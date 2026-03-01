@@ -253,9 +253,9 @@ export default function Docs() {
             <P>
               LibreYOLO is an MIT-licensed object detection library that provides a unified Python API across three architectures: <strong className="text-white">YOLOX</strong>, <strong className="text-white">YOLOv9</strong>, and <strong className="text-white">RF-DETR</strong>. One interface for prediction, training, validation, and export — regardless of which model family you use.
             </P>
-            <CodeBlock language="python">{`from libreyolo import LIBREYOLO
+            <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
-model = LIBREYOLO("libreyoloXs.pt")
+model = LibreYOLO("LibreYOLOXs.pt")
 results = model("image.jpg", conf=0.25, save=True)
 print(results.boxes.xyxy)`}</CodeBlock>
 
@@ -321,10 +321,10 @@ uv sync --extra openvino`}</CodeBlock>
           <SectionHeading id="quickstart" icon={Rocket}>Quickstart</SectionHeading>
 
           <SubHeading>Load a model and run inference</SubHeading>
-          <CodeBlock language="python">{`from libreyolo import LIBREYOLO
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 # Auto-detects architecture and size from the weights file
-model = LIBREYOLO("libreyoloXs.pt")
+model = LibreYOLO("LibreYOLOXs.pt")
 
 # Run on a single image
 result = model("photo.jpg")
@@ -336,7 +336,7 @@ print(result.boxes.cls)    # class IDs (N,)`}</CodeBlock>
 
           <SubHeading>Save annotated output</SubHeading>
           <CodeBlock language="python">{`result = model("photo.jpg", save=True)
-# Saved to runs/detections/photo_LIBREYOLOX_s_<timestamp>.jpg`}</CodeBlock>
+# Saved to runs/detections/photo_LibreYOLOX_s_<timestamp>.jpg`}</CodeBlock>
 
           <SubHeading>Process a directory</SubHeading>
           <CodeBlock language="python">{`results = model("images/", save=True, batch=4)
@@ -352,22 +352,22 @@ for r in results:
           <DocTable
             headers={['Size', 'Code', 'Input size', 'Use case']}
             rows={[
-              ['Nano', <InlineCode key="nano">&quot;nano&quot;</InlineCode>, '416', 'Edge devices, mobile'],
-              ['Tiny', <InlineCode key="tiny">&quot;tiny&quot;</InlineCode>, '416', 'Edge devices, faster'],
+              ['Nano', <InlineCode key="n">&quot;n&quot;</InlineCode>, '416', 'Edge devices, mobile'],
+              ['Tiny', <InlineCode key="t">&quot;t&quot;</InlineCode>, '416', 'Edge devices, faster'],
               ['Small', <InlineCode key="s">&quot;s&quot;</InlineCode>, '640', 'Balanced speed/accuracy'],
               ['Medium', <InlineCode key="m">&quot;m&quot;</InlineCode>, '640', 'Higher accuracy'],
               ['Large', <InlineCode key="l">&quot;l&quot;</InlineCode>, '640', 'High accuracy'],
               ['XLarge', <InlineCode key="x">&quot;x&quot;</InlineCode>, '640', 'Maximum accuracy'],
             ]}
           />
-          <CodeBlock language="python">{`from libreyolo import LIBREYOLO
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
-model = LIBREYOLO("libreyoloXnano.pt")
-# model = LIBREYOLO("libreyoloXtiny.pt")
-# model = LIBREYOLO("libreyoloXs.pt")
-# model = LIBREYOLO("libreyoloXm.pt")
-# model = LIBREYOLO("libreyoloXl.pt")
-# model = LIBREYOLO("libreyoloXx.pt")`}</CodeBlock>
+model = LibreYOLO("LibreYOLOXn.pt")
+# model = LibreYOLO("LibreYOLOXt.pt")
+# model = LibreYOLO("LibreYOLOXs.pt")
+# model = LibreYOLO("LibreYOLOXm.pt")
+# model = LibreYOLO("LibreYOLOXl.pt")
+# model = LibreYOLO("LibreYOLOXx.pt")`}</CodeBlock>
 
           <SubHeading>YOLOv9</SubHeading>
           <DocTable
@@ -379,12 +379,12 @@ model = LIBREYOLO("libreyoloXnano.pt")
               ['Compact', <InlineCode key="c">&quot;c&quot;</InlineCode>, '640', 'Best accuracy'],
             ]}
           />
-          <CodeBlock language="python">{`from libreyolo import LIBREYOLO
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
-model = LIBREYOLO("libreyolo9t.pt")
-# model = LIBREYOLO("libreyolo9s.pt")
-# model = LIBREYOLO("libreyolo9m.pt")
-# model = LIBREYOLO("libreyolo9c.pt")`}</CodeBlock>
+model = LibreYOLO("LibreYOLO9t.pt")
+# model = LibreYOLO("LibreYOLO9s.pt")
+# model = LibreYOLO("LibreYOLO9m.pt")
+# model = LibreYOLO("LibreYOLO9c.pt")`}</CodeBlock>
 
           <SubHeading>RF-DETR</SubHeading>
           <DocTable
@@ -396,33 +396,33 @@ model = LIBREYOLO("libreyolo9t.pt")
               ['Large', <InlineCode key="l">&quot;l&quot;</InlineCode>, '704', 'Maximum accuracy'],
             ]}
           />
-          <CodeBlock language="python">{`from libreyolo import LIBREYOLORFDETR
+          <CodeBlock language="python">{`from libreyolo import LibreYOLORFDETR
 
-model = LIBREYOLORFDETR(size="s")`}</CodeBlock>
+model = LibreYOLORFDETR(size="s")`}</CodeBlock>
 
           <SubHeading>Factory function (recommended)</SubHeading>
           <P>
-            The <InlineCode>LIBREYOLO()</InlineCode> factory auto-detects everything from the weights file:
+            The <InlineCode>LibreYOLO()</InlineCode> factory auto-detects everything from the weights file:
           </P>
-          <CodeBlock language="python">{`from libreyolo import LIBREYOLO
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 # Auto-detects: YOLOX, size=s, 80 classes
-model = LIBREYOLO("libreyoloXs.pt")
+model = LibreYOLO("LibreYOLOXs.pt")
 
 # Auto-detects: YOLOv9, size=c, 80 classes
-model = LIBREYOLO("libreyolo9c.pt")
+model = LibreYOLO("LibreYOLO9c.pt")
 
 # Auto-detects: RF-DETR
-model = LIBREYOLO("librerfdetrsmall.pth")
+model = LibreYOLO("LibreRFDETRs.pth")
 
 # ONNX models work too
-model = LIBREYOLO("model.onnx")
+model = LibreYOLO("model.onnx")
 
 # TensorRT engines
-model = LIBREYOLO("model.engine")
+model = LibreYOLO("model.engine")
 
 # OpenVINO models (directory with model.xml)
-model = LIBREYOLO("model_openvino/")`}</CodeBlock>
+model = LibreYOLO("model_openvino/")`}</CodeBlock>
           <P>
             If weights are not found locally, LibreYOLO attempts to download them from Hugging Face automatically.
           </P>
@@ -563,9 +563,9 @@ result.num_tiles       # number of tiles used`}</CodeBlock>
           <SectionHeading id="training" icon={GraduationCap}>Training</SectionHeading>
 
           <SubHeading>YOLOX training</SubHeading>
-          <CodeBlock language="python">{`from libreyolo import LIBREYOLOX
+          <CodeBlock language="python">{`from libreyolo import LibreYOLOX
 
-model = LIBREYOLOX(size="s")
+model = LibreYOLOX(size="s")
 
 results = model.train(
     data="coco128.yaml",     # path to data.yaml (required)
@@ -612,7 +612,7 @@ print(f"Best checkpoint: {results['best_checkpoint']}")`}</CodeBlock>
 }`}</CodeBlock>
 
           <SubHeading>Resuming training</SubHeading>
-          <CodeBlock language="python">{`model = LIBREYOLOX("runs/train/exp/weights/last.pt", size="s")
+          <CodeBlock language="python">{`model = LibreYOLOX("runs/train/exp/weights/last.pt", size="s")
 results = model.train(data="coco128.yaml", resume=True)`}</CodeBlock>
 
           <SubHeading>Custom dataset YAML format</SubHeading>
@@ -625,9 +625,9 @@ nc: 3
 names: ["cat", "dog", "bird"]`}</CodeBlock>
 
           <SubHeading>YOLOv9 training</SubHeading>
-          <CodeBlock language="python">{`from libreyolo import LIBREYOLO9
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO9
 
-model = LIBREYOLO9("libreyolo9c.pt", size="c")
+model = LibreYOLO9("LibreYOLO9c.pt", size="c")
 
 results = model.train(
     data="coco128.yaml",
@@ -656,9 +656,9 @@ print(f"Best mAP50-95: {results['best_mAP50_95']:.3f}")`}</CodeBlock>
           <P>
             RF-DETR uses a different training API that wraps the original rfdetr implementation:
           </P>
-          <CodeBlock language="python">{`from libreyolo import LIBREYOLORFDETR
+          <CodeBlock language="python">{`from libreyolo import LibreYOLORFDETR
 
-model = LIBREYOLORFDETR(size="s")
+model = LibreYOLORFDETR(size="s")
 
 results = model.train(
     data="path/to/dataset",  # Roboflow/COCO format directory
@@ -766,7 +766,7 @@ model.export(format="openvino")`}</CodeBlock>
             headers={['Key', 'Example value']}
             rows={[
               [<InlineCode key="v">libreyolo_version</InlineCode>, <InlineCode key="vv">&quot;0.1.4&quot;</InlineCode>],
-              [<InlineCode key="f">model_family</InlineCode>, <InlineCode key="fv">&quot;LIBREYOLOX&quot;</InlineCode>],
+              [<InlineCode key="f">model_family</InlineCode>, <InlineCode key="fv">&quot;LibreYOLOX&quot;</InlineCode>],
               [<InlineCode key="s">model_size</InlineCode>, <InlineCode key="sv">&quot;s&quot;</InlineCode>],
               [<InlineCode key="c">nb_classes</InlineCode>, <InlineCode key="cv">&quot;80&quot;</InlineCode>],
               [<InlineCode key="n">names</InlineCode>, <span key="nv" className="text-xs"><InlineCode>{`'{"0": "person", "1": "bicycle", ...}'`}</InlineCode></span>],
@@ -776,7 +776,7 @@ model.export(format="openvino")`}</CodeBlock>
             ]}
           />
           <P>
-            This metadata is automatically read back when loading the model with <InlineCode>LIBREYOLOOnnx</InlineCode>.
+            This metadata is automatically read back when loading the model with <InlineCode>LibreYOLOOnnx</InlineCode>.
           </P>
 
           <SubHeading>Using the Exporter class directly</SubHeading>
@@ -792,9 +792,9 @@ path = exporter("onnx", dynamic=True, simplify=True)`}</CodeBlock>
           <P>
             Run inference using ONNX Runtime instead of PyTorch. Useful for deployment environments without PyTorch.
           </P>
-          <CodeBlock language="python">{`from libreyolo import LIBREYOLOOnnx
+          <CodeBlock language="python">{`from libreyolo import LibreYOLOOnnx
 
-model = LIBREYOLOOnnx("model.onnx")
+model = LibreYOLOOnnx("model.onnx")
 
 result = model("image.jpg", conf=0.25, iou=0.45, save=True)
 print(result.boxes.xyxy)`}</CodeBlock>
@@ -807,28 +807,28 @@ print(result.boxes.xyxy)`}</CodeBlock>
 model.export(format="onnx", output_path="model.onnx")
 
 # Load — names and nb_classes auto-populated
-onnx_model = LIBREYOLOOnnx("model.onnx")
+onnx_model = LibreYOLOOnnx("model.onnx")
 print(onnx_model.names)       # {0: "person", 1: "bicycle", ...}
 print(onnx_model.nb_classes)  # 80`}</CodeBlock>
 
           <P>
             For ONNX files without metadata (e.g., exported by other tools), specify <InlineCode>nb_classes</InlineCode> manually:
           </P>
-          <CodeBlock language="python">{`model = LIBREYOLOOnnx("external_model.onnx", nb_classes=20)`}</CodeBlock>
+          <CodeBlock language="python">{`model = LibreYOLOOnnx("external_model.onnx", nb_classes=20)`}</CodeBlock>
 
           <SubHeading>Device selection</SubHeading>
           <CodeBlock language="python">{`# Auto-detect (CUDA if available, else CPU)
-model = LIBREYOLOOnnx("model.onnx", device="auto")
+model = LibreYOLOOnnx("model.onnx", device="auto")
 
 # Force CPU
-model = LIBREYOLOOnnx("model.onnx", device="cpu")
+model = LibreYOLOOnnx("model.onnx", device="cpu")
 
 # Force CUDA
-model = LIBREYOLOOnnx("model.onnx", device="cuda")`}</CodeBlock>
+model = LibreYOLOOnnx("model.onnx", device="cuda")`}</CodeBlock>
 
           <SubHeading>Prediction parameters</SubHeading>
           <P>
-            <InlineCode>LIBREYOLOOnnx</InlineCode> supports the same prediction API:
+            <InlineCode>LibreYOLOOnnx</InlineCode> supports the same prediction API:
           </P>
           <CodeBlock language="python">{`result = model(
     "image.jpg",
@@ -849,24 +849,24 @@ model = LIBREYOLOOnnx("model.onnx", device="cuda")`}</CodeBlock>
           <P>
             Run inference using TensorRT for maximum throughput on NVIDIA GPUs. Requires TensorRT and pycuda.
           </P>
-          <CodeBlock language="python">{`from libreyolo import LIBREYOLOTensorRT
+          <CodeBlock language="python">{`from libreyolo import LibreYOLOTensorRT
 
-model = LIBREYOLOTensorRT("model.engine")
+model = LibreYOLOTensorRT("model.engine")
 
 result = model("image.jpg", conf=0.25, iou=0.45, save=True)
 print(result.boxes.xyxy)`}</CodeBlock>
 
           <SubHeading>Auto-detection via factory</SubHeading>
           <P>
-            The <InlineCode>LIBREYOLO()</InlineCode> factory automatically detects <InlineCode>.engine</InlineCode> files:
+            The <InlineCode>LibreYOLO()</InlineCode> factory automatically detects <InlineCode>.engine</InlineCode> files:
           </P>
-          <CodeBlock language="python">{`from libreyolo import LIBREYOLO
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 # Auto-detects TensorRT engine
-model = LIBREYOLO("model.engine")`}</CodeBlock>
+model = LibreYOLO("model.engine")`}</CodeBlock>
 
           <P>
-            <InlineCode>LIBREYOLOTensorRT</InlineCode> supports the same prediction API as PyTorch models (except tiling).
+            <InlineCode>LibreYOLOTensorRT</InlineCode> supports the same prediction API as PyTorch models (except tiling).
           </P>
 
           <Divider />
@@ -876,24 +876,24 @@ model = LIBREYOLO("model.engine")`}</CodeBlock>
           <P>
             Run inference using OpenVINO, optimized for Intel CPUs, GPUs, and VPUs.
           </P>
-          <CodeBlock language="python">{`from libreyolo import LIBREYOLOOpenVINO
+          <CodeBlock language="python">{`from libreyolo import LibreYOLOOpenVINO
 
-model = LIBREYOLOOpenVINO("model_openvino/")
+model = LibreYOLOOpenVINO("model_openvino/")
 
 result = model("image.jpg", conf=0.25, iou=0.45, save=True)
 print(result.boxes.xyxy)`}</CodeBlock>
 
           <SubHeading>Auto-detection via factory</SubHeading>
           <P>
-            The <InlineCode>LIBREYOLO()</InlineCode> factory automatically detects OpenVINO model directories:
+            The <InlineCode>LibreYOLO()</InlineCode> factory automatically detects OpenVINO model directories:
           </P>
-          <CodeBlock language="python">{`from libreyolo import LIBREYOLO
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 # Auto-detects OpenVINO directory
-model = LIBREYOLO("model_openvino/")`}</CodeBlock>
+model = LibreYOLO("model_openvino/")`}</CodeBlock>
 
           <P>
-            <InlineCode>LIBREYOLOOpenVINO</InlineCode> supports the same prediction API as PyTorch models (except tiling).
+            <InlineCode>LibreYOLOOpenVINO</InlineCode> supports the same prediction API as PyTorch models (except tiling).
           </P>
 
           <Divider />
@@ -901,14 +901,14 @@ model = LIBREYOLO("model_openvino/")`}</CodeBlock>
           {/* ────────────── API REFERENCE ────────────── */}
           <SectionHeading id="api-reference" icon={FileCode}>API Reference</SectionHeading>
 
-          <SubHeading>LIBREYOLO (factory)</SubHeading>
-          <CodeBlock language="python">{`LIBREYOLO(
+          <SubHeading>LibreYOLO (factory)</SubHeading>
+          <CodeBlock language="python">{`LibreYOLO(
     model_path: str,
     size: str = None,           # auto-detected from weights
     reg_max: int = 16,          # YOLOv9 only
     nb_classes: int = None,     # auto-detected from weights
     device: str = "auto",
-) -> LIBREYOLOX | LIBREYOLO9 | LIBREYOLORFDETR | LIBREYOLOOnnx | LIBREYOLOTensorRT | LIBREYOLOOpenVINO`}</CodeBlock>
+) -> LibreYOLOX | LibreYOLO9 | LibreYOLORFDETR | LibreYOLOOnnx | LibreYOLOTensorRT | LibreYOLOOpenVINO`}</CodeBlock>
           <P>
             Auto-detects model architecture, size, and class count from the weights file. Returns the appropriate model class. Also handles <InlineCode>.onnx</InlineCode>, <InlineCode>.engine</InlineCode> (TensorRT), and OpenVINO model directories. Downloads weights from Hugging Face if not found locally.
           </P>
@@ -1086,8 +1086,8 @@ Exporter.FORMATS               # dict of supported formats
     **kwargs,                   # additional RF-DETR training args
 ) -> dict`}</CodeBlock>
 
-          <SubHeading>LIBREYOLOOnnx</SubHeading>
-          <CodeBlock language="python">{`LIBREYOLOOnnx(
+          <SubHeading>LibreYOLOOnnx</SubHeading>
+          <CodeBlock language="python">{`LibreYOLOOnnx(
     onnx_path: str,
     nb_classes: int = 80,       # auto-read from metadata if available
     device: str = "auto",
@@ -1096,8 +1096,8 @@ Exporter.FORMATS               # dict of supported formats
             Supports the same prediction API as PyTorch models (except tiling).
           </P>
 
-          <SubHeading>LIBREYOLOTensorRT</SubHeading>
-          <CodeBlock language="python">{`LIBREYOLOTensorRT(
+          <SubHeading>LibreYOLOTensorRT</SubHeading>
+          <CodeBlock language="python">{`LibreYOLOTensorRT(
     engine_path: str,
     nb_classes: int = 80,
     device: str = "auto",
@@ -1106,8 +1106,8 @@ Exporter.FORMATS               # dict of supported formats
             Runs inference on a TensorRT <InlineCode>.engine</InlineCode> file. Same prediction API as PyTorch models (except tiling).
           </P>
 
-          <SubHeading>LIBREYOLOOpenVINO</SubHeading>
-          <CodeBlock language="python">{`LIBREYOLOOpenVINO(
+          <SubHeading>LibreYOLOOpenVINO</SubHeading>
+          <CodeBlock language="python">{`LibreYOLOOpenVINO(
     model_dir: str,
     nb_classes: int = 80,
     device: str = "auto",
@@ -1173,12 +1173,12 @@ config.to_yaml("config.yaml")`}</CodeBlock>
           <SubHeading>Package structure</SubHeading>
           <CodeBlock language="text">{`libreyolo/
     __init__.py          # Public API exports
-    factory.py           # LIBREYOLO() auto-detection factory
+    factory.py           # LibreYOLO() auto-detection factory
     common/
         base_model.py    # LibreYOLOBase abstract class
-        onnx.py          # LIBREYOLOOnnx runtime backend
-        tensorrt.py      # LIBREYOLOTensorRT runtime backend
-        openvino.py      # LIBREYOLOOpenVINO runtime backend
+        onnx.py          # LibreYOLOOnnx runtime backend
+        tensorrt.py      # LibreYOLOTensorRT runtime backend
+        openvino.py      # LibreYOLOOpenVINO runtime backend
         results.py       # Results and Boxes classes
         image_loader.py  # Unified image loading
         utils.py         # NMS, drawing, preprocessing
@@ -1189,15 +1189,15 @@ config.to_yaml("config.yaml")`}</CodeBlock>
         tensorrt.py      # TensorRT export logic
         openvino.py      # OpenVINO export logic
     yolox/
-        model.py         # LIBREYOLOX
+        model.py         # LibreYOLOX
         nn.py            # YOLOX network architecture
         utils.py         # YOLOX-specific pre/postprocessing
     v9/
-        model.py         # LIBREYOLO9
+        model.py         # LibreYOLO9
         nn.py            # YOLOv9 network architecture
         utils.py         # v9-specific pre/postprocessing
     rfdetr/
-        model.py         # LIBREYOLORFDETR
+        model.py         # LibreYOLORFDETR
         nn.py            # RF-DETR network + configs
         utils.py         # RF-DETR postprocessing
         train.py         # RF-DETR training wrapper

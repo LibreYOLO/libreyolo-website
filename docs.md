@@ -7,9 +7,9 @@
 LibreYOLO is an MIT-licensed object detection library that provides a unified Python API across three architectures: **YOLOX**, **YOLOv9**, and **RF-DETR**. One interface for prediction, training, validation, and export — regardless of which model family you use.
 
 ```python
-from libreyolo import LIBREYOLO
+from libreyolo import LibreYOLO
 
-model = LIBREYOLO("libreyoloXs.pt")
+model = LibreYOLO("LibreYOLOXs.pt")
 results = model("image.jpg", conf=0.25, save=True)
 print(results.boxes.xyxy)
 ```
@@ -82,10 +82,10 @@ uv sync --extra openvino
 ### Load a model and run inference
 
 ```python
-from libreyolo import LIBREYOLO
+from libreyolo import LibreYOLO
 
 # Auto-detects architecture and size from the weights file
-model = LIBREYOLO("libreyoloXs.pt")
+model = LibreYOLO("LibreYOLOXs.pt")
 
 # Run on a single image
 result = model("photo.jpg")
@@ -100,7 +100,7 @@ print(result.boxes.cls)    # class IDs (N,)
 
 ```python
 result = model("photo.jpg", save=True)
-# Saved to runs/detections/photo_LIBREYOLOX_s_<timestamp>.jpg
+# Saved to runs/detections/photo_LibreYOLOX_s_<timestamp>.jpg
 ```
 
 ### Process a directory
@@ -119,16 +119,16 @@ for r in results:
 
 | Size | Code | Input size | Use case |
 |------|------|-----------|----------|
-| Nano | `"nano"` | 416 | Edge devices, mobile |
-| Tiny | `"tiny"` | 416 | Edge devices, faster |
+| Nano | `"n"` | 416 | Edge devices, mobile |
+| Tiny | `"t"` | 416 | Edge devices, faster |
 | Small | `"s"` | 640 | Balanced speed/accuracy |
 | Medium | `"m"` | 640 | Higher accuracy |
 | Large | `"l"` | 640 | High accuracy |
 | XLarge | `"x"` | 640 | Maximum accuracy |
 
 ```python
-from libreyolo import LIBREYOLOX
-model = LIBREYOLOX("libreyoloXs.pt", size="s")
+from libreyolo import LibreYOLOX
+model = LibreYOLOX("LibreYOLOXs.pt", size="s")
 ```
 
 ### YOLOv9
@@ -141,8 +141,8 @@ model = LIBREYOLOX("libreyoloXs.pt", size="s")
 | Compact | `"c"` | 640 | Best accuracy |
 
 ```python
-from libreyolo import LIBREYOLO9
-model = LIBREYOLO9("libreyolo9c.pt", size="c")
+from libreyolo import LibreYOLO9
+model = LibreYOLO9("LibreYOLO9c.pt", size="c")
 ```
 
 ### RF-DETR
@@ -155,34 +155,34 @@ model = LIBREYOLO9("libreyolo9c.pt", size="c")
 | Large | `"l"` | 704 | Maximum accuracy |
 
 ```python
-from libreyolo import LIBREYOLORFDETR
-model = LIBREYOLORFDETR(size="s")
+from libreyolo import LibreYOLORFDETR
+model = LibreYOLORFDETR(size="s")
 ```
 
 ### Factory function (recommended)
 
-The `LIBREYOLO()` factory auto-detects everything from the weights file:
+The `LibreYOLO()` factory auto-detects everything from the weights file:
 
 ```python
-from libreyolo import LIBREYOLO
+from libreyolo import LibreYOLO
 
 # Auto-detects: YOLOX, size=s, 80 classes
-model = LIBREYOLO("libreyoloXs.pt")
+model = LibreYOLO("LibreYOLOXs.pt")
 
 # Auto-detects: YOLOv9, size=c, 80 classes
-model = LIBREYOLO("libreyolo9c.pt")
+model = LibreYOLO("LibreYOLO9c.pt")
 
 # Auto-detects: RF-DETR
-model = LIBREYOLO("librerfdetrsmall.pth")
+model = LibreYOLO("LibreRFDETRs.pth")
 
 # ONNX models work too
-model = LIBREYOLO("model.onnx")
+model = LibreYOLO("model.onnx")
 
 # TensorRT engines
-model = LIBREYOLO("model.engine")
+model = LibreYOLO("model.engine")
 
 # OpenVINO models (directory with model.xml)
-model = LIBREYOLO("model_openvino/")
+model = LibreYOLO("model_openvino/")
 ```
 
 If weights are not found locally, LibreYOLO attempts to download them from Hugging Face automatically.
@@ -338,9 +338,9 @@ If the image is already smaller than the model's input size, tiling is skipped a
 ### YOLOX training
 
 ```python
-from libreyolo import LIBREYOLOX
+from libreyolo import LibreYOLOX
 
-model = LIBREYOLOX(size="s")
+model = LibreYOLOX(size="s")
 
 results = model.train(
     data="coco128.yaml",     # path to data.yaml (required)
@@ -393,7 +393,7 @@ After training, the model instance is automatically updated with the best weight
 #### Resuming training
 
 ```python
-model = LIBREYOLOX("runs/train/exp/weights/last.pt", size="s")
+model = LibreYOLOX("runs/train/exp/weights/last.pt", size="s")
 results = model.train(data="coco128.yaml", resume=True)
 ```
 
@@ -415,9 +415,9 @@ names: ["cat", "dog", "bird"]
 YOLOv9 training uses the same API as YOLOX with slightly different defaults:
 
 ```python
-from libreyolo import LIBREYOLO9
+from libreyolo import LibreYOLO9
 
-model = LIBREYOLO9("libreyolo9c.pt", size="c")
+model = LibreYOLO9("LibreYOLO9c.pt", size="c")
 
 results = model.train(
     data="coco128.yaml",     # path to data.yaml (required)
@@ -453,9 +453,9 @@ results = model.train(
 RF-DETR uses a different training API that wraps the original rfdetr implementation:
 
 ```python
-from libreyolo import LIBREYOLORFDETR
+from libreyolo import LibreYOLORFDETR
 
-model = LIBREYOLORFDETR(size="s")
+model = LibreYOLORFDETR(size="s")
 
 results = model.train(
     data="path/to/dataset",  # Roboflow/COCO format directory
@@ -609,7 +609,7 @@ Exported ONNX files include embedded metadata:
 | Key | Example value |
 |-----|--------------|
 | `libreyolo_version` | `"0.1.4"` |
-| `model_family` | `"LIBREYOLOX"` |
+| `model_family` | `"LibreYOLOX"` |
 | `model_size` | `"s"` |
 | `nb_classes` | `"80"` |
 | `names` | `'{"0": "person", "1": "bicycle", ...}'` |
@@ -617,7 +617,7 @@ Exported ONNX files include embedded metadata:
 | `dynamic` | `"True"` |
 | `half` | `"False"` |
 
-This metadata is automatically read back when loading the model with `LIBREYOLOOnnx` (see next section).
+This metadata is automatically read back when loading the model with `LibreYOLOOnnx` (see next section).
 
 ### Using the Exporter class directly
 
@@ -639,9 +639,9 @@ LibreYOLO supports three inference backends beyond PyTorch: ONNX Runtime, Tensor
 Run inference using ONNX Runtime instead of PyTorch. Useful for deployment environments without PyTorch.
 
 ```python
-from libreyolo import LIBREYOLOOnnx
+from libreyolo import LibreYOLOOnnx
 
-model = LIBREYOLOOnnx("model.onnx")
+model = LibreYOLOOnnx("model.onnx")
 
 result = model("image.jpg", conf=0.25, iou=0.45, save=True)
 print(result.boxes.xyxy)
@@ -656,7 +656,7 @@ If the ONNX file was exported by LibreYOLO, class names and class count are read
 model.export(format="onnx", output_path="model.onnx")
 
 # Load — names and nb_classes auto-populated
-onnx_model = LIBREYOLOOnnx("model.onnx")
+onnx_model = LibreYOLOOnnx("model.onnx")
 print(onnx_model.names)       # {0: "person", 1: "bicycle", ...}
 print(onnx_model.nb_classes)  # 80
 ```
@@ -664,25 +664,25 @@ print(onnx_model.nb_classes)  # 80
 For ONNX files without metadata (e.g., exported by other tools), specify `nb_classes` manually:
 
 ```python
-model = LIBREYOLOOnnx("external_model.onnx", nb_classes=20)
+model = LibreYOLOOnnx("external_model.onnx", nb_classes=20)
 ```
 
 ### Device selection
 
 ```python
 # Auto-detect (CUDA if available, else CPU)
-model = LIBREYOLOOnnx("model.onnx", device="auto")
+model = LibreYOLOOnnx("model.onnx", device="auto")
 
 # Force CPU
-model = LIBREYOLOOnnx("model.onnx", device="cpu")
+model = LibreYOLOOnnx("model.onnx", device="cpu")
 
 # Force CUDA
-model = LIBREYOLOOnnx("model.onnx", device="cuda")
+model = LibreYOLOOnnx("model.onnx", device="cuda")
 ```
 
 ### Prediction parameters
 
-`LIBREYOLOOnnx` supports the same prediction API:
+`LibreYOLOOnnx` supports the same prediction API:
 
 ```python
 result = model(
@@ -703,9 +703,9 @@ result = model(
 Run inference using TensorRT for GPU-accelerated deployment on NVIDIA hardware:
 
 ```python
-from libreyolo.common.tensorrt import LIBREYOLOTensorRT
+from libreyolo.common.tensorrt import LibreYOLOTensorRT
 
-model = LIBREYOLOTensorRT("model.engine")
+model = LibreYOLOTensorRT("model.engine")
 
 result = model("image.jpg", conf=0.25, iou=0.45, save=True)
 print(result.boxes.xyxy)
@@ -714,8 +714,8 @@ print(result.boxes.xyxy)
 Or load via the factory (auto-detects `.engine` files):
 
 ```python
-from libreyolo import LIBREYOLO
-model = LIBREYOLO("model.engine")
+from libreyolo import LibreYOLO
+model = LibreYOLO("model.engine")
 ```
 
 ## OpenVINO Inference
@@ -723,9 +723,9 @@ model = LIBREYOLO("model.engine")
 Run inference using OpenVINO for Intel CPU/GPU/VPU acceleration:
 
 ```python
-from libreyolo import LIBREYOLOOpenVINO
+from libreyolo import LibreYOLOOpenVINO
 
-model = LIBREYOLOOpenVINO("model_openvino/")
+model = LibreYOLOOpenVINO("model_openvino/")
 
 result = model("image.jpg", conf=0.25, iou=0.45, save=True)
 print(result.boxes.xyxy)
@@ -734,36 +734,36 @@ print(result.boxes.xyxy)
 Or load via the factory (auto-detects OpenVINO directories):
 
 ```python
-from libreyolo import LIBREYOLO
-model = LIBREYOLO("model_openvino/")
+from libreyolo import LibreYOLO
+model = LibreYOLO("model_openvino/")
 ```
 
 ---
 
 # API Reference
 
-## LIBREYOLO (factory)
+## LibreYOLO (factory)
 
 ```python
-LIBREYOLO(
+LibreYOLO(
     model_path: str,
     size: str = None,           # auto-detected from weights
     reg_max: int = 16,          # YOLOv9 only
     nb_classes: int = None,     # auto-detected from weights
     device: str = "auto",
-) -> LIBREYOLOX | LIBREYOLO9 | LIBREYOLORFDETR | LIBREYOLOOnnx | LIBREYOLOTensorRT | LIBREYOLOOpenVINO
+) -> LibreYOLOX | LibreYOLO9 | LibreYOLORFDETR | LibreYOLOOnnx | LibreYOLOTensorRT | LibreYOLOOpenVINO
 ```
 
 Auto-detects model architecture, size, and class count from the weights file. Returns the appropriate model class. Also handles `.onnx`, `.engine`, and OpenVINO directories.
 
 Downloads weights from Hugging Face if not found locally.
 
-## LIBREYOLOX
+## LibreYOLOX
 
 ```python
-LIBREYOLOX(
+LibreYOLOX(
     model_path=None,            # str, dict, or None
-    size: str = "s",            # "nano", "tiny", "s", "m", "l", "x"
+    size: str = "s",            # "n", "t", "s", "m", "l", "x"
     nb_classes: int = 80,
     device: str = "auto",
 )
@@ -771,10 +771,10 @@ LIBREYOLOX(
 
 Pass `model_path=None` to create a fresh (randomly initialized) model for training.
 
-## LIBREYOLO9
+## LibreYOLO9
 
 ```python
-LIBREYOLO9(
+LibreYOLO9(
     model_path,                 # str or dict (required)
     size: str,                  # "t", "s", "m", "c" (required)
     reg_max: int = 16,
@@ -783,10 +783,10 @@ LIBREYOLO9(
 )
 ```
 
-## LIBREYOLORFDETR
+## LibreYOLORFDETR
 
 ```python
-LIBREYOLORFDETR(
+LibreYOLORFDETR(
     model_path: str = None,     # None = use default pretrained
     size: str = "s",            # "n", "s", "m", "l"
     nb_classes: int = 80,
@@ -1010,10 +1010,10 @@ Returns:
 }
 ```
 
-## LIBREYOLOOnnx
+## LibreYOLOOnnx
 
 ```python
-LIBREYOLOOnnx(
+LibreYOLOOnnx(
     onnx_path: str,
     nb_classes: int = 80,       # auto-read from metadata if available
     device: str = "auto",
@@ -1078,12 +1078,12 @@ The base class provides the shared pipeline: `__call__` / `predict`, `export`, `
 ```
 libreyolo/
     __init__.py          # Public API exports
-    factory.py           # LIBREYOLO() auto-detection factory
+    factory.py           # LibreYOLO() auto-detection factory
     common/
         base_model.py    # LibreYOLOBase abstract class
-        onnx.py          # LIBREYOLOOnnx runtime backend
-        tensorrt.py      # LIBREYOLOTensorRT runtime backend
-        openvino.py      # LIBREYOLOOpenVINO runtime backend
+        onnx.py          # LibreYOLOOnnx runtime backend
+        tensorrt.py      # LibreYOLOTensorRT runtime backend
+        openvino.py      # LibreYOLOOpenVINO runtime backend
         results.py       # Results and Boxes classes
         image_loader.py  # Unified image loading
         utils.py         # NMS, drawing, preprocessing
@@ -1096,18 +1096,18 @@ libreyolo/
         calibration.py   # INT8 calibration utilities
         config.py        # Export configuration
     yolox/
-        model.py         # LIBREYOLOX
+        model.py         # LibreYOLOX
         nn.py            # YOLOX network architecture
         utils.py         # YOLOX-specific pre/postprocessing
     v9/
-        model.py         # LIBREYOLO9
+        model.py         # LibreYOLO9
         nn.py            # YOLOv9 network architecture
         utils.py         # v9-specific pre/postprocessing
         config.py        # YOLOv9 configuration
         loss.py          # YOLOv9 loss functions
         trainer.py       # YOLOv9 training
     rfdetr/
-        model.py         # LIBREYOLORFDETR
+        model.py         # LibreYOLORFDETR
         nn.py            # RF-DETR network + configs
         utils.py         # RF-DETR postprocessing
         train.py         # RF-DETR training wrapper

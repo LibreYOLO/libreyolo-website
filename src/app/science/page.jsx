@@ -264,11 +264,11 @@ function ExplainabilitySection() {
                       </div>
                       <span className="ml-4 text-surface-500 text-sm font-mono">feature_maps.py</span>
                     </div>
-                    <CopyButton code={`from libreyolo import LIBREYOLO
+                    <CopyButton code={`from libreyolo import LibreYOLO
 
 # Enable feature map saving in constructor
-model = LIBREYOLO(
-    model_path="libreyolo11m.pt",
+model = LibreYOLO(
+    model_path="LibreYOLO11m.pt",
     size="m",
     save_feature_maps=True
 )
@@ -280,10 +280,10 @@ results = model(image="parkour.jpg")
                   </div>
                   <pre className="p-6 overflow-x-auto">
                     <code className="font-mono text-sm">
-                      <span className="token-keyword">from</span> <span className="text-violet-300">libreyolo</span> <span className="token-keyword">import</span> <span className="text-emerald-400">LIBREYOLO</span>{'\n\n'}
+                      <span className="token-keyword">from</span> <span className="text-violet-300">libreyolo</span> <span className="token-keyword">import</span> <span className="text-emerald-400">LibreYOLO</span>{'\n\n'}
                       <span className="token-comment"># Enable feature map saving in constructor</span>{'\n'}
-                      <span className="text-surface-300">model</span> <span className="text-violet-400">=</span> <span className="text-emerald-400">LIBREYOLO</span>({'\n'}
-                      {'    '}<span className="text-surface-300">model_path</span><span className="text-violet-400">=</span><span className="token-string">"libreyolo11m.pt"</span>,{'\n'}
+                      <span className="text-surface-300">model</span> <span className="text-violet-400">=</span> <span className="text-emerald-400">LibreYOLO</span>({'\n'}
+                      {'    '}<span className="text-surface-300">model_path</span><span className="text-violet-400">=</span><span className="token-string">"LibreYOLO11m.pt"</span>,{'\n'}
                       {'    '}<span className="text-surface-300">size</span><span className="text-violet-400">=</span><span className="token-string">"m"</span>,{'\n'}
                       {'    '}<span className="text-surface-300">save_feature_maps</span><span className="text-violet-400">=</span><span className="text-emerald-400">True</span>{'\n'}
                       ){'\n\n'}
@@ -356,9 +356,9 @@ results = model(image="parkour.jpg")
                       </div>
                       <span className="ml-4 text-surface-500 text-sm font-mono">explainability.py</span>
                     </div>
-                    <CopyButton code={`from libreyolo import LIBREYOLO
+                    <CopyButton code={`from libreyolo import LibreYOLO
 
-model = LIBREYOLO(model_path="libreyolo11m.pt", size="m")
+model = LibreYOLO(model_path="LibreYOLO11m.pt", size="m")
 
 # One-line CAM visualization
 result = model.explain(
@@ -373,8 +373,8 @@ print(result["heatmap"].shape)`} />
                   </div>
                   <pre className="p-6 overflow-x-auto">
                     <code className="font-mono text-sm">
-                      <span className="token-keyword">from</span> <span className="text-violet-300">libreyolo</span> <span className="token-keyword">import</span> <span className="text-emerald-400">LIBREYOLO</span>{'\n\n'}
-                      <span className="text-surface-300">model</span> <span className="text-violet-400">=</span> <span className="text-emerald-400">LIBREYOLO</span>(<span className="text-surface-300">model_path</span><span className="text-violet-400">=</span><span className="token-string">"libreyolo11m.pt"</span>, <span className="text-surface-300">size</span><span className="text-violet-400">=</span><span className="token-string">"m"</span>){'\n\n'}
+                      <span className="token-keyword">from</span> <span className="text-violet-300">libreyolo</span> <span className="token-keyword">import</span> <span className="text-emerald-400">LibreYOLO</span>{'\n\n'}
+                      <span className="text-surface-300">model</span> <span className="text-violet-400">=</span> <span className="text-emerald-400">LibreYOLO</span>(<span className="text-surface-300">model_path</span><span className="text-violet-400">=</span><span className="token-string">"LibreYOLO11m.pt"</span>, <span className="text-surface-300">size</span><span className="text-violet-400">=</span><span className="token-string">"m"</span>){'\n\n'}
                       <span className="token-comment"># One-line CAM visualization</span>{'\n'}
                       <span className="text-surface-300">result</span> <span className="text-violet-400">=</span> <span className="text-surface-300">model</span>.<span className="token-function">explain</span>({'\n'}
                       {'    '}<span className="text-surface-300">image</span><span className="text-violet-400">=</span><span className="token-string">"parkour.jpg"</span>,{'\n'}

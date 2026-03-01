@@ -23,9 +23,9 @@ const stagger = {
   }
 }
 
-const codeSnippet = `from libreyolo import LIBREYOLO, SAMPLE_IMAGE
+const codeSnippet = `from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-model = LIBREYOLO("libreyoloXs.pt")
+model = LibreYOLO("LibreYOLOXs.pt")
 results = model(SAMPLE_IMAGE, save=True)`
 
 function HeroSection() {
@@ -143,12 +143,12 @@ function HeroSection() {
                         <tbody>
                           <tr>
                             <td className="pr-4 text-right select-none text-surface-600 align-top w-6">1</td>
-                            <td><span className="token-keyword">from</span> <span className="text-libre-300">libreyolo</span> <span className="token-keyword">import</span> <span className="text-emerald-400">LIBREYOLO</span>, <span className="text-emerald-400">SAMPLE_IMAGE</span></td>
+                            <td><span className="token-keyword">from</span> <span className="text-libre-300">libreyolo</span> <span className="token-keyword">import</span> <span className="text-emerald-400">LibreYOLO</span>, <span className="text-emerald-400">SAMPLE_IMAGE</span></td>
                           </tr>
                           <tr><td className="pr-4 text-right select-none text-surface-600 w-6">2</td><td></td></tr>
                           <tr>
                             <td className="pr-4 text-right select-none text-surface-600 align-top w-6">3</td>
-                            <td><span className="text-surface-300">model</span> <span className="text-libre-400">=</span> <span className="text-emerald-400">LIBREYOLO</span>(<span className="token-string">&quot;libreyoloXs.pt&quot;</span>)</td>
+                            <td><span className="text-surface-300">model</span> <span className="text-libre-400">=</span> <span className="text-emerald-400">LibreYOLO</span>(<span className="token-string">&quot;LibreYOLOXs.pt&quot;</span>)</td>
                           </tr>
                           <tr>
                             <td className="pr-4 text-right select-none text-surface-600 align-top w-6">4</td>
@@ -210,7 +210,7 @@ function FeaturesSection() {
     {
       icon: Layers,
       title: 'One API, three architectures',
-      description: 'YOLOX, YOLOv9, and RF-DETR behind a single LIBREYOLO() call. Architecture, size, and class count auto-detected from weights.',
+      description: 'YOLOX, YOLOv9, and RF-DETR behind a single LibreYOLO() call. Architecture, size, and class count auto-detected from weights.',
       color: 'libre'
     },
     {
