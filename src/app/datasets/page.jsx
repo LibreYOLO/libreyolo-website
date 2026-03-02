@@ -21,12 +21,12 @@ export default function Datasets() {
             Dataset <span className="text-emerald-400">Zoo</span>
           </h1>
           <p className="text-lg text-surface-400 max-w-2xl mx-auto mb-10">
-            Curated datasets for training and evaluating Libre-YOLO models.
-            Ready to use with the Libre-YOLO training pipeline.
+            Curated datasets for training and evaluating LibreYOLO models.
+            Ready to use with the LibreYOLO training pipeline.
           </p>
 
           <a
-            href="https://huggingface.co/Libre-YOLO/datasets"
+            href="https://huggingface.co/LibreYOLO/datasets"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl text-white font-semibold text-lg"

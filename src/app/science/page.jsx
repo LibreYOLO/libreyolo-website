@@ -147,7 +147,7 @@ function NoPaywallSection() {
               <h2 className="text-2xl font-bold text-white mb-4">No "Research License" Required</h2>
               <p className="text-surface-300 mb-6">
                 Some frameworks charge separate fees for "research" or "science" licenses just to 
-                let you inspect the code without releasing your work. <strong className="text-white">Libre-YOLO doesn't.</strong>
+                let you inspect the code without releasing your work. <strong className="text-white">LibreYOLO doesn't.</strong>
               </p>
               
               <div className="grid sm:grid-cols-2 gap-6">
@@ -179,7 +179,7 @@ function NoPaywallSection() {
                 <div className="bg-emerald-500/5 rounded-xl p-5 border border-emerald-500/20">
                   <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
                     <Unlock className="w-4 h-4 text-emerald-400" />
-                    Libre-YOLO (MIT)
+                    LibreYOLO (MIT)
                   </h3>
                   <ul className="space-y-2 text-sm text-surface-400">
                     <li className="flex items-start gap-2">

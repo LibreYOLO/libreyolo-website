@@ -24,7 +24,7 @@ function HeroSection() {
             Ship Your Product <span className="text-emerald-400">Without</span> Shipping Your Source
           </h1>
           <p className="text-lg text-surface-400 leading-relaxed">
-            The definitive guide to using Libre-YOLO in proprietary, closed-source applications. 
+            The definitive guide to using LibreYOLO in proprietary, closed-source applications. 
             No license negotiations. No legal gray areas. Just clear, actionable guidance.
           </p>
         </motion.div>
@@ -51,7 +51,7 @@ function TLDRSection() {
               <h2 className="text-2xl font-bold text-white mb-4">TL;DR: Yes, You Can Sell This</h2>
               <div className="space-y-3 text-surface-300">
                 <p>
-                  The Libre-YOLO engine is released under the <strong className="text-white">MIT License</strong>. 
+                  The LibreYOLO engine is released under the <strong className="text-white">MIT License</strong>. 
                   This is one of the most permissive open-source licenses available.
                 </p>
                 <p>You are explicitly permitted to:</p>
@@ -111,7 +111,7 @@ function WeightsSection() {
                   Engine vs. Weights: Different Licenses May Apply
                 </h3>
                 <p className="text-surface-400 mb-4">
-                  The Libre-YOLO <strong className="text-white">engine</strong> (the code that runs inference and training) 
+                  The LibreYOLO <strong className="text-white">engine</strong> (the code that runs inference and training) 
                   is MIT-licensed. However, pre-trained <strong className="text-white">model weights</strong> may have 
                   different licensing terms depending on their origin.
                 </p>
@@ -122,7 +122,7 @@ function WeightsSection() {
                       <span className="font-semibold text-white">MIT Weights</span>
                     </div>
                     <p className="text-surface-400 text-sm">
-                      Weights trained from scratch using Libre-YOLO on public datasets. 
+                      Weights trained from scratch using LibreYOLO on public datasets. 
                       Fully safe for commercial use.
                     </p>
                   </div>
@@ -150,7 +150,7 @@ function WeightsSection() {
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-semibold flex-shrink-0">2</span>
-                <span>Fine-tune on your own proprietary dataset using Libre-YOLO</span>
+                <span>Fine-tune on your own proprietary dataset using LibreYOLO</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-semibold flex-shrink-0">3</span>
@@ -242,28 +242,28 @@ function ComparisonSection() {
 function FAQSection() {
   const faqs = [
     {
-      question: 'Do I need to pay anything to use Libre-YOLO commercially?',
-      answer: 'No. The MIT license does not require any payment, royalties, or fees for commercial use. You can use, modify, and distribute Libre-YOLO in commercial products at no cost.',
+      question: 'Do I need to pay anything to use LibreYOLO commercially?',
+      answer: 'No. The MIT license does not require any payment, royalties, or fees for commercial use. You can use, modify, and distribute LibreYOLO in commercial products at no cost.',
     },
     {
-      question: 'Do I need to open-source my application if I use Libre-YOLO?',
+      question: 'Do I need to open-source my application if I use LibreYOLO?',
       answer: 'No. Unlike copyleft licenses (like AGPL), the MIT license has no "viral" clause. Your proprietary code remains proprietary. You only need to include the MIT license notice somewhere in your distribution.',
     },
     {
-      question: 'Can I use Libre-YOLO in a SaaS product?',
-      answer: 'Yes. You can build and deploy SaaS products using Libre-YOLO without any special licensing requirements. The MIT license explicitly permits this.',
+      question: 'Can I use LibreYOLO in a SaaS product?',
+      answer: 'Yes. You can build and deploy SaaS products using LibreYOLO without any special licensing requirements. The MIT license explicitly permits this.',
     },
     {
-      question: 'What if I modify the Libre-YOLO source code?',
+      question: 'What if I modify the LibreYOLO source code?',
       answer: 'You can modify the code freely without any obligation to share your changes. Unlike AGPL, MIT does not require you to publish modifications.',
     },
     {
       question: 'Can my competitors use my improvements if I contribute back?',
-      answer: 'If you choose to contribute improvements back to the Libre-YOLO project (which is optional), those contributions become available under MIT license. But you\'re never required to contribute.',
+      answer: 'If you choose to contribute improvements back to the LibreYOLO project (which is optional), those contributions become available under MIT license. But you\'re never required to contribute.',
     },
     {
       question: 'How do I ensure my commercial use is fully "clean"?',
-      answer: 'Use MIT-licensed weights from our Model Zoo, or train your own models from scratch using Libre-YOLO. Your trained weights are entirely yours with no encumbrances.',
+      answer: 'Use MIT-licensed weights from our Model Zoo, or train your own models from scratch using LibreYOLO. Your trained weights are entirely yours with no encumbrances.',
     },
   ]
 
@@ -317,7 +317,7 @@ function CTASection() {
             Ready to Build?
           </h2>
           <p className="text-surface-400 mb-8 max-w-xl mx-auto">
-            Start integrating Libre-YOLO into your commercial product today. 
+            Start integrating LibreYOLO into your commercial product today. 
             No licensing calls. No legal reviews. Just code.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

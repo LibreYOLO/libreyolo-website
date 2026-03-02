@@ -49,7 +49,7 @@ export default function Navbar() {
               <div className="relative w-8 h-8">
                 <Image
                   src="/logo.png"
-                  alt="Libre-YOLO"
+                  alt="LibreYOLO"
                   fill
                   className="object-contain invert transition-all duration-300 group-hover:opacity-80 relative z-10"
                   sizes="32px"
@@ -58,7 +58,7 @@ export default function Navbar() {
               </div>
               <span className="text-xl font-semibold tracking-tight">
                 <span className="text-white">Libre</span>
-                <span className="text-libre-400">-YOLO</span>
+                <span className="text-libre-400">YOLO</span>
               </span>
             </Link>
 

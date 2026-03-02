@@ -18,21 +18,21 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata = {
-  title: 'Libre-YOLO | MIT-Licensed Object Detection',
+  title: 'LibreYOLO | MIT-Licensed Object Detection',
   description: 'The MIT-licensed training and inference engine for state-of-the-art YOLO models. Built for commercial applications, free from AGPL restrictions.',
   keywords: ['YOLO', 'object detection', 'MIT license', 'machine learning', 'computer vision', 'open source', 'AI'],
-  authors: [{ name: 'Libre-YOLO Team' }],
+  authors: [{ name: 'LibreYOLO Team' }],
   openGraph: {
-    title: 'Libre-YOLO | MIT-Licensed Object Detection',
+    title: 'LibreYOLO | MIT-Licensed Object Detection',
     description: 'The MIT-licensed training and inference engine for state-of-the-art YOLO models. Built for commercial applications, free from AGPL restrictions.',
     url: 'https://libreyolo.com',
-    siteName: 'Libre-YOLO',
+    siteName: 'LibreYOLO',
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Libre-YOLO | MIT-Licensed Object Detection',
+    title: 'LibreYOLO | MIT-Licensed Object Detection',
     description: 'The MIT-licensed training and inference engine for state-of-the-art YOLO models.',
   },
   icons: {

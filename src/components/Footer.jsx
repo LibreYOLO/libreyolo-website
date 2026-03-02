@@ -13,7 +13,7 @@ export default function Footer() {
               <div className="relative w-7 h-7">
                 <Image 
                   src="/logo.png" 
-                  alt="Libre-YOLO" 
+                  alt="LibreYOLO" 
                   fill
                   className="object-contain invert"
                   sizes="28px"
@@ -21,7 +21,7 @@ export default function Footer() {
               </div>
               <span className="text-lg font-semibold">
                 <span className="text-white">Libre</span>
-                <span className="text-libre-400">-YOLO</span>
+                <span className="text-libre-400">YOLO</span>
               </span>
             </Link>
             <p className="text-surface-400 text-sm leading-relaxed max-w-md">
@@ -87,7 +87,7 @@ export default function Footer() {
 
         <div className="mt-12 pt-8 border-t border-white/5">
           <p className="text-surface-500 text-sm text-center md:text-left">
-            © {new Date().getFullYear()} Libre-YOLO. An independent open-source project.
+            © {new Date().getFullYear()} LibreYOLO. An independent open-source project.
           </p>
         </div>
       </div>
