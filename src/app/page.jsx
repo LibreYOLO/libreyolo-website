@@ -3,10 +3,12 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   Unlock, Layers, ArrowRight,
   Code2, Scale, Copy, Check, CheckCircle2,
-  Upload, RefreshCw
+  Upload, RefreshCw, MessageSquareQuote,
+  Cpu, X as XIcon
 } from 'lucide-react'
 
 const fadeInUp = {
@@ -42,11 +44,11 @@ function HeroSection() {
       {/* Background Effects */}
       <div className="absolute inset-0 grid-bg" />
       <div className="absolute inset-0 gradient-mesh" />
-      
+
       {/* Animated Orbs */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-libre-500/20 rounded-full blur-3xl animate-pulse-slow" />
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-emerald-500/15 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
-      
+
       {/* Hero Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20">
         <motion.div
@@ -64,7 +66,7 @@ function HeroSection() {
           </motion.div>
 
           {/* Main Headline */}
-          <motion.h1 
+          <motion.h1
             variants={fadeInUp}
             className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-6"
           >
@@ -199,6 +201,66 @@ function HeroSection() {
 }
 
 
+function SocialProofSection() {
+  const testimonials = [
+    {
+      quote: "This is really damn good! People need to take note of this!!!",
+      author: "u/InternationalMany6",
+    },
+    {
+      quote: "I'll be so happy when there is a good, community maintained, MIT licensed alternative to Ultralytics.",
+      author: "u/Covered_in_bees_",
+    },
+    {
+      quote: "This is so cool bro. If I see some place I can contribute, I will definitely do so!",
+      author: "u/FedStan",
+    },
+  ]
+
+  return (
+    <section className="relative py-20 lg:py-28 overflow-hidden">
+      <div className="absolute inset-0 grid-bg opacity-30" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-medium mb-4">
+            <MessageSquareQuote className="w-3.5 h-3.5" />
+            r/computervision
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold text-white">
+            What the Community Says
+          </h2>
+        </motion.div>
+
+        <div className="grid sm:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {testimonials.map((t, i) => (
+            <motion.div
+              key={t.author}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="relative bg-surface-900/60 backdrop-blur-sm border border-white/5 rounded-2xl p-6"
+            >
+              <div className="absolute top-4 left-5 text-libre-500/20 text-4xl font-serif leading-none select-none">&ldquo;</div>
+              <p className="text-surface-200 text-sm leading-relaxed mb-4 pt-4 italic">
+                &ldquo;{t.quote}&rdquo;
+              </p>
+              <p className="text-surface-500 text-xs font-mono">{t.author}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+
 function FeaturesSection() {
   const features = [
     {
@@ -251,7 +313,7 @@ function FeaturesSection() {
   return (
     <section className="relative py-24 lg:py-32">
       <div className="absolute inset-0 grid-bg opacity-50" />
-      
+
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -293,12 +355,215 @@ function FeaturesSection() {
   )
 }
 
+
+function DeployAnywhereSection() {
+  const exportFormats = [
+    { name: 'ONNX', variants: ['FP32', 'FP16'] },
+    { name: 'TensorRT', variants: ['FP32', 'FP16', 'INT8'] },
+    { name: 'OpenVINO', variants: ['FP16', 'INT8'] },
+    { name: 'ncnn', variants: ['FP16'] },
+    { name: 'TorchScript', variants: ['FP32'] },
+  ]
+
+  const hardware = [
+    { name: 'Jetson Nano', src: '/hardware/jetson-nano.jpg' },
+    { name: 'Jetson Orin', src: '/hardware/jetson-orin.jpg' },
+    { name: 'Raspberry Pi', src: '/hardware/raspberry-pi.png' },
+    { name: 'NVIDIA GPU', src: '/hardware/nvidia-gpu.png' },
+  ]
+
+  return (
+    <section className="relative py-24 lg:py-32 overflow-hidden">
+      <div className="absolute inset-0 grid-bg opacity-30" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-libre-500/5 rounded-full blur-3xl" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-libre-500/10 border border-libre-500/20 text-libre-400 text-xs font-medium mb-4">
+            <Cpu className="w-3.5 h-3.5" />
+            Edge to Cloud
+          </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+            Deploy <span className="text-transparent bg-clip-text bg-gradient-to-r from-libre-400 to-emerald-400">Anywhere</span>
+          </h2>
+          <p className="text-lg text-surface-400 max-w-2xl mx-auto">
+            Export once, run on any hardware. From $35 boards to datacenter GPUs.
+          </p>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-2 gap-12 items-start max-w-6xl mx-auto">
+          {/* Export Formats */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-sm font-semibold text-surface-400 uppercase tracking-wider mb-6">Export Formats</h3>
+            <div className="space-y-3">
+              {exportFormats.map((fmt) => (
+                <div
+                  key={fmt.name}
+                  className="flex items-center justify-between bg-surface-900/60 border border-white/5 rounded-xl px-5 py-3.5"
+                >
+                  <span className="text-white font-medium text-sm">{fmt.name}</span>
+                  <div className="flex gap-2">
+                    {fmt.variants.map((v) => (
+                      <span
+                        key={v}
+                        className="px-2.5 py-1 rounded-md bg-libre-500/10 text-libre-300 text-xs font-mono"
+                      >
+                        {v}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Hardware Grid */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-sm font-semibold text-surface-400 uppercase tracking-wider mb-6">Tested Hardware</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {hardware.map((hw) => (
+                <div
+                  key={hw.name}
+                  className="group relative bg-surface-900/60 border border-white/5 rounded-xl overflow-hidden"
+                >
+                  <div className="aspect-[4/3] relative">
+                    <Image
+                      src={hw.src}
+                      alt={hw.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-surface-950/90 via-surface-950/20 to-transparent" />
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 px-4 py-3">
+                    <span className="text-white text-sm font-medium">{hw.name}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+
+function ComparisonSection() {
+  const rows = [
+    { feature: 'Use in proprietary software', libre: true, ultra: false },
+    { feature: 'Sell products containing it', libre: true, ultra: false },
+    { feature: 'No source disclosure required', libre: true, ultra: false },
+    { feature: 'Fine-tune & keep weights private', libre: true, ultra: false },
+    { feature: 'Distill into a new model', libre: true, ultra: false },
+    { feature: 'Commercial use fee', libreText: 'None', ultraText: 'Required' },
+  ]
+
+  return (
+    <section className="relative py-24 lg:py-32">
+      <div className="absolute inset-0 grid-bg opacity-30" />
+
+      <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+            LibreYOLO vs <span className="text-surface-400">Ultralytics</span>
+          </h2>
+          <p className="text-lg text-surface-400 max-w-2xl mx-auto">
+            MIT means you own your work. No surprises.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="bg-surface-900/60 backdrop-blur-sm border border-white/5 rounded-2xl overflow-hidden"
+        >
+          {/* Table Header */}
+          <div className="grid grid-cols-[1fr_80px_80px] sm:grid-cols-[1fr_140px_140px] items-center px-4 sm:px-6 py-4 border-b border-white/5 bg-surface-900/80">
+            <span className="text-surface-500 text-sm font-medium" />
+            <span className="text-libre-400 text-xs sm:text-sm font-semibold text-center">LibreYOLO</span>
+            <span className="text-surface-400 text-xs sm:text-sm font-semibold text-center">Ultralytics</span>
+          </div>
+
+          {/* Table Rows */}
+          {rows.map((row, i) => (
+            <div
+              key={row.feature}
+              className={`grid grid-cols-[1fr_80px_80px] sm:grid-cols-[1fr_140px_140px] items-center px-4 sm:px-6 py-4 ${
+                i < rows.length - 1 ? 'border-b border-white/5' : ''
+              }`}
+            >
+              <span className="text-surface-200 text-sm">{row.feature}</span>
+              {row.libreText !== undefined ? (
+                <>
+                  <span className="text-emerald-400 text-sm font-medium text-center">{row.libreText}</span>
+                  <span className="text-red-400 text-sm font-medium text-center">{row.ultraText}</span>
+                </>
+              ) : (
+                <>
+                  <div className="flex justify-center">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                  </div>
+                  <div className="flex justify-center">
+                    <XIcon className="w-5 h-5 text-red-400" />
+                  </div>
+                </>
+              )}
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Community callout */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-8 text-center"
+        >
+          <p className="text-surface-400 text-sm">
+            <span className="text-libre-400 font-medium">Community Driven</span> — built on the{' '}
+            <a
+              href="https://github.com/testdummyvt/yolov9mit"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-libre-300 hover:text-libre-200 underline underline-offset-2 transition-colors"
+            >
+              @testdummyvt fork
+            </a>{' '}
+            that added RT-DETR + NMS-free YOLOv9 under the MIT license.
+          </p>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+
 function CTASection() {
   return (
     <section className="relative py-24 lg:py-32 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-surface-950 to-surface-900/50" />
       <div className="absolute inset-0 gradient-mesh opacity-50" />
-      
+
       <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -343,9 +608,11 @@ export default function Home() {
   return (
     <>
       <HeroSection />
+      <SocialProofSection />
       <FeaturesSection />
+      <DeployAnywhereSection />
+      <ComparisonSection />
       <CTASection />
     </>
   )
 }
-
