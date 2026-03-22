@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Github, ExternalLink, Linkedin, Twitter, Globe } from 'lucide-react'
+import { Github, ExternalLink } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -30,40 +30,13 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-4 mt-6">
               <a
-                href="https://github.com/LibreYOLO/libreyolo"
+                href="https://github.com/Libre-YOLO/libreyolo"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-surface-400 hover:text-libre-400 transition-colors"
                 aria-label="GitHub"
               >
                 <Github className="w-5 h-5" />
-              </a>
-              <a
-                href="https://x.com/LibreYOLO"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-surface-400 hover:text-libre-400 transition-colors"
-                aria-label="Twitter / X"
-              >
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a
-                href="https://www.linkedin.com/company/110443296/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-surface-400 hover:text-libre-400 transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a
-                href="https://www.libreyolo.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-surface-400 hover:text-libre-400 transition-colors"
-                aria-label="Website"
-              >
-                <Globe className="w-5 h-5" />
               </a>
             </div>
           </div>

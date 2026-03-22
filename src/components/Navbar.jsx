@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Github, BookOpen, Linkedin, Twitter } from 'lucide-react'
+import { Menu, X, Github, BookOpen } from 'lucide-react'
 
 const navLinks = [
   { name: 'Home', path: '/' },
@@ -81,33 +81,15 @@ export default function Navbar() {
             </div>
 
             {/* Right Side */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-4">
               <a
-                href="https://www.linkedin.com/in/xuban-ceccon/"
+                href="https://github.com/Libre-YOLO/libreyolo"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 text-surface-400 hover:text-libre-400 transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-4 h-4" />
-              </a>
-              <a
-                href="https://x.com/LibreYOLO"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 text-surface-400 hover:text-libre-400 transition-colors"
-                aria-label="Twitter / X"
-              >
-                <Twitter className="w-4 h-4" />
-              </a>
-              <a
-                href="https://github.com/LibreYOLO/libreyolo"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 text-surface-400 hover:text-libre-400 transition-colors"
-                aria-label="GitHub"
+                className="flex items-center gap-2 px-3 py-2 text-sm text-surface-300 hover:text-white transition-colors"
               >
                 <Github className="w-4 h-4" />
+                GitHub
               </a>
               <div className="badge-mit px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -152,35 +134,15 @@ export default function Navbar() {
                   {link.name}
                 </Link>
               ))}
-              <div className="flex items-center gap-4 px-4 py-3">
-                <a
-                  href="https://www.linkedin.com/in/xuban-ceccon/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-surface-400 hover:text-libre-400 transition-colors"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
-                <a
-                  href="https://x.com/LibreYOLO"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-surface-400 hover:text-libre-400 transition-colors"
-                  aria-label="Twitter / X"
-                >
-                  <Twitter className="w-5 h-5" />
-                </a>
-                <a
-                  href="https://github.com/LibreYOLO/libreyolo"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-surface-400 hover:text-libre-400 transition-colors"
-                  aria-label="GitHub"
-                >
-                  <Github className="w-5 h-5" />
-                </a>
-              </div>
+              <a
+                href="https://github.com/Libre-YOLO/libreyolo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-3 text-sm text-surface-300 hover:text-white"
+              >
+                <Github className="w-4 h-4" />
+                GitHub
+              </a>
               <div className="px-4 pt-2">
                 <div className="badge-mit px-3 py-1.5 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
