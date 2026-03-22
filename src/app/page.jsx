@@ -180,7 +180,7 @@ function HeroSection() {
                   </div>
                   <div className="p-3">
                     <img
-                      src="https://raw.githubusercontent.com/LibreYOLO/libreyolo/main/libreyolo/assets/parkour_result.jpg"
+                      src="https://raw.githubusercontent.com/Libre-YOLO/libreyolo/main/media/parkour_result.jpg"
                       alt="LibreYOLO Detection Result"
                       className="rounded-lg w-full"
                     />
