@@ -8,7 +8,7 @@ import {
   Unlock, Layers, ArrowRight,
   Code2, Scale, Copy, Check, CheckCircle2,
   Upload, RefreshCw, MessageSquareQuote,
-  Cpu, X as XIcon
+  Cpu, X as XIcon, Map
 } from 'lucide-react'
 
 const fadeInUp = {
@@ -109,6 +109,20 @@ function HeroSection() {
             </a>
           </motion.div>
 
+          {/* Roadmap Link */}
+          <motion.div variants={fadeInUp} className="mt-6">
+            <a
+              href="https://github.com/orgs/LibreYOLO/projects/1/views/4"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-surface-400 hover:text-libre-400 text-sm transition-colors"
+            >
+              <Map className="w-4 h-4" />
+              Check out our roadmap
+              <ArrowRight className="w-3 h-3" />
+            </a>
+          </motion.div>
+
           {/* Hero Visual */}
           <motion.div
             variants={fadeInUp}
@@ -180,7 +194,7 @@ function HeroSection() {
                   </div>
                   <div className="p-3">
                     <img
-                      src="https://raw.githubusercontent.com/Libre-YOLO/libreyolo/main/media/parkour_result.jpg"
+                      src="https://raw.githubusercontent.com/LibreYOLO/libreyolo/main/libreyolo/assets/parkour_result.jpg"
                       alt="LibreYOLO Detection Result"
                       className="rounded-lg w-full"
                     />
