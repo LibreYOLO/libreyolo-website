@@ -21,11 +21,11 @@ export default function NotFound() {
           </span>
         </div>
         
-        <h1 className="text-3xl font-bold text-white mb-4">
+        <h1 className="text-3xl font-bold text-surface-800 dark:text-white mb-4">
           Object Not Detected
         </h1>
         
-        <p className="text-surface-400 mb-8">
+        <p className="text-surface-600 dark:text-surface-400 mb-8">
           Our model couldn't find this page. It might have been moved, 
           deleted, or perhaps it never existed in the first place.
         </p>
@@ -42,7 +42,7 @@ export default function NotFound() {
             href="https://docs.libreyolo.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-medium transition-all"
+            className="flex items-center gap-2 px-6 py-3 bg-surface-50 dark:bg-white/5 hover:bg-surface-100 dark:hover:bg-white/10 border border-surface-200 dark:border-white/10 rounded-xl text-surface-800 dark:text-white font-medium transition-all"
           >
             <Search className="w-5 h-5" />
             Browse Docs
@@ -53,9 +53,9 @@ export default function NotFound() {
           <pre className="p-4 text-left text-sm">
             <code className="font-mono">
               <span className="token-comment"># Detection results</span>{'\n'}
-              <span className="text-surface-300">confidence</span><span className="text-libre-400">:</span> <span className="text-red-400">0.00</span>{'\n'}
-              <span className="text-surface-300">class</span><span className="text-libre-400">:</span> <span className="token-string">"page_not_found"</span>{'\n'}
-              <span className="text-surface-300">suggestion</span><span className="text-libre-400">:</span> <span className="token-string">"try_home_page"</span>
+              <span className="text-surface-600 dark:text-surface-400">confidence</span><span className="text-libre-400">:</span> <span className="text-red-400">0.00</span>{'\n'}
+              <span className="text-surface-600 dark:text-surface-400">class</span><span className="text-libre-400">:</span> <span className="token-string">"page_not_found"</span>{'\n'}
+              <span className="text-surface-600 dark:text-surface-400">suggestion</span><span className="text-libre-400">:</span> <span className="token-string">"try_home_page"</span>
             </code>
           </pre>
         </div>

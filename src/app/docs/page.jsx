@@ -39,28 +39,28 @@ function CodeBlock({ children, language = 'python', filename }) {
   }
 
   return (
-    <div className="relative my-5 rounded-xl overflow-hidden border border-white/[0.06]">
-      <div className="flex items-center justify-between px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.06]">
+    <div className="relative my-5 rounded-xl overflow-hidden border border-surface-200 dark:border-white/[0.06]">
+      <div className="flex items-center justify-between px-4 py-2.5 bg-surface-100 dark:bg-white/[0.03] border-b border-surface-200 dark:border-white/[0.06]">
         <div className="flex items-center gap-2">
           <span className="text-[11px] font-mono text-surface-500 uppercase tracking-wider">{language}</span>
           {filename && (
             <>
-              <span className="text-surface-700">·</span>
+              <span className="text-surface-400 dark:text-surface-700">&middot;</span>
               <span className="text-xs font-mono text-surface-500">{filename}</span>
             </>
           )}
         </div>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-medium text-surface-500 hover:text-surface-300 hover:bg-white/[0.06] transition-all"
+          className="flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-medium text-surface-500 hover:text-surface-800 dark:hover:text-surface-300 hover:bg-surface-200 dark:hover:bg-white/[0.06] transition-all"
         >
-          {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+          {copied ? <Check className="w-3 h-3 text-emerald-500 dark:text-emerald-400" /> : <Copy className="w-3 h-3" />}
           {copied ? 'Copied' : 'Copy'}
         </button>
       </div>
-      <div className="overflow-x-auto bg-[#0a0f1a]">
+      <div className="overflow-x-auto bg-surface-50 dark:bg-[#0a0f1a]">
         <pre className="p-5 text-[13px] leading-relaxed">
-          <code className="font-mono text-surface-300">{children}</code>
+          <code className="font-mono text-surface-700 dark:text-surface-300">{children}</code>
         </pre>
       </div>
     </div>
@@ -69,20 +69,20 @@ function CodeBlock({ children, language = 'python', filename }) {
 
 function DocTable({ headers, rows }) {
   return (
-    <div className="my-5 overflow-x-auto rounded-xl border border-white/[0.06]">
+    <div className="my-5 overflow-x-auto rounded-xl border border-surface-200 dark:border-white/[0.06]">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-white/[0.08] bg-white/[0.02]">
+          <tr className="border-b border-surface-200 dark:border-white/[0.08] bg-surface-50 dark:bg-white/[0.02]">
             {headers.map((h, i) => (
-              <th key={i} className="px-4 py-3 text-left font-semibold text-surface-300 whitespace-nowrap">{h}</th>
+              <th key={i} className="px-4 py-3 text-left font-semibold text-surface-700 dark:text-surface-300 whitespace-nowrap">{h}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {rows.map((row, i) => (
-            <tr key={i} className="border-b border-white/[0.04] last:border-0 hover:bg-white/[0.02] transition-colors">
+            <tr key={i} className="border-b border-surface-100 dark:border-white/[0.04] last:border-0 hover:bg-surface-50 dark:hover:bg-white/[0.02] transition-colors">
               {row.map((cell, j) => (
-                <td key={j} className="px-4 py-3 text-surface-400">{cell}</td>
+                <td key={j} className="px-4 py-3 text-surface-600 dark:text-surface-400">{cell}</td>
               ))}
             </tr>
           ))}
@@ -96,33 +96,33 @@ function SectionHeading({ id, icon: Icon, children }) {
   return (
     <div id={id} className="scroll-mt-28 flex items-center gap-3 mb-6 pt-2">
       <div className="w-10 h-10 rounded-xl bg-libre-500/10 border border-libre-500/20 flex items-center justify-center shrink-0">
-        <Icon className="w-5 h-5 text-libre-400" />
+        <Icon className="w-5 h-5 text-libre-600 dark:text-libre-400" />
       </div>
-      <h2 className="text-2xl lg:text-3xl font-bold text-white">{children}</h2>
+      <h2 className="text-2xl lg:text-3xl font-bold text-surface-800 dark:text-white">{children}</h2>
     </div>
   )
 }
 
 function SubHeading({ children }) {
-  return <h3 className="text-lg font-semibold text-white mt-10 mb-4">{children}</h3>
+  return <h3 className="text-lg font-semibold text-surface-800 dark:text-white mt-10 mb-4">{children}</h3>
 }
 
 function P({ children }) {
-  return <p className="text-surface-400 leading-relaxed mb-4">{children}</p>
+  return <p className="text-surface-600 dark:text-surface-400 leading-relaxed mb-4">{children}</p>
 }
 
 function InlineCode({ children }) {
-  return <code className="px-1.5 py-0.5 rounded bg-white/[0.06] text-libre-300 text-sm font-mono">{children}</code>
+  return <code className="px-1.5 py-0.5 rounded bg-libre-500/10 dark:bg-white/[0.06] text-libre-600 dark:text-libre-300 text-sm font-mono">{children}</code>
 }
 
 function Divider() {
-  return <div className="border-t border-white/[0.06] my-16" />
+  return <div className="border-t border-surface-200 dark:border-white/[0.06] my-16" />
 }
 
 function FeatureItem({ children }) {
   return (
-    <li className="flex items-start gap-3 text-surface-400">
-      <ChevronRight className="w-4 h-4 text-libre-400 mt-1 shrink-0" />
+    <li className="flex items-start gap-3 text-surface-600 dark:text-surface-400">
+      <ChevronRight className="w-4 h-4 text-libre-600 dark:text-libre-400 mt-1 shrink-0" />
       <span>{children}</span>
     </li>
   )
@@ -134,8 +134,8 @@ function Sidebar({ activeSection, onNavigate, className = '' }) {
   return (
     <nav className={className}>
       <div className="flex items-center gap-2 mb-6 px-3">
-        <BookOpen className="w-5 h-5 text-libre-400" />
-        <span className="text-sm font-semibold text-white tracking-wide uppercase">Documentation</span>
+        <BookOpen className="w-5 h-5 text-libre-600 dark:text-libre-400" />
+        <span className="text-sm font-semibold text-surface-800 dark:text-white tracking-wide uppercase">Documentation</span>
       </div>
       <ul className="space-y-0.5">
         {sections.map(({ id, title, icon: Icon }) => {
@@ -146,11 +146,11 @@ function Sidebar({ activeSection, onNavigate, className = '' }) {
                 onClick={() => onNavigate(id)}
                 className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-left ${
                   isActive
-                    ? 'text-libre-400 bg-libre-500/10'
-                    : 'text-surface-400 hover:text-surface-200 hover:bg-white/[0.04]'
+                    ? 'text-libre-600 dark:text-libre-400 bg-libre-500/10'
+                    : 'text-surface-600 dark:text-surface-400 hover:text-surface-900 dark:hover:text-surface-200 hover:bg-surface-100 dark:hover:bg-white/[0.04]'
                 }`}
               >
-                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-libre-400' : 'text-surface-600'}`} />
+                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-libre-600 dark:text-libre-400' : 'text-surface-400 dark:text-surface-600'}`} />
                 {title}
               </button>
             </li>
@@ -197,7 +197,7 @@ export default function Docs() {
   return (
     <div className="flex min-h-screen">
       {/* Desktop sidebar */}
-      <aside className="hidden lg:block fixed left-0 top-20 bottom-0 w-64 border-r border-white/[0.06] bg-surface-950/50 backdrop-blur-sm overflow-y-auto py-8 px-4 z-30">
+      <aside className="hidden lg:block fixed left-0 top-20 bottom-0 w-64 border-r border-surface-200 dark:border-white/[0.06] bg-white/80 dark:bg-surface-950/50 backdrop-blur-sm overflow-y-auto py-8 px-4 z-30">
         <Sidebar activeSection={activeSection} onNavigate={navigateTo} />
       </aside>
 
@@ -226,13 +226,13 @@ export default function Docs() {
               animate={{ x: 0 }}
               exit={{ x: -280 }}
               transition={{ type: 'spring', damping: 25, stiffness: 250 }}
-              className="fixed left-0 top-0 bottom-0 w-72 bg-surface-950 border-r border-white/[0.06] z-50 lg:hidden overflow-y-auto py-6 px-4"
+              className="fixed left-0 top-0 bottom-0 w-72 bg-white dark:bg-surface-950 border-r border-surface-200 dark:border-white/[0.06] z-50 lg:hidden overflow-y-auto py-6 px-4"
             >
               <div className="flex items-center justify-between mb-4 px-3">
-                <span className="text-sm font-semibold text-white tracking-wide uppercase">Docs</span>
+                <span className="text-sm font-semibold text-surface-800 dark:text-white tracking-wide uppercase">Docs</span>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-1.5 rounded-lg text-surface-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+                  className="p-1.5 rounded-lg text-surface-500 dark:text-surface-400 hover:text-surface-900 dark:hover:text-white hover:bg-surface-100 dark:hover:bg-white/[0.06] transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -251,7 +251,7 @@ export default function Docs() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <SectionHeading id="introduction" icon={BookOpen}>Introduction</SectionHeading>
             <P>
-              LibreYOLO is an MIT-licensed object detection library that provides a unified Python API across three architectures: <strong className="text-white">YOLOX</strong>, <strong className="text-white">YOLOv9</strong>, and <strong className="text-white">RF-DETR</strong>. One interface for prediction, training, validation, and export — regardless of which model family you use.
+              LibreYOLO is an MIT-licensed object detection library that provides a unified Python API across three architectures: <strong className="text-surface-800 dark:text-white">YOLOX</strong>, <strong className="text-surface-800 dark:text-white">YOLOv9</strong>, and <strong className="text-surface-800 dark:text-white">RF-DETR</strong>. One interface for prediction, training, validation, and export — regardless of which model family you use.
             </P>
             <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
@@ -277,10 +277,10 @@ print(results.boxes.xyxy)`}</CodeBlock>
           <SectionHeading id="installation" icon={Terminal}>Installation</SectionHeading>
           <SubHeading>Requirements</SubHeading>
           <ul className="space-y-1.5 mb-4">
-            <li className="flex items-center gap-2 text-surface-400">
+            <li className="flex items-center gap-2 text-surface-600 dark:text-surface-400">
               <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />Python 3.10+
             </li>
-            <li className="flex items-center gap-2 text-surface-400">
+            <li className="flex items-center gap-2 text-surface-600 dark:text-surface-400">
               <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />PyTorch 1.7+
             </li>
           </ul>
@@ -1232,7 +1232,7 @@ config.to_yaml("config.yaml")`}</CodeBlock>
               <>Export the class from <InlineCode>libreyolo/__init__.py</InlineCode></>,
               <>(Optional) Override <InlineCode>_get_val_preprocessor()</InlineCode> if the model needs non-standard validation preprocessing</>,
             ].map((item, i) => (
-              <li key={i} className="flex items-start gap-3 text-surface-400">
+              <li key={i} className="flex items-start gap-3 text-surface-600 dark:text-surface-400">
                 <span className="w-6 h-6 rounded-lg bg-libre-500/10 border border-libre-500/20 text-libre-400 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
                   {i + 1}
                 </span>

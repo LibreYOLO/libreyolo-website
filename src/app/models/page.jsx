@@ -13,14 +13,14 @@ export default function Models() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-libre-500/10 border border-libre-500/20 text-libre-400 text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-libre-500/10 border border-libre-500/20 text-libre-700 dark:text-libre-400 text-sm font-medium mb-6">
             <Layers className="w-4 h-4" />
             Pre-trained Weights
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-            Model <span className="text-libre-400">Zoo</span>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-surface-800 dark:text-white mb-6">
+            Model <span className="text-libre-500 dark:text-libre-400">Zoo</span>
           </h1>
-          <p className="text-lg text-surface-400 max-w-2xl mx-auto mb-10">
+          <p className="text-lg text-surface-600 dark:text-surface-400 max-w-2xl mx-auto mb-10">
             Pre-trained weights for LibreYOLOX, LibreYOLO8, and LibreYOLO11 architectures.
             All models trained on COCO dataset with 80 object classes.
           </p>
@@ -43,28 +43,40 @@ export default function Models() {
           transition={{ delay: 0.1 }}
           className="grid grid-cols-3 gap-4 mb-12 max-w-2xl mx-auto"
         >
-          <div className="bg-surface-900/50 border border-white/5 rounded-xl p-4 text-center">
-            <p className="text-2xl font-bold text-white">15</p>
+          <div className="bg-surface-50 dark:bg-surface-900/50 border border-surface-200 dark:border-white/5 rounded-xl p-4 text-center">
+            <p className="text-2xl font-bold text-surface-800 dark:text-white">15</p>
             <p className="text-surface-500 text-sm">Models</p>
           </div>
-          <div className="bg-surface-900/50 border border-white/5 rounded-xl p-4 text-center">
-            <p className="text-2xl font-bold text-libre-400">3</p>
+          <div className="bg-surface-50 dark:bg-surface-900/50 border border-surface-200 dark:border-white/5 rounded-xl p-4 text-center">
+            <p className="text-2xl font-bold text-libre-500 dark:text-libre-400">3</p>
             <p className="text-surface-500 text-sm">Architectures</p>
           </div>
-          <div className="bg-surface-900/50 border border-white/5 rounded-xl p-4 text-center">
-            <p className="text-2xl font-bold text-white">PyTorch</p>
+          <div className="bg-surface-50 dark:bg-surface-900/50 border border-surface-200 dark:border-white/5 rounded-xl p-4 text-center">
+            <p className="text-2xl font-bold text-surface-800 dark:text-white">PyTorch</p>
             <p className="text-surface-500 text-sm">Framework</p>
           </div>
         </motion.div>
 
-        {/* Note about weights */}
+        {/* Coming soon note */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center text-surface-500 text-sm"
+          className="text-center text-surface-500 text-sm max-w-xl mx-auto mt-4"
         >
           <p>
+            Individual model cards will be listed here soon. In the meanwhile, browse all available
+            models on{' '}
+            <a
+              href="https://huggingface.co/Libre-YOLO/models"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-libre-500 hover:text-libre-600 underline underline-offset-2 transition-colors"
+            >
+              LibreYOLO&apos;s HuggingFace
+            </a>.
+          </p>
+          <p className="mt-3">
             Note: Pre-trained weights may inherit licensing terms from their original training source.
           </p>
         </motion.div>

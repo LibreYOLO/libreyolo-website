@@ -13,14 +13,14 @@ export default function Datasets() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-sm font-medium mb-6">
             <Database className="w-4 h-4" />
             Training Data
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-            Dataset <span className="text-emerald-400">Zoo</span>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-surface-800 dark:text-white mb-6">
+            Dataset <span className="text-emerald-600 dark:text-emerald-400">Zoo</span>
           </h1>
-          <p className="text-lg text-surface-400 max-w-2xl mx-auto mb-10">
+          <p className="text-lg text-surface-600 dark:text-surface-400 max-w-2xl mx-auto mb-10">
             Curated datasets for training and evaluating LibreYOLO models.
             Ready to use with the LibreYOLO training pipeline.
           </p>
@@ -34,6 +34,26 @@ export default function Datasets() {
             Browse Datasets on HuggingFace
             <ExternalLink className="w-5 h-5" />
           </a>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center text-surface-500 text-sm max-w-xl mx-auto mt-4"
+        >
+          <p>
+            Individual dataset cards will be listed here soon. In the meanwhile, browse all available
+            datasets on{' '}
+            <a
+              href="https://huggingface.co/LibreYOLO/datasets"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 underline underline-offset-2 transition-colors"
+            >
+              LibreYOLO&apos;s HuggingFace
+            </a>.
+          </p>
         </motion.div>
       </div>
     </div>

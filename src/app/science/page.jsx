@@ -23,9 +23,9 @@ function CopyButton({ code }) {
       title="Copy to clipboard"
     >
       {copied ? (
-        <Check className="w-4 h-4 text-emerald-400" />
+        <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
       ) : (
-        <Copy className="w-4 h-4 text-surface-400" />
+        <Copy className="w-4 h-4 text-surface-600 dark:text-surface-400" />
       )}
     </button>
   )
@@ -112,14 +112,14 @@ function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           className="max-w-3xl"
         >
-          <div className="flex items-center gap-2 text-violet-400 text-sm font-medium mb-4">
+          <div className="flex items-center gap-2 text-violet-700 dark:text-violet-400 text-sm font-medium mb-4">
             <FlaskConical className="w-4 h-4" />
             Research & Science
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-surface-800 dark:text-white mb-6">
             Built for <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">Discovery</span>
           </h1>
-          <p className="text-lg text-surface-400 leading-relaxed">
+          <p className="text-lg text-surface-600 dark:text-surface-400 leading-relaxed">
             A codebase designed for researchers, not just users. Modify freely, inspect deeply, 
             and publish without paying for the privilege.
           </p>
@@ -141,22 +141,22 @@ function NoPaywallSection() {
         >
           <div className="flex items-start gap-4">
             <div className="p-3 rounded-xl bg-violet-500/20 flex-shrink-0">
-              <Unlock className="w-8 h-8 text-violet-400" />
+              <Unlock className="w-8 h-8 text-violet-700 dark:text-violet-400" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-white mb-4">No "Research License" Required</h2>
-              <p className="text-surface-300 mb-6">
-                Some frameworks charge separate fees for "research" or "science" licenses just to 
-                let you inspect the code without releasing your work. <strong className="text-white">LibreYOLO doesn't.</strong>
+              <h2 className="text-2xl font-bold text-surface-800 dark:text-white mb-4">No "Research License" Required</h2>
+              <p className="text-surface-600 dark:text-surface-300 mb-6">
+                Some frameworks charge separate fees for "research" or "science" licenses just to
+                let you inspect the code without releasing your work. <strong className="text-surface-800 dark:text-white">LibreYOLO doesn't.</strong>
               </p>
               
               <div className="grid sm:grid-cols-2 gap-6">
-                <div className="bg-surface-900/50 rounded-xl p-5 border border-white/5">
-                  <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
+                <div className="bg-surface-50 dark:bg-surface-900/50 rounded-xl p-5 border border-surface-200 dark:border-white/5">
+                  <h3 className="text-surface-800 dark:text-white font-semibold mb-3 flex items-center gap-2">
                     <Lock className="w-4 h-4 text-red-400" />
                     Typical "Science Licenses"
                   </h3>
-                  <ul className="space-y-2 text-sm text-surface-400">
+                  <ul className="space-y-2 text-sm text-surface-600 dark:text-surface-400">
                     <li className="flex items-start gap-2">
                       <XCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
                       Pay to keep research private
@@ -177,25 +177,25 @@ function NoPaywallSection() {
                 </div>
                 
                 <div className="bg-emerald-500/5 rounded-xl p-5 border border-emerald-500/20">
-                  <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
-                    <Unlock className="w-4 h-4 text-emerald-400" />
+                  <h3 className="text-surface-800 dark:text-white font-semibold mb-3 flex items-center gap-2">
+                    <Unlock className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                     LibreYOLO (MIT)
                   </h3>
-                  <ul className="space-y-2 text-sm text-surface-400">
+                  <ul className="space-y-2 text-sm text-surface-600 dark:text-surface-400">
                     <li className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span>Investigate freely, <strong className="text-emerald-400">keep it private</strong></span>
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
+                      <span>Investigate freely, <strong className="text-emerald-600 dark:text-emerald-400">keep it private</strong></span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                       Zero fees for any use case
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                       One simple license: MIT
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                       Publish without legal concerns
                     </li>
                   </ul>
@@ -219,14 +219,14 @@ function ExplainabilitySection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-sm font-medium mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-700 dark:text-violet-400 text-sm font-medium mb-4">
             <Eye className="w-4 h-4" />
             Native Explainability
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-surface-800 dark:text-white mb-4">
             See Inside the Black Box
           </h2>
-          <p className="text-lg text-surface-400 max-w-2xl mx-auto">
+          <p className="text-lg text-surface-600 dark:text-surface-400 max-w-2xl mx-auto">
             Built-in tools for interpretability and explainability. No external dependencies,
             no complex setup - just flags and function calls.
           </p>
@@ -241,11 +241,11 @@ function ExplainabilitySection() {
           >
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 rounded-lg bg-cyan-500/10">
-                <Layers className="w-5 h-5 text-cyan-400" />
+                <Layers className="w-5 h-5 text-cyan-700 dark:text-cyan-400" />
               </div>
-              <h3 className="text-xl font-semibold text-white">Feature Map Extraction</h3>
+              <h3 className="text-xl font-semibold text-surface-800 dark:text-white">Feature Map Extraction</h3>
             </div>
-            <p className="text-surface-400 mb-6 max-w-2xl">
+            <p className="text-surface-600 dark:text-surface-400 mb-6 max-w-2xl">
               One flag. That's all it takes to save intermediate activations from every layer.
               Perfect for understanding what your model "sees" at each stage.
             </p>
@@ -330,15 +330,15 @@ results = model(image="parkour.jpg")
           >
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 rounded-lg bg-fuchsia-500/10">
-                <Brain className="w-5 h-5 text-fuchsia-400" />
+                <Brain className="w-5 h-5 text-fuchsia-700 dark:text-fuchsia-400" />
               </div>
-              <h3 className="text-xl font-semibold text-white">CAM Visualizations</h3>
+              <h3 className="text-xl font-semibold text-surface-800 dark:text-white">CAM Visualizations</h3>
               <span className="px-2 py-1 rounded-md bg-amber-500/20 text-amber-400 text-xs font-medium">
                 Experimental
               </span>
             </div>
-            <p className="text-surface-400 mb-6 max-w-2xl">
-              7 built-in Class Activation Map methods. Call <code className="text-fuchsia-400 font-mono text-sm">model.explain()</code> to
+            <p className="text-surface-600 dark:text-surface-400 mb-6 max-w-2xl">
+              7 built-in Class Activation Map methods. Call <code className="text-fuchsia-700 dark:text-fuchsia-400 font-mono text-sm">model.explain()</code> to
               generate heatmaps showing what your model focuses on. This feature is experimental and results may vary.
             </p>
 
@@ -409,12 +409,12 @@ function ModificationSection() {
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-fuchsia-500/10">
-              <Zap className="w-5 h-5 text-fuchsia-400" />
+              <Zap className="w-5 h-5 text-fuchsia-700 dark:text-fuchsia-400" />
             </div>
-            <h2 className="text-2xl font-semibold text-white">Designed for Modification</h2>
+            <h2 className="text-2xl font-semibold text-surface-800 dark:text-white">Designed for Modification</h2>
           </div>
 
-          <p className="text-surface-400 mb-8 max-w-3xl">
+          <p className="text-surface-600 dark:text-surface-400 mb-8 max-w-3xl">
             The codebase is written to be easy to read and modify. Want to test a new backbone?
             Experiment with a custom attention mechanism? Add a novel loss function? Go for it.
           </p>
@@ -484,11 +484,11 @@ function CTASection() {
           viewport={{ once: true }}
           className="bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10 border border-violet-500/20 rounded-2xl p-8 lg:p-12 text-center"
         >
-          <FlaskConical className="w-12 h-12 text-violet-400 mx-auto mb-6" />
-          <h2 className="text-2xl lg:text-3xl font-bold text-white mb-4">
+          <FlaskConical className="w-12 h-12 text-violet-700 dark:text-violet-400 mx-auto mb-6" />
+          <h2 className="text-2xl lg:text-3xl font-bold text-surface-800 dark:text-white mb-4">
             Start Your Research Today
           </h2>
-          <p className="text-surface-400 mb-8 max-w-xl mx-auto">
+          <p className="text-surface-600 dark:text-surface-400 mb-8 max-w-xl mx-auto">
             No license fees. No paywalls. No restrictions on keeping your work private. 
             Just install and start exploring.
           </p>

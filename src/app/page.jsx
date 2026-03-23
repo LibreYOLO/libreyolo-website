@@ -8,7 +8,7 @@ import {
   Unlock, Layers, ArrowRight,
   Code2, Scale, Copy, Check, CheckCircle2,
   Upload, RefreshCw, MessageSquareQuote,
-  Cpu, X as XIcon, Map
+  Cpu, X as XIcon, Map, ChevronLeft, ChevronRight
 } from 'lucide-react'
 
 const fadeInUp = {
@@ -43,11 +43,11 @@ function HeroSection() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 grid-bg" />
-      <div className="absolute inset-0 gradient-mesh" />
+      <div className="absolute inset-0 gradient-mesh hidden dark:block" />
 
-      {/* Animated Orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-libre-500/20 rounded-full blur-3xl animate-pulse-slow" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-emerald-500/15 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
+      {/* Animated Orbs - hidden in light, visible in dark */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 hidden dark:block bg-libre-500/20 rounded-full blur-3xl animate-pulse-slow" />
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 hidden dark:block bg-emerald-500/15 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
 
       {/* Hero Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20">
@@ -59,9 +59,9 @@ function HeroSection() {
         >
           {/* Badge */}
           <motion.div variants={fadeInUp} className="mb-8">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-libre-500/10 border border-libre-500/20 text-libre-400 text-sm font-medium">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-libre-500/10 border border-libre-500/20 text-libre-600 dark:text-libre-400 text-sm font-medium">
               <Unlock className="w-4 h-4" />
-              100% MIT Licensed • No AGPL Dependencies
+              100% MIT Licensed &bull; No AGPL Dependencies
             </span>
           </motion.div>
 
@@ -70,20 +70,20 @@ function HeroSection() {
             variants={fadeInUp}
             className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-6"
           >
-            <span className="text-white">Object Detection.</span>
+            <span className="text-surface-800 dark:text-white">Object Detection.</span>
             <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-libre-400 via-libre-300 to-emerald-400 glow-text">
-              Unrestricted.
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-libre-500 via-libre-400 to-emerald-500 glow-text">
+              100% MIT Licensed.
             </span>
           </motion.h1>
 
           {/* Sub-headline */}
           <motion.p
             variants={fadeInUp}
-            className="text-lg sm:text-xl lg:text-2xl text-surface-300 max-w-3xl mx-auto mb-10 leading-relaxed"
+            className="text-lg sm:text-xl lg:text-2xl text-surface-600 dark:text-surface-400 max-w-3xl mx-auto mb-10 leading-relaxed"
           >
-            A modern training and inference engine for state-of-the-art YOLO models.
-            <span className="text-white"> Built for commercial applications, scientists, and the community.</span>
+            Making YOLO accessible again, the way its creators always intended it to be.
+            <span className="text-surface-800 dark:text-white font-medium"> A modern, MIT-licensed engine for training and deploying state-of-the-art object detection.</span>
           </motion.p>
 
           {/* CTAs */}
@@ -102,9 +102,9 @@ function HeroSection() {
               href="https://github.com/Libre-YOLO/libreyolo"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-medium text-lg transition-all"
+              className="flex items-center gap-2 px-8 py-4 bg-white dark:bg-white/5 hover:bg-surface-100 dark:hover:bg-white/10 border border-surface-300 dark:border-white/10 rounded-xl text-surface-800 dark:text-white font-medium text-lg transition-all shadow-sm dark:shadow-none"
             >
-              <Code2 className="w-5 h-5 text-libre-400" />
+              <Code2 className="w-5 h-5 text-libre-500 dark:text-libre-400" />
               View on GitHub
             </a>
           </motion.div>
@@ -115,7 +115,7 @@ function HeroSection() {
               href="https://github.com/orgs/LibreYOLO/projects/1/views/4"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-surface-400 hover:text-libre-400 text-sm transition-colors"
+              className="inline-flex items-center gap-2 text-surface-500 hover:text-libre-500 text-sm transition-colors"
             >
               <Map className="w-4 h-4" />
               Check out our roadmap
@@ -132,10 +132,10 @@ function HeroSection() {
               {/* Code Preview */}
               <div className="relative flex-1 w-full">
                 {/* Glowing border effect */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-libre-500/50 via-emerald-500/50 to-libre-500/50 rounded-2xl lg:rounded-r-none blur-xl opacity-30" />
+                <div className="absolute -inset-1 bg-gradient-to-r from-libre-500/30 via-emerald-500/30 to-libre-500/30 rounded-2xl lg:rounded-r-none blur-xl opacity-40" />
 
                 <div className="relative code-block rounded-2xl lg:rounded-r-none overflow-hidden h-full">
-                  <div className="flex items-center justify-between px-4 py-3 bg-surface-900/50 border-b border-white/5">
+                  <div className="flex items-center justify-between px-4 py-3 bg-surface-100 dark:bg-surface-900/50 border-b border-surface-200 dark:border-white/5">
                     <div className="flex items-center gap-2">
                       <div className="flex gap-2">
                         <span className="w-3 h-3 rounded-full bg-red-500/80" />
@@ -146,7 +146,7 @@ function HeroSection() {
                     </div>
                     <button
                       onClick={handleCopy}
-                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-surface-400 hover:text-white hover:bg-white/10 transition-all"
+                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-surface-500 dark:text-surface-400 hover:text-surface-900 dark:hover:text-white hover:bg-surface-200 dark:hover:bg-white/10 transition-all"
                       aria-label="Copy code"
                     >
                       {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
@@ -159,16 +159,16 @@ function HeroSection() {
                         <tbody>
                           <tr>
                             <td className="pr-4 text-right select-none text-surface-600 align-top w-6">1</td>
-                            <td><span className="token-keyword">from</span> <span className="text-libre-300">libreyolo</span> <span className="token-keyword">import</span> <span className="text-emerald-400">LibreYOLO</span>, <span className="text-emerald-400">SAMPLE_IMAGE</span></td>
+                            <td><span className="token-keyword">from</span> <span className="text-libre-600 dark:text-libre-300">libreyolo</span> <span className="token-keyword">import</span> <span className="text-emerald-600 dark:text-emerald-400">LibreYOLO</span>, <span className="text-emerald-600 dark:text-emerald-400">SAMPLE_IMAGE</span></td>
                           </tr>
                           <tr><td className="pr-4 text-right select-none text-surface-600 w-6">2</td><td></td></tr>
                           <tr>
                             <td className="pr-4 text-right select-none text-surface-600 align-top w-6">3</td>
-                            <td><span className="text-surface-300">model</span> <span className="text-libre-400">=</span> <span className="text-emerald-400">LibreYOLO</span>(<span className="token-string">&quot;LibreYOLOXs.pt&quot;</span>)</td>
+                            <td><span className="text-surface-700 dark:text-surface-300">model</span> <span className="text-libre-600 dark:text-libre-400">=</span> <span className="text-emerald-600 dark:text-emerald-400">LibreYOLO</span>(<span className="token-string">&quot;LibreYOLOXs.pt&quot;</span>)</td>
                           </tr>
                           <tr>
                             <td className="pr-4 text-right select-none text-surface-600 align-top w-6">4</td>
-                            <td><span className="text-surface-300">results</span> <span className="text-libre-400">=</span> <span className="text-surface-300">model</span>(<span className="text-emerald-400">SAMPLE_IMAGE</span>, <span className="text-surface-300">save</span><span className="text-libre-400">=</span><span className="text-emerald-400">True</span>)</td>
+                            <td><span className="text-surface-700 dark:text-surface-300">results</span> <span className="text-libre-600 dark:text-libre-400">=</span> <span className="text-surface-700 dark:text-surface-300">model</span>(<span className="text-emerald-600 dark:text-emerald-400">SAMPLE_IMAGE</span>, <span className="text-surface-700 dark:text-surface-300">save</span><span className="text-libre-600 dark:text-libre-400">=</span><span className="text-emerald-600 dark:text-emerald-400">True</span>)</td>
                           </tr>
                         </tbody>
                       </table>
@@ -179,16 +179,16 @@ function HeroSection() {
 
               {/* Arrow connector - visible on lg screens */}
               <div className="hidden lg:flex items-center justify-center relative z-10">
-                <div className="w-12 h-12 rounded-full bg-surface-900 border border-libre-500/30 flex items-center justify-center -mx-6">
-                  <ArrowRight className="w-5 h-5 text-libre-400" />
+                <div className="w-12 h-12 rounded-full bg-white dark:bg-surface-900 border border-libre-500/30 shadow-lg dark:shadow-none flex items-center justify-center -mx-6">
+                  <ArrowRight className="w-5 h-5 text-libre-500 dark:text-libre-400" />
                 </div>
               </div>
 
               {/* Result Image as Output Panel */}
               <div className="relative lg:max-w-sm w-full">
-                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/30 via-libre-500/30 to-emerald-500/30 rounded-2xl lg:rounded-l-none blur-xl opacity-30" />
-                <div className="relative bg-surface-900/80 backdrop-blur-sm border border-emerald-500/20 rounded-2xl lg:rounded-l-none overflow-hidden h-full">
-                  <div className="flex items-center gap-2 px-4 py-3 bg-surface-900/50 border-b border-white/5">
+                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 via-libre-500/20 to-emerald-500/20 rounded-2xl lg:rounded-l-none blur-xl opacity-40" />
+                <div className="relative bg-surface-50 dark:bg-surface-900/80 backdrop-blur-sm border border-surface-200 dark:border-emerald-500/20 rounded-2xl lg:rounded-l-none overflow-hidden h-full">
+                  <div className="flex items-center gap-2 px-4 py-3 bg-surface-100 dark:bg-surface-900/50 border-b border-surface-200 dark:border-white/5">
                     <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                     <span className="text-surface-500 text-sm font-mono">parkour_result.jpg</span>
                   </div>
@@ -199,7 +199,7 @@ function HeroSection() {
                       className="rounded-lg w-full"
                     />
                     <div className="mt-3 flex items-center justify-between text-xs">
-                      <span className="text-emerald-400 font-mono">✓ Detected 1 object (person)</span>
+                      <span className="text-emerald-400 font-mono">&check; Detected 1 object (person)</span>
                       <span className="text-surface-500 font-mono">0.023s</span>
                     </div>
                   </div>
@@ -216,23 +216,53 @@ function HeroSection() {
 
 
 function SocialProofSection() {
+  const [carouselPage, setCarouselPage] = useState(0)
+
   const testimonials = [
     {
-      quote: "This is really damn good! People need to take note of this!!!",
-      author: "u/InternationalMany6",
-    },
-    {
-      quote: "I'll be so happy when there is a good, community maintained, MIT licensed alternative to Ultralytics.",
+      quote: "You have my hearty support for this. I'll be so happy when there is a good, community maintained, MIT licensed alternative to Ultralytics.",
       author: "u/Covered_in_bees_",
     },
     {
       quote: "This is so cool bro. If I see some place I can contribute, I will definitely do so!",
       author: "u/FedStan",
     },
+    {
+      quote: "This looks like a really good project, and I hope you are able to realize the full vision you seem to have for it. Very exciting.",
+      author: "u/CalmBet",
+    },
+    {
+      quote: "Nice work! I'll try it out this week and open issues/PRs.",
+      author: "u/InternationalMany6",
+    },
+    {
+      quote: "Looks pretty cool. It's good to see these sorts of developments.",
+      author: "u/HistoricalMistake681",
+    },
+    {
+      quote: "Thank you for sharing, this looks interesting.",
+      author: "u/nemesis1836",
+    },
+    {
+      quote: "Great initiative.",
+      author: "u/Outrageous_Sort_8993",
+    },
+    {
+      quote: "Good job! Are you hosting the models on HuggingFace?",
+      author: "u/Winners-magic",
+    },
+    {
+      quote: "Very nice, will add creating a node of it to my todo list.",
+      author: "u/dr_hamilton",
+    },
   ]
 
+  const pageSize = 3
+  const totalPages = Math.ceil(testimonials.length / pageSize)
+  const visible = testimonials.slice(carouselPage * pageSize, carouselPage * pageSize + pageSize)
+
   return (
-    <section className="relative py-20 lg:py-28 overflow-hidden">
+    <section className="relative py-14 lg:py-20 overflow-hidden">
       <div className="absolute inset-0 grid-bg opacity-30" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
@@ -240,33 +270,68 @@ function SocialProofSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-10"
         >
-          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-medium mb-4">
+          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-medium mb-4">
             <MessageSquareQuote className="w-3.5 h-3.5" />
             r/computervision
           </span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white">
+          <h2 className="text-3xl sm:text-4xl font-bold text-surface-900 dark:text-white">
             What the Community Says
           </h2>
         </motion.div>
 
-        <div className="grid sm:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {testimonials.map((t, i) => (
-            <motion.div
-              key={t.author}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="relative bg-surface-900/60 backdrop-blur-sm border border-white/5 rounded-2xl p-6"
-            >
-              <div className="absolute top-4 left-5 text-libre-500/20 text-4xl font-serif leading-none select-none">&ldquo;</div>
-              <p className="text-surface-200 text-sm leading-relaxed mb-4 pt-4 italic">
-                &ldquo;{t.quote}&rdquo;
-              </p>
-              <p className="text-surface-500 text-xs font-mono">{t.author}</p>
-            </motion.div>
+        <div className="relative max-w-5xl mx-auto">
+          {/* Prev button */}
+          <button
+            onClick={() => setCarouselPage((p) => (p === 0 ? totalPages - 1 : p - 1))}
+            className="absolute -left-4 lg:-left-14 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white dark:bg-surface-800 border border-surface-200 dark:border-white/10 shadow-md dark:shadow-none flex items-center justify-center text-surface-500 dark:text-surface-300 hover:text-surface-900 dark:hover:text-white hover:border-surface-300 dark:hover:border-white/20 transition-all"
+            aria-label="Previous"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          {/* Next button */}
+          <button
+            onClick={() => setCarouselPage((p) => (p === totalPages - 1 ? 0 : p + 1))}
+            className="absolute -right-4 lg:-right-14 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white dark:bg-surface-800 border border-surface-200 dark:border-white/10 shadow-md dark:shadow-none flex items-center justify-center text-surface-500 dark:text-surface-300 hover:text-surface-900 dark:hover:text-white hover:border-surface-300 dark:hover:border-white/20 transition-all"
+            aria-label="Next"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+
+          <div className="grid sm:grid-cols-3 gap-6">
+            {visible.map((t, i) => (
+              <motion.div
+                key={`${carouselPage}-${i}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.08 }}
+                className="relative bg-white dark:bg-surface-900/60 border border-surface-200 dark:border-white/5 rounded-2xl p-6 shadow-sm dark:shadow-none min-h-[160px] flex flex-col justify-between"
+              >
+                <div className="absolute top-4 left-5 text-libre-500/20 text-4xl font-serif leading-none select-none">&ldquo;</div>
+                <p className="text-surface-700 dark:text-surface-200 text-sm leading-relaxed mb-4 pt-4 italic">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <p className="text-surface-400 text-xs font-mono">{t.author}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Dot indicators */}
+        <div className="flex items-center justify-center gap-3 mt-8">
+          {Array.from({ length: totalPages }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCarouselPage(i)}
+              className={`h-2.5 rounded-full transition-all duration-300 ${
+                i === carouselPage
+                  ? 'bg-libre-500 w-8'
+                  : 'w-2.5 bg-surface-300 dark:bg-surface-600 hover:bg-surface-400 dark:hover:bg-surface-500'
+              }`}
+              aria-label={`Page ${i + 1}`}
+            />
           ))}
         </div>
       </div>
@@ -280,7 +345,7 @@ function FeaturesSection() {
     {
       icon: Unlock,
       title: 'Truly MIT',
-      description: 'No AGPL anywhere in the dependency chain. Use it in closed-source products, SaaS, embedded systems — zero licensing risk.',
+      description: 'No AGPL anywhere in the dependency chain. Use it in closed-source products, SaaS, embedded systems.',
       color: 'emerald'
     },
     {
@@ -292,7 +357,7 @@ function FeaturesSection() {
     {
       icon: RefreshCw,
       title: 'Batteries included',
-      description: 'Any input format — paths, URLs, PIL, NumPy, OpenCV, tensors, bytes. Tiled inference for large images. Auto-download weights from HuggingFace.',
+      description: 'Any input format: paths, URLs, PIL, NumPy, OpenCV, tensors, bytes. Tiled inference for large images. Auto-download weights from HuggingFace.',
       color: 'cyan'
     },
     {
@@ -316,16 +381,16 @@ function FeaturesSection() {
   ]
 
   const colorClasses = {
-    libre: { bg: 'bg-libre-500/10', text: 'text-libre-400', border: 'border-libre-500/20' },
-    emerald: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/20' },
-    cyan: { bg: 'bg-cyan-500/10', text: 'text-cyan-400', border: 'border-cyan-500/20' },
-    amber: { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/20' },
-    violet: { bg: 'bg-violet-500/10', text: 'text-violet-400', border: 'border-violet-500/20' },
-    rose: { bg: 'bg-rose-500/10', text: 'text-rose-400', border: 'border-rose-500/20' }
+    libre: { bg: 'bg-libre-500/10', text: 'text-libre-700 dark:text-libre-400', border: 'border-libre-500/20' },
+    emerald: { bg: 'bg-emerald-500/10', text: 'text-emerald-700 dark:text-emerald-400', border: 'border-emerald-500/20' },
+    cyan: { bg: 'bg-cyan-500/10', text: 'text-cyan-700 dark:text-cyan-400', border: 'border-cyan-500/20' },
+    amber: { bg: 'bg-amber-500/10', text: 'text-amber-700 dark:text-amber-400', border: 'border-amber-500/20' },
+    violet: { bg: 'bg-violet-500/10', text: 'text-violet-700 dark:text-violet-400', border: 'border-violet-500/20' },
+    rose: { bg: 'bg-rose-500/10', text: 'text-rose-700 dark:text-rose-400', border: 'border-rose-500/20' }
   }
 
   return (
-    <section className="relative py-24 lg:py-32">
+    <section className="relative py-14 lg:py-20">
       <div className="absolute inset-0 grid-bg opacity-50" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
@@ -333,12 +398,12 @@ function FeaturesSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Why <span className="text-transparent bg-clip-text bg-gradient-to-r from-libre-400 to-emerald-400">LibreYOLO</span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-surface-900 dark:text-white mb-4">
+            Why <span className="text-transparent bg-clip-text bg-gradient-to-r from-libre-500 to-emerald-500">LibreYOLO</span>
           </h2>
-          <p className="text-lg text-surface-400 max-w-2xl mx-auto">
+          <p className="text-lg text-surface-600 dark:text-surface-400 max-w-2xl mx-auto">
             Everything you need for object detection, nothing you don&apos;t.
           </p>
         </motion.div>
@@ -353,13 +418,13 @@ function FeaturesSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className={`card-hover bg-surface-900/50 backdrop-blur-sm border ${colors.border} rounded-2xl p-6`}
+                className={`card-hover bg-surface-50 dark:bg-surface-900/50 border ${colors.border} rounded-2xl p-6 shadow-sm`}
               >
                 <div className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center mb-4`}>
                   <feature.icon className={`w-6 h-6 ${colors.text}`} />
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">{feature.title}</h3>
-                <p className="text-surface-400 text-sm leading-relaxed">{feature.description}</p>
+                <h3 className="text-lg font-semibold text-surface-900 dark:text-white mb-2">{feature.title}</h3>
+                <p className="text-surface-600 dark:text-surface-400 text-sm leading-relaxed">{feature.description}</p>
               </motion.div>
             )
           })}
@@ -380,14 +445,14 @@ function DeployAnywhereSection() {
   ]
 
   const hardware = [
-    { name: 'Jetson Nano', src: '/hardware/jetson-nano.jpg' },
-    { name: 'Jetson Orin', src: '/hardware/jetson-orin.jpg' },
-    { name: 'Raspberry Pi', src: '/hardware/raspberry-pi.png' },
-    { name: 'NVIDIA GPU', src: '/hardware/nvidia-gpu.png' },
+    { name: 'Jetson Nano', src: '/hardware/jetson-nano.jpg', srcLight: '/hardware/jetson-nano-light.jpg' },
+    { name: 'Jetson Orin', src: '/hardware/jetson-orin.jpg', srcLight: '/hardware/jetson-orin-light.jpg' },
+    { name: 'Raspberry Pi', src: '/hardware/raspberry-pi.png', srcLight: '/hardware/raspberry-pi-light.png' },
+    { name: 'NVIDIA GPU', src: '/hardware/nvidia-gpu.png', srcLight: '/hardware/nvidia-gpu-light.png' },
   ]
 
   return (
-    <section className="relative py-24 lg:py-32 overflow-hidden">
+    <section className="relative py-14 lg:py-20 overflow-hidden">
       <div className="absolute inset-0 grid-bg opacity-30" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-libre-500/5 rounded-full blur-3xl" />
 
@@ -396,16 +461,16 @@ function DeployAnywhereSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
-          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-libre-500/10 border border-libre-500/20 text-libre-400 text-xs font-medium mb-4">
+          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-libre-500/10 border border-libre-500/20 text-libre-600 text-xs font-medium mb-4">
             <Cpu className="w-3.5 h-3.5" />
             Edge to Cloud
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Deploy <span className="text-transparent bg-clip-text bg-gradient-to-r from-libre-400 to-emerald-400">Anywhere</span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-surface-900 dark:text-white mb-4">
+            Deploy <span className="text-transparent bg-clip-text bg-gradient-to-r from-libre-500 to-emerald-500">Anywhere</span>
           </h2>
-          <p className="text-lg text-surface-400 max-w-2xl mx-auto">
+          <p className="text-lg text-surface-600 dark:text-surface-400 max-w-2xl mx-auto">
             Export once, run on any hardware. From $35 boards to datacenter GPUs.
           </p>
         </motion.div>
@@ -417,19 +482,19 @@ function DeployAnywhereSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-sm font-semibold text-surface-400 uppercase tracking-wider mb-6">Export Formats</h3>
+            <h3 className="text-sm font-semibold text-surface-500 uppercase tracking-wider mb-6">Export Formats</h3>
             <div className="space-y-3">
               {exportFormats.map((fmt) => (
                 <div
                   key={fmt.name}
-                  className="flex items-center justify-between bg-surface-900/60 border border-white/5 rounded-xl px-5 py-3.5"
+                  className="flex items-center justify-between bg-surface-50 dark:bg-surface-900/60 border border-surface-200 dark:border-white/5 rounded-xl px-5 py-3.5"
                 >
-                  <span className="text-white font-medium text-sm">{fmt.name}</span>
+                  <span className="text-surface-800 dark:text-white font-medium text-sm">{fmt.name}</span>
                   <div className="flex gap-2">
                     {fmt.variants.map((v) => (
                       <span
                         key={v}
-                        className="px-2.5 py-1 rounded-md bg-libre-500/10 text-libre-300 text-xs font-mono"
+                        className="px-2.5 py-1 rounded-md bg-libre-500/10 text-libre-600 text-xs font-mono"
                       >
                         {v}
                       </span>
@@ -446,21 +511,29 @@ function DeployAnywhereSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-sm font-semibold text-surface-400 uppercase tracking-wider mb-6">Tested Hardware</h3>
+            <h3 className="text-sm font-semibold text-surface-500 uppercase tracking-wider mb-6">Tested Hardware</h3>
             <div className="grid grid-cols-2 gap-4">
               {hardware.map((hw) => (
                 <div
                   key={hw.name}
-                  className="group relative bg-surface-900/60 border border-white/5 rounded-xl overflow-hidden"
+                  className="group relative bg-surface-50 dark:bg-surface-900/60 border border-surface-200 dark:border-white/5 rounded-xl overflow-hidden"
                 >
                   <div className="aspect-[4/3] relative">
+                    {/* Dark variant */}
                     <Image
                       src={hw.src}
                       alt={hw.name}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500 hidden dark:block"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-surface-950/90 via-surface-950/20 to-transparent" />
+                    {/* Light variant */}
+                    <Image
+                      src={hw.srcLight}
+                      alt={hw.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500 dark:hidden"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-surface-800/60 dark:from-surface-900/80 via-transparent to-transparent" />
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 px-4 py-3">
                     <span className="text-white text-sm font-medium">{hw.name}</span>
@@ -487,7 +560,7 @@ function ComparisonSection() {
   ]
 
   return (
-    <section className="relative py-24 lg:py-32">
+    <section className="relative py-14 lg:py-20">
       <div className="absolute inset-0 grid-bg opacity-30" />
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8">
@@ -495,12 +568,12 @@ function ComparisonSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-surface-900 dark:text-white mb-4">
             LibreYOLO vs <span className="text-surface-400">Ultralytics</span>
           </h2>
-          <p className="text-lg text-surface-400 max-w-2xl mx-auto">
+          <p className="text-lg text-surface-600 dark:text-surface-400 max-w-2xl mx-auto">
             MIT means you own your work. No surprises.
           </p>
         </motion.div>
@@ -509,13 +582,13 @@ function ComparisonSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-surface-900/60 backdrop-blur-sm border border-white/5 rounded-2xl overflow-hidden"
+          className="bg-surface-50 dark:bg-surface-900/60 border border-surface-200 dark:border-white/5 rounded-2xl overflow-hidden"
         >
           {/* Table Header */}
-          <div className="grid grid-cols-[1fr_80px_80px] sm:grid-cols-[1fr_140px_140px] items-center px-4 sm:px-6 py-4 border-b border-white/5 bg-surface-900/80">
+          <div className="grid grid-cols-[1fr_80px_80px] sm:grid-cols-[1fr_140px_140px] items-center px-4 sm:px-6 py-4 border-b border-surface-200 dark:border-white/5 bg-surface-50 dark:bg-surface-900/80">
             <span className="text-surface-500 text-sm font-medium" />
-            <span className="text-libre-400 text-xs sm:text-sm font-semibold text-center">LibreYOLO</span>
-            <span className="text-surface-400 text-xs sm:text-sm font-semibold text-center">Ultralytics</span>
+            <span className="text-libre-500 text-xs sm:text-sm font-semibold text-center">LibreYOLO</span>
+            <span className="text-surface-500 text-xs sm:text-sm font-semibold text-center">Ultralytics</span>
           </div>
 
           {/* Table Rows */}
@@ -523,19 +596,19 @@ function ComparisonSection() {
             <div
               key={row.feature}
               className={`grid grid-cols-[1fr_80px_80px] sm:grid-cols-[1fr_140px_140px] items-center px-4 sm:px-6 py-4 ${
-                i < rows.length - 1 ? 'border-b border-white/5' : ''
+                i < rows.length - 1 ? 'border-b border-surface-100 dark:border-white/5' : ''
               }`}
             >
-              <span className="text-surface-200 text-sm">{row.feature}</span>
+              <span className="text-surface-700 dark:text-surface-200 text-sm">{row.feature}</span>
               {row.libreText !== undefined ? (
                 <>
-                  <span className="text-emerald-400 text-sm font-medium text-center">{row.libreText}</span>
-                  <span className="text-red-400 text-sm font-medium text-center">{row.ultraText}</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 text-sm font-medium text-center">{row.libreText}</span>
+                  <span className="text-red-500 text-sm font-medium text-center">{row.ultraText}</span>
                 </>
               ) : (
                 <>
                   <div className="flex justify-center">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                    <CheckCircle2 className="w-5 h-5 text-emerald-500" />
                   </div>
                   <div className="flex justify-center">
                     <XIcon className="w-5 h-5 text-red-400" />
@@ -545,27 +618,6 @@ function ComparisonSection() {
             </div>
           ))}
         </motion.div>
-
-        {/* Community callout */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-8 text-center"
-        >
-          <p className="text-surface-400 text-sm">
-            <span className="text-libre-400 font-medium">Community Driven</span> — built on the{' '}
-            <a
-              href="https://github.com/testdummyvt/yolov9mit"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-libre-300 hover:text-libre-200 underline underline-offset-2 transition-colors"
-            >
-              @testdummyvt fork
-            </a>{' '}
-            that added RT-DETR + NMS-free YOLOv9 under the MIT license.
-          </p>
-        </motion.div>
       </div>
     </section>
   )
@@ -574,8 +626,8 @@ function ComparisonSection() {
 
 function CTASection() {
   return (
-    <section className="relative py-24 lg:py-32 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-surface-950 to-surface-900/50" />
+    <section className="relative py-14 lg:py-20 overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-white dark:from-surface-950 to-surface-50 dark:to-surface-900/50" />
       <div className="absolute inset-0 gradient-mesh opacity-50" />
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center">
@@ -584,14 +636,14 @@ function CTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-10">
-            Start Building <span className="text-libre-400">Today</span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-surface-900 mb-10">
+            Start Building <span className="text-libre-500">Today</span>
           </h2>
 
           <div className="code-block rounded-xl max-w-md mx-auto mb-10">
             <pre className="p-4 text-left">
               <code className="font-mono text-sm">
-                <span className="text-surface-500">$</span> <span className="text-emerald-400">pip install</span> <span className="text-libre-300">libreyolo</span>
+                <span className="text-surface-500">$</span> <span className="text-emerald-600 dark:text-emerald-400">pip install</span> <span className="text-libre-600 dark:text-libre-300">libreyolo</span>
               </code>
             </pre>
           </div>
@@ -606,11 +658,31 @@ function CTASection() {
             </Link>
             <Link
               href="/commercial"
-              className="flex items-center gap-2 px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-medium transition-all"
+              className="flex items-center gap-2 px-8 py-4 bg-white dark:bg-white/5 hover:bg-surface-100 dark:hover:bg-white/10 border border-surface-300 dark:border-white/10 rounded-xl text-surface-800 dark:text-white font-medium transition-all shadow-sm dark:shadow-none"
             >
-              <Scale className="w-5 h-5 text-emerald-400" />
+              <Scale className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               Commercial Guide
             </Link>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-sm">
+            <Link href="/models" className="text-surface-500 hover:text-libre-500 transition-colors flex items-center gap-1.5">
+              <Layers className="w-4 h-4" />
+              Model Zoo
+            </Link>
+            <Link href="/datasets" className="text-surface-500 hover:text-libre-500 transition-colors flex items-center gap-1.5">
+              <Layers className="w-4 h-4" />
+              Dataset Zoo
+            </Link>
+            <a
+              href="https://github.com/orgs/LibreYOLO/projects/1/views/4"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-surface-500 hover:text-libre-500 transition-colors flex items-center gap-1.5"
+            >
+              <Map className="w-4 h-4" />
+              Roadmap
+            </a>
           </div>
         </motion.div>
       </div>
@@ -622,8 +694,8 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <SocialProofSection />
       <FeaturesSection />
+      <SocialProofSection />
       <DeployAnywhereSection />
       <ComparisonSection />
       <CTASection />
