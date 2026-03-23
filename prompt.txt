@@ -1,0 +1,21 @@
+1) in first page, change the word unrestricted by 100% MIT license
+
+3) in the firs texts, A modern training and infrence... We have the mission to make YOLO accesible again, like the it was always intented to ro smth like that. basically we need to convey what were doing. Or "like the scientists that created it always wanted it to be" or origainlly made it or smth
+
+4) Apparently for the marketing guy there is too much space between sections.
+
+5) In the what community says, the marketing guy thinks it could be a carrousel, showing 3 but that there can be more messages. I think its a good idea. we could take messages from reeddit: https://www.reddit.com/r/computervision/comments/1qmi1ni/ultralytics_alternative_libreyolo/ thre are a lot to pick from!
+
+6) Why libreyolo section should be above community section
+
+7) He told me to make it personal , in the libreyolovs ultralytics page to say smt personal like "if you have reached this point you mayb wonder what is the purpose of libreyolo in the computer vision space. and that would be to beat ultraltyics. or maybe not idk but to make it more available.
+
+8) he told me at the footer to put a conaact point for the team: I think im gonna put my linkedin: linkeind .com / xuban-ceccon
+
+8)Then he told me more fundamental thing. That I'm giving away smoething great free. and that free stuff is white. (crazy but true). and he recommended a rebrand to white. omfg. listn up. he might be onto something. what do you think? is it something we could try.
+
+
+NEW STUFF:
+- In the lasnding page also below in the start building today etc sectiosn there should be the roadmap also. put the roadmap link.
+- in home there should be links to models /datasets , i mean one link at least. where could we mention the models / datasets pages? 
+- In the models and datasets pages respectively put a prhase such as in the future models / datasets will be listed here, but sin the meanwhile you can just go to to LibreYOLO's  huggingace 
