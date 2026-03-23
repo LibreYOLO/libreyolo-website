@@ -1,11 +1,12 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ExternalLink, Layers } from 'lucide-react'
+import Link from 'next/link'
+import { ExternalLink, Layers, ArrowRight } from 'lucide-react'
 
 export default function Models() {
   return (
-    <div className="min-h-screen pt-24 lg:pt-32 pb-16">
+    <div className="pt-24 lg:pt-32 pb-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -79,6 +80,21 @@ export default function Models() {
           <p className="mt-3">
             Note: Pre-trained weights may inherit licensing terms from their original training source.
           </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mt-16"
+        >
+          <Link
+            href="/docs"
+            className="btn-primary inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-libre-500 to-libre-600 rounded-xl text-white font-semibold text-lg"
+          >
+            Get Started
+            <ArrowRight className="w-5 h-5" />
+          </Link>
         </motion.div>
       </div>
     </div>

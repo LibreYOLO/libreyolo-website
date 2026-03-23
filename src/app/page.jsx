@@ -334,6 +334,10 @@ function SocialProofSection() {
             />
           ))}
         </div>
+
+        <p className="text-center text-surface-500 dark:text-surface-500 text-sm mt-8 max-w-lg mx-auto">
+          LibreYOLO is a huge effort. Messages like these keep us going.
+        </p>
       </div>
     </section>
   )
