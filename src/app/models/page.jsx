@@ -27,7 +27,7 @@ export default function Models() {
           </p>
 
           <a
-            href="https://huggingface.co/Libre-YOLO/models"
+            href="https://huggingface.co/LibreYOLO/models"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-libre-500 to-libre-600 rounded-xl text-white font-semibold text-lg"
@@ -69,7 +69,7 @@ export default function Models() {
             Individual model cards will be listed here soon. In the meanwhile, browse all available
             models on{' '}
             <a
-              href="https://huggingface.co/Libre-YOLO/models"
+              href="https://huggingface.co/LibreYOLO/models"
               target="_blank"
               rel="noopener noreferrer"
               className="text-libre-500 hover:text-libre-600 underline underline-offset-2 transition-colors"

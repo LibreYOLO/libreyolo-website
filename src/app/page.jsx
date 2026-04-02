@@ -700,8 +700,8 @@ export default function Home() {
       <HeroSection />
       <FeaturesSection />
       <SocialProofSection />
-      <DeployAnywhereSection />
-      <ComparisonSection />
+      {/* <DeployAnywhereSection /> */}
+      {/* <ComparisonSection /> */}
       <CTASection />
     </>
   )

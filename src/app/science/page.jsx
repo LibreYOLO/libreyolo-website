@@ -6,6 +6,7 @@ import {
   Lock, Unlock, ArrowRight, Zap, Copy, Check, ChevronLeft, ChevronRight
 } from 'lucide-react'
 import { useState } from 'react'
+import Link from 'next/link'
 
 function CopyButton({ code }) {
   const [copied, setCopied] = useState(false)
@@ -501,15 +502,13 @@ function CTASection() {
             </pre>
           </div>
 
-          <a
-            href="https://docs.libreyolo.com"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/docs"
             className="btn-primary inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-xl text-white font-semibold"
           >
             View Documentation
             <ArrowRight className="w-5 h-5" />
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>

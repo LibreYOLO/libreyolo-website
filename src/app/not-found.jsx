@@ -38,15 +38,13 @@ export default function NotFound() {
             <Home className="w-5 h-5" />
             Go Home
           </Link>
-          <a
-            href="https://docs.libreyolo.com"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/docs"
             className="flex items-center gap-2 px-6 py-3 bg-surface-50 dark:bg-white/5 hover:bg-surface-100 dark:hover:bg-white/10 border border-surface-200 dark:border-white/10 rounded-xl text-surface-800 dark:text-white font-medium transition-all"
           >
             <Search className="w-5 h-5" />
             Browse Docs
-          </a>
+          </Link>
         </div>
 
         <div className="mt-12 code-block rounded-xl max-w-sm mx-auto">
