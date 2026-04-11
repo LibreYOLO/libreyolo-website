@@ -73,8 +73,14 @@ body {
 
 .code-block pre {
   margin: 0;
-  padding: 1.5rem;
+  padding: 1rem;
   overflow-x: auto;
+}
+
+@media (min-width: 640px) {
+  .code-block pre {
+    padding: 1.5rem;
+  }
 }
 
 .code-block code {
@@ -210,22 +216,24 @@ body {
   box-shadow: 0 10px 40px rgba(8, 145, 178, 0.25);
 }
 
-/* Card hover */
+/* Card hover — only on devices that can actually hover (prevents sticky lift on touch) */
 .card-hover {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.08),
-    0 0 30px rgba(8, 145, 178, 0.06);
-}
+@media (hover: hover) {
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.08),
+      0 0 30px rgba(8, 145, 178, 0.06);
+  }
 
-.dark .card-hover:hover {
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.3),
-    0 0 30px rgba(6, 182, 212, 0.1);
+  .dark .card-hover:hover {
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.3),
+      0 0 30px rgba(6, 182, 212, 0.1);
+  }
 }
 
 /* Animated border */
@@ -264,4 +272,20 @@ body {
 .dark ::selection {
   background: rgba(6, 182, 212, 0.3);
   color: #fff;
+}
+
+/* Reduced motion — respect user's OS-level preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animated-border {
+    animation: none;
+  }
 }

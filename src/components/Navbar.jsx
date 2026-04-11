@@ -37,10 +37,10 @@ export default function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/80 dark:bg-surface-950/80 backdrop-blur-xl border-b border-surface-200/50 dark:border-white/5 shadow-sm dark:shadow-none ${
           isScrolled
-            ? 'bg-white/80 dark:bg-surface-950/80 backdrop-blur-xl border-b border-surface-200/50 dark:border-white/5 shadow-sm dark:shadow-none'
-            : 'bg-transparent'
+            ? ''
+            : 'md:bg-transparent md:backdrop-blur-none md:border-transparent md:shadow-none'
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -148,12 +148,6 @@ export default function Navbar() {
                 <Github className="w-4 h-4" />
                 GitHub
               </a>
-              <div className="px-4 pt-2">
-                <div className="badge-mit px-3 py-1.5 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
-                  MIT Licensed
-                </div>
-              </div>
             </div>
           </motion.div>
         )}
