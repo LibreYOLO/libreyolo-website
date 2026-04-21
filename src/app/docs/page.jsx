@@ -29,40 +29,424 @@ const sections = [
 
 /* ─── Reusable components ─── */
 
+const PYTHON_KEYWORDS = new Set([
+  'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'continue',
+  'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from',
+  'global', 'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or',
+  'pass', 'raise', 'return', 'try', 'while', 'with', 'yield',
+])
+
+const PYTHON_CONSTANTS = new Set(['False', 'None', 'True'])
+
+const PYTHON_BUILTINS = new Set([
+  'all', 'any', 'bool', 'dict', 'enumerate', 'filter', 'float', 'int', 'len',
+  'list', 'map', 'max', 'min', 'print', 'range', 'reversed', 'round', 'set',
+  'sorted', 'str', 'sum', 'tuple', 'zip',
+])
+
+const BASH_KEYWORDS = new Set([
+  'case', 'do', 'done', 'elif', 'else', 'esac', 'fi', 'for', 'function', 'if',
+  'in', 'select', 'then', 'until', 'while',
+])
+
+const YAML_CONSTANTS = new Set(['false', 'no', 'null', 'off', 'on', 'true', 'yes'])
+
+const CODE_LABELS = {
+  bash: 'bash',
+  py: 'python',
+  python: 'python',
+  shell: 'shell',
+  sh: 'bash',
+  text: 'text',
+  yaml: 'yaml',
+  yml: 'yaml',
+}
+
+function pushToken(tokens, value, className = '') {
+  if (!value) return
+  tokens.push({ value, className })
+}
+
+function nextNonWhitespaceChar(text, index) {
+  for (let i = index; i < text.length; i += 1) {
+    if (!/\s/.test(text[i])) return text[i]
+  }
+
+  return ''
+}
+
+function prevNonWhitespaceChar(text, index) {
+  for (let i = index - 1; i >= 0; i -= 1) {
+    if (!/\s/.test(text[i])) return text[i]
+  }
+
+  return ''
+}
+
+function isUppercaseSymbol(value) {
+  return /^[A-Z][A-Za-z0-9_]*$/.test(value) || /^[A-Z0-9_]+$/.test(value)
+}
+
+function matchPythonString(segment) {
+  return segment.match(/^(?:r|u|b|f|rb|br|fr|rf)?(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/i)
+}
+
+function classifyPythonIdentifier(value, line, start, end, state) {
+  if (PYTHON_KEYWORDS.has(value)) return 'token-keyword'
+  if (PYTHON_CONSTANTS.has(value)) return 'token-symbol'
+  if (state.expectDefinitionName === 'function') return 'token-function'
+  if (state.expectDefinitionName === 'class') return 'token-symbol'
+  if (state.importMode === 'module') return 'token-module'
+  if (state.importMode === 'imported') {
+    return isUppercaseSymbol(value) ? 'token-symbol' : 'token-module'
+  }
+
+  const nextChar = nextNonWhitespaceChar(line, end)
+  const prevChar = prevNonWhitespaceChar(line, start)
+
+  if (value === 'self' || value === 'cls') return 'token-variable'
+  if (PYTHON_BUILTINS.has(value) && nextChar === '(') return 'token-function'
+  if (isUppercaseSymbol(value)) return 'token-symbol'
+  if (prevChar === '.') return nextChar === '(' ? 'token-function' : 'token-property'
+  if (nextChar === '(') return 'token-function'
+
+  return ''
+}
+
+function updatePythonState(state, value) {
+  if (value === 'from') {
+    state.importMode = 'module'
+    state.expectDefinitionName = null
+    return
+  }
+
+  if (value === 'import') {
+    state.importMode = 'imported'
+    return
+  }
+
+  if (value === 'def') {
+    state.expectDefinitionName = 'function'
+    state.importMode = null
+    return
+  }
+
+  if (value === 'class') {
+    state.expectDefinitionName = 'class'
+    state.importMode = null
+    return
+  }
+
+  if (state.expectDefinitionName) {
+    state.expectDefinitionName = null
+  }
+}
+
+function tokenizePythonLine(line) {
+  const tokens = []
+  const state = {
+    expectDefinitionName: null,
+    importMode: null,
+  }
+
+  let index = 0
+
+  while (index < line.length) {
+    const segment = line.slice(index)
+
+    const whitespaceMatch = segment.match(/^\s+/)
+    if (whitespaceMatch) {
+      pushToken(tokens, whitespaceMatch[0])
+      index += whitespaceMatch[0].length
+      continue
+    }
+
+    if (segment.startsWith('#')) {
+      pushToken(tokens, segment, 'token-comment')
+      break
+    }
+
+    const stringMatch = matchPythonString(segment)
+    if (stringMatch) {
+      pushToken(tokens, stringMatch[0], 'token-string')
+      index += stringMatch[0].length
+      continue
+    }
+
+    const decoratorMatch = segment.match(/^@[A-Za-z_]\w*/)
+    if (decoratorMatch) {
+      pushToken(tokens, decoratorMatch[0], 'token-symbol')
+      index += decoratorMatch[0].length
+      continue
+    }
+
+    const numberMatch = segment.match(/^(?:\d+(?:\.\d+)?|\.\d+)/)
+    if (numberMatch) {
+      pushToken(tokens, numberMatch[0], 'token-number')
+      index += numberMatch[0].length
+      continue
+    }
+
+    const operatorMatch = segment.match(/^(?:==|!=|<=|>=|:=|\*\*|\/\/|->|[-+*/%=&|^~<>]+)/)
+    if (operatorMatch) {
+      pushToken(tokens, operatorMatch[0], 'token-operator')
+      index += operatorMatch[0].length
+      continue
+    }
+
+    const identifierMatch = segment.match(/^[A-Za-z_]\w*/)
+    if (identifierMatch) {
+      const value = identifierMatch[0]
+      pushToken(
+        tokens,
+        value,
+        classifyPythonIdentifier(value, line, index, index + value.length, state)
+      )
+      index += value.length
+      updatePythonState(state, value)
+      continue
+    }
+
+    pushToken(tokens, segment[0])
+    index += 1
+  }
+
+  return tokens
+}
+
+function tokenizeBashLine(line) {
+  const tokens = []
+  let index = 0
+  let expectCommand = true
+
+  while (index < line.length) {
+    const segment = line.slice(index)
+
+    const whitespaceMatch = segment.match(/^\s+/)
+    if (whitespaceMatch) {
+      pushToken(tokens, whitespaceMatch[0])
+      index += whitespaceMatch[0].length
+      continue
+    }
+
+    if (segment.startsWith('#')) {
+      pushToken(tokens, segment, 'token-comment')
+      break
+    }
+
+    const stringMatch = segment.match(/^(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/)
+    if (stringMatch) {
+      pushToken(tokens, stringMatch[0], 'token-string')
+      index += stringMatch[0].length
+      expectCommand = false
+      continue
+    }
+
+    const variableMatch = segment.match(/^(?:\$\{[^}]+\}|\$[A-Za-z_]\w*)/)
+    if (variableMatch) {
+      pushToken(tokens, variableMatch[0], 'token-variable')
+      index += variableMatch[0].length
+      expectCommand = false
+      continue
+    }
+
+    const chainMatch = segment.match(/^(?:&&|\|\||[|;><=]+)/)
+    if (chainMatch) {
+      pushToken(tokens, chainMatch[0], 'token-operator')
+      index += chainMatch[0].length
+      expectCommand = true
+      continue
+    }
+
+    const flagMatch = segment.match(/^--?[A-Za-z0-9][\w-]*/)
+    if (flagMatch) {
+      pushToken(tokens, flagMatch[0], 'token-flag')
+      index += flagMatch[0].length
+      expectCommand = false
+      continue
+    }
+
+    const numberMatch = segment.match(/^(?:\d+(?:\.\d+)?|\.\d+)/)
+    if (numberMatch) {
+      pushToken(tokens, numberMatch[0], 'token-number')
+      index += numberMatch[0].length
+      expectCommand = false
+      continue
+    }
+
+    const wordMatch = segment.match(/^[A-Za-z_./:][\w./:-]*/)
+    if (wordMatch) {
+      const value = wordMatch[0]
+
+      if (BASH_KEYWORDS.has(value)) {
+        pushToken(tokens, value, 'token-keyword')
+      } else if (expectCommand) {
+        pushToken(tokens, value, 'token-function')
+      } else {
+        pushToken(tokens, value)
+      }
+
+      index += value.length
+      expectCommand = false
+      continue
+    }
+
+    pushToken(tokens, segment[0])
+    index += 1
+  }
+
+  return tokens
+}
+
+function tokenizeYamlLine(line) {
+  const tokens = []
+  let index = 0
+  let sawValueSeparator = false
+
+  while (index < line.length) {
+    const segment = line.slice(index)
+
+    const whitespaceMatch = segment.match(/^\s+/)
+    if (whitespaceMatch) {
+      pushToken(tokens, whitespaceMatch[0])
+      index += whitespaceMatch[0].length
+      continue
+    }
+
+    if (segment.startsWith('#')) {
+      pushToken(tokens, segment, 'token-comment')
+      break
+    }
+
+    if (segment.startsWith('- ')) {
+      pushToken(tokens, '-', 'token-operator')
+      pushToken(tokens, ' ')
+      index += 2
+      continue
+    }
+
+    const stringMatch = segment.match(/^(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/)
+    if (stringMatch) {
+      pushToken(tokens, stringMatch[0], 'token-string')
+      index += stringMatch[0].length
+      continue
+    }
+
+    const numberMatch = segment.match(/^(?:\d+(?:\.\d+)?|\.\d+)/)
+    if (numberMatch) {
+      pushToken(tokens, numberMatch[0], 'token-number')
+      index += numberMatch[0].length
+      continue
+    }
+
+    const keywordMatch = segment.match(/^[A-Za-z0-9_.\/-]+/)
+    if (keywordMatch) {
+      const value = keywordMatch[0]
+      const nextChar = line[index + value.length]
+
+      if (!sawValueSeparator && nextChar === ':') {
+        pushToken(tokens, value, 'token-property')
+      } else if (YAML_CONSTANTS.has(value.toLowerCase())) {
+        pushToken(tokens, value, 'token-constant')
+      } else {
+        pushToken(tokens, value)
+      }
+
+      index += value.length
+      continue
+    }
+
+    if (segment[0] === ':') {
+      pushToken(tokens, ':', 'token-operator')
+      sawValueSeparator = true
+      index += 1
+      continue
+    }
+
+    pushToken(tokens, segment[0])
+    index += 1
+  }
+
+  return tokens
+}
+
+function highlightLine(line, language) {
+  switch (language.toLowerCase()) {
+    case 'py':
+    case 'python':
+      return tokenizePythonLine(line)
+    case 'bash':
+    case 'sh':
+    case 'shell':
+      return tokenizeBashLine(line)
+    case 'yaml':
+    case 'yml':
+      return tokenizeYamlLine(line)
+    default:
+      return [{ value: line, className: '' }]
+  }
+}
+
+function getCodeLabel(language, filename) {
+  if (filename) return filename
+
+  const normalizedLanguage = language.toLowerCase()
+  return CODE_LABELS[normalizedLanguage] || normalizedLanguage
+}
+
 function CodeBlock({ children, language = 'python', filename }) {
   const [copied, setCopied] = useState(false)
+  const code = typeof children === 'string' ? children : String(children ?? '')
+  const lines = code.split('\n')
+  const label = getCodeLabel(language, filename)
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(children)
+    navigator.clipboard.writeText(code)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
 
   return (
-    <div className="relative my-5 rounded-xl overflow-hidden border border-surface-200 dark:border-white/[0.06]">
-      <div className="flex items-center justify-between px-4 py-2.5 bg-surface-100 dark:bg-white/[0.03] border-b border-surface-200 dark:border-white/[0.06]">
+    <div className="relative my-5 code-block rounded-xl overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-3 bg-surface-100 dark:bg-surface-900/50 border-b border-surface-200 dark:border-white/5">
         <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono text-surface-500 uppercase tracking-wider">{language}</span>
-          {filename && (
-            <>
-              <span className="text-surface-400 dark:text-surface-700">&middot;</span>
-              <span className="text-xs font-mono text-surface-500">{filename}</span>
-            </>
-          )}
+          <div className="flex gap-2">
+            <span className="w-3 h-3 rounded-full bg-red-500/80" />
+            <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
+            <span className="w-3 h-3 rounded-full bg-green-500/80" />
+          </div>
+          <span className="ml-4 text-surface-500 text-sm font-mono">{label}</span>
         </div>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-medium text-surface-500 hover:text-surface-800 dark:hover:text-surface-300 hover:bg-surface-200 dark:hover:bg-white/[0.06] transition-all"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-surface-500 dark:text-surface-400 hover:text-surface-900 dark:hover:text-white hover:bg-surface-200 dark:hover:bg-white/10 transition-all"
         >
-          {copied ? <Check className="w-3 h-3 text-emerald-500 dark:text-emerald-400" /> : <Copy className="w-3 h-3" />}
-          {copied ? 'Copied' : 'Copy'}
+          {copied ? <Check className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+          {copied ? 'Copied!' : 'Copy'}
         </button>
       </div>
-      <div className="overflow-x-auto bg-surface-50 dark:bg-[#0a0f1a]">
-        <pre className="p-5 text-[13px] leading-relaxed">
-          <code className="font-mono text-surface-700 dark:text-surface-300">{children}</code>
-        </pre>
-      </div>
+      <pre className="text-left overflow-x-auto">
+        <code className="font-mono text-sm lg:text-base text-surface-700 dark:text-surface-300">
+          <table className="border-collapse">
+            <tbody>
+              {lines.map((line, lineIndex) => (
+                <tr key={`${label}-${lineIndex}`}>
+                  <td className="pr-4 text-right select-none text-surface-500 dark:text-surface-600 align-top w-6">
+                    {lineIndex + 1}
+                  </td>
+                  <td className="whitespace-pre">
+                    {highlightLine(line, language).map((token, tokenIndex) => (
+                      <span key={`${lineIndex}-${tokenIndex}`} className={token.className}>
+                        {token.value}
+                      </span>
+                    ))}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </code>
+      </pre>
     </div>
   )
 }
