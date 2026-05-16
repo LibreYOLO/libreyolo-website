@@ -104,7 +104,6 @@ function ImageCarousel({ images, accentColor = 'cyan' }) {
 function HeroSection() {
   return (
     <section className="relative pt-24 lg:pt-32 pb-16">
-      <div className="absolute inset-0 grid-bg opacity-30" />
       <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl" />
       
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">

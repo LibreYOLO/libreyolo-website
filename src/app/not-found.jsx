@@ -7,7 +7,6 @@ import { Home, Search } from 'lucide-react'
 export default function NotFound() {
   return (
     <div className="min-h-screen flex items-center justify-center px-6">
-      <div className="absolute inset-0 grid-bg opacity-30" />
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-96 h-96 bg-libre-500/10 rounded-full blur-3xl" />
       
       <motion.div 

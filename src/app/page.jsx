@@ -42,7 +42,6 @@ function HeroSection() {
   return (
     <section className="relative md:min-h-screen md:flex md:items-center md:justify-center overflow-hidden">
       {/* Background Effects */}
-      <div className="absolute inset-0 grid-bg opacity-30 md:opacity-100" />
       <div className="absolute inset-0 gradient-mesh hidden md:dark:block" />
 
       {/* Animated Orbs - desktop-only, dark mode only */}
@@ -296,8 +295,6 @@ function SocialProofSection() {
 
   return (
     <section className="relative py-16 lg:py-20 overflow-hidden">
-      <div className="absolute inset-0 grid-bg opacity-10 md:opacity-30" />
-
       <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -460,8 +457,6 @@ function FeaturesSection() {
 
   return (
     <section className="relative py-16 lg:py-20">
-      <div className="absolute inset-0 grid-bg opacity-20 md:opacity-50" />
-
       <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -525,7 +520,6 @@ function DeployAnywhereSection() {
 
   return (
     <section className="relative py-14 lg:py-20 overflow-hidden">
-      <div className="absolute inset-0 grid-bg opacity-30" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-libre-500/5 rounded-full blur-3xl" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
@@ -633,8 +627,6 @@ function ComparisonSection() {
 
   return (
     <section className="relative py-14 lg:py-20">
-      <div className="absolute inset-0 grid-bg opacity-30" />
-
       <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

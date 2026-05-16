@@ -28,6 +28,13 @@ const sections = [
   { id: 'dataset-format', title: 'Dataset Format', icon: Database },
 ]
 
+const docsVersions = [
+  { version: 'v1.2.0', label: 'Dev branch', href: '/docs' },
+  { version: 'v1.1.0', label: 'Archived', href: '/docs/v1.1.0' },
+]
+
+export { DocsPage }
+
 /* ─── Reusable components ─── */
 
 const PYTHON_KEYWORDS = new Set([
@@ -515,12 +522,36 @@ function FeatureItem({ children }) {
 
 /* ─── Sidebar ─── */
 
-function Sidebar({ activeSection, onNavigate, className = '' }) {
+function Sidebar({ activeSection, onNavigate, currentVersion = 'v1.2.0', className = '' }) {
   return (
     <nav className={className}>
       <div className="flex items-center gap-2 mb-6 px-3">
         <BookOpen className="w-5 h-5 text-libre-600 dark:text-libre-400" />
         <span className="text-sm font-semibold text-surface-800 dark:text-white tracking-wide uppercase">Documentation</span>
+      </div>
+      <div className="mb-6 mx-3 rounded-lg border border-surface-200 dark:border-white/[0.08] bg-surface-50 dark:bg-white/[0.03] p-2">
+        <div className="text-[11px] font-semibold uppercase tracking-wide text-surface-500 dark:text-surface-500 mb-2">
+          Version
+        </div>
+        <div className="space-y-1">
+          {docsVersions.map(({ version, label, href }) => {
+            const isCurrent = version === currentVersion
+            return (
+              <a
+                key={version}
+                href={href}
+                className={`flex items-center justify-between rounded-md px-2.5 py-2 text-sm font-medium transition-colors ${
+                  isCurrent
+                    ? 'bg-libre-500/10 text-libre-700 dark:text-libre-300'
+                    : 'text-surface-600 dark:text-surface-400 hover:bg-white dark:hover:bg-white/[0.05]'
+                }`}
+              >
+                <span>{version}</span>
+                <span className="text-[11px] font-semibold uppercase tracking-wide">{label}</span>
+              </a>
+            )
+          })}
+        </div>
       </div>
       <ul className="space-y-0.5">
         {sections.map(({ id, title, icon: Icon }) => {
@@ -548,9 +579,10 @@ function Sidebar({ activeSection, onNavigate, className = '' }) {
 
 /* ─── Main docs page ─── */
 
-export default function Docs() {
+function DocsPage({ version = 'v1.2.0', isLatest = true }) {
   const [activeSection, setActiveSection] = useState('introduction')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [docsCopied, setDocsCopied] = useState(false)
 
   // Scroll spy — pick the last section whose heading has scrolled past 30% of viewport
   useEffect(() => {
@@ -579,11 +611,18 @@ export default function Docs() {
     setMobileMenuOpen(false)
   }
 
+  const copyDocs = async () => {
+    const docsText = document.querySelector('[data-docs-content]')?.innerText || ''
+    await navigator.clipboard.writeText(`# LibreYOLO Documentation ${version}\n\n${docsText}`)
+    setDocsCopied(true)
+    setTimeout(() => setDocsCopied(false), 2000)
+  }
+
   return (
     <div className="flex min-h-screen">
       {/* Desktop sidebar */}
       <aside className="hidden lg:block fixed left-0 top-20 bottom-0 w-64 border-r border-surface-200 dark:border-white/[0.06] bg-white/80 dark:bg-surface-950/50 backdrop-blur-sm overflow-y-auto py-8 px-4 z-30">
-        <Sidebar activeSection={activeSection} onNavigate={navigateTo} />
+        <Sidebar activeSection={activeSection} onNavigate={navigateTo} currentVersion={version} />
       </aside>
 
       {/* Mobile sidebar toggle */}
@@ -622,7 +661,7 @@ export default function Docs() {
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              <Sidebar activeSection={activeSection} onNavigate={navigateTo} />
+              <Sidebar activeSection={activeSection} onNavigate={navigateTo} currentVersion={version} />
             </motion.aside>
           </>
         )}
@@ -630,23 +669,59 @@ export default function Docs() {
 
       {/* Main content */}
       <main className="flex-1 lg:ml-64 min-h-screen pt-28 lg:pt-32 pb-24 px-6 lg:px-12">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto" data-docs-content>
+          <div className="mb-8 rounded-lg border border-surface-200 dark:border-white/[0.08] bg-white/80 dark:bg-white/[0.03] p-4 shadow-sm">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="flex flex-wrap items-center gap-2">
+                  {docsVersions.map(({ version: itemVersion, label, href }) => {
+                    const isCurrent = itemVersion === version
+                    return (
+                      <a
+                        key={itemVersion}
+                        href={href}
+                        className={`rounded-md px-2.5 py-1 text-sm font-semibold transition-colors ${
+                          isCurrent
+                            ? 'bg-libre-500/10 text-libre-700 dark:text-libre-300'
+                            : 'text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-white/[0.06] hover:text-surface-900 dark:hover:text-white'
+                        }`}
+                      >
+                        {itemVersion} {label.toLowerCase()}
+                      </a>
+                    )
+                  })}
+                </div>
+                <p className="mt-2 text-sm text-surface-600 dark:text-surface-400">
+                    {isLatest
+                    ? 'These docs track the upcoming v1.2.0 dev branch. For current released docs, use v1.1.0.'
+                    : 'This archived version is kept linkable so older installs, search results, and agents can target the right documentation.'}
+                </p>
+              </div>
+              <button
+                onClick={copyDocs}
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-surface-200 dark:border-white/[0.08] bg-surface-950 px-3.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-surface-800 dark:bg-white dark:text-surface-950 dark:hover:bg-surface-200"
+              >
+                {docsCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                {docsCopied ? 'Copied docs' : 'Copy docs'}
+              </button>
+            </div>
+          </div>
 
           {/* ────────────── INTRODUCTION ────────────── */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <SectionHeading id="introduction" icon={BookOpen}>Introduction</SectionHeading>
             <P>
-              LibreYOLO is an MIT-licensed object detection library that provides a unified Python API across four architectures: <strong className="text-surface-800 dark:text-white">YOLOX</strong>, <strong className="text-surface-800 dark:text-white">YOLOv9</strong>, <strong className="text-surface-800 dark:text-white">RT-DETR</strong>, and <strong className="text-surface-800 dark:text-white">RF-DETR</strong>. One interface for prediction, training, validation, and export, regardless of which model family you use.
+              LibreYOLO is an MIT-licensed object detection library focused on two flagship model families: <strong className="text-surface-800 dark:text-white">YOLO9</strong> as the CNN flagship and <strong className="text-surface-800 dark:text-white">RF-DETR</strong> as the transformer flagship. The API stays consistent across prediction, training, validation, and export.
             </P>
             <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
-model = LibreYOLO("LibreYOLOXs.pt")
+model = LibreYOLO("LibreYOLO9c.pt")
 results = model("image.jpg", conf=0.25, save=True)
 print(results.boxes.xyxy)`}</CodeBlock>
 
             <SubHeading>Key features</SubHeading>
             <ul className="space-y-2.5 mb-4">
-              <FeatureItem>Unified API across YOLOX, YOLOv9, RT-DETR, and RF-DETR</FeatureItem>
+              <FeatureItem>Flagship support for YOLO9 and RF-DETR</FeatureItem>
               <FeatureItem>Auto-detection of model architecture, size, and class count from weights</FeatureItem>
               <FeatureItem>Tiled inference for large/high-resolution images</FeatureItem>
               <FeatureItem>ONNX, TorchScript, TensorRT, OpenVINO, and NCNN export with embedded metadata</FeatureItem>
@@ -726,7 +801,7 @@ uv pip install --python .venv-rtdetr/bin/python -e '.[rtdetr]'
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 # Auto-detects architecture and size from the weights file
-model = LibreYOLO("LibreYOLOXs.pt")
+model = LibreYOLO("LibreYOLO9c.pt")
 
 # Run on a single image
 result = model("photo.jpg")
@@ -750,28 +825,11 @@ for r in results:
           {/* ────────────── AVAILABLE MODELS ────────────── */}
           <SectionHeading id="models" icon={Layers}>Available Models</SectionHeading>
 
-          <SubHeading>YOLOX</SubHeading>
-          <DocTable
-            headers={['Size', 'Code', 'Input size', 'Use case']}
-            rows={[
-              ['Nano', <InlineCode key="n">&quot;n&quot;</InlineCode>, '416', 'Edge devices, mobile'],
-              ['Tiny', <InlineCode key="t">&quot;t&quot;</InlineCode>, '416', 'Edge devices, faster'],
-              ['Small', <InlineCode key="s">&quot;s&quot;</InlineCode>, '640', 'Balanced speed/accuracy'],
-              ['Medium', <InlineCode key="m">&quot;m&quot;</InlineCode>, '640', 'Higher accuracy'],
-              ['Large', <InlineCode key="l">&quot;l&quot;</InlineCode>, '640', 'High accuracy'],
-              ['XLarge', <InlineCode key="x">&quot;x&quot;</InlineCode>, '640', 'Maximum accuracy'],
-            ]}
-          />
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
+          <P>
+            v1.2.0 documentation is centered on two flagship model families. YOLO9 is the CNN flagship and RF-DETR is the transformer flagship. Other supported families are listed as compact references.
+          </P>
 
-model = LibreYOLO("LibreYOLOXn.pt")
-# model = LibreYOLO("LibreYOLOXt.pt")
-# model = LibreYOLO("LibreYOLOXs.pt")
-# model = LibreYOLO("LibreYOLOXm.pt")
-# model = LibreYOLO("LibreYOLOXl.pt")
-# model = LibreYOLO("LibreYOLOXx.pt")`}</CodeBlock>
-
-          <SubHeading>YOLOv9</SubHeading>
+          <SubHeading>YOLO9 flagship</SubHeading>
           <DocTable
             headers={['Size', 'Code', 'Input size', 'Use case']}
             rows={[
@@ -788,22 +846,7 @@ model = LibreYOLO("LibreYOLO9t.pt")
 # model = LibreYOLO("LibreYOLO9m.pt")
 # model = LibreYOLO("LibreYOLO9c.pt")`}</CodeBlock>
 
-          <SubHeading>RT-DETR</SubHeading>
-          <DocTable
-            headers={['Size', 'Code', 'Input size', 'Use case']}
-            rows={[
-              ['ResNet-18', <InlineCode key="r18">&quot;r18&quot;</InlineCode>, '640', 'Fastest RT-DETR variant'],
-              ['ResNet-34', <InlineCode key="r34">&quot;r34&quot;</InlineCode>, '640', 'Balanced speed/accuracy'],
-              ['ResNet-50', <InlineCode key="r50">&quot;r50&quot;</InlineCode>, '640', 'General-purpose default'],
-              ['ResNet-50-m', <InlineCode key="r50m">&quot;r50m&quot;</InlineCode>, '640', 'Higher accuracy'],
-              ['ResNet-101', <InlineCode key="r101">&quot;r101&quot;</InlineCode>, '640', 'Largest RT-DETR variant'],
-            ]}
-          />
-          <CodeBlock language="python">{`from libreyolo import LibreYOLORTDETR
-
-model = LibreYOLORTDETR(size="r50")`}</CodeBlock>
-
-          <SubHeading>RF-DETR</SubHeading>
+          <SubHeading>RF-DETR flagship</SubHeading>
           <DocTable
             headers={['Size', 'Code', 'Input size', 'Use case']}
             rows={[
@@ -813,9 +856,29 @@ model = LibreYOLORTDETR(size="r50")`}</CodeBlock>
               ['Large', <InlineCode key="l">&quot;l&quot;</InlineCode>, '704', 'Maximum accuracy'],
             ]}
           />
-          <CodeBlock language="python">{`from libreyolo import LibreYOLORFDETR
+          <CodeBlock language="python">{`from libreyolo import LibreRFDETR
 
-model = LibreYOLORFDETR(size="s")`}</CodeBlock>
+model = LibreRFDETR(size="s")`}</CodeBlock>
+
+          <SubHeading>Additional supported models</SubHeading>
+          <DocTable
+            headers={['Family', 'Model class', 'Model names']}
+            rows={[
+              ['YOLOX', <InlineCode key="yolox">LibreYOLOX</InlineCode>, 'LibreYOLOXn.pt, LibreYOLOXt.pt, LibreYOLOXs.pt, LibreYOLOXm.pt, LibreYOLOXl.pt, LibreYOLOXx.pt'],
+              ['YOLO9-E2E', <InlineCode key="yolo9e2e">LibreYOLO9E2E</InlineCode>, 'LibreYOLO9E2Et.pt, LibreYOLO9E2Es.pt, LibreYOLO9E2Em.pt, LibreYOLO9E2Ec.pt'],
+              ['YOLO-NAS', <InlineCode key="yolonas">LibreYOLONAS</InlineCode>, 'LibreYOLONASs.pt, LibreYOLONASm.pt, LibreYOLONASl.pt, LibreYOLONASn-pose.pt, LibreYOLONASs-pose.pt, LibreYOLONASm-pose.pt, LibreYOLONASl-pose.pt'],
+              ['D-FINE', <InlineCode key="dfine">LibreDFINE</InlineCode>, 'LibreDFINEn.pt, LibreDFINEs.pt, LibreDFINEm.pt, LibreDFINEl.pt, LibreDFINEx.pt'],
+              ['DEIM', <InlineCode key="deim">LibreDEIM</InlineCode>, 'LibreDEIMn.pt, LibreDEIMs.pt, LibreDEIMm.pt, LibreDEIMl.pt, LibreDEIMx.pt'],
+              ['DEIMv2', <InlineCode key="deimv2">LibreDEIMv2</InlineCode>, 'LibreDEIMv2atto.pt, LibreDEIMv2femto.pt, LibreDEIMv2pico.pt, LibreDEIMv2n.pt, LibreDEIMv2s.pt, LibreDEIMv2m.pt, LibreDEIMv2l.pt, LibreDEIMv2x.pt'],
+              ['RT-DETR', <InlineCode key="rtdetr">LibreRTDETR</InlineCode>, 'LibreRTDETRr18.pt, LibreRTDETRr34.pt, LibreRTDETRr50.pt, LibreRTDETRr50m.pt, LibreRTDETRr101.pt, LibreRTDETRl.pt, LibreRTDETRx.pt'],
+              ['RT-DETRv2', <InlineCode key="rtdetrv2">LibreRTDETRv2</InlineCode>, 'LibreRTDETRv2r18.pt, LibreRTDETRv2r34.pt, LibreRTDETRv2r50.pt, LibreRTDETRv2r50m.pt, LibreRTDETRv2r101.pt'],
+              ['RT-DETRv4', <InlineCode key="rtdetrv4">LibreRTDETRv4</InlineCode>, 'LibreRTDETRv4s.pt, LibreRTDETRv4m.pt, LibreRTDETRv4l.pt, LibreRTDETRv4x.pt'],
+              ['PicoDet', <InlineCode key="picodet">LibrePICODET</InlineCode>, 'LibrePICODETs.pt, LibrePICODETm.pt, LibrePICODETl.pt'],
+              ['EdgeCrafter', <InlineCode key="ec">LibreEC</InlineCode>, 'LibreECs.pt, LibreECm.pt, LibreECl.pt, LibreECx.pt, LibreECs-pose.pt, LibreECm-pose.pt, LibreECl-pose.pt, LibreECx-pose.pt, LibreECs-seg.pt, LibreECm-seg.pt, LibreECl-seg.pt, LibreECx-seg.pt'],
+              ['DAMO-YOLO', <InlineCode key="damoyolo">LibreDAMOYOLO</InlineCode>, 'LibreDAMOYOLOns.pt, LibreDAMOYOLOnm.pt, LibreDAMOYOLOnl.pt, LibreDAMOYOLOt.pt, LibreDAMOYOLOs.pt, LibreDAMOYOLOm.pt, LibreDAMOYOLOl.pt'],
+              ['RTMDet', <InlineCode key="rtmdet">LibreRTMDet</InlineCode>, 'LibreRTMDett.pt, LibreRTMDets.pt, LibreRTMDetm.pt, LibreRTMDetl.pt, LibreRTMDetx.pt'],
+            ]}
+          />
 
           <SubHeading>Factory function (recommended)</SubHeading>
           <P>
@@ -826,7 +889,7 @@ model = LibreYOLORFDETR(size="s")`}</CodeBlock>
 # Auto-detects: YOLOX, size=s, 80 classes
 model = LibreYOLO("LibreYOLOXs.pt")
 
-# Auto-detects: YOLOv9, size=c, 80 classes
+# Auto-detects: YOLO9, size=c, 80 classes
 model = LibreYOLO("LibreYOLO9c.pt")
 
 # Auto-detects: RT-DETR
@@ -987,6 +1050,9 @@ result.grid_path       # grid visualization image`}</CodeBlock>
 
           {/* ────────────── TRAINING ────────────── */}
           <SectionHeading id="training" icon={GraduationCap}>Training</SectionHeading>
+          <P>
+            The flagship training paths for v1.2.0 are YOLO9 and RF-DETR. Additional training examples remain documented for API compatibility.
+          </P>
 
           <SubHeading>YOLOX training</SubHeading>
           <CodeBlock language="python">{`from libreyolo import LibreYOLOX
@@ -1050,7 +1116,7 @@ test: images/test  # optional
 nc: 3
 names: ["cat", "dog", "bird"]`}</CodeBlock>
 
-          <SubHeading>YOLOv9 training</SubHeading>
+          <SubHeading>YOLO9 training</SubHeading>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO9
 
 model = LibreYOLO9("LibreYOLO9c.pt", size="c")
@@ -1075,13 +1141,13 @@ results = model.train(
 
 print(f"Best mAP50-95: {results['best_mAP50_95']:.3f}")`}</CodeBlock>
           <P>
-            YOLOv9 training uses the same parameter API as YOLOX but defaults to <InlineCode>epochs=300</InlineCode> and <InlineCode>name=&quot;yolo9_exp&quot;</InlineCode>. It does not have a <InlineCode>pretrained</InlineCode> parameter.
+            YOLO9 training uses the same parameter API as YOLOX but defaults to <InlineCode>epochs=300</InlineCode> and <InlineCode>name=&quot;yolo9_exp&quot;</InlineCode>. It does not have a <InlineCode>pretrained</InlineCode> parameter.
           </P>
 
           <SubHeading>RT-DETR training</SubHeading>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLORTDETR
+          <CodeBlock language="python">{`from libreyolo import LibreRTDETR
 
-model = LibreYOLORTDETR(size="r50")
+model = LibreRTDETR(size="r50")
 
 results = model.train(
     data="coco128.yaml",
@@ -1111,9 +1177,9 @@ results = model.train(
           <P>
             RF-DETR uses a different training API that wraps the original rfdetr implementation:
           </P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLORFDETR
+          <CodeBlock language="python">{`from libreyolo import LibreRFDETR
 
-model = LibreYOLORFDETR(size="s")
+model = LibreRFDETR(size="s")
 
 results = model.train(
     data="path/to/dataset",  # Roboflow/COCO format directory
@@ -1398,10 +1464,10 @@ model = LibreYOLO("model_ncnn/")`}</CodeBlock>
           <CodeBlock language="python">{`LibreYOLO(
     model_path: str,
     size: str = None,           # auto-detected from weights
-    reg_max: int = 16,          # YOLOv9 only
+    reg_max: int = 16,          # YOLO9 only
     nb_classes: int = None,     # auto-detected from weights
     device: str = "auto",
-) -> LibreYOLOX | LibreYOLO9 | LibreYOLORTDETR | LibreYOLORFDETR | OnnxBackend | TensorRTBackend | OpenVINOBackend | NcnnBackend`}</CodeBlock>
+) -> LibreYOLOX | LibreYOLO9 | LibreRTDETR | LibreRFDETR | OnnxBackend | TensorRTBackend | OpenVINOBackend | NcnnBackend`}</CodeBlock>
           <P>
             Auto-detects model architecture, size, and class count from the weights file. It also handles <InlineCode>.onnx</InlineCode>, <InlineCode>.engine</InlineCode>, OpenVINO directories containing <InlineCode>model.xml</InlineCode>, and NCNN directories containing <InlineCode>model.ncnn.param</InlineCode> plus <InlineCode>model.ncnn.bin</InlineCode>.
           </P>
@@ -1555,7 +1621,7 @@ BaseExporter.create("ncnn", model)(output_path="model_ncnn")`}</CodeBlock>
     "last_checkpoint": str,
 }`}</CodeBlock>
 
-          <SubHeading>model.train() (YOLOv9)</SubHeading>
+          <SubHeading>model.train() (YOLO9)</SubHeading>
           <CodeBlock language="python">{`model.train(
     data: str,                  # path to data.yaml (required)
     *,
@@ -1800,7 +1866,7 @@ ncnn_exporter = BaseExporter.create("ncnn", model)`}</CodeBlock>
           {/* ────────────── DATASET FORMAT ────────────── */}
           <SectionHeading id="dataset-format" icon={Database}>Dataset Format</SectionHeading>
           <P>
-            YOLOX, YOLOv9, and RT-DETR use YOLO-style datasets configured via <InlineCode>data.yaml</InlineCode>. RF-DETR uses COCO-format annotations and is documented separately below.
+            YOLO-style models use datasets configured via <InlineCode>data.yaml</InlineCode>. RF-DETR uses COCO-format annotations and is documented separately below.
           </P>
 
           <SubHeading>data.yaml structure</SubHeading>
@@ -1881,4 +1947,8 @@ results = model.train(data="coco128.yaml", epochs=10)`}</CodeBlock>
       </main>
     </div>
   )
+}
+
+export default function Docs() {
+  return <DocsPage />
 }
