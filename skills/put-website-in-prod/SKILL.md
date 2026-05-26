@@ -1,29 +1,24 @@
 ---
 name: put-website-in-prod
-description: Deploy the libreyolo-website (this repo) to production on Vercel. Use when the user asks to "deploy", "push to prod", "put it live", "ship the site", or to verify a manual production deploy. Covers the Vercel CLI install, login, the specific Vercel project this repo is linked to, the correct deploy command, and the most common pitfalls.
+description: Deploy libreyolo-website to production on Vercel using the global vercel CLI (vercel --prod --yes). Use when the user asks to deploy, publish, push to prod, put it live, or ship the site.
 ---
 
 # Put the website in production
 
-This repo (`libreyolo-website`) is a Next.js 16 app deployed on Vercel. The production domain is `https://www.libreyolo.com`.
+This repo (`libreyolo-website`) is a Next.js 16 app on Vercel. Production is **`https://www.libreyolo.com`**.
+
+Publishing means running the **global** Vercel CLI from the repo root. That is the only supported deploy path for agents and humans in this project.
 
 ## Where the site lives on Vercel
 
-- **Scope:** `xubanceccons-projects` (Xuban's personal Vercel account, not a team)
+- **Scope:** `xubanceccons-projects`
 - **Project:** `libreyolo-website`
 - **Production domain:** `www.libreyolo.com`
-- **Vercel dashboard:** https://vercel.com/xubanceccons-projects/libreyolo-website
+- **Dashboard:** https://vercel.com/xubanceccons-projects/libreyolo-website
 
-## The two deploy paths
+## Prereqs
 
-1. **Auto-deploy via GitHub integration (default).** Pushing to `main` triggers a Vercel build automatically. Most of the time, this is all you need. Just `git push origin main` and the new commit goes live in ~1–2 minutes.
-2. **Manual CLI deploy.** Use only when (a) you want to deploy local changes without pushing, (b) you need to redeploy without a new commit, or (c) the user explicitly asks for `vercel --prod`.
-
-Confirm with the user which path they want before running the CLI deploy. Don't run a manual deploy if the user just wanted to push.
-
-## CLI prereqs
-
-Use the **globally-installed** `vercel` CLI (currently v54+). Do **not** use `npx vercel` — that picks up the stale `vercel@50.1.3` pinned in `package.json` as a project dependency, whose auth token format is incompatible with v54. If you see `Error: The specified token is not valid`, you almost certainly ran `npx vercel` instead of plain `vercel`.
+Use the **globally installed** `vercel` CLI (v54+). **Never** use `npx vercel` or `npx vercel --prod`. The repo pins `vercel@50.1.3` in `package.json`; that old version uses an incompatible token format and fails with `Error: The specified token is not valid`.
 
 Install globally if missing:
 
@@ -37,17 +32,17 @@ Verify:
 vercel --version   # expect 54.x or newer
 ```
 
-## Login flow
+## Login (if needed)
 
-`vercel login` is interactive (opens a browser URL with a device code). **Don't run it from a non-interactive Claude Code session** — it will hang waiting for the user to confirm in the browser. Instead, ask the user to run it themselves:
+`vercel login` is interactive (browser device code). Do not run it from a non-interactive agent session; it will hang.
 
-> Please run `vercel login` in your terminal and confirm the device code in the browser. Once it says "Congratulations! You are now signed in.", I'll continue.
+Ask the user to run it in their terminal:
 
-If you're invoked inline (e.g. with `!`-prefixed commands), running it inline works because stdout/stderr stream to the user.
+> Run `vercel login` and confirm the device code in the browser. When you see "Congratulations! You are now signed in.", tell me and I will deploy.
 
-After login, the token is stored at `~/.vercel/auth.json` (or the equivalent on the platform) and persists across sessions.
+The token persists at `~/.vercel/auth.json` (platform equivalent on Windows).
 
-## Manual production deploy
+## Production deploy
 
 From the repo root:
 
@@ -55,35 +50,37 @@ From the repo root:
 vercel --prod --yes
 ```
 
-- `--prod` targets the production environment (aliases to `www.libreyolo.com`).
-- `--yes` accepts defaults non-interactively. First run will auto-link the local directory to the existing `xubanceccons-projects/libreyolo-website` project by name match. Subsequent runs read `.vercel/project.json` and skip the prompt.
-- Without `--yes`, the CLI prompts ("Set up and deploy ~/path? Y/n", "Which scope?", "Link to existing project?") and will hang in non-interactive sessions.
+- **`--prod`** deploys to production and aliases to `www.libreyolo.com`.
+- **`--yes`** accepts defaults non-interactively (required in agent sessions).
+- Deploys the **current working tree** on disk. You do not need a git push for the site to update.
+- First run links this directory to `xubanceccons-projects/libreyolo-website` via `.vercel/project.json`. Later runs reuse that link.
 
-Expected output ends with:
+Success looks like:
 
 ```
 ▲ Production  https://libreyolo-website-<hash>-xubanceccons-projects.vercel.app
 ▲ Aliased     https://www.libreyolo.com
 ```
 
-If you see `Aliased`, the production domain is updated.
+If you see **`Aliased`**, production is live.
 
-## Verifying the deploy
+## Verify
 
-- Open `https://www.libreyolo.com` (or the specific page that changed) and confirm visually.
-- For build details / logs: `vercel inspect <deployment-url>` using the URL from the previous step.
-- For history: `vercel ls` lists recent deploys; the topmost with `● Ready` and `Production` is the live one.
+- Open `https://www.libreyolo.com` (or the page that changed) and confirm visually.
+- Build logs: `vercel inspect <deployment-url>` using the Production URL from the output.
+- Recent deploys: `vercel ls` (top row with `● Ready` and `Production` is live).
 
 ## Common pitfalls
 
-- **`Error: The specified token is not valid`** → you ran `npx vercel`, which uses the pinned v50.1.3. Use the global `vercel` command directly.
-- **`No existing credentials found`** → user is logged out. Ask them to run `vercel login`.
-- **`.vercel/` appearing in `git status`** → it's already in `.gitignore`; don't stage it. It holds the local project link (`project.json`) and is per-machine.
-- **Deploy succeeded but `www.libreyolo.com` shows old content** → DNS / browser cache. Hard-refresh (Ctrl+Shift+R) and check from an incognito window before assuming the deploy is broken.
-- **Two production builds running simultaneously** → you pushed to `main` *and* ran `vercel --prod`. Both will complete; the later finish wins. Usually harmless, but wasteful.
+| Symptom | Fix |
+|--------|-----|
+| `The specified token is not valid` | You used `npx vercel`. Run global `vercel --prod --yes` instead. |
+| `No existing credentials found` | User must run `vercel login`. |
+| CLI prompts and hangs | Add `--yes`, or ensure `.vercel/project.json` exists from a prior link. |
+| Site shows old content after success | Hard-refresh (Ctrl+Shift+R) or incognito; cache, not a failed deploy. |
+| `.vercel/` in `git status` | Already gitignored; do not commit it. |
 
-## When NOT to manually deploy
+## What this skill does not cover
 
-- Right after `git push origin main` — the auto-deploy is already running. Wait for it.
-- If the user only asked you to commit/push. Pushing is not the same as deploying via CLI; don't escalate.
-- If the build is currently failing on Vercel — fix the underlying error first, don't loop on manual redeploys.
+- **Git commit / push** is separate from publishing. Only commit or push when the user asks; publishing is always `vercel --prod --yes`.
+- Do not redeploy in a loop if the Vercel build is failing. Read the build log, fix the error, then deploy once.
