@@ -1,6 +1,7 @@
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import HackathonBanner from '@/components/HackathonBanner'
 import { Outfit, JetBrains_Mono } from 'next/font/google'
 
 const outfit = Outfit({
@@ -60,6 +61,7 @@ export default function RootLayout({ children }) {
             {children}
           </main>
           <Footer />
+          <HackathonBanner />
         </div>
       </body>
     </html>
