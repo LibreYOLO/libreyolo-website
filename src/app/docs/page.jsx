@@ -1490,7 +1490,7 @@ results = model.train(
     optimizer="SGD",         # "SGD", "Adam", "AdamW"
 
     # System
-    device="0",              # "" | "cpu" | "cuda" | "0" | "0,1"
+    device="0",              # "cpu" | "0" | "0,1" | "0,1,2,3" — comma-separated for multi-GPU
     workers=8,
     seed=0,
 
@@ -1502,7 +1502,7 @@ results = model.train(
     # Training features
     amp=True,                # automatic mixed precision
     patience=50,             # early stopping patience
-    resume=False,            # resume from loaded checkpoint
+    resume=False,            # True = resume from the loaded checkpoint path
 )
 
 print(f"Best mAP50-95: {results['best_mAP50_95']:.3f}")
@@ -1512,32 +1512,32 @@ print(f"Best checkpoint: {results['best_checkpoint']}")`}</CodeBlock>
           </P>
 
           <SubHeading>RF-DETR - transformer flagship training</SubHeading>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
+          <CodeBlock language="python">{`from libreyolo.models.rfdetr.model import LibreRFDETR
 
-model = LibreYOLO("LibreRFDETRs.pt")
-
-# Advanced: start fresh
-# from libreyolo import LibreRFDETR
-# model = LibreRFDETR(size="s")
+# Fine-tune from pretrained weights (None = use built-in pretrained)
+model = LibreRFDETR(None, size="n")  # or "s", "m", "l"
 
 results = model.train(
-    data="path/to/dataset",  # Roboflow/COCO-format directory
+    data="path/to/data.yaml",
     epochs=100,
-    batch_size=4,            # NOTE: RF-DETR uses batch_size, not batch
-    lr=1e-4,
+    batch=-1,          # -1 = AutoBatch (targets 60% VRAM)
+    nbs=16,            # nominal batch for grad accumulation (RF-DETR default: 16)
+    device="0",        # "cpu" | "0" | "0,1" | "0,1,2,3" — comma-separated for multi-GPU
+    workers=4,
     output_dir="runs/train/rfdetr_exp",
-)`}</CodeBlock>
-          <P>
-            RF-DETR has its own training signature (<InlineCode>batch_size</InlineCode>, <InlineCode>lr</InlineCode>, <InlineCode>output_dir</InlineCode>) - it wraps the upstream RF-DETR trainer. It also expects a COCO-format dataset directory rather than a YOLO <InlineCode>data.yaml</InlineCode>:
-          </P>
-          <CodeBlock language="text">{`dataset/
-    train/
-        _annotations.coco.json
-        image1.jpg
-        image2.jpg
-    valid/
-        _annotations.coco.json
-        image1.jpg`}</CodeBlock>
+    amp=True,
+    seed=42,
+    exist_ok=True,
+)
+
+print(f"Best mAP50-95: {results['best_mAP50_95']:.3f}")
+print(f"Weights saved: {results['output_dir']}")`}</CodeBlock>
+          <CodeBlock language="bash">{`# CLI
+libreyolo train --model rfdetr-n --data path/to/data.yaml --device 0 --batch -1`}</CodeBlock>
+          <SubHeading>Resuming RF-DETR training</SubHeading>
+          <CodeBlock language="python">{`# Pass the checkpoint path as the first argument to resume
+model = LibreRFDETR("runs/train/rfdetr_exp/best.pt", size="n")
+results = model.train(data="path/to/data.yaml", resume="runs/train/rfdetr_exp/best.pt")`}</CodeBlock>
 
           <SubHeading>Training results dict</SubHeading>
           <CodeBlock language="python">{`{
@@ -1602,19 +1602,24 @@ results = model.train(cfg="configs/yolo9_finetune.yaml")
           <CodeBlock language="python">{`# Effective batch 64 on a single GPU that only fits batch=8
 model.train(data="coco128.yaml", batch=8, nbs=64)`}</CodeBlock>
 
-          <SubHeading>Distributed training (DDP)</SubHeading>
+          <SubHeading>Multi-GPU training</SubHeading>
           <P>
-            YOLO9 and RF-DETR support multi-GPU training through PyTorch DistributedDataParallel. Launch the training script with <InlineCode>torchrun</InlineCode>:
+            Both YOLO9 and RF-DETR support multi-GPU training by passing comma-separated GPU indices to <InlineCode>device</InlineCode>. No <InlineCode>torchrun</InlineCode> wrapper needed.
           </P>
-          <CodeBlock language="bash">{`# 4-GPU node
-torchrun --nproc_per_node=4 train_yolo9.py
+          <CodeBlock language="python">{`# YOLO9 — 2 GPUs
+from libreyolo import LibreYOLO9
 
-# Multi-node - see PyTorch's torchrun docs for --nnodes / --rdzv_endpoint`}</CodeBlock>
-          <CodeBlock language="python" filename="train_yolo9.py">{`from libreyolo import LibreYOLO
+model = LibreYOLO9(None, size="c")
+model.train(data="coco128.yaml", epochs=300, batch=-1, nbs=64, device="0,1", amp=True)
 
-model = LibreYOLO("LibreYOLO9c.pt")
-# Pass device="" (auto-detect) and let torchrun set the rank
-model.train(data="coco128.yaml", epochs=300, batch=16)`}</CodeBlock>
+# RF-DETR — 2 GPUs
+from libreyolo.models.rfdetr.model import LibreRFDETR
+
+model = LibreRFDETR(None, size="n")
+model.train(data="path/to/data.yaml", epochs=100, batch=-1, nbs=16, device="0,1", amp=True)`}</CodeBlock>
+          <P>
+            Pass as many indices as you have available GPUs: <InlineCode>&quot;0,1,2,3&quot;</InlineCode> for a 4-GPU node. The trainer distributes batches across ranks automatically.
+          </P>
 
           <Divider />
 
@@ -2160,13 +2165,19 @@ BaseExporter.create("ncnn", model)(output_path="model_ncnn")`}</CodeBlock>
 
           <SubHeading>model.train() (RF-DETR)</SubHeading>
           <CodeBlock language="python">{`model.train(
-    data: str,                  # path to dataset directory
+    data: str,                            # path to YOLO-format data.yaml
     epochs: int = 100,
-    batch_size: int = 4,
-    lr: float = 1e-4,
+    batch: int = -1,                      # -1 = AutoBatch (targets 60% VRAM)
+    nbs: int = 16,                        # nominal batch for grad accumulation (RFDETRConfig default)
+    device: str = "0",                    # "cpu" | "0" | "0,1" | "0,1,2,3"
+    workers: int = 4,
     output_dir: str = "runs/train",
-    resume: str = None,
-    **kwargs,                   # additional RF-DETR training args
+    amp: bool = True,
+    seed: int = 42,
+    exist_ok: bool = True,
+    resume: str | None = None,            # path to checkpoint to resume from
+    allow_download_scripts: bool = False, # allow embedded download blocks in data YAML
+    # imgsz: derived from size variant (n→384 s→512 m→576 l→704), not overridable
 ) -> dict`}</CodeBlock>
 
           <SubHeading>OnnxBackend</SubHeading>
@@ -2375,7 +2386,7 @@ ncnn_exporter = BaseExporter.create("ncnn", model)`}</CodeBlock>
           {/* ────────────── DATASET FORMAT ────────────── */}
           <SectionHeading id="dataset-format" icon={Database}>Dataset Format</SectionHeading>
           <P>
-            YOLO-style models use datasets configured via <InlineCode>data.yaml</InlineCode>. RF-DETR uses COCO-format annotations and is documented separately below.
+            All models — including RF-DETR — use datasets configured via <InlineCode>data.yaml</InlineCode>.
           </P>
 
           <SubHeading>data.yaml structure</SubHeading>
@@ -2437,18 +2448,6 @@ names: ["person", "bicycle", "car", "..."]`}</CodeBlock>
           <CodeBlock language="python">{`# These download automatically on first use
 results = model.val(data="coco8.yaml")
 results = model.train(data="coco128.yaml", epochs=10)`}</CodeBlock>
-
-          <SubHeading>RF-DETR dataset format</SubHeading>
-          <P>
-            RF-DETR uses COCO-format annotations (JSON) instead of YOLO text labels:
-          </P>
-          <CodeBlock language="text">{`dataset/
-    train/
-        _annotations.coco.json
-        image1.jpg
-    valid/
-        _annotations.coco.json
-        image1.jpg`}</CodeBlock>
 
           {/* Bottom spacer */}
           <div className="h-16" />
