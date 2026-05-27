@@ -1490,7 +1490,7 @@ results = model.train(
     optimizer="SGD",         # "SGD", "Adam", "AdamW"
 
     # System
-    device="0",              # "0" | "0,1" | "0,1,2,3" — comma-separated for multi-GPU
+    device="0",              # "cpu" | "0" | "0,1" | "0,1,2,3" — comma-separated for multi-GPU
     workers=8,
     seed=0,
 
@@ -1522,7 +1522,7 @@ results = model.train(
     epochs=100,
     batch=-1,          # -1 = AutoBatch (targets 60% VRAM)
     nbs=16,            # nominal batch for grad accumulation (RF-DETR default: 16)
-    device="0",        # "0" | "0,1" | "0,1,2,3" — comma-separated for multi-GPU
+    device="0",        # "cpu" | "0" | "0,1" | "0,1,2,3" — comma-separated for multi-GPU
     workers=4,
     output_dir="runs/train/rfdetr_exp",
     amp=True,
@@ -2169,7 +2169,7 @@ BaseExporter.create("ncnn", model)(output_path="model_ncnn")`}</CodeBlock>
     epochs: int = 100,
     batch: int = -1,                      # -1 = AutoBatch (targets 60% VRAM)
     nbs: int = 16,                        # nominal batch for grad accumulation (RFDETRConfig default)
-    device: str = "0",                    # "0" | "0,1" | "0,1,2,3"
+    device: str = "0",                    # "cpu" | "0" | "0,1" | "0,1,2,3"
     workers: int = 4,
     output_dir: str = "runs/train",
     amp: bool = True,
