@@ -15,6 +15,9 @@ import {
   ExternalLink,
   Rocket,
   Scissors,
+  PersonStanding,
+  Video,
+  Activity,
 } from 'lucide-react'
 
 const SECTIONS = [
@@ -23,6 +26,9 @@ const SECTIONS = [
   { id: 'setup-tutorial', title: 'Setup tutorial', icon: Terminal },
   { id: 'example-detection', title: 'Example 1', icon: Code2 },
   { id: 'example-segmentation', title: 'Example 2', icon: Scissors },
+  { id: 'example-keypoints', title: 'Example 3', icon: PersonStanding },
+  { id: 'example-video', title: 'Example 4', icon: Video },
+  { id: 'example-tracking', title: 'Example 5', icon: Activity },
 ]
 
 const SETUP_PROMPT = `# Install LibreYOLO (Cursor Hackathon, LibreYOLO Track)
@@ -104,13 +110,16 @@ const EXAMPLE_DETECTION_CODE = `from libreyolo import LibreYOLO, SAMPLE_IMAGE
 model = LibreYOLO("LibreYOLO9t.pt")
 
 # Accepts file paths, URLs, PIL, NumPy, tensors, or raw bytes.
-results = model(SAMPLE_IMAGE, save=True)
+result = model(SAMPLE_IMAGE, save=True)
 
-for r in results:
-    print(r.boxes.xyxy)        # (N, 4) tensor of bounding boxes
-    print(r.boxes.conf)        # (N,) confidence scores
-    print(r.names[r.boxes.cls[0].item()])  # class name of the first detection
-    print(r.saved_path)        # where the annotated image was saved
+print(result.boxes.xyxy)        # (N, 4) tensor of bounding boxes
+print(result.boxes.conf)        # (N,) confidence scores
+print(result.names[int(result.boxes.cls[0].item())])  # first class name
+print(result.saved_path)        # where the annotated image was saved
+`
+
+const RFDETR_EXTRA_CODE = `# Required once for RF-DETR examples
+pip install -e ".[rfdetr]"
 `
 
 const EXAMPLE_SEGMENTATION_CODE = `from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -120,17 +129,58 @@ const EXAMPLE_SEGMENTATION_CODE = `from libreyolo import LibreYOLO, SAMPLE_IMAGE
 model = LibreYOLO("LibreRFDETRs-seg.pt")
 
 # save=True draws boxes plus translucent mask overlays on top of the image.
-results = model(SAMPLE_IMAGE, save=True)
+result = model(SAMPLE_IMAGE, save=True)
 
-for r in results:
-    # Boxes still work the same as in detection
-    print(r.boxes.xyxy)            # (N, 4) bounding boxes
-    print(r.boxes.cls)             # (N,) class IDs
+# Boxes still work the same as in detection
+print(result.boxes.xyxy)            # (N, 4) bounding boxes
+print(result.boxes.cls)             # (N,) class IDs
 
-    # Masks are the new bit
-    print(r.masks.data.shape)      # (N, H, W) binary masks at image resolution
-    print(r.masks.xy[0].shape)     # polygon contour for the first instance
-    print(r.saved_path)            # annotated output path
+# Masks are the new bit
+print(result.masks.data.shape)      # (N, H, W) binary masks at image resolution
+print(result.masks.xy[0].shape)     # polygon contour for the first instance
+print(result.saved_path)            # annotated output path
+`
+
+const EXAMPLE_KEYPOINTS_CODE = `from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+# YOLO-NAS pose predicts one person box plus 17 COCO keypoints per person.
+model = LibreYOLO("LibreYOLONASs-pose.pt")
+result = model(SAMPLE_IMAGE, save=True)
+
+print(result.boxes.xyxy)             # (N, 4) person boxes
+print(result.keypoints.xy.shape)     # (N, 17, 2) pixel coordinates
+print(result.keypoints.conf.shape)   # (N, 17) keypoint confidence
+if len(result):
+    print(result.keypoints.xy[0, 0])  # first person's nose keypoint
+print(result.saved_path)             # annotated output path
+`
+
+const EXAMPLE_VIDEO_CODE = `from libreyolo import LibreYOLO
+
+# Pick one model:
+model = LibreYOLO("LibreYOLO9t.pt")          # detection
+# model = LibreYOLO("LibreRFDETRs-seg.pt")   # segmentation
+# model = LibreYOLO("LibreYOLONASs-pose.pt") # keypoints
+
+for frame in model("clip.mp4", stream=True, save=True):
+    print(frame.frame_idx, len(frame))
+`
+
+const TRACKING_EXTRA_CODE = `pip install libreyolo[tracking]
+`
+
+const EXAMPLE_TRACKING_CODE = `from libreyolo import LibreYOLO
+
+model = LibreYOLO("LibreYOLO9t.pt")
+
+for result in model.track(
+    "clip.mp4",
+    track_conf=0.25,
+    iou=0.45,
+    save=True,      # writes runs/track/<video_stem>.mp4 by default
+    vid_stride=1,
+):
+    print(result.frame_idx, result.track_id)
 `
 
 function CopyButton({ value, label = 'Copy' }) {
@@ -494,10 +544,91 @@ export default function CursorHackathon() {
               call.
             </p>
 
+            <div className="mb-6">
+              <CodeBlockCard
+                icon={Terminal}
+                label="Install RF-DETR extra"
+                content={RFDETR_EXTRA_CODE}
+                copyLabel="Copy install"
+              />
+            </div>
+
             <CodeBlockCard
               icon={Scissors}
               label="segment.py"
               content={EXAMPLE_SEGMENTATION_CODE}
+              copyLabel="Copy example"
+            />
+          </section>
+
+          {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ EXAMPLE 3: KEYPOINTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          <section className="mb-16">
+            <SectionHeading id="example-keypoints" icon={PersonStanding}>
+              Example 3: Human keypoints
+            </SectionHeading>
+
+            <p className="text-base text-surface-600 dark:text-surface-400 leading-relaxed mb-6">
+              Human pose estimation with YOLO-NAS pose. The
+              <code className="mx-1 px-1.5 py-0.5 rounded bg-surface-100 dark:bg-white/[0.06] text-libre-700 dark:text-libre-300 font-mono text-[0.9em]">-pose</code>
+              suffix loads the keypoint head, returning person boxes plus 17
+              COCO keypoints for each detected person.
+            </p>
+
+            <CodeBlockCard
+              icon={PersonStanding}
+              label="keypoints.py"
+              content={EXAMPLE_KEYPOINTS_CODE}
+              copyLabel="Copy example"
+            />
+          </section>
+
+          {/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ EXAMPLE 4: VIDEO Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */}
+          <section className="mb-16">
+            <SectionHeading id="example-video" icon={Video}>
+              Example 4: Video inference
+            </SectionHeading>
+
+            <p className="text-base text-surface-600 dark:text-surface-400 leading-relaxed mb-6">
+              Run the same LibreYOLO call on a video. Swap one model line to do
+              detection, segmentation, or keypoints; RF-DETR segmentation still
+              needs the <code className="mx-1 px-1.5 py-0.5 rounded bg-surface-100 dark:bg-white/[0.06] text-libre-700 dark:text-libre-300 font-mono text-[0.9em]">rfdetr</code>
+              extra from Example 2.
+            </p>
+
+            <CodeBlockCard
+              icon={Video}
+              label="video.py"
+              content={EXAMPLE_VIDEO_CODE}
+              copyLabel="Copy example"
+            />
+          </section>
+
+          {/* EXAMPLE 5: TRACKING */}
+          <section className="mb-16">
+            <SectionHeading id="example-tracking" icon={Activity}>
+              Example 5: Object tracking
+            </SectionHeading>
+
+            <p className="text-base text-surface-600 dark:text-surface-400 leading-relaxed mb-6">
+              ByteTrack adds stable IDs across video frames. This is the fastest
+              path from detection to people counting, sports clips, traffic
+              analysis, or anything that needs to know whether the same object
+              is still on screen.
+            </p>
+
+            <div className="mb-6">
+              <CodeBlockCard
+                icon={Terminal}
+                label="Install tracking extra"
+                content={TRACKING_EXTRA_CODE}
+                copyLabel="Copy install"
+              />
+            </div>
+
+            <CodeBlockCard
+              icon={Activity}
+              label="track.py"
+              content={EXAMPLE_TRACKING_CODE}
               copyLabel="Copy example"
             />
 
