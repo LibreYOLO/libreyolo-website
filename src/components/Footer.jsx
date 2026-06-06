@@ -51,6 +51,16 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/docs/librevlm" className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
+                  LibreVLM
+                </Link>
+              </li>
+              <li>
+                <Link href="/docs/experimental" className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
+                  Experimental Tasks
+                </Link>
+              </li>
+              <li>
                 <Link href="/models" className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
                   Model Zoo
                 </Link>
