@@ -70,7 +70,7 @@ pip install -e .
 python -c "from libreyolo import LibreYOLO; print('LibreYOLO ready')"
 
 # OPTIONAL: smoke test on a real image (downloads small weights on first run)
-python -c "from libreyolo import LibreYOLO; m = LibreYOLO('LibreYOLO9t.pt'); r = m('https://raw.githubusercontent.com/LibreYOLO/libreyolo/main/libreyolo/assets/parkour.jpg'); print(len(r), 'detections')"
+python -c "from libreyolo import LibreYOLO; m = LibreYOLO('LibreYOLO9t.pt'); r = m('https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg'); print(len(r), 'detections')"
 
 # === FAST PATH (only if the user already has \`uv\` installed) ===============
 # Replaces steps 2-5 with a much faster resolver. Skip if uv is not present.
@@ -477,7 +477,7 @@ export default function CursorHackathon() {
                 <div className="p-3">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="https://raw.githubusercontent.com/LibreYOLO/libreyolo/main/libreyolo/assets/parkour_result.jpg"
+                    src="https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour_result.jpg"
                     alt="LibreYOLO detection result"
                     className="rounded-lg w-full"
                   />

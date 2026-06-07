@@ -178,14 +178,14 @@ function HeroSection() {
                   {/* Mobile-only: full-width result image inside the same card, click to open full-size */}
                   <div className="lg:hidden border-t border-surface-200 dark:border-white/5">
                     <a
-                      href="https://raw.githubusercontent.com/LibreYOLO/libreyolo/main/libreyolo/assets/parkour_result.jpg"
+                      href="https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour_result.jpg"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block relative group"
                       aria-label="View full-size detection result"
                     >
                       <img
-                        src="https://raw.githubusercontent.com/LibreYOLO/libreyolo/main/libreyolo/assets/parkour_result.jpg"
+                        src="https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour_result.jpg"
                         alt="LibreYOLO detection result"
                         className="w-full h-auto block"
                       />
@@ -219,7 +219,7 @@ function HeroSection() {
                   </div>
                   <div className="p-3">
                     <img
-                      src="https://raw.githubusercontent.com/LibreYOLO/libreyolo/main/libreyolo/assets/parkour_result.jpg"
+                      src="https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour_result.jpg"
                       alt="LibreYOLO Detection Result"
                       className="rounded-lg w-full"
                     />
