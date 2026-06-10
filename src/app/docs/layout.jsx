@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Docs | LibreYOLO',
+  title: 'Docs',
   description: 'Documentation for LibreYOLO object detection framework.',
 }
 

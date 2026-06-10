@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Experimental Tasks | Classification, OBB, Pose, LoRA | LibreYOLO',
+  title: 'Experimental Tasks | Classification, OBB, Pose, LoRA',
   description:
     'Experimental LibreYOLO capabilities: image classification and oriented bounding boxes (OBB) for YOLO9 and RF-DETR, keypoint and pose estimation, and LoRA/DoRA fine-tuning for RF-DETR.',
   keywords: [

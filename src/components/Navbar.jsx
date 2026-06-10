@@ -13,6 +13,7 @@ const navLinks = [
   { name: 'Models', path: '/models' },
   { name: 'Datasets', path: '/datasets' },
   { name: 'Commercial', path: '/commercial' },
+  { name: 'Articles', path: '/articles' },
   { name: 'Docs', path: '/docs', icon: BookOpen },
 ]
 

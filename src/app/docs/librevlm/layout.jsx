@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'LibreVLM | Open-Vocabulary Detection | LibreYOLO',
+  title: 'LibreVLM | Open-Vocabulary Detection',
   description:
     'LibreVLM wraps modern vision language models (Qwen3-VL, Florence-2, LFM2-VL, InternVL3, SmolVLM2, Kosmos-2) and exposes them as open-vocabulary object detectors behind the familiar LibreYOLO Results API.',
   keywords: [

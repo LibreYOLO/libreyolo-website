@@ -75,6 +75,11 @@ export default function Footer() {
                   Commercial Guide
                 </Link>
               </li>
+              <li>
+                <Link href="/articles" className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
+                  Articles
+                </Link>
+              </li>
             </ul>
           </div>
 

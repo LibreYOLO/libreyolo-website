@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Research & Science | LibreYOLO',
+  title: 'Research & Science',
   description: 'LibreYOLO for researchers. Native explainability, feature maps, and a codebase designed for discovery.',
 }
 
