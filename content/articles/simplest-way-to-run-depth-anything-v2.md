@@ -6,7 +6,7 @@ author: Xuban
 tags: [LibreYOLO, depth-anything-v2, depth-estimation, tutorial]
 ---
 
-![](/repo/articles-libreyolo-com/drafts/assets/simplest-way-to-run-depth-anything-v2/guggenheim-bilbao-input-vs-depth.jpg)
+![Guggenheim Bilbao next to its depth map](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-bilbao-input-vs-depth.jpg)
 
 Depth Anything V2 produces some of the best monocular depth maps available right now.
 
@@ -39,13 +39,13 @@ From there the same call does more: you can pull the raw depth values to work wi
 
 The exact same one-line call, on very different scenes:
 
-![The parkour sample image (LibreYOLO's bundled SAMPLE\_IMAGE) next to its depth map: the jumpers in front stand out from the concrete walls behind.](/repo/articles-libreyolo-com/drafts/assets/simplest-way-to-run-depth-anything-v2/parkour-input-vs-depth.jpg)
+![The parkour sample image next to its depth map: the jumpers in front stand out from the concrete walls behind.](/articles/simplest-way-to-run-depth-anything-v2/parkour-input-vs-depth.jpg)
 
-![Aerial view of La Concha bay in Donostia next to its depth map: the boats and shoreline read as near, the open water recedes.](/repo/articles-libreyolo-com/drafts/assets/simplest-way-to-run-depth-anything-v2/donostia-bay-input-vs-depth.jpg)
+![Aerial view of La Concha bay in Donostia next to its depth map: the boats and shoreline read as near, the open water recedes.](/articles/simplest-way-to-run-depth-anything-v2/donostia-bay-input-vs-depth.jpg)
 
-![The columned courtyard of the Casa de Juntas de Gernika next to its depth map, showing the receding architecture.](/repo/articles-libreyolo-com/drafts/assets/simplest-way-to-run-depth-anything-v2/gernika-casa-juntas-input-vs-depth.jpg)
+![The columned courtyard of the Casa de Juntas de Gernika next to its depth map, showing the receding architecture.](/articles/simplest-way-to-run-depth-anything-v2/gernika-casa-juntas-input-vs-depth.jpg)
 
-![A night festival crowd in Donostia's Plaza de la Constitucion next to its depth map, the near rows of people standing out from the lit facade behind.](/repo/articles-libreyolo-com/drafts/assets/simplest-way-to-run-depth-anything-v2/donostia-plaza-crowd-input-vs-depth.jpg)
+![A night festival crowd in Donostia's Plaza de la Constitucion next to its depth map, the near rows of people standing out from the lit facade behind.](/articles/simplest-way-to-run-depth-anything-v2/donostia-plaza-crowd-input-vs-depth.jpg)
 
 A note on weights: LibreYOLO hosts converted Depth Anything V2 checkpoints and pulls them on first use, so there is nothing to download by hand. The upstream license still applies: the Small encoder is Apache-2.0, while Base, Large, and Giant are CC-BY-NC-4.0 (non-commercial), so the strong checkpoints are for non-commercial use. Want to stay offline or convert your own? The one-time conversion script is still there:
 
