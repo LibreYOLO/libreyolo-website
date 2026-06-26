@@ -1,6 +1,6 @@
 import { getAllArticles } from '@/lib/articles'
 
-const BASE_URL = 'https://libreyolo.com'
+const BASE_URL = 'https://www.libreyolo.com'
 
 export default function sitemap() {
   const staticRoutes = [
