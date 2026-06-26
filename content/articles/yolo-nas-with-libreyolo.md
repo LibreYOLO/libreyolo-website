@@ -8,7 +8,14 @@ tags: [LibreYOLO, yolo-nas, object-detection, tutorial]
 
 YOLO-NAS posts some of the best accuracy-speed numbers of any real-time detector: the large variant hits 52.2 mAP on COCO while still running in real time. It has 3 size variants (S, M, L) as well as two task variants (detection, pose).
 
-Benchmarks: https\://www\.visionanalysis.org/model/yolonas
+<iframe
+  src="https://visionanalysis.org/embed/scatter?highlight=yolonas-s%2Cyolonas-m%2Cyolonas-l"
+  width="100%"
+  height="420"
+  style="border:0;border-radius:12px;overflow:hidden"
+  loading="lazy"
+  title="YOLO-NAS accuracy vs parameters — visionanalysis.org">
+</iframe>
 
 Getting YOLO-NAS running from the official repo (supergradients) takes a bit more work than it should:
 
