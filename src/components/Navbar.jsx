@@ -5,16 +5,16 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Github, BookOpen } from 'lucide-react'
+import { Menu, X, Github, BookOpen, BarChart3, ExternalLink } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
 
 const navLinks = [
   { name: 'Home', path: '/' },
   { name: 'Models', path: '/models' },
-  { name: 'Datasets', path: '/datasets' },
+  { name: 'Benchmarks', path: 'https://visionanalysis.org', external: true, icon: BarChart3 },
   { name: 'Commercial', path: '/commercial' },
   { name: 'Articles', path: '/articles' },
-  { name: 'Docs', path: '/docs', icon: BookOpen },
+  { name: 'Docs', path: '/docs', icon: BookOpen, highlight: true },
 ]
 
 export default function Navbar() {
@@ -66,20 +66,38 @@ export default function Navbar() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  href={link.path}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
-                    pathname === link.path
-                      ? 'text-libre-600 dark:text-libre-400 bg-libre-500/10'
-                      : 'text-surface-600 dark:text-surface-200 hover:text-surface-900 dark:hover:text-white hover:bg-surface-100 dark:hover:bg-white/5'
-                  }`}
-                >
-                  {link.icon && <link.icon className="w-4 h-4" />}
-                  {link.name}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = pathname === link.path
+                const base = 'px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5'
+                const className = link.highlight
+                  ? `${base} text-white bg-gradient-to-r from-libre-500 to-libre-600 hover:from-libre-400 hover:to-libre-500 shadow-sm`
+                  : isActive
+                    ? `${base} text-libre-600 dark:text-libre-400 bg-libre-500/10`
+                    : `${base} text-surface-600 dark:text-surface-200 hover:text-surface-900 dark:hover:text-white hover:bg-surface-100 dark:hover:bg-white/5`
+
+                if (link.external) {
+                  return (
+                    <a
+                      key={link.path}
+                      href={link.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={className}
+                    >
+                      {link.icon && <link.icon className="w-4 h-4" />}
+                      {link.name}
+                      <ExternalLink className="w-3 h-3 opacity-60" />
+                    </a>
+                  )
+                }
+
+                return (
+                  <Link key={link.path} href={link.path} className={className}>
+                    {link.icon && <link.icon className="w-4 h-4" />}
+                    {link.name}
+                  </Link>
+                )
+              })}
             </div>
 
             {/* Right Side */}
@@ -94,10 +112,6 @@ export default function Navbar() {
                 <Github className="w-4 h-4" />
                 GitHub
               </a>
-              <div className="badge-mit px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
-                MIT Licensed
-              </div>
             </div>
 
             {/* Mobile Menu Button */}
@@ -126,20 +140,38 @@ export default function Navbar() {
             className="fixed inset-x-0 top-16 z-40 md:hidden bg-white/95 dark:bg-surface-950/95 backdrop-blur-xl border-b border-surface-200 dark:border-white/5"
           >
             <div className="px-6 py-4 space-y-2">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  href={link.path}
-                  className={`flex items-center gap-1.5 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
-                    pathname === link.path
-                      ? 'text-libre-600 dark:text-libre-400 bg-libre-500/10'
-                      : 'text-surface-600 dark:text-surface-200 hover:text-surface-900 dark:hover:text-white hover:bg-surface-100 dark:hover:bg-white/5'
-                  }`}
-                >
-                  {link.icon && <link.icon className="w-4 h-4" />}
-                  {link.name}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = pathname === link.path
+                const base = 'flex items-center gap-1.5 px-4 py-3 rounded-lg text-sm font-medium transition-all'
+                const className = link.highlight
+                  ? `${base} text-white bg-gradient-to-r from-libre-500 to-libre-600`
+                  : isActive
+                    ? `${base} text-libre-600 dark:text-libre-400 bg-libre-500/10`
+                    : `${base} text-surface-600 dark:text-surface-200 hover:text-surface-900 dark:hover:text-white hover:bg-surface-100 dark:hover:bg-white/5`
+
+                if (link.external) {
+                  return (
+                    <a
+                      key={link.path}
+                      href={link.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={className}
+                    >
+                      {link.icon && <link.icon className="w-4 h-4" />}
+                      {link.name}
+                      <ExternalLink className="w-3 h-3 opacity-60" />
+                    </a>
+                  )
+                }
+
+                return (
+                  <Link key={link.path} href={link.path} className={className}>
+                    {link.icon && <link.icon className="w-4 h-4" />}
+                    {link.name}
+                  </Link>
+                )
+              })}
               <a
                 href="https://github.com/Libre-YOLO/libreyolo"
                 target="_blank"

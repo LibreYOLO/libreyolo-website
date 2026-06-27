@@ -6,7 +6,6 @@ export default function sitemap() {
   const staticRoutes = [
     { path: '', priority: 1.0 },
     { path: '/models', priority: 0.9 },
-    { path: '/datasets', priority: 0.9 },
     { path: '/docs', priority: 0.9 },
     { path: '/docs/librevlm', priority: 0.8 },
     { path: '/docs/experimental', priority: 0.8 },

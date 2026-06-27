@@ -126,32 +126,29 @@ body {
 
 .dark .glow-box {
   box-shadow:
-    0 0 20px rgba(6, 182, 212, 0.15),
-    0 0 40px rgba(6, 182, 212, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
 .glow-text {
-  text-shadow: 0 0 30px rgba(8, 145, 178, 0.3);
+  /* no glow — keep the gradient text crisp */
 }
 
 .dark .glow-text {
-  text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+  text-shadow: none;
 }
 
-/* Gradient mesh */
+/* Gradient mesh — kept very subtle; the heavy dark glow was removed */
 .gradient-mesh {
   background:
-    radial-gradient(at 20% 20%, rgba(8, 145, 178, 0.08) 0%, transparent 50%),
-    radial-gradient(at 80% 80%, rgba(16, 185, 129, 0.06) 0%, transparent 50%),
-    radial-gradient(at 50% 50%, rgba(8, 145, 178, 0.03) 0%, transparent 70%);
+    radial-gradient(at 20% 20%, rgba(8, 145, 178, 0.05) 0%, transparent 55%),
+    radial-gradient(at 80% 80%, rgba(16, 185, 129, 0.04) 0%, transparent 55%);
 }
 
 .dark .gradient-mesh {
   background:
-    radial-gradient(at 20% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
-    radial-gradient(at 80% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-    radial-gradient(at 50% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 70%);
+    radial-gradient(at 20% 20%, rgba(6, 182, 212, 0.04) 0%, transparent 55%),
+    radial-gradient(at 80% 80%, rgba(16, 185, 129, 0.03) 0%, transparent 55%);
 }
 
 /* Badge styles */
@@ -230,9 +227,7 @@ body {
   }
 
   .dark .card-hover:hover {
-    box-shadow:
-      0 20px 40px rgba(0, 0, 0, 0.3),
-      0 0 30px rgba(6, 182, 212, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
   }
 }
 

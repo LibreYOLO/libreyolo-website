@@ -8,7 +8,7 @@ import {
   Unlock, Layers, ArrowRight,
   Code2, Scale, Copy, Check, CheckCircle2,
   Upload, RefreshCw, MessageSquareQuote,
-  Cpu, X as XIcon, Map, ChevronLeft, ChevronRight
+  Cpu, X as XIcon, BarChart3, ChevronLeft, ChevronRight
 } from 'lucide-react'
 
 const fadeInUp = {
@@ -41,13 +41,6 @@ function HeroSection() {
 
   return (
     <section className="relative md:min-h-screen md:flex md:items-center md:justify-center overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 gradient-mesh hidden md:dark:block" />
-
-      {/* Animated Orbs - desktop-only, dark mode only */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 hidden md:dark:block bg-libre-500/20 rounded-full blur-3xl animate-pulse-slow" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 hidden md:dark:block bg-emerald-500/15 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
-
       {/* Hero Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-6 lg:px-8 pt-24 pb-12 md:pt-32 md:pb-20">
         <motion.div
@@ -56,23 +49,14 @@ function HeroSection() {
           variants={stagger}
           className="text-center"
         >
-          {/* Badge */}
-          <motion.div variants={fadeInUp} className="mb-6 md:mb-8">
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-libre-500/10 border border-libre-500/20 text-libre-600 dark:text-libre-400 text-xs sm:text-sm font-medium">
-              <Unlock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-              <span className="sm:hidden">MIT Licensed &bull; No AGPL</span>
-              <span className="hidden sm:inline">100% MIT Licensed &bull; No AGPL Dependencies</span>
-            </span>
-          </motion.div>
-
           {/* Main Headline */}
           <motion.h1
             variants={fadeInUp}
-            className="text-[40px] leading-[1.05] sm:text-5xl sm:leading-tight md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-5 md:mb-6"
+            className="text-[40px] leading-[1.05] sm:text-5xl sm:leading-tight md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-5 md:mb-6 mt-4 md:mt-0"
           >
             <span className="text-surface-800 dark:text-white">Object Detection.</span>
             <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-libre-500 via-libre-400 to-emerald-500 glow-text">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-libre-500 via-libre-400 to-emerald-500">
               100% MIT Licensed.
             </span>
           </motion.h1>
@@ -109,20 +93,6 @@ function HeroSection() {
             </a>
           </motion.div>
 
-          {/* Roadmap Link */}
-          <motion.div variants={fadeInUp} className="mt-6">
-            <a
-              href="https://github.com/orgs/LibreYOLO/projects/1/views/4"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-surface-500 hover:text-libre-500 text-sm transition-colors"
-            >
-              <Map className="w-4 h-4" />
-              Check out our roadmap
-              <ArrowRight className="w-3 h-3" />
-            </a>
-          </motion.div>
-
           {/* Hero Visual */}
           <motion.div
             variants={fadeInUp}
@@ -131,9 +101,6 @@ function HeroSection() {
             <div className="flex flex-col lg:flex-row items-stretch gap-0 max-w-6xl mx-auto min-w-0">
               {/* Code Preview */}
               <div className="relative flex-1 w-full min-w-0">
-                {/* Glowing border effect — desktop only */}
-                <div className="hidden md:block absolute -inset-1 bg-gradient-to-r from-libre-500/30 via-emerald-500/30 to-libre-500/30 rounded-2xl lg:rounded-r-none blur-xl opacity-40" />
-
                 <div className="relative code-block rounded-2xl lg:rounded-r-none overflow-hidden h-full">
                   <div className="flex items-center justify-between px-4 py-3 bg-surface-100 dark:bg-surface-900/50 border-b border-surface-200 dark:border-white/5">
                     <div className="flex items-center gap-2">
@@ -211,8 +178,7 @@ function HeroSection() {
 
               {/* Result Image as Output Panel — desktop-only */}
               <div className="hidden lg:block relative lg:max-w-sm w-full">
-                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 via-libre-500/20 to-emerald-500/20 rounded-2xl lg:rounded-l-none blur-xl opacity-40" />
-                <div className="relative bg-surface-50 dark:bg-surface-900/80 backdrop-blur-sm border border-surface-200 dark:border-emerald-500/20 rounded-2xl lg:rounded-l-none overflow-hidden h-full">
+                <div className="relative bg-surface-50 dark:bg-surface-900/80 backdrop-blur-sm border border-surface-200 dark:border-white/10 rounded-2xl lg:rounded-l-none overflow-hidden h-full">
                   <div className="flex items-center gap-2 px-4 py-3 bg-surface-100 dark:bg-surface-900/50 border-b border-surface-200 dark:border-white/5">
                     <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                     <span className="text-surface-500 text-sm font-mono">parkour_result.jpg</span>
@@ -465,10 +431,10 @@ function FeaturesSection() {
           className="text-center mb-8 md:mb-12"
         >
           <h2 className="text-[28px] leading-tight sm:text-4xl lg:text-5xl font-bold text-surface-900 dark:text-white mb-3 md:mb-4">
-            Why <span className="text-transparent bg-clip-text bg-gradient-to-r from-libre-500 to-emerald-500">LibreYOLO</span>
+            One library, <span className="text-transparent bg-clip-text bg-gradient-to-r from-libre-500 to-emerald-500">the whole workflow</span>
           </h2>
           <p className="text-sm sm:text-lg text-surface-600 dark:text-surface-400 max-w-2xl mx-auto">
-            Everything you need for object detection, nothing you don&apos;t.
+            Train, validate, export, and deploy detection models from one permissive, MIT-licensed package.
           </p>
         </motion.div>
 
@@ -483,13 +449,13 @@ function FeaturesSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.06 }}
-                className={`flex gap-4 items-start py-5 border-b border-surface-200 dark:border-white/5 sm:block sm:py-0 sm:p-6 sm:border sm:rounded-2xl sm:shadow-sm sm:bg-surface-50 sm:dark:bg-surface-900/50 sm:card-hover ${colors.border}`}
+                className={`flex gap-4 items-start py-5 border-b border-surface-200 dark:border-white/5 sm:block sm:py-0 sm:p-7 sm:border sm:border-surface-200 sm:dark:border-white/10 sm:rounded-2xl sm:shadow-sm sm:bg-white sm:dark:bg-surface-900/60 sm:card-hover ${colors.border}`}
               >
-                <div className={`w-10 h-10 sm:w-12 sm:h-12 bg-libre-500/10 ${colors.bg} rounded-xl flex items-center justify-center flex-shrink-0 sm:mb-4`}>
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 bg-libre-500/10 ${colors.bg} rounded-xl flex items-center justify-center flex-shrink-0 sm:mb-5`}>
                   <feature.icon className={`w-5 h-5 sm:w-6 sm:h-6 text-libre-600 dark:text-libre-400 ${colors.text}`} />
                 </div>
                 <div className="flex-1 min-w-0 sm:flex-none">
-                  <h3 className="text-base sm:text-lg font-semibold text-surface-900 dark:text-white mb-1 sm:mb-2">{feature.title}</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-surface-900 dark:text-white mb-1.5 sm:mb-2">{feature.title}</h3>
                   <p className="text-surface-600 dark:text-surface-400 text-[13px] sm:text-sm leading-relaxed">{feature.description}</p>
                 </div>
               </motion.div>
@@ -734,18 +700,14 @@ function CTASection() {
               <Layers className="w-4 h-4" />
               Model Zoo
             </Link>
-            <Link href="/datasets" className="text-surface-500 hover:text-libre-500 transition-colors flex items-center gap-1.5">
-              <Layers className="w-4 h-4" />
-              Dataset Zoo
-            </Link>
             <a
-              href="https://github.com/orgs/LibreYOLO/projects/1/views/4"
+              href="https://visionanalysis.org"
               target="_blank"
               rel="noopener noreferrer"
               className="text-surface-500 hover:text-libre-500 transition-colors flex items-center gap-1.5"
             >
-              <Map className="w-4 h-4" />
-              Roadmap
+              <BarChart3 className="w-4 h-4" />
+              Benchmarks
             </a>
           </div>
         </motion.div>

@@ -66,9 +66,24 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/datasets" className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
-                  Dataset Zoo
-                </Link>
+                <a
+                  href="https://huggingface.co/spaces/LibreYOLO/libreyolo-demo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors inline-flex items-center gap-1"
+                >
+                  Live Demo <ExternalLink className="w-3 h-3" />
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://visionanalysis.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors inline-flex items-center gap-1"
+                >
+                  Benchmarks <ExternalLink className="w-3 h-3" />
+                </a>
               </li>
               <li>
                 <Link href="/commercial" className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
