@@ -8,14 +8,14 @@ tags: [LibreYOLO, yolox, object-detection, tutorial]
 
 YOLOX is an anchor-free detector from Megvii with seven model sizes ranging from 0.91M parameters (Nano) to 99.1M (X). The large variant hits 49.7 mAP on COCO val. It is Apache 2.0 on both code and weights, which makes it one of the few competitive detectors you can ship in a commercial product without any restrictions.
 
-<iframe
-  src="https://visionanalysis.org/embed/scatter?highlight=yolox-s%2Cyolox-m%2Cyolox-l%2Cyolox-x"
-  width="100%"
-  height="420"
-  style="border:0;border-radius:12px;overflow:hidden"
-  loading="lazy"
-  title="YOLOX accuracy vs parameters — visionanalysis.org">
-</iframe>
+<div style="position:relative;width:100%;padding-top:62.5%">
+  <iframe
+    src="https://www.visionanalysis.org/embed/scatter?highlight=yolox-nano%2Cyolox-tiny%2Cyolox-s%2Cyolox-m%2Cyolox-l%2Cyolox-x&title=YOLOX%3A%20accuracy%20vs.%20model%20size"
+    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;border-radius:12px"
+    loading="lazy"
+    title="YOLOX accuracy vs parameters - visionanalysis.org">
+  </iframe>
+</div>
 
 The problem is the original library. `pip install yolox` gets you version 0.3.0 from April 2022 and has not moved since. Running inference is not a one-liner:
 

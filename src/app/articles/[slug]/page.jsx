@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import { ArrowLeft, Calendar, User } from 'lucide-react'
 import { getAllArticles, getArticleBySlug } from '@/lib/articles'
+import ThemedEmbed from '@/components/ThemedEmbed'
 
 export function generateStaticParams() {
   return getAllArticles().map((article) => ({ slug: article.slug }))
@@ -93,9 +94,7 @@ const markdownComponents = {
   td: (props) => <td className="text-surface-600 dark:text-surface-400 border-b border-surface-200 dark:border-surface-800 px-3 py-2" {...props} />,
   img: (props) => <img className="rounded-xl my-6 mx-auto" loading="lazy" {...props} />,
   hr: () => <hr className="border-surface-200 dark:border-surface-800 my-10" />,
-  iframe: (props) => (
-    <iframe className="rounded-xl my-6 w-full" style={{ border: 0, overflow: 'hidden' }} {...props} />
-  ),
+  iframe: ThemedEmbed,
 }
 
 export default async function ArticlePage({ params }) {
