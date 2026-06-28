@@ -1721,7 +1721,11 @@ with VideoSource("clip.mp4", vid_stride=1) as src, \\
           {/* ────────────── TRACKING ────────────── */}
           <SectionHeading id="tracking" icon={Activity}>Tracking</SectionHeading>
           <P>
-            LibreYOLO ships a ByteTrack multi-object tracker that consumes <InlineCode>Results</InlineCode> from any detector and adds persistent track IDs. It is most tested with single-GPU YOLO9 detection and RF-DETR detection; other detection families are experimental in v1.3.0.
+            LibreYOLO ships two motion trackers that consume <InlineCode>Results</InlineCode> from any
+            detector and add persistent track IDs: <strong className="text-surface-800 dark:text-white">ByteTrack</strong> (default)
+            and <strong className="text-surface-800 dark:text-white">OC-SORT</strong> (new in v1.3.0), which is more robust to
+            occlusion and non-linear motion. Tracking is most tested with single-GPU YOLO9 detection and
+            RF-DETR detection; other detection families are experimental in v1.3.0.
           </P>
 
           <SubHeading>Install</SubHeading>
@@ -1784,6 +1788,48 @@ tracker = ByteTracker(config=cfg)`}</CodeBlock>
 
           <SubHeading>Reset between clips</SubHeading>
           <CodeBlock language="python">{`tracker.reset()   # clears tracked / lost / removed lists and the ID counter`}</CodeBlock>
+
+          <SubHeading>OC-SORT (occlusion-robust)</SubHeading>
+          <P>
+            Select OC-SORT with <InlineCode>tracker=&quot;ocsort&quot;</InlineCode> on{' '}
+            <InlineCode>model.track()</InlineCode>. ByteTrack stays the default. With OC-SORT,{' '}
+            <InlineCode>track_conf</InlineCode> maps to the tracker&apos;s{' '}
+            <InlineCode>det_thresh</InlineCode> (for ByteTrack it maps to{' '}
+            <InlineCode>track_high_thresh</InlineCode>).
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
+
+model = LibreYOLO("LibreYOLO9c.pt")
+
+for result in model.track(
+    "clip.mp4",
+    tracker="ocsort",      # "bytetrack" (default) or "ocsort"
+    track_conf=0.25,       # maps to OC-SORT det_thresh
+    iou=0.45,
+    save=True,
+):
+    print(result.frame_idx, result.track_id)`}</CodeBlock>
+
+          <P>
+            Pass an <InlineCode>OCSortConfig</InlineCode> for full control. Supplying a config
+            instance selects the tracker by type, so the <InlineCode>tracker=</InlineCode> string
+            is then ignored.
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO, OCSortConfig
+
+cfg = OCSortConfig(
+    det_thresh=0.25,     # boxes above this drive association and spawn new tracks
+    max_age=30,          # frames a track survives without an observation
+    min_hits=3,          # consecutive hits before a track is reported
+    iou_threshold=0.3,   # minimum IoU for a valid association
+    delta_t=3,           # frame span used to estimate velocity direction
+    inertia=0.2,         # weight of the velocity-direction (momentum) term
+    use_byte=False,      # enable the BYTE low-score recovery pass
+)
+
+model = LibreYOLO("LibreYOLO9c.pt")
+for result in model.track("clip.mp4", tracker_config=cfg, save=True):
+    print(result.frame_idx, result.track_id)`}</CodeBlock>
 
           <Divider />
 
@@ -2652,7 +2698,9 @@ print(result.boxes.xyxy)`}</CodeBlock>
               [<InlineCode key="p">predict</InlineCode>, 'Run inference on images, directories, or videos'],
               [<InlineCode key="t">train</InlineCode>, 'Train a model on a dataset'],
               [<InlineCode key="v">val</InlineCode>, 'Evaluate a model on a dataset'],
-              [<InlineCode key="e">export</InlineCode>, 'Export to ONNX / TorchScript / TensorRT / OpenVINO / NCNN / CoreML'],
+              [<InlineCode key="e">export</InlineCode>, 'Export to ONNX / TorchScript / TensorRT / OpenVINO / NCNN / CoreML / TFLite'],
+              [<InlineCode key="ui">ui</InlineCode>, 'Launch a local drag-and-drop / paste browser inference UI'],
+              [<InlineCode key="dr">doctor</InlineCode>, 'Run pre-training dataset health checks (YOLO detection format)'],
               [<InlineCode key="c">checks</InlineCode>, 'Print Python, torch, CUDA, GPU, and optional-package info'],
               [<InlineCode key="m">models</InlineCode>, 'List registered model families and CLI shortcut names'],
               [<InlineCode key="f">formats</InlineCode>, 'List supported export formats'],
@@ -2673,9 +2721,9 @@ print(result.boxes.xyxy)`}</CodeBlock>
             headers={['Command', 'Important options']}
             rows={[
               [<InlineCode key="p">predict</InlineCode>, <span key="pv"><InlineCode>conf</InlineCode>, <InlineCode>iou</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>classes</InlineCode>, <InlineCode>max_det</InlineCode>, <InlineCode>half</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>tiling</InlineCode>, <InlineCode>overlap_ratio</InlineCode>, <InlineCode>output_file_format</InlineCode>, <InlineCode>project</InlineCode>, <InlineCode>name</InlineCode>, <InlineCode>exist_ok</InlineCode>, <InlineCode>face_detector</InlineCode></span>],
-              [<InlineCode key="t">train</InlineCode>, <span key="tv"><InlineCode>epochs</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>lr0</InlineCode>, <InlineCode>optimizer</InlineCode>, <InlineCode>scheduler</InlineCode>, <InlineCode>workers</InlineCode>, <InlineCode>seed</InlineCode>, <InlineCode>resume</InlineCode>, <InlineCode>amp</InlineCode>, <InlineCode>allow_download_scripts</InlineCode>, <InlineCode>dry_run</InlineCode></span>],
-              [<InlineCode key="v">val</InlineCode>, <span key="vv"><InlineCode>split</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>conf</InlineCode>, <InlineCode>iou</InlineCode>, <InlineCode>max_det</InlineCode>, <InlineCode>half</InlineCode>, <InlineCode>data_dir</InlineCode>, <InlineCode>use_coco_eval</InlineCode>, <InlineCode>project</InlineCode>, <InlineCode>name</InlineCode>, <InlineCode>exist_ok</InlineCode>, <InlineCode>save_json</InlineCode>, <InlineCode>allow_download_scripts</InlineCode></span>],
-              [<InlineCode key="e">export</InlineCode>, <span key="ev"><InlineCode>format</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>half</InlineCode>, <InlineCode>int8</InlineCode>, <InlineCode>dynamic</InlineCode>, <InlineCode>simplify</InlineCode>, <InlineCode>opset</InlineCode>, <InlineCode>data</InlineCode>, <InlineCode>fraction</InlineCode>, <InlineCode>device</InlineCode>, <InlineCode>allow_download_scripts</InlineCode>, <InlineCode>verbose</InlineCode></span>],
+              [<InlineCode key="t">train</InlineCode>, <span key="tv"><InlineCode>epochs</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>lr0</InlineCode>, <InlineCode>optimizer</InlineCode>, <InlineCode>scheduler</InlineCode>, <InlineCode>workers</InlineCode>, <InlineCode>seed</InlineCode>, <InlineCode>resume</InlineCode>, <InlineCode>amp</InlineCode>, <InlineCode>task</InlineCode>, <InlineCode>cache</InlineCode>, <InlineCode>lora</InlineCode>, <InlineCode>freeze</InlineCode>, <InlineCode>save_plots</InlineCode>, <InlineCode>allow_download_scripts</InlineCode>, <InlineCode>dry_run</InlineCode></span>],
+              [<InlineCode key="v">val</InlineCode>, <span key="vv"><InlineCode>split</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>conf</InlineCode>, <InlineCode>iou</InlineCode>, <InlineCode>max_det</InlineCode>, <InlineCode>half</InlineCode>, <InlineCode>save_plots</InlineCode>, <InlineCode>data_dir</InlineCode>, <InlineCode>use_coco_eval</InlineCode>, <InlineCode>project</InlineCode>, <InlineCode>name</InlineCode>, <InlineCode>exist_ok</InlineCode>, <InlineCode>save_json</InlineCode>, <InlineCode>allow_download_scripts</InlineCode></span>],
+              [<InlineCode key="e">export</InlineCode>, <span key="ev"><InlineCode>format</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>half</InlineCode>, <InlineCode>int8</InlineCode>, <InlineCode>dynamic</InlineCode>, <InlineCode>simplify</InlineCode>, <InlineCode>nms</InlineCode>, <InlineCode>conf</InlineCode>, <InlineCode>iou</InlineCode>, <InlineCode>max_det</InlineCode>, <InlineCode>opset</InlineCode>, <InlineCode>data</InlineCode>, <InlineCode>fraction</InlineCode>, <InlineCode>device</InlineCode>, <InlineCode>allow_download_scripts</InlineCode>, <InlineCode>verbose</InlineCode></span>],
             ]}
           />
 
@@ -2710,6 +2758,35 @@ libreyolo train model=yolo9-c data=coco128.yaml --dry-run`}</CodeBlock>
 libreyolo export model=best.pt format=tensorrt half=true
 libreyolo export model=best.pt format=openvino int8=true data=coco128.yaml
 libreyolo export model=best.pt format=coreml`}</CodeBlock>
+
+          <SubHeading>Export with embedded NMS and rectangular size</SubHeading>
+          <CodeBlock language="bash">{`# Embed NMS into an ONNX YOLO9 detection graph
+libreyolo export model=yolo9-c format=onnx nms=true conf=0.25 iou=0.45 max_det=300
+
+# Rectangular export size (imgsz accepts a single value or two comma-separated dims)
+libreyolo export model=yolo9-c format=onnx imgsz=640,480
+
+# TFLite (Python 3.12+, libreyolo[tflite])
+libreyolo export model=rfdetr-s format=tflite`}</CodeBlock>
+
+          <SubHeading>Local inference UI</SubHeading>
+          <P>
+            <InlineCode>libreyolo ui</InlineCode> serves a local browser page where you drop, paste,
+            or pick images, choose a model, and view results. It binds{' '}
+            <InlineCode>127.0.0.1:8000</InlineCode> by default and auto-bumps the port if taken.
+          </P>
+          <CodeBlock language="bash">{`libreyolo ui                       # opens http://127.0.0.1:8000
+libreyolo ui --port 9000 --no-browser --device 0`}</CodeBlock>
+
+          <SubHeading>Dataset health check</SubHeading>
+          <P>
+            <InlineCode>libreyolo doctor</InlineCode> runs pre-training checks on a YOLO
+            detection-format dataset and exits non-zero when errors are found
+            (<InlineCode>--strict</InlineCode> also fails on warnings), so it can gate CI.
+          </P>
+          <CodeBlock language="bash">{`libreyolo doctor coco8.yaml
+libreyolo doctor --data coco8.yaml --strict --json
+libreyolo doctor coco8.yaml --fast --only labels   # skip image decoding, run one check family`}</CodeBlock>
 
           <SubHeading>Machine-readable output</SubHeading>
           <P>
