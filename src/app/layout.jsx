@@ -2,6 +2,7 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { Outfit, JetBrains_Mono } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -93,6 +94,7 @@ export default function RootLayout({ children }) {
           </main>
           <Footer />
         </div>
+        <Analytics />
       </body>
     </html>
   )
