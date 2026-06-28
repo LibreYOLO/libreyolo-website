@@ -1,10 +1,12 @@
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import { ArrowLeft, Calendar, User } from 'lucide-react'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getAllArticles, getArticleBySlug } from '@/lib/articles'
+import { buildEnglishOnlyAlternates, OG_IMAGE, SITE_URL } from '@/i18n/metadata'
+import { Link } from '@/i18n/navigation'
 import ThemedEmbed from '@/components/ThemedEmbed'
 
 export function generateStaticParams() {
@@ -20,28 +22,28 @@ export async function generateMetadata({ params }) {
     title: article.title,
     description: article.description,
     keywords: article.tags,
-    alternates: {
-      canonical: `/articles/${article.slug}`,
-    },
+    alternates: buildEnglishOnlyAlternates(`/articles/${article.slug}`),
     openGraph: {
       title: article.title,
       description: article.description,
-      url: `https://libreyolo.com/articles/${article.slug}`,
+      url: `${SITE_URL}/articles/${article.slug}`,
       siteName: 'LibreYOLO',
       type: 'article',
       publishedTime: article.date,
       authors: [article.author],
+      images: [OG_IMAGE],
     },
     twitter: {
       card: 'summary_large_image',
       title: article.title,
       description: article.description,
+      images: [OG_IMAGE.url],
     },
   }
 }
 
-function formatDate(dateString) {
-  return new Date(dateString).toLocaleDateString('en-US', {
+function formatDate(dateString, locale) {
+  return new Date(dateString).toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -98,9 +100,11 @@ const markdownComponents = {
 }
 
 export default async function ArticlePage({ params }) {
-  const { slug } = await params
+  const { locale, slug } = await params
+  setRequestLocale(locale)
   const article = getArticleBySlug(slug)
   if (!article) notFound()
+  const t = await getTranslations({ locale, namespace: 'Articles' })
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -125,7 +129,7 @@ export default async function ArticlePage({ params }) {
           className="inline-flex items-center gap-1.5 text-sm text-surface-500 hover:text-libre-600 dark:hover:text-libre-400 transition-colors mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
-          All articles
+          {t('backToArticles')}
         </Link>
 
         <header className="mb-10">
@@ -135,13 +139,18 @@ export default async function ArticlePage({ params }) {
           <div className="flex flex-wrap items-center gap-4 text-sm text-surface-500">
             <span className="inline-flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5" />
-              <time dateTime={article.date}>{formatDate(article.date)}</time>
+              <time dateTime={article.date}>{formatDate(article.date, locale)}</time>
             </span>
             <span className="inline-flex items-center gap-1.5">
               <User className="w-3.5 h-3.5" />
               {article.author}
             </span>
           </div>
+          {locale === 'zh' && (
+            <p className="mt-4 text-sm text-surface-400 dark:text-surface-500">
+              {t('englishNote')}
+            </p>
+          )}
         </header>
 
         <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={markdownComponents}>

@@ -11,6 +11,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
+import { useLocale, useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   BookOpen, Copy, Check, Menu, X, ChevronRight, ArrowLeft, ExternalLink,
@@ -477,6 +478,8 @@ function Sidebar({ sections, eyebrow, activeSection, onNavigate, relatedLinks })
 }
 
 export function DocLayout({ sections, eyebrow = 'Documentation', copyTitle = 'LibreYOLO Documentation', relatedLinks, children }) {
+  const locale = useLocale()
+  const tNote = useTranslations('DocsNote')
   const [activeSection, setActiveSection] = useState(sections[0]?.id)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [docsCopied, setDocsCopied] = useState(false)
@@ -565,6 +568,11 @@ export function DocLayout({ sections, eyebrow = 'Documentation', copyTitle = 'Li
       {/* Main content */}
       <main className="flex-1 lg:ml-64 min-h-screen pt-28 lg:pt-32 pb-24 px-6 lg:px-12">
         <div className="max-w-4xl mx-auto" data-docs-content>
+          {locale === 'zh' && (
+            <div className="mb-6 rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3 text-sm text-surface-600 dark:text-surface-300">
+              {tNote('text')}
+            </div>
+          )}
           <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <Link
               href="/docs"

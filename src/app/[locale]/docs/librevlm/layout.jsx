@@ -1,3 +1,5 @@
+import { buildEnglishOnlyAlternates } from '@/i18n/metadata'
+
 export const metadata = {
   title: 'LibreVLM | Open-Vocabulary Detection',
   description:
@@ -6,6 +8,7 @@ export const metadata = {
     'LibreVLM', 'open vocabulary detection', 'vision language model', 'Qwen3-VL',
     'Florence-2', 'LFM2-VL', 'InternVL3', 'SmolVLM2', 'Kosmos-2', 'zero-shot detection',
   ],
+  alternates: buildEnglishOnlyAlternates('/docs/librevlm'),
 }
 
 export default function LibreVLMDocsLayout({ children }) {

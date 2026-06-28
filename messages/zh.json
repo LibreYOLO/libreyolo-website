@@ -147,7 +147,8 @@
     "subtitle": "关于使用 LibreYOLO 运行检测模型的教程和深度解析。",
     "empty": "暂无文章，敬请期待。",
     "minRead": "阅读约 {minutes} 分钟",
-    "englishNote": "文章以英文撰写。"
+    "englishNote": "文章以英文撰写。",
+    "backToArticles": "返回文章列表"
   },
   "Science": {
     "heroBadge": "研究与科学",

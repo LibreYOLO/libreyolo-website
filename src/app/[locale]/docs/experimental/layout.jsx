@@ -1,3 +1,5 @@
+import { buildEnglishOnlyAlternates } from '@/i18n/metadata'
+
 export const metadata = {
   title: 'Experimental Tasks | Classification, OBB, Pose, LoRA',
   description:
@@ -6,6 +8,7 @@ export const metadata = {
     'LibreYOLO experimental', 'image classification', 'oriented bounding boxes', 'OBB',
     'pose estimation', 'keypoints', 'LoRA', 'DoRA', 'RF-DETR fine-tuning', 'YOLO9',
   ],
+  alternates: buildEnglishOnlyAlternates('/docs/experimental'),
 }
 
 export default function ExperimentalDocsLayout({ children }) {

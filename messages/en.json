@@ -147,7 +147,8 @@
     "subtitle": "Tutorials and deep dives on running detection models with LibreYOLO.",
     "empty": "No articles yet. Check back soon.",
     "minRead": "{minutes} min read",
-    "englishNote": "Articles are written in English."
+    "englishNote": "Articles are written in English.",
+    "backToArticles": "All articles"
   },
   "Science": {
     "heroBadge": "Research & Science",

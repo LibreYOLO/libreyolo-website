@@ -31,6 +31,22 @@ export function buildAlternates(path, locale) {
   }
 }
 
+// For English-only sections (docs, individual articles, the hackathon page):
+// the /zh/* URL serves English content, so we consolidate it to the English
+// canonical and only advertise the English alternate. This avoids indexing the
+// same English text under two URLs.
+export function buildEnglishOnlyAlternates(path) {
+  const clean = path === '/' ? '' : path
+  const enUrl = `${SITE_URL}${clean || '/'}`
+  return {
+    canonical: enUrl,
+    languages: {
+      en: enUrl,
+      'x-default': enUrl,
+    },
+  }
+}
+
 // OpenGraph locale string for a given app locale.
 export function ogLocale(locale) {
   return locale === 'zh' ? 'zh_CN' : 'en_US'

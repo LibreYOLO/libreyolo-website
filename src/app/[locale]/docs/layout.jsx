@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server'
-import { buildAlternates } from '@/i18n/metadata'
+import { buildEnglishOnlyAlternates } from '@/i18n/metadata'
 
 export async function generateMetadata({ params }) {
   const { locale } = await params
@@ -7,7 +7,7 @@ export async function generateMetadata({ params }) {
   return {
     title: t('docsTitle'),
     description: t('docsDescription'),
-    alternates: buildAlternates('/docs', locale),
+    alternates: buildEnglishOnlyAlternates('/docs'),
   }
 }
 

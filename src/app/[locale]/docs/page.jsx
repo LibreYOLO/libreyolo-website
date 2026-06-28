@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useLocale, useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   BookOpen, Terminal, Rocket, Layers, Crosshair, Grid3x3,
@@ -984,6 +985,8 @@ function Sidebar({ activeSection, onNavigate, currentVersion = 'v1.2.0', classNa
 /* ─── Main docs page ─── */
 
 function DocsPage({ version = 'v1.2.0', isLatest = true }) {
+  const locale = useLocale()
+  const tNote = useTranslations('DocsNote')
   const [activeSection, setActiveSection] = useState('introduction')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [docsCopied, setDocsCopied] = useState(false)
@@ -1074,6 +1077,11 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
       {/* Main content */}
       <main className="flex-1 lg:ml-64 min-h-screen pt-28 lg:pt-32 pb-24 px-6 lg:px-12">
         <div className="max-w-4xl mx-auto" data-docs-content>
+          {locale === 'zh' && (
+            <div className="mb-6 rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3 text-sm text-surface-600 dark:text-surface-300">
+              {tNote('text')}
+            </div>
+          )}
           <div className="mb-8 rounded-lg border border-surface-200 dark:border-white/[0.08] bg-white/80 dark:bg-white/[0.03] p-4 shadow-sm">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
