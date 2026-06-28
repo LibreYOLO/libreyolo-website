@@ -1,26 +1,28 @@
 'use client'
 
-import Link from 'next/link'
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Github, BookOpen, BarChart3, ExternalLink } from 'lucide-react'
+import { Link, usePathname } from '@/i18n/navigation'
 import ThemeToggle from './ThemeToggle'
-
-const navLinks = [
-  { name: 'Home', path: '/' },
-  { name: 'Models', path: '/models' },
-  { name: 'Benchmarks', path: 'https://visionanalysis.org', external: true, icon: BarChart3 },
-  { name: 'Commercial', path: '/commercial' },
-  { name: 'Articles', path: '/articles' },
-  { name: 'Docs', path: '/docs', icon: BookOpen, highlight: true },
-]
+import LanguageSwitcher from './LanguageSwitcher'
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const t = useTranslations('Nav')
+
+  const navLinks = [
+    { name: t('home'), path: '/' },
+    { name: t('models'), path: '/models' },
+    { name: t('benchmarks'), path: 'https://visionanalysis.org', external: true, icon: BarChart3 },
+    { name: t('commercial'), path: '/commercial' },
+    { name: t('articles'), path: '/articles' },
+    { name: t('docs'), path: '/docs', icon: BookOpen, highlight: true },
+  ]
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20)
@@ -102,6 +104,7 @@ export default function Navbar() {
 
             {/* Right Side */}
             <div className="hidden md:flex items-center gap-2">
+              <LanguageSwitcher />
               <ThemeToggle />
               <a
                 href="https://github.com/Libre-YOLO/libreyolo"
@@ -110,12 +113,13 @@ export default function Navbar() {
                 className="flex items-center gap-2 px-3 py-2 text-sm text-surface-500 dark:text-surface-300 hover:text-surface-900 dark:hover:text-white transition-colors"
               >
                 <Github className="w-4 h-4" />
-                GitHub
+                {t('github')}
               </a>
             </div>
 
             {/* Mobile Menu Button */}
             <div className="flex items-center gap-2 md:hidden">
+              <LanguageSwitcher />
               <ThemeToggle />
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -179,7 +183,7 @@ export default function Navbar() {
                 className="flex items-center gap-2 px-4 py-3 text-sm text-surface-500 dark:text-surface-300 hover:text-surface-900 dark:hover:text-white"
               >
                 <Github className="w-4 h-4" />
-                GitHub
+                {t('github')}
               </a>
             </div>
           </motion.div>

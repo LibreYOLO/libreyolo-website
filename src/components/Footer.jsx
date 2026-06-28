@@ -1,8 +1,10 @@
-import Link from 'next/link'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import { Github, ExternalLink, Linkedin } from 'lucide-react'
+import { Link } from '@/i18n/navigation'
 
 export default function Footer() {
+  const t = useTranslations('Footer')
   return (
     <footer className="relative border-t border-surface-200 dark:border-white/5 bg-surface-50 dark:bg-surface-950">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
@@ -25,8 +27,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-surface-500 text-sm leading-relaxed max-w-md">
-              An independent open-source project providing state-of-the-art object detection.
-              Built for developers, researchers, and commercial applications.
+              {t('tagline')}
             </p>
             <div className="flex items-center gap-4 mt-6">
               <a
@@ -43,11 +44,11 @@ export default function Footer() {
 
           {/* Links */}
           <div>
-            <h4 className="text-surface-900 dark:text-white font-semibold mb-4">Resources</h4>
+            <h4 className="text-surface-900 dark:text-white font-semibold mb-4">{t('resources')}</h4>
             <ul className="space-y-3">
               <li>
                 <Link href="/docs" className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
-                  Documentation
+                  {t('documentation')}
                 </Link>
               </li>
               <li>
@@ -57,12 +58,12 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/docs/experimental" className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
-                  Experimental Tasks
+                  {t('experimental')}
                 </Link>
               </li>
               <li>
                 <Link href="/models" className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
-                  Model Zoo
+                  {t('modelZoo')}
                 </Link>
               </li>
               <li>
@@ -72,7 +73,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors inline-flex items-center gap-1"
                 >
-                  Live Demo <ExternalLink className="w-3 h-3" />
+                  {t('liveDemo')} <ExternalLink className="w-3 h-3" />
                 </a>
               </li>
               <li>
@@ -82,24 +83,24 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors inline-flex items-center gap-1"
                 >
-                  Benchmarks <ExternalLink className="w-3 h-3" />
+                  {t('benchmarks')} <ExternalLink className="w-3 h-3" />
                 </a>
               </li>
               <li>
                 <Link href="/commercial" className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
-                  Commercial Guide
+                  {t('commercialGuide')}
                 </Link>
               </li>
               <li>
                 <Link href="/articles" className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
-                  Articles
+                  {t('articles')}
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-surface-900 dark:text-white font-semibold mb-4">Contact</h4>
+            <h4 className="text-surface-900 dark:text-white font-semibold mb-4">{t('contact')}</h4>
             <div className="flex items-center gap-3 mb-4">
               <Image
                 src="/photo.jpg"
@@ -110,7 +111,7 @@ export default function Footer() {
               />
               <div>
                 <p className="text-surface-800 dark:text-surface-200 text-sm font-medium">Xuban Ceccon</p>
-                <p className="text-surface-400 text-xs">Creator & Maintainer</p>
+                <p className="text-surface-400 text-xs">{t('role')}</p>
               </div>
             </div>
             <a
@@ -120,7 +121,7 @@ export default function Footer() {
               className="text-libre-500 dark:text-libre-400 hover:text-libre-600 dark:hover:text-libre-300 text-sm font-medium transition-colors inline-flex items-center gap-1.5"
             >
               <Linkedin className="w-4 h-4" />
-              Let&apos;s chat
+              {t('chat')}
             </a>
             <div className="mt-4">
               <a
@@ -129,7 +130,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors inline-flex items-center gap-1"
               >
-                MIT License <ExternalLink className="w-3 h-3" />
+                {t('mitLicense')} <ExternalLink className="w-3 h-3" />
               </a>
             </div>
           </div>
@@ -137,7 +138,7 @@ export default function Footer() {
 
         <div className="mt-12 pt-8 border-t border-surface-200 dark:border-white/5">
           <p className="text-surface-400 text-sm text-center md:text-left">
-            &copy; {new Date().getFullYear()} LibreYOLO. An independent open-source project.
+            {t('copyright', { year: new Date().getFullYear() })}
           </p>
         </div>
       </div>

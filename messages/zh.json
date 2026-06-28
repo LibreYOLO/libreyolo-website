@@ -1,0 +1,47 @@
+{
+  "Metadata": {
+    "defaultTitle": "LibreYOLO | MIT 许可的目标检测",
+    "description": "面向最先进 YOLO 模型的 MIT 许可训练与推理引擎。专为商业应用打造，不受 AGPL 限制。",
+    "twitterDescription": "面向最先进 YOLO 模型的 MIT 许可训练与推理引擎。",
+    "keywords": "YOLO|目标检测|MIT 许可|机器学习|计算机视觉|开源|人工智能"
+  },
+  "Nav": {
+    "home": "首页",
+    "models": "模型",
+    "benchmarks": "基准测试",
+    "commercial": "商业使用",
+    "articles": "文章",
+    "docs": "文档",
+    "github": "GitHub"
+  },
+  "LangSwitcher": {
+    "label": "切换语言"
+  },
+  "Footer": {
+    "tagline": "一个独立的开源项目，提供最先进的目标检测能力。为开发者、研究人员和商业应用而打造。",
+    "resources": "资源",
+    "documentation": "文档",
+    "experimental": "实验性任务",
+    "modelZoo": "模型库",
+    "liveDemo": "在线演示",
+    "benchmarks": "基准测试",
+    "commercialGuide": "商业使用指南",
+    "articles": "文章",
+    "contact": "联系",
+    "role": "创建者与维护者",
+    "chat": "联系我",
+    "mitLicense": "MIT 许可证",
+    "copyright": "© {year} LibreYOLO。一个独立的开源项目。"
+  },
+  "NotFound": {
+    "title": "未检测到目标",
+    "body": "我们的模型找不到这个页面。它可能已被移动、删除，或者从一开始就不存在。",
+    "goHome": "返回首页",
+    "browseDocs": "浏览文档",
+    "codeComment": "# 检测结果"
+  },
+  "DocsNote": {
+    "label": "仅英文",
+    "text": "本部分目前仅提供英文版本。"
+  }
+}

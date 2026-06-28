@@ -1,0 +1,47 @@
+{
+  "Metadata": {
+    "defaultTitle": "LibreYOLO | MIT-Licensed Object Detection",
+    "description": "The MIT-licensed training and inference engine for state-of-the-art YOLO models. Built for commercial applications, free from AGPL restrictions.",
+    "twitterDescription": "The MIT-licensed training and inference engine for state-of-the-art YOLO models.",
+    "keywords": "YOLO|object detection|MIT license|machine learning|computer vision|open source|AI"
+  },
+  "Nav": {
+    "home": "Home",
+    "models": "Models",
+    "benchmarks": "Benchmarks",
+    "commercial": "Commercial",
+    "articles": "Articles",
+    "docs": "Docs",
+    "github": "GitHub"
+  },
+  "LangSwitcher": {
+    "label": "Change language"
+  },
+  "Footer": {
+    "tagline": "An independent open-source project providing state-of-the-art object detection. Built for developers, researchers, and commercial applications.",
+    "resources": "Resources",
+    "documentation": "Documentation",
+    "experimental": "Experimental Tasks",
+    "modelZoo": "Model Zoo",
+    "liveDemo": "Live Demo",
+    "benchmarks": "Benchmarks",
+    "commercialGuide": "Commercial Guide",
+    "articles": "Articles",
+    "contact": "Contact",
+    "role": "Creator & Maintainer",
+    "chat": "Let's chat",
+    "mitLicense": "MIT License",
+    "copyright": "© {year} LibreYOLO. An independent open-source project."
+  },
+  "NotFound": {
+    "title": "Object Not Detected",
+    "body": "Our model couldn't find this page. It might have been moved, deleted, or perhaps it never existed in the first place.",
+    "goHome": "Go Home",
+    "browseDocs": "Browse Docs",
+    "codeComment": "# Detection results"
+  },
+  "DocsNote": {
+    "label": "English only",
+    "text": "This section is currently available in English only."
+  }
+}
