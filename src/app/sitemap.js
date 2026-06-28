@@ -1,32 +1,31 @@
 import { getAllArticles } from '@/lib/articles'
-import { SITE_URL } from '@/i18n/metadata'
+import { routing, localeHtmlLang } from '@/i18n/routing'
+import { localeUrl } from '@/i18n/metadata'
 
-// Host kept consistent with the canonical/hreflang URLs emitted in metadata.
-const BASE = SITE_URL
-
-function enUrl(path) {
-  const clean = path === '/' ? '' : path
-  return `${BASE}${clean || '/'}`
+function languageMap(path) {
+  const languages = {}
+  for (const locale of routing.locales) {
+    languages[localeHtmlLang[locale]] = localeUrl(path, locale)
+  }
+  return languages
 }
 
-function zhUrl(path) {
-  const clean = path === '/' ? '' : path
-  return `${BASE}/zh${clean}`
-}
-
-// Translated pages: emit both locales, each carrying the full hreflang map so
-// search engines can pair the English and Chinese versions.
+// Translated pages: one entry per locale, each carrying the full hreflang map so
+// search engines can pair the localized versions.
 function bilingual(path, priority, changeFrequency = 'weekly', lastModified = new Date()) {
-  const languages = { en: enUrl(path), 'zh-CN': zhUrl(path) }
-  return [
-    { url: enUrl(path), lastModified, changeFrequency, priority, alternates: { languages } },
-    { url: zhUrl(path), lastModified, changeFrequency, priority, alternates: { languages } },
-  ]
+  const languages = languageMap(path)
+  return routing.locales.map((locale) => ({
+    url: localeUrl(path, locale),
+    lastModified,
+    changeFrequency,
+    priority,
+    alternates: { languages },
+  }))
 }
 
-// English-only pages (docs, hackathon, individual articles): one entry, English URL.
+// English-only pages (docs, hackathon, individual articles): a single English entry.
 function englishOnly(path, priority, changeFrequency = 'weekly', lastModified = new Date()) {
-  return [{ url: enUrl(path), lastModified, changeFrequency, priority }]
+  return [{ url: localeUrl(path, routing.defaultLocale), lastModified, changeFrequency, priority }]
 }
 
 export default function sitemap() {

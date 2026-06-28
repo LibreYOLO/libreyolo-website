@@ -1,16 +1,17 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getAllArticles } from '@/lib/articles'
-import { buildAlternates } from '@/i18n/metadata'
+import { buildPageMetadata } from '@/i18n/metadata'
 import { Link } from '@/i18n/navigation'
 
 export async function generateMetadata({ params }) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'Metadata' })
-  return {
+  return buildPageMetadata({
     title: t('articlesTitle'),
     description: t('articlesDescription'),
-    alternates: buildAlternates('/articles', locale),
-  }
+    path: '/articles',
+    locale,
+  })
 }
 
 function formatDate(dateString, locale) {

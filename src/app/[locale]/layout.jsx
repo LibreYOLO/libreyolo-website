@@ -67,7 +67,7 @@ const jsonLd = {
   '@type': 'SoftwareApplication',
   name: 'LibreYOLO',
   description: 'MIT-licensed training and inference engine for state-of-the-art YOLO object detection models.',
-  url: 'https://libreyolo.com',
+  url: SITE_URL,
   applicationCategory: 'DeveloperApplication',
   operatingSystem: 'Windows, macOS, Linux',
   license: 'https://opensource.org/license/mit',

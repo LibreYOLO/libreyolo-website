@@ -12,3 +12,9 @@ export const localeHtmlLang = {
   en: 'en',
   zh: 'zh-CN',
 }
+
+// Autonym labels shown in the language switcher.
+export const localeLabels = {
+  en: 'EN',
+  zh: '中文',
+}

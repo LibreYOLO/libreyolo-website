@@ -1,6 +1,8 @@
-import { localeHtmlLang } from './routing'
+import { routing, localeHtmlLang } from './routing'
 
-export const SITE_URL = 'https://libreyolo.com'
+// Production serves on www (libreyolo.com 307-redirects to www.libreyolo.com),
+// so every canonical / hreflang / OG / sitemap URL points at the non-redirecting host.
+export const SITE_URL = 'https://www.libreyolo.com'
 
 // The dynamic OG image lives at app/opengraph-image.jsx (served at /opengraph-image).
 // Because all pages moved under [locale], the file-convention image is no longer
@@ -12,22 +14,36 @@ export const OG_IMAGE = {
   alt: 'LibreYOLO: MIT-Licensed Object Detection',
 }
 
-// Builds canonical + hreflang alternates for a route, given the locale-agnostic
-// path (e.g. '/models', or '/' for home). English lives at the root, Chinese
-// under '/zh'. The canonical is self-referential per locale; the language map is
-// identical across locales so search engines can pair them up.
-export function buildAlternates(path, locale) {
-  const clean = path === '/' ? '' : path
-  const enUrl = `${SITE_URL}${clean || '/'}`
-  const zhUrl = `${SITE_URL}/zh${clean}`
+// OpenGraph locale string per app locale.
+const OG_LOCALES = { en: 'en_US', zh: 'zh_CN' }
+export function ogLocale(locale) {
+  return OG_LOCALES[locale] ?? OG_LOCALES[routing.defaultLocale]
+}
 
+// Absolute URL for a path in a given locale. English (the default) lives at the
+// root (`/models`); every other locale is prefixed (`/zh/models`).
+export function localeUrl(path, locale) {
+  const clean = path === '/' ? '' : path
+  if (locale === routing.defaultLocale) return `${SITE_URL}${clean || '/'}`
+  return `${SITE_URL}/${locale}${clean}`
+}
+
+// hreflang map covering every configured locale + x-default. Derived from
+// routing.locales / localeHtmlLang so adding a locale needs no edits here.
+function languageMap(path) {
+  const languages = {}
+  for (const locale of routing.locales) {
+    languages[localeHtmlLang[locale]] = localeUrl(path, locale)
+  }
+  languages['x-default'] = localeUrl(path, routing.defaultLocale)
+  return languages
+}
+
+// Canonical (self-referential per locale) + full hreflang map for a translated page.
+export function buildAlternates(path, locale) {
   return {
-    canonical: locale === 'zh' ? zhUrl : enUrl,
-    languages: {
-      en: enUrl,
-      'zh-CN': zhUrl,
-      'x-default': enUrl,
-    },
+    canonical: localeUrl(path, locale),
+    languages: languageMap(path),
   }
 }
 
@@ -36,20 +52,39 @@ export function buildAlternates(path, locale) {
 // canonical and only advertise the English alternate. This avoids indexing the
 // same English text under two URLs.
 export function buildEnglishOnlyAlternates(path) {
-  const clean = path === '/' ? '' : path
-  const enUrl = `${SITE_URL}${clean || '/'}`
+  const url = localeUrl(path, routing.defaultLocale)
+  const lang = localeHtmlLang[routing.defaultLocale]
   return {
-    canonical: enUrl,
-    languages: {
-      en: enUrl,
-      'x-default': enUrl,
-    },
+    canonical: url,
+    languages: { [lang]: url, 'x-default': url },
   }
 }
 
-// OpenGraph locale string for a given app locale.
-export function ogLocale(locale) {
-  return locale === 'zh' ? 'zh_CN' : 'en_US'
+// Full per-page metadata (title, description, alternates, OpenGraph, Twitter).
+// Setting OpenGraph here means each page advertises its own title/url/card
+// instead of inheriting the home page's values from the root layout.
+export function buildPageMetadata({ title, description, path, locale, englishOnly = false }) {
+  const ogTarget = englishOnly ? routing.defaultLocale : locale
+  return {
+    title,
+    description,
+    alternates: englishOnly ? buildEnglishOnlyAlternates(path) : buildAlternates(path, locale),
+    openGraph: {
+      title,
+      description,
+      url: localeUrl(path, ogTarget),
+      siteName: 'LibreYOLO',
+      locale: ogLocale(ogTarget),
+      type: 'website',
+      images: [OG_IMAGE],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [OG_IMAGE.url],
+    },
+  }
 }
 
 export { localeHtmlLang }

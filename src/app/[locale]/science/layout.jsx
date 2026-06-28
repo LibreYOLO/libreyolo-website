@@ -1,14 +1,15 @@
 import { getTranslations } from 'next-intl/server'
-import { buildAlternates } from '@/i18n/metadata'
+import { buildPageMetadata } from '@/i18n/metadata'
 
 export async function generateMetadata({ params }) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'Metadata' })
-  return {
+  return buildPageMetadata({
     title: t('scienceTitle'),
     description: t('scienceDescription'),
-    alternates: buildAlternates('/science', locale),
-  }
+    path: '/science',
+    locale,
+  })
 }
 
 export default function ScienceLayout({ children }) {

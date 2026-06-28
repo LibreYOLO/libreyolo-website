@@ -1,14 +1,15 @@
 import { getTranslations } from 'next-intl/server'
-import { buildAlternates } from '@/i18n/metadata'
+import { buildPageMetadata } from '@/i18n/metadata'
 
 export async function generateMetadata({ params }) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'Metadata' })
-  return {
+  return buildPageMetadata({
     title: t('modelsTitle'),
     description: t('modelsDescription'),
-    alternates: buildAlternates('/models', locale),
-  }
+    path: '/models',
+    locale,
+  })
 }
 
 export default function ModelsLayout({ children }) {

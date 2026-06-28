@@ -113,8 +113,8 @@ export default async function ArticlePage({ params }) {
     description: article.description,
     datePublished: article.date,
     author: { '@type': 'Person', name: article.author },
-    publisher: { '@type': 'Organization', name: 'LibreYOLO', url: 'https://libreyolo.com' },
-    mainEntityOfPage: `https://libreyolo.com/articles/${article.slug}`,
+    publisher: { '@type': 'Organization', name: 'LibreYOLO', url: SITE_URL },
+    mainEntityOfPage: `${SITE_URL}/articles/${article.slug}`,
   }
 
   return (
