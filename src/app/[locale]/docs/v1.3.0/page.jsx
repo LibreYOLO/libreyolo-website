@@ -1062,9 +1062,27 @@ print(result.saved_path)`}</CodeBlock>
             </ul>
           </motion.div>
 
+          <SubHeading>Breaking changes in v1.3.0</SubHeading>
+          <ul className="space-y-2 my-4">
+            <FeatureItem>
+              <strong className="text-surface-800 dark:text-white">DAMO-YOLO removed</strong> with no alias:{' '}
+              <InlineCode>LibreDAMOYOLO</InlineCode> raises <InlineCode>AttributeError</InlineCode>, and DAMO-YOLO checkpoints are rejected on load.
+            </FeatureItem>
+            <FeatureItem>
+              <strong className="text-surface-800 dark:text-white">YOLO9 is detect-only.</strong> The{' '}
+              <InlineCode>-seg</InlineCode>, <InlineCode>-pose</InlineCode>, <InlineCode>-cls</InlineCode>, <InlineCode>-obb</InlineCode>, and <InlineCode>-sem</InlineCode> YOLO9 variants were removed.
+            </FeatureItem>
+            <FeatureItem>
+              <strong className="text-surface-800 dark:text-white">RF-DETR lost classify, semantic, and depth.</strong> Its tasks are now detect, segment, pose, and obb. Classification and semantic moved to the new <InlineCode>LibreDINOv2</InlineCode> family; depth moved to the new <InlineCode>LibreDepthAnythingV2</InlineCode> family.
+            </FeatureItem>
+            <FeatureItem>
+              <strong className="text-surface-800 dark:text-white">TFLite export needs Python 3.12+</strong> (onnx2tf wheel constraint). The onnx2tf floor was raised to <InlineCode>&gt;=2.4.3</InlineCode> and the old onnx2tf runtime patches were removed.
+            </FeatureItem>
+          </ul>
+
           <Divider />
 
-          {/* ────────────── INSTALLATION ────────────── */}
+          {/* ────────────── COMPATIBILITY ────────────── */}
           <SectionHeading id="compatibility" icon={CheckCircle2}>Compatibility</SectionHeading>
           <P>
             Use this matrix as the quick v1.3.0 support map. <InlineCode>&#10003;</InlineCode>{' '}
@@ -1632,6 +1650,37 @@ boxes_np = result.boxes.numpy()`}</CodeBlock>
           <P>Filter detections to specific class IDs:</P>
           <CodeBlock language="python">{`# Only detect people (class 0) and cars (class 2)
 result = model("image.jpg", classes=[0, 2])`}</CodeBlock>
+
+          <SubHeading>Batched in-memory inference</SubHeading>
+          <P>
+            New in v1.3.0: <InlineCode>model.predict()</InlineCode> accepts a list or tuple of
+            in-memory images (NumPy arrays, PIL images, or tensors) and runs them as a true
+            stacked-forward batch. Set <InlineCode>batch &gt; 1</InlineCode> to actually batch the
+            forward pass on families that support it; a list of results is returned, one per input.
+          </P>
+          <CodeBlock language="python">{`import numpy as np
+from libreyolo import LibreYOLO
+
+model = LibreYOLO("LibreYOLO9c.pt")
+
+frames = [
+    np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8),
+    np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8),
+    np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8),
+]
+
+results = model(frames, batch=4)   # list/tuple -> true batched inference
+for r in results:
+    print(len(r), r.boxes.xyxy.shape)`}</CodeBlock>
+
+          <SubHeading>Model info</SubHeading>
+          <P>
+            <InlineCode>model.info()</InlineCode> (new in v1.3.0) returns a JSON-friendly dict of
+            family, size, task, parameter counts, input size, and class names, and logs a
+            human-readable summary when <InlineCode>verbose=True</InlineCode>.
+          </P>
+          <CodeBlock language="python">{`meta = model.info(detailed=False, verbose=True)
+# meta -> {"family": ..., "size": ..., "task": ..., "params": ..., "imgsz": ..., "names": {...}, ...}`}</CodeBlock>
 
           <Divider />
 
@@ -2363,6 +2412,7 @@ model.train(data="coco128.yaml", epochs=300, batch=16)`}</CodeBlock>
     split="val",           # "val", "test", or "train"
     save_json=False,       # save predictions as COCO JSON
     verbose=True,          # print per-class metrics
+    plots=True,            # save validation plots (metrics, per-class AP, confusion matrix); alias for save_plots
 )
 
 print(f"mAP50:    {results['metrics/mAP50']:.3f}")
@@ -2399,7 +2449,13 @@ print(f"mAP50-95: {results['metrics/mAP50-95']:.3f}")`}</CodeBlock>
     "speed/images_seen": 1382,
 }`}</CodeBlock>
           <P>
-            Segmentation validation returns mask metrics with <InlineCode>(M)</InlineCode> suffixes alongside bbox metrics with <InlineCode>(B)</InlineCode> suffixes. Pose validation returns COCO keypoint metrics through <InlineCode>PoseValidator</InlineCode>.
+            Segmentation validation returns mask metrics with <InlineCode>(M)</InlineCode> suffixes alongside
+            bbox metrics with <InlineCode>(B)</InlineCode> suffixes; OBB validation adds{' '}
+            <InlineCode>(OBB)</InlineCode> metrics. Pose validation returns COCO keypoint metrics through{' '}
+            <InlineCode>PoseValidator</InlineCode>. v1.3.0 adds validators for classify (top-1 / top-5),
+            semantic (mIoU / pixel accuracy), point, and depth (zero-shot). Pass{' '}
+            <InlineCode>plots=True</InlineCode> (or <InlineCode>--save-plots</InlineCode> on the CLI) to write
+            metric, per-class AP, confusion-matrix, and sample plots to the run directory.
           </P>
 
           <Divider />
@@ -3002,7 +3058,7 @@ result.gaze.direction_3d # approximate 3D direction vectors`}</CodeBlock>
     **kwargs,                   # additional RF-DETR training args
 ) -> dict`}</CodeBlock>
           <P>
-            Additional experimental trainers exist for YOLO-NAS, D-FINE, DEIM, DEIMv2, EC, PicoDet, DAMO-YOLO, RT-DETRv2/v4, and RTMDet. They follow the same <InlineCode>model.train(data=&quot;...yaml&quot;, ...)</InlineCode> shape but their defaults and experimental gates are family-specific.
+            Additional experimental trainers exist for YOLO-NAS, D-FINE, DEIM, DEIMv2, EC, PicoDet, RT-DETRv2/v4, and RTMDet, plus the new classification (MobileNetV4, ConvNeXt, EfficientNetV2, DINOv2), semantic-segmentation (DINOv2), and point (FOMO) families. They follow the same <InlineCode>model.train(data=&quot;...yaml&quot;, ...)</InlineCode> shape but their defaults and experimental gates are family-specific.
           </P>
 
           <SubHeading>Runtime artifact loading</SubHeading>
@@ -3092,7 +3148,7 @@ config.to_yaml("config.yaml")`}</CodeBlock>
             model.py     # BaseModel - shared wrapper behaviour
             inference.py # Shared prediction pipeline (image/dir/video/tiled)
         yolox/           # LibreYOLOX (detect)
-        yolo9/           # LibreYOLO9 (detect, segment)
+        yolo9/           # LibreYOLO9 (detect)
         yolo9_e2e/       # LibreYOLO9E2E (detect)
         yolonas/         # LibreYOLONAS (detect, pose)
         dfine/           # LibreDFINE (detect)
@@ -3101,11 +3157,16 @@ config.to_yaml("config.yaml")`}</CodeBlock>
         rtdetr/          # LibreRTDETR (detect)
         rtdetrv2/        # LibreRTDETRv2 (detect)
         rtdetrv4/        # LibreRTDETRv4 (detect)
-        rfdetr/          # LibreRFDETR (detect, segment) - lazy-loaded
+        rfdetr/          # LibreRFDETR (detect, segment, pose, obb) - lazy-loaded
         ec/              # LibreEC / EdgeCrafter (detect, pose, segment)
         picodet/         # LibrePICODET (detect)
-        damoyolo/        # LibreDAMOYOLO (detect)
         rtmdet/          # LibreRTMDet (detect)
+        dinov2/          # LibreDINOv2 (semantic, classify) - lazy-loaded
+        mobilenetv4/     # LibreMobileNetV4 (classify)
+        convnext/        # LibreConvNeXt (classify)
+        efficientnetv2/  # LibreEfficientNetV2 (classify)
+        depth_anything/  # LibreDepthAnythingV2 (depth)
+        fomo/            # LibreFOMO (point)
         l2cs/            # LibreL2CS (gaze, inference-only)
     backends/
         base.py
