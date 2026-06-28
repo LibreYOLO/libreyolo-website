@@ -775,7 +775,7 @@ function ValidationScopeCallout({ className = '' }) {
         <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" />
         <div>
           <p className="font-semibold text-surface-900 dark:text-white mb-2">
-            v1.2.0 validation scope
+            v1.3.0 validation scope
           </p>
           <p className="text-sm text-surface-600 dark:text-surface-400 mb-2">
             The heavily tested path is detection, training and inference for YOLO9 and RF-DETR, including RF-DETR segmentation.
@@ -799,7 +799,7 @@ function FlagshipCallout({ className = '' }) {
             Recommended validated path: YOLO9 detection or RF-DETR detection / segmentation
           </p>
           <p className="text-sm text-surface-600 dark:text-surface-400">
-            Detection, training and inference for these models receive the heaviest testing. Treat other families, tasks, and multi-GPU workflows as experimental in v1.2.0.
+            Detection, training and inference for these models receive the heaviest testing. Treat other families, tasks, and multi-GPU workflows as experimental in v1.3.0.
           </p>
         </div>
       </div>
@@ -1028,7 +1028,7 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
             <SectionHeading id="introduction" icon={BookOpen}>Introduction</SectionHeading>
             <ValidationScopeCallout />
             <P>
-              LibreYOLO is an MIT-licensed object detection toolkit. v1.2.0 ships a broad catalogue, but the validated support surface is intentionally narrow:
+              LibreYOLO is an MIT-licensed computer-vision toolkit. v1.3.0 ships a broad catalogue across detection, segmentation, classification, depth and more, but the validated support surface is intentionally narrow:
             </P>
             <ul className="space-y-2 mb-4">
               <FeatureItem><strong className="text-surface-800 dark:text-white">YOLO9 detection</strong> - the CNN path.</FeatureItem>
@@ -1036,7 +1036,7 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
               <FeatureItem><strong className="text-surface-800 dark:text-white">RF-DETR segmentation</strong> - the heavily tested segmentation path.</FeatureItem>
             </ul>
             <P>
-              We recommend those paths as the default choice for new projects because they receive the heaviest testing around detection, training and inference. Other supported families and tasks work through the same unified <InlineCode>LibreYOLO()</InlineCode> factory, but they are experimental in v1.2.0. Use them if you have a specific reason.
+              We recommend those paths as the default choice for new projects because they receive the heaviest testing around detection, training and inference. Other supported families and tasks work through the same unified <InlineCode>LibreYOLO()</InlineCode> factory, but they are experimental in v1.3.0. Use them if you have a specific reason.
             </P>
             <CodeBlock language="python">{`from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
@@ -1100,7 +1100,7 @@ print(result.saved_path)`}</CodeBlock>
           <SubHeading>From PyPI</SubHeading>
           <CodeBlock language="bash">{`pip install libreyolo`}</CodeBlock>
           <P>
-            These docs track the upcoming v1.2.0 dev branch. Until v1.2.0 is published to PyPI, use a source install for the features documented on this page.
+            These docs track the upcoming v1.3.0 release. Until v1.3.0 is published to PyPI, use a source install for the features documented on this page.
           </P>
 
           <SubHeading>From source</SubHeading>
@@ -1136,7 +1136,7 @@ pip install libreyolo[ncnn]
 
 # ByteTrack API compatibility extra
 pip install libreyolo[tracking]
-# Tracking dependencies are part of the base install in v1.2.0 dev.
+# Tracking dependencies are part of the base install in v1.3.0.
 
 # CoreML export and inference (macOS only for runtime)
 pip install libreyolo[coreml]
@@ -1521,7 +1521,7 @@ LibreL2CSr50.pt`}</CodeBlock>
           {/* ────────────── PREDICTION ────────────── */}
           <SectionHeading id="prediction" icon={Crosshair}>Prediction</SectionHeading>
           <P>
-            The single-GPU prediction path is heavily tested for YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Other families and tasks use the same API but are experimental in v1.2.0.
+            The single-GPU prediction path is heavily tested for YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Other families and tasks use the same API but are experimental in v1.3.0.
           </P>
 
           <SubHeading>Basic prediction</SubHeading>
@@ -1641,7 +1641,7 @@ result = model("image.jpg", classes=[0, 2])`}</CodeBlock>
             For images much larger than the model's input size (e.g., satellite imagery, drone footage), tiled inference splits the image into overlapping tiles, runs detection on each, and merges results.
           </P>
           <P>
-            Tiling is detection-only in v1.2.0 dev. It rejects segmentation masks, and it cannot be combined with <InlineCode>augment=True</InlineCode>.
+            Tiling is detection-only in v1.3.0. It rejects segmentation masks, and it cannot be combined with <InlineCode>augment=True</InlineCode>.
           </P>
           <CodeBlock language="python">{`result = model(
     "large_aerial_image.jpg",
@@ -1721,7 +1721,7 @@ with VideoSource("clip.mp4", vid_stride=1) as src, \\
           {/* ────────────── TRACKING ────────────── */}
           <SectionHeading id="tracking" icon={Activity}>Tracking</SectionHeading>
           <P>
-            LibreYOLO ships a ByteTrack multi-object tracker that consumes <InlineCode>Results</InlineCode> from any detector and adds persistent track IDs. It is most tested with single-GPU YOLO9 detection and RF-DETR detection; other detection families are experimental in v1.2.0.
+            LibreYOLO ships a ByteTrack multi-object tracker that consumes <InlineCode>Results</InlineCode> from any detector and adds persistent track IDs. It is most tested with single-GPU YOLO9 detection and RF-DETR detection; other detection families are experimental in v1.3.0.
           </P>
 
           <SubHeading>Install</SubHeading>
@@ -1791,18 +1791,18 @@ tracker = ByteTracker(config=cfg)`}</CodeBlock>
           <SectionHeading id="segmentation" icon={Scissors}>Segmentation</SectionHeading>
           <ValidationScopeCallout />
           <P>
-            RF-DETR segmentation is the heavily tested segmentation path in v1.2.0. YOLO9 segmentation and EdgeCrafter segmentation are available through the same <InlineCode>-seg</InlineCode> suffix, but they are experimental.
+            RF-DETR segmentation is the segmentation path in v1.3.0 and is the heavily tested option. EdgeCrafter (<InlineCode>-seg</InlineCode>) also exposes a segmentation head but is experimental. YOLO9 no longer ships a segmentation head: it is detect-only as of v1.3.0.
           </P>
 
           <SubHeading>Run segmentation</SubHeading>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
-# RF-DETR segmentation, heavily tested on single GPU
+# RF-DETR segmentation, the heavily tested segmentation path
 model = LibreYOLO("LibreRFDETRs-seg.pt")
 result = model("photo.jpg")
 
-# YOLO9 segmentation is available but experimental in v1.2.0
-# model = LibreYOLO("LibreYOLO9c-seg.pt")
+# EdgeCrafter segmentation is also available but experimental
+# model = LibreYOLO("LibreECs-seg.pt")
 
 # Segmentation returns boxes + masks
 print(result.boxes.xyxy)        # bounding boxes (N, 4)
@@ -1829,7 +1829,7 @@ result.masks.numpy()`}</CodeBlock>
 
           <SubHeading>Training segmentation</SubHeading>
           <P>
-            RF-DETR segmentation uses the RF-DETR COCO-format training pipeline and is part of the heavily tested single-GPU scope. YOLO9 segmentation and EdgeCrafter segmentation training are available but experimental in v1.2.0.
+            RF-DETR segmentation uses the RF-DETR COCO-format training pipeline and is part of the heavily tested single-GPU scope. EdgeCrafter segmentation training is available but experimental. YOLO9 segmentation training was removed in v1.3.0.
           </P>
 
           <Divider />
@@ -1837,7 +1837,10 @@ result.masks.numpy()`}</CodeBlock>
           {/* ────────────── POSE ESTIMATION ────────────── */}
           <SectionHeading id="pose" icon={PersonStanding}>Pose Estimation</SectionHeading>
           <P>
-            Pose (human keypoint) estimation is supported on <InlineCode>YOLO-NAS (-pose)</InlineCode> and <InlineCode>EdgeCrafter (-pose)</InlineCode>. Each pose model is single-class (&quot;person&quot;) with 17 COCO keypoints.
+            Pose (human keypoint) estimation runs on <InlineCode>YOLO-NAS (-pose)</InlineCode>,{' '}
+            <InlineCode>EdgeCrafter (-pose)</InlineCode>, and, new in v1.3.0, an{' '}
+            <InlineCode>RF-DETR (-pose)</InlineCode> preview. Each pose model is single-class
+            (&quot;person&quot;) with 17 COCO keypoints.
           </P>
 
           <SubHeading>Run pose</SubHeading>
@@ -1854,6 +1857,16 @@ result = model("people.jpg")
 print(result.boxes.xyxy)          # person boxes (N, 4)
 print(result.keypoints.xy.shape)  # (N, 17, 2) pixel coordinates`}</CodeBlock>
 
+          <P>
+            <SupportBadge variant="experimental">Preview</SupportBadge>{' '}
+            RF-DETR pose ships a single checkpoint at size <InlineCode>x</InlineCode> only:{' '}
+            <InlineCode>LibreRFDETRx-pose.pt</InlineCode>. It is a research preview in v1.3.0.
+          </P>
+          <CodeBlock language="python">{`# RF-DETR pose preview (size x only)
+model = LibreYOLO("LibreRFDETRx-pose.pt")
+result = model("people.jpg")
+print(result.keypoints.xy.shape)  # (N, 17, 2)`}</CodeBlock>
+
           <SubHeading>Keypoint API</SubHeading>
           <CodeBlock language="python">{`result.keypoints.xy        # (N, K, 2) absolute pixel coords
 result.keypoints.xyn       # (N, K, 2) normalized to [0, 1]
@@ -1867,7 +1880,7 @@ result.keypoints.numpy()`}</CodeBlock>
           <CodeBlock language="python">{`model("people.jpg", save=True)  # draws boxes + skeleton`}</CodeBlock>
 
           <P>
-            Pose training is supported for YOLO-NAS; EdgeCrafter pose is currently inference-only. YOLO9 and RF-DETR don&apos;t ship pose checkpoints yet.
+            Pose training is supported for YOLO-NAS; EdgeCrafter pose is currently inference-only. RF-DETR pose is a preview (size <InlineCode>x</InlineCode> only). YOLO9 is detect-only and ships no pose checkpoints.
           </P>
 
           <Divider />
@@ -1875,7 +1888,7 @@ result.keypoints.numpy()`}</CodeBlock>
           {/* ────────────── GAZE ESTIMATION ────────────── */}
           <SectionHeading id="gaze" icon={Eye}>Gaze Estimation</SectionHeading>
           <P>
-            Gaze direction estimation is provided by the <InlineCode>LibreL2CS</InlineCode> family, an L2CS-Net port with a ResNet trunk and two angle-bin classification heads. It is a two-stage model: an upstream face detector locates faces, then the gaze head predicts per-face pitch and yaw in radians. It is inference-only and experimental in v1.2.0.
+            Gaze direction estimation is provided by the <InlineCode>LibreL2CS</InlineCode> family, an L2CS-Net port with a ResNet trunk and two angle-bin classification heads. It is a two-stage model: an upstream face detector locates faces, then the gaze head predicts per-face pitch and yaw in radians. It is inference-only and experimental in v1.3.0.
           </P>
 
           <SubHeading>Install</SubHeading>
@@ -2125,7 +2138,7 @@ print(points.cls, points.conf)`}</CodeBlock>
           <SectionHeading id="training" icon={GraduationCap}>Training</SectionHeading>
           <ValidationScopeCallout />
           <P>
-            The heavily tested training paths are single-GPU YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Other model-family trainers, YOLO9 segmentation training, and multi-GPU workflows are available but experimental in v1.2.0.
+            The heavily tested training paths are single-GPU YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Other model-family trainers, YOLO9 segmentation training, and multi-GPU workflows are available but experimental in v1.3.0.
           </P>
 
           <SubHeading>YOLO9 - CNN flagship training</SubHeading>
@@ -2165,7 +2178,7 @@ results = model.train(
 print(f"Best mAP50-95: {results['best_mAP50_95']:.3f}")
 print(f"Best checkpoint: {results['best_checkpoint']}")`}</CodeBlock>
           <P>
-            After training completes, the model instance is automatically reloaded with the best weights so you can call <InlineCode>model(...)</InlineCode> immediately. YOLO9 segmentation training is supported via <InlineCode>LibreYOLO(&quot;LibreYOLO9c-seg.pt&quot;)</InlineCode>, but it is experimental in v1.2.0.
+            After training completes, the model instance is automatically reloaded with the best weights so you can call <InlineCode>model(...)</InlineCode> immediately. YOLO9 segmentation training is supported via <InlineCode>LibreYOLO(&quot;LibreYOLO9c-seg.pt&quot;)</InlineCode>, but it is experimental in v1.3.0.
           </P>
 
           <SubHeading>RF-DETR - transformer flagship training</SubHeading>
@@ -2211,7 +2224,7 @@ names: ["cat", "dog", "bird"]`}</CodeBlock>
 
           <SubHeading>Additional training paths</SubHeading>
           <P>
-            Other families have trainer hooks, but they are not the recommended path in v1.2.0. Keep new work on YOLO9 detection or RF-DETR detection/segmentation; use experimental trainers only for compatibility, benchmark reproduction, or targeted research. DAMO-YOLO, PicoDet, RTMDet, and EC training require an explicit <InlineCode>allow_experimental=True</InlineCode> acknowledgement.
+            Other families have trainer hooks, but they are not the recommended path in v1.3.0. Keep new work on YOLO9 detection or RF-DETR detection/segmentation; use experimental trainers only for compatibility, benchmark reproduction, or targeted research. PicoDet, RTMDet, and EC training require an explicit <InlineCode>allow_experimental=True</InlineCode> acknowledgement.
           </P>
 
           <SubHeading>Training from a YAML config</SubHeading>
@@ -2232,7 +2245,7 @@ model.train(data="coco128.yaml", batch=8, nbs=64)`}</CodeBlock>
 
           <SubHeading>Distributed training (DDP, experimental)</SubHeading>
           <P>
-            YOLO9 and RF-DETR support multi-GPU training through PyTorch DistributedDataParallel, but multi-GPU is outside the heavily tested v1.2.0 scope. Launch the training script with <InlineCode>torchrun</InlineCode>:
+            YOLO9 and RF-DETR support multi-GPU training through PyTorch DistributedDataParallel, but multi-GPU is outside the heavily tested v1.3.0 scope. Launch the training script with <InlineCode>torchrun</InlineCode>:
           </P>
           <CodeBlock language="bash">{`# 4-GPU node
 torchrun --nproc_per_node=4 train_yolo9.py
