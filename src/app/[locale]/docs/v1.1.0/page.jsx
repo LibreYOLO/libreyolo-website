@@ -674,25 +674,7 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
           <div className="mb-8 rounded-lg border border-surface-200 dark:border-white/[0.08] bg-white/80 dark:bg-white/[0.03] p-4 shadow-sm">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <div className="flex flex-wrap items-center gap-2">
-                  {docsVersions.map(({ version: itemVersion, label, href }) => {
-                    const isCurrent = itemVersion === version
-                    return (
-                      <a
-                        key={itemVersion}
-                        href={href}
-                        className={`rounded-md px-2.5 py-1 text-sm font-semibold transition-colors ${
-                          isCurrent
-                            ? 'bg-libre-500/10 text-libre-700 dark:text-libre-300'
-                            : 'text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-white/[0.06] hover:text-surface-900 dark:hover:text-white'
-                        }`}
-                      >
-                        {itemVersion} {label.toLowerCase()}
-                      </a>
-                    )
-                  })}
-                </div>
-                <p className="mt-2 text-sm text-surface-600 dark:text-surface-400">
+                <p className="text-sm text-surface-600 dark:text-surface-400">
                     {isLatest
                     ? 'These docs track the upcoming v1.2.0 dev branch. For current released docs, use v1.1.0.'
                     : 'This archived version is kept linkable so older installs, search results, and agents can target the right documentation.'}
