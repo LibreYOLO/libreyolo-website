@@ -984,44 +984,13 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
           </div>
 
           {/* ────────────── SPECIALIZED GUIDES ────────────── */}
-          <div className="mb-10 grid gap-4 sm:grid-cols-2">
-            <a
-              href="/docs/librevlm"
-              className="group rounded-xl border border-surface-200 dark:border-white/[0.08] bg-white/80 dark:bg-white/[0.03] p-5 transition-colors hover:border-libre-500/40 hover:bg-libre-500/[0.03]"
-            >
-              <div className="flex items-center gap-2.5 mb-2">
-                <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-libre-500/10 border border-libre-500/20">
-                  <Eye className="w-5 h-5 text-libre-600 dark:text-libre-400" />
-                </span>
-                <span className="font-semibold text-surface-900 dark:text-white">LibreVLM</span>
-                <span className="ml-auto inline-flex items-center rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:text-amber-300">Experimental</span>
-              </div>
-              <p className="text-sm text-surface-600 dark:text-surface-400">
-                Open-vocabulary detection that wraps vision language models like Qwen3-VL and Florence-2. Detect anything you can name.
-              </p>
-              <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-libre-600 dark:text-libre-400">
-                Read the guide <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-              </span>
-            </a>
-            <a
-              href="/docs/experimental"
-              className="group rounded-xl border border-surface-200 dark:border-white/[0.08] bg-white/80 dark:bg-white/[0.03] p-5 transition-colors hover:border-libre-500/40 hover:bg-libre-500/[0.03]"
-            >
-              <div className="flex items-center gap-2.5 mb-2">
-                <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-libre-500/10 border border-libre-500/20">
-                  <Sparkles className="w-5 h-5 text-libre-600 dark:text-libre-400" />
-                </span>
-                <span className="font-semibold text-surface-900 dark:text-white">Experimental tasks</span>
-                <span className="ml-auto inline-flex items-center rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:text-amber-300">New</span>
-              </div>
-              <p className="text-sm text-surface-600 dark:text-surface-400">
-                Classification, oriented boxes, pose, and LoRA / DoRA fine-tuning for YOLO9 and RF-DETR.
-              </p>
-              <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-libre-600 dark:text-libre-400">
-                Read the guide <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-              </span>
-            </a>
-          </div>
+          <P>
+            Two companion guides go deeper on specialized topics: the{' '}
+            <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM guide</a>{' '}
+            covers open-vocabulary detection that wraps vision-language models like Qwen3-VL and Florence-2, and the{' '}
+            <a href="/docs/experimental" className="text-libre-600 dark:text-libre-400 hover:underline">experimental tasks guide</a>{' '}
+            covers additional experimental workflows, including LoRA / DoRA fine-tuning. Classification, oriented boxes, and pose are also documented in their own sections below.
+          </P>
 
           {/* ────────────── INTRODUCTION ────────────── */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
@@ -3744,44 +3713,13 @@ function DocsPageZh({ version = 'v1.3.0', isLatest = true }) {
           </div>
 
           {/* ────────────── SPECIALIZED GUIDES ────────────── */}
-          <div className="mb-10 grid gap-4 sm:grid-cols-2">
-            <a
-              href="/docs/librevlm"
-              className="group rounded-xl border border-surface-200 dark:border-white/[0.08] bg-white/80 dark:bg-white/[0.03] p-5 transition-colors hover:border-libre-500/40 hover:bg-libre-500/[0.03]"
-            >
-              <div className="flex items-center gap-2.5 mb-2">
-                <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-libre-500/10 border border-libre-500/20">
-                  <Eye className="w-5 h-5 text-libre-600 dark:text-libre-400" />
-                </span>
-                <span className="font-semibold text-surface-900 dark:text-white">LibreVLM</span>
-                <span className="ml-auto inline-flex items-center rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:text-amber-300">实验性</span>
-              </div>
-              <p className="text-sm text-surface-600 dark:text-surface-400">
-                开放词表检测，封装了 Qwen3-VL、Florence-2 等视觉语言模型。只要能命名，就能检测。
-              </p>
-              <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-libre-600 dark:text-libre-400">
-                阅读指南 <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-              </span>
-            </a>
-            <a
-              href="/docs/experimental"
-              className="group rounded-xl border border-surface-200 dark:border-white/[0.08] bg-white/80 dark:bg-white/[0.03] p-5 transition-colors hover:border-libre-500/40 hover:bg-libre-500/[0.03]"
-            >
-              <div className="flex items-center gap-2.5 mb-2">
-                <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-libre-500/10 border border-libre-500/20">
-                  <Sparkles className="w-5 h-5 text-libre-600 dark:text-libre-400" />
-                </span>
-                <span className="font-semibold text-surface-900 dark:text-white">实验性任务</span>
-                <span className="ml-auto inline-flex items-center rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:text-amber-300">新增</span>
-              </div>
-              <p className="text-sm text-surface-600 dark:text-surface-400">
-                面向 YOLO9 和 RF-DETR 的分类、旋转框、姿态以及 LoRA / DoRA 微调。
-              </p>
-              <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-libre-600 dark:text-libre-400">
-                阅读指南 <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-              </span>
-            </a>
-          </div>
+          <P>
+            两份配套指南更深入地介绍专门主题：{' '}
+            <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM 指南</a>{' '}
+            介绍封装 Qwen3-VL、Florence-2 等视觉语言模型的开放词表检测；{' '}
+            <a href="/docs/experimental" className="text-libre-600 dark:text-libre-400 hover:underline">实验性任务指南</a>{' '}
+            介绍更多实验性工作流，包括 LoRA / DoRA 微调。分类、旋转框和姿态也在下文各自的章节中有文档说明。
+          </P>
 
           {/* ────────────── INTRODUCTION ────────────── */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
