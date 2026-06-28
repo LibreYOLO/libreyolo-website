@@ -2138,7 +2138,7 @@ print(points.cls, points.conf)`}</CodeBlock>
           <SectionHeading id="training" icon={GraduationCap}>Training</SectionHeading>
           <ValidationScopeCallout />
           <P>
-            The heavily tested training paths are single-GPU YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Other model-family trainers, YOLO9 segmentation training, and multi-GPU workflows are available but experimental in v1.3.0.
+            The heavily tested training paths are single-GPU YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Other model-family trainers and multi-GPU workflows are available but experimental. YOLO9 is detect-only in v1.3.0, so there is no YOLO9 segmentation or pose training.
           </P>
 
           <SubHeading>YOLO9 - CNN flagship training</SubHeading>
@@ -2173,12 +2173,16 @@ results = model.train(
     amp=True,                # automatic mixed precision
     patience=50,             # early stopping patience
     resume=False,            # resume from loaded checkpoint
+    pretrained=True,         # transfer-learning init (True, a path, or None)
+    cache="disk",            # cache decoded images: False | True/"ram" | "disk"
+    freeze=10,               # freeze first N groups, or a list of indices / module names
+    save_plots=True,         # write final validation plots to the run dir
 )
 
 print(f"Best mAP50-95: {results['best_mAP50_95']:.3f}")
 print(f"Best checkpoint: {results['best_checkpoint']}")`}</CodeBlock>
           <P>
-            After training completes, the model instance is automatically reloaded with the best weights so you can call <InlineCode>model(...)</InlineCode> immediately. YOLO9 segmentation training is supported via <InlineCode>LibreYOLO(&quot;LibreYOLO9c-seg.pt&quot;)</InlineCode>, but it is experimental in v1.3.0.
+            After training completes, the model instance is automatically reloaded with the best weights so you can call <InlineCode>model(...)</InlineCode> immediately. <InlineCode>freeze</InlineCode>, <InlineCode>cache</InlineCode>, <InlineCode>pretrained</InlineCode>, and <InlineCode>save_plots</InlineCode> are new in v1.3.0 and accepted across the trainer-backed families.
           </P>
 
           <SubHeading>RF-DETR - transformer flagship training</SubHeading>
@@ -2195,6 +2199,46 @@ results = model.train(
 )`}</CodeBlock>
           <P>
             RF-DETR has its own training signature (<InlineCode>batch_size</InlineCode>, <InlineCode>lr</InlineCode>, <InlineCode>output_dir</InlineCode>) but it uses LibreYOLO&apos;s dataset config loader. Pass a <InlineCode>data.yaml</InlineCode> for detection or segmentation; COCO/Roboflow-style annotation layouts can be referenced from that config.
+          </P>
+
+          <SubHeading>LoRA fine-tuning (RF-DETR)</SubHeading>
+          <P>
+            <SupportBadge variant="experimental">Experimental</SupportBadge>{' '}
+            <InlineCode>lora=True</InlineCode> injects LoRA adapters into the RF-DETR backbone for
+            low-VRAM fine-tuning. It requires the optional <InlineCode>peft</InlineCode> dependency
+            (<InlineCode>pip install &quot;libreyolo[lora]&quot;</InlineCode>) and is currently limited to
+            RF-DETR; other families raise a clear error rather than ignoring the flag.
+          </P>
+          <CodeBlock language="python">{`model = LibreYOLO("LibreRFDETRs.pt")
+results = model.train(data="data.yaml", epochs=50, lora=True)`}</CodeBlock>
+
+          <SubHeading>Experiment loggers</SubHeading>
+          <P>
+            New in v1.3.0: pass <InlineCode>loggers=</InlineCode> to stream metrics to TensorBoard,
+            MLflow, or Weights &amp; Biases. Accepts a name (<InlineCode>&quot;tensorboard&quot;</InlineCode>,{' '}
+            <InlineCode>&quot;mlflow&quot;</InlineCode>, <InlineCode>&quot;wandb&quot;</InlineCode>), a configured logger
+            instance, or an iterable mixing both. Each backend is an optional extra
+            (<InlineCode>libreyolo[tensorboard]</InlineCode>, <InlineCode>[mlflow]</InlineCode>,{' '}
+            <InlineCode>[wandb]</InlineCode>).
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
+from libreyolo.training.loggers import MLflowLogger
+
+model = LibreYOLO("LibreYOLO9c.pt")
+
+# By name
+model.train(data="coco128.yaml", loggers="tensorboard")
+
+# Mix configured instances and names
+model.train(
+    data="coco128.yaml",
+    loggers=[MLflowLogger(experiment_name="my-exp"), "tensorboard"],
+)`}</CodeBlock>
+          <P>
+            Loggers are a Python-API feature only. There is no CLI flag for them; the rest of the
+            new training knobs (<InlineCode>--task</InlineCode>, <InlineCode>--cache</InlineCode>,{' '}
+            <InlineCode>--lora</InlineCode>, <InlineCode>--freeze</InlineCode>,{' '}
+            <InlineCode>--save-plots</InlineCode>) are exposed on the CLI.
           </P>
 
           <SubHeading>Training results dict</SubHeading>
@@ -2317,7 +2361,7 @@ print(f"mAP50-95: {results['metrics/mAP50-95']:.3f}")`}</CodeBlock>
           {/* ────────────── EXPORT ────────────── */}
           <SectionHeading id="export" icon={Upload}>Export</SectionHeading>
           <P>
-            Export PyTorch models to ONNX, TorchScript, TensorRT, OpenVINO, NCNN, or CoreML for deployment. The heavily tested export and runtime-backend paths are single-GPU YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Other families and tasks are experimental.
+            Export PyTorch models to ONNX, TorchScript, TensorRT, OpenVINO, NCNN, CoreML, or (new in v1.3.0) TFLite for deployment. TensorRT now covers every model family. The heavily tested export paths remain single-GPU YOLO9 detection, RF-DETR detection, and RF-DETR segmentation.
           </P>
 
           <SubHeading>Quick export</SubHeading>
@@ -2337,20 +2381,23 @@ model.export(format="openvino")
 model.export(format="ncnn")
 
 # CoreML (.mlpackage, macOS runtime)
-model.export(format="coreml")`}</CodeBlock>
+model.export(format="coreml")
+
+# TFLite (RF-DETR detect/seg/pose + YOLO9 detect; experimental, needs Python 3.12+)
+model.export(format="tflite")`}</CodeBlock>
 
           <SubHeading>All export parameters</SubHeading>
           <CodeBlock language="python">{`path = model.export(
-    format="onnx",            # "onnx", "torchscript", "tensorrt", "openvino", "ncnn", or "coreml"
+    format="onnx",            # "onnx", "torchscript", "tensorrt", "openvino", "ncnn", "coreml", or "tflite"
     output_path="model.onnx", # output file (auto-generated if None)
-    imgsz=640,                # input resolution (default: model's native)
+    imgsz=640,                # input resolution (default: model's native); also accepts (h, w) for rectangular
     opset=None,               # ONNX opset (auto: 13, or 17 for wrappers that need it)
     simplify=True,            # run onnxsim graph simplification
-    dynamic=True,             # enable dynamic batch axis
+    dynamic=True,             # enable dynamic batch axis (ONNX); TFLite requires static shapes
     half=False,               # export in FP16
     batch=1,                  # batch size for static graph
     device=None,              # device to trace on (default: model's current device)
-    int8=False,               # INT8 quantization (TensorRT / OpenVINO only)
+    int8=False,               # INT8 quantization: TensorRT, OpenVINO, or ONNX (YOLO9 detection only)
     data=None,                # calibration dataset for INT8
     fraction=1.0,             # fraction of calibration data to use
     allow_download_scripts=False, # allow data.yaml download hooks during calibration
@@ -2362,13 +2409,64 @@ model.export(format="coreml")`}</CodeBlock>
     gpu_device=0,             # GPU device index for TensorRT
     trt_config=None,          # optional TensorRT YAML config path
     compute_units="all",      # CoreML routing: all, cpu_only, cpu_and_gpu, cpu_and_ne
-    nms=False,                # CoreML embedded NMS where supported
-    iou=0.45,                 # CoreML embedded NMS IoU threshold
-    conf=0.25,                # CoreML embedded NMS confidence threshold
+    nms=False,                # embed NMS in the graph (ONNX YOLO9 detection, or CoreML)
+    iou=0.45,                 # embedded-NMS IoU threshold
+    conf=0.25,                # embedded-NMS confidence threshold
+    max_det=300,              # embedded-NMS max detections (ONNX only)
     verbose=False,            # verbose logging
 )`}</CodeBlock>
           <P>
             OpenVINO INT8 export additionally requires <InlineCode>nncf</InlineCode>. NCNN export writes a directory containing <InlineCode>model.ncnn.param</InlineCode>, <InlineCode>model.ncnn.bin</InlineCode>, and <InlineCode>metadata.yaml</InlineCode>. CoreML export writes a <InlineCode>.mlpackage</InlineCode> bundle, requires <InlineCode>coremltools</InlineCode>, and does not support INT8.
+          </P>
+
+          <SubHeading>ONNX embedded NMS (YOLO9 detection)</SubHeading>
+          <P>
+            New in v1.3.0: pass <InlineCode>nms=True</InlineCode> to bake NMS into an exported ONNX
+            graph so the model emits final boxes directly. This is currently limited to the{' '}
+            <InlineCode>yolo9</InlineCode> family on the <InlineCode>detect</InlineCode> task (other
+            families/tasks raise). It forces a fixed batch-1 graph
+            (<InlineCode>dynamic=False</InlineCode>) and records{' '}
+            <InlineCode>nms</InlineCode> / <InlineCode>nms_conf</InlineCode> /{' '}
+            <InlineCode>nms_iou</InlineCode> / <InlineCode>max_det</InlineCode> in the ONNX metadata.
+          </P>
+          <CodeBlock language="python">{`model = LibreYOLO("LibreYOLO9c.pt")
+model.export(format="onnx", nms=True, conf=0.25, iou=0.45, max_det=300)`}</CodeBlock>
+          <P>
+            <InlineCode>int8=True</InlineCode> is now also supported for ONNX (in addition to
+            TensorRT and OpenVINO), again limited to YOLO9 detection; it needs a calibration{' '}
+            <InlineCode>data=</InlineCode> dataset.
+          </P>
+
+          <SubHeading>TFLite export</SubHeading>
+          <P>
+            <SupportBadge variant="experimental">Experimental</SupportBadge>{' '}
+            v1.3.0 adds a TFLite export path built on <InlineCode>onnx2tf</InlineCode>. It is
+            validated for RF-DETR detect / segment / pose and YOLO9 detect. It requires{' '}
+            <strong className="text-surface-800 dark:text-white">Python 3.12+</strong> (the{' '}
+            <InlineCode>onnx2tf 2.4.x</InlineCode> wheels do not target older Python) plus the
+            optional extra <InlineCode>libreyolo[tflite]</InlineCode>
+            (<InlineCode>onnx2tf&gt;=2.4.3</InlineCode>, onnx-graphsurgeon, onnx-simplifier). Export
+            is FP32 and static-shape only (no <InlineCode>half</InlineCode>,{' '}
+            <InlineCode>int8</InlineCode>, or <InlineCode>dynamic</InlineCode> yet).
+          </P>
+          <CodeBlock language="bash">{`pip install "libreyolo[tflite]"   # Python 3.12+`}</CodeBlock>
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
+
+model = LibreYOLO("LibreRFDETRs-seg.pt")
+model.export(format="tflite")   # writes a .tflite file`}</CodeBlock>
+          <P>
+            For RF-DETR, the exporter rewrites each GridSample node into a TFLite-safe bilinear
+            subgraph because onnx2tf&apos;s default lowering is numerically broken. In v1.3.0 the old
+            runtime monkeypatches against onnx2tf were removed now that{' '}
+            <InlineCode>onnx2tf&gt;=2.4.3</InlineCode> ships the RF-DETR fixes upstream; only the
+            static ONNX-graph rewrite remains.
+          </P>
+          <P>
+            <strong className="text-surface-800 dark:text-white">No TFLite runtime backend.</strong>{' '}
+            LibreYOLO cannot load or run a <InlineCode>.tflite</InlineCode> file; this format is
+            export-only. Run the exported model with a TF Lite runtime
+            (<InlineCode>ai-edge-litert</InlineCode> / <InlineCode>tflite-runtime</InlineCode>) on
+            your target device.
           </P>
 
           <SubHeading>ONNX metadata</SubHeading>
@@ -2376,7 +2474,7 @@ model.export(format="coreml")`}</CodeBlock>
           <DocTable
             headers={['Key', 'Example value']}
             rows={[
-              [<InlineCode key="v">libreyolo_version</InlineCode>, <InlineCode key="vv">&quot;1.2.0&quot;</InlineCode>],
+              [<InlineCode key="v">libreyolo_version</InlineCode>, <InlineCode key="vv">&quot;1.3.0&quot;</InlineCode>],
               [<InlineCode key="f">model_family</InlineCode>, <InlineCode key="fv">&quot;yolox&quot;</InlineCode>],
               [<InlineCode key="s">model_size</InlineCode>, <InlineCode key="sv">&quot;s&quot;</InlineCode>],
               [<InlineCode key="c">nb_classes</InlineCode>, <InlineCode key="cv">&quot;80&quot;</InlineCode>],
