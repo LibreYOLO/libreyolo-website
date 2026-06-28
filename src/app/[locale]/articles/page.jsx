@@ -1,13 +1,20 @@
-import Link from 'next/link'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getAllArticles } from '@/lib/articles'
+import { buildAlternates } from '@/i18n/metadata'
+import { Link } from '@/i18n/navigation'
 
-export const metadata = {
-  title: 'Articles',
-  description: 'Articles, tutorials, and news about LibreYOLO: MIT-licensed object detection, training tips, model releases, and computer vision guides.',
+export async function generateMetadata({ params }) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'Metadata' })
+  return {
+    title: t('articlesTitle'),
+    description: t('articlesDescription'),
+    alternates: buildAlternates('/articles', locale),
+  }
 }
 
-function formatDate(dateString) {
-  return new Date(dateString).toLocaleDateString('en-US', {
+function formatDate(dateString, locale) {
+  return new Date(dateString).toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US', {
     month: 'short',
     day: 'numeric',
   })
@@ -18,7 +25,10 @@ function readingTime(content = '') {
   return Math.max(1, Math.round(words / 200))
 }
 
-export default function Articles() {
+export default async function Articles({ params }) {
+  const { locale } = await params
+  setRequestLocale(locale)
+  const t = await getTranslations({ locale, namespace: 'Articles' })
   const articles = getAllArticles()
 
   return (
@@ -27,16 +37,21 @@ export default function Articles() {
         {/* Header */}
         <header className="mb-14 lg:mb-16">
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-surface-900 dark:text-white mb-4">
-            Articles
+            {t('title')}
           </h1>
           <p className="text-lg text-surface-500 dark:text-surface-400">
-            Tutorials and deep dives on running detection models with LibreYOLO.
+            {t('subtitle')}
           </p>
+          {locale === 'zh' && (
+            <p className="mt-3 text-sm text-surface-400 dark:text-surface-500">
+              {t('englishNote')}
+            </p>
+          )}
         </header>
 
         {/* Editorial list */}
         {articles.length === 0 ? (
-          <p className="text-surface-500">No articles yet. Check back soon.</p>
+          <p className="text-surface-500">{t('empty')}</p>
         ) : (
           <div className="divide-y divide-surface-200 dark:divide-white/10 border-t border-surface-200 dark:border-white/10">
             {articles.map((article) => (
@@ -46,7 +61,7 @@ export default function Articles() {
                     {article.title}
                   </h2>
                   <div className="mt-2 text-sm text-surface-400 dark:text-surface-500 font-mono">
-                    {formatDate(article.date)} &middot; {readingTime(article.content)} min read
+                    {formatDate(article.date, locale)} &middot; {t('minRead', { minutes: readingTime(article.content) })}
                   </div>
                   <p className="mt-3 text-surface-600 dark:text-surface-400 leading-relaxed">
                     {article.description}

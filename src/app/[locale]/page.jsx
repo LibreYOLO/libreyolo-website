@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
+import { Link } from '@/i18n/navigation'
 import {
   Unlock, Layers, ArrowRight,
   Code2, Scale, Copy, Check, CheckCircle2,
@@ -31,6 +32,8 @@ model = LibreYOLO("LibreYOLOXs.pt")
 results = model(SAMPLE_IMAGE, save=True)`
 
 function HeroSection() {
+  const t = useTranslations('Home')
+  const tc = useTranslations('Common')
   const [copied, setCopied] = useState(false)
 
   const handleCopy = () => {
@@ -54,10 +57,10 @@ function HeroSection() {
             variants={fadeInUp}
             className="text-[40px] leading-[1.05] sm:text-5xl sm:leading-tight md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-5 md:mb-6 mt-4 md:mt-0"
           >
-            <span className="text-surface-800 dark:text-white">Object Detection.</span>
+            <span className="text-surface-800 dark:text-white">{t('heroTitleLine1')}</span>
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-libre-500 via-libre-400 to-emerald-500">
-              100% MIT Licensed.
+              {t('heroTitleLine2')}
             </span>
           </motion.h1>
 
@@ -66,8 +69,8 @@ function HeroSection() {
             variants={fadeInUp}
             className="text-base sm:text-xl lg:text-2xl text-surface-600 dark:text-surface-400 max-w-3xl mx-auto mb-8 md:mb-10 leading-relaxed"
           >
-            Making YOLO accessible again, the way its creators always intended it to be.
-            <span className="hidden sm:inline text-surface-800 dark:text-white font-medium"> A modern, MIT-licensed engine for training and deploying state-of-the-art object detection.</span>
+            {t('heroSubA')}
+            <span className="hidden sm:inline text-surface-800 dark:text-white font-medium">{' '}{t('heroSubB')}</span>
           </motion.p>
 
           {/* CTAs */}
@@ -79,7 +82,7 @@ function HeroSection() {
               href="/docs"
               className="btn-primary group flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-libre-500 to-libre-600 rounded-xl text-white font-semibold text-base sm:text-lg"
             >
-              Get Started
+              {tc('getStarted')}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <a
@@ -89,7 +92,7 @@ function HeroSection() {
               className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-white dark:bg-white/5 hover:bg-surface-100 dark:hover:bg-white/10 border border-surface-300 dark:border-white/10 rounded-xl text-surface-800 dark:text-white font-medium text-base sm:text-lg transition-all shadow-sm dark:shadow-none"
             >
               <Code2 className="w-5 h-5 text-libre-500 dark:text-libre-400" />
-              View on GitHub
+              {t('viewGithub')}
             </a>
           </motion.div>
 
@@ -117,7 +120,7 @@ function HeroSection() {
                       aria-label="Copy code"
                     >
                       {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                      {copied ? 'Copied!' : 'Copy'}
+                      {copied ? t('copied') : t('copy')}
                     </button>
                   </div>
                   <pre className="text-left">
@@ -161,7 +164,7 @@ function HeroSection() {
                     <div className="flex items-center justify-between gap-3 px-4 py-3 bg-surface-100/70 dark:bg-surface-900/50">
                       <div className="flex items-center gap-2 min-w-0">
                         <div className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse flex-shrink-0" />
-                        <span className="text-emerald-600 dark:text-emerald-400 font-mono text-xs">Detected 1 object (person)</span>
+                        <span className="text-emerald-600 dark:text-emerald-400 font-mono text-xs">{t('detected')}</span>
                       </div>
                       <span className="text-surface-500 dark:text-surface-400 font-mono text-xs flex-shrink-0">0.023s</span>
                     </div>
@@ -190,7 +193,7 @@ function HeroSection() {
                       className="rounded-lg w-full"
                     />
                     <div className="mt-3 flex items-center justify-between text-xs">
-                      <span className="text-emerald-400 font-mono">&check; Detected 1 object (person)</span>
+                      <span className="text-emerald-400 font-mono">&check; {t('detected')}</span>
                       <span className="text-surface-500 font-mono">0.023s</span>
                     </div>
                   </div>
@@ -207,46 +210,10 @@ function HeroSection() {
 
 
 function SocialProofSection() {
+  const t = useTranslations('Home')
   const [carouselPage, setCarouselPage] = useState(0)
 
-  const testimonials = [
-    {
-      quote: "You have my hearty support for this. I'll be so happy when there is a good, community maintained, MIT licensed alternative to Ultralytics.",
-      author: "u/Covered_in_bees_",
-    },
-    {
-      quote: "This is so cool bro. If I see some place I can contribute, I will definitely do so!",
-      author: "u/FedStan",
-    },
-    {
-      quote: "This looks like a really good project, and I hope you are able to realize the full vision you seem to have for it. Very exciting.",
-      author: "u/CalmBet",
-    },
-    {
-      quote: "Nice work! I'll try it out this week and open issues/PRs.",
-      author: "u/InternationalMany6",
-    },
-    {
-      quote: "Looks pretty cool. It's good to see these sorts of developments.",
-      author: "u/HistoricalMistake681",
-    },
-    {
-      quote: "Thank you for sharing, this looks interesting.",
-      author: "u/nemesis1836",
-    },
-    {
-      quote: "Great initiative.",
-      author: "u/Outrageous_Sort_8993",
-    },
-    {
-      quote: "Good job! Are you hosting the models on HuggingFace?",
-      author: "u/Winners-magic",
-    },
-    {
-      quote: "Very nice, will add creating a node of it to my todo list.",
-      author: "u/dr_hamilton",
-    },
-  ]
+  const testimonials = t.raw('testimonials')
 
   const pageSize = 3
   const totalDesktopPages = Math.ceil(testimonials.length / pageSize)
@@ -273,7 +240,7 @@ function SocialProofSection() {
             r/computervision
           </span>
           <h2 className="text-[26px] leading-tight sm:text-4xl font-bold text-surface-900 dark:text-white">
-            What the Community Says
+            {t('communityTitle')}
           </h2>
         </motion.div>
 
@@ -363,7 +330,7 @@ function SocialProofSection() {
         </div>
 
         <p className="text-center text-surface-500 dark:text-surface-500 text-xs sm:text-sm mt-6 md:mt-8 max-w-lg mx-auto px-5">
-          LibreYOLO is a huge effort. Messages like these keep us going.
+          {t('communityFootnote')}
         </p>
       </div>
     </section>
@@ -372,41 +339,42 @@ function SocialProofSection() {
 
 
 function FeaturesSection() {
+  const t = useTranslations('Home')
   const features = [
     {
       icon: Unlock,
-      title: 'Truly MIT',
-      description: 'No AGPL anywhere in the dependency chain. Use it in closed-source products, SaaS, embedded systems.',
+      title: t('feature1Title'),
+      description: t('feature1Desc'),
       color: 'emerald'
     },
     {
       icon: Layers,
-      title: 'One API, three architectures',
-      description: 'YOLOX, YOLOv9, and RF-DETR behind a single LibreYOLO() call. Architecture, size, and class count auto-detected from weights.',
+      title: t('feature2Title'),
+      description: t('feature2Desc'),
       color: 'libre'
     },
     {
       icon: RefreshCw,
-      title: 'Batteries included',
-      description: 'Any input format: paths, URLs, PIL, NumPy, OpenCV, tensors, bytes. Tiled inference for large images. Auto-download weights from HuggingFace.',
+      title: t('feature3Title'),
+      description: t('feature3Desc'),
       color: 'cyan'
     },
     {
       icon: Code2,
-      title: 'Train',
-      description: 'Fine-tune on custom YOLO or COCO datasets with built-in augmentation, mixed precision, and early stopping. Resume from any checkpoint.',
+      title: t('feature4Title'),
+      description: t('feature4Desc'),
       color: 'amber'
     },
     {
       icon: CheckCircle2,
-      title: 'Validate',
-      description: 'COCO-standard evaluation with mAP50, mAP50-95, precision, and recall on COCO or custom datasets. Per-class metrics and confusion matrix out of the box.',
+      title: t('feature5Title'),
+      description: t('feature5Desc'),
       color: 'violet'
     },
     {
       icon: Upload,
-      title: 'Export & deploy',
-      description: 'One-line ONNX export with embedded metadata for easy deployment.',
+      title: t('feature6Title'),
+      description: t('feature6Desc'),
       color: 'rose'
     }
   ]
@@ -431,10 +399,12 @@ function FeaturesSection() {
           className="text-center mb-8 md:mb-12"
         >
           <h2 className="text-[28px] leading-tight sm:text-4xl lg:text-5xl font-bold text-surface-900 dark:text-white mb-3 md:mb-4">
-            One library, <span className="text-transparent bg-clip-text bg-gradient-to-r from-libre-500 to-emerald-500">the whole workflow</span>
+            {t.rich('featuresTitle', {
+              accent: (chunks) => <span className="text-transparent bg-clip-text bg-gradient-to-r from-libre-500 to-emerald-500">{chunks}</span>,
+            })}
           </h2>
           <p className="text-sm sm:text-lg text-surface-600 dark:text-surface-400 max-w-2xl mx-auto">
-            Train, validate, export, and deploy detection models from one permissive, MIT-licensed package.
+            {t('featuresSubtitle')}
           </p>
         </motion.div>
 
@@ -469,6 +439,7 @@ function FeaturesSection() {
 
 
 function DeployAnywhereSection() {
+  const t = useTranslations('Home')
   const exportFormats = [
     { name: 'ONNX', variants: ['FP32', 'FP16'] },
     { name: 'TensorRT', variants: ['FP32', 'FP16', 'INT8'] },
@@ -497,13 +468,15 @@ function DeployAnywhereSection() {
         >
           <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-libre-500/10 border border-libre-500/20 text-libre-600 text-xs font-medium mb-4">
             <Cpu className="w-3.5 h-3.5" />
-            Edge to Cloud
+            {t('deployBadge')}
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-surface-900 dark:text-white mb-4">
-            Deploy <span className="text-transparent bg-clip-text bg-gradient-to-r from-libre-500 to-emerald-500">Anywhere</span>
+            {t.rich('deployTitle', {
+              accent: (chunks) => <span className="text-transparent bg-clip-text bg-gradient-to-r from-libre-500 to-emerald-500">{chunks}</span>,
+            })}
           </h2>
           <p className="text-lg text-surface-600 dark:text-surface-400 max-w-2xl mx-auto">
-            Export once, run on any hardware. From $35 boards to datacenter GPUs.
+            {t('deploySubtitle')}
           </p>
         </motion.div>
 
@@ -514,7 +487,7 @@ function DeployAnywhereSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-sm font-semibold text-surface-500 uppercase tracking-wider mb-6">Export Formats</h3>
+            <h3 className="text-sm font-semibold text-surface-500 uppercase tracking-wider mb-6">{t('exportFormats')}</h3>
             <div className="space-y-3">
               {exportFormats.map((fmt) => (
                 <div
@@ -543,7 +516,7 @@ function DeployAnywhereSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-sm font-semibold text-surface-500 uppercase tracking-wider mb-6">Tested Hardware</h3>
+            <h3 className="text-sm font-semibold text-surface-500 uppercase tracking-wider mb-6">{t('testedHardware')}</h3>
             <div className="grid grid-cols-2 gap-4">
               {hardware.map((hw) => (
                 <div
@@ -582,13 +555,14 @@ function DeployAnywhereSection() {
 
 
 function ComparisonSection() {
+  const t = useTranslations('Home')
   const rows = [
-    { feature: 'Use in proprietary software', libre: true, ultra: false },
-    { feature: 'Sell products containing it', libre: true, ultra: false },
-    { feature: 'No source disclosure required', libre: true, ultra: false },
-    { feature: 'Fine-tune & keep weights private', libre: true, ultra: false },
-    { feature: 'Distill into a new model', libre: true, ultra: false },
-    { feature: 'Commercial use fee', libreText: 'None', ultraText: 'Required' },
+    { feature: t('compRow1'), libre: true, ultra: false },
+    { feature: t('compRow2'), libre: true, ultra: false },
+    { feature: t('compRow3'), libre: true, ultra: false },
+    { feature: t('compRow4'), libre: true, ultra: false },
+    { feature: t('compRow5'), libre: true, ultra: false },
+    { feature: t('compRow6'), libreText: t('compNone'), ultraText: t('compRequired') },
   ]
 
   return (
@@ -601,10 +575,12 @@ function ComparisonSection() {
           className="text-center mb-12"
         >
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-surface-900 dark:text-white mb-4">
-            LibreYOLO vs <span className="text-surface-400">Ultralytics</span>
+            {t.rich('comparisonTitle', {
+              muted: (chunks) => <span className="text-surface-400">{chunks}</span>,
+            })}
           </h2>
           <p className="text-lg text-surface-600 dark:text-surface-400 max-w-2xl mx-auto">
-            MIT means you own your work. No surprises.
+            {t('comparisonSubtitle')}
           </p>
         </motion.div>
 
@@ -655,6 +631,7 @@ function ComparisonSection() {
 
 
 function CTASection() {
+  const t = useTranslations('Home')
   return (
     <section className="relative py-16 lg:py-20 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-white dark:from-surface-950 to-surface-50 dark:to-surface-900/50" />
@@ -667,7 +644,9 @@ function CTASection() {
           viewport={{ once: true }}
         >
           <h2 className="text-[32px] leading-tight sm:text-4xl lg:text-5xl font-bold text-surface-900 dark:text-white mb-8 md:mb-10">
-            Start Building <span className="text-libre-500">Today</span>
+            {t.rich('ctaTitle', {
+              accent: (chunks) => <span className="text-libre-500">{chunks}</span>,
+            })}
           </h2>
 
           <div className="code-block rounded-xl max-w-md mx-auto mb-8 md:mb-10">
@@ -683,7 +662,7 @@ function CTASection() {
               href="/docs"
               className="btn-primary flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-libre-500 to-libre-600 rounded-xl text-white font-semibold"
             >
-              Read the Docs
+              {t('ctaReadDocs')}
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
@@ -691,14 +670,14 @@ function CTASection() {
               className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-white dark:bg-white/5 hover:bg-surface-100 dark:hover:bg-white/10 border border-surface-300 dark:border-white/10 rounded-xl text-surface-800 dark:text-white font-medium transition-all shadow-sm dark:shadow-none"
             >
               <Scale className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-              Commercial Guide
+              {t('ctaCommercialGuide')}
             </Link>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:flex-wrap items-center justify-center gap-4 sm:gap-6 mt-8 text-sm">
             <Link href="/models" className="text-surface-500 hover:text-libre-500 transition-colors flex items-center gap-1.5">
               <Layers className="w-4 h-4" />
-              Model Zoo
+              {t('ctaModelZoo')}
             </Link>
             <a
               href="https://visionanalysis.org"
@@ -707,7 +686,7 @@ function CTASection() {
               className="text-surface-500 hover:text-libre-500 transition-colors flex items-center gap-1.5"
             >
               <BarChart3 className="w-4 h-4" />
-              Benchmarks
+              {t('ctaBenchmarks')}
             </a>
           </div>
         </motion.div>

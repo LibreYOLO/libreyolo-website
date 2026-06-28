@@ -1,9 +1,16 @@
-export const metadata = {
-  title: 'Model Zoo',
-  description: 'Pre-trained YOLO weights with MIT licensing. Browse available models for object detection.',
+import { getTranslations } from 'next-intl/server'
+import { buildAlternates } from '@/i18n/metadata'
+
+export async function generateMetadata({ params }) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'Metadata' })
+  return {
+    title: t('modelsTitle'),
+    description: t('modelsDescription'),
+    alternates: buildAlternates('/models', locale),
+  }
 }
 
 export default function ModelsLayout({ children }) {
   return children
 }
-

@@ -6,7 +6,8 @@ import {
   Lock, Unlock, ArrowRight, Zap, Copy, Check, ChevronLeft, ChevronRight
 } from 'lucide-react'
 import { useState } from 'react'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 
 function CopyButton({ code }) {
   const [copied, setCopied] = useState(false)
@@ -102,10 +103,11 @@ function ImageCarousel({ images, accentColor = 'cyan' }) {
 }
 
 function HeroSection() {
+  const t = useTranslations('Science')
   return (
     <section className="relative pt-24 lg:pt-32 pb-16">
       <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl" />
-      
+
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -114,14 +116,15 @@ function HeroSection() {
         >
           <div className="flex items-center gap-2 text-violet-700 dark:text-violet-400 text-sm font-medium mb-4">
             <FlaskConical className="w-4 h-4" />
-            Research & Science
+            {t('heroBadge')}
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-surface-800 dark:text-white mb-6">
-            Built for <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">Discovery</span>
+            {t.rich('heroTitle', {
+              accent: (chunks) => <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">{chunks}</span>,
+            })}
           </h1>
           <p className="text-lg text-surface-600 dark:text-surface-400 leading-relaxed">
-            A codebase designed for researchers, not just users. Modify freely, inspect deeply, 
-            and publish without paying for the privilege.
+            {t('heroSubtitle')}
           </p>
         </motion.div>
       </div>
@@ -130,6 +133,7 @@ function HeroSection() {
 }
 
 function NoPaywallSection() {
+  const t = useTranslations('Science')
   return (
     <section className="py-12">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -144,34 +148,35 @@ function NoPaywallSection() {
               <Unlock className="w-8 h-8 text-violet-700 dark:text-violet-400" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-surface-800 dark:text-white mb-4">No "Research License" Required</h2>
+              <h2 className="text-2xl font-bold text-surface-800 dark:text-white mb-4">{t('noPaywallTitle')}</h2>
               <p className="text-surface-600 dark:text-surface-300 mb-6">
-                Some frameworks charge separate fees for "research" or "science" licenses just to
-                let you inspect the code without releasing your work. <strong className="text-surface-800 dark:text-white">LibreYOLO doesn't.</strong>
+                {t.rich('noPaywallIntro', {
+                  b: (chunks) => <strong className="text-surface-800 dark:text-white">{chunks}</strong>,
+                })}
               </p>
               
               <div className="grid sm:grid-cols-2 gap-6">
                 <div className="bg-surface-50 dark:bg-surface-900/50 rounded-xl p-5 border border-surface-200 dark:border-white/5">
                   <h3 className="text-surface-800 dark:text-white font-semibold mb-3 flex items-center gap-2">
                     <Lock className="w-4 h-4 text-red-400" />
-                    Typical "Science Licenses"
+                    {t('typicalTitle')}
                   </h3>
                   <ul className="space-y-2 text-sm text-surface-600 dark:text-surface-400">
                     <li className="flex items-start gap-2">
                       <XCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
-                      Pay to keep research private
+                      {t('typical1')}
                     </li>
                     <li className="flex items-start gap-2">
                       <XCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
-                      Fees for commercial R&D use
+                      {t('typical2')}
                     </li>
                     <li className="flex items-start gap-2">
                       <XCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
-                      Complex license tiers
+                      {t('typical3')}
                     </li>
                     <li className="flex items-start gap-2">
                       <XCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
-                      Legal review for publication
+                      {t('typical4')}
                     </li>
                   </ul>
                 </div>
@@ -179,24 +184,28 @@ function NoPaywallSection() {
                 <div className="bg-emerald-500/5 rounded-xl p-5 border border-emerald-500/20">
                   <h3 className="text-surface-800 dark:text-white font-semibold mb-3 flex items-center gap-2">
                     <Unlock className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                    LibreYOLO (MIT)
+                    {t('libreTitle')}
                   </h3>
                   <ul className="space-y-2 text-sm text-surface-600 dark:text-surface-400">
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span>Investigate freely, <strong className="text-emerald-600 dark:text-emerald-400">keep it private</strong></span>
+                      <span>
+                        {t.rich('libre1', {
+                          b: (chunks) => <strong className="text-emerald-600 dark:text-emerald-400">{chunks}</strong>,
+                        })}
+                      </span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
-                      Zero fees for any use case
+                      {t('libre2')}
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
-                      One simple license: MIT
+                      {t('libre3')}
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
-                      Publish without legal concerns
+                      {t('libre4')}
                     </li>
                   </ul>
                 </div>
@@ -210,6 +219,7 @@ function NoPaywallSection() {
 }
 
 function ExplainabilitySection() {
+  const t = useTranslations('Science')
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -221,14 +231,13 @@ function ExplainabilitySection() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-700 dark:text-violet-400 text-sm font-medium mb-4">
             <Eye className="w-4 h-4" />
-            Native Explainability
+            {t('explainBadge')}
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-surface-800 dark:text-white mb-4">
-            See Inside the Black Box
+            {t('explainTitle')}
           </h2>
           <p className="text-lg text-surface-600 dark:text-surface-400 max-w-2xl mx-auto">
-            Built-in tools for interpretability and explainability. No external dependencies,
-            no complex setup - just flags and function calls.
+            {t('explainSubtitle')}
           </p>
         </motion.div>
 
@@ -243,11 +252,10 @@ function ExplainabilitySection() {
               <div className="p-2 rounded-lg bg-cyan-500/10">
                 <Layers className="w-5 h-5 text-cyan-700 dark:text-cyan-400" />
               </div>
-              <h3 className="text-xl font-semibold text-surface-800 dark:text-white">Feature Map Extraction</h3>
+              <h3 className="text-xl font-semibold text-surface-800 dark:text-white">{t('featureMapTitle')}</h3>
             </div>
             <p className="text-surface-600 dark:text-surface-400 mb-6 max-w-2xl">
-              One flag. That's all it takes to save intermediate activations from every layer.
-              Perfect for understanding what your model "sees" at each stage.
+              {t('featureMapDesc')}
             </p>
 
             <div className="flex flex-col lg:flex-row items-stretch gap-0 max-w-5xl mx-auto">
@@ -332,14 +340,15 @@ results = model(image="parkour.jpg")
               <div className="p-2 rounded-lg bg-fuchsia-500/10">
                 <Brain className="w-5 h-5 text-fuchsia-700 dark:text-fuchsia-400" />
               </div>
-              <h3 className="text-xl font-semibold text-surface-800 dark:text-white">CAM Visualizations</h3>
+              <h3 className="text-xl font-semibold text-surface-800 dark:text-white">{t('camTitle')}</h3>
               <span className="px-2 py-1 rounded-md bg-amber-500/20 text-amber-400 text-xs font-medium">
-                Experimental
+                {t('experimentalBadge')}
               </span>
             </div>
             <p className="text-surface-600 dark:text-surface-400 mb-6 max-w-2xl">
-              7 built-in Class Activation Map methods. Call <code className="text-fuchsia-700 dark:text-fuchsia-400 font-mono text-sm">model.explain()</code> to
-              generate heatmaps showing what your model focuses on. This feature is experimental and results may vary.
+              {t.rich('camDesc', {
+                code: (chunks) => <code className="text-fuchsia-700 dark:text-fuchsia-400 font-mono text-sm">{chunks}</code>,
+              })}
             </p>
 
             <div className="max-w-2xl">
@@ -399,6 +408,7 @@ print(result["heatmap"].shape)`} />
 
 
 function ModificationSection() {
+  const t = useTranslations('Science')
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -411,12 +421,11 @@ function ModificationSection() {
             <div className="p-2 rounded-lg bg-fuchsia-500/10">
               <Zap className="w-5 h-5 text-fuchsia-700 dark:text-fuchsia-400" />
             </div>
-            <h2 className="text-2xl font-semibold text-surface-800 dark:text-white">Designed for Modification</h2>
+            <h2 className="text-2xl font-semibold text-surface-800 dark:text-white">{t('modifyTitle')}</h2>
           </div>
 
           <p className="text-surface-600 dark:text-surface-400 mb-8 max-w-3xl">
-            The codebase is written to be easy to read and modify. Want to test a new backbone?
-            Experiment with a custom attention mechanism? Add a novel loss function? Go for it.
+            {t('modifyDesc')}
           </p>
 
           <div className="max-w-2xl">
@@ -475,6 +484,7 @@ model.train(data="my_dataset.yaml")`} />
 }
 
 function CTASection() {
+  const t = useTranslations('Science')
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -486,11 +496,10 @@ function CTASection() {
         >
           <FlaskConical className="w-12 h-12 text-violet-700 dark:text-violet-400 mx-auto mb-6" />
           <h2 className="text-2xl lg:text-3xl font-bold text-surface-800 dark:text-white mb-4">
-            Start Your Research Today
+            {t('ctaTitle')}
           </h2>
           <p className="text-surface-600 dark:text-surface-400 mb-8 max-w-xl mx-auto">
-            No license fees. No paywalls. No restrictions on keeping your work private. 
-            Just install and start exploring.
+            {t('ctaDesc')}
           </p>
           
           <div className="code-block rounded-xl max-w-md mx-auto mb-8">
@@ -505,7 +514,7 @@ function CTASection() {
             href="/docs"
             className="btn-primary inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-xl text-white font-semibold"
           >
-            View Documentation
+            {t('ctaButton')}
             <ArrowRight className="w-5 h-5" />
           </Link>
         </motion.div>

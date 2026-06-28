@@ -1,9 +1,16 @@
-export const metadata = {
-  title: 'Commercial Guide',
-  description: 'How to use LibreYOLO in proprietary, closed-source commercial applications under the MIT license.',
+import { getTranslations } from 'next-intl/server'
+import { buildAlternates } from '@/i18n/metadata'
+
+export async function generateMetadata({ params }) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'Metadata' })
+  return {
+    title: t('commercialTitle'),
+    description: t('commercialDescription'),
+    alternates: buildAlternates('/commercial', locale),
+  }
 }
 
 export default function CommercialLayout({ children }) {
   return children
 }
-
