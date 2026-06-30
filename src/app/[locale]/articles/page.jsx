@@ -30,7 +30,8 @@ export default async function Articles({ params }) {
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'Articles' })
-  const articles = getAllArticles()
+  const articles = getAllArticles(locale)
+  const hasUntranslated = articles.some((article) => !article.translated)
 
   return (
     <div className="pt-28 lg:pt-36 pb-24">
@@ -43,7 +44,7 @@ export default async function Articles({ params }) {
           <p className="text-lg text-surface-500 dark:text-surface-400">
             {t('subtitle')}
           </p>
-          {locale === 'zh' && (
+          {locale === 'zh' && hasUntranslated && (
             <p className="mt-3 text-sm text-surface-400 dark:text-surface-500">
               {t('englishNote')}
             </p>

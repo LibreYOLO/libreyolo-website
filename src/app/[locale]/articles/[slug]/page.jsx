@@ -5,7 +5,16 @@ import rehypeRaw from 'rehype-raw'
 import { ArrowLeft, Calendar, User } from 'lucide-react'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getAllArticles, getArticleBySlug } from '@/lib/articles'
-import { buildEnglishOnlyAlternates, OG_IMAGE, SITE_URL } from '@/i18n/metadata'
+import {
+  buildAlternates,
+  buildEnglishOnlyAlternates,
+  localeUrl,
+  ogLocale,
+  localeHtmlLang,
+  OG_IMAGE,
+  SITE_URL,
+} from '@/i18n/metadata'
+import { routing } from '@/i18n/routing'
 import { Link } from '@/i18n/navigation'
 import ThemedEmbed from '@/components/ThemedEmbed'
 
@@ -14,20 +23,29 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-  const { slug } = await params
-  const article = getArticleBySlug(slug)
+  const { locale, slug } = await params
+  const article = getArticleBySlug(slug, locale)
   if (!article) return {}
+
+  const path = `/articles/${article.slug}`
+  // A translated article is indexed independently per locale (self-canonical +
+  // full hreflang). An untranslated one serves English under /zh too, so we
+  // consolidate it to the English canonical to avoid duplicate indexing.
+  const ogTarget = article.translated ? locale : routing.defaultLocale
 
   return {
     title: article.title,
     description: article.description,
     keywords: article.tags,
-    alternates: buildEnglishOnlyAlternates(`/articles/${article.slug}`),
+    alternates: article.translated
+      ? buildAlternates(path, locale)
+      : buildEnglishOnlyAlternates(path),
     openGraph: {
       title: article.title,
       description: article.description,
-      url: `${SITE_URL}/articles/${article.slug}`,
+      url: localeUrl(path, ogTarget),
       siteName: 'LibreYOLO',
+      locale: ogLocale(ogTarget),
       type: 'article',
       publishedTime: article.date,
       authors: [article.author],
@@ -102,7 +120,7 @@ const markdownComponents = {
 export default async function ArticlePage({ params }) {
   const { locale, slug } = await params
   setRequestLocale(locale)
-  const article = getArticleBySlug(slug)
+  const article = getArticleBySlug(slug, locale)
   if (!article) notFound()
   const t = await getTranslations({ locale, namespace: 'Articles' })
 
@@ -114,7 +132,8 @@ export default async function ArticlePage({ params }) {
     datePublished: article.date,
     author: { '@type': 'Person', name: article.author },
     publisher: { '@type': 'Organization', name: 'LibreYOLO', url: SITE_URL },
-    mainEntityOfPage: `${SITE_URL}/articles/${article.slug}`,
+    inLanguage: localeHtmlLang[article.translated ? locale : routing.defaultLocale],
+    mainEntityOfPage: localeUrl(`/articles/${article.slug}`, article.translated ? locale : routing.defaultLocale),
   }
 
   return (
@@ -146,7 +165,7 @@ export default async function ArticlePage({ params }) {
               {article.author}
             </span>
           </div>
-          {locale === 'zh' && (
+          {locale === 'zh' && !article.translated && (
             <p className="mt-4 text-sm text-surface-400 dark:text-surface-500">
               {t('englishNote')}
             </p>
