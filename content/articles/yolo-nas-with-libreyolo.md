@@ -14,7 +14,7 @@ YOLO-NAS posts some of the best accuracy-speed numbers of any real-time detector
   height="420"
   style="border:0;border-radius:12px;overflow:hidden"
   loading="lazy"
-  title="YOLO-NAS accuracy vs parameters — visionanalysis.org">
+  title="YOLO-NAS accuracy vs parameters - visionanalysis.org">
 </iframe>
 
 Getting YOLO-NAS running from the official repo (supergradients) takes a bit more work than it should:

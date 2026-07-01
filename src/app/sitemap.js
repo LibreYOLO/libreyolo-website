@@ -41,8 +41,6 @@ export default function sitemap() {
   const englishOnlyRoutes = [
     { path: '/docs/v1.3.0', priority: 0.9 },
     { path: '/docs/v1.2.0', priority: 0.7 },
-    { path: '/docs/librevlm', priority: 0.8 },
-    { path: '/docs/experimental', priority: 0.8 },
     { path: '/docs/v1.1.0', priority: 0.5 },
     { path: '/cursor-hackathon', priority: 0.4 },
   ].flatMap(({ path, priority }) => englishOnly(path, priority))

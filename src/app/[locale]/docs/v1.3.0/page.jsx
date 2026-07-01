@@ -8,7 +8,7 @@ import {
   GraduationCap, CheckCircle2, Upload, Cpu, FileCode, Wrench,
   Database, Copy, Check, Menu, X, ChevronRight,
   Sparkles, Tags, Video, Activity, Scissors, PersonStanding, Eye, SquareTerminal,
-  ShieldCheck, Mountain, MapPin,
+  ShieldCheck, Mountain, MapPin, Rotate3d, ScanSearch, Layers2, AlertTriangle,
 } from 'lucide-react'
 
 /* ─── Section metadata for sidebar ─── */
@@ -24,12 +24,15 @@ const sections = [
   { id: 'video-inference', title: 'Video Inference', icon: Video },
   { id: 'tracking', title: 'Tracking', icon: Activity },
   { id: 'segmentation', title: 'Segmentation', icon: Scissors },
+  { id: 'obb', title: 'Oriented Boxes (OBB)', icon: Rotate3d },
   { id: 'pose', title: 'Pose Estimation', icon: PersonStanding },
   { id: 'gaze', title: 'Gaze Estimation', icon: Eye },
+  { id: 'open-vocabulary', title: 'Open-Vocabulary Detection', icon: ScanSearch },
   { id: 'classification', title: 'Classification', icon: Tags },
   { id: 'depth', title: 'Depth Estimation', icon: Mountain },
   { id: 'point-localization', title: 'Point Localization', icon: MapPin },
   { id: 'training', title: 'Training', icon: GraduationCap },
+  { id: 'lora', title: 'LoRA / DoRA', icon: Layers2 },
   { id: 'validation', title: 'Validation', icon: CheckCircle2 },
   { id: 'export', title: 'Export', icon: Upload },
   { id: 'torchscript-inference', title: 'TorchScript Inference', icon: Cpu },
@@ -570,12 +573,47 @@ function SupportBadge({ variant = 'experimental', children }) {
   const styles = {
     validated: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300',
     experimental: 'border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300',
+    wip: 'border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-300',
   }
 
   return (
-    <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${styles[variant]}`}>
+    <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${styles[variant] || styles.experimental}`}>
       {children}
     </span>
+  )
+}
+
+const CALLOUT_STYLES = {
+  libre: {
+    wrap: 'border-libre-500/30 bg-libre-500/5 dark:bg-libre-500/10',
+    icon: 'text-libre-600 dark:text-libre-400',
+  },
+  emerald: {
+    wrap: 'border-emerald-500/30 bg-emerald-500/5 dark:bg-emerald-500/10',
+    icon: 'text-emerald-600 dark:text-emerald-400',
+  },
+  amber: {
+    wrap: 'border-amber-500/30 bg-amber-500/5 dark:bg-amber-500/10',
+    icon: 'text-amber-600 dark:text-amber-400',
+  },
+  rose: {
+    wrap: 'border-rose-500/30 bg-rose-500/5 dark:bg-rose-500/10',
+    icon: 'text-rose-600 dark:text-rose-400',
+  },
+}
+
+function Callout({ icon: Icon, tone = 'libre', title, children, className = '' }) {
+  const style = CALLOUT_STYLES[tone] || CALLOUT_STYLES.libre
+  return (
+    <div className={`my-6 rounded-xl border p-4 ${style.wrap} ${className}`}>
+      <div className="flex items-start gap-3">
+        {Icon && <Icon className={`w-5 h-5 mt-0.5 shrink-0 ${style.icon}`} />}
+        <div>
+          {title && <p className="font-semibold text-surface-900 dark:text-white mb-1">{title}</p>}
+          <div className="text-sm text-surface-600 dark:text-surface-400 space-y-2">{children}</div>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -632,9 +670,9 @@ function CompatibilityMatrix() {
       onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: 'yes', coreml: 'yes', tflite: 'exp',
     },
     {
-      family: 'RF-DETR', status: 'Validated detect + segment; pose / OBB preview',
+      family: 'RF-DETR', status: 'Validated detect, segment, and pose; OBB experimental',
       inference: 'yes', training: 'yes',
-      detect: 'yes', segment: 'yes', semantic: '', classify: '', pose: 'preview', obb: 'preview', depth: '', point: '', gaze: '',
+      detect: 'yes', segment: 'yes', semantic: '', classify: '', pose: 'yes', obb: 'exp', depth: '', point: '', gaze: '',
       onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: '', coreml: 'exp', tflite: 'exp',
     },
     {
@@ -781,7 +819,7 @@ function ValidationScopeCallout({ className = '' }) {
             The heavily tested path is detection, training and inference for YOLO9 and RF-DETR, including RF-DETR segmentation.
           </p>
           <p className="text-sm text-surface-600 dark:text-surface-400">
-            Other model families, tasks, and multi-GPU workflows are available but experimental.
+            For production we recommend starting with YOLO9 or RF-DETR.
           </p>
         </div>
       </div>
@@ -998,30 +1036,10 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
             </div>
           </div>
 
-          {/* ────────────── SPECIALIZED GUIDES ────────────── */}
-          <P>
-            Two companion guides go deeper on specialized topics: the{' '}
-            <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM guide</a>{' '}
-            covers open-vocabulary detection that wraps vision-language models like Qwen3-VL and Florence-2, and the{' '}
-            <a href="/docs/experimental" className="text-libre-600 dark:text-libre-400 hover:underline">experimental tasks guide</a>{' '}
-            covers additional experimental workflows, including LoRA / DoRA fine-tuning. Classification, oriented boxes, and pose are also documented in their own sections below.
-          </P>
-
           {/* ────────────── INTRODUCTION ────────────── */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <SectionHeading id="introduction" icon={BookOpen}>Introduction</SectionHeading>
             <ValidationScopeCallout />
-            <P>
-              LibreYOLO is an MIT-licensed computer-vision toolkit. v1.3.0 ships a broad catalogue across detection, segmentation, classification, depth and more, but the validated support surface is intentionally narrow:
-            </P>
-            <ul className="space-y-2 mb-4">
-              <FeatureItem><strong className="text-surface-800 dark:text-white">YOLO9 detection</strong> - the CNN path.</FeatureItem>
-              <FeatureItem><strong className="text-surface-800 dark:text-white">RF-DETR detection</strong> - the transformer path.</FeatureItem>
-              <FeatureItem><strong className="text-surface-800 dark:text-white">RF-DETR segmentation</strong> - the heavily tested segmentation path.</FeatureItem>
-            </ul>
-            <P>
-              We recommend those paths as the default choice for new projects because they receive the heaviest testing around detection, training and inference. Other supported families and tasks work through the same unified <InlineCode>LibreYOLO()</InlineCode> factory, but they are experimental in v1.3.0. Use them if you have a specific reason.
-            </P>
             <CodeBlock language="python">{`from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
 # Default: YOLO9 detection
@@ -1032,37 +1050,8 @@ print(f"Detected {len(result)} objects")
 print(result.boxes.xyxy)
 print(result.saved_path)`}</CodeBlock>
 
-            <SubHeading>Key features</SubHeading>
-            <ul className="space-y-2.5 mb-4">
-              <FeatureItem>Heavy testing and recommended defaults for YOLO9 detection, RF-DETR detection, and RF-DETR segmentation</FeatureItem>
-              <FeatureItem>Unified <InlineCode>LibreYOLO()</InlineCode> factory for checkpoints, exported artifacts, and runtime loading</FeatureItem>
-              <FeatureItem>Detection, segmentation, pose, and gaze tasks through one consistent API</FeatureItem>
-              <FeatureItem>Image, directory, and video inference (with optional tiled inference for large frames)</FeatureItem>
-              <FeatureItem>Built-in multi-object tracking via ByteTrack</FeatureItem>
-              <FeatureItem>ONNX, TorchScript, TensorRT, OpenVINO, NCNN, and CoreML export with embedded metadata, plus matching runtime backends</FeatureItem>
-              <FeatureItem>COCO-compatible validation with mAP metrics, plus segmentation and pose validators</FeatureItem>
-              <FeatureItem>Ultralytics-style <InlineCode>libreyolo</InlineCode> command-line tool for predict / train / val / export</FeatureItem>
-              <FeatureItem>Accepts any image format: file paths, URLs, PIL, NumPy, PyTorch tensors, raw bytes</FeatureItem>
-            </ul>
           </motion.div>
 
-          <SubHeading>Breaking changes in v1.3.0</SubHeading>
-          <ul className="space-y-2 my-4">
-            <FeatureItem>
-              <strong className="text-surface-800 dark:text-white">DAMO-YOLO removed</strong> with no alias:{' '}
-              <InlineCode>LibreDAMOYOLO</InlineCode> raises <InlineCode>AttributeError</InlineCode>, and DAMO-YOLO checkpoints are rejected on load.
-            </FeatureItem>
-            <FeatureItem>
-              <strong className="text-surface-800 dark:text-white">YOLO9 is detect-only.</strong> The{' '}
-              <InlineCode>-seg</InlineCode>, <InlineCode>-pose</InlineCode>, <InlineCode>-cls</InlineCode>, <InlineCode>-obb</InlineCode>, and <InlineCode>-sem</InlineCode> YOLO9 variants were removed.
-            </FeatureItem>
-            <FeatureItem>
-              <strong className="text-surface-800 dark:text-white">RF-DETR lost classify, semantic, and depth.</strong> Its tasks are now detect, segment, pose, and obb. Classification and semantic moved to the new <InlineCode>LibreDINOv2</InlineCode> family; depth moved to the new <InlineCode>LibreDepthAnythingV2</InlineCode> family.
-            </FeatureItem>
-            <FeatureItem>
-              <strong className="text-surface-800 dark:text-white">TFLite export needs Python 3.12+</strong> (onnx2tf wheel constraint). The onnx2tf floor was raised to <InlineCode>&gt;=2.4.3</InlineCode> and the old onnx2tf runtime patches were removed.
-            </FeatureItem>
-          </ul>
 
           <Divider />
 
@@ -1071,10 +1060,10 @@ print(result.saved_path)`}</CodeBlock>
           <P>
             Use this matrix as the quick v1.3.0 support map. <InlineCode>&#10003;</InlineCode>{' '}
             marks a validated path, <InlineCode>exp</InlineCode> is experimental,{' '}
-            <InlineCode>prev</InlineCode> is a research preview, and empty cells are
-            not currently supported. Only YOLO9 and RF-DETR detection (plus RF-DETR
-            segmentation) are heavily tested; everything else, including the new
-            classification, semantic, depth and point families, is experimental.
+            and empty cells are not currently supported. YOLO9 detection and
+            RF-DETR detection, segmentation, and pose are the heavily tested paths;
+            everything else, including the new classification, semantic, depth and
+            point families, is experimental.
           </P>
           <CompatibilityMatrix />
           <p className="text-sm text-surface-600 dark:text-surface-400 leading-relaxed mb-4">
@@ -1095,14 +1084,14 @@ print(result.saved_path)`}</CodeBlock>
               <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />Python 3.10+
             </li>
             <li className="flex items-center gap-2 text-surface-600 dark:text-surface-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />PyTorch 1.13+ and torchvision 0.11+
+              <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />PyTorch 2.4+ and torchvision 0.19+
             </li>
           </ul>
 
           <SubHeading>From PyPI</SubHeading>
           <CodeBlock language="bash">{`pip install libreyolo`}</CodeBlock>
           <P>
-            v1.3.0 is not yet on PyPI. Until it is published, use a source install for the features documented on this page.
+            v1.3.0 is on PyPI, so a plain pip install libreyolo installs the features documented on this page.
           </P>
 
           <SubHeading>From source</SubHeading>
@@ -1146,8 +1135,6 @@ pip install libreyolo[coreml]
 
 # L2CS gaze optional auto-download helper
 pip install libreyolo[gaze]
-# Optional parity with the upstream RetinaFace-based L2CS pipeline
-pip install libreyolo[gaze-retinaface]
 
 # Install every optional LibreYOLO extra
 pip install libreyolo[all]`}</CodeBlock>
@@ -1245,8 +1232,8 @@ model = LibreYOLO("LibreYOLO9c.pt")   # detection`}</CodeBlock>
 
           <ValidatedModelHeader title="RF-DETR - transformer flagship">
             <SupportBadge variant="validated">Recommended transformer path</SupportBadge>
-            <SupportBadge variant="validated">Heavily tested: detection, segmentation, training and inference</SupportBadge>
-            <SupportBadge>Research preview: pose, OBB</SupportBadge>
+            <SupportBadge variant="validated">Heavily tested: detection, segmentation, pose, training and inference</SupportBadge>
+            <SupportBadge>Experimental: OBB</SupportBadge>
             <SupportBadge>Experimental: multi-GPU</SupportBadge>
           </ValidatedModelHeader>
           <DocTable
@@ -1272,22 +1259,24 @@ model = LibreYOLO("LibreYOLO9c.pt")   # detection`}</CodeBlock>
             <a href="#segmentation" className="text-libre-600 dark:text-libre-400 hover:underline">Segmentation</a> section.
           </P>
           <P>
-            <SupportBadge>Research preview</SupportBadge>{' '}
+            <SupportBadge variant="validated">Supported</SupportBadge>{' '}
             <strong className="text-surface-800 dark:text-white">Pose:</strong>{' '}
             <Checkpoints names={['LibreRFDETRx-pose.pt']} link={false} /> (ported
             from RF-DETR v1.8.0 GroupPose; only size <InlineCode>x</InlineCode> at
-            576 ships).{' '}
+            576 ships).
+          </P>
+          <P>
+            <SupportBadge>Experimental</SupportBadge>{' '}
             <strong className="text-surface-800 dark:text-white">OBB:</strong>{' '}
             <Checkpoints names={['LibreRFDETRn-obb.pt', 'LibreRFDETRs-obb.pt', 'LibreRFDETRm-obb.pt', 'LibreRFDETRl-obb.pt']} link={false} />{' '}
-            (oriented boxes, uses detection input sizes). Treat both as research
-            previews, not validated paths.
+            (oriented boxes, uses detection input sizes).
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 model = LibreYOLO("LibreRFDETRs.pt")           # detect (validated)
 # model = LibreYOLO("LibreRFDETRs-seg.pt")     # segment (validated)
-# model = LibreYOLO("LibreRFDETRx-pose.pt")    # pose  (research preview)
-# model = LibreYOLO("LibreRFDETRn-obb.pt")     # obb   (research preview)`}</CodeBlock>
+# model = LibreYOLO("LibreRFDETRx-pose.pt")    # pose  (size x)
+# model = LibreYOLO("LibreRFDETRn-obb.pt")     # obb   (experimental)`}</CodeBlock>
 
           <SubHeading>Additional detection families</SubHeading>
           <P>
@@ -1423,8 +1412,8 @@ model = LibreYOLO("model_ncnn/")                # NCNN (directory)`}</CodeBlock>
               ['Detection', <InlineCode key="d">&quot;detect&quot;</InlineCode>, '(none - implicit)', 'most families (default)'],
               ['Instance segmentation', <InlineCode key="s">&quot;segment&quot;</InlineCode>, <InlineCode key="ss">-seg</InlineCode>, 'RF-DETR, EdgeCrafter'],
               ['Semantic segmentation', <InlineCode key="se">&quot;semantic&quot;</InlineCode>, <InlineCode key="ses">-sem</InlineCode>, 'DINOv2'],
-              ['Pose estimation', <InlineCode key="p">&quot;pose&quot;</InlineCode>, <InlineCode key="ps">-pose</InlineCode>, 'YOLO-NAS, EdgeCrafter, RF-DETR (preview)'],
-              ['Oriented boxes', <InlineCode key="o">&quot;obb&quot;</InlineCode>, <InlineCode key="os">-obb</InlineCode>, 'RF-DETR (preview)'],
+              ['Pose estimation', <InlineCode key="p">&quot;pose&quot;</InlineCode>, <InlineCode key="ps">-pose</InlineCode>, 'YOLO-NAS, EdgeCrafter, RF-DETR'],
+              ['Oriented boxes', <InlineCode key="o">&quot;obb&quot;</InlineCode>, <InlineCode key="os">-obb</InlineCode>, 'RF-DETR (experimental)'],
               ['Classification', <InlineCode key="c">&quot;classify&quot;</InlineCode>, <InlineCode key="cs">-cls</InlineCode>, 'MobileNetV4, ConvNeXt, EfficientNetV2, DINOv2'],
               ['Monocular depth', <InlineCode key="de">&quot;depth&quot;</InlineCode>, <InlineCode key="des">-depth</InlineCode>, 'Depth Anything V2'],
               ['Point localization', <InlineCode key="pt">&quot;point&quot;</InlineCode>, <InlineCode key="pts">-point</InlineCode>, 'FOMO'],
@@ -1461,7 +1450,7 @@ model = LibreYOLO("LibreYOLO9c.pt")  # task="detect"`}</CodeBlock>
             headers={['Family', 'v1.3.0 status', 'Default', 'Supported tasks']}
             rows={[
               [<strong key="y9">YOLO9</strong>, 'detect single-GPU heavily tested; multi-GPU experimental', 'detect', 'detect'],
-              [<strong key="rfd">RF-DETR</strong>, 'detect and segment single-GPU heavily tested; pose and OBB research preview', 'detect', 'detect, segment, pose, obb'],
+              [<strong key="rfd">RF-DETR</strong>, 'detect, segment, and pose single-GPU heavily tested; OBB experimental', 'detect', 'detect, segment, pose, obb'],
               ['YOLOX', 'experimental', 'detect', 'detect'],
               ['YOLO9-E2E', 'experimental', 'detect', 'detect'],
               ['YOLO-NAS', 'experimental', 'detect', 'detect, pose'],
@@ -1493,10 +1482,10 @@ LibreDINOv2n.pt          # semantic is DINOv2's default; -sem optional
 # Pose (-pose)
 LibreYOLONASn-pose.pt
 LibreECs-pose.pt
-LibreRFDETRx-pose.pt     # preview; size x only
+LibreRFDETRx-pose.pt     # pose; size x
 
 # Oriented boxes (-obb)
-LibreRFDETRn-obb.pt      # preview
+LibreRFDETRn-obb.pt      # obb; experimental
 
 # Classification (-cls)
 LibreMobileNetV4s-cls.pt
@@ -1913,12 +1902,69 @@ result.masks.numpy()`}</CodeBlock>
 
           <Divider />
 
+          {/* ────────────── ORIENTED BOXES (OBB) ────────────── */}
+          <SectionHeading id="obb" icon={Rotate3d}>Oriented Boxes (OBB)</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-5">
+            <SupportBadge variant="experimental">YOLO9: t, s, m, c</SupportBadge>
+            <SupportBadge variant="experimental">RF-DETR: n, s, m, l</SupportBadge>
+          </div>
+          <P>
+            Oriented boxes carry a rotation angle, which is what aerial imagery, documents, and densely packed scenes need. YOLO9 adds an angle branch to its detect head; RF-DETR adds a learnable angle embedding to its decoder.
+          </P>
+
+          <SubHeading>Inference and the OBB result</SubHeading>
+          <P>
+            Results expose an <InlineCode>obb</InlineCode> field. Angles are in <strong className="text-surface-800 dark:text-white">radians</strong>.
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
+
+model = LibreYOLO("LibreYOLO9t-obb.pt")
+r = model.predict("aerial.jpg")
+
+for i in range(len(r.obb.cls)):
+    cx, cy, w, h, angle = r.obb.xywhr[i]  # angle in radians
+    corners = r.obb.xyxyxyxy[i]           # 4 (x, y) corner points
+    conf, cls = r.obb.conf[i], r.obb.cls[i]`}</CodeBlock>
+          <DocTable
+            headers={['Field', 'Shape', 'Meaning']}
+            rows={[
+              [<InlineCode key="a">obb.xywhr</InlineCode>, 'N x 5', '[cx, cy, w, h, angle], angle in radians.'],
+              [<InlineCode key="b">obb.xyxyxyxy</InlineCode>, 'N x 4 x 2', 'Four corner points per box.'],
+              [<InlineCode key="c">obb.conf</InlineCode>, 'N', 'Confidence per box.'],
+              [<InlineCode key="d">obb.cls</InlineCode>, 'N', 'Class id per box.'],
+            ]}
+          />
+
+          <SubHeading>Dataset format and training</SubHeading>
+          <P>
+            OBB uses a standard detect-style data YAML, but labels are YOLO-OBB text files with <strong className="text-surface-800 dark:text-white">exactly nine fields</strong> per row: a class id followed by four normalized corner points. The angle is derived from the corners, not stored.
+          </P>
+          <CodeBlock language="text" filename="labels/aerial_001.txt">{`# class_id  x1 y1  x2 y2  x3 y3  x4 y4   (all normalized to [0, 1])
+0  0.51 0.32  0.66 0.38  0.62 0.55  0.47 0.49
+2  0.10 0.71  0.18 0.69  0.20 0.80  0.12 0.82`}</CodeBlock>
+          <P>
+            A plain detection checkpoint cannot be loaded directly into an OBB model. Going from detect to OBB is only allowed as a training warm-start: pass <InlineCode>pretrained=True</InlineCode> (YOLO9) or the explicit transfer flag on RF-DETR. Mosaic and mixup are disabled for OBB until corner-aware augmentation lands, and tiled inference is not supported.
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO9
+
+model = LibreYOLO9(None, size="t", task="obb")
+# Warm-start the backbone from a same-family detect checkpoint
+result = model.train(data="dota8.yaml", pretrained=True, epochs=100, imgsz=640)
+
+# CLI equivalent
+# libreyolo train model=LibreYOLO9t.pt data=dota8.yaml --task obb`}</CodeBlock>
+          <P>
+            Validation uses rotated-IoU AP, reported as mAP50 and mAP50-95 under the OBB metric group.
+          </P>
+
+          <Divider />
+
           {/* ────────────── POSE ESTIMATION ────────────── */}
           <SectionHeading id="pose" icon={PersonStanding}>Pose Estimation</SectionHeading>
           <P>
             Pose (human keypoint) estimation runs on <InlineCode>YOLO-NAS (-pose)</InlineCode>,{' '}
-            <InlineCode>EdgeCrafter (-pose)</InlineCode>, and, new in v1.3.0, an{' '}
-            <InlineCode>RF-DETR (-pose)</InlineCode> preview. Each pose model is single-class
+            <InlineCode>EdgeCrafter (-pose)</InlineCode>, and, new in v1.3.0,{' '}
+            <InlineCode>RF-DETR (-pose)</InlineCode>. Each pose model is single-class
             (&quot;person&quot;) with 17 COCO keypoints.
           </P>
 
@@ -1937,11 +1983,11 @@ print(result.boxes.xyxy)          # person boxes (N, 4)
 print(result.keypoints.xy.shape)  # (N, 17, 2) pixel coordinates`}</CodeBlock>
 
           <P>
-            <SupportBadge variant="experimental">Preview</SupportBadge>{' '}
+            <SupportBadge variant="validated">Supported</SupportBadge>{' '}
             RF-DETR pose ships a single checkpoint at size <InlineCode>x</InlineCode> only:{' '}
-            <InlineCode>LibreRFDETRx-pose.pt</InlineCode>. It is a research preview in v1.3.0.
+            <InlineCode>LibreRFDETRx-pose.pt</InlineCode>.
           </P>
-          <CodeBlock language="python">{`# RF-DETR pose preview (size x only)
+          <CodeBlock language="python">{`# RF-DETR pose (size x only)
 model = LibreYOLO("LibreRFDETRx-pose.pt")
 result = model("people.jpg")
 print(result.keypoints.xy.shape)  # (N, 17, 2)`}</CodeBlock>
@@ -1959,7 +2005,7 @@ result.keypoints.numpy()`}</CodeBlock>
           <CodeBlock language="python">{`model("people.jpg", save=True)  # draws boxes + skeleton`}</CodeBlock>
 
           <P>
-            Pose training is supported for YOLO-NAS; EdgeCrafter pose is currently inference-only. RF-DETR pose is a preview (size <InlineCode>x</InlineCode> only). YOLO9 is detect-only and ships no pose checkpoints.
+            Pose training is supported for YOLO-NAS; EdgeCrafter pose is currently inference-only. RF-DETR pose ships the size <InlineCode>x</InlineCode> checkpoint only. YOLO9 is detect-only and ships no pose checkpoints.
           </P>
 
           <Divider />
@@ -2003,6 +2049,238 @@ for i in range(len(result.gaze)):
           <P>
             From the CLI: <InlineCode>libreyolo predict model=LibreL2CSr50.pt source=portrait.jpg --face-detector path/to/face.pt</InlineCode>.
           </P>
+
+          <Divider />
+
+          {/* ────────────── OPEN-VOCABULARY DETECTION (LibreVLM) ────────────── */}
+          <SectionHeading id="open-vocabulary" icon={ScanSearch}>Open-Vocabulary Detection</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-5">
+            <SupportBadge variant="experimental">Inference only</SupportBadge>
+            <SupportBadge variant="experimental">Python API</SupportBadge>
+          </div>
+          <P>
+            A classic detector ships with a fixed list of classes baked into its head. <InlineCode>LibreVLM</InlineCode> throws that constraint away: it wraps modern instruction-tuned vision-language models, prompts them to emit bounding boxes, parses the generated text, and returns the same <InlineCode>Results</InlineCode> object you already use for YOLO9 and RF-DETR. The class list is just a list of words you supply at runtime, so adding a new category costs nothing and works zero-shot.
+          </P>
+          <ul className="space-y-2 mb-4">
+            <FeatureItem><strong className="text-surface-800 dark:text-white">Open vocabulary.</strong> Detect <InlineCode>&quot;pink car&quot;</InlineCode>, <InlineCode>&quot;license plate&quot;</InlineCode>, or <InlineCode>&quot;the small island&quot;</InlineCode> without ever training a head for them.</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">One factory, one contract.</strong> <InlineCode>LibreVLM(...)</InlineCode> returns the standard <InlineCode>Results</InlineCode> with <InlineCode>boxes.xyxy</InlineCode>, <InlineCode>boxes.cls</InlineCode>, <InlineCode>boxes.conf</InlineCode>, plus <InlineCode>.plot()</InlineCode> and <InlineCode>.save()</InlineCode>.</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">Swappable backends.</strong> Six model families behind one alias string, from a 230M Florence-2 to an 8B Qwen3-VL.</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">A raw escape hatch.</strong> <InlineCode>chat()</InlineCode> gives you free-form image question answering when you need more than boxes.</FeatureItem>
+          </ul>
+          <Callout icon={AlertTriangle} tone="amber" title="Inference-only tier">
+            <p>
+              LibreVLM is a Python-only inference tier: there is no training, validation, export, or CLI path yet, and confidence scores are placeholders. Read the limitations at the end of this section before you build on top of it.
+            </p>
+          </Callout>
+
+          <SubHeading>Installation</SubHeading>
+          <P>
+            LibreVLM lives behind the optional <InlineCode>vlm</InlineCode> extra. It pulls in a recent <InlineCode>transformers</InlineCode> and the helpers a couple of processors need.
+          </P>
+          <CodeBlock language="bash">{`pip install 'libreyolo[vlm]'`}</CodeBlock>
+          <P>
+            Weights download from the Hugging Face Hub on first use into a local <InlineCode>weights/</InlineCode> folder. A GPU is recommended for the larger backends, but every model also runs on CPU with <InlineCode>device=&quot;cpu&quot;</InlineCode>.
+          </P>
+
+          <SubHeading>Quickstart</SubHeading>
+          <P>
+            Construct a model, declare the words you care about, and predict. The default backend is Qwen3-VL-4B, the strongest detector in the tier and Apache-2.0 licensed.
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreVLM
+
+# Qwen3-VL-4B by default; weights autodownload on first use
+model = LibreVLM()
+
+# The vocabulary is just words. Any words.
+model.set_classes(["pink car", "wheel"])
+
+result = model.predict("street.jpg")
+
+print(result.boxes.xyxy)   # pixel [x1, y1, x2, y2]
+print(result.boxes.cls)    # ids into ["pink car", "wheel"]
+result.plot()              # same drawing helpers as any LibreYOLO model
+result.save("out.jpg")`}</CodeBlock>
+
+          <SubHeading>Supported backends</SubHeading>
+          <P>
+            Pick a backend with the alias you pass to <InlineCode>LibreVLM(...)</InlineCode>. A bare family name resolves to its default size. The strongest detectors are <strong className="text-surface-800 dark:text-white">Qwen3-VL</strong>, <strong className="text-surface-800 dark:text-white">LFM2-VL</strong>, and <strong className="text-surface-800 dark:text-white">Florence-2</strong>.
+          </P>
+          <DocTable
+            headers={['Family', 'Alias', 'Sizes (params)', 'License', 'Notes']}
+            rows={[
+              [
+                <strong key="q" className="text-surface-800 dark:text-white whitespace-nowrap">Qwen3-VL</strong>,
+                <code key="qa" className="font-mono text-xs">qwen3-vl-2b / -4b / -8b</code>,
+                '2B / 4B / 8B',
+                'Apache-2.0',
+                <span key="qn">Default and strongest. Recommended starting point.</span>,
+              ],
+              [
+                <strong key="l" className="text-surface-800 dark:text-white whitespace-nowrap">LFM2-VL</strong>,
+                <code key="la" className="font-mono text-xs">lfm2-vl-450m / -1.6b</code>,
+                '450M / 1.6B',
+                'LFM Open License',
+                <span key="ln">Edge sized, surprisingly strong small detector. Notice gated.</span>,
+              ],
+              [
+                <strong key="i" className="text-surface-800 dark:text-white whitespace-nowrap">InternVL3</strong>,
+                <code key="ia" className="font-mono text-xs">internvl3-1b / -2b / -8b</code>,
+                '1B / 2B / 8B',
+                'Qwen License',
+                <span key="in">Good grounding at 8B; small sizes are weak. Notice gated.</span>,
+              ],
+              [
+                <strong key="f" className="text-surface-800 dark:text-white whitespace-nowrap">Florence-2</strong>,
+                <code key="fa" className="font-mono text-xs">florence-2-base / -large</code>,
+                '0.23B / 0.77B',
+                'MIT',
+                <span key="fn">Purpose-built grounding model. Tight boxes, no <InlineCode>chat()</InlineCode>.</span>,
+              ],
+              [
+                <strong key="s" className="text-surface-800 dark:text-white whitespace-nowrap">SmolVLM2</strong>,
+                <code key="sa" className="font-mono text-xs">smolvlm2-500m / -2.2b</code>,
+                '500M / 2.2B',
+                'Apache-2.0',
+                <span key="sn">Tiny and fast; weaker detector. Good for quick trials.</span>,
+              ],
+              [
+                <strong key="k" className="text-surface-800 dark:text-white whitespace-nowrap">Kosmos-2</strong>,
+                <code key="ka" className="font-mono text-xs">kosmos-2</code>,
+                '~1.6B',
+                'MIT',
+                <span key="kn">2023 grounder. Coarser boxes, no <InlineCode>chat()</InlineCode>.</span>,
+              ],
+            ]}
+          />
+          <ul className="space-y-2 mb-4">
+            <FeatureItem><strong className="text-surface-800 dark:text-white">Best quality:</strong> <InlineCode>qwen3-vl-8b</InlineCode> or <InlineCode>qwen3-vl-4b</InlineCode> (the default).</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">Tight boxes, small footprint:</strong> <InlineCode>florence-2-large</InlineCode>.</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">Edge / CPU:</strong> <InlineCode>lfm2-vl-450m</InlineCode> or <InlineCode>smolvlm2-500m</InlineCode>.</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">Fully permissive license:</strong> any Qwen3-VL, SmolVLM2, Florence-2 or Kosmos-2 size.</FeatureItem>
+          </ul>
+          <Callout icon={ShieldCheck} tone="emerald" title="Licensing">
+            <p>
+              Qwen3-VL and SmolVLM2 are Apache-2.0; Florence-2 and Kosmos-2 are MIT. LFM2-VL and InternVL3 carry non-OSI licenses and emit a one-time notice before their first download, so you can make an informed choice for commercial use.
+            </p>
+          </Callout>
+
+          <SubHeading>Setting the vocabulary</SubHeading>
+          <P>
+            The vocabulary is the heart of open-vocabulary detection. Call <InlineCode>set_classes()</InlineCode> with a list of label strings. It is sticky: it persists across every later <InlineCode>predict()</InlineCode> and <InlineCode>track()</InlineCode> call until you set it again. It returns <InlineCode>self</InlineCode>, so it chains.
+          </P>
+          <CodeBlock language="python">{`# Sticky and chainable
+model = LibreVLM("qwen3-vl-2b").set_classes(["person", "dog", "cat"])
+
+# Set it once at construction instead
+model = LibreVLM("lfm2-vl-450m", names=["boat"], device="cpu")
+
+# Re-set any time to change what you are looking for
+model.set_classes(["a red car", "a blue truck"])`}</CodeBlock>
+          <P>
+            Labels can be any phrase. They must be unique case-insensitively, and you must pass a list, not a bare string. If you never call <InlineCode>set_classes()</InlineCode>, the model falls back to the COCO-80 vocabulary so a bare <InlineCode>predict()</InlineCode> still does something sensible.
+          </P>
+
+          <SubHeading>Prediction and results</SubHeading>
+          <P>
+            <InlineCode>predict()</InlineCode> (and the equivalent <InlineCode>model(...)</InlineCode> call) accepts the same source types as any LibreYOLO detector: a path, a PIL image, a numpy array, a URL, a folder, or a video. <InlineCode>stream=True</InlineCode> and <InlineCode>track()</InlineCode> work too.
+          </P>
+          <CodeBlock language="python">{`result = model.predict(
+    source="image.jpg",  # path | PIL | ndarray | URL | folder | video
+    conf=0.25,           # see note below: scoring is synthetic
+    classes=[0],         # optional: keep only these vocabulary ids
+    max_det=300,
+)`}</CodeBlock>
+          <DocTable
+            headers={['Field', 'Shape / type', 'Meaning']}
+            rows={[
+              [<InlineCode key="a">result.boxes.xyxy</InlineCode>, 'N x 4', 'Pixel boxes [x1, y1, x2, y2], scaled to the original image.'],
+              [<InlineCode key="b">result.boxes.cls</InlineCode>, 'N', 'Class ids indexing into your set_classes() vocabulary.'],
+              [<InlineCode key="c">result.boxes.conf</InlineCode>, 'N', 'Synthetic confidence: 1.0 for every box (see Limitations).'],
+              [<InlineCode key="d">result.plot() / .save()</InlineCode>, '-', 'The usual drawing and saving helpers.'],
+            ]}
+          />
+          <P>
+            Under the hood, LibreVLM tolerantly parses the model output (handling markdown fences, stray prose, duplicated boxes, and truncated arrays), maps free-text labels back to your class ids, and drops any label that is not in your vocabulary. That last step is what makes a free-form generator behave like a closed-set detector.
+          </P>
+
+          <SubHeading>Examples</SubHeading>
+          <CodeBlock language="python">{`from libreyolo import LibreVLM
+
+# Detect a specific colored object
+model = LibreVLM("qwen3-vl-4b")
+model.set_classes(["red car"])
+result = model.predict("parking_lot.jpg")
+print(f"Found {len(result.boxes.cls)} red car(s)")
+result.save("red_cars.jpg")`}</CodeBlock>
+          <CodeBlock language="python">{`# Tight boxes with Florence-2 (a purpose-built grounder)
+model = LibreVLM("florence-2-large")
+model.set_classes(["a red car", "license plate"])
+result = model.predict("car.jpg")
+result.plot()`}</CodeBlock>
+          <CodeBlock language="python">{`# Run on CPU with a built-in sample image
+from libreyolo import LibreVLM, SAMPLE_IMAGE
+
+model = LibreVLM("lfm2-vl-450m", device="cpu")
+# No set_classes() -> falls back to the COCO-80 vocabulary
+result = model.predict(SAMPLE_IMAGE)
+print(model.names[result.boxes.cls[0]])  # e.g. "person"`}</CodeBlock>
+          <CodeBlock language="python">{`# Batches, folders, and video
+model = LibreVLM().set_classes(["forklift", "pallet"])
+
+# A whole folder
+for result in model.predict("warehouse_frames/", stream=True):
+    result.save()
+
+# A video file (frames are processed one at a time)
+model.predict("warehouse.mp4", save=True)`}</CodeBlock>
+
+          <SubHeading>Raw chat</SubHeading>
+          <P>
+            Sometimes you want the model, not the detector. The chat-template families expose <InlineCode>chat()</InlineCode>, which takes an image and a free-form prompt and returns the decoded text verbatim. Use it for counting, captioning, or quick visual questions.
+          </P>
+          <CodeBlock language="python">{`model = LibreVLM("qwen3-vl-4b")
+
+answer = model.chat("harbor.jpg", "How many boats are docked? Answer with a number.")
+print(answer)`}</CodeBlock>
+          <Callout icon={AlertTriangle} tone="amber">
+            <p>
+              <InlineCode>chat()</InlineCode> is available on the chat-template families (Qwen3-VL, LFM2-VL, SmolVLM2, InternVL3). Florence-2 and Kosmos-2 are task-token grounders and raise <InlineCode>NotImplementedError</InlineCode>; use <InlineCode>predict()</InlineCode> with them.
+            </p>
+          </Callout>
+
+          <SubHeading>How backends differ</SubHeading>
+          <P>
+            Every family returns the same <InlineCode>Results</InlineCode>, but they reach it differently. The chat families are prompted for a JSON array of boxes; the grounders use dedicated task tokens.
+          </P>
+          <DocTable
+            headers={['Family', 'Prompting', 'Coordinate space', 'chat()']}
+            rows={[
+              ['Qwen3-VL', 'JSON box prompt', '0 to 1000, rescaled', 'Yes'],
+              ['LFM2-VL', 'JSON box prompt', 'Normalized 0 to 1', 'Yes'],
+              ['SmolVLM2', 'JSON box prompt', 'Normalized 0 to 1', 'Yes'],
+              ['InternVL3', 'JSON box prompt', '0 to 1000, rescaled', 'Yes'],
+              ['Florence-2', 'Task token', 'Native pixels', 'No'],
+              ['Kosmos-2', 'Grounding prompt', 'Normalized, rescaled', 'No'],
+            ]}
+          />
+          <P>
+            For the chat families you can override the detection prompt with the <InlineCode>prompt=</InlineCode> constructor argument, and cap generation length with <InlineCode>max_new_tokens=</InlineCode>. Device and dtype are resolved automatically: bf16 or fp16 on CUDA, fp32 on CPU.
+          </P>
+
+          <SubHeading>Limitations</SubHeading>
+          <ul className="space-y-2 mb-4">
+            <FeatureItem><strong className="text-surface-800 dark:text-white">Synthetic confidence.</strong> Every box is scored 1.0. The <InlineCode>conf=</InlineCode> filter therefore behaves as all-or-nothing rather than a real threshold.</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">No mAP / validation.</strong> <InlineCode>val()</InlineCode> raises, because synthetic scores would make COCO mAP misleading.</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">No training or export.</strong> <InlineCode>train()</InlineCode> and <InlineCode>export()</InlineCode> raise. Fine-tune the VLM upstream and load the resulting weights instead.</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">Tracking is degraded.</strong> <InlineCode>track()</InlineCode> runs, but uniform scores make the tracker&apos;s low-confidence recovery stage inert.</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">One image at a time.</strong> Generation is sequential in v1, so larger <InlineCode>batch=</InlineCode> values give no speedup.</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">Python API only.</strong> The <InlineCode>libreyolo</InlineCode> CLI does not resolve VLM aliases yet.</FeatureItem>
+          </ul>
+          <Callout icon={Eye} tone="libre" title="Where it shines">
+            <p>
+              Use LibreVLM when the class set is open ended, changes often, or is hard to label up front: rapid prototyping, long-tail or rare categories, and &quot;find the thing I describe in words&quot; workflows. When you need calibrated confidence, throughput, or a deployable artifact, train a closed-vocabulary YOLO9 or RF-DETR with the <a href="#training" className="text-libre-600 dark:text-libre-400 hover:underline">Training</a> section above.
+            </p>
+          </Callout>
 
           <Divider />
 
@@ -2217,7 +2495,7 @@ print(points.cls, points.conf)`}</CodeBlock>
           <SectionHeading id="training" icon={GraduationCap}>Training</SectionHeading>
           <ValidationScopeCallout />
           <P>
-            The heavily tested training paths are single-GPU YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Other model-family trainers and multi-GPU workflows are available but experimental. YOLO9 is detect-only in v1.3.0, so there is no YOLO9 segmentation or pose training.
+            The heavily tested training paths are single-GPU YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Other model-family trainers and multi-GPU workflows are also available, though less extensively tested. YOLO9 is detect-only in v1.3.0, so there is no YOLO9 segmentation or pose training.
           </P>
 
           <SubHeading>YOLO9 - CNN flagship training</SubHeading>
@@ -2382,6 +2660,48 @@ model.train(data="coco128.yaml", epochs=300, batch=16)`}</CodeBlock>
 
           <Divider />
 
+          {/* ────────────── LoRA / DoRA ────────────── */}
+          <SectionHeading id="lora" icon={Layers2}>LoRA / DoRA Fine-Tuning</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-5">
+            <SupportBadge variant="experimental">RF-DETR: n, s, m, l</SupportBadge>
+          </div>
+          <P>
+            LoRA-style adapters let you fine-tune RF-DETR&apos;s transformer backbone by training a small set of low-rank matrices while the base weights stay frozen. That cuts optimizer and gradient memory, which is ideal for adapting a strong checkpoint to a new domain on modest hardware.
+          </P>
+
+          <SubHeading>Enabling it</SubHeading>
+          <P>
+            The whole public API is a single flag on <InlineCode>train()</InlineCode>. There are no rank, alpha, or target-module knobs to tune; the recipe is fixed to a well-tested configuration. Under the hood the implementation uses <strong className="text-surface-800 dark:text-white">DoRA</strong> (weight-decomposed LoRA, rank 16) applied to the DINOv2 attention query, key, and value projections.
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
+
+model = LibreYOLO("rf-detr-nano.pth")   # sizes n, s, m, l
+result = model.train(
+    data="data.yaml",
+    lora=True,        # DoRA on the frozen DINOv2 backbone
+    epochs=100, batch_size=4, lr=1e-4,
+)
+
+# Resume: LoRA is auto-detected from the checkpoint, no need to repeat the flag
+model.train(data="data.yaml", resume=True)`}</CodeBlock>
+          <CodeBlock language="bash">{`# CLI equivalent
+libreyolo train --model rf-detr-nano.pth --data data.yaml --lora`}</CodeBlock>
+
+          <SubHeading>Checkpoints and export</SubHeading>
+          <ul className="space-y-2 mb-4">
+            <FeatureItem>Training checkpoints keep the adapter tensors, and the config records that LoRA was used, so loading and resuming rebuild the adapter graph automatically.</FeatureItem>
+            <FeatureItem>The detection head always stays trainable, so you can still adapt to a new class count.</FeatureItem>
+            <FeatureItem><InlineCode>export()</InlineCode> merges the adapters back into dense weights. Exported models are plain and carry no <InlineCode>peft</InlineCode> dependency.</FeatureItem>
+            <FeatureItem>LoRA is RF-DETR only; passing <InlineCode>lora=True</InlineCode> to other families raises a clear error.</FeatureItem>
+          </ul>
+          <Callout icon={ShieldCheck} tone="emerald" title="Install extra">
+            <p>
+              LoRA training needs the adapter dependency: <InlineCode>pip install &quot;libreyolo[lora]&quot;</InlineCode>, which pulls in the RF-DETR stack and <InlineCode>peft</InlineCode>. Exported (merged) models do not need it at inference time.
+            </p>
+          </Callout>
+
+          <Divider />
+
           {/* ────────────── VALIDATION ────────────── */}
           <SectionHeading id="validation" icon={CheckCircle2}>Validation</SectionHeading>
           <P>
@@ -2447,7 +2767,7 @@ print(f"mAP50-95: {results['metrics/mAP50-95']:.3f}")`}</CodeBlock>
           {/* ────────────── EXPORT ────────────── */}
           <SectionHeading id="export" icon={Upload}>Export</SectionHeading>
           <P>
-            Export PyTorch models to ONNX, TorchScript, TensorRT, OpenVINO, NCNN, CoreML, or (new in v1.3.0) TFLite for deployment. TensorRT now covers every model family. The heavily tested export paths remain single-GPU YOLO9 detection, RF-DETR detection, and RF-DETR segmentation.
+            Export PyTorch models to ONNX, TorchScript, TensorRT, OpenVINO, NCNN, CoreML, or (new in v1.3.0) TFLite for deployment. The heavily tested export paths are single-GPU YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Some newer families, including DINOv2, Depth Anything V2, SAM, VLM, and L2CS, do not support export yet.
           </P>
 
           <SubHeading>Quick export</SubHeading>
@@ -3348,12 +3668,15 @@ const sectionsZh = [
   { id: 'video-inference', title: '视频推理', icon: Video },
   { id: 'tracking', title: '跟踪', icon: Activity },
   { id: 'segmentation', title: '分割', icon: Scissors },
+  { id: 'obb', title: '旋转框 (OBB)', icon: Rotate3d },
   { id: 'pose', title: '姿态估计', icon: PersonStanding },
   { id: 'gaze', title: '视线估计', icon: Eye },
+  { id: 'open-vocabulary', title: '开放词表检测', icon: ScanSearch },
   { id: 'classification', title: '分类', icon: Tags },
   { id: 'depth', title: '深度估计', icon: Mountain },
   { id: 'point-localization', title: '点定位', icon: MapPin },
   { id: 'training', title: '训练', icon: GraduationCap },
+  { id: 'lora', title: 'LoRA / DoRA', icon: Layers2 },
   { id: 'validation', title: '验证', icon: CheckCircle2 },
   { id: 'export', title: '导出', icon: Upload },
   { id: 'torchscript-inference', title: 'TorchScript 推理', icon: Cpu },
@@ -3444,7 +3767,7 @@ function ValidationScopeCalloutZh({ className = '' }) {
             经过充分测试的路径是 YOLO9 和 RF-DETR 的检测、训练与推理，包括 RF-DETR 分割。
           </p>
           <p className="text-sm text-surface-600 dark:text-surface-400">
-            其他模型系列、任务以及多 GPU 工作流均可使用，但仍属实验性。
+            在生产环境中，我们建议从 YOLO9 或 RF-DETR 开始。
           </p>
         </div>
       </div>
@@ -3479,9 +3802,9 @@ function CompatibilityMatrixZh() {
       onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: 'yes', coreml: 'yes', tflite: 'exp',
     },
     {
-      family: 'RF-DETR', status: '已验证 detect + segment；pose / OBB 预览',
+      family: 'RF-DETR', status: '已验证 detect、segment 和 pose；OBB 实验性',
       inference: 'yes', training: 'yes',
-      detect: 'yes', segment: 'yes', semantic: '', classify: '', pose: 'preview', obb: 'preview', depth: '', point: '', gaze: '',
+      detect: 'yes', segment: 'yes', semantic: '', classify: '', pose: 'yes', obb: 'exp', depth: '', point: '', gaze: '',
       onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: '', coreml: 'exp', tflite: 'exp',
     },
     {
@@ -3742,30 +4065,10 @@ function DocsPageZh({ version = 'v1.3.0', isLatest = true }) {
             </div>
           </div>
 
-          {/* ────────────── SPECIALIZED GUIDES ────────────── */}
-          <P>
-            两份配套指南更深入地介绍专门主题：{' '}
-            <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM 指南</a>{' '}
-            介绍封装 Qwen3-VL、Florence-2 等视觉语言模型的开放词表检测；{' '}
-            <a href="/docs/experimental" className="text-libre-600 dark:text-libre-400 hover:underline">实验性任务指南</a>{' '}
-            介绍更多实验性工作流，包括 LoRA / DoRA 微调。分类、旋转框和姿态也在下文各自的章节中有文档说明。
-          </P>
-
           {/* ────────────── INTRODUCTION ────────────── */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <SectionHeading id="introduction" icon={BookOpen}>简介</SectionHeading>
             <ValidationScopeCalloutZh />
-            <P>
-              LibreYOLO 是一个采用 MIT 许可的计算机视觉工具包。v1.3.0 提供了涵盖检测、分割、分类、深度等的广泛模型目录，但其经过验证的支持范围是有意收窄的：
-            </P>
-            <ul className="space-y-2 mb-4">
-              <FeatureItem><strong className="text-surface-800 dark:text-white">YOLO9 检测</strong> - CNN 路径。</FeatureItem>
-              <FeatureItem><strong className="text-surface-800 dark:text-white">RF-DETR 检测</strong> - transformer 路径。</FeatureItem>
-              <FeatureItem><strong className="text-surface-800 dark:text-white">RF-DETR 分割</strong> - 经过充分测试的分割路径。</FeatureItem>
-            </ul>
-            <P>
-              我们建议将这些路径作为新项目的默认选择，因为它们在检测、训练与推理方面经过了最充分的测试。其他受支持的系列和任务通过同一个统一的 <InlineCode>LibreYOLO()</InlineCode> 工厂工作，但在 v1.3.0 中属于实验性。如果你有特定理由，可以使用它们。
-            </P>
             <CodeBlock language="python">{`from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
 # Default: YOLO9 detection
@@ -3776,37 +4079,8 @@ print(f"Detected {len(result)} objects")
 print(result.boxes.xyxy)
 print(result.saved_path)`}</CodeBlock>
 
-            <SubHeading>核心特性</SubHeading>
-            <ul className="space-y-2.5 mb-4">
-              <FeatureItem>对 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割进行了充分测试并作为推荐默认项</FeatureItem>
-              <FeatureItem>统一的 <InlineCode>LibreYOLO()</InlineCode> 工厂，用于加载检查点、导出产物和运行时</FeatureItem>
-              <FeatureItem>通过一致的 API 完成检测、分割、姿态和视线任务</FeatureItem>
-              <FeatureItem>支持图像、目录和视频推理（大尺寸帧可选分块推理）</FeatureItem>
-              <FeatureItem>通过 ByteTrack 内置多目标跟踪</FeatureItem>
-              <FeatureItem>ONNX、TorchScript、TensorRT、OpenVINO、NCNN 和 CoreML 导出，内嵌元数据，并配有相应的运行时后端</FeatureItem>
-              <FeatureItem>兼容 COCO 的验证，提供 mAP 指标，并包含分割和姿态验证器</FeatureItem>
-              <FeatureItem>Ultralytics 风格的 <InlineCode>libreyolo</InlineCode> 命令行工具，用于 predict / train / val / export</FeatureItem>
-              <FeatureItem>接受任意图像格式：文件路径、URL、PIL、NumPy、PyTorch 张量、原始字节</FeatureItem>
-            </ul>
           </motion.div>
 
-          <SubHeading>v1.3.0 中的重大变更</SubHeading>
-          <ul className="space-y-2 my-4">
-            <FeatureItem>
-              <strong className="text-surface-800 dark:text-white">DAMO-YOLO 已移除</strong>，且无别名：{' '}
-              <InlineCode>LibreDAMOYOLO</InlineCode> 会抛出 <InlineCode>AttributeError</InlineCode>，加载 DAMO-YOLO 检查点时会被拒绝。
-            </FeatureItem>
-            <FeatureItem>
-              <strong className="text-surface-800 dark:text-white">YOLO9 仅支持检测。</strong>{' '}
-              <InlineCode>-seg</InlineCode>、<InlineCode>-pose</InlineCode>、<InlineCode>-cls</InlineCode>、<InlineCode>-obb</InlineCode> 和 <InlineCode>-sem</InlineCode> 的 YOLO9 变体已移除。
-            </FeatureItem>
-            <FeatureItem>
-              <strong className="text-surface-800 dark:text-white">RF-DETR 移除了 classify、semantic 和 depth。</strong> 它现在的任务是 detect、segment、pose 和 obb。分类和语义迁移到新的 <InlineCode>LibreDINOv2</InlineCode> 系列；深度迁移到新的 <InlineCode>LibreDepthAnythingV2</InlineCode> 系列。
-            </FeatureItem>
-            <FeatureItem>
-              <strong className="text-surface-800 dark:text-white">TFLite 导出需要 Python 3.12+</strong>（onnx2tf wheel 约束）。onnx2tf 的最低版本提高到 <InlineCode>&gt;=2.4.3</InlineCode>，并移除了旧的 onnx2tf 运行时补丁。
-            </FeatureItem>
-          </ul>
 
           <Divider />
 
@@ -3815,8 +4089,8 @@ print(result.saved_path)`}</CodeBlock>
           <P>
             可将此矩阵作为 v1.3.0 的快速支持速查表。<InlineCode>&#10003;</InlineCode>{' '}
             表示已验证路径，<InlineCode>exp</InlineCode> 表示实验性，{' '}
-            <InlineCode>prev</InlineCode> 表示研究预览，空白单元格表示当前不支持。只有 YOLO9 和 RF-DETR 检测（外加 RF-DETR
-            分割）经过充分测试；其余全部，包括新增的分类、语义、深度和点定位系列，均为实验性。
+            空白单元格表示当前不支持。经过充分测试的路径是 YOLO9 检测，以及 RF-DETR
+            的检测、分割和姿态；其余全部，包括新增的分类、语义、深度和点定位系列，均为实验性。
           </P>
           <CompatibilityMatrixZh />
           <p className="text-sm text-surface-600 dark:text-surface-400 leading-relaxed mb-4">
@@ -3836,14 +4110,14 @@ print(result.saved_path)`}</CodeBlock>
               <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />Python 3.10+
             </li>
             <li className="flex items-center gap-2 text-surface-600 dark:text-surface-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />PyTorch 1.13+ 和 torchvision 0.11+
+              <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />PyTorch 2.4+ 和 torchvision 0.19+
             </li>
           </ul>
 
           <SubHeading>从 PyPI 安装</SubHeading>
           <CodeBlock language="bash">{`pip install libreyolo`}</CodeBlock>
           <P>
-            v1.3.0 尚未发布到 PyPI。在其发布之前，请使用源码安装来获取本页所述的功能。
+            v1.3.0 已发布到 PyPI，因此直接 pip install libreyolo 即可获得本页所述的功能。
           </P>
 
           <SubHeading>从源码安装</SubHeading>
@@ -3887,8 +4161,6 @@ pip install libreyolo[coreml]
 
 # L2CS gaze optional auto-download helper
 pip install libreyolo[gaze]
-# Optional parity with the upstream RetinaFace-based L2CS pipeline
-pip install libreyolo[gaze-retinaface]
 
 # Install every optional LibreYOLO extra
 pip install libreyolo[all]`}</CodeBlock>
@@ -3981,8 +4253,8 @@ model = LibreYOLO("LibreYOLO9c.pt")   # detection`}</CodeBlock>
 
           <ValidatedModelHeader title="RF-DETR - transformer 旗舰">
             <SupportBadge variant="validated">推荐的 transformer 路径</SupportBadge>
-            <SupportBadge variant="validated">充分测试：检测、分割、训练与推理</SupportBadge>
-            <SupportBadge>研究预览：pose、OBB</SupportBadge>
+            <SupportBadge variant="validated">充分测试：检测、分割、姿态、训练与推理</SupportBadge>
+            <SupportBadge>实验性：OBB</SupportBadge>
             <SupportBadge>实验性：多 GPU</SupportBadge>
           </ValidatedModelHeader>
           <DocTable
@@ -4007,20 +4279,23 @@ model = LibreYOLO("LibreYOLO9c.pt")   # detection`}</CodeBlock>
             <a href="#segmentation" className="text-libre-600 dark:text-libre-400 hover:underline">分割</a> 章节。
           </P>
           <P>
-            <SupportBadge>研究预览</SupportBadge>{' '}
+            <SupportBadge variant="validated">已支持</SupportBadge>{' '}
             <strong className="text-surface-800 dark:text-white">姿态：</strong>{' '}
             <Checkpoints names={['LibreRFDETRx-pose.pt']} link={false} />（移植自
-            RF-DETR v1.8.0 的 GroupPose；仅提供 576 下的 <InlineCode>x</InlineCode> 尺寸）。{' '}
+            RF-DETR v1.8.0 的 GroupPose；仅提供 576 下的 <InlineCode>x</InlineCode> 尺寸）。
+          </P>
+          <P>
+            <SupportBadge>实验性</SupportBadge>{' '}
             <strong className="text-surface-800 dark:text-white">OBB：</strong>{' '}
             <Checkpoints names={['LibreRFDETRn-obb.pt', 'LibreRFDETRs-obb.pt', 'LibreRFDETRm-obb.pt', 'LibreRFDETRl-obb.pt']} link={false} />{' '}
-            （旋转框，使用检测的输入尺寸）。请将两者视为研究预览，而非已验证路径。
+            （旋转框，使用检测的输入尺寸）。
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 model = LibreYOLO("LibreRFDETRs.pt")           # detect (validated)
 # model = LibreYOLO("LibreRFDETRs-seg.pt")     # segment (validated)
-# model = LibreYOLO("LibreRFDETRx-pose.pt")    # pose  (research preview)
-# model = LibreYOLO("LibreRFDETRn-obb.pt")     # obb   (research preview)`}</CodeBlock>
+# model = LibreYOLO("LibreRFDETRx-pose.pt")    # pose  (size x)
+# model = LibreYOLO("LibreRFDETRn-obb.pt")     # obb   (experimental)`}</CodeBlock>
 
           <SubHeading>其他检测系列</SubHeading>
           <P>
@@ -4147,8 +4422,8 @@ model = LibreYOLO("model_ncnn/")                # NCNN (directory)`}</CodeBlock>
               ['检测', <InlineCode key="d">&quot;detect&quot;</InlineCode>, '（无 - 隐式）', '大多数系列（默认）'],
               ['实例分割', <InlineCode key="s">&quot;segment&quot;</InlineCode>, <InlineCode key="ss">-seg</InlineCode>, 'RF-DETR、EdgeCrafter'],
               ['语义分割', <InlineCode key="se">&quot;semantic&quot;</InlineCode>, <InlineCode key="ses">-sem</InlineCode>, 'DINOv2'],
-              ['姿态估计', <InlineCode key="p">&quot;pose&quot;</InlineCode>, <InlineCode key="ps">-pose</InlineCode>, 'YOLO-NAS、EdgeCrafter、RF-DETR（预览）'],
-              ['旋转框', <InlineCode key="o">&quot;obb&quot;</InlineCode>, <InlineCode key="os">-obb</InlineCode>, 'RF-DETR（预览）'],
+              ['姿态估计', <InlineCode key="p">&quot;pose&quot;</InlineCode>, <InlineCode key="ps">-pose</InlineCode>, 'YOLO-NAS、EdgeCrafter、RF-DETR'],
+              ['旋转框', <InlineCode key="o">&quot;obb&quot;</InlineCode>, <InlineCode key="os">-obb</InlineCode>, 'RF-DETR（实验性）'],
               ['分类', <InlineCode key="c">&quot;classify&quot;</InlineCode>, <InlineCode key="cs">-cls</InlineCode>, 'MobileNetV4、ConvNeXt、EfficientNetV2、DINOv2'],
               ['单目深度', <InlineCode key="de">&quot;depth&quot;</InlineCode>, <InlineCode key="des">-depth</InlineCode>, 'Depth Anything V2'],
               ['点定位', <InlineCode key="pt">&quot;point&quot;</InlineCode>, <InlineCode key="pts">-point</InlineCode>, 'FOMO'],
@@ -4185,7 +4460,7 @@ model = LibreYOLO("LibreYOLO9c.pt")  # task="detect"`}</CodeBlock>
             headers={['系列', 'v1.3.0 状态', '默认', '受支持任务']}
             rows={[
               [<strong key="y9">YOLO9</strong>, '单 GPU detect 充分测试；多 GPU 实验性', 'detect', 'detect'],
-              [<strong key="rfd">RF-DETR</strong>, '单 GPU detect 和 segment 充分测试；pose 和 OBB 研究预览', 'detect', 'detect, segment, pose, obb'],
+              [<strong key="rfd">RF-DETR</strong>, '单 GPU detect、segment 和 pose 充分测试；OBB 实验性', 'detect', 'detect, segment, pose, obb'],
               ['YOLOX', '实验性', 'detect', 'detect'],
               ['YOLO9-E2E', '实验性', 'detect', 'detect'],
               ['YOLO-NAS', '实验性', 'detect', 'detect, pose'],
@@ -4217,10 +4492,10 @@ LibreDINOv2n.pt          # semantic is DINOv2's default; -sem optional
 # Pose (-pose)
 LibreYOLONASn-pose.pt
 LibreECs-pose.pt
-LibreRFDETRx-pose.pt     # preview; size x only
+LibreRFDETRx-pose.pt     # pose; size x
 
 # Oriented boxes (-obb)
-LibreRFDETRn-obb.pt      # preview
+LibreRFDETRn-obb.pt      # obb; experimental
 
 # Classification (-cls)
 LibreMobileNetV4s-cls.pt
@@ -4633,12 +4908,69 @@ result.masks.numpy()`}</CodeBlock>
 
           <Divider />
 
+          {/* ────────────── ORIENTED BOXES (OBB) ────────────── */}
+          <SectionHeading id="obb" icon={Rotate3d}>旋转边界框 (OBB)</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-5">
+            <SupportBadge variant="experimental">YOLO9: t, s, m, c</SupportBadge>
+            <SupportBadge variant="experimental">RF-DETR: n, s, m, l</SupportBadge>
+          </div>
+          <P>
+            旋转框带有一个旋转角，这正是航拍图像、文档以及密集排布场景所需要的。YOLO9 在其检测头上增加了一个角度分支；RF-DETR 则在其解码器中加入了一个可学习的角度嵌入。
+          </P>
+
+          <SubHeading>推理与 OBB 结果</SubHeading>
+          <P>
+            Results 暴露一个 <InlineCode>obb</InlineCode> 字段。角度以 <strong className="text-surface-800 dark:text-white">弧度</strong>为单位。
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
+
+model = LibreYOLO("LibreYOLO9t-obb.pt")
+r = model.predict("aerial.jpg")
+
+for i in range(len(r.obb.cls)):
+    cx, cy, w, h, angle = r.obb.xywhr[i]  # angle in radians
+    corners = r.obb.xyxyxyxy[i]           # 4 (x, y) corner points
+    conf, cls = r.obb.conf[i], r.obb.cls[i]`}</CodeBlock>
+          <DocTable
+            headers={['字段', '形状', '含义']}
+            rows={[
+              [<InlineCode key="a">obb.xywhr</InlineCode>, 'N x 5', '[cx, cy, w, h, angle]，angle 以弧度为单位。'],
+              [<InlineCode key="b">obb.xyxyxyxy</InlineCode>, 'N x 4 x 2', '每个框的四个角点。'],
+              [<InlineCode key="c">obb.conf</InlineCode>, 'N', '每个框的置信度。'],
+              [<InlineCode key="d">obb.cls</InlineCode>, 'N', '每个框的类别 id。'],
+            ]}
+          />
+
+          <SubHeading>数据集格式与训练</SubHeading>
+          <P>
+            OBB 使用标准的检测式数据 YAML，但标签是 YOLO-OBB 文本文件，每行 <strong className="text-surface-800 dark:text-white">恰好九个字段</strong>：一个类别 id，后跟四个归一化角点。角度由角点推导得出，并不存储。
+          </P>
+          <CodeBlock language="text" filename="labels/aerial_001.txt">{`# class_id  x1 y1  x2 y2  x3 y3  x4 y4   (all normalized to [0, 1])
+0  0.51 0.32  0.66 0.38  0.62 0.55  0.47 0.49
+2  0.10 0.71  0.18 0.69  0.20 0.80  0.12 0.82`}</CodeBlock>
+          <P>
+            普通的检测检查点无法直接加载到 OBB 模型中。从检测转到 OBB 仅允许作为训练时的热启动：传入 <InlineCode>pretrained=True</InlineCode>（YOLO9）或 RF-DETR 上的显式迁移标志。在角点感知增强落地之前，OBB 会禁用 Mosaic 与 mixup，且不支持分块推理。
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO9
+
+model = LibreYOLO9(None, size="t", task="obb")
+# Warm-start the backbone from a same-family detect checkpoint
+result = model.train(data="dota8.yaml", pretrained=True, epochs=100, imgsz=640)
+
+# CLI equivalent
+# libreyolo train model=LibreYOLO9t.pt data=dota8.yaml --task obb`}</CodeBlock>
+          <P>
+            验证使用旋转 IoU 的 AP，在 OBB 指标组下以 mAP50 与 mAP50-95 报告。
+          </P>
+
+          <Divider />
+
           {/* ────────────── POSE ESTIMATION ────────────── */}
           <SectionHeading id="pose" icon={PersonStanding}>姿态估计</SectionHeading>
           <P>
             姿态（人体关键点）估计可在 <InlineCode>YOLO-NAS (-pose)</InlineCode>、{' '}
             <InlineCode>EdgeCrafter (-pose)</InlineCode> 以及 v1.3.0 新增的{' '}
-            <InlineCode>RF-DETR (-pose)</InlineCode> 预览上运行。每个姿态模型都是单类别
+            <InlineCode>RF-DETR (-pose)</InlineCode> 上运行。每个姿态模型都是单类别
             （&quot;person&quot;），具有 17 个 COCO 关键点。
           </P>
 
@@ -4657,11 +4989,11 @@ print(result.boxes.xyxy)          # person boxes (N, 4)
 print(result.keypoints.xy.shape)  # (N, 17, 2) pixel coordinates`}</CodeBlock>
 
           <P>
-            <SupportBadge variant="experimental">预览</SupportBadge>{' '}
+            <SupportBadge variant="validated">已支持</SupportBadge>{' '}
             RF-DETR 姿态仅提供一个 <InlineCode>x</InlineCode> 尺寸的检查点：{' '}
-            <InlineCode>LibreRFDETRx-pose.pt</InlineCode>。它在 v1.3.0 中是研究预览。
+            <InlineCode>LibreRFDETRx-pose.pt</InlineCode>。
           </P>
-          <CodeBlock language="python">{`# RF-DETR pose preview (size x only)
+          <CodeBlock language="python">{`# RF-DETR pose (size x only)
 model = LibreYOLO("LibreRFDETRx-pose.pt")
 result = model("people.jpg")
 print(result.keypoints.xy.shape)  # (N, 17, 2)`}</CodeBlock>
@@ -4679,7 +5011,7 @@ result.keypoints.numpy()`}</CodeBlock>
           <CodeBlock language="python">{`model("people.jpg", save=True)  # draws boxes + skeleton`}</CodeBlock>
 
           <P>
-            YOLO-NAS 支持姿态训练；EdgeCrafter 姿态目前仅推理。RF-DETR 姿态为预览（仅 <InlineCode>x</InlineCode> 尺寸）。YOLO9 仅检测，不提供姿态检查点。
+            YOLO-NAS 支持姿态训练；EdgeCrafter 姿态目前仅推理。RF-DETR 姿态仅提供 <InlineCode>x</InlineCode> 尺寸的检查点。YOLO9 仅检测，不提供姿态检查点。
           </P>
 
           <Divider />
@@ -4723,6 +5055,238 @@ for i in range(len(result.gaze)):
           <P>
             在命令行中：<InlineCode>libreyolo predict model=LibreL2CSr50.pt source=portrait.jpg --face-detector path/to/face.pt</InlineCode>。
           </P>
+
+          <Divider />
+
+          {/* ────────────── OPEN-VOCABULARY DETECTION (LibreVLM) ────────────── */}
+          <SectionHeading id="open-vocabulary" icon={ScanSearch}>开放词表检测</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-5">
+            <SupportBadge variant="experimental">仅推理</SupportBadge>
+            <SupportBadge variant="experimental">Python API</SupportBadge>
+          </div>
+          <P>
+            传统检测器在检测头中固化了一份固定的类别列表。<InlineCode>LibreVLM</InlineCode> 抛弃了这个限制：它封装现代指令微调的视觉语言模型，提示它们输出边界框，解析生成的文本，并返回你在 YOLO9 和 RF-DETR 中已经用过的同一个 <InlineCode>Results</InlineCode> 对象。类别列表只是你在运行时提供的一组词，因此新增一个类别毫无成本，而且是零样本生效。
+          </P>
+          <ul className="space-y-2 mb-4">
+            <FeatureItem><strong className="text-surface-800 dark:text-white">开放词表。</strong> 检测 <InlineCode>&quot;pink car&quot;</InlineCode>、<InlineCode>&quot;license plate&quot;</InlineCode> 或 <InlineCode>&quot;the small island&quot;</InlineCode>，无需为它们训练任何检测头。</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">一个工厂，一份契约。</strong> <InlineCode>LibreVLM(...)</InlineCode> 返回标准的 <InlineCode>Results</InlineCode>，含 <InlineCode>boxes.xyxy</InlineCode>、<InlineCode>boxes.cls</InlineCode>、<InlineCode>boxes.conf</InlineCode>，以及 <InlineCode>.plot()</InlineCode> 和 <InlineCode>.save()</InlineCode>。</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">可替换的后端。</strong> 一个别名字符串背后是六个模型系列，从 230M 的 Florence-2 到 8B 的 Qwen3-VL。</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">一个原始的逃生通道。</strong> 当你需要的不止是框时，<InlineCode>chat()</InlineCode> 提供自由形式的图像问答。</FeatureItem>
+          </ul>
+          <Callout icon={AlertTriangle} tone="amber" title="仅推理层级">
+            <p>
+              LibreVLM 是一个纯 Python 的推理层级：尚无训练、验证、导出或 CLI 路径，且置信度分数是占位符。在此之上构建之前，请先阅读本节末尾的局限性。
+            </p>
+          </Callout>
+
+          <SubHeading>安装</SubHeading>
+          <P>
+            LibreVLM 位于可选的 <InlineCode>vlm</InlineCode> extra 之后。它会引入较新的 <InlineCode>transformers</InlineCode> 以及一些处理器所需的辅助库。
+          </P>
+          <CodeBlock language="bash">{`pip install 'libreyolo[vlm]'`}</CodeBlock>
+          <P>
+            权重在首次使用时从 Hugging Face Hub 下载到本地的 <InlineCode>weights/</InlineCode> 文件夹。较大的后端推荐使用 GPU，但每个模型也都能通过 <InlineCode>device=&quot;cpu&quot;</InlineCode> 在 CPU 上运行。
+          </P>
+
+          <SubHeading>快速开始</SubHeading>
+          <P>
+            构造一个模型，声明你关心的词，然后预测。默认后端是 Qwen3-VL-4B，它是该层级中最强的检测器，并采用 Apache-2.0 许可证。
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreVLM
+
+# Qwen3-VL-4B by default; weights autodownload on first use
+model = LibreVLM()
+
+# The vocabulary is just words. Any words.
+model.set_classes(["pink car", "wheel"])
+
+result = model.predict("street.jpg")
+
+print(result.boxes.xyxy)   # pixel [x1, y1, x2, y2]
+print(result.boxes.cls)    # ids into ["pink car", "wheel"]
+result.plot()              # same drawing helpers as any LibreYOLO model
+result.save("out.jpg")`}</CodeBlock>
+
+          <SubHeading>支持的后端</SubHeading>
+          <P>
+            通过传给 <InlineCode>LibreVLM(...)</InlineCode> 的别名来选择后端。仅给出系列名会解析为其默认尺寸。最强的检测器是 <strong className="text-surface-800 dark:text-white">Qwen3-VL</strong>、<strong className="text-surface-800 dark:text-white">LFM2-VL</strong> 和 <strong className="text-surface-800 dark:text-white">Florence-2</strong>。
+          </P>
+          <DocTable
+            headers={['系列', '别名', '尺寸（参数量）', '许可证', '说明']}
+            rows={[
+              [
+                <strong key="q" className="text-surface-800 dark:text-white whitespace-nowrap">Qwen3-VL</strong>,
+                <code key="qa" className="font-mono text-xs">qwen3-vl-2b / -4b / -8b</code>,
+                '2B / 4B / 8B',
+                'Apache-2.0',
+                <span key="qn">默认且最强。推荐作为起点。</span>,
+              ],
+              [
+                <strong key="l" className="text-surface-800 dark:text-white whitespace-nowrap">LFM2-VL</strong>,
+                <code key="la" className="font-mono text-xs">lfm2-vl-450m / -1.6b</code>,
+                '450M / 1.6B',
+                'LFM Open License',
+                <span key="ln">边缘尺寸，小型检测器表现意外出色。下载前有提示。</span>,
+              ],
+              [
+                <strong key="i" className="text-surface-800 dark:text-white whitespace-nowrap">InternVL3</strong>,
+                <code key="ia" className="font-mono text-xs">internvl3-1b / -2b / -8b</code>,
+                '1B / 2B / 8B',
+                'Qwen License',
+                <span key="in">8B 定位效果好；小尺寸较弱。下载前有提示。</span>,
+              ],
+              [
+                <strong key="f" className="text-surface-800 dark:text-white whitespace-nowrap">Florence-2</strong>,
+                <code key="fa" className="font-mono text-xs">florence-2-base / -large</code>,
+                '0.23B / 0.77B',
+                'MIT',
+                <span key="fn">专为定位打造的模型。框很紧致，无 <InlineCode>chat()</InlineCode>。</span>,
+              ],
+              [
+                <strong key="s" className="text-surface-800 dark:text-white whitespace-nowrap">SmolVLM2</strong>,
+                <code key="sa" className="font-mono text-xs">smolvlm2-500m / -2.2b</code>,
+                '500M / 2.2B',
+                'Apache-2.0',
+                <span key="sn">小巧快速；检测能力较弱。适合快速试用。</span>,
+              ],
+              [
+                <strong key="k" className="text-surface-800 dark:text-white whitespace-nowrap">Kosmos-2</strong>,
+                <code key="ka" className="font-mono text-xs">kosmos-2</code>,
+                '~1.6B',
+                'MIT',
+                <span key="kn">2023 年的定位模型。框较粗糙，无 <InlineCode>chat()</InlineCode>。</span>,
+              ],
+            ]}
+          />
+          <ul className="space-y-2 mb-4">
+            <FeatureItem><strong className="text-surface-800 dark:text-white">最佳质量：</strong> <InlineCode>qwen3-vl-8b</InlineCode> 或 <InlineCode>qwen3-vl-4b</InlineCode>（默认）。</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">紧致的框、占用小：</strong> <InlineCode>florence-2-large</InlineCode>。</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">边缘 / CPU：</strong> <InlineCode>lfm2-vl-450m</InlineCode> 或 <InlineCode>smolvlm2-500m</InlineCode>。</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">完全宽松的许可证：</strong> 任意尺寸的 Qwen3-VL、SmolVLM2、Florence-2 或 Kosmos-2。</FeatureItem>
+          </ul>
+          <Callout icon={ShieldCheck} tone="emerald" title="许可证">
+            <p>
+              Qwen3-VL 和 SmolVLM2 采用 Apache-2.0；Florence-2 和 Kosmos-2 采用 MIT。LFM2-VL 和 InternVL3 采用非 OSI 许可证，会在首次下载前发出一次性提示，以便你为商业用途做出知情选择。
+            </p>
+          </Callout>
+
+          <SubHeading>设置词表</SubHeading>
+          <P>
+            词表是开放词表检测的核心。用一组标签字符串调用 <InlineCode>set_classes()</InlineCode>。它是持久的：会在之后每一次 <InlineCode>predict()</InlineCode> 和 <InlineCode>track()</InlineCode> 调用中保留，直到你再次设置。它返回 <InlineCode>self</InlineCode>，因此可以链式调用。
+          </P>
+          <CodeBlock language="python">{`# Sticky and chainable
+model = LibreVLM("qwen3-vl-2b").set_classes(["person", "dog", "cat"])
+
+# Set it once at construction instead
+model = LibreVLM("lfm2-vl-450m", names=["boat"], device="cpu")
+
+# Re-set any time to change what you are looking for
+model.set_classes(["a red car", "a blue truck"])`}</CodeBlock>
+          <P>
+            标签可以是任意短语。它们在不区分大小写时必须唯一，并且你必须传入一个列表，而不是单个字符串。如果你从不调用 <InlineCode>set_classes()</InlineCode>，模型会回退到 COCO-80 词表，这样即使是裸 <InlineCode>predict()</InlineCode> 也能给出合理的结果。
+          </P>
+
+          <SubHeading>预测与结果</SubHeading>
+          <P>
+            <InlineCode>predict()</InlineCode>（以及等价的 <InlineCode>model(...)</InlineCode> 调用）接受与任何 LibreYOLO 检测器相同的输入类型：路径、PIL 图像、numpy 数组、URL、文件夹或视频。<InlineCode>stream=True</InlineCode> 和 <InlineCode>track()</InlineCode> 也都能用。
+          </P>
+          <CodeBlock language="python">{`result = model.predict(
+    source="image.jpg",  # path | PIL | ndarray | URL | folder | video
+    conf=0.25,           # see note below: scoring is synthetic
+    classes=[0],         # optional: keep only these vocabulary ids
+    max_det=300,
+)`}</CodeBlock>
+          <DocTable
+            headers={['字段', '形状 / 类型', '含义']}
+            rows={[
+              [<InlineCode key="a">result.boxes.xyxy</InlineCode>, 'N x 4', '像素框 [x1, y1, x2, y2]，缩放到原始图像尺寸。'],
+              [<InlineCode key="b">result.boxes.cls</InlineCode>, 'N', '类别 id，索引到你的 set_classes() 词表。'],
+              [<InlineCode key="c">result.boxes.conf</InlineCode>, 'N', '合成置信度：每个框都是 1.0（见“局限性”）。'],
+              [<InlineCode key="d">result.plot() / .save()</InlineCode>, '-', '常用的绘制与保存辅助方法。'],
+            ]}
+          />
+          <P>
+            在底层，LibreVLM 会宽容地解析模型输出（处理 markdown 代码围栏、多余的散文、重复的框以及被截断的数组），把自由文本标签映射回你的类别 id，并丢弃任何不在你词表中的标签。正是最后这一步，让一个自由生成的模型表现得像一个闭集检测器。
+          </P>
+
+          <SubHeading>示例</SubHeading>
+          <CodeBlock language="python">{`from libreyolo import LibreVLM
+
+# Detect a specific colored object
+model = LibreVLM("qwen3-vl-4b")
+model.set_classes(["red car"])
+result = model.predict("parking_lot.jpg")
+print(f"Found {len(result.boxes.cls)} red car(s)")
+result.save("red_cars.jpg")`}</CodeBlock>
+          <CodeBlock language="python">{`# Tight boxes with Florence-2 (a purpose-built grounder)
+model = LibreVLM("florence-2-large")
+model.set_classes(["a red car", "license plate"])
+result = model.predict("car.jpg")
+result.plot()`}</CodeBlock>
+          <CodeBlock language="python">{`# Run on CPU with a built-in sample image
+from libreyolo import LibreVLM, SAMPLE_IMAGE
+
+model = LibreVLM("lfm2-vl-450m", device="cpu")
+# No set_classes() -> falls back to the COCO-80 vocabulary
+result = model.predict(SAMPLE_IMAGE)
+print(model.names[result.boxes.cls[0]])  # e.g. "person"`}</CodeBlock>
+          <CodeBlock language="python">{`# Batches, folders, and video
+model = LibreVLM().set_classes(["forklift", "pallet"])
+
+# A whole folder
+for result in model.predict("warehouse_frames/", stream=True):
+    result.save()
+
+# A video file (frames are processed one at a time)
+model.predict("warehouse.mp4", save=True)`}</CodeBlock>
+
+          <SubHeading>原始对话</SubHeading>
+          <P>
+            有时你想要的是模型本身，而不是检测器。采用对话模板的系列暴露了 <InlineCode>chat()</InlineCode>，它接受一张图像和一个自由形式的提示，并原样返回解码后的文本。可用于计数、生成描述或快速的视觉问答。
+          </P>
+          <CodeBlock language="python">{`model = LibreVLM("qwen3-vl-4b")
+
+answer = model.chat("harbor.jpg", "How many boats are docked? Answer with a number.")
+print(answer)`}</CodeBlock>
+          <Callout icon={AlertTriangle} tone="amber">
+            <p>
+              <InlineCode>chat()</InlineCode> 在采用对话模板的系列上可用（Qwen3-VL、LFM2-VL、SmolVLM2、InternVL3）。Florence-2 和 Kosmos-2 是基于任务 token 的定位模型，会抛出 <InlineCode>NotImplementedError</InlineCode>；请对它们使用 <InlineCode>predict()</InlineCode>。
+            </p>
+          </Callout>
+
+          <SubHeading>后端差异</SubHeading>
+          <P>
+            每个系列都返回同样的 <InlineCode>Results</InlineCode>，但抵达方式各不相同。对话系列被提示输出一个 JSON 框数组；定位模型则使用专门的任务 token。
+          </P>
+          <DocTable
+            headers={['系列', '提示方式', '坐标空间', 'chat()']}
+            rows={[
+              ['Qwen3-VL', 'JSON 框提示', '0 到 1000，重新缩放', '是'],
+              ['LFM2-VL', 'JSON 框提示', '归一化 0 到 1', '是'],
+              ['SmolVLM2', 'JSON 框提示', '归一化 0 到 1', '是'],
+              ['InternVL3', 'JSON 框提示', '0 到 1000，重新缩放', '是'],
+              ['Florence-2', '任务 token', '原生像素', '否'],
+              ['Kosmos-2', 'Grounding 提示', '归一化，重新缩放', '否'],
+            ]}
+          />
+          <P>
+            对于对话系列，你可以用构造函数参数 <InlineCode>prompt=</InlineCode> 覆盖检测提示，并用 <InlineCode>max_new_tokens=</InlineCode> 限制生成长度。设备和 dtype 会自动解析：CUDA 上为 bf16 或 fp16，CPU 上为 fp32。
+          </P>
+
+          <SubHeading>局限性</SubHeading>
+          <ul className="space-y-2 mb-4">
+            <FeatureItem><strong className="text-surface-800 dark:text-white">合成置信度。</strong> 每个框的得分都是 1.0。因此 <InlineCode>conf=</InlineCode> 过滤表现为全有或全无，而非真正的阈值。</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">无 mAP / 验证。</strong> <InlineCode>val()</InlineCode> 会抛出异常，因为合成分数会让 COCO mAP 产生误导。</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">无训练或导出。</strong> <InlineCode>train()</InlineCode> 和 <InlineCode>export()</InlineCode> 会抛出异常。请在上游微调 VLM，然后加载得到的权重。</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">跟踪能力受限。</strong> <InlineCode>track()</InlineCode> 可以运行，但统一的分数会让跟踪器的低置信度恢复阶段失效。</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">一次一张图像。</strong> 在 v1 中生成是串行的，因此更大的 <InlineCode>batch=</InlineCode> 值不会带来加速。</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">仅 Python API。</strong> <InlineCode>libreyolo</InlineCode> CLI 尚不能解析 VLM 别名。</FeatureItem>
+          </ul>
+          <Callout icon={Eye} tone="libre" title="它的优势所在">
+            <p>
+              当类别集合是开放式的、经常变化，或难以提前标注时，就使用 LibreVLM：快速原型、长尾或稀有类别，以及“用文字描述要找的东西”这类工作流。当你需要校准过的置信度、吞吐量或可部署的产物时，请用上文的 <a href="#training" className="text-libre-600 dark:text-libre-400 hover:underline">训练</a> 一节训练闭合词表的 YOLO9 或 RF-DETR。
+            </p>
+          </Callout>
 
           <Divider />
 
@@ -4937,7 +5501,7 @@ print(points.cls, points.conf)`}</CodeBlock>
           <SectionHeading id="training" icon={GraduationCap}>训练</SectionHeading>
           <ValidationScopeCalloutZh />
           <P>
-            经过充分测试的训练路径是单 GPU 的 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割。其他模型系列的训练器和多 GPU 工作流可用，但为实验性。在 v1.3.0 中 YOLO9 仅检测，因此没有 YOLO9 分割或姿态训练。
+            经过充分测试的训练路径是单 GPU 的 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割。其他模型系列的训练器和多 GPU 工作流也可使用，但测试较少。在 v1.3.0 中 YOLO9 仅检测，因此没有 YOLO9 分割或姿态训练。
           </P>
 
           <SubHeading>YOLO9 - CNN 旗舰训练</SubHeading>
@@ -5102,6 +5666,48 @@ model.train(data="coco128.yaml", epochs=300, batch=16)`}</CodeBlock>
 
           <Divider />
 
+          {/* ────────────── LoRA / DoRA ────────────── */}
+          <SectionHeading id="lora" icon={Layers2}>LoRA / DoRA 微调</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-5">
+            <SupportBadge variant="experimental">RF-DETR: n, s, m, l</SupportBadge>
+          </div>
+          <P>
+            LoRA 式适配器让你通过训练一小组低秩矩阵来微调 RF-DETR 的 Transformer 主干，同时保持基础权重冻结。这能削减优化器与梯度的显存占用，非常适合在普通硬件上将一个强力检查点适配到新领域。
+          </P>
+
+          <SubHeading>启用方式</SubHeading>
+          <P>
+            整个公开 API 就是 <InlineCode>train()</InlineCode> 上的一个标志。没有 rank、alpha 或目标模块等参数可调；配方固定为一套经过充分测试的配置。底层实现使用 <strong className="text-surface-800 dark:text-white">DoRA</strong>（权重分解的 LoRA，秩 16），应用于 DINOv2 注意力的 query、key 与 value 投影。
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
+
+model = LibreYOLO("rf-detr-nano.pth")   # sizes n, s, m, l
+result = model.train(
+    data="data.yaml",
+    lora=True,        # DoRA on the frozen DINOv2 backbone
+    epochs=100, batch_size=4, lr=1e-4,
+)
+
+# Resume: LoRA is auto-detected from the checkpoint, no need to repeat the flag
+model.train(data="data.yaml", resume=True)`}</CodeBlock>
+          <CodeBlock language="bash">{`# CLI equivalent
+libreyolo train --model rf-detr-nano.pth --data data.yaml --lora`}</CodeBlock>
+
+          <SubHeading>检查点与导出</SubHeading>
+          <ul className="space-y-2 mb-4">
+            <FeatureItem>训练检查点会保留适配器张量，配置中也会记录已使用 LoRA，因此加载与续训会自动重建适配器图。</FeatureItem>
+            <FeatureItem>检测头始终保持可训练，因此你仍可适配到新的类别数。</FeatureItem>
+            <FeatureItem><InlineCode>export()</InlineCode> 会将适配器合并回稠密权重。导出的模型是普通模型，不带 <InlineCode>peft</InlineCode> 依赖。</FeatureItem>
+            <FeatureItem>LoRA 仅限 RF-DETR；向其他家族传入 <InlineCode>lora=True</InlineCode> 会抛出明确的错误。</FeatureItem>
+          </ul>
+          <Callout icon={ShieldCheck} tone="emerald" title="安装额外依赖">
+            <p>
+              LoRA 训练需要适配器依赖：<InlineCode>pip install &quot;libreyolo[lora]&quot;</InlineCode>，它会引入 RF-DETR 相关组件与 <InlineCode>peft</InlineCode>。导出（已合并）的模型在推理时无需该依赖。
+            </p>
+          </Callout>
+
+          <Divider />
+
           {/* ────────────── VALIDATION ────────────── */}
           <SectionHeading id="validation" icon={CheckCircle2}>验证</SectionHeading>
           <P>
@@ -5167,7 +5773,7 @@ print(f"mAP50-95: {results['metrics/mAP50-95']:.3f}")`}</CodeBlock>
           {/* ────────────── EXPORT ────────────── */}
           <SectionHeading id="export" icon={Upload}>导出</SectionHeading>
           <P>
-            将 PyTorch 模型导出为 ONNX、TorchScript、TensorRT、OpenVINO、NCNN、CoreML 或（v1.3.0 新增）TFLite 以进行部署。TensorRT 现已覆盖所有模型系列。经过充分测试的导出路径仍是单 GPU 的 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割。
+            将 PyTorch 模型导出为 ONNX、TorchScript、TensorRT、OpenVINO、NCNN、CoreML 或（v1.3.0 新增）TFLite 以进行部署。经过充分测试的导出路径是单 GPU 的 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割。部分较新的系列（包括 DINOv2、Depth Anything V2、SAM、VLM 和 L2CS）尚不支持导出。
           </P>
 
           <SubHeading>快速导出</SubHeading>
