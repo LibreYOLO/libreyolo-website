@@ -20,7 +20,7 @@ const TASKS = [
   { title: 'Oriented boxes', image: '/showcase/task-obb.jpg', models: ['RF-DETR'] },
   { title: 'Point & counting', image: '/showcase/task-point.jpg', models: ['FOMO'] },
   { title: 'Gaze', image: '/showcase/task-gaze.gif', models: ['L2CS'] },
-  { title: 'Vision-language', image: '/showcase/task-vlm.jpg', models: ['Florence-2', 'InternVL3', 'Kosmos-2', 'LFM2-VL', 'Qwen3-VL', 'SmolVLM2'] },
+  { title: 'Vision-language', image: '/showcase/task-vlm.jpg', models: ['Florence-2', 'InternVL3', 'Kosmos-2', 'LFM2-VL', 'LocateAnything', 'Qwen3-VL', 'SmolVLM2'] },
   { title: 'Depth', image: '/showcase/depth-reveal.gif', models: ['Depth Anything V2'] },
 ]
 
