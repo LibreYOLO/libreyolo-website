@@ -1753,7 +1753,7 @@ with VideoSource("clip.mp4", vid_stride=1) as src, \\
           </P>
 
           <SubHeading>Install</SubHeading>
-          <CodeBlock language="bash">{`pip install libreyolo[tracking]   # compatibility extra; tracking deps ship in base dev install`}</CodeBlock>
+          <CodeBlock language="bash">{`pip install libreyolo[tracking]   # compatibility extra; tracking deps ship in the base install`}</CodeBlock>
 
           <SubHeading>Video tracking helper</SubHeading>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
@@ -2169,7 +2169,7 @@ result.save("out.jpg")`}</CodeBlock>
           </ul>
           <Callout icon={ShieldCheck} tone="emerald" title="Licensing">
             <p>
-              Qwen3-VL and SmolVLM2 are Apache-2.0; Florence-2 and Kosmos-2 are MIT. LFM2-VL and InternVL3 carry non-OSI licenses and emit a one-time notice before their first download, so you can make an informed choice for commercial use.
+              Qwen3-VL and SmolVLM2 are Apache-2.0; Florence-2 and Kosmos-2 are MIT. LFM2-VL, InternVL3, and LocateAnything carry non-OSI licenses (LocateAnything is NVIDIA non-commercial) and emit a one-time notice before their first download, so you can make an informed choice for commercial use.
             </p>
           </Callout>
 
@@ -2253,7 +2253,7 @@ answer = model.chat("harbor.jpg", "How many boats are docked? Answer with a numb
 print(answer)`}</CodeBlock>
           <Callout icon={AlertTriangle} tone="amber">
             <p>
-              <InlineCode>chat()</InlineCode> is available on the chat-template families (Qwen3-VL, LFM2-VL, SmolVLM2, InternVL3). Florence-2 and Kosmos-2 are task-token grounders and raise <InlineCode>NotImplementedError</InlineCode>; use <InlineCode>predict()</InlineCode> with them.
+              <InlineCode>chat()</InlineCode> is available on the chat-template families (Qwen3-VL, LFM2-VL, SmolVLM2, InternVL3, LocateAnything). Florence-2 and Kosmos-2 are task-token grounders and raise <InlineCode>NotImplementedError</InlineCode>; use <InlineCode>predict()</InlineCode> with them.
             </p>
           </Callout>
 
@@ -2413,7 +2413,7 @@ probs.top5conf              # 5 confidences, aligned with probs.top5`}</CodeBloc
 
           <ul className="space-y-2 my-4">
             <FeatureItem>MobileNetV4 weights are production grade (Apache-2.0 ImageNet-1k, bit-identical load). DINOv2 classify weights are demo-grade (Imagenette, 10 classes).</FeatureItem>
-            <FeatureItem>There is no LibreRFDETR classifier in v1.3.0. Classification moved into the LibreMobileNetV4 and LibreDINOv2 families; legacy LibreRFDETR*-cls checkpoints are rejected on load.</FeatureItem>
+            <FeatureItem>There is no LibreRFDETR classifier in v1.3.0. Classification moved into the dedicated classification families (LibreMobileNetV4, LibreConvNeXt, LibreEfficientNetV2, LibreResNet, LibreDINOv2, LibreCLIP); legacy LibreRFDETR*-cls checkpoints are rejected on load.</FeatureItem>
             <FeatureItem>A fresh DINOv2 fine-tune with the default recipe tops out around 0.93 top-1 on Imagenette, below the shipped 0.976. Fine-tune from a shipped -cls checkpoint to recover accuracy.</FeatureItem>
             <FeatureItem>ONNX classify output is raw logits. Apply softmax in non-Python consumers.</FeatureItem>
             <FeatureItem>Predicting a single image returns one Results. Read result.probs directly, or pass a list and index the list: model([&quot;a.jpg&quot;])[0].probs.</FeatureItem>
@@ -4772,7 +4772,7 @@ with VideoSource("clip.mp4", vid_stride=1) as src, \\
           </P>
 
           <SubHeading>安装</SubHeading>
-          <CodeBlock language="bash">{`pip install libreyolo[tracking]   # compatibility extra; tracking deps ship in base dev install`}</CodeBlock>
+          <CodeBlock language="bash">{`pip install libreyolo[tracking]   # compatibility extra; tracking deps ship in the base install`}</CodeBlock>
 
           <SubHeading>视频跟踪助手</SubHeading>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
@@ -5186,7 +5186,7 @@ result.save("out.jpg")`}</CodeBlock>
           </ul>
           <Callout icon={ShieldCheck} tone="emerald" title="许可证">
             <p>
-              Qwen3-VL 和 SmolVLM2 采用 Apache-2.0；Florence-2 和 Kosmos-2 采用 MIT。LFM2-VL 和 InternVL3 采用非 OSI 许可证，会在首次下载前发出一次性提示，以便你为商业用途做出知情选择。
+              Qwen3-VL 和 SmolVLM2 采用 Apache-2.0；Florence-2 和 Kosmos-2 采用 MIT。LFM2-VL、InternVL3 和 LocateAnything 采用非 OSI 许可证（LocateAnything 为 NVIDIA 非商业许可），会在首次下载前发出一次性提示，以便你为商业用途做出知情选择。
             </p>
           </Callout>
 
@@ -5270,7 +5270,7 @@ answer = model.chat("harbor.jpg", "How many boats are docked? Answer with a numb
 print(answer)`}</CodeBlock>
           <Callout icon={AlertTriangle} tone="amber">
             <p>
-              <InlineCode>chat()</InlineCode> 在采用对话模板的系列上可用（Qwen3-VL、LFM2-VL、SmolVLM2、InternVL3）。Florence-2 和 Kosmos-2 是基于任务 token 的定位模型，会抛出 <InlineCode>NotImplementedError</InlineCode>；请对它们使用 <InlineCode>predict()</InlineCode>。
+              <InlineCode>chat()</InlineCode> 在采用对话模板的系列上可用（Qwen3-VL、LFM2-VL、SmolVLM2、InternVL3、LocateAnything）。Florence-2 和 Kosmos-2 是基于任务 token 的定位模型，会抛出 <InlineCode>NotImplementedError</InlineCode>；请对它们使用 <InlineCode>predict()</InlineCode>。
             </p>
           </Callout>
 
@@ -5430,7 +5430,7 @@ probs.top5conf              # 5 confidences, aligned with probs.top5`}</CodeBloc
 
           <ul className="space-y-2 my-4">
             <FeatureItem>MobileNetV4 权重为生产级（Apache-2.0 ImageNet-1k，逐比特一致加载）。DINOv2 分类权重为演示级（Imagenette，10 类）。</FeatureItem>
-            <FeatureItem>v1.3.0 中没有 LibreRFDETR 分类器。分类已迁移到 LibreMobileNetV4 和 LibreDINOv2 系列；旧的 LibreRFDETR*-cls 检查点在加载时会被拒绝。</FeatureItem>
+            <FeatureItem>v1.3.0 中没有 LibreRFDETR 分类器。分类已迁移到专门的分类系列（LibreMobileNetV4、LibreConvNeXt、LibreEfficientNetV2、LibreResNet、LibreDINOv2、LibreCLIP）；旧的 LibreRFDETR*-cls 检查点在加载时会被拒绝。</FeatureItem>
             <FeatureItem>使用默认配方从头微调 DINOv2 在 Imagenette 上的 top-1 上限约为 0.93，低于随附的 0.976。从随附的 -cls 检查点开始微调以恢复精度。</FeatureItem>
             <FeatureItem>ONNX 分类输出为原始 logits。请在非 Python 消费方中自行应用 softmax。</FeatureItem>
             <FeatureItem>预测单张图像返回一个 Results。直接读取 result.probs，或传入列表并对列表取索引：model([&quot;a.jpg&quot;])[0].probs。</FeatureItem>
