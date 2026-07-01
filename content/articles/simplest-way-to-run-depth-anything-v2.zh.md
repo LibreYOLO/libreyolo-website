@@ -29,7 +29,7 @@ LibreYOLO 加载的是同样的 Depth Anything V2 权重，并把深度任务变
 ```python
 from libreyolo import LibreYOLO
 
-model = LibreYOLO("LibreDepthAnythingV2l-depth.pt")  # 首次运行时自动下载
+model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")  # 首次运行时自动下载（Apache-2.0，可商用）
 model.predict("image.jpg", save=True)     # 把上色后的深度图写入磁盘
 ```
 
@@ -52,7 +52,7 @@ model.predict("image.jpg", save=True)     # 把上色后的深度图写入磁盘
 ```bash
 # 可选：自己转换官方 checkpoint，而不使用自动下载
 python weights/convert_depth_anything_v2_weights.py \
-  depth_anything_v2_vitl.pth weights/LibreDepthAnythingV2l-depth.pt
+  depth_anything_v2_vits.pth weights/LibreDepthAnythingV2s-depth.pt
 ```
 
 ## 上手试试

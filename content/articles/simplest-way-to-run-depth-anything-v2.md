@@ -29,7 +29,7 @@ LibreYOLO loads the same Depth Anything V2 weights and gives you the depth task 
 ```python
 from libreyolo import LibreYOLO
 
-model = LibreYOLO("LibreDepthAnythingV2l-depth.pt")  # auto-downloads on first run
+model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")  # auto-downloads on first run (Apache-2.0, commercial-safe)
 model.predict("image.jpg", save=True)     # writes a colorized depth map to disk
 ```
 
@@ -52,7 +52,7 @@ A note on weights: LibreYOLO hosts converted Depth Anything V2 checkpoints and p
 ```bash
 # optional: convert an official checkpoint yourself instead of auto-downloading
 python weights/convert_depth_anything_v2_weights.py \
-  depth_anything_v2_vitl.pth weights/LibreDepthAnythingV2l-depth.pt
+  depth_anything_v2_vits.pth weights/LibreDepthAnythingV2s-depth.pt
 ```
 
 ## Try it
