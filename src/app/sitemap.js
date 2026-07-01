@@ -39,8 +39,8 @@ export default function sitemap() {
   ].flatMap(({ path, priority }) => bilingual(path, priority))
 
   const englishOnlyRoutes = [
-    { path: '/docs', priority: 0.9 },
-    { path: '/docs/v1.3.0', priority: 0.7 },
+    { path: '/docs/v1.3.0', priority: 0.9 },
+    { path: '/docs/v1.2.0', priority: 0.7 },
     { path: '/docs/librevlm', priority: 0.8 },
     { path: '/docs/experimental', priority: 0.8 },
     { path: '/docs/v1.1.0', priority: 0.5 },

@@ -540,10 +540,11 @@ export function DocLayout({ sections, eyebrow = 'Documentation', copyTitle = 'Li
       {/* Mobile sidebar toggle */}
       <button
         onClick={() => setMobileMenuOpen(true)}
-        className="lg:hidden fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-libre-500 text-white shadow-lg shadow-libre-500/30 flex items-center justify-center hover:bg-libre-400 transition-colors"
-        aria-label="Open navigation"
+        className="lg:hidden fixed top-16 left-4 z-30 inline-flex items-center gap-2 rounded-lg border border-surface-200 dark:border-white/[0.1] bg-white/90 dark:bg-surface-900/90 backdrop-blur px-3 py-2 text-sm font-semibold text-surface-700 dark:text-surface-200 shadow-sm hover:bg-white dark:hover:bg-surface-800 transition-colors"
+        aria-label="Open documentation navigation"
       >
-        <Menu className="w-5 h-5" />
+        <Menu className="w-4 h-4" />
+        Menu
       </button>
 
       {/* Mobile sidebar overlay */}
