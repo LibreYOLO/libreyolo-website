@@ -6,7 +6,7 @@ author: Xuban
 tags: [LibreYOLO, yolox, object-detection, tutorial]
 ---
 
-YOLOX is an anchor-free detector from Megvii with seven model sizes ranging from 0.91M parameters (Nano) to 99.1M (X). The large variant hits 49.7 mAP on COCO val. It is Apache 2.0 on both code and weights, which makes it one of the few competitive detectors you can ship in a commercial product without any restrictions.
+YOLOX is an anchor-free detector from Megvii with six model sizes ranging from 0.91M parameters (Nano) to 99.1M (X). The large variant hits 49.7 mAP on COCO val. It is Apache 2.0 on both code and weights, which makes it one of the few competitive detectors you can ship in a commercial product without any restrictions.
 
 <div style="position:relative;width:100%;padding-top:62.5%">
   <iframe
@@ -45,7 +45,7 @@ print(results[0].boxes.xyxy)  # xyxy coordinates
 print(results[0].boxes.conf)  # confidence scores
 ```
 
-Export is broader than what the original library offers. LibreYOLO can export YOLOX to ONNX, TorchScript, CoreML, OpenVINO, NCNN, TFLite, and TensorRT. The original repo has no CoreML path and its ONNX export is broken on modern PyTorch.
+Export is broader than what the original library offers. LibreYOLO can export YOLOX to ONNX, TorchScript, CoreML, OpenVINO, NCNN, and TensorRT. The original repo has no CoreML path and its ONNX export is broken on modern PyTorch.
 
 Training works too:
 

@@ -38,7 +38,7 @@ results = model("image.jpg", save=True)
 
 S、M、L 变体在检测和姿态任务上都可用。
 
-LibreYOLO 可以把 YOLO-NAS 导出为 ONNX、TorchScript、OpenVINO、NCNN 和 TFLite，这比原始库提供了更好的支持。
+LibreYOLO 可以把 YOLO-NAS 导出为 ONNX、TorchScript、OpenVINO 和 NCNN，这比原始库提供了更好的支持。
 
 ## 什么情况下 super-gradients 仍是更好的选择
 

@@ -38,7 +38,7 @@ results = model("image.jpg", save=True)
 
 The S, M, and L variants all work for detection and pose.
 
-LibreYOLO can export YOLO-NAS to ONNX, TorchScript, OpenVINO, NCNN, and TFLite which represents a better support than the original library.
+LibreYOLO can export YOLO-NAS to ONNX, TorchScript, OpenVINO, and NCNN, which represents a better support than the original library.
 
 ## Where super-gradients is still the right choice
 

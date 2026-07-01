@@ -697,25 +697,25 @@ function CompatibilityMatrix() {
       family: 'D-FINE', status: 'Experimental',
       inference: 'exp', training: 'exp',
       detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: '', tflite: '',
+      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: '', coreml: '', tflite: '',
     },
     {
       family: 'DEIM', status: 'Experimental',
       inference: 'exp', training: 'exp',
       detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: '', tflite: '',
+      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: '', coreml: '', tflite: '',
     },
     {
       family: 'DEIMv2', status: 'Experimental',
       inference: 'exp', training: 'exp',
       detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: '', tflite: '',
+      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: '', coreml: '', tflite: '',
     },
     {
       family: 'RT-DETR', status: 'Experimental',
       inference: 'exp', training: 'exp',
       detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: 'exp', tflite: '',
+      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: '', coreml: 'exp', tflite: '',
     },
     {
       family: 'RT-DETRv2', status: 'Experimental',
@@ -1091,7 +1091,7 @@ print(result.saved_path)`}</CodeBlock>
           <SubHeading>From PyPI</SubHeading>
           <CodeBlock language="bash">{`pip install libreyolo`}</CodeBlock>
           <P>
-            v1.3.0 is on PyPI, so a plain pip install libreyolo installs the features documented on this page.
+            v1.3.0 is on PyPI, so pip install libreyolo gets you the core library. Some paths (RF-DETR, LibreVLM, TFLite, TensorRT, and other optional backends) need the extras shown below.
           </P>
 
           <SubHeading>From source</SubHeading>
@@ -2294,7 +2294,7 @@ print(answer)`}</CodeBlock>
           {/* ────────────── CLASSIFICATION ────────────── */}
           <SectionHeading id="classification" icon={Tags}>Classification</SectionHeading>
           <P>
-            New in v1.3.0: whole-image classification across several families. <InlineCode>LibreMobileNetV4</InlineCode> is the production classifier (Apache-2.0 ImageNet-1k weights, exportable to ONNX); <InlineCode>LibreConvNeXt</InlineCode> and <InlineCode>LibreEfficientNetV2</InlineCode> are additional Apache-2.0 ImageNet-1k classifiers; <InlineCode>LibreResNet</InlineCode> is a baseline; <InlineCode>LibreCLIP</InlineCode> adds zero-shot open-vocabulary classification (inference-only); and <InlineCode>LibreDINOv2</InlineCode> with <InlineCode>task=classify</InlineCode> is a DINOv2 backbone plus linear probe, ideal for transfer learning, though its published weights are demo-grade and it cannot export yet. This is a pre-release task, so details may change before launch.
+            New in v1.3.0: whole-image classification across several families. <InlineCode>LibreMobileNetV4</InlineCode> is the production classifier (Apache-2.0 ImageNet-1k weights, exportable to ONNX); <InlineCode>LibreConvNeXt</InlineCode> and <InlineCode>LibreEfficientNetV2</InlineCode> are additional Apache-2.0 ImageNet-1k classifiers; <InlineCode>LibreResNet</InlineCode> is a baseline; <InlineCode>LibreCLIP</InlineCode> adds zero-shot open-vocabulary classification (inference-only); and <InlineCode>LibreDINOv2</InlineCode> with <InlineCode>task=classify</InlineCode> is a DINOv2 backbone plus linear probe, ideal for transfer learning, though its published weights are demo-grade and it cannot export yet. This is an experimental task, so details may still change.
           </P>
 
           <DocTable
@@ -2426,7 +2426,7 @@ probs.top5conf              # 5 confidences, aligned with probs.top5`}</CodeBloc
             <SupportBadge variant="experimental">Inference and val only</SupportBadge>
           </div>
           <P>
-            New in v1.3.0: monocular depth via <InlineCode>LibreDepthAnythingV2</InlineCode>, a Depth Anything V2 port (DINOv2 encoder plus DPT head, NeurIPS 2024). It predicts a dense relative inverse-depth map: higher values are closer to the camera, with no metric unit implied. Sizes <InlineCode>s</InlineCode> / <InlineCode>b</InlineCode> / <InlineCode>l</InlineCode> / <InlineCode>g</InlineCode> map to ViT-S / B / L / G and all run at 518. This is a pre-release task and supports inference and zero-shot validation only: no training and no export.
+            New in v1.3.0: monocular depth via <InlineCode>LibreDepthAnythingV2</InlineCode>, a Depth Anything V2 port (DINOv2 encoder plus DPT head, NeurIPS 2024). It predicts a dense relative inverse-depth map: higher values are closer to the camera, with no metric unit implied. Sizes <InlineCode>s</InlineCode> / <InlineCode>b</InlineCode> / <InlineCode>l</InlineCode> / <InlineCode>g</InlineCode> map to ViT-S / B / L / G and all run at 518. This is an experimental task and supports inference and zero-shot validation only: no training and no export.
           </P>
           <P>
             Checkpoints. Only the ViT-S checkpoint is Apache-2.0 and auto-hosted: <Checkpoints names={['LibreDepthAnythingV2s-depth.pt']} link={false} />. The larger encoders <Checkpoints names={['LibreDepthAnythingV2b-depth.pt', 'LibreDepthAnythingV2l-depth.pt', 'LibreDepthAnythingV2g-depth.pt']} link={false} /> are CC-BY-NC-4.0 and are not redistributed by LibreYOLO; convert the official upstream checkpoints with <InlineCode>weights/convert_depth_anything_v2_weights.py</InlineCode>.
@@ -2796,7 +2796,7 @@ model.export(format="ncnn")
 # CoreML (.mlpackage, macOS runtime)
 model.export(format="coreml")
 
-# TFLite (RF-DETR detect/seg/pose + YOLO9 detect; experimental, needs Python 3.12+)
+# TFLite (RF-DETR detect/pose + YOLO9 detect; experimental, needs Python 3.12+)
 model.export(format="tflite")`}</CodeBlock>
 
           <SubHeading>All export parameters</SubHeading>
@@ -2865,7 +2865,7 @@ model.export(format="onnx", nms=True, conf=0.25, iou=0.45, max_det=300)`}</CodeB
           <CodeBlock language="bash">{`pip install "libreyolo[tflite]"   # Python 3.12+`}</CodeBlock>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
-model = LibreYOLO("LibreRFDETRs-seg.pt")
+model = LibreYOLO("LibreRFDETRs.pt")
 model.export(format="tflite")   # writes a .tflite file`}</CodeBlock>
           <P>
             For RF-DETR, the exporter rewrites each GridSample node into a TFLite-safe bilinear
@@ -3837,25 +3837,25 @@ function CompatibilityMatrixZh() {
       family: 'D-FINE', status: '实验性',
       inference: 'exp', training: 'exp',
       detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: '', tflite: '',
+      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: '', coreml: '', tflite: '',
     },
     {
       family: 'DEIM', status: '实验性',
       inference: 'exp', training: 'exp',
       detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: '', tflite: '',
+      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: '', coreml: '', tflite: '',
     },
     {
       family: 'DEIMv2', status: '实验性',
       inference: 'exp', training: 'exp',
       detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: '', tflite: '',
+      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: '', coreml: '', tflite: '',
     },
     {
       family: 'RT-DETR', status: '实验性',
       inference: 'exp', training: 'exp',
       detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: 'exp', tflite: '',
+      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: '', coreml: 'exp', tflite: '',
     },
     {
       family: 'RT-DETRv2', status: '实验性',
@@ -4125,7 +4125,7 @@ print(result.saved_path)`}</CodeBlock>
           <SubHeading>从 PyPI 安装</SubHeading>
           <CodeBlock language="bash">{`pip install libreyolo`}</CodeBlock>
           <P>
-            v1.3.0 已发布到 PyPI，因此直接 pip install libreyolo 即可获得本页所述的功能。
+            v1.3.0 已发布到 PyPI，因此 pip install libreyolo 即可获得核心库。部分功能（RF-DETR、LibreVLM、TFLite、TensorRT 等可选后端）需要下方所示的 extras。
           </P>
 
           <SubHeading>从源码安装</SubHeading>
@@ -5308,7 +5308,7 @@ print(answer)`}</CodeBlock>
           {/* ────────────── CLASSIFICATION ────────────── */}
           <SectionHeading id="classification" icon={Tags}>分类</SectionHeading>
           <P>
-            v1.3.0 新增：整图分类，涵盖多个系列。<InlineCode>LibreMobileNetV4</InlineCode> 是生产级分类器（Apache-2.0 ImageNet-1k 权重，可导出为 ONNX）；<InlineCode>LibreConvNeXt</InlineCode> 和 <InlineCode>LibreEfficientNetV2</InlineCode> 是额外的 Apache-2.0 ImageNet-1k 分类器；<InlineCode>LibreResNet</InlineCode> 是基线；<InlineCode>LibreCLIP</InlineCode> 提供零样本开放词表分类（仅推理）；<InlineCode>LibreDINOv2</InlineCode> 配合 <InlineCode>task=classify</InlineCode> 是 DINOv2 主干加线性探针，非常适合迁移学习，但其发布的权重为演示级，且暂不支持导出。这是一个预发布任务，因此细节可能在正式发布前变化。
+            v1.3.0 新增：整图分类，涵盖多个系列。<InlineCode>LibreMobileNetV4</InlineCode> 是生产级分类器（Apache-2.0 ImageNet-1k 权重，可导出为 ONNX）；<InlineCode>LibreConvNeXt</InlineCode> 和 <InlineCode>LibreEfficientNetV2</InlineCode> 是额外的 Apache-2.0 ImageNet-1k 分类器；<InlineCode>LibreResNet</InlineCode> 是基线；<InlineCode>LibreCLIP</InlineCode> 提供零样本开放词表分类（仅推理）；<InlineCode>LibreDINOv2</InlineCode> 配合 <InlineCode>task=classify</InlineCode> 是 DINOv2 主干加线性探针，非常适合迁移学习，但其发布的权重为演示级，且暂不支持导出。这是一个实验性任务，细节仍可能变化。
           </P>
 
           <DocTable
@@ -5440,7 +5440,7 @@ probs.top5conf              # 5 confidences, aligned with probs.top5`}</CodeBloc
             <SupportBadge variant="experimental">仅推理与验证</SupportBadge>
           </div>
           <P>
-            v1.3.0 新增：通过 <InlineCode>LibreDepthAnythingV2</InlineCode> 进行单目深度估计，它是 Depth Anything V2 的移植（DINOv2 编码器加 DPT 头，NeurIPS 2024）。它预测一张密集的相对逆深度图：值越大越靠近相机，不隐含任何度量单位。尺寸 <InlineCode>s</InlineCode> / <InlineCode>b</InlineCode> / <InlineCode>l</InlineCode> / <InlineCode>g</InlineCode> 对应 ViT-S / B / L / G，均在 518 运行。这是一个预发布任务，仅支持推理和零样本验证：不支持训练，也不支持导出。
+            v1.3.0 新增：通过 <InlineCode>LibreDepthAnythingV2</InlineCode> 进行单目深度估计，它是 Depth Anything V2 的移植（DINOv2 编码器加 DPT 头，NeurIPS 2024）。它预测一张密集的相对逆深度图：值越大越靠近相机，不隐含任何度量单位。尺寸 <InlineCode>s</InlineCode> / <InlineCode>b</InlineCode> / <InlineCode>l</InlineCode> / <InlineCode>g</InlineCode> 对应 ViT-S / B / L / G，均在 518 运行。这是一个实验性任务，仅支持推理和零样本验证：不支持训练，也不支持导出。
           </P>
           <P>
             检查点。只有 ViT-S 检查点为 Apache-2.0 并自动托管：<Checkpoints names={['LibreDepthAnythingV2s-depth.pt']} link={false} />。更大的编码器 <Checkpoints names={['LibreDepthAnythingV2b-depth.pt', 'LibreDepthAnythingV2l-depth.pt', 'LibreDepthAnythingV2g-depth.pt']} link={false} /> 为 CC-BY-NC-4.0，LibreYOLO 不做再分发；请使用 <InlineCode>weights/convert_depth_anything_v2_weights.py</InlineCode> 转换官方上游检查点。
@@ -5810,7 +5810,7 @@ model.export(format="ncnn")
 # CoreML (.mlpackage, macOS runtime)
 model.export(format="coreml")
 
-# TFLite (RF-DETR detect/seg/pose + YOLO9 detect; experimental, needs Python 3.12+)
+# TFLite (RF-DETR detect/pose + YOLO9 detect; experimental, needs Python 3.12+)
 model.export(format="tflite")`}</CodeBlock>
 
           <SubHeading>全部导出参数</SubHeading>
@@ -5878,7 +5878,7 @@ model.export(format="onnx", nms=True, conf=0.25, iou=0.45, max_det=300)`}</CodeB
           <CodeBlock language="bash">{`pip install "libreyolo[tflite]"   # Python 3.12+`}</CodeBlock>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
-model = LibreYOLO("LibreRFDETRs-seg.pt")
+model = LibreYOLO("LibreRFDETRs.pt")
 model.export(format="tflite")   # writes a .tflite file`}</CodeBlock>
           <P>
             对于 RF-DETR，导出器会将每个 GridSample 节点改写为 TFLite 安全的双线性

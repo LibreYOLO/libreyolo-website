@@ -6,7 +6,7 @@ author: Xuban
 tags: [LibreYOLO, yolox, object-detection, tutorial]
 ---
 
-YOLOX 是旷视（Megvii）推出的无锚框（anchor-free）检测器，共有七种模型尺寸，参数量从 0.91M（Nano）到 99.1M（X）不等。large 变体在 COCO val 上达到 49.7 mAP。它的代码和权重都采用 Apache 2.0 许可，这使它成为少数几个可以毫无限制地用于商业产品的、有竞争力的检测器之一。
+YOLOX 是旷视（Megvii）推出的无锚框（anchor-free）检测器，共有六种模型尺寸，参数量从 0.91M（Nano）到 99.1M（X）不等。large 变体在 COCO val 上达到 49.7 mAP。它的代码和权重都采用 Apache 2.0 许可，这使它成为少数几个可以毫无限制地用于商业产品的、有竞争力的检测器之一。
 
 <div style="position:relative;width:100%;padding-top:62.5%">
   <iframe
@@ -45,7 +45,7 @@ print(results[0].boxes.xyxy)  # xyxy 坐标
 print(results[0].boxes.conf)  # 置信度分数
 ```
 
-它的导出范围比原始库更广。LibreYOLO 可以把 YOLOX 导出为 ONNX、TorchScript、CoreML、OpenVINO、NCNN、TFLite 和 TensorRT。原始仓库没有 CoreML 路径，而且它的 ONNX 导出在现代 PyTorch 上已经无法工作。
+它的导出范围比原始库更广。LibreYOLO 可以把 YOLOX 导出为 ONNX、TorchScript、CoreML、OpenVINO、NCNN 和 TensorRT。原始仓库没有 CoreML 路径，而且它的 ONNX 导出在现代 PyTorch 上已经无法工作。
 
 训练同样可用：
 
