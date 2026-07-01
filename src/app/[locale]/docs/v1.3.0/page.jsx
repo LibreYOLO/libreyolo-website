@@ -1068,7 +1068,7 @@ print(result.saved_path)`}</CodeBlock>
           <CompatibilityMatrix />
           <p className="text-sm text-surface-600 dark:text-surface-400 leading-relaxed mb-4">
             Depth Anything V2 has no export path. TFLite export is experimental and
-            limited to YOLO9 detection and RF-DETR detect / segment / pose. The
+            limited to YOLO9 detection and RF-DETR detect / pose. The
             classification families (MobileNetV4, ConvNeXt, EfficientNetV2) support
             ONNX export. CoreML exports produce <InlineCode>.mlpackage</InlineCode>{' '}
             bundles and require <InlineCode>libreyolo[coreml]</InlineCode>: macOS only,
@@ -1097,7 +1097,7 @@ print(result.saved_path)`}</CodeBlock>
           <SubHeading>From source</SubHeading>
           <CodeBlock language="bash">{`git clone https://github.com/LibreYOLO/libreyolo.git
 cd libreyolo
-git checkout dev
+git checkout v1.3.0
 pip install -e .`}</CodeBlock>
 
           <SubHeading>Optional dependencies</SubHeading>
@@ -1414,7 +1414,7 @@ model = LibreYOLO("model_ncnn/")                # NCNN (directory)`}</CodeBlock>
               ['Semantic segmentation', <InlineCode key="se">&quot;semantic&quot;</InlineCode>, <InlineCode key="ses">-sem</InlineCode>, 'DINOv2'],
               ['Pose estimation', <InlineCode key="p">&quot;pose&quot;</InlineCode>, <InlineCode key="ps">-pose</InlineCode>, 'YOLO-NAS, EdgeCrafter, RF-DETR'],
               ['Oriented boxes', <InlineCode key="o">&quot;obb&quot;</InlineCode>, <InlineCode key="os">-obb</InlineCode>, 'RF-DETR (experimental)'],
-              ['Classification', <InlineCode key="c">&quot;classify&quot;</InlineCode>, <InlineCode key="cs">-cls</InlineCode>, 'MobileNetV4, ConvNeXt, EfficientNetV2, DINOv2'],
+              ['Classification', <InlineCode key="c">&quot;classify&quot;</InlineCode>, <InlineCode key="cs">-cls</InlineCode>, 'MobileNetV4, ConvNeXt, EfficientNetV2, ResNet, DINOv2, CLIP'],
               ['Monocular depth', <InlineCode key="de">&quot;depth&quot;</InlineCode>, <InlineCode key="des">-depth</InlineCode>, 'Depth Anything V2'],
               ['Point localization', <InlineCode key="pt">&quot;point&quot;</InlineCode>, <InlineCode key="pts">-point</InlineCode>, 'FOMO'],
               ['Gaze estimation', <InlineCode key="g">&quot;gaze&quot;</InlineCode>, <InlineCode key="gs">-gaze</InlineCode>, 'L2CS'],
@@ -2005,7 +2005,7 @@ result.keypoints.numpy()`}</CodeBlock>
           <CodeBlock language="python">{`model("people.jpg", save=True)  # draws boxes + skeleton`}</CodeBlock>
 
           <P>
-            Pose training is supported for YOLO-NAS; EdgeCrafter pose is currently inference-only. RF-DETR pose ships the size <InlineCode>x</InlineCode> checkpoint only. YOLO9 is detect-only and ships no pose checkpoints.
+            Pose training is supported for YOLO-NAS; EdgeCrafter adds experimental (not yet validated) pose training. RF-DETR pose ships the size <InlineCode>x</InlineCode> checkpoint only. YOLO9 is detect-only and ships no pose checkpoints.
           </P>
 
           <Divider />
@@ -2064,7 +2064,7 @@ for i in range(len(result.gaze)):
           <ul className="space-y-2 mb-4">
             <FeatureItem><strong className="text-surface-800 dark:text-white">Open vocabulary.</strong> Detect <InlineCode>&quot;pink car&quot;</InlineCode>, <InlineCode>&quot;license plate&quot;</InlineCode>, or <InlineCode>&quot;the small island&quot;</InlineCode> without ever training a head for them.</FeatureItem>
             <FeatureItem><strong className="text-surface-800 dark:text-white">One factory, one contract.</strong> <InlineCode>LibreVLM(...)</InlineCode> returns the standard <InlineCode>Results</InlineCode> with <InlineCode>boxes.xyxy</InlineCode>, <InlineCode>boxes.cls</InlineCode>, <InlineCode>boxes.conf</InlineCode>, plus <InlineCode>.plot()</InlineCode> and <InlineCode>.save()</InlineCode>.</FeatureItem>
-            <FeatureItem><strong className="text-surface-800 dark:text-white">Swappable backends.</strong> Six model families behind one alias string, from a 230M Florence-2 to an 8B Qwen3-VL.</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">Swappable backends.</strong> Seven model families behind one alias string, from a 230M Florence-2 to an 8B Qwen3-VL.</FeatureItem>
             <FeatureItem><strong className="text-surface-800 dark:text-white">A raw escape hatch.</strong> <InlineCode>chat()</InlineCode> gives you free-form image question answering when you need more than boxes.</FeatureItem>
           </ul>
           <Callout icon={AlertTriangle} tone="amber" title="Inference-only tier">
@@ -2149,6 +2149,13 @@ result.save("out.jpg")`}</CodeBlock>
                 '~1.6B',
                 'MIT',
                 <span key="kn">2023 grounder. Coarser boxes, no <InlineCode>chat()</InlineCode>.</span>,
+              ],
+              [
+                <strong key="la" className="text-surface-800 dark:text-white whitespace-nowrap">LocateAnything</strong>,
+                <code key="laa" className="font-mono text-xs">locate-anything</code>,
+                '~3B',
+                'NVIDIA (see model card)',
+                <span key="lan">Generative grounder from NVIDIA; emits semantic text plus boxes.</span>,
               ],
             ]}
           />
@@ -2287,7 +2294,7 @@ print(answer)`}</CodeBlock>
           {/* ────────────── CLASSIFICATION ────────────── */}
           <SectionHeading id="classification" icon={Tags}>Classification</SectionHeading>
           <P>
-            New in v1.3.0: whole-image classification. Two families ship, and they target different needs. <InlineCode>LibreMobileNetV4</InlineCode> is the production classifier (Apache-2.0 ImageNet-1k weights, exportable to ONNX). <InlineCode>LibreDINOv2</InlineCode> with <InlineCode>task=classify</InlineCode> is a DINOv2 backbone plus linear probe, ideal for transfer learning, but its published weights are demo-grade and it cannot export yet. This is a pre-release task, so details may change before launch.
+            New in v1.3.0: whole-image classification across several families. <InlineCode>LibreMobileNetV4</InlineCode> is the production classifier (Apache-2.0 ImageNet-1k weights, exportable to ONNX); <InlineCode>LibreConvNeXt</InlineCode> and <InlineCode>LibreEfficientNetV2</InlineCode> are additional Apache-2.0 ImageNet-1k classifiers; <InlineCode>LibreResNet</InlineCode> is a baseline; <InlineCode>LibreCLIP</InlineCode> adds zero-shot open-vocabulary classification (inference-only); and <InlineCode>LibreDINOv2</InlineCode> with <InlineCode>task=classify</InlineCode> is a DINOv2 backbone plus linear probe, ideal for transfer learning, though its published weights are demo-grade and it cannot export yet. This is a pre-release task, so details may change before launch.
           </P>
 
           <DocTable
@@ -2847,7 +2854,7 @@ model.export(format="onnx", nms=True, conf=0.25, iou=0.45, max_det=300)`}</CodeB
           <P>
             <SupportBadge variant="experimental">Experimental</SupportBadge>{' '}
             v1.3.0 adds a TFLite export path built on <InlineCode>onnx2tf</InlineCode>. It is
-            validated for RF-DETR detect / segment / pose and YOLO9 detect. It requires{' '}
+            validated for RF-DETR detect / pose and YOLO9 detect. It requires{' '}
             <strong className="text-surface-800 dark:text-white">Python 3.12+</strong> (the{' '}
             <InlineCode>onnx2tf 2.4.x</InlineCode> wheels do not target older Python) plus the
             optional extra <InlineCode>libreyolo[tflite]</InlineCode>
@@ -3150,7 +3157,7 @@ libreyolo doctor coco8.yaml --fast --only labels   # skip image decoding, run on
 
           <SubHeading>Machine-readable output</SubHeading>
           <P>
-            Every command accepts <InlineCode>--json</InlineCode> (structured stdout for piping into scripts or agents) and <InlineCode>--quiet</InlineCode> (suppress stderr progress lines). The core <InlineCode>predict</InlineCode>, <InlineCode>train</InlineCode>, <InlineCode>val</InlineCode>, and <InlineCode>export</InlineCode> commands also accept <InlineCode>--help-json</InlineCode> to dump their parameter schema as JSON.
+            Every command accepts <InlineCode>--json</InlineCode> (structured stdout for piping into scripts or agents). The core <InlineCode>predict</InlineCode>, <InlineCode>train</InlineCode>, <InlineCode>val</InlineCode>, and <InlineCode>export</InlineCode> commands also accept <InlineCode>--quiet</InlineCode> (suppress stderr progress lines) and <InlineCode>--help-json</InlineCode> to dump their parameter schema as JSON.
           </P>
           <CodeBlock language="bash">{`libreyolo predict model=yolo9-c source=img.jpg --json | jq .
 
@@ -3164,11 +3171,12 @@ libreyolo train --help-json > train_schema.json`}</CodeBlock>
           <SubHeading>LibreYOLO (factory)</SubHeading>
           <CodeBlock language="python">{`LibreYOLO(
     model_path: str,
-    *,
-    device: str = "auto",
-    task: str | None = None,    # override only when a custom artifact is ambiguous
+    size: str | None = None,      # override size when it can't be inferred from the filename
+    reg_max: int = 16,            # YOLO9 DFL bins; rarely changed
     nb_classes: int | None = None,  # mainly for external exported artifacts
-    compute_units: str = "all", # CoreML only: all, cpu_only, cpu_and_gpu, cpu_and_ne
+    device: str = "auto",
+    task: str | None = None,      # override only when a custom artifact is ambiguous
+    compute_units: str = "all",   # CoreML only: all, cpu_only, cpu_and_gpu, cpu_and_ne
 ) -> model wrapper or runtime backend`}</CodeBlock>
           <P>
             Prefer official checkpoint filenames and exported artifact paths, then let the factory resolve the details. It handles PyTorch checkpoints, <InlineCode>.onnx</InlineCode>, <InlineCode>.torchscript</InlineCode>, <InlineCode>.engine</InlineCode>, <InlineCode>.tensorrt</InlineCode>, <InlineCode>.mlpackage</InlineCode>, OpenVINO directories containing <InlineCode>model.xml</InlineCode>, and NCNN directories containing <InlineCode>model.ncnn.param</InlineCode> plus <InlineCode>model.ncnn.bin</InlineCode>. The <InlineCode>task</InlineCode> argument is for ambiguous custom artifacts; otherwise resolution comes from checkpoint metadata, filename suffix, and family default.
@@ -4123,7 +4131,7 @@ print(result.saved_path)`}</CodeBlock>
           <SubHeading>从源码安装</SubHeading>
           <CodeBlock language="bash">{`git clone https://github.com/LibreYOLO/libreyolo.git
 cd libreyolo
-git checkout dev
+git checkout v1.3.0
 pip install -e .`}</CodeBlock>
 
           <SubHeading>可选依赖</SubHeading>
@@ -4424,7 +4432,7 @@ model = LibreYOLO("model_ncnn/")                # NCNN (directory)`}</CodeBlock>
               ['语义分割', <InlineCode key="se">&quot;semantic&quot;</InlineCode>, <InlineCode key="ses">-sem</InlineCode>, 'DINOv2'],
               ['姿态估计', <InlineCode key="p">&quot;pose&quot;</InlineCode>, <InlineCode key="ps">-pose</InlineCode>, 'YOLO-NAS、EdgeCrafter、RF-DETR'],
               ['旋转框', <InlineCode key="o">&quot;obb&quot;</InlineCode>, <InlineCode key="os">-obb</InlineCode>, 'RF-DETR（实验性）'],
-              ['分类', <InlineCode key="c">&quot;classify&quot;</InlineCode>, <InlineCode key="cs">-cls</InlineCode>, 'MobileNetV4、ConvNeXt、EfficientNetV2、DINOv2'],
+              ['分类', <InlineCode key="c">&quot;classify&quot;</InlineCode>, <InlineCode key="cs">-cls</InlineCode>, 'MobileNetV4、ConvNeXt、EfficientNetV2、ResNet、DINOv2、CLIP'],
               ['单目深度', <InlineCode key="de">&quot;depth&quot;</InlineCode>, <InlineCode key="des">-depth</InlineCode>, 'Depth Anything V2'],
               ['点定位', <InlineCode key="pt">&quot;point&quot;</InlineCode>, <InlineCode key="pts">-point</InlineCode>, 'FOMO'],
               ['视线估计', <InlineCode key="g">&quot;gaze&quot;</InlineCode>, <InlineCode key="gs">-gaze</InlineCode>, 'L2CS'],
@@ -5011,7 +5019,7 @@ result.keypoints.numpy()`}</CodeBlock>
           <CodeBlock language="python">{`model("people.jpg", save=True)  # draws boxes + skeleton`}</CodeBlock>
 
           <P>
-            YOLO-NAS 支持姿态训练；EdgeCrafter 姿态目前仅推理。RF-DETR 姿态仅提供 <InlineCode>x</InlineCode> 尺寸的检查点。YOLO9 仅检测，不提供姿态检查点。
+            YOLO-NAS 支持姿态训练；EdgeCrafter 提供实验性（尚未验证）的姿态训练。RF-DETR 姿态仅提供 <InlineCode>x</InlineCode> 尺寸的检查点。YOLO9 仅检测，不提供姿态检查点。
           </P>
 
           <Divider />
@@ -5070,7 +5078,7 @@ for i in range(len(result.gaze)):
           <ul className="space-y-2 mb-4">
             <FeatureItem><strong className="text-surface-800 dark:text-white">开放词表。</strong> 检测 <InlineCode>&quot;pink car&quot;</InlineCode>、<InlineCode>&quot;license plate&quot;</InlineCode> 或 <InlineCode>&quot;the small island&quot;</InlineCode>，无需为它们训练任何检测头。</FeatureItem>
             <FeatureItem><strong className="text-surface-800 dark:text-white">一个工厂，一份契约。</strong> <InlineCode>LibreVLM(...)</InlineCode> 返回标准的 <InlineCode>Results</InlineCode>，含 <InlineCode>boxes.xyxy</InlineCode>、<InlineCode>boxes.cls</InlineCode>、<InlineCode>boxes.conf</InlineCode>，以及 <InlineCode>.plot()</InlineCode> 和 <InlineCode>.save()</InlineCode>。</FeatureItem>
-            <FeatureItem><strong className="text-surface-800 dark:text-white">可替换的后端。</strong> 一个别名字符串背后是六个模型系列，从 230M 的 Florence-2 到 8B 的 Qwen3-VL。</FeatureItem>
+            <FeatureItem><strong className="text-surface-800 dark:text-white">可替换的后端。</strong> 一个别名字符串背后是七个模型系列，从 230M 的 Florence-2 到 8B 的 Qwen3-VL。</FeatureItem>
             <FeatureItem><strong className="text-surface-800 dark:text-white">一个原始的逃生通道。</strong> 当你需要的不止是框时，<InlineCode>chat()</InlineCode> 提供自由形式的图像问答。</FeatureItem>
           </ul>
           <Callout icon={AlertTriangle} tone="amber" title="仅推理层级">
@@ -5155,6 +5163,13 @@ result.save("out.jpg")`}</CodeBlock>
                 '~1.6B',
                 'MIT',
                 <span key="kn">2023 年的定位模型。框较粗糙，无 <InlineCode>chat()</InlineCode>。</span>,
+              ],
+              [
+                <strong key="la" className="text-surface-800 dark:text-white whitespace-nowrap">LocateAnything</strong>,
+                <code key="laa" className="font-mono text-xs">locate-anything</code>,
+                '~3B',
+                'NVIDIA（见模型卡）',
+                <span key="lan">来自 NVIDIA 的生成式定位模型；输出语义文本与检测框。</span>,
               ],
             ]}
           />
@@ -5293,7 +5308,7 @@ print(answer)`}</CodeBlock>
           {/* ────────────── CLASSIFICATION ────────────── */}
           <SectionHeading id="classification" icon={Tags}>分类</SectionHeading>
           <P>
-            v1.3.0 新增：整图分类。提供两个系列，面向不同需求。<InlineCode>LibreMobileNetV4</InlineCode> 是生产级分类器（Apache-2.0 ImageNet-1k 权重，可导出为 ONNX）。<InlineCode>LibreDINOv2</InlineCode> 配合 <InlineCode>task=classify</InlineCode> 是 DINOv2 主干加线性探针，非常适合迁移学习，但其发布的权重为演示级，且暂不支持导出。这是一个预发布任务，因此细节可能在正式发布前变化。
+            v1.3.0 新增：整图分类，涵盖多个系列。<InlineCode>LibreMobileNetV4</InlineCode> 是生产级分类器（Apache-2.0 ImageNet-1k 权重，可导出为 ONNX）；<InlineCode>LibreConvNeXt</InlineCode> 和 <InlineCode>LibreEfficientNetV2</InlineCode> 是额外的 Apache-2.0 ImageNet-1k 分类器；<InlineCode>LibreResNet</InlineCode> 是基线；<InlineCode>LibreCLIP</InlineCode> 提供零样本开放词表分类（仅推理）；<InlineCode>LibreDINOv2</InlineCode> 配合 <InlineCode>task=classify</InlineCode> 是 DINOv2 主干加线性探针，非常适合迁移学习，但其发布的权重为演示级，且暂不支持导出。这是一个预发布任务，因此细节可能在正式发布前变化。
           </P>
 
           <DocTable
@@ -5852,7 +5867,7 @@ model.export(format="onnx", nms=True, conf=0.25, iou=0.45, max_det=300)`}</CodeB
           <P>
             <SupportBadge variant="experimental">实验性</SupportBadge>{' '}
             v1.3.0 新增了基于 <InlineCode>onnx2tf</InlineCode> 的 TFLite 导出路径。它已在
-            RF-DETR detect / segment / pose 和 YOLO9 detect 上验证。它需要{' '}
+            RF-DETR detect / pose 和 YOLO9 detect 上验证。它需要{' '}
             <strong className="text-surface-800 dark:text-white">Python 3.12+</strong>（{' '}
             <InlineCode>onnx2tf 2.4.x</InlineCode> wheels 不面向更老的 Python），以及
             可选 extra <InlineCode>libreyolo[tflite]</InlineCode>
@@ -6154,7 +6169,7 @@ libreyolo doctor coco8.yaml --fast --only labels   # skip image decoding, run on
 
           <SubHeading>机器可读输出</SubHeading>
           <P>
-            每个命令都接受 <InlineCode>--json</InlineCode>（结构化的标准输出，便于管道传入脚本或智能体）和 <InlineCode>--quiet</InlineCode>（抑制 stderr 进度行）。核心的 <InlineCode>predict</InlineCode>、<InlineCode>train</InlineCode>、<InlineCode>val</InlineCode> 和 <InlineCode>export</InlineCode> 命令还接受 <InlineCode>--help-json</InlineCode>，可将其参数 schema 以 JSON 形式输出。
+            每个命令都接受 <InlineCode>--json</InlineCode>（结构化的标准输出，便于管道传入脚本或智能体）。核心的 <InlineCode>predict</InlineCode>、<InlineCode>train</InlineCode>、<InlineCode>val</InlineCode> 和 <InlineCode>export</InlineCode> 命令还接受 <InlineCode>--quiet</InlineCode>（抑制 stderr 进度行）和 <InlineCode>--help-json</InlineCode>，可将其参数 schema 以 JSON 形式输出。
           </P>
           <CodeBlock language="bash">{`libreyolo predict model=yolo9-c source=img.jpg --json | jq .
 
@@ -6168,11 +6183,12 @@ libreyolo train --help-json > train_schema.json`}</CodeBlock>
           <SubHeading>LibreYOLO（工厂）</SubHeading>
           <CodeBlock language="python">{`LibreYOLO(
     model_path: str,
-    *,
-    device: str = "auto",
-    task: str | None = None,    # override only when a custom artifact is ambiguous
+    size: str | None = None,      # override size when it can't be inferred from the filename
+    reg_max: int = 16,            # YOLO9 DFL bins; rarely changed
     nb_classes: int | None = None,  # mainly for external exported artifacts
-    compute_units: str = "all", # CoreML only: all, cpu_only, cpu_and_gpu, cpu_and_ne
+    device: str = "auto",
+    task: str | None = None,      # override only when a custom artifact is ambiguous
+    compute_units: str = "all",   # CoreML only: all, cpu_only, cpu_and_gpu, cpu_and_ne
 ) -> model wrapper or runtime backend`}</CodeBlock>
           <P>
             优先使用官方检查点文件名和导出产物路径，然后让工厂解析细节。它可处理 PyTorch 检查点、<InlineCode>.onnx</InlineCode>、<InlineCode>.torchscript</InlineCode>、<InlineCode>.engine</InlineCode>、<InlineCode>.tensorrt</InlineCode>、<InlineCode>.mlpackage</InlineCode>、包含 <InlineCode>model.xml</InlineCode> 的 OpenVINO 目录，以及包含 <InlineCode>model.ncnn.param</InlineCode> 和 <InlineCode>model.ncnn.bin</InlineCode> 的 NCNN 目录。<InlineCode>task</InlineCode> 参数用于有歧义的自定义产物；否则解析来自检查点元数据、文件名后缀和系列默认值。
