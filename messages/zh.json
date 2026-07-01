@@ -117,18 +117,11 @@
     ]
   },
   "Models": {
-    "title": "模型<accent>库</accent>",
-    "subtitle": "不断扩充的 PyTorch 检测权重集合，统一在一个 API 之后。可直接运行、在你自己的数据上微调，或导出为 ONNX 及更多格式。每个权重都托管在 HuggingFace 上。",
-    "browseCta": "在 HuggingFace 上浏览模型",
-    "highlight1Title": "原生 PyTorch",
-    "highlight1Desc": "每个模型都是标准的 PyTorch 检查点。只需一次 LibreYOLO() 调用即可加载。",
-    "highlight2Title": "导出为 ONNX 及更多格式",
-    "highlight2Desc": "一行代码导出为 ONNX；许多模型还支持 TensorRT、OpenVINO、ncnn 和 TorchScript。",
-    "highlight3Title": "公开的基准测试",
-    "highlight3Desc": "每个模型的精度和速度都发布在 <link>visionanalysis.org</link> 上，让你在下载前就能比较。",
-    "benchmarkIntro": "每个模型都经过公开的基准测试。在 <link>visionanalysis.org</link> 上探索完整的交互式精度与速度图表。",
-    "exploreBenchmarks": "探索完整基准测试",
-    "note": "注意：预训练权重可能会继承其原始训练来源的许可条款。"
+    "title": "看它运行",
+    "subtitle": "来自 LibreYOLO 的真实输出。每一个都只需几行代码。",
+    "byTask": "按任务分类的模型",
+    "weights": "全部权重",
+    "docs": "文档"
   },
   "Commercial": {
     "titleEmphasis": "是的",

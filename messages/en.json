@@ -117,18 +117,11 @@
     ]
   },
   "Models": {
-    "title": "Model <accent>Zoo</accent>",
-    "subtitle": "A growing collection of PyTorch detection weights behind a single API. Run them as-is, fine-tune on your own data, or export to ONNX and beyond. Every weight is hosted on HuggingFace.",
-    "browseCta": "Browse Models on HuggingFace",
-    "highlight1Title": "PyTorch-native",
-    "highlight1Desc": "Every model is a standard PyTorch checkpoint. Load it with one LibreYOLO() call.",
-    "highlight2Title": "Export to ONNX & more",
-    "highlight2Desc": "One-line export to ONNX, with TensorRT, OpenVINO, ncnn, and TorchScript available for many models.",
-    "highlight3Title": "Benchmarked in the open",
-    "highlight3Desc": "Accuracy and speed for every model are published on <link>visionanalysis.org</link>, so you can compare before you download.",
-    "benchmarkIntro": "Every model is benchmarked in the open. Explore the full interactive accuracy and speed charts on <link>visionanalysis.org</link>.",
-    "exploreBenchmarks": "Explore full benchmarks",
-    "note": "Note: pre-trained weights may inherit licensing terms from their original training source."
+    "title": "See it run",
+    "subtitle": "Real outputs from LibreYOLO. Each one is a few lines of code.",
+    "byTask": "Models by task",
+    "weights": "All weights",
+    "docs": "Docs"
   },
   "Commercial": {
     "titleEmphasis": "Yes",

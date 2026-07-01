@@ -504,8 +504,22 @@ export function DocLayout({ sections, eyebrow = 'Documentation', copyTitle = 'Li
     return () => window.removeEventListener('scroll', handleScroll)
   }, [sections])
 
+  // On load, honor a #section deep link so a shared URL lands on that section.
+  useEffect(() => {
+    const id = decodeURIComponent((window.location.hash || '').replace(/^#/, ''))
+    if (id && sections.some((s) => s.id === id)) {
+      requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView()
+        setActiveSection(id)
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const navigateTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    setActiveSection(id)
+    window.history.replaceState(null, '', `#${id}`)
     setMobileMenuOpen(false)
   }
 

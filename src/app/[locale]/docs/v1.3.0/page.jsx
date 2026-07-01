@@ -895,8 +895,22 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // On load, honor a #section deep link so a shared URL lands on that section.
+  useEffect(() => {
+    const id = decodeURIComponent((window.location.hash || '').replace(/^#/, ''))
+    if (id && sections.some((s) => s.id === id)) {
+      requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView()
+        setActiveSection(id)
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const navigateTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    setActiveSection(id)
+    window.history.replaceState(null, '', `#${id}`)
     setMobileMenuOpen(false)
   }
 
@@ -3629,8 +3643,22 @@ function DocsPageZh({ version = 'v1.3.0', isLatest = true }) {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // On load, honor a #section deep link so a shared URL lands on that section.
+  useEffect(() => {
+    const id = decodeURIComponent((window.location.hash || '').replace(/^#/, ''))
+    if (id && sections.some((s) => s.id === id)) {
+      requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView()
+        setActiveSection(id)
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const navigateTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    setActiveSection(id)
+    window.history.replaceState(null, '', `#${id}`)
     setMobileMenuOpen(false)
   }
 
