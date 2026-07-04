@@ -17,6 +17,7 @@ const sections = [
   { id: 'classification', title: 'Classification', icon: Tags },
   { id: 'obb', title: 'Oriented Boxes (OBB)', icon: Rotate3d },
   { id: 'pose', title: 'Keypoints / Pose', icon: PersonStanding },
+  { id: 'small-object', title: 'Small-Object Detection', icon: Crosshair },
   { id: 'lora', title: 'LoRA / DoRA', icon: Layers2 },
   { id: 'status', title: 'Stability', icon: AlertTriangle },
 ]
@@ -57,6 +58,7 @@ function ExperimentalPage() {
           <FeatureItem><strong className="text-surface-800 dark:text-white">Classification</strong> for YOLO9 and RF-DETR. Whole-image labels with top-1 / top-5 probabilities.</FeatureItem>
           <FeatureItem><strong className="text-surface-800 dark:text-white">Oriented bounding boxes (OBB)</strong> for YOLO9 and RF-DETR. Rotated boxes for aerial and document imagery.</FeatureItem>
           <FeatureItem><strong className="text-surface-800 dark:text-white">Keypoints / pose</strong> for YOLO9 and RF-DETR. COCO-17 person keypoints.</FeatureItem>
+          <FeatureItem><strong className="text-surface-800 dark:text-white">Small-object detection</strong> with YOLO9-P2, a YOLOv9 variant with a stride-4 scale for the 4&ndash;16 px objects of aerial and drone imagery, including a VisDrone research-preview checkpoint.</FeatureItem>
           <FeatureItem><strong className="text-surface-800 dark:text-white">LoRA / DoRA</strong> fine-tuning for RF-DETR. Adapt the transformer backbone with a fraction of the memory.</FeatureItem>
         </ul>
         <Callout icon={AlertTriangle} tone="amber" title="Read this first">
@@ -312,6 +314,93 @@ model.train(data="coco8-pose.yaml", epochs=100, imgsz=640)
 
       <Divider />
 
+      {/* ───────── SMALL-OBJECT ───────── */}
+      <SectionHeading id="small-object" icon={Crosshair}>Small-Object Detection (YOLO9-P2)</SectionHeading>
+      <div className="flex flex-wrap gap-2 mb-5">
+        <SupportBadge variant="experimental">YOLO9-P2: t, s</SupportBadge>
+        <SupportBadge variant="experimental">VisDrone research preview</SupportBadge>
+      </div>
+      <P>
+        YOLO9-P2 is YOLOv9 with a fourth detection scale at{' '}
+        <strong className="text-surface-800 dark:text-white">stride 4</strong>. Stock YOLOv9 detects at
+        strides 8/16/32, so objects below ~16 px fall under its finest grid; the P2 head catches the
+        4&ndash;16 px range that dominates aerial and drone footage.
+      </P>
+      <P>
+        In a controlled A/B on VisDrone &mdash; same recipe, same resolution, same init, the only change
+        being the P2 head &mdash; small-object AP improved by{' '}
+        <strong className="text-surface-800 dark:text-white">+49%</strong> over stock YOLOv9 of the same
+        size. Adding higher training resolution and the bigger s size roughly doubled small-object AP
+        across the project:
+      </P>
+      <DocTable
+        headers={['Model', 'AP', 'AP50', 'AP_small']}
+        rows={[
+          ['Stock YOLO9-t @640 (control)', '0.123', '0.220', '0.047'],
+          ['YOLO9-P2-t @640 (same-recipe A/B)', '0.138', '0.254', '0.070'],
+          [<strong key="s">YOLO9-P2-s @768 (released preview)</strong>, '0.226', '0.385', '0.141'],
+        ]}
+      />
+      <P className="text-sm">
+        VisDrone2019-DET val (548 images), pycocotools, single seed &mdash; treat &plusmn;1 point as noise.
+      </P>
+
+      <SubHeading>The VisDrone research preview</SubHeading>
+      <P>
+        A trained checkpoint is published as{' '}
+        <a href="https://huggingface.co/LibreYOLO/LibreYOLO9P2s-visdrone" target="_blank" rel="noopener noreferrer" className="text-libre-600 dark:text-libre-400 hover:underline">LibreYOLO9P2s-visdrone</a>.
+        The family is merged on <InlineCode>dev</InlineCode> but not yet in a PyPI release, so install
+        from source until the next release.
+      </P>
+      <CodeBlock language="python">{`from libreyolo import LibreYOLO
+
+# Auto-downloads from the LibreYOLO Hugging Face org
+model = LibreYOLO("LibreYOLO9P2s-visdrone.pt")
+
+# Evaluate/predict at 768 - the resolution it was trained at
+results = model.predict("aerial.jpg", imgsz=768, conf=0.25)`}</CodeBlock>
+      <Callout icon={AlertTriangle} tone="amber" title="Non-commercial license">
+        <p>
+          The preview checkpoint is trained on VisDrone2019-DET (AISKYEYE, Tianjin University), licensed
+          CC BY-NC-SA 3.0 &mdash; <strong>non-commercial use only</strong>, unlike LibreYOLO&apos;s MIT
+          code and COCO-default weights. It detects the 10 VisDrone aerial classes, not COCO. The model
+          card ships the exact training recipe, the per-epoch metrics, and a clean-room dataset converter
+          so you can reproduce it or retrain on your own data.
+        </p>
+      </Callout>
+
+      <SubHeading>When (not) to use it</SubHeading>
+      <P>
+        Match the architecture to the arena. On COCO-like data (&quot;small&quot; means 16&ndash;32 px)
+        the P2 head does <strong className="text-surface-800 dark:text-white">not</strong> help &mdash;
+        stock YOLOv9 is the better pick there. Reach for YOLO9-P2 when your objects live under ~16 px:
+        drone and aerial footage, distant CCTV, satellite tiles. The extra scale roughly doubles compute
+        and anchor count &mdash; that is the price of the stride-4 grid.
+      </P>
+
+      <SubHeading>Training your own</SubHeading>
+      <P>
+        YOLO9-P2 transfer-initializes from stock YOLOv9 detect checkpoints: the backbone, shared neck,
+        and existing head towers load; the new P2 modules start fresh. The recipe below encodes what we
+        learned the hard way on tiny-object data:
+      </P>
+      <CodeBlock language="python">{`from libreyolo import LibreYOLO9P2
+
+model = LibreYOLO9P2(None, size="s")
+model.train(
+    data="/abs/path/tiny_objects.yaml",
+    imgsz=768,                # resolution is the biggest lever for tiny objects
+    lr0=0.005,                # the family default 0.01 diverges on transfer init
+    mosaic_prob=0.0,          # mosaic tiling shrinks tiny objects below detectability
+    mixup_prob=0.0,
+    hsv_prob=1.0, flip_prob=0.5,
+    max_labels=600,           # dense aerial frames exceed the default 100-box cap
+    pretrained="LibreYOLO9s.pt",  # transfer init from stock YOLOv9
+    epochs=60,
+)`}</CodeBlock>
+
+      <Divider />
+
       {/* ───────── LoRA ───────── */}
       <SectionHeading id="lora" icon={Layers2}>LoRA / DoRA Fine-Tuning</SectionHeading>
       <div className="flex flex-wrap gap-2 mb-5">
@@ -374,6 +463,7 @@ libreyolo train --model rf-detr-nano.pth --data data.yaml --lora`}</CodeBlock>
           ['Oriented boxes (OBB)', 'YOLO9, RF-DETR', <SupportBadge key="b" variant="experimental">Experimental</SupportBadge>],
           ['Keypoints / pose', 'YOLO9, RF-DETR', <SupportBadge key="c" variant="wip">Landing soon</SupportBadge>],
           ['Keypoints / pose', 'YOLO-NAS, EdgeCrafter', <SupportBadge key="d" variant="experimental">Available</SupportBadge>],
+          ['Small-object detection', 'YOLO9-P2', <SupportBadge key="f" variant="experimental">Research preview</SupportBadge>],
           ['LoRA / DoRA', 'RF-DETR', <SupportBadge key="e" variant="experimental">Reviewed</SupportBadge>],
         ]}
       />
@@ -410,6 +500,7 @@ const sectionsZh = [
   { id: 'classification', title: '分类', icon: Tags },
   { id: 'obb', title: '旋转框 (OBB)', icon: Rotate3d },
   { id: 'pose', title: '关键点 / 姿态', icon: PersonStanding },
+  { id: 'small-object', title: '小目标检测', icon: Crosshair },
   { id: 'lora', title: 'LoRA / DoRA', icon: Layers2 },
   { id: 'status', title: '稳定性', icon: AlertTriangle },
 ]
@@ -449,6 +540,7 @@ function ExperimentalPageZh() {
           <FeatureItem><strong className="text-surface-800 dark:text-white">分类</strong>，支持 YOLO9 和 RF-DETR。输出整图标签及 top-1 / top-5 概率。</FeatureItem>
           <FeatureItem><strong className="text-surface-800 dark:text-white">旋转边界框 (OBB)</strong>，支持 YOLO9 和 RF-DETR。为航拍与文档图像提供带旋转角的检测框。</FeatureItem>
           <FeatureItem><strong className="text-surface-800 dark:text-white">关键点 / 姿态</strong>，支持 YOLO9 和 RF-DETR。COCO-17 人体关键点。</FeatureItem>
+          <FeatureItem><strong className="text-surface-800 dark:text-white">小目标检测</strong>：YOLO9-P2，为 YOLOv9 增加 stride-4 检测尺度，面向航拍/无人机图像中 4&ndash;16 像素的目标，并提供 VisDrone 研究预览权重。</FeatureItem>
           <FeatureItem><strong className="text-surface-800 dark:text-white">LoRA / DoRA</strong> 微调，支持 RF-DETR。以极少的显存适配 Transformer 主干。</FeatureItem>
         </ul>
         <Callout icon={AlertTriangle} tone="amber" title="请先阅读">
@@ -692,6 +784,87 @@ model.train(data="coco8-pose.yaml", epochs=100, imgsz=640)
 
       <Divider />
 
+      {/* ───────── SMALL-OBJECT ───────── */}
+      <SectionHeading id="small-object" icon={Crosshair}>小目标检测（YOLO9-P2）</SectionHeading>
+      <div className="flex flex-wrap gap-2 mb-5">
+        <SupportBadge variant="experimental">YOLO9-P2: t, s</SupportBadge>
+        <SupportBadge variant="experimental">VisDrone 研究预览</SupportBadge>
+      </div>
+      <P>
+        YOLO9-P2 是在 YOLOv9 上增加了第四个检测尺度（<strong className="text-surface-800 dark:text-white">stride 4</strong>）的变体。
+        标准 YOLOv9 在 stride 8/16/32 上检测，约 16 像素以下的目标会落在其最细网格之下；P2
+        检测头正好覆盖航拍和无人机画面中占主导的 4&ndash;16 像素范围。
+      </P>
+      <P>
+        在 VisDrone 上的受控 A/B 实验中（相同配方、相同分辨率、相同初始化，唯一差别是 P2 头），
+        小目标 AP 比同级标准 YOLOv9 提升了{' '}
+        <strong className="text-surface-800 dark:text-white">+49%</strong>。再叠加更高的训练分辨率与更大的
+        s 尺寸后，小目标 AP 在整个项目中大约翻倍：
+      </P>
+      <DocTable
+        headers={['模型', 'AP', 'AP50', 'AP_small']}
+        rows={[
+          ['标准 YOLO9-t @640（对照）', '0.123', '0.220', '0.047'],
+          ['YOLO9-P2-t @640（同配方 A/B）', '0.138', '0.254', '0.070'],
+          [<strong key="s">YOLO9-P2-s @768（已发布预览）</strong>, '0.226', '0.385', '0.141'],
+        ]}
+      />
+      <P className="text-sm">
+        VisDrone2019-DET 验证集（548 张），pycocotools，单一随机种子 &mdash; 请将 &plusmn;1 个点视为噪声。
+      </P>
+
+      <SubHeading>VisDrone 研究预览权重</SubHeading>
+      <P>
+        已发布的训练权重：{' '}
+        <a href="https://huggingface.co/LibreYOLO/LibreYOLO9P2s-visdrone" target="_blank" rel="noopener noreferrer" className="text-libre-600 dark:text-libre-400 hover:underline">LibreYOLO9P2s-visdrone</a>。
+        该模型家族已合并到 <InlineCode>dev</InlineCode>，但尚未进入 PyPI 发行版；在下个版本发布前请从源码安装。
+      </P>
+      <CodeBlock language="python">{`from libreyolo import LibreYOLO
+
+# Auto-downloads from the LibreYOLO Hugging Face org
+model = LibreYOLO("LibreYOLO9P2s-visdrone.pt")
+
+# Evaluate/predict at 768 - the resolution it was trained at
+results = model.predict("aerial.jpg", imgsz=768, conf=0.25)`}</CodeBlock>
+      <Callout icon={AlertTriangle} tone="amber" title="非商业许可证">
+        <p>
+          该预览权重在 VisDrone2019-DET（天津大学 AISKYEYE 团队）上训练，数据集许可证为
+          CC BY-NC-SA 3.0 &mdash; <strong>仅限非商业用途</strong>，与 LibreYOLO 的 MIT 代码和 COCO
+          默认权重不同。它检测的是 VisDrone 的 10 个航拍类别，而非 COCO。Hugging Face
+          模型卡附带完整训练配方、逐 epoch 指标以及净室实现的数据集转换脚本，方便复现或在自己的数据上重训。
+        </p>
+      </Callout>
+
+      <SubHeading>何时（不）使用它</SubHeading>
+      <P>
+        让架构匹配场景。在类 COCO 数据上（&quot;小目标&quot;指 16&ndash;32 像素），P2 头并
+        <strong className="text-surface-800 dark:text-white">不会</strong>带来提升 &mdash;
+        那里标准 YOLOv9 是更好的选择。当目标小于约 16 像素时才选 YOLO9-P2：无人机与航拍画面、远距离监控、卫星切片。
+        额外的尺度会使计算量与 anchor 数量大约翻倍 &mdash; 这是 stride-4 网格的代价。
+      </P>
+
+      <SubHeading>训练自己的模型</SubHeading>
+      <P>
+        YOLO9-P2 从标准 YOLOv9 检测权重迁移初始化：主干、共享的 neck 和已有检测塔直接加载，新增的 P2
+        模块从头初始化。下面的配方浓缩了我们在微小目标数据上踩过的坑：
+      </P>
+      <CodeBlock language="python">{`from libreyolo import LibreYOLO9P2
+
+model = LibreYOLO9P2(None, size="s")
+model.train(
+    data="/abs/path/tiny_objects.yaml",
+    imgsz=768,                # resolution is the biggest lever for tiny objects
+    lr0=0.005,                # the family default 0.01 diverges on transfer init
+    mosaic_prob=0.0,          # mosaic tiling shrinks tiny objects below detectability
+    mixup_prob=0.0,
+    hsv_prob=1.0, flip_prob=0.5,
+    max_labels=600,           # dense aerial frames exceed the default 100-box cap
+    pretrained="LibreYOLO9s.pt",  # transfer init from stock YOLOv9
+    epochs=60,
+)`}</CodeBlock>
+
+      <Divider />
+
       {/* ───────── LoRA ───────── */}
       <SectionHeading id="lora" icon={Layers2}>LoRA / DoRA 微调</SectionHeading>
       <div className="flex flex-wrap gap-2 mb-5">
@@ -750,6 +923,7 @@ libreyolo train --model rf-detr-nano.pth --data data.yaml --lora`}</CodeBlock>
           ['旋转框 (OBB)', 'YOLO9, RF-DETR', <SupportBadge key="b" variant="experimental">实验性</SupportBadge>],
           ['关键点 / 姿态', 'YOLO9, RF-DETR', <SupportBadge key="c" variant="wip">即将上线</SupportBadge>],
           ['关键点 / 姿态', 'YOLO-NAS, EdgeCrafter', <SupportBadge key="d" variant="experimental">已可用</SupportBadge>],
+          ['小目标检测', 'YOLO9-P2', <SupportBadge key="f" variant="experimental">研究预览</SupportBadge>],
           ['LoRA / DoRA', 'RF-DETR', <SupportBadge key="e" variant="experimental">已评审</SupportBadge>],
         ]}
       />

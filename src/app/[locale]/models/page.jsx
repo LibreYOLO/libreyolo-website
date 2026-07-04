@@ -9,7 +9,7 @@ import { Link } from '@/i18n/navigation'
 // Same parkour clip, three tasks, in motion. Each carries its model list, shown
 // under the video (so these tasks don't need their own section below).
 const VIDEOS = [
-  { src: '/showcase/parkour-detection.mp4', poster: '/showcase/parkour-detection-poster.jpg', label: 'Detection', models: ['YOLO9', 'RF-DETR', 'YOLOX', 'YOLO9-E2E', 'YOLO-NAS', 'D-FINE', 'DEIM', 'DEIMv2', 'RT-DETR', 'RT-DETRv2', 'RT-DETRv4', 'PicoDet', 'RTMDet', 'EdgeCrafter'] },
+  { src: '/showcase/parkour-detection.mp4', poster: '/showcase/parkour-detection-poster.jpg', label: 'Detection', models: ['YOLO9', 'RF-DETR', 'YOLOX', 'YOLO9-E2E', 'YOLO9-P2', 'YOLO-NAS', 'D-FINE', 'DEIM', 'DEIMv2', 'RT-DETR', 'RT-DETRv2', 'RT-DETRv4', 'PicoDet', 'RTMDet', 'EdgeCrafter'] },
   { src: '/showcase/parkour-segmentation.mp4', poster: '/showcase/parkour-segmentation-poster.jpg', label: 'Segmentation', models: ['RF-DETR', 'EdgeCrafter', 'SAM', 'MobileSAM', 'SAM2'] },
   { src: '/showcase/parkour-pose.mp4', poster: '/showcase/parkour-pose-poster.jpg', label: 'Keypoints', models: ['RF-DETR', 'EdgeCrafter', 'YOLO-NAS'] },
 ]
