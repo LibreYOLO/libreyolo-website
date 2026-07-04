@@ -2276,7 +2276,7 @@ results = model.train(
     output_dir="runs/train/rfdetr_exp",
 )`}</CodeBlock>
           <P>
-            RF-DETR has its own training signature (<InlineCode>batch_size</InlineCode>, <InlineCode>lr</InlineCode>, <InlineCode>output_dir</InlineCode>) but it uses LibreYOLO&apos;s dataset config loader. Pass a <InlineCode>data.yaml</InlineCode> for detection or segmentation; COCO/Roboflow-style annotation layouts can be referenced from that config.
+            RF-DETR has its own training signature (<InlineCode>batch_size</InlineCode>, <InlineCode>lr</InlineCode>, <InlineCode>output_dir</InlineCode>) but shares LibreYOLO&apos;s dataset loader. Pass a <InlineCode>data.yaml</InlineCode> for detection or segmentation in either YOLO TXT or native COCO JSON layout — see <a href="#dataset-format" className="text-libre-600 dark:text-libre-400 hover:underline">Dataset Format</a>.
           </P>
 
           <SubHeading>LoRA fine-tuning (RF-DETR)</SubHeading>
@@ -3234,90 +3234,122 @@ model.export(format="onnx")`}</CodeBlock>
           {/* ────────────── DATASET FORMAT ────────────── */}
           <SectionHeading id="dataset-format" icon={Database}>Dataset Format</SectionHeading>
           <P>
-            Training and validation use dataset configs loaded through <InlineCode>data.yaml</InlineCode>. Detection, segmentation, pose, and RF-DETR training all enter through this loader; the label file contents differ by task.
+            Every task loads through one <InlineCode>data.yaml</InlineCode>. Detection, instance segmentation, and OBB accept <strong className="text-surface-800 dark:text-white">two interchangeable label formats</strong> — YOLO TXT or native COCO JSON — and the loader picks the right one from the config. Pose, semantic segmentation, depth, and classification each add a small format of their own. The table maps every task to its layout.
           </P>
+
+          <SubHeading>Formats by task</SubHeading>
+          <DocTable
+            headers={['Task', 'Data layout', 'Labels']}
+            rows={[
+              ['Detection', <span key="l"><InlineCode>data.yaml</InlineCode> + <InlineCode>labels/*.txt</InlineCode>, or COCO JSON</span>, 'One box per line'],
+              ['Instance segmentation', <span key="l"><InlineCode>data.yaml</InlineCode> + polygon <InlineCode>.txt</InlineCode>, or COCO JSON</span>, 'Polygon per line (TXT) / polygons + RLE (COCO)'],
+              ['OBB', <span key="l"><InlineCode>data.yaml</InlineCode> + rotated-box <InlineCode>.txt</InlineCode>, or COCO JSON</span>, 'One rotated box per line'],
+              ['Pose', <span key="l"><InlineCode>data.yaml</InlineCode> + <InlineCode>.txt</InlineCode> + <InlineCode>kpt_shape</InlineCode>/<InlineCode>flip_idx</InlineCode></span>, 'Box + keypoints per line'],
+              ['Semantic segmentation', <span key="l"><InlineCode>data.yaml</InlineCode> + <InlineCode>masks_dir/</InlineCode> PNGs</span>, 'Per-pixel class ID (255 = ignore)'],
+              ['Depth', <span key="l"><InlineCode>data.yaml</InlineCode> + <InlineCode>depths_dir/</InlineCode> maps</span>, 'Per-pixel depth (0 = invalid)'],
+              ['Classification', <span key="l">ImageFolder (<InlineCode>train/&lt;class&gt;/</InlineCode>)</span>, 'Folder name = class'],
+            ]}
+          />
 
           <SubHeading>data.yaml structure</SubHeading>
+          <P>
+            The shared contract for detection, segmentation, OBB, and pose. <InlineCode>train</InlineCode>/<InlineCode>val</InlineCode>/<InlineCode>test</InlineCode> may be a directory, a <InlineCode>.txt</InlineCode> file list (one image path per line), or a list of paths. <InlineCode>nc</InlineCode> is optional — when omitted it is inferred from <InlineCode>names</InlineCode>.
+          </P>
           <CodeBlock language="yaml" filename="data.yaml">{`path: /absolute/path/to/dataset   # dataset root
-train: images/train               # directory path, relative to path
-val: images/val                   # directory path, relative to path
+train: images/train               # dir, .txt file list, or list of paths
+val: images/val
 test: images/test                 # optional
 
-nc: 80                            # number of classes
-names: [                          # class names
-  "person", "bicycle", "car", "motorcycle", "airplane",
-  "bus", "train", "truck", "boat", "traffic light",
-  # ...
-]`}</CodeBlock>
-
-          <SubHeading>Config resolution and downloads</SubHeading>
-          <P>
-            Dataset configs resolve from an explicit path, the current working directory, then built-ins under <InlineCode>libreyolo/config/datasets/</InlineCode>. Dataset roots default under <InlineCode>~/datasets</InlineCode> and can be overridden with <InlineCode>LIBREYOLO_DATASETS_DIR</InlineCode>.
-          </P>
-          <P>
-            <InlineCode>train</InlineCode>, <InlineCode>val</InlineCode>, and <InlineCode>test</InlineCode> may be directories, <InlineCode>.txt</InlineCode> files, or lists of paths. YAML download hooks are guarded; pass <InlineCode>allow_download_scripts=True</InlineCode> only for trusted configs.
-          </P>
-
-          <SubHeading>File-list variant</SubHeading>
-          <P>
-            The same YAML format can also point <InlineCode>train</InlineCode>, <InlineCode>val</InlineCode>, or <InlineCode>test</InlineCode> at <InlineCode>.txt</InlineCode> files containing one image path per line:
-          </P>
-          <CodeBlock language="yaml" filename="coco.yaml">{`path: /absolute/path/to/coco
-train: train2017.txt
-val: val2017.txt
-test: test-dev2017.txt
-
-nc: 80
+nc: 80                            # optional; inferred from names if absent
 names: ["person", "bicycle", "car", "..."]`}</CodeBlock>
+          <P>
+            Configs resolve from an explicit path, the working directory, then the built-ins under <InlineCode>libreyolo/config/datasets/</InlineCode>. Roots default under <InlineCode>~/datasets</InlineCode>; override with <InlineCode>LIBREYOLO_DATASETS_DIR</InlineCode>.
+          </P>
 
-          <SubHeading>Directory layout</SubHeading>
+          <SubHeading>YOLO TXT labels</SubHeading>
+          <P>
+            The default layout: one <InlineCode>.txt</InlineCode> per image under <InlineCode>labels/</InlineCode>, mirroring the <InlineCode>images/</InlineCode> tree with the same file stem. All coordinates are normalized to [0, 1].
+          </P>
           <CodeBlock language="text">{`dataset/
-    images/
-        train/
-            img001.jpg
-            img002.jpg
-        val/
-            img003.jpg
-    labels/
-        train/
-            img001.txt
-            img002.txt
-        val/
-            img003.txt`}</CodeBlock>
+    images/train/img001.jpg
+    labels/train/img001.txt        # same stem as the image`}</CodeBlock>
+          <CodeBlock language="text">{`# Detection      one box per line
+<class_id> <cx> <cy> <w> <h>
 
-          <SubHeading>Detection label format</SubHeading>
-          <P>
-            One text file per image. Each line is one object:
-          </P>
-          <CodeBlock language="text">{`<class_id> <center_x> <center_y> <width> <height>`}</CodeBlock>
-          <P>
-            All coordinates are normalized to [0, 1] relative to image dimensions.
-          </P>
-          <P>Example (<InlineCode>img001.txt</InlineCode>):</P>
-          <CodeBlock language="text" filename="img001.txt">{`0 0.5 0.4 0.3 0.6
-2 0.1 0.2 0.05 0.1`}</CodeBlock>
+# Segmentation   one polygon per line (box derived from the vertices)
+<class_id> <x1> <y1> <x2> <y2> ... <xn> <yn>
 
-          <SubHeading>Segmentation label format</SubHeading>
-          <P>
-            Segmentation uses YOLO polygon rows. The dataset loader derives the bounding box from the polygon vertices and keeps the polygon rings when segment loading is enabled:
-          </P>
-          <CodeBlock language="text">{`<class_id> <x1> <y1> <x2> <y2> ... <xn> <yn>`}</CodeBlock>
+# Pose           box, then K keypoints (needs kpt_shape / flip_idx below)
+<class_id> <cx> <cy> <w> <h> <kx1> <ky1> <v1> ... <kxK> <kyK> <vK>
 
-          <SubHeading>Pose label format</SubHeading>
-          <P>
-            Pose labels append keypoints after the box. Add <InlineCode>kpt_shape</InlineCode> and <InlineCode>flip_idx</InlineCode> to <InlineCode>data.yaml</InlineCode> so the loader knows the keypoint count and horizontal flip permutation.
-          </P>
-          <CodeBlock language="yaml">{`kpt_shape: [17, 3]
+# OBB            four rotated-box corners
+<class_id> <x1> <y1> <x2> <y2> <x3> <y3> <x4> <y4>`}</CodeBlock>
+          <CodeBlock language="yaml" filename="data.yaml (pose)">{`kpt_shape: [17, 3]   # K keypoints, 3 values each: x, y, visibility
 flip_idx: [0, 2, 1, 4, 3, 6, 5, 8, 7, 10, 9, 12, 11, 14, 13, 16, 15]`}</CodeBlock>
-          <CodeBlock language="text">{`<class_id> <cx> <cy> <w> <h> <kx1> <ky1> <v1> ... <kxK> <kyK> <vK>`}</CodeBlock>
+
+          <SubHeading>Native COCO JSON</SubHeading>
+          <P>
+            Detection, segmentation, and OBB also load COCO JSON directly — add an <InlineCode>annotations:</InlineCode> block mapping each split to its JSON file. <InlineCode>train</InlineCode>/<InlineCode>val</InlineCode> then point at image <em>directories</em> (not <InlineCode>.txt</InlineCode> lists). Requires <InlineCode>pycocotools</InlineCode>; class names come from the JSON categories, so <InlineCode>nc</InlineCode>/<InlineCode>names</InlineCode> are optional.
+          </P>
+          <CodeBlock language="yaml" filename="data.yaml (COCO)">{`path: dataset
+train: images/train               # image directory
+val: images/val
+annotations:
+  train: annotations/train.json   # COCO instances JSON
+  val: annotations/val.json`}</CodeBlock>
+          <P>
+            The same switch feeds YOLO9, RF-DETR, DEIM, and D-FINE training and the detection, OBB, and pose validators. A COCO layout with <InlineCode>annotations/instances_train2017.json</InlineCode> on disk is also detected automatically, without the <InlineCode>annotations:</InlineCode> key.
+          </P>
+          <P>
+            <strong className="text-surface-800 dark:text-white">Which segmentation format?</strong> A YOLO polygon row is a single ring per instance — it cannot express a hole or a split (multi-part) mask. COCO JSON keeps every polygon of an instance and decodes RLE masks, holes included. Use COCO JSON when instances have holes or disconnected parts; either format is fine for simple blobs. Crowd annotations (<InlineCode>iscrowd: 1</InlineCode>) are skipped.
+          </P>
+
+          <SubHeading>Semantic segmentation masks</SubHeading>
+          <P>
+            Pair each image with a single-channel mask whose pixel values are class IDs; <InlineCode>255</InlineCode> marks ignored pixels. <InlineCode>masks_dir</InlineCode> is substituted for <InlineCode>images</InlineCode> in each path (default <InlineCode>masks</InlineCode>), and masks must be lossless (PNG) with the same stem as their image. Optional <InlineCode>label_mapping</InlineCode> remaps source IDs to train IDs (unmapped values become ignore). Omit <InlineCode>masks_dir</InlineCode> to rasterize masks from YOLO polygon labels at load time, with a <InlineCode>background</InlineCode> class appended.
+          </P>
+          <CodeBlock language="text">{`dataset/
+    images/train/scene001.jpg
+    masks/train/scene001.png       # single-channel class IDs, 255 = ignore`}</CodeBlock>
+          <CodeBlock language="yaml" filename="data.yaml (semantic)">{`path: /path/to/dataset
+train: images/train
+val: images/val
+masks_dir: masks
+nc: 3
+names: ["road", "building", "vegetation"]`}</CodeBlock>
+
+          <SubHeading>Depth maps</SubHeading>
+          <P>
+            Pair each image with a single-channel depth map under <InlineCode>depths_dir</InlineCode> (default <InlineCode>depths</InlineCode>). 16-bit PNG/TIF is divided by <InlineCode>depth_scale</InlineCode> (default <InlineCode>256.0</InlineCode>); <InlineCode>.npy</InlineCode> float files are used as-is. Zero, negative, and non-finite pixels are invalid. An optional <InlineCode>depth_stem_suffix</InlineCode> and a <InlineCode>*_mask</InlineCode> validity map are honored automatically. Depth is validation-only in v1.3.0.
+          </P>
+          <CodeBlock language="yaml" filename="data.yaml (depth)">{`path: /path/to/dataset
+val: images/val
+depths_dir: depths
+depth_scale: 256.0                # 16-bit PNG encoding: value / 256 = depth`}</CodeBlock>
+
+          <SubHeading>Classification</SubHeading>
+          <P>
+            Classification uses an ImageNet-style ImageFolder tree instead of a <InlineCode>data.yaml</InlineCode> — see <a href="#classification" className="text-libre-600 dark:text-libre-400 hover:underline">Classification</a> for the layout. <InlineCode>data=</InlineCode> takes a dataset root, a <InlineCode>.zip</InlineCode> URL, or a known name.
+          </P>
 
           <SubHeading>Built-in datasets</SubHeading>
           <P>
-            LibreYOLO ships built-in dataset configs under <InlineCode>libreyolo/config/datasets/</InlineCode> and can auto-download supported datasets on first use:
+            Configs ship under <InlineCode>libreyolo/config/datasets/</InlineCode>. Download behavior differs per config: URL-backed sets fetch on first use, script-backed sets need <InlineCode>allow_download_scripts=True</InlineCode>, and a few must be placed locally.
           </P>
-          <CodeBlock language="python">{`# These download automatically on first use
-results = model.val(data="coco8.yaml")
-results = model.train(data="coco128.yaml", epochs=10)`}</CodeBlock>
+          <DocTable
+            headers={['Config', 'Task', 'Download']}
+            rows={[
+              [<InlineCode key="c">coco8</InlineCode>, 'Detection (8 images)', 'Automatic'],
+              [<InlineCode key="c">coco128</InlineCode>, 'Detection (128 images)', 'Automatic'],
+              [<InlineCode key="c">coco5000</InlineCode>, 'Detection', <span key="d">Script — <InlineCode>allow_download_scripts=True</InlineCode></span>],
+              [<span key="c"><InlineCode>coco</InlineCode> / <InlineCode>coco-val-only</InlineCode></span>, 'Detection (full)', <span key="d">Script — <InlineCode>allow_download_scripts=True</InlineCode></span>],
+              [<span key="c"><InlineCode>coco8-pose</InlineCode> / <InlineCode>coco-pose</InlineCode></span>, 'Pose', <span key="d">Script — <InlineCode>allow_download_scripts=True</InlineCode></span>],
+              [<InlineCode key="c">cocostuff</InlineCode>, 'Semantic (182 classes)', 'Manual — place locally'],
+            ]}
+          />
+          <CodeBlock language="python">{`results = model.val(data="coco8.yaml")                          # auto-downloads
+results = model.train(data="coco128.yaml", epochs=10)           # auto-downloads
+model.train(data="coco8-pose.yaml", allow_download_scripts=True)  # script config`}</CodeBlock>
 
           {/* Bottom spacer */}
           <div className="h-16" />
@@ -4995,7 +5027,7 @@ results = model.train(
     output_dir="runs/train/rfdetr_exp",
 )`}</CodeBlock>
           <P>
-            RF-DETR 有自己的训练签名（<InlineCode>batch_size</InlineCode>、<InlineCode>lr</InlineCode>、<InlineCode>output_dir</InlineCode>），但它使用 LibreYOLO 的数据集配置加载器。为检测或分割传入 <InlineCode>data.yaml</InlineCode>；COCO/Roboflow 风格的标注布局可从该配置中引用。
+            RF-DETR 有自己的训练签名（<InlineCode>batch_size</InlineCode>、<InlineCode>lr</InlineCode>、<InlineCode>output_dir</InlineCode>），但共用 LibreYOLO 的数据集加载器。为检测或分割传入 <InlineCode>data.yaml</InlineCode>，可采用 YOLO TXT 或原生 COCO JSON 布局 —— 参见 <a href="#dataset-format" className="text-libre-600 dark:text-libre-400 hover:underline">数据集格式</a>。
           </P>
 
           <SubHeading>LoRA 微调（RF-DETR）</SubHeading>
@@ -5951,90 +5983,122 @@ model.export(format="onnx")`}</CodeBlock>
           {/* ────────────── DATASET FORMAT ────────────── */}
           <SectionHeading id="dataset-format" icon={Database}>数据集格式</SectionHeading>
           <P>
-            训练和验证使用通过 <InlineCode>data.yaml</InlineCode> 加载的数据集配置。检测、分割、姿态和 RF-DETR 训练都通过该加载器进入；标签文件内容因任务而异。
+            每个任务都通过一个 <InlineCode>data.yaml</InlineCode> 加载。检测、实例分割和 OBB 接受<strong className="text-surface-800 dark:text-white">两种可互换的标签格式</strong>——YOLO TXT 或原生 COCO JSON——加载器会根据配置自动选择。姿态、语义分割、深度和分类各自增加一个小型格式。下表将每个任务映射到其布局。
           </P>
+
+          <SubHeading>按任务划分的格式</SubHeading>
+          <DocTable
+            headers={['任务', '数据布局', '标签']}
+            rows={[
+              ['检测', <span key="l"><InlineCode>data.yaml</InlineCode> + <InlineCode>labels/*.txt</InlineCode>，或 COCO JSON</span>, '每行一个框'],
+              ['实例分割', <span key="l"><InlineCode>data.yaml</InlineCode> + 多边形 <InlineCode>.txt</InlineCode>，或 COCO JSON</span>, '每行一个多边形（TXT）/ 多边形 + RLE（COCO）'],
+              ['OBB', <span key="l"><InlineCode>data.yaml</InlineCode> + 旋转框 <InlineCode>.txt</InlineCode>，或 COCO JSON</span>, '每行一个旋转框'],
+              ['姿态', <span key="l"><InlineCode>data.yaml</InlineCode> + <InlineCode>.txt</InlineCode> + <InlineCode>kpt_shape</InlineCode>/<InlineCode>flip_idx</InlineCode></span>, '每行一个框 + 关键点'],
+              ['语义分割', <span key="l"><InlineCode>data.yaml</InlineCode> + <InlineCode>masks_dir/</InlineCode> PNG</span>, '逐像素类别 ID（255 = 忽略）'],
+              ['深度', <span key="l"><InlineCode>data.yaml</InlineCode> + <InlineCode>depths_dir/</InlineCode> 深度图</span>, '逐像素深度（0 = 无效）'],
+              ['分类', <span key="l">ImageFolder（<InlineCode>train/&lt;class&gt;/</InlineCode>）</span>, '文件夹名 = 类别'],
+            ]}
+          />
 
           <SubHeading>data.yaml 结构</SubHeading>
+          <P>
+            检测、分割、OBB 和姿态的通用契约。<InlineCode>train</InlineCode>/<InlineCode>val</InlineCode>/<InlineCode>test</InlineCode> 可以是目录、<InlineCode>.txt</InlineCode> 文件列表（每行一个图像路径）或路径列表。<InlineCode>nc</InlineCode> 可选——省略时从 <InlineCode>names</InlineCode> 推断。
+          </P>
           <CodeBlock language="yaml" filename="data.yaml">{`path: /absolute/path/to/dataset   # dataset root
-train: images/train               # directory path, relative to path
-val: images/val                   # directory path, relative to path
+train: images/train               # dir, .txt file list, or list of paths
+val: images/val
 test: images/test                 # optional
 
-nc: 80                            # number of classes
-names: [                          # class names
-  "person", "bicycle", "car", "motorcycle", "airplane",
-  "bus", "train", "truck", "boat", "traffic light",
-  # ...
-]`}</CodeBlock>
-
-          <SubHeading>配置解析与下载</SubHeading>
-          <P>
-            数据集配置按以下顺序解析：明确路径、当前工作目录，然后是 <InlineCode>libreyolo/config/datasets/</InlineCode> 下的内置配置。数据集根目录默认在 <InlineCode>~/datasets</InlineCode> 下，可用 <InlineCode>LIBREYOLO_DATASETS_DIR</InlineCode> 覆盖。
-          </P>
-          <P>
-            <InlineCode>train</InlineCode>、<InlineCode>val</InlineCode> 和 <InlineCode>test</InlineCode> 可以是目录、<InlineCode>.txt</InlineCode> 文件或路径列表。YAML 下载钩子受保护；仅对可信配置传入 <InlineCode>allow_download_scripts=True</InlineCode>。
-          </P>
-
-          <SubHeading>文件列表变体</SubHeading>
-          <P>
-            同样的 YAML 格式也可以让 <InlineCode>train</InlineCode>、<InlineCode>val</InlineCode> 或 <InlineCode>test</InlineCode> 指向每行一个图像路径的 <InlineCode>.txt</InlineCode> 文件：
-          </P>
-          <CodeBlock language="yaml" filename="coco.yaml">{`path: /absolute/path/to/coco
-train: train2017.txt
-val: val2017.txt
-test: test-dev2017.txt
-
-nc: 80
+nc: 80                            # optional; inferred from names if absent
 names: ["person", "bicycle", "car", "..."]`}</CodeBlock>
+          <P>
+            配置按以下顺序解析：明确路径、当前工作目录，然后是 <InlineCode>libreyolo/config/datasets/</InlineCode> 下的内置配置。根目录默认在 <InlineCode>~/datasets</InlineCode> 下；用 <InlineCode>LIBREYOLO_DATASETS_DIR</InlineCode> 覆盖。
+          </P>
 
-          <SubHeading>目录布局</SubHeading>
+          <SubHeading>YOLO TXT 标签</SubHeading>
+          <P>
+            默认布局：每张图像在 <InlineCode>labels/</InlineCode> 下有一个 <InlineCode>.txt</InlineCode>，镜像 <InlineCode>images/</InlineCode> 树并使用相同的文件名主干。所有坐标都归一化到 [0, 1]。
+          </P>
           <CodeBlock language="text">{`dataset/
-    images/
-        train/
-            img001.jpg
-            img002.jpg
-        val/
-            img003.jpg
-    labels/
-        train/
-            img001.txt
-            img002.txt
-        val/
-            img003.txt`}</CodeBlock>
+    images/train/img001.jpg
+    labels/train/img001.txt        # same stem as the image`}</CodeBlock>
+          <CodeBlock language="text">{`# Detection      one box per line
+<class_id> <cx> <cy> <w> <h>
 
-          <SubHeading>检测标签格式</SubHeading>
-          <P>
-            每张图像一个文本文件。每行是一个目标：
-          </P>
-          <CodeBlock language="text">{`<class_id> <center_x> <center_y> <width> <height>`}</CodeBlock>
-          <P>
-            所有坐标都相对于图像尺寸归一化到 [0, 1]。
-          </P>
-          <P>示例（<InlineCode>img001.txt</InlineCode>）：</P>
-          <CodeBlock language="text" filename="img001.txt">{`0 0.5 0.4 0.3 0.6
-2 0.1 0.2 0.05 0.1`}</CodeBlock>
+# Segmentation   one polygon per line (box derived from the vertices)
+<class_id> <x1> <y1> <x2> <y2> ... <xn> <yn>
 
-          <SubHeading>分割标签格式</SubHeading>
-          <P>
-            分割使用 YOLO 多边形行。数据集加载器从多边形顶点导出边界框，并在启用分割加载时保留多边形环：
-          </P>
-          <CodeBlock language="text">{`<class_id> <x1> <y1> <x2> <y2> ... <xn> <yn>`}</CodeBlock>
+# Pose           box, then K keypoints (needs kpt_shape / flip_idx below)
+<class_id> <cx> <cy> <w> <h> <kx1> <ky1> <v1> ... <kxK> <kyK> <vK>
 
-          <SubHeading>姿态标签格式</SubHeading>
-          <P>
-            姿态标签在框之后追加关键点。在 <InlineCode>data.yaml</InlineCode> 中添加 <InlineCode>kpt_shape</InlineCode> 和 <InlineCode>flip_idx</InlineCode>，以便加载器知道关键点数量和水平翻转排列。
-          </P>
-          <CodeBlock language="yaml">{`kpt_shape: [17, 3]
+# OBB            four rotated-box corners
+<class_id> <x1> <y1> <x2> <y2> <x3> <y3> <x4> <y4>`}</CodeBlock>
+          <CodeBlock language="yaml" filename="data.yaml (pose)">{`kpt_shape: [17, 3]   # K keypoints, 3 values each: x, y, visibility
 flip_idx: [0, 2, 1, 4, 3, 6, 5, 8, 7, 10, 9, 12, 11, 14, 13, 16, 15]`}</CodeBlock>
-          <CodeBlock language="text">{`<class_id> <cx> <cy> <w> <h> <kx1> <ky1> <v1> ... <kxK> <kyK> <vK>`}</CodeBlock>
+
+          <SubHeading>原生 COCO JSON</SubHeading>
+          <P>
+            检测、分割和 OBB 也可直接加载 COCO JSON——添加一个 <InlineCode>annotations:</InlineCode> 块，将每个划分映射到其 JSON 文件。此时 <InlineCode>train</InlineCode>/<InlineCode>val</InlineCode> 指向图像<em>目录</em>（而非 <InlineCode>.txt</InlineCode> 列表）。需要 <InlineCode>pycocotools</InlineCode>；类别名来自 JSON 的 categories，因此 <InlineCode>nc</InlineCode>/<InlineCode>names</InlineCode> 可选。
+          </P>
+          <CodeBlock language="yaml" filename="data.yaml (COCO)">{`path: dataset
+train: images/train               # image directory
+val: images/val
+annotations:
+  train: annotations/train.json   # COCO instances JSON
+  val: annotations/val.json`}</CodeBlock>
+          <P>
+            同一套切换逻辑服务于 YOLO9、RF-DETR、DEIM 和 D-FINE 训练，以及检测、OBB 和姿态验证器。磁盘上带有 <InlineCode>annotations/instances_train2017.json</InlineCode> 的 COCO 布局也会被自动识别，无需 <InlineCode>annotations:</InlineCode> 键。
+          </P>
+          <P>
+            <strong className="text-surface-800 dark:text-white">选择哪种分割格式？</strong> 一个 YOLO 多边形行是每个实例一个环——无法表示带孔或分离（多部分）的掩码。COCO JSON 会保留实例的每个多边形并解码 RLE 掩码（含孔）。当实例带孔或存在不相连的部分时使用 COCO JSON；简单的单块掩码用任一格式均可。人群标注（<InlineCode>iscrowd: 1</InlineCode>）会被跳过。
+          </P>
+
+          <SubHeading>语义分割掩码</SubHeading>
+          <P>
+            为每张图像配一张单通道掩码，其像素值为类别 ID；<InlineCode>255</InlineCode> 标记被忽略的像素。<InlineCode>masks_dir</InlineCode> 会替换每个路径中的 <InlineCode>images</InlineCode>（默认 <InlineCode>masks</InlineCode>），掩码必须是无损（PNG）且与其图像同名主干。可选的 <InlineCode>label_mapping</InlineCode> 将源 ID 重映射为训练 ID（未映射的值变为忽略）。省略 <InlineCode>masks_dir</InlineCode> 则在加载时从 YOLO 多边形标签栅格化掩码，并追加一个 <InlineCode>background</InlineCode> 类。
+          </P>
+          <CodeBlock language="text">{`dataset/
+    images/train/scene001.jpg
+    masks/train/scene001.png       # single-channel class IDs, 255 = ignore`}</CodeBlock>
+          <CodeBlock language="yaml" filename="data.yaml (semantic)">{`path: /path/to/dataset
+train: images/train
+val: images/val
+masks_dir: masks
+nc: 3
+names: ["road", "building", "vegetation"]`}</CodeBlock>
+
+          <SubHeading>深度图</SubHeading>
+          <P>
+            为每张图像配一张单通道深度图，放在 <InlineCode>depths_dir</InlineCode> 下（默认 <InlineCode>depths</InlineCode>）。16 位 PNG/TIF 会除以 <InlineCode>depth_scale</InlineCode>（默认 <InlineCode>256.0</InlineCode>）；<InlineCode>.npy</InlineCode> 浮点文件按原样使用。零、负值和非有限像素为无效。可选的 <InlineCode>depth_stem_suffix</InlineCode> 和 <InlineCode>*_mask</InlineCode> 有效性掩码会被自动识别。深度在 v1.3.0 中仅支持验证。
+          </P>
+          <CodeBlock language="yaml" filename="data.yaml (depth)">{`path: /path/to/dataset
+val: images/val
+depths_dir: depths
+depth_scale: 256.0                # 16-bit PNG encoding: value / 256 = depth`}</CodeBlock>
+
+          <SubHeading>分类</SubHeading>
+          <P>
+            分类使用 ImageNet 风格的 ImageFolder 树，而非 <InlineCode>data.yaml</InlineCode>——布局参见 <a href="#classification" className="text-libre-600 dark:text-libre-400 hover:underline">分类</a>。<InlineCode>data=</InlineCode> 接受数据集根目录、<InlineCode>.zip</InlineCode> URL 或已知名称。
+          </P>
 
           <SubHeading>内置数据集</SubHeading>
           <P>
-            LibreYOLO 在 <InlineCode>libreyolo/config/datasets/</InlineCode> 下提供内置数据集配置，并可在首次使用时自动下载受支持的数据集：
+            配置位于 <InlineCode>libreyolo/config/datasets/</InlineCode> 下。下载行为因配置而异：基于 URL 的数据集在首次使用时获取，基于脚本的数据集需要 <InlineCode>allow_download_scripts=True</InlineCode>，少数需要在本地放置。
           </P>
-          <CodeBlock language="python">{`# These download automatically on first use
-results = model.val(data="coco8.yaml")
-results = model.train(data="coco128.yaml", epochs=10)`}</CodeBlock>
+          <DocTable
+            headers={['配置', '任务', '下载']}
+            rows={[
+              [<InlineCode key="c">coco8</InlineCode>, '检测（8 张）', '自动'],
+              [<InlineCode key="c">coco128</InlineCode>, '检测（128 张）', '自动'],
+              [<InlineCode key="c">coco5000</InlineCode>, '检测', <span key="d">脚本 —— <InlineCode>allow_download_scripts=True</InlineCode></span>],
+              [<span key="c"><InlineCode>coco</InlineCode> / <InlineCode>coco-val-only</InlineCode></span>, '检测（完整）', <span key="d">脚本 —— <InlineCode>allow_download_scripts=True</InlineCode></span>],
+              [<span key="c"><InlineCode>coco8-pose</InlineCode> / <InlineCode>coco-pose</InlineCode></span>, '姿态', <span key="d">脚本 —— <InlineCode>allow_download_scripts=True</InlineCode></span>],
+              [<InlineCode key="c">cocostuff</InlineCode>, '语义（182 类）', '手动 —— 本地放置'],
+            ]}
+          />
+          <CodeBlock language="python">{`results = model.val(data="coco8.yaml")                          # auto-downloads
+results = model.train(data="coco128.yaml", epochs=10)           # auto-downloads
+model.train(data="coco8-pose.yaml", allow_download_scripts=True)  # script config`}</CodeBlock>
 
           {/* Bottom spacer */}
           <div className="h-16" />
