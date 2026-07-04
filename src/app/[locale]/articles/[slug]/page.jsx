@@ -136,12 +136,34 @@ export default async function ArticlePage({ params }) {
     mainEntityOfPage: localeUrl(`/articles/${article.slug}`, article.translated ? locale : routing.defaultLocale),
   }
 
+  // When the article declares an `faq` list in frontmatter, emit FAQPage schema
+  // so the Q&A is eligible for rich results and clean LLM extraction. The marked-up
+  // text mirrors the visible FAQ section, as Google requires.
+  const faqJsonLd =
+    article.faq && article.faq.length
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: article.faq.map((item) => ({
+            '@type': 'Question',
+            name: item.q,
+            acceptedAnswer: { '@type': 'Answer', text: item.a },
+          })),
+        }
+      : null
+
   return (
     <div className="pt-24 lg:pt-32 pb-16">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       <article className="max-w-3xl mx-auto px-6 lg:px-8">
         <Link
           href="/articles"

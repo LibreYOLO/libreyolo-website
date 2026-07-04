@@ -30,6 +30,9 @@ function readArticle(slug, locale) {
     date: data.date || '1970-01-01',
     author: data.author || 'LibreYOLO Team',
     tags: data.tags || [],
+    // Optional FAQ pairs ([{ q, a }]) that drive FAQPage JSON-LD on the article
+    // page. Absent on most articles, so default to null and gate rendering on it.
+    faq: Array.isArray(data.faq) ? data.faq : null,
     content,
     translated,
   }
