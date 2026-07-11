@@ -1053,11 +1053,12 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
 
           {/* ────────────── SPECIALIZED GUIDES ────────────── */}
           <P>
-            Two companion guides go deeper on specialized topics: the{' '}
+            Two companion guides go deeper on specialized topics. The{' '}
             <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM guide</a>{' '}
-            covers open-vocabulary detection that wraps vision-language models like Qwen3-VL and Florence-2, and the{' '}
+            covers the vision-language tier (Qwen3-VL, Florence-2), which generates text that LibreYOLO parses into boxes. That is a different thing from{' '}
+            <a href="#open-vocabulary" className="text-libre-600 dark:text-libre-400 hover:underline">open-vocabulary detection</a>, new in v1.3.1, which uses purpose-built detectors conditioned on text and is documented on this page. The{' '}
             <a href="/docs/experimental" className="text-libre-600 dark:text-libre-400 hover:underline">experimental tasks guide</a>{' '}
-            covers additional experimental workflows, including LoRA / DoRA fine-tuning. Classification, oriented boxes, and pose are also documented in their own sections below.
+            covers additional experimental workflows, including LoRA / DoRA fine-tuning.
           </P>
 
           {/* ────────────── INTRODUCTION ────────────── */}
@@ -4511,11 +4512,13 @@ function DocsPageZh({ version = 'v1.3.1', isLatest = true }) {
 
           {/* ────────────── SPECIALIZED GUIDES ────────────── */}
           <P>
-            两份配套指南更深入地介绍专门主题：{' '}
+            两份配套指南更深入地介绍专门主题。{' '}
             <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM 指南</a>{' '}
-            介绍封装 Qwen3-VL、Florence-2 等视觉语言模型的开放词表检测；{' '}
+            介绍视觉语言模型层（Qwen3-VL、Florence-2），它生成文本，再由 LibreYOLO 解析成框。这与 v1.3.1 新增的{' '}
+            <a href="#open-vocabulary" className="text-libre-600 dark:text-libre-400 hover:underline">开放词表检测</a>{' '}
+            是两回事：后者使用以文本为条件的专用检测器，并在本页中说明。{' '}
             <a href="/docs/experimental" className="text-libre-600 dark:text-libre-400 hover:underline">实验性任务指南</a>{' '}
-            介绍更多实验性工作流，包括 LoRA / DoRA 微调。分类、旋转框和姿态也在下文各自的章节中有文档说明。
+            介绍更多实验性工作流，包括 LoRA / DoRA 微调。
           </P>
 
           {/* ────────────── INTRODUCTION ────────────── */}
