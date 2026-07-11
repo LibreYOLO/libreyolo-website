@@ -9,6 +9,8 @@ import {
   Database, Copy, Check, Menu, X, ChevronRight,
   Sparkles, Tags, Video, Activity, Scissors, PersonStanding, Eye, SquareTerminal,
   ShieldCheck, Mountain, MapPin,
+  Palette, WandSparkles, MousePointerClick, Search, PenTool, FlaskConical,
+  Boxes, Gauge, Timer,
 } from 'lucide-react'
 
 /* ─── Section metadata for sidebar ─── */
@@ -23,13 +25,22 @@ const sections = [
   { id: 'tiled-inference', title: 'Tiled Inference', icon: Grid3x3 },
   { id: 'video-inference', title: 'Video Inference', icon: Video },
   { id: 'tracking', title: 'Tracking', icon: Activity },
-  { id: 'segmentation', title: 'Segmentation', icon: Scissors },
+  { id: 'ensembling', title: 'Ensembling', icon: Boxes },
+  { id: 'segmentation', title: 'Instance Segmentation', icon: Scissors },
+  { id: 'semantic-segmentation', title: 'Semantic Segmentation', icon: Palette },
+  { id: 'promptable-segmentation', title: 'Promptable Segmentation', icon: MousePointerClick },
+  { id: 'open-vocabulary', title: 'Open-Vocabulary Detection', icon: Search },
   { id: 'pose', title: 'Pose Estimation', icon: PersonStanding },
   { id: 'gaze', title: 'Gaze Estimation', icon: Eye },
   { id: 'classification', title: 'Classification', icon: Tags },
   { id: 'depth', title: 'Depth Estimation', icon: Mountain },
+  { id: 'restoration', title: 'Image Restoration', icon: WandSparkles },
   { id: 'point-localization', title: 'Point Localization', icon: MapPin },
+  { id: 'annotation', title: 'Annotation (LibreLabel)', icon: PenTool },
   { id: 'training', title: 'Training', icon: GraduationCap },
+  { id: 'distillation', title: 'Distillation', icon: FlaskConical },
+  { id: 'monitoring', title: 'Training Monitor', icon: Gauge },
+  { id: 'profiling', title: 'Profiling', icon: Timer },
   { id: 'validation', title: 'Validation', icon: CheckCircle2 },
   { id: 'export', title: 'Export', icon: Upload },
   { id: 'torchscript-inference', title: 'TorchScript Inference', icon: Cpu },
@@ -749,13 +760,55 @@ function CompatibilityMatrix() {
     {
       family: 'L2CS', status: 'Experimental, inference-only',
       inference: 'exp', training: '',
-      detect: '', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: 'exp',
+      detect: '', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: 'exp', restore: '',
       onnx: '', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+    },
+    {
+      family: 'YOLO9-P2', status: 'New; small objects. VisDrone weights only (non-commercial)',
+      inference: 'exp', training: 'exp',
+      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '', restore: '',
+      onnx: 'exp', torchscript: 'exp', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+    },
+    {
+      family: 'YOLO2 / YOLO3 / YOLO4 / YOLO7', status: 'New; legacy baselines, inference-only',
+      inference: 'exp', training: '',
+      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '', restore: '',
+      onnx: 'exp', torchscript: 'exp', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: 'exp',
+    },
+    {
+      family: 'PIDNet', status: 'New; semantic. Inference and val only, no export',
+      inference: 'exp', training: '',
+      detect: '', segment: '', semantic: 'exp', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '', restore: '',
+      onnx: '', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+    },
+    {
+      family: 'EoMT', status: 'New; semantic. Size l only, imgsz locked to 512',
+      inference: 'exp', training: '',
+      detect: '', segment: '', semantic: 'exp', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '', restore: '',
+      onnx: '', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+    },
+    {
+      family: 'NAFNet', status: 'New; image restoration (denoise / deblur)',
+      inference: 'exp', training: 'exp',
+      detect: '', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '', restore: 'exp',
+      onnx: 'exp', torchscript: 'exp', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+    },
+    {
+      family: 'CLIP', status: 'Zero-shot classification',
+      inference: 'exp', training: '',
+      detect: '', segment: '', semantic: '', classify: 'exp', pose: '', obb: '', depth: '', point: '', gaze: '', restore: '',
+      onnx: '', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+    },
+    {
+      family: 'ResNet', status: 'Experimental classifier',
+      inference: 'exp', training: 'exp',
+      detect: '', segment: '', semantic: '', classify: 'exp', pose: '', obb: '', depth: '', point: '', gaze: '', restore: '',
+      onnx: 'exp', torchscript: 'exp', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
     },
   ]
 
-  const headers = ['Model family', 'v1.3.0 status', 'Inference', 'Training', 'Detect', 'Segment', 'Semantic', 'Classify', 'Pose', 'OBB', 'Depth', 'Point', 'Gaze', 'ONNX', 'TorchScript', 'TensorRT', 'OpenVINO', 'NCNN', 'CoreML', 'TFLite']
-  const columns = ['inference', 'training', 'detect', 'segment', 'semantic', 'classify', 'pose', 'obb', 'depth', 'point', 'gaze', 'onnx', 'torchscript', 'tensorrt', 'openvino', 'ncnn', 'coreml', 'tflite']
+  const headers = ['Model family', 'v1.3.1 status', 'Inference', 'Training', 'Detect', 'Segment', 'Semantic', 'Classify', 'Pose', 'OBB', 'Depth', 'Point', 'Gaze', 'Restore', 'ONNX', 'TorchScript', 'TensorRT', 'OpenVINO', 'NCNN', 'CoreML', 'TFLite']
+  const columns = ['inference', 'training', 'detect', 'segment', 'semantic', 'classify', 'pose', 'obb', 'depth', 'point', 'gaze', 'restore', 'onnx', 'torchscript', 'tensorrt', 'openvino', 'ncnn', 'coreml', 'tflite']
 
   return (
     <DocTable
@@ -776,7 +829,7 @@ function ValidationScopeCallout({ className = '' }) {
         <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" />
         <div>
           <p className="font-semibold text-surface-900 dark:text-white mb-2">
-            v1.3.0 validation scope
+            v1.3.1 validation scope
           </p>
           <p className="text-sm text-surface-600 dark:text-surface-400 mb-2">
             The heavily tested path is detection, training and inference for YOLO9 and RF-DETR, including RF-DETR segmentation.
@@ -800,7 +853,7 @@ function FlagshipCallout({ className = '' }) {
             Recommended validated path: YOLO9 detection or RF-DETR detection / segmentation
           </p>
           <p className="text-sm text-surface-600 dark:text-surface-400">
-            Detection, training and inference for these models receive the heaviest testing. Treat other families, tasks, and multi-GPU workflows as experimental in v1.3.0.
+            Detection, training and inference for these models receive the heaviest testing. Treat other families, tasks, and multi-GPU workflows as experimental in v1.3.1.
           </p>
         </div>
       </div>
@@ -984,7 +1037,7 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
               <div>
                 <p className="text-sm text-surface-600 dark:text-surface-400">
                     {isLatest
-                    ? 'These are the docs for v1.3.0, the previous release. The latest docs are v1.3.1, available from the version menu.'
+                    ? 'These are the docs for the current stable release line, v1.3.x. Earlier versions stay available from the version menu.'
                     : 'This archived version is kept linkable so older installs, search results, and agents can target the right documentation.'}
                 </p>
               </div>
@@ -1012,7 +1065,7 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
             <SectionHeading id="introduction" icon={BookOpen}>Introduction</SectionHeading>
             <ValidationScopeCallout />
             <P>
-              LibreYOLO is an MIT-licensed computer-vision toolkit. v1.3.0 ships a broad catalogue across detection, segmentation, classification, depth and more, but the validated support surface is intentionally narrow:
+              LibreYOLO is an MIT-licensed computer-vision toolkit. v1.3.1 ships a broad catalogue across detection, segmentation, classification, depth and more, but the validated support surface is intentionally narrow:
             </P>
             <ul className="space-y-2 mb-4">
               <FeatureItem><strong className="text-surface-800 dark:text-white">YOLO9 detection</strong> - the CNN path.</FeatureItem>
@@ -1020,7 +1073,7 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
               <FeatureItem><strong className="text-surface-800 dark:text-white">RF-DETR segmentation</strong> - the heavily tested segmentation path.</FeatureItem>
             </ul>
             <P>
-              We recommend those paths as the default choice for new projects because they receive the heaviest testing around detection, training and inference. Other supported families and tasks work through the same unified <InlineCode>LibreYOLO()</InlineCode> factory, but they are experimental in v1.3.0. Use them if you have a specific reason.
+              We recommend those paths as the default choice for new projects because they receive the heaviest testing around detection, training and inference. Other supported families and tasks work through the same unified <InlineCode>LibreYOLO()</InlineCode> factory, but they are experimental in v1.3.1. Use them if you have a specific reason.
             </P>
             <CodeBlock language="python">{`from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
@@ -1041,7 +1094,7 @@ print(result.saved_path)`}</CodeBlock>
               <FeatureItem>Built-in multi-object tracking via ByteTrack</FeatureItem>
               <FeatureItem>ONNX, TorchScript, TensorRT, OpenVINO, NCNN, and CoreML export with embedded metadata, plus matching runtime backends</FeatureItem>
               <FeatureItem>COCO-compatible validation with mAP metrics, plus segmentation and pose validators</FeatureItem>
-              <FeatureItem>Ultralytics-style <InlineCode>libreyolo</InlineCode> command-line tool for predict / train / val / export</FeatureItem>
+              <FeatureItem>A <InlineCode>libreyolo</InlineCode> command-line tool for predict / train / val / export</FeatureItem>
               <FeatureItem>Accepts any image format: file paths, URLs, PIL, NumPy, PyTorch tensors, raw bytes</FeatureItem>
             </ul>
           </motion.div>
@@ -1069,7 +1122,7 @@ print(result.saved_path)`}</CodeBlock>
           {/* ────────────── COMPATIBILITY ────────────── */}
           <SectionHeading id="compatibility" icon={CheckCircle2}>Compatibility</SectionHeading>
           <P>
-            Use this matrix as the quick v1.3.0 support map. <InlineCode>&#10003;</InlineCode>{' '}
+            Use this matrix as the quick v1.3.1 support map. <InlineCode>&#10003;</InlineCode>{' '}
             marks a validated path, <InlineCode>exp</InlineCode> is experimental,{' '}
             <InlineCode>prev</InlineCode> is a research preview, and empty cells are
             not currently supported. Only YOLO9 and RF-DETR detection (plus RF-DETR
@@ -1102,13 +1155,12 @@ print(result.saved_path)`}</CodeBlock>
           <SubHeading>From PyPI</SubHeading>
           <CodeBlock language="bash">{`pip install libreyolo`}</CodeBlock>
           <P>
-            These docs track the upcoming v1.3.0 release. Until v1.3.0 is published to PyPI, use a source install for the features documented on this page.
+            v1.3.1 is the current release on PyPI, and it is what these docs describe. Everything on this page works from the published package: you do not need a source install.
           </P>
 
           <SubHeading>From source</SubHeading>
           <CodeBlock language="bash">{`git clone https://github.com/LibreYOLO/libreyolo.git
 cd libreyolo
-git checkout dev
 pip install -e .`}</CodeBlock>
 
           <SubHeading>Optional dependencies</SubHeading>
@@ -1138,7 +1190,7 @@ pip install libreyolo[ncnn]
 
 # ByteTrack API compatibility extra
 pip install libreyolo[tracking]
-# Tracking dependencies are part of the base install in v1.3.0.
+# Tracking dependencies are part of the base install in v1.3.1.
 
 # CoreML export and inference (macOS only for runtime)
 pip install libreyolo[coreml]
@@ -1146,8 +1198,18 @@ pip install libreyolo[coreml]
 
 # L2CS gaze optional auto-download helper
 pip install libreyolo[gaze]
-# Optional parity with the upstream RetinaFace-based L2CS pipeline
-pip install libreyolo[gaze-retinaface]
+
+# Promptable segmentation (LibreSAM: SAM-1, SAM-2, MobileSAM)
+pip install libreyolo[sam]
+
+# Open-vocabulary detection (Grounding DINO, OWLv2)
+pip install libreyolo[openvocab]
+
+# LibreLabel AI assist (SAM click-to-mask)
+pip install libreyolo[label]
+
+# Zero-shot classification (CLIP)
+pip install libreyolo[clip]
 
 # Install every optional LibreYOLO extra
 pip install libreyolo[all]`}</CodeBlock>
@@ -1213,7 +1275,7 @@ for r in results:
           <SectionHeading id="models" icon={Layers}>Available Models</SectionHeading>
           <FlagshipCallout />
           <P>
-            LibreYOLO v1.3.0 ships two validated flagship families plus a broader
+            LibreYOLO v1.3.1 ships two validated flagship families plus a broader
             catalogue of supported and freshly added models. Every model loads
             through the same <InlineCode>LibreYOLO()</InlineCode> factory, but only
             the validated paths below should be treated as heavily tested.
@@ -1222,7 +1284,7 @@ for r in results:
           <ValidatedModelHeader title="YOLO9 - CNN flagship">
             <SupportBadge variant="validated">Default: LibreYOLO9c.pt</SupportBadge>
             <SupportBadge variant="validated">Heavily tested: detection, training and inference</SupportBadge>
-            <SupportBadge>Detect-only in v1.3.0</SupportBadge>
+            <SupportBadge>Detect-only in v1.3.1</SupportBadge>
             <SupportBadge>Experimental: multi-GPU</SupportBadge>
           </ValidatedModelHeader>
           <DocTable
@@ -1235,7 +1297,7 @@ for r in results:
             ]}
           />
           <P>
-            YOLO9 is detection-only in v1.3.0. The non-detect flagship variants
+            YOLO9 is detection-only in v1.3.1. The non-detect flagship variants
             (including the old <InlineCode>-seg</InlineCode> checkpoints) were
             removed; for segmentation use RF-DETR or EdgeCrafter below.
           </P>
@@ -1292,7 +1354,7 @@ model = LibreYOLO("LibreRFDETRs.pt")           # detect (validated)
           <SubHeading>Additional detection families</SubHeading>
           <P>
             Detection-capable families that share the same factory and API surface
-            as the validated paths. These are experimental in v1.3.0. Each
+            as the validated paths. These are experimental in v1.3.1. Each
             checkpoint name links to its model card on the{' '}
             <a href="https://huggingface.co/LibreYOLO" target="_blank" rel="noopener noreferrer" className="text-libre-600 dark:text-libre-400 hover:underline">LibreYOLO org</a>;
             pass any name to <InlineCode>LibreYOLO()</InlineCode> and the factory
@@ -1404,7 +1466,7 @@ model = LibreYOLO("model_ncnn/")                # NCNN (directory)`}</CodeBlock>
             For recognized official checkpoint filenames, LibreYOLO can auto-download
             missing weights. For custom filenames, point at an explicit local path.
             Keep new projects on YOLO9 detection or RF-DETR detection / segmentation;
-            other families, tasks, and the new families are experimental in v1.3.0.
+            other families, tasks, and the new families are experimental in v1.3.1.
           </P>
 
           <Divider />
@@ -1458,24 +1520,61 @@ model = LibreYOLO("LibreYOLO9c.pt")  # task="detect"`}</CodeBlock>
 
           <SubHeading>Per-family task support</SubHeading>
           <DocTable
-            headers={['Family', 'v1.3.0 status', 'Default', 'Supported tasks']}
+            headers={['Family', 'v1.3.1 status', 'Default', 'Supported tasks']}
             rows={[
               [<strong key="y9">YOLO9</strong>, 'detect single-GPU heavily tested; multi-GPU experimental', 'detect', 'detect'],
               [<strong key="rfd">RF-DETR</strong>, 'detect and segment single-GPU heavily tested; pose and OBB research preview', 'detect', 'detect, segment, pose, obb'],
               ['YOLOX', 'experimental', 'detect', 'detect'],
               ['YOLO9-E2E', 'experimental', 'detect', 'detect'],
+              ['YOLO9-P2', 'new, experimental (small objects)', 'detect', 'detect'],
               ['YOLO-NAS', 'experimental', 'detect', 'detect, pose'],
               ['D-FINE / DEIM / DEIMv2', 'experimental', 'detect', 'detect'],
               ['RT-DETR / RT-DETRv2 / RT-DETRv4', 'experimental', 'detect', 'detect'],
               ['PicoDet / RTMDet', 'experimental', 'detect', 'detect'],
               ['EdgeCrafter (EC)', 'experimental', 'detect', 'detect, pose, segment'],
-              ['DINOv2', 'new, experimental', 'semantic', 'semantic, classify'],
-              ['MobileNetV4 / ConvNeXt / EfficientNetV2', 'new, experimental', 'classify', 'classify'],
-              ['Depth Anything V2', 'new, experimental', 'depth', 'depth'],
-              ['FOMO', 'new, experimental', 'point', 'point'],
+              ['YOLO2 / YOLO3 / YOLO4 / YOLO7', 'new, legacy baselines (inference-only)', 'detect', 'detect'],
+              ['PIDNet', 'new, experimental', 'semantic', 'semantic (inference and val only)'],
+              ['EoMT', 'new, experimental', 'semantic', 'semantic (inference and val only)'],
+              ['DINOv2', 'experimental', 'semantic', 'semantic, classify'],
+              ['MobileNetV4 / ConvNeXt / EfficientNetV2 / ResNet', 'experimental', 'classify', 'classify'],
+              ['CLIP', 'experimental', 'classify', 'zero-shot classify'],
+              ['Depth Anything V2', 'experimental', 'depth', 'depth (inference and val only)'],
+              ['NAFNet', 'new, experimental', 'restore', 'restore'],
+              ['FOMO', 'experimental', 'point', 'point'],
               ['L2CS', 'experimental', 'gaze', 'gaze (inference-only)'],
             ]}
           />
+          <P>
+            Three tiers sit <em>outside</em> the <InlineCode>LibreYOLO()</InlineCode> factory and are imported directly instead: <a href="#promptable-segmentation" className="text-libre-600 dark:text-libre-400 hover:underline">LibreSAM</a> (promptable segmentation), <a href="#open-vocabulary" className="text-libre-600 dark:text-libre-400 hover:underline">LibreOpenVocab</a> (open-vocabulary detection), and <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM</a>. They are not checkpoint families, so <InlineCode>LibreYOLO(&quot;sam_b&quot;)</InlineCode> and friends will not resolve.
+          </P>
+
+          <SubHeading>Legacy YOLO baselines</SubHeading>
+          <P>
+            v1.3.1 adds the historical Darknet lineage so you can reproduce old baselines against modern ones with one API. These are <strong>inference-only</strong>: none of them can be trained in LibreYOLO, and they are not the path to pick for new work. Reach for YOLO9 or RF-DETR instead.
+          </P>
+          <DocTable
+            headers={['Family', 'Checkpoints', 'Input size', 'Weights license']}
+            rows={[
+              ['LibreYOLO2', 'LibreYOLO2{t,b}.pt', '416 / 608', 'Public domain'],
+              ['LibreYOLO3', 'LibreYOLO3{t,b,spp}.pt', '416 / 416 / 608', 'Public domain'],
+              ['LibreYOLO4', 'LibreYOLO4{t,b}.pt', '416 / 608', 'Public domain'],
+              ['LibreYOLO7', 'LibreYOLO7b.pt', '640', 'MIT'],
+            ]}
+          />
+          <P>
+            All four are COCO-80. LibreYOLO7 is ported from the MIT-licensed <InlineCode>MultimediaTechLab/YOLO</InlineCode>, deliberately <strong>not</strong> from the GPL-3.0 reference implementation, so it is safe to use commercially.
+          </P>
+
+          <SubHeading>YOLO9-P2, for small objects</SubHeading>
+          <P>
+            <InlineCode>LibreYOLO9P2</InlineCode> adds a stride-4 detection scale to YOLO9. That extra high-resolution head is what makes it worth the cost when your objects are tiny in frame, which is the classic aerial and drone-footage problem. It trains and exports like YOLO9.
+          </P>
+          <P>
+            One published checkpoint ships: <Checkpoints names={['LibreYOLO9P2s-visdrone.pt']} link={false} />, trained on VisDrone. There is <strong>no COCO-pretrained P2 checkpoint</strong>. Note the licence carefully: the VisDrone weights are <strong>CC BY-NC-SA 3.0, so they are non-commercial</strong>. Train your own P2 weights on a permissive dataset if you need commercial use.
+          </P>
+          <P>
+            Two rough edges in v1.3.1. TFLite export is not available for P2 (though it <em>is</em> available for the legacy families above), and the CLI cannot resolve the variant filename, so load the VisDrone checkpoint from Python.
+          </P>
 
           <SubHeading>Examples</SubHeading>
           <CodeBlock language="text">{`# Detection (implicit)
@@ -1523,7 +1622,7 @@ LibreL2CSr50.pt`}</CodeBlock>
           {/* ────────────── PREDICTION ────────────── */}
           <SectionHeading id="prediction" icon={Crosshair}>Prediction</SectionHeading>
           <P>
-            The single-GPU prediction path is heavily tested for YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Other families and tasks use the same API but are experimental in v1.3.0.
+            The single-GPU prediction path is heavily tested for YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Other families and tasks use the same API but are experimental in v1.3.1.
           </P>
 
           <SubHeading>Basic prediction</SubHeading>
@@ -1674,7 +1773,7 @@ for r in results:
             For images much larger than the model's input size (e.g., satellite imagery, drone footage), tiled inference splits the image into overlapping tiles, runs detection on each, and merges results.
           </P>
           <P>
-            Tiling is detection-only in v1.3.0. It rejects segmentation masks, and it cannot be combined with <InlineCode>augment=True</InlineCode>.
+            Tiling is detection-only in v1.3.1. It rejects segmentation masks, and it cannot be combined with <InlineCode>augment=True</InlineCode>.
           </P>
           <CodeBlock language="python">{`result = model(
     "large_aerial_image.jpg",
@@ -1758,7 +1857,7 @@ with VideoSource("clip.mp4", vid_stride=1) as src, \\
             detector and add persistent track IDs: <strong className="text-surface-800 dark:text-white">ByteTrack</strong> (default)
             and <strong className="text-surface-800 dark:text-white">OC-SORT</strong> (new in v1.3.0), which is more robust to
             occlusion and non-linear motion. Tracking is most tested with single-GPU YOLO9 detection and
-            RF-DETR detection; other detection families are experimental in v1.3.0.
+            RF-DETR detection; other detection families are experimental in v1.3.1.
           </P>
 
           <SubHeading>Install</SubHeading>
@@ -1866,11 +1965,74 @@ for result in model.track("clip.mp4", tracker_config=cfg, save=True):
 
           <Divider />
 
-          {/* ────────────── SEGMENTATION ────────────── */}
-          <SectionHeading id="segmentation" icon={Scissors}>Segmentation</SectionHeading>
+          {/* ────────────── ENSEMBLING ────────────── */}
+          <SectionHeading id="ensembling" icon={Boxes}>Ensembling</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">Detection only</SupportBadge>
+            <SupportBadge variant="experimental">Python API only</SupportBadge>
+          </div>
+          <P>
+            <InlineCode>LibreEnsemble</InlineCode> runs two or more detection models and fuses their detections into one ordinary <InlineCode>Results</InlineCode>. Fusion happens at the detection level, never at the tensor level, so every member keeps its own input size, normalization and NMS. That is what lets you mix a grid detector with a DETR, or a <InlineCode>.pt</InlineCode> checkpoint with an exported backend, in the same ensemble.
+          </P>
+          <P>
+            Class spaces do not have to match. Members are unified by class <em>name</em>: identical name maps pass straight through, otherwise LibreYOLO builds the union and remaps each member into it. Boxes are only fused with boxes of the same unified class, and a class that only one member knows passes through unfused.
+          </P>
+
+          <SubHeading>Fuse two detectors</SubHeading>
+          <CodeBlock language="python">{`from libreyolo import LibreEnsemble
+
+# Weighted Boxes Fusion (the default), keep only boxes BOTH models found
+ens = LibreEnsemble(["LibreYOLO9s.pt", "LibreRFDETRs.pt"], min_votes=2)
+
+result = ens("image.jpg", conf=0.25)
+print(result.boxes.xyxy)
+print(result.names)     # the unified (union) class map
+print(result.speed)     # per-member timings plus fusion`}</CodeBlock>
+
+          <SubHeading>Trust weights and per-member settings</SubHeading>
+          <P>
+            <InlineCode>weights</InlineCode> expresses how much you trust each member (set it proportional to each model&apos;s validation mAP). <InlineCode>conf</InlineCode>, <InlineCode>iou</InlineCode> and <InlineCode>device</InlineCode> accept either one value for everyone or one value per member.
+          </P>
+          <CodeBlock language="python">{`ens = LibreEnsemble(
+    ["LibreYOLO9s.pt", "LibreRFDETRs.pt"],
+    weights=[1.0, 1.4],     # pull fused coordinates and scores toward member 2
+    fusion="wbf",           # "wbf" | "wbf_seeded" | "nms" | your own callable
+    fusion_iou=0.55,        # IoU used to CLUSTER boxes for fusion, not member NMS
+    min_votes=1,            # keep boxes confirmed by at least N members
+)
+
+result = ens("image.jpg", conf=[0.25, 0.4])   # per-member confidence`}</CodeBlock>
+
+          <SubHeading>Bring an outside detector</SubHeading>
+          <P>
+            <InlineCode>ExternalDetector</InlineCode> wraps any callable that returns boxes, so a model that is not a LibreYOLO model can still join the ensemble. The function receives a PIL image and must return boxes in original-image pixels.
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreEnsemble, ExternalDetector
+
+def my_detector(image):
+    # -> (boxes_xyxy, scores, labels) in ORIGINAL-image pixels
+    return boxes, scores, labels
+
+member = ExternalDetector(my_detector, names={0: "person"})
+ens = LibreEnsemble(["LibreYOLO9s.pt", member])`}</CodeBlock>
+
+          <SubHeading>Limits</SubHeading>
+          <ul className="space-y-2 my-4">
+            <FeatureItem>Detection members only. Any member whose task is not <InlineCode>detect</InlineCode> raises. Segmentation and pose models cannot be ensembled.</FeatureItem>
+            <FeatureItem>At least two members are required.</FeatureItem>
+            <FeatureItem><InlineCode>min_votes</InlineCode> above 1 requires a voting fusion. It raises with <InlineCode>fusion=&quot;nms&quot;</InlineCode>; use <InlineCode>wbf</InlineCode> or <InlineCode>wbf_seeded</InlineCode>.</FeatureItem>
+            <FeatureItem>Images and image directories only. Video sources and <InlineCode>stream=True</InlineCode> raise: run the members individually for video.</FeatureItem>
+            <FeatureItem><InlineCode>ens.val()</InlineCode> and <InlineCode>ens.export()</InlineCode> both raise. Validate and export the members individually.</FeatureItem>
+            <FeatureItem><InlineCode>batch</InlineCode> is accepted for API parity but images are still processed one at a time.</FeatureItem>
+          </ul>
+
+          <Divider />
+
+          {/* ────────────── INSTANCE SEGMENTATION ────────────── */}
+          <SectionHeading id="segmentation" icon={Scissors}>Instance Segmentation</SectionHeading>
           <ValidationScopeCallout />
           <P>
-            RF-DETR segmentation is the segmentation path in v1.3.0 and is the heavily tested option. EdgeCrafter (<InlineCode>-seg</InlineCode>) also exposes a segmentation head but is experimental. YOLO9 no longer ships a segmentation head: it is detect-only as of v1.3.0.
+            RF-DETR segmentation is the segmentation path in v1.3.1 and is the heavily tested option. EdgeCrafter (<InlineCode>-seg</InlineCode>) also exposes a segmentation head but is experimental. YOLO9 no longer ships a segmentation head: it is detect-only as of v1.3.1.
           </P>
 
           <SubHeading>Run segmentation</SubHeading>
@@ -1913,6 +2075,249 @@ result.masks.numpy()`}</CodeBlock>
 
           <Divider />
 
+          {/* ────────────── SEMANTIC SEGMENTATION ────────────── */}
+          <SectionHeading id="semantic-segmentation" icon={Palette}>Semantic Segmentation</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">New in v1.3.1</SupportBadge>
+            <SupportBadge variant="experimental">No export</SupportBadge>
+          </div>
+          <P>
+            Semantic segmentation labels <em>every pixel</em> with a class. It is a different task from instance segmentation: there are no object instances and no boxes, just one dense class map. Pass <InlineCode>task=&quot;semantic&quot;</InlineCode> (aliases: <InlineCode>semseg</InlineCode>, <InlineCode>sem</InlineCode>), and read the result from <InlineCode>result.semantic_mask</InlineCode>. On a semantic model <InlineCode>result.boxes</InlineCode> and <InlineCode>result.masks</InlineCode> are both <InlineCode>None</InlineCode>.
+          </P>
+
+          <SubHeading>Models</SubHeading>
+          <DocTable
+            headers={['Family', 'Checkpoints', 'Backbone', 'Trained on', 'Classes', 'Train?']}
+            rows={[
+              ['LibrePIDNet', 'LibrePIDNet{s,m,l}-sem.pt', 'PIDNet 3-branch CNN', 'Cityscapes', '19', 'No'],
+              ['LibreEoMT', 'LibreEoMTl-sem.pt', 'DINOv2 ViT-L', 'ADE20K', '150', 'No'],
+              ['LibreDINOv2', 'none published: you train it', 'DINOv2 + dense head', 'your data', 'you choose', 'Yes'],
+            ]}
+          />
+          <P>
+            The three behave quite differently, so pick deliberately. <InlineCode>LibrePIDNet</InlineCode> is a fast real-time CNN carrying Cityscapes road-scene classes. <InlineCode>LibreEoMT</InlineCode> carries ADE20K&apos;s 150 general scene classes. Both ship pretrained weights and <strong>cannot be trained</strong> inside LibreYOLO: fine-tune them upstream and convert the result.
+          </P>
+          <P>
+            <InlineCode>LibreDINOv2</InlineCode> is the mirror image, and the distinction matters: it is the <strong>fine-tuning</strong> family. There is <strong>no published LibreDINOv2 semantic checkpoint</strong>. You construct it from the pretrained DINOv2 backbone with a fresh dense head and train it on your own masks, so it is the family to reach for when your classes are not Cityscapes or ADE20K.
+          </P>
+
+          <SubHeading>Run semantic segmentation</SubHeading>
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
+
+model = LibreYOLO("LibrePIDNets-sem.pt")   # Cityscapes, 19 classes
+result = model.predict("street.jpg")
+
+sm = result.semantic_mask     # SemanticMask
+print(sm.data.shape)          # (H, W) int class ids, on the ORIGINAL image canvas
+print(sm.classes)             # sorted class ids present, 255 (ignore) excluded
+print(model.names[13])        # 'car'
+
+car = sm.class_mask(13)       # (H, W) bool mask for one class
+
+result.plot().save("out.png") # class map overlaid on the image
+
+print(result.boxes, result.masks)   # None None: semantic has no instances`}</CodeBlock>
+
+          <SubHeading>SemanticMask API</SubHeading>
+          <CodeBlock language="python">{`sm = result.semantic_mask
+
+sm.data               # (H, W) integer class ids at original resolution
+sm.orig_shape         # (H, W)
+sm.classes            # list[int] of ids present, excluding the ignore index
+sm.class_mask(cid)    # (H, W) bool
+SemanticMask.IGNORE_INDEX   # 255: the void label, never counted as a class
+
+sm.cpu(); sm.numpy()`}</CodeBlock>
+
+          <SubHeading>Validate</SubHeading>
+          <P>Validation reports mean IoU and pixel accuracy. Classes never seen in either the prediction or the ground truth are excluded from the mean rather than scored as zero. <InlineCode>fitness</InlineCode> is an alias of mIoU, so it is what drives best-checkpoint selection during training.</P>
+          <CodeBlock language="python">{`metrics = model.val(data="cityscapes.yaml")
+print(metrics["metrics/mIoU"])
+print(metrics["metrics/pixel_accuracy"])`}</CodeBlock>
+          <CodeBlock language="bash">{`libreyolo val model=LibrePIDNets-sem.pt data=cityscapes.yaml split=val`}</CodeBlock>
+
+          <SubHeading>Train (LibreDINOv2)</SubHeading>
+          <P>
+            Masks are single-channel lossless images whose pixel value is the class id, paired to each image by filename stem. <InlineCode>255</InlineCode> means ignore and is excluded from both loss and metrics.
+          </P>
+          <CodeBlock language="bash">{`dataset/
+    images/train/*.jpg
+    images/val/*.jpg
+    masks/train/*.png      # same stem as the image; pixel value = class id
+    masks/val/*.png`}</CodeBlock>
+          <CodeBlock language="python">{`from libreyolo import LibreDINOv2
+
+# model_path=None -> pretrained DINOv2 backbone + a fresh dense head
+model = LibreDINOv2(model_path=None, size="s", task="semantic", nb_classes=19)
+model.train(data="cityscapes.yaml", epochs=100, batch_size=4, lr=1e-4)`}</CodeBlock>
+          <P>
+            In the dataset YAML, <InlineCode>masks_dir</InlineCode> names the mask directory (default <InlineCode>masks</InlineCode>). If you omit it, LibreYOLO rasterizes masks from YOLO polygon labels at load time and appends a <InlineCode>background</InlineCode> class. <InlineCode>label_mapping</InlineCode> remaps source pixel values to training ids, and anything unmapped becomes ignore.
+          </P>
+
+          <SubHeading>Limits</SubHeading>
+          <ul className="space-y-2 my-4">
+            <FeatureItem><strong>No export, in any format.</strong> Semantic export is blocked at the framework level, not just per model: ONNX, TensorRT, OpenVINO, NCNN, CoreML and TFLite all raise. A semantic export contract (dense logits plus backend argmax) has not landed yet.</FeatureItem>
+            <FeatureItem><strong>Only LibreDINOv2 trains.</strong> <InlineCode>LibrePIDNet.train()</InlineCode> and <InlineCode>LibreEoMT.train()</InlineCode> raise.</FeatureItem>
+            <FeatureItem><strong>EoMT is size <InlineCode>l</InlineCode> only and locked to <InlineCode>imgsz=512</InlineCode></strong> (its checkpoint uses fixed position embeddings), and it cannot batch: <InlineCode>val(batch=N)</InlineCode> warns and still runs one image at a time.</FeatureItem>
+            <FeatureItem><InlineCode>imgsz</InlineCode> divisibility differs per family: PIDNet needs a multiple of 8, EoMT of 16, DINOv2 of 14. Violations raise.</FeatureItem>
+            <FeatureItem>No tracking and no test-time augmentation for semantic models.</FeatureItem>
+            <FeatureItem>Cityscapes, ADE20K and COCO-Stuff all require a manual download. LibreYOLO ships the dataset YAMLs, not the data.</FeatureItem>
+            <FeatureItem>Raw upstream checkpoints are rejected. Convert with <InlineCode>weights/convert_pidnet_weights.py</InlineCode> or <InlineCode>weights/convert_eomt_weights.py</InlineCode>.</FeatureItem>
+          </ul>
+
+          <Divider />
+
+          {/* ────────────── PROMPTABLE SEGMENTATION (SAM) ────────────── */}
+          <SectionHeading id="promptable-segmentation" icon={MousePointerClick}>Promptable Segmentation</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">New in v1.3.1</SupportBadge>
+            <SupportBadge variant="experimental">Python API only</SupportBadge>
+            <SupportBadge variant="experimental">Inference only</SupportBadge>
+          </div>
+          <P>
+            LibreSAM is a separate tier from the detector factory, because a promptable segmenter has a different contract: it runs a heavy image encoder once, then answers cheap spatial prompts (a click, a box) with a mask. There is no fixed class list. Install it with <InlineCode>pip install &quot;libreyolo[sam]&quot;</InlineCode>.
+          </P>
+          <P>
+            Two things surprise people. First, <InlineCode>LibreSAM</InlineCode> is a <strong>factory function, not a class</strong>, and it is deliberately kept <strong>outside</strong> the <InlineCode>LibreYOLO()</InlineCode> loader, so <InlineCode>LibreYOLO(&quot;sam_b&quot;)</InlineCode> does not work. Import it directly. Second, the whole tier is <strong>Python-only</strong>: there is no CLI path to it.
+          </P>
+
+          <SubHeading>Models</SubHeading>
+          <DocTable
+            headers={['Family', 'Pass to LibreSAM()', 'Encoder', 'Notes']}
+            rows={[
+              ['SAM-1', '"base" (default), "large", "huge"', 'ViT-B / L / H', 'Apache-2.0'],
+              ['SAM-2.1', '"sam2-tiny", "sam2-small", "sam2-base-plus", "sam2-large"', 'Hiera', 'Images only, no video'],
+              ['MobileSAM', '"mobilesam"', 'TinyViT', 'Fastest; native LibreYOLO port'],
+            ]}
+          />
+          <P>
+            Those short aliases only work through the <InlineCode>LibreSAM()</InlineCode> factory. The concrete classes take canonical sizes, so <InlineCode>LibreSAM1(&quot;base&quot;)</InlineCode> is right and <InlineCode>LibreSAM1(&quot;sam_b&quot;)</InlineCode> raises.
+          </P>
+
+          <SubHeading>Prompt with a click or a box</SubHeading>
+          <CodeBlock language="python">{`from libreyolo import LibreSAM
+
+model = LibreSAM("base")          # SAM-1 ViT-B
+
+# a single click
+r = model.predict("img.jpg", points=[640, 360], labels=[1])
+print(r.masks.data.shape)   # (1, H, W) bool, at the original resolution
+print(r.boxes.xyxy)         # a tight box derived from the mask
+print(r.boxes.conf)         # SAM's predicted mask quality, NOT a detection score
+
+# a box prompt
+r = model.predict("img.jpg", bboxes=[100, 100, 500, 500])
+
+# segment everything (a coarse grid); lower the grid on CPU, it is slow
+r = model.predict("img.jpg", points_per_side=16)`}</CodeBlock>
+
+          <SubHeading>Encode once, prompt many times</SubHeading>
+          <P>This is the pattern that makes interactive use fast. The expensive encoder runs once per image and every later prompt reuses the embedding.</P>
+          <CodeBlock language="python">{`model.set_image("img.jpg")                        # heavy encoder runs ONCE
+a = model.predict(points=[500, 375], labels=[1])  # cheap: decoder only
+b = model.predict(bboxes=[100, 100, 200, 200])    # cheap: reuses the embedding
+model.reset_image()`}</CodeBlock>
+
+          <SubHeading>How prompts are shaped</SubHeading>
+          <P>
+            Nesting depth carries meaning, and this is the single easiest thing to get wrong. Points are plain <InlineCode>[x, y]</InlineCode> pixels. A label of <InlineCode>1</InlineCode> means include, <InlineCode>0</InlineCode> means exclude.
+          </P>
+          <DocTable
+            headers={['You pass', 'It means']}
+            rows={[
+              ['points=[x, y]', 'one object, one point'],
+              ['points=[[x, y], [x, y]]', 'TWO objects, one point each'],
+              ['points=[[[x, y], [x, y]]]', 'ONE object, two points'],
+            ]}
+          />
+          <CodeBlock language="python">{`# refine ONE object with a positive and a negative click
+r = model.predict(
+    "img.jpg",
+    points=[[[500, 375], [620, 400]]],   # one object, two points
+    labels=[1, 0],                        # include, then exclude
+)
+
+# all three whole-vs-part candidate masks for an ambiguous click
+r = model.predict("img.jpg", points=[640, 360], labels=[1], multimask=True)`}</CodeBlock>
+
+          <SubHeading>Limits</SubHeading>
+          <ul className="space-y-2 my-4">
+            <FeatureItem><strong>SAM-2 is images only.</strong> There is no video segmentation and no memory propagation across frames in v1.3.1: <InlineCode>track()</InlineCode> raises. Call <InlineCode>predict()</InlineCode> per frame.</FeatureItem>
+            <FeatureItem><strong>No training, no validation, no export</strong>, for any SAM family. All three raise, including <InlineCode>export(format=&quot;onnx&quot;)</InlineCode>.</FeatureItem>
+            <FeatureItem>Mask prompts (<InlineCode>masks=</InlineCode>) are not supported and raise. Use points or boxes.</FeatureItem>
+            <FeatureItem><InlineCode>conf</InlineCode> here filters on SAM&apos;s predicted <em>mask quality</em>, not on detection confidence. Detector intuition does not transfer.</FeatureItem>
+            <FeatureItem>Everything runs in fp32, even on CUDA. This is deliberate: half precision rounds prompt coordinates by several pixels at SAM&apos;s 1024px working size, which silently moves where you clicked.</FeatureItem>
+            <FeatureItem>Segment-everything is a simplified grid, not the reference automatic mask generator. It under-segments crowded scenes.</FeatureItem>
+            <FeatureItem>Weights download into <InlineCode>./weights/</InlineCode> relative to your working directory, so running from elsewhere re-downloads.</FeatureItem>
+          </ul>
+
+          <Divider />
+
+          {/* ────────────── OPEN-VOCABULARY DETECTION ────────────── */}
+          <SectionHeading id="open-vocabulary" icon={Search}>Open-Vocabulary Detection</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">New in v1.3.1</SupportBadge>
+            <SupportBadge variant="experimental">Python API only</SupportBadge>
+            <SupportBadge variant="validated">Apache-2.0 weights</SupportBadge>
+          </div>
+          <P>
+            Give the model a list of class names as text and get real detection boxes back. No training, no labelled data. Change the list and you change what it detects. Install with <InlineCode>pip install &quot;libreyolo[openvocab]&quot;</InlineCode>.
+          </P>
+          <P>
+            This is not the same as the <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM</a> tier, and the difference matters. These are purpose-built <em>detectors</em> conditioned on text: the detector head returns boxes with real model scores. A VLM instead generates text that LibreYOLO parses into boxes. The rule of thumb: <strong>boxes for named classes, use open-vocab; describe or instruct, use a VLM</strong>. The other practical difference is licensing: every weight in this tier is Apache-2.0, while the VLM tier contains non-commercial models.
+          </P>
+
+          <SubHeading>Models</SubHeading>
+          <DocTable
+            headers={['Pass to LibreOpenVocab()', 'Class', 'Backbone', 'Default conf']}
+            rows={[
+              ['"grounding-dino" (default, tiny)', 'LibreGroundingDINO', 'Swin-T + BERT', '0.25'],
+              ['"grounding-dino-base"', 'LibreGroundingDINO', 'Swin-B + BERT', '0.25'],
+              ['"owlv2"', 'LibreOWLv2', 'ViT-B/16', '0.1'],
+              ['"owlv2-large"', 'LibreOWLv2', 'ViT-L/14', '0.1'],
+            ]}
+          />
+
+          <SubHeading>Detect anything you can name</SubHeading>
+          <P>
+            The vocabulary is set on the <em>model</em>, with <InlineCode>set_classes()</InlineCode>, and it is sticky across later calls. There is no <InlineCode>prompts=</InlineCode> or <InlineCode>text=</InlineCode> argument on <InlineCode>predict()</InlineCode>.
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreOpenVocab
+
+model = LibreOpenVocab("grounding-dino")
+model.set_classes(["person", "dog", "skateboard"])   # sticky vocabulary
+
+result = model.predict("street.jpg", conf=0.25, text_threshold=0.25)
+print(result.boxes.xyxy, result.boxes.conf)
+print(result.names)     # {0: 'person', 1: 'dog', 2: 'skateboard'}
+
+result = model.predict("another.jpg")   # same vocabulary, still set
+
+# or set it at construction
+model = LibreOpenVocab("owlv2", names=["forklift", "pallet"])`}</CodeBlock>
+          <P>
+            <strong>Watch out for the lookalike.</strong> <InlineCode>predict(classes=...)</InlineCode> is <em>not</em> the text API. It is the standard integer class-id filter and takes a list of ints. The text vocabulary goes through <InlineCode>set_classes()</InlineCode>.
+          </P>
+
+          <SubHeading>Practical notes</SubHeading>
+          <ul className="space-y-2 my-4">
+            <FeatureItem>Short noun phrases work best. &quot;remote control&quot; beats &quot;remote&quot;. Phrases that cannot be mapped back to one of your class names unambiguously are dropped, so a missing detection is sometimes a mapping drop rather than a detector miss.</FeatureItem>
+            <FeatureItem>There is no cap on how many classes you may pass. Grounding DINO automatically splits a long vocabulary into chunks that fit its text encoder and runs one forward pass per chunk, so <strong>cost grows with vocabulary size</strong>. That is the main latency knob you control.</FeatureItem>
+            <FeatureItem><InlineCode>text_threshold</InlineCode> is Grounding DINO only. Passing it to OWLv2 raises.</FeatureItem>
+            <FeatureItem>The two families score differently, so tune <InlineCode>conf</InlineCode> per family rather than reusing a number.</FeatureItem>
+            <FeatureItem>Expect this to be far slower than a LibreYOLO detector. The honest workflow: use open-vocab to explore or auto-label an open vocabulary, then train a fast detector on the result.</FeatureItem>
+          </ul>
+
+          <SubHeading>Limits</SubHeading>
+          <ul className="space-y-2 my-4">
+            <FeatureItem><strong>No CLI.</strong> <InlineCode>libreyolo predict model=grounding-dino</InlineCode> does not work. This tier is reachable only from Python.</FeatureItem>
+            <FeatureItem><strong>No training, no validation, no export, no tracking.</strong> All four raise.</FeatureItem>
+            <FeatureItem><InlineCode>imgsz</InlineCode> and <InlineCode>augment=True</InlineCode> are rejected: the processor owns resizing. <InlineCode>iou</InlineCode> is accepted but ignored, since no LibreYOLO NMS runs here.</FeatureItem>
+            <FeatureItem>Batching gives no speedup: images run one at a time. Everything is fp32.</FeatureItem>
+          </ul>
+
+          <Divider />
+
           {/* ────────────── POSE ESTIMATION ────────────── */}
           <SectionHeading id="pose" icon={PersonStanding}>Pose Estimation</SectionHeading>
           <P>
@@ -1939,7 +2344,7 @@ print(result.keypoints.xy.shape)  # (N, 17, 2) pixel coordinates`}</CodeBlock>
           <P>
             <SupportBadge variant="experimental">Preview</SupportBadge>{' '}
             RF-DETR pose ships a single checkpoint at size <InlineCode>x</InlineCode> only:{' '}
-            <InlineCode>LibreRFDETRx-pose.pt</InlineCode>. It is a research preview in v1.3.0.
+            <InlineCode>LibreRFDETRx-pose.pt</InlineCode>. It is a research preview in v1.3.1.
           </P>
           <CodeBlock language="python">{`# RF-DETR pose preview (size x only)
 model = LibreYOLO("LibreRFDETRx-pose.pt")
@@ -1967,7 +2372,7 @@ result.keypoints.numpy()`}</CodeBlock>
           {/* ────────────── GAZE ESTIMATION ────────────── */}
           <SectionHeading id="gaze" icon={Eye}>Gaze Estimation</SectionHeading>
           <P>
-            Gaze direction estimation is provided by the <InlineCode>LibreL2CS</InlineCode> family, an L2CS-Net port with a ResNet trunk and two angle-bin classification heads. It is a two-stage model: an upstream face detector locates faces, then the gaze head predicts per-face pitch and yaw in radians. It is inference-only and experimental in v1.3.0.
+            Gaze direction estimation is provided by the <InlineCode>LibreL2CS</InlineCode> family, an L2CS-Net port with a ResNet trunk and two angle-bin classification heads. It is a two-stage model: an upstream face detector locates faces, then the gaze head predicts per-face pitch and yaw in radians. It is inference-only and experimental in v1.3.1.
           </P>
 
           <SubHeading>Install</SubHeading>
@@ -2193,6 +2598,60 @@ model.export(format="onnx")      # raises NotImplementedError - depth export is 
 
           <Divider />
 
+          {/* ────────────── IMAGE RESTORATION ────────────── */}
+          <SectionHeading id="restoration" icon={WandSparkles}>Image Restoration</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">New in v1.3.1</SupportBadge>
+            <SupportBadge variant="experimental">Trainable</SupportBadge>
+          </div>
+          <P>
+            The <InlineCode>restore</InlineCode> task takes a degraded image and returns a clean one. v1.3.1 ships <InlineCode>LibreNAFNet</InlineCode>, a port of NAFNet. Unlike most tasks here there is nothing to detect: the output is an image, returned as <InlineCode>result.restored_image</InlineCode>.
+          </P>
+          <P>
+            What a restoration model actually fixes, whether it denoises or deblurs, is a property of <em>the weights it was trained on</em>, not of the model size. Sizes <InlineCode>s</InlineCode> and <InlineCode>l</InlineCode> differ only in width (32 and 64 channels).
+          </P>
+
+          <SubHeading>Checkpoints</SubHeading>
+          <P>
+            One checkpoint is published: <Checkpoints names={['LibreNAFNetl-restore-sidd.pt']} link={false} />, a real-image <strong>denoiser</strong> trained on SIDD, converted bit-exactly from upstream NAFNet, MIT licensed. For <strong>deblurring</strong> there is no published LibreYOLO checkpoint: convert the upstream GoPro weights yourself with <InlineCode>weights/convert_nafnet_weights.py</InlineCode>. Note that the plain names <InlineCode>LibreNAFNets-restore.pt</InlineCode> and <InlineCode>LibreNAFNetl-restore.pt</InlineCode> are <strong>not</strong> hosted, so asking for them will fail to download.
+          </P>
+
+          <SubHeading>Clean up an image</SubHeading>
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
+
+model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")   # SIDD denoiser
+result = model("noisy.jpg")
+
+img = result.restored_image     # RestoredImage
+print(img.array.shape)          # (H, W, 3) uint8 RGB, at the original resolution
+img.save("clean.png")           # save lossless`}</CodeBlock>
+          <P>
+            Restoration runs at the image&apos;s native resolution: the input is padded to a multiple of 16 and cropped back afterwards, so you get the same size out that you put in.
+          </P>
+
+          <SubHeading>Save losslessly, or you undo the work</SubHeading>
+          <P>
+            This is the one thing to get right. <InlineCode>libreyolo predict --save</InlineCode> writes <strong>JPEG</strong> by default, which re-introduces compression artefacts into an image you just spent a model cleaning up. Ask for PNG.
+          </P>
+          <CodeBlock language="bash">{`libreyolo predict model=LibreNAFNetl-restore-sidd.pt source=noisy.jpg \\
+  save=true output-file-format=png`}</CodeBlock>
+
+          <SubHeading>Train and validate</SubHeading>
+          <P>
+            Training takes paired degraded and clean images. Validation reports PSNR and SSIM.
+          </P>
+          <CodeBlock language="python">{`model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
+model.train(data="gopro.yaml", epochs=100)
+
+metrics = model.val(data="gopro.yaml")
+print(metrics["metrics/psnr"], metrics["metrics/ssim"])`}</CodeBlock>
+          <ul className="space-y-2 my-4">
+            <FeatureItem>Two reporting quirks to expect while training: the console prints PSNR under the <InlineCode>mAP50</InlineCode> column heading (a labelling bug, the number is PSNR), and PSNR/SSIM are computed with no border crop, so they are not directly comparable to published NAFNet benchmark figures.</FeatureItem>
+            <FeatureItem>Export: ONNX (static shapes only, and <InlineCode>imgsz</InlineCode> must be a multiple of 16) and TorchScript work. TFLite and CoreML raise.</FeatureItem>
+          </ul>
+
+          <Divider />
+
           {/* ────────────── POINT LOCALIZATION ────────────── */}
           <SectionHeading id="point-localization" icon={MapPin}>Point Localization</SectionHeading>
           <div className="flex flex-wrap gap-2 mb-4">
@@ -2211,6 +2670,69 @@ points = result.points       # Points payload, (N, 4) rows: x, y, class, confide
 print(points.xy)             # (N, 2) absolute pixel coords
 print(points.xyn)            # (N, 2) normalized to [0, 1]
 print(points.cls, points.conf)`}</CodeBlock>
+
+          <Divider />
+
+          {/* ────────────── ANNOTATION (LIBRELABEL) ────────────── */}
+          <SectionHeading id="annotation" icon={PenTool}>Annotation (LibreLabel)</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">New in v1.3.1</SupportBadge>
+          </div>
+          <P>
+            <InlineCode>libreyolo label</InlineCode> starts a local, browser-based annotation tool. It writes LibreYOLO-native label files exactly where the trainer already reads them, so a folder of images becomes a trainable dataset with no conversion step, no cloud account and no database. The server is Python standard library only, and it runs entirely on your machine.
+          </P>
+
+          <SubHeading>Label a folder of images</SubHeading>
+          <CodeBlock language="bash">{`# open an existing dataset
+libreyolo label data=path/to/data.yaml
+
+# a bare folder works too: LibreYOLO scaffolds the dataset around it
+libreyolo label data=path/to/images
+
+# start on the project home screen and create a project in the browser
+libreyolo label`}</CodeBlock>
+
+          <SubHeading>Options</SubHeading>
+          <DocTable
+            headers={['Option', 'Default', 'What it does']}
+            rows={[
+              ['data', '(none)', 'Dataset YAML or a folder. Omit to open the project home screen.'],
+              ['host', '127.0.0.1', 'Interface to bind. See the sharing note below before changing this.'],
+              ['port', '8000', 'Port to bind. Auto-bumps up to port+19 if taken.'],
+              ['device', 'auto', 'Device used by the AI assist features.'],
+              ['no_assist', 'false', 'Hard-disable every AI assist feature.'],
+              ['no_browser', 'false', 'Do not auto-open a browser.'],
+              ['share', 'false', 'Bind 0.0.0.0 so teammates on your LAN can label with you.'],
+            ]}
+          />
+
+          <SubHeading>What you can label</SubHeading>
+          <P>
+            Bounding boxes (<InlineCode>detect</InlineCode>), polygons (<InlineCode>segment</InlineCode>) and oriented boxes (<InlineCode>obb</InlineCode>, with a rotate handle). Keypoints, masks and depth files open <strong>read-only</strong>, so a save can never silently drop fields it does not understand. Classification labelling is not available yet.
+          </P>
+
+          <SubHeading>AI assist, and the one rule it never breaks</SubHeading>
+          <P>
+            LibreLabel can pre-label with one of your own detectors, turn a click into a mask with SAM, audit your existing labels for likely mistakes, find near-duplicate images, and detect train/val leakage. <strong>No AI path ever writes a label file.</strong> Every suggestion is held in memory until a human accepts it. AI assist also never downloads weights: if a checkpoint is not already on disk it refuses and tells you, rather than pulling hundreds of megabytes behind your back.
+          </P>
+          <ul className="space-y-2 my-4">
+            <FeatureItem>Box pre-labelling with any in-package detector works on the base install, no extra needed.</FeatureItem>
+            <FeatureItem>SAM click-to-mask needs <InlineCode>pip install &quot;libreyolo[label]&quot;</InlineCode> and the LibreSAM weights already downloaded.</FeatureItem>
+            <FeatureItem>Assist is task-aware: on an OBB project it is refused entirely, and on a segmentation project only the mask tools stay available.</FeatureItem>
+          </ul>
+
+          <SubHeading>Export</SubHeading>
+          <P>
+            Export to YOLO, COCO or VOC (or several at once) from the Export dialog in the browser, with reproducible train/val/test splits. Note it is a browser action: there is no CLI export flag. Import is YOLO only, so COCO and VOC are export formats, not entry points.
+          </P>
+
+          <SubHeading>Sharing, and a trap worth knowing</SubHeading>
+          <P>
+            There is <strong>no authentication of any kind</strong>. Access is controlled purely by network position, so only share on a network you trust.
+          </P>
+          <P>
+            The counter-intuitive part: <InlineCode>share=true</InlineCode> is the <em>safe</em> way to let teammates in. It binds a wildcard address, and because admin rights require a loopback connection, you keep admin on your machine while teammates get a labelling-only view. Binding a specific address instead (<InlineCode>host=192.168.1.50</InlineCode>) makes your machine indistinguishable from a teammate, which hands <strong>full admin to every client on the LAN</strong>. Prefer <InlineCode>share=true</InlineCode>.
+          </P>
 
           <Divider />
 
@@ -2379,6 +2901,163 @@ torchrun --nproc_per_node=4 train_yolo9.py
 model = LibreYOLO("LibreYOLO9c.pt")
 # Pass device="" (auto-detect) and let torchrun set the rank
 model.train(data="coco128.yaml", epochs=300, batch=16)`}</CodeBlock>
+
+          <Divider />
+
+          {/* ────────────── DISTILLATION ────────────── */}
+          <SectionHeading id="distillation" icon={FlaskConical}>Distillation</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">New in v1.3.1</SupportBadge>
+            <SupportBadge variant="experimental">YOLO9 and YOLOX only</SupportBadge>
+          </div>
+          <P>
+            Knowledge distillation trains a small student model against a larger frozen teacher, so the student learns from the teacher&apos;s intermediate features on top of its own labels. You get a model that runs at the student&apos;s speed but recovers some of the teacher&apos;s accuracy. Point <InlineCode>distill_model</InlineCode> at a teacher checkpoint and distillation turns on.
+          </P>
+
+          <SubHeading>Distill a big model into a small one</SubHeading>
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
+
+student = LibreYOLO("LibreYOLO9t.pt")     # small student
+
+student.train(
+    data="coco.yaml",
+    epochs=100,
+    distill_model="LibreYOLO9c.pt",   # the frozen teacher: this turns distillation ON
+    distill_loss_type="mgd",          # "mgd" (default) or "cwd"
+    dis=2e-5,                         # global weight; omit to take the per-loss default
+)`}</CodeBlock>
+          <CodeBlock language="bash">{`libreyolo train model=LibreYOLO9t.pt data=coco.yaml epochs=100 \\
+  distill-model=LibreYOLO9c.pt distill-loss-type=mgd dis=2e-5`}</CodeBlock>
+          <P>
+            During training the distillation term shows up as a <InlineCode>distill</InlineCode> loss component alongside the usual ones.
+          </P>
+
+          <SubHeading>Arguments</SubHeading>
+          <DocTable
+            headers={['Argument', 'Default', 'Meaning']}
+            rows={[
+              ['distill_model', 'None', 'Teacher checkpoint path. Setting it enables distillation.'],
+              ['dis', 'None', 'Global distillation loss weight. Falls back to 2e-5 for MGD, 1.0 for CWD.'],
+              ['distill_loss_type', '"mgd"', 'Feature loss: "mgd" or "cwd".'],
+              ['distill_mask_ratio', '0.65', 'MGD only: fraction of spatial positions masked. Python API only.'],
+              ['distill_tau', '1.0', 'CWD only: softmax temperature. Python API only.'],
+            ]}
+          />
+          <P>
+            Note the short name: the weight argument is <InlineCode>dis</InlineCode>, not <InlineCode>distill_loss_weight</InlineCode>. Three of these have CLI flags (<InlineCode>distill-model</InlineCode>, <InlineCode>dis</InlineCode>, <InlineCode>distill-loss-type</InlineCode>); <InlineCode>distill_mask_ratio</InlineCode> and <InlineCode>distill_tau</InlineCode> are reachable from Python or a training YAML only.
+          </P>
+
+          <SubHeading>MGD or CWD</SubHeading>
+          <P>
+            <strong>MGD</strong> (Masked Generative Distillation, the default) masks random spatial positions in the student features and asks it to regenerate the teacher&apos;s. Because it regresses raw feature magnitudes, its default weight is small: <InlineCode>2e-5</InlineCode>.
+          </P>
+          <P>
+            <strong>CWD</strong> (Channel-Wise Distillation) turns each channel into a spatial distribution and matches them with a KL divergence. Normalizing per channel makes it scale invariant, so it copes better when teacher and student feature magnitudes are far apart. Its default weight is <InlineCode>1.0</InlineCode>.
+          </P>
+          <P>
+            We do not publish a head-to-head accuracy comparison of the two, so treat MGD as the default and try CWD if the loss scale looks unhealthy.
+          </P>
+
+          <SubHeading>Limits</SubHeading>
+          <ul className="space-y-2 my-4">
+            <FeatureItem><strong>Only the YOLO9 and YOLOX families can distill.</strong> Every other family raises at setup, because distillation needs feature tap points that only these two declare.</FeatureItem>
+            <FeatureItem><strong>Teacher and student strides must match exactly.</strong> Both supported families use strides 8/16/32, so in practice you distill within a family, across sizes. Channel widths may differ freely: a 1x1 adapter bridges them.</FeatureItem>
+            <FeatureItem>Multi-GPU, mixed precision and gradient accumulation all work with distillation on.</FeatureItem>
+            <FeatureItem>Resuming works, and the adapter state is restored, but the teacher is not stored in the checkpoint: pass <InlineCode>distill_model</InlineCode> again when you resume.</FeatureItem>
+          </ul>
+
+          <Divider />
+
+          {/* ────────────── TRAINING MONITOR ────────────── */}
+          <SectionHeading id="monitoring" icon={Gauge}>Training Monitor</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">New in v1.3.1</SupportBadge>
+          </div>
+          <P>
+            Every training run, for every model family, writes machine-readable progress files into its run directory. You do not have to enable anything. <InlineCode>libreyolo monitor</InlineCode> serves them as a live dashboard, and because it only reads files it works equally well on a running job, a finished one, or one that crashed.
+          </P>
+          <CodeBlock language="bash">{`libreyolo monitor                     # watch runs/ on http://127.0.0.1:8420
+libreyolo monitor runs/train/exp      # open one run directly
+libreyolo monitor --port 9000 --no-browser`}</CodeBlock>
+
+          <SubHeading>Run artifacts</SubHeading>
+          <P>
+            The two files below are the contract, and they are the reason this is useful to scripts and agents as well as to humans: you can poll a run&apos;s state without parsing logs.
+          </P>
+          <DocTable
+            headers={['File', 'What it is']}
+            rows={[
+              ['status.json', 'Current state of the run, rewritten atomically every epoch.'],
+              ['metrics.jsonl', 'Append-only, one JSON object per epoch. The full metric history.'],
+              ['train.log', 'The run log.'],
+            ]}
+          />
+          <P>
+            <InlineCode>status.json</InlineCode> always carries <InlineCode>state</InlineCode> (<InlineCode>running</InlineCode>, <InlineCode>completed</InlineCode> or <InlineCode>failed</InlineCode>), <InlineCode>pid</InlineCode>, <InlineCode>progress</InlineCode>, <InlineCode>eta_seconds</InlineCode>, and the current and best metric. If the run dies it records <InlineCode>state: &quot;failed&quot;</InlineCode> plus an <InlineCode>error</InlineCode> object with the exception type and message, so a crash is visible in the file rather than only in a terminal you have closed.
+          </P>
+          <CodeBlock language="python">{`import json, time
+
+def wait_for_run(run_dir):
+    while True:
+        status = json.load(open(f"{run_dir}/status.json"))
+        if status["state"] != "running":
+            return status
+        print(f'{status["progress"]:.0%}  eta {status["eta_seconds"]:.0f}s  '
+              f'best {status["best_metric"]}')
+        time.sleep(30)
+
+final = wait_for_run("runs/train/exp")
+if final["state"] == "failed":
+    print(final["error"]["type"], final["error"]["message"])
+else:
+    print(final["checkpoints"]["best"])`}</CodeBlock>
+          <P>
+            The monitor also exposes the same data over HTTP (<InlineCode>/api/status</InlineCode>, <InlineCode>/api/metrics</InlineCode>, <InlineCode>/api/log</InlineCode>, <InlineCode>/api/images</InlineCode>), so you can drive a dashboard of your own from it.
+          </P>
+
+          <Divider />
+
+          {/* ────────────── PROFILING ────────────── */}
+          <SectionHeading id="profiling" icon={Timer}>Profiling</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">New in v1.3.1</SupportBadge>
+          </div>
+          <P>
+            <InlineCode>libreyolo profile</InlineCode> measures where the time actually goes, in training and in inference. It is deliberately a measuring tool and nothing else: it never edits your config or tunes anything for you. It tells you what is slow and leaves the decision to you.
+          </P>
+
+          <SubHeading>Profile training or inference</SubHeading>
+          <CodeBlock language="bash">{`# training: is the GPU actually busy, or am I dataloader-bound?
+libreyolo profile run coco128 --weights LibreYOLO9t.pt --batch 16 --repeat 3
+
+# inference: latency percentiles and where they are spent
+libreyolo profile infer bus.jpg --weights LibreYOLO9t.pt --runs 200`}</CodeBlock>
+          <P>
+            <InlineCode>profile infer</InlineCode> reports p50, p90 and p99 latency, throughput, and a split across preprocess, forward and postprocess (NMS), plus a verdict on what is bounding you. That split is usually the punchline: a model that looks slow is often spending its time in NMS or in preprocessing rather than in the network.
+          </P>
+
+          <SubHeading>Then look closer</SubHeading>
+          <P>
+            Both commands write the same <InlineCode>profile.json</InlineCode>, and the analysis subcommands all read it, so you profile once and then interrogate the result from several angles.
+          </P>
+          <DocTable
+            headers={['Subcommand', 'What it answers']}
+            rows={[
+              ['summary', 'The high-level diagnosis: utilisation, what is bounding you, the kernel mix.'],
+              ['phases', 'Where the time went: forward, backward, dataload, optimizer.'],
+              ['kernels', 'Which individual GPU kernels dominate.'],
+              ['ops', 'The framework view: which operations cost the most CPU time.'],
+              ['get', 'Print one metric, for use inside a script.'],
+              ['compare', 'Diff two profiles, before and after a change.'],
+              ['what-if', 'Estimate the payoff of a change before you write it.'],
+            ]}
+          />
+          <CodeBlock language="bash">{`libreyolo profile summary runs/profile/prof/profile.json
+libreyolo profile kernels runs/profile/prof/profile.json --top 20
+libreyolo profile compare before.json after.json`}</CodeBlock>
+          <P>
+            Two practical notes. Every subcommand takes <InlineCode>--json</InlineCode>, which makes the profiler usable inside an automated optimize loop. And <InlineCode>compare</InlineCode> will only report statistical significance if both profiles were captured with <InlineCode>--repeat 2</InlineCode> or higher: a single run is noisy enough to mislead you, especially when the job is launch-bound.
+          </P>
 
           <Divider />
 
@@ -2728,7 +3407,7 @@ print(result.boxes.xyxy)`}</CodeBlock>
           {/* ────────────── CLI ────────────── */}
           <SectionHeading id="cli" icon={SquareTerminal}>CLI</SectionHeading>
           <P>
-            Installing LibreYOLO registers a <InlineCode>libreyolo</InlineCode> command on your PATH (entry point in <InlineCode>pyproject.toml</InlineCode>). The CLI mirrors the Python API and follows Ultralytics-style <InlineCode>key=value</InlineCode> syntax.
+            Installing LibreYOLO registers a <InlineCode>libreyolo</InlineCode> command on your PATH (entry point in <InlineCode>pyproject.toml</InlineCode>). The CLI mirrors the Python API and accepts <InlineCode>key=value</InlineCode> syntax.
           </P>
 
           <SubHeading>Subcommands</SubHeading>
@@ -2739,6 +3418,9 @@ print(result.boxes.xyxy)`}</CodeBlock>
               [<InlineCode key="t">train</InlineCode>, 'Train a model on a dataset'],
               [<InlineCode key="v">val</InlineCode>, 'Evaluate a model on a dataset'],
               [<InlineCode key="e">export</InlineCode>, 'Export to ONNX / TorchScript / TensorRT / OpenVINO / NCNN / CoreML / TFLite'],
+              [<InlineCode key="lb">label</InlineCode>, 'Launch LibreLabel, the local browser annotation tool (new in v1.3.1)'],
+              [<InlineCode key="mo">monitor</InlineCode>, 'Serve a live dashboard over training runs (new in v1.3.1)'],
+              [<InlineCode key="pr">profile</InlineCode>, 'Profile training or inference, then analyse the result (new in v1.3.1)'],
               [<InlineCode key="ui">ui</InlineCode>, 'Launch a local drag-and-drop / paste browser inference UI'],
               [<InlineCode key="dr">doctor</InlineCode>, 'Run pre-training dataset health checks (YOLO detection format)'],
               [<InlineCode key="c">checks</InlineCode>, 'Print Python, torch, CUDA, GPU, and optional-package info'],
@@ -3379,13 +4061,22 @@ const sectionsZh = [
   { id: 'tiled-inference', title: '分块推理', icon: Grid3x3 },
   { id: 'video-inference', title: '视频推理', icon: Video },
   { id: 'tracking', title: '跟踪', icon: Activity },
-  { id: 'segmentation', title: '分割', icon: Scissors },
+  { id: 'ensembling', title: '模型集成', icon: Boxes },
+  { id: 'segmentation', title: '实例分割', icon: Scissors },
+  { id: 'semantic-segmentation', title: '语义分割', icon: Palette },
+  { id: 'promptable-segmentation', title: '可提示分割', icon: MousePointerClick },
+  { id: 'open-vocabulary', title: '开放词表检测', icon: Search },
   { id: 'pose', title: '姿态估计', icon: PersonStanding },
   { id: 'gaze', title: '视线估计', icon: Eye },
   { id: 'classification', title: '分类', icon: Tags },
   { id: 'depth', title: '深度估计', icon: Mountain },
+  { id: 'restoration', title: '图像修复', icon: WandSparkles },
   { id: 'point-localization', title: '点定位', icon: MapPin },
+  { id: 'annotation', title: '标注（LibreLabel）', icon: PenTool },
   { id: 'training', title: '训练', icon: GraduationCap },
+  { id: 'distillation', title: '知识蒸馏', icon: FlaskConical },
+  { id: 'monitoring', title: '训练监控', icon: Gauge },
+  { id: 'profiling', title: '性能分析', icon: Timer },
   { id: 'validation', title: '验证', icon: CheckCircle2 },
   { id: 'export', title: '导出', icon: Upload },
   { id: 'torchscript-inference', title: 'TorchScript 推理', icon: Cpu },
@@ -3401,7 +4092,7 @@ const sectionsZh = [
 ]
 
 /* ─── 2. Sidebar (Chinese) ─── */
-function SidebarZh({ activeSection, onNavigate, currentVersion = 'v1.3.0', className = '' }) {
+function SidebarZh({ activeSection, onNavigate, currentVersion = 'v1.3.1', className = '' }) {
   const versionLabelZh = {
     'Pre-release': '预发布',
     'Latest': '最新',
@@ -3471,7 +4162,7 @@ function ValidationScopeCalloutZh({ className = '' }) {
         <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" />
         <div>
           <p className="font-semibold text-surface-900 dark:text-white mb-2">
-            v1.3.0 验证范围
+            v1.3.1 验证范围
           </p>
           <p className="text-sm text-surface-600 dark:text-surface-400 mb-2">
             经过充分测试的路径是 YOLO9 和 RF-DETR 的检测、训练与推理，包括 RF-DETR 分割。
@@ -3628,13 +4319,55 @@ function CompatibilityMatrixZh() {
     {
       family: 'L2CS', status: '实验性，仅推理',
       inference: 'exp', training: '',
-      detect: '', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: 'exp',
+      detect: '', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: 'exp', restore: '',
       onnx: '', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+    },
+    {
+      family: 'YOLO9-P2', status: '新增；小目标。仅有 VisDrone 权重（非商用）',
+      inference: 'exp', training: 'exp',
+      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '', restore: '',
+      onnx: 'exp', torchscript: 'exp', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+    },
+    {
+      family: 'YOLO2 / YOLO3 / YOLO4 / YOLO7', status: '新增；历史基线，仅推理',
+      inference: 'exp', training: '',
+      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '', restore: '',
+      onnx: 'exp', torchscript: 'exp', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: 'exp',
+    },
+    {
+      family: 'PIDNet', status: '新增；语义分割。仅推理与验证，不支持导出',
+      inference: 'exp', training: '',
+      detect: '', segment: '', semantic: 'exp', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '', restore: '',
+      onnx: '', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+    },
+    {
+      family: 'EoMT', status: '新增；语义分割。仅 l 尺寸，imgsz 固定为 512',
+      inference: 'exp', training: '',
+      detect: '', segment: '', semantic: 'exp', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '', restore: '',
+      onnx: '', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+    },
+    {
+      family: 'NAFNet', status: '新增；图像修复（去噪 / 去模糊）',
+      inference: 'exp', training: 'exp',
+      detect: '', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '', restore: 'exp',
+      onnx: 'exp', torchscript: 'exp', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+    },
+    {
+      family: 'CLIP', status: '零样本分类',
+      inference: 'exp', training: '',
+      detect: '', segment: '', semantic: '', classify: 'exp', pose: '', obb: '', depth: '', point: '', gaze: '', restore: '',
+      onnx: '', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+    },
+    {
+      family: 'ResNet', status: '实验性分类器',
+      inference: 'exp', training: 'exp',
+      detect: '', segment: '', semantic: '', classify: 'exp', pose: '', obb: '', depth: '', point: '', gaze: '', restore: '',
+      onnx: 'exp', torchscript: 'exp', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
     },
   ]
 
-  const headers = ['模型系列', 'v1.3.0 状态', '推理', '训练', '检测', '分割', '语义', '分类', '姿态', 'OBB', '深度', '点', '视线', 'ONNX', 'TorchScript', 'TensorRT', 'OpenVINO', 'NCNN', 'CoreML', 'TFLite']
-  const columns = ['inference', 'training', 'detect', 'segment', 'semantic', 'classify', 'pose', 'obb', 'depth', 'point', 'gaze', 'onnx', 'torchscript', 'tensorrt', 'openvino', 'ncnn', 'coreml', 'tflite']
+  const headers = ['模型系列', 'v1.3.1 状态', '推理', '训练', '检测', '分割', '语义', '分类', '姿态', 'OBB', '深度', '点', '视线', '修复', 'ONNX', 'TorchScript', 'TensorRT', 'OpenVINO', 'NCNN', 'CoreML', 'TFLite']
+  const columns = ['inference', 'training', 'detect', 'segment', 'semantic', 'classify', 'pose', 'obb', 'depth', 'point', 'gaze', 'restore', 'onnx', 'torchscript', 'tensorrt', 'openvino', 'ncnn', 'coreml', 'tflite']
 
   return (
     <DocTable
@@ -3649,7 +4382,7 @@ function CompatibilityMatrixZh() {
 }
 
 /* ─── 4. Main docs page (Chinese) ─── */
-function DocsPageZh({ version = 'v1.3.0', isLatest = true }) {
+function DocsPageZh({ version = 'v1.3.1', isLatest = true }) {
   const [activeSection, setActiveSection] = useState('introduction')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [docsCopied, setDocsCopied] = useState(false)
@@ -3760,7 +4493,7 @@ function DocsPageZh({ version = 'v1.3.0', isLatest = true }) {
               <div>
                 <p className="text-sm text-surface-600 dark:text-surface-400">
                     {isLatest
-                    ? '这是上一个版本 v1.3.0 的文档。最新文档为 v1.3.1，可在版本菜单中找到。'
+                    ? '这是当前稳定版本线 v1.3.x 的文档。早期版本仍可在版本菜单中找到。'
                     : '保留此归档版本的可链接性，以便较旧的安装、搜索结果和智能体能够定位到正确的文档。'}
                 </p>
               </div>
@@ -3817,7 +4550,7 @@ print(result.saved_path)`}</CodeBlock>
               <FeatureItem>通过 ByteTrack 内置多目标跟踪</FeatureItem>
               <FeatureItem>ONNX、TorchScript、TensorRT、OpenVINO、NCNN 和 CoreML 导出，内嵌元数据，并配有相应的运行时后端</FeatureItem>
               <FeatureItem>兼容 COCO 的验证，提供 mAP 指标，并包含分割和姿态验证器</FeatureItem>
-              <FeatureItem>Ultralytics 风格的 <InlineCode>libreyolo</InlineCode> 命令行工具，用于 predict / train / val / export</FeatureItem>
+              <FeatureItem><InlineCode>libreyolo</InlineCode> 命令行工具，用于 predict / train / val / export</FeatureItem>
               <FeatureItem>接受任意图像格式：文件路径、URL、PIL、NumPy、PyTorch 张量、原始字节</FeatureItem>
             </ul>
           </motion.div>
@@ -3875,13 +4608,12 @@ print(result.saved_path)`}</CodeBlock>
           <SubHeading>从 PyPI 安装</SubHeading>
           <CodeBlock language="bash">{`pip install libreyolo`}</CodeBlock>
           <P>
-            本文档对应即将发布的 v1.3.0。在 v1.3.0 发布到 PyPI 之前，请使用源码安装来获取本页所述的功能。
+            v1.3.1 是 PyPI 上的当前版本，也是本文档所描述的版本。本页所有内容都可直接使用已发布的软件包，无需源码安装。
           </P>
 
           <SubHeading>从源码安装</SubHeading>
           <CodeBlock language="bash">{`git clone https://github.com/LibreYOLO/libreyolo.git
 cd libreyolo
-git checkout dev
 pip install -e .`}</CodeBlock>
 
           <SubHeading>可选依赖</SubHeading>
@@ -3911,7 +4643,7 @@ pip install libreyolo[ncnn]
 
 # ByteTrack API compatibility extra
 pip install libreyolo[tracking]
-# Tracking dependencies are part of the base install in v1.3.0.
+# Tracking dependencies are part of the base install in v1.3.1.
 
 # CoreML export and inference (macOS only for runtime)
 pip install libreyolo[coreml]
@@ -3919,8 +4651,18 @@ pip install libreyolo[coreml]
 
 # L2CS gaze optional auto-download helper
 pip install libreyolo[gaze]
-# Optional parity with the upstream RetinaFace-based L2CS pipeline
-pip install libreyolo[gaze-retinaface]
+
+# Promptable segmentation (LibreSAM: SAM-1, SAM-2, MobileSAM)
+pip install libreyolo[sam]
+
+# Open-vocabulary detection (Grounding DINO, OWLv2)
+pip install libreyolo[openvocab]
+
+# LibreLabel AI assist (SAM click-to-mask)
+pip install libreyolo[label]
+
+# Zero-shot classification (CLIP)
+pip install libreyolo[clip]
 
 # Install every optional LibreYOLO extra
 pip install libreyolo[all]`}</CodeBlock>
@@ -4056,7 +4798,7 @@ model = LibreYOLO("LibreRFDETRs.pt")           # detect (validated)
 
           <SubHeading>其他检测系列</SubHeading>
           <P>
-            与已验证路径共享同一工厂和 API 接口的可检测系列。它们在 v1.3.0 中为实验性。每个检查点名称都链接到{' '}
+            与已验证路径共享同一工厂和 API 接口的可检测系列。它们在 v1.3.1 中为实验性。每个检查点名称都链接到{' '}
             <a href="https://huggingface.co/LibreYOLO" target="_blank" rel="noopener noreferrer" className="text-libre-600 dark:text-libre-400 hover:underline">LibreYOLO 组织</a>上的模型卡；
             将任意名称传给 <InlineCode>LibreYOLO()</InlineCode>，工厂会在首次使用时自动获取。
           </P>
@@ -4160,7 +4902,7 @@ model = LibreYOLO("model_ncnn/")                # NCNN (directory)`}</CodeBlock>
           <P>
             对于可识别的官方检查点文件名，LibreYOLO 可以自动下载缺失的权重。对于自定义文件名，请指向明确的本地路径。
             新项目请保持使用 YOLO9 检测或 RF-DETR 检测 / 分割；
-            其他系列、任务以及新增系列在 v1.3.0 中为实验性。
+            其他系列、任务以及新增系列在 v1.3.1 中为实验性。
           </P>
 
           <Divider />
@@ -4214,7 +4956,7 @@ model = LibreYOLO("LibreYOLO9c.pt")  # task="detect"`}</CodeBlock>
 
           <SubHeading>各系列任务支持</SubHeading>
           <DocTable
-            headers={['系列', 'v1.3.0 状态', '默认', '受支持任务']}
+            headers={['系列', 'v1.3.1 状态', '默认', '受支持任务']}
             rows={[
               [<strong key="y9">YOLO9</strong>, '单 GPU detect 充分测试；多 GPU 实验性', 'detect', 'detect'],
               [<strong key="rfd">RF-DETR</strong>, '单 GPU detect 和 segment 充分测试；pose 和 OBB 研究预览', 'detect', 'detect, segment, pose, obb'],
@@ -4279,7 +5021,7 @@ LibreL2CSr50.pt`}</CodeBlock>
           {/* ────────────── PREDICTION ────────────── */}
           <SectionHeading id="prediction" icon={Crosshair}>预测</SectionHeading>
           <P>
-            单 GPU 预测路径在 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割上经过充分测试。其他系列和任务使用相同的 API，但在 v1.3.0 中为实验性。
+            单 GPU 预测路径在 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割上经过充分测试。其他系列和任务使用相同的 API，但在 v1.3.1 中为实验性。
           </P>
 
           <SubHeading>基础预测</SubHeading>
@@ -4512,7 +5254,7 @@ with VideoSource("clip.mp4", vid_stride=1) as src, \\
             LibreYOLO 提供两种运动跟踪器，它们消费任意检测器的 <InlineCode>Results</InlineCode> 并添加持久的轨迹 ID：<strong className="text-surface-800 dark:text-white">ByteTrack</strong>（默认）
             和 <strong className="text-surface-800 dark:text-white">OC-SORT</strong>（v1.3.0 新增），后者对遮挡和
             非线性运动更鲁棒。跟踪在单 GPU 的 YOLO9 检测和
-            RF-DETR 检测上测试最充分；其他检测系列在 v1.3.0 中为实验性。
+            RF-DETR 检测上测试最充分；其他检测系列在 v1.3.1 中为实验性。
           </P>
 
           <SubHeading>安装</SubHeading>
@@ -4619,7 +5361,46 @@ for result in model.track("clip.mp4", tracker_config=cfg, save=True):
           <Divider />
 
           {/* ────────────── SEGMENTATION ────────────── */}
-          <SectionHeading id="segmentation" icon={Scissors}>分割</SectionHeading>
+          <SectionHeading id="ensembling" icon={Boxes}>模型集成</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">仅检测</SupportBadge>
+            <SupportBadge variant="experimental">仅 Python API</SupportBadge>
+          </div>
+          <P>
+            <InlineCode>LibreEnsemble</InlineCode> 同时运行两个或更多检测模型，并把它们的检测结果融合成一个普通的 <InlineCode>Results</InlineCode>。融合发生在检测层面，而不是张量层面，因此每个成员都保留自己的输入尺寸、归一化和 NMS。这正是你可以把网格检测器与 DETR、或把 <InlineCode>.pt</InlineCode> 检查点与已导出后端混在同一个集成里的原因。
+          </P>
+          <P>
+            类别空间不必一致。成员按类别<em>名称</em>统一：名称映射相同则直接通过，否则 LibreYOLO 会构建并集并把每个成员重映射进去。只有属于同一统一类别的框才会相互融合。
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreEnsemble
+
+# 加权框融合（WBF，默认），只保留两个模型都找到的框
+ens = LibreEnsemble(["LibreYOLO9s.pt", "LibreRFDETRs.pt"], min_votes=2)
+
+result = ens("image.jpg", conf=0.25)
+print(result.boxes.xyxy)
+print(result.names)     # 统一后的（并集）类别表`}</CodeBlock>
+          <CodeBlock language="python">{`ens = LibreEnsemble(
+    ["LibreYOLO9s.pt", "LibreRFDETRs.pt"],
+    weights=[1.0, 1.4],     # 让融合结果更偏向第二个成员
+    fusion="wbf",           # "wbf" | "wbf_seeded" | "nms" | 自定义可调用对象
+    fusion_iou=0.55,        # 用于聚类的 IoU，不是成员的 NMS
+    min_votes=1,
+)
+
+result = ens("image.jpg", conf=[0.25, 0.4])   # 每个成员单独的置信度阈值`}</CodeBlock>
+          <SubHeading>限制</SubHeading>
+          <ul className="space-y-2 my-4">
+            <FeatureItem>只支持检测成员。任何非 <InlineCode>detect</InlineCode> 任务的成员都会报错，分割与姿态模型无法集成。</FeatureItem>
+            <FeatureItem>至少需要两个成员。</FeatureItem>
+            <FeatureItem><InlineCode>min_votes</InlineCode> 大于 1 时必须使用投票式融合，配合 <InlineCode>fusion=&quot;nms&quot;</InlineCode> 会报错，请改用 <InlineCode>wbf</InlineCode>。</FeatureItem>
+            <FeatureItem>仅支持图像与图像目录。视频源与 <InlineCode>stream=True</InlineCode> 会报错，请分别对每个成员单独处理视频。</FeatureItem>
+            <FeatureItem><InlineCode>ens.val()</InlineCode> 与 <InlineCode>ens.export()</InlineCode> 都会报错，请对成员单独验证与导出。</FeatureItem>
+          </ul>
+
+          <Divider />
+
+          <SectionHeading id="segmentation" icon={Scissors}>实例分割</SectionHeading>
           <ValidationScopeCalloutZh />
           <P>
             RF-DETR 分割是 v1.3.0 中的分割路径，也是经过充分测试的选项。EdgeCrafter（<InlineCode>-seg</InlineCode>）也提供分割头，但为实验性。YOLO9 不再提供分割头：自 v1.3.0 起它仅支持检测。
@@ -4666,6 +5447,174 @@ result.masks.numpy()`}</CodeBlock>
           <Divider />
 
           {/* ────────────── POSE ESTIMATION ────────────── */}
+          <SectionHeading id="semantic-segmentation" icon={Palette}>语义分割</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">v1.3.1 新增</SupportBadge>
+            <SupportBadge variant="experimental">不支持导出</SupportBadge>
+          </div>
+          <P>
+            语义分割为<em>每个像素</em>赋予一个类别。它与实例分割是不同的任务：没有目标实例，也没有检测框，只有一张稠密的类别图。使用 <InlineCode>task=&quot;semantic&quot;</InlineCode>，并从 <InlineCode>result.semantic_mask</InlineCode> 读取结果。对语义模型而言，<InlineCode>result.boxes</InlineCode> 与 <InlineCode>result.masks</InlineCode> 均为 <InlineCode>None</InlineCode>。
+          </P>
+          <DocTable
+            headers={['系列', '检查点', '主干', '训练数据', '类别数', '可训练？']}
+            rows={[
+              ['LibrePIDNet', 'LibrePIDNet{s,m,l}-sem.pt', 'PIDNet 三分支 CNN', 'Cityscapes', '19', '否'],
+              ['LibreEoMT', 'LibreEoMTl-sem.pt', 'DINOv2 ViT-L', 'ADE20K', '150', '否'],
+              ['LibreDINOv2', '未发布权重：需自行训练', 'DINOv2 + 稠密头', '你的数据', '自定义', '是'],
+            ]}
+          />
+          <P>
+            三者差别很大，请有意识地选择。<InlineCode>LibrePIDNet</InlineCode> 是快速的实时 CNN，携带 Cityscapes 街景类别；<InlineCode>LibreEoMT</InlineCode> 携带 ADE20K 的 150 个通用场景类别。两者都提供预训练权重，但<strong>无法在 LibreYOLO 内训练</strong>：请在上游微调后再转换权重。
+          </P>
+          <P>
+            <InlineCode>LibreDINOv2</InlineCode> 恰好相反，它是<strong>微调</strong>系列：<strong>没有发布任何 LibreDINOv2 语义检查点</strong>。你需要基于预训练的 DINOv2 主干加一个全新的稠密头，用自己的掩码训练它。当你的类别既不是 Cityscapes 也不是 ADE20K 时，就该选它。
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
+
+model = LibreYOLO("LibrePIDNets-sem.pt")   # Cityscapes，19 类
+result = model.predict("street.jpg")
+
+sm = result.semantic_mask     # SemanticMask
+print(sm.data.shape)          # (H, W) 整数类别 id，位于原图尺寸上
+print(sm.classes)             # 出现过的类别 id，已排除 255（忽略）
+car = sm.class_mask(13)       # (H, W) 布尔掩码
+
+result.plot().save("out.png")
+print(result.boxes, result.masks)   # None None：语义分割没有实例`}</CodeBlock>
+          <SubHeading>验证</SubHeading>
+          <CodeBlock language="python">{`metrics = model.val(data="cityscapes.yaml")
+print(metrics["metrics/mIoU"])
+print(metrics["metrics/pixel_accuracy"])`}</CodeBlock>
+          <SubHeading>训练（仅 LibreDINOv2）</SubHeading>
+          <P>掩码是单通道无损图像，像素值即类别 id，按文件名与图像配对。<InlineCode>255</InlineCode> 表示忽略，不参与损失与指标。</P>
+          <CodeBlock language="bash">{`dataset/
+    images/train/*.jpg
+    masks/train/*.png      # 与图像同名；像素值 = 类别 id`}</CodeBlock>
+          <CodeBlock language="python">{`from libreyolo import LibreDINOv2
+
+model = LibreDINOv2(model_path=None, size="s", task="semantic", nb_classes=19)
+model.train(data="cityscapes.yaml", epochs=100, batch_size=4, lr=1e-4)`}</CodeBlock>
+          <SubHeading>限制</SubHeading>
+          <ul className="space-y-2 my-4">
+            <FeatureItem><strong>完全不支持导出</strong>：语义分割的导出在框架层被拦截，ONNX、TensorRT、OpenVINO、NCNN、CoreML 与 TFLite 全部报错。</FeatureItem>
+            <FeatureItem><strong>只有 LibreDINOv2 可训练。</strong><InlineCode>LibrePIDNet.train()</InlineCode> 与 <InlineCode>LibreEoMT.train()</InlineCode> 都会报错。</FeatureItem>
+            <FeatureItem><strong>EoMT 仅有 <InlineCode>l</InlineCode> 尺寸，且 <InlineCode>imgsz</InlineCode> 固定为 512</strong>（其检查点使用固定位置编码），并且不支持批处理。</FeatureItem>
+            <FeatureItem><InlineCode>imgsz</InlineCode> 的整除要求因系列而异：PIDNet 需被 8 整除，EoMT 为 16，DINOv2 为 14。</FeatureItem>
+            <FeatureItem>语义模型不支持跟踪与测试时增强。</FeatureItem>
+            <FeatureItem>Cityscapes、ADE20K 与 COCO-Stuff 均需手动下载，LibreYOLO 只提供数据集 YAML。</FeatureItem>
+          </ul>
+
+          <Divider />
+
+          <SectionHeading id="promptable-segmentation" icon={MousePointerClick}>可提示分割</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">v1.3.1 新增</SupportBadge>
+            <SupportBadge variant="experimental">仅 Python API</SupportBadge>
+            <SupportBadge variant="experimental">仅推理</SupportBadge>
+          </div>
+          <P>
+            LibreSAM 是独立于检测器工厂的一层，因为可提示分割器的调用契约不同：它先运行一次重量级图像编码器，随后用廉价的空间提示（点击、框）换取掩码。没有固定的类别表。安装：<InlineCode>pip install &quot;libreyolo[sam]&quot;</InlineCode>。
+          </P>
+          <P>
+            有两点常令人意外。其一，<InlineCode>LibreSAM</InlineCode> 是<strong>工厂函数而非类</strong>，并且刻意<strong>不在</strong> <InlineCode>LibreYOLO()</InlineCode> 加载器之内，因此 <InlineCode>LibreYOLO(&quot;sam_b&quot;)</InlineCode> 无效，请直接导入。其二，整个层<strong>仅支持 Python</strong>，没有任何 CLI 入口。
+          </P>
+          <DocTable
+            headers={['系列', '传给 LibreSAM()', '编码器', '备注']}
+            rows={[
+              ['SAM-1', '"base"（默认）, "large", "huge"', 'ViT-B / L / H', 'Apache-2.0'],
+              ['SAM-2.1', '"sam2-tiny", "sam2-small", "sam2-base-plus", "sam2-large"', 'Hiera', '仅图像，不支持视频'],
+              ['MobileSAM', '"mobilesam"', 'TinyViT', '最快'],
+            ]}
+          />
+          <CodeBlock language="python">{`from libreyolo import LibreSAM
+
+model = LibreSAM("base")
+
+# 一次点击
+r = model.predict("img.jpg", points=[640, 360], labels=[1])
+print(r.masks.data.shape)   # (1, H, W) 布尔掩码，原图分辨率
+print(r.boxes.conf)         # SAM 预测的掩码质量，不是检测置信度
+
+# 框提示
+r = model.predict("img.jpg", bboxes=[100, 100, 500, 500])`}</CodeBlock>
+          <SubHeading>编码一次，多次提示</SubHeading>
+          <CodeBlock language="python">{`model.set_image("img.jpg")                        # 重量级编码器只运行一次
+a = model.predict(points=[500, 375], labels=[1])  # 廉价：只跑解码器
+b = model.predict(bboxes=[100, 100, 200, 200])    # 廉价：复用图像嵌入
+model.reset_image()`}</CodeBlock>
+          <SubHeading>提示的形状</SubHeading>
+          <P>嵌套层级是有含义的，这是最容易出错的地方。标签 <InlineCode>1</InlineCode> 表示包含，<InlineCode>0</InlineCode> 表示排除。</P>
+          <DocTable
+            headers={['你传入', '含义']}
+            rows={[
+              ['points=[x, y]', '一个目标，一个点'],
+              ['points=[[x, y], [x, y]]', '两个目标，各一个点'],
+              ['points=[[[x, y], [x, y]]]', '一个目标，两个点'],
+            ]}
+          />
+          <SubHeading>限制</SubHeading>
+          <ul className="space-y-2 my-4">
+            <FeatureItem><strong>SAM-2 仅支持图像。</strong>v1.3.1 没有视频分割，也没有跨帧记忆传播，<InlineCode>track()</InlineCode> 会报错，请逐帧调用 <InlineCode>predict()</InlineCode>。</FeatureItem>
+            <FeatureItem><strong>不支持训练、验证与导出</strong>，所有 SAM 系列均如此。</FeatureItem>
+            <FeatureItem>不支持掩码提示（<InlineCode>masks=</InlineCode>），请使用点或框。</FeatureItem>
+            <FeatureItem>全程使用 fp32，即便在 CUDA 上也是如此。这是有意为之：半精度会在 SAM 的 1024px 工作尺度上把提示坐标舍入若干像素，悄悄挪动你点击的位置。</FeatureItem>
+          </ul>
+
+          <Divider />
+
+          <SectionHeading id="open-vocabulary" icon={Search}>开放词表检测</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">v1.3.1 新增</SupportBadge>
+            <SupportBadge variant="experimental">仅 Python API</SupportBadge>
+            <SupportBadge variant="validated">Apache-2.0 权重</SupportBadge>
+          </div>
+          <P>
+            用文本给出类别名列表，就能得到真实的检测框。无需训练，也无需标注数据。改变列表，就改变它检测的东西。安装：<InlineCode>pip install &quot;libreyolo[openvocab]&quot;</InlineCode>。
+          </P>
+          <P>
+            它与 <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM</a> 不同，这一点很关键。这些是以文本为条件的<em>专用检测器</em>：检测头直接输出带真实模型分数的框；而 VLM 是生成文本，再由 LibreYOLO 解析成框。经验法则：<strong>要“给已命名类别画框”就用开放词表；要“描述或指令”就用 VLM</strong>。另一个实际差别是许可：本层的权重全部为 Apache-2.0，而 VLM 层包含非商用模型。
+          </P>
+          <DocTable
+            headers={['传给 LibreOpenVocab()', '类', '主干', '默认 conf']}
+            rows={[
+              ['"grounding-dino"（默认，tiny）', 'LibreGroundingDINO', 'Swin-T + BERT', '0.25'],
+              ['"grounding-dino-base"', 'LibreGroundingDINO', 'Swin-B + BERT', '0.25'],
+              ['"owlv2"', 'LibreOWLv2', 'ViT-B/16', '0.1'],
+              ['"owlv2-large"', 'LibreOWLv2', 'ViT-L/14', '0.1'],
+            ]}
+          />
+          <P>
+            词表设置在<em>模型</em>上，通过 <InlineCode>set_classes()</InlineCode>，并且会在后续调用中保持。<InlineCode>predict()</InlineCode> 上<strong>没有</strong> <InlineCode>prompts=</InlineCode> 或 <InlineCode>text=</InlineCode> 参数。
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreOpenVocab
+
+model = LibreOpenVocab("grounding-dino")
+model.set_classes(["person", "dog", "skateboard"])   # 持久词表
+
+result = model.predict("street.jpg", conf=0.25, text_threshold=0.25)
+print(result.names)     # {0: 'person', 1: 'dog', 2: 'skateboard'}
+
+result = model.predict("another.jpg")   # 词表仍然有效`}</CodeBlock>
+          <P>
+            <strong>小心同名陷阱。</strong><InlineCode>predict(classes=...)</InlineCode> <em>不是</em>文本接口，它是标准的整数类别 id 过滤器。文本词表只能通过 <InlineCode>set_classes()</InlineCode> 设置。
+          </P>
+          <SubHeading>实用提示</SubHeading>
+          <ul className="space-y-2 my-4">
+            <FeatureItem>简短的名词短语效果最好，&quot;remote control&quot; 优于 &quot;remote&quot;。无法明确映射回你类别名的短语会被丢弃，因此漏检有时是映射被丢弃，而不是检测器没看到。</FeatureItem>
+            <FeatureItem>类别数量没有上限。Grounding DINO 会自动把长词表切分成多个块，每块跑一次前向，因此<strong>开销随词表增大而增长</strong>，这是你能控制的主要延迟因素。</FeatureItem>
+            <FeatureItem><InlineCode>text_threshold</InlineCode> 仅适用于 Grounding DINO，传给 OWLv2 会报错。</FeatureItem>
+            <FeatureItem>它比 LibreYOLO 检测器慢得多。务实的用法：先用开放词表探索或自动标注，再训练一个快速检测器。</FeatureItem>
+          </ul>
+          <SubHeading>限制</SubHeading>
+          <ul className="space-y-2 my-4">
+            <FeatureItem><strong>没有 CLI。</strong><InlineCode>libreyolo predict model=grounding-dino</InlineCode> 无效，本层只能从 Python 使用。</FeatureItem>
+            <FeatureItem><strong>不支持训练、验证、导出与跟踪</strong>，四者都会报错。</FeatureItem>
+            <FeatureItem><InlineCode>imgsz</InlineCode> 与 <InlineCode>augment=True</InlineCode> 会被拒绝；<InlineCode>iou</InlineCode> 会被接受但忽略。</FeatureItem>
+            <FeatureItem>批处理不会带来加速，且全程 fp32。</FeatureItem>
+          </ul>
+
+          <Divider />
+
           <SectionHeading id="pose" icon={PersonStanding}>姿态估计</SectionHeading>
           <P>
             姿态（人体关键点）估计可在 <InlineCode>YOLO-NAS (-pose)</InlineCode>、{' '}
@@ -4946,6 +5895,47 @@ model.export(format="onnx")      # raises NotImplementedError - depth export is 
           <Divider />
 
           {/* ────────────── POINT LOCALIZATION ────────────── */}
+          <SectionHeading id="restoration" icon={WandSparkles}>图像修复</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">v1.3.1 新增</SupportBadge>
+            <SupportBadge variant="experimental">可训练</SupportBadge>
+          </div>
+          <P>
+            <InlineCode>restore</InlineCode> 任务把退化的图像还原成干净的图像。v1.3.1 提供 <InlineCode>LibreNAFNet</InlineCode>（NAFNet 移植）。与这里的多数任务不同，它没有要检测的东西：输出就是一张图像，通过 <InlineCode>result.restored_image</InlineCode> 获取。
+          </P>
+          <P>
+            模型究竟修复什么（去噪还是去模糊）取决于<em>它训练所用的权重</em>，而不是模型尺寸。<InlineCode>s</InlineCode> 与 <InlineCode>l</InlineCode> 只是宽度不同（32 与 64 通道）。
+          </P>
+          <SubHeading>检查点</SubHeading>
+          <P>
+            官方发布了一个检查点：<Checkpoints names={['LibreNAFNetl-restore-sidd.pt']} link={false} />，一个基于 SIDD 训练的真实图像<strong>去噪</strong>模型，从上游 NAFNet 逐位精确转换而来，MIT 许可。<strong>去模糊</strong>没有已发布的 LibreYOLO 检查点：请用 <InlineCode>weights/convert_nafnet_weights.py</InlineCode> 自行转换上游 GoPro 权重。注意 <InlineCode>LibreNAFNets-restore.pt</InlineCode> 与 <InlineCode>LibreNAFNetl-restore.pt</InlineCode> 这两个名字<strong>并未托管</strong>，请求它们会下载失败。
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
+
+model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")   # SIDD 去噪
+result = model("noisy.jpg")
+
+img = result.restored_image     # RestoredImage
+print(img.array.shape)          # (H, W, 3) uint8 RGB，原始分辨率
+img.save("clean.png")           # 无损保存`}</CodeBlock>
+          <SubHeading>务必无损保存</SubHeading>
+          <P>
+            这一点最容易出错。<InlineCode>libreyolo predict --save</InlineCode> 默认写出 <strong>JPEG</strong>，会把压缩伪影重新引入你刚刚花模型清理干净的图像。请显式要求 PNG。
+          </P>
+          <CodeBlock language="bash">{`libreyolo predict model=LibreNAFNetl-restore-sidd.pt source=noisy.jpg \\
+  save=true output-file-format=png`}</CodeBlock>
+          <SubHeading>训练与验证</SubHeading>
+          <CodeBlock language="python">{`model.train(data="gopro.yaml", epochs=100)
+
+metrics = model.val(data="gopro.yaml")
+print(metrics["metrics/psnr"], metrics["metrics/ssim"])`}</CodeBlock>
+          <ul className="space-y-2 my-4">
+            <FeatureItem>训练时有两处显示上的怪癖：控制台会把 PSNR 打印在 <InlineCode>mAP50</InlineCode> 这一列标题下（标签错误，数值确实是 PSNR）；并且 PSNR/SSIM 计算时不做边界裁剪，因此不能直接与公开的 NAFNet 基准数字对比。</FeatureItem>
+            <FeatureItem>导出：支持 ONNX（仅静态尺寸，且 <InlineCode>imgsz</InlineCode> 必须是 16 的倍数）与 TorchScript；TFLite 与 CoreML 会报错。</FeatureItem>
+          </ul>
+
+          <Divider />
+
           <SectionHeading id="point-localization" icon={MapPin}>点定位</SectionHeading>
           <div className="flex flex-wrap gap-2 mb-4">
             <SupportBadge variant="experimental">实验性</SupportBadge>
@@ -4963,6 +5953,55 @@ points = result.points       # Points payload, (N, 4) rows: x, y, class, confide
 print(points.xy)             # (N, 2) absolute pixel coords
 print(points.xyn)            # (N, 2) normalized to [0, 1]
 print(points.cls, points.conf)`}</CodeBlock>
+
+          <Divider />
+
+          <SectionHeading id="annotation" icon={PenTool}>标注（LibreLabel）</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">v1.3.1 新增</SupportBadge>
+          </div>
+          <P>
+            <InlineCode>libreyolo label</InlineCode> 启动一个本地的、基于浏览器的标注工具。它把 LibreYOLO 原生格式的标签文件直接写到训练器已经会读取的位置，因此一个图像文件夹无需任何转换就能变成可训练的数据集，不需要云账号，也不需要数据库。服务端只用 Python 标准库，全程在你自己的机器上运行。
+          </P>
+          <CodeBlock language="bash">{`# 打开已有数据集
+libreyolo label data=path/to/data.yaml
+
+# 也可以直接给一个图像文件夹
+libreyolo label data=path/to/images
+
+# 从项目主页开始，在浏览器里创建项目
+libreyolo label`}</CodeBlock>
+          <DocTable
+            headers={['选项', '默认值', '作用']}
+            rows={[
+              ['data', '（无）', '数据集 YAML 或文件夹。省略则打开项目主页。'],
+              ['host', '127.0.0.1', '绑定的网卡地址。修改前请先看下面的共享说明。'],
+              ['port', '8000', '绑定端口，被占用时自动向后顺延最多 19 个端口。'],
+              ['device', 'auto', 'AI 辅助功能使用的设备。'],
+              ['no_assist', 'false', '彻底关闭所有 AI 辅助。'],
+              ['no_browser', 'false', '不自动打开浏览器。'],
+              ['share', 'false', '绑定 0.0.0.0，让局域网内的同事一起标注。'],
+            ]}
+          />
+          <SubHeading>可以标注什么</SubHeading>
+          <P>
+            检测框（<InlineCode>detect</InlineCode>）、多边形（<InlineCode>segment</InlineCode>）与旋转框（<InlineCode>obb</InlineCode>，带旋转手柄）。关键点、掩码与深度文件以<strong>只读</strong>方式打开，这样保存时绝不会悄悄丢掉它不理解的字段。分类标注尚不可用。
+          </P>
+          <SubHeading>AI 辅助，以及它绝不打破的一条规则</SubHeading>
+          <P>
+            LibreLabel 可以用你自己的检测器预标注、用 SAM 把一次点击变成掩码、审计已有标签中可能的错误、找出近似重复的图像，并检测训练/验证集泄漏。<strong>任何 AI 路径都不会写入标签文件。</strong>所有建议都只存在内存中，直到人工确认。AI 辅助也绝不会下载权重：如果检查点不在本地，它会拒绝并提示你，而不是在背后拉取数百 MB。
+          </P>
+          <SubHeading>导出</SubHeading>
+          <P>
+            在浏览器的导出对话框中可导出为 YOLO、COCO 或 VOC（也可一次导出多种），并提供可复现的训练/验证/测试划分。注意这是浏览器里的操作，<strong>没有对应的 CLI 参数</strong>。导入仅支持 YOLO，因此 COCO 与 VOC 只是导出格式，不是入口。
+          </P>
+          <SubHeading>共享，以及一个值得注意的陷阱</SubHeading>
+          <P>
+            这里<strong>完全没有任何身份认证</strong>，访问控制纯粹依赖网络位置，因此只在你信任的网络上共享。
+          </P>
+          <P>
+            反直觉的地方在于：<InlineCode>share=true</InlineCode> 才是让同事加入的<em>安全</em>方式。它绑定通配地址，而管理员权限要求来自回环连接，因此你在本机保留管理员权限，同事只得到一个仅供标注的视图。反过来，绑定具体地址（<InlineCode>host=192.168.1.50</InlineCode>）会让你的机器与同事无法区分，从而把<strong>完整管理员权限交给局域网内的每一个客户端</strong>。请优先使用 <InlineCode>share=true</InlineCode>。
+          </P>
 
           <Divider />
 
@@ -5135,6 +6174,126 @@ model.train(data="coco128.yaml", epochs=300, batch=16)`}</CodeBlock>
           <Divider />
 
           {/* ────────────── VALIDATION ────────────── */}
+          <SectionHeading id="distillation" icon={FlaskConical}>知识蒸馏</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">v1.3.1 新增</SupportBadge>
+            <SupportBadge variant="experimental">仅 YOLO9 与 YOLOX</SupportBadge>
+          </div>
+          <P>
+            知识蒸馏让小模型（学生）在自身标签之外，额外向一个更大的冻结教师模型的中间特征学习。你会得到一个以学生速度运行、却找回部分教师精度的模型。把 <InlineCode>distill_model</InlineCode> 指向一个教师检查点即可开启蒸馏。
+          </P>
+          <CodeBlock language="python">{`from libreyolo import LibreYOLO
+
+student = LibreYOLO("LibreYOLO9t.pt")     # 小学生模型
+
+student.train(
+    data="coco.yaml",
+    epochs=100,
+    distill_model="LibreYOLO9c.pt",   # 冻结的教师：这一项开启蒸馏
+    distill_loss_type="mgd",          # "mgd"（默认）或 "cwd"
+    dis=2e-5,                         # 全局权重；省略则使用各损失的默认值
+)`}</CodeBlock>
+          <CodeBlock language="bash">{`libreyolo train model=LibreYOLO9t.pt data=coco.yaml epochs=100 \\
+  distill-model=LibreYOLO9c.pt distill-loss-type=mgd dis=2e-5`}</CodeBlock>
+          <DocTable
+            headers={['参数', '默认值', '含义']}
+            rows={[
+              ['distill_model', 'None', '教师检查点路径。设置即开启蒸馏。'],
+              ['dis', 'None', '蒸馏损失的全局权重。默认回退为 MGD 的 2e-5、CWD 的 1.0。'],
+              ['distill_loss_type', '"mgd"', '特征损失："mgd" 或 "cwd"。'],
+              ['distill_mask_ratio', '0.65', '仅 MGD：被遮蔽的空间位置比例。仅 Python API。'],
+              ['distill_tau', '1.0', '仅 CWD：softmax 温度。仅 Python API。'],
+            ]}
+          />
+          <P>
+            注意参数名很短：权重参数叫 <InlineCode>dis</InlineCode>，而不是 <InlineCode>distill_loss_weight</InlineCode>。
+          </P>
+          <SubHeading>MGD 还是 CWD</SubHeading>
+          <P>
+            <strong>MGD</strong>（掩码生成式蒸馏，默认）随机遮蔽学生特征的空间位置，并要求它重建教师的特征。由于它回归的是原始特征幅值，默认权重很小：<InlineCode>2e-5</InlineCode>。
+          </P>
+          <P>
+            <strong>CWD</strong>（逐通道蒸馏）把每个通道变成一个空间分布，再用 KL 散度对齐。逐通道归一化使它对尺度不敏感，因此在师生特征幅值差距很大时表现更稳。默认权重为 <InlineCode>1.0</InlineCode>。
+          </P>
+          <SubHeading>限制</SubHeading>
+          <ul className="space-y-2 my-4">
+            <FeatureItem><strong>只有 YOLO9 与 YOLOX 系列支持蒸馏。</strong>其他系列会在 setup 阶段报错，因为蒸馏需要只有这两个系列声明的特征抽取点。</FeatureItem>
+            <FeatureItem><strong>师生的 stride 必须完全一致。</strong>两个支持的系列都使用 8/16/32，因此实际做法是在同一系列内跨尺寸蒸馏。通道宽度可以自由不同，会由 1x1 适配层桥接。</FeatureItem>
+            <FeatureItem>多卡、混合精度与梯度累积都可与蒸馏同时使用。</FeatureItem>
+            <FeatureItem>支持断点续训并恢复适配层状态，但教师不会存入检查点：续训时请重新传入 <InlineCode>distill_model</InlineCode>。</FeatureItem>
+          </ul>
+
+          <Divider />
+
+          <SectionHeading id="monitoring" icon={Gauge}>训练监控</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">v1.3.1 新增</SupportBadge>
+          </div>
+          <P>
+            每一次训练、每一个模型系列，都会把机器可读的进度文件写入运行目录，无需任何开关。<InlineCode>libreyolo monitor</InlineCode> 把它们展示为实时看板；由于它只读取文件，对正在运行、已完成、甚至已崩溃的任务同样有效。
+          </P>
+          <CodeBlock language="bash">{`libreyolo monitor                     # 在 http://127.0.0.1:8420 监视 runs/
+libreyolo monitor runs/train/exp      # 直接打开某一次运行
+libreyolo monitor --port 9000 --no-browser`}</CodeBlock>
+          <DocTable
+            headers={['文件', '内容']}
+            rows={[
+              ['status.json', '本次运行的当前状态，每个 epoch 原子性重写。'],
+              ['metrics.jsonl', '仅追加，每个 epoch 一个 JSON 对象，完整指标历史。'],
+              ['train.log', '运行日志。'],
+            ]}
+          />
+          <P>
+            <InlineCode>status.json</InlineCode> 始终包含 <InlineCode>state</InlineCode>（<InlineCode>running</InlineCode>、<InlineCode>completed</InlineCode> 或 <InlineCode>failed</InlineCode>）、<InlineCode>pid</InlineCode>、<InlineCode>progress</InlineCode>、<InlineCode>eta_seconds</InlineCode>，以及当前与最佳指标。如果任务崩溃，它会记录 <InlineCode>state: &quot;failed&quot;</InlineCode> 以及包含异常类型与信息的 <InlineCode>error</InlineCode> 对象，因此崩溃会留在文件里，而不是只出现在你已经关掉的终端里。
+          </P>
+          <CodeBlock language="python">{`import json, time
+
+def wait_for_run(run_dir):
+    while True:
+        status = json.load(open(f"{run_dir}/status.json"))
+        if status["state"] != "running":
+            return status
+        print(f'{status["progress"]:.0%}  eta {status["eta_seconds"]:.0f}s')
+        time.sleep(30)
+
+final = wait_for_run("runs/train/exp")
+if final["state"] == "failed":
+    print(final["error"]["type"], final["error"]["message"])`}</CodeBlock>
+
+          <Divider />
+
+          <SectionHeading id="profiling" icon={Timer}>性能分析</SectionHeading>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <SupportBadge variant="experimental">v1.3.1 新增</SupportBadge>
+          </div>
+          <P>
+            <InlineCode>libreyolo profile</InlineCode> 测量时间究竟花在哪里，训练与推理都支持。它刻意只做测量：绝不修改你的配置，也不替你调参。它只告诉你什么慢，决定权留给你。
+          </P>
+          <CodeBlock language="bash">{`# 训练：GPU 真的在忙，还是被数据加载卡住了？
+libreyolo profile run coco128 --weights LibreYOLO9t.pt --batch 16 --repeat 3
+
+# 推理：延迟分位数，以及时间花在哪一段
+libreyolo profile infer bus.jpg --weights LibreYOLO9t.pt --runs 200`}</CodeBlock>
+          <P>
+            <InlineCode>profile infer</InlineCode> 报告 p50、p90、p99 延迟、吞吐，以及在预处理 / 前向 / 后处理（NMS）之间的耗时拆分。这个拆分往往才是重点：一个看起来很慢的模型，时间常常花在 NMS 或预处理上，而不是网络本身。
+          </P>
+          <DocTable
+            headers={['子命令', '回答什么问题']}
+            rows={[
+              ['summary', '总体诊断：利用率、瓶颈在哪、kernel 构成。'],
+              ['phases', '时间去向：前向、反向、数据加载、优化器。'],
+              ['kernels', '哪些 GPU kernel 占主导。'],
+              ['ops', '框架视角：哪些算子最耗 CPU 时间。'],
+              ['compare', '对比两份 profile，看改动前后。'],
+              ['what-if', '在动手改代码之前，先估算收益。'],
+            ]}
+          />
+          <P>
+            两点提示：每个子命令都支持 <InlineCode>--json</InlineCode>，便于放进自动化的优化循环；而 <InlineCode>compare</InlineCode> 只有在两份 profile 都用 <InlineCode>--repeat 2</InlineCode> 或更高采集时才会报告统计显著性，单次运行的噪声足以误导你。
+          </P>
+
+          <Divider />
+
           <SectionHeading id="validation" icon={CheckCircle2}>验证</SectionHeading>
           <P>
             在验证集上运行 COCO 标准评估。经过充分测试的验证路径是单 GPU 的 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割。
@@ -5478,7 +6637,7 @@ print(result.boxes.xyxy)`}</CodeBlock>
           {/* ────────────── CLI ────────────── */}
           <SectionHeading id="cli" icon={SquareTerminal}>命令行（CLI）</SectionHeading>
           <P>
-            安装 LibreYOLO 会在你的 PATH 中注册一个 <InlineCode>libreyolo</InlineCode> 命令（入口点在 <InlineCode>pyproject.toml</InlineCode> 中）。命令行镜像 Python API，并遵循 Ultralytics 风格的 <InlineCode>key=value</InlineCode> 语法。
+            安装 LibreYOLO 会在你的 PATH 中注册一个 <InlineCode>libreyolo</InlineCode> 命令（入口点在 <InlineCode>pyproject.toml</InlineCode> 中）。命令行镜像 Python API，并接受 <InlineCode>key=value</InlineCode> 语法。
           </P>
 
           <SubHeading>子命令</SubHeading>
@@ -5489,6 +6648,9 @@ print(result.boxes.xyxy)`}</CodeBlock>
               [<InlineCode key="t">train</InlineCode>, '在数据集上训练模型'],
               [<InlineCode key="v">val</InlineCode>, '在数据集上评估模型'],
               [<InlineCode key="e">export</InlineCode>, '导出为 ONNX / TorchScript / TensorRT / OpenVINO / NCNN / CoreML / TFLite'],
+              [<InlineCode key="lb">label</InlineCode>, '启动 LibreLabel 本地浏览器标注工具（v1.3.1 新增）'],
+              [<InlineCode key="mo">monitor</InlineCode>, '为训练任务提供实时看板（v1.3.1 新增）'],
+              [<InlineCode key="pr">profile</InlineCode>, '分析训练或推理性能，并解读结果（v1.3.1 新增）'],
               [<InlineCode key="ui">ui</InlineCode>, '启动本地拖放 / 粘贴的浏览器推理界面'],
               [<InlineCode key="dr">doctor</InlineCode>, '运行训练前的数据集健康检查（YOLO 检测格式）'],
               [<InlineCode key="c">checks</InlineCode>, '打印 Python、torch、CUDA、GPU 和可选包信息'],
@@ -6113,6 +7275,6 @@ model.train(data="coco8-pose.yaml", allow_download_scripts=True)  # script confi
 
 export default function Docs() {
   const locale = useLocale()
-  if (locale === 'zh') return <DocsPageZh version="v1.3.0" />
-  return <DocsPage version="v1.3.0" />
+  if (locale === 'zh') return <DocsPageZh version="v1.3.1" />
+  return <DocsPage version="v1.3.1" />
 }
