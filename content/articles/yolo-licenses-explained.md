@@ -6,7 +6,7 @@ author: Xuban
 tags: [LibreYOLO, yolo-license, agpl, gpl, apache, mit-license, yolov9, yolov10, yolo11, yolov12, yolov13, yolo26]
 faq:
   - q: "Is YOLOv9 free for commercial use?"
-    a: "It depends which repository you use. The paper repository (WongKinYiu/yolov9) is GPL-3.0. The same lab also ships a separate MIT-licensed implementation of YOLOv9 and YOLOv7 at MultimediaTechLab/YOLO, written after commercial users asked for a permissive option. It is a rewrite, not a relicense of the GPL files. The code license is clear; the pretrained weights carry no separate license statement in either repo, so treat weight provenance as its own question. This is general information, not legal advice."
+    a: "It depends which repository you use. The paper repository (WongKinYiu/yolov9) is GPL-3.0. The same lab also ships a separate MIT-licensed implementation of YOLOv9 and YOLOv7 at MultimediaTechLab/YOLO, written after commercial users asked for a permissive option. It is a rewrite, not a relicense of the GPL files. The code license is clear; the pretrained weights carry no separate license statement in either repo, so treat weight provenance as its own question."
   - q: "Which YOLO versions are free for closed-source commercial use?"
     a: "Through at least one permissive repository: YOLOv1 to YOLOv4 (original Darknet, public domain), YOLOv7 and YOLOv9 (the lab's own MIT rewrite), YOLOX and PP-YOLOE (Apache-2.0), and the MIT reimplementations in LibreYOLO. YOLOv5, v6, v8, v10, YOLO11, v12, v13, YOLO26, YOLO-World and YOLOE have no permissive implementation as of July 2026. Check the current LICENSE file yourself before you rely on this: licenses change, and this is general information, not legal advice."
   - q: "What license is YOLOv10 under?"
@@ -33,7 +33,7 @@ This guide maps the landscape repository by repository, with links to each paper
 
 If you only want the Ultralytics AGPL question answered, we cover that in depth in [Is YOLO Free for Commercial Use?](/articles/yolo-commercial-license). This one is the full map.
 
-**Two disclosures before we start.** First, we maintain LibreYOLO, an MIT-licensed library that competes with several of the projects below, and the last section of this article is about it. That is a reason to check our work, not to take it on faith, which is why every license claim here links to the primary source. Second, this article is general information about published license texts and public statements, current as of the date above. It is not legal advice, it does not create an advisory relationship, and it is not a substitute for a lawyer in your jurisdiction. Licenses and maintainers' positions change. Read the current LICENSE file of any repository before you make a shipping decision.
+**Two disclosures before we start.** First, we maintain LibreYOLO, an MIT-licensed library that competes with several of the projects below, and the last section of this article is about it. That is a reason to check our work, not to take it on faith, which is why every license claim here links to the primary source. Second, this article is general information about published license texts and public statements, current as of the date above. It is not legal advice and is not a substitute for a lawyer in your jurisdiction. Licenses and maintainers' positions change. Read the current LICENSE file of any repository before you make a shipping decision.
 
 ## The license table
 
@@ -80,7 +80,7 @@ So YOLOv9 is simultaneously "not shippable" and "shippable" depending on which r
 **Before you bet a product on it, three caveats the repo will not tell you on the front page:**
 
 1. **It is still maturing.** An [open issue](https://github.com/MultimediaTechLab/YOLO/issues/231) from February 2026 reports that the shipped checkpoints do not reproduce the paper's COCO numbers and carry noticeably more parameters than the paper claims. Segmentation and keypoint training are [still unimplemented](https://github.com/MultimediaTechLab/YOLO/issues/232). Nothing has merged to main since the v1.0 tag in December 2025.
-2. **The weights carry no separate license statement.** The repo's MIT LICENSE conventionally covers its release assets, and the technical evidence points to checkpoints trained by this project rather than copied from the GPL repo: the files differ in size and parameter count from the GPL repo's checkpoints. But no document states that the .pt files are MIT, and a community [request for a formal audit against AGPL contamination](https://github.com/MultimediaTechLab/YOLO/issues/51) is still open. That is a gap in the paperwork, not evidence of a problem; it just means "verified clean" is not a claim anyone has made.
+2. **The weights carry no separate license statement.** The repo's MIT LICENSE conventionally covers its release assets, and the technical evidence points to checkpoints trained by this project rather than copied from the GPL repo: the files differ in size and parameter count from the GPL repo's checkpoints. But no document states that the .pt files are MIT, and a community [request for a formal audit against AGPL contamination](https://github.com/MultimediaTechLab/YOLO/issues/51) is still open. That is a gap in the paperwork: nobody has claimed "verified clean," and nobody has alleged a problem.
 3. **It is a different codebase**, not a drop-in replacement for the GPL repo's scripts.
 
 None of that makes it unusable. It makes it a project to evaluate, not a checkbox to tick.
@@ -99,7 +99,7 @@ Darknet itself is not quite dead, either. Redmon's repo has been idle since 2022
 
 **The trap is the ports.** Almost nobody trains in Darknet in 2026; people reach for a PyTorch reimplementation, and those carry their own licenses:
 
-- [ultralytics/yolov3](https://github.com/ultralytics/yolov3), the most popular YOLOv3 port, is **AGPL-3.0**. A public domain architecture, redistributed under the strictest common license in this space. Nothing is hidden about that, but it does mean the license you get depends entirely on whose port you pip-installed.
+- [ultralytics/yolov3](https://github.com/ultralytics/yolov3), the most popular YOLOv3 port, is **AGPL-3.0**. A public domain architecture, redistributed under the strictest common license in this space. The license you get depends entirely on whose port you pip-installed.
 - [eriklindernoren/PyTorch-YOLOv3](https://github.com/eriklindernoren/PyTorch-YOLOv3) is **GPL-3.0**.
 - [Tianxiaomo/pytorch-YOLOv4](https://github.com/Tianxiaomo/pytorch-YOLOv4) is **Apache-2.0**, so a permissive route for v4 survives into PyTorch.
 - [WongKinYiu/PyTorch_YOLOv4](https://github.com/WongKinYiu/PyTorch_YOLOv4), from the YOLOv4 co-author, has **no LICENSE file at all**. That is worse than copyleft: with no license, no rights are granted, and the default is all rights reserved.
@@ -128,7 +128,7 @@ That date is checkable, and worth checking, because the popular version of this 
 
 Which produces the fact almost nobody knows: **YOLOv8 did not launch under AGPL.** It shipped in January 2023 under **GPL-3.0** and was relicensed three months later. The PyPI record is unambiguous: `ultralytics` 8.0.0 (10 January 2023) through 8.0.76 (13 April 2023) all declare `GPL-3.0`. Version 8.0.80, uploaded on 16 April 2023, is the first to declare `AGPL-3.0`.
 
-This is not a loophole, and we are not suggesting you go hunting for one. A licence granted is not retroactively revoked, so those old versions remain available on the terms they were published under. But they are three years stale, unmaintained and unpatched, GPL-3.0 is still copyleft (you have swapped a network clause for a distribution clause, not escaped copyleft), and Ultralytics' commercial position is broader than the licence text anyway. The useful takeaway is narrower and more general: **a licence attaches to the version you received, not to the project's name.** Pin your dependencies and record what the licence said on the day you took the copy, because the project can change it tomorrow and your compliance story depends on which one you actually got.
+This is not a loophole. A licence granted is not retroactively revoked, so those old versions remain available on the terms they were published under. But they are three years stale, unmaintained and unpatched, GPL-3.0 is still copyleft (you have swapped a network clause for a distribution clause, not escaped copyleft), and Ultralytics' commercial position is broader than the licence text anyway. The useful takeaway is narrower and more general: **a licence attaches to the version you received, not to the project's name.** Pin your dependencies and record what the licence said on the day you took the copy, because the project can change it tomorrow and your compliance story depends on which one you actually got.
 
 AGPL-3.0 is GPL plus Section 13, the network clause: *if you modify the Program*, users who interact with your modified version over a network must be offered its source. That closes the SaaS path plain GPL leaves open.
 
@@ -151,13 +151,13 @@ If you see a page claiming YOLOv13 is Apache-2.0, it is wrong. The LICENSE file,
 
 ### The YOLOv8 permissive route that no longer exists
 
-Many guides still online, including an earlier draft of this one, point at KerasCV's Apache-2.0 YOLOv8 as the clean escape from AGPL YOLOv8. **You cannot rely on it today**, and the reason is in the Keras team's own public record rather than in anything we are alleging:
+Many guides still online, including an earlier draft of this one, point at KerasCV's Apache-2.0 YOLOv8 as the clean escape from AGPL YOLOv8. **You cannot rely on it today.** Here is the public record:
 
 - In the KerasCV discussion [Clarifications regarding YOLOv8 licensing](https://github.com/keras-team/keras-cv/discussions/2032), a contributor wrote that "many parts are derived form ultralytics." No maintainer answered the thread, so the question of how independent the implementation was has never been settled either way in public.
 - The KerasHub issue [add YOLOV8](https://github.com/keras-team/keras-hub/issues/1760) was closed in July 2025 by a Keras maintainer with: "Hey all!! Because of license issues, we have decided to drop this." Two people then asked what that meant for existing commercial users of the KerasCV version. Neither got a reply.
 - KerasCV is now archived, and KerasHub, its maintained successor, **does not ship YOLOv8**.
 
-We do not know whether those two things are connected, and we are not asserting that anything improper happened. What we can say is the practical part: the maintained Keras project deliberately does not carry YOLOv8, the reason its own team gave was licensing, and the questions raised about the old implementation were never publicly answered. That is not a foundation to build a product on.
+We do not know whether those two things are connected, and we are not asserting that anything improper happened. That is not a foundation to build a product on.
 
 ## The permissive outliers: YOLOX, PP-YOLOE, YOLO-NAS
 
@@ -270,6 +270,6 @@ Star it on GitHub: [github.com/LibreYOLO/libreyolo](https://github.com/LibreYOLO
 
 ---
 
-*Trademarks and affiliation: YOLO, YOLOv8, YOLO11, YOLO26 and Ultralytics are trademarks of their respective owners, including Ultralytics Inc. LibreYOLO is an independent project and is not affiliated with, sponsored by, or endorsed by Ultralytics, Meituan, Megvii, Baidu, Tencent, Tsinghua University, Meta, Google, Roboflow, NVIDIA, Deci or any other organisation named here. Product and repository names are used only to identify and compare the software discussed.*
+*Trademarks and affiliation: YOLO, YOLOv8, YOLO11, YOLO26 and Ultralytics are trademarks of their respective owners, including Ultralytics Inc. LibreYOLO is an independent project and is not affiliated with, sponsored by, or endorsed by Ultralytics or any other organisation named in this article. Product and repository names are used only to identify and compare the software discussed.*
 
-*Legal note, repeated because the sections above give categorical answers: this article is general information about published license texts, current as of 11 July 2026. It is not legal advice and does not create an advisory relationship. Licenses change, maintainers change their positions, and the application of any license to your specific product is a question for a lawyer in your jurisdiction, not for a blog post written by one of the vendors in the comparison.*
+*This article is general information, not legal advice, current as of 11 July 2026, and written by one of the vendors in the comparison. Verify the current license before you ship.*
