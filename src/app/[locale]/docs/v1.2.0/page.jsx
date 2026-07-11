@@ -8,7 +8,7 @@ import {
   GraduationCap, CheckCircle2, Upload, Cpu, FileCode, Wrench,
   Database, Copy, Check, Menu, X, ChevronRight,
   Sparkles, Tags, Video, Activity, Scissors, PersonStanding, Eye, SquareTerminal,
-  ShieldCheck, Mountain, MapPin,
+  ShieldCheck,
 } from 'lucide-react'
 
 /* ─── Section metadata for sidebar ─── */
@@ -26,9 +26,6 @@ const sections = [
   { id: 'segmentation', title: 'Segmentation', icon: Scissors },
   { id: 'pose', title: 'Pose Estimation', icon: PersonStanding },
   { id: 'gaze', title: 'Gaze Estimation', icon: Eye },
-  { id: 'classification', title: 'Classification', icon: Tags },
-  { id: 'depth', title: 'Depth Estimation', icon: Mountain },
-  { id: 'point-localization', title: 'Point Localization', icon: MapPin },
   { id: 'training', title: 'Training', icon: GraduationCap },
   { id: 'validation', title: 'Validation', icon: CheckCircle2 },
   { id: 'export', title: 'Export', icon: Upload },
@@ -612,149 +609,271 @@ function MatrixMark({ value }) {
     )
   }
 
-  if (value === 'preview') {
-    return (
-      <span className="font-semibold text-sky-600 dark:text-sky-400" aria-label="research preview">
-        prev
-      </span>
-    )
-  }
-
   return <span className="sr-only">Not currently supported</span>
 }
 
 function CompatibilityMatrix() {
   const rows = [
     {
-      family: 'YOLO9', status: 'Validated detect, single GPU',
-      inference: 'yes', training: 'yes',
-      detect: 'yes', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: 'yes', coreml: 'yes', tflite: 'exp',
+      family: 'YOLO9',
+      status: 'Validated detect, single GPU',
+      inference: 'yes',
+      training: 'yes',
+      detect: 'yes',
+      segment: 'exp',
+      pose: '',
+      gaze: '',
+      onnx: 'yes',
+      torchscript: 'yes',
+      tensorrt: 'yes',
+      openvino: 'yes',
+      ncnn: 'yes',
+      coreml: 'yes',
     },
     {
-      family: 'RF-DETR', status: 'Validated detect + segment; pose / OBB preview',
-      inference: 'yes', training: 'yes',
-      detect: 'yes', segment: 'yes', semantic: '', classify: '', pose: 'preview', obb: 'preview', depth: '', point: '', gaze: '',
-      onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: '', coreml: 'exp', tflite: 'exp',
+      family: 'RF-DETR',
+      status: 'Validated detect + segment, single GPU',
+      inference: 'yes',
+      training: 'yes',
+      detect: 'yes',
+      segment: 'yes',
+      pose: '',
+      gaze: '',
+      onnx: 'yes',
+      torchscript: 'exp',
+      tensorrt: 'yes',
+      openvino: 'yes',
+      ncnn: '',
+      coreml: 'exp',
     },
     {
-      family: 'YOLOX', status: 'Experimental',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: 'exp', tflite: '',
+      family: 'YOLOX',
+      status: 'Experimental',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: 'exp',
+      coreml: 'exp',
     },
     {
-      family: 'YOLO9-E2E', status: 'Experimental',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: '', coreml: '', tflite: '',
+      family: 'YOLO9-E2E',
+      status: 'Experimental',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: 'exp',
+      coreml: '',
     },
     {
-      family: 'YOLO-NAS', status: 'Experimental',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: 'exp', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: '', tflite: '',
+      family: 'YOLO-NAS',
+      status: 'Experimental',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: 'exp',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: 'exp',
+      coreml: '',
     },
     {
-      family: 'D-FINE', status: 'Experimental',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: '', tflite: '',
+      family: 'D-FINE',
+      status: 'Experimental',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: '',
+      coreml: '',
     },
     {
-      family: 'DEIM', status: 'Experimental',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: '', tflite: '',
+      family: 'DEIM',
+      status: 'Experimental',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: '',
+      coreml: '',
     },
     {
-      family: 'DEIMv2', status: 'Experimental',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: '', tflite: '',
+      family: 'DEIMv2',
+      status: 'Experimental',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: '',
+      coreml: '',
     },
     {
-      family: 'RT-DETR', status: 'Experimental',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: 'exp', tflite: '',
+      family: 'RT-DETR',
+      status: 'Experimental',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: '',
+      coreml: 'exp',
     },
     {
-      family: 'RT-DETRv2', status: 'Experimental',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+      family: 'PicoDet',
+      status: 'Experimental',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: 'exp',
+      coreml: '',
     },
     {
-      family: 'RT-DETRv4', status: 'Experimental',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+      family: 'EC',
+      status: 'Experimental',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: 'exp',
+      pose: 'exp',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: '',
+      coreml: '',
     },
     {
-      family: 'PicoDet', status: 'Experimental',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: '', ncnn: '', coreml: '', tflite: '',
+      family: 'RT-DETRv2',
+      status: 'Experimental',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: 'exp',
+      coreml: '',
     },
     {
-      family: 'RTMDet', status: 'Experimental',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+      family: 'RT-DETRv4',
+      status: 'Experimental',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: 'exp',
+      coreml: '',
     },
     {
-      family: 'EC', status: 'Experimental',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: 'exp', semantic: '', classify: '', pose: 'exp', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+      family: 'DAMO-YOLO',
+      status: 'Experimental',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: 'exp',
+      coreml: '',
     },
     {
-      family: 'DINOv2', status: 'New, experimental (needs transformers)',
-      inference: 'exp', training: 'exp',
-      detect: '', segment: '', semantic: 'exp', classify: 'exp', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: '', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+      family: 'RTMDet',
+      status: 'Experimental',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: 'exp',
+      coreml: '',
     },
     {
-      family: 'MobileNetV4', status: 'New, experimental classifier (Apache)',
-      inference: 'exp', training: 'exp',
-      detect: '', segment: '', semantic: '', classify: 'exp', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'ConvNeXt', status: 'New, experimental classifier (Apache)',
-      inference: 'exp', training: 'exp',
-      detect: '', segment: '', semantic: '', classify: 'exp', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'EfficientNetV2', status: 'New, experimental classifier (Apache)',
-      inference: 'exp', training: 'exp',
-      detect: '', segment: '', semantic: '', classify: 'exp', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'Depth Anything V2', status: 'New, experimental; no export',
-      inference: 'exp', training: '',
-      detect: '', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: 'exp', point: '', gaze: '',
-      onnx: '', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'FOMO', status: 'New, experimental; no auto-download',
-      inference: 'exp', training: 'exp',
-      detect: '', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: 'exp', gaze: '',
-      onnx: '', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'L2CS', status: 'Experimental, inference-only',
-      inference: 'exp', training: '',
-      detect: '', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: 'exp',
-      onnx: '', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
+      family: 'L2CS',
+      status: 'Experimental, inference-only',
+      inference: 'exp',
+      training: '',
+      detect: '',
+      segment: '',
+      pose: '',
+      gaze: 'exp',
+      onnx: '',
+      torchscript: '',
+      tensorrt: '',
+      openvino: '',
+      ncnn: '',
+      coreml: '',
     },
   ]
 
-  const headers = ['Model family', 'v1.3.0 status', 'Inference', 'Training', 'Detect', 'Segment', 'Semantic', 'Classify', 'Pose', 'OBB', 'Depth', 'Point', 'Gaze', 'ONNX', 'TorchScript', 'TensorRT', 'OpenVINO', 'NCNN', 'CoreML', 'TFLite']
-  const columns = ['inference', 'training', 'detect', 'segment', 'semantic', 'classify', 'pose', 'obb', 'depth', 'point', 'gaze', 'onnx', 'torchscript', 'tensorrt', 'openvino', 'ncnn', 'coreml', 'tflite']
+  const headers = ['Model family', 'v1.2.0 status', 'Inference', 'Training', 'Detection', 'Segmentation', 'Pose', 'Gaze', 'ONNX', 'TorchScript', 'TensorRT', 'OpenVINO', 'NCNN', 'CoreML']
+  const columns = ['inference', 'training', 'detect', 'segment', 'pose', 'gaze', 'onnx', 'torchscript', 'tensorrt', 'openvino', 'ncnn', 'coreml']
 
   return (
     <DocTable
@@ -775,7 +894,7 @@ function ValidationScopeCallout({ className = '' }) {
         <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" />
         <div>
           <p className="font-semibold text-surface-900 dark:text-white mb-2">
-            v1.3.0 validation scope
+            v1.2.0 validation scope
           </p>
           <p className="text-sm text-surface-600 dark:text-surface-400 mb-2">
             The heavily tested path is detection, training and inference for YOLO9 and RF-DETR, including RF-DETR segmentation.
@@ -799,7 +918,7 @@ function FlagshipCallout({ className = '' }) {
             Recommended validated path: YOLO9 detection or RF-DETR detection / segmentation
           </p>
           <p className="text-sm text-surface-600 dark:text-surface-400">
-            Detection, training and inference for these models receive the heaviest testing. Treat other families, tasks, and multi-GPU workflows as experimental in v1.3.0.
+            Detection, training and inference for these models receive the heaviest testing. Treat other families, tasks, and multi-GPU workflows as experimental in v1.2.0.
           </p>
         </div>
       </div>
@@ -895,22 +1014,8 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // On load, honor a #section deep link so a shared URL lands on that section.
-  useEffect(() => {
-    const id = decodeURIComponent((window.location.hash || '').replace(/^#/, ''))
-    if (id && sections.some((s) => s.id === id)) {
-      requestAnimationFrame(() => {
-        document.getElementById(id)?.scrollIntoView()
-        setActiveSection(id)
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   const navigateTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-    setActiveSection(id)
-    window.history.replaceState(null, '', `#${id}`)
     setMobileMenuOpen(false)
   }
 
@@ -983,7 +1088,7 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
               <div>
                 <p className="text-sm text-surface-600 dark:text-surface-400">
                     {isLatest
-                    ? 'These are the docs for the current stable release line, v1.3.x. Earlier versions stay available from the version menu.'
+                    ? 'These are the docs for v1.2.0, the previous release. The latest docs are v1.3.0, available from the version menu.'
                     : 'This archived version is kept linkable so older installs, search results, and agents can target the right documentation.'}
                 </p>
               </div>
@@ -997,21 +1102,12 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
             </div>
           </div>
 
-          {/* ────────────── SPECIALIZED GUIDES ────────────── */}
-          <P>
-            Two companion guides go deeper on specialized topics: the{' '}
-            <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM guide</a>{' '}
-            covers open-vocabulary detection that wraps vision-language models like Qwen3-VL and Florence-2, and the{' '}
-            <a href="/docs/experimental" className="text-libre-600 dark:text-libre-400 hover:underline">experimental tasks guide</a>{' '}
-            covers additional experimental workflows, including LoRA / DoRA fine-tuning. Classification, oriented boxes, and pose are also documented in their own sections below.
-          </P>
-
           {/* ────────────── INTRODUCTION ────────────── */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <SectionHeading id="introduction" icon={BookOpen}>Introduction</SectionHeading>
             <ValidationScopeCallout />
             <P>
-              LibreYOLO is an MIT-licensed computer-vision toolkit. v1.3.0 ships a broad catalogue across detection, segmentation, classification, depth and more, but the validated support surface is intentionally narrow:
+              LibreYOLO is an MIT-licensed object detection toolkit. v1.2.0 ships a broad catalogue, but the validated support surface is intentionally narrow:
             </P>
             <ul className="space-y-2 mb-4">
               <FeatureItem><strong className="text-surface-800 dark:text-white">YOLO9 detection</strong> - the CNN path.</FeatureItem>
@@ -1019,7 +1115,7 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
               <FeatureItem><strong className="text-surface-800 dark:text-white">RF-DETR segmentation</strong> - the heavily tested segmentation path.</FeatureItem>
             </ul>
             <P>
-              We recommend those paths as the default choice for new projects because they receive the heaviest testing around detection, training and inference. Other supported families and tasks work through the same unified <InlineCode>LibreYOLO()</InlineCode> factory, but they are experimental in v1.3.0. Use them if you have a specific reason.
+              We recommend those paths as the default choice for new projects because they receive the heaviest testing around detection, training and inference. Other supported families and tasks work through the same unified <InlineCode>LibreYOLO()</InlineCode> factory, but they are experimental in v1.2.0. Use them if you have a specific reason.
             </P>
             <CodeBlock language="python">{`from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
@@ -1045,44 +1141,16 @@ print(result.saved_path)`}</CodeBlock>
             </ul>
           </motion.div>
 
-          <SubHeading>Breaking changes in v1.3.0</SubHeading>
-          <ul className="space-y-2 my-4">
-            <FeatureItem>
-              <strong className="text-surface-800 dark:text-white">DAMO-YOLO removed</strong> with no alias:{' '}
-              <InlineCode>LibreDAMOYOLO</InlineCode> raises <InlineCode>AttributeError</InlineCode>, and DAMO-YOLO checkpoints are rejected on load.
-            </FeatureItem>
-            <FeatureItem>
-              <strong className="text-surface-800 dark:text-white">YOLO9 is detect-only.</strong> The{' '}
-              <InlineCode>-seg</InlineCode>, <InlineCode>-pose</InlineCode>, <InlineCode>-cls</InlineCode>, <InlineCode>-obb</InlineCode>, and <InlineCode>-sem</InlineCode> YOLO9 variants were removed.
-            </FeatureItem>
-            <FeatureItem>
-              <strong className="text-surface-800 dark:text-white">RF-DETR lost classify, semantic, and depth.</strong> Its tasks are now detect, segment, pose, and obb. Classification and semantic moved to the new <InlineCode>LibreDINOv2</InlineCode> family; depth moved to the new <InlineCode>LibreDepthAnythingV2</InlineCode> family.
-            </FeatureItem>
-            <FeatureItem>
-              <strong className="text-surface-800 dark:text-white">TFLite export needs Python 3.12+</strong> (onnx2tf wheel constraint). The onnx2tf floor was raised to <InlineCode>&gt;=2.4.3</InlineCode> and the old onnx2tf runtime patches were removed.
-            </FeatureItem>
-          </ul>
-
           <Divider />
 
-          {/* ────────────── COMPATIBILITY ────────────── */}
+          {/* ────────────── INSTALLATION ────────────── */}
           <SectionHeading id="compatibility" icon={CheckCircle2}>Compatibility</SectionHeading>
           <P>
-            Use this matrix as the quick v1.3.0 support map. <InlineCode>&#10003;</InlineCode>{' '}
-            marks a validated path, <InlineCode>exp</InlineCode> is experimental,{' '}
-            <InlineCode>prev</InlineCode> is a research preview, and empty cells are
-            not currently supported. Only YOLO9 and RF-DETR detection (plus RF-DETR
-            segmentation) are heavily tested; everything else, including the new
-            classification, semantic, depth and point families, is experimental.
+            Use this matrix as the quick v1.2.0 support map. A checkmark means the path is supported in the validated documentation surface, <InlineCode>exp</InlineCode> means the path exists but is experimental, and empty cells are not currently supported or should not be relied on.
           </P>
           <CompatibilityMatrix />
           <p className="text-sm text-surface-600 dark:text-surface-400 leading-relaxed mb-4">
-            Depth Anything V2 has no export path. TFLite export is experimental and
-            limited to YOLO9 detection and RF-DETR detect / segment / pose. The
-            classification families (MobileNetV4, ConvNeXt, EfficientNetV2) support
-            ONNX export. CoreML exports produce <InlineCode>.mlpackage</InlineCode>{' '}
-            bundles and require <InlineCode>libreyolo[coreml]</InlineCode>: macOS only,
-            no INT8, and no embedded NMS for RF-DETR, D-FINE, DEIM, DEIMv2, or EC.
+            CoreML exports produce <InlineCode>.mlpackage</InlineCode> bundles and require <InlineCode>libreyolo[coreml]</InlineCode>. CoreML inference is macOS only, INT8 is not supported, and embedded CoreML NMS is not available for RF-DETR, D-FINE, DEIM, DEIMv2, or EC.
           </p>
 
           <Divider />
@@ -1101,7 +1169,7 @@ print(result.saved_path)`}</CodeBlock>
           <SubHeading>From PyPI</SubHeading>
           <CodeBlock language="bash">{`pip install libreyolo`}</CodeBlock>
           <P>
-            These docs track the upcoming v1.3.0 release. Until v1.3.0 is published to PyPI, use a source install for the features documented on this page.
+            These docs cover v1.2.0, the previous release. For the newest features, see the v1.3.0 docs.
           </P>
 
           <SubHeading>From source</SubHeading>
@@ -1137,7 +1205,7 @@ pip install libreyolo[ncnn]
 
 # ByteTrack API compatibility extra
 pip install libreyolo[tracking]
-# Tracking dependencies are part of the base install in v1.3.0.
+# Tracking dependencies are part of the base install in v1.2.0 dev.
 
 # CoreML export and inference (macOS only for runtime)
 pip install libreyolo[coreml]
@@ -1212,17 +1280,13 @@ for r in results:
           <SectionHeading id="models" icon={Layers}>Available Models</SectionHeading>
           <FlagshipCallout />
           <P>
-            LibreYOLO v1.3.0 ships two validated flagship families plus a broader
-            catalogue of supported and freshly added models. Every model loads
-            through the same <InlineCode>LibreYOLO()</InlineCode> factory, but only
-            the validated paths below should be treated as heavily tested.
+            LibreYOLO ships a small validated v1.2.0 surface plus a broader catalogue of supported models. Every model loads through the same <InlineCode>LibreYOLO()</InlineCode> factory, but only the validated paths below should be treated as heavily tested.
           </P>
 
           <ValidatedModelHeader title="YOLO9 - CNN flagship">
             <SupportBadge variant="validated">Default: LibreYOLO9c.pt</SupportBadge>
             <SupportBadge variant="validated">Heavily tested: detection, training and inference</SupportBadge>
-            <SupportBadge>Detect-only in v1.3.0</SupportBadge>
-            <SupportBadge>Experimental: multi-GPU</SupportBadge>
+            <SupportBadge>Experimental: segment, multi-GPU</SupportBadge>
           </ValidatedModelHeader>
           <DocTable
             headers={['Size', 'Code', 'Input size', 'Use case', 'Detection checkpoint']}
@@ -1234,18 +1298,20 @@ for r in results:
             ]}
           />
           <P>
-            YOLO9 is detection-only in v1.3.0. The non-detect flagship variants
-            (including the old <InlineCode>-seg</InlineCode> checkpoints) were
-            removed; for segmentation use RF-DETR or EdgeCrafter below.
+            <SupportBadge>Experimental</SupportBadge>{' '}
+            <strong className="text-surface-800 dark:text-white">Segmentation checkpoints:</strong>{' '}
+            <Checkpoints names={['LibreYOLO9t-seg.pt', 'LibreYOLO9s-seg.pt', 'LibreYOLO9m-seg.pt', 'LibreYOLO9c-seg.pt']} />
+            . See the <a href="#segmentation" className="text-libre-600 dark:text-libre-400 hover:underline">Segmentation</a> section.
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
-model = LibreYOLO("LibreYOLO9c.pt")   # detection`}</CodeBlock>
+model = LibreYOLO("LibreYOLO9c.pt")
+# Experimental segmentation variant
+# model = LibreYOLO("LibreYOLO9c-seg.pt")`}</CodeBlock>
 
           <ValidatedModelHeader title="RF-DETR - transformer flagship">
             <SupportBadge variant="validated">Recommended transformer path</SupportBadge>
             <SupportBadge variant="validated">Heavily tested: detection, segmentation, training and inference</SupportBadge>
-            <SupportBadge>Research preview: pose, OBB</SupportBadge>
             <SupportBadge>Experimental: multi-GPU</SupportBadge>
           </ValidatedModelHeader>
           <DocTable
@@ -1258,152 +1324,78 @@ model = LibreYOLO("LibreYOLO9c.pt")   # detection`}</CodeBlock>
             ]}
           />
           <P>
-            LibreYOLO ships the Apache-clean RF-DETR detect sizes N/S/M/L on the
-            Hugging Face org. The XL/2XL tiers are intentionally not shipped.
-          </P>
-          <P>
             <SupportBadge variant="validated">Heavily tested</SupportBadge>{' '}
-            <strong className="text-surface-800 dark:text-white">Segmentation:</strong>{' '}
-            <Checkpoints names={['LibreRFDETRn-seg.pt', 'LibreRFDETRs-seg.pt', 'LibreRFDETRm-seg.pt', 'LibreRFDETRl-seg.pt']} />.
-            {' '}Larger <InlineCode>-seg</InlineCode> sizes (<InlineCode>x</InlineCode>, <InlineCode>xx</InlineCode>)
-            pull upstream RF-DETR seg-XL / seg-2XL weights under a non-commercial
-            license and are not hosted on the LibreYOLO org. See the{' '}
-            <a href="#segmentation" className="text-libre-600 dark:text-libre-400 hover:underline">Segmentation</a> section.
-          </P>
-          <P>
-            <SupportBadge>Research preview</SupportBadge>{' '}
-            <strong className="text-surface-800 dark:text-white">Pose:</strong>{' '}
-            <Checkpoints names={['LibreRFDETRx-pose.pt']} link={false} /> (ported
-            from RF-DETR v1.8.0 GroupPose; only size <InlineCode>x</InlineCode> at
-            576 ships).{' '}
-            <strong className="text-surface-800 dark:text-white">OBB:</strong>{' '}
-            <Checkpoints names={['LibreRFDETRn-obb.pt', 'LibreRFDETRs-obb.pt', 'LibreRFDETRm-obb.pt', 'LibreRFDETRl-obb.pt']} link={false} />{' '}
-            (oriented boxes, uses detection input sizes). Treat both as research
-            previews, not validated paths.
+            <strong className="text-surface-800 dark:text-white">Segmentation checkpoints:</strong>{' '}
+            <Checkpoints names={['LibreRFDETRn-seg.pt', 'LibreRFDETRs-seg.pt', 'LibreRFDETRm-seg.pt', 'LibreRFDETRl-seg.pt', 'LibreRFDETRx-seg.pt', 'LibreRFDETRxx-seg.pt']} />
+            . See the <a href="#segmentation" className="text-libre-600 dark:text-libre-400 hover:underline">Segmentation</a> section.
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
-model = LibreYOLO("LibreRFDETRs.pt")           # detect (validated)
-# model = LibreYOLO("LibreRFDETRs-seg.pt")     # segment (validated)
-# model = LibreYOLO("LibreRFDETRx-pose.pt")    # pose  (research preview)
-# model = LibreYOLO("LibreRFDETRn-obb.pt")     # obb   (research preview)`}</CodeBlock>
+model = LibreYOLO("LibreRFDETRs.pt")
+# Segmentation variants exist for every RF-DETR size
+# model = LibreYOLO("LibreRFDETRs-seg.pt")`}</CodeBlock>
 
-          <SubHeading>Additional detection families</SubHeading>
+          <SubHeading>Additional supported families</SubHeading>
           <P>
-            Detection-capable families that share the same factory and API surface
-            as the validated paths. These are experimental in v1.3.0. Each
-            checkpoint name links to its model card on the{' '}
-            <a href="https://huggingface.co/LibreYOLO" target="_blank" rel="noopener noreferrer" className="text-libre-600 dark:text-libre-400 hover:underline">LibreYOLO org</a>;
-            pass any name to <InlineCode>LibreYOLO()</InlineCode> and the factory
-            fetches it on first use.
+            Detection-capable families that share the same factory and API surface as the validated paths. These are experimental in v1.2.0. Each checkpoint name links to its Hugging Face model card on the <a href="https://huggingface.co/LibreYOLO" target="_blank" rel="noopener noreferrer" className="text-libre-600 dark:text-libre-400 hover:underline">LibreYOLO org</a>; pass any name to <InlineCode>LibreYOLO()</InlineCode> and the factory will fetch it on first use.
           </P>
           <DocTable
             headers={['Family', 'Status', 'Tasks', 'Checkpoints']}
             rows={[
-              ['YOLOX', <SupportBadge key="b">Experimental</SupportBadge>, 'detect', <Checkpoints key="yolox" names={['LibreYOLOXn.pt', 'LibreYOLOXt.pt', 'LibreYOLOXs.pt', 'LibreYOLOXm.pt', 'LibreYOLOXl.pt', 'LibreYOLOXx.pt']} />],
-              ['YOLO9-E2E', <SupportBadge key="b">Experimental</SupportBadge>, 'detect', <Checkpoints key="y9e2e" names={['LibreYOLO9E2Et.pt', 'LibreYOLO9E2Es.pt', 'LibreYOLO9E2Em.pt', 'LibreYOLO9E2Ec.pt']} />],
-              ['YOLO-NAS', <SupportBadge key="b">Experimental</SupportBadge>, 'detect, pose', <Checkpoints key="ynas" link={false} names={['LibreYOLONASs.pt', 'LibreYOLONASm.pt', 'LibreYOLONASl.pt', 'LibreYOLONASn-pose.pt', 'LibreYOLONASs-pose.pt', 'LibreYOLONASm-pose.pt', 'LibreYOLONASl-pose.pt']} />],
-              ['D-FINE', <SupportBadge key="b">Experimental</SupportBadge>, 'detect', <Checkpoints key="dfine" names={['LibreDFINEn.pt', 'LibreDFINEs.pt', 'LibreDFINEm.pt', 'LibreDFINEl.pt', 'LibreDFINEx.pt']} />],
-              ['DEIM', <SupportBadge key="b">Experimental</SupportBadge>, 'detect', <Checkpoints key="deim" names={['LibreDEIMn.pt', 'LibreDEIMs.pt', 'LibreDEIMm.pt', 'LibreDEIMl.pt', 'LibreDEIMx.pt']} />],
-              ['DEIMv2', <SupportBadge key="b">Experimental</SupportBadge>, 'detect', <Checkpoints key="deimv2" names={['LibreDEIMv2atto.pt', 'LibreDEIMv2femto.pt', 'LibreDEIMv2pico.pt', 'LibreDEIMv2n.pt', 'LibreDEIMv2s.pt', 'LibreDEIMv2m.pt', 'LibreDEIMv2l.pt', 'LibreDEIMv2x.pt']} />],
-              ['RT-DETR', <SupportBadge key="b">Experimental</SupportBadge>, 'detect', <Checkpoints key="rtdetr" names={['LibreRTDETRr18.pt', 'LibreRTDETRr34.pt', 'LibreRTDETRr50.pt', 'LibreRTDETRr50m.pt', 'LibreRTDETRr101.pt', 'LibreRTDETRl.pt', 'LibreRTDETRx.pt']} />],
-              ['RT-DETRv2', <SupportBadge key="b">Experimental</SupportBadge>, 'detect', <Checkpoints key="rtdetrv2" names={['LibreRTDETRv2r18.pt', 'LibreRTDETRv2r34.pt', 'LibreRTDETRv2r50.pt', 'LibreRTDETRv2r50m.pt', 'LibreRTDETRv2r101.pt']} />],
-              ['RT-DETRv4', <SupportBadge key="b">Experimental</SupportBadge>, 'detect', <Checkpoints key="rtdetrv4" names={['LibreRTDETRv4s.pt', 'LibreRTDETRv4m.pt', 'LibreRTDETRv4l.pt', 'LibreRTDETRv4x.pt']} />],
-              ['PicoDet', <SupportBadge key="b">Experimental</SupportBadge>, 'detect', <Checkpoints key="picodet" names={['LibrePICODETs.pt', 'LibrePICODETm.pt', 'LibrePICODETl.pt']} />],
-              ['RTMDet', <SupportBadge key="b">Experimental</SupportBadge>, 'detect', <Checkpoints key="rtmdet" names={['LibreRTMDett.pt', 'LibreRTMDets.pt', 'LibreRTMDetm.pt', 'LibreRTMDetl.pt', 'LibreRTMDetx.pt']} />],
-              ['EdgeCrafter', <SupportBadge key="b">Experimental</SupportBadge>, 'detect, pose, segment', <Checkpoints key="ec" names={['LibreECs.pt', 'LibreECm.pt', 'LibreECl.pt', 'LibreECx.pt', 'LibreECs-pose.pt', 'LibreECm-pose.pt', 'LibreECl-pose.pt', 'LibreECx-pose.pt', 'LibreECs-seg.pt', 'LibreECm-seg.pt', 'LibreECl-seg.pt', 'LibreECx-seg.pt']} />],
+              ['YOLOX', <SupportBadge>Experimental</SupportBadge>, 'detect', <Checkpoints key="yolox" names={['LibreYOLOXn.pt', 'LibreYOLOXt.pt', 'LibreYOLOXs.pt', 'LibreYOLOXm.pt', 'LibreYOLOXl.pt', 'LibreYOLOXx.pt']} />],
+              ['YOLO9-E2E', <SupportBadge>Experimental</SupportBadge>, 'detect', <Checkpoints key="y9e2e" names={['LibreYOLO9E2Et.pt', 'LibreYOLO9E2Es.pt', 'LibreYOLO9E2Em.pt', 'LibreYOLO9E2Ec.pt']} />],
+              ['YOLO-NAS', <SupportBadge>Experimental</SupportBadge>, 'detect, pose', <Checkpoints key="ynas" link={false} names={['LibreYOLONASs.pt', 'LibreYOLONASm.pt', 'LibreYOLONASl.pt', 'LibreYOLONASn-pose.pt', 'LibreYOLONASs-pose.pt', 'LibreYOLONASm-pose.pt', 'LibreYOLONASl-pose.pt']} />],
+              ['D-FINE', <SupportBadge>Experimental</SupportBadge>, 'detect', <Checkpoints key="dfine" names={['LibreDFINEn.pt', 'LibreDFINEs.pt', 'LibreDFINEm.pt', 'LibreDFINEl.pt', 'LibreDFINEx.pt']} />],
+              ['DEIM', <SupportBadge>Experimental</SupportBadge>, 'detect', <Checkpoints key="deim" names={['LibreDEIMn.pt', 'LibreDEIMs.pt', 'LibreDEIMm.pt', 'LibreDEIMl.pt', 'LibreDEIMx.pt']} />],
+              ['DEIMv2', <SupportBadge>Experimental</SupportBadge>, 'detect', <Checkpoints key="deimv2" names={['LibreDEIMv2atto.pt', 'LibreDEIMv2femto.pt', 'LibreDEIMv2pico.pt', 'LibreDEIMv2n.pt', 'LibreDEIMv2s.pt', 'LibreDEIMv2m.pt', 'LibreDEIMv2l.pt', 'LibreDEIMv2x.pt']} />],
+              ['RT-DETR', <SupportBadge>Experimental</SupportBadge>, 'detect', <Checkpoints key="rtdetr" names={['LibreRTDETRr18.pt', 'LibreRTDETRr34.pt', 'LibreRTDETRr50.pt', 'LibreRTDETRr50m.pt', 'LibreRTDETRr101.pt', 'LibreRTDETRl.pt', 'LibreRTDETRx.pt']} />],
+              ['RT-DETRv2', <SupportBadge>Experimental</SupportBadge>, 'detect', <Checkpoints key="rtdetrv2" names={['LibreRTDETRv2r18.pt', 'LibreRTDETRv2r34.pt', 'LibreRTDETRv2r50.pt', 'LibreRTDETRv2r50m.pt', 'LibreRTDETRv2r101.pt']} />],
+              ['RT-DETRv4', <SupportBadge>Experimental</SupportBadge>, 'detect', <Checkpoints key="rtdetrv4" names={['LibreRTDETRv4s.pt', 'LibreRTDETRv4m.pt', 'LibreRTDETRv4l.pt', 'LibreRTDETRv4x.pt']} />],
+              ['PicoDet', <SupportBadge>Experimental</SupportBadge>, 'detect', <Checkpoints key="picodet" names={['LibrePICODETs.pt', 'LibrePICODETm.pt', 'LibrePICODETl.pt']} />],
+              ['EdgeCrafter', <SupportBadge>Experimental</SupportBadge>, 'detect, pose, segment', <Checkpoints key="ec" names={['LibreECs.pt', 'LibreECm.pt', 'LibreECl.pt', 'LibreECx.pt', 'LibreECs-pose.pt', 'LibreECm-pose.pt', 'LibreECl-pose.pt', 'LibreECx-pose.pt', 'LibreECs-seg.pt', 'LibreECm-seg.pt', 'LibreECl-seg.pt', 'LibreECx-seg.pt']} />],
+              ['DAMO-YOLO', <SupportBadge>Experimental</SupportBadge>, 'detect', <Checkpoints key="damo" names={['LibreDAMOYOLOns.pt', 'LibreDAMOYOLOnm.pt', 'LibreDAMOYOLOnl.pt', 'LibreDAMOYOLOt.pt', 'LibreDAMOYOLOs.pt', 'LibreDAMOYOLOm.pt', 'LibreDAMOYOLOl.pt']} />],
+              ['RTMDet', <SupportBadge>Experimental</SupportBadge>, 'detect', <Checkpoints key="rtmdet" names={['LibreRTMDett.pt', 'LibreRTMDets.pt', 'LibreRTMDetm.pt', 'LibreRTMDetl.pt', 'LibreRTMDetx.pt']} />],
             ]}
           />
           <P className="text-sm">
-            <strong className="text-surface-800 dark:text-white">Hosting note:</strong>{' '}
-            YOLO-NAS checkpoints (plain text above) are hosted on Deci&apos;s CDN
-            under their proprietary weights license, not on the LibreYOLO Hugging
-            Face org. The factory still downloads them automatically on first use.
-            DAMO-YOLO was removed in v1.3.0 and is no longer loadable.
-          </P>
-
-          <SubHeading>New model families in v1.3.0</SubHeading>
-          <P>
-            v1.3.0 adds classification, dense semantic segmentation, monocular depth
-            and point-localization families. They load through the same factory but
-            are newly added and experimental. DINOv2 needs{' '}
-            <InlineCode>pip install libreyolo[rfdetr]</InlineCode> (transformers).
-          </P>
-          <DocTable
-            headers={['Family', 'Status', 'Task', 'Checkpoints']}
-            rows={[
-              ['MobileNetV4', <SupportBadge key="b">Experimental</SupportBadge>, 'classify', <Checkpoints key="mn4" names={['LibreMobileNetV4s-cls.pt', 'LibreMobileNetV4m-cls.pt', 'LibreMobileNetV4l-cls.pt']} />],
-              ['ConvNeXt', <SupportBadge key="b">Experimental</SupportBadge>, 'classify', <Checkpoints key="cnx" link={false} names={['LibreConvNeXtt-cls.pt', 'LibreConvNeXts-cls.pt', 'LibreConvNeXtb-cls.pt']} />],
-              ['EfficientNetV2', <SupportBadge key="b">Experimental</SupportBadge>, 'classify', <Checkpoints key="env2" link={false} names={['LibreEfficientNetV2b0-cls.pt', 'LibreEfficientNetV2b1-cls.pt', 'LibreEfficientNetV2b2-cls.pt', 'LibreEfficientNetV2b3-cls.pt']} />],
-              ['DINOv2', <SupportBadge key="b">Experimental</SupportBadge>, 'semantic, classify', <Checkpoints key="dino" link={false} names={['LibreDINOv2n.pt', 'LibreDINOv2s.pt', 'LibreDINOv2m.pt', 'LibreDINOv2l.pt', 'LibreDINOv2n-cls.pt', 'LibreDINOv2s-cls.pt', 'LibreDINOv2m-cls.pt', 'LibreDINOv2l-cls.pt']} />],
-              ['Depth Anything V2', <SupportBadge key="b">Experimental</SupportBadge>, 'depth', <Checkpoints key="depth" link={false} names={['LibreDepthAnythingV2s-depth.pt', 'LibreDepthAnythingV2b-depth.pt', 'LibreDepthAnythingV2l-depth.pt', 'LibreDepthAnythingV2g-depth.pt']} />],
-              ['FOMO', <SupportBadge key="b">Experimental</SupportBadge>, 'point', <Checkpoints key="fomo" link={false} names={['LibreFOMOs-point.pt', 'LibreFOMOm-point.pt', 'LibreFOMOl-point.pt']} />],
-            ]}
-          />
-          <ul className="space-y-2 my-4">
-            <FeatureItem><strong className="text-surface-800 dark:text-white">MobileNetV4</strong> is the commercially clean classification path: Apache-2.0 ImageNet-1k weights (s/m/l at 224/224/256), with predict, top-1/top-5 validation, fine-tune training and ONNX export.</FeatureItem>
-            <FeatureItem><strong className="text-surface-800 dark:text-white">ConvNeXt</strong> (V1 Tiny/Small/Base, 224) and <strong className="text-surface-800 dark:text-white">EfficientNetV2</strong> (b0-b3, 224-300) are additional Apache-2.0 ImageNet-1k classifiers (the accuracy tier).</FeatureItem>
-            <FeatureItem><strong className="text-surface-800 dark:text-white">DINOv2</strong> is a DINOv2 backbone with a task head: dense semantic segmentation at 518 (default) and a classification linear probe at 224. It is not the RF-DETR detector. Classification was moved here from RF-DETR in v1.3.0.</FeatureItem>
-            <FeatureItem><strong className="text-surface-800 dark:text-white">Depth Anything V2</strong> does monocular depth (sizes s/b/l/g, all at 518). ViT-S weights are Apache-2.0; ViT-B/L/G are CC-BY-NC-4.0 (non-commercial). Inference and zero-shot validation only: not trainable and with no export.</FeatureItem>
-            <FeatureItem><strong className="text-surface-800 dark:text-white">FOMO</strong> is a point-localizer emitting <InlineCode>(x, y, class, confidence)</InlineCode> per object. Pretrained weights are not redistributed: pass a local checkpoint or train from scratch.</FeatureItem>
-          </ul>
-          <P className="text-sm">
-            <strong className="text-surface-800 dark:text-white">Promptable and VLM tiers:</strong>{' '}
-            LibreSAM (promptable segmentation, <InlineCode>libreyolo[sam]</InlineCode>)
-            and the LibreVLM tier of vision-language detectors
-            (<InlineCode>libreyolo[vlm]</InlineCode>) are separate categories that load
-            upstream Hugging Face snapshots and are not routed through the{' '}
-            <InlineCode>LibreYOLO()</InlineCode> detector factory. Their weights inherit
-            each upstream model&apos;s license.
+            <strong className="text-surface-800 dark:text-white">Hosting note:</strong> YOLO-NAS checkpoints (plain text above) are hosted on Deci&apos;s CDN under their proprietary weights license, not on the LibreYOLO Hugging Face org. The factory still downloads them automatically on first use.
           </P>
 
           <SubHeading>Specialized models</SubHeading>
           <DocTable
             headers={['Family', 'Status', 'Tasks', 'Checkpoints']}
             rows={[
-              ['L2CS', <SupportBadge key="b">Experimental</SupportBadge>, <span key="t">gaze (inference-only) - see <a href="#gaze" className="text-libre-600 dark:text-libre-400 hover:underline">Gaze Estimation</a></span>, <Checkpoints key="l2cs" link={false} names={['LibreL2CSr50.pt']} />],
+              ['L2CS', <SupportBadge>Experimental</SupportBadge>, <span key="t">gaze (inference-only) - see <a href="#gaze" className="text-libre-600 dark:text-libre-400 hover:underline">Gaze Estimation</a></span>, <Checkpoints key="l2cs" link={false} names={['LibreL2CSr50.pt']} />],
             ]}
           />
           <P className="text-sm">
-            L2CS architecture sizes include r18, r34, r50, r101, and r152, but the
-            upstream-published Gaze360 checkpoint is ResNet-50. Install{' '}
-            <InlineCode>libreyolo[gaze]</InlineCode> for the optional download helper,
-            or pass a local checkpoint path for other sizes. L2CS weights are not
-            hosted by LibreYOLO (the Gaze360 dataset license forbids redistribution).
+            L2CS architecture sizes include r18, r34, r50, r101, and r152, but the upstream-published Gaze360 checkpoint is ResNet-50. Install <InlineCode>libreyolo[gaze]</InlineCode> for the optional Google Drive helper, or pass a local checkpoint path for other sizes.
           </P>
 
           <SubHeading>Factory function</SubHeading>
           <P>
-            Use the <InlineCode>LibreYOLO()</InlineCode> factory for every model and
-            runtime. Give it an official checkpoint name or exported artifact path,
-            then let it choose the right model family, task, class count, and runtime:
+            Use the <InlineCode>LibreYOLO()</InlineCode> factory for every model and runtime. Give it an official checkpoint name or exported artifact path, then let it choose the right model family, task, class count, and runtime:
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 # Default: YOLO9 detection
 model = LibreYOLO("LibreYOLO9c.pt")
 
-# Flagship transformer: RF-DETR
+# Flagship: RF-DETR
 model = LibreYOLO("LibreRFDETRs.pt")
-model = LibreYOLO("LibreRFDETRs-seg.pt")        # validated segmentation
 
-# New in v1.3.0
-model = LibreYOLO("LibreMobileNetV4s-cls.pt")   # classification (Apache, ImageNet-1k)
-model = LibreYOLO("LibreDINOv2n.pt")            # semantic segmentation
-model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")  # monocular depth
-model = LibreYOLO("LibreFOMOs-point.pt")        # point localization (local weights)
+# Segmentation checkpoints use the same factory path
+model = LibreYOLO("LibreRFDETRs-seg.pt")       # validated segmentation
+model = LibreYOLO("LibreYOLO9c-seg.pt")        # experimental segmentation
 
 # Exported deployment formats
-model = LibreYOLO("model.onnx")                 # ONNX Runtime
-model = LibreYOLO("model.engine")               # TensorRT
-model = LibreYOLO("model.mlpackage")            # CoreML (macOS)
-model = LibreYOLO("model_openvino/")            # OpenVINO (directory)
-model = LibreYOLO("model_ncnn/")                # NCNN (directory)`}</CodeBlock>
+model = LibreYOLO("model.onnx")                # ONNX Runtime
+model = LibreYOLO("model.engine")              # TensorRT
+model = LibreYOLO("model.mlpackage")           # CoreML (macOS)
+model = LibreYOLO("model_openvino/")           # OpenVINO (directory)
+model = LibreYOLO("model_ncnn/")               # NCNN (directory)`}</CodeBlock>
           <P>
-            For recognized official checkpoint filenames, LibreYOLO can auto-download
-            missing weights. For custom filenames, point at an explicit local path.
-            Keep new projects on YOLO9 detection or RF-DETR detection / segmentation;
-            other families, tasks, and the new families are experimental in v1.3.0.
+            For recognized official checkpoint filenames, LibreYOLO can auto-download missing weights. For custom filenames, point at an explicit local path. Experimental families still load through the same factory, but keep new projects on YOLO9 detection or RF-DETR detection/segmentation. Use them if you have a specific reason.
           </P>
 
           <Divider />
@@ -1417,26 +1409,17 @@ model = LibreYOLO("model_ncnn/")                # NCNN (directory)`}</CodeBlock>
 
           <SubHeading>Task suffixes</SubHeading>
           <DocTable
-            headers={['Task', 'Canonical name', 'Filename suffix', 'Owned by']}
+            headers={['Task', 'Canonical name', 'Filename suffix']}
             rows={[
-              ['Detection', <InlineCode key="d">&quot;detect&quot;</InlineCode>, '(none - implicit)', 'most families (default)'],
-              ['Instance segmentation', <InlineCode key="s">&quot;segment&quot;</InlineCode>, <InlineCode key="ss">-seg</InlineCode>, 'RF-DETR, EdgeCrafter'],
-              ['Semantic segmentation', <InlineCode key="se">&quot;semantic&quot;</InlineCode>, <InlineCode key="ses">-sem</InlineCode>, 'DINOv2'],
-              ['Pose estimation', <InlineCode key="p">&quot;pose&quot;</InlineCode>, <InlineCode key="ps">-pose</InlineCode>, 'YOLO-NAS, EdgeCrafter, RF-DETR (preview)'],
-              ['Oriented boxes', <InlineCode key="o">&quot;obb&quot;</InlineCode>, <InlineCode key="os">-obb</InlineCode>, 'RF-DETR (preview)'],
-              ['Classification', <InlineCode key="c">&quot;classify&quot;</InlineCode>, <InlineCode key="cs">-cls</InlineCode>, 'MobileNetV4, ConvNeXt, EfficientNetV2, DINOv2'],
-              ['Monocular depth', <InlineCode key="de">&quot;depth&quot;</InlineCode>, <InlineCode key="des">-depth</InlineCode>, 'Depth Anything V2'],
-              ['Point localization', <InlineCode key="pt">&quot;point&quot;</InlineCode>, <InlineCode key="pts">-point</InlineCode>, 'FOMO'],
-              ['Gaze estimation', <InlineCode key="g">&quot;gaze&quot;</InlineCode>, <InlineCode key="gs">-gaze</InlineCode>, 'L2CS'],
+              ['Detection', <InlineCode key="d">&quot;detect&quot;</InlineCode>, '(none - implicit)'],
+              ['Instance segmentation', <InlineCode key="s">&quot;segment&quot;</InlineCode>, <InlineCode key="ss">-seg</InlineCode>],
+              ['Pose estimation', <InlineCode key="p">&quot;pose&quot;</InlineCode>, <InlineCode key="ps">-pose</InlineCode>],
+              ['Classification', <InlineCode key="c">&quot;classify&quot;</InlineCode>, <InlineCode key="cs">-cls</InlineCode>],
+              ['Gaze estimation', <InlineCode key="g">&quot;gaze&quot;</InlineCode>, <InlineCode key="gs">-gaze</InlineCode>],
             ]}
           />
           <P>
-            Detection is implicit (no suffix), following the common YOLO convention.
-            The factory accepts aliases at the API boundary
-            (<InlineCode>&quot;detection&quot;</InlineCode>, <InlineCode>&quot;seg&quot;</InlineCode>,
-            <InlineCode>&quot;keypoints&quot;</InlineCode>, <InlineCode>&quot;cls&quot;</InlineCode>, etc.);
-            only the canonical names above appear in filenames. A task is available
-            only when it is in that family&apos;s supported-task set.
+            The factory accepts aliases at the API boundary (<InlineCode>&quot;detection&quot;</InlineCode>, <InlineCode>&quot;seg&quot;</InlineCode>, <InlineCode>&quot;keypoints&quot;</InlineCode>, etc.) - only the canonical names appear in filenames.
           </P>
 
           <SubHeading>Resolution precedence</SubHeading>
@@ -1457,21 +1440,18 @@ model = LibreYOLO("LibreYOLO9c.pt")  # task="detect"`}</CodeBlock>
 
           <SubHeading>Per-family task support</SubHeading>
           <DocTable
-            headers={['Family', 'v1.3.0 status', 'Default', 'Supported tasks']}
+            headers={['Family', 'v1.2.0 status', 'Default', 'Supported tasks']}
             rows={[
-              [<strong key="y9">YOLO9</strong>, 'detect single-GPU heavily tested; multi-GPU experimental', 'detect', 'detect'],
-              [<strong key="rfd">RF-DETR</strong>, 'detect and segment single-GPU heavily tested; pose and OBB research preview', 'detect', 'detect, segment, pose, obb'],
+              [<strong key="y9">YOLO9</strong>, 'detect single-GPU heavily tested; segment and multi-GPU experimental', 'detect', 'detect, segment'],
+              [<strong key="rfd">RF-DETR</strong>, 'detect and segment single-GPU heavily tested; multi-GPU experimental', 'detect', 'detect, segment'],
               ['YOLOX', 'experimental', 'detect', 'detect'],
               ['YOLO9-E2E', 'experimental', 'detect', 'detect'],
               ['YOLO-NAS', 'experimental', 'detect', 'detect, pose'],
               ['D-FINE / DEIM / DEIMv2', 'experimental', 'detect', 'detect'],
               ['RT-DETR / RT-DETRv2 / RT-DETRv4', 'experimental', 'detect', 'detect'],
-              ['PicoDet / RTMDet', 'experimental', 'detect', 'detect'],
+              ['PicoDet', 'experimental', 'detect', 'detect'],
               ['EdgeCrafter (EC)', 'experimental', 'detect', 'detect, pose, segment'],
-              ['DINOv2', 'new, experimental', 'semantic', 'semantic, classify'],
-              ['MobileNetV4 / ConvNeXt / EfficientNetV2', 'new, experimental', 'classify', 'classify'],
-              ['Depth Anything V2', 'new, experimental', 'depth', 'depth'],
-              ['FOMO', 'new, experimental', 'point', 'point'],
+              ['DAMO-YOLO / RTMDet', 'experimental', 'detect', 'detect'],
               ['L2CS', 'experimental', 'gaze', 'gaze (inference-only)'],
             ]}
           />
@@ -1482,35 +1462,17 @@ LibreYOLO9c.pt
 LibreRFDETRs.pt
 LibreRTDETRr50.pt
 
-# Instance segmentation (-seg)
+# Segmentation
+LibreYOLO9c-seg.pt
 LibreRFDETRs-seg.pt
 LibreECm-seg.pt
 
-# Semantic segmentation (-sem)
-LibreDINOv2n.pt          # semantic is DINOv2's default; -sem optional
-
-# Pose (-pose)
+# Pose
 LibreYOLONASn-pose.pt
 LibreECs-pose.pt
-LibreRFDETRx-pose.pt     # preview; size x only
 
-# Oriented boxes (-obb)
-LibreRFDETRn-obb.pt      # preview
-
-# Classification (-cls)
-LibreMobileNetV4s-cls.pt
-LibreConvNeXtt-cls.pt
-LibreEfficientNetV2b0-cls.pt
-LibreDINOv2n-cls.pt      # DINOv2 linear probe
-
-# Depth (-depth)
-LibreDepthAnythingV2s-depth.pt
-
-# Point (-point)
-LibreFOMOs-point.pt
-
-# Gaze (-gaze optional; only task for L2CS)
-LibreL2CSr50.pt`}</CodeBlock>
+# Gaze
+LibreL2CSr50.pt   # gaze is L2CS's only task - suffix optional`}</CodeBlock>
 
           <SubHeading>Deprecated aliases</SubHeading>
           <P>
@@ -1522,7 +1484,7 @@ LibreL2CSr50.pt`}</CodeBlock>
           {/* ────────────── PREDICTION ────────────── */}
           <SectionHeading id="prediction" icon={Crosshair}>Prediction</SectionHeading>
           <P>
-            The single-GPU prediction path is heavily tested for YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Other families and tasks use the same API but are experimental in v1.3.0.
+            The single-GPU prediction path is heavily tested for YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Other families and tasks use the same API but are experimental in v1.2.0.
           </P>
 
           <SubHeading>Basic prediction</SubHeading>
@@ -1634,37 +1596,6 @@ boxes_np = result.boxes.numpy()`}</CodeBlock>
           <CodeBlock language="python">{`# Only detect people (class 0) and cars (class 2)
 result = model("image.jpg", classes=[0, 2])`}</CodeBlock>
 
-          <SubHeading>Batched in-memory inference</SubHeading>
-          <P>
-            New in v1.3.0: <InlineCode>model.predict()</InlineCode> accepts a list or tuple of
-            in-memory images (NumPy arrays, PIL images, or tensors) and runs them as a true
-            stacked-forward batch. Set <InlineCode>batch &gt; 1</InlineCode> to actually batch the
-            forward pass on families that support it; a list of results is returned, one per input.
-          </P>
-          <CodeBlock language="python">{`import numpy as np
-from libreyolo import LibreYOLO
-
-model = LibreYOLO("LibreYOLO9c.pt")
-
-frames = [
-    np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8),
-    np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8),
-    np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8),
-]
-
-results = model(frames, batch=4)   # list/tuple -> true batched inference
-for r in results:
-    print(len(r), r.boxes.xyxy.shape)`}</CodeBlock>
-
-          <SubHeading>Model info</SubHeading>
-          <P>
-            <InlineCode>model.info()</InlineCode> (new in v1.3.0) returns a JSON-friendly dict of
-            family, size, task, parameter counts, input size, and class names, and logs a
-            human-readable summary when <InlineCode>verbose=True</InlineCode>.
-          </P>
-          <CodeBlock language="python">{`meta = model.info(detailed=False, verbose=True)
-# meta -> {"family": ..., "size": ..., "task": ..., "params": ..., "imgsz": ..., "names": {...}, ...}`}</CodeBlock>
-
           <Divider />
 
           {/* ────────────── TILED INFERENCE ────────────── */}
@@ -1673,7 +1604,7 @@ for r in results:
             For images much larger than the model's input size (e.g., satellite imagery, drone footage), tiled inference splits the image into overlapping tiles, runs detection on each, and merges results.
           </P>
           <P>
-            Tiling is detection-only in v1.3.0. It rejects segmentation masks, and it cannot be combined with <InlineCode>augment=True</InlineCode>.
+            Tiling is detection-only in v1.2.0 dev. It rejects segmentation masks, and it cannot be combined with <InlineCode>augment=True</InlineCode>.
           </P>
           <CodeBlock language="python">{`result = model(
     "large_aerial_image.jpg",
@@ -1753,11 +1684,7 @@ with VideoSource("clip.mp4", vid_stride=1) as src, \\
           {/* ────────────── TRACKING ────────────── */}
           <SectionHeading id="tracking" icon={Activity}>Tracking</SectionHeading>
           <P>
-            LibreYOLO ships two motion trackers that consume <InlineCode>Results</InlineCode> from any
-            detector and add persistent track IDs: <strong className="text-surface-800 dark:text-white">ByteTrack</strong> (default)
-            and <strong className="text-surface-800 dark:text-white">OC-SORT</strong> (new in v1.3.0), which is more robust to
-            occlusion and non-linear motion. Tracking is most tested with single-GPU YOLO9 detection and
-            RF-DETR detection; other detection families are experimental in v1.3.0.
+            LibreYOLO ships a ByteTrack multi-object tracker that consumes <InlineCode>Results</InlineCode> from any detector and adds persistent track IDs. It is most tested with single-GPU YOLO9 detection and RF-DETR detection; other detection families are experimental in v1.2.0.
           </P>
 
           <SubHeading>Install</SubHeading>
@@ -1821,66 +1748,24 @@ tracker = ByteTracker(config=cfg)`}</CodeBlock>
           <SubHeading>Reset between clips</SubHeading>
           <CodeBlock language="python">{`tracker.reset()   # clears tracked / lost / removed lists and the ID counter`}</CodeBlock>
 
-          <SubHeading>OC-SORT (occlusion-robust)</SubHeading>
-          <P>
-            Select OC-SORT with <InlineCode>tracker=&quot;ocsort&quot;</InlineCode> on{' '}
-            <InlineCode>model.track()</InlineCode>. ByteTrack stays the default. With OC-SORT,{' '}
-            <InlineCode>track_conf</InlineCode> maps to the tracker&apos;s{' '}
-            <InlineCode>det_thresh</InlineCode> (for ByteTrack it maps to{' '}
-            <InlineCode>track_high_thresh</InlineCode>).
-          </P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
-
-model = LibreYOLO("LibreYOLO9c.pt")
-
-for result in model.track(
-    "clip.mp4",
-    tracker="ocsort",      # "bytetrack" (default) or "ocsort"
-    track_conf=0.25,       # maps to OC-SORT det_thresh
-    iou=0.45,
-    save=True,
-):
-    print(result.frame_idx, result.track_id)`}</CodeBlock>
-
-          <P>
-            Pass an <InlineCode>OCSortConfig</InlineCode> for full control. Supplying a config
-            instance selects the tracker by type, so the <InlineCode>tracker=</InlineCode> string
-            is then ignored.
-          </P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO, OCSortConfig
-
-cfg = OCSortConfig(
-    det_thresh=0.25,     # boxes above this drive association and spawn new tracks
-    max_age=30,          # frames a track survives without an observation
-    min_hits=3,          # consecutive hits before a track is reported
-    iou_threshold=0.3,   # minimum IoU for a valid association
-    delta_t=3,           # frame span used to estimate velocity direction
-    inertia=0.2,         # weight of the velocity-direction (momentum) term
-    use_byte=False,      # enable the BYTE low-score recovery pass
-)
-
-model = LibreYOLO("LibreYOLO9c.pt")
-for result in model.track("clip.mp4", tracker_config=cfg, save=True):
-    print(result.frame_idx, result.track_id)`}</CodeBlock>
-
           <Divider />
 
           {/* ────────────── SEGMENTATION ────────────── */}
           <SectionHeading id="segmentation" icon={Scissors}>Segmentation</SectionHeading>
           <ValidationScopeCallout />
           <P>
-            RF-DETR segmentation is the segmentation path in v1.3.0 and is the heavily tested option. EdgeCrafter (<InlineCode>-seg</InlineCode>) also exposes a segmentation head but is experimental. YOLO9 no longer ships a segmentation head: it is detect-only as of v1.3.0.
+            RF-DETR segmentation is the heavily tested segmentation path in v1.2.0. YOLO9 segmentation and EdgeCrafter segmentation are available through the same <InlineCode>-seg</InlineCode> suffix, but they are experimental.
           </P>
 
           <SubHeading>Run segmentation</SubHeading>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
-# RF-DETR segmentation, the heavily tested segmentation path
+# RF-DETR segmentation, heavily tested on single GPU
 model = LibreYOLO("LibreRFDETRs-seg.pt")
 result = model("photo.jpg")
 
-# EdgeCrafter segmentation is also available but experimental
-# model = LibreYOLO("LibreECs-seg.pt")
+# YOLO9 segmentation is available but experimental in v1.2.0
+# model = LibreYOLO("LibreYOLO9c-seg.pt")
 
 # Segmentation returns boxes + masks
 print(result.boxes.xyxy)        # bounding boxes (N, 4)
@@ -1907,7 +1792,7 @@ result.masks.numpy()`}</CodeBlock>
 
           <SubHeading>Training segmentation</SubHeading>
           <P>
-            RF-DETR segmentation uses the RF-DETR COCO-format training pipeline and is part of the heavily tested single-GPU scope. EdgeCrafter segmentation training is available but experimental. YOLO9 segmentation training was removed in v1.3.0.
+            RF-DETR segmentation uses the RF-DETR COCO-format training pipeline and is part of the heavily tested single-GPU scope. YOLO9 segmentation and EdgeCrafter segmentation training are available but experimental in v1.2.0.
           </P>
 
           <Divider />
@@ -1915,10 +1800,7 @@ result.masks.numpy()`}</CodeBlock>
           {/* ────────────── POSE ESTIMATION ────────────── */}
           <SectionHeading id="pose" icon={PersonStanding}>Pose Estimation</SectionHeading>
           <P>
-            Pose (human keypoint) estimation runs on <InlineCode>YOLO-NAS (-pose)</InlineCode>,{' '}
-            <InlineCode>EdgeCrafter (-pose)</InlineCode>, and, new in v1.3.0, an{' '}
-            <InlineCode>RF-DETR (-pose)</InlineCode> preview. Each pose model is single-class
-            (&quot;person&quot;) with 17 COCO keypoints.
+            Pose (human keypoint) estimation is supported on <InlineCode>YOLO-NAS (-pose)</InlineCode> and <InlineCode>EdgeCrafter (-pose)</InlineCode>. Each pose model is single-class (&quot;person&quot;) with 17 COCO keypoints.
           </P>
 
           <SubHeading>Run pose</SubHeading>
@@ -1935,16 +1817,6 @@ result = model("people.jpg")
 print(result.boxes.xyxy)          # person boxes (N, 4)
 print(result.keypoints.xy.shape)  # (N, 17, 2) pixel coordinates`}</CodeBlock>
 
-          <P>
-            <SupportBadge variant="experimental">Preview</SupportBadge>{' '}
-            RF-DETR pose ships a single checkpoint at size <InlineCode>x</InlineCode> only:{' '}
-            <InlineCode>LibreRFDETRx-pose.pt</InlineCode>. It is a research preview in v1.3.0.
-          </P>
-          <CodeBlock language="python">{`# RF-DETR pose preview (size x only)
-model = LibreYOLO("LibreRFDETRx-pose.pt")
-result = model("people.jpg")
-print(result.keypoints.xy.shape)  # (N, 17, 2)`}</CodeBlock>
-
           <SubHeading>Keypoint API</SubHeading>
           <CodeBlock language="python">{`result.keypoints.xy        # (N, K, 2) absolute pixel coords
 result.keypoints.xyn       # (N, K, 2) normalized to [0, 1]
@@ -1958,7 +1830,7 @@ result.keypoints.numpy()`}</CodeBlock>
           <CodeBlock language="python">{`model("people.jpg", save=True)  # draws boxes + skeleton`}</CodeBlock>
 
           <P>
-            Pose training is supported for YOLO-NAS; EdgeCrafter pose is currently inference-only. RF-DETR pose is a preview (size <InlineCode>x</InlineCode> only). YOLO9 is detect-only and ships no pose checkpoints.
+            Pose training is supported for YOLO-NAS; EdgeCrafter pose is currently inference-only. YOLO9 and RF-DETR don&apos;t ship pose checkpoints yet.
           </P>
 
           <Divider />
@@ -1966,7 +1838,7 @@ result.keypoints.numpy()`}</CodeBlock>
           {/* ────────────── GAZE ESTIMATION ────────────── */}
           <SectionHeading id="gaze" icon={Eye}>Gaze Estimation</SectionHeading>
           <P>
-            Gaze direction estimation is provided by the <InlineCode>LibreL2CS</InlineCode> family, an L2CS-Net port with a ResNet trunk and two angle-bin classification heads. It is a two-stage model: an upstream face detector locates faces, then the gaze head predicts per-face pitch and yaw in radians. It is inference-only and experimental in v1.3.0.
+            Gaze direction estimation is provided by the <InlineCode>LibreL2CS</InlineCode> family, an L2CS-Net port with a ResNet trunk and two angle-bin classification heads. It is a two-stage model: an upstream face detector locates faces, then the gaze head predicts per-face pitch and yaw in radians. It is inference-only and experimental in v1.2.0.
           </P>
 
           <SubHeading>Install</SubHeading>
@@ -2005,218 +1877,10 @@ for i in range(len(result.gaze)):
 
           <Divider />
 
-          {/* ────────────── CLASSIFICATION ────────────── */}
-          <SectionHeading id="classification" icon={Tags}>Classification</SectionHeading>
-          <P>
-            New in v1.3.0: whole-image classification. Two families ship, and they target different needs. <InlineCode>LibreMobileNetV4</InlineCode> is the production classifier (Apache-2.0 ImageNet-1k weights, exportable to ONNX). <InlineCode>LibreDINOv2</InlineCode> with <InlineCode>task=classify</InlineCode> is a DINOv2 backbone plus linear probe, ideal for transfer learning, but its published weights are demo-grade and it cannot export yet. Classification is new in v1.3.0, so details may still change.
-          </P>
-
-          <DocTable
-            headers={['Family', 'Checkpoints', 'Input', 'Weights', 'Fine-tune', 'ONNX export']}
-            rows={[
-              ['LibreMobileNetV4', 'LibreMobileNetV4{s,m,l}-cls.pt', '224 / 224 / 256', 'Apache-2.0 ImageNet-1k (production)', 'Cross-entropy', 'Yes'],
-              ['LibreDINOv2 (classify)', 'LibreDINOv2{n,s,m,l}-cls.pt', '224', 'Imagenette demo-grade (10 classes)', 'Linear probe', 'Not supported'],
-            ]}
-          />
-
-          <SubHeading>LibreMobileNetV4 (production classifier)</SubHeading>
-          <div className="flex flex-wrap gap-2 mb-4">
-            <SupportBadge variant="validated">Apache-2.0 ImageNet-1k weights</SupportBadge>
-            <SupportBadge variant="experimental">New in v1.3.0</SupportBadge>
-          </div>
-          <P>
-            A native MobileNetV4-conv port (derived from timm) whose 1000-class ImageNet-1k weights load bit-identically. Sizes <InlineCode>s</InlineCode> / <InlineCode>m</InlineCode> run at 224, <InlineCode>l</InlineCode> at 256. Checkpoints:
-          </P>
-          <Checkpoints names={['LibreMobileNetV4s-cls.pt', 'LibreMobileNetV4m-cls.pt', 'LibreMobileNetV4l-cls.pt']} />
-
-          <P>Load and predict. A single image returns one <InlineCode>Results</InlineCode>; read <InlineCode>.probs</InlineCode> directly off it (pass a list to get a list back).</P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
-
-# MobileNetV4-conv-Small, Apache-2.0 ImageNet-1k weights (auto-downloaded if missing)
-model = LibreYOLO("LibreMobileNetV4s-cls.pt")
-result = model("cat.jpg")            # single image -> one Results
-
-probs = result.probs                 # whole-image class vector, length = num classes
-print(probs.top1, probs.top1conf)    # top-1 class id (int) and its confidence
-print(probs.top5, probs.top5conf)    # 5 class ids and 5 confidences
-print(result.names[probs.top1])      # human-readable class name`}</CodeBlock>
-
-          <P>Fine-tune to a custom class set (ImageFolder layout). The head is rebuilt to the dataset class count automatically; the ImageNet-pretrained backbone transfers cleanly.</P>
-          <CodeBlock language="python">{`from libreyolo import LibreMobileNetV4
-
-model = LibreMobileNetV4(size="s")   # ImageNet-pretrained backbone
-model.train(
-    data="imagenette160",            # known name, dataset root, or .zip URL
-    epochs=5,
-    batch=64,
-    lr0=1e-3,                        # AdamW + cosine, 1-epoch warmup
-    imgsz=224,
-)`}</CodeBlock>
-
-          <P>Validate (top-1 / top-5 accuracy):</P>
-          <CodeBlock language="python">{`model = LibreYOLO("LibreMobileNetV4s-cls.pt")
-metrics = model.val(data="imagenette160")
-print(metrics["metrics/accuracy_top1"])
-print(metrics["metrics/accuracy_top5"])`}</CodeBlock>
-
-          <P>Export to ONNX (verified bit-exact against eager). The ONNX graph emits a single logits tensor.</P>
-          <CodeBlock language="python">{`model = LibreYOLO("LibreMobileNetV4s-cls.pt")
-path = model.export(format="onnx", imgsz=224)   # single output: logits [batch, num_classes]
-
-# Interop note: the ONNX output is RAW LOGITS, not softmaxed. The PyTorch
-# predict path applies softmax for you; non-Python consumers must apply it
-# themselves before reading probabilities.`}</CodeBlock>
-
-          <SubHeading>LibreDINOv2 classify (linear probe / transfer)</SubHeading>
-          <div className="flex flex-wrap gap-2 mb-4">
-            <SupportBadge variant="experimental">Demo-grade weights (Imagenette)</SupportBadge>
-            <SupportBadge variant="experimental">No export</SupportBadge>
-          </div>
-          <P>
-            A frozen-style DINOv2-S encoder with a trainable linear head, run at 224. The <InlineCode>n</InlineCode> / <InlineCode>s</InlineCode> / <InlineCode>m</InlineCode> / <InlineCode>l</InlineCode> sizes control only the projector width: all four share the same DINOv2-S encoder, so the published checkpoints land at near-identical accuracy. The shipped <InlineCode>-cls</InlineCode> weights are demo-grade (trained on Imagenette, 10 classes), so treat this family as the transfer-learning option, not a drop-in 1000-class classifier. Checkpoints:
-          </P>
-          <Checkpoints names={['LibreDINOv2n-cls.pt', 'LibreDINOv2s-cls.pt', 'LibreDINOv2m-cls.pt', 'LibreDINOv2l-cls.pt']} link={false} />
-
-          <P>Load and predict (same <InlineCode>Probs</InlineCode> surface as MobileNetV4):</P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
-
-model = LibreYOLO("LibreDINOv2s-cls.pt")   # DINOv2-S backbone + linear probe (224)
-result = model("springer.jpg")
-print(result.probs.top1, result.probs.top1conf)`}</CodeBlock>
-
-          <P>
-            Fine-tune for transfer. Build a fresh model with <InlineCode>task=&quot;classify&quot;</InlineCode> for a brand-new head, or load a shipped <InlineCode>-cls</InlineCode> checkpoint and continue training. For the best accuracy, fine-tune from a shipped checkpoint rather than a fresh head, and keep the default <InlineCode>lr=1e-4</InlineCode> (higher learning rates converge worse).
-          </P>
-          <CodeBlock language="python">{`from libreyolo import LibreDINOv2
-
-# Fresh DINOv2 backbone + random linear head, sized to the dataset
-model = LibreDINOv2(size="s", task="classify", nb_classes=3)
-model.train(data="path/to/imagefolder", epochs=5, lr=1e-4, batch=4)
-
-# Validate the same way (top-1 / top-5)
-metrics = model.val(data="path/to/imagefolder")
-print(metrics["metrics/accuracy_top1"])`}</CodeBlock>
-
-          <P>Export is not implemented for LibreDINOv2. If you need an exportable classifier, use LibreMobileNetV4.</P>
-          <CodeBlock language="python">{`model = LibreYOLO("LibreDINOv2s-cls.pt")
-model.export(format="onnx")
-# raises NotImplementedError: Export is not yet implemented for LibreDINOv2.`}</CodeBlock>
-
-          <SubHeading>Dataset layout (both families)</SubHeading>
-          <P>
-            Classification uses an ImageNet-style ImageFolder tree (folders, not label files). Class index is assigned by sorted folder name. <InlineCode>data=</InlineCode> accepts a dataset root, a known name (e.g. <InlineCode>imagenette160</InlineCode>), or a <InlineCode>.zip</InlineCode> URL.
-          </P>
-          <CodeBlock language="text">{`dataset_root/
-  train/                # required; one subfolder per class
-    class_a/img001.jpg
-    class_a/img002.jpg
-    class_b/img003.jpg
-  val/                  # required for validation; same class folders as train
-    class_a/img010.jpg
-    class_b/img011.jpg`}</CodeBlock>
-
-          <SubHeading>Results.probs reference</SubHeading>
-          <CodeBlock language="python">{`probs = result.probs        # Probs payload, 1-D vector of length = num classes
-probs.data                  # raw tensor / ndarray of class probabilities
-probs.top1                  # int   - argmax class id
-probs.top5                  # list  - 5 class ids, highest first
-probs.top1conf              # float - confidence of the top-1 class
-probs.top5conf              # 5 confidences, aligned with probs.top5`}</CodeBlock>
-
-          <ul className="space-y-2 my-4">
-            <FeatureItem>MobileNetV4 weights are production grade (Apache-2.0 ImageNet-1k, bit-identical load). DINOv2 classify weights are demo-grade (Imagenette, 10 classes).</FeatureItem>
-            <FeatureItem>There is no LibreRFDETR classifier in v1.3.0. Classification moved into the LibreMobileNetV4 and LibreDINOv2 families; legacy LibreRFDETR*-cls checkpoints are rejected on load.</FeatureItem>
-            <FeatureItem>A fresh DINOv2 fine-tune with the default recipe tops out around 0.93 top-1 on Imagenette, below the shipped 0.976. Fine-tune from a shipped -cls checkpoint to recover accuracy.</FeatureItem>
-            <FeatureItem>ONNX classify output is raw logits. Apply softmax in non-Python consumers.</FeatureItem>
-            <FeatureItem>Predicting a single image returns one Results. Read result.probs directly, or pass a list and index the list: model([&quot;a.jpg&quot;])[0].probs.</FeatureItem>
-          </ul>
-
-          <Divider />
-
-          {/* ────────────── DEPTH ESTIMATION ────────────── */}
-          <SectionHeading id="depth" icon={Mountain}>Depth Estimation</SectionHeading>
-          <div className="flex flex-wrap gap-2 mb-4">
-            <SupportBadge variant="experimental">New in v1.3.0</SupportBadge>
-            <SupportBadge variant="experimental">Inference and val only</SupportBadge>
-          </div>
-          <P>
-            New in v1.3.0: monocular depth via <InlineCode>LibreDepthAnythingV2</InlineCode>, a Depth Anything V2 port (DINOv2 encoder plus DPT head, NeurIPS 2024). It predicts a dense relative inverse-depth map: higher values are closer to the camera, with no metric unit implied. Sizes <InlineCode>s</InlineCode> / <InlineCode>b</InlineCode> / <InlineCode>l</InlineCode> / <InlineCode>g</InlineCode> map to ViT-S / B / L / G and all run at 518. Depth is new in v1.3.0 and supports inference and zero-shot validation only: no training and no export.
-          </P>
-          <P>
-            Checkpoints. Only the ViT-S checkpoint is Apache-2.0 and auto-hosted: <Checkpoints names={['LibreDepthAnythingV2s-depth.pt']} link={false} />. The larger encoders <Checkpoints names={['LibreDepthAnythingV2b-depth.pt', 'LibreDepthAnythingV2l-depth.pt', 'LibreDepthAnythingV2g-depth.pt']} link={false} /> are CC-BY-NC-4.0 and are not redistributed by LibreYOLO; convert the official upstream checkpoints with <InlineCode>weights/convert_depth_anything_v2_weights.py</InlineCode>.
-          </P>
-
-          <SubHeading>Run depth estimation</SubHeading>
-          <P>Input <InlineCode>imgsz</InlineCode> must be divisible by 14 (the DINOv2 patch grid). The depth map is returned on the original image canvas.</P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
-
-# ViT-S encoder, Apache-2.0 weights (commercial use OK)
-model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")
-result = model("street.jpg")
-
-depth = result.depth_map          # DepthMap payload, (H, W) float on the original canvas
-print(depth.data.shape)           # (H, W)
-print(depth.min, depth.max, depth.mean)   # relative inverse depth: higher = closer
-norm = depth.normalized()         # rescaled to [0, 1] over finite values`}</CodeBlock>
-
-          <SubHeading>DepthMap API</SubHeading>
-          <CodeBlock language="python">{`depth = result.depth_map
-depth.data          # (H, W) float tensor / ndarray, relative inverse depth
-depth.min           # min over finite values
-depth.max           # max over finite values
-depth.mean          # mean over finite values
-depth.normalized()  # (H, W) rescaled to [0, 1]; non-finite pixels become 0
-
-depth.cpu()
-depth.numpy()`}</CodeBlock>
-
-          <SubHeading>Zero-shot validation</SubHeading>
-          <P>
-            Validation runs zero-shot through the shared depth validator and reports standard depth metrics (AbsRel, RMSE, and delta thresholds). The validator letterboxes to a fixed square and excludes padded pixels; because predict uses Depth Anything&apos;s native keep-aspect resize, non-square val metrics are a documented approximation of predict.
-          </P>
-          <CodeBlock language="python">{`metrics = model.val(data="depth_dataset.yaml")
-print(metrics["metrics/abs_rel"])   # absolute relative error (lower is better)
-print(metrics["metrics/rmse"])      # root mean squared error
-print(metrics["metrics/delta1"])    # fraction within a 1.25x ratio (higher is better)`}</CodeBlock>
-
-          <SubHeading>Not supported</SubHeading>
-          <CodeBlock language="python">{`model.train(data="...")          # raises NotImplementedError - DA V2 is inference + val only
-model.export(format="onnx")      # raises NotImplementedError - depth export is out of scope`}</CodeBlock>
-
-          <ul className="space-y-2 my-4">
-            <FeatureItem>Licensing is split: ViT-S (size s) weights are Apache-2.0 and fine for commercial use. ViT-B / ViT-L / ViT-G (sizes b / l / g) are CC-BY-NC-4.0 (non-commercial) and are not redistributed by LibreYOLO.</FeatureItem>
-            <FeatureItem>For commercial use, stick to size s.</FeatureItem>
-            <FeatureItem>Depth is relative inverse depth with no metric unit. Calibrate on your side if you need meters.</FeatureItem>
-            <FeatureItem>imgsz must be divisible by 14. Batched predict is disabled because keep-aspect resize yields variable per-image sizes.</FeatureItem>
-          </ul>
-
-          <Divider />
-
-          {/* ────────────── POINT LOCALIZATION ────────────── */}
-          <SectionHeading id="point-localization" icon={MapPin}>Point Localization</SectionHeading>
-          <div className="flex flex-wrap gap-2 mb-4">
-            <SupportBadge variant="experimental">Experimental</SupportBadge>
-          </div>
-          <P>
-            <InlineCode>LibreFOMO</InlineCode> is a FOMO-style point localizer (sizes <InlineCode>s</InlineCode> / <InlineCode>m</InlineCode> / <InlineCode>l</InlineCode>) for centroid-style detection: instead of boxes, each detection is a single image coordinate. Predictions arrive as <InlineCode>result.points</InlineCode>. Pretrained LibreFOMO weights are not auto-downloaded, so pass a local checkpoint path (or train from scratch, which is experimental and requires <InlineCode>allow_experimental=True</InlineCode>).
-          </P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
-
-# LibreFOMO weights are not hosted by LibreYOLO - pass a local checkpoint
-model = LibreYOLO("path/to/LibreFOMOm-point.pt")
-result = model("scene.jpg")
-
-points = result.points       # Points payload, (N, 4) rows: x, y, class, confidence
-print(points.xy)             # (N, 2) absolute pixel coords
-print(points.xyn)            # (N, 2) normalized to [0, 1]
-print(points.cls, points.conf)`}</CodeBlock>
-
-          <Divider />
-
           <SectionHeading id="training" icon={GraduationCap}>Training</SectionHeading>
           <ValidationScopeCallout />
           <P>
-            The heavily tested training paths are single-GPU YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Other model-family trainers and multi-GPU workflows are available but experimental. YOLO9 is detect-only in v1.3.0, so there is no YOLO9 segmentation or pose training.
+            The heavily tested training paths are single-GPU YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Other model-family trainers, YOLO9 segmentation training, and multi-GPU workflows are available but experimental in v1.2.0.
           </P>
 
           <SubHeading>YOLO9 - CNN flagship training</SubHeading>
@@ -2251,16 +1915,12 @@ results = model.train(
     amp=True,                # automatic mixed precision
     patience=50,             # early stopping patience
     resume=False,            # resume from loaded checkpoint
-    pretrained=True,         # transfer-learning init (True, a path, or None)
-    cache="disk",            # cache decoded images: False | True/"ram" | "disk"
-    freeze=10,               # freeze first N groups, or a list of indices / module names
-    save_plots=True,         # write final validation plots to the run dir
 )
 
 print(f"Best mAP50-95: {results['best_mAP50_95']:.3f}")
 print(f"Best checkpoint: {results['best_checkpoint']}")`}</CodeBlock>
           <P>
-            After training completes, the model instance is automatically reloaded with the best weights so you can call <InlineCode>model(...)</InlineCode> immediately. <InlineCode>freeze</InlineCode>, <InlineCode>cache</InlineCode>, <InlineCode>pretrained</InlineCode>, and <InlineCode>save_plots</InlineCode> are new in v1.3.0 and accepted across the trainer-backed families.
+            After training completes, the model instance is automatically reloaded with the best weights so you can call <InlineCode>model(...)</InlineCode> immediately. YOLO9 segmentation training is supported via <InlineCode>LibreYOLO(&quot;LibreYOLO9c-seg.pt&quot;)</InlineCode>, but it is experimental in v1.2.0.
           </P>
 
           <SubHeading>RF-DETR - transformer flagship training</SubHeading>
@@ -2276,47 +1936,7 @@ results = model.train(
     output_dir="runs/train/rfdetr_exp",
 )`}</CodeBlock>
           <P>
-            RF-DETR has its own training signature (<InlineCode>batch_size</InlineCode>, <InlineCode>lr</InlineCode>, <InlineCode>output_dir</InlineCode>) but shares LibreYOLO&apos;s dataset loader. Pass a <InlineCode>data.yaml</InlineCode> for detection or segmentation in either YOLO TXT or native COCO JSON layout — see <a href="#dataset-format" className="text-libre-600 dark:text-libre-400 hover:underline">Dataset Format</a>.
-          </P>
-
-          <SubHeading>LoRA fine-tuning (RF-DETR)</SubHeading>
-          <P>
-            <SupportBadge variant="experimental">Experimental</SupportBadge>{' '}
-            <InlineCode>lora=True</InlineCode> injects LoRA adapters into the RF-DETR backbone for
-            low-VRAM fine-tuning. It requires the optional <InlineCode>peft</InlineCode> dependency
-            (<InlineCode>pip install &quot;libreyolo[lora]&quot;</InlineCode>) and is currently limited to
-            RF-DETR; other families raise a clear error rather than ignoring the flag.
-          </P>
-          <CodeBlock language="python">{`model = LibreYOLO("LibreRFDETRs.pt")
-results = model.train(data="data.yaml", epochs=50, lora=True)`}</CodeBlock>
-
-          <SubHeading>Experiment loggers</SubHeading>
-          <P>
-            New in v1.3.0: pass <InlineCode>loggers=</InlineCode> to stream metrics to TensorBoard,
-            MLflow, or Weights &amp; Biases. Accepts a name (<InlineCode>&quot;tensorboard&quot;</InlineCode>,{' '}
-            <InlineCode>&quot;mlflow&quot;</InlineCode>, <InlineCode>&quot;wandb&quot;</InlineCode>), a configured logger
-            instance, or an iterable mixing both. Each backend is an optional extra
-            (<InlineCode>libreyolo[tensorboard]</InlineCode>, <InlineCode>[mlflow]</InlineCode>,{' '}
-            <InlineCode>[wandb]</InlineCode>).
-          </P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
-from libreyolo.training.loggers import MLflowLogger
-
-model = LibreYOLO("LibreYOLO9c.pt")
-
-# By name
-model.train(data="coco128.yaml", loggers="tensorboard")
-
-# Mix configured instances and names
-model.train(
-    data="coco128.yaml",
-    loggers=[MLflowLogger(experiment_name="my-exp"), "tensorboard"],
-)`}</CodeBlock>
-          <P>
-            Loggers are a Python-API feature only. There is no CLI flag for them; the rest of the
-            new training knobs (<InlineCode>--task</InlineCode>, <InlineCode>--cache</InlineCode>,{' '}
-            <InlineCode>--lora</InlineCode>, <InlineCode>--freeze</InlineCode>,{' '}
-            <InlineCode>--save-plots</InlineCode>) are exposed on the CLI.
+            RF-DETR has its own training signature (<InlineCode>batch_size</InlineCode>, <InlineCode>lr</InlineCode>, <InlineCode>output_dir</InlineCode>) but it uses LibreYOLO&apos;s dataset config loader. Pass a <InlineCode>data.yaml</InlineCode> for detection or segmentation; COCO/Roboflow-style annotation layouts can be referenced from that config.
           </P>
 
           <SubHeading>Training results dict</SubHeading>
@@ -2346,7 +1966,7 @@ names: ["cat", "dog", "bird"]`}</CodeBlock>
 
           <SubHeading>Additional training paths</SubHeading>
           <P>
-            Other families have trainer hooks, but they are not the recommended path in v1.3.0. Keep new work on YOLO9 detection or RF-DETR detection/segmentation; use experimental trainers only for compatibility, benchmark reproduction, or targeted research. PicoDet, RTMDet, and EC training require an explicit <InlineCode>allow_experimental=True</InlineCode> acknowledgement.
+            Other families have trainer hooks, but they are not the recommended path in v1.2.0. Keep new work on YOLO9 detection or RF-DETR detection/segmentation; use experimental trainers only for compatibility, benchmark reproduction, or targeted research. DAMO-YOLO, PicoDet, RTMDet, and EC training require an explicit <InlineCode>allow_experimental=True</InlineCode> acknowledgement.
           </P>
 
           <SubHeading>Training from a YAML config</SubHeading>
@@ -2367,7 +1987,7 @@ model.train(data="coco128.yaml", batch=8, nbs=64)`}</CodeBlock>
 
           <SubHeading>Distributed training (DDP, experimental)</SubHeading>
           <P>
-            YOLO9 and RF-DETR support multi-GPU training through PyTorch DistributedDataParallel, but multi-GPU is outside the heavily tested v1.3.0 scope. Launch the training script with <InlineCode>torchrun</InlineCode>:
+            YOLO9 and RF-DETR support multi-GPU training through PyTorch DistributedDataParallel, but multi-GPU is outside the heavily tested v1.2.0 scope. Launch the training script with <InlineCode>torchrun</InlineCode>:
           </P>
           <CodeBlock language="bash">{`# 4-GPU node
 torchrun --nproc_per_node=4 train_yolo9.py
@@ -2395,7 +2015,6 @@ model.train(data="coco128.yaml", epochs=300, batch=16)`}</CodeBlock>
     split="val",           # "val", "test", or "train"
     save_json=False,       # save predictions as COCO JSON
     verbose=True,          # print per-class metrics
-    plots=True,            # save validation plots (metrics, per-class AP, confusion matrix); alias for save_plots
 )
 
 print(f"mAP50:    {results['metrics/mAP50']:.3f}")
@@ -2432,13 +2051,7 @@ print(f"mAP50-95: {results['metrics/mAP50-95']:.3f}")`}</CodeBlock>
     "speed/images_seen": 1382,
 }`}</CodeBlock>
           <P>
-            Segmentation validation returns mask metrics with <InlineCode>(M)</InlineCode> suffixes alongside
-            bbox metrics with <InlineCode>(B)</InlineCode> suffixes; OBB validation adds{' '}
-            <InlineCode>(OBB)</InlineCode> metrics. Pose validation returns COCO keypoint metrics through{' '}
-            <InlineCode>PoseValidator</InlineCode>. v1.3.0 adds validators for classify (top-1 / top-5),
-            semantic (mIoU / pixel accuracy), point, and depth (zero-shot). Pass{' '}
-            <InlineCode>plots=True</InlineCode> (or <InlineCode>--save-plots</InlineCode> on the CLI) to write
-            metric, per-class AP, confusion-matrix, and sample plots to the run directory.
+            Segmentation validation returns mask metrics with <InlineCode>(M)</InlineCode> suffixes alongside bbox metrics with <InlineCode>(B)</InlineCode> suffixes. Pose validation returns COCO keypoint metrics through <InlineCode>PoseValidator</InlineCode>.
           </P>
 
           <Divider />
@@ -2446,7 +2059,7 @@ print(f"mAP50-95: {results['metrics/mAP50-95']:.3f}")`}</CodeBlock>
           {/* ────────────── EXPORT ────────────── */}
           <SectionHeading id="export" icon={Upload}>Export</SectionHeading>
           <P>
-            Export PyTorch models to ONNX, TorchScript, TensorRT, OpenVINO, NCNN, CoreML, or (new in v1.3.0) TFLite for deployment. TensorRT now covers every model family. The heavily tested export paths remain single-GPU YOLO9 detection, RF-DETR detection, and RF-DETR segmentation.
+            Export PyTorch models to ONNX, TorchScript, TensorRT, OpenVINO, NCNN, or CoreML for deployment. The heavily tested export and runtime-backend paths are single-GPU YOLO9 detection, RF-DETR detection, and RF-DETR segmentation. Other families and tasks are experimental.
           </P>
 
           <SubHeading>Quick export</SubHeading>
@@ -2466,23 +2079,20 @@ model.export(format="openvino")
 model.export(format="ncnn")
 
 # CoreML (.mlpackage, macOS runtime)
-model.export(format="coreml")
-
-# TFLite (RF-DETR detect/seg/pose + YOLO9 detect; experimental, needs Python 3.12+)
-model.export(format="tflite")`}</CodeBlock>
+model.export(format="coreml")`}</CodeBlock>
 
           <SubHeading>All export parameters</SubHeading>
           <CodeBlock language="python">{`path = model.export(
-    format="onnx",            # "onnx", "torchscript", "tensorrt", "openvino", "ncnn", "coreml", or "tflite"
+    format="onnx",            # "onnx", "torchscript", "tensorrt", "openvino", "ncnn", or "coreml"
     output_path="model.onnx", # output file (auto-generated if None)
-    imgsz=640,                # input resolution (default: model's native); also accepts (h, w) for rectangular
+    imgsz=640,                # input resolution (default: model's native)
     opset=None,               # ONNX opset (auto: 13, or 17 for wrappers that need it)
     simplify=True,            # run onnxsim graph simplification
-    dynamic=True,             # enable dynamic batch axis (ONNX); TFLite requires static shapes
+    dynamic=True,             # enable dynamic batch axis
     half=False,               # export in FP16
     batch=1,                  # batch size for static graph
     device=None,              # device to trace on (default: model's current device)
-    int8=False,               # INT8 quantization: TensorRT, OpenVINO, or ONNX (YOLO9 detection only)
+    int8=False,               # INT8 quantization (TensorRT / OpenVINO only)
     data=None,                # calibration dataset for INT8
     fraction=1.0,             # fraction of calibration data to use
     allow_download_scripts=False, # allow data.yaml download hooks during calibration
@@ -2494,64 +2104,13 @@ model.export(format="tflite")`}</CodeBlock>
     gpu_device=0,             # GPU device index for TensorRT
     trt_config=None,          # optional TensorRT YAML config path
     compute_units="all",      # CoreML routing: all, cpu_only, cpu_and_gpu, cpu_and_ne
-    nms=False,                # embed NMS in the graph (ONNX YOLO9 detection, or CoreML)
-    iou=0.45,                 # embedded-NMS IoU threshold
-    conf=0.25,                # embedded-NMS confidence threshold
-    max_det=300,              # embedded-NMS max detections (ONNX only)
+    nms=False,                # CoreML embedded NMS where supported
+    iou=0.45,                 # CoreML embedded NMS IoU threshold
+    conf=0.25,                # CoreML embedded NMS confidence threshold
     verbose=False,            # verbose logging
 )`}</CodeBlock>
           <P>
             OpenVINO INT8 export additionally requires <InlineCode>nncf</InlineCode>. NCNN export writes a directory containing <InlineCode>model.ncnn.param</InlineCode>, <InlineCode>model.ncnn.bin</InlineCode>, and <InlineCode>metadata.yaml</InlineCode>. CoreML export writes a <InlineCode>.mlpackage</InlineCode> bundle, requires <InlineCode>coremltools</InlineCode>, and does not support INT8.
-          </P>
-
-          <SubHeading>ONNX embedded NMS (YOLO9 detection)</SubHeading>
-          <P>
-            New in v1.3.0: pass <InlineCode>nms=True</InlineCode> to bake NMS into an exported ONNX
-            graph so the model emits final boxes directly. This is currently limited to the{' '}
-            <InlineCode>yolo9</InlineCode> family on the <InlineCode>detect</InlineCode> task (other
-            families/tasks raise). It forces a fixed batch-1 graph
-            (<InlineCode>dynamic=False</InlineCode>) and records{' '}
-            <InlineCode>nms</InlineCode> / <InlineCode>nms_conf</InlineCode> /{' '}
-            <InlineCode>nms_iou</InlineCode> / <InlineCode>max_det</InlineCode> in the ONNX metadata.
-          </P>
-          <CodeBlock language="python">{`model = LibreYOLO("LibreYOLO9c.pt")
-model.export(format="onnx", nms=True, conf=0.25, iou=0.45, max_det=300)`}</CodeBlock>
-          <P>
-            <InlineCode>int8=True</InlineCode> is now also supported for ONNX (in addition to
-            TensorRT and OpenVINO), again limited to YOLO9 detection; it needs a calibration{' '}
-            <InlineCode>data=</InlineCode> dataset.
-          </P>
-
-          <SubHeading>TFLite export</SubHeading>
-          <P>
-            <SupportBadge variant="experimental">Experimental</SupportBadge>{' '}
-            v1.3.0 adds a TFLite export path built on <InlineCode>onnx2tf</InlineCode>. It is
-            validated for RF-DETR detect / segment / pose and YOLO9 detect. It requires{' '}
-            <strong className="text-surface-800 dark:text-white">Python 3.12+</strong> (the{' '}
-            <InlineCode>onnx2tf 2.4.x</InlineCode> wheels do not target older Python) plus the
-            optional extra <InlineCode>libreyolo[tflite]</InlineCode>
-            (<InlineCode>onnx2tf&gt;=2.4.3</InlineCode>, onnx-graphsurgeon, onnx-simplifier). Export
-            is FP32 and static-shape only (no <InlineCode>half</InlineCode>,{' '}
-            <InlineCode>int8</InlineCode>, or <InlineCode>dynamic</InlineCode> yet).
-          </P>
-          <CodeBlock language="bash">{`pip install "libreyolo[tflite]"   # Python 3.12+`}</CodeBlock>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
-
-model = LibreYOLO("LibreRFDETRs-seg.pt")
-model.export(format="tflite")   # writes a .tflite file`}</CodeBlock>
-          <P>
-            For RF-DETR, the exporter rewrites each GridSample node into a TFLite-safe bilinear
-            subgraph because onnx2tf&apos;s default lowering is numerically broken. In v1.3.0 the old
-            runtime monkeypatches against onnx2tf were removed now that{' '}
-            <InlineCode>onnx2tf&gt;=2.4.3</InlineCode> ships the RF-DETR fixes upstream; only the
-            static ONNX-graph rewrite remains.
-          </P>
-          <P>
-            <strong className="text-surface-800 dark:text-white">No TFLite runtime backend.</strong>{' '}
-            LibreYOLO cannot load or run a <InlineCode>.tflite</InlineCode> file; this format is
-            export-only. Run the exported model with a TF Lite runtime
-            (<InlineCode>ai-edge-litert</InlineCode> / <InlineCode>tflite-runtime</InlineCode>) on
-            your target device.
           </P>
 
           <SubHeading>ONNX metadata</SubHeading>
@@ -2559,7 +2118,7 @@ model.export(format="tflite")   # writes a .tflite file`}</CodeBlock>
           <DocTable
             headers={['Key', 'Example value']}
             rows={[
-              [<InlineCode key="v">libreyolo_version</InlineCode>, <InlineCode key="vv">&quot;1.3.0&quot;</InlineCode>],
+              [<InlineCode key="v">libreyolo_version</InlineCode>, <InlineCode key="vv">&quot;1.2.0&quot;</InlineCode>],
               [<InlineCode key="f">model_family</InlineCode>, <InlineCode key="fv">&quot;yolox&quot;</InlineCode>],
               [<InlineCode key="s">model_size</InlineCode>, <InlineCode key="sv">&quot;s&quot;</InlineCode>],
               [<InlineCode key="c">nb_classes</InlineCode>, <InlineCode key="cv">&quot;80&quot;</InlineCode>],
@@ -2737,9 +2296,7 @@ print(result.boxes.xyxy)`}</CodeBlock>
               [<InlineCode key="p">predict</InlineCode>, 'Run inference on images, directories, or videos'],
               [<InlineCode key="t">train</InlineCode>, 'Train a model on a dataset'],
               [<InlineCode key="v">val</InlineCode>, 'Evaluate a model on a dataset'],
-              [<InlineCode key="e">export</InlineCode>, 'Export to ONNX / TorchScript / TensorRT / OpenVINO / NCNN / CoreML / TFLite'],
-              [<InlineCode key="ui">ui</InlineCode>, 'Launch a local drag-and-drop / paste browser inference UI'],
-              [<InlineCode key="dr">doctor</InlineCode>, 'Run pre-training dataset health checks (YOLO detection format)'],
+              [<InlineCode key="e">export</InlineCode>, 'Export to ONNX / TorchScript / TensorRT / OpenVINO / NCNN / CoreML'],
               [<InlineCode key="c">checks</InlineCode>, 'Print Python, torch, CUDA, GPU, and optional-package info'],
               [<InlineCode key="m">models</InlineCode>, 'List registered model families and CLI shortcut names'],
               [<InlineCode key="f">formats</InlineCode>, 'List supported export formats'],
@@ -2760,9 +2317,9 @@ print(result.boxes.xyxy)`}</CodeBlock>
             headers={['Command', 'Important options']}
             rows={[
               [<InlineCode key="p">predict</InlineCode>, <span key="pv"><InlineCode>conf</InlineCode>, <InlineCode>iou</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>classes</InlineCode>, <InlineCode>max_det</InlineCode>, <InlineCode>half</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>tiling</InlineCode>, <InlineCode>overlap_ratio</InlineCode>, <InlineCode>output_file_format</InlineCode>, <InlineCode>project</InlineCode>, <InlineCode>name</InlineCode>, <InlineCode>exist_ok</InlineCode>, <InlineCode>face_detector</InlineCode></span>],
-              [<InlineCode key="t">train</InlineCode>, <span key="tv"><InlineCode>epochs</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>lr0</InlineCode>, <InlineCode>optimizer</InlineCode>, <InlineCode>scheduler</InlineCode>, <InlineCode>workers</InlineCode>, <InlineCode>seed</InlineCode>, <InlineCode>resume</InlineCode>, <InlineCode>amp</InlineCode>, <InlineCode>task</InlineCode>, <InlineCode>cache</InlineCode>, <InlineCode>lora</InlineCode>, <InlineCode>freeze</InlineCode>, <InlineCode>save_plots</InlineCode>, <InlineCode>allow_download_scripts</InlineCode>, <InlineCode>dry_run</InlineCode></span>],
-              [<InlineCode key="v">val</InlineCode>, <span key="vv"><InlineCode>split</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>conf</InlineCode>, <InlineCode>iou</InlineCode>, <InlineCode>max_det</InlineCode>, <InlineCode>half</InlineCode>, <InlineCode>save_plots</InlineCode>, <InlineCode>data_dir</InlineCode>, <InlineCode>use_coco_eval</InlineCode>, <InlineCode>project</InlineCode>, <InlineCode>name</InlineCode>, <InlineCode>exist_ok</InlineCode>, <InlineCode>save_json</InlineCode>, <InlineCode>allow_download_scripts</InlineCode></span>],
-              [<InlineCode key="e">export</InlineCode>, <span key="ev"><InlineCode>format</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>half</InlineCode>, <InlineCode>int8</InlineCode>, <InlineCode>dynamic</InlineCode>, <InlineCode>simplify</InlineCode>, <InlineCode>nms</InlineCode>, <InlineCode>conf</InlineCode>, <InlineCode>iou</InlineCode>, <InlineCode>max_det</InlineCode>, <InlineCode>opset</InlineCode>, <InlineCode>data</InlineCode>, <InlineCode>fraction</InlineCode>, <InlineCode>device</InlineCode>, <InlineCode>allow_download_scripts</InlineCode>, <InlineCode>verbose</InlineCode></span>],
+              [<InlineCode key="t">train</InlineCode>, <span key="tv"><InlineCode>epochs</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>lr0</InlineCode>, <InlineCode>optimizer</InlineCode>, <InlineCode>scheduler</InlineCode>, <InlineCode>workers</InlineCode>, <InlineCode>seed</InlineCode>, <InlineCode>resume</InlineCode>, <InlineCode>amp</InlineCode>, <InlineCode>allow_download_scripts</InlineCode>, <InlineCode>dry_run</InlineCode></span>],
+              [<InlineCode key="v">val</InlineCode>, <span key="vv"><InlineCode>split</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>conf</InlineCode>, <InlineCode>iou</InlineCode>, <InlineCode>max_det</InlineCode>, <InlineCode>half</InlineCode>, <InlineCode>data_dir</InlineCode>, <InlineCode>use_coco_eval</InlineCode>, <InlineCode>project</InlineCode>, <InlineCode>name</InlineCode>, <InlineCode>exist_ok</InlineCode>, <InlineCode>save_json</InlineCode>, <InlineCode>allow_download_scripts</InlineCode></span>],
+              [<InlineCode key="e">export</InlineCode>, <span key="ev"><InlineCode>format</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>half</InlineCode>, <InlineCode>int8</InlineCode>, <InlineCode>dynamic</InlineCode>, <InlineCode>simplify</InlineCode>, <InlineCode>opset</InlineCode>, <InlineCode>data</InlineCode>, <InlineCode>fraction</InlineCode>, <InlineCode>device</InlineCode>, <InlineCode>allow_download_scripts</InlineCode>, <InlineCode>verbose</InlineCode></span>],
             ]}
           />
 
@@ -2797,35 +2354,6 @@ libreyolo train model=yolo9-c data=coco128.yaml --dry-run`}</CodeBlock>
 libreyolo export model=best.pt format=tensorrt half=true
 libreyolo export model=best.pt format=openvino int8=true data=coco128.yaml
 libreyolo export model=best.pt format=coreml`}</CodeBlock>
-
-          <SubHeading>Export with embedded NMS and rectangular size</SubHeading>
-          <CodeBlock language="bash">{`# Embed NMS into an ONNX YOLO9 detection graph
-libreyolo export model=yolo9-c format=onnx nms=true conf=0.25 iou=0.45 max_det=300
-
-# Rectangular export size (imgsz accepts a single value or two comma-separated dims)
-libreyolo export model=yolo9-c format=onnx imgsz=640,480
-
-# TFLite (Python 3.12+, libreyolo[tflite])
-libreyolo export model=rfdetr-s format=tflite`}</CodeBlock>
-
-          <SubHeading>Local inference UI</SubHeading>
-          <P>
-            <InlineCode>libreyolo ui</InlineCode> serves a local browser page where you drop, paste,
-            or pick images, choose a model, and view results. It binds{' '}
-            <InlineCode>127.0.0.1:8000</InlineCode> by default and auto-bumps the port if taken.
-          </P>
-          <CodeBlock language="bash">{`libreyolo ui                       # opens http://127.0.0.1:8000
-libreyolo ui --port 9000 --no-browser --device 0`}</CodeBlock>
-
-          <SubHeading>Dataset health check</SubHeading>
-          <P>
-            <InlineCode>libreyolo doctor</InlineCode> runs pre-training checks on a YOLO
-            detection-format dataset and exits non-zero when errors are found
-            (<InlineCode>--strict</InlineCode> also fails on warnings), so it can gate CI.
-          </P>
-          <CodeBlock language="bash">{`libreyolo doctor coco8.yaml
-libreyolo doctor --data coco8.yaml --strict --json
-libreyolo doctor coco8.yaml --fast --only labels   # skip image decoding, run one check family`}</CodeBlock>
 
           <SubHeading>Machine-readable output</SubHeading>
           <P>
@@ -3041,7 +2569,7 @@ result.gaze.direction_3d # approximate 3D direction vectors`}</CodeBlock>
     **kwargs,                   # additional RF-DETR training args
 ) -> dict`}</CodeBlock>
           <P>
-            Additional experimental trainers exist for YOLO-NAS, D-FINE, DEIM, DEIMv2, EC, PicoDet, RT-DETRv2/v4, and RTMDet, plus the new classification (MobileNetV4, ConvNeXt, EfficientNetV2, DINOv2), semantic-segmentation (DINOv2), and point (FOMO) families. They follow the same <InlineCode>model.train(data=&quot;...yaml&quot;, ...)</InlineCode> shape but their defaults and experimental gates are family-specific.
+            Additional experimental trainers exist for YOLO-NAS, D-FINE, DEIM, DEIMv2, EC, PicoDet, DAMO-YOLO, RT-DETRv2/v4, and RTMDet. They follow the same <InlineCode>model.train(data=&quot;...yaml&quot;, ...)</InlineCode> shape but their defaults and experimental gates are family-specific.
           </P>
 
           <SubHeading>Runtime artifact loading</SubHeading>
@@ -3131,7 +2659,7 @@ config.to_yaml("config.yaml")`}</CodeBlock>
             model.py     # BaseModel - shared wrapper behaviour
             inference.py # Shared prediction pipeline (image/dir/video/tiled)
         yolox/           # LibreYOLOX (detect)
-        yolo9/           # LibreYOLO9 (detect)
+        yolo9/           # LibreYOLO9 (detect, segment)
         yolo9_e2e/       # LibreYOLO9E2E (detect)
         yolonas/         # LibreYOLONAS (detect, pose)
         dfine/           # LibreDFINE (detect)
@@ -3140,16 +2668,11 @@ config.to_yaml("config.yaml")`}</CodeBlock>
         rtdetr/          # LibreRTDETR (detect)
         rtdetrv2/        # LibreRTDETRv2 (detect)
         rtdetrv4/        # LibreRTDETRv4 (detect)
-        rfdetr/          # LibreRFDETR (detect, segment, pose, obb) - lazy-loaded
+        rfdetr/          # LibreRFDETR (detect, segment) - lazy-loaded
         ec/              # LibreEC / EdgeCrafter (detect, pose, segment)
         picodet/         # LibrePICODET (detect)
+        damoyolo/        # LibreDAMOYOLO (detect)
         rtmdet/          # LibreRTMDet (detect)
-        dinov2/          # LibreDINOv2 (semantic, classify) - lazy-loaded
-        mobilenetv4/     # LibreMobileNetV4 (classify)
-        convnext/        # LibreConvNeXt (classify)
-        efficientnetv2/  # LibreEfficientNetV2 (classify)
-        depth_anything/  # LibreDepthAnythingV2 (depth)
-        fomo/            # LibreFOMO (point)
         l2cs/            # LibreL2CS (gaze, inference-only)
     backends/
         base.py
@@ -3234,122 +2757,90 @@ model.export(format="onnx")`}</CodeBlock>
           {/* ────────────── DATASET FORMAT ────────────── */}
           <SectionHeading id="dataset-format" icon={Database}>Dataset Format</SectionHeading>
           <P>
-            Every task loads through one <InlineCode>data.yaml</InlineCode>. Detection, instance segmentation, and OBB accept <strong className="text-surface-800 dark:text-white">two interchangeable label formats</strong> — YOLO TXT or native COCO JSON — and the loader picks the right one from the config. Pose, semantic segmentation, depth, and classification each add a small format of their own. The table maps every task to its layout.
+            Training and validation use dataset configs loaded through <InlineCode>data.yaml</InlineCode>. Detection, segmentation, pose, and RF-DETR training all enter through this loader; the label file contents differ by task.
           </P>
-
-          <SubHeading>Formats by task</SubHeading>
-          <DocTable
-            headers={['Task', 'Data layout', 'Labels']}
-            rows={[
-              ['Detection', <span key="l"><InlineCode>data.yaml</InlineCode> + <InlineCode>labels/*.txt</InlineCode>, or COCO JSON</span>, 'One box per line'],
-              ['Instance segmentation', <span key="l"><InlineCode>data.yaml</InlineCode> + polygon <InlineCode>.txt</InlineCode>, or COCO JSON</span>, 'Polygon per line (TXT) / polygons + RLE (COCO)'],
-              ['OBB', <span key="l"><InlineCode>data.yaml</InlineCode> + rotated-box <InlineCode>.txt</InlineCode>, or COCO JSON</span>, 'One rotated box per line'],
-              ['Pose', <span key="l"><InlineCode>data.yaml</InlineCode> + <InlineCode>.txt</InlineCode> + <InlineCode>kpt_shape</InlineCode>/<InlineCode>flip_idx</InlineCode></span>, 'Box + keypoints per line'],
-              ['Semantic segmentation', <span key="l"><InlineCode>data.yaml</InlineCode> + <InlineCode>masks_dir/</InlineCode> PNGs</span>, 'Per-pixel class ID (255 = ignore)'],
-              ['Depth', <span key="l"><InlineCode>data.yaml</InlineCode> + <InlineCode>depths_dir/</InlineCode> maps</span>, 'Per-pixel depth (0 = invalid)'],
-              ['Classification', <span key="l">ImageFolder (<InlineCode>train/&lt;class&gt;/</InlineCode>)</span>, 'Folder name = class'],
-            ]}
-          />
 
           <SubHeading>data.yaml structure</SubHeading>
-          <P>
-            The shared contract for detection, segmentation, OBB, and pose. <InlineCode>train</InlineCode>/<InlineCode>val</InlineCode>/<InlineCode>test</InlineCode> may be a directory, a <InlineCode>.txt</InlineCode> file list (one image path per line), or a list of paths. <InlineCode>nc</InlineCode> is optional — when omitted it is inferred from <InlineCode>names</InlineCode>.
-          </P>
           <CodeBlock language="yaml" filename="data.yaml">{`path: /absolute/path/to/dataset   # dataset root
-train: images/train               # dir, .txt file list, or list of paths
-val: images/val
+train: images/train               # directory path, relative to path
+val: images/val                   # directory path, relative to path
 test: images/test                 # optional
 
-nc: 80                            # optional; inferred from names if absent
+nc: 80                            # number of classes
+names: [                          # class names
+  "person", "bicycle", "car", "motorcycle", "airplane",
+  "bus", "train", "truck", "boat", "traffic light",
+  # ...
+]`}</CodeBlock>
+
+          <SubHeading>Config resolution and downloads</SubHeading>
+          <P>
+            Dataset configs resolve from an explicit path, the current working directory, then built-ins under <InlineCode>libreyolo/config/datasets/</InlineCode>. Dataset roots default under <InlineCode>~/datasets</InlineCode> and can be overridden with <InlineCode>LIBREYOLO_DATASETS_DIR</InlineCode>.
+          </P>
+          <P>
+            <InlineCode>train</InlineCode>, <InlineCode>val</InlineCode>, and <InlineCode>test</InlineCode> may be directories, <InlineCode>.txt</InlineCode> files, or lists of paths. YAML download hooks are guarded; pass <InlineCode>allow_download_scripts=True</InlineCode> only for trusted configs.
+          </P>
+
+          <SubHeading>File-list variant</SubHeading>
+          <P>
+            The same YAML format can also point <InlineCode>train</InlineCode>, <InlineCode>val</InlineCode>, or <InlineCode>test</InlineCode> at <InlineCode>.txt</InlineCode> files containing one image path per line:
+          </P>
+          <CodeBlock language="yaml" filename="coco.yaml">{`path: /absolute/path/to/coco
+train: train2017.txt
+val: val2017.txt
+test: test-dev2017.txt
+
+nc: 80
 names: ["person", "bicycle", "car", "..."]`}</CodeBlock>
-          <P>
-            Configs resolve from an explicit path, the working directory, then the built-ins under <InlineCode>libreyolo/config/datasets/</InlineCode>. Roots default under <InlineCode>~/datasets</InlineCode>; override with <InlineCode>LIBREYOLO_DATASETS_DIR</InlineCode>.
-          </P>
 
-          <SubHeading>YOLO TXT labels</SubHeading>
-          <P>
-            The default layout: one <InlineCode>.txt</InlineCode> per image under <InlineCode>labels/</InlineCode>, mirroring the <InlineCode>images/</InlineCode> tree with the same file stem. All coordinates are normalized to [0, 1].
-          </P>
+          <SubHeading>Directory layout</SubHeading>
           <CodeBlock language="text">{`dataset/
-    images/train/img001.jpg
-    labels/train/img001.txt        # same stem as the image`}</CodeBlock>
-          <CodeBlock language="text">{`# Detection      one box per line
-<class_id> <cx> <cy> <w> <h>
+    images/
+        train/
+            img001.jpg
+            img002.jpg
+        val/
+            img003.jpg
+    labels/
+        train/
+            img001.txt
+            img002.txt
+        val/
+            img003.txt`}</CodeBlock>
 
-# Segmentation   one polygon per line (box derived from the vertices)
-<class_id> <x1> <y1> <x2> <y2> ... <xn> <yn>
+          <SubHeading>Detection label format</SubHeading>
+          <P>
+            One text file per image. Each line is one object:
+          </P>
+          <CodeBlock language="text">{`<class_id> <center_x> <center_y> <width> <height>`}</CodeBlock>
+          <P>
+            All coordinates are normalized to [0, 1] relative to image dimensions.
+          </P>
+          <P>Example (<InlineCode>img001.txt</InlineCode>):</P>
+          <CodeBlock language="text" filename="img001.txt">{`0 0.5 0.4 0.3 0.6
+2 0.1 0.2 0.05 0.1`}</CodeBlock>
 
-# Pose           box, then K keypoints (needs kpt_shape / flip_idx below)
-<class_id> <cx> <cy> <w> <h> <kx1> <ky1> <v1> ... <kxK> <kyK> <vK>
+          <SubHeading>Segmentation label format</SubHeading>
+          <P>
+            Segmentation uses YOLO polygon rows. The dataset loader derives the bounding box from the polygon vertices and keeps the polygon rings when segment loading is enabled:
+          </P>
+          <CodeBlock language="text">{`<class_id> <x1> <y1> <x2> <y2> ... <xn> <yn>`}</CodeBlock>
 
-# OBB            four rotated-box corners
-<class_id> <x1> <y1> <x2> <y2> <x3> <y3> <x4> <y4>`}</CodeBlock>
-          <CodeBlock language="yaml" filename="data.yaml (pose)">{`kpt_shape: [17, 3]   # K keypoints, 3 values each: x, y, visibility
+          <SubHeading>Pose label format</SubHeading>
+          <P>
+            Pose labels append keypoints after the box. Add <InlineCode>kpt_shape</InlineCode> and <InlineCode>flip_idx</InlineCode> to <InlineCode>data.yaml</InlineCode> so the loader knows the keypoint count and horizontal flip permutation.
+          </P>
+          <CodeBlock language="yaml">{`kpt_shape: [17, 3]
 flip_idx: [0, 2, 1, 4, 3, 6, 5, 8, 7, 10, 9, 12, 11, 14, 13, 16, 15]`}</CodeBlock>
-
-          <SubHeading>Native COCO JSON</SubHeading>
-          <P>
-            Detection, segmentation, and OBB also load COCO JSON directly — add an <InlineCode>annotations:</InlineCode> block mapping each split to its JSON file. <InlineCode>train</InlineCode>/<InlineCode>val</InlineCode> then point at image <em>directories</em> (not <InlineCode>.txt</InlineCode> lists). Requires <InlineCode>pycocotools</InlineCode>; class names come from the JSON categories, so <InlineCode>nc</InlineCode>/<InlineCode>names</InlineCode> are optional.
-          </P>
-          <CodeBlock language="yaml" filename="data.yaml (COCO)">{`path: dataset
-train: images/train               # image directory
-val: images/val
-annotations:
-  train: annotations/train.json   # COCO instances JSON
-  val: annotations/val.json`}</CodeBlock>
-          <P>
-            The same switch feeds YOLO9, RF-DETR, DEIM, and D-FINE training and the detection, OBB, and pose validators. A COCO layout with <InlineCode>annotations/instances_train2017.json</InlineCode> on disk is also detected automatically, without the <InlineCode>annotations:</InlineCode> key.
-          </P>
-          <P>
-            <strong className="text-surface-800 dark:text-white">Which segmentation format?</strong> A YOLO polygon row is a single ring per instance — it cannot express a hole or a split (multi-part) mask. COCO JSON keeps every polygon of an instance and decodes RLE masks, holes included. Use COCO JSON when instances have holes or disconnected parts; either format is fine for simple blobs. Crowd annotations (<InlineCode>iscrowd: 1</InlineCode>) are skipped.
-          </P>
-
-          <SubHeading>Semantic segmentation masks</SubHeading>
-          <P>
-            Pair each image with a single-channel mask whose pixel values are class IDs; <InlineCode>255</InlineCode> marks ignored pixels. <InlineCode>masks_dir</InlineCode> is substituted for <InlineCode>images</InlineCode> in each path (default <InlineCode>masks</InlineCode>), and masks must be lossless (PNG) with the same stem as their image. Optional <InlineCode>label_mapping</InlineCode> remaps source IDs to train IDs (unmapped values become ignore). Omit <InlineCode>masks_dir</InlineCode> to rasterize masks from YOLO polygon labels at load time, with a <InlineCode>background</InlineCode> class appended.
-          </P>
-          <CodeBlock language="text">{`dataset/
-    images/train/scene001.jpg
-    masks/train/scene001.png       # single-channel class IDs, 255 = ignore`}</CodeBlock>
-          <CodeBlock language="yaml" filename="data.yaml (semantic)">{`path: /path/to/dataset
-train: images/train
-val: images/val
-masks_dir: masks
-nc: 3
-names: ["road", "building", "vegetation"]`}</CodeBlock>
-
-          <SubHeading>Depth maps</SubHeading>
-          <P>
-            Pair each image with a single-channel depth map under <InlineCode>depths_dir</InlineCode> (default <InlineCode>depths</InlineCode>). 16-bit PNG/TIF is divided by <InlineCode>depth_scale</InlineCode> (default <InlineCode>256.0</InlineCode>); <InlineCode>.npy</InlineCode> float files are used as-is. Zero, negative, and non-finite pixels are invalid. An optional <InlineCode>depth_stem_suffix</InlineCode> and a <InlineCode>*_mask</InlineCode> validity map are honored automatically. Depth is validation-only in v1.3.0.
-          </P>
-          <CodeBlock language="yaml" filename="data.yaml (depth)">{`path: /path/to/dataset
-val: images/val
-depths_dir: depths
-depth_scale: 256.0                # 16-bit PNG encoding: value / 256 = depth`}</CodeBlock>
-
-          <SubHeading>Classification</SubHeading>
-          <P>
-            Classification uses an ImageNet-style ImageFolder tree instead of a <InlineCode>data.yaml</InlineCode> — see <a href="#classification" className="text-libre-600 dark:text-libre-400 hover:underline">Classification</a> for the layout. <InlineCode>data=</InlineCode> takes a dataset root, a <InlineCode>.zip</InlineCode> URL, or a known name.
-          </P>
+          <CodeBlock language="text">{`<class_id> <cx> <cy> <w> <h> <kx1> <ky1> <v1> ... <kxK> <kyK> <vK>`}</CodeBlock>
 
           <SubHeading>Built-in datasets</SubHeading>
           <P>
-            Configs ship under <InlineCode>libreyolo/config/datasets/</InlineCode>. Download behavior differs per config: URL-backed sets fetch on first use, script-backed sets need <InlineCode>allow_download_scripts=True</InlineCode>, and a few must be placed locally.
+            LibreYOLO ships built-in dataset configs under <InlineCode>libreyolo/config/datasets/</InlineCode> and can auto-download supported datasets on first use:
           </P>
-          <DocTable
-            headers={['Config', 'Task', 'Download']}
-            rows={[
-              [<InlineCode key="c">coco8</InlineCode>, 'Detection (8 images)', 'Automatic'],
-              [<InlineCode key="c">coco128</InlineCode>, 'Detection (128 images)', 'Automatic'],
-              [<InlineCode key="c">coco5000</InlineCode>, 'Detection', <span key="d">Script — <InlineCode>allow_download_scripts=True</InlineCode></span>],
-              [<span key="c"><InlineCode>coco</InlineCode> / <InlineCode>coco-val-only</InlineCode></span>, 'Detection (full)', <span key="d">Script — <InlineCode>allow_download_scripts=True</InlineCode></span>],
-              [<span key="c"><InlineCode>coco8-pose</InlineCode> / <InlineCode>coco-pose</InlineCode></span>, 'Pose', <span key="d">Script — <InlineCode>allow_download_scripts=True</InlineCode></span>],
-              [<InlineCode key="c">cocostuff</InlineCode>, 'Semantic (182 classes)', 'Manual — place locally'],
-            ]}
-          />
-          <CodeBlock language="python">{`results = model.val(data="coco8.yaml")                          # auto-downloads
-results = model.train(data="coco128.yaml", epochs=10)           # auto-downloads
-model.train(data="coco8-pose.yaml", allow_download_scripts=True)  # script config`}</CodeBlock>
+          <CodeBlock language="python">{`# These download automatically on first use
+results = model.val(data="coco8.yaml")
+results = model.train(data="coco128.yaml", epochs=10)`}</CodeBlock>
 
           {/* Bottom spacer */}
           <div className="h-16" />
@@ -3360,13 +2851,13 @@ model.train(data="coco8-pose.yaml", allow_download_scripts=True)  # script confi
 }
 
 
-/* ============================================================================
- * Chinese (zh-CN) content bundle for the LibreYOLO v1.3.0 docs page.
- * Append to src/app/[locale]/docs/v1.3.0/page.jsx and render <DocsPageZh /> when
- * locale === 'zh'. Reuses all shared presentational components from that file.
- * ========================================================================== */
+/* ============================================================
+   Chinese (zh-CN) content bundle for LibreYOLO docs v1.2.0
+   Append to src/app/[locale]/docs/page.jsx.
+   Reuses shared presentational components already defined in that file.
+   ============================================================ */
 
-/* ─── 1. Section metadata (Chinese titles, same id + icon) ─── */
+/* ─── 1. Section metadata (Chinese titles) ─── */
 const sectionsZh = [
   { id: 'introduction', title: '简介', icon: BookOpen },
   { id: 'compatibility', title: '兼容性', icon: CheckCircle2 },
@@ -3381,9 +2872,6 @@ const sectionsZh = [
   { id: 'segmentation', title: '分割', icon: Scissors },
   { id: 'pose', title: '姿态估计', icon: PersonStanding },
   { id: 'gaze', title: '视线估计', icon: Eye },
-  { id: 'classification', title: '分类', icon: Tags },
-  { id: 'depth', title: '深度估计', icon: Mountain },
-  { id: 'point-localization', title: '点定位', icon: MapPin },
   { id: 'training', title: '训练', icon: GraduationCap },
   { id: 'validation', title: '验证', icon: CheckCircle2 },
   { id: 'export', title: '导出', icon: Upload },
@@ -3393,21 +2881,20 @@ const sectionsZh = [
   { id: 'openvino-inference', title: 'OpenVINO 推理', icon: Cpu },
   { id: 'ncnn-inference', title: 'NCNN 推理', icon: Cpu },
   { id: 'coreml-inference', title: 'CoreML 推理', icon: Cpu },
-  { id: 'cli', title: '命令行（CLI）', icon: SquareTerminal },
+  { id: 'cli', title: '命令行工具', icon: SquareTerminal },
   { id: 'api-reference', title: 'API 参考', icon: FileCode },
   { id: 'architecture', title: '架构指南', icon: Wrench },
   { id: 'dataset-format', title: '数据集格式', icon: Database },
 ]
 
 /* ─── 2. Sidebar (Chinese) ─── */
-function SidebarZh({ activeSection, onNavigate, currentVersion = 'v1.3.0', className = '' }) {
-  const versionLabelZh = {
+function SidebarZh({ activeSection, onNavigate, currentVersion = 'v1.2.0', className = '' }) {
+  const versionLabelsZh = {
     'Pre-release': '预发布',
     'Latest': '最新',
     'Previous': '上一版本',
     'Archived': '已归档',
   }
-
   return (
     <nav className={className}>
       <div className="flex items-center gap-2 mb-6 px-3">
@@ -3432,7 +2919,7 @@ function SidebarZh({ activeSection, onNavigate, currentVersion = 'v1.3.0', class
                 }`}
               >
                 <span>{version}</span>
-                <span className="text-[11px] font-semibold uppercase tracking-wide">{versionLabelZh[label] || label}</span>
+                <span className="text-[11px] font-semibold uppercase tracking-wide">{versionLabelsZh[label] || label}</span>
               </a>
             )
           })}
@@ -3462,7 +2949,299 @@ function SidebarZh({ activeSection, onNavigate, currentVersion = 'v1.3.0', class
   )
 }
 
-/* ─── 3. Content-bearing callouts + compatibility matrix (Chinese) ─── */
+/* ─── 3. Content-bearing twins ─── */
+
+function ValidatedModelHeaderZh({ title, children }) {
+  return (
+    <div className="mt-10 mb-5 rounded-lg border border-emerald-500/30 bg-emerald-500/[0.08] dark:bg-emerald-500/[0.12] px-4 py-3">
+      <div className="flex flex-wrap items-center gap-3">
+        <h3 className="text-lg font-semibold text-surface-900 dark:text-white underline decoration-emerald-500 decoration-2 underline-offset-4">
+          {title}
+        </h3>
+        <SupportBadge variant="validated">推荐</SupportBadge>
+      </div>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {children}
+      </div>
+    </div>
+  )
+}
+
+function CompatibilityMatrixZh() {
+  const rows = [
+    {
+      family: 'YOLO9',
+      status: '已验证 detect，单 GPU',
+      inference: 'yes',
+      training: 'yes',
+      detect: 'yes',
+      segment: 'exp',
+      pose: '',
+      gaze: '',
+      onnx: 'yes',
+      torchscript: 'yes',
+      tensorrt: 'yes',
+      openvino: 'yes',
+      ncnn: 'yes',
+      coreml: 'yes',
+    },
+    {
+      family: 'RF-DETR',
+      status: '已验证 detect + segment，单 GPU',
+      inference: 'yes',
+      training: 'yes',
+      detect: 'yes',
+      segment: 'yes',
+      pose: '',
+      gaze: '',
+      onnx: 'yes',
+      torchscript: 'exp',
+      tensorrt: 'yes',
+      openvino: 'yes',
+      ncnn: '',
+      coreml: 'exp',
+    },
+    {
+      family: 'YOLOX',
+      status: '实验性',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: 'exp',
+      coreml: 'exp',
+    },
+    {
+      family: 'YOLO9-E2E',
+      status: '实验性',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: 'exp',
+      coreml: '',
+    },
+    {
+      family: 'YOLO-NAS',
+      status: '实验性',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: 'exp',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: 'exp',
+      coreml: '',
+    },
+    {
+      family: 'D-FINE',
+      status: '实验性',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: '',
+      coreml: '',
+    },
+    {
+      family: 'DEIM',
+      status: '实验性',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: '',
+      coreml: '',
+    },
+    {
+      family: 'DEIMv2',
+      status: '实验性',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: '',
+      coreml: '',
+    },
+    {
+      family: 'RT-DETR',
+      status: '实验性',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: '',
+      coreml: 'exp',
+    },
+    {
+      family: 'PicoDet',
+      status: '实验性',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: 'exp',
+      coreml: '',
+    },
+    {
+      family: 'EC',
+      status: '实验性',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: 'exp',
+      pose: 'exp',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: '',
+      coreml: '',
+    },
+    {
+      family: 'RT-DETRv2',
+      status: '实验性',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: 'exp',
+      coreml: '',
+    },
+    {
+      family: 'RT-DETRv4',
+      status: '实验性',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: 'exp',
+      coreml: '',
+    },
+    {
+      family: 'DAMO-YOLO',
+      status: '实验性',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: 'exp',
+      coreml: '',
+    },
+    {
+      family: 'RTMDet',
+      status: '实验性',
+      inference: 'exp',
+      training: 'exp',
+      detect: 'exp',
+      segment: '',
+      pose: '',
+      gaze: '',
+      onnx: 'exp',
+      torchscript: 'exp',
+      tensorrt: 'exp',
+      openvino: 'exp',
+      ncnn: 'exp',
+      coreml: '',
+    },
+    {
+      family: 'L2CS',
+      status: '实验性，仅推理',
+      inference: 'exp',
+      training: '',
+      detect: '',
+      segment: '',
+      pose: '',
+      gaze: 'exp',
+      onnx: '',
+      torchscript: '',
+      tensorrt: '',
+      openvino: '',
+      ncnn: '',
+      coreml: '',
+    },
+  ]
+
+  const headers = ['模型系列', 'v1.2.0 状态', '推理', '训练', '检测', '分割', '姿态', '视线', 'ONNX', 'TorchScript', 'TensorRT', 'OpenVINO', 'NCNN', 'CoreML']
+  const columns = ['inference', 'training', 'detect', 'segment', 'pose', 'gaze', 'onnx', 'torchscript', 'tensorrt', 'openvino', 'ncnn', 'coreml']
+
+  return (
+    <DocTable
+      headers={headers}
+      rows={rows.map((row) => [
+        <strong key={`${row.family}-family`} className="text-surface-800 dark:text-white whitespace-nowrap">{row.family}</strong>,
+        <span key={`${row.family}-status`} className="text-xs leading-relaxed">{row.status}</span>,
+        ...columns.map((column) => <MatrixMark key={`${row.family}-${column}`} value={row[column]} />),
+      ])}
+    />
+  )
+}
+
 function ValidationScopeCalloutZh({ className = '' }) {
   return (
     <div className={`my-6 rounded-xl border border-emerald-500/30 bg-emerald-500/5 dark:bg-emerald-500/10 p-4 ${className}`}>
@@ -3470,13 +3249,13 @@ function ValidationScopeCalloutZh({ className = '' }) {
         <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" />
         <div>
           <p className="font-semibold text-surface-900 dark:text-white mb-2">
-            v1.3.0 验证范围
+            v1.2.0 验证范围
           </p>
           <p className="text-sm text-surface-600 dark:text-surface-400 mb-2">
-            经过充分测试的路径是 YOLO9 和 RF-DETR 的检测、训练与推理，包括 RF-DETR 分割。
+            经过深度测试的路径是 YOLO9 和 RF-DETR 的检测、训练与推理，包括 RF-DETR 分割。
           </p>
           <p className="text-sm text-surface-600 dark:text-surface-400">
-            其他模型系列、任务以及多 GPU 工作流均可使用，但仍属实验性。
+            其他模型系列、任务和多 GPU 工作流均可用，但属实验性。
           </p>
         </div>
       </div>
@@ -3494,7 +3273,7 @@ function FlagshipCalloutZh({ className = '' }) {
             推荐的已验证路径：YOLO9 检测或 RF-DETR 检测 / 分割
           </p>
           <p className="text-sm text-surface-600 dark:text-surface-400">
-            这些模型的检测、训练与推理经过最充分的测试。在 v1.3.0 中，请将其他系列、任务以及多 GPU 工作流视为实验性。
+            这些模型的检测、训练与推理获得了最充分的测试。在 v1.2.0 中，请将其他系列、任务和多 GPU 工作流视为实验性。
           </p>
         </div>
       </div>
@@ -3502,159 +3281,13 @@ function FlagshipCalloutZh({ className = '' }) {
   )
 }
 
-function CompatibilityMatrixZh() {
-  const rows = [
-    {
-      family: 'YOLO9', status: '已验证 detect，单 GPU',
-      inference: 'yes', training: 'yes',
-      detect: 'yes', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: 'yes', coreml: 'yes', tflite: 'exp',
-    },
-    {
-      family: 'RF-DETR', status: '已验证 detect + segment；pose / OBB 预览',
-      inference: 'yes', training: 'yes',
-      detect: 'yes', segment: 'yes', semantic: '', classify: '', pose: 'preview', obb: 'preview', depth: '', point: '', gaze: '',
-      onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: '', coreml: 'exp', tflite: 'exp',
-    },
-    {
-      family: 'YOLOX', status: '实验性',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: 'exp', tflite: '',
-    },
-    {
-      family: 'YOLO9-E2E', status: '实验性',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'YOLO-NAS', status: '实验性',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: 'exp', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: '', tflite: '',
-    },
-    {
-      family: 'D-FINE', status: '实验性',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: '', tflite: '',
-    },
-    {
-      family: 'DEIM', status: '实验性',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: '', tflite: '',
-    },
-    {
-      family: 'DEIMv2', status: '实验性',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: '', tflite: '',
-    },
-    {
-      family: 'RT-DETR', status: '实验性',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: 'exp', tflite: '',
-    },
-    {
-      family: 'RT-DETRv2', status: '实验性',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'RT-DETRv4', status: '实验性',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'PicoDet', status: '实验性',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'RTMDet', status: '实验性',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'EC', status: '实验性',
-      inference: 'exp', training: 'exp',
-      detect: 'exp', segment: 'exp', semantic: '', classify: '', pose: 'exp', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'DINOv2', status: '新增，实验性（需要 transformers）',
-      inference: 'exp', training: 'exp',
-      detect: '', segment: '', semantic: 'exp', classify: 'exp', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: '', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'MobileNetV4', status: '新增，实验性分类器（Apache）',
-      inference: 'exp', training: 'exp',
-      detect: '', segment: '', semantic: '', classify: 'exp', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'ConvNeXt', status: '新增，实验性分类器（Apache）',
-      inference: 'exp', training: 'exp',
-      detect: '', segment: '', semantic: '', classify: 'exp', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'EfficientNetV2', status: '新增，实验性分类器（Apache）',
-      inference: 'exp', training: 'exp',
-      detect: '', segment: '', semantic: '', classify: 'exp', pose: '', obb: '', depth: '', point: '', gaze: '',
-      onnx: 'exp', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'Depth Anything V2', status: '新增，实验性；不支持导出',
-      inference: 'exp', training: '',
-      detect: '', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: 'exp', point: '', gaze: '',
-      onnx: '', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'FOMO', status: '新增，实验性；不自动下载',
-      inference: 'exp', training: 'exp',
-      detect: '', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: 'exp', gaze: '',
-      onnx: '', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-    {
-      family: 'L2CS', status: '实验性，仅推理',
-      inference: 'exp', training: '',
-      detect: '', segment: '', semantic: '', classify: '', pose: '', obb: '', depth: '', point: '', gaze: 'exp',
-      onnx: '', torchscript: '', tensorrt: '', openvino: '', ncnn: '', coreml: '', tflite: '',
-    },
-  ]
-
-  const headers = ['模型系列', 'v1.3.0 状态', '推理', '训练', '检测', '分割', '语义', '分类', '姿态', 'OBB', '深度', '点', '视线', 'ONNX', 'TorchScript', 'TensorRT', 'OpenVINO', 'NCNN', 'CoreML', 'TFLite']
-  const columns = ['inference', 'training', 'detect', 'segment', 'semantic', 'classify', 'pose', 'obb', 'depth', 'point', 'gaze', 'onnx', 'torchscript', 'tensorrt', 'openvino', 'ncnn', 'coreml', 'tflite']
-
-  return (
-    <DocTable
-      headers={headers}
-      rows={rows.map((row) => [
-        <strong key={`${row.family}-family`} className="text-surface-800 dark:text-white whitespace-nowrap">{row.family}</strong>,
-        <span key={`${row.family}-status`} className="text-xs leading-relaxed">{row.status}</span>,
-        ...columns.map((column) => <MatrixMark key={`${row.family}-${column}`} value={row[column]} />),
-      ])}
-    />
-  )
-}
-
 /* ─── 4. Main docs page (Chinese) ─── */
-function DocsPageZh({ version = 'v1.3.0', isLatest = true }) {
+function DocsPageZh({ version = 'v1.2.0', isLatest = true }) {
   const [activeSection, setActiveSection] = useState('introduction')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [docsCopied, setDocsCopied] = useState(false)
 
-  // Scroll spy - pick the last section whose heading has scrolled past 30% of viewport
-  // NOTE: keep the English `sections` ids here so scroll-spy matches the rendered ids.
+  // Scroll spy - keeps looping over the English `sections` so ids match the DOM
   useEffect(() => {
     const handleScroll = () => {
       const threshold = window.innerHeight * 0.3
@@ -3676,22 +3309,8 @@ function DocsPageZh({ version = 'v1.3.0', isLatest = true }) {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // On load, honor a #section deep link so a shared URL lands on that section.
-  useEffect(() => {
-    const id = decodeURIComponent((window.location.hash || '').replace(/^#/, ''))
-    if (id && sections.some((s) => s.id === id)) {
-      requestAnimationFrame(() => {
-        document.getElementById(id)?.scrollIntoView()
-        setActiveSection(id)
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   const navigateTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-    setActiveSection(id)
-    window.history.replaceState(null, '', `#${id}`)
     setMobileMenuOpen(false)
   }
 
@@ -3759,8 +3378,8 @@ function DocsPageZh({ version = 'v1.3.0', isLatest = true }) {
               <div>
                 <p className="text-sm text-surface-600 dark:text-surface-400">
                     {isLatest
-                    ? '这是当前稳定版本线 v1.3.x 的文档。早期版本仍可在版本菜单中找到。'
-                    : '保留此归档版本的可链接性，以便较旧的安装、搜索结果和智能体能够定位到正确的文档。'}
+                    ? '这是上一个版本 v1.2.0 的文档。最新文档为 v1.3.0，可在版本菜单中找到。'
+                    : '此归档版本保留可链接状态，以便旧版安装、搜索结果和智能体能够定位到正确的文档。'}
                 </p>
               </div>
               <button
@@ -3773,29 +3392,20 @@ function DocsPageZh({ version = 'v1.3.0', isLatest = true }) {
             </div>
           </div>
 
-          {/* ────────────── SPECIALIZED GUIDES ────────────── */}
-          <P>
-            两份配套指南更深入地介绍专门主题：{' '}
-            <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM 指南</a>{' '}
-            介绍封装 Qwen3-VL、Florence-2 等视觉语言模型的开放词表检测；{' '}
-            <a href="/docs/experimental" className="text-libre-600 dark:text-libre-400 hover:underline">实验性任务指南</a>{' '}
-            介绍更多实验性工作流，包括 LoRA / DoRA 微调。分类、旋转框和姿态也在下文各自的章节中有文档说明。
-          </P>
-
           {/* ────────────── INTRODUCTION ────────────── */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <SectionHeading id="introduction" icon={BookOpen}>简介</SectionHeading>
             <ValidationScopeCalloutZh />
             <P>
-              LibreYOLO 是一个采用 MIT 许可的计算机视觉工具包。v1.3.0 提供了涵盖检测、分割、分类、深度等的广泛模型目录，但其经过验证的支持范围是有意收窄的：
+              LibreYOLO 是一个采用 MIT 许可证的目标检测工具包。v1.2.0 提供了广泛的模型目录，但经过验证的支持范围有意保持精简：
             </P>
             <ul className="space-y-2 mb-4">
               <FeatureItem><strong className="text-surface-800 dark:text-white">YOLO9 检测</strong> - CNN 路径。</FeatureItem>
-              <FeatureItem><strong className="text-surface-800 dark:text-white">RF-DETR 检测</strong> - transformer 路径。</FeatureItem>
-              <FeatureItem><strong className="text-surface-800 dark:text-white">RF-DETR 分割</strong> - 经过充分测试的分割路径。</FeatureItem>
+              <FeatureItem><strong className="text-surface-800 dark:text-white">RF-DETR 检测</strong> - Transformer 路径。</FeatureItem>
+              <FeatureItem><strong className="text-surface-800 dark:text-white">RF-DETR 分割</strong> - 经过深度测试的分割路径。</FeatureItem>
             </ul>
             <P>
-              我们建议将这些路径作为新项目的默认选择，因为它们在检测、训练与推理方面经过了最充分的测试。其他受支持的系列和任务通过同一个统一的 <InlineCode>LibreYOLO()</InlineCode> 工厂工作，但在 v1.3.0 中属于实验性。如果你有特定理由，可以使用它们。
+              我们推荐将这些路径作为新项目的默认选择，因为它们在检测、训练和推理方面经过了最充分的测试。其他受支持的系列和任务通过同一个统一的 <InlineCode>LibreYOLO()</InlineCode> 工厂函数工作，但在 v1.2.0 中仍属实验性。如有特定理由再使用它们。
             </P>
             <CodeBlock language="python">{`from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
@@ -3809,57 +3419,33 @@ print(result.saved_path)`}</CodeBlock>
 
             <SubHeading>核心特性</SubHeading>
             <ul className="space-y-2.5 mb-4">
-              <FeatureItem>对 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割进行了充分测试并作为推荐默认项</FeatureItem>
-              <FeatureItem>统一的 <InlineCode>LibreYOLO()</InlineCode> 工厂，用于加载检查点、导出产物和运行时</FeatureItem>
-              <FeatureItem>通过一致的 API 完成检测、分割、姿态和视线任务</FeatureItem>
-              <FeatureItem>支持图像、目录和视频推理（大尺寸帧可选分块推理）</FeatureItem>
+              <FeatureItem>针对 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割的深度测试与推荐默认配置</FeatureItem>
+              <FeatureItem>统一的 <InlineCode>LibreYOLO()</InlineCode> 工厂函数，用于加载检查点、导出产物和运行时</FeatureItem>
+              <FeatureItem>通过一致的 API 支持检测、分割、姿态和视线任务</FeatureItem>
+              <FeatureItem>支持图像、目录和视频推理（大尺寸帧可选用分块推理）</FeatureItem>
               <FeatureItem>通过 ByteTrack 内置多目标跟踪</FeatureItem>
-              <FeatureItem>ONNX、TorchScript、TensorRT、OpenVINO、NCNN 和 CoreML 导出，内嵌元数据，并配有相应的运行时后端</FeatureItem>
-              <FeatureItem>兼容 COCO 的验证，提供 mAP 指标，并包含分割和姿态验证器</FeatureItem>
+              <FeatureItem>支持 ONNX、TorchScript、TensorRT、OpenVINO、NCNN 和 CoreML 导出（含内嵌元数据），并提供匹配的运行时后端</FeatureItem>
+              <FeatureItem>兼容 COCO 的验证与 mAP 指标，并提供分割和姿态验证器</FeatureItem>
               <FeatureItem>Ultralytics 风格的 <InlineCode>libreyolo</InlineCode> 命令行工具，用于 predict / train / val / export</FeatureItem>
               <FeatureItem>接受任意图像格式：文件路径、URL、PIL、NumPy、PyTorch 张量、原始字节</FeatureItem>
             </ul>
           </motion.div>
-
-          <SubHeading>v1.3.0 中的重大变更</SubHeading>
-          <ul className="space-y-2 my-4">
-            <FeatureItem>
-              <strong className="text-surface-800 dark:text-white">DAMO-YOLO 已移除</strong>，且无别名：{' '}
-              <InlineCode>LibreDAMOYOLO</InlineCode> 会抛出 <InlineCode>AttributeError</InlineCode>，加载 DAMO-YOLO 检查点时会被拒绝。
-            </FeatureItem>
-            <FeatureItem>
-              <strong className="text-surface-800 dark:text-white">YOLO9 仅支持检测。</strong>{' '}
-              <InlineCode>-seg</InlineCode>、<InlineCode>-pose</InlineCode>、<InlineCode>-cls</InlineCode>、<InlineCode>-obb</InlineCode> 和 <InlineCode>-sem</InlineCode> 的 YOLO9 变体已移除。
-            </FeatureItem>
-            <FeatureItem>
-              <strong className="text-surface-800 dark:text-white">RF-DETR 移除了 classify、semantic 和 depth。</strong> 它现在的任务是 detect、segment、pose 和 obb。分类和语义迁移到新的 <InlineCode>LibreDINOv2</InlineCode> 系列；深度迁移到新的 <InlineCode>LibreDepthAnythingV2</InlineCode> 系列。
-            </FeatureItem>
-            <FeatureItem>
-              <strong className="text-surface-800 dark:text-white">TFLite 导出需要 Python 3.12+</strong>（onnx2tf wheel 约束）。onnx2tf 的最低版本提高到 <InlineCode>&gt;=2.4.3</InlineCode>，并移除了旧的 onnx2tf 运行时补丁。
-            </FeatureItem>
-          </ul>
 
           <Divider />
 
           {/* ────────────── COMPATIBILITY ────────────── */}
           <SectionHeading id="compatibility" icon={CheckCircle2}>兼容性</SectionHeading>
           <P>
-            可将此矩阵作为 v1.3.0 的快速支持速查表。<InlineCode>&#10003;</InlineCode>{' '}
-            表示已验证路径，<InlineCode>exp</InlineCode> 表示实验性，{' '}
-            <InlineCode>prev</InlineCode> 表示研究预览，空白单元格表示当前不支持。只有 YOLO9 和 RF-DETR 检测（外加 RF-DETR
-            分割）经过充分测试；其余全部，包括新增的分类、语义、深度和点定位系列，均为实验性。
+            可将此矩阵用作 v1.2.0 的快速支持速查表。对勾表示该路径在经过验证的文档范围内受支持，<InlineCode>exp</InlineCode> 表示该路径存在但属实验性，空白单元格表示当前不受支持或不应依赖。
           </P>
           <CompatibilityMatrixZh />
           <p className="text-sm text-surface-600 dark:text-surface-400 leading-relaxed mb-4">
-            Depth Anything V2 没有导出路径。TFLite 导出为实验性，仅限 YOLO9 检测和 RF-DETR
-            detect / segment / pose。分类系列（MobileNetV4、ConvNeXt、EfficientNetV2）支持
-            ONNX 导出。CoreML 导出会生成 <InlineCode>.mlpackage</InlineCode>{' '}
-            包并需要 <InlineCode>libreyolo[coreml]</InlineCode>：仅限 macOS、不支持 INT8，
-            且对 RF-DETR、D-FINE、DEIM、DEIMv2 或 EC 不内嵌 NMS。
+            CoreML 导出会生成 <InlineCode>.mlpackage</InlineCode> 包，并需要 <InlineCode>libreyolo[coreml]</InlineCode>。CoreML 推理仅限 macOS，不支持 INT8，且 RF-DETR、D-FINE、DEIM、DEIMv2 或 EC 不提供内嵌的 CoreML NMS。
           </p>
 
           <Divider />
 
+          {/* ────────────── INSTALLATION ────────────── */}
           <SectionHeading id="installation" icon={Terminal}>安装</SectionHeading>
           <SubHeading>环境要求</SubHeading>
           <ul className="space-y-1.5 mb-4">
@@ -3867,14 +3453,14 @@ print(result.saved_path)`}</CodeBlock>
               <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />Python 3.10+
             </li>
             <li className="flex items-center gap-2 text-surface-600 dark:text-surface-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />PyTorch 1.13+ 和 torchvision 0.11+
+              <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />PyTorch 1.13+ 与 torchvision 0.11+
             </li>
           </ul>
 
           <SubHeading>从 PyPI 安装</SubHeading>
           <CodeBlock language="bash">{`pip install libreyolo`}</CodeBlock>
           <P>
-            本文档对应即将发布的 v1.3.0。在 v1.3.0 发布到 PyPI 之前，请使用源码安装来获取本页所述的功能。
+            本文档对应即将发布的 v1.2.0 开发分支。在 v1.2.0 发布到 PyPI 之前，请使用源码安装以获得本页所述功能。
           </P>
 
           <SubHeading>从源码安装</SubHeading>
@@ -3910,7 +3496,7 @@ pip install libreyolo[ncnn]
 
 # ByteTrack API compatibility extra
 pip install libreyolo[tracking]
-# Tracking dependencies are part of the base install in v1.3.0.
+# Tracking dependencies are part of the base install in v1.2.0 dev.
 
 # CoreML export and inference (macOS only for runtime)
 pip install libreyolo[coreml]
@@ -3924,7 +3510,7 @@ pip install libreyolo[gaze-retinaface]
 # Install every optional LibreYOLO extra
 pip install libreyolo[all]`}</CodeBlock>
 
-          <P>如果使用 <InlineCode>uv</InlineCode>，最可靠的做法是为每个 extra 建立独立的 venv：</P>
+          <P>如果使用 <InlineCode>uv</InlineCode>，最可靠的方式是为每个 extra 创建独立的虚拟环境：</P>
           <CodeBlock language="bash">{`# ONNX environment
 uv venv .venv-onnx
 uv pip install --python .venv-onnx/bin/python -e '.[onnx]'
@@ -3935,7 +3521,7 @@ uv pip install --python .venv-rtdetr/bin/python -e '.[rtdetr]'
 
 # Repeat with .[rfdetr], .[openvino], .[ncnn], .[coreml], .[gaze], .[tracking], or .[tensorrt] as needed`}</CodeBlock>
           <P>
-            这样可以避免改动项目环境，并保持可选依赖相互隔离。TensorRT、OpenVINO、NCNN 和 CoreML 等特定厂商 extra 可能仍需平台相关的原生包。
+            这可避免改动项目环境，并使可选依赖保持隔离。TensorRT、OpenVINO、NCNN 和 CoreML 等特定厂商的 extra 仍可能需要平台专属的原生包。
           </P>
 
           <Divider />
@@ -3943,7 +3529,7 @@ uv pip install --python .venv-rtdetr/bin/python -e '.[rtdetr]'
           {/* ────────────── QUICKSTART ────────────── */}
           <SectionHeading id="quickstart" icon={Rocket}>快速开始</SectionHeading>
           <P>
-            若要使用测试最充分的路径，请选择单 GPU 的 YOLO9 检测、RF-DETR 检测或 RF-DETR 分割。它们通过同一个工厂加载、接受相同的输入并返回相同的 <InlineCode>Results</InlineCode> 对象，因此你可以在它们之间切换而无需改动周边代码。
+            若要使用经过最充分测试的路径，请选择单 GPU 的 YOLO9 检测、RF-DETR 检测或 RF-DETR 分割。它们通过同一个工厂函数加载，接受相同的输入，并返回相同的 <InlineCode>Results</InlineCode> 对象，因此你可以在它们之间切换而无需改动周边代码。
           </P>
 
           <SubHeading>YOLO9 - CNN 旗舰</SubHeading>
@@ -3960,7 +3546,7 @@ print(result.boxes.xyxy)   # bounding boxes (N, 4)
 print(result.boxes.conf)   # confidence scores (N,)
 print(result.boxes.cls)    # class IDs (N,)`}</CodeBlock>
 
-          <SubHeading>RF-DETR - transformer 旗舰</SubHeading>
+          <SubHeading>RF-DETR - Transformer 旗舰</SubHeading>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
 # Same factory, same call shape - just point at an RF-DETR checkpoint
@@ -3985,15 +3571,14 @@ for r in results:
           <SectionHeading id="models" icon={Layers}>可用模型</SectionHeading>
           <FlagshipCalloutZh />
           <P>
-            LibreYOLO v1.3.0 提供两个已验证的旗舰系列，以及更广泛的受支持和新增模型目录。每个模型都通过同一个 <InlineCode>LibreYOLO()</InlineCode> 工厂加载，但只有下面的已验证路径才应被视为经过充分测试。
+            LibreYOLO 在 v1.2.0 中提供一小部分经过验证的范围，外加更广泛的受支持模型目录。每个模型都通过同一个 <InlineCode>LibreYOLO()</InlineCode> 工厂函数加载，但只有下方经过验证的路径才应视为经过深度测试。
           </P>
 
-          <ValidatedModelHeader title="YOLO9 - CNN 旗舰">
+          <ValidatedModelHeaderZh title="YOLO9 - CNN 旗舰">
             <SupportBadge variant="validated">默认：LibreYOLO9c.pt</SupportBadge>
-            <SupportBadge variant="validated">充分测试：检测、训练与推理</SupportBadge>
-            <SupportBadge>v1.3.0 中仅检测</SupportBadge>
-            <SupportBadge>实验性：多 GPU</SupportBadge>
-          </ValidatedModelHeader>
+            <SupportBadge variant="validated">深度测试：检测、训练与推理</SupportBadge>
+            <SupportBadge>实验性：分割、多 GPU</SupportBadge>
+          </ValidatedModelHeaderZh>
           <DocTable
             headers={['尺寸', '代号', '输入尺寸', '适用场景', '检测检查点']}
             rows={[
@@ -4004,162 +3589,104 @@ for r in results:
             ]}
           />
           <P>
-            在 v1.3.0 中 YOLO9 仅支持检测。非检测的旗舰变体（包括旧的 <InlineCode>-seg</InlineCode> 检查点）已移除；如需分割，请使用下文的 RF-DETR 或 EdgeCrafter。
+            <SupportBadge>实验性</SupportBadge>{' '}
+            <strong className="text-surface-800 dark:text-white">分割检查点：</strong>{' '}
+            <Checkpoints names={['LibreYOLO9t-seg.pt', 'LibreYOLO9s-seg.pt', 'LibreYOLO9m-seg.pt', 'LibreYOLO9c-seg.pt']} />
+            。参见 <a href="#segmentation" className="text-libre-600 dark:text-libre-400 hover:underline">分割</a> 章节。
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
-model = LibreYOLO("LibreYOLO9c.pt")   # detection`}</CodeBlock>
+model = LibreYOLO("LibreYOLO9c.pt")
+# Experimental segmentation variant
+# model = LibreYOLO("LibreYOLO9c-seg.pt")`}</CodeBlock>
 
-          <ValidatedModelHeader title="RF-DETR - transformer 旗舰">
-            <SupportBadge variant="validated">推荐的 transformer 路径</SupportBadge>
-            <SupportBadge variant="validated">充分测试：检测、分割、训练与推理</SupportBadge>
-            <SupportBadge>研究预览：pose、OBB</SupportBadge>
+          <ValidatedModelHeaderZh title="RF-DETR - Transformer 旗舰">
+            <SupportBadge variant="validated">推荐的 Transformer 路径</SupportBadge>
+            <SupportBadge variant="validated">深度测试：检测、分割、训练与推理</SupportBadge>
             <SupportBadge>实验性：多 GPU</SupportBadge>
-          </ValidatedModelHeader>
+          </ValidatedModelHeaderZh>
           <DocTable
             headers={['尺寸', '代号', '输入尺寸', '适用场景', '检测检查点']}
             rows={[
-              ['Nano', <InlineCode key="n">&quot;n&quot;</InlineCode>, '384', '边缘端', <HFLink key="cp-n" name="LibreRFDETRn.pt" />],
+              ['Nano', <InlineCode key="n">&quot;n&quot;</InlineCode>, '384', '边缘设备', <HFLink key="cp-n" name="LibreRFDETRn.pt" />],
               ['Small', <InlineCode key="s">&quot;s&quot;</InlineCode>, '512', '均衡', <HFLink key="cp-s" name="LibreRFDETRs.pt" />],
               ['Medium', <InlineCode key="m">&quot;m&quot;</InlineCode>, '576', '更高精度', <HFLink key="cp-m" name="LibreRFDETRm.pt" />],
               ['Large', <InlineCode key="l">&quot;l&quot;</InlineCode>, '704', '最高精度', <HFLink key="cp-l" name="LibreRFDETRl.pt" />],
             ]}
           />
           <P>
-            LibreYOLO 在 Hugging Face 组织上提供 Apache 干净授权的 RF-DETR 检测尺寸 N/S/M/L。XL/2XL 档位有意不提供。
-          </P>
-          <P>
-            <SupportBadge variant="validated">充分测试</SupportBadge>{' '}
-            <strong className="text-surface-800 dark:text-white">分割：</strong>{' '}
-            <Checkpoints names={['LibreRFDETRn-seg.pt', 'LibreRFDETRs-seg.pt', 'LibreRFDETRm-seg.pt', 'LibreRFDETRl-seg.pt']} />。
-            {' '}更大的 <InlineCode>-seg</InlineCode> 尺寸（<InlineCode>x</InlineCode>、<InlineCode>xx</InlineCode>）
-            会拉取上游 RF-DETR seg-XL / seg-2XL 权重，采用非商业许可，
-            且不托管在 LibreYOLO 组织上。请参见{' '}
-            <a href="#segmentation" className="text-libre-600 dark:text-libre-400 hover:underline">分割</a> 章节。
-          </P>
-          <P>
-            <SupportBadge>研究预览</SupportBadge>{' '}
-            <strong className="text-surface-800 dark:text-white">姿态：</strong>{' '}
-            <Checkpoints names={['LibreRFDETRx-pose.pt']} link={false} />（移植自
-            RF-DETR v1.8.0 的 GroupPose；仅提供 576 下的 <InlineCode>x</InlineCode> 尺寸）。{' '}
-            <strong className="text-surface-800 dark:text-white">OBB：</strong>{' '}
-            <Checkpoints names={['LibreRFDETRn-obb.pt', 'LibreRFDETRs-obb.pt', 'LibreRFDETRm-obb.pt', 'LibreRFDETRl-obb.pt']} link={false} />{' '}
-            （旋转框，使用检测的输入尺寸）。请将两者视为研究预览，而非已验证路径。
+            <SupportBadge variant="validated">深度测试</SupportBadge>{' '}
+            <strong className="text-surface-800 dark:text-white">分割检查点：</strong>{' '}
+            <Checkpoints names={['LibreRFDETRn-seg.pt', 'LibreRFDETRs-seg.pt', 'LibreRFDETRm-seg.pt', 'LibreRFDETRl-seg.pt', 'LibreRFDETRx-seg.pt', 'LibreRFDETRxx-seg.pt']} />
+            。参见 <a href="#segmentation" className="text-libre-600 dark:text-libre-400 hover:underline">分割</a> 章节。
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
-model = LibreYOLO("LibreRFDETRs.pt")           # detect (validated)
-# model = LibreYOLO("LibreRFDETRs-seg.pt")     # segment (validated)
-# model = LibreYOLO("LibreRFDETRx-pose.pt")    # pose  (research preview)
-# model = LibreYOLO("LibreRFDETRn-obb.pt")     # obb   (research preview)`}</CodeBlock>
+model = LibreYOLO("LibreRFDETRs.pt")
+# Segmentation variants exist for every RF-DETR size
+# model = LibreYOLO("LibreRFDETRs-seg.pt")`}</CodeBlock>
 
-          <SubHeading>其他检测系列</SubHeading>
+          <SubHeading>其他受支持的系列</SubHeading>
           <P>
-            与已验证路径共享同一工厂和 API 接口的可检测系列。它们在 v1.3.0 中为实验性。每个检查点名称都链接到{' '}
-            <a href="https://huggingface.co/LibreYOLO" target="_blank" rel="noopener noreferrer" className="text-libre-600 dark:text-libre-400 hover:underline">LibreYOLO 组织</a>上的模型卡；
-            将任意名称传给 <InlineCode>LibreYOLO()</InlineCode>，工厂会在首次使用时自动获取。
+            具备检测能力的系列，与经过验证的路径共享同一个工厂函数和 API。它们在 v1.2.0 中属实验性。每个检查点名称都链接到 <a href="https://huggingface.co/LibreYOLO" target="_blank" rel="noopener noreferrer" className="text-libre-600 dark:text-libre-400 hover:underline">LibreYOLO 组织</a> 在 Hugging Face 上的模型卡；将任意名称传给 <InlineCode>LibreYOLO()</InlineCode>，工厂函数会在首次使用时自动获取。
           </P>
           <DocTable
             headers={['系列', '状态', '任务', '检查点']}
             rows={[
-              ['YOLOX', <SupportBadge key="b">实验性</SupportBadge>, 'detect', <Checkpoints key="yolox" names={['LibreYOLOXn.pt', 'LibreYOLOXt.pt', 'LibreYOLOXs.pt', 'LibreYOLOXm.pt', 'LibreYOLOXl.pt', 'LibreYOLOXx.pt']} />],
-              ['YOLO9-E2E', <SupportBadge key="b">实验性</SupportBadge>, 'detect', <Checkpoints key="y9e2e" names={['LibreYOLO9E2Et.pt', 'LibreYOLO9E2Es.pt', 'LibreYOLO9E2Em.pt', 'LibreYOLO9E2Ec.pt']} />],
-              ['YOLO-NAS', <SupportBadge key="b">实验性</SupportBadge>, 'detect, pose', <Checkpoints key="ynas" link={false} names={['LibreYOLONASs.pt', 'LibreYOLONASm.pt', 'LibreYOLONASl.pt', 'LibreYOLONASn-pose.pt', 'LibreYOLONASs-pose.pt', 'LibreYOLONASm-pose.pt', 'LibreYOLONASl-pose.pt']} />],
-              ['D-FINE', <SupportBadge key="b">实验性</SupportBadge>, 'detect', <Checkpoints key="dfine" names={['LibreDFINEn.pt', 'LibreDFINEs.pt', 'LibreDFINEm.pt', 'LibreDFINEl.pt', 'LibreDFINEx.pt']} />],
-              ['DEIM', <SupportBadge key="b">实验性</SupportBadge>, 'detect', <Checkpoints key="deim" names={['LibreDEIMn.pt', 'LibreDEIMs.pt', 'LibreDEIMm.pt', 'LibreDEIMl.pt', 'LibreDEIMx.pt']} />],
-              ['DEIMv2', <SupportBadge key="b">实验性</SupportBadge>, 'detect', <Checkpoints key="deimv2" names={['LibreDEIMv2atto.pt', 'LibreDEIMv2femto.pt', 'LibreDEIMv2pico.pt', 'LibreDEIMv2n.pt', 'LibreDEIMv2s.pt', 'LibreDEIMv2m.pt', 'LibreDEIMv2l.pt', 'LibreDEIMv2x.pt']} />],
-              ['RT-DETR', <SupportBadge key="b">实验性</SupportBadge>, 'detect', <Checkpoints key="rtdetr" names={['LibreRTDETRr18.pt', 'LibreRTDETRr34.pt', 'LibreRTDETRr50.pt', 'LibreRTDETRr50m.pt', 'LibreRTDETRr101.pt', 'LibreRTDETRl.pt', 'LibreRTDETRx.pt']} />],
-              ['RT-DETRv2', <SupportBadge key="b">实验性</SupportBadge>, 'detect', <Checkpoints key="rtdetrv2" names={['LibreRTDETRv2r18.pt', 'LibreRTDETRv2r34.pt', 'LibreRTDETRv2r50.pt', 'LibreRTDETRv2r50m.pt', 'LibreRTDETRv2r101.pt']} />],
-              ['RT-DETRv4', <SupportBadge key="b">实验性</SupportBadge>, 'detect', <Checkpoints key="rtdetrv4" names={['LibreRTDETRv4s.pt', 'LibreRTDETRv4m.pt', 'LibreRTDETRv4l.pt', 'LibreRTDETRv4x.pt']} />],
-              ['PicoDet', <SupportBadge key="b">实验性</SupportBadge>, 'detect', <Checkpoints key="picodet" names={['LibrePICODETs.pt', 'LibrePICODETm.pt', 'LibrePICODETl.pt']} />],
-              ['RTMDet', <SupportBadge key="b">实验性</SupportBadge>, 'detect', <Checkpoints key="rtmdet" names={['LibreRTMDett.pt', 'LibreRTMDets.pt', 'LibreRTMDetm.pt', 'LibreRTMDetl.pt', 'LibreRTMDetx.pt']} />],
-              ['EdgeCrafter', <SupportBadge key="b">实验性</SupportBadge>, 'detect, pose, segment', <Checkpoints key="ec" names={['LibreECs.pt', 'LibreECm.pt', 'LibreECl.pt', 'LibreECx.pt', 'LibreECs-pose.pt', 'LibreECm-pose.pt', 'LibreECl-pose.pt', 'LibreECx-pose.pt', 'LibreECs-seg.pt', 'LibreECm-seg.pt', 'LibreECl-seg.pt', 'LibreECx-seg.pt']} />],
+              ['YOLOX', <SupportBadge>实验性</SupportBadge>, 'detect', <Checkpoints key="yolox" names={['LibreYOLOXn.pt', 'LibreYOLOXt.pt', 'LibreYOLOXs.pt', 'LibreYOLOXm.pt', 'LibreYOLOXl.pt', 'LibreYOLOXx.pt']} />],
+              ['YOLO9-E2E', <SupportBadge>实验性</SupportBadge>, 'detect', <Checkpoints key="y9e2e" names={['LibreYOLO9E2Et.pt', 'LibreYOLO9E2Es.pt', 'LibreYOLO9E2Em.pt', 'LibreYOLO9E2Ec.pt']} />],
+              ['YOLO-NAS', <SupportBadge>实验性</SupportBadge>, 'detect, pose', <Checkpoints key="ynas" link={false} names={['LibreYOLONASs.pt', 'LibreYOLONASm.pt', 'LibreYOLONASl.pt', 'LibreYOLONASn-pose.pt', 'LibreYOLONASs-pose.pt', 'LibreYOLONASm-pose.pt', 'LibreYOLONASl-pose.pt']} />],
+              ['D-FINE', <SupportBadge>实验性</SupportBadge>, 'detect', <Checkpoints key="dfine" names={['LibreDFINEn.pt', 'LibreDFINEs.pt', 'LibreDFINEm.pt', 'LibreDFINEl.pt', 'LibreDFINEx.pt']} />],
+              ['DEIM', <SupportBadge>实验性</SupportBadge>, 'detect', <Checkpoints key="deim" names={['LibreDEIMn.pt', 'LibreDEIMs.pt', 'LibreDEIMm.pt', 'LibreDEIMl.pt', 'LibreDEIMx.pt']} />],
+              ['DEIMv2', <SupportBadge>实验性</SupportBadge>, 'detect', <Checkpoints key="deimv2" names={['LibreDEIMv2atto.pt', 'LibreDEIMv2femto.pt', 'LibreDEIMv2pico.pt', 'LibreDEIMv2n.pt', 'LibreDEIMv2s.pt', 'LibreDEIMv2m.pt', 'LibreDEIMv2l.pt', 'LibreDEIMv2x.pt']} />],
+              ['RT-DETR', <SupportBadge>实验性</SupportBadge>, 'detect', <Checkpoints key="rtdetr" names={['LibreRTDETRr18.pt', 'LibreRTDETRr34.pt', 'LibreRTDETRr50.pt', 'LibreRTDETRr50m.pt', 'LibreRTDETRr101.pt', 'LibreRTDETRl.pt', 'LibreRTDETRx.pt']} />],
+              ['RT-DETRv2', <SupportBadge>实验性</SupportBadge>, 'detect', <Checkpoints key="rtdetrv2" names={['LibreRTDETRv2r18.pt', 'LibreRTDETRv2r34.pt', 'LibreRTDETRv2r50.pt', 'LibreRTDETRv2r50m.pt', 'LibreRTDETRv2r101.pt']} />],
+              ['RT-DETRv4', <SupportBadge>实验性</SupportBadge>, 'detect', <Checkpoints key="rtdetrv4" names={['LibreRTDETRv4s.pt', 'LibreRTDETRv4m.pt', 'LibreRTDETRv4l.pt', 'LibreRTDETRv4x.pt']} />],
+              ['PicoDet', <SupportBadge>实验性</SupportBadge>, 'detect', <Checkpoints key="picodet" names={['LibrePICODETs.pt', 'LibrePICODETm.pt', 'LibrePICODETl.pt']} />],
+              ['EdgeCrafter', <SupportBadge>实验性</SupportBadge>, 'detect, pose, segment', <Checkpoints key="ec" names={['LibreECs.pt', 'LibreECm.pt', 'LibreECl.pt', 'LibreECx.pt', 'LibreECs-pose.pt', 'LibreECm-pose.pt', 'LibreECl-pose.pt', 'LibreECx-pose.pt', 'LibreECs-seg.pt', 'LibreECm-seg.pt', 'LibreECl-seg.pt', 'LibreECx-seg.pt']} />],
+              ['DAMO-YOLO', <SupportBadge>实验性</SupportBadge>, 'detect', <Checkpoints key="damo" names={['LibreDAMOYOLOns.pt', 'LibreDAMOYOLOnm.pt', 'LibreDAMOYOLOnl.pt', 'LibreDAMOYOLOt.pt', 'LibreDAMOYOLOs.pt', 'LibreDAMOYOLOm.pt', 'LibreDAMOYOLOl.pt']} />],
+              ['RTMDet', <SupportBadge>实验性</SupportBadge>, 'detect', <Checkpoints key="rtmdet" names={['LibreRTMDett.pt', 'LibreRTMDets.pt', 'LibreRTMDetm.pt', 'LibreRTMDetl.pt', 'LibreRTMDetx.pt']} />],
             ]}
           />
           <P className="text-sm">
-            <strong className="text-surface-800 dark:text-white">托管说明：</strong>{' '}
-            YOLO-NAS 检查点（上方纯文本）托管在 Deci 的 CDN 上，采用其专有权重许可，
-            而非 LibreYOLO 的 Hugging Face 组织。工厂仍会在首次使用时自动下载它们。
-            DAMO-YOLO 已在 v1.3.0 中移除，不再可加载。
-          </P>
-
-          <SubHeading>v1.3.0 中的新模型系列</SubHeading>
-          <P>
-            v1.3.0 新增了分类、密集语义分割、单目深度和点定位系列。它们通过同一个工厂加载，但属于新增且实验性。DINOv2 需要{' '}
-            <InlineCode>pip install libreyolo[rfdetr]</InlineCode>（transformers）。
-          </P>
-          <DocTable
-            headers={['系列', '状态', '任务', '检查点']}
-            rows={[
-              ['MobileNetV4', <SupportBadge key="b">实验性</SupportBadge>, 'classify', <Checkpoints key="mn4" names={['LibreMobileNetV4s-cls.pt', 'LibreMobileNetV4m-cls.pt', 'LibreMobileNetV4l-cls.pt']} />],
-              ['ConvNeXt', <SupportBadge key="b">实验性</SupportBadge>, 'classify', <Checkpoints key="cnx" link={false} names={['LibreConvNeXtt-cls.pt', 'LibreConvNeXts-cls.pt', 'LibreConvNeXtb-cls.pt']} />],
-              ['EfficientNetV2', <SupportBadge key="b">实验性</SupportBadge>, 'classify', <Checkpoints key="env2" link={false} names={['LibreEfficientNetV2b0-cls.pt', 'LibreEfficientNetV2b1-cls.pt', 'LibreEfficientNetV2b2-cls.pt', 'LibreEfficientNetV2b3-cls.pt']} />],
-              ['DINOv2', <SupportBadge key="b">实验性</SupportBadge>, 'semantic, classify', <Checkpoints key="dino" link={false} names={['LibreDINOv2n.pt', 'LibreDINOv2s.pt', 'LibreDINOv2m.pt', 'LibreDINOv2l.pt', 'LibreDINOv2n-cls.pt', 'LibreDINOv2s-cls.pt', 'LibreDINOv2m-cls.pt', 'LibreDINOv2l-cls.pt']} />],
-              ['Depth Anything V2', <SupportBadge key="b">实验性</SupportBadge>, 'depth', <Checkpoints key="depth" link={false} names={['LibreDepthAnythingV2s-depth.pt', 'LibreDepthAnythingV2b-depth.pt', 'LibreDepthAnythingV2l-depth.pt', 'LibreDepthAnythingV2g-depth.pt']} />],
-              ['FOMO', <SupportBadge key="b">实验性</SupportBadge>, 'point', <Checkpoints key="fomo" link={false} names={['LibreFOMOs-point.pt', 'LibreFOMOm-point.pt', 'LibreFOMOl-point.pt']} />],
-            ]}
-          />
-          <ul className="space-y-2 my-4">
-            <FeatureItem><strong className="text-surface-800 dark:text-white">MobileNetV4</strong> 是商用干净的分类路径：Apache-2.0 ImageNet-1k 权重（s/m/l 分别为 224/224/256），支持预测、top-1/top-5 验证、微调训练和 ONNX 导出。</FeatureItem>
-            <FeatureItem><strong className="text-surface-800 dark:text-white">ConvNeXt</strong>（V1 Tiny/Small/Base，224）和 <strong className="text-surface-800 dark:text-white">EfficientNetV2</strong>（b0-b3，224-300）是另外的 Apache-2.0 ImageNet-1k 分类器（精度档）。</FeatureItem>
-            <FeatureItem><strong className="text-surface-800 dark:text-white">DINOv2</strong> 是带任务头的 DINOv2 主干：默认在 518 下进行密集语义分割，并在 224 下提供分类线性探针。它不是 RF-DETR 检测器。分类在 v1.3.0 中从 RF-DETR 迁移到这里。</FeatureItem>
-            <FeatureItem><strong className="text-surface-800 dark:text-white">Depth Anything V2</strong> 进行单目深度估计（尺寸 s/b/l/g，均在 518）。ViT-S 权重为 Apache-2.0；ViT-B/L/G 为 CC-BY-NC-4.0（非商业）。仅支持推理和零样本验证：不可训练，且不支持导出。</FeatureItem>
-            <FeatureItem><strong className="text-surface-800 dark:text-white">FOMO</strong> 是点定位器，为每个目标输出 <InlineCode>(x, y, class, confidence)</InlineCode>。预训练权重不再分发：请传入本地检查点或从头训练。</FeatureItem>
-          </ul>
-          <P className="text-sm">
-            <strong className="text-surface-800 dark:text-white">可提示与 VLM 档位：</strong>{' '}
-            LibreSAM（可提示分割，<InlineCode>libreyolo[sam]</InlineCode>）
-            和 LibreVLM 视觉语言检测器档位
-            （<InlineCode>libreyolo[vlm]</InlineCode>）是单独的类别，它们加载
-            上游的 Hugging Face 快照，且不通过{' '}
-            <InlineCode>LibreYOLO()</InlineCode> 检测器工厂路由。它们的权重继承
-            各上游模型的许可。
+            <strong className="text-surface-800 dark:text-white">托管说明：</strong> YOLO-NAS 检查点（上方以纯文本显示）托管在 Deci 的 CDN 上，遵循其专有权重许可证，而非 LibreYOLO 的 Hugging Face 组织。工厂函数仍会在首次使用时自动下载它们。
           </P>
 
           <SubHeading>专用模型</SubHeading>
           <DocTable
             headers={['系列', '状态', '任务', '检查点']}
             rows={[
-              ['L2CS', <SupportBadge key="b">实验性</SupportBadge>, <span key="t">gaze（仅推理）- 参见 <a href="#gaze" className="text-libre-600 dark:text-libre-400 hover:underline">视线估计</a></span>, <Checkpoints key="l2cs" link={false} names={['LibreL2CSr50.pt']} />],
+              ['L2CS', <SupportBadge>实验性</SupportBadge>, <span key="t">gaze（仅推理） - 参见 <a href="#gaze" className="text-libre-600 dark:text-libre-400 hover:underline">视线估计</a></span>, <Checkpoints key="l2cs" link={false} names={['LibreL2CSr50.pt']} />],
             ]}
           />
           <P className="text-sm">
-            L2CS 架构尺寸包括 r18、r34、r50、r101 和 r152，但上游发布的 Gaze360 检查点为
-            ResNet-50。安装 <InlineCode>libreyolo[gaze]</InlineCode> 以获取可选的下载助手，
-            或为其他尺寸传入本地检查点路径。L2CS 权重不由 LibreYOLO 托管（Gaze360 数据集
-            许可禁止再分发）。
+            L2CS 架构尺寸包括 r18、r34、r50、r101 和 r152，但上游发布的 Gaze360 检查点是 ResNet-50。安装 <InlineCode>libreyolo[gaze]</InlineCode> 以使用可选的 Google Drive 辅助下载，或为其他尺寸传入本地检查点路径。
           </P>
 
           <SubHeading>工厂函数</SubHeading>
           <P>
-            对每个模型和运行时都使用 <InlineCode>LibreYOLO()</InlineCode> 工厂。给它一个官方检查点名称或导出产物路径，
-            然后让它选择正确的模型系列、任务、类别数和运行时：
+            对所有模型和运行时都使用 <InlineCode>LibreYOLO()</InlineCode> 工厂函数。传入官方检查点名称或导出产物路径，让它自动选择正确的模型系列、任务、类别数和运行时：
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 # Default: YOLO9 detection
 model = LibreYOLO("LibreYOLO9c.pt")
 
-# Flagship transformer: RF-DETR
+# Flagship: RF-DETR
 model = LibreYOLO("LibreRFDETRs.pt")
-model = LibreYOLO("LibreRFDETRs-seg.pt")        # validated segmentation
 
-# New in v1.3.0
-model = LibreYOLO("LibreMobileNetV4s-cls.pt")   # classification (Apache, ImageNet-1k)
-model = LibreYOLO("LibreDINOv2n.pt")            # semantic segmentation
-model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")  # monocular depth
-model = LibreYOLO("LibreFOMOs-point.pt")        # point localization (local weights)
+# Segmentation checkpoints use the same factory path
+model = LibreYOLO("LibreRFDETRs-seg.pt")       # validated segmentation
+model = LibreYOLO("LibreYOLO9c-seg.pt")        # experimental segmentation
 
 # Exported deployment formats
-model = LibreYOLO("model.onnx")                 # ONNX Runtime
-model = LibreYOLO("model.engine")               # TensorRT
-model = LibreYOLO("model.mlpackage")            # CoreML (macOS)
-model = LibreYOLO("model_openvino/")            # OpenVINO (directory)
-model = LibreYOLO("model_ncnn/")                # NCNN (directory)`}</CodeBlock>
+model = LibreYOLO("model.onnx")                # ONNX Runtime
+model = LibreYOLO("model.engine")              # TensorRT
+model = LibreYOLO("model.mlpackage")           # CoreML (macOS)
+model = LibreYOLO("model_openvino/")           # OpenVINO (directory)
+model = LibreYOLO("model_ncnn/")               # NCNN (directory)`}</CodeBlock>
           <P>
-            对于可识别的官方检查点文件名，LibreYOLO 可以自动下载缺失的权重。对于自定义文件名，请指向明确的本地路径。
-            新项目请保持使用 YOLO9 检测或 RF-DETR 检测 / 分割；
-            其他系列、任务以及新增系列在 v1.3.0 中为实验性。
+            对于可识别的官方检查点文件名，LibreYOLO 可自动下载缺失的权重。对于自定义文件名，请指向明确的本地路径。实验性系列仍通过同一个工厂函数加载，但新项目请坚持使用 YOLO9 检测或 RF-DETR 检测/分割。如有特定理由再使用它们。
           </P>
 
           <Divider />
@@ -4167,32 +3694,23 @@ model = LibreYOLO("model_ncnn/")                # NCNN (directory)`}</CodeBlock>
           {/* ────────────── TASKS & FILENAMES ────────────── */}
           <SectionHeading id="tasks" icon={Tags}>任务与文件名</SectionHeading>
           <P>
-            LibreYOLO 使用统一的文件名约定，因此工厂仅凭检查点名称即可识别系列、尺寸和任务：
+            LibreYOLO 使用统一的文件名约定，使工厂函数仅凭检查点名称即可识别系列、尺寸和任务：
           </P>
           <CodeBlock language="text">{`Libre<FAMILY><size>[-<task>].pt`}</CodeBlock>
 
           <SubHeading>任务后缀</SubHeading>
           <DocTable
-            headers={['任务', '规范名称', '文件名后缀', '所属系列']}
+            headers={['任务', '规范名称', '文件名后缀']}
             rows={[
-              ['检测', <InlineCode key="d">&quot;detect&quot;</InlineCode>, '（无 - 隐式）', '大多数系列（默认）'],
-              ['实例分割', <InlineCode key="s">&quot;segment&quot;</InlineCode>, <InlineCode key="ss">-seg</InlineCode>, 'RF-DETR、EdgeCrafter'],
-              ['语义分割', <InlineCode key="se">&quot;semantic&quot;</InlineCode>, <InlineCode key="ses">-sem</InlineCode>, 'DINOv2'],
-              ['姿态估计', <InlineCode key="p">&quot;pose&quot;</InlineCode>, <InlineCode key="ps">-pose</InlineCode>, 'YOLO-NAS、EdgeCrafter、RF-DETR（预览）'],
-              ['旋转框', <InlineCode key="o">&quot;obb&quot;</InlineCode>, <InlineCode key="os">-obb</InlineCode>, 'RF-DETR（预览）'],
-              ['分类', <InlineCode key="c">&quot;classify&quot;</InlineCode>, <InlineCode key="cs">-cls</InlineCode>, 'MobileNetV4、ConvNeXt、EfficientNetV2、DINOv2'],
-              ['单目深度', <InlineCode key="de">&quot;depth&quot;</InlineCode>, <InlineCode key="des">-depth</InlineCode>, 'Depth Anything V2'],
-              ['点定位', <InlineCode key="pt">&quot;point&quot;</InlineCode>, <InlineCode key="pts">-point</InlineCode>, 'FOMO'],
-              ['视线估计', <InlineCode key="g">&quot;gaze&quot;</InlineCode>, <InlineCode key="gs">-gaze</InlineCode>, 'L2CS'],
+              ['检测', <InlineCode key="d">&quot;detect&quot;</InlineCode>, '（无 - 隐式）'],
+              ['实例分割', <InlineCode key="s">&quot;segment&quot;</InlineCode>, <InlineCode key="ss">-seg</InlineCode>],
+              ['姿态估计', <InlineCode key="p">&quot;pose&quot;</InlineCode>, <InlineCode key="ps">-pose</InlineCode>],
+              ['分类', <InlineCode key="c">&quot;classify&quot;</InlineCode>, <InlineCode key="cs">-cls</InlineCode>],
+              ['视线估计', <InlineCode key="g">&quot;gaze&quot;</InlineCode>, <InlineCode key="gs">-gaze</InlineCode>],
             ]}
           />
           <P>
-            检测是隐式的（无后缀），遵循常见的 YOLO 约定。
-            工厂在 API 边界接受别名
-            （<InlineCode>&quot;detection&quot;</InlineCode>、<InlineCode>&quot;seg&quot;</InlineCode>、
-            <InlineCode>&quot;keypoints&quot;</InlineCode>、<InlineCode>&quot;cls&quot;</InlineCode> 等）；
-            只有上面的规范名称才会出现在文件名中。只有当某个任务在该系列的
-            受支持任务集中时，它才可用。
+            工厂函数在 API 边界接受别名（<InlineCode>&quot;detection&quot;</InlineCode>、<InlineCode>&quot;seg&quot;</InlineCode>、<InlineCode>&quot;keypoints&quot;</InlineCode> 等） - 但文件名中只出现规范名称。
           </P>
 
           <SubHeading>解析优先级</SubHeading>
@@ -4213,21 +3731,18 @@ model = LibreYOLO("LibreYOLO9c.pt")  # task="detect"`}</CodeBlock>
 
           <SubHeading>各系列任务支持</SubHeading>
           <DocTable
-            headers={['系列', 'v1.3.0 状态', '默认', '受支持任务']}
+            headers={['系列', 'v1.2.0 状态', '默认', '支持的任务']}
             rows={[
-              [<strong key="y9">YOLO9</strong>, '单 GPU detect 充分测试；多 GPU 实验性', 'detect', 'detect'],
-              [<strong key="rfd">RF-DETR</strong>, '单 GPU detect 和 segment 充分测试；pose 和 OBB 研究预览', 'detect', 'detect, segment, pose, obb'],
+              [<strong key="y9">YOLO9</strong>, 'detect 单 GPU 深度测试；segment 与多 GPU 实验性', 'detect', 'detect, segment'],
+              [<strong key="rfd">RF-DETR</strong>, 'detect 与 segment 单 GPU 深度测试；多 GPU 实验性', 'detect', 'detect, segment'],
               ['YOLOX', '实验性', 'detect', 'detect'],
               ['YOLO9-E2E', '实验性', 'detect', 'detect'],
               ['YOLO-NAS', '实验性', 'detect', 'detect, pose'],
               ['D-FINE / DEIM / DEIMv2', '实验性', 'detect', 'detect'],
               ['RT-DETR / RT-DETRv2 / RT-DETRv4', '实验性', 'detect', 'detect'],
-              ['PicoDet / RTMDet', '实验性', 'detect', 'detect'],
+              ['PicoDet', '实验性', 'detect', 'detect'],
               ['EdgeCrafter (EC)', '实验性', 'detect', 'detect, pose, segment'],
-              ['DINOv2', '新增，实验性', 'semantic', 'semantic, classify'],
-              ['MobileNetV4 / ConvNeXt / EfficientNetV2', '新增，实验性', 'classify', 'classify'],
-              ['Depth Anything V2', '新增，实验性', 'depth', 'depth'],
-              ['FOMO', '新增，实验性', 'point', 'point'],
+              ['DAMO-YOLO / RTMDet', '实验性', 'detect', 'detect'],
               ['L2CS', '实验性', 'gaze', 'gaze（仅推理）'],
             ]}
           />
@@ -4238,39 +3753,21 @@ LibreYOLO9c.pt
 LibreRFDETRs.pt
 LibreRTDETRr50.pt
 
-# Instance segmentation (-seg)
+# Segmentation
+LibreYOLO9c-seg.pt
 LibreRFDETRs-seg.pt
 LibreECm-seg.pt
 
-# Semantic segmentation (-sem)
-LibreDINOv2n.pt          # semantic is DINOv2's default; -sem optional
-
-# Pose (-pose)
+# Pose
 LibreYOLONASn-pose.pt
 LibreECs-pose.pt
-LibreRFDETRx-pose.pt     # preview; size x only
 
-# Oriented boxes (-obb)
-LibreRFDETRn-obb.pt      # preview
+# Gaze
+LibreL2CSr50.pt   # gaze is L2CS's only task - suffix optional`}</CodeBlock>
 
-# Classification (-cls)
-LibreMobileNetV4s-cls.pt
-LibreConvNeXtt-cls.pt
-LibreEfficientNetV2b0-cls.pt
-LibreDINOv2n-cls.pt      # DINOv2 linear probe
-
-# Depth (-depth)
-LibreDepthAnythingV2s-depth.pt
-
-# Point (-point)
-LibreFOMOs-point.pt
-
-# Gaze (-gaze optional; only task for L2CS)
-LibreL2CSr50.pt`}</CodeBlock>
-
-          <SubHeading>已弃用别名</SubHeading>
+          <SubHeading>已弃用的别名</SubHeading>
           <P>
-            <InlineCode>LibreYOLORTDETR</InlineCode> 和 <InlineCode>LibreYOLORFDETR</InlineCode> 分别是 <InlineCode>LibreRTDETR</InlineCode> 和 <InlineCode>LibreRFDETR</InlineCode> 的旧名称。它们仍可解析，但会发出 <InlineCode>DeprecationWarning</InlineCode> - 方便时请更新导入。
+            <InlineCode>LibreYOLORTDETR</InlineCode> 和 <InlineCode>LibreYOLORFDETR</InlineCode> 分别是 <InlineCode>LibreRTDETR</InlineCode> 和 <InlineCode>LibreRFDETR</InlineCode> 的旧名称。它们仍可解析，但会触发 <InlineCode>DeprecationWarning</InlineCode> - 请在方便时更新导入。
           </P>
 
           <Divider />
@@ -4278,10 +3775,10 @@ LibreL2CSr50.pt`}</CodeBlock>
           {/* ────────────── PREDICTION ────────────── */}
           <SectionHeading id="prediction" icon={Crosshair}>预测</SectionHeading>
           <P>
-            单 GPU 预测路径在 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割上经过充分测试。其他系列和任务使用相同的 API，但在 v1.3.0 中为实验性。
+            单 GPU 预测路径针对 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割经过深度测试。其他系列和任务使用相同的 API，但在 v1.2.0 中属实验性。
           </P>
 
-          <SubHeading>基础预测</SubHeading>
+          <SubHeading>基本预测</SubHeading>
           <CodeBlock language="python">{`result = model("image.jpg")`}</CodeBlock>
 
           <SubHeading>全部预测参数</SubHeading>
@@ -4353,7 +3850,7 @@ results = model("images/", batch=4)`}</CodeBlock>
 
           <SubHeading>处理结果</SubHeading>
           <P>
-            每次预测都返回一个 <InlineCode>Results</InlineCode> 对象（对目录则返回它们的列表）：
+            每次预测都会返回一个 <InlineCode>Results</InlineCode> 对象（处理目录时返回其列表）：
           </P>
           <CodeBlock language="python">{`result = model("image.jpg")
 
@@ -4386,49 +3883,19 @@ result_cpu = result.cpu()
 boxes_np = result.boxes.numpy()`}</CodeBlock>
 
           <SubHeading>类别过滤</SubHeading>
-          <P>将检测结果过滤到特定类别 ID：</P>
+          <P>将检测结果过滤为特定类别 ID：</P>
           <CodeBlock language="python">{`# Only detect people (class 0) and cars (class 2)
 result = model("image.jpg", classes=[0, 2])`}</CodeBlock>
-
-          <SubHeading>内存中的批量推理</SubHeading>
-          <P>
-            v1.3.0 新增：<InlineCode>model.predict()</InlineCode> 接受由内存中图像组成的列表或元组
-            （NumPy 数组、PIL 图像或张量），并将它们作为真正的堆叠前向批次运行。设置 <InlineCode>batch &gt; 1</InlineCode> 可在支持的系列上
-            真正批处理前向计算；返回结果列表，每个输入对应一个。
-          </P>
-          <CodeBlock language="python">{`import numpy as np
-from libreyolo import LibreYOLO
-
-model = LibreYOLO("LibreYOLO9c.pt")
-
-frames = [
-    np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8),
-    np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8),
-    np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8),
-]
-
-results = model(frames, batch=4)   # list/tuple -> true batched inference
-for r in results:
-    print(len(r), r.boxes.xyxy.shape)`}</CodeBlock>
-
-          <SubHeading>模型信息</SubHeading>
-          <P>
-            <InlineCode>model.info()</InlineCode>（v1.3.0 新增）返回一个 JSON 友好的字典，包含
-            系列、尺寸、任务、参数量、输入尺寸和类别名称，并在 <InlineCode>verbose=True</InlineCode> 时
-            打印可读的摘要。
-          </P>
-          <CodeBlock language="python">{`meta = model.info(detailed=False, verbose=True)
-# meta -> {"family": ..., "size": ..., "task": ..., "params": ..., "imgsz": ..., "names": {...}, ...}`}</CodeBlock>
 
           <Divider />
 
           {/* ────────────── TILED INFERENCE ────────────── */}
           <SectionHeading id="tiled-inference" icon={Grid3x3}>分块推理</SectionHeading>
           <P>
-            对于远大于模型输入尺寸的图像（如卫星影像、无人机画面），分块推理会将图像切分为重叠的分块，对每个分块运行检测，再合并结果。
+            对于远大于模型输入尺寸的图像（如卫星影像、无人机航拍），分块推理会将图像切分为相互重叠的小块，分别在每块上运行检测，再合并结果。
           </P>
           <P>
-            在 v1.3.0 中分块仅支持检测。它会拒绝分割掩码，且不能与 <InlineCode>augment=True</InlineCode> 组合使用。
+            在 v1.2.0 dev 中分块仅支持检测。它不接受分割掩码，且无法与 <InlineCode>augment=True</InlineCode> 组合使用。
           </P>
           <CodeBlock language="python">{`result = model(
     "large_aerial_image.jpg",
@@ -4448,13 +3915,13 @@ result.grid_path       # grid visualization image`}</CodeBlock>
             在分块时设置 <InlineCode>save=True</InlineCode>，LibreYOLO 会保存：
           </P>
           <ul className="space-y-2 mb-4">
-            <FeatureItem><InlineCode>final_image.jpg</InlineCode> - 绘制了所有合并检测的完整图像</FeatureItem>
+            <FeatureItem><InlineCode>final_image.jpg</InlineCode> - 绘制了全部合并检测结果的完整图像</FeatureItem>
             <FeatureItem><InlineCode>grid_visualization.jpg</InlineCode> - 显示分块网格叠加的图像</FeatureItem>
             <FeatureItem><InlineCode>tiles/</InlineCode> - 各个分块裁剪图</FeatureItem>
             <FeatureItem><InlineCode>metadata.json</InlineCode> - 分块参数和检测数量</FeatureItem>
           </ul>
           <P>
-            如果图像已经小于模型的输入尺寸，则会自动跳过分块。
+            如果图像本身已小于模型的输入尺寸，则会自动跳过分块。
           </P>
 
           <Divider />
@@ -4462,7 +3929,7 @@ result.grid_path       # grid visualization image`}</CodeBlock>
           {/* ────────────── VIDEO INFERENCE ────────────── */}
           <SectionHeading id="video-inference" icon={Video}>视频推理</SectionHeading>
           <P>
-            将任意视频文件传给旗舰模型，LibreYOLO 会根据扩展名自动检测格式。支持：<InlineCode>.mp4</InlineCode>、<InlineCode>.avi</InlineCode>、<InlineCode>.mov</InlineCode>、<InlineCode>.mkv</InlineCode>、<InlineCode>.webm</InlineCode>、<InlineCode>.gif</InlineCode> 以及其他常见容器。
+            将任意视频文件传给旗舰模型，LibreYOLO 会根据扩展名自动识别格式。支持：<InlineCode>.mp4</InlineCode>、<InlineCode>.avi</InlineCode>、<InlineCode>.mov</InlineCode>、<InlineCode>.mkv</InlineCode>、<InlineCode>.webm</InlineCode>、<InlineCode>.gif</InlineCode> 以及其他常见容器格式。
           </P>
 
           <SubHeading>保存标注后的视频</SubHeading>
@@ -4472,7 +3939,7 @@ model = LibreYOLO("LibreYOLO9c.pt")
 results = model("clip.mp4", save=True)
 # Saved under runs/detect/predict*/clip.mp4`}</CodeBlock>
 
-          <SubHeading>流式结果（内存平稳）</SubHeading>
+          <SubHeading>流式结果（内存恒定）</SubHeading>
           <P>
             对于长视频，传入 <InlineCode>stream=True</InlineCode> 可获得一个生成器。每次迭代产出一帧的 <InlineCode>Results</InlineCode> - 不会在内存中缓存完整列表。
           </P>
@@ -4489,7 +3956,7 @@ results = model("clip.mp4", show=True)`}</CodeBlock>
 
           <SubHeading>用于自定义流水线的 VideoSource / VideoWriter</SubHeading>
           <P>
-            当你需要完全控制解码和编码时 - 自定义帧变换、混入跟踪输出、写入非默认编解码器 - 可直接使用这些构建块：
+            当你需要完全掌控解码和编码时 - 自定义帧变换、混入跟踪器输出、写入非默认编解码器 - 可直接使用这些构建模块：
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 from libreyolo.utils.video import VideoSource, VideoWriter
@@ -4508,16 +3975,13 @@ with VideoSource("clip.mp4", vid_stride=1) as src, \\
           {/* ────────────── TRACKING ────────────── */}
           <SectionHeading id="tracking" icon={Activity}>跟踪</SectionHeading>
           <P>
-            LibreYOLO 提供两种运动跟踪器，它们消费任意检测器的 <InlineCode>Results</InlineCode> 并添加持久的轨迹 ID：<strong className="text-surface-800 dark:text-white">ByteTrack</strong>（默认）
-            和 <strong className="text-surface-800 dark:text-white">OC-SORT</strong>（v1.3.0 新增），后者对遮挡和
-            非线性运动更鲁棒。跟踪在单 GPU 的 YOLO9 检测和
-            RF-DETR 检测上测试最充分；其他检测系列在 v1.3.0 中为实验性。
+            LibreYOLO 内置 ByteTrack 多目标跟踪器，可消费任意检测器输出的 <InlineCode>Results</InlineCode> 并添加持久的跟踪 ID。它在单 GPU 的 YOLO9 检测和 RF-DETR 检测上测试最充分；其他检测系列在 v1.2.0 中属实验性。
           </P>
 
           <SubHeading>安装</SubHeading>
           <CodeBlock language="bash">{`pip install libreyolo[tracking]   # compatibility extra; tracking deps ship in base dev install`}</CodeBlock>
 
-          <SubHeading>视频跟踪助手</SubHeading>
+          <SubHeading>视频跟踪辅助函数</SubHeading>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 model = LibreYOLO("LibreYOLO9c.pt")
@@ -4534,7 +3998,7 @@ for result in model.track(
             <InlineCode>model.track()</InlineCode> 是用于视频文件的生成器。它逐帧运行检测，内部使用较低的 ByteTrack 置信度进行恢复，并产出已填充 <InlineCode>result.track_id</InlineCode> 和 <InlineCode>result.boxes.id</InlineCode> 的 <InlineCode>Results</InlineCode>。
           </P>
 
-          <SubHeading>基础循环</SubHeading>
+          <SubHeading>基本循环</SubHeading>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO, ByteTracker
 from libreyolo.utils.video import VideoSource
 
@@ -4552,10 +4016,10 @@ with VideoSource("clip.mp4") as src:
             cls = int(tracked.boxes.cls[i])
             print(f"frame {frame_idx} - id {track_id} cls {cls} {xyxy}")`}</CodeBlock>
           <P>
-            调用 <InlineCode>tracker.update()</InlineCode> 之后，<InlineCode>result.boxes.id</InlineCode> 保存轨迹 ID，且 <InlineCode>result.boxes.is_track</InlineCode> 为 <InlineCode>True</InlineCode>。
+            调用 <InlineCode>tracker.update()</InlineCode> 后，<InlineCode>result.boxes.id</InlineCode> 保存跟踪 ID，且 <InlineCode>result.boxes.is_track</InlineCode> 为 <InlineCode>True</InlineCode>。
           </P>
 
-          <SubHeading>TrackConfig 参数</SubHeading>
+          <SubHeading>TrackConfig 可调参数</SubHeading>
           <CodeBlock language="python">{`from libreyolo import ByteTracker, TrackConfig
 
 cfg = TrackConfig(
@@ -4575,64 +4039,24 @@ tracker = ByteTracker(config=cfg)`}</CodeBlock>
           <SubHeading>片段之间重置</SubHeading>
           <CodeBlock language="python">{`tracker.reset()   # clears tracked / lost / removed lists and the ID counter`}</CodeBlock>
 
-          <SubHeading>OC-SORT（抗遮挡）</SubHeading>
-          <P>
-            在 <InlineCode>model.track()</InlineCode> 上用 <InlineCode>tracker=&quot;ocsort&quot;</InlineCode> 选择 OC-SORT。ByteTrack 仍为默认。使用 OC-SORT 时，{' '}
-            <InlineCode>track_conf</InlineCode> 映射到跟踪器的{' '}
-            <InlineCode>det_thresh</InlineCode>（在 ByteTrack 中它映射到{' '}
-            <InlineCode>track_high_thresh</InlineCode>）。
-          </P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
-
-model = LibreYOLO("LibreYOLO9c.pt")
-
-for result in model.track(
-    "clip.mp4",
-    tracker="ocsort",      # "bytetrack" (default) or "ocsort"
-    track_conf=0.25,       # maps to OC-SORT det_thresh
-    iou=0.45,
-    save=True,
-):
-    print(result.frame_idx, result.track_id)`}</CodeBlock>
-
-          <P>
-            传入 <InlineCode>OCSortConfig</InlineCode> 以完全控制。提供配置实例会按类型选择跟踪器，
-            因此此时会忽略 <InlineCode>tracker=</InlineCode> 字符串。
-          </P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO, OCSortConfig
-
-cfg = OCSortConfig(
-    det_thresh=0.25,     # boxes above this drive association and spawn new tracks
-    max_age=30,          # frames a track survives without an observation
-    min_hits=3,          # consecutive hits before a track is reported
-    iou_threshold=0.3,   # minimum IoU for a valid association
-    delta_t=3,           # frame span used to estimate velocity direction
-    inertia=0.2,         # weight of the velocity-direction (momentum) term
-    use_byte=False,      # enable the BYTE low-score recovery pass
-)
-
-model = LibreYOLO("LibreYOLO9c.pt")
-for result in model.track("clip.mp4", tracker_config=cfg, save=True):
-    print(result.frame_idx, result.track_id)`}</CodeBlock>
-
           <Divider />
 
           {/* ────────────── SEGMENTATION ────────────── */}
           <SectionHeading id="segmentation" icon={Scissors}>分割</SectionHeading>
           <ValidationScopeCalloutZh />
           <P>
-            RF-DETR 分割是 v1.3.0 中的分割路径，也是经过充分测试的选项。EdgeCrafter（<InlineCode>-seg</InlineCode>）也提供分割头，但为实验性。YOLO9 不再提供分割头：自 v1.3.0 起它仅支持检测。
+            RF-DETR 分割是 v1.2.0 中经过深度测试的分割路径。YOLO9 分割和 EdgeCrafter 分割可通过相同的 <InlineCode>-seg</InlineCode> 后缀使用，但属实验性。
           </P>
 
           <SubHeading>运行分割</SubHeading>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
-# RF-DETR segmentation, the heavily tested segmentation path
+# RF-DETR segmentation, heavily tested on single GPU
 model = LibreYOLO("LibreRFDETRs-seg.pt")
 result = model("photo.jpg")
 
-# EdgeCrafter segmentation is also available but experimental
-# model = LibreYOLO("LibreECs-seg.pt")
+# YOLO9 segmentation is available but experimental in v1.2.0
+# model = LibreYOLO("LibreYOLO9c-seg.pt")
 
 # Segmentation returns boxes + masks
 print(result.boxes.xyxy)        # bounding boxes (N, 4)
@@ -4653,13 +4077,13 @@ result.masks.numpy()`}</CodeBlock>
 
           <SubHeading>保存标注后的输出</SubHeading>
           <P>
-            <InlineCode>save=True</InlineCode> 会自动绘制框和半透明掩码叠加。
+            <InlineCode>save=True</InlineCode> 会自动绘制边界框和半透明掩码叠加层。
           </P>
           <CodeBlock language="python">{`model("photo.jpg", save=True)`}</CodeBlock>
 
-          <SubHeading>训练分割</SubHeading>
+          <SubHeading>训练分割模型</SubHeading>
           <P>
-            RF-DETR 分割使用 RF-DETR 的 COCO 格式训练流水线，属于经过充分测试的单 GPU 范围。EdgeCrafter 分割训练可用，但为实验性。YOLO9 分割训练已在 v1.3.0 中移除。
+            RF-DETR 分割使用 RF-DETR 的 COCO 格式训练流水线，属于经过深度测试的单 GPU 范围。YOLO9 分割和 EdgeCrafter 分割训练可用，但在 v1.2.0 中属实验性。
           </P>
 
           <Divider />
@@ -4667,13 +4091,10 @@ result.masks.numpy()`}</CodeBlock>
           {/* ────────────── POSE ESTIMATION ────────────── */}
           <SectionHeading id="pose" icon={PersonStanding}>姿态估计</SectionHeading>
           <P>
-            姿态（人体关键点）估计可在 <InlineCode>YOLO-NAS (-pose)</InlineCode>、{' '}
-            <InlineCode>EdgeCrafter (-pose)</InlineCode> 以及 v1.3.0 新增的{' '}
-            <InlineCode>RF-DETR (-pose)</InlineCode> 预览上运行。每个姿态模型都是单类别
-            （&quot;person&quot;），具有 17 个 COCO 关键点。
+            姿态（人体关键点）估计在 <InlineCode>YOLO-NAS (-pose)</InlineCode> 和 <InlineCode>EdgeCrafter (-pose)</InlineCode> 上受支持。每个姿态模型均为单类别（&quot;person&quot;），包含 17 个 COCO 关键点。
           </P>
 
-          <SubHeading>运行姿态</SubHeading>
+          <SubHeading>运行姿态估计</SubHeading>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 # YOLO-NAS pose
@@ -4686,16 +4107,6 @@ result = model("people.jpg")
 # Per-person bbox + 17 keypoints
 print(result.boxes.xyxy)          # person boxes (N, 4)
 print(result.keypoints.xy.shape)  # (N, 17, 2) pixel coordinates`}</CodeBlock>
-
-          <P>
-            <SupportBadge variant="experimental">预览</SupportBadge>{' '}
-            RF-DETR 姿态仅提供一个 <InlineCode>x</InlineCode> 尺寸的检查点：{' '}
-            <InlineCode>LibreRFDETRx-pose.pt</InlineCode>。它在 v1.3.0 中是研究预览。
-          </P>
-          <CodeBlock language="python">{`# RF-DETR pose preview (size x only)
-model = LibreYOLO("LibreRFDETRx-pose.pt")
-result = model("people.jpg")
-print(result.keypoints.xy.shape)  # (N, 17, 2)`}</CodeBlock>
 
           <SubHeading>关键点 API</SubHeading>
           <CodeBlock language="python">{`result.keypoints.xy        # (N, K, 2) absolute pixel coords
@@ -4710,7 +4121,7 @@ result.keypoints.numpy()`}</CodeBlock>
           <CodeBlock language="python">{`model("people.jpg", save=True)  # draws boxes + skeleton`}</CodeBlock>
 
           <P>
-            YOLO-NAS 支持姿态训练；EdgeCrafter 姿态目前仅推理。RF-DETR 姿态为预览（仅 <InlineCode>x</InlineCode> 尺寸）。YOLO9 仅检测，不提供姿态检查点。
+            YOLO-NAS 支持姿态训练；EdgeCrafter 姿态目前仅支持推理。YOLO9 和 RF-DETR 尚未提供姿态检查点。
           </P>
 
           <Divider />
@@ -4718,13 +4129,13 @@ result.keypoints.numpy()`}</CodeBlock>
           {/* ────────────── GAZE ESTIMATION ────────────── */}
           <SectionHeading id="gaze" icon={Eye}>视线估计</SectionHeading>
           <P>
-            视线方向估计由 <InlineCode>LibreL2CS</InlineCode> 系列提供，它是 L2CS-Net 的移植，具有 ResNet 主干和两个角度分箱分类头。这是一个两阶段模型：上游的人脸检测器定位人脸，然后视线头以弧度预测每张人脸的 pitch 和 yaw。它在 v1.3.0 中仅推理且为实验性。
+            视线方向估计由 <InlineCode>LibreL2CS</InlineCode> 系列提供，它是 L2CS-Net 的移植版，采用 ResNet 主干和两个角度分箱分类头。这是一个两阶段模型：上游的人脸检测器先定位人脸，然后视线头以弧度预测每张人脸的俯仰角（pitch）和偏航角（yaw）。它仅支持推理，且在 v1.2.0 中属实验性。
           </P>
 
           <SubHeading>安装</SubHeading>
           <CodeBlock language="bash">{`pip install libreyolo[gaze]   # optional Google Drive helper for Gaze360 weights`}</CodeBlock>
           <P>
-            已发布的 L2CS ResNet-50 权重在 Gaze360 上训练，LibreYOLO 不做镜像。在没有可选助手的情况下，请传入本地检查点路径，或按照 <InlineCode>LibreL2CS</InlineCode> 打印的手动下载说明操作。
+            已发布的 L2CS ResNet-50 权重在 Gaze360 上训练，LibreYOLO 不进行镜像。若没有可选辅助工具，请传入本地检查点路径，或按照 <InlineCode>LibreL2CS</InlineCode> 打印的手动下载说明操作。
           </P>
 
           <SubHeading>两阶段推理</SubHeading>
@@ -4752,223 +4163,15 @@ for i in range(len(result.gaze)):
     print(f"face {i}: pitch={pitch_deg:.1f} deg, yaw={yaw_deg:.1f} deg")`}</CodeBlock>
 
           <P>
-            在命令行中：<InlineCode>libreyolo predict model=LibreL2CSr50.pt source=portrait.jpg --face-detector path/to/face.pt</InlineCode>。
+            通过命令行：<InlineCode>libreyolo predict model=LibreL2CSr50.pt source=portrait.jpg --face-detector path/to/face.pt</InlineCode>。
           </P>
-
-          <Divider />
-
-          {/* ────────────── CLASSIFICATION ────────────── */}
-          <SectionHeading id="classification" icon={Tags}>分类</SectionHeading>
-          <P>
-            v1.3.0 新增：整图分类。提供两个系列，面向不同需求。<InlineCode>LibreMobileNetV4</InlineCode> 是生产级分类器（Apache-2.0 ImageNet-1k 权重，可导出为 ONNX）。<InlineCode>LibreDINOv2</InlineCode> 配合 <InlineCode>task=classify</InlineCode> 是 DINOv2 主干加线性探针，非常适合迁移学习，但其发布的权重为演示级，且暂不支持导出。分类是 v1.3.0 的新增任务，因此细节可能仍会变化。
-          </P>
-
-          <DocTable
-            headers={['系列', '检查点', '输入', '权重', '微调', 'ONNX 导出']}
-            rows={[
-              ['LibreMobileNetV4', 'LibreMobileNetV4{s,m,l}-cls.pt', '224 / 224 / 256', 'Apache-2.0 ImageNet-1k（生产级）', '交叉熵', '支持'],
-              ['LibreDINOv2（classify）', 'LibreDINOv2{n,s,m,l}-cls.pt', '224', 'Imagenette 演示级（10 类）', '线性探针', '不支持'],
-            ]}
-          />
-
-          <SubHeading>LibreMobileNetV4（生产级分类器）</SubHeading>
-          <div className="flex flex-wrap gap-2 mb-4">
-            <SupportBadge variant="validated">Apache-2.0 ImageNet-1k 权重</SupportBadge>
-            <SupportBadge variant="experimental">v1.3.0 新增</SupportBadge>
-          </div>
-          <P>
-            原生 MobileNetV4-conv 移植（源自 timm），其 1000 类 ImageNet-1k 权重可逐比特一致地加载。尺寸 <InlineCode>s</InlineCode> / <InlineCode>m</InlineCode> 在 224 运行，<InlineCode>l</InlineCode> 在 256 运行。检查点：
-          </P>
-          <Checkpoints names={['LibreMobileNetV4s-cls.pt', 'LibreMobileNetV4m-cls.pt', 'LibreMobileNetV4l-cls.pt']} />
-
-          <P>加载并预测。单张图像返回一个 <InlineCode>Results</InlineCode>；直接从中读取 <InlineCode>.probs</InlineCode>（传入列表则返回列表）。</P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
-
-# MobileNetV4-conv-Small, Apache-2.0 ImageNet-1k weights (auto-downloaded if missing)
-model = LibreYOLO("LibreMobileNetV4s-cls.pt")
-result = model("cat.jpg")            # single image -> one Results
-
-probs = result.probs                 # whole-image class vector, length = num classes
-print(probs.top1, probs.top1conf)    # top-1 class id (int) and its confidence
-print(probs.top5, probs.top5conf)    # 5 class ids and 5 confidences
-print(result.names[probs.top1])      # human-readable class name`}</CodeBlock>
-
-          <P>微调到自定义类别集（ImageFolder 布局）。分类头会自动按数据集类别数重建；ImageNet 预训练主干可干净地迁移。</P>
-          <CodeBlock language="python">{`from libreyolo import LibreMobileNetV4
-
-model = LibreMobileNetV4(size="s")   # ImageNet-pretrained backbone
-model.train(
-    data="imagenette160",            # known name, dataset root, or .zip URL
-    epochs=5,
-    batch=64,
-    lr0=1e-3,                        # AdamW + cosine, 1-epoch warmup
-    imgsz=224,
-)`}</CodeBlock>
-
-          <P>验证（top-1 / top-5 精度）：</P>
-          <CodeBlock language="python">{`model = LibreYOLO("LibreMobileNetV4s-cls.pt")
-metrics = model.val(data="imagenette160")
-print(metrics["metrics/accuracy_top1"])
-print(metrics["metrics/accuracy_top5"])`}</CodeBlock>
-
-          <P>导出为 ONNX（已验证与 eager 模式逐比特一致）。ONNX 图输出单个 logits 张量。</P>
-          <CodeBlock language="python">{`model = LibreYOLO("LibreMobileNetV4s-cls.pt")
-path = model.export(format="onnx", imgsz=224)   # single output: logits [batch, num_classes]
-
-# Interop note: the ONNX output is RAW LOGITS, not softmaxed. The PyTorch
-# predict path applies softmax for you; non-Python consumers must apply it
-# themselves before reading probabilities.`}</CodeBlock>
-
-          <SubHeading>LibreDINOv2 分类（线性探针 / 迁移）</SubHeading>
-          <div className="flex flex-wrap gap-2 mb-4">
-            <SupportBadge variant="experimental">演示级权重（Imagenette）</SupportBadge>
-            <SupportBadge variant="experimental">不支持导出</SupportBadge>
-          </div>
-          <P>
-            冻结风格的 DINOv2-S 编码器加可训练线性头，在 224 运行。<InlineCode>n</InlineCode> / <InlineCode>s</InlineCode> / <InlineCode>m</InlineCode> / <InlineCode>l</InlineCode> 尺寸只控制投影头宽度：四者共享同一个 DINOv2-S 编码器，因此发布的检查点精度几乎相同。随附的 <InlineCode>-cls</InlineCode> 权重为演示级（在 Imagenette 上训练，10 类），因此请将该系列视为迁移学习选项，而非可直接替换的 1000 类分类器。检查点：
-          </P>
-          <Checkpoints names={['LibreDINOv2n-cls.pt', 'LibreDINOv2s-cls.pt', 'LibreDINOv2m-cls.pt', 'LibreDINOv2l-cls.pt']} link={false} />
-
-          <P>加载并预测（与 MobileNetV4 相同的 <InlineCode>Probs</InlineCode> 接口）：</P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
-
-model = LibreYOLO("LibreDINOv2s-cls.pt")   # DINOv2-S backbone + linear probe (224)
-result = model("springer.jpg")
-print(result.probs.top1, result.probs.top1conf)`}</CodeBlock>
-
-          <P>
-            微调用于迁移。用 <InlineCode>task=&quot;classify&quot;</InlineCode> 构建全新模型以获得全新分类头，或加载随附的 <InlineCode>-cls</InlineCode> 检查点继续训练。为获得最佳精度，请从随附检查点而非全新分类头开始微调，并保持默认的 <InlineCode>lr=1e-4</InlineCode>（更高的学习率收敛更差）。
-          </P>
-          <CodeBlock language="python">{`from libreyolo import LibreDINOv2
-
-# Fresh DINOv2 backbone + random linear head, sized to the dataset
-model = LibreDINOv2(size="s", task="classify", nb_classes=3)
-model.train(data="path/to/imagefolder", epochs=5, lr=1e-4, batch=4)
-
-# Validate the same way (top-1 / top-5)
-metrics = model.val(data="path/to/imagefolder")
-print(metrics["metrics/accuracy_top1"])`}</CodeBlock>
-
-          <P>LibreDINOv2 未实现导出。如果你需要可导出的分类器，请使用 LibreMobileNetV4。</P>
-          <CodeBlock language="python">{`model = LibreYOLO("LibreDINOv2s-cls.pt")
-model.export(format="onnx")
-# raises NotImplementedError: Export is not yet implemented for LibreDINOv2.`}</CodeBlock>
-
-          <SubHeading>数据集布局（两个系列）</SubHeading>
-          <P>
-            分类使用 ImageNet 风格的 ImageFolder 目录树（按文件夹组织，而非标签文件）。类别索引按文件夹名称排序分配。<InlineCode>data=</InlineCode> 接受数据集根目录、已知名称（如 <InlineCode>imagenette160</InlineCode>）或 <InlineCode>.zip</InlineCode> URL。
-          </P>
-          <CodeBlock language="text">{`dataset_root/
-  train/                # required; one subfolder per class
-    class_a/img001.jpg
-    class_a/img002.jpg
-    class_b/img003.jpg
-  val/                  # required for validation; same class folders as train
-    class_a/img010.jpg
-    class_b/img011.jpg`}</CodeBlock>
-
-          <SubHeading>Results.probs 参考</SubHeading>
-          <CodeBlock language="python">{`probs = result.probs        # Probs payload, 1-D vector of length = num classes
-probs.data                  # raw tensor / ndarray of class probabilities
-probs.top1                  # int   - argmax class id
-probs.top5                  # list  - 5 class ids, highest first
-probs.top1conf              # float - confidence of the top-1 class
-probs.top5conf              # 5 confidences, aligned with probs.top5`}</CodeBlock>
-
-          <ul className="space-y-2 my-4">
-            <FeatureItem>MobileNetV4 权重为生产级（Apache-2.0 ImageNet-1k，逐比特一致加载）。DINOv2 分类权重为演示级（Imagenette，10 类）。</FeatureItem>
-            <FeatureItem>v1.3.0 中没有 LibreRFDETR 分类器。分类已迁移到 LibreMobileNetV4 和 LibreDINOv2 系列；旧的 LibreRFDETR*-cls 检查点在加载时会被拒绝。</FeatureItem>
-            <FeatureItem>使用默认配方从头微调 DINOv2 在 Imagenette 上的 top-1 上限约为 0.93，低于随附的 0.976。从随附的 -cls 检查点开始微调以恢复精度。</FeatureItem>
-            <FeatureItem>ONNX 分类输出为原始 logits。请在非 Python 消费方中自行应用 softmax。</FeatureItem>
-            <FeatureItem>预测单张图像返回一个 Results。直接读取 result.probs，或传入列表并对列表取索引：model([&quot;a.jpg&quot;])[0].probs。</FeatureItem>
-          </ul>
-
-          <Divider />
-
-          {/* ────────────── DEPTH ESTIMATION ────────────── */}
-          <SectionHeading id="depth" icon={Mountain}>深度估计</SectionHeading>
-          <div className="flex flex-wrap gap-2 mb-4">
-            <SupportBadge variant="experimental">v1.3.0 新增</SupportBadge>
-            <SupportBadge variant="experimental">仅推理与验证</SupportBadge>
-          </div>
-          <P>
-            v1.3.0 新增：通过 <InlineCode>LibreDepthAnythingV2</InlineCode> 进行单目深度估计，它是 Depth Anything V2 的移植（DINOv2 编码器加 DPT 头，NeurIPS 2024）。它预测一张密集的相对逆深度图：值越大越靠近相机，不隐含任何度量单位。尺寸 <InlineCode>s</InlineCode> / <InlineCode>b</InlineCode> / <InlineCode>l</InlineCode> / <InlineCode>g</InlineCode> 对应 ViT-S / B / L / G，均在 518 运行。深度估计是 v1.3.0 的新增任务，仅支持推理和零样本验证：不支持训练，也不支持导出。
-          </P>
-          <P>
-            检查点。只有 ViT-S 检查点为 Apache-2.0 并自动托管：<Checkpoints names={['LibreDepthAnythingV2s-depth.pt']} link={false} />。更大的编码器 <Checkpoints names={['LibreDepthAnythingV2b-depth.pt', 'LibreDepthAnythingV2l-depth.pt', 'LibreDepthAnythingV2g-depth.pt']} link={false} /> 为 CC-BY-NC-4.0，LibreYOLO 不做再分发；请使用 <InlineCode>weights/convert_depth_anything_v2_weights.py</InlineCode> 转换官方上游检查点。
-          </P>
-
-          <SubHeading>运行深度估计</SubHeading>
-          <P>输入 <InlineCode>imgsz</InlineCode> 必须能被 14 整除（DINOv2 的 patch 网格）。深度图在原始图像画布上返回。</P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
-
-# ViT-S encoder, Apache-2.0 weights (commercial use OK)
-model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")
-result = model("street.jpg")
-
-depth = result.depth_map          # DepthMap payload, (H, W) float on the original canvas
-print(depth.data.shape)           # (H, W)
-print(depth.min, depth.max, depth.mean)   # relative inverse depth: higher = closer
-norm = depth.normalized()         # rescaled to [0, 1] over finite values`}</CodeBlock>
-
-          <SubHeading>DepthMap API</SubHeading>
-          <CodeBlock language="python">{`depth = result.depth_map
-depth.data          # (H, W) float tensor / ndarray, relative inverse depth
-depth.min           # min over finite values
-depth.max           # max over finite values
-depth.mean          # mean over finite values
-depth.normalized()  # (H, W) rescaled to [0, 1]; non-finite pixels become 0
-
-depth.cpu()
-depth.numpy()`}</CodeBlock>
-
-          <SubHeading>零样本验证</SubHeading>
-          <P>
-            验证通过共享的深度验证器以零样本方式运行，并报告标准深度指标（AbsRel、RMSE 和 delta 阈值）。验证器会信箱填充到固定正方形并排除填充像素；由于预测使用 Depth Anything 原生的保持纵横比缩放，非正方形的验证指标是预测的有据近似。
-          </P>
-          <CodeBlock language="python">{`metrics = model.val(data="depth_dataset.yaml")
-print(metrics["metrics/abs_rel"])   # absolute relative error (lower is better)
-print(metrics["metrics/rmse"])      # root mean squared error
-print(metrics["metrics/delta1"])    # fraction within a 1.25x ratio (higher is better)`}</CodeBlock>
-
-          <SubHeading>不支持</SubHeading>
-          <CodeBlock language="python">{`model.train(data="...")          # raises NotImplementedError - DA V2 is inference + val only
-model.export(format="onnx")      # raises NotImplementedError - depth export is out of scope`}</CodeBlock>
-
-          <ul className="space-y-2 my-4">
-            <FeatureItem>许可是分开的：ViT-S（尺寸 s）权重为 Apache-2.0，可用于商业用途。ViT-B / ViT-L / ViT-G（尺寸 b / l / g）为 CC-BY-NC-4.0（非商业），LibreYOLO 不做再分发。</FeatureItem>
-            <FeatureItem>若用于商业用途，请坚持使用尺寸 s。</FeatureItem>
-            <FeatureItem>深度为相对逆深度，没有度量单位。如果你需要以米为单位，请自行标定。</FeatureItem>
-            <FeatureItem>imgsz 必须能被 14 整除。批量预测被禁用，因为保持纵横比缩放会导致每张图像尺寸不一。</FeatureItem>
-          </ul>
-
-          <Divider />
-
-          {/* ────────────── POINT LOCALIZATION ────────────── */}
-          <SectionHeading id="point-localization" icon={MapPin}>点定位</SectionHeading>
-          <div className="flex flex-wrap gap-2 mb-4">
-            <SupportBadge variant="experimental">实验性</SupportBadge>
-          </div>
-          <P>
-            <InlineCode>LibreFOMO</InlineCode> 是 FOMO 风格的点定位器（尺寸 <InlineCode>s</InlineCode> / <InlineCode>m</InlineCode> / <InlineCode>l</InlineCode>），用于质心式检测：每个检测不是框，而是一个图像坐标。预测以 <InlineCode>result.points</InlineCode> 形式返回。预训练的 LibreFOMO 权重不会自动下载，因此请传入本地检查点路径（或从头训练，这属于实验性，需要 <InlineCode>allow_experimental=True</InlineCode>）。
-          </P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
-
-# LibreFOMO weights are not hosted by LibreYOLO - pass a local checkpoint
-model = LibreYOLO("path/to/LibreFOMOm-point.pt")
-result = model("scene.jpg")
-
-points = result.points       # Points payload, (N, 4) rows: x, y, class, confidence
-print(points.xy)             # (N, 2) absolute pixel coords
-print(points.xyn)            # (N, 2) normalized to [0, 1]
-print(points.cls, points.conf)`}</CodeBlock>
 
           <Divider />
 
           <SectionHeading id="training" icon={GraduationCap}>训练</SectionHeading>
           <ValidationScopeCalloutZh />
           <P>
-            经过充分测试的训练路径是单 GPU 的 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割。其他模型系列的训练器和多 GPU 工作流可用，但为实验性。在 v1.3.0 中 YOLO9 仅检测，因此没有 YOLO9 分割或姿态训练。
+            经过深度测试的训练路径是单 GPU 的 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割。其他模型系列的训练器、YOLO9 分割训练和多 GPU 工作流可用，但在 v1.2.0 中属实验性。
           </P>
 
           <SubHeading>YOLO9 - CNN 旗舰训练</SubHeading>
@@ -5003,19 +4206,15 @@ results = model.train(
     amp=True,                # automatic mixed precision
     patience=50,             # early stopping patience
     resume=False,            # resume from loaded checkpoint
-    pretrained=True,         # transfer-learning init (True, a path, or None)
-    cache="disk",            # cache decoded images: False | True/"ram" | "disk"
-    freeze=10,               # freeze first N groups, or a list of indices / module names
-    save_plots=True,         # write final validation plots to the run dir
 )
 
 print(f"Best mAP50-95: {results['best_mAP50_95']:.3f}")
 print(f"Best checkpoint: {results['best_checkpoint']}")`}</CodeBlock>
           <P>
-            训练完成后，模型实例会自动以最优权重重新加载，因此你可以立即调用 <InlineCode>model(...)</InlineCode>。<InlineCode>freeze</InlineCode>、<InlineCode>cache</InlineCode>、<InlineCode>pretrained</InlineCode> 和 <InlineCode>save_plots</InlineCode> 为 v1.3.0 新增，并在所有基于训练器的系列中受支持。
+            训练完成后，模型实例会自动以最佳权重重新加载，因此你可以立即调用 <InlineCode>model(...)</InlineCode>。YOLO9 分割训练可通过 <InlineCode>LibreYOLO(&quot;LibreYOLO9c-seg.pt&quot;)</InlineCode> 使用，但在 v1.2.0 中属实验性。
           </P>
 
-          <SubHeading>RF-DETR - transformer 旗舰训练</SubHeading>
+          <SubHeading>RF-DETR - Transformer 旗舰训练</SubHeading>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 model = LibreYOLO("LibreRFDETRs.pt")
@@ -5028,47 +4227,7 @@ results = model.train(
     output_dir="runs/train/rfdetr_exp",
 )`}</CodeBlock>
           <P>
-            RF-DETR 有自己的训练签名（<InlineCode>batch_size</InlineCode>、<InlineCode>lr</InlineCode>、<InlineCode>output_dir</InlineCode>），但共用 LibreYOLO 的数据集加载器。为检测或分割传入 <InlineCode>data.yaml</InlineCode>，可采用 YOLO TXT 或原生 COCO JSON 布局 —— 参见 <a href="#dataset-format" className="text-libre-600 dark:text-libre-400 hover:underline">数据集格式</a>。
-          </P>
-
-          <SubHeading>LoRA 微调（RF-DETR）</SubHeading>
-          <P>
-            <SupportBadge variant="experimental">实验性</SupportBadge>{' '}
-            <InlineCode>lora=True</InlineCode> 会向 RF-DETR 主干注入 LoRA 适配器，用于
-            低显存微调。它需要可选的 <InlineCode>peft</InlineCode> 依赖
-            （<InlineCode>pip install &quot;libreyolo[lora]&quot;</InlineCode>），目前仅限
-            RF-DETR；其他系列会抛出明确错误，而不是忽略该标志。
-          </P>
-          <CodeBlock language="python">{`model = LibreYOLO("LibreRFDETRs.pt")
-results = model.train(data="data.yaml", epochs=50, lora=True)`}</CodeBlock>
-
-          <SubHeading>实验日志记录器</SubHeading>
-          <P>
-            v1.3.0 新增：传入 <InlineCode>loggers=</InlineCode> 可将指标流式发送到 TensorBoard、
-            MLflow 或 Weights &amp; Biases。接受名称（<InlineCode>&quot;tensorboard&quot;</InlineCode>、{' '}
-            <InlineCode>&quot;mlflow&quot;</InlineCode>、<InlineCode>&quot;wandb&quot;</InlineCode>）、已配置的日志记录器
-            实例，或两者混合的可迭代对象。每个后端都是可选 extra
-            （<InlineCode>libreyolo[tensorboard]</InlineCode>、<InlineCode>[mlflow]</InlineCode>、{' '}
-            <InlineCode>[wandb]</InlineCode>）。
-          </P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
-from libreyolo.training.loggers import MLflowLogger
-
-model = LibreYOLO("LibreYOLO9c.pt")
-
-# By name
-model.train(data="coco128.yaml", loggers="tensorboard")
-
-# Mix configured instances and names
-model.train(
-    data="coco128.yaml",
-    loggers=[MLflowLogger(experiment_name="my-exp"), "tensorboard"],
-)`}</CodeBlock>
-          <P>
-            日志记录器仅为 Python API 功能。命令行没有相应标志；其余新增的训练参数
-            （<InlineCode>--task</InlineCode>、<InlineCode>--cache</InlineCode>、{' '}
-            <InlineCode>--lora</InlineCode>、<InlineCode>--freeze</InlineCode>、{' '}
-            <InlineCode>--save-plots</InlineCode>）在命令行中可用。
+            RF-DETR 有自己的训练签名（<InlineCode>batch_size</InlineCode>、<InlineCode>lr</InlineCode>、<InlineCode>output_dir</InlineCode>），但它使用 LibreYOLO 的数据集配置加载器。为检测或分割传入 <InlineCode>data.yaml</InlineCode>；该配置可引用 COCO/Roboflow 风格的标注布局。
           </P>
 
           <SubHeading>训练结果字典</SubHeading>
@@ -5098,12 +4257,12 @@ names: ["cat", "dog", "bird"]`}</CodeBlock>
 
           <SubHeading>其他训练路径</SubHeading>
           <P>
-            其他系列也有训练器钩子，但在 v1.3.0 中它们不是推荐路径。新工作请保持使用 YOLO9 检测或 RF-DETR 检测/分割；仅出于兼容性、基准复现或针对性研究使用实验性训练器。PicoDet、RTMDet 和 EC 训练需要显式的 <InlineCode>allow_experimental=True</InlineCode> 确认。
+            其他系列也有训练器钩子，但它们不是 v1.2.0 中的推荐路径。新工作请坚持使用 YOLO9 检测或 RF-DETR 检测/分割；仅在兼容、复现基准或定向研究时使用实验性训练器。DAMO-YOLO、PicoDet、RTMDet 和 EC 的训练需要显式的 <InlineCode>allow_experimental=True</InlineCode> 确认。
           </P>
 
-          <SubHeading>从 YAML 配置训练</SubHeading>
+          <SubHeading>通过 YAML 配置训练</SubHeading>
           <P>
-            每个 <InlineCode>model.train(...)</InlineCode> 都接受 <InlineCode>cfg=&quot;train.yaml&quot;</InlineCode>，以从文件加载全部参数。显式 kwargs 仍优先于 yaml 中的值，因此你可以用 yaml 作为基线，并按运行覆盖单个字段。
+            每个 <InlineCode>model.train(...)</InlineCode> 都接受 <InlineCode>cfg=&quot;train.yaml&quot;</InlineCode>，以从文件加载全部参数。显式关键字参数仍优先于 yaml 中的值，因此你可以用 yaml 作为基线，并在每次运行时覆盖单个字段。
           </P>
           <CodeBlock language="python">{`model = LibreYOLO("LibreYOLO9c.pt")
 results = model.train(cfg="configs/yolo9_finetune.yaml")
@@ -5112,14 +4271,14 @@ results = model.train(cfg="configs/yolo9_finetune.yaml")
 
           <SubHeading>梯度累积</SubHeading>
           <P>
-            传入 <InlineCode>nbs</InlineCode>（名义批大小）以启用梯度累积。训练器每 <InlineCode>nbs / batch</InlineCode> 次前向后步进一次优化器，从而让你在较小硬件上以配方的参考批大小进行训练。
+            传入 <InlineCode>nbs</InlineCode>（名义批量大小）以启用梯度累积。训练器每 <InlineCode>nbs / batch</InlineCode> 次前向传播执行一次优化器步进，使你能在较小的硬件上以配方的参考批量大小进行训练。
           </P>
           <CodeBlock language="python">{`# Effective batch 64 on a single GPU that only fits batch=8
 model.train(data="coco128.yaml", batch=8, nbs=64)`}</CodeBlock>
 
           <SubHeading>分布式训练（DDP，实验性）</SubHeading>
           <P>
-            YOLO9 和 RF-DETR 通过 PyTorch DistributedDataParallel 支持多 GPU 训练，但多 GPU 不在 v1.3.0 经过充分测试的范围内。使用 <InlineCode>torchrun</InlineCode> 启动训练脚本：
+            YOLO9 和 RF-DETR 通过 PyTorch DistributedDataParallel 支持多 GPU 训练，但多 GPU 不在 v1.2.0 的深度测试范围内。使用 <InlineCode>torchrun</InlineCode> 启动训练脚本：
           </P>
           <CodeBlock language="bash">{`# 4-GPU node
 torchrun --nproc_per_node=4 train_yolo9.py
@@ -5136,7 +4295,7 @@ model.train(data="coco128.yaml", epochs=300, batch=16)`}</CodeBlock>
           {/* ────────────── VALIDATION ────────────── */}
           <SectionHeading id="validation" icon={CheckCircle2}>验证</SectionHeading>
           <P>
-            在验证集上运行 COCO 标准评估。经过充分测试的验证路径是单 GPU 的 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割。
+            在验证集上运行 COCO 标准评估。经过深度测试的验证路径是单 GPU 的 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割。
           </P>
           <CodeBlock language="python">{`results = model.val(
     data="coco128.yaml",   # dataset config
@@ -5147,7 +4306,6 @@ model.train(data="coco128.yaml", epochs=300, batch=16)`}</CodeBlock>
     split="val",           # "val", "test", or "train"
     save_json=False,       # save predictions as COCO JSON
     verbose=True,          # print per-class metrics
-    plots=True,            # save validation plots (metrics, per-class AP, confusion matrix); alias for save_plots
 )
 
 print(f"mAP50:    {results['metrics/mAP50']:.3f}")
@@ -5184,13 +4342,7 @@ print(f"mAP50-95: {results['metrics/mAP50-95']:.3f}")`}</CodeBlock>
     "speed/images_seen": 1382,
 }`}</CodeBlock>
           <P>
-            分割验证返回带 <InlineCode>(M)</InlineCode> 后缀的掩码指标，以及带 <InlineCode>(B)</InlineCode> 后缀的
-            框指标；OBB 验证会添加{' '}
-            <InlineCode>(OBB)</InlineCode> 指标。姿态验证通过{' '}
-            <InlineCode>PoseValidator</InlineCode> 返回 COCO 关键点指标。v1.3.0 新增了用于分类（top-1 / top-5）、
-            语义（mIoU / 像素精度）、点定位和深度（零样本）的验证器。传入{' '}
-            <InlineCode>plots=True</InlineCode>（或命令行的 <InlineCode>--save-plots</InlineCode>）可将
-            指标图、各类 AP、混淆矩阵和样本图写入运行目录。
+            分割验证返回带 <InlineCode>(M)</InlineCode> 后缀的掩码指标，以及带 <InlineCode>(B)</InlineCode> 后缀的边界框指标。姿态验证通过 <InlineCode>PoseValidator</InlineCode> 返回 COCO 关键点指标。
           </P>
 
           <Divider />
@@ -5198,7 +4350,7 @@ print(f"mAP50-95: {results['metrics/mAP50-95']:.3f}")`}</CodeBlock>
           {/* ────────────── EXPORT ────────────── */}
           <SectionHeading id="export" icon={Upload}>导出</SectionHeading>
           <P>
-            将 PyTorch 模型导出为 ONNX、TorchScript、TensorRT、OpenVINO、NCNN、CoreML 或（v1.3.0 新增）TFLite 以进行部署。TensorRT 现已覆盖所有模型系列。经过充分测试的导出路径仍是单 GPU 的 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割。
+            将 PyTorch 模型导出为 ONNX、TorchScript、TensorRT、OpenVINO、NCNN 或 CoreML 以便部署。经过深度测试的导出与运行时后端路径是单 GPU 的 YOLO9 检测、RF-DETR 检测和 RF-DETR 分割。其他系列和任务属实验性。
           </P>
 
           <SubHeading>快速导出</SubHeading>
@@ -5218,23 +4370,20 @@ model.export(format="openvino")
 model.export(format="ncnn")
 
 # CoreML (.mlpackage, macOS runtime)
-model.export(format="coreml")
-
-# TFLite (RF-DETR detect/seg/pose + YOLO9 detect; experimental, needs Python 3.12+)
-model.export(format="tflite")`}</CodeBlock>
+model.export(format="coreml")`}</CodeBlock>
 
           <SubHeading>全部导出参数</SubHeading>
           <CodeBlock language="python">{`path = model.export(
-    format="onnx",            # "onnx", "torchscript", "tensorrt", "openvino", "ncnn", "coreml", or "tflite"
+    format="onnx",            # "onnx", "torchscript", "tensorrt", "openvino", "ncnn", or "coreml"
     output_path="model.onnx", # output file (auto-generated if None)
-    imgsz=640,                # input resolution (default: model's native); also accepts (h, w) for rectangular
+    imgsz=640,                # input resolution (default: model's native)
     opset=None,               # ONNX opset (auto: 13, or 17 for wrappers that need it)
     simplify=True,            # run onnxsim graph simplification
-    dynamic=True,             # enable dynamic batch axis (ONNX); TFLite requires static shapes
+    dynamic=True,             # enable dynamic batch axis
     half=False,               # export in FP16
     batch=1,                  # batch size for static graph
     device=None,              # device to trace on (default: model's current device)
-    int8=False,               # INT8 quantization: TensorRT, OpenVINO, or ONNX (YOLO9 detection only)
+    int8=False,               # INT8 quantization (TensorRT / OpenVINO only)
     data=None,                # calibration dataset for INT8
     fraction=1.0,             # fraction of calibration data to use
     allow_download_scripts=False, # allow data.yaml download hooks during calibration
@@ -5246,62 +4395,13 @@ model.export(format="tflite")`}</CodeBlock>
     gpu_device=0,             # GPU device index for TensorRT
     trt_config=None,          # optional TensorRT YAML config path
     compute_units="all",      # CoreML routing: all, cpu_only, cpu_and_gpu, cpu_and_ne
-    nms=False,                # embed NMS in the graph (ONNX YOLO9 detection, or CoreML)
-    iou=0.45,                 # embedded-NMS IoU threshold
-    conf=0.25,                # embedded-NMS confidence threshold
-    max_det=300,              # embedded-NMS max detections (ONNX only)
+    nms=False,                # CoreML embedded NMS where supported
+    iou=0.45,                 # CoreML embedded NMS IoU threshold
+    conf=0.25,                # CoreML embedded NMS confidence threshold
     verbose=False,            # verbose logging
 )`}</CodeBlock>
           <P>
-            OpenVINO INT8 导出额外需要 <InlineCode>nncf</InlineCode>。NCNN 导出会写出一个目录，包含 <InlineCode>model.ncnn.param</InlineCode>、<InlineCode>model.ncnn.bin</InlineCode> 和 <InlineCode>metadata.yaml</InlineCode>。CoreML 导出会写出 <InlineCode>.mlpackage</InlineCode> 包，需要 <InlineCode>coremltools</InlineCode>，且不支持 INT8。
-          </P>
-
-          <SubHeading>ONNX 内嵌 NMS（YOLO9 检测）</SubHeading>
-          <P>
-            v1.3.0 新增：传入 <InlineCode>nms=True</InlineCode> 可将 NMS 烘焙进导出的 ONNX
-            图，使模型直接输出最终框。目前仅限 <InlineCode>detect</InlineCode> 任务上的{' '}
-            <InlineCode>yolo9</InlineCode> 系列（其他系列/任务会报错）。它会强制固定的 batch-1 图
-            （<InlineCode>dynamic=False</InlineCode>），并在 ONNX 元数据中记录{' '}
-            <InlineCode>nms</InlineCode> / <InlineCode>nms_conf</InlineCode> /{' '}
-            <InlineCode>nms_iou</InlineCode> / <InlineCode>max_det</InlineCode>。
-          </P>
-          <CodeBlock language="python">{`model = LibreYOLO("LibreYOLO9c.pt")
-model.export(format="onnx", nms=True, conf=0.25, iou=0.45, max_det=300)`}</CodeBlock>
-          <P>
-            <InlineCode>int8=True</InlineCode> 现在也支持 ONNX（除 TensorRT 和 OpenVINO 之外），
-            同样仅限 YOLO9 检测；它需要一个用于标定的{' '}
-            <InlineCode>data=</InlineCode> 数据集。
-          </P>
-
-          <SubHeading>TFLite 导出</SubHeading>
-          <P>
-            <SupportBadge variant="experimental">实验性</SupportBadge>{' '}
-            v1.3.0 新增了基于 <InlineCode>onnx2tf</InlineCode> 的 TFLite 导出路径。它已在
-            RF-DETR detect / segment / pose 和 YOLO9 detect 上验证。它需要{' '}
-            <strong className="text-surface-800 dark:text-white">Python 3.12+</strong>（{' '}
-            <InlineCode>onnx2tf 2.4.x</InlineCode> wheels 不面向更老的 Python），以及
-            可选 extra <InlineCode>libreyolo[tflite]</InlineCode>
-            （<InlineCode>onnx2tf&gt;=2.4.3</InlineCode>、onnx-graphsurgeon、onnx-simplifier）。导出
-            为 FP32 且仅静态形状（暂不支持 <InlineCode>half</InlineCode>、{' '}
-            <InlineCode>int8</InlineCode> 或 <InlineCode>dynamic</InlineCode>）。
-          </P>
-          <CodeBlock language="bash">{`pip install "libreyolo[tflite]"   # Python 3.12+`}</CodeBlock>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
-
-model = LibreYOLO("LibreRFDETRs-seg.pt")
-model.export(format="tflite")   # writes a .tflite file`}</CodeBlock>
-          <P>
-            对于 RF-DETR，导出器会将每个 GridSample 节点改写为 TFLite 安全的双线性
-            子图，因为 onnx2tf 的默认 lowering 在数值上有问题。在 v1.3.0 中，由于{' '}
-            <InlineCode>onnx2tf&gt;=2.4.3</InlineCode> 已在上游提供 RF-DETR 修复，旧的针对 onnx2tf
-            的运行时 monkeypatch 已被移除；只保留静态 ONNX 图改写。
-          </P>
-          <P>
-            <strong className="text-surface-800 dark:text-white">没有 TFLite 运行时后端。</strong>{' '}
-            LibreYOLO 无法加载或运行 <InlineCode>.tflite</InlineCode> 文件；该格式仅用于
-            导出。请在目标设备上使用 TF Lite 运行时
-            （<InlineCode>ai-edge-litert</InlineCode> / <InlineCode>tflite-runtime</InlineCode>）
-            运行导出的模型。
+            OpenVINO INT8 导出还需要 <InlineCode>nncf</InlineCode>。NCNN 导出会写出一个目录，包含 <InlineCode>model.ncnn.param</InlineCode>、<InlineCode>model.ncnn.bin</InlineCode> 和 <InlineCode>metadata.yaml</InlineCode>。CoreML 导出会写出 <InlineCode>.mlpackage</InlineCode> 包，需要 <InlineCode>coremltools</InlineCode>，且不支持 INT8。
           </P>
 
           <SubHeading>ONNX 元数据</SubHeading>
@@ -5309,7 +4409,7 @@ model.export(format="tflite")   # writes a .tflite file`}</CodeBlock>
           <DocTable
             headers={['键', '示例值']}
             rows={[
-              [<InlineCode key="v">libreyolo_version</InlineCode>, <InlineCode key="vv">&quot;1.3.0&quot;</InlineCode>],
+              [<InlineCode key="v">libreyolo_version</InlineCode>, <InlineCode key="vv">&quot;1.2.0&quot;</InlineCode>],
               [<InlineCode key="f">model_family</InlineCode>, <InlineCode key="fv">&quot;yolox&quot;</InlineCode>],
               [<InlineCode key="s">model_size</InlineCode>, <InlineCode key="sv">&quot;s&quot;</InlineCode>],
               [<InlineCode key="c">nb_classes</InlineCode>, <InlineCode key="cv">&quot;80&quot;</InlineCode>],
@@ -5320,7 +4420,7 @@ model.export(format="tflite")   # writes a .tflite file`}</CodeBlock>
             ]}
           />
           <P>
-            使用 <InlineCode>LibreYOLO(&quot;model.onnx&quot;)</InlineCode> 加载导出文件时，会自动读回该元数据。
+            使用 <InlineCode>LibreYOLO(&quot;model.onnx&quot;)</InlineCode> 加载导出文件时，会自动读回此元数据。
           </P>
 
           <Divider />
@@ -5364,7 +4464,7 @@ print(onnx_model.names)       # {0: "person", 1: "bicycle", ...}
 print(onnx_model.nb_classes)  # 80`}</CodeBlock>
 
           <P>
-            对于没有元数据的 ONNX 文件（例如由其他工具导出），请手动指定 <InlineCode>nb_classes</InlineCode>：
+            对于没有元数据的 ONNX 文件（如由其他工具导出），请手动指定 <InlineCode>nb_classes</InlineCode>：
           </P>
           <CodeBlock language="python">{`model = LibreYOLO("external_model.onnx", nb_classes=20)`}</CodeBlock>
 
@@ -5394,10 +4494,10 @@ model = LibreYOLO("model.onnx", device="cuda")`}</CodeBlock>
     color_format="auto",
 )`}</CodeBlock>
           <P>
-            运行时后端不暴露仅 PyTorch 的选项，如 <InlineCode>tiling</InlineCode>、<InlineCode>overlap_ratio</InlineCode> 或 <InlineCode>output_file_format</InlineCode>。
+            运行时后端不暴露仅限 PyTorch 的选项，如 <InlineCode>tiling</InlineCode>、<InlineCode>overlap_ratio</InlineCode> 或 <InlineCode>output_file_format</InlineCode>。
           </P>
           <P>
-            运行时后端在保存方面与 PyTorch 包装器略有不同：如果你设置 <InlineCode>output_path</InlineCode>，请传入最终文件路径，而非目录。如果省略它，当前后端默认保存在 <InlineCode>runs/detections/</InlineCode> 下。
+            运行时后端的保存方式与 PyTorch 封装略有不同：如果设置 <InlineCode>output_path</InlineCode>，请传入最终文件路径，而非目录。如果省略它，当前后端默认保存在 <InlineCode>runs/detections/</InlineCode> 下。
           </P>
 
           <Divider />
@@ -5405,7 +4505,7 @@ model = LibreYOLO("model.onnx", device="cuda")`}</CodeBlock>
           {/* ────────────── TENSORRT INFERENCE ────────────── */}
           <SectionHeading id="tensorrt-inference" icon={Cpu}>TensorRT 推理</SectionHeading>
           <P>
-            使用 TensorRT 在 NVIDIA GPU 上获得最大吞吐。需要 CUDA 以及 TensorRT 的 Python 绑定。
+            使用 TensorRT 在 NVIDIA GPU 上以最大吞吐量运行推理。需要 CUDA 以及 TensorRT 的 Python 绑定。
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
@@ -5423,7 +4523,7 @@ print(result.boxes.xyxy)`}</CodeBlock>
           {/* ────────────── OPENVINO INFERENCE ────────────── */}
           <SectionHeading id="openvino-inference" icon={Cpu}>OpenVINO 推理</SectionHeading>
           <P>
-            使用 OpenVINO 运行推理，针对 Intel CPU、GPU 和 VPU 优化。
+            使用 OpenVINO 运行推理，针对 Intel CPU、GPU 和 VPU 进行了优化。
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
@@ -5441,7 +4541,7 @@ print(result.boxes.xyxy)`}</CodeBlock>
           {/* ────────────── NCNN INFERENCE ────────────── */}
           <SectionHeading id="ncnn-inference" icon={Cpu}>NCNN 推理</SectionHeading>
           <P>
-            使用 NCNN 运行推理，用于在 CPU 或支持 Vulkan 的 GPU 目标上进行轻量部署。
+            使用 NCNN 运行推理，以在 CPU 或支持 Vulkan 的 GPU 目标上实现轻量化部署。
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
@@ -5475,9 +4575,9 @@ print(result.boxes.xyxy)`}</CodeBlock>
           <Divider />
 
           {/* ────────────── CLI ────────────── */}
-          <SectionHeading id="cli" icon={SquareTerminal}>命令行（CLI）</SectionHeading>
+          <SectionHeading id="cli" icon={SquareTerminal}>命令行工具</SectionHeading>
           <P>
-            安装 LibreYOLO 会在你的 PATH 中注册一个 <InlineCode>libreyolo</InlineCode> 命令（入口点在 <InlineCode>pyproject.toml</InlineCode> 中）。命令行镜像 Python API，并遵循 Ultralytics 风格的 <InlineCode>key=value</InlineCode> 语法。
+            安装 LibreYOLO 会在你的 PATH 中注册一个 <InlineCode>libreyolo</InlineCode> 命令（入口点在 <InlineCode>pyproject.toml</InlineCode> 中）。该命令行镜像 Python API，并遵循 Ultralytics 风格的 <InlineCode>key=value</InlineCode> 语法。
           </P>
 
           <SubHeading>子命令</SubHeading>
@@ -5487,22 +4587,20 @@ print(result.boxes.xyxy)`}</CodeBlock>
               [<InlineCode key="p">predict</InlineCode>, '对图像、目录或视频运行推理'],
               [<InlineCode key="t">train</InlineCode>, '在数据集上训练模型'],
               [<InlineCode key="v">val</InlineCode>, '在数据集上评估模型'],
-              [<InlineCode key="e">export</InlineCode>, '导出为 ONNX / TorchScript / TensorRT / OpenVINO / NCNN / CoreML / TFLite'],
-              [<InlineCode key="ui">ui</InlineCode>, '启动本地拖放 / 粘贴的浏览器推理界面'],
-              [<InlineCode key="dr">doctor</InlineCode>, '运行训练前的数据集健康检查（YOLO 检测格式）'],
-              [<InlineCode key="c">checks</InlineCode>, '打印 Python、torch、CUDA、GPU 和可选包信息'],
-              [<InlineCode key="m">models</InlineCode>, '列出已注册的模型系列和命令行简称'],
+              [<InlineCode key="e">export</InlineCode>, '导出为 ONNX / TorchScript / TensorRT / OpenVINO / NCNN / CoreML'],
+              [<InlineCode key="c">checks</InlineCode>, '打印 Python、torch、CUDA、GPU 及可选包信息'],
+              [<InlineCode key="m">models</InlineCode>, '列出已注册的模型系列和 CLI 快捷名称'],
               [<InlineCode key="f">formats</InlineCode>, '列出支持的导出格式'],
               [<InlineCode key="cfg">cfg</InlineCode>, '打印默认的训练配置 YAML'],
               [<InlineCode key="i">info</InlineCode>, '加载模型并打印解析出的系列、尺寸、任务、设备和类别'],
-              [<InlineCode key="md">metadata</InlineCode>, '检查 .pt 文件中的原始检查点元数据'],
+              [<InlineCode key="md">metadata</InlineCode>, '检视 .pt 文件中的原始检查点元数据'],
               [<InlineCode key="ver">version</InlineCode>, '打印 LibreYOLO + Python + torch 版本'],
             ]}
           />
 
-          <SubHeading>模型名称简称</SubHeading>
+          <SubHeading>模型名称快捷方式</SubHeading>
           <P>
-            命令行接受简称（<InlineCode>yolo9-c</InlineCode>），它们会解析为权重文件名（<InlineCode>LibreYOLO9c.pt</InlineCode>）- 可通过 <InlineCode>libreyolo models</InlineCode> 查看。你也可以传入任意明确的检查点路径。
+            命令行接受短名称（<InlineCode>yolo9-c</InlineCode>），它们会解析为权重文件名（<InlineCode>LibreYOLO9c.pt</InlineCode>） - 可通过 <InlineCode>libreyolo models</InlineCode> 查看。你也可以传入任意明确的检查点路径。
           </P>
 
           <SubHeading>常用选项</SubHeading>
@@ -5510,9 +4608,9 @@ print(result.boxes.xyxy)`}</CodeBlock>
             headers={['命令', '重要选项']}
             rows={[
               [<InlineCode key="p">predict</InlineCode>, <span key="pv"><InlineCode>conf</InlineCode>, <InlineCode>iou</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>classes</InlineCode>, <InlineCode>max_det</InlineCode>, <InlineCode>half</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>tiling</InlineCode>, <InlineCode>overlap_ratio</InlineCode>, <InlineCode>output_file_format</InlineCode>, <InlineCode>project</InlineCode>, <InlineCode>name</InlineCode>, <InlineCode>exist_ok</InlineCode>, <InlineCode>face_detector</InlineCode></span>],
-              [<InlineCode key="t">train</InlineCode>, <span key="tv"><InlineCode>epochs</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>lr0</InlineCode>, <InlineCode>optimizer</InlineCode>, <InlineCode>scheduler</InlineCode>, <InlineCode>workers</InlineCode>, <InlineCode>seed</InlineCode>, <InlineCode>resume</InlineCode>, <InlineCode>amp</InlineCode>, <InlineCode>task</InlineCode>, <InlineCode>cache</InlineCode>, <InlineCode>lora</InlineCode>, <InlineCode>freeze</InlineCode>, <InlineCode>save_plots</InlineCode>, <InlineCode>allow_download_scripts</InlineCode>, <InlineCode>dry_run</InlineCode></span>],
-              [<InlineCode key="v">val</InlineCode>, <span key="vv"><InlineCode>split</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>conf</InlineCode>, <InlineCode>iou</InlineCode>, <InlineCode>max_det</InlineCode>, <InlineCode>half</InlineCode>, <InlineCode>save_plots</InlineCode>, <InlineCode>data_dir</InlineCode>, <InlineCode>use_coco_eval</InlineCode>, <InlineCode>project</InlineCode>, <InlineCode>name</InlineCode>, <InlineCode>exist_ok</InlineCode>, <InlineCode>save_json</InlineCode>, <InlineCode>allow_download_scripts</InlineCode></span>],
-              [<InlineCode key="e">export</InlineCode>, <span key="ev"><InlineCode>format</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>half</InlineCode>, <InlineCode>int8</InlineCode>, <InlineCode>dynamic</InlineCode>, <InlineCode>simplify</InlineCode>, <InlineCode>nms</InlineCode>, <InlineCode>conf</InlineCode>, <InlineCode>iou</InlineCode>, <InlineCode>max_det</InlineCode>, <InlineCode>opset</InlineCode>, <InlineCode>data</InlineCode>, <InlineCode>fraction</InlineCode>, <InlineCode>device</InlineCode>, <InlineCode>allow_download_scripts</InlineCode>, <InlineCode>verbose</InlineCode></span>],
+              [<InlineCode key="t">train</InlineCode>, <span key="tv"><InlineCode>epochs</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>lr0</InlineCode>, <InlineCode>optimizer</InlineCode>, <InlineCode>scheduler</InlineCode>, <InlineCode>workers</InlineCode>, <InlineCode>seed</InlineCode>, <InlineCode>resume</InlineCode>, <InlineCode>amp</InlineCode>, <InlineCode>allow_download_scripts</InlineCode>, <InlineCode>dry_run</InlineCode></span>],
+              [<InlineCode key="v">val</InlineCode>, <span key="vv"><InlineCode>split</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>conf</InlineCode>, <InlineCode>iou</InlineCode>, <InlineCode>max_det</InlineCode>, <InlineCode>half</InlineCode>, <InlineCode>data_dir</InlineCode>, <InlineCode>use_coco_eval</InlineCode>, <InlineCode>project</InlineCode>, <InlineCode>name</InlineCode>, <InlineCode>exist_ok</InlineCode>, <InlineCode>save_json</InlineCode>, <InlineCode>allow_download_scripts</InlineCode></span>],
+              [<InlineCode key="e">export</InlineCode>, <span key="ev"><InlineCode>format</InlineCode>, <InlineCode>imgsz</InlineCode>, <InlineCode>batch</InlineCode>, <InlineCode>half</InlineCode>, <InlineCode>int8</InlineCode>, <InlineCode>dynamic</InlineCode>, <InlineCode>simplify</InlineCode>, <InlineCode>opset</InlineCode>, <InlineCode>data</InlineCode>, <InlineCode>fraction</InlineCode>, <InlineCode>device</InlineCode>, <InlineCode>allow_download_scripts</InlineCode>, <InlineCode>verbose</InlineCode></span>],
             ]}
           />
 
@@ -5548,38 +4646,9 @@ libreyolo export model=best.pt format=tensorrt half=true
 libreyolo export model=best.pt format=openvino int8=true data=coco128.yaml
 libreyolo export model=best.pt format=coreml`}</CodeBlock>
 
-          <SubHeading>导出内嵌 NMS 与矩形尺寸</SubHeading>
-          <CodeBlock language="bash">{`# Embed NMS into an ONNX YOLO9 detection graph
-libreyolo export model=yolo9-c format=onnx nms=true conf=0.25 iou=0.45 max_det=300
-
-# Rectangular export size (imgsz accepts a single value or two comma-separated dims)
-libreyolo export model=yolo9-c format=onnx imgsz=640,480
-
-# TFLite (Python 3.12+, libreyolo[tflite])
-libreyolo export model=rfdetr-s format=tflite`}</CodeBlock>
-
-          <SubHeading>本地推理界面</SubHeading>
-          <P>
-            <InlineCode>libreyolo ui</InlineCode> 提供一个本地浏览器页面，你可以在其中拖放、粘贴
-            或选择图像、选择模型并查看结果。它默认绑定{' '}
-            <InlineCode>127.0.0.1:8000</InlineCode>，若端口被占用会自动递增。
-          </P>
-          <CodeBlock language="bash">{`libreyolo ui                       # opens http://127.0.0.1:8000
-libreyolo ui --port 9000 --no-browser --device 0`}</CodeBlock>
-
-          <SubHeading>数据集健康检查</SubHeading>
-          <P>
-            <InlineCode>libreyolo doctor</InlineCode> 对 YOLO 检测格式的数据集运行训练前检查，
-            发现错误时以非零退出
-            （<InlineCode>--strict</InlineCode> 还会在出现警告时失败），因此可用于门控 CI。
-          </P>
-          <CodeBlock language="bash">{`libreyolo doctor coco8.yaml
-libreyolo doctor --data coco8.yaml --strict --json
-libreyolo doctor coco8.yaml --fast --only labels   # skip image decoding, run one check family`}</CodeBlock>
-
           <SubHeading>机器可读输出</SubHeading>
           <P>
-            每个命令都接受 <InlineCode>--json</InlineCode>（结构化的标准输出，便于管道传入脚本或智能体）和 <InlineCode>--quiet</InlineCode>（抑制 stderr 进度行）。核心的 <InlineCode>predict</InlineCode>、<InlineCode>train</InlineCode>、<InlineCode>val</InlineCode> 和 <InlineCode>export</InlineCode> 命令还接受 <InlineCode>--help-json</InlineCode>，可将其参数 schema 以 JSON 形式输出。
+            每个命令都接受 <InlineCode>--json</InlineCode>（结构化的标准输出，便于管道传入脚本或智能体）和 <InlineCode>--quiet</InlineCode>（抑制 stderr 进度行）。核心的 <InlineCode>predict</InlineCode>、<InlineCode>train</InlineCode>、<InlineCode>val</InlineCode> 和 <InlineCode>export</InlineCode> 命令还接受 <InlineCode>--help-json</InlineCode>，可将其参数 schema 以 JSON 形式导出。
           </P>
           <CodeBlock language="bash">{`libreyolo predict model=yolo9-c source=img.jpg --json | jq .
 
@@ -5590,7 +4659,7 @@ libreyolo train --help-json > train_schema.json`}</CodeBlock>
           {/* ────────────── API REFERENCE ────────────── */}
           <SectionHeading id="api-reference" icon={FileCode}>API 参考</SectionHeading>
 
-          <SubHeading>LibreYOLO（工厂）</SubHeading>
+          <SubHeading>LibreYOLO（工厂函数）</SubHeading>
           <CodeBlock language="python">{`LibreYOLO(
     model_path: str,
     *,
@@ -5600,10 +4669,10 @@ libreyolo train --help-json > train_schema.json`}</CodeBlock>
     compute_units: str = "all", # CoreML only: all, cpu_only, cpu_and_gpu, cpu_and_ne
 ) -> model wrapper or runtime backend`}</CodeBlock>
           <P>
-            优先使用官方检查点文件名和导出产物路径，然后让工厂解析细节。它可处理 PyTorch 检查点、<InlineCode>.onnx</InlineCode>、<InlineCode>.torchscript</InlineCode>、<InlineCode>.engine</InlineCode>、<InlineCode>.tensorrt</InlineCode>、<InlineCode>.mlpackage</InlineCode>、包含 <InlineCode>model.xml</InlineCode> 的 OpenVINO 目录，以及包含 <InlineCode>model.ncnn.param</InlineCode> 和 <InlineCode>model.ncnn.bin</InlineCode> 的 NCNN 目录。<InlineCode>task</InlineCode> 参数用于有歧义的自定义产物；否则解析来自检查点元数据、文件名后缀和系列默认值。
+            优先使用官方检查点文件名和导出产物路径，再让工厂函数解析细节。它可处理 PyTorch 检查点、<InlineCode>.onnx</InlineCode>、<InlineCode>.torchscript</InlineCode>、<InlineCode>.engine</InlineCode>、<InlineCode>.tensorrt</InlineCode>、<InlineCode>.mlpackage</InlineCode>、包含 <InlineCode>model.xml</InlineCode> 的 OpenVINO 目录，以及包含 <InlineCode>model.ncnn.param</InlineCode> 和 <InlineCode>model.ncnn.bin</InlineCode> 的 NCNN 目录。<InlineCode>task</InlineCode> 参数用于含糊的自定义产物；否则解析来自检查点元数据、文件名后缀和系列默认值。
           </P>
 
-          <SubHeading>预测（PyTorch 模型包装器）</SubHeading>
+          <SubHeading>预测（PyTorch 模型封装）</SubHeading>
           <CodeBlock language="python">{`model(
     source,                     # image input (see supported formats)
     *,
@@ -5641,7 +4710,7 @@ libreyolo train --help-json > train_schema.json`}</CodeBlock>
     color_format: str = "auto",
 ) -> Results | list[Results]`}</CodeBlock>
           <P>
-            如果运行时后端省略了 <InlineCode>output_path</InlineCode>，当前默认保存位置是 <InlineCode>runs/detections/</InlineCode>。
+            如果运行时后端省略 <InlineCode>output_path</InlineCode>，当前默认保存位置为 <InlineCode>runs/detections/</InlineCode>。
           </P>
 
           <SubHeading>Results</SubHeading>
@@ -5682,7 +4751,7 @@ len(boxes)           # number of boxes
 boxes.cpu()          # copy on CPU
 boxes.numpy()        # copy as numpy arrays`}</CodeBlock>
 
-          <SubHeading>任务载荷</SubHeading>
+          <SubHeading>任务负载</SubHeading>
           <CodeBlock language="python">{`result.masks.data        # segmentation masks, (N, H, W)
 result.masks.xy          # list of mask contours in pixel coordinates
 result.masks.xyn         # normalized mask contours
@@ -5757,7 +4826,7 @@ result.gaze.direction_3d # approximate 3D direction vectors`}</CodeBlock>
     "metrics/AR_large": float,
 }`}</CodeBlock>
 
-          <SubHeading>model.train()（YOLO9）</SubHeading>
+          <SubHeading>model.train() (YOLO9)</SubHeading>
           <CodeBlock language="python">{`model.train(
     data: str,                  # path to data.yaml (required)
     *,
@@ -5780,7 +4849,7 @@ result.gaze.direction_3d # approximate 3D direction vectors`}</CodeBlock>
 ) -> dict`}</CodeBlock>
           <P>返回标准的 LibreYOLO 训练字典，包含 <InlineCode>final_loss</InlineCode>、<InlineCode>best_mAP50</InlineCode>、<InlineCode>best_mAP50_95</InlineCode>、<InlineCode>best_epoch</InlineCode>、<InlineCode>save_dir</InlineCode>、<InlineCode>best_checkpoint</InlineCode> 和 <InlineCode>last_checkpoint</InlineCode>。</P>
 
-          <SubHeading>model.train()（RF-DETR）</SubHeading>
+          <SubHeading>model.train() (RF-DETR)</SubHeading>
           <CodeBlock language="python">{`model.train(
     data: str,                  # path to data.yaml
     epochs: int = 100,
@@ -5791,12 +4860,12 @@ result.gaze.direction_3d # approximate 3D direction vectors`}</CodeBlock>
     **kwargs,                   # additional RF-DETR training args
 ) -> dict`}</CodeBlock>
           <P>
-            YOLO-NAS、D-FINE、DEIM、DEIMv2、EC、PicoDet、RT-DETRv2/v4 和 RTMDet 还有额外的实验性训练器，外加新增的分类（MobileNetV4、ConvNeXt、EfficientNetV2、DINOv2）、语义分割（DINOv2）和点定位（FOMO）系列。它们遵循相同的 <InlineCode>model.train(data=&quot;...yaml&quot;, ...)</InlineCode> 形式，但默认值和实验性门控因系列而异。
+            YOLO-NAS、D-FINE、DEIM、DEIMv2、EC、PicoDet、DAMO-YOLO、RT-DETRv2/v4 和 RTMDet 还提供额外的实验性训练器。它们遵循相同的 <InlineCode>model.train(data=&quot;...yaml&quot;, ...)</InlineCode> 形式，但其默认值和实验性门控因系列而异。
           </P>
 
           <SubHeading>运行时产物加载</SubHeading>
           <P>
-            通过 <InlineCode>LibreYOLO()</InlineCode> 加载导出产物，方式与加载 PyTorch 检查点相同。工厂会根据路径选择 ONNX Runtime、TorchScript、TensorRT、OpenVINO、NCNN 或 CoreML：
+            通过 <InlineCode>LibreYOLO()</InlineCode> 加载导出产物，方式与加载 PyTorch 检查点相同。工厂函数会根据路径选择 ONNX Runtime、TorchScript、TensorRT、OpenVINO、NCNN 或 CoreML：
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
@@ -5807,7 +4876,7 @@ model = LibreYOLO("model_openvino/")
 model = LibreYOLO("model_ncnn/")
 model = LibreYOLO("model.mlpackage", compute_units="all")`}</CodeBlock>
           <P>
-            高级集成可以触及更底层的运行时模块，但普通应用代码应保持使用工厂路径。
+            高级集成可以访问更底层的运行时模块，但普通应用代码应坚持使用工厂函数路径。
           </P>
 
           <SubHeading>ValidationConfig</SubHeading>
@@ -5848,26 +4917,26 @@ config.to_yaml("config.yaml")`}</CodeBlock>
           {/* ────────────── ARCHITECTURE GUIDE ────────────── */}
           <SectionHeading id="architecture" icon={Wrench}>架构指南</SectionHeading>
           <P>
-            本节面向希望了解代码库内部机制的贡献者。
+            本节面向希望了解代码库内部实现的贡献者。
           </P>
 
           <SubHeading>基类设计</SubHeading>
           <P>
-            PyTorch 模型系列继承自 <InlineCode>libreyolo/models/base/model.py</InlineCode> 中的 <InlineCode>BaseModel</InlineCode>。子类实现以下抽象方法：
+            PyTorch 模型系列继承自 <InlineCode>libreyolo/models/base/model.py</InlineCode> 中的 <InlineCode>BaseModel</InlineCode>。子类需实现以下抽象方法：
           </P>
           <DocTable
             headers={['方法', '用途']}
             rows={[
               [<InlineCode key="init">_init_model()</InlineCode>, '构建并返回 nn.Module'],
-              [<InlineCode key="layers">_get_available_layers()</InlineCode>, '返回层名到模块的映射'],
-              [<InlineCode key="pre-np">_get_preprocess_numpy()</InlineCode>, '返回用于导出 / 标定的 NumPy 预处理器'],
+              [<InlineCode key="layers">_get_available_layers()</InlineCode>, '返回层名称到模块的映射'],
+              [<InlineCode key="pre-np">_get_preprocess_numpy()</InlineCode>, '返回用于导出/校准的 NumPy 预处理器'],
               [<InlineCode key="pre">_preprocess()</InlineCode>, '图像到张量的转换'],
               [<InlineCode key="fwd">_forward()</InlineCode>, '模型前向传播'],
               [<InlineCode key="post">_postprocess()</InlineCode>, '原始输出到检测字典'],
             ]}
           />
           <P>
-            <InlineCode>BaseModel</InlineCode> 提供共享的包装行为：预测、导出、验证、尺寸/名称元数据和训练辅助。实际的单图、批量和分块推理流程位于 <InlineCode>libreyolo/models/base/inference.py</InlineCode>，而部署运行时位于 <InlineCode>libreyolo/backends/</InlineCode> 下。
+            <InlineCode>BaseModel</InlineCode> 提供共享的封装行为：预测、导出、验证、尺寸/名称元数据和训练辅助函数。实际的单图、批量和分块推理流程位于 <InlineCode>libreyolo/models/base/inference.py</InlineCode>，而部署运行时位于 <InlineCode>libreyolo/backends/</InlineCode> 下。
           </P>
 
           <SubHeading>包结构</SubHeading>
@@ -5881,7 +4950,7 @@ config.to_yaml("config.yaml")`}</CodeBlock>
             model.py     # BaseModel - shared wrapper behaviour
             inference.py # Shared prediction pipeline (image/dir/video/tiled)
         yolox/           # LibreYOLOX (detect)
-        yolo9/           # LibreYOLO9 (detect)
+        yolo9/           # LibreYOLO9 (detect, segment)
         yolo9_e2e/       # LibreYOLO9E2E (detect)
         yolonas/         # LibreYOLONAS (detect, pose)
         dfine/           # LibreDFINE (detect)
@@ -5890,16 +4959,11 @@ config.to_yaml("config.yaml")`}</CodeBlock>
         rtdetr/          # LibreRTDETR (detect)
         rtdetrv2/        # LibreRTDETRv2 (detect)
         rtdetrv4/        # LibreRTDETRv4 (detect)
-        rfdetr/          # LibreRFDETR (detect, segment, pose, obb) - lazy-loaded
+        rfdetr/          # LibreRFDETR (detect, segment) - lazy-loaded
         ec/              # LibreEC / EdgeCrafter (detect, pose, segment)
         picodet/         # LibrePICODET (detect)
+        damoyolo/        # LibreDAMOYOLO (detect)
         rtmdet/          # LibreRTMDet (detect)
-        dinov2/          # LibreDINOv2 (semantic, classify) - lazy-loaded
-        mobilenetv4/     # LibreMobileNetV4 (classify)
-        convnext/        # LibreConvNeXt (classify)
-        efficientnetv2/  # LibreEfficientNetV2 (classify)
-        depth_anything/  # LibreDepthAnythingV2 (depth)
-        fomo/            # LibreFOMO (point)
         l2cs/            # LibreL2CS (gaze, inference-only)
     backends/
         base.py
@@ -5954,7 +5018,7 @@ config.to_yaml("config.yaml")`}</CodeBlock>
               <>实现注册表钩子，如 <InlineCode>can_load()</InlineCode>、<InlineCode>detect_size()</InlineCode>、<InlineCode>detect_nb_classes()</InlineCode> 和 <InlineCode>detect_size_from_filename()</InlineCode></>,
               '实现该系列所需的模型初始化、预处理、前向、后处理、训练和验证钩子',
               <>在 <InlineCode>libreyolo/models/newmodel/</InlineCode> 下创建配套的网络和工具</>,
-              <>将导入添加到 <InlineCode>libreyolo/models/__init__.py</InlineCode>；子类注册会在导入运行时发生</>,
+              <>将该导入添加到 <InlineCode>libreyolo/models/__init__.py</InlineCode>；导入运行时会进行子类注册</>,
               <>从 <InlineCode>libreyolo/__init__.py</InlineCode> 导出该类</>,
               <>（可选）如果验证预处理与标准路径不同，覆盖 <InlineCode>val_preprocessor_class</InlineCode></>,
             ].map((item, i) => (
@@ -5969,7 +5033,7 @@ config.to_yaml("config.yaml")`}</CodeBlock>
 
           <SubHeading>导出架构</SubHeading>
           <P>
-            用户代码应通过 <InlineCode>model.export(...)</InlineCode> 导出。在内部，<InlineCode>libreyolo/export/exporter.py</InlineCode> 中的 <InlineCode>BaseExporter</InlineCode> 拥有格式注册表，具体的导出器通过子类注册来注册自身。
+            用户代码应通过 <InlineCode>model.export(...)</InlineCode> 导出。在内部，<InlineCode>libreyolo/export/exporter.py</InlineCode> 中的 <InlineCode>BaseExporter</InlineCode> 持有格式注册表，具体的导出器通过子类注册来注册自身。
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
@@ -5984,122 +5048,90 @@ model.export(format="onnx")`}</CodeBlock>
           {/* ────────────── DATASET FORMAT ────────────── */}
           <SectionHeading id="dataset-format" icon={Database}>数据集格式</SectionHeading>
           <P>
-            每个任务都通过一个 <InlineCode>data.yaml</InlineCode> 加载。检测、实例分割和 OBB 接受<strong className="text-surface-800 dark:text-white">两种可互换的标签格式</strong>——YOLO TXT 或原生 COCO JSON——加载器会根据配置自动选择。姿态、语义分割、深度和分类各自增加一个小型格式。下表将每个任务映射到其布局。
+            训练和验证使用通过 <InlineCode>data.yaml</InlineCode> 加载的数据集配置。检测、分割、姿态和 RF-DETR 训练都经由该加载器；标签文件内容因任务而异。
           </P>
-
-          <SubHeading>按任务划分的格式</SubHeading>
-          <DocTable
-            headers={['任务', '数据布局', '标签']}
-            rows={[
-              ['检测', <span key="l"><InlineCode>data.yaml</InlineCode> + <InlineCode>labels/*.txt</InlineCode>，或 COCO JSON</span>, '每行一个框'],
-              ['实例分割', <span key="l"><InlineCode>data.yaml</InlineCode> + 多边形 <InlineCode>.txt</InlineCode>，或 COCO JSON</span>, '每行一个多边形（TXT）/ 多边形 + RLE（COCO）'],
-              ['OBB', <span key="l"><InlineCode>data.yaml</InlineCode> + 旋转框 <InlineCode>.txt</InlineCode>，或 COCO JSON</span>, '每行一个旋转框'],
-              ['姿态', <span key="l"><InlineCode>data.yaml</InlineCode> + <InlineCode>.txt</InlineCode> + <InlineCode>kpt_shape</InlineCode>/<InlineCode>flip_idx</InlineCode></span>, '每行一个框 + 关键点'],
-              ['语义分割', <span key="l"><InlineCode>data.yaml</InlineCode> + <InlineCode>masks_dir/</InlineCode> PNG</span>, '逐像素类别 ID（255 = 忽略）'],
-              ['深度', <span key="l"><InlineCode>data.yaml</InlineCode> + <InlineCode>depths_dir/</InlineCode> 深度图</span>, '逐像素深度（0 = 无效）'],
-              ['分类', <span key="l">ImageFolder（<InlineCode>train/&lt;class&gt;/</InlineCode>）</span>, '文件夹名 = 类别'],
-            ]}
-          />
 
           <SubHeading>data.yaml 结构</SubHeading>
-          <P>
-            检测、分割、OBB 和姿态的通用契约。<InlineCode>train</InlineCode>/<InlineCode>val</InlineCode>/<InlineCode>test</InlineCode> 可以是目录、<InlineCode>.txt</InlineCode> 文件列表（每行一个图像路径）或路径列表。<InlineCode>nc</InlineCode> 可选——省略时从 <InlineCode>names</InlineCode> 推断。
-          </P>
           <CodeBlock language="yaml" filename="data.yaml">{`path: /absolute/path/to/dataset   # dataset root
-train: images/train               # dir, .txt file list, or list of paths
-val: images/val
+train: images/train               # directory path, relative to path
+val: images/val                   # directory path, relative to path
 test: images/test                 # optional
 
-nc: 80                            # optional; inferred from names if absent
+nc: 80                            # number of classes
+names: [                          # class names
+  "person", "bicycle", "car", "motorcycle", "airplane",
+  "bus", "train", "truck", "boat", "traffic light",
+  # ...
+]`}</CodeBlock>
+
+          <SubHeading>配置解析与下载</SubHeading>
+          <P>
+            数据集配置按以下顺序解析：明确路径、当前工作目录，然后是 <InlineCode>libreyolo/config/datasets/</InlineCode> 下的内置配置。数据集根目录默认在 <InlineCode>~/datasets</InlineCode> 下，可通过 <InlineCode>LIBREYOLO_DATASETS_DIR</InlineCode> 覆盖。
+          </P>
+          <P>
+            <InlineCode>train</InlineCode>、<InlineCode>val</InlineCode> 和 <InlineCode>test</InlineCode> 可以是目录、<InlineCode>.txt</InlineCode> 文件或路径列表。YAML 下载钩子受保护；仅对可信配置传入 <InlineCode>allow_download_scripts=True</InlineCode>。
+          </P>
+
+          <SubHeading>文件列表变体</SubHeading>
+          <P>
+            同样的 YAML 格式也可将 <InlineCode>train</InlineCode>、<InlineCode>val</InlineCode> 或 <InlineCode>test</InlineCode> 指向每行一个图像路径的 <InlineCode>.txt</InlineCode> 文件：
+          </P>
+          <CodeBlock language="yaml" filename="coco.yaml">{`path: /absolute/path/to/coco
+train: train2017.txt
+val: val2017.txt
+test: test-dev2017.txt
+
+nc: 80
 names: ["person", "bicycle", "car", "..."]`}</CodeBlock>
-          <P>
-            配置按以下顺序解析：明确路径、当前工作目录，然后是 <InlineCode>libreyolo/config/datasets/</InlineCode> 下的内置配置。根目录默认在 <InlineCode>~/datasets</InlineCode> 下；用 <InlineCode>LIBREYOLO_DATASETS_DIR</InlineCode> 覆盖。
-          </P>
 
-          <SubHeading>YOLO TXT 标签</SubHeading>
-          <P>
-            默认布局：每张图像在 <InlineCode>labels/</InlineCode> 下有一个 <InlineCode>.txt</InlineCode>，镜像 <InlineCode>images/</InlineCode> 树并使用相同的文件名主干。所有坐标都归一化到 [0, 1]。
-          </P>
+          <SubHeading>目录布局</SubHeading>
           <CodeBlock language="text">{`dataset/
-    images/train/img001.jpg
-    labels/train/img001.txt        # same stem as the image`}</CodeBlock>
-          <CodeBlock language="text">{`# Detection      one box per line
-<class_id> <cx> <cy> <w> <h>
+    images/
+        train/
+            img001.jpg
+            img002.jpg
+        val/
+            img003.jpg
+    labels/
+        train/
+            img001.txt
+            img002.txt
+        val/
+            img003.txt`}</CodeBlock>
 
-# Segmentation   one polygon per line (box derived from the vertices)
-<class_id> <x1> <y1> <x2> <y2> ... <xn> <yn>
+          <SubHeading>检测标签格式</SubHeading>
+          <P>
+            每张图像对应一个文本文件。每行表示一个目标：
+          </P>
+          <CodeBlock language="text">{`<class_id> <center_x> <center_y> <width> <height>`}</CodeBlock>
+          <P>
+            所有坐标都相对于图像尺寸归一化到 [0, 1]。
+          </P>
+          <P>示例（<InlineCode>img001.txt</InlineCode>）：</P>
+          <CodeBlock language="text" filename="img001.txt">{`0 0.5 0.4 0.3 0.6
+2 0.1 0.2 0.05 0.1`}</CodeBlock>
 
-# Pose           box, then K keypoints (needs kpt_shape / flip_idx below)
-<class_id> <cx> <cy> <w> <h> <kx1> <ky1> <v1> ... <kxK> <kyK> <vK>
+          <SubHeading>分割标签格式</SubHeading>
+          <P>
+            分割使用 YOLO 多边形行。数据集加载器从多边形顶点推导边界框，并在启用分割加载时保留多边形环：
+          </P>
+          <CodeBlock language="text">{`<class_id> <x1> <y1> <x2> <y2> ... <xn> <yn>`}</CodeBlock>
 
-# OBB            four rotated-box corners
-<class_id> <x1> <y1> <x2> <y2> <x3> <y3> <x4> <y4>`}</CodeBlock>
-          <CodeBlock language="yaml" filename="data.yaml (pose)">{`kpt_shape: [17, 3]   # K keypoints, 3 values each: x, y, visibility
+          <SubHeading>姿态标签格式</SubHeading>
+          <P>
+            姿态标签在边界框之后追加关键点。在 <InlineCode>data.yaml</InlineCode> 中添加 <InlineCode>kpt_shape</InlineCode> 和 <InlineCode>flip_idx</InlineCode>，使加载器知道关键点数量和水平翻转排列。
+          </P>
+          <CodeBlock language="yaml">{`kpt_shape: [17, 3]
 flip_idx: [0, 2, 1, 4, 3, 6, 5, 8, 7, 10, 9, 12, 11, 14, 13, 16, 15]`}</CodeBlock>
-
-          <SubHeading>原生 COCO JSON</SubHeading>
-          <P>
-            检测、分割和 OBB 也可直接加载 COCO JSON——添加一个 <InlineCode>annotations:</InlineCode> 块，将每个划分映射到其 JSON 文件。此时 <InlineCode>train</InlineCode>/<InlineCode>val</InlineCode> 指向图像<em>目录</em>（而非 <InlineCode>.txt</InlineCode> 列表）。需要 <InlineCode>pycocotools</InlineCode>；类别名来自 JSON 的 categories，因此 <InlineCode>nc</InlineCode>/<InlineCode>names</InlineCode> 可选。
-          </P>
-          <CodeBlock language="yaml" filename="data.yaml (COCO)">{`path: dataset
-train: images/train               # image directory
-val: images/val
-annotations:
-  train: annotations/train.json   # COCO instances JSON
-  val: annotations/val.json`}</CodeBlock>
-          <P>
-            同一套切换逻辑服务于 YOLO9、RF-DETR、DEIM 和 D-FINE 训练，以及检测、OBB 和姿态验证器。磁盘上带有 <InlineCode>annotations/instances_train2017.json</InlineCode> 的 COCO 布局也会被自动识别，无需 <InlineCode>annotations:</InlineCode> 键。
-          </P>
-          <P>
-            <strong className="text-surface-800 dark:text-white">选择哪种分割格式？</strong> 一个 YOLO 多边形行是每个实例一个环——无法表示带孔或分离（多部分）的掩码。COCO JSON 会保留实例的每个多边形并解码 RLE 掩码（含孔）。当实例带孔或存在不相连的部分时使用 COCO JSON；简单的单块掩码用任一格式均可。人群标注（<InlineCode>iscrowd: 1</InlineCode>）会被跳过。
-          </P>
-
-          <SubHeading>语义分割掩码</SubHeading>
-          <P>
-            为每张图像配一张单通道掩码，其像素值为类别 ID；<InlineCode>255</InlineCode> 标记被忽略的像素。<InlineCode>masks_dir</InlineCode> 会替换每个路径中的 <InlineCode>images</InlineCode>（默认 <InlineCode>masks</InlineCode>），掩码必须是无损（PNG）且与其图像同名主干。可选的 <InlineCode>label_mapping</InlineCode> 将源 ID 重映射为训练 ID（未映射的值变为忽略）。省略 <InlineCode>masks_dir</InlineCode> 则在加载时从 YOLO 多边形标签栅格化掩码，并追加一个 <InlineCode>background</InlineCode> 类。
-          </P>
-          <CodeBlock language="text">{`dataset/
-    images/train/scene001.jpg
-    masks/train/scene001.png       # single-channel class IDs, 255 = ignore`}</CodeBlock>
-          <CodeBlock language="yaml" filename="data.yaml (semantic)">{`path: /path/to/dataset
-train: images/train
-val: images/val
-masks_dir: masks
-nc: 3
-names: ["road", "building", "vegetation"]`}</CodeBlock>
-
-          <SubHeading>深度图</SubHeading>
-          <P>
-            为每张图像配一张单通道深度图，放在 <InlineCode>depths_dir</InlineCode> 下（默认 <InlineCode>depths</InlineCode>）。16 位 PNG/TIF 会除以 <InlineCode>depth_scale</InlineCode>（默认 <InlineCode>256.0</InlineCode>）；<InlineCode>.npy</InlineCode> 浮点文件按原样使用。零、负值和非有限像素为无效。可选的 <InlineCode>depth_stem_suffix</InlineCode> 和 <InlineCode>*_mask</InlineCode> 有效性掩码会被自动识别。深度在 v1.3.0 中仅支持验证。
-          </P>
-          <CodeBlock language="yaml" filename="data.yaml (depth)">{`path: /path/to/dataset
-val: images/val
-depths_dir: depths
-depth_scale: 256.0                # 16-bit PNG encoding: value / 256 = depth`}</CodeBlock>
-
-          <SubHeading>分类</SubHeading>
-          <P>
-            分类使用 ImageNet 风格的 ImageFolder 树，而非 <InlineCode>data.yaml</InlineCode>——布局参见 <a href="#classification" className="text-libre-600 dark:text-libre-400 hover:underline">分类</a>。<InlineCode>data=</InlineCode> 接受数据集根目录、<InlineCode>.zip</InlineCode> URL 或已知名称。
-          </P>
+          <CodeBlock language="text">{`<class_id> <cx> <cy> <w> <h> <kx1> <ky1> <v1> ... <kxK> <kyK> <vK>`}</CodeBlock>
 
           <SubHeading>内置数据集</SubHeading>
           <P>
-            配置位于 <InlineCode>libreyolo/config/datasets/</InlineCode> 下。下载行为因配置而异：基于 URL 的数据集在首次使用时获取，基于脚本的数据集需要 <InlineCode>allow_download_scripts=True</InlineCode>，少数需要在本地放置。
+            LibreYOLO 在 <InlineCode>libreyolo/config/datasets/</InlineCode> 下提供内置数据集配置，并可在首次使用时自动下载支持的数据集：
           </P>
-          <DocTable
-            headers={['配置', '任务', '下载']}
-            rows={[
-              [<InlineCode key="c">coco8</InlineCode>, '检测（8 张）', '自动'],
-              [<InlineCode key="c">coco128</InlineCode>, '检测（128 张）', '自动'],
-              [<InlineCode key="c">coco5000</InlineCode>, '检测', <span key="d">脚本 —— <InlineCode>allow_download_scripts=True</InlineCode></span>],
-              [<span key="c"><InlineCode>coco</InlineCode> / <InlineCode>coco-val-only</InlineCode></span>, '检测（完整）', <span key="d">脚本 —— <InlineCode>allow_download_scripts=True</InlineCode></span>],
-              [<span key="c"><InlineCode>coco8-pose</InlineCode> / <InlineCode>coco-pose</InlineCode></span>, '姿态', <span key="d">脚本 —— <InlineCode>allow_download_scripts=True</InlineCode></span>],
-              [<InlineCode key="c">cocostuff</InlineCode>, '语义（182 类）', '手动 —— 本地放置'],
-            ]}
-          />
-          <CodeBlock language="python">{`results = model.val(data="coco8.yaml")                          # auto-downloads
-results = model.train(data="coco128.yaml", epochs=10)           # auto-downloads
-model.train(data="coco8-pose.yaml", allow_download_scripts=True)  # script config`}</CodeBlock>
+          <CodeBlock language="python">{`# These download automatically on first use
+results = model.val(data="coco8.yaml")
+results = model.train(data="coco128.yaml", epochs=10)`}</CodeBlock>
 
           {/* Bottom spacer */}
           <div className="h-16" />
@@ -6112,6 +5144,6 @@ model.train(data="coco8-pose.yaml", allow_download_scripts=True)  # script confi
 
 export default function Docs() {
   const locale = useLocale()
-  if (locale === 'zh') return <DocsPageZh version="v1.3.0" />
-  return <DocsPage version="v1.3.0" />
+  if (locale === 'zh') return <DocsPageZh />
+  return <DocsPage />
 }
