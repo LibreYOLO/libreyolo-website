@@ -3,6 +3,14 @@ import { useTranslations } from 'next-intl'
 import { Github, ExternalLink, Linkedin } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 
+function XLogo({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  )
+}
+
 export default function Footer() {
   const t = useTranslations('Footer')
   return (
@@ -114,15 +122,26 @@ export default function Footer() {
                 <p className="text-surface-400 text-xs">{t('role')}</p>
               </div>
             </div>
-            <a
-              href="https://www.linkedin.com/in/xuban-ceccon"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-libre-500 dark:text-libre-400 hover:text-libre-600 dark:hover:text-libre-300 text-sm font-medium transition-colors inline-flex items-center gap-1.5"
-            >
-              <Linkedin className="w-4 h-4" />
-              {t('chat')}
-            </a>
+            <div className="flex items-center gap-4">
+              <a
+                href="https://www.linkedin.com/in/xuban-ceccon"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-libre-500 dark:text-libre-400 hover:text-libre-600 dark:hover:text-libre-300 text-sm font-medium transition-colors inline-flex items-center gap-1.5"
+              >
+                <Linkedin className="w-4 h-4" />
+                {t('chat')}
+              </a>
+              <a
+                href="https://x.com/EHxuban11"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-surface-400 hover:text-libre-500 dark:hover:text-libre-400 transition-colors"
+                aria-label="X (Twitter)"
+              >
+                <XLogo className="w-4 h-4" />
+              </a>
+            </div>
             <div className="mt-4">
               <a
                 href="https://opensource.org/licenses/MIT"
