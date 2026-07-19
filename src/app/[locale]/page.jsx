@@ -681,9 +681,10 @@ function CTASection() {
               {t('ctaModelZoo')}
             </Link>
             <a
-              href="https://visionanalysis.org"
+              href="https://www.visionanalysis.org/?utm_source=libreyolo&utm_medium=referral&utm_campaign=benchmarks"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener"
+              referrerPolicy="strict-origin-when-cross-origin"
               className="text-surface-500 hover:text-libre-500 transition-colors flex items-center gap-1.5"
             >
               <BarChart3 className="w-4 h-4" />

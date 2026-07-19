@@ -78,9 +78,10 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://visionanalysis.org"
+                  href="https://www.visionanalysis.org/?utm_source=libreyolo&utm_medium=referral&utm_campaign=benchmarks"
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener"
+                  referrerPolicy="strict-origin-when-cross-origin"
                   className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors inline-flex items-center gap-1"
                 >
                   {t('benchmarks')} <ExternalLink className="w-3 h-3" />
