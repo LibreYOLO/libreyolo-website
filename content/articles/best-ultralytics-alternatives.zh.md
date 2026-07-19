@@ -156,4 +156,4 @@ print(results[0].boxes.conf)
 
 LibreYOLO 采用 MIT 许可，可在 Linux、Mac 和 Windows 上运行，并且无需改动代码即可在 GPU、Apple Silicon 和普通 CPU 上工作。一套 API 覆盖 RF-DETR、D-FINE、DEIM、YOLOX、YOLO-NAS、RTMDet、RT-DETR、EdgeCrafter 等更多模型，横跨检测、分割、姿态、分类、深度、视线和跟踪。
 
-在 GitHub 上点个 star：[github.com/LibreYOLO/libreyolo](https://github.com/LibreYOLO/libreyolo) | 文档：[libreyolo.com/docs](https://libreyolo.com/docs)
+在 GitHub 上点个 star：[github.com/LibreYOLO/libreyolo](https://github.com/LibreYOLO/libreyolo) | 文档：[libreyolo.com/docs](https://www.libreyolo.com/docs/v1.3.1)

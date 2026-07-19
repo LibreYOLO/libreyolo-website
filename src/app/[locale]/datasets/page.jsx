@@ -70,7 +70,7 @@ export default function Datasets() {
           className="text-center mt-16"
         >
           <Link
-            href="/docs"
+            href="/docs/v1.3.1"
             className="btn-primary inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-libre-500 to-libre-600 rounded-xl text-white font-semibold text-lg"
           >
             {tc('getStarted')}

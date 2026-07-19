@@ -24,7 +24,8 @@
     "commercial": "Commercial",
     "articles": "Articles",
     "docs": "Docs",
-    "github": "GitHub"
+    "github": "GitHub",
+    "star": "Star"
   },
   "LangSwitcher": {
     "label": "Change language"
@@ -58,6 +59,10 @@
   },
   "Common": {
     "getStarted": "Get Started"
+  },
+  "Support": {
+    "title": "Support LibreYOLO",
+    "body": "The best way to help is to <star>star the repo</star>. If you hit a problem or have a suggestion, <issue>open an issue</issue>, and code contributions are <contrib>very welcome</contrib>."
   },
   "Home": {
     "heroTitleLine1": "Object Detection.",

@@ -23,7 +23,7 @@ const sections = [
 ]
 
 const relatedLinks = [
-  { href: '/docs', label: 'Core documentation' },
+  { href: '/docs/v1.3.1', label: 'Core documentation' },
   { href: '/docs/librevlm', label: 'LibreVLM' },
   { href: '/models', label: 'Model Zoo' },
 ]
@@ -471,7 +471,7 @@ libreyolo train --model rf-detr-nano.pth --data data.yaml --lora`}</CodeBlock>
         <p>
           For production work, the validated core is YOLO9 detection and RF-DETR detection and
           segmentation. See the{' '}
-          <a href="/docs" className="text-libre-600 dark:text-libre-400 hover:underline">core documentation</a>{' '}
+          <a href="/docs/v1.3.1" className="text-libre-600 dark:text-libre-400 hover:underline">core documentation</a>{' '}
           for those, and <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM</a>{' '}
           for open-vocabulary detection.
         </p>
@@ -480,7 +480,7 @@ libreyolo train --model rf-detr-nano.pth --data data.yaml --lora`}</CodeBlock>
       <div className="mt-12 flex flex-wrap gap-3 items-center">
         <GraduationCap className="w-5 h-5 text-surface-400" />
         <span className="text-sm text-surface-500 dark:text-surface-400">
-          Track progress and source on <ExternalRef href="https://github.com/Libre-YOLO/libreyolo">GitHub</ExternalRef>
+          Track progress and source on <ExternalRef href="https://github.com/LibreYOLO/libreyolo">GitHub</ExternalRef>
         </span>
       </div>
     </DocLayout>
@@ -506,7 +506,7 @@ const sectionsZh = [
 ]
 
 const relatedLinksZh = [
-  { href: '/docs', label: '核心文档' },
+  { href: '/zh/docs/v1.3.1', label: '核心文档' },
   { href: '/docs/librevlm', label: 'LibreVLM' },
   { href: '/models', label: '模型库' },
 ]
@@ -930,7 +930,7 @@ libreyolo train --model rf-detr-nano.pth --data data.yaml --lora`}</CodeBlock>
       <Callout icon={Crosshair} tone="libre" title="在寻找稳定的方案？">
         <p>
           对于生产工作，经过验证的核心是 YOLO9 检测以及 RF-DETR 检测与分割。相关内容请参阅{' '}
-          <a href="/docs" className="text-libre-600 dark:text-libre-400 hover:underline">核心文档</a>，
+          <a href="/zh/docs/v1.3.1" className="text-libre-600 dark:text-libre-400 hover:underline">核心文档</a>，
           开放词表检测请参阅 <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM</a>。
         </p>
       </Callout>
@@ -938,7 +938,7 @@ libreyolo train --model rf-detr-nano.pth --data data.yaml --lora`}</CodeBlock>
       <div className="mt-12 flex flex-wrap gap-3 items-center">
         <GraduationCap className="w-5 h-5 text-surface-400" />
         <span className="text-sm text-surface-500 dark:text-surface-400">
-          在 <ExternalRef href="https://github.com/Libre-YOLO/libreyolo">GitHub</ExternalRef> 上追踪进展与源码
+          在 <ExternalRef href="https://github.com/LibreYOLO/libreyolo">GitHub</ExternalRef> 上追踪进展与源码
         </span>
       </div>
     </DocLayout>

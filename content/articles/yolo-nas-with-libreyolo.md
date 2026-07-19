@@ -69,4 +69,4 @@ print(results[0].boxes.conf)   # confidence scores
 
 LibreYOLO is MIT-licensed, runs on Linux, Mac, and Windows, and covers GPU, Apple Silicon, and plain CPU with no code change. One API spans RF-DETR, D-FINE, DEIM, YOLO-NAS, segmentation, pose, depth, and much more.
 
-Star it on GitHub: [github.com/LibreYOLO/libreyolo](https://github.com/LibreYOLO/libreyolo) | Docs: [libreyolo.com/docs](https://libreyolo.com/docs)
+Star it on GitHub: [github.com/LibreYOLO/libreyolo](https://github.com/LibreYOLO/libreyolo) | Docs: [libreyolo.com/docs](https://www.libreyolo.com/docs/v1.3.1)

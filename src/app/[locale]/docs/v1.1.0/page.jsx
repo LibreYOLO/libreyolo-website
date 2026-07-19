@@ -734,7 +734,7 @@ print(results.boxes.xyxy)`}</CodeBlock>
           <CodeBlock language="bash">{`pip install libreyolo`}</CodeBlock>
 
           <SubHeading>From source</SubHeading>
-          <CodeBlock language="bash">{`git clone https://github.com/Libre-YOLO/libreyolo.git
+          <CodeBlock language="bash">{`git clone https://github.com/LibreYOLO/libreyolo.git
 cd libreyolo
 pip install -e .`}</CodeBlock>
 
@@ -2181,7 +2181,7 @@ print(results.boxes.xyxy)`}</CodeBlock>
           <CodeBlock language="bash">{`pip install libreyolo`}</CodeBlock>
 
           <SubHeading>从源码安装</SubHeading>
-          <CodeBlock language="bash">{`git clone https://github.com/Libre-YOLO/libreyolo.git
+          <CodeBlock language="bash">{`git clone https://github.com/LibreYOLO/libreyolo.git
 cd libreyolo
 pip install -e .`}</CodeBlock>
 

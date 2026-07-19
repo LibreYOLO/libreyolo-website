@@ -116,4 +116,4 @@ You keep the YOLO development experience: train on your data, predict, and expor
 
 LibreYOLO is MIT-licensed, runs on Linux, Mac, and Windows, and works on GPU, Apple Silicon, and plain CPU with no code change. One API spans YOLO9, RF-DETR, RTMDet, YOLOX, D-FINE, the RT-DETR line, segmentation, pose, depth, and more, all permissively licensed.
 
-Star it on GitHub: [github.com/LibreYOLO/libreyolo](https://github.com/LibreYOLO/libreyolo) | Docs: [libreyolo.com/docs](https://libreyolo.com/docs)
+Star it on GitHub: [github.com/LibreYOLO/libreyolo](https://github.com/LibreYOLO/libreyolo) | Docs: [libreyolo.com/docs](https://www.libreyolo.com/docs/v1.3.1)

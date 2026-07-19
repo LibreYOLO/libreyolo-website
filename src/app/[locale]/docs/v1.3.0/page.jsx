@@ -2523,10 +2523,12 @@ model.export(format="onnx", nms=True, conf=0.25, iou=0.45, max_det=300)`}</CodeB
             <InlineCode>data=</InlineCode> dataset.
           </P>
 
-          <SubHeading>TFLite export</SubHeading>
+          <SubHeading>TFLite (LiteRT) export</SubHeading>
           <P>
             <SupportBadge variant="experimental">Experimental</SupportBadge>{' '}
-            v1.3.0 adds a TFLite export path built on <InlineCode>onnx2tf</InlineCode>. It is
+            v1.3.0 adds a TFLite export path built on <InlineCode>onnx2tf</InlineCode>. TFLite is
+            the format of Google&apos;s LiteRT runtime (TensorFlow Lite was renamed LiteRT in 2024;
+            the <InlineCode>.tflite</InlineCode> file format is unchanged). It is
             validated for RF-DETR detect / segment / pose and YOLO9 detect. It requires{' '}
             <strong className="text-surface-800 dark:text-white">Python 3.12+</strong> (the{' '}
             <InlineCode>onnx2tf 2.4.x</InlineCode> wheels do not target older Python) plus the
@@ -2550,9 +2552,9 @@ model.export(format="tflite")   # writes a .tflite file`}</CodeBlock>
           <P>
             <strong className="text-surface-800 dark:text-white">No TFLite runtime backend.</strong>{' '}
             LibreYOLO cannot load or run a <InlineCode>.tflite</InlineCode> file; this format is
-            export-only. Run the exported model with a TF Lite runtime
-            (<InlineCode>ai-edge-litert</InlineCode> / <InlineCode>tflite-runtime</InlineCode>) on
-            your target device.
+            export-only. Run the exported model with Google&apos;s LiteRT runtime
+            (<InlineCode>pip install ai-edge-litert</InlineCode>) on your target device. Avoid the
+            older <InlineCode>tflite-runtime</InlineCode> package, which is no longer updated.
           </P>
 
           <SubHeading>ONNX metadata</SubHeading>
@@ -5274,10 +5276,12 @@ model.export(format="onnx", nms=True, conf=0.25, iou=0.45, max_det=300)`}</CodeB
             <InlineCode>data=</InlineCode> 数据集。
           </P>
 
-          <SubHeading>TFLite 导出</SubHeading>
+          <SubHeading>TFLite (LiteRT) 导出</SubHeading>
           <P>
             <SupportBadge variant="experimental">实验性</SupportBadge>{' '}
-            v1.3.0 新增了基于 <InlineCode>onnx2tf</InlineCode> 的 TFLite 导出路径。它已在
+            v1.3.0 新增了基于 <InlineCode>onnx2tf</InlineCode> 的 TFLite 导出路径。TFLite 是
+            Google LiteRT 运行时的格式（TensorFlow Lite 于 2024 年更名为 LiteRT，
+            <InlineCode>.tflite</InlineCode> 文件格式不变）。它已在
             RF-DETR detect / segment / pose 和 YOLO9 detect 上验证。它需要{' '}
             <strong className="text-surface-800 dark:text-white">Python 3.12+</strong>（{' '}
             <InlineCode>onnx2tf 2.4.x</InlineCode> wheels 不面向更老的 Python），以及
@@ -5300,9 +5304,9 @@ model.export(format="tflite")   # writes a .tflite file`}</CodeBlock>
           <P>
             <strong className="text-surface-800 dark:text-white">没有 TFLite 运行时后端。</strong>{' '}
             LibreYOLO 无法加载或运行 <InlineCode>.tflite</InlineCode> 文件；该格式仅用于
-            导出。请在目标设备上使用 TF Lite 运行时
-            （<InlineCode>ai-edge-litert</InlineCode> / <InlineCode>tflite-runtime</InlineCode>）
-            运行导出的模型。
+            导出。请在目标设备上使用 Google 的 LiteRT 运行时
+            （<InlineCode>pip install ai-edge-litert</InlineCode>）运行导出的模型。请避免使用
+            旧的 <InlineCode>tflite-runtime</InlineCode> 包，它已不再更新。
           </P>
 
           <SubHeading>ONNX 元数据</SubHeading>

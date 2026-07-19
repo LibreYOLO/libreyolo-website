@@ -24,7 +24,8 @@
     "commercial": "商业使用",
     "articles": "文章",
     "docs": "文档",
-    "github": "GitHub"
+    "github": "GitHub",
+    "star": "Star"
   },
   "LangSwitcher": {
     "label": "切换语言"
@@ -58,6 +59,10 @@
   },
   "Common": {
     "getStarted": "开始使用"
+  },
+  "Support": {
+    "title": "支持 LibreYOLO",
+    "body": "最好的支持方式就是<star>给仓库点个 Star</star>。遇到问题或有建议，欢迎<issue>提交 issue</issue>，也非常欢迎<contrib>贡献代码</contrib>。"
   },
   "Home": {
     "heroTitleLine1": "目标检测。",

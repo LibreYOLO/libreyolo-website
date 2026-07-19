@@ -63,4 +63,4 @@ pip install libreyolo
 
 LibreYOLO is the most complete computer vision library you can pip install. One familiar API spans a growing roster of state-of-the-art models: object detection (RF-DETR, D-FINE, DEIM), segmentation, pose, oriented boxes, and now monocular depth with Depth Anything V2, plus training and validation for the tasks that support it. It runs on every major OS, on GPU or CPU, and it is fully MIT-licensed, so you can ship it commercially with no strings attached.
 
-Star it on GitHub: [github.com/LibreYOLO/libreyolo](https://github.com/LibreYOLO/libreyolo) | Docs: [libreyolo.com/docs](https://libreyolo.com/docs)
+Star it on GitHub: [github.com/LibreYOLO/libreyolo](https://github.com/LibreYOLO/libreyolo) | Docs: [libreyolo.com/docs](https://www.libreyolo.com/docs/v1.3.1)

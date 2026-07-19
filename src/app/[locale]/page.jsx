@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
+import SupportCallout from '@/components/SupportCallout'
 import {
   Unlock, Layers, ArrowRight,
   Code2, Scale, Copy, Check, CheckCircle2,
@@ -79,14 +80,14 @@ function HeroSection() {
             className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4"
           >
             <Link
-              href="/docs"
+              href="/docs/v1.3.1"
               className="btn-primary group flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-libre-500 to-libre-600 rounded-xl text-white font-semibold text-base sm:text-lg"
             >
               {tc('getStarted')}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <a
-              href="https://github.com/Libre-YOLO/libreyolo"
+              href="https://github.com/LibreYOLO/libreyolo"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-white dark:bg-white/5 hover:bg-surface-100 dark:hover:bg-white/10 border border-surface-300 dark:border-white/10 rounded-xl text-surface-800 dark:text-white font-medium text-base sm:text-lg transition-all shadow-sm dark:shadow-none"
@@ -659,7 +660,7 @@ function CTASection() {
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4">
             <Link
-              href="/docs"
+              href="/docs/v1.3.1"
               className="btn-primary flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-libre-500 to-libre-600 rounded-xl text-white font-semibold"
             >
               {t('ctaReadDocs')}
@@ -699,6 +700,11 @@ export default function Home() {
   return (
     <>
       <HeroSection />
+      <section className="px-6 pb-16">
+        <div className="max-w-4xl mx-auto">
+          <SupportCallout />
+        </div>
+      </section>
       <FeaturesSection />
       <SocialProofSection />
       {/* <DeployAnywhereSection /> */}

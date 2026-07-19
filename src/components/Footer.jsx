@@ -31,7 +31,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-4 mt-6">
               <a
-                href="https://github.com/Libre-YOLO/libreyolo"
+                href="https://github.com/LibreYOLO/libreyolo"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-surface-400 hover:text-libre-500 transition-colors"
@@ -47,7 +47,7 @@ export default function Footer() {
             <h4 className="text-surface-900 dark:text-white font-semibold mb-4">{t('resources')}</h4>
             <ul className="space-y-3">
               <li>
-                <Link href="/docs" className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
+                <Link href="/docs/v1.3.1" className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
                   {t('documentation')}
                 </Link>
               </li>

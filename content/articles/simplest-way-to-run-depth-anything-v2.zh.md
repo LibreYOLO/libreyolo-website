@@ -63,4 +63,4 @@ pip install libreyolo
 
 LibreYOLO 是你能通过 pip 安装到的最完整的计算机视觉库。一套熟悉的 API 覆盖了不断扩充的最先进模型阵容：目标检测（RF-DETR、D-FINE、DEIM）、分割、姿态、旋转框，现在还加上了基于 Depth Anything V2 的单目深度估计，以及对支持这些任务的训练和验证。它可在所有主流操作系统、GPU 或 CPU 上运行，并且采用完全的 MIT 许可，因此你可以毫无附加条件地将它用于商业产品。
 
-在 GitHub 上点个 star：[github.com/LibreYOLO/libreyolo](https://github.com/LibreYOLO/libreyolo) | 文档：[libreyolo.com/docs](https://libreyolo.com/docs)
+在 GitHub 上点个 star：[github.com/LibreYOLO/libreyolo](https://github.com/LibreYOLO/libreyolo) | 文档：[libreyolo.com/docs](https://www.libreyolo.com/docs/v1.3.1)

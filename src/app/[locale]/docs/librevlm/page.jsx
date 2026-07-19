@@ -25,7 +25,7 @@ const sections = [
 ]
 
 const relatedLinks = [
-  { href: '/docs', label: 'Core documentation' },
+  { href: '/docs/v1.3.1', label: 'Core documentation' },
   { href: '/docs/experimental', label: 'Experimental tasks' },
   { href: '/models', label: 'Model Zoo' },
 ]
@@ -384,7 +384,7 @@ print(answer)`}</CodeBlock>
           rapid prototyping, long-tail or rare categories, and "find the thing I describe in words"
           workflows. When you need calibrated confidence, throughput, or a deployable artifact, train a
           closed-vocabulary YOLO9 or RF-DETR from the{' '}
-          <a href="/docs" className="text-libre-600 dark:text-libre-400 hover:underline">core docs</a>.
+          <a href="/docs/v1.3.1" className="text-libre-600 dark:text-libre-400 hover:underline">core docs</a>.
         </p>
       </Callout>
 
@@ -392,7 +392,7 @@ print(answer)`}</CodeBlock>
         <SupportBadge variant="experimental">Inference only</SupportBadge>
         <SupportBadge variant="experimental">dev branch / targeting v1.3</SupportBadge>
         <span className="text-sm text-surface-500 dark:text-surface-400 self-center">
-          Source on <ExternalRef href="https://github.com/Libre-YOLO/libreyolo">GitHub</ExternalRef>
+          Source on <ExternalRef href="https://github.com/LibreYOLO/libreyolo">GitHub</ExternalRef>
         </span>
       </div>
     </DocLayout>
@@ -427,7 +427,7 @@ const sectionsZh = [
 ]
 
 const relatedLinksZh = [
-  { href: '/docs', label: '核心文档' },
+  { href: '/zh/docs/v1.3.1', label: '核心文档' },
   { href: '/docs/experimental', label: '实验性任务' },
   { href: '/models', label: '模型库' },
 ]
@@ -773,7 +773,7 @@ print(answer)`}</CodeBlock>
         <p>
           当类别集合是开放式的、经常变化，或难以提前标注时，就使用 LibreVLM：快速原型、长尾或稀有类别，
           以及“用文字描述要找的东西”这类工作流。当你需要校准过的置信度、吞吐量或可部署的产物时，请按{' '}
-          <a href="/docs" className="text-libre-600 dark:text-libre-400 hover:underline">核心文档</a>{' '}
+          <a href="/zh/docs/v1.3.1" className="text-libre-600 dark:text-libre-400 hover:underline">核心文档</a>{' '}
           训练闭合词表的 YOLO9 或 RF-DETR。
         </p>
       </Callout>
@@ -782,7 +782,7 @@ print(answer)`}</CodeBlock>
         <SupportBadge variant="experimental">仅推理</SupportBadge>
         <SupportBadge variant="experimental">dev 分支 / 面向 v1.3</SupportBadge>
         <span className="text-sm text-surface-500 dark:text-surface-400 self-center">
-          源码见 <ExternalRef href="https://github.com/Libre-YOLO/libreyolo">GitHub</ExternalRef>
+          源码见 <ExternalRef href="https://github.com/LibreYOLO/libreyolo">GitHub</ExternalRef>
         </span>
       </div>
     </DocLayout>

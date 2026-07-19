@@ -47,10 +47,8 @@ export function buildAlternates(path, locale) {
   }
 }
 
-// For English-only sections (docs, individual articles, the hackathon page):
-// the /zh/* URL serves English content, so we consolidate it to the English
-// canonical and only advertise the English alternate. This avoids indexing the
-// same English text under two URLs.
+// For genuinely English-only pages: when a /zh/* URL serves the same English
+// content, consolidate it to the English canonical instead of indexing a duplicate.
 export function buildEnglishOnlyAlternates(path) {
   const url = localeUrl(path, routing.defaultLocale)
   const lang = localeHtmlLang[routing.defaultLocale]

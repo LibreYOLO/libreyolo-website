@@ -69,4 +69,4 @@ print(results[0].boxes.conf)   # 置信度分数
 
 LibreYOLO 采用 MIT 许可，可在 Linux、Mac 和 Windows 上运行，并且无需改动代码即可覆盖 GPU、Apple Silicon 和普通 CPU。一套 API 覆盖 RF-DETR、D-FINE、DEIM、YOLO-NAS、分割、姿态、深度等更多任务。
 
-在 GitHub 上点个 star：[github.com/LibreYOLO/libreyolo](https://github.com/LibreYOLO/libreyolo) | 文档：[libreyolo.com/docs](https://libreyolo.com/docs)
+在 GitHub 上点个 star：[github.com/LibreYOLO/libreyolo](https://github.com/LibreYOLO/libreyolo) | 文档：[libreyolo.com/docs](https://www.libreyolo.com/docs/v1.3.1)

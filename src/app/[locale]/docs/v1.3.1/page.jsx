@@ -12,6 +12,7 @@ import {
   Palette, WandSparkles, MousePointerClick, Search, PenTool, FlaskConical,
   Boxes, Gauge, Timer,
 } from 'lucide-react'
+import SupportCallout from '@/components/SupportCallout'
 
 /* ─── Section metadata for sidebar ─── */
 const sections = [
@@ -1050,6 +1051,8 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
               </button>
             </div>
           </div>
+
+          <SupportCallout className="mb-8" />
 
           {/* ────────────── SPECIALIZED GUIDES ────────────── */}
           <P>
@@ -4509,6 +4512,8 @@ function DocsPageZh({ version = 'v1.3.1', isLatest = true }) {
               </button>
             </div>
           </div>
+
+          <SupportCallout className="mb-8" />
 
           {/* ────────────── SPECIALIZED GUIDES ────────────── */}
           <P>

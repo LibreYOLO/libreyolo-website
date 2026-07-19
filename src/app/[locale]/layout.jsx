@@ -77,7 +77,7 @@ const jsonLd = {
     priceCurrency: 'USD',
   },
   sameAs: [
-    'https://github.com/Libre-YOLO/libreyolo',
+    'https://github.com/LibreYOLO/libreyolo',
     'https://pypi.org/project/libreyolo/',
     'https://huggingface.co/LibreYOLO',
   ],
@@ -104,7 +104,8 @@ export default async function LocaleLayout({ children, params }) {
         <script dangerouslySetInnerHTML={{ __html: `
           (function() {
             var t = localStorage.getItem('theme');
-            if (t === 'dark') {
+            var dark = t === 'dark' || (t !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            if (dark) {
               document.documentElement.classList.add('dark');
             }
           })();

@@ -511,7 +511,7 @@ function CTASection() {
           </div>
 
           <Link
-            href="/docs"
+            href="/docs/v1.3.1"
             className="btn-primary inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-xl text-white font-semibold"
           >
             {t('ctaButton')}

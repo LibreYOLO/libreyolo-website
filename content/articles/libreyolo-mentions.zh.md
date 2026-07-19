@@ -54,4 +54,4 @@ model.predict("image.jpg")
 
 LibreYOLO 采用 MIT 许可证，可在 Linux、Mac 和 Windows 上运行，并且无需改动代码即可在 GPU、Apple Silicon 和普通 CPU 上工作。统一的 API 覆盖 YOLOX、RF-DETR、D-FINE、DEIM、YOLO-NAS、分割、姿态、深度等更多任务。
 
-在 GitHub 上给我们加星：[github.com/LibreYOLO/libreyolo](https://github.com/LibreYOLO/libreyolo) | 文档：[libreyolo.com/docs](https://libreyolo.com/docs)
+在 GitHub 上给我们加星：[github.com/LibreYOLO/libreyolo](https://github.com/LibreYOLO/libreyolo) | 文档：[libreyolo.com/docs](https://www.libreyolo.com/docs/v1.3.1)

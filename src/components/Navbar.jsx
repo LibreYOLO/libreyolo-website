@@ -4,10 +4,11 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Github, BookOpen, BarChart3, ExternalLink } from 'lucide-react'
+import { Menu, X, BookOpen, BarChart3, ExternalLink } from 'lucide-react'
 import { Link, usePathname } from '@/i18n/navigation'
 import ThemeToggle from './ThemeToggle'
 import LanguageSwitcher from './LanguageSwitcher'
+import GitHubStarButton from './GitHubStarButton'
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -21,7 +22,7 @@ export default function Navbar() {
     { name: t('benchmarks'), path: 'https://visionanalysis.org', external: true, icon: BarChart3 },
     { name: t('commercial'), path: '/commercial' },
     { name: t('articles'), path: '/articles' },
-    { name: t('docs'), path: '/docs', icon: BookOpen, highlight: true },
+    { name: t('docs'), path: '/docs/v1.3.1', icon: BookOpen, highlight: true },
   ]
 
   useEffect(() => {
@@ -106,15 +107,7 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-2">
               <LanguageSwitcher />
               <ThemeToggle />
-              <a
-                href="https://github.com/Libre-YOLO/libreyolo"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-3 py-2 text-sm text-surface-500 dark:text-surface-300 hover:text-surface-900 dark:hover:text-white transition-colors"
-              >
-                <Github className="w-4 h-4" />
-                {t('github')}
-              </a>
+              <GitHubStarButton />
             </div>
 
             {/* Mobile Menu Button */}
@@ -176,15 +169,7 @@ export default function Navbar() {
                   </Link>
                 )
               })}
-              <a
-                href="https://github.com/Libre-YOLO/libreyolo"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-3 text-sm text-surface-500 dark:text-surface-300 hover:text-surface-900 dark:hover:text-white"
-              >
-                <Github className="w-4 h-4" />
-                {t('github')}
-              </a>
+              <GitHubStarButton className="mt-2 justify-center" />
             </div>
           </motion.div>
         )}
