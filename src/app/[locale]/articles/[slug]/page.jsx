@@ -28,16 +28,24 @@ export async function generateMetadata({ params }) {
   if (!article) return {}
 
   const path = `/articles/${article.slug}`
-  // A translated article is indexed independently per locale (self-canonical +
-  // full hreflang). An untranslated one serves English under /zh too, so we
-  // consolidate it to the English canonical to avoid duplicate indexing.
-  const ogTarget = article.translated ? locale : routing.defaultLocale
+  // English source articles report `translated: false`, so also check whether a
+  // localized counterpart exists. Both sides of a translated pair must publish
+  // the same reciprocal hreflang set. A locale fallback that serves English still
+  // consolidates to the English canonical to avoid duplicate indexing.
+  const hasLocalizedCounterpart = routing.locales.some((candidateLocale) =>
+    candidateLocale !== routing.defaultLocale &&
+    getArticleBySlug(slug, candidateLocale)?.translated
+  )
+  const isLocalizedVersion = locale === routing.defaultLocale
+    ? hasLocalizedCounterpart
+    : article.translated
+  const ogTarget = isLocalizedVersion ? locale : routing.defaultLocale
 
   return {
     title: article.title,
     description: article.description,
     keywords: article.tags,
-    alternates: article.translated
+    alternates: isLocalizedVersion
       ? buildAlternates(path, locale)
       : buildEnglishOnlyAlternates(path),
     openGraph: {
