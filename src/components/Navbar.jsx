@@ -19,7 +19,12 @@ export default function Navbar() {
   const navLinks = [
     { name: t('home'), path: '/' },
     { name: t('models'), path: '/models' },
-    { name: t('benchmarks'), path: 'https://visionanalysis.org', external: true, icon: BarChart3 },
+    {
+      name: t('benchmarks'),
+      path: 'https://www.visionanalysis.org/?utm_source=libreyolo&utm_medium=referral&utm_campaign=benchmarks',
+      external: true,
+      icon: BarChart3,
+    },
     { name: t('commercial'), path: '/commercial' },
     { name: t('articles'), path: '/articles' },
     { name: t('docs'), path: '/docs/v1.3.1', icon: BookOpen, highlight: true },
@@ -84,7 +89,8 @@ export default function Navbar() {
                       key={link.path}
                       href={link.path}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="noopener"
+                      referrerPolicy="strict-origin-when-cross-origin"
                       className={className}
                     >
                       {link.icon && <link.icon className="w-4 h-4" />}
@@ -152,7 +158,8 @@ export default function Navbar() {
                       key={link.path}
                       href={link.path}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="noopener"
+                      referrerPolicy="strict-origin-when-cross-origin"
                       className={className}
                     >
                       {link.icon && <link.icon className="w-4 h-4" />}
