@@ -1,7 +1,9 @@
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
-import { Github, ExternalLink, Linkedin } from 'lucide-react'
+import { ExternalLink, Linkedin } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { GithubIcon, RedditIcon } from './BrandIcons'
+import { GITHUB_URL, REDDIT_URL } from '@/lib/links'
 
 export default function Footer() {
   const t = useTranslations('Footer')
@@ -31,13 +33,22 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-4 mt-6">
               <a
-                href="https://github.com/LibreYOLO/libreyolo"
+                href={GITHUB_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-surface-400 hover:text-libre-500 transition-colors"
                 aria-label="GitHub"
               >
-                <Github className="w-5 h-5" />
+                <GithubIcon className="w-5 h-5" />
+              </a>
+              <a
+                href={REDDIT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-surface-400 hover:text-[#FF4500] transition-colors"
+                aria-label={t('community')}
+              >
+                <RedditIcon className="w-5 h-5" />
               </a>
             </div>
           </div>
@@ -96,6 +107,16 @@ export default function Footer() {
                 <Link href="/articles" className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
                   {t('articles')}
                 </Link>
+              </li>
+              <li>
+                <a
+                  href={REDDIT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-surface-500 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors inline-flex items-center gap-1"
+                >
+                  {t('community')} <ExternalLink className="w-3 h-3" />
+                </a>
               </li>
             </ul>
           </div>

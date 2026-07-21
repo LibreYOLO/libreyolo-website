@@ -25,7 +25,8 @@
     "articles": "文章",
     "docs": "文档",
     "github": "GitHub",
-    "star": "Star"
+    "star": "Star",
+    "community": "社区"
   },
   "LangSwitcher": {
     "label": "切换语言"
@@ -44,7 +45,8 @@
     "role": "创建者与维护者",
     "chat": "联系我",
     "mitLicense": "MIT 许可证",
-    "copyright": "© {year} LibreYOLO。一个独立的开源项目。"
+    "copyright": "© {year} LibreYOLO。一个独立的开源项目。",
+    "community": "社区"
   },
   "NotFound": {
     "title": "未检测到目标",
@@ -62,7 +64,10 @@
   },
   "Support": {
     "title": "支持 LibreYOLO",
-    "body": "最好的支持方式就是<star>给仓库点个 Star</star>。遇到问题或有建议，欢迎<issue>提交 issue</issue>，也非常欢迎<contrib>贡献代码</contrib>。"
+    "body": "最好的支持方式就是<star>给仓库点个 Star</star>。遇到问题或有建议，欢迎<issue>提交 issue</issue>，也非常欢迎<contrib>贡献代码</contrib>。",
+    "communityBody": "关于使用问题、训练报错和版本发布的讨论都在 r/LibreYOLO，欢迎来交流。",
+    "communityCta": "r/LibreYOLO",
+    "githubCta": "GitHub"
   },
   "Home": {
     "heroTitleLine1": "目标检测。",

@@ -25,7 +25,8 @@
     "articles": "Articles",
     "docs": "Docs",
     "github": "GitHub",
-    "star": "Star"
+    "star": "Star",
+    "community": "Community"
   },
   "LangSwitcher": {
     "label": "Change language"
@@ -44,7 +45,8 @@
     "role": "Creator & Maintainer",
     "chat": "Let's chat",
     "mitLicense": "MIT License",
-    "copyright": "© {year} LibreYOLO. An independent open-source project."
+    "copyright": "© {year} LibreYOLO. An independent open-source project.",
+    "community": "Community"
   },
   "NotFound": {
     "title": "Object Not Detected",
@@ -62,7 +64,10 @@
   },
   "Support": {
     "title": "Support LibreYOLO",
-    "body": "The best way to help is to <star>star the repo</star>. If you hit a problem or have a suggestion, <issue>open an issue</issue>, and code contributions are <contrib>very welcome</contrib>."
+    "body": "The best way to help is to <star>star the repo</star>. If you hit a problem or have a suggestion, <issue>open an issue</issue>, and code contributions are <contrib>very welcome</contrib>.",
+    "communityBody": "Questions, training crashes, and release news get discussed on r/LibreYOLO. Come say hi.",
+    "communityCta": "r/LibreYOLO",
+    "githubCta": "GitHub"
   },
   "Home": {
     "heroTitleLine1": "Object Detection.",
