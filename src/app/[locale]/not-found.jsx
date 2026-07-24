@@ -39,7 +39,7 @@ export default function NotFound() {
             {t('goHome')}
           </Link>
           <Link
-            href="/docs/v1.3.1"
+            href="/docs/v1.4.0"
             className="flex items-center gap-2 px-6 py-3 bg-surface-50 dark:bg-white/5 hover:bg-surface-100 dark:hover:bg-white/10 border border-surface-200 dark:border-white/10 rounded-xl text-surface-800 dark:text-white font-medium transition-all"
           >
             <Search className="w-5 h-5" />

@@ -30,8 +30,9 @@ const sections = [
 ]
 
 const docsVersions = [
-  { version: 'v1.3.1', label: 'Latest', href: '/docs/v1.3.1' },
-  { version: 'v1.3.0', label: 'Previous', href: '/docs/v1.3.0' },
+  { version: 'v1.4.0', label: 'Latest', href: '/docs/v1.4.0' },
+  { version: 'v1.3.1', label: 'Previous', href: '/docs/v1.3.1' },
+  { version: 'v1.3.0', label: 'Archived', href: '/docs/v1.3.0' },
   { version: 'v1.2.0', label: 'Archived', href: '/docs/v1.2.0' },
   { version: 'v1.1.0', label: 'Archived', href: '/docs/v1.1.0' },
 ]

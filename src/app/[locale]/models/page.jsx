@@ -233,7 +233,7 @@ export default function Models() {
             {t('weights')} &#8599;
           </a>
           <Link
-            href="/docs/v1.3.1"
+            href="/docs/v1.4.0"
             className="text-surface-500 hover:text-libre-600 dark:hover:text-libre-400 transition-colors"
           >
             {t('docs')} &#8594;

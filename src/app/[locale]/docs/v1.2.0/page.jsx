@@ -42,8 +42,9 @@ const sections = [
 ]
 
 const docsVersions = [
-  { version: 'v1.3.1', label: 'Latest', href: '/docs/v1.3.1' },
-  { version: 'v1.3.0', label: 'Previous', href: '/docs/v1.3.0' },
+  { version: 'v1.4.0', label: 'Latest', href: '/docs/v1.4.0' },
+  { version: 'v1.3.1', label: 'Previous', href: '/docs/v1.3.1' },
+  { version: 'v1.3.0', label: 'Archived', href: '/docs/v1.3.0' },
   { version: 'v1.2.0', label: 'Archived', href: '/docs/v1.2.0' },
   { version: 'v1.1.0', label: 'Archived', href: '/docs/v1.1.0' },
 ]
@@ -1089,7 +1090,7 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
               <div>
                 <p className="text-sm text-surface-600 dark:text-surface-400">
                     {isLatest
-                    ? 'These are the docs for v1.2.0, the previous release. The latest docs are v1.3.0, available from the version menu.'
+                    ? 'These are the docs for v1.2.0, an earlier release. The latest docs are v1.4.0, available from the version menu.'
                     : 'This archived version is kept linkable so older installs, search results, and agents can target the right documentation.'}
                 </p>
               </div>
@@ -3379,7 +3380,7 @@ function DocsPageZh({ version = 'v1.2.0', isLatest = true }) {
               <div>
                 <p className="text-sm text-surface-600 dark:text-surface-400">
                     {isLatest
-                    ? '这是上一个版本 v1.2.0 的文档。最新文档为 v1.3.0，可在版本菜单中找到。'
+                    ? '这是早期版本 v1.2.0 的文档。最新文档为 v1.4.0，可在版本菜单中找到。'
                     : '此归档版本保留可链接状态，以便旧版安装、搜索结果和智能体能够定位到正确的文档。'}
                 </p>
               </div>

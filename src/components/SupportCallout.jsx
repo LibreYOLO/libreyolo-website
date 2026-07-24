@@ -5,7 +5,7 @@ import { Star } from 'lucide-react'
 import { GithubIcon, RedditIcon } from './BrandIcons'
 import { GITHUB_URL as REPO_URL, REDDIT_URL } from '@/lib/links'
 
-export default function SupportCallout({ className = '' }) {
+export default function SupportCallout({ className = '', community = true }) {
   const t = useTranslations('Support')
 
   const link = (href) =>
@@ -38,9 +38,11 @@ export default function SupportCallout({ className = '' }) {
             contrib: link(`${REPO_URL}/blob/HEAD/CONTRIBUTING.md`),
           })}
         </p>
-        <p className="text-sm leading-relaxed text-surface-600 dark:text-surface-300 mt-2">
-          {t('communityBody')}
-        </p>
+        {community && (
+          <p className="text-sm leading-relaxed text-surface-600 dark:text-surface-300 mt-2">
+            {t('communityBody')}
+          </p>
+        )}
       </div>
       <div className="shrink-0 flex flex-col gap-2 w-full sm:w-auto">
         <a

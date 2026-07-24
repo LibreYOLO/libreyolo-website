@@ -46,10 +46,11 @@ export default function sitemap() {
     { path: '/science', priority: 0.8 },
     { path: '/datasets', priority: 0.7 },
     { path: '/articles', priority: 0.9 },
-    { path: '/docs/v1.3.1', priority: 0.9 },
+    { path: '/docs/v1.4.0', priority: 0.9 },
     { path: '/docs/librevlm', priority: 0.8 },
     { path: '/docs/experimental', priority: 0.8 },
-    { path: '/docs/v1.3.0', priority: 0.6 },
+    { path: '/docs/v1.3.1', priority: 0.6 },
+    { path: '/docs/v1.3.0', priority: 0.5 },
     { path: '/docs/v1.2.0', priority: 0.5 },
     { path: '/docs/v1.1.0', priority: 0.5 },
   ].flatMap(({ path, priority }) => bilingual(path, priority))
