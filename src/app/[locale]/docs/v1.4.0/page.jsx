@@ -624,14 +624,6 @@ function MatrixMark({ value }) {
     )
   }
 
-  if (value === 'exp') {
-    return (
-      <span className="font-semibold text-amber-600 dark:text-amber-400" aria-label="experimental">
-        exp
-      </span>
-    )
-  }
-
   if (value === 'preview') {
     return (
       <span className="font-semibold text-sky-600 dark:text-sky-400" aria-label="research preview">
@@ -653,185 +645,185 @@ const compatibilityColumns = [
 // the columns a family supports; missing keys render as "not supported".
 const compatibilityRows = [
   {
-    family: 'YOLO9', status: 'Validated detect, single GPU; int8 / fp8 quantization', statusZh: '已验证 detect，单 GPU；支持 int8 / fp8 量化',
+    family: 'YOLO9', status: 'Recommended detect path; int8 / fp8 quantization', statusZh: '推荐的 detect 路径；支持 int8 / fp8 量化',
     inference: 'yes', training: 'yes', detect: 'yes',
     onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: 'yes', coreml: 'yes', tflite: 'yes',
   },
   {
-    family: 'RF-DETR', status: 'Validated detect + segment; pose / OBB preview; LoRA + all quantization recipes', statusZh: '已验证 detect + segment；pose / OBB 预览；支持 LoRA 与全部量化配方',
+    family: 'RF-DETR', status: 'Recommended detect + segment; pose / OBB preview; LoRA + all quantization recipes', statusZh: '推荐的 detect + segment；pose / OBB 预览；支持 LoRA 与全部量化配方',
     inference: 'yes', training: 'yes', detect: 'yes', segment: 'yes', pose: 'preview', obb: 'preview',
-    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', coreml: 'exp', tflite: 'yes',
+    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', coreml: 'yes', tflite: 'yes',
   },
   {
-    family: 'YOLOX', status: 'Experimental', statusZh: '实验性',
-    inference: 'exp', training: 'exp', detect: 'exp',
-    onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', coreml: 'exp', tflite: 'exp',
+    family: 'YOLOX', status: '', statusZh: '',
+    inference: 'yes', training: 'yes', detect: 'yes',
+    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: 'yes', coreml: 'yes', tflite: 'yes',
   },
   {
     family: 'YOLOv7', status: 'Trainable as of v1.4.0 (SimOTA); was inference-only', statusZh: 'v1.4.0 起可训练（SimOTA）；此前仅推理',
-    inference: 'exp', training: 'exp', detect: 'exp',
-    onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp',
+    inference: 'yes', training: 'yes', detect: 'yes',
+    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: 'yes',
   },
   {
-    family: 'YOLO9-E2E', status: 'Experimental', statusZh: '实验性',
-    inference: 'exp', training: 'exp', detect: 'exp',
-    onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp',
+    family: 'YOLO9-E2E', status: '', statusZh: '',
+    inference: 'yes', training: 'yes', detect: 'yes',
+    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: 'yes',
   },
   {
     family: 'YOLO9-P2', status: 'Small objects; VisDrone weights only (non-commercial)', statusZh: '小目标；仅 VisDrone 权重（非商用）',
-    inference: 'exp', training: 'exp', detect: 'exp',
-    onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp',
+    inference: 'yes', training: 'yes', detect: 'yes',
+    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: 'yes',
   },
   {
-    family: 'YOLO-NAS', status: 'Experimental; multi-class pose training new in v1.4.0', statusZh: '实验性；v1.4.0 新增多类别姿态训练',
-    inference: 'exp', training: 'exp', detect: 'exp', pose: 'exp',
-    onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp',
+    family: 'YOLO-NAS', status: 'multi-class pose training new in v1.4.0', statusZh: 'v1.4.0 新增多类别姿态训练',
+    inference: 'yes', training: 'yes', detect: 'yes', pose: 'yes',
+    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: 'yes',
   },
   {
-    family: 'D-FINE', status: 'Experimental; segmentation + dynamic eval sizes new in v1.4.0; LoRA', statusZh: '实验性；v1.4.0 新增分割与动态验证尺寸；支持 LoRA',
-    inference: 'exp', training: 'exp', detect: 'exp', segment: 'exp',
-    onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp',
+    family: 'D-FINE', status: 'segmentation + dynamic eval sizes new in v1.4.0; LoRA', statusZh: 'v1.4.0 新增分割与动态验证尺寸；支持 LoRA',
+    inference: 'yes', training: 'yes', detect: 'yes', segment: 'yes',
+    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes',
   },
   {
-    family: 'DEIM', status: 'Experimental; fine-tune defaults fixed in v1.4.0; LoRA', statusZh: '实验性；v1.4.0 修正微调默认值；支持 LoRA',
-    inference: 'exp', training: 'exp', detect: 'exp',
-    onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp',
+    family: 'DEIM', status: 'fine-tune defaults fixed in v1.4.0; LoRA', statusZh: 'v1.4.0 修正微调默认值；支持 LoRA',
+    inference: 'yes', training: 'yes', detect: 'yes',
+    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes',
   },
   {
-    family: 'DEIMv2', status: 'Experimental; LoRA', statusZh: '实验性；支持 LoRA',
-    inference: 'exp', training: 'exp', detect: 'exp',
-    onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp',
+    family: 'DEIMv2', status: 'LoRA', statusZh: '支持 LoRA',
+    inference: 'yes', training: 'yes', detect: 'yes',
+    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes',
   },
   {
-    family: 'RT-DETR', status: 'Experimental; LoRA', statusZh: '实验性；支持 LoRA',
-    inference: 'exp', training: 'exp', detect: 'exp',
-    onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', coreml: 'exp',
+    family: 'RT-DETR', status: 'LoRA', statusZh: '支持 LoRA',
+    inference: 'yes', training: 'yes', detect: 'yes',
+    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', coreml: 'yes',
   },
   {
-    family: 'RT-DETRv2', status: 'Experimental; LoRA', statusZh: '实验性；支持 LoRA',
-    inference: 'exp', training: 'exp', detect: 'exp',
-    onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp',
+    family: 'RT-DETRv2', status: 'LoRA', statusZh: '支持 LoRA',
+    inference: 'yes', training: 'yes', detect: 'yes',
+    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes',
   },
   {
-    family: 'RT-DETRv4', status: 'Experimental; dynamic eval sizes new in v1.4.0; LoRA', statusZh: '实验性；v1.4.0 新增动态验证尺寸；支持 LoRA',
-    inference: 'exp', training: 'exp', detect: 'exp',
-    onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp',
+    family: 'RT-DETRv4', status: 'dynamic eval sizes new in v1.4.0; LoRA', statusZh: 'v1.4.0 新增动态验证尺寸；支持 LoRA',
+    inference: 'yes', training: 'yes', detect: 'yes',
+    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes',
   },
   {
-    family: 'PicoDet', status: 'Experimental; fine-tune defaults fixed in v1.4.0', statusZh: '实验性；v1.4.0 修正微调默认值',
-    inference: 'exp', training: 'exp', detect: 'exp',
-    onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp', ncnn: 'exp', tflite: 'exp',
+    family: 'PicoDet', status: 'fine-tune defaults fixed in v1.4.0', statusZh: 'v1.4.0 修正微调默认值',
+    inference: 'yes', training: 'yes', detect: 'yes',
+    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: 'yes', tflite: 'yes',
   },
   {
-    family: 'RTMDet', status: 'Experimental; RTMDet-Ins segmentation (inference + val) new in v1.4.0', statusZh: '实验性；v1.4.0 新增 RTMDet-Ins 实例分割（仅推理与验证）',
-    inference: 'exp', training: 'exp', detect: 'exp', segment: 'exp',
-    onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp',
+    family: 'RTMDet', status: 'RTMDet-Ins segmentation (inference + val) new in v1.4.0', statusZh: 'v1.4.0 新增 RTMDet-Ins 实例分割（仅推理与验证）',
+    inference: 'yes', training: 'yes', detect: 'yes', segment: 'yes',
+    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes',
   },
   {
-    family: 'EC', status: 'Experimental; LoRA (detect)', statusZh: '实验性；支持 LoRA（仅 detect）',
-    inference: 'exp', training: 'exp', detect: 'exp', segment: 'exp', pose: 'exp',
-    onnx: 'exp', torchscript: 'exp', tensorrt: 'exp', openvino: 'exp',
+    family: 'EC', status: 'LoRA (detect)', statusZh: '支持 LoRA（仅 detect）',
+    inference: 'yes', training: 'yes', detect: 'yes', segment: 'yes', pose: 'yes',
+    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes',
   },
   {
     family: 'EoMT', status: 'Semantic + instance + panoptic; instance and panoptic new in v1.4.0; inference and val only', statusZh: '语义 + 实例 + 全景；实例与全景为 v1.4.0 新增；仅推理与验证',
-    inference: 'exp', segment: 'exp', semantic: 'exp', panoptic: 'exp',
+    inference: 'yes', segment: 'yes', semantic: 'yes', panoptic: 'yes',
   },
   {
     family: 'SegFormer', status: 'New in v1.4.0; semantic b0-b5; ADE20K weights non-commercial', statusZh: 'v1.4.0 新增；语义分割 b0-b5；ADE20K 权重非商用',
-    inference: 'exp', training: 'exp', semantic: 'exp',
+    inference: 'yes', training: 'yes', semantic: 'yes',
   },
   {
     family: 'PIDNet', status: 'Semantic; inference and val only; ONNX export new in v1.4.0', statusZh: '语义分割；仅推理与验证；v1.4.0 新增 ONNX 导出',
-    inference: 'exp', semantic: 'exp',
-    onnx: 'exp',
+    inference: 'yes', semantic: 'yes',
+    onnx: 'yes',
   },
   {
-    family: 'DINOv2', status: 'Experimental; semantic / classify / detect (needs transformers)', statusZh: '实验性；语义 / 分类 / 检测（需要 transformers）',
-    inference: 'exp', training: 'exp', detect: 'exp', semantic: 'exp', classify: 'exp',
+    family: 'DINOv2', status: 'semantic / classify / detect (needs transformers)', statusZh: '语义 / 分类 / 检测（需要 transformers）',
+    inference: 'yes', training: 'yes', detect: 'yes', semantic: 'yes', classify: 'yes',
   },
   {
-    family: 'MobileNetV4', status: 'Experimental classifier (Apache-2.0)', statusZh: '实验性分类器（Apache-2.0）',
-    inference: 'exp', training: 'exp', classify: 'exp',
-    onnx: 'exp',
+    family: 'MobileNetV4', status: 'Classifier (Apache-2.0)', statusZh: '分类器（Apache-2.0）',
+    inference: 'yes', training: 'yes', classify: 'yes',
+    onnx: 'yes',
   },
   {
-    family: 'ConvNeXt', status: 'Experimental classifier (Apache-2.0); LoRA', statusZh: '实验性分类器（Apache-2.0）；支持 LoRA',
-    inference: 'exp', training: 'exp', classify: 'exp',
-    onnx: 'exp',
+    family: 'ConvNeXt', status: 'Classifier (Apache-2.0); LoRA', statusZh: '分类器（Apache-2.0）；支持 LoRA',
+    inference: 'yes', training: 'yes', classify: 'yes',
+    onnx: 'yes',
   },
   {
-    family: 'EfficientNetV2', status: 'Experimental classifier (Apache-2.0)', statusZh: '实验性分类器（Apache-2.0）',
-    inference: 'exp', training: 'exp', classify: 'exp',
-    onnx: 'exp',
+    family: 'EfficientNetV2', status: 'Classifier (Apache-2.0)', statusZh: '分类器（Apache-2.0）',
+    inference: 'yes', training: 'yes', classify: 'yes',
+    onnx: 'yes',
   },
   {
-    family: 'ResNet', status: 'Experimental classifier', statusZh: '实验性分类器',
-    inference: 'exp', training: 'exp', classify: 'exp',
-    onnx: 'exp', torchscript: 'exp',
+    family: 'ResNet', status: 'Classifier', statusZh: '分类器',
+    inference: 'yes', training: 'yes', classify: 'yes',
+    onnx: 'yes', torchscript: 'yes',
   },
   {
     family: 'CLIP', status: 'Zero-shot classification', statusZh: '零样本分类',
-    inference: 'exp', classify: 'exp',
+    inference: 'yes', classify: 'yes',
   },
   {
     family: 'SigLIP2', status: 'New in v1.4.0; zero-shot classification, inference-only', statusZh: 'v1.4.0 新增；零样本分类，仅推理',
-    inference: 'exp', classify: 'exp',
+    inference: 'yes', classify: 'yes',
   },
   {
-    family: 'Depth Anything V2', status: 'Experimental; ONNX export new in v1.4.0 (fixed resolution, batch 1)', statusZh: '实验性；v1.4.0 新增 ONNX 导出（固定分辨率、batch 1）',
-    inference: 'exp', depth: 'exp',
-    onnx: 'exp',
+    family: 'Depth Anything V2', status: 'ONNX export new in v1.4.0 (fixed resolution, batch 1)', statusZh: 'v1.4.0 新增 ONNX 导出（固定分辨率、batch 1）',
+    inference: 'yes', depth: 'yes',
+    onnx: 'yes',
   },
   {
     family: 'Depth Anything 3', status: 'New in v1.4.0; size l at 504, Apache-2.0', statusZh: 'v1.4.0 新增；l 尺寸、504 输入，Apache-2.0',
-    inference: 'exp', depth: 'exp',
+    inference: 'yes', depth: 'yes',
   },
   {
     family: 'ZipDepth', status: 'New in v1.4.0; b / bnpu at 384, MIT', statusZh: 'v1.4.0 新增；b / bnpu、384 输入，MIT',
-    inference: 'exp', depth: 'exp',
-    onnx: 'exp',
+    inference: 'yes', depth: 'yes',
+    onnx: 'yes',
   },
   {
-    family: 'FOMO', status: 'Experimental; no auto-download; ONNX export new in v1.4.0', statusZh: '实验性；不自动下载；v1.4.0 新增 ONNX 导出',
-    inference: 'exp', training: 'exp', point: 'exp',
-    onnx: 'exp',
+    family: 'FOMO', status: 'no auto-download; ONNX export new in v1.4.0', statusZh: '不自动下载；v1.4.0 新增 ONNX 导出',
+    inference: 'yes', training: 'yes', point: 'yes',
+    onnx: 'yes',
   },
   {
     family: 'NAFNet', status: 'Restoration (denoise / deblur); SIDD denoise weights', statusZh: '图像修复（去噪 / 去模糊）；提供 SIDD 去噪权重',
-    inference: 'exp', training: 'exp', restore: 'exp',
-    onnx: 'exp', torchscript: 'exp',
+    inference: 'yes', training: 'yes', restore: 'yes',
+    onnx: 'yes', torchscript: 'yes',
   },
   {
     family: 'SwinIR', status: 'New in v1.4.0; 4x super-resolution s / m / l, Apache-2.0; inference and val', statusZh: 'v1.4.0 新增；4 倍超分 s / m / l，Apache-2.0；仅推理与验证',
-    inference: 'exp', restore: 'exp',
+    inference: 'yes', restore: 'yes',
   },
   {
     family: 'Real-ESRGAN', status: 'New in v1.4.0; x4 / x2 / x4t super-resolution; inference and val', statusZh: 'v1.4.0 新增；x4 / x2 / x4t 超分；仅推理与验证',
-    inference: 'exp', restore: 'exp',
+    inference: 'yes', restore: 'yes',
   },
   {
     family: 'BiRefNet', status: 'New in v1.4.0; background removal (matte) t / l at 1024', statusZh: 'v1.4.0 新增；背景移除（matte）t / l，1024 输入',
-    inference: 'exp', matte: 'exp',
+    inference: 'yes', matte: 'yes',
   },
   {
     family: 'PP-OCR', status: 'New in v1.4.0; text detection + recognition; inference and val', statusZh: 'v1.4.0 新增；文本检测 + 识别；仅推理与验证',
-    inference: 'exp', ocr: 'exp',
+    inference: 'yes', ocr: 'yes',
   },
   {
     family: 'YOLO1 / YOLO2 / YOLO3 / YOLO4', status: 'Museum tier, inference-only (YOLO1 new in v1.4.0)', statusZh: '博物馆级历史基线，仅推理（YOLO1 为 v1.4.0 新增）',
-    inference: 'exp', detect: 'exp',
-    onnx: 'exp', torchscript: 'exp', tflite: 'exp',
+    inference: 'yes', detect: 'yes',
+    onnx: 'yes', torchscript: 'yes', tflite: 'yes',
   },
   {
-    family: 'L2CS', status: 'Experimental, inference-only', statusZh: '实验性，仅推理',
-    inference: 'exp', gaze: 'exp',
+    family: 'L2CS', status: 'Inference-only', statusZh: '仅推理',
+    inference: 'yes', gaze: 'yes',
   },
 ]
 
 function CompatibilityMatrix({ zh = false }) {
   const headers = zh
-    ? ['模型系列', 'v1.4.0 状态', '推理', '训练', '检测', '分割', '语义', '全景', '分类', '姿态', 'OBB', '深度', '点', '修复', '抠图', 'OCR', '视线', 'ONNX', 'TorchScript', 'TensorRT', 'OpenVINO', 'NCNN', 'CoreML', 'TFLite']
-    : ['Model family', 'v1.4.0 status', 'Inference', 'Training', 'Detect', 'Segment', 'Semantic', 'Panoptic', 'Classify', 'Pose', 'OBB', 'Depth', 'Point', 'Restore', 'Matte', 'OCR', 'Gaze', 'ONNX', 'TorchScript', 'TensorRT', 'OpenVINO', 'NCNN', 'CoreML', 'TFLite']
+    ? ['模型系列', '备注', '推理', '训练', '检测', '分割', '语义', '全景', '分类', '姿态', 'OBB', '深度', '点', '修复', '抠图', 'OCR', '视线', 'ONNX', 'TorchScript', 'TensorRT', 'OpenVINO', 'NCNN', 'CoreML', 'TFLite']
+    : ['Model family', 'Notes', 'Inference', 'Training', 'Detect', 'Segment', 'Semantic', 'Panoptic', 'Classify', 'Pose', 'OBB', 'Depth', 'Point', 'Restore', 'Matte', 'OCR', 'Gaze', 'ONNX', 'TorchScript', 'TensorRT', 'OpenVINO', 'NCNN', 'CoreML', 'TFLite']
 
   return (
     <DocTable
@@ -1177,11 +1169,11 @@ print(result.saved_path)`}</CodeBlock>
           <SectionHeading id="compatibility" icon={CheckCircle2}>Compatibility</SectionHeading>
           <P>
             Use this matrix as the quick v1.4.0 support map. <InlineCode>&#10003;</InlineCode>{' '}
-            marks a validated path, <InlineCode>exp</InlineCode> is experimental,{' '}
+            marks a supported path,{' '}
             <InlineCode>prev</InlineCode> is a research preview, and empty cells are
-            not currently supported. Only YOLO9 and RF-DETR detection (plus RF-DETR
-            segmentation) are heavily tested; everything else, including the fifteen
-            families that are new in v1.4.0, is experimental.
+            not currently supported. YOLO9 and RF-DETR detection (plus RF-DETR
+            segmentation) get the heaviest testing and are the recommended starting
+            point; the other families are supported too, so please report an issue if something misbehaves.
           </P>
           <CompatibilityMatrix />
           <p className="text-sm text-surface-600 dark:text-surface-400 leading-relaxed mb-4">
@@ -5458,9 +5450,9 @@ print(result.saved_path)`}</CodeBlock>
           <SectionHeading id="compatibility" icon={CheckCircle2}>兼容性</SectionHeading>
           <P>
             可将此矩阵作为 v1.4.0 的快速支持速查表。<InlineCode>&#10003;</InlineCode>{' '}
-            表示已验证路径，<InlineCode>exp</InlineCode> 表示实验性，{' '}
-            <InlineCode>prev</InlineCode> 表示研究预览，空白单元格表示当前不支持。只有 YOLO9 和 RF-DETR 检测（外加 RF-DETR
-            分割）经过充分测试；其余全部，包括 v1.4.0 新增的十五个系列，均为实验性。
+            表示受支持的路径，{' '}
+            <InlineCode>prev</InlineCode> 表示研究预览，空白单元格表示当前不支持。YOLO9 和 RF-DETR 检测（外加 RF-DETR
+            分割）测试最充分，也是推荐的起点；其他系列同样受支持，如遇问题请提交 issue。
           </P>
           <CompatibilityMatrixZh />
           <p className="text-sm text-surface-600 dark:text-surface-400 leading-relaxed mb-4">
