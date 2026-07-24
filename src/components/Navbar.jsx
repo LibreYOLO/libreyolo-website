@@ -8,8 +8,8 @@ import { Menu, X, BookOpen, BarChart3, ExternalLink } from 'lucide-react'
 import { Link, usePathname } from '@/i18n/navigation'
 import ThemeToggle from './ThemeToggle'
 import LanguageSwitcher from './LanguageSwitcher'
-import { GithubIcon, RedditIcon } from './BrandIcons'
-import { GITHUB_URL, REDDIT_URL } from '@/lib/links'
+import { GithubIcon } from './BrandIcons'
+import { GITHUB_URL } from '@/lib/links'
 
 const repoButtonClass =
   'flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium border border-surface-200 dark:border-white/10 text-surface-600 dark:text-surface-200 hover:text-surface-900 dark:hover:text-white hover:border-surface-300 dark:hover:border-white/20 hover:bg-surface-50 dark:hover:bg-white/5 transition-all duration-200'
@@ -118,16 +118,6 @@ export default function Navbar() {
               <LanguageSwitcher />
               <ThemeToggle />
               <a
-                href={REDDIT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold border border-[#FF4500]/30 bg-[#FF4500]/10 text-[#D93A00] dark:text-[#FF6A33] hover:bg-[#FF4500]/20 transition-colors"
-                aria-label={t('community')}
-              >
-                <RedditIcon className="w-4 h-4" />
-                r/LibreYOLO
-              </a>
-              <a
                 href={GITHUB_URL}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -198,16 +188,6 @@ export default function Navbar() {
                   </Link>
                 )
               })}
-              <a
-                href={REDDIT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-4 py-3 rounded-lg text-sm font-medium text-surface-600 dark:text-surface-200 hover:text-[#FF4500] hover:bg-surface-100 dark:hover:bg-white/5 transition-all"
-              >
-                <RedditIcon className="w-4 h-4" />
-                r/LibreYOLO
-                <ExternalLink className="w-3 h-3 opacity-60" />
-              </a>
               <a
                 href={GITHUB_URL}
                 target="_blank"
