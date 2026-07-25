@@ -650,7 +650,7 @@ const compatibilityRows = [
     onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: 'yes', coreml: 'yes', tflite: 'yes',
   },
   {
-    family: 'RF-DETR', status: 'Recommended detect + segment; pose / OBB preview; LoRA + all quantization recipes', statusZh: '推荐的 detect + segment；pose / OBB 预览；支持 LoRA 与全部量化配方',
+    family: 'RF-DETR', status: 'Recommended detect + segment; pose / OBB preview; TFLite detect experimental, segment / pose blocked', statusZh: '推荐的 detect + segment；pose / OBB 预览；TFLite detect 为实验性，segment / pose 被拦截',
     inference: 'yes', training: 'yes', detect: 'yes', segment: 'yes', pose: 'preview', obb: 'preview',
     onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', coreml: 'yes', tflite: 'yes',
   },
@@ -712,7 +712,7 @@ const compatibilityRows = [
   {
     family: 'PicoDet', status: 'fine-tune defaults fixed in v1.4.0', statusZh: 'v1.4.0 修正微调默认值',
     inference: 'yes', training: 'yes', detect: 'yes',
-    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: 'yes', tflite: 'yes',
+    onnx: 'yes', torchscript: 'yes', tensorrt: 'yes', openvino: 'yes', ncnn: 'yes',
   },
   {
     family: 'RTMDet', status: 'RTMDet-Ins segmentation (inference + val) new in v1.4.0', statusZh: 'v1.4.0 新增 RTMDet-Ins 实例分割（仅推理与验证）',
@@ -727,52 +727,56 @@ const compatibilityRows = [
   {
     family: 'EoMT', status: 'Semantic + instance + panoptic; instance and panoptic new in v1.4.0; inference and val only', statusZh: '语义 + 实例 + 全景；实例与全景为 v1.4.0 新增；仅推理与验证',
     inference: 'yes', segment: 'yes', semantic: 'yes', panoptic: 'yes',
+    onnx: 'yes', torchscript: 'yes',
   },
   {
     family: 'SegFormer', status: 'New in v1.4.0; semantic b0-b5; ADE20K weights non-commercial', statusZh: 'v1.4.0 新增；语义分割 b0-b5；ADE20K 权重非商用',
     inference: 'yes', training: 'yes', semantic: 'yes',
   },
   {
-    family: 'PIDNet', status: 'Semantic; inference and val only; ONNX export new in v1.4.0', statusZh: '语义分割；仅推理与验证；v1.4.0 新增 ONNX 导出',
+    family: 'PIDNet', status: 'Semantic; inference and val only; ONNX / TorchScript / NCNN / TFLite', statusZh: '语义分割；仅推理与验证；支持 ONNX / TorchScript / NCNN / TFLite',
     inference: 'yes', semantic: 'yes',
-    onnx: 'yes',
+    onnx: 'yes', torchscript: 'yes', ncnn: 'yes', tflite: 'yes',
   },
   {
     family: 'DINOv2', status: 'semantic / classify / detect (needs transformers)', statusZh: '语义 / 分类 / 检测（需要 transformers）',
     inference: 'yes', training: 'yes', detect: 'yes', semantic: 'yes', classify: 'yes',
+    onnx: 'yes', torchscript: 'yes',
   },
   {
     family: 'MobileNetV4', status: 'Classifier (Apache-2.0)', statusZh: '分类器（Apache-2.0）',
     inference: 'yes', training: 'yes', classify: 'yes',
-    onnx: 'yes',
+    onnx: 'yes', torchscript: 'yes', ncnn: 'yes', tflite: 'yes',
   },
   {
     family: 'ConvNeXt', status: 'Classifier (Apache-2.0); LoRA', statusZh: '分类器（Apache-2.0）；支持 LoRA',
     inference: 'yes', training: 'yes', classify: 'yes',
-    onnx: 'yes',
+    onnx: 'yes', torchscript: 'yes', ncnn: 'yes', tflite: 'yes',
   },
   {
     family: 'EfficientNetV2', status: 'Classifier (Apache-2.0)', statusZh: '分类器（Apache-2.0）',
     inference: 'yes', training: 'yes', classify: 'yes',
-    onnx: 'yes',
+    onnx: 'yes', torchscript: 'yes', ncnn: 'yes', tflite: 'yes',
   },
   {
     family: 'ResNet', status: 'Classifier', statusZh: '分类器',
     inference: 'yes', training: 'yes', classify: 'yes',
-    onnx: 'yes', torchscript: 'yes',
+    onnx: 'yes', torchscript: 'yes', ncnn: 'yes', tflite: 'yes',
   },
   {
     family: 'CLIP', status: 'Zero-shot classification', statusZh: '零样本分类',
     inference: 'yes', classify: 'yes',
+    onnx: 'yes',
   },
   {
     family: 'SigLIP2', status: 'New in v1.4.0; zero-shot classification, inference-only', statusZh: 'v1.4.0 新增；零样本分类，仅推理',
     inference: 'yes', classify: 'yes',
+    onnx: 'yes',
   },
   {
     family: 'Depth Anything V2', status: 'ONNX export new in v1.4.0 (fixed resolution, batch 1)', statusZh: 'v1.4.0 新增 ONNX 导出（固定分辨率、batch 1）',
     inference: 'yes', depth: 'yes',
-    onnx: 'yes',
+    onnx: 'yes', torchscript: 'yes',
   },
   {
     family: 'Depth Anything 3', status: 'New in v1.4.0; size l at 504, Apache-2.0', statusZh: 'v1.4.0 新增；l 尺寸、504 输入，Apache-2.0',
@@ -786,24 +790,27 @@ const compatibilityRows = [
   {
     family: 'FOMO', status: 'no auto-download; ONNX export new in v1.4.0', statusZh: '不自动下载；v1.4.0 新增 ONNX 导出',
     inference: 'yes', training: 'yes', point: 'yes',
-    onnx: 'yes',
+    onnx: 'yes', torchscript: 'yes',
   },
   {
     family: 'NAFNet', status: 'Restoration (denoise / deblur); SIDD denoise weights', statusZh: '图像修复（去噪 / 去模糊）；提供 SIDD 去噪权重',
     inference: 'yes', training: 'yes', restore: 'yes',
-    onnx: 'yes', torchscript: 'yes',
+    onnx: 'yes', torchscript: 'yes', ncnn: 'yes',
   },
   {
     family: 'SwinIR', status: 'New in v1.4.0; 4x super-resolution s / m / l, Apache-2.0; inference and val', statusZh: 'v1.4.0 新增；4 倍超分 s / m / l，Apache-2.0；仅推理与验证',
     inference: 'yes', restore: 'yes',
+    onnx: 'yes', torchscript: 'yes',
   },
   {
     family: 'Real-ESRGAN', status: 'New in v1.4.0; x4 / x2 / x4t super-resolution; inference and val', statusZh: 'v1.4.0 新增；x4 / x2 / x4t 超分；仅推理与验证',
     inference: 'yes', restore: 'yes',
+    onnx: 'yes', torchscript: 'yes', ncnn: 'yes', tflite: 'yes',
   },
   {
     family: 'BiRefNet', status: 'New in v1.4.0; background removal (matte) t / l at 1024', statusZh: 'v1.4.0 新增；背景移除（matte）t / l，1024 输入',
     inference: 'yes', matte: 'yes',
+    onnx: 'yes', torchscript: 'yes',
   },
   {
     family: 'PP-OCR', status: 'New in v1.4.0; text detection + recognition; inference and val', statusZh: 'v1.4.0 新增；文本检测 + 识别；仅推理与验证',
@@ -812,11 +819,12 @@ const compatibilityRows = [
   {
     family: 'YOLO1 / YOLO2 / YOLO3 / YOLO4', status: 'Museum tier, inference-only (YOLO1 new in v1.4.0)', statusZh: '博物馆级历史基线，仅推理（YOLO1 为 v1.4.0 新增）',
     inference: 'yes', detect: 'yes',
-    onnx: 'yes', torchscript: 'yes', tflite: 'yes',
+    onnx: 'yes', torchscript: 'yes',
   },
   {
     family: 'L2CS', status: 'Inference-only', statusZh: '仅推理',
     inference: 'yes', gaze: 'yes',
+    onnx: 'yes',
   },
 ]
 
@@ -1198,7 +1206,7 @@ print(result.saved_path)`}</CodeBlock>
               <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />Python 3.10+
             </li>
             <li className="flex items-center gap-2 text-surface-600 dark:text-surface-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />PyTorch 1.13+ and torchvision 0.11+
+              <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />PyTorch 2.4+ and torchvision 0.19+
             </li>
           </ul>
 
@@ -1267,6 +1275,16 @@ pip install libreyolo[label]
 # Zero-shot classification
 pip install libreyolo[clip]       # CLIP
 pip install libreyolo[siglip2]    # SigLIP2 tokenizer (SentencePiece)
+
+# Validation and training plots
+pip install libreyolo[plots]
+
+# SenseNova Vision preview
+pip install libreyolo[sensenova]
+
+# Converter-only dependencies for CLIP and SigLIP2 checkpoints
+pip install libreyolo[clip-convert]
+pip install libreyolo[siglip2-convert]
 
 # LoRA fine-tuning (peft)
 pip install libreyolo[lora]
@@ -1408,8 +1426,12 @@ model = LibreYOLO("LibreYOLO9c.pt")   # detection`}</CodeBlock>
             GroupPose).{' '}
             <strong className="text-surface-800 dark:text-white">OBB:</strong>{' '}
             <Checkpoints names={['LibreRFDETRn-obb.pt', 'LibreRFDETRs-obb.pt', 'LibreRFDETRm-obb.pt', 'LibreRFDETRl-obb.pt']} />{' '}
-            (oriented boxes, uses detection input sizes). Treat both as research
-            previews, not validated paths.
+            (oriented boxes, uses detection input sizes). These checkpoints are
+            trained for six vehicle classes: <InlineCode>bike</InlineCode>,{' '}
+            <InlineCode>bus</InlineCode>, <InlineCode>car</InlineCode>,{' '}
+            <InlineCode>other_vehicle</InlineCode>, <InlineCode>taxi</InlineCode>,
+            and <InlineCode>truck</InlineCode>. They are not COCO-80 models.
+            Treat both pose and OBB as research previews, not validated paths.
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
@@ -1690,7 +1712,7 @@ model = LibreYOLO("LibreYOLO9c.pt")  # task="detect"`}</CodeBlock>
             One published checkpoint ships: <Checkpoints names={['LibreYOLO9P2s-visdrone.pt']} link={false} />, trained on VisDrone. There is <strong>no COCO-pretrained P2 checkpoint</strong>. Note the licence carefully: the VisDrone weights are <strong>CC BY-NC-SA 3.0, so they are non-commercial</strong>. Train your own P2 weights on a permissive dataset if you need commercial use.
           </P>
           <P>
-            Two rough edges remain in v1.4.0. TFLite export is not available for P2 (though it <em>is</em> available for the museum families above), and the CLI cannot resolve the variant filename, so load the VisDrone checkpoint from Python.
+            Two rough edges remain in v1.4.0. TFLite export is not available for P2 or the museum families, and the CLI cannot resolve the variant filename, so load the VisDrone checkpoint from Python.
           </P>
 
           <SubHeading>Examples</SubHeading>
@@ -1722,7 +1744,7 @@ LibreRFDETRn-obb.pt      # preview
 LibreMobileNetV4s-cls.pt
 LibreConvNeXtt-cls.pt
 LibreEfficientNetV2b0-cls.pt
-LibreDINOv2n-cls.pt      # DINOv2 linear probe
+# LibreDINOv2 classify checkpoints are not publicly shipped in v1.4.0
 LibreSigLIP2b16-cls.pt   # zero-shot
 
 # Depth (-depth)
@@ -1779,7 +1801,7 @@ LibreL2CSr50.pt`}</CodeBlock>
     show=False,           # video only: display annotated frames
     tiling=False,         # large-image tiled detection
     overlap_ratio=0.2,    # tile overlap ratio
-    output_path="out/",   # where to save (default: runs/detect/predict*/)
+    output_path="out/",   # images: directory; video: final file path
     color_format="auto",  # "auto", "rgb", or "bgr"
     output_file_format="png",  # output format: "jpg", "png", "webp"
 )`}</CodeBlock>
@@ -1950,6 +1972,13 @@ result.grid_path       # grid visualization image`}</CodeBlock>
 model = LibreYOLO("LibreYOLO9c.pt")
 results = model("clip.mp4", save=True)
 # Saved under runs/detect/predict*/clip.mp4`}</CodeBlock>
+          <P>
+            For video, <InlineCode>output_path</InlineCode> must be a complete
+            filename such as <InlineCode>out/clip.mp4</InlineCode>, not a directory.
+            In v1.4.0 the per-frame <InlineCode>Results</InlineCode> objects do not
+            populate <InlineCode>saved_path</InlineCode>; use the requested path or
+            the default shown above.
+          </P>
 
           <SubHeading>Stream results (memory-flat)</SubHeading>
           <P>
@@ -2354,7 +2383,7 @@ result.masks.numpy()`}</CodeBlock>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 model = LibreYOLO("LibrePIDNets-sem.pt")   # Cityscapes, 19 classes
-result = model.predict("street.jpg")
+result = model.predict("street.jpg", save=True)
 
 sm = result.semantic_mask     # SemanticMask
 print(sm.data.shape)          # (H, W) int class ids, on the ORIGINAL image canvas
@@ -2363,7 +2392,7 @@ print(model.names[13])        # 'car'
 
 car = sm.class_mask(13)       # (H, W) bool mask for one class
 
-result.plot().save("out.png") # class map overlaid on the image
+print(result.saved_path)      # saved semantic overlay
 
 print(result.boxes, result.masks)   # None None: semantic has no instances`}</CodeBlock>
 
@@ -2417,11 +2446,11 @@ metrics = model.val(data="ade20k.yaml", augment=True)`}</CodeBlock>
 
           <SubHeading>Limits</SubHeading>
           <ul className="space-y-2 my-4">
-            <FeatureItem><strong>Export is mostly blocked.</strong> In v1.4.0 PIDNet gained ONNX export under the fixed-resolution contract; SegFormer, EoMT and DINOv2 semantic still raise for every format. Check <InlineCode>libreyolo formats --family ...</InlineCode> for the current tier.</FeatureItem>
+            <FeatureItem><strong>Export support is family-specific.</strong> PIDNet supports ONNX, TorchScript, NCNN, and TFLite. DINOv2 and EoMT semantic support ONNX and TorchScript. SegFormer export remains blocked. Check <InlineCode>libreyolo formats --family ...</InlineCode> for the exact tier.</FeatureItem>
             <FeatureItem><strong>Only LibreDINOv2 and LibreSegformer train.</strong> <InlineCode>LibrePIDNet.train()</InlineCode> and <InlineCode>LibreEoMT.train()</InlineCode> raise.</FeatureItem>
             <FeatureItem>Semantic training now applies <strong>HSV color jitter by default</strong> (new in v1.4.0), so retrained mIoU can shift slightly versus v1.3.1 runs. The knob comes from the family, not <InlineCode>hsv_prob</InlineCode>; see <a href="#augmentation" className="text-libre-600 dark:text-libre-400 hover:underline">Data Augmentation</a>.</FeatureItem>
             <FeatureItem><strong>EoMT semantic is size <InlineCode>l</InlineCode> only and locked to <InlineCode>imgsz=512</InlineCode></strong> (its checkpoint uses fixed position embeddings), and it cannot batch: <InlineCode>val(batch=N)</InlineCode> warns and still runs one image at a time.</FeatureItem>
-            <FeatureItem><InlineCode>imgsz</InlineCode> divisibility differs per family: PIDNet needs a multiple of 8, EoMT of 16, DINOv2 of 14. Violations raise.</FeatureItem>
+            <FeatureItem><InlineCode>imgsz</InlineCode> divisibility differs per family: PIDNet needs a multiple of 8, EoMT of 16, DINOv2 of 14, and SegFormer of 32. Violations raise.</FeatureItem>
             <FeatureItem>No tracking for semantic models.</FeatureItem>
             <FeatureItem>Cityscapes, ADE20K and COCO-Stuff all require a manual download. LibreYOLO ships the dataset YAMLs, not the data.</FeatureItem>
             <FeatureItem>Raw upstream checkpoints are rejected. Convert with the <InlineCode>weights/convert_*_weights.py</InlineCode> scripts.</FeatureItem>
@@ -2453,7 +2482,7 @@ metrics = model.val(data="ade20k.yaml", augment=True)`}</CodeBlock>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 model = LibreYOLO("LibreEoMTb-panoptic.pt")   # task resolved from the -panoptic suffix
-result = model.predict("street.jpg")
+result = model.predict("street.jpg", save=True)
 
 pan = result.panoptic             # PanopticSegmentation
 print(pan.data.shape)             # (H, W) integer segment ids, original canvas
@@ -2461,7 +2490,7 @@ for seg in pan.segments_info:     # one dict per segment
     print(seg["id"], seg["category_id"], model.names[seg["category_id"]])
 
 car_mask = pan.segment_mask(3)    # (H, W) bool mask for one segment id
-result.plot().save("panoptic.png")
+print(result.saved_path)          # saved panoptic overlay
 
 # Flip-TTA works here too (new in v1.4.0)
 result = model.predict("street.jpg", augment=True)`}</CodeBlock>
@@ -2544,7 +2573,7 @@ model = LibreEdgeTAM()            # Apache-2.0, edge-friendly
 r = model.predict("img.jpg", bboxes=[100, 100, 500, 500])
 
 model = LibrePicoSAM3()           # 96 px ROI segmenter, ONNX-exportable
-r = model.predict("crop.jpg", points=[48, 48], labels=[1])`}</CodeBlock>
+r = model.predict("crop.jpg", bboxes=[8, 8, 88, 88])`}</CodeBlock>
 
           <SubHeading>Prompt with a click or a box</SubHeading>
           <CodeBlock language="python">{`from libreyolo import LibreSAM
@@ -2596,6 +2625,7 @@ r = model.predict("img.jpg", points=[640, 360], labels=[1], multimask=True)`}</C
           <ul className="space-y-2 my-4">
             <FeatureItem><strong>Images only, across the tier.</strong> There is no video segmentation and no memory propagation across frames in v1.4.0 (this includes SAM 2, SAM 3 and EdgeTAM): <InlineCode>track()</InlineCode> raises. Call <InlineCode>predict()</InlineCode> per frame.</FeatureItem>
             <FeatureItem><strong>No training and no validation</strong> for any SAM family. Export raises everywhere except PicoSAM3, which exports to ONNX only.</FeatureItem>
+            <FeatureItem><strong>PicoSAM3 accepts only <InlineCode>bboxes=</InlineCode> ROI prompts.</strong> Use LibreSAM2 or LibreSAM3 for points, text, masks, or segment-everything.</FeatureItem>
             <FeatureItem>Mask prompts (<InlineCode>masks=</InlineCode>) are not supported and raise. Use points or boxes.</FeatureItem>
             <FeatureItem><InlineCode>conf</InlineCode> here filters on SAM&apos;s predicted <em>mask quality</em>, not on detection confidence. Detector intuition does not transfer.</FeatureItem>
             <FeatureItem>Everything runs in fp32, even on CUDA. This is deliberate: half precision rounds prompt coordinates by several pixels at SAM&apos;s 1024px working size, which silently moves where you clicked.</FeatureItem>
@@ -2772,14 +2802,14 @@ for i in range(len(result.gaze)):
           {/* ────────────── CLASSIFICATION ────────────── */}
           <SectionHeading id="classification" icon={Tags}>Classification</SectionHeading>
           <P>
-            Whole-image classification spans two supervised paths and a zero-shot path. <InlineCode>LibreMobileNetV4</InlineCode> is the production classifier (Apache-2.0 ImageNet-1k weights, exportable to ONNX), with <InlineCode>LibreConvNeXt</InlineCode>, <InlineCode>LibreEfficientNetV2</InlineCode> and <InlineCode>LibreResNet</InlineCode> as alternatives on the same API. <InlineCode>LibreDINOv2</InlineCode> with <InlineCode>task=classify</InlineCode> is a DINOv2 backbone plus linear probe, ideal for transfer learning, but its published weights are demo-grade and it cannot export yet. For zero-shot (no training, labels as text), use CLIP or, new in v1.4.0, SigLIP2. Classification training gained its own <a href="#augmentation" className="text-libre-600 dark:text-libre-400 hover:underline">augmentation pack</a> in v1.4.0: <InlineCode>auto_augment</InlineCode>, <InlineCode>erasing</InlineCode>, <InlineCode>mixup</InlineCode> and <InlineCode>cutmix</InlineCode>.
+            Whole-image classification spans two supervised paths and a zero-shot path. <InlineCode>LibreMobileNetV4</InlineCode> is the production classifier (Apache-2.0 ImageNet-1k weights, exportable to ONNX), with <InlineCode>LibreConvNeXt</InlineCode>, <InlineCode>LibreEfficientNetV2</InlineCode> and <InlineCode>LibreResNet</InlineCode> as alternatives on the same API. <InlineCode>LibreDINOv2</InlineCode> with <InlineCode>task=classify</InlineCode> is a DINOv2 backbone plus linear probe for transfer learning. v1.4.0 does not publish public <InlineCode>-cls</InlineCode> checkpoints for it, so construct and train a fresh head; a trained classifier can export to ONNX. For zero-shot (no training, labels as text), use CLIP or, new in v1.4.0, SigLIP2. Classification training gained its own <a href="#augmentation" className="text-libre-600 dark:text-libre-400 hover:underline">augmentation pack</a> in v1.4.0: <InlineCode>auto_augment</InlineCode>, <InlineCode>erasing</InlineCode>, <InlineCode>mixup</InlineCode> and <InlineCode>cutmix</InlineCode>.
           </P>
 
           <DocTable
             headers={['Family', 'Checkpoints', 'Input', 'Weights', 'Fine-tune', 'ONNX export']}
             rows={[
               ['LibreMobileNetV4', 'LibreMobileNetV4{s,m,l}-cls.pt', '224 / 224 / 256', 'Apache-2.0 ImageNet-1k (production)', 'Cross-entropy', 'Yes'],
-              ['LibreDINOv2 (classify)', 'LibreDINOv2{n,s,m,l}-cls.pt', '224', 'Imagenette demo-grade (10 classes)', 'Linear probe', 'Not supported'],
+              ['LibreDINOv2 (classify)', 'Not publicly shipped in v1.4.0', '224', 'Fresh linear head', 'Linear probe', 'Yes'],
             ]}
           />
 
@@ -2832,23 +2862,15 @@ path = model.export(format="onnx", imgsz=224)   # single output: logits [batch, 
 
           <SubHeading>LibreDINOv2 classify (linear probe / transfer)</SubHeading>
           <div className="flex flex-wrap gap-2 mb-4">
-            <SupportBadge variant="experimental">Demo-grade weights (Imagenette)</SupportBadge>
-            <SupportBadge variant="experimental">No export</SupportBadge>
+            <SupportBadge variant="experimental">No public v1.4.0 checkpoints</SupportBadge>
+            <SupportBadge variant="validated">ONNX export</SupportBadge>
           </div>
           <P>
-            A frozen-style DINOv2-S encoder with a trainable linear head, run at 224. The <InlineCode>n</InlineCode> / <InlineCode>s</InlineCode> / <InlineCode>m</InlineCode> / <InlineCode>l</InlineCode> sizes control only the projector width: all four share the same DINOv2-S encoder, so the published checkpoints land at near-identical accuracy. The shipped <InlineCode>-cls</InlineCode> weights are demo-grade (trained on Imagenette, 10 classes), so treat this family as the transfer-learning option, not a drop-in 1000-class classifier. Checkpoints:
+            A DINOv2-S encoder with a trainable linear head, run at 224. The <InlineCode>n</InlineCode> / <InlineCode>s</InlineCode> / <InlineCode>m</InlineCode> / <InlineCode>l</InlineCode> sizes control the projector width; all four share the same DINOv2-S encoder. LibreYOLO v1.4.0 does not publicly host <InlineCode>LibreDINOv2*-cls.pt</InlineCode> checkpoints. Build a fresh classifier and train it on your own ImageFolder dataset.
           </P>
-          <Checkpoints names={['LibreDINOv2n-cls.pt', 'LibreDINOv2s-cls.pt', 'LibreDINOv2m-cls.pt', 'LibreDINOv2l-cls.pt']} link={false} />
-
-          <P>Load and predict (same <InlineCode>Probs</InlineCode> surface as MobileNetV4):</P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
-
-model = LibreYOLO("LibreDINOv2s-cls.pt")   # DINOv2-S backbone + linear probe (224)
-result = model("springer.jpg")
-print(result.probs.top1, result.probs.top1conf)`}</CodeBlock>
 
           <P>
-            Fine-tune for transfer. Build a fresh model with <InlineCode>task=&quot;classify&quot;</InlineCode> for a brand-new head, or load a shipped <InlineCode>-cls</InlineCode> checkpoint and continue training. For the best accuracy, fine-tune from a shipped checkpoint rather than a fresh head, and keep the default <InlineCode>lr=1e-4</InlineCode> (higher learning rates converge worse).
+            Build a fresh model with <InlineCode>task=&quot;classify&quot;</InlineCode>, train the new head, then use the same <InlineCode>Probs</InlineCode> prediction surface as MobileNetV4.
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreDINOv2
 
@@ -2858,12 +2880,12 @@ model.train(data="path/to/imagefolder", epochs=5, lr=1e-4, batch=4)
 
 # Validate the same way (top-1 / top-5)
 metrics = model.val(data="path/to/imagefolder")
-print(metrics["metrics/accuracy_top1"])`}</CodeBlock>
+print(metrics["metrics/accuracy_top1"])
 
-          <P>Export is not implemented for LibreDINOv2. If you need an exportable classifier, use LibreMobileNetV4.</P>
-          <CodeBlock language="python">{`model = LibreYOLO("LibreDINOv2s-cls.pt")
-model.export(format="onnx")
-# raises NotImplementedError: Export is not yet implemented for LibreDINOv2.`}</CodeBlock>
+result = model("springer.jpg")
+print(result.probs.top1, result.probs.top1conf)
+
+model.export(format="onnx", imgsz=224)`}</CodeBlock>
 
           <SubHeading>Dataset layout (both families)</SubHeading>
           <P>
@@ -2919,9 +2941,8 @@ result = model.predict("warehouse.jpg", multi_label=True)`}</CodeBlock>
           </P>
 
           <ul className="space-y-2 my-4">
-            <FeatureItem>MobileNetV4 weights are production grade (Apache-2.0 ImageNet-1k, bit-identical load). DINOv2 classify weights are demo-grade (Imagenette, 10 classes).</FeatureItem>
+            <FeatureItem>MobileNetV4 weights are production grade (Apache-2.0 ImageNet-1k, bit-identical load). LibreDINOv2 classify has no publicly hosted v1.4.0 checkpoint; train a fresh head.</FeatureItem>
             <FeatureItem>There is no LibreRFDETR classifier since v1.3.0. Classification moved into the dedicated classifier families; legacy LibreRFDETR*-cls checkpoints are rejected on load.</FeatureItem>
-            <FeatureItem>A fresh DINOv2 fine-tune with the default recipe tops out around 0.93 top-1 on Imagenette, below the shipped 0.976. Fine-tune from a shipped -cls checkpoint to recover accuracy.</FeatureItem>
             <FeatureItem>ONNX classify output is raw logits. Apply softmax in non-Python consumers.</FeatureItem>
             <FeatureItem>Predicting a single image returns one Results. Read result.probs directly, or pass a list and index the list: model([&quot;a.jpg&quot;])[0].probs.</FeatureItem>
             <FeatureItem>New in v1.4.0: <InlineCode>square_resize</InlineCode> together with <InlineCode>augment</InlineCode> now raises instead of silently misbehaving, and the classifier families train multi-GPU via the spawn path.</FeatureItem>
@@ -3109,7 +3130,7 @@ metrics = model.val(data="gopro.yaml")
 print(metrics["metrics/psnr"], metrics["metrics/ssim"])`}</CodeBlock>
           <ul className="space-y-2 my-4">
             <FeatureItem>Two reporting quirks to expect while training: the console prints PSNR under the <InlineCode>mAP50</InlineCode> column heading (a labelling bug, the number is PSNR), and PSNR/SSIM are computed with no border crop, so they are not directly comparable to published NAFNet benchmark figures.</FeatureItem>
-            <FeatureItem>Export (NAFNet): ONNX (static shapes only, and <InlineCode>imgsz</InlineCode> must be a multiple of 16) and TorchScript work. TFLite and CoreML raise. SwinIR and Real-ESRGAN do not export in v1.4.0.</FeatureItem>
+            <FeatureItem>Export: NAFNet supports ONNX (static shapes, <InlineCode>imgsz</InlineCode> multiple of 16) and TorchScript. SwinIR supports ONNX experimentally and TorchScript. Real-ESRGAN supports ONNX, TorchScript, NCNN, and TFLite. NAFNet TFLite and CoreML remain blocked.</FeatureItem>
           </ul>
 
           <Divider />
@@ -3156,7 +3177,7 @@ alpha = matte.array[..., None]  # (H, W, 1)`}</CodeBlock>
 
           <SubHeading>Limits</SubHeading>
           <ul className="space-y-2 my-4">
-            <FeatureItem><strong>Inference and validation only.</strong> Matte training and export raise in v1.4.0.</FeatureItem>
+            <FeatureItem><strong>Inference and validation only.</strong> Matte training raises in v1.4.0. Export supports experimental ONNX and fixed-1024 TorchScript; NCNN remains blocked.</FeatureItem>
             <FeatureItem>Checkpoints written with the <InlineCode>matte</InlineCode> task string are not loadable by v1.3.1.</FeatureItem>
             <FeatureItem>Save the cutout as PNG or WebP. JPEG has no alpha channel, so saving a cutout as JPEG silently flattens it.</FeatureItem>
           </ul>
@@ -3184,15 +3205,15 @@ alpha = matte.array[..., None]  # (H, W, 1)`}</CodeBlock>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 model = LibreYOLO("LibrePPOCRt-ocr.pt")
-result = model("receipt.jpg")
+result = model("receipt.jpg", save=True)
 
 ocr = result.ocr                 # OCRRegions
 print(ocr.polygons.shape)        # (N, 4, 2) quad corners in pixels
-for text, conf in zip(ocr.texts, ocr.confidence):
+for text, conf in zip(ocr.texts, ocr.conf):
     print(f"{conf:.2f}  {text}")
 
-ocr.det_confidence               # (N,) detector scores, separate from recognition
-result.plot().save("read.png")   # polygons + transcriptions drawn on the image`}</CodeBlock>
+ocr.det_conf                      # (N,) detector scores, separate from recognition
+print(result.saved_path)          # saved OCR overlay`}</CodeBlock>
 
           <SubHeading>CLI and validation</SubHeading>
           <P>
@@ -4121,8 +4142,11 @@ model.export(format="onnx", nms=True, conf=0.25, iou=0.45, max_det=300)`}</CodeB
             <SupportBadge variant="experimental">Runtime backend new in v1.4.0</SupportBadge>{' '}
             LibreYOLO has a TFLite export path built on <InlineCode>onnx2tf</InlineCode>. TFLite is
             the format of Google&apos;s LiteRT runtime (TensorFlow Lite was renamed LiteRT in 2024;
-            the <InlineCode>.tflite</InlineCode> file format is unchanged). It is
-            validated for RF-DETR detect / segment / pose and YOLO9 detect. It requires{' '}
+            the <InlineCode>.tflite</InlineCode> file format is unchanged). It supports
+            YOLO9 and YOLOX detection, the MobileNetV4 / ConvNeXt / EfficientNetV2 /
+            ResNet classifiers, PIDNet semantic segmentation, and Real-ESRGAN restoration.
+            RF-DETR detection is experimental; RF-DETR segmentation and pose are blocked.
+            It requires{' '}
             <strong className="text-surface-800 dark:text-white">Python 3.12+</strong> (the{' '}
             <InlineCode>onnx2tf 2.4.x</InlineCode> wheels do not target older Python) plus the
             optional extra <InlineCode>libreyolo[tflite]</InlineCode> (alias:{' '}
@@ -4133,7 +4157,7 @@ model.export(format="onnx", nms=True, conf=0.25, iou=0.45, max_det=300)`}</CodeB
           <CodeBlock language="bash">{`pip install "libreyolo[tflite]"   # Python 3.12+; [litert] is the same extra`}</CodeBlock>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
-model = LibreYOLO("LibreRFDETRs-seg.pt")
+model = LibreYOLO("LibreYOLO9c.pt")
 model.export(format="tflite")   # writes a .tflite file; format="litert" also works`}</CodeBlock>
           <P>
             For RF-DETR, the exporter rewrites each GridSample node into a TFLite-safe bilinear
@@ -4378,6 +4402,14 @@ print(result.boxes.xyxy)`}</CodeBlock>
           <P>
             The CLI accepts short names (<InlineCode>yolo9-c</InlineCode>) that resolve to weight filenames (<InlineCode>LibreYOLO9c.pt</InlineCode>) - discoverable via <InlineCode>libreyolo models</InlineCode>. You can also pass any explicit checkpoint path.
           </P>
+          <P>
+            Released-v1.4.0 caveats: without <InlineCode>transformers</InlineCode>,
+            <InlineCode>libreyolo models</InlineCode> omits RF-DETR and DINOv2 instead
+            of listing them as unavailable. Some task-suffixed shortcuts for
+            non-detection-default families also fail to resolve. Install{' '}
+            <InlineCode>libreyolo[rfdetr]</InlineCode> for the transformer families,
+            and pass the full official checkpoint filename when a shortcut fails.
+          </P>
 
           <SubHeading>Common options</SubHeading>
           <DocTable
@@ -4543,13 +4575,13 @@ libreyolo train --help-json > train_schema.json`}</CodeBlock>
     probs: Probs | None = None,
     obb: OBB | None = None,
     gaze: Gaze | None = None,
+    points: Points | None = None,
+    semantic_mask: SemanticMask | None = None,
+    depth_map: DepthMap | None = None,
+    restored: RestoredImage | None = None,
     speed: dict[str, float] | None = None,
     track_id = None,
     frame_idx: int | None = None,
-    semantic_mask: SemanticMask | None = None,
-    depth_map: DepthMap | None = None,
-    points: Points | None = None,
-    restored: RestoredImage | None = None,
     # New in v1.4.0 (placed after the complete v1.3 signature, so
     # positional v1.3 call sites keep working):
     panoptic: PanopticSegmentation | None = None,
@@ -4590,6 +4622,11 @@ result.keypoints.xy      # pose keypoint coordinates
 result.keypoints.xyn     # normalized keypoint coordinates
 result.keypoints.conf    # keypoint confidence when present
 
+result.obb.xywhr         # (N, 5): center x/y, width, height, rotation
+result.obb.xyxyxyxy      # (N, 4, 2): four oriented box corners
+result.obb.conf          # (N,) confidence scores
+result.obb.cls           # (N,) class IDs
+
 result.gaze.data         # (N, 2): pitch, yaw in radians
 result.gaze.pitch_deg    # pitch in degrees
 result.gaze.yaw_deg      # yaw in degrees
@@ -4607,8 +4644,8 @@ result.panoptic.segments_info  # per-segment {"id", "category_id", ...}
 result.matte.data              # (H, W) float32 alpha in [0, 1]
 result.ocr.polygons            # (N, 4, 2) text-region quads
 result.ocr.texts               # list[str] transcriptions
-result.ocr.confidence          # (N,) recognition scores
-result.ocr.det_confidence      # (N,) detection scores`}</CodeBlock>
+result.ocr.conf                # (N,) recognition scores
+result.ocr.det_conf            # (N,) detection scores`}</CodeBlock>
 
           <SubHeading>model.track()</SubHeading>
           <CodeBlock language="python">{`model.track(
@@ -5476,7 +5513,7 @@ print(result.saved_path)`}</CodeBlock>
               <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />Python 3.10+
             </li>
             <li className="flex items-center gap-2 text-surface-600 dark:text-surface-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />PyTorch 1.13+ 和 torchvision 0.11+
+              <span className="w-1.5 h-1.5 rounded-full bg-libre-400" />PyTorch 2.4+ 和 torchvision 0.19+
             </li>
           </ul>
 
@@ -5545,6 +5582,16 @@ pip install libreyolo[label]
 # Zero-shot classification
 pip install libreyolo[clip]       # CLIP
 pip install libreyolo[siglip2]    # SigLIP2 tokenizer (SentencePiece)
+
+# Validation and training plots
+pip install libreyolo[plots]
+
+# SenseNova Vision preview
+pip install libreyolo[sensenova]
+
+# Converter-only dependencies for CLIP and SigLIP2 checkpoints
+pip install libreyolo[clip-convert]
+pip install libreyolo[siglip2-convert]
 
 # LoRA fine-tuning (peft)
 pip install libreyolo[lora]
@@ -5676,7 +5723,11 @@ model = LibreYOLO("LibreYOLO9c.pt")   # detection`}</CodeBlock>
             <Checkpoints names={['LibreRFDETRx-pose.pt']} />（移植自 RF-DETR 的 GroupPose）。{' '}
             <strong className="text-surface-800 dark:text-white">OBB：</strong>{' '}
             <Checkpoints names={['LibreRFDETRn-obb.pt', 'LibreRFDETRs-obb.pt', 'LibreRFDETRm-obb.pt', 'LibreRFDETRl-obb.pt']} />{' '}
-            （旋转框，使用检测的输入尺寸）。请将两者视为研究预览，而非已验证路径。
+            （旋转框，使用检测的输入尺寸）。这些检查点针对六个车辆类别训练：
+            <InlineCode>bike</InlineCode>、<InlineCode>bus</InlineCode>、
+            <InlineCode>car</InlineCode>、<InlineCode>other_vehicle</InlineCode>、
+            <InlineCode>taxi</InlineCode> 和 <InlineCode>truck</InlineCode>，并非 COCO-80 模型。
+            请将姿态与 OBB 都视为研究预览，而非已验证路径。
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
@@ -5951,7 +6002,7 @@ LibreRFDETRn-obb.pt      # preview
 LibreMobileNetV4s-cls.pt
 LibreConvNeXtt-cls.pt
 LibreEfficientNetV2b0-cls.pt
-LibreDINOv2n-cls.pt      # DINOv2 linear probe
+# LibreDINOv2 classify checkpoints are not publicly shipped in v1.4.0
 LibreSigLIP2b16-cls.pt   # zero-shot
 
 # Depth (-depth)
@@ -6008,7 +6059,7 @@ LibreL2CSr50.pt`}</CodeBlock>
     show=False,           # video only: display annotated frames
     tiling=False,         # large-image tiled detection
     overlap_ratio=0.2,    # tile overlap ratio
-    output_path="out/",   # where to save (default: runs/detect/predict*/)
+    output_path="out/",   # images: directory; video: final file path
     color_format="auto",  # "auto", "rgb", or "bgr"
     output_file_format="png",  # output format: "jpg", "png", "webp"
 )`}</CodeBlock>
@@ -6178,6 +6229,12 @@ result.grid_path       # grid visualization image`}</CodeBlock>
 model = LibreYOLO("LibreYOLO9c.pt")
 results = model("clip.mp4", save=True)
 # Saved under runs/detect/predict*/clip.mp4`}</CodeBlock>
+          <P>
+            对于视频，<InlineCode>output_path</InlineCode> 必须是完整文件名，例如
+            <InlineCode>out/clip.mp4</InlineCode>，不能只传目录。v1.4.0 的逐帧
+            <InlineCode>Results</InlineCode> 不会填充 <InlineCode>saved_path</InlineCode>；
+            请使用传入的路径或上方所示的默认位置。
+          </P>
 
           <SubHeading>流式结果（内存平稳）</SubHeading>
           <P>
@@ -6536,14 +6593,14 @@ result.masks.numpy()`}</CodeBlock>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 model = LibreYOLO("LibrePIDNets-sem.pt")   # Cityscapes，19 类
-result = model.predict("street.jpg")
+result = model.predict("street.jpg", save=True)
 
 sm = result.semantic_mask     # SemanticMask
 print(sm.data.shape)          # (H, W) 整数类别 id，位于原图尺寸上
 print(sm.classes)             # 出现过的类别 id，已排除 255（忽略）
 car = sm.class_mask(13)       # (H, W) 布尔掩码
 
-result.plot().save("out.png")
+print(result.saved_path)      # 已保存的语义分割叠加图
 print(result.boxes, result.masks)   # None None：语义分割没有实例`}</CodeBlock>
           <SubHeading>验证</SubHeading>
           <CodeBlock language="python">{`metrics = model.val(data="cityscapes.yaml")
@@ -6570,11 +6627,11 @@ metrics = model.val(data="ade20k.yaml", augment=True)`}</CodeBlock>
 
           <SubHeading>限制</SubHeading>
           <ul className="space-y-2 my-4">
-            <FeatureItem><strong>导出大多仍被拦截。</strong>v1.4.0 中 PIDNet 获得了固定分辨率契约下的 ONNX 导出；SegFormer、EoMT 与 DINOv2 语义分割的所有格式仍会报错。用 <InlineCode>libreyolo formats --family ...</InlineCode> 查询当前档位。</FeatureItem>
+            <FeatureItem><strong>导出支持因系列而异。</strong>PIDNet 支持 ONNX、TorchScript、NCNN 和 TFLite；DINOv2 与 EoMT 语义分割支持 ONNX 和 TorchScript；SegFormer 导出仍被拦截。用 <InlineCode>libreyolo formats --family ...</InlineCode> 查询准确档位。</FeatureItem>
             <FeatureItem><strong>只有 LibreDINOv2 和 LibreSegformer 可训练。</strong><InlineCode>LibrePIDNet.train()</InlineCode> 与 <InlineCode>LibreEoMT.train()</InlineCode> 都会报错。</FeatureItem>
             <FeatureItem>语义分割训练现在<strong>默认应用 HSV 颜色抖动</strong>（v1.4.0 新增），重新训练的 mIoU 可能与 v1.3.1 略有偏移。该开关来自系列本身而非 <InlineCode>hsv_prob</InlineCode>；见<a href="#augmentation" className="text-libre-600 dark:text-libre-400 hover:underline">数据增强</a>。</FeatureItem>
             <FeatureItem><strong>EoMT 语义分割仅有 <InlineCode>l</InlineCode> 尺寸，且 <InlineCode>imgsz</InlineCode> 固定为 512</strong>（其检查点使用固定位置编码），并且不支持批处理。</FeatureItem>
-            <FeatureItem><InlineCode>imgsz</InlineCode> 的整除要求因系列而异：PIDNet 需被 8 整除，EoMT 为 16，DINOv2 为 14。</FeatureItem>
+            <FeatureItem><InlineCode>imgsz</InlineCode> 的整除要求因系列而异：PIDNet 需被 8 整除，EoMT 为 16，DINOv2 为 14，SegFormer 为 32。</FeatureItem>
             <FeatureItem>语义模型不支持跟踪。</FeatureItem>
             <FeatureItem>Cityscapes、ADE20K 与 COCO-Stuff 均需手动下载，LibreYOLO 只提供数据集 YAML。</FeatureItem>
           </ul>
@@ -6599,7 +6656,7 @@ metrics = model.val(data="ade20k.yaml", augment=True)`}</CodeBlock>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 model = LibreYOLO("LibreEoMTb-panoptic.pt")   # task resolved from the -panoptic suffix
-result = model.predict("street.jpg")
+result = model.predict("street.jpg", save=True)
 
 pan = result.panoptic             # PanopticSegmentation
 print(pan.data.shape)             # (H, W) integer segment ids, original canvas
@@ -6607,7 +6664,7 @@ for seg in pan.segments_info:     # one dict per segment
     print(seg["id"], seg["category_id"], model.names[seg["category_id"]])
 
 car_mask = pan.segment_mask(3)    # (H, W) bool mask for one segment id
-result.plot().save("panoptic.png")
+print(result.saved_path)          # saved panoptic overlay
 
 # Flip-TTA works here too (new in v1.4.0)
 result = model.predict("street.jpg", augment=True)`}</CodeBlock>
@@ -6679,7 +6736,7 @@ model = LibreEdgeTAM()            # Apache-2.0, edge-friendly
 r = model.predict("img.jpg", bboxes=[100, 100, 500, 500])
 
 model = LibrePicoSAM3()           # 96 px ROI segmenter, ONNX-exportable
-r = model.predict("crop.jpg", points=[48, 48], labels=[1])`}</CodeBlock>
+r = model.predict("crop.jpg", bboxes=[8, 8, 88, 88])`}</CodeBlock>
           <CodeBlock language="python">{`from libreyolo import LibreSAM
 
 model = LibreSAM("base")
@@ -6710,6 +6767,7 @@ model.reset_image()`}</CodeBlock>
           <ul className="space-y-2 my-4">
             <FeatureItem><strong>整层仅支持图像。</strong>v1.4.0 没有视频分割，也没有跨帧记忆传播（SAM 2、SAM 3 和 EdgeTAM 亦然），<InlineCode>track()</InlineCode> 会报错，请逐帧调用 <InlineCode>predict()</InlineCode>。</FeatureItem>
             <FeatureItem><strong>不支持训练与验证</strong>，所有 SAM 系列均如此。导出除 PicoSAM3（仅 ONNX）外全部报错。</FeatureItem>
+            <FeatureItem><strong>PicoSAM3 仅接受 <InlineCode>bboxes=</InlineCode> ROI 提示。</strong>点、文本、掩码或全图分割请使用 LibreSAM2 或 LibreSAM3。</FeatureItem>
             <FeatureItem>不支持掩码提示（<InlineCode>masks=</InlineCode>），请使用点或框。</FeatureItem>
             <FeatureItem>全程使用 fp32，即便在 CUDA 上也是如此。这是有意为之：半精度会在 SAM 的 1024px 工作尺度上把提示坐标舍入若干像素，悄悄挪动你点击的位置。</FeatureItem>
           </ul>
@@ -6868,14 +6926,14 @@ for i in range(len(result.gaze)):
           {/* ────────────── CLASSIFICATION ────────────── */}
           <SectionHeading id="classification" icon={Tags}>分类</SectionHeading>
           <P>
-            整图分类覆盖两条监督路径和一条零样本路径。<InlineCode>LibreMobileNetV4</InlineCode> 是生产级分类器（Apache-2.0 ImageNet-1k 权重，可导出为 ONNX)，<InlineCode>LibreConvNeXt</InlineCode>、<InlineCode>LibreEfficientNetV2</InlineCode> 和 <InlineCode>LibreResNet</InlineCode> 提供同一 API 下的替代选择。<InlineCode>LibreDINOv2</InlineCode> 配合 <InlineCode>task=classify</InlineCode> 是 DINOv2 主干加线性探针，非常适合迁移学习，但其发布的权重为演示级，且暂不支持导出。零样本分类（无需训练，标签即文本）请用 CLIP 或 v1.4.0 新增的 SigLIP2。分类训练在 v1.4.0 中获得了自己的<a href="#augmentation" className="text-libre-600 dark:text-libre-400 hover:underline">增强参数包</a>：<InlineCode>auto_augment</InlineCode>、<InlineCode>erasing</InlineCode>、<InlineCode>mixup</InlineCode> 和 <InlineCode>cutmix</InlineCode>。
+            整图分类覆盖两条监督路径和一条零样本路径。<InlineCode>LibreMobileNetV4</InlineCode> 是生产级分类器（Apache-2.0 ImageNet-1k 权重，可导出为 ONNX)，<InlineCode>LibreConvNeXt</InlineCode>、<InlineCode>LibreEfficientNetV2</InlineCode> 和 <InlineCode>LibreResNet</InlineCode> 提供同一 API 下的替代选择。<InlineCode>LibreDINOv2</InlineCode> 配合 <InlineCode>task=classify</InlineCode> 是用于迁移学习的 DINOv2 主干加线性探针。v1.4.0 没有为它公开发布 <InlineCode>-cls</InlineCode> 检查点，因此需要构建并训练全新分类头；训练后的分类器可导出为 ONNX。零样本分类（无需训练，标签即文本）请用 CLIP 或 v1.4.0 新增的 SigLIP2。分类训练在 v1.4.0 中获得了自己的<a href="#augmentation" className="text-libre-600 dark:text-libre-400 hover:underline">增强参数包</a>：<InlineCode>auto_augment</InlineCode>、<InlineCode>erasing</InlineCode>、<InlineCode>mixup</InlineCode> 和 <InlineCode>cutmix</InlineCode>。
           </P>
 
           <DocTable
             headers={['系列', '检查点', '输入', '权重', '微调', 'ONNX 导出']}
             rows={[
               ['LibreMobileNetV4', 'LibreMobileNetV4{s,m,l}-cls.pt', '224 / 224 / 256', 'Apache-2.0 ImageNet-1k（生产级）', '交叉熵', '支持'],
-              ['LibreDINOv2（classify）', 'LibreDINOv2{n,s,m,l}-cls.pt', '224', 'Imagenette 演示级（10 类）', '线性探针', '不支持'],
+              ['LibreDINOv2（classify）', 'v1.4.0 未公开发布', '224', '全新线性头', '线性探针', '支持'],
             ]}
           />
 
@@ -6928,23 +6986,15 @@ path = model.export(format="onnx", imgsz=224)   # single output: logits [batch, 
 
           <SubHeading>LibreDINOv2 分类（线性探针 / 迁移）</SubHeading>
           <div className="flex flex-wrap gap-2 mb-4">
-            <SupportBadge variant="experimental">演示级权重（Imagenette）</SupportBadge>
-            <SupportBadge variant="experimental">不支持导出</SupportBadge>
+            <SupportBadge variant="experimental">无公开 v1.4.0 检查点</SupportBadge>
+            <SupportBadge variant="validated">支持 ONNX 导出</SupportBadge>
           </div>
           <P>
-            冻结风格的 DINOv2-S 编码器加可训练线性头，在 224 运行。<InlineCode>n</InlineCode> / <InlineCode>s</InlineCode> / <InlineCode>m</InlineCode> / <InlineCode>l</InlineCode> 尺寸只控制投影头宽度：四者共享同一个 DINOv2-S 编码器，因此发布的检查点精度几乎相同。随附的 <InlineCode>-cls</InlineCode> 权重为演示级（在 Imagenette 上训练，10 类），因此请将该系列视为迁移学习选项，而非可直接替换的 1000 类分类器。检查点：
+            DINOv2-S 编码器加可训练线性头，在 224 运行。<InlineCode>n</InlineCode> / <InlineCode>s</InlineCode> / <InlineCode>m</InlineCode> / <InlineCode>l</InlineCode> 尺寸控制投影头宽度，四者共享同一个 DINOv2-S 编码器。LibreYOLO v1.4.0 没有公开托管 <InlineCode>LibreDINOv2*-cls.pt</InlineCode> 检查点。请构建全新分类器，并在自己的 ImageFolder 数据集上训练。
           </P>
-          <Checkpoints names={['LibreDINOv2n-cls.pt', 'LibreDINOv2s-cls.pt', 'LibreDINOv2m-cls.pt', 'LibreDINOv2l-cls.pt']} link={false} />
-
-          <P>加载并预测（与 MobileNetV4 相同的 <InlineCode>Probs</InlineCode> 接口）：</P>
-          <CodeBlock language="python">{`from libreyolo import LibreYOLO
-
-model = LibreYOLO("LibreDINOv2s-cls.pt")   # DINOv2-S backbone + linear probe (224)
-result = model("springer.jpg")
-print(result.probs.top1, result.probs.top1conf)`}</CodeBlock>
 
           <P>
-            微调用于迁移。用 <InlineCode>task=&quot;classify&quot;</InlineCode> 构建全新模型以获得全新分类头，或加载随附的 <InlineCode>-cls</InlineCode> 检查点继续训练。为获得最佳精度，请从随附检查点而非全新分类头开始微调，并保持默认的 <InlineCode>lr=1e-4</InlineCode>（更高的学习率收敛更差）。
+            用 <InlineCode>task=&quot;classify&quot;</InlineCode> 构建全新模型，训练新分类头，然后使用与 MobileNetV4 相同的 <InlineCode>Probs</InlineCode> 预测接口。
           </P>
           <CodeBlock language="python">{`from libreyolo import LibreDINOv2
 
@@ -6954,12 +7004,12 @@ model.train(data="path/to/imagefolder", epochs=5, lr=1e-4, batch=4)
 
 # Validate the same way (top-1 / top-5)
 metrics = model.val(data="path/to/imagefolder")
-print(metrics["metrics/accuracy_top1"])`}</CodeBlock>
+print(metrics["metrics/accuracy_top1"])
 
-          <P>LibreDINOv2 未实现导出。如果你需要可导出的分类器，请使用 LibreMobileNetV4。</P>
-          <CodeBlock language="python">{`model = LibreYOLO("LibreDINOv2s-cls.pt")
-model.export(format="onnx")
-# raises NotImplementedError: Export is not yet implemented for LibreDINOv2.`}</CodeBlock>
+result = model("springer.jpg")
+print(result.probs.top1, result.probs.top1conf)
+
+model.export(format="onnx", imgsz=224)`}</CodeBlock>
 
           <SubHeading>数据集布局（两个系列）</SubHeading>
           <P>
@@ -7009,9 +7059,8 @@ result = model.predict("warehouse.jpg", multi_label=True)`}</CodeBlock>
           </P>
 
           <ul className="space-y-2 my-4">
-            <FeatureItem>MobileNetV4 权重为生产级（Apache-2.0 ImageNet-1k，逐比特一致加载）。DINOv2 分类权重为演示级（Imagenette，10 类）。</FeatureItem>
+            <FeatureItem>MobileNetV4 权重为生产级（Apache-2.0 ImageNet-1k，逐比特一致加载）。LibreDINOv2 分类没有公开托管的 v1.4.0 检查点，请训练全新分类头。</FeatureItem>
             <FeatureItem>自 v1.3.0 起不再有 LibreRFDETR 分类器。分类已迁移到专门的分类器系列；旧的 LibreRFDETR*-cls 检查点在加载时会被拒绝。</FeatureItem>
-            <FeatureItem>使用默认配方从头微调 DINOv2 在 Imagenette 上的 top-1 上限约为 0.93，低于随附的 0.976。从随附的 -cls 检查点开始微调以恢复精度。</FeatureItem>
             <FeatureItem>ONNX 分类输出为原始 logits。请在非 Python 消费方中自行应用 softmax。</FeatureItem>
             <FeatureItem>预测单张图像返回一个 Results。直接读取 result.probs，或传入列表并对列表取索引：model([&quot;a.jpg&quot;])[0].probs。</FeatureItem>
             <FeatureItem>v1.4.0 新增：<InlineCode>square_resize</InlineCode> 与 <InlineCode>augment</InlineCode> 同时使用现在会直接报错而不是悄悄出错，并且分类器系列支持 spawn 路径的多 GPU 训练。</FeatureItem>
@@ -7168,7 +7217,7 @@ metrics = model.val(data="gopro.yaml")
 print(metrics["metrics/psnr"], metrics["metrics/ssim"])`}</CodeBlock>
           <ul className="space-y-2 my-4">
             <FeatureItem>训练时有两处显示上的怪癖：控制台会把 PSNR 打印在 <InlineCode>mAP50</InlineCode> 这一列标题下（标签错误，数值确实是 PSNR）；并且 PSNR/SSIM 计算时不做边界裁剪，因此不能直接与公开的 NAFNet 基准数字对比。</FeatureItem>
-            <FeatureItem>导出（NAFNet）：支持 ONNX（仅静态尺寸，且 <InlineCode>imgsz</InlineCode> 必须是 16 的倍数）与 TorchScript；TFLite 与 CoreML 会报错。SwinIR 与 Real-ESRGAN 在 v1.4.0 中不支持导出。</FeatureItem>
+            <FeatureItem>导出：NAFNet 支持 ONNX（静态尺寸，<InlineCode>imgsz</InlineCode> 为 16 的倍数）与 TorchScript；SwinIR 实验性支持 ONNX，并支持 TorchScript；Real-ESRGAN 支持 ONNX、TorchScript、NCNN 和 TFLite。NAFNet 的 TFLite 与 CoreML 仍被拦截。</FeatureItem>
           </ul>
 
           <Divider />
@@ -7205,7 +7254,7 @@ alpha = matte.array[..., None]  # (H, W, 1)`}</CodeBlock>
 
           <SubHeading>限制</SubHeading>
           <ul className="space-y-2 my-4">
-            <FeatureItem><strong>仅推理与验证。</strong>v1.4.0 中 matte 的训练与导出都会报错。</FeatureItem>
+            <FeatureItem><strong>仅推理与验证。</strong>v1.4.0 中 matte 训练会报错。导出支持实验性 ONNX 和固定 1024 输入的 TorchScript；NCNN 仍被拦截。</FeatureItem>
             <FeatureItem>使用 <InlineCode>matte</InlineCode> 任务字符串写出的检查点无法被 v1.3.1 加载。</FeatureItem>
             <FeatureItem>抠图请保存为 PNG 或 WebP。JPEG 没有 alpha 通道，存成 JPEG 会悄悄拍平透明度。</FeatureItem>
           </ul>
@@ -7226,15 +7275,15 @@ alpha = matte.array[..., None]  # (H, W, 1)`}</CodeBlock>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 model = LibreYOLO("LibrePPOCRt-ocr.pt")
-result = model("receipt.jpg")
+result = model("receipt.jpg", save=True)
 
 ocr = result.ocr                 # OCRRegions
 print(ocr.polygons.shape)        # (N, 4, 2) quad corners in pixels
-for text, conf in zip(ocr.texts, ocr.confidence):
+for text, conf in zip(ocr.texts, ocr.conf):
     print(f"{conf:.2f}  {text}")
 
-ocr.det_confidence               # (N,) detector scores, separate from recognition
-result.plot().save("read.png")   # polygons + transcriptions drawn on the image`}</CodeBlock>
+ocr.det_conf                      # (N,) detector scores, separate from recognition
+print(result.saved_path)          # saved OCR overlay`}</CodeBlock>
 
           <SubHeading>CLI 与验证</SubHeading>
           <P>
@@ -8059,8 +8108,10 @@ model.export(format="onnx", nms=True, conf=0.25, iou=0.45, max_det=300)`}</CodeB
             <SupportBadge variant="experimental">运行时后端为 v1.4.0 新增</SupportBadge>{' '}
             LibreYOLO 提供基于 <InlineCode>onnx2tf</InlineCode> 的 TFLite 导出路径。TFLite 是
             Google LiteRT 运行时的格式（TensorFlow Lite 于 2024 年更名为 LiteRT，
-            <InlineCode>.tflite</InlineCode> 文件格式不变）。它已在
-            RF-DETR detect / segment / pose 和 YOLO9 detect 上验证。它需要{' '}
+            <InlineCode>.tflite</InlineCode> 文件格式不变）。它支持 YOLO9 与 YOLOX 检测、
+            MobileNetV4 / ConvNeXt / EfficientNetV2 / ResNet 分类器、PIDNet 语义分割，
+            以及 Real-ESRGAN 修复。RF-DETR 检测为实验性支持；RF-DETR 分割与姿态被拦截。
+            它需要{' '}
             <strong className="text-surface-800 dark:text-white">Python 3.12+</strong>（{' '}
             <InlineCode>onnx2tf 2.4.x</InlineCode> wheels 不面向更老的 Python），以及
             可选 extra <InlineCode>libreyolo[tflite]</InlineCode>（别名{' '}
@@ -8071,7 +8122,7 @@ model.export(format="onnx", nms=True, conf=0.25, iou=0.45, max_det=300)`}</CodeB
           <CodeBlock language="bash">{`pip install "libreyolo[tflite]"   # Python 3.12+; [litert] is the same extra`}</CodeBlock>
           <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
-model = LibreYOLO("LibreRFDETRs-seg.pt")
+model = LibreYOLO("LibreYOLO9c.pt")
 model.export(format="tflite")   # writes a .tflite file; format="litert" also works`}</CodeBlock>
           <P>
             对于 RF-DETR，导出器会将每个 GridSample 节点改写为 TFLite 安全的双线性
@@ -8314,6 +8365,12 @@ print(result.boxes.xyxy)`}</CodeBlock>
           <P>
             命令行接受简称（<InlineCode>yolo9-c</InlineCode>），它们会解析为权重文件名（<InlineCode>LibreYOLO9c.pt</InlineCode>）- 可通过 <InlineCode>libreyolo models</InlineCode> 查看。你也可以传入任意明确的检查点路径。
           </P>
+          <P>
+            v1.4.0 已发布版本有两个限制：未安装 <InlineCode>transformers</InlineCode> 时，
+            <InlineCode>libreyolo models</InlineCode> 会省略 RF-DETR 与 DINOv2，而不是将其标为不可用；
+            某些默认任务并非检测的系列，其带任务后缀的简称也可能无法解析。需要 transformer 系列时请安装
+            <InlineCode>libreyolo[rfdetr]</InlineCode>，简称失败时请传入完整的官方检查点文件名。
+          </P>
 
           <SubHeading>常用选项</SubHeading>
           <DocTable
@@ -8477,13 +8534,13 @@ libreyolo train --help-json > train_schema.json`}</CodeBlock>
     probs: Probs | None = None,
     obb: OBB | None = None,
     gaze: Gaze | None = None,
+    points: Points | None = None,
+    semantic_mask: SemanticMask | None = None,
+    depth_map: DepthMap | None = None,
+    restored: RestoredImage | None = None,
     speed: dict[str, float] | None = None,
     track_id = None,
     frame_idx: int | None = None,
-    semantic_mask: SemanticMask | None = None,
-    depth_map: DepthMap | None = None,
-    points: Points | None = None,
-    restored: RestoredImage | None = None,
     # New in v1.4.0 (placed after the complete v1.3 signature, so
     # positional v1.3 call sites keep working):
     panoptic: PanopticSegmentation | None = None,
@@ -8524,6 +8581,11 @@ result.keypoints.xy      # pose keypoint coordinates
 result.keypoints.xyn     # normalized keypoint coordinates
 result.keypoints.conf    # keypoint confidence when present
 
+result.obb.xywhr         # (N, 5): center x/y, width, height, rotation
+result.obb.xyxyxyxy      # (N, 4, 2): four oriented box corners
+result.obb.conf          # (N,) confidence scores
+result.obb.cls           # (N,) class IDs
+
 result.gaze.data         # (N, 2): pitch, yaw in radians
 result.gaze.pitch_deg    # pitch in degrees
 result.gaze.yaw_deg      # yaw in degrees
@@ -8541,8 +8603,8 @@ result.panoptic.segments_info  # per-segment {"id", "category_id", ...}
 result.matte.data              # (H, W) float32 alpha in [0, 1]
 result.ocr.polygons            # (N, 4, 2) text-region quads
 result.ocr.texts               # list[str] transcriptions
-result.ocr.confidence          # (N,) recognition scores
-result.ocr.det_confidence      # (N,) detection scores`}</CodeBlock>
+result.ocr.conf                # (N,) recognition scores
+result.ocr.det_conf            # (N,) detection scores`}</CodeBlock>
 
           <SubHeading>model.track()</SubHeading>
           <CodeBlock language="python">{`model.track(
