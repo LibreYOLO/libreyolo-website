@@ -5,24 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { X, Maximize2 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
-
-// Same parkour clip, three tasks, in motion. Each carries its model list, shown
-// under the video (so these tasks don't need their own section below).
-const VIDEOS = [
-  { src: '/showcase/parkour-detection.mp4', poster: '/showcase/parkour-detection-poster.jpg', label: 'Detection', models: ['YOLO9', 'RF-DETR', 'YOLOX', 'YOLO9-E2E', 'YOLO9-P2', 'YOLO-NAS', 'D-FINE', 'DEIM', 'DEIMv2', 'RT-DETR', 'RT-DETRv2', 'RT-DETRv4', 'PicoDet', 'RTMDet', 'EdgeCrafter'] },
-  { src: '/showcase/parkour-segmentation.mp4', poster: '/showcase/parkour-segmentation-poster.jpg', label: 'Segmentation', models: ['RF-DETR', 'EdgeCrafter', 'SAM', 'MobileSAM', 'SAM2'] },
-  { src: '/showcase/parkour-pose.mp4', poster: '/showcase/parkour-pose-poster.jpg', label: 'Keypoints', models: ['RF-DETR', 'EdgeCrafter', 'YOLO-NAS'] },
-]
-
-// The remaining tasks, each with an example image + model list.
-const TASKS = [
-  { title: 'Classification', image: '/showcase/task-classification.jpg', models: ['ConvNeXt', 'EfficientNetV2', 'MobileNetV4', 'DINOv2', 'ResNet', 'CLIP'] },
-  { title: 'Oriented boxes', image: '/showcase/task-obb.jpg', models: ['RF-DETR'] },
-  { title: 'Point & counting', image: '/showcase/task-point.jpg', models: ['FOMO'] },
-  { title: 'Gaze', image: '/showcase/task-gaze.gif', models: ['L2CS'] },
-  { title: 'Vision-language', image: '/showcase/task-vlm.jpg', models: ['Florence-2', 'InternVL3', 'Kosmos-2', 'LFM2-VL', 'Qwen3-VL', 'SmolVLM2'] },
-  { title: 'Depth', image: '/showcase/depth-reveal.gif', models: ['Depth Anything V2'] },
-]
+import { VIDEOS, TASKS } from '@/lib/showcase'
 
 // Small corner hint so people (especially on touch) know a tile opens larger.
 function ExpandBadge() {
