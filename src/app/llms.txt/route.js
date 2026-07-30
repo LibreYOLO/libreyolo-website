@@ -42,6 +42,7 @@ libreyolo.com is the official site of the LibreYOLO open-source library: documen
 - [v1.1.0](${SITE_URL}/docs/v1.1.0)
 
 ## Articles
+Every article is also available as raw markdown: append .md to its URL (or .zh.md for the Chinese translation).
 ${articleLines}
 
 ## Project links
