@@ -4,6 +4,15 @@ description: RTMDet is one of the fastest accurate detectors around. The officia
 date: 2026-06-27
 author: Xuban
 tags: [LibreYOLO, rtmdet, object-detection, tutorial]
+faq:
+  - q: "Why does mmcv fail to install with recent PyTorch?"
+    a: "The newest mmcv wheel, 2.2.0 from April 2024, only ships pre-built binaries up to torch 2.4 / CUDA 12.1. On any newer PyTorch, mmcv has to compile its C++/CUDA ops from source, which takes 10 to 30 minutes and needs a matching CUDA toolkit, nvcc, and a compatible C++ compiler. That is where errors like a missing mmcv._ext module come from."
+  - q: "Can I run RTMDet without installing mmdetection?"
+    a: "Yes. LibreYOLO loads RTMDet weights converted from the upstream OpenMMLab checkpoints, and inference is bit-equivalent to mmdetection on the same checkpoint. Load LibreRTMDets.pt by name and it auto-downloads; five sizes (Tiny to X) all run at 640 px."
+  - q: "Is RTMDet free for commercial use?"
+    a: "Yes. MMDetection and RTMDet are Apache 2.0, the converted weights carry the same Apache 2.0 terms, and LibreYOLO's code is MIT. No commercial restrictions."
+  - q: "When is mmdetection still the right choice?"
+    a: "If you need to train or fine-tune RTMDet with the full MMDetection augmentation pipeline, or you are already deep in the OpenMMLab ecosystem with mmcv working. For inference and deployment, LibreYOLO is the better path."
 ---
 
 RTMDet is a real-time detector from OpenMMLab that achieves strong COCO accuracy while staying fast enough for deployment. The architecture is clean. The install is not.

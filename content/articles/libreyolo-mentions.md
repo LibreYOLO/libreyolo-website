@@ -4,6 +4,11 @@ description: A running list of talks, blog posts, and community threads that men
 date: 2026-07-06
 author: Xuban
 tags: [LibreYOLO, community, mentions, press]
+faq:
+  - q: "Where has LibreYOLO been featured?"
+    a: "Highlights so far: a CVPR 2026 edge-AI tutorial by a Jabra and IT University of Copenhagen team, Lightly's Best Ultralytics Alternatives guide, a top-voted Hacker News comment recommending it as a license-clean alternative, r/computervision release threads with more than 90,000 combined views, and Queensland agtech firm Morgan Rural Tech listing it among the technologies they work with."
+  - q: "How do I get a LibreYOLO mention added to this page?"
+    a: "Open an issue on the LibreYOLO GitHub repository or reach out directly. Talks, blog posts, production uses, and community threads all qualify."
 ---
 
 This is a living page. Every so often LibreYOLO shows up somewhere: a conference tutorial, a comparison blog, a Reddit thread. This page collects those mentions in one place. It gets updated as new ones come in, so check back.

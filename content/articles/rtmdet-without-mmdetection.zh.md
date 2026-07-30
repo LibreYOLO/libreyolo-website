@@ -4,6 +4,15 @@ description: RTMDet 是目前速度最快、精度也很高的检测器之一。
 date: 2026-06-27
 author: Xuban
 tags: [LibreYOLO, rtmdet, object-detection, tutorial]
+faq:
+  - q: "为什么在较新的 PyTorch 上安装 mmcv 会失败？"
+    a: "最新的 mmcv wheel 是 2024 年 4 月发布的 2.2.0，预编译二进制只支持到 torch 2.4 / CUDA 12.1。在更新的 PyTorch 上，mmcv 必须从源码编译 C++/CUDA 算子，耗时 10 到 30 分钟，还需要匹配的 CUDA 工具链、nvcc 和兼容的 C++ 编译器。诸如找不到 mmcv._ext 模块之类的报错正是由此而来。"
+  - q: "可以不安装 mmdetection 就运行 RTMDet 吗？"
+    a: "可以。LibreYOLO 加载的 RTMDet 权重由上游 OpenMMLab 检查点转换而来，在同一检查点上推理结果与 mmdetection 逐位一致。按名称加载 LibreRTMDets.pt 即可自动下载；五个尺寸（Tiny 到 X）均以 640 px 运行。"
+  - q: "RTMDet 可以免费商用吗？"
+    a: "可以。MMDetection 和 RTMDet 均为 Apache 2.0，转换后的权重沿用同样的 Apache 2.0 条款，LibreYOLO 的代码是 MIT 许可。没有商业限制。"
+  - q: "什么情况下仍应选择 mmdetection？"
+    a: "如果你需要用完整的 MMDetection 数据增强管线训练或微调 RTMDet，或者你已经深入 OpenMMLab 生态且 mmcv 环境正常，就留在原生态。至于推理和部署，LibreYOLO 是更好的选择。"
 ---
 
 RTMDet 是 OpenMMLab 推出的实时检测器，它在 COCO 上取得了很高的精度，同时保持着足以用于部署的速度。它的架构很简洁，安装过程却并不简洁。

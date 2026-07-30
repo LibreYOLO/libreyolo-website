@@ -4,6 +4,13 @@ description: YOLO-NAS is one of the most accurate real-time detectors available 
 date: 2026-06-26
 author: Xuban
 tags: [LibreYOLO, yolo-nas, object-detection, tutorial]
+faq:
+  - q: "Is super-gradients still maintained?"
+    a: "No. Development stopped after Deci was acquired by NVIDIA, so issues go unanswered and pinned dependencies like torchmetrics 0.8 conflict with newer stacks. LibreYOLO is a maintained alternative that loads the same YOLO-NAS weights."
+  - q: "Can I use YOLO-NAS commercially?"
+    a: "The YOLO-NAS weights carry Deci's non-commercial license, and it applies no matter which library loads them. Research and non-commercial inference are fine; for a commercial product you need to talk to Deci. LibreYOLO's own code is MIT; the restriction is upstream."
+  - q: "When is super-gradients still the right choice?"
+    a: "Two cases: CoreML export, which LibreYOLO does not support for YOLO-NAS, and TensorRT, where super-gradients has documented, tested paths while LibreYOLO's YOLO-NAS TensorRT support is untested."
 ---
 
 YOLO-NAS posts some of the best accuracy-speed numbers of any real-time detector: the large variant hits 52.2 mAP on COCO while still running in real time. It has 3 size variants (S, M, L) as well as two task variants (detection, pose).

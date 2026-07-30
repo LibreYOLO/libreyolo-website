@@ -4,6 +4,13 @@ description: YOLOX is Apache 2.0, commercially clean, and still competitive. The
 date: 2026-06-26
 author: Xuban
 tags: [LibreYOLO, yolox, object-detection, tutorial]
+faq:
+  - q: "Is YOLOX free for commercial use?"
+    a: "Yes. YOLOX code and weights are both Apache 2.0, with no non-commercial restrictions and no platform lock-in. LibreYOLO's own code is MIT, so the whole stack stays commercially clean."
+  - q: "Is the original YOLOX repo still maintained?"
+    a: "No. pip install yolox still gives you version 0.3.0 from April 2022, the repo has been in maintenance-only mode since mid-2022, and its ONNX export depends on a private PyTorch API that was removed in PyTorch 2.x. CoreML export does not exist at all."
+  - q: "How do I run YOLOX on modern PyTorch?"
+    a: "Install LibreYOLO (pip install libreyolo) and load the weights by name: LibreYOLOXs.pt auto-downloads on first run. All six sizes work, and export covers ONNX, TorchScript, CoreML, OpenVINO, NCNN, TFLite, and TensorRT."
 ---
 
 YOLOX is an anchor-free detector from Megvii with seven model sizes ranging from 0.91M parameters (Nano) to 99.1M (X). The large variant hits 49.7 mAP on COCO val. It is Apache 2.0 on both code and weights, which makes it one of the few competitive detectors you can ship in a commercial product without any restrictions.

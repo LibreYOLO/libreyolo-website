@@ -4,6 +4,11 @@ description: 在丹佛举办的 CVPR 2026 上，来自 Jabra 和哥本哈根信�
 date: 2026-06-30
 author: Xuban
 tags: [LibreYOLO, yolox, edge-ai, cvpr]
+faq:
+  - q: "LibreYOLOXs 在边缘硬件上能跑多快？"
+    a: "在 CVPR 2026 教程中，LibreYOLOXs 在搭载 Hailo-8L 的 Raspberry Pi 5 上达到每帧 19.0 毫秒（52.6 FPS）；经 INT8 量化后在高通 QCS6490 的 HTP/DSP 上达到 6.69 毫秒。"
+  - q: "如何把 LibreYOLO 模型部署到边缘加速器？"
+    a: "先用 LibreYOLO 的导出功能导出 ONNX，再针对目标硬件编译：Hailo Dataflow Compiler 为 Hailo 芯片生成 HEF，SNPE / QAIRT / AI Hub 工具链覆盖高通 Snapdragon。这正是 CVPR 教程端到端演示的流程。"
 ---
 
 ![CVPR 2026，美国科罗拉多州丹佛，6 月 3-7 日](/articles/libreyolo-at-cvpr-2026/cvpr-denver-banner.png)

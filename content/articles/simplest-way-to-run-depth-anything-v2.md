@@ -4,6 +4,13 @@ description: Depth Anything V2 gives you state-of-the-art monocular depth. Here 
 date: 2026-06-26
 author: Xuban
 tags: [LibreYOLO, depth-anything-v2, depth-estimation, tutorial]
+faq:
+  - q: "What is the simplest way to run Depth Anything V2?"
+    a: "Two lines with LibreYOLO: load LibreDepthAnythingV2l-depth.pt by name and call predict with save=True. The weights auto-download on first use, and normalization, the colormap, and device placement are handled for you on CUDA, Apple Silicon, or plain CPU."
+  - q: "Can I use Depth Anything V2 commercially?"
+    a: "Only the Small encoder is Apache 2.0. Base, Large, and Giant are CC-BY-NC-4.0, so the strongest checkpoints are for non-commercial use. The upstream license applies no matter which library loads the weights."
+  - q: "Does LibreYOLO support training Depth Anything V2?"
+    a: "No. Training stays in the original repository; LibreYOLO covers inference, video, and validation for the depth task."
 ---
 
 ![Guggenheim Bilbao next to its depth map](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-bilbao-input-vs-depth.jpg)

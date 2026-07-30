@@ -4,6 +4,11 @@ description: 一份持续更新的清单，收集网络上提及 LibreYOLO 的�
 date: 2026-07-06
 author: Xuban
 tags: [LibreYOLO, community, mentions, press]
+faq:
+  - q: "LibreYOLO 都在哪些地方被提及过？"
+    a: "目前的亮点包括：Jabra 与哥本哈根信息技术大学团队的 CVPR 2026 边缘 AI 教程、Lightly 的 Best Ultralytics Alternatives 指南、Hacker News 上被顶到最高的推荐评论、r/computervision 上累计浏览量超过 9 万的发布帖，以及昆士兰农业科技公司 Morgan Rural Tech 将其列入所用技术。"
+  - q: "如何让新的 LibreYOLO 提及被收录到本页？"
+    a: "在 LibreYOLO 的 GitHub 仓库开一个 issue，或直接联系我们。演讲、博客文章、生产环境使用和社区讨论都符合收录条件。"
 ---
 
 这是一个持续更新的页面。LibreYOLO 时不时会出现在各种地方：一场会议教程、一篇对比博客、一个 Reddit 讨论帖。本页把这些提及汇总到一处，并会随着新内容的出现不断更新，欢迎常来看看。

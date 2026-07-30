@@ -4,6 +4,13 @@ description: YOLOX 采用 Apache 2.0 许可，可放心用于商业用途，且�
 date: 2026-06-26
 author: Xuban
 tags: [LibreYOLO, yolox, object-detection, tutorial]
+faq:
+  - q: "YOLOX 可以免费商用吗？"
+    a: "可以。YOLOX 的代码和权重均采用 Apache 2.0 许可，没有非商业限制，也没有平台绑定。LibreYOLO 自身的代码是 MIT 许可，整个技术栈都可以放心商用。"
+  - q: "YOLOX 官方仓库还在维护吗？"
+    a: "没有。pip install yolox 装到的仍是 2022 年 4 月的 0.3.0 版本，仓库自 2022 年年中起就处于仅维护状态，其 ONNX 导出依赖的 PyTorch 私有 API 已在 PyTorch 2.x 中被移除，CoreML 导出则完全不存在。"
+  - q: "如何在新版 PyTorch 上运行 YOLOX？"
+    a: "安装 LibreYOLO（pip install libreyolo），按名称加载权重：LibreYOLOXs.pt 首次运行时自动下载。六个尺寸全部可用，并支持导出 ONNX、TorchScript、CoreML、OpenVINO、NCNN、TFLite 和 TensorRT。"
 ---
 
 YOLOX 是旷视（Megvii）推出的无锚框（anchor-free）检测器，共有七种模型尺寸，参数量从 0.91M（Nano）到 99.1M（X）不等。large 变体在 COCO val 上达到 49.7 mAP。它的代码和权重都采用 Apache 2.0 许可，这使它成为少数几个可以毫无限制地用于商业产品的、有竞争力的检测器之一。

@@ -4,6 +4,11 @@ description: At CVPR 2026 in Denver, a Jabra and IT University of Copenhagen tea
 date: 2026-06-30
 author: Xuban
 tags: [LibreYOLO, yolox, edge-ai, cvpr]
+faq:
+  - q: "How fast does LibreYOLOXs run on edge hardware?"
+    a: "In the CVPR 2026 tutorial, LibreYOLOXs ran at 19.0 ms per frame (52.6 FPS) on a Raspberry Pi 5 with a Hailo-8L, and at 6.69 ms on a Qualcomm QCS6490's HTP/DSP after INT8 quantization."
+  - q: "How do I deploy a LibreYOLO model to an edge accelerator?"
+    a: "Export to ONNX with LibreYOLO's export call, then compile for the target: the Hailo Dataflow Compiler produces a HEF for Hailo chips, and the SNPE / QAIRT / AI Hub stack covers Qualcomm Snapdragon. That is the exact pipeline the CVPR tutorial walked end to end."
 ---
 
 ![CVPR 2026, Denver, Colorado, June 3-7](/articles/libreyolo-at-cvpr-2026/cvpr-denver-banner.png)

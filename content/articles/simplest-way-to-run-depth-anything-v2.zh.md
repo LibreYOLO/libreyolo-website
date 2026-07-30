@@ -4,6 +4,13 @@ description: Depth Anything V2 能提供业界领先的单目深度估计。下�
 date: 2026-06-26
 author: Xuban
 tags: [LibreYOLO, depth-anything-v2, depth-estimation, tutorial]
+faq:
+  - q: "运行 Depth Anything V2 最简单的方式是什么？"
+    a: "用 LibreYOLO 只需两行：按名称加载 LibreDepthAnythingV2l-depth.pt，再调用 predict 并设置 save=True。权重首次使用时自动下载，归一化、色彩映射和设备分配都已处理好，可在 CUDA、Apple Silicon 或纯 CPU 上运行。"
+  - q: "Depth Anything V2 可以商用吗？"
+    a: "只有 Small 编码器是 Apache 2.0。Base、Large 和 Giant 均为 CC-BY-NC-4.0，因此最强的检查点仅限非商业用途。无论用哪个库加载权重，上游许可都同样适用。"
+  - q: "LibreYOLO 支持训练 Depth Anything V2 吗？"
+    a: "不支持。训练仍在原始仓库中进行；LibreYOLO 覆盖深度任务的推理、视频和验证。"
 ---
 
 ![毕尔巴鄂古根海姆博物馆与其深度图的对比](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-bilbao-input-vs-depth.jpg)

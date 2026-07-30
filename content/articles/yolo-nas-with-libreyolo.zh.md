@@ -4,6 +4,13 @@ description: YOLO-NAS 是目前精度最高的实时检测器之一，但原始�
 date: 2026-06-26
 author: Xuban
 tags: [LibreYOLO, yolo-nas, object-detection, tutorial]
+faq:
+  - q: "super-gradients 还在维护吗？"
+    a: "没有。Deci 被 NVIDIA 收购后开发就停止了，问题无人回应，像 torchmetrics 0.8 这样的固定依赖也与较新的环境冲突。LibreYOLO 是一个持续维护的替代方案，加载的是同一套 YOLO-NAS 权重。"
+  - q: "YOLO-NAS 可以商用吗？"
+    a: "YOLO-NAS 权重带有 Deci 的非商业许可，无论用哪个库加载都同样适用。科研和非商业推理没有问题；商业产品需要与 Deci 洽谈。LibreYOLO 自身代码是 MIT 许可，限制来自上游。"
+  - q: "什么情况下仍应选择 super-gradients？"
+    a: "两种情况：CoreML 导出（LibreYOLO 不支持 YOLO-NAS 的 CoreML 导出），以及 TensorRT。super-gradients 有文档完善、经过测试的 TensorRT 路径，而 LibreYOLO 对 YOLO-NAS 的 TensorRT 支持尚未经过测试。"
 ---
 
 在所有实时检测器中，YOLO-NAS 拥有数一数二的精度-速度表现：large 变体在 COCO 上达到 52.2 mAP，同时仍能实时运行。它有 3 种尺寸变体（S、M、L），以及两种任务变体（检测、姿态）。
