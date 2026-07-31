@@ -17,6 +17,8 @@ import {
 import { routing } from '@/i18n/routing'
 import { Link } from '@/i18n/navigation'
 import ThemedEmbed from '@/components/ThemedEmbed'
+import RF100VLHero from '@/components/articles/rf100vl/RF100VLHero'
+import RF100VLResults from '@/components/articles/rf100vl/RF100VLResults'
 
 export function generateStaticParams() {
   return getAllArticles().map((article) => ({ slug: article.slug }))
@@ -123,6 +125,10 @@ const markdownComponents = {
   img: (props) => <img className="rounded-xl my-6 mx-auto" loading="lazy" {...props} />,
   hr: () => <hr className="border-surface-200 dark:border-surface-800 my-10" />,
   iframe: ThemedEmbed,
+  // Custom widgets an article can drop inline via raw-HTML tags in the markdown,
+  // e.g. <rf100vl-hero />. rehype-raw keeps unknown tags, so they land here.
+  'rf100vl-hero': () => <RF100VLHero />,
+  'rf100vl-results': () => <RF100VLResults />,
 }
 
 export default async function ArticlePage({ params }) {
