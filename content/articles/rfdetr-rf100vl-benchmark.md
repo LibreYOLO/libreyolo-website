@@ -3,6 +3,7 @@ title: "Benchmarking RF-DETR on RF100-VL: one model, one hundred datasets"
 description: We are running RF-DETR and 14 other detection families across all 100 RF100-VL datasets. Here is the benchmark explained, an interactive map of the datasets, and the first leaderboard.
 date: 2026-07-31
 author: Xuban
+layout: paper
 tags: [LibreYOLO, RF-DETR, RF100-VL, benchmark, object-detection, roboflow]
 faq:
   - q: "What is RF100-VL?"
@@ -23,9 +24,7 @@ This is the benchmark the RF-DETR paper used to claim state-of-the-art real-worl
 
 Chest x-rays next to conveyor belts. Coral reefs next to circuit boards. Aerial sheep counting next to invoice parsing. The spread is the point: a model that wins here did not memorize a domain.
 
-<rf100vl-hero></rf100vl-hero>
-
-Every dot is one dataset, colored by domain, orbiting one ring per domain. Hover (or tap) a dot and the background shows you an annotated sample from that dataset. The rings are sized by domain: industrial and flora/fauna carry the most datasets, sports the fewest.
+Every planet orbiting RF-DETR at the top of this page is one of the 100 datasets: the thumbnail is a real annotated sample, the orbit is its domain. Hover a planet (or a domain in the legend) to explore. The rings are sized by domain: industrial and flora/fauna carry the most datasets, sports the fewest.
 
 A few things that make RF100-VL genuinely hard:
 
