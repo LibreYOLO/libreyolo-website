@@ -1,6 +1,6 @@
 ---
 title: "Benchmarking RF-DETR on RF100-VL: one model, one hundred datasets"
-description: We are running RF-DETR and 14 other detection families across all 100 RF100-VL datasets. Here is the benchmark explained, an interactive map of the datasets, and the first leaderboard.
+description: We are running RF-DETR and 14 other detection families across all 100 RF100-VL datasets. Here is the benchmark explained, an interactive map of the datasets, and the first two verified results.
 date: 2026-07-31
 author: Xuban
 tags: [LibreYOLO, RF-DETR, RF100-VL, benchmark, object-detection, roboflow]
@@ -8,11 +8,11 @@ faq:
   - q: "What is RF100-VL?"
     a: "RF100-VL is a benchmark of 100 real-world object detection datasets collected from Roboflow Universe, spanning seven domains: aerial, document, flora and fauna, industrial, medical, sports, and a misc category. It was introduced by Roboflow to measure how well detectors generalize beyond COCO, and it is the benchmark used in the RF-DETR paper."
   - q: "What is the RF100-VL protocol in this report?"
-    a: "For each model family we fine-tune the COCO-pretrained checkpoint for 100 epochs on each dataset's train split, then evaluate on that dataset's test split. We report mAP50 and mAP50-95 averaged over the datasets that completed, plus the median training time per dataset."
-  - q: "Which model won the RF100-VL sweep?"
-    a: "In the preliminary sweep, RF-DETR S leads with 0.562 mAP50-95 and 0.784 mAP50, ahead of EC, DEIMv2, RT-DETRv4 and DEIM, all near 0.55. YOLO-NAS S is the best accuracy-per-hour trade-off at 0.544 mAP50-95 with about 37 minutes of training per dataset."
-  - q: "Why do RTMDet and PicoDet score near zero on RF100-VL?"
-    a: "They are not broken: both train and produce detections on a subset of datasets, but the default fine-tuning recipe fails to converge on most of the 100 mostly small datasets. The heads use plain BCE which also conflicts with AMP autocasting. A validated small-dataset recipe for these two families is still open work."
+    a: "For each model family we fine-tune the COCO-pretrained checkpoint for 100 epochs on each dataset's train split, then score that dataset's test split with pycocotools at maxDets 500. We report the unweighted mean of mAP50 and mAP50-95 across the 100 datasets, plus the median training time per dataset. A run only counts as a result when all 100 datasets completed."
+  - q: "Which models have completed the RF100-VL sweep so far?"
+    a: "Two: YOLOv9-S at 0.559 mAP50-95 and 0.814 mAP50, and YOLOv9-T at 0.540 mAP50-95 and 0.796 mAP50. Both trained and scored all 100 datasets with none skipped, at a median of roughly 33 minutes per dataset. The other families are still running and are not listed until they finish a full 100."
+  - q: "Where can I check the RF100-VL numbers myself?"
+    a: "Every artifact is published at huggingface.co/datasets/LibreYOLO/rf100-vl-results: the per-dataset training configs, per-epoch metrics, logs, GPU telemetry, scoring inputs and the submission JSON. Each run carries a manifest.json pinning the exact LibreYOLO and harness commits that produced it."
 ---
 
 COCO has 80 classes and a decade of overfitting behind it. If you want to know whether a detector actually works in the real world, you need a harder test. That test is **RF100-VL**: 100 datasets pulled from Roboflow Universe, crowdsourced from real projects, and grouped into seven domains: aerial, document, flora and fauna, industrial, medical, sports, and everything else.
@@ -36,16 +36,18 @@ A few things that make RF100-VL genuinely hard:
 
 ## The protocol
 
-For each family we take the COCO-pretrained checkpoint at the smallest practical size (S for most, R18 for RT-DETR, T for YOLOv9 E2E) and fine-tune 100 epochs at 640 px (576 for RF-DETR). Then `model.val(split="test")`. We track three numbers per family: **mAP50**, **mAP50-95**, and the **median wall-clock training time** per dataset, because accuracy you cannot afford to train is not accuracy.
+For each family we take the COCO-pretrained checkpoint at the smallest practical size (S for most, R18 for RT-DETR, T for YOLOv9 E2E) and fine-tune 100 epochs at 640 px (576 for RF-DETR). Then `model.val(split="test")`, scored with pycocotools at maxDets 500. We track three numbers per family: **mAP50**, **mAP50-95**, and the **median wall-clock training time** per dataset, because accuracy you cannot afford to train is not accuracy.
+
+One rule governs what appears below: a family is listed only after it has trained and scored all 100 datasets from a clean state under one set of commits. A partial sweep is a debugging artifact, not a result, so it is not shown here at any confidence level.
 
 <rf100vl-results></rf100vl-results>
 
-## Reading the leaderboard
+## Reading the results
 
-The table stings a little, and that is the point: on 100 diverse datasets, architecture choice moves the needle by tenths of mAP, not percentage points.
+Two families have finished a full 100 so far, and both are YOLOv9. That is not a ranking yet, so read it as two reference points rather than a podium.
 
-* **The transformer detectors own the top.** RF-DETR S leads at 0.562 mAP50-95, with EC, DEIMv2, RT-DETRv4 and DEIM packed within 0.014 behind it. They are also 3 to 5 times slower to train than the YOLO-style families.
-* **YOLO-NAS S is the efficiency king.** 0.544 mAP50-95 at roughly 37 minutes per dataset, finishing all 100 datasets. If you retrain weekly, this row matters more than the crown.
-* **Two families collapse.** RTMDet and PicoDet floor near zero on most datasets. They are not broken models; their default recipes simply do not converge on small-data fine-tuning. Recipe, not architecture, is the bottleneck there.
+* **Capacity buys less than you would guess.** YOLOv9-S carries 3.6 times the parameters of YOLOv9-T and converts that into 0.019 mAP50-95, from 0.540 to 0.559. On 100 diverse datasets, architecture and scale move the needle by hundredths, not percentage points.
+* **Training cost is flat between them.** Both sit near 33 minutes per dataset in the median, so the larger model is close to free here. Fine-tuning on a few hundred images is dominated by fixed per-dataset overhead, not by model size.
+* **The spread across datasets dwarfs the spread across models.** The gap between the two models is far smaller than the gap between the easiest and hardest datasets for either one. Which datasets resemble your problem matters more than which of these two you pick.
 
-The full per-dataset breakdown, failure analysis, and training curves land in the final report. Until then, the leaderboard above updates as the sweep progresses.
+Every number above is traceable to a published run, and a family appears only once it has trained and scored all 100 datasets. The full per-dataset breakdown, failure analysis and training curves land in the final report; until then this page grows as each sweep finishes.
