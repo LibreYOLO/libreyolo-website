@@ -15,6 +15,8 @@ faq:
     a: "Every artifact is published at huggingface.co/datasets/LibreYOLO/rf100-vl-results: the per-dataset training configs, per-epoch metrics, logs, GPU telemetry, scoring inputs and the submission JSON. Each run carries a manifest.json pinning the exact LibreYOLO and harness commits that produced it."
 ---
 
+<under-construction></under-construction>
+
 COCO has 80 classes and a decade of overfitting behind it. If you want to know whether a detector actually works in the real world, you need a harder test. That test is **RF100-VL**: 100 datasets pulled from Roboflow Universe, crowdsourced from real projects, and grouped into seven domains: aerial, document, flora and fauna, industrial, medical, sports, and everything else.
 
 We are running it across **15 detection families** in LibreYOLO: one representative model per family, fine-tuned for 100 epochs on each dataset's `train` split, then evaluated on its `test` split. 15 families x 100 datasets means 1,500 training runs. This article is the living report.

@@ -19,6 +19,7 @@ import { Link } from '@/i18n/navigation'
 import ThemedEmbed from '@/components/ThemedEmbed'
 import RF100VLHero from '@/components/articles/rf100vl/RF100VLHero'
 import RF100VLResults from '@/components/articles/rf100vl/RF100VLResults'
+import UnderConstruction from '@/components/articles/UnderConstruction'
 
 export function generateStaticParams() {
   return getAllArticles().map((article) => ({ slug: article.slug }))
@@ -129,6 +130,7 @@ const markdownComponents = {
   // e.g. <rf100vl-hero />. rehype-raw keeps unknown tags, so they land here.
   'rf100vl-hero': () => <RF100VLHero />,
   'rf100vl-results': () => <RF100VLResults />,
+  'under-construction': () => <UnderConstruction />,
 }
 
 export default async function ArticlePage({ params }) {
