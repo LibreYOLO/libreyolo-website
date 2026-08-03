@@ -83,7 +83,7 @@ export default function RF100VLHero() {
 
   return (
     <section
-      aria-label="Interactive map of the 100 RF100-VL datasets orbiting RF-DETR"
+      aria-label="Interactive map of the 100 RF100-VL datasets, grouped by domain"
       className="rf-hero not-prose my-10"
       style={{ width: 'min(96vw, 1280px)', marginLeft: 'calc(50% - min(48vw, 640px))' }}
     >
@@ -98,7 +98,7 @@ export default function RF100VLHero() {
           The benchmark
         </p>
         <h2 className="mt-2 text-2xl md:text-4xl font-bold text-white tracking-tight">
-          One model, one hundred datasets
+          One hundred datasets, one recipe
         </h2>
         <p className="mt-2 md:mt-3 text-xs md:text-sm text-surface-400 max-w-xl mx-auto">
           RF100-VL spans seven domains, from chest x-rays to conveyor belts. Hover the
@@ -120,9 +120,9 @@ export default function RF100VLHero() {
           />
         ))}
 
-        {/* RF-DETR core */}
+        {/* benchmark core: the datasets are the subject, not any one model */}
         <div className="rf-core">
-          <span className="rf-core-pill">RF-DETR</span>
+          <span className="rf-core-pill">RF100-VL</span>
           <div className="rf-core-sub">100 datasets</div>
         </div>
 

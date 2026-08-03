@@ -1,12 +1,12 @@
 ---
-title: "Benchmarking RF-DETR on RF100-VL: one model, one hundred datasets"
-description: We are running RF-DETR and 14 other detection families across all 100 RF100-VL datasets. Here is the benchmark explained, an interactive map of the datasets, and the first two verified results.
+title: "RF100-VL: benchmarking detectors on one hundred real datasets"
+description: We are running 15 detection families across all 100 RF100-VL datasets. Here is the benchmark explained, an interactive map of the datasets, and the first two verified results.
 date: 2026-07-31
 author: Xuban
-tags: [LibreYOLO, RF-DETR, RF100-VL, benchmark, object-detection, roboflow]
+tags: [LibreYOLO, RF100-VL, benchmark, object-detection, roboflow]
 faq:
   - q: "What is RF100-VL?"
-    a: "RF100-VL is a benchmark of 100 real-world object detection datasets collected from Roboflow Universe, spanning seven domains: aerial, document, flora and fauna, industrial, medical, sports, and a misc category. It was introduced by Roboflow to measure how well detectors generalize beyond COCO, and it is the benchmark used in the RF-DETR paper."
+    a: "RF100-VL is a benchmark of 100 real-world object detection datasets collected from Roboflow Universe, spanning seven domains: aerial, document, flora and fauna, industrial, medical, sports, and a misc category. It was introduced by Roboflow to measure how well detectors generalize beyond COCO. It is a dataset benchmark, not a model: any detector can be evaluated on it."
   - q: "What is the RF100-VL protocol in this report?"
     a: "For each model family we fine-tune the COCO-pretrained checkpoint for 100 epochs on each dataset's train split, then score that dataset's test split with pycocotools at maxDets 500. We report the unweighted mean of mAP50 and mAP50-95 across the 100 datasets, plus the median training time per dataset. A run only counts as a result when all 100 datasets completed."
   - q: "Which models have completed the RF100-VL sweep so far?"
@@ -17,7 +17,7 @@ faq:
 
 COCO has 80 classes and a decade of overfitting behind it. If you want to know whether a detector actually works in the real world, you need a harder test. That test is **RF100-VL**: 100 datasets pulled from Roboflow Universe, crowdsourced from real projects, and grouped into seven domains: aerial, document, flora and fauna, industrial, medical, sports, and everything else.
 
-This is the benchmark the RF-DETR paper used to claim state-of-the-art real-world accuracy, and it is the benchmark we are running across **15 detection families** in LibreYOLO: one representative model per family, fine-tuned for 100 epochs on each dataset's `train` split, then evaluated on its `test` split. 15 families x 100 datasets means 1,500 training runs. This article is the living report.
+We are running it across **15 detection families** in LibreYOLO: one representative model per family, fine-tuned for 100 epochs on each dataset's `train` split, then evaluated on its `test` split. 15 families x 100 datasets means 1,500 training runs. This article is the living report.
 
 ## The 100 datasets
 

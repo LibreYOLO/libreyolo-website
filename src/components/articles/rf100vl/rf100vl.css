@@ -1,4 +1,4 @@
-/* RF100-VL orbit hero: RF-DETR core, 100 datasets on 7 domain rings.
+/* RF100-VL orbit hero: benchmark core, 100 datasets on 7 domain rings.
    Orbit mechanics follow the same CSS-only approach as the MODUS page:
    each node is a zero-size pivot at the orbit center that rotates while
    translated out by its ring radius. Nodes are circular dots, so no
@@ -188,7 +188,7 @@
   opacity: 1;
 }
 
-/* RF-DETR core pill */
+/* benchmark core pill */
 .rf-core {
   position: absolute;
   top: 50%;
