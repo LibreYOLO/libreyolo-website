@@ -1,0 +1,992 @@
+/* RF100-VL paper hero: academic paper landing page (MODUS / rf100-vl.org
+   style) with a "data galaxy" of 100 dataset planets on 7 domain orbits.
+   Light by default, like the reference paper pages; `.dark` overrides follow
+   the site theme.
+
+   Orbit mechanics: each node is a zero-size pivot at the orbit center that
+   rotates while translated out by its ring radius. Planets are thumbnails,
+   so an inner layer counter-rotates to keep the image upright. */
+
+.rfp-hero {
+  --rf-r1: 54px;
+  --rf-r2: 80px;
+  --rf-r3: 104px;
+  --rf-r4: 128px;
+  --rf-r5: 152px;
+  --rf-r6: 176px;
+  --rf-r7: 200px;
+  --rf-planet: 18px;
+  --rf-rt: 17px;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 85% 55% at 50% 30%, rgba(8, 145, 178, 0.07) 0%, transparent 62%),
+    linear-gradient(180deg, #fafbfd 0%, #f4f7fa 55%, #eef2f7 100%);
+}
+.dark .rfp-hero {
+  background:
+    radial-gradient(ellipse 85% 55% at 50% 30%, rgba(8, 145, 178, 0.14) 0%, transparent 62%),
+    radial-gradient(ellipse 60% 45% at 78% 78%, rgba(16, 185, 129, 0.05) 0%, transparent 60%),
+    linear-gradient(180deg, #030b14 0%, #020617 45%, #01040d 100%);
+}
+
+@media (min-width: 768px) {
+  .rfp-hero {
+    --rf-r1: 100px;
+    --rf-r2: 142px;
+    --rf-r3: 184px;
+    --rf-r4: 226px;
+    --rf-r5: 268px;
+    --rf-r6: 314px;
+    --rf-r7: 362px;
+    --rf-planet: 30px;
+    --rf-rt: 30px;
+  }
+}
+
+/* tiny star field: dark mode only */
+.rfp-stars {
+  display: none;
+}
+.dark .rfp-stars {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 12% 22%, rgba(255, 255, 255, 0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 68% 8%, rgba(255, 255, 255, 0.35) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 42% 66%, rgba(165, 243, 252, 0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 86% 48%, rgba(255, 255, 255, 0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 28% 88%, rgba(255, 255, 255, 0.25) 0%, transparent 100%);
+  background-size: 420px 420px, 340px 340px, 520px 520px, 280px 280px, 380px 380px;
+  opacity: 0.7;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 40%, transparent 90%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 40%, transparent 90%);
+}
+
+/* faint grid, fading out toward the edges */
+.rfp-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(8, 145, 178, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(8, 145, 178, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, black 25%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, black 25%, transparent 75%);
+  pointer-events: none;
+}
+.dark .rfp-grid {
+  background-image:
+    linear-gradient(rgba(103, 232, 249, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(103, 232, 249, 0.04) 1px, transparent 1px);
+}
+
+/* dataset sample that fills the backdrop on hover / auto-cycle */
+.rfp-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.rfp-bg.is-on {
+  opacity: 1;
+}
+.rfp-bg img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.05);
+  animation: rfp-bg-in 1.1s ease-out forwards;
+}
+.rfp-bg::after {
+  /* keep the masthead and orbit readable over any image: MODUS-style faded
+     wash in light mode, dark vignette in dark mode */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 62% 55% at 50% 55%, rgba(250, 251, 253, 0.72) 0%, rgba(250, 251, 253, 0.9) 100%),
+    linear-gradient(180deg, rgba(250, 251, 253, 0.96) 0%, rgba(250, 251, 253, 0.7) 45%, rgba(250, 251, 253, 0.96) 100%);
+}
+.dark .rfp-bg::after {
+  background:
+    radial-gradient(ellipse 62% 55% at 50% 55%, rgba(2, 6, 23, 0.6) 0%, rgba(2, 6, 23, 0.85) 100%),
+    linear-gradient(180deg, rgba(2, 6, 23, 0.92) 0%, rgba(2, 6, 23, 0.55) 45%, rgba(2, 6, 23, 0.92) 100%);
+}
+@keyframes rfp-bg-in {
+  from { opacity: 0; transform: scale(1.05); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.rfp-orbit {
+  position: relative;
+  margin: 2rem auto 0;
+  width: min(100%, 840px);
+  height: 460px;
+  animation: rfp-orbit-in 1s ease-out both;
+}
+@media (min-width: 768px) {
+  .rfp-orbit {
+    margin-top: 3rem;
+    height: 800px;
+  }
+}
+@keyframes rfp-orbit-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* orbit outlines */
+.rfp-ring-outline {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(var(--r) * 2);
+  height: calc(var(--r) * 2);
+  border-radius: 50%;
+  border: 1px solid rgba(15, 23, 42, 0.09);
+  pointer-events: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.dark .rfp-ring-outline {
+  border-color: rgba(148, 163, 184, 0.1);
+}
+.rfp-ring-outline.is-hot,
+.dark .rfp-ring-outline.is-hot {
+  border-color: color-mix(in srgb, var(--c) 55%, transparent);
+  box-shadow:
+    0 0 24px -8px color-mix(in srgb, var(--c) 45%, transparent),
+    inset 0 0 24px -12px color-mix(in srgb, var(--c) 35%, transparent);
+}
+
+/* the rotating pivot (planets and domain chips share it) */
+.rf-sat {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  animation: rf-orbit var(--dur) linear infinite;
+  animation-delay: calc(-1 * var(--dur) * var(--phase));
+  will-change: transform;
+}
+.rf-rev .rf-sat {
+  animation-name: rf-orbit-rev;
+}
+@keyframes rf-orbit {
+  from { transform: rotate(0deg) translateY(calc(-1 * var(--r))); }
+  to { transform: rotate(360deg) translateY(calc(-1 * var(--r))); }
+}
+@keyframes rf-orbit-rev {
+  from { transform: rotate(0deg) translateY(calc(-1 * var(--r))); }
+  to { transform: rotate(-360deg) translateY(calc(-1 * var(--r))); }
+}
+
+/* counter-rotation so thumbnails and labels stay upright */
+.rf-upright {
+  position: relative;
+  width: 0;
+  height: 0;
+  animation: rf-counter var(--dur) linear infinite;
+  animation-delay: calc(-1 * var(--dur) * var(--phase));
+  will-change: transform;
+}
+.rf-rev .rf-upright {
+  animation-name: rf-counter-rev;
+}
+@keyframes rf-counter {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+@keyframes rf-counter-rev {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* dataset planet: a tiny circular sample of the dataset itself */
+.rfp-planet {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--rf-planet);
+  height: var(--rf-planet);
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  background: #fff;
+  box-shadow:
+    0 0 0 1.5px color-mix(in srgb, var(--c) 80%, transparent),
+    0 1px 6px rgba(15, 23, 42, 0.14);
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.25s ease,
+    opacity 0.25s ease;
+}
+.dark .rfp-planet {
+  background: #0b1220;
+  box-shadow:
+    0 0 0 1.5px color-mix(in srgb, var(--c) 80%, transparent),
+    0 0 10px -2px color-mix(in srgb, var(--c) 55%, transparent);
+}
+.rfp-planet img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+.rfp-planet:hover,
+.rfp-planet:focus-visible,
+.rfp-planet.is-active {
+  transform: translate(-50%, -50%) scale(2.1);
+  z-index: 30;
+  box-shadow:
+    0 0 0 2px rgba(15, 23, 42, 0.9),
+    0 6px 22px -2px color-mix(in srgb, var(--c) 60%, transparent);
+}
+.dark .rfp-planet:hover,
+.dark .rfp-planet:focus-visible,
+.dark .rfp-planet.is-active {
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.95),
+    0 0 22px 2px color-mix(in srgb, var(--c) 80%, transparent);
+}
+.rfp-planet.is-dim {
+  opacity: 0.3;
+}
+.rfp-planet:focus-visible {
+  outline: none;
+}
+
+/* orbiting domain chip (kept upright by .rf-upright) */
+.rf-label-sat {
+  display: none;
+}
+@media (min-width: 768px) {
+  .rf-label-sat {
+    display: block;
+    z-index: 20;
+  }
+}
+.rfp-ring-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--c) 60%, #0f172a);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid color-mix(in srgb, var(--c) 45%, transparent);
+  border-radius: 999px;
+  padding: 3px 11px;
+  pointer-events: none;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.dark .rfp-ring-label {
+  color: var(--c);
+  background: rgba(2, 6, 23, 0.88);
+  border-color: color-mix(in srgb, var(--c) 40%, transparent);
+}
+.rfp-ring-label.is-hot {
+  border-color: color-mix(in srgb, var(--c) 90%, transparent);
+  box-shadow: 0 0 16px -4px color-mix(in srgb, var(--c) 80%, transparent);
+}
+
+/* pause + spotlight while the user explores */
+.rfp-orbit.rfp-paused .rf-sat,
+.rfp-orbit.rfp-paused .rf-upright {
+  animation-play-state: paused;
+}
+
+/* Benchmark core: dark pill anchor in both themes, like the MODUS core */
+.rfp-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  text-align: center;
+  pointer-events: none;
+}
+.rfp-core::before {
+  content: '';
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  width: 190px;
+  height: 190px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(8, 145, 178, 0.16) 0%, transparent 70%);
+  animation: rfp-pulse 3.6s ease-in-out infinite;
+}
+@keyframes rfp-pulse {
+  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.12); }
+}
+.rfp-core-pill {
+  display: inline-block;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #ecfeff;
+  font-size: 14px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: linear-gradient(145deg, #0e7490 0%, #0891b2 55%, #155e75 100%);
+  border: 1px solid rgba(103, 232, 249, 0.35);
+  box-shadow:
+    0 10px 34px rgba(8, 145, 178, 0.35),
+    0 0 0 7px rgba(8, 145, 178, 0.07),
+    0 0 0 14px rgba(8, 145, 178, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+@media (min-width: 768px) {
+  .rfp-core-pill { font-size: 21px; padding: 13px 28px; }
+}
+.rfp-core-sub {
+  margin-top: 8px;
+  font-size: 9px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(21, 94, 117, 0.7);
+}
+.dark .rfp-core-sub {
+  color: rgba(165, 243, 252, 0.55);
+}
+@media (min-width: 768px) {
+  .rfp-core-sub { font-size: 11px; }
+}
+
+/* bottom info card for the active dataset */
+.rfp-info {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%) translateY(8px);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: min(92vw, 460px);
+  padding: 8px 16px 8px 8px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.dark .rfp-info {
+  background: rgba(2, 6, 23, 0.78);
+  border-color: rgba(103, 232, 249, 0.18);
+  box-shadow: none;
+}
+.rfp-info.is-on {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.rfp-info img {
+  width: 64px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  flex-shrink: 0;
+}
+.dark .rfp-info img {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.rfp-info-name {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 56vw;
+}
+.dark .rfp-info-name {
+  color: #f1f5f9;
+}
+.rfp-info-domain {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 3px;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+.dark .rfp-info-domain {
+  color: #94a3b8;
+}
+.rfp-swatch {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+@media (min-width: 768px) {
+  .rfp-info { bottom: 22px; }
+  .rfp-info img { width: 84px; height: 58px; }
+  .rfp-info-name { font-size: 14px; }
+}
+
+/* interactive legend chips */
+.rfp-legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(255, 255, 255, 0.65);
+  font-size: 11px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: border-color 0.25s ease, background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+.dark .rfp-legend-chip {
+  border-color: rgba(148, 163, 184, 0.18);
+  background: rgba(148, 163, 184, 0.04);
+  color: #94a3b8;
+}
+.rfp-legend-chip:hover,
+.rfp-legend-chip:focus-visible,
+.rfp-legend-chip.is-hot {
+  border-color: color-mix(in srgb, var(--c) 55%, transparent);
+  background: color-mix(in srgb, var(--c) 12%, transparent);
+  color: #0f172a;
+  box-shadow: 0 0 16px -6px color-mix(in srgb, var(--c) 60%, transparent);
+}
+.dark .rfp-legend-chip:hover,
+.dark .rfp-legend-chip:focus-visible,
+.dark .rfp-legend-chip.is-hot {
+  color: #e2e8f0;
+}
+.rfp-legend-chip:focus-visible {
+  outline: none;
+}
+.rfp-legend-count {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 10px;
+  color: #94a3b8;
+}
+.dark .rfp-legend-count {
+  color: #64748b;
+}
+.rfp-legend-chip:hover .rfp-legend-count,
+.rfp-legend-chip.is-hot .rfp-legend-count {
+  color: #334155;
+}
+.dark .rfp-legend-chip:hover .rfp-legend-count,
+.dark .rfp-legend-chip.is-hot .rfp-legend-count {
+  color: #cbd5e1;
+}
+
+/* ==================================================================== */
+/* ART MODE: seven thick themed domain rings around a prominent benchmark core */
+/* ==================================================================== */
+
+.rfa-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: rfp-orbit-in 0.8s ease-out both;
+}
+
+/* annulus body: soft conic tint + dotted texture, masked to a thick ring */
+.rfa-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(var(--r) * 2 + var(--rf-rt));
+  height: calc(var(--r) * 2 + var(--rf-rt));
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--c) 30%, transparent);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.rfa-ring::after {
+  content: '';
+  position: absolute;
+  inset: calc(var(--rf-rt) - 1px);
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--c) 24%, transparent);
+}
+.rfa-ring::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  background:
+    radial-gradient(color-mix(in srgb, var(--c) 30%, transparent) 1px, transparent 1.5px),
+    conic-gradient(
+      from 25deg,
+      color-mix(in srgb, var(--c) 24%, #ffffff) 0%,
+      color-mix(in srgb, var(--c) 9%, #ffffff) 22%,
+      color-mix(in srgb, var(--c) 20%, #ffffff) 47%,
+      color-mix(in srgb, var(--c) 7%, #ffffff) 71%,
+      color-mix(in srgb, var(--c) 24%, #ffffff) 100%
+    );
+  background-size: 17px 17px, auto;
+  -webkit-mask: radial-gradient(
+    circle,
+    transparent calc(var(--r) - var(--rf-rt) / 2),
+    #000 calc(var(--r) - var(--rf-rt) / 2 + 1.5px)
+  );
+  mask: radial-gradient(
+    circle,
+    transparent calc(var(--r) - var(--rf-rt) / 2),
+    #000 calc(var(--r) - var(--rf-rt) / 2 + 1.5px)
+  );
+  opacity: 0.85;
+  transition: opacity 0.3s ease;
+}
+.dark .rfa-ring::before {
+  background:
+    radial-gradient(color-mix(in srgb, var(--c) 38%, transparent) 1px, transparent 1.5px),
+    conic-gradient(
+      from 25deg,
+      color-mix(in srgb, var(--c) 28%, transparent) 0%,
+      color-mix(in srgb, var(--c) 9%, transparent) 22%,
+      color-mix(in srgb, var(--c) 24%, transparent) 47%,
+      color-mix(in srgb, var(--c) 7%, transparent) 71%,
+      color-mix(in srgb, var(--c) 28%, transparent) 100%
+    );
+  background-size: 17px 17px, auto;
+}
+.rfa-ring.is-hot {
+  border-color: color-mix(in srgb, var(--c) 65%, transparent);
+  box-shadow:
+    0 0 34px -10px color-mix(in srgb, var(--c) 55%, transparent),
+    inset 0 0 30px -14px color-mix(in srgb, var(--c) 40%, transparent);
+}
+.rfa-ring.is-hot::before {
+  opacity: 1;
+}
+
+/* motif icons drifting along each ring */
+.rfa-ic {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  opacity: 0.9;
+  filter: drop-shadow(0 1px 1.5px rgba(15, 23, 42, 0.18));
+}
+.dark .rfa-ic {
+  opacity: 0.95;
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.55));
+}
+@media (max-width: 767px) {
+  .rfa-icon-sat:nth-child(even) {
+    display: none;
+  }
+  .rfa-ic svg {
+    width: 11px;
+    height: 11px;
+  }
+}
+
+/* bigger label chip in art mode */
+.rfa-ring-label {
+  font-size: 11px;
+  padding: 5px 14px;
+  letter-spacing: 0.18em;
+}
+
+/* prominent benchmark core with the explore call-to-action */
+.rfa-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  pointer-events: none;
+}
+.rfa-core::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 240px;
+  height: 240px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(8, 145, 178, 0.16) 0%, transparent 70%);
+  animation: rfp-pulse 3.6s ease-in-out infinite;
+}
+.rfa-core-pill {
+  position: relative;
+  display: inline-block;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #ecfeff;
+  font-size: 19px;
+  padding: 12px 28px;
+  border-radius: 999px;
+  background: linear-gradient(145deg, #0e7490 0%, #0891b2 55%, #155e75 100%);
+  border: 1px solid rgba(103, 232, 249, 0.35);
+  box-shadow:
+    0 12px 40px rgba(8, 145, 178, 0.38),
+    0 0 0 8px rgba(8, 145, 178, 0.07),
+    0 0 0 16px rgba(8, 145, 178, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+@media (min-width: 768px) {
+  .rfa-core-pill { font-size: 30px; padding: 17px 42px; }
+}
+.rfa-core-sub {
+  position: relative;
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(21, 94, 117, 0.75);
+  max-width: 240px;
+}
+.dark .rfa-core-sub {
+  color: rgba(165, 243, 252, 0.6);
+}
+@media (min-width: 768px) {
+  .rfa-core-sub { font-size: 11px; max-width: none; }
+}
+.rfa-explore-btn {
+  position: relative;
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, #0891b2 0%, #10b981 100%);
+  box-shadow:
+    0 10px 30px rgba(8, 145, 178, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+@media (min-width: 768px) {
+  .rfa-explore-btn { font-size: 14px; padding: 12px 26px; }
+}
+.rfa-explore-btn:hover,
+.rfa-explore-btn:focus-visible {
+  transform: translateY(-2px);
+  filter: brightness(1.07);
+  box-shadow:
+    0 16px 40px rgba(8, 145, 178, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.rfa-explore-btn:focus-visible {
+  outline: 2px solid rgba(8, 145, 178, 0.6);
+  outline-offset: 3px;
+}
+
+/* ==================================================================== */
+/* EXPLORE MODE                                                          */
+/* ==================================================================== */
+
+.rfe-layer {
+  position: absolute;
+  inset: 0;
+  animation: rfp-orbit-in 0.7s ease-out both;
+}
+
+.rfe-exit {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  z-index: 45;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  background: rgba(255, 255, 255, 0.78);
+  color: #334155;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.rfe-exit:hover,
+.rfe-exit:focus-visible {
+  background: rgba(255, 255, 255, 0.95);
+  color: #0f172a;
+  border-color: rgba(15, 23, 42, 0.3);
+}
+.dark .rfe-exit {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(2, 6, 23, 0.6);
+  color: #cbd5e1;
+}
+.dark .rfe-exit:hover,
+.dark .rfe-exit:focus-visible {
+  background: rgba(2, 6, 23, 0.85);
+  color: #f1f5f9;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ==================================================================== */
+/* DATASET DRAWER (lateral explorer)                                     */
+/* ==================================================================== */
+
+.rfd-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: rgba(2, 6, 23, 0.45);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: rfd-fade 0.3s ease both;
+}
+@keyframes rfd-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.rfd-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 71;
+  width: min(100vw, 440px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: #ffffff;
+  border-left: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: -24px 0 70px rgba(2, 6, 23, 0.28);
+  animation: rfd-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.dark .rfd-drawer {
+  background: #060b18;
+  border-left-color: rgba(255, 255, 255, 0.08);
+}
+@keyframes rfd-in {
+  from { transform: translateX(60px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+.rfd-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  background: rgba(15, 23, 42, 0.05);
+  color: #475569;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.rfd-close:hover,
+.rfd-close:focus-visible {
+  background: rgba(15, 23, 42, 0.12);
+  color: #0f172a;
+}
+.dark .rfd-close {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: #94a3b8;
+}
+.dark .rfd-close:hover,
+.dark .rfd-close:focus-visible {
+  background: rgba(255, 255, 255, 0.14);
+  color: #f1f5f9;
+}
+
+.rfd-main-img {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--c) 40%, transparent);
+  box-shadow: 0 8px 30px -10px color-mix(in srgb, var(--c) 45%, transparent);
+}
+.rfd-main-img img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+.rfd-img-tag {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ecfeff;
+  background: rgba(2, 6, 23, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  padding: 3px 9px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.rfd-stat {
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(15, 23, 42, 0.025);
+  padding: 10px 6px;
+  text-align: center;
+}
+.dark .rfd-stat {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+.rfd-stat-value {
+  font-weight: 800;
+  font-size: 15px;
+  color: #0f172a;
+  font-variant-numeric: tabular-nums;
+}
+.dark .rfd-stat-value {
+  color: #f1f5f9;
+}
+.rfd-stat-label {
+  margin-top: 2px;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.rfd-crop {
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+.dark .rfd-crop {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.rfd-crop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.7);
+  display: block;
+}
+
+.rfd-sibling {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+.dark .rfd-sibling {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.rfd-sibling img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+.rfd-sibling:hover img,
+.rfd-sibling:focus-visible img {
+  transform: scale(1.08);
+}
+.rfd-sibling span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px 6px 4px;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 8.5px;
+  color: #f1f5f9;
+  background: linear-gradient(180deg, transparent 0%, rgba(2, 6, 23, 0.85) 100%);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.rfd-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  background: #0f172a;
+  transition: background 0.2s ease;
+}
+.rfd-cta:hover,
+.rfd-cta:focus-visible {
+  background: #334155;
+}
+.dark .rfd-cta {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f1f5f9;
+}
+.dark .rfd-cta:hover,
+.dark .rfd-cta:focus-visible {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Reduced motion: freeze every node at its phase position instead of letting
+   the global animation kill-switch collapse them all onto 12 o'clock. */
+@media (prefers-reduced-motion: reduce) {
+  .rfp-bg img { animation: none; }
+  .rf-sat {
+    animation: none !important;
+    transform: rotate(calc(var(--phase) * 360deg)) translateY(calc(-1 * var(--r)));
+  }
+  .rf-upright {
+    animation: none !important;
+    transform: rotate(calc(var(--phase) * -360deg));
+  }
+}

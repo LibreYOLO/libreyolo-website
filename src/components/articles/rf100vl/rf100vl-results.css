@@ -1,0 +1,29 @@
+/* RF100-VL leaderboard: bars animate in when the list scrolls into view. */
+
+.rf-bar-fill {
+  width: 0;
+  transition: width 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.rf-bars-in .rf-bar-fill {
+  width: var(--w);
+}
+.rf-row {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition-delay: var(--d, 0ms);
+}
+.rf-bars-in .rf-row {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rf-bar-fill,
+  .rf-row {
+    transition: none;
+    opacity: 1;
+    transform: none;
+    width: var(--w);
+  }
+}

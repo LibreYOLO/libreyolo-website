@@ -33,6 +33,10 @@ function readArticle(slug, locale) {
     // Optional FAQ pairs ([{ q, a }]) that drive FAQPage JSON-LD on the article
     // page. Absent on most articles, so default to null and gate rendering on it.
     faq: Array.isArray(data.faq) ? data.faq : null,
+    // Optional page treatment. 'paper' renders the article as a dark,
+    // paper-launch style landing page with a custom hero instead of the
+    // standard article header.
+    layout: data.layout || null,
     content,
     translated,
   }

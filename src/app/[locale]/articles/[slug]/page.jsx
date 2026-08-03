@@ -17,6 +17,9 @@ import {
 import { routing } from '@/i18n/routing'
 import { Link } from '@/i18n/navigation'
 import ThemedEmbed from '@/components/ThemedEmbed'
+import RF100VLHero from '@/components/articles/rf100vl/RF100VLHero'
+import RF100VLResults from '@/components/articles/rf100vl/RF100VLResults'
+import UnderConstruction from '@/components/articles/UnderConstruction'
 
 export function generateStaticParams() {
   return getAllArticles().map((article) => ({ slug: article.slug }))
@@ -123,6 +126,16 @@ const markdownComponents = {
   img: (props) => <img className="rounded-xl my-6 mx-auto" loading="lazy" {...props} />,
   hr: () => <hr className="border-surface-200 dark:border-surface-800 my-10" />,
   iframe: ThemedEmbed,
+  // Custom widgets an article can drop inline via raw-HTML tags in the markdown,
+  // e.g. <rf100vl-results />. rehype-raw keeps unknown tags, so they land here.
+  'rf100vl-results': () => <RF100VLResults />,
+  'under-construction': () => <UnderConstruction />,
+}
+
+// Articles with `layout: paper` swap the standard header for a full-bleed,
+// paper-launch style hero. One hero component per article slug.
+const PAPER_HEROES = {
+  'rf100vl-benchmark': RF100VLHero,
 }
 
 export default async function ArticlePage({ params }) {
@@ -159,6 +172,56 @@ export default async function ArticlePage({ params }) {
           })),
         }
       : null
+
+  const PaperHero = article.layout === 'paper' ? PAPER_HEROES[article.slug] : null
+
+  if (PaperHero) {
+    // Paper layout: full-bleed hero with title/authors/links instead of the
+    // standard article header, then the article body below it. Light by
+    // default, following the usual paper landing page style; the dark
+    // variant follows the site theme.
+    return (
+      <div>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {faqJsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+          />
+        )}
+        <PaperHero
+          title={article.title}
+          author={article.author}
+          dateISO={article.date}
+          dateLabel={formatDate(article.date, locale)}
+          backLink={
+            <Link
+              href="/articles"
+              className="inline-flex items-center gap-1.5 text-sm text-surface-500 hover:text-libre-600 dark:hover:text-libre-400 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              {t('backToArticles')}
+            </Link>
+          }
+        />
+        <article className="max-w-3xl mx-auto px-6 lg:px-8 pt-14 pb-20">
+          {locale === 'zh' && !article.translated && (
+            <p className="mb-8 text-sm text-surface-500">{t('englishNote')}</p>
+          )}
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
+            components={markdownComponents}
+          >
+            {article.content}
+          </ReactMarkdown>
+        </article>
+      </div>
+    )
+  }
 
   return (
     <div className="pt-24 lg:pt-32 pb-16">
