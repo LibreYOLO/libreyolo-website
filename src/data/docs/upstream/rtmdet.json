@@ -1,0 +1,12 @@
+{
+  "name": "RTMDet",
+  "org": "OpenMMLab",
+  "paper_title": "RTMDet: An Empirical Study of Designing Real-Time Object Detectors",
+  "paper_url": "https://arxiv.org/abs/2212.07784",
+  "code_url": "https://github.com/open-mmlab/mmdetection",
+  "license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. It places no obligation on your own application code, and weights you train yourself on your own data are yours. The published RTMDet and RTMDet-Ins checkpoints are converted from mmdetection's own COCO weights, trained by OpenMMLab under the same license.",
+  "bibtex": "@misc{lyu2022rtmdet,\n      title={RTMDet: An Empirical Study of Designing Real-Time Object Detectors},\n      author={Chengqi Lyu and Wenwei Zhang and Haian Huang and Yue Zhou and Yudong Wang and Yanyi Liu and Shilong Zhang and Kai Chen},\n      year={2022},\n      eprint={2212.07784},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV}\n}",
+  "bibtex_source_url": "https://github.com/open-mmlab/mmdetection/tree/main/configs/rtmdet#citation",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README at configs/rtmdet on branch main. Cross-checked against the arXiv API for 2212.07784: eight authors in the same order, Chengqi Lyu, Wenwei Zhang, Haian Huang, Yue Zhou, Yudong Wang, Yanyi Liu, Shilong Zhang and Kai Chen, identical title, submitted 2022-12-14. No journal-ref is recorded, so the @misc preprint form the authors publish still matches the record. Do not hand-edit; a wrong citation misattributes someone's work."
+}
