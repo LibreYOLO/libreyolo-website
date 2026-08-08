@@ -102,10 +102,28 @@
           "tflite": "blocked", "coreml": "blocked", "coreai": "blocked"
         }
       },
-      "export_notes": {
-        "ncnn": "The DETR family is blocked on ncnn framework-wide.",
-        "coreml": "Converts, but no numeric parity guarantee yet."
+      "export_reasons": {
+        "detect": {
+          "tensorrt": "Runtime parity coverage lives in tests/e2e/test_tensorrt.py.",
+          "openvino": "Runtime parity coverage lives in tests/e2e/test_openvino.py.",
+          "coreml": "Conversion is available, but runtime parity requires a macOS runner.",
+          "ncnn": "The DETR family is blocked on ncnn framework-wide."
+        },
+        "segment": {
+          "tensorrt": "A published Apache-2.0 trained segmentation checkpoint exports and reloads, but public top-k class membership changes.",
+          "openvino": "After Hungarian query alignment, the converted-runtime element match rate is 69.0%, below the validation bar.",
+          "tflite": "onnx2tf 2.4.x assigns an invalid NHWC layout to the segmentation-head Einsum (78 channels versus the required 256), so conversion fails."
+        },
+        "pose": {
+          "tensorrt": "A published Apache-2.0 trained pose checkpoint exports and reloads, but matched public boxes fall to 0.704 IoU with 41.4-pixel coordinate drift.",
+          "openvino": "After Hungarian query alignment, the converted-runtime element match rate is 72.75%, below the validation bar."
+        },
+        "obb": {
+          "tensorrt": "A deterministic synthetic OBB fixture exports and reloads, but public top-k class membership changes.",
+          "openvino": "After Hungarian query alignment, the converted-runtime element match rate is 91.25%, below the validation bar."
+        }
       },
+      "_export_reasons_source": "libreyolo/export/support.py on dev: detect/tensorrt+openvino L727-737, coreml L1361-1367, segment/tensorrt L2002-2011, pose/tensorrt L2012-2022, obb/tensorrt L2023-2032, segment+pose+obb/openvino L2682-2692, segment/tflite L1306-1316. The build-registry script must read these from the SUPPORT dict, not from the generated markdown.",
       "benchmarks": {
         "detect": {
           "metric": "mAP 50-95",

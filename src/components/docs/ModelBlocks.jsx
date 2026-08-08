@@ -353,12 +353,19 @@ const STATES = {
   },
 }
 
-function Mark({ state, label }) {
+/*
+ * The tooltip and screen-reader text prefer the library's own per-cell reason
+ * over the generic state sentence. Those reasons are the measured findings that
+ * decided the tier (which metric drifted, and by how much), so a reader asking
+ * "why is this only experimental" gets the real answer rather than a category.
+ */
+function Mark({ state, label, reason }) {
   const s = STATES[state] || STATES.blocked
+  const text = reason || s.sentence
   return (
-    <span className={`inline-flex ${s.color}`} title={`${label}: ${s.sentence}`}>
+    <span className={`inline-flex ${s.color}`} title={`${label}: ${text}`}>
       {s.icon}
-      <span className="sr-only">{s.sentence}</span>
+      <span className="sr-only">{`${s.sentence} ${reason || ''}`}</span>
     </span>
   )
 }
@@ -398,6 +405,7 @@ export function ExportMatrix({ family }) {
                     <Mark
                       state={family.export[task]?.[f.key] || 'blocked'}
                       label={`${getTaskMeta(task).label} to ${f.label}`}
+                      reason={family.export_reasons?.[task]?.[f.key]}
                     />
                   </td>
                 ))}
@@ -418,19 +426,46 @@ export function ExportMatrix({ family }) {
           ))}
       </dl>
 
-      {family.export_notes && (
-        <dl className="mt-3 space-y-0.5 text-[13px]">
-          {Object.entries(family.export_notes).map(([key, note]) => {
-            const label = getExportFormats().find((f) => f.key === key)?.label || key
-            return (
-              <div key={key} className="flex flex-col gap-x-2 sm:flex-row">
-                <dt className="shrink-0 text-surface-500 dark:text-surface-500 sm:w-24">{label}</dt>
-                <dd className="text-surface-500 dark:text-surface-500">{note}</dd>
-              </div>
-            )
-          })}
-        </dl>
-      )}
+      <ExportCaveats family={family} />
+    </div>
+  )
+}
+
+/*
+ * Why any non-validated cell is not validated, in the library's own words.
+ * Reference sites keep this kind of detail out of the cell and below the table
+ * (MDN expands it per cell); a flat list is the same idea without the
+ * interaction cost.
+ */
+function ExportCaveats({ family }) {
+  const formats = getExportFormats()
+  const rows = []
+  for (const task of family.tasks) {
+    for (const f of formats) {
+      const state = family.export[task]?.[f.key] || 'blocked'
+      const reason = family.export_reasons?.[task]?.[f.key]
+      if (state !== 'validated' && reason) {
+        rows.push({ key: `${task}-${f.key}`, task: getTaskMeta(task).label, format: f.label, reason })
+      }
+    }
+  }
+  if (!rows.length) return null
+
+  return (
+    <div className="mt-5">
+      <p className="mb-1.5 text-[13px] font-medium text-surface-700 dark:text-surface-300">
+        Why these are not validated
+      </p>
+      <dl className="space-y-1 text-[13px]">
+        {rows.map((row) => (
+          <div key={row.key} className="flex flex-col gap-x-3 sm:flex-row">
+            <dt className="shrink-0 text-surface-500 dark:text-surface-500 sm:w-52">
+              {row.task} to {row.format}
+            </dt>
+            <dd className="max-w-[62ch] text-surface-500 dark:text-surface-500">{row.reason}</dd>
+          </div>
+        ))}
+      </dl>
     </div>
   )
 }
