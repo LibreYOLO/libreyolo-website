@@ -1,0 +1,12 @@
+{
+  "name": "MobileSAM",
+  "org": "Kyung Hee University",
+  "paper_title": "Faster Segment Anything: Towards Lightweight SAM for Mobile Applications",
+  "paper_url": "https://arxiv.org/abs/2306.14289",
+  "code_url": "https://github.com/ChaoningZhang/MobileSAM",
+  "license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so this code and these weights can be used in commercial and closed-source products. It asks you to keep the license text and attribution notices with any copy you redistribute, and it grants a patent license. LibreYOLO carries a native port of the TinyViT image encoder, prompt encoder, two-way transformer and mask decoder rather than vendoring upstream files unmodified, checked for bit-exact parity against the original Apache-2.0 implementation, with a NOTICE recording that provenance. The converted checkpoint is hosted as LibreMobileSAM.pt on the LibreYOLO Hugging Face org, tagged Apache-2.0 there as well.",
+  "bibtex": "@article{mobile_sam,\n  title={Faster Segment Anything: Towards Lightweight SAM for Mobile Applications},\n  author={Zhang, Chaoning and Han, Dongshen and Qiao, Yu and Kim, Jung Uk and Bae, Sung-Ho and Lee, Seungkyu and Hong, Choong Seon},\n  journal={arXiv preprint arXiv:2306.14289},\n  year={2023}\n}",
+  "bibtex_source_url": "https://github.com/ChaoningZhang/MobileSAM#bibtex-of-our-mobilesam",
+  "bibtex_verified": "2026-08-08, copied verbatim from the BibTex of our MobileSAM section of the upstream README on branch master. Cross-checked against the arXiv API for 2306.14289: seven authors in the same order, identical title. The upstream README still cites it as an arXiv preprint, so this page does too rather than asserting a venue upstream has not."
+}
