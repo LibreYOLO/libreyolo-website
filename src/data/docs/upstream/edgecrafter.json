@@ -1,0 +1,12 @@
+{
+    "name":  "EdgeCrafter",
+    "org":  "Intellindust AI Lab",
+    "paper_title":  "EdgeCrafter: Compact ViTs for Edge Dense Prediction via Task-Specialized Distillation",
+    "paper_url":  "https://arxiv.org/abs/2603.18739",
+    "code_url":  "https://github.com/Intellindust-AI-Lab/EdgeCrafter",
+    "license":  "Apache-2.0",
+    "license_interpretation":  "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. One license covers all three upstream models, so the detection, pose and segmentation weights carry identical terms, and weights you train yourself on your own data are yours.",
+    "bibtex":  "@article{liu2026edgecrafter,\n  title={EdgeCrafter: Compact ViTs for Edge Dense Prediction via Task-Specialized Distillation},\n  author={Liu, Longfei and Hou, Yongjie and Li, Yang and Wang, Qirui and Sha, Youyang and Yu, Yongjun and Wang, Yinzhi and Ru, Peizhe and Yu, Xuanlong and Shen, Xi},\n  journal={arXiv},\n  year={2026}\n}",
+    "bibtex_source_url":  "https://github.com/Intellindust-AI-Lab/EdgeCrafter#-citation",
+    "bibtex_verified":  "2026-08-08, copied verbatim from the Citation section of the upstream README on branch main. Cross-checked against the arXiv API for 2603.18739: ten authors in the same order, identical title, latest version v3 dated 2026-03-27 with no journal reference, so journal={arXiv} and year 2026 still match the record. Do not hand-edit; a wrong citation misattributes someone's work."
+}
