@@ -1,0 +1,12 @@
+{
+  "name": "ResNet",
+  "org": "Microsoft Research Asia",
+  "paper_title": "Deep Residual Learning for Image Recognition",
+  "paper_url": "https://arxiv.org/abs/1512.03385",
+  "code_url": "https://github.com/huggingface/pytorch-image-models",
+  "license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. It places no obligation on your own application code, and weights you train yourself on your own data are yours. The architecture is the original Microsoft Research Asia design; the pretrained weights LibreYOLO ships are timm's resnet{18,34,50,101}.a1_in1k reproduction (the \"ResNet Strikes Back\" A1 recipe), trained by Ross Wightman and the timm contributors on ImageNet-1k and licensed Apache-2.0 there. LibreYOLO's module and attribute names mirror timm so the state dict loads unchanged and inference matches bit-identically.",
+  "bibtex": "@article{He2015,\n\tauthor = {Kaiming He and Xiangyu Zhang and Shaoqing Ren and Jian Sun},\n\ttitle = {Deep Residual Learning for Image Recognition},\n\tjournal = {arXiv preprint arXiv:1512.03385},\n\tyear = {2015}\n}",
+  "bibtex_source_url": "https://github.com/KaimingHe/deep-residual-networks#citation",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README on branch master. Cross-checked against the arXiv API for 1512.03385: four authors in the same order, identical title, one version dated 2015-12-10. The paper was later presented at CVPR 2016 (confirmed via the CVPR 2016 Open Access Repository listing), but the authors' own README citation block still gives the arXiv preprint form shown here, unchanged since publication. Do not hand-edit; a wrong citation misattributes someone's work."
+}
