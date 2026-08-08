@@ -159,6 +159,8 @@ checkpoint file name.
 
 <benchmark-table task="detect" />
 
+<va-embed />
+
 Version 2 keeps version 1's architecture and state dict layout and changes how
 the deformable attention samples, which is why the two are told apart by the
 metadata in the checkpoint rather than by shape. Version 4 is a different

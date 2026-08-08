@@ -245,6 +245,7 @@
           "source_url": "https://www.visionanalysis.org/",
           "rows": [
             {
+              "id": "yolov9c",
               "size": "c",
               "prefix_key": "yolo9",
               "imgsz": 640,
@@ -252,6 +253,7 @@
               "map": 56.4
             },
             {
+              "id": "yolov9m",
               "size": "m",
               "prefix_key": "yolo9",
               "imgsz": 640,
@@ -259,6 +261,7 @@
               "map": 55.3
             },
             {
+              "id": "yolov9s",
               "size": "s",
               "prefix_key": "yolo9",
               "imgsz": 640,
@@ -266,6 +269,7 @@
               "map": 55.9
             },
             {
+              "id": "yolov9t",
               "size": "t",
               "prefix_key": "yolo9",
               "imgsz": 640,
@@ -274,6 +278,9 @@
             }
           ]
         }
+      },
+      "va_embed": {
+        "scatter": "https://www.visionanalysis.org/embed/scatter?highlight=yolov9c%2Cyolov9m%2Cyolov9s%2Cyolov9t&title=YOLOv9%20on%20COCO&subtitle=Accuracy%20against%20latency%2C%20every%20benchmarked%20model"
       },
       "upstream": null
     },
@@ -530,6 +537,7 @@
           "source_url": "https://www.visionanalysis.org/",
           "rows": [
             {
+              "id": "rfdetr-n",
               "size": "n",
               "prefix_key": "rfdetr",
               "imgsz": 384,
@@ -537,6 +545,7 @@
               "map": 51.4
             },
             {
+              "id": "rfdetr-s",
               "size": "s",
               "prefix_key": "rfdetr",
               "imgsz": 512,
@@ -544,6 +553,7 @@
               "map": 55.1
             },
             {
+              "id": "rfdetr-m",
               "size": "m",
               "prefix_key": "rfdetr",
               "imgsz": 576,
@@ -551,6 +561,7 @@
               "map": 57.4
             },
             {
+              "id": "rfdetr-l",
               "size": "l",
               "prefix_key": "rfdetr",
               "imgsz": 704,
@@ -565,6 +576,7 @@
           "source_url": "https://www.visionanalysis.org/",
           "rows": [
             {
+              "id": "rfdetr-seg-n",
               "size": "n",
               "prefix_key": "rfdetr",
               "imgsz": 312,
@@ -573,6 +585,9 @@
             }
           ]
         }
+      },
+      "va_embed": {
+        "scatter": "https://www.visionanalysis.org/embed/scatter?highlight=rfdetr-n%2Crfdetr-s%2Crfdetr-m%2Crfdetr-l%2Crfdetr-seg-n&title=RF-DETR%20on%20COCO&subtitle=Accuracy%20against%20latency%2C%20every%20benchmarked%20model"
       },
       "upstream": {
         "name": "RF-DETR",
@@ -606,9 +621,6 @@
           "tensorrt": "A deterministic synthetic OBB fixture exports and reloads, but public top-k class membership changes.",
           "openvino": "After Hungarian query alignment, the converted-runtime element match rate is 91.25%, below the validation bar."
         }
-      },
-      "va_embed": {
-        "scatter": "https://www.visionanalysis.org/embed/scatter?highlight=rfdetr-n,rfdetr-s,rfdetr-m,rfdetr-l&hw=nvidia_geforce_rtx_5070_ti&rt=tensorrt&title=RF-DETR%20on%20COCO&subtitle=Accuracy%20vs%20latency,%20RTX%205070%20Ti"
       }
     },
     "ec": {
@@ -780,6 +792,7 @@
           "source_url": "https://www.visionanalysis.org/",
           "rows": [
             {
+              "id": "ec-l",
               "size": "l",
               "prefix_key": "ec",
               "imgsz": 640,
@@ -787,6 +800,7 @@
               "map": 60.1
             },
             {
+              "id": "ec-m",
               "size": "m",
               "prefix_key": "ec",
               "imgsz": 640,
@@ -794,6 +808,7 @@
               "map": 58.4
             },
             {
+              "id": "ec-s",
               "size": "s",
               "prefix_key": "ec",
               "imgsz": 640,
@@ -801,6 +816,7 @@
               "map": 54.3
             },
             {
+              "id": "ec-x",
               "size": "x",
               "prefix_key": "ec",
               "imgsz": 640,
@@ -809,6 +825,9 @@
             }
           ]
         }
+      },
+      "va_embed": {
+        "scatter": "https://www.visionanalysis.org/embed/scatter?highlight=ec-l%2Cec-m%2Cec-s%2Cec-x&title=EdgeCrafter%20on%20COCO&subtitle=Accuracy%20against%20latency%2C%20every%20benchmarked%20model"
       },
       "upstream": null
     },
@@ -987,6 +1006,7 @@
           "source_url": "https://www.visionanalysis.org/",
           "rows": [
             {
+              "id": "rtdetr-l",
               "size": "l",
               "prefix_key": "rtdetr",
               "imgsz": 640,
@@ -994,6 +1014,7 @@
               "map": 55.8
             },
             {
+              "id": "rtdetr-r101",
               "size": "r101",
               "prefix_key": "rtdetr",
               "imgsz": 640,
@@ -1001,6 +1022,7 @@
               "map": 56.8
             },
             {
+              "id": "rtdetr-r18",
               "size": "r18",
               "prefix_key": "rtdetr",
               "imgsz": 640,
@@ -1008,6 +1030,7 @@
               "map": 49.7
             },
             {
+              "id": "rtdetr-r34",
               "size": "r34",
               "prefix_key": "rtdetr",
               "imgsz": 640,
@@ -1015,6 +1038,7 @@
               "map": 52.2
             },
             {
+              "id": "rtdetr-r50",
               "size": "r50",
               "prefix_key": "rtdetr",
               "imgsz": 640,
@@ -1022,6 +1046,7 @@
               "map": 55.9
             },
             {
+              "id": "rtdetr-r50m",
               "size": "r50m",
               "prefix_key": "rtdetr",
               "imgsz": 640,
@@ -1029,6 +1054,7 @@
               "map": 53.8
             },
             {
+              "id": "rtdetr-x",
               "size": "x",
               "prefix_key": "rtdetr",
               "imgsz": 640,
@@ -1036,6 +1062,7 @@
               "map": 57.9
             },
             {
+              "id": "rtdetrv2-r101",
               "size": "r101",
               "prefix_key": "rtdetrv2",
               "imgsz": 640,
@@ -1043,6 +1070,7 @@
               "map": 56.8
             },
             {
+              "id": "rtdetrv2-r18",
               "size": "r18",
               "prefix_key": "rtdetrv2",
               "imgsz": 640,
@@ -1050,6 +1078,7 @@
               "map": 50.8
             },
             {
+              "id": "rtdetrv2-r34",
               "size": "r34",
               "prefix_key": "rtdetrv2",
               "imgsz": 640,
@@ -1057,6 +1086,7 @@
               "map": 53.2
             },
             {
+              "id": "rtdetrv2-r50",
               "size": "r50",
               "prefix_key": "rtdetrv2",
               "imgsz": 640,
@@ -1064,6 +1094,7 @@
               "map": 55.7
             },
             {
+              "id": "rtdetrv2-r50m",
               "size": "r50m",
               "prefix_key": "rtdetrv2",
               "imgsz": 640,
@@ -1071,6 +1102,7 @@
               "map": 54.8
             },
             {
+              "id": "rtdetrv4-l",
               "size": "l",
               "prefix_key": "rtdetrv4",
               "imgsz": 640,
@@ -1078,6 +1110,7 @@
               "map": 57.8
             },
             {
+              "id": "rtdetrv4-m",
               "size": "m",
               "prefix_key": "rtdetrv4",
               "imgsz": 640,
@@ -1085,6 +1118,7 @@
               "map": 56.5
             },
             {
+              "id": "rtdetrv4-s",
               "size": "s",
               "prefix_key": "rtdetrv4",
               "imgsz": 640,
@@ -1092,6 +1126,7 @@
               "map": 52.8
             },
             {
+              "id": "rtdetrv4-x",
               "size": "x",
               "prefix_key": "rtdetrv4",
               "imgsz": 640,
@@ -1100,6 +1135,9 @@
             }
           ]
         }
+      },
+      "va_embed": {
+        "scatter": "https://www.visionanalysis.org/embed/scatter?highlight=rtdetr-l%2Crtdetr-r101%2Crtdetr-r18%2Crtdetr-r34%2Crtdetr-r50%2Crtdetr-r50m%2Crtdetr-x%2Crtdetrv2-r101%2Crtdetrv2-r18%2Crtdetrv2-r34%2Crtdetrv2-r50%2Crtdetrv2-r50m%2Crtdetrv4-l%2Crtdetrv4-m%2Crtdetrv4-s%2Crtdetrv4-x&title=RT-DETR%20on%20COCO&subtitle=Accuracy%20against%20latency%2C%20every%20benchmarked%20model"
       },
       "upstream": null
     },
@@ -1243,6 +1281,7 @@
           "source_url": "https://www.visionanalysis.org/",
           "rows": [
             {
+              "id": "dfine-l",
               "size": "l",
               "prefix_key": "dfine",
               "imgsz": 640,
@@ -1250,6 +1289,7 @@
               "map": 60
             },
             {
+              "id": "dfine-m",
               "size": "m",
               "prefix_key": "dfine",
               "imgsz": 640,
@@ -1257,6 +1297,7 @@
               "map": 57.8
             },
             {
+              "id": "dfine-n",
               "size": "n",
               "prefix_key": "dfine",
               "imgsz": 640,
@@ -1264,6 +1305,7 @@
               "map": 45.8
             },
             {
+              "id": "dfine-s",
               "size": "s",
               "prefix_key": "dfine",
               "imgsz": 640,
@@ -1271,6 +1313,7 @@
               "map": 53.4
             },
             {
+              "id": "dfine-x",
               "size": "x",
               "prefix_key": "dfine",
               "imgsz": 640,
@@ -1279,6 +1322,9 @@
             }
           ]
         }
+      },
+      "va_embed": {
+        "scatter": "https://www.visionanalysis.org/embed/scatter?highlight=dfine-l%2Cdfine-m%2Cdfine-n%2Cdfine-s%2Cdfine-x&title=D-FINE%20on%20COCO&subtitle=Accuracy%20against%20latency%2C%20every%20benchmarked%20model"
       },
       "upstream": null
     },
@@ -1432,6 +1478,7 @@
           "source_url": "https://www.visionanalysis.org/",
           "rows": [
             {
+              "id": "deim-l",
               "size": "l",
               "prefix_key": "deim",
               "imgsz": 640,
@@ -1439,6 +1486,7 @@
               "map": 57.8
             },
             {
+              "id": "deim-m",
               "size": "m",
               "prefix_key": "deim",
               "imgsz": 640,
@@ -1446,6 +1494,7 @@
               "map": 55.4
             },
             {
+              "id": "deim-n",
               "size": "n",
               "prefix_key": "deim",
               "imgsz": 640,
@@ -1453,6 +1502,7 @@
               "map": 46.8
             },
             {
+              "id": "deim-s",
               "size": "s",
               "prefix_key": "deim",
               "imgsz": 640,
@@ -1460,6 +1510,7 @@
               "map": 52.1
             },
             {
+              "id": "deim-x",
               "size": "x",
               "prefix_key": "deim",
               "imgsz": 640,
@@ -1467,6 +1518,7 @@
               "map": 59.6
             },
             {
+              "id": "deimv2-atto",
               "size": "atto",
               "prefix_key": "deimv2",
               "imgsz": 320,
@@ -1474,6 +1526,7 @@
               "map": 27.5
             },
             {
+              "id": "deimv2-femto",
               "size": "femto",
               "prefix_key": "deimv2",
               "imgsz": 416,
@@ -1481,6 +1534,7 @@
               "map": 34.5
             },
             {
+              "id": "deimv2-l",
               "size": "l",
               "prefix_key": "deimv2",
               "imgsz": 640,
@@ -1488,6 +1542,7 @@
               "map": 58.6
             },
             {
+              "id": "deimv2-m",
               "size": "m",
               "prefix_key": "deimv2",
               "imgsz": 640,
@@ -1495,6 +1550,7 @@
               "map": 56
             },
             {
+              "id": "deimv2-n",
               "size": "n",
               "prefix_key": "deimv2",
               "imgsz": 640,
@@ -1502,6 +1558,7 @@
               "map": 46.7
             },
             {
+              "id": "deimv2-pico",
               "size": "pico",
               "prefix_key": "deimv2",
               "imgsz": 640,
@@ -1509,6 +1566,7 @@
               "map": 42.2
             },
             {
+              "id": "deimv2-s",
               "size": "s",
               "prefix_key": "deimv2",
               "imgsz": 640,
@@ -1516,6 +1574,7 @@
               "map": 53
             },
             {
+              "id": "deimv2-x",
               "size": "x",
               "prefix_key": "deimv2",
               "imgsz": 640,
@@ -1524,6 +1583,9 @@
             }
           ]
         }
+      },
+      "va_embed": {
+        "scatter": "https://www.visionanalysis.org/embed/scatter?highlight=deim-l%2Cdeim-m%2Cdeim-n%2Cdeim-s%2Cdeim-x%2Cdeimv2-atto%2Cdeimv2-femto%2Cdeimv2-l%2Cdeimv2-m%2Cdeimv2-n%2Cdeimv2-pico%2Cdeimv2-s%2Cdeimv2-x&title=DEIM%20on%20COCO&subtitle=Accuracy%20against%20latency%2C%20every%20benchmarked%20model"
       },
       "upstream": null
     },
@@ -1596,6 +1658,7 @@
           "source_url": "https://www.visionanalysis.org/",
           "rows": [
             {
+              "id": "yolonas-l",
               "size": "l",
               "prefix_key": "yolonas",
               "imgsz": 640,
@@ -1603,6 +1666,7 @@
               "map": 56.3
             },
             {
+              "id": "yolonas-m",
               "size": "m",
               "prefix_key": "yolonas",
               "imgsz": 640,
@@ -1610,6 +1674,7 @@
               "map": 55.4
             },
             {
+              "id": "yolonas-s",
               "size": "s",
               "prefix_key": "yolonas",
               "imgsz": 640,
@@ -1618,6 +1683,9 @@
             }
           ]
         }
+      },
+      "va_embed": {
+        "scatter": "https://www.visionanalysis.org/embed/scatter?highlight=yolonas-l%2Cyolonas-m%2Cyolonas-s&title=YOLO-NAS%20on%20COCO&subtitle=Accuracy%20against%20latency%2C%20every%20benchmarked%20model"
       },
       "upstream": null
     }

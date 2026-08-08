@@ -152,6 +152,8 @@ and the stride-4 tower starts from random initialization.
 
 <benchmark-table task="detect" />
 
+<va-embed />
+
 ## Train
 
 <code-tabs name="train" />

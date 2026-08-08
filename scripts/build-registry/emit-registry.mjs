@@ -104,11 +104,28 @@ for (const lin of ex.lineages) {
       }
       for (const r of sorted) {
         benchmarks[task].rows.push({
-          size: r.size, prefix_key: key, imgsz: r.imgsz, params_m: r.params_m, map: r.map,
+          id: r.id, size: r.size, prefix_key: key, imgsz: r.imgsz, params_m: r.params_m, map: r.map,
         })
       }
     }
   }
+
+  /*
+   * Vision Analysis embed. Every benchmarked model already carries its VA id,
+   * so the chart is derivable: highlight this family's models against the whole
+   * field. Hardware and runtime are deliberately not pinned, because pinning a
+   * combination a family has no run for yields an empty chart.
+   */
+  const vaIds = Object.values(benchmarks).flatMap((b) => b.rows.map((r) => r.id)).filter(Boolean)
+  const vaEmbed = vaIds.length
+    ? {
+        scatter:
+          'https://www.visionanalysis.org/embed/scatter?highlight=' +
+          encodeURIComponent([...new Set(vaIds)].join(',')) +
+          '&title=' + encodeURIComponent(`${lin.display} on COCO`) +
+          '&subtitle=' + encodeURIComponent('Accuracy against latency, every benchmarked model'),
+      }
+    : null
 
   families[primary] = {
     key: primary,
@@ -136,6 +153,7 @@ for (const lin of ex.lineages) {
     checkpoints,
     export: merged,
     benchmarks,
+    va_embed: vaEmbed,
     upstream: null, // merged from upstream/<slug>.json after human verification
   }
 }
@@ -149,7 +167,7 @@ if (prev && families['rfdetr']) {
   families['rfdetr'].added_in = prev.added_in
   families['rfdetr'].task_added_in = prev.task_added_in
   families['rfdetr'].export_reasons = prev.export_reasons
-  families['rfdetr'].va_embed = prev.va_embed
+
   families['rfdetr'].capabilities = prev.capabilities
   // Checkpoints are no longer carried over: the extractor now reads each
   // repository's own license tag and honors TASK_INPUT_SIZES, so it is a better

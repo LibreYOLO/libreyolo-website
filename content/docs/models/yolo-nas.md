@@ -136,6 +136,8 @@ COCO keypoint set.
 
 <benchmark-table task="detect" />
 
+<va-embed />
+
 ## Train
 
 <code-tabs name="train" />

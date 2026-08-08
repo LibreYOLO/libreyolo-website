@@ -165,6 +165,8 @@ written into the checkpoint file name.
 
 <benchmark-table task="detect" />
 
+<va-embed />
+
 Version 1 keeps D-FINE's architecture and swaps its classification objective
 for the matchability-aware loss from the dense one-to-one recipe, so the two
 families share almost every state dict key and are told apart by the metadata
