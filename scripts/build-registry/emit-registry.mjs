@@ -14,6 +14,20 @@ const TASK_LABELS = {
 const EXTRAS = { rfdetr: 'rfdetr', rtdetr: 'rtdetr' } // families needing a pip extra
 const DATASET = { detect: 'COCO', segment: 'COCO', pose: 'COCO keypoints', obb: 'DOTA' }
 
+// "n, s, m, l at 640 px" style summary, derived from INPUT_SIZES.
+function sizesLabel(lin) {
+  const parts = []
+  for (const key of lin.keys) {
+    const table = lin.sizes[key] || {}
+    const codes = Object.keys(table)
+    if (!codes.length) continue
+    const px = [...new Set(Object.values(table))]
+    const res = px.length === 1 ? `at ${px[0]} px` : `at ${Math.min(...px)} to ${Math.max(...px)} px`
+    parts.push(lin.keys.length > 1 ? `${key}: ${codes.join(', ')} ${res}` : `${codes.join(', ')} ${res}`)
+  }
+  return parts.join('; ') || null
+}
+
 const families = {}
 for (const lin of ex.lineages) {
   const primary = lin.keys[0]
@@ -75,10 +89,10 @@ for (const lin of ex.lineages) {
     slug: lin.slug,
     registry_keys: lin.keys,
     display: lin.display,
-    prefix: null, // filled below
+    prefix: lin.prefixes?.[primary] ?? null,
     tier: lin.tier,
     tasks: lin.tasks,
-    sizes_label: null,
+    sizes_label: sizesLabel(lin),
     extra: EXTRAS[primary] ?? null,
     trainable: true,
     unsupported_train_params: lin.unsupported_train_params,

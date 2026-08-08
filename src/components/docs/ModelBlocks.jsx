@@ -106,7 +106,11 @@ export function ModelHeader({ doc, family }) {
         <Meta label="Tasks">{taskNames}</Meta>
         <Meta label="Sizes">{family.sizes_label}</Meta>
         <Meta label="Install">
-          <code className="font-mono text-[12.5px]">pip install &quot;libreyolo[{family.extra}]&quot;</code>
+          {/* Most families need no extra; only quote the bracket form when
+              there is actually one, or the row reads pip install "libreyolo[]". */}
+          <code className="font-mono text-[12.5px]">
+            {family.extra ? `pip install "libreyolo[${family.extra}]"` : 'pip install libreyolo'}
+          </code>
         </Meta>
         <Meta label="Support tier">
           {tier?.label}, since v{family.added_in}. {tier?.blurb}

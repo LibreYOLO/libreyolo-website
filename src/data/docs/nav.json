@@ -6,61 +6,251 @@
       "id": "start",
       "label": "Get started",
       "items": [
-        { "slug": "/docs", "label": "Overview", "built": false },
-        { "slug": "/docs/install", "label": "Install", "built": false },
-        { "slug": "/docs/quickstart", "label": "Quickstart", "built": false },
-        { "slug": "/docs/concepts", "label": "Core concepts", "built": false },
-        { "slug": "/docs/weights", "label": "Checkpoints and weights", "built": false },
-        { "slug": "/docs/migrate", "label": "Import existing weights", "built": false },
-        { "slug": "/docs/faq", "label": "FAQ", "built": false }
+        {
+          "slug": "/docs",
+          "label": "Overview",
+          "built": false
+        },
+        {
+          "slug": "/docs/install",
+          "label": "Install",
+          "built": false
+        },
+        {
+          "slug": "/docs/quickstart",
+          "label": "Quickstart",
+          "built": false
+        },
+        {
+          "slug": "/docs/concepts",
+          "label": "Core concepts",
+          "built": false
+        },
+        {
+          "slug": "/docs/weights",
+          "label": "Checkpoints and weights",
+          "built": false
+        },
+        {
+          "slug": "/docs/migrate",
+          "label": "Import existing weights",
+          "built": false
+        },
+        {
+          "slug": "/docs/faq",
+          "label": "FAQ",
+          "built": false
+        }
       ]
     },
     {
       "id": "tasks",
       "label": "Tasks",
       "items": [
-        { "slug": "/docs/tasks/object-detection", "label": "Object detection", "built": false },
-        { "slug": "/docs/tasks/instance-segmentation", "label": "Instance segmentation", "built": false },
-        { "slug": "/docs/tasks/semantic-segmentation", "label": "Semantic segmentation", "built": false },
-        { "slug": "/docs/tasks/panoptic-segmentation", "label": "Panoptic segmentation", "built": false },
-        { "slug": "/docs/tasks/pose-estimation", "label": "Pose estimation", "built": false },
-        { "slug": "/docs/tasks/image-classification", "label": "Image classification", "built": false },
-        { "slug": "/docs/tasks/oriented-detection", "label": "Oriented boxes", "built": false },
-        { "slug": "/docs/tasks/point-detection", "label": "Point detection", "built": false },
-        { "slug": "/docs/tasks/depth-estimation", "label": "Depth estimation", "built": false },
-        { "slug": "/docs/tasks/image-restoration", "label": "Image restoration", "built": false },
-        { "slug": "/docs/tasks/background-removal", "label": "Background removal", "built": false },
-        { "slug": "/docs/tasks/ocr", "label": "OCR", "built": false },
-        { "slug": "/docs/tasks/face-recognition", "label": "Face recognition", "built": false },
-        { "slug": "/docs/tasks/gaze-estimation", "label": "Gaze estimation", "built": false },
-        { "slug": "/docs/tasks/object-tracking", "label": "Object tracking", "built": false },
-        { "slug": "/docs/tasks/open-vocabulary-detection", "label": "Open-vocabulary detection", "built": false },
-        { "slug": "/docs/tasks/promptable-segmentation", "label": "Promptable segmentation", "built": false }
+        {
+          "slug": "/docs/tasks/object-detection",
+          "label": "Object detection",
+          "built": false
+        },
+        {
+          "slug": "/docs/tasks/instance-segmentation",
+          "label": "Instance segmentation",
+          "built": false
+        },
+        {
+          "slug": "/docs/tasks/semantic-segmentation",
+          "label": "Semantic segmentation",
+          "built": false
+        },
+        {
+          "slug": "/docs/tasks/panoptic-segmentation",
+          "label": "Panoptic segmentation",
+          "built": false
+        },
+        {
+          "slug": "/docs/tasks/pose-estimation",
+          "label": "Pose estimation",
+          "built": false
+        },
+        {
+          "slug": "/docs/tasks/image-classification",
+          "label": "Image classification",
+          "built": false
+        },
+        {
+          "slug": "/docs/tasks/oriented-detection",
+          "label": "Oriented boxes",
+          "built": false
+        },
+        {
+          "slug": "/docs/tasks/point-detection",
+          "label": "Point detection",
+          "built": false
+        },
+        {
+          "slug": "/docs/tasks/depth-estimation",
+          "label": "Depth estimation",
+          "built": false
+        },
+        {
+          "slug": "/docs/tasks/image-restoration",
+          "label": "Image restoration",
+          "built": false
+        },
+        {
+          "slug": "/docs/tasks/background-removal",
+          "label": "Background removal",
+          "built": false
+        },
+        {
+          "slug": "/docs/tasks/ocr",
+          "label": "OCR",
+          "built": false
+        },
+        {
+          "slug": "/docs/tasks/face-recognition",
+          "label": "Face recognition",
+          "built": false
+        },
+        {
+          "slug": "/docs/tasks/gaze-estimation",
+          "label": "Gaze estimation",
+          "built": false
+        },
+        {
+          "slug": "/docs/tasks/object-tracking",
+          "label": "Object tracking",
+          "built": false
+        },
+        {
+          "slug": "/docs/tasks/open-vocabulary-detection",
+          "label": "Open-vocabulary detection",
+          "built": false
+        },
+        {
+          "slug": "/docs/tasks/promptable-segmentation",
+          "label": "Promptable segmentation",
+          "built": false
+        }
       ]
     },
     {
       "id": "models",
       "label": "Models",
       "items": [
-        { "slug": "/docs/models", "label": "All models", "built": false },
-        { "slug": "/docs/models/yolov9", "label": "YOLOv9", "built": false, "tier": "g0" },
-        { "slug": "/docs/models/rf-detr", "label": "RF-DETR", "built": true, "tier": "g0" },
-        { "slug": "/docs/models/edgecrafter", "label": "EdgeCrafter", "built": false, "tier": "g1" },
-        { "slug": "/docs/models/rt-detr", "label": "RT-DETR", "built": false, "tier": "g1" },
-        { "slug": "/docs/models/d-fine", "label": "D-FINE", "built": false, "tier": "g1" },
-        { "slug": "/docs/models/deim", "label": "DEIM", "built": false, "tier": "g1" },
-        { "slug": "/docs/models/yolo-nas", "label": "YOLO-NAS", "built": false, "tier": "g1" },
-        { "slug": "/docs/models/yolox", "label": "YOLOX", "built": false, "tier": "g2" },
-        { "slug": "/docs/models/rtmdet", "label": "RTMDet", "built": false, "tier": "g2" },
-        { "slug": "/docs/models/picodet", "label": "PicoDet", "built": false, "tier": "g2" },
-        { "slug": "/docs/models/fomo", "label": "FOMO", "built": false, "tier": "g2" },
-        { "slug": "/docs/models/segformer", "label": "SegFormer", "built": false, "tier": "g2" },
-        { "slug": "/docs/models/dinov2", "label": "DINOv2", "built": false, "tier": "g2" },
-        { "slug": "/docs/models/eomt", "label": "EoMT", "built": false, "tier": "g3" },
-        { "slug": "/docs/models/depth-anything-v2", "label": "Depth Anything V2", "built": false, "tier": "g3" },
-        { "slug": "/docs/models/sam-2", "label": "SAM 2", "built": false, "tier": "s" },
-        { "slug": "/docs/models/grounding-dino", "label": "Grounding DINO", "built": false, "tier": "s" },
-        { "slug": "/docs/models/clip", "label": "CLIP", "built": false, "tier": "s" }
+        {
+          "slug": "/docs/models",
+          "label": "All models",
+          "built": false
+        },
+        {
+          "slug": "/docs/models/yolov9",
+          "label": "YOLOv9",
+          "built": true,
+          "tier": "g0"
+        },
+        {
+          "slug": "/docs/models/rf-detr",
+          "label": "RF-DETR",
+          "built": true,
+          "tier": "g0"
+        },
+        {
+          "slug": "/docs/models/edgecrafter",
+          "label": "EdgeCrafter",
+          "built": true,
+          "tier": "g1"
+        },
+        {
+          "slug": "/docs/models/rt-detr",
+          "label": "RT-DETR",
+          "built": true,
+          "tier": "g1"
+        },
+        {
+          "slug": "/docs/models/d-fine",
+          "label": "D-FINE",
+          "built": true,
+          "tier": "g1"
+        },
+        {
+          "slug": "/docs/models/deim",
+          "label": "DEIM",
+          "built": false,
+          "tier": "g1"
+        },
+        {
+          "slug": "/docs/models/yolo-nas",
+          "label": "YOLO-NAS",
+          "built": true,
+          "tier": "g1"
+        },
+        {
+          "slug": "/docs/models/yolox",
+          "label": "YOLOX",
+          "built": false,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/rtmdet",
+          "label": "RTMDet",
+          "built": false,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/picodet",
+          "label": "PicoDet",
+          "built": false,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/fomo",
+          "label": "FOMO",
+          "built": false,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/segformer",
+          "label": "SegFormer",
+          "built": false,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/dinov2",
+          "label": "DINOv2",
+          "built": false,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/eomt",
+          "label": "EoMT",
+          "built": false,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/depth-anything-v2",
+          "label": "Depth Anything V2",
+          "built": false,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/sam-2",
+          "label": "SAM 2",
+          "built": false,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/grounding-dino",
+          "label": "Grounding DINO",
+          "built": false,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/clip",
+          "label": "CLIP",
+          "built": false,
+          "tier": "s"
+        }
       ],
       "more": "62 more model pages"
     },
@@ -68,68 +258,196 @@
       "id": "train",
       "label": "Train",
       "items": [
-        { "slug": "/docs/train", "label": "Training overview", "built": false },
-        { "slug": "/docs/train/datasets", "label": "Datasets", "built": false },
-        { "slug": "/docs/train/hyperparameters", "label": "Hyperparameters", "built": false },
-        { "slug": "/docs/train/augmentations", "label": "Augmentations", "built": false },
-        { "slug": "/docs/train/multi-gpu", "label": "Multi-GPU", "built": false },
-        { "slug": "/docs/train/loggers", "label": "Experiment loggers", "built": false },
-        { "slug": "/docs/train/validation", "label": "Validation and metrics", "built": false }
+        {
+          "slug": "/docs/train",
+          "label": "Training overview",
+          "built": false
+        },
+        {
+          "slug": "/docs/train/datasets",
+          "label": "Datasets",
+          "built": false
+        },
+        {
+          "slug": "/docs/train/hyperparameters",
+          "label": "Hyperparameters",
+          "built": false
+        },
+        {
+          "slug": "/docs/train/augmentations",
+          "label": "Augmentations",
+          "built": false
+        },
+        {
+          "slug": "/docs/train/multi-gpu",
+          "label": "Multi-GPU",
+          "built": false
+        },
+        {
+          "slug": "/docs/train/loggers",
+          "label": "Experiment loggers",
+          "built": false
+        },
+        {
+          "slug": "/docs/train/validation",
+          "label": "Validation and metrics",
+          "built": false
+        }
       ]
     },
     {
       "id": "predict",
       "label": "Predict",
       "items": [
-        { "slug": "/docs/predict", "label": "Prediction overview", "built": false },
-        { "slug": "/docs/predict/sources", "label": "Sources and streams", "built": false },
-        { "slug": "/docs/predict/results", "label": "Working with results", "built": false },
-        { "slug": "/docs/predict/ensembling", "label": "Ensembling", "built": false }
+        {
+          "slug": "/docs/predict",
+          "label": "Prediction overview",
+          "built": false
+        },
+        {
+          "slug": "/docs/predict/sources",
+          "label": "Sources and streams",
+          "built": false
+        },
+        {
+          "slug": "/docs/predict/results",
+          "label": "Working with results",
+          "built": false
+        },
+        {
+          "slug": "/docs/predict/ensembling",
+          "label": "Ensembling",
+          "built": false
+        }
       ]
     },
     {
       "id": "export",
       "label": "Export and deploy",
       "items": [
-        { "slug": "/docs/export", "label": "Export overview", "built": false },
-        { "slug": "/docs/export/onnx", "label": "ONNX", "built": false },
-        { "slug": "/docs/export/tensorrt", "label": "TensorRT", "built": false },
-        { "slug": "/docs/export/openvino", "label": "OpenVINO", "built": false },
-        { "slug": "/docs/export/coreml", "label": "CoreML", "built": false },
-        { "slug": "/docs/export/tflite", "label": "TFLite", "built": false },
-        { "slug": "/docs/export/deepstream", "label": "DeepStream", "built": true },
-        { "slug": "/docs/export/quantization", "label": "Quantization", "built": false }
+        {
+          "slug": "/docs/export",
+          "label": "Export overview",
+          "built": false
+        },
+        {
+          "slug": "/docs/export/onnx",
+          "label": "ONNX",
+          "built": false
+        },
+        {
+          "slug": "/docs/export/tensorrt",
+          "label": "TensorRT",
+          "built": false
+        },
+        {
+          "slug": "/docs/export/openvino",
+          "label": "OpenVINO",
+          "built": false
+        },
+        {
+          "slug": "/docs/export/coreml",
+          "label": "CoreML",
+          "built": false
+        },
+        {
+          "slug": "/docs/export/tflite",
+          "label": "TFLite",
+          "built": false
+        },
+        {
+          "slug": "/docs/export/deepstream",
+          "label": "DeepStream",
+          "built": true
+        },
+        {
+          "slug": "/docs/export/quantization",
+          "label": "Quantization",
+          "built": false
+        }
       ]
     },
     {
       "id": "cli",
       "label": "CLI",
       "items": [
-        { "slug": "/docs/cli", "label": "Command index", "built": false },
-        { "slug": "/docs/cli/predict", "label": "predict", "built": false },
-        { "slug": "/docs/cli/train", "label": "train", "built": false },
-        { "slug": "/docs/cli/val", "label": "val", "built": false },
-        { "slug": "/docs/cli/export", "label": "export", "built": false }
+        {
+          "slug": "/docs/cli",
+          "label": "Command index",
+          "built": false
+        },
+        {
+          "slug": "/docs/cli/predict",
+          "label": "predict",
+          "built": false
+        },
+        {
+          "slug": "/docs/cli/train",
+          "label": "train",
+          "built": false
+        },
+        {
+          "slug": "/docs/cli/val",
+          "label": "val",
+          "built": false
+        },
+        {
+          "slug": "/docs/cli/export",
+          "label": "export",
+          "built": false
+        }
       ]
     },
     {
       "id": "reference",
       "label": "Reference",
       "items": [
-        { "slug": "/docs/reference/python-api", "label": "Python API", "built": false },
-        { "slug": "/docs/reference/results-types", "label": "Results types", "built": false },
-        { "slug": "/docs/reference/dataset-formats", "label": "Dataset formats", "built": false },
-        { "slug": "/docs/reference/export-matrix", "label": "Full export matrix", "built": false },
-        { "slug": "/docs/reference/stability-tiers", "label": "Stability tiers", "built": false }
+        {
+          "slug": "/docs/reference/python-api",
+          "label": "Python API",
+          "built": false
+        },
+        {
+          "slug": "/docs/reference/results-types",
+          "label": "Results types",
+          "built": false
+        },
+        {
+          "slug": "/docs/reference/dataset-formats",
+          "label": "Dataset formats",
+          "built": false
+        },
+        {
+          "slug": "/docs/reference/export-matrix",
+          "label": "Full export matrix",
+          "built": false
+        },
+        {
+          "slug": "/docs/reference/stability-tiers",
+          "label": "Stability tiers",
+          "built": false
+        }
       ]
     },
     {
       "id": "about",
       "label": "About",
       "items": [
-        { "slug": "/docs/licensing", "label": "Licensing", "built": false },
-        { "slug": "/docs/citation", "label": "Citation", "built": false },
-        { "slug": "/docs/versions", "label": "Versions", "built": false }
+        {
+          "slug": "/docs/licensing",
+          "label": "Licensing",
+          "built": false
+        },
+        {
+          "slug": "/docs/citation",
+          "label": "Citation",
+          "built": false
+        },
+        {
+          "slug": "/docs/versions",
+          "label": "Versions",
+          "built": false
+        }
       ]
     }
   ]

@@ -69,21 +69,24 @@ snippets:
         from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibreRFDETRs.pt")
+
+        # val() returns a plain dict, not an object
         metrics = model.val(data="my-dataset.yaml", imgsz=512)
 
-        print(metrics.box.map)      # mAP 50-95
-        print(metrics.box.map50)    # mAP 50
+        print(metrics["metrics/mAP50-95"])
+        print(metrics["metrics/mAP50"])
+        print(metrics["metrics/precision"], metrics["metrics/recall"])
     - label: CLI
       language: bash
       code: |
         libreyolo val model=LibreRFDETRs.pt data=my-dataset.yaml imgsz=512
-    - label: Reproduce COCO
+    - label: Against COCO
       language: bash
       code: |
-        libreyolo val model=LibreRFDETRn.pt data=coco.yaml imgsz=384
-      expect: |
-        Class     Images  Instances     mAP50   mAP50-95
-        all         5000     36335      0.699      0.514
+        # The bundled COCO yaml carries an embedded download script, so it
+        # needs explicit permission unless the dataset is already local.
+        libreyolo val model=LibreRFDETRn.pt data=coco.yaml imgsz=384 \
+          allow_download_scripts=True
   export:
     - label: Python
       language: python
@@ -199,13 +202,10 @@ See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
 
 ## Validate
 
-`val()` reports mAP 50-95, mAP 50 and per-class results against any dataset in
-the same format you trained on.
+`val()` returns a dictionary of `metrics/` keys covering precision, recall,
+mAP 50 and mAP 50-95, measured against any dataset in the format you trained on.
 
 <code-tabs name="val" />
-
-The last command reproduces the first row of the benchmark table above against
-full COCO `val2017`.
 
 ## Export
 

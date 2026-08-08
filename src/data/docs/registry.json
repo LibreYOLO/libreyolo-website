@@ -128,12 +128,12 @@
         "yolo9_p2"
       ],
       "display": "YOLOv9",
-      "prefix": null,
+      "prefix": "LibreYOLO9",
       "tier": "g0",
       "tasks": [
         "detect"
       ],
-      "sizes_label": null,
+      "sizes_label": "yolo9: t, s, m, c at 640 px; yolo9_p2: t, s at 640 px",
       "extra": null,
       "trainable": true,
       "unsupported_train_params": {
@@ -640,14 +640,14 @@
         "ec"
       ],
       "display": "EdgeCrafter",
-      "prefix": null,
+      "prefix": "LibreEC",
       "tier": "g1",
       "tasks": [
         "detect",
         "pose",
         "segment"
       ],
-      "sizes_label": null,
+      "sizes_label": "s, m, l, x at 640 px",
       "extra": null,
       "trainable": true,
       "unsupported_train_params": {
@@ -835,12 +835,12 @@
         "rtdetrv4"
       ],
       "display": "RT-DETR",
-      "prefix": null,
+      "prefix": "LibreRTDETR",
       "tier": "g1",
       "tasks": [
         "detect"
       ],
-      "sizes_label": null,
+      "sizes_label": "rtdetr: r18, r34, r50, r50m, r101, l, x at 640 px; rtdetrv2: r18, r34, r50, r50m, r101 at 640 px; rtdetrv4: s, m, l, x at 640 px",
       "extra": "rtdetr",
       "trainable": true,
       "unsupported_train_params": {
@@ -1112,13 +1112,13 @@
         "dfine"
       ],
       "display": "D-FINE",
-      "prefix": null,
+      "prefix": "LibreDFINE",
       "tier": "g1",
       "tasks": [
         "detect",
         "segment"
       ],
-      "sizes_label": null,
+      "sizes_label": "n, s, m, l, x at 640 px",
       "extra": null,
       "trainable": true,
       "unsupported_train_params": {
@@ -1284,12 +1284,12 @@
         "deimv2"
       ],
       "display": "DEIM",
-      "prefix": null,
+      "prefix": "LibreDEIM",
       "tier": "g1",
       "tasks": [
         "detect"
       ],
-      "sizes_label": null,
+      "sizes_label": "deim: n, s, m, l, x at 640 px",
       "extra": null,
       "trainable": true,
       "unsupported_train_params": {
@@ -1518,13 +1518,13 @@
         "yolonas"
       ],
       "display": "YOLO-NAS",
-      "prefix": null,
+      "prefix": "LibreYOLONAS",
       "tier": "g1",
       "tasks": [
         "detect",
         "pose"
       ],
-      "sizes_label": null,
+      "sizes_label": "s, m, l at 640 px",
       "extra": null,
       "trainable": true,
       "unsupported_train_params": {
