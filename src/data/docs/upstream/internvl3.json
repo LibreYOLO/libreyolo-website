@@ -1,0 +1,12 @@
+{
+  "name": "InternVL3",
+  "org": "Shanghai AI Laboratory (OpenGVLab)",
+  "paper_title": "InternVL3: Exploring Advanced Training and Test-Time Recipes for Open-Source Multimodal Models",
+  "paper_url": "https://arxiv.org/abs/2504.10479",
+  "code_url": "https://github.com/OpenGVLab/InternVL",
+  "license": "MIT (code); Qwen License (weights)",
+  "license_interpretation": "InternVL3's own code is MIT, permissive and usable in commercial and closed-source products. The `-hf` checkpoints this family loads carry a Qwen LLM backbone and are licensed separately, under Alibaba Cloud's Qwen License: free to use, modify and redistribute with a \"Built with Qwen\" or \"Improved using Qwen\" attribution requirement, and a 100 million monthly-active-user ceiling on commercial use above which Alibaba's own authorization is required. LibreYOLO does not host or redistribute these weights: LibreInternVL3 downloads the matching size directly from OpenGVLab/InternVL3-<size>-hf on Hugging Face the first time it runs, and logs a one-time notice for the Qwen License before that download.",
+  "bibtex": "@article{zhu2025internvl3,\n  title={Internvl3: Exploring advanced training and test-time recipes for open-source multimodal models},\n  author={Zhu, Jinguo and Wang, Weiyun and Chen, Zhe and Liu, Zhaoyang and Ye, Shenglong and Gu, Lixin and Tian, Hao and Duan, Yuchen and Su, Weijie and Shao, Jie and others},\n  journal={arXiv preprint arXiv:2504.10479},\n  year={2025}\n}",
+  "bibtex_source_url": "https://github.com/OpenGVLab/InternVL#citation",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the OpenGVLab/InternVL README on branch main, which lists seven BibTeX entries spanning the project's history; the zhu2025internvl3 entry is the one specific to InternVL3, the release this LibreYOLO family loads, so it alone is reproduced rather than the whole block. Cross-checked against the arXiv API for 2504.10479: identical title and the first nine authors in the same order (Zhu, Wang, Chen, Liu, Ye, Gu, Tian, Duan, Su), matching the README's own truncation to 'and others' after the ninth author, reproduced as published. Do not hand-edit; a wrong citation misattributes someone's work."
+}

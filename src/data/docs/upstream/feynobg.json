@@ -1,0 +1,12 @@
+{
+  "name": "FeyNobg",
+  "org": "Feyn Inc.",
+  "paper_title": "nobg: Open Source Background Removal Models for Image and Video Matting",
+  "paper_url": "https://github.com/feyninc/nobg",
+  "code_url": "https://github.com/feyninc/nobg",
+  "license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. It places no obligation on your own application code. FeyNobg builds on BiRefNet's architecture (MIT) with a deepened backbone stage, and Feyn Inc. releases both the nobg library and the FeyNobg weights under Apache-2.0. LibreYOLO's checkpoint is a format conversion of Feyn's own published weights, with the learned parameters unchanged; fine-tuning is not wired into this library, so there is no LibreYOLO-trained variant to license separately.",
+  "bibtex": "@software{nobg,\n  title={nobg: Open Source Background Removal Models for Image and Video Matting},\n  author={Hichri, Hafedh},\n  year={2026},\n  url={https://github.com/feyninc/nobg},\n  license={Apache-2.0},\n}",
+  "bibtex_source_url": "https://github.com/feyninc/nobg#citation",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README on branch main. FeyNobg was released without a paper, so this @software entry naming the nobg library is the citation its author asks for; there is no arXiv record to cross-check it against, so this entry is reproduced exactly as published rather than verified against a second source. Do not hand-edit; a wrong citation misattributes someone's work."
+}

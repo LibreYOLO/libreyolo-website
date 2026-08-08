@@ -226,7 +226,9 @@ function tokenizeYamlLine(line) {
   return tokens
 }
 
-function highlightLine(line, language) {
+// Exported so the v2 docs can reuse the tokenizer with its own, plainer
+// code-block chrome. Behaviour here is unchanged.
+export function highlightLine(line, language) {
   switch (language.toLowerCase()) {
     case 'py':
     case 'python':
@@ -427,7 +429,7 @@ function Sidebar({ sections, eyebrow, activeSection, onNavigate, relatedLinks })
       </div>
 
       <Link
-        href="/docs/v1.4.0"
+        href="/docs"
         className="flex items-center gap-2 mb-6 mx-3 rounded-lg border border-surface-200 dark:border-white/[0.08] bg-surface-50 dark:bg-white/[0.03] px-3 py-2 text-sm font-medium text-surface-600 dark:text-surface-400 hover:text-surface-900 dark:hover:text-white hover:bg-white dark:hover:bg-white/[0.05] transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
@@ -589,7 +591,7 @@ export function DocLayout({ sections, eyebrow = 'Documentation', copyTitle = 'Li
           )}
           <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <Link
-              href="/docs/v1.4.0"
+              href="/docs"
               className="inline-flex items-center gap-1.5 text-sm font-medium text-surface-500 dark:text-surface-400 hover:text-libre-600 dark:hover:text-libre-400 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
