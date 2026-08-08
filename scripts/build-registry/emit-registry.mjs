@@ -12,6 +12,14 @@ const TASK_LABELS = {
   obb: { label: 'Oriented boxes', slug: 'oriented-detection' },
 }
 const EXTRAS = { rfdetr: 'rfdetr', rtdetr: 'rtdetr' } // families needing a pip extra
+/*
+ * Training dataset per task, ONLY where the library's own naming convention
+ * makes it unambiguous. There is deliberately no default: stamping "COCO" on
+ * everything put that claim on ImageNet classifiers, Cityscapes segmenters, an
+ * OCR pipeline and a matting model, each of which contradicted its own page.
+ * An unknown dataset renders as an empty cell, which is the house convention
+ * for "not recorded".
+ */
 const DATASET = { detect: 'COCO', segment: 'COCO', pose: 'COCO keypoints', obb: 'DOTA' }
 
 // "n, s, m, l at 640 px" style summary, derived from INPUT_SIZES.
@@ -86,7 +94,7 @@ for (const lin of ex.lineages) {
       name: row.name,
       task: row.task,
       imgsz: custom ? null : sizeOf(bare, row.task),
-      data: row.dataset || DATASET[row.task] || 'COCO',
+      data: row.dataset || DATASET[row.task] || null,
       license: row.license,
     }
   })

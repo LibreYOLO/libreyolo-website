@@ -2179,21 +2179,21 @@
           "name": "LibreFOMOs-point.pt",
           "task": "point",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         },
         {
           "name": "LibreFOMOm-point.pt",
           "task": "point",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         },
         {
           "name": "LibreFOMOl-point.pt",
           "task": "point",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         }
       ],
@@ -2252,42 +2252,42 @@
           "name": "LibreSegformerb0-sem.pt",
           "task": "semantic",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "other"
         },
         {
           "name": "LibreSegformerb1-sem.pt",
           "task": "semantic",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "other"
         },
         {
           "name": "LibreSegformerb2-sem.pt",
           "task": "semantic",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "other"
         },
         {
           "name": "LibreSegformerb3-sem.pt",
           "task": "semantic",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "other"
         },
         {
           "name": "LibreSegformerb4-sem.pt",
           "task": "semantic",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "other"
         },
         {
           "name": "LibreSegformerb5-sem.pt",
           "task": "semantic",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "other"
         }
       ],
@@ -2346,21 +2346,21 @@
           "name": "LibreLingBotVisions-sem.pt",
           "task": "semantic",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreLingBotVisionb-sem.pt",
           "task": "semantic",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreLingBotVisionl-sem.pt",
           "task": "semantic",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         }
       ],
@@ -2559,28 +2559,28 @@
           "name": "LibreResNet18-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreResNet34-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreResNet50-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreResNet101-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         }
       ],
@@ -2639,21 +2639,21 @@
           "name": "LibreConvNeXtt-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreConvNeXts-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreConvNeXtb-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         }
       ],
@@ -2712,21 +2712,21 @@
           "name": "LibreMobileNetV4s-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreMobileNetV4m-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreMobileNetV4l-cls.pt",
           "task": "classify",
           "imgsz": 256,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         }
       ],
@@ -2785,28 +2785,28 @@
           "name": "LibreEfficientNetV2b0-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreEfficientNetV2b1-cls.pt",
           "task": "classify",
           "imgsz": 240,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreEfficientNetV2b2-cls.pt",
           "task": "classify",
           "imgsz": 260,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreEfficientNetV2b3-cls.pt",
           "task": "classify",
           "imgsz": 300,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         }
       ],
@@ -3683,28 +3683,28 @@
           "name": "LibreViTti-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreViTs-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreViTb-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreViTl-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         }
       ],
@@ -3763,28 +3763,28 @@
           "name": "LibreSwint-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         },
         {
           "name": "LibreSwins-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         },
         {
           "name": "LibreSwinb-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         },
         {
           "name": "LibreSwinl-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         }
       ],
@@ -3843,28 +3843,28 @@
           "name": "LibreVGG16-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "bsd-3-clause"
         },
         {
           "name": "LibreVGG19bn-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "bsd-3-clause"
         },
         {
           "name": "LibreVGG19-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "bsd-3-clause"
         },
         {
           "name": "LibreVGG16bn-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "bsd-3-clause"
         }
       ],
@@ -3923,7 +3923,7 @@
           "name": "LibreAlexNetb-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "bsd-3-clause"
         }
       ],
@@ -3982,14 +3982,14 @@
           "name": "LibreFCNr50.pt",
           "task": "semantic",
           "imgsz": 520,
-          "data": "COCO",
+          "data": null,
           "license": "bsd-3-clause"
         },
         {
           "name": "LibreFCNr101.pt",
           "task": "semantic",
           "imgsz": 520,
-          "data": "COCO",
+          "data": null,
           "license": "bsd-3-clause"
         }
       ],
@@ -4048,21 +4048,21 @@
           "name": "LibreDeepLabv3r50-sem.pt",
           "task": "semantic",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "bsd-3-clause"
         },
         {
           "name": "LibreDeepLabv3r101-sem.pt",
           "task": "semantic",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "bsd-3-clause"
         },
         {
           "name": "LibreDeepLabv3mv3-sem.pt",
           "task": "semantic",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "bsd-3-clause"
         }
       ],
@@ -4121,21 +4121,21 @@
           "name": "LibrePIDNets-sem.pt",
           "task": "semantic",
           "imgsz": 1024,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         },
         {
           "name": "LibrePIDNetm-sem.pt",
           "task": "semantic",
           "imgsz": 1024,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         },
         {
           "name": "LibrePIDNetl-sem.pt",
           "task": "semantic",
           "imgsz": 1024,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         }
       ],
@@ -4196,7 +4196,7 @@
           "name": "LibreEoMTl-sem.pt",
           "task": "semantic",
           "imgsz": 512,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         },
         {
@@ -4217,21 +4217,21 @@
           "name": "LibreEoMTs-panoptic.pt",
           "task": "panoptic",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         },
         {
           "name": "LibreEoMTb-panoptic.pt",
           "task": "panoptic",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         },
         {
           "name": "LibreEoMTl-panoptic.pt",
           "task": "panoptic",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         }
       ],
@@ -4435,21 +4435,21 @@
           "name": "LibreDepthAnythingV2s-depth.pt",
           "task": "depth",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreDepthAnythingV2l-depth.pt",
           "task": "depth",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "cc-by-nc-4.0"
         },
         {
           "name": "LibreDepthAnythingV2b-depth.pt",
           "task": "depth",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "cc-by-nc-4.0"
         }
       ],
@@ -4508,7 +4508,7 @@
           "name": "LibreDepthAnything3l-depth.pt",
           "task": "depth",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         }
       ],
@@ -4567,14 +4567,14 @@
           "name": "LibreZipDepthb-depth.pt",
           "task": "depth",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         },
         {
           "name": "LibreZipDepthbnpu-depth.pt",
           "task": "depth",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         }
       ],
@@ -4837,21 +4837,21 @@
           "name": "LibreSwinIRs-restore.pt",
           "task": "restore",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreSwinIRm-restore.pt",
           "task": "restore",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreSwinIRl-restore.pt",
           "task": "restore",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         }
       ],
@@ -4910,21 +4910,21 @@
           "name": "LibreRealESRGANx4t-restore.pt",
           "task": "restore",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "bsd-3-clause"
         },
         {
           "name": "LibreRealESRGANx4-restore.pt",
           "task": "restore",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "bsd-3-clause"
         },
         {
           "name": "LibreRealESRGANx2-restore.pt",
           "task": "restore",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "bsd-3-clause"
         }
       ],
@@ -4983,7 +4983,7 @@
           "name": "LibreBiRefNetl-matte.pt",
           "task": "matte",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         }
       ],
@@ -5020,14 +5020,14 @@
       },
       "tier": "g3",
       "tasks": [
-        "detect"
+        "matte"
       ],
       "sizes_label": "l at 1024 px",
       "added_in": null,
       "task_added_in": {
         "feynobg": null
       },
-      "weights_hosted": false,
+      "weights_hosted": true,
       "extra": null,
       "trainable": true,
       "unsupported_train_params": {
@@ -5037,8 +5037,45 @@
         "train": true,
         "val": true
       },
-      "checkpoints": [],
-      "export": {},
+      "checkpoints": [
+        {
+          "name": "LibreFeyNobgl-matte.pt",
+          "task": "matte",
+          "imgsz": null,
+          "data": null,
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreFeyNobgl-matte-fp8.pt",
+          "task": "matte",
+          "imgsz": null,
+          "data": null,
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreFeyNobgl-matte-fp16.pt",
+          "task": "matte",
+          "imgsz": null,
+          "data": null,
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "matte": {
+          "onnx": "available",
+          "torchscript": "validated",
+          "executorch": "available",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
       "benchmarks": {},
       "va_embed": null,
       "upstream": null
@@ -5078,14 +5115,14 @@
           "name": "LibrePPOCRt-ocr.pt",
           "task": "ocr",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibrePPOCRl-ocr.pt",
           "task": "ocr",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         }
       ],
@@ -5180,14 +5217,14 @@
           "name": "LibreSAM3DBodyd3-mesh.pt",
           "task": "mesh",
           "imgsz": 512,
-          "data": "COCO",
+          "data": null,
           "license": "other"
         },
         {
           "name": "LibreSAM3DBodyh-mesh.pt",
           "task": "mesh",
           "imgsz": 512,
-          "data": "COCO",
+          "data": null,
           "license": "other"
         }
       ],
@@ -5510,21 +5547,21 @@
           "name": "LibreDeiTt-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreDeiTs-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreDeiTb-cls.pt",
           "task": "classify",
           "imgsz": 224,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         }
       ],
@@ -6579,14 +6616,14 @@
           "name": "LibreCLIPb32-cls.pt",
           "task": "classify",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         },
         {
           "name": "LibreCLIPb16-cls.pt",
           "task": "classify",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "mit"
         }
       ],
@@ -6660,14 +6697,14 @@
           "name": "LibreSigLIP2b16-cls.pt",
           "task": "classify",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         },
         {
           "name": "LibreSigLIP2so400m-cls.pt",
           "task": "classify",
           "imgsz": null,
-          "data": "COCO",
+          "data": null,
           "license": "apache-2.0"
         }
       ],
@@ -6867,24 +6904,6 @@
       "kind": "weights-without-registry-task",
       "file": "LibreRFDETRl-cls.pt",
       "task": "classify"
-    },
-    {
-      "slug": "feynobg",
-      "kind": "weights-without-registry-task",
-      "file": "LibreFeyNobgl-matte.pt",
-      "task": "matte"
-    },
-    {
-      "slug": "feynobg",
-      "kind": "weights-without-registry-task",
-      "file": "LibreFeyNobgl-matte-fp8.pt",
-      "task": "matte"
-    },
-    {
-      "slug": "feynobg",
-      "kind": "weights-without-registry-task",
-      "file": "LibreFeyNobgl-matte-fp16.pt",
-      "task": "matte"
     }
   ],
   "_generated_by": "scripts/build-registry (prototype). Mechanical fields are extracted from docs/export_support.md, each family model.py, models/registry.py, the LibreYOLO HF org listing and the vision-analysis results. Upstream metadata is merged from src/data/docs/upstream/<slug>.json after per-family human verification.",

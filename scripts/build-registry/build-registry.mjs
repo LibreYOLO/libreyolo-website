@@ -70,7 +70,15 @@ function parseExport() {
     out[family][task] = {}
     formats.forEach((fmt, i) => {
       const v = (rest[i] || '').trim()
-      out[family][task][fmt] = v === '✓' ? 'validated' : v === 'exp' ? 'available' : 'blocked'
+      // The generated table renamed its middle tier from "exp" to "available"
+      // when ADR 0011's vocabulary changed. Accept both: matching only the old
+      // spelling would silently reclassify every supported-but-unvalidated
+      // combination as blocked, which understates support across the library.
+      out[family][task][fmt] =
+        v === '✓' ? 'validated'
+          : v === 'exp' || v === 'available' ? 'available'
+            : v === '' ? 'blocked'
+              : (() => { throw new Error(`Unknown export cell value ${JSON.stringify(v)} for ${family}/${task}/${fmt}`) })()
     })
   }
   return { formats, support: out }
@@ -81,21 +89,34 @@ function parseExport() {
  * modules rather than assumed. A class that declares nothing inherits from its
  * own tier, not from BaseModel.
  */
-const BASE_TASKS = (() => {
-  const out = {}
-  for (const file of ['BASE__sam__base.py', 'BASE__vlm__base.py', 'BASE__openvocab__base.py', 'BASE__base__model.py']) {
-    let text
-    try { text = read(path.join('models', file)) } catch { continue }
-    for (const m of text.matchAll(/^class\s+(\w+)[\s\S]*?SUPPORTED_TASKS[^=]*=\s*\(([^)]*)\)/gm)) {
-      out[m[1]] = [...m[2].matchAll(/"([a-z]+)"/g)].map((x) => x[1])
-    }
+/*
+ * SUPPORTED_TASKS by class name, across EVERY dumped source, not just the tier
+ * base modules. Families also subclass each other: LibreFeyNobg extends
+ * LibreBiRefNet and declares no tasks of its own, so looking only at the tier
+ * bases resolved it to BaseModel's ("detect",) and labelled a matting model as
+ * a detector. Inheritance is followed transitively.
+ */
+const CLASS_TASKS = {}
+const CLASS_BASE = {}
+for (const file of (() => { try { return fs.readdirSync(path.join(SRC, 'models')) } catch { return [] } })()) {
+  let text
+  try { text = read(path.join('models', file)) } catch { continue }
+  for (const m of text.matchAll(/^class\s+(\w+)\(([^)]*)\)/gm)) {
+    const [, cls, bases] = m
+    CLASS_BASE[cls] ??= (bases.split(',')[0] || '').trim().split('.').pop()
+    const after = text.slice(m.index, text.indexOf('\nclass ', m.index + 1) === -1 ? undefined : text.indexOf('\nclass ', m.index + 1))
+    const t = after.match(/SUPPORTED_TASKS[^=]*=\s*\(([^)]*)\)/)?.[1]
+    if (t) CLASS_TASKS[cls] ??= [...t.matchAll(/"([a-z]+)"/g)].map((x) => x[1])
   }
-  return out
-})()
+}
 
-function inheritedTasks(baseName) {
+function inheritedTasks(baseName, seen = new Set()) {
   const key = String(baseName).split('.').pop()
-  return BASE_TASKS[key] ?? ['detect']
+  if (!key || seen.has(key)) return ['detect']
+  seen.add(key)
+  if (CLASS_TASKS[key]) return CLASS_TASKS[key]
+  if (CLASS_BASE[key]) return inheritedTasks(CLASS_BASE[key], seen)
+  return ['detect']
 }
 
 /* ── per-family basics ──────────────────────────────────────────── */

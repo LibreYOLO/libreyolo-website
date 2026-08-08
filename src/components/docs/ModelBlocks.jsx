@@ -121,7 +121,11 @@ export function ModelHeader({ doc, family }) {
           <ExtLink href={u.code_url}>source</ExtLink>
         </Meta>
         <Meta label="Licenses">
-          Code MIT, weights {u.license}. <Link href="#licensing" className="text-libre-700 underline-offset-2 hover:underline dark:text-libre-400">Commercial use</Link>
+          {/* LibreYOLO's own code is MIT, but a vendored port keeps its
+              upstream license, so the header cannot assert MIT for every
+              family. `code_license` overrides where they differ. */}
+          Code {u.code_license ?? 'MIT'}, weights {u.license}.{' '}
+          <Link href="#licensing" className="text-libre-700 underline-offset-2 hover:underline dark:text-libre-400">Commercial use</Link>
         </Meta>
       </dl>
     </header>
@@ -288,9 +292,16 @@ export function CheckpointTable({ family }) {
             {/* No params column: it is only recorded for a handful of rows,
                 and a mostly-empty column reads as a broken table. Parameter
                 counts live in the benchmark table, where they are known. */}
+            {/*
+              No "Trained on" column. The registry cannot source it reliably:
+              filename tokens cover a handful of checkpoints, and the Hugging
+              Face dataset tags are inconsistent where they exist at all. A
+              task-based default put "COCO" on ImageNet classifiers and OCR
+              models. The linked repository is the authority for provenance,
+              which is what the licensing note already tells the reader.
+            */}
             <Th>File</Th>
             <Th align="right">Input (px)</Th>
-            <Th>Trained on</Th>
             <Th>Weights license</Th>
           </tr>
         </thead>
@@ -298,7 +309,7 @@ export function CheckpointTable({ family }) {
           {grouped.map(({ task, rows }) => (
             <Fragment key={task}>
               <tr>
-                <td colSpan={4} className="border-b border-surface-200/70 px-3 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wider text-surface-500 dark:border-white/[0.07] dark:text-surface-500">
+                <td colSpan={3} className="border-b border-surface-200/70 px-3 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wider text-surface-500 dark:border-white/[0.07] dark:text-surface-500">
                   {getTaskMeta(task).label}
                 </td>
               </tr>
@@ -315,7 +326,7 @@ export function CheckpointTable({ family }) {
                     </a>
                   </Td>
                   <Td className="text-right tabular-nums">{row.imgsz}</Td>
-                  <Td>{row.data}</Td>
+
                   <Td>{row.license}</Td>
                 </tr>
               ))}
@@ -490,7 +501,23 @@ export function Provenance({ family, children }) {
         <Meta label="Upstream license">{u.license}</Meta>
         <Meta label="Upstream source"><ExtLink href={u.code_url}>{u.code_url.replace('https://', '')}</ExtLink></Meta>
         <Meta label="LibreYOLO code">MIT</Meta>
-        <Meta label="Weights">{u.license}, republished at <ExtLink href={HF_BASE}>huggingface.co/LibreYOLO</ExtLink></Meta>
+        {/*
+          Only claim we republish weights when we actually host some. Several
+          families are deliberately NOT mirrored because their licenses forbid
+          it (research-only, gated, or non-commercial), and asserting otherwise
+          on those pages is both false and legally careless.
+        */}
+        <Meta label="Weights">
+          {family.weights_hosted === false ? (
+            <>
+              {u.license}, distributed by their authors. LibreYOLO does not host or mirror them.
+            </>
+          ) : (
+            <>
+              {u.license}, republished at <ExtLink href={HF_BASE}>huggingface.co/LibreYOLO</ExtLink>
+            </>
+          )}
+        </Meta>
         {u.license_interpretation && (
           <Meta label="Interpretation">{u.license_interpretation}</Meta>
         )}
