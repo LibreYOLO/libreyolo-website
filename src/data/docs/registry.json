@@ -1688,6 +1688,5111 @@
         "scatter": "https://www.visionanalysis.org/embed/scatter?highlight=yolonas-l%2Cyolonas-m%2Cyolonas-s&title=YOLO-NAS%20on%20COCO&subtitle=Accuracy%20against%20latency%2C%20every%20benchmarked%20model"
       },
       "upstream": null
+    },
+    "yolox": {
+      "key": "yolox",
+      "slug": "yolox",
+      "registry_keys": [
+        "yolox"
+      ],
+      "display": "YOLOX",
+      "prefix": "LibreYOLOX",
+      "prefixes": {
+        "yolox": "LibreYOLOX"
+      },
+      "tier": "g2",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "n, t, s, m, l, x at 416 to 640 px",
+      "added_in": null,
+      "task_added_in": {
+        "yolox": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "yolox": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreYOLOXn.pt",
+          "task": "detect",
+          "imgsz": 416,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreYOLOXt.pt",
+          "task": "detect",
+          "imgsz": 416,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreYOLOXs.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreYOLOXm.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreYOLOXl.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreYOLOXx.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "available",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "validated",
+          "tflite": "validated",
+          "coreml": "available",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {
+        "detect": {
+          "metric": "mAP 50-95",
+          "dataset": "COCO val2017, 500 images",
+          "source_url": "https://www.visionanalysis.org/",
+          "rows": [
+            {
+              "id": "yolox-nano",
+              "size": "nano",
+              "prefix_key": "yolox",
+              "imgsz": 416,
+              "params_m": 0.91,
+              "map": 28.8
+            },
+            {
+              "id": "yolox-tiny",
+              "size": "tiny",
+              "prefix_key": "yolox",
+              "imgsz": 416,
+              "params_m": 5.06,
+              "map": 35.1
+            },
+            {
+              "id": "yolox-l",
+              "size": "l",
+              "prefix_key": "yolox",
+              "imgsz": 640,
+              "params_m": 54.21,
+              "map": 53.9
+            },
+            {
+              "id": "yolox-m",
+              "size": "m",
+              "prefix_key": "yolox",
+              "imgsz": 640,
+              "params_m": 25.33,
+              "map": 50.9
+            },
+            {
+              "id": "yolox-s",
+              "size": "s",
+              "prefix_key": "yolox",
+              "imgsz": 640,
+              "params_m": 8.97,
+              "map": 43
+            },
+            {
+              "id": "yolox-x",
+              "size": "x",
+              "prefix_key": "yolox",
+              "imgsz": 640,
+              "params_m": 99.07,
+              "map": 56.3
+            }
+          ]
+        }
+      },
+      "va_embed": {
+        "scatter": "https://www.visionanalysis.org/embed/scatter?highlight=yolox-nano%2Cyolox-tiny%2Cyolox-l%2Cyolox-m%2Cyolox-s%2Cyolox-x&title=YOLOX%20on%20COCO&subtitle=Accuracy%20against%20latency%2C%20every%20benchmarked%20model"
+      },
+      "upstream": null
+    },
+    "yolo7": {
+      "key": "yolo7",
+      "slug": "yolov7",
+      "registry_keys": [
+        "yolo7"
+      ],
+      "display": "YOLOv7",
+      "prefix": "LibreYOLO7",
+      "prefixes": {
+        "yolo7": "LibreYOLO7"
+      },
+      "tier": "g2",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "b at 640 px",
+      "added_in": null,
+      "task_added_in": {
+        "yolo7": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "yolo7": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreYOLO7b.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "mit"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "available",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "validated",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "rtmdet": {
+      "key": "rtmdet",
+      "slug": "rtmdet",
+      "registry_keys": [
+        "rtmdet"
+      ],
+      "display": "RTMDet",
+      "prefix": "LibreRTMDet",
+      "prefixes": {
+        "rtmdet": "LibreRTMDet"
+      },
+      "tier": "g2",
+      "tasks": [
+        "detect",
+        "segment"
+      ],
+      "sizes_label": "t, s, m, l, x at 640 px",
+      "added_in": null,
+      "task_added_in": {
+        "rtmdet": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "rtmdet": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreRTMDett.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRTMDets.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRTMDetm.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRTMDetl.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRTMDetx.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRTMDett-seg.pt",
+          "task": "segment",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRTMDets-seg.pt",
+          "task": "segment",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRTMDetm-seg.pt",
+          "task": "segment",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRTMDetl-seg.pt",
+          "task": "segment",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRTMDetx-seg.pt",
+          "task": "segment",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "available",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "validated"
+        },
+        "segment": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "picodet": {
+      "key": "picodet",
+      "slug": "picodet",
+      "registry_keys": [
+        "picodet"
+      ],
+      "display": "PicoDet",
+      "prefix": "LibrePICODET",
+      "prefixes": {
+        "picodet": "LibrePICODET"
+      },
+      "tier": "g2",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "s, m, l at 320 to 640 px",
+      "added_in": null,
+      "task_added_in": {
+        "picodet": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "picodet": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibrePICODETs.pt",
+          "task": "detect",
+          "imgsz": 320,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibrePICODETm.pt",
+          "task": "detect",
+          "imgsz": 416,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibrePICODETl.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "available",
+          "ncnn": "validated",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {
+        "detect": {
+          "metric": "mAP 50-95",
+          "dataset": "COCO val2017, 500 images",
+          "source_url": "https://www.visionanalysis.org/",
+          "rows": [
+            {
+              "id": "picodet-s",
+              "size": "s",
+              "prefix_key": "picodet",
+              "imgsz": 320,
+              "params_m": 0.99,
+              "map": 29.5
+            },
+            {
+              "id": "picodet-m",
+              "size": "m",
+              "prefix_key": "picodet",
+              "imgsz": 416,
+              "params_m": 2.15,
+              "map": 37.6
+            },
+            {
+              "id": "picodet-l",
+              "size": "l",
+              "prefix_key": "picodet",
+              "imgsz": 640,
+              "params_m": 3.31,
+              "map": 44.2
+            }
+          ]
+        }
+      },
+      "va_embed": {
+        "scatter": "https://www.visionanalysis.org/embed/scatter?highlight=picodet-s%2Cpicodet-m%2Cpicodet-l&title=PicoDet%20on%20COCO&subtitle=Accuracy%20against%20latency%2C%20every%20benchmarked%20model"
+      },
+      "upstream": null
+    },
+    "fomo": {
+      "key": "fomo",
+      "slug": "fomo",
+      "registry_keys": [
+        "fomo"
+      ],
+      "display": "FOMO",
+      "prefix": "LibreFOMO",
+      "prefixes": {
+        "fomo": "LibreFOMO"
+      },
+      "tier": "g2",
+      "tasks": [
+        "point"
+      ],
+      "sizes_label": null,
+      "added_in": null,
+      "task_added_in": {
+        "fomo": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "fomo": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreFOMOs-point.pt",
+          "task": "point",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "mit"
+        },
+        {
+          "name": "LibreFOMOm-point.pt",
+          "task": "point",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "mit"
+        },
+        {
+          "name": "LibreFOMOl-point.pt",
+          "task": "point",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "mit"
+        }
+      ],
+      "export": {
+        "point": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "validated",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "segformer": {
+      "key": "segformer",
+      "slug": "segformer",
+      "registry_keys": [
+        "segformer"
+      ],
+      "display": "SegFormer",
+      "prefix": "LibreSegformer",
+      "prefixes": {
+        "segformer": "LibreSegformer"
+      },
+      "tier": "g2",
+      "tasks": [
+        "semantic"
+      ],
+      "sizes_label": null,
+      "added_in": null,
+      "task_added_in": {
+        "segformer": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "segformer": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreSegformerb0-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "other"
+        },
+        {
+          "name": "LibreSegformerb1-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "other"
+        },
+        {
+          "name": "LibreSegformerb2-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "other"
+        },
+        {
+          "name": "LibreSegformerb3-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "other"
+        },
+        {
+          "name": "LibreSegformerb4-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "other"
+        },
+        {
+          "name": "LibreSegformerb5-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "other"
+        }
+      ],
+      "export": {
+        "semantic": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "lingbotvision": {
+      "key": "lingbotvision",
+      "slug": "lingbot-vision",
+      "registry_keys": [
+        "lingbotvision"
+      ],
+      "display": "LingBot-Vision",
+      "prefix": "LibreLingBotVision",
+      "prefixes": {
+        "lingbotvision": "LibreLingBotVision"
+      },
+      "tier": "g2",
+      "tasks": [
+        "semantic"
+      ],
+      "sizes_label": null,
+      "added_in": null,
+      "task_added_in": {
+        "lingbotvision": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "lingbotvision": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreLingBotVisions-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreLingBotVisionb-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreLingBotVisionl-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "semantic": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "available",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "dinov2": {
+      "key": "dinov2",
+      "slug": "dinov2",
+      "registry_keys": [
+        "dinov2"
+      ],
+      "display": "DINOv2",
+      "prefix": "LibreDINOv2",
+      "prefixes": {
+        "dinov2": "LibreDINOv2"
+      },
+      "tier": "g2",
+      "tasks": [
+        "semantic",
+        "classify",
+        "embed"
+      ],
+      "sizes_label": "n, s, m, l at 518 px",
+      "added_in": null,
+      "task_added_in": {
+        "dinov2": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "dinov2": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {
+        "semantic": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "classify": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "available",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "available"
+        },
+        "embed": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "available",
+          "tensorrt": "available",
+          "openvino": "available",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "validated",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "nafnet": {
+      "key": "nafnet",
+      "slug": "nafnet",
+      "registry_keys": [
+        "nafnet"
+      ],
+      "display": "NAFNet",
+      "prefix": "LibreNAFNet",
+      "prefixes": {
+        "nafnet": "LibreNAFNet"
+      },
+      "tier": "g2",
+      "tasks": [
+        "restore"
+      ],
+      "sizes_label": "s, l at 256 px",
+      "added_in": null,
+      "task_added_in": {
+        "nafnet": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "nafnet": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreNAFNetl-restore-sidd.pt",
+          "task": "restore",
+          "imgsz": null,
+          "data": "SIDD",
+          "license": "mit"
+        }
+      ],
+      "export": {
+        "restore": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "validated",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "resnet": {
+      "key": "resnet",
+      "slug": "resnet",
+      "registry_keys": [
+        "resnet"
+      ],
+      "display": "ResNet",
+      "prefix": "LibreResNet",
+      "prefixes": {
+        "resnet": "LibreResNet"
+      },
+      "tier": "g2",
+      "tasks": [
+        "classify"
+      ],
+      "sizes_label": "18, 34, 50, 101 at 224 px",
+      "added_in": null,
+      "task_added_in": {
+        "resnet": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "resnet": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreResNet18-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreResNet34-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreResNet50-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreResNet101-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "classify": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "validated",
+          "tflite": "validated",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "convnext": {
+      "key": "convnext",
+      "slug": "convnext",
+      "registry_keys": [
+        "convnext"
+      ],
+      "display": "ConvNeXt",
+      "prefix": "LibreConvNeXt",
+      "prefixes": {
+        "convnext": "LibreConvNeXt"
+      },
+      "tier": "g2",
+      "tasks": [
+        "classify"
+      ],
+      "sizes_label": "t, s, b at 224 px",
+      "added_in": null,
+      "task_added_in": {
+        "convnext": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "convnext": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreConvNeXtt-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreConvNeXts-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreConvNeXtb-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "classify": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "validated",
+          "tflite": "validated",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "mobilenetv4": {
+      "key": "mobilenetv4",
+      "slug": "mobilenetv4",
+      "registry_keys": [
+        "mobilenetv4"
+      ],
+      "display": "MobileNetV4",
+      "prefix": "LibreMobileNetV4",
+      "prefixes": {
+        "mobilenetv4": "LibreMobileNetV4"
+      },
+      "tier": "g2",
+      "tasks": [
+        "classify"
+      ],
+      "sizes_label": "s, m, l at 224 to 256 px",
+      "added_in": null,
+      "task_added_in": {
+        "mobilenetv4": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "mobilenetv4": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreMobileNetV4s-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreMobileNetV4m-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreMobileNetV4l-cls.pt",
+          "task": "classify",
+          "imgsz": 256,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "classify": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "validated",
+          "tflite": "validated",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "efficientnetv2": {
+      "key": "efficientnetv2",
+      "slug": "efficientnetv2",
+      "registry_keys": [
+        "efficientnetv2"
+      ],
+      "display": "EfficientNetV2",
+      "prefix": "LibreEfficientNetV2",
+      "prefixes": {
+        "efficientnetv2": "LibreEfficientNetV2"
+      },
+      "tier": "g2",
+      "tasks": [
+        "classify"
+      ],
+      "sizes_label": "b0, b1, b2, b3 at 224 to 300 px",
+      "added_in": null,
+      "task_added_in": {
+        "efficientnetv2": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "efficientnetv2": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreEfficientNetV2b0-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreEfficientNetV2b1-cls.pt",
+          "task": "classify",
+          "imgsz": 240,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreEfficientNetV2b2-cls.pt",
+          "task": "classify",
+          "imgsz": 260,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreEfficientNetV2b3-cls.pt",
+          "task": "classify",
+          "imgsz": 300,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "classify": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "validated",
+          "tflite": "validated",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "lwdetr": {
+      "key": "lwdetr",
+      "slug": "lw-detr",
+      "registry_keys": [
+        "lwdetr"
+      ],
+      "display": "LW-DETR",
+      "prefix": "LibreLWDETR",
+      "prefixes": {
+        "lwdetr": "LibreLWDETR"
+      },
+      "tier": "g3",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "t, s, m, l, x at 640 px",
+      "added_in": null,
+      "task_added_in": {
+        "lwdetr": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "lwdetr": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreLWDETRt.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreLWDETRs.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreLWDETRm.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreLWDETRl.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreLWDETRx.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "available",
+          "tensorrt": "available",
+          "openvino": "available",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "detr": {
+      "key": "detr",
+      "slug": "detr",
+      "registry_keys": [
+        "detr"
+      ],
+      "display": "DETR",
+      "prefix": "LibreDETR",
+      "prefixes": {
+        "detr": "LibreDETR"
+      },
+      "tier": "g3",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "r50, r50dc5, r101, r101dc5 at 800 px",
+      "added_in": null,
+      "task_added_in": {
+        "detr": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "detr": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreDETRr50dc5.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreDETRr50.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreDETRr101dc5.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreDETRr101.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "available",
+          "tensorrt": "available",
+          "openvino": "available",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "deformable_detr": {
+      "key": "deformable_detr",
+      "slug": "deformable-detr",
+      "registry_keys": [
+        "deformable_detr"
+      ],
+      "display": "Deformable DETR",
+      "prefix": "LibreDeformableDETR",
+      "prefixes": {
+        "deformable_detr": "LibreDeformableDETR"
+      },
+      "tier": "g3",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "r50ss, r50ssdc5, r50, r50refine, r50twostage at 800 px",
+      "added_in": null,
+      "task_added_in": {
+        "deformable_detr": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "deformable_detr": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreDeformableDETRr50ss.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreDeformableDETRr50ssdc5.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreDeformableDETRr50.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreDeformableDETRr50twostage.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreDeformableDETRr50refine.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "available",
+          "executorch": "available",
+          "tensorrt": "available",
+          "openvino": "available",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "dinodetr": {
+      "key": "dinodetr",
+      "slug": "dino-detr",
+      "registry_keys": [
+        "dinodetr"
+      ],
+      "display": "DINO-DETR",
+      "prefix": "LibreDINODETR",
+      "prefixes": {
+        "dinodetr": "LibreDINODETR"
+      },
+      "tier": "g3",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "r50, r50s5, swinl at 800 px",
+      "added_in": null,
+      "task_added_in": {
+        "dinodetr": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "dinodetr": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreDINODETRr50.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreDINODETRr50s5.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreDINODETRswinl.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "available",
+          "executorch": "available",
+          "tensorrt": "available",
+          "openvino": "available",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "mask_rcnn": {
+      "key": "mask_rcnn",
+      "slug": "mask-rcnn",
+      "registry_keys": [
+        "mask_rcnn"
+      ],
+      "display": "Mask R-CNN",
+      "prefix": "LibreMaskRCNN",
+      "prefixes": {
+        "mask_rcnn": "LibreMaskRCNN"
+      },
+      "tier": "g3",
+      "tasks": [
+        "detect",
+        "segment"
+      ],
+      "sizes_label": "r50 at 800 px",
+      "added_in": null,
+      "task_added_in": {
+        "mask_rcnn": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "mask_rcnn": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreMaskRCNNr50.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "segment": {
+          "onnx": "validated",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "faster_rcnn": {
+      "key": "faster_rcnn",
+      "slug": "faster-rcnn",
+      "registry_keys": [
+        "faster_rcnn"
+      ],
+      "display": "Faster R-CNN",
+      "prefix": "LibreFasterRCNN",
+      "prefixes": {
+        "faster_rcnn": "LibreFasterRCNN"
+      },
+      "tier": "g3",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "n, s, m, l at 320 to 800 px",
+      "added_in": null,
+      "task_added_in": {
+        "faster_rcnn": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "faster_rcnn": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreFasterRCNNn.pt",
+          "task": "detect",
+          "imgsz": 320,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        },
+        {
+          "name": "LibreFasterRCNNs.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        },
+        {
+          "name": "LibreFasterRCNNm.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        },
+        {
+          "name": "LibreFasterRCNNl.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "fcos": {
+      "key": "fcos",
+      "slug": "fcos",
+      "registry_keys": [
+        "fcos"
+      ],
+      "display": "FCOS",
+      "prefix": "LibreFCOS",
+      "prefixes": {
+        "fcos": "LibreFCOS"
+      },
+      "tier": "g3",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "r50 at 800 px",
+      "added_in": null,
+      "task_added_in": {
+        "fcos": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "fcos": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreFCOSr50.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "available",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "retinanet": {
+      "key": "retinanet",
+      "slug": "retinanet",
+      "registry_keys": [
+        "retinanet"
+      ],
+      "display": "RetinaNet",
+      "prefix": "LibreRetinaNet",
+      "prefixes": {
+        "retinanet": "LibreRetinaNet"
+      },
+      "tier": "g3",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "r50, r50v2 at 800 px",
+      "added_in": null,
+      "task_added_in": {
+        "retinanet": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "retinanet": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreRetinaNetr50.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        },
+        {
+          "name": "LibreRetinaNetr50v2.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "ssd": {
+      "key": "ssd",
+      "slug": "ssd",
+      "registry_keys": [
+        "ssd"
+      ],
+      "display": "SSD",
+      "prefix": "LibreSSD",
+      "prefixes": {
+        "ssd": "LibreSSD"
+      },
+      "tier": "g3",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "300 at 300 px",
+      "added_in": null,
+      "task_added_in": {
+        "ssd": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "ssd": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreSSD300.pt",
+          "task": "detect",
+          "imgsz": 300,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "centernet": {
+      "key": "centernet",
+      "slug": "centernet",
+      "registry_keys": [
+        "centernet"
+      ],
+      "display": "CenterNet",
+      "prefix": "LibreCenterNet",
+      "prefixes": {
+        "centernet": "LibreCenterNet"
+      },
+      "tier": "g3",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "resdcn18, dla34 at 512 px",
+      "added_in": null,
+      "task_added_in": {
+        "centernet": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "centernet": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreCenterNetresdcn18.pt",
+          "task": "detect",
+          "imgsz": 512,
+          "data": "COCO",
+          "license": "mit"
+        },
+        {
+          "name": "LibreCenterNetdla34.pt",
+          "task": "detect",
+          "imgsz": 512,
+          "data": "COCO",
+          "license": "mit"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "available",
+          "tensorrt": "available",
+          "openvino": "available",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "efficientdet": {
+      "key": "efficientdet",
+      "slug": "efficientdet",
+      "registry_keys": [
+        "efficientdet"
+      ],
+      "display": "EfficientDet",
+      "prefix": "LibreEfficientDet",
+      "prefixes": {
+        "efficientdet": "LibreEfficientDet"
+      },
+      "tier": "g3",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": null,
+      "added_in": null,
+      "task_added_in": {
+        "efficientdet": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "efficientdet": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreEfficientDetd0.pt",
+          "task": "detect",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreEfficientDetd1.pt",
+          "task": "detect",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreEfficientDetd2.pt",
+          "task": "detect",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreEfficientDetd3.pt",
+          "task": "detect",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreEfficientDetd4.pt",
+          "task": "detect",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "available",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "available",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "vit": {
+      "key": "vit",
+      "slug": "vit",
+      "registry_keys": [
+        "vit"
+      ],
+      "display": "ViT",
+      "prefix": "LibreViT",
+      "prefixes": {
+        "vit": "LibreViT"
+      },
+      "tier": "g3",
+      "tasks": [
+        "classify"
+      ],
+      "sizes_label": "ti, s, b, l at 224 px",
+      "added_in": null,
+      "task_added_in": {
+        "vit": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "vit": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreViTti-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreViTs-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreViTb-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreViTl-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "classify": {
+          "onnx": "validated",
+          "torchscript": "available",
+          "executorch": "available",
+          "tensorrt": "available",
+          "openvino": "available",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "available",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "swin": {
+      "key": "swin",
+      "slug": "swin",
+      "registry_keys": [
+        "swin"
+      ],
+      "display": "Swin Transformer",
+      "prefix": "LibreSwin",
+      "prefixes": {
+        "swin": "LibreSwin"
+      },
+      "tier": "g3",
+      "tasks": [
+        "classify"
+      ],
+      "sizes_label": "t, s, b, l at 224 px",
+      "added_in": null,
+      "task_added_in": {
+        "swin": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "swin": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreSwint-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "mit"
+        },
+        {
+          "name": "LibreSwins-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "mit"
+        },
+        {
+          "name": "LibreSwinb-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "mit"
+        },
+        {
+          "name": "LibreSwinl-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "mit"
+        }
+      ],
+      "export": {
+        "classify": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "available",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "available",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "vgg": {
+      "key": "vgg",
+      "slug": "vgg",
+      "registry_keys": [
+        "vgg"
+      ],
+      "display": "VGG",
+      "prefix": "LibreVGG",
+      "prefixes": {
+        "vgg": "LibreVGG"
+      },
+      "tier": "g3",
+      "tasks": [
+        "classify"
+      ],
+      "sizes_label": "16, 19, 16bn, 19bn at 224 px",
+      "added_in": null,
+      "task_added_in": {
+        "vgg": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "vgg": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreVGG16-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        },
+        {
+          "name": "LibreVGG19bn-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        },
+        {
+          "name": "LibreVGG19-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        },
+        {
+          "name": "LibreVGG16bn-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        }
+      ],
+      "export": {
+        "classify": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "available",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "available",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "alexnet": {
+      "key": "alexnet",
+      "slug": "alexnet",
+      "registry_keys": [
+        "alexnet"
+      ],
+      "display": "AlexNet",
+      "prefix": "LibreAlexNet",
+      "prefixes": {
+        "alexnet": "LibreAlexNet"
+      },
+      "tier": "g3",
+      "tasks": [
+        "classify"
+      ],
+      "sizes_label": "b at 224 px",
+      "added_in": null,
+      "task_added_in": {
+        "alexnet": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "alexnet": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreAlexNetb-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        }
+      ],
+      "export": {
+        "classify": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "available",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "available",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "fcn": {
+      "key": "fcn",
+      "slug": "fcn",
+      "registry_keys": [
+        "fcn"
+      ],
+      "display": "FCN",
+      "prefix": "LibreFCN",
+      "prefixes": {
+        "fcn": "LibreFCN"
+      },
+      "tier": "g3",
+      "tasks": [
+        "semantic"
+      ],
+      "sizes_label": "r50, r101 at 520 px",
+      "added_in": null,
+      "task_added_in": {
+        "fcn": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "fcn": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreFCNr50.pt",
+          "task": "semantic",
+          "imgsz": 520,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        },
+        {
+          "name": "LibreFCNr101.pt",
+          "task": "semantic",
+          "imgsz": 520,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        }
+      ],
+      "export": {
+        "semantic": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "blocked",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "deeplabv3": {
+      "key": "deeplabv3",
+      "slug": "deeplabv3",
+      "registry_keys": [
+        "deeplabv3"
+      ],
+      "display": "DeepLabv3",
+      "prefix": "LibreDeepLabv3",
+      "prefixes": {
+        "deeplabv3": "LibreDeepLabv3"
+      },
+      "tier": "g3",
+      "tasks": [
+        "semantic"
+      ],
+      "sizes_label": null,
+      "added_in": null,
+      "task_added_in": {
+        "deeplabv3": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "deeplabv3": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreDeepLabv3r50-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        },
+        {
+          "name": "LibreDeepLabv3r101-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        },
+        {
+          "name": "LibreDeepLabv3mv3-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        }
+      ],
+      "export": {
+        "semantic": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "blocked",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "pidnet": {
+      "key": "pidnet",
+      "slug": "pidnet",
+      "registry_keys": [
+        "pidnet"
+      ],
+      "display": "PIDNet",
+      "prefix": "LibrePIDNet",
+      "prefixes": {
+        "pidnet": "LibrePIDNet"
+      },
+      "tier": "g3",
+      "tasks": [
+        "semantic"
+      ],
+      "sizes_label": "s, m, l at 1024 px",
+      "added_in": null,
+      "task_added_in": {
+        "pidnet": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "pidnet": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibrePIDNets-sem.pt",
+          "task": "semantic",
+          "imgsz": 1024,
+          "data": "COCO",
+          "license": "mit"
+        },
+        {
+          "name": "LibrePIDNetm-sem.pt",
+          "task": "semantic",
+          "imgsz": 1024,
+          "data": "COCO",
+          "license": "mit"
+        },
+        {
+          "name": "LibrePIDNetl-sem.pt",
+          "task": "semantic",
+          "imgsz": 1024,
+          "data": "COCO",
+          "license": "mit"
+        }
+      ],
+      "export": {
+        "semantic": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "available",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "validated",
+          "tflite": "validated",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "eomt": {
+      "key": "eomt",
+      "slug": "eomt",
+      "registry_keys": [
+        "eomt"
+      ],
+      "display": "EoMT",
+      "prefix": "LibreEoMT",
+      "prefixes": {
+        "eomt": "LibreEoMT"
+      },
+      "tier": "g3",
+      "tasks": [
+        "semantic",
+        "segment",
+        "panoptic"
+      ],
+      "sizes_label": "s, b, l at 512 px",
+      "added_in": null,
+      "task_added_in": {
+        "eomt": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "eomt": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreEoMTl-sem.pt",
+          "task": "semantic",
+          "imgsz": 512,
+          "data": "COCO",
+          "license": "mit"
+        },
+        {
+          "name": "LibreEoMTl-seg.pt",
+          "task": "segment",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "mit"
+        },
+        {
+          "name": "LibreEoMTl-seg-1280.pt",
+          "task": "segment",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "mit"
+        },
+        {
+          "name": "LibreEoMTs-panoptic.pt",
+          "task": "panoptic",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "mit"
+        },
+        {
+          "name": "LibreEoMTb-panoptic.pt",
+          "task": "panoptic",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "mit"
+        },
+        {
+          "name": "LibreEoMTl-panoptic.pt",
+          "task": "panoptic",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "mit"
+        }
+      ],
+      "export": {
+        "semantic": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "blocked",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "segment": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "panoptic": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "hrnet": {
+      "key": "hrnet",
+      "slug": "hrnet",
+      "registry_keys": [
+        "hrnet"
+      ],
+      "display": "HRNet",
+      "prefix": "LibreHRNet",
+      "prefixes": {
+        "hrnet": "LibreHRNet"
+      },
+      "tier": "g3",
+      "tasks": [
+        "pose"
+      ],
+      "sizes_label": null,
+      "added_in": null,
+      "task_added_in": {
+        "hrnet": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "hrnet": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreHRNetw32-pose.pt",
+          "task": "pose",
+          "imgsz": null,
+          "data": "COCO keypoints",
+          "license": "mit"
+        },
+        {
+          "name": "LibreHRNetw48-pose.pt",
+          "task": "pose",
+          "imgsz": null,
+          "data": "COCO keypoints",
+          "license": "mit"
+        }
+      ],
+      "export": {
+        "pose": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "blocked",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "l2cs": {
+      "key": "l2cs",
+      "slug": "l2cs",
+      "registry_keys": [
+        "l2cs"
+      ],
+      "display": "L2CS-Net",
+      "prefix": "LibreL2CS",
+      "prefixes": {
+        "l2cs": "LibreL2CS"
+      },
+      "tier": "g3",
+      "tasks": [
+        "gaze"
+      ],
+      "sizes_label": "r18, r34, r50, r101, r152 at 448 px",
+      "added_in": null,
+      "task_added_in": {
+        "l2cs": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "l2cs": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {
+        "gaze": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "depth_anything": {
+      "key": "depth_anything",
+      "slug": "depth-anything-v2",
+      "registry_keys": [
+        "depth_anything"
+      ],
+      "display": "Depth Anything V2",
+      "prefix": "LibreDepthAnythingV2",
+      "prefixes": {
+        "depth_anything": "LibreDepthAnythingV2"
+      },
+      "tier": "g3",
+      "tasks": [
+        "depth"
+      ],
+      "sizes_label": "s, b, l, g at 518 px",
+      "added_in": null,
+      "task_added_in": {
+        "depth_anything": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "depth_anything": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreDepthAnythingV2s-depth.pt",
+          "task": "depth",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreDepthAnythingV2l-depth.pt",
+          "task": "depth",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "cc-by-nc-4.0"
+        },
+        {
+          "name": "LibreDepthAnythingV2b-depth.pt",
+          "task": "depth",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "cc-by-nc-4.0"
+        }
+      ],
+      "export": {
+        "depth": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "depth_anything3": {
+      "key": "depth_anything3",
+      "slug": "depth-anything-3",
+      "registry_keys": [
+        "depth_anything3"
+      ],
+      "display": "Depth Anything 3",
+      "prefix": "LibreDepthAnything3",
+      "prefixes": {
+        "depth_anything3": "LibreDepthAnything3"
+      },
+      "tier": "g3",
+      "tasks": [
+        "depth"
+      ],
+      "sizes_label": "l at 504 px",
+      "added_in": null,
+      "task_added_in": {
+        "depth_anything3": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "depth_anything3": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreDepthAnything3l-depth.pt",
+          "task": "depth",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "depth": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "zipdepth": {
+      "key": "zipdepth",
+      "slug": "zipdepth",
+      "registry_keys": [
+        "zipdepth"
+      ],
+      "display": "ZipDepth",
+      "prefix": "LibreZipDepth",
+      "prefixes": {
+        "zipdepth": "LibreZipDepth"
+      },
+      "tier": "g3",
+      "tasks": [
+        "depth"
+      ],
+      "sizes_label": "b, bnpu at 384 px",
+      "added_in": null,
+      "task_added_in": {
+        "zipdepth": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "zipdepth": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreZipDepthb-depth.pt",
+          "task": "depth",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "mit"
+        },
+        {
+          "name": "LibreZipDepthbnpu-depth.pt",
+          "task": "depth",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "mit"
+        }
+      ],
+      "export": {
+        "depth": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "available",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "validated",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "midas": {
+      "key": "midas",
+      "slug": "midas",
+      "registry_keys": [
+        "midas"
+      ],
+      "display": "MiDaS",
+      "prefix": "LibreMiDaS",
+      "prefixes": {
+        "midas": "LibreMiDaS"
+      },
+      "tier": "g3",
+      "tasks": [
+        "depth"
+      ],
+      "sizes_label": "s, l at 256 to 384 px",
+      "added_in": null,
+      "task_added_in": {
+        "midas": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "midas": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {
+        "depth": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "available",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "available",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "moge2": {
+      "key": "moge2",
+      "slug": "moge-2",
+      "registry_keys": [
+        "moge2"
+      ],
+      "display": "MoGe-2",
+      "prefix": "LibreMoGe2",
+      "prefixes": {
+        "moge2": "LibreMoGe2"
+      },
+      "tier": "g3",
+      "tasks": [
+        "normal"
+      ],
+      "sizes_label": "s, b, l at 518 px",
+      "added_in": null,
+      "task_added_in": {
+        "moge2": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "moge2": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {
+        "normal": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "available",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "teed": {
+      "key": "teed",
+      "slug": "teed",
+      "registry_keys": [
+        "teed"
+      ],
+      "display": "TEED",
+      "prefix": "LibreTEED",
+      "prefixes": {
+        "teed": "LibreTEED"
+      },
+      "tier": "g3",
+      "tasks": [
+        "edge"
+      ],
+      "sizes_label": "t at 352 px",
+      "added_in": null,
+      "task_added_in": {
+        "teed": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "teed": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {
+        "edge": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "validated",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "dexined": {
+      "key": "dexined",
+      "slug": "dexined",
+      "registry_keys": [
+        "dexined"
+      ],
+      "display": "DexiNed",
+      "prefix": "LibreDexiNed",
+      "prefixes": {
+        "dexined": "LibreDexiNed"
+      },
+      "tier": "g3",
+      "tasks": [
+        "edge"
+      ],
+      "sizes_label": "b at 352 px",
+      "added_in": null,
+      "task_added_in": {
+        "dexined": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "dexined": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {
+        "edge": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "validated",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "swinir": {
+      "key": "swinir",
+      "slug": "swinir",
+      "registry_keys": [
+        "swinir"
+      ],
+      "display": "SwinIR",
+      "prefix": "LibreSwinIR",
+      "prefixes": {
+        "swinir": "LibreSwinIR"
+      },
+      "tier": "g3",
+      "tasks": [
+        "restore"
+      ],
+      "sizes_label": "s, m, l at 64 px",
+      "added_in": null,
+      "task_added_in": {
+        "swinir": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "swinir": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreSwinIRs-restore.pt",
+          "task": "restore",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreSwinIRm-restore.pt",
+          "task": "restore",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreSwinIRl-restore.pt",
+          "task": "restore",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "restore": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "blocked",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "validated",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "realesrgan": {
+      "key": "realesrgan",
+      "slug": "real-esrgan",
+      "registry_keys": [
+        "realesrgan"
+      ],
+      "display": "Real-ESRGAN",
+      "prefix": "LibreRealESRGAN",
+      "prefixes": {
+        "realesrgan": "LibreRealESRGAN"
+      },
+      "tier": "g3",
+      "tasks": [
+        "restore"
+      ],
+      "sizes_label": "x4, x2, x4t at 64 px",
+      "added_in": null,
+      "task_added_in": {
+        "realesrgan": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "realesrgan": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreRealESRGANx4t-restore.pt",
+          "task": "restore",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        },
+        {
+          "name": "LibreRealESRGANx4-restore.pt",
+          "task": "restore",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        },
+        {
+          "name": "LibreRealESRGANx2-restore.pt",
+          "task": "restore",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "bsd-3-clause"
+        }
+      ],
+      "export": {
+        "restore": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "validated",
+          "tflite": "validated",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "birefnet": {
+      "key": "birefnet",
+      "slug": "birefnet",
+      "registry_keys": [
+        "birefnet"
+      ],
+      "display": "BiRefNet",
+      "prefix": "LibreBiRefNet",
+      "prefixes": {
+        "birefnet": "LibreBiRefNet"
+      },
+      "tier": "g3",
+      "tasks": [
+        "matte"
+      ],
+      "sizes_label": "t, l at 1024 px",
+      "added_in": null,
+      "task_added_in": {
+        "birefnet": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "birefnet": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreBiRefNetl-matte.pt",
+          "task": "matte",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "mit"
+        }
+      ],
+      "export": {
+        "matte": {
+          "onnx": "available",
+          "torchscript": "validated",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "feynobg": {
+      "key": "feynobg",
+      "slug": "feynobg",
+      "registry_keys": [
+        "feynobg"
+      ],
+      "display": "FeyNobg",
+      "prefix": "LibreFeyNobg",
+      "prefixes": {
+        "feynobg": "LibreFeyNobg"
+      },
+      "tier": "g3",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "l at 1024 px",
+      "added_in": null,
+      "task_added_in": {
+        "feynobg": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "feynobg": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {},
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "ppocr": {
+      "key": "ppocr",
+      "slug": "pp-ocrv5",
+      "registry_keys": [
+        "ppocr"
+      ],
+      "display": "PP-OCRv5",
+      "prefix": "LibrePPOCR",
+      "prefixes": {
+        "ppocr": "LibrePPOCR"
+      },
+      "tier": "g3",
+      "tasks": [
+        "ocr"
+      ],
+      "sizes_label": "t, l at 960 px",
+      "added_in": null,
+      "task_added_in": {
+        "ppocr": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "ppocr": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibrePPOCRt-ocr.pt",
+          "task": "ocr",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibrePPOCRl-ocr.pt",
+          "task": "ocr",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "ocr": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "facerec": {
+      "key": "facerec",
+      "slug": "librefacerec",
+      "registry_keys": [
+        "facerec"
+      ],
+      "display": "LibreFaceRec",
+      "prefix": null,
+      "prefixes": {
+        "facerec": null
+      },
+      "tier": "g3",
+      "tasks": [
+        "embed"
+      ],
+      "sizes_label": null,
+      "added_in": null,
+      "task_added_in": {
+        "facerec": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "facerec": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {},
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "sam3dbody": {
+      "key": "sam3dbody",
+      "slug": "sam-3d-body",
+      "registry_keys": [
+        "sam3dbody"
+      ],
+      "display": "SAM 3D Body",
+      "prefix": "LibreSAM3DBody",
+      "prefixes": {
+        "sam3dbody": "LibreSAM3DBody"
+      },
+      "tier": "g3",
+      "tasks": [
+        "mesh"
+      ],
+      "sizes_label": "d3, h at 512 px",
+      "added_in": null,
+      "task_added_in": {
+        "sam3dbody": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "sam3dbody": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreSAM3DBodyd3-mesh.pt",
+          "task": "mesh",
+          "imgsz": 512,
+          "data": "COCO",
+          "license": "other"
+        },
+        {
+          "name": "LibreSAM3DBodyh-mesh.pt",
+          "task": "mesh",
+          "imgsz": 512,
+          "data": "COCO",
+          "license": "other"
+        }
+      ],
+      "export": {
+        "mesh": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "yolo1": {
+      "key": "yolo1",
+      "slug": "yolov1",
+      "registry_keys": [
+        "yolo1"
+      ],
+      "display": "YOLOv1",
+      "prefix": "LibreYOLO1",
+      "prefixes": {
+        "yolo1": "LibreYOLO1"
+      },
+      "tier": "g4",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "t, b at 448 px",
+      "added_in": null,
+      "task_added_in": {
+        "yolo1": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "yolo1": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreYOLO1b.pt",
+          "task": "detect",
+          "imgsz": 448,
+          "data": "COCO",
+          "license": "other"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "validated",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "yolo2": {
+      "key": "yolo2",
+      "slug": "yolov2",
+      "registry_keys": [
+        "yolo2"
+      ],
+      "display": "YOLOv2",
+      "prefix": "LibreYOLO2",
+      "prefixes": {
+        "yolo2": "LibreYOLO2"
+      },
+      "tier": "g4",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "t, b at 416 to 608 px",
+      "added_in": null,
+      "task_added_in": {
+        "yolo2": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "yolo2": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreYOLO2t.pt",
+          "task": "detect",
+          "imgsz": 416,
+          "data": "COCO",
+          "license": "other"
+        },
+        {
+          "name": "LibreYOLO2b.pt",
+          "task": "detect",
+          "imgsz": 608,
+          "data": "COCO",
+          "license": "other"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "available",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "yolo3": {
+      "key": "yolo3",
+      "slug": "yolov3",
+      "registry_keys": [
+        "yolo3"
+      ],
+      "display": "YOLOv3",
+      "prefix": "LibreYOLO3",
+      "prefixes": {
+        "yolo3": "LibreYOLO3"
+      },
+      "tier": "g4",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "t, b, spp at 416 to 608 px",
+      "added_in": null,
+      "task_added_in": {
+        "yolo3": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "yolo3": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreYOLO3t.pt",
+          "task": "detect",
+          "imgsz": 416,
+          "data": "COCO",
+          "license": "other"
+        },
+        {
+          "name": "LibreYOLO3b.pt",
+          "task": "detect",
+          "imgsz": 416,
+          "data": "COCO",
+          "license": "other"
+        },
+        {
+          "name": "LibreYOLO3spp.pt",
+          "task": "detect",
+          "imgsz": 608,
+          "data": "COCO",
+          "license": "other"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "validated",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "yolo4": {
+      "key": "yolo4",
+      "slug": "yolov4",
+      "registry_keys": [
+        "yolo4"
+      ],
+      "display": "YOLOv4",
+      "prefix": "LibreYOLO4",
+      "prefixes": {
+        "yolo4": "LibreYOLO4"
+      },
+      "tier": "g4",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "t, b at 416 to 608 px",
+      "added_in": null,
+      "task_added_in": {
+        "yolo4": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "yolo4": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreYOLO4t.pt",
+          "task": "detect",
+          "imgsz": 416,
+          "data": "COCO",
+          "license": "other"
+        },
+        {
+          "name": "LibreYOLO4b.pt",
+          "task": "detect",
+          "imgsz": 608,
+          "data": "COCO",
+          "license": "other"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "validated",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "validated"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "deit": {
+      "key": "deit",
+      "slug": "deit",
+      "registry_keys": [
+        "deit"
+      ],
+      "display": "DeiT",
+      "prefix": "LibreDeiT",
+      "prefixes": {
+        "deit": "LibreDeiT"
+      },
+      "tier": "g4",
+      "tasks": [
+        "classify"
+      ],
+      "sizes_label": "t, s, b at 224 px",
+      "added_in": null,
+      "task_added_in": {
+        "deit": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "deit": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreDeiTt-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreDeiTs-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreDeiTb-cls.pt",
+          "task": "classify",
+          "imgsz": 224,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "classify": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "available",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "available",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "sam": {
+      "key": "sam",
+      "slug": "sam",
+      "registry_keys": [
+        "sam"
+      ],
+      "display": "SAM",
+      "prefix": "LibreSAM",
+      "prefixes": {
+        "sam": "LibreSAM"
+      },
+      "tier": "s",
+      "tasks": [
+        "segment"
+      ],
+      "sizes_label": "base, large, huge at 1024 px",
+      "added_in": null,
+      "task_added_in": {
+        "sam": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "sam": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {
+        "segment": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "sam2": {
+      "key": "sam2",
+      "slug": "sam-2",
+      "registry_keys": [
+        "sam2"
+      ],
+      "display": "SAM 2",
+      "prefix": "LibreSAM2",
+      "prefixes": {
+        "sam2": "LibreSAM2"
+      },
+      "tier": "s",
+      "tasks": [
+        "segment"
+      ],
+      "sizes_label": null,
+      "added_in": null,
+      "task_added_in": {
+        "sam2": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "sam2": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreSAM2tiny.pt",
+          "task": "segment",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreSAM2small.pt",
+          "task": "segment",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreSAM2base-plus.pt",
+          "task": "segment",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreSAM2large.pt",
+          "task": "segment",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "segment": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "sam3": {
+      "key": "sam3",
+      "slug": "sam-3",
+      "registry_keys": [
+        "sam3"
+      ],
+      "display": "SAM 3",
+      "prefix": "LibreSAM3",
+      "prefixes": {
+        "sam3": "LibreSAM3"
+      },
+      "tier": "s",
+      "tasks": [
+        "segment"
+      ],
+      "sizes_label": "large at 1008 px",
+      "added_in": null,
+      "task_added_in": {
+        "sam3": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "sam3": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {
+        "segment": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "mobilesam": {
+      "key": "mobilesam",
+      "slug": "mobilesam",
+      "registry_keys": [
+        "mobilesam"
+      ],
+      "display": "MobileSAM",
+      "prefix": "LibreMobileSAM",
+      "prefixes": {
+        "mobilesam": "LibreMobileSAM"
+      },
+      "tier": "s",
+      "tasks": [
+        "segment"
+      ],
+      "sizes_label": "tiny at 1024 px",
+      "added_in": null,
+      "task_added_in": {
+        "mobilesam": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "mobilesam": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreMobileSAM.pt",
+          "task": "segment",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "segment": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "edgetam": {
+      "key": "edgetam",
+      "slug": "edgetam",
+      "registry_keys": [
+        "edgetam"
+      ],
+      "display": "EdgeTAM",
+      "prefix": "LibreEdgeTAM",
+      "prefixes": {
+        "edgetam": "LibreEdgeTAM"
+      },
+      "tier": "s",
+      "tasks": [
+        "segment"
+      ],
+      "sizes_label": null,
+      "added_in": null,
+      "task_added_in": {
+        "edgetam": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "edgetam": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreEdgeTAM.pt",
+          "task": "segment",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "segment": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "picosam3": {
+      "key": "picosam3",
+      "slug": "picosam3",
+      "registry_keys": [
+        "picosam3"
+      ],
+      "display": "PicoSAM3",
+      "prefix": "LibrePicoSAM3",
+      "prefixes": {
+        "picosam3": "LibrePicoSAM3"
+      },
+      "tier": "s",
+      "tasks": [
+        "segment"
+      ],
+      "sizes_label": "pico at 96 px",
+      "added_in": null,
+      "task_added_in": {
+        "picosam3": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "picosam3": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibrePicoSAM3.pt",
+          "task": "segment",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "segment": {
+          "onnx": "validated",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "grounding_dino": {
+      "key": "grounding_dino",
+      "slug": "grounding-dino",
+      "registry_keys": [
+        "grounding_dino"
+      ],
+      "display": "Grounding DINO",
+      "prefix": "LibreGroundingDINO",
+      "prefixes": {
+        "grounding_dino": "LibreGroundingDINO"
+      },
+      "tier": "s",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "t, b at 800 px",
+      "added_in": null,
+      "task_added_in": {
+        "grounding_dino": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "grounding_dino": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreGroundingDINOt.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreGroundingDINOb.pt",
+          "task": "detect",
+          "imgsz": 800,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "owlv2": {
+      "key": "owlv2",
+      "slug": "owlv2",
+      "registry_keys": [
+        "owlv2"
+      ],
+      "display": "OWLv2",
+      "prefix": "LibreOWLv2",
+      "prefixes": {
+        "owlv2": "LibreOWLv2"
+      },
+      "tier": "s",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "b16, l14 at 960 to 1008 px",
+      "added_in": null,
+      "task_added_in": {
+        "owlv2": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "owlv2": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreOWLv2b16.pt",
+          "task": "detect",
+          "imgsz": 960,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreOWLv2l14.pt",
+          "task": "detect",
+          "imgsz": 1008,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "omdet_turbo": {
+      "key": "omdet_turbo",
+      "slug": "omdet-turbo",
+      "registry_keys": [
+        "omdet_turbo"
+      ],
+      "display": "OMDet-Turbo",
+      "prefix": "LibreOMDetTurbo",
+      "prefixes": {
+        "omdet_turbo": "LibreOMDetTurbo"
+      },
+      "tier": "s",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "t at 640 px",
+      "added_in": null,
+      "task_added_in": {
+        "omdet_turbo": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "omdet_turbo": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreOMDetTurbot.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "ov_deim": {
+      "key": "ov_deim",
+      "slug": "ov-deim",
+      "registry_keys": [
+        "ov_deim"
+      ],
+      "display": "OV-DEIM",
+      "prefix": "LibreOVDEIM",
+      "prefixes": {
+        "ov_deim": "LibreOVDEIM"
+      },
+      "tier": "s",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "s, m, l at 640 px",
+      "added_in": null,
+      "task_added_in": {
+        "ov_deim": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "ov_deim": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreOVDEIMs.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "cc-by-nc-4.0"
+        },
+        {
+          "name": "LibreOVDEIMm.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "cc-by-nc-4.0"
+        },
+        {
+          "name": "LibreOVDEIMl.pt",
+          "task": "detect",
+          "imgsz": 640,
+          "data": "COCO",
+          "license": "cc-by-nc-4.0"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "florence2": {
+      "key": "florence2",
+      "slug": "florence-2",
+      "registry_keys": [
+        "florence2"
+      ],
+      "display": "Florence-2",
+      "prefix": "LibreFlorence2",
+      "prefixes": {
+        "florence2": "LibreFlorence2"
+      },
+      "tier": "s",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "base, large at 768 px",
+      "added_in": null,
+      "task_added_in": {
+        "florence2": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "florence2": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {
+        "detect": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "kosmos2": {
+      "key": "kosmos2",
+      "slug": "kosmos-2",
+      "registry_keys": [
+        "kosmos2"
+      ],
+      "display": "Kosmos-2",
+      "prefix": "LibreKosmos2",
+      "prefixes": {
+        "kosmos2": "LibreKosmos2"
+      },
+      "tier": "s",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "224 at 224 px",
+      "added_in": null,
+      "task_added_in": {
+        "kosmos2": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "kosmos2": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {
+        "detect": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "qwen3vl": {
+      "key": "qwen3vl",
+      "slug": "qwen3-vl",
+      "registry_keys": [
+        "qwen3vl"
+      ],
+      "display": "Qwen3-VL",
+      "prefix": "LibreQwen3VL",
+      "prefixes": {
+        "qwen3vl": "LibreQwen3VL"
+      },
+      "tier": "s",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "2b, 4b, 8b at 1024 px",
+      "added_in": null,
+      "task_added_in": {
+        "qwen3vl": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "qwen3vl": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {
+        "detect": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "smolvlm2": {
+      "key": "smolvlm2",
+      "slug": "smolvlm2",
+      "registry_keys": [
+        "smolvlm2"
+      ],
+      "display": "SmolVLM2",
+      "prefix": "LibreSmolVLM2",
+      "prefixes": {
+        "smolvlm2": "LibreSmolVLM2"
+      },
+      "tier": "s",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "500m at 512 px",
+      "added_in": null,
+      "task_added_in": {
+        "smolvlm2": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "smolvlm2": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {
+        "detect": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "internvl3": {
+      "key": "internvl3",
+      "slug": "internvl3",
+      "registry_keys": [
+        "internvl3"
+      ],
+      "display": "InternVL3",
+      "prefix": "LibreInternVL3",
+      "prefixes": {
+        "internvl3": "LibreInternVL3"
+      },
+      "tier": "s",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "1b, 2b, 8b at 448 px",
+      "added_in": null,
+      "task_added_in": {
+        "internvl3": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "internvl3": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {
+        "detect": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "lfm2vl": {
+      "key": "lfm2vl",
+      "slug": "lfm2-vl",
+      "registry_keys": [
+        "lfm2vl"
+      ],
+      "display": "LFM2-VL",
+      "prefix": "LibreLFM2VL",
+      "prefixes": {
+        "lfm2vl": "LibreLFM2VL"
+      },
+      "tier": "s",
+      "tasks": [
+        "detect"
+      ],
+      "sizes_label": "450m at 512 px",
+      "added_in": null,
+      "task_added_in": {
+        "lfm2vl": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "lfm2vl": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {
+        "detect": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "locateanything": {
+      "key": "locateanything",
+      "slug": "locate-anything",
+      "registry_keys": [
+        "locateanything"
+      ],
+      "display": "LocateAnything",
+      "prefix": "LocateAnything",
+      "prefixes": {
+        "locateanything": "LocateAnything"
+      },
+      "tier": "s",
+      "tasks": [
+        "detect",
+        "point"
+      ],
+      "sizes_label": "3b at 2500 px",
+      "added_in": null,
+      "task_added_in": {
+        "locateanything": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "locateanything": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {
+        "detect": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "point": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "clip": {
+      "key": "clip",
+      "slug": "clip",
+      "registry_keys": [
+        "clip"
+      ],
+      "display": "CLIP",
+      "prefix": "LibreCLIP",
+      "prefixes": {
+        "clip": "LibreCLIP"
+      },
+      "tier": "s",
+      "tasks": [
+        "classify",
+        "embed"
+      ],
+      "sizes_label": null,
+      "added_in": null,
+      "task_added_in": {
+        "clip": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "clip": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreCLIPb32-cls.pt",
+          "task": "classify",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "mit"
+        },
+        {
+          "name": "LibreCLIPb16-cls.pt",
+          "task": "classify",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "mit"
+        }
+      ],
+      "export": {
+        "classify": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "validated"
+        },
+        "embed": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "siglip2": {
+      "key": "siglip2",
+      "slug": "siglip2",
+      "registry_keys": [
+        "siglip2"
+      ],
+      "display": "SigLIP2",
+      "prefix": "LibreSigLIP2",
+      "prefixes": {
+        "siglip2": "LibreSigLIP2"
+      },
+      "tier": "s",
+      "tasks": [
+        "classify",
+        "embed"
+      ],
+      "sizes_label": null,
+      "added_in": null,
+      "task_added_in": {
+        "siglip2": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "siglip2": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreSigLIP2b16-cls.pt",
+          "task": "classify",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreSigLIP2so400m-cls.pt",
+          "task": "classify",
+          "imgsz": null,
+          "data": "COCO",
+          "license": "apache-2.0"
+        }
+      ],
+      "export": {
+        "classify": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "validated",
+          "coreml": "blocked",
+          "coreai": "validated"
+        },
+        "embed": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "validated",
+          "tensorrt": "validated",
+          "openvino": "validated",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "validated",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "sensenovavision": {
+      "key": "sensenovavision",
+      "slug": "sensenova-vision",
+      "registry_keys": [
+        "sensenovavision"
+      ],
+      "display": "SenseNova-Vision",
+      "prefix": "SenseNovaVision",
+      "prefixes": {
+        "sensenovavision": "SenseNovaVision"
+      },
+      "tier": "s",
+      "tasks": [
+        "detect",
+        "segment",
+        "panoptic",
+        "pose",
+        "point",
+        "depth",
+        "ocr"
+      ],
+      "sizes_label": "7b at 1024 px",
+      "added_in": null,
+      "task_added_in": {
+        "sensenovavision": null
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "sensenovavision": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "SenseNovaVision7b.pt",
+          "task": "detect",
+          "imgsz": 1024,
+          "data": "COCO",
+          "license": "cc-by-nc-4.0"
+        }
+      ],
+      "export": {},
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
+    },
+    "libremodus": {
+      "key": "libremodus",
+      "slug": "libremodus",
+      "registry_keys": [
+        "libremodus"
+      ],
+      "display": "LibreMODUS",
+      "prefix": "LibreMODUS",
+      "prefixes": {
+        "libremodus": "LibreMODUS"
+      },
+      "tier": "s",
+      "tasks": [
+        "detect",
+        "depth",
+        "normal",
+        "edge"
+      ],
+      "sizes_label": null,
+      "added_in": null,
+      "task_added_in": {
+        "libremodus": null
+      },
+      "weights_hosted": false,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "libremodus": []
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [],
+      "export": {},
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": null
     }
   },
   "discrepancies": [
@@ -1762,6 +6867,24 @@
       "kind": "weights-without-registry-task",
       "file": "LibreRFDETRl-cls.pt",
       "task": "classify"
+    },
+    {
+      "slug": "feynobg",
+      "kind": "weights-without-registry-task",
+      "file": "LibreFeyNobgl-matte.pt",
+      "task": "matte"
+    },
+    {
+      "slug": "feynobg",
+      "kind": "weights-without-registry-task",
+      "file": "LibreFeyNobgl-matte-fp8.pt",
+      "task": "matte"
+    },
+    {
+      "slug": "feynobg",
+      "kind": "weights-without-registry-task",
+      "file": "LibreFeyNobgl-matte-fp16.pt",
+      "task": "matte"
     }
   ],
   "_generated_by": "scripts/build-registry (prototype). Mechanical fields are extracted from docs/export_support.md, each family model.py, models/registry.py, the LibreYOLO HF org listing and the vision-analysis results. Upstream metadata is merged from src/data/docs/upstream/<slug>.json after per-family human verification.",

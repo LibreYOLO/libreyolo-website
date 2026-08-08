@@ -23,15 +23,26 @@ const OUT = process.argv[3]
 const read = (f) => fs.readFileSync(path.join(SRC, f), 'utf8')
 
 /* Lineages: one page per upstream lineage, first key is primary. */
-const LINEAGES = [
-  { slug: 'yolov9', display: 'YOLOv9', keys: ['yolo9', 'yolo9_e2e', 'yolo9_p2'] },
-  { slug: 'rf-detr', display: 'RF-DETR', keys: ['rfdetr'] },
-  { slug: 'edgecrafter', display: 'EdgeCrafter', keys: ['ec'] },
-  { slug: 'rt-detr', display: 'RT-DETR', keys: ['rtdetr', 'rtdetrv2', 'rtdetrv4'] },
-  { slug: 'd-fine', display: 'D-FINE', keys: ['dfine'] },
-  { slug: 'deim', display: 'DEIM', keys: ['deim', 'deimv2'] },
-  { slug: 'yolo-nas', display: 'YOLO-NAS', keys: ['yolonas'] },
-]
+import { LINEAGES } from './lineages.mjs'
+
+/*
+ * Where each family's class is defined. Eager families live at
+ * libreyolo/models/<key>/model.py; the lazily-registered SAM, VLM and
+ * open-vocabulary tiers live in shared modules, so the map is built by reading
+ * the FAMILY constant out of every dumped source rather than guessing paths.
+ */
+const FAMILY_FILES = (() => {
+  try { return JSON.parse(read('family_files.json')) } catch { return {} }
+})()
+
+/* Pip extras, from OPTIONAL_MODELS for the lazy tiers plus the eager ones. */
+const EAGER_EXTRAS = { rfdetr: 'rfdetr', dinov2: 'rfdetr', clip: 'clip', siglip2: 'siglip2', midas: 'midas', eomt: 'eomt', sensenovavision: 'sensenova', libremodus: 'modus' }
+const OPTIONAL_EXTRAS = (() => {
+  try {
+    const rows = JSON.parse(read('optional.json'))
+    return Object.fromEntries(rows.map((r) => [r.cls, r.extra]))
+  } catch { return {} }
+})()
 
 /* ── tiers ──────────────────────────────────────────────────────── */
 function parseTiers() {
@@ -65,17 +76,58 @@ function parseExport() {
   return { formats, support: out }
 }
 
+/*
+ * SUPPORTED_TASKS declared by each tier base class, read from the dumped base
+ * modules rather than assumed. A class that declares nothing inherits from its
+ * own tier, not from BaseModel.
+ */
+const BASE_TASKS = (() => {
+  const out = {}
+  for (const file of ['BASE__sam__base.py', 'BASE__vlm__base.py', 'BASE__openvocab__base.py', 'BASE__base__model.py']) {
+    let text
+    try { text = read(path.join('models', file)) } catch { continue }
+    for (const m of text.matchAll(/^class\s+(\w+)[\s\S]*?SUPPORTED_TASKS[^=]*=\s*\(([^)]*)\)/gm)) {
+      out[m[1]] = [...m[2].matchAll(/"([a-z]+)"/g)].map((x) => x[1])
+    }
+  }
+  return out
+})()
+
+function inheritedTasks(baseName) {
+  const key = String(baseName).split('.').pop()
+  return BASE_TASKS[key] ?? ['detect']
+}
+
 /* ── per-family basics ──────────────────────────────────────────── */
 function parseFamily(key) {
   let text
-  try { text = read(`model_${key}.py`) } catch { return null }
+  const file = FAMILY_FILES[key]
+  try { text = read(file ? path.join('models', file) : `model_${key}.py`) } catch { return null }
+  // A shared module defines several families, so narrow to this one's class.
+  if (file && /FAMILY[^=]*=\s*"/.test(text)) {
+    const marker = new RegExp(`FAMILY[^=]*=\\s*"${key}"`)
+    const at = text.search(marker)
+    if (at !== -1) {
+      const classStart = text.lastIndexOf('\nclass ', at)
+      const nextClass = text.indexOf('\nclass ', at)
+      text = text.slice(classStart === -1 ? 0 : classStart, nextClass === -1 ? text.length : nextClass)
+    }
+  }
   const prefix = text.match(/FILENAME_PREFIX[^=]*=\s*"([^"]+)"/)?.[1] ?? null
-  // A family that does not declare SUPPORTED_TASKS inherits BaseModel's
-  // ("detect",). Verified at libreyolo/models/base/model.py:122.
+  /*
+   * SUPPORTED_TASKS is inherited when a class does not declare it, and the
+   * tier base classes disagree with BaseModel: the SAM tier defaults to
+   * ("segment",), not ("detect",). Falling back to BaseModel for everything
+   * would label all six promptable-segmentation pages as detectors.
+   */
   const tasksRaw = text.match(/SUPPORTED_TASKS[^=]*=\s*\(([^)]*)\)/)?.[1]
-  const tasks = tasksRaw === undefined
-    ? ['detect']
-    : [...tasksRaw.matchAll(/"([a-z]+)"/g)].map((m) => m[1])
+  let tasks
+  if (tasksRaw !== undefined) {
+    tasks = [...tasksRaw.matchAll(/"([a-z]+)"/g)].map((m) => m[1])
+  } else {
+    const base = text.match(/^class\s+\w+\(([\w.]+)/m)?.[1] ?? ''
+    tasks = inheritedTasks(base)
+  }
   /*
    * Size tables. Every `NAME = {"code": px}` constant in the class is collected
    * first, because TASK_INPUT_SIZES usually maps a task to one of those names
@@ -110,16 +162,29 @@ function parseFamily(key) {
 }
 
 /* ── checkpoints from the HF org ────────────────────────────────── */
-const TASK_SUFFIX = { seg: 'segment', pose: 'pose', obb: 'obb', cls: 'classify', sem: 'semantic', point: 'point' }
+/*
+ * Every task suffix in the naming scheme (docs/nomenclature.md). Detect is
+ * implicit, so a file with no suffix takes its family's default task, which is
+ * NOT always detect: a SAM checkpoint is segmentation, a Depth Anything
+ * checkpoint is depth. Treating an unsuffixed file as detection discards it as
+ * a discrepancy against a family that never declared detection at all.
+ */
+const TASK_SUFFIX = {
+  seg: 'segment', sem: 'semantic', panoptic: 'panoptic', pose: 'pose',
+  cls: 'classify', gaze: 'gaze', obb: 'obb', point: 'point', depth: 'depth',
+  edge: 'edge', normal: 'normal', restore: 'restore', matte: 'matte',
+  ocr: 'ocr', embed: 'embed', mesh: 'mesh', gazetarget: 'gaze',
+}
 
 // Dataset tokens that can appear in a checkpoint name. A checkpoint trained on
 // something other than the family default says so in its filename, and that
 // token is the only mechanical signal we have for it.
 const DATASETS = { visdrone: 'VisDrone2019-DET', imagenette: 'Imagenette', sidd: 'SIDD' }
 
-function parseCheckpoints(prefixes) {
+function parseCheckpoints(prefixToDefaultTask) {
   const repos = JSON.parse(read('hf.json'))
   const byPrefix = {}
+  const prefixes = Object.keys(prefixToDefaultTask)
   // Longest prefix wins, so LibreYOLO9E2E is not swallowed by LibreYOLO9.
   const sorted = [...prefixes].sort((a, b) => b.length - a.length)
   for (const repo of repos) {
@@ -128,8 +193,10 @@ function parseCheckpoints(prefixes) {
     if (!prefix) continue
     const rest = id.slice(prefix.length)
     const parts = rest.split('-')
-    const size = parts[0]
-    if (!size) continue
+    // A single-variant family publishes one repo named exactly for its prefix
+    // (LibreMobileSAM, LibreEdgeTAM), so an empty size is a real checkpoint,
+    // not a parse failure.
+    const size = parts[0] ?? ''
     const suffix = parts.slice(1).find((p) => TASK_SUFFIX[p])
     const datasetToken = parts.slice(1).find((p) => DATASETS[p])
     // The HF repo's own license tag is authoritative: it is the thing the
@@ -139,7 +206,7 @@ function parseCheckpoints(prefixes) {
     byPrefix[prefix].push({
       name: `${id}.pt`,
       size,
-      task: TASK_SUFFIX[suffix] || 'detect',
+      task: TASK_SUFFIX[suffix] || prefixToDefaultTask[prefix] || 'detect',
       dataset: datasetToken ? DATASETS[datasetToken] : null,
       license: licenseTag ? licenseTag.slice('license:'.length) : null,
     })
@@ -199,7 +266,7 @@ for (const key of LINEAGES.flatMap((l) => l.keys)) {
   const f = parseFamily(key)
   if (f) families[key] = { ...f, tier: tiers[key] ?? null, export: support[key] ?? {} }
 }
-const checkpoints = parseCheckpoints(Object.values(families).map((f) => f.prefix).filter(Boolean))
+const checkpoints = parseCheckpoints(Object.fromEntries(Object.values(families).filter((f) => f.prefix).map((f) => [f.prefix, f.tasks[0]])))
 const benchmarks = parseBenchmarks(Object.keys(families))
 
 const report = { lineages: [], missing: [], discrepancies: [] }
