@@ -332,8 +332,8 @@ const STATES = {
       </svg>
     ),
   },
-  experimental: {
-    sentence: 'Experimental. Converts and runs, but the output is not parity checked.',
+  available: {
+    sentence: 'Available. Conversion is implemented, but numeric runtime parity evidence is incomplete or has not been recorded.',
     color: 'text-amber-600 dark:text-amber-400',
     icon: (
       <svg viewBox="0 0 16 16" className="h-[13px] w-[13px]" aria-hidden="true">
@@ -357,7 +357,7 @@ const STATES = {
  * The tooltip and screen-reader text prefer the library's own per-cell reason
  * over the generic state sentence. Those reasons are the measured findings that
  * decided the tier (which metric drifted, and by how much), so a reader asking
- * "why is this only experimental" gets the real answer rather than a category.
+ * "why is this not validated" gets the real answer rather than a category.
  */
 function Mark({ state, label, reason }) {
   const s = STATES[state] || STATES.blocked

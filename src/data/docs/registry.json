@@ -80,24 +80,24 @@
         "detect": {
           "onnx": "validated", "torchscript": "validated", "executorch": "validated",
           "tensorrt": "validated", "openvino": "validated", "mnn": "validated",
-          "coreai": "validated", "coreml": "experimental",
+          "coreai": "validated", "coreml": "available",
           "paddle": "blocked", "rknn": "blocked", "ncnn": "blocked", "tflite": "blocked"
         },
         "segment": {
           "onnx": "validated", "torchscript": "validated", "executorch": "validated",
-          "tensorrt": "experimental", "openvino": "experimental",
+          "tensorrt": "available", "openvino": "available",
           "paddle": "blocked", "mnn": "blocked", "rknn": "blocked", "ncnn": "blocked",
           "tflite": "blocked", "coreml": "blocked", "coreai": "blocked"
         },
         "pose": {
           "onnx": "validated", "torchscript": "validated", "executorch": "validated",
-          "tensorrt": "experimental", "openvino": "experimental",
+          "tensorrt": "available", "openvino": "available",
           "paddle": "blocked", "mnn": "blocked", "rknn": "blocked", "ncnn": "blocked",
           "tflite": "blocked", "coreml": "blocked", "coreai": "blocked"
         },
         "obb": {
           "onnx": "validated", "torchscript": "validated", "executorch": "validated",
-          "tensorrt": "experimental", "openvino": "experimental",
+          "tensorrt": "available", "openvino": "available",
           "paddle": "blocked", "mnn": "blocked", "rknn": "blocked", "ncnn": "blocked",
           "tflite": "blocked", "coreml": "blocked", "coreai": "blocked"
         }

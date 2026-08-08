@@ -64,7 +64,7 @@ using the page's `families`.
 | `<checkpoint-table />` | Published weights, grouped by task |
 | `<export-matrix />` | Task x format support, with legend |
 | `<code-tabs name="quickstart" />` | A snippet group from frontmatter |
-| `<provenance-box>...</provenance-box>` | Upstream and licence rows, your prose inside |
+| `<provenance-box>...</provenance-box>` | Upstream and license rows, your prose inside |
 
 **Trap:** self-closing custom tags are expanded to open/close pairs by
 `expandSelfClosingTags()` in `src/lib/docs.js` before parsing. HTML5 ignores the
@@ -83,14 +83,14 @@ first draft of this docs system was rejected for looking machine-generated.
 - Stat tiles. No fact is ever set as a big number in a box. Not one of the
   reference sites surveyed does this for a static property. Counts go inline at
   body size next to their label.
-- Status pills or badge rows. A support tier, a licence and a version are
+- Status pills or badge rows. A support tier, a license and a version are
   metadata rows, not chips.
 - Card wrappers. A table is a table; it does not live inside a bordered rounded
   container. Separation comes from hairline rules and whitespace.
 - Accordions for content the reader came to read. An FAQ is headings and
   paragraphs.
 - Icons as decoration next to headings.
-- Coloured chips inside table cells.
+- Colored chips inside table cells.
 
 **Do use:**
 
@@ -103,11 +103,11 @@ first draft of this docs system was rejected for looking machine-generated.
 - `tabular-nums` and right alignment for any column of figures.
 - Monospace for every identifier: filenames, flags, arguments, class names.
 - For a support matrix: one short token per cell, three distinguishable icon
-  *shapes* so it survives greyscale and colourblindness, colour on the mark and
+  *shapes* so it survives greyscale and colorblindness, color on the mark and
   never on the cell background, and a legend below written as full sentences in
   a definition list. Nothing longer than a token goes inside a cell; caveats go
   under the table.
-- Colour for exactly two things: links, and state inside a matrix. Not for
+- Color for exactly two things: links, and state inside a matrix. Not for
   labels, headings, panel backgrounds, or making numbers look important.
 
 **Density target:** at least 200 words of real content in the first 1440x900
@@ -131,6 +131,37 @@ Two places where docs override it:
   coming back to..." belong. Reference pages are not that. Address the reader as
   *you*, keep yourself out of it, and let the facts carry the page. The rest of
   the humanizer applies unchanged.
+
+### Never call anything experimental
+
+The word does not appear anywhere in the docs: not in prose, not in a legend,
+not as a label, not in a table cell, not in a tooltip. Same for its relatives:
+*beta*, *preview*, *alpha*, *unstable*, *use at your own risk*.
+
+It fails on two counts. It tells the reader nothing they can act on, because it
+does not say what will go wrong or when. And it reads as a liability disclaimer,
+which invites the reader to assume the worst about a capability that usually
+works fine.
+
+Say what is actually true instead. For export support the vocabulary is the one
+in ADR 0011:
+
+- **Validated**, parity checked against PyTorch, and name the test if there is one.
+- **Available**, conversion is implemented but numeric runtime parity evidence is
+  incomplete or has not been recorded.
+- **Not supported**, the exporter refuses the combination before it runs.
+
+Then give the specific reason. `libreyolo/export/support.py` carries a measured
+`reason=` string for every non-validated combination, and those sentences are
+the most useful content on the page. Pass them through verbatim.
+
+> Before: TensorRT export is experimental for pose.
+> After: TensorRT export is available for pose. Matched boxes fall to 0.704 IoU with 41.4 px of coordinate drift, so it is not parity validated.
+
+The same rule covers models and training. Do not label a family experimental.
+State which paths are covered and which are not: "Inference is bit-equivalent to
+upstream on the same checkpoint. Full-dataset convergence, multi-GPU behavior
+and augmentation beyond horizontal flipping have not been validated."
 
 Docs-specific rules on top:
 
@@ -158,4 +189,4 @@ excluded.
    on the Hugging Face org listing. If it is not in the registry, it does not go
    on the page, no matter what the code implies.
 4. Run the humanizer checklist.
-5. Confirm no `—`, no emoji, no competitor library names.
+5. Confirm no `—`, no emoji, no competitor library names, and no use of the word "experimental" (see the rule above).
