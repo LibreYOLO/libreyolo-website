@@ -8,40 +8,21 @@ import { DOCS_PRERELEASE, DOCS_CURRENT_VERSION } from '@/data/docs-versions'
  * pinned to a given release. Without a banner a reader has no way to tell
  * which version they are looking at.
  *
- * There are two cases and they must not be worded the same. A superseded
- * version is frozen: no longer updated, and the reader should be sent to the
- * current tree. The CURRENT release is not frozen at all, and while the
- * exploded tree at /docs still documents an untagged version, this page is
- * the accurate one: it describes what `pip install libreyolo` actually gives
- * you. Telling that reader they are looking at outdated docs would be false
- * and would push them toward pages describing families their install lacks.
+ * The CURRENT release gets NO banner. It is the page readers are sent to, it
+ * already carries its own in-page notice naming the version, and the sidebar
+ * version menu offers the next-release tree. A second bar above it repeated
+ * that for no one and added a band of colour to the top of the site.
  *
- * Both variants pair with a canonical pointing at /docs. Note the deliberate
- * absence of noindex: combining noindex with a canonical is a documented way
- * to get the wrong page dropped from an index, so these pages stay indexable
- * and simply point at the current tree.
+ * A superseded version does get one, because nothing else on the page tells
+ * the reader they are on outdated documentation.
+ *
+ * It pairs with a canonical pointing at /docs. Note the deliberate absence of
+ * noindex: combining noindex with a canonical is a documented way to get the
+ * wrong page dropped from an index, so these pages stay indexable and simply
+ * point at the current tree.
  */
 export default function FrozenVersionBanner({ version }) {
-  const isCurrentRelease = DOCS_PRERELEASE && version === `v${DOCS_CURRENT_VERSION}`
-
-  if (isCurrentRelease) {
-    return (
-      <div className="border-b border-emerald-500/30 bg-emerald-500/[0.07] px-6 py-3">
-        <p className="mx-auto max-w-4xl text-[13.5px] leading-relaxed text-surface-700 dark:text-surface-300">
-          These are the docs for <strong className="font-semibold">{version}</strong>, the current
-          release, and they match what <code className="font-mono text-[12.5px]">pip install libreyolo</code> installs
-          today.{' '}
-          <Link
-            href="/docs"
-            className="font-medium text-libre-700 underline underline-offset-2 dark:text-libre-400"
-          >
-            Preview the docs for the next release
-          </Link>
-          , which cover models and export formats this version does not have yet.
-        </p>
-      </div>
-    )
-  }
+  if (DOCS_PRERELEASE && version === `v${DOCS_CURRENT_VERSION}`) return null
 
   return (
     <div className="border-b border-amber-500/30 bg-amber-500/[0.07] px-6 py-3">
