@@ -126,8 +126,3 @@ Every published weight file for this family.
 ## Licensing
 
 <provenance-box></provenance-box>
-
-## Citation
-
-The authors publish no BibTeX block for this work. Cite the paper linked in
-the Upstream row above.

@@ -125,8 +125,3 @@ tensors. No source from the LGPL-licensed
 zylo117/Yet-Another-EfficientDet-Pytorch project was consulted or used.
 
 </provenance-box>
-
-## Citation
-
-The authors publish no BibTeX block for this work. Cite the paper linked in
-the Upstream row above.

@@ -288,6 +288,18 @@ that type. The label is the quieter element; emphasis and links go on the value.
 A citation is an attribution. Getting it wrong credits the wrong people. This is
 the one block with a procedure rather than a style rule.
 
+**No citation means no Citation section.** Not a heading, not a note explaining
+that the authors publish no BibTeX. Fifteen pages carried "The authors publish
+no BibTeX block for this work. Cite the paper linked in the Upstream row
+above.", which is a section whose entire content is an apology for its own
+existence. It costs the reader a scroll, an entry in the on-this-page rail, and
+a paragraph in the markdown twin, to tell them nothing they can use. The
+Upstream row already links the paper.
+
+The same rule covers any generated block: if it would render empty, the heading
+around it does not belong on the page either. `Citation` returns null with no
+BibTeX, so a bare `## Citation` heading leaves a title with nothing under it.
+
 1. Copy the BibTeX **verbatim** from the authors' own citation block, normally a
    `## Citation` section in the upstream README or a `CITATION.cff`. Never
    assemble one from paper metadata, never retype it.

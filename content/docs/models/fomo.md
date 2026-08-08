@@ -184,9 +184,3 @@ code and these weights are MIT, LibreYOLO's own. The name FOMO and the
 technique it describes remain Edge Impulse's.
 
 </provenance-box>
-
-## Citation
-
-Edge Impulse announced FOMO in a blog post rather than a paper, and publishes
-no BibTeX block for it. Cite the announcement linked in the Upstream row
-above.

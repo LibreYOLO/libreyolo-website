@@ -127,8 +127,3 @@ license notice printed before the transfer starts, and is not the "republished
 at huggingface.co/LibreYOLO" copy the summary above implies.
 
 </provenance-box>
-
-## Citation
-
-The authors publish no BibTeX block for this work. Cite the paper linked in
-the Upstream row above.

@@ -142,8 +142,3 @@ shares the same torchvision source and BSD-3-Clause license, and adds the
 mask predictor and mask RoI head from the same ported commit.
 
 </provenance-box>
-
-## Citation
-
-The authors publish no BibTeX block for this work. Cite the paper linked in
-the Upstream row above.
