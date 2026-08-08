@@ -108,10 +108,9 @@ a family that downloads from another host never receives it.
 
 Not every family auto-downloads. Some deliberately return no URL because the
 released weights may not be redistributed, and the error then explains what to
-supply instead. Others print a license notice before the transfer starts, which
-is the case for any weights whose terms are narrower than LibreYOLO's own
-license. Read that notice: it is the only place some restrictions appear at
-runtime.
+supply instead. Others print a license notice before the transfer starts. That
+notice is the runtime signal that a checkpoint's terms are narrower than the
+code's, and it is worth reading rather than scrolling past.
 
 ## The Hugging Face organization
 

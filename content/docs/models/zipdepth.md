@@ -14,9 +14,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreZipDepthb-depth.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        depth = results[0].depth_map
+        depth = result.depth_map
         print(depth.min, depth.max, depth.mean)
     - label: CLI
       language: bash
@@ -30,7 +30,7 @@ snippets:
         # Same encoder, an unfold-free upsampling head for compilers that lack
         # gather/unfold support. Output is visually equivalent to the b checkpoint.
         model = LibreYOLO("LibreZipDepthbnpu-depth.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
   val:
     - label: Python
       language: python
@@ -69,9 +69,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreZipDepthb-depth.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].depth_map.data.shape)
+        print(result.depth_map.data.shape)
 ---
 
 ## Install
@@ -89,7 +89,7 @@ Weights download from Hugging Face on first use and are cached locally.
 
 <code-tabs name="predict" />
 
-`results[0].depth_map` carries a dense relative inverse-depth map: higher
+`result.depth_map` carries a dense relative inverse-depth map: higher
 values mean closer to the camera, and the values have no metric unit or
 cross-image scale. `save=True` writes a colormapped visualization of that map
 to disk; `Results.plot()` does not cover this family, since it is defined for

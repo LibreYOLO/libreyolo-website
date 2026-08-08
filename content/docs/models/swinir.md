@@ -14,9 +14,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreSwinIRm-restore.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        restored = results[0].restored
+        restored = result.restored
         print(restored.array.shape, restored.array.dtype)
     - label: CLI
       language: bash
@@ -33,7 +33,7 @@ snippets:
         # seams back together; tile_pad is the halo added around each tile
         # before it is cropped back out. Both are Python-only keyword
         # arguments, not CLI flags.
-        results = model("large-photo.jpg", tile=512, tile_pad=16, save=True)
+        result = model("large-photo.jpg", tile=512, tile_pad=16, save=True)
   val:
     - label: Python
       language: python
@@ -74,9 +74,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreSwinIRm-restore.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].restored.array.shape)
+        print(result.restored.array.shape)
 ---
 
 ## Install
@@ -93,7 +93,7 @@ Weights download from Hugging Face on first use and are cached locally.
 
 <code-tabs name="predict" />
 
-A restore result carries no boxes; `results[0].restored` is a dense `(H, W, 3)`
+A restore result carries no boxes; `result.restored` is a dense `(H, W, 3)`
 uint8 RGB image, on a canvas 4x the input in each dimension. `save=True` writes
 that image directly rather than an annotated plot. The input is padded to a
 multiple of 8 rather than resized, so predict runs at the photo's own

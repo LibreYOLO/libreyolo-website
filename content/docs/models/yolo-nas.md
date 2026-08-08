@@ -16,9 +16,9 @@ snippets:
         # A name not already on disk is fetched from Deci's CDN. The download
         # prints Deci's license terms first; taking the file accepts them.
         model = LibreYOLO("LibreYOLONASs.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        for box in results[0].boxes:
+        for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
@@ -32,9 +32,9 @@ snippets:
 
         # The -pose suffix picks the pose head and its own set of weights.
         model = LibreYOLO("LibreYOLONASs-pose.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].keypoints.xy)
+        print(result.keypoints.xy)
   train:
     - label: Python
       language: python
@@ -99,9 +99,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreYOLONASs.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].boxes.xyxy)
+        print(result.boxes.xyxy)
 ---
 
 ## Install

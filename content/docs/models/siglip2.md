@@ -15,10 +15,9 @@ snippets:
 
         model = LibreYOLO("LibreSigLIP2b16-cls.pt")
         model.set_classes(["a forklift", "an empty aisle", "a spill"])
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        r = results[0]
-        print(model.names[r.probs.top1], float(r.probs.top1conf))
+        print(model.names[result.probs.top1], float(result.probs.top1conf))
     - label: CLI
       language: bash
       code: |
@@ -32,7 +31,7 @@ snippets:
 
         model = LibreYOLO("LibreSigLIP2b16-cls.pt")
         model.set_classes(["a dog", "a cat", "outdoors"], multi_label=True)
-        r = model(SAMPLE_IMAGE)[0]
+        r = model(SAMPLE_IMAGE)
 
         # Independent per-class probabilities: more than one, or none, can
         # score high at once. Softmax (the default) instead normalizes them
@@ -45,7 +44,7 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreSigLIP2b16-cls.pt", task="embed")
-        image_embed = model(SAMPLE_IMAGE)[0].embeddings.data
+        image_embed = model(SAMPLE_IMAGE).embeddings.data
         text_embed = model.embed_text("a photo of a forklift")
 
         # Both are L2-normalized, so a plain dot product is cosine similarity.

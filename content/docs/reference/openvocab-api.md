@@ -28,7 +28,7 @@ snippets:
         model = LibreOpenVocab("grounding-dino-tiny")
         model.set_classes(["person", "skateboard", "handrail"])
 
-        result = model.predict(SAMPLE_IMAGE)[0]
+        result = model.predict(SAMPLE_IMAGE)
         for box, cls in zip(result.boxes.xyxy, result.boxes.cls):
             print(result.names[int(cls)], box.tolist())
 ---

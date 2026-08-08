@@ -13,10 +13,10 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreYOLO9t.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        for box in results[0].boxes:
-            print(results[0].names[int(box.cls)], float(box.conf), box.xyxy)
+        for box in result.boxes:
+            print(result.names[int(box.cls)], float(box.conf), box.xyxy)
     - label: CLI
       language: bash
       code: |
@@ -30,9 +30,9 @@ snippets:
         # The factory routes on the checkpoint, and every detector returns the
         # same Results object, so switching family is a one line change.
         model = LibreYOLO("LibreDFINEn.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].boxes.xyxy.shape)
+        print(result.boxes.xyxy.shape)
     - label: Video and streams
       language: python
       code: |
@@ -78,7 +78,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"], metrics["metrics/mAP75"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -103,9 +103,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like a checkpoint and returns the same Results object.
         model = LibreYOLO("LibreYOLO9t.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].boxes.xyxy)
+        print(result.boxes.xyxy)
 ---
 
 ## Definition
@@ -120,9 +120,9 @@ what separates it from [instance segmentation](/docs/tasks/instance-segmentation
 `detect` is the canonical task key and the default: a checkpoint whose filename
 carries no task suffix loads as a detector.
 
-`predict()` fills `results[0].boxes`. `.xyxy` gives pixel corners on the
+`predict()` fills `result.boxes`. `.xyxy` gives pixel corners on the
 original image canvas, `.conf` the score, and `.cls` the class index into
-`results[0].names`. `.xywh`, `.xyxyn` and `.xywhn` are derived views of the
+`result.names`. `.xywh`, `.xyxyn` and `.xywhn` are derived views of the
 same rows, and `.id` carries a track id once a tracker is attached. Iterating
 a `Boxes` object yields one-row slices, so `box.cls`, `box.conf` and
 `box.xyxy` all work per detection.
@@ -226,11 +226,11 @@ the label ids, so the JSON category names have to match it.
 
 <code-tabs name="train" />
 
-`epochs`, `imgsz`, `batch` and `lr0` are the arguments that move first. Learning
-rates differ sharply by family: the transformer detectors want `lr0` at or
-below `1e-4`, where a convolutional detector tolerates far more. Each model
-page states the family's own defaults, and a family can ignore an argument
-outright, which its page lists. See [training](/docs/train) for datasets,
+`epochs`, `imgsz`, `batch` and `lr0` are the arguments that move first. `lr0` is
+the one that does not carry across families: a rate a convolutional detector
+tolerates will diverge a transformer one, so take the value from the model page
+rather than from another family's example. A family can also ignore an argument
+outright, and its page lists which. See [training](/docs/train) for datasets,
 augmentation, multi-GPU and loggers.
 
 ## Validate
@@ -242,14 +242,21 @@ evaluation over the split named by `val` in the dataset YAML.
 
 `metrics/mAP50-95` is mean average precision averaged over IoU thresholds 0.50
 to 0.95, and it is the headline number. `metrics/mAP50` and `metrics/mAP75` are
-the single-threshold versions. `metrics/precision` and `metrics/recall` are
-taken at IoU 0.50. `metrics/mAP_small`, `metrics/mAP_medium` and
-`metrics/mAP_large` split the same average by object area, and
-`metrics/AR1`, `metrics/AR10`, `metrics/AR100`, `metrics/AR_small`,
-`metrics/AR_medium` and `metrics/AR_large` are the matching average-recall
-figures. `metrics/AR_max_det` and `metrics/max_det` record the detection cap
-the run used. The same numbers repeat under a `(B)` suffix, for box, so that a
-detection key reads the same on a model that also predicts masks.
+the single-threshold versions. `metrics/mAP_small`, `metrics/mAP_medium` and
+`metrics/mAP_large` split the same average by object area, and `metrics/AR1`,
+`metrics/AR10`, `metrics/AR100`, `metrics/AR_small`, `metrics/AR_medium` and
+`metrics/AR_large` are the matching average-recall figures.
+`metrics/AR_max_det` and `metrics/max_det` record the detection cap the run
+used.
+
+Read `metrics/precision` and `metrics/recall` carefully on this task. They are
+kept for backward compatibility and are aliases, not an operating point:
+`metrics/precision` holds the same value as `metrics/mAP50-95`, and
+`metrics/recall` the same value as `metrics/AR100`. Plotting them as a
+precision-recall pair reports one number twice. Four keys also repeat under a
+`(B)` suffix, for box, so that a detection key reads the same on a model that
+also predicts masks: `metrics/mAP50-95(B)`, `metrics/mAP50(B)`,
+`metrics/precision(B)` and `metrics/recall(B)`.
 
 ## Export
 

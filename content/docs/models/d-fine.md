@@ -14,9 +14,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreDFINEn.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        for box in results[0].boxes:
+        for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
@@ -30,9 +30,9 @@ snippets:
         # The -seg suffix in the filename selects the mask head, so no task
         # argument is needed here.
         model = LibreYOLO("LibreDFINEn-seg.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        print(results[0].masks.data.shape)
+        print(result.masks.data.shape)
   train:
     - label: Python
       language: python
@@ -119,9 +119,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreDFINEn.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].boxes.xyxy)
+        print(result.boxes.xyxy)
 ---
 
 ## Install
@@ -147,7 +147,7 @@ Weights download from Hugging Face on first use and are cached locally.
 
 The returned `Results` object is the one every family returns, so swapping in a
 different detector is a one line change. A `-seg` filename resolves to the
-segmentation task on its own, and `results[0].masks` then carries the instance
+segmentation task on its own, and `result.masks` then carries the instance
 masks alongside the boxes. `conf` and `max_det` filter the query selection;
 `iou` is accepted for API parity but has no effect, because the decoder is a set
 predictor with no NMS step. See [prediction](/docs/predict) for sources,

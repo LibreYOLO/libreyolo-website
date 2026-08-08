@@ -15,9 +15,9 @@ snippets:
 
         model = LibreVLM("florence-2-base")
         model.set_classes(["car", "person", "traffic light"])
-        results = model.predict(SAMPLE_IMAGE, save=True)
+        result = model.predict(SAMPLE_IMAGE, save=True)
 
-        for box in results[0].boxes:
+        for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
     - label: Video
       language: python

@@ -14,9 +14,9 @@ snippets:
 
         # No edge checkpoint ships with LibreYOLO; convert one first (below).
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        edges = results[0].edges
+        edges = result.edges
         print(edges.array.shape)          # (H, W) float32 in [0, 1]
         print(edges.binary(0.5).sum())    # edge-pixel count at 0.5
     - label: Choose your own threshold
@@ -25,21 +25,21 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
         # The continuous map is kept so the threshold stays your decision.
         for t in (0.3, 0.5, 0.7):
-            print(t, int(results[0].edges.binary(t).sum()))
+            print(t, int(result.edges.binary(t).sum()))
     - label: Save the visualization
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
         # plot() renders the map; it is defined for edge and normal results.
-        results[0].plot().save("edges.png")
+        result.plot().save("edges.png")
   val:
     - label: Validate and read the metric keys
       language: python
@@ -82,9 +82,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("weights/LibreDexiNedb-edge.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].edges.array.shape)
+        print(result.edges.array.shape)
 ---
 
 ## Definition
@@ -94,9 +94,9 @@ The `edge` task predicts one probability per pixel from a single RGB image:
 threshold that turns it into a binary boundary image is left to the caller, and
 the right threshold depends on the dataset and the downstream use.
 
-A prediction fills `results[0].edges`, an `EdgeMap` payload holding an `(H, W)`
+A prediction fills `result.edges`, an `EdgeMap` payload holding an `(H, W)`
 float32 array in `[0, 1]` on the original image canvas. `.array` returns that
-map as NumPy and `.binary(threshold)` returns a boolean mask. `results[0].boxes`
+map as NumPy and `.binary(threshold)` returns a boolean mask. `result.boxes`
 stays empty, so `conf`, `iou` and `max_det` have no effect. `Results.plot()`
 covers this task and renders the map directly.
 

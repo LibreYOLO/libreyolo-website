@@ -14,7 +14,7 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreEfficientNetV2b0-cls.pt")
-        result = model(SAMPLE_IMAGE, save=True)[0]
+        result = model(SAMPLE_IMAGE, save=True)
 
         print(result.probs.top1, result.probs.top1conf)
         print(result.probs.top5)
@@ -76,7 +76,7 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreEfficientNetV2b0-cls.onnx")
-        result = model(SAMPLE_IMAGE)[0]
+        result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
 ---

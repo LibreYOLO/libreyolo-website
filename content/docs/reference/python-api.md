@@ -22,19 +22,22 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreYOLO9t.pt")
-        results = model(SAMPLE_IMAGE)
 
-        print(results[0].boxes.xyxy)
-        print(results[0].names)
+        # A single image source returns one Results; a list or directory
+        # returns a list of them.
+        result = model(SAMPLE_IMAGE)
+
+        print(result.boxes.xyxy)
+        print(result.names)
     - label: Import a family class directly
       language: python
       code: |
         from libreyolo import LibreYOLO9, SAMPLE_IMAGE
 
         model = LibreYOLO9("LibreYOLO9t.pt", size="t")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(len(results[0]))
+        print(len(result))
   factories:
     - label: The five entry points
       language: python
@@ -168,9 +171,10 @@ model(
 )
 ```
 
-The return is a `Results`, a list of `Results`, or with `stream=True` a
-generator of `Results`. The other methods on the model object are documented
-on the [model API page](/docs/reference/model-api).
+A single image source returns one `Results`. A list, a tuple or a directory
+returns a list of them, and `stream=True` returns a generator. The other
+methods on the model object are documented on the
+[model API page](/docs/reference/model-api).
 
 ## Results payloads
 

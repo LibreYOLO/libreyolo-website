@@ -14,9 +14,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreMoGe2s-normal.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        normal = results[0].normal_map
+        normal = result.normal_map
         print(normal.array.shape)   # (H, W, 3) float32 unit vectors
     - label: CLI
       language: bash
@@ -58,9 +58,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreMoGe2s-normal.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].normal_map.array.shape)
+        print(result.normal_map.array.shape)
 ---
 
 ## Install
@@ -79,8 +79,8 @@ size directly from the official checkpoints and caches it locally.
 <code-tabs name="predict" />
 
 MoGe-2 returns a dense field rather than a set of detections, so
-`results[0].boxes` is empty and `conf`, `iou` and `max_det` have no effect.
-`results[0].normal_map` holds the result: an `(H, W, 3)` array of unit vectors
+`result.boxes` is empty and `conf`, `iou` and `max_det` have no effect.
+`result.normal_map` holds the result: an `(H, W, 3)` array of unit vectors
 in the OpenCV camera frame, where `+x` is right, `+y` is down, `+z` is into the
 scene, and a surface facing the camera reads `(0, 0, -1)`. Predicting a list of
 images runs one forward pass per image; this family has no stacked-batch fast

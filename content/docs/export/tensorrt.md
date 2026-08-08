@@ -111,8 +111,8 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("weights/LibreYOLO9t_fp16.engine")
-        results = model.predict(SAMPLE_IMAGE)
-        print(results.boxes.xyxy[:3])
+        result = model.predict(SAMPLE_IMAGE)
+        print(result.boxes.xyxy[:3])
     - label: Bare TensorRT
       language: python
       code: |
@@ -212,8 +212,8 @@ TensorRT version that built it. An engine built on a workstation will not load o
 a different architecture, which is why the build step runs on the deployment
 machine. `hardware_compatibility="ampere_plus"` trades some performance for
 portability across Ampere and newer. The `"same_compute_capability"` value maps to
-`NONE` on TensorRT builds that do not expose that level, and in that case the
-export warns rather than claiming portability it did not apply.
+`NONE` and warns: the engine is optimized for the current GPU only, and the export
+says so rather than claiming a portability it did not apply.
 
 Only the batch axis is profiled. A build with dynamic spatial dimensions is not
 part of this contract, which is why FCOS is blocked: it needs dynamic padded

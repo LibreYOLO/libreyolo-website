@@ -18,9 +18,9 @@ snippets:
         # Open vocabulary: any words work, not a fixed class head. Sticky
         # across every later predict()/track() call until set again.
         model.set_classes(["person", "bicycle", "dog"])
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        for box in results[0].boxes:
+        for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
     - label: Raw chat
       language: python
@@ -56,7 +56,7 @@ locally, and logs a one-time license notice before it does.
 
 <code-tabs name="predict" />
 
-`results[0].boxes` carries the parsed detections like any other family.
+`result.boxes` carries the parsed detections like any other family.
 Confidence is a placeholder: LFM2-VL emits no per-box score, so every
 detection gets the same constant confidence, and `conf=` only drops rows
 below that constant, it does not rank them. `iou` discards near-duplicate

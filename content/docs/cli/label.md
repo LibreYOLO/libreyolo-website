@@ -3,7 +3,7 @@ title: libreyolo label
 seo_title: "libreyolo label command reference"
 description: "Launch the local bounding-box annotation tool: arguments with defaults, the AI assist switch, and what binding to a network interface exposes."
 lead: "Starts a local web tool for drawing and editing bounding boxes. It writes LibreYOLO-native label files, so a dataset annotated here trains with no conversion step."
-keywords: [libreyolo label cli, bounding box annotation tool, yolo labelling tool, auto label cli, libreyolo label share]
+keywords: [libreyolo label cli, bounding box annotation tool, yolo labeling tool, auto label cli, libreyolo label share]
 last_verified: "1.5.0"
 meta:
   - label: Command

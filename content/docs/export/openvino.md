@@ -87,8 +87,8 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("weights/LibreYOLO9t_openvino")
-        results = model.predict(SAMPLE_IMAGE)
-        print(results.boxes.xyxy[:3])
+        result = model.predict(SAMPLE_IMAGE)
+        print(result.boxes.xyxy[:3])
     - label: Select the device
       language: python
       code: |

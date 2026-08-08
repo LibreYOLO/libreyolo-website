@@ -15,9 +15,9 @@ snippets:
         # LibreFOMO weights are not auto-downloaded. Fetch a checkpoint from
         # https://huggingface.co/LibreYOLO first and load it by local path.
         model = LibreYOLO("./LibreFOMOs-point.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        points = results[0].points
+        points = result.points
         print(len(points))     # object count
         print(points.xy)       # (N, 2) centers in original-image pixels
         print(points.cls, points.conf)
@@ -29,9 +29,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("./LibreFOMOs-point.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        points = results[0].points.numpy()
+        points = result.points.numpy()
         print(points.xyn)                          # same centers in [0, 1]
         print(Counter(points.cls.astype(int).tolist()))
   train:
@@ -53,7 +53,7 @@ snippets:
         # train() reloads the best checkpoint into the same object, so the
         # model predicts with the trained weights when the call returns.
         print(results["best_checkpoint"])
-        print(model(SAMPLE_IMAGE)[0].points.xy)
+        print(model(SAMPLE_IMAGE).points.xy)
   val:
     - label: Validate and read the metric keys
       language: python
@@ -97,9 +97,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("./LibreFOMOs-point.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].points.xy)
+        print(result.points.xy)
 ---
 
 ## Definition
@@ -108,11 +108,11 @@ The `point` task locates each object with a single x, y coordinate and a class,
 with no width, height or mask. Because a prediction is a flat list of objects,
 the row count is the object count, which is what makes this the counting task.
 
-A prediction fills `results[0].points`, a `Points` payload wrapping an `(N, 4)`
+A prediction fills `result.points`, a `Points` payload wrapping an `(N, 4)`
 array of `x, y, class, confidence` rows in original-image pixels. `.xy` returns
 the coordinates, `.xyn` the same coordinates divided by the image size, `.cls`
 the class indices and `.conf` the scores; `len()` returns the number of points.
-`results[0].boxes` stays empty, so `iou` and `max_det` have nothing to act on.
+`result.boxes` stays empty, so `iou` and `max_det` have nothing to act on.
 
 ## Models
 

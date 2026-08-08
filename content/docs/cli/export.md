@@ -1,7 +1,7 @@
 ---
 title: libreyolo export
 seo_title: "libreyolo export command reference"
-description: "Export a checkpoint to a deployment format from the command line: arguments with their defaults, where the artifact lands, and the combinations that are refused."
+description: "Export a checkpoint to a deployment format: every argument with its default, where the artifact lands, and the combinations the command refuses."
 lead: "Converts one checkpoint into one deployment format and writes the artifact under weights/. The format decides which of the arguments below apply."
 keywords: [libreyolo export cli, libreyolo export command, yolo onnx export cli, tensorrt export command, libreyolo export arguments]
 last_verified: "1.5.0"

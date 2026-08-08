@@ -16,10 +16,10 @@ snippets:
         # No person source given: HRNet pairs itself with a lightweight
         # LibreYOLO9t detector automatically and logs that choice once.
         model = LibreYOLO("LibreHRNetw32-pose.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        print(results[0].keypoints.xy)
-        print(results[0].boxes.xyxy)
+        print(result.keypoints.xy)
+        print(result.boxes.xyxy)
     - label: CLI
       language: bash
       code: |
@@ -32,14 +32,14 @@ snippets:
         model = LibreYOLO("LibreHRNetw32-pose.pt")
 
         # Skip detection entirely: treat the whole image as one person.
-        results = model(SAMPLE_IMAGE, cropped=True)
+        result = model(SAMPLE_IMAGE, cropped=True)
 
         # Or hand HRNet boxes from a detector you already ran.
-        results = model(SAMPLE_IMAGE, person_boxes=[[34, 12, 220, 400]])
+        result = model(SAMPLE_IMAGE, person_boxes=[[34, 12, 220, 400]])
 
         # Or pair it with a specific LibreYOLO detector instead of the
         # LibreYOLO9t default.
-        results = model(SAMPLE_IMAGE, person_detector="rfdetr")
+        result = model(SAMPLE_IMAGE, person_detector="rfdetr")
   val:
     - label: Python
       language: python

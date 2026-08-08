@@ -18,9 +18,9 @@ snippets:
         # Open vocabulary: any words work, not a fixed class head. Sticky
         # across every later predict()/track() call until set again.
         model.set_classes(["person", "bicycle", "dog"])
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        for box in results[0].boxes:
+        for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
     - label: Point prompting
       language: python
@@ -31,9 +31,9 @@ snippets:
         # Switch tasks on an already-loaded model with model.set_task("point").
         model = LibreLocateAnything(size="3b", task="point")
         model.set_classes(["the person closest to the camera"])
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        for pt in results[0].points:
+        for pt in result.points:
             print(pt.cls, pt.conf, pt.xy)
     - label: Raw chat
       language: python
@@ -71,7 +71,7 @@ and logs a one-time license notice before the first download.
 
 <code-tabs name="predict" />
 
-`results[0].boxes` (task `detect`) and `results[0].points` (task `point`)
+`result.boxes` (task `detect`) and `result.points` (task `point`)
 carry the parsed output like any other family. Confidence is a placeholder:
 LocateAnything emits no per-box score, so every detection gets the same
 constant confidence, and `conf=` only drops rows below that constant, it
@@ -83,7 +83,7 @@ result handling.
 
 One published size, 3b. Two tasks share the same weights: `detect` (the
 default) returns boxes, and `task="point"` returns a single point per
-matched object instead, in `results[0].points`; switch between them on an
+matched object instead, in `result.points`; switch between them on an
 already-loaded model with `model.set_task("point")`. LibreYOLO's benchmark
 harness has not measured this family, so there are no published accuracy
 numbers to compare against.

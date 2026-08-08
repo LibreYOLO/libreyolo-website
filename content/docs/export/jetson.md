@@ -127,8 +127,8 @@ snippets:
         # Downloads the checkpoint on first use.
         model = LibreYOLO9("libreyolo9s.pt", size="s")
 
-        results = model.predict("bus.jpg")
-        print(results.boxes)
+        result = model.predict("bus.jpg")
+        print(result.boxes)
     - label: CLI
       language: bash
       code: |
@@ -143,7 +143,7 @@ snippets:
         LibreYOLO9("libreyolo9s.pt", size="s").export(format="tensorrt", half=True)
 
         # The engine loads back through the same entry point.
-        results = LibreYOLO("libreyolo9s.engine").predict("bus.jpg")
+        result = LibreYOLO("libreyolo9s.engine").predict("bus.jpg")
     - label: CLI
       language: bash
       code: |

@@ -14,10 +14,10 @@ snippets:
 
         # The compact 4x generator; tile bounds peak memory on a large source.
         model = LibreYOLO("LibreRealESRGANx4t-restore.pt")
-        results = model(SAMPLE_IMAGE, tile=512, tile_pad=10)
+        result = model(SAMPLE_IMAGE, tile=512, tile_pad=10)
 
-        results[0].restored.save("upscaled.png")
-        print(results[0].restored.array.shape)   # 4x the input in each axis
+        result.restored.save("upscaled.png")
+        print(result.restored.array.shape)   # 4x the input in each axis
     - label: Denoise an image
       language: python
       code: |
@@ -25,10 +25,10 @@ snippets:
 
         # Trained on SIDD real-image noise; output stays at the input size.
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        results[0].restored.save("denoised.png")
-        print(results[0].restore_scale)   # 1: no upscale for this checkpoint
+        result.restored.save("denoised.png")
+        print(result.restore_scale)   # 1: no upscale for this checkpoint
   train:
     - label: Fine-tune NAFNet on paired images
       language: python
@@ -84,9 +84,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreNAFNetl-restore-sidd.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        results[0].restored.save("denoised.png")
+        result.restored.save("denoised.png")
 ---
 
 ## Definition
@@ -96,11 +96,11 @@ super-resolution are all the same task here, because they share one contract:
 the model consumes an RGB image and returns an RGB image, and the degradation it
 was trained to undo is a property of the checkpoint rather than of the API.
 
-A prediction fills `results[0].restored`, a `RestoredImage` payload holding an
+A prediction fills `result.restored`, a `RestoredImage` payload holding an
 `(H, W, 3)` uint8 RGB array. `.array` returns it as NumPy and `.save(path)`
-writes it to disk. `results[0].restore_scale` records the upscale factor the
+writes it to disk. `result.restore_scale` records the upscale factor the
 output canvas carries, which is `1` for a checkpoint that preserves resolution.
-`results[0].boxes` stays empty, so `conf`, `iou` and `max_det` are accepted for
+`result.boxes` stays empty, so `conf`, `iou` and `max_det` are accepted for
 signature parity but have no effect, and `save=True` writes the restored image
 directly rather than an annotated photo.
 

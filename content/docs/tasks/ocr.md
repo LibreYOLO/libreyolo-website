@@ -15,9 +15,9 @@ snippets:
         # The t tier is the lighter of the two, built for CPU. SAMPLE_IMAGE
         # keeps this runnable; point it at an image with text of your own.
         model = LibreYOLO("LibrePPOCRt-ocr.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        regions = results[0].ocr
+        regions = result.ocr
         print(len(regions), "regions")
         for text, score in zip(regions.texts, regions.conf):
             print(repr(text), float(score))
@@ -27,9 +27,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibrePPOCRt-ocr.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        regions = results[0].ocr
+        regions = result.ocr
         print(regions.data.shape)   # (N, 4, 2) polygons, TL TR BR BL
         print(regions.xyxy)         # axis-aligned hulls of those polygons
         print(regions.det_conf)     # detection score, separate from .conf
@@ -40,11 +40,11 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibrePPOCRt-ocr.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
         # Index with positions, not a boolean mask: slicing carries the
         # transcripts and both score arrays along with the geometry.
-        regions = results[0].ocr.numpy()
+        regions = result.ocr.numpy()
         keep = regions[np.flatnonzero(regions.conf >= 0.9)]
         print(keep.texts)
   val:
@@ -69,12 +69,12 @@ image and transcribes it. Regions come back as four-point polygons rather than
 axis-aligned boxes, because scene text is often rotated, and in reading order,
 top to bottom then left to right.
 
-A prediction fills `results[0].ocr`, an `OCRRegions` payload. `.data` is an
+A prediction fills `result.ocr`, an `OCRRegions` payload. `.data` is an
 `(N, 4, 2)` float array of polygons in original-image pixels, ordered top-left,
 top-right, bottom-right, bottom-left; `.texts` is the list of N transcripts;
 `.conf` is the per-region recognition score and `.det_conf` the detection score;
 `.xyxy` gives the axis-aligned hull of each polygon. Because the quads are
-genuine polygons, they do not populate `results[0].boxes`. Slicing an
+genuine polygons, they do not populate `result.boxes`. Slicing an
 `OCRRegions` carries the transcripts and both score arrays along with the
 geometry.
 

@@ -15,10 +15,9 @@ snippets:
 
         model = LibreYOLO("LibreCLIPb32-cls.pt")
         model.set_classes(["a forklift", "an empty aisle", "a spill"])
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        r = results[0]
-        print(model.names[r.probs.top1], float(r.probs.top1conf))
+        print(model.names[result.probs.top1], float(result.probs.top1conf))
     - label: CLI
       language: bash
       code: |
@@ -31,7 +30,7 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
-        image_embed = model(SAMPLE_IMAGE)[0].embeddings.data
+        image_embed = model(SAMPLE_IMAGE).embeddings.data
         text_embed = model.embed_text("a photo of a forklift")
 
         # Both are L2-normalized, so a plain dot product is cosine similarity.

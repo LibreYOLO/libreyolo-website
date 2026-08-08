@@ -15,9 +15,9 @@ snippets:
 
         model = LibreVLM("smolvlm2-500m")
         model.set_classes(["cat", "dog"])
-        results = model.predict(SAMPLE_IMAGE, save=True)
+        result = model.predict(SAMPLE_IMAGE, save=True)
 
-        for box in results[0].boxes:
+        for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
     - label: Chat
       language: python

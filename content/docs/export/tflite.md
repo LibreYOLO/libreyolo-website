@@ -82,8 +82,8 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("weights/LibreYOLO9t.tflite")
-        results = model.predict(SAMPLE_IMAGE)
-        print(results.boxes.xyxy[:3])
+        result = model.predict(SAMPLE_IMAGE)
+        print(result.boxes.xyxy[:3])
     - label: Bare LiteRT
       language: python
       code: |

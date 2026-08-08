@@ -8,7 +8,7 @@ keywords:
   - yolo batch inference python
   - fp16 inference
   - tiled inference small objects
-  - sahi slicing
+  - sliced inference large images
   - test time augmentation detection
   - capture_graph
   - batch predict directory

@@ -21,7 +21,7 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreYOLO9t.pt")
-        result = model(SAMPLE_IMAGE)[0]
+        result = model(SAMPLE_IMAGE)
 
         print(result.orig_shape, result.path)
         print(result.boxes.xyxy)
@@ -34,20 +34,21 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreYOLO9t.pt")
-        result = model(SAMPLE_IMAGE)[0]
+        result = model(SAMPLE_IMAGE)
 
         # Every payload moves together.
         result = result.cpu().numpy()
 
         # Rows, as plain dicts, then as JSON.
-        print(result.summary()[0])
+        print(result.summary()[:1])
         print(result.to_json())
 ---
 
 ## The Results object
 
-One `Results` describes one image. A list source or a directory returns a list
-of them, and `stream=True` returns a generator that yields them.
+One `Results` describes one image. A single image source returns one of them,
+a list source or a directory returns a list, and `stream=True` returns a
+generator that yields them.
 
 | Attribute | Type | Meaning |
 |---|---|---|
@@ -207,13 +208,13 @@ The restored RGB image, `(H, W, 3)` uint8. For super-resolution the canvas is
 
 ## Matte
 
-Soft alpha matte, float32 `(H, W)` in `[0, 1]` on the original image canvas.
+Soft opacity matte, float32 `(H, W)` in `[0, 1]` on the original image canvas.
 `1` is fully foreground and `0` is fully background. A soft matte subsumes a
 hard background-removal mask, thresholded at 0.5, and keeps the anti-aliased
 edges that a binary mask discards. `array` returns the numpy view.
 
 On a matte result, `Results.cutout(image=None)` returns an RGBA `(H, W, 4)`
-uint8 array whose alpha is the matte, and `Results.save(path, image=None)`
+uint8 array whose fourth channel is the matte, and `Results.save(path, image=None)`
 writes that cutout as a transparent-background PNG. Both take the RGB from
 `image` when given, otherwise they reload it from `Results.path`.
 

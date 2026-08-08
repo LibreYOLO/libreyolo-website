@@ -1,7 +1,7 @@
 ---
 title: Knowledge distillation
 seo_title: "Knowledge distillation in LibreYOLO"
-description: "Train a small detector against a larger teacher or a frozen DINOv2 backbone. The MGD, CWD and feature-MSE losses, tap points, and which families support each."
+description: "Train a small detector against a larger teacher or a frozen DINOv2 backbone: the MGD, CWD and feature-MSE losses, tap points, and family support."
 lead: "Distillation adds a second loss term that pulls the student's intermediate feature maps toward a frozen teacher's. LibreYOLO taps features with forward hooks, so the teacher's own head and loss are never involved."
 keywords:
   - knowledge distillation

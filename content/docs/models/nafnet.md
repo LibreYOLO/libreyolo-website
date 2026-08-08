@@ -14,9 +14,9 @@ snippets:
         from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
-        results = model("noisy.jpg", save=True)
+        result = model("noisy.jpg", save=True)
 
-        restored = results[0].restored
+        restored = result.restored
         print(restored.array.shape)
     - label: CLI
       language: bash
@@ -28,9 +28,9 @@ snippets:
         from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
-        results = model.predict("noisy.jpg")
+        result = model.predict("noisy.jpg")
 
-        results[0].restored.save("denoised.png")
+        result.restored.save("denoised.png")
   train:
     - label: Python
       language: python
@@ -102,9 +102,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreNAFNetl-restore-sidd.onnx")
-        results = model("noisy.jpg")
+        result = model("noisy.jpg")
 
-        results[0].restored.save("denoised.png")
+        result.restored.save("denoised.png")
 ---
 
 ## Install

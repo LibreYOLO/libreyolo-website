@@ -14,9 +14,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreECs.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        for box in results[0].boxes:
+        for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
@@ -30,19 +30,19 @@ snippets:
         # The -pose suffix in the filename selects the keypoint head, so no
         # task argument is needed here.
         model = LibreYOLO("LibreECs-pose.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        print(results[0].keypoints.xy)
-        print(results[0].boxes.conf)
+        print(result.keypoints.xy)
+        print(result.boxes.conf)
     - label: Instance segmentation
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreECs-seg.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        print(results[0].masks.data.shape)
+        print(result.masks.data.shape)
   train:
     - label: Python
       language: python
@@ -155,9 +155,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreECs.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].boxes.xyxy)
+        print(result.boxes.xyxy)
 ---
 
 ## Install
@@ -184,8 +184,8 @@ Weights download from Hugging Face on first use and are cached locally.
 
 The task comes from the filename, so a `-pose` or `-seg` checkpoint selects its
 own head and takes no task argument. All three return the `Results` object every
-family returns, with `results[0].keypoints` added for pose and
-`results[0].masks` for segmentation. Pose covers one class, person, with the 17
+family returns, with `result.keypoints` added for pose and
+`result.masks` for segmentation. Pose covers one class, person, with the 17
 COCO keypoints, and the count is fixed when the model is built. It has no box
 head, so each pose box is the bounding extent of its own keypoints, and the
 third keypoint channel is a constant rather than a per-point score.

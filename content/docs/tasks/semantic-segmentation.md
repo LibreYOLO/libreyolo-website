@@ -15,9 +15,9 @@ snippets:
         # The -sem suffix in the filename selects the task, so no task
         # argument is needed.
         model = LibreYOLO("LibreSegformerb0-sem.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        mask = results[0].semantic_mask
+        mask = result.semantic_mask
         print(mask.data.shape)   # (H, W) class ids on the original canvas
         print(mask.classes)      # sorted class ids present, ignoring 255
     - label: CLI
@@ -30,7 +30,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        result = LibreYOLO("LibreSegformerb0-sem.pt")(SAMPLE_IMAGE)[0]
+        result = LibreYOLO("LibreSegformerb0-sem.pt")(SAMPLE_IMAGE)
         mask = result.semantic_mask
 
         for class_id in mask.classes:
@@ -42,9 +42,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibrePIDNets-sem.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].semantic_mask.data.shape)
+        print(result.semantic_mask.data.shape)
   train:
     - label: Python
       language: python
@@ -102,9 +102,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like a checkpoint and returns the same Results object.
         model = LibreYOLO("LibreSegformerb0-sem.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].semantic_mask.data.shape)
+        print(result.semantic_mask.data.shape)
 ---
 
 ## Definition
@@ -119,7 +119,7 @@ pixel and separating instances at the same time is
 `semantic` is the canonical task key, and the `-sem` suffix in a checkpoint
 filename selects it, so `task=` is not needed when loading published weights.
 
-`predict()` fills `results[0].semantic_mask`. `.data` is an `(H, W)` integer
+`predict()` fills `result.semantic_mask`. `.data` is an `(H, W)` integer
 class map on the original image canvas, `.classes` lists the ids present in
 sorted order, and `.class_mask(id)` returns the boolean `(H, W)` selection for
 one class. The value `255` is the ignore label: it is never a class, it is
@@ -142,10 +142,11 @@ Four more predict, validate and export, but their `train()` raises
 [DeepLabv3](/docs/models/deeplabv3), [PIDNet](/docs/models/pidnet) and
 [EoMT](/docs/models/eomt).
 
-Class sets differ by checkpoint, not by family. Published weights are trained
-on datasets with very different label spaces, so a checkpoint's `names` is what
-tells you what it can label, and swapping families only makes sense between
-checkpoints trained on the same dataset.
+Class sets differ by checkpoint, not by family. The published weights come from
+datasets whose label spaces have little in common, ADE20K's 150 classes against
+Cityscapes' 19 among them, so a checkpoint's `names` is what tells you what it
+can label, and two checkpoints are only comparable when they were trained on
+the same one.
 
 ## Predict
 
@@ -153,9 +154,11 @@ Weights download from Hugging Face on first use and are cached locally.
 
 <code-tabs name="predict" />
 
-`conf` and `iou` have no effect here. The prediction is an argmax per pixel,
-so there is no score threshold to raise and no NMS step to tune. See
-[prediction](/docs/predict) for sources, streaming and result handling.
+The map is an argmax per pixel, so there is no NMS step and `iou` never has an
+effect. `conf` and `max_det` are accepted for API parity and do nothing on
+SegFormer, PIDNet and the other dense predictors; EoMT is the exception, where
+`conf` filters query selection. See [prediction](/docs/predict) for sources,
+streaming and result handling.
 
 ## Dataset format
 

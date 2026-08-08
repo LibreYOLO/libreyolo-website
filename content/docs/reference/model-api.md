@@ -23,10 +23,10 @@ snippets:
         model = LibreYOLO("LibreYOLO9t.pt")
 
         model.info()
-        results = model(SAMPLE_IMAGE, conf=0.25, iou=0.45)
+        result = model(SAMPLE_IMAGE, conf=0.25, iou=0.45)
 
-        print(results[0].boxes.xyxy)
-        print(results[0].speed)
+        print(result.boxes.xyxy)
+        print(result.speed)
   stream:
     - label: Python
       language: python
@@ -108,6 +108,9 @@ model(
 | `overlap_ratio` | `0.2` | Tile overlap ratio |
 | `output_file_format` | `None` | `"jpg"`, `"png"` or `"webp"` |
 | `cuda_graph` | `False` | `True` captures on first use per input shape, `"auto"` waits for a shape to repeat |
+
+A single image source returns one `Results`. A list, a tuple or a directory
+returns a list of them, and `stream=True` returns a generator in every case.
 
 Live stream sources are unbounded and require `stream=True`. `tiling` and
 `augment` cannot be combined. Test-time augmentation raises for the `embed`,

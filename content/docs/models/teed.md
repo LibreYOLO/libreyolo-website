@@ -14,9 +14,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("weights/LibreTEEDt-edge.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        edges = results[0].edges
+        edges = result.edges
         print(edges.array.shape)        # (H, W) float32 in [0, 1]
         print(edges.binary(0.5).sum())  # thresholded edge-pixel count
     - label: CLI
@@ -58,9 +58,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("weights/LibreTEEDt-edge.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].edges.array.shape)
+        print(result.edges.array.shape)
 ---
 
 ## Install
@@ -86,7 +86,7 @@ python weights/convert_teed_weights.py upstream.pth weights/LibreTEEDt-edge.pt -
 
 <code-tabs name="predict" />
 
-`results[0].edges` holds the result: an `(H, W)` float32 array in `[0, 1]`,
+`result.edges` holds the result: an `(H, W)` float32 array in `[0, 1]`,
 with `.binary(threshold)` returning a boolean edge mask. There are no boxes,
 so `conf`, `iou` and `max_det` have no effect. See
 [prediction](/docs/predict) for sources, streaming and result handling.

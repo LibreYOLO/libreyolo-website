@@ -17,9 +17,9 @@ snippets:
         # suffix and download from the LibreYOLO Hugging Face org on first
         # use, along with the default face detector.
         model = LibreYOLO("librefacerec-l.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].embeddings.data.shape)   # (N, D), L2-normalized
+        print(result.embeddings.data.shape)   # (N, D), L2-normalized
     - label: CLI
       language: bash
       code: |
@@ -76,8 +76,8 @@ recognition head returns an L2-normalized embedding per face. Left alone,
 `predict()` downloads and pairs the bundled default detector automatically.
 `face_detector` accepts a callable, a LibreYOLO detection model, or a
 `FaceDetector` instance; `face_boxes` bypasses detection entirely with boxes
-you already have. `results[0].embeddings` holds one row per detected face,
-aligned with `results[0].boxes`; its `.similarity()` method computes cosine
+you already have. `result.embeddings` holds one row per detected face,
+aligned with `result.boxes`; its `.similarity()` method computes cosine
 similarity against another embedding or a whole gallery in one call. For
 comparing two images directly rather than two already-computed embeddings,
 `model.verify(image_a, image_b)` runs detection and embedding on both and

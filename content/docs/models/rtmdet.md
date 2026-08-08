@@ -14,9 +14,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreRTMDets.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        for box in results[0].boxes:
+        for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
@@ -30,9 +30,9 @@ snippets:
         # The -seg suffix in the filename selects the RTMDet-Ins mask head,
         # so no task argument is needed here.
         model = LibreYOLO("LibreRTMDets-seg.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        print(results[0].masks.data.shape)
+        print(result.masks.data.shape)
   val:
     - label: Python
       language: python
@@ -95,9 +95,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreRTMDets.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].boxes.xyxy)
+        print(result.boxes.xyxy)
 ---
 
 ## Install
@@ -116,7 +116,7 @@ Weights download from Hugging Face on first use and are cached locally.
 
 The returned `Results` object is the one every family returns, so swapping in a
 different detector is a one line change. A `-seg` filename resolves to the
-RTMDet-Ins task on its own, and `results[0].masks` then carries the instance
+RTMDet-Ins task on its own, and `result.masks` then carries the instance
 masks alongside the boxes. `conf` sets the confidence threshold and `iou` the
 NMS threshold. See [prediction](/docs/predict) for sources, streaming and
 result handling.

@@ -16,9 +16,9 @@ snippets:
         # Not on disk yet: LibreYOLO downloads it from the official isl-org/MiDaS
         # GitHub release and checks it against a pinned SHA-256 before use.
         model = LibreYOLO("LibreMiDaSl-depth.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        depth = results[0].depth_map
+        depth = result.depth_map
         print(depth.min, depth.max, depth.mean)
     - label: CLI
       language: bash
@@ -31,7 +31,7 @@ snippets:
 
         # EfficientNet-Lite3 encoder, smaller and faster than the DPT-Large l size.
         model = LibreYOLO("LibreMiDaSs-depth.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
   val:
     - label: Python
       language: python
@@ -70,9 +70,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreMiDaSl-depth.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].depth_map.data.shape)
+        print(result.depth_map.data.shape)
 ---
 
 ## Install
@@ -94,7 +94,7 @@ Licensing for why.
 
 <code-tabs name="predict" />
 
-`results[0].depth_map` carries a dense relative inverse-depth map: higher
+`result.depth_map` carries a dense relative inverse-depth map: higher
 values mean closer to the camera, and the values have no metric unit or
 cross-image scale. `save=True` writes a colormapped visualization of that map
 to disk; `Results.plot()` does not cover this family, since it is defined for

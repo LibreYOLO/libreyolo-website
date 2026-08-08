@@ -1,836 +1,1011 @@
 {
-  "_comment": "Docs sidebar manifest. In production this is generated from the content tree at build time; pages with built:false are planned but not yet written, and render as dimmed placeholders so the shape of the docs is visible while it fills in.",
-  "version": "1.5.0",
-  "groups": [
-    {
-      "id": "start",
-      "label": "Get started",
-      "items": [
-        {
-          "slug": "/docs",
-          "label": "Overview",
-          "built": false
-        },
-        {
-          "slug": "/docs/install",
-          "label": "Install",
-          "built": false
-        },
-        {
-          "slug": "/docs/quickstart",
-          "label": "Quickstart",
-          "built": false
-        },
-        {
-          "slug": "/docs/concepts",
-          "label": "Core concepts",
-          "built": false
-        },
-        {
-          "slug": "/docs/weights",
-          "label": "Checkpoints and weights",
-          "built": false
-        },
-        {
-          "slug": "/docs/migrate",
-          "label": "Import existing weights",
-          "built": false
-        },
-        {
-          "slug": "/docs/faq",
-          "label": "FAQ",
-          "built": false
-        }
-      ]
-    },
-    {
-      "id": "tasks",
-      "label": "Tasks",
-      "items": [
-        {
-          "slug": "/docs/tasks/object-detection",
-          "label": "Object detection",
-          "built": false
-        },
-        {
-          "slug": "/docs/tasks/instance-segmentation",
-          "label": "Instance segmentation",
-          "built": false
-        },
-        {
-          "slug": "/docs/tasks/semantic-segmentation",
-          "label": "Semantic segmentation",
-          "built": false
-        },
-        {
-          "slug": "/docs/tasks/panoptic-segmentation",
-          "label": "Panoptic segmentation",
-          "built": false
-        },
-        {
-          "slug": "/docs/tasks/pose-estimation",
-          "label": "Pose estimation",
-          "built": false
-        },
-        {
-          "slug": "/docs/tasks/image-classification",
-          "label": "Image classification",
-          "built": false
-        },
-        {
-          "slug": "/docs/tasks/oriented-detection",
-          "label": "Oriented boxes",
-          "built": false
-        },
-        {
-          "slug": "/docs/tasks/point-detection",
-          "label": "Point detection",
-          "built": false
-        },
-        {
-          "slug": "/docs/tasks/depth-estimation",
-          "label": "Depth estimation",
-          "built": false
-        },
-        {
-          "slug": "/docs/tasks/image-restoration",
-          "label": "Image restoration",
-          "built": false
-        },
-        {
-          "slug": "/docs/tasks/background-removal",
-          "label": "Background removal",
-          "built": false
-        },
-        {
-          "slug": "/docs/tasks/ocr",
-          "label": "OCR",
-          "built": false
-        },
-        {
-          "slug": "/docs/tasks/face-recognition",
-          "label": "Face recognition",
-          "built": false
-        },
-        {
-          "slug": "/docs/tasks/gaze-estimation",
-          "label": "Gaze estimation",
-          "built": false
-        },
-        {
-          "slug": "/docs/tasks/object-tracking",
-          "label": "Object tracking",
-          "built": false
-        },
-        {
-          "slug": "/docs/tasks/open-vocabulary-detection",
-          "label": "Open-vocabulary detection",
-          "built": false
-        },
-        {
-          "slug": "/docs/tasks/promptable-segmentation",
-          "label": "Promptable segmentation",
-          "built": false
-        }
-      ]
-    },
-    {
-      "id": "models",
-      "label": "Models",
-      "items": [
-        {
-          "slug": "/docs/models",
-          "label": "All models",
-          "built": true
-        },
-        {
-          "slug": "/docs/models/rf-detr",
-          "label": "RF-DETR",
-          "built": true,
-          "tier": "g0"
-        },
-        {
-          "slug": "/docs/models/yolov9",
-          "label": "YOLOv9",
-          "built": true,
-          "tier": "g0"
-        },
-        {
-          "slug": "/docs/models/deim",
-          "label": "DEIM",
-          "built": true,
-          "tier": "g1"
-        },
-        {
-          "slug": "/docs/models/d-fine",
-          "label": "D-FINE",
-          "built": true,
-          "tier": "g1"
-        },
-        {
-          "slug": "/docs/models/edgecrafter",
-          "label": "EdgeCrafter",
-          "built": true,
-          "tier": "g1"
-        },
-        {
-          "slug": "/docs/models/rt-detr",
-          "label": "RT-DETR",
-          "built": true,
-          "tier": "g1"
-        },
-        {
-          "slug": "/docs/models/yolo-nas",
-          "label": "YOLO-NAS",
-          "built": true,
-          "tier": "g1"
-        },
-        {
-          "slug": "/docs/models/convnext",
-          "label": "ConvNeXt",
-          "built": true,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/dinov2",
-          "label": "DINOv2",
-          "built": true,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/efficientnetv2",
-          "label": "EfficientNetV2",
-          "built": true,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/fomo",
-          "label": "FOMO",
-          "built": true,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/lingbot-vision",
-          "label": "LingBot-Vision",
-          "built": true,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/mobilenetv4",
-          "label": "MobileNetV4",
-          "built": true,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/nafnet",
-          "label": "NAFNet",
-          "built": true,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/picodet",
-          "label": "PicoDet",
-          "built": true,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/resnet",
-          "label": "ResNet",
-          "built": true,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/rtmdet",
-          "label": "RTMDet",
-          "built": true,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/segformer",
-          "label": "SegFormer",
-          "built": true,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/yolov7",
-          "label": "YOLOv7",
-          "built": true,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/yolox",
-          "label": "YOLOX",
-          "built": true,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/alexnet",
-          "label": "AlexNet",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/birefnet",
-          "label": "BiRefNet",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/centernet",
-          "label": "CenterNet",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/deeplabv3",
-          "label": "DeepLabv3",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/deformable-detr",
-          "label": "Deformable DETR",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/depth-anything-3",
-          "label": "Depth Anything 3",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/depth-anything-v2",
-          "label": "Depth Anything V2",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/detr",
-          "label": "DETR",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/dexined",
-          "label": "DexiNed",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/dino-detr",
-          "label": "DINO-DETR",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/efficientdet",
-          "label": "EfficientDet",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/eomt",
-          "label": "EoMT",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/faster-rcnn",
-          "label": "Faster R-CNN",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/fcn",
-          "label": "FCN",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/fcos",
-          "label": "FCOS",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/feynobg",
-          "label": "FeyNobg",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/hrnet",
-          "label": "HRNet",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/l2cs",
-          "label": "L2CS-Net",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/librefacerec",
-          "label": "LibreFaceRec",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/lw-detr",
-          "label": "LW-DETR",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/mask-rcnn",
-          "label": "Mask R-CNN",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/midas",
-          "label": "MiDaS",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/moge-2",
-          "label": "MoGe-2",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/pidnet",
-          "label": "PIDNet",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/pp-ocrv5",
-          "label": "PP-OCRv5",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/real-esrgan",
-          "label": "Real-ESRGAN",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/retinanet",
-          "label": "RetinaNet",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/sam-3d-body",
-          "label": "SAM 3D Body",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/ssd",
-          "label": "SSD",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/swin",
-          "label": "Swin Transformer",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/swinir",
-          "label": "SwinIR",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/teed",
-          "label": "TEED",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/vgg",
-          "label": "VGG",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/vit",
-          "label": "ViT",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/zipdepth",
-          "label": "ZipDepth",
-          "built": true,
-          "tier": "g3"
-        },
-        {
-          "slug": "/docs/models/deit",
-          "label": "DeiT",
-          "built": true,
-          "tier": "g4"
-        },
-        {
-          "slug": "/docs/models/yolov1",
-          "label": "YOLOv1",
-          "built": true,
-          "tier": "g4"
-        },
-        {
-          "slug": "/docs/models/yolov2",
-          "label": "YOLOv2",
-          "built": true,
-          "tier": "g4"
-        },
-        {
-          "slug": "/docs/models/yolov3",
-          "label": "YOLOv3",
-          "built": true,
-          "tier": "g4"
-        },
-        {
-          "slug": "/docs/models/yolov4",
-          "label": "YOLOv4",
-          "built": true,
-          "tier": "g4"
-        },
-        {
-          "slug": "/docs/models/clip",
-          "label": "CLIP",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/edgetam",
-          "label": "EdgeTAM",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/florence-2",
-          "label": "Florence-2",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/grounding-dino",
-          "label": "Grounding DINO",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/internvl3",
-          "label": "InternVL3",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/kosmos-2",
-          "label": "Kosmos-2",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/lfm2-vl",
-          "label": "LFM2-VL",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/libremodus",
-          "label": "LibreMODUS",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/locate-anything",
-          "label": "LocateAnything",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/mobilesam",
-          "label": "MobileSAM",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/omdet-turbo",
-          "label": "OMDet-Turbo",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/ov-deim",
-          "label": "OV-DEIM",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/owlv2",
-          "label": "OWLv2",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/picosam3",
-          "label": "PicoSAM3",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/qwen3-vl",
-          "label": "Qwen3-VL",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/sam",
-          "label": "SAM",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/sam-2",
-          "label": "SAM 2",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/sam-3",
-          "label": "SAM 3",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/sensenova-vision",
-          "label": "SenseNova-Vision",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/siglip2",
-          "label": "SigLIP2",
-          "built": true,
-          "tier": "s"
-        },
-        {
-          "slug": "/docs/models/smolvlm2",
-          "label": "SmolVLM2",
-          "built": true,
-          "tier": "s"
-        }
-      ]
-    },
-    {
-      "id": "train",
-      "label": "Train",
-      "items": [
-        {
-          "slug": "/docs/train",
-          "label": "Training overview",
-          "built": false
-        },
-        {
-          "slug": "/docs/train/datasets",
-          "label": "Datasets",
-          "built": false
-        },
-        {
-          "slug": "/docs/train/hyperparameters",
-          "label": "Hyperparameters",
-          "built": false
-        },
-        {
-          "slug": "/docs/train/augmentations",
-          "label": "Augmentations",
-          "built": false
-        },
-        {
-          "slug": "/docs/train/multi-gpu",
-          "label": "Multi-GPU",
-          "built": false
-        },
-        {
-          "slug": "/docs/train/loggers",
-          "label": "Experiment loggers",
-          "built": false
-        },
-        {
-          "slug": "/docs/train/validation",
-          "label": "Validation and metrics",
-          "built": false
-        }
-      ]
-    },
-    {
-      "id": "predict",
-      "label": "Predict",
-      "items": [
-        {
-          "slug": "/docs/predict",
-          "label": "Prediction overview",
-          "built": false
-        },
-        {
-          "slug": "/docs/predict/sources",
-          "label": "Sources and streams",
-          "built": false
-        },
-        {
-          "slug": "/docs/predict/results",
-          "label": "Working with results",
-          "built": false
-        },
-        {
-          "slug": "/docs/predict/ensembling",
-          "label": "Ensembling",
-          "built": false
-        }
-      ]
-    },
-    {
-      "id": "export",
-      "label": "Export and deploy",
-      "items": [
-        {
-          "slug": "/docs/export",
-          "label": "Export overview",
-          "built": true
-        },
-        {
-          "slug": "/docs/export/onnx",
-          "label": "ONNX",
-          "built": false
-        },
-        {
-          "slug": "/docs/export/tensorrt",
-          "label": "TensorRT",
-          "built": false
-        },
-        {
-          "slug": "/docs/export/openvino",
-          "label": "OpenVINO",
-          "built": false
-        },
-        {
-          "slug": "/docs/export/coreml",
-          "label": "CoreML",
-          "built": false
-        },
-        {
-          "slug": "/docs/export/tflite",
-          "label": "TFLite",
-          "built": false
-        },
-        {
-          "slug": "/docs/export/deepstream",
-          "label": "DeepStream",
-          "built": true
-        },
-        {
-          "slug": "/docs/export/jetson",
-          "label": "NVIDIA Jetson",
-          "built": true
-        },
-        {
-          "slug": "/docs/export/quantization",
-          "label": "Quantization",
-          "built": false
-        }
-      ]
-    },
-    {
-      "id": "cli",
-      "label": "CLI",
-      "items": [
-        {
-          "slug": "/docs/cli",
-          "label": "Command index",
-          "built": false
-        },
-        {
-          "slug": "/docs/cli/predict",
-          "label": "predict",
-          "built": false
-        },
-        {
-          "slug": "/docs/cli/train",
-          "label": "train",
-          "built": false
-        },
-        {
-          "slug": "/docs/cli/val",
-          "label": "val",
-          "built": false
-        },
-        {
-          "slug": "/docs/cli/export",
-          "label": "export",
-          "built": false
-        }
-      ]
-    },
-    {
-      "id": "reference",
-      "label": "Reference",
-      "items": [
-        {
-          "slug": "/docs/reference/python-api",
-          "label": "Python API",
-          "built": false
-        },
-        {
-          "slug": "/docs/reference/results-types",
-          "label": "Results types",
-          "built": false
-        },
-        {
-          "slug": "/docs/reference/dataset-formats",
-          "label": "Dataset formats",
-          "built": false
-        },
-        {
-          "slug": "/docs/reference/export-matrix",
-          "label": "Full export matrix",
-          "built": false
-        },
-        {
-          "slug": "/docs/reference/stability-tiers",
-          "label": "Stability tiers",
-          "built": false
-        }
-      ]
-    },
-    {
-      "id": "about",
-      "label": "About",
-      "items": [
-        {
-          "slug": "/docs/licensing",
-          "label": "Licensing",
-          "built": false
-        },
-        {
-          "slug": "/docs/citation",
-          "label": "Citation",
-          "built": false
-        },
-        {
-          "slug": "/docs/versions",
-          "label": "Versions",
-          "built": false
-        }
-      ]
-    }
-  ]
+    "_comment":  "Docs sidebar manifest. In production this is generated from the content tree at build time; pages with built:false are planned but not yet written, and render as dimmed placeholders so the shape of the docs is visible while it fills in.",
+    "version":  "1.5.0",
+    "groups":  [
+                   {
+                       "id":  "start",
+                       "label":  "Get started",
+                       "items":  [
+                                     {
+                                         "slug":  "/docs",
+                                         "label":  "Overview",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/install",
+                                         "label":  "Install",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/quickstart",
+                                         "label":  "Quickstart",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/concepts",
+                                         "label":  "Core concepts",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/weights",
+                                         "label":  "Checkpoints and weights",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/migrate",
+                                         "label":  "Import existing weights",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/faq",
+                                         "label":  "FAQ",
+                                         "built":  true
+                                     }
+                                 ]
+                   },
+                   {
+                       "id":  "tasks",
+                       "label":  "Tasks",
+                       "items":  [
+                                     {
+                                         "slug":  "/docs/tasks/object-detection",
+                                         "label":  "Object detection",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/instance-segmentation",
+                                         "label":  "Instance segmentation",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/semantic-segmentation",
+                                         "label":  "Semantic segmentation",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/panoptic-segmentation",
+                                         "label":  "Panoptic segmentation",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/pose-estimation",
+                                         "label":  "Pose estimation",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/image-classification",
+                                         "label":  "Image classification",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/oriented-detection",
+                                         "label":  "Oriented detection",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/point-detection",
+                                         "label":  "Point detection",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/depth-estimation",
+                                         "label":  "Depth estimation",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/edge-detection",
+                                         "label":  "Edge detection",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/surface-normals",
+                                         "label":  "Surface normals",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/image-restoration",
+                                         "label":  "Image restoration",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/background-removal",
+                                         "label":  "Background removal",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/ocr",
+                                         "label":  "OCR",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/face-recognition",
+                                         "label":  "Face recognition",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/gaze-estimation",
+                                         "label":  "Gaze estimation",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/body-mesh",
+                                         "label":  "Body mesh",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/object-tracking",
+                                         "label":  "Object tracking",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/open-vocabulary-detection",
+                                         "label":  "Open-vocabulary detection",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/tasks/promptable-segmentation",
+                                         "label":  "Promptable segmentation",
+                                         "built":  true
+                                     }
+                                 ]
+                   },
+                   {
+                       "id":  "models",
+                       "label":  "Models",
+                       "items":  [
+                                     {
+                                         "slug":  "/docs/models",
+                                         "label":  "All models",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/models/rf-detr",
+                                         "label":  "RF-DETR",
+                                         "built":  true,
+                                         "tier":  "g0"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/yolov9",
+                                         "label":  "YOLOv9",
+                                         "built":  true,
+                                         "tier":  "g0"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/deim",
+                                         "label":  "DEIM",
+                                         "built":  true,
+                                         "tier":  "g1"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/d-fine",
+                                         "label":  "D-FINE",
+                                         "built":  true,
+                                         "tier":  "g1"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/edgecrafter",
+                                         "label":  "EdgeCrafter",
+                                         "built":  true,
+                                         "tier":  "g1"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/rt-detr",
+                                         "label":  "RT-DETR",
+                                         "built":  true,
+                                         "tier":  "g1"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/yolo-nas",
+                                         "label":  "YOLO-NAS",
+                                         "built":  true,
+                                         "tier":  "g1"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/convnext",
+                                         "label":  "ConvNeXt",
+                                         "built":  true,
+                                         "tier":  "g2"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/dinov2",
+                                         "label":  "DINOv2",
+                                         "built":  true,
+                                         "tier":  "g2"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/efficientnetv2",
+                                         "label":  "EfficientNetV2",
+                                         "built":  true,
+                                         "tier":  "g2"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/fomo",
+                                         "label":  "FOMO",
+                                         "built":  true,
+                                         "tier":  "g2"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/lingbot-vision",
+                                         "label":  "LingBot-Vision",
+                                         "built":  true,
+                                         "tier":  "g2"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/mobilenetv4",
+                                         "label":  "MobileNetV4",
+                                         "built":  true,
+                                         "tier":  "g2"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/nafnet",
+                                         "label":  "NAFNet",
+                                         "built":  true,
+                                         "tier":  "g2"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/picodet",
+                                         "label":  "PicoDet",
+                                         "built":  true,
+                                         "tier":  "g2"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/resnet",
+                                         "label":  "ResNet",
+                                         "built":  true,
+                                         "tier":  "g2"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/rtmdet",
+                                         "label":  "RTMDet",
+                                         "built":  true,
+                                         "tier":  "g2"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/segformer",
+                                         "label":  "SegFormer",
+                                         "built":  true,
+                                         "tier":  "g2"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/yolov7",
+                                         "label":  "YOLOv7",
+                                         "built":  true,
+                                         "tier":  "g2"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/yolox",
+                                         "label":  "YOLOX",
+                                         "built":  true,
+                                         "tier":  "g2"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/alexnet",
+                                         "label":  "AlexNet",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/birefnet",
+                                         "label":  "BiRefNet",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/centernet",
+                                         "label":  "CenterNet",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/deeplabv3",
+                                         "label":  "DeepLabv3",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/deformable-detr",
+                                         "label":  "Deformable DETR",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/depth-anything-3",
+                                         "label":  "Depth Anything 3",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/depth-anything-v2",
+                                         "label":  "Depth Anything V2",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/detr",
+                                         "label":  "DETR",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/dexined",
+                                         "label":  "DexiNed",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/dino-detr",
+                                         "label":  "DINO-DETR",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/efficientdet",
+                                         "label":  "EfficientDet",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/eomt",
+                                         "label":  "EoMT",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/faster-rcnn",
+                                         "label":  "Faster R-CNN",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/fcn",
+                                         "label":  "FCN",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/fcos",
+                                         "label":  "FCOS",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/feynobg",
+                                         "label":  "FeyNobg",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/hrnet",
+                                         "label":  "HRNet",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/l2cs",
+                                         "label":  "L2CS-Net",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/librefacerec",
+                                         "label":  "LibreFaceRec",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/lw-detr",
+                                         "label":  "LW-DETR",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/mask-rcnn",
+                                         "label":  "Mask R-CNN",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/midas",
+                                         "label":  "MiDaS",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/moge-2",
+                                         "label":  "MoGe-2",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/pidnet",
+                                         "label":  "PIDNet",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/pp-ocrv5",
+                                         "label":  "PP-OCRv5",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/real-esrgan",
+                                         "label":  "Real-ESRGAN",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/retinanet",
+                                         "label":  "RetinaNet",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/sam-3d-body",
+                                         "label":  "SAM 3D Body",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/ssd",
+                                         "label":  "SSD",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/swin",
+                                         "label":  "Swin Transformer",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/swinir",
+                                         "label":  "SwinIR",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/teed",
+                                         "label":  "TEED",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/vgg",
+                                         "label":  "VGG",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/vit",
+                                         "label":  "ViT",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/zipdepth",
+                                         "label":  "ZipDepth",
+                                         "built":  true,
+                                         "tier":  "g3"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/deit",
+                                         "label":  "DeiT",
+                                         "built":  true,
+                                         "tier":  "g4"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/yolov1",
+                                         "label":  "YOLOv1",
+                                         "built":  true,
+                                         "tier":  "g4"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/yolov2",
+                                         "label":  "YOLOv2",
+                                         "built":  true,
+                                         "tier":  "g4"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/yolov3",
+                                         "label":  "YOLOv3",
+                                         "built":  true,
+                                         "tier":  "g4"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/yolov4",
+                                         "label":  "YOLOv4",
+                                         "built":  true,
+                                         "tier":  "g4"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/clip",
+                                         "label":  "CLIP",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/edgetam",
+                                         "label":  "EdgeTAM",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/florence-2",
+                                         "label":  "Florence-2",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/grounding-dino",
+                                         "label":  "Grounding DINO",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/internvl3",
+                                         "label":  "InternVL3",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/kosmos-2",
+                                         "label":  "Kosmos-2",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/lfm2-vl",
+                                         "label":  "LFM2-VL",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/libremodus",
+                                         "label":  "LibreMODUS",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/locate-anything",
+                                         "label":  "LocateAnything",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/mobilesam",
+                                         "label":  "MobileSAM",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/omdet-turbo",
+                                         "label":  "OMDet-Turbo",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/ov-deim",
+                                         "label":  "OV-DEIM",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/owlv2",
+                                         "label":  "OWLv2",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/picosam3",
+                                         "label":  "PicoSAM3",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/qwen3-vl",
+                                         "label":  "Qwen3-VL",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/sam",
+                                         "label":  "SAM",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/sam-2",
+                                         "label":  "SAM 2",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/sam-3",
+                                         "label":  "SAM 3",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/sensenova-vision",
+                                         "label":  "SenseNova-Vision",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/siglip2",
+                                         "label":  "SigLIP2",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     },
+                                     {
+                                         "slug":  "/docs/models/smolvlm2",
+                                         "label":  "SmolVLM2",
+                                         "built":  true,
+                                         "tier":  "s"
+                                     }
+                                 ]
+                   },
+                   {
+                       "id":  "train",
+                       "label":  "Train",
+                       "items":  [
+                                     {
+                                         "slug":  "/docs/train",
+                                         "label":  "Overview",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/train/datasets",
+                                         "label":  "Datasets",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/train/hyperparameters",
+                                         "label":  "Hyperparameters",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/train/augmentations",
+                                         "label":  "Augmentations",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/train/multi-gpu",
+                                         "label":  "Multi-GPU",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/train/performance",
+                                         "label":  "Performance",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/train/lora",
+                                         "label":  "LoRA fine-tuning",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/train/layer-freezing",
+                                         "label":  "Layer freezing",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/train/distillation",
+                                         "label":  "Distillation",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/train/loggers",
+                                         "label":  "Loggers",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/train/validation",
+                                         "label":  "Validation",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/train/cloud-gpus",
+                                         "label":  "Train on a rented GPU",
+                                         "built":  true
+                                     }
+                                 ]
+                   },
+                   {
+                       "id":  "predict",
+                       "label":  "Predict",
+                       "items":  [
+                                     {
+                                         "slug":  "/docs/predict",
+                                         "label":  "Overview",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/predict/sources",
+                                         "label":  "Sources",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/predict/results",
+                                         "label":  "Results",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/predict/performance",
+                                         "label":  "Performance",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/predict/ensembling",
+                                         "label":  "Ensembling",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/predict/thresholds",
+                                         "label":  "Thresholds",
+                                         "built":  true
+                                     }
+                                 ]
+                   },
+                   {
+                       "id":  "export",
+                       "label":  "Export and deploy",
+                       "items":  [
+                                     {
+                                         "slug":  "/docs/export/onnx",
+                                         "label":  "ONNX",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/export/torchscript",
+                                         "label":  "TorchScript",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/export/tensorrt",
+                                         "label":  "TensorRT",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/export/openvino",
+                                         "label":  "OpenVINO",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/export/tflite",
+                                         "label":  "TFLite",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/export/coreml",
+                                         "label":  "CoreML",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/export/executorch",
+                                         "label":  "ExecuTorch",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/export/ncnn",
+                                         "label":  "ncnn",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/export/mnn",
+                                         "label":  "MNN",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/export/rknn",
+                                         "label":  "RKNN",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/export/paddle",
+                                         "label":  "Paddle",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/export/coreai",
+                                         "label":  "Core AI",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/export/quantization",
+                                         "label":  "Quantization",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/export/triton",
+                                         "label":  "Triton",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/export/deepstream",
+                                         "label":  "NVIDIA DeepStream",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/export/jetson",
+                                         "label":  "NVIDIA Jetson",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/export/hailo",
+                                         "label":  "Hailo",
+                                         "built":  true
+                                     }
+                                 ]
+                   },
+                   {
+                       "id":  "cli",
+                       "label":  "CLI",
+                       "items":  [
+                                     {
+                                         "slug":  "/docs/cli",
+                                         "label":  "Overview",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/cli/predict",
+                                         "label":  "predict",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/cli/train",
+                                         "label":  "train",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/cli/val",
+                                         "label":  "val",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/cli/export",
+                                         "label":  "export",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/cli/quantize",
+                                         "label":  "quantize",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/cli/ui",
+                                         "label":  "ui",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/cli/monitor",
+                                         "label":  "monitor",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/cli/label",
+                                         "label":  "label",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/cli/doctor",
+                                         "label":  "doctor",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/cli/profile",
+                                         "label":  "profile",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/cli/utilities",
+                                         "label":  "Utilities",
+                                         "built":  true
+                                     }
+                                 ]
+                   },
+                   {
+                       "id":  "reference",
+                       "label":  "Reference",
+                       "items":  [
+                                     {
+                                         "slug":  "/docs/reference/python-api",
+                                         "label":  "Python API",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/reference/model-api",
+                                         "label":  "Model API",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/reference/results-types",
+                                         "label":  "Results types",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/reference/sam-api",
+                                         "label":  "Promptable API",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/reference/openvocab-api",
+                                         "label":  "Open-vocabulary API",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/reference/vlm-api",
+                                         "label":  "VLM API",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/reference/ensemble-api",
+                                         "label":  "Ensemble API",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/reference/dataset-formats",
+                                         "label":  "Dataset formats",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/reference/checkpoint-schema",
+                                         "label":  "Checkpoint schema",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/reference/export-matrix",
+                                         "label":  "Export matrix",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/reference/augmentation-matrix",
+                                         "label":  "Augmentation matrix",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/reference/stability-tiers",
+                                         "label":  "Support tiers",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/reference/settings",
+                                         "label":  "Settings",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/reference/upstream-checkpoints",
+                                         "label":  "Upstream checkpoints",
+                                         "built":  true
+                                     }
+                                 ]
+                   },
+                   {
+                       "id":  "about",
+                       "label":  "About",
+                       "items":  [
+                                     {
+                                         "slug":  "/docs/licensing",
+                                         "label":  "Licensing",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/citation",
+                                         "label":  "Citation",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/versions",
+                                         "label":  "Versions",
+                                         "built":  true
+                                     },
+                                     {
+                                         "slug":  "/docs/changelog",
+                                         "label":  "Changelog",
+                                         "built":  true
+                                     }
+                                 ]
+                   }
+               ]
 }

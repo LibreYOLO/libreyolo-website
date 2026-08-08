@@ -13,9 +13,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreMoGe2s-normal.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        normals = results[0].normal_map
+        normals = result.normal_map
         print(normals.data.shape)      # (H, W, 3) float32 unit vectors
         normals.assert_normalized()    # raises if any pixel is not unit length
     - label: Read one pixel
@@ -24,11 +24,11 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreMoGe2s-normal.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
         # OpenCV camera frame: +x right, +y down, +z into the scene. A surface
         # facing the camera reads close to (0, 0, -1).
-        field = results[0].normals.data
+        field = result.normals.data
         h, w = field.shape[:2]
         print(field[h // 2, w // 2])
     - label: Save the visualization
@@ -37,10 +37,10 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreMoGe2s-normal.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
         # plot() renders the field; it is defined for normal and edge results.
-        results[0].plot().save("normals.png")
+        result.plot().save("normals.png")
   val:
     - label: Validate and read the metric keys
       language: python
@@ -70,9 +70,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreMoGe2s-normal.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].normal_map.data.shape)
+        print(result.normal_map.data.shape)
 ---
 
 ## Definition
@@ -82,12 +82,12 @@ RGB image: the direction the surface at that pixel faces. Unlike depth, the
 output has no free scale, so two predictions are directly comparable without
 alignment.
 
-A prediction fills `results[0].normal_map`, a `NormalMap` payload holding an
+A prediction fills `result.normal_map`, a `NormalMap` payload holding an
 `(H, W, 3)` float32 array on the original image canvas, also reachable as
-`results[0].normals`. Vectors use LibreYOLO's OpenCV camera frame, with `+x`
+`result.normals`. Vectors use LibreYOLO's OpenCV camera frame, with `+x`
 right, `+y` down and `+z` into the scene, and they face the camera, so a
 fronto-parallel surface reads `(0, 0, -1)`. `.assert_normalized()` checks that
-every pixel is finite and unit length within a tolerance. `results[0].boxes`
+every pixel is finite and unit length within a tolerance. `result.boxes`
 stays empty, so `conf`, `iou` and `max_det` have no effect, and
 `Results.plot()` covers this task.
 

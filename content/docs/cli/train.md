@@ -1,7 +1,7 @@
 ---
 title: libreyolo train
 seo_title: "libreyolo train command reference"
-description: "Train a model from the command line: all 59 arguments with defaults read from the CLI definition, family default overrides, and which arguments a family ignores."
+description: "Train a model from the command line: all 59 arguments with their defaults, how family defaults override them, and which arguments a family ignores."
 lead: "Trains one model on one dataset and writes checkpoints, metrics and logs into a run directory. Every argument below has a default from the command definition, which a model family's own training config may replace."
 keywords: [libreyolo train cli, libreyolo training command, yolo cli training, libreyolo train arguments, libreyolo dry run, libreyolo freeze layers]
 last_verified: "1.5.0"
@@ -89,7 +89,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `epochs=50` and
 |---|---|---|
 | `optimizer` | `sgd` | Optimizer: `sgd`, `adam`, `adamw` |
 | `lr0` | `0.01` | Initial learning rate |
-| `momentum` | `0.937` | SGD momentum, or Adam beta1 |
+| `momentum` | `0.937` | SGD momentum, and the first-moment coefficient for the Adam optimizers |
 | `weight_decay` | `0.0005` | L2 regularization |
 | `nesterov` | `true` | Nesterov momentum |
 
@@ -183,17 +183,23 @@ legal sizes when it does not.
 
 ### Arguments a family ignores
 
-Not every family reads every argument. The augmentation knobs in particular
-reach some pipelines and not others: DETR-style families have no mosaic, no
-mixup and no affine warp, so `mosaic`, `mixup`, `degrees`, `translate`,
-`shear`, `mosaic_scale` and `mixup_scale` do nothing there. The classification
-families ignore the detection augmentation set entirely. RF-DETR additionally
-ignores `optimizer`, `momentum` and `nesterov`.
+Not every family reads every argument, and the augmentation ones are where that
+shows. RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETRv4 and DINOv2 train through
+pass-through pipelines with no mosaic, no mixup and no affine warp, so
+`mosaic`, `mixup`, `hsv_prob`, `degrees`, `translate`, `shear`, `mosaic_scale`
+and `mixup_scale` reach nothing there. EC shares that pipeline but does read
+`hsv_prob`, `degrees` and `translate` when its task is pose. The
+classification families, SegFormer and NAFNet ignore that whole set and
+`flip_prob` with it, because their flip runs at a fixed probability rather than
+a configurable one. YOLO-NAS ignores `mosaic` alone, since it augments with an
+always-on per-sample affine instead. RF-DETR ignores three more on top of that
+list: `optimizer`, `momentum` and `nesterov`.
 
 Setting one of these is not an error. The run logs a line to stderr naming the
-family and the arguments it will ignore, then trains. That line is the only
-signal, and `quiet=true` removes it, so a scripted run that suppresses stderr
-suppresses the warning with it.
+family and the arguments it will ignore, then trains, and that line is the
+authoritative list for the version installed. It is also the only signal, so a
+scripted run with `quiet=true` suppresses the warning along with everything
+else on stderr.
 
 `val=false` is a related case. It sets `eval_interval` to `0` for most
 families; RF-DETR cannot disable validation that way and logs that it ignored

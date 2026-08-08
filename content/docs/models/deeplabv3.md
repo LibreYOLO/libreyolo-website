@@ -14,9 +14,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreDeepLabv3r50-sem.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        mask = results[0].semantic_mask
+        mask = result.semantic_mask
         print(mask.data.shape)   # (H, W) class ids
         print(mask.classes)      # sorted class ids present in the image
     - label: CLI
@@ -60,9 +60,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreDeepLabv3r50-sem.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].semantic_mask.data.shape)
+        print(result.semantic_mask.data.shape)
 ---
 
 ## Install
@@ -82,7 +82,7 @@ Weights download from Hugging Face on first use and are cached locally. The
 <code-tabs name="predict" />
 
 Semantic segmentation returns one class id per pixel, not boxes, so
-`results[0].semantic_mask` carries a `(H, W)` array on `.data` and the list of
+`result.semantic_mask` carries a `(H, W)` array on `.data` and the list of
 class ids present in the image on `.classes`. `conf`, `iou` and `max_det` are
 accepted for API parity but have no effect: the model assigns a class to every
 pixel by argmax, with no confidence threshold or NMS step. See

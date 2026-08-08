@@ -14,9 +14,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreSwint-cls.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        probs = results[0].probs
+        probs = result.probs
         print(probs.top1, probs.top1conf)
         print(probs.top5, probs.top5conf)
     - label: CLI
@@ -63,9 +63,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreSwint-cls.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].probs.top1)
+        print(result.probs.top1)
 ---
 
 ## Install
@@ -82,7 +82,7 @@ Weights download from Hugging Face on first use and are cached locally.
 
 <code-tabs name="predict" />
 
-A classifier returns `results[0].probs` instead of `results[0].boxes`: `top1`
+A classifier returns `result.probs` instead of `result.boxes`: `top1`
 and `top5` give class indices, `top1conf` and `top5conf` give their
 confidences. Every size is fixed to a 224px input, because the final attention
 stage is built for that resolution; predict, validate and export all raise if

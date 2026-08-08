@@ -82,23 +82,22 @@ confidence.
 
 LibreYOLO has no `promptable` task key. The tier registers as `segment`, the
 same key instance segmentation uses. What separates it is the call shape, which
-is why it has its own factory: `LibreSAM()`, a sibling of `LibreYOLO()`,
-`LibreOpenVocab()` and `LibreVLM()`. The interactive lifecycle is the reason.
-`set_image()` runs the image encoder once and caches the embeddings so that
-later `predict()` calls with `source=None` only pay for prompt decoding;
-`reset_image()` clears it. That encode-once, prompt-many loop is what makes an
-annotation tool feel immediate, and it does not fit a one-shot `predict(image)`
-signature.
+is why it has its own factory, `LibreSAM()`, a sibling of `LibreYOLO()`,
+`LibreOpenVocab()` and `LibreVLM()`. A single `predict(image)` signature cannot
+express the loop these models are built for: `set_image()` runs the image
+encoder once and caches the embeddings, every later `predict()` call with
+`source=None` pays only for prompt decoding, and `reset_image()` clears the
+cache. The image encoder is the dominant cost and runs once per image, so a
+second prompt on the same image skips it entirely.
 
 ## Models
 
 Six families load through `LibreSAM` by alias.
 
-[SAM](/docs/models/sam) is the default, in `base`, `large` and `huge` sizes
-(also `b`, `l`, `h`). It is the original ViT image encoder with a lightweight
-mask decoder.
+[SAM](/docs/models/sam) is the default, in `base`, `large` and `huge` sizes,
+also spelled `b`, `l` and `h`.
 
-[SAM 2](/docs/models/sam-2), in `sam2-tiny`, `sam2-small`, `sam2-base-plus` and
+[SAM 2](/docs/models/sam-2), as `sam2-tiny`, `sam2-small`, `sam2-base-plus` and
 `sam2-large`. LibreYOLO supports its image path.
 
 [SAM 3](/docs/models/sam-3), as `sam3`, is the one family that accepts a text

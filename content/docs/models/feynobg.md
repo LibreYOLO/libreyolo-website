@@ -14,9 +14,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreFeyNobgl-matte.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        matte = results[0].matte
+        matte = result.matte
         print(matte.array.shape, matte.array.dtype)
     - label: CLI
       language: bash
@@ -28,11 +28,11 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreFeyNobgl-matte.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
         # RGBA (H, W, 4) uint8: source RGB plus the matte as an alpha channel.
-        rgba = results[0].cutout()
-        results[0].save("subject.png")
+        rgba = result.cutout()
+        result.save("subject.png")
   val:
     - label: Python
       language: python
@@ -67,7 +67,7 @@ not yet listed in the Checkpoints table on this page.
 
 <code-tabs name="predict" />
 
-A matte result carries no boxes; `results[0].matte` is a dense `(H, W)`
+A matte result carries no boxes; `result.matte` is a dense `(H, W)`
 float32 array in `[0, 1]`, 1 fully foreground and 0 fully background. Unlike a
 binary mask, the soft matte keeps anti-aliased edge detail such as hair and
 fur. `result.cutout()` composites the source image with that alpha channel

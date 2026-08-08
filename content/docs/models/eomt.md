@@ -14,9 +14,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreEoMTl-sem.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        mask = results[0].semantic_mask
+        mask = result.semantic_mask
         print(mask.data.shape)   # (H, W) class ids
         print(mask.classes)      # sorted class ids present in the image
     - label: Instance segmentation
@@ -27,19 +27,19 @@ snippets:
         # The -seg suffix in the filename selects the instance task, so no
         # task argument is needed here.
         model = LibreYOLO("LibreEoMTl-seg.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        print(results[0].boxes.xyxy)
-        print(results[0].masks.data.shape)
+        print(result.boxes.xyxy)
+        print(result.masks.data.shape)
     - label: Panoptic
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreEoMTl-panoptic.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        pan = results[0].panoptic
+        pan = result.panoptic
         print(pan.data.shape)       # (H, W) segment ids
         print(pan.segments_info)    # [{"id": ..., "category_id": ...}, ...]
     - label: CLI
@@ -103,9 +103,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreEoMTl-sem.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].semantic_mask.data.shape)
+        print(result.semantic_mask.data.shape)
 ---
 
 ## Install
@@ -124,10 +124,10 @@ task suffix in the filename (`-sem`, `-seg`, `-panoptic`) selects the task, and
 
 <code-tabs name="predict" />
 
-Semantic segmentation fills `results[0].semantic_mask`, a `(H, W)` array of
-class ids on `.data`. Instance segmentation fills `results[0].boxes` and
-`results[0].masks`, the same shape every other segmentation family returns.
-Panoptic segmentation fills `results[0].panoptic`: a `(H, W)` segment-id map on
+Semantic segmentation fills `result.semantic_mask`, a `(H, W)` array of
+class ids on `.data`. Instance segmentation fills `result.boxes` and
+`result.masks`, the same shape every other segmentation family returns.
+Panoptic segmentation fills `result.panoptic`: a `(H, W)` segment-id map on
 `.data`, plus `.segments_info`, a list of `{"id", "category_id"}` dicts, one
 per segment. `conf` filters query selection; `iou` has no effect on the
 semantic task, since it argmaxes per pixel with no NMS step. See

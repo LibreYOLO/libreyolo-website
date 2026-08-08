@@ -1,7 +1,7 @@
 ---
 title: Training performance
 seo_title: "Faster training: CUDA graphs, AMP, profiler"
-description: "Make a training run faster: capture the step into CUDA graphs, pick an AMP dtype, and use the built-in profiler to find out what the bottleneck actually is."
+description: "Make a training run faster: capture the step into CUDA graphs, pick an AMP dtype, and use the built-in profiler to find where the time actually goes."
 lead: "Three levers change how fast a training step runs: mixed precision, CUDA graph capture of the network's forward and backward, and whatever the profiler says is actually holding the step up."
 keywords:
   - cuda graphs training

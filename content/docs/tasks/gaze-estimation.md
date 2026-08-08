@@ -78,20 +78,22 @@ ResNet trunk with two parallel angle-bin classification heads, one for pitch and
 one for yaw, over 448x448 face crops. Five backbone depths are supported
 architecturally, and one, the ResNet-50, has a published checkpoint.
 
-The weights carry a real restriction. They are trained on Gaze360, whose license
-permits research and non-commercial use only and forbids redistribution, so
-LibreYOLO mirrors nothing for this family. The one checkpoint the library can
-fetch automatically comes straight from the authors' own Google Drive
-distribution, over `gdown`, after printing the license terms. Read
+The weights carry a license restriction. They are trained on Gaze360, whose
+license permits research and non-commercial use only and forbids
+redistribution, so LibreYOLO mirrors nothing for this family. The one checkpoint
+the library can fetch automatically comes straight from the authors' own Google
+Drive distribution, over `gdown`, after printing the license terms. Read
 [L2CS-Net](/docs/models/l2cs) before deploying it.
+
+That download path needs the `gaze` extra:
 
 ```bash
 pip install "libreyolo[gaze]"
 ```
 
-Without that extra the library prints manual download instructions instead of
-attempting the transfer. Predicting on and exporting a checkpoint you already
-hold needs no extra at all.
+Without it the library prints manual download instructions instead of attempting
+the transfer. Predicting on and exporting a checkpoint you already hold needs no
+extra at all.
 
 ## Predict
 
@@ -101,8 +103,10 @@ The face source is chosen in one of three ways. `face_boxes` passes boxes you
 already computed and skips detection. `face_detector` accepts `"auto"`,
 `"haar"`, `"yunet"`, a LibreYOLO detection model, or a plain callable, and can
 be set on the constructor or per call. Left unset in Python, prediction falls
-back to OpenCV's bundled detector, Haar on OpenCV 4 and YuNet on OpenCV 5, so a
-bare call works offline.
+back to OpenCV's bundled detector, so a bare call works with no wiring. On
+OpenCV 4 that is the Haar cascade shipped inside the wheel, which needs no
+download at all; on OpenCV 5, where the Haar API was removed, it is YuNet, which
+fetches a small model file from the OpenCV zoo once.
 
 The CLI does not share that fallback. `libreyolo predict` rejects a gaze model
 without `face_detector=`, and the value it takes is a LibreYOLO detector name or

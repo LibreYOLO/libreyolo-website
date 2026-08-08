@@ -15,9 +15,8 @@ snippets:
         # The -seg suffix in the filename selects the mask head, so no task
         # argument is needed.
         model = LibreYOLO("LibreDFINEn-seg.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        result = results[0]
         print(result.masks.data.shape)   # (N, H, W), one mask per detection
         print(result.boxes.xyxy.shape)   # (N, 4), the same N rows
     - label: CLI
@@ -31,7 +30,7 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreDFINEn-seg.pt")
-        result = model(SAMPLE_IMAGE)[0]
+        result = model(SAMPLE_IMAGE)
 
         # .xy is a list of (P, 2) contours in pixels, .xyn the same normalized.
         for name, contour in zip(result.boxes.cls, result.masks.xy):
@@ -42,9 +41,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreRTMDets-seg.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].masks.data.shape)
+        print(result.masks.data.shape)
   train:
     - label: Python
       language: python
@@ -104,9 +103,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like a checkpoint and returns the same Results object.
         model = LibreYOLO("LibreDFINEn-seg.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].masks.data.shape)
+        print(result.masks.data.shape)
 ---
 
 ## Definition
@@ -121,7 +120,7 @@ left unassigned, which is what separates the task from
 `segment` is the canonical task key, and the `-seg` suffix in a checkpoint
 filename selects it, so `task=` is not needed when loading published weights.
 
-`predict()` fills `results[0].masks` alongside `results[0].boxes`. `.data` is
+`predict()` fills `result.masks` alongside `result.boxes`. `.data` is
 an `(N, H, W)` stack on the original image canvas, row-aligned with the boxes,
 so mask `i` belongs to box `i`. `.xy` converts each mask to its largest outer
 contour as a `(P, 2)` pixel array, and `.xyn` gives the same contour
@@ -225,13 +224,18 @@ The unsuffixed keys hold mask results: `metrics/mAP50-95`, `metrics/mAP50`,
 for average recall. `metrics/AR_max_det` and `metrics/max_det` record the
 detection cap the run used.
 
-Every headline figure is also published twice under an explicit suffix, `(M)`
-for mask and `(B)` for box, so that a comparison never depends on which number
-the family decided to call primary: `metrics/mAP50-95(M)` and
-`metrics/mAP50-95(B)`, `metrics/mAP50(M)` and `metrics/mAP50(B)`,
-`metrics/precision(M)` and `metrics/precision(B)`, `metrics/recall(M)` and
-`metrics/recall(B)`. Precision and recall exist only in the suffixed form on
-this task.
+Four figures are also published under an explicit suffix, `(M)` for mask and
+`(B)` for box, so that a comparison never depends on which number the family
+decided to call primary: `metrics/mAP50-95(M)` and `metrics/mAP50-95(B)`,
+`metrics/mAP50(M)` and `metrics/mAP50(B)`, `metrics/precision(M)` and
+`metrics/precision(B)`, `metrics/recall(M)` and `metrics/recall(B)`. There is
+no unsuffixed `metrics/precision` or `metrics/recall` on this task.
+
+Read the precision and recall keys carefully. They are kept for backward
+compatibility and are aliases, not an operating point: `metrics/precision(M)`
+holds the same value as `metrics/mAP50-95(M)`, and `metrics/recall(M)` the same
+value as mask AR at 100 detections, with `(B)` behaving the same way for boxes.
+Plotting a pair of them reports one number twice.
 
 ## Export
 

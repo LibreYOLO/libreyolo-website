@@ -14,10 +14,10 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreDeiTb-cls.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].probs.top1, results[0].probs.top1conf)
-        print(results[0].probs.top5)
+        print(result.probs.top1, result.probs.top1conf)
+        print(result.probs.top5)
     - label: CLI
       language: bash
       code: |
@@ -59,9 +59,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreDeiTb-cls.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].probs.top1)
+        print(result.probs.top1)
 ---
 
 ## Install

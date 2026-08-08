@@ -126,12 +126,15 @@ joints, optionally predicted and target vertices, and returns a dictionary keyed
 exactly like a validator's:
 
 `metrics/mpjpe` is mean per-joint position error after aligning the root joint,
-in millimeters. `metrics/pa_mpjpe` is the same error after a Procrustes
-alignment, which removes global rotation, translation and scale, so it measures
-pose independently of how the body is placed. `metrics/pve` is per-vertex error
-over the full mesh surface, and appears only when both vertex arrays are
-supplied. Inputs are assumed metric, in meters; `scale_to_mm` converts them to
-the millimeters the literature reports.
+so it scores pose while ignoring where the person stands in the scene.
+`metrics/pa_mpjpe` is the same quantity after a full Procrustes alignment,
+rotation, uniform scale and translation, which removes global orientation and
+body-size error and leaves the articulated pose. `metrics/pve` is mean
+per-vertex error over the mesh surface after aligning on the vertex centroid;
+unlike the joint metrics it is sensitive to body shape, and it appears only when
+both vertex arrays are supplied. All three are lower-is-better. Inputs are
+assumed metric, in meters, and `scale_to_mm` converts the results to the
+millimeters the literature reports.
 
 ## Export
 

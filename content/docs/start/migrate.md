@@ -122,20 +122,21 @@ metadata path, and `libreyolo metadata` reports it as valid.
 
 ## Cases that need a hand
 
-Two families never auto-convert. The gaze family is excluded from the generic
-recognizer, and RF-DETR is handled by the dedicated path described above rather
-than the generic one.
+Two families sit outside the generic recognizer. The gaze family is excluded
+outright: it is inference only and its released weights carry redistribution
+restrictions. RF-DETR is excluded because it has the dedicated recognizer
+described above, which is what handles it instead.
 
-Raw upstream PIDNet checkpoints are refused with an error pointing at
-`weights/convert_pidnet_weights.py`, because the semantic metadata they need
-cannot be recovered from the tensors.
+Raw upstream PIDNet checkpoints are refused, with an error pointing at
+`weights/convert_pidnet_weights.py`. That script writes the Cityscapes semantic
+metadata the checkpoint needs.
 
 D-FINE and DEIM share the same architecture keys, so tensors alone cannot
-separate them. When both claim a file and no sibling family with a distinguishing
-marker is in the running, the filename decides. A name giving no hint, such as
-neither `dfine_hgnetv2_n_coco.pth` nor `deim_hgnetv2_n_coco.pth`, is refused with
-that explanation rather than guessed. Instantiating `LibreDFINE` or `LibreDEIM`
-directly also resolves it.
+separate them. When both claim a file and no sibling family with a
+distinguishing marker is in the running, the filename decides: a name in the
+shape of `dfine_hgnetv2_n_coco.pth` or `deim_hgnetv2_n_coco.pth` settles it, and
+a name that says nothing is refused with that explanation rather than guessed.
+Instantiating `LibreDFINE` or `LibreDEIM` directly also resolves it.
 
 When several families legitimately claim one file, a subclass beats the base
 class it refines, and registry order decides the rest, since that order encodes

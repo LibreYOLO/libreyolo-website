@@ -14,9 +14,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreLingBotVisions-sem.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        mask = results[0].semantic_mask
+        mask = result.semantic_mask
         print(mask.data.shape, mask.classes)
     - label: CLI
       language: bash
@@ -88,9 +88,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreLingBotVisions-sem.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].semantic_mask.data.shape)
+        print(result.semantic_mask.data.shape)
 ---
 
 ## Install
@@ -108,9 +108,9 @@ Weights download from Hugging Face on first use and are cached locally.
 
 <code-tabs name="predict" />
 
-`results[0].semantic_mask` carries the dense class map: `.data` is an `(H, W)`
+`result.semantic_mask` carries the dense class map: `.data` is an `(H, W)`
 tensor of class IDs on the original image size, and `.classes` lists the class
-IDs actually present. `results[0].boxes` is `None`, since there are no
+IDs actually present. `result.boxes` is `None`, since there are no
 per-instance detections. `conf` and `iou` are accepted for API parity but do
 not change the output, since the model returns one class per pixel rather than
 detections to filter. See [prediction](/docs/predict) for sources, streaming

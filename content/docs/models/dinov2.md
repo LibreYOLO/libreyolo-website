@@ -19,9 +19,9 @@ snippets:
         # Meta's Hugging Face org. The dense head starts at random
         # initialization until you train it (see Train below).
         model = LibreDINOv2(size="s", task="semantic", nb_classes=19)
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        mask = results[0].semantic_mask
+        mask = result.semantic_mask
         print(mask.data.shape, mask.classes)
     - label: Classify
       language: python
@@ -32,9 +32,9 @@ snippets:
         # nb_classes= is your dataset's class count; the linear head starts
         # at random initialization until you train it.
         model = LibreDINOv2(size="s", task="classify", nb_classes=10)
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].probs.top1, results[0].probs.top1conf)
+        print(result.probs.top1, result.probs.top1conf)
     - label: Embed
       language: python
       code: |
@@ -44,9 +44,9 @@ snippets:
         # Bypasses every task head: the backbone alone is enough, so this
         # needs no fine-tuning to be useful.
         model = LibreDINOv2(size="s", task="embed")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].embeddings.data.shape)   # (1, D), L2-normalized
+        print(result.embeddings.data.shape)   # (1, D), L2-normalized
     - label: Embed a batch
       language: python
       code: |
@@ -135,7 +135,7 @@ snippets:
         # like any checkpoint and returns the same Results object. Export
         # names the file from the task, here LibreDINOv2s-sem.onnx.
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 ---
 
 ## Install
@@ -161,7 +161,7 @@ Face on first use. `task=` selects what runs on top of it.
 the backbone; that head is randomly initialized and only useful after you
 train it (see [Train](#train)). `task="embed"` skips every head and returns
 the backbone's final normalized CLS token as one whole-image row in
-`results[0].embeddings`, so it needs no training at all. `results[0].boxes` is
+`result.embeddings`, so it needs no training at all. `result.boxes` is
 always `None`: none of the three tasks produce per-instance detections. See
 [prediction](/docs/predict) for sources, streaming and result handling.
 

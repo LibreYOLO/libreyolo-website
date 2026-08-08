@@ -44,8 +44,7 @@ snippets:
 ## Tasks
 
 A task is what a model returns. LibreYOLO has seventeen canonical task names,
-and each one maps to a specific field on the `Results` object and a specific set
-of validation metrics.
+and each one names the field on the `Results` object that carries its output.
 
 | Task | Returns |
 |---|---|
@@ -94,10 +93,11 @@ the same `predict`, `train`, `val` and `export` surface and returns the same
 
 <code-tabs name="inspect" />
 
-Families supporting more than one task publish separate checkpoints per task and
-often a different set of sizes per task. A family's supported tasks are a fixed
-tuple: asking for a task outside it raises with the supported list in the
-message, rather than loading something approximate.
+A family that serves more than one task usually publishes a separate checkpoint
+per task, often with a different set of sizes for each; a few share one artifact
+between two runtime tasks instead. Either way the supported tasks are a fixed
+list, and asking for one outside it raises with the supported list in the
+message rather than loading something approximate.
 
 The full list, with per-family benchmarks and published weights, is at
 [all models](/docs/models).

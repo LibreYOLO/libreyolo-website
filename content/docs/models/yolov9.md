@@ -14,9 +14,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreYOLO9s.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        for box in results[0].boxes:
+        for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
@@ -31,9 +31,9 @@ snippets:
         # Same call, different checkpoint. The end-to-end head returns its own
         # top-scoring predictions, so no NMS runs and iou is ignored.
         model = LibreYOLO("LibreYOLO9E2Es.pt")
-        results = model(SAMPLE_IMAGE, conf=0.25, max_det=300)
+        result = model(SAMPLE_IMAGE, conf=0.25, max_det=300)
 
-        print(len(results[0].boxes))
+        print(len(result.boxes))
   train:
     - label: Python
       language: python
@@ -104,9 +104,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreYOLO9s.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].boxes.xyxy)
+        print(result.boxes.xyxy)
 ---
 
 ## Install

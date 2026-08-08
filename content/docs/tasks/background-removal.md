@@ -13,9 +13,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        matte = results[0].matte
+        matte = result.matte
         print(matte.array.shape, matte.array.dtype)   # (H, W) float32 in [0, 1]
     - label: Write a transparent PNG
       language: python
@@ -23,12 +23,12 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
         # save() composites the source with the matte as an alpha channel.
-        results[0].save("subject.png")
+        result.save("subject.png")
 
-        rgba = results[0].cutout()   # the same (H, W, 4) uint8 array in memory
+        rgba = result.cutout()   # the same (H, W, 4) uint8 array in memory
         print(rgba.shape)
     - label: Composite onto a new background
       language: python
@@ -37,9 +37,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        rgba = results[0].cutout()
+        rgba = result.cutout()
         alpha = rgba[..., 3:4].astype(np.float32) / 255.0
         backdrop = np.full_like(rgba[..., :3], 255)          # white
         composited = (rgba[..., :3] * alpha + backdrop * (1 - alpha)).astype(np.uint8)
@@ -74,9 +74,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreBiRefNetl-matte.torchscript")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].matte.array.shape)
+        print(result.matte.array.shape)
 ---
 
 ## Definition
@@ -87,11 +87,11 @@ than binary, which is the point of the task. A hard mask is one threshold away,
 at 0.5, while the soft matte additionally carries the partial coverage at hair,
 fur and motion-blurred edges that a binary mask throws away.
 
-A prediction fills `results[0].matte`, a `Matte` payload holding an `(H, W)`
+A prediction fills `result.matte`, a `Matte` payload holding an `(H, W)`
 float32 array in `[0, 1]` on the original image canvas, reachable as NumPy
-through `.array`. `results[0].cutout()` composites the source image with that
-alpha into an `(H, W, 4)` uint8 RGBA array, and `results[0].save(path)` writes
-the same thing to a transparent-background PNG. `results[0].boxes` stays empty,
+through `.array`. `result.cutout()` composites the source image with that
+alpha into an `(H, W, 4)` uint8 RGBA array, and `result.save(path)` writes
+the same thing to a transparent-background PNG. `result.boxes` stays empty,
 so `conf`, `iou` and `max_det` have no effect.
 
 ## Models

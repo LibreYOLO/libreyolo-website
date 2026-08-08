@@ -16,9 +16,9 @@ snippets:
         # LibreFOMO weights are not auto-downloaded (see Checkpoints below).
         # Point this at a checkpoint you already downloaded locally.
         model = LibreYOLO("./LibreFOMOs-point.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        for point in results[0].points:
+        for point in result.points:
             print(point.cls, point.conf, point.xy)
     - label: CLI
       language: bash
@@ -77,9 +77,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("./LibreFOMOs-point.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].points.xy)
+        print(result.points.xy)
 ---
 
 ## Install
@@ -101,7 +101,7 @@ first and load it by local path, or train your own (see Train below).
 <code-tabs name="predict" />
 
 The result carries a `points` payload instead of `boxes`: each row is
-`x, y, class, confidence`, available as `results[0].points.data`, or through
+`x, y, class, confidence`, available as `result.points.data`, or through
 the `.xy`, `.xyn`, `.cls` and `.conf` accessors. There is no `iou` threshold
 to set, because there are no boxes to suppress; `predict(..., nms_radius=1)`
 controls how many grid cells apart two detections must be to both survive,

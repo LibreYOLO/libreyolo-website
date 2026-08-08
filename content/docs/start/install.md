@@ -67,8 +67,8 @@ NumPy, Pillow, OpenCV, PyYAML, requests, mss, tqdm, pycocotools, typer, click,
 safetensors and SciPy, so YOLOv9 and the other families that need nothing more
 work straight after `pip install libreyolo`.
 
-A clone checks out `release`, the branch the published package is cut from. The
-integration branch is `dev`.
+A clone checks out `release`, the stable branch whose code matches these docs.
+The integration branch, carrying unreleased work, is `dev`.
 
 ## Optional extras
 

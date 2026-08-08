@@ -13,9 +13,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        depth = results[0].depth_map
+        depth = result.depth_map
         print(depth.data.shape)              # (H, W) on the original canvas
         print(depth.min, depth.max, depth.mean)
     - label: Work with the values
@@ -24,9 +24,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        depth = results[0].depth_map
+        depth = result.depth_map
         raw = depth.data          # higher is closer; no metric unit, no scale
         gray = depth.normalized() # rescaled to [0, 1] for visualization
         print(raw.shape, float(gray.max()))
@@ -37,9 +37,9 @@ snippets:
 
         # Same task contract, a much smaller network built for edge runtimes.
         model = LibreYOLO("LibreZipDepthb-depth.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].depth_map.data.shape)
+        print(result.depth_map.data.shape)
   val:
     - label: Validate and read the metric keys
       language: python
@@ -69,9 +69,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreDepthAnythingV2s-depth.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].depth_map.data.shape)
+        print(result.depth_map.data.shape)
 ---
 
 ## Definition
@@ -82,10 +82,10 @@ and the numbers carry no metric unit and no scale that holds across two images.
 Comparing depth between two pixels of the same prediction is meaningful;
 comparing a value to a value from another image is not.
 
-A prediction fills `results[0].depth_map`, a `DepthMap` payload holding an
+A prediction fills `result.depth_map`, a `DepthMap` payload holding an
 `(H, W)` array on the original image canvas. `.min`, `.max` and `.mean` read the
 finite values, and `.normalized()` rescales the map to `[0, 1]` for display.
-`results[0].boxes` stays empty, so `conf`, `iou` and `max_det` have no effect,
+`result.boxes` stays empty, so `conf`, `iou` and `max_det` have no effect,
 and `save=True` writes a colormapped image of the map rather than an annotated
 photo.
 

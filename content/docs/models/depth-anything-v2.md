@@ -14,9 +14,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        depth = results[0].depth_map
+        depth = result.depth_map
         print(depth.min, depth.max, depth.mean)
     - label: CLI
       language: bash
@@ -28,9 +28,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        depth = results[0].depth_map    # DepthMap: dense (H, W), higher = closer
+        depth = result.depth_map    # DepthMap: dense (H, W), higher = closer
         raw = depth.data                # tensor, no metric unit or cross-image scale
         normalized = depth.normalized() # rescaled to [0, 1] for visualization
   val:
@@ -71,9 +71,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreDepthAnythingV2s-depth.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].depth_map.data.shape)
+        print(result.depth_map.data.shape)
 ---
 
 ## Install
@@ -90,7 +90,7 @@ Weights download from Hugging Face on first use and are cached locally.
 
 <code-tabs name="predict" />
 
-`results[0].depth_map` carries a dense relative inverse-depth map: higher values
+`result.depth_map` carries a dense relative inverse-depth map: higher values
 mean closer to the camera, and the values have no metric unit or cross-image
 scale. `save=True` writes a colormapped visualization of that map to disk;
 `Results.plot()` does not cover this family, since it is defined for surface

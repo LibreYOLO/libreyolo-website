@@ -17,9 +17,9 @@ snippets:
         # detector (Haar on OpenCV 4, YuNet on OpenCV 5), so this runs with
         # no extra download beyond the L2CS checkpoint itself.
         model = LibreYOLO("LibreL2CSr50.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].gaze.pitch, results[0].gaze.yaw)
+        print(result.gaze.pitch, result.gaze.yaw)
     - label: CLI
       language: bash
       code: |
@@ -32,10 +32,10 @@ snippets:
         model = LibreYOLO("LibreL2CSr50.pt")
 
         # Hand L2CS boxes from a detector you already ran.
-        results = model(SAMPLE_IMAGE, face_boxes=[[34, 12, 90, 80]])
+        result = model(SAMPLE_IMAGE, face_boxes=[[34, 12, 90, 80]])
 
         # Or name a specific bundled face detector.
-        results = model(SAMPLE_IMAGE, face_detector="yunet")
+        result = model(SAMPLE_IMAGE, face_detector="yunet")
   export:
     - label: Python
       language: python
@@ -98,8 +98,8 @@ falls back to OpenCV's bundled detector, so a bare call works with no
 additional download once the L2CS checkpoint itself is in hand. `face_boxes`
 accepts boxes from a detector you already ran; `face_detector` accepts
 `"auto"`, `"haar"`, `"yunet"`, a LibreYOLO detection model, or a plain
-callable. `results[0].gaze` carries pitch and yaw in radians, aligned row by
-row with `results[0].boxes`, the detected face boxes. See
+callable. `result.gaze` carries pitch and yaw in radians, aligned row by
+row with `result.boxes`, the detected face boxes. See
 [prediction](/docs/predict) for sources, streaming and result handling.
 
 ## Variants

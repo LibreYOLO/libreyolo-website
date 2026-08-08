@@ -238,7 +238,9 @@ bfloat16 support raises at setup rather than degrading silently.
 
 ## Output, checkpoints and stopping
 
-Runs are written to `project/name`, defaulting to `runs/train/exp`. With
+Runs are written to `project/name`. `project` defaults to `runs/train`
+everywhere, but `name` is one of the per-family overrides: the base default is
+`exp`, while YOLOv9 uses `yolo9_exp` and D-FINE uses `dfine_exp`. With
 `exist_ok=False`, the default, an existing directory gets an incremented suffix
 instead of being overwritten.
 

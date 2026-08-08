@@ -58,7 +58,7 @@ snippets:
             imgsz=640,        # int, or (height, width)
             batch=1,
             simplify=True,    # applies to the ONNX fallback path only
-            opset=13,         # applies to the ONNX fallback path only
+            opset=None,       # auto; applies to the ONNX fallback path only
             output_path=None, # None writes weights/<stem>_ncnn
         )
 
@@ -70,8 +70,8 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("weights/LibreYOLO9t_ncnn")
-        results = model.predict(SAMPLE_IMAGE)
-        print(results.boxes.xyxy[:3])
+        result = model.predict(SAMPLE_IMAGE)
+        print(result.boxes.xyxy[:3])
     - label: Bare ncnn
       language: python
       code: |

@@ -362,7 +362,7 @@ Canonical loader: `libreyolo.data.RestoreDataset`.
 
 ## matte
 
-Each RGB image pairs with a single-channel ground-truth alpha matte sharing
+Each RGB image pairs with a single-channel ground-truth matte sharing
 the same stem, where 0 is background and 255 is foreground:
 
 ```text
@@ -375,7 +375,7 @@ and `alpha/`, passed as `data=`. Or a YAML with `path` plus per-split
 `val_images` and `val_mattes`, and optionally `train_images` and
 `train_mattes`, each relative to `path` or absolute.
 
-The matte is grayscale and read as alpha in `[0, 1]`, and it is resized to the
+The matte is grayscale and read as opacity in `[0, 1]`, and it is resized to the
 prediction canvas with bilinear interpolation when the shapes differ. Metrics
 are MAE and S-measure (Fan et al., ICCV 2017) on the original image canvas,
 with S-measure as the best-checkpoint fitness.

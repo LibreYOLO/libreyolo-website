@@ -20,7 +20,9 @@ snippets:
         from libreyolo import LibreEnsemble, SAMPLE_IMAGE
 
         ens = LibreEnsemble(["LibreYOLO9t.pt", "LibreYOLO9s.pt"])
-        result = ens(SAMPLE_IMAGE, conf=0.25)[0]
+
+        # A single image source returns one Results, not a list.
+        result = ens(SAMPLE_IMAGE, conf=0.25)
 
         print(result.boxes.xyxy)
         print(result.speed)
@@ -36,7 +38,7 @@ snippets:
             fusion_iou=0.55,
             min_votes=2,
         )
-        result = ens(SAMPLE_IMAGE, conf=[0.25, 0.4])[0]
+        result = ens(SAMPLE_IMAGE, conf=[0.25, 0.4])
         print(len(result))
   ops:
     - label: Fusion op, no model involved
@@ -130,7 +132,9 @@ ens(
 ```
 
 `predict` is an alias for `__call__`. The return is the usual `Results`, whose
-`speed` breaks the cost down per member and adds a `fusion` entry.
+`speed` breaks the cost down per member and adds a `fusion` entry. A single
+image source returns one of them, a list or directory returns a list, and
+`stream=True` returns a generator.
 
 `conf`, `iou` and `device` broadcast to every member and also accept one value
 per member, so `conf=[0.25, 0.4]` gives member 0 a threshold of 0.25 and

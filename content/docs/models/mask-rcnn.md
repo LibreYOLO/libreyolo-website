@@ -14,10 +14,10 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreMaskRCNNr50.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        print(results[0].masks.data.shape)
-        for box in results[0].boxes:
+        print(result.masks.data.shape)
+        for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
@@ -31,9 +31,9 @@ snippets:
         # task="detect" skips the mask head and returns boxes from the same
         # checkpoint, with no masks in the result.
         model = LibreYOLO("LibreMaskRCNNr50.pt", task="detect")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].boxes.xyxy)
+        print(result.boxes.xyxy)
   val:
     - label: Python
       language: python
@@ -69,9 +69,9 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreMaskRCNNr50.onnx")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
-        print(results[0].masks.data.shape)
+        print(result.masks.data.shape)
 ---
 
 ## Install
@@ -92,7 +92,7 @@ Weights download from Hugging Face on first use and are cached locally.
 The returned `Results` object is the one every family returns, so swapping in
 a different detector is a one line change. Loading the checkpoint with no
 `task` argument returns instance masks, since segmentation is this family's
-default task; `results[0].masks` then carries them alongside the boxes.
+default task; `result.masks` then carries them alongside the boxes.
 Passing `task="detect"` loads the same weights without the mask head and
 returns boxes only. `conf` and `iou` set the confidence and NMS thresholds;
 Mask R-CNN keeps its upstream NMS step, unlike a query-based detector. See

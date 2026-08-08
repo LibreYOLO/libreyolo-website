@@ -153,10 +153,11 @@ so survivors keep their original scores, and weights only influence which box
 wins. Because it selects rather than clusters, it cannot count votes: combining
 `fusion="nms"` with `min_votes` greater than `1` raises `ValueError`.
 
-Weighted boxes fusion rescales a cluster's score by how many members backed it.
-A box that only one of two members found keeps about half its score, which means
-a fused confidence can fall below the `conf` each member was run at. Filter on
-the fused score rather than assuming the member threshold still holds.
+Weighted boxes fusion rescales a cluster's score by the share of member weight
+that backed it. With two equally weighted members, a box only one of them found
+keeps half its score: `0.9` becomes `0.45`. A fused confidence can therefore
+fall below the `conf` each member was run at, so filter on the fused score
+rather than assuming the member threshold still holds.
 
 ## Members with different class lists
 

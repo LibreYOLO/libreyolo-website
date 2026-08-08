@@ -20,9 +20,9 @@ snippets:
         # existing local checkpoint path and is never fetched automatically.
         # Inference requires a CUDA device; there is no CPU path.
         model = LibreSAM3DBody(None, size="d3", device="cuda")
-        results = model(SAMPLE_IMAGE, person_boxes=[[34, 12, 220, 400]])
+        result = model(SAMPLE_IMAGE, person_boxes=[[34, 12, 220, 400]])
 
-        meshes = results[0].meshes
+        meshes = result.meshes
         print(meshes.vertices.shape)    # (N, V, 3), camera frame, meters
         print(meshes.joints3d.shape)    # (N, J, 3)
     - label: With a person detector
@@ -36,7 +36,7 @@ snippets:
         detector = LibreYOLO("LibreRFDETRn.pt")
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
-        results = model(SAMPLE_IMAGE, person_detector=detector)
+        result = model(SAMPLE_IMAGE, person_detector=detector)
 ---
 
 ## Install
@@ -80,8 +80,8 @@ The checkpoint download is gated: it requires accepting Meta's license on the
 Hugging Face model page and authenticating with `hf auth login` before the
 first download succeeds. Inference itself needs a CUDA device unconditionally:
 the upstream estimator moves its batch to the GPU without checking, so a
-CPU-only machine raises rather than falling back. `results[0].meshes` is a
-`Meshes` payload, row-aligned with `results[0].boxes` (one row per detected
+CPU-only machine raises rather than falling back. `result.meshes` is a
+`Meshes` payload, row-aligned with `result.boxes` (one row per detected
 person): `vertices` and `joints3d` are metric and already include the
 estimated camera translation, `joints2d` is in pixels on the original image,
 and rotations follow MHR's convention, Euler angles rather than axis-angle.

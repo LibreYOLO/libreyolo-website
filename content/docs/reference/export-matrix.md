@@ -36,19 +36,20 @@ snippets:
         libreyolo formats --family yolo9 --task detect
         libreyolo formats --family yolo9 --task detect --json
   export:
-    - label: Export, and read the rejection
+    - label: Export, and read a rejection
       language: python
       code: |
         from libreyolo import LibreYOLO
+        from libreyolo.export.support import get_support
 
         model = LibreYOLO("LibreYOLO9t.pt")
         print(model.export(format="onnx"))
 
-        # A blocked combination raises before tracing, with the reason.
-        try:
-            model.export(format="rknn")
-        except NotImplementedError as exc:
-            print(exc)
+        # Check before calling: a blocked combination raises in preflight
+        # and the message carries this reason.
+        blocked = get_support("domedetr", "detect", "onnx")
+        print(blocked.tier)
+        print(blocked.reason)
 ---
 
 ## Shape of the matrix

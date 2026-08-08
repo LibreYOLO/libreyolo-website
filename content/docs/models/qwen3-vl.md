@@ -15,9 +15,9 @@ snippets:
 
         model = LibreVLM("qwen3-vl-4b")
         model.set_classes(["forklift", "pallet", "safety vest"])
-        results = model.predict(SAMPLE_IMAGE, save=True)
+        result = model.predict(SAMPLE_IMAGE, save=True)
 
-        for box in results[0].boxes:
+        for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
     - label: Chat
       language: python

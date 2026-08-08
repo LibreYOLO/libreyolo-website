@@ -14,9 +14,9 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibrePPOCRl-ocr.pt")
-        results = model(SAMPLE_IMAGE, save=True)
+        result = model(SAMPLE_IMAGE, save=True)
 
-        for text, conf in zip(results[0].ocr.texts, results[0].ocr.confidence):
+        for text, conf in zip(result.ocr.texts, result.ocr.conf):
             print(text, float(conf))
     - label: CLI
       language: bash
@@ -28,13 +28,13 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibrePPOCRl-ocr.pt")
-        results = model(SAMPLE_IMAGE)
+        result = model(SAMPLE_IMAGE)
 
         # (N, 4, 2) polygons in reading order: top-left, top-right,
         # bottom-right, bottom-left. Detection quads are genuine polygons
-        # (rotated text), so they populate results.ocr, not results.boxes.
-        print(results[0].ocr.data.shape)
-        print(results[0].ocr.det_confidence)
+        # (rotated text), so they populate result.ocr, not result.boxes.
+        print(result.ocr.data.shape)
+        print(result.ocr.det_conf)
   val:
     - label: Python
       language: python
@@ -70,10 +70,10 @@ Weights download from Hugging Face on first use and are cached locally.
 Each checkpoint bundles both stages, detection and recognition, under one
 `.pt` file, with the recognition charset and pipeline defaults carried in the
 checkpoint metadata. The recognizer reads Simplified and Traditional Chinese,
-English, Japanese and pinyin with one dictionary. `results[0].ocr` is an
+English, Japanese and pinyin with one dictionary. `result.ocr` is an
 `OCRRegions` payload: `.data` holds the four-point polygons, `.texts` the
-transcripts, `.confidence` the per-region recognition score, and
-`.det_confidence` the detection score. Multi-image sources run sequentially:
+transcripts, `.conf` the per-region recognition score, and
+`.det_conf` the detection score. Multi-image sources run sequentially:
 the two-stage pipeline does not batch across images. See
 [prediction](/docs/predict) for sources, streaming and result handling.
 

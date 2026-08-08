@@ -94,8 +94,8 @@ snippets:
             "weights/LibreYOLO9t.mlpackage",
             compute_units="all",   # or cpu_and_ne to pin the Neural Engine
         )
-        results = model.predict(SAMPLE_IMAGE)
-        print(results.boxes.xyxy[:3])
+        result = model.predict(SAMPLE_IMAGE)
+        print(result.boxes.xyxy[:3])
     - label: Bare coremltools
       language: python
       code: |
