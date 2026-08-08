@@ -23,12 +23,7 @@ export default function Navbar() {
   const navLinks = [
     { name: t('home'), path: '/' },
     { name: t('models'), path: '/models' },
-    {
-      name: t('benchmarks'),
-      path: 'https://www.visionanalysis.org/?utm_source=libreyolo&utm_medium=referral&utm_campaign=benchmarks',
-      external: true,
-      icon: BarChart3,
-    },
+    { name: t('benchmarks'), path: '/benchmarks', icon: BarChart3 },
     { name: t('commercial'), path: '/commercial' },
     { name: t('articles'), path: '/articles' },
     { name: t('docs'), path: '/docs/v1.4.0', icon: BookOpen, highlight: true },

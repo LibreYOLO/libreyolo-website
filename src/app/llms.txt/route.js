@@ -27,6 +27,7 @@ libreyolo.com is the official site of the LibreYOLO open-source library: documen
 ## Key pages
 - [Home](${SITE_URL}/): project overview and quickstart
 - [Model Zoo](${SITE_URL}/models): pre-trained weights with MIT licensing, browsable per family
+- [Benchmarks](${SITE_URL}/benchmarks): measured COCO accuracy, RF100-VL transfer across 100 real-world datasets, and latency on real hardware
 - [Dataset Zoo](${SITE_URL}/datasets): datasets for training and evaluating models, hosted on Hugging Face
 - [Commercial Guide](${SITE_URL}/commercial): how to use LibreYOLO in proprietary, closed-source commercial applications under the MIT license
 - [Research & Science](${SITE_URL}/science): native explainability, feature maps, and a codebase designed for discovery
