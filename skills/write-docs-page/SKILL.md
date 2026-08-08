@@ -66,8 +66,8 @@ about it. The reader arrived to run the thing. Sections, in this order:
 | Train | `<code-tabs name="train" />`, plus the arguments that matter for this family |
 | Validate | `<code-tabs name="val" />`, including the command that reproduces our published number |
 | Export | `<export-matrix />` and `<code-tabs name="export" />` |
-| Licensing | `<provenance-box>` and the commercial-use answer |
-| Citation | Upstream BibTeX |
+| Licensing | `<provenance-box>`, which carries the caveats, provenance rows and interpretation |
+| Citation | `<citation-block />`, verbatim from upstream with its source URL |
 
 **Do not add these to a model page:**
 
@@ -98,10 +98,43 @@ go missing, but do not undercut them in your own prose:
 2. What the page states is a description, not legal advice. If it matters
    commercially, the reader reads the licenses and takes their own counsel.
 
-Then the provenance rows and a direct answer to the commercial-use question.
+Then the provenance rows. The commercial-use answer is **a row in that same
+list**, labelled Interpretation, not a separate heading. The reader comparing
+licenses across model pages should find every fact in the same slot every time:
+
+    Original work / Upstream license / Upstream source / LibreYOLO code /
+    Weights / Interpretation
+
 Never state a license more permissively than the repository does, and when
 weights are non-commercial, say so plainly in the same breath as the code
 license so the two are never confused.
+
+## Citations
+
+A citation is an attribution. Getting it wrong sends credit to the wrong people
+and sends readers to a paper that does not exist, so this is the one block on
+the page with a verification procedure rather than a style rule.
+
+1. **Copy the BibTeX verbatim from the authors' own citation block**, normally a
+   `## Citation` section in the upstream README or a `CITATION.cff`. Never
+   assemble one from a paper's metadata, and never retype it.
+2. **Cross-check it** against the arXiv API
+   (`https://export.arxiv.org/api/query?id_list=<id>`) or the publisher: every
+   author present and in order, the venue, and the year. Papers get accepted
+   after preprinting, so an `@article ... arXiv preprint` entry often should be
+   an `@inproceedings` by now.
+3. **Store both the BibTeX and its source URL** in the registry
+   (`upstream.bibtex`, `upstream.bibtex_source_url`). The page renders the URL
+   beneath the entry so a reader can check us.
+4. **Record when it was verified and against what**, in
+   `upstream.bibtex_verified`.
+
+This is not hypothetical. The first draft of the RF-DETR page carried a
+hand-assembled entry that was wrong five ways at once: wrong citation key, two
+of five authors missing, wrong entry type, wrong venue, and a title that did not
+match the one the authors ask you to cite.
+
+Render it with `<citation-block />`. Do not paste BibTeX into the markdown body.
 
 ## Generated-data tags
 
@@ -114,9 +147,10 @@ using the page's `families`.
 | `<benchmark-table task="detect" />` | Benchmark rows plus a source line |
 | `<va-embed />` | The Vision Analysis chart, when the family has one |
 | `<checkpoint-table />` | Published weights, grouped by task |
-| `<export-matrix />` | Task x format support, with legend |
+| `<export-matrix />` | Task x format ticks, plus per-combination notes |
 | `<code-tabs name="predict" />` | A snippet group from frontmatter, by key |
-| `<provenance-box>...</provenance-box>` | Upstream and license rows, your prose inside |
+| `<provenance-box>...</provenance-box>` | License caveats, provenance rows, interpretation |
+| `<citation-block />` | Verified upstream BibTeX plus a link to its source |
 
 **Trap:** self-closing custom tags are expanded to open/close pairs by
 `expandSelfClosingTags()` in `src/lib/docs.js` before parsing. HTML5 ignores the
@@ -154,11 +188,16 @@ first draft of this docs system was rejected for looking machine-generated.
   container so the page body never scrolls sideways.
 - `tabular-nums` and right alignment for any column of figures.
 - Monospace for every identifier: filenames, flags, arguments, class names.
-- For a support matrix: one short token per cell, three distinguishable icon
-  *shapes* so it survives greyscale and colorblindness, color on the mark and
-  never on the cell background, and a legend below written as full sentences in
-  a definition list. Nothing longer than a token goes inside a cell; caveats go
-  under the table.
+- For a support matrix: **a tick means supported, an empty cell means not
+  supported, and there is no third state.** A grid answers one binary question.
+  Any finer grading the library keeps internally is a distinction the reader
+  cannot act on inside a cell, so it belongs in the notes underneath, stated in
+  words, naming the combination and the measured caveat. Nothing longer than a
+  mark goes inside a cell. Color goes on the mark, never on the cell background.
+- Units belong in the column heading, never repeated in every cell. Write
+  `Params (M)` and put `30.47` in the cell, not `30.47 M`.
+- One missing-data convention across every table: an empty cell means the value
+  is not recorded. Never a dash, never `n/a`, never mixed.
 - Color for exactly two things: links, and state inside a matrix. Not for
   labels, headings, panel backgrounds, or making numbers look important.
 

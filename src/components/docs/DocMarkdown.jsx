@@ -16,7 +16,7 @@ import { slugifyHeading } from '@/lib/docs'
 import CodeTabs from '@/components/docs/CodeTabs'
 import {
   SectionTitle, BenchmarkTable, VaEmbed, CheckpointTable, ExportMatrix,
-  TaskSupport, Provenance,
+  TaskSupport, Provenance, Citation,
 } from '@/components/docs/ModelBlocks'
 
 function textOf(children) {
@@ -86,6 +86,7 @@ export default function DocMarkdown({ children, family, snippets = {} }) {
     'export-matrix': () => <ExportMatrix family={family} />,
     'code-tabs': ({ name }) => <CodeTabs tabs={snippets[name] || []} />,
     'provenance-box': ({ children: kids }) => <Provenance family={family}>{kids}</Provenance>,
+    'citation-block': () => <Citation family={family} />,
   }
 
   return (

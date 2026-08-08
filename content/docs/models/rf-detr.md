@@ -185,20 +185,7 @@ adapted to the shared model, trainer and export contracts. Architecture and
 weight compatibility are preserved, so upstream checkpoints convert cleanly.
 </provenance-box>
 
-### Can I use RF-DETR commercially?
-
-Yes, in closed source and commercial products, under both licenses. Apache-2.0
-asks you to keep its license and attribution notices with any copy of the
-weights you redistribute; it does not reach your application code. Weights you
-train yourself on your own data are yours.
-
 ## Citation
 
-```text
-@article{rfdetr2025,
-  title   = {RF-DETR: Neural Architecture Search for Real-Time Detection Transformers},
-  author  = {Robinson, Isaac and Robicheaux, Peter and Popov, Matvei},
-  journal = {arXiv preprint arXiv:2511.09554},
-  year    = {2025}
-}
-```
+<citation-block />
+

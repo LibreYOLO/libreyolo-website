@@ -206,12 +206,13 @@ export function BenchmarkTable({ family, task = 'detect' }) {
       <Table className="tabular-nums">
         <thead>
           <tr>
+            {/* Units live in the column head, never repeated in every cell. */}
             <Th>Checkpoint</Th>
-            <Th align="right">Input</Th>
+            <Th align="right">Input (px)</Th>
             <Th align="right">{bench.metric}</Th>
-            <Th align="right">Params</Th>
-            <Th align="right">PyTorch</Th>
-            <Th align="right">TensorRT fp16</Th>
+            <Th align="right">Params (M)</Th>
+            <Th align="right">PyTorch (ms)</Th>
+            <Th align="right">TensorRT fp16 (ms)</Th>
           </tr>
         </thead>
         <tbody>
@@ -220,9 +221,9 @@ export function BenchmarkTable({ family, task = 'detect' }) {
               <Td className="font-mono text-[12.5px] text-surface-900 dark:text-surface-200">{family.prefix}{row.size}</Td>
               <Td className="text-right">{row.imgsz}</Td>
               <Td className="text-right font-medium text-surface-900 dark:text-surface-200">{row.map.toFixed(1)}</Td>
-              <Td className="text-right">{row.params_m ? `${row.params_m} M` : '—'}</Td>
-              <Td className="text-right">{row.torch_ms ? `${row.torch_ms.toFixed(1)} ms` : '—'}</Td>
-              <Td className="text-right">{row.trt_ms ? `${row.trt_ms.toFixed(1)} ms` : '—'}</Td>
+              <Td className="text-right">{row.params_m ?? ''}</Td>
+              <Td className="text-right">{row.torch_ms ? row.torch_ms.toFixed(1) : ''}</Td>
+              <Td className="text-right">{row.trt_ms ? row.trt_ms.toFixed(1) : ''}</Td>
             </tr>
           ))}
         </tbody>
@@ -267,8 +268,8 @@ export function CheckpointTable({ family }) {
         <thead>
           <tr>
             <Th>File</Th>
-            <Th align="right">Input</Th>
-            <Th align="right">Params</Th>
+            <Th align="right">Input (px)</Th>
+            <Th align="right">Params (M)</Th>
             <Th>Trained on</Th>
             <Th>Weights license</Th>
           </tr>
@@ -294,7 +295,9 @@ export function CheckpointTable({ family }) {
                     </a>
                   </Td>
                   <Td className="text-right tabular-nums">{row.imgsz}</Td>
-                  <Td className="text-right tabular-nums">{row.params_m ? `${row.params_m} M` : '—'}</Td>
+                  {/* Empty means not recorded in the registry. That is the one
+                      missing-data convention, used in every docs table. */}
+                  <Td className="text-right tabular-nums">{row.params_m ?? ''}</Td>
                   <Td>{row.data}</Td>
                   <Td>{row.license}</Td>
                 </tr>
@@ -321,37 +324,20 @@ export function CheckpointTable({ family }) {
  * carries the full sentence in `title` plus screen-reader text; the legend
  * below repeats those sentences in a definition list.
  */
-const STATES = {
-  validated: {
-    sentence: 'Validated. Numerically checked against the PyTorch model.',
-    color: 'text-emerald-600 dark:text-emerald-400',
-    icon: (
-      <svg viewBox="0 0 16 16" className="h-[13px] w-[13px]" aria-hidden="true">
-        <circle cx="8" cy="8" r="7" fill="currentColor" />
-        <path d="M4.7 8.2l2.1 2.1 4.3-4.4" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-  },
-  available: {
-    sentence: 'Available. Conversion is implemented, but numeric runtime parity evidence is incomplete or has not been recorded.',
-    color: 'text-amber-600 dark:text-amber-400',
-    icon: (
-      <svg viewBox="0 0 16 16" className="h-[13px] w-[13px]" aria-hidden="true">
-        <circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" strokeWidth="1.6" />
-        <path d="M8 1.8a6.2 6.2 0 000 12.4z" fill="currentColor" />
-      </svg>
-    ),
-  },
-  blocked: {
-    sentence: 'Not supported. The exporter refuses this combination before it runs.',
-    color: 'text-surface-400 dark:text-surface-600',
-    icon: (
-      <svg viewBox="0 0 16 16" className="h-[13px] w-[13px]" aria-hidden="true">
-        <path d="M3.5 8h9" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-}
+/*
+ * The matrix answers one question: can I export this task to this format.
+ * A tick means yes. The library's finer internal grading (parity validated
+ * versus implemented but not yet parity checked) is not a distinction the
+ * reader can act on in a grid, so it moves to the notes below the table,
+ * where the specific measured caveat can be stated in words.
+ */
+const SUPPORTED_STATES = new Set(['validated', 'available'])
+
+const TICK = (
+  <svg viewBox="0 0 16 16" className="h-[13px] w-[13px]" aria-hidden="true">
+    <path d="M3.2 8.6l3.1 3.1 6.5-6.8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+)
 
 /*
  * The tooltip and screen-reader text prefer the library's own per-cell reason
@@ -360,19 +346,25 @@ const STATES = {
  * "why is this not validated" gets the real answer rather than a category.
  */
 function Mark({ state, label, reason }) {
-  const s = STATES[state] || STATES.blocked
-  const text = reason || s.sentence
+  const supported = SUPPORTED_STATES.has(state)
+  if (!supported) {
+    return (
+      <span className="sr-only">{`${label}: not supported`}</span>
+    )
+  }
   return (
-    <span className={`inline-flex ${s.color}`} title={`${label}: ${text}`}>
-      {s.icon}
-      <span className="sr-only">{`${s.sentence} ${reason || ''}`}</span>
+    <span
+      className="inline-flex text-emerald-600 dark:text-emerald-400"
+      title={reason ? `${label}: supported. ${reason}` : `${label}: supported`}
+    >
+      {TICK}
+      <span className="sr-only">{`${label}: supported. ${reason || ''}`}</span>
     </span>
   )
 }
 
 export function ExportMatrix({ family }) {
   const formats = getExportFormats()
-  const used = [...new Set(family.tasks.flatMap((t) => formats.map((f) => family.export[t]?.[f.key] || 'blocked')))]
 
   return (
     <div>
@@ -415,16 +407,10 @@ export function ExportMatrix({ family }) {
         </table>
       </div>
 
-      <dl className="mt-3 space-y-1 text-[13px]">
-        {Object.entries(STATES)
-          .filter(([key]) => used.includes(key))
-          .map(([key, s]) => (
-            <div key={key} className="flex items-baseline gap-2">
-              <dt className={`shrink-0 ${s.color}`}>{s.icon}</dt>
-              <dd className="text-surface-500 dark:text-surface-500">{s.sentence}</dd>
-            </div>
-          ))}
-      </dl>
+      <Note>
+        A tick means the export runs and is supported. An empty cell means the
+        exporter refuses that combination before it starts.
+      </Note>
 
       <ExportCaveats family={family} />
     </div>
@@ -454,7 +440,7 @@ function ExportCaveats({ family }) {
   return (
     <div className="mt-5">
       <p className="mb-1.5 text-[13px] font-medium text-surface-700 dark:text-surface-300">
-        Why these are not validated
+        Notes on specific combinations
       </p>
       <dl className="space-y-1 text-[13px]">
         {rows.map((row) => (
@@ -466,6 +452,33 @@ function ExportCaveats({ family }) {
           </div>
         ))}
       </dl>
+    </div>
+  )
+}
+
+/* ── citation ───────────────────────────────────────────────────── */
+
+/*
+ * The BibTeX is rendered from the registry, where it is stored verbatim from
+ * the upstream authors' own citation block, and it always ships with a link to
+ * that block. A citation is an attribution: if we retype it and drop an author
+ * or change a venue, readers credit the wrong people. Never author one by hand.
+ */
+export function Citation({ family }) {
+  const u = family.upstream
+  if (!u?.bibtex) return null
+  return (
+    <div>
+      <pre className="overflow-x-auto border border-surface-200 bg-surface-50/60 px-3 py-2.5 font-mono text-[12.5px] leading-[1.7] text-surface-800 dark:border-white/[0.09] dark:bg-white/[0.02] dark:text-surface-300">
+        {u.bibtex}
+      </pre>
+      {u.bibtex_source_url && (
+        <Note>
+          Copied from the authors' citation block at{' '}
+          <ExtLink href={u.bibtex_source_url}>{u.bibtex_source_url.replace('https://', '')}</ExtLink>.
+          Cite the original work, not this page.
+        </Note>
+      )}
     </div>
   )
 }
@@ -508,8 +521,11 @@ export function Provenance({ family, children }) {
         <Meta label="Upstream source"><ExtLink href={u.code_url}>{u.code_url.replace('https://', '')}</ExtLink></Meta>
         <Meta label="LibreYOLO code">MIT</Meta>
         <Meta label="Weights">{u.license}, republished at <ExtLink href={HF_BASE}>huggingface.co/LibreYOLO</ExtLink></Meta>
+        {u.license_interpretation && (
+          <Meta label="Interpretation">{u.license_interpretation}</Meta>
+        )}
       </dl>
-      <div className="mt-4 text-surface-600 dark:text-surface-400">{children}</div>
+      {children && <div className="mt-4 text-surface-600 dark:text-surface-400">{children}</div>}
     </div>
   )
 }
