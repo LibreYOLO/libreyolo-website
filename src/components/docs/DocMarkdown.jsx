@@ -3,8 +3,7 @@
  *
  * Prose is markdown. Facts are components: the author drops a tag such as
  * <checkpoint-table /> where the generated block belongs, rehype-raw keeps the
- * unknown tag, and the map below swaps in the real component. The same trick
- * the articles pipeline already uses for its inline widgets.
+ * unknown tag, and the map below swaps in the real component.
  */
 
 import ReactMarkdown from 'react-markdown'
@@ -27,35 +26,16 @@ function textOf(children) {
 }
 
 /*
- * Two table skins. The default keeps the bordered container the article-style
- * pages already ship. `bareTables` matches the house rule the generated blocks
- * follow: hairline row rules, a stronger rule under the header, no fill, no
- * radius, no hover, no zebra. A page written to that rule opts in so its
- * authored tables and its generated ones look like one table system.
+ * react-markdown hands each renderer the hast node in `node`. Spreading props
+ * straight onto a DOM element therefore emits node="[object Object]" on every
+ * tag, which is invalid HTML and noise in the .md twin and for crawlers. Strip
+ * it once here rather than destructuring it in a dozen renderers.
  */
-const TABLE_SKINS = {
-  boxed: {
-    table: (props) => (
-      <div className="my-5 overflow-x-auto rounded-xl border border-surface-200 dark:border-white/[0.08]">
-        <table className="w-full text-sm" {...props} />
-      </div>
-    ),
-    th: (props) => <th className="border-b border-surface-200 bg-surface-50 px-4 py-3 text-left font-semibold text-surface-700 dark:border-white/[0.08] dark:bg-white/[0.02] dark:text-surface-300" {...props} />,
-    td: (props) => <td className="border-b border-surface-100 px-4 py-3 text-surface-600 last:border-0 dark:border-white/[0.04] dark:text-surface-400" {...props} />,
-  },
-  bare: {
-    table: (props) => (
-      <div className="-mx-1 my-5 overflow-x-auto px-1">
-        <table className="w-full border-collapse text-[13.5px]" {...props} />
-      </div>
-    ),
-    th: (props) => <th className="border-b border-surface-300 px-3 py-1.5 text-left font-semibold text-surface-700 dark:border-white/20 dark:text-surface-300" {...props} />,
-    td: (props) => <td className="border-b border-surface-200/70 px-3 py-1.5 align-top text-surface-700 dark:border-white/[0.07] dark:text-surface-400" {...props} />,
-  },
+function dom({ node, ...rest }) {
+  return rest
 }
 
-export default function DocMarkdown({ children, family, snippets = {}, bareTables = false }) {
-  const tableSkin = bareTables ? TABLE_SKINS.bare : TABLE_SKINS.boxed
+export default function DocMarkdown({ children, family, snippets = {} }) {
   const components = {
     h2: ({ children: kids }) => <SectionTitle id={slugifyHeading(textOf(kids))}>{kids}</SectionTitle>,
     h3: ({ children: kids }) => (
@@ -63,35 +43,50 @@ export default function DocMarkdown({ children, family, snippets = {}, bareTable
         {kids}
       </h3>
     ),
-    // Paragraph spacing must stay clearly larger than intra-paragraph leading,
-    // or paragraph boundaries dissolve and the page reads as one grey field.
-    // This is the most-cited complaint about the 2022 MDN redesign (1.75 leading).
-    p: (props) => <p className="mb-5 max-w-[68ch] text-[15px] leading-[1.6] text-surface-600 dark:text-surface-400" {...props} />,
+    // Paragraph spacing stays clearly larger than intra-paragraph leading, or
+    // paragraph boundaries dissolve and the page reads as one grey field.
+    p: (props) => <p className="mb-5 max-w-[68ch] text-[15px] leading-[1.6] text-surface-600 dark:text-surface-400" {...dom(props)} />,
     a: (props) => (
       <a
         className="font-medium text-libre-600 underline-offset-2 hover:underline dark:text-libre-400"
         target={props.href?.startsWith('http') ? '_blank' : undefined}
         rel={props.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
-        {...props}
+        {...dom(props)}
       />
     ),
-    ul: (props) => <ul className="mb-4 max-w-[68ch] list-disc space-y-1 pl-5 text-[15px] text-surface-600 dark:text-surface-400" {...props} />,
-    ol: (props) => <ol className="mb-4 max-w-[68ch] list-decimal space-y-1 pl-5 text-[15px] text-surface-600 dark:text-surface-400" {...props} />,
-    li: (props) => <li className="leading-[1.6]" {...props} />,
-    strong: (props) => <strong className="font-semibold text-surface-800 dark:text-surface-200" {...props} />,
+    ul: (props) => <ul className="mb-4 max-w-[68ch] list-disc space-y-1 pl-5 text-[15px] text-surface-600 dark:text-surface-400" {...dom(props)} />,
+    ol: (props) => <ol className="mb-4 max-w-[68ch] list-decimal space-y-1 pl-5 text-[15px] text-surface-600 dark:text-surface-400" {...dom(props)} />,
+    li: (props) => <li className="leading-[1.6]" {...dom(props)} />,
+    strong: (props) => <strong className="font-semibold text-surface-800 dark:text-surface-200" {...dom(props)} />,
     hr: () => <hr className="my-10 border-surface-200 dark:border-white/[0.06]" />,
     blockquote: (props) => (
-      <blockquote className="my-5 border-l-2 border-libre-500 pl-4 text-surface-500 dark:text-surface-400" {...props} />
+      <blockquote className="my-5 border-l-2 border-libre-500 pl-4 text-surface-500 dark:text-surface-400" {...dom(props)} />
     ),
-    table: tableSkin.table,
-    th: tableSkin.th,
-    td: tableSkin.td,
+
+    /*
+     * One table skin, matching the generated blocks: hairline row rules, a
+     * stronger rule under the header, no container border, no fill, no radius,
+     * no hover, no zebra. An authored table and a generated one have to look
+     * like one system, and the house rules forbid the boxed alternative.
+     */
+    table: (props) => (
+      <div className="-mx-1 my-5 overflow-x-auto px-1">
+        <table className="w-full border-collapse text-[13.5px]" {...dom(props)} />
+      </div>
+    ),
+    th: (props) => (
+      <th className="border-b border-surface-300 px-3 py-1.5 text-left font-semibold text-surface-700 dark:border-white/20 dark:text-surface-300" {...dom(props)} />
+    ),
+    td: (props) => (
+      <td className="border-b border-surface-200/70 px-3 py-1.5 align-top text-surface-700 dark:border-white/[0.07] dark:text-surface-400" {...dom(props)} />
+    ),
+
     code: ({ className, children: kids, ...props }) => {
       if (/language-/.test(className || '')) {
-        return <code className={className} {...props}>{kids}</code>
+        return <code className={className} {...dom(props)}>{kids}</code>
       }
       return (
-        <code className="rounded bg-libre-500/10 px-1.5 py-0.5 font-mono text-[0.85em] text-libre-700 dark:bg-white/[0.06] dark:text-libre-300" {...props}>
+        <code className="rounded bg-libre-500/10 px-1.5 py-0.5 font-mono text-[0.85em] text-libre-700 dark:bg-white/[0.06] dark:text-libre-300" {...dom(props)}>
           {kids}
         </code>
       )
@@ -103,7 +98,7 @@ export default function DocMarkdown({ children, family, snippets = {}, bareTable
       return <Code language={language}>{textOf(node?.props?.children).replace(/\n$/, '')}</Code>
     },
 
-    /* Generated blocks. The author writes the tag; the pipeline supplies data. */
+    /* Generated blocks. The author writes the tag; the registry supplies data. */
     'benchmark-table': ({ task }) => <BenchmarkTable family={family} task={task || 'detect'} />,
     'va-embed': () => <VaEmbed family={family} />,
     'checkpoint-table': () => <CheckpointTable family={family} />,
