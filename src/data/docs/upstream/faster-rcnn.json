@@ -5,6 +5,7 @@
     "paper_url": "https://arxiv.org/abs/1506.01497",
     "code_url": "https://github.com/pytorch/vision",
     "license": "BSD-3-Clause",
+    "code_license": "BSD-3-Clause",
     "license_interpretation": "BSD-3-Clause is a permissive license, so this code can be used in commercial and closed-source products with no obligation on your own application code. It asks only that you keep the copyright notice and disclaimer with any copy you redistribute, and it carries no patent grant. The four published checkpoints used for parity testing are not distributed in the LibreYOLO source tree: torchvision's own documentation notes that a pretrained model's terms may depend on its training data, so each Hugging Face mirror ships the BSD text on that implied basis and repeats the caveat rather than issuing an explicit checkpoint-specific grant.",
     "bibtex": "@inproceedings{renNIPS15fasterrcnn,\n    Author = {Shaoqing Ren and Kaiming He and Ross Girshick and Jian Sun},\n    Title = {Faster {R-CNN}: Towards Real-Time Object Detection\n             with Region Proposal Networks},\n    Booktitle = {Advances in Neural Information Processing Systems ({NIPS})},\n    Year = {2015}\n}",
     "bibtex_source_url": "https://github.com/rbgirshick/py-faster-rcnn#citing-faster-r-cnn",

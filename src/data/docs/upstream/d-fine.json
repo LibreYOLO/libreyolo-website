@@ -5,6 +5,7 @@
     "paper_url":  "https://arxiv.org/abs/2410.13842",
     "code_url":  "https://github.com/Peterande/D-FINE",
     "license":  "Apache-2.0",
+    "code_license":  "Apache-2.0",
     "license_interpretation":  "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. It places no obligation on your own application code, and weights you train yourself on your own data are yours. The segmentation weights carry a second Apache-2.0 upstream, ArgoHA/D-FINE-seg, under the same terms.",
     "bibtex":  "@misc{peng2024dfine,\n      title={D-FINE: Redefine Regression Task in DETRs as Fine-grained Distribution Refinement},\n      author={Yansong Peng and Hebei Li and Peixi Wu and Yueyi Zhang and Xiaoyan Sun and Feng Wu},\n      year={2024},\n      eprint={2410.13842},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV}\n}",
     "bibtex_source_url":  "https://github.com/Peterande/D-FINE#citation",

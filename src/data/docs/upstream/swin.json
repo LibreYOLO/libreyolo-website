@@ -5,6 +5,7 @@
   "paper_url": "https://arxiv.org/abs/2103.14030",
   "code_url": "https://github.com/microsoft/Swin-Transformer",
   "license": "MIT",
+  "code_license": "Apache-2.0",
   "license_interpretation": "MIT is a permissive license, so these weights can be used in commercial and closed-source products. It asks only that you keep the license text and copyright notice with any copy you redistribute, and it carries no explicit patent grant. LibreYOLO's runtime code for this family is a derived port of the Apache-2.0 timm Swin implementation (Ross Wightman, huggingface/pytorch-image-models), kept parameter-name compatible so the tensors load unchanged; the four released Tiny/Small/Base/Large checkpoints are Microsoft's own MIT-licensed patch-4/window-7 classifiers. Code and weights therefore sit under two different permissive licenses, both of which allow commercial use.",
   "bibtex": "@inproceedings{liu2021Swin,\n  title={Swin Transformer: Hierarchical Vision Transformer using Shifted Windows},\n  author={Liu, Ze and Lin, Yutong and Cao, Yue and Hu, Han and Wei, Yixuan and Zhang, Zheng and Lin, Stephen and Guo, Baining},\n  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},\n  year={2021}\n}",
   "bibtex_source_url": "https://github.com/microsoft/Swin-Transformer#citing-swin-transformer",

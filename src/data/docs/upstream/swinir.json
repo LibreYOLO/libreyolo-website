@@ -5,6 +5,7 @@
   "paper_url": "https://arxiv.org/abs/2108.10257",
   "code_url": "https://github.com/JingyunLiang/SwinIR",
   "license": "Apache-2.0",
+  "code_license": "Apache-2.0",
   "license_interpretation": "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. It places no obligation on your own application code. LibreYOLO's checkpoints are format conversions of the official pretrained generators, with the learned parameters unchanged; SwinIR's real-world variants need a degradation and GAN training pipeline that is not wired into this library, so there is no LibreYOLO-trained variant to license separately.",
   "bibtex": "@article{liang2021swinir,\n  title={SwinIR: Image Restoration Using Swin Transformer},\n  author={Liang, Jingyun and Cao, Jiezhang and Sun, Guolei and Zhang, Kai and Van Gool, Luc and Timofte, Radu},\n  journal={arXiv preprint arXiv:2108.10257},\n  year={2021}\n}",
   "bibtex_source_url": "https://github.com/JingyunLiang/SwinIR#citation",

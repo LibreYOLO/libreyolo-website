@@ -5,6 +5,7 @@
   "paper_url": "https://arxiv.org/abs/2107.10833",
   "code_url": "https://github.com/xinntao/Real-ESRGAN",
   "license": "BSD-3-Clause",
+  "code_license": "Apache-2.0 and BSD-3-Clause",
   "license_interpretation": "BSD-3-Clause is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep the copyright notice, the condition list and the disclaimer with any copy you redistribute, in source or compiled form, and its third clause forbids using the names of Xintao Wang or the project's contributors to endorse or promote a derived product without separate written permission. It carries no patent grant, unlike Apache-2.0. LibreYOLO's checkpoints are format conversions of the official pretrained generators, with the learned parameters unchanged; Real-ESRGAN's training is a GAN over a synthetic degradation pipeline that is not wired into this library, so there is no LibreYOLO-trained variant to license separately.",
   "bibtex": "@InProceedings{wang2021realesrgan,\n    author    = {Xintao Wang and Liangbin Xie and Chao Dong and Ying Shan},\n    title     = {Real-ESRGAN: Training Real-World Blind Super-Resolution with Pure Synthetic Data},\n    booktitle = {International Conference on Computer Vision Workshops (ICCVW)},\n    date      = {2021}\n}",
   "bibtex_source_url": "https://github.com/xinntao/Real-ESRGAN#bibtex",

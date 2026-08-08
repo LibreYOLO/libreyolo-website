@@ -5,6 +5,7 @@
   "paper_url": "https://arxiv.org/abs/2406.09414",
   "code_url": "https://github.com/DepthAnything/Depth-Anything-V2",
   "license": "Apache-2.0 (Small checkpoint); CC-BY-NC-4.0 (Base and Large checkpoints)",
+  "code_license": "Apache-2.0",
   "license_interpretation": "The two licenses are not interchangeable. The Small checkpoint is Apache-2.0, a permissive license: it can be used in commercial and closed-source products, it asks you to keep its license text and attribution notices with any redistributed copy, and it grants a patent license. The Base and Large checkpoints are CC-BY-NC-4.0, which forbids commercial use outright and requires attribution on any redistribution, so treat them as research and evaluation weights unless you obtain separate terms from the authors. LibreYOLO's own code for this family is MIT throughout, and training is not offered for this family so there is no self-trained-weights exception to reach for.",
   "bibtex": "@article{depth_anything_v2,\n  title={Depth Anything V2},\n  author={Yang, Lihe and Kang, Bingyi and Huang, Zilong and Zhao, Zhen and Xu, Xiaogang and Feng, Jiashi and Zhao, Hengshuang},\n  journal={arXiv:2406.09414},\n  year={2024}\n}",
   "bibtex_source_url": "https://github.com/DepthAnything/Depth-Anything-V2#citation",

@@ -5,6 +5,7 @@
   "paper_url": "https://arxiv.org/abs/2603.11917",
   "code_url": "https://github.com/pbonazzi/picosam3",
   "license": "Apache-2.0",
+  "code_license": "Apache-2.0",
   "license_interpretation": "Apache-2.0 is a permissive license, so this code and these weights can be used in commercial and closed-source products. It asks you to keep the license text and attribution notices with any copy you redistribute, and it grants a patent license. LibreYOLO carries a native port of the compact ROI CNN rather than vendoring upstream files unmodified, and downloads LibrePicoSAM3pico.pt from the LibreYOLO Hugging Face org, converted with unchanged tensor values from the pinned pietrobonazzi/picosam3 revision af49e4322b6b7cf448499fee5c073d4576f59444 and tagged Apache-2.0 there. PicoSAM3 is distilled from SAM 2.1 and SAM 3 as teacher models; LibreYOLO does not vendor or redistribute either teacher's code or weights in this family.",
   "bibtex": "@article{picosam3_2026,\n      title={PicoSAM3: Real-Time In-Sensor Region-of-Interest Segmentation}, \n      author={Pietro Bonazzi and Nicola Farronato and Stefan Zihlmann and Haotong Qin and Michele Magno},\n      journal={IEEE Sensors Journal},\n      year={2026}\n}",
   "bibtex_source_url": "https://github.com/pbonazzi/picosam3#readme",

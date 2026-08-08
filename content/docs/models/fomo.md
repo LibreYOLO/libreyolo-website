@@ -33,9 +33,14 @@ snippets:
         model = LibreYOLO("./LibreFOMOs-point.pt")
         model.train(
             data="my-dataset.yaml",
-            allow_experimental=True,
             epochs=40, batch=32, lr0=3e-4,
         )
+    - label: CLI
+      language: bash
+      code: |
+        # imgsz must be passed: the CLI defaults it to 640, and the s
+        # checkpoint accepts only its native 96.
+        libreyolo train model=./LibreFOMOs-point.pt data=my-dataset.yaml imgsz=96 epochs=40 batch=32 lr0=3e-4
   val:
     - label: Python
       language: python
@@ -116,21 +121,22 @@ currently published.
 
 <code-tabs name="train" />
 
-Training raises `NotImplementedError` unless `allow_experimental=True` is
-passed to `train()`. `imgsz` is not a free choice: it defaults to the loaded
-checkpoint's native resolution, and passing a different value raises
-`ValueError` naming the size it expects.
+`imgsz` is not a free choice: it defaults to the loaded checkpoint's native
+resolution, and passing a different value raises `ValueError` naming the size
+it expects. Those sizes are 96 for `s`, 192 for `m` and 224 for `l`. The CLI
+defaults `imgsz` to 640, so a `libreyolo train` command has to set it
+explicitly to match the checkpoint.
 
-Left alone otherwise, the trainer runs 40 epochs with Adam at `lr0=3e-4`, no
-weight decay, and a foreground class weighted 100x over background in the
-per-cell cross-entropy loss, since almost every grid cell is background in a
-typical scene. EMA and mixed precision are both off by default, and none of
-the geometric or color augmentations used elsewhere in LibreYOLO are applied:
-mosaic, mixup, HSV jitter, flip, rotation, translation and shear are all
-zero.
+Left alone otherwise, the trainer runs 40 epochs at batch 32 with Adam at
+`lr0=3e-4`, no weight decay, and a foreground class weighted 100x over
+background in the per-cell cross-entropy loss, since almost every grid cell is
+background in a typical scene. EMA and mixed precision are both off by
+default, and none of the geometric or color augmentations used elsewhere in
+LibreYOLO are applied: mosaic, mixup, HSV jitter, flip, rotation, translation
+and shear are all zero.
 
-The CLI has no `allow_experimental` flag, so `libreyolo train` cannot start a
-FOMO run; use the Python API shown above.
+This is the path the published LibreFOMO checkpoints were trained with, from
+scratch on COCO.
 
 See [training](/docs/train) for datasets and loggers.
 
@@ -178,3 +184,9 @@ code and these weights are MIT, LibreYOLO's own. The name FOMO and the
 technique it describes remain Edge Impulse's.
 
 </provenance-box>
+
+## Citation
+
+Edge Impulse announced FOMO in a blog post rather than a paper, and publishes
+no BibTeX block for it. Cite the announcement linked in the Upstream row
+above.

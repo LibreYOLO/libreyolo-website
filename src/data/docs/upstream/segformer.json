@@ -5,6 +5,7 @@
   "paper_url": "https://arxiv.org/abs/2105.15203",
   "code_url": "https://github.com/NVlabs/SegFormer",
   "license": "NVIDIA Source Code License (non-commercial, research or evaluation only)",
+  "code_license": "Apache-2.0",
   "license_interpretation": "The pretrained ADE20K checkpoints LibreYOLO hosts for this family are converted from NVIDIA's official SegFormer release under the NVIDIA Source Code License. That license permits redistributing the weights and derivative works, provided the license text and attribution notices travel with them, but it limits USE to non-commercial research or evaluation, a restriction its Section 3.2 carries forward into every derivative and that cannot be relicensed away: these weights are NOT covered by LibreYOLO's normal permissive terms, and that limitation binds you, not just LibreYOLO. LibreYOLO's own SegFormer implementation is a separate Apache-2.0 port of Hugging Face Transformers' code, unrelated to NVIDIA's repository, so a model you train from scratch with LibreSegformer(...).train(...) carries none of this restriction.",
   "bibtex": "@inproceedings{xie2021segformer,\n  title={SegFormer: Simple and Efficient Design for Semantic Segmentation with Transformers},\n  author={Xie, Enze and Wang, Wenhai and Yu, Zhiding and Anandkumar, Anima and Alvarez, Jose M and Luo, Ping},\n  booktitle={Neural Information Processing Systems (NeurIPS)},\n  year={2021}\n}",
   "bibtex_source_url": "https://github.com/NVlabs/SegFormer#citation",

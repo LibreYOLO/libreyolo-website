@@ -129,4 +129,5 @@ Every published weight file for this family.
 
 ## Citation
 
-<citation-block />
+The authors publish no BibTeX block for this work. Cite the paper linked in
+the Upstream row above.

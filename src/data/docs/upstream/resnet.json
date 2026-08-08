@@ -5,6 +5,7 @@
   "paper_url": "https://arxiv.org/abs/1512.03385",
   "code_url": "https://github.com/huggingface/pytorch-image-models",
   "license": "Apache-2.0",
+  "code_license": "Apache-2.0",
   "license_interpretation": "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. It places no obligation on your own application code, and weights you train yourself on your own data are yours. The architecture is the original Microsoft Research Asia design; the pretrained weights LibreYOLO ships are timm's resnet{18,34,50,101}.a1_in1k reproduction (the \"ResNet Strikes Back\" A1 recipe), trained by Ross Wightman and the timm contributors on ImageNet-1k and licensed Apache-2.0 there. LibreYOLO's module and attribute names mirror timm so the state dict loads unchanged and inference matches bit-identically.",
   "bibtex": "@article{He2015,\n\tauthor = {Kaiming He and Xiangyu Zhang and Shaoqing Ren and Jian Sun},\n\ttitle = {Deep Residual Learning for Image Recognition},\n\tjournal = {arXiv preprint arXiv:1512.03385},\n\tyear = {2015}\n}",
   "bibtex_source_url": "https://github.com/KaimingHe/deep-residual-networks#citation",

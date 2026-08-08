@@ -46,9 +46,14 @@ snippets:
         model = LibreYOLO("LibrePICODETs.pt")
         model.train(
             data="my-dataset.yaml",
-            allow_experimental=True,
             epochs=300, batch=16, lr0=0.01,
         )
+    - label: CLI
+      language: bash
+      code: |
+        # imgsz is worth setting: the CLI defaults it to 640, while the s
+        # checkpoint is native at 320.
+        libreyolo train model=LibrePICODETs.pt data=my-dataset.yaml imgsz=320 epochs=300 batch=16 lr0=0.01
   export:
     - label: Python
       language: python
@@ -109,28 +114,26 @@ also more expensive to run per image, on top of carrying more parameters.
 
 <code-tabs name="train" />
 
-Training requires `allow_experimental=True`; leave it off and `train()`
-raises, spelling out what has been checked and what has not. What is
-validated: inference, plus ONNX, TorchScript, NCNN and OpenVINO export. What
-is not: small-dataset fine-tune convergence, multi-GPU training, and any
-augmentation beyond horizontal flip. The loss and assigner (VFL, DFL, GIoU,
-SimOTA) match the upstream recipe and the trainer runs end to end, but the
-smallest size's tiny backbone at its correspondingly small input resolution
-is a poor fit for a handful of small, few-class fine-tunes; it is a better
-fit at full-COCO scale.
+The loss components and the assigner follow the upstream recipe: VFL, DFL,
+GIoU and SimOTA, with classification-quality weighting and dynamic-IoU VFL
+targets. Inference is bit-equivalent to upstream on the same checkpoint.
+
+What has not been checked, per `train()`'s own docstring: full-dataset
+convergence, multi-GPU behavior, and any augmentation beyond horizontal flip.
+The `s` checkpoint at its native 320 has also not reliably cleared LibreYOLO's
+accuracy floor on the 30-image, two-class fixture the library tests small
+fine-tunes with. That size is a better fit at full-COCO scale.
 
 `train()` also accepts a `pretrained` argument, but the value is never read
 inside the method: training always continues from whatever weights the model
 was constructed with, so `pretrained=False` does not reinitialize the
-network. Leave `imgsz` unset and it takes the loaded checkpoint's native
-resolution.
+network. Leave `imgsz` unset in Python and it takes the loaded checkpoint's
+native resolution, 320 for `s`, 416 for `m` and 640 for `l`. The CLI always
+sends an `imgsz`, defaulting to 640, so set it there to match the checkpoint.
 
 Left alone otherwise, the trainer runs 300 epochs with SGD at `lr0=0.01`,
-momentum 0.9 and a 1-epoch warmup; horizontal flip is the only augmentation
-applied.
-
-The CLI has no `allow_experimental` flag, so `libreyolo train` cannot start a
-PicoDet run; use the Python API shown above.
+momentum 0.9, weight decay 4e-5 and a 1-epoch warmup on a cosine schedule.
+Horizontal flip is the only augmentation applied.
 
 See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
 

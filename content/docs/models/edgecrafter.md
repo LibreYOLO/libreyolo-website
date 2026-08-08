@@ -52,12 +52,15 @@ snippets:
         model = LibreYOLO("LibreECs.pt")
         model.train(
             data="my-dataset.yaml",
-            allow_experimental=True,
             epochs=50,
             imgsz=640,
             batch=8,
             lr0=5e-4,
         )
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo train model=LibreECs.pt data=my-dataset.yaml epochs=50 imgsz=640 batch=8 lr0=5e-4
     - label: Pose
       language: python
       code: |
@@ -68,7 +71,6 @@ snippets:
         model = LibreYOLO("LibreECs-pose.pt")
         model.train(
             data="my-pose-dataset.yaml",
-            allow_experimental=True,
             epochs=50,
             imgsz=640,
         )
@@ -81,7 +83,6 @@ snippets:
         model = LibreYOLO("LibreECs-seg.pt")
         model.train(
             data="my-dataset.yaml",
-            allow_experimental=True,
             epochs=50,
             imgsz=640,
         )
@@ -93,7 +94,6 @@ snippets:
         model = LibreYOLO("LibreECs.pt")
         model.train(
             data="my-dataset.yaml",
-            allow_experimental=True,
             epochs=50,
             lora=True,
         )
@@ -213,21 +213,19 @@ take the same arguments whichever one you load.
 
 ## Train
 
-All three tasks train through `train()`, and none of them has been checked by a
-full fine-tune, so the call stops unless you pass `allow_experimental=True`.
-`libreyolo train` has no matching argument, so training this family runs from
-Python rather than the CLI.
+All three tasks train through `train()`, which reads the task from the loaded
+checkpoint and picks the matching trainer.
 
 <code-tabs name="train" />
 
 What has been checked for detection and segmentation: inference parity against
-upstream to 1e-5 on all four sizes, an ONNX export round trip, COCO val2017 mAP,
-and that the loss and a single training step run on synthetic input. What has
-not: convergence of a full fine-tune, multi-GPU training, the `stop_aug_epoch`
-best-reload step, and the Objects365 to COCO class remap. The pose path follows
-DETRPose's published recipe, a Hungarian matcher over class, keypoint L1 and OKS
-costs with contrastive keypoint denoising, and its convergence has not been
-checked end to end either.
+upstream at 1e-5, layer by layer and per size, and that the loss and a single
+training step run on synthetic input. What has not, per `train()`'s own
+docstring: convergence of a full fine-tune, multi-GPU training, the
+stop-augmentation best-reload step, and the Objects365 to COCO class remap. The
+pose path follows DETRPose's published recipe, a Hungarian matcher over class,
+keypoint L1 and OKS costs with contrastive keypoint denoising, and its
+convergence has not been checked end to end either.
 
 Left alone, the trainer runs 74 epochs at `lr0=5e-4` with mixed precision on,
 following upstream's recipe: AdamW, a flat cosine schedule, EMA at 0.9999 and
@@ -237,9 +235,9 @@ model is constructed; a different value raises before the run starts. Pose also
 requires a single-class dataset whose `data.yaml` declares `kpt_shape`, with a
 keypoint count matching the head.
 
-`lora=True` applies to detection. Pose and segmentation reject it and point at
-`freeze='backbone'` instead. On Apple silicon the trainer keeps the run on the
-GPU and sends one operation to CPU, the grid-sample backward inside deformable
+`lora=True` applies to detection only; pose and segmentation raise a
+`ValueError` on it. On Apple silicon the trainer keeps the run on the GPU and
+sends one operation to CPU, the grid-sample backward inside deformable
 attention, which PyTorch does not implement in Metal.
 
 See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.

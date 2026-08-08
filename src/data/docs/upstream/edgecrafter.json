@@ -5,6 +5,7 @@
     "paper_url":  "https://arxiv.org/abs/2603.18739",
     "code_url":  "https://github.com/Intellindust-AI-Lab/EdgeCrafter",
     "license":  "Apache-2.0",
+    "code_license":  "Apache-2.0",
     "license_interpretation":  "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. One license covers all three upstream models, so the detection, pose and segmentation weights carry identical terms, and weights you train yourself on your own data are yours.",
     "bibtex":  "@article{liu2026edgecrafter,\n  title={EdgeCrafter: Compact ViTs for Edge Dense Prediction via Task-Specialized Distillation},\n  author={Liu, Longfei and Hou, Yongjie and Li, Yang and Wang, Qirui and Sha, Youyang and Yu, Yongjun and Wang, Yinzhi and Ru, Peizhe and Yu, Xuanlong and Shen, Xi},\n  journal={arXiv},\n  year={2026}\n}",
     "bibtex_source_url":  "https://github.com/Intellindust-AI-Lab/EdgeCrafter#-citation",

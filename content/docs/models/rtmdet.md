@@ -67,9 +67,12 @@ snippets:
         model = LibreYOLO("LibreRTMDets.pt")
         model.train(
             data="my-dataset.yaml",
-            allow_experimental=True,
             epochs=300, imgsz=640, batch=16, lr0=0.004,
         )
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo train model=LibreRTMDets.pt data=my-dataset.yaml imgsz=640 epochs=300 batch=16 lr0=0.004
   export:
     - label: Python
       language: python
@@ -128,16 +131,20 @@ checkpoint file size in the table below.
 
 <code-tabs name="train" />
 
-Detection training requires `allow_experimental=True`; leave it off and
-`train()` raises, spelling out what has been checked and what has not. What is
-validated: forward and ONNX export are bit-equivalent to upstream mmdetection,
-and postprocessing matches mmdet's output within 0.001 mAP on val2017 subsets.
-What is not: small-dataset fine-tune convergence, from-scratch paper parity,
-multi-GPU behavior, cached Mosaic/MixUp throughput, and the strict upstream
-two-stage pipeline switch. RTMDet-Ins (`task="segment"`, a `-seg` checkpoint)
-has no training path at all yet: `train()` raises `NotImplementedError`
-regardless of `allow_experimental`, before that flag is even checked.
-Instance segmentation currently supports inference and validation only.
+Detection trains through `train()`. The QualityFocalLoss, GIoU and
+DynamicSoftLabelAssigner components are ported from upstream mmdetection, and
+the forward pass and ONNX export are bit-equivalent to it, with postprocessing
+matching mmdet's output within 0.001 mAP on val2017 subsets.
+
+What has not been checked, per `train()`'s own docstring: small-dataset
+fine-tune convergence, from-scratch paper parity, multi-GPU behavior, cached
+Mosaic and MixUp throughput, the strict upstream two-stage pipeline switch,
+and the paramwise weight-decay overrides that zero decay on norm and bias
+parameters.
+
+RTMDet-Ins has no training path. Calling `train()` on a `-seg` checkpoint, or
+with `task="segment"`, raises `NotImplementedError`; instance segmentation
+supports inference and validation only.
 
 `train()` also accepts a `pretrained` argument, but the value is never read
 inside the method: training always continues from whatever weights the model
@@ -145,11 +152,8 @@ was constructed with, so `pretrained=False` does not reinitialize the
 network.
 
 Left alone otherwise, the trainer runs 300 epochs with AdamW at `lr0=0.004`
-and `weight_decay=0.05`, a 1-epoch warmup, and Mosaic and MixUp switched off
-for the final 20 epochs.
-
-The CLI has no `allow_experimental` flag, so `libreyolo train` cannot start an
-RTMDet run; use the Python API shown above.
+and `weight_decay=0.05`, a 1-epoch warmup on a cosine schedule, and Mosaic and
+MixUp switched off for the final 20 epochs.
 
 See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
 

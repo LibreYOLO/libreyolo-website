@@ -5,6 +5,7 @@
   "paper_url": "https://arxiv.org/abs/1409.1556",
   "code_url": "https://github.com/pytorch/vision",
   "license": "BSD-3-Clause",
+  "code_license": "BSD-3-Clause",
   "license_interpretation": "BSD-3-Clause is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep the copyright notice, the list of conditions and the disclaimer with any copy you redistribute, and it forbids using the contributors' names to endorse a derived product without permission; it carries no explicit patent grant. LibreYOLO's code and the four shipped checkpoints (16, 19, 16-BN, 19-BN) are both derived from torchvision, not from the Oxford group's original 2014 Caffe release, which is a separate model under Creative Commons Attribution and is not what LibreYOLO redistributes. Torchvision itself notes that BSD-3-Clause redistribution of a pretrained checkpoint is an implied basis rather than a grant written for that specific checkpoint, and that pretrained-model terms can depend on the data a model was trained on; LibreYOLO repeats that caveat on each hosted weights repository.",
   "bibtex": null,
   "bibtex_source_url": null,

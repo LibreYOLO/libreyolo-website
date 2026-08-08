@@ -5,8 +5,9 @@
     "paper_url": "https://arxiv.org/abs/1703.06870",
     "code_url": "https://github.com/pytorch/vision",
     "license": "BSD-3-Clause",
+    "code_license": "BSD-3-Clause",
     "license_interpretation": "BSD-3-Clause is a permissive license, so this code can be used in commercial and closed-source products with no obligation on your own application code. It asks only that you keep the copyright notice and disclaimer with any copy you redistribute, and it carries no patent grant. The published checkpoint used for parity testing is not distributed in the LibreYOLO source tree: torchvision's own documentation notes that a pretrained model's terms may depend on its training data, so the Hugging Face mirror ships the BSD text on that implied basis and repeats the caveat rather than issuing an explicit checkpoint-specific grant.",
     "bibtex": null,
     "bibtex_source_url": null,
-    "bibtex_verified": null
+    "bibtex_verified": "2026-08-08: no authors\u0027 BibTeX block exists for this paper. facebookresearch/Detectron\u0027s Citation section carries only @misc{Detectron2018} for the Detectron software, and facebookresearch/detectron2 carries only @misc{wu2019detectron2} for detectron2; neither cites the Mask R-CNN paper. pytorch/vision, the code and weights source, does not cite the papers behind the models it reimplements. Per the citation procedure, bibtex is left null rather than assembled by hand."
 }

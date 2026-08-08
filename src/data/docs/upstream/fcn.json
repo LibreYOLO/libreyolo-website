@@ -5,6 +5,7 @@
   "paper_url": "https://arxiv.org/abs/1411.4038",
   "code_url": "https://github.com/pytorch/vision",
   "license": "BSD-3-Clause",
+  "code_license": "BSD-3-Clause",
   "license_interpretation": "BSD-3-Clause is a permissive license, so this code and these weights can be used in commercial and closed-source products. It asks you to keep the copyright notice, license text and a non-endorsement clause with any copy you redistribute. LibreYOLO's inference graph is torchvision's dilated-ResNet FCN, not the original VGG-based FCN-8s skip-fusion network from the paper. The two published checkpoints are torchvision's official COCO-trained weights; their separate LibreYOLO Hugging Face mirrors carry BSD-3-Clause on an implied basis disclosed by torchvision rather than an explicit checkpoint-specific grant, and torchvision's own documentation notes that pretrained-model terms can depend on the training data, leaving that determination to the user.",
   "bibtex": null,
   "bibtex_source_url": null,
