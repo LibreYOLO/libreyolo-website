@@ -1,0 +1,12 @@
+{
+    "name":  "LW-DETR",
+    "org":  "Baidu",
+    "paper_title":  "LW-DETR: A Transformer Replacement to YOLO for Real-Time Detection",
+    "paper_url":  "https://arxiv.org/abs/2406.03459",
+    "code_url":  "https://github.com/Atten4Vis/LW-DETR",
+    "license":  "Apache-2.0",
+    "license_interpretation":  "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. It places no obligation on your own application code, and weights you train yourself on your own data are yours. The published checkpoints are converted from the upstream Apache-2.0 Hugging Face release (xbsu/LW-DETR) and rehosted under the same license.",
+    "bibtex":  "@article{chen2024lw,\n    title={LW-DETR: A Transformer Replacement to YOLO for Real-Time Detection},\n    author={Chen, Qiang and Su, Xiangbo and Zhang, Xinyu and Wang, Jian and Chen, Jiahui and Shen, Yunpeng and Han, Chuchu and Chen, Ziliang and Xu, Weixiang and Li, Fanrong and others},\n    journal={arXiv preprint arXiv:2406.03459},\n    year={2024}\n}",
+    "bibtex_source_url":  "https://github.com/Atten4Vis/LW-DETR#10-citation",
+    "bibtex_verified":  "2026-08-08, copied verbatim from the '10. Citation' section of the upstream README on branch main. Cross-checked against the arXiv API for 2406.03459: the fifteen listed arXiv authors open with the same ten names in the same order as the README entry before it truncates to 'and others', identical title, one version dated 2024-06-05, no journal reference, so the @article/arXiv-preprint form the authors publish still matches the record. Do not hand-edit; a wrong citation misattributes someone's work."
+}

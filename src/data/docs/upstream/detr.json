@@ -1,0 +1,12 @@
+{
+    "name":  "DETR",
+    "org":  "Meta AI (FAIR)",
+    "paper_title":  "End-to-End Object Detection with Transformers",
+    "paper_url":  "https://arxiv.org/abs/2005.12872",
+    "code_url":  "https://github.com/facebookresearch/detr",
+    "license":  "Apache-2.0",
+    "license_interpretation":  "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. It places no obligation on your own application code, and weights you train yourself on your own data are yours. The four checkpoints are the official releases linked from the Apache-2.0 repository's model zoo, and the official Hugging Face DETR card independently declares the same license.",
+    "bibtex":  null,
+    "bibtex_source_url":  null,
+    "bibtex_verified":  "2026-08-08: no Citation section or CITATION.cff exists in facebookresearch/detr (checked the README on branch main end to end, and CITATION.cff returns 404). The README's License section credits the paper by title and author names only, with no BibTeX. bibtex is left null rather than assembled by hand; do not invent one."
+}
