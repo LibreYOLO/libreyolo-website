@@ -1,0 +1,12 @@
+{
+  "name": "YOLOv3",
+  "org": "Joseph Redmon",
+  "paper_title": "YOLOv3: An Incremental Improvement",
+  "paper_url": "https://arxiv.org/abs/1804.02767",
+  "code_url": "https://github.com/pjreddie/darknet",
+  "license": "Public domain (Darknet \"YOLO LICENSE\")",
+  "license_interpretation": "Darknet's bundled NOTICE quotes its own license in full: \"Darknet is public domain. Do whatever you want with it.\" That covers both the architecture and the pretrained weights LibreYOLO converts from it, with no attribution requirement and no restriction on commercial use. LibreYOLO's own code around this architecture is MIT.",
+  "bibtex": null,
+  "bibtex_source_url": null,
+  "bibtex_verified": "2026-08-08: checked the Citation section of the pjreddie/darknet README on branch master and found no CITATION.cff in the repository. The Citation section carries entries only for YOLOv4, Scaled-YOLOv4 and YOLOv7; no block exists for the YOLOv3 tech report to copy verbatim, so this field is left null rather than assembled from paper metadata by hand. The paper itself is arXiv 1804.02767 (Redmon, Farhadi), tech report, 2018."
+}
