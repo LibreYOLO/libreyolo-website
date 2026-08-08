@@ -84,14 +84,15 @@ on the machine, not merely less of it.
 | Entry point | `OnnxBackend` |
 | Interface | Python library |
 
-Anything outside that will import torch when you call it. Segmentation, pose,
-classification and depth are not on this path, and neither are families outside
-the flagship and core tiers.
+That is the verified scope, not a boundary the library enforces. Other tasks
+and other families are simply outside what was checked: some will pull torch
+when you call them, and a few may happen to work. Treat anything beyond the
+table as untested rather than as supported or as broken.
 
-Results are identical to the normal install, not merely close. Each G0 and G1
-detection family was exported to ONNX and run twice, once normally and once
-with torch blocked; boxes, scores and classes matched exactly. A parity test in
-the suite keeps that contract from drifting.
+Inside it, results are identical to the normal install, not merely close. Each
+G0 and G1 detection family was exported to ONNX and run twice, once normally
+and once with torch blocked; boxes, scores and classes matched exactly. A
+parity test in the suite keeps that contract from drifting.
 
 ## The five things that catch people
 
