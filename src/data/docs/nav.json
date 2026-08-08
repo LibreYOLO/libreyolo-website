@@ -45,6 +45,11 @@
           "slug": "/docs/faq",
           "label": "FAQ",
           "built": true
+        },
+        {
+          "label": "Troubleshooting",
+          "slug": "/docs/troubleshooting",
+          "built": true
         }
       ]
     },
