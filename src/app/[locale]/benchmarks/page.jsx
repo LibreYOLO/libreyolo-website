@@ -9,13 +9,12 @@ import ThemedEmbed from '@/components/ThemedEmbed'
 const VA = 'https://www.visionanalysis.org'
 const UTM = 'utm_source=libreyolo&utm_medium=referral&utm_campaign=benchmarks'
 
-// Two families lit up against the grey field, rather than every model at once.
-// The embed connects each highlighted family into a curve, so the size/accuracy
-// trade-off reads at a glance instead of as a cloud.
-const SCATTER_HIGHLIGHT = [
-  'dfine-n', 'dfine-s', 'dfine-m', 'dfine-l', 'dfine-x',
-  'yolov9t', 'yolov9s', 'yolov9m', 'yolov9c',
-].join(',')
+// One family lit up against the grey field, rather than every model at once.
+// The embed draws a curve through the highlighted points, so the size/accuracy
+// trade-off reads at a glance instead of as a cloud. Deliberately a single
+// family: two families interleave at the small-parameter end and their point
+// labels overlap.
+const SCATTER_HIGHLIGHT = ['dfine-n', 'dfine-s', 'dfine-m', 'dfine-l', 'dfine-x'].join(',')
 
 const HEADLINE_STATS = [
   { icon: Activity, value: '100', label: 'real-world datasets in RF100-VL' },
@@ -119,7 +118,7 @@ export default function BenchmarksPage() {
 
         <div className="mt-8 overflow-hidden rounded-2xl border border-surface-200 dark:border-surface-800">
           <ThemedEmbed
-            src={`${VA}/embed/scatter?highlight=${SCATTER_HIGHLIGHT}&title=Accuracy%20vs%20parameters&subtitle=D-FINE%20and%20YOLOv9%20against%20every%20other%20detector%20on%20COCO%20val2017`}
+            src={`${VA}/embed/scatter?highlight=${SCATTER_HIGHLIGHT}&title=Accuracy%20vs%20parameters&subtitle=D-FINE%20against%20every%20other%20detector%20on%20COCO%20val2017`}
             title="Accuracy vs parameters, COCO val2017"
             className="w-full block"
             style={{ border: 0, overflow: 'hidden', aspectRatio: '640 / 400' }}
@@ -159,7 +158,11 @@ export default function BenchmarksPage() {
               src={`${VA}/embed/leaderboard?hw=jetson_orin&rt=tensorrt_fp16&limit=10`}
               title="Latency leaderboard across hardware"
               className="w-full block"
-              style={{ border: 0, overflow: 'hidden', aspectRatio: '640 / 460' }}
+              /* A table does not get taller as it gets wider, so this one is
+                 sized in pixels. An aspect ratio leaves a huge empty band
+                 under the last row on a wide screen. */
+              height={430}
+              style={{ border: 0, overflow: 'hidden', display: 'block' }}
             />
           </div>
         </div>
