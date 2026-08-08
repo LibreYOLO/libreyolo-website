@@ -11,12 +11,12 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 
-import { CodeBlock } from '@/components/DocsKit'
+import Code from '@/components/docs/Code'
 import { slugifyHeading } from '@/lib/docs'
 import CodeTabs from '@/components/docs/CodeTabs'
 import {
   SectionTitle, BenchmarkTable, VaEmbed, CheckpointTable, ExportMatrix,
-  TaskSupport, Provenance, LicenseAnswer, Pill,
+  TaskSupport, Provenance,
 } from '@/components/docs/ModelBlocks'
 
 function textOf(children) {
@@ -30,11 +30,11 @@ export default function DocMarkdown({ children, family, snippets = {} }) {
   const components = {
     h2: ({ children: kids }) => <SectionTitle id={slugifyHeading(textOf(kids))}>{kids}</SectionTitle>,
     h3: ({ children: kids }) => (
-      <h3 id={slugifyHeading(textOf(kids))} className="scroll-mt-28 mt-8 mb-3 text-base font-semibold text-surface-900 dark:text-white">
+      <h3 id={slugifyHeading(textOf(kids))} className="scroll-mt-24 mt-7 mb-2 text-[15px] font-semibold text-surface-900 dark:text-white">
         {kids}
       </h3>
     ),
-    p: (props) => <p className="mb-4 leading-relaxed text-surface-600 dark:text-surface-400" {...props} />,
+    p: (props) => <p className="mb-3.5 max-w-[68ch] text-[15px] leading-[1.65] text-surface-600 dark:text-surface-400" {...props} />,
     a: (props) => (
       <a
         className="font-medium text-libre-600 underline-offset-2 hover:underline dark:text-libre-400"
@@ -43,9 +43,9 @@ export default function DocMarkdown({ children, family, snippets = {} }) {
         {...props}
       />
     ),
-    ul: (props) => <ul className="mb-4 list-disc space-y-1.5 pl-5 text-surface-600 dark:text-surface-400" {...props} />,
-    ol: (props) => <ol className="mb-4 list-decimal space-y-1.5 pl-5 text-surface-600 dark:text-surface-400" {...props} />,
-    li: (props) => <li className="leading-relaxed" {...props} />,
+    ul: (props) => <ul className="mb-4 max-w-[68ch] list-disc space-y-1 pl-5 text-[15px] text-surface-600 dark:text-surface-400" {...props} />,
+    ol: (props) => <ol className="mb-4 max-w-[68ch] list-decimal space-y-1 pl-5 text-[15px] text-surface-600 dark:text-surface-400" {...props} />,
+    li: (props) => <li className="leading-[1.6]" {...props} />,
     strong: (props) => <strong className="font-semibold text-surface-800 dark:text-surface-200" {...props} />,
     hr: () => <hr className="my-10 border-surface-200 dark:border-white/[0.06]" />,
     blockquote: (props) => (
@@ -72,7 +72,7 @@ export default function DocMarkdown({ children, family, snippets = {} }) {
       const node = Array.isArray(kids) ? kids[0] : kids
       const className = node?.props?.className || ''
       const language = (/language-(\w+)/.exec(className) || [, 'text'])[1]
-      return <CodeBlock language={language}>{textOf(node?.props?.children).replace(/\n$/, '')}</CodeBlock>
+      return <Code language={language}>{textOf(node?.props?.children).replace(/\n$/, '')}</Code>
     },
 
     /* Generated blocks. The author writes the tag; the pipeline supplies data. */
@@ -83,15 +83,6 @@ export default function DocMarkdown({ children, family, snippets = {} }) {
     'export-matrix': () => <ExportMatrix family={family} />,
     'code-tabs': ({ name }) => <CodeTabs tabs={snippets[name] || []} />,
     'provenance-box': ({ children: kids }) => <Provenance family={family}>{kids}</Provenance>,
-    'license-answer': ({ q, warn, children: kids }) => (
-      <LicenseAnswer question={q} warn={warn !== undefined && warn !== 'false'}>{kids}</LicenseAnswer>
-    ),
-    'tier-note': ({ children: kids }) => (
-      <div className="my-5 flex items-start gap-3 rounded-xl border border-libre-500/25 bg-libre-500/[0.06] p-4">
-        <Pill tone="libre">Flagship</Pill>
-        <p className="text-sm leading-relaxed text-surface-600 dark:text-surface-400">{kids}</p>
-      </div>
-    ),
   }
 
   return (

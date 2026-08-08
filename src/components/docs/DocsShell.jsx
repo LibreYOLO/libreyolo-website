@@ -39,7 +39,7 @@ function NavGroup({ group, activePath, onNavigate }) {
               return (
                 <li key={item.slug}>
                   <span
-                    className="block px-2.5 py-1.5 rounded-md text-sm text-surface-400/80 dark:text-surface-600 cursor-default select-none"
+                    className="block py-1 pl-3 text-[13.5px] text-surface-400/80 dark:text-surface-600 cursor-default select-none"
                     title="Planned, not written yet"
                   >
                     {item.label}
@@ -53,10 +53,10 @@ function NavGroup({ group, activePath, onNavigate }) {
                   href={item.slug}
                   onClick={onNavigate}
                   aria-current={isActive ? 'page' : undefined}
-                  className={`block px-2.5 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  className={`-ml-px block border-l-2 py-1 pl-3 text-[13.5px] transition-colors ${
                     isActive
-                      ? 'bg-libre-500/10 text-libre-700 dark:text-libre-300'
-                      : 'text-surface-600 dark:text-surface-400 hover:text-surface-900 dark:hover:text-white hover:bg-surface-100 dark:hover:bg-white/[0.04]'
+                      ? 'border-surface-800 font-medium text-surface-900 dark:border-surface-300 dark:text-white'
+                      : 'border-transparent text-surface-600 hover:text-surface-900 dark:text-surface-400 dark:hover:text-white'
                   }`}
                 >
                   {item.label}

@@ -9,7 +9,7 @@
  */
 
 import { useState } from 'react'
-import { CodeBlock } from '@/components/DocsKit'
+import Code from '@/components/docs/Code'
 
 export default function CodeTabs({ tabs = [] }) {
   const [active, setActive] = useState(0)
@@ -17,29 +17,32 @@ export default function CodeTabs({ tabs = [] }) {
   const current = tabs[Math.min(active, tabs.length - 1)]
 
   return (
-    <div className="my-5">
-      <div className="flex items-center gap-1 rounded-lg border border-surface-200 bg-surface-50 p-1 dark:border-white/[0.08] dark:bg-white/[0.02]" role="tablist">
+    <div className="my-4">
+      {/* Tabs are underline-switched text, not a segmented control. */}
+      <div className="flex items-center gap-4 border-b border-surface-200 dark:border-white/[0.09]" role="tablist">
         {tabs.map((tab, index) => (
           <button
             key={tab.label}
             role="tab"
             aria-selected={index === active}
             onClick={() => setActive(index)}
-            className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+            className={`-mb-px border-b-2 pb-1.5 text-[13px] transition-colors ${
               index === active
-                ? 'bg-white text-surface-900 shadow-sm dark:bg-white/[0.08] dark:text-white'
-                : 'text-surface-500 hover:text-surface-900 dark:text-surface-400 dark:hover:text-white'
+                ? 'border-surface-800 font-medium text-surface-900 dark:border-surface-300 dark:text-white'
+                : 'border-transparent text-surface-500 hover:text-surface-800 dark:text-surface-500 dark:hover:text-surface-300'
             }`}
           >
             {tab.label}
           </button>
         ))}
       </div>
-      <CodeBlock language={current.language}>{current.code.replace(/\n$/, '')}</CodeBlock>
+      <Code language={current.language}>{current.code}</Code>
       {current.expect && (
-        <div className="-mt-2 rounded-b-xl border border-t-0 border-surface-200 bg-surface-50 px-4 py-3 dark:border-white/[0.08] dark:bg-white/[0.02]">
-          <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-500">Expected output</p>
-          <pre className="overflow-x-auto font-mono text-xs leading-relaxed text-surface-600 dark:text-surface-400">{current.expect.replace(/\n$/, '')}</pre>
+        <div className="-mt-2 mb-4">
+          <p className="mb-1 text-[12px] text-surface-500 dark:text-surface-500">Output</p>
+          <pre className="overflow-x-auto border-l-2 border-surface-300 py-0.5 pl-3 font-mono text-[12px] leading-[1.7] text-surface-600 dark:border-white/20 dark:text-surface-400">
+            {current.expect.replace(/\n$/, '')}
+          </pre>
         </div>
       )}
     </div>

@@ -226,7 +226,9 @@ function tokenizeYamlLine(line) {
   return tokens
 }
 
-function highlightLine(line, language) {
+// Exported so the v2 docs can reuse the tokenizer with its own, plainer
+// code-block chrome. Behaviour here is unchanged.
+export function highlightLine(line, language) {
   switch (language.toLowerCase()) {
     case 'py':
     case 'python':
