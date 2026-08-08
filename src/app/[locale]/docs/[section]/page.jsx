@@ -2,9 +2,19 @@ import { notFound } from 'next/navigation'
 import { setRequestLocale } from 'next-intl/server'
 import Link from 'next/link'
 
-import { DOCS_NAV, DOCS_VERSION, getTierMeta } from '@/lib/docs'
-import { buildPageMetadata, SITE_URL } from '@/i18n/metadata'
+import {
+  DOCS_NAV,
+  DOCS_VERSION,
+  getTierMeta,
+  getDoc,
+  getDocSlugs,
+  extractHeadings,
+} from '@/lib/docs'
+import { buildPageMetadata, localeUrl, SITE_URL } from '@/i18n/metadata'
+import { routing } from '@/i18n/routing'
 import DocsShell from '@/components/docs/DocsShell'
+import DocMarkdown from '@/components/docs/DocMarkdown'
+import { PageHeader } from '@/components/docs/ModelBlocks'
 
 /*
  * Section index: /docs/models, /docs/export, and the rest.
@@ -63,21 +73,47 @@ const SECTIONS = {
   },
 }
 
+/*
+ * The same single segment also serves the standalone pages that deliberately
+ * carry no group prefix, because their URLs are permanent and short:
+ * /docs/install, /docs/quickstart, /docs/licensing and the rest. Their markdown
+ * lives in `content/docs/start/`, and a slug is only treated as one of these
+ * when SECTIONS does not claim it first.
+ */
+const STANDALONE = 'start'
+
 export function generateStaticParams() {
-  return Object.keys(SECTIONS).map((section) => ({ section }))
+  return [
+    ...Object.keys(SECTIONS).map((section) => ({ section })),
+    ...getDocSlugs(STANDALONE).map((slug) => ({ section: slug })),
+  ]
 }
 
 export async function generateMetadata({ params }) {
   const { locale, section } = await params
   const meta = SECTIONS[section]
-  if (!meta) return {}
-  return buildPageMetadata({
-    title: `${meta.title} | LibreYOLO docs`,
-    description: meta.description,
-    path: `/docs/${section}`,
-    locale,
-    englishOnly: true,
-  })
+  if (meta) {
+    return buildPageMetadata({
+      title: `${meta.title} | LibreYOLO docs`,
+      description: meta.description,
+      path: `/docs/${section}`,
+      locale,
+      englishOnly: true,
+    })
+  }
+
+  const doc = getDoc(STANDALONE, section, locale)
+  if (!doc) return {}
+  return {
+    ...buildPageMetadata({
+      title: doc.seo_title || doc.title,
+      description: doc.description,
+      path: `/docs/${section}`,
+      locale,
+      englishOnly: !doc.translated,
+    }),
+    keywords: doc.keywords,
+  }
 }
 
 export default async function SectionIndex({ params }) {
@@ -85,7 +121,7 @@ export default async function SectionIndex({ params }) {
   setRequestLocale(locale)
 
   const meta = SECTIONS[section]
-  if (!meta) notFound()
+  if (!meta) return <StandalonePage locale={locale} slug={section} />
 
   const group = DOCS_NAV.groups.find((g) => g.id === meta.group)
   if (!group) notFound()
@@ -148,6 +184,79 @@ export default async function SectionIndex({ params }) {
             <p className="mt-4 text-[13px] text-surface-500 dark:text-surface-500">{group.more}.</p>
           )}
         </div>
+      </DocsShell>
+    </>
+  )
+}
+
+/*
+ * A prefix-free page such as /docs/install. Same shell, same header and the same
+ * markdown pipeline as a sectioned page; only the breadcrumb is shorter, because
+ * there is no group above it.
+ */
+async function StandalonePage({ locale, slug }) {
+  const doc = getDoc(STANDALONE, slug, locale)
+  if (!doc) notFound()
+
+  const path = `/docs/${slug}`
+  const url = localeUrl(path, doc.translated ? locale : routing.defaultLocale)
+  const headings = extractHeadings(doc.content)
+  const breadcrumbs = [{ label: 'Docs', href: '/docs' }, { label: doc.title }]
+
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'TechArticle',
+      headline: doc.seo_title || doc.title,
+      description: doc.description,
+      mainEntityOfPage: url,
+      inLanguage: doc.translated ? locale : routing.defaultLocale,
+      publisher: { '@type': 'Organization', name: 'LibreYOLO', url: SITE_URL },
+      about: doc.title,
+      proficiencyLevel: 'Beginner',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbs.map((crumb, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: crumb.label,
+        ...(crumb.href ? { item: `${SITE_URL}${crumb.href}` } : {}),
+      })),
+    },
+  ]
+
+  return (
+    <>
+      {jsonLd.map((block, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(block) }}
+        />
+      ))}
+
+      <DocsShell
+        nav={DOCS_NAV}
+        activePath={path}
+        version={DOCS_VERSION}
+        headings={headings}
+        breadcrumbs={breadcrumbs}
+      >
+        <article className="max-w-3xl">
+          <PageHeader doc={doc} />
+
+          <DocMarkdown snippets={doc.snippets || {}} bareTables>
+            {doc.content}
+          </DocMarkdown>
+
+          <footer className="mt-16 border-t border-surface-200 pt-6 text-sm text-surface-500 dark:border-white/[0.06] dark:text-surface-500">
+            <p>
+              {doc.verification || `Verified against LibreYOLO v${doc.last_verified}.`}
+            </p>
+          </footer>
+        </article>
       </DocsShell>
     </>
   )

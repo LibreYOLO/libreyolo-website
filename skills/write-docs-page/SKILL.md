@@ -104,6 +104,101 @@ Omit a section that has no content; never reorder.
 Do not add: an architecture section (we are not the paper; one sentence is fine
 where it changes what the reader types), an FAQ, or a related-models list.
 
+## Task page
+
+`content/docs/tasks/<task>.md`, rendered by `docs/tasks/[slug]/page.jsx`. The
+hub node: it answers "how do I do X in Python" and links out to every model
+that serves the task.
+
+| Section | Contents |
+|---|---|
+| Definition | What the task is and what it returns. No pitch, no history |
+| Models | The families that serve it, as prose plus links to their pages |
+| Predict | `<code-tabs name="predict" />` with the recommended default |
+| Dataset format | The layout this task's loaders expect, with a folder tree |
+| Train | `<code-tabs name="train" />` |
+| Validate | `<code-tabs name="val" />` and what each metric key means |
+| Export | `<code-tabs name="export" />`, linked to the format pages |
+
+Omit a section with no content; never reorder. A task with no trainable
+family says so in one sentence rather than dropping the Train section
+silently. The metric paragraphs name the literal `metrics/` keys the
+validator returns, because that is what the reader prints.
+
+**The generated blocks do not work here.** `benchmark-table`,
+`checkpoint-table`, `export-matrix`, `va-embed`, `provenance-box` and
+`citation-block` all read the page's registry family, and a task page has
+none. Only `code-tabs` renders. So the Models section is a linked list in
+prose, and per-model numbers stay on the model pages where the blocks work.
+Link, do not transcribe: a hand-typed accuracy column here is exactly the
+drift rule 1 exists to prevent.
+
+## Workflow page
+
+`content/docs/train/<page>.md` and `content/docs/predict/<page>.md`. One page
+answers one question, end to end and runnable.
+
+No fixed section list, because the questions differ. The rules that hold:
+the first paragraph is the answer, not a preamble; every page carries the
+runnable snippet for its own subject; and **no page explains a neighbouring
+concern**, it links it. The augmentation page does not explain the optimizer.
+Where behavior differs per family, say which families, or place a generated
+block; never write "some models".
+
+## Export format page
+
+`content/docs/export/<format>.md`.
+
+| Section | Contents |
+|---|---|
+| Install | The extra, and the one pip line |
+| Export | `<code-tabs name="export" />` and the arguments this format adds |
+| Run the artifact | Loading it back through `LibreYOLO()`, then the bare-runtime path |
+| Constraints | Fixed shapes, precision limits, unsupported ops, per-task gaps |
+
+Same block limitation as task pages: only `code-tabs` renders, because there
+is no family. Point at `/docs/reference/export-matrix` for coverage rather
+than typing a family list that goes stale in one release.
+
+"Run the artifact" leads with `LibreYOLO("model.onnx")`, because the library
+routes on file suffix and a page that reaches for the raw runtime first makes
+the product look weaker than it is. The bare-runtime version comes second, for
+readers who genuinely have no LibreYOLO installed, and it states that
+preprocessing and postprocessing become theirs.
+
+## CLI page
+
+`content/docs/cli/<command>.md`. Small by design: it exists so that
+"libreyolo <command> flags" is answered in one screen.
+
+| Section | Contents |
+|---|---|
+| Synopsis | One fenced `bash` block with the general form |
+| Arguments | A table: argument, default, meaning. Defaults read from the source |
+| Examples | Three, ordered simple to advanced, each runnable |
+| Notes | Exit behavior, `--json`, and a link to the workflow page |
+
+Every default in the argument table is read from the CLI definition, not
+recalled. A CLI argument that the family's `train()` ignores is worth a line,
+because the CLI accepts it silently.
+
+## Reference page
+
+`content/docs/reference/<page>.md`. Curated, never an autodumped API listing.
+Document the deliberate public surface: what a reader is meant to call, with
+the real signature and a short example. Schema pages mirror the library's own
+`docs/*_schema.md` at the release they were checked against.
+
+## Standalone page
+
+`content/docs/start/<slug>.md`, served prefix-free at `/docs/<slug>`:
+install, quickstart, concepts, weights, migrate, faq, licensing, citation,
+versions. These URLs are permanent, so the slug is chosen once and never
+changed.
+
+Same prose rules as everything else. `faq` is the one page allowed a
+question-heading structure, because that is its subject.
+
 ## Blocks
 
 Place the tag; the registry supplies the data.
