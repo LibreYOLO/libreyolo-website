@@ -1,0 +1,152 @@
+{
+  "_comment": "GENERATED FILE. Do not hand-edit. Produced by scripts/build-registry against a pinned libreyolo release plus the LibreYOLO Hugging Face org listing. Docs pages render this; prose never restates these facts inline. Pilot note: this file currently carries the rfdetr slice only, written from libreyolo dev @ 91b3518, docs/export_support.md, the HF org listing (265 repos), and vision-analysis generated/verified-results.v1.json.",
+  "libreyolo_version": "1.5.0",
+  "source": {
+    "library_commit": "91b3518",
+    "hf_org": "https://huggingface.co/LibreYOLO",
+    "benchmarks": "vision-analysis generated/verified-results.v1.json"
+  },
+  "tiers": {
+    "g0": { "label": "Flagship", "tone": "emerald", "blurb": "Features are designed and fully GPU-validated here first." },
+    "g1": { "label": "Core", "tone": "emerald", "blurb": "Core trainable detectors: features follow the flagships in the same release wave." },
+    "g2": { "label": "Supported", "tone": "libre", "blurb": "Supporting trainables: kept green in CI, features land opportunistically." },
+    "g3": { "label": "Inference only", "tone": "amber", "blurb": "Predict, validate and export only. Training features do not apply." },
+    "g4": { "label": "Museum", "tone": "amber", "blurb": "Frozen exhibit. Bug fixes only." },
+    "s": { "label": "Sibling tier", "tone": "libre", "blurb": "A separate product surface with its own factory and contract." }
+  },
+  "export_formats": [
+    { "key": "onnx", "label": "ONNX", "ext": ".onnx" },
+    { "key": "torchscript", "label": "TorchScript", "ext": ".torchscript" },
+    { "key": "executorch", "label": "ExecuTorch", "ext": ".pte" },
+    { "key": "tensorrt", "label": "TensorRT", "ext": ".engine" },
+    { "key": "openvino", "label": "OpenVINO", "ext": "_openvino" },
+    { "key": "paddle", "label": "Paddle", "ext": "_paddle" },
+    { "key": "mnn", "label": "MNN", "ext": ".mnn" },
+    { "key": "rknn", "label": "RKNN", "ext": ".rknn" },
+    { "key": "ncnn", "label": "ncnn", "ext": "_ncnn" },
+    { "key": "tflite", "label": "TFLite", "ext": ".tflite" },
+    { "key": "coreml", "label": "CoreML", "ext": ".mlpackage" },
+    { "key": "coreai", "label": "Core AI", "ext": ".aimodel" }
+  ],
+  "tasks": {
+    "detect": { "label": "Detection", "slug": "object-detection" },
+    "segment": { "label": "Instance segmentation", "slug": "instance-segmentation" },
+    "pose": { "label": "Pose", "slug": "pose-estimation" },
+    "obb": { "label": "Oriented boxes", "slug": "oriented-detection" }
+  },
+  "families": {
+    "rfdetr": {
+      "key": "rfdetr",
+      "display": "RF-DETR",
+      "prefix": "LibreRFDETR",
+      "tier": "g0",
+      "tasks": ["detect", "segment", "pose", "obb"],
+      "default_task": "detect",
+      "added_in": "1.0.0",
+      "task_added_in": { "detect": "1.0.0", "segment": "1.2.0", "pose": "1.3.0", "obb": "1.3.0" },
+      "extra": "rfdetr",
+      "trainable": true,
+      "capabilities": {
+        "train": true,
+        "val": true,
+        "lora": true,
+        "cuda_graph": true,
+        "distill": false,
+        "track": true
+      },
+      "checkpoints": [
+        { "name": "LibreRFDETRn.pt", "task": "detect", "size": "n", "imgsz": 384, "params_m": 30.47, "data": "COCO", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRs.pt", "task": "detect", "size": "s", "imgsz": 512, "params_m": 32.11, "data": "COCO", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRm.pt", "task": "detect", "size": "m", "imgsz": 576, "params_m": 33.69, "data": "COCO", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRl.pt", "task": "detect", "size": "l", "imgsz": 704, "params_m": 33.93, "data": "COCO", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRn-seg.pt", "task": "segment", "size": "n", "imgsz": 312, "params_m": 33.58, "data": "COCO", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRs-seg.pt", "task": "segment", "size": "s", "imgsz": 384, "params_m": null, "data": "COCO", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRm-seg.pt", "task": "segment", "size": "m", "imgsz": 432, "params_m": null, "data": "COCO", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRl-seg.pt", "task": "segment", "size": "l", "imgsz": 504, "params_m": null, "data": "COCO", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRx-seg.pt", "task": "segment", "size": "x", "imgsz": 504, "params_m": null, "data": "COCO", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRxx-seg.pt", "task": "segment", "size": "xx", "imgsz": 504, "params_m": null, "data": "COCO", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRn-pose.pt", "task": "pose", "size": "n", "imgsz": 384, "params_m": null, "data": "COCO keypoints", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRs-pose.pt", "task": "pose", "size": "s", "imgsz": 512, "params_m": null, "data": "COCO keypoints", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRm-pose.pt", "task": "pose", "size": "m", "imgsz": 576, "params_m": null, "data": "COCO keypoints", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRl-pose.pt", "task": "pose", "size": "l", "imgsz": 704, "params_m": null, "data": "COCO keypoints", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRx-pose.pt", "task": "pose", "size": "x", "imgsz": 704, "params_m": null, "data": "COCO keypoints", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRn-obb.pt", "task": "obb", "size": "n", "imgsz": 384, "params_m": null, "data": "DOTA", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRs-obb.pt", "task": "obb", "size": "s", "imgsz": 512, "params_m": null, "data": "DOTA", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRm-obb.pt", "task": "obb", "size": "m", "imgsz": 576, "params_m": null, "data": "DOTA", "license": "Apache-2.0" },
+        { "name": "LibreRFDETRl-obb.pt", "task": "obb", "size": "l", "imgsz": 704, "params_m": null, "data": "DOTA", "license": "Apache-2.0" }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "validated", "torchscript": "validated", "executorch": "validated",
+          "tensorrt": "validated", "openvino": "validated", "mnn": "validated",
+          "coreai": "validated", "coreml": "experimental",
+          "paddle": "blocked", "rknn": "blocked", "ncnn": "blocked", "tflite": "blocked"
+        },
+        "segment": {
+          "onnx": "validated", "torchscript": "validated", "executorch": "validated",
+          "tensorrt": "experimental", "openvino": "experimental",
+          "paddle": "blocked", "mnn": "blocked", "rknn": "blocked", "ncnn": "blocked",
+          "tflite": "blocked", "coreml": "blocked", "coreai": "blocked"
+        },
+        "pose": {
+          "onnx": "validated", "torchscript": "validated", "executorch": "validated",
+          "tensorrt": "experimental", "openvino": "experimental",
+          "paddle": "blocked", "mnn": "blocked", "rknn": "blocked", "ncnn": "blocked",
+          "tflite": "blocked", "coreml": "blocked", "coreai": "blocked"
+        },
+        "obb": {
+          "onnx": "validated", "torchscript": "validated", "executorch": "validated",
+          "tensorrt": "experimental", "openvino": "experimental",
+          "paddle": "blocked", "mnn": "blocked", "rknn": "blocked", "ncnn": "blocked",
+          "tflite": "blocked", "coreml": "blocked", "coreai": "blocked"
+        }
+      },
+      "export_notes": {
+        "ncnn": "The DETR family is blocked on ncnn framework-wide.",
+        "coreml": "Converts, but no numeric parity guarantee yet."
+      },
+      "benchmarks": {
+        "detect": {
+          "metric": "mAP 50-95",
+          "dataset": "COCO val2017, 500-image subset",
+          "hardware": "RTX 5070 Ti",
+          "source_url": "https://www.visionanalysis.org/",
+          "rows": [
+            { "size": "n", "imgsz": 384, "params_m": 30.47, "map": 51.4, "torch_ms": 24.19, "trt_ms": 10.08, "trt_fps": 99.3 },
+            { "size": "s", "imgsz": 512, "params_m": 32.11, "map": 55.1, "torch_ms": 27.56, "trt_ms": 14.01, "trt_fps": 71.4 },
+            { "size": "m", "imgsz": 576, "params_m": 33.69, "map": 57.3, "torch_ms": 31.76, "trt_ms": 15.86, "trt_fps": 63.1 },
+            { "size": "l", "imgsz": 704, "params_m": 33.93, "map": 58.6, "torch_ms": 38.41, "trt_ms": 21.32, "trt_fps": 46.9 }
+          ]
+        },
+        "segment": {
+          "metric": "mask mAP 50-95",
+          "dataset": "COCO val2017, full 5000 images",
+          "hardware": "RTX 5070 Ti",
+          "source_url": "https://www.visionanalysis.org/segmentation",
+          "rows": [
+            { "size": "n", "imgsz": 312, "params_m": 33.58, "map": 40.4, "box_map": 49.3, "torch_ms": 26.22 }
+          ]
+        }
+      },
+      "va_embed": {
+        "scatter": "https://www.visionanalysis.org/embed/scatter?highlight=rfdetr-n,rfdetr-s,rfdetr-m,rfdetr-l&hw=nvidia_geforce_rtx_5070_ti&rt=tensorrt&title=RF-DETR%20on%20COCO&subtitle=Accuracy%20vs%20latency,%20RTX%205070%20Ti"
+      },
+      "upstream": {
+        "name": "RF-DETR",
+        "org": "Roboflow",
+        "paper_title": "RF-DETR: Neural Architecture Search for Real-Time Detection Transformers",
+        "paper_url": "https://arxiv.org/abs/2511.09554",
+        "code_url": "https://github.com/roboflow/rf-detr",
+        "license": "Apache-2.0",
+        "bibtex": "@article{rfdetr2025,\n  title   = {RF-DETR: Neural Architecture Search for Real-Time Detection Transformers},\n  author  = {Robinson, Isaac and Robicheaux, Peter and Popov, Matvei},\n  journal = {arXiv preprint arXiv:2511.09554},\n  year    = {2025}\n}"
+      }
+    }
+  },
+  "discrepancies": [
+    {
+      "family": "rfdetr",
+      "kind": "weights-without-registry-task",
+      "detail": "The HF org publishes LibreRFDETR{n,s,m,l}-cls, LibreRFDETRn-imagenette-cls and LibreRFDETRn-sem, but the library registry declares only detect/segment/pose/obb for this family. Not rendered on the page until the mismatch is resolved."
+    }
+  ]
+}
