@@ -1,7 +1,7 @@
 ---
 title: DeepLabv3
 families: [deeplabv3]
-seo_title: "DeepLabv3: predict and export ASPP segmentation under BSD-3-Clause"
+seo_title: "DeepLabv3: predict and export ASPP semantic segmentation"
 description: "Use DeepLabv3 in LibreYOLO for semantic segmentation. Install, predict, validate and export torchvision's ResNet and MobileNetV3 checkpoints."
 lead: "A semantic segmentation network that pools features at several dilation rates in parallel (atrous spatial pyramid pooling) before classifying each pixel. LibreYOLO ships it for semantic segmentation only."
 keywords: [DeepLabv3, atrous spatial pyramid pooling, ASPP, semantic segmentation, dense prediction]

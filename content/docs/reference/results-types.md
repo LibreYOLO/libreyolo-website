@@ -1,7 +1,7 @@
 ---
 title: Results types
 seo_title: "LibreYOLO Results object reference"
-description: "Every payload a LibreYOLO Results object can carry: boxes, masks, keypoints, probs, obb, gaze, points, semantic, panoptic, depth, normal, edge, restore, matte, ocr, embeddings, identities, meshes."
+description: "Every payload a LibreYOLO Results object can carry, one slot per task shape: boxes, masks, keypoints, probs, obb, depth, ocr, embeddings and ten more."
 lead: "Results is the single per-image return type of every LibreYOLO model. It carries eighteen optional payload slots, one per task shape, and populates only the ones the model produced."
 keywords:
   - libreyolo results object
