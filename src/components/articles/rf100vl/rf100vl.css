@@ -487,13 +487,15 @@
 .rfp-legend-chip:focus-visible {
   outline: none;
 }
+/* 10px counts, so they need the full 4.5:1. The old pair sat at 2.6:1 on
+   white and 3.6:1 on the dark chip. */
 .rfp-legend-count {
   font-family: var(--font-jetbrains), monospace;
   font-size: 10px;
-  color: #94a3b8;
+  color: #475569;
 }
 .dark .rfp-legend-count {
-  color: #64748b;
+  color: #94a3b8;
 }
 .rfp-legend-chip:hover .rfp-legend-count,
 .rfp-legend-chip.is-hot .rfp-legend-count {

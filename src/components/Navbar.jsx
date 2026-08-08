@@ -77,7 +77,9 @@ export default function Navbar() {
                 const isActive = pathname === link.path
                 const base = 'px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5'
                 const className = link.highlight
-                  ? `${base} text-white bg-gradient-to-r from-libre-500 to-libre-600 hover:from-libre-400 hover:to-libre-500 shadow-sm`
+                  // libre-500 leaves white text at 3.5:1; start at libre-600 and
+                  // darken on hover so the whole gradient clears AA.
+                  ? `${base} text-white bg-gradient-to-r from-libre-600 to-libre-700 hover:from-libre-700 hover:to-libre-800 shadow-sm`
                   : isActive
                     ? `${base} text-libre-600 dark:text-libre-400 bg-libre-500/10`
                     : `${base} text-surface-600 dark:text-surface-200 hover:text-surface-900 dark:hover:text-white hover:bg-surface-100 dark:hover:bg-white/5`
