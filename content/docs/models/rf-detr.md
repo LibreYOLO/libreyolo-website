@@ -168,8 +168,8 @@ the same format you trained on.
 
 <code-tabs name="val" />
 
-The third tab reproduces the first row of the benchmark table above against full
-COCO `val2017`.
+The last command reproduces the first row of the benchmark table above against
+full COCO `val2017`.
 
 ## Export
 
@@ -179,11 +179,7 @@ COCO `val2017`.
 
 ## Licensing
 
-<provenance-box>
-The LibreYOLO implementation is a port of the upstream Apache-2.0 release,
-adapted to the shared model, trainer and export contracts. Architecture and
-weight compatibility are preserved, so upstream checkpoints convert cleanly.
-</provenance-box>
+<provenance-box></provenance-box>
 
 ## Citation
 

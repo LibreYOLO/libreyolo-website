@@ -411,47 +411,6 @@ export function ExportMatrix({ family }) {
         A tick means the export runs and is supported. An empty cell means the
         exporter refuses that combination before it starts.
       </Note>
-
-      <ExportCaveats family={family} />
-    </div>
-  )
-}
-
-/*
- * Why any non-validated cell is not validated, in the library's own words.
- * Reference sites keep this kind of detail out of the cell and below the table
- * (MDN expands it per cell); a flat list is the same idea without the
- * interaction cost.
- */
-function ExportCaveats({ family }) {
-  const formats = getExportFormats()
-  const rows = []
-  for (const task of family.tasks) {
-    for (const f of formats) {
-      const state = family.export[task]?.[f.key] || 'blocked'
-      const reason = family.export_reasons?.[task]?.[f.key]
-      if (state !== 'validated' && reason) {
-        rows.push({ key: `${task}-${f.key}`, task: getTaskMeta(task).label, format: f.label, reason })
-      }
-    }
-  }
-  if (!rows.length) return null
-
-  return (
-    <div className="mt-5">
-      <p className="mb-1.5 text-[13px] font-medium text-surface-700 dark:text-surface-300">
-        Notes on specific combinations
-      </p>
-      <dl className="space-y-1 text-[13px]">
-        {rows.map((row) => (
-          <div key={row.key} className="flex flex-col gap-x-3 sm:flex-row">
-            <dt className="shrink-0 text-surface-500 dark:text-surface-500 sm:w-52">
-              {row.task} to {row.format}
-            </dt>
-            <dd className="max-w-[62ch] text-surface-500 dark:text-surface-500">{row.reason}</dd>
-          </div>
-        ))}
-      </dl>
     </div>
   )
 }
@@ -476,7 +435,6 @@ export function Citation({ family }) {
         <Note>
           Copied from the authors' citation block at{' '}
           <ExtLink href={u.bibtex_source_url}>{u.bibtex_source_url.replace('https://', '')}</ExtLink>.
-          Cite the original work, not this page.
         </Note>
       )}
     </div>

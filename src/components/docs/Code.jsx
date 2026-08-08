@@ -22,6 +22,8 @@ const LABELS = {
 export default function Code({ children, language = 'text', label }) {
   const [copied, setCopied] = useState(false)
   const code = String(children ?? '').replace(/\n$/, '')
+  // When a snippet carries its own name ("CLI", "Run the ONNX"), that name is
+  // more useful than the language, so it wins the header slot.
   const caption = label ?? LABELS[language.toLowerCase()] ?? language.toLowerCase()
 
   const copy = () => {

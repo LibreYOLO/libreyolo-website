@@ -157,6 +157,35 @@ using the page's `families`.
 slash on unknown elements, so without that step a `<checkpoint-table />` swallows
 the rest of the page. If you add a new tag, keep the hyphen in its name.
 
+## Everything is visible. Nothing is behind an interaction.
+
+No tabs. No accordions. No "show more". No disclosure triangles, hover-only
+tooltips carrying information you cannot get otherwise, or anything else that
+requires a click to read.
+
+The reason is who reads these pages. A large and growing share of the audience
+is an agent working on someone's behalf: it fetches the page or its `.md` twin,
+reads it once, and acts. It does not click a tab to discover that a CLI form of
+the command exists. Neither does a human scanning for the CLI form, because a
+tab strip only advertises the variant currently selected. The same content is
+also lost in the markdown twin, in `llms-full.txt`, in print, and in a
+screen-reader pass.
+
+So the Python example, the CLI example and the standalone-runtime example all
+render, stacked, each labelled, in one pass down the page. It costs vertical
+space, which is the cheapest thing a docs page has.
+
+Two consequences worth stating:
+
+- Prefer a server-rendered block to a client component. If a block needs state
+  to show its content, the content is hidden from something.
+- When you are tempted to collapse a long list to keep the page tidy, cut the
+  list instead, or move it to its own page. Tidiness that hides content is not
+  tidiness.
+
+The copy button is the one interaction that survives, because it adds a
+convenience and hides nothing.
+
 ## Visual rules
 
 These are not preferences. They come from how reference sites that people
@@ -173,8 +202,8 @@ first draft of this docs system was rejected for looking machine-generated.
   metadata rows, not chips.
 - Card wrappers. A table is a table; it does not live inside a bordered rounded
   container. Separation comes from hairline rules and whitespace.
-- Accordions for content the reader came to read. An FAQ is headings and
-  paragraphs.
+- Accordions, tabs, or any other widget that hides content behind a click. See
+  the section above; this is the rule that matters most for agent readers.
 - Icons as decoration next to headings.
 - Colored chips inside table cells.
 
