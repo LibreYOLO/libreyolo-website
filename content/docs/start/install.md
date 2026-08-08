@@ -167,6 +167,11 @@ succeeds everywhere and simply installs less where a wheel does not exist.
 `sensenova` skips `bitsandbytes` on macOS, where no wheel is published; the rest
 of the extra installs normally.
 
+If disk is the constraint, most of it is PyTorch, and most of PyTorch is the
+CUDA payload its default wheel bundles. A CPU-only wheel removes that without
+giving anything up. For ONNX detection on a machine that should carry no torch
+at all, see the [lightweight install](/docs/lightweight-install).
+
 ## GPU and CUDA
 
 Device selection happens when a model is constructed. The default,

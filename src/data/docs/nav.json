@@ -17,6 +17,11 @@
           "built": true
         },
         {
+          "label": "Lightweight install",
+          "slug": "/docs/lightweight-install",
+          "built": true
+        },
+        {
           "slug": "/docs/quickstart",
           "label": "Quickstart",
           "built": true
