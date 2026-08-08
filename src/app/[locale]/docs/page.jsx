@@ -144,7 +144,7 @@ export default async function DocsLanding({ params }) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <DocsShell nav={DOCS_NAV} activePath="/docs" version={DOCS_VERSION}>
+      <DocsShell nav={DOCS_NAV} activePath="/docs" version={DOCS_VERSION} showActions={false}>
         <div className="max-w-3xl">
           <h1 className="text-[2.4rem] font-semibold leading-tight tracking-tight text-surface-900 dark:text-white">
             LibreYOLO documentation

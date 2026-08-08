@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronRight, ChevronDown, Hash } from 'lucide-react'
+import PageActions from '@/components/docs/PageActions'
 
 function NavGroup({ group, activePath, onNavigate }) {
   const containsActive = group.items.some((item) => item.slug === activePath)
@@ -141,7 +142,7 @@ function OnThisPage({ headings }) {
   )
 }
 
-export default function DocsShell({ nav, activePath, version, headings = [], breadcrumbs = [], children }) {
+export default function DocsShell({ nav, activePath, version, headings = [], breadcrumbs = [], showActions = true, children }) {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const closeDrawer = () => setDrawerOpen(false)
 
@@ -157,8 +158,11 @@ export default function DocsShell({ nav, activePath, version, headings = [], bre
 
         {/* Content */}
         <div className="min-w-0 flex-1 px-6 lg:px-0 pt-28 pb-24">
-          {breadcrumbs.length > 0 && (
-            <nav aria-label="Breadcrumb" className="mb-6">
+          {/* Breadcrumb on the left, page actions on the right, sharing one row
+              so neither needs a band of its own. */}
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+            {breadcrumbs.length > 0 ? (
+            <nav aria-label="Breadcrumb">
               <ol className="flex flex-wrap items-center gap-1.5 text-[13px] text-surface-500 dark:text-surface-500">
                 {breadcrumbs.map((crumb, index) => (
                   <li key={crumb.href || crumb.label} className="flex items-center gap-1.5">
@@ -174,7 +178,9 @@ export default function DocsShell({ nav, activePath, version, headings = [], bre
                 ))}
               </ol>
             </nav>
-          )}
+            ) : <span />}
+            {showActions && <PageActions path={activePath} />}
+          </div>
           {children}
         </div>
 

@@ -144,7 +144,7 @@ export default async function SectionIndex({ params }) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <DocsShell nav={DOCS_NAV} activePath={`/docs/${section}`} version={DOCS_VERSION} breadcrumbs={breadcrumbs}>
+      <DocsShell nav={DOCS_NAV} activePath={`/docs/${section}`} version={DOCS_VERSION} breadcrumbs={breadcrumbs} showActions={false}>
         <div className="max-w-3xl">
           <h1 className="text-[2.1rem] font-semibold tracking-tight text-surface-900 dark:text-white">
             {meta.title}
