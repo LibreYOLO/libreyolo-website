@@ -34,7 +34,10 @@ export default function DocMarkdown({ children, family, snippets = {} }) {
         {kids}
       </h3>
     ),
-    p: (props) => <p className="mb-3.5 max-w-[68ch] text-[15px] leading-[1.65] text-surface-600 dark:text-surface-400" {...props} />,
+    // Paragraph spacing must stay clearly larger than intra-paragraph leading,
+    // or paragraph boundaries dissolve and the page reads as one grey field.
+    // This is the most-cited complaint about the 2022 MDN redesign (1.75 leading).
+    p: (props) => <p className="mb-5 max-w-[68ch] text-[15px] leading-[1.6] text-surface-600 dark:text-surface-400" {...props} />,
     a: (props) => (
       <a
         className="font-medium text-libre-600 underline-offset-2 hover:underline dark:text-libre-400"

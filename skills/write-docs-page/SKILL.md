@@ -116,7 +116,23 @@ this yet; eyeball it.
 
 ## Prose
 
-Load the `humanizer` skill and follow it. The rules that bite hardest on docs:
+**Read the `humanizer` skill in this repo and apply it.** It is the full
+treatment of AI writing patterns (promotional language, participle padding,
+hedging, rule of three, filler, em dashes) and it is what keeps docs prose from
+reading as generated. Run its checklist before calling a page done.
+
+Two places where docs override it:
+
+- **Spelling is US**, not British. The humanizer's checklist item 5 says to
+  default to British English; ignore that here. The site is US throughout
+  (`color`, `behavior`, `optimize`, `license`).
+- **No first person and no personality.** The humanizer's "Personality and soul"
+  section is written for articles and blog posts, where opinions and "I keep
+  coming back to..." belong. Reference pages are not that. Address the reader as
+  *you*, keep yourself out of it, and let the facts carry the page. The rest of
+  the humanizer applies unchanged.
+
+Docs-specific rules on top:
 
 - The lead is a definition, not a pitch. "A detection transformer that predicts
   a fixed set of objects instead of a dense grid", not "a powerful and flexible
@@ -124,9 +140,11 @@ Load the `humanizer` skill and follow it. The rules that bite hardest on docs:
 - No throat-clearing under a heading. The reader knows what section they are in.
 - Every number carries its source in the sentence or the line beneath.
 - The same concept keeps the same word, every time.
-- No em or en dashes.
 - Never name a competing library. Upstream model authors and their
-  organisations are always credited; that is provenance and it is required.
+  organizations are always credited; that is provenance and it is required.
+- Surface the library's own words where it has them. `support.py` records a
+  measured reason for every non-validated export cell; those sentences are more
+  useful than any summary you would write, so pass them through.
 
 Length band for a model page: 600 to 1200 words of prose, tables and code
 excluded.

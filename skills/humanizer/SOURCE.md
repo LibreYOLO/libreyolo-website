@@ -1,38 +1,19 @@
 # Source and licence
 
-`SKILL.md` in this folder is a distillation, not a copy, of
-[blader/humanizer](https://github.com/blader/humanizer).
+This skill is vendored from [blader/humanizer](https://github.com/blader/humanizer) (MIT-licensed).
 
-## Upstream
+## Original
 
 - **Author:** Siqi Chen ([@blader](https://github.com/blader))
-- **Repository:** https://github.com/blader/humanizer
-- **Licence:** MIT
-- **Ultimate source:** the upstream skill builds on Wikipedia's
-  "Signs of AI writing" (CC BY-SA).
+- **Upstream:** https://github.com/blader/humanizer
+- **Version vendored:** v2.5.1 (copied 2026-05-20 from upstream `main`).
+- **Local modifications:** two additions to the "Your Task" checklist - (5) "Use British English" and (8) "Do a quality pass" (covers throwaway transitions, dead-air connectors, dead flat closers). Everything else is upstream as-is.
 
-## What was taken and what was written here
-
-Taken: the taxonomy of AI writing patterns and the words-to-watch vocabulary
-lists (promotional adjectives, participle clauses, copula avoidance, negative
-parallelism, false ranges, and the rest). These are factual observations about
-how machine-generated text reads.
-
-Written for this repo: every explanation and every before/after example. The
-upstream examples are drawn from encyclopedia articles about towns, temples and
-musicians; they were replaced with examples from LibreYOLO documentation so the
-guidance applies directly to the text we actually write. Sections irrelevant to
-technical documentation (notability and media coverage, cultural-heritage tone,
-sycophancy toward the user, knowledge-cutoff disclaimers) were dropped, and
-sections specific to reference writing (terminology consistency, sourcing every
-number, imperative instructions, tables over bullet lists) were added.
-
-The result is roughly a fifth of the length of the upstream skill, which is the
-point: it has to be cheap enough to load on every docs page we write.
+If you want the canonical version (or to file issues), use the upstream. We re-ship it here only so that cloning this starter folder gives you the skill without a separate install step.
 
 ## Licence
 
-MIT, per the upstream.
+This skill is distributed under the MIT licence below, per the upstream:
 
 ```
 MIT License
