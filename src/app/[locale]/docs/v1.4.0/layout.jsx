@@ -1,4 +1,5 @@
 import { buildPageMetadata } from '@/i18n/metadata'
+import FrozenVersionBanner from '@/components/docs/FrozenVersionBanner'
 
 const metadataByLocale = {
   en: {
@@ -14,13 +15,22 @@ const metadataByLocale = {
 export async function generateMetadata({ params }) {
   const { locale } = await params
   const copy = metadataByLocale[locale] ?? metadataByLocale.en
-  return buildPageMetadata({
+  const meta = buildPageMetadata({
     ...copy,
     path: '/docs/v1.4.0',
     locale,
   })
+  // Frozen version: canonicalise to the current docs tree. No noindex:
+  // pairing noindex with a canonical is a documented way to deindex the
+  // wrong page.
+  return { ...meta, alternates: { canonical: 'https://www.libreyolo.com/docs' } }
 }
 
 export default function DocsV140Layout({ children }) {
-  return children
+  return (
+    <>
+      <FrozenVersionBanner version="v1.4.0" />
+      {children}
+    </>
+  )
 }

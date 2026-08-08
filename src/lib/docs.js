@@ -116,4 +116,54 @@ export function extractHeadings(markdown, extra = []) {
   return [...headings, ...extra]
 }
 
+/*
+ * Every docs page on disk, as one list.
+ *
+ * The sitemap, llms.txt, llms-full.txt and the markdown twins all read this,
+ * so none of them can drift from the tree the way a hand-maintained list does.
+ * `content/docs/start/*.md` is the prefix-free group: those serve at
+ * /docs/<slug> because their URLs are meant to be short and permanent.
+ */
+const STANDALONE_DIR = 'start'
+
+export function getAllDocPages() {
+  if (!fs.existsSync(docsDir)) return []
+  const pages = []
+  for (const section of fs.readdirSync(docsDir)) {
+    const dir = path.join(docsDir, section)
+    if (!fs.statSync(dir).isDirectory()) continue
+    for (const slug of getDocSlugs(section)) {
+      const doc = readDoc(section, slug, 'en')
+      if (!doc) continue
+      pages.push({
+        section,
+        slug,
+        // The URL a reader and a crawler actually see.
+        path: section === STANDALONE_DIR ? `/docs/${slug}` : `/docs/${section}/${slug}`,
+        title: doc.title || slug,
+        description: doc.description || doc.lead || '',
+        lastModified: fs.statSync(path.join(dir, `${slug}.md`)).mtime,
+      })
+    }
+  }
+  return pages.sort((a, b) => a.path.localeCompare(b.path))
+}
+
+/* The section index routes, which have no markdown file behind them. */
+export const DOCS_SECTION_INDEXES = [
+  '/docs', '/docs/models', '/docs/tasks', '/docs/export',
+  '/docs/train', '/docs/predict', '/docs/cli', '/docs/reference',
+]
+
+/* Frozen single-page docs for releases before the v2 tree. Kept reachable and
+   canonicalised to /docs, never edited again, and never in the sitemap. */
+export const LEGACY_DOCS_VERSIONS = ['v1.4.0', 'v1.3.1', 'v1.3.0', 'v1.2.0', 'v1.1.0']
+
+export function getDocByPath(urlPath) {
+  const rest = urlPath.replace(/^\/docs\//, '')
+  const parts = rest.split('/')
+  if (parts.length === 1) return readDoc(STANDALONE_DIR, parts[0], 'en')
+  return readDoc(parts[0], parts.slice(1).join('/'), 'en')
+}
+
 export default registry

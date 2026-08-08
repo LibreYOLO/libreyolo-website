@@ -1,6 +1,7 @@
 import { getAllArticles, getArticleBySlug } from '@/lib/articles'
 import { routing, localeHtmlLang } from '@/i18n/routing'
 import { localeUrl } from '@/i18n/metadata'
+import { getAllDocPages, DOCS_SECTION_INDEXES } from '@/lib/docs'
 
 function languageMap(path, locales) {
   const languages = {}
@@ -46,17 +47,33 @@ export default function sitemap() {
     { path: '/science', priority: 0.8 },
     { path: '/datasets', priority: 0.7 },
     { path: '/articles', priority: 0.9 },
-    { path: '/docs/v1.4.0', priority: 0.9 },
     { path: '/docs/librevlm', priority: 0.8 },
     { path: '/docs/experimental', priority: 0.8 },
-    { path: '/docs/v1.3.1', priority: 0.6 },
-    { path: '/docs/v1.3.0', priority: 0.5 },
-    { path: '/docs/v1.2.0', priority: 0.5 },
-    { path: '/docs/v1.1.0', priority: 0.5 },
   ].flatMap(({ path, priority }) => bilingual(path, priority))
 
+  /*
+   * The v2 docs tree, generated from the content directory.
+   *
+   * Enumerating 169 pages by hand is how a sitemap silently goes stale, so this
+   * reads the same manifest the nav, the markdown twins and llms.txt read.
+   * English-only for now: the tree has no translations yet, so a bilingual entry
+   * would advertise a Chinese page that does not exist.
+   *
+   * The frozen v1.1 to v1.4 single-page docs are deliberately absent. They stay
+   * reachable and carry a canonical pointing at /docs, and a canonicalised page
+   * does not belong in a sitemap.
+   */
+  const docsRoutes = [
+    ...DOCS_SECTION_INDEXES.map((path) => ({ path, priority: path === '/docs' ? 1.0 : 0.8 })),
+    ...getAllDocPages().map((page) => ({
+      path: page.path,
+      priority: page.section === 'models' || page.section === 'tasks' ? 0.8 : 0.7,
+      lastModified: page.lastModified,
+    })),
+  ].flatMap(({ path, priority, lastModified }) =>
+    englishOnly(path, priority, 'weekly', lastModified))
+
   const englishOnlyRoutes = [
-    // `/docs` redirects to the current version and is intentionally omitted.
     { path: '/cursor-hackathon', priority: 0.4 },
   ].flatMap(({ path, priority }) => englishOnly(path, priority))
 
@@ -71,5 +88,5 @@ export default function sitemap() {
       : englishOnly(path, 0.7, 'monthly', lastModified)
   })
 
-  return [...bilingualRoutes, ...englishOnlyRoutes, ...articleRoutes]
+  return [...bilingualRoutes, ...docsRoutes, ...englishOnlyRoutes, ...articleRoutes]
 }

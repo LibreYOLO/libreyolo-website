@@ -1,4 +1,5 @@
 import { getAllArticles } from '@/lib/articles'
+import { getAllDocPages } from '@/lib/docs'
 import { SITE_URL } from '@/i18n/metadata'
 import { GITHUB_URL, REDDIT_URL } from '@/lib/links'
 
@@ -10,6 +11,28 @@ import { GITHUB_URL, REDDIT_URL } from '@/lib/links'
 export const dynamic = 'force-static'
 
 export function GET() {
+  /*
+   * The docs index, grouped by section and read from disk. A hand-kept list at
+   * this size goes stale on the first page added, and a stale llms.txt is worse
+   * than none: it tells an agent a page exists when it does not.
+   */
+  const SECTION_TITLES = {
+    start: 'Getting started', tasks: 'Tasks', models: 'Models',
+    train: 'Training', predict: 'Prediction', export: 'Export and deploy',
+    cli: 'Command line', reference: 'Reference',
+  }
+  const bySection = {}
+  for (const page of getAllDocPages()) (bySection[page.section] ??= []).push(page)
+  const docsLines = Object.keys(SECTION_TITLES)
+    .filter((s) => bySection[s]?.length)
+    .map((s) => {
+      const lines = bySection[s]
+        .map((p) => `- [${p.title}](${SITE_URL}${p.path})${p.description ? `: ${p.description}` : ''}`)
+        .join('\n')
+      return `### ${SECTION_TITLES[s]}\n${lines}`
+    })
+    .join('\n\n')
+
   const articleLines = getAllArticles()
     .map((a) => `- [${a.title}](${SITE_URL}/articles/${a.slug})${a.description ? `: ${a.description}` : ''}`)
     .join('\n')
@@ -22,7 +45,9 @@ libreyolo.com is the official site of the LibreYOLO open-source library: documen
 
 ## Get started
 - Install: \`pip install libreyolo\`
-- [Documentation (v1.4.0, current)](${SITE_URL}/docs/v1.4.0): install, quickstart, and the full API for every supported model family
+- [Documentation](${SITE_URL}/docs): install, quickstart, every model family, every task, training, validation and export
+- Every documentation page is also served as raw markdown by appending \`.md\` to its URL, for example ${SITE_URL}/docs/models/rf-detr.md
+- [The whole documentation as one file](${SITE_URL}/llms-full.txt)
 
 ## Key pages
 - [Home](${SITE_URL}/): project overview and quickstart
@@ -35,11 +60,18 @@ libreyolo.com is the official site of the LibreYOLO open-source library: documen
 - [Experimental tasks](${SITE_URL}/docs/experimental): research previews and experimental model documentation
 
 ## Documentation versions
-- [v1.4.0 (current)](${SITE_URL}/docs/v1.4.0)
-- [v1.3.1](${SITE_URL}/docs/v1.3.1)
-- [v1.3.0](${SITE_URL}/docs/v1.3.0)
-- [v1.2.0](${SITE_URL}/docs/v1.2.0)
-- [v1.1.0](${SITE_URL}/docs/v1.1.0)
+${SITE_URL}/docs always describes the current release. These single-page docs for
+earlier releases stay reachable for anyone pinned to them, but they are frozen,
+no longer updated, and canonicalised to ${SITE_URL}/docs. Prefer /docs.
+- [v1.4.0 (frozen)](${SITE_URL}/docs/v1.4.0)
+- [v1.3.1 (frozen)](${SITE_URL}/docs/v1.3.1)
+- [v1.3.0 (frozen)](${SITE_URL}/docs/v1.3.0)
+- [v1.2.0 (frozen)](${SITE_URL}/docs/v1.2.0)
+- [v1.1.0 (frozen)](${SITE_URL}/docs/v1.1.0)
+
+## Documentation
+Generated from the docs tree, so this list cannot drift from what is published.
+${docsLines}
 
 ## Articles
 Every article is also available as raw markdown: append .md to its URL (or .zh.md for the Chinese translation).
