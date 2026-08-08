@@ -179,6 +179,7 @@ const out = {
   _comment: current._comment,
   _generated_by: 'scripts/build-registry (prototype). Mechanical fields are extracted from docs/export_support.md, each family model.py, models/registry.py, the LibreYOLO HF org listing and the vision-analysis results. Upstream metadata is merged from src/data/docs/upstream/<slug>.json after per-family human verification.',
   tasks: TASK_LABELS,
+  library: ex.library ?? null,
   families,
   discrepancies: ex.discrepancies,
 }

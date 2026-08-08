@@ -238,6 +238,21 @@ for (const lin of LINEAGES) {
   })
 }
 report.export_formats = formats
+
+/*
+ * Library-wide totals, for the docs landing page. Counted, never typed: the
+ * landing page's credibility rests on these being true, and a hand-typed "86
+ * families" goes stale the first time a family lands.
+ */
+const tasksText = (() => { try { return read('tasks.py') } catch { return '' } })()
+const taskList = [...(tasksText.match(/^TASKS[^=]*=\s*\(([\s\S]*?)\)/m)?.[1] ?? '')
+  .matchAll(/"([a-z]+)"/g)].map((m) => m[1])
+report.library = {
+  families: Object.keys(tiers).length,
+  tasks: taskList.length,
+  task_names: taskList,
+  export_formats: formats.length,
+}
 fs.writeFileSync(OUT, JSON.stringify(report, null, 2))
 
 for (const l of report.lineages) {

@@ -1764,5 +1764,29 @@
       "task": "classify"
     }
   ],
-  "_generated_by": "scripts/build-registry (prototype). Mechanical fields are extracted from docs/export_support.md, each family model.py, models/registry.py, the LibreYOLO HF org listing and the vision-analysis results. Upstream metadata is merged from src/data/docs/upstream/<slug>.json after per-family human verification."
+  "_generated_by": "scripts/build-registry (prototype). Mechanical fields are extracted from docs/export_support.md, each family model.py, models/registry.py, the LibreYOLO HF org listing and the vision-analysis results. Upstream metadata is merged from src/data/docs/upstream/<slug>.json after per-family human verification.",
+  "library": {
+    "families": 86,
+    "tasks": 17,
+    "task_names": [
+      "detect",
+      "segment",
+      "semantic",
+      "panoptic",
+      "pose",
+      "classify",
+      "gaze",
+      "obb",
+      "point",
+      "depth",
+      "edge",
+      "normal",
+      "restore",
+      "matte",
+      "ocr",
+      "embed",
+      "mesh"
+    ],
+    "export_formats": 12
+  }
 }
