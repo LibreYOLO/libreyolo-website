@@ -21,7 +21,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreYOLO3b.pt source=bus.jpg save=True
+        libreyolo predict model=LibreYOLO3b.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
     - label: SPP size
       language: python
       code: |

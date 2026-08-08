@@ -107,7 +107,7 @@ snippets:
         print(mlmodel.user_defined_metadata["names"])
 
         # The input is an image named "image" at the fixed export size.
-        image = Image.open("bus.jpg").convert("RGB").resize((640, 640))
+        image = Image.open(SAMPLE_IMAGE).convert("RGB").resize((640, 640))
         out = mlmodel.predict({"image": image})
         print({name: value.shape for name, value in out.items()})
 

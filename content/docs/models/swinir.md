@@ -21,7 +21,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreSwinIRm-restore.pt source=bus.jpg save=True
+        libreyolo predict model=LibreSwinIRm-restore.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
     - label: Tiled, for large images
       language: python
       code: |

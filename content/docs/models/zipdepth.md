@@ -21,7 +21,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreZipDepthb-depth.pt source=bus.jpg save=True
+        libreyolo predict model=LibreZipDepthb-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
     - label: NPU/edge checkpoint
       language: python
       code: |

@@ -187,8 +187,8 @@ On the command line, `classes` accepts a bare integer, a list, or a
 comma-separated string:
 
 ```bash
-libreyolo predict model=LibreYOLO9s.pt classes=0 source=bus.jpg
-libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=bus.jpg
+libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
 ```
 
 Filtering is not free accuracy. A model still spends its budget predicting

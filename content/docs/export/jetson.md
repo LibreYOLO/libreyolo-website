@@ -122,28 +122,28 @@ snippets:
     - label: Python
       language: python
       code: |
-        from libreyolo import LibreYOLO9
+        from libreyolo import LibreYOLO9, SAMPLE_IMAGE
 
         # Downloads the checkpoint on first use.
         model = LibreYOLO9("libreyolo9s.pt", size="s")
 
-        result = model.predict("bus.jpg")
+        result = model.predict(SAMPLE_IMAGE)
         print(result.boxes)
     - label: CLI
       language: bash
       code: |
-        libreyolo predict --source bus.jpg --model libreyolo9s.pt --save
+        libreyolo predict --source https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg --model libreyolo9s.pt --save
   export:
     - label: Python
       language: python
       code: |
-        from libreyolo import LibreYOLO9, LibreYOLO
+        from libreyolo import LibreYOLO, LibreYOLO9, SAMPLE_IMAGE
 
         # Writes libreyolo9s.onnx, then builds libreyolo9s.engine from it.
         LibreYOLO9("libreyolo9s.pt", size="s").export(format="tensorrt", half=True)
 
         # The engine loads back through the same entry point.
-        result = LibreYOLO("libreyolo9s.engine").predict("bus.jpg")
+        result = LibreYOLO("libreyolo9s.engine").predict(SAMPLE_IMAGE)
     - label: CLI
       language: bash
       code: |

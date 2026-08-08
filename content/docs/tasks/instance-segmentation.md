@@ -133,8 +133,14 @@ Four families both train and predict masks: [RF-DETR](/docs/models/rf-detr),
 [RTMDet](/docs/models/rtmdet). RF-DETR needs its own extra,
 `pip install "libreyolo[rfdetr]"`; the other three run on the base package.
 
-[Mask R-CNN](/docs/models/mask-rcnn) and [EoMT](/docs/models/eomt) predict,
-validate and export masks, but their `train()` raises `NotImplementedError`.
+[Mask R-CNN](/docs/models/mask-rcnn) predicts, validates and exports masks, but
+its `train()` raises `NotImplementedError`.
+
+[EoMT](/docs/models/eomt) predicts and validates masks and also cannot train,
+and its export is narrower still: `export()` only accepts the semantic task, and
+raises `NotImplementedError` for `segment` and `panoptic`, because the
+query-mask runtime contract those two need has not been defined. Use EoMT for
+instance masks in Python, not through an exported graph.
 
 A separate group segments from a prompt rather than a class list: a click, a
 box or a phrase picks the object, and the model returns its mask.

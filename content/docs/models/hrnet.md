@@ -23,7 +23,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreHRNetw32-pose.pt source=bus.jpg save=True
+        libreyolo predict model=LibreHRNetw32-pose.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
     - label: Person source
       language: python
       code: |

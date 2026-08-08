@@ -21,7 +21,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreFeyNobgl-matte.pt source=bus.jpg save=True
+        libreyolo predict model=LibreFeyNobgl-matte.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
     - label: Cutout
       language: python
       code: |

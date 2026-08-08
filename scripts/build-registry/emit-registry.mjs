@@ -13,14 +13,20 @@ const TASK_LABELS = {
 }
 const EXTRAS = { rfdetr: 'rfdetr', rtdetr: 'rtdetr' } // families needing a pip extra
 /*
- * Training dataset per task, ONLY where the library's own naming convention
- * makes it unambiguous. There is deliberately no default: stamping "COCO" on
- * everything put that claim on ImageNet classifiers, Cityscapes segmenters, an
- * OCR pipeline and a matting model, each of which contradicted its own page.
- * An unknown dataset renders as an empty cell, which is the house convention
- * for "not recorded".
+ * There is deliberately no task-to-dataset fallback here, and adding one back
+ * is a bug. Two rounds of this went wrong. Stamping "COCO" on everything put
+ * that claim on ImageNet classifiers, Cityscapes segmenters, an OCR pipeline
+ * and a matting model. Narrowing it to a per-task map still shipped one plain
+ * falsehood: `obb: 'DOTA'`, when every published `-obb` checkpoint is fine
+ * tuned on a six-class Roboflow UAV vehicle set and its card says, in those
+ * words, that it was not trained on DOTA.
+ *
+ * The reason both attempts failed is the same. A `-seg` or `-obb` suffix names
+ * the TASK. It has never named the dataset, and no amount of narrowing turns
+ * one into the other. The dataset is only known when the checkpoint's own
+ * metadata records it, so `data` comes from `row.dataset` or stays null, and
+ * null renders as an empty cell, the house convention for "not recorded".
  */
-const DATASET = { detect: 'COCO', segment: 'COCO', pose: 'COCO keypoints', obb: 'DOTA' }
 
 // "n, s, m, l at 640 px" style summary, derived from INPUT_SIZES.
 function sizesLabel(lin) {
@@ -94,7 +100,7 @@ for (const lin of ex.lineages) {
       name: row.name,
       task: row.task,
       imgsz: custom ? null : sizeOf(bare, row.task),
-      data: row.dataset || DATASET[row.task] || null,
+      data: row.dataset || null,
       license: row.license,
     }
   })

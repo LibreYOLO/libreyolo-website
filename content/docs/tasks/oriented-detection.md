@@ -136,9 +136,12 @@ rectangles. `result.boxes` is filled as well, with the axis-aligned form.
 
 [RF-DETR](/docs/models/rf-detr) is the family to use. It trains, predicts,
 validates and exports oriented boxes, and it ships published oriented
-checkpoints in four sizes, n, s, m and l, trained on DOTA. It needs its own
-extra, `pip install "libreyolo[rfdetr]"`, and its model page carries the
-weights license and the provenance.
+checkpoints in four sizes, n, s, m and l. It needs its own extra,
+`pip install "libreyolo[rfdetr]"`, and its model page carries the weights
+license and the provenance.
+
+Read the section below on what those checkpoints actually predict before you
+plan around them.
 
 [RT-DETRv2](/docs/models/rt-detr) also declares `obb` in its supported tasks
 and can load an oriented checkpoint, but LibreYOLO publishes no oriented
@@ -150,9 +153,17 @@ Weights download from Hugging Face on first use and are cached locally.
 
 <code-tabs name="predict" />
 
-The published checkpoints are trained on DOTA, whose fifteen classes are aerial
-categories such as ship, harbor and storage tank. Run them on ordinary
-photographs and the labels will be aerial ones; a domain of your own means
+Know what the published checkpoints are before you run them. Despite DOTA being
+the reference benchmark for this task, these weights were not trained on it.
+All four were initialized from the RF-DETR detection weights and fine-tuned on a
+single Roboflow Universe dataset of UAV footage, with six vehicle classes: bike,
+bus, car, other_vehicle, taxi and truck. Their model cards describe them as
+development weights, produced while validating oriented training support, and
+say they should not be read as production or benchmark-official weights.
+
+In practice that means they are a working starting point for oriented boxes on
+vehicles seen from above, and for verifying that your pipeline runs end to end.
+Any other domain, including the aerial categories DOTA is known for, means
 training on your own oriented labels. `conf` and `max_det` shape the output as
 they do for detection. See [prediction](/docs/predict) for sources, streaming
 and result handling.

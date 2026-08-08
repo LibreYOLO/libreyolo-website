@@ -21,7 +21,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreMoGe2s-normal.pt source=bus.jpg save=True
+        libreyolo predict model=LibreMoGe2s-normal.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   val:
     - label: Python
       language: python

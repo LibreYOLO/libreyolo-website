@@ -21,7 +21,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreLingBotVisions-sem.pt source=bus.jpg save=True
+        libreyolo predict model=LibreLingBotVisions-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python (linear probe)
       language: python

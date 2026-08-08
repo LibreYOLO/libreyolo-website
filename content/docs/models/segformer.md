@@ -21,7 +21,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreSegformerb0-sem.pt source=bus.jpg save=True
+        libreyolo predict model=LibreSegformerb0-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python (fine-tune)
       language: python

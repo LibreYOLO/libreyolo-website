@@ -25,7 +25,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreRFDETRs.pt source=bus.jpg save=True
+        libreyolo predict model=LibreRFDETRs.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
     - label: Video
       language: python
       code: |
@@ -134,7 +134,7 @@ snippets:
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
         model = LibreYOLO("LibreRFDETRs.onnx")
-        result = model("bus.jpg")
+        result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
     - label: Without LibreYOLO

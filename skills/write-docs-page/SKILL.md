@@ -64,6 +64,18 @@ Rules that follow:
   size. A bare millisecond is not a fact; link the Vision Analysis embed.
 - "Mainly", "mostly" and "more than" mark unverified inference. Find the number
   or cut the clause.
+- **A filename suffix names the task, never the dataset.** `-seg` means masks,
+  `-obb` means oriented boxes. Neither says what the weights were trained on.
+  Four pages said the oriented checkpoints were trained on DOTA, the benchmark
+  everyone associates with the task; their model cards say in those words that
+  they were not, and name a six-class vehicle set. Read the card, or write
+  nothing about the training data.
+- **The only images that ship are `parkour.jpg` and `guggenheim-bilbao.jpg`**,
+  in `libreyolo/assets/`. In Python use `SAMPLE_IMAGE`, which resolves to the
+  first. In shell use its raw URL on the `release` branch. A plausible filename
+  from another library's tutorials, `bus.jpg` being the one that got through,
+  fails on line one of a reader's first session. Any path in a snippet is a
+  claim that the file exists.
 
 ## Prose
 

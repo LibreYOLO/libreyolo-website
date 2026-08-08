@@ -23,7 +23,7 @@ snippets:
       code: |
         # With no set_classes() call, CLI predict uses the 1,000 ImageNet
         # class names the model loads with by default.
-        libreyolo predict model=LibreSigLIP2b16-cls.pt source=bus.jpg save=True
+        libreyolo predict model=LibreSigLIP2b16-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
     - label: Multi-label sigmoid scoring
       language: python
       code: |

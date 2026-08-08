@@ -82,8 +82,10 @@ family. Two examples of the second:
 
 - The YOLO9 COCO checkpoints are MIT. `LibreYOLO9P2s-visdrone.pt`, trained on
   VisDrone2019-DET, is CC BY-NC-SA 3.0, which is non-commercial.
-- The RF-DETR COCO checkpoints are Apache-2.0. The oriented-box checkpoints
-  trained on DOTA are CC BY 4.0.
+- The RF-DETR detection checkpoints are Apache-2.0. The oriented-box
+  checkpoints are CC BY 4.0, because they were fine-tuned on a Roboflow
+  Universe dataset published under CC BY 4.0 and the weights carry that
+  dataset's attribution requirement forward.
 
 Across families, the range runs wider, and several published checkpoints cannot
 be used in a commercial product:

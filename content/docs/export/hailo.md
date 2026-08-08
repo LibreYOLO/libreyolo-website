@@ -228,8 +228,8 @@ detectors, with YOLOX and YOLO9 as the primary targets; other convolutional
 detectors such as PicoDet, YOLO-NAS and RTMDet, with application-side decode; the
 CNN classifiers ResNet, MobileNetV4-conv and EfficientNetV2, of which ResNet is
 best supported because Hailo's Model Zoo ships recipes for it; and small
-convolutional task heads such as FOMO point detection, L2CS gaze on a ResNet
-backbone and EC pose, which are compilable in principle but have no Hailo recipe.
+convolutional task heads such as FOMO point detection and L2CS gaze on a ResNet
+backbone, which are compilable in principle but have no Hailo recipe.
 
 One status caveat, which is the reason nothing on this page is presented as
 supported: no LibreYOLO family has been taken end to end through the DFC to a

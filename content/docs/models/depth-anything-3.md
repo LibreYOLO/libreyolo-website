@@ -21,7 +21,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreDepthAnything3l-depth.pt source=bus.jpg save=True
+        libreyolo predict model=LibreDepthAnything3l-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
     - label: Read the depth map
       language: python
       code: |
