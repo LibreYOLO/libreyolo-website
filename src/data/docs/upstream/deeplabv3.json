@@ -1,0 +1,12 @@
+{
+  "name": "DeepLabv3",
+  "org": "PyTorch",
+  "paper_title": "Rethinking Atrous Convolution for Semantic Image Segmentation",
+  "paper_url": "https://arxiv.org/abs/1706.05587",
+  "code_url": "https://github.com/pytorch/vision",
+  "license": "BSD-3-Clause",
+  "license_interpretation": "BSD-3-Clause is a permissive license, so this code and these weights can be used in commercial and closed-source products. It asks you to keep the copyright notice, license text and a non-endorsement clause with any copy you redistribute. LibreYOLO's inference graph is torchvision's ASPP head over its ResNet-50, ResNet-101 and MobileNetV3-Large backbones; it is DeepLabv3, not DeepLabv3+, so there is no decoder or CRF, and the paper's training-only auxiliary FCN classifier is excluded. The three published checkpoints are torchvision's official COCO-with-VOC-label weights; their separate LibreYOLO Hugging Face mirrors carry BSD-3-Clause on an implied basis disclosed by torchvision rather than an explicit checkpoint-specific grant, and torchvision's own documentation notes that pretrained-model terms can depend on the training data, leaving that determination to the user.",
+  "bibtex": null,
+  "bibtex_source_url": null,
+  "bibtex_verified": "2026-08-08: checked tensorflow/models' research/deeplab README and pytorch/vision's README for a Citation section or CITATION.cff covering this paper. The deeplab README lists it only as a plain-text reference at the bottom of the page, not as a BibTeX entry, and torchvision does not cite the papers behind the models it reimplements. No authoritative BibTeX block exists to copy, so bibtex is left null rather than assembled by hand."
+}
