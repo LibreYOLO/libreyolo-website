@@ -3030,7 +3030,7 @@ else:
 libreyolo profile run coco128 --weights LibreYOLO9t.pt --batch 16 --repeat 3
 
 # inference: latency percentiles and where they are spent
-libreyolo profile infer bus.jpg --weights LibreYOLO9t.pt --runs 200`}</CodeBlock>
+libreyolo profile infer https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg --weights LibreYOLO9t.pt --runs 200`}</CodeBlock>
           <P>
             <InlineCode>profile infer</InlineCode> reports p50, p90 and p99 latency, throughput, and a split across preprocess, forward and postprocess (NMS), plus a verdict on what is bounding you. That split is usually the punchline: a model that looks slow is often spending its time in NMS or in preprocessing rather than in the network.
           </P>
@@ -6278,7 +6278,7 @@ if final["state"] == "failed":
 libreyolo profile run coco128 --weights LibreYOLO9t.pt --batch 16 --repeat 3
 
 # 推理：延迟分位数，以及时间花在哪一段
-libreyolo profile infer bus.jpg --weights LibreYOLO9t.pt --runs 200`}</CodeBlock>
+libreyolo profile infer https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg --weights LibreYOLO9t.pt --runs 200`}</CodeBlock>
           <P>
             <InlineCode>profile infer</InlineCode> 报告 p50、p90、p99 延迟、吞吐，以及在预处理 / 前向 / 后处理（NMS）之间的耗时拆分。这个拆分往往才是重点：一个看起来很慢的模型，时间常常花在 NMS 或预处理上，而不是网络本身。
           </P>

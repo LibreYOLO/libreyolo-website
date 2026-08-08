@@ -79,10 +79,11 @@ Rules that follow:
   and has no way to look one up.
 - **The only images that ship are `parkour.jpg` and `guggenheim-bilbao.jpg`**,
   in `libreyolo/assets/`. In Python use `SAMPLE_IMAGE`, which resolves to the
-  first. In shell use its raw URL on the `release` branch. A plausible filename
-  from another library's tutorials, `bus.jpg` being the one that got through,
-  fails on line one of a reader's first session. Any path in a snippet is a
-  claim that the file exists.
+  first. In shell use its raw URL on the `release` branch. Never type a sample
+  filename you remember from somewhere else: one got through into sixty
+  snippets, it was another project's canonical sample, it had never existed in
+  this repo, and it failed on line one of a reader's first session. Any path in
+  a snippet is a claim that the file exists here.
 
 ## Prose
 
