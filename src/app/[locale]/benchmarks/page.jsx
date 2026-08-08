@@ -52,7 +52,7 @@ export default function BenchmarksPage() {
             animate={{ opacity: 1, y: 0 }}
             className="font-mono text-[10px] md:text-xs font-semibold uppercase tracking-[0.35em] text-libre-600 dark:text-libre-300/90"
           >
-            LibreYOLO · Benchmarks
+            Measured, not copied from papers
           </motion.p>
 
           <motion.h1
@@ -61,8 +61,7 @@ export default function BenchmarksPage() {
             transition={{ delay: 0.05 }}
             className="mt-4 max-w-3xl text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] text-surface-900 dark:text-white"
           >
-            Every model, measured.{' '}
-            <span className="text-surface-500 dark:text-surface-400">Nothing copied from a paper.</span>
+            LibreYOLO Benchmarks
           </motion.h1>
 
           <motion.p
@@ -100,20 +99,9 @@ export default function BenchmarksPage() {
         </div>
       </section>
 
-      {/* RF100-VL: the centrepiece */}
-      <section className="mx-auto max-w-6xl px-6 pt-16 md:pt-24">
-        <SectionHeading tag="RF100-VL" title="What happens when you leave COCO behind?">
-          COCO is 80 everyday categories: people, cars, dogs. Almost nobody ships that. The real
-          question is transfer, so we fine-tuned on 100 unrelated real-world datasets and scored
-          every one of them separately. Pills on a conveyor, chest X-rays, mahjong tiles, varroa
-          mites, wildfire smoke.
-        </SectionHeading>
-      </section>
-
-      <RF100VLPanel />
-
-      {/* COCO, via a Vision Analysis embed */}
-      <section className="mx-auto max-w-6xl px-6 pt-8 pb-16 md:pb-24">
+      {/* COCO first: the baseline everyone already knows, via a Vision
+          Analysis embed. RF100-VL then lands as the "and off COCO?" follow-up. */}
+      <section className="mx-auto max-w-6xl px-6 pt-16 pb-16 md:pt-24 md:pb-24">
         <SectionHeading tag="COCO" title="Accuracy against size">
           The classic view: how much accuracy each architecture buys for its parameter count.
           Live from Vision Analysis, so it stays current as new runs land.
@@ -147,6 +135,18 @@ export default function BenchmarksPage() {
           </Link>
         </div>
       </section>
+
+      {/* RF100-VL: the follow-up to COCO, and the centrepiece of the page */}
+      <section className="mx-auto max-w-6xl px-6">
+        <SectionHeading tag="RF100-VL" title="What happens when you leave COCO behind?">
+          COCO is 80 everyday categories: people, cars, dogs. Almost nobody ships that. The real
+          question is transfer, so we fine-tuned on 100 unrelated real-world datasets and scored
+          every one of them separately. Pills on a conveyor, chest X-rays, mahjong tiles, varroa
+          mites, wildfire smoke.
+        </SectionHeading>
+      </section>
+
+      <RF100VLPanel />
 
       {/* Latency */}
       <section className="border-t border-surface-200 dark:border-surface-800 bg-surface-50/60 dark:bg-surface-900/30">
