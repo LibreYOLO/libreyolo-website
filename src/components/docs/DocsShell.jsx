@@ -14,6 +14,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronRight, ChevronDown, Hash } from 'lucide-react'
 import PageActions from '@/components/docs/PageActions'
+import DocsSearch from '@/components/docs/DocsSearch'
 
 function NavGroup({ group, activePath, onNavigate }) {
   const containsActive = group.items.some((item) => item.slug === activePath)
@@ -88,6 +89,9 @@ function NavTree({ nav, activePath, version, onNavigate }) {
           v{version}
           <span className="text-surface-400 dark:text-surface-600">latest</span>
         </span>
+        <div className="mt-3">
+          <DocsSearch />
+        </div>
       </div>
       <ul className="space-y-px">
         {nav.groups.map((group) => (

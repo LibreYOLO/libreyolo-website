@@ -61,7 +61,26 @@ export function buildEnglishOnlyAlternates(path) {
 // Full per-page metadata (title, description, alternates, OpenGraph, Twitter).
 // Setting OpenGraph here means each page advertises its own title/url/card
 // instead of inheriting the home page's values from the root layout.
-export function buildPageMetadata({ title, description, path, locale, englishOnly = false }) {
+/*
+ * `ownImage` opts a route out of the shared social card.
+ *
+ * Next injects a segment's own `opengraph-image` file automatically, but ONLY
+ * when metadata does not set `openGraph.images` explicitly. Setting it here
+ * unconditionally is what kept all 171 docs pages sharing one image after the
+ * per-page cards existed: the card rendered fine at its URL and nothing
+ * pointed at it.
+ *
+ * The URL is built here rather than left to that auto-injection, which emits
+ * a locale-prefixed path (`/en/docs/...`). English is served at the root, so
+ * that path answers 307 rather than 200, and several social scrapers do not
+ * follow a redirect for `og:image`. `localeUrl` already resolves the default
+ * locale to the unprefixed form, so the card URL 200s for every scraper.
+ */
+function ownImageUrl(path, locale) {
+  return `${localeUrl(path, locale)}/opengraph-image`
+}
+
+export function buildPageMetadata({ title, description, path, locale, englishOnly = false, ownImage = false }) {
   const ogTarget = englishOnly ? routing.defaultLocale : locale
   return {
     title,
@@ -74,13 +93,15 @@ export function buildPageMetadata({ title, description, path, locale, englishOnl
       siteName: 'LibreYOLO',
       locale: ogLocale(ogTarget),
       type: 'website',
-      images: [OG_IMAGE],
+      images: ownImage
+        ? [{ url: ownImageUrl(path, ogTarget), width: 1200, height: 630, alt: title }]
+        : [OG_IMAGE],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [OG_IMAGE.url],
+      images: [ownImage ? ownImageUrl(path, ogTarget) : OG_IMAGE.url],
     },
   }
 }

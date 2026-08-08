@@ -99,6 +99,7 @@ export async function generateMetadata({ params }) {
       path: `/docs/${section}`,
       locale,
       englishOnly: true,
+      ownImage: true,
     })
   }
 
@@ -111,6 +112,7 @@ export async function generateMetadata({ params }) {
       path: `/docs/${section}`,
       locale,
       englishOnly: !doc.translated,
+      ownImage: true,
     }),
     keywords: doc.keywords,
   }

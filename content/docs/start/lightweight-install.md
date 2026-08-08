@@ -3,7 +3,7 @@ title: Lightweight install
 seo_title: "Run LibreYOLO ONNX inference without PyTorch"
 description: "Install LibreYOLO with --no-deps and run ONNX detection on numpy alone, no torch on disk. The technique, its limits, and the exact package list."
 lead: "LibreYOLO's ONNX inference path is numpy end to end, including decode and NMS. Nothing on it needs PyTorch at runtime, so an install that skips dependency resolution can run detection with torch absent from the machine."
-keywords: [libreyolo without pytorch, onnx inference no torch, libreyolo lightweight install, pip install no-deps, libreyolo disk space, onnxruntime inference]
+keywords: [torch-free inference, torch free, libreyolo without pytorch, onnx inference no torch, libreyolo lightweight install, pip install no-deps, libreyolo disk space, onnxruntime inference]
 last_verified: "1.5.0"
 meta:
   - label: Applies to

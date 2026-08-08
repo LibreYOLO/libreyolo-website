@@ -92,15 +92,14 @@ export function getExportFormats() {
   return registry.export_formats
 }
 
-// Heading anchors have to match between the rendered markdown and the "on this
-// page" rail, so both sides derive ids through this one function.
-export function slugifyHeading(text) {
-  return String(text)
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-}
+// Imported, used below, and re-exported so server-side callers keep importing
+// it from here. The implementation moved to its own module because the search
+// dialog runs in the browser and cannot import anything that touches the
+// filesystem. `export ... from` alone would not bind the name in this scope,
+// and extractHeadings calls it.
+import { slugifyHeading } from './slugify-heading'
+
+export { slugifyHeading }
 
 // The right-hand rail is built from the markdown source rather than the DOM so
 // it renders server-side with no layout shift.

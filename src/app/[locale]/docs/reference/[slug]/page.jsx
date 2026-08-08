@@ -32,6 +32,7 @@ export async function generateMetadata({ params }) {
       // consolidates to the English canonical rather than claiming a
       // translation that does not exist.
       englishOnly: !doc.translated,
+      ownImage: true,
     }),
     keywords: doc.keywords,
   }
