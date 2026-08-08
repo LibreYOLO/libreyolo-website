@@ -27,21 +27,21 @@ meta:
       - label: github.com/marcoslucianops/DeepStream-Yolo
         href: https://github.com/marcoslucianops/DeepStream-Yolo
   - label: Availability
-    value: "The deepstream-export branch, commit 5f81e11e. No published release carries it."
+    value: "Ships in v1.5.0. Merged into dev on 2026-08-08 in pull request 728."
     links:
-      - label: branch
-        href: https://github.com/LibreYOLO/libreyolo/tree/deepstream-export
+      - label: pull request 728
+        href: https://github.com/LibreYOLO/libreyolo/pull/728
       - label: issue 648
         href: https://github.com/LibreYOLO/libreyolo/issues/648
   - label: Runtime validated
     value: "DeepStream 8.0.0 on an RTX 5070 Ti, detection only, 2026-08-08"
-verification: "Written from the runtime validation of 2026-08-08 and read against the deepstream-export branch at commit 5f81e11e. Family lists, config keys and defaults come from libreyolo/export/deepstream.py and libreyolo/export/exporter.py on that commit."
+verification: "Written from the runtime validation of 2026-08-08. Family lists, config keys and defaults read from libreyolo/export/deepstream.py and libreyolo/export/exporter.py at commit 5f81e11e, which merged into dev the same day in pull request 728."
 snippets:
   install:
-    - label: Install from the branch
+    - label: Install
       language: bash
       code: |
-        pip install "libreyolo[onnx] @ git+https://github.com/LibreYOLO/libreyolo@5f81e11e"
+        pip install "libreyolo[onnx]"
   export:
     - label: Python
       language: python
@@ -180,16 +180,14 @@ snippets:
 
 ## Availability
 
-The flag lives on the `deepstream-export` branch of the LibreYOLO repository, at
-commit `5f81e11e`. No published release carries it, so a plain
-`pip install libreyolo` does not have it. Install from the branch instead.
+DeepStream export ships in v1.5.0. It merged into `dev` on 2026-08-08 in pull
+request 728, so a current install has it and no branch pin is needed.
 
 <code-tabs name="install" />
 
-The branch was rebased onto `dev` and force-pushed on 2026-08-08, so a clone
-taken before that date has different history and does not carry the fix that
-lets these exports run on a CUDA machine at all. Pin the commit above rather
-than tracking the branch name.
+If you cloned the `deepstream-export` branch before 2026-08-08, replace it. That
+branch was rebased and force-pushed, and the older history is missing the fix
+that lets these exports run on a CUDA machine at all.
 
 ## What the export writes
 
