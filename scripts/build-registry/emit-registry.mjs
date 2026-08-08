@@ -155,9 +155,10 @@ for (const lin of ex.lineages) {
     // does not, the licensing block must not claim we republish them.
     weights_hosted: (lin.checkpoint_rows || []).length > 0,
     extra: EXTRAS[primary] ?? null,
-    trainable: true,
+    trainable: lin.trainable,
     unsupported_train_params: lin.unsupported_train_params,
-    capabilities: { train: true, val: true },
+    trainable_per_key: lin.trainable_per_key,
+    capabilities: { train: lin.trainable !== false, val: true },
     checkpoints,
     export: merged,
     benchmarks,

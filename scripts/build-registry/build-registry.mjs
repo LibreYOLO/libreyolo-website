@@ -179,7 +179,20 @@ function parseFamily(key) {
   }
   const unsupported = [...(text.match(/UNSUPPORTED_TRAIN_PARAMS[^=]*=\s*\{([\s\S]*?)\}/)?.[1] ?? '')
     .matchAll(/"([a-z_]+)"/g)].map((m) => m[1])
-  return { key, prefix, tasks, sizes, task_sizes: taskSizes, unsupported_train_params: unsupported }
+
+  /*
+   * Trainability, read rather than assumed. A family whose train() raises
+   * NotImplementedError is inference-only, and hardcoding trainable:true put a
+   * false capability on every museum and specialist family in the registry.
+   * Only an unconditional raise counts: a raise guarded by an `if` is a
+   * validation error on bad input, not a missing capability.
+   */
+  const trainDef = text.match(/\n    def train\(([\s\S]*?)(?=\n    def |\n\nclass |$)/)?.[0] ?? ''
+  const body = trainDef.replace(/"""[\s\S]*?"""/g, '')
+  const trainable = trainDef === ''
+    ? null
+    : !/^\s{8}raise NotImplementedError/m.test(body)
+  return { key, prefix, tasks, sizes, task_sizes: taskSizes, unsupported_train_params: unsupported, trainable }
 }
 
 /* ── checkpoints from the HF org ────────────────────────────────── */
@@ -323,6 +336,8 @@ for (const lin of LINEAGES) {
     export: Object.fromEntries(lin.keys.map((k) => [k, families[k]?.export ?? {}])),
     benchmarks: Object.fromEntries(lin.keys.map((k) => [k, benchmarks[k] ?? {}])),
     unsupported_train_params: Object.fromEntries(lin.keys.map((k) => [k, families[k]?.unsupported_train_params ?? []])),
+    trainable: lin.keys.some((k) => families[k]?.trainable === true) ? true : lin.keys.every((k) => families[k]?.trainable === false) ? false : null,
+    trainable_per_key: Object.fromEntries(lin.keys.map((k) => [k, families[k]?.trainable ?? null])),
   })
 }
 report.export_formats = formats

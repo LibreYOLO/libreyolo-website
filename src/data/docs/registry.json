@@ -153,6 +153,11 @@
         "yolo9_e2e": [],
         "yolo9_p2": []
       },
+      "trainable_per_key": {
+        "yolo9": true,
+        "yolo9_e2e": true,
+        "yolo9_p2": null
+      },
       "capabilities": {
         "train": true,
         "val": true
@@ -328,6 +333,9 @@
           "translate",
           "pretrained"
         ]
+      },
+      "trainable_per_key": {
+        "rfdetr": true
       },
       "capabilities": {
         "train": true,
@@ -651,6 +659,9 @@
       "unsupported_train_params": {
         "ec": []
       },
+      "trainable_per_key": {
+        "ec": true
+      },
       "capabilities": {
         "train": true,
         "val": true
@@ -864,6 +875,11 @@
         "rtdetr": [],
         "rtdetrv2": [],
         "rtdetrv4": []
+      },
+      "trainable_per_key": {
+        "rtdetr": true,
+        "rtdetrv2": null,
+        "rtdetrv4": true
       },
       "capabilities": {
         "train": true,
@@ -1168,6 +1184,9 @@
       "unsupported_train_params": {
         "dfine": []
       },
+      "trainable_per_key": {
+        "dfine": true
+      },
       "capabilities": {
         "train": true,
         "val": true
@@ -1357,6 +1376,10 @@
       "unsupported_train_params": {
         "deim": [],
         "deimv2": []
+      },
+      "trainable_per_key": {
+        "deim": true,
+        "deimv2": true
       },
       "capabilities": {
         "train": true,
@@ -1616,6 +1639,9 @@
       "unsupported_train_params": {
         "yolonas": []
       },
+      "trainable_per_key": {
+        "yolonas": true
+      },
       "capabilities": {
         "train": true,
         "val": true
@@ -1714,6 +1740,9 @@
       "trainable": true,
       "unsupported_train_params": {
         "yolox": []
+      },
+      "trainable_per_key": {
+        "yolox": true
       },
       "capabilities": {
         "train": true,
@@ -1867,6 +1896,9 @@
       "unsupported_train_params": {
         "yolo7": []
       },
+      "trainable_per_key": {
+        "yolo7": true
+      },
       "capabilities": {
         "train": true,
         "val": true
@@ -1926,6 +1958,9 @@
       "trainable": true,
       "unsupported_train_params": {
         "rtmdet": []
+      },
+      "trainable_per_key": {
+        "rtmdet": true
       },
       "capabilities": {
         "train": true,
@@ -2063,6 +2098,9 @@
       "unsupported_train_params": {
         "picodet": []
       },
+      "trainable_per_key": {
+        "picodet": true
+      },
       "capabilities": {
         "train": true,
         "val": true
@@ -2170,6 +2208,9 @@
       "unsupported_train_params": {
         "fomo": []
       },
+      "trainable_per_key": {
+        "fomo": true
+      },
       "capabilities": {
         "train": true,
         "val": true
@@ -2242,6 +2283,9 @@
       "trainable": true,
       "unsupported_train_params": {
         "segformer": []
+      },
+      "trainable_per_key": {
+        "segformer": true
       },
       "capabilities": {
         "train": true,
@@ -2337,6 +2381,9 @@
       "unsupported_train_params": {
         "lingbotvision": []
       },
+      "trainable_per_key": {
+        "lingbotvision": true
+      },
       "capabilities": {
         "train": true,
         "val": true
@@ -2411,6 +2458,9 @@
       "trainable": true,
       "unsupported_train_params": {
         "dinov2": []
+      },
+      "trainable_per_key": {
+        "dinov2": true
       },
       "capabilities": {
         "train": true,
@@ -2491,6 +2541,9 @@
       "unsupported_train_params": {
         "nafnet": []
       },
+      "trainable_per_key": {
+        "nafnet": true
+      },
       "capabilities": {
         "train": true,
         "val": true
@@ -2549,6 +2602,9 @@
       "trainable": true,
       "unsupported_train_params": {
         "resnet": []
+      },
+      "trainable_per_key": {
+        "resnet": true
       },
       "capabilities": {
         "train": true,
@@ -2630,6 +2686,9 @@
       "unsupported_train_params": {
         "convnext": []
       },
+      "trainable_per_key": {
+        "convnext": true
+      },
       "capabilities": {
         "train": true,
         "val": true
@@ -2703,6 +2762,9 @@
       "unsupported_train_params": {
         "mobilenetv4": []
       },
+      "trainable_per_key": {
+        "mobilenetv4": true
+      },
       "capabilities": {
         "train": true,
         "val": true
@@ -2775,6 +2837,9 @@
       "trainable": true,
       "unsupported_train_params": {
         "efficientnetv2": []
+      },
+      "trainable_per_key": {
+        "efficientnetv2": true
       },
       "capabilities": {
         "train": true,
@@ -2852,12 +2917,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "lwdetr": []
       },
+      "trainable_per_key": {
+        "lwdetr": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -2939,12 +3007,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "detr": []
       },
+      "trainable_per_key": {
+        "detr": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -3019,12 +3090,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "deformable_detr": []
       },
+      "trainable_per_key": {
+        "deformable_detr": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -3106,12 +3180,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "dinodetr": []
       },
+      "trainable_per_key": {
+        "dinodetr": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -3180,12 +3257,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "mask_rcnn": []
       },
+      "trainable_per_key": {
+        "mask_rcnn": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -3253,12 +3333,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "faster_rcnn": []
       },
+      "trainable_per_key": {
+        "faster_rcnn": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -3333,12 +3416,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "fcos": []
       },
+      "trainable_per_key": {
+        "fcos": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -3392,12 +3478,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "retinanet": []
       },
+      "trainable_per_key": {
+        "retinanet": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -3458,12 +3547,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "ssd": []
       },
+      "trainable_per_key": {
+        "ssd": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -3517,12 +3609,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "centernet": []
       },
+      "trainable_per_key": {
+        "centernet": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -3583,12 +3678,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "efficientdet": []
       },
+      "trainable_per_key": {
+        "efficientdet": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -3670,12 +3768,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "vit": []
       },
+      "trainable_per_key": {
+        "vit": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -3750,12 +3851,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "swin": []
       },
+      "trainable_per_key": {
+        "swin": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -3830,12 +3934,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "vgg": []
       },
+      "trainable_per_key": {
+        "vgg": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -3910,12 +4017,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "alexnet": []
       },
+      "trainable_per_key": {
+        "alexnet": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -3969,12 +4079,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "fcn": []
       },
+      "trainable_per_key": {
+        "fcn": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -4035,12 +4148,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "deeplabv3": []
       },
+      "trainable_per_key": {
+        "deeplabv3": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -4108,12 +4224,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "pidnet": []
       },
+      "trainable_per_key": {
+        "pidnet": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -4183,12 +4302,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "eomt": []
       },
+      "trainable_per_key": {
+        "eomt": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -4305,12 +4427,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "hrnet": []
       },
+      "trainable_per_key": {
+        "hrnet": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -4371,12 +4496,15 @@
       },
       "weights_hosted": false,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "l2cs": []
       },
+      "trainable_per_key": {
+        "l2cs": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [],
@@ -4422,12 +4550,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "depth_anything": []
       },
+      "trainable_per_key": {
+        "depth_anything": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -4495,12 +4626,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "depth_anything3": []
       },
+      "trainable_per_key": {
+        "depth_anything3": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -4554,12 +4688,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "zipdepth": []
       },
+      "trainable_per_key": {
+        "zipdepth": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -4620,12 +4757,15 @@
       },
       "weights_hosted": false,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "midas": []
       },
+      "trainable_per_key": {
+        "midas": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [],
@@ -4671,12 +4811,15 @@
       },
       "weights_hosted": false,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "moge2": []
       },
+      "trainable_per_key": {
+        "moge2": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [],
@@ -4722,12 +4865,15 @@
       },
       "weights_hosted": false,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "teed": []
       },
+      "trainable_per_key": {
+        "teed": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [],
@@ -4773,12 +4919,15 @@
       },
       "weights_hosted": false,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "dexined": []
       },
+      "trainable_per_key": {
+        "dexined": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [],
@@ -4824,12 +4973,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "swinir": []
       },
+      "trainable_per_key": {
+        "swinir": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -4897,12 +5049,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "realesrgan": []
       },
+      "trainable_per_key": {
+        "realesrgan": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -4970,12 +5125,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "birefnet": []
       },
+      "trainable_per_key": {
+        "birefnet": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -5029,12 +5187,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "feynobg": []
       },
+      "trainable_per_key": {
+        "feynobg": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -5102,12 +5263,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "ppocr": []
       },
+      "trainable_per_key": {
+        "ppocr": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -5168,12 +5332,15 @@
       },
       "weights_hosted": false,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "facerec": []
       },
+      "trainable_per_key": {
+        "facerec": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [],
@@ -5204,12 +5371,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "sam3dbody": []
       },
+      "trainable_per_key": {
+        "sam3dbody": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -5270,9 +5440,12 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "yolo1": []
+      },
+      "trainable_per_key": {
+        "yolo1": null
       },
       "capabilities": {
         "train": true,
@@ -5329,9 +5502,12 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "yolo2": []
+      },
+      "trainable_per_key": {
+        "yolo2": null
       },
       "capabilities": {
         "train": true,
@@ -5395,9 +5571,12 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "yolo3": []
+      },
+      "trainable_per_key": {
+        "yolo3": null
       },
       "capabilities": {
         "train": true,
@@ -5468,9 +5647,12 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "yolo4": []
+      },
+      "trainable_per_key": {
+        "yolo4": null
       },
       "capabilities": {
         "train": true,
@@ -5534,12 +5716,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "deit": []
       },
+      "trainable_per_key": {
+        "deit": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -5607,9 +5792,12 @@
       },
       "weights_hosted": false,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "sam": []
+      },
+      "trainable_per_key": {
+        "sam": null
       },
       "capabilities": {
         "train": true,
@@ -5658,9 +5846,12 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "sam2": []
+      },
+      "trainable_per_key": {
+        "sam2": null
       },
       "capabilities": {
         "train": true,
@@ -5738,9 +5929,12 @@
       },
       "weights_hosted": false,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "sam3": []
+      },
+      "trainable_per_key": {
+        "sam3": null
       },
       "capabilities": {
         "train": true,
@@ -5789,9 +5983,12 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "mobilesam": []
+      },
+      "trainable_per_key": {
+        "mobilesam": null
       },
       "capabilities": {
         "train": true,
@@ -5848,9 +6045,12 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "edgetam": []
+      },
+      "trainable_per_key": {
+        "edgetam": null
       },
       "capabilities": {
         "train": true,
@@ -5907,9 +6107,12 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "picosam3": []
+      },
+      "trainable_per_key": {
+        "picosam3": null
       },
       "capabilities": {
         "train": true,
@@ -5966,9 +6169,12 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "grounding_dino": []
+      },
+      "trainable_per_key": {
+        "grounding_dino": null
       },
       "capabilities": {
         "train": true,
@@ -6032,9 +6238,12 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "owlv2": []
+      },
+      "trainable_per_key": {
+        "owlv2": null
       },
       "capabilities": {
         "train": true,
@@ -6098,9 +6307,12 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "omdet_turbo": []
+      },
+      "trainable_per_key": {
+        "omdet_turbo": null
       },
       "capabilities": {
         "train": true,
@@ -6157,9 +6369,12 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "ov_deim": []
+      },
+      "trainable_per_key": {
+        "ov_deim": null
       },
       "capabilities": {
         "train": true,
@@ -6230,9 +6445,12 @@
       },
       "weights_hosted": false,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "florence2": []
+      },
+      "trainable_per_key": {
+        "florence2": null
       },
       "capabilities": {
         "train": true,
@@ -6281,9 +6499,12 @@
       },
       "weights_hosted": false,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "kosmos2": []
+      },
+      "trainable_per_key": {
+        "kosmos2": null
       },
       "capabilities": {
         "train": true,
@@ -6332,9 +6553,12 @@
       },
       "weights_hosted": false,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "qwen3vl": []
+      },
+      "trainable_per_key": {
+        "qwen3vl": null
       },
       "capabilities": {
         "train": true,
@@ -6383,9 +6607,12 @@
       },
       "weights_hosted": false,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "smolvlm2": []
+      },
+      "trainable_per_key": {
+        "smolvlm2": null
       },
       "capabilities": {
         "train": true,
@@ -6434,9 +6661,12 @@
       },
       "weights_hosted": false,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "internvl3": []
+      },
+      "trainable_per_key": {
+        "internvl3": null
       },
       "capabilities": {
         "train": true,
@@ -6485,9 +6715,12 @@
       },
       "weights_hosted": false,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "lfm2vl": []
+      },
+      "trainable_per_key": {
+        "lfm2vl": null
       },
       "capabilities": {
         "train": true,
@@ -6537,9 +6770,12 @@
       },
       "weights_hosted": false,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "locateanything": []
+      },
+      "trainable_per_key": {
+        "locateanything": null
       },
       "capabilities": {
         "train": true,
@@ -6603,12 +6839,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "clip": []
       },
+      "trainable_per_key": {
+        "clip": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -6684,12 +6923,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "siglip2": []
       },
+      "trainable_per_key": {
+        "siglip2": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -6770,9 +7012,12 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": true,
+      "trainable": null,
       "unsupported_train_params": {
         "sensenovavision": []
+      },
+      "trainable_per_key": {
+        "sensenovavision": null
       },
       "capabilities": {
         "train": true,
@@ -6817,12 +7062,15 @@
       },
       "weights_hosted": false,
       "extra": null,
-      "trainable": true,
+      "trainable": false,
       "unsupported_train_params": {
         "libremodus": []
       },
+      "trainable_per_key": {
+        "libremodus": false
+      },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [],
