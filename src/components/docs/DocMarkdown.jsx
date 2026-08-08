@@ -16,7 +16,7 @@ import { slugifyHeading } from '@/lib/docs'
 import CodeTabs from '@/components/docs/CodeTabs'
 import {
   SectionTitle, BenchmarkTable, VaEmbed, CheckpointTable, ExportMatrix,
-  TaskSupport, Provenance, Citation,
+  Provenance, Citation,
 } from '@/components/docs/ModelBlocks'
 
 function textOf(children) {
@@ -79,7 +79,6 @@ export default function DocMarkdown({ children, family, snippets = {} }) {
     },
 
     /* Generated blocks. The author writes the tag; the pipeline supplies data. */
-    'task-support': () => <TaskSupport family={family} />,
     'benchmark-table': ({ task }) => <BenchmarkTable family={family} task={task || 'detect'} />,
     'va-embed': () => <VaEmbed family={family} />,
     'checkpoint-table': () => <CheckpointTable family={family} />,

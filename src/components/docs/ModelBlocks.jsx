@@ -157,44 +157,6 @@ export function HeroMedia({ media }) {
   )
 }
 
-/* ── tasks ──────────────────────────────────────────────────────── */
-
-export function TaskSupport({ family }) {
-  return (
-    <Table>
-      <thead>
-        <tr>
-          <Th>Task</Th>
-          <Th>Weights</Th>
-          <Th>Training</Th>
-          <Th>Export formats</Th>
-          <Th>Since</Th>
-        </tr>
-      </thead>
-      <tbody>
-        {family.tasks.map((task) => {
-          const meta = getTaskMeta(task)
-          const count = family.checkpoints.filter((c) => c.task === task).length
-          const validated = Object.values(family.export[task] || {}).filter((v) => v === 'validated').length
-          return (
-            <tr key={task}>
-              <Td>
-                <Link href={`/docs/tasks/${meta.slug}`} className="text-libre-700 underline-offset-2 hover:underline dark:text-libre-400">
-                  {meta.label}
-                </Link>
-              </Td>
-              <Td className="tabular-nums">{count}</Td>
-              <Td>{family.capabilities.train ? 'Supported' : 'Inference only'}</Td>
-              <Td className="tabular-nums">{validated} validated</Td>
-              <Td className="tabular-nums">v{family.task_added_in?.[task] || family.added_in}</Td>
-            </tr>
-          )
-        })}
-      </tbody>
-    </Table>
-  )
-}
-
 /* ── benchmarks ─────────────────────────────────────────────────── */
 
 export function BenchmarkTable({ family, task = 'detect' }) {
@@ -267,9 +229,11 @@ export function CheckpointTable({ family }) {
       <Table>
         <thead>
           <tr>
+            {/* No params column: it is only recorded for a handful of rows,
+                and a mostly-empty column reads as a broken table. Parameter
+                counts live in the benchmark table, where they are known. */}
             <Th>File</Th>
             <Th align="right">Input (px)</Th>
-            <Th align="right">Params (M)</Th>
             <Th>Trained on</Th>
             <Th>Weights license</Th>
           </tr>
@@ -278,7 +242,7 @@ export function CheckpointTable({ family }) {
           {grouped.map(({ task, rows }) => (
             <Fragment key={task}>
               <tr>
-                <td colSpan={5} className="border-b border-surface-200/70 px-3 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wider text-surface-500 dark:border-white/[0.07] dark:text-surface-500">
+                <td colSpan={4} className="border-b border-surface-200/70 px-3 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wider text-surface-500 dark:border-white/[0.07] dark:text-surface-500">
                   {getTaskMeta(task).label}
                 </td>
               </tr>
@@ -295,9 +259,6 @@ export function CheckpointTable({ family }) {
                     </a>
                   </Td>
                   <Td className="text-right tabular-nums">{row.imgsz}</Td>
-                  {/* Empty means not recorded in the registry. That is the one
-                      missing-data convention, used in every docs table. */}
-                  <Td className="text-right tabular-nums">{row.params_m ?? ''}</Td>
                   <Td>{row.data}</Td>
                   <Td>{row.license}</Td>
                 </tr>

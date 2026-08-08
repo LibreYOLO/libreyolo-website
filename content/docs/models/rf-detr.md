@@ -129,17 +129,10 @@ selection; there is no NMS step to tune. See
 
 ## Variants
 
-Four tasks share one architecture: segmentation, pose and oriented boxes reuse
-the detection decoder with a different head, so they take the same arguments.
-
-<task-support />
-
-Sizes differ mainly by input resolution rather than depth, so picking one is a
-latency decision more than a memory one.
-
-<checkpoint-table />
-
-## Benchmarks
+Four sizes, and four tasks that share one architecture: segmentation, pose and
+oriented boxes reuse the detection decoder with a different head, so they take
+the same arguments. Sizes differ mainly by input resolution rather than depth,
+so choosing one is a latency decision more than a memory one.
 
 <benchmark-table task="detect" />
 
@@ -176,6 +169,12 @@ full COCO `val2017`.
 <export-matrix />
 
 <code-tabs name="export" />
+
+## Checkpoints
+
+Every published weight file for this family.
+
+<checkpoint-table />
 
 ## Licensing
 

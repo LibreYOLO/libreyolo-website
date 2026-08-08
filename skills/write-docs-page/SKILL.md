@@ -61,13 +61,30 @@ about it. The reader arrived to run the thing. Sections, in this order:
 |---|---|
 | Install | The extra it needs, if any, and the one pip line |
 | Predict | `<code-tabs name="predict" />`, plus what the Results carry |
-| Variants | `<task-support />` and `<checkpoint-table />`. What exists to load |
-| Benchmarks | `<benchmark-table />` and `<va-embed />` when there is data |
+| Variants | `<benchmark-table />` and `<va-embed />`. The sizes with their numbers, which is how a reader chooses one |
 | Train | `<code-tabs name="train" />`, plus the arguments that matter for this family |
 | Validate | `<code-tabs name="val" />`, including the command that reproduces our published number |
 | Export | `<export-matrix />` and `<code-tabs name="export" />` |
+| Checkpoints | `<checkpoint-table />`. Reference material, so it sits low |
 | Licensing | `<provenance-box>`, which carries the caveats, provenance rows and interpretation |
 | Citation | `<citation-block />`, verbatim from upstream with its source URL |
+
+Order follows what the reader needs first. Install and run come before anything
+descriptive; the full checkpoint list is something you consult once you have
+decided, so it sits near the bottom rather than interrupting the path to running
+the model.
+
+**Do not add a task-by-task summary table.** Which tasks a family serves is
+already in the header metadata, and the export matrix has a row per task. A
+table restating that with counts of other tables is a table about the page
+rather than about the model. Columns nobody acts on ("since v1.3.0", "3
+validated formats") are the symptom.
+
+**Do not ship a column that is mostly empty.** A checkpoint table with a
+parameter count for four rows out of nineteen reads as broken rather than
+precise. Either the registry has the values for every row or the column comes
+out; parameter counts already appear in the benchmark table, where they are
+known for every row shown.
 
 **Do not add these to a model page:**
 
@@ -143,7 +160,7 @@ using the page's `families`.
 
 | Tag | Renders |
 |---|---|
-| `<task-support />` | Tasks, checkpoint counts, training, export counts, since-version |
+
 | `<benchmark-table task="detect" />` | Benchmark rows plus a source line |
 | `<va-embed />` | The Vision Analysis chart, when the family has one |
 | `<checkpoint-table />` | Published weights, grouped by task |
