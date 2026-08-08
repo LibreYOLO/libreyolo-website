@@ -6,15 +6,18 @@ import { Link } from '@/i18n/navigation'
 import RF100VLPanel from '@/components/articles/rf100vl/RF100VLPanel'
 import ThemedEmbed from '@/components/ThemedEmbed'
 
-const VA = 'https://www.visionanalysis.org'
+// Defaults to the live site. Point NEXT_PUBLIC_VA_URL at a local Vision
+// Analysis dev server to preview embed changes before they are deployed.
+const VA = process.env.NEXT_PUBLIC_VA_URL || 'https://www.visionanalysis.org'
 const UTM = 'utm_source=libreyolo&utm_medium=referral&utm_campaign=benchmarks'
 
-// One family lit up against the grey field, rather than every model at once.
-// The embed draws a curve through the highlighted points, so the size/accuracy
-// trade-off reads at a glance instead of as a cloud. Deliberately a single
-// family: two families interleave at the small-parameter end and their point
-// labels overlap.
-const SCATTER_HIGHLIGHT = ['dfine-n', 'dfine-s', 'dfine-m', 'dfine-l', 'dfine-x'].join(',')
+// Our two flagships lit up against the grey field of every other detector.
+// The embed draws a curve through each highlighted family, so the size/accuracy
+// trade-off reads at a glance instead of as a cloud.
+const SCATTER_HIGHLIGHT = [
+  'yolov9t', 'yolov9s', 'yolov9m', 'yolov9c',
+  'rfdetr-n', 'rfdetr-s', 'rfdetr-m', 'rfdetr-l',
+].join(',')
 
 const HEADLINE_STATS = [
   { icon: Activity, value: '100', label: 'real-world datasets in RF100-VL' },
@@ -118,7 +121,7 @@ export default function BenchmarksPage() {
 
         <div className="mt-8 overflow-hidden rounded-2xl border border-surface-200 dark:border-surface-800">
           <ThemedEmbed
-            src={`${VA}/embed/scatter?highlight=${SCATTER_HIGHLIGHT}&title=Accuracy%20vs%20parameters&subtitle=D-FINE%20against%20every%20other%20detector%20on%20COCO%20val2017`}
+            src={`${VA}/embed/scatter?highlight=${SCATTER_HIGHLIGHT}&title=Accuracy%20vs%20parameters&subtitle=YOLOv9%20and%20RF-DETR%20against%20every%20other%20detector%20on%20COCO%20val2017`}
             title="Accuracy vs parameters, COCO val2017"
             className="w-full block"
             style={{ border: 0, overflow: 'hidden', aspectRatio: '640 / 400' }}
