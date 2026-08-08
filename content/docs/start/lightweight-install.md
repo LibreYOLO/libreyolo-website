@@ -7,7 +7,7 @@ keywords: [libreyolo without pytorch, onnx inference no torch, libreyolo lightwe
 last_verified: "1.5.0"
 meta:
   - label: Applies to
-    value: ONNX detection, G0 and G1 families
+    value: ONNX detection, seven model families
   - label: Entry point
     value: libreyolo.backends.onnx.OnnxBackend
     mono: true
@@ -80,19 +80,24 @@ on the machine, not merely less of it.
 |---|---|
 | Task | Detection |
 | Format | ONNX |
-| Families | G0 and G1 |
 | Entry point | `OnnxBackend` |
 | Interface | Python library |
 
+Seven families were verified on this path: [YOLOv9](/docs/models/yolov9),
+[YOLO-NAS](/docs/models/yolo-nas), [EdgeCrafter](/docs/models/edgecrafter),
+[RT-DETR](/docs/models/rt-detr), [RF-DETR](/docs/models/rf-detr),
+[D-FINE](/docs/models/d-fine) and [DEIM](/docs/models/deim), counting each
+family's variants with it.
+
 That is the verified scope, not a boundary the library enforces. Other tasks
 and other families are simply outside what was checked: some will pull torch
-when you call them, and a few may happen to work. Treat anything beyond the
-table as untested rather than as supported or as broken.
+when you call them, and a few may happen to work. Treat anything beyond this
+list as untested rather than as supported or as broken.
 
 Inside it, results are identical to the normal install, not merely close. Each
-G0 and G1 detection family was exported to ONNX and run twice, once normally
-and once with torch blocked; boxes, scores and classes matched exactly. A
-parity test in the suite keeps that contract from drifting.
+family was exported to ONNX and run twice, once normally and once with torch
+blocked; boxes, scores and classes matched exactly. A parity test in the suite
+keeps that contract from drifting.
 
 ## The five things that catch people
 

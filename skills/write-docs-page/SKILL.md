@@ -70,6 +70,13 @@ Rules that follow:
   everyone associates with the task; their model cards say in those words that
   they were not, and name a six-class vehicle set. Read the card, or write
   nothing about the training data.
+- **`g0`, `g1`, `g2`, `g3`, `g4` are internal notation. Never publish them.**
+  Not in prose, not in a metadata value, not in a table head. The registry
+  already maps each to a reader-facing label (Flagship, Core, Supported,
+  Inference only, Museum) and `getTierMeta()` is the only sanctioned way to
+  show one. When a page needs to describe a set of families, name the families
+  and link them, the way the task pages do. A reader cannot act on a tier code
+  and has no way to look one up.
 - **The only images that ship are `parkour.jpg` and `guggenheim-bilbao.jpg`**,
   in `libreyolo/assets/`. In Python use `SAMPLE_IMAGE`, which resolves to the
   first. In shell use its raw URL on the `release` branch. A plausible filename
