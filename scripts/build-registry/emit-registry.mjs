@@ -47,22 +47,48 @@ for (const lin of ex.lineages) {
     }
   }
 
-  const sizeOf = (name) => {
+  /*
+   * Native input resolution for a checkpoint. TASK_INPUT_SIZES wins over
+   * INPUT_SIZES where a family sets it, because several families run
+   * segmentation and pose at a different resolution from detection, and
+   * reading only INPUT_SIZES would report the detection number for all of them.
+   * The size code is matched against the checkpoint's own suffix, longest
+   * first, so "s" does not match inside "seg".
+   */
+  const sizeOf = (name, task) => {
+    const bare = name.replace(/-(seg|pose|obb|cls|sem|point)$/, '')
+    const entry = ex.lineages.find((l) => l.slug === lin.slug)
     for (const key of lin.keys) {
-      const table = ex.lineages.find((l) => l.slug === lin.slug).sizes[key] || {}
-      for (const [code, px] of Object.entries(table)) {
-        if (name.toLowerCase().includes(code.toLowerCase())) return px
+      const perTask = entry.task_sizes?.[key]
+      // If a family declares per-task sizes at all, only its table for THIS
+      // task may be used. Falling back to INPUT_SIZES would silently report
+      // the detection resolution for a segmentation checkpoint.
+      const table = perTask && Object.keys(perTask).length
+        ? perTask[task]
+        : entry.sizes[key]
+      if (!table) continue
+      const codes = Object.keys(table).sort((a, b) => b.length - a.length)
+      for (const code of codes) {
+        if (bare.toLowerCase().endsWith(code.toLowerCase())) return table[code]
       }
     }
     return null
   }
 
-  const checkpoints = lin.checkpoint_names.map((name) => {
-    const bare = name.replace(/\.pt$/, '')
-    const task = /-seg$/.test(bare) ? 'segment'
-      : /-pose$/.test(bare) ? 'pose'
-      : /-obb$/.test(bare) ? 'obb' : 'detect'
-    return { name, task, imgsz: sizeOf(bare), data: DATASET[task] || 'COCO', license: null }
+  const checkpoints = (lin.checkpoint_rows || []).map((row) => {
+    const bare = row.name.replace(/\.pt$/, '')
+    // A checkpoint trained on something other than the family default names
+    // that dataset in its filename. When it does, the family's default input
+    // size does not apply either, so leave the cell empty rather than assert
+    // a resolution we have not read.
+    const custom = Boolean(row.dataset)
+    return {
+      name: row.name,
+      task: row.task,
+      imgsz: custom ? null : sizeOf(bare, row.task),
+      data: row.dataset || DATASET[row.task] || 'COCO',
+      license: row.license,
+    }
   })
 
   const benchmarks = {}
@@ -90,9 +116,19 @@ for (const lin of ex.lineages) {
     registry_keys: lin.keys,
     display: lin.display,
     prefix: lin.prefixes?.[primary] ?? null,
+    // Per-key prefixes. A lineage page mixes benchmark rows from sibling keys
+    // with different filename prefixes, so a row must be labelled with its own
+    // key's prefix or the table credits one version's accuracy to another
+    // version's filename, naming files that do not exist.
+    prefixes: lin.prefixes ?? {},
     tier: lin.tier,
     tasks: lin.tasks,
     sizes_label: sizesLabel(lin),
+    added_in: lin.added_in,
+    task_added_in: lin.task_added_in,
+    // Whether the LibreYOLO org hosts this family's weights at all. When it
+    // does not, the licensing block must not claim we republish them.
+    weights_hosted: (lin.checkpoint_rows || []).length > 0,
     extra: EXTRAS[primary] ?? null,
     trainable: true,
     unsupported_train_params: lin.unsupported_train_params,
@@ -115,9 +151,9 @@ if (prev && families['rfdetr']) {
   families['rfdetr'].export_reasons = prev.export_reasons
   families['rfdetr'].va_embed = prev.va_embed
   families['rfdetr'].capabilities = prev.capabilities
-  // Keep the hand-verified checkpoint rows: they carry licenses and input sizes
-  // the extractor cannot know yet.
-  families['rfdetr'].checkpoints = prev.checkpoints
+  // Checkpoints are no longer carried over: the extractor now reads each
+  // repository's own license tag and honors TASK_INPUT_SIZES, so it is a better
+  // source than the hand-written rows it replaces.
 }
 
 const out = {

@@ -129,11 +129,23 @@
       ],
       "display": "YOLOv9",
       "prefix": "LibreYOLO9",
+      "prefixes": {
+        "yolo9": "LibreYOLO9",
+        "yolo9_e2e": "LibreYOLO9E2E",
+        "yolo9_p2": "LibreYOLO9P2"
+      },
       "tier": "g0",
       "tasks": [
         "detect"
       ],
       "sizes_label": "yolo9: t, s, m, c at 640 px; yolo9_p2: t, s at 640 px",
+      "added_in": "1.0.0",
+      "task_added_in": {
+        "yolo9": "1.0.0",
+        "yolo9_e2e": "1.2.0",
+        "yolo9_p2": "1.3.1"
+      },
+      "weights_hosted": true,
       "extra": null,
       "trainable": true,
       "unsupported_train_params": {
@@ -151,63 +163,63 @@
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "mit"
         },
         {
           "name": "LibreYOLO9s.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "mit"
         },
         {
           "name": "LibreYOLO9m.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "mit"
         },
         {
           "name": "LibreYOLO9c.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "mit"
         },
         {
           "name": "LibreYOLO9E2Et.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "mit"
         },
         {
           "name": "LibreYOLO9E2Es.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "mit"
         },
         {
           "name": "LibreYOLO9E2Em.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "mit"
         },
         {
           "name": "LibreYOLO9E2Ec.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "mit"
         },
         {
           "name": "LibreYOLO9P2s-visdrone.pt",
           "task": "detect",
-          "imgsz": 640,
-          "data": "COCO",
-          "license": null
+          "imgsz": null,
+          "data": "VisDrone2019-DET",
+          "license": "cc-by-nc-sa-3.0"
         }
       ],
       "export": {
@@ -273,6 +285,9 @@
       ],
       "display": "RF-DETR",
       "prefix": "LibreRFDETR",
+      "prefixes": {
+        "rfdetr": "LibreRFDETR"
+      },
       "tier": "g0",
       "tasks": [
         "detect",
@@ -281,6 +296,14 @@
         "obb"
       ],
       "sizes_label": "n, s, m, l for detection, pose and oriented boxes; n through xx for segmentation",
+      "added_in": "1.0.0",
+      "task_added_in": {
+        "detect": "1.0.0",
+        "segment": "1.2.0",
+        "pose": "1.3.0",
+        "obb": "1.3.0"
+      },
+      "weights_hosted": true,
       "extra": "rfdetr",
       "trainable": true,
       "unsupported_train_params": {
@@ -309,175 +332,137 @@
       },
       "checkpoints": [
         {
-          "name": "LibreRFDETRn.pt",
+          "name": "LibreRFDETRl.pt",
           "task": "detect",
-          "size": "n",
-          "imgsz": 384,
-          "params_m": 30.47,
+          "imgsz": 704,
           "data": "COCO",
-          "license": "Apache-2.0"
-        },
-        {
-          "name": "LibreRFDETRs.pt",
-          "task": "detect",
-          "size": "s",
-          "imgsz": 512,
-          "params_m": 32.11,
-          "data": "COCO",
-          "license": "Apache-2.0"
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRFDETRm.pt",
           "task": "detect",
-          "size": "m",
           "imgsz": 576,
-          "params_m": 33.69,
           "data": "COCO",
-          "license": "Apache-2.0"
+          "license": "apache-2.0"
         },
         {
-          "name": "LibreRFDETRl.pt",
+          "name": "LibreRFDETRn.pt",
           "task": "detect",
-          "size": "l",
-          "imgsz": 704,
-          "params_m": 33.93,
+          "imgsz": 384,
           "data": "COCO",
-          "license": "Apache-2.0"
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRFDETRs.pt",
+          "task": "detect",
+          "imgsz": 512,
+          "data": "COCO",
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRFDETRn-seg.pt",
           "task": "segment",
-          "size": "n",
           "imgsz": 312,
-          "params_m": 33.58,
           "data": "COCO",
-          "license": "Apache-2.0"
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRFDETRs-seg.pt",
           "task": "segment",
-          "size": "s",
           "imgsz": 384,
-          "params_m": null,
           "data": "COCO",
-          "license": "Apache-2.0"
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRFDETRm-seg.pt",
           "task": "segment",
-          "size": "m",
           "imgsz": 432,
-          "params_m": null,
           "data": "COCO",
-          "license": "Apache-2.0"
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRFDETRl-seg.pt",
           "task": "segment",
-          "size": "l",
           "imgsz": 504,
-          "params_m": null,
           "data": "COCO",
-          "license": "Apache-2.0"
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRFDETRx-seg.pt",
           "task": "segment",
-          "size": "x",
-          "imgsz": 504,
-          "params_m": null,
+          "imgsz": 624,
           "data": "COCO",
-          "license": "Apache-2.0"
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRFDETRxx-seg.pt",
           "task": "segment",
-          "size": "xx",
-          "imgsz": 504,
-          "params_m": null,
+          "imgsz": 768,
           "data": "COCO",
-          "license": "Apache-2.0"
-        },
-        {
-          "name": "LibreRFDETRn-pose.pt",
-          "task": "pose",
-          "size": "n",
-          "imgsz": 384,
-          "params_m": null,
-          "data": "COCO keypoints",
-          "license": "Apache-2.0"
-        },
-        {
-          "name": "LibreRFDETRs-pose.pt",
-          "task": "pose",
-          "size": "s",
-          "imgsz": 512,
-          "params_m": null,
-          "data": "COCO keypoints",
-          "license": "Apache-2.0"
-        },
-        {
-          "name": "LibreRFDETRm-pose.pt",
-          "task": "pose",
-          "size": "m",
-          "imgsz": 576,
-          "params_m": null,
-          "data": "COCO keypoints",
-          "license": "Apache-2.0"
-        },
-        {
-          "name": "LibreRFDETRl-pose.pt",
-          "task": "pose",
-          "size": "l",
-          "imgsz": 704,
-          "params_m": null,
-          "data": "COCO keypoints",
-          "license": "Apache-2.0"
-        },
-        {
-          "name": "LibreRFDETRx-pose.pt",
-          "task": "pose",
-          "size": "x",
-          "imgsz": 704,
-          "params_m": null,
-          "data": "COCO keypoints",
-          "license": "Apache-2.0"
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRFDETRn-obb.pt",
           "task": "obb",
-          "size": "n",
           "imgsz": 384,
-          "params_m": null,
           "data": "DOTA",
-          "license": "Apache-2.0"
+          "license": "cc-by-4.0"
+        },
+        {
+          "name": "LibreRFDETRn-pose.pt",
+          "task": "pose",
+          "imgsz": null,
+          "data": "COCO keypoints",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRFDETRs-pose.pt",
+          "task": "pose",
+          "imgsz": null,
+          "data": "COCO keypoints",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRFDETRm-pose.pt",
+          "task": "pose",
+          "imgsz": null,
+          "data": "COCO keypoints",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRFDETRl-pose.pt",
+          "task": "pose",
+          "imgsz": null,
+          "data": "COCO keypoints",
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRFDETRs-obb.pt",
           "task": "obb",
-          "size": "s",
           "imgsz": 512,
-          "params_m": null,
           "data": "DOTA",
-          "license": "Apache-2.0"
+          "license": "cc-by-4.0"
         },
         {
           "name": "LibreRFDETRm-obb.pt",
           "task": "obb",
-          "size": "m",
           "imgsz": 576,
-          "params_m": null,
           "data": "DOTA",
-          "license": "Apache-2.0"
+          "license": "cc-by-4.0"
         },
         {
           "name": "LibreRFDETRl-obb.pt",
           "task": "obb",
-          "size": "l",
           "imgsz": 704,
-          "params_m": null,
           "data": "DOTA",
-          "license": "Apache-2.0"
+          "license": "cc-by-4.0"
+        },
+        {
+          "name": "LibreRFDETRx-pose.pt",
+          "task": "pose",
+          "imgsz": 576,
+          "data": "COCO keypoints",
+          "license": "apache-2.0"
         }
       ],
       "export": {
@@ -601,13 +586,6 @@
         "bibtex_source_url": "https://github.com/roboflow/rf-detr#citation",
         "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README on branch develop. Cross-checked against the arXiv API for 2511.09554: five authors, accepted to ICLR 2026. Do not hand-edit; a wrong citation misattributes someone's work."
       },
-      "added_in": "1.0.0",
-      "task_added_in": {
-        "detect": "1.0.0",
-        "segment": "1.2.0",
-        "pose": "1.3.0",
-        "obb": "1.3.0"
-      },
       "export_reasons": {
         "detect": {
           "tensorrt": "Runtime parity coverage lives in tests/e2e/test_tensorrt.py.",
@@ -641,6 +619,9 @@
       ],
       "display": "EdgeCrafter",
       "prefix": "LibreEC",
+      "prefixes": {
+        "ec": "LibreEC"
+      },
       "tier": "g1",
       "tasks": [
         "detect",
@@ -648,6 +629,11 @@
         "segment"
       ],
       "sizes_label": "s, m, l, x at 640 px",
+      "added_in": "1.2.0",
+      "task_added_in": {
+        "ec": "1.2.0"
+      },
+      "weights_hosted": true,
       "extra": null,
       "trainable": true,
       "unsupported_train_params": {
@@ -663,84 +649,84 @@
           "task": "pose",
           "imgsz": 640,
           "data": "COCO keypoints",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreECm-pose.pt",
           "task": "pose",
           "imgsz": 640,
           "data": "COCO keypoints",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreECl-pose.pt",
           "task": "pose",
           "imgsz": 640,
           "data": "COCO keypoints",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreECx-pose.pt",
           "task": "pose",
           "imgsz": 640,
           "data": "COCO keypoints",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreECs-seg.pt",
           "task": "segment",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreECm-seg.pt",
           "task": "segment",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreECl-seg.pt",
           "task": "segment",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreECx-seg.pt",
           "task": "segment",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreECs.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreECm.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreECl.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreECx.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         }
       ],
       "export": {
@@ -836,11 +822,23 @@
       ],
       "display": "RT-DETR",
       "prefix": "LibreRTDETR",
+      "prefixes": {
+        "rtdetr": "LibreRTDETR",
+        "rtdetrv2": "LibreRTDETRv2",
+        "rtdetrv4": "LibreRTDETRv4"
+      },
       "tier": "g1",
       "tasks": [
         "detect"
       ],
       "sizes_label": "rtdetr: r18, r34, r50, r50m, r101, l, x at 640 px; rtdetrv2: r18, r34, r50, r50m, r101 at 640 px; rtdetrv4: s, m, l, x at 640 px",
+      "added_in": "1.1.0",
+      "task_added_in": {
+        "rtdetr": "1.1.0",
+        "rtdetrv2": "1.2.0",
+        "rtdetrv4": "1.2.0"
+      },
+      "weights_hosted": true,
       "extra": "rtdetr",
       "trainable": true,
       "unsupported_train_params": {
@@ -858,112 +856,112 @@
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRTDETRr18.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRTDETRr50.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRTDETRr50m.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRTDETRr101.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRTDETRl.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRTDETRx.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRTDETRv2r18.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRTDETRv2r34.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRTDETRv2r50m.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRTDETRv2r50.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRTDETRv2r101.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRTDETRv4s.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRTDETRv4m.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRTDETRv4l.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreRTDETRv4x.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         }
       ],
       "export": {
@@ -1113,12 +1111,20 @@
       ],
       "display": "D-FINE",
       "prefix": "LibreDFINE",
+      "prefixes": {
+        "dfine": "LibreDFINE"
+      },
       "tier": "g1",
       "tasks": [
         "detect",
         "segment"
       ],
       "sizes_label": "n, s, m, l, x at 640 px",
+      "added_in": "1.1.0",
+      "task_added_in": {
+        "dfine": "1.1.0"
+      },
+      "weights_hosted": true,
       "extra": null,
       "trainable": true,
       "unsupported_train_params": {
@@ -1134,70 +1140,70 @@
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDFINEs.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDFINEm.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDFINEl.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDFINEx.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDFINEn-seg.pt",
           "task": "segment",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDFINEs-seg.pt",
           "task": "segment",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDFINEm-seg.pt",
           "task": "segment",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDFINEl-seg.pt",
           "task": "segment",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDFINEx-seg.pt",
           "task": "segment",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         }
       ],
       "export": {
@@ -1285,11 +1291,21 @@
       ],
       "display": "DEIM",
       "prefix": "LibreDEIM",
+      "prefixes": {
+        "deim": "LibreDEIM",
+        "deimv2": "LibreDEIMv2"
+      },
       "tier": "g1",
       "tasks": [
         "detect"
       ],
       "sizes_label": "deim: n, s, m, l, x at 640 px",
+      "added_in": "1.2.0",
+      "task_added_in": {
+        "deim": "1.2.0",
+        "deimv2": "1.2.0"
+      },
+      "weights_hosted": true,
       "extra": null,
       "trainable": true,
       "unsupported_train_params": {
@@ -1306,91 +1322,91 @@
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDEIMs.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDEIMm.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDEIMl.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDEIMx.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDEIMv2n.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDEIMv2s.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "other"
         },
         {
           "name": "LibreDEIMv2m.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "other"
         },
         {
           "name": "LibreDEIMv2l.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "other"
         },
         {
           "name": "LibreDEIMv2x.pt",
           "task": "detect",
           "imgsz": 640,
           "data": "COCO",
-          "license": null
+          "license": "other"
         },
         {
           "name": "LibreDEIMv2atto.pt",
           "task": "detect",
-          "imgsz": 640,
+          "imgsz": null,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDEIMv2femto.pt",
           "task": "detect",
-          "imgsz": 640,
+          "imgsz": null,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         },
         {
           "name": "LibreDEIMv2pico.pt",
           "task": "detect",
-          "imgsz": 640,
+          "imgsz": null,
           "data": "COCO",
-          "license": null
+          "license": "apache-2.0"
         }
       ],
       "export": {
@@ -1519,12 +1535,20 @@
       ],
       "display": "YOLO-NAS",
       "prefix": "LibreYOLONAS",
+      "prefixes": {
+        "yolonas": "LibreYOLONAS"
+      },
       "tier": "g1",
       "tasks": [
         "detect",
         "pose"
       ],
       "sizes_label": "s, m, l at 640 px",
+      "added_in": "1.1.0",
+      "task_added_in": {
+        "yolonas": "1.1.0"
+      },
+      "weights_hosted": false,
       "extra": null,
       "trainable": true,
       "unsupported_train_params": {

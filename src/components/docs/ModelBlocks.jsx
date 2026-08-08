@@ -232,7 +232,13 @@ export function BenchmarkTable({ family, task = 'detect' }) {
         <tbody>
           {bench.rows.map((row) => (
             <tr key={row.size}>
-              <Td className="font-mono text-[12.5px] text-surface-900 dark:text-surface-200">{family.prefix}{row.size}</Td>
+              {/* Label each row with its OWN key's prefix. A lineage page mixes
+                  rows from sibling families, and using the primary prefix for
+                  all of them credits one version's accuracy to another
+                  version's filename, often one that does not exist. */}
+              <Td className="font-mono text-[12.5px] text-surface-900 dark:text-surface-200">
+                {(family.prefixes?.[row.prefix_key] ?? family.prefix) || ''}{row.size}
+              </Td>
               <Td className="text-right">{row.imgsz}</Td>
               <Td className="text-right font-medium text-surface-900 dark:text-surface-200">{row.map.toFixed(1)}</Td>
               <Td className="text-right">{row.params_m ?? ''}</Td>

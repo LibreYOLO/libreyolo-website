@@ -76,18 +76,33 @@ function parseFamily(key) {
   const tasks = tasksRaw === undefined
     ? ['detect']
     : [...tasksRaw.matchAll(/"([a-z]+)"/g)].map((m) => m[1])
-  // INPUT_SIZES maps each size code to its native input resolution, so it
-  // supplies the size list and the imgsz column in one read.
-  const inputBlock = text.match(/INPUT_SIZES[^=]*=\s*\{([^}]*)\}/)?.[1] ?? ''
-  const sizes = {}
-  for (const m of inputBlock.matchAll(/"([a-z0-9]+)"\s*:\s*(\d+)/g)) sizes[m[1]] = +m[2]
-  // TASK_INPUT_SIZES overrides per task where a family differs.
-  const taskBlock = text.match(/TASK_INPUT_SIZES[^=]*=\s*\{([\s\S]*?)\n    \}/)?.[1] ?? ''
-  const taskSizes = {}
-  for (const m of taskBlock.matchAll(/"([a-z]+)"\s*:\s*\{([^}]*)\}/g)) {
-    taskSizes[m[1]] = Object.fromEntries(
+  /*
+   * Size tables. Every `NAME = {"code": px}` constant in the class is collected
+   * first, because TASK_INPUT_SIZES usually maps a task to one of those names
+   * (`"segment": SEG_INPUT_SIZES`) rather than to an inline dict. Following that
+   * indirection is what stops segmentation checkpoints being labelled with the
+   * detection resolution.
+   */
+  const tables = {}
+  for (const m of text.matchAll(/^\s{4}([A-Z][A-Z0-9_]*)\s*(?::[^=\n]*)?=\s*\{([^}]*)\}/gm)) {
+    if (!m[1].endsWith('INPUT_SIZES')) continue
+    const table = Object.fromEntries(
       [...m[2].matchAll(/"([a-z0-9]+)"\s*:\s*(\d+)/g)].map((x) => [x[1], +x[2]])
     )
+    if (Object.keys(table).length) tables[m[1]] = table
+  }
+  const sizes = tables.INPUT_SIZES ?? {}
+
+  const taskBlock = text.match(/TASK_INPUT_SIZES[^=]*=\s*\{([\s\S]*?)\n    \}/)?.[1] ?? ''
+  const taskSizes = {}
+  for (const m of taskBlock.matchAll(/"([a-z]+)"\s*:\s*([A-Z][A-Z0-9_]*|\{[^}]*\})/g)) {
+    const [, task, ref] = m
+    const table = ref.startsWith('{')
+      ? Object.fromEntries([...ref.matchAll(/"([a-z0-9]+)"\s*:\s*(\d+)/g)].map((x) => [x[1], +x[2]]))
+      : tables[ref]
+    // An unresolvable reference yields no entry, so the emitter reports an
+    // empty cell rather than falling back to another task's resolution.
+    if (table && Object.keys(table).length) taskSizes[task] = table
   }
   const unsupported = [...(text.match(/UNSUPPORTED_TRAIN_PARAMS[^=]*=\s*\{([\s\S]*?)\}/)?.[1] ?? '')
     .matchAll(/"([a-z_]+)"/g)].map((m) => m[1])
@@ -97,23 +112,48 @@ function parseFamily(key) {
 /* ── checkpoints from the HF org ────────────────────────────────── */
 const TASK_SUFFIX = { seg: 'segment', pose: 'pose', obb: 'obb', cls: 'classify', sem: 'semantic', point: 'point' }
 
+// Dataset tokens that can appear in a checkpoint name. A checkpoint trained on
+// something other than the family default says so in its filename, and that
+// token is the only mechanical signal we have for it.
+const DATASETS = { visdrone: 'VisDrone2019-DET', imagenette: 'Imagenette', sidd: 'SIDD' }
+
 function parseCheckpoints(prefixes) {
-  const ids = JSON.parse(read('hf.json')).map((m) => m.id.split('/')[1])
+  const repos = JSON.parse(read('hf.json'))
   const byPrefix = {}
   // Longest prefix wins, so LibreYOLO9E2E is not swallowed by LibreYOLO9.
   const sorted = [...prefixes].sort((a, b) => b.length - a.length)
-  for (const id of ids) {
+  for (const repo of repos) {
+    const id = repo.id.split('/')[1]
     const prefix = sorted.find((p) => id.startsWith(p))
     if (!prefix) continue
     const rest = id.slice(prefix.length)
     const parts = rest.split('-')
     const size = parts[0]
-    const suffix = parts.slice(1).find((p) => TASK_SUFFIX[p])
     if (!size) continue
+    const suffix = parts.slice(1).find((p) => TASK_SUFFIX[p])
+    const datasetToken = parts.slice(1).find((p) => DATASETS[p])
+    // The HF repo's own license tag is authoritative: it is the thing the
+    // page tells readers to check, so the page must not disagree with it.
+    const licenseTag = (repo.tags || []).find((t) => t.startsWith('license:'))
     byPrefix[prefix] ??= []
-    byPrefix[prefix].push({ name: `${id}.pt`, size, task: TASK_SUFFIX[suffix] || 'detect' })
+    byPrefix[prefix].push({
+      name: `${id}.pt`,
+      size,
+      task: TASK_SUFFIX[suffix] || 'detect',
+      dataset: datasetToken ? DATASETS[datasetToken] : null,
+      license: licenseTag ? licenseTag.slice('license:'.length) : null,
+    })
   }
   return byPrefix
+}
+
+/*
+ * The release a family first appeared in, taken from the first commit that
+ * added its package and the earliest release tag containing that commit.
+ * Passed in from the caller because it needs the git repo, not a dumped file.
+ */
+function parseAddedIn() {
+  try { return JSON.parse(read('added_in.json')) } catch { return {} }
 }
 
 /* ── benchmarks from Vision Analysis ────────────────────────────── */
@@ -152,6 +192,7 @@ function parseBenchmarks(keys) {
 
 /* ── assemble ───────────────────────────────────────────────────── */
 const tiers = parseTiers()
+const addedIn = parseAddedIn()
 const { formats, support } = parseExport()
 const families = {}
 for (const key of LINEAGES.flatMap((l) => l.keys)) {
@@ -181,10 +222,16 @@ for (const lin of LINEAGES) {
     keys: lin.keys,
     tier: primary.tier,
     tasks: [...new Set(lin.keys.flatMap((k) => families[k]?.tasks ?? []))],
+    added_in_raw: null,
     sizes: Object.fromEntries(lin.keys.map((k) => [k, families[k]?.sizes ?? {}])),
+    task_sizes: Object.fromEntries(lin.keys.map((k) => [k, families[k]?.task_sizes ?? {}])),
     prefixes: Object.fromEntries(lin.keys.map((k) => [k, families[k]?.prefix ?? null])),
     checkpoints: ckpts.length,
+    checkpoint_rows: ckpts,
     checkpoint_names: ckpts.map((c) => c.name),
+    // The lineage appeared when its earliest member did.
+    added_in: lin.keys.map((k) => addedIn[k]).filter(Boolean).sort()[0] ?? null,
+    task_added_in: Object.fromEntries(lin.keys.map((k) => [k, addedIn[k] ?? null])),
     export: Object.fromEntries(lin.keys.map((k) => [k, families[k]?.export ?? {}])),
     benchmarks: Object.fromEntries(lin.keys.map((k) => [k, benchmarks[k] ?? {}])),
     unsupported_train_params: Object.fromEntries(lin.keys.map((k) => [k, families[k]?.unsupported_train_params ?? []])),

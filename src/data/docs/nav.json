@@ -176,7 +176,7 @@
         {
           "slug": "/docs/models/deim",
           "label": "DEIM",
-          "built": false,
+          "built": true,
           "tier": "g1"
         },
         {
