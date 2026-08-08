@@ -1,0 +1,12 @@
+{
+  "name": "VGG",
+  "org": "Visual Geometry Group, University of Oxford",
+  "paper_title": "Very Deep Convolutional Networks for Large-Scale Image Recognition",
+  "paper_url": "https://arxiv.org/abs/1409.1556",
+  "code_url": "https://github.com/pytorch/vision",
+  "license": "BSD-3-Clause",
+  "license_interpretation": "BSD-3-Clause is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep the copyright notice, the list of conditions and the disclaimer with any copy you redistribute, and it forbids using the contributors' names to endorse a derived product without permission; it carries no explicit patent grant. LibreYOLO's code and the four shipped checkpoints (16, 19, 16-BN, 19-BN) are both derived from torchvision, not from the Oxford group's original 2014 Caffe release, which is a separate model under Creative Commons Attribution and is not what LibreYOLO redistributes. Torchvision itself notes that BSD-3-Clause redistribution of a pretrained checkpoint is an implied basis rather than a grant written for that specific checkpoint, and that pretrained-model terms can depend on the data a model was trained on; LibreYOLO repeats that caveat on each hosted weights repository.",
+  "bibtex": "@article{simonyan2014very,\n  title={Very Deep Convolutional Networks for Large-Scale Image Recognition},\n  author={Simonyan, K. and Zisserman, A.},\n  journal={arXiv preprint arXiv:1409.1556},\n  year={2014}\n}",
+  "bibtex_source_url": "https://gist.github.com/ksimonyan/211839e770f7b538e2d8",
+  "bibtex_verified": "2026-08-08, copied verbatim from Karen Simonyan's own gist accompanying the VGG-16 model release, which reads 'Please cite the paper if you use the model' followed by this entry. VGG has no code repository or CITATION.cff of its own; the Oxford project page at robots.ox.ac.uk/~vgg/research/very_deep/ links to this gist for the model files and gives no separate citation block. Cross-checked against the arXiv API for 1409.1556: both authors, Simonyan and Zisserman, in the same order, identical title. The paper appeared at ICLR 2015 and the author's own gist entry still records the 2014 arXiv preprint, so it is reproduced as published rather than upgraded. Do not hand-edit; a wrong citation misattributes someone's work."
+}

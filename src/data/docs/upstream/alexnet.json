@@ -1,0 +1,12 @@
+{
+  "name": "AlexNet",
+  "org": "University of Toronto",
+  "paper_title": "ImageNet Classification with Deep Convolutional Neural Networks",
+  "paper_url": "https://papers.nips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html",
+  "code_url": "https://github.com/pytorch/vision",
+  "license": "BSD-3-Clause",
+  "license_interpretation": "BSD-3-Clause is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep the copyright notice, the list of conditions and the disclaimer with any copy you redistribute, and it forbids using the contributors' names to endorse a derived product without permission; it carries no explicit patent grant. LibreYOLO's code and the shipped checkpoint are both derived from torchvision's single-tower AlexNet, the later \"one weird trick\" graph, not the original two-GPU 2012 model, and no code from the 2012 paper's authors is republished here. Torchvision itself notes that BSD-3-Clause redistribution of a pretrained checkpoint is an implied basis rather than a grant written for that specific checkpoint, and that pretrained-model terms can depend on the data a model was trained on; LibreYOLO repeats that caveat on the hosted weights repository.",
+  "bibtex": null,
+  "bibtex_source_url": null,
+  "bibtex_verified": "2026-08-08: no authoritative citation block exists. The original paper predates arXiv's dominance in cs.CV, has no official code release, and Alex Krizhevsky's own page at cave.cs.toronto.edu/kriz lists only a plain reference line, 'Krizhevsky, A., Sutskever, I. and Hinton, G. E. ImageNet Classification with Deep Convolutional Neural Networks. NIPS 2012', with no bibtex block or CITATION.cff. Torchvision, the actual code and weights source, ships a CITATION.cff for the library itself, not for the AlexNet architecture. Per the citation procedure, bibtex is left null rather than assembled by hand; the plain reference above is the only thing that can be stated with confidence."
+}
