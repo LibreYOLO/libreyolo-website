@@ -31,7 +31,7 @@ export default function Navbar() {
     },
     { name: t('commercial'), path: '/commercial' },
     { name: t('articles'), path: '/articles' },
-    { name: t('docs'), path: '/docs', icon: BookOpen, highlight: true },
+    { name: t('docs'), path: '/docs/v1.4.0', icon: BookOpen, highlight: true },
   ]
 
   useEffect(() => {
