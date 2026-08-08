@@ -705,7 +705,7 @@
         {
           "slug": "/docs/export",
           "label": "Export overview",
-          "built": false
+          "built": true
         },
         {
           "slug": "/docs/export/onnx",
@@ -735,6 +735,11 @@
         {
           "slug": "/docs/export/deepstream",
           "label": "DeepStream",
+          "built": true
+        },
+        {
+          "slug": "/docs/export/jetson",
+          "label": "NVIDIA Jetson",
           "built": true
         },
         {
