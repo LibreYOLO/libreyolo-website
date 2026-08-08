@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronRight, ChevronDown, Hash } from 'lucide-react'
 import PageActions from '@/components/docs/PageActions'
 import DocsSearch from '@/components/docs/DocsSearch'
+import { DOCS_PRERELEASE, DOCS_CURRENT_VERSION } from '@/data/docs-versions'
 
 function NavGroup({ group, activePath, onNavigate }) {
   const containsActive = group.items.some((item) => item.slug === activePath)
@@ -84,11 +85,37 @@ function NavTree({ nav, activePath, version, onNavigate }) {
         <Link href="/docs" onClick={onNavigate} className="block group">
           <span className="text-sm font-bold text-surface-900 dark:text-white">Documentation</span>
         </Link>
-        <span className="mt-1 inline-flex items-center gap-1.5 text-xs font-medium text-surface-500 dark:text-surface-500">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-          v{version}
-          <span className="text-surface-400 dark:text-surface-600">latest</span>
-        </span>
+        {/*
+          The rail states which release these pages describe, and it must not
+          claim a release exists before it is tagged. This tree documents the
+          development branch, which carries model families and export formats
+          the current release does not have, so labelling it with the current
+          version number would tell a reader that `pip install libreyolo`
+          ships things it does not. Until the version is cut, the rail says so
+          and links the frozen page for the release people are actually
+          running. Flip `DOCS_PRERELEASE` to false on tag day.
+        */}
+        {DOCS_PRERELEASE ? (
+          <span className="mt-1 flex flex-col gap-0.5 text-xs font-medium">
+            <span className="inline-flex items-center gap-1.5 text-surface-500 dark:text-surface-500">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+              Next release
+            </span>
+            <Link
+              href={`/docs/v${DOCS_CURRENT_VERSION}`}
+              onClick={onNavigate}
+              className="pl-3 text-surface-400 underline-offset-2 hover:underline dark:text-surface-600"
+            >
+              v{DOCS_CURRENT_VERSION} is current
+            </Link>
+          </span>
+        ) : (
+          <span className="mt-1 inline-flex items-center gap-1.5 text-xs font-medium text-surface-500 dark:text-surface-500">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            v{version}
+            <span className="text-surface-400 dark:text-surface-600">latest</span>
+          </span>
+        )}
         <div className="mt-3">
           <DocsSearch />
         </div>
