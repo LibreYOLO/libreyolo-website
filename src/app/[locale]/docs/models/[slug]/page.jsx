@@ -6,7 +6,7 @@ import { buildPageMetadata, localeUrl, SITE_URL } from '@/i18n/metadata'
 import { routing } from '@/i18n/routing'
 import DocsShell from '@/components/docs/DocsShell'
 import DocMarkdown from '@/components/docs/DocMarkdown'
-import { ModelHeader, HeroMedia, SectionTitle, Faq, RelatedGrid } from '@/components/docs/ModelBlocks'
+import { ModelHeader, HeroMedia } from '@/components/docs/ModelBlocks'
 
 const SECTION = 'models'
 
@@ -47,10 +47,9 @@ export default async function ModelDocPage({ params }) {
 
   const path = `/docs/models/${slug}`
   const url = localeUrl(path, doc.translated ? locale : routing.defaultLocale)
-  const headings = extractHeadings(doc.content, [
-    ...(doc.faq?.length ? [{ id: 'faq', title: 'FAQ' }] : []),
-    ...(doc.related?.length ? [{ id: 'related', title: 'Related' }] : []),
-  ])
+  // Model pages are a usage reference: install, predict, variants, train,
+  // validate, export, licensing. No FAQ and no related-links section.
+  const headings = extractHeadings(doc.content)
 
   const breadcrumbs = [
     { label: 'Docs', href: '/docs' },
@@ -92,18 +91,6 @@ export default async function ModelDocPage({ params }) {
     },
   ]
 
-  if (doc.faq?.length) {
-    jsonLd.push({
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: doc.faq.map((item) => ({
-        '@type': 'Question',
-        name: item.q,
-        acceptedAnswer: { '@type': 'Answer', text: item.a },
-      })),
-    })
-  }
-
   if (doc.hero?.src) {
     jsonLd.push({
       '@context': 'https://schema.org',
@@ -140,20 +127,6 @@ export default async function ModelDocPage({ params }) {
           <DocMarkdown family={family} snippets={doc.snippets || {}}>
             {doc.content}
           </DocMarkdown>
-
-          {doc.faq?.length > 0 && (
-            <>
-              <SectionTitle id="faq">FAQ</SectionTitle>
-              <Faq items={doc.faq} />
-            </>
-          )}
-
-          {doc.related?.length > 0 && (
-            <>
-              <SectionTitle id="related">Related</SectionTitle>
-              <RelatedGrid items={doc.related} />
-            </>
-          )}
 
           <footer className="mt-16 border-t border-surface-200 pt-6 text-sm text-surface-500 dark:border-white/[0.06] dark:text-surface-500">
             <p>

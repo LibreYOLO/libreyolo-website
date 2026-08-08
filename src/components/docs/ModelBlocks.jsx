@@ -481,6 +481,27 @@ export function Provenance({ family, children }) {
   const u = family.upstream
   return (
     <div>
+      {/*
+        Rendered by the component, not written by the page author, so it cannot
+        be forgotten on any model page. What we publish is a summary; the
+        repository the reader actually downloads from is the authority, and
+        licenses can differ per checkpoint inside one family.
+      */}
+      <div className="mb-5 border-l-2 border-surface-300 pl-4 text-[13.5px] leading-relaxed text-surface-600 dark:border-white/20 dark:text-surface-400">
+        <p className="mb-2">
+          Check the license on the Hugging Face repository of the specific weights you
+          download. Every checkpoint in the{' '}
+          <ExtLink href={HF_BASE}>LibreYOLO org</ExtLink> carries one, and they are not
+          always the same across a family. That repository is the authoritative source;
+          the summary below describes what applied when this page was last verified.
+        </p>
+        <p>
+          This is a description of the licenses involved, not legal advice. If the
+          answer matters commercially, read the licenses yourself and take your own
+          counsel.
+        </p>
+      </div>
+
       <dl className="flex flex-col gap-y-1 text-[13.5px]">
         <Meta label="Original work">{u.name}, {u.org}</Meta>
         <Meta label="Upstream license">{u.license}</Meta>

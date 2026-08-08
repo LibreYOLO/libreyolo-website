@@ -2,7 +2,7 @@
 title: RF-DETR
 families: [rfdetr]
 seo_title: "RF-DETR: train, fine-tune and export under MIT"
-description: "Run RF-DETR for detection, instance segmentation, pose and oriented boxes in LibreYOLO. Benchmarks, checkpoints, training and export, all MIT-licensed."
+description: "Use RF-DETR in LibreYOLO for detection, instance segmentation, pose and oriented boxes. Install, predict, train, validate and export, all MIT-licensed."
 lead: "A detection transformer that predicts a fixed set of objects instead of a dense grid, so it needs no NMS at inference. LibreYOLO supports it for four tasks."
 keywords: [RF-DETR, real-time detection transformer, DETR, object detection, instance segmentation, pose estimation, oriented bounding boxes]
 last_verified: "1.5.0"
@@ -11,7 +11,7 @@ hero:
   poster: /showcase/parkour-detection-poster.jpg
   caption: "LibreRFDETRs, detection on video at 512 px."
 snippets:
-  quickstart:
+  predict:
     - label: Python
       language: python
       code: |
@@ -26,6 +26,17 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreRFDETRs.pt source=bus.jpg save=True
+    - label: Video
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        model = LibreYOLO("LibreRFDETRs.pt")
+
+        # Any source the library accepts: file, folder, URL, webcam index,
+        # RTSP stream, or a .streams list
+        for result in model.predict("clip.mp4", stream=True, save=True):
+            print(len(result.boxes))
   train:
     - label: Python
       language: python
@@ -46,8 +57,27 @@ snippets:
 
         model = LibreYOLO("LibreRFDETRs.pt")
         model.train(data="my-dataset.yaml", epochs=50, lora=True)
-  reproduce:
+    - label: Multi-GPU
+      language: bash
+      code: |
+        libreyolo train model=LibreRFDETRs.pt data=my-dataset.yaml \
+          epochs=50 device=0,1 batch=-1
+  val:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        model = LibreYOLO("LibreRFDETRs.pt")
+        metrics = model.val(data="my-dataset.yaml", imgsz=512)
+
+        print(metrics.box.map)      # mAP 50-95
+        print(metrics.box.map50)    # mAP 50
     - label: CLI
+      language: bash
+      code: |
+        libreyolo val model=LibreRFDETRs.pt data=my-dataset.yaml imgsz=512
+    - label: Reproduce COCO
       language: bash
       code: |
         libreyolo val model=LibreRFDETRn.pt data=coco.yaml imgsz=384
@@ -76,51 +106,9 @@ snippets:
         session = ort.InferenceSession("LibreRFDETRs.onnx")
         dummy = np.zeros((1, 3, 512, 512), dtype=np.float32)
         boxes, logits = session.run(None, {session.get_inputs()[0].name: dummy})
-faq:
-  - q: Is RF-DETR free for commercial use?
-    a: Yes. The implementation is MIT and the published weights are Apache-2.0. Neither is copyleft, so nothing obliges you to release your own source.
-  - q: Does RF-DETR need NMS?
-    a: No. It predicts a fixed set of queries and keeps the highest scoring ones. conf and max_det still apply, because they filter that selection.
-  - q: Why was my imgsz rejected?
-    a: The input must divide evenly by the backbone patch size times the window count. LibreYOLO checks before the run starts and names the nearest two valid sizes.
-  - q: RF-DETR or YOLOv9?
-    a: RF-DETR handles crowded and overlapping objects better, because there is no NMS to merge them, and it covers four tasks. YOLOv9 is lighter, trains faster on small datasets, and reaches more edge formats including TFLite and ncnn.
-  - q: Can I train it on one GPU?
-    a: Yes. Fine-tune from a COCO checkpoint, keep lr0 low, and set batch=-1 to let autobatch size it. LoRA reduces memory further.
-related:
-  - href: /docs/models/yolov9
-    label: YOLOv9
-    note: The other flagship. CNN, lighter, more export targets.
-  - href: /docs/models/d-fine
-    label: D-FINE
-    note: Nearest DETR sibling. Detection and instance segmentation.
-  - href: /docs/tasks/object-detection
-    label: Object detection
-    note: Every detector in the library, compared.
-  - href: /docs/export/onnx
-    label: ONNX export
-    note: The path most deployments take.
 ---
 
-## Tasks
-
-RF-DETR is the only family that covers all four box-shaped tasks with published
-weights. Segmentation, pose and oriented boxes reuse the detection decoder and
-attach a task head, so they behave the same way at the API.
-
-<task-support />
-
-## Benchmarks
-
-<benchmark-table task="detect" />
-
-Accuracy scales with input resolution rather than depth here: all four
-checkpoints sit within 3.5 M parameters of each other, so choosing a size is a
-latency decision, not a memory one.
-
-<va-embed />
-
-## Quickstart
+## Install
 
 RF-DETR needs its own extra, which pulls in `transformers` for the backbone.
 
@@ -128,16 +116,36 @@ RF-DETR needs its own extra, which pulls in `transformers` for the backbone.
 pip install "libreyolo[rfdetr]"
 ```
 
-<code-tabs name="quickstart" />
+## Predict
 
-Weights download on first use. The returned `Results` object is the same one
-every other family returns, so swapping detectors is a one line change.
+Weights download from Hugging Face on first use and are cached locally.
 
-## Checkpoints
+<code-tabs name="predict" />
+
+The returned `Results` object is the one every family returns, so swapping in a
+different detector is a one line change. `conf` and `max_det` filter the query
+selection; there is no NMS step to tune. See
+[prediction](/docs/predict) for sources, streaming and result handling.
+
+## Variants
+
+Four tasks share one architecture: segmentation, pose and oriented boxes reuse
+the detection decoder with a different head, so they take the same arguments.
+
+<task-support />
+
+Sizes differ mainly by input resolution rather than depth, so picking one is a
+latency decision more than a memory one.
 
 <checkpoint-table />
 
-## Training
+## Benchmarks
+
+<benchmark-table task="detect" />
+
+<va-embed />
+
+## Train
 
 Fine-tuning from a COCO checkpoint converges in far fewer epochs than training
 from scratch, and works for all four tasks.
@@ -147,42 +155,27 @@ from scratch, and works for all four tasks.
 Two arguments matter more here than on a CNN detector. Keep `lr0` at or below
 `1e-4`, since transformer detectors diverge at learning rates a YOLO model
 tolerates. Leave `imgsz` at the checkpoint's native resolution unless you have a
-reason to change it, because resolution is how this family trades accuracy for
-latency. See [training](/docs/train) for datasets, augmentation, multi-GPU and
-loggers.
+reason to change it. The input must divide evenly by the backbone patch size
+times the window count; LibreYOLO checks this before the run starts and names
+the nearest valid sizes.
 
-## Reproducing the numbers
+See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
 
-The benchmark table above is reproducible. This is the exact command behind the
-first row, against full COCO `val2017`.
+## Validate
 
-<code-tabs name="reproduce" />
+`val()` reports mAP 50-95, mAP 50 and per-class results against any dataset in
+the same format you trained on.
+
+<code-tabs name="val" />
+
+The third tab reproduces the first row of the benchmark table above against full
+COCO `val2017`.
 
 ## Export
 
 <export-matrix />
 
 <code-tabs name="export" />
-
-## Architecture
-
-The backbone is a pretrained DINOv2 vision transformer, which is the main reason
-the family transfers well to small custom datasets: the representation is
-already strong before it sees a label of yours.
-
-Backbone features feed a deformable attention decoder. Each query samples a
-small number of learned offsets rather than attending to every spatial position,
-which is what brings a DETR into real-time latency. The decoder emits a fixed
-number of queries, each carrying a class distribution and a box.
-
-Training uses bipartite matching: a Hungarian matcher assigns each prediction to
-at most one ground truth object, so duplicates are penalized during training
-rather than removed afterwards. That is why there is no NMS at inference, and
-why crowded scenes stay stable.
-
-Resolution is constrained. The input must divide evenly by the backbone patch
-size times the window count, and LibreYOLO validates this before a run starts
-rather than failing inside the forward pass.
 
 ## Licensing
 

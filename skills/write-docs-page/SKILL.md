@@ -40,16 +40,68 @@ keywords: [...]
 last_verified: "1.5.0"
 hero: {src, poster, caption}  # optional
 snippets:                     # runnable code lives HERE, not in the body
-  quickstart: [{label, language, code, expect?}, ...]
+  predict: [{label, language, code, expect?}, ...]
   train: [...]
-  reproduce: [...]
+  val: [...]                  # include a tab reproducing our published number
   export: [...]
-faq: [{q, a}, ...]            # renders the FAQ section AND the FAQPage JSON-LD
-related: [{href, label, note}, ...]
 ```
+
+Model pages carry no `faq` and no `related` keys. See the structure section
+above for why.
 
 Snippets sit in frontmatter so the same strings can be extracted and executed by
 CI. Every snippet must run as pasted, on CPU, from a clean environment.
+
+## Model page structure
+
+A model page is a usage reference for that model, not an encyclopedia entry
+about it. The reader arrived to run the thing. Sections, in this order:
+
+| Section | Contents |
+|---|---|
+| Install | The extra it needs, if any, and the one pip line |
+| Predict | `<code-tabs name="predict" />`, plus what the Results carry |
+| Variants | `<task-support />` and `<checkpoint-table />`. What exists to load |
+| Benchmarks | `<benchmark-table />` and `<va-embed />` when there is data |
+| Train | `<code-tabs name="train" />`, plus the arguments that matter for this family |
+| Validate | `<code-tabs name="val" />`, including the command that reproduces our published number |
+| Export | `<export-matrix />` and `<code-tabs name="export" />` |
+| Licensing | `<provenance-box>` and the commercial-use answer |
+| Citation | Upstream BibTeX |
+
+**Do not add these to a model page:**
+
+- **An architecture or "how it works" section.** We are not the paper. Link the
+  paper in the header metadata and spend the page on usage. A sentence about
+  architecture is fine where it changes what the reader types (for example, that
+  there is no NMS, so `conf` and `max_det` behave differently); a section
+  explaining the decoder is not.
+- **An FAQ.** If a question is worth answering it belongs in the section it is
+  about. Google stopped showing FAQ rich results in May 2026, so there is not
+  even an SEO reason left.
+- **A related-models section.** The sidebar and the task pages already do
+  navigation. Cross-link inline where a comparison actually helps the reader
+  choose.
+
+Keep the page answering: how do I install it, run it, train it, validate it,
+export it, what variants exist, and what am I allowed to do with it.
+
+## Licensing section
+
+Always open with the two standing caveats before any specific claim. They are
+rendered by `<provenance-box>` itself rather than typed per page, so they cannot
+go missing, but do not undercut them in your own prose:
+
+1. Check the license on the Hugging Face repository of the specific weights
+   being downloaded. It is the authoritative source, every LibreYOLO checkpoint
+   carries one, and licenses are not always uniform across a family.
+2. What the page states is a description, not legal advice. If it matters
+   commercially, the reader reads the licenses and takes their own counsel.
+
+Then the provenance rows and a direct answer to the commercial-use question.
+Never state a license more permissively than the repository does, and when
+weights are non-commercial, say so plainly in the same breath as the code
+license so the two are never confused.
 
 ## Generated-data tags
 
@@ -63,7 +115,7 @@ using the page's `families`.
 | `<va-embed />` | The Vision Analysis chart, when the family has one |
 | `<checkpoint-table />` | Published weights, grouped by task |
 | `<export-matrix />` | Task x format support, with legend |
-| `<code-tabs name="quickstart" />` | A snippet group from frontmatter |
+| `<code-tabs name="predict" />` | A snippet group from frontmatter, by key |
 | `<provenance-box>...</provenance-box>` | Upstream and license rows, your prose inside |
 
 **Trap:** self-closing custom tags are expanded to open/close pairs by
