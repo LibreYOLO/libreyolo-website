@@ -97,6 +97,7 @@
         { "slug": "/docs/export/openvino", "label": "OpenVINO", "built": false },
         { "slug": "/docs/export/coreml", "label": "CoreML", "built": false },
         { "slug": "/docs/export/tflite", "label": "TFLite", "built": false },
+        { "slug": "/docs/export/deepstream", "label": "DeepStream", "built": true },
         { "slug": "/docs/export/quantization", "label": "Quantization", "built": false }
       ]
     },

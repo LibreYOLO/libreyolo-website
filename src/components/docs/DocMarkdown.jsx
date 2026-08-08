@@ -26,7 +26,36 @@ function textOf(children) {
   return ''
 }
 
-export default function DocMarkdown({ children, family, snippets = {} }) {
+/*
+ * Two table skins. The default keeps the bordered container the article-style
+ * pages already ship. `bareTables` matches the house rule the generated blocks
+ * follow: hairline row rules, a stronger rule under the header, no fill, no
+ * radius, no hover, no zebra. A page written to that rule opts in so its
+ * authored tables and its generated ones look like one table system.
+ */
+const TABLE_SKINS = {
+  boxed: {
+    table: (props) => (
+      <div className="my-5 overflow-x-auto rounded-xl border border-surface-200 dark:border-white/[0.08]">
+        <table className="w-full text-sm" {...props} />
+      </div>
+    ),
+    th: (props) => <th className="border-b border-surface-200 bg-surface-50 px-4 py-3 text-left font-semibold text-surface-700 dark:border-white/[0.08] dark:bg-white/[0.02] dark:text-surface-300" {...props} />,
+    td: (props) => <td className="border-b border-surface-100 px-4 py-3 text-surface-600 last:border-0 dark:border-white/[0.04] dark:text-surface-400" {...props} />,
+  },
+  bare: {
+    table: (props) => (
+      <div className="-mx-1 my-5 overflow-x-auto px-1">
+        <table className="w-full border-collapse text-[13.5px]" {...props} />
+      </div>
+    ),
+    th: (props) => <th className="border-b border-surface-300 px-3 py-1.5 text-left font-semibold text-surface-700 dark:border-white/20 dark:text-surface-300" {...props} />,
+    td: (props) => <td className="border-b border-surface-200/70 px-3 py-1.5 align-top text-surface-700 dark:border-white/[0.07] dark:text-surface-400" {...props} />,
+  },
+}
+
+export default function DocMarkdown({ children, family, snippets = {}, bareTables = false }) {
+  const tableSkin = bareTables ? TABLE_SKINS.bare : TABLE_SKINS.boxed
   const components = {
     h2: ({ children: kids }) => <SectionTitle id={slugifyHeading(textOf(kids))}>{kids}</SectionTitle>,
     h3: ({ children: kids }) => (
@@ -54,13 +83,9 @@ export default function DocMarkdown({ children, family, snippets = {} }) {
     blockquote: (props) => (
       <blockquote className="my-5 border-l-2 border-libre-500 pl-4 text-surface-500 dark:text-surface-400" {...props} />
     ),
-    table: (props) => (
-      <div className="my-5 overflow-x-auto rounded-xl border border-surface-200 dark:border-white/[0.08]">
-        <table className="w-full text-sm" {...props} />
-      </div>
-    ),
-    th: (props) => <th className="border-b border-surface-200 bg-surface-50 px-4 py-3 text-left font-semibold text-surface-700 dark:border-white/[0.08] dark:bg-white/[0.02] dark:text-surface-300" {...props} />,
-    td: (props) => <td className="border-b border-surface-100 px-4 py-3 text-surface-600 last:border-0 dark:border-white/[0.04] dark:text-surface-400" {...props} />,
+    table: tableSkin.table,
+    th: tableSkin.th,
+    td: tableSkin.td,
     code: ({ className, children: kids, ...props }) => {
       if (/language-/.test(className || '')) {
         return <code className={className} {...props}>{kids}</code>

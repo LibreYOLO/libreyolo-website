@@ -133,6 +133,53 @@ function Meta({ label, children }) {
   )
 }
 
+/*
+ * Header for a docs page with no registry family behind it: an export format, a
+ * CLI command, a guide. Same shape as ModelHeader so the two page types read as
+ * one system, but the metadata rows come from the page's own frontmatter,
+ * because there is no registry slice to generate them from.
+ *
+ * A row is { label, value, mono?, links? }. `mono` sets the value in the
+ * identifier face; `links` appends external links after it.
+ */
+export function PageHeader({ doc }) {
+  const rows = doc.meta || []
+
+  return (
+    <header className="mb-8">
+      <h1 className="text-[2.1rem] font-semibold tracking-tight text-surface-900 dark:text-white">
+        {doc.title}
+      </h1>
+      {doc.lead && (
+        <p className="mt-2 max-w-[62ch] text-[15px] leading-relaxed text-surface-600 dark:text-surface-400">
+          {doc.lead}
+        </p>
+      )}
+
+      {rows.length > 0 && (
+        <dl className="mt-5 flex flex-col gap-y-1 border-t border-surface-200 pt-4 text-[13.5px] dark:border-white/[0.09]">
+          {rows.map((row) => (
+            <Meta key={row.label} label={row.label}>
+              {row.mono ? <code className="font-mono text-[12.5px]">{row.value}</code> : row.value}
+              {row.links?.length ? (
+                <>
+                  {' '}
+                  {row.links.map((link, index) => (
+                    <Fragment key={link.href}>
+                      {index > 0 && ', '}
+                      <ExtLink href={link.href}>{link.label}</ExtLink>
+                    </Fragment>
+                  ))}
+                </>
+              ) : null}
+            </Meta>
+          ))}
+        </dl>
+      )}
+    </header>
+  )
+}
+
 /* ── hero media ─────────────────────────────────────────────────── */
 
 export function HeroMedia({ media }) {
