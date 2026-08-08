@@ -126,6 +126,37 @@ Never state a license more permissively than the repository does, and when
 weights are non-commercial, say so plainly in the same breath as the code
 license so the two are never confused.
 
+## Claims
+
+Every sentence that asserts how the software behaves has to be traceable to
+something: a number in the registry, a default in the source, a benchmark run,
+or the upstream paper. If you cannot point at the source, cut the sentence. It
+is always better to say less.
+
+The failure mode is not inventing numbers, which is obvious and rare. It is the
+plausible-sounding inference drawn one step past the data:
+
+> Before: The sizes differ mainly by input resolution, so choosing one is a latency decision more than a memory one.
+> After: The sizes carry similar parameter counts and differ mainly in input resolution.
+
+The first half was measured. The second half sounded reasonable and was never
+checked, and it is probably wrong: activation memory scales with input area, so
+a 704 px variant costs more memory than a 384 px one even when their parameter
+counts match. One clause of speculation discredits the measured clause next to it.
+
+Rules that follow:
+
+- **State the measurement, not the conclusion you drew from it.** Readers can
+  draw conclusions; they cannot un-read a wrong one.
+- **Never publish a latency figure without its hardware, runtime, precision and
+  batch size.** A bare millisecond is not a fact. Latency comparisons belong on
+  Vision Analysis, where those are recorded; link the embed instead.
+- **Check argument defaults against the source** before writing about them. If
+  you write "keep `lr0` at or below `1e-4`", open the family's config and
+  confirm the default. Guidance that contradicts the code is worse than none.
+- **Words like "mainly", "mostly" and "more than" are where unverified claims
+  hide.** When you write one, find the number behind it or delete it.
+
 ## Citations
 
 A citation is an attribution. Getting it wrong sends credit to the wrong people

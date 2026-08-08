@@ -168,13 +168,14 @@ export function BenchmarkTable({ family, task = 'detect' }) {
       <Table className="tabular-nums">
         <thead>
           <tr>
-            {/* Units live in the column head, never repeated in every cell. */}
+            {/* Units live in the column head, never repeated in every cell.
+                No latency columns: a millisecond figure is meaningless without
+                its hardware and runtime, and Vision Analysis already compares
+                those properly. The embed below carries that axis. */}
             <Th>Checkpoint</Th>
             <Th align="right">Input (px)</Th>
             <Th align="right">{bench.metric}</Th>
             <Th align="right">Params (M)</Th>
-            <Th align="right">PyTorch (ms)</Th>
-            <Th align="right">TensorRT fp16 (ms)</Th>
           </tr>
         </thead>
         <tbody>
@@ -184,16 +185,14 @@ export function BenchmarkTable({ family, task = 'detect' }) {
               <Td className="text-right">{row.imgsz}</Td>
               <Td className="text-right font-medium text-surface-900 dark:text-surface-200">{row.map.toFixed(1)}</Td>
               <Td className="text-right">{row.params_m ?? ''}</Td>
-              <Td className="text-right">{row.torch_ms ? row.torch_ms.toFixed(1) : ''}</Td>
-              <Td className="text-right">{row.trt_ms ? row.trt_ms.toFixed(1) : ''}</Td>
             </tr>
           ))}
         </tbody>
       </Table>
       <Note>
-        {bench.dataset}. {bench.hardware}, batch 1, median end-to-end latency including pre and
-        postprocessing. Published on <ExtLink href={bench.source_url}>Vision Analysis</ExtLink>, where
-        the full runs and hardware details are recorded.
+        {bench.dataset}. Measured by the LibreYOLO benchmark harness and published on{' '}
+        <ExtLink href={bench.source_url}>Vision Analysis</ExtLink>, where latency across hardware and
+        runtimes is compared and the full run records live.
       </Note>
     </div>
   )
@@ -269,8 +268,7 @@ export function CheckpointTable({ family }) {
       </Table>
       <Note>
         Every file above exists in the <ExtLink href={HF_BASE}>LibreYOLO org</ExtLink> today and
-        downloads on first use. Naming a file that is not listed here will fail rather than fall back
-        to a different checkpoint.
+        downloads on first use.
       </Note>
     </div>
   )

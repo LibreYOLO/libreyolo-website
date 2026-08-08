@@ -131,8 +131,8 @@ selection; there is no NMS step to tune. See
 
 Four sizes, and four tasks that share one architecture: segmentation, pose and
 oriented boxes reuse the detection decoder with a different head, so they take
-the same arguments. Sizes differ mainly by input resolution rather than depth,
-so choosing one is a latency decision more than a memory one.
+the same arguments. The sizes carry similar parameter counts and differ mainly
+in input resolution.
 
 <benchmark-table task="detect" />
 
