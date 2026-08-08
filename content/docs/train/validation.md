@@ -2,7 +2,7 @@
 title: Validation and metrics
 seo_title: "Validation and metrics in LibreYOLO"
 description: "Run val() on any model, read the metric keys each task returns, choose an evaluation backend, and turn on a validation loss alongside the accuracy metric."
-lead: "val() runs a model over a dataset split and returns a flat dictionary of metric keys and float values. The keys are literal strings, and which ones you get depends on the task, not the family."
+lead: "Validation runs a model over a dataset split through val() and returns a flat dictionary of metric keys and float values. The keys are literal strings, and which ones you get depends on the task, not the family."
 keywords:
   - map50-95
   - coco evaluation
@@ -31,13 +31,13 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml
-    - label: On the test split
+    - label: On another split
       language: python
       code: |
         from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibreYOLO9s.pt")
-        metrics = model.val(data="my-dataset.yaml", split="test", batch=32)
+        metrics = model.val(data="coco8.yaml", split="train", batch=4)
 
         print(metrics)
   valloss:
@@ -120,6 +120,12 @@ alias values as detect's: the `(B)` pair is box mAP50-95 and box AR@100, the
 | ocr | `metrics/det_precision`, `metrics/det_recall`, `metrics/det_hmean`, `metrics/e2e_precision`, `metrics/e2e_recall`, `metrics/e2e_f1`, `metrics/rec_1-NED` |
 | point | `metrics/precision`, `metrics/recall`, `metrics/f1`, `metrics/MLE`, `metrics/MAE`, `metrics/RMSE`, plus a mAP sweep key |
 
+OBB's `metrics/precision` and `metrics/recall` are not aliases: they are the
+real precision and recall at IoU 0.50, taken at the loosest operating point
+(every prediction that survives `conf`, default `0.001`). The `(OBB)`-suffixed
+copies repeat the same four values under a task-specific name, the same
+convention as `(B)` and `(M)` above.
+
 `accuracy_top5` is really top-`min(5, num_classes)`, so on a three-class dataset
 it is top-3, which every sample satisfies and which therefore reads 1.0.
 
@@ -128,8 +134,10 @@ defaults it reads `metrics/mAP@[0.01:0.10]` and the single-threshold key reads
 `metrics/mAP@0.01`. Passing `dist_thresholds` changes both strings.
 
 Most tasks also return a `fitness` key, the single number best-checkpoint
-selection uses. Detection, segmentation, pose and OBB do not; they are selected
-on `metrics/mAP50-95`.
+selection uses by default. Detection, segmentation and OBB do not carry one;
+their families are selected on `metrics/mAP50-95`, which their dicts do
+return. Pose returns neither `fitness` nor `metrics/mAP50-95`; its trainers
+set `best_metric_key` to `metrics/keypoints_mAP50-95` instead.
 
 ## Speed keys
 
@@ -184,6 +192,7 @@ The components are the family's own:
 | detect | `rfdetr` | `ce`, `bbox`, `giou` |
 | detect | `rtdetr`, `rtdetrv2` | `vfl`, `bbox`, `giou` |
 | detect | `dfine` | `vfl`, `bbox`, `giou`, `fgl`, `ddf` |
+| detect | `domedetr` | `vfl`, `bbox`, `giou`, `fgl`, `ddf`, `defe_density`, `defe_reg` |
 | detect | `deim`, `deimv2`, `rtdetrv4`, `ec` | `mal`, `bbox`, `giou`, `fgl`, `ddf` |
 | detect | `rtmdet` | `cls`, `bbox` |
 | detect | `picodet` | `cls`, `bbox`, `dfl` |
@@ -236,8 +245,8 @@ not support it and says so.
 confidence curves, a confusion matrix, and annotated sample images when OpenCV is
 installed. Segmentation adds the mask-side copies of each, and pose gets its own
 metric and curve set. The other validators do not implement plots; classification,
-semantic, panoptic, depth, normal, edge, restore, matte, OCR and point all write
-nothing there. A plotting failure warns and never aborts the run.
+semantic, panoptic, depth, normal, edge, restore, matte, OCR, OBB and point all
+write nothing there. A plotting failure warns and never aborts the run.
 
 ## Validation during training
 

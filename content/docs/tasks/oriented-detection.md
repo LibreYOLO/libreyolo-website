@@ -1,6 +1,6 @@
 ---
-title: Oriented boxes
-seo_title: "Oriented bounding box detection in LibreYOLO"
+title: Oriented detection
+seo_title: "Oriented detection in LibreYOLO"
 description: "Detect rotated objects in LibreYOLO: the families that serve oriented boxes, the four-corner label row, and the predict, train, validate and export calls."
 lead: "Oriented object detection locates each instance with a rotated rectangle rather than an axis-aligned one, so a tilted object is bounded tightly instead of by a box full of background. The task key is obb."
 keywords: [oriented bounding box detection, rotated object detection, OBB python, DOTA dataset, aerial object detection, rotated IoU]
