@@ -141,7 +141,13 @@
         {
           "slug": "/docs/models",
           "label": "All models",
-          "built": false
+          "built": true
+        },
+        {
+          "slug": "/docs/models/rf-detr",
+          "label": "RF-DETR",
+          "built": true,
+          "tier": "g0"
         },
         {
           "slug": "/docs/models/yolov9",
@@ -150,10 +156,16 @@
           "tier": "g0"
         },
         {
-          "slug": "/docs/models/rf-detr",
-          "label": "RF-DETR",
+          "slug": "/docs/models/deim",
+          "label": "DEIM",
           "built": true,
-          "tier": "g0"
+          "tier": "g1"
+        },
+        {
+          "slug": "/docs/models/d-fine",
+          "label": "D-FINE",
+          "built": true,
+          "tier": "g1"
         },
         {
           "slug": "/docs/models/edgecrafter",
@@ -168,91 +180,456 @@
           "tier": "g1"
         },
         {
-          "slug": "/docs/models/d-fine",
-          "label": "D-FINE",
-          "built": true,
-          "tier": "g1"
-        },
-        {
-          "slug": "/docs/models/deim",
-          "label": "DEIM",
-          "built": true,
-          "tier": "g1"
-        },
-        {
           "slug": "/docs/models/yolo-nas",
           "label": "YOLO-NAS",
           "built": true,
           "tier": "g1"
         },
         {
-          "slug": "/docs/models/yolox",
-          "label": "YOLOX",
-          "built": false,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/rtmdet",
-          "label": "RTMDet",
-          "built": false,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/picodet",
-          "label": "PicoDet",
-          "built": false,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/fomo",
-          "label": "FOMO",
-          "built": false,
-          "tier": "g2"
-        },
-        {
-          "slug": "/docs/models/segformer",
-          "label": "SegFormer",
-          "built": false,
+          "slug": "/docs/models/convnext",
+          "label": "ConvNeXt",
+          "built": true,
           "tier": "g2"
         },
         {
           "slug": "/docs/models/dinov2",
           "label": "DINOv2",
-          "built": false,
+          "built": true,
           "tier": "g2"
         },
         {
-          "slug": "/docs/models/eomt",
-          "label": "EoMT",
-          "built": false,
+          "slug": "/docs/models/efficientnetv2",
+          "label": "EfficientNetV2",
+          "built": true,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/fomo",
+          "label": "FOMO",
+          "built": true,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/lingbot-vision",
+          "label": "LingBot-Vision",
+          "built": true,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/mobilenetv4",
+          "label": "MobileNetV4",
+          "built": true,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/nafnet",
+          "label": "NAFNet",
+          "built": true,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/picodet",
+          "label": "PicoDet",
+          "built": true,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/resnet",
+          "label": "ResNet",
+          "built": true,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/rtmdet",
+          "label": "RTMDet",
+          "built": true,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/segformer",
+          "label": "SegFormer",
+          "built": true,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/yolov7",
+          "label": "YOLOv7",
+          "built": true,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/yolox",
+          "label": "YOLOX",
+          "built": true,
+          "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/alexnet",
+          "label": "AlexNet",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/birefnet",
+          "label": "BiRefNet",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/centernet",
+          "label": "CenterNet",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/deeplabv3",
+          "label": "DeepLabv3",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/deformable-detr",
+          "label": "Deformable DETR",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/depth-anything-3",
+          "label": "Depth Anything 3",
+          "built": true,
           "tier": "g3"
         },
         {
           "slug": "/docs/models/depth-anything-v2",
           "label": "Depth Anything V2",
-          "built": false,
+          "built": true,
           "tier": "g3"
         },
         {
-          "slug": "/docs/models/sam-2",
-          "label": "SAM 2",
-          "built": false,
+          "slug": "/docs/models/detr",
+          "label": "DETR",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/dexined",
+          "label": "DexiNed",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/dino-detr",
+          "label": "DINO-DETR",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/efficientdet",
+          "label": "EfficientDet",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/eomt",
+          "label": "EoMT",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/faster-rcnn",
+          "label": "Faster R-CNN",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/fcn",
+          "label": "FCN",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/fcos",
+          "label": "FCOS",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/feynobg",
+          "label": "FeyNobg",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/hrnet",
+          "label": "HRNet",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/l2cs",
+          "label": "L2CS-Net",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/librefacerec",
+          "label": "LibreFaceRec",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/lw-detr",
+          "label": "LW-DETR",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/mask-rcnn",
+          "label": "Mask R-CNN",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/midas",
+          "label": "MiDaS",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/moge-2",
+          "label": "MoGe-2",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/pidnet",
+          "label": "PIDNet",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/pp-ocrv5",
+          "label": "PP-OCRv5",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/real-esrgan",
+          "label": "Real-ESRGAN",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/retinanet",
+          "label": "RetinaNet",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/sam-3d-body",
+          "label": "SAM 3D Body",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/ssd",
+          "label": "SSD",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/swin",
+          "label": "Swin Transformer",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/swinir",
+          "label": "SwinIR",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/teed",
+          "label": "TEED",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/vgg",
+          "label": "VGG",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/vit",
+          "label": "ViT",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/zipdepth",
+          "label": "ZipDepth",
+          "built": true,
+          "tier": "g3"
+        },
+        {
+          "slug": "/docs/models/deit",
+          "label": "DeiT",
+          "built": true,
+          "tier": "g4"
+        },
+        {
+          "slug": "/docs/models/yolov1",
+          "label": "YOLOv1",
+          "built": true,
+          "tier": "g4"
+        },
+        {
+          "slug": "/docs/models/yolov2",
+          "label": "YOLOv2",
+          "built": true,
+          "tier": "g4"
+        },
+        {
+          "slug": "/docs/models/yolov3",
+          "label": "YOLOv3",
+          "built": true,
+          "tier": "g4"
+        },
+        {
+          "slug": "/docs/models/yolov4",
+          "label": "YOLOv4",
+          "built": true,
+          "tier": "g4"
+        },
+        {
+          "slug": "/docs/models/clip",
+          "label": "CLIP",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/edgetam",
+          "label": "EdgeTAM",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/florence-2",
+          "label": "Florence-2",
+          "built": true,
           "tier": "s"
         },
         {
           "slug": "/docs/models/grounding-dino",
           "label": "Grounding DINO",
-          "built": false,
+          "built": true,
           "tier": "s"
         },
         {
-          "slug": "/docs/models/clip",
-          "label": "CLIP",
-          "built": false,
+          "slug": "/docs/models/internvl3",
+          "label": "InternVL3",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/kosmos-2",
+          "label": "Kosmos-2",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/lfm2-vl",
+          "label": "LFM2-VL",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/libremodus",
+          "label": "LibreMODUS",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/locate-anything",
+          "label": "LocateAnything",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/mobilesam",
+          "label": "MobileSAM",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/omdet-turbo",
+          "label": "OMDet-Turbo",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/ov-deim",
+          "label": "OV-DEIM",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/owlv2",
+          "label": "OWLv2",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/picosam3",
+          "label": "PicoSAM3",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/qwen3-vl",
+          "label": "Qwen3-VL",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/sam",
+          "label": "SAM",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/sam-2",
+          "label": "SAM 2",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/sam-3",
+          "label": "SAM 3",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/sensenova-vision",
+          "label": "SenseNova-Vision",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/siglip2",
+          "label": "SigLIP2",
+          "built": true,
+          "tier": "s"
+        },
+        {
+          "slug": "/docs/models/smolvlm2",
+          "label": "SmolVLM2",
+          "built": true,
           "tier": "s"
         }
-      ],
-      "more": "62 more model pages"
+      ]
     },
     {
       "id": "train",
