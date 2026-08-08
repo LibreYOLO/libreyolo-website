@@ -93,19 +93,61 @@ snippets:
         model = LibreYOLO("LibreRFDETRs.pt")
         model.export(format="onnx", imgsz=512)
         model.export(format="tensorrt", imgsz=512, half=True)
+
+        # Arguments accepted for every format:
+        #
+        #   format    "onnx" | "torchscript" | "executorch" | "tensorrt"
+        #             | "openvino" | "paddle" | "mnn" | "rknn" | "ncnn"
+        #             | "tflite" | "coreml" | "coreai".
+        #             "engine" is an alias for tensorrt, "litert" for tflite.
+        #   imgsz     int, or (height, width). Defaults to the checkpoint's
+        #             native resolution.
+        #   batch     int, default 1.
+        #   half      bool, export in FP16. Default False.
+        #   int8      bool, export in INT8. Default False. Needs `data`.
+        #   data      path to a dataset YAML, used to calibrate int8.
+        #   fraction  float, share of that calibration set to use. Default 1.0.
+        #   dynamic   bool, dynamic axes. Default True.
+        #   simplify  bool, run ONNX graph simplification. Default True.
+        #   opset     int, ONNX opset. Chosen per family when not given.
+        #   device    str, device to trace on. Defaults to the model's device.
+        #   output_path  str, defaults to a name derived from the checkpoint.
+        #   verbose   bool, default False.
+        #   allow_download_scripts  bool, default False. Permits embedded
+        #             Python in a dataset YAML that has to be downloaded.
+        #
+        # A few formats take extra arguments of their own, such as an RKNN
+        # target platform. Those are documented on each format's page.
     - label: CLI
       language: bash
       code: |
         libreyolo export model=LibreRFDETRs.pt format=onnx imgsz=512
-    - label: Run the ONNX
+        libreyolo export model=LibreRFDETRs.pt format=tensorrt imgsz=512 half=True
+    - label: Use the exported file
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        # The factory routes on the file suffix, so an exported artifact loads
+        # like any checkpoint and returns the same Results object.
+        model = LibreYOLO("LibreRFDETRs.onnx")
+        results = model("bus.jpg")
+
+        print(results[0].boxes.xyxy)
+    - label: Without LibreYOLO
       language: python
       code: |
         import numpy as np
         import onnxruntime as ort
 
+        # Running the graph directly means doing your own preprocessing and
+        # postprocessing. Inspect the signature before wiring anything up.
         session = ort.InferenceSession("LibreRFDETRs.onnx")
-        dummy = np.zeros((1, 3, 512, 512), dtype=np.float32)
-        boxes, logits = session.run(None, {session.get_inputs()[0].name: dummy})
+        name = session.get_inputs()[0].name
+        outputs = session.run(None, {name: np.zeros((1, 3, 512, 512), dtype=np.float32)})
+
+        for meta, array in zip(session.get_outputs(), outputs):
+            print(meta.name, array.shape)
 ---
 
 ## Install
@@ -140,8 +182,9 @@ in input resolution.
 
 ## Train
 
-Fine-tuning from a COCO checkpoint converges in far fewer epochs than training
-from scratch, and works for all four tasks.
+Training starts from a published checkpoint, for all four tasks. RF-DETR lists
+`pretrained` among the arguments its native trainer ignores, so passing
+`pretrained=False` does not give you a randomly initialized model here.
 
 <code-tabs name="train" />
 
@@ -167,6 +210,11 @@ full COCO `val2017`.
 ## Export
 
 <export-matrix />
+
+An exported artifact loads back through `LibreYOLO()` on its file suffix, so a
+`.onnx` or `.engine` file behaves like a checkpoint and returns the same
+`Results`. Running the graph in a bare runtime, with no LibreYOLO installed, is
+also supported, but then preprocessing and postprocessing are yours to write.
 
 <code-tabs name="export" />
 

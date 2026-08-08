@@ -366,10 +366,6 @@ export function ExportMatrix({ family }) {
         </table>
       </div>
 
-      <Note>
-        A tick means the export runs and is supported. An empty cell means the
-        exporter refuses that combination before it starts.
-      </Note>
     </div>
   )
 }

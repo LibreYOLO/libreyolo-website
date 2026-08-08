@@ -133,8 +133,14 @@ something: a number in the registry, a default in the source, a benchmark run,
 or the upstream paper. If you cannot point at the source, cut the sentence. It
 is always better to say less.
 
-The failure mode is not inventing numbers, which is obvious and rare. It is the
-plausible-sounding inference drawn one step past the data:
+The failure mode is not inventing numbers, which is obvious and rare. It is
+**stepping one pace past what you actually know**, and asserting the next thing
+along as if it had been checked too. This is a characteristic AI writing
+pattern, and it is the most damaging one for reference documentation, because
+the unverified clause sits next to a verified one and borrows its authority.
+Watch for it in your own drafts the way you watch for promotional adjectives.
+
+Two real examples from the first model page, both caught in review:
 
 > Before: The sizes differ mainly by input resolution, so choosing one is a latency decision more than a memory one.
 > After: The sizes carry similar parameter counts and differ mainly in input resolution.
@@ -143,6 +149,27 @@ The first half was measured. The second half sounded reasonable and was never
 checked, and it is probably wrong: activation memory scales with input area, so
 a 704 px variant costs more memory than a 384 px one even when their parameter
 counts match. One clause of speculation discredits the measured clause next to it.
+
+> Before: Fine-tuning from a COCO checkpoint converges in far fewer epochs than training from scratch.
+> After: Training starts from a published checkpoint, for all four tasks.
+
+A third, from the same page: an "run the exported model" snippet was written
+against raw `onnxruntime`, implying that is what you do with an export. In fact
+`LibreYOLO()` routes on file suffix (`models/__init__.py`), so a `.onnx`,
+`.engine`, `.tflite` or `.mlpackage` artifact loads like a checkpoint and
+returns the same `Results`. The snippet was not false, it was just not the
+library's actual answer, which is worse: it makes the product look weaker than
+it is. **Check whether the library already solves the problem before documenting
+the manual workaround.**
+
+Nothing in that first sentence is false in general, and that is what makes it
+dangerous. It quietly implies RF-DETR can be trained from scratch in LibreYOLO,
+which it cannot: `pretrained` sits in the family's `UNSUPPORTED_TRAIN_PARAMS`,
+so the flag is silently ignored. A reader would have burned an afternoon finding
+that out. **Before describing what a model can do, open the family's `model.py`
+and read `UNSUPPORTED_TRAIN_PARAMS` and its capability flags.** Support varies
+per family and general machine-learning knowledge is not evidence about this
+library.
 
 Rules that follow:
 
