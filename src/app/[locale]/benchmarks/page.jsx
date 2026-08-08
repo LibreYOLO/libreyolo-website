@@ -62,7 +62,7 @@ export default function BenchmarksPage() {
             className="mt-4 max-w-3xl text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] text-surface-900 dark:text-white"
           >
             Every model, measured.{' '}
-            <span className="text-surface-400 dark:text-surface-500">Nothing copied from a paper.</span>
+            <span className="text-surface-500 dark:text-surface-400">Nothing copied from a paper.</span>
           </motion.h1>
 
           <motion.p

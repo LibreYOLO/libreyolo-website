@@ -1021,9 +1021,13 @@
   border-radius: 999px;
   font-size: 12.5px;
   font-weight: 600;
-  color: rgb(100 116 139);
+  color: rgb(71 85 105);
   transition: background-color 0.18s ease, color 0.18s ease;
   white-space: nowrap;
+}
+
+.dark .rfx-tab {
+  color: rgb(148 163 184);
 }
 
 .rfx-tab:hover {
@@ -1036,8 +1040,9 @@
   background: rgb(255 255 255 / 0.07);
 }
 
+/* libre-500 is only 3.5:1 behind white text; libre-600 clears AA. */
 .rfx-tab.is-on {
-  background: #0891b2;
+  background: #0e7490;
   color: #fff;
 }
 
@@ -1149,6 +1154,20 @@
 
 .dark .rfx-list-name {
   color: rgb(203 213 225);
+}
+
+/* Band-coloured numbers. The bright ramp sits at roughly 2:1 on a white card,
+   so light mode uses the darker ramp and dark mode switches back. */
+.rfx-list-value,
+.rfd-score-value,
+.rfx-band-text {
+  color: var(--band-text);
+}
+
+.dark .rfx-list-value,
+.dark .rfd-score-value,
+.dark .rfx-band-text {
+  color: var(--band);
 }
 
 .rfx-list-value {
@@ -1284,6 +1303,10 @@
   transform: translateX(-100%);
   font-family: var(--font-jetbrains), monospace;
   font-size: 9.5px;
+  color: rgb(100 116 139);
+}
+
+.dark .rfb-gridline span {
   color: rgb(148 163 184);
 }
 
@@ -1302,7 +1325,7 @@
   font-family: var(--font-jetbrains), monospace;
   font-size: 9.5px;
   font-weight: 700;
-  color: #0891b2;
+  color: #0e7490;
 }
 
 .dark .rfb-mean span {
@@ -1358,6 +1381,10 @@
   font-size: 9.5px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  color: rgb(100 116 139);
+}
+
+.dark .rfb-foot {
   color: rgb(148 163 184);
 }
 

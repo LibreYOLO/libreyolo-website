@@ -63,12 +63,29 @@ const TABS = [
 ]
 
 // Score bands. RF100-VL spans a huge range, so colour carries the verdict.
+// Two ramps: the bright one for fills (bars, dots, swatches) where contrast is
+// against the panel, and a darker one for text, because the bright greens and
+// ambers sit at ~2:1 on a white background. CSS swaps back to the bright ramp
+// in dark mode, where it is the readable one.
 function bandColor(m) {
   if (m >= 0.75) return '#34d399'
   if (m >= 0.6) return '#38bdf8'
   if (m >= 0.45) return '#a78bfa'
   if (m >= 0.3) return '#fbbf24'
   return '#fb7185'
+}
+
+function bandTextColor(m) {
+  if (m >= 0.75) return '#047857'
+  if (m >= 0.6) return '#0369a1'
+  if (m >= 0.45) return '#6d28d9'
+  if (m >= 0.3) return '#b45309'
+  return '#be123c'
+}
+
+// Both ramps on one element; the stylesheet decides which one applies.
+function bandVars(m) {
+  return { '--band': bandColor(m), '--band-text': bandTextColor(m) }
 }
 
 const BANDS = [
@@ -181,7 +198,7 @@ function DatasetDrawer({ dataset, onClose, onSwitch }) {
                   <span className="rfd-score-bar">
                     <span style={{ width: `${Math.max(s.m * 100, 2)}%`, background: bandColor(s.m) }} />
                   </span>
-                  <span className="rfd-score-value" style={{ color: bandColor(s.m) }}>{pct(s.m)}</span>
+                  <span className="rfd-score-value" style={bandVars(s.m)}>{pct(s.m)}</span>
                 </div>
               ))}
             </div>
@@ -499,7 +516,7 @@ export default function RF100VLPanel() {
                       <span className="rfp-swatch" style={{ background: COLOR_BY_DOMAIN[active.domain] }} />
                       {active.domain}
                       {tab === 'results' && model && model.scores[active.name] && (
-                        <span className="ml-2 font-mono font-bold" style={{ color: bandColor(model.scores[active.name].m) }}>
+                        <span className="ml-2 font-mono font-bold rfx-band-text" style={bandVars(model.scores[active.name].m)}>
                           {pct(model.scores[active.name].m)}
                         </span>
                       )}
@@ -566,7 +583,7 @@ export default function RF100VLPanel() {
                 >
                   <img src={ds.img} alt="" loading="lazy" />
                   <span className="rfx-list-name">{ds.name}</span>
-                  <span className="rfx-list-value" style={{ color: bandColor(s.m) }}>{pct(s.m)}</span>
+                  <span className="rfx-list-value" style={bandVars(s.m)}>{pct(s.m)}</span>
                   <ArrowUpRight className="h-3 w-3 shrink-0 opacity-40" />
                 </button>
               ))}
