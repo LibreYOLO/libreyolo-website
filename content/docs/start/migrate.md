@@ -43,6 +43,9 @@ snippets:
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
 ---
 
+This page is about checkpoints from other projects. If you are moving your own
+code from an older LibreYOLO, see [upgrading to 1.5.0](/docs/upgrade).
+
 ## What happens when you load a foreign file
 
 `LibreYOLO()` loads any weight file through the restricted, weights-only path

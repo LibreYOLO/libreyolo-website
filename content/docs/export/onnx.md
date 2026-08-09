@@ -177,6 +177,19 @@ outputs: `output`, shaped `(batch, max_det, 6)`, and `raw`, the undecoded
 detector tensor that LibreYOLO's own backend uses so postprocessing stays
 identical to the PyTorch path.
 
+### DeepStream
+
+`deepstream=True` is an ONNX-only option. It exports the graph in the layout
+NVIDIA DeepStream's parser expects and writes two sidecar files next to it,
+`config_infer_primary_<stem>.txt` and `<stem>_labels.txt`, so the artifact drops
+into a pipeline without hand-written configuration.
+
+It is mutually exclusive with `nms=True`, and asking for both raises a
+`ValueError`: DeepStream runs suppression in its own clustering stage. Passing
+it to any format other than ONNX raises as well. See
+[DeepStream](/docs/export/deepstream) for the supported family and task grid and
+the parser build.
+
 ### INT8
 
 <code-tabs name="int8" />

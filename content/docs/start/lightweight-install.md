@@ -58,9 +58,14 @@ it is never called.
 Before this release the import failed anyway: importing anything under
 `libreyolo.models` built every model class to populate the checkpoint
 auto-detection registry, and those classes are `torch.nn.Module` subclasses.
-The preprocessing recipes now live in their own package and the torch import is
-deferred until something touches a torch attribute, so the ONNX path imports
-with torch absent from the machine.
+The preprocessing recipes now live in their own package, `libreyolo.preprocess`,
+and the torch import is deferred until something touches a torch attribute, so
+the ONNX path imports with torch absent from the machine. That package holds a
+numpy-native preprocessor per family: `yolo9`, `yolonas`, `yolox`, `ec`,
+`rtdetr`, `rfdetr`, `dfine`, `deim` and `deimv2`, two more than the seven
+families verified end to end below. Each
+`libreyolo/models/<family>/utils.py` re-exports from it, so existing import
+paths keep working.
 
 ## Try the CPU-only wheel first
 

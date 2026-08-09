@@ -89,7 +89,10 @@ name is never substituted.
 
 The library's canonical task key is `embed`. `face-recognition`, `facial-recognition`,
 `reid` and `face` all normalize to it, so `task="face-recognition"` and
-`task="embed"` select the same thing.
+`task="embed"` select the same thing. Faces are the region shape of that wider
+task; [embeddings](/docs/tasks/embeddings) covers the whole-image and text
+shapes, the shared `Embeddings`, `Identities` and `Gallery` API, and the models
+that produce vectors without detecting anything.
 
 ## Models
 

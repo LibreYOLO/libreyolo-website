@@ -42,6 +42,11 @@
           "built": true
         },
         {
+          "slug": "/docs/upgrade",
+          "label": "Upgrading to 1.5.0",
+          "built": true
+        },
+        {
           "slug": "/docs/faq",
           "label": "FAQ",
           "built": true
@@ -138,6 +143,11 @@
           "built": true
         },
         {
+          "slug": "/docs/tasks/embeddings",
+          "label": "Embeddings",
+          "built": true
+        },
+        {
           "slug": "/docs/tasks/gaze-estimation",
           "label": "Gaze estimation",
           "built": true
@@ -226,6 +236,11 @@
           "label": "DINOv2",
           "built": true,
           "tier": "g2"
+        },
+        {
+          "slug": "/docs/models/dome-detr",
+          "label": "Dome-DETR",
+          "built": true
         },
         {
           "slug": "/docs/models/efficientnetv2",
@@ -997,6 +1012,16 @@
         {
           "slug": "/docs/reference/settings",
           "label": "Settings",
+          "built": true
+        },
+        {
+          "slug": "/docs/reference/cuda-graphs",
+          "label": "CUDA graphs",
+          "built": true
+        },
+        {
+          "slug": "/docs/reference/kernels",
+          "label": "Kernels",
           "built": true
         },
         {

@@ -46,6 +46,19 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.obb.xywhr.shape)
+    - label: RT-DETRv2
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        # DOTA v1.0 weights, 15 aerial classes at 1024 px. The oriented graph
+        # is recognized from the checkpoint's own tensors, so no task argument.
+        model = LibreYOLO("LibreRTDETRv2n-obb.pt")
+        result = model("aerial.png", save=True)
+
+        obb = result.obb
+        print(obb.xywhr)
+        print(result.names)   # plane, ship, harbor, helicopter, and 11 more
   train:
     - label: Python
       language: python
@@ -86,6 +99,10 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreRFDETRs-obb.pt data=my-obb-dataset.yaml
+    - label: RT-DETRv2
+      language: bash
+      code: |
+        libreyolo val model=LibreRTDETRv2n-obb.pt data=my-obb-dataset.yaml
   export:
     - label: Python
       language: python
@@ -98,6 +115,13 @@ snippets:
       language: bash
       code: |
         libreyolo export model=LibreRFDETRs-obb.pt format=onnx imgsz=512
+    - label: RT-DETRv2
+      language: bash
+      code: |
+        # ONNX and TorchScript are the validated targets here, at FP32,
+        # batch 1, on a fixed 1024 by 1024 canvas.
+        libreyolo export model=LibreRTDETRv2n-obb.pt format=onnx imgsz=1024
+        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript imgsz=1024
     - label: Use the exported file
       language: python
       code: |
@@ -134,7 +158,10 @@ rectangles. `result.boxes` is filled as well, with the axis-aligned form.
 
 ## Models
 
-[RF-DETR](/docs/models/rf-detr) is the family to use. It trains, predicts,
+Two families serve this task, and which one to reach for depends on whether
+you need to train.
+
+[RF-DETR](/docs/models/rf-detr) is the one that trains. It predicts, trains,
 validates and exports oriented boxes, and it ships published oriented
 checkpoints in four sizes, n, s, m and l. It needs its own extra,
 `pip install "libreyolo[rfdetr]"`, and its model page carries the weights
@@ -143,9 +170,18 @@ license and the provenance.
 Read the section below on what those checkpoints actually predict before you
 plan around them.
 
-[RT-DETRv2](/docs/models/rt-detr) also declares `obb` in its supported tasks
-and can load an oriented checkpoint, but LibreYOLO publishes no oriented
-weights for it, so there is nothing to start from.
+[RT-DETRv2](/docs/models/rt-detr) is the one with aerial weights. It publishes
+`LibreRTDETRv2n-obb.pt` through `LibreRTDETRv2x-obb.pt`, the official DOTA v1.0
+single-scale checkpoints converted into LibreYOLO's format, covering DOTA's 15
+classes at 1024 px. It needs no extra beyond the base package, the oriented
+graph is recognized from the checkpoint's own tensors, and prediction,
+validation and ONNX and TorchScript export are all supported. Training is not:
+the oriented task is inference only on that family, `train()` raises, and there
+is no transfer from its detection weights, which use a different backbone.
+Tracking and test-time augmentation are also unavailable for oriented boxes.
+
+So: DOTA categories out of the box, RT-DETRv2. Your own oriented labels,
+RF-DETR.
 
 ## Predict
 
@@ -153,9 +189,9 @@ Weights download from Hugging Face on first use and are cached locally.
 
 <code-tabs name="predict" />
 
-Know what the published checkpoints are before you run them. Despite DOTA being
-the reference benchmark for this task, these weights were not trained on it.
-All four were initialized from the RF-DETR detection weights and fine-tuned on a
+Know what RF-DETR's published checkpoints are before you run them. Despite DOTA
+being the reference benchmark for this task, those weights were not trained on
+it. All four were initialized from the RF-DETR detection weights and fine-tuned on a
 single Roboflow Universe dataset of UAV footage, with six vehicle classes: bike,
 bus, car, other_vehicle, taxi and truck. Their model cards describe them as
 development weights, produced while validating oriented training support, and
@@ -163,8 +199,9 @@ say they should not be read as production or benchmark-official weights.
 
 In practice that means they are a working starting point for oriented boxes on
 vehicles seen from above, and for verifying that your pipeline runs end to end.
-Any other domain, including the aerial categories DOTA is known for, means
-training on your own oriented labels. `conf` and `max_det` shape the output as
+Any other domain means training on your own oriented labels, and for the aerial
+categories DOTA is known for, the RT-DETRv2 checkpoints are the ones actually
+trained on that data. `conf` and `max_det` shape the output as
 they do for detection. See [prediction](/docs/predict) for sources, streaming
 and result handling.
 
@@ -225,10 +262,12 @@ The canonical row parser is `libreyolo.data.parse_yolo_obb_label_line`.
 
 <code-tabs name="train" />
 
-Training continues from a published `-obb` checkpoint by default. Starting from
-detection weights is a deliberate transfer: those weights predict no angle, and
-passing `task=obb` is what authorizes the swap. Keep `lr0` at or below `1e-4`,
-as with the family's other tasks. See [training](/docs/train) for datasets,
+Training on this task means RF-DETR. Training continues from a published `-obb`
+checkpoint by default. Starting from detection weights is a deliberate
+transfer: those weights predict no angle, and passing `task=obb` is what
+authorizes the swap. Keep `lr0` at or below `1e-4`, as with the family's other
+tasks. RT-DETRv2's oriented checkpoints cannot be fine-tuned; use them as they
+are, or train an RF-DETR model on your own labels. See [training](/docs/train) for datasets,
 augmentation, multi-GPU and loggers.
 
 ## Validate

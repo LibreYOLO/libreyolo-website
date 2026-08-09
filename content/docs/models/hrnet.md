@@ -129,8 +129,11 @@ setting the original evaluation used.
 
 ## Validate
 
-`val()` runs COCO-style keypoint OKS-AP through `pycocotools` and accepts a
-YOLO-pose `data.yaml` or a COCO keypoints JSON plus an images directory.
+`val()` runs COCO-style keypoint OKS-AP and accepts a YOLO-pose `data.yaml` or a
+COCO keypoints JSON plus an images directory. The metrics backend is
+faster-coco-eval by default, with `pycocotools` used automatically when
+faster-coco-eval is not installed; `faster_coco_eval=False` forces the
+`pycocotools` path.
 
 <code-tabs name="val" />
 

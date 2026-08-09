@@ -227,6 +227,9 @@ A graph records memory addresses, not values, so anything that relocates
 parameters drops it. Changing device through `predict(device=...)`, quantizing
 and dequantizing all invalidate captured graphs.
 
+The full per-family support matrix, the seam splits and the numerics contract
+are on [CUDA graphs](/docs/reference/cuda-graphs).
+
 ## Precision
 
 <code-tabs name="precision" />

@@ -54,7 +54,8 @@ opt-out. An installation without the extra is unaffected either way.
 
 Kernel selection also short-circuits imports: when `LIBREYOLO_KERNELS` forces
 `off` or `reference`, the in-tree accelerated providers are never imported at
-all.
+all. The registry these three variables control is documented on
+[kernels](/docs/reference/kernels).
 
 ## Variables the library sets
 

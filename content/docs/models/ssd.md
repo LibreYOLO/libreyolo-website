@@ -92,6 +92,10 @@ SSD ships one checkpoint: the VGG16-backed SSD300 network at its fixed native
 canvas. There is no size or scale choice in this family; predict, validate and
 export all use that one graph.
 
+The weight file is `LibreSSD300.pt`, the family prefix followed by its only size
+key, `"300"`. The class behind it is `LibreSSD`, so a direct construction is
+`LibreSSD(size="300")` rather than a class named after the file.
+
 ## Validate
 
 `val()` returns a dictionary of `metrics/` keys covering precision, recall,

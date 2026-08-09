@@ -23,6 +23,9 @@ meta:
   - label: Loads back
     value: 'LibreYOLO("weights/LibreYOLO9t_paddle", device="cpu")'
     mono: true
+  - label: Backend
+    value: "libreyolo.backends.paddle.PaddleBackend"
+    mono: true
   - label: Shapes
     value: "Static, batch 1, opset 15. All three are enforced."
   - label: Precision
@@ -82,6 +85,16 @@ snippets:
       code: |
         libreyolo predict --model weights/LibreYOLO9t_paddle \
           --source https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg --device cpu --save
+    - label: The backend directly
+      language: python
+      code: |
+        from libreyolo.backends.paddle import PaddleBackend
+
+        # What LibreYOLO() constructs for a Paddle directory. Same Results
+        # object, no factory routing in between.
+        backend = PaddleBackend("weights/LibreYOLO9t_paddle", device="cpu")
+        result = backend.predict("parkour.jpg")
+        print(result.boxes.xyxy[:3])
     - label: Bare Paddle
       language: python
       code: |
@@ -153,6 +166,12 @@ of it.
 `model.pdiparams`, reads `metadata.yaml`, and returns the same `Results` object as
 the checkpoint. A device other than `auto` or `cpu` raises: this backend is CPU
 only.
+
+What the factory constructs is `PaddleBackend`, exported from `libreyolo` and
+importable as `libreyolo.backends.paddle.PaddleBackend`. Construct it yourself
+when you want the backend without the factory's suffix routing, for example to
+pass `task=` explicitly for a directory whose `metadata.yaml` you did not write.
+Its `predict()` takes the same sources and returns the same results.
 
 The bare-runtime snippet mirrors what the backend configures, and the three
 disabled options are deliberate. The Paddle 2.6 CPU fusion pipeline can crash

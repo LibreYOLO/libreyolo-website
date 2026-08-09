@@ -46,6 +46,7 @@ its own path.
 
 | Release | Documentation |
 | --- | --- |
+| 1.5.0 | [/docs](/docs), these pages, released 2026-08-09 |
 | 1.4.0 | [/docs/v1.4.0](/docs/v1.4.0) |
 | 1.3.1 | [/docs/v1.3.1](/docs/v1.3.1) |
 | 1.3.0 | [/docs/v1.3.0](/docs/v1.3.0) |

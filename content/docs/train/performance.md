@@ -249,3 +249,5 @@ run over the limit, lower the batch or leave the flag off.
   `workers`.
 - [Multi-GPU training](/docs/train/multi-gpu), where both CUDA graphs and the
   profiler are unavailable.
+- [CUDA graphs](/docs/reference/cuda-graphs) for the combined inference and
+  training support matrix, the seam splits and the numerics contract.

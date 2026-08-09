@@ -135,7 +135,7 @@ evaluation falls back to pycocotools and the run continues.
 | `stream` | `yt-dlp`, needed only to resolve YouTube page URLs |
 | `tracking` | Nothing. Every tracking dependency is already a core dependency |
 | `label` | `libreyolo[sam]`, which enables click-to-mask assist in `libreyolo label` |
-| `hub-kernels` | `kernels`, the optional loader for compiled Hub kernels |
+| `hub-kernels` | `kernels`, the optional loader for compiled Hub kernels. See [kernels](/docs/reference/kernels), which notes that installing it can shift RF-DETR predictions at float tolerance |
 | `clip-convert` | `libreyolo[clip]` plus `open_clip_torch`, for weight conversion and parity checks |
 | `siglip2-convert` | `libreyolo[siglip2]` plus `transformers`, for the same reason |
 
