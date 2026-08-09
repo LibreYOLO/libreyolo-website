@@ -23,7 +23,7 @@ const sections = [
 ]
 
 const relatedLinks = [
-  { href: '/docs/v1.4.0', label: 'Core documentation' },
+  { href: '/docs', label: 'Core documentation' },
   { href: '/docs/librevlm', label: 'LibreVLM' },
   { href: '/models', label: 'Model Zoo' },
 ]
@@ -471,7 +471,7 @@ libreyolo train --model rf-detr-nano.pth --data data.yaml --lora`}</CodeBlock>
         <p>
           For production work, the validated core is YOLO9 detection and RF-DETR detection and
           segmentation. See the{' '}
-          <a href="/docs/v1.4.0" className="text-libre-600 dark:text-libre-400 hover:underline">core documentation</a>{' '}
+          <a href="/docs" className="text-libre-600 dark:text-libre-400 hover:underline">core documentation</a>{' '}
           for those, and <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM</a>{' '}
           for open-vocabulary detection.
         </p>
@@ -506,7 +506,7 @@ const sectionsZh = [
 ]
 
 const relatedLinksZh = [
-  { href: '/zh/docs/v1.4.0', label: '核心文档' },
+  { href: '/zh/docs', label: '核心文档' },
   { href: '/docs/librevlm', label: 'LibreVLM' },
   { href: '/models', label: '模型库' },
 ]
@@ -930,7 +930,7 @@ libreyolo train --model rf-detr-nano.pth --data data.yaml --lora`}</CodeBlock>
       <Callout icon={Crosshair} tone="libre" title="在寻找稳定的方案？">
         <p>
           对于生产工作，经过验证的核心是 YOLO9 检测以及 RF-DETR 检测与分割。相关内容请参阅{' '}
-          <a href="/zh/docs/v1.4.0" className="text-libre-600 dark:text-libre-400 hover:underline">核心文档</a>，
+          <a href="/zh/docs" className="text-libre-600 dark:text-libre-400 hover:underline">核心文档</a>，
           开放词表检测请参阅 <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM</a>。
         </p>
       </Callout>

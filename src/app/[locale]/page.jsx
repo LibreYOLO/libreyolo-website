@@ -80,7 +80,7 @@ function HeroSection() {
             className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4"
           >
             <Link
-              href="/docs/v1.4.0"
+              href="/docs"
               className="btn-primary group flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-libre-500 to-libre-600 rounded-xl text-white font-semibold text-base sm:text-lg"
             >
               {tc('getStarted')}
@@ -660,7 +660,7 @@ function CTASection() {
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4">
             <Link
-              href="/docs/v1.4.0"
+              href="/docs"
               className="btn-primary flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-libre-500 to-libre-600 rounded-xl text-white font-semibold"
             >
               {t('ctaReadDocs')}

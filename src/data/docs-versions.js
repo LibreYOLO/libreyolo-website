@@ -21,10 +21,10 @@
  * On tag day: set DOCS_PRERELEASE to false, set DOCS_CURRENT_VERSION to the
  * new number, and move the previous release's entry from Latest to Frozen.
  */
-export const DOCS_PRERELEASE = true
+export const DOCS_PRERELEASE = false
 
 // The version a reader gets from `pip install libreyolo` today.
-export const DOCS_CURRENT_VERSION = '1.4.0'
+export const DOCS_CURRENT_VERSION = '1.5.0'
 
 export const CURRENT_DOCS_VERSION = 'v1.5.0'
 
