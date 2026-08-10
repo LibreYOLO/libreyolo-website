@@ -77,8 +77,8 @@ Los parámetros de aumento de datos son argumentos normales de `train()`.
 
 <code-tabs name="train" />
 
-Dos de ellos tienen una forma más corta en la CLI: `mosaic` se mapea a
-`mosaic_prob` y `mixup` se mapea a `mixup_prob`. Todos los demás parámetros se
+Dos de ellos tienen una forma más corta en la CLI: `mosaic` corresponde a
+`mosaic_prob` y `mixup` corresponde a `mixup_prob`. Todos los demás parámetros se
 escriben igual en los dos sitios.
 
 ## Tres estados, no dos
@@ -93,8 +93,8 @@ rama de mosaico, así que con `mosaic_prob=0` nunca se activa aunque esté
 conectado.
 
 Ese tercer estado es el que sorprende a la gente. En un pipeline de estilo YOLOX
-el warp afín se ejecuta sobre el lienzo del mosaico y MixUp mezcla una muestra de
-mosaico, así que `mosaic_prob=0` desactiva en silencio `degrees`, `translate`,
+la transformación afín se ejecuta sobre el lienzo del mosaico y MixUp mezcla una
+muestra de mosaico, así que `mosaic_prob=0` desactiva en silencio `degrees`, `translate`,
 `shear`, `perspective`, `mosaic_scale`, `mixup_prob` y `mixup_scale` de golpe. El
 entrenador registra un aviso concretamente para el caso de MixUp:
 
@@ -116,11 +116,13 @@ Las familias se agrupan en cuatro pipelines de entrenamiento, y el pipeline
 determina casi todas las respuestas.
 
 El pipeline de mosaico de estilo YOLOX aplica el jitter HSV y los volteos por
-muestra, y después ejecuta el afín y MixUp dentro de la rama de mosaico. Cubre
+muestra, y después ejecuta la transformación afín y MixUp dentro de la rama de
+mosaico. Cubre
 YOLOX, YOLOv7, YOLOv9 y sus variantes E2E y P2, RTMDet, PicoDet, RT-DETR,
 RT-DETRv2 y FOMO.
 
-El pipeline de paso directo de estilo DETR no tiene mosaico ni warp afín. Su
+El pipeline de paso directo de estilo DETR no tiene mosaico ni transformación
+afín. Su
 distorsión fotométrica, el zoom-out y el recorte por IoU son constantes de la
 receta y no parámetros de configuración, así que solo `flip_prob` y
 `no_aug_epochs` están activos. Cubre D-FINE, Dome-DETR, DEIM, DEIMv2, RT-DETRv4,
@@ -130,9 +132,10 @@ El pipeline de clasificación con ImageFolder ignora todos los parámetros de
 detección. Su volteo horizontal es un 0.5 fijo al que `flip_prob` no llega. En su
 lugar tiene su propio pack de parámetros, descrito más abajo.
 
-YOLO-NAS es una forma en sí misma: nada de mosaico, un afín por muestra siempre
-activo y MixUp aplicado de forma independiente en lugar de condicionado. Su valor
-de `mosaic_scale` se reutiliza como rango de escala del afín.
+YOLO-NAS es una forma en sí misma: nada de mosaico, una transformación afín por
+muestra siempre activa y MixUp aplicado de forma independiente en lugar de
+condicionado. Su valor de `mosaic_scale` se reutiliza como rango de escala de esa
+transformación afín.
 
 SegFormer y NAFNet ejecutan cada uno un pipeline específico de su tarea cuya
 aleatoriedad está fijada en la familia en lugar de ser configurable. En SegFormer
@@ -155,16 +158,16 @@ Resumida por pipeline, para los parámetros base:
 | Parámetro | Estilo YOLOX | YOLO-NAS | Estilo DETR | Clasificación |
 |---|---|---|---|---|
 | `mosaic_prob` | used | ignored | ignored | ignored |
-| `mixup_prob` | gated por mosaico | used | ignored | ignored |
+| `mixup_prob` | condicionado por el mosaico | used | ignored | ignored |
 | `hsv_prob` | used | used | ignored | ignored |
 | `flip_prob` | used | used | used | ignored |
 | `flipud` | used | used | ignored | ignored |
-| `degrees` | gated por mosaico | used | ignored | ignored |
-| `translate` | gated por mosaico | used | ignored | ignored |
-| `shear` | gated por mosaico | used | ignored | ignored |
-| `perspective` | gated por mosaico | used | ignored | ignored |
-| `mosaic_scale` | gated por mosaico | used | ignored | ignored |
-| `mixup_scale` | gated por mosaico | used | ignored | ignored |
+| `degrees` | condicionado por el mosaico | used | ignored | ignored |
+| `translate` | condicionado por el mosaico | used | ignored | ignored |
+| `shear` | condicionado por el mosaico | used | ignored | ignored |
+| `perspective` | condicionado por el mosaico | used | ignored | ignored |
+| `mosaic_scale` | condicionado por el mosaico | used | ignored | ignored |
+| `mixup_scale` | condicionado por el mosaico | used | ignored | ignored |
 | `no_aug_epochs` | used | used | used | used |
 
 Excepciones dentro de esas columnas, todas ellas restrictivas:
@@ -175,15 +178,15 @@ Excepciones dentro de esas columnas, todas ellas restrictivas:
 - El pipeline nativo de RF-DETR no tiene jitter HSV, así que `hsv_prob` se ignora
   además de lo que dice la columna de estilo DETR.
 - EC respeta `hsv_prob`, `degrees` y `translate`, pero solo para `task="pose"`,
-  cuya transformación consciente de keypoints los lee. Sus rutas de detect y
-  segment usan recetas fotométricas fijas.
+  cuya transformación, que tiene en cuenta los keypoints, los lee. Sus
+  rutas de detect y segment usan recetas fotométricas fijas.
 - DINOv2 sigue la columna de estilo DETR para sus tareas detect y semantic, y
   añade el pack de clasificación para `task="classify"`.
 
 `no_aug_epochs` está en `used` en todas partes, pero no significa lo mismo en
 todas. En los pipelines de mosaico apaga el mosaico y MixUp durante las épocas
 finales. En los pipelines de estilo DETR detiene los aumentos fotométricos, de
-zoom-out y de recorte, y da forma a la cola del scheduler. En los pipelines de
+zoom-out y de recorte, y da forma a la cola del schedule. En los pipelines de
 clasificación y de semántica solo da forma a la cola.
 
 ## El pack de clasificación

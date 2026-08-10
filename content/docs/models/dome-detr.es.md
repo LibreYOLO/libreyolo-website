@@ -83,8 +83,8 @@ snippets:
 
 ## Instalación
 
-Dome-DETR no necesita ningún extra opcional. Todo lo que importa está en la
-instalación base.
+Dome-DETR no necesita ningún extra opcional. Todo lo que necesita importar está
+en la instalación base.
 
 ```bash
 pip install libreyolo
@@ -107,10 +107,11 @@ Consulta [predicción](/docs/predict) para fuentes, streaming y manejo de
 resultados.
 
 Dos capacidades están desactivadas en esta familia. La captura de grafos CUDA
-está deshabilitada, porque el número de queries de PAQI depende de los datos y
-el forward cambia por tanto de forma de una imagen a otra, que es justo lo que
-la captura de grafos no puede absorber. El aumento en test se ejecuta a un único
-tamaño cuadrado fijo, así que pedir un TTA multiescala no hace nada.
+está deshabilitada, porque el número de queries de PAQI depende de los datos y,
+por tanto, el forward cambia de forma de una imagen a otra, que es justo lo que
+la captura de grafos no puede absorber. El aumento de datos en test (TTA) se
+ejecuta a un único tamaño cuadrado fijo, así que pedir un TTA multiescala no
+hace nada.
 
 ## Variantes
 

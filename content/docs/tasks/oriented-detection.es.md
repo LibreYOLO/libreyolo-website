@@ -190,7 +190,8 @@ orientadas, RF-DETR.
 
 ## Predicción
 
-Los pesos se descargan de Hugging Face en el primer uso y se cachean en local.
+Los pesos se descargan de Hugging Face en el primer uso y se guardan en caché
+en local.
 
 <code-tabs name="predict" />
 
@@ -209,14 +210,14 @@ orientadas sobre vehículos vistos desde arriba, y para verificar que tu pipelin
 funciona de principio a fin. Cualquier otro dominio implica entrenar con tus
 propias etiquetas orientadas, y para las categorías aéreas por las que DOTA es
 conocido, los checkpoints de RT-DETRv2 son los que están realmente entrenados
-con esos datos. `conf` y `max_det` moldean la salida igual que en detección.
-Consulta la [predicción](/docs/predict) para las fuentes, el streaming y el
-manejo de resultados.
+con esos datos. `conf` y `max_det` dan forma a la salida igual que en detección.
+Consulta [predicción](/docs/predict) para fuentes, streaming y manejo de
+resultados.
 
 ## Formato del dataset
 
 La estructura es la de detección: un archivo de etiquetas `.txt` por imagen, que
-se encuentra cambiando `images` por `labels` en la ruta de la imagen y
+se localiza sustituyendo `images` por `labels` en la ruta de la imagen y
 cambiando la extensión.
 
 ```text
@@ -265,8 +266,8 @@ split a archivo JSON. Las anotaciones se leen por orden de prioridad: un campo
 `obb` con ocho esquinas en espacio de píxeles, un campo `obb` con
 `[cx, cy, w, h, angle]` y el ángulo en radianes, un polígono o RLE de
 `segmentation` reajustado a su rectángulo de área mínima, o un `bbox` de COCO
-normal, que se trata como un rectángulo alineado a los ejes y se canoniza a
-`xywhr`.
+normal, que se trata como un rectángulo alineado a los ejes y se convierte a la
+forma canónica `xywhr`.
 
 El parser canónico de filas es `libreyolo.data.parse_yolo_obb_label_line`.
 
@@ -280,8 +281,8 @@ transferencia deliberada: esos pesos no predicen ningún ángulo, y pasar
 `task=obb` es lo que autoriza el cambio. Mantén `lr0` en `1e-4` o por debajo,
 igual que en las demás tareas de la familia. Los checkpoints orientados de
 RT-DETRv2 no admiten fine-tuning; úsalos tal cual, o entrena un modelo RF-DETR
-con tus propias etiquetas. Consulta el [entrenamiento](/docs/train) para los
-datasets, el aumento de datos, el multi-GPU y los loggers.
+con tus propias etiquetas. Consulta [entrenamiento](/docs/train) para datasets,
+aumento de datos, multi-GPU y loggers.
 
 ## Validación
 
@@ -293,20 +294,20 @@ correcta y el ángulo equivocado cuenta como fallo.
 <code-tabs name="val" />
 
 `metrics/mAP50-95` es la precisión media promediada sobre umbrales de IoU de
-0.50 a 0.95 en pasos de 0.05, y es la cifra principal. A diferencia del camino
+0.50 a 0.95 en pasos de 0.05, y es la cifra principal. A diferencia de la ruta
 COCO que usa la detección, esta tarea respeta `iou_thresholds` en la
 configuración de validación, así que el barrido se puede cambiar.
 `metrics/mAP50` y `metrics/mAP75` son las versiones de un solo umbral.
 `metrics/precision` y `metrics/recall` son precisión y recall reales con IoU
 0.50, leídos en el punto de operación más laxo: se cuenta cada predicción que
 sobrevive al umbral de confianza, y ese umbral vale 0.001 por defecto durante la
-validación. Subir `conf` por tanto los mueve, mientras que las cifras de mAP,
+validación. Por tanto, subir `conf` las mueve, mientras que las cifras de mAP,
 que usan la curva de precisión-recall entera, se quedan donde están. Cuatro de
 estas se repiten con un sufijo `(OBB)`, `metrics/mAP50-95(OBB)`,
 `metrics/mAP50(OBB)`, `metrics/precision(OBB)` y `metrics/recall(OBB)`, que es
-como quien llama distingue un resultado orientado de uno alineado a los ejes
-cuando ambos están en la misma tabla. `metrics/mAP75` no tiene gemela con
-sufijo.
+como el código que llama distingue un resultado orientado de uno alineado a los
+ejes cuando ambos están en la misma tabla. `metrics/mAP75` no tiene equivalente
+con sufijo.
 
 Dos opciones no hacen nada en esta tarea. `save_json` y `save_plots` se aceptan
 y registran un aviso: los volcados de predicciones orientadas y las gráficas de
@@ -321,5 +322,5 @@ su archivo, así que un archivo `.onnx` o `.engine` se comporta como un
 checkpoint y devuelve el mismo `Results`. La cobertura de formatos varía por
 tarea dentro de una misma familia, y la matriz de la página del modelo se genera
 a partir del conjunto validado y da el motivo por el que un destino no está
-disponible. Consulta la [exportación y despliegue](/docs/export) para los
-formatos, sus extras y sus restricciones.
+disponible. Consulta [exportación y despliegue](/docs/export) para los formatos,
+sus extras y sus restricciones.

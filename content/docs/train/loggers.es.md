@@ -12,7 +12,7 @@ keywords:
   - neptune
   - dvclive
   - callbacks de entrenamiento
-  - metricas de entrenamiento csv
+  - métricas de entrenamiento csv
   - libreyolo monitor
 last_verified: "1.5.0"
 snippets:
@@ -75,7 +75,7 @@ snippets:
     - label: Seguir una ejecución en el navegador
       language: bash
       code: |
-        libreyolo monitor                     # la ejecución más reciente bajo runs/
+        libreyolo monitor                     # la ejecución más reciente en runs/
         libreyolo monitor runs/train/exp      # una ejecución concreta
 ---
 
@@ -89,7 +89,7 @@ que mezcle ambas cosas.
 Los nombres no distinguen mayúsculas de minúsculas. El conjunto registrado es
 `tensorboard`, `mlflow`, `wandb`, `comet`, `clearml`, `neptune`, `dvclive` y
 `dvc`, siendo este último un alias de `dvclive`. Cualquier otra cosa lanza un
-error de inmediato y lista los nombres válidos. No hay ningún valor que los
+error de inmediato y enumera los nombres válidos. No hay ningún valor que los
 active todos, y no hay flag de CLI: `loggers=` es un argumento de Python.
 
 ## Qué registra cada backend
@@ -110,7 +110,7 @@ totalmente resuelta se registra como parámetros al inicio del entrenamiento, y
 el nombre de la ejecución es por defecto `<family><size>-<task>`, por ejemplo
 `yolo9s-detect`.
 
-Al terminar el entrenamiento, los backends que soportan artefactos suben
+Al terminar el entrenamiento, los backends que admiten artefactos suben
 `results.csv`, `train_config.yaml` y `summary.json` cuando existen, más
 `weights/best.pt` con `log_checkpoints=True`. TensorBoard no sube nada, porque
 no tiene concepto de artefacto. Ningún logger sube las imágenes de las gráficas
@@ -120,7 +120,7 @@ de validación.
 
 Si falta el paquete de un backend, el error salta en la construcción y nombra el
 comando de instalación, porque pedir un logger y no obtener nada en silencio
-esconde un bug.
+oculta un bug.
 
 Un fallo del backend durante la ejecución hace lo contrario. La primera
 excepción de un handler desactiva ese logger para el resto de la ejecución, la
@@ -158,7 +158,7 @@ arriba, y léela con `mlflow ui --backend-store-uri sqlite:///mlflow.db`.
 Weights & Biases recurre a la variable de entorno `WANDB_PROJECT` y luego a
 `libreyolo`. Comet recurre a `COMET_PROJECT_NAME` y luego a `libreyolo`, y toma
 las credenciales de su propia configuración; `online=False` da un experimento
-offline. ClearML crea una tarea nueva, reporta la configuración bajo
+offline. ClearML crea una tarea nueva, registra la configuración en
 `TrainConfig` y desactiva la captura automática del framework para que las
 métricas no se reporten dos veces. Neptune usa el cliente actual
 `neptune-scale` en lugar del paquete antiguo, y `mode="offline"` registra en
@@ -167,9 +167,9 @@ local.
 DVCLive escribe en `<save_dir>/dvclive`. Construye su árbol de resumen a partir
 de `/`, y no puede guardar un float en una ruta que además es un padre, así que
 `train/loss/box` se escribe como `train/loss.box` mientras que `train/loss`
-conserva su nombre. LibreYOLO también desactiva los valores por defecto
-habituales de DVCLive de guardar un experimento de DVC y escribir un `dvc.yaml`
-en la raíz, de modo que un logger opcional no crea estado de control de
+conserva su nombre. LibreYOLO también desactiva el comportamiento por defecto de
+DVCLive de guardar un experimento de DVC y escribir un `dvc.yaml` en la raíz, de
+modo que un logger opcional no crea estado de control de
 versiones fuera del directorio de la ejecución; pasa `save_dvc_exp=True` o un
 `dvcyaml=` explícito para recuperarlos.
 
@@ -183,11 +183,11 @@ Los mismos cuatro eventos lo mueven todo.
 
 <code-tabs name="callback" />
 
-| Evento | Cuándo | Lleva |
+| Evento | Cuándo | Qué lleva |
 |---|---|---|
 | `TrainStartEvent` | tras el setup, antes de la época 1 | `start_epoch`, `total_epochs`, `model_family`, `model_size`, `task`, `save_dir`, `config` |
 | `TrainEpochEvent` | después de cada época, entrenamiento y validación | `epoch`, `train_loss`, `train_loss_items`, `lr`, `val_metrics`, `validated`, `is_best`, `current_metric`, `best_metric`, `best_epoch`, `epoch_seconds` |
-| `TrainEndEvent` | cuando el entrenamiento termina | `completed_epochs`, `final_loss`, `best_metric`, `best_epoch`, `total_seconds`, `results` |
+| `TrainEndEvent` | tras completarse el entrenamiento | `completed_epochs`, `final_loss`, `best_metric`, `best_epoch`, `total_seconds`, `results` |
 | `TrainExceptionEvent` | si el entrenamiento lanza una excepción | `epoch`, `exception`, `exception_type`, `exception_message`, `elapsed_seconds` |
 
 Un callable simple recibe solo `TrainEpochEvent`. Un objeto puede implementar
@@ -196,8 +196,9 @@ y `on_train_exception`; los métodos que falten se omiten.
 
 `TrainStartEvent.config` es la configuración totalmente resuelta, los kwargs del
 usuario fusionados con los valores por defecto de la familia, como un mapping de
-solo lectura. Los eventos son dataclasses congeladas y sus mappings son de solo
-lectura, así que un callback no puede cambiar la ejecución escribiendo en uno.
+solo lectura. Los eventos son dataclasses inmutables (`frozen`) y sus mappings
+son de solo lectura, así que un callback no puede cambiar la ejecución
+escribiendo en uno.
 
 Una excepción lanzada desde `on_train_start`, `on_train_epoch_end` o
 `on_train_end` se propaga y termina la ejecución. Solo `on_train_exception` está
@@ -227,12 +228,12 @@ vea un archivo a medio escribir.
 para YOLOv9, YOLOv9-E2E, YOLOv9-P2, YOLOv7, YOLO-NAS, RF-DETR, EC y DINOv2, y no
 para las demás familias. `results.csv` recibe una fila por época con los
 componentes de la loss, las métricas de validación y los learning rates como
-columnas, y su cabecera se ensancha cuando aparece una columna nueva. Al
+columnas, y su cabecera se amplía cuando aparece una columna nueva. Al
 reanudar, se recorta hasta las filas anteriores a la época reanudada en lugar de
 duplicarlas.
 
 Junto a esos, el trainer siempre escribe `train_config.yaml` en el setup y los
-checkpoints bajo `weights/`.
+checkpoints en `weights/`.
 
 ## Seguir una ejecución en vivo
 

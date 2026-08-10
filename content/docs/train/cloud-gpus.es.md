@@ -163,9 +163,10 @@ comportamiento distribuido, está en
 
 ## Míralo desde fuera
 
-Cada ejecución escribe `status.json` en su directorio de ejecución, reescrito de forma
-atómica en cada epoch. Es la lectura barata: unos pocos cientos de bytes con el
-estado, la epoch actual, el ETA y las últimas métricas, sin parsear un log.
+Cada ejecución escribe `status.json` en su directorio de ejecución, reescrito de
+forma atómica en cada epoch. Es la lectura barata: unos pocos cientos de bytes
+con el estado, la epoch actual, el ETA y las últimas métricas, sin parsear un
+log.
 
 <code-tabs name="watch" />
 
@@ -212,10 +213,10 @@ olvidarse una máquina encendida. Un job colgado sin timeout sigue facturando, a
 que ponle siempre uno.
 
 Parar en lugar de destruir es una palanca real, y una trampa real. Medido en una
-8x RTX 4090 alquilada con un disco de 250 GB el 2026-07-31: en marcha facturaba
-3,4828 $ por hora, parada facturaba 0,0694 $ por hora solo por el disco, y
-destruida no facturaba nada. Eso es un ahorro del 98 por ciento manteniendo en su
-sitio el entorno, los datos preparados y los checkpoints.
+máquina alquilada con 8x RTX 4090 y un disco de 250 GB el 31/07/2026: en marcha
+facturaba 3,4828 $ por hora, parada facturaba 0,0694 $ por hora solo por el
+disco, y destruida no facturaba nada. Eso es un ahorro del 98 por ciento
+manteniendo en su sitio el entorno, los datos preparados y los checkpoints.
 
 La tarifa de parada es una cuenta que puedes hacer antes de alquilar:
 
@@ -224,10 +225,10 @@ stopped $/hr = allocated_GB * storage_cost_per_GB_per_month / 730
              = 250 * 0.20 / 730 = $0.0694/hr
 ```
 
-Compárala con lo que cuesta reconstruir: volver a alquilar, bajar la imagen,
-instalar y volver a preparar los datos. En esa misma máquina reconstruir eran
-unos 15 minutos de instalación más 43 GB de transferencia entrante, en torno a
-1,00 $ en total. Frente a 0,0694 $ por hora, volver antes de unas 14 horas
+Compárala con lo que cuesta reconstruir: volver a alquilar, descargar la imagen,
+instalar y volver a preparar los datos. En esa misma máquina, una reconstrucción
+salía por unos 15 minutos de instalación más 43 GB de transferencia entrante, en
+torno a 1,00 $ en total. Frente a 0,0694 $ por hora, volver antes de unas 14 horas
 favorece parar, y un hueco más largo favorece destruir y reconstruir desde la
 copia preparada.
 
@@ -239,8 +240,8 @@ libres. Tu disco está a salvo; tus GPUs no.
 
 Si prefieres no gestionar una máquina, tanto Modal como Beam ejecutan una función
 Python decorada en una GPU y escalan a cero cuando retorna. La propia suite de
-tests nocturnos de LibreYOLO corre en Modal, y `tools/ci/modal_nightly.py` en el
-repositorio de la biblioteca es el ejemplo funcional del que copiar.
+tests nocturnos de LibreYOLO se ejecuta en Modal, y `tools/ci/modal_nightly.py`
+en el repositorio de la biblioteca es el ejemplo real del que copiar.
 
 ```python
 import modal
@@ -280,14 +281,14 @@ ejecución colgada y una factura sin límite.
 Beam toma la misma forma con un decorador `@function`, un `Volume` y
 `train.remote()` llamado desde `__main__`.
 
-## Dimensiona por coste por job
+## Ajusta el tamaño según el coste por job
 
-$/hora es el número equivocado que optimizar. Un modelo pequeño deja a medio
+El $/hora es la cifra equivocada para optimizar. Un modelo pequeño deja a medio
 gas una tarjeta grande, así que una GPU más barata y más lenta suele salir más
 barata por epoch. Lanza el profiler durante unos pocos pasos en la tarjeta
 alquilada antes de comprometerte a una ejecución larga: si el veredicto es
-`dataloader` o `host / launch`, una GPU más rápida no compra nada y más workers o
-un batch más grande compran mucho. Consulta
+`dataloader` o `host / launch`, una GPU más rápida no aporta nada y más workers o
+un batch más grande aportan mucho. Consulta
 [Rendimiento del entrenamiento](/docs/train/performance).
 
 ## Relacionado

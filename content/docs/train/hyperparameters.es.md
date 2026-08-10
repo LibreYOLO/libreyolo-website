@@ -2,7 +2,7 @@
 title: Hiperparámetros
 seo_title: "Hiperparámetros de entrenamiento en LibreYOLO"
 description: "Los argumentos de train() que importan: epochs, batch, lr0, optimizer, EMA, autobatch, acumulación de gradientes y resume, además de por qué los valores por defecto cambian según la familia."
-lead: "Cada argumento de entrenamiento es un campo de una dataclass TrainConfig. La clase base define el campo y su valor por defecto; cada familia de modelos la subclasea y sobrescribe los valores por defecto que cambia su receta publicada."
+lead: "Cada argumento de entrenamiento es un campo de una dataclass TrainConfig. La clase base define el campo y su valor por defecto; cada familia de modelos hereda de ella y sobrescribe los valores por defecto que cambia su receta publicada."
 keywords:
   - argumentos de entrenamiento yolo
   - learning rate
@@ -57,7 +57,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        # Imprime los valores por defecto de train, val y predict, incluidas las de cada familia.
+        # Imprime los valores por defecto de train, val y predict, incluidas las sobrescrituras de cada familia.
         libreyolo cfg
   autobatch:
     - label: Python
@@ -115,7 +115,7 @@ forma `key=value`.
 
 <code-tabs name="train" />
 
-Ambos caminos terminan en el mismo sitio. Los kwargs se entregan a
+Ambos caminos terminan en el mismo sitio. Los kwargs se pasan a
 `TrainConfig.from_kwargs()`, que construye la dataclass de configuración de la familia.
 
 ## Una errata no lanza ningún error
@@ -136,8 +136,8 @@ configuración, así que un flag mal escrito en la CLI se rechaza de plano.
 
 ## Los valores por defecto son por familia
 
-`TrainConfig` define el campo y un valor por defecto base. Cada familia la
-subclasea y sobrescribe lo que cambia su receta publicada, así que no hay una
+`TrainConfig` define el campo y un valor por defecto base. Cada familia hereda de
+ella y sobrescribe lo que cambia su receta publicada, así que no hay una
 única respuesta correcta a "cuál es el learning rate por defecto".
 
 Los valores por defecto base son `optimizer="sgd"`, `lr0=0.01`, `momentum=0.937`,
@@ -165,24 +165,24 @@ Para leer los valores por defecto reales de una familia en lugar de adivinarlos:
 
 ## Tamaño de batch
 
-`batch` es el batch global. En entrenamiento multi-GPU cada rank carga
+`batch` es el batch global. En el entrenamiento multi-GPU cada rank carga
 `batch // world_size`, así que el número que pasas es el número de imágenes por
 paso del optimizador, independientemente de cuántas GPU intervengan. Consulta
 [Entrenamiento multi-GPU](/docs/train/multi-gpu).
 
 `batch=-1` activa el autobatch. El trainer sondea el modelo en modo entrenamiento
-con una pasada hacia atrás real en potencias de dos, ajusta una recta a la curva
+con una pasada backward real en potencias de dos, ajusta una recta a la curva
 de memoria y elige la mayor potencia de dos estrictamente por debajo del valor
 extrapolado que quepa dentro del 60 por ciento de la VRAM total.
 
 <code-tabs name="autobatch" />
 
-Sondear en modo entrenamiento con una pasada hacia atrás es justo el punto: un
-sondeo en modo inferencia se pierde las activaciones retenidas y los tensores de
-gradientes, que en una CNN profunda son varias veces la huella de la inferencia.
-RF-DETR baja la fracción objetivo al 45 por ciento, porque la pasada hacia atrás
-sintética del sondeo sigue subestimando lo que cuestan su criterio y sus capas de
-decoder auxiliares.
+Sondear en modo entrenamiento con una pasada backward es justo la clave: un
+sondeo en modo inferencia pasa por alto las activaciones retenidas y los tensores
+de gradientes, que en una CNN profunda son varias veces la huella de la
+inferencia. RF-DETR baja la fracción objetivo al 45 por ciento, porque la pasada
+backward sintética del sondeo sigue subestimando lo que cuestan su criterio y sus
+capas de decoder auxiliares.
 
 El autobatch es una funcionalidad de CUDA. En CPU o MPS registra una línea y
 mantiene el batch por defecto.
@@ -205,12 +205,12 @@ L2, y `nesterov` se aplica a SGD.
 
 La planificación la determinan `scheduler`, `warmup_epochs`, `warmup_lr_start` y
 `min_lr_ratio`. `no_aug_epochs` fija cuántas épocas finales se ejecutan sin
-aumento de datos fuerte, y varias planificaciones lo usan también para dar forma a
-su tramo final, así que no es puramente un mando de aumento de datos. Lo que hace
-cada familia con la mitad de aumento de datos está en
-[Aumentos de datos](/docs/train/augmentations).
+aumento de datos fuerte, y varios schedulers lo usan también para dar forma a su
+tramo final, así que no es solo un parámetro de aumento de datos. Lo que hace cada
+familia con su vertiente de aumento de datos está en
+[Aumento de datos](/docs/train/augmentations).
 
-Algunas familias añaden sus propios mandos de learning rate. `backbone_lr_mult`
+Algunas familias añaden sus propios parámetros de learning rate. `backbone_lr_mult`
 escala el grupo del backbone frente a la cabeza, `clip_max_norm` fija el recorte
 de gradientes, y SegFormer usa `head_lr_mult` para ejecutar su cabeza de
 decodificación a diez veces el ritmo del backbone. Estos viven en la subclase de
@@ -223,26 +223,27 @@ entrenados. Está activada por defecto en todas partes excepto en FOMO.
 
 `ema_decay` es el decaimiento objetivo. El decaimiento entra de forma progresiva
 en lugar de empezar en su objetivo: el valor efectivo en la actualización `n` es
-`ema_decay * (1 - exp(-n / tau))` con `tau` por defecto a 2000, así que las
+`ema_decay * (1 - exp(-n / tau))` con `tau` a 2000 por defecto, así que las
 actualizaciones tempranas siguen al modelo más de cerca y las tardías lo suavizan.
 Los valores por defecto de cada familia van desde `0.997` en YOLO-NAS pose,
 pasando por `0.9998` en YOLOX, hasta `0.9999` en YOLOv9 y la línea DETR.
 
 Los pesos de la EMA son los que se validan y los que llevan `best.pt` y `last.pt`.
-Los pesos entrenados en crudo también se guardan, bajo la clave `train_model`, de
+Los pesos entrenados en bruto también se guardan, bajo la clave `train_model`, de
 modo que un resume continúa desde la trayectoria entrenada y no desde la media.
 
 ## Precisión
 
-`amp=True` ejecuta la pasada hacia delante bajo el autocast de CUDA. `amp_dtype`
+`amp=True` ejecuta la pasada forward bajo el autocast de CUDA. `amp_dtype`
 selecciona `float16` (el valor por defecto) o `bfloat16`; `fp16` y `bf16` son
 grafías aceptadas.
 
-Float16 necesita escalado dinámico de la loss y recibe un `GradScaler` vivo. El
-rango de exponente más amplio de bfloat16 no lo necesita, así que su scaler se
-construye pero queda desactivado, lo que mantiene idéntico el camino del
-optimizador. Pedir bfloat16 en un dispositivo CUDA sin soporte de bfloat16 lanza
-un error en la configuración en lugar de degradarse en silencio.
+Float16 necesita escalado dinámico de la loss (la función de pérdida) y recibe un
+`GradScaler` vivo. El rango de exponente más amplio de bfloat16 no lo necesita,
+así que su scaler se construye pero queda desactivado, lo que mantiene idéntico el
+camino del optimizador. Pedir bfloat16 en un dispositivo CUDA sin soporte de
+bfloat16 lanza un error al preparar el entrenamiento en lugar de degradarse en
+silencio.
 
 ## Salida, checkpoints y parada
 
@@ -260,8 +261,8 @@ desactivando el early stopping.
 
 `cache` acelera las épocas repetidas manteniendo las imágenes decodificadas en RAM
 (`True` o `"ram"`) o como archivos `.npy` junto a las fuentes (`"disk"`). Las
-lecturas cacheadas son idénticas byte a byte a las frescas. Con workers de
-dataloader, `"disk"` es la más segura de las dos.
+lecturas cacheadas son idénticas byte a byte a las lecturas sin caché. Con workers
+de dataloader, `"disk"` es la opción más segura de las dos.
 
 ## Reanudar
 
@@ -288,14 +289,14 @@ sobre el archivo.
 
 <code-tabs name="cfg" />
 
-`size` y `num_classes` se eliminan del archivo, porque la instancia del modelo ya
-es su dueña. No hay flag `--cfg` en la CLI; la ruta del archivo es un argumento de
+`size` y `num_classes` se eliminan del archivo, porque ya los define la instancia
+del modelo. No hay flag `--cfg` en la CLI; la ruta del archivo es un argumento de
 Python.
 
 ## Relacionado
 
 - [Datasets](/docs/train/datasets) para lo que acepta `data=`.
-- [Aumentos de datos](/docs/train/augmentations) para los mandos de aumento de
+- [Aumento de datos](/docs/train/augmentations) para los parámetros de aumento de
   datos y qué familias los respetan.
 - [Congelación de capas](/docs/train/layer-freezing) y [LoRA](/docs/train/lora)
   para entrenar un subconjunto de los pesos.

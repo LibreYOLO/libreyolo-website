@@ -92,13 +92,13 @@ metrics/precision(B)  metrics/recall(B)  metrics/mAP50(B)  metrics/mAP50-95(B)
 ```
 
 Dos de ellas son trampas. `metrics/precision` y `metrics/recall` son alias que se
-mantienen por compatibilidad hacia atrás: llevan los valores de mAP 50-95 y
+mantienen por retrocompatibilidad: llevan los valores de mAP 50-95 y
 AR@100, no un par de precisión y recall. Usa las claves con nombre.
 
 La segmentación de instancias devuelve las cifras de mAP y AR anteriores como
 números de máscara bajo las claves sin sufijo, con las versiones de caja bajo el
 sufijo `(B)` y las versiones de máscara repetidas bajo `(M)`. En esta tarea, la
-precisión y el recall solo existen en forma sufijada, como
+precisión y el recall solo existen con sufijo, como
 `metrics/precision(B)`/`metrics/recall(B)` y
 `metrics/precision(M)`/`metrics/recall(M)`, y ambos pares llevan los mismos
 valores alias que los de detect: el par `(B)` es el mAP50-95 de cajas y el AR@100
@@ -152,15 +152,16 @@ speed/total_ms        speed/total_s        speed/images_seen
 ```
 
 Son milisegundos por imagen promediados sobre la ejecución. Describen la máquina
-y los ajustes con los que ejecutaste, así que una cifra sacada de ahí solo tiene
-sentido si se reporta junto con su hardware, su tamaño de batch y su precisión.
+y los ajustes con los que ejecutaste la validación, así que una cifra sacada de
+ahí solo tiene sentido si se indica junto con su hardware, su tamaño de batch y
+su precisión.
 
 ## Backend de evaluación
 
 Las métricas de detección y segmentación se calculan a través de un evaluador
 COCO, y `faster_coco_eval=True`, el valor por defecto, selecciona el backend en
 C++ cuando el paquete `faster-coco-eval` está instalado. Cuando no lo está, la
-ejecución cae de vuelta a pycocotools con un aviso por proceso:
+ejecución recurre a pycocotools con un aviso por proceso:
 
 ```text
 faster_coco_eval requested but not installed; falling back to pycocotools.
@@ -168,7 +169,7 @@ Install with: pip install faster-coco-eval
 ```
 
 Qué backend se ejecutó realmente queda registrado en el modelo como
-`last_eval_backend`, y la CLI lo informa en su salida para las tareas de tipo
+`last_eval_backend`, y la CLI lo muestra en su salida para las tareas de tipo
 detección. Define `LIBREYOLO_FASTER_COCO_EVAL` para sobrescribir el valor de la
 configuración desde el entorno.
 
@@ -183,7 +184,7 @@ validación.
 
 <code-tabs name="valloss" />
 
-Emite `metrics/loss`, la loss (la función de pérdida), más un
+Emite `metrics/loss` —la loss, es decir, la función de pérdida— más un
 `metrics/loss/<component>` por cada término, ponderados exactamente igual que los
 pondera el entrenamiento, de modo que los componentes suman el total. A través de
 un logger aparecen como `val/loss` y `val/loss/<component>`, y `libreyolo
@@ -211,8 +212,8 @@ Los componentes son los propios de cada familia:
 
 Está desactivada por defecto porque la asignación de targets añade tiempo y
 memoria a la validación. El validador reutiliza la salida del modelo que ya se
-produjo para la métrica de precisión en lugar de hacer una segunda pasada hacia
-delante, se ejecuta bajo `no_grad` sobre el modelo de evaluación o EMA, y en
+produjo para la métrica de precisión en lugar de hacer un segundo forward, se
+ejecuta bajo `no_grad` sobre el modelo de evaluación o EMA, y en
 entrenamiento multi-GPU se calcula localmente en el rank 0 sin operaciones
 colectivas. La selección del mejor checkpoint se mantiene sobre la métrica de
 precisión.
@@ -234,8 +235,8 @@ classify, and semantic tasks are not supported
 FOMO es la excepción que no cambia nada: su validador siempre calculó esta loss,
 y `val_loss=True` solo afecta a las claves bajo las que se publica.
 
-La validación aumentada y la loss de validación no se pueden combinar, y pedir
-ambas lanza un error.
+La validación con aumento de datos y la loss de validación no se pueden
+combinar, y pedir ambas lanza un error.
 
 ## Archivos que escribe una validación
 
@@ -246,20 +247,20 @@ defecto es `runs/val/<model>_<size>_<timestamp>` cuando no se pasa `save_dir`.
 
 `save_json=True` escribe `predictions.json` para detección, y
 `predictions_bbox.json` más `predictions_masks.json` para segmentación. OBB no lo
-soporta y lo dice.
+admite y lo dice.
 
 `save_plots=True` escribe en un subdirectorio `plots/`. La detección obtiene
 `box_metrics.png`, gráficas de AP y de recall por clase, curvas de
 precisión-recall y de confianza, una matriz de confusión e imágenes de muestra
-anotadas cuando OpenCV está instalado. La segmentación añade las copias del lado
-de la máscara de cada una, y pose tiene su propio conjunto de métricas y curvas.
+anotadas cuando OpenCV está instalado. La segmentación añade la copia de máscara
+de cada una, y pose tiene su propio conjunto de métricas y curvas.
 Los demás validadores no implementan gráficas; classification, semantic,
 panoptic, depth, normal, edge, restore, matte, OCR, OBB y point no escriben nada
 ahí. Un fallo al generar las gráficas avisa y nunca aborta la ejecución.
 
 ## Validación durante el entrenamiento
 
-El entrenamiento valida cada `eval_interval` épocas contra el split `val` del
+El entrenamiento valida cada `eval_interval` épocas sobre el split `val` del
 dataset, y las métricas que produce son las que gobiernan la selección de
 `best.pt`, la parada temprana por `patience` y las claves `val/` de todos los
 loggers. La validación se ejecuta sobre los pesos EMA cuando EMA está activado.

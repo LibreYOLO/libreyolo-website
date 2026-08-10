@@ -2,7 +2,7 @@
 title: Hailo
 seo_title: "Ejecutar modelos LibreYOLO en aceleradores Hailo"
 description: "Despliega un modelo LibreYOLO en un Hailo-8 o un Hailo-8L: la exportación ONNX estática, la etapa del Dataflow Compiler que ejecutas tú, y qué arquitecturas compilan."
-lead: "Los aceleradores Hailo se compilan con el Hailo Dataflow Compiler, un SDK propietario que se distribuye a través de la Developer Zone de Hailo. La parte del flujo que le toca a LibreYOLO es una exportación ONNX estática y sin más; el parseo, la cuantización y la compilación a un HEF ocurren después, dentro del DFC."
+lead: "Los aceleradores Hailo se compilan con el Hailo Dataflow Compiler, un SDK propietario que se distribuye a través de la Developer Zone de Hailo. La parte del flujo que le toca a LibreYOLO no es más que una exportación ONNX estática; el parseo, la cuantización y la compilación a un HEF ocurren después, dentro del DFC."
 keywords:
   - libreyolo hailo
   - hailo-8
@@ -27,7 +27,7 @@ meta:
   - label: Compila
     value: "Grafos de CNN pura y forma fija. La atención, las formas dinámicas y los diseños dominados por LayerNorm, no."
   - label: Estado
-    value: "Ninguna familia de LibreYOLO se ha llevado de principio a fin por el DFC hasta un HEF en funcionamiento."
+    value: "Ninguna familia de LibreYOLO se ha llevado de principio a fin a través del DFC hasta un HEF en funcionamiento."
 verification: "Leído de skills/libreyolo-export-hailo/SKILL.md, libreyolo/export/onnx.py y libreyolo/cli/commands/export.py en la rama dev. Las restricciones del DFC son las registradas en esa skill; no se ha compilado ni medido ningún HEF de LibreYOLO."
 snippets:
   install:
@@ -106,8 +106,8 @@ snippets:
         runner.load_model_script(script)
 
         # Las imágenes de calibración deben ser representativas de los datos de
-        # despliegue. Imágenes aleatorias compilan y destruyen la precisión en
-        # silencio.
+        # despliegue. Con imágenes aleatorias la compilación funciona igual,
+        # pero arruina la precisión en silencio.
         calib_paths = sorted(Path("calib_images").glob("*.jpg"))[:128]
         calib = np.stack([
             np.asarray(
@@ -160,7 +160,7 @@ Libre<Model>.pt  ->  ONNX  ->  HAR (parse)  ->  HAR (quantize INT8)  ->  HEF
 
 <code-tabs name="export" />
 
-No pases `half=True`. El DFC ingiere ONNX FP32 y hace su propia cuantización INT8.
+No pases `half=True`. El DFC acepta ONNX en FP32 y hace su propia cuantización INT8.
 Tampoco pases `nms=True`: de NMS se encarga Hailo mediante `nms_postprocess` o
 bien la aplicación, y un subgrafo de NMS es peso muerto más allá de los nodos
 finales. El opset por defecto funciona; si el parser del DFC protesta, vuelve a
@@ -178,13 +178,13 @@ simplemente ignora la cola de decodificación.
 Elige `hw_arch` según el destino: `hailo8` para el Hailo-8, el AI HAT+ de 26 TOPS
 y los módulos M.2 y PCIe; `hailo8l` para el Hailo-8L, el Raspberry Pi AI Kit y el
 AI HAT+ de 13 TOPS; `hailo10h` para el Hailo-10H, que necesita un DFC y un Model
-Zoo más nuevos y a juego. `hailortcli fw-control identify` en el dispositivo
+Zoo más nuevos y compatibles entre sí. `hailortcli fw-control identify` en el dispositivo
 responde a la pregunta cuando no lo tienes claro.
 
 Dos familias encajan en una meta-arquitectura de NMS de HailoRT, así que Hailo
 puede encargarse de la supresión dentro del pipeline compilado: YOLOX mediante
 `meta_arch=yolox`, y YOLO9 mediante la meta-arquitectura de cabeza desacoplada de
-Hailo, cuya disposición de cabeza es idéntica. Coge del Hailo Model Zoo la
+Hailo, cuya disposición de cabeza es idéntica. Toma del Hailo Model Zoo la
 configuración de `nms_postprocess` correspondiente y ajústala a tu número de
 clases y a tu tamaño de entrada. Cualquier otro detector convolucional compila
 como un grafo sin meta-arquitectura equivalente: el HEF emite los tensores en

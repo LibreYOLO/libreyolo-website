@@ -74,7 +74,7 @@ snippets:
         query = model.embed("query.jpg")          # (1, 512)
         pool = model.embed(["a.jpg", "b.jpg"])    # (2, 512)
 
-        # Las filas son unitarias: el coseno es un producto escalar.
+        # Las filas son unitarias: la similitud del coseno es un producto escalar.
         scores = model("query.jpg").embeddings.similarity(pool)
         print(scores.shape)  # (1, 2)
     - label: Imagen contra texto
@@ -162,7 +162,7 @@ la red se haya entrenado para predecir.
 
 ### Tres formas
 
-| Forma | `Results.embeddings` | `Results.boxes` | Lo produce |
+| Forma | `Results.embeddings` | `Results.boxes` | Producido por |
 |---|---|---|---|
 | Imagen entera | `(1, D)` | `None` | Pasar una imagen a una familia de imagen entera |
 | Región | `(N, D)` | `(N, 4)`, alineado fila a fila | Familias que localizan primero, como el reconocimiento facial |
@@ -171,7 +171,7 @@ la red se haya entrenado para predecir.
 Un resultado de imagen entera sigue siendo bidimensional incluso con una sola
 imagen. `(D,)` no es una forma de retorno permitida, así que quien lo consume
 nunca tiene que tratar la fila única como un caso especial. El texto devuelve un
-tensor plano en lugar de un `Results`, porque una cadena no es una fuente de
+tensor normal en lugar de un `Results`, porque una cadena no es una fuente de
 imagen: pasar una a `model(...)` sigue significando una ruta o una URL, y la
 biblioteca nunca supone que una cadena es prosa.
 
@@ -182,7 +182,7 @@ seleccionan exactamente lo mismo.
 
 ## Modelos
 
-Cuatro familias sirven la tarea, y se dividen con claridad según si localizan
+Cuatro familias cubren la tarea, y se dividen con claridad según si localizan
 algo primero o no.
 
 | Familia | Forma | Dimensión | También soporta |
@@ -195,31 +195,31 @@ algo primero o no.
 CLIP y SigLIP 2 mantienen `classify` como tarea por defecto, así que hay que
 pedir `task="embed"` de forma explícita. Su checkpoint `-cls` existente es el
 artefacto compartido de dos torres; no se publica un checkpoint `-embed`
-duplicado para unos pesos idénticos.
+duplicado para los mismos pesos.
 
 `embed_text` solo existe en CLIP y SigLIP 2, las dos familias con torre de
 texto. DINOv2 no tiene ninguna. El embedding de DINOv2 se salta las cabezas
-semántica y de clasificación y lee el token CLS final normalizado a 224 píxeles;
+semántica y de clasificación y lee el token CLS final normalizado, a 224 píxeles;
 las variantes `n`, `s`, `m` y `l` comparten todas el encoder DINOv2-S, así que
 las cuatro devuelven `D = 384`.
 
 Los backbones solo de clasificación añadidos en esta versión,
 [ViT](/docs/models/vit), [Swin](/docs/models/swin) y [DeiT](/docs/models/deit),
-declaran únicamente `classify` y no sirven esta tarea.
+declaran únicamente `classify` y no cubren esta tarea.
 
 <code-tabs name="predict" />
 
 `model.embed(source, **kwargs)` es el atajo por lotes: ejecuta `predict` y
 concatena todas las filas de todos los resultados en un único tensor float32 de
 CPU `(N_total, D)`, lanzando una excepción si las filas tienen dimensiones
-mezcladas. Una familia que no tenga `embed` entre sus tareas soportadas lanza
+distintas. Una familia que no tenga `embed` entre sus tareas soportadas lanza
 `NotImplementedError`.
 
 ## Payloads de resultado
 
 `result.embeddings` es un payload `Embeddings`. Su `data` es siempre `(N, D)`
 float32, ya normalizado con L2 por la ruta de inferencia, y una entrada que no
-sea bidimensional lanza una excepción en lugar de reformarse en silencio.
+sea bidimensional lanza una excepción en lugar de cambiar de forma en silencio.
 
 | Miembro | Significado |
 |---|---|
@@ -230,7 +230,7 @@ sea bidimensional lanza una excepción en lugar de reformarse en silencio.
 | `.verify(i, j, threshold=0.4)` | Si las filas `i` y `j` son el mismo sujeto |
 
 `result.identities` es un payload `Identities`, presente solo cuando se pasó una
-galería. Es un contenedor plano, no un tensor, así que mover un `Results` entre
+galería. Es un contenedor normal, no un tensor, así que mover un `Results` entre
 dispositivos lo deja intacto.
 
 | Miembro | Significado |
@@ -242,13 +242,13 @@ dispositivos lo deja intacto.
 <code-tabs name="similarity" />
 
 Los vectores se dejan fuera de `summary()` y `to_json()` por defecto, ya que una
-fila de 512 floats ocupa unos dos kilobytes por sujeto. Cada fila reporta
+fila de 512 floats ocupa unos dos kilobytes por sujeto. Cada fila indica
 `embedding_dim` en su lugar, más `identity` e `identity_score` cuando se usó una
 galería. Pasa `summary(embeddings=True)` para incluir los números.
 
 ## Galerías
 
-Una `Gallery` es un conjunto con nombre de filas de referencia. Guarda cada
+Una `Gallery` es un conjunto de filas de referencia con nombre. Guarda cada
 referencia por separado en lugar de promediarlas, así que un nombre se puntúa
 por su mejor referencia coincidente, y añadir una foto mala no puede arrastrar
 el centroide de una identidad.
@@ -264,7 +264,7 @@ la inferencia y toma un vector directamente, normalizándolo y rechazando una
 fila de ceros.
 
 `FaceGallery` es un alias permanente de la misma clase, y los archivos escritos
-por versiones anteriores solo para caras siguen cargándose.
+por versiones anteriores centradas solo en caras siguen cargándose.
 
 ### Emparejamiento y umbrales
 
@@ -282,8 +282,8 @@ sustituye nunca por el nombre más cercano que no llegue al umbral.
 
 El umbral por defecto es `0.4` en todas partes. Es un valor de coseno, no una
 probabilidad, y el punto de operación correcto es una propiedad de tus datos y
-de tu tolerancia a coincidencias falsas, así que barrelo sobre pares etiquetados
-en lugar de aceptar el valor por defecto. `libreyolo enroll` y el argumento de
+de tu tolerancia a coincidencias falsas, así que haz un barrido sobre pares
+etiquetados en lugar de aceptar el valor por defecto. `libreyolo enroll` y el argumento de
 predicción `gallery=` usan el mismo número.
 
 ### Persistencia
@@ -335,7 +335,7 @@ coseno, el veredicto de igual-o-distinto y el umbral que lo produjo. `--json`
 imprime los mismos tres campos como un objeto.
 
 En `predict`, `gallery` apunta a un `.npz` guardado y `gallery_threshold`
-sobrescribe el valor por defecto de `0.4`. Pasar una galería a un modelo cuya
+anula el valor por defecto de `0.4`. Pasar una galería a un modelo cuya
 tarea no es `embed` es un error en lugar de una operación silenciosa sin efecto,
 y un archivo de galería que falta sugiere el comando `libreyolo enroll` que lo
 crearía.

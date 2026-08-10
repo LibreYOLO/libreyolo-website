@@ -32,11 +32,11 @@ snippets:
         result = LibreYOLO("LibreECs-pose.pt")(SAMPLE_IMAGE)
         kpts = result.keypoints
 
-        # .has_visible se deriva de la tercera columna de keypoints, y es
-        # toda verdadera cuando el checkpoint solo predice (x, y).
+        # .has_visible se deriva de la tercera columna de keypoints, y vale
+        # verdadero en todas sus posiciones cuando el checkpoint solo predice (x, y).
         for person, visible in zip(kpts.xy, kpts.has_visible):
             print(person[visible])
-    - label: Top-down en su lugar
+    - label: Alternativa top-down
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -137,10 +137,10 @@ es `(N, K, 2)` o `(N, K, 3)`, alineado fila a fila con los boxes, de modo que la
 instancia `i` de uno es la instancia `i` del otro. `.xy` extrae las coordenadas
 en píxeles y `.xyn` las normaliza por el tamaño de la imagen original. `.conf`
 es la tercera columna cuando el checkpoint la predice y `None` cuando no, y
-`.has_visible` es la máscara booleana derivada de ella, toda verdadera cuando no
-hay tercera columna.
+`.has_visible` es la máscara booleana derivada de ella, verdadera en todas sus
+posiciones cuando no hay tercera columna.
 
-Dos arquitecturas llegan a esta salida. Un modelo de una etapa predice boxes y
+Dos arquitecturas producen esta salida. Un modelo de una etapa predice boxes y
 keypoints en una sola pasada. Un modelo top-down ejecuta primero un detector,
 recorta cada instancia y regresa los keypoints dentro del recorte, así que su
 precisión depende del detector que tiene delante.
@@ -154,10 +154,10 @@ propio extra, `pip install "libreyolo[rfdetr]"`. RF-DETR y EdgeCrafter traen
 checkpoints de pose publicados y ambas hacen fine-tuning sobre datasets de una
 sola clase, solo de personas; la cabeza de keypoints de EdgeCrafter queda fijada
 en la construcción y rechaza un dataset que declare un número distinto, mientras
-que RF-DETR reinicializa la suya para adaptarse. YOLO-NAS descarga sus pesos del
+que RF-DETR reinicializa la suya para ese número. YOLO-NAS descarga sus pesos del
 CDN propio de Deci.AI bajo una licencia no comercial, y LibreYOLO no publica
 ninguno de ellos; su cabeza de pose también se reconstruye para un número nuevo
-de keypoints, y es la única de las tres cuyo número de clases no está fijado a
+de keypoints, y es la única de las tres cuyo número de clases no está fijado en
 uno, así que es la familia para un esqueleto multiclase o no humano, como la
 pose de animales.
 
@@ -172,11 +172,12 @@ modelo generativo guiado por prompts, con su propia factoría, `LibreVLM`, y su
 propio extra; si no se fija ningún vocabulario, `set_task("pose")` recurre a la
 categoría de personas. Sus pesos son no comerciales, y la latencia por imagen es
 mucho mayor que la de una cabeza de pose diseñada para ello, porque cada
-predicción es un decodificado por difusión.
+predicción es una decodificación por difusión.
 
 ## Predicción
 
-Los pesos se descargan de Hugging Face en el primer uso y se cachean localmente.
+Los pesos se descargan de Hugging Face en el primer uso y se guardan en la caché
+local.
 
 <code-tabs name="predict" />
 
@@ -193,8 +194,8 @@ resultados.
 ## Formato del dataset
 
 La estructura es la de detección: un archivo de etiquetas `.txt` por imagen, que
-se localiza cambiando `images` por `labels` en la ruta de la imagen y cambiando
-la extensión.
+se localiza sustituyendo `images` por `labels` en la ruta de la imagen y
+cambiando la extensión.
 
 ```text
 dataset/
