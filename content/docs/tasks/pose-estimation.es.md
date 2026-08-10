@@ -33,7 +33,7 @@ snippets:
         kpts = result.keypoints
 
         # .has_visible se deriva de la tercera columna de keypoints, y vale
-        # verdadero en todas sus posiciones cuando el checkpoint solo predice (x, y).
+        # verdadero en todas sus posiciones si el checkpoint solo predice (x, y).
         for person, visible in zip(kpts.xy, kpts.has_visible):
             print(person[visible])
     - label: Alternativa top-down
@@ -262,14 +262,14 @@ para los boxes. Necesita `pycocotools`, que viene en la instalación base.
 
 <code-tabs name="val" />
 
-`metrics/keypoints_mAP50-95` es la cifra principal, la mean average precision
-promediada sobre los umbrales de OKS de 0.50 a 0.95, y es la que usa el
-entrenamiento para elegir la mejor época. `metrics/keypoints_mAP50` y
+`metrics/keypoints_mAP50-95` es la cifra principal, la precisión media
+(mean average precision) promediada sobre umbrales de OKS de 0.50 a 0.95, y es
+la que usa el entrenamiento para elegir la mejor época. `metrics/keypoints_mAP50` y
 `metrics/keypoints_mAP75` son las versiones de un solo umbral, y
-`metrics/keypoints_mAP_M` y `metrics/keypoints_mAP_L` reparten el promedio por
+`metrics/keypoints_mAP_M` y `metrics/keypoints_mAP_L` desglosan el promedio por
 área de la instancia, mediana y grande; la evaluación de keypoints de COCO no
-define ningún grupo de instancias pequeñas. Las cifras de average recall
-correspondientes son `metrics/keypoints_AR50-95`, `metrics/keypoints_AR50`,
+define ningún grupo de instancias pequeñas. Las cifras equivalentes de recall
+promedio son `metrics/keypoints_AR50-95`, `metrics/keypoints_AR50`,
 `metrics/keypoints_AR75`, `metrics/keypoints_AR_M` y
 `metrics/keypoints_AR_L`. Todas las claves de esta tarea llevan el prefijo
 `keypoints_`, así que las claves de `mAP` de boxes que devuelve un detector no

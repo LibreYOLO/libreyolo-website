@@ -125,11 +125,11 @@ decoder en AI-TOD-V2 frente a seis en VisDrone.
 Dome-DETR es D-FINE con tres añadidos. DeFE predice un mapa de densidad. MWAS
 usa ese mapa para restringir la atención del encoder a las ventanas que de
 verdad contienen objetos, en lugar de atender a todas partes. PAQI dimensiona el
-conjunto de queries a partir de esa misma densidad en lugar de decodificar unas
-300 fijas. La ganancia se concentra donde los objetos son más pequeños, y se
-estrecha a medida que crecen: la ablación del propio upstream mueve el AP en
-objetos muy diminutos de 14.0 a 17.8, mientras que el AP en objetos medianos
-solo pasa de 45.4 a 46.4. Trátalo como un compañero de
+conjunto de queries a partir de esa misma densidad en lugar de decodificar 300
+fijas. La ganancia se concentra donde los objetos son más pequeños, y se reduce
+a medida que crecen: la ablación del propio upstream mueve el AP en objetos muy
+diminutos de 14.0 a 17.8, mientras que el AP en objetos medianos solo pasa de
+45.4 a 46.4. Trátalo como un complemento de
 [D-FINE](/docs/models/d-fine) para imágenes aéreas, de dron y de teledetección,
 no como un reemplazo.
 
@@ -139,8 +139,8 @@ checkpoints que medir.
 ## Entrenamiento
 
 Dome-DETR es entrenable. El entrenamiento ejecuta el objetivo completo de
-upstream: las losses de D-FINE más la supervisión de densidad y de conteo de
-DeFE, con las queries de relleno enmascaradas fuera de los términos de
+upstream: las funciones de pérdida de D-FINE más la supervisión de densidad y de
+conteo de DeFE, con las queries de padding enmascaradas fuera de los términos de
 clasificación y con máscaras de atención de denoising por imagen, para que el
 padding de una imagen no pueda filtrarse en el de otra.
 
@@ -151,8 +151,8 @@ es 800, `lr0` es `2e-4`, el grupo de parámetros del backbone se escala con
 `backbone_lr_mult=0.1`, y `multi_scale` se fuerza a desactivado, porque las
 ventanas de MWAS necesitan que la entrada siga siendo divisible por el stride 8.
 `batch` vale 4 por defecto en lugar de los 16 de D-FINE: PAQI rellena cada batch
-hasta su miembro más ancho, así que la memoria sigue a la imagen más cargada del
-batch en vez de a la media.
+hasta su miembro más ancho, así que la memoria depende de la imagen más cargada
+del batch y no de la media.
 
 Una advertencia honesta sobre la precisión. Upstream entrena 160 epochs con
 `MultiStepLR(milestones=[80, 120], gamma=0.8)`, mientras que estos valores por
@@ -173,30 +173,30 @@ resultados por clase si dejas `verbose` activado.
 <code-tabs name="val" />
 
 La validación se ejecuta contra tu propio dataset, en el formato con el que
-entrenaste. El gate de validación COCO de la biblioteca no se aplica aquí, ya
-que no existe ningún checkpoint de COCO de esta familia contra el que medir.
+entrenaste. El control de validación de COCO de la biblioteca no se aplica
+aquí, ya que no existe ningún checkpoint de COCO de esta familia contra el que
+medir.
 
 ## Exportación
 
-La exportación no está soportada, en ningún formato, y pedir una lanza un error
-en vez de producir un archivo.
+La exportación no está soportada, en ningún formato, y pedirla lanza un error en
+vez de producir un archivo.
 
 El motivo es PAQI. Decide el número de queries por imagen a partir de propuestas
 filtradas por densidad y de un bucle voraz de supresión adaptativa a la
 densidad, así que la longitud de salida del decoder es una propiedad de la
-entrada y no del grafo. El trazado fija el número que la imagen de trazado
-produjera en ese momento, lo que da un artefacto que devuelve resultados
-incorrectos de forma silenciosa para cualquier otra imagen. Una formulación
-estática tendría que desenrollar esa supresión sobre los 250 a 1500 candidatos,
-y reducirla a un top-k fijo eliminaría exactamente el recall en objetos
-diminutos que justifica la existencia de esta familia. Si necesitas un
-transformer de detección exportable, [D-FINE](/docs/models/d-fine) es al que
-recurrir.
+entrada y no del grafo. El trazado deja fijado el número que produjo la imagen
+con la que se trazó, lo que da un artefacto que devuelve resultados incorrectos
+de forma silenciosa para cualquier otra imagen. Una formulación estática tendría
+que desenrollar esa supresión sobre todos los candidatos, entre 250 y 1500, y
+reducirla a un top-k fijo eliminaría exactamente el recall en objetos diminutos
+que justifica la existencia de esta familia. Si necesitas un transformer de
+detección exportable, el indicado es [D-FINE](/docs/models/d-fine).
 
 ## Checkpoints
 
 No hay ninguno que listar. LibreYOLO no publica pesos de Dome-DETR, y ningún
-nombre de la forma `LibreDOMEDETR<size>-<dataset>.pt` resuelve a una descarga.
+nombre de la forma `LibreDOMEDETR<size>-<dataset>.pt` corresponde a una descarga.
 
 Upstream publica seis checkpoints, s, m y l para cada uno de dos datasets:
 AI-TOD-V2 con 9 clases y VisDrone con 12. No hay checkpoint de COCO, así que un
@@ -220,8 +220,8 @@ python weights/convert_domedetr_weights.py \
 
 Sobre la fidelidad numérica, `weights/parity_domedetr.py` compara este port con
 la implementación de upstream en los seis checkpoints y reporta
-`max_abs_diff == 0.0` tanto en `pred_logits` como en `pred_boxes`, después de
-comprobar antes la máscara de ventanas de MWAS bit a bit, y aparte compara cada
+`max_abs_diff == 0.0` tanto en `pred_logits` como en `pred_boxes`, tras
+comprobar primero la máscara de ventanas de MWAS bit a bit, y aparte compara cada
 término de la loss con el criterion de upstream. Que quede claro qué es eso: un
 script manual que necesita el checkout de upstream y los checkpoints publicados
 en disco, ejecutado a mano. No forma parte de la integración continua, y ningún
@@ -253,6 +253,6 @@ Density-Oriented Feature-Query Manipulation for Efficient Tiny Object
 Detection». El preprint está en
 [arxiv.org/abs/2505.05741](https://arxiv.org/abs/2505.05741). Los autores no
 publican ningún bloque BibTeX en su repositorio, así que aquí no se reproduce
-ninguno en vez de montarlo a mano.
+ninguno en vez de montar uno a mano.
 
 <citation-block />

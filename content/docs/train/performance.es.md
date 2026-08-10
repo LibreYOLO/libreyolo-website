@@ -25,7 +25,7 @@ snippets:
         # Perfila una ventana corta de pasos reales, imprime un veredicto y
         # después sigue la ejecución con los hooks retirados.
         model.train(data="my-dataset.yaml", epochs=100, profile=True)
-    - label: Solo medir, y parar
+    - label: Solo medir y parar
       language: bash
       code: |
         # Fija no_aug_epochs=0 y ejecuta las épocas justas para llenar la ventana.
@@ -66,8 +66,8 @@ snippets:
 
 ## Medir antes de tocar nada
 
-Las tres palancas de abajo arreglan problemas distintos, y aplicar la que no
-toca no cambia nada. El profiler dice cuál de esos problemas tienes.
+Las tres palancas de abajo arreglan problemas distintos, y aplicar la
+equivocada no cambia nada. El profiler dice cuál de esos problemas tienes.
 
 <code-tabs name="profile" />
 
@@ -80,7 +80,7 @@ El informe termina en uno de cuatro veredictos:
 
 | Veredicto | Significado | Palancas |
 |---|---|---|
-| `dataloader` | la GPU espera por los datos de entrada | más `workers`, `cache="ram"` o `"disk"`, aumento de datos más ligero, batch más grande |
+| `dataloader` | la GPU espera a los datos de entrada | más `workers`, `cache="ram"` o `"disk"`, aumento de datos más ligero, batch más grande |
 | `host / launch` | la GPU se alimenta demasiado despacio, muchos kernels diminutos | batch más grande, grafos CUDA, menos sincronizaciones con el host por paso |
 | `compute` | la GPU está saturada | AMP o bfloat16, o aceptarlo |
 | `memory-pressure` | thrashing del allocator, la VRAM al límite | baja el batch; aquí las cifras de utilización no son fiables |
@@ -93,10 +93,10 @@ sincronización para atribuir el tiempo de GPU. Sincronizar en cada fase da
 holgura a los workers del dataloader y esconde la inanición, así que las cifras
 de composición no se usan nunca para elegir el veredicto.
 
-En el directorio de la ejecución aterrizan cuatro ficheros: `timeline.html`, que
+En el directorio de la ejecución aparecen cuatro archivos: `timeline.html`, que
 se abre por sí solo en un navegador, `profile_trace.json` para Perfetto o
 Nsight, `profile_summary.json` y `profile.json`, el autocontenido, el que se
-copia de un lado a otro y se le vuelve a pasar a los subcomandos
+copia de un lado a otro y se vuelve a pasar a los subcomandos
 `libreyolo profile`.
 
 Hay dos cosas de `profile run` que conviene saber. Fija `no_aug_epochs=0`,
@@ -104,13 +104,13 @@ porque el profiler mide la época 0 y una ejecución corta con el
 `no_aug_epochs` por defecto perfilaría el dataloader más ligero, el que va sin
 aumento de datos, en lugar del que el entrenamiento usa de verdad. Y
 `--repeat N` informa de la media y la desviación estándar, lo que importa
-porque un paso limitado por lanzamientos tiene ruido de sobra como para que una
-sola ejecución engañe; escribe un directorio por prueba, `prof_1`, `prof_2` y
-así, más un `profile_repeat.json` agregado.
+porque un paso limitado por los lanzamientos tiene ruido suficiente como para
+que una sola ejecución induzca a error; escribe un directorio por prueba,
+`prof_1`, `prof_2` y así sucesivamente, más un `profile_repeat.json` agregado.
 
 ## Precisión mixta
 
-`amp=True` es el valor por defecto en la mayoría de familias y ejecuta el
+`amp=True` es el valor por defecto en la mayoría de las familias y ejecuta el
 forward bajo el autocast de CUDA. `amp_dtype` elige entre `float16` y
 `bfloat16`.
 
@@ -120,8 +120,8 @@ Float16 necesita escalado dinámico de la función de pérdida (loss) y recibe u
 escalador de gradientes activo; el rango de exponente más ancho de bfloat16 no
 lo necesita, así que su escalador queda desactivado. Cuatro familias vienen con
 `amp=False`, D-FINE, DEIM, YOLO-NAS y FOMO, y el ajuste de DEIM llega a
-RT-DETRv4 por herencia. D-FINE deja dicho el motivo: su decoder recorta las
-activaciones en 65504, el mayor valor finito de float16.
+RT-DETRv4 por herencia. D-FINE indica el motivo: su decoder limita las
+activaciones a 65504, el mayor valor finito de float16.
 
 La semántica de los argumentos, incluido qué hace una petición de bfloat16 en
 hardware sin soporte de bfloat16, está en
@@ -150,7 +150,7 @@ de YOLOX-t y el 26 por ciento de uno de RTMDet-t. Los dos últimos pasan la mayo
 parte del paso dentro de sus asignadores de etiquetas, así que capturar la red
 es lo que menos les ayuda.
 
-### Cuánto vale
+### Cuánto se gana
 
 Condiciones de todas las cifras de abajo: RTX 5070 Ti, Windows, AMP, un proceso
 por rama a partir de un estado guardado compartido, reproduciendo un batch real
@@ -173,17 +173,17 @@ por fila.
 | YOLOv7 | b | 4 | 102,5 ms | 98,0 ms | 1,05x |
 
 Esas cifras aíslan el paso de GPU. Un fine-tuning completo paga además el
-dataloader y la validación. YOLOv9-t sobre un conjunto de detección de 406
+dataloader y la validación. YOLOv9-t sobre un dataset de detección de 406
 imágenes, 20 épocas, batch 8, 640 px, 4 workers de dataloader, en la misma
-máquina: 428,4 s de reloj en eager frente a 367,7 s con grafo, una ganancia de
-1,16x, con un mAP50-95 de 0,6394 en las dos ramas.
+máquina: 428,4 s de tiempo de reloj en eager frente a 367,7 s con grafo, una
+ganancia de 1,16x, con un mAP50-95 de 0,6394 en las dos ramas.
 
 Tres cosas mueven estos números. Los batches pequeños están limitados por los
 lanzamientos y los grandes por el cómputo, así que RT-DETR-r18 gana 1,19x con
 batch 2 y 1,04x con batch 8. El overhead de lanzamiento es máximo en Windows, y
 en Linux las ganancias son más o menos de un tercio a la mitad de las de la
-tabla. Y una ejecución limitada por el dataloader no ve ningún cambio de reloj,
-que es por lo que el profiler va primero.
+tabla. Y una ejecución limitada por el dataloader no ve ningún cambio en el
+tiempo de reloj, y por eso el profiler va primero.
 
 La captura se activa igual con `amp=False`, pero los kernels fp32 tardan más,
 así que el paso está menos limitado por los lanzamientos y la mayoría de
@@ -225,11 +225,11 @@ las veces suficientes como para llegar a capturar. Pasa `multi_scale=False`
 cuando lo que buscas es la aceleración.
 
 YOLOX cambia lo que calcula la región capturada a mitad de una ejecución, y
-enciende su rama de regresión L1 cuando el mosaic se cierra en `no_aug_epochs`.
+activa su rama de regresión L1 cuando el mosaic se cierra en `no_aug_epochs`.
 El entrenador invalida ahí la captura y vuelve a capturar en cuanto la nueva
 forma se asienta.
 
-### Números y memoria
+### Comportamiento numérico y memoria
 
 La mayoría de familias reproducen su trayectoria de loss en eager bit a bit bajo
 AMP. FOMO y LingBot-Vision difieren en el último bit de float32 por un orden de
@@ -241,8 +241,8 @@ de esa dispersión. RTMDet difiere en torno a 3e-4 relativo en dos de 139
 gradientes, porque comparte convoluciones de la cabeza entre niveles de la
 pirámide y los dos caminos de backward suman tres contribuciones en distinto
 orden. SegFormer tiene stochastic depth dentro de la región capturada, así que
-un grafo reproducido tira de su propio flujo aleatorio y es estadísticamente
-equivalente a eager en lugar de idéntico; el manager lo registra una vez en el
+un grafo reproducido consume su propio flujo aleatorio y es estadísticamente
+equivalente a eager en lugar de idéntico; el gestor lo registra una vez en el
 momento de la captura.
 
 Con `amp=False` no hay nada bit a bit idéntico en este hardware, con captura o
@@ -266,5 +266,5 @@ encima del límite, baja el batch o deja el flag apagado.
 - [Entrenamiento multi-GPU](/docs/train/multi-gpu), donde ni los grafos CUDA ni
   el profiler están disponibles.
 - [Grafos CUDA](/docs/reference/cuda-graphs) para la matriz de soporte combinada
-  de inferencia y entrenamiento, las divisiones por costura y el contrato de
-  números.
+  de inferencia y entrenamiento, las divisiones por la costura y el contrato
+  numérico.

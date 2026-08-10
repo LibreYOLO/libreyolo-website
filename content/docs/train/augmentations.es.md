@@ -94,8 +94,9 @@ conectado.
 
 Ese tercer estado es el que sorprende a la gente. En un pipeline de estilo YOLOX
 la transformación afín se ejecuta sobre el lienzo del mosaico y MixUp mezcla una
-muestra de mosaico, así que `mosaic_prob=0` desactiva en silencio `degrees`, `translate`,
-`shear`, `perspective`, `mosaic_scale`, `mixup_prob` y `mixup_scale` de golpe. El
+muestra de mosaico, así que `mosaic_prob=0` desactiva en silencio `degrees`,
+`translate`, `shear`, `perspective`, `mosaic_scale`, `mixup_prob` y
+`mixup_scale` de golpe. El
 entrenador registra un aviso concretamente para el caso de MixUp:
 
 ```text
@@ -117,14 +118,12 @@ determina casi todas las respuestas.
 
 El pipeline de mosaico de estilo YOLOX aplica el jitter HSV y los volteos por
 muestra, y después ejecuta la transformación afín y MixUp dentro de la rama de
-mosaico. Cubre
-YOLOX, YOLOv7, YOLOv9 y sus variantes E2E y P2, RTMDet, PicoDet, RT-DETR,
-RT-DETRv2 y FOMO.
+mosaico. Cubre YOLOX, YOLOv7, YOLOv9 y sus variantes E2E y P2, RTMDet, PicoDet,
+RT-DETR, RT-DETRv2 y FOMO.
 
 El pipeline de paso directo de estilo DETR no tiene mosaico ni transformación
-afín. Su
-distorsión fotométrica, el zoom-out y el recorte por IoU son constantes de la
-receta y no parámetros de configuración, así que solo `flip_prob` y
+afín. Su distorsión fotométrica, el zoom-out y el recorte por IoU son constantes
+de la receta y no parámetros de configuración, así que solo `flip_prob` y
 `no_aug_epochs` están activos. Cubre D-FINE, Dome-DETR, DEIM, DEIMv2, RT-DETRv4,
 EC y, con un cambio, RF-DETR.
 
@@ -224,15 +223,15 @@ CLI.
 | YOLOv9 | `max_labels` | Límite de ground truth por imagen en las transformaciones de entrenamiento, 100 por defecto |
 | RF-DETR | `copy_paste`, `copy_paste_mode` | Copy-paste para `task="segment"`, solo en modo `"flip"` |
 | RF-DETR, D-FINE, EC | `crop_resize_prob` | Probabilidad de recorte y redimensionado aleatorios |
-| EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | Probabilidades del jitter de la ruta de pose y del afín consciente de keypoints |
+| EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | Probabilidades del jitter de la ruta de pose y de la transformación afín que tiene en cuenta los keypoints |
 
 `max_labels` es el que pierde datos en silencio. Los bounding boxes que pasan del
 límite se descartan sin error, así que las imágenes densas como la fotografía
 aérea necesitan subirlo.
 
 El mosaico y MixUp están desactivados en el entrenamiento con bounding boxes
-orientados independientemente de los parámetros, porque el aumento de datos
-consciente de las esquinas para bounding boxes rotados no está implementado.
+orientados independientemente de los parámetros, porque el aumento de datos que
+tiene en cuenta las esquinas de los bounding boxes rotados no está implementado.
 
 ## Relacionado
 

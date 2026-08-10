@@ -160,11 +160,11 @@ Libre<Model>.pt  ->  ONNX  ->  HAR (parse)  ->  HAR (quantize INT8)  ->  HEF
 
 <code-tabs name="export" />
 
-No pases `half=True`. El DFC acepta ONNX en FP32 y hace su propia cuantización INT8.
-Tampoco pases `nms=True`: de NMS se encarga Hailo mediante `nms_postprocess` o
-bien la aplicación, y un subgrafo de NMS es peso muerto más allá de los nodos
-finales. El opset por defecto funciona; si el parser del DFC protesta, vuelve a
-exportar con `opset=11`.
+No pases `half=True`. El DFC acepta ONNX en FP32 y hace su propia cuantización
+INT8. Tampoco pases `nms=True`: del NMS se encarga Hailo mediante
+`nms_postprocess`, o bien la aplicación, y un subgrafo de NMS es peso muerto más
+allá de los nodos finales. El opset por defecto funciona; si el parser del DFC
+protesta, vuelve a exportar con `opset=11`.
 
 El DFC corta el grafo en los nodos finales que le indicas, que son las
 convoluciones de la cabeza de detección, y descarta todo lo que va después. Por
@@ -178,8 +178,8 @@ simplemente ignora la cola de decodificación.
 Elige `hw_arch` según el destino: `hailo8` para el Hailo-8, el AI HAT+ de 26 TOPS
 y los módulos M.2 y PCIe; `hailo8l` para el Hailo-8L, el Raspberry Pi AI Kit y el
 AI HAT+ de 13 TOPS; `hailo10h` para el Hailo-10H, que necesita un DFC y un Model
-Zoo más nuevos y compatibles entre sí. `hailortcli fw-control identify` en el dispositivo
-responde a la pregunta cuando no lo tienes claro.
+Zoo más nuevos y compatibles entre sí. `hailortcli fw-control identify` en el
+dispositivo responde a la pregunta cuando no lo tienes claro.
 
 Dos familias encajan en una meta-arquitectura de NMS de HailoRT, así que Hailo
 puede encargarse de la supresión dentro del pipeline compilado: YOLOX mediante
@@ -199,16 +199,16 @@ exacto de la capa o del operador que falla.
 
 La inferencia de la aplicación usa la API de Python `hailo_platform`. Con
 `nms_postprocess` compilado dentro, la salida es `(batch, num_classes, max_dets, 5)`
-y lleva `[y1, x1, y2, x2, score]` en coordenadas del modelo, que escalas de vuelta
-a la imagen de origen tú mismo. El pipeline `Results` de LibreYOLO no interviene en
-tiempo de ejecución; el HEF es un artefacto autónomo, y el preprocesado y el
-posprocesado corren por cuenta de la aplicación.
+y lleva `[y1, x1, y2, x2, score]` en coordenadas del modelo, que tienes que
+reescalar tú mismo a la imagen de origen. El pipeline `Results` de LibreYOLO no
+interviene en tiempo de ejecución; el HEF es un artefacto autónomo, y el
+preprocesado y el posprocesado corren por cuenta de la aplicación.
 
 ## Restricciones
 
-Que un modelo pueda apuntar a Hailo-8 o a Hailo-8L es una propiedad de su
-arquitectura, no de su nombre, así que la regla de abajo se aplica también a las
-familias añadidas después de escribir esta página.
+Que un modelo pueda tener como destino Hailo-8 o Hailo-8L es una propiedad de su
+arquitectura, no de su nombre, así que la regla de abajo se aplica a las familias
+añadidas después de escribir esta página.
 
 Un modelo no compilará si contiene alguna de estas cosas:
 
@@ -222,34 +222,35 @@ Un modelo no compilará si contiene alguna de estas cosas:
   única forma de entrada fija y un grafo estático, así que quedan fuera los
   recuentos variables de queries, los prompts de texto, el top-k dinámico,
   `NonZero`, `Gather` o `TopK` con índices dinámicos, y `grid_sample`.
-- Un diseño dominado por LayerNorm o por GELU. BatchNorm se pliega limpiamente
-  dentro de las convoluciones; el soporte de LayerNorm es pobre y GELU no es una
+- Un diseño dominado por LayerNorm o por GELU. BatchNorm se fusiona limpiamente
+  con las convoluciones; el soporte de LayerNorm es deficiente y GELU no es una
   activación nativa, así que una pila estilo ConvNeXt encaja mal aunque sea
   nominalmente convolucional.
 - Trabajo de imagen a imagen a resolución nativa. Los modelos de restauración
-  funcionan a resolución de entrada completa y superan los presupuestos prácticos
-  de SRAM de Hailo.
+  funcionan a resolución de entrada completa y superan lo que la SRAM de Hailo
+  permite en la práctica.
 
-Una familia es candidata cuando es solo convolución, usa BatchNorm con ReLU o
-SiLU, y tiene un tamaño de entrada fijo. En esta biblioteca eso significa los
-detectores CNN de una etapa, con YOLOX y YOLO9 como objetivos principales; otros
-detectores convolucionales como PicoDet, YOLO-NAS y RTMDet, con decodificación del
-lado de la aplicación; los clasificadores CNN ResNet, MobileNetV4-conv y
-EfficientNetV2, de los cuales ResNet es el mejor soportado porque el Model Zoo de
-Hailo incluye recetas para él; y cabezas de tarea convolucionales pequeñas como la
-detección de puntos FOMO y la mirada L2CS sobre un backbone ResNet, que son
-compilables en principio pero no tienen receta de Hailo.
+Una familia es candidata cuando es puramente convolucional, usa BatchNorm con
+ReLU o SiLU, y tiene un tamaño de entrada fijo. En esta biblioteca eso significa
+los detectores CNN de una etapa, con YOLOX y YOLO9 como objetivos principales;
+otros detectores convolucionales como PicoDet, YOLO-NAS y RTMDet, con
+decodificación del lado de la aplicación; los clasificadores CNN ResNet,
+MobileNetV4-conv y EfficientNetV2, de los cuales ResNet es el que mejor soporte
+tiene porque el Model Zoo de Hailo incluye recetas para él; y cabezas de tarea
+convolucionales pequeñas como la detección de puntos FOMO y la estimación de
+mirada L2CS sobre un backbone ResNet, que son compilables en principio pero no
+tienen receta de Hailo.
 
 Una salvedad sobre el estado, que es la razón por la que nada de esta página se
-presenta como soportado: ninguna familia de LibreYOLO se ha llevado de principio a
-fin por el DFC hasta un HEF en funcionamiento. Las reglas de arriba predicen la
-compilabilidad a partir de la arquitectura. El comportamiento del parser, la
-cuantización y la precisión siguen sin demostrarse hasta que se compile y se mida
-un HEF, así que trata cada candidato como algo que requiere su propia evidencia
-registrada: un HEF compilado desde el checkpoint exacto con las versiones de DFC,
-Model Zoo y HailoRT anotadas, una calibración documentada, y una comparación de
-precisión en el dispositivo contra la baseline FP32 en vez de un número de
-throughput.
+presenta como soportado: ninguna familia de LibreYOLO se ha llevado de principio
+a fin a través del DFC hasta un HEF en funcionamiento. Las reglas de arriba
+predicen la compilabilidad a partir de la arquitectura. El comportamiento del
+parser, la cuantización y la precisión siguen sin demostrarse hasta que se
+compile y se mida un HEF, así que trata cada candidato como algo que requiere su
+propia evidencia registrada: un HEF compilado desde el checkpoint exacto con las
+versiones de DFC, Model Zoo y HailoRT anotadas, una calibración documentada, y
+una comparación de precisión en el dispositivo frente a la baseline FP32 en vez
+de un número de throughput.
 
 Si el modelo queda descartado, las alternativas son los runtimes con paridad
 registrada: [ONNX](/docs/export/onnx), [TensorRT](/docs/export/tensorrt) y
