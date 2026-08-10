@@ -4871,9 +4871,10 @@
       },
       "tier": "g1",
       "tasks": [
-        "detect"
+        "detect",
+        "obb"
       ],
-      "sizes_label": "rtdetr: r18, r34, r50, r50m, r101, l, x at 640 px; rtdetrv2: r18, r34, r50, r50m, r101 at 640 px; rtdetrv4: s, m, l, x at 640 px",
+      "sizes_label": "rtdetr: r18, r34, r50, r50m, r101, l, x at 640 px; rtdetrv2: r18, r34, r50, r50m, r101 for detection at 640 px, n, s, m, l, x for oriented boxes at 1024 px; rtdetrv4: s, m, l, x at 640 px",
       "added_in": "1.1.0",
       "task_added_in": {
         "rtdetr": "1.1.0",
@@ -5009,6 +5010,41 @@
           "imgsz": 640,
           "data": "COCO",
           "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRTDETRv2n-obb.pt",
+          "task": "obb",
+          "imgsz": 1024,
+          "data": "DOTA v1.0",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRTDETRv2s-obb.pt",
+          "task": "obb",
+          "imgsz": 1024,
+          "data": "DOTA v1.0",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRTDETRv2m-obb.pt",
+          "task": "obb",
+          "imgsz": 1024,
+          "data": "DOTA v1.0",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRTDETRv2l-obb.pt",
+          "task": "obb",
+          "imgsz": 1024,
+          "data": "DOTA v1.0",
+          "license": "apache-2.0"
+        },
+        {
+          "name": "LibreRTDETRv2x-obb.pt",
+          "task": "obb",
+          "imgsz": 1024,
+          "data": "DOTA v1.0",
+          "license": "apache-2.0"
         }
       ],
       "export": {
@@ -5025,6 +5061,20 @@
           "tflite": "blocked",
           "coreml": "blocked",
           "coreai": "validated"
+        },
+        "obb": {
+          "onnx": "validated",
+          "torchscript": "validated",
+          "executorch": "available",
+          "tensorrt": "available",
+          "openvino": "available",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
         }
       },
       "benchmarks": {
