@@ -9,17 +9,46 @@ articles, marketing pages, `/docs/experimental`, `/docs/librevlm`. Untranslated
 pages already fall back to English with an English canonical, so partial rollout
 is always safe.
 
-## Languages and locale decisions
+## Final language roster (15 locales + English)
 
-| Locale | hreflang | OG locale | Switcher label | Notes |
-|--------|----------|-----------|----------------|-------|
-| `zh`   | `zh-CN`  | `zh_CN`   | 中文           | Already configured; docs not yet translated |
-| `es`   | `es`     | `es_ES`   | Español        | Neutral international Spanish |
-| `pt`   | `pt-BR`  | `pt_BR`   | Português      | Brazilian Portuguese (larger dev market) |
-| `fr`   | `fr`     | `fr_FR`   | Français       | |
-| `it`   | `it`     | `it_IT`   | Italiano       | |
-| `ru`   | `ru`     | `ru_RU`   | Русский        | Large CV/ML community |
-| `ar`   | `ar`     | `ar_AR`   | العربية        | MSA; **requires RTL phase first** |
+Status as of 2026-08-10. "Pages" counts `<slug>.<locale>.md` twins out of 174.
+"Assets" means style guide (`scripts/translation/STYLE-<locale>.md`) and UI
+strings (`messages/<locale>.json`) exist.
+
+| Locale | hreflang | OG locale | Label | Pages | Assets | Notes |
+|--------|----------|-----------|-------|-------|--------|-------|
+| `es` | `es` | `es_ES` | Español | **174/174** | yes | Complete. Neutral international Spanish, `tú` |
+| `zh` | `zh-CN` | `zh_CN` | 中文 | 106/174 | yes | ~25% of site traffic — highest-value locale |
+| `pt` | `pt-BR` | `pt_BR` | Português | 46/174 | yes | pt-BR; glossary marks pt-PT splits for a later fork |
+| `it` | `it` | `it_IT` | Italiano | 41/174 | yes | `libreria` is correct here (unlike es) |
+| `fr` | `fr` | `fr_FR` | Français | 15/174 | yes | NBSP typography in `fr.json` — do not let a formatter strip it |
+| `ru` | `ru` | `ru_RU` | Русский | 12/174 | yes | Needs ICU plurals for `Models.familyCount` |
+| `ar` | `ar` | `ar_AR` | العربية | 0/174 | yes | MSA. **Blocked on RTL pass**; not in `routing.locales` |
+| `de` | `de` | `de_DE` | Deutsch | 0/174 | no | **Highest-ROI addition** — industrial machine vision |
+| `ja` | `ja` | `ja_JP` | 日本語 | 0/174 | no | Robotics/factory CV; low English-docs tolerance |
+| `ko` | `ko` | `ko_KR` | 한국어 | 0/174 | no | Strong industrial CV sector |
+| `pl` | `pl` | `pl_PL` | Polski | 0/174 | no | Large EU dev population |
+| `uk` | `uk` | `uk_UA` | Українська | 0/174 | no | Keep terminology independent of `ru`, not derived from it |
+| `vi` | `vi` | `vi_VN` | Tiếng Việt | 0/174 | no | Fast-growing dev base, little CV content competition |
+| `id` | `id` | `id_ID` | Bahasa Indonesia | 0/174 | no | Same rationale as `vi` |
+| `th` | `th` | `th_TH` | ไทย | 0/174 | no | Needs a line-breaking check (Thai has no word spaces) |
+
+### Sequencing for the remaining work
+
+1. **Finish what is started** — `zh` (68 pages left), then `pt`, `it`, `fr`, `ru`.
+   Cheapest possible value: the assets and conventions already exist.
+2. **`de`, `ja`, `ko`** — the industrial-CV trio. Highest expected return per
+   page of any *new* language for this product.
+3. **`pl`, `uk`, `vi`, `id`, `th`** — reach plays; each needs assets built first.
+4. **`ar`** — last. Only language needing a layout project (Phase 0R) rather
+   than just content.
+
+### Scale consequence (decide before step 2)
+
+15 locales × 174 pages = **2,610 twin files**. Every English docs edit then
+implies up to 15 twin updates. The `source_hash` frontmatter check plus the CI
+validator (Phase 3) stops being a nice-to-have and becomes the thing that keeps
+the corpus from rotting silently. Wire it before adding an eighth language.
 
 ## Phase 0 — Platform (one PR, before any content)
 
