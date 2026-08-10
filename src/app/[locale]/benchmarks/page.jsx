@@ -47,19 +47,10 @@ export default function BenchmarksPage() {
       <section className="relative overflow-hidden border-b border-surface-200 dark:border-surface-800">
         <div className="absolute inset-0 bg-gradient-to-br from-libre-500/10 via-transparent to-transparent" />
         <div className="relative mx-auto max-w-6xl px-6 pt-28 pb-14 md:pt-36 md:pb-20">
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="font-mono text-[10px] md:text-xs font-semibold uppercase tracking-[0.35em] text-libre-600 dark:text-libre-300/90"
-          >
-            Measured, not copied from papers
-          </motion.p>
-
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 }}
-            className="mt-4 max-w-3xl text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] text-surface-900 dark:text-white"
+            className="max-w-3xl text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] text-surface-900 dark:text-white"
           >
             LibreYOLO Benchmarks
           </motion.h1>
@@ -70,9 +61,9 @@ export default function BenchmarksPage() {
             transition={{ delay: 0.1 }}
             className="mt-6 max-w-2xl text-lg text-surface-600 dark:text-surface-400 leading-relaxed"
           >
-            LibreYOLO ships dozens of detection models behind one API. These are the numbers that
-            tell you which one to pick: accuracy on COCO, transfer onto 100 real-world datasets,
-            and speed on hardware you can actually buy.
+            LibreYOLO ships dozens of detection models behind one API, which is fine until you
+            have to choose one. So we measured them. Accuracy on COCO, then transfer onto 100
+            datasets that look nothing like COCO, then speed on hardware you can actually buy.
           </motion.p>
 
           <motion.div
@@ -103,8 +94,8 @@ export default function BenchmarksPage() {
           Analysis embed. RF100-VL then lands as the "and off COCO?" follow-up. */}
       <section className="mx-auto max-w-6xl px-6 pt-16 pb-16 md:pt-24 md:pb-24">
         <SectionHeading tag="COCO" title="Accuracy against size">
-          The classic view: how much accuracy each architecture buys for its parameter count.
-          Live from Vision Analysis, so it stays current as new runs land.
+          How much accuracy each architecture buys for its parameter count. The chart is live
+          from Vision Analysis, so it updates as new runs land.
         </SectionHeading>
 
         <div className="mt-8 overflow-hidden rounded-2xl border border-surface-200 dark:border-surface-800">
@@ -139,10 +130,10 @@ export default function BenchmarksPage() {
       {/* RF100-VL: the follow-up to COCO, and the centrepiece of the page */}
       <section className="mx-auto max-w-6xl px-6">
         <SectionHeading tag="RF100-VL" title="What happens when you leave COCO behind?">
-          COCO is 80 everyday categories: people, cars, dogs. Almost nobody ships that. The real
-          question is transfer, so we fine-tuned on 100 unrelated real-world datasets and scored
-          every one of them separately. Pills on a conveyor, chest X-rays, mahjong tiles, varroa
-          mites, wildfire smoke.
+          COCO is 80 everyday categories, and almost nobody ships a product that detects dogs and
+          sofas. Transfer is the harder question, so we fine-tuned on 100 unrelated real-world
+          datasets and scored each one separately. Pills on a conveyor, chest X-rays, mahjong
+          tiles, varroa mites, wildfire smoke.
         </SectionHeading>
       </section>
 
@@ -173,11 +164,11 @@ export default function BenchmarksPage() {
 
       {/* Trust */}
       <section className="mx-auto max-w-6xl px-6 py-16 md:py-24">
-        <SectionHeading tag="Provenance" title="Why you can trust these numbers">
-          Because they are ours, not the papers&apos;. Every model LibreYOLO ships was re-measured
-          from scratch on the full COCO val2017 set and checked against what its original authors
-          published. Across every variant, the worst disagreement is 0.39 mAP. If a port had
-          quietly broken, that number would show it.
+        <SectionHeading tag="Provenance" title="Where these numbers come from">
+          We re-measured every model LibreYOLO ships from scratch on the full COCO val2017 set,
+          then checked each result against what its original authors published. The worst
+          disagreement across every variant is 0.39 mAP. A port that had quietly broken would
+          show up here.
         </SectionHeading>
 
         <a
