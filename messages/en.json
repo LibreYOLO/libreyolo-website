@@ -160,8 +160,6 @@
     "weights": "All weights",
     "docs": "Docs",
     "indexLead": "Every family the library ships, generated from the v{version} model registry: {families} families across {tasks} tasks.",
-    "allTiers": "All",
-    "showing": "{shown} shown",
     "familyCount": "{count} families",
     "weightsShort": "weights",
     "tasks": {
@@ -233,7 +231,8 @@
         "label": "Mesh",
         "blurb": "3D geometry from an image."
       }
-    }
+    },
+    "docsShort": "docs"
   },
   "Commercial": {
     "titleEmphasis": "Yes",

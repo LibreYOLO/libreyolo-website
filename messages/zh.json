@@ -160,8 +160,6 @@
     "weights": "全部权重",
     "docs": "文档",
     "indexLead": "库中的每个系列，由 v{version} 模型注册表生成：{tasks} 类任务下共 {families} 个系列。",
-    "allTiers": "全部",
-    "showing": "显示 {shown} 个",
     "familyCount": "{count} 个系列",
     "weightsShort": "权重",
     "tasks": {
@@ -233,7 +231,8 @@
         "label": "三维网格",
         "blurb": "从图像重建三维几何。"
       }
-    }
+    },
+    "docsShort": "文档"
   },
   "Commercial": {
     "titleEmphasis": "是的",
