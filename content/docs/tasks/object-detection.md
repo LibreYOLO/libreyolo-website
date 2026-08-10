@@ -129,10 +129,11 @@ a `Boxes` object yields one-row slices, so `box.cls`, `box.conf` and
 
 ## Models
 
-Eleven families both train and predict: [YOLOv9](/docs/models/yolov9),
+Twelve families both train and predict: [YOLOv9](/docs/models/yolov9),
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
 [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine),
-[DEIM](/docs/models/deim), [YOLO-NAS](/docs/models/yolo-nas),
+[DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr),
+[YOLO-NAS](/docs/models/yolo-nas),
 [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7),
 [RTMDet](/docs/models/rtmdet) and [PicoDet](/docs/models/picodet). YOLOv9 and
 RF-DETR are the two flagship families, and features land on them first. RF-DETR

@@ -487,13 +487,15 @@
 .rfp-legend-chip:focus-visible {
   outline: none;
 }
+/* 10px counts, so they need the full 4.5:1. The old pair sat at 2.6:1 on
+   white and 3.6:1 on the dark chip. */
 .rfp-legend-count {
   font-family: var(--font-jetbrains), monospace;
   font-size: 10px;
-  color: #94a3b8;
+  color: #475569;
 }
 .dark .rfp-legend-count {
-  color: #64748b;
+  color: #94a3b8;
 }
 .rfp-legend-chip:hover .rfp-legend-count,
 .rfp-legend-chip.is-hot .rfp-legend-count {
@@ -989,4 +991,411 @@
     animation: none !important;
     transform: rotate(calc(var(--phase) * -360deg));
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Tabbed panel (benchmarks page). Reuses the ring stage above; adds the tab
+   bar, the model picker and the strongest/weakest lists.
+--------------------------------------------------------------------------- */
+
+.rfx-tabs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid rgb(226 232 240);
+  background: rgb(255 255 255 / 0.75);
+  backdrop-filter: blur(8px);
+}
+
+.dark .rfx-tabs {
+  border-color: rgb(255 255 255 / 0.1);
+  background: rgb(15 23 42 / 0.6);
+}
+
+.rfx-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgb(71 85 105);
+  transition: background-color 0.18s ease, color 0.18s ease;
+  white-space: nowrap;
+}
+
+.dark .rfx-tab {
+  color: rgb(148 163 184);
+}
+
+.rfx-tab:hover {
+  color: rgb(15 23 42);
+  background: rgb(148 163 184 / 0.14);
+}
+
+.dark .rfx-tab:hover {
+  color: rgb(241 245 249);
+  background: rgb(255 255 255 / 0.07);
+}
+
+/* libre-500 is only 3.5:1 behind white text; libre-600 clears AA. */
+.rfx-tab.is-on {
+  background: #0e7490;
+  color: #fff;
+}
+
+.dark .rfx-tab.is-on {
+  background: #06b6d4;
+  color: #04212b;
+}
+
+.rfx-model {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid rgb(226 232 240);
+  background: rgb(255 255 255 / 0.7);
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 12px;
+  color: rgb(71 85 105);
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.dark .rfx-model {
+  border-color: rgb(255 255 255 / 0.12);
+  background: rgb(15 23 42 / 0.55);
+  color: rgb(203 213 225);
+}
+
+.rfx-model:hover {
+  border-color: #06b6d4;
+}
+
+.rfx-model.is-on {
+  border-color: #06b6d4;
+  background: rgb(6 182 212 / 0.12);
+  color: #0e7490;
+}
+
+.dark .rfx-model.is-on {
+  color: #67e8f9;
+}
+
+.rfx-model-name {
+  font-weight: 700;
+}
+
+.rfx-model-score {
+  opacity: 0.75;
+}
+
+.rfx-list {
+  border: 1px solid rgb(226 232 240);
+  border-radius: 14px;
+  background: rgb(255 255 255 / 0.72);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+
+.dark .rfx-list {
+  border-color: rgb(255 255 255 / 0.1);
+  background: rgb(15 23 42 / 0.6);
+}
+
+.rfx-list-head {
+  padding: 9px 14px;
+  border-bottom: 1px solid rgb(226 232 240);
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: rgb(100 116 139);
+}
+
+.dark .rfx-list-head {
+  border-color: rgb(255 255 255 / 0.08);
+  color: rgb(148 163 184);
+}
+
+.rfx-list-row {
+  display: grid;
+  grid-template-columns: 30px 1fr auto 12px;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 14px;
+  text-align: left;
+  transition: background-color 0.16s ease;
+}
+
+.rfx-list-row:hover {
+  background: rgb(148 163 184 / 0.12);
+}
+
+.rfx-list-row img {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.rfx-list-name {
+  font-size: 12.5px;
+  color: rgb(51 65 85);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dark .rfx-list-name {
+  color: rgb(203 213 225);
+}
+
+/* Band-coloured numbers. The bright ramp sits at roughly 2:1 on a white card,
+   so light mode uses the darker ramp and dark mode switches back. */
+.rfx-list-value,
+.rfd-score-value,
+.rfx-band-text {
+  color: var(--band-text);
+}
+
+.dark .rfx-list-value,
+.dark .rfd-score-value,
+.dark .rfx-band-text {
+  color: var(--band);
+}
+
+.rfx-list-value {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.rfd-score-row {
+  display: grid;
+  grid-template-columns: 4.6rem 1fr 3rem;
+  align-items: center;
+  gap: 8px;
+}
+
+.rfd-score-model {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgb(100 116 139);
+}
+
+.dark .rfd-score-model {
+  color: rgb(148 163 184);
+}
+
+.rfd-score-bar {
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: rgb(148 163 184 / 0.22);
+  overflow: hidden;
+}
+
+.rfd-score-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+}
+
+.rfd-score-value {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-align: right;
+}
+
+/* ---------------------------------------------------------------------------
+   Results bar chart. One bar per dataset, tallest first.
+--------------------------------------------------------------------------- */
+
+.rfb-panel {
+  border: 1px solid rgb(226 232 240);
+  border-radius: 18px;
+  background: rgb(255 255 255 / 0.78);
+  backdrop-filter: blur(10px);
+  padding: 18px 20px 14px;
+}
+
+.dark .rfb-panel {
+  border-color: rgb(255 255 255 / 0.1);
+  background: rgb(15 23 42 / 0.62);
+}
+
+.rfb-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 56px;
+  margin-bottom: 14px;
+}
+
+.rfb-head-value {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: rgb(15 23 42);
+}
+
+.dark .rfb-head-value {
+  color: #fff;
+}
+
+.rfb-head-label {
+  margin-top: 5px;
+  font-size: 12.5px;
+  color: rgb(100 116 139);
+}
+
+.dark .rfb-head-label {
+  color: rgb(148 163 184);
+}
+
+.rfb-head-preview {
+  width: 56px;
+  height: 56px;
+  flex: none;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgb(148 163 184 / 0.14);
+}
+
+.rfb-head-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rfb-chart {
+  position: relative;
+}
+
+.rfb-axis {
+  position: relative;
+  height: 190px;
+}
+
+.rfb-gridline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed rgb(148 163 184 / 0.28);
+  pointer-events: none;
+}
+
+.rfb-gridline span {
+  position: absolute;
+  left: -4px;
+  top: -8px;
+  transform: translateX(-100%);
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 9.5px;
+  color: rgb(100 116 139);
+}
+
+.dark .rfb-gridline span {
+  color: rgb(148 163 184);
+}
+
+.rfb-mean {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid rgb(8 145 178 / 0.55);
+  pointer-events: none;
+}
+
+.rfb-mean span {
+  position: absolute;
+  right: 0;
+  top: -14px;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #0e7490;
+}
+
+.dark .rfb-mean span {
+  color: #22d3ee;
+}
+
+.rfb-bars {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.rfb-bar {
+  flex: 1 1 0;
+  min-width: 0;
+  height: var(--h);
+  background: var(--c);
+  border-radius: 2px 2px 0 0;
+  opacity: 0.82;
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  transform-origin: bottom;
+  cursor: pointer;
+  animation: rfbGrow 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.rfb-bar:hover,
+.rfb-bar.is-on,
+.rfb-bar:focus-visible {
+  opacity: 1;
+  transform: scaleX(1.6);
+  outline: none;
+}
+
+@keyframes rfbGrow {
+  from { transform: scaleY(0); opacity: 0; }
+  to   { transform: scaleY(1); opacity: 0.82; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rfb-bar { animation: none; }
+}
+
+.rfb-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid rgb(226 232 240);
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(100 116 139);
+}
+
+.dark .rfb-foot {
+  color: rgb(148 163 184);
+}
+
+.dark .rfb-foot {
+  border-color: rgb(255 255 255 / 0.08);
+}
+
+.rfb-foot-mid {
+  letter-spacing: 0.08em;
+  text-transform: none;
+  font-size: 10px;
 }
