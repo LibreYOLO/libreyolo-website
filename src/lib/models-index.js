@@ -151,9 +151,13 @@ const WEIGHTS_SOURCE = {
     url: 'https://github.com/facebookresearch/segment-anything',
     note: 'Apache-2.0 weights, downloaded from the upstream project on first use.',
   },
+  // moge2 is mirrored on the org now (s and l), so it is deliberately absent
+  // from this map: weightsLink falls through to the hosted branch once the
+  // registry is regenerated. Until then it keeps the upstream link, which is
+  // still correct for the b size.
   moge2: {
-    url: 'https://huggingface.co/Ruicheng/moge-2-vitl-normal',
-    note: 'MIT weights, pulled from the authors on Hugging Face and converted to LibreYOLO format as they load.',
+    url: 'https://huggingface.co/LibreYOLO?search_models=LibreMoGe2',
+    note: 'Mirrored on the LibreYOLO org for the s and l sizes; b still downloads from the authors on Hugging Face and is checksum-pinned.',
   },
   facerec: {
     url: 'https://huggingface.co/fal/AuraFace-v1',

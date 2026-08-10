@@ -152,13 +152,22 @@ def colorize_labels(img: np.ndarray, labels: np.ndarray, alpha: float = 0.55) ->
 
 
 def art_semantic():
-    # PIDNet is Cityscapes-trained, so it labels road, building, sky and
-    # vegetation on an urban frame. DeepLabv3 is Pascal VOC and finds only the
-    # person here, which reads as instance segmentation and misses the point.
-    # SegFormer would also fit but its weights are non-commercial, and this
-    # still ships on a marketing page.
-    res, img = predict("LibrePIDNetl-sem.pt", SCENE)
-    return colorize_labels(img, as_array(res.semantic_mask))
+    # SegFormer-B5 on ADE20K: 150 classes, so it parses sky, building, tree,
+    # road and person separately instead of collapsing the scene.
+    #
+    # Its weights are non-commercial (NVIDIA Source Code License), which is a
+    # restriction on use, not a bar on the model being here: LibreYOLO already
+    # hosts LibreSegformer on its own org under that licence. Earlier passes
+    # used PIDNet (Cityscapes) and DeepLabv3 (Pascal VOC, which finds only the
+    # person and reads as instance segmentation); both were worse.
+    for weights in ("LibreSegformerb5-sem.pt", "LibreSegformerb2-sem.pt", "LibrePIDNetl-sem.pt"):
+        try:
+            res, img = predict(weights, SCENE)
+            print(f"    semantic via {weights}", flush=True)
+            return colorize_labels(img, as_array(res.semantic_mask))
+        except Exception as exc:
+            print(f"    {weights} failed: {type(exc).__name__}: {str(exc)[:110]}", flush=True)
+    raise RuntimeError("no semantic model could be loaded")
 
 
 def art_panoptic():
