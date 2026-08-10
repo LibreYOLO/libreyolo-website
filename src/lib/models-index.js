@@ -35,10 +35,12 @@ const TASK_ORDER = [
 //
 // Every still under /showcase/task-* is a real LibreYOLO run, rendered by
 // scripts/build-task-art over the library's own demo photographs. Re-run that
-// script to regenerate them.
+// script to regenerate them. All 17 tasks have artwork.
 //
-// Four tasks still have no artwork and fall back to a typographic card: ocr,
-// embed, edge and mesh. See the script for why each one is outstanding.
+// Two needed weights LibreYOLO cannot host, so their recipes expect a local
+// checkpoint: edge (TEED, BIPED-trained, non-commercial) and mesh (SAM 3D
+// Body, which also needs Meta's own package). Running them is use, which both
+// licences permit; redistributing the weights is what LibreYOLO does not do.
 const TASK_META = {
   detect: {
     label: 'Detection',
@@ -118,8 +120,16 @@ const TASK_META = {
     blurb: 'Vectors for search, clustering and retrieval.',
     image: '/showcase/task-embed.jpg',
   },
-  edge: { label: 'Edge detection', blurb: 'Contours and boundaries.' },
-  mesh: { label: 'Mesh', blurb: '3D geometry from an image.' },
+  edge: {
+    label: 'Edge detection',
+    blurb: 'Contours and boundaries.',
+    image: '/showcase/task-edge.jpg',
+  },
+  mesh: {
+    label: 'Mesh',
+    blurb: '3D geometry from an image.',
+    image: '/showcase/task-mesh.jpg',
+  },
 }
 
 // Tier copy lives in the registry, so the labels here stay in step with docs.
