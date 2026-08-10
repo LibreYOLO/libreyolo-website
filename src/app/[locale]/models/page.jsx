@@ -73,50 +73,75 @@ function LazyVideo({ src, poster }) {
 // which gets a star and larger type so the eye lands there first.
 function ModelRow({ model, docsLabel, weightsLabel }) {
   const king = model.tier === 'g0'
+  const [noteOpen, setNoteOpen] = useState(false)
 
   return (
     <div
-      className={`flex items-baseline justify-between gap-4 border-b py-2.5 last:border-b-0 ${
+      className={`border-b py-2.5 last:border-b-0 ${
         king
           ? 'border-amber-200/70 dark:border-amber-400/20'
           : 'border-surface-100 dark:border-white/5'
       }`}
     >
-      <div className="min-w-0">
-        <span
-          className={
-            king
-              ? 'text-base font-semibold text-surface-900 dark:text-white'
-              : 'text-sm font-medium text-surface-800 dark:text-surface-100'
-          }
-        >
-          {king && <span className="mr-1.5">⭐</span>}
-          {model.name}
-        </span>
-        {model.sizesLabel && (
-          <p className="mt-0.5 truncate text-xs text-surface-400 dark:text-surface-500" title={model.sizesLabel}>
-            {model.sizesLabel}
-          </p>
-        )}
-      </div>
-      <div className="flex shrink-0 items-baseline gap-3 text-xs">
-        <Link
-          href={model.docsUrl}
-          className="text-surface-500 underline-offset-2 hover:text-libre-600 hover:underline dark:text-surface-400 dark:hover:text-libre-400"
-        >
-          {docsLabel}
-        </Link>
-        {model.hfUrl && (
-          <a
-            href={model.hfUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+      <div className="flex items-baseline justify-between gap-4">
+        <div className="min-w-0">
+          <span
+            className={
+              king
+                ? 'text-base font-semibold text-surface-900 dark:text-white'
+                : 'text-sm font-medium text-surface-800 dark:text-surface-100'
+            }
+          >
+            {king && <span className="mr-1.5">⭐</span>}
+            {model.name}
+          </span>
+          {model.sizesLabel && (
+            <p className="mt-0.5 truncate text-xs text-surface-400 dark:text-surface-500" title={model.sizesLabel}>
+              {model.sizesLabel}
+            </p>
+          )}
+        </div>
+        <div className="flex shrink-0 items-baseline gap-3 text-xs">
+          <Link
+            href={model.docsUrl}
             className="text-surface-500 underline-offset-2 hover:text-libre-600 hover:underline dark:text-surface-400 dark:hover:text-libre-400"
           >
-            {weightsLabel}
-          </a>
-        )}
+            {docsLabel}
+          </Link>
+          {model.hfUrl && (
+            <a
+              href={model.hfUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-surface-500 underline-offset-2 hover:text-libre-600 hover:underline dark:text-surface-400 dark:hover:text-libre-400"
+            >
+              {weightsLabel}
+            </a>
+          )}
+          {/* Only the families LibreYOLO does not host carry a note, so the
+              marker doubles as a signal that the link leaves for upstream. */}
+          {model.weightsNote && (
+            <button
+              type="button"
+              onClick={() => setNoteOpen((v) => !v)}
+              aria-expanded={noteOpen}
+              title={model.weightsNote}
+              className={`flex h-4 w-4 items-center justify-center rounded-full border font-mono text-[9px] leading-none transition-colors ${
+                noteOpen
+                  ? 'border-libre-500 text-libre-600 dark:border-libre-400 dark:text-libre-400'
+                  : 'border-surface-300 text-surface-400 hover:border-libre-500 hover:text-libre-600 dark:border-surface-600 dark:text-surface-500 dark:hover:border-libre-400 dark:hover:text-libre-400'
+              }`}
+            >
+              ?
+            </button>
+          )}
+        </div>
       </div>
+      {noteOpen && model.weightsNote && (
+        <p className="mt-1.5 max-w-prose text-xs leading-relaxed text-surface-500 dark:text-surface-400">
+          {model.weightsNote}
+        </p>
+      )}
     </div>
   )
 }

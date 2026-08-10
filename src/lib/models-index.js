@@ -119,14 +119,121 @@ export function tierMeta(tier) {
   return REGISTRY.tiers?.[tier] ?? { label: tier, tone: 'libre', blurb: '' }
 }
 
-function hfUrl(family) {
-  if (!family.weights_hosted) return null
-  const prefix = family.prefix ?? Object.values(family.prefixes ?? {})[0]
-  if (!prefix) return null
-  return `${HF_ORG}?search_models=${encodeURIComponent(prefix)}`
+// Where the weights for the 19 families LibreYOLO does not host actually come
+// from, and why. "Not on our Hugging Face org" is never the same as "you
+// cannot get them": the library downloads every one of these on first use.
+//
+// URLs and licence facts are taken from the verified upstream records in
+// src/data/docs/upstream/<slug>.json and from each family's model.py, not
+// invented here. A non-hosted family missing from this map gets no weights
+// link at all rather than a guessed one.
+//
+// kind drives nothing but the wording of the note; the link is the point.
+const WEIGHTS_SOURCE = {
+  // Downloaded from the upstream project on first use, permissive licence.
+  dinov2: {
+    url: 'https://github.com/facebookresearch/dinov2',
+    note: 'Apache-2.0 weights, downloaded from the upstream project on first use.',
+  },
+  midas: {
+    url: 'https://github.com/isl-org/MiDaS',
+    note: 'MIT weights, downloaded from the upstream project on first use.',
+  },
+  sam: {
+    url: 'https://github.com/facebookresearch/segment-anything',
+    note: 'Apache-2.0 weights, downloaded from the upstream project on first use.',
+  },
+  moge2: {
+    url: 'https://huggingface.co/Ruicheng/moge-2-vitl-normal',
+    note: 'MIT weights, pulled from the authors on Hugging Face and converted to LibreYOLO format as they load.',
+  },
+  facerec: {
+    url: 'https://huggingface.co/fal/AuraFace-v1',
+    note: 'Wraps AuraFace. Apache-2.0 weights, downloaded from the upstream repo on first use.',
+  },
+
+  // Restricted checkpoints. LibreYOLO refuses to mirror them and fetches from
+  // the origin instead, printing the terms before the download starts.
+  yolonas: {
+    url: 'https://github.com/Deci-AI/super-gradients/blob/master/LICENSE.YOLONAS.md',
+    note: "Deci's checkpoints are non-commercial and cannot be redistributed, so LibreYOLO downloads them from Deci's CDN and prints the licence first. The architecture and training code are Apache-2.0, so weights you train yourself carry no such terms.",
+  },
+  l2cs: {
+    url: 'https://github.com/Ahmednull/L2CS-Net',
+    note: 'Trained on Gaze360, whose terms are research and non-commercial only, so the checkpoint is not mirrored. LibreYOLO downloads it from the authors.',
+  },
+  dexined: {
+    url: 'https://github.com/xavysp/DexiNed',
+    note: 'The code is MIT, but the released checkpoint is BIPED-trained and BIPED is non-commercial, so LibreYOLO does not mirror it. Convert a checkpoint you are licensed to use.',
+  },
+  teed: {
+    url: 'https://github.com/xavysp/TEED',
+    note: 'The code is MIT, but the released checkpoint is BIPED-trained and BIPED is non-commercial, so LibreYOLO does not mirror it. Convert a checkpoint you are licensed to use.',
+  },
+  domedetr: {
+    url: 'https://github.com/RicePasteM/Dome-DETR',
+    note: 'The upstream licence is unclear, so the checkpoint is not redistributed. Weights come from the authors’ repository.',
+  },
+  libremodus: {
+    url: 'https://github.com/EPFL-VILAB/Modus',
+    note: 'The code is Apache-2.0 but the upstream model card is research-only, so the weights are not mirrored.',
+  },
+  locateanything: {
+    url: 'https://github.com/NVlabs/Eagle/tree/main/Embodied',
+    note: 'Released under an NVIDIA non-commercial licence, so the weights are not mirrored.',
+  },
+  sam3: {
+    url: 'https://github.com/facebookresearch/sam3',
+    note: 'Meta gates these weights behind its own licence. Accept it upstream and the download works.',
+  },
+
+  // Wrapped rather than ported: the weights live in the upstream model repo and
+  // load through that project's own loader.
+  florence2: {
+    url: 'https://huggingface.co/microsoft/Florence-2-large',
+    note: 'LibreYOLO wraps this model rather than porting it, so the weights load from its own Hugging Face repo.',
+  },
+  internvl3: {
+    url: 'https://github.com/OpenGVLab/InternVL',
+    note: 'LibreYOLO wraps this model rather than porting it, so the weights load from its own repo. The code is MIT; the weights carry the Qwen licence.',
+  },
+  kosmos2: {
+    url: 'https://github.com/microsoft/unilm/tree/master/kosmos-2',
+    note: 'LibreYOLO wraps this model rather than porting it, so the weights load from its own repo.',
+  },
+  lfm2vl: {
+    url: 'https://huggingface.co/LiquidAI/LFM2.5-VL-450M',
+    note: 'LibreYOLO wraps this model rather than porting it, so the weights load from its own Hugging Face repo under the LFM Open License.',
+  },
+  qwen3vl: {
+    url: 'https://github.com/QwenLM/Qwen3-VL',
+    note: 'LibreYOLO wraps this model rather than porting it, so the weights load from its own repo.',
+  },
+  smolvlm2: {
+    url: 'https://github.com/huggingface/smollm/tree/main/vision',
+    note: 'LibreYOLO wraps this model rather than porting it, so the weights load from its own repo.',
+  },
+}
+
+// Every family that has weights at all gets a link. Hosted families point at
+// the org filtered to their prefix, because each checkpoint is its own repo and
+// a family has no single one. The rest point upstream and carry a note.
+function weightsLink(family) {
+  if (family.weights_hosted) {
+    const prefix = family.prefix ?? Object.values(family.prefixes ?? {})[0]
+    if (!prefix) return { url: null, note: null }
+    return { url: `${HF_ORG}?search_models=${encodeURIComponent(prefix)}`, note: null }
+  }
+
+  const keys = [family.key, ...(family.registry_keys ?? [])]
+  for (const key of keys) {
+    if (WEIGHTS_SOURCE[key]) return WEIGHTS_SOURCE[key]
+  }
+  return { url: null, note: null }
 }
 
 function toModel(family) {
+  const weights = weightsLink(family)
   return {
     key: family.key,
     name: family.display || family.key,
@@ -136,7 +243,8 @@ function toModel(family) {
     addedIn: family.added_in ?? null,
     trainable: family.trainable !== false,
     docsUrl: `/docs/models/${family.slug}`,
-    hfUrl: hfUrl(family),
+    hfUrl: weights.url,
+    weightsNote: weights.note,
   }
 }
 
