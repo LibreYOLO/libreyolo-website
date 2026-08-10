@@ -75,6 +75,9 @@ export default function sitemap() {
 
   const englishOnlyRoutes = [
     { path: '/cursor-hackathon', priority: 0.4 },
+    // English only until the benchmark copy is translated; the /zh URL renders
+    // English content today, so it is not independently indexable.
+    { path: '/benchmarks', priority: 0.9 },
   ].flatMap(({ path, priority }) => englishOnly(path, priority))
 
   const articleRoutes = getAllArticles().flatMap((article) => {
