@@ -1,0 +1,285 @@
+{
+  "Metadata": {
+    "defaultTitle": "LibreYOLO | كشف الأجسام برخصة MIT",
+    "description": "محرّك التدريب والاستدلال برخصة MIT لأحدث نماذج YOLO. مبني للتطبيقات التجارية، وخالٍ من قيود AGPL.",
+    "twitterDescription": "محرّك التدريب والاستدلال برخصة MIT لأحدث نماذج YOLO.",
+    "keywords": "YOLO|كشف الأجسام|رخصة MIT|تعلم الآلة|الرؤية الحاسوبية|مفتوح المصدر|ذكاء اصطناعي",
+    "modelsTitle": "معرض النماذج",
+    "modelsDescription": "أوزان YOLO مُدرَّبة مسبقًا برخصة MIT. تصفّح النماذج المتاحة لكشف الأجسام.",
+    "commercialTitle": "الدليل التجاري",
+    "commercialDescription": "كيف تستخدم LibreYOLO في تطبيقات تجارية احتكارية مغلقة المصدر بموجب رخصة MIT.",
+    "datasetsTitle": "معرض مجموعات البيانات",
+    "datasetsDescription": "مجموعات بيانات لتدريب نماذج YOLO وتقييمها. تصفّح المجموعات المتاحة على HuggingFace.",
+    "scienceTitle": "البحث والعلم",
+    "scienceDescription": "LibreYOLO للباحثين. قابلية تفسير أصلية، وخرائط سمات، وقاعدة شيفرة مصمَّمة للاكتشاف.",
+    "docsTitle": "الوثائق",
+    "docsDescription": "وثائق إطار كشف الأجسام LibreYOLO.",
+    "articlesTitle": "المقالات",
+    "articlesDescription": "مقالات ودروس وأخبار عن LibreYOLO: كشف الأجسام برخصة MIT، ونصائح التدريب، وإصدارات النماذج، وأدلة الرؤية الحاسوبية."
+  },
+  "Nav": {
+    "home": "الرئيسية",
+    "models": "النماذج",
+    "benchmarks": "قياسات الأداء",
+    "commercial": "تجاري",
+    "articles": "مقالات",
+    "docs": "الوثائق",
+    "github": "GitHub",
+    "star": "Star",
+    "community": "المجتمع"
+  },
+  "LangSwitcher": {
+    "label": "تغيير اللغة"
+  },
+  "Footer": {
+    "tagline": "مشروع مستقل مفتوح المصدر يقدّم كشف أجسام بأحدث ما وصل إليه المجال. مصنوع للمطورين والباحثين والتطبيقات التجارية.",
+    "resources": "مصادر",
+    "documentation": "الوثائق",
+    "experimental": "المهام التجريبية",
+    "modelZoo": "معرض النماذج",
+    "liveDemo": "عرض حي",
+    "benchmarks": "قياسات الأداء",
+    "commercialGuide": "الدليل التجاري",
+    "articles": "المقالات",
+    "contact": "تواصل",
+    "role": "المُنشئ والمشرف",
+    "chat": "لنتحدث",
+    "mitLicense": "رخصة MIT",
+    "copyright": "© {year} LibreYOLO. مشروع مستقل مفتوح المصدر.",
+    "community": "المجتمع"
+  },
+  "NotFound": {
+    "title": "لم يُكتشف أي جسم",
+    "body": "لم يعثر نموذجنا على هذه الصفحة. ربما نُقلت أو حُذفت، أو ربما لم توجد أصلًا.",
+    "goHome": "إلى الصفحة الرئيسية",
+    "browseDocs": "تصفّح الوثائق",
+    "codeComment": "# نتائج الكشف"
+  },
+  "DocsNote": {
+    "label": "بالإنجليزية فقط",
+    "text": "هذا القسم متاح حاليًا بالإنجليزية فقط."
+  },
+  "Common": {
+    "getStarted": "ابدأ الآن"
+  },
+  "Support": {
+    "title": "ادعم LibreYOLO",
+    "body": "أفضل طريقة للمساعدة هي <star>إعطاء المستودع نجمة</star>. إذا واجهت مشكلة أو كان لديك اقتراح، <issue>افتح issue</issue>، ومساهمات الشيفرة <contrib>مرحَّب بها جدًا</contrib>.",
+    "communityBody": "الأسئلة وأعطال التدريب وأخبار الإصدارات تُناقَش في r/LibreYOLO. مرّ وسلّم علينا.",
+    "communityCta": "r/LibreYOLO",
+    "githubCta": "GitHub"
+  },
+  "Home": {
+    "heroTitleLine1": "كشف الأجسام.",
+    "heroTitleLine2": "برخصة MIT مئة بالمئة.",
+    "heroSubA": "نُعيد YOLO إلى متناول الجميع، كما أراد له صانعوه دائمًا.",
+    "heroSubB": "محرّك حديث برخصة MIT لتدريب أحدث نماذج كشف الأجسام ونشرها.",
+    "viewGithub": "اعرضه على GitHub",
+    "copy": "نسخ",
+    "copied": "تم النسخ!",
+    "detected": "تم كشف جسم واحد (شخص)",
+    "communityTitle": "ماذا يقول المجتمع",
+    "communityFootnote": "LibreYOLO مشروع ضخم. رسائل كهذه هي ما يبقينا مستمرين.",
+    "featuresTitle": "مكتبة واحدة، <accent>وسير العمل بالكامل</accent>",
+    "featuresSubtitle": "درِّب نماذج الكشف وتحقّق منها وصدِّرها وانشرها من حزمة واحدة متساهلة برخصة MIT.",
+    "feature1Title": "MIT حقًّا",
+    "feature1Desc": "لا وجود لرخصة AGPL في سلسلة الاعتماديات كلها. استخدمها في المنتجات مغلقة المصدر وخدمات SaaS والأنظمة المدمجة.",
+    "feature2Title": "واجهة واحدة، ثلاث معماريات",
+    "feature2Desc": "YOLOX و YOLOv9 و RF-DETR خلف استدعاء LibreYOLO() واحد. تُكتشف المعمارية والحجم وعدد الفئات تلقائيًا من الأوزان.",
+    "feature3Title": "كل شيء مضمّن",
+    "feature3Desc": "أي صيغة إدخال: المسارات وعناوين URL و PIL و NumPy و OpenCV والموتّرات والبايتات. استدلال بالتقسيم للصور الكبيرة. تنزيل تلقائي للأوزان من HuggingFace.",
+    "feature4Title": "التدريب",
+    "feature4Desc": "اضبط النموذج ضبطًا دقيقًا على مجموعات بيانات YOLO أو COCO خاصة بك، مع زيادة بيانات مدمجة ودقة مختلطة وإيقاف مبكر. استأنف من أي نقطة حفظ.",
+    "feature5Title": "التحقق",
+    "feature5Desc": "تقييم بمعيار COCO مع mAP50 و mAP50-95 و precision و recall على COCO أو على مجموعات بياناتك. مقاييس لكل فئة ومصفوفة التباس جاهزة من البداية.",
+    "feature6Title": "التصدير والنشر",
+    "feature6Desc": "تصدير إلى ONNX بسطر واحد، مع بيانات وصفية مضمّنة تسهّل النشر.",
+    "deployBadge": "من الطرف إلى السحابة",
+    "deployTitle": "انشر <accent>في أي مكان</accent>",
+    "deploySubtitle": "صدِّر مرة واحدة وشغِّل على أي عتاد. من لوحات بـ 35 دولارًا إلى بطاقات GPU في مراكز البيانات.",
+    "exportFormats": "صيغ التصدير",
+    "testedHardware": "العتاد المُختبَر",
+    "comparisonTitle": "LibreYOLO مقابل <muted>Ultralytics</muted>",
+    "comparisonSubtitle": "رخصة MIT تعني أن عملك ملك لك. بلا مفاجآت.",
+    "compRow1": "الاستخدام في برمجيات احتكارية",
+    "compRow2": "بيع منتجات تتضمنها",
+    "compRow3": "لا إلزام بكشف الشيفرة المصدرية",
+    "compRow4": "الضبط الدقيق مع إبقاء الأوزان خاصة",
+    "compRow5": "التقطير في نموذج جديد",
+    "compRow6": "رسوم الاستخدام التجاري",
+    "compNone": "لا توجد",
+    "compRequired": "مطلوبة",
+    "ctaTitle": "ابدأ البناء <accent>اليوم</accent>",
+    "ctaReadDocs": "اقرأ الوثائق",
+    "ctaCommercialGuide": "الدليل التجاري",
+    "ctaModelZoo": "معرض النماذج",
+    "ctaBenchmarks": "قياسات الأداء",
+    "testimonials": [
+      {
+        "quote": "You have my hearty support for this. I'll be so happy when there is a good, community maintained, MIT licensed alternative to Ultralytics.",
+        "author": "u/Covered_in_bees_"
+      },
+      {
+        "quote": "This is so cool bro. If I see some place I can contribute, I will definitely do so!",
+        "author": "u/FedStan"
+      },
+      {
+        "quote": "This looks like a really good project, and I hope you are able to realize the full vision you seem to have for it. Very exciting.",
+        "author": "u/CalmBet"
+      },
+      {
+        "quote": "Nice work! I'll try it out this week and open issues/PRs.",
+        "author": "u/InternationalMany6"
+      },
+      {
+        "quote": "Looks pretty cool. It's good to see these sorts of developments.",
+        "author": "u/HistoricalMistake681"
+      },
+      {
+        "quote": "Thank you for sharing, this looks interesting.",
+        "author": "u/nemesis1836"
+      },
+      {
+        "quote": "Great initiative.",
+        "author": "u/Outrageous_Sort_8993"
+      },
+      {
+        "quote": "Good job! Are you hosting the models on HuggingFace?",
+        "author": "u/Winners-magic"
+      },
+      {
+        "quote": "Very nice, will add creating a node of it to my todo list.",
+        "author": "u/dr_hamilton"
+      }
+    ]
+  },
+  "Models": {
+    "byTask": "النماذج حسب المهمة",
+    "weights": "كل الأوزان",
+    "docs": "الوثائق",
+    "indexLead": "كل عائلة تتضمنها المكتبة، مولَّدة من سجل النماذج v{version}: {families} عائلة عبر {tasks} مهمة.",
+    "familyCount": "{count} عائلة",
+    "weightsShort": "أوزان",
+    "tasks": {
+      "detect": {
+        "label": "الكشف",
+        "blurb": "مربعات حول الأجسام. المهمة التي بُني من أجلها معظم المكتبة."
+      },
+      "segment": {
+        "label": "التجزئة",
+        "blurb": "أقنعة لكل نسخة بدل المربعات."
+      },
+      "pose": {
+        "label": "النقاط المفتاحية",
+        "blurb": "هياكل ومعالم على كل نسخة مكتشفة."
+      },
+      "classify": {
+        "label": "التصنيف",
+        "blurb": "تسمية واحدة للصورة كاملة، وشبكات backbone التي تقف خلف كل ما عداها."
+      },
+      "obb": {
+        "label": "المربعات المائلة",
+        "blurb": "مربعات مُدارة، للصور الجوية ولكل ما لا يستقر محاذيًا للمحاور."
+      },
+      "depth": {
+        "label": "العمق",
+        "blurb": "المسافة لكل بكسل من صورة واحدة."
+      },
+      "semantic": {
+        "label": "التجزئة الدلالية",
+        "blurb": "فئة لكل بكسل، دون فصل النُسَخ."
+      },
+      "panoptic": {
+        "label": "التجزئة الشاملة",
+        "blurb": "أقنعة دلالية وأقنعة نُسَخ في تمريرة واحدة."
+      },
+      "point": {
+        "label": "النقاط والعدّ",
+        "blurb": "مراكز بدل المربعات، رخيصة بما يكفي للمتحكمات الدقيقة."
+      },
+      "ocr": {
+        "label": "التعرف على النص",
+        "blurb": "إيجاد النص في الصورة وقراءته."
+      },
+      "embed": {
+        "label": "Embeddings",
+        "blurb": "متجهات للبحث والتجميع والاسترجاع."
+      },
+      "gaze": {
+        "label": "اتجاه النظر",
+        "blurb": "إلى أين ينظر الشخص."
+      },
+      "edge": {
+        "label": "كشف الحواف",
+        "blurb": "الخطوط الكفافية والحدود."
+      },
+      "normal": {
+        "label": "نواظم السطح",
+        "blurb": "إلى أين يتجه كل سطح."
+      },
+      "matte": {
+        "label": "Matting",
+        "blurb": "قصاصات بقناة ألفا، بالشعر والحواف."
+      },
+      "restore": {
+        "label": "الترميم",
+        "blurb": "إزالة الضوضاء ومعالجة التشويش ورفع الدقة."
+      },
+      "mesh": {
+        "label": "الشبكة المجسّمة",
+        "blurb": "هندسة ثلاثية الأبعاد من صورة واحدة."
+      }
+    },
+    "docsShort": "وثائق"
+  },
+  "Commercial": {
+    "titleEmphasis": "نعم",
+    "titleRest": "، يمكنك استخدام هذا.",
+    "subtitle": "مجاني مئة بالمئة، بلا شروط خفية. LibreYOLO مفتوح المصدر كما كان يجب أن يكون YOLO دائمًا."
+  },
+  "Datasets": {
+    "badge": "بيانات التدريب",
+    "title": "معرض <accent>مجموعات البيانات</accent>",
+    "subtitle": "مجموعات بيانات منتقاة لتدريب نماذج LibreYOLO وتقييمها. جاهزة للاستخدام مع خط معالجة التدريب في LibreYOLO.",
+    "browseCta": "تصفّح مجموعات البيانات على HuggingFace",
+    "note": "ستُدرج بطاقات كل مجموعة بيانات هنا قريبًا. حتى ذلك الحين، تصفّح كل المجموعات المتاحة على <link>حساب LibreYOLO على HuggingFace</link>."
+  },
+  "Articles": {
+    "title": "المقالات",
+    "subtitle": "دروس وتحليلات معمّقة حول تشغيل نماذج الكشف باستخدام LibreYOLO.",
+    "empty": "لا توجد مقالات بعد. عُد قريبًا.",
+    "minRead": "{minutes} دقيقة قراءة",
+    "englishNote": "المقالات مكتوبة بالإنجليزية.",
+    "backToArticles": "كل المقالات"
+  },
+  "Science": {
+    "heroBadge": "البحث والعلم",
+    "heroTitle": "مصنوع من أجل <accent>الاكتشاف</accent>",
+    "heroSubtitle": "قاعدة شيفرة مصمَّمة للباحثين، لا للمستخدمين فقط. عدِّل بحرية، وافحص بعمق، وانشر دون أن تدفع مقابل ذلك.",
+    "noPaywallTitle": "لا حاجة إلى \"رخصة بحثية\"",
+    "noPaywallIntro": "تفرض بعض الأطر رسومًا منفصلة على رخص \"البحث\" أو \"العلم\" لمجرد أن تفحص الشيفرة دون نشر عملك. <b>LibreYOLO لا تفعل ذلك.</b>",
+    "typicalTitle": "\"الرخص العلمية\" المعتادة",
+    "typical1": "الدفع مقابل إبقاء البحث خاصًا",
+    "typical2": "رسوم على البحث والتطوير التجاري",
+    "typical3": "مستويات ترخيص معقّدة",
+    "typical4": "مراجعة قانونية قبل النشر",
+    "libreTitle": "LibreYOLO (MIT)",
+    "libre1": "ابحث بحرية، <b>وأبقِ عملك خاصًا</b>",
+    "libre2": "صفر رسوم لأي حالة استخدام",
+    "libre3": "رخصة واحدة بسيطة: MIT",
+    "libre4": "انشر دون هواجس قانونية",
+    "explainBadge": "قابلية تفسير أصلية",
+    "explainTitle": "انظر داخل الصندوق الأسود",
+    "explainSubtitle": "أدوات مدمجة للتأويل والتفسير. بلا اعتماديات خارجية ولا إعداد معقّد: مجرد مُعاملات واستدعاءات دوال.",
+    "featureMapTitle": "استخراج خرائط السمات",
+    "featureMapDesc": "مُعامل واحد. هذا كل ما يلزم لحفظ التنشيطات الوسيطة من كل طبقة. مثالي لفهم ما \"تراه\" شبكتك في كل مرحلة.",
+    "camTitle": "تصورات CAM",
+    "experimentalBadge": "تجريبي",
+    "camDesc": "7 طرق مدمجة لخرائط تنشيط الفئات. استدعِ <code>model.explain()</code> لتوليد خرائط حرارية تُظهر ما يركّز عليه نموذجك. هذه الميزة تجريبية وقد تختلف النتائج.",
+    "modifyTitle": "مصمَّم للتعديل",
+    "modifyDesc": "قاعدة الشيفرة مكتوبة لتكون سهلة القراءة والتعديل. تريد تجربة backbone جديد؟ أو التجريب على آلية انتباه خاصة بك؟ أو إضافة دالة خسارة مبتكرة؟ تفضّل.",
+    "ctaTitle": "ابدأ بحثك اليوم",
+    "ctaDesc": "بلا رسوم ترخيص. بلا جدران دفع. بلا قيود على إبقاء عملك خاصًا. ثبِّت وابدأ الاستكشاف.",
+    "ctaButton": "عرض الوثائق"
+  }
+}

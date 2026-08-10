@@ -15,7 +15,16 @@ export const OG_IMAGE = {
 }
 
 // OpenGraph locale string per app locale.
-const OG_LOCALES = { en: 'en_US', zh: 'zh_CN' }
+const OG_LOCALES = {
+  en: 'en_US',
+  zh: 'zh_CN',
+  es: 'es_ES',
+  it: 'it_IT',
+  fr: 'fr_FR',
+  ru: 'ru_RU',
+  pt: 'pt_BR',
+  ar: 'ar_AR',
+}
 export function ogLocale(locale) {
   return OG_LOCALES[locale] ?? OG_LOCALES[routing.defaultLocale]
 }

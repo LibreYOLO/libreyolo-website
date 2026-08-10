@@ -1,0 +1,285 @@
+{
+  "Metadata": {
+    "defaultTitle": "LibreYOLO | Rilevamento di oggetti con licenza MIT",
+    "description": "Il motore di addestramento e inferenza con licenza MIT per i modelli YOLO allo stato dell'arte. Pensato per le applicazioni commerciali, libero dalle restrizioni dell'AGPL.",
+    "twitterDescription": "Il motore di addestramento e inferenza con licenza MIT per i modelli YOLO allo stato dell'arte.",
+    "keywords": "YOLO|rilevamento di oggetti|licenza MIT|machine learning|computer vision|open source|IA",
+    "modelsTitle": "Zoo di modelli",
+    "modelsDescription": "Pesi YOLO preaddestrati con licenza MIT. Esplora i modelli disponibili per il rilevamento di oggetti.",
+    "commercialTitle": "Guida commerciale",
+    "commercialDescription": "Come usare LibreYOLO in applicazioni commerciali proprietarie e closed source con la licenza MIT.",
+    "datasetsTitle": "Zoo di dataset",
+    "datasetsDescription": "Dataset per addestrare e valutare i modelli YOLO. Esplora i dataset disponibili su HuggingFace.",
+    "scienceTitle": "Ricerca e scienza",
+    "scienceDescription": "LibreYOLO per chi fa ricerca. Spiegabilità nativa, feature map e una base di codice pensata per la scoperta.",
+    "docsTitle": "Documentazione",
+    "docsDescription": "Documentazione del framework di rilevamento di oggetti LibreYOLO.",
+    "articlesTitle": "Articoli",
+    "articlesDescription": "Articoli, tutorial e novità su LibreYOLO: rilevamento di oggetti con licenza MIT, consigli per l'addestramento, rilasci di modelli e guide di computer vision."
+  },
+  "Nav": {
+    "home": "Home",
+    "models": "Modelli",
+    "benchmarks": "Benchmark",
+    "commercial": "Commerciale",
+    "articles": "Articoli",
+    "docs": "Docs",
+    "github": "GitHub",
+    "star": "Star",
+    "community": "Community"
+  },
+  "LangSwitcher": {
+    "label": "Cambia lingua"
+  },
+  "Footer": {
+    "tagline": "Un progetto open source indipendente che offre rilevamento di oggetti allo stato dell'arte. Pensato per sviluppatori, ricercatori e applicazioni commerciali.",
+    "resources": "Risorse",
+    "documentation": "Documentazione",
+    "experimental": "Task sperimentali",
+    "modelZoo": "Zoo di modelli",
+    "liveDemo": "Demo live",
+    "benchmarks": "Benchmark",
+    "commercialGuide": "Guida commerciale",
+    "articles": "Articoli",
+    "contact": "Contatti",
+    "role": "Creatore e maintainer",
+    "chat": "Parliamone",
+    "mitLicense": "Licenza MIT",
+    "copyright": "© {year} LibreYOLO. Un progetto open source indipendente.",
+    "community": "Community"
+  },
+  "NotFound": {
+    "title": "Oggetto non rilevato",
+    "body": "Il nostro modello non è riuscito a trovare questa pagina. Forse è stata spostata, cancellata, o magari non è mai esistita.",
+    "goHome": "Torna alla home",
+    "browseDocs": "Vai alla documentazione",
+    "codeComment": "# Risultati del rilevamento"
+  },
+  "DocsNote": {
+    "label": "Solo in inglese",
+    "text": "Per ora questa sezione è disponibile solo in inglese."
+  },
+  "Common": {
+    "getStarted": "Inizia"
+  },
+  "Support": {
+    "title": "Sostieni LibreYOLO",
+    "body": "Il modo migliore per aiutare è <star>mettere una stella al repo</star>. Se incontri un problema o hai un suggerimento, <issue>apri una issue</issue>, e i contributi di codice sono <contrib>più che benvenuti</contrib>.",
+    "communityBody": "Domande, crash durante l'addestramento e novità sui rilasci si discutono su r/LibreYOLO. Passa a salutare.",
+    "communityCta": "r/LibreYOLO",
+    "githubCta": "GitHub"
+  },
+  "Home": {
+    "heroTitleLine1": "Rilevamento di oggetti.",
+    "heroTitleLine2": "100% licenza MIT.",
+    "heroSubA": "Rendiamo YOLO di nuovo accessibile, come i suoi creatori hanno sempre voluto.",
+    "heroSubB": "Un motore moderno con licenza MIT per addestrare e mettere in produzione il rilevamento di oggetti allo stato dell'arte.",
+    "viewGithub": "Vedi su GitHub",
+    "copy": "Copia",
+    "copied": "Copiato!",
+    "detected": "1 oggetto rilevato (persona)",
+    "communityTitle": "Cosa dice la community",
+    "communityFootnote": "LibreYOLO è uno sforzo enorme. Messaggi come questi ci danno la carica.",
+    "featuresTitle": "Una libreria, <accent>tutto il flusso di lavoro</accent>",
+    "featuresSubtitle": "Addestra, valida, esporta e metti in produzione modelli di rilevamento da un unico pacchetto permissivo con licenza MIT.",
+    "feature1Title": "MIT davvero",
+    "feature1Desc": "Nessuna AGPL in tutta la catena delle dipendenze. Usala in prodotti closed source, SaaS, sistemi embedded.",
+    "feature2Title": "Un'API, tre architetture",
+    "feature2Desc": "YOLOX, YOLOv9 e RF-DETR dietro un'unica chiamata LibreYOLO(). Architettura, dimensione e numero di classi vengono rilevati automaticamente dai pesi.",
+    "feature3Title": "Tutto incluso",
+    "feature3Desc": "Qualsiasi formato di input: percorsi, URL, PIL, NumPy, OpenCV, tensori, byte. Inferenza a tasselli per le immagini grandi. Download automatico dei pesi da HuggingFace.",
+    "feature4Title": "Addestra",
+    "feature4Desc": "Fai fine-tuning su dataset YOLO o COCO personalizzati, con data augmentation integrata, precisione mista ed early stopping. Riprendi da qualsiasi checkpoint.",
+    "feature5Title": "Valida",
+    "feature5Desc": "Valutazione secondo lo standard COCO con mAP50, mAP50-95, precisione e recall su dataset COCO o personalizzati. Metriche per classe e matrice di confusione già incluse.",
+    "feature6Title": "Esporta e metti in produzione",
+    "feature6Desc": "Esportazione ONNX in una riga, con metadati incorporati per un deployment senza attriti.",
+    "deployBadge": "Dall'edge al cloud",
+    "deployTitle": "Metti in produzione <accent>ovunque</accent>",
+    "deploySubtitle": "Esporta una volta ed esegui su qualsiasi hardware. Da schede da 35 $ alle GPU da data center.",
+    "exportFormats": "Formati di esportazione",
+    "testedHardware": "Hardware testato",
+    "comparisonTitle": "LibreYOLO vs <muted>Ultralytics</muted>",
+    "comparisonSubtitle": "MIT significa che il tuo lavoro è tuo. Nessuna sorpresa.",
+    "compRow1": "Uso in software proprietario",
+    "compRow2": "Vendere prodotti che lo includono",
+    "compRow3": "Nessun obbligo di pubblicare il codice",
+    "compRow4": "Fare fine-tuning e tenere i pesi privati",
+    "compRow5": "Distillare in un nuovo modello",
+    "compRow6": "Costo per uso commerciale",
+    "compNone": "Nessuno",
+    "compRequired": "Obbligatorio",
+    "ctaTitle": "Inizia a costruire <accent>oggi</accent>",
+    "ctaReadDocs": "Leggi la documentazione",
+    "ctaCommercialGuide": "Guida commerciale",
+    "ctaModelZoo": "Zoo di modelli",
+    "ctaBenchmarks": "Benchmark",
+    "testimonials": [
+      {
+        "quote": "You have my hearty support for this. I'll be so happy when there is a good, community maintained, MIT licensed alternative to Ultralytics.",
+        "author": "u/Covered_in_bees_"
+      },
+      {
+        "quote": "This is so cool bro. If I see some place I can contribute, I will definitely do so!",
+        "author": "u/FedStan"
+      },
+      {
+        "quote": "This looks like a really good project, and I hope you are able to realize the full vision you seem to have for it. Very exciting.",
+        "author": "u/CalmBet"
+      },
+      {
+        "quote": "Nice work! I'll try it out this week and open issues/PRs.",
+        "author": "u/InternationalMany6"
+      },
+      {
+        "quote": "Looks pretty cool. It's good to see these sorts of developments.",
+        "author": "u/HistoricalMistake681"
+      },
+      {
+        "quote": "Thank you for sharing, this looks interesting.",
+        "author": "u/nemesis1836"
+      },
+      {
+        "quote": "Great initiative.",
+        "author": "u/Outrageous_Sort_8993"
+      },
+      {
+        "quote": "Good job! Are you hosting the models on HuggingFace?",
+        "author": "u/Winners-magic"
+      },
+      {
+        "quote": "Very nice, will add creating a node of it to my todo list.",
+        "author": "u/dr_hamilton"
+      }
+    ]
+  },
+  "Models": {
+    "byTask": "Modelli per task",
+    "weights": "Tutti i pesi",
+    "docs": "Docs",
+    "indexLead": "Tutte le famiglie incluse nella libreria, generate dal registro dei modelli v{version}: {families} famiglie su {tasks} task.",
+    "familyCount": "{count} famiglie",
+    "weightsShort": "pesi",
+    "tasks": {
+      "detect": {
+        "label": "Rilevamento",
+        "blurb": "Box attorno agli oggetti. Il task per cui è costruita la maggior parte della libreria."
+      },
+      "segment": {
+        "label": "Segmentazione",
+        "blurb": "Maschere per singola istanza invece dei box."
+      },
+      "pose": {
+        "label": "Keypoint",
+        "blurb": "Scheletri e landmark su ogni istanza rilevata."
+      },
+      "classify": {
+        "label": "Classificazione",
+        "blurb": "Un'etichetta per l'intera immagine, e i backbone dietro a tutto il resto."
+      },
+      "obb": {
+        "label": "Box orientati",
+        "blurb": "Box ruotati, per le immagini aeree e per tutto ciò che non è allineato agli assi."
+      },
+      "depth": {
+        "label": "Profondità",
+        "blurb": "Distanza per pixel a partire da una sola immagine."
+      },
+      "semantic": {
+        "label": "Segmentazione semantica",
+        "blurb": "Una classe per ogni pixel, senza separare le istanze."
+      },
+      "panoptic": {
+        "label": "Segmentazione panottica",
+        "blurb": "Maschere semantiche e di istanza in un solo passaggio."
+      },
+      "point": {
+        "label": "Punti e conteggio",
+        "blurb": "Centroidi invece dei box, abbastanza leggeri da girare sui microcontrollori."
+      },
+      "ocr": {
+        "label": "Riconoscimento del testo",
+        "blurb": "Trovare e leggere il testo in un'immagine."
+      },
+      "embed": {
+        "label": "Embedding",
+        "blurb": "Vettori per ricerca, clustering e retrieval."
+      },
+      "gaze": {
+        "label": "Sguardo",
+        "blurb": "Dove sta guardando una persona."
+      },
+      "edge": {
+        "label": "Rilevamento dei bordi",
+        "blurb": "Contorni e confini."
+      },
+      "normal": {
+        "label": "Normali alle superfici",
+        "blurb": "In che direzione è orientata ogni superficie."
+      },
+      "matte": {
+        "label": "Matting",
+        "blurb": "Ritagli con canale alfa, capelli e bordi inclusi."
+      },
+      "restore": {
+        "label": "Restauro",
+        "blurb": "Riduzione del rumore, deblurring e upscaling."
+      },
+      "mesh": {
+        "label": "Mesh",
+        "blurb": "Geometria 3D a partire da un'immagine."
+      }
+    },
+    "docsShort": "docs"
+  },
+  "Commercial": {
+    "titleEmphasis": "Sì",
+    "titleRest": ", puoi usarlo.",
+    "subtitle": "100% gratuito, senza condizioni nascoste. LibreYOLO è open source come YOLO avrebbe sempre dovuto essere."
+  },
+  "Datasets": {
+    "badge": "Dati di addestramento",
+    "title": "Zoo di <accent>dataset</accent>",
+    "subtitle": "Dataset selezionati per addestrare e valutare i modelli LibreYOLO. Pronti all'uso con la pipeline di addestramento di LibreYOLO.",
+    "browseCta": "Esplora i dataset su HuggingFace",
+    "note": "Le schede dei singoli dataset arriveranno presto. Nel frattempo, esplora tutti i dataset disponibili su <link>HuggingFace di LibreYOLO</link>."
+  },
+  "Articles": {
+    "title": "Articoli",
+    "subtitle": "Tutorial e approfondimenti su come eseguire modelli di rilevamento con LibreYOLO.",
+    "empty": "Ancora nessun articolo. Torna presto.",
+    "minRead": "{minutes} min di lettura",
+    "englishNote": "Gli articoli sono scritti in inglese.",
+    "backToArticles": "Tutti gli articoli"
+  },
+  "Science": {
+    "heroBadge": "Ricerca e scienza",
+    "heroTitle": "Fatto per <accent>scoprire</accent>",
+    "heroSubtitle": "Una base di codice pensata per chi fa ricerca, non solo per chi la usa. Modifica liberamente, ispeziona a fondo e pubblica senza pagare per il privilegio.",
+    "noPaywallTitle": "Nessuna \"licenza di ricerca\"",
+    "noPaywallIntro": "Alcuni framework fanno pagare licenze separate per la \"ricerca\" o la \"scienza\" solo per lasciarti ispezionare il codice senza pubblicare il tuo lavoro. <b>LibreYOLO no.</b>",
+    "typicalTitle": "Le tipiche \"licenze scientifiche\"",
+    "typical1": "Pagare per tenere privata la ricerca",
+    "typical2": "Costi per la R&S commerciale",
+    "typical3": "Livelli di licenza complessi",
+    "typical4": "Revisione legale prima di pubblicare",
+    "libreTitle": "LibreYOLO (MIT)",
+    "libre1": "Indaga liberamente, <b>tieni tutto privato</b>",
+    "libre2": "Zero costi per qualsiasi caso d'uso",
+    "libre3": "Una sola licenza semplice: MIT",
+    "libre4": "Pubblica senza preoccupazioni legali",
+    "explainBadge": "Spiegabilità nativa",
+    "explainTitle": "Guarda dentro la scatola nera",
+    "explainSubtitle": "Strumenti integrati di interpretabilità e spiegabilità. Nessuna dipendenza esterna, nessuna configurazione complessa: solo flag e chiamate di funzione.",
+    "featureMapTitle": "Estrazione delle feature map",
+    "featureMapDesc": "Un flag. È tutto quello che serve per salvare le attivazioni intermedie di ogni layer. Perfetto per capire cosa \"vede\" il tuo modello a ogni stadio.",
+    "camTitle": "Visualizzazioni CAM",
+    "experimentalBadge": "Sperimentale",
+    "camDesc": "7 metodi Class Activation Map integrati. Chiama <code>model.explain()</code> per generare mappe di calore che mostrano su cosa si concentra il tuo modello. Questa funzionalità è sperimentale e i risultati possono variare.",
+    "modifyTitle": "Progettato per essere modificato",
+    "modifyDesc": "La base di codice è scritta per essere facile da leggere e da modificare. Vuoi provare un nuovo backbone? Sperimentare con un meccanismo di attenzione tuo? Aggiungere una nuova funzione di loss? Vai.",
+    "ctaTitle": "Inizia oggi la tua ricerca",
+    "ctaDesc": "Nessun costo di licenza. Nessun paywall. Nessuna restrizione sul tenere privato il tuo lavoro. Installa e comincia a esplorare.",
+    "ctaButton": "Vedi la documentazione"
+  }
+}

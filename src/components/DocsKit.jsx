@@ -584,7 +584,7 @@ export function DocLayout({ sections, eyebrow = 'Documentation', copyTitle = 'Li
       {/* Main content */}
       <main className="flex-1 lg:ml-64 min-h-screen pt-28 lg:pt-32 pb-24 px-6 lg:px-12">
         <div className="max-w-4xl mx-auto" data-docs-content>
-          {locale === 'zh' && (
+          {locale !== 'en' && (
             <div className="mb-6 rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3 text-sm text-surface-600 dark:text-surface-300">
               {tNote('text')}
             </div>
