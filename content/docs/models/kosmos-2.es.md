@@ -1,11 +1,27 @@
 ---
 title: Kosmos-2
-families: [kosmos2]
-seo_title: "Kosmos-2 en LibreYOLO: detección de objetos con grounding"
-description: "Kosmos-2 en LibreYOLO: instalación, definición de un vocabulario abierto y predicción de cajas con grounding usando el modelo con licencia MIT de Microsoft."
-lead: "Kosmos-2 es el modelo de grounding de Microsoft: genera una descripción de la imagen y después localiza con una caja cada sintagma nominal de esa descripción. LibreYOLO lo envuelve como detector de objetos de vocabulario abierto: la lista de clases se indica en el momento de predecir."
-keywords: [Kosmos-2, "modelo de visión y lenguaje", grounding, "detección de vocabulario abierto", "detectar objetos sin entrenar", "kosmos 2 python", Microsoft, VLM]
-last_verified: "1.5.0"
+families:
+  - kosmos2
+seo_title: 'Kosmos-2 en LibreYOLO: detección de objetos con grounding'
+description: >-
+  Kosmos-2 en LibreYOLO: instalación, definición de un vocabulario abierto y
+  predicción de cajas con grounding usando el modelo con licencia MIT de
+  Microsoft.
+lead: >-
+  Kosmos-2 es el modelo de grounding de Microsoft: genera una descripción de la
+  imagen y después localiza con una caja cada sintagma nominal de esa
+  descripción. LibreYOLO lo envuelve como detector de objetos de vocabulario
+  abierto: la lista de clases se indica en el momento de predecir.
+keywords:
+  - Kosmos-2
+  - modelo de visión y lenguaje
+  - grounding
+  - detección de vocabulario abierto
+  - detectar objetos sin entrenar
+  - kosmos 2 python
+  - Microsoft
+  - VLM
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -31,6 +47,7 @@ snippets:
         # índice de webcam, stream RTSP o una lista .streams
         for result in model.predict("clip.mp4", stream=True, save=True):
             print(len(result.boxes))
+source_hash: 60e0796f34be6d59
 ---
 
 ## Instalación

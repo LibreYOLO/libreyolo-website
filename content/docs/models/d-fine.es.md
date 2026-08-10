@@ -1,11 +1,25 @@
 ---
 title: D-FINE
-families: [dfine]
-seo_title: "D-FINE: haz fine-tuning, valida y exporta bajo MIT"
-description: "Usa D-FINE en LibreYOLO para detección de objetos y segmentación de instancias. Instala, predice, haz fine-tuning, valida y exporta, todo con código bajo licencia MIT."
-lead: "Un transformer de detección que reformula la regresión de cajas como una distribución de probabilidad sobre cada borde de la caja, refinada a lo largo de las capas del decoder. LibreYOLO lo soporta para detección y segmentación de instancias."
-keywords: [D-FINE, "transformer de detección", "detección de objetos en tiempo real", "segmentación de instancias", "fine-tuning D-FINE", DETR]
-last_verified: "1.5.0"
+families:
+  - dfine
+seo_title: 'D-FINE: haz fine-tuning, valida y exporta bajo MIT'
+description: >-
+  Usa D-FINE en LibreYOLO para detección de objetos y segmentación de
+  instancias. Instala, predice, haz fine-tuning, valida y exporta, todo con
+  código bajo licencia MIT.
+lead: >-
+  Un transformer de detección que reformula la regresión de cajas como una
+  distribución de probabilidad sobre cada borde de la caja, refinada a lo largo
+  de las capas del decoder. LibreYOLO lo soporta para detección y segmentación
+  de instancias.
+keywords:
+  - D-FINE
+  - transformer de detección
+  - detección de objetos en tiempo real
+  - segmentación de instancias
+  - fine-tuning D-FINE
+  - DETR
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +34,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDFINEn.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDFINEn.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Segmentación de instancias
       language: python
       code: |
@@ -36,11 +52,14 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreDFINEn.pt")
-        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8, lr0=2e-4)
+
+        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8,
+        lr0=2e-4)
     - label: CLI
       language: bash
       code: |
@@ -48,16 +67,24 @@ snippets:
           epochs=50 imgsz=640 batch=8 lr0=2e-4
     - label: Segmentación de instancias
       language: bash
-      code: |
-        # Continúa desde pesos de segmentación publicados, cabeza de máscaras incluida.
+      code: >
+        # Continúa desde pesos de segmentación publicados, cabeza de máscaras
+        incluida.
+
         libreyolo train model=LibreDFINEn-seg.pt data=my-dataset.yaml \
           task=segment epochs=50 imgsz=640
     - label: Segmentación desde pesos de detección
       language: bash
-      code: |
-        # Los pesos de detección no llevan cabeza de máscaras, así que esto es una
-        # transferencia explícita: la cabeza empieza sin entrenar y solo sirve una
-        # vez entrenada. Pedir task=segment aquí es lo que autoriza la transferencia.
+      code: >
+        # Los pesos de detección no llevan cabeza de máscaras, así que esto es
+        una
+
+        # transferencia explícita: la cabeza empieza sin entrenar y solo sirve
+        una
+
+        # vez entrenada. Pedir task=segment aquí es lo que autoriza la
+        transferencia.
+
         libreyolo train model=LibreDFINEn.pt data=my-dataset.yaml \
           task=segment epochs=50 imgsz=640
     - label: LoRA
@@ -108,20 +135,29 @@ snippets:
         model.export(format="tensorrt", imgsz=640, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDFINEn.pt format=onnx imgsz=640
-        libreyolo export model=LibreDFINEn.pt format=tensorrt imgsz=640 half=True
+
+        libreyolo export model=LibreDFINEn.pt format=tensorrt imgsz=640
+        half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factoría enruta según el sufijo del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo Results.
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        Results.
+
         model = LibreYOLO("LibreDFINEn.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)
+source_hash: 0216631a26185524
 ---
 
 ## Instalación

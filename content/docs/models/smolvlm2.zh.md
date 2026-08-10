@@ -1,11 +1,24 @@
 ---
 title: SmolVLM2
-families: [smolvlm2]
-seo_title: "SmolVLM2：在 LibreYOLO 里做开放词汇检测"
-description: "在 LibreYOLO 里用 SmolVLM2：安装、设定开放词汇，用 Hugging Face 这个采用 Apache-2.0 许可的视觉语言模型做预测或对话。"
-lead: "SmolVLM2 是 Hugging Face 的小型视觉语言模型。LibreYOLO 把它包装成一个开放词汇目标检测器，并直接暴露它的自由形式对话：给一份类别列表就做检测，或者直接问它一个问题。"
-keywords: [SmolVLM2, "smolvlm2 目标检测", "smolvlm2 python", 视觉语言模型, 开放词汇检测, 小型多模态模型, Hugging Face, VLM]
-last_verified: "1.5.0"
+families:
+  - smolvlm2
+seo_title: SmolVLM2：在 LibreYOLO 里做开放词汇检测
+description: >-
+  在 LibreYOLO 里用 SmolVLM2：安装、设定开放词汇，用 Hugging Face 这个采用 Apache-2.0
+  许可的视觉语言模型做预测或对话。
+lead: >-
+  SmolVLM2 是 Hugging Face 的小型视觉语言模型。LibreYOLO
+  把它包装成一个开放词汇目标检测器，并直接暴露它的自由形式对话：给一份类别列表就做检测，或者直接问它一个问题。
+keywords:
+  - SmolVLM2
+  - smolvlm2 目标检测
+  - smolvlm2 python
+  - 视觉语言模型
+  - 开放词汇检测
+  - 小型多模态模型
+  - Hugging Face
+  - VLM
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -30,6 +43,7 @@ snippets:
         # 不只是检测框查询
         answer = model.chat(SAMPLE_IMAGE, "What is the cat doing?")
         print(answer)
+source_hash: b30823b62d6347b5
 ---
 
 ## 安装

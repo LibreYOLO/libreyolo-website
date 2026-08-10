@@ -1,11 +1,23 @@
 ---
 title: AlexNet
-families: [alexnet]
-seo_title: "AlexNet: ejecuta el clásico clasificador de ImageNet en LibreYOLO"
-description: "Predice, valida y exporta AlexNet con LibreYOLO. Pesos de torchvision con licencia BSD-3-Clause; el fine-tuning todavía no está soportado."
-lead: "AlexNet es la red convolucional que ganó la ILSVRC 2012 y ayudó a poner en marcha la era del deep learning en visión por computador. LibreYOLO incluye la revisión posterior de una sola torre de la arquitectura para clasificación de imágenes."
-keywords: [AlexNet, ImageNet, "red neuronal convolucional", "clasificación de imágenes python", "clasificador de imágenes preentrenado"]
-last_verified: "1.5.0"
+families:
+  - alexnet
+seo_title: 'AlexNet: ejecuta el clásico clasificador de ImageNet en LibreYOLO'
+description: >-
+  Predice, valida y exporta AlexNet con LibreYOLO. Pesos de torchvision con
+  licencia BSD-3-Clause; el fine-tuning todavía no está soportado.
+lead: >-
+  AlexNet es la red convolucional que ganó la ILSVRC 2012 y ayudó a poner en
+  marcha la era del deep learning en visión por computador. LibreYOLO incluye la
+  revisión posterior de una sola torre de la arquitectura para clasificación de
+  imágenes.
+keywords:
+  - AlexNet
+  - ImageNet
+  - red neuronal convolucional
+  - clasificación de imágenes python
+  - clasificador de imágenes preentrenado
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +33,10 @@ snippets:
         print(probs.top5, probs.top5conf)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreAlexNetb-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreAlexNetb-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -57,16 +71,24 @@ snippets:
         libreyolo export model=LibreAlexNetb-cls.pt format=tensorrt half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
         # exportado se carga como cualquier checkpoint y devuelve el mismo
+
         # objeto Results.
+
         model = LibreYOLO("LibreAlexNetb-cls.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.probs.top1)
+source_hash: 68c09f080c74bb87
 ---
 
 ## Instalación

@@ -1,11 +1,25 @@
 ---
 title: ConvNeXt
-families: [convnext]
-seo_title: "ConvNeXt: addestra, valida ed esporta con licenza Apache-2.0"
-description: "Usa ConvNeXt in LibreYOLO per la classificazione di immagini. Installa, fai predizioni, fine-tuning con LoRA, validazione ed esportazione di LibreConvNeXt tiny/small/base."
-lead: "ConvNeXt è un classificatore di immagini costruito interamente con convoluzioni standard, modernizzato blocco per blocco a partire da una ResNet fino alle scelte progettuali di un vision transformer. LibreYOLO lo supporta per un solo task: la classificazione."
-keywords: [ConvNeXt, ConvNeXt tiny, image classification python, classificazione immagini python, rete convoluzionale pura, classificatore ImageNet]
-last_verified: "1.5.0"
+families:
+  - convnext
+seo_title: 'ConvNeXt: addestra, valida ed esporta con licenza Apache-2.0'
+description: >-
+  Usa ConvNeXt in LibreYOLO per la classificazione di immagini. Installa, fai
+  predizioni, fine-tuning con LoRA, validazione ed esportazione di LibreConvNeXt
+  tiny/small/base.
+lead: >-
+  ConvNeXt è un classificatore di immagini costruito interamente con
+  convoluzioni standard, modernizzato blocco per blocco a partire da una ResNet
+  fino alle scelte progettuali di un vision transformer. LibreYOLO lo supporta
+  per un solo task: la classificazione.
+keywords:
+  - ConvNeXt
+  - ConvNeXt tiny
+  - image classification python
+  - classificazione immagini python
+  - rete convoluzionale pura
+  - classificatore ImageNet
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -87,6 +101,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: 1682cc69cf2925e6
 ---
 
 ## Installazione

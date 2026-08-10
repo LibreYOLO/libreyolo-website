@@ -1,11 +1,21 @@
 ---
 title: YOLOv2
-families: [yolo2]
-seo_title: "在 LibreYOLO 里运行 YOLOv2：预测、验证与导出"
-description: "在 LibreYOLO 里运行 YOLOv2（YOLO9000）：一个冻结的、仅推理的博物馆家族。可以预测、验证并导出，采用公共领域许可。"
-lead: "YOLOv2 也以 YOLO9000 之名发表，是把锚框和 passthrough 层带进 YOLO 一脉的 Darknet-19 检测器。LibreYOLO 以冻结、仅推理的展品形式收录它。"
-keywords: [YOLOv2, YOLO9000, Darknet, Darknet-19, "yolov2 目标检测", "锚框", "yolov2 权重下载"]
-last_verified: "1.5.0"
+families:
+  - yolo2
+seo_title: 在 LibreYOLO 里运行 YOLOv2：预测、验证与导出
+description: 在 LibreYOLO 里运行 YOLOv2（YOLO9000）：一个冻结的、仅推理的博物馆家族。可以预测、验证并导出，采用公共领域许可。
+lead: >-
+  YOLOv2 也以 YOLO9000 之名发表，是把锚框和 passthrough 层带进 YOLO 一脉的 Darknet-19
+  检测器。LibreYOLO 以冻结、仅推理的展品形式收录它。
+keywords:
+  - YOLOv2
+  - YOLO9000
+  - Darknet
+  - Darknet-19
+  - yolov2 目标检测
+  - 锚框
+  - yolov2 权重下载
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +30,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreYOLO2b.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreYOLO2b.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -62,6 +74,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: ba2884a2f6e1b0da
 ---
 
 ## 安装

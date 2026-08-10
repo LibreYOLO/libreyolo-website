@@ -1,8 +1,14 @@
 ---
 title: Tipos de Results
-seo_title: "Referencia del objeto Results de LibreYOLO"
-description: "Todos los payloads que puede llevar un objeto Results de LibreYOLO, un slot por forma de tarea: boxes, masks, keypoints, probs, obb, depth, ocr, embeddings y diez más."
-lead: "Results es el único tipo de retorno por imagen de todos los modelos de LibreYOLO. Lleva dieciocho slots de payload opcionales, uno por forma de tarea, y solo rellena los que el modelo ha producido."
+seo_title: Referencia del objeto Results de LibreYOLO
+description: >-
+  Todos los payloads que puede llevar un objeto Results de LibreYOLO, un slot
+  por forma de tarea: boxes, masks, keypoints, probs, obb, depth, ocr,
+  embeddings y diez más.
+lead: >-
+  Results es el único tipo de retorno por imagen de todos los modelos de
+  LibreYOLO. Lleva dieciocho slots de payload opcionales, uno por forma de
+  tarea, y solo rellena los que el modelo ha producido.
 keywords:
   - objeto Results de libreyolo
   - Results.boxes
@@ -11,8 +17,11 @@ keywords:
   - Results.depth_map
   - resultados de deteccion a json python
   - obtener coordenadas de bounding box python
-last_verified: "1.5.0"
-verification: "Nombres de slot, formas, propiedades y valores por defecto leídos de libreyolo/utils/results.py en la v1.5.0. Semántica citada de los docstrings de las clases de payload."
+last_verified: 1.5.0
+verification: >-
+  Nombres de slot, formas, propiedades y valores por defecto leídos de
+  libreyolo/utils/results.py en la v1.5.0. Semántica citada de los docstrings de
+  las clases de payload.
 snippets:
   usage:
     - label: Python
@@ -42,6 +51,7 @@ snippets:
         # Las filas, como dicts planos, y luego como JSON.
         print(result.summary()[:1])
         print(result.to_json())
+source_hash: 16f654364ae6448a
 ---
 
 ## El objeto Results

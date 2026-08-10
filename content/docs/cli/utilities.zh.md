@@ -1,16 +1,26 @@
 ---
 title: libreyolo 实用命令
-seo_title: "libreyolo CLI 实用命令参考"
-description: "LibreYOLO 的一组小命令：version、checks、models、formats、cfg、info、metadata、enroll 和 compare，每个都附上它的参数和默认值。"
-lead: "九个只做报告和检查、不做计算的命令。它们打印环境信息、模型与格式清单、解析后的默认值、检查点（checkpoint）细节，并构建和查询一个人脸库。"
-keywords: [libreyolo version, libreyolo checks, libreyolo 模型列表, libreyolo 支持的导出格式, 查看 yolo 检查点元数据, libreyolo 默认配置, libreyolo 人脸注册, libreyolo 人脸比对]
-last_verified: "1.5.0"
+seo_title: libreyolo CLI 实用命令参考
+description: >-
+  LibreYOLO 的一组小命令：version、checks、models、formats、cfg、info、metadata、enroll 和
+  compare，每个都附上它的参数和默认值。
+lead: 九个只做报告和检查、不做计算的命令。它们打印环境信息、模型与格式清单、解析后的默认值、检查点（checkpoint）细节，并构建和查询一个人脸库。
+keywords:
+  - libreyolo version
+  - libreyolo checks
+  - libreyolo 模型列表
+  - libreyolo 支持的导出格式
+  - 查看 yolo 检查点元数据
+  - libreyolo 默认配置
+  - libreyolo 人脸注册
+  - libreyolo 人脸比对
+last_verified: 1.5.0
 meta:
   - label: 命令
-    value: version, checks, models, formats, cfg, info, metadata, enroll, compare
+    value: 'version, checks, models, formats, cfg, info, metadata, enroll, compare'
     mono: true
   - label: 输出
-    value: "stdout，文本形式；或者在 json=true 时输出一个带 schema_version 的对象"
+    value: stdout，文本形式；或者在 json=true 时输出一个带 schema_version 的对象
 snippets:
   examples:
     - label: 环境
@@ -28,6 +38,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
+source_hash: 7b5b53c46df00c06
 ---
 
 ## 概要

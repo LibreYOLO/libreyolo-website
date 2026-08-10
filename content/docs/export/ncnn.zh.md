@@ -1,8 +1,12 @@
 ---
 title: ncnn
-seo_title: "从 LibreYOLO 导出到 ncnn"
-description: "把 LibreYOLO 模型通过 PNNX 导出为 ncnn：param 与 bin 文件对、固定的导出画布、YOLOX 的 Focus 改写，以及哪些家族能转换。"
-lead: "ncnn 是腾讯面向移动端的 CPU 推理库。LibreYOLO 通过 PNNX 转换，写出一份 model.ncnn.param 图文件，旁边放上 model.ncnn.bin 权重文件，以及一个记录家族、任务和类别名的 metadata.yaml。"
+seo_title: 从 LibreYOLO 导出到 ncnn
+description: >-
+  把 LibreYOLO 模型通过 PNNX 导出为 ncnn：param 与 bin 文件对、固定的导出画布、YOLOX 的 Focus
+  改写，以及哪些家族能转换。
+lead: >-
+  ncnn 是腾讯面向移动端的 CPU 推理库。LibreYOLO 通过 PNNX 转换，写出一份 model.ncnn.param 图文件，旁边放上
+  model.ncnn.bin 权重文件，以及一个记录家族、任务和类别名的 metadata.yaml。
 keywords:
   - yolo 导出 ncnn
   - pnnx 转换
@@ -10,24 +14,27 @@ keywords:
   - 移动端 cpu 推理
   - ncnn 推理 python
   - focus pixel_unshuffle
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: 参数
-    value: 'export(format="ncnn")'
+    value: export(format="ncnn")
     mono: true
   - label: 输出
-    value: "一个目录，里面有 model.ncnn.param、model.ncnn.bin 和 metadata.yaml"
+    value: 一个目录，里面有 model.ncnn.param、model.ncnn.bin 和 metadata.yaml
   - label: 额外依赖
     value: 'pip install "libreyolo[ncnn]"'
     mono: true
   - label: 重新加载方式
-    value: 'LibreYOLO("weights/LibreYOLO9t_ncnn")'
+    value: LibreYOLO("weights/LibreYOLO9t_ncnn")
     mono: true
   - label: 形状
-    value: "固定。无论标志怎么设置，元数据都记录 dynamic=False。"
+    value: 固定。无论标志怎么设置，元数据都记录 dynamic=False。
   - label: 精度
-    value: "仅 FP32。half=True 和 int8=True 会被拒绝。"
-verification: "依据 dev 分支上的 libreyolo/export/ncnn.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/ncnn.py 和 pyproject.toml 校对。"
+    value: 仅 FP32。half=True 和 int8=True 会被拒绝。
+verification: >-
+  依据 dev 分支上的
+  libreyolo/export/ncnn.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/ncnn.py
+  和 pyproject.toml 校对。
 snippets:
   install:
     - label: 安装
@@ -100,6 +107,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: 9a849a16a3b32334
 ---
 
 ## 安装

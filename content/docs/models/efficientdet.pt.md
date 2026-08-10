@@ -1,11 +1,24 @@
 ---
 title: EfficientDet
-families: [efficientdet]
-seo_title: "EfficientDet: detecção de objetos no LibreYOLO"
-description: "Rode o EfficientDet D0-D4 no LibreYOLO: detectores BiFPN para predição, validação e exportação para ONNX, TensorRT e OpenVINO sob licença Apache-2.0."
-lead: "O EfficientDet combina um backbone EfficientNet com uma rede piramidal de características bidirecional repetida (BiFPN) e escala profundidade, largura e resolução em conjunto ao longo de cinco tamanhos. O LibreYOLO o inclui como detector somente de inferência."
-keywords: [EfficientDet, BiFPN, EfficientNet, "detecção de objetos python", "exportar efficientdet onnx", "compound scaling"]
-last_verified: "1.5.0"
+families:
+  - efficientdet
+seo_title: 'EfficientDet: detecção de objetos no LibreYOLO'
+description: >-
+  Rode o EfficientDet D0-D4 no LibreYOLO: detectores BiFPN para predição,
+  validação e exportação para ONNX, TensorRT e OpenVINO sob licença Apache-2.0.
+lead: >-
+  O EfficientDet combina um backbone EfficientNet com uma rede piramidal de
+  características bidirecional repetida (BiFPN) e escala profundidade, largura e
+  resolução em conjunto ao longo de cinco tamanhos. O LibreYOLO o inclui como
+  detector somente de inferência.
+keywords:
+  - EfficientDet
+  - BiFPN
+  - EfficientNet
+  - detecção de objetos python
+  - exportar efficientdet onnx
+  - compound scaling
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +33,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreEfficientDetd0.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreEfficientDetd0.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -62,6 +77,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 12c61fb0035437ce
 ---
 
 ## Instalação

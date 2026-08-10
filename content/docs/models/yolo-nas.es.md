@@ -1,11 +1,26 @@
 ---
 title: YOLO-NAS
-families: [yolonas]
-seo_title: "YOLO-NAS: predice, entrena y exporta en LibreYOLO"
-description: "Usa YOLO-NAS en LibreYOLO para detección y pose. Los pesos de Deci.AI son propietarios y de uso no comercial, y LibreYOLO no publica ninguno."
-lead: "Un detector convolucional cuyo backbone y cuello salieron de la búsqueda de arquitecturas de Deci.AI, construido con bloques RepVGG preparados para la cuantización. Sus pesos son de Deci.AI, con licencia solo para uso no comercial, y LibreYOLO no publica ninguno."
-keywords: [YOLO-NAS, YOLONAS, Deci AI, SuperGradients, "detección de objetos", "estimación de pose", "detector cuantizable", AutoNAC]
-last_verified: "1.5.0"
+families:
+  - yolonas
+seo_title: 'YOLO-NAS: predice, entrena y exporta en LibreYOLO'
+description: >-
+  Usa YOLO-NAS en LibreYOLO para detección y pose. Los pesos de Deci.AI son
+  propietarios y de uso no comercial, y LibreYOLO no publica ninguno.
+lead: >-
+  Un detector convolucional cuyo backbone y cuello salieron de la búsqueda de
+  arquitecturas de Deci.AI, construido con bloques RepVGG preparados para la
+  cuantización. Sus pesos son de Deci.AI, con licencia solo para uso no
+  comercial, y LibreYOLO no publica ninguno.
+keywords:
+  - YOLO-NAS
+  - YOLONAS
+  - Deci AI
+  - SuperGradients
+  - detección de objetos
+  - estimación de pose
+  - detector cuantizable
+  - AutoNAC
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -28,12 +43,17 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Pose
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # El sufijo -pose selecciona la cabeza de pose y su propio juego de pesos.
+
+        # El sufijo -pose selecciona la cabeza de pose y su propio juego de
+        pesos.
+
         model = LibreYOLO("LibreYOLONASs-pose.pt")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.keypoints.xy)
   train:
@@ -51,12 +71,17 @@ snippets:
           epochs=100 imgsz=640 batch=16
     - label: Desde cero
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLONAS
 
+
         # No se toca ningún checkpoint de Deci: el modelo parte de pesos
-        # aleatorios, así que lo que salga de la ejecución deriva solo de tus datos.
+
+        # aleatorios, así que lo que salga de la ejecución deriva solo de tus
+        datos.
+
         model = LibreYOLONAS(None, size="s")
+
         model.train(data="my-dataset.yaml", imgsz=640, batch=16)
   val:
     - label: Python
@@ -94,15 +119,22 @@ snippets:
         libreyolo export model=LibreYOLONASs.pt format=onnx imgsz=640
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factoría resuelve según el sufijo del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreYOLONASs.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)
+source_hash: 47c30d6e44024ce7
 ---
 
 ## Instalación

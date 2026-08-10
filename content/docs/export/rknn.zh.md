@@ -1,8 +1,10 @@
 ---
 title: RKNN
-seo_title: "导出到 RKNN，跑在瑞芯微 NPU 上"
-description: "把 LibreYOLO 检测器编译成瑞芯微的 .rknn 产物：需要你自己装的厂商 SDK、四个通过验证的 RK3588 变体，以及模拟器一致性。"
-lead: "RKNN 是瑞芯微（Rockchip）的 NPU 编译格式。LibreYOLO 会导出一个 opset 19 的 ONNX 中间产物，用 RKNN Toolkit2 SDK 把它编译出来，还能在 Toolkit2 的主机模拟器里、不用板子就把编译后的图和 ONNX Runtime 做对比。"
+seo_title: 导出到 RKNN，跑在瑞芯微 NPU 上
+description: 把 LibreYOLO 检测器编译成瑞芯微的 .rknn 产物：需要你自己装的厂商 SDK、四个通过验证的 RK3588 变体，以及模拟器一致性。
+lead: >-
+  RKNN 是瑞芯微（Rockchip）的 NPU 编译格式。LibreYOLO 会导出一个 opset 19 的 ONNX 中间产物，用 RKNN
+  Toolkit2 SDK 把它编译出来，还能在 Toolkit2 的主机模拟器里、不用板子就把编译后的图和 ONNX Runtime 做对比。
 keywords:
   - yolo 导出 rknn
   - 瑞芯微 npu
@@ -10,24 +12,29 @@ keywords:
   - rknn-toolkit2
   - rknn 模拟器 一致性
   - orange pi yolo 推理
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: 参数
     value: 'export(format="rknn", name="rk3588")'
     mono: true
   - label: 输出
-    value: "一个 .rknn 文件、一个 .rknn.metadata.json sidecar，以及 verify=True 时的一份 .rknn.parity.json 报告"
+    value: >-
+      一个 .rknn 文件、一个 .rknn.metadata.json sidecar，以及 verify=True 时的一份
+      .rknn.parity.json 报告
   - label: 额外依赖
-    value: "PyPI 上没有。rknn-toolkit2 是厂商 SDK，要你自己安装。"
+    value: PyPI 上没有。rknn-toolkit2 是厂商 SDK，要你自己安装。
   - label: 回读方式
-    value: "不经过 LibreYOLO。产物在板子上由瑞芯微自己的运行时执行。"
+    value: 不经过 LibreYOLO。产物在板子上由瑞芯微自己的运行时执行。
   - label: 形状
-    value: "固定的正方形、批大小 1、opset 19。三条都会强制检查。"
+    value: 固定的正方形、批大小 1、opset 19。三条都会强制检查。
   - label: 精度
-    value: "厂商的浮点构建。half=True 和 int8=True 会被拒绝。"
+    value: 厂商的浮点构建。half=True 和 int8=True 会被拒绝。
   - label: 范围
-    value: "RK3588 上的四个检测变体：YOLO9-t、YOLO9-E2E-t、PicoDet-s 和 YOLO-NAS-s"
-verification: "读自 dev 分支上的 libreyolo/export/rknn.py、libreyolo/export/exporter.py、libreyolo/export/support.py 和 docs/rknn.md。实测的一致性数字来自 docs/rknn.md 中日期为 2026-08-04 的验证记录。"
+    value: RK3588 上的四个检测变体：YOLO9-t、YOLO9-E2E-t、PicoDet-s 和 YOLO-NAS-s
+verification: >-
+  读自 dev 分支上的
+  libreyolo/export/rknn.py、libreyolo/export/exporter.py、libreyolo/export/support.py
+  和 docs/rknn.md。实测的一致性数字来自 docs/rknn.md 中日期为 2026-08-04 的验证记录。
 snippets:
   install:
     - label: LibreYOLO 这一侧
@@ -51,13 +58,18 @@ snippets:
   export:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
+
         # 输出 weights/LibreYOLO9t.rknn 和 weights/LibreYOLO9t.rknn.metadata.json
-        path = model.export(format="rknn", name="rk3588", imgsz=640, verify=True)
+
+        path = model.export(format="rknn", name="rk3588", imgsz=640,
+        verify=True)
+
         print(path)
     - label: CLI
       language: bash
@@ -100,6 +112,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: c659713cc3c8cc9e
 ---
 
 ## 安装

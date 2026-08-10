@@ -1,8 +1,15 @@
 ---
 title: ncnn
-seo_title: "Exportar a ncnn desde LibreYOLO"
-description: "Exporta un modelo LibreYOLO a ncnn a través de PNNX: el par param y bin, el lienzo de exportación fijo, la reescritura del Focus de YOLOX y qué familias convierten."
-lead: "ncnn es la biblioteca de inferencia en CPU de Tencent para targets móviles. LibreYOLO convierte a través de PNNX, escribiendo un grafo model.ncnn.param junto a un archivo de pesos model.ncnn.bin y un metadata.yaml que lleva la familia, la tarea y los nombres de clase."
+seo_title: Exportar a ncnn desde LibreYOLO
+description: >-
+  Exporta un modelo LibreYOLO a ncnn a través de PNNX: el par param y bin, el
+  lienzo de exportación fijo, la reescritura del Focus de YOLOX y qué familias
+  convierten.
+lead: >-
+  ncnn es la biblioteca de inferencia en CPU de Tencent para targets móviles.
+  LibreYOLO convierte a través de PNNX, escribiendo un grafo model.ncnn.param
+  junto a un archivo de pesos model.ncnn.bin y un metadata.yaml que lleva la
+  familia, la tarea y los nombres de clase.
 keywords:
   - exportar yolo ncnn
   - pnnx
@@ -10,24 +17,27 @@ keywords:
   - inferencia cpu movil
   - ncnn extractor
   - focus pixel_unshuffle
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="ncnn")'
+    value: export(format="ncnn")
     mono: true
   - label: Escribe
-    value: "Un directorio con model.ncnn.param, model.ncnn.bin y metadata.yaml"
+    value: 'Un directorio con model.ncnn.param, model.ncnn.bin y metadata.yaml'
   - label: Extra
     value: 'pip install "libreyolo[ncnn]"'
     mono: true
   - label: Se recarga con
-    value: 'LibreYOLO("weights/LibreYOLO9t_ncnn")'
+    value: LibreYOLO("weights/LibreYOLO9t_ncnn")
     mono: true
   - label: Formas
-    value: "Fijas. Los metadatos registran dynamic=False independientemente del flag."
+    value: Fijas. Los metadatos registran dynamic=False independientemente del flag.
   - label: Precisión
-    value: "Solo FP32. half=True e int8=True se rechazan."
-verification: "Leído de libreyolo/export/ncnn.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/ncnn.py y pyproject.toml en la rama dev."
+    value: Solo FP32. half=True e int8=True se rechazan.
+verification: >-
+  Leído de libreyolo/export/ncnn.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/ncnn.py y pyproject.toml en la
+  rama dev.
 snippets:
   install:
     - label: Instalación
@@ -100,6 +110,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: 9a849a16a3b32334
 ---
 
 ## Instalación

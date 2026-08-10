@@ -1,10 +1,21 @@
 ---
 title: Cita
-seo_title: "Cómo citar LibreYOLO y a los autores originales"
-description: "Cómo citar LibreYOLO en un artículo y cómo citar a los autores de la familia de modelos que ejecutaste. Ambas cosas van en la misma sección de métodos."
-lead: "Una cita completa de LibreYOLO tiene dos partes: la biblioteca y el trabajo publicado que hay detrás de la familia de modelos que produjo el resultado."
-keywords: [citar libreyolo, libreyolo bibtex, libreyolo citation cff, como citar un modelo de vision, citar paper de deteccion de objetos, referencia bibliografica vision por computador]
-last_verified: "1.5.0"
+seo_title: Cómo citar LibreYOLO y a los autores originales
+description: >-
+  Cómo citar LibreYOLO en un artículo y cómo citar a los autores de la familia
+  de modelos que ejecutaste. Ambas cosas van en la misma sección de métodos.
+lead: >-
+  Una cita completa de LibreYOLO tiene dos partes: la biblioteca y el trabajo
+  publicado que hay detrás de la familia de modelos que produjo el resultado.
+keywords:
+  - citar libreyolo
+  - libreyolo bibtex
+  - libreyolo citation cff
+  - como citar un modelo de vision
+  - citar paper de deteccion de objetos
+  - referencia bibliografica vision por computador
+last_verified: 1.5.0
+source_hash: 0f3f23e4e85e38be
 ---
 
 ## Cómo citar LibreYOLO

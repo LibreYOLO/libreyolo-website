@@ -1,11 +1,26 @@
 ---
 title: DeiT
-families: [deit]
-seo_title: "Classificatore di immagini DeiT: predizione, validazione, esportazione"
-description: "Esegui i classificatori di immagini DeiT in LibreYOLO: una famiglia da museo congelata e solo per l'inferenza, nelle dimensioni tiny, small e base, con licenza Apache-2.0."
-lead: "DeiT (Data-efficient image Transformer) è un classificatore Vision Transformer puro, addestrato solo su ImageNet-1k e senza dati di preaddestramento aggiuntivi. LibreYOLO include le dimensioni tiny, small e base con patch 16 come pezzo da museo congelato e solo per l'inferenza."
-keywords: [DeiT, Vision Transformer, ViT, image classification python, classificare immagini python, ImageNet, transformer visione artificiale]
-last_verified: "1.5.0"
+families:
+  - deit
+seo_title: 'Classificatore di immagini DeiT: predizione, validazione, esportazione'
+description: >-
+  Esegui i classificatori di immagini DeiT in LibreYOLO: una famiglia da museo
+  congelata e solo per l'inferenza, nelle dimensioni tiny, small e base, con
+  licenza Apache-2.0.
+lead: >-
+  DeiT (Data-efficient image Transformer) è un classificatore Vision Transformer
+  puro, addestrato solo su ImageNet-1k e senza dati di preaddestramento
+  aggiuntivi. LibreYOLO include le dimensioni tiny, small e base con patch 16
+  come pezzo da museo congelato e solo per l'inferenza.
+keywords:
+  - DeiT
+  - Vision Transformer
+  - ViT
+  - image classification python
+  - classificare immagini python
+  - ImageNet
+  - transformer visione artificiale
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +35,9 @@ snippets:
         print(result.probs.top5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDeiTb-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+      code: >
+        libreyolo predict model=LibreDeiTb-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
   val:
     - label: Python
       language: python
@@ -63,6 +79,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: 9c67c8554b2af5c6
 ---
 
 ## Installazione

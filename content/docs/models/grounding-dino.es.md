@@ -1,11 +1,25 @@
 ---
 title: Grounding DINO
-families: [grounding_dino]
-seo_title: "Grounding DINO en LibreYOLO: detección de conjunto abierto"
-description: "Usa Grounding DINO en LibreYOLO para detectar cualquier objeto descrito con texto. Instala el extra openvocab y predice con un vocabulario de texto libre."
-lead: "Grounding DINO es un detector de objetos de conjunto abierto, desarrollado por IDEA Research, que puntúa una imagen frente a un prompt de texto libre en lugar de una lista fija de clases. LibreYOLO lo envuelve como una familia solo de predicción dentro de su tier de detectores de vocabulario abierto."
-keywords: [Grounding DINO, "detección de vocabulario abierto", "detectar objetos por texto", "detección zero-shot", "detectar objetos sin entrenar", open-set detection, LibreOpenVocab]
-last_verified: "1.5.0"
+families:
+  - grounding_dino
+seo_title: 'Grounding DINO en LibreYOLO: detección de conjunto abierto'
+description: >-
+  Usa Grounding DINO en LibreYOLO para detectar cualquier objeto descrito con
+  texto. Instala el extra openvocab y predice con un vocabulario de texto libre.
+lead: >-
+  Grounding DINO es un detector de objetos de conjunto abierto, desarrollado por
+  IDEA Research, que puntúa una imagen frente a un prompt de texto libre en
+  lugar de una lista fija de clases. LibreYOLO lo envuelve como una familia solo
+  de predicción dentro de su tier de detectores de vocabulario abierto.
+keywords:
+  - Grounding DINO
+  - detección de vocabulario abierto
+  - detectar objetos por texto
+  - detección zero-shot
+  - detectar objetos sin entrenar
+  - open-set detection
+  - LibreOpenVocab
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,16 +35,24 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: Umbral de texto
       language: python
-      code: |
+      code: >
         from libreyolo import LibreOpenVocab, SAMPLE_IMAGE
 
+
         model = LibreOpenVocab("grounding-dino-b")
+
         model.set_classes(["remote control", "school bus"])
 
+
         # conf filtra por la puntuación de la caja y text_threshold por la
-        # puntuación de token de la frase decodificada. Ambos valen 0.25 por defecto.
+
+        # puntuación de token de la frase decodificada. Ambos valen 0.25 por
+        defecto.
+
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
+
         print(result.names)
+source_hash: 06bd13b8e6a66038
 ---
 
 ## Instalación

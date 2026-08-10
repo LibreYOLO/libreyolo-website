@@ -1,44 +1,73 @@
 ---
 title: Detección de bordes
-seo_title: "Detección de bordes en LibreYOLO"
-description: "Predice un mapa denso de probabilidad de bordes a partir de una imagen en LibreYOLO. Convierte un checkpoint, aplica un umbral al mapa, valida con ODS y OIS, y exporta."
-lead: "La detección de bordes predice la probabilidad de que cada píxel caiga sobre el contorno de un objeto. LibreYOLO la expone como la tarea edge, que devuelve un mapa denso de probabilidad sobre el lienzo de la imagen original en lugar de un conjunto de segmentos."
-keywords: [detección de bordes python, detección de contornos deep learning, mapa de probabilidad de bordes, ODS OIS F-measure, DexiNed python]
-last_verified: "1.5.0"
+seo_title: Detección de bordes en LibreYOLO
+description: >-
+  Predice un mapa denso de probabilidad de bordes a partir de una imagen en
+  LibreYOLO. Convierte un checkpoint, aplica un umbral al mapa, valida con ODS y
+  OIS, y exporta.
+lead: >-
+  La detección de bordes predice la probabilidad de que cada píxel caiga sobre
+  el contorno de un objeto. LibreYOLO la expone como la tarea edge, que devuelve
+  un mapa denso de probabilidad sobre el lienzo de la imagen original en lugar
+  de un conjunto de segmentos.
+keywords:
+  - detección de bordes python
+  - detección de contornos deep learning
+  - mapa de probabilidad de bordes
+  - ODS OIS F-measure
+  - DexiNed python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Predecir un mapa de bordes
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # LibreYOLO no incluye ningún checkpoint de bordes; convierte uno antes (abajo).
+
+        # LibreYOLO no incluye ningún checkpoint de bordes; convierte uno antes
+        (abajo).
+
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         edges = result.edges
+
         print(edges.array.shape)          # (H, W) float32 en [0, 1]
+
         print(edges.binary(0.5).sum())    # píxeles de borde con umbral 0.5
     - label: Elegir tu propio umbral
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
+
         result = model(SAMPLE_IMAGE)
 
-        # El mapa continuo se conserva para que el umbral siga siendo tu decisión.
+
+        # El mapa continuo se conserva para que el umbral siga siendo tu
+        decisión.
+
         for t in (0.3, 0.5, 0.7):
             print(t, int(result.edges.binary(t).sum()))
     - label: Guardar la visualización
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
+
         result = model(SAMPLE_IMAGE)
 
-        # plot() dibuja el mapa; está definido para resultados de bordes y de normales.
+
+        # plot() dibuja el mapa; está definido para resultados de bordes y de
+        normales.
+
         result.plot().save("edges.png")
   val:
     - label: Validar y leer las claves de las métricas
@@ -76,15 +105,22 @@ snippets:
         model.export(format="onnx", imgsz=352)
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factory decide según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo Results.
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        Results.
+
         model = LibreYOLO("weights/LibreDexiNedb-edge.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.edges.array.shape)
+source_hash: bc286345540ed966
 ---
 
 ## Definición

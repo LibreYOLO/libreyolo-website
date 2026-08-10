@@ -1,8 +1,15 @@
 ---
 title: Core AI
-seo_title: "Exportar a Apple Core AI desde LibreYOLO"
-description: "Exporta un modelo LibreYOLO a un asset .aimodel de Apple Core AI: solo macOS, lienzo fijo, FP32 y el contrato de orden de salidas con nombre que los consumidores deben respetar."
-lead: "Core AI es el stack de inferencia en dispositivo de Apple. LibreYOLO captura el modelo con torch.export, lo baja a través del conversor de Core AI y escribe un asset .aimodel que lleva los metadatos del modelo y los nombres de las salidas exportadas."
+seo_title: Exportar a Apple Core AI desde LibreYOLO
+description: >-
+  Exporta un modelo LibreYOLO a un asset .aimodel de Apple Core AI: solo macOS,
+  lienzo fijo, FP32 y el contrato de orden de salidas con nombre que los
+  consumidores deben respetar.
+lead: >-
+  Core AI es el stack de inferencia en dispositivo de Apple. LibreYOLO captura
+  el modelo con torch.export, lo baja a través del conversor de Core AI y
+  escribe un asset .aimodel que lleva los metadatos del modelo y los nombres de
+  las salidas exportadas.
 keywords:
   - exportar libreyolo core ai
   - aimodel
@@ -10,28 +17,35 @@ keywords:
   - torch.export apple
   - inferencia en dispositivo apple
   - coreai_output_names
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="coreai")'
+    value: export(format="coreai")
     mono: true
   - label: Escribe
-    value: "Un asset .aimodel con los metadatos adjuntos"
+    value: Un asset .aimodel con los metadatos adjuntos
   - label: Extra
     value: 'pip install "libreyolo[coreai]"'
     mono: true
   - label: Se recarga
-    value: "No con LibreYOLO. Los consumidores usan el runtime de Core AI directamente."
+    value: >-
+      No con LibreYOLO. Los consumidores usan el runtime de Core AI
+      directamente.
   - label: Formas
-    value: "Lienzo fijo. dynamic=True lanza NotImplementedError."
+    value: Lienzo fijo. dynamic=True lanza NotImplementedError.
   - label: Precisión
-    value: "Solo FP32. half=True e int8=True se rechazan."
+    value: Solo FP32. half=True e int8=True se rechazan.
   - label: Requiere
-    value: "macOS. La toolchain ni convierte ni ejecuta en otro sistema, y coreai-torch fija torch a 2.11.x."
-verification: "Leído de libreyolo/export/coreai.py, libreyolo/export/coreai_compat.py, libreyolo/export/exporter.py, libreyolo/export/support.py y pyproject.toml en la rama dev."
+    value: >-
+      macOS. La toolchain ni convierte ni ejecuta en otro sistema, y
+      coreai-torch fija torch a 2.11.x.
+verification: >-
+  Leído de libreyolo/export/coreai.py, libreyolo/export/coreai_compat.py,
+  libreyolo/export/exporter.py, libreyolo/export/support.py y pyproject.toml en
+  la rama dev.
 snippets:
   install:
-    - label: Instalación, en macOS
+    - label: 'Instalación, en macOS'
       language: bash
       code: |
         # Deliberadamente fuera de todos los extras agregados: coreai-torch fija
@@ -67,21 +81,29 @@ snippets:
   outputs:
     - label: Lee el orden de las salidas antes de conectar un consumidor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreYOLO9t.pt")
+
         model.export(format="coreai", imgsz=640)
 
-        # Los metadatos del asset registran los nombres de las salidas exportadas,
+
+        # Los metadatos del asset registran los nombres de las salidas
+        exportadas,
+
         # en orden de grafo, bajo "coreai_output_names". Mapea por nombre el
+
         # diccionario que devuelve Core AI usando esa lista; nunca lo emparejes
+
         # por posición con la tupla del modo eager.
   support:
     - label: Comprobar una familia y una tarea antes de exportar
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: a35bfeafac6d6966
 ---
 
 ## Instalación

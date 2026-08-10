@@ -1,34 +1,41 @@
 ---
 title: MNN
-seo_title: "从 LibreYOLO 导出到 MNN"
-description: "把 LibreYOLO 检测器通过 ONNX 和 mnnconvert 导出成 MNN：固定的 NCHW 形状、CPU 上的 FP32，以及运行时契约要求的元数据 sidecar。"
-lead: "MNN 是阿里巴巴的轻量推理引擎。LibreYOLO 导出一张静态 ONNX 图，用 MNN 包自带的 mnnconvert 工具做转换，并写出一个 JSON sidecar，记录输入和输出名称、固定的输入形状以及类别名。"
+seo_title: 从 LibreYOLO 导出到 MNN
+description: >-
+  把 LibreYOLO 检测器通过 ONNX 和 mnnconvert 导出成 MNN：固定的 NCHW 形状、CPU 上的
+  FP32，以及运行时契约要求的元数据 sidecar。
+lead: >-
+  MNN 是阿里巴巴的轻量推理引擎。LibreYOLO 导出一张静态 ONNX 图，用 MNN 包自带的 mnnconvert 工具做转换，并写出一个
+  JSON sidecar，记录输入和输出名称、固定的输入形状以及类别名。
 keywords:
   - yolo 导出 mnn
   - mnnconvert
   - mnn 推理
   - 移动端目标检测推理
   - nchw 固定输入形状
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: 参数
-    value: 'export(format="mnn")'
+    value: export(format="mnn")
     mono: true
   - label: 输出
-    value: "一个 .mnn 文件，外加一个 .mnn.json 元数据 sidecar"
+    value: 一个 .mnn 文件，外加一个 .mnn.json 元数据 sidecar
   - label: 额外依赖
     value: 'pip install "libreyolo[mnn]"'
     mono: true
   - label: 重新加载方式
-    value: 'LibreYOLO("weights/LibreYOLO9t.mnn")'
+    value: LibreYOLO("weights/LibreYOLO9t.mnn")
     mono: true
   - label: 形状
-    value: "固定 NCHW。dynamic=True 会被拒绝。"
+    value: 固定 NCHW。dynamic=True 会被拒绝。
   - label: 精度
-    value: "仅 FP32，仅 CPU。"
+    value: 仅 FP32，仅 CPU。
   - label: 任务
-    value: "本版本仅支持检测"
-verification: "读自 dev 分支上的 libreyolo/export/mnn.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/mnn.py 和 pyproject.toml。"
+    value: 本版本仅支持检测
+verification: >-
+  读自 dev 分支上的
+  libreyolo/export/mnn.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/mnn.py
+  和 pyproject.toml。
 snippets:
   install:
     - label: 安装
@@ -79,18 +86,25 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: 直接用 MNN
       language: python
-      code: |
+      code: >
         import json
 
+
         import MNN
+
         import numpy as np
 
+
         meta = json.load(open("weights/LibreYOLO9t.mnn.json"))
-        print(meta["mnn_input_names"], meta["mnn_output_names"], meta["mnn_input_shape"])
+
+        print(meta["mnn_input_names"], meta["mnn_output_names"],
+        meta["mnn_input_shape"])
+
 
         runtime = MNN.nn.create_runtime_manager(
             ({"backend": 0, "precision": 1, "numThread": 4},)
         )
+
         module = MNN.nn.load_module_from_file(
             "weights/LibreYOLO9t.mnn",
             meta["mnn_input_names"],
@@ -100,11 +114,15 @@ snippets:
             shape_mutable=False,
         )
 
+
         blob = np.zeros(meta["mnn_input_shape"], dtype=np.float32)
+
         input_var = MNN.expr.const(
             blob, list(blob.shape), MNN.expr.NCHW, MNN.expr.float
         )
+
         outputs = module.forward([input_var])
+
         for out in outputs:
             print(np.array(MNN.expr.convert(out, MNN.expr.NCHW).read()).shape)
 
@@ -114,6 +132,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: 68fad34d07aea149
 ---
 
 ## 安装

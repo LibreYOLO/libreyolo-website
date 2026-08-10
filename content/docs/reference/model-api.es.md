@@ -1,8 +1,14 @@
 ---
 title: API del modelo
-seo_title: "Métodos y firmas del objeto modelo de LibreYOLO"
-description: "Todos los métodos de un modelo LibreYOLO cargado: predict, embed, track, val, train, export, save, quantize, info y los controles de grafos CUDA, con sus valores por defecto reales."
-lead: "Un modelo LibreYOLO cargado es una instancia de BaseModel. Esta página lista los métodos que lleva esa instancia, con las firmas y los valores por defecto leídos de libreyolo/models/base/model.py."
+seo_title: Métodos y firmas del objeto modelo de LibreYOLO
+description: >-
+  Todos los métodos de un modelo LibreYOLO cargado: predict, embed, track, val,
+  train, export, save, quantize, info y los controles de grafos CUDA, con sus
+  valores por defecto reales.
+lead: >-
+  Un modelo LibreYOLO cargado es una instancia de BaseModel. Esta página lista
+  los métodos que lleva esa instancia, con las firmas y los valores por defecto
+  leídos de libreyolo/models/base/model.py.
 keywords:
   - métodos del modelo libreyolo
   - argumentos de predict libreyolo
@@ -11,8 +17,12 @@ keywords:
   - model.track
   - model.quantize
   - capture_graph
-last_verified: "1.5.0"
-verification: "Firmas y valores por defecto leídos de libreyolo/models/base/model.py y libreyolo/models/base/inference.py en la v1.5.0. Las clases de familia pueden restringirlos o ampliarlos; train() se define por familia y aquí solo se documenta su envoltorio común cfg=."
+last_verified: 1.5.0
+verification: >-
+  Firmas y valores por defecto leídos de libreyolo/models/base/model.py y
+  libreyolo/models/base/inference.py en la v1.5.0. Las clases de familia pueden
+  restringirlos o ampliarlos; train() se define por familia y aquí solo se
+  documenta su envoltorio común cfg=.
 snippets:
   usage:
     - label: Python
@@ -38,6 +48,7 @@ snippets:
         # stream=True devuelve un generador, un Results por frame o imagen.
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
+source_hash: da0776970ded8716
 ---
 
 ## Construcción

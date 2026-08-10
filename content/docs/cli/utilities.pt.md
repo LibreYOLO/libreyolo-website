@@ -1,16 +1,31 @@
 ---
 title: utilitários do libreyolo
-seo_title: "referência dos comandos utilitários da CLI do libreyolo"
-description: "Os comandos pequenos do LibreYOLO: version, checks, models, formats, cfg, info, metadata, enroll e compare, cada um com seus argumentos e valores padrão."
-lead: "Nove comandos que relatam ou inspecionam em vez de calcular. Eles imprimem dados do ambiente, o inventário de modelos e formatos, os valores padrão já resolvidos e os detalhes de um checkpoint, além de construir e consultar uma galeria de rostos."
-keywords: [libreyolo version, libreyolo checks, listar modelos libreyolo, formatos de exportacao libreyolo, ver metadados de checkpoint yolo, galeria de rostos libreyolo enroll]
-last_verified: "1.5.0"
+seo_title: referência dos comandos utilitários da CLI do libreyolo
+description: >-
+  Os comandos pequenos do LibreYOLO: version, checks, models, formats, cfg,
+  info, metadata, enroll e compare, cada um com seus argumentos e valores
+  padrão.
+lead: >-
+  Nove comandos que relatam ou inspecionam em vez de calcular. Eles imprimem
+  dados do ambiente, o inventário de modelos e formatos, os valores padrão já
+  resolvidos e os detalhes de um checkpoint, além de construir e consultar uma
+  galeria de rostos.
+keywords:
+  - libreyolo version
+  - libreyolo checks
+  - listar modelos libreyolo
+  - formatos de exportacao libreyolo
+  - ver metadados de checkpoint yolo
+  - galeria de rostos libreyolo enroll
+last_verified: 1.5.0
 meta:
   - label: Comandos
-    value: version, checks, models, formats, cfg, info, metadata, enroll, compare
+    value: 'version, checks, models, formats, cfg, info, metadata, enroll, compare'
     mono: true
   - label: Saída
-    value: "stdout, em texto ou com json=true como um único objeto que carrega schema_version"
+    value: >-
+      stdout, em texto ou com json=true como um único objeto que carrega
+      schema_version
 snippets:
   examples:
     - label: Ambiente
@@ -28,6 +43,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
+source_hash: 7b5b53c46df00c06
 ---
 
 ## Sinopse

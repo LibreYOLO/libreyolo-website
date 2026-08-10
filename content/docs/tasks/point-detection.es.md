@@ -1,38 +1,66 @@
 ---
 title: Detección de puntos
-seo_title: "Detección de puntos y conteo en LibreYOLO"
-description: "Localiza objetos como puntos individuales en lugar de cajas en LibreYOLO. Predice centroides, cuenta objetos, entrena FOMO y lee las métricas de puntos."
-lead: "La detección de puntos devuelve una posición x, y por objeto en lugar de un bounding box. LibreYOLO la expone como la tarea point, y una predicción lleva una fila de x, y, clase y confianza por objeto."
-keywords: [detección de puntos python, contar objetos python, detección de centroides, FOMO localización de puntos, contar objetos en imágenes, conteo de objetos en visión artificial]
-last_verified: "1.5.0"
+seo_title: Detección de puntos y conteo en LibreYOLO
+description: >-
+  Localiza objetos como puntos individuales en lugar de cajas en LibreYOLO.
+  Predice centroides, cuenta objetos, entrena FOMO y lee las métricas de puntos.
+lead: >-
+  La detección de puntos devuelve una posición x, y por objeto en lugar de un
+  bounding box. LibreYOLO la expone como la tarea point, y una predicción lleva
+  una fila de x, y, clase y confianza por objeto.
+keywords:
+  - detección de puntos python
+  - contar objetos python
+  - detección de centroides
+  - FOMO localización de puntos
+  - contar objetos en imágenes
+  - conteo de objetos en visión artificial
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Predecir puntos y contarlos
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Los pesos de LibreFOMO no se descargan automáticamente. Consigue primero
-        # un checkpoint en https://huggingface.co/LibreYOLO y cárgalo por ruta local.
+
+        # Los pesos de LibreFOMO no se descargan automáticamente. Consigue
+        primero
+
+        # un checkpoint en https://huggingface.co/LibreYOLO y cárgalo por ruta
+        local.
+
         model = LibreYOLO("./LibreFOMOs-point.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         points = result.points
+
         print(len(points))     # número de objetos
+
         print(points.xy)       # centros (N, 2) en píxeles de la imagen original
+
         print(points.cls, points.conf)
     - label: Coordenadas normalizadas y conteos por clase
       language: python
-      code: |
+      code: >
         from collections import Counter
+
 
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("./LibreFOMOs-point.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         points = result.points.numpy()
-        print(points.xyn)                          # los mismos centros en [0, 1]
+
+        print(points.xyn)                          # los mismos centros en [0,
+        1]
+
         print(Counter(points.cls.astype(int).tolist()))
   train:
     - label: Entrenar FOMO con un dataset YOLO
@@ -57,29 +85,45 @@ snippets:
   val:
     - label: Validar y leer las claves de las métricas
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("./LibreFOMOs-point.pt")
+
         metrics = model.val(data="my-dataset.yaml")
 
+
         print(metrics["metrics/precision"], metrics["metrics/recall"])
+
         print(metrics["metrics/f1"])
+
         print(metrics["metrics/mAP@[0.01:0.10]"])   # fitness
-        print(metrics["metrics/MLE"])               # error medio de localización
-        print(metrics["metrics/MAE"], metrics["metrics/RMSE"])   # error de conteo
+
+        print(metrics["metrics/MLE"])               # error medio de
+        localización
+
+        print(metrics["metrics/MAE"], metrics["metrics/RMSE"])   # error de
+        conteo
     - label: Cambiar los umbrales de distancia
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("./LibreFOMOs-point.pt")
 
+
         # Los límites del barrido forman parte del texto de la clave, así que un
+
         # barrido personalizado renombra las claves mAP que produce.
-        metrics = model.val(data="my-dataset.yaml", dist_thresholds=[0.02, 0.05])
+
+        metrics = model.val(data="my-dataset.yaml", dist_thresholds=[0.02,
+        0.05])
+
 
         print(metrics["metrics/mAP@0.02"])
+
         print(metrics["metrics/mAP@[0.02:0.05]"])
   export:
     - label: Exportar
@@ -91,15 +135,22 @@ snippets:
         model.export(format="onnx")
     - label: Ejecutar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factoría decide por el sufijo del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("./LibreFOMOs-point.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.points.xy)
+source_hash: 932153c8870d1c7c
 ---
 
 ## Definición

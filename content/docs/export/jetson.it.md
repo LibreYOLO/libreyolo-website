@@ -1,8 +1,15 @@
 ---
 title: NVIDIA Jetson
-seo_title: "Installare LibreYOLO e PyTorch su NVIDIA Jetson"
-description: "Installa LibreYOLO su un NVIDIA Jetson: le quattro librerie CUDA che JetPack non include, il passaggio --no-deps che serve a PyTorch e i numeri misurati sull'Orin Nano."
-lead: "Le schede NVIDIA Jetson eseguono LibreYOLO sui normali wheel aarch64 di PyTorch. Non è coinvolta nessuna build di torch specifica per Jetson, ma JetPack omette quattro librerie a cui torch si collega, e l'installazione deve fornirle."
+seo_title: Installare LibreYOLO e PyTorch su NVIDIA Jetson
+description: >-
+  Installa LibreYOLO su un NVIDIA Jetson: le quattro librerie CUDA che JetPack
+  non include, il passaggio --no-deps che serve a PyTorch e i numeri misurati
+  sull'Orin Nano.
+lead: >-
+  Le schede NVIDIA Jetson eseguono LibreYOLO sui normali wheel aarch64 di
+  PyTorch. Non è coinvolta nessuna build di torch specifica per Jetson, ma
+  JetPack omette quattro librerie a cui torch si collega, e l'installazione deve
+  fornirle.
 keywords:
   - NVIDIA Jetson
   - Jetson Orin Nano
@@ -16,28 +23,43 @@ keywords:
   - no kernel image is available for execution on the device
   - tensorrt su jetson
   - wheel aarch64 pytorch
-last_verified: "1.4.0"
+last_verified: 1.4.0
 meta:
   - label: Scheda
-    value: "Jetson Orin Nano Super Developer Kit, 8 GB, compute capability della GPU 8.7"
+    value: >-
+      Jetson Orin Nano Super Developer Kit, 8 GB, compute capability della GPU
+      8.7
   - label: Piattaforma
-    value: "JetPack 7.2 (L4T R39.2), Ubuntu 24.04, CUDA 13, Python 3.12.3, aarch64"
+    value: 'JetPack 7.2 (L4T R39.2), Ubuntu 24.04, CUDA 13, Python 3.12.3, aarch64'
   - label: Stack testato
-    value: "libreyolo 1.4.0, torch 2.13.0+cu130, torchvision 0.28.0+cu130, opencv 5.0.0, numpy 2.5.1, il 2026-07-27"
+    value: >-
+      libreyolo 1.4.0, torch 2.13.0+cu130, torchvision 0.28.0+cu130, opencv
+      5.0.0, numpy 2.5.1, il 2026-07-27
   - label: Assenti in JetPack
-    value: "nvidia-cudnn-cu13, nvidia-nccl-cu13, nvidia-cusparselt-cu13, nvidia-nvshmem-cu13"
+    value: >-
+      nvidia-cudnn-cu13, nvidia-nccl-cu13, nvidia-cusparselt-cu13,
+      nvidia-nvshmem-cu13
     mono: true
   - label: Benchmark
-    value: "223 esecuzioni verificate su questa scheda, 58 modelli in 12 famiglie, in PyTorch, ONNX Runtime e TensorRT"
+    value: >-
+      223 esecuzioni verificate su questa scheda, 58 modelli in 12 famiglie, in
+      PyTorch, ONNX Runtime e TensorRT
     links:
       - label: visionanalysis.org/hardware/jetson_orin
-        href: https://www.visionanalysis.org/hardware/jetson_orin
+        href: 'https://www.visionanalysis.org/hardware/jetson_orin'
   - label: Tracciato in
-    value: "La metà Jetson della issue 648"
+    value: La metà Jetson della issue 648
     links:
       - label: issue 648
-        href: https://github.com/LibreYOLO/libreyolo/issues/648
-verification: "Ricetta di installazione e output atteso presi dall'installazione del 2026-07-27 su un Jetson Orin Nano Super. Le righe di latenza e accuratezza vengono dallo snapshot dei risultati verificati dietro visionanalysis.org, filtrato sull'hardware jetson_orin, misurato a giugno 2026 su libreyolo 1.2.0.dev0. Comportamento dell'esportazione e del loader letti da libreyolo/export/exporter.py, libreyolo/export/tensorrt.py e libreyolo/models/__init__.py."
+        href: 'https://github.com/LibreYOLO/libreyolo/issues/648'
+verification: >-
+  Ricetta di installazione e output atteso presi dall'installazione del
+  2026-07-27 su un Jetson Orin Nano Super. Le righe di latenza e accuratezza
+  vengono dallo snapshot dei risultati verificati dietro visionanalysis.org,
+  filtrato sull'hardware jetson_orin, misurato a giugno 2026 su libreyolo
+  1.2.0.dev0. Comportamento dell'esportazione e del loader letti da
+  libreyolo/export/exporter.py, libreyolo/export/tensorrt.py e
+  libreyolo/models/__init__.py.
 snippets:
   prep:
     - label: Pacchetti di sistema e un ambiente virtuale
@@ -51,7 +73,7 @@ snippets:
         source ~/libreyolo/bin/activate
         pip install -U pip wheel setuptools
   torch:
-    - label: PyTorch, dall'indice dei wheel per CUDA 13
+    - label: 'PyTorch, dall''indice dei wheel per CUDA 13'
       language: bash
       code: |
         pip install torch torchvision \
@@ -62,10 +84,12 @@ snippets:
       code: |
         pip install nvidia-cudnn-cu13 nvidia-nccl-cu13 \
                     nvidia-cusparselt-cu13 nvidia-nvshmem-cu13
-    - label: Se pip pretende cuda-toolkit 13.0.3, installa con --no-deps
+    - label: 'Se pip pretende cuda-toolkit 13.0.3, installa con --no-deps'
       language: bash
-      code: |
-        # --no-deps significa che anche le dipendenze Python di torch vanno elencate a mano.
+      code: >
+        # --no-deps significa che anche le dipendenze Python di torch vanno
+        elencate a mano.
+
         pip install --no-deps \
           torch torchvision \
           nvidia-cudnn-cu13 nvidia-nccl-cu13 \
@@ -73,24 +97,33 @@ snippets:
           filelock typing_extensions sympy networkx jinja2 markupsafe mpmath \
           fsspec numpy pillow
   ldd:
-    - label: Fatti dire qual è la prossima libreria mancante, invece di indovinare
+    - label: 'Fatti dire qual è la prossima libreria mancante, invece di indovinare'
       language: bash
-      code: |
-        ldd "$VIRTUAL_ENV/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so" \
+      code: >
+        ldd
+        "$VIRTUAL_ENV/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so" \
           | grep "not found"
 
-        # Tutto quello che manca ancora in tutte le librerie di torch, in un colpo solo:
-        ldd "$VIRTUAL_ENV"/lib/python3.12/site-packages/torch/lib/*.so 2>/dev/null \
+        # Tutto quello che manca ancora in tutte le librerie di torch, in un
+        colpo solo:
+
+        ldd "$VIRTUAL_ENV"/lib/python3.12/site-packages/torch/lib/*.so
+        2>/dev/null \
           | grep "not found" | sort -u
   install:
-    - label: Installa LibreYOLO dopo torch, non prima
+    - label: 'Installa LibreYOLO dopo torch, non prima'
       language: bash
-      code: |
+      code: >
         # torch è già soddisfatto, quindi pip lascia al suo posto la build CUDA.
+
         pip install libreyolo
 
+
         # L'extra ONNX serve solo per esportare. Un'esportazione TensorRT passa
-        # per ONNX, quindi installalo prima della sezione sull'esportazione qui sotto.
+
+        # per ONNX, quindi installalo prima della sezione sull'esportazione qui
+        sotto.
+
         pip install "libreyolo[onnx]"
   verify:
     - label: Versioni e dispositivo
@@ -131,18 +164,25 @@ snippets:
         print(result.boxes)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict --source https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg --model libreyolo9s.pt --save
+      code: >
+        libreyolo predict --source
+        https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        --model libreyolo9s.pt --save
   export:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, LibreYOLO9, SAMPLE_IMAGE
 
+
         # Scrive libreyolo9s.onnx, poi ne costruisce libreyolo9s.engine.
-        LibreYOLO9("libreyolo9s.pt", size="s").export(format="tensorrt", half=True)
+
+        LibreYOLO9("libreyolo9s.pt", size="s").export(format="tensorrt",
+        half=True)
+
 
         # L'engine si ricarica dallo stesso punto di ingresso.
+
         result = LibreYOLO("libreyolo9s.engine").predict(SAMPLE_IMAGE)
     - label: CLI
       language: bash
@@ -151,12 +191,18 @@ snippets:
   power:
     - label: Modalità di alimentazione e clock
       language: bash
-      code: |
-        sudo nvpmodel -q      # quali modalità espone questa scheda, e quella attiva
+      code: >
+        sudo nvpmodel -q      # quali modalità espone questa scheda, e quella
+        attiva
+
         sudo nvpmodel -m 0    # modalità più alta sulla scheda testata qui
+
         sudo jetson_clocks
 
-        tegrastats            # carico in tempo reale; nvidia-smi è limitato su Tegra
+
+        tegrastats            # carico in tempo reale; nvidia-smi è limitato su
+        Tegra
+source_hash: c07ff908503e89b5
 ---
 
 ## Cosa documenta questa pagina

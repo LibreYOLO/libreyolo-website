@@ -1,8 +1,12 @@
 ---
 title: OpenVINO
-seo_title: "从 LibreYOLO 导出到 OpenVINO IR"
-description: "把 LibreYOLO 模型转换成 OpenVINO IR：model.xml 与 model.bin 这一对文件、FP16 权重压缩、NNCF INT8，以及 CPU、GPU 或 NPU 推理。"
-lead: "OpenVINO IR 是英特尔的运行时格式，一个 model.xml 计算图加上一个 model.bin 权重 blob。LibreYOLO 先导出一个 ONNX 中间产物，用 ov.convert_model 转换，再往同一个目录里写一个 metadata.yaml。"
+seo_title: 从 LibreYOLO 导出到 OpenVINO IR
+description: >-
+  把 LibreYOLO 模型转换成 OpenVINO IR：model.xml 与 model.bin 这一对文件、FP16 权重压缩、NNCF
+  INT8，以及 CPU、GPU 或 NPU 推理。
+lead: >-
+  OpenVINO IR 是英特尔的运行时格式，一个 model.xml 计算图加上一个 model.bin 权重 blob。LibreYOLO 先导出一个
+  ONNX 中间产物，用 ov.convert_model 转换，再往同一个目录里写一个 metadata.yaml。
 keywords:
   - yolo 导出 openvino
   - openvino ir
@@ -11,24 +15,27 @@ keywords:
   - nncf int8 量化
   - openvino npu 推理
   - compress_to_fp16
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: 参数
-    value: 'export(format="openvino")'
+    value: export(format="openvino")
     mono: true
   - label: 输出
-    value: "一个包含 model.xml、model.bin 和 metadata.yaml 的目录"
+    value: 一个包含 model.xml、model.bin 和 metadata.yaml 的目录
   - label: Extra
     value: 'pip install "libreyolo[onnx,openvino]"'
     mono: true
   - label: 重新加载方式
-    value: 'LibreYOLO("weights/LibreYOLO9t_openvino")'
+    value: LibreYOLO("weights/LibreYOLO9t_openvino")
     mono: true
   - label: 形状
-    value: "跟随 ONNX 中间产物：dynamic=True 时为动态 batch"
+    value: 跟随 ONNX 中间产物：dynamic=True 时为动态 batch
   - label: 精度
-    value: "FP32、FP16 权重压缩（half=True）、通过 NNCF 的 INT8（int8=True 并配合 data=）"
-verification: "读自 dev 分支上的 libreyolo/export/openvino.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/openvino.py 和 pyproject.toml。"
+    value: FP32、FP16 权重压缩（half=True）、通过 NNCF 的 INT8（int8=True 并配合 data=）
+verification: >-
+  读自 dev 分支上的
+  libreyolo/export/openvino.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/openvino.py
+  和 pyproject.toml。
 snippets:
   install:
     - label: 安装
@@ -99,21 +106,34 @@ snippets:
         model = LibreYOLO("weights/LibreYOLO9t_openvino", device="gpu")
     - label: 直接使用 OpenVINO
       language: python
-      code: |
+      code: >
         import numpy as np
+
         import openvino as ov
+
         import yaml
 
+
         core = ov.Core()
+
         print(core.available_devices)
 
-        compiled = core.compile_model("weights/LibreYOLO9t_openvino/model.xml", "CPU")
+
+        compiled = core.compile_model("weights/LibreYOLO9t_openvino/model.xml",
+        "CPU")
+
         outputs = compiled(np.zeros((1, 3, 640, 640), dtype=np.float32))
+
         print([tensor.shape for tensor in outputs.values()])
 
+
         # 类别名、任务和输入尺寸都在 IR 旁边的 metadata.yaml 里
-        meta = yaml.safe_load(open("weights/LibreYOLO9t_openvino/metadata.yaml"))
+
+        meta =
+        yaml.safe_load(open("weights/LibreYOLO9t_openvino/metadata.yaml"))
+
         print(meta["model_family"], meta["task"], meta["names"])
+
 
         # 这条路径上的预处理和后处理要你自己做
   support:
@@ -121,6 +141,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: 519816615e3aca3c
 ---
 
 ## 安装

@@ -1,10 +1,20 @@
 ---
 title: libreyolo export
-seo_title: "riferimento del comando libreyolo export"
-description: "Esporta un checkpoint in un formato di deployment: ogni argomento con il suo valore predefinito, dove finisce l'artefatto e le combinazioni che il comando rifiuta."
-lead: "Converte un checkpoint in un formato di deployment e scrive l'artefatto sotto weights/. Il formato decide quali degli argomenti qui sotto si applicano."
-keywords: [libreyolo export cli, esportare yolo onnx, comando libreyolo export, esportare yolo tensorrt, argomenti libreyolo export]
-last_verified: "1.5.0"
+seo_title: riferimento del comando libreyolo export
+description: >-
+  Esporta un checkpoint in un formato di deployment: ogni argomento con il suo
+  valore predefinito, dove finisce l'artefatto e le combinazioni che il comando
+  rifiuta.
+lead: >-
+  Converte un checkpoint in un formato di deployment e scrive l'artefatto sotto
+  weights/. Il formato decide quali degli argomenti qui sotto si applicano.
+keywords:
+  - libreyolo export cli
+  - esportare yolo onnx
+  - comando libreyolo export
+  - esportare yolo tensorrt
+  - argomenti libreyolo export
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo export
@@ -13,7 +23,7 @@ meta:
     value: model
     mono: true
   - label: Output
-    value: "weights/<checkpoint-stem>[_fp16|_int8]<format-suffix>"
+    value: 'weights/<checkpoint-stem>[_fp16|_int8]<format-suffix>'
     mono: true
 snippets:
   examples:
@@ -29,12 +39,16 @@ snippets:
           nms=true conf=0.25 iou=0.45 max_det=300
     - label: Eseguire l'artefatto
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreYOLO9s.pt format=onnx imgsz=640
 
-        # La factory si basa sul suffisso del file, quindi l'esportazione si carica come un checkpoint.
+
+        # La factory si basa sul suffisso del file, quindi l'esportazione si
+        carica come un checkpoint.
+
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+source_hash: ef2ca20af3814109
 ---
 
 ## Sinossi

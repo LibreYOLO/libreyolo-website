@@ -1,8 +1,16 @@
 ---
 title: Paddle
-seo_title: "Esportare in PaddlePaddle da LibreYOLO"
-description: "Converti un rilevatore LibreYOLO in un modello di inferenza PaddlePaddle tramite X2Paddle: la toolchain fissata, i grafi statici FP32 con batch 1 e l'inferenza su CPU."
-lead: "I modelli di inferenza PaddlePaddle sono un grafo model.pdmodel accanto a un file di pesi model.pdiparams. LibreYOLO esporta un grafo ONNX statico con opset 15, lo converte con X2Paddle e impacchetta il risultato con un metadata.yaml, così si carica attraverso la stessa factory di ogni altro runtime."
+seo_title: Esportare in PaddlePaddle da LibreYOLO
+description: >-
+  Converti un rilevatore LibreYOLO in un modello di inferenza PaddlePaddle
+  tramite X2Paddle: la toolchain fissata, i grafi statici FP32 con batch 1 e
+  l'inferenza su CPU.
+lead: >-
+  I modelli di inferenza PaddlePaddle sono un grafo model.pdmodel accanto a un
+  file di pesi model.pdiparams. LibreYOLO esporta un grafo ONNX statico con
+  opset 15, lo converte con X2Paddle e impacchetta il risultato con un
+  metadata.yaml, così si carica attraverso la stessa factory di ogni altro
+  runtime.
 keywords:
   - esportare yolo paddle
   - inferenza paddlepaddle
@@ -10,13 +18,13 @@ keywords:
   - model.pdmodel
   - model.pdiparams
   - onnx opset 15
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="paddle")'
+    value: export(format="paddle")
     mono: true
   - label: Scrive
-    value: "Una directory con model.pdmodel, model.pdiparams e metadata.yaml"
+    value: 'Una directory con model.pdmodel, model.pdiparams e metadata.yaml'
   - label: Extra
     value: 'pip install "libreyolo[paddle]"'
     mono: true
@@ -24,26 +32,34 @@ meta:
     value: 'LibreYOLO("weights/LibreYOLO9t_paddle", device="cpu")'
     mono: true
   - label: Backend
-    value: "libreyolo.backends.paddle.PaddleBackend"
+    value: libreyolo.backends.paddle.PaddleBackend
     mono: true
   - label: Forme
-    value: "Statiche, batch 1, opset 15. Tutti e tre i vincoli sono imposti."
+    value: 'Statiche, batch 1, opset 15. Tutti e tre i vincoli sono imposti.'
   - label: Precisione
-    value: "Solo FP32, solo CPU."
+    value: 'Solo FP32, solo CPU.'
   - label: Toolchain
-    value: "PaddlePaddle 2.6.2, X2Paddle 1.6.0, ONNX 1.17 o precedente, controllati in modo esatto"
-verification: "Letto da libreyolo/export/paddle.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/paddle.py, docs/paddle.md e pyproject.toml sul branch dev."
+    value: >-
+      PaddlePaddle 2.6.2, X2Paddle 1.6.0, ONNX 1.17 o precedente, controllati in
+      modo esatto
+verification: >-
+  Letto da libreyolo/export/paddle.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/paddle.py, docs/paddle.md e
+  pyproject.toml sul branch dev.
 snippets:
   install:
     - label: Installazione
       language: bash
-      code: |
-        # Python da 3.10 a 3.12. WSL2 con Ubuntu 22.04 è il percorso validato su Windows.
+      code: >
+        # Python da 3.10 a 3.12. WSL2 con Ubuntu 22.04 è il percorso validato su
+        Windows.
+
         pip install "libreyolo[paddle]"
     - label: Confermare le versioni fissate
       language: bash
-      code: |
-        python -c "from importlib.metadata import version; print(version('paddlepaddle'), version('x2paddle'), version('onnx'))"
+      code: >
+        python -c "from importlib.metadata import version;
+        print(version('paddlepaddle'), version('x2paddle'), version('onnx'))"
   export:
     - label: Python
       language: python
@@ -97,36 +113,53 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: Paddle puro
       language: python
-      code: |
+      code: >
         import numpy as np
+
         import paddle.inference as paddle_infer
+
         import yaml
 
+
         directory = "weights/LibreYOLO9t_paddle"
+
         config = paddle_infer.Config(
             f"{directory}/model.pdmodel", f"{directory}/model.pdiparams"
         )
+
         config.disable_gpu()
+
         config.disable_mkldnn()
+
         config.switch_ir_optim(False)
 
+
         predictor = paddle_infer.create_predictor(config)
+
         handle = predictor.get_input_handle(predictor.get_input_names()[0])
+
         handle.reshape([1, 3, 640, 640])
+
         handle.copy_from_cpu(np.zeros((1, 3, 640, 640), dtype=np.float32))
+
         predictor.run()
+
         for name in predictor.get_output_names():
             print(name, predictor.get_output_handle(name).copy_to_cpu().shape)
 
         meta = yaml.safe_load(open(f"{directory}/metadata.yaml"))
+
         print(meta["model_family"], meta["task"], meta["names"])
 
-        # Su questo percorso il preprocessing e il postprocessing sono a tuo carico.
+
+        # Su questo percorso il preprocessing e il postprocessing sono a tuo
+        carico.
   support:
     - label: Controllare una famiglia e un task prima di esportare
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: cdd8bf12286e2f53
 ---
 
 ## Installazione

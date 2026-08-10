@@ -1,40 +1,52 @@
 ---
 title: MNN
-seo_title: "Exportar a MNN desde LibreYOLO"
-description: "Exporta un detector LibreYOLO a MNN a través de ONNX y mnnconvert: una forma NCHW fija, FP32 en CPU y un sidecar de metadatos que el contrato de runtime exige."
-lead: "MNN es el motor de inferencia ligero de Alibaba. LibreYOLO exporta un grafo ONNX estático, lo convierte con la herramienta mnnconvert que trae el paquete MNN y escribe un sidecar JSON que registra los nombres de entrada y salida, la forma de entrada fija y los nombres de clase."
+seo_title: Exportar a MNN desde LibreYOLO
+description: >-
+  Exporta un detector LibreYOLO a MNN a través de ONNX y mnnconvert: una forma
+  NCHW fija, FP32 en CPU y un sidecar de metadatos que el contrato de runtime
+  exige.
+lead: >-
+  MNN es el motor de inferencia ligero de Alibaba. LibreYOLO exporta un grafo
+  ONNX estático, lo convierte con la herramienta mnnconvert que trae el paquete
+  MNN y escribe un sidecar JSON que registra los nombres de entrada y salida, la
+  forma de entrada fija y los nombres de clase.
 keywords:
   - exportar yolo mnn
   - mnnconvert
   - inferencia mnn
   - inferencia detector en móvil
   - forma nchw fija
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="mnn")'
+    value: export(format="mnn")
     mono: true
   - label: Escribe
-    value: "Un archivo .mnn más un sidecar de metadatos .mnn.json"
+    value: Un archivo .mnn más un sidecar de metadatos .mnn.json
   - label: Extra
     value: 'pip install "libreyolo[mnn]"'
     mono: true
   - label: Se recarga con
-    value: 'LibreYOLO("weights/LibreYOLO9t.mnn")'
+    value: LibreYOLO("weights/LibreYOLO9t.mnn")
     mono: true
   - label: Formas
-    value: "NCHW fija. dynamic=True se rechaza."
+    value: NCHW fija. dynamic=True se rechaza.
   - label: Precisión
-    value: "Solo FP32, solo CPU."
+    value: 'Solo FP32, solo CPU.'
   - label: Tareas
-    value: "Solo detección en esta versión"
-verification: "Leído de libreyolo/export/mnn.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/mnn.py y pyproject.toml en la rama dev."
+    value: Solo detección en esta versión
+verification: >-
+  Leído de libreyolo/export/mnn.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/mnn.py y pyproject.toml en la
+  rama dev.
 snippets:
   install:
     - label: Instalación
       language: bash
-      code: |
-        # El extra incluye libreyolo[onnx]: MNN convierte desde un intermedio ONNX.
+      code: >
+        # El extra incluye libreyolo[onnx]: MNN convierte desde un intermedio
+        ONNX.
+
         pip install "libreyolo[mnn]"
     - label: Comprobar que el conversor está en el PATH
       language: bash
@@ -79,18 +91,25 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: MNN puro
       language: python
-      code: |
+      code: >
         import json
 
+
         import MNN
+
         import numpy as np
 
+
         meta = json.load(open("weights/LibreYOLO9t.mnn.json"))
-        print(meta["mnn_input_names"], meta["mnn_output_names"], meta["mnn_input_shape"])
+
+        print(meta["mnn_input_names"], meta["mnn_output_names"],
+        meta["mnn_input_shape"])
+
 
         runtime = MNN.nn.create_runtime_manager(
             ({"backend": 0, "precision": 1, "numThread": 4},)
         )
+
         module = MNN.nn.load_module_from_file(
             "weights/LibreYOLO9t.mnn",
             meta["mnn_input_names"],
@@ -100,11 +119,15 @@ snippets:
             shape_mutable=False,
         )
 
+
         blob = np.zeros(meta["mnn_input_shape"], dtype=np.float32)
+
         input_var = MNN.expr.const(
             blob, list(blob.shape), MNN.expr.NCHW, MNN.expr.float
         )
+
         outputs = module.forward([input_var])
+
         for out in outputs:
             print(np.array(MNN.expr.convert(out, MNN.expr.NCHW).read()).shape)
 
@@ -114,6 +137,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: 68fad34d07aea149
 ---
 
 ## Instalación

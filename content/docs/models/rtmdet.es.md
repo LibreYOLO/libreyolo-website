@@ -1,11 +1,26 @@
 ---
 title: RTMDet
-families: [rtmdet]
-seo_title: "RTMDet en LibreYOLO: predecir, entrenar y exportar"
-description: "Ejecuta RTMDet en LibreYOLO para detección de objetos y segmentación de instancias con RTMDet-Ins. Instala, predice, entrena, valida y exporta bajo Apache-2.0."
-lead: "RTMDet es un detector de una etapa que predice a partir de un único prior basado en puntos por posición de la rejilla, sin anchors, a través de una cabeza cuyas convoluciones se comparten entre niveles de características. LibreYOLO lo admite para detección y para segmentación de instancias con RTMDet-Ins."
-keywords: [RTMDet, "detección de objetos python", "segmentación de instancias", RTMDet-Ins, "detección sin anchors", mmdetection]
-last_verified: "1.5.0"
+families:
+  - rtmdet
+seo_title: 'RTMDet en LibreYOLO: predecir, entrenar y exportar'
+description: >-
+  Ejecuta RTMDet en LibreYOLO para detección de objetos y segmentación de
+  instancias con RTMDet-Ins. Instala, predice, entrena, valida y exporta bajo
+  Apache-2.0.
+lead: >-
+  RTMDet es un detector de una etapa que predice a partir de un único prior
+  basado en puntos por posición de la rejilla, sin anchors, a través de una
+  cabeza cuyas convoluciones se comparten entre niveles de características.
+  LibreYOLO lo admite para detección y para segmentación de instancias con
+  RTMDet-Ins.
+keywords:
+  - RTMDet
+  - detección de objetos python
+  - segmentación de instancias
+  - RTMDet-Ins
+  - detección sin anchors
+  - mmdetection
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +35,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreRTMDets.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreRTMDets.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Segmentación de instancias
       language: python
       code: |
@@ -71,8 +88,9 @@ snippets:
         )
     - label: CLI
       language: bash
-      code: |
-        libreyolo train model=LibreRTMDets.pt data=my-dataset.yaml imgsz=640 epochs=300 batch=16 lr0=0.004
+      code: >
+        libreyolo train model=LibreRTMDets.pt data=my-dataset.yaml imgsz=640
+        epochs=300 batch=16 lr0=0.004
   export:
     - label: Python
       language: python
@@ -84,21 +102,31 @@ snippets:
         model.export(format="tensorrt", imgsz=640, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreRTMDets.pt format=onnx imgsz=640
-        libreyolo export model=LibreRTMDets.pt format=tensorrt imgsz=640 half=True
+
+        libreyolo export model=LibreRTMDets.pt format=tensorrt imgsz=640
+        half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
         # exportado se carga como cualquier checkpoint y devuelve el mismo
+
         # objeto Results.
+
         model = LibreYOLO("LibreRTMDets.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)
+source_hash: 2f5033bdc1c3c931
 ---
 
 ## Instalación

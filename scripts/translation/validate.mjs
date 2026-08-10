@@ -124,8 +124,10 @@ for (const twin of twins) {
     continue
   }
 
+  // `source_hash` is bookkeeping added by sync-check.mjs and exists only on
+  // the twin, so it is never part of the key comparison.
   const enKeys = Object.keys(en.data).sort()
-  const trKeys = Object.keys(tr.data).sort()
+  const trKeys = Object.keys(tr.data).filter((k) => k !== 'source_hash').sort()
   if (!eq(enKeys, trKeys)) problems.push(`frontmatter keys differ: en=[${enKeys}] ${locale}=[${trKeys}]`)
 
   for (const field of ['families', 'last_verified', 'layout']) {

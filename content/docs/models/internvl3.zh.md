@@ -1,11 +1,22 @@
 ---
 title: InternVL3
-families: [internvl3]
-seo_title: "InternVL3：在 LibreYOLO 里做开放词汇检测"
-description: "在 LibreYOLO 里用 InternVL3 做开放词汇目标检测。用任意文本标签跑预测；不支持训练、验证和导出。"
-lead: "InternVL3 是 OpenGVLab 发布的原生多模态大语言模型，在同一个预训练阶段里联合学习视觉和语言。LibreYOLO 把它包装成一个开放词汇目标检测器：任意一组文本标签都能当作类别集合，没有固定的 head，也不需要微调。"
-keywords: [InternVL3, InternVL, "internvl3 目标检测", 视觉语言模型, 开放词汇检测, VLM, OpenGVLab, LibreVLM]
-last_verified: "1.5.0"
+families:
+  - internvl3
+seo_title: InternVL3：在 LibreYOLO 里做开放词汇检测
+description: 在 LibreYOLO 里用 InternVL3 做开放词汇目标检测。用任意文本标签跑预测；不支持训练、验证和导出。
+lead: >-
+  InternVL3 是 OpenGVLab 发布的原生多模态大语言模型，在同一个预训练阶段里联合学习视觉和语言。LibreYOLO
+  把它包装成一个开放词汇目标检测器：任意一组文本标签都能当作类别集合，没有固定的 head，也不需要微调。
+keywords:
+  - InternVL3
+  - InternVL
+  - internvl3 目标检测
+  - 视觉语言模型
+  - 开放词汇检测
+  - VLM
+  - OpenGVLab
+  - LibreVLM
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -33,6 +44,7 @@ snippets:
         # 检测框封装覆盖不到的提示词
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
+source_hash: 6305f020d3079d71
 ---
 
 ## 安装

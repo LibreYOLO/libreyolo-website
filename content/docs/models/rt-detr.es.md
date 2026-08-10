@@ -1,11 +1,28 @@
 ---
 title: RT-DETR
-families: [rtdetr]
-seo_title: "RT-DETR, RT-DETRv2 y RT-DETRv4 en LibreYOLO"
-description: "Usa RT-DETR, RT-DETRv2 y RT-DETRv4 en LibreYOLO para detección de objetos, más cajas orientadas en RT-DETRv2. Instala, predice, entrena, valida y exporta, con pesos Apache-2.0."
-lead: "Un transformer de detección hecho para inferencia en tiempo real: decodifica un conjunto fijo de queries en vez de una rejilla densa, así que no ejecuta NMS. LibreYOLO incluye tres versiones, distinguidas por el checkpoint que cargas, y la versión 2 sirve además cajas orientadas."
-keywords: [RT-DETR, RT-DETRv2, RT-DETRv4, "transformer de detección en tiempo real", DETR, "detección de objetos", "detección de cajas orientadas", OBB, DOTA]
-last_verified: "1.5.0"
+families:
+  - rtdetr
+seo_title: 'RT-DETR, RT-DETRv2 y RT-DETRv4 en LibreYOLO'
+description: >-
+  Usa RT-DETR, RT-DETRv2 y RT-DETRv4 en LibreYOLO para detección de objetos, más
+  cajas orientadas en RT-DETRv2. Instala, predice, entrena, valida y exporta,
+  con pesos Apache-2.0.
+lead: >-
+  Un transformer de detección hecho para inferencia en tiempo real: decodifica
+  un conjunto fijo de queries en vez de una rejilla densa, así que no ejecuta
+  NMS. LibreYOLO incluye tres versiones, distinguidas por el checkpoint que
+  cargas, y la versión 2 sirve además cajas orientadas.
+keywords:
+  - RT-DETR
+  - RT-DETRv2
+  - RT-DETRv4
+  - transformer de detección en tiempo real
+  - DETR
+  - detección de objetos
+  - detección de cajas orientadas
+  - OBB
+  - DOTA
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -38,24 +55,36 @@ snippets:
             print(len(result.boxes))
     - label: Cajas orientadas
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         # Solo en la versión 2. El sufijo -obb selecciona la tarea, y el
+
         # checkpoint se reconoce como orientado a partir de sus propios
+
         # tensores, así que no hace falta el argumento task. Estos pesos son
+
         # DOTA v1.0, 15 clases aéreas a 1024 px.
+
         model = LibreYOLO("LibreRTDETRv2n-obb.pt")
+
         result = model("aerial.png", save=True)
 
+
         obb = result.obb
+
         print(obb.xywhr)     # (N, 5): cx, cy, w, h, radianes
+
         print(obb.xyxyxyxy)  # las mismas filas como cuatro esquinas
-        print(result.boxes.xyxy)  # cajas alineadas con los ejes que las encierran
-    - label: Cajas orientadas, CLI
+
+        print(result.boxes.xyxy)  # cajas alineadas con los ejes que las
+        encierran
+    - label: 'Cajas orientadas, CLI'
       language: bash
-      code: |
-        libreyolo predict model=LibreRTDETRv2n-obb.pt source=aerial.png save=True
+      code: >
+        libreyolo predict model=LibreRTDETRv2n-obb.pt source=aerial.png
+        save=True
   train:
     - label: Python
       language: python
@@ -141,11 +170,15 @@ snippets:
         libreyolo export model=LibreRTDETRr18.pt format=onnx
     - label: Cajas orientadas
       language: bash
-      code: |
+      code: >
         # ONNX y TorchScript son los destinos validados para la tarea
+
         # orientada, a FP32, batch 1 y con un lienzo fijo de 1024 por 1024.
+
         libreyolo export model=LibreRTDETRv2n-obb.pt format=onnx imgsz=1024
-        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript imgsz=1024
+
+        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript
+        imgsz=1024
     - label: Usar el archivo exportado
       language: python
       code: |
@@ -158,6 +191,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 8022a5a591922a90
 ---
 
 ## Instalación

@@ -1,16 +1,21 @@
 ---
 title: libreyolo profile
-seo_title: "libreyolo profile 命令参考"
-description: "测量训练和推理速度并读懂结果：profile 的每个子命令、它们的参数和默认值，以及每种读法各自报告什么。"
-lead: "一个命令组，它测量训练步或推理调用中的时间花在了哪里，写出一份自包含的剖析文件（profile），再用几种不同的读法把这份剖析文件读回来。"
-keywords: [libreyolo profile 命令, yolo 训练性能分析, 推理延迟测试, gpu kernel 性能分析, libreyolo 性能对比]
-last_verified: "1.5.0"
+seo_title: libreyolo profile 命令参考
+description: 测量训练和推理速度并读懂结果：profile 的每个子命令、它们的参数和默认值，以及每种读法各自报告什么。
+lead: 一个命令组，它测量训练步或推理调用中的时间花在了哪里，写出一份自包含的剖析文件（profile），再用几种不同的读法把这份剖析文件读回来。
+keywords:
+  - libreyolo profile 命令
+  - yolo 训练性能分析
+  - 推理延迟测试
+  - gpu kernel 性能分析
+  - libreyolo 性能对比
+last_verified: 1.5.0
 meta:
   - label: 命令
     value: libreyolo profile
     mono: true
   - label: 输出
-    value: "profile.json and profile_trace.json under runs/profile"
+    value: profile.json and profile_trace.json under runs/profile
     mono: true
 snippets:
   examples:
@@ -25,12 +30,17 @@ snippets:
         libreyolo profile summary runs/profile/infer/profile.json
     - label: 对比两次测量
       language: bash
-      code: |
-        libreyolo profile infer --device cpu --warmup 5 --runs 20 --project runs/profile/a
-        libreyolo profile infer --device cpu --warmup 5 --runs 20 --batch 4 --project runs/profile/b
+      code: >
+        libreyolo profile infer --device cpu --warmup 5 --runs 20 --project
+        runs/profile/a
+
+        libreyolo profile infer --device cpu --warmup 5 --runs 20 --batch 4
+        --project runs/profile/b
+
 
         libreyolo profile compare runs/profile/a/infer/profile.json \
           runs/profile/b/infer/profile.json
+source_hash: b967e869fd9ba418
 ---
 
 ## 概要

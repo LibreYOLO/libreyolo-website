@@ -1,8 +1,10 @@
 ---
 title: 量化
-seo_title: "在 PyTorch 里量化一个 LibreYOLO 模型"
-description: "LibreYOLO 的 PyTorch 量化 API：九种配方、和训练数据分开的校准集、QAT 与 QAD，以及两种部署产物。"
-lead: "LibreYOLO 的量化完全在 PyTorch 里跑：model.quantize() 会把模型的 Conv2d 和 Linear 模块换成量化版本并做校准。结果仍然保持普通的 predict、val、train 和 save 契约，所以量化模型和浮点模型由同一批验证器打分。"
+seo_title: 在 PyTorch 里量化一个 LibreYOLO 模型
+description: LibreYOLO 的 PyTorch 量化 API：九种配方、和训练数据分开的校准集、QAT 与 QAD，以及两种部署产物。
+lead: >-
+  LibreYOLO 的量化完全在 PyTorch 里跑：model.quantize() 会把模型的 Conv2d 和 Linear
+  模块换成量化版本并做校准。结果仍然保持普通的 predict、val、train 和 save 契约，所以量化模型和浮点模型由同一批验证器打分。
 keywords:
   - libreyolo 量化
   - yolo int8 量化
@@ -12,45 +14,59 @@ keywords:
   - fp8 e4m3
   - 量化校准数据集
   - qdq onnx 导出
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: 调用
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
     mono: true
   - label: 命令
-    value: "libreyolo quantize --model M.pt --recipe int8 --calib coco128.yaml"
+    value: libreyolo quantize --model M.pt --recipe int8 --calib coco128.yaml
     mono: true
   - label: 额外依赖
-    value: "无。量化在 PyTorch 里运行。"
+    value: 无。量化在 PyTorch 里运行。
   - label: 家族
-    value: "yolo9, rfdetr, birefnet, feynobg"
+    value: 'yolo9, rfdetr, birefnet, feynobg'
   - label: 配方
-    value: "fp16, bf16, fp8, int8, w4a16, w4a8, nvfp4, mxfp4, int2"
+    value: 'fp16, bf16, fp8, int8, w4a16, w4a8, nvfp4, mxfp4, int2'
     mono: true
   - label: 部署产物
-    value: 'export(format="pt") for a packed checkpoint, export(format="onnx") for a QDQ INT8 graph'
+    value: >-
+      export(format="pt") for a packed checkpoint, export(format="onnx") for a
+      QDQ INT8 graph
     mono: true
-verification: "读自 dev 分支上的 libreyolo/quant/api.py、libreyolo/models/base/model.py、libreyolo/cli/commands/quantize.py 和 docs/quantization.md。检查点体积数字是 docs/quantization.md 中记录的实测值。"
+verification: >-
+  读自 dev 分支上的
+  libreyolo/quant/api.py、libreyolo/models/base/model.py、libreyolo/cli/commands/quantize.py
+  和 docs/quantization.md。检查点体积数字是 docs/quantization.md 中记录的实测值。
 snippets:
   quantize:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
+
         # 结构替换加校准。calib 是一小批无标注图像，
+
         # 只做前向读取，用来推算激活值范围和缩放系数
-        qmodel = model.quantize(recipe="int8", calib="coco128.yaml", samples=128)
+
+        qmodel = model.quantize(recipe="int8", calib="coco128.yaml",
+        samples=128)
+
 
         print(qmodel.quant_info())
+
         qmodel.val(data="coco8.yaml")          # 和浮点模型用同一批验证器
+
         qmodel.save("LibreYOLO9s-int8.pt")     # 检查点里带着一份量化清单
     - label: CLI
       language: bash
-      code: |
-        libreyolo quantize --model LibreYOLO9s.pt --recipe int8 --calib coco128.yaml
+      code: >
+        libreyolo quantize --model LibreYOLO9s.pt --recipe int8 --calib
+        coco128.yaml
     - label: 参数
       language: python
       code: |
@@ -94,8 +110,9 @@ snippets:
         )
     - label: CLI
       language: bash
-      code: |
-        libreyolo train --model LibreYOLO9s-int8.pt --data coco8.yaml --epochs 5 --lr0 1e-4
+      code: >
+        libreyolo train --model LibreYOLO9s-int8.pt --data coco8.yaml --epochs 5
+        --lr0 1e-4
   export:
     - label: 打包后的 PyTorch 检查点
       language: python
@@ -135,6 +152,7 @@ snippets:
 
         # 现在任何浮点导出器都可用，精度也随它支持的来
         qmodel.export(format="tensorrt", half=True)
+source_hash: 4ffb06b87cad017e
 ---
 
 ## 安装

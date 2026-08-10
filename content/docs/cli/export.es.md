@@ -1,10 +1,20 @@
 ---
 title: libreyolo export
-seo_title: "referencia del comando libreyolo export"
-description: "Exporta un checkpoint a un formato de despliegue: cada argumento con su valor por defecto, dónde acaba el artefacto y las combinaciones que el comando rechaza."
-lead: "Convierte un checkpoint en un formato de despliegue y escribe el artefacto en weights/. El formato decide cuáles de los argumentos de abajo aplican."
-keywords: [libreyolo export cli, exportar yolo a onnx, comando libreyolo export, exportar yolo tensorrt, argumentos libreyolo export]
-last_verified: "1.5.0"
+seo_title: referencia del comando libreyolo export
+description: >-
+  Exporta un checkpoint a un formato de despliegue: cada argumento con su valor
+  por defecto, dónde acaba el artefacto y las combinaciones que el comando
+  rechaza.
+lead: >-
+  Convierte un checkpoint en un formato de despliegue y escribe el artefacto en
+  weights/. El formato decide cuáles de los argumentos de abajo aplican.
+keywords:
+  - libreyolo export cli
+  - exportar yolo a onnx
+  - comando libreyolo export
+  - exportar yolo tensorrt
+  - argumentos libreyolo export
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo export
@@ -13,7 +23,7 @@ meta:
     value: model
     mono: true
   - label: Salida
-    value: "weights/<checkpoint-stem>[_fp16|_int8]<format-suffix>"
+    value: 'weights/<checkpoint-stem>[_fp16|_int8]<format-suffix>'
     mono: true
 snippets:
   examples:
@@ -29,12 +39,16 @@ snippets:
           nms=true conf=0.25 iou=0.45 max_det=300
     - label: Ejecutar el artefacto
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreYOLO9s.pt format=onnx imgsz=640
 
-        # La factoría se guía por el sufijo del archivo, así que la exportación se carga como un checkpoint.
+
+        # La factoría se guía por el sufijo del archivo, así que la exportación
+        se carga como un checkpoint.
+
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+source_hash: ef2ca20af3814109
 ---
 
 ## Sinopsis

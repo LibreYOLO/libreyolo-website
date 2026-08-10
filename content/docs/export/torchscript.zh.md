@@ -1,8 +1,12 @@
 ---
 title: TorchScript
-seo_title: "从 LibreYOLO 导出到 TorchScript"
-description: "把 LibreYOLO 模型导出为 TorchScript：一个 trace 出来的 .torchscript 归档，LibreYOLO 元数据就放在里面，可以从 Python 或 libtorch 加载。"
-lead: "TorchScript 是 PyTorch 自己的序列化图格式。LibreYOLO 用 torch.jit.trace 追踪模型，并把结果和一个 libreyolo_metadata.json 附加文件（extra file）一起保存，所以归档里带着家族、任务、类别名和输入尺寸。"
+seo_title: 从 LibreYOLO 导出到 TorchScript
+description: >-
+  把 LibreYOLO 模型导出为 TorchScript：一个 trace 出来的 .torchscript 归档，LibreYOLO
+  元数据就放在里面，可以从 Python 或 libtorch 加载。
+lead: >-
+  TorchScript 是 PyTorch 自己的序列化图格式。LibreYOLO 用 torch.jit.trace 追踪模型，并把结果和一个
+  libreyolo_metadata.json 附加文件（extra file）一起保存，所以归档里带着家族、任务、类别名和输入尺寸。
 keywords:
   - yolo 导出 torchscript
   - torch.jit.trace
@@ -10,23 +14,26 @@ keywords:
   - libtorch 部署
   - torchscript 元数据
   - extra_files
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: 标志
-    value: 'export(format="torchscript")'
+    value: export(format="torchscript")
     mono: true
   - label: 输出
-    value: "一个 .torchscript 归档，里面带一个 libreyolo_metadata.json 附加文件"
+    value: 一个 .torchscript 归档，里面带一个 libreyolo_metadata.json 附加文件
   - label: 额外依赖
-    value: "无。TorchScript 随 PyTorch 一起提供。"
+    value: 无。TorchScript 随 PyTorch 一起提供。
   - label: 重新加载方式
-    value: 'LibreYOLO("weights/LibreYOLO9t.torchscript")'
+    value: LibreYOLO("weights/LibreYOLO9t.torchscript")
     mono: true
   - label: 形状
-    value: "固定。图是在单一输入形状下 trace 出来的。"
+    value: 固定。图是在单一输入形状下 trace 出来的。
   - label: 精度
-    value: "FP32、FP16（half=True）。没有 INT8。"
-verification: "读取自 dev 分支上的 libreyolo/export/torchscript.py、libreyolo/export/exporter.py、libreyolo/export/support.py 和 libreyolo/backends/torchscript.py。"
+    value: FP32、FP16（half=True）。没有 INT8。
+verification: >-
+  读取自 dev 分支上的
+  libreyolo/export/torchscript.py、libreyolo/export/exporter.py、libreyolo/export/support.py
+  和 libreyolo/backends/torchscript.py。
 snippets:
   install:
     - label: 安装
@@ -98,6 +105,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: 286a082969ccd604
 ---
 
 ## 安装

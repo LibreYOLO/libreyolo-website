@@ -1,10 +1,15 @@
 ---
 title: libreyolo quantize
-seo_title: "libreyolo quantize 命令参考"
-description: "在命令行里量化 PyTorch 检查点：配方、校准参数、默认值，以及每种配方接受的模型家族。"
-lead: "把模型的浮点模块换成量化模块，在配方需要统计量时用无标注图像做校准，并把结果保存为 PyTorch 检查点（checkpoint）。"
-keywords: [libreyolo quantize cli, int8 量化命令, fp8 量化, 训练后量化 yolo, libreyolo quantize 参数]
-last_verified: "1.5.0"
+seo_title: libreyolo quantize 命令参考
+description: 在命令行里量化 PyTorch 检查点：配方、校准参数、默认值，以及每种配方接受的模型家族。
+lead: 把模型的浮点模块换成量化模块，在配方需要统计量时用无标注图像做校准，并把结果保存为 PyTorch 检查点（checkpoint）。
+keywords:
+  - libreyolo quantize cli
+  - int8 量化命令
+  - fp8 量化
+  - 训练后量化 yolo
+  - libreyolo quantize 参数
+last_verified: 1.5.0
 meta:
   - label: 命令
     value: libreyolo quantize
@@ -13,7 +18,7 @@ meta:
     value: model
     mono: true
   - label: 输出
-    value: "在后缀前带 -<recipe> 的源路径，例如 LibreYOLO9s-int8.pt"
+    value: 在后缀前带 -<recipe> 的源路径，例如 LibreYOLO9s-int8.pt
     mono: true
 snippets:
   examples:
@@ -29,12 +34,15 @@ snippets:
           out=weights/LibreYOLO9s-fp16.pt
     - label: 扩大校准，再恢复精度
       language: bash
-      code: |
+      code: >
         libreyolo quantize model=LibreYOLO9s.pt recipe=int8 \
           calib=coco128.yaml samples=256 batch=16 algorithm=minmax
 
         # 在量化后的检查点上做量化感知训练可以恢复精度
-        libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10 lr0=0.001
+
+        libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
+        lr0=0.001
+source_hash: 7ae663e9f117826e
 ---
 
 ## 概要

@@ -23,7 +23,6 @@ const OG_LOCALES = {
   fr: 'fr_FR',
   ru: 'ru_RU',
   pt: 'pt_BR',
-  ar: 'ar_AR',
 }
 export function ogLocale(locale) {
   return OG_LOCALES[locale] ?? OG_LOCALES[routing.defaultLocale]

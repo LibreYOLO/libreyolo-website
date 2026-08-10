@@ -1,11 +1,25 @@
 ---
 title: RetinaNet
-families: [retinanet]
-seo_title: "RetinaNet en LibreYOLO: predecir, validar y exportar"
-description: "Ejecuta RetinaNet en LibreYOLO para detección de objetos de una etapa con focal loss. Instala, predice, valida y exporta el port de torchvision con licencia BSD-3-Clause."
-lead: "RetinaNet es un detector de una etapa entrenado con focal loss, que reduce el peso de los negativos fáciles para que una rejilla densa de anchors ya no necesite una etapa de propuestas aparte para mantener la precisión. LibreYOLO porta la implementación de torchvision para detección."
-keywords: [RetinaNet, "focal loss", "detección de objetos python", "detector de una etapa", "retinanet pytorch", torchvision]
-last_verified: "1.5.0"
+families:
+  - retinanet
+seo_title: 'RetinaNet en LibreYOLO: predecir, validar y exportar'
+description: >-
+  Ejecuta RetinaNet en LibreYOLO para detección de objetos de una etapa con
+  focal loss. Instala, predice, valida y exporta el port de torchvision con
+  licencia BSD-3-Clause.
+lead: >-
+  RetinaNet es un detector de una etapa entrenado con focal loss, que reduce el
+  peso de los negativos fáciles para que una rejilla densa de anchors ya no
+  necesite una etapa de propuestas aparte para mantener la precisión. LibreYOLO
+  porta la implementación de torchvision para detección.
+keywords:
+  - RetinaNet
+  - focal loss
+  - detección de objetos python
+  - detector de una etapa
+  - retinanet pytorch
+  - torchvision
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +34,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreRetinaNetr50v2.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreRetinaNetr50v2.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -61,6 +77,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 1cc7ceb6de290bdb
 ---
 
 ## Instalación

@@ -1,8 +1,15 @@
 ---
 title: Core ML
-seo_title: "Экспорт в Core ML из LibreYOLO"
-description: "Экспорт детектора LibreYOLO в Core ML .mlpackage: контракт входа ImageType, FP16, compute units, встроенный NMS и четыре поддерживаемых семейства."
-lead: "Core ML — это формат моделей Apple для работы на устройстве. LibreYOLO трассирует детектор за обёрткой предобработки, своей для каждого семейства, поэтому конвертированный граф всегда принимает канонический вход-изображение RGB, а затем записывает .mlpackage в формате ML Program с приложенными метаданными модели."
+seo_title: Экспорт в Core ML из LibreYOLO
+description: >-
+  Экспорт детектора LibreYOLO в Core ML .mlpackage: контракт входа ImageType,
+  FP16, compute units, встроенный NMS и четыре поддерживаемых семейства.
+lead: >-
+  Core ML — это формат моделей Apple для работы на устройстве. LibreYOLO
+  трассирует детектор за обёрткой предобработки, своей для каждого семейства,
+  поэтому конвертированный граф всегда принимает канонический вход-изображение
+  RGB, а затем записывает .mlpackage в формате ML Program с приложенными
+  метаданными модели.
 keywords:
   - экспорт yolo в coreml
   - mlpackage
@@ -11,26 +18,29 @@ keywords:
   - apple neural engine
   - compute_units
   - coreml nms пайплайн
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Флаг
-    value: 'export(format="coreml")'
+    value: export(format="coreml")
     mono: true
   - label: Записывает
-    value: "Один бандл .mlpackage (директория) в формате ML Program"
+    value: Один бандл .mlpackage (директория) в формате ML Program
   - label: Дополнительно
     value: 'pip install "libreyolo[coreml]"'
     mono: true
   - label: Загружается обратно
-    value: 'LibreYOLO("weights/LibreYOLO9t.mlpackage") на macOS'
+    value: LibreYOLO("weights/LibreYOLO9t.mlpackage") на macOS
     mono: true
   - label: Формы
-    value: "Фиксированные. Вход — жёстко заданный ct.ImageType."
+    value: Фиксированные. Вход — жёстко заданный ct.ImageType.
   - label: Точность
-    value: "FP32, FP16 (half=True). INT8 нет."
+    value: 'FP32, FP16 (half=True). INT8 нет.'
   - label: Семейства
-    value: "Только детекция, для yolox, yolo9, rtdetr и rfdetr"
-verification: "Прочитано из libreyolo/export/coreml.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/coreml.py и pyproject.toml в ветке dev."
+    value: 'Только детекция, для yolox, yolo9, rtdetr и rfdetr'
+verification: >-
+  Прочитано из libreyolo/export/coreml.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/coreml.py и pyproject.toml в
+  ветке dev.
 snippets:
   install:
     - label: Установка
@@ -54,7 +64,7 @@ snippets:
         libreyolo export --model LibreYOLO9t.pt --format coreml
     - label: Аргументы
       language: python
-      code: |
+      code: >
         model.export(
             format="coreml",
             imgsz=640,
@@ -64,7 +74,10 @@ snippets:
             output_path=None,     # None записывает weights/<stem>.mlpackage
         )
 
-        # dynamic принимается, но вход — это ct.ImageType с фиксированной формой,
+
+        # dynamic принимается, но вход — это ct.ImageType с фиксированной
+        формой,
+
         # и встроенные метаданные в любом случае записывают dynamic=False.
   nms:
     - label: Встраивание слоя NMS от Apple
@@ -85,7 +98,7 @@ snippets:
         libreyolo export --model LibreYOLO9t.pt --format coreml --nms \
           --conf 0.25 --iou 0.45
   run:
-    - label: Через LibreYOLO, на macOS
+    - label: 'Через LibreYOLO, на macOS'
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -117,6 +130,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: 09c5394e3837eca2
 ---
 
 ## Установка

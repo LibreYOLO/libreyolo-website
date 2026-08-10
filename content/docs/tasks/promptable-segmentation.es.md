@@ -1,10 +1,25 @@
 ---
 title: Segmentación con prompts
-seo_title: "Segmentación con prompts en LibreYOLO"
-description: "Convierte un punto, un box o un concepto de texto en la máscara de un objeto con LibreYOLO. Carga SAM, SAM 2, SAM 3, EdgeTAM, MobileSAM o PicoSAM3 a través de LibreSAM."
-lead: "La segmentación con prompts convierte un clic en una máscara: señalas un objeto, o dibujas un box a su alrededor, y el modelo devuelve su contorno. En LibreYOLO no es una clave de tarea aparte, sino un nivel de modelos que se carga mediante la factoría LibreSAM y cuyos resultados son Results de segmentación normales."
-keywords: [segmentación con prompts, segmentación interactiva, segment anything python, prompt de punto, prompt de box, SAM python, máscara a partir de un clic]
-last_verified: "1.5.0"
+seo_title: Segmentación con prompts en LibreYOLO
+description: >-
+  Convierte un punto, un box o un concepto de texto en la máscara de un objeto
+  con LibreYOLO. Carga SAM, SAM 2, SAM 3, EdgeTAM, MobileSAM o PicoSAM3 a través
+  de LibreSAM.
+lead: >-
+  La segmentación con prompts convierte un clic en una máscara: señalas un
+  objeto, o dibujas un box a su alrededor, y el modelo devuelve su contorno. En
+  LibreYOLO no es una clave de tarea aparte, sino un nivel de modelos que se
+  carga mediante la factoría LibreSAM y cuyos resultados son Results de
+  segmentación normales.
+keywords:
+  - segmentación con prompts
+  - segmentación interactiva
+  - segment anything python
+  - prompt de punto
+  - prompt de box
+  - SAM python
+  - máscara a partir de un clic
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Prompts de punto y de box
@@ -21,17 +36,24 @@ snippets:
 
         # Un prompt de box da una máscara por box.
         result = model.predict(SAMPLE_IMAGE, bboxes=[300, 200, 900, 700])
-    - label: Codificar una vez, lanzar muchos prompts
+    - label: 'Codificar una vez, lanzar muchos prompts'
       language: python
-      code: |
+      code: >
         from libreyolo import LibreSAM, SAMPLE_IMAGE
+
 
         model = LibreSAM("base")
 
-        # set_image ejecuta una sola vez el pesado encoder de imagen y lo cachea.
+
+        # set_image ejecuta una sola vez el pesado encoder de imagen y lo
+        cachea.
+
         model.set_image(SAMPLE_IMAGE)
+
         first = model.predict(points=[640, 420], labels=[1])
+
         second = model.predict(bboxes=[300, 200, 900, 700])
+
         model.reset_image()
     - label: Segmentarlo todo
       language: python
@@ -59,6 +81,7 @@ snippets:
             SAMPLE_IMAGE, points=[640, 420], labels=[1], multimask=True
         )
         print(len(result.masks))
+source_hash: bb70ff24e6c0a767
 ---
 
 ## Definición

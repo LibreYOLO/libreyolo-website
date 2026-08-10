@@ -1,8 +1,14 @@
 ---
 title: Datasets
-seo_title: "Datasets de entrenamiento en LibreYOLO"
-description: "El YAML de dataset que lee LibreYOLO, la estructura de carpetas que espera, cómo funciona la descarga automática y el comando doctor que comprueba un dataset antes de entrenar."
-lead: "Un dataset de LibreYOLO es un archivo YAML que nombra una raíz, sus splits y sus nombres de clases. Todo lo demás, incluido dónde viven los archivos de etiquetas, se deriva de ese archivo por convención."
+seo_title: Datasets de entrenamiento en LibreYOLO
+description: >-
+  El YAML de dataset que lee LibreYOLO, la estructura de carpetas que espera,
+  cómo funciona la descarga automática y el comando doctor que comprueba un
+  dataset antes de entrenar.
+lead: >-
+  Un dataset de LibreYOLO es un archivo YAML que nombra una raíz, sus splits y
+  sus nombres de clases. Todo lo demás, incluido dónde viven los archivos de
+  etiquetas, se deriva de ese archivo por convención.
 keywords:
   - formato dataset yolo
   - data.yaml
@@ -13,17 +19,21 @@ keywords:
   - libreyolo doctor
   - desbalanceo de clases dataset
   - fuga de datos train val
-last_verified: "1.5.0"
+last_verified: 1.5.0
 snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # Un nombre incluido, una ruta relativa o una ruta absoluta funcionan igual.
+
+        # Un nombre incluido, una ruta relativa o una ruta absoluta funcionan
+        igual.
+
         model.train(data="coco8.yaml", epochs=10)
     - label: CLI
       language: bash
@@ -40,9 +50,12 @@ snippets:
         libreyolo doctor my-dataset.yaml strict=true json=true
     - label: Omitir la pasada de decodificación de imágenes
       language: bash
-      code: |
+      code: >
         # Lee solo las etiquetas y el YAML. Las comprobaciones de corrupción,
-        # duplicados y fuga entre splits necesitan los píxeles, así que se omiten.
+
+        # duplicados y fuga entre splits necesitan los píxeles, así que se
+        omiten.
+
         libreyolo doctor my-dataset.yaml fast=true
     - label: Python
       language: python
@@ -55,6 +68,7 @@ snippets:
             print(finding.severity.value, finding.check_id, finding.message)
 
         raise SystemExit(report.exit_code(strict=False))
+source_hash: 9a12a0551c8b56e9
 ---
 
 ## Apunta el entrenamiento a un dataset

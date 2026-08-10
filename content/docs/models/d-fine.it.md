@@ -1,11 +1,26 @@
 ---
 title: D-FINE
-families: [dfine]
-seo_title: "D-FINE: fai fine-tuning, valida ed esporta con licenza MIT"
-description: "Usa D-FINE in LibreYOLO per il rilevamento di oggetti e la segmentazione di istanze. Installa, fai predizioni, fine-tuning, validazione ed esportazione, con codice sotto licenza MIT."
-lead: "Un detection transformer che riformula la regressione dei box come una distribuzione di probabilità su ogni bordo del box, raffinata attraverso i layer del decoder. LibreYOLO lo supporta per il rilevamento e per la segmentazione di istanze."
-keywords: [D-FINE, detection transformer, real-time object detection, instance segmentation, "rilevamento oggetti in tempo reale", "segmentazione di istanze python", DETR]
-last_verified: "1.5.0"
+families:
+  - dfine
+seo_title: 'D-FINE: fai fine-tuning, valida ed esporta con licenza MIT'
+description: >-
+  Usa D-FINE in LibreYOLO per il rilevamento di oggetti e la segmentazione di
+  istanze. Installa, fai predizioni, fine-tuning, validazione ed esportazione,
+  con codice sotto licenza MIT.
+lead: >-
+  Un detection transformer che riformula la regressione dei box come una
+  distribuzione di probabilità su ogni bordo del box, raffinata attraverso i
+  layer del decoder. LibreYOLO lo supporta per il rilevamento e per la
+  segmentazione di istanze.
+keywords:
+  - D-FINE
+  - detection transformer
+  - real-time object detection
+  - instance segmentation
+  - rilevamento oggetti in tempo reale
+  - segmentazione di istanze python
+  - DETR
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +35,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDFINEn.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDFINEn.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Segmentazione di istanze
       language: python
       code: |
@@ -36,11 +53,14 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreDFINEn.pt")
-        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8, lr0=2e-4)
+
+        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8,
+        lr0=2e-4)
     - label: CLI
       language: bash
       code: |
@@ -48,8 +68,10 @@ snippets:
           epochs=50 imgsz=640 batch=8 lr0=2e-4
     - label: Segmentazione di istanze
       language: bash
-      code: |
-        # Continua dai pesi di segmentazione pubblicati, testa delle maschere inclusa.
+      code: >
+        # Continua dai pesi di segmentazione pubblicati, testa delle maschere
+        inclusa.
+
         libreyolo train model=LibreDFINEn-seg.pt data=my-dataset.yaml \
           task=segment epochs=50 imgsz=640
     - label: Segmentazione dai pesi di rilevamento
@@ -109,9 +131,11 @@ snippets:
         model.export(format="tensorrt", imgsz=640, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDFINEn.pt format=onnx imgsz=640
-        libreyolo export model=LibreDFINEn.pt format=tensorrt imgsz=640 half=True
+
+        libreyolo export model=LibreDFINEn.pt format=tensorrt imgsz=640
+        half=True
     - label: Usare il file esportato
       language: python
       code: |
@@ -124,6 +148,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 0216631a26185524
 ---
 
 ## Installazione

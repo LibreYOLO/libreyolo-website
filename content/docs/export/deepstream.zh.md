@@ -1,8 +1,12 @@
 ---
 title: NVIDIA DeepStream
-seo_title: "在 NVIDIA DeepStream 上运行 YOLO 模型"
-description: "为 NVIDIA DeepStream 导出 LibreYOLO 模型：一个 ONNX 图，加上自动生成的 nvinfer 配置。构建解析器和跑通流水线的确切命令。"
-lead: "NVIDIA DeepStream 通过 nvinfer 元件跑推理，而 nvinfer 需要一个 ONNX 图、一份与之匹配的配置文件和一个检测框解析器。在 ONNX 导出上设置 deepstream=True 会写出前两个，并把它们接到第三个上。"
+seo_title: 在 NVIDIA DeepStream 上运行 YOLO 模型
+description: >-
+  为 NVIDIA DeepStream 导出 LibreYOLO 模型：一个 ONNX 图，加上自动生成的 nvinfer
+  配置。构建解析器和跑通流水线的确切命令。
+lead: >-
+  NVIDIA DeepStream 通过 nvinfer 元件跑推理，而 nvinfer 需要一个 ONNX
+  图、一份与之匹配的配置文件和一个检测框解析器。在 ONNX 导出上设置 deepstream=True 会写出前两个，并把它们接到第三个上。
 keywords:
   - deepstream yolo
   - yolo 导出 deepstream
@@ -18,24 +22,29 @@ meta:
     value: 'export(format="onnx", deepstream=True)'
     mono: true
   - label: 输出
-    value: "一个 ONNX 图、config_infer_primary_<stem>.txt 和 <stem>_labels.txt"
+    value: 一个 ONNX 图、config_infer_primary_<stem>.txt 和 <stem>_labels.txt
   - label: 覆盖范围
-    value: "九项任务下的 43 个家族与任务组合"
+    value: 九项任务下的 43 个家族与任务组合
   - label: 解析器
-    value: "NvDsInferParseYolo，来自 Marcos Luciano 的 DeepStream-Yolo 项目，采用 MIT 许可。每台设备编译一次。"
+    value: >-
+      NvDsInferParseYolo，来自 Marcos Luciano 的 DeepStream-Yolo 项目，采用 MIT
+      许可。每台设备编译一次。
     links:
       - label: github.com/marcoslucianops/DeepStream-Yolo
-        href: https://github.com/marcoslucianops/DeepStream-Yolo
+        href: 'https://github.com/marcoslucianops/DeepStream-Yolo'
   - label: 可用性
-    value: "随 v1.5.0 发布。2026-08-08 通过 pull request 728 合入 dev。"
+    value: 随 v1.5.0 发布。2026-08-08 通过 pull request 728 合入 dev。
     links:
       - label: pull request 728
-        href: https://github.com/LibreYOLO/libreyolo/pull/728
+        href: 'https://github.com/LibreYOLO/libreyolo/pull/728'
       - label: issue 648
-        href: https://github.com/LibreYOLO/libreyolo/issues/648
+        href: 'https://github.com/LibreYOLO/libreyolo/issues/648'
   - label: 运行时已验证
-    value: "DeepStream 8.0.0，跑在 RTX 5070 Ti 上，仅检测，2026-08-08"
-verification: "根据 2026-08-08 的运行时验证写成。家族列表、配置键和默认值读自 commit 5f81e11e 的 libreyolo/export/deepstream.py 与 libreyolo/export/exporter.py，该 commit 当天通过 pull request 728 合入 dev。"
+    value: DeepStream 8.0.0，跑在 RTX 5070 Ti 上，仅检测，2026-08-08
+verification: >-
+  根据 2026-08-08 的运行时验证写成。家族列表、配置键和默认值读自 commit 5f81e11e 的
+  libreyolo/export/deepstream.py 与 libreyolo/export/exporter.py，该 commit 当天通过
+  pull request 728 合入 dev。
 snippets:
   install:
     - label: 安装
@@ -45,16 +54,24 @@ snippets:
   export:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO9, LibreDFINE
 
+
         # 在工作目录下写出 libreyolo9s.onnx、config_infer_primary_libreyolo9s.txt
+
         # 和 libreyolo9s_labels.txt
-        LibreYOLO9("libreyolo9s.pt", size="s").export(format="onnx", deepstream=True)
+
+        LibreYOLO9("libreyolo9s.pt", size="s").export(format="onnx",
+        deepstream=True)
+
 
         # 每个检测模型放在各自的目录里：所有检测配置指向的引擎缓存文件名都一样
+
         # 参见「已知陷阱」
-        LibreDFINE("LibreDFINEs.pt", size="s").export(format="onnx", deepstream=True)
+
+        LibreDFINE("LibreDFINEs.pt", size="s").export(format="onnx",
+        deepstream=True)
     - label: 参数
       language: python
       code: |
@@ -90,79 +107,128 @@ snippets:
   parser:
     - label: build_parser.sh，在 DeepStream 容器内运行
       language: bash
-      code: |
+      code: >
         set -e
-        git clone --depth 1 https://github.com/marcoslucianops/DeepStream-Yolo.git
+
+        git clone --depth 1
+        https://github.com/marcoslucianops/DeepStream-Yolo.git
+
 
         # 这个镜像里的 /usr/local/cuda-12 是个 stub，编译会死在它上面，报
+
         # "fatal error: crt/host_defines.h: No such file or directory"。找一个真正
+
         # 带这个头文件的 toolkit；在 8.0 镜像上就是 cuda-12.5
+
         CUDA_DIR=$(readlink -f /usr/local/cuda)
+
         [ -f "$CUDA_DIR/include/crt/host_defines.h" ] || \
           CUDA_DIR=$(ls -d /usr/local/cuda-*.* | sort -Vr | \
                      while read d; do [ -f "$d/include/crt/host_defines.h" ] && echo "$d" && break; done)
 
         # 镜像自带 libcublas.so.12 和 libcublas.so.12.8.4.1，却没有 -lcublas 需要的
+
         # 无版本号 libcublas.so，所以链接一步会失败并报
+
         # "/usr/bin/ld: cannot find -lcublas"。把链接器想要的名字给它
+
         mkdir -p /tmp/cudalibs
+
         for lib in cublas cublasLt cudart; do
           real=$(find /usr/local -name "lib${lib}.so.1*" | grep -v stubs | sort -V | tail -1)
           ln -sf "$real" "/tmp/cudalibs/lib${lib}.so"
         done
+
         export LIBRARY_PATH="/tmp/cudalibs:$LIBRARY_PATH"
 
-        make -C DeepStream-Yolo/nvdsinfer_custom_impl_Yolo CUDA_VER="${CUDA_DIR##*/cuda-}"
+
+        make -C DeepStream-Yolo/nvdsinfer_custom_impl_Yolo
+        CUDA_VER="${CUDA_DIR##*/cuda-}"
     - label: 实例分割用的是另一个解析器
       language: bash
-      code: |
-        git clone --depth 1 https://github.com/marcoslucianops/DeepStream-Yolo-Seg.git
+      code: >
+        git clone --depth 1
+        https://github.com/marcoslucianops/DeepStream-Yolo-Seg.git
+
         make -C DeepStream-Yolo-Seg/nvdsinfer_custom_impl_Yolo_seg \
           CUDA_VER="${CUDA_DIR##*/cuda-}"
   run:
     - label: deepstream_app_config.txt
       language: text
-      code: |
+      code: >
         [application]
+
         enable-perf-measurement=1
+
         perf-measurement-interval-sec=5
+
         gie-kitti-output-dir=kitti
 
+
         [tiled-display]
+
         enable=0
 
+
         [source0]
+
         enable=1
+
         type=3
+
         uri=file:///opt/nvidia/deepstream/deepstream/samples/streams/sample_1080p_h264.mp4
+
         num-sources=1
+
         gpu-id=0
+
 
         [streammux]
+
         gpu-id=0
+
         batch-size=1
+
         batched-push-timeout=40000
+
         width=1920
+
         height=1080
+
         live-source=0
 
+
         [primary-gie]
+
         enable=1
+
         gpu-id=0
+
         gie-unique-id=1
+
         config-file=config_infer_primary_libreyolo9s.txt
 
+
         [osd]
+
         enable=1
+
         border-width=2
+
         text-size=15
 
+
         [sink0]
+
         enable=1
+
         type=1
+
         sync=0
 
+
         [tests]
+
         file-loop=0
     - label: 运行它
       language: bash
@@ -176,6 +242,7 @@ snippets:
         docker run --rm --gpus all -v "$PWD:/work" -w /work \
           nvcr.io/nvidia/deepstream:8.0-samples-multiarch \
           bash -c "bash build_parser.sh && deepstream-app -c deepstream_app_config.txt"
+source_hash: 1ee91c265753dd9a
 ---
 
 ## 可用性

@@ -1,11 +1,26 @@
 ---
 title: CenterNet
-families: [centernet]
-seo_title: "CenterNet: detección de objetos en LibreYOLO"
-description: "Ejecuta CenterNet (Objects as Points) en LibreYOLO con los backbones ResDCN-18 y DLA-34. Predice, valida y exporta a ONNX bajo licencia MIT. Sin ruta de entrenamiento."
-lead: "CenterNet modela un objeto como el punto central de su bounding box y regresa todas las demás propiedades a partir de un pico del heatmap, así que no necesita anchors ni un paso de non-maximum-suppression. LibreYOLO lo incluye como detector solo de inferencia."
-keywords: [CenterNet, "Objects as Points", "detección de objetos python", "detector anchor-free", "detección por keypoints", ResDCN-18, DLA-34]
-last_verified: "1.5.0"
+families:
+  - centernet
+seo_title: 'CenterNet: detección de objetos en LibreYOLO'
+description: >-
+  Ejecuta CenterNet (Objects as Points) en LibreYOLO con los backbones ResDCN-18
+  y DLA-34. Predice, valida y exporta a ONNX bajo licencia MIT. Sin ruta de
+  entrenamiento.
+lead: >-
+  CenterNet modela un objeto como el punto central de su bounding box y regresa
+  todas las demás propiedades a partir de un pico del heatmap, así que no
+  necesita anchors ni un paso de non-maximum-suppression. LibreYOLO lo incluye
+  como detector solo de inferencia.
+keywords:
+  - CenterNet
+  - Objects as Points
+  - detección de objetos python
+  - detector anchor-free
+  - detección por keypoints
+  - ResDCN-18
+  - DLA-34
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +35,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreCenterNetresdcn18.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreCenterNetresdcn18.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: DLA-34
       language: python
       code: |
@@ -73,6 +90,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 20aaef83cc95590d
 ---
 
 ## Instalación

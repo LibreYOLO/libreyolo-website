@@ -1,11 +1,24 @@
 ---
 title: DeiT
-families: [deit]
-seo_title: "DeiT 图像分类器：预测、验证与导出"
-description: "在 LibreYOLO 里运行 DeiT 图像分类器：一个冻结的、仅推理的博物馆家族，提供 tiny、small 和 base 三种尺寸，采用 Apache-2.0 许可。"
-lead: "DeiT（Data-efficient image Transformer）是一个纯粹的 Vision Transformer 分类器，只在 ImageNet-1k 上训练，没有用额外的预训练数据。LibreYOLO 以冻结、仅推理的展品形式收录 tiny、small 和 base 三种 patch-16 尺寸。"
-keywords: [DeiT, Vision Transformer, ViT, "图像分类 python", ImageNet, "deit 预训练模型", "vision transformer 图像分类"]
-last_verified: "1.5.0"
+families:
+  - deit
+seo_title: DeiT 图像分类器：预测、验证与导出
+description: >-
+  在 LibreYOLO 里运行 DeiT 图像分类器：一个冻结的、仅推理的博物馆家族，提供 tiny、small 和 base 三种尺寸，采用
+  Apache-2.0 许可。
+lead: >-
+  DeiT（Data-efficient image Transformer）是一个纯粹的 Vision Transformer 分类器，只在
+  ImageNet-1k 上训练，没有用额外的预训练数据。LibreYOLO 以冻结、仅推理的展品形式收录 tiny、small 和 base 三种
+  patch-16 尺寸。
+keywords:
+  - DeiT
+  - Vision Transformer
+  - ViT
+  - 图像分类 python
+  - ImageNet
+  - deit 预训练模型
+  - vision transformer 图像分类
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +33,9 @@ snippets:
         print(result.probs.top5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDeiTb-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+      code: >
+        libreyolo predict model=LibreDeiTb-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
   val:
     - label: Python
       language: python
@@ -62,6 +76,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: 9c67c8554b2af5c6
 ---
 
 ## 安装

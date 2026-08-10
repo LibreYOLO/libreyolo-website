@@ -1,30 +1,38 @@
 ---
 title: libreyolo ui
-seo_title: "référence de la commande libreyolo ui"
-description: "Lancer l'interface web d'inférence locale : adresse d'écoute, comportement du port, choix de l'appareil et fin du processus."
-lead: "Lance un serveur web local qui accepte les images déposées ou collées, leur applique le modèle choisi et affiche les résultats dans le navigateur."
-keywords: [libreyolo ui cli, interface web libreyolo, inférence locale dans le navigateur, inférence glisser-déposer, libreyolo ui port]
-last_verified: "1.5.0"
+seo_title: référence de la commande libreyolo ui
+description: "Lancer l'interface web d'inférence locale\_: adresse d'écoute, comportement du port, choix de l'appareil et fin du processus."
+lead: >-
+  Lance un serveur web local qui accepte les images déposées ou collées, leur
+  applique le modèle choisi et affiche les résultats dans le navigateur.
+keywords:
+  - libreyolo ui cli
+  - interface web libreyolo
+  - inférence locale dans le navigateur
+  - inférence glisser-déposer
+  - libreyolo ui port
+last_verified: 1.5.0
 meta:
   - label: Commande
     value: libreyolo ui
     mono: true
   - label: Sortie
-    value: "Une URL de serveur sur stdout, puis le processus reste au premier plan"
+    value: 'Une URL de serveur sur stdout, puis le processus reste au premier plan'
 snippets:
   examples:
     - label: Simple
       language: bash
       code: |
         libreyolo ui
-    - label: Port fixe, sans navigateur
+    - label: 'Port fixe, sans navigateur'
       language: bash
       code: |
         libreyolo ui port=9000 no_browser=true
-    - label: Sur le CPU, lisible par une machine
+    - label: 'Sur le CPU, lisible par une machine'
       language: bash
       code: |
         libreyolo ui device=cpu json=true
+source_hash: b0eebd33fd0f463b
 ---
 
 ## Synopsis

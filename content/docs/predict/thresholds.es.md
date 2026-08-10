@@ -1,8 +1,15 @@
 ---
 title: Umbrales y filtrado
-seo_title: "conf, iou y max_det en LibreYOLO"
-description: "Qué hacen realmente conf, iou, max_det y classes en la predicción, qué familias ignoran iou porque no ejecutan NMS y por qué agnostic_nms es un no-op."
-lead: "Cuatro argumentos deciden qué predicciones sobreviven: conf, iou, max_det y classes. Solo dos de ellos se aplican a todas las familias, porque un predictor de conjuntos decodifica un conjunto fijo de queries y nunca ejecuta NMS."
+seo_title: 'conf, iou y max_det en LibreYOLO'
+description: >-
+  Qué hacen realmente conf, iou, max_det y classes en la predicción, qué
+  familias ignoran iou porque no ejecutan NMS y por qué agnostic_nms es un
+  no-op.
+lead: >-
+  Cuatro argumentos deciden qué predicciones sobreviven: conf, iou, max_det y
+  classes. Solo dos de ellos se aplican a todas las familias, porque un
+  predictor de conjuntos decodifica un conjunto fijo de queries y nunca ejecuta
+  NMS.
 keywords:
   - umbral de confianza yolo
   - conf yolo python
@@ -12,8 +19,16 @@ keywords:
   - agnostic nms
   - detr sin nms
   - filtrado por clases inferencia
-last_verified: "1.5.0"
-verification: "Valores por defecto tomados de InferenceRunner.__call__ en libreyolo/models/base/inference.py. Comportamiento de NMS por familia leído de todos los módulos de libreyolo/postprocess/ y contrastado con _is_nms_free_family en libreyolo/backends/base.py. Filtrado por clases de InferenceRunner._apply_classes_filter y _wrap_results. Estado de agnostic_nms de NOOP_PREDICT_KWARGS en libreyolo/utils/predict_args.py. Gestión de vocabulario abierto de NMS_THRESHOLD en libreyolo/models/openvocab/base.py. Valores por defecto de la validación de BaseModel.val."
+last_verified: 1.5.0
+verification: >-
+  Valores por defecto tomados de InferenceRunner.__call__ en
+  libreyolo/models/base/inference.py. Comportamiento de NMS por familia leído de
+  todos los módulos de libreyolo/postprocess/ y contrastado con
+  _is_nms_free_family en libreyolo/backends/base.py. Filtrado por clases de
+  InferenceRunner._apply_classes_filter y _wrap_results. Estado de agnostic_nms
+  de NOOP_PREDICT_KWARGS en libreyolo/utils/predict_args.py. Gestión de
+  vocabulario abierto de NMS_THRESHOLD en libreyolo/models/openvocab/base.py.
+  Valores por defecto de la validación de BaseModel.val.
 snippets:
   basic:
     - label: Los cuatro argumentos
@@ -75,17 +90,26 @@ snippets:
   nmsfree:
     - label: iou en una familia que no ejecuta NMS
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # RF-DETR decodifica un conjunto fijo de queries, así que iou no cambia nada aquí.
+
+        # RF-DETR decodifica un conjunto fijo de queries, así que iou no cambia
+        nada aquí.
+
         model = LibreYOLO("LibreRFDETRs.pt")
 
+
         loose = model(SAMPLE_IMAGE, iou=0.9)
+
         tight = model(SAMPLE_IMAGE, iou=0.1)
 
-        # El mismo recuento en ambos casos. conf y max_det son los controles que funcionan.
+
+        # El mismo recuento en ambos casos. conf y max_det son los controles que
+        funcionan.
+
         print(len(loose.boxes), len(tight.boxes))
+source_hash: 0b978963c356027d
 ---
 
 ## Los cuatro argumentos

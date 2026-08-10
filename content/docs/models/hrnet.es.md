@@ -1,11 +1,23 @@
 ---
 title: HRNet
-families: [hrnet]
-seo_title: "HRNet: estimación de pose top-down en LibreYOLO"
-description: "Usa HRNet en LibreYOLO para estimación de pose top-down con COCO-17. Instala, predice, valida y exporta los checkpoints W32 y W48, con licencia MIT."
-lead: "HRNet es una red convolucional que mantiene un flujo de características de alta resolución mediante fusión multiescala repetida, en lugar de recuperar la resolución después de reducirla. LibreYOLO envuelve la variante oficial de pose top-down para inferencia y validación."
-keywords: [HRNet, "estimación de pose humana", "pose top-down", "keypoints COCO-17", "estimación de pose python"]
-last_verified: "1.5.0"
+families:
+  - hrnet
+seo_title: 'HRNet: estimación de pose top-down en LibreYOLO'
+description: >-
+  Usa HRNet en LibreYOLO para estimación de pose top-down con COCO-17. Instala,
+  predice, valida y exporta los checkpoints W32 y W48, con licencia MIT.
+lead: >-
+  HRNet es una red convolucional que mantiene un flujo de características de
+  alta resolución mediante fusión multiescala repetida, en lugar de recuperar la
+  resolución después de reducirla. LibreYOLO envuelve la variante oficial de
+  pose top-down para inferencia y validación.
+keywords:
+  - HRNet
+  - estimación de pose humana
+  - pose top-down
+  - keypoints COCO-17
+  - estimación de pose python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -22,23 +34,34 @@ snippets:
         print(result.boxes.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreHRNetw32-pose.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreHRNetw32-pose.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Fuente de personas
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
 
         model = LibreYOLO("LibreHRNetw32-pose.pt")
 
-        # Sáltate la detección por completo: trata toda la imagen como una persona.
+
+        # Sáltate la detección por completo: trata toda la imagen como una
+        persona.
+
         result = model(SAMPLE_IMAGE, cropped=True)
 
+
         # O pásale a HRNet cajas de un detector que ya hayas ejecutado.
+
         result = model(SAMPLE_IMAGE, person_boxes=[[34, 12, 220, 400]])
 
+
         # O empareja HRNet con un detector LibreYOLO concreto en lugar del
+
         # LibreYOLO9t por defecto.
+
         result = model(SAMPLE_IMAGE, person_detector="rfdetr")
   val:
     - label: Python
@@ -70,21 +93,33 @@ snippets:
         libreyolo export model=LibreHRNetw32-pose.pt format=onnx
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         import numpy as np
+
         import onnxruntime as ort
 
-        # El grafo exportado es solo la cabeza de heatmaps de lienzo fijo: recibe
+
+        # El grafo exportado es solo la cabeza de heatmaps de lienzo fijo:
+        recibe
+
         # un batch de recortes de persona ya recortados y ya normalizados y
+
         # devuelve heatmaps en bruto. La detección de personas, la geometría del
+
         # recorte, la decodificación de heatmaps y la supresión OKS no forman
+
         # parte de este grafo; ejecutarlo fuera de LibreYOLO implica
+
         # reimplementar tú mismo ese paso de decodificación.
+
         session = ort.InferenceSession("LibreHRNetw32-pose.onnx")
+
         name = session.get_inputs()[0].name
+
         heatmaps = session.run(
             None, {name: np.zeros((1, 3, 256, 192), dtype=np.float32)}
         )[0]
+source_hash: 5a5540fd54ee6f23
 ---
 
 ## Instalación

@@ -1,11 +1,24 @@
 ---
 title: ResNet
-families: [resnet]
-seo_title: "ResNet: entrena, valida y exporta bajo Apache-2.0"
-description: "Usa ResNet en LibreYOLO para clasificación de imágenes. Instala, predice, haz fine-tuning, valida y exporta LibreResNet18/34/50/101."
-lead: "ResNet es un clasificador de imágenes construido con bloques residuales, conexiones de salto que permiten a una red añadir muchas más capas sin la pérdida de precisión que sufren, si no, las pilas convolucionales profundas y simples. LibreYOLO lo soporta para una tarea: clasificación."
-keywords: [ResNet, ResNet50, "clasificación de imágenes python", "aprendizaje residual", "redes residuales profundas", "clasificador ImageNet"]
-last_verified: "1.5.0"
+families:
+  - resnet
+seo_title: 'ResNet: entrena, valida y exporta bajo Apache-2.0'
+description: >-
+  Usa ResNet en LibreYOLO para clasificación de imágenes. Instala, predice, haz
+  fine-tuning, valida y exporta LibreResNet18/34/50/101.
+lead: >-
+  ResNet es un clasificador de imágenes construido con bloques residuales,
+  conexiones de salto que permiten a una red añadir muchas más capas sin la
+  pérdida de precisión que sufren, si no, las pilas convolucionales profundas y
+  simples. LibreYOLO lo soporta para una tarea: clasificación.
+keywords:
+  - ResNet
+  - ResNet50
+  - clasificación de imágenes python
+  - aprendizaje residual
+  - redes residuales profundas
+  - clasificador ImageNet
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -70,15 +83,23 @@ snippets:
         libreyolo export model=LibreResNet50-cls.pt format=tensorrt half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreResNet50-cls.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.probs.top1)
+source_hash: e2f46c73716af1b7
 ---
 
 ## Instalación

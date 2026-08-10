@@ -1,10 +1,22 @@
 ---
 title: Instalación
-seo_title: "Instalar LibreYOLO"
-description: "Instala LibreYOLO desde PyPI, elige los extras opcionales que necesita una familia de modelos o un destino de exportación, y confirma que PyTorch ve tu GPU."
-lead: "LibreYOLO se publica en PyPI como libreyolo. El paquete base cubre la predicción, el entrenamiento, la validación y las familias de modelos que no necesitan nada más allá de PyTorch; los extras opcionales añaden el resto."
-keywords: [instalar libreyolo, pip install libreyolo, libreyolo extras, libreyolo cuda, libreyolo gpu, requisitos libreyolo]
-last_verified: "1.5.0"
+seo_title: Instalar LibreYOLO
+description: >-
+  Instala LibreYOLO desde PyPI, elige los extras opcionales que necesita una
+  familia de modelos o un destino de exportación, y confirma que PyTorch ve tu
+  GPU.
+lead: >-
+  LibreYOLO se publica en PyPI como libreyolo. El paquete base cubre la
+  predicción, el entrenamiento, la validación y las familias de modelos que no
+  necesitan nada más allá de PyTorch; los extras opcionales añaden el resto.
+keywords:
+  - instalar libreyolo
+  - pip install libreyolo
+  - libreyolo extras
+  - libreyolo cuda
+  - libreyolo gpu
+  - requisitos libreyolo
+last_verified: 1.5.0
 meta:
   - label: Paquete
     value: libreyolo
@@ -56,6 +68,7 @@ snippets:
         # de entrada. Las familias cuyo extra falta se listan con el
         # comando pip que las habilita.
         libreyolo models
+source_hash: 34fc6d3e24d03fb4
 ---
 
 ## Instalación

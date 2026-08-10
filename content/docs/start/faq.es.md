@@ -1,10 +1,23 @@
 ---
 title: FAQ
-seo_title: "Preguntas frecuentes sobre LibreYOLO"
-description: "Respuestas breves a las preguntas que atraviesan todos los modelos de LibreYOLO: hardware, licencias, pesos, dispositivos, entrenamiento, cobertura de exportación y la CLI."
-lead: "Respuestas a preguntas que no son específicas de una familia de modelos. Todo lo específico de una familia vive en la página de esa familia."
-keywords: [libreyolo faq, libreyolo preguntas frecuentes, libreyolo necesita gpu, libreyolo licencia comercial, donde se guardan los pesos libreyolo, libreyolo cli, libreyolo sin internet]
-last_verified: "1.5.0"
+seo_title: Preguntas frecuentes sobre LibreYOLO
+description: >-
+  Respuestas breves a las preguntas que atraviesan todos los modelos de
+  LibreYOLO: hardware, licencias, pesos, dispositivos, entrenamiento, cobertura
+  de exportación y la CLI.
+lead: >-
+  Respuestas a preguntas que no son específicas de una familia de modelos. Todo
+  lo específico de una familia vive en la página de esa familia.
+keywords:
+  - libreyolo faq
+  - libreyolo preguntas frecuentes
+  - libreyolo necesita gpu
+  - libreyolo licencia comercial
+  - donde se guardan los pesos libreyolo
+  - libreyolo cli
+  - libreyolo sin internet
+last_verified: 1.5.0
+source_hash: a729b43a6642f2a0
 ---
 
 ## ¿Con qué modelo debería empezar?

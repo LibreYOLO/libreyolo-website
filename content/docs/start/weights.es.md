@@ -1,16 +1,28 @@
 ---
 title: Checkpoints y pesos
-seo_title: "Checkpoints y pesos de LibreYOLO"
-description: "Cómo LibreYOLO encuentra, descarga y verifica los pesos de los modelos, dónde están alojados, cómo ejecutar sin red y qué hace que un checkpoint se cargue de forma segura."
-lead: "Un checkpoint de LibreYOLO es un diccionario de torch.save que contiene un state dict más los metadatos necesarios para identificarlo. Esta página cubre de dónde vienen esos archivos, dónde acaban y cómo se cargan."
-keywords: [pesos libreyolo, checkpoints libreyolo, descargar pesos libreyolo, libreyolo sin conexión, libreyolo hugging face, metadatos de un checkpoint]
-last_verified: "1.5.0"
+seo_title: Checkpoints y pesos de LibreYOLO
+description: >-
+  Cómo LibreYOLO encuentra, descarga y verifica los pesos de los modelos, dónde
+  están alojados, cómo ejecutar sin red y qué hace que un checkpoint se cargue
+  de forma segura.
+lead: >-
+  Un checkpoint de LibreYOLO es un diccionario de torch.save que contiene un
+  state dict más los metadatos necesarios para identificarlo. Esta página cubre
+  de dónde vienen esos archivos, dónde acaban y cómo se cargan.
+keywords:
+  - pesos libreyolo
+  - checkpoints libreyolo
+  - descargar pesos libreyolo
+  - libreyolo sin conexión
+  - libreyolo hugging face
+  - metadatos de un checkpoint
+last_verified: 1.5.0
 meta:
   - label: Alojados en
-    value: "Un repositorio de Hugging Face por checkpoint:"
+    value: 'Un repositorio de Hugging Face por checkpoint:'
     links:
       - label: huggingface.co/LibreYOLO
-        href: https://huggingface.co/LibreYOLO
+        href: 'https://huggingface.co/LibreYOLO'
   - label: Caché local
     value: weights/ bajo el directorio de trabajo
     mono: true
@@ -49,17 +61,24 @@ snippets:
         libreyolo metadata path=weights/LibreYOLO9t.pt --json
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo.utils.serialization import (
             load_untrusted_torch_file,
             validate_checkpoint_metadata,
         )
 
+
         loaded = load_untrusted_torch_file("weights/LibreYOLO9t.pt")
 
-        # Devuelve una lista de problemas. Vacía significa que el archivo cumple la v1.0.
+
+        # Devuelve una lista de problemas. Vacía significa que el archivo cumple
+        la v1.0.
+
         print(validate_checkpoint_metadata(loaded))
-        print(loaded["model_family"], loaded["size"], loaded["task"], loaded["nc"])
+
+        print(loaded["model_family"], loaded["size"], loaded["task"],
+        loaded["nc"])
+source_hash: 210a12baa1417cfb
 ---
 
 ## Dónde se busca un checkpoint

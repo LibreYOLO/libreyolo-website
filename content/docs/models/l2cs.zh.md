@@ -1,11 +1,20 @@
 ---
 title: L2CS-Net
-families: [l2cs]
-seo_title: "L2CS-Net：在 LibreYOLO 里做视线估计"
-description: "在 LibreYOLO 里用 L2CS-Net 做两阶段的视线俯仰角/偏航角估计。安装、预测和导出；Gaze360 检查点仅限研究使用。"
-lead: "L2CS-Net 是一个两阶段视线估计器：先由人脸检测器定位人脸，再由一个带两个角度分箱分类 head 的 ResNet 主干为每张人脸预测俯仰角和偏航角。LibreYOLO 对它的封装仅支持推理。"
-keywords: [L2CS-Net, "视线估计 python", "眼动追踪 开源模型", "俯仰角 偏航角 估计", Gaze360, "人脸检测"]
-last_verified: "1.5.0"
+families:
+  - l2cs
+seo_title: L2CS-Net：在 LibreYOLO 里做视线估计
+description: 在 LibreYOLO 里用 L2CS-Net 做两阶段的视线俯仰角/偏航角估计。安装、预测和导出；Gaze360 检查点仅限研究使用。
+lead: >-
+  L2CS-Net 是一个两阶段视线估计器：先由人脸检测器定位人脸，再由一个带两个角度分箱分类 head 的 ResNet
+  主干为每张人脸预测俯仰角和偏航角。LibreYOLO 对它的封装仅支持推理。
+keywords:
+  - L2CS-Net
+  - 视线估计 python
+  - 眼动追踪 开源模型
+  - 俯仰角 偏航角 估计
+  - Gaze360
+  - 人脸检测
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -22,8 +31,10 @@ snippets:
         print(result.gaze.pitch, result.gaze.yaw)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreL2CSr50.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreL2CSr50.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: 人脸来源
       language: python
       code: |
@@ -64,6 +75,7 @@ snippets:
         yaw_logits, pitch_logits = session.run(
             None, {name: np.zeros((1, 3, 448, 448), dtype=np.float32)}
         )
+source_hash: 4ec43f4673b4be3e
 ---
 
 ## 安装

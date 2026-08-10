@@ -1,11 +1,25 @@
 ---
 title: PicoDet
-families: [picodet]
-seo_title: "PicoDet en LibreYOLO: predecir, entrenar y exportar"
-description: "Ejecuta PicoDet en LibreYOLO para detección de objetos en móvil. Instala, predice, entrena, valida y exporta con licencia Apache-2.0."
-lead: "PicoDet es un detector de una etapa pensado para CPUs de móvil y edge: un backbone ESNet, un neck CSP-PAN y una cabeza compartida con Generalized Focal Loss. LibreYOLO lo soporta para detección."
-keywords: [PicoDet, PP-PicoDet, "detección de objetos", "detección de objetos en móvil", "detección de objetos en dispositivos edge", "detector ligero", ESNet, "Generalized Focal Loss"]
-last_verified: "1.5.0"
+families:
+  - picodet
+seo_title: 'PicoDet en LibreYOLO: predecir, entrenar y exportar'
+description: >-
+  Ejecuta PicoDet en LibreYOLO para detección de objetos en móvil. Instala,
+  predice, entrena, valida y exporta con licencia Apache-2.0.
+lead: >-
+  PicoDet es un detector de una etapa pensado para CPUs de móvil y edge: un
+  backbone ESNet, un neck CSP-PAN y una cabeza compartida con Generalized Focal
+  Loss. LibreYOLO lo soporta para detección.
+keywords:
+  - PicoDet
+  - PP-PicoDet
+  - detección de objetos
+  - detección de objetos en móvil
+  - detección de objetos en dispositivos edge
+  - detector ligero
+  - ESNet
+  - Generalized Focal Loss
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +34,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibrePICODETs.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibrePICODETs.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -50,10 +66,13 @@ snippets:
         )
     - label: CLI
       language: bash
-      code: |
+      code: >
         # Merece la pena fijar imgsz: el CLI usa 640 por defecto, mientras que
+
         # el checkpoint s es nativo a 320.
-        libreyolo train model=LibrePICODETs.pt data=my-dataset.yaml imgsz=320 epochs=300 batch=16 lr0=0.01
+
+        libreyolo train model=LibrePICODETs.pt data=my-dataset.yaml imgsz=320
+        epochs=300 batch=16 lr0=0.01
   export:
     - label: Python
       language: python
@@ -65,9 +84,11 @@ snippets:
         model.export(format="tensorrt", imgsz=320, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibrePICODETs.pt format=onnx imgsz=320
-        libreyolo export model=LibrePICODETs.pt format=tensorrt imgsz=320 half=True
+
+        libreyolo export model=LibrePICODETs.pt format=tensorrt imgsz=320
+        half=True
     - label: Usar el archivo exportado
       language: python
       code: |
@@ -80,6 +101,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 947aa47214abc4c0
 ---
 
 ## Instalación

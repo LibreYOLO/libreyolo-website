@@ -1,8 +1,15 @@
 ---
 title: API de segmentación con prompts
-seo_title: "API de LibreSAM: prompts, alias y firmas"
-description: "La factoría LibreSAM, sus alias de tamaño, los tipos de prompt de punto, de caja y de texto de concepto, el ciclo de vida de set_image que codifica una sola vez, y lo que el tier no soporta."
-lead: "LibreSAM es la factoría para la segmentación con prompts. Un forward pass necesita un prompt por imagen que se pasa en el momento de la llamada, así que el tier tiene su propia superficie de predict en lugar de enrutar a través del runner de inferencia sin prompts."
+seo_title: 'API de LibreSAM: prompts, alias y firmas'
+description: >-
+  La factoría LibreSAM, sus alias de tamaño, los tipos de prompt de punto, de
+  caja y de texto de concepto, el ciclo de vida de set_image que codifica una
+  sola vez, y lo que el tier no soporta.
+lead: >-
+  LibreSAM es la factoría para la segmentación con prompts. Un forward pass
+  necesita un prompt por imagen que se pasa en el momento de la llamada, así que
+  el tier tiene su propia superficie de predict en lugar de enrutar a través del
+  runner de inferencia sin prompts.
 keywords:
   - LibreSAM
   - segmentación con prompts
@@ -11,8 +18,14 @@ keywords:
   - set_image
   - segmentarlo todo SAM
   - extra sam de libreyolo
-last_verified: "1.5.0"
-verification: "Alias, tamaños y repositorios de la factoría leídos de libreyolo/models/sam/model.py, sam2.py, edgetam.py, sam3.py, libreyolo/models/mobilesam/model.py y libreyolo/models/picosam3/model.py. Contrato de prompts y valores por defecto leídos de libreyolo/models/sam/base.py. Intención de diseño según docs/adr/0007-libresam-contract.md, todo en la v1.5.0."
+last_verified: 1.5.0
+verification: >-
+  Alias, tamaños y repositorios de la factoría leídos de
+  libreyolo/models/sam/model.py, sam2.py, edgetam.py, sam3.py,
+  libreyolo/models/mobilesam/model.py y libreyolo/models/picosam3/model.py.
+  Contrato de prompts y valores por defecto leídos de
+  libreyolo/models/sam/base.py. Intención de diseño según
+  docs/adr/0007-libresam-contract.md, todo en la v1.5.0.
 snippets:
   install:
     - label: bash
@@ -33,7 +46,7 @@ snippets:
 
         r = model.predict(SAMPLE_IMAGE, bboxes=[100, 100, 200, 200])
         print(len(r))
-    - label: Codificar una vez, lanzar muchos prompts
+    - label: 'Codificar una vez, lanzar muchos prompts'
       language: python
       code: |
         from libreyolo import LibreSAM, SAMPLE_IMAGE
@@ -46,6 +59,7 @@ snippets:
         print(len(a), len(b))
 
         model.reset_image()
+source_hash: 18e8206c10ce17fd
 ---
 
 ## Instalación

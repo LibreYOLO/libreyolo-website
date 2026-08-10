@@ -1,11 +1,26 @@
 ---
 title: Qwen3-VL
-families: [qwen3vl]
-seo_title: "Qwen3-VL en LibreYOLO: detección de vocabulario abierto"
-description: "Qwen3-VL en LibreYOLO: instalación, definición de un vocabulario abierto y predicción o chat con el modelo de visión y lenguaje Apache-2.0 de Alibaba."
-lead: "Qwen3-VL es el modelo de visión y lenguaje de Alibaba con grounding 2D nativo. LibreYOLO lo envuelve como detector de objetos de vocabulario abierto y expone su chat libre directamente: pásale una lista de clases para detectar, o hazle una pregunta."
-keywords: [Qwen3-VL, "modelo de visión y lenguaje", "detección de vocabulario abierto", "qwen3 vl python", "detectar objetos sin entrenar", grounding, Alibaba, VLM]
-last_verified: "1.5.0"
+families:
+  - qwen3vl
+seo_title: 'Qwen3-VL en LibreYOLO: detección de vocabulario abierto'
+description: >-
+  Qwen3-VL en LibreYOLO: instalación, definición de un vocabulario abierto y
+  predicción o chat con el modelo de visión y lenguaje Apache-2.0 de Alibaba.
+lead: >-
+  Qwen3-VL es el modelo de visión y lenguaje de Alibaba con grounding 2D nativo.
+  LibreYOLO lo envuelve como detector de objetos de vocabulario abierto y expone
+  su chat libre directamente: pásale una lista de clases para detectar, o hazle
+  una pregunta.
+keywords:
+  - Qwen3-VL
+  - modelo de visión y lenguaje
+  - detección de vocabulario abierto
+  - qwen3 vl python
+  - detectar objetos sin entrenar
+  - grounding
+  - Alibaba
+  - VLM
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,15 +36,23 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: Chat
       language: python
-      code: |
+      code: >
         from libreyolo import LibreVLM, SAMPLE_IMAGE
+
 
         model = LibreVLM("qwen3-vl-4b")
 
-        # La vía de escape bajo la comodidad de la detección: cualquier pregunta,
+
+        # La vía de escape bajo la comodidad de la detección: cualquier
+        pregunta,
+
         # no solo una consulta de bounding boxes.
-        answer = model.chat(SAMPLE_IMAGE, "How many people are wearing a safety vest?")
+
+        answer = model.chat(SAMPLE_IMAGE, "How many people are wearing a safety
+        vest?")
+
         print(answer)
+source_hash: ee225b6221d624d9
 ---
 
 ## Instalación

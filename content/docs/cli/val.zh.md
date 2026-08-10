@@ -1,19 +1,24 @@
 ---
 title: libreyolo val
-seo_title: "libreyolo val 命令参考"
-description: "从命令行在数据集划分（split）上评估检查点（checkpoint）：每个参数及其默认值，以及每种任务返回的指标键。"
-lead: "把一个模型放到一个数据集划分上评估并打印指标。指标集合取决于模型的任务，这些数字就是基准测试里一行数据的来源。"
-keywords: [libreyolo val 命令, libreyolo 验证命令, yolo 命令行评估, mAP50-95 计算, libreyolo val 参数]
-last_verified: "1.5.0"
+seo_title: libreyolo val 命令参考
+description: 从命令行在数据集划分（split）上评估检查点（checkpoint）：每个参数及其默认值，以及每种任务返回的指标键。
+lead: 把一个模型放到一个数据集划分上评估并打印指标。指标集合取决于模型的任务，这些数字就是基准测试里一行数据的来源。
+keywords:
+  - libreyolo val 命令
+  - libreyolo 验证命令
+  - yolo 命令行评估
+  - mAP50-95 计算
+  - libreyolo val 参数
+last_verified: 1.5.0
 meta:
   - label: 命令
     value: libreyolo val
     mono: true
   - label: 必填
-    value: model, data
+    value: 'model, data'
     mono: true
   - label: 输出
-    value: "指标打印到 stdout。需要时在 runs/val/exp 下生成图表和 COCO JSON"
+    value: 指标打印到 stdout。需要时在 runs/val/exp 下生成图表和 COCO JSON
 snippets:
   examples:
     - label: 基础用法
@@ -30,6 +35,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
+source_hash: f6507840568c3725
 ---
 
 ## 概要

@@ -1,42 +1,70 @@
 ---
 title: Restauración de imágenes
-seo_title: "Restauración y escalado de imágenes en LibreYOLO"
-description: "Elimina ruido, corrige el desenfoque y escala imágenes en LibreYOLO. Predice una imagen RGB restaurada, entrena NAFNet con datos emparejados y lee las claves PSNR y SSIM."
-lead: "La restauración de imágenes toma una imagen degradada y devuelve una limpia. LibreYOLO la expone como la tarea restore, que cubre la eliminación de ruido, la corrección de desenfoque y la superresolución detrás de un único contrato de salida: entra una imagen RGB, sale una imagen RGB."
-keywords: [restauración de imágenes python, quitar ruido de imagen python, superresolución de imágenes python, escalar imagen sin perder calidad, modelo para quitar desenfoque, validación PSNR SSIM]
-last_verified: "1.5.0"
+seo_title: Restauración y escalado de imágenes en LibreYOLO
+description: >-
+  Elimina ruido, corrige el desenfoque y escala imágenes en LibreYOLO. Predice
+  una imagen RGB restaurada, entrena NAFNet con datos emparejados y lee las
+  claves PSNR y SSIM.
+lead: >-
+  La restauración de imágenes toma una imagen degradada y devuelve una limpia.
+  LibreYOLO la expone como la tarea restore, que cubre la eliminación de ruido,
+  la corrección de desenfoque y la superresolución detrás de un único contrato
+  de salida: entra una imagen RGB, sale una imagen RGB.
+keywords:
+  - restauración de imágenes python
+  - quitar ruido de imagen python
+  - superresolución de imágenes python
+  - escalar imagen sin perder calidad
+  - modelo para quitar desenfoque
+  - validación PSNR SSIM
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Escalar una imagen
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # El generador 4x compacto; tile limita el pico de memoria con un origen grande.
+
+        # El generador 4x compacto; tile limita el pico de memoria con un origen
+        grande.
+
         model = LibreYOLO("LibreRealESRGANx4t-restore.pt")
+
         result = model(SAMPLE_IMAGE, tile=512, tile_pad=10)
 
+
         result.restored.save("upscaled.png")
+
         print(result.restored.array.shape)   # 4x la entrada en cada eje
     - label: Quitar el ruido de una imagen
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Entrenado con ruido real de imagen de SIDD; la salida mantiene el tamaño de entrada.
+
+        # Entrenado con ruido real de imagen de SIDD; la salida mantiene el
+        tamaño de entrada.
+
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         result.restored.save("denoised.png")
+
         print(result.restore_scale)   # 1: este checkpoint no escala
   train:
     - label: Hacer fine-tuning de NAFNet con imágenes emparejadas
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
-        model.train(data="my-dataset.yaml", epochs=100, imgsz=256, batch=16, lr0=1e-3)
+
+        model.train(data="my-dataset.yaml", epochs=100, imgsz=256, batch=16,
+        lr0=1e-3)
     - label: Registrar la procedencia en el checkpoint
       language: python
       code: |
@@ -78,15 +106,22 @@ snippets:
         model.export(format="onnx", imgsz=256)
     - label: Ejecutar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factory decide según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreNAFNetl-restore-sidd.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         result.restored.save("denoised.png")
+source_hash: 9dc81cadb3ebf18b
 ---
 
 ## Definición

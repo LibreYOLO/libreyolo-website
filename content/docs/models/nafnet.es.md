@@ -1,11 +1,26 @@
 ---
 title: NAFNet
-families: [nafnet]
-seo_title: "NAFNet: quitar ruido, entrenar y exportar con licencia MIT"
-description: "Usa NAFNet en LibreYOLO para eliminar ruido y restaurar imágenes. Instala, predice, entrena, valida y exporta el checkpoint SIDD, con licencia MIT."
-lead: "NAFNet es una red convolucional para restauración de imágenes que elimina las funciones de activación no lineales del bloque UNet típico y las sustituye por una multiplicación elemento a elemento. LibreYOLO lo soporta para una tarea, la restauración, con un checkpoint publicado de eliminación de ruido en imágenes reales entrenado sobre SIDD."
-keywords: [NAFNet, "restauración de imágenes", "quitar ruido de una imagen", "eliminar ruido de una foto python", "eliminar desenfoque de una imagen", "denoising de imágenes", SIDD]
-last_verified: "1.5.0"
+families:
+  - nafnet
+seo_title: 'NAFNet: quitar ruido, entrenar y exportar con licencia MIT'
+description: >-
+  Usa NAFNet en LibreYOLO para eliminar ruido y restaurar imágenes. Instala,
+  predice, entrena, valida y exporta el checkpoint SIDD, con licencia MIT.
+lead: >-
+  NAFNet es una red convolucional para restauración de imágenes que elimina las
+  funciones de activación no lineales del bloque UNet típico y las sustituye por
+  una multiplicación elemento a elemento. LibreYOLO lo soporta para una tarea,
+  la restauración, con un checkpoint publicado de eliminación de ruido en
+  imágenes reales entrenado sobre SIDD.
+keywords:
+  - NAFNet
+  - restauración de imágenes
+  - quitar ruido de una imagen
+  - eliminar ruido de una foto python
+  - eliminar desenfoque de una imagen
+  - denoising de imágenes
+  - SIDD
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +35,9 @@ snippets:
         print(restored.array.shape)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreNAFNetl-restore-sidd.pt source=noisy.jpg save=True
+      code: >
+        libreyolo predict model=LibreNAFNetl-restore-sidd.pt source=noisy.jpg
+        save=True
     - label: Guardar la imagen restaurada
       language: python
       code: |
@@ -34,15 +50,19 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
-        model.train(data="my-dataset.yaml", epochs=100, imgsz=256, batch=16, lr0=1e-3)
+
+        model.train(data="my-dataset.yaml", epochs=100, imgsz=256, batch=16,
+        lr0=1e-3)
     - label: CLI
       language: bash
-      code: |
-        libreyolo train model=LibreNAFNetl-restore-sidd.pt data=my-dataset.yaml \
+      code: >
+        libreyolo train model=LibreNAFNetl-restore-sidd.pt data=my-dataset.yaml
+        \
           epochs=100 imgsz=256 batch=16 lr0=1e-3
     - label: Procedencia del checkpoint
       language: python
@@ -60,8 +80,9 @@ snippets:
         )
     - label: Multi-GPU
       language: bash
-      code: |
-        libreyolo train model=LibreNAFNetl-restore-sidd.pt data=my-dataset.yaml \
+      code: >
+        libreyolo train model=LibreNAFNetl-restore-sidd.pt data=my-dataset.yaml
+        \
           epochs=100 device=0,1 batch=32
   val:
     - label: Python
@@ -91,20 +112,31 @@ snippets:
         model.export(format="tensorrt", imgsz=256, half=True)
     - label: CLI
       language: bash
-      code: |
-        libreyolo export model=LibreNAFNetl-restore-sidd.pt format=onnx imgsz=256
-        libreyolo export model=LibreNAFNetl-restore-sidd.pt format=tensorrt imgsz=256 half=True
+      code: >
+        libreyolo export model=LibreNAFNetl-restore-sidd.pt format=onnx
+        imgsz=256
+
+        libreyolo export model=LibreNAFNetl-restore-sidd.pt format=tensorrt
+        imgsz=256 half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo Results.
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        Results.
+
         model = LibreYOLO("LibreNAFNetl-restore-sidd.onnx")
+
         result = model("noisy.jpg")
 
+
         result.restored.save("denoised.png")
+source_hash: 9bae9f82bee741bf
 ---
 
 ## Instalación

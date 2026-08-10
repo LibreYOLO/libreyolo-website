@@ -1,11 +1,26 @@
 ---
 title: YOLOX
-families: [yolox]
-seo_title: "YOLOX: predecir, entrenar y exportar bajo Apache-2.0"
-description: "Usa YOLOX en LibreYOLO para detección de objetos: instala, predice, entrena, valida y exporta bajo Apache-2.0."
-lead: "YOLOX es un detector de una sola etapa sin anchors, con una cabeza desacoplada de clasificación y regresión, entrenado con asignación de etiquetas SimOTA. LibreYOLO lo soporta para detección."
-keywords: [YOLOX, "detección de objetos", "detección anchor-free", "detección sin anchors", "cabeza desacoplada", SimOTA, "detección de objetos en tiempo real", "yolox python", "entrenar yolox"]
-last_verified: "1.5.0"
+families:
+  - yolox
+seo_title: 'YOLOX: predecir, entrenar y exportar bajo Apache-2.0'
+description: >-
+  Usa YOLOX en LibreYOLO para detección de objetos: instala, predice, entrena,
+  valida y exporta bajo Apache-2.0.
+lead: >-
+  YOLOX es un detector de una sola etapa sin anchors, con una cabeza desacoplada
+  de clasificación y regresión, entrenado con asignación de etiquetas SimOTA.
+  LibreYOLO lo soporta para detección.
+keywords:
+  - YOLOX
+  - detección de objetos
+  - detección anchor-free
+  - detección sin anchors
+  - cabeza desacoplada
+  - SimOTA
+  - detección de objetos en tiempo real
+  - yolox python
+  - entrenar yolox
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,16 +35,21 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreYOLOXs.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreYOLOXs.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreYOLOXs.pt")
-        model.train(data="my-dataset.yaml", epochs=300, imgsz=640, batch=16, lr0=0.01)
+
+        model.train(data="my-dataset.yaml", epochs=300, imgsz=640, batch=16,
+        lr0=0.01)
     - label: CLI
       language: bash
       code: |
@@ -68,20 +88,29 @@ snippets:
         model.export(format="tensorrt", imgsz=640, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreYOLOXs.pt format=onnx imgsz=640
-        libreyolo export model=LibreYOLOXs.pt format=tensorrt imgsz=640 half=True
+
+        libreyolo export model=LibreYOLOXs.pt format=tensorrt imgsz=640
+        half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factoría enruta según el sufijo del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreYOLOXs.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)
+source_hash: f5ab735a29f85a95
 ---
 
 ## Instalación

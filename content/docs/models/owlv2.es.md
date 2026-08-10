@@ -1,11 +1,25 @@
 ---
 title: OWLv2
-families: [owlv2]
-seo_title: "OWLv2 en LibreYOLO: detección de objetos zero-shot"
-description: "Usa OWLv2 en LibreYOLO para detectar cualquier objeto descrito con texto. Instala el extra openvocab y predice con un vocabulario de texto libre."
-lead: "OWLv2 es un detector de objetos de vocabulario abierto, desarrollado por Google Research, que puntúa regiones de la imagen frente a embeddings de texto de un codificador estilo CLIP. LibreYOLO lo envuelve como una familia solo de predicción dentro de su tier de detectores de vocabulario abierto."
-keywords: [OWLv2, OWL-ViT, "detección de vocabulario abierto", "detección zero-shot", "detectar objetos por texto", "detectar objetos sin entrenar", LibreOpenVocab]
-last_verified: "1.5.0"
+families:
+  - owlv2
+seo_title: 'OWLv2 en LibreYOLO: detección de objetos zero-shot'
+description: >-
+  Usa OWLv2 en LibreYOLO para detectar cualquier objeto descrito con texto.
+  Instala el extra openvocab y predice con un vocabulario de texto libre.
+lead: >-
+  OWLv2 es un detector de objetos de vocabulario abierto, desarrollado por
+  Google Research, que puntúa regiones de la imagen frente a embeddings de texto
+  de un codificador estilo CLIP. LibreYOLO lo envuelve como una familia solo de
+  predicción dentro de su tier de detectores de vocabulario abierto.
+keywords:
+  - OWLv2
+  - OWL-ViT
+  - detección de vocabulario abierto
+  - detección zero-shot
+  - detectar objetos por texto
+  - detectar objetos sin entrenar
+  - LibreOpenVocab
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,13 +35,19 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: Vocabulario por defecto
       language: python
-      code: |
+      code: >
         from libreyolo import LibreOpenVocab, SAMPLE_IMAGE
 
-        # Omitir set_classes() conserva el vocabulario COCO-80 por defecto del tier.
+
+        # Omitir set_classes() conserva el vocabulario COCO-80 por defecto del
+        tier.
+
         model = LibreOpenVocab("owlv2-l14")
+
         result = model.predict(SAMPLE_IMAGE, conf=0.1)
+
         print(result.names)
+source_hash: 2d0ce68af0daabb7
 ---
 
 ## Instalación

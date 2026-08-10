@@ -1,11 +1,21 @@
 ---
 title: FOMO
-families: [fomo]
-seo_title: "FOMO：在 LibreYOLO 里做点定位、训练和导出"
-description: "在 LibreYOLO 里运行 FOMO（Faster Objects, More Objects）：一个用来清点大量小目标的极小点定位检测器。安装、预测、训练和导出。"
-lead: "FOMO 是一个基于网格的点定位器：低分辨率网格的每个格子被分类为背景或目标中心，完全不做检测框回归。LibreYOLO 在 point 任务下支持它。"
-keywords: [FOMO, "Faster Objects More Objects", "fomo 点定位", "中心点检测", "小目标检测", "边缘设备 目标检测", "单片机 目标检测"]
-last_verified: "1.5.0"
+families:
+  - fomo
+seo_title: FOMO：在 LibreYOLO 里做点定位、训练和导出
+description: >-
+  在 LibreYOLO 里运行 FOMO（Faster Objects, More
+  Objects）：一个用来清点大量小目标的极小点定位检测器。安装、预测、训练和导出。
+lead: FOMO 是一个基于网格的点定位器：低分辨率网格的每个格子被分类为背景或目标中心，完全不做检测框回归。LibreYOLO 在 point 任务下支持它。
+keywords:
+  - FOMO
+  - Faster Objects More Objects
+  - fomo 点定位
+  - 中心点检测
+  - 小目标检测
+  - 边缘设备 目标检测
+  - 单片机 目标检测
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -22,8 +32,10 @@ snippets:
             print(point.cls, point.conf, point.xy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=./LibreFOMOs-point.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=./LibreFOMOs-point.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   train:
     - label: Python
       language: python
@@ -37,10 +49,13 @@ snippets:
         )
     - label: CLI
       language: bash
-      code: |
+      code: >
         # imgsz 必须显式传入：CLI 会把它默认成 640，而 s 检查点
+
         # 只接受它原生的 96
-        libreyolo train model=./LibreFOMOs-point.pt data=my-dataset.yaml imgsz=96 epochs=40 batch=32 lr0=3e-4
+
+        libreyolo train model=./LibreFOMOs-point.pt data=my-dataset.yaml
+        imgsz=96 epochs=40 batch=32 lr0=3e-4
   val:
     - label: Python
       language: python
@@ -80,6 +95,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.points.xy)
+source_hash: 03015f2bcd9fe99d
 ---
 
 ## 安装

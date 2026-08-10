@@ -1,11 +1,19 @@
 ---
 title: PIDNet
-families: [pidnet]
-seo_title: "PIDNet：预测并导出 MIT 许可的实时分割模型"
-description: "在 LibreYOLO 里用 PIDNet 做实时语义分割。安装、预测、验证并导出采用 MIT 许可的 s/m/l 三个 Cityscapes 检查点。"
-lead: "一个三分支语义分割网络，在受比例积分微分（proportional-integral-derivative）启发的设计上加了一条专门的边界分支，目标是实时推理。LibreYOLO 只把它用于语义分割。"
-keywords: [PIDNet, Cityscapes, "实时语义分割 python", "pidnet 预训练权重", "语义分割 边界"]
-last_verified: "1.5.0"
+families:
+  - pidnet
+seo_title: PIDNet：预测并导出 MIT 许可的实时分割模型
+description: 在 LibreYOLO 里用 PIDNet 做实时语义分割。安装、预测、验证并导出采用 MIT 许可的 s/m/l 三个 Cityscapes 检查点。
+lead: >-
+  一个三分支语义分割网络，在受比例积分微分（proportional-integral-derivative）启发的设计上加了一条专门的边界分支，目标是实时推理。LibreYOLO
+  只把它用于语义分割。
+keywords:
+  - PIDNet
+  - Cityscapes
+  - 实时语义分割 python
+  - pidnet 预训练权重
+  - 语义分割 边界
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +29,10 @@ snippets:
         print(mask.classes)      # 图像中出现的类别 id，已排序
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibrePIDNets-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibrePIDNets-sem.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -63,6 +73,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
+source_hash: 489db64a39e3a61a
 ---
 
 ## 安装

@@ -1,8 +1,14 @@
 ---
 title: Configuración
-seo_title: "Variables de entorno y directorios de LibreYOLO"
-description: "Todas las variables de entorno que lee LibreYOLO, los directorios en los que escribe, los tokens que necesita y los interruptores que cambian qué ruta de código se ejecuta."
-lead: "LibreYOLO no tiene archivo de configuración. El comportamiento que no es un argumento de función se controla mediante variables de entorno y mediante un pequeño número de directorios convencionales, todos listados aquí."
+seo_title: Variables de entorno y directorios de LibreYOLO
+description: >-
+  Todas las variables de entorno que lee LibreYOLO, los directorios en los que
+  escribe, los tokens que necesita y los interruptores que cambian qué ruta de
+  código se ejecuta.
+lead: >-
+  LibreYOLO no tiene archivo de configuración. El comportamiento que no es un
+  argumento de función se controla mediante variables de entorno y mediante un
+  pequeño número de directorios convencionales, todos listados aquí.
 keywords:
   - LIBREYOLO_DATASETS_DIR
   - LIBREYOLO_KERNELS
@@ -11,8 +17,13 @@ keywords:
   - variables de entorno libreyolo
   - directorio de pesos libreyolo
   - caché de libreyolo
-last_verified: "1.5.0"
-verification: "Variables localizadas buscando os.environ y os.getenv en libreyolo/**/*.py en la v1.5.0; semántica leída en cada punto de uso. Convenciones de directorios leídas de libreyolo/data/utils.py, libreyolo/utils/download.py, libreyolo/export/exporter.py, libreyolo/models/base/model.py y libreyolo/models/sam3dbody/mhr_body.py."
+last_verified: 1.5.0
+verification: >-
+  Variables localizadas buscando os.environ y os.getenv en libreyolo/**/*.py en
+  la v1.5.0; semántica leída en cada punto de uso. Convenciones de directorios
+  leídas de libreyolo/data/utils.py, libreyolo/utils/download.py,
+  libreyolo/export/exporter.py, libreyolo/models/base/model.py y
+  libreyolo/models/sam3dbody/mhr_body.py.
 snippets:
   usage:
     - label: Apuntar la raíz de datasets a otro sitio
@@ -22,11 +33,15 @@ snippets:
         python -c "from libreyolo.data import DATASETS_DIR; print(DATASETS_DIR)"
     - label: Leer el valor resuelto desde Python
       language: python
-      code: |
+      code: >
         from libreyolo.data import DATASETS_DIR
 
-        # Por defecto es ~/datasets; LIBREYOLO_DATASETS_DIR lo sobrescribe al importar.
+
+        # Por defecto es ~/datasets; LIBREYOLO_DATASETS_DIR lo sobrescribe al
+        importar.
+
         print(DATASETS_DIR)
+source_hash: 462f1288582225ce
 ---
 
 ## Variables de entorno

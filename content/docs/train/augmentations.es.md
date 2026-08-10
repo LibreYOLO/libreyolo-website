@@ -1,8 +1,14 @@
 ---
 title: Aumento de datos
-seo_title: "Aumento de datos de entrenamiento en LibreYOLO"
-description: "Los parámetros de aumento de datos de TrainConfig, las cuatro formas de pipeline que hay detrás y la tabla por familia que dice qué parámetros se usan, se condicionan o se ignoran."
-lead: "El aumento de datos se configura con parámetros de TrainConfig, pero cada familia de modelos ejecuta su propio pipeline de entrenamiento, y un pipeline que no tiene rama de mosaico ignora mosaic_prob en lugar de aproximarlo."
+seo_title: Aumento de datos de entrenamiento en LibreYOLO
+description: >-
+  Los parámetros de aumento de datos de TrainConfig, las cuatro formas de
+  pipeline que hay detrás y la tabla por familia que dice qué parámetros se
+  usan, se condicionan o se ignoran.
+lead: >-
+  El aumento de datos se configura con parámetros de TrainConfig, pero cada
+  familia de modelos ejecuta su propio pipeline de entrenamiento, y un pipeline
+  que no tiene rama de mosaico ignora mosaic_prob en lugar de aproximarlo.
 keywords:
   - aumento de datos yolo
   - data augmentation yolo
@@ -14,7 +20,7 @@ keywords:
   - randaugment
   - cutmix
   - no_aug_epochs
-last_verified: "1.5.0"
+last_verified: 1.5.0
 snippets:
   train:
     - label: Python
@@ -69,6 +75,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
+source_hash: 47461cd13aab580c
 ---
 
 ## Definir los parámetros

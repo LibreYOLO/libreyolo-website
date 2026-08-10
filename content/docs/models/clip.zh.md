@@ -1,11 +1,22 @@
 ---
 title: CLIP
-families: [clip]
-seo_title: "CLIP：在 LibreYOLO 里做零样本分类和嵌入向量"
-description: "用 LibreYOLO 里的 CLIP 做零样本图像分类和图像/文本嵌入向量。无需训练：set_classes() 在运行时定义标签集合。"
-lead: "CLIP 是一个双塔（dual-tower）模型，它拿图像去和文本提示词打分，而不是去对一个固定的标签集合。LibreYOLO 支持用它做零样本分类和图像/文本嵌入向量，没有训练这一步。"
-keywords: [CLIP, OpenCLIP, 零样本图像分类, "clip 图像嵌入 python", "clip 文本嵌入", "图文相似度检索", 开放词汇分类, LAION-2B]
-last_verified: "1.5.0"
+families:
+  - clip
+seo_title: CLIP：在 LibreYOLO 里做零样本分类和嵌入向量
+description: 用 LibreYOLO 里的 CLIP 做零样本图像分类和图像/文本嵌入向量。无需训练：set_classes() 在运行时定义标签集合。
+lead: >-
+  CLIP 是一个双塔（dual-tower）模型，它拿图像去和文本提示词打分，而不是去对一个固定的标签集合。LibreYOLO
+  支持用它做零样本分类和图像/文本嵌入向量，没有训练这一步。
+keywords:
+  - CLIP
+  - OpenCLIP
+  - 零样本图像分类
+  - clip 图像嵌入 python
+  - clip 文本嵌入
+  - 图文相似度检索
+  - 开放词汇分类
+  - LAION-2B
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,10 +31,14 @@ snippets:
         print(model.names[result.probs.top1], float(result.probs.top1conf))
     - label: CLI
       language: bash
-      code: |
+      code: >
         # 不调用 set_classes() 时，CLI 的 predict 用的是模型默认加载的
+
         # 1,000 个 ImageNet 类别名
-        libreyolo predict model=LibreCLIPb32-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+
+        libreyolo predict model=LibreCLIPb32-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: 图像与文本嵌入向量
       language: python
       code: |
@@ -79,6 +94,7 @@ snippets:
         # task="embed" 只追踪图像塔，不需要类别
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
         model.export(format="onnx")
+source_hash: ac7cfd75ad6c0fa7
 ---
 
 ## 安装

@@ -1,11 +1,24 @@
 ---
 title: SwinIR
-families: [swinir]
-seo_title: "SwinIR: superresolución de imágenes a 4x en LibreYOLO"
-description: "Usa SwinIR en LibreYOLO para superresolución de imágenes a 4x. Instala, predice, valida y exporta los checkpoints lightweight, medium y large."
-lead: "Una red Swin Transformer para restauración de imágenes. LibreYOLO incluye inferencia y validación para sus checkpoints de superresolución a 4x: el generador oficial lightweight y los generadores real-world medium y large."
-keywords: [SwinIR, Swin Transformer, "superresolución de imágenes", "aumentar la resolución de una imagen", "restauración de imágenes python", "escalar imagen 4x sin perder calidad", "residual Swin Transformer block"]
-last_verified: "1.5.0"
+families:
+  - swinir
+seo_title: 'SwinIR: superresolución de imágenes a 4x en LibreYOLO'
+description: >-
+  Usa SwinIR en LibreYOLO para superresolución de imágenes a 4x. Instala,
+  predice, valida y exporta los checkpoints lightweight, medium y large.
+lead: >-
+  Una red Swin Transformer para restauración de imágenes. LibreYOLO incluye
+  inferencia y validación para sus checkpoints de superresolución a 4x: el
+  generador oficial lightweight y los generadores real-world medium y large.
+keywords:
+  - SwinIR
+  - Swin Transformer
+  - superresolución de imágenes
+  - aumentar la resolución de una imagen
+  - restauración de imágenes python
+  - escalar imagen 4x sin perder calidad
+  - residual Swin Transformer block
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,9 +33,11 @@ snippets:
         print(restored.array.shape, restored.array.dtype)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreSwinIRm-restore.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
-    - label: Por tiles, para imágenes grandes
+      code: >
+        libreyolo predict model=LibreSwinIRm-restore.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
+    - label: 'Por tiles, para imágenes grandes'
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -78,6 +93,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.restored.array.shape)
+source_hash: 87fc3d5524480eec
 ---
 
 ## Instalación

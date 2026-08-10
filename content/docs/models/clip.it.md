@@ -1,11 +1,27 @@
 ---
 title: CLIP
-families: [clip]
-seo_title: "CLIP in LibreYOLO: classificazione zero-shot ed embedding"
-description: "Usa CLIP in LibreYOLO per la classificazione zero-shot di immagini e per l'embedding di immagini e testo. Nessun addestramento: set_classes() definisce l'insieme di etichette a runtime."
-lead: "CLIP è un modello a due torri che confronta un'immagine con dei prompt testuali invece che con un insieme fisso di etichette. LibreYOLO lo supporta per la classificazione zero-shot e per l'embedding di immagini e testo, senza nessun passaggio di addestramento."
-keywords: [CLIP, OpenCLIP, zero-shot classification, classificazione zero-shot python, image embedding, embedding immagini testo, open vocabulary, LAION-2B]
-last_verified: "1.5.0"
+families:
+  - clip
+seo_title: 'CLIP in LibreYOLO: classificazione zero-shot ed embedding'
+description: >-
+  Usa CLIP in LibreYOLO per la classificazione zero-shot di immagini e per
+  l'embedding di immagini e testo. Nessun addestramento: set_classes() definisce
+  l'insieme di etichette a runtime.
+lead: >-
+  CLIP è un modello a due torri che confronta un'immagine con dei prompt
+  testuali invece che con un insieme fisso di etichette. LibreYOLO lo supporta
+  per la classificazione zero-shot e per l'embedding di immagini e testo, senza
+  nessun passaggio di addestramento.
+keywords:
+  - CLIP
+  - OpenCLIP
+  - zero-shot classification
+  - classificazione zero-shot python
+  - image embedding
+  - embedding immagini testo
+  - open vocabulary
+  - LAION-2B
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,34 +36,51 @@ snippets:
         print(model.names[result.probs.top1], float(result.probs.top1conf))
     - label: CLI
       language: bash
-      code: |
+      code: >
         # Senza una chiamata a set_classes(), predict da CLI usa i 1.000 nomi
+
         # di classe ImageNet con cui il modello viene caricato di default.
-        libreyolo predict model=LibreCLIPb32-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+
+        libreyolo predict model=LibreCLIPb32-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Embedding di immagini e testo
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
+
         image_embed = model(SAMPLE_IMAGE).embeddings.data
+
         text_embed = model.embed_text("a photo of a forklift")
 
-        # Entrambi sono normalizzati L2, quindi un semplice prodotto scalare è la similarità coseno.
+
+        # Entrambi sono normalizzati L2, quindi un semplice prodotto scalare è
+        la similarità coseno.
+
         similarity = (image_embed @ text_embed.T).item()
   val:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreCLIPb32-cls.pt")
 
+
         # data è una directory radice ImageFolder con uno split train/; i nomi
-        # delle cartelle diventano i prompt di classe zero-shot per questa esecuzione.
+
+        # delle cartelle diventano i prompt di classe zero-shot per questa
+        esecuzione.
+
         metrics = model.val(data="imagenette160")
 
+
         print(metrics["metrics/accuracy_top1"])
+
         print(metrics["metrics/accuracy_top5"])
     - label: CLI
       language: bash
@@ -67,9 +100,12 @@ snippets:
         # vengono fissate nel grafo. Riesporta dopo aver cambiato una delle due.
     - label: CLI
       language: bash
-      code: |
+      code: >
         # Qui non c'è nessuna chiamata a set_classes(), quindi vengono fissate
-        # le 1.000 classi ImageNet predefinite con cui il modello viene caricato.
+
+        # le 1.000 classi ImageNet predefinite con cui il modello viene
+        caricato.
+
         libreyolo export model=LibreCLIPb32-cls.pt format=onnx
     - label: Esportazione degli embedding
       language: python
@@ -79,6 +115,7 @@ snippets:
         # task="embed" traccia solo la torre delle immagini; non servono classi.
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
         model.export(format="onnx")
+source_hash: ac7cfd75ad6c0fa7
 ---
 
 ## Installazione

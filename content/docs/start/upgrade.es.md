@@ -1,19 +1,33 @@
 ---
 title: Actualizar a 1.5.0
-seo_title: "Actualizar LibreYOLO de 1.4.0 a 1.5.0"
-description: "Los cuatro cambios de código que exige 1.5.0, los tres cambios que mueven las métricas y los ajustes de comportamiento menores que conviene conocer antes de comparar ejecuciones."
-lead: "No se ha eliminado nada de la API pública de modelos: todas las clases y funciones que funcionaban en 1.4.0 se siguen importando. Cuatro argumentos han cambiado de forma, y tres valores por defecto mueven números con los que quizá estés comparando."
-keywords: [actualizar libreyolo, migrar libreyolo 1.5.0, libreyolo cambios incompatibles, allow_experimental eliminado, yolox bn eps, faster-coco-eval por defecto]
-last_verified: "1.5.0"
+seo_title: Actualizar LibreYOLO de 1.4.0 a 1.5.0
+description: >-
+  Los cuatro cambios de código que exige 1.5.0, los tres cambios que mueven las
+  métricas y los ajustes de comportamiento menores que conviene conocer antes de
+  comparar ejecuciones.
+lead: >-
+  No se ha eliminado nada de la API pública de modelos: todas las clases y
+  funciones que funcionaban en 1.4.0 se siguen importando. Cuatro argumentos han
+  cambiado de forma, y tres valores por defecto mueven números con los que quizá
+  estés comparando.
+keywords:
+  - actualizar libreyolo
+  - migrar libreyolo 1.5.0
+  - libreyolo cambios incompatibles
+  - allow_experimental eliminado
+  - yolox bn eps
+  - faster-coco-eval por defecto
+last_verified: 1.5.0
 meta:
   - label: Se aplica a
     value: De 1.4.0 a 1.5.0
   - label: Cambios de código necesarios
-    value: Cuatro, todos acotados
+    value: 'Cuatro, todos acotados'
   - label: Resultados que cambian
-    value: Backend de COCO, eps de BN en YOLOX, multiescala de D-FINE
+    value: 'Backend de COCO, eps de BN en YOLOX, multiescala de D-FINE'
   - label: Eliminaciones de la API pública
     value: Ninguna
+source_hash: ab38d8ef7b53f596
 ---
 
 Esta página trata sobre actualizar LibreYOLO en sí. Si lo que buscas es cómo

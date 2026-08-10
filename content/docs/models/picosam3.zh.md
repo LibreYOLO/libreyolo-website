@@ -1,11 +1,23 @@
 ---
 title: PicoSAM3
-families: [picosam3]
-seo_title: "PicoSAM3：LibreYOLO 里的框提示边缘端分割"
-description: "在 LibreYOLO 里用 PicoSAM3 对边缘端传感器上的区域做框提示分割。安装、预测并导出这个 Apache-2.0 许可的 pico 检查点。"
-lead: "PicoSAM3 是一个从 SAM 2.1 和 SAM 3 蒸馏出来的紧凑 CNN，专为 Sony IMX500 这类传感器上的框提示感兴趣区域（ROI）分割而设计。LibreYOLO 通过一个专门的 LibreSAM 工厂函数支持它，与 LibreYOLO() 检测器工厂函数分开，并且只接受框提示。"
-keywords: [PicoSAM3, Segment Anything, IMX500, "边缘端分割", "框提示分割", "sam 蒸馏小模型", "imx500 分割", "端侧分割模型"]
-last_verified: "1.5.0"
+families:
+  - picosam3
+seo_title: PicoSAM3：LibreYOLO 里的框提示边缘端分割
+description: 在 LibreYOLO 里用 PicoSAM3 对边缘端传感器上的区域做框提示分割。安装、预测并导出这个 Apache-2.0 许可的 pico 检查点。
+lead: >-
+  PicoSAM3 是一个从 SAM 2.1 和 SAM 3 蒸馏出来的紧凑 CNN，专为 Sony IMX500
+  这类传感器上的框提示感兴趣区域（ROI）分割而设计。LibreYOLO 通过一个专门的 LibreSAM 工厂函数支持它，与 LibreYOLO()
+  检测器工厂函数分开，并且只接受框提示。
+keywords:
+  - PicoSAM3
+  - Segment Anything
+  - IMX500
+  - 边缘端分割
+  - 框提示分割
+  - sam 蒸馏小模型
+  - imx500 分割
+  - 端侧分割模型
+last_verified: 1.5.0
 snippets:
   predict:
     - label: 框提示
@@ -49,19 +61,29 @@ snippets:
         # 接受的仅有的两个导出参数
     - label: 使用导出的文件
       language: python
-      code: |
+      code: >
         import numpy as np
+
         import onnxruntime as ort
 
+
         # PicoSAM3 导出的是它原始的 96x96 ROI CNN：roi_image -> mask_logits。
+
         # 这里没有 LibreYOLO 侧的预处理/后处理可以复用，因为 export() 不像
+
         # 检测器检查点那样把产物路由回 LibreYOLO()
+
         session = ort.InferenceSession("LibrePicoSAM3pico.onnx")
+
         name = session.get_inputs()[0].name
-        outputs = session.run(None, {name: np.zeros((1, 3, 96, 96), dtype=np.float32)})
+
+        outputs = session.run(None, {name: np.zeros((1, 3, 96, 96),
+        dtype=np.float32)})
+
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
+source_hash: 5d60ff14fe61ba29
 ---
 
 ## 安装

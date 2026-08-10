@@ -1,11 +1,24 @@
 ---
 title: MobileNetV4
-families: [mobilenetv4]
-seo_title: "MobileNetV4: entrena, valida y exporta bajo Apache-2.0"
-description: "Usa MobileNetV4 en LibreYOLO para clasificación de imágenes. Instala, predice, haz fine-tuning, valida y exporta LibreMobileNetV4 small/medium/large."
-lead: "MobileNetV4 es un clasificador de imágenes pensado para hardware móvil y edge, que usa el bloque Universal Inverted Bottleneck para unificar varios diseños de bloques móviles previos en una única estructura sobre la que buscar. LibreYOLO lo soporta para una tarea: clasificación."
-keywords: [MobileNetV4, "MobileNetV4 conv", "clasificación de imágenes python", "inferencia en móvil", "clasificador edge", "clasificador ImageNet"]
-last_verified: "1.5.0"
+families:
+  - mobilenetv4
+seo_title: 'MobileNetV4: entrena, valida y exporta bajo Apache-2.0'
+description: >-
+  Usa MobileNetV4 en LibreYOLO para clasificación de imágenes. Instala, predice,
+  haz fine-tuning, valida y exporta LibreMobileNetV4 small/medium/large.
+lead: >-
+  MobileNetV4 es un clasificador de imágenes pensado para hardware móvil y edge,
+  que usa el bloque Universal Inverted Bottleneck para unificar varios diseños
+  de bloques móviles previos en una única estructura sobre la que buscar.
+  LibreYOLO lo soporta para una tarea: clasificación.
+keywords:
+  - MobileNetV4
+  - MobileNetV4 conv
+  - clasificación de imágenes python
+  - inferencia en móvil
+  - clasificador edge
+  - clasificador ImageNet
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +33,9 @@ snippets:
         print(result.probs.top5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreMobileNetV4s-cls.pt source=cat.jpg save=True
+      code: >
+        libreyolo predict model=LibreMobileNetV4s-cls.pt source=cat.jpg
+        save=True
   train:
     - label: Python
       language: python
@@ -32,8 +46,9 @@ snippets:
         model.train(data="imagenette160", epochs=5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo train model=LibreMobileNetV4s-cls.pt data=imagenette160 epochs=5
+      code: >
+        libreyolo train model=LibreMobileNetV4s-cls.pt data=imagenette160
+        epochs=5
     - label: Multi-GPU
       language: bash
       code: |
@@ -65,20 +80,30 @@ snippets:
         model.export(format="tensorrt", half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreMobileNetV4s-cls.pt format=onnx
-        libreyolo export model=LibreMobileNetV4s-cls.pt format=tensorrt half=True
+
+        libreyolo export model=LibreMobileNetV4s-cls.pt format=tensorrt
+        half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreMobileNetV4s-cls.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.probs.top1)
+source_hash: 4a9a1b392ffb136d
 ---
 
 ## Instalación

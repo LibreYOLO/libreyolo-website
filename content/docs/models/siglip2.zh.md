@@ -1,11 +1,22 @@
 ---
 title: SigLIP2
-families: [siglip2]
-seo_title: "SigLIP2：在 LibreYOLO 里做零样本分类和嵌入向量"
-description: "用 LibreYOLO 里的 SigLIP2 做零样本图像分类和图像/文本嵌入向量，按类别独立的 sigmoid 多标签打分。无需训练。"
-lead: "SigLIP2 是一个双塔（dual-tower）模型，它拿图像去和文本提示词打分，每个类别用一个独立的 sigmoid，而不是在一个固定的标签集合上共用一个 softmax。LibreYOLO 支持用它做零样本分类和图像/文本嵌入向量，没有训练这一步。"
-keywords: [SigLIP2, SigLIP 2, 零样本图像分类, "siglip2 图像嵌入 python", "siglip2 文本嵌入", 开放词汇分类, 多语言图像分类, "sigmoid 多标签分类"]
-last_verified: "1.5.0"
+families:
+  - siglip2
+seo_title: SigLIP2：在 LibreYOLO 里做零样本分类和嵌入向量
+description: 用 LibreYOLO 里的 SigLIP2 做零样本图像分类和图像/文本嵌入向量，按类别独立的 sigmoid 多标签打分。无需训练。
+lead: >-
+  SigLIP2 是一个双塔（dual-tower）模型，它拿图像去和文本提示词打分，每个类别用一个独立的
+  sigmoid，而不是在一个固定的标签集合上共用一个 softmax。LibreYOLO 支持用它做零样本分类和图像/文本嵌入向量，没有训练这一步。
+keywords:
+  - SigLIP2
+  - SigLIP 2
+  - 零样本图像分类
+  - siglip2 图像嵌入 python
+  - siglip2 文本嵌入
+  - 开放词汇分类
+  - 多语言图像分类
+  - sigmoid 多标签分类
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,10 +31,14 @@ snippets:
         print(model.names[result.probs.top1], float(result.probs.top1conf))
     - label: CLI
       language: bash
-      code: |
+      code: >
         # 不调用 set_classes() 时，CLI 的 predict 用的是模型默认加载的
+
         # 1,000 个 ImageNet 类别名
-        libreyolo predict model=LibreSigLIP2b16-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+
+        libreyolo predict model=LibreSigLIP2b16-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: 多标签 sigmoid 打分
       language: python
       code: |
@@ -94,6 +109,7 @@ snippets:
         # task="embed" 只追踪图像塔，不需要类别
         model = LibreYOLO("LibreSigLIP2b16-cls.pt", task="embed")
         model.export(format="onnx")
+source_hash: f992655747fd8819
 ---
 
 ## 安装

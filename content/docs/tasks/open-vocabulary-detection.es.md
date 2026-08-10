@@ -1,10 +1,25 @@
 ---
 title: Detección de vocabulario abierto
-seo_title: "Detección de vocabulario abierto en LibreYOLO"
-description: "Detecta objetos a partir de un vocabulario de texto en LibreYOLO. Carga Grounding DINO, OWLv2, OMDet-Turbo u OV-DEIM a través de LibreOpenVocab y define las clases en tiempo de ejecución."
-lead: "La detección de vocabulario abierto sustituye la lista fija de clases de un checkpoint por las palabras que elijas en el momento de la llamada. En LibreYOLO no es una tarea aparte: es la tarea detect servida por un nivel de modelos aparte, que se carga mediante la factoría LibreOpenVocab en lugar de LibreYOLO."
-keywords: [detección de vocabulario abierto, detección de objetos zero shot, open vocabulary detection python, grounding dino python, owlv2, omdet turbo, detectar objetos con un prompt de texto]
-last_verified: "1.5.0"
+seo_title: Detección de vocabulario abierto en LibreYOLO
+description: >-
+  Detecta objetos a partir de un vocabulario de texto en LibreYOLO. Carga
+  Grounding DINO, OWLv2, OMDet-Turbo u OV-DEIM a través de LibreOpenVocab y
+  define las clases en tiempo de ejecución.
+lead: >-
+  La detección de vocabulario abierto sustituye la lista fija de clases de un
+  checkpoint por las palabras que elijas en el momento de la llamada. En
+  LibreYOLO no es una tarea aparte: es la tarea detect servida por un nivel de
+  modelos aparte, que se carga mediante la factoría LibreOpenVocab en lugar de
+  LibreYOLO.
+keywords:
+  - detección de vocabulario abierto
+  - detección de objetos zero shot
+  - open vocabulary detection python
+  - grounding dino python
+  - owlv2
+  - omdet turbo
+  - detectar objetos con un prompt de texto
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -45,6 +60,7 @@ snippets:
         # puntuación de tokens de la frase decodificada. Ambos valen 0.25 por
         # defecto. Solo Grounding DINO acepta text_threshold; los demás fallan.
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
+source_hash: 17197cf4d80f3d6f
 ---
 
 ## Definición

@@ -1,11 +1,23 @@
 ---
 title: Florence-2
-families: [florence2]
-seo_title: "Florence-2：在 LibreYOLO 里做开放词汇检测"
-description: "在 LibreYOLO 里用 Florence-2：安装、设定开放词汇，用微软这个采用 MIT 许可的视觉模型预测检测框。"
-lead: "Florence-2 是微软的视觉基础模型，靠一个任务 token 来提示，而不是走一个固定的检测 head。LibreYOLO 把它包装成一个开放词汇目标检测器：类别列表在预测时给出。"
-keywords: [Florence-2, 视觉语言模型, 开放词汇检测, "florence 2 python", "florence-2 目标检测", "不用训练的目标检测", grounding, 微软, VLM]
-last_verified: "1.5.0"
+families:
+  - florence2
+seo_title: Florence-2：在 LibreYOLO 里做开放词汇检测
+description: 在 LibreYOLO 里用 Florence-2：安装、设定开放词汇，用微软这个采用 MIT 许可的视觉模型预测检测框。
+lead: >-
+  Florence-2 是微软的视觉基础模型，靠一个任务 token 来提示，而不是走一个固定的检测 head。LibreYOLO
+  把它包装成一个开放词汇目标检测器：类别列表在预测时给出。
+keywords:
+  - Florence-2
+  - 视觉语言模型
+  - 开放词汇检测
+  - florence 2 python
+  - florence-2 目标检测
+  - 不用训练的目标检测
+  - grounding
+  - 微软
+  - VLM
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -31,6 +43,7 @@ snippets:
         # RTSP 流，或者一个 .streams 列表
         for result in model.predict("clip.mp4", stream=True, save=True):
             print(len(result.boxes))
+source_hash: ad26d9056465d662
 ---
 
 ## 安装

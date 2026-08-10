@@ -1,11 +1,28 @@
 ---
 title: LibreMODUS
-families: [libremodus]
-seo_title: "LibreMODUS en LibreYOLO: análisis de imagen any-to-any"
-description: "Usa LibreMODUS en LibreYOLO para profundidad, normales, bordes y detección, y para componerlos con any2any(). Solo inferencia; los pesos se cargan desde EPFL-VILAB."
-lead: "LibreMODUS es una integración solo de inferencia del checkpoint MODUS 14B-A7B, un modelo any-to-any que convierte una entrada derivada de imagen en otra: entra RGB, sale profundidad; entra profundidad, salen normales; cualquiera de ellas más una frase, salen cajas. LibreYOLO soporta cuatro tareas a través de la API estándar de predict y un conjunto más amplio a través de any2any()."
-keywords: [LibreMODUS, MODUS, any-to-any, "estimación de profundidad", "normales de superficie", "detección de bordes", "detectar objetos con una frase", EPFL VILAB]
-last_verified: "1.5.0"
+families:
+  - libremodus
+seo_title: 'LibreMODUS en LibreYOLO: análisis de imagen any-to-any'
+description: >-
+  Usa LibreMODUS en LibreYOLO para profundidad, normales, bordes y detección, y
+  para componerlos con any2any(). Solo inferencia; los pesos se cargan desde
+  EPFL-VILAB.
+lead: >-
+  LibreMODUS es una integración solo de inferencia del checkpoint MODUS 14B-A7B,
+  un modelo any-to-any que convierte una entrada derivada de imagen en otra:
+  entra RGB, sale profundidad; entra profundidad, salen normales; cualquiera de
+  ellas más una frase, salen cajas. LibreYOLO soporta cuatro tareas a través de
+  la API estándar de predict y un conjunto más amplio a través de any2any().
+keywords:
+  - LibreMODUS
+  - MODUS
+  - any-to-any
+  - estimación de profundidad
+  - normales de superficie
+  - detección de bordes
+  - detectar objetos con una frase
+  - EPFL VILAB
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -39,13 +56,18 @@ snippets:
         print(result.boxes.xyxy, result.boxes.cls)
     - label: any2any()
       language: python
-      code: |
+      code: >
         from libreyolo import LibreMODUS
+
 
         model = LibreMODUS()
 
+
         # De una a tres entradas derivadas de imagen (rgb, depth, normal,
-        # canny/edge), más texto auxiliar opcional, compuestas hacia un objetivo.
+
+        # canny/edge), más texto auxiliar opcional, compuestas hacia un
+        objetivo.
+
         result = model.any2any(
             inputs={"rgb": "room.jpg"},
             target="normal",
@@ -53,15 +75,21 @@ snippets:
             cfg=2.0,
             seed=0,
         )
+
         normals = result.normal_map.data
 
+
         # El grounding a través de any2any() necesita una entrada de texto
+
         # que nombre la frase.
+
         result = model.any2any(
             {"rgb": "street.jpg", "text": "red bus"},
             target="grounding",
         )
+
         print(result.boxes.xyxy)
+source_hash: 7386886d4c36ea9a
 ---
 
 ## Instalación

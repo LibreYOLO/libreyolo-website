@@ -1,11 +1,20 @@
 ---
 title: Kosmos-2
-families: [kosmos2]
-seo_title: "Kosmos-2：LibreYOLO 里的视觉定位目标检测"
-description: "在 LibreYOLO 里使用 Kosmos-2：安装、设定开放词汇，用微软这个 MIT 许可的模型预测定位出的检测框。"
-lead: "Kosmos-2 是微软的视觉定位（grounding）模型：它先给图像生成一段描述，再用检测框把描述里的每个名词短语定位出来。LibreYOLO 把它包装成一个开放词汇目标检测器：在预测时提供类别列表即可。"
-keywords: [Kosmos-2, "视觉语言模型", "grounding 视觉定位", "开放词汇检测", "微软 kosmos-2", VLM]
-last_verified: "1.5.0"
+families:
+  - kosmos2
+seo_title: Kosmos-2：LibreYOLO 里的视觉定位目标检测
+description: 在 LibreYOLO 里使用 Kosmos-2：安装、设定开放词汇，用微软这个 MIT 许可的模型预测定位出的检测框。
+lead: >-
+  Kosmos-2 是微软的视觉定位（grounding）模型：它先给图像生成一段描述，再用检测框把描述里的每个名词短语定位出来。LibreYOLO
+  把它包装成一个开放词汇目标检测器：在预测时提供类别列表即可。
+keywords:
+  - Kosmos-2
+  - 视觉语言模型
+  - grounding 视觉定位
+  - 开放词汇检测
+  - 微软 kosmos-2
+  - VLM
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -31,6 +40,7 @@ snippets:
         # RTSP 流，或者一个 .streams 列表
         for result in model.predict("clip.mp4", stream=True, save=True):
             print(len(result.boxes))
+source_hash: 60e0796f34be6d59
 ---
 
 ## 安装

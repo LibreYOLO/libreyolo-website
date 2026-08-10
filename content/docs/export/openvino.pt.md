@@ -1,8 +1,13 @@
 ---
 title: OpenVINO
-seo_title: "Exportar para OpenVINO IR a partir do LibreYOLO"
-description: "Converta um modelo LibreYOLO para OpenVINO IR: o par model.xml e model.bin, a compressão de pesos FP16, o INT8 do NNCF e a inferência em CPU, GPU ou NPU."
-lead: "O OpenVINO IR é o formato de runtime da Intel, um grafo model.xml ao lado de um blob de pesos model.bin. O LibreYOLO exporta um intermediário ONNX, converte com ov.convert_model e escreve um metadata.yaml no mesmo diretório."
+seo_title: Exportar para OpenVINO IR a partir do LibreYOLO
+description: >-
+  Converta um modelo LibreYOLO para OpenVINO IR: o par model.xml e model.bin, a
+  compressão de pesos FP16, o INT8 do NNCF e a inferência em CPU, GPU ou NPU.
+lead: >-
+  O OpenVINO IR é o formato de runtime da Intel, um grafo model.xml ao lado de
+  um blob de pesos model.bin. O LibreYOLO exporta um intermediário ONNX,
+  converte com ov.convert_model e escreve um metadata.yaml no mesmo diretório.
 keywords:
   - exportar yolo openvino
   - openvino ir
@@ -11,30 +16,37 @@ keywords:
   - quantização int8 nncf
   - openvino npu
   - compress_to_fp16
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="openvino")'
+    value: export(format="openvino")
     mono: true
   - label: Escreve
-    value: "Um diretório com model.xml, model.bin e metadata.yaml"
+    value: 'Um diretório com model.xml, model.bin e metadata.yaml'
   - label: Extra
     value: 'pip install "libreyolo[onnx,openvino]"'
     mono: true
   - label: Recarrega com
-    value: 'LibreYOLO("weights/LibreYOLO9t_openvino")'
+    value: LibreYOLO("weights/LibreYOLO9t_openvino")
     mono: true
   - label: Formas
-    value: "Seguem o intermediário ONNX: batch dinâmico quando dynamic=True"
+    value: 'Seguem o intermediário ONNX: batch dinâmico quando dynamic=True'
   - label: Precisão
-    value: "FP32, compressão de pesos FP16 (half=True), INT8 via NNCF (int8=True com data=)"
-verification: "Lido de libreyolo/export/openvino.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/openvino.py e pyproject.toml no branch dev."
+    value: >-
+      FP32, compressão de pesos FP16 (half=True), INT8 via NNCF (int8=True com
+      data=)
+verification: >-
+  Lido de libreyolo/export/openvino.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/openvino.py e pyproject.toml
+  no branch dev.
 snippets:
   install:
     - label: Instalação
       language: bash
-      code: |
-        # O IR é convertido a partir de um intermediário ONNX, então os dois extras são necessários.
+      code: >
+        # O IR é convertido a partir de um intermediário ONNX, então os dois
+        extras são necessários.
+
         pip install "libreyolo[onnx,openvino]"
     - label: O INT8 ainda exige o NNCF
       language: bash
@@ -91,36 +103,56 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: Selecionar o dispositivo
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         # "auto" e "cpu" mapeiam para CPU, "gpu" e "cuda" mapeiam para GPU,
-        # qualquer outra coisa é repassada em maiúsculas, por exemplo "npu" -> NPU.
+
+        # qualquer outra coisa é repassada em maiúsculas, por exemplo "npu" ->
+        NPU.
+
         model = LibreYOLO("weights/LibreYOLO9t_openvino", device="gpu")
     - label: OpenVINO puro
       language: python
-      code: |
+      code: >
         import numpy as np
+
         import openvino as ov
+
         import yaml
 
+
         core = ov.Core()
+
         print(core.available_devices)
 
-        compiled = core.compile_model("weights/LibreYOLO9t_openvino/model.xml", "CPU")
+
+        compiled = core.compile_model("weights/LibreYOLO9t_openvino/model.xml",
+        "CPU")
+
         outputs = compiled(np.zeros((1, 3, 640, 640), dtype=np.float32))
+
         print([tensor.shape for tensor in outputs.values()])
 
-        # Os nomes das classes, a tarefa e o tamanho de entrada vivem no metadata.yaml ao lado do IR.
-        meta = yaml.safe_load(open("weights/LibreYOLO9t_openvino/metadata.yaml"))
+
+        # Os nomes das classes, a tarefa e o tamanho de entrada vivem no
+        metadata.yaml ao lado do IR.
+
+        meta =
+        yaml.safe_load(open("weights/LibreYOLO9t_openvino/metadata.yaml"))
+
         print(meta["model_family"], meta["task"], meta["names"])
 
-        # O pré-processamento e o pós-processamento ficam por sua conta neste caminho.
+
+        # O pré-processamento e o pós-processamento ficam por sua conta neste
+        caminho.
   support:
     - label: Conferir uma família e uma tarefa antes de exportar
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: 519816615e3aca3c
 ---
 
 ## Instalação

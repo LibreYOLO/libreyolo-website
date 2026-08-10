@@ -1,24 +1,48 @@
 ---
 title: LFM2-VL
-families: [lfm2vl]
-seo_title: "LFM2-VL: detección de vocabulario abierto en LibreYOLO"
-description: "Usa LFM2-VL en LibreYOLO para detección de objetos de vocabulario abierto en el dispositivo. Predice con cualquier etiqueta de texto; el entrenamiento, la validación y la exportación no están soportados."
-lead: "LFM2-VL es un modelo de visión y lenguaje compacto, pensado para ejecutarse en el propio dispositivo y publicado por Liquid AI. LibreYOLO lo envuelve como detector de objetos de vocabulario abierto: cualquier lista de etiquetas de texto se convierte en el conjunto de clases, sin cabeza fija y sin necesidad de hacer fine-tuning."
-keywords: [LFM2-VL, LFM2, Liquid AI, "modelo de visión y lenguaje", "detección de vocabulario abierto", VLM, "VLM en el dispositivo", LibreVLM]
-last_verified: "1.5.0"
+families:
+  - lfm2vl
+seo_title: 'LFM2-VL: detección de vocabulario abierto en LibreYOLO'
+description: >-
+  Usa LFM2-VL en LibreYOLO para detección de objetos de vocabulario abierto en
+  el dispositivo. Predice con cualquier etiqueta de texto; el entrenamiento, la
+  validación y la exportación no están soportados.
+lead: >-
+  LFM2-VL es un modelo de visión y lenguaje compacto, pensado para ejecutarse en
+  el propio dispositivo y publicado por Liquid AI. LibreYOLO lo envuelve como
+  detector de objetos de vocabulario abierto: cualquier lista de etiquetas de
+  texto se convierte en el conjunto de clases, sin cabeza fija y sin necesidad
+  de hacer fine-tuning.
+keywords:
+  - LFM2-VL
+  - LFM2
+  - Liquid AI
+  - modelo de visión y lenguaje
+  - detección de vocabulario abierto
+  - VLM
+  - VLM en el dispositivo
+  - LibreVLM
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreLFM2VL, SAMPLE_IMAGE
+
 
         model = LibreLFM2VL(size="450m")
 
+
         # Vocabulario abierto: vale cualquier palabra, no una cabeza de clases
-        # fija. Persiste en cada predict()/track() posterior hasta volver a fijarlo.
+
+        # fija. Persiste en cada predict()/track() posterior hasta volver a
+        fijarlo.
+
         model.set_classes(["person", "bicycle", "dog"])
+
         result = model(SAMPLE_IMAGE, save=True)
+
 
         for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
@@ -33,6 +57,7 @@ snippets:
         # recuentos o cualquier prompt que el envoltorio de cajas no cubra.
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
+source_hash: 40237f0ecc0d2cd5
 ---
 
 ## Instalación

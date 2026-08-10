@@ -1,8 +1,12 @@
 ---
 title: ExecuTorch
-seo_title: "从 LibreYOLO 导出到 ExecuTorch"
-description: "把 LibreYOLO 模型导出为带 XNNPACK 委托的 ExecuTorch .pte 程序：固定形状、批大小 1、FP32，以及它需要的元数据 sidecar。"
-lead: "ExecuTorch 在边缘设备上运行 PyTorch 程序。LibreYOLO 用 torch.export 的严格模式捕获模型，把它 lowering 到 XNNPACK，并把 .pte 程序和一个 JSON 元数据 sidecar 作为一个整体一起提交。"
+seo_title: 从 LibreYOLO 导出到 ExecuTorch
+description: >-
+  把 LibreYOLO 模型导出为带 XNNPACK 委托的 ExecuTorch .pte 程序：固定形状、批大小 1、FP32，以及它需要的元数据
+  sidecar。
+lead: >-
+  ExecuTorch 在边缘设备上运行 PyTorch 程序。LibreYOLO 用 torch.export 的严格模式捕获模型，把它 lowering
+  到 XNNPACK，并把 .pte 程序和一个 JSON 元数据 sidecar 作为一个整体一起提交。
 keywords:
   - yolo 导出 executorch
   - .pte 程序
@@ -10,26 +14,29 @@ keywords:
   - torch.export strict
   - executorch 运行时
   - 边缘 pytorch 推理
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: 标志
-    value: 'export(format="executorch")'
+    value: export(format="executorch")
     mono: true
   - label: 输出
-    value: "一个 .pte 程序，外加一个 .pte.json 元数据 sidecar"
+    value: 一个 .pte 程序，外加一个 .pte.json 元数据 sidecar
   - label: 额外依赖
     value: 'pip install "libreyolo[executorch]"'
     mono: true
   - label: 重新加载方式
-    value: 'LibreYOLO("weights/LibreYOLO9t.pte")'
+    value: LibreYOLO("weights/LibreYOLO9t.pte")
     mono: true
   - label: 形状
-    value: "固定。dynamic=True 和 batch != 1 会被拒绝。"
+    value: 固定。dynamic=True 和 batch != 1 会被拒绝。
   - label: 精度
-    value: "仅 FP32。half=True 和 int8=True 会被拒绝。"
+    value: 仅 FP32。half=True 和 int8=True 会被拒绝。
   - label: 委托
-    value: "XNNPACK，CPU。delegate='xnnpack' 是唯一接受的值。"
-verification: "读取自 dev 分支上的 libreyolo/export/executorch.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/executorch.py 和 pyproject.toml。"
+    value: XNNPACK，CPU。delegate='xnnpack' 是唯一接受的值。
+verification: >-
+  读取自 dev 分支上的
+  libreyolo/export/executorch.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/executorch.py
+  和 pyproject.toml。
 snippets:
   install:
     - label: 安装
@@ -76,30 +83,44 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: 直接使用 ExecuTorch 运行时
       language: python
-      code: |
+      code: >
         import json
+
         from pathlib import Path
 
+
         import torch
+
         from executorch.runtime import Runtime
 
+
         runtime = Runtime.get()
+
         print(runtime.backend_registry.is_available("XnnpackBackend"))
 
-        program = runtime.load_program(Path("weights/LibreYOLO9t.pte").read_bytes())
+
+        program =
+        runtime.load_program(Path("weights/LibreYOLO9t.pte").read_bytes())
+
         method = program.load_method("forward")
 
+
         # 这条路径上的预处理和后处理由你自己负责
+
         outputs = method.execute((torch.zeros(1, 3, 640, 640),))
+
         print([tensor.shape for tensor in outputs])
 
+
         meta = json.load(open("weights/LibreYOLO9t.pte.json"))
+
         print(meta["model_family"], meta["task"], meta["executorch_delegate"])
   support:
     - label: 导出前检查某个家族和任务
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: c2c354a76ee33157
 ---
 
 ## 安装

@@ -1,11 +1,22 @@
 ---
 title: PicoDet
-families: [picodet]
-seo_title: "PicoDet 在 LibreYOLO 里：预测、训练与导出"
-description: "在 LibreYOLO 里用 PicoDet 做移动端目标检测。安装、预测、训练、验证并导出，采用 Apache-2.0 许可。"
-lead: "PicoDet 是一个为移动端和边缘 CPU 打造的单阶段检测器：ESNet 骨干、CSP-PAN neck，以及一个共享的 Generalized Focal Loss head。LibreYOLO 支持它做目标检测。"
-keywords: [PicoDet, PP-PicoDet, "目标检测", "移动端目标检测", "边缘设备目标检测", "picodet 部署", ESNet, "Generalized Focal Loss"]
-last_verified: "1.5.0"
+families:
+  - picodet
+seo_title: PicoDet 在 LibreYOLO 里：预测、训练与导出
+description: 在 LibreYOLO 里用 PicoDet 做移动端目标检测。安装、预测、训练、验证并导出，采用 Apache-2.0 许可。
+lead: >-
+  PicoDet 是一个为移动端和边缘 CPU 打造的单阶段检测器：ESNet 骨干、CSP-PAN neck，以及一个共享的 Generalized
+  Focal Loss head。LibreYOLO 支持它做目标检测。
+keywords:
+  - PicoDet
+  - PP-PicoDet
+  - 目标检测
+  - 移动端目标检测
+  - 边缘设备目标检测
+  - picodet 部署
+  - ESNet
+  - Generalized Focal Loss
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +31,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibrePICODETs.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibrePICODETs.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -50,10 +63,13 @@ snippets:
         )
     - label: CLI
       language: bash
-      code: |
+      code: >
         # imgsz 值得显式设置：CLI 把它默认成 640，而 s 检查点
+
         # 原生就是 320
-        libreyolo train model=LibrePICODETs.pt data=my-dataset.yaml imgsz=320 epochs=300 batch=16 lr0=0.01
+
+        libreyolo train model=LibrePICODETs.pt data=my-dataset.yaml imgsz=320
+        epochs=300 batch=16 lr0=0.01
   export:
     - label: Python
       language: python
@@ -65,9 +81,11 @@ snippets:
         model.export(format="tensorrt", imgsz=320, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibrePICODETs.pt format=onnx imgsz=320
-        libreyolo export model=LibrePICODETs.pt format=tensorrt imgsz=320 half=True
+
+        libreyolo export model=LibrePICODETs.pt format=tensorrt imgsz=320
+        half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -79,6 +97,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 947aa47214abc4c0
 ---
 
 ## 安装

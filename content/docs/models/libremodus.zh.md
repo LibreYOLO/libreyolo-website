@@ -1,11 +1,25 @@
 ---
 title: LibreMODUS
-families: [libremodus]
-seo_title: "LibreMODUS：在 LibreYOLO 里做 any-to-any 图像分析"
-description: "在 LibreYOLO 里用 LibreMODUS 做深度、法线、边缘和检测，并用 any2any() 把它们组合起来。仅支持推理；权重从 EPFL-VILAB 加载。"
-lead: "LibreMODUS 是对 MODUS 14B-A7B 检查点（checkpoint）的一个仅支持推理的集成，这是一个 any-to-any 模型，把一种由图像派生的输入变成另一种：输入 RGB，输出深度；输入深度，输出法线；上述任意一种再加一个短语，输出检测框。LibreYOLO 通过标准的 predict API 支持四个任务，通过 any2any() 支持更广的一组。"
-keywords: [LibreMODUS, MODUS, any-to-any, 单目深度估计, 表面法线估计, 边缘检测, "文本提示检测物体", EPFL VILAB]
-last_verified: "1.5.0"
+families:
+  - libremodus
+seo_title: LibreMODUS：在 LibreYOLO 里做 any-to-any 图像分析
+description: >-
+  在 LibreYOLO 里用 LibreMODUS 做深度、法线、边缘和检测，并用 any2any() 把它们组合起来。仅支持推理；权重从
+  EPFL-VILAB 加载。
+lead: >-
+  LibreMODUS 是对 MODUS 14B-A7B 检查点（checkpoint）的一个仅支持推理的集成，这是一个 any-to-any
+  模型，把一种由图像派生的输入变成另一种：输入 RGB，输出深度；输入深度，输出法线；上述任意一种再加一个短语，输出检测框。LibreYOLO 通过标准的
+  predict API 支持四个任务，通过 any2any() 支持更广的一组。
+keywords:
+  - LibreMODUS
+  - MODUS
+  - any-to-any
+  - 单目深度估计
+  - 表面法线估计
+  - 边缘检测
+  - 文本提示检测物体
+  - EPFL VILAB
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -61,6 +75,7 @@ snippets:
             target="grounding",
         )
         print(result.boxes.xyxy)
+source_hash: 7386886d4c36ea9a
 ---
 
 ## 安装

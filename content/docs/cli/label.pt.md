@@ -1,24 +1,39 @@
 ---
 title: libreyolo label
-seo_title: "Referência do comando libreyolo label"
-description: "Abra a ferramenta local de anotação de bounding boxes: argumentos com seus padrões, a chave de assistência por IA e o que expor a ferramenta em uma interface de rede significa."
-lead: "Inicia uma ferramenta web local para desenhar e editar bounding boxes. Ela escreve arquivos de rótulos no formato nativo do LibreYOLO, então um dataset anotado aqui treina sem nenhuma etapa de conversão."
-keywords: [libreyolo label cli, ferramenta de anotação bounding box, rotular dataset yolo, rotulagem automática cli, compartilhar libreyolo label]
-last_verified: "1.5.0"
+seo_title: Referência do comando libreyolo label
+description: >-
+  Abra a ferramenta local de anotação de bounding boxes: argumentos com seus
+  padrões, a chave de assistência por IA e o que expor a ferramenta em uma
+  interface de rede significa.
+lead: >-
+  Inicia uma ferramenta web local para desenhar e editar bounding boxes. Ela
+  escreve arquivos de rótulos no formato nativo do LibreYOLO, então um dataset
+  anotado aqui treina sem nenhuma etapa de conversão.
+keywords:
+  - libreyolo label cli
+  - ferramenta de anotação bounding box
+  - rotular dataset yolo
+  - rotulagem automática cli
+  - compartilhar libreyolo label
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo label
     mono: true
   - label: Saída
-    value: "Uma URL de servidor no stdout; os rótulos são escritos como labels/*.txt junto às imagens"
+    value: >-
+      Uma URL de servidor no stdout; os rótulos são escritos como labels/*.txt
+      junto às imagens
 snippets:
   examples:
     - label: Básico
       language: bash
-      code: |
-        # Abre a página inicial do projeto; escolha ou crie um dataset no navegador.
+      code: >
+        # Abre a página inicial do projeto; escolha ou crie um dataset no
+        navegador.
+
         libreyolo label
-    - label: Somente manual, porta fixa
+    - label: 'Somente manual, porta fixa'
       language: bash
       code: |
         libreyolo label no_assist=true port=9200 no_browser=true
@@ -26,6 +41,7 @@ snippets:
       language: bash
       code: |
         libreyolo label share=true
+source_hash: bddad245877793b1
 ---
 
 ## Sinopse
@@ -76,8 +92,8 @@ também abre e diz por que não é possível escrever nele.
 ### Compartilhamento, e o que o `host` faz
 
 `share=true` faz o bind no endereço curinga, o que deixa outras máquinas da sua
-rede alcançarem a ferramenta enquanto as ações administrativas — trocar ou
-apagar projetos e iniciar computação — ficam nesta máquina.
+rede alcançarem a ferramenta enquanto as ações administrativas (trocar ou
+apagar projetos e iniciar computação) ficam nesta máquina.
 
 Definir `host` como uma interface específica faz algo diferente e menos seguro:
 o host passa a ser indistinguível de um cliente de rede, então todo cliente

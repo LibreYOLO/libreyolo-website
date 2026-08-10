@@ -1,11 +1,26 @@
 ---
 title: OV-DEIM
-families: [ov_deim]
-seo_title: "OV-DEIM en LibreYOLO: detección de vocabulario abierto"
-description: "Usa OV-DEIM en LibreYOLO para detección de vocabulario abierto en tiempo real, al estilo DETR. Instala el extra openvocab y predice con un vocabulario de texto libre."
-lead: "OV-DEIM es un detector de objetos de vocabulario abierto al estilo DETR que empareja las queries del decoder con embeddings de texto de una torre de texto MobileCLIP incluida. LibreYOLO lo porta de forma nativa como una familia solo de predicción dentro de su tier de detectores de vocabulario abierto."
-keywords: [OV-DEIM, DEIMv2, "detección de vocabulario abierto", "detección de objetos en tiempo real", "detección zero-shot", "detectar objetos por texto", LibreOpenVocab]
-last_verified: "1.5.0"
+families:
+  - ov_deim
+seo_title: 'OV-DEIM en LibreYOLO: detección de vocabulario abierto'
+description: >-
+  Usa OV-DEIM en LibreYOLO para detección de vocabulario abierto en tiempo real,
+  al estilo DETR. Instala el extra openvocab y predice con un vocabulario de
+  texto libre.
+lead: >-
+  OV-DEIM es un detector de objetos de vocabulario abierto al estilo DETR que
+  empareja las queries del decoder con embeddings de texto de una torre de texto
+  MobileCLIP incluida. LibreYOLO lo porta de forma nativa como una familia solo
+  de predicción dentro de su tier de detectores de vocabulario abierto.
+keywords:
+  - OV-DEIM
+  - DEIMv2
+  - detección de vocabulario abierto
+  - detección de objetos en tiempo real
+  - detección zero-shot
+  - detectar objetos por texto
+  - LibreOpenVocab
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -34,6 +49,7 @@ snippets:
         model.set_classes(["giraffe"])
         second = model.predict(SAMPLE_IMAGE, conf=0.5)
         print(second.names, len(second))
+source_hash: 0c295f555a9eb303
 ---
 
 ## Instalación

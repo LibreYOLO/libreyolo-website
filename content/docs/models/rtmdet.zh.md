@@ -1,11 +1,22 @@
 ---
 title: RTMDet
-families: [rtmdet]
-seo_title: "在 LibreYOLO 里使用 RTMDet：预测、训练与导出"
-description: "在 LibreYOLO 里用 RTMDet 做目标检测，用 RTMDet-Ins 做实例分割。安装、预测、训练、验证、导出，代码采用 Apache-2.0 许可。"
-lead: "RTMDet 是一个单阶段检测器，它在每个网格位置上只用一个基于点的先验来预测，没有锚框，经过的 head 在各个特征层级之间共享卷积。LibreYOLO 支持它做目标检测和 RTMDet-Ins 实例分割。"
-keywords: [RTMDet, "目标检测 python", "实例分割", RTMDet-Ins, "无锚框检测", "rtmdet 不用 mmdetection"]
-last_verified: "1.5.0"
+families:
+  - rtmdet
+seo_title: 在 LibreYOLO 里使用 RTMDet：预测、训练与导出
+description: >-
+  在 LibreYOLO 里用 RTMDet 做目标检测，用 RTMDet-Ins 做实例分割。安装、预测、训练、验证、导出，代码采用 Apache-2.0
+  许可。
+lead: >-
+  RTMDet 是一个单阶段检测器，它在每个网格位置上只用一个基于点的先验来预测，没有锚框，经过的 head 在各个特征层级之间共享卷积。LibreYOLO
+  支持它做目标检测和 RTMDet-Ins 实例分割。
+keywords:
+  - RTMDet
+  - 目标检测 python
+  - 实例分割
+  - RTMDet-Ins
+  - 无锚框检测
+  - rtmdet 不用 mmdetection
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +31,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreRTMDets.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreRTMDets.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: 实例分割
       language: python
       code: |
@@ -71,8 +84,9 @@ snippets:
         )
     - label: CLI
       language: bash
-      code: |
-        libreyolo train model=LibreRTMDets.pt data=my-dataset.yaml imgsz=640 epochs=300 batch=16 lr0=0.004
+      code: >
+        libreyolo train model=LibreRTMDets.pt data=my-dataset.yaml imgsz=640
+        epochs=300 batch=16 lr0=0.004
   export:
     - label: Python
       language: python
@@ -84,9 +98,11 @@ snippets:
         model.export(format="tensorrt", imgsz=640, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreRTMDets.pt format=onnx imgsz=640
-        libreyolo export model=LibreRTMDets.pt format=tensorrt imgsz=640 half=True
+
+        libreyolo export model=LibreRTMDets.pt format=tensorrt imgsz=640
+        half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -98,6 +114,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 2f5033bdc1c3c931
 ---
 
 ## 安装

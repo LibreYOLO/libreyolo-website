@@ -1,11 +1,28 @@
 ---
 title: DINOv2
-families: [dinov2]
-seo_title: "DINOv2 en LibreYOLO: segmentación semántica, clasificación y embeddings"
-description: "Usa DINOv2 en LibreYOLO para segmentación semántica, clasificación y embedding de imagen completa sobre el backbone DINOv2-with-Registers. Apache-2.0 de principio a fin."
-lead: "DINOv2 es un vision transformer autosupervisado entrenado por Meta AI para producir características de imagen de propósito general sin etiquetas. LibreYOLO envuelve su backbone DINOv2-with-Registers para tres tareas: segmentación semántica, clasificación y embedding de imagen completa."
-keywords: [DINOv2, "DINOv2 with registers", "aprendizaje autosupervisado", vision transformer, "segmentación semántica python", "embeddings de imágenes", "extracción de características", "modelo de visión preentrenado", Meta AI]
-last_verified: "1.5.0"
+families:
+  - dinov2
+seo_title: 'DINOv2 en LibreYOLO: segmentación semántica, clasificación y embeddings'
+description: >-
+  Usa DINOv2 en LibreYOLO para segmentación semántica, clasificación y embedding
+  de imagen completa sobre el backbone DINOv2-with-Registers. Apache-2.0 de
+  principio a fin.
+lead: >-
+  DINOv2 es un vision transformer autosupervisado entrenado por Meta AI para
+  producir características de imagen de propósito general sin etiquetas.
+  LibreYOLO envuelve su backbone DINOv2-with-Registers para tres tareas:
+  segmentación semántica, clasificación y embedding de imagen completa.
+keywords:
+  - DINOv2
+  - DINOv2 with registers
+  - aprendizaje autosupervisado
+  - vision transformer
+  - segmentación semántica python
+  - embeddings de imágenes
+  - extracción de características
+  - modelo de visión preentrenado
+  - Meta AI
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Semántica
@@ -138,6 +155,7 @@ snippets:
         # tarea, aquí LibreDINOv2s-sem.onnx.
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
+source_hash: 4256e0a0398e5aaf
 ---
 
 ## Instalación

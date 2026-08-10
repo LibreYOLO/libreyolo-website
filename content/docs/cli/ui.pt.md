@@ -1,30 +1,42 @@
 ---
 title: libreyolo ui
-seo_title: "referência do comando libreyolo ui"
-description: "Sobe a interface web local de inferência: endereço de bind, comportamento da porta, escolha de dispositivo e como o comando termina."
-lead: "Sobe um servidor web local que aceita imagens arrastadas ou coladas, roda nelas o modelo que você escolher e mostra os resultados no navegador."
-keywords: [libreyolo ui cli, interface web libreyolo, inferência local no navegador, inferência arrastando imagem, porta libreyolo ui]
-last_verified: "1.5.0"
+seo_title: referência do comando libreyolo ui
+description: >-
+  Sobe a interface web local de inferência: endereço de bind, comportamento da
+  porta, escolha de dispositivo e como o comando termina.
+lead: >-
+  Sobe um servidor web local que aceita imagens arrastadas ou coladas, roda
+  nelas o modelo que você escolher e mostra os resultados no navegador.
+keywords:
+  - libreyolo ui cli
+  - interface web libreyolo
+  - inferência local no navegador
+  - inferência arrastando imagem
+  - porta libreyolo ui
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo ui
     mono: true
   - label: Saída
-    value: "Uma URL de servidor no stdout e, em seguida, o processo fica em primeiro plano"
+    value: >-
+      Uma URL de servidor no stdout e, em seguida, o processo fica em primeiro
+      plano
 snippets:
   examples:
     - label: Básico
       language: bash
       code: |
         libreyolo ui
-    - label: Porta fixa, sem navegador
+    - label: 'Porta fixa, sem navegador'
       language: bash
       code: |
         libreyolo ui port=9000 no_browser=true
-    - label: Na CPU, saída legível por máquina
+    - label: 'Na CPU, saída legível por máquina'
       language: bash
       code: |
         libreyolo ui device=cpu json=true
+source_hash: b0eebd33fd0f463b
 ---
 
 ## Sinopse

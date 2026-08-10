@@ -1,11 +1,22 @@
 ---
 title: EfficientDet
-families: [efficientdet]
-seo_title: "EfficientDet：在 LibreYOLO 里做目标检测"
-description: "在 LibreYOLO 里运行 EfficientDet D0-D4：采用 Apache-2.0 许可的 BiFPN 检测器，可以预测、验证并导出到 ONNX、TensorRT 和 OpenVINO。"
-lead: "EfficientDet 把 EfficientNet 骨干和重复堆叠的双向特征金字塔网络（BiFPN）配在一起，并在五种尺寸上同时缩放深度、宽度和分辨率。LibreYOLO 以仅推理的检测器形式提供它。"
-keywords: [EfficientDet, BiFPN, EfficientNet, "efficientdet 目标检测", "复合缩放", "efficientdet onnx 导出"]
-last_verified: "1.5.0"
+families:
+  - efficientdet
+seo_title: EfficientDet：在 LibreYOLO 里做目标检测
+description: >-
+  在 LibreYOLO 里运行 EfficientDet D0-D4：采用 Apache-2.0 许可的 BiFPN 检测器，可以预测、验证并导出到
+  ONNX、TensorRT 和 OpenVINO。
+lead: >-
+  EfficientDet 把 EfficientNet
+  骨干和重复堆叠的双向特征金字塔网络（BiFPN）配在一起，并在五种尺寸上同时缩放深度、宽度和分辨率。LibreYOLO 以仅推理的检测器形式提供它。
+keywords:
+  - EfficientDet
+  - BiFPN
+  - EfficientNet
+  - efficientdet 目标检测
+  - 复合缩放
+  - efficientdet onnx 导出
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +31,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreEfficientDetd0.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreEfficientDetd0.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -62,6 +75,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 12c61fb0035437ce
 ---
 
 ## 安装

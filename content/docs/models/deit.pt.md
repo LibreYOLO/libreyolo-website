@@ -1,11 +1,26 @@
 ---
 title: DeiT
-families: [deit]
-seo_title: "Classificador de imagens DeiT: predição, validação e exportação"
-description: "Rode classificadores de imagens DeiT no LibreYOLO: uma família de museu congelada e somente para inferência, nos tamanhos tiny, small e base, sob Apache-2.0."
-lead: "DeiT (Data-efficient image Transformer) é um classificador Vision Transformer puro treinado apenas com o ImageNet-1k, sem dados extras de pré-treinamento. O LibreYOLO traz os tamanhos tiny, small e base com patch-16 como uma peça de museu congelada e somente para inferência."
-keywords: [DeiT, Vision Transformer, ViT, "classificação de imagens python", ImageNet, "classificador de imagens pré-treinado", "família de museu"]
-last_verified: "1.5.0"
+families:
+  - deit
+seo_title: 'Classificador de imagens DeiT: predição, validação e exportação'
+description: >-
+  Rode classificadores de imagens DeiT no LibreYOLO: uma família de museu
+  congelada e somente para inferência, nos tamanhos tiny, small e base, sob
+  Apache-2.0.
+lead: >-
+  DeiT (Data-efficient image Transformer) é um classificador Vision Transformer
+  puro treinado apenas com o ImageNet-1k, sem dados extras de pré-treinamento. O
+  LibreYOLO traz os tamanhos tiny, small e base com patch-16 como uma peça de
+  museu congelada e somente para inferência.
+keywords:
+  - DeiT
+  - Vision Transformer
+  - ViT
+  - classificação de imagens python
+  - ImageNet
+  - classificador de imagens pré-treinado
+  - família de museu
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +35,9 @@ snippets:
         print(result.probs.top5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDeiTb-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+      code: >
+        libreyolo predict model=LibreDeiTb-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
   val:
     - label: Python
       language: python
@@ -62,6 +78,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: 9c67c8554b2af5c6
 ---
 
 ## Instalação

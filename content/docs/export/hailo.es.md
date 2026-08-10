@@ -1,8 +1,16 @@
 ---
 title: Hailo
-seo_title: "Ejecutar modelos LibreYOLO en aceleradores Hailo"
-description: "Despliega un modelo LibreYOLO en un Hailo-8 o un Hailo-8L: la exportación ONNX estática, la etapa del Dataflow Compiler que ejecutas tú, y qué arquitecturas compilan."
-lead: "Los aceleradores Hailo se compilan con el Hailo Dataflow Compiler, un SDK propietario que se distribuye a través de la Developer Zone de Hailo. La parte del flujo que le toca a LibreYOLO no es más que una exportación ONNX estática; el parseo, la cuantización y la compilación a un HEF ocurren después, dentro del DFC."
+seo_title: Ejecutar modelos LibreYOLO en aceleradores Hailo
+description: >-
+  Despliega un modelo LibreYOLO en un Hailo-8 o un Hailo-8L: la exportación ONNX
+  estática, la etapa del Dataflow Compiler que ejecutas tú, y qué arquitecturas
+  compilan.
+lead: >-
+  Los aceleradores Hailo se compilan con el Hailo Dataflow Compiler, un SDK
+  propietario que se distribuye a través de la Developer Zone de Hailo. La parte
+  del flujo que le toca a LibreYOLO no es más que una exportación ONNX estática;
+  el parseo, la cuantización y la compilación a un HEF ocurren después, dentro
+  del DFC.
 keywords:
   - libreyolo hailo
   - hailo-8
@@ -12,37 +20,49 @@ keywords:
   - hailo dataflow compiler
   - compilar hef hailo
   - hailortcli
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Paso de LibreYOLO
     value: 'export(format="onnx", imgsz=640, dynamic=False)'
     mono: true
   - label: No es un formato
-    value: 'No existe format="hef". El DFC no puede ser una dependencia de pip.'
+    value: No existe format="hef". El DFC no puede ser una dependencia de pip.
   - label: Extra
     value: 'pip install "libreyolo[onnx]"'
     mono: true
   - label: Host de compilación
-    value: "Linux x86_64, incluido WSL2 con Ubuntu 22.04. La compilación no puede ejecutarse en ARM."
+    value: >-
+      Linux x86_64, incluido WSL2 con Ubuntu 22.04. La compilación no puede
+      ejecutarse en ARM.
   - label: Compila
-    value: "Grafos de CNN pura y forma fija. La atención, las formas dinámicas y los diseños dominados por LayerNorm, no."
+    value: >-
+      Grafos de CNN pura y forma fija. La atención, las formas dinámicas y los
+      diseños dominados por LayerNorm, no.
   - label: Estado
-    value: "Ninguna familia de LibreYOLO se ha llevado de principio a fin a través del DFC hasta un HEF en funcionamiento."
-verification: "Leído de skills/libreyolo-export-hailo/SKILL.md, libreyolo/export/onnx.py y libreyolo/cli/commands/export.py en la rama dev. Las restricciones del DFC son las registradas en esa skill; no se ha compilado ni medido ningún HEF de LibreYOLO."
+    value: >-
+      Ninguna familia de LibreYOLO se ha llevado de principio a fin a través del
+      DFC hasta un HEF en funcionamiento.
+verification: >-
+  Leído de skills/libreyolo-export-hailo/SKILL.md, libreyolo/export/onnx.py y
+  libreyolo/cli/commands/export.py en la rama dev. Las restricciones del DFC son
+  las registradas en esa skill; no se ha compilado ni medido ningún HEF de
+  LibreYOLO.
 snippets:
   install:
     - label: Lado de LibreYOLO
       language: bash
       code: |
         pip install "libreyolo[onnx]"
-    - label: Lado de Hailo, lo instalas tú
+    - label: 'Lado de Hailo, lo instalas tú'
       language: text
-      code: |
+      code: >
         Prerequisites, none of them installable from PyPI:
+
 
         - A Linux x86_64 machine. WSL2 Ubuntu 22.04 works. The Raspberry Pi is a
           runtime target, never the compile host.
-        - The Dataflow Compiler wheel (hailo_sdk_client) from the Hailo Developer
+        - The Dataflow Compiler wheel (hailo_sdk_client) from the Hailo
+        Developer
           Zone, which is free to register for.
         - For Hailo-8 and Hailo-8L, the Hailo Model Zoo v2.x line, for its
           recipes and NMS configurations.
@@ -51,12 +71,17 @@ snippets:
   export:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         # Hailo necesita batch 1, una resolución fija y ningún eje dinámico.
-        # La API de Python usa dynamic=True por defecto: desactívalo explícitamente.
+
+        # La API de Python usa dynamic=True por defecto: desactívalo
+        explícitamente.
+
         model = LibreYOLO("LibreYOLOXs.pt")
+
         model.export(format="onnx", imgsz=640, dynamic=False, simplify=True)
     - label: CLI
       language: bash
@@ -72,43 +97,72 @@ snippets:
         shape = graph.input[0].type.tensor_type.shape
         print([d.dim_value or d.dim_param for d in shape.dim])
   compile:
-    - label: Parsear, cuantizar y compilar
+    - label: 'Parsear, cuantizar y compilar'
       language: python
-      code: |
+      code: >
         from pathlib import Path
 
+
         import numpy as np
+
         from hailo_sdk_client import ClientRunner
+
         from PIL import Image
 
+
         ONNX = "weights/LibreYOLOXs.onnx"
+
         HW_ARCH = "hailo8"     # hailo8 | hailo8l | hailo10h
+
         IMGSZ = 640
+
 
         runner = ClientRunner(hw_arch=HW_ARCH)
 
+
         # Para YOLOX, traduce una vez sin end_node_names: el log del DFC imprime
+
         # los nodos finales que sugiere. Vuelve a ejecutar con esos.
+
         runner.translate_onnx_model(ONNX)
 
-        # La normalización debe coincidir con el preprocesado de LibreYOLO. YOLOX
+
+        # La normalización debe coincidir con el preprocesado de LibreYOLO.
+        YOLOX
+
         # y YOLO9 no necesitan media ni desviación estándar, solo la escala de
+
         # 0-255 a 0-1.
-        script = "normalization1 = normalization([0.0, 0.0, 0.0], [255.0, 255.0, 255.0])\n"
+
+        script = "normalization1 = normalization([0.0, 0.0, 0.0], [255.0, 255.0,
+        255.0])\n"
+
 
         # Opcional: deja que Hailo se encargue de NMS. La configuración es
+
         # específica tanto del número de clases como del tamaño de entrada, así
+
         # que una config de COCO-80 es incorrecta para un modelo de tres clases
+
         # con fine-tuning. Sin esta línea el HEF emite los tensores en bruto de
+
         # la cabeza y la aplicación los decodifica.
-        # script += 'nms_postprocess("yolox_nms_config.json", meta_arch=yolox, engine=cpu)\n'
+
+        # script += 'nms_postprocess("yolox_nms_config.json", meta_arch=yolox,
+        engine=cpu)\n'
+
 
         runner.load_model_script(script)
 
+
         # Las imágenes de calibración deben ser representativas de los datos de
+
         # despliegue. Con imágenes aleatorias la compilación funciona igual,
+
         # pero arruina la precisión en silencio.
+
         calib_paths = sorted(Path("calib_images").glob("*.jpg"))[:128]
+
         calib = np.stack([
             np.asarray(
                 Image.open(p).convert("RGB").resize((IMGSZ, IMGSZ)),
@@ -117,7 +171,9 @@ snippets:
             for p in calib_paths
         ])
 
+
         runner.optimize(calib)
+
         Path("libreyoloxs.hef").write_bytes(runner.compile())
     - label: Nodos finales de YOLO9
       language: python
@@ -135,10 +191,14 @@ snippets:
   device:
     - label: Raspberry Pi 5 con el AI Kit o el AI HAT+
       language: bash
-      code: |
+      code: >
         sudo apt install dkms hailo-all
-        hailortcli fw-control identify       # comprueba el dispositivo, y da el nombre de la arquitectura
+
+        hailortcli fw-control identify       # comprueba el dispositivo, y da el
+        nombre de la arquitectura
+
         hailortcli run libreyoloxs.hef       # smoke test y throughput
+source_hash: 33b077f1c23d5535
 ---
 
 ## Instalación

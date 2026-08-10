@@ -1,28 +1,48 @@
 ---
 title: FCN
-families: [fcn]
-seo_title: "FCN: predice y exporta un ResNet FCN bajo BSD-3-Clause"
-description: "Usa FCN en LibreYOLO para segmentación semántica. Instala, predice, valida y exporta los checkpoints FCN con ResNet dilatada de torchvision."
-lead: "Un clasificador denso píxel a píxel que sustituye las capas totalmente conectadas de un detector por convoluciones, de modo que produce un mapa de clases a resolución completa en lugar de bounding boxes. LibreYOLO lo incluye solo para segmentación semántica."
-keywords: [FCN, "red totalmente convolucional", "segmentación semántica python", "predicción densa por píxel", ResNet]
-last_verified: "1.5.0"
+families:
+  - fcn
+seo_title: 'FCN: predice y exporta un ResNet FCN bajo BSD-3-Clause'
+description: >-
+  Usa FCN en LibreYOLO para segmentación semántica. Instala, predice, valida y
+  exporta los checkpoints FCN con ResNet dilatada de torchvision.
+lead: >-
+  Un clasificador denso píxel a píxel que sustituye las capas totalmente
+  conectadas de un detector por convoluciones, de modo que produce un mapa de
+  clases a resolución completa en lugar de bounding boxes. LibreYOLO lo incluye
+  solo para segmentación semántica.
+keywords:
+  - FCN
+  - red totalmente convolucional
+  - segmentación semántica python
+  - predicción densa por píxel
+  - ResNet
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreFCNr50.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         mask = result.semantic_mask
+
         print(mask.data.shape)   # (H, W) ids de clase
-        print(mask.classes)      # ids de clase presentes en la imagen, ordenados
+
+        print(mask.classes)      # ids de clase presentes en la imagen,
+        ordenados
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreFCNr50.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreFCNr50.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -54,16 +74,25 @@ snippets:
         libreyolo export model=LibreFCNr50.pt format=tensorrt half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto
+
         # Results.
+
         model = LibreYOLO("LibreFCNr50.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.semantic_mask.data.shape)
+source_hash: 7776b0fc85a208fb
 ---
 
 ## Instalación

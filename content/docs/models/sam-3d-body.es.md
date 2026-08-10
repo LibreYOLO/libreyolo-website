@@ -1,30 +1,58 @@
 ---
 title: SAM 3D Body
-families: [sam3dbody]
-seo_title: "SAM 3D Body: recuperación de malla de cuerpo completo en LibreYOLO"
-description: "Usa SAM 3D Body en LibreYOLO para recuperar la malla 3D de un cuerpo humano completo. Instala y predice; la SAM License de Meta restringe los checkpoints y hace falta CUDA."
-lead: "SAM 3D Body es el modelo de Meta guiado por prompts para recuperar una malla 3D de cuerpo completo, manos y pies incluidos, a partir de una sola imagen y de cajas de personas. LibreYOLO envuelve el paquete upstream en lugar de portarlo."
-keywords: [SAM 3D Body, MHR, Momentum Human Rig, "malla 3d del cuerpo humano", "reconstrucción 3d de personas", "human mesh recovery", "pose 3d python"]
-last_verified: "1.5.0"
+families:
+  - sam3dbody
+seo_title: 'SAM 3D Body: recuperación de malla de cuerpo completo en LibreYOLO'
+description: >-
+  Usa SAM 3D Body en LibreYOLO para recuperar la malla 3D de un cuerpo humano
+  completo. Instala y predice; la SAM License de Meta restringe los checkpoints
+  y hace falta CUDA.
+lead: >-
+  SAM 3D Body es el modelo de Meta guiado por prompts para recuperar una malla
+  3D de cuerpo completo, manos y pies incluidos, a partir de una sola imagen y
+  de cajas de personas. LibreYOLO envuelve el paquete upstream en lugar de
+  portarlo.
+keywords:
+  - SAM 3D Body
+  - MHR
+  - Momentum Human Rig
+  - malla 3d del cuerpo humano
+  - reconstrucción 3d de personas
+  - human mesh recovery
+  - pose 3d python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import SAMPLE_IMAGE
+
         from libreyolo.models.sam3dbody import LibreSAM3DBody
 
+
         # Esta familia no está registrada en la factoría LibreYOLO(), así
+
         # que se construye directamente. model_path=None es lo que dispara
+
         # la descarga restringida de Hugging Face; una cadena, en cambio, se
+
         # trata como la ruta de un checkpoint local ya existente y nunca se
+
         # descarga automáticamente.
+
         # La inferencia requiere un dispositivo CUDA; no hay camino por CPU.
+
         model = LibreSAM3DBody(None, size="d3", device="cuda")
+
         result = model(SAMPLE_IMAGE, person_boxes=[[34, 12, 220, 400]])
 
+
         meshes = result.meshes
-        print(meshes.vertices.shape)    # (N, V, 3), sistema de la cámara, metros
+
+        print(meshes.vertices.shape)    # (N, V, 3), sistema de la cámara,
+        metros
+
         print(meshes.joints3d.shape)    # (N, J, 3)
     - label: Con un detector de personas
       language: python
@@ -39,6 +67,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
+source_hash: 8edc8d7872f3f875
 ---
 
 ## Instalación

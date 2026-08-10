@@ -1,11 +1,25 @@
 ---
 title: RT-DETR
-families: [rtdetr]
-seo_title: "在 LibreYOLO 里使用 RT-DETR、RT-DETRv2 和 RT-DETRv4"
-description: "在 LibreYOLO 里用 RT-DETR、RT-DETRv2 和 RT-DETRv4 做目标检测，RT-DETRv2 还支持旋转框。安装、预测、训练、验证、导出，权重采用 Apache-2.0 许可。"
-lead: "一个为实时推理而生的检测 transformer：它解码的是一组固定的 query，而不是一张稠密网格，所以不跑 NMS。LibreYOLO 收录了它的三个版本，靠你加载的检查点（checkpoint）来区分，版本 2 还提供旋转框。"
-keywords: [RT-DETR, RT-DETRv2, RT-DETRv4, "实时目标检测", DETR, "目标检测 python", "旋转框检测", OBB, DOTA]
-last_verified: "1.5.0"
+families:
+  - rtdetr
+seo_title: 在 LibreYOLO 里使用 RT-DETR、RT-DETRv2 和 RT-DETRv4
+description: >-
+  在 LibreYOLO 里用 RT-DETR、RT-DETRv2 和 RT-DETRv4 做目标检测，RT-DETRv2
+  还支持旋转框。安装、预测、训练、验证、导出，权重采用 Apache-2.0 许可。
+lead: >-
+  一个为实时推理而生的检测 transformer：它解码的是一组固定的 query，而不是一张稠密网格，所以不跑 NMS。LibreYOLO
+  收录了它的三个版本，靠你加载的检查点（checkpoint）来区分，版本 2 还提供旋转框。
+keywords:
+  - RT-DETR
+  - RT-DETRv2
+  - RT-DETRv4
+  - 实时目标检测
+  - DETR
+  - 目标检测 python
+  - 旋转框检测
+  - OBB
+  - DOTA
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -53,8 +67,9 @@ snippets:
         print(result.boxes.xyxy)  # 外接的轴对齐检测框
     - label: 旋转框，CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreRTDETRv2n-obb.pt source=aerial.png save=True
+      code: >
+        libreyolo predict model=LibreRTDETRv2n-obb.pt source=aerial.png
+        save=True
   train:
     - label: Python
       language: python
@@ -138,11 +153,15 @@ snippets:
         libreyolo export model=LibreRTDETRr18.pt format=onnx
     - label: 旋转框
       language: bash
-      code: |
+      code: >
         # ONNX 和 TorchScript 是旋转任务上已验证的导出目标，FP32、
+
         # 批大小 1、固定的 1024 乘 1024 画布
+
         libreyolo export model=LibreRTDETRv2n-obb.pt format=onnx imgsz=1024
-        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript imgsz=1024
+
+        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript
+        imgsz=1024
     - label: 使用导出的文件
       language: python
       code: |
@@ -154,6 +173,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 8022a5a591922a90
 ---
 
 ## 安装

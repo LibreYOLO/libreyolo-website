@@ -1,8 +1,14 @@
 ---
 title: Formatos de dataset
-seo_title: "Formatos de dataset de LibreYOLO para cada tarea"
-description: "El contrato de archivos de dataset por tarea canónica: claves YAML, estructura de carpetas, filas de etiquetas, convenciones de máscaras y mapas, y el loader que lee cada uno."
-lead: "Esta página refleja el contrato de archivos de dataset del propio docs/dataset_schema.md de la biblioteca. Cubre las claves YAML y la estructura en disco que espera cada tarea canónica."
+seo_title: Formatos de dataset de LibreYOLO para cada tarea
+description: >-
+  El contrato de archivos de dataset por tarea canónica: claves YAML, estructura
+  de carpetas, filas de etiquetas, convenciones de máscaras y mapas, y el loader
+  que lee cada uno.
+lead: >-
+  Esta página refleja el contrato de archivos de dataset del propio
+  docs/dataset_schema.md de la biblioteca. Cubre las claves YAML y la estructura
+  en disco que espera cada tarea canónica.
 keywords:
   - formato dataset libreyolo
   - formato etiquetas yolo
@@ -11,20 +17,28 @@ keywords:
   - formato coco panoptic
   - dataset profundidad
   - pose kpt_shape
-last_verified: "1.5.0"
-verification: "Refleja docs/dataset_schema.md del repositorio libreyolo en la v1.5.0, con los nombres de los loaders verificados contra libreyolo/data/."
+last_verified: 1.5.0
+verification: >-
+  Refleja docs/dataset_schema.md del repositorio libreyolo en la v1.5.0, con los
+  nombres de los loaders verificados contra libreyolo/data/.
 snippets:
   usage:
     - label: Parsear una fila de etiqueta de detección
       language: python
-      code: |
+      code: >
         from libreyolo.data import parse_yolo_label_line
 
+
         # class_id cx cy w h, normalizado a [0, 1]
-        row = parse_yolo_label_line("0 0.5 0.5 0.25 0.5", 640, 480, num_classes=80)
+
+        row = parse_yolo_label_line("0 0.5 0.5 0.25 0.5", 640, 480,
+        num_classes=80)
+
 
         # (class_id, x1, y1, x2, y2, area) en píxeles
+
         print(row)
+source_hash: a8282c079624044d
 ---
 
 ## YAML común

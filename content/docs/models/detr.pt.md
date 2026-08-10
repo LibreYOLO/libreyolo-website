@@ -1,11 +1,25 @@
 ---
 title: DETR
-families: [detr]
-seo_title: "DETR: preveja e exporte sob Apache-2.0"
-description: "Use DETR, o transformer de detecção original, no LibreYOLO. Instale, preveja, valide e exporte quatro tamanhos baseados em ResNet, todos licenciados sob Apache-2.0."
-lead: "O DETR é o transformer de detecção original: ele prevê um conjunto fixo de objetos com um decoder transformer casado por matching húngaro, em vez de âncoras ou de uma grade densa. O LibreYOLO traz quatro tamanhos para detecção, apenas para inferência."
-keywords: [DETR, "detection transformer", "detecção de objetos python", "DETR ResNet-50", "transformer para detecção de objetos", "exportar DETR onnx"]
-last_verified: "1.5.0"
+families:
+  - detr
+seo_title: 'DETR: preveja e exporte sob Apache-2.0'
+description: >-
+  Use DETR, o transformer de detecção original, no LibreYOLO. Instale, preveja,
+  valide e exporte quatro tamanhos baseados em ResNet, todos licenciados sob
+  Apache-2.0.
+lead: >-
+  O DETR é o transformer de detecção original: ele prevê um conjunto fixo de
+  objetos com um decoder transformer casado por matching húngaro, em vez de
+  âncoras ou de uma grade densa. O LibreYOLO traz quatro tamanhos para detecção,
+  apenas para inferência.
+keywords:
+  - DETR
+  - detection transformer
+  - detecção de objetos python
+  - DETR ResNet-50
+  - transformer para detecção de objetos
+  - exportar DETR onnx
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +34,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDETRr50.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDETRr50.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -51,9 +67,11 @@ snippets:
         model.export(format="tensorrt", imgsz=800, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDETRr50.pt format=onnx imgsz=800
-        libreyolo export model=LibreDETRr50.pt format=tensorrt imgsz=800 half=True
+
+        libreyolo export model=LibreDETRr50.pt format=tensorrt imgsz=800
+        half=True
     - label: Usar o arquivo exportado
       language: python
       code: |
@@ -65,6 +83,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: c5549a596742d2a5
 ---
 
 ## Instalação

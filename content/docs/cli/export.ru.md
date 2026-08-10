@@ -1,10 +1,19 @@
 ---
 title: libreyolo export
-seo_title: "справочник команды libreyolo export"
-description: "Экспорт чекпойнта в формат для развёртывания: каждый аргумент со значением по умолчанию, куда попадает артефакт и какие комбинации команда отклоняет."
-lead: "Превращает один чекпойнт в один формат для развёртывания и пишет артефакт в weights/. Формат решает, какие из аргументов ниже применимы."
-keywords: [libreyolo export cli, экспорт yolo в onnx, команда libreyolo export, экспорт yolo в tensorrt, аргументы libreyolo export]
-last_verified: "1.5.0"
+seo_title: справочник команды libreyolo export
+description: >-
+  Экспорт чекпойнта в формат для развёртывания: каждый аргумент со значением по
+  умолчанию, куда попадает артефакт и какие комбинации команда отклоняет.
+lead: >-
+  Превращает один чекпойнт в один формат для развёртывания и пишет артефакт в
+  weights/. Формат решает, какие из аргументов ниже применимы.
+keywords:
+  - libreyolo export cli
+  - экспорт yolo в onnx
+  - команда libreyolo export
+  - экспорт yolo в tensorrt
+  - аргументы libreyolo export
+last_verified: 1.5.0
 meta:
   - label: Команда
     value: libreyolo export
@@ -13,7 +22,7 @@ meta:
     value: model
     mono: true
   - label: Вывод
-    value: "weights/<checkpoint-stem>[_fp16|_int8]<format-suffix>"
+    value: 'weights/<checkpoint-stem>[_fp16|_int8]<format-suffix>'
     mono: true
 snippets:
   examples:
@@ -29,12 +38,16 @@ snippets:
           nms=true conf=0.25 iou=0.45 max_det=300
     - label: Запуск артефакта
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreYOLO9s.pt format=onnx imgsz=640
 
-        # Фабрика ориентируется на суффикс файла, поэтому экспорт загружается как чекпойнт.
+
+        # Фабрика ориентируется на суффикс файла, поэтому экспорт загружается
+        как чекпойнт.
+
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+source_hash: ef2ca20af3814109
 ---
 
 ## Синопсис

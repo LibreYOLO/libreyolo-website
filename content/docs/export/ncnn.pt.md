@@ -1,8 +1,15 @@
 ---
 title: ncnn
-seo_title: "Exportar para ncnn a partir do LibreYOLO"
-description: "Exporte um modelo LibreYOLO para ncnn através do PNNX: o par param e bin, o canvas de exportação fixo, a reescrita do Focus do YOLOX e quais famílias convertem."
-lead: "ncnn é a biblioteca de inferência em CPU da Tencent para alvos móveis. O LibreYOLO converte através do PNNX, escrevendo um grafo model.ncnn.param ao lado de um arquivo de pesos model.ncnn.bin e de um metadata.yaml que carrega a família, a tarefa e os nomes das classes."
+seo_title: Exportar para ncnn a partir do LibreYOLO
+description: >-
+  Exporte um modelo LibreYOLO para ncnn através do PNNX: o par param e bin, o
+  canvas de exportação fixo, a reescrita do Focus do YOLOX e quais famílias
+  convertem.
+lead: >-
+  ncnn é a biblioteca de inferência em CPU da Tencent para alvos móveis. O
+  LibreYOLO converte através do PNNX, escrevendo um grafo model.ncnn.param ao
+  lado de um arquivo de pesos model.ncnn.bin e de um metadata.yaml que carrega a
+  família, a tarefa e os nomes das classes.
 keywords:
   - exportar yolo ncnn
   - pnnx
@@ -10,24 +17,27 @@ keywords:
   - inferência cpu mobile
   - ncnn extractor
   - focus pixel_unshuffle
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="ncnn")'
+    value: export(format="ncnn")
     mono: true
   - label: Escreve
-    value: "Um diretório com model.ncnn.param, model.ncnn.bin e metadata.yaml"
+    value: 'Um diretório com model.ncnn.param, model.ncnn.bin e metadata.yaml'
   - label: Extra
     value: 'pip install "libreyolo[ncnn]"'
     mono: true
   - label: Recarrega com
-    value: 'LibreYOLO("weights/LibreYOLO9t_ncnn")'
+    value: LibreYOLO("weights/LibreYOLO9t_ncnn")
     mono: true
   - label: Formas
-    value: "Fixas. Os metadados registram dynamic=False independentemente da flag."
+    value: Fixas. Os metadados registram dynamic=False independentemente da flag.
   - label: Precisão
-    value: "Somente FP32. half=True e int8=True são rejeitados."
-verification: "Lido de libreyolo/export/ncnn.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/ncnn.py e pyproject.toml no branch dev."
+    value: Somente FP32. half=True e int8=True são rejeitados.
+verification: >-
+  Lido de libreyolo/export/ncnn.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/ncnn.py e pyproject.toml no
+  branch dev.
 snippets:
   install:
     - label: Instalação
@@ -74,32 +84,49 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: ncnn puro
       language: python
-      code: |
+      code: >
         import ncnn
+
         import numpy as np
+
         import yaml
 
+
         directory = "weights/LibreYOLO9t_ncnn"
+
         net = ncnn.Net()
+
         net.load_param(f"{directory}/model.ncnn.param")
+
         net.load_model(f"{directory}/model.ncnn.bin")
 
+
         # O ncnn recebe uma única imagem CHW, não um batch.
+
         mat_in = ncnn.Mat(np.zeros((3, 640, 640), dtype=np.float32))
+
         extractor = net.create_extractor()
+
         extractor.input("in0", mat_in)
+
         ret, mat_out = extractor.extract("out0")
+
         print(ret, np.array(mat_out).shape)
 
+
         meta = yaml.safe_load(open(f"{directory}/metadata.yaml"))
+
         print(meta["model_family"], meta["task"], meta["names"])
 
-        # O pré-processamento e o pós-processamento são por sua conta neste caminho.
+
+        # O pré-processamento e o pós-processamento são por sua conta neste
+        caminho.
   support:
     - label: Conferir uma família e tarefa antes de exportar
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: 9a849a16a3b32334
 ---
 
 ## Instalação

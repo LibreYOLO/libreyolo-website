@@ -1,11 +1,25 @@
 ---
 title: BiRefNet
-families: [birefnet]
-seo_title: "BiRefNet: eliminación de fondo y matting en LibreYOLO"
-description: "Usa BiRefNet en LibreYOLO para eliminar el fondo y para segmentación dicotómica de imágenes. Instala, predice, valida y exporta el checkpoint general."
-lead: "Una red de referencia bilateral que predice un alpha matte suave que separa al sujeto de su fondo. LibreYOLO incluye inferencia y validación para la tarea de matte de BiRefNet."
-keywords: [BiRefNet, "quitar el fondo de una imagen", "eliminar fondo python", "segmentación dicotómica de imágenes", "alpha matte", "image matting", "recorte con transparencia"]
-last_verified: "1.5.0"
+families:
+  - birefnet
+seo_title: 'BiRefNet: eliminación de fondo y matting en LibreYOLO'
+description: >-
+  Usa BiRefNet en LibreYOLO para eliminar el fondo y para segmentación
+  dicotómica de imágenes. Instala, predice, valida y exporta el checkpoint
+  general.
+lead: >-
+  Una red de referencia bilateral que predice un alpha matte suave que separa al
+  sujeto de su fondo. LibreYOLO incluye inferencia y validación para la tarea de
+  matte de BiRefNet.
+keywords:
+  - BiRefNet
+  - quitar el fondo de una imagen
+  - eliminar fondo python
+  - segmentación dicotómica de imágenes
+  - alpha matte
+  - image matting
+  - recorte con transparencia
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +34,10 @@ snippets:
         print(matte.array.shape, matte.array.dtype)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreBiRefNetl-matte.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreBiRefNetl-matte.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Recorte
       language: python
       code: |
@@ -72,6 +88,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
+source_hash: 1af1bd7f4f905081
 ---
 
 ## Instalación

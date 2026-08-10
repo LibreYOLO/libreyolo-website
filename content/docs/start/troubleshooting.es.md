@@ -1,10 +1,22 @@
 ---
 title: Solución de problemas
-seo_title: "Corregir los errores más comunes de LibreYOLO"
-description: "Los errores que LibreYOLO lanza con más frecuencia, qué significa cada uno y cómo solucionarlo. Incluye dos fallos que producen resultados incorrectos en lugar de lanzar una excepción."
-lead: "Errores agrupados por el mensaje que ves. Las dos últimas entradas cubren el problema contrario: código que se ejecuta, devuelve algo plausible y está mal."
-keywords: [error libreyolo, modulenotfounderror libreyolo, libreyolo cuda out of memory, libreyolo notimplementederror, solucionar errores libreyolo, libreyolo no descarga pesos]
-last_verified: "1.5.0"
+seo_title: Corregir los errores más comunes de LibreYOLO
+description: >-
+  Los errores que LibreYOLO lanza con más frecuencia, qué significa cada uno y
+  cómo solucionarlo. Incluye dos fallos que producen resultados incorrectos en
+  lugar de lanzar una excepción.
+lead: >-
+  Errores agrupados por el mensaje que ves. Las dos últimas entradas cubren el
+  problema contrario: código que se ejecuta, devuelve algo plausible y está mal.
+keywords:
+  - error libreyolo
+  - modulenotfounderror libreyolo
+  - libreyolo cuda out of memory
+  - libreyolo notimplementederror
+  - solucionar errores libreyolo
+  - libreyolo no descarga pesos
+last_verified: 1.5.0
+source_hash: e271ab29b789865a
 ---
 
 Los errores están agrupados por el texto que ves. Si tu mensaje no está aquí,

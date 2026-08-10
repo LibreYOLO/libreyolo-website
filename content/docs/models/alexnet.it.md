@@ -1,11 +1,23 @@
 ---
 title: AlexNet
-families: [alexnet]
-seo_title: "AlexNet: esegui il classico classificatore ImageNet in LibreYOLO"
-description: "Fai predizioni, valida ed esporta AlexNet con LibreYOLO. Pesi torchvision con licenza BSD-3-Clause; il fine-tuning non è ancora supportato."
-lead: "AlexNet è la rete convoluzionale che ha vinto ILSVRC 2012 e ha contribuito ad aprire l'era del deep learning nella computer vision. LibreYOLO distribuisce la revisione successiva dell'architettura, a torre singola, per la classificazione di immagini."
-keywords: [AlexNet, ImageNet, image classification python, classificazione immagini python, rete neurale convoluzionale]
-last_verified: "1.5.0"
+families:
+  - alexnet
+seo_title: 'AlexNet: esegui il classico classificatore ImageNet in LibreYOLO'
+description: >-
+  Fai predizioni, valida ed esporta AlexNet con LibreYOLO. Pesi torchvision con
+  licenza BSD-3-Clause; il fine-tuning non è ancora supportato.
+lead: >-
+  AlexNet è la rete convoluzionale che ha vinto ILSVRC 2012 e ha contribuito ad
+  aprire l'era del deep learning nella computer vision. LibreYOLO distribuisce
+  la revisione successiva dell'architettura, a torre singola, per la
+  classificazione di immagini.
+keywords:
+  - AlexNet
+  - ImageNet
+  - image classification python
+  - classificazione immagini python
+  - rete neurale convoluzionale
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +33,10 @@ snippets:
         print(probs.top5, probs.top5conf)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreAlexNetb-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreAlexNetb-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -67,6 +81,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: 68c09f080c74bb87
 ---
 
 ## Installazione

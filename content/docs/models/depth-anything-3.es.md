@@ -1,11 +1,26 @@
 ---
 title: Depth Anything 3
-families: [depth_anything3]
-seo_title: "Depth Anything 3: predice profundidad monocular en LibreYOLO"
-description: "Usa Depth Anything 3 en LibreYOLO para estimación de profundidad monocular. Instala, predice, valida y exporta el checkpoint DA3MONO-LARGE, Apache-2.0."
-lead: "Depth Anything 3 es un transformer DINOv2 sin más, entrenado para predecir profundidad y geometría de cámara a partir de una o varias vistas sin ninguna especialización arquitectónica. LibreYOLO porta su checkpoint DA3MONO-LARGE para la tarea de profundidad: predicción y validación zero-shot, sin ruta de entrenamiento."
-keywords: [Depth Anything 3, DA3, "estimación de profundidad monocular", DINOv2, "profundidad relativa", "mapa de profundidad python", "estimar profundidad de una imagen"]
-last_verified: "1.5.0"
+families:
+  - depth_anything3
+seo_title: 'Depth Anything 3: predice profundidad monocular en LibreYOLO'
+description: >-
+  Usa Depth Anything 3 en LibreYOLO para estimación de profundidad monocular.
+  Instala, predice, valida y exporta el checkpoint DA3MONO-LARGE, Apache-2.0.
+lead: >-
+  Depth Anything 3 es un transformer DINOv2 sin más, entrenado para predecir
+  profundidad y geometría de cámara a partir de una o varias vistas sin ninguna
+  especialización arquitectónica. LibreYOLO porta su checkpoint DA3MONO-LARGE
+  para la tarea de profundidad: predicción y validación zero-shot, sin ruta de
+  entrenamiento.
+keywords:
+  - Depth Anything 3
+  - DA3
+  - estimación de profundidad monocular
+  - DINOv2
+  - profundidad relativa
+  - mapa de profundidad python
+  - estimar profundidad de una imagen
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,18 +35,27 @@ snippets:
         print(depth.min, depth.max, depth.mean)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDepthAnything3l-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDepthAnything3l-depth.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Leer el mapa de profundidad
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreDepthAnything3l-depth.pt")
+
         result = model(SAMPLE_IMAGE)
 
-        depth = result.depth_map    # DepthMap: densa (H, W), más alto = más cerca
-        raw = depth.data                # tensor, sin unidad métrica ni escala entre imágenes
+
+        depth = result.depth_map    # DepthMap: densa (H, W), más alto = más
+        cerca
+
+        raw = depth.data                # tensor, sin unidad métrica ni escala
+        entre imágenes
+
         normalized = depth.normalized() # reescalado a [0, 1] para visualización
   val:
     - label: Python
@@ -60,20 +84,30 @@ snippets:
         model.export(format="tensorrt", half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDepthAnything3l-depth.pt format=onnx
-        libreyolo export model=LibreDepthAnything3l-depth.pt format=tensorrt half=True
+
+        libreyolo export model=LibreDepthAnything3l-depth.pt format=tensorrt
+        half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreDepthAnything3l-depth.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.depth_map.data.shape)
+source_hash: 0ac96180165c4891
 ---
 
 ## Instalación

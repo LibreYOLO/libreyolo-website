@@ -1,11 +1,27 @@
 ---
 title: DETR
-families: [detr]
-seo_title: "DETR: predizione ed esportazione con licenza Apache-2.0"
-description: "Esegui DETR, il transformer di rilevamento originale, in LibreYOLO. Installa, fai predizioni, valida ed esporta quattro dimensioni basate su ResNet, tutte con licenza Apache-2.0."
-lead: "DETR è il transformer di rilevamento originale: predice un insieme fisso di oggetti con un decoder transformer accoppiato dall'algoritmo ungherese, invece di usare anchor o una griglia densa. LibreYOLO include quattro dimensioni per il rilevamento, solo per inferenza."
-keywords: [DETR, "detection transformer", "object detection python", "rilevamento oggetti python", "Hungarian matching", "decoder transformer", "DETR pytorch", Meta AI]
-last_verified: "1.5.0"
+families:
+  - detr
+seo_title: 'DETR: predizione ed esportazione con licenza Apache-2.0'
+description: >-
+  Esegui DETR, il transformer di rilevamento originale, in LibreYOLO. Installa,
+  fai predizioni, valida ed esporta quattro dimensioni basate su ResNet, tutte
+  con licenza Apache-2.0.
+lead: >-
+  DETR è il transformer di rilevamento originale: predice un insieme fisso di
+  oggetti con un decoder transformer accoppiato dall'algoritmo ungherese, invece
+  di usare anchor o una griglia densa. LibreYOLO include quattro dimensioni per
+  il rilevamento, solo per inferenza.
+keywords:
+  - DETR
+  - detection transformer
+  - object detection python
+  - rilevamento oggetti python
+  - Hungarian matching
+  - decoder transformer
+  - DETR pytorch
+  - Meta AI
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +36,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDETRr50.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDETRr50.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -51,9 +69,11 @@ snippets:
         model.export(format="tensorrt", imgsz=800, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDETRr50.pt format=onnx imgsz=800
-        libreyolo export model=LibreDETRr50.pt format=tensorrt imgsz=800 half=True
+
+        libreyolo export model=LibreDETRr50.pt format=tensorrt imgsz=800
+        half=True
     - label: Usare il file esportato
       language: python
       code: |
@@ -66,6 +86,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: c5549a596742d2a5
 ---
 
 ## Installazione

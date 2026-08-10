@@ -1,10 +1,22 @@
 ---
 title: Segmentación de instancias
-seo_title: "Segmentación de instancias en LibreYOLO"
-description: "Segmenta objetos individuales en LibreYOLO: las familias que cubren la tarea, el formato de etiquetas de polígonos y las llamadas de predicción, entrenamiento, validación y exportación."
-lead: "La segmentación de instancias localiza cada instancia de objeto y devuelve una máscara por píxel para cada una, junto al box, la clase y la puntuación que devuelve un detector. La clave de la tarea es segment."
-keywords: [segmentación de instancias python, máscaras de objetos python, entrenar modelo de segmentación, etiquetas de polígonos yolo, segmentación de instancias licencia MIT, mAP de máscaras]
-last_verified: "1.5.0"
+seo_title: Segmentación de instancias en LibreYOLO
+description: >-
+  Segmenta objetos individuales en LibreYOLO: las familias que cubren la tarea,
+  el formato de etiquetas de polígonos y las llamadas de predicción,
+  entrenamiento, validación y exportación.
+lead: >-
+  La segmentación de instancias localiza cada instancia de objeto y devuelve una
+  máscara por píxel para cada una, junto al box, la clase y la puntuación que
+  devuelve un detector. La clave de la tarea es segment.
+keywords:
+  - segmentación de instancias python
+  - máscaras de objetos python
+  - entrenar modelo de segmentación
+  - etiquetas de polígonos yolo
+  - segmentación de instancias licencia MIT
+  - mAP de máscaras
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -26,16 +38,21 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Contornos de las máscaras
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreDFINEn-seg.pt")
+
         result = model(SAMPLE_IMAGE)
 
-        # .xy es una lista de contornos (P, 2) en píxeles, .xyn los mismos normalizados.
+
+        # .xy es una lista de contornos (P, 2) en píxeles, .xyn los mismos
+        normalizados.
+
         for name, contour in zip(result.boxes.cls, result.masks.xy):
             print(result.names[int(name)], contour.shape)
-    - label: Otra familia, la misma llamada
+    - label: 'Otra familia, la misma llamada'
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -47,13 +64,19 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # Continúa desde pesos de segmentación publicados, cabeza de máscaras incluida.
+
+        # Continúa desde pesos de segmentación publicados, cabeza de máscaras
+        incluida.
+
         # data debe apuntar a un dataset cuyas etiquetas lleven polígonos.
+
         model = LibreYOLO("LibreDFINEn-seg.pt")
-        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8, lr0=2e-4)
+
+        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8,
+        lr0=2e-4)
     - label: CLI
       language: bash
       code: |
@@ -97,15 +120,22 @@ snippets:
         libreyolo export model=LibreDFINEn-seg.pt format=onnx imgsz=640
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factory decide según la extensión del archivo, así que un artefacto
-        # exportado se carga como un checkpoint y devuelve el mismo objeto Results.
+
+        # exportado se carga como un checkpoint y devuelve el mismo objeto
+        Results.
+
         model = LibreYOLO("LibreDFINEn-seg.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.masks.data.shape)
+source_hash: 33e331eac0f9b0af
 ---
 
 ## Definición

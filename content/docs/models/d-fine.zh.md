@@ -1,11 +1,18 @@
 ---
 title: D-FINE
-families: [dfine]
-seo_title: "D-FINE：在 MIT 许可下微调、验证并导出"
-description: "在 LibreYOLO 里用 D-FINE 做目标检测和实例分割。安装、预测、微调、验证、导出，代码采用 MIT 许可。"
-lead: "一个检测 transformer，它把检测框回归重新表述成每条框边上的概率分布，并在各解码器层之间逐步细化。LibreYOLO 支持它做目标检测和实例分割。"
-keywords: [D-FINE, "检测 transformer", "实时目标检测", "实例分割", "d-fine 训练自己的数据集", DETR]
-last_verified: "1.5.0"
+families:
+  - dfine
+seo_title: D-FINE：在 MIT 许可下微调、验证并导出
+description: 在 LibreYOLO 里用 D-FINE 做目标检测和实例分割。安装、预测、微调、验证、导出，代码采用 MIT 许可。
+lead: 一个检测 transformer，它把检测框回归重新表述成每条框边上的概率分布，并在各解码器层之间逐步细化。LibreYOLO 支持它做目标检测和实例分割。
+keywords:
+  - D-FINE
+  - 检测 transformer
+  - 实时目标检测
+  - 实例分割
+  - d-fine 训练自己的数据集
+  - DETR
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +27,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDFINEn.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDFINEn.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: 实例分割
       language: python
       code: |
@@ -36,11 +45,14 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreDFINEn.pt")
-        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8, lr0=2e-4)
+
+        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8,
+        lr0=2e-4)
     - label: CLI
       language: bash
       code: |
@@ -108,9 +120,11 @@ snippets:
         model.export(format="tensorrt", imgsz=640, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDFINEn.pt format=onnx imgsz=640
-        libreyolo export model=LibreDFINEn.pt format=tensorrt imgsz=640 half=True
+
+        libreyolo export model=LibreDFINEn.pt format=tensorrt imgsz=640
+        half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -122,6 +136,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 0216631a26185524
 ---
 
 ## 安装

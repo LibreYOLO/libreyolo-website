@@ -1,11 +1,23 @@
 ---
 title: Faster R-CNN
-families: [faster_rcnn]
-seo_title: "Faster R-CNN：在 LibreYOLO 里预测、验证和导出"
-description: "在 LibreYOLO 里用四种骨干运行 Faster R-CNN 做目标检测。安装、预测、验证并导出这个采用 BSD-3-Clause 许可的 torchvision 移植版。"
-lead: "Faster R-CNN 用一个区域建议网络（region proposal network）喂给两阶段分类器来检测目标，正是这个架构让区域建议成为同一个训练网络的一部分，而不再是单独的一步。LibreYOLO 移植了 torchvision 的实现，用于目标检测。"
-keywords: [Faster R-CNN, 目标检测, "faster rcnn 目标检测", "区域建议网络", "两阶段检测器", torchvision]
-last_verified: "1.5.0"
+families:
+  - faster_rcnn
+seo_title: Faster R-CNN：在 LibreYOLO 里预测、验证和导出
+description: >-
+  在 LibreYOLO 里用四种骨干运行 Faster R-CNN 做目标检测。安装、预测、验证并导出这个采用 BSD-3-Clause 许可的
+  torchvision 移植版。
+lead: >-
+  Faster R-CNN 用一个区域建议网络（region proposal
+  network）喂给两阶段分类器来检测目标，正是这个架构让区域建议成为同一个训练网络的一部分，而不再是单独的一步。LibreYOLO 移植了
+  torchvision 的实现，用于目标检测。
+keywords:
+  - Faster R-CNN
+  - 目标检测
+  - faster rcnn 目标检测
+  - 区域建议网络
+  - 两阶段检测器
+  - torchvision
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +32,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreFasterRCNNl.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreFasterRCNNl.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -60,6 +74,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 3fd82eb835399560
 ---
 
 ## 安装

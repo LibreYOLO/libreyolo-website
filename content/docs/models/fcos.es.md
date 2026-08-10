@@ -1,11 +1,25 @@
 ---
 title: FCOS
-families: [fcos]
-seo_title: "FCOS en LibreYOLO: predecir, validar y exportar"
-description: "Ejecuta FCOS en LibreYOLO para detección de objetos sin anchors. Instala, predice, valida y exporta el port de torchvision con licencia BSD-3-Clause, ResNet-50/FPN."
-lead: "FCOS detecta objetos píxel a píxel en lugar de apoyarse en un conjunto de anchor boxes predefinidos, y predice un box y una puntuación de centerness en cada posición del mapa de características. LibreYOLO porta la implementación de torchvision para detección."
-keywords: [FCOS, "detector anchor-free", "detección de objetos python", "detección sin anchors", "detector de una etapa", torchvision]
-last_verified: "1.5.0"
+families:
+  - fcos
+seo_title: 'FCOS en LibreYOLO: predecir, validar y exportar'
+description: >-
+  Ejecuta FCOS en LibreYOLO para detección de objetos sin anchors. Instala,
+  predice, valida y exporta el port de torchvision con licencia BSD-3-Clause,
+  ResNet-50/FPN.
+lead: >-
+  FCOS detecta objetos píxel a píxel en lugar de apoyarse en un conjunto de
+  anchor boxes predefinidos, y predice un box y una puntuación de centerness en
+  cada posición del mapa de características. LibreYOLO porta la implementación
+  de torchvision para detección.
+keywords:
+  - FCOS
+  - detector anchor-free
+  - detección de objetos python
+  - detección sin anchors
+  - detector de una etapa
+  - torchvision
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +34,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreFCOSr50.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreFCOSr50.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -62,6 +78,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 60bd7b8dfd903a8c
 ---
 
 ## Instalación

@@ -1,11 +1,25 @@
 ---
 title: OMDet-Turbo
-families: [omdet_turbo]
-seo_title: "OMDet-Turbo en LibreYOLO: detección zero-shot en tiempo real"
-description: "Usa OMDet-Turbo en LibreYOLO para detección de vocabulario abierto en tiempo real. Instala el extra openvocab y predice con un vocabulario de texto libre."
-lead: "OMDet-Turbo es un detector de objetos de vocabulario abierto en tiempo real, desarrollado por Om AI Lab, que desacopla los embeddings de clase del prompt de tarea de lenguaje. LibreYOLO lo envuelve como una familia solo de predicción dentro de su tier de detectores de vocabulario abierto."
-keywords: [OMDet-Turbo, OmDet, "detección de vocabulario abierto", "detección de objetos en tiempo real", "detección zero-shot", "detectar objetos por texto", LibreOpenVocab]
-last_verified: "1.5.0"
+families:
+  - omdet_turbo
+seo_title: 'OMDet-Turbo en LibreYOLO: detección zero-shot en tiempo real'
+description: >-
+  Usa OMDet-Turbo en LibreYOLO para detección de vocabulario abierto en tiempo
+  real. Instala el extra openvocab y predice con un vocabulario de texto libre.
+lead: >-
+  OMDet-Turbo es un detector de objetos de vocabulario abierto en tiempo real,
+  desarrollado por Om AI Lab, que desacopla los embeddings de clase del prompt
+  de tarea de lenguaje. LibreYOLO lo envuelve como una familia solo de
+  predicción dentro de su tier de detectores de vocabulario abierto.
+keywords:
+  - OMDet-Turbo
+  - OmDet
+  - detección de vocabulario abierto
+  - detección de objetos en tiempo real
+  - detección zero-shot
+  - detectar objetos por texto
+  - LibreOpenVocab
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -32,6 +46,7 @@ snippets:
         # y vale 0.5 por defecto cuando iou= se deja sin indicar.
         result = model.predict(SAMPLE_IMAGE, conf=0.3, iou=0.7)
         print(result.names, len(result))
+source_hash: c2a375d234341b7e
 ---
 
 ## Instalación

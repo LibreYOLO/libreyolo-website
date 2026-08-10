@@ -1,11 +1,19 @@
 ---
 title: AlexNet
-families: [alexnet]
-seo_title: "AlexNet：在 LibreYOLO 里运行经典的 ImageNet 分类器"
-description: "用 LibreYOLO 预测、验证并导出 AlexNet。torchvision 权重采用 BSD-3-Clause 许可；微调尚未支持。"
-lead: "AlexNet 是赢得 ILSVRC 2012 的卷积网络，它帮助开启了计算机视觉的深度学习时代。LibreYOLO 提供的是这个架构后期的单塔（single-tower）修订版，用于图像分类。"
-keywords: [AlexNet, ImageNet, 卷积神经网络, "图像分类 python", "预训练图像分类模型"]
-last_verified: "1.5.0"
+families:
+  - alexnet
+seo_title: AlexNet：在 LibreYOLO 里运行经典的 ImageNet 分类器
+description: 用 LibreYOLO 预测、验证并导出 AlexNet。torchvision 权重采用 BSD-3-Clause 许可；微调尚未支持。
+lead: >-
+  AlexNet 是赢得 ILSVRC 2012 的卷积网络，它帮助开启了计算机视觉的深度学习时代。LibreYOLO
+  提供的是这个架构后期的单塔（single-tower）修订版，用于图像分类。
+keywords:
+  - AlexNet
+  - ImageNet
+  - 卷积神经网络
+  - 图像分类 python
+  - 预训练图像分类模型
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +29,10 @@ snippets:
         print(probs.top5, probs.top5conf)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreAlexNetb-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreAlexNetb-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -66,6 +76,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: 68c09f080c74bb87
 ---
 
 ## 安装

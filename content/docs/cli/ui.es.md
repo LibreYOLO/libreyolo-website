@@ -1,30 +1,42 @@
 ---
 title: libreyolo ui
-seo_title: "referencia del comando libreyolo ui"
-description: "Arranca la interfaz web local de inferencia: dirección de enlace, comportamiento del puerto, selección de dispositivo y cómo termina el comando."
-lead: "Arranca un servidor web local que acepta imágenes soltadas o pegadas, ejecuta sobre ellas el modelo que elijas y muestra los resultados en el navegador."
-keywords: [libreyolo ui cli, interfaz web libreyolo, inferencia local navegador, inferencia arrastrando imagenes, puerto libreyolo ui]
-last_verified: "1.5.0"
+seo_title: referencia del comando libreyolo ui
+description: >-
+  Arranca la interfaz web local de inferencia: dirección de enlace,
+  comportamiento del puerto, selección de dispositivo y cómo termina el comando.
+lead: >-
+  Arranca un servidor web local que acepta imágenes soltadas o pegadas, ejecuta
+  sobre ellas el modelo que elijas y muestra los resultados en el navegador.
+keywords:
+  - libreyolo ui cli
+  - interfaz web libreyolo
+  - inferencia local navegador
+  - inferencia arrastrando imagenes
+  - puerto libreyolo ui
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo ui
     mono: true
   - label: Salida
-    value: "Una URL de servidor por stdout y, a continuación, el proceso se queda en primer plano"
+    value: >-
+      Una URL de servidor por stdout y, a continuación, el proceso se queda en
+      primer plano
 snippets:
   examples:
     - label: Básico
       language: bash
       code: |
         libreyolo ui
-    - label: Puerto fijo, sin navegador
+    - label: 'Puerto fijo, sin navegador'
       language: bash
       code: |
         libreyolo ui port=9000 no_browser=true
-    - label: En la CPU, salida legible por máquina
+    - label: 'En la CPU, salida legible por máquina'
       language: bash
       code: |
         libreyolo ui device=cpu json=true
+source_hash: b0eebd33fd0f463b
 ---
 
 ## Sinopsis

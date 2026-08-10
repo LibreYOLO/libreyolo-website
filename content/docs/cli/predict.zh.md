@@ -1,10 +1,15 @@
 ---
 title: libreyolo predict
-seo_title: "libreyolo predict 命令参考"
-description: "从命令行跑推理：每一个参数、从 CLI 定义里读出的默认值，以及会改变 stdout 输出内容的 flag。"
-lead: "在一个源上运行已加载的模型并打印预测结果。源可以是图像、目录、视频、URL 或实时流；模型可以是检查点（checkpoint），也可以是导出的产物。"
-keywords: [libreyolo predict cli, libreyolo 命令行推理, yolo 命令行预测, libreyolo predict 参数, libreyolo json 输出]
-last_verified: "1.5.0"
+seo_title: libreyolo predict 命令参考
+description: 从命令行跑推理：每一个参数、从 CLI 定义里读出的默认值，以及会改变 stdout 输出内容的 flag。
+lead: 在一个源上运行已加载的模型并打印预测结果。源可以是图像、目录、视频、URL 或实时流；模型可以是检查点（checkpoint），也可以是导出的产物。
+keywords:
+  - libreyolo predict cli
+  - libreyolo 命令行推理
+  - yolo 命令行预测
+  - libreyolo predict 参数
+  - libreyolo json 输出
+last_verified: 1.5.0
 meta:
   - label: 命令
     value: libreyolo predict
@@ -13,7 +18,7 @@ meta:
     value: source
     mono: true
   - label: 输出
-    value: "预测结果打印到 stdout。save=true 时，标注后的文件写入 runs/detect/predict"
+    value: 预测结果打印到 stdout。save=true 时，标注后的文件写入 runs/detect/predict
 snippets:
   examples:
     - label: 基础用法
@@ -29,11 +34,14 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: 过滤类别，JSON 输出到 stdout
       language: bash
-      code: |
+      code: >
         # 类别 0 在检查点自带的 COCO 类别列表里是 person
-        libreyolo predict model=LibreYOLO9s.pt classes="[0]" conf=0.4 max_det=50 \
+
+        libreyolo predict model=LibreYOLO9s.pt classes="[0]" conf=0.4 max_det=50
+        \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+source_hash: 7e46c7ed7dd9e6c4
 ---
 
 ## 用法概要

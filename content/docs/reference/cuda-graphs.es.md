@@ -1,8 +1,15 @@
 ---
 title: Grafos CUDA
-seo_title: "Matriz de soporte de grafos CUDA en LibreYOLO"
-description: "Qué familias capturan su forward en predicción y su forward y su backward en entrenamiento, qué se garantiza sobre los números, dónde se parte una captura y por qué una familia no soportada lanza un error."
-lead: "Un grafo CUDA registra una ejecución de una secuencia fija de kernels y la reproduce como un único lanzamiento. LibreYOLO captura la inferencia en 39 familias verificadas y el entrenamiento en 24, siempre por familia, siempre tras una comprobación de paridad bit a bit y nunca como fallback silencioso."
+seo_title: Matriz de soporte de grafos CUDA en LibreYOLO
+description: >-
+  Qué familias capturan su forward en predicción y su forward y su backward en
+  entrenamiento, qué se garantiza sobre los números, dónde se parte una captura
+  y por qué una familia no soportada lanza un error.
+lead: >-
+  Un grafo CUDA registra una ejecución de una secuencia fija de kernels y la
+  reproduce como un único lanzamiento. LibreYOLO captura la inferencia en 39
+  familias verificadas y el entrenamiento en 24, siempre por familia, siempre
+  tras una comprobación de paridad bit a bit y nunca como fallback silencioso.
 keywords:
   - libreyolo cuda graph
   - cuda_graph=True
@@ -10,13 +17,25 @@ keywords:
   - acelerar inferencia yolo cuda graph
   - entrenar yolo con cuda graph
   - capture_error_mode thread_local
-last_verified: "1.5.0"
-verification: "Lista de familias de inferencia derivada de la matriz CAPTURABLE de tests/e2e/test_cuda_graph_families.py en la v1.5.0. Lista de familias de entrenamiento, clases de paridad y tiempos tomados de docs/training_cuda_graphs.md. La API y el NotImplementedError, de BaseModel._require_cuda_graph_support, cuda_graph_scope y capture_graph en libreyolo/models/base/model.py, con la variable de clase SUPPORTS_CUDA_GRAPH. Las divisiones por costura, leídas de los overrides de _get_graph_runner en las familias depth_anything3, birefnet, ppocr, sam y sensenova y de libreyolo/models/base/detr_cuda_graph.py. capture_error_mode, de libreyolo/models/base/cuda_graph.py y libreyolo/training/cuda_graph.py. El fallback de entrenamiento, de libreyolo/training/trainer.py y el flag --cuda-graph, de libreyolo/cli/commands/train.py."
+last_verified: 1.5.0
+verification: >-
+  Lista de familias de inferencia derivada de la matriz CAPTURABLE de
+  tests/e2e/test_cuda_graph_families.py en la v1.5.0. Lista de familias de
+  entrenamiento, clases de paridad y tiempos tomados de
+  docs/training_cuda_graphs.md. La API y el NotImplementedError, de
+  BaseModel._require_cuda_graph_support, cuda_graph_scope y capture_graph en
+  libreyolo/models/base/model.py, con la variable de clase SUPPORTS_CUDA_GRAPH.
+  Las divisiones por costura, leídas de los overrides de _get_graph_runner en
+  las familias depth_anything3, birefnet, ppocr, sam y sensenova y de
+  libreyolo/models/base/detr_cuda_graph.py. capture_error_mode, de
+  libreyolo/models/base/cuda_graph.py y libreyolo/training/cuda_graph.py. El
+  fallback de entrenamiento, de libreyolo/training/trainer.py y el flag
+  --cuda-graph, de libreyolo/cli/commands/train.py.
 meta:
   - label: Familias de inferencia
-    value: "39"
+    value: '39'
   - label: Familias de entrenamiento
-    value: "24"
+    value: '24'
   - label: Flag de inferencia
     value: predict(cuda_graph=True)
     mono: true
@@ -27,13 +46,18 @@ snippets:
   usage:
     - label: Predicción
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
+
         # True captura en el primer uso de cada forma de entrada.
-        # "auto" espera a que una forma se repita antes de pagar el coste de la captura.
+
+        # "auto" espera a que una forma se repita antes de pagar el coste de la
+        captura.
+
         result = model(SAMPLE_IMAGE, cuda_graph=True)
     - label: Entrenamiento
       language: python
@@ -47,6 +71,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9t.pt data=my-dataset.yaml \
           epochs=100 --cuda-graph
+source_hash: 67c46199939278f2
 ---
 
 ## Qué se captura

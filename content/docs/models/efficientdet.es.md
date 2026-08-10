@@ -1,11 +1,24 @@
 ---
 title: EfficientDet
-families: [efficientdet]
-seo_title: "EfficientDet: detección de objetos en LibreYOLO"
-description: "Ejecuta EfficientDet D0-D4 en LibreYOLO: detectores con BiFPN para predicción, validación y exportación a ONNX, TensorRT y OpenVINO bajo licencia Apache-2.0."
-lead: "EfficientDet combina un backbone EfficientNet con una red piramidal de características bidireccional y repetida (BiFPN), y escala a la vez profundidad, anchura y resolución en cinco tamaños. LibreYOLO lo incluye como detector solo de inferencia."
-keywords: [EfficientDet, BiFPN, EfficientNet, "detección de objetos python", "escalado compuesto", "exportar efficientdet onnx"]
-last_verified: "1.5.0"
+families:
+  - efficientdet
+seo_title: 'EfficientDet: detección de objetos en LibreYOLO'
+description: >-
+  Ejecuta EfficientDet D0-D4 en LibreYOLO: detectores con BiFPN para predicción,
+  validación y exportación a ONNX, TensorRT y OpenVINO bajo licencia Apache-2.0.
+lead: >-
+  EfficientDet combina un backbone EfficientNet con una red piramidal de
+  características bidireccional y repetida (BiFPN), y escala a la vez
+  profundidad, anchura y resolución en cinco tamaños. LibreYOLO lo incluye como
+  detector solo de inferencia.
+keywords:
+  - EfficientDet
+  - BiFPN
+  - EfficientNet
+  - detección de objetos python
+  - escalado compuesto
+  - exportar efficientdet onnx
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +33,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreEfficientDetd0.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreEfficientDetd0.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -53,15 +68,23 @@ snippets:
         libreyolo export model=LibreEfficientDetd0.pt format=tensorrt half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreEfficientDetd0.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)
+source_hash: 12c61fb0035437ce
 ---
 
 ## Instalación

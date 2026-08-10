@@ -1,11 +1,24 @@
 ---
 title: ZipDepth
-families: [zipdepth]
-seo_title: "ZipDepth: profundidad monocular ligera en LibreYOLO"
-description: "Usa ZipDepth en LibreYOLO para estimación de profundidad monocular ligera. Instala, predice, valida y exporta dos checkpoints con licencia MIT."
-lead: "ZipDepth es una CNN compacta y reparametrizable destilada de Depth Anything V2 Large que predice un mapa denso de profundidad inversa relativa. LibreYOLO lo soporta para la tarea de profundidad: predicción y validación zero-shot, sin ruta de entrenamiento."
-keywords: [ZipDepth, "estimación de profundidad monocular", "modelo de profundidad para edge", "profundidad relativa", "mapa de profundidad python", "CNN reparametrizable"]
-last_verified: "1.5.0"
+families:
+  - zipdepth
+seo_title: 'ZipDepth: profundidad monocular ligera en LibreYOLO'
+description: >-
+  Usa ZipDepth en LibreYOLO para estimación de profundidad monocular ligera.
+  Instala, predice, valida y exporta dos checkpoints con licencia MIT.
+lead: >-
+  ZipDepth es una CNN compacta y reparametrizable destilada de Depth Anything V2
+  Large que predice un mapa denso de profundidad inversa relativa. LibreYOLO lo
+  soporta para la tarea de profundidad: predicción y validación zero-shot, sin
+  ruta de entrenamiento.
+keywords:
+  - ZipDepth
+  - estimación de profundidad monocular
+  - modelo de profundidad para edge
+  - profundidad relativa
+  - mapa de profundidad python
+  - CNN reparametrizable
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +33,10 @@ snippets:
         print(depth.min, depth.max, depth.mean)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreZipDepthb-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreZipDepthb-depth.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Checkpoint NPU/edge
       language: python
       code: |
@@ -64,16 +79,25 @@ snippets:
         libreyolo export model=LibreZipDepthbnpu-depth.pt format=ncnn
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto
+
         # Results.
+
         model = LibreYOLO("LibreZipDepthb-depth.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.depth_map.data.shape)
+source_hash: 891eaa1a42795a4c
 ---
 
 ## Instalación

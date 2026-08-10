@@ -1,8 +1,14 @@
 ---
 title: Loggers de experimentos
-seo_title: "Loggers de experimentos y callbacks en LibreYOLO"
-description: "Envía las métricas de entrenamiento a TensorBoard, MLflow, Weights & Biases, Comet, ClearML, Neptune o DVCLive, y escribe tu propio callback sobre los cuatro hooks de entrenamiento."
-lead: "Toda familia entrenable emite cuatro eventos de entrenamiento. Los loggers integrados son objetos callback que escuchan esos mismos eventos, así que la integración con un backend y un hook propio usan una única interfaz."
+seo_title: Loggers de experimentos y callbacks en LibreYOLO
+description: >-
+  Envía las métricas de entrenamiento a TensorBoard, MLflow, Weights & Biases,
+  Comet, ClearML, Neptune o DVCLive, y escribe tu propio callback sobre los
+  cuatro hooks de entrenamiento.
+lead: >-
+  Toda familia entrenable emite cuatro eventos de entrenamiento. Los loggers
+  integrados son objetos callback que escuchan esos mismos eventos, así que la
+  integración con un backend y un hook propio usan una única interfaz.
 keywords:
   - tensorboard entrenamiento
   - mlflow tracking
@@ -14,7 +20,7 @@ keywords:
   - callbacks de entrenamiento
   - métricas de entrenamiento csv
   - libreyolo monitor
-last_verified: "1.5.0"
+last_verified: 1.5.0
 snippets:
   logger:
     - label: Por nombre
@@ -52,9 +58,12 @@ snippets:
         model.train(data="coco8.yaml", epochs=10, callbacks=on_epoch)
     - label: Un objeto con varios hooks
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
-        from libreyolo.training import TrainEndEvent, TrainEpochEvent, TrainStartEvent
+
+        from libreyolo.training import TrainEndEvent, TrainEpochEvent,
+        TrainStartEvent
+
 
 
         class RunLog:
@@ -70,13 +79,17 @@ snippets:
 
 
         model = LibreYOLO("LibreYOLO9s.pt")
+
         model.train(data="coco8.yaml", epochs=10, callbacks=RunLog())
   monitor:
     - label: Seguir una ejecución en el navegador
       language: bash
-      code: |
-        libreyolo monitor                     # la ejecución más reciente en runs/
+      code: >
+        libreyolo monitor                     # la ejecución más reciente en
+        runs/
+
         libreyolo monitor runs/train/exp      # una ejecución concreta
+source_hash: de035acbaed32804
 ---
 
 ## Activar un logger

@@ -1,8 +1,15 @@
 ---
 title: NVIDIA Jetson
-seo_title: "Instalar LibreYOLO e PyTorch na NVIDIA Jetson"
-description: "Instale o LibreYOLO em uma NVIDIA Jetson: as quatro bibliotecas CUDA que o JetPack deixa de fora, o passo --no-deps que o PyTorch exige e números medidos na Orin Nano."
-lead: "As placas NVIDIA Jetson rodam o LibreYOLO com os wheels padrão do PyTorch para aarch64. Nenhuma build de torch específica para Jetson entra em jogo, mas o JetPack omite quatro bibliotecas contra as quais o torch linka, e a instalação precisa fornecê-las."
+seo_title: Instalar LibreYOLO e PyTorch na NVIDIA Jetson
+description: >-
+  Instale o LibreYOLO em uma NVIDIA Jetson: as quatro bibliotecas CUDA que o
+  JetPack deixa de fora, o passo --no-deps que o PyTorch exige e números medidos
+  na Orin Nano.
+lead: >-
+  As placas NVIDIA Jetson rodam o LibreYOLO com os wheels padrão do PyTorch para
+  aarch64. Nenhuma build de torch específica para Jetson entra em jogo, mas o
+  JetPack omite quatro bibliotecas contra as quais o torch linka, e a instalação
+  precisa fornecê-las.
 keywords:
   - NVIDIA Jetson
   - Jetson Orin Nano
@@ -16,28 +23,41 @@ keywords:
   - no kernel image is available for execution on the device
   - tensorrt na jetson
   - wheels aarch64
-last_verified: "1.4.0"
+last_verified: 1.4.0
 meta:
   - label: Placa
-    value: "Jetson Orin Nano Super Developer Kit, 8 GB, compute capability de GPU 8.7"
+    value: 'Jetson Orin Nano Super Developer Kit, 8 GB, compute capability de GPU 8.7'
   - label: Plataforma
-    value: "JetPack 7.2 (L4T R39.2), Ubuntu 24.04, CUDA 13, Python 3.12.3, aarch64"
+    value: 'JetPack 7.2 (L4T R39.2), Ubuntu 24.04, CUDA 13, Python 3.12.3, aarch64'
   - label: Stack testado
-    value: "libreyolo 1.4.0, torch 2.13.0+cu130, torchvision 0.28.0+cu130, opencv 5.0.0, numpy 2.5.1, em 2026-07-27"
+    value: >-
+      libreyolo 1.4.0, torch 2.13.0+cu130, torchvision 0.28.0+cu130, opencv
+      5.0.0, numpy 2.5.1, em 2026-07-27
   - label: Ausentes no JetPack
-    value: "nvidia-cudnn-cu13, nvidia-nccl-cu13, nvidia-cusparselt-cu13, nvidia-nvshmem-cu13"
+    value: >-
+      nvidia-cudnn-cu13, nvidia-nccl-cu13, nvidia-cusparselt-cu13,
+      nvidia-nvshmem-cu13
     mono: true
   - label: Benchmarks
-    value: "223 execuções verificadas nesta placa, 58 modelos de 12 famílias, em PyTorch, ONNX Runtime e TensorRT"
+    value: >-
+      223 execuções verificadas nesta placa, 58 modelos de 12 famílias, em
+      PyTorch, ONNX Runtime e TensorRT
     links:
       - label: visionanalysis.org/hardware/jetson_orin
-        href: https://www.visionanalysis.org/hardware/jetson_orin
+        href: 'https://www.visionanalysis.org/hardware/jetson_orin'
   - label: Acompanhado em
-    value: "A metade Jetson da issue 648"
+    value: A metade Jetson da issue 648
     links:
       - label: issue 648
-        href: https://github.com/LibreYOLO/libreyolo/issues/648
-verification: "Receita de instalação e saída esperada tiradas da instalação de 2026-07-27 em uma Jetson Orin Nano Super. As linhas de latência e acurácia vêm do snapshot de resultados verificados por trás do visionanalysis.org, filtrado pelo hardware jetson_orin, medido em junho de 2026 sobre libreyolo 1.2.0.dev0. Comportamento de exportação e do carregador lido de libreyolo/export/exporter.py, libreyolo/export/tensorrt.py e libreyolo/models/__init__.py."
+        href: 'https://github.com/LibreYOLO/libreyolo/issues/648'
+verification: >-
+  Receita de instalação e saída esperada tiradas da instalação de 2026-07-27 em
+  uma Jetson Orin Nano Super. As linhas de latência e acurácia vêm do snapshot
+  de resultados verificados por trás do visionanalysis.org, filtrado pelo
+  hardware jetson_orin, medido em junho de 2026 sobre libreyolo 1.2.0.dev0.
+  Comportamento de exportação e do carregador lido de
+  libreyolo/export/exporter.py, libreyolo/export/tensorrt.py e
+  libreyolo/models/__init__.py.
 snippets:
   prep:
     - label: Pacotes do sistema e um ambiente virtual
@@ -51,7 +71,7 @@ snippets:
         source ~/libreyolo/bin/activate
         pip install -U pip wheel setuptools
   torch:
-    - label: PyTorch, a partir do índice de wheels para CUDA 13
+    - label: 'PyTorch, a partir do índice de wheels para CUDA 13'
       language: bash
       code: |
         pip install torch torchvision \
@@ -62,10 +82,12 @@ snippets:
       code: |
         pip install nvidia-cudnn-cu13 nvidia-nccl-cu13 \
                     nvidia-cusparselt-cu13 nvidia-nvshmem-cu13
-    - label: Se o pip exigir o cuda-toolkit 13.0.3, instale com --no-deps
+    - label: 'Se o pip exigir o cuda-toolkit 13.0.3, instale com --no-deps'
       language: bash
-      code: |
-        # --no-deps significa que as dependências Python do torch também são nomeadas na mão.
+      code: >
+        # --no-deps significa que as dependências Python do torch também são
+        nomeadas na mão.
+
         pip install --no-deps \
           torch torchvision \
           nvidia-cudnn-cu13 nvidia-nccl-cu13 \
@@ -75,22 +97,30 @@ snippets:
   ldd:
     - label: Descubra a próxima biblioteca faltante em vez de adivinhar
       language: bash
-      code: |
-        ldd "$VIRTUAL_ENV/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so" \
+      code: >
+        ldd
+        "$VIRTUAL_ENV/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so" \
           | grep "not found"
 
         # Tudo que ainda falta em todas as bibliotecas do torch, de uma só vez:
-        ldd "$VIRTUAL_ENV"/lib/python3.12/site-packages/torch/lib/*.so 2>/dev/null \
+
+        ldd "$VIRTUAL_ENV"/lib/python3.12/site-packages/torch/lib/*.so
+        2>/dev/null \
           | grep "not found" | sort -u
   install:
-    - label: Instale o LibreYOLO depois do torch, não antes
+    - label: 'Instale o LibreYOLO depois do torch, não antes'
       language: bash
-      code: |
+      code: >
         # o torch já está satisfeito, então o pip deixa a build CUDA no lugar.
+
         pip install libreyolo
 
-        # O extra ONNX só é necessário para exportar. Uma exportação para TensorRT
+
+        # O extra ONNX só é necessário para exportar. Uma exportação para
+        TensorRT
+
         # passa pelo ONNX, então instale-o antes da seção de exportação abaixo.
+
         pip install "libreyolo[onnx]"
   verify:
     - label: Versões e dispositivo
@@ -131,18 +161,26 @@ snippets:
         print(result.boxes)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict --source https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg --model libreyolo9s.pt --save
+      code: >
+        libreyolo predict --source
+        https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        --model libreyolo9s.pt --save
   export:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, LibreYOLO9, SAMPLE_IMAGE
 
-        # Escreve libreyolo9s.onnx e, a partir dele, constrói libreyolo9s.engine.
-        LibreYOLO9("libreyolo9s.pt", size="s").export(format="tensorrt", half=True)
+
+        # Escreve libreyolo9s.onnx e, a partir dele, constrói
+        libreyolo9s.engine.
+
+        LibreYOLO9("libreyolo9s.pt", size="s").export(format="tensorrt",
+        half=True)
+
 
         # A engine é carregada de volta pelo mesmo ponto de entrada.
+
         result = LibreYOLO("libreyolo9s.engine").predict(SAMPLE_IMAGE)
     - label: CLI
       language: bash
@@ -157,6 +195,7 @@ snippets:
         sudo jetson_clocks
 
         tegrastats            # carga ao vivo; o nvidia-smi é limitado no Tegra
+source_hash: c07ff908503e89b5
 ---
 
 ## O que esta página registra

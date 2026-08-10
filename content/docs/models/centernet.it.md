@@ -1,11 +1,27 @@
 ---
 title: CenterNet
-families: [centernet]
-seo_title: "CenterNet: rilevamento di oggetti in LibreYOLO"
-description: "Esegui CenterNet (Objects as Points) in LibreYOLO con i backbone ResDCN-18 e DLA-34. Fai predizioni, valida ed esporta in ONNX con licenza MIT. Nessun percorso di addestramento."
-lead: "CenterNet modella un oggetto come il punto centrale del suo bounding box e ricava per regressione ogni altra proprietà da un picco della heatmap, quindi non ha bisogno di anchor né di un passaggio di non-maximum-suppression. LibreYOLO lo include come rilevatore solo per inferenza."
-keywords: [CenterNet, "Objects as Points", "object detection python", "rilevamento oggetti python", "detector anchor-free", "keypoint detection", ResDCN-18, DLA-34]
-last_verified: "1.5.0"
+families:
+  - centernet
+seo_title: 'CenterNet: rilevamento di oggetti in LibreYOLO'
+description: >-
+  Esegui CenterNet (Objects as Points) in LibreYOLO con i backbone ResDCN-18 e
+  DLA-34. Fai predizioni, valida ed esporta in ONNX con licenza MIT. Nessun
+  percorso di addestramento.
+lead: >-
+  CenterNet modella un oggetto come il punto centrale del suo bounding box e
+  ricava per regressione ogni altra proprietà da un picco della heatmap, quindi
+  non ha bisogno di anchor né di un passaggio di non-maximum-suppression.
+  LibreYOLO lo include come rilevatore solo per inferenza.
+keywords:
+  - CenterNet
+  - Objects as Points
+  - object detection python
+  - rilevamento oggetti python
+  - detector anchor-free
+  - keypoint detection
+  - ResDCN-18
+  - DLA-34
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +36,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreCenterNetresdcn18.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreCenterNetresdcn18.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: DLA-34
       language: python
       code: |
@@ -73,6 +91,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 20aaef83cc95590d
 ---
 
 ## Installazione

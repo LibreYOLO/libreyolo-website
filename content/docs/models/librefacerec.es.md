@@ -1,23 +1,42 @@
 ---
 title: LibreFaceRec
-families: [facerec]
-seo_title: "LibreFaceRec: reconocimiento y verificación facial"
-description: "Usa LibreFaceRec en LibreYOLO para detección de caras, embeddings y verificación. Instala y predice; los pesos de embedding son Apache-2.0."
-lead: "LibreFaceRec es la tarea de embeddings faciales de LibreYOLO: un detector de caras localiza y alinea las caras, y una cabeza de reconocimiento produce un embedding de identidad normalizado con L2 para verificación o búsqueda."
-keywords: [LibreFaceRec, "reconocimiento facial python", "embeddings faciales", "verificación facial", "comparar dos caras", ArcFace]
-last_verified: "1.5.0"
+families:
+  - facerec
+seo_title: 'LibreFaceRec: reconocimiento y verificación facial'
+description: >-
+  Usa LibreFaceRec en LibreYOLO para detección de caras, embeddings y
+  verificación. Instala y predice; los pesos de embedding son Apache-2.0.
+lead: >-
+  LibreFaceRec es la tarea de embeddings faciales de LibreYOLO: un detector de
+  caras localiza y alinea las caras, y una cabeza de reconocimiento produce un
+  embedding de identidad normalizado con L2 para verificación o búsqueda.
+keywords:
+  - LibreFaceRec
+  - reconocimiento facial python
+  - embeddings faciales
+  - verificación facial
+  - comparar dos caras
+  - ArcFace
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Los nombres librefacerec-* dirigen a esta familia sin importar el
+
         # sufijo del archivo y se descargan de la organización de LibreYOLO en
-        # Hugging Face en el primer uso, junto con el detector de caras por defecto.
+
+        # Hugging Face en el primer uso, junto con el detector de caras por
+        defecto.
+
         model = LibreYOLO("librefacerec-l.onnx")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.embeddings.data.shape)   # (N, D), normalizado con L2
     - label: CLI
@@ -37,15 +56,21 @@ snippets:
         print(result["similarity"], result["same_person"])
     - label: Búsqueda en galería
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("librefacerec-l.onnx")
 
-        query = model("query.jpg").embeddings          # las caras de esta imagen
+
+        query = model("query.jpg").embeddings          # las caras de esta
+        imagen
+
         gallery = model.embed(["a.jpg", "b.jpg", "c.jpg"])   # (N_total, D)
 
+
         # Similitudes coseno (query_faces, N_total).
+
         scores = query.similarity(gallery)
   export:
     - label: Python
@@ -55,6 +80,7 @@ snippets:
 
         model = LibreYOLO("librefacerec-l.onnx")
         model.export(format="onnx")
+source_hash: f1a345bb96e32f12
 ---
 
 ## Instalación

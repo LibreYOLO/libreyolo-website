@@ -1,11 +1,23 @@
 ---
 title: SSD
-families: [ssd]
-seo_title: "SSD（SSD300）：在 LibreYOLO 里做目标检测"
-description: "在 LibreYOLO 里运行 SSD300：一个单次前向的 VGG16 检测器，采用 BSD-3-Clause 许可，可以预测、验证并导出 ONNX。没有训练路径。"
-lead: "SSD（Single Shot MultiBox Detector）在一次前向传播中，从一张稠密的默认框（default box）网格上算出每个检测框和类别分数，没有单独的候选区域生成阶段。LibreYOLO 以仅推理的检测器形式提供基于 VGG16 的 SSD300 检查点。"
-keywords: [SSD, SSD300, "Single Shot MultiBox Detector", "ssd 目标检测", "ssd300 推理", VGG16, "基于锚框的检测器"]
-last_verified: "1.5.0"
+families:
+  - ssd
+seo_title: SSD（SSD300）：在 LibreYOLO 里做目标检测
+description: >-
+  在 LibreYOLO 里运行 SSD300：一个单次前向的 VGG16 检测器，采用 BSD-3-Clause 许可，可以预测、验证并导出
+  ONNX。没有训练路径。
+lead: >-
+  SSD（Single Shot MultiBox Detector）在一次前向传播中，从一张稠密的默认框（default
+  box）网格上算出每个检测框和类别分数，没有单独的候选区域生成阶段。LibreYOLO 以仅推理的检测器形式提供基于 VGG16 的 SSD300 检查点。
+keywords:
+  - SSD
+  - SSD300
+  - Single Shot MultiBox Detector
+  - ssd 目标检测
+  - ssd300 推理
+  - VGG16
+  - 基于锚框的检测器
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +32,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreSSD300.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreSSD300.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -63,6 +77,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 3b3f9ea72291c4fa
 ---
 
 ## 安装

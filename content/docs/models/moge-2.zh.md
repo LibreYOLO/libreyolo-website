@@ -1,11 +1,21 @@
 ---
 title: MoGe-2
-families: [moge2]
-seo_title: "MoGe-2：预测、验证并导出表面法线"
-description: "在 LibreYOLO 里用 MoGe-2 做稠密表面法线预测。安装、预测、验证并导出官方的 ViT-S、ViT-B 和 ViT-L 检查点。"
-lead: "MoGe-2 是一个单次前向的单目几何模型，从一张 RGB 图像预测稠密的表面法线场。LibreYOLO 只把它用于法线估计，通过官方的 ViT-S、ViT-B 和 ViT-L 检查点。"
-keywords: [MoGe-2, MoGe 2, "表面法线估计", "法线图 python", "单目几何", "稠密预测", DINOv2]
-last_verified: "1.5.0"
+families:
+  - moge2
+seo_title: MoGe-2：预测、验证并导出表面法线
+description: 在 LibreYOLO 里用 MoGe-2 做稠密表面法线预测。安装、预测、验证并导出官方的 ViT-S、ViT-B 和 ViT-L 检查点。
+lead: >-
+  MoGe-2 是一个单次前向的单目几何模型，从一张 RGB 图像预测稠密的表面法线场。LibreYOLO 只把它用于法线估计，通过官方的
+  ViT-S、ViT-B 和 ViT-L 检查点。
+keywords:
+  - MoGe-2
+  - MoGe 2
+  - 表面法线估计
+  - 法线图 python
+  - 单目几何
+  - 稠密预测
+  - DINOv2
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +30,10 @@ snippets:
         print(normal.array.shape)   # (H, W, 3) float32 单位向量
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreMoGe2s-normal.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreMoGe2s-normal.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -49,9 +61,11 @@ snippets:
         model.export(format="tensorrt", imgsz=518, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreMoGe2s-normal.pt format=onnx imgsz=518
-        libreyolo export model=LibreMoGe2s-normal.pt format=tensorrt imgsz=518 half=True
+
+        libreyolo export model=LibreMoGe2s-normal.pt format=tensorrt imgsz=518
+        half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -61,6 +75,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
+source_hash: ddfacf6b7e9729f6
 ---
 
 ## 安装

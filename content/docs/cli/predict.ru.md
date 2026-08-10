@@ -1,10 +1,21 @@
 ---
 title: libreyolo predict
-seo_title: "справочник по команде libreyolo predict"
-description: "Запуск инференса из командной строки: каждый аргумент, его значение по умолчанию, прочитанное из определения CLI, и флаги, которые меняют то, что попадает в stdout."
-lead: "Прогоняет загруженную модель по одному источнику и печатает предсказания. Источником может быть изображение, каталог, видео, URL или живой поток; моделью — чекпойнт или экспортированный артефакт."
-keywords: [libreyolo predict cli, инференс yolo из командной строки, команда libreyolo predict, аргументы libreyolo predict, yolo json вывод в stdout]
-last_verified: "1.5.0"
+seo_title: справочник по команде libreyolo predict
+description: >-
+  Запуск инференса из командной строки: каждый аргумент, его значение по
+  умолчанию, прочитанное из определения CLI, и флаги, которые меняют то, что
+  попадает в stdout.
+lead: >-
+  Прогоняет загруженную модель по одному источнику и печатает предсказания.
+  Источником может быть изображение, каталог, видео, URL или живой поток;
+  моделью — чекпойнт или экспортированный артефакт.
+keywords:
+  - libreyolo predict cli
+  - инференс yolo из командной строки
+  - команда libreyolo predict
+  - аргументы libreyolo predict
+  - yolo json вывод в stdout
+last_verified: 1.5.0
 meta:
   - label: Команда
     value: libreyolo predict
@@ -13,7 +24,9 @@ meta:
     value: source
     mono: true
   - label: Вывод
-    value: "Предсказания в stdout. При save=true — аннотированные файлы в runs/detect/predict"
+    value: >-
+      Предсказания в stdout. При save=true — аннотированные файлы в
+      runs/detect/predict
 snippets:
   examples:
     - label: Базовый вызов
@@ -27,13 +40,17 @@ snippets:
         libreyolo predict model=LibreYOLO9s.pt save=true \
           project=runs/detect name=parkour exist_ok=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-    - label: Фильтр классов, JSON в stdout
+    - label: 'Фильтр классов, JSON в stdout'
       language: bash
-      code: |
-        # класс 0 — person в списке классов COCO, который идёт вместе с чекпойнтом.
-        libreyolo predict model=LibreYOLO9s.pt classes="[0]" conf=0.4 max_det=50 \
+      code: >
+        # класс 0 — person в списке классов COCO, который идёт вместе с
+        чекпойнтом.
+
+        libreyolo predict model=LibreYOLO9s.pt classes="[0]" conf=0.4 max_det=50
+        \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+source_hash: 7e46c7ed7dd9e6c4
 ---
 
 ## Синопсис

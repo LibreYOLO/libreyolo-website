@@ -1,10 +1,15 @@
 ---
 title: libreyolo export
-seo_title: "libreyolo export 命令参考"
-description: "把检查点导出成一种部署格式：每个参数及其默认值、产物写到哪里，以及命令会拒绝的组合。"
-lead: "把一个检查点（checkpoint）转换成一种部署格式，并把产物写到 weights/ 下。格式决定下面哪些参数适用。"
-keywords: [libreyolo export cli, libreyolo 导出命令, yolo 导出 onnx, tensorrt 导出命令, libreyolo export 参数]
-last_verified: "1.5.0"
+seo_title: libreyolo export 命令参考
+description: 把检查点导出成一种部署格式：每个参数及其默认值、产物写到哪里，以及命令会拒绝的组合。
+lead: 把一个检查点（checkpoint）转换成一种部署格式，并把产物写到 weights/ 下。格式决定下面哪些参数适用。
+keywords:
+  - libreyolo export cli
+  - libreyolo 导出命令
+  - yolo 导出 onnx
+  - tensorrt 导出命令
+  - libreyolo export 参数
+last_verified: 1.5.0
 meta:
   - label: 命令
     value: libreyolo export
@@ -13,7 +18,7 @@ meta:
     value: model
     mono: true
   - label: 输出
-    value: "weights/<checkpoint-stem>[_fp16|_int8]<format-suffix>"
+    value: 'weights/<checkpoint-stem>[_fp16|_int8]<format-suffix>'
     mono: true
 snippets:
   examples:
@@ -35,6 +40,7 @@ snippets:
         # 工厂按文件后缀路由，所以导出产物会像检查点一样加载
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+source_hash: ef2ca20af3814109
 ---
 
 ## 概要

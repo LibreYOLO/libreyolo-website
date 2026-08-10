@@ -1,11 +1,19 @@
 ---
 title: SwinIR
-families: [swinir]
-seo_title: "SwinIR：在 LibreYOLO 里做 4x 图像超分辨率"
-description: "在 LibreYOLO 里用 SwinIR 做 4x 图像超分辨率。安装、预测、验证并导出轻量、中号和大号检查点。"
-lead: "一个用于图像恢复的 Swin Transformer 网络。LibreYOLO 为它的 4x 超分辨率检查点提供推理和验证：官方轻量版、真实场景中号和真实场景大号生成器。"
-keywords: [SwinIR, Swin Transformer, 图像超分辨率, "图像恢复 python", "swinir 4 倍放大"]
-last_verified: "1.5.0"
+families:
+  - swinir
+seo_title: SwinIR：在 LibreYOLO 里做 4x 图像超分辨率
+description: 在 LibreYOLO 里用 SwinIR 做 4x 图像超分辨率。安装、预测、验证并导出轻量、中号和大号检查点。
+lead: >-
+  一个用于图像恢复的 Swin Transformer 网络。LibreYOLO 为它的 4x
+  超分辨率检查点提供推理和验证：官方轻量版、真实场景中号和真实场景大号生成器。
+keywords:
+  - SwinIR
+  - Swin Transformer
+  - 图像超分辨率
+  - 图像恢复 python
+  - swinir 4 倍放大
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +28,10 @@ snippets:
         print(restored.array.shape, restored.array.dtype)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreSwinIRm-restore.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreSwinIRm-restore.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: 分块处理大图
       language: python
       code: |
@@ -75,6 +85,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.restored.array.shape)
+source_hash: 87fc3d5524480eec
 ---
 
 ## 安装

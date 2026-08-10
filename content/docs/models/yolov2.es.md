@@ -1,11 +1,28 @@
 ---
 title: YOLOv2
-families: [yolo2]
-seo_title: "YOLOv2 en LibreYOLO: predecir, validar, exportar"
-description: "Ejecuta YOLOv2 (YOLO9000) en LibreYOLO: una familia de museo congelada y solo de inferencia. Predice, valida y exporta, bajo una licencia de dominio público."
-lead: "YOLOv2, publicado también como YOLO9000, es el detector Darknet-19 que introdujo las anchor boxes y una capa passthrough en la línea YOLO. LibreYOLO lo mantiene como una pieza de museo congelada y solo de inferencia."
-keywords: [YOLOv2, YOLO9000, Darknet, Darknet-19, "detección de objetos", "anchor boxes", "yolov2 python", "ejecutar yolov2", "exportar yolov2 onnx", "modelos yolo antiguos"]
-last_verified: "1.5.0"
+families:
+  - yolo2
+seo_title: 'YOLOv2 en LibreYOLO: predecir, validar, exportar'
+description: >-
+  Ejecuta YOLOv2 (YOLO9000) en LibreYOLO: una familia de museo congelada y solo
+  de inferencia. Predice, valida y exporta, bajo una licencia de dominio
+  público.
+lead: >-
+  YOLOv2, publicado también como YOLO9000, es el detector Darknet-19 que
+  introdujo las anchor boxes y una capa passthrough en la línea YOLO. LibreYOLO
+  lo mantiene como una pieza de museo congelada y solo de inferencia.
+keywords:
+  - YOLOv2
+  - YOLO9000
+  - Darknet
+  - Darknet-19
+  - detección de objetos
+  - anchor boxes
+  - yolov2 python
+  - ejecutar yolov2
+  - exportar yolov2 onnx
+  - modelos yolo antiguos
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +37,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreYOLO2b.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreYOLO2b.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -53,15 +72,22 @@ snippets:
         libreyolo export model=LibreYOLO2b.pt format=tensorrt half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factoría enruta según el sufijo del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreYOLO2b.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)
+source_hash: ba2884a2f6e1b0da
 ---
 
 ## Instalación

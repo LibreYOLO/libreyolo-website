@@ -1,11 +1,23 @@
 ---
 title: Mask R-CNN
-families: [mask_rcnn]
-seo_title: "Mask R-CNN：在 LibreYOLO 里预测、验证和导出"
-description: "在 LibreYOLO 里用 Mask R-CNN 做目标检测和实例分割。安装、预测、验证并导出这个采用 BSD-3-Clause 许可的 torchvision 移植版。"
-lead: "Mask R-CNN 给 Faster R-CNN 加了一条按区域走的掩码分支，在它检测到的每个检测框旁边预测一张分割掩码。LibreYOLO 移植了 torchvision 的实现，用于目标检测和实例分割。"
-keywords: [Mask R-CNN, 实例分割, "目标检测 python", "mask rcnn pytorch", Faster R-CNN, torchvision, "两阶段检测器"]
-last_verified: "1.5.0"
+families:
+  - mask_rcnn
+seo_title: Mask R-CNN：在 LibreYOLO 里预测、验证和导出
+description: >-
+  在 LibreYOLO 里用 Mask R-CNN 做目标检测和实例分割。安装、预测、验证并导出这个采用 BSD-3-Clause 许可的
+  torchvision 移植版。
+lead: >-
+  Mask R-CNN 给 Faster R-CNN 加了一条按区域走的掩码分支，在它检测到的每个检测框旁边预测一张分割掩码。LibreYOLO 移植了
+  torchvision 的实现，用于目标检测和实例分割。
+keywords:
+  - Mask R-CNN
+  - 实例分割
+  - 目标检测 python
+  - mask rcnn pytorch
+  - Faster R-CNN
+  - torchvision
+  - 两阶段检测器
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +33,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreMaskRCNNr50.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreMaskRCNNr50.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: 仅检测框
       language: python
       code: |
@@ -72,6 +86,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
+source_hash: 9608459b801aa6d5
 ---
 
 ## 安装

@@ -1,8 +1,16 @@
 ---
 title: Paddle
-seo_title: "Exportar a PaddlePaddle desde LibreYOLO"
-description: "Convierte un detector de LibreYOLO en un modelo de inferencia de PaddlePaddle a través de X2Paddle: el toolchain fijado, los grafos estáticos FP32 con batch 1 y la inferencia en CPU."
-lead: "Los modelos de inferencia de PaddlePaddle son un grafo model.pdmodel junto a un archivo de pesos model.pdiparams. LibreYOLO exporta un grafo ONNX estático con opset 15, lo convierte con X2Paddle y empaqueta el resultado con un metadata.yaml para que se cargue a través de la misma factoría que cualquier otro runtime."
+seo_title: Exportar a PaddlePaddle desde LibreYOLO
+description: >-
+  Convierte un detector de LibreYOLO en un modelo de inferencia de PaddlePaddle
+  a través de X2Paddle: el toolchain fijado, los grafos estáticos FP32 con batch
+  1 y la inferencia en CPU.
+lead: >-
+  Los modelos de inferencia de PaddlePaddle son un grafo model.pdmodel junto a
+  un archivo de pesos model.pdiparams. LibreYOLO exporta un grafo ONNX estático
+  con opset 15, lo convierte con X2Paddle y empaqueta el resultado con un
+  metadata.yaml para que se cargue a través de la misma factoría que cualquier
+  otro runtime.
 keywords:
   - exportar yolo paddle
   - inferencia paddlepaddle
@@ -10,13 +18,13 @@ keywords:
   - model.pdmodel
   - model.pdiparams
   - onnx opset 15
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="paddle")'
+    value: export(format="paddle")
     mono: true
   - label: Escribe
-    value: "Un directorio con model.pdmodel, model.pdiparams y metadata.yaml"
+    value: 'Un directorio con model.pdmodel, model.pdiparams y metadata.yaml'
   - label: Extra
     value: 'pip install "libreyolo[paddle]"'
     mono: true
@@ -24,26 +32,34 @@ meta:
     value: 'LibreYOLO("weights/LibreYOLO9t_paddle", device="cpu")'
     mono: true
   - label: Backend
-    value: "libreyolo.backends.paddle.PaddleBackend"
+    value: libreyolo.backends.paddle.PaddleBackend
     mono: true
   - label: Formas
-    value: "Estáticas, batch 1, opset 15. Las tres se imponen."
+    value: 'Estáticas, batch 1, opset 15. Las tres se imponen.'
   - label: Precisión
-    value: "Solo FP32, solo CPU."
+    value: 'Solo FP32, solo CPU.'
   - label: Toolchain
-    value: "PaddlePaddle 2.6.2, X2Paddle 1.6.0, ONNX 1.17 o anterior, comprobados de forma exacta"
-verification: "Leído de libreyolo/export/paddle.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/paddle.py, docs/paddle.md y pyproject.toml en la rama dev."
+    value: >-
+      PaddlePaddle 2.6.2, X2Paddle 1.6.0, ONNX 1.17 o anterior, comprobados de
+      forma exacta
+verification: >-
+  Leído de libreyolo/export/paddle.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/paddle.py, docs/paddle.md y
+  pyproject.toml en la rama dev.
 snippets:
   install:
     - label: Instalación
       language: bash
-      code: |
-        # Python 3.10 a 3.12. WSL2 con Ubuntu 22.04 es la ruta validada en Windows.
+      code: >
+        # Python 3.10 a 3.12. WSL2 con Ubuntu 22.04 es la ruta validada en
+        Windows.
+
         pip install "libreyolo[paddle]"
     - label: Confirmar las versiones fijadas
       language: bash
-      code: |
-        python -c "from importlib.metadata import version; print(version('paddlepaddle'), version('x2paddle'), version('onnx'))"
+      code: >
+        python -c "from importlib.metadata import version;
+        print(version('paddlepaddle'), version('x2paddle'), version('onnx'))"
   export:
     - label: Python
       language: python
@@ -87,13 +103,19 @@ snippets:
           --source https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg --device cpu --save
     - label: El backend directamente
       language: python
-      code: |
+      code: >
         from libreyolo.backends.paddle import PaddleBackend
 
-        # Lo que construye LibreYOLO() para un directorio Paddle. El mismo objeto
+
+        # Lo que construye LibreYOLO() para un directorio Paddle. El mismo
+        objeto
+
         # Results, sin enrutado de la factoría por medio.
+
         backend = PaddleBackend("weights/LibreYOLO9t_paddle", device="cpu")
+
         result = backend.predict("parkour.jpg")
+
         print(result.boxes.xyxy[:3])
     - label: Paddle a secas
       language: python
@@ -127,6 +149,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: cdd8bf12286e2f53
 ---
 
 ## Instalación

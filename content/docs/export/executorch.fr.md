@@ -1,8 +1,12 @@
 ---
 title: ExecuTorch
-seo_title: "Exporter vers ExecuTorch depuis LibreYOLO"
-description: "Exportez un modèle LibreYOLO vers un programme .pte ExecuTorch avec délégation XNNPACK : forme fixe, batch 1, FP32, et le sidecar de métadonnées dont il a besoin."
-lead: "ExecuTorch exécute des programmes PyTorch sur des cibles edge. LibreYOLO capture le modèle avec torch.export en mode strict, fait le lowering vers XNNPACK, et écrit le programme .pte et un sidecar de métadonnées JSON comme un seul ensemble."
+seo_title: Exporter vers ExecuTorch depuis LibreYOLO
+description: "Exportez un modèle LibreYOLO vers un programme .pte ExecuTorch avec délégation XNNPACK\_: forme fixe, batch 1, FP32, et le sidecar de métadonnées dont il a besoin."
+lead: >-
+  ExecuTorch exécute des programmes PyTorch sur des cibles edge. LibreYOLO
+  capture le modèle avec torch.export en mode strict, fait le lowering vers
+  XNNPACK, et écrit le programme .pte et un sidecar de métadonnées JSON comme un
+  seul ensemble.
 keywords:
   - exporter yolo executorch
   - programme .pte
@@ -10,26 +14,29 @@ keywords:
   - torch.export strict
   - executorch runtime
   - inférence pytorch sur edge
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="executorch")'
+    value: export(format="executorch")
     mono: true
   - label: Écrit
-    value: "Un programme .pte plus un sidecar de métadonnées .pte.json"
+    value: Un programme .pte plus un sidecar de métadonnées .pte.json
   - label: Extra
     value: 'pip install "libreyolo[executorch]"'
     mono: true
   - label: Se recharge avec
-    value: 'LibreYOLO("weights/LibreYOLO9t.pte")'
+    value: LibreYOLO("weights/LibreYOLO9t.pte")
     mono: true
   - label: Formes
-    value: "Fixes. dynamic=True et batch != 1 sont refusés."
+    value: Fixes. dynamic=True et batch != 1 sont refusés.
   - label: Précision
-    value: "FP32 uniquement. half=True et int8=True sont refusés."
+    value: FP32 uniquement. half=True et int8=True sont refusés.
   - label: Délégué
-    value: "XNNPACK, CPU. delegate='xnnpack' est la seule valeur acceptée."
-verification: "Lu depuis libreyolo/export/executorch.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/executorch.py et pyproject.toml sur la branche dev."
+    value: 'XNNPACK, CPU. delegate=''xnnpack'' est la seule valeur acceptée.'
+verification: >-
+  Lu depuis libreyolo/export/executorch.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/executorch.py et
+  pyproject.toml sur la branche dev.
 snippets:
   install:
     - label: Installation
@@ -76,30 +83,44 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: Runtime ExecuTorch direct
       language: python
-      code: |
+      code: >
         import json
+
         from pathlib import Path
 
+
         import torch
+
         from executorch.runtime import Runtime
 
+
         runtime = Runtime.get()
+
         print(runtime.backend_registry.is_available("XnnpackBackend"))
 
-        program = runtime.load_program(Path("weights/LibreYOLO9t.pte").read_bytes())
+
+        program =
+        runtime.load_program(Path("weights/LibreYOLO9t.pte").read_bytes())
+
         method = program.load_method("forward")
 
+
         # Sur ce chemin, le prétraitement et le post-traitement sont à vous.
+
         outputs = method.execute((torch.zeros(1, 3, 640, 640),))
+
         print([tensor.shape for tensor in outputs])
 
+
         meta = json.load(open("weights/LibreYOLO9t.pte.json"))
+
         print(meta["model_family"], meta["task"], meta["executorch_delegate"])
   support:
     - label: Vérifier une famille et une tâche avant d'exporter
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: c2c354a76ee33157
 ---
 
 ## Installation

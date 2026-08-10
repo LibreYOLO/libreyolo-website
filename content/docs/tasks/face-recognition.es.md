@@ -1,25 +1,49 @@
 ---
 title: Reconocimiento facial
-seo_title: "Reconocimiento facial en LibreYOLO"
-description: "Detecta, genera embeddings e identifica caras en LibreYOLO. Registra una galería, compara dos imágenes y empareja por similitud del coseno, desde Python o la CLI."
-lead: "El reconocimiento facial es la tarea embed aplicada a caras. Un detector localiza y alinea cada cara, una cabeza de reconocimiento devuelve un vector normalizado con L2 por cara, y la identidad se decide por similitud del coseno frente a referencias registradas, no por una lista fija de clases."
-keywords: [reconocimiento facial python, embeddings de caras, verificación facial python, comparar dos caras, identificar personas en fotos, arcface onnx, similitud del coseno caras]
-last_verified: "1.5.0"
+seo_title: Reconocimiento facial en LibreYOLO
+description: >-
+  Detecta, genera embeddings e identifica caras en LibreYOLO. Registra una
+  galería, compara dos imágenes y empareja por similitud del coseno, desde
+  Python o la CLI.
+lead: >-
+  El reconocimiento facial es la tarea embed aplicada a caras. Un detector
+  localiza y alinea cada cara, una cabeza de reconocimiento devuelve un vector
+  normalizado con L2 por cara, y la identidad se decide por similitud del coseno
+  frente a referencias registradas, no por una lista fija de clases.
+keywords:
+  - reconocimiento facial python
+  - embeddings de caras
+  - verificación facial python
+  - comparar dos caras
+  - identificar personas en fotos
+  - arcface onnx
+  - similitud del coseno caras
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Los nombres librefacerec-* apuntan a la familia de embeddings faciales
-        # sea cual sea el sufijo del archivo, y se descargan de la org de LibreYOLO
-        # en Hugging Face en el primer uso junto con el detector de caras por defecto.
+
+        # sea cual sea el sufijo del archivo, y se descargan de la org de
+        LibreYOLO
+
+        # en Hugging Face en el primer uso junto con el detector de caras por
+        defecto.
+
         model = LibreYOLO("librefacerec-l.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)             # (N, 4) boxes de caras
+
         print(result.embeddings.data.shape)  # (N, D), una fila por cara
+
         print(result.embeddings.dim)
     - label: CLI
       language: bash
@@ -27,14 +51,20 @@ snippets:
         libreyolo predict model=librefacerec-l.onnx source=photo.jpg
     - label: Comparar dos imágenes
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("librefacerec-l.onnx")
 
+
         # Ejecuta detección y embedding en ambas imágenes y compara la cara
-        # con más confianza de cada una. La similitud del coseno está en [-1, 1].
+
+        # con más confianza de cada una. La similitud del coseno está en [-1,
+        1].
+
         outcome = model.verify("person_a.jpg", "person_b.jpg", threshold=0.4)
+
         print(outcome["similarity"], outcome["same_person"])
     - label: Registrar una galería e identificar
       language: python
@@ -53,20 +83,30 @@ snippets:
             print(name, score)   # name es None por debajo del umbral
     - label: Registrar e identificar desde la CLI
       language: bash
-      code: |
-        libreyolo enroll model=librefacerec-l.onnx source=people/ gallery=faces.npz
-        libreyolo predict model=librefacerec-l.onnx source=group_photo.jpg gallery=faces.npz
+      code: >
+        libreyolo enroll model=librefacerec-l.onnx source=people/
+        gallery=faces.npz
+
+        libreyolo predict model=librefacerec-l.onnx source=group_photo.jpg
+        gallery=faces.npz
     - label: Usa tus propios boxes de caras
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
 
         model = LibreYOLO("librefacerec-l.onnx")
 
+
         # face_boxes se salta la detección por completo; face_detector acepta un
-        # callable, un modelo de detección de LibreYOLO o una instancia de FaceDetector.
+
+        # callable, un modelo de detección de LibreYOLO o una instancia de
+        FaceDetector.
+
         result = model(SAMPLE_IMAGE, face_boxes=[[34, 12, 90, 80]])
+
         print(result.embeddings.data.shape)
+source_hash: d7dfcb6f812ebb2d
 ---
 
 ## Definición

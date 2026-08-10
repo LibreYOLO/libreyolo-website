@@ -1,10 +1,22 @@
 ---
 title: Segmentación panóptica
-seo_title: "Segmentación panóptica en LibreYOLO"
-description: "Asigna a cada píxel un único segmento en LibreYOLO: las familias que sirven la tarea, el formato de dataset COCO-panoptic y las llamadas de predicción y validación."
-lead: "La segmentación panóptica asigna cada píxel a exactamente un segmento sin solapamiento, unificando las instancias de objetos contables con las regiones amorfas del fondo. La clave de la tarea es panoptic."
-keywords: [segmentación panóptica python, panoptic quality PQ, things y stuff segmentación, formato COCO panoptic, mapa de ids de segmento, métrica PQ]
-last_verified: "1.5.0"
+seo_title: Segmentación panóptica en LibreYOLO
+description: >-
+  Asigna a cada píxel un único segmento en LibreYOLO: las familias que sirven la
+  tarea, el formato de dataset COCO-panoptic y las llamadas de predicción y
+  validación.
+lead: >-
+  La segmentación panóptica asigna cada píxel a exactamente un segmento sin
+  solapamiento, unificando las instancias de objetos contables con las regiones
+  amorfas del fondo. La clave de la tarea es panoptic.
+keywords:
+  - segmentación panóptica python
+  - panoptic quality PQ
+  - things y stuff segmentación
+  - formato COCO panoptic
+  - mapa de ids de segmento
+  - métrica PQ
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -63,6 +75,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreEoMTl-panoptic.pt data=my-dataset.yaml
+source_hash: b8adc9ccde7a4e6c
 ---
 
 ## Definición

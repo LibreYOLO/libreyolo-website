@@ -1,10 +1,22 @@
 ---
 title: Estimación de profundidad
-seo_title: "Estimación monocular de profundidad en LibreYOLO"
-description: "Predice un mapa denso de profundidad relativa a partir de una sola imagen en LibreYOLO. Compara las familias de profundidad, interpreta sus métricas y exporta un modelo de profundidad."
-lead: "La estimación de profundidad predice a qué distancia está cada píxel de la cámara usando una única imagen. LibreYOLO la expone como la tarea depth, que devuelve un mapa denso de profundidad inversa relativa sobre el lienzo de la imagen original."
-keywords: [estimación de profundidad monocular python, mapa de profundidad de una imagen, modelo de profundidad relativa, depth anything libreyolo, calcular profundidad con python]
-last_verified: "1.5.0"
+seo_title: Estimación monocular de profundidad en LibreYOLO
+description: >-
+  Predice un mapa denso de profundidad relativa a partir de una sola imagen en
+  LibreYOLO. Compara las familias de profundidad, interpreta sus métricas y
+  exporta un modelo de profundidad.
+lead: >-
+  La estimación de profundidad predice a qué distancia está cada píxel de la
+  cámara usando una única imagen. LibreYOLO la expone como la tarea depth, que
+  devuelve un mapa denso de profundidad inversa relativa sobre el lienzo de la
+  imagen original.
+keywords:
+  - estimación de profundidad monocular python
+  - mapa de profundidad de una imagen
+  - modelo de profundidad relativa
+  - depth anything libreyolo
+  - calcular profundidad con python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Predecir un mapa de profundidad
@@ -20,24 +32,36 @@ snippets:
         print(depth.min, depth.max, depth.mean)
     - label: Trabajar con los valores
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         depth = result.depth_map
-        raw = depth.data          # más alto es más cerca; sin unidad métrica, sin escala
+
+        raw = depth.data          # más alto es más cerca; sin unidad métrica,
+        sin escala
+
         gray = depth.normalized() # reescalado a [0, 1] para visualizar
+
         print(raw.shape, float(gray.max()))
     - label: Una alternativa compacta
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # El mismo contrato de tarea, con una red mucho más pequeña para runtimes edge.
+
+        # El mismo contrato de tarea, con una red mucho más pequeña para
+        runtimes edge.
+
         model = LibreYOLO("LibreZipDepthb-depth.pt")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.depth_map.data.shape)
   val:
@@ -63,15 +87,22 @@ snippets:
         model.export(format="onnx")
     - label: Ejecutar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factory decide según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreDepthAnythingV2s-depth.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.depth_map.data.shape)
+source_hash: e0612c59f9c999b4
 ---
 
 ## Definición

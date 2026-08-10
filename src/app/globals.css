@@ -284,25 +284,3 @@ body {
     animation: none;
   }
 }
-
-/* RTL locales (Arabic): the page mirrors, but code never does. Identifiers,
-   paths, flags and CLI commands are left-to-right regardless of the surrounding
-   prose direction, and forcing that here keeps a stray Arabic word in a comment
-   from visually reordering the line. */
-[dir='rtl'] pre,
-[dir='rtl'] code,
-[dir='rtl'] kbd,
-[dir='rtl'] samp {
-  direction: ltr;
-  text-align: left;
-  /* `direction` alone does nothing to an inline box: without an explicit
-     isolation the surrounding RTL run still reorders inline <code> spans. */
-  unicode-bidi: isolate;
-}
-
-/* Numeric/benchmark tables read left-to-right too: mirroring a column of mAP
-   figures against its header helps nobody. */
-[dir='rtl'] table[data-ltr],
-[dir='rtl'] .table-ltr {
-  direction: ltr;
-}

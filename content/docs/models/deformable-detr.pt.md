@@ -1,11 +1,26 @@
 ---
 title: Deformable DETR
-families: [deformable_detr]
-seo_title: "Deformable DETR: predição e exportação, Apache-2.0"
-description: "Rode o Deformable DETR no LibreYOLO para detecção de objetos. Instale, faça predição, validação e exportação de cinco tamanhos com atenção esparsa, todos sob licença Apache-2.0."
-lead: "O Deformable DETR troca a cross-attention densa do DETR por uma amostragem esparsa e multiescala ao redor de cada ponto de referência, o que foi o que tornou os detectores transformer viáveis de treinar. O LibreYOLO traz cinco tamanhos para detecção, apenas inferência."
-keywords: [Deformable DETR, "detection transformer", "atenção esparsa", "atenção multiescala", "detecção de objetos python", "transformer para detecção de objetos", SenseTime]
-last_verified: "1.5.0"
+families:
+  - deformable_detr
+seo_title: 'Deformable DETR: predição e exportação, Apache-2.0'
+description: >-
+  Rode o Deformable DETR no LibreYOLO para detecção de objetos. Instale, faça
+  predição, validação e exportação de cinco tamanhos com atenção esparsa, todos
+  sob licença Apache-2.0.
+lead: >-
+  O Deformable DETR troca a cross-attention densa do DETR por uma amostragem
+  esparsa e multiescala ao redor de cada ponto de referência, o que foi o que
+  tornou os detectores transformer viáveis de treinar. O LibreYOLO traz cinco
+  tamanhos para detecção, apenas inferência.
+keywords:
+  - Deformable DETR
+  - detection transformer
+  - atenção esparsa
+  - atenção multiescala
+  - detecção de objetos python
+  - transformer para detecção de objetos
+  - SenseTime
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +35,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDeformableDETRr50.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDeformableDETRr50.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -51,9 +68,11 @@ snippets:
         model.export(format="tensorrt", imgsz=800, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDeformableDETRr50.pt format=onnx imgsz=800
-        libreyolo export model=LibreDeformableDETRr50.pt format=tensorrt imgsz=800 half=True
+
+        libreyolo export model=LibreDeformableDETRr50.pt format=tensorrt
+        imgsz=800 half=True
     - label: Usar o arquivo exportado
       language: python
       code: |
@@ -65,6 +84,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 35225efc54b5ef91
 ---
 
 ## Instalação

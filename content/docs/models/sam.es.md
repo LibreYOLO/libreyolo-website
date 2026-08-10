@@ -1,34 +1,63 @@
 ---
 title: SAM
-families: [sam]
-seo_title: "SAM (Segment Anything): predecir máscaras en LibreYOLO"
-description: "Usa SAM en LibreYOLO para segmentación con prompts de punto y de caja. Instala y predice con los checkpoints base, large y huge bajo Apache-2.0."
-lead: "SAM (Segment Anything) convierte un clic de punto o de caja en la máscara de un objeto. LibreYOLO lo carga mediante una factoría LibreSAM dedicada, separada de la factoría de detectores LibreYOLO(), porque un modelo guiado por prompts necesita otra forma de llamada."
-keywords: [SAM, Segment Anything, "segmentación con prompts", "segmentación interactiva python", "segmentar objeto con un clic", "prompt de punto", "prompt de caja", Meta AI]
-last_verified: "1.5.0"
+families:
+  - sam
+seo_title: 'SAM (Segment Anything): predecir máscaras en LibreYOLO'
+description: >-
+  Usa SAM en LibreYOLO para segmentación con prompts de punto y de caja. Instala
+  y predice con los checkpoints base, large y huge bajo Apache-2.0.
+lead: >-
+  SAM (Segment Anything) convierte un clic de punto o de caja en la máscara de
+  un objeto. LibreYOLO lo carga mediante una factoría LibreSAM dedicada,
+  separada de la factoría de detectores LibreYOLO(), porque un modelo guiado por
+  prompts necesita otra forma de llamada.
+keywords:
+  - SAM
+  - Segment Anything
+  - segmentación con prompts
+  - segmentación interactiva python
+  - segmentar objeto con un clic
+  - prompt de punto
+  - prompt de caja
+  - Meta AI
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Prompts de punto y de caja
       language: python
-      code: |
+      code: >
         from libreyolo import LibreSAM, SAMPLE_IMAGE
 
-        # "base" descarga automáticamente facebook/sam-vit-base en el primer uso.
+
+        # "base" descarga automáticamente facebook/sam-vit-base en el primer
+        uso.
+
         # Otros tamaños: "large", "huge" (también "b"/"l"/"h").
+
         model = LibreSAM("base")
 
-        # Un prompt de punto: [x, y] en coordenadas de píxel, label 1 = primer plano.
+
+        # Un prompt de punto: [x, y] en coordenadas de píxel, label 1 = primer
+        plano.
+
         result = model.predict(SAMPLE_IMAGE, points=[640, 420], labels=[1])
+
         print(result.masks.xy)      # un polígono por máscara
+
         print(result.boxes.xyxy)    # caja ajustada derivada de la máscara
 
+
         # Un prompt de caja en lugar de un punto.
+
         result = model.predict(SAMPLE_IMAGE, bboxes=[300, 200, 900, 700])
 
+
         # Sin ningún prompt se segmenta la imagen entera (un generador
+
         # automático de máscaras simplificado, no el exhaustivo de referencia).
+
         result = model.predict(SAMPLE_IMAGE)
-    - label: Codifica una vez, lanza muchos prompts
+    - label: 'Codifica una vez, lanza muchos prompts'
       language: python
       code: |
         from libreyolo import LibreSAM, SAMPLE_IMAGE
@@ -41,6 +70,7 @@ snippets:
         a = model.predict(points=[640, 420], labels=[1])
         b = model.predict(bboxes=[300, 200, 900, 700])
         model.reset_image()
+source_hash: f8904d241ef8a929
 ---
 
 ## Instalación

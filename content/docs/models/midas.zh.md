@@ -1,11 +1,20 @@
 ---
 title: MiDaS
-families: [midas]
-seo_title: "MiDaS：LibreYOLO 里的单目深度估计"
-description: "在 LibreYOLO 里用 MiDaS 做单目深度估计。安装、预测、验证并导出两个采用 MIT 许可的变体，权重从 isl-org 下载。"
-lead: "MiDaS 是单目相对深度估计，在混合数据集上用尺度和偏移不变的损失函数训练，正是这条工作线确立了后来各家族沿用的零样本深度迁移流程。LibreYOLO 支持它的 depth 任务：预测和零样本验证，没有训练这一步。"
-keywords: [MiDaS, 单目深度估计, DPT, 相对深度, "深度图 python", "零样本深度估计"]
-last_verified: "1.5.0"
+families:
+  - midas
+seo_title: MiDaS：LibreYOLO 里的单目深度估计
+description: 在 LibreYOLO 里用 MiDaS 做单目深度估计。安装、预测、验证并导出两个采用 MIT 许可的变体，权重从 isl-org 下载。
+lead: >-
+  MiDaS 是单目相对深度估计，在混合数据集上用尺度和偏移不变的损失函数训练，正是这条工作线确立了后来各家族沿用的零样本深度迁移流程。LibreYOLO
+  支持它的 depth 任务：预测和零样本验证，没有训练这一步。
+keywords:
+  - MiDaS
+  - 单目深度估计
+  - DPT
+  - 相对深度
+  - 深度图 python
+  - 零样本深度估计
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -22,8 +31,10 @@ snippets:
         print(depth.min, depth.max, depth.mean)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreMiDaSl-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreMiDaSl-depth.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Small 变体
       language: python
       code: |
@@ -73,6 +84,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
+source_hash: ce2fbf3ae43e9be4
 ---
 
 ## 安装

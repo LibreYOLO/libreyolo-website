@@ -1,24 +1,48 @@
 ---
 title: InternVL3
-families: [internvl3]
-seo_title: "InternVL3: detección de vocabulario abierto en LibreYOLO"
-description: "Usa InternVL3 en LibreYOLO para detección de objetos de vocabulario abierto. Predice con cualquier etiqueta de texto; el entrenamiento, la validación y la exportación no están soportados."
-lead: "InternVL3 es un modelo de lenguaje grande multimodal nativo publicado por OpenGVLab que aprende visión y lenguaje de forma conjunta en una única etapa de preentrenamiento. LibreYOLO lo envuelve como detector de objetos de vocabulario abierto: cualquier lista de etiquetas de texto se convierte en el conjunto de clases, sin cabeza fija y sin necesidad de hacer fine-tuning."
-keywords: [InternVL3, InternVL, "modelo de visión y lenguaje", "detección de vocabulario abierto", VLM, OpenGVLab, "detectar objetos con texto", LibreVLM]
-last_verified: "1.5.0"
+families:
+  - internvl3
+seo_title: 'InternVL3: detección de vocabulario abierto en LibreYOLO'
+description: >-
+  Usa InternVL3 en LibreYOLO para detección de objetos de vocabulario abierto.
+  Predice con cualquier etiqueta de texto; el entrenamiento, la validación y la
+  exportación no están soportados.
+lead: >-
+  InternVL3 es un modelo de lenguaje grande multimodal nativo publicado por
+  OpenGVLab que aprende visión y lenguaje de forma conjunta en una única etapa
+  de preentrenamiento. LibreYOLO lo envuelve como detector de objetos de
+  vocabulario abierto: cualquier lista de etiquetas de texto se convierte en el
+  conjunto de clases, sin cabeza fija y sin necesidad de hacer fine-tuning.
+keywords:
+  - InternVL3
+  - InternVL
+  - modelo de visión y lenguaje
+  - detección de vocabulario abierto
+  - VLM
+  - OpenGVLab
+  - detectar objetos con texto
+  - LibreVLM
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreInternVL3, SAMPLE_IMAGE
+
 
         model = LibreInternVL3(size="2b")
 
+
         # Vocabulario abierto: vale cualquier palabra, no una cabeza de clases
-        # fija. Persiste en cada predict()/track() posterior hasta volver a fijarlo.
+
+        # fija. Persiste en cada predict()/track() posterior hasta volver a
+        fijarlo.
+
         model.set_classes(["person", "bicycle", "dog"])
+
         result = model(SAMPLE_IMAGE, save=True)
+
 
         for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
@@ -33,6 +57,7 @@ snippets:
         # recuentos o cualquier prompt que el envoltorio de cajas no cubra.
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
+source_hash: 6305f020d3079d71
 ---
 
 ## Instalación

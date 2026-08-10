@@ -1,11 +1,23 @@
 ---
 title: LingBot-Vision
-families: [lingbotvision]
-seo_title: "LingBot-Vision：LibreYOLO 里的语义分割"
-description: "在 LibreYOLO 里用 LingBot-Vision 做语义分割，跑在采用 Apache-2.0 许可的 ViT 骨干上。安装、预测、训练、验证和导出，尺寸有 s/b/l。"
-lead: "LingBot-Vision 是 Robbyant 发布的一系列自监督 vision transformer 骨干，用以边界为中心的掩码建模训练，面向稠密空间感知。LibreYOLO 给这个骨干配上一个稠密 head，只支持一个任务：语义分割。"
-keywords: [LingBot-Vision, "语义分割 python", "vision transformer 语义分割", "自监督预训练 骨干", "lingbot-vision 权重", Robbyant, "稠密预测"]
-last_verified: "1.5.0"
+families:
+  - lingbotvision
+seo_title: LingBot-Vision：LibreYOLO 里的语义分割
+description: >-
+  在 LibreYOLO 里用 LingBot-Vision 做语义分割，跑在采用 Apache-2.0 许可的 ViT
+  骨干上。安装、预测、训练、验证和导出，尺寸有 s/b/l。
+lead: >-
+  LingBot-Vision 是 Robbyant 发布的一系列自监督 vision transformer
+  骨干，用以边界为中心的掩码建模训练，面向稠密空间感知。LibreYOLO 给这个骨干配上一个稠密 head，只支持一个任务：语义分割。
+keywords:
+  - LingBot-Vision
+  - 语义分割 python
+  - vision transformer 语义分割
+  - 自监督预训练 骨干
+  - lingbot-vision 权重
+  - Robbyant
+  - 稠密预测
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +32,10 @@ snippets:
         print(mask.data.shape, mask.classes)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreLingBotVisions-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreLingBotVisions-sem.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   train:
     - label: Python（线性探针）
       language: python
@@ -91,6 +105,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
+source_hash: c47b33fdc6fa1139
 ---
 
 ## 安装

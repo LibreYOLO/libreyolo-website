@@ -1,8 +1,15 @@
 ---
 title: NVIDIA DeepStream
-seo_title: "Ejecutar modelos YOLO en NVIDIA DeepStream"
-description: "Exporta un modelo LibreYOLO para NVIDIA DeepStream: un grafo ONNX más un config de nvinfer generado. Comandos exactos para compilar el parser y para el pipeline."
-lead: "NVIDIA DeepStream ejecuta la inferencia a través de su elemento nvinfer, que necesita un grafo ONNX, un archivo de configuración que le corresponda y un parser de bounding boxes. Poner deepstream=True en la exportación a ONNX escribe los dos primeros y los conecta con el tercero."
+seo_title: Ejecutar modelos YOLO en NVIDIA DeepStream
+description: >-
+  Exporta un modelo LibreYOLO para NVIDIA DeepStream: un grafo ONNX más un
+  config de nvinfer generado. Comandos exactos para compilar el parser y para el
+  pipeline.
+lead: >-
+  NVIDIA DeepStream ejecuta la inferencia a través de su elemento nvinfer, que
+  necesita un grafo ONNX, un archivo de configuración que le corresponda y un
+  parser de bounding boxes. Poner deepstream=True en la exportación a ONNX
+  escribe los dos primeros y los conecta con el tercero.
 keywords:
   - deepstream yolo
   - exportar yolo a deepstream
@@ -18,24 +25,30 @@ meta:
     value: 'export(format="onnx", deepstream=True)'
     mono: true
   - label: Escribe
-    value: "Un grafo ONNX, config_infer_primary_<stem>.txt y <stem>_labels.txt"
+    value: 'Un grafo ONNX, config_infer_primary_<stem>.txt y <stem>_labels.txt'
   - label: Cobertura
-    value: "43 combinaciones de familia y tarea repartidas en nueve tareas"
+    value: 43 combinaciones de familia y tarea repartidas en nueve tareas
   - label: Parser
-    value: "NvDsInferParseYolo, del proyecto DeepStream-Yolo de Marcos Luciano, con licencia MIT. Se compila una vez por dispositivo."
+    value: >-
+      NvDsInferParseYolo, del proyecto DeepStream-Yolo de Marcos Luciano, con
+      licencia MIT. Se compila una vez por dispositivo.
     links:
       - label: github.com/marcoslucianops/DeepStream-Yolo
-        href: https://github.com/marcoslucianops/DeepStream-Yolo
+        href: 'https://github.com/marcoslucianops/DeepStream-Yolo'
   - label: Disponibilidad
-    value: "Llega en la v1.5.0. Fusionado en dev el 2026-08-08 en la pull request 728."
+    value: Llega en la v1.5.0. Fusionado en dev el 2026-08-08 en la pull request 728.
     links:
       - label: pull request 728
-        href: https://github.com/LibreYOLO/libreyolo/pull/728
+        href: 'https://github.com/LibreYOLO/libreyolo/pull/728'
       - label: issue 648
-        href: https://github.com/LibreYOLO/libreyolo/issues/648
+        href: 'https://github.com/LibreYOLO/libreyolo/issues/648'
   - label: Validado en ejecución
-    value: "DeepStream 8.0.0 en una RTX 5070 Ti, solo detección, 2026-08-08"
-verification: "Escrito a partir de la validación en ejecución del 2026-08-08. Las listas de familias, las claves de configuración y los valores por defecto están leídos de libreyolo/export/deepstream.py y libreyolo/export/exporter.py en el commit 5f81e11e, que se fusionó en dev ese mismo día en la pull request 728."
+    value: 'DeepStream 8.0.0 en una RTX 5070 Ti, solo detección, 2026-08-08'
+verification: >-
+  Escrito a partir de la validación en ejecución del 2026-08-08. Las listas de
+  familias, las claves de configuración y los valores por defecto están leídos
+  de libreyolo/export/deepstream.py y libreyolo/export/exporter.py en el commit
+  5f81e11e, que se fusionó en dev ese mismo día en la pull request 728.
 snippets:
   install:
     - label: Instalación
@@ -45,19 +58,28 @@ snippets:
   export:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO9, LibreDFINE
 
-        # Escribe libreyolo9s.onnx, config_infer_primary_libreyolo9s.txt
-        # y libreyolo9s_labels.txt en el directorio de trabajo.
-        LibreYOLO9("libreyolo9s.pt", size="s").export(format="onnx", deepstream=True)
 
-        # Mantén cada modelo de detección en su propio directorio: todos los configs
+        # Escribe libreyolo9s.onnx, config_infer_primary_libreyolo9s.txt
+
+        # y libreyolo9s_labels.txt en el directorio de trabajo.
+
+        LibreYOLO9("libreyolo9s.pt", size="s").export(format="onnx",
+        deepstream=True)
+
+
+        # Mantén cada modelo de detección en su propio directorio: todos los
+        configs
+
         # nombran el mismo archivo de caché del motor. Ver "Trampas conocidas".
-        LibreDFINE("LibreDFINEs.pt", size="s").export(format="onnx", deepstream=True)
+
+        LibreDFINE("LibreDFINEs.pt", size="s").export(format="onnx",
+        deepstream=True)
     - label: Argumentos
       language: python
-      code: |
+      code: >
         model.export(
             format="onnx",     # deepstream=True se rechaza en cualquier otro formato
             deepstream=True,
@@ -71,8 +93,12 @@ snippets:
             imgsz=640,         # alimenta infer-dims=3;H;W
         )
 
-        # deepstream=True y nms=True son mutuamente excluyentes: DeepStream ejecuta
-        # la supresión en su etapa de clustering, así que no se embebe nada en el grafo.
+
+        # deepstream=True y nms=True son mutuamente excluyentes: DeepStream
+        ejecuta
+
+        # la supresión en su etapa de clustering, así que no se embebe nada en
+        el grafo.
     - label: Descarga primero los pesos de D-FINE
       language: bash
       code: |
@@ -88,81 +114,134 @@ snippets:
         name, driver_version, compute_cap
         NVIDIA GeForce RTX 5070 Ti, 591.86, 12.0
   parser:
-    - label: build_parser.sh, ejecútalo dentro del contenedor de DeepStream
+    - label: 'build_parser.sh, ejecútalo dentro del contenedor de DeepStream'
       language: bash
-      code: |
+      code: >
         set -e
-        git clone --depth 1 https://github.com/marcoslucianops/DeepStream-Yolo.git
 
-        # /usr/local/cuda-12 en esta imagen es un stub y la compilación muere ahí con
-        # "fatal error: crt/host_defines.h: No such file or directory". Resuelve un
+        git clone --depth 1
+        https://github.com/marcoslucianops/DeepStream-Yolo.git
+
+
+        # /usr/local/cuda-12 en esta imagen es un stub y la compilación muere
+        ahí con
+
+        # "fatal error: crt/host_defines.h: No such file or directory". Resuelve
+        un
+
         # toolkit que sí lleve la cabecera; en la imagen 8.0 ese es cuda-12.5.
+
         CUDA_DIR=$(readlink -f /usr/local/cuda)
+
         [ -f "$CUDA_DIR/include/crt/host_defines.h" ] || \
           CUDA_DIR=$(ls -d /usr/local/cuda-*.* | sort -Vr | \
                      while read d; do [ -f "$d/include/crt/host_defines.h" ] && echo "$d" && break; done)
 
         # La imagen trae libcublas.so.12 y libcublas.so.12.8.4.1 pero no el
-        # libcublas.so sin versión que -lcublas necesita, así que el enlazado falla con
-        # "/usr/bin/ld: cannot find -lcublas". Dale al enlazador los nombres que quiere.
+
+        # libcublas.so sin versión que -lcublas necesita, así que el enlazado
+        falla con
+
+        # "/usr/bin/ld: cannot find -lcublas". Dale al enlazador los nombres que
+        quiere.
+
         mkdir -p /tmp/cudalibs
+
         for lib in cublas cublasLt cudart; do
           real=$(find /usr/local -name "lib${lib}.so.1*" | grep -v stubs | sort -V | tail -1)
           ln -sf "$real" "/tmp/cudalibs/lib${lib}.so"
         done
+
         export LIBRARY_PATH="/tmp/cudalibs:$LIBRARY_PATH"
 
-        make -C DeepStream-Yolo/nvdsinfer_custom_impl_Yolo CUDA_VER="${CUDA_DIR##*/cuda-}"
+
+        make -C DeepStream-Yolo/nvdsinfer_custom_impl_Yolo
+        CUDA_VER="${CUDA_DIR##*/cuda-}"
     - label: La segmentación de instancias usa otro parser
       language: bash
-      code: |
-        git clone --depth 1 https://github.com/marcoslucianops/DeepStream-Yolo-Seg.git
+      code: >
+        git clone --depth 1
+        https://github.com/marcoslucianops/DeepStream-Yolo-Seg.git
+
         make -C DeepStream-Yolo-Seg/nvdsinfer_custom_impl_Yolo_seg \
           CUDA_VER="${CUDA_DIR##*/cuda-}"
   run:
     - label: deepstream_app_config.txt
       language: text
-      code: |
+      code: >
         [application]
+
         enable-perf-measurement=1
+
         perf-measurement-interval-sec=5
+
         gie-kitti-output-dir=kitti
 
+
         [tiled-display]
+
         enable=0
 
+
         [source0]
+
         enable=1
+
         type=3
+
         uri=file:///opt/nvidia/deepstream/deepstream/samples/streams/sample_1080p_h264.mp4
+
         num-sources=1
+
         gpu-id=0
+
 
         [streammux]
+
         gpu-id=0
+
         batch-size=1
+
         batched-push-timeout=40000
+
         width=1920
+
         height=1080
+
         live-source=0
 
+
         [primary-gie]
+
         enable=1
+
         gpu-id=0
+
         gie-unique-id=1
+
         config-file=config_infer_primary_libreyolo9s.txt
 
+
         [osd]
+
         enable=1
+
         border-width=2
+
         text-size=15
 
+
         [sink0]
+
         enable=1
+
         type=1
+
         sync=0
 
+
         [tests]
+
         file-loop=0
     - label: Ejecútalo
       language: bash
@@ -176,6 +255,7 @@ snippets:
         docker run --rm --gpus all -v "$PWD:/work" -w /work \
           nvcr.io/nvidia/deepstream:8.0-samples-multiarch \
           bash -c "bash build_parser.sh && deepstream-app -c deepstream_app_config.txt"
+source_hash: 1ee91c265753dd9a
 ---
 
 ## Disponibilidad

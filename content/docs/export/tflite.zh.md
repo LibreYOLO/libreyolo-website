@@ -1,8 +1,12 @@
 ---
 title: TFLite
-seo_title: "从 LibreYOLO 导出到 TFLite (LiteRT)"
-description: "通过 onnx2tf 把 LibreYOLO 模型导出为 .tflite FlatBuffer：静态形状、仅 FP32、NHWC 输入，以及能干净转换的那些家族。"
-lead: "TFLite 是 LiteRT 在移动端和嵌入式目标上执行的 FlatBuffer 格式。LibreYOLO 会导出一个静态 ONNX 图，用 onnx2tf 的 flatbuffer-direct 模式转换它，并把模型元数据以 JSON sidecar 的形式写在产物旁边。"
+seo_title: 从 LibreYOLO 导出到 TFLite (LiteRT)
+description: >-
+  通过 onnx2tf 把 LibreYOLO 模型导出为 .tflite FlatBuffer：静态形状、仅 FP32、NHWC
+  输入，以及能干净转换的那些家族。
+lead: >-
+  TFLite 是 LiteRT 在移动端和嵌入式目标上执行的 FlatBuffer 格式。LibreYOLO 会导出一个静态 ONNX 图，用
+  onnx2tf 的 flatbuffer-direct 模式转换它，并把模型元数据以 JSON sidecar 的形式写在产物旁边。
 keywords:
   - yolo 导出 tflite
   - litert
@@ -11,26 +15,29 @@ keywords:
   - tflite flatbuffer
   - tflite nhwc 输入
   - 边缘推理
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: 标志
-    value: 'export(format="tflite")'
+    value: export(format="tflite")
     mono: true
   - label: 输出
-    value: "一个 .tflite 文件，外加一个 .tflite.json 元数据 sidecar"
+    value: 一个 .tflite 文件，外加一个 .tflite.json 元数据 sidecar
   - label: 额外依赖
     value: 'pip install "libreyolo[tflite]"'
     mono: true
   - label: 重新加载方式
-    value: 'LibreYOLO("weights/LibreYOLO9t.tflite")'
+    value: LibreYOLO("weights/LibreYOLO9t.tflite")
     mono: true
   - label: 形状
-    value: "仅静态。dynamic=True 会被拒绝。"
+    value: 仅静态。dynamic=True 会被拒绝。
   - label: 精度
-    value: "仅 FP32。half=True 和 int8=True 会被拒绝。"
+    value: 仅 FP32。half=True 和 int8=True 会被拒绝。
   - label: 环境要求
-    value: "Python 3.12 或更高版本，因为 onnx2tf 2.4.x 没有发布更早的 wheel"
-verification: "读自 dev 分支上的 libreyolo/export/tflite.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/tflite.py 和 pyproject.toml。"
+    value: Python 3.12 或更高版本，因为 onnx2tf 2.4.x 没有发布更早的 wheel
+verification: >-
+  读自 dev 分支上的
+  libreyolo/export/tflite.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/tflite.py
+  和 pyproject.toml。
 snippets:
   install:
     - label: 安装
@@ -86,25 +93,38 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: 直接使用 LiteRT
       language: python
-      code: |
+      code: >
         import json
 
+
         import numpy as np
+
         from ai_edge_litert.interpreter import Interpreter
 
+
         interpreter = Interpreter(model_path="weights/LibreYOLO9t.tflite")
+
         interpreter.allocate_tensors()
+
         detail = interpreter.get_input_details()[0]
+
         print(detail["shape"], detail["dtype"])   # NHWC，不是 NCHW
 
-        interpreter.set_tensor(detail["index"], np.zeros(detail["shape"], np.float32))
+
+        interpreter.set_tensor(detail["index"], np.zeros(detail["shape"],
+        np.float32))
+
         interpreter.invoke()
+
         for output in interpreter.get_output_details():
             print(output["name"], interpreter.get_tensor(output["index"]).shape)
 
         # 类别名、任务和输入尺寸都在 sidecar 里
+
         meta = json.load(open("weights/LibreYOLO9t.tflite.json"))
+
         print(meta["model_family"], meta["task"], meta["names"])
+
 
         # 预处理、NCHW 到 NHWC 的转置和后处理都归你自己做
   support:
@@ -112,6 +132,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: fa2deaa0ef6d9978
 ---
 
 ## 安装

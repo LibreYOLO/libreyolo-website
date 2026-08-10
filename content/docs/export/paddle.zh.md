@@ -1,8 +1,13 @@
 ---
 title: Paddle
-seo_title: "从 LibreYOLO 导出到 PaddlePaddle"
-description: "通过 X2Paddle 把 LibreYOLO 检测器转换成 PaddlePaddle 推理模型：锁定的工具链、静态 batch 为 1 的 FP32 图，以及 CPU 推理。"
-lead: "PaddlePaddle 的推理模型由一个 model.pdmodel 计算图和一个放在旁边的 model.pdiparams 权重文件组成。LibreYOLO 会导出一张静态的 opset-15 ONNX 图，用 X2Paddle 转换，再连同一个 metadata.yaml 一起打包，这样它就能和其他所有运行时一样，通过同一个工厂加载。"
+seo_title: 从 LibreYOLO 导出到 PaddlePaddle
+description: >-
+  通过 X2Paddle 把 LibreYOLO 检测器转换成 PaddlePaddle 推理模型：锁定的工具链、静态 batch 为 1 的 FP32
+  图，以及 CPU 推理。
+lead: >-
+  PaddlePaddle 的推理模型由一个 model.pdmodel 计算图和一个放在旁边的 model.pdiparams
+  权重文件组成。LibreYOLO 会导出一张静态的 opset-15 ONNX 图，用 X2Paddle 转换，再连同一个 metadata.yaml
+  一起打包，这样它就能和其他所有运行时一样，通过同一个工厂加载。
 keywords:
   - yolo 导出 paddle
   - paddle 推理模型
@@ -10,13 +15,13 @@ keywords:
   - model.pdmodel
   - model.pdiparams
   - onnx opset 15
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: 参数
-    value: 'export(format="paddle")'
+    value: export(format="paddle")
     mono: true
   - label: 输出
-    value: "一个包含 model.pdmodel、model.pdiparams 和 metadata.yaml 的目录"
+    value: 一个包含 model.pdmodel、model.pdiparams 和 metadata.yaml 的目录
   - label: 额外依赖
     value: 'pip install "libreyolo[paddle]"'
     mono: true
@@ -24,15 +29,18 @@ meta:
     value: 'LibreYOLO("weights/LibreYOLO9t_paddle", device="cpu")'
     mono: true
   - label: 后端
-    value: "libreyolo.backends.paddle.PaddleBackend"
+    value: libreyolo.backends.paddle.PaddleBackend
     mono: true
   - label: 形状
-    value: "静态形状，batch 为 1，opset 15。三条都会强制校验。"
+    value: 静态形状，batch 为 1，opset 15。三条都会强制校验。
   - label: 精度
-    value: "仅 FP32，仅 CPU。"
+    value: 仅 FP32，仅 CPU。
   - label: 工具链
-    value: "PaddlePaddle 2.6.2、X2Paddle 1.6.0、ONNX 1.17 或更早，逐项精确检查"
-verification: "读自 dev 分支上的 libreyolo/export/paddle.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/paddle.py、docs/paddle.md 和 pyproject.toml。"
+    value: PaddlePaddle 2.6.2、X2Paddle 1.6.0、ONNX 1.17 或更早，逐项精确检查
+verification: >-
+  读自 dev 分支上的
+  libreyolo/export/paddle.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/paddle.py、docs/paddle.md
+  和 pyproject.toml。
 snippets:
   install:
     - label: 安装
@@ -42,8 +50,9 @@ snippets:
         pip install "libreyolo[paddle]"
     - label: 确认锁定的版本
       language: bash
-      code: |
-        python -c "from importlib.metadata import version; print(version('paddlepaddle'), version('x2paddle'), version('onnx'))"
+      code: >
+        python -c "from importlib.metadata import version;
+        print(version('paddlepaddle'), version('x2paddle'), version('onnx'))"
   export:
     - label: Python
       language: python
@@ -127,6 +136,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: cdd8bf12286e2f53
 ---
 
 ## 安装

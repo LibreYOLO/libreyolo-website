@@ -1,19 +1,29 @@
 ---
 title: libreyolo val
-seo_title: "справочник по команде libreyolo val"
-description: "Оценка чекпойнта на сплите датасета из командной строки: каждый аргумент со значением по умолчанию и ключи метрик, которые возвращает каждая задача."
-lead: "Оценивает одну модель на одном сплите датасета и печатает метрики. Набор метрик зависит от задачи модели, а сами числа — те же, из которых собирается строка бенчмарка."
-keywords: [libreyolo val cli, команда валидации libreyolo, оценка модели yolo из командной строки, посчитать mAP50-95 в терминале, аргументы libreyolo val]
-last_verified: "1.5.0"
+seo_title: справочник по команде libreyolo val
+description: >-
+  Оценка чекпойнта на сплите датасета из командной строки: каждый аргумент со
+  значением по умолчанию и ключи метрик, которые возвращает каждая задача.
+lead: >-
+  Оценивает одну модель на одном сплите датасета и печатает метрики. Набор
+  метрик зависит от задачи модели, а сами числа — те же, из которых собирается
+  строка бенчмарка.
+keywords:
+  - libreyolo val cli
+  - команда валидации libreyolo
+  - оценка модели yolo из командной строки
+  - посчитать mAP50-95 в терминале
+  - аргументы libreyolo val
+last_verified: 1.5.0
 meta:
   - label: Команда
     value: libreyolo val
     mono: true
   - label: Обязательные
-    value: model, data
+    value: 'model, data'
     mono: true
   - label: Вывод
-    value: "Метрики в stdout. Графики и COCO JSON в runs/val/exp, если их запросить"
+    value: 'Метрики в stdout. Графики и COCO JSON в runs/val/exp, если их запросить'
 snippets:
   examples:
     - label: Базовый вызов
@@ -30,6 +40,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
+source_hash: f6507840568c3725
 ---
 
 ## Синтаксис

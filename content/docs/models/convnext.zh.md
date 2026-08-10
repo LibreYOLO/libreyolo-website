@@ -1,11 +1,21 @@
 ---
 title: ConvNeXt
-families: [convnext]
-seo_title: "ConvNeXt：在 Apache-2.0 下训练、验证与导出"
-description: "在 LibreYOLO 里用 ConvNeXt 做图像分类。安装、预测、用 LoRA 微调、验证并导出 LibreConvNeXt tiny/small/base。"
-lead: "ConvNeXt 是一个完全由标准卷积搭出来的图像分类器，从 ResNet 出发，一个模块一个模块地朝 vision transformer 的设计选择改造。LibreYOLO 只支持它的一个任务：分类。"
-keywords: [ConvNeXt, "ConvNeXt tiny", "图像分类 python", "纯卷积网络", "imagenet 预训练分类模型"]
-last_verified: "1.5.0"
+families:
+  - convnext
+seo_title: ConvNeXt：在 Apache-2.0 下训练、验证与导出
+description: >-
+  在 LibreYOLO 里用 ConvNeXt 做图像分类。安装、预测、用 LoRA 微调、验证并导出 LibreConvNeXt
+  tiny/small/base。
+lead: >-
+  ConvNeXt 是一个完全由标准卷积搭出来的图像分类器，从 ResNet 出发，一个模块一个模块地朝 vision transformer
+  的设计选择改造。LibreYOLO 只支持它的一个任务：分类。
+keywords:
+  - ConvNeXt
+  - ConvNeXt tiny
+  - 图像分类 python
+  - 纯卷积网络
+  - imagenet 预训练分类模型
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -86,6 +96,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: 1682cc69cf2925e6
 ---
 
 ## 安装

@@ -1,11 +1,25 @@
 ---
 title: Real-ESRGAN
-families: [realesrgan]
-seo_title: "Real-ESRGAN: superresolución de imágenes en LibreYOLO"
-description: "Usa Real-ESRGAN en LibreYOLO para superresolución de imágenes práctica a 4x, 2x y un nivel 4x rápido. Instala, predice, valida y exporta."
-lead: "Un escalador de superresolución ciega pensado para uso real, entrenado con degradaciones sintéticas en lugar de solo con reducción bicúbica. LibreYOLO incluye inferencia y validación para sus checkpoints 4x, 2x y 4x rápido."
-keywords: [Real-ESRGAN, RRDBNet, SRVGGNetCompact, "superresolución de imágenes", "mejorar la calidad de una imagen python", "aumentar la resolución de una imagen", "escalar imagen sin perder calidad", "restauración de imágenes"]
-last_verified: "1.5.0"
+families:
+  - realesrgan
+seo_title: 'Real-ESRGAN: superresolución de imágenes en LibreYOLO'
+description: >-
+  Usa Real-ESRGAN en LibreYOLO para superresolución de imágenes práctica a 4x,
+  2x y un nivel 4x rápido. Instala, predice, valida y exporta.
+lead: >-
+  Un escalador de superresolución ciega pensado para uso real, entrenado con
+  degradaciones sintéticas en lugar de solo con reducción bicúbica. LibreYOLO
+  incluye inferencia y validación para sus checkpoints 4x, 2x y 4x rápido.
+keywords:
+  - Real-ESRGAN
+  - RRDBNet
+  - SRVGGNetCompact
+  - superresolución de imágenes
+  - mejorar la calidad de una imagen python
+  - aumentar la resolución de una imagen
+  - escalar imagen sin perder calidad
+  - restauración de imágenes
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,9 +34,11 @@ snippets:
         print(restored.array.shape, restored.array.dtype)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreRealESRGANx4-restore.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
-    - label: Por tiles, para imágenes grandes
+      code: >
+        libreyolo predict model=LibreRealESRGANx4-restore.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
+    - label: 'Por tiles, para imágenes grandes'
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -47,8 +63,9 @@ snippets:
         print(metrics["metrics/SSIM"])
     - label: CLI
       language: bash
-      code: |
-        libreyolo val model=LibreRealESRGANx4-restore.pt data=my-restore-dataset.yaml
+      code: >
+        libreyolo val model=LibreRealESRGANx4-restore.pt
+        data=my-restore-dataset.yaml
   export:
     - label: Python
       language: python
@@ -64,8 +81,9 @@ snippets:
         model.export(format="tensorrt", imgsz=512, half=True)
     - label: CLI
       language: bash
-      code: |
-        libreyolo export model=LibreRealESRGANx4-restore.pt format=onnx imgsz=512
+      code: >
+        libreyolo export model=LibreRealESRGANx4-restore.pt format=onnx
+        imgsz=512
     - label: Usar el archivo exportado
       language: python
       code: |
@@ -78,6 +96,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.restored.array.shape)
+source_hash: f0efb4f65d38e22d
 ---
 
 ## Instalación

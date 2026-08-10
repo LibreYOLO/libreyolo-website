@@ -1,11 +1,22 @@
 ---
 title: Qwen3-VL
-families: [qwen3vl]
-seo_title: "Qwen3-VL：在 LibreYOLO 里做开放词汇检测"
-description: "在 LibreYOLO 里用 Qwen3-VL：安装、设定开放词汇，用阿里巴巴这个采用 Apache-2.0 许可的视觉语言模型做预测或对话。"
-lead: "Qwen3-VL 是阿里巴巴的视觉语言模型，原生支持 2D grounding。LibreYOLO 把它包装成一个开放词汇目标检测器，并直接暴露它的自由形式对话：给一份类别列表就做检测，或者直接问它一个问题。"
-keywords: [Qwen3-VL, Qwen, "qwen3-vl 目标检测", "qwen3-vl python", 视觉语言模型, 开放词汇检测, 阿里巴巴, VLM]
-last_verified: "1.5.0"
+families:
+  - qwen3vl
+seo_title: Qwen3-VL：在 LibreYOLO 里做开放词汇检测
+description: 在 LibreYOLO 里用 Qwen3-VL：安装、设定开放词汇，用阿里巴巴这个采用 Apache-2.0 许可的视觉语言模型做预测或对话。
+lead: >-
+  Qwen3-VL 是阿里巴巴的视觉语言模型，原生支持 2D grounding。LibreYOLO
+  把它包装成一个开放词汇目标检测器，并直接暴露它的自由形式对话：给一份类别列表就做检测，或者直接问它一个问题。
+keywords:
+  - Qwen3-VL
+  - Qwen
+  - qwen3-vl 目标检测
+  - qwen3-vl python
+  - 视觉语言模型
+  - 开放词汇检测
+  - 阿里巴巴
+  - VLM
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,15 +32,22 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: 对话
       language: python
-      code: |
+      code: >
         from libreyolo import LibreVLM, SAMPLE_IMAGE
+
 
         model = LibreVLM("qwen3-vl-4b")
 
+
         # 检测这层便利封装底下的逃生口：任何问题都可以问，
+
         # 不只是检测框查询
-        answer = model.chat(SAMPLE_IMAGE, "How many people are wearing a safety vest?")
+
+        answer = model.chat(SAMPLE_IMAGE, "How many people are wearing a safety
+        vest?")
+
         print(answer)
+source_hash: ee225b6221d624d9
 ---
 
 ## 安装

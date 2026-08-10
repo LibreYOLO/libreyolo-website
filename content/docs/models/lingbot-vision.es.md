@@ -1,11 +1,26 @@
 ---
 title: LingBot-Vision
-families: [lingbotvision]
-seo_title: "LingBot-Vision: segmentación semántica en LibreYOLO"
-description: "Usa LingBot-Vision en LibreYOLO para segmentación semántica sobre un backbone ViT con licencia Apache-2.0. Instala, predice, entrena, valida y exporta, tamaños s/b/l."
-lead: "LingBot-Vision es una familia de backbones vision transformer autosupervisados entrenados con masked modeling centrado en bordes para percepción espacial densa, publicada por Robbyant. LibreYOLO combina el backbone con una cabeza densa y lo soporta para una tarea: segmentación semántica."
-keywords: [LingBot-Vision, "segmentación semántica python", vision transformer, "aprendizaje autosupervisado", "detección de bordes", Robbyant, "predicción densa"]
-last_verified: "1.5.0"
+families:
+  - lingbotvision
+seo_title: 'LingBot-Vision: segmentación semántica en LibreYOLO'
+description: >-
+  Usa LingBot-Vision en LibreYOLO para segmentación semántica sobre un backbone
+  ViT con licencia Apache-2.0. Instala, predice, entrena, valida y exporta,
+  tamaños s/b/l.
+lead: >-
+  LingBot-Vision es una familia de backbones vision transformer autosupervisados
+  entrenados con masked modeling centrado en bordes para percepción espacial
+  densa, publicada por Robbyant. LibreYOLO combina el backbone con una cabeza
+  densa y lo soporta para una tarea: segmentación semántica.
+keywords:
+  - LingBot-Vision
+  - segmentación semántica python
+  - vision transformer
+  - aprendizaje autosupervisado
+  - detección de bordes
+  - Robbyant
+  - predicción densa
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +35,10 @@ snippets:
         print(mask.data.shape, mask.classes)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreLingBotVisions-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreLingBotVisions-sem.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   train:
     - label: Python (linear probe)
       language: python
@@ -82,16 +99,25 @@ snippets:
         libreyolo export model=LibreLingBotVisions-sem.pt format=onnx imgsz=512
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto
+
         # Results.
+
         model = LibreYOLO("LibreLingBotVisions-sem.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.semantic_mask.data.shape)
+source_hash: c47b33fdc6fa1139
 ---
 
 ## Instalación

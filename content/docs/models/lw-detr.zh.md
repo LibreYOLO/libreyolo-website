@@ -1,11 +1,19 @@
 ---
 title: LW-DETR
-families: [lwdetr]
-seo_title: "LW-DETR：预测与导出，采用 Apache-2.0 许可"
-description: "在 LibreYOLO 里运行 LW-DETR 做实时目标检测。安装、预测、验证并导出五种基于 ViT 的尺寸，全部采用 Apache-2.0 许可。"
-lead: "一个纯 ViT 的检测 transformer，百度把它定位成 YOLO 检测器的实时替代方案。LibreYOLO 提供五种尺寸用于检测，仅支持推理。"
-keywords: [LW-DETR, "lw-detr 推理", "检测 transformer", 实时目标检测, plain ViT, DETR, "百度 目标检测"]
-last_verified: "1.5.0"
+families:
+  - lwdetr
+seo_title: LW-DETR：预测与导出，采用 Apache-2.0 许可
+description: 在 LibreYOLO 里运行 LW-DETR 做实时目标检测。安装、预测、验证并导出五种基于 ViT 的尺寸，全部采用 Apache-2.0 许可。
+lead: 一个纯 ViT 的检测 transformer，百度把它定位成 YOLO 检测器的实时替代方案。LibreYOLO 提供五种尺寸用于检测，仅支持推理。
+keywords:
+  - LW-DETR
+  - lw-detr 推理
+  - 检测 transformer
+  - 实时目标检测
+  - plain ViT
+  - DETR
+  - 百度 目标检测
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +28,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreLWDETRt.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreLWDETRt.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -51,9 +61,11 @@ snippets:
         model.export(format="tensorrt", imgsz=640, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreLWDETRt.pt format=onnx imgsz=640
-        libreyolo export model=LibreLWDETRt.pt format=tensorrt imgsz=640 half=True
+
+        libreyolo export model=LibreLWDETRt.pt format=tensorrt imgsz=640
+        half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -65,6 +77,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: badd1d8255df5bbd
 ---
 
 ## 安装

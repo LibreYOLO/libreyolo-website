@@ -1,11 +1,20 @@
 ---
 title: Grounding DINO
-families: [grounding_dino]
-seo_title: "Grounding DINO：在 LibreYOLO 里做开集检测"
-description: "用 LibreYOLO 里的 Grounding DINO 检测任何用文本描述的物体。装上 openvocab extra，用自由文本词汇表做预测。"
-lead: "Grounding DINO 是一个开集（open-set）目标检测器，由 IDEA Research 开发，它拿图像去和一段自由文本提示词打分，而不是去对一个固定的类别列表。LibreYOLO 把它包装成开放词汇检测器层里一个仅支持预测的家族。"
-keywords: [Grounding DINO, 开放词汇目标检测, "grounding dino 文本提示检测", 零样本目标检测, "开集检测 python", LibreOpenVocab]
-last_verified: "1.5.0"
+families:
+  - grounding_dino
+seo_title: Grounding DINO：在 LibreYOLO 里做开集检测
+description: 用 LibreYOLO 里的 Grounding DINO 检测任何用文本描述的物体。装上 openvocab extra，用自由文本词汇表做预测。
+lead: >-
+  Grounding DINO 是一个开集（open-set）目标检测器，由 IDEA Research
+  开发，它拿图像去和一段自由文本提示词打分，而不是去对一个固定的类别列表。LibreYOLO 把它包装成开放词汇检测器层里一个仅支持预测的家族。
+keywords:
+  - Grounding DINO
+  - 开放词汇目标检测
+  - grounding dino 文本提示检测
+  - 零样本目标检测
+  - 开集检测 python
+  - LibreOpenVocab
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -31,6 +40,7 @@ snippets:
         # 分数过滤，两者不设置时都默认为 0.25
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
         print(result.names)
+source_hash: 06bd13b8e6a66038
 ---
 
 ## 安装

@@ -1,24 +1,43 @@
 ---
 title: EoMT
-families: [eomt]
-seo_title: "EoMT: predice segmentación semántica, de instancias y panóptica"
-description: "Usa EoMT en LibreYOLO para segmentación semántica, de instancias y panóptica sobre un vision transformer DINOv2 puro, sin decoder. Licencia MIT."
-lead: "Una red de segmentación construida sobre un vision transformer puro sin decoder de píxeles dedicado: unas queries aprendidas extra añadidas al propio encoder predicen las máscaras. LibreYOLO la soporta para segmentación semántica, de instancias y panóptica."
-keywords: [EoMT, encoder-only mask transformer, DINOv2, "segmentación panóptica python", "segmentación de instancias python", "segmentación semántica python"]
-last_verified: "1.5.0"
+families:
+  - eomt
+seo_title: 'EoMT: predice segmentación semántica, de instancias y panóptica'
+description: >-
+  Usa EoMT en LibreYOLO para segmentación semántica, de instancias y panóptica
+  sobre un vision transformer DINOv2 puro, sin decoder. Licencia MIT.
+lead: >-
+  Una red de segmentación construida sobre un vision transformer puro sin
+  decoder de píxeles dedicado: unas queries aprendidas extra añadidas al propio
+  encoder predicen las máscaras. LibreYOLO la soporta para segmentación
+  semántica, de instancias y panóptica.
+keywords:
+  - EoMT
+  - encoder-only mask transformer
+  - DINOv2
+  - segmentación panóptica python
+  - segmentación de instancias python
+  - segmentación semántica python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Semántica
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreEoMTl-sem.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         mask = result.semantic_mask
+
         print(mask.data.shape)   # (H, W) ids de clase
-        print(mask.classes)      # ids de clase presentes en la imagen, ordenados
+
+        print(mask.classes)      # ids de clase presentes en la imagen,
+        ordenados
     - label: Segmentación de instancias
       language: python
       code: |
@@ -44,8 +63,10 @@ snippets:
         print(pan.segments_info)    # [{"id": ..., "category_id": ...}, ...]
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreEoMTl-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreEoMTl-sem.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Semántica
       language: python
@@ -97,16 +118,25 @@ snippets:
         libreyolo export model=LibreEoMTl-sem.pt format=tensorrt half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto
+
         # Results.
+
         model = LibreYOLO("LibreEoMTl-sem.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.semantic_mask.data.shape)
+source_hash: 64b2da642999f150
 ---
 
 ## Instalación

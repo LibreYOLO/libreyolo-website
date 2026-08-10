@@ -1,11 +1,26 @@
 ---
 title: DeiT
-families: [deit]
-seo_title: "Clasificador de imágenes DeiT: predicción, validación y exportación"
-description: "Ejecuta clasificadores de imágenes DeiT en LibreYOLO: una familia de museo congelada y solo de inferencia, en tamaños tiny, small y base, con licencia Apache-2.0."
-lead: "DeiT (Data-efficient image Transformer) es un clasificador Vision Transformer puro entrenado únicamente con ImageNet-1k, sin datos de preentrenamiento adicionales. LibreYOLO incluye los tamaños tiny, small y base con patch-16 como una pieza de museo congelada y solo de inferencia."
-keywords: [DeiT, Vision Transformer, ViT, "clasificación de imágenes python", ImageNet, "clasificador de imágenes preentrenado", "familia de museo"]
-last_verified: "1.5.0"
+families:
+  - deit
+seo_title: 'Clasificador de imágenes DeiT: predicción, validación y exportación'
+description: >-
+  Ejecuta clasificadores de imágenes DeiT en LibreYOLO: una familia de museo
+  congelada y solo de inferencia, en tamaños tiny, small y base, con licencia
+  Apache-2.0.
+lead: >-
+  DeiT (Data-efficient image Transformer) es un clasificador Vision Transformer
+  puro entrenado únicamente con ImageNet-1k, sin datos de preentrenamiento
+  adicionales. LibreYOLO incluye los tamaños tiny, small y base con patch-16
+  como una pieza de museo congelada y solo de inferencia.
+keywords:
+  - DeiT
+  - Vision Transformer
+  - ViT
+  - clasificación de imágenes python
+  - ImageNet
+  - clasificador de imágenes preentrenado
+  - familia de museo
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +35,9 @@ snippets:
         print(result.probs.top5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDeiTb-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+      code: >
+        libreyolo predict model=LibreDeiTb-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
   val:
     - label: Python
       language: python
@@ -53,16 +69,25 @@ snippets:
         libreyolo export model=LibreDeiTb-cls.pt format=tensorrt half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto
+
         # Results.
+
         model = LibreYOLO("LibreDeiTb-cls.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.probs.top1)
+source_hash: 9c67c8554b2af5c6
 ---
 
 ## Instalación

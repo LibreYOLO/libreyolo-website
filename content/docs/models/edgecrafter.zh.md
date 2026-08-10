@@ -1,11 +1,23 @@
 ---
 title: EdgeCrafter
-families: [ec]
-seo_title: "EdgeCrafter：在 LibreYOLO 里检测、估计姿态并分割"
-description: "在 LibreYOLO 里用 EdgeCrafter 做检测、姿态和实例分割。安装、预测、验证并导出，代码采用 MIT 许可。"
-lead: "一个紧凑的视觉 transformer，面向边缘硬件上的稠密预测，上游以三个同胞模型的形式发布：ECDet、ECPose 和 ECSeg。LibreYOLO 把三者作为一个家族加载，任务由检查点（checkpoint）携带。"
-keywords: [EdgeCrafter, ECDet, ECPose, ECSeg, "轻量视觉 transformer", 目标检测, 姿态估计, 实例分割, "边缘设备 推理"]
-last_verified: "1.5.0"
+families:
+  - ec
+seo_title: EdgeCrafter：在 LibreYOLO 里检测、估计姿态并分割
+description: 在 LibreYOLO 里用 EdgeCrafter 做检测、姿态和实例分割。安装、预测、验证并导出，代码采用 MIT 许可。
+lead: >-
+  一个紧凑的视觉 transformer，面向边缘硬件上的稠密预测，上游以三个同胞模型的形式发布：ECDet、ECPose 和 ECSeg。LibreYOLO
+  把三者作为一个家族加载，任务由检查点（checkpoint）携带。
+keywords:
+  - EdgeCrafter
+  - ECDet
+  - ECPose
+  - ECSeg
+  - 轻量视觉 transformer
+  - 目标检测
+  - 姿态估计
+  - 实例分割
+  - 边缘设备 推理
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +32,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreECs.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreECs.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: 姿态
       language: python
       code: |
@@ -59,8 +73,9 @@ snippets:
         )
     - label: CLI
       language: bash
-      code: |
-        libreyolo train model=LibreECs.pt data=my-dataset.yaml epochs=50 imgsz=640 batch=8 lr0=5e-4
+      code: >
+        libreyolo train model=LibreECs.pt data=my-dataset.yaml epochs=50
+        imgsz=640 batch=8 lr0=5e-4
     - label: 姿态
       language: python
       code: |
@@ -158,6 +173,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 39c6975fc16b3ff1
 ---
 
 ## 安装

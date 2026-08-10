@@ -1,10 +1,21 @@
 ---
 title: libreyolo predict
-seo_title: "riferimento del comando libreyolo predict"
-description: "Esegue l'inferenza da riga di comando: ogni argomento, il suo valore predefinito letto dalla definizione della CLI e i flag che cambiano ciò che finisce su stdout."
-lead: "Esegue un modello caricato su una sorgente e stampa le predizioni. La sorgente può essere un'immagine, una directory, un video, un URL o uno stream dal vivo; il modello può essere un checkpoint o un artefatto esportato."
-keywords: [libreyolo predict cli, inferenza yolo da riga di comando, comando predict libreyolo, argomenti libreyolo predict, yolo output json terminale]
-last_verified: "1.5.0"
+seo_title: riferimento del comando libreyolo predict
+description: >-
+  Esegue l'inferenza da riga di comando: ogni argomento, il suo valore
+  predefinito letto dalla definizione della CLI e i flag che cambiano ciò che
+  finisce su stdout.
+lead: >-
+  Esegue un modello caricato su una sorgente e stampa le predizioni. La sorgente
+  può essere un'immagine, una directory, un video, un URL o uno stream dal vivo;
+  il modello può essere un checkpoint o un artefatto esportato.
+keywords:
+  - libreyolo predict cli
+  - inferenza yolo da riga di comando
+  - comando predict libreyolo
+  - argomenti libreyolo predict
+  - yolo output json terminale
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo predict
@@ -13,7 +24,7 @@ meta:
     value: source
     mono: true
   - label: Output
-    value: "Predizioni su stdout. Con save=true, file annotati in runs/detect/predict"
+    value: 'Predizioni su stdout. Con save=true, file annotati in runs/detect/predict'
 snippets:
   examples:
     - label: Base
@@ -27,13 +38,17 @@ snippets:
         libreyolo predict model=LibreYOLO9s.pt save=true \
           project=runs/detect name=parkour exist_ok=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-    - label: Classi filtrate, JSON su stdout
+    - label: 'Classi filtrate, JSON su stdout'
       language: bash
-      code: |
-        # la classe 0 è person nella lista di classi COCO fornita con il checkpoint.
-        libreyolo predict model=LibreYOLO9s.pt classes="[0]" conf=0.4 max_det=50 \
+      code: >
+        # la classe 0 è person nella lista di classi COCO fornita con il
+        checkpoint.
+
+        libreyolo predict model=LibreYOLO9s.pt classes="[0]" conf=0.4 max_det=50
+        \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+source_hash: 7e46c7ed7dd9e6c4
 ---
 
 ## Sinossi

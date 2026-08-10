@@ -1,11 +1,23 @@
 ---
 title: EfficientNetV2
-families: [efficientnetv2]
-seo_title: "EfficientNetV2：在 Apache-2.0 下训练、验证与导出"
-description: "在 LibreYOLO 里用 EfficientNetV2 做图像分类。安装、预测、微调、验证并导出 LibreEfficientNetV2 b0 到 b3。"
-lead: "EfficientNetV2 是一个图像分类器，它的深度、宽度以及每个阶段的模块选择都是由神经架构搜索找出来的，同时优化精度和训练速度，而不是只优化精度。LibreYOLO 只支持它的一个任务：分类。"
-keywords: [EfficientNetV2, "EfficientNetV2-b0", "图像分类 python", "神经架构搜索", MBConv, "imagenet 分类模型"]
-last_verified: "1.5.0"
+families:
+  - efficientnetv2
+seo_title: EfficientNetV2：在 Apache-2.0 下训练、验证与导出
+description: >-
+  在 LibreYOLO 里用 EfficientNetV2 做图像分类。安装、预测、微调、验证并导出 LibreEfficientNetV2 b0 到
+  b3。
+lead: >-
+  EfficientNetV2
+  是一个图像分类器，它的深度、宽度以及每个阶段的模块选择都是由神经架构搜索找出来的，同时优化精度和训练速度，而不是只优化精度。LibreYOLO
+  只支持它的一个任务：分类。
+keywords:
+  - EfficientNetV2
+  - EfficientNetV2-b0
+  - 图像分类 python
+  - 神经架构搜索
+  - MBConv
+  - imagenet 分类模型
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +32,9 @@ snippets:
         print(result.probs.top5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=cat.jpg save=True
+      code: >
+        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=cat.jpg
+        save=True
   train:
     - label: Python
       language: python
@@ -32,8 +45,9 @@ snippets:
         model.train(data="imagenette160", epochs=5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo train model=LibreEfficientNetV2b0-cls.pt data=imagenette160 epochs=5
+      code: >
+        libreyolo train model=LibreEfficientNetV2b0-cls.pt data=imagenette160
+        epochs=5
     - label: Multi-GPU
       language: bash
       code: |
@@ -65,9 +79,11 @@ snippets:
         model.export(format="tensorrt", half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreEfficientNetV2b0-cls.pt format=onnx
-        libreyolo export model=LibreEfficientNetV2b0-cls.pt format=tensorrt half=True
+
+        libreyolo export model=LibreEfficientNetV2b0-cls.pt format=tensorrt
+        half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -79,6 +95,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: ad3ff140aad824bd
 ---
 
 ## 安装

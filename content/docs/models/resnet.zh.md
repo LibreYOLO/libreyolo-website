@@ -1,11 +1,20 @@
 ---
 title: ResNet
-families: [resnet]
-seo_title: "ResNet：在 Apache-2.0 下训练、验证与导出"
-description: "在 LibreYOLO 里用 ResNet 做图像分类。安装、预测、微调、验证并导出 LibreResNet18/34/50/101。"
-lead: "ResNet 是一个由残差块搭出来的图像分类器，残差块就是那些跳跃连接（skip connection），它让网络可以多堆很多层，而不会出现很深的普通卷积堆叠原本会有的精度下降。LibreYOLO 只支持它的一个任务：分类。"
-keywords: [ResNet, ResNet50, "图像分类 python", "残差网络", "深度残差网络", "imagenet 预训练分类模型"]
-last_verified: "1.5.0"
+families:
+  - resnet
+seo_title: ResNet：在 Apache-2.0 下训练、验证与导出
+description: 在 LibreYOLO 里用 ResNet 做图像分类。安装、预测、微调、验证并导出 LibreResNet18/34/50/101。
+lead: >-
+  ResNet 是一个由残差块搭出来的图像分类器，残差块就是那些跳跃连接（skip
+  connection），它让网络可以多堆很多层，而不会出现很深的普通卷积堆叠原本会有的精度下降。LibreYOLO 只支持它的一个任务：分类。
+keywords:
+  - ResNet
+  - ResNet50
+  - 图像分类 python
+  - 残差网络
+  - 深度残差网络
+  - imagenet 预训练分类模型
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -79,6 +88,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: e2f46c73716af1b7
 ---
 
 ## 安装

@@ -1,11 +1,26 @@
 ---
 title: Depth Anything V2
-families: [depth_anything]
-seo_title: "Depth Anything V2: prediga e valide profundidade monocular"
-description: "Use o Depth Anything V2 no LibreYOLO para estimativa de profundidade monocular. Instale, faça predições e valide; o Small vem sob Apache-2.0, Base e Large são CC-BY-NC-4.0."
-lead: "O Depth Anything V2 é um encoder DINOv2 combinado com um decoder DPT que prediz um mapa denso de profundidade inversa relativa a partir de uma única imagem. O LibreYOLO oferece suporte a ele na tarefa de profundidade: predição e validação zero-shot, sem caminho de treinamento."
-keywords: [Depth Anything V2, "estimativa de profundidade monocular", "mapa de profundidade python", "profundidade a partir de uma imagem", "depth estimation python", DPT, DINOv2]
-last_verified: "1.5.0"
+families:
+  - depth_anything
+seo_title: 'Depth Anything V2: prediga e valide profundidade monocular'
+description: >-
+  Use o Depth Anything V2 no LibreYOLO para estimativa de profundidade
+  monocular. Instale, faça predições e valide; o Small vem sob Apache-2.0, Base
+  e Large são CC-BY-NC-4.0.
+lead: >-
+  O Depth Anything V2 é um encoder DINOv2 combinado com um decoder DPT que
+  prediz um mapa denso de profundidade inversa relativa a partir de uma única
+  imagem. O LibreYOLO oferece suporte a ele na tarefa de profundidade: predição
+  e validação zero-shot, sem caminho de treinamento.
+keywords:
+  - Depth Anything V2
+  - estimativa de profundidade monocular
+  - mapa de profundidade python
+  - profundidade a partir de uma imagem
+  - depth estimation python
+  - DPT
+  - DINOv2
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,19 +35,28 @@ snippets:
         print(depth.min, depth.max, depth.mean)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDepthAnythingV2s-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDepthAnythingV2s-depth.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Ler o mapa de profundidade
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         depth = result.depth_map    # DepthMap: denso (H, W), maior = mais perto
-        raw = depth.data                # tensor, sem unidade métrica nem escala entre imagens
-        normalized = depth.normalized() # reescalado para [0, 1] para visualização
+
+        raw = depth.data                # tensor, sem unidade métrica nem escala
+        entre imagens
+
+        normalized = depth.normalized() # reescalado para [0, 1] para
+        visualização
   val:
     - label: Python
       language: python
@@ -60,9 +84,11 @@ snippets:
         model.export(format="tensorrt", half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDepthAnythingV2s-depth.pt format=onnx
-        libreyolo export model=LibreDepthAnythingV2s-depth.pt format=tensorrt half=True
+
+        libreyolo export model=LibreDepthAnythingV2s-depth.pt format=tensorrt
+        half=True
     - label: Usar o arquivo exportado
       language: python
       code: |
@@ -74,6 +100,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
+source_hash: e1043aba1b70b65c
 ---
 
 ## Instalação

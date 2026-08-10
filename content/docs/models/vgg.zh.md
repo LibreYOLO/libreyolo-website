@@ -1,11 +1,20 @@
 ---
 title: VGG
-families: [vgg]
-seo_title: "VGG：在 LibreYOLO 里运行 VGG-16/19 图像分类器"
-description: "用 LibreYOLO 预测、验证并导出 VGG 分类器。torchvision 权重采用 BSD-3-Clause 许可；微调尚未支持。"
-lead: "VGG 是一个卷积图像分类器，由一叠尺寸统一的 3x3 小卷积堆叠而成，而不是更大的滤波器。LibreYOLO 提供 16 层和 19 层两种尺寸，每种都有普通版和带批归一化（batch normalization）的版本，用于图像分类。"
-keywords: [VGG, VGG-16, VGG-19, 卷积神经网络, "图像分类 python", "vgg16 预训练模型"]
-last_verified: "1.5.0"
+families:
+  - vgg
+seo_title: VGG：在 LibreYOLO 里运行 VGG-16/19 图像分类器
+description: 用 LibreYOLO 预测、验证并导出 VGG 分类器。torchvision 权重采用 BSD-3-Clause 许可；微调尚未支持。
+lead: >-
+  VGG 是一个卷积图像分类器，由一叠尺寸统一的 3x3 小卷积堆叠而成，而不是更大的滤波器。LibreYOLO 提供 16 层和 19
+  层两种尺寸，每种都有普通版和带批归一化（batch normalization）的版本，用于图像分类。
+keywords:
+  - VGG
+  - VGG-16
+  - VGG-19
+  - 卷积神经网络
+  - 图像分类 python
+  - vgg16 预训练模型
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +30,10 @@ snippets:
         print(probs.top5, probs.top5conf)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreVGG16-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreVGG16-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -66,6 +77,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: 26eb6ff5811533fd
 ---
 
 ## 安装

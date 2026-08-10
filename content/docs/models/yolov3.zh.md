@@ -1,11 +1,22 @@
 ---
 title: YOLOv3
-families: [yolo3]
-seo_title: "LibreYOLO 里的 YOLOv3：预测、验证与导出"
-description: "在 LibreYOLO 里运行 YOLOv3：一个冻结的、仅推理的博物馆家族，提供 tiny、base 和 SPP 三种尺寸。可以预测、验证并导出，采用公有领域许可。"
-lead: "YOLOv3 是那个基于 Darknet-53 的检测器，它给 YOLO 这条线加上了多尺度预测和相互独立的逻辑回归分类器。LibreYOLO 以冻结、仅推理的展品形式收录它的 tiny、base 和 SPP 三种尺寸。"
-keywords: [YOLOv3, Darknet, Darknet-53, "yolov3 目标检测", "yolov3 pytorch", "yolov3 权重下载"]
-last_verified: "1.5.0"
+families:
+  - yolo3
+seo_title: LibreYOLO 里的 YOLOv3：预测、验证与导出
+description: >-
+  在 LibreYOLO 里运行 YOLOv3：一个冻结的、仅推理的博物馆家族，提供 tiny、base 和 SPP
+  三种尺寸。可以预测、验证并导出，采用公有领域许可。
+lead: >-
+  YOLOv3 是那个基于 Darknet-53 的检测器，它给 YOLO 这条线加上了多尺度预测和相互独立的逻辑回归分类器。LibreYOLO
+  以冻结、仅推理的展品形式收录它的 tiny、base 和 SPP 三种尺寸。
+keywords:
+  - YOLOv3
+  - Darknet
+  - Darknet-53
+  - yolov3 目标检测
+  - yolov3 pytorch
+  - yolov3 权重下载
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +31,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreYOLO3b.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreYOLO3b.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: SPP 尺寸
       language: python
       code: |
@@ -71,6 +84,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: a4c652bb2707fc8f
 ---
 
 ## 安装

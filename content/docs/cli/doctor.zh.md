@@ -1,10 +1,15 @@
 ---
 title: libreyolo doctor
-seo_title: "libreyolo doctor 命令参考"
-description: "训练前检查检测数据集：带默认值的参数、可以跳过或单独选择的检查家族，以及 CI 可以据此设门禁的退出码。"
-lead: "对检测数据集跑一组健康检查，报告哪些问题会拖累训练：缺失的文件、损坏的标注、损坏的图像、划分（split）之间的泄漏，以及类别不均衡。"
-keywords: [libreyolo doctor cli, 数据集健康检查, yolo 数据集校验, 数据集泄漏检查, libreyolo doctor strict]
-last_verified: "1.5.0"
+seo_title: libreyolo doctor 命令参考
+description: 训练前检查检测数据集：带默认值的参数、可以跳过或单独选择的检查家族，以及 CI 可以据此设门禁的退出码。
+lead: 对检测数据集跑一组健康检查，报告哪些问题会拖累训练：缺失的文件、损坏的标注、损坏的图像、划分（split）之间的泄漏，以及类别不均衡。
+keywords:
+  - libreyolo doctor cli
+  - 数据集健康检查
+  - yolo 数据集校验
+  - 数据集泄漏检查
+  - libreyolo doctor strict
+last_verified: 1.5.0
 meta:
   - label: 命令
     value: libreyolo doctor
@@ -13,7 +18,7 @@ meta:
     value: data
     mono: true
   - label: 输出
-    value: "stdout 上的一份问题报告。发现错误时退出码为 1"
+    value: stdout 上的一份问题报告。发现错误时退出码为 1
 snippets:
   examples:
     - label: 基础
@@ -30,6 +35,7 @@ snippets:
       code: |
         libreyolo doctor coco8.yaml download=true strict=true json=true \
           only=labels,files,config
+source_hash: 79e0ef471d567ea3
 ---
 
 ## 概要

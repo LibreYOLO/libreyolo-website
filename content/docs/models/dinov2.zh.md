@@ -1,11 +1,24 @@
 ---
 title: DINOv2
-families: [dinov2]
-seo_title: "LibreYOLO 里的 DINOv2：语义分割、分类与嵌入"
-description: "在 LibreYOLO 里用 DINOv2 做语义分割、分类和整图嵌入，全部跑在 DINOv2-with-Registers 骨干上。从头到尾采用 Apache-2.0 许可。"
-lead: "DINOv2 是 Meta AI 训练的自监督 vision transformer，不用标注就能产出通用的图像特征。LibreYOLO 把它的 DINOv2-with-Registers 骨干封装成三个任务：语义分割、分类和整图嵌入。"
-keywords: [DINOv2, "DINOv2 with registers", "自监督学习", "dinov2 特征提取", "vision transformer 语义分割", "图像 embedding 提取", "以图搜图 特征向量", Meta AI]
-last_verified: "1.5.0"
+families:
+  - dinov2
+seo_title: LibreYOLO 里的 DINOv2：语义分割、分类与嵌入
+description: >-
+  在 LibreYOLO 里用 DINOv2 做语义分割、分类和整图嵌入，全部跑在 DINOv2-with-Registers 骨干上。从头到尾采用
+  Apache-2.0 许可。
+lead: >-
+  DINOv2 是 Meta AI 训练的自监督 vision transformer，不用标注就能产出通用的图像特征。LibreYOLO 把它的
+  DINOv2-with-Registers 骨干封装成三个任务：语义分割、分类和整图嵌入。
+keywords:
+  - DINOv2
+  - DINOv2 with registers
+  - 自监督学习
+  - dinov2 特征提取
+  - vision transformer 语义分割
+  - 图像 embedding 提取
+  - 以图搜图 特征向量
+  - Meta AI
+last_verified: 1.5.0
 snippets:
   predict:
     - label: 语义分割
@@ -133,6 +146,7 @@ snippets:
         # LibreDINOv2s-sem.onnx
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
+source_hash: 4256e0a0398e5aaf
 ---
 
 ## 安装

@@ -1,10 +1,21 @@
 ---
 title: libreyolo quantize
-seo_title: "referencia del comando libreyolo quantize"
-description: "Cuantiza un checkpoint en PyTorch desde la línea de comandos: recetas, argumentos de calibración, valores por defecto y las familias que acepta cada receta."
-lead: "Sustituye los módulos float de un modelo por módulos cuantizados, los calibra sobre imágenes sin etiquetar cuando la receta necesita estadísticas y guarda el resultado como un checkpoint de PyTorch."
-keywords: [libreyolo quantize cli, cuantizacion int8 linea de comandos, cuantizacion fp8, cuantizacion post entrenamiento yolo, argumentos libreyolo quantize]
-last_verified: "1.5.0"
+seo_title: referencia del comando libreyolo quantize
+description: >-
+  Cuantiza un checkpoint en PyTorch desde la línea de comandos: recetas,
+  argumentos de calibración, valores por defecto y las familias que acepta cada
+  receta.
+lead: >-
+  Sustituye los módulos float de un modelo por módulos cuantizados, los calibra
+  sobre imágenes sin etiquetar cuando la receta necesita estadísticas y guarda
+  el resultado como un checkpoint de PyTorch.
+keywords:
+  - libreyolo quantize cli
+  - cuantizacion int8 linea de comandos
+  - cuantizacion fp8
+  - cuantizacion post entrenamiento yolo
+  - argumentos libreyolo quantize
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo quantize
@@ -13,7 +24,9 @@ meta:
     value: model
     mono: true
   - label: Salida
-    value: "La ruta de origen con -<recipe> antes del sufijo, p. ej. LibreYOLO9s-int8.pt"
+    value: >-
+      La ruta de origen con -<recipe> antes del sufijo, p. ej.
+      LibreYOLO9s-int8.pt
     mono: true
 snippets:
   examples:
@@ -22,19 +35,23 @@ snippets:
       code: |
         # Calibra sobre coco128 y escribe LibreYOLO9s-int8.pt
         libreyolo quantize model=LibreYOLO9s.pt recipe=int8
-    - label: Solo cast, sin calibración
+    - label: 'Solo cast, sin calibración'
       language: bash
       code: |
         libreyolo quantize model=LibreYOLO9s.pt recipe=fp16 calib=none \
           out=weights/LibreYOLO9s-fp16.pt
     - label: Calibración más amplia y luego recuperación
       language: bash
-      code: |
+      code: >
         libreyolo quantize model=LibreYOLO9s.pt recipe=int8 \
           calib=coco128.yaml samples=256 batch=16 algorithm=minmax
 
-        # El entrenamiento consciente de la cuantización sobre el checkpoint cuantizado recupera precisión.
-        libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10 lr0=0.001
+        # El entrenamiento consciente de la cuantización sobre el checkpoint
+        cuantizado recupera precisión.
+
+        libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
+        lr0=0.001
+source_hash: 7ae663e9f117826e
 ---
 
 ## Sinopsis

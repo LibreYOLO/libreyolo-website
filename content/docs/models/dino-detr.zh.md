@@ -1,11 +1,21 @@
 ---
 title: DINO-DETR
-families: [dinodetr]
-seo_title: "DINO-DETR：预测与导出，采用 Apache-2.0 许可"
-description: "在 LibreYOLO 里运行 DINO-DETR 做目标检测。安装、预测、验证并导出三种去噪锚框尺寸，全部采用 Apache-2.0 许可。"
-lead: "DINO-DETR 由 IDEA Research 以 DINO 之名发布，在 Deformable DETR 的稀疏注意力之上，把对比式去噪训练和混合 query 选择结合在一起。LibreYOLO 提供三种尺寸用于检测，仅支持推理。"
-keywords: [DINO-DETR, DINO, "dino detr 目标检测", "检测 transformer", 去噪锚框, "混合 query 选择", IDEA Research]
-last_verified: "1.5.0"
+families:
+  - dinodetr
+seo_title: DINO-DETR：预测与导出，采用 Apache-2.0 许可
+description: 在 LibreYOLO 里运行 DINO-DETR 做目标检测。安装、预测、验证并导出三种去噪锚框尺寸，全部采用 Apache-2.0 许可。
+lead: >-
+  DINO-DETR 由 IDEA Research 以 DINO 之名发布，在 Deformable DETR 的稀疏注意力之上，把对比式去噪训练和混合
+  query 选择结合在一起。LibreYOLO 提供三种尺寸用于检测，仅支持推理。
+keywords:
+  - DINO-DETR
+  - DINO
+  - dino detr 目标检测
+  - 检测 transformer
+  - 去噪锚框
+  - 混合 query 选择
+  - IDEA Research
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +30,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDINODETRr50.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDINODETRr50.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -51,9 +63,11 @@ snippets:
         model.export(format="tensorrt", imgsz=800, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDINODETRr50.pt format=onnx imgsz=800
-        libreyolo export model=LibreDINODETRr50.pt format=tensorrt imgsz=800 half=True
+
+        libreyolo export model=LibreDINODETRr50.pt format=tensorrt imgsz=800
+        half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -65,6 +79,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: dda176ebee3a83de
 ---
 
 ## 安装

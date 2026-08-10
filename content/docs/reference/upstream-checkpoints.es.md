@@ -1,8 +1,15 @@
 ---
 title: Checkpoints upstream
-seo_title: "Cargar checkpoints upstream en LibreYOLO"
-description: "Cómo la conversión automática convierte un checkpoint upstream publicado en uno de LibreYOLO v1.0: los formatos que desenvuelve, qué reconoce cada familia y dónde se detiene."
-lead: "Las familias de LibreYOLO están portadas desde proyectos upstream cuyos checkpoints publicados son casi cargables, pero no llevan metadatos de LibreYOLO. La conversión automática reconoce esos archivos, los envuelve en el esquema v1.0 y escribe el resultado junto al original."
+seo_title: Cargar checkpoints upstream en LibreYOLO
+description: >-
+  Cómo la conversión automática convierte un checkpoint upstream publicado en
+  uno de LibreYOLO v1.0: los formatos que desenvuelve, qué reconoce cada familia
+  y dónde se detiene.
+lead: >-
+  Las familias de LibreYOLO están portadas desde proyectos upstream cuyos
+  checkpoints publicados son casi cargables, pero no llevan metadatos de
+  LibreYOLO. La conversión automática reconoce esos archivos, los envuelve en el
+  esquema v1.0 y escribe el resultado junto al original.
 keywords:
   - libreyolo autoconvert
   - cargar checkpoint upstream
@@ -10,8 +17,13 @@ keywords:
   - pesos upstream libreyolo
   - convertir checkpoint yolo
   - cargar pesos .pt en libreyolo
-last_verified: "1.5.0"
-verification: "Comportamiento leído de libreyolo/models/autoconvert.py y BaseModel.convert_upstream_state_dict; los reconocedores por familia se comprobaron leyendo el override de convert_upstream_state_dict de cada familia, todo en la v1.5.0. Reglas COCO de RF-DETR según docs/checkpoint_schema.md."
+last_verified: 1.5.0
+verification: >-
+  Comportamiento leído de libreyolo/models/autoconvert.py y
+  BaseModel.convert_upstream_state_dict; los reconocedores por familia se
+  comprobaron leyendo el override de convert_upstream_state_dict de cada
+  familia, todo en la v1.5.0. Reglas COCO de RF-DETR según
+  docs/checkpoint_schema.md.
 snippets:
   usage:
     - label: Basta con pasar el archivo a la factoría
@@ -26,6 +38,7 @@ snippets:
         # Cualquier checkpoint de LibreYOLO se carga sin cambios.
         model = LibreYOLO("LibreYOLO9t.pt")
         print(model.family, model.size, model.task, model.nb_classes)
+source_hash: c6022771a2a207a1
 ---
 
 ## Qué ocurre al cargar

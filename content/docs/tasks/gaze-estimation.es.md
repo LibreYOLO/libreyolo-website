@@ -1,44 +1,77 @@
 ---
 title: Estimación de la mirada
-seo_title: "Estimación de la mirada en LibreYOLO"
-description: "Estima el pitch y el yaw de la mirada de cada cara en LibreYOLO. Predice desde Python o la CLI, lee los ángulos en radianes y exporta la cabeza de mirada a ONNX."
-lead: "La estimación de la mirada devuelve una dirección de mirada para cada cara de una imagen. LibreYOLO la modela como una tarea en dos etapas: primero se ejecuta un detector de caras, y una cabeza de mirada lee el pitch y el yaw de cada recorte de cara que devuelve."
-keywords: [estimación de la mirada python, seguimiento ocular python, eye tracking, dirección de la mirada, pitch yaw mirada, L2CS-Net, pose de la cabeza]
-last_verified: "1.5.0"
+seo_title: Estimación de la mirada en LibreYOLO
+description: >-
+  Estima el pitch y el yaw de la mirada de cada cara en LibreYOLO. Predice desde
+  Python o la CLI, lee los ángulos en radianes y exporta la cabeza de mirada a
+  ONNX.
+lead: >-
+  La estimación de la mirada devuelve una dirección de mirada para cada cara de
+  una imagen. LibreYOLO la modela como una tarea en dos etapas: primero se
+  ejecuta un detector de caras, y una cabeza de mirada lee el pitch y el yaw de
+  cada recorte de cara que devuelve.
+keywords:
+  - estimación de la mirada python
+  - seguimiento ocular python
+  - eye tracking
+  - dirección de la mirada
+  - pitch yaw mirada
+  - L2CS-Net
+  - pose de la cabeza
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Si no se indica face_detector, la predicción recurre al detector
-        # incluido en OpenCV, así que no se descarga nada más allá del checkpoint.
+
+        # incluido en OpenCV, así que no se descarga nada más allá del
+        checkpoint.
+
         model = LibreYOLO("LibreL2CSr50.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         gaze = result.gaze
+
         print(gaze.pitch, gaze.yaw)              # radianes, una fila por cara
+
         print(gaze.pitch_deg, gaze.yaw_deg)      # los mismos ángulos en grados
+
         print(gaze.direction_3d)                 # vectores unitarios (N, 3)
     - label: CLI
       language: bash
-      code: |
+      code: >
         # A diferencia de la vía de Python, la CLI no tiene fallback automático:
+
         # los modelos de mirada exigen un detector de caras explícito, y debe
+
         # ser un detector de LibreYOLO cuyos boxes sean caras.
-        libreyolo predict model=LibreL2CSr50.pt source=photo.jpg face_detector=face-detector.pt save=True
+
+        libreyolo predict model=LibreL2CSr50.pt source=photo.jpg
+        face_detector=face-detector.pt save=True
     - label: Elegir la fuente de caras
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
 
         model = LibreYOLO("LibreL2CSr50.pt")
 
-        # Pasa a la cabeza de mirada los boxes de un detector que ya hayas ejecutado.
+
+        # Pasa a la cabeza de mirada los boxes de un detector que ya hayas
+        ejecutado.
+
         result = model(SAMPLE_IMAGE, face_boxes=[[34, 12, 90, 80]])
 
+
         # O nombra uno de los detectores incluidos.
+
         result = model(SAMPLE_IMAGE, face_detector="yunet")
   export:
     - label: Python
@@ -52,6 +85,7 @@ snippets:
       language: bash
       code: |
         libreyolo export model=LibreL2CSr50.pt format=onnx
+source_hash: 22aa3c3d87b0c730
 ---
 
 ## Definición

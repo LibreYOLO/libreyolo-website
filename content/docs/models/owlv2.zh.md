@@ -1,11 +1,20 @@
 ---
 title: OWLv2
-families: [owlv2]
-seo_title: "OWLv2：在 LibreYOLO 里做零样本目标检测"
-description: "用 LibreYOLO 里的 OWLv2 检测任何用文本描述的物体。装上 openvocab extra，用自由文本词汇表做预测。"
-lead: "OWLv2 是一个开放词汇目标检测器，由 Google Research 开发，它把图像区域拿去和一个 CLIP 式编码器输出的文本嵌入向量打分。LibreYOLO 把它包装成开放词汇检测器层里一个仅支持预测的家族。"
-keywords: [OWLv2, OWL-ViT, 开放词汇目标检测, "owlv2 零样本检测", "文本提示目标检测 python", LibreOpenVocab]
-last_verified: "1.5.0"
+families:
+  - owlv2
+seo_title: OWLv2：在 LibreYOLO 里做零样本目标检测
+description: 用 LibreYOLO 里的 OWLv2 检测任何用文本描述的物体。装上 openvocab extra，用自由文本词汇表做预测。
+lead: >-
+  OWLv2 是一个开放词汇目标检测器，由 Google Research 开发，它把图像区域拿去和一个 CLIP
+  式编码器输出的文本嵌入向量打分。LibreYOLO 把它包装成开放词汇检测器层里一个仅支持预测的家族。
+keywords:
+  - OWLv2
+  - OWL-ViT
+  - 开放词汇目标检测
+  - owlv2 零样本检测
+  - 文本提示目标检测 python
+  - LibreOpenVocab
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -28,6 +37,7 @@ snippets:
         model = LibreOpenVocab("owlv2-l14")
         result = model.predict(SAMPLE_IMAGE, conf=0.1)
         print(result.names)
+source_hash: 2d0ce68af0daabb7
 ---
 
 ## 安装

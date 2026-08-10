@@ -1,11 +1,25 @@
 ---
 title: YOLOv7
-families: [yolo7]
-seo_title: "YOLOv7 en LibreYOLO: predecir, entrenar y exportar bajo MIT"
-description: "Ejecuta YOLOv7 en LibreYOLO para detección de objetos: instala, predice, entrena, valida y exporta, con código y pesos bajo licencia MIT."
-lead: "YOLOv7 es un detector de una sola etapa basado en anchors cuya cabeza añade offsets de conocimiento implícito aprendidos antes de la convolución final. LibreYOLO incluye su único tamaño publicado para detección."
-keywords: [YOLOv7, "detección de objetos", "detector basado en anchors", "yolov7 python", "entrenar yolov7", "conocimiento implícito", ImplicitA, "detección de objetos en tiempo real"]
-last_verified: "1.5.0"
+families:
+  - yolo7
+seo_title: 'YOLOv7 en LibreYOLO: predecir, entrenar y exportar bajo MIT'
+description: >-
+  Ejecuta YOLOv7 en LibreYOLO para detección de objetos: instala, predice,
+  entrena, valida y exporta, con código y pesos bajo licencia MIT.
+lead: >-
+  YOLOv7 es un detector de una sola etapa basado en anchors cuya cabeza añade
+  offsets de conocimiento implícito aprendidos antes de la convolución final.
+  LibreYOLO incluye su único tamaño publicado para detección.
+keywords:
+  - YOLOv7
+  - detección de objetos
+  - detector basado en anchors
+  - yolov7 python
+  - entrenar yolov7
+  - conocimiento implícito
+  - ImplicitA
+  - detección de objetos en tiempo real
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,16 +34,21 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreYOLO7b.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreYOLO7b.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreYOLO7b.pt")
-        model.train(data="my-dataset.yaml", epochs=300, imgsz=640, batch=16, lr0=0.01)
+
+        model.train(data="my-dataset.yaml", epochs=300, imgsz=640, batch=16,
+        lr0=0.01)
     - label: CLI
       language: bash
       code: |
@@ -72,20 +91,29 @@ snippets:
         model.export(format="tensorrt", imgsz=640, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreYOLO7b.pt format=onnx imgsz=640
-        libreyolo export model=LibreYOLO7b.pt format=tensorrt imgsz=640 half=True
+
+        libreyolo export model=LibreYOLO7b.pt format=tensorrt imgsz=640
+        half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factoría enruta según el sufijo del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreYOLO7b.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)
+source_hash: 361e81de5614a571
 ---
 
 ## Instalación

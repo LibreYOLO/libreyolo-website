@@ -1,11 +1,22 @@
 ---
 title: AlexNet
-families: [alexnet]
-seo_title: "AlexNet: rode o clássico classificador da ImageNet no LibreYOLO"
-description: "Faça predição, validação e exportação do AlexNet com o LibreYOLO. Pesos do torchvision sob licença BSD-3-Clause; o fine-tuning ainda não é suportado."
-lead: "AlexNet é a rede convolucional que venceu a ILSVRC 2012 e ajudou a iniciar a era do deep learning em visão computacional. O LibreYOLO traz a revisão posterior da arquitetura, de torre única, para classificação de imagens."
-keywords: [AlexNet, ImageNet, "rede neural convolucional", "classificação de imagens python", "classificador de imagens pré-treinado"]
-last_verified: "1.5.0"
+families:
+  - alexnet
+seo_title: 'AlexNet: rode o clássico classificador da ImageNet no LibreYOLO'
+description: >-
+  Faça predição, validação e exportação do AlexNet com o LibreYOLO. Pesos do
+  torchvision sob licença BSD-3-Clause; o fine-tuning ainda não é suportado.
+lead: >-
+  AlexNet é a rede convolucional que venceu a ILSVRC 2012 e ajudou a iniciar a
+  era do deep learning em visão computacional. O LibreYOLO traz a revisão
+  posterior da arquitetura, de torre única, para classificação de imagens.
+keywords:
+  - AlexNet
+  - ImageNet
+  - rede neural convolucional
+  - classificação de imagens python
+  - classificador de imagens pré-treinado
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +32,10 @@ snippets:
         print(probs.top5, probs.top5conf)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreAlexNetb-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreAlexNetb-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -66,6 +79,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: 68c09f080c74bb87
 ---
 
 ## Instalação

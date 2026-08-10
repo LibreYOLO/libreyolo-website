@@ -1,8 +1,15 @@
 ---
 title: Rendimiento de inferencia
-seo_title: "Inferencia más rápida en LibreYOLO"
-description: "Grafos CUDA, media precisión, batching, inferencia por tiles y aumento en test en tiempo de predicción, con los valores por defecto reales y qué familias soportan cada uno."
-lead: "Cinco controles en tiempo de predicción cambian el throughput o la precisión: la reproducción de grafos CUDA, la precisión numérica, el batching, el tiling y el aumento en test. Cada uno se aplica a un conjunto concreto de familias, y dos de ellos cuestan precisión o latencia en lugar de ahorrarla."
+seo_title: Inferencia más rápida en LibreYOLO
+description: >-
+  Grafos CUDA, media precisión, batching, inferencia por tiles y aumento en test
+  en tiempo de predicción, con los valores por defecto reales y qué familias
+  soportan cada uno.
+lead: >-
+  Cinco controles en tiempo de predicción cambian el throughput o la precisión:
+  la reproducción de grafos CUDA, la precisión numérica, el batching, el tiling
+  y el aumento en test. Cada uno se aplica a un conjunto concreto de familias, y
+  dos de ellos cuestan precisión o latencia en lugar de ahorrarla.
 keywords:
   - cuda graphs pytorch inferencia
   - inferencia por batches yolo python
@@ -12,8 +19,20 @@ keywords:
   - tta aumento en test detección
   - capture_graph
   - predecir una carpeta de imágenes yolo
-last_verified: "1.5.0"
-verification: "Valores por defecto de los argumentos de InferenceRunner.__call__ en libreyolo/models/base/inference.py. API de grafos CUDA de BaseModel.capture_graph, graph_info, release_graphs y cuda_graph_scope en libreyolo/models/base/model.py; la adhesión por familia, de la variable de clase SUPPORTS_CUDA_GRAPH. Comportamiento de media precisión de NOOP_PREDICT_KWARGS en libreyolo/utils/predict_args.py, la advertencia de la CLI en libreyolo/cli/commands/predict.py, y CAST_RECIPES más SUPPORTED_FAMILIES en libreyolo/quant/api.py. Condiciones de batching de InferenceRunner._process_in_batches y _predict_batch. Tiling de _predict_tiled y _merge_tile_detections. Aumento en test de BaseModel._predict_augment y _merge_tta, con TTA_ENABLED, TTA_SCALES y TTA_FIXED_SIZE leídos en libreyolo/models/."
+last_verified: 1.5.0
+verification: >-
+  Valores por defecto de los argumentos de InferenceRunner.__call__ en
+  libreyolo/models/base/inference.py. API de grafos CUDA de
+  BaseModel.capture_graph, graph_info, release_graphs y cuda_graph_scope en
+  libreyolo/models/base/model.py; la adhesión por familia, de la variable de
+  clase SUPPORTS_CUDA_GRAPH. Comportamiento de media precisión de
+  NOOP_PREDICT_KWARGS en libreyolo/utils/predict_args.py, la advertencia de la
+  CLI en libreyolo/cli/commands/predict.py, y CAST_RECIPES más
+  SUPPORTED_FAMILIES en libreyolo/quant/api.py. Condiciones de batching de
+  InferenceRunner._process_in_batches y _predict_batch. Tiling de _predict_tiled
+  y _merge_tile_detections. Aumento en test de BaseModel._predict_augment y
+  _merge_tta, con TTA_ENABLED, TTA_SCALES y TTA_FIXED_SIZE leídos en
+  libreyolo/models/.
 snippets:
   batch:
     - label: Inferencia por batches sobre una carpeta
@@ -35,7 +54,7 @@ snippets:
         # Un forward apilado por bloque de 4 en las familias que lo soportan.
         results = model(str(folder), batch=4)
         print(len(results), "results")
-    - label: Streaming, para que la lista nunca se materialice
+    - label: 'Streaming, para que la lista nunca se materialice'
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -51,16 +70,23 @@ snippets:
   graphs:
     - label: Capturar por adelantado y luego reproducir (necesita CUDA)
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
 
         model = LibreYOLO("LibreYOLO9s.pt", device="cuda")
 
-        # Paga el warmup y la captura una sola vez, fuera de la primera petición.
+
+        # Paga el warmup y la captura una sola vez, fuera de la primera
+        petición.
+
         model.capture_graph()
 
+
         result = model(SAMPLE_IMAGE, cuda_graph=True)
+
         print(len(result.boxes))
+
         print(model.graph_info())
     - label: Capturar solo cuando una forma se repite (necesita CUDA)
       language: python
@@ -81,7 +107,7 @@ snippets:
       language: bash
       code: |
         pip install "libreyolo[onnx]"
-    - label: Exportar y volver a cargar, con la precisión por defecto
+    - label: 'Exportar y volver a cargar, con la precisión por defecto'
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -103,7 +129,7 @@ snippets:
         exported = LibreYOLO(path)
         result = exported(SAMPLE_IMAGE)
         print(len(result.boxes))
-    - label: FP16 en PyTorch, mediante una receta de cast (necesita CUDA)
+    - label: 'FP16 en PyTorch, mediante una receta de cast (necesita CUDA)'
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -118,18 +144,26 @@ snippets:
   tiling:
     - label: Inferencia por tiles sobre una imagen grande
       language: python
-      code: |
+      code: >
         from PIL import Image
+
 
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # El tiling solo se activa si la imagen es mayor que el tamaño de entrada.
+
+        # El tiling solo se activa si la imagen es mayor que el tamaño de
+        entrada.
+
         large = Image.open(SAMPLE_IMAGE).resize((2048, 1536))
+
         large.save("large.jpg")
+
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
+
         result = model("large.jpg", tiling=True, overlap_ratio=0.2)
+
         print(result.num_tiles, "tiles", len(result.boxes), "detections")
   tta:
     - label: Aumento en test
@@ -143,6 +177,7 @@ snippets:
         flipped = model(SAMPLE_IMAGE, augment=True)
 
         print(len(plain.boxes), "->", len(flipped.boxes))
+source_hash: 3914665d0e7f892c
 ---
 
 ## Los controles y sus valores por defecto

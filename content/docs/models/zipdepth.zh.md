@@ -1,11 +1,20 @@
 ---
 title: ZipDepth
-families: [zipdepth]
-seo_title: "ZipDepth：LibreYOLO 里的轻量单目深度"
-description: "在 LibreYOLO 里用 ZipDepth 做轻量的单目深度估计。安装、预测、验证并导出两个采用 MIT 许可的检查点。"
-lead: "ZipDepth 是一个紧凑的可重参数化 CNN，从 Depth Anything V2 Large 蒸馏而来，预测稠密的相对逆深度图。LibreYOLO 支持它的 depth 任务：预测和零样本验证，没有训练这一步。"
-keywords: [ZipDepth, 单目深度估计, "边缘设备 深度估计", 相对深度, "深度图 python", "轻量级深度模型"]
-last_verified: "1.5.0"
+families:
+  - zipdepth
+seo_title: ZipDepth：LibreYOLO 里的轻量单目深度
+description: 在 LibreYOLO 里用 ZipDepth 做轻量的单目深度估计。安装、预测、验证并导出两个采用 MIT 许可的检查点。
+lead: >-
+  ZipDepth 是一个紧凑的可重参数化 CNN，从 Depth Anything V2 Large 蒸馏而来，预测稠密的相对逆深度图。LibreYOLO
+  支持它的 depth 任务：预测和零样本验证，没有训练这一步。
+keywords:
+  - ZipDepth
+  - 单目深度估计
+  - 边缘设备 深度估计
+  - 相对深度
+  - 深度图 python
+  - 轻量级深度模型
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +29,10 @@ snippets:
         print(depth.min, depth.max, depth.mean)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreZipDepthb-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreZipDepthb-depth.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: NPU/边缘检查点
       language: python
       code: |
@@ -72,6 +83,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
+source_hash: 891eaa1a42795a4c
 ---
 
 ## 安装

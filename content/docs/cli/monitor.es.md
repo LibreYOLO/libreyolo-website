@@ -1,16 +1,29 @@
 ---
 title: libreyolo monitor
-seo_title: "referencia del comando libreyolo monitor"
-description: "Sirve un dashboard en vivo para los entrenamientos: argumentos con sus valores por defecto, qué lee el servidor del disco y cómo un solo servidor cubre muchos runs."
-lead: "Sirve un dashboard web para los entrenamientos, leyendo los artefactos que un run escribe en disco. Nunca se engancha al proceso de entrenamiento, así que se muestran igual los runs en vivo, los terminados y los que han fallado."
-keywords: [libreyolo monitor cli, dashboard de entrenamiento, ver entrenamiento en tiempo real, libreyolo monitor puerto, visor de metricas de entrenamiento]
-last_verified: "1.5.0"
+seo_title: referencia del comando libreyolo monitor
+description: >-
+  Sirve un dashboard en vivo para los entrenamientos: argumentos con sus valores
+  por defecto, qué lee el servidor del disco y cómo un solo servidor cubre
+  muchos runs.
+lead: >-
+  Sirve un dashboard web para los entrenamientos, leyendo los artefactos que un
+  run escribe en disco. Nunca se engancha al proceso de entrenamiento, así que
+  se muestran igual los runs en vivo, los terminados y los que han fallado.
+keywords:
+  - libreyolo monitor cli
+  - dashboard de entrenamiento
+  - ver entrenamiento en tiempo real
+  - libreyolo monitor puerto
+  - visor de metricas de entrenamiento
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo monitor
     mono: true
   - label: Salida
-    value: "Una URL de servidor por stdout; después el proceso se queda en primer plano"
+    value: >-
+      Una URL de servidor por stdout; después el proceso se queda en primer
+      plano
 snippets:
   examples:
     - label: Básico
@@ -22,10 +35,11 @@ snippets:
       language: bash
       code: |
         libreyolo monitor experiments/
-    - label: Un solo run, puerto fijo, sin navegador
+    - label: 'Un solo run, puerto fijo, sin navegador'
       language: bash
       code: |
         libreyolo monitor runs/train/exp port=9100 no_browser=true
+source_hash: 4aa178141d451728
 ---
 
 ## Sinopsis

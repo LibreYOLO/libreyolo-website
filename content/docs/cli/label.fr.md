@@ -1,16 +1,24 @@
 ---
 title: libreyolo label
-seo_title: "Référence de la commande libreyolo label"
-description: "Lance l'outil local d'annotation de bounding boxes : les arguments et leurs valeurs par défaut, l'option d'assistance IA, et ce qu'expose le binding sur une interface réseau."
-lead: "Démarre un outil web local pour dessiner et modifier des bounding boxes. Il écrit des fichiers d'étiquettes au format natif de LibreYOLO, donc un dataset annoté ici s'entraîne sans aucune étape de conversion."
-keywords: [libreyolo label cli, outil annotation bounding box, étiqueter un dataset yolo, auto labeling cli, partager libreyolo label]
-last_verified: "1.5.0"
+seo_title: Référence de la commande libreyolo label
+description: "Lance l'outil local d'annotation de bounding boxes\_: les arguments et leurs valeurs par défaut, l'option d'assistance IA, et ce qu'expose le binding sur une interface réseau."
+lead: >-
+  Démarre un outil web local pour dessiner et modifier des bounding boxes. Il
+  écrit des fichiers d'étiquettes au format natif de LibreYOLO, donc un dataset
+  annoté ici s'entraîne sans aucune étape de conversion.
+keywords:
+  - libreyolo label cli
+  - outil annotation bounding box
+  - étiqueter un dataset yolo
+  - auto labeling cli
+  - partager libreyolo label
+last_verified: 1.5.0
 meta:
   - label: Commande
     value: libreyolo label
     mono: true
   - label: Sortie
-    value: "Une URL de serveur sur stdout ; les étiquettes sont écrites dans labels/*.txt à côté des images"
+    value: "Une URL de serveur sur stdout\_; les étiquettes sont écrites dans labels/*.txt à côté des images"
 snippets:
   examples:
     - label: Base
@@ -18,7 +26,7 @@ snippets:
       code: |
         # Ouvre l'accueil du projet ; choisissez ou créez un dataset ensuite.
         libreyolo label
-    - label: Manuel uniquement, port fixe
+    - label: 'Manuel uniquement, port fixe'
       language: bash
       code: |
         libreyolo label no_assist=true port=9200 no_browser=true
@@ -26,6 +34,7 @@ snippets:
       language: bash
       code: |
         libreyolo label share=true
+source_hash: bddad245877793b1
 ---
 
 ## Synopsis
@@ -78,7 +87,7 @@ s'ouvre quand même et explique pourquoi il ne peut pas être écrit.
 
 `share=true` fait le binding sur l'adresse joker, ce qui permet aux autres
 machines de votre réseau d'atteindre l'outil, tandis que les actions
-administratives — changer ou supprimer des projets et lancer des calculs —
+administratives (changer ou supprimer des projets et lancer des calculs)
 restent sur cette machine.
 
 Définir `host` sur une interface précise fait quelque chose de différent et de

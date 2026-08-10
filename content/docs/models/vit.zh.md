@@ -1,11 +1,19 @@
 ---
 title: ViT
-families: [vit]
-seo_title: "ViT：在 LibreYOLO 里运行经典的 Vision Transformer 分类器"
-description: "在 LibreYOLO 里预测、验证和导出 ViT 分类器。采用 Apache-2.0 许可的 AugReg 权重；暂不支持微调。"
-lead: "经典的 Vision Transformer：一个纯 transformer，作用在固定大小的图像 patch 上，带一个学习得到的 class token，不含卷积。LibreYOLO 收录了四种 AugReg 预训练尺寸，用于图像分类。"
-keywords: [ViT, Vision Transformer, AugReg, "图像分类 python", "vision transformer 图像分类"]
-last_verified: "1.5.0"
+families:
+  - vit
+seo_title: ViT：在 LibreYOLO 里运行经典的 Vision Transformer 分类器
+description: 在 LibreYOLO 里预测、验证和导出 ViT 分类器。采用 Apache-2.0 许可的 AugReg 权重；暂不支持微调。
+lead: >-
+  经典的 Vision Transformer：一个纯 transformer，作用在固定大小的图像 patch 上，带一个学习得到的 class
+  token，不含卷积。LibreYOLO 收录了四种 AugReg 预训练尺寸，用于图像分类。
+keywords:
+  - ViT
+  - Vision Transformer
+  - AugReg
+  - 图像分类 python
+  - vision transformer 图像分类
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +29,10 @@ snippets:
         print(probs.top5, probs.top5conf)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreViTti-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreViTti-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -66,6 +76,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: f63e98454913765a
 ---
 
 ## 安装

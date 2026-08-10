@@ -1,11 +1,24 @@
 ---
 title: FeyNobg
-families: [feynobg]
-seo_title: "FeyNobg：LibreYOLO 里的背景移除"
-description: "在 LibreYOLO 里用 FeyNobg 做背景移除和 alpha 抠图，它是 Feyn Inc. 加深并重新训练过的 BiRefNet 变体。安装、预测并验证。"
-lead: "一个来自 Feyn Inc. 的背景移除模型，它加深了 BiRefNet 的架构并重新训练。LibreYOLO 为 FeyNobg 的 matte 任务提供推理和验证。"
-keywords: [FeyNobg, "feynobg 背景移除", "背景移除 python", "图像抠图 模型", "alpha matte", "二分图像分割", "透明背景 png python", nobg]
-last_verified: "1.5.0"
+families:
+  - feynobg
+seo_title: FeyNobg：LibreYOLO 里的背景移除
+description: >-
+  在 LibreYOLO 里用 FeyNobg 做背景移除和 alpha 抠图，它是 Feyn Inc. 加深并重新训练过的 BiRefNet
+  变体。安装、预测并验证。
+lead: >-
+  一个来自 Feyn Inc. 的背景移除模型，它加深了 BiRefNet 的架构并重新训练。LibreYOLO 为 FeyNobg 的 matte
+  任务提供推理和验证。
+keywords:
+  - FeyNobg
+  - feynobg 背景移除
+  - 背景移除 python
+  - 图像抠图 模型
+  - alpha matte
+  - 二分图像分割
+  - 透明背景 png python
+  - nobg
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +33,10 @@ snippets:
         print(matte.array.shape, matte.array.dtype)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreFeyNobgl-matte.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreFeyNobgl-matte.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: 抠图
       language: python
       code: |
@@ -48,6 +63,7 @@ snippets:
 
         print(metrics["metrics/MAE"])
         print(metrics["metrics/Smeasure"])
+source_hash: 45de3b578d7ebbf2
 ---
 
 ## 安装

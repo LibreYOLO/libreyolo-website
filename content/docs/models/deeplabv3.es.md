@@ -1,28 +1,47 @@
 ---
 title: DeepLabv3
-families: [deeplabv3]
-seo_title: "DeepLabv3: predice y exporta segmentación semántica con ASPP"
-description: "Usa DeepLabv3 en LibreYOLO para segmentación semántica. Instala, predice, valida y exporta los checkpoints ResNet y MobileNetV3 de torchvision."
-lead: "Una red de segmentación semántica que agrupa características a varias tasas de dilatación en paralelo (atrous spatial pyramid pooling) antes de clasificar cada píxel. LibreYOLO la incluye solo para segmentación semántica."
-keywords: [DeepLabv3, ASPP, "atrous spatial pyramid pooling", "segmentación semántica python", "segmentar imágenes por píxel"]
-last_verified: "1.5.0"
+families:
+  - deeplabv3
+seo_title: 'DeepLabv3: predice y exporta segmentación semántica con ASPP'
+description: >-
+  Usa DeepLabv3 en LibreYOLO para segmentación semántica. Instala, predice,
+  valida y exporta los checkpoints ResNet y MobileNetV3 de torchvision.
+lead: >-
+  Una red de segmentación semántica que agrupa características a varias tasas de
+  dilatación en paralelo (atrous spatial pyramid pooling) antes de clasificar
+  cada píxel. LibreYOLO la incluye solo para segmentación semántica.
+keywords:
+  - DeepLabv3
+  - ASPP
+  - atrous spatial pyramid pooling
+  - segmentación semántica python
+  - segmentar imágenes por píxel
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreDeepLabv3r50-sem.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         mask = result.semantic_mask
+
         print(mask.data.shape)   # (H, W) ids de clase
-        print(mask.classes)      # ids de clase presentes en la imagen, ordenados
+
+        print(mask.classes)      # ids de clase presentes en la imagen,
+        ordenados
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDeepLabv3r50-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDeepLabv3r50-sem.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -49,21 +68,32 @@ snippets:
         model.export(format="tensorrt", half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDeepLabv3r50-sem.pt format=onnx
-        libreyolo export model=LibreDeepLabv3r50-sem.pt format=tensorrt half=True
+
+        libreyolo export model=LibreDeepLabv3r50-sem.pt format=tensorrt
+        half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto
+
         # Results.
+
         model = LibreYOLO("LibreDeepLabv3r50-sem.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.semantic_mask.data.shape)
+source_hash: 7abf11ebb6cece18
 ---
 
 ## Instalación

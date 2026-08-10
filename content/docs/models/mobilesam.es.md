@@ -1,33 +1,63 @@
 ---
 title: MobileSAM
-families: [mobilesam]
-seo_title: "MobileSAM: segmentación ligera con prompts en LibreYOLO"
-description: "Usa MobileSAM en LibreYOLO para segmentación con prompts de punto y de caja con un encoder TinyViT. Instala y predice con el checkpoint tiny bajo Apache-2.0."
-lead: "MobileSAM sustituye el encoder de imagen ViT-H de SAM por un encoder TinyViT destilado, así que el mismo flujo de trabajo con prompts de punto y de caja funciona en hardware más modesto. LibreYOLO incluye un port nativo mediante una factoría LibreSAM dedicada, separada de la factoría de detectores LibreYOLO()."
-keywords: [MobileSAM, Segment Anything, TinyViT, "segmentación con prompts", "segmentación interactiva python", "segmentar objeto con un clic", "prompt de punto", "segmentación ligera"]
-last_verified: "1.5.0"
+families:
+  - mobilesam
+seo_title: 'MobileSAM: segmentación ligera con prompts en LibreYOLO'
+description: >-
+  Usa MobileSAM en LibreYOLO para segmentación con prompts de punto y de caja
+  con un encoder TinyViT. Instala y predice con el checkpoint tiny bajo
+  Apache-2.0.
+lead: >-
+  MobileSAM sustituye el encoder de imagen ViT-H de SAM por un encoder TinyViT
+  destilado, así que el mismo flujo de trabajo con prompts de punto y de caja
+  funciona en hardware más modesto. LibreYOLO incluye un port nativo mediante
+  una factoría LibreSAM dedicada, separada de la factoría de detectores
+  LibreYOLO().
+keywords:
+  - MobileSAM
+  - Segment Anything
+  - TinyViT
+  - segmentación con prompts
+  - segmentación interactiva python
+  - segmentar objeto con un clic
+  - prompt de punto
+  - segmentación ligera
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Prompts de punto y de caja
       language: python
-      code: |
+      code: >
         from libreyolo import LibreSAM, SAMPLE_IMAGE
 
-        # MobileSAM tiene un único tamaño, "tiny", así que no hace falta ningún otro alias.
+
+        # MobileSAM tiene un único tamaño, "tiny", así que no hace falta ningún
+        otro alias.
+
         model = LibreSAM("mobilesam")
 
-        # Un prompt de punto: [x, y] en coordenadas de píxel, label 1 = primer plano.
+
+        # Un prompt de punto: [x, y] en coordenadas de píxel, label 1 = primer
+        plano.
+
         result = model.predict(SAMPLE_IMAGE, points=[640, 420], labels=[1])
+
         print(result.masks.xy)      # un polígono por máscara
+
         print(result.boxes.xyxy)    # caja ajustada derivada de la máscara
 
+
         # Un prompt de caja en lugar de un punto.
+
         result = model.predict(SAMPLE_IMAGE, bboxes=[300, 200, 900, 700])
 
+
         # Sin ningún prompt se segmenta la imagen entera (un generador
+
         # automático de máscaras simplificado, no el exhaustivo de referencia).
+
         result = model.predict(SAMPLE_IMAGE)
-    - label: Codifica una vez, lanza muchos prompts
+    - label: 'Codifica una vez, lanza muchos prompts'
       language: python
       code: |
         from libreyolo import LibreMobileSAM, SAMPLE_IMAGE
@@ -40,6 +70,7 @@ snippets:
         a = model.predict(points=[640, 420], labels=[1])
         b = model.predict(bboxes=[300, 200, 900, 700])
         model.reset_image()
+source_hash: f96e885d93f72bdd
 ---
 
 ## Instalación

@@ -1,8 +1,16 @@
 ---
 title: Core ML
-seo_title: "Esportare in Core ML da LibreYOLO"
-description: "Esporta un rilevatore LibreYOLO in un .mlpackage di Core ML: il contratto di input ImageType, FP16, le compute unit, l'NMS integrato e le quattro famiglie supportate."
-lead: "Core ML è il formato di modelli on-device di Apple. LibreYOLO traccia il rilevatore dietro un wrapper di preprocessing specifico per ogni famiglia, così il grafo convertito riceve sempre un input immagine RGB canonico, e poi scrive un .mlpackage in formato ML Program con i metadati del modello allegati."
+seo_title: Esportare in Core ML da LibreYOLO
+description: >-
+  Esporta un rilevatore LibreYOLO in un .mlpackage di Core ML: il contratto di
+  input ImageType, FP16, le compute unit, l'NMS integrato e le quattro famiglie
+  supportate.
+lead: >-
+  Core ML è il formato di modelli on-device di Apple. LibreYOLO traccia il
+  rilevatore dietro un wrapper di preprocessing specifico per ogni famiglia,
+  così il grafo convertito riceve sempre un input immagine RGB canonico, e poi
+  scrive un .mlpackage in formato ML Program con i metadati del modello
+  allegati.
 keywords:
   - esportare yolo coreml
   - mlpackage
@@ -12,26 +20,29 @@ keywords:
   - compute_units
   - coreml nms pipeline
   - yolo su ios
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="coreml")'
+    value: export(format="coreml")
     mono: true
   - label: Scrive
-    value: "Un bundle .mlpackage (una directory) in formato ML Program"
+    value: Un bundle .mlpackage (una directory) in formato ML Program
   - label: Extra
     value: 'pip install "libreyolo[coreml]"'
     mono: true
   - label: Si ricarica con
-    value: 'LibreYOLO("weights/LibreYOLO9t.mlpackage") su macOS'
+    value: LibreYOLO("weights/LibreYOLO9t.mlpackage") su macOS
     mono: true
   - label: Forme
-    value: "Fisse. L'input è un ct.ImageType a forma rigida."
+    value: Fisse. L'input è un ct.ImageType a forma rigida.
   - label: Precisione
-    value: "FP32, FP16 (half=True). Nessun INT8."
+    value: 'FP32, FP16 (half=True). Nessun INT8.'
   - label: Famiglie
-    value: "Solo rilevamento, per yolox, yolo9, rtdetr e rfdetr"
-verification: "Letto da libreyolo/export/coreml.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/coreml.py e pyproject.toml sul branch dev."
+    value: 'Solo rilevamento, per yolox, yolo9, rtdetr e rfdetr'
+verification: >-
+  Letto da libreyolo/export/coreml.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/coreml.py e pyproject.toml sul
+  branch dev.
 snippets:
   install:
     - label: Installazione
@@ -86,7 +97,7 @@ snippets:
         libreyolo export --model LibreYOLO9t.pt --format coreml --nms \
           --conf 0.25 --iou 0.45
   run:
-    - label: Tramite LibreYOLO, su macOS
+    - label: 'Tramite LibreYOLO, su macOS'
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -99,18 +110,28 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: coremltools da solo
       language: python
-      code: |
+      code: >
         import coremltools as ct
+
         from PIL import Image
 
+
         mlmodel = ct.models.MLModel("weights/LibreYOLO9t.mlpackage")
+
         print(mlmodel.user_defined_metadata["model_family"])
+
         print(mlmodel.user_defined_metadata["names"])
 
-        # L'input è un'immagine chiamata "image" alla dimensione fissa di esportazione.
+
+        # L'input è un'immagine chiamata "image" alla dimensione fissa di
+        esportazione.
+
         image = Image.open(SAMPLE_IMAGE).convert("RGB").resize((640, 640))
+
         out = mlmodel.predict({"image": image})
+
         print({name: value.shape for name, value in out.items()})
+
 
         # Su questa strada letterboxing e postprocessing sono a tuo carico.
   support:
@@ -118,6 +139,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: 09c5394e3837eca2
 ---
 
 ## Installazione

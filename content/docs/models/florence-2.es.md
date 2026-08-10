@@ -1,11 +1,26 @@
 ---
 title: Florence-2
-families: [florence2]
-seo_title: "Florence-2 en LibreYOLO: detección de vocabulario abierto"
-description: "Florence-2 en LibreYOLO: instalación, definición de un vocabulario abierto y predicción de cajas con el modelo de visión con licencia MIT de Microsoft."
-lead: "Florence-2 es el modelo fundacional de visión de Microsoft, que se controla con un token de tarea en lugar de pasar por una cabeza de detección fija. LibreYOLO lo envuelve como detector de objetos de vocabulario abierto: la lista de clases se indica en el momento de predecir."
-keywords: [Florence-2, "modelo de visión y lenguaje", "detección de vocabulario abierto", "detectar objetos sin entrenar", "florence 2 python", grounding, Microsoft, VLM]
-last_verified: "1.5.0"
+families:
+  - florence2
+seo_title: 'Florence-2 en LibreYOLO: detección de vocabulario abierto'
+description: >-
+  Florence-2 en LibreYOLO: instalación, definición de un vocabulario abierto y
+  predicción de cajas con el modelo de visión con licencia MIT de Microsoft.
+lead: >-
+  Florence-2 es el modelo fundacional de visión de Microsoft, que se controla
+  con un token de tarea en lugar de pasar por una cabeza de detección fija.
+  LibreYOLO lo envuelve como detector de objetos de vocabulario abierto: la
+  lista de clases se indica en el momento de predecir.
+keywords:
+  - Florence-2
+  - modelo de visión y lenguaje
+  - detección de vocabulario abierto
+  - detectar objetos sin entrenar
+  - florence 2 python
+  - grounding
+  - Microsoft
+  - VLM
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -31,6 +46,7 @@ snippets:
         # índice de webcam, stream RTSP o una lista .streams
         for result in model.predict("clip.mp4", stream=True, save=True):
             print(len(result.boxes))
+source_hash: ad26d9056465d662
 ---
 
 ## Instalación

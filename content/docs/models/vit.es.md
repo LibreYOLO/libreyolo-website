@@ -1,11 +1,24 @@
 ---
 title: ViT
-families: [vit]
-seo_title: "ViT: ejecuta clasificadores Vision Transformer clásicos en LibreYOLO"
-description: "Predice, valida y exporta clasificadores ViT con LibreYOLO. Pesos AugReg con licencia Apache-2.0; el fine-tuning todavía no está soportado."
-lead: "El Vision Transformer clásico: un transformer puro aplicado a parches de imagen de tamaño fijo, con un class token aprendido y sin convoluciones. LibreYOLO incluye cuatro tamaños preentrenados con AugReg para clasificación de imágenes."
-keywords: [ViT, Vision Transformer, AugReg, "clasificación de imágenes python", "clasificador transformer", "vision transformer preentrenado"]
-last_verified: "1.5.0"
+families:
+  - vit
+seo_title: 'ViT: ejecuta clasificadores Vision Transformer clásicos en LibreYOLO'
+description: >-
+  Predice, valida y exporta clasificadores ViT con LibreYOLO. Pesos AugReg con
+  licencia Apache-2.0; el fine-tuning todavía no está soportado.
+lead: >-
+  El Vision Transformer clásico: un transformer puro aplicado a parches de
+  imagen de tamaño fijo, con un class token aprendido y sin convoluciones.
+  LibreYOLO incluye cuatro tamaños preentrenados con AugReg para clasificación
+  de imágenes.
+keywords:
+  - ViT
+  - Vision Transformer
+  - AugReg
+  - clasificación de imágenes python
+  - clasificador transformer
+  - vision transformer preentrenado
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +34,10 @@ snippets:
         print(probs.top5, probs.top5conf)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreViTti-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreViTti-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -57,16 +72,25 @@ snippets:
         libreyolo export model=LibreViTti-cls.pt format=tensorrt half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto
+
         # Results.
+
         model = LibreYOLO("LibreViTti-cls.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.probs.top1)
+source_hash: f63e98454913765a
 ---
 
 ## Instalación

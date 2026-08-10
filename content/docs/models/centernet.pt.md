@@ -1,11 +1,26 @@
 ---
 title: CenterNet
-families: [centernet]
-seo_title: "CenterNet: detecção de objetos no LibreYOLO"
-description: "Rode o CenterNet (Objects as Points) no LibreYOLO com os backbones ResDCN-18 e DLA-34. Faça predições, valide e exporte para ONNX sob licença MIT. Sem caminho de treinamento."
-lead: "O CenterNet modela um objeto como o ponto central do seu bounding box e regride todas as demais propriedades a partir de um pico do mapa de calor, então não precisa de âncoras nem de uma etapa de non-maximum-suppression. O LibreYOLO o inclui como detector somente de inferência."
-keywords: [CenterNet, "Objects as Points", "detecção de objetos python", "detector anchor-free", "detecção por keypoints", ResDCN-18, DLA-34]
-last_verified: "1.5.0"
+families:
+  - centernet
+seo_title: 'CenterNet: detecção de objetos no LibreYOLO'
+description: >-
+  Rode o CenterNet (Objects as Points) no LibreYOLO com os backbones ResDCN-18 e
+  DLA-34. Faça predições, valide e exporte para ONNX sob licença MIT. Sem
+  caminho de treinamento.
+lead: >-
+  O CenterNet modela um objeto como o ponto central do seu bounding box e
+  regride todas as demais propriedades a partir de um pico do mapa de calor,
+  então não precisa de âncoras nem de uma etapa de non-maximum-suppression. O
+  LibreYOLO o inclui como detector somente de inferência.
+keywords:
+  - CenterNet
+  - Objects as Points
+  - detecção de objetos python
+  - detector anchor-free
+  - detecção por keypoints
+  - ResDCN-18
+  - DLA-34
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +35,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreCenterNetresdcn18.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreCenterNetresdcn18.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: DLA-34
       language: python
       code: |
@@ -73,6 +90,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 20aaef83cc95590d
 ---
 
 ## Instalação

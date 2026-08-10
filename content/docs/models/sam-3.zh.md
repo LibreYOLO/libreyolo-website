@@ -1,11 +1,22 @@
 ---
 title: SAM 3
-families: [sam3]
-seo_title: "SAM 3：LibreYOLO 里的可提示分割与概念分割"
-description: "在 LibreYOLO 里用 SAM 3 做点提示、框提示和文本概念分割。安装并用 large 检查点跑预测，这份权重受 Meta 的 SAM 许可证限制。"
-lead: "SAM 3 在常规的点提示和框提示之上，给 SAM 加了文本概念提示，于是像「黄色校车」这样的短语会返回每一个匹配的实例。LibreYOLO 通过一个专门的 LibreSAM 工厂函数支持它的图像路径，与 LibreYOLO() 检测器工厂函数分开。"
-keywords: [SAM 3, Segment Anything, Meta AI, "可提示分割", "概念分割", "用文字分割图片", "sam3 文本提示", "交互式分割 python"]
-last_verified: "1.5.0"
+families:
+  - sam3
+seo_title: SAM 3：LibreYOLO 里的可提示分割与概念分割
+description: 在 LibreYOLO 里用 SAM 3 做点提示、框提示和文本概念分割。安装并用 large 检查点跑预测，这份权重受 Meta 的 SAM 许可证限制。
+lead: >-
+  SAM 3 在常规的点提示和框提示之上，给 SAM 加了文本概念提示，于是像「黄色校车」这样的短语会返回每一个匹配的实例。LibreYOLO 通过一个专门的
+  LibreSAM 工厂函数支持它的图像路径，与 LibreYOLO() 检测器工厂函数分开。
+keywords:
+  - SAM 3
+  - Segment Anything
+  - Meta AI
+  - 可提示分割
+  - 概念分割
+  - 用文字分割图片
+  - sam3 文本提示
+  - 交互式分割 python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: 点提示与框提示
@@ -50,6 +61,7 @@ snippets:
         a = model.predict(points=[640, 420], labels=[1])
         b = model.predict(bboxes=[300, 200, 900, 700])
         model.reset_image()
+source_hash: c4fb6d5a622f99ff
 ---
 
 ## 安装

@@ -1,11 +1,20 @@
 ---
 title: LibreFaceRec
-families: [facerec]
-seo_title: "LibreFaceRec：人脸识别与人脸验证"
-description: "在 LibreYOLO 里用 LibreFaceRec 做人脸检测、人脸嵌入向量和人脸验证。装好就能预测；嵌入权重采用 Apache-2.0 许可。"
-lead: "LibreFaceRec 是 LibreYOLO 的人脸嵌入向量任务：一个人脸检测器负责定位并对齐人脸，一个识别 head 产出经过 L2 归一化的身份嵌入向量，用来做验证或者检索。"
-keywords: [LibreFaceRec, "人脸识别 python", "人脸特征向量提取", "两张人脸比对相似度", "人脸识别 onnx", ArcFace]
-last_verified: "1.5.0"
+families:
+  - facerec
+seo_title: LibreFaceRec：人脸识别与人脸验证
+description: 在 LibreYOLO 里用 LibreFaceRec 做人脸检测、人脸嵌入向量和人脸验证。装好就能预测；嵌入权重采用 Apache-2.0 许可。
+lead: >-
+  LibreFaceRec 是 LibreYOLO 的人脸嵌入向量任务：一个人脸检测器负责定位并对齐人脸，一个识别 head 产出经过 L2
+  归一化的身份嵌入向量，用来做验证或者检索。
+keywords:
+  - LibreFaceRec
+  - 人脸识别 python
+  - 人脸特征向量提取
+  - 两张人脸比对相似度
+  - 人脸识别 onnx
+  - ArcFace
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -55,6 +64,7 @@ snippets:
 
         model = LibreYOLO("librefacerec-l.onnx")
         model.export(format="onnx")
+source_hash: f1a345bb96e32f12
 ---
 
 ## 安装

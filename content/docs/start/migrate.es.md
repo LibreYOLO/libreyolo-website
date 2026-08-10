@@ -1,16 +1,26 @@
 ---
 title: Importar pesos existentes
-seo_title: "Cargar pesos upstream en LibreYOLO"
-description: "Apunta LibreYOLO a un checkpoint de un proyecto upstream. La autoconversión lo reempaqueta al cargarlo y conserva su número de clases y sus nombres."
-lead: "LibreYOLO porta sus familias de modelos desde proyectos upstream, así que los checkpoints que estos publican ya son casi cargables. Lo que les falta son los metadatos. La autoconversión los aporta en el momento de la carga."
-keywords: [convertir pesos libreyolo, cargar checkpoint yolo preentrenado, migrar pesos a libreyolo, convertir pth a libreyolo, autoconversion checkpoint]
-last_verified: "1.5.0"
+seo_title: Cargar pesos upstream en LibreYOLO
+description: >-
+  Apunta LibreYOLO a un checkpoint de un proyecto upstream. La autoconversión lo
+  reempaqueta al cargarlo y conserva su número de clases y sus nombres.
+lead: >-
+  LibreYOLO porta sus familias de modelos desde proyectos upstream, así que los
+  checkpoints que estos publican ya son casi cargables. Lo que les falta son los
+  metadatos. La autoconversión los aporta en el momento de la carga.
+keywords:
+  - convertir pesos libreyolo
+  - cargar checkpoint yolo preentrenado
+  - migrar pesos a libreyolo
+  - convertir pth a libreyolo
+  - autoconversion checkpoint
+last_verified: 1.5.0
 meta:
   - label: Punto de entrada
     value: LibreYOLO("path/to/upstream.pth")
     mono: true
   - label: Se escribe junto al origen como
-    value: "<source>-<Prefix><size>[-task].pt"
+    value: '<source>-<Prefix><size>[-task].pt'
     mono: true
   - label: Conversores en script
     value: weights/ en el repositorio
@@ -42,6 +52,7 @@ snippets:
       code: |
         # El archivo convertido cumple el mismo esquema que uno publicado.
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
+source_hash: bf9d7c7d168fd2c0
 ---
 
 Esta página trata sobre checkpoints de otros proyectos. Si lo que estás moviendo

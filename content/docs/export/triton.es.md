@@ -1,8 +1,15 @@
 ---
 title: Triton Inference Server
-seo_title: "Servir un modelo LibreYOLO en NVIDIA Triton"
-description: "Sirve una exportación ONNX de LibreYOLO a través de NVIDIA Triton: la estructura del model repository, el config.pbtxt generado y cómo predecir contra una URL de modelo HTTP."
-lead: "Triton Inference Server aloja un model repository y responde peticiones de inferencia por HTTP. LibreYOLO exporta el grafo ONNX, genera un config.pbtxt que lleva los metadatos de la exportación como un único parámetro de Triton, y trata una URL de modelo como una ruta de modelo cargable."
+seo_title: Servir un modelo LibreYOLO en NVIDIA Triton
+description: >-
+  Sirve una exportación ONNX de LibreYOLO a través de NVIDIA Triton: la
+  estructura del model repository, el config.pbtxt generado y cómo predecir
+  contra una URL de modelo HTTP.
+lead: >-
+  Triton Inference Server aloja un model repository y responde peticiones de
+  inferencia por HTTP. LibreYOLO exporta el grafo ONNX, genera un config.pbtxt
+  que lleva los metadatos de la exportación como un único parámetro de Triton, y
+  trata una URL de modelo como una ruta de modelo cargable.
 keywords:
   - libreyolo triton
   - triton inference server
@@ -11,22 +18,29 @@ keywords:
   - tritonclient http
   - model repository triton
   - inferencia yolo remota
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Llamada
     value: 'LibreYOLO("http://127.0.0.1:8000/yolo9")'
     mono: true
   - label: Función auxiliar
-    value: "create_triton_config(onnx_path, config_path, model_name=..., max_batch_size=8)"
+    value: >-
+      create_triton_config(onnx_path, config_path, model_name=...,
+      max_batch_size=8)
     mono: true
   - label: Extra
     value: 'pip install "libreyolo[onnx,triton]"'
     mono: true
   - label: Protocolo
-    value: "Solo inferencia V2 por HTTP y HTTPS. Sin gRPC, sin autenticación, sin memoria compartida y sin carga ni descarga de modelos."
+    value: >-
+      Solo inferencia V2 por HTTP y HTTPS. Sin gRPC, sin autenticación, sin
+      memoria compartida y sin carga ni descarga de modelos.
   - label: Timeouts
-    value: "Los timeouts de conexión y de red son de 30 segundos por defecto"
-verification: "Leído de libreyolo/backends/triton.py, libreyolo/models/__init__.py, docs/triton.md y pyproject.toml en la rama dev. Los comandos del contenedor son los fijados en docs/triton.md."
+    value: Los timeouts de conexión y de red son de 30 segundos por defecto
+verification: >-
+  Leído de libreyolo/backends/triton.py, libreyolo/models/__init__.py,
+  docs/triton.md y pyproject.toml en la rama dev. Los comandos del contenedor
+  son los fijados en docs/triton.md.
 snippets:
   install:
     - label: Instalación
@@ -80,8 +94,9 @@ snippets:
           tritonserver --model-repository=/models --exit-on-error=true
     - label: Esperar a que esté listo
       language: bash
-      code: |
-        until curl --fail --silent http://127.0.0.1:8000/v2/health/ready; do sleep 1; done
+      code: >
+        until curl --fail --silent http://127.0.0.1:8000/v2/health/ready; do
+        sleep 1; done
     - label: Pararlo
       language: bash
       code: |
@@ -106,7 +121,7 @@ snippets:
         print(len(remote.boxes), len(native.boxes))
         print(remote.boxes.xyxy[:3])
         print(native.boxes.xyxy[:3])
-    - label: Fijar una versión, o cambiar el timeout
+    - label: 'Fijar una versión, o cambiar el timeout'
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -118,6 +133,7 @@ snippets:
 
         # Los timeouts de conexión y de red son de 30 segundos por defecto.
         patient = TritonBackend("http://127.0.0.1:8000/yolo9", timeout=120)
+source_hash: 0652e4faf0224df3
 ---
 
 ## Instalación

@@ -1,10 +1,20 @@
 ---
 title: Eliminación de fondo
-seo_title: "Eliminación de fondo en LibreYOLO"
-description: "Recorta un sujeto y sepáralo de su fondo en LibreYOLO. Predice un matte alfa suave, escribe un PNG transparente y valida con MAE y S-measure."
-lead: "La eliminación de fondo separa un sujeto de todo lo que hay detrás de él. LibreYOLO la expone como la tarea matte, que devuelve un valor alfa suave por píxel en lugar de una máscara binaria de primer plano."
-keywords: [quitar fondo imagen python, modelo alpha matting, segmentación dicotómica de imágenes, recorte png transparente, matte alfa suave]
-last_verified: "1.5.0"
+seo_title: Eliminación de fondo en LibreYOLO
+description: >-
+  Recorta un sujeto y sepáralo de su fondo en LibreYOLO. Predice un matte alfa
+  suave, escribe un PNG transparente y valida con MAE y S-measure.
+lead: >-
+  La eliminación de fondo separa un sujeto de todo lo que hay detrás de él.
+  LibreYOLO la expone como la tarea matte, que devuelve un valor alfa suave por
+  píxel en lugar de una máscara binaria de primer plano.
+keywords:
+  - quitar fondo imagen python
+  - modelo alpha matting
+  - segmentación dicotómica de imágenes
+  - recorte png transparente
+  - matte alfa suave
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Predecir un matte
@@ -32,17 +42,26 @@ snippets:
         print(rgba.shape)
     - label: Componer sobre un fondo nuevo
       language: python
-      code: |
+      code: >
         import numpy as np
+
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         rgba = result.cutout()
+
         alpha = rgba[..., 3:4].astype(np.float32) / 255.0
+
         backdrop = np.full_like(rgba[..., :3], 255)          # blanco
-        composited = (rgba[..., :3] * alpha + backdrop * (1 - alpha)).astype(np.uint8)
+
+        composited = (rgba[..., :3] * alpha + backdrop * (1 -
+        alpha)).astype(np.uint8)
+
         print(composited.shape)
   val:
     - label: Validar y leer las claves de las métricas
@@ -68,15 +87,22 @@ snippets:
         model.export(format="torchscript")
     - label: Ejecutar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factory decide según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreBiRefNetl-matte.torchscript")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.matte.array.shape)
+source_hash: f7d88c74d9729268
 ---
 
 ## Definición

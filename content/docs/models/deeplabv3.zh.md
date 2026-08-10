@@ -1,11 +1,21 @@
 ---
 title: DeepLabv3
-families: [deeplabv3]
-seo_title: "DeepLabv3：预测并导出 ASPP 语义分割模型"
-description: "在 LibreYOLO 里用 DeepLabv3 做语义分割。安装、预测、验证并导出 torchvision 的 ResNet 和 MobileNetV3 检查点。"
-lead: "一个语义分割网络，在给每个像素分类之前，先以多个膨胀率并行池化特征（空洞空间金字塔池化，atrous spatial pyramid pooling）。LibreYOLO 只把它用于语义分割。"
-keywords: [DeepLabv3, ASPP, "语义分割 python", "空洞卷积 语义分割", "deeplabv3 预训练权重"]
-last_verified: "1.5.0"
+families:
+  - deeplabv3
+seo_title: DeepLabv3：预测并导出 ASPP 语义分割模型
+description: >-
+  在 LibreYOLO 里用 DeepLabv3 做语义分割。安装、预测、验证并导出 torchvision 的 ResNet 和 MobileNetV3
+  检查点。
+lead: >-
+  一个语义分割网络，在给每个像素分类之前，先以多个膨胀率并行池化特征（空洞空间金字塔池化，atrous spatial pyramid
+  pooling）。LibreYOLO 只把它用于语义分割。
+keywords:
+  - DeepLabv3
+  - ASPP
+  - 语义分割 python
+  - 空洞卷积 语义分割
+  - deeplabv3 预训练权重
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +31,10 @@ snippets:
         print(mask.classes)      # 图像中出现的类别 id，已排序
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDeepLabv3r50-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDeepLabv3r50-sem.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -49,9 +61,11 @@ snippets:
         model.export(format="tensorrt", half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDeepLabv3r50-sem.pt format=onnx
-        libreyolo export model=LibreDeepLabv3r50-sem.pt format=tensorrt half=True
+
+        libreyolo export model=LibreDeepLabv3r50-sem.pt format=tensorrt
+        half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -63,6 +77,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
+source_hash: 7abf11ebb6cece18
 ---
 
 ## 安装

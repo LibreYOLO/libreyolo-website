@@ -1,11 +1,23 @@
 ---
 title: RetinaNet
-families: [retinanet]
-seo_title: "RetinaNet：在 LibreYOLO 里预测、验证和导出"
-description: "在 LibreYOLO 里用 RetinaNet 做单阶段目标检测，配 focal 损失。安装、预测、验证并导出这个采用 BSD-3-Clause 许可的 torchvision 移植版。"
-lead: "RetinaNet 是一个用 focal 损失训练的单阶段检测器，focal 损失会压低简单负样本的权重，让一整片密集的锚框网格不再需要单独的候选框阶段也能保持精度。LibreYOLO 移植了 torchvision 的实现，用于检测。"
-keywords: [RetinaNet, "retinanet 目标检测", "focal loss", 单阶段检测器, torchvision, "retinanet onnx 导出"]
-last_verified: "1.5.0"
+families:
+  - retinanet
+seo_title: RetinaNet：在 LibreYOLO 里预测、验证和导出
+description: >-
+  在 LibreYOLO 里用 RetinaNet 做单阶段目标检测，配 focal 损失。安装、预测、验证并导出这个采用 BSD-3-Clause 许可的
+  torchvision 移植版。
+lead: >-
+  RetinaNet 是一个用 focal 损失训练的单阶段检测器，focal
+  损失会压低简单负样本的权重，让一整片密集的锚框网格不再需要单独的候选框阶段也能保持精度。LibreYOLO 移植了 torchvision
+  的实现，用于检测。
+keywords:
+  - RetinaNet
+  - retinanet 目标检测
+  - focal loss
+  - 单阶段检测器
+  - torchvision
+  - retinanet onnx 导出
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +32,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreRetinaNetr50v2.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreRetinaNetr50v2.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -60,6 +74,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 1cc7ceb6de290bdb
 ---
 
 ## 安装

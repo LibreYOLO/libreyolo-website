@@ -1,8 +1,16 @@
 ---
 title: ONNX
-seo_title: "Exportar para ONNX a partir do LibreYOLO"
-description: "Exporte um modelo LibreYOLO para ONNX: o opset que o LibreYOLO escolhe por família, os eixos dinâmicos, o NMS embutido, INT8 e como o grafo é recarregado."
-lead: "ONNX é um formato de grafo portátil. O LibreYOLO traça o modelo com torch.onnx.export, opcionalmente simplifica o grafo e escreve a família, a tarefa, os nomes das classes e o tamanho de entrada nos metadados do próprio arquivo, para que qualquer backend do LibreYOLO consiga reconstruir o pós-processamento."
+seo_title: Exportar para ONNX a partir do LibreYOLO
+description: >-
+  Exporte um modelo LibreYOLO para ONNX: o opset que o LibreYOLO escolhe por
+  família, os eixos dinâmicos, o NMS embutido, INT8 e como o grafo é
+  recarregado.
+lead: >-
+  ONNX é um formato de grafo portátil. O LibreYOLO traça o modelo com
+  torch.onnx.export, opcionalmente simplifica o grafo e escreve a família, a
+  tarefa, os nomes das classes e o tamanho de entrada nos metadados do próprio
+  arquivo, para que qualquer backend do LibreYOLO consiga reconstruir o
+  pós-processamento.
 keywords:
   - exportar yolo onnx
   - onnxruntime
@@ -12,24 +20,27 @@ keywords:
   - nms embutido onnx
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="onnx")'
+    value: export(format="onnx")
     mono: true
   - label: Escreve
-    value: "Um arquivo .onnx, com os metadados embutidos no grafo"
+    value: 'Um arquivo .onnx, com os metadados embutidos no grafo'
   - label: Extra
     value: 'pip install "libreyolo[onnx]"'
     mono: true
   - label: Recarrega com
-    value: 'LibreYOLO("weights/LibreYOLO9t.onnx")'
+    value: LibreYOLO("weights/LibreYOLO9t.onnx")
     mono: true
   - label: Formas
-    value: "Batch dinâmico por padrão no Python; exceções por tarefa abaixo"
+    value: Batch dinâmico por padrão no Python; exceções por tarefa abaixo
   - label: Precisão
-    value: "FP32, FP16 (half=True), INT8 (int8=True, detecção YOLO9)"
-verification: "Lido de libreyolo/export/onnx.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/onnx.py e libreyolo/cli/commands/export.py no branch dev."
+    value: 'FP32, FP16 (half=True), INT8 (int8=True, detecção YOLO9)'
+verification: >-
+  Lido de libreyolo/export/onnx.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/onnx.py e
+  libreyolo/cli/commands/export.py no branch dev.
 snippets:
   install:
     - label: Instalação
@@ -109,29 +120,43 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: ONNX Runtime puro
       language: python
-      code: |
+      code: >
         import numpy as np
+
         import onnx
+
         import onnxruntime as ort
+
 
         session = ort.InferenceSession(
             "weights/LibreYOLO9t.onnx",
             providers=["CPUExecutionProvider"],
         )
 
-        # O pré-processamento e o pós-processamento ficam por sua conta neste caminho.
+
+        # O pré-processamento e o pós-processamento ficam por sua conta neste
+        caminho.
+
         batch = np.zeros((1, 3, 640, 640), dtype=np.float32)
+
         outputs = session.run(None, {session.get_inputs()[0].name: batch})
+
         print([out.shape for out in outputs])
 
-        # O grafo carrega a família, a tarefa, os nomes das classes e o tamanho de entrada.
-        meta = {p.key: p.value for p in onnx.load("weights/LibreYOLO9t.onnx").metadata_props}
+
+        # O grafo carrega a família, a tarefa, os nomes das classes e o tamanho
+        de entrada.
+
+        meta = {p.key: p.value for p in
+        onnx.load("weights/LibreYOLO9t.onnx").metadata_props}
+
         print(meta["model_family"], meta["task"], meta["imgsz"])
   support:
     - label: Conferir uma família e tarefa antes de exportar
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: cee78250fc7189a3
 ---
 
 ## Instalação

@@ -1,15 +1,23 @@
 ---
 title: RF-DETR
-families: [rfdetr]
-seo_title: "RF-DETR：在 MIT 许可下训练、微调并导出"
-description: "在 LibreYOLO 里用 RF-DETR 做目标检测、实例分割、姿态和旋转框。安装、预测、训练、验证、导出，全部采用 MIT 许可。"
-lead: "一个检测 transformer，它预测的是一组固定数量的目标，而不是一张稠密网格，所以推理时不需要 NMS。LibreYOLO 支持它做四种任务。"
-keywords: [RF-DETR, "实时检测 transformer", DETR, "目标检测 python", "实例分割", "姿态估计", "旋转框检测"]
-last_verified: "1.5.0"
+families:
+  - rfdetr
+seo_title: RF-DETR：在 MIT 许可下训练、微调并导出
+description: 在 LibreYOLO 里用 RF-DETR 做目标检测、实例分割、姿态和旋转框。安装、预测、训练、验证、导出，全部采用 MIT 许可。
+lead: 一个检测 transformer，它预测的是一组固定数量的目标，而不是一张稠密网格，所以推理时不需要 NMS。LibreYOLO 支持它做四种任务。
+keywords:
+  - RF-DETR
+  - 实时检测 transformer
+  - DETR
+  - 目标检测 python
+  - 实例分割
+  - 姿态估计
+  - 旋转框检测
+last_verified: 1.5.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
-  caption: "LibreRFDETRs，在视频上以 512 px 做检测。"
+  caption: LibreRFDETRs，在视频上以 512 px 做检测。
 snippets:
   predict:
     - label: Python
@@ -24,8 +32,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreRFDETRs.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreRFDETRs.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: 视频
       language: python
       code: |
@@ -40,11 +50,14 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreRFDETRs.pt")
-        model.train(data="my-dataset.yaml", epochs=50, imgsz=512, batch=8, lr0=1e-4)
+
+        model.train(data="my-dataset.yaml", epochs=50, imgsz=512, batch=8,
+        lr0=1e-4)
     - label: CLI
       language: bash
       code: |
@@ -122,9 +135,11 @@ snippets:
         # 这些参数记录在各自格式的页面上
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreRFDETRs.pt format=onnx imgsz=512
-        libreyolo export model=LibreRFDETRs.pt format=tensorrt imgsz=512 half=True
+
+        libreyolo export model=LibreRFDETRs.pt format=tensorrt imgsz=512
+        half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -138,18 +153,27 @@ snippets:
         print(result.boxes.xyxy)
     - label: 不用 LibreYOLO
       language: python
-      code: |
+      code: >
         import numpy as np
+
         import onnxruntime as ort
 
+
         # 直接跑这张计算图，意味着预处理和后处理都得你自己做。动手
+
         # 接线之前先看清楚签名
+
         session = ort.InferenceSession("LibreRFDETRs.onnx")
+
         name = session.get_inputs()[0].name
-        outputs = session.run(None, {name: np.zeros((1, 3, 512, 512), dtype=np.float32)})
+
+        outputs = session.run(None, {name: np.zeros((1, 3, 512, 512),
+        dtype=np.float32)})
+
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
+source_hash: 8c464aa759131694
 ---
 
 ## 安装

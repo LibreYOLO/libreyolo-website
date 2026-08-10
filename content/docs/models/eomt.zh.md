@@ -1,11 +1,22 @@
 ---
 title: EoMT
-families: [eomt]
-seo_title: "EoMT：预测语义分割、实例分割和全景分割"
-description: "在 LibreYOLO 里用 EoMT 做语义分割、实例分割和全景分割，跑在一个普通的 DINOv2 vision transformer 上，不需要解码器。采用 MIT 许可。"
-lead: "一个建在普通 vision transformer 上的分割网络，没有专门的像素解码器：加到编码器本身上的额外可学习查询（query）直接预测掩码。LibreYOLO 支持用它做语义分割、实例分割和全景分割。"
-keywords: [EoMT, "encoder-only mask transformer", DINOv2, "全景分割 python", "实例分割 dinov2", "语义分割 预训练模型"]
-last_verified: "1.5.0"
+families:
+  - eomt
+seo_title: EoMT：预测语义分割、实例分割和全景分割
+description: >-
+  在 LibreYOLO 里用 EoMT 做语义分割、实例分割和全景分割，跑在一个普通的 DINOv2 vision transformer
+  上，不需要解码器。采用 MIT 许可。
+lead: >-
+  一个建在普通 vision transformer
+  上的分割网络，没有专门的像素解码器：加到编码器本身上的额外可学习查询（query）直接预测掩码。LibreYOLO 支持用它做语义分割、实例分割和全景分割。
+keywords:
+  - EoMT
+  - encoder-only mask transformer
+  - DINOv2
+  - 全景分割 python
+  - 实例分割 dinov2
+  - 语义分割 预训练模型
+last_verified: 1.5.0
 snippets:
   predict:
     - label: 语义分割
@@ -44,8 +55,10 @@ snippets:
         print(pan.segments_info)    # [{"id": ..., "category_id": ...}, ...]
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreEoMTl-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreEoMTl-sem.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: 语义分割
       language: python
@@ -106,6 +119,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
+source_hash: 64b2da642999f150
 ---
 
 ## 安装

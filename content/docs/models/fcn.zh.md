@@ -1,11 +1,17 @@
 ---
 title: FCN
-families: [fcn]
-seo_title: "FCN：预测并导出 BSD-3-Clause 许可的 ResNet FCN"
-description: "在 LibreYOLO 里用 FCN 做语义分割。安装、预测、验证并导出 torchvision 的膨胀 ResNet FCN 检查点。"
-lead: "一个逐像素的稠密分类器，把检测器的全连接层换成卷积，于是输出的是全分辨率的类别图，而不是检测框。LibreYOLO 只把它用于语义分割。"
-keywords: [FCN, 全卷积网络, "语义分割 python", "fcn 语义分割 预训练权重", ResNet]
-last_verified: "1.5.0"
+families:
+  - fcn
+seo_title: FCN：预测并导出 BSD-3-Clause 许可的 ResNet FCN
+description: 在 LibreYOLO 里用 FCN 做语义分割。安装、预测、验证并导出 torchvision 的膨胀 ResNet FCN 检查点。
+lead: 一个逐像素的稠密分类器，把检测器的全连接层换成卷积，于是输出的是全分辨率的类别图，而不是检测框。LibreYOLO 只把它用于语义分割。
+keywords:
+  - FCN
+  - 全卷积网络
+  - 语义分割 python
+  - fcn 语义分割 预训练权重
+  - ResNet
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +27,10 @@ snippets:
         print(mask.classes)      # 图像中出现的类别 id，已排序
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreFCNr50.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreFCNr50.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -63,6 +71,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
+source_hash: 7776b0fc85a208fb
 ---
 
 ## 安装

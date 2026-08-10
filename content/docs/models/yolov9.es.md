@@ -1,11 +1,28 @@
 ---
 title: YOLOv9
-families: [yolo9]
-seo_title: "YOLOv9: predecir, entrenar y exportar bajo MIT"
-description: "Ejecuta YOLOv9 en LibreYOLO, incluida la cabeza end-to-end sin NMS y la cabeza de stride 4 para objetos pequeños. Instala, predice, entrena, valida y exporta."
-lead: "Un detector convolucional de una sola etapa: una pasada puntúa una rejilla densa de boxes y NMS descarta los duplicados. LibreYOLO incluye tres variantes, una de ellas sin paso de NMS."
-keywords: [YOLOv9, YOLO9, "detección de objetos", "detección sin NMS", "detección end-to-end", "detección de objetos pequeños", "yolov9 python", "entrenar yolov9", "programmable gradient information", GELAN]
-last_verified: "1.5.0"
+families:
+  - yolo9
+seo_title: 'YOLOv9: predecir, entrenar y exportar bajo MIT'
+description: >-
+  Ejecuta YOLOv9 en LibreYOLO, incluida la cabeza end-to-end sin NMS y la cabeza
+  de stride 4 para objetos pequeños. Instala, predice, entrena, valida y
+  exporta.
+lead: >-
+  Un detector convolucional de una sola etapa: una pasada puntúa una rejilla
+  densa de boxes y NMS descarta los duplicados. LibreYOLO incluye tres
+  variantes, una de ellas sin paso de NMS.
+keywords:
+  - YOLOv9
+  - YOLO9
+  - detección de objetos
+  - detección sin NMS
+  - detección end-to-end
+  - detección de objetos pequeños
+  - yolov9 python
+  - entrenar yolov9
+  - programmable gradient information
+  - GELAN
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -25,13 +42,20 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Sin NMS
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La misma llamada, distinto checkpoint. La cabeza end-to-end devuelve sus
-        # propias predicciones mejor puntuadas, así que no se ejecuta NMS y iou se ignora.
+
+        # La misma llamada, distinto checkpoint. La cabeza end-to-end devuelve
+        sus
+
+        # propias predicciones mejor puntuadas, así que no se ejecuta NMS y iou
+        se ignora.
+
         model = LibreYOLO("LibreYOLO9E2Es.pt")
+
         result = model(SAMPLE_IMAGE, conf=0.25, max_det=300)
+
 
         print(len(result.boxes))
   train:
@@ -49,14 +73,22 @@ snippets:
           epochs=100 imgsz=640 batch=16
     - label: Objetos pequeños
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO9P2
 
-        # La variante de stride 4 no tiene checkpoint COCO propio, así que indica
-        # uno de detección base: su backbone y su neck se cargan sin cambios y la
+
+        # La variante de stride 4 no tiene checkpoint COCO propio, así que
+        indica
+
+        # uno de detección base: su backbone y su neck se cargan sin cambios y
+        la
+
         # torre de la cabeza de stride 4 parte de una inicialización aleatoria.
+
         model = LibreYOLO9P2(None, size="s")
-        model.train(data="my-dataset.yaml", epochs=100, pretrained="LibreYOLO9s.pt")
+
+        model.train(data="my-dataset.yaml", epochs=100,
+        pretrained="LibreYOLO9s.pt")
   val:
     - label: Python
       language: python
@@ -98,15 +130,22 @@ snippets:
           conf=0.25 iou=0.45 max_det=300
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factoría enruta según el sufijo del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreYOLO9s.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)
+source_hash: eaa6023a4a0b9e71
 ---
 
 ## Instalación

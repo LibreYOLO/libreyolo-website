@@ -1,28 +1,48 @@
 ---
 title: PIDNet
-families: [pidnet]
-seo_title: "PIDNet: predice y exporta segmentación en tiempo real bajo MIT"
-description: "Usa PIDNet en LibreYOLO para segmentación semántica en tiempo real. Instala, predice, valida y exporta los checkpoints s/m/l de Cityscapes bajo MIT."
-lead: "Una red de segmentación semántica de tres ramas que añade una rama dedicada a los bordes sobre un diseño inspirado en el control proporcional-integral-derivativo, pensada para inferencia en tiempo real. LibreYOLO la incluye solo para segmentación semántica."
-keywords: [PIDNet, "segmentación semántica en tiempo real", "segmentación semántica python", Cityscapes, "predicción densa por píxel"]
-last_verified: "1.5.0"
+families:
+  - pidnet
+seo_title: 'PIDNet: predice y exporta segmentación en tiempo real bajo MIT'
+description: >-
+  Usa PIDNet en LibreYOLO para segmentación semántica en tiempo real. Instala,
+  predice, valida y exporta los checkpoints s/m/l de Cityscapes bajo MIT.
+lead: >-
+  Una red de segmentación semántica de tres ramas que añade una rama dedicada a
+  los bordes sobre un diseño inspirado en el control
+  proporcional-integral-derivativo, pensada para inferencia en tiempo real.
+  LibreYOLO la incluye solo para segmentación semántica.
+keywords:
+  - PIDNet
+  - segmentación semántica en tiempo real
+  - segmentación semántica python
+  - Cityscapes
+  - predicción densa por píxel
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibrePIDNets-sem.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         mask = result.semantic_mask
+
         print(mask.data.shape)   # (H, W) ids de clase
-        print(mask.classes)      # ids de clase presentes en la imagen, ordenados
+
+        print(mask.classes)      # ids de clase presentes en la imagen,
+        ordenados
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibrePIDNets-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibrePIDNets-sem.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -54,16 +74,25 @@ snippets:
         libreyolo export model=LibrePIDNets-sem.pt format=tensorrt half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto
+
         # Results.
+
         model = LibreYOLO("LibrePIDNets-sem.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.semantic_mask.data.shape)
+source_hash: 489db64a39e3a61a
 ---
 
 ## Instalación

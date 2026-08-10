@@ -1,8 +1,15 @@
 ---
 title: Matriz completa de exportación
-seo_title: "Matriz de soporte de exportación de LibreYOLO y sus reglas"
-description: "Cómo decide LibreYOLO si una combinación de familia, tarea y formato se puede exportar: los doce formatos, los tres niveles, las reglas de respaldo y los umbrales de paridad."
-lead: "El soporte de exportación es una consulta sobre la terna (familia, tarea, formato). Esta página describe la forma de esa matriz, las reglas que rellenan las celdas que ninguna entrada explícita cubre, y cómo consultarla para la combinación que te interesa."
+seo_title: Matriz de soporte de exportación de LibreYOLO y sus reglas
+description: >-
+  Cómo decide LibreYOLO si una combinación de familia, tarea y formato se puede
+  exportar: los doce formatos, los tres niveles, las reglas de respaldo y los
+  umbrales de paridad.
+lead: >-
+  El soporte de exportación es una consulta sobre la terna (familia, tarea,
+  formato). Esta página describe la forma de esa matriz, las reglas que rellenan
+  las celdas que ninguna entrada explícita cubre, y cómo consultarla para la
+  combinación que te interesa.
 keywords:
   - soporte exportación libreyolo
   - matriz de exportación
@@ -10,11 +17,17 @@ keywords:
   - comando libreyolo formats
   - umbral de paridad exportación
   - NotImplementedError exportar
-last_verified: "1.5.0"
-verification: "Formatos, niveles, orden de respaldo, bloqueos por tarea y por familia y bloqueos de NCNN leídos de libreyolo/export/support.py; alias y argumentos compartidos de libreyolo/export/exporter.py; definiciones de niveles de docs/adr/0011-export-support-tiers.md; umbrales de paridad de docs/export_support.md, todo en la v1.5.0. Las celdas de cada combinación no se transcriben aquí; consúltalas con el snippet de abajo."
+last_verified: 1.5.0
+verification: >-
+  Formatos, niveles, orden de respaldo, bloqueos por tarea y por familia y
+  bloqueos de NCNN leídos de libreyolo/export/support.py; alias y argumentos
+  compartidos de libreyolo/export/exporter.py; definiciones de niveles de
+  docs/adr/0011-export-support-tiers.md; umbrales de paridad de
+  docs/export_support.md, todo en la v1.5.0. Las celdas de cada combinación no
+  se transcriben aquí; consúltalas con el snippet de abajo.
 snippets:
   usage:
-    - label: Consultar la matriz, sin necesidad de modelo
+    - label: 'Consultar la matriz, sin necesidad de modelo'
       language: python
       code: |
         from libreyolo.export.support import (
@@ -36,7 +49,7 @@ snippets:
         libreyolo formats --family yolo9 --task detect
         libreyolo formats --family yolo9 --task detect --json
   export:
-    - label: Exportar, y leer un rechazo
+    - label: 'Exportar, y leer un rechazo'
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -50,6 +63,7 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
+source_hash: 83de3289634888c6
 ---
 
 ## Forma de la matriz

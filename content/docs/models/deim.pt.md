@@ -1,11 +1,27 @@
 ---
 title: DEIM
-families: [deim]
-seo_title: "DEIM e DEIMv2 no LibreYOLO"
-description: "Use DEIM e DEIMv2 no LibreYOLO para detecção de objetos. Instale, faça predições, treine, valide e exporte, a partir de um tamanho de meio milhão de parâmetros."
-lead: "Um transformer de detecção treinado com correspondência densa um-para-um, que converge em muito menos épocas que as receitas DETR sobre as quais é construído. O LibreYOLO inclui duas versões dele, distinguidas pelo checkpoint que você carrega."
-keywords: [DEIM, DEIMv2, DINOv3, "transformer de detecção", DETR, "detecção de objetos", "detecção de objetos em tempo real", "detecção de objetos python"]
-last_verified: "1.5.0"
+families:
+  - deim
+seo_title: DEIM e DEIMv2 no LibreYOLO
+description: >-
+  Use DEIM e DEIMv2 no LibreYOLO para detecção de objetos. Instale, faça
+  predições, treine, valide e exporte, a partir de um tamanho de meio milhão de
+  parâmetros.
+lead: >-
+  Um transformer de detecção treinado com correspondência densa um-para-um, que
+  converge em muito menos épocas que as receitas DETR sobre as quais é
+  construído. O LibreYOLO inclui duas versões dele, distinguidas pelo checkpoint
+  que você carrega.
+keywords:
+  - DEIM
+  - DEIMv2
+  - DINOv3
+  - transformer de detecção
+  - DETR
+  - detecção de objetos
+  - detecção de objetos em tempo real
+  - detecção de objetos python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -126,6 +142,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 6edaac5f05abaabe
 ---
 
 ## Instalação

@@ -1,8 +1,16 @@
 ---
 title: Core ML
-seo_title: "Exportar a Core ML desde LibreYOLO"
-description: "Exporta un detector LibreYOLO a un .mlpackage de Core ML: el contrato de entrada ImageType, FP16, las compute units, el NMS embebido y las cuatro familias soportadas."
-lead: "Core ML es el formato de modelos on-device de Apple. LibreYOLO traza el detector detrás de un wrapper de preprocesado propio de cada familia, de modo que el grafo convertido siempre recibe una entrada de imagen RGB canónica, y después escribe un .mlpackage en formato ML Program con los metadatos del modelo adjuntos."
+seo_title: Exportar a Core ML desde LibreYOLO
+description: >-
+  Exporta un detector LibreYOLO a un .mlpackage de Core ML: el contrato de
+  entrada ImageType, FP16, las compute units, el NMS embebido y las cuatro
+  familias soportadas.
+lead: >-
+  Core ML es el formato de modelos on-device de Apple. LibreYOLO traza el
+  detector detrás de un wrapper de preprocesado propio de cada familia, de modo
+  que el grafo convertido siempre recibe una entrada de imagen RGB canónica, y
+  después escribe un .mlpackage en formato ML Program con los metadatos del
+  modelo adjuntos.
 keywords:
   - exportar yolo coreml
   - mlpackage
@@ -12,26 +20,29 @@ keywords:
   - compute_units
   - nms embebido coreml
   - yolo en ios
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="coreml")'
+    value: export(format="coreml")
     mono: true
   - label: Escribe
-    value: "Un bundle .mlpackage (un directorio) en formato ML Program"
+    value: Un bundle .mlpackage (un directorio) en formato ML Program
   - label: Extra
     value: 'pip install "libreyolo[coreml]"'
     mono: true
   - label: Se recarga con
-    value: 'LibreYOLO("weights/LibreYOLO9t.mlpackage") en macOS'
+    value: LibreYOLO("weights/LibreYOLO9t.mlpackage") en macOS
     mono: true
   - label: Formas
-    value: "Fijas. La entrada es un ct.ImageType de forma rígida."
+    value: Fijas. La entrada es un ct.ImageType de forma rígida.
   - label: Precisión
-    value: "FP32, FP16 (half=True). Sin INT8."
+    value: 'FP32, FP16 (half=True). Sin INT8.'
   - label: Familias
-    value: "Solo detección, para yolox, yolo9, rtdetr y rfdetr"
-verification: "Leído de libreyolo/export/coreml.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/coreml.py y pyproject.toml en la rama dev."
+    value: 'Solo detección, para yolox, yolo9, rtdetr y rfdetr'
+verification: >-
+  Leído de libreyolo/export/coreml.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/coreml.py y pyproject.toml en
+  la rama dev.
 snippets:
   install:
     - label: Instalación
@@ -86,7 +97,7 @@ snippets:
         libreyolo export --model LibreYOLO9t.pt --format coreml --nms \
           --conf 0.25 --iou 0.45
   run:
-    - label: A través de LibreYOLO, en macOS
+    - label: 'A través de LibreYOLO, en macOS'
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -99,18 +110,28 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: coremltools a secas
       language: python
-      code: |
+      code: >
         import coremltools as ct
+
         from PIL import Image
 
+
         mlmodel = ct.models.MLModel("weights/LibreYOLO9t.mlpackage")
+
         print(mlmodel.user_defined_metadata["model_family"])
+
         print(mlmodel.user_defined_metadata["names"])
 
-        # La entrada es una imagen llamada "image" con el tamaño fijo de exportación.
+
+        # La entrada es una imagen llamada "image" con el tamaño fijo de
+        exportación.
+
         image = Image.open(SAMPLE_IMAGE).convert("RGB").resize((640, 640))
+
         out = mlmodel.predict({"image": image})
+
         print({name: value.shape for name, value in out.items()})
+
 
         # El letterboxing y el postprocesado corren de tu cuenta en esta ruta.
   support:
@@ -118,6 +139,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: 09c5394e3837eca2
 ---
 
 ## Instalación

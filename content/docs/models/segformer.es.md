@@ -1,11 +1,27 @@
 ---
 title: SegFormer
-families: [segformer]
-seo_title: "SegFormer: segmentación semántica en LibreYOLO"
-description: "Usa SegFormer en LibreYOLO para segmentación semántica sobre ADE20K en los tamaños b0-b5. Instala, predice, entrena y exporta; los pesos preentrenados son de uso no comercial."
-lead: "SegFormer es un transformer de segmentación semántica que combina un encoder jerárquico Mix Transformer (MiT) con una cabeza de decodificación all-MLP ligera, evitando los decoders pesados y las codificaciones posicionales fijas que necesitaban los transformers de segmentación anteriores. LibreYOLO lo soporta para una sola tarea, segmentación semántica, en seis tamaños."
-keywords: [SegFormer, "segmentación semántica python", "Mix Transformer", MiT, "transformer de segmentación", ADE20K, "segmentar imágenes por píxel"]
-last_verified: "1.5.0"
+families:
+  - segformer
+seo_title: 'SegFormer: segmentación semántica en LibreYOLO'
+description: >-
+  Usa SegFormer en LibreYOLO para segmentación semántica sobre ADE20K en los
+  tamaños b0-b5. Instala, predice, entrena y exporta; los pesos preentrenados
+  son de uso no comercial.
+lead: >-
+  SegFormer es un transformer de segmentación semántica que combina un encoder
+  jerárquico Mix Transformer (MiT) con una cabeza de decodificación all-MLP
+  ligera, evitando los decoders pesados y las codificaciones posicionales fijas
+  que necesitaban los transformers de segmentación anteriores. LibreYOLO lo
+  soporta para una sola tarea, segmentación semántica, en seis tamaños.
+keywords:
+  - SegFormer
+  - segmentación semántica python
+  - Mix Transformer
+  - MiT
+  - transformer de segmentación
+  - ADE20K
+  - segmentar imágenes por píxel
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +36,10 @@ snippets:
         print(mask.data.shape, mask.classes)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreSegformerb0-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreSegformerb0-sem.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   train:
     - label: Python (fine-tuning)
       language: python
@@ -37,13 +55,19 @@ snippets:
           epochs=160 imgsz=512 batch=8
     - label: Desde cero
       language: python
-      code: |
+      code: >
         from libreyolo.models.segformer.model import LibreSegformer
 
-        # Sin model_path: inicialización aleatoria, no se descarga nada. La única
+
+        # Sin model_path: inicialización aleatoria, no se descarga nada. La
+        única
+
         # vía a pesos libres del término no comercial de los checkpoints
+
         # preentrenados.
+
         model = LibreSegformer(size="b0", nb_classes=150)
+
         model.train(data="my-dataset.yaml", epochs=160, imgsz=512, batch=8)
     - label: Multi-GPU
       language: bash
@@ -76,21 +100,32 @@ snippets:
         model.export(format="tensorrt", imgsz=512, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreSegformerb0-sem.pt format=onnx imgsz=512
-        libreyolo export model=LibreSegformerb0-sem.pt format=tensorrt imgsz=512 half=True
+
+        libreyolo export model=LibreSegformerb0-sem.pt format=tensorrt imgsz=512
+        half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto
+
         # Results.
+
         model = LibreYOLO("LibreSegformerb0-sem.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.semantic_mask.data.shape)
+source_hash: c236895b991beabf
 ---
 
 ## Instalación

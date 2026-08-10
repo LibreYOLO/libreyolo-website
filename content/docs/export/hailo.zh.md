@@ -1,8 +1,12 @@
 ---
 title: Hailo
-seo_title: "在 Hailo 加速器上运行 LibreYOLO 模型"
-description: "把 LibreYOLO 模型部署到 Hailo-8 或 Hailo-8L：静态的 ONNX 导出、需要你自己跑的 Dataflow Compiler 环节，以及哪些架构能编译。"
-lead: "Hailo 加速器要用 Hailo Dataflow Compiler 编译，那是一套通过 Hailo Developer Zone 分发的专有 SDK。LibreYOLO 在这条流程里负责的部分只是一次普通的静态 ONNX 导出；解析、量化以及编译成 HEF，都在之后的 DFC 里完成。"
+seo_title: 在 Hailo 加速器上运行 LibreYOLO 模型
+description: >-
+  把 LibreYOLO 模型部署到 Hailo-8 或 Hailo-8L：静态的 ONNX 导出、需要你自己跑的 Dataflow Compiler
+  环节，以及哪些架构能编译。
+lead: >-
+  Hailo 加速器要用 Hailo Dataflow Compiler 编译，那是一套通过 Hailo Developer Zone 分发的专有
+  SDK。LibreYOLO 在这条流程里负责的部分只是一次普通的静态 ONNX 导出；解析、量化以及编译成 HEF，都在之后的 DFC 里完成。
 keywords:
   - libreyolo hailo
   - hailo-8 部署
@@ -12,23 +16,26 @@ keywords:
   - hailo dataflow compiler
   - hef 编译
   - hailortcli
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: LibreYOLO 环节
     value: 'export(format="onnx", imgsz=640, dynamic=False)'
     mono: true
   - label: 不是一种格式
-    value: '没有 format="hef" 这种格式。DFC 不可能作为 pip 依赖存在。'
+    value: 没有 format="hef" 这种格式。DFC 不可能作为 pip 依赖存在。
   - label: 额外依赖
     value: 'pip install "libreyolo[onnx]"'
     mono: true
   - label: 编译主机
-    value: "Linux x86_64，包括 WSL2 Ubuntu 22.04。编译无法在 ARM 上运行。"
+    value: Linux x86_64，包括 WSL2 Ubuntu 22.04。编译无法在 ARM 上运行。
   - label: 能编译
-    value: "纯 CNN、固定形状的计算图。注意力、动态形状以及以 LayerNorm 为主的设计则不行。"
+    value: 纯 CNN、固定形状的计算图。注意力、动态形状以及以 LayerNorm 为主的设计则不行。
   - label: 状态
-    value: "目前还没有任何 LibreYOLO 家族完整跑通 DFC 并得到可运行的 HEF。"
-verification: "读自 dev 分支上的 skills/libreyolo-export-hailo/SKILL.md、libreyolo/export/onnx.py 和 libreyolo/cli/commands/export.py。DFC 的各项约束就是那个 skill 里记录的内容；目前还没有编译并实测过任何 LibreYOLO 的 HEF。"
+    value: 目前还没有任何 LibreYOLO 家族完整跑通 DFC 并得到可运行的 HEF。
+verification: >-
+  读自 dev 分支上的 skills/libreyolo-export-hailo/SKILL.md、libreyolo/export/onnx.py 和
+  libreyolo/cli/commands/export.py。DFC 的各项约束就是那个 skill 里记录的内容；目前还没有编译并实测过任何
+  LibreYOLO 的 HEF。
 snippets:
   install:
     - label: LibreYOLO 侧
@@ -37,12 +44,14 @@ snippets:
         pip install "libreyolo[onnx]"
     - label: Hailo 侧，由你自己安装
       language: text
-      code: |
+      code: >
         Prerequisites, none of them installable from PyPI:
+
 
         - A Linux x86_64 machine. WSL2 Ubuntu 22.04 works. The Raspberry Pi is a
           runtime target, never the compile host.
-        - The Dataflow Compiler wheel (hailo_sdk_client) from the Hailo Developer
+        - The Dataflow Compiler wheel (hailo_sdk_client) from the Hailo
+        Developer
           Zone, which is free to register for.
         - For Hailo-8 and Hailo-8L, the Hailo Model Zoo v2.x line, for its
           recipes and NMS configurations.
@@ -74,37 +83,61 @@ snippets:
   compile:
     - label: 解析、量化并编译
       language: python
-      code: |
+      code: >
         from pathlib import Path
 
+
         import numpy as np
+
         from hailo_sdk_client import ClientRunner
+
         from PIL import Image
 
+
         ONNX = "weights/LibreYOLOXs.onnx"
+
         HW_ARCH = "hailo8"     # hailo8 | hailo8l | hailo10h
+
         IMGSZ = 640
+
 
         runner = ClientRunner(hw_arch=HW_ARCH)
 
+
         # 对 YOLOX，先不带 end_node_names 转换一次：DFC 的日志会打印
+
         # 它建议的末端节点，再用这些节点重跑一遍
+
         runner.translate_onnx_model(ONNX)
 
+
         # 归一化必须与 LibreYOLO 的预处理一致：YOLOX 和 YOLO9
+
         # 不需要均值和标准差，只需要 0-255 到 0-1 的缩放
-        script = "normalization1 = normalization([0.0, 0.0, 0.0], [255.0, 255.0, 255.0])\n"
+
+        script = "normalization1 = normalization([0.0, 0.0, 0.0], [255.0, 255.0,
+        255.0])\n"
+
 
         # 可选：让 Hailo 接管 NMS，这份配置同时与类别数和输入尺寸绑定，
+
         # 所以 COCO-80 的配置用在微调过的三类模型上就是错的，
+
         # 不加这一行的话，HEF 会输出原始的 head 张量，由应用自己解码
-        # script += 'nms_postprocess("yolox_nms_config.json", meta_arch=yolox, engine=cpu)\n'
+
+        # script += 'nms_postprocess("yolox_nms_config.json", meta_arch=yolox,
+        engine=cpu)\n'
+
 
         runner.load_model_script(script)
 
+
         # 校准图像必须能代表实际部署时的数据，
+
         # 随机图像照样能编译，但会悄悄毁掉精度
+
         calib_paths = sorted(Path("calib_images").glob("*.jpg"))[:128]
+
         calib = np.stack([
             np.asarray(
                 Image.open(p).convert("RGB").resize((IMGSZ, IMGSZ)),
@@ -113,7 +146,9 @@ snippets:
             for p in calib_paths
         ])
 
+
         runner.optimize(calib)
+
         Path("libreyoloxs.hef").write_bytes(runner.compile())
     - label: YOLO9 的末端节点
       language: python
@@ -134,6 +169,7 @@ snippets:
         sudo apt install dkms hailo-all
         hailortcli fw-control identify       # 检查设备，同时给出架构名
         hailortcli run libreyoloxs.hef       # 冒烟测试与吞吐量
+source_hash: 33b077f1c23d5535
 ---
 
 ## 安装

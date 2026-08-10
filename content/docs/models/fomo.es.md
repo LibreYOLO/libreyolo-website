@@ -1,29 +1,52 @@
 ---
 title: FOMO
-families: [fomo]
-seo_title: "FOMO: localización de puntos, entrenamiento y exportación en LibreYOLO"
-description: "Ejecuta FOMO (Faster Objects, More Objects) en LibreYOLO: un detector diminuto de localización de puntos para contar muchos objetos pequeños. Instala, predice, entrena y exporta."
-lead: "FOMO es un localizador de puntos basado en una rejilla: cada celda de una rejilla de baja resolución se clasifica como fondo o como centro de un objeto, sin ninguna regresión de bounding box. LibreYOLO lo incluye para la tarea de puntos."
-keywords: [FOMO, Faster Objects More Objects, "localización de puntos", "detección de centroides", "detectar objetos pequeños", "edge AI", "detección de objetos en microcontrolador"]
-last_verified: "1.5.0"
+families:
+  - fomo
+seo_title: 'FOMO: localización de puntos, entrenamiento y exportación en LibreYOLO'
+description: >-
+  Ejecuta FOMO (Faster Objects, More Objects) en LibreYOLO: un detector diminuto
+  de localización de puntos para contar muchos objetos pequeños. Instala,
+  predice, entrena y exporta.
+lead: >-
+  FOMO es un localizador de puntos basado en una rejilla: cada celda de una
+  rejilla de baja resolución se clasifica como fondo o como centro de un objeto,
+  sin ninguna regresión de bounding box. LibreYOLO lo incluye para la tarea de
+  puntos.
+keywords:
+  - FOMO
+  - Faster Objects More Objects
+  - localización de puntos
+  - detección de centroides
+  - detectar objetos pequeños
+  - edge AI
+  - detección de objetos en microcontrolador
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Los pesos de LibreFOMO no se descargan solos (ver Checkpoints más abajo).
+
+        # Los pesos de LibreFOMO no se descargan solos (ver Checkpoints más
+        abajo).
+
         # Apunta esto a un checkpoint que ya hayas descargado en local.
+
         model = LibreYOLO("./LibreFOMOs-point.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
+
 
         for point in result.points:
             print(point.cls, point.conf, point.xy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=./LibreFOMOs-point.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=./LibreFOMOs-point.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   train:
     - label: Python
       language: python
@@ -37,10 +60,13 @@ snippets:
         )
     - label: CLI
       language: bash
-      code: |
+      code: >
         # Hay que pasar imgsz: la CLI usa 640 por defecto, y el checkpoint s
+
         # solo acepta su valor nativo de 96.
-        libreyolo train model=./LibreFOMOs-point.pt data=my-dataset.yaml imgsz=96 epochs=40 batch=32 lr0=3e-4
+
+        libreyolo train model=./LibreFOMOs-point.pt data=my-dataset.yaml
+        imgsz=96 epochs=40 batch=32 lr0=3e-4
   val:
     - label: Python
       language: python
@@ -71,15 +97,23 @@ snippets:
         libreyolo export model=./LibreFOMOs-point.pt format=onnx
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("./LibreFOMOs-point.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.points.xy)
+source_hash: 03015f2bcd9fe99d
 ---
 
 ## Instalación

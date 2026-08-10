@@ -1,8 +1,16 @@
 ---
 title: Core ML
-seo_title: "Exportar para Core ML a partir do LibreYOLO"
-description: "Exporte um detector LibreYOLO para um .mlpackage do Core ML: o contrato de entrada ImageType, FP16, as compute units, o NMS embutido e as quatro famílias suportadas."
-lead: "Core ML é o formato de modelos on-device da Apple. O LibreYOLO traça o detector por trás de um wrapper de pré-processamento específico de cada família, de modo que o grafo convertido sempre recebe uma entrada de imagem RGB canônica, e então escreve um .mlpackage em formato ML Program com os metadados do modelo anexados."
+seo_title: Exportar para Core ML a partir do LibreYOLO
+description: >-
+  Exporte um detector LibreYOLO para um .mlpackage do Core ML: o contrato de
+  entrada ImageType, FP16, as compute units, o NMS embutido e as quatro famílias
+  suportadas.
+lead: >-
+  Core ML é o formato de modelos on-device da Apple. O LibreYOLO traça o
+  detector por trás de um wrapper de pré-processamento específico de cada
+  família, de modo que o grafo convertido sempre recebe uma entrada de imagem
+  RGB canônica, e então escreve um .mlpackage em formato ML Program com os
+  metadados do modelo anexados.
 keywords:
   - exportar yolo coreml
   - mlpackage
@@ -12,26 +20,29 @@ keywords:
   - compute_units
   - nms embutido coreml
   - yolo no ios
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="coreml")'
+    value: export(format="coreml")
     mono: true
   - label: Escreve
-    value: "Um bundle .mlpackage (um diretório) em formato ML Program"
+    value: Um bundle .mlpackage (um diretório) em formato ML Program
   - label: Extra
     value: 'pip install "libreyolo[coreml]"'
     mono: true
   - label: Recarrega com
-    value: 'LibreYOLO("weights/LibreYOLO9t.mlpackage") no macOS'
+    value: LibreYOLO("weights/LibreYOLO9t.mlpackage") no macOS
     mono: true
   - label: Formas
-    value: "Fixas. A entrada é um ct.ImageType de forma rígida."
+    value: Fixas. A entrada é um ct.ImageType de forma rígida.
   - label: Precisão
-    value: "FP32, FP16 (half=True). Sem INT8."
+    value: 'FP32, FP16 (half=True). Sem INT8.'
   - label: Famílias
-    value: "Somente detecção, para yolox, yolo9, rtdetr e rfdetr"
-verification: "Lido de libreyolo/export/coreml.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/coreml.py e pyproject.toml no branch dev."
+    value: 'Somente detecção, para yolox, yolo9, rtdetr e rfdetr'
+verification: >-
+  Lido de libreyolo/export/coreml.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/coreml.py e pyproject.toml no
+  branch dev.
 snippets:
   install:
     - label: Instalação
@@ -86,7 +97,7 @@ snippets:
         libreyolo export --model LibreYOLO9t.pt --format coreml --nms \
           --conf 0.25 --iou 0.45
   run:
-    - label: Pelo LibreYOLO, no macOS
+    - label: 'Pelo LibreYOLO, no macOS'
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -99,25 +110,36 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: coremltools puro
       language: python
-      code: |
+      code: >
         import coremltools as ct
+
         from PIL import Image
 
+
         mlmodel = ct.models.MLModel("weights/LibreYOLO9t.mlpackage")
+
         print(mlmodel.user_defined_metadata["model_family"])
+
         print(mlmodel.user_defined_metadata["names"])
 
+
         # A entrada é uma imagem chamada "image" no tamanho fixo da exportação.
+
         image = Image.open(SAMPLE_IMAGE).convert("RGB").resize((640, 640))
+
         out = mlmodel.predict({"image": image})
+
         print({name: value.shape for name, value in out.items()})
 
-        # O letterboxing e o pós-processamento ficam por sua conta neste caminho.
+
+        # O letterboxing e o pós-processamento ficam por sua conta neste
+        caminho.
   support:
     - label: Conferir uma família e uma tarefa antes de exportar
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: 09c5394e3837eca2
 ---
 
 ## Instalação

@@ -1,11 +1,25 @@
 ---
 title: LW-DETR
-families: [lwdetr]
-seo_title: "LW-DETR: predice y exporta bajo Apache-2.0"
-description: "Usa LW-DETR en LibreYOLO para detección de objetos en tiempo real. Instala, predice, valida y exporta cinco tamaños basados en ViT, todos con licencia Apache-2.0."
-lead: "Un transformer de detección con ViT plano que Baidu planteó como alternativa en tiempo real a los detectores YOLO. LibreYOLO incluye cinco tamaños para detección, solo inferencia."
-keywords: [LW-DETR, "transformer de detección", "detección de objetos en tiempo real", "ViT plano", DETR, Baidu, Atten4Vis]
-last_verified: "1.5.0"
+families:
+  - lwdetr
+seo_title: 'LW-DETR: predice y exporta bajo Apache-2.0'
+description: >-
+  Usa LW-DETR en LibreYOLO para detección de objetos en tiempo real. Instala,
+  predice, valida y exporta cinco tamaños basados en ViT, todos con licencia
+  Apache-2.0.
+lead: >-
+  Un transformer de detección con ViT plano que Baidu planteó como alternativa
+  en tiempo real a los detectores YOLO. LibreYOLO incluye cinco tamaños para
+  detección, solo inferencia.
+keywords:
+  - LW-DETR
+  - transformer de detección
+  - detección de objetos en tiempo real
+  - ViT plano
+  - DETR
+  - Baidu
+  - Atten4Vis
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +34,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreLWDETRt.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreLWDETRt.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -51,20 +67,29 @@ snippets:
         model.export(format="tensorrt", imgsz=640, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreLWDETRt.pt format=onnx imgsz=640
-        libreyolo export model=LibreLWDETRt.pt format=tensorrt imgsz=640 half=True
+
+        libreyolo export model=LibreLWDETRt.pt format=tensorrt imgsz=640
+        half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factoría enruta según el sufijo del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreLWDETRt.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)
+source_hash: badd1d8255df5bbd
 ---
 
 ## Instalación

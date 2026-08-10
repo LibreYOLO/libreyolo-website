@@ -1,42 +1,78 @@
 ---
 title: Malla corporal
-seo_title: "Recuperación de malla corporal en LibreYOLO"
-description: "Recupera una malla corporal 3D paramétrica por persona en LibreYOLO. Predice a partir de boxes de personas o de un detector, y lee vértices, articulaciones y la traslación de cámara."
-lead: "La recuperación de malla corporal convierte una sola imagen y un conjunto de boxes de personas en un cuerpo 3D paramétrico por persona: parámetros de forma y de pose, vértices posados, articulaciones 3D y la traslación de cámara que los sitúa delante del objetivo."
-keywords: [malla corporal 3d python, human mesh recovery python, pose 3d cuerpo humano, SAM 3D Body, MHR, modelo corporal paramétrico, tarea mesh libreyolo]
-last_verified: "1.5.0"
+seo_title: Recuperación de malla corporal en LibreYOLO
+description: >-
+  Recupera una malla corporal 3D paramétrica por persona en LibreYOLO. Predice a
+  partir de boxes de personas o de un detector, y lee vértices, articulaciones y
+  la traslación de cámara.
+lead: >-
+  La recuperación de malla corporal convierte una sola imagen y un conjunto de
+  boxes de personas en un cuerpo 3D paramétrico por persona: parámetros de forma
+  y de pose, vértices posados, articulaciones 3D y la traslación de cámara que
+  los sitúa delante del objetivo.
+keywords:
+  - malla corporal 3d python
+  - human mesh recovery python
+  - pose 3d cuerpo humano
+  - SAM 3D Body
+  - MHR
+  - modelo corporal paramétrico
+  - tarea mesh libreyolo
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import SAMPLE_IMAGE
+
         from libreyolo.models.sam3dbody import LibreSAM3DBody
+
 
         # Esta familia no está registrada en la factory LibreYOLO(), así que
+
         # se construye directamente. model_path=None dispara la descarga
+
         # restringida de Hugging Face; una cadena se trata como un checkpoint
+
         # local ya existente y nunca se descarga. La inferencia requiere CUDA.
+
         model = LibreSAM3DBody(None, size="d3", device="cuda")
+
         result = model(SAMPLE_IMAGE, person_boxes=[[34, 12, 220, 400]])
 
+
         meshes = result.meshes
-        print(meshes.body_model)      # la parametrización que usan estos tensores
+
+        print(meshes.body_model)      # la parametrización que usan estos
+        tensores
+
         print(meshes.vertices.shape)  # (N, V, 3), frame de cámara, metros
+
         print(meshes.joints3d.shape)  # (N, J, 3)
-        print(meshes.joints2d.shape)  # (N, J, 2), píxeles sobre la imagen original
+
+        print(meshes.joints2d.shape)  # (N, J, 2), píxeles sobre la imagen
+        original
     - label: Con un detector de personas
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
         from libreyolo.models.sam3dbody import LibreSAM3DBody
 
+
         # person_detector acepta un detector LibreYOLO ya construido, un
-        # callable normal o una instancia de PersonDetector. No hay atajo por nombre.
+
+        # callable normal o una instancia de PersonDetector. No hay atajo por
+        nombre.
+
         detector = LibreYOLO("LibreYOLO9s.pt")
+
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
+
         result = model(SAMPLE_IMAGE, person_detector=detector)
+source_hash: 31c5b44171cbcd0e
 ---
 
 ## Definición

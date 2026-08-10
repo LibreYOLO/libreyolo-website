@@ -1,8 +1,12 @@
 ---
 title: Core ML
-seo_title: "从 LibreYOLO 导出到 Core ML"
-description: "把 LibreYOLO 检测器导出为 Core ML 的 .mlpackage：ImageType 输入契约、FP16、compute units、内嵌 NMS，以及支持的四个家族。"
-lead: "Core ML 是 Apple 的端侧模型格式。LibreYOLO 会在一层按家族区分的预处理包装器后面对检测器做 trace，让转换后的图始终接受规范的 RGB 图像输入，然后写出一个附带模型元数据的 ML Program 格式 .mlpackage。"
+seo_title: 从 LibreYOLO 导出到 Core ML
+description: >-
+  把 LibreYOLO 检测器导出为 Core ML 的 .mlpackage：ImageType 输入契约、FP16、compute units、内嵌
+  NMS，以及支持的四个家族。
+lead: >-
+  Core ML 是 Apple 的端侧模型格式。LibreYOLO 会在一层按家族区分的预处理包装器后面对检测器做 trace，让转换后的图始终接受规范的
+  RGB 图像输入，然后写出一个附带模型元数据的 ML Program 格式 .mlpackage。
 keywords:
   - yolo 导出 coreml
   - mlpackage
@@ -11,26 +15,29 @@ keywords:
   - apple neural engine
   - compute_units
   - coreml 内嵌 nms
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: 参数
-    value: 'export(format="coreml")'
+    value: export(format="coreml")
     mono: true
   - label: 输出
-    value: "一个 ML Program 格式的 .mlpackage bundle（一个目录）"
+    value: 一个 ML Program 格式的 .mlpackage bundle（一个目录）
   - label: 额外依赖
     value: 'pip install "libreyolo[coreml]"'
     mono: true
   - label: 加载方式
-    value: 'LibreYOLO("weights/LibreYOLO9t.mlpackage") on macOS'
+    value: LibreYOLO("weights/LibreYOLO9t.mlpackage") on macOS
     mono: true
   - label: 形状
-    value: "固定。输入是形状写死的 ct.ImageType。"
+    value: 固定。输入是形状写死的 ct.ImageType。
   - label: 精度
-    value: "FP32、FP16（half=True）。没有 INT8。"
+    value: FP32、FP16（half=True）。没有 INT8。
   - label: 家族
-    value: "仅检测，支持 yolox、yolo9、rtdetr 和 rfdetr"
-verification: "读自 dev 分支上的 libreyolo/export/coreml.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/coreml.py 和 pyproject.toml。"
+    value: 仅检测，支持 yolox、yolo9、rtdetr 和 rfdetr
+verification: >-
+  读自 dev 分支上的
+  libreyolo/export/coreml.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/coreml.py
+  和 pyproject.toml。
 snippets:
   install:
     - label: 安装
@@ -117,6 +124,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: 09c5394e3837eca2
 ---
 
 ## 安装

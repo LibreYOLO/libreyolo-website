@@ -1,11 +1,29 @@
 ---
 title: SenseNova-Vision
-families: [sensenovavision]
-seo_title: "SenseNova-Vision en LibreYOLO: 7 tareas, un solo checkpoint"
-description: "Usa SenseNova-Vision en LibreYOLO para detección, segmentación, panóptica, pose, puntos, profundidad y OCR desde un único checkpoint generativo guiado por prompt."
-lead: "SenseNova-Vision es un modelo multimodal unificado que plantea las tareas de visión como generación guiada por prompt sobre un decodificador compartido: las cajas, los puntos, los keypoints y las palabras de OCR salen como texto etiquetado, y los mapas de profundidad, de máscara y panópticos salen como imágenes que renderiza un decodificador. LibreYOLO lo carga a través de LibreVLM y admite siete tareas desde un único checkpoint de 7B."
-keywords: [SenseNova-Vision, SenseTime, "modelo multimodal unificado", Bagel, "detección por prompt", "percepción densa", "segmentación referring", "segmentación panóptica python"]
-last_verified: "1.5.0"
+families:
+  - sensenovavision
+seo_title: 'SenseNova-Vision en LibreYOLO: 7 tareas, un solo checkpoint'
+description: >-
+  Usa SenseNova-Vision en LibreYOLO para detección, segmentación, panóptica,
+  pose, puntos, profundidad y OCR desde un único checkpoint generativo guiado
+  por prompt.
+lead: >-
+  SenseNova-Vision es un modelo multimodal unificado que plantea las tareas de
+  visión como generación guiada por prompt sobre un decodificador compartido:
+  las cajas, los puntos, los keypoints y las palabras de OCR salen como texto
+  etiquetado, y los mapas de profundidad, de máscara y panópticos salen como
+  imágenes que renderiza un decodificador. LibreYOLO lo carga a través de
+  LibreVLM y admite siete tareas desde un único checkpoint de 7B.
+keywords:
+  - SenseNova-Vision
+  - SenseTime
+  - modelo multimodal unificado
+  - Bagel
+  - detección por prompt
+  - percepción densa
+  - segmentación referring
+  - segmentación panóptica python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -24,23 +42,36 @@ snippets:
         depth = result.depth_map.data
     - label: Segmentación referring y panóptica
       language: python
-      code: |
+      code: >
         from libreyolo import LibreVLM
 
+
         model = LibreVLM("sensenova-vision", task="segment")
-        # La segmentación es referring: necesita una frase objetivo, no una lista de clases.
+
+        # La segmentación es referring: necesita una frase objetivo, no una
+        lista de clases.
+
         model.set_classes(["the person furthest to the right"])
+
         result = model.predict("street.jpg")
+
         mask = result.masks.data[0]
 
+
         model.set_task("panoptic")
-        # Sin vocabulario propio, la panóptica recurre a las categorías panópticas
+
+        # Sin vocabulario propio, la panóptica recurre a las categorías
+        panópticas
+
         # de COCO con las que se ajustó el checkpoint.
+
         result = model.predict("street.jpg")
+
         segment_map = result.panoptic.data
+
         for segment in result.panoptic.segments_info:
             print(segment)
-    - label: Puntos, pose y OCR
+    - label: 'Puntos, pose y OCR'
       language: python
       code: |
         from libreyolo import LibreVLM
@@ -58,6 +89,7 @@ snippets:
         model.set_task("ocr")
         result = model.predict("sign.jpg")
         print(result.ocr.texts)
+source_hash: 8749277e1910baa4
 ---
 
 ## Instalación

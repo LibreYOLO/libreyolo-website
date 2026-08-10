@@ -1,18 +1,32 @@
 ---
 title: Instalación ligera
-seo_title: "Ejecuta inferencia ONNX de LibreYOLO sin PyTorch"
-description: "Instala LibreYOLO con --no-deps y ejecuta detección ONNX solo con numpy, sin torch en disco. La técnica, sus límites y la lista exacta de paquetes."
-lead: "La ruta de inferencia ONNX de LibreYOLO es numpy de principio a fin, incluidos el decode y el NMS. Nada de esa ruta necesita PyTorch en tiempo de ejecución, así que una instalación que se salte la resolución de dependencias puede ejecutar detección con torch ausente de la máquina."
-keywords: [libreyolo sin pytorch, inferencia onnx sin torch, instalación ligera libreyolo, pip install no-deps, onnxruntime inferencia python, libreyolo espacio en disco, detección de objetos sin torch, torch solo cpu]
-last_verified: "1.5.0"
+seo_title: Ejecuta inferencia ONNX de LibreYOLO sin PyTorch
+description: >-
+  Instala LibreYOLO con --no-deps y ejecuta detección ONNX solo con numpy, sin
+  torch en disco. La técnica, sus límites y la lista exacta de paquetes.
+lead: >-
+  La ruta de inferencia ONNX de LibreYOLO es numpy de principio a fin, incluidos
+  el decode y el NMS. Nada de esa ruta necesita PyTorch en tiempo de ejecución,
+  así que una instalación que se salte la resolución de dependencias puede
+  ejecutar detección con torch ausente de la máquina.
+keywords:
+  - libreyolo sin pytorch
+  - inferencia onnx sin torch
+  - instalación ligera libreyolo
+  - pip install no-deps
+  - onnxruntime inferencia python
+  - libreyolo espacio en disco
+  - detección de objetos sin torch
+  - torch solo cpu
+last_verified: 1.5.0
 meta:
   - label: Se aplica a
-    value: Detección ONNX, siete familias de modelos
+    value: 'Detección ONNX, siete familias de modelos'
   - label: Punto de entrada
     value: libreyolo.backends.onnx.OnnxBackend
     mono: true
   - label: Nivel de soporte
-    value: Best effort, no es una distribución aparte
+    value: 'Best effort, no es una distribución aparte'
 snippets:
   install:
     - label: Ligera
@@ -31,16 +45,24 @@ snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo.backends.onnx import OnnxBackend
 
+
         model = OnnxBackend("libreyolo9t.onnx")
-        result = model.predict("https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg")
+
+        result =
+        model.predict("https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg")
+
 
         # Aquí xyxy es un ndarray de numpy, no un tensor de torch.
+
         print(result.boxes.xyxy)
+
         print(result.boxes.conf)
+
         print(result.boxes.cls)
+source_hash: e60e83d32d13026e
 ---
 
 ## Por qué funciona

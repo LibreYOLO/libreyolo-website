@@ -1,36 +1,64 @@
 ---
 title: MiDaS
-families: [midas]
-seo_title: "MiDaS: estimación de profundidad monocular en LibreYOLO"
-description: "Usa MiDaS en LibreYOLO para estimación de profundidad monocular. Instala, predice, valida y exporta dos variantes con licencia MIT, descargadas desde isl-org."
-lead: "MiDaS es estimación de profundidad relativa monocular entrenada con una loss invariante a escala y desplazamiento sobre datasets mezclados, la línea de trabajo que estableció el protocolo de transferencia de profundidad zero-shot que reutilizan las familias posteriores. LibreYOLO lo soporta para la tarea de profundidad: predicción y validación zero-shot, sin ruta de entrenamiento."
-keywords: [MiDaS, "estimación de profundidad monocular", DPT, "mapa de profundidad python", "profundidad relativa", "profundidad zero-shot"]
-last_verified: "1.5.0"
+families:
+  - midas
+seo_title: 'MiDaS: estimación de profundidad monocular en LibreYOLO'
+description: >-
+  Usa MiDaS en LibreYOLO para estimación de profundidad monocular. Instala,
+  predice, valida y exporta dos variantes con licencia MIT, descargadas desde
+  isl-org.
+lead: >-
+  MiDaS es estimación de profundidad relativa monocular entrenada con una loss
+  invariante a escala y desplazamiento sobre datasets mezclados, la línea de
+  trabajo que estableció el protocolo de transferencia de profundidad zero-shot
+  que reutilizan las familias posteriores. LibreYOLO lo soporta para la tarea de
+  profundidad: predicción y validación zero-shot, sin ruta de entrenamiento.
+keywords:
+  - MiDaS
+  - estimación de profundidad monocular
+  - DPT
+  - mapa de profundidad python
+  - profundidad relativa
+  - profundidad zero-shot
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Aún no está en disco: LibreYOLO lo descarga de la release oficial de
-        # isl-org/MiDaS en GitHub y lo comprueba contra un SHA-256 fijado antes de usarlo.
+
+        # isl-org/MiDaS en GitHub y lo comprueba contra un SHA-256 fijado antes
+        de usarlo.
+
         model = LibreYOLO("LibreMiDaSl-depth.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         depth = result.depth_map
+
         print(depth.min, depth.max, depth.mean)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreMiDaSl-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreMiDaSl-depth.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Variante Small
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Encoder EfficientNet-Lite3, más pequeño y rápido que el tamaño l, DPT-Large.
+
+        # Encoder EfficientNet-Lite3, más pequeño y rápido que el tamaño l,
+        DPT-Large.
+
         model = LibreYOLO("LibreMiDaSs-depth.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
   val:
     - label: Python
@@ -64,15 +92,23 @@ snippets:
         libreyolo export model=LibreMiDaSl-depth.pt format=tensorrt half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreMiDaSl-depth.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.depth_map.data.shape)
+source_hash: ce2fbf3ae43e9be4
 ---
 
 ## Instalación

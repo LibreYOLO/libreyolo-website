@@ -1,11 +1,19 @@
 ---
 title: Swin Transformer
-families: [swin]
-seo_title: "Swin Transformer：用 LibreYOLO 的 LibreSwin 做图像分类"
-description: "在 LibreYOLO 里对 Swin Transformer 分类器做预测、验证与导出。权重采用 MIT 许可；暂不支持微调。"
-lead: "Swin Transformer V1：一个分层的 vision transformer，注意力在移位的局部窗口（shifted local windows）内计算，而不是在整张图上计算。LibreYOLO 为图像分类提供四种尺寸。"
-keywords: [Swin Transformer, "swin transformer 图像分类", "移位窗口注意力", "分层 vision transformer", "图像分类 python"]
-last_verified: "1.5.0"
+families:
+  - swin
+seo_title: Swin Transformer：用 LibreYOLO 的 LibreSwin 做图像分类
+description: 在 LibreYOLO 里对 Swin Transformer 分类器做预测、验证与导出。权重采用 MIT 许可；暂不支持微调。
+lead: >-
+  Swin Transformer V1：一个分层的 vision transformer，注意力在移位的局部窗口（shifted local
+  windows）内计算，而不是在整张图上计算。LibreYOLO 为图像分类提供四种尺寸。
+keywords:
+  - Swin Transformer
+  - swin transformer 图像分类
+  - 移位窗口注意力
+  - 分层 vision transformer
+  - 图像分类 python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +29,10 @@ snippets:
         print(probs.top5, probs.top5conf)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreSwint-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreSwint-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -66,6 +76,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: faa6bbacae62d88e
 ---
 
 ## 安装

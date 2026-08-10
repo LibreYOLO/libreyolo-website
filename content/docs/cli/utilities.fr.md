@@ -1,16 +1,31 @@
 ---
 title: utilitaires libreyolo
-seo_title: "Référence des commandes utilitaires du CLI libreyolo"
-description: "Les petites commandes LibreYOLO : version, checks, models, formats, cfg, info, metadata, enroll et compare, chacune avec ses arguments et ses valeurs par défaut."
-lead: "Neuf commandes qui rapportent ou inspectent au lieu de calculer. Elles affichent les informations sur l'environnement, l'inventaire des modèles et des formats, les valeurs par défaut résolues, les détails d'un checkpoint, et elles construisent et interrogent une galerie de visages."
-keywords: ["commandes cli libreyolo", "libreyolo version", "vérifier installation libreyolo", "lister les modèles libreyolo", "formats export libreyolo", "configuration par défaut libreyolo", "métadonnées checkpoint pytorch", "reconnaissance faciale python cli", "comparer deux visages python"]
-last_verified: "1.5.0"
+seo_title: Référence des commandes utilitaires du CLI libreyolo
+description: "Les petites commandes LibreYOLO\_: version, checks, models, formats, cfg, info, metadata, enroll et compare, chacune avec ses arguments et ses valeurs par défaut."
+lead: >-
+  Neuf commandes qui rapportent ou inspectent au lieu de calculer. Elles
+  affichent les informations sur l'environnement, l'inventaire des modèles et
+  des formats, les valeurs par défaut résolues, les détails d'un checkpoint, et
+  elles construisent et interrogent une galerie de visages.
+keywords:
+  - commandes cli libreyolo
+  - libreyolo version
+  - vérifier installation libreyolo
+  - lister les modèles libreyolo
+  - formats export libreyolo
+  - configuration par défaut libreyolo
+  - métadonnées checkpoint pytorch
+  - reconnaissance faciale python cli
+  - comparer deux visages python
+last_verified: 1.5.0
 meta:
   - label: Commandes
-    value: version, checks, models, formats, cfg, info, metadata, enroll, compare
+    value: 'version, checks, models, formats, cfg, info, metadata, enroll, compare'
     mono: true
   - label: Sortie
-    value: "stdout, en texte ou, avec json=true, sous forme d'un seul objet portant schema_version"
+    value: >-
+      stdout, en texte ou, avec json=true, sous forme d'un seul objet portant
+      schema_version
 snippets:
   examples:
     - label: Environnement
@@ -28,6 +43,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
+source_hash: 7b5b53c46df00c06
 ---
 
 ## Synopsis

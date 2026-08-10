@@ -1,11 +1,23 @@
 ---
 title: ConvNeXt
-families: [convnext]
-seo_title: "ConvNeXt: entrena, valida y exporta bajo Apache-2.0"
-description: "Usa ConvNeXt en LibreYOLO para clasificación de imágenes. Instala, predice, haz fine-tuning con LoRA, valida y exporta LibreConvNeXt tiny/small/base."
-lead: "ConvNeXt es un clasificador de imágenes construido enteramente con convoluciones estándar, modernizado bloque a bloque desde una ResNet hacia las decisiones de diseño de un vision transformer. LibreYOLO lo soporta para una tarea: clasificación."
-keywords: [ConvNeXt, "ConvNeXt tiny", "clasificación de imágenes python", "red convolucional pura", "clasificador ImageNet"]
-last_verified: "1.5.0"
+families:
+  - convnext
+seo_title: 'ConvNeXt: entrena, valida y exporta bajo Apache-2.0'
+description: >-
+  Usa ConvNeXt en LibreYOLO para clasificación de imágenes. Instala, predice,
+  haz fine-tuning con LoRA, valida y exporta LibreConvNeXt tiny/small/base.
+lead: >-
+  ConvNeXt es un clasificador de imágenes construido enteramente con
+  convoluciones estándar, modernizado bloque a bloque desde una ResNet hacia las
+  decisiones de diseño de un vision transformer. LibreYOLO lo soporta para una
+  tarea: clasificación.
+keywords:
+  - ConvNeXt
+  - ConvNeXt tiny
+  - clasificación de imágenes python
+  - red convolucional pura
+  - clasificador ImageNet
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -77,15 +89,23 @@ snippets:
         libreyolo export model=LibreConvNeXtt-cls.pt format=tensorrt half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreConvNeXtt-cls.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.probs.top1)
+source_hash: 1682cc69cf2925e6
 ---
 
 ## Instalación

@@ -1,11 +1,24 @@
 ---
 title: BiRefNet
-families: [birefnet]
-seo_title: "BiRefNet: remoção de fundo e matting no LibreYOLO"
-description: "Use o BiRefNet no LibreYOLO para remoção de fundo e segmentação dicotômica de imagens. Instale, faça predições, valide e exporte o checkpoint geral."
-lead: "Uma rede de referência bilateral que prediz um alpha matte suave separando o sujeito do fundo. O LibreYOLO inclui inferência e validação para a tarefa de matte do BiRefNet."
-keywords: [BiRefNet, "remover fundo de imagem", "tirar fundo de foto python", "segmentação dicotômica de imagens", "alpha matte", "image matting", "recorte com fundo transparente"]
-last_verified: "1.5.0"
+families:
+  - birefnet
+seo_title: 'BiRefNet: remoção de fundo e matting no LibreYOLO'
+description: >-
+  Use o BiRefNet no LibreYOLO para remoção de fundo e segmentação dicotômica de
+  imagens. Instale, faça predições, valide e exporte o checkpoint geral.
+lead: >-
+  Uma rede de referência bilateral que prediz um alpha matte suave separando o
+  sujeito do fundo. O LibreYOLO inclui inferência e validação para a tarefa de
+  matte do BiRefNet.
+keywords:
+  - BiRefNet
+  - remover fundo de imagem
+  - tirar fundo de foto python
+  - segmentação dicotômica de imagens
+  - alpha matte
+  - image matting
+  - recorte com fundo transparente
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +33,10 @@ snippets:
         print(matte.array.shape, matte.array.dtype)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreBiRefNetl-matte.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreBiRefNetl-matte.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Recorte
       language: python
       code: |
@@ -71,6 +86,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
+source_hash: 1af1bd7f4f905081
 ---
 
 ## Instalação

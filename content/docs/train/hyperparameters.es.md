@@ -1,8 +1,15 @@
 ---
 title: Hiperparámetros
-seo_title: "Hiperparámetros de entrenamiento en LibreYOLO"
-description: "Los argumentos de train() que importan: epochs, batch, lr0, optimizer, EMA, autobatch, acumulación de gradientes y resume, además de por qué los valores por defecto cambian según la familia."
-lead: "Cada argumento de entrenamiento es un campo de una dataclass TrainConfig. La clase base define el campo y su valor por defecto; cada familia de modelos hereda de ella y sobrescribe los valores por defecto que cambia su receta publicada."
+seo_title: Hiperparámetros de entrenamiento en LibreYOLO
+description: >-
+  Los argumentos de train() que importan: epochs, batch, lr0, optimizer, EMA,
+  autobatch, acumulación de gradientes y resume, además de por qué los valores
+  por defecto cambian según la familia.
+lead: >-
+  Cada argumento de entrenamiento es un campo de una dataclass TrainConfig. La
+  clase base define el campo y su valor por defecto; cada familia de modelos
+  hereda de ella y sobrescribe los valores por defecto que cambia su receta
+  publicada.
 keywords:
   - argumentos de entrenamiento yolo
   - learning rate
@@ -14,7 +21,7 @@ keywords:
   - early stopping patience
   - amp bfloat16
   - train config yaml
-last_verified: "1.5.0"
+last_verified: 1.5.0
 snippets:
   train:
     - label: Python
@@ -56,18 +63,24 @@ snippets:
                 print(f"{f.name}: {family_value}")
     - label: CLI
       language: bash
-      code: |
-        # Imprime los valores por defecto de train, val y predict, incluidas las sobrescrituras de cada familia.
+      code: >
+        # Imprime los valores por defecto de train, val y predict, incluidas las
+        sobrescrituras de cada familia.
+
         libreyolo cfg
   autobatch:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # batch=-1 sondea la memoria de la GPU y resuelve a una potencia de dos concreta.
+
+        # batch=-1 sondea la memoria de la GPU y resuelve a una potencia de dos
+        concreta.
+
         model.train(data="my-dataset.yaml", batch=-1, imgsz=640)
     - label: CLI
       language: bash
@@ -100,12 +113,17 @@ snippets:
   cfg:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # Las claves del yaml son nombres de campos de TrainConfig. Los kwargs explícitos ganan.
+
+        # Las claves del yaml son nombres de campos de TrainConfig. Los kwargs
+        explícitos ganan.
+
         model = LibreYOLO("LibreYOLO9s.pt")
+
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
+source_hash: d838d1abd45af40f
 ---
 
 ## Cómo pasar argumentos

@@ -1,15 +1,29 @@
 ---
 title: RF-DETR
-families: [rfdetr]
-seo_title: "RF-DETR: entrena, haz fine-tuning y exporta bajo MIT"
-description: "Usa RF-DETR en LibreYOLO para detección, segmentación de instancias, pose y cajas orientadas. Instala, predice, entrena, valida y exporta, todo con licencia MIT."
-lead: "Un transformer de detección que predice un conjunto fijo de objetos en lugar de una rejilla densa, por lo que no necesita NMS en inferencia. LibreYOLO lo soporta para cuatro tareas."
-keywords: [RF-DETR, "transformer de detección en tiempo real", DETR, "detección de objetos", "segmentación de instancias", "estimación de pose", "bounding boxes orientados"]
-last_verified: "1.5.0"
+families:
+  - rfdetr
+seo_title: 'RF-DETR: entrena, haz fine-tuning y exporta bajo MIT'
+description: >-
+  Usa RF-DETR en LibreYOLO para detección, segmentación de instancias, pose y
+  cajas orientadas. Instala, predice, entrena, valida y exporta, todo con
+  licencia MIT.
+lead: >-
+  Un transformer de detección que predice un conjunto fijo de objetos en lugar
+  de una rejilla densa, por lo que no necesita NMS en inferencia. LibreYOLO lo
+  soporta para cuatro tareas.
+keywords:
+  - RF-DETR
+  - transformer de detección en tiempo real
+  - DETR
+  - detección de objetos
+  - segmentación de instancias
+  - estimación de pose
+  - bounding boxes orientados
+last_verified: 1.5.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
-  caption: "LibreRFDETRs, detección en video a 512 px."
+  caption: 'LibreRFDETRs, detección en video a 512 px.'
 snippets:
   predict:
     - label: Python
@@ -24,8 +38,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreRFDETRs.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreRFDETRs.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Vídeo
       language: python
       code: |
@@ -40,11 +56,14 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreRFDETRs.pt")
-        model.train(data="my-dataset.yaml", epochs=50, imgsz=512, batch=8, lr0=1e-4)
+
+        model.train(data="my-dataset.yaml", epochs=50, imgsz=512, batch=8,
+        lr0=1e-4)
     - label: CLI
       language: bash
       code: |
@@ -127,9 +146,11 @@ snippets:
         # cada formato.
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreRFDETRs.pt format=onnx imgsz=512
-        libreyolo export model=LibreRFDETRs.pt format=tensorrt imgsz=512 half=True
+
+        libreyolo export model=LibreRFDETRs.pt format=tensorrt imgsz=512
+        half=True
     - label: Usar el archivo exportado
       language: python
       code: |
@@ -144,18 +165,27 @@ snippets:
         print(result.boxes.xyxy)
     - label: Sin LibreYOLO
       language: python
-      code: |
+      code: >
         import numpy as np
+
         import onnxruntime as ort
 
+
         # Ejecutar el grafo directamente implica hacer tu propio preprocesado
+
         # y postprocesado. Inspecciona la firma antes de conectar nada.
+
         session = ort.InferenceSession("LibreRFDETRs.onnx")
+
         name = session.get_inputs()[0].name
-        outputs = session.run(None, {name: np.zeros((1, 3, 512, 512), dtype=np.float32)})
+
+        outputs = session.run(None, {name: np.zeros((1, 3, 512, 512),
+        dtype=np.float32)})
+
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
+source_hash: 8c464aa759131694
 ---
 
 ## Instalación

@@ -1,10 +1,22 @@
 ---
 title: Estimación de pose
-seo_title: "Estimación de pose en LibreYOLO"
-description: "Predice keypoints por instancia en LibreYOLO: las familias que cubren la tarea, el formato de etiquetas y las llamadas de predicción, entrenamiento, validación y exportación."
-lead: "La estimación de pose localiza cada instancia y devuelve para ella un conjunto ordenado de keypoints con nombre, de modo que la salida lleva la estructura interna del objeto y no solo su extensión. La clave de la tarea es pose."
-keywords: [estimación de pose python, detección de keypoints, modelo de pose humana, keypoints COCO, OKS mAP, entrenar modelo de pose]
-last_verified: "1.5.0"
+seo_title: Estimación de pose en LibreYOLO
+description: >-
+  Predice keypoints por instancia en LibreYOLO: las familias que cubren la
+  tarea, el formato de etiquetas y las llamadas de predicción, entrenamiento,
+  validación y exportación.
+lead: >-
+  La estimación de pose localiza cada instancia y devuelve para ella un conjunto
+  ordenado de keypoints con nombre, de modo que la salida lleva la estructura
+  interna del objeto y no solo su extensión. La clave de la tarea es pose.
+keywords:
+  - estimación de pose python
+  - detección de keypoints
+  - modelo de pose humana
+  - keypoints COCO
+  - OKS mAP
+  - entrenar modelo de pose
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -26,25 +38,37 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Solo keypoints visibles
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         result = LibreYOLO("LibreECs-pose.pt")(SAMPLE_IMAGE)
+
         kpts = result.keypoints
 
+
         # .has_visible se deriva de la tercera columna de keypoints, y vale
-        # verdadero en todas sus posiciones si el checkpoint solo predice (x, y).
+
+        # verdadero en todas sus posiciones si el checkpoint solo predice (x,
+        y).
+
         for person, visible in zip(kpts.xy, kpts.has_visible):
             print(person[visible])
     - label: Alternativa top-down
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # HRNet es top-down: primero recorta cada persona. Sin una fuente de
-        # personas, se empareja con un detector LibreYOLO9t y registra la elección.
+
+        # personas, se empareja con un detector LibreYOLO9t y registra la
+        elección.
+
         model = LibreYOLO("LibreHRNetw32-pose.pt")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.keypoints.xy.shape)
   train:
@@ -80,16 +104,22 @@ snippets:
   val:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreECs-pose.pt")
 
+
         # val() devuelve un dict plano, no un objeto.
+
         metrics = model.val(data="coco8-pose.yaml", allow_download_scripts=True)
 
+
         print(metrics["metrics/keypoints_mAP50-95"])
-        print(metrics["metrics/keypoints_mAP50"], metrics["metrics/keypoints_mAP75"])
+
+        print(metrics["metrics/keypoints_mAP50"],
+        metrics["metrics/keypoints_mAP75"])
     - label: CLI
       language: bash
       code: |
@@ -109,15 +139,23 @@ snippets:
         libreyolo export model=LibreECs-pose.pt format=onnx imgsz=640
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como un checkpoint y devuelve el mismo objeto Results.
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como un checkpoint y devuelve el mismo objeto
+        Results.
+
         model = LibreYOLO("LibreECs-pose.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.keypoints.xy)
+source_hash: 9de01d1f615bdf33
 ---
 
 ## Definición

@@ -1,8 +1,12 @@
 ---
 title: TensorRT
-seo_title: "从 LibreYOLO 导出到 TensorRT"
-description: "从一个 LibreYOLO 模型构建 TensorRT engine：ONNX 中间产物、FP16 与 INT8 构建、动态 batch 的优化配置文件，以及 engine 的可移植性限制。"
-lead: "TensorRT 会把一张图编译成针对某一块 GPU 调优的 engine。LibreYOLO 先导出一个 ONNX 中间产物，用 TensorRT 的 ONNX 解析器解析它，构建出 engine，并把模型元数据作为 JSON 附属文件（sidecar）写在它旁边。"
+seo_title: 从 LibreYOLO 导出到 TensorRT
+description: >-
+  从一个 LibreYOLO 模型构建 TensorRT engine：ONNX 中间产物、FP16 与 INT8 构建、动态 batch
+  的优化配置文件，以及 engine 的可移植性限制。
+lead: >-
+  TensorRT 会把一张图编译成针对某一块 GPU 调优的 engine。LibreYOLO 先导出一个 ONNX 中间产物，用 TensorRT 的
+  ONNX 解析器解析它，构建出 engine，并把模型元数据作为 JSON 附属文件（sidecar）写在它旁边。
 keywords:
   - yolo 导出 tensorrt
   - tensorrt engine
@@ -11,26 +15,29 @@ keywords:
   - tensorrt 优化配置文件
   - tensorrt 动态 batch
   - tensorrt 硬件兼容性
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: 参数
-    value: 'export(format="tensorrt")'
+    value: export(format="tensorrt")
     mono: true
   - label: 输出
-    value: "一个 .engine 文件，外加一个 .engine.json 元数据附属文件"
+    value: 一个 .engine 文件，外加一个 .engine.json 元数据附属文件
   - label: 额外依赖
     value: 'pip install "libreyolo[onnx,tensorrt]"'
     mono: true
   - label: 加载方式
-    value: 'LibreYOLO("weights/LibreYOLO9t.engine")'
+    value: LibreYOLO("weights/LibreYOLO9t.engine")
     mono: true
   - label: 形状
-    value: "默认固定；dynamic=True 会加上一条沿 batch 轴的优化配置文件"
+    value: 默认固定；dynamic=True 会加上一条沿 batch 轴的优化配置文件
   - label: 精度
-    value: "FP32、FP16（half=True）、INT8（int8=True 并配合 data=）"
+    value: FP32、FP16（half=True）、INT8（int8=True 并配合 data=）
   - label: 环境要求
-    value: "构建时和运行时都需要一块 NVIDIA GPU。engine 不能在不同 GPU 架构之间迁移。"
-verification: "读自 dev 分支上的 libreyolo/export/tensorrt.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/tensorrt.py 和 pyproject.toml。"
+    value: 构建时和运行时都需要一块 NVIDIA GPU。engine 不能在不同 GPU 架构之间迁移。
+verification: >-
+  读自 dev 分支上的
+  libreyolo/export/tensorrt.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/tensorrt.py
+  和 pyproject.toml。
 snippets:
   install:
     - label: 安装
@@ -40,18 +47,24 @@ snippets:
         pip install "libreyolo[onnx,tensorrt]"
     - label: 构建前确认工具链
       language: bash
-      code: |
-        python -c "import tensorrt, torch; print(tensorrt.__version__, torch.cuda.is_available())"
+      code: >
+        python -c "import tensorrt, torch; print(tensorrt.__version__,
+        torch.cuda.is_available())"
   export:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # 输出 weights/LibreYOLO9t_fp16.engine 和 weights/LibreYOLO9t_fp16.engine.json
+
+        # 输出 weights/LibreYOLO9t_fp16.engine 和
+        weights/LibreYOLO9t_fp16.engine.json
+
         path = model.export(format="tensorrt", half=True)
+
         print(path)
     - label: CLI
       language: bash
@@ -137,6 +150,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: cb90fc98ab735233
 ---
 
 ## 安装

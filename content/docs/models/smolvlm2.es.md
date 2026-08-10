@@ -1,11 +1,25 @@
 ---
 title: SmolVLM2
-families: [smolvlm2]
-seo_title: "SmolVLM2 en LibreYOLO: detección de vocabulario abierto"
-description: "SmolVLM2 en LibreYOLO: instálalo, fija un vocabulario abierto y predice o chatea con el modelo de visión y lenguaje Apache-2.0 de Hugging Face."
-lead: "SmolVLM2 es el modelo de visión y lenguaje pequeño de Hugging Face. LibreYOLO lo envuelve como detector de objetos de vocabulario abierto y expone su chat libre directamente: pásale una lista de clases para detectar, o hazle una pregunta."
-keywords: [SmolVLM2, "modelo de visión y lenguaje", "detección de vocabulario abierto", "modelo multimodal pequeño", Hugging Face, VLM, "detectar objetos con texto"]
-last_verified: "1.5.0"
+families:
+  - smolvlm2
+seo_title: 'SmolVLM2 en LibreYOLO: detección de vocabulario abierto'
+description: >-
+  SmolVLM2 en LibreYOLO: instálalo, fija un vocabulario abierto y predice o
+  chatea con el modelo de visión y lenguaje Apache-2.0 de Hugging Face.
+lead: >-
+  SmolVLM2 es el modelo de visión y lenguaje pequeño de Hugging Face. LibreYOLO
+  lo envuelve como detector de objetos de vocabulario abierto y expone su chat
+  libre directamente: pásale una lista de clases para detectar, o hazle una
+  pregunta.
+keywords:
+  - SmolVLM2
+  - modelo de visión y lenguaje
+  - detección de vocabulario abierto
+  - modelo multimodal pequeño
+  - Hugging Face
+  - VLM
+  - detectar objetos con texto
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,15 +35,22 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: Chat
       language: python
-      code: |
+      code: >
         from libreyolo import LibreVLM, SAMPLE_IMAGE
+
 
         model = LibreVLM("smolvlm2-500m")
 
-        # La vía de escape bajo la comodidad de la detección: cualquier pregunta,
+
+        # La vía de escape bajo la comodidad de la detección: cualquier
+        pregunta,
+
         # no solo una consulta de bounding boxes.
+
         answer = model.chat(SAMPLE_IMAGE, "What is the cat doing?")
+
         print(answer)
+source_hash: b30823b62d6347b5
 ---
 
 ## Instalación

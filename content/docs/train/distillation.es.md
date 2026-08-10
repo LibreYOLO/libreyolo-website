@@ -1,8 +1,15 @@
 ---
 title: Destilación de conocimiento
-seo_title: "Destilación de conocimiento en LibreYOLO"
-description: "Entrena un detector pequeño contra un teacher más grande o contra un backbone DINOv2 congelado: las losses MGD, CWD y feature-MSE, los puntos de toma y las familias soportadas."
-lead: "La destilación añade un segundo término de loss que acerca los mapas de características intermedios del student a los de un teacher congelado. LibreYOLO toma las características con forward hooks, así que la cabeza y la loss del propio teacher nunca intervienen."
+seo_title: Destilación de conocimiento en LibreYOLO
+description: >-
+  Entrena un detector pequeño contra un teacher más grande o contra un backbone
+  DINOv2 congelado: las losses MGD, CWD y feature-MSE, los puntos de toma y las
+  familias soportadas.
+lead: >-
+  La destilación añade un segundo término de loss que acerca los mapas de
+  características intermedios del student a los de un teacher congelado.
+  LibreYOLO toma las características con forward hooks, así que la cabeza y la
+  loss del propio teacher nunca intervienen.
 keywords:
   - destilacion de conocimiento
   - masked generative distillation
@@ -12,7 +19,7 @@ keywords:
   - entrenamiento teacher student
   - mgd loss
   - cwd loss
-last_verified: "1.5.0"
+last_verified: 1.5.0
 snippets:
   detector:
     - label: Python
@@ -65,6 +72,7 @@ snippets:
             dis=1.0,           # peso global de la destilación
             distill_tau=1.0,   # temperatura del softmax de CWD
         )
+source_hash: 7210031328f6826f
 ---
 
 ## Destilar desde un checkpoint más grande

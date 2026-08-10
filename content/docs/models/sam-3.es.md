@@ -1,55 +1,102 @@
 ---
 title: SAM 3
-families: [sam3]
-seo_title: "SAM 3: segmentación con prompts y por concepto en LibreYOLO"
-description: "Usa SAM 3 en LibreYOLO para segmentación por punto, por caja y por concepto de texto. Instala y predice con el checkpoint large, restringido bajo la SAM License de Meta."
-lead: "SAM 3 amplía SAM con un prompt de concepto en texto además de los puntos y cajas habituales, así que una frase como \"yellow school bus\" devuelve todas las instancias que coinciden. LibreYOLO soporta su camino de imagen mediante una factoría LibreSAM dedicada, separada de la factoría de detectores LibreYOLO()."
-keywords: [SAM 3, Segment Anything, "segmentación con prompts", "segmentación por concepto", "segmentar con texto", "prompt de texto", "prompt de punto", "segmentar objeto con un clic", Meta AI]
-last_verified: "1.5.0"
+families:
+  - sam3
+seo_title: 'SAM 3: segmentación con prompts y por concepto en LibreYOLO'
+description: >-
+  Usa SAM 3 en LibreYOLO para segmentación por punto, por caja y por concepto de
+  texto. Instala y predice con el checkpoint large, restringido bajo la SAM
+  License de Meta.
+lead: >-
+  SAM 3 amplía SAM con un prompt de concepto en texto además de los puntos y
+  cajas habituales, así que una frase como "yellow school bus" devuelve todas
+  las instancias que coinciden. LibreYOLO soporta su camino de imagen mediante
+  una factoría LibreSAM dedicada, separada de la factoría de detectores
+  LibreYOLO().
+keywords:
+  - SAM 3
+  - Segment Anything
+  - segmentación con prompts
+  - segmentación por concepto
+  - segmentar con texto
+  - prompt de texto
+  - prompt de punto
+  - segmentar objeto con un clic
+  - Meta AI
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Prompts de punto y de caja
       language: python
-      code: |
+      code: >
         from libreyolo import LibreSAM, SAMPLE_IMAGE
 
-        # "sam3" es el único tamaño ("large"); alias: "sam3", "sam-3", "sam3-large".
+
+        # "sam3" es el único tamaño ("large"); alias: "sam3", "sam-3",
+        "sam3-large".
+
         model = LibreSAM("sam3")
 
-        # Un prompt de punto: [x, y] en coordenadas de píxel, label 1 = primer plano.
+
+        # Un prompt de punto: [x, y] en coordenadas de píxel, label 1 = primer
+        plano.
+
         result = model.predict(SAMPLE_IMAGE, points=[640, 420], labels=[1])
+
         print(result.masks.xy)      # un polígono por máscara
+
         print(result.boxes.xyxy)    # caja ajustada derivada de la máscara
 
+
         # Un prompt de caja en lugar de un punto.
+
         result = model.predict(SAMPLE_IMAGE, bboxes=[300, 200, 900, 700])
     - label: Prompt de texto (concepto)
       language: python
-      code: |
+      code: >
         from libreyolo import LibreSAM3, SAMPLE_IMAGE
+
 
         model = LibreSAM3("large")
 
-        # Encuentra todas las instancias que coinciden con la frase, no solo un objeto.
+
+        # Encuentra todas las instancias que coinciden con la frase, no solo un
+        objeto.
+
         # text= es mutuamente excluyente con points, bboxes, labels y masks.
+
         result = model.predict(SAMPLE_IMAGE, text="a person")
+
         print(result.names)         # {0: "a person"}
-        print(result.boxes.conf)    # la puntuación de detección PCS por instancia
-    - label: Codifica una vez, lanza muchos prompts
+
+        print(result.boxes.conf)    # la puntuación de detección PCS por
+        instancia
+    - label: 'Codifica una vez, lanza muchos prompts'
       language: python
-      code: |
+      code: >
         from libreyolo import LibreSAM3, SAMPLE_IMAGE
 
+
         model = LibreSAM3("large")
+
 
         # El encoder de imagen es la parte cara. set_image() lo ejecuta una vez;
-        # cada llamada posterior a predict() reutiliza el embedding cacheado. Una
+
+        # cada llamada posterior a predict() reutiliza el embedding cacheado.
+        Una
+
         # llamada con text= vuelve a codificar internamente, ya que el tracker y
+
         # el encoder de segmentación por concepto no comparten caché.
+
         model.set_image(SAMPLE_IMAGE)
+
         a = model.predict(points=[640, 420], labels=[1])
+
         b = model.predict(bboxes=[300, 200, 900, 700])
+
         model.reset_image()
+source_hash: c4fb6d5a622f99ff
 ---
 
 ## Instalación

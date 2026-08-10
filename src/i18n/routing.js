@@ -21,7 +21,6 @@ export const localeHtmlLang = {
   pt: 'pt-BR',
   fr: 'fr',
   ru: 'ru',
-  ar: 'ar',
 }
 
 // Autonym labels shown in the language switcher.
@@ -33,15 +32,4 @@ export const localeLabels = {
   pt: 'PT',
   fr: 'FR',
   ru: 'RU',
-  ar: 'AR',
-}
-
-// Text direction per locale, for the <html dir> attribute. Anything not listed
-// is left-to-right; Arabic is the only right-to-left locale we serve.
-const LOCALE_DIR = {
-  ar: 'rtl',
-}
-
-export function localeDir(locale) {
-  return LOCALE_DIR[locale] ?? 'ltr'
 }

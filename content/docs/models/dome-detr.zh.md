@@ -1,11 +1,24 @@
 ---
 title: Dome-DETR
-families: [domedetr]
-seo_title: "Dome-DETR：在 LibreYOLO 里做微小目标检测"
-description: "在 LibreYOLO 里用 Dome-DETR 对航拍和无人机图像做微小目标检测。转换上游权重，然后在采用 MIT 许可的代码下预测、微调和验证。"
-lead: "一个建立在 D-FINE 之上的微小目标专家：一个密度 head 决定目标在哪里，编码器注意力被限制在装着目标的那些窗口内，query 数量也由这份密度来定，而不是固定不变。LibreYOLO 支持它做检测。"
-keywords: [Dome-DETR, 微小目标检测, 小目标检测, "航拍 目标检测", "无人机 目标检测", 遥感目标检测, VisDrone, AI-TOD, DETR, "密度自适应 query"]
-last_verified: "1.5.0"
+families:
+  - domedetr
+seo_title: Dome-DETR：在 LibreYOLO 里做微小目标检测
+description: 在 LibreYOLO 里用 Dome-DETR 对航拍和无人机图像做微小目标检测。转换上游权重，然后在采用 MIT 许可的代码下预测、微调和验证。
+lead: >-
+  一个建立在 D-FINE 之上的微小目标专家：一个密度 head 决定目标在哪里，编码器注意力被限制在装着目标的那些窗口内，query
+  数量也由这份密度来定，而不是固定不变。LibreYOLO 支持它做检测。
+keywords:
+  - Dome-DETR
+  - 微小目标检测
+  - 小目标检测
+  - 航拍 目标检测
+  - 无人机 目标检测
+  - 遥感目标检测
+  - VisDrone
+  - AI-TOD
+  - DETR
+  - 密度自适应 query
+last_verified: 1.5.0
 snippets:
   predict:
     - label: 先转换，再预测
@@ -32,8 +45,9 @@ snippets:
             print(result.names[int(box.cls)], box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDOMEDETRs-visdrone.pt source=drone-frame.jpg save=True
+      code: >
+        libreyolo predict model=LibreDOMEDETRs-visdrone.pt
+        source=drone-frame.jpg save=True
     - label: 类别名称
       language: python
       code: |
@@ -49,11 +63,14 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-        model.train(data="my-dataset.yaml", epochs=160, imgsz=800, batch=4, lr0=2e-4)
+
+        model.train(data="my-dataset.yaml", epochs=160, imgsz=800, batch=4,
+        lr0=2e-4)
     - label: CLI
       language: bash
       code: |
@@ -79,6 +96,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreDOMEDETRs-visdrone.pt data=my-dataset.yaml
+source_hash: 381f01d769e7c420
 ---
 
 ## 安装

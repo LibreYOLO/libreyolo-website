@@ -1,11 +1,23 @@
 ---
 title: LocateAnything
-families: [locateanything]
-seo_title: "LocateAnything：开放词汇检测与点定位"
-description: "在 LibreYOLO 里用 LocateAnything 做开放词汇检测和点定位。用任意文本标签跑预测；不支持训练、验证和导出。"
-lead: "LocateAnything 是英伟达发布的视觉定位（grounding）模型，它并行解码检测框和点，而不是一次只解码一个坐标 token。LibreYOLO 把它包装成一个开放词汇检测器兼点定位器：任意一组文本标签都能当作类别集合，没有固定的 head，也不需要微调。"
-keywords: [LocateAnything, NVIDIA, "locateanything 目标检测", 视觉语言模型, 开放词汇检测, "grounding 视觉定位", "点定位 python", VLM, LibreVLM]
-last_verified: "1.5.0"
+families:
+  - locateanything
+seo_title: LocateAnything：开放词汇检测与点定位
+description: 在 LibreYOLO 里用 LocateAnything 做开放词汇检测和点定位。用任意文本标签跑预测；不支持训练、验证和导出。
+lead: >-
+  LocateAnything 是英伟达发布的视觉定位（grounding）模型，它并行解码检测框和点，而不是一次只解码一个坐标
+  token。LibreYOLO 把它包装成一个开放词汇检测器兼点定位器：任意一组文本标签都能当作类别集合，没有固定的 head，也不需要微调。
+keywords:
+  - LocateAnything
+  - NVIDIA
+  - locateanything 目标检测
+  - 视觉语言模型
+  - 开放词汇检测
+  - grounding 视觉定位
+  - 点定位 python
+  - VLM
+  - LibreVLM
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -46,6 +58,7 @@ snippets:
         # 检测框封装覆盖不到的提示词
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
+source_hash: 378ea758e507a096
 ---
 
 ## 安装

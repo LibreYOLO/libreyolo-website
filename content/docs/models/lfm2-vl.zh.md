@@ -1,11 +1,22 @@
 ---
 title: LFM2-VL
-families: [lfm2vl]
-seo_title: "LFM2-VL：在 LibreYOLO 里做开放词汇检测"
-description: "用 LibreYOLO 里的 LFM2-VL 在端侧做开放词汇目标检测。用任意文本标签做预测；不支持训练、验证和导出。"
-lead: "LFM2-VL 是 Liquid AI 发布的一个紧凑的端侧视觉语言模型。LibreYOLO 把它包装成开放词汇目标检测器：任何一份文本标签列表都能成为类别集合，不需要固定的 head，也不需要微调。"
-keywords: [LFM2-VL, LFM2, Liquid AI, 视觉语言模型, "开放词汇目标检测", VLM, "端侧 vlm", LibreVLM]
-last_verified: "1.5.0"
+families:
+  - lfm2vl
+seo_title: LFM2-VL：在 LibreYOLO 里做开放词汇检测
+description: 用 LibreYOLO 里的 LFM2-VL 在端侧做开放词汇目标检测。用任意文本标签做预测；不支持训练、验证和导出。
+lead: >-
+  LFM2-VL 是 Liquid AI 发布的一个紧凑的端侧视觉语言模型。LibreYOLO
+  把它包装成开放词汇目标检测器：任何一份文本标签列表都能成为类别集合，不需要固定的 head，也不需要微调。
+keywords:
+  - LFM2-VL
+  - LFM2
+  - Liquid AI
+  - 视觉语言模型
+  - 开放词汇目标检测
+  - VLM
+  - 端侧 vlm
+  - LibreVLM
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -33,6 +44,7 @@ snippets:
         # 封装覆盖不到的提示词
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
+source_hash: 40237f0ecc0d2cd5
 ---
 
 ## 安装

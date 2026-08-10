@@ -1,11 +1,24 @@
 ---
 title: PP-OCRv5
-families: [ppocr]
-seo_title: "PP-OCRv5: detección y reconocimiento de texto en LibreYOLO"
-description: "Usa PP-OCRv5 en LibreYOLO para OCR multilingüe de texto en escenas. Instala, predice y valida los checkpoints t y l, con licencia Apache-2.0."
-lead: "PP-OCRv5 es el pipeline de detección y reconocimiento de texto de PaddleOCR: un detector de binarización diferenciable localiza los cuadriláteros de texto y un reconocedor SVTR/CTC los lee. LibreYOLO lo porta a PyTorch en dos niveles."
-keywords: [PP-OCRv5, PaddleOCR, OCR, "detección de texto en imágenes", "reconocimiento de texto", "extraer texto de una imagen python"]
-last_verified: "1.5.0"
+families:
+  - ppocr
+seo_title: 'PP-OCRv5: detección y reconocimiento de texto en LibreYOLO'
+description: >-
+  Usa PP-OCRv5 en LibreYOLO para OCR multilingüe de texto en escenas. Instala,
+  predice y valida los checkpoints t y l, con licencia Apache-2.0.
+lead: >-
+  PP-OCRv5 es el pipeline de detección y reconocimiento de texto de PaddleOCR:
+  un detector de binarización diferenciable localiza los cuadriláteros de texto
+  y un reconocedor SVTR/CTC los lee. LibreYOLO lo porta a PyTorch en dos
+  niveles.
+keywords:
+  - PP-OCRv5
+  - PaddleOCR
+  - OCR
+  - detección de texto en imágenes
+  - reconocimiento de texto
+  - extraer texto de una imagen python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -52,6 +65,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibrePPOCRl-ocr.pt data=my-dataset
+source_hash: 9835057f8bd95bc1
 ---
 
 ## Instalación

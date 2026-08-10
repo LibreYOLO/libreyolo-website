@@ -1,11 +1,27 @@
 ---
 title: SSD
-families: [ssd]
-seo_title: "SSD (SSD300): detección de objetos en LibreYOLO"
-description: "Ejecuta SSD300 en LibreYOLO: un detector single-shot con VGG16 para predicción, validación y exportación a ONNX bajo licencia BSD-3-Clause. Sin ruta de entrenamiento."
-lead: "SSD (Single Shot MultiBox Detector) predice todas las cajas y las puntuaciones de clase a partir de una rejilla densa de cajas por defecto en una sola pasada hacia delante, sin una etapa aparte de propuesta de regiones. LibreYOLO incluye el checkpoint SSD300 con backbone VGG16 como detector solo de inferencia."
-keywords: [SSD, SSD300, "Single Shot MultiBox Detector", "detección de objetos python", VGG16, "detector basado en anchors", "exportar ssd onnx"]
-last_verified: "1.5.0"
+families:
+  - ssd
+seo_title: 'SSD (SSD300): detección de objetos en LibreYOLO'
+description: >-
+  Ejecuta SSD300 en LibreYOLO: un detector single-shot con VGG16 para
+  predicción, validación y exportación a ONNX bajo licencia BSD-3-Clause. Sin
+  ruta de entrenamiento.
+lead: >-
+  SSD (Single Shot MultiBox Detector) predice todas las cajas y las puntuaciones
+  de clase a partir de una rejilla densa de cajas por defecto en una sola pasada
+  hacia delante, sin una etapa aparte de propuesta de regiones. LibreYOLO
+  incluye el checkpoint SSD300 con backbone VGG16 como detector solo de
+  inferencia.
+keywords:
+  - SSD
+  - SSD300
+  - Single Shot MultiBox Detector
+  - detección de objetos python
+  - VGG16
+  - detector basado en anchors
+  - exportar ssd onnx
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +36,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreSSD300.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreSSD300.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -55,15 +73,23 @@ snippets:
         libreyolo export model=LibreSSD300.pt format=onnx
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreSSD300.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)
+source_hash: 3b3f9ea72291c4fa
 ---
 
 ## Instalación

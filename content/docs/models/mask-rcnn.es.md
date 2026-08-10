@@ -1,11 +1,26 @@
 ---
 title: Mask R-CNN
-families: [mask_rcnn]
-seo_title: "Mask R-CNN en LibreYOLO: predecir, validar y exportar"
-description: "Ejecuta Mask R-CNN en LibreYOLO para detección de objetos y segmentación de instancias. Instala, predice, valida y exporta el port de torchvision con licencia BSD-3-Clause."
-lead: "Mask R-CNN añade a Faster R-CNN una rama de máscaras por región, que predice una máscara de segmentación junto a cada caja que detecta. LibreYOLO incluye un port de la implementación de torchvision para detección y segmentación de instancias."
-keywords: [Mask R-CNN, "segmentación de instancias", "detección de objetos python", Faster R-CNN, "Mask R-CNN pytorch", torchvision, "detector de dos etapas"]
-last_verified: "1.5.0"
+families:
+  - mask_rcnn
+seo_title: 'Mask R-CNN en LibreYOLO: predecir, validar y exportar'
+description: >-
+  Ejecuta Mask R-CNN en LibreYOLO para detección de objetos y segmentación de
+  instancias. Instala, predice, valida y exporta el port de torchvision con
+  licencia BSD-3-Clause.
+lead: >-
+  Mask R-CNN añade a Faster R-CNN una rama de máscaras por región, que predice
+  una máscara de segmentación junto a cada caja que detecta. LibreYOLO incluye
+  un port de la implementación de torchvision para detección y segmentación de
+  instancias.
+keywords:
+  - Mask R-CNN
+  - segmentación de instancias
+  - detección de objetos python
+  - Faster R-CNN
+  - Mask R-CNN pytorch
+  - torchvision
+  - detector de dos etapas
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,17 +36,25 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreMaskRCNNr50.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreMaskRCNNr50.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Solo cajas
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # task="detect" omite la cabeza de máscaras y devuelve las cajas del mismo
+
+        # task="detect" omite la cabeza de máscaras y devuelve las cajas del
+        mismo
+
         # checkpoint, sin máscaras en el resultado.
+
         model = LibreYOLO("LibreMaskRCNNr50.pt", task="detect")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.boxes.xyxy)
   val:
@@ -63,15 +86,23 @@ snippets:
         libreyolo export model=LibreMaskRCNNr50.pt format=onnx imgsz=800
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreMaskRCNNr50.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.masks.data.shape)
+source_hash: 9608459b801aa6d5
 ---
 
 ## Instalación

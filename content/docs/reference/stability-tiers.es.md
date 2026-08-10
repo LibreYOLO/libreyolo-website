@@ -1,8 +1,15 @@
 ---
 title: Niveles de estabilidad
-seo_title: "Qué significa cada nivel de soporte de LibreYOLO"
-description: "El vocabulario de niveles que usa LibreYOLO: los tres niveles de soporte de exportación, los cuatro niveles de API, los seis grupos de cobertura y lo que ninguno de ellos promete."
-lead: "LibreYOLO usa la palabra nivel para tres cosas distintas: la evidencia que hay detrás de una ruta de exportación, el contrato de llamada al que responde una familia de modelos, y el grupo de cobertura en el que está inscrita esa familia. Esta página define cada uno y dice qué no implica."
+seo_title: Qué significa cada nivel de soporte de LibreYOLO
+description: >-
+  El vocabulario de niveles que usa LibreYOLO: los tres niveles de soporte de
+  exportación, los cuatro niveles de API, los seis grupos de cobertura y lo que
+  ninguno de ellos promete.
+lead: >-
+  LibreYOLO usa la palabra nivel para tres cosas distintas: la evidencia que hay
+  detrás de una ruta de exportación, el contrato de llamada al que responde una
+  familia de modelos, y el grupo de cobertura en el que está inscrita esa
+  familia. Esta página define cada uno y dice qué no implica.
 keywords:
   - nivel de soporte libreyolo
   - validated available blocked
@@ -10,8 +17,19 @@ keywords:
   - grupos de cobertura libreyolo
   - g0 g1 g2 g3 g4
   - niveles de modelos libreyolo
-last_verified: "1.5.0"
-verification: "Niveles de exportación de docs/adr/0011-export-support-tiers.md y libreyolo/export/support.py; grupos de cobertura y recuentos por familia de MODEL_GROUPS en libreyolo/models/registry.py; la comprobación de entrenamiento desde cero de libreyolo/models/base/model.py y libreyolo/cli/commands/train.py; el inventario de la CLI leído de libreyolo/models/inventory.py; niveles de API de los docstrings de los paquetes libreyolo/models/sam/, openvocab/ y vlm/ y de los contratos de base.py, todo en la v1.5.0. Las etiquetas de grupo que ve el lector (Flagship, Core, Supported, Inference only, Museum, Sibling tier) son el vocabulario propio del sitio para esos mismos grupos, tomado de src/data/docs/registry.json."
+last_verified: 1.5.0
+verification: >-
+  Niveles de exportación de docs/adr/0011-export-support-tiers.md y
+  libreyolo/export/support.py; grupos de cobertura y recuentos por familia de
+  MODEL_GROUPS en libreyolo/models/registry.py; la comprobación de entrenamiento
+  desde cero de libreyolo/models/base/model.py y
+  libreyolo/cli/commands/train.py; el inventario de la CLI leído de
+  libreyolo/models/inventory.py; niveles de API de los docstrings de los
+  paquetes libreyolo/models/sam/, openvocab/ y vlm/ y de los contratos de
+  base.py, todo en la v1.5.0. Las etiquetas de grupo que ve el lector (Flagship,
+  Core, Supported, Inference only, Museum, Sibling tier) son el vocabulario
+  propio del sitio para esos mismos grupos, tomado de
+  src/data/docs/registry.json.
 snippets:
   usage:
     - label: Leer las dos clasificaciones de una familia
@@ -27,6 +45,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
+source_hash: de545894b0d125e4
 ---
 
 ## Niveles de soporte de exportación

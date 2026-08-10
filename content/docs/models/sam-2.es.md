@@ -1,47 +1,88 @@
 ---
 title: SAM 2
-families: [sam2]
-seo_title: "SAM 2: segmentación de imágenes con prompts en LibreYOLO"
-description: "Usa SAM 2 en LibreYOLO para segmentación con prompts de punto y de caja. Instala y predice con los checkpoints tiny, small, base-plus y large, bajo Apache-2.0."
-lead: "SAM 2 amplía SAM con una arquitectura de memoria en streaming construida para vídeo, y convierte un clic de punto o de caja en una máscara de objeto. LibreYOLO admite su ruta de segmentación de imágenes mediante una factoría LibreSAM dedicada, separada de la factoría de detectores LibreYOLO()."
-keywords: [SAM 2, Segment Anything, "segmentación con prompts", "segmentación interactiva python", "segmentar objeto con un clic", "prompt de punto", "prompt de caja", Meta AI, Hiera]
-last_verified: "1.5.0"
+families:
+  - sam2
+seo_title: 'SAM 2: segmentación de imágenes con prompts en LibreYOLO'
+description: >-
+  Usa SAM 2 en LibreYOLO para segmentación con prompts de punto y de caja.
+  Instala y predice con los checkpoints tiny, small, base-plus y large, bajo
+  Apache-2.0.
+lead: >-
+  SAM 2 amplía SAM con una arquitectura de memoria en streaming construida para
+  vídeo, y convierte un clic de punto o de caja en una máscara de objeto.
+  LibreYOLO admite su ruta de segmentación de imágenes mediante una factoría
+  LibreSAM dedicada, separada de la factoría de detectores LibreYOLO().
+keywords:
+  - SAM 2
+  - Segment Anything
+  - segmentación con prompts
+  - segmentación interactiva python
+  - segmentar objeto con un clic
+  - prompt de punto
+  - prompt de caja
+  - Meta AI
+  - Hiera
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Prompts de punto y de caja
       language: python
-      code: |
+      code: >
         from libreyolo import LibreSAM, SAMPLE_IMAGE
 
+
         # Alias de tamaño: "sam2-tiny", "sam2-small", "sam2-base-plus",
-        # "sam2-large" (también las formas cortas "sam2-t"/"sam2-s"/"sam2-bp"/"sam2-l").
+
+        # "sam2-large" (también las formas cortas
+        "sam2-t"/"sam2-s"/"sam2-bp"/"sam2-l").
+
         model = LibreSAM("sam2-large")
 
-        # Un prompt de punto: [x, y] en coordenadas de píxel, label 1 = primer plano.
+
+        # Un prompt de punto: [x, y] en coordenadas de píxel, label 1 = primer
+        plano.
+
         result = model.predict(SAMPLE_IMAGE, points=[640, 420], labels=[1])
+
         print(result.masks.xy)      # un polígono por máscara
+
         print(result.boxes.xyxy)    # caja ajustada derivada de la máscara
 
+
         # Un prompt de caja en lugar de un punto.
+
         result = model.predict(SAMPLE_IMAGE, bboxes=[300, 200, 900, 700])
 
+
         # Sin ningún prompt se segmenta la imagen entera (un generador
+
         # automático de máscaras simplificado, no el exhaustivo de referencia).
+
         result = model.predict(SAMPLE_IMAGE)
-    - label: Codifica una vez, lanza muchos prompts
+    - label: 'Codifica una vez, lanza muchos prompts'
       language: python
-      code: |
+      code: >
         from libreyolo import LibreSAM2, SAMPLE_IMAGE
 
-        # La clase específica de la familia toma el tamaño sin el prefijo "sam2-".
+
+        # La clase específica de la familia toma el tamaño sin el prefijo
+        "sam2-".
+
         model = LibreSAM2("large")
 
+
         # El encoder de imagen es la parte cara. set_image() lo ejecuta una vez;
+
         # cada llamada posterior a predict() reutiliza el embedding cacheado.
+
         model.set_image(SAMPLE_IMAGE)
+
         a = model.predict(points=[640, 420], labels=[1])
+
         b = model.predict(bboxes=[300, 200, 900, 700])
+
         model.reset_image()
+source_hash: 2a3090d7ecd533b0
 ---
 
 ## Instalación

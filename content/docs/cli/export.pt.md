@@ -1,10 +1,19 @@
 ---
 title: libreyolo export
-seo_title: "referência do comando libreyolo export"
-description: "Exporte um checkpoint para um formato de deploy: cada argumento com seu valor padrão, onde o artefato é gravado e as combinações que o comando recusa."
-lead: "Converte um checkpoint em um formato de deploy e grava o artefato em weights/. O formato decide quais dos argumentos abaixo se aplicam."
-keywords: [libreyolo export cli, exportar yolo onnx, comando libreyolo export, exportar yolo tensorrt, argumentos libreyolo export]
-last_verified: "1.5.0"
+seo_title: referência do comando libreyolo export
+description: >-
+  Exporte um checkpoint para um formato de deploy: cada argumento com seu valor
+  padrão, onde o artefato é gravado e as combinações que o comando recusa.
+lead: >-
+  Converte um checkpoint em um formato de deploy e grava o artefato em weights/.
+  O formato decide quais dos argumentos abaixo se aplicam.
+keywords:
+  - libreyolo export cli
+  - exportar yolo onnx
+  - comando libreyolo export
+  - exportar yolo tensorrt
+  - argumentos libreyolo export
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo export
@@ -13,7 +22,7 @@ meta:
     value: model
     mono: true
   - label: Saída
-    value: "weights/<checkpoint-stem>[_fp16|_int8]<format-suffix>"
+    value: 'weights/<checkpoint-stem>[_fp16|_int8]<format-suffix>'
     mono: true
 snippets:
   examples:
@@ -29,12 +38,16 @@ snippets:
           nms=true conf=0.25 iou=0.45 max_det=300
     - label: Executar o artefato
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreYOLO9s.pt format=onnx imgsz=640
 
-        # A factory se orienta pelo sufixo do arquivo, então a exportação carrega como um checkpoint.
+
+        # A factory se orienta pelo sufixo do arquivo, então a exportação
+        carrega como um checkpoint.
+
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+source_hash: ef2ca20af3814109
 ---
 
 ## Sinopse

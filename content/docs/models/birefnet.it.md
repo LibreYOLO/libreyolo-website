@@ -1,11 +1,25 @@
 ---
 title: BiRefNet
-families: [birefnet]
-seo_title: "BiRefNet: rimozione dello sfondo e matting in LibreYOLO"
-description: "Usa BiRefNet in LibreYOLO per rimuovere lo sfondo e per la segmentazione dicotomica delle immagini. Installa, fai predizioni, valida ed esporta il checkpoint general."
-lead: "Una rete a riferimento bilaterale che predice un alpha matte morbido, capace di separare il soggetto dallo sfondo. LibreYOLO include inferenza e validazione per il task matte di BiRefNet."
-keywords: [BiRefNet, "rimuovere lo sfondo da un'immagine", "background removal python", "dichotomous image segmentation", "alpha matte", "image matting", "ritaglio con sfondo trasparente"]
-last_verified: "1.5.0"
+families:
+  - birefnet
+seo_title: 'BiRefNet: rimozione dello sfondo e matting in LibreYOLO'
+description: >-
+  Usa BiRefNet in LibreYOLO per rimuovere lo sfondo e per la segmentazione
+  dicotomica delle immagini. Installa, fai predizioni, valida ed esporta il
+  checkpoint general.
+lead: >-
+  Una rete a riferimento bilaterale che predice un alpha matte morbido, capace
+  di separare il soggetto dallo sfondo. LibreYOLO include inferenza e
+  validazione per il task matte di BiRefNet.
+keywords:
+  - BiRefNet
+  - rimuovere lo sfondo da un'immagine
+  - background removal python
+  - dichotomous image segmentation
+  - alpha matte
+  - image matting
+  - ritaglio con sfondo trasparente
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +34,10 @@ snippets:
         print(matte.array.shape, matte.array.dtype)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreBiRefNetl-matte.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreBiRefNetl-matte.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Ritaglio
       language: python
       code: |
@@ -72,6 +88,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
+source_hash: 1af1bd7f4f905081
 ---
 
 ## Installazione

@@ -1,16 +1,21 @@
 ---
 title: libreyolo label
-seo_title: "libreyolo label 命令参考"
-description: "启动本地检测框标注工具：带默认值的参数、AI 辅助开关，以及绑定到网络接口会暴露什么。"
-lead: "启动一个本地网页工具，用来绘制和编辑检测框。它写出 LibreYOLO 原生的标注文件，因此在这里标注的数据集不需要任何转换步骤就能训练。"
-keywords: [libreyolo label cli, 检测框标注工具, yolo 标注工具, 自动标注 cli, libreyolo label 共享]
-last_verified: "1.5.0"
+seo_title: libreyolo label 命令参考
+description: 启动本地检测框标注工具：带默认值的参数、AI 辅助开关，以及绑定到网络接口会暴露什么。
+lead: 启动一个本地网页工具，用来绘制和编辑检测框。它写出 LibreYOLO 原生的标注文件，因此在这里标注的数据集不需要任何转换步骤就能训练。
+keywords:
+  - libreyolo label cli
+  - 检测框标注工具
+  - yolo 标注工具
+  - 自动标注 cli
+  - libreyolo label 共享
+last_verified: 1.5.0
 meta:
   - label: 命令
     value: libreyolo label
     mono: true
   - label: 输出
-    value: "stdout 上输出一个服务器 URL；标注写入图像旁边的 labels/*.txt"
+    value: stdout 上输出一个服务器 URL；标注写入图像旁边的 labels/*.txt
 snippets:
   examples:
     - label: 基础
@@ -26,6 +31,7 @@ snippets:
       language: bash
       code: |
         libreyolo label share=true
+source_hash: bddad245877793b1
 ---
 
 ## 概要

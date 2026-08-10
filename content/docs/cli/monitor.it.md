@@ -1,16 +1,28 @@
 ---
 title: libreyolo monitor
-seo_title: "riferimento del comando libreyolo monitor"
-description: "Serve una dashboard live per gli addestramenti: argomenti con i valori predefiniti, cosa legge il server dal disco e come un solo server copre molti run."
-lead: "Serve una dashboard web per gli addestramenti, leggendo gli artefatti che un run scrive su disco. Non si aggancia mai al processo di addestramento, quindi i run live, quelli finiti e quelli andati in crash vengono mostrati allo stesso modo."
-keywords: [libreyolo monitor cli, dashboard training, monitorare addestramento in tempo reale, libreyolo monitor porta, visualizzare metriche training]
-last_verified: "1.5.0"
+seo_title: riferimento del comando libreyolo monitor
+description: >-
+  Serve una dashboard live per gli addestramenti: argomenti con i valori
+  predefiniti, cosa legge il server dal disco e come un solo server copre molti
+  run.
+lead: >-
+  Serve una dashboard web per gli addestramenti, leggendo gli artefatti che un
+  run scrive su disco. Non si aggancia mai al processo di addestramento, quindi
+  i run live, quelli finiti e quelli andati in crash vengono mostrati allo
+  stesso modo.
+keywords:
+  - libreyolo monitor cli
+  - dashboard training
+  - monitorare addestramento in tempo reale
+  - libreyolo monitor porta
+  - visualizzare metriche training
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo monitor
     mono: true
   - label: Output
-    value: "Una URL del server su stdout, poi il processo resta in primo piano"
+    value: 'Una URL del server su stdout, poi il processo resta in primo piano'
 snippets:
   examples:
     - label: Base
@@ -22,10 +34,11 @@ snippets:
       language: bash
       code: |
         libreyolo monitor experiments/
-    - label: Un solo run, porta fissa, senza browser
+    - label: 'Un solo run, porta fissa, senza browser'
       language: bash
       code: |
         libreyolo monitor runs/train/exp port=9100 no_browser=true
+source_hash: 4aa178141d451728
 ---
 
 ## Sinossi

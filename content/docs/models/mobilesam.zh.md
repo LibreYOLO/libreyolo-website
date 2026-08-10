@@ -1,11 +1,25 @@
 ---
 title: MobileSAM
-families: [mobilesam]
-seo_title: "MobileSAM：LibreYOLO 里的轻量可提示分割"
-description: "在 LibreYOLO 里用 MobileSAM 做点提示和框提示分割，它用的是 TinyViT 编码器。安装并用这个 Apache-2.0 许可的 tiny 检查点跑预测。"
-lead: "MobileSAM 把 SAM 的 ViT-H 图像编码器换成了蒸馏出来的 TinyViT 编码器，于是同样的点提示和框提示工作流可以跑在更轻的硬件上。LibreYOLO 通过一个专门的 LibreSAM 工厂函数提供了它的原生移植，与 LibreYOLO() 检测器工厂函数分开。"
-keywords: [MobileSAM, Segment Anything, TinyViT, "可提示分割", "交互式分割 python", "点一下分割物体", "sam 轻量版", "轻量分割模型"]
-last_verified: "1.5.0"
+families:
+  - mobilesam
+seo_title: MobileSAM：LibreYOLO 里的轻量可提示分割
+description: >-
+  在 LibreYOLO 里用 MobileSAM 做点提示和框提示分割，它用的是 TinyViT 编码器。安装并用这个 Apache-2.0 许可的
+  tiny 检查点跑预测。
+lead: >-
+  MobileSAM 把 SAM 的 ViT-H 图像编码器换成了蒸馏出来的 TinyViT
+  编码器，于是同样的点提示和框提示工作流可以跑在更轻的硬件上。LibreYOLO 通过一个专门的 LibreSAM 工厂函数提供了它的原生移植，与
+  LibreYOLO() 检测器工厂函数分开。
+keywords:
+  - MobileSAM
+  - Segment Anything
+  - TinyViT
+  - 可提示分割
+  - 交互式分割 python
+  - 点一下分割物体
+  - sam 轻量版
+  - 轻量分割模型
+last_verified: 1.5.0
 snippets:
   predict:
     - label: 点提示与框提示
@@ -40,6 +54,7 @@ snippets:
         a = model.predict(points=[640, 420], labels=[1])
         b = model.predict(bboxes=[300, 200, 900, 700])
         model.reset_image()
+source_hash: f96e885d93f72bdd
 ---
 
 ## 安装

@@ -1,34 +1,44 @@
 ---
 title: MNN
-seo_title: "Esportare in MNN da LibreYOLO"
-description: "Esporta un detector LibreYOLO in MNN passando per ONNX e mnnconvert: una forma NCHW fissa, FP32 su CPU e un sidecar di metadati richiesto dal contratto di runtime."
-lead: "MNN è il motore di inferenza leggero di Alibaba. LibreYOLO esporta un grafo ONNX statico, lo converte con lo strumento mnnconvert incluso nel pacchetto MNN e scrive un sidecar JSON che registra i nomi di input e output, la forma di input fissa e i nomi delle classi."
+seo_title: Esportare in MNN da LibreYOLO
+description: >-
+  Esporta un detector LibreYOLO in MNN passando per ONNX e mnnconvert: una forma
+  NCHW fissa, FP32 su CPU e un sidecar di metadati richiesto dal contratto di
+  runtime.
+lead: >-
+  MNN è il motore di inferenza leggero di Alibaba. LibreYOLO esporta un grafo
+  ONNX statico, lo converte con lo strumento mnnconvert incluso nel pacchetto
+  MNN e scrive un sidecar JSON che registra i nomi di input e output, la forma
+  di input fissa e i nomi delle classi.
 keywords:
   - esportare yolo mnn
   - mnnconvert
   - inferenza mnn
   - inferenza detector su mobile
   - forma nchw fissa
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="mnn")'
+    value: export(format="mnn")
     mono: true
   - label: Scrive
-    value: "Un file .mnn più un sidecar di metadati .mnn.json"
+    value: Un file .mnn più un sidecar di metadati .mnn.json
   - label: Extra
     value: 'pip install "libreyolo[mnn]"'
     mono: true
   - label: Si ricarica con
-    value: 'LibreYOLO("weights/LibreYOLO9t.mnn")'
+    value: LibreYOLO("weights/LibreYOLO9t.mnn")
     mono: true
   - label: Forme
-    value: "NCHW fissa. dynamic=True viene rifiutato."
+    value: NCHW fissa. dynamic=True viene rifiutato.
   - label: Precisione
-    value: "Solo FP32, solo CPU."
+    value: 'Solo FP32, solo CPU.'
   - label: Task
-    value: "Solo rilevamento in questa versione"
-verification: "Letto da libreyolo/export/mnn.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/mnn.py e pyproject.toml sul branch dev."
+    value: Solo rilevamento in questa versione
+verification: >-
+  Letto da libreyolo/export/mnn.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/mnn.py e pyproject.toml sul
+  branch dev.
 snippets:
   install:
     - label: Installazione
@@ -57,7 +67,7 @@ snippets:
         libreyolo export --model LibreYOLO9t.pt --format mnn --imgsz 640
     - label: Argomenti
       language: python
-      code: |
+      code: >
         model.export(
             format="mnn",
             imgsz=640,        # int, oppure (altezza, larghezza)
@@ -67,7 +77,9 @@ snippets:
             verbose=False,    # True mostra il log di mnnconvert
         )
 
-        # dynamic=True solleva ValueError. half=True e int8=True vengono rifiutati.
+
+        # dynamic=True solleva ValueError. half=True e int8=True vengono
+        rifiutati.
   run:
     - label: Tramite LibreYOLO
       language: python
@@ -79,18 +91,25 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: MNN puro
       language: python
-      code: |
+      code: >
         import json
 
+
         import MNN
+
         import numpy as np
 
+
         meta = json.load(open("weights/LibreYOLO9t.mnn.json"))
-        print(meta["mnn_input_names"], meta["mnn_output_names"], meta["mnn_input_shape"])
+
+        print(meta["mnn_input_names"], meta["mnn_output_names"],
+        meta["mnn_input_shape"])
+
 
         runtime = MNN.nn.create_runtime_manager(
             ({"backend": 0, "precision": 1, "numThread": 4},)
         )
+
         module = MNN.nn.load_module_from_file(
             "weights/LibreYOLO9t.mnn",
             meta["mnn_input_names"],
@@ -100,20 +119,26 @@ snippets:
             shape_mutable=False,
         )
 
+
         blob = np.zeros(meta["mnn_input_shape"], dtype=np.float32)
+
         input_var = MNN.expr.const(
             blob, list(blob.shape), MNN.expr.NCHW, MNN.expr.float
         )
+
         outputs = module.forward([input_var])
+
         for out in outputs:
             print(np.array(MNN.expr.convert(out, MNN.expr.NCHW).read()).shape)
 
-        # Il preprocessing e il postprocessing sono a tuo carico su questo percorso.
+        # Il preprocessing e il postprocessing sono a tuo carico su questo
+        percorso.
   support:
     - label: Controllare una famiglia e un task prima di esportare
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: 68fad34d07aea149
 ---
 
 ## Installazione

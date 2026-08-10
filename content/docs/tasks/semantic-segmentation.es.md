@@ -1,10 +1,22 @@
 ---
 title: Segmentación semántica
-seo_title: "Segmentación semántica en LibreYOLO"
-description: "Etiqueta cada píxel con una clase en LibreYOLO: las familias que sirven la tarea, el formato de máscara densa y las llamadas de predicción, entrenamiento, validación y exportación."
-lead: "La segmentación semántica asigna una clase a cada píxel de una imagen y no distingue entre instancias de la misma clase. La clave de la tarea es semantic."
-keywords: [segmentación semántica python, clasificación de píxeles, predicción densa, entrenar modelo de segmentación, mIoU, biblioteca de segmentación MIT]
-last_verified: "1.5.0"
+seo_title: Segmentación semántica en LibreYOLO
+description: >-
+  Etiqueta cada píxel con una clase en LibreYOLO: las familias que sirven la
+  tarea, el formato de máscara densa y las llamadas de predicción,
+  entrenamiento, validación y exportación.
+lead: >-
+  La segmentación semántica asigna una clase a cada píxel de una imagen y no
+  distingue entre instancias de la misma clase. La clave de la tarea es
+  semantic.
+keywords:
+  - segmentación semántica python
+  - clasificación de píxeles
+  - predicción densa
+  - entrenar modelo de segmentación
+  - mIoU
+  - biblioteca de segmentación MIT
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -36,7 +48,7 @@ snippets:
         for class_id in mask.classes:
             pixels = mask.class_mask(class_id)   # booleano (H, W)
             print(result.names[class_id], int(pixels.sum()))
-    - label: Otra familia, la misma llamada
+    - label: 'Otra familia, la misma llamada'
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -97,15 +109,22 @@ snippets:
         libreyolo export model=LibreSegformerb0-sem.pt format=onnx imgsz=512
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factoría enruta según el sufijo del archivo, así que un artefacto
-        # exportado se carga como un checkpoint y devuelve el mismo objeto Results.
+
+        # exportado se carga como un checkpoint y devuelve el mismo objeto
+        Results.
+
         model = LibreYOLO("LibreSegformerb0-sem.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.semantic_mask.data.shape)
+source_hash: 44b92d8ba6062f04
 ---
 
 ## Definición

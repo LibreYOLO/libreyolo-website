@@ -1,11 +1,23 @@
 ---
 title: SenseNova-Vision
-families: [sensenovavision]
-seo_title: "SenseNova-Vision：在 LibreYOLO 里用一个检查点做 7 个任务"
-description: "在 LibreYOLO 里用 SenseNova-Vision 做检测、分割、全景分割、姿态、点、深度和 OCR，全部来自同一个提示驱动的生成式检查点。"
-lead: "SenseNova-Vision 是一个统一多模态模型，它把视觉任务当成共享解码器上的提示驱动生成：检测框、点、关键点和 OCR 文字以带标签的文本输出，而深度图、掩码图和全景图以解码器渲染出的图像输出。LibreYOLO 通过 LibreVLM 加载它，用这一个 7B 检查点支持七种任务。"
-keywords: [SenseNova-Vision, 商汤, 统一多模态模型, Bagel, "多模态大模型 目标检测", 稠密感知, 指代分割, "全景分割 python"]
-last_verified: "1.5.0"
+families:
+  - sensenovavision
+seo_title: SenseNova-Vision：在 LibreYOLO 里用一个检查点做 7 个任务
+description: 在 LibreYOLO 里用 SenseNova-Vision 做检测、分割、全景分割、姿态、点、深度和 OCR，全部来自同一个提示驱动的生成式检查点。
+lead: >-
+  SenseNova-Vision 是一个统一多模态模型，它把视觉任务当成共享解码器上的提示驱动生成：检测框、点、关键点和 OCR
+  文字以带标签的文本输出，而深度图、掩码图和全景图以解码器渲染出的图像输出。LibreYOLO 通过 LibreVLM 加载它，用这一个 7B
+  检查点支持七种任务。
+keywords:
+  - SenseNova-Vision
+  - 商汤
+  - 统一多模态模型
+  - Bagel
+  - 多模态大模型 目标检测
+  - 稠密感知
+  - 指代分割
+  - 全景分割 python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -58,6 +70,7 @@ snippets:
         model.set_task("ocr")
         result = model.predict("sign.jpg")
         print(result.ocr.texts)
+source_hash: 8749277e1910baa4
 ---
 
 ## 安装

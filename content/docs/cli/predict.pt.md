@@ -1,10 +1,20 @@
 ---
 title: libreyolo predict
-seo_title: "referência do comando libreyolo predict"
-description: "Roda inferência pela linha de comando: cada argumento, seu valor padrão lido da definição da CLI e as flags que mudam o que chega ao stdout."
-lead: "Roda um modelo carregado sobre uma fonte e imprime as predições. A fonte pode ser uma imagem, um diretório, um vídeo, uma URL ou um stream ao vivo; o modelo pode ser um checkpoint ou um artefato exportado."
-keywords: [libreyolo predict cli, inferência yolo linha de comando, comando predict libreyolo, argumentos libreyolo predict, yolo saída json terminal]
-last_verified: "1.5.0"
+seo_title: referência do comando libreyolo predict
+description: >-
+  Roda inferência pela linha de comando: cada argumento, seu valor padrão lido
+  da definição da CLI e as flags que mudam o que chega ao stdout.
+lead: >-
+  Roda um modelo carregado sobre uma fonte e imprime as predições. A fonte pode
+  ser uma imagem, um diretório, um vídeo, uma URL ou um stream ao vivo; o modelo
+  pode ser um checkpoint ou um artefato exportado.
+keywords:
+  - libreyolo predict cli
+  - inferência yolo linha de comando
+  - comando predict libreyolo
+  - argumentos libreyolo predict
+  - yolo saída json terminal
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo predict
@@ -13,7 +23,9 @@ meta:
     value: source
     mono: true
   - label: Saída
-    value: "Predições no stdout. Com save=true, arquivos anotados em runs/detect/predict"
+    value: >-
+      Predições no stdout. Com save=true, arquivos anotados em
+      runs/detect/predict
 snippets:
   examples:
     - label: Básico
@@ -27,13 +39,17 @@ snippets:
         libreyolo predict model=LibreYOLO9s.pt save=true \
           project=runs/detect name=parkour exist_ok=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-    - label: Classes filtradas, JSON no stdout
+    - label: 'Classes filtradas, JSON no stdout'
       language: bash
-      code: |
-        # a classe 0 é person na lista de classes COCO que acompanha o checkpoint.
-        libreyolo predict model=LibreYOLO9s.pt classes="[0]" conf=0.4 max_det=50 \
+      code: >
+        # a classe 0 é person na lista de classes COCO que acompanha o
+        checkpoint.
+
+        libreyolo predict model=LibreYOLO9s.pt classes="[0]" conf=0.4 max_det=50
+        \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+source_hash: 7e46c7ed7dd9e6c4
 ---
 
 ## Sinopse

@@ -1,10 +1,21 @@
 ---
 title: Clasificación de imágenes
-seo_title: "Clasificación de imágenes en LibreYOLO"
-description: "Etiqueta una imagen entera en LibreYOLO: las familias que cubren la tarea, la estructura de dataset ImageFolder y las llamadas de predicción, entrenamiento, validación y exportación."
-lead: "La clasificación de imágenes asigna una distribución de etiquetas a la imagen entera y no localiza nada dentro de ella. La clave de la tarea es classify."
-keywords: [clasificación de imágenes python, entrenar clasificador de imágenes, dataset ImageFolder, accuracy top-1, clasificación zero-shot, librería clasificación de imágenes licencia MIT]
-last_verified: "1.5.0"
+seo_title: Clasificación de imágenes en LibreYOLO
+description: >-
+  Etiqueta una imagen entera en LibreYOLO: las familias que cubren la tarea, la
+  estructura de dataset ImageFolder y las llamadas de predicción, entrenamiento,
+  validación y exportación.
+lead: >-
+  La clasificación de imágenes asigna una distribución de etiquetas a la imagen
+  entera y no localiza nada dentro de ella. La clave de la tarea es classify.
+keywords:
+  - clasificación de imágenes python
+  - entrenar clasificador de imágenes
+  - dataset ImageFolder
+  - accuracy top-1
+  - clasificación zero-shot
+  - librería clasificación de imágenes licencia MIT
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -36,27 +47,40 @@ snippets:
         print(probs.data.shape)
         for index, score in zip(probs.top5, probs.top5conf):
             print(result.names[index], float(score))
-    - label: Zero-shot, sin entrenamiento
+    - label: 'Zero-shot, sin entrenamiento'
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # CLIP puntúa la imagen frente a prompts de texto, así que el conjunto de
+
+        # CLIP puntúa la imagen frente a prompts de texto, así que el conjunto
+        de
+
         # etiquetas se fija en la llamada en vez de venir dentro del checkpoint.
+
         model = LibreYOLO("LibreCLIPb32-cls.pt")
-        model.set_classes(["a person jumping", "an empty street", "a parked car"])
+
+        model.set_classes(["a person jumping", "an empty street", "a parked
+        car"])
+
         result = model(SAMPLE_IMAGE)
+
 
         print(model.names[result.probs.top1], float(result.probs.top1conf))
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # imagenette160 es un nombre de dataset conocido y se descarga en el primer uso.
+
+        # imagenette160 es un nombre de dataset conocido y se descarga en el
+        primer uso.
+
         # Para tus propios datos, pasa un directorio con un split train/.
+
         model = LibreYOLO("LibreResNet50-cls.pt")
+
         model.train(data="imagenette160", epochs=5)
     - label: CLI
       language: bash
@@ -98,15 +122,22 @@ snippets:
         libreyolo export model=LibreResNet50-cls.pt format=onnx
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factory decide según la extensión del archivo, así que un artefacto
-        # exportado se carga como un checkpoint y devuelve el mismo objeto Results.
+
+        # exportado se carga como un checkpoint y devuelve el mismo objeto
+        Results.
+
         model = LibreYOLO("LibreResNet50-cls.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.probs.top1, result.probs.top1conf)
+source_hash: 836bea76cd2cdf92
 ---
 
 ## Definición

@@ -1,8 +1,12 @@
 ---
 title: NVIDIA Jetson
-seo_title: "在 NVIDIA Jetson 上安装 LibreYOLO 和 PyTorch"
-description: "在 NVIDIA Jetson 上安装 LibreYOLO：JetPack 漏掉的四个 CUDA 库、PyTorch 需要的 --no-deps 这一步，以及 Orin Nano 上的实测数据。"
-lead: "NVIDIA Jetson 板子用标准的 aarch64 PyTorch wheel 就能跑 LibreYOLO。不涉及任何 Jetson 专用的 torch 构建，但 JetPack 漏掉了 torch 所链接的四个库，安装时必须自己补上。"
+seo_title: 在 NVIDIA Jetson 上安装 LibreYOLO 和 PyTorch
+description: >-
+  在 NVIDIA Jetson 上安装 LibreYOLO：JetPack 漏掉的四个 CUDA 库、PyTorch 需要的 --no-deps
+  这一步，以及 Orin Nano 上的实测数据。
+lead: >-
+  NVIDIA Jetson 板子用标准的 aarch64 PyTorch wheel 就能跑 LibreYOLO。不涉及任何 Jetson 专用的
+  torch 构建，但 JetPack 漏掉了 torch 所链接的四个库，安装时必须自己补上。
 keywords:
   - NVIDIA Jetson
   - Jetson Orin Nano
@@ -16,28 +20,37 @@ keywords:
   - no kernel image is available for execution on the device
   - jetson tensorrt 加速
   - aarch64 wheel
-last_verified: "1.4.0"
+last_verified: 1.4.0
 meta:
   - label: 开发板
-    value: "Jetson Orin Nano Super Developer Kit，8 GB，GPU 计算能力 8.7"
+    value: Jetson Orin Nano Super Developer Kit，8 GB，GPU 计算能力 8.7
   - label: 平台
-    value: "JetPack 7.2 (L4T R39.2), Ubuntu 24.04, CUDA 13, Python 3.12.3, aarch64"
+    value: 'JetPack 7.2 (L4T R39.2), Ubuntu 24.04, CUDA 13, Python 3.12.3, aarch64'
   - label: 测试过的技术栈
-    value: "libreyolo 1.4.0, torch 2.13.0+cu130, torchvision 0.28.0+cu130, opencv 5.0.0, numpy 2.5.1，于 2026-07-27"
+    value: >-
+      libreyolo 1.4.0, torch 2.13.0+cu130, torchvision 0.28.0+cu130, opencv
+      5.0.0, numpy 2.5.1，于 2026-07-27
   - label: JetPack 里缺少的
-    value: "nvidia-cudnn-cu13, nvidia-nccl-cu13, nvidia-cusparselt-cu13, nvidia-nvshmem-cu13"
+    value: >-
+      nvidia-cudnn-cu13, nvidia-nccl-cu13, nvidia-cusparselt-cu13,
+      nvidia-nvshmem-cu13
     mono: true
   - label: 基准测试
-    value: "在这块板子上 223 次验证过的运行，12 个家族共 58 个模型，覆盖 PyTorch、ONNX Runtime 和 TensorRT"
+    value: 在这块板子上 223 次验证过的运行，12 个家族共 58 个模型，覆盖 PyTorch、ONNX Runtime 和 TensorRT
     links:
       - label: visionanalysis.org/hardware/jetson_orin
-        href: https://www.visionanalysis.org/hardware/jetson_orin
+        href: 'https://www.visionanalysis.org/hardware/jetson_orin'
   - label: 跟踪于
-    value: "issue 648 中属于 Jetson 的那一半"
+    value: issue 648 中属于 Jetson 的那一半
     links:
       - label: issue 648
-        href: https://github.com/LibreYOLO/libreyolo/issues/648
-verification: "安装步骤和预期输出取自 2026-07-27 在一台 Jetson Orin Nano Super 上的安装过程。延迟和精度数据行来自 visionanalysis.org 背后的已验证结果快照，按硬件 jetson_orin 过滤，2026 年 6 月在 libreyolo 1.2.0.dev0 上测得。导出与加载器行为读自 libreyolo/export/exporter.py、libreyolo/export/tensorrt.py 和 libreyolo/models/__init__.py。"
+        href: 'https://github.com/LibreYOLO/libreyolo/issues/648'
+verification: >-
+  安装步骤和预期输出取自 2026-07-27 在一台 Jetson Orin Nano Super 上的安装过程。延迟和精度数据行来自
+  visionanalysis.org 背后的已验证结果快照，按硬件 jetson_orin 过滤，2026 年 6 月在 libreyolo
+  1.2.0.dev0 上测得。导出与加载器行为读自
+  libreyolo/export/exporter.py、libreyolo/export/tensorrt.py 和
+  libreyolo/models/__init__.py。
 snippets:
   prep:
     - label: 系统软件包与虚拟环境
@@ -75,12 +88,15 @@ snippets:
   ldd:
     - label: 直接点出下一个缺失的库，不用猜
       language: bash
-      code: |
-        ldd "$VIRTUAL_ENV/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so" \
+      code: >
+        ldd
+        "$VIRTUAL_ENV/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so" \
           | grep "not found"
 
         # 一次性列出 torch 所有库里仍然缺失的东西：
-        ldd "$VIRTUAL_ENV"/lib/python3.12/site-packages/torch/lib/*.so 2>/dev/null \
+
+        ldd "$VIRTUAL_ENV"/lib/python3.12/site-packages/torch/lib/*.so
+        2>/dev/null \
           | grep "not found" | sort -u
   install:
     - label: 在 torch 之后装 LibreYOLO，不要在它之前
@@ -131,18 +147,25 @@ snippets:
         print(result.boxes)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict --source https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg --model libreyolo9s.pt --save
+      code: >
+        libreyolo predict --source
+        https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        --model libreyolo9s.pt --save
   export:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, LibreYOLO9, SAMPLE_IMAGE
 
+
         # 先写出 libreyolo9s.onnx，再据此构建 libreyolo9s.engine
-        LibreYOLO9("libreyolo9s.pt", size="s").export(format="tensorrt", half=True)
+
+        LibreYOLO9("libreyolo9s.pt", size="s").export(format="tensorrt",
+        half=True)
+
 
         # engine 通过同一个入口加载回来
+
         result = LibreYOLO("libreyolo9s.engine").predict(SAMPLE_IMAGE)
     - label: CLI
       language: bash
@@ -157,6 +180,7 @@ snippets:
         sudo jetson_clocks
 
         tegrastats            # 实时负载，nvidia-smi 在 Tegra 上功能有限
+source_hash: c07ff908503e89b5
 ---
 
 ## 这个页面记录了什么

@@ -1,8 +1,13 @@
 ---
 title: Ensembles de detectores
-seo_title: "Ensembles de detectores en LibreYOLO"
-description: "Ejecuta varios detectores sobre una misma imagen y fusiona sus boxes con weighted boxes fusion o NMS, incluidos modelos con listas de clases distintas."
-lead: "LibreEnsemble ejecuta dos o más detectores sobre la misma imagen decodificada y fusiona sus boxes en un único objeto Results. Cada miembro conserva sus propios pesos, umbrales, dispositivos y lista de clases."
+seo_title: Ensembles de detectores en LibreYOLO
+description: >-
+  Ejecuta varios detectores sobre una misma imagen y fusiona sus boxes con
+  weighted boxes fusion o NMS, incluidos modelos con listas de clases distintas.
+lead: >-
+  LibreEnsemble ejecuta dos o más detectores sobre la misma imagen decodificada
+  y fusiona sus boxes en un único objeto Results. Cada miembro conserva sus
+  propios pesos, umbrales, dispositivos y lista de clases.
 keywords:
   - ensemble de modelos detección de objetos
   - weighted boxes fusion
@@ -12,11 +17,17 @@ keywords:
   - LibreEnsemble
   - ensemble detección python
   - min_votes
-last_verified: "1.5.0"
-verification: "Firmas del constructor y de la llamada, valores por defecto, errores de validación, unificación del espacio de clases, recuento de votos y el Results devuelto leídos de libreyolo/ensemble/model.py. Algoritmos de fusión y sus argumentos de libreyolo/ops/fusion.py. Intención de diseño de docs/adr/0004-model-ensembling.md. Patrones de uso contrastados con tests/unit/test_ensemble.py y tests/unit/test_ops_fusion.py."
+last_verified: 1.5.0
+verification: >-
+  Firmas del constructor y de la llamada, valores por defecto, errores de
+  validación, unificación del espacio de clases, recuento de votos y el Results
+  devuelto leídos de libreyolo/ensemble/model.py. Algoritmos de fusión y sus
+  argumentos de libreyolo/ops/fusion.py. Intención de diseño de
+  docs/adr/0004-model-ensembling.md. Patrones de uso contrastados con
+  tests/unit/test_ensemble.py y tests/unit/test_ops_fusion.py.
 snippets:
   basic:
-    - label: Dos detectores, fusionados
+    - label: 'Dos detectores, fusionados'
       language: python
       code: |
         from libreyolo import LibreEnsemble, SAMPLE_IMAGE
@@ -48,13 +59,18 @@ snippets:
         print(len(result.boxes), "agreed detections")
     - label: Umbrales por miembro
       language: python
-      code: |
+      code: >
         from libreyolo import LibreEnsemble, SAMPLE_IMAGE
+
 
         ensemble = LibreEnsemble(["LibreYOLO9s.pt", "LibreRFDETRs.pt"])
 
-        # Un escalar se aplica a todos los miembros; una lista se lee por miembro.
+
+        # Un escalar se aplica a todos los miembros; una lista se lee por
+        miembro.
+
         result = ensemble(SAMPLE_IMAGE, conf=[0.3, 0.5], iou=0.5)
+
         print(len(result.boxes))
   external:
     - label: Incorporar un detector que LibreYOLO no ha cargado
@@ -82,6 +98,7 @@ snippets:
         # Sustituye clip.mp4 por un archivo de vídeo en disco.
         for result in ensemble("clip.mp4", stream=True, vid_stride=2):
             print(result.frame_idx, len(result.boxes))
+source_hash: 4f4c54c52b295795
 ---
 
 ## Qué es un ensemble

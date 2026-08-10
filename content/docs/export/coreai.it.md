@@ -1,8 +1,15 @@
 ---
 title: Core AI
-seo_title: "Esportare in Apple Core AI da LibreYOLO"
-description: "Esporta un modello LibreYOLO in un asset .aimodel di Apple Core AI: solo macOS, canvas fisso, FP32 e il contratto sull'ordine degli output con nome che i consumatori devono rispettare."
-lead: "Core AI è lo stack di inferenza on-device di Apple. LibreYOLO cattura il modello con torch.export, lo abbassa attraverso il convertitore di Core AI e scrive un asset .aimodel che porta con sé i metadati del modello e i nomi degli output esportati."
+seo_title: Esportare in Apple Core AI da LibreYOLO
+description: >-
+  Esporta un modello LibreYOLO in un asset .aimodel di Apple Core AI: solo
+  macOS, canvas fisso, FP32 e il contratto sull'ordine degli output con nome che
+  i consumatori devono rispettare.
+lead: >-
+  Core AI è lo stack di inferenza on-device di Apple. LibreYOLO cattura il
+  modello con torch.export, lo abbassa attraverso il convertitore di Core AI e
+  scrive un asset .aimodel che porta con sé i metadati del modello e i nomi
+  degli output esportati.
 keywords:
   - esportare libreyolo core ai
   - aimodel
@@ -10,28 +17,35 @@ keywords:
   - torch.export apple
   - inferenza on-device apple
   - coreai_output_names
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="coreai")'
+    value: export(format="coreai")
     mono: true
   - label: Scrive
-    value: "Un asset .aimodel con i metadati allegati"
+    value: Un asset .aimodel con i metadati allegati
   - label: Extra
     value: 'pip install "libreyolo[coreai]"'
     mono: true
   - label: Si ricarica
-    value: "Non tramite LibreYOLO. I consumatori usano direttamente il runtime di Core AI."
+    value: >-
+      Non tramite LibreYOLO. I consumatori usano direttamente il runtime di Core
+      AI.
   - label: Forme
-    value: "Canvas fisso. dynamic=True solleva NotImplementedError."
+    value: Canvas fisso. dynamic=True solleva NotImplementedError.
   - label: Precisione
-    value: "Solo FP32. half=True e int8=True vengono rifiutati."
+    value: Solo FP32. half=True e int8=True vengono rifiutati.
   - label: Richiede
-    value: "macOS. La toolchain non converte né esegue altrove, e coreai-torch fissa torch a 2.11.x."
-verification: "Letto da libreyolo/export/coreai.py, libreyolo/export/coreai_compat.py, libreyolo/export/exporter.py, libreyolo/export/support.py e pyproject.toml sul branch dev."
+    value: >-
+      macOS. La toolchain non converte né esegue altrove, e coreai-torch fissa
+      torch a 2.11.x.
+verification: >-
+  Letto da libreyolo/export/coreai.py, libreyolo/export/coreai_compat.py,
+  libreyolo/export/exporter.py, libreyolo/export/support.py e pyproject.toml sul
+  branch dev.
 snippets:
   install:
-    - label: Installazione, su macOS
+    - label: 'Installazione, su macOS'
       language: bash
       code: |
         # Tenuto fuori da ogni extra aggregato di proposito: coreai-torch fissa
@@ -82,6 +96,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: a35bfeafac6d6966
 ---
 
 ## Installazione

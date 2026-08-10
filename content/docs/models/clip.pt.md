@@ -1,11 +1,28 @@
 ---
 title: CLIP
-families: [clip]
-seo_title: "CLIP no LibreYOLO: classificação e embeddings zero-shot"
-description: "Use CLIP no LibreYOLO para classificação de imagens zero-shot e embeddings de imagem e texto. Sem treinamento: set_classes() define o conjunto de rótulos em tempo de execução."
-lead: "CLIP é um modelo de torre dupla que pontua uma imagem contra prompts de texto em vez de um conjunto fixo de rótulos. O LibreYOLO oferece suporte a ele para classificação zero-shot e embeddings de imagem e texto, sem nenhuma etapa de treinamento."
-keywords: [CLIP, OpenCLIP, "classificação zero-shot", "classificar imagens sem treinar", "embedding de imagem python", "embedding de texto", "busca por similaridade imagem texto", "vocabulário aberto", LAION-2B]
-last_verified: "1.5.0"
+families:
+  - clip
+seo_title: 'CLIP no LibreYOLO: classificação e embeddings zero-shot'
+description: >-
+  Use CLIP no LibreYOLO para classificação de imagens zero-shot e embeddings de
+  imagem e texto. Sem treinamento: set_classes() define o conjunto de rótulos em
+  tempo de execução.
+lead: >-
+  CLIP é um modelo de torre dupla que pontua uma imagem contra prompts de texto
+  em vez de um conjunto fixo de rótulos. O LibreYOLO oferece suporte a ele para
+  classificação zero-shot e embeddings de imagem e texto, sem nenhuma etapa de
+  treinamento.
+keywords:
+  - CLIP
+  - OpenCLIP
+  - classificação zero-shot
+  - classificar imagens sem treinar
+  - embedding de imagem python
+  - embedding de texto
+  - busca por similaridade imagem texto
+  - vocabulário aberto
+  - LAION-2B
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,20 +37,30 @@ snippets:
         print(model.names[result.probs.top1], float(result.probs.top1conf))
     - label: CLI
       language: bash
-      code: |
+      code: >
         # Sem uma chamada a set_classes(), o predict da CLI usa os 1.000
+
         # nomes de classe do ImageNet que o modelo carrega por padrão.
-        libreyolo predict model=LibreCLIPb32-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+
+        libreyolo predict model=LibreCLIPb32-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Embedding de imagem e texto
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
+
         image_embed = model(SAMPLE_IMAGE).embeddings.data
+
         text_embed = model.embed_text("a photo of a forklift")
 
-        # Ambos são normalizados por L2, então um simples produto escalar é a similaridade de cosseno.
+
+        # Ambos são normalizados por L2, então um simples produto escalar é a
+        similaridade de cosseno.
+
         similarity = (image_embed @ text_embed.T).item()
   val:
     - label: Python
@@ -56,15 +83,21 @@ snippets:
   export:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreCLIPb32-cls.pt")
+
         model.set_classes(["a forklift", "an empty aisle", "a spill"])
+
         model.export(format="onnx")
 
+
         # Os rótulos atuais de set_classes() e a resolução de entrada ficam
-        # fixados no grafo. Exporte de novo depois de mudar qualquer um dos dois.
+
+        # fixados no grafo. Exporte de novo depois de mudar qualquer um dos
+        dois.
     - label: CLI
       language: bash
       code: |
@@ -73,12 +106,17 @@ snippets:
         libreyolo export model=LibreCLIPb32-cls.pt format=onnx
     - label: Exportação de embeddings
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # task="embed" traça apenas a torre de imagem; nenhuma classe é necessária.
+
+        # task="embed" traça apenas a torre de imagem; nenhuma classe é
+        necessária.
+
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
+
         model.export(format="onnx")
+source_hash: ac7cfd75ad6c0fa7
 ---
 
 ## Instalação

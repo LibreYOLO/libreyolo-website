@@ -1,8 +1,15 @@
 ---
 title: API de ensemble
-seo_title: "API de LibreEnsemble y operaciones de fusión"
-description: "LibreEnsemble, ExternalDetector y las tres operaciones de fusión de libreyolo.ops: weighted boxes fusion, su variante con semillas y la fusión por NMS por clase."
-lead: "LibreEnsemble ejecuta varios detectores sobre la misma imagen y fusiona sus detecciones en un único Results. La fusión ocurre después del postprocesado propio de cada miembro, así que cada uno conserva su tamaño de entrada, su normalización y su supresión."
+seo_title: API de LibreEnsemble y operaciones de fusión
+description: >-
+  LibreEnsemble, ExternalDetector y las tres operaciones de fusión de
+  libreyolo.ops: weighted boxes fusion, su variante con semillas y la fusión por
+  NMS por clase.
+lead: >-
+  LibreEnsemble ejecuta varios detectores sobre la misma imagen y fusiona sus
+  detecciones en un único Results. La fusión ocurre después del postprocesado
+  propio de cada miembro, así que cada uno conserva su tamaño de entrada, su
+  normalización y su supresión.
 keywords:
   - LibreEnsemble
   - ensemble de detectores de objetos
@@ -10,11 +17,14 @@ keywords:
   - ExternalDetector
   - libreyolo.ops.fusion
   - consenso min_votes
-last_verified: "1.5.0"
-verification: "Firmas y valores por defecto leídos de libreyolo/ensemble/model.py y libreyolo/ops/fusion.py en la v1.5.0. Intención de diseño según docs/adr/0004-model-ensembling.md."
+last_verified: 1.5.0
+verification: >-
+  Firmas y valores por defecto leídos de libreyolo/ensemble/model.py y
+  libreyolo/ops/fusion.py en la v1.5.0. Intención de diseño según
+  docs/adr/0004-model-ensembling.md.
 snippets:
   usage:
-    - label: Dos miembros, fusión por defecto
+    - label: 'Dos miembros, fusión por defecto'
       language: python
       code: |
         from libreyolo import LibreEnsemble, SAMPLE_IMAGE
@@ -41,21 +51,30 @@ snippets:
         result = ens(SAMPLE_IMAGE, conf=[0.25, 0.4])
         print(len(result))
   ops:
-    - label: Operación de fusión, sin modelo de por medio
+    - label: 'Operación de fusión, sin modelo de por medio'
       language: python
-      code: |
+      code: >
         import torch
+
         from libreyolo.ops import weighted_boxes_fusion
 
-        boxes = torch.tensor([[10.0, 10.0, 50.0, 50.0], [12.0, 11.0, 51.0, 49.0]])
+
+        boxes = torch.tensor([[10.0, 10.0, 50.0, 50.0], [12.0, 11.0, 51.0,
+        49.0]])
+
         scores = torch.tensor([0.9, 0.8])
+
         labels = torch.tensor([0, 0])
+
         model_ids = torch.tensor([0, 1])
+
 
         fused = weighted_boxes_fusion(
             boxes, scores, labels, model_ids, num_models=2, iou_thr=0.55
         )
+
         print(fused)
+source_hash: 3834f628efb1193d
 ---
 
 ## LibreEnsemble

@@ -1,10 +1,21 @@
 ---
 title: libreyolo doctor
-seo_title: "riferimento del comando libreyolo doctor"
-description: "Controlla un dataset di rilevamento prima dell'addestramento: gli argomenti con i valori predefiniti, le famiglie di controlli che puoi saltare o selezionare e i codici di uscita su cui la CI può fallire."
-lead: "Esegue un insieme di controlli di salute su un dataset di rilevamento e segnala ciò che danneggerebbe un addestramento: file mancanti, etichette rotte, immagini corrotte, fuga tra split e sbilanciamento delle classi."
-keywords: [libreyolo doctor cli, controllo salute dataset yolo, validare dataset detection, data leakage tra split, libreyolo doctor strict]
-last_verified: "1.5.0"
+seo_title: riferimento del comando libreyolo doctor
+description: >-
+  Controlla un dataset di rilevamento prima dell'addestramento: gli argomenti
+  con i valori predefiniti, le famiglie di controlli che puoi saltare o
+  selezionare e i codici di uscita su cui la CI può fallire.
+lead: >-
+  Esegue un insieme di controlli di salute su un dataset di rilevamento e
+  segnala ciò che danneggerebbe un addestramento: file mancanti, etichette
+  rotte, immagini corrotte, fuga tra split e sbilanciamento delle classi.
+keywords:
+  - libreyolo doctor cli
+  - controllo salute dataset yolo
+  - validare dataset detection
+  - data leakage tra split
+  - libreyolo doctor strict
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo doctor
@@ -13,15 +24,19 @@ meta:
     value: data
     mono: true
   - label: Output
-    value: "Un report delle segnalazioni su stdout. Esce con 1 quando vengono trovati errori"
+    value: >-
+      Un report delle segnalazioni su stdout. Esce con 1 quando vengono trovati
+      errori
 snippets:
   examples:
     - label: Base
       language: bash
-      code: |
-        # download=true permette al coco8.yaml incluso di scaricare le sue immagini se mancano.
+      code: >
+        # download=true permette al coco8.yaml incluso di scaricare le sue
+        immagini se mancano.
+
         libreyolo doctor coco8.yaml download=true
-    - label: Passata veloce, senza decodifica delle immagini
+    - label: 'Passata veloce, senza decodifica delle immagini'
       language: bash
       code: |
         libreyolo doctor coco8.yaml download=true fast=true
@@ -30,6 +45,7 @@ snippets:
       code: |
         libreyolo doctor coco8.yaml download=true strict=true json=true \
           only=labels,files,config
+source_hash: 79e0ef471d567ea3
 ---
 
 ## Sinossi

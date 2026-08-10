@@ -1,11 +1,23 @@
 ---
 title: SAM 3D Body
-families: [sam3dbody]
-seo_title: "SAM 3D Body：LibreYOLO 里的全身网格恢复"
-description: "在 LibreYOLO 里用 SAM 3D Body 做全身人体网格恢复。安装并跑预测；检查点受 Meta 的 SAM License 限制，且必须有 CUDA。"
-lead: "SAM 3D Body 是 Meta 的可提示模型，它从单张图像加人体框恢复出包含手和脚在内的全身 3D 网格。LibreYOLO 封装的是上游的包，而不是把它移植过来。"
-keywords: [SAM 3D Body, MHR, Momentum Human Rig, "人体网格恢复", "单图 3d 人体重建", "3d 人体姿态估计 python", "sam 3d body 权重下载"]
-last_verified: "1.5.0"
+families:
+  - sam3dbody
+seo_title: SAM 3D Body：LibreYOLO 里的全身网格恢复
+description: >-
+  在 LibreYOLO 里用 SAM 3D Body 做全身人体网格恢复。安装并跑预测；检查点受 Meta 的 SAM License 限制，且必须有
+  CUDA。
+lead: >-
+  SAM 3D Body 是 Meta 的可提示模型，它从单张图像加人体框恢复出包含手和脚在内的全身 3D 网格。LibreYOLO
+  封装的是上游的包，而不是把它移植过来。
+keywords:
+  - SAM 3D Body
+  - MHR
+  - Momentum Human Rig
+  - 人体网格恢复
+  - 单图 3d 人体重建
+  - 3d 人体姿态估计 python
+  - sam 3d body 权重下载
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -36,6 +48,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
+source_hash: 8edc8d7872f3f875
 ---
 
 ## 安装

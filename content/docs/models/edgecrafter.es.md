@@ -1,11 +1,27 @@
 ---
 title: EdgeCrafter
-families: [ec]
-seo_title: "EdgeCrafter: detección, pose y segmentación en LibreYOLO"
-description: "Usa EdgeCrafter en LibreYOLO para detección, pose y segmentación de instancias. Instala, predice, valida y exporta, con código bajo licencia MIT."
-lead: "Un vision transformer compacto para predicción densa en hardware edge, publicado upstream como tres modelos hermanos: ECDet, ECPose y ECSeg. LibreYOLO carga los tres como una sola familia, con la tarea determinada por el checkpoint."
-keywords: [EdgeCrafter, ECDet, ECPose, ECSeg, "vision transformer compacto", "detección de objetos", "estimación de pose", "segmentación de instancias", "inferencia en dispositivos edge"]
-last_verified: "1.5.0"
+families:
+  - ec
+seo_title: 'EdgeCrafter: detección, pose y segmentación en LibreYOLO'
+description: >-
+  Usa EdgeCrafter en LibreYOLO para detección, pose y segmentación de
+  instancias. Instala, predice, valida y exporta, con código bajo licencia MIT.
+lead: >-
+  Un vision transformer compacto para predicción densa en hardware edge,
+  publicado upstream como tres modelos hermanos: ECDet, ECPose y ECSeg.
+  LibreYOLO carga los tres como una sola familia, con la tarea determinada por
+  el checkpoint.
+keywords:
+  - EdgeCrafter
+  - ECDet
+  - ECPose
+  - ECSeg
+  - vision transformer compacto
+  - detección de objetos
+  - estimación de pose
+  - segmentación de instancias
+  - inferencia en dispositivos edge
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +36,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreECs.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreECs.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Pose
       language: python
       code: |
@@ -59,8 +77,9 @@ snippets:
         )
     - label: CLI
       language: bash
-      code: |
-        libreyolo train model=LibreECs.pt data=my-dataset.yaml epochs=50 imgsz=640 batch=8 lr0=5e-4
+      code: >
+        libreyolo train model=LibreECs.pt data=my-dataset.yaml epochs=50
+        imgsz=640 batch=8 lr0=5e-4
     - label: Pose
       language: python
       code: |
@@ -76,11 +95,15 @@ snippets:
         )
     - label: Segmentación de instancias
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # Necesita etiquetas de polígonos, e imgsz al tamaño nativo del checkpoint.
+
+        # Necesita etiquetas de polígonos, e imgsz al tamaño nativo del
+        checkpoint.
+
         model = LibreYOLO("LibreECs-seg.pt")
+
         model.train(
             data="my-dataset.yaml",
             epochs=50,
@@ -149,15 +172,23 @@ snippets:
         libreyolo export model=LibreECs-seg.pt format=onnx imgsz=640
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo Results.
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        Results.
+
         model = LibreYOLO("LibreECs.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)
+source_hash: 39c6975fc16b3ff1
 ---
 
 ## Instalación

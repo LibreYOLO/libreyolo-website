@@ -1,16 +1,21 @@
 ---
 title: libreyolo ui
-seo_title: "libreyolo ui 命令参考"
-description: "启动本地推理 Web 界面：绑定地址、端口行为、设备选择，以及命令如何退出。"
-lead: "启动一个本地 Web 服务器，接受拖入或粘贴的图片，用你选定的模型对它们跑推理，并在浏览器里显示结果。"
-keywords: [libreyolo ui cli, libreyolo web 界面, 本地推理 web 界面, 拖拽图片推理, libreyolo ui 端口]
-last_verified: "1.5.0"
+seo_title: libreyolo ui 命令参考
+description: 启动本地推理 Web 界面：绑定地址、端口行为、设备选择，以及命令如何退出。
+lead: 启动一个本地 Web 服务器，接受拖入或粘贴的图片，用你选定的模型对它们跑推理，并在浏览器里显示结果。
+keywords:
+  - libreyolo ui cli
+  - libreyolo web 界面
+  - 本地推理 web 界面
+  - 拖拽图片推理
+  - libreyolo ui 端口
+last_verified: 1.5.0
 meta:
   - label: 命令
     value: libreyolo ui
     mono: true
   - label: 输出
-    value: "在 stdout 上打印一个服务器 URL，随后进程留在前台"
+    value: 在 stdout 上打印一个服务器 URL，随后进程留在前台
 snippets:
   examples:
     - label: 基本用法
@@ -25,6 +30,7 @@ snippets:
       language: bash
       code: |
         libreyolo ui device=cpu json=true
+source_hash: b0eebd33fd0f463b
 ---
 
 ## 概要

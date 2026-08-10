@@ -1,8 +1,15 @@
 ---
 title: RKNN
-seo_title: "Exportar para RKNN em NPUs Rockchip"
-description: "Compile um detector LibreYOLO para um artefato .rknn da Rockchip: o SDK do fabricante que você mesmo instala, as quatro variantes RK3588 validadas e a paridade no simulador."
-lead: "RKNN é o formato compilado de NPU da Rockchip. O LibreYOLO exporta um ONNX intermediário de opset 19, compila com o SDK RKNN Toolkit2 e consegue comparar o grafo compilado com o ONNX Runtime no simulador de host do Toolkit2, sem placa nenhuma."
+seo_title: Exportar para RKNN em NPUs Rockchip
+description: >-
+  Compile um detector LibreYOLO para um artefato .rknn da Rockchip: o SDK do
+  fabricante que você mesmo instala, as quatro variantes RK3588 validadas e a
+  paridade no simulador.
+lead: >-
+  RKNN é o formato compilado de NPU da Rockchip. O LibreYOLO exporta um ONNX
+  intermediário de opset 19, compila com o SDK RKNN Toolkit2 e consegue comparar
+  o grafo compilado com o ONNX Runtime no simulador de host do Toolkit2, sem
+  placa nenhuma.
 keywords:
   - exportar yolo rknn
   - npu rockchip
@@ -10,31 +17,42 @@ keywords:
   - rknn-toolkit2
   - paridade simulador rknn
   - inferência rockchip orange pi
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
     value: 'export(format="rknn", name="rk3588")'
     mono: true
   - label: Escreve
-    value: "Um arquivo .rknn, um sidecar .rknn.metadata.json e um relatório .rknn.parity.json quando verify=True"
+    value: >-
+      Um arquivo .rknn, um sidecar .rknn.metadata.json e um relatório
+      .rknn.parity.json quando verify=True
   - label: Extra
-    value: "Nenhum no PyPI. O rknn-toolkit2 é um SDK do fabricante que você mesmo instala."
+    value: >-
+      Nenhum no PyPI. O rknn-toolkit2 é um SDK do fabricante que você mesmo
+      instala.
   - label: Recarrega com
-    value: "Não pelo LibreYOLO. O artefato roda na placa com o runtime da Rockchip."
+    value: Não pelo LibreYOLO. O artefato roda na placa com o runtime da Rockchip.
   - label: Formas
-    value: "Quadrada fixa, batch 1, opset 19. Os três são exigidos."
+    value: 'Quadrada fixa, batch 1, opset 19. Os três são exigidos.'
   - label: Precisão
-    value: "O build de ponto flutuante do fabricante. half=True e int8=True são rejeitados."
+    value: >-
+      O build de ponto flutuante do fabricante. half=True e int8=True são
+      rejeitados.
   - label: Escopo
-    value: "Quatro variantes de detecção no RK3588: YOLO9-t, YOLO9-E2E-t, PicoDet-s e YOLO-NAS-s"
-verification: "Lido de libreyolo/export/rknn.py, libreyolo/export/exporter.py, libreyolo/export/support.py e docs/rknn.md no branch dev. Os números de paridade medidos vêm do registro de validação de 2026-08-04 em docs/rknn.md."
+    value: >-
+      Quatro variantes de detecção no RK3588: YOLO9-t, YOLO9-E2E-t, PicoDet-s e
+      YOLO-NAS-s
+verification: >-
+  Lido de libreyolo/export/rknn.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py e docs/rknn.md no branch dev. Os números de
+  paridade medidos vêm do registro de validação de 2026-08-04 em docs/rknn.md.
 snippets:
   install:
     - label: Lado do LibreYOLO
       language: bash
       code: |
         pip install "libreyolo[onnx]"
-    - label: SDK do fabricante, instalado por você
+    - label: 'SDK do fabricante, instalado por você'
       language: bash
       code: |
         # O rknn-toolkit2 é um SDK da Rockchip sob licença separada. O LibreYOLO
@@ -51,13 +69,19 @@ snippets:
   export:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # Escreve weights/LibreYOLO9t.rknn e weights/LibreYOLO9t.rknn.metadata.json
-        path = model.export(format="rknn", name="rk3588", imgsz=640, verify=True)
+
+        # Escreve weights/LibreYOLO9t.rknn e
+        weights/LibreYOLO9t.rknn.metadata.json
+
+        path = model.export(format="rknn", name="rk3588", imgsz=640,
+        verify=True)
+
         print(path)
     - label: CLI
       language: bash
@@ -100,6 +124,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: c659713cc3c8cc9e
 ---
 
 ## Instalação

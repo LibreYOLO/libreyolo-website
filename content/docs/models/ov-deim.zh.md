@@ -1,11 +1,20 @@
 ---
 title: OV-DEIM
-families: [ov_deim]
-seo_title: "OV-DEIM：在 LibreYOLO 里做开放词汇检测"
-description: "用 LibreYOLO 里的 OV-DEIM 做实时的 DETR 式开放词汇检测。装上 openvocab extra，用自由文本词汇表做预测。"
-lead: "OV-DEIM 是一个 DETR 式的开放词汇目标检测器，它把解码器 query 拿去和随库提供的 MobileCLIP 文本塔输出的文本嵌入向量做匹配。LibreYOLO 把它原生移植成开放词汇检测器层里一个仅支持预测的家族。"
-keywords: [OV-DEIM, DEIMv2, 开放词汇目标检测, "实时目标检测 python", "零样本检测 python", LibreOpenVocab]
-last_verified: "1.5.0"
+families:
+  - ov_deim
+seo_title: OV-DEIM：在 LibreYOLO 里做开放词汇检测
+description: 用 LibreYOLO 里的 OV-DEIM 做实时的 DETR 式开放词汇检测。装上 openvocab extra，用自由文本词汇表做预测。
+lead: >-
+  OV-DEIM 是一个 DETR 式的开放词汇目标检测器，它把解码器 query 拿去和随库提供的 MobileCLIP
+  文本塔输出的文本嵌入向量做匹配。LibreYOLO 把它原生移植成开放词汇检测器层里一个仅支持预测的家族。
+keywords:
+  - OV-DEIM
+  - DEIMv2
+  - 开放词汇目标检测
+  - 实时目标检测 python
+  - 零样本检测 python
+  - LibreOpenVocab
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -34,6 +43,7 @@ snippets:
         model.set_classes(["giraffe"])
         second = model.predict(SAMPLE_IMAGE, conf=0.5)
         print(second.names, len(second))
+source_hash: 0c295f555a9eb303
 ---
 
 ## 安装

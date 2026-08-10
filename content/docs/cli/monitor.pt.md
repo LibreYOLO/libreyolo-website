@@ -1,16 +1,27 @@
 ---
 title: libreyolo monitor
-seo_title: "Referência do comando libreyolo monitor"
-description: "Serve um dashboard ao vivo para execuções de treinamento: argumentos com seus padrões, o que o servidor lê do disco e como um servidor cobre várias execuções."
-lead: "Serve um dashboard web para execuções de treinamento, lendo os artefatos que uma execução grava no disco. Ele nunca se conecta ao processo de treinamento, então execuções ao vivo, concluídas e que quebraram aparecem do mesmo jeito."
-keywords: [libreyolo monitor cli, dashboard de treinamento, acompanhar treinamento yolo, libreyolo monitor porta, visualizar métricas de treinamento]
-last_verified: "1.5.0"
+seo_title: Referência do comando libreyolo monitor
+description: >-
+  Serve um dashboard ao vivo para execuções de treinamento: argumentos com seus
+  padrões, o que o servidor lê do disco e como um servidor cobre várias
+  execuções.
+lead: >-
+  Serve um dashboard web para execuções de treinamento, lendo os artefatos que
+  uma execução grava no disco. Ele nunca se conecta ao processo de treinamento,
+  então execuções ao vivo, concluídas e que quebraram aparecem do mesmo jeito.
+keywords:
+  - libreyolo monitor cli
+  - dashboard de treinamento
+  - acompanhar treinamento yolo
+  - libreyolo monitor porta
+  - visualizar métricas de treinamento
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo monitor
     mono: true
   - label: Saída
-    value: "A URL do servidor no stdout, e então o processo fica em primeiro plano"
+    value: 'A URL do servidor no stdout, e então o processo fica em primeiro plano'
 snippets:
   examples:
     - label: Básico
@@ -22,10 +33,11 @@ snippets:
       language: bash
       code: |
         libreyolo monitor experiments/
-    - label: Uma execução, porta fixa, sem navegador
+    - label: 'Uma execução, porta fixa, sem navegador'
       language: bash
       code: |
         libreyolo monitor runs/train/exp port=9100 no_browser=true
+source_hash: 4aa178141d451728
 ---
 
 ## Sinopse

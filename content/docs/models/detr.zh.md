@@ -1,11 +1,23 @@
 ---
 title: DETR
-families: [detr]
-seo_title: "DETR：在 Apache-2.0 许可下预测和导出"
-description: "在 LibreYOLO 里运行 DETR，最初的 detection transformer。安装、预测、验证并导出四种基于 ResNet 的尺寸，全部采用 Apache-2.0 许可。"
-lead: "DETR 是最初的 detection transformer，它用经过匈牙利匹配（Hungarian matching）的 transformer 解码器预测一组固定数量的目标，而不是用锚框或稠密网格。LibreYOLO 提供四种尺寸，用于目标检测，只支持推理。"
-keywords: [DETR, "detection transformer", 目标检测, 匈牙利匹配, "transformer 解码器", "detr 推理", "detr onnx 导出"]
-last_verified: "1.5.0"
+families:
+  - detr
+seo_title: DETR：在 Apache-2.0 许可下预测和导出
+description: >-
+  在 LibreYOLO 里运行 DETR，最初的 detection transformer。安装、预测、验证并导出四种基于 ResNet 的尺寸，全部采用
+  Apache-2.0 许可。
+lead: >-
+  DETR 是最初的 detection transformer，它用经过匈牙利匹配（Hungarian matching）的 transformer
+  解码器预测一组固定数量的目标，而不是用锚框或稠密网格。LibreYOLO 提供四种尺寸，用于目标检测，只支持推理。
+keywords:
+  - DETR
+  - detection transformer
+  - 目标检测
+  - 匈牙利匹配
+  - transformer 解码器
+  - detr 推理
+  - detr onnx 导出
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +32,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDETRr50.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDETRr50.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -51,9 +65,11 @@ snippets:
         model.export(format="tensorrt", imgsz=800, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDETRr50.pt format=onnx imgsz=800
-        libreyolo export model=LibreDETRr50.pt format=tensorrt imgsz=800 half=True
+
+        libreyolo export model=LibreDETRr50.pt format=tensorrt imgsz=800
+        half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -65,6 +81,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: c5549a596742d2a5
 ---
 
 ## 安装

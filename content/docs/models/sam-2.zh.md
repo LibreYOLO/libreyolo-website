@@ -1,11 +1,24 @@
 ---
 title: SAM 2
-families: [sam2]
-seo_title: "SAM 2：LibreYOLO 里的可提示图像分割"
-description: "在 LibreYOLO 里用 SAM 2 做基于点提示和框提示的分割。安装 tiny、small、base-plus 和 large 检查点并做预测，Apache-2.0。"
-lead: "SAM 2 在 SAM 的基础上加了一套为视频设计的流式记忆（streaming memory）架构，把一次点击或框选变成一张物体掩码。LibreYOLO 通过专门的 LibreSAM 工厂函数支持它的图像分割路径，与 LibreYOLO() 检测器工厂函数分开。"
-keywords: [SAM 2, Segment Anything, "sam2 python", "可提示分割", "交互式分割", "点提示分割", "sam2 掩码", Hiera]
-last_verified: "1.5.0"
+families:
+  - sam2
+seo_title: SAM 2：LibreYOLO 里的可提示图像分割
+description: >-
+  在 LibreYOLO 里用 SAM 2 做基于点提示和框提示的分割。安装 tiny、small、base-plus 和 large
+  检查点并做预测，Apache-2.0。
+lead: >-
+  SAM 2 在 SAM 的基础上加了一套为视频设计的流式记忆（streaming memory）架构，把一次点击或框选变成一张物体掩码。LibreYOLO
+  通过专门的 LibreSAM 工厂函数支持它的图像分割路径，与 LibreYOLO() 检测器工厂函数分开。
+keywords:
+  - SAM 2
+  - Segment Anything
+  - sam2 python
+  - 可提示分割
+  - 交互式分割
+  - 点提示分割
+  - sam2 掩码
+  - Hiera
+last_verified: 1.5.0
 snippets:
   predict:
     - label: 点提示与框提示
@@ -42,6 +55,7 @@ snippets:
         a = model.predict(points=[640, 420], labels=[1])
         b = model.predict(bboxes=[300, 200, 900, 700])
         model.reset_image()
+source_hash: 2a3090d7ecd533b0
 ---
 
 ## 安装

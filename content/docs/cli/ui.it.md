@@ -1,30 +1,40 @@
 ---
 title: libreyolo ui
-seo_title: "riferimento del comando libreyolo ui"
-description: "Avvia la web UI locale per l'inferenza: indirizzo di bind, comportamento della porta, scelta del dispositivo e come termina il comando."
-lead: "Avvia un server web locale che accetta immagini trascinate o incollate, ci esegue sopra il modello scelto e mostra i risultati nel browser."
-keywords: [libreyolo ui cli, libreyolo web ui, ui web inferenza locale, inferenza drag and drop immagini, libreyolo ui porta]
-last_verified: "1.5.0"
+seo_title: riferimento del comando libreyolo ui
+description: >-
+  Avvia la web UI locale per l'inferenza: indirizzo di bind, comportamento della
+  porta, scelta del dispositivo e come termina il comando.
+lead: >-
+  Avvia un server web locale che accetta immagini trascinate o incollate, ci
+  esegue sopra il modello scelto e mostra i risultati nel browser.
+keywords:
+  - libreyolo ui cli
+  - libreyolo web ui
+  - ui web inferenza locale
+  - inferenza drag and drop immagini
+  - libreyolo ui porta
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo ui
     mono: true
   - label: Output
-    value: "Un URL del server su stdout, poi il processo resta in primo piano"
+    value: 'Un URL del server su stdout, poi il processo resta in primo piano'
 snippets:
   examples:
     - label: Base
       language: bash
       code: |
         libreyolo ui
-    - label: Porta fissa, senza browser
+    - label: 'Porta fissa, senza browser'
       language: bash
       code: |
         libreyolo ui port=9000 no_browser=true
-    - label: Su CPU, output leggibile da un programma
+    - label: 'Su CPU, output leggibile da un programma'
       language: bash
       code: |
         libreyolo ui device=cpu json=true
+source_hash: b0eebd33fd0f463b
 ---
 
 ## Sintassi

@@ -1,10 +1,23 @@
 ---
 title: Licencias
-seo_title: "Licencias de LibreYOLO: código y pesos"
-description: "El código propio de LibreYOLO es MIT. El código upstream incorporado y los checkpoints publicados llevan sus propias licencias, y varias de ellas son no comerciales."
-lead: "LibreYOLO reúne tres cosas con licencias separadas: su propio código, el código upstream incorporado en una familia de modelos y los checkpoints preentrenados. A menudo no comparten la misma licencia."
-keywords: [libreyolo licencia, licencia libreyolo uso comercial, pesos de modelos no comercial, licencia checkpoints yolo, biblioteca vision artificial mit, apache-2.0 deteccion de objetos]
-last_verified: "1.5.0"
+seo_title: 'Licencias de LibreYOLO: código y pesos'
+description: >-
+  El código propio de LibreYOLO es MIT. El código upstream incorporado y los
+  checkpoints publicados llevan sus propias licencias, y varias de ellas son no
+  comerciales.
+lead: >-
+  LibreYOLO reúne tres cosas con licencias separadas: su propio código, el
+  código upstream incorporado en una familia de modelos y los checkpoints
+  preentrenados. A menudo no comparten la misma licencia.
+keywords:
+  - libreyolo licencia
+  - licencia libreyolo uso comercial
+  - pesos de modelos no comercial
+  - licencia checkpoints yolo
+  - biblioteca vision artificial mit
+  - apache-2.0 deteccion de objetos
+last_verified: 1.5.0
+source_hash: 83536fea4dc4eaec
 ---
 
 ## El código propio de LibreYOLO

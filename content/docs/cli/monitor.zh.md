@@ -1,16 +1,21 @@
 ---
 title: libreyolo monitor
-seo_title: "libreyolo monitor 命令参考"
-description: "为训练 run 提供一个实时仪表盘：带默认值的参数、服务端从磁盘读取哪些文件，以及一个服务端如何覆盖多个 run。"
-lead: "为训练 run 提供一个网页仪表盘，读取 run 写到磁盘上的产物。它从不挂接到训练进程，所以正在跑的、已结束的和已崩溃的 run 都能显示。"
-keywords: [libreyolo monitor cli, yolo 训练可视化, 实时查看训练过程, libreyolo monitor 端口, 训练指标面板]
-last_verified: "1.5.0"
+seo_title: libreyolo monitor 命令参考
+description: 为训练 run 提供一个实时仪表盘：带默认值的参数、服务端从磁盘读取哪些文件，以及一个服务端如何覆盖多个 run。
+lead: 为训练 run 提供一个网页仪表盘，读取 run 写到磁盘上的产物。它从不挂接到训练进程，所以正在跑的、已结束的和已崩溃的 run 都能显示。
+keywords:
+  - libreyolo monitor cli
+  - yolo 训练可视化
+  - 实时查看训练过程
+  - libreyolo monitor 端口
+  - 训练指标面板
+last_verified: 1.5.0
 meta:
   - label: 命令
     value: libreyolo monitor
     mono: true
   - label: 输出
-    value: "在 stdout 上打印一个服务地址，然后进程留在前台"
+    value: 在 stdout 上打印一个服务地址，然后进程留在前台
 snippets:
   examples:
     - label: 基础
@@ -26,6 +31,7 @@ snippets:
       language: bash
       code: |
         libreyolo monitor runs/train/exp port=9100 no_browser=true
+source_hash: 4aa178141d451728
 ---
 
 ## 概要

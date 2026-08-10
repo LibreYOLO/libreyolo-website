@@ -1,16 +1,25 @@
 ---
 title: libreyolo monitor
-seo_title: "référence de la commande libreyolo monitor"
-description: "Sert un tableau de bord en direct pour les entraînements : les arguments et leurs valeurs par défaut, ce que le serveur lit sur le disque, et comment un seul serveur couvre plusieurs runs."
-lead: "Sert un tableau de bord web pour les entraînements, en lisant les artefacts qu'un run écrit sur le disque. Il ne s'attache jamais au processus d'entraînement, si bien que les runs en cours, terminés et plantés s'affichent tous."
-keywords: [libreyolo monitor cli, dashboard entraînement, suivre un entraînement en direct, libreyolo monitor port, visualiseur de métriques d'entraînement]
-last_verified: "1.5.0"
+seo_title: référence de la commande libreyolo monitor
+description: "Sert un tableau de bord en direct pour les entraînements\_: les arguments et leurs valeurs par défaut, ce que le serveur lit sur le disque, et comment un seul serveur couvre plusieurs runs."
+lead: >-
+  Sert un tableau de bord web pour les entraînements, en lisant les artefacts
+  qu'un run écrit sur le disque. Il ne s'attache jamais au processus
+  d'entraînement, si bien que les runs en cours, terminés et plantés s'affichent
+  tous.
+keywords:
+  - libreyolo monitor cli
+  - dashboard entraînement
+  - suivre un entraînement en direct
+  - libreyolo monitor port
+  - visualiseur de métriques d'entraînement
+last_verified: 1.5.0
 meta:
   - label: Commande
     value: libreyolo monitor
     mono: true
   - label: Sortie
-    value: "Une URL de serveur sur stdout, puis le processus reste au premier plan"
+    value: 'Une URL de serveur sur stdout, puis le processus reste au premier plan'
 snippets:
   examples:
     - label: Basique
@@ -22,10 +31,11 @@ snippets:
       language: bash
       code: |
         libreyolo monitor experiments/
-    - label: Un seul run, port fixe, sans navigateur
+    - label: 'Un seul run, port fixe, sans navigateur'
       language: bash
       code: |
         libreyolo monitor runs/train/exp port=9100 no_browser=true
+source_hash: 4aa178141d451728
 ---
 
 ## Synopsis

@@ -1,10 +1,23 @@
 ---
 title: Detección orientada
-seo_title: "Detección orientada en LibreYOLO"
-description: "Detecta objetos rotados en LibreYOLO: las familias que ofrecen cajas orientadas, la fila de etiquetas de cuatro esquinas y las llamadas de predicción, entrenamiento, validación y exportación."
-lead: "La detección orientada de objetos localiza cada instancia con un rectángulo rotado en vez de uno alineado a los ejes, así que un objeto inclinado queda bien ceñido en lugar de encerrado en una caja llena de fondo. La clave de la tarea es obb."
-keywords: [detección de cajas orientadas, detección de objetos rotados, OBB python, dataset DOTA, detección de objetos en imágenes aéreas, IoU rotado]
-last_verified: "1.5.0"
+seo_title: Detección orientada en LibreYOLO
+description: >-
+  Detecta objetos rotados en LibreYOLO: las familias que ofrecen cajas
+  orientadas, la fila de etiquetas de cuatro esquinas y las llamadas de
+  predicción, entrenamiento, validación y exportación.
+lead: >-
+  La detección orientada de objetos localiza cada instancia con un rectángulo
+  rotado en vez de uno alineado a los ejes, así que un objeto inclinado queda
+  bien ceñido en lugar de encerrado en una caja llena de fondo. La clave de la
+  tarea es obb.
+keywords:
+  - detección de cajas orientadas
+  - detección de objetos rotados
+  - OBB python
+  - dataset DOTA
+  - detección de objetos en imágenes aéreas
+  - IoU rotado
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -28,15 +41,21 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Esquinas en vez de ángulos
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         result = LibreYOLO("LibreRFDETRs-obb.pt")(SAMPLE_IMAGE)
+
         obb = result.obb
 
+
         print(obb.xyxyxyxy.shape)    # (N, 4, 2) puntos de esquina en píxeles
+
         print(obb.xyxyxyxyn.shape)   # los mismos, normalizados
-        print(obb.xyxy.shape)        # (N, 4) caja alineada a los ejes que la contiene
+
+        print(obb.xyxy.shape)        # (N, 4) caja alineada a los ejes que la
+        contiene
     - label: Un checkpoint más pequeño
       language: python
       code: |
@@ -63,13 +82,18 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         # Continúa desde pesos orientados publicados. data debe apuntar a un
+
         # dataset cuyas filas de etiquetas lleven cuatro esquinas.
+
         model = LibreYOLO("LibreRFDETRs-obb.pt")
-        model.train(data="my-obb-dataset.yaml", epochs=50, imgsz=512, batch=8, lr0=1e-4)
+
+        model.train(data="my-obb-dataset.yaml", epochs=50, imgsz=512, batch=8,
+        lr0=1e-4)
     - label: CLI
       language: bash
       code: |
@@ -118,22 +142,33 @@ snippets:
         libreyolo export model=LibreRFDETRs-obb.pt format=onnx imgsz=512
     - label: RT-DETRv2
       language: bash
-      code: |
+      code: >
         # ONNX y TorchScript son los destinos validados aquí, a FP32,
+
         # batch 1 y con un lienzo fijo de 1024 por 1024.
+
         libreyolo export model=LibreRTDETRv2n-obb.pt format=onnx imgsz=1024
-        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript imgsz=1024
+
+        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript
+        imgsz=1024
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factoría enruta según el sufijo del archivo, así que un artefacto
-        # exportado se carga como un checkpoint y devuelve el mismo objeto Results.
+
+        # exportado se carga como un checkpoint y devuelve el mismo objeto
+        Results.
+
         model = LibreYOLO("LibreRFDETRs-obb.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.obb.xywhr)
+source_hash: 0d605d956f3ea025
 ---
 
 ## Definición

@@ -1,11 +1,24 @@
 ---
 title: CenterNet
-families: [centernet]
-seo_title: "CenterNet：在 LibreYOLO 里做目标检测"
-description: "在 LibreYOLO 里用 ResDCN-18 和 DLA-34 骨干运行 CenterNet（Objects as Points）。采用 MIT 许可，可以预测、验证并导出到 ONNX。没有训练路径。"
-lead: "CenterNet 把一个目标建模为它检测框的中心点，其余所有属性都从热力图的一个峰值回归得到，所以它既不需要锚框，也不需要非极大值抑制（non-maximum-suppression）步骤。LibreYOLO 以仅推理的检测器形式提供它。"
-keywords: [CenterNet, "Objects as Points", "centernet 目标检测", "无锚框检测器", "关键点检测", ResDCN-18, DLA-34]
-last_verified: "1.5.0"
+families:
+  - centernet
+seo_title: CenterNet：在 LibreYOLO 里做目标检测
+description: >-
+  在 LibreYOLO 里用 ResDCN-18 和 DLA-34 骨干运行 CenterNet（Objects as Points）。采用 MIT
+  许可，可以预测、验证并导出到 ONNX。没有训练路径。
+lead: >-
+  CenterNet
+  把一个目标建模为它检测框的中心点，其余所有属性都从热力图的一个峰值回归得到，所以它既不需要锚框，也不需要非极大值抑制（non-maximum-suppression）步骤。LibreYOLO
+  以仅推理的检测器形式提供它。
+keywords:
+  - CenterNet
+  - Objects as Points
+  - centernet 目标检测
+  - 无锚框检测器
+  - 关键点检测
+  - ResDCN-18
+  - DLA-34
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +33,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreCenterNetresdcn18.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreCenterNetresdcn18.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: DLA-34
       language: python
       code: |
@@ -71,6 +86,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 20aaef83cc95590d
 ---
 
 ## 安装

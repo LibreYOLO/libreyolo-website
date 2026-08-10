@@ -1,23 +1,47 @@
 ---
 title: Embeddings
-seo_title: "Embeddings de imagen y de región en LibreYOLO"
-description: "La tarea embed devuelve vectores float32 normalizados con L2 para una imagen entera, para cada región detectada o para texto. Registra una galería, empareja por similitud del coseno y busca desde Python o la CLI."
-lead: "Una sola tarea cubre todos los vectores que produce LibreYOLO. embed devuelve filas float32 de longitud unitaria cuyo producto escalar es una puntuación de similitud, tanto si la fila describe una imagen entera como una sola cara detectada o una línea de texto, y la misma Gallery las empareja todas."
-keywords: [embeddings de imagen python, embedding normalizado l2, búsqueda por similitud del coseno, tarea embed libreyolo, buscar imágenes similares, registrar galería de caras, embeddings clip, embeddings dinov2, embeddings reid]
-last_verified: "1.5.0"
-verification: "Clave de tarea y alias leídos de libreyolo/tasks.py. Payloads de resultado de las clases Embeddings e Identities en libreyolo/utils/results.py. API de Gallery de libreyolo/utils/gallery.py. embed y _postprocess_embeddings de libreyolo/models/base/model.py. Familias soportadas localizadas buscando embed en SUPPORTED_TASKS dentro de libreyolo/models/**/model.py. Superficie de CLI de libreyolo/cli/__init__.py, libreyolo/cli/commands/special.py y libreyolo/cli/commands/predict.py. Intención de diseño de docs/adr/0015-embed-generalization.md."
+seo_title: Embeddings de imagen y de región en LibreYOLO
+description: >-
+  La tarea embed devuelve vectores float32 normalizados con L2 para una imagen
+  entera, para cada región detectada o para texto. Registra una galería,
+  empareja por similitud del coseno y busca desde Python o la CLI.
+lead: >-
+  Una sola tarea cubre todos los vectores que produce LibreYOLO. embed devuelve
+  filas float32 de longitud unitaria cuyo producto escalar es una puntuación de
+  similitud, tanto si la fila describe una imagen entera como una sola cara
+  detectada o una línea de texto, y la misma Gallery las empareja todas.
+keywords:
+  - embeddings de imagen python
+  - embedding normalizado l2
+  - búsqueda por similitud del coseno
+  - tarea embed libreyolo
+  - buscar imágenes similares
+  - registrar galería de caras
+  - embeddings clip
+  - embeddings dinov2
+  - embeddings reid
+last_verified: 1.5.0
+verification: >-
+  Clave de tarea y alias leídos de libreyolo/tasks.py. Payloads de resultado de
+  las clases Embeddings e Identities en libreyolo/utils/results.py. API de
+  Gallery de libreyolo/utils/gallery.py. embed y _postprocess_embeddings de
+  libreyolo/models/base/model.py. Familias soportadas localizadas buscando embed
+  en SUPPORTED_TASKS dentro de libreyolo/models/**/model.py. Superficie de CLI
+  de libreyolo/cli/__init__.py, libreyolo/cli/commands/special.py y
+  libreyolo/cli/commands/predict.py. Intención de diseño de
+  docs/adr/0015-embed-generalization.md.
 meta:
   - label: Clave de tarea
     value: embed
     mono: true
   - label: Alias
-    value: face-recognition, reid, face
+    value: 'face-recognition, reid, face'
     mono: true
   - label: Payloads de resultado
-    value: Embeddings, Identities
+    value: 'Embeddings, Identities'
     mono: true
   - label: Dtype de fila
-    value: float32, longitud unitaria
+    value: 'float32, longitud unitaria'
 snippets:
   predict:
     - label: Imagen entera
@@ -66,16 +90,23 @@ snippets:
   similarity:
     - label: Comparar dos conjuntos de filas
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
 
+
         query = model.embed("query.jpg")          # (1, 512)
+
         pool = model.embed(["a.jpg", "b.jpg"])    # (2, 512)
 
-        # Las filas son unitarias: la similitud del coseno es un producto escalar.
+
+        # Las filas son unitarias: la similitud del coseno es un producto
+        escalar.
+
         scores = model("query.jpg").embeddings.similarity(pool)
+
         print(scores.shape)  # (1, 2)
     - label: Imagen contra texto
       language: python
@@ -129,9 +160,11 @@ snippets:
   cli:
     - label: Registrar un árbol de carpetas
       language: bash
-      code: |
+      code: >
         # source/<identity>/*.jpg. Una galería existente se amplía in situ.
-        libreyolo enroll model=librefacerec-l.onnx source=people/ gallery=refs.npz
+
+        libreyolo enroll model=librefacerec-l.onnx source=people/
+        gallery=refs.npz
     - label: Identificar durante la predicción
       language: bash
       code: |
@@ -139,12 +172,15 @@ snippets:
           gallery=refs.npz gallery_threshold=0.45
     - label: Comparar dos imágenes
       language: bash
-      code: |
+      code: >
         libreyolo compare model=librefacerec-l.onnx \
           source=a.jpg source2=b.jpg threshold=0.4
 
         # verify es el mismo comando bajo un segundo nombre.
-        libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg --json
+
+        libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg
+        --json
+source_hash: ffbaad5599035bc7
 ---
 
 ## Definición

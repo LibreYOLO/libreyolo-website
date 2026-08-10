@@ -1,8 +1,10 @@
 ---
 title: ONNX
-seo_title: "从 LibreYOLO 导出 ONNX"
-description: "把 LibreYOLO 模型导出成 ONNX：LibreYOLO 按家族挑选的 opset、动态轴、内嵌 NMS、INT8，以及导出的图怎么加载回来。"
-lead: "ONNX 是一种可移植的图格式。LibreYOLO 用 torch.onnx.export 对模型做 tracing，可选地简化图，并把家族、任务、类别名和输入尺寸写进文件自身的元数据，这样任何 LibreYOLO 后端都能重建后处理。"
+seo_title: 从 LibreYOLO 导出 ONNX
+description: 把 LibreYOLO 模型导出成 ONNX：LibreYOLO 按家族挑选的 opset、动态轴、内嵌 NMS、INT8，以及导出的图怎么加载回来。
+lead: >-
+  ONNX 是一种可移植的图格式。LibreYOLO 用 torch.onnx.export 对模型做
+  tracing，可选地简化图，并把家族、任务、类别名和输入尺寸写进文件自身的元数据，这样任何 LibreYOLO 后端都能重建后处理。
 keywords:
   - yolo 导出 onnx
   - onnxruntime 推理
@@ -12,24 +14,27 @@ keywords:
   - onnx 内嵌 nms
   - onnx int8 量化 qdq
   - onnx metadata_props
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: 参数
-    value: 'export(format="onnx")'
+    value: export(format="onnx")
     mono: true
   - label: 输出
-    value: "一个 .onnx 文件，元数据内嵌在图里"
+    value: 一个 .onnx 文件，元数据内嵌在图里
   - label: 额外依赖
     value: 'pip install "libreyolo[onnx]"'
     mono: true
   - label: 重新加载方式
-    value: 'LibreYOLO("weights/LibreYOLO9t.onnx")'
+    value: LibreYOLO("weights/LibreYOLO9t.onnx")
     mono: true
   - label: 形状
-    value: "Python 里默认 batch 轴动态；分任务的例外见下文"
+    value: Python 里默认 batch 轴动态；分任务的例外见下文
   - label: 精度
-    value: "FP32、FP16（half=True）、INT8（int8=True，YOLO9 检测）"
-verification: "读自 dev 分支上的 libreyolo/export/onnx.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/onnx.py 和 libreyolo/cli/commands/export.py。"
+    value: FP32、FP16（half=True）、INT8（int8=True，YOLO9 检测）
+verification: >-
+  读自 dev 分支上的
+  libreyolo/export/onnx.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/onnx.py
+  和 libreyolo/cli/commands/export.py。
 snippets:
   install:
     - label: 安装
@@ -109,29 +114,41 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: 裸用 ONNX Runtime
       language: python
-      code: |
+      code: >
         import numpy as np
+
         import onnx
+
         import onnxruntime as ort
+
 
         session = ort.InferenceSession(
             "weights/LibreYOLO9t.onnx",
             providers=["CPUExecutionProvider"],
         )
 
+
         # 这条路径上的预处理和后处理都得你自己写
+
         batch = np.zeros((1, 3, 640, 640), dtype=np.float32)
+
         outputs = session.run(None, {session.get_inputs()[0].name: batch})
+
         print([out.shape for out in outputs])
 
+
         # 图里带着家族、任务、类别名和输入尺寸
-        meta = {p.key: p.value for p in onnx.load("weights/LibreYOLO9t.onnx").metadata_props}
+
+        meta = {p.key: p.value for p in
+        onnx.load("weights/LibreYOLO9t.onnx").metadata_props}
+
         print(meta["model_family"], meta["task"], meta["imgsz"])
   support:
     - label: 导出前先查一个家族和任务
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: cee78250fc7189a3
 ---
 
 ## 安装

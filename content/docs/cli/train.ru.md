@@ -1,10 +1,23 @@
 ---
 title: libreyolo train
-seo_title: "справочник по команде libreyolo train"
-description: "Обучение модели из командной строки: все 59 аргументов со значениями по умолчанию, как их заменяют настройки семейства и какие аргументы семейство игнорирует."
-lead: "Обучает одну модель на одном датасете и записывает чекпойнты, метрики и логи в каталог запуска. У каждого аргумента ниже есть значение по умолчанию из определения команды, и его может заменить собственный конфиг обучения семейства моделей."
-keywords: [libreyolo train cli, обучение yolo из командной строки, команда libreyolo train, аргументы libreyolo train, обучить yolo на своём датасете, заморозка слоёв yolo]
-last_verified: "1.5.0"
+seo_title: справочник по команде libreyolo train
+description: >-
+  Обучение модели из командной строки: все 59 аргументов со значениями по
+  умолчанию, как их заменяют настройки семейства и какие аргументы семейство
+  игнорирует.
+lead: >-
+  Обучает одну модель на одном датасете и записывает чекпойнты, метрики и логи в
+  каталог запуска. У каждого аргумента ниже есть значение по умолчанию из
+  определения команды, и его может заменить собственный конфиг обучения
+  семейства моделей.
+keywords:
+  - libreyolo train cli
+  - обучение yolo из командной строки
+  - команда libreyolo train
+  - аргументы libreyolo train
+  - обучить yolo на своём датасете
+  - заморозка слоёв yolo
+last_verified: 1.5.0
 meta:
   - label: Команда
     value: libreyolo train
@@ -13,26 +26,33 @@ meta:
     value: data
     mono: true
   - label: Результат
-    value: "Чекпойнты, метрики и логи в runs/train/exp"
+    value: 'Чекпойнты, метрики и логи в runs/train/exp'
 snippets:
   examples:
     - label: Базовый
       language: bash
-      code: |
-        # coco8.yaml входит в пакет и скачивает свои 8 изображений при первом использовании.
-        libreyolo train model=LibreYOLO9s.pt data=coco8.yaml epochs=10 imgsz=640 batch=8
+      code: >
+        # coco8.yaml входит в пакет и скачивает свои 8 изображений при первом
+        использовании.
+
+        libreyolo train model=LibreYOLO9s.pt data=coco8.yaml epochs=10 imgsz=640
+        batch=8
     - label: Сначала проверка итоговой конфигурации
       language: bash
-      code: |
+      code: >
         # Печатает, что будет использовать запуск, включая значения по умолчанию
+
         # семейства, и выходит без обучения и загрузки данных.
-        libreyolo train model=LibreDFINEn.pt data=coco8.yaml epochs=10 dry_run=true
+
+        libreyolo train model=LibreDFINEn.pt data=coco8.yaml epochs=10
+        dry_run=true
     - label: Именованный запуск с явным рецептом
       language: bash
       code: |
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
+source_hash: 3aad4298310d3081
 ---
 
 ## Синтаксис

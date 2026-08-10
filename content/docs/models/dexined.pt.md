@@ -1,28 +1,50 @@
 ---
 title: DexiNed
-families: [dexined]
-seo_title: "DexiNed: detecção de bordas, com o seu próprio checkpoint"
-description: "Use o DexiNed no LibreYOLO para predição densa de probabilidade de bordas. Converta um checkpoint licenciado e depois faça predições, valide e exporte."
-lead: "O DexiNed (Dense Extreme Inception Network) é uma rede convolucional que prediz um mapa denso de probabilidade de bordas a partir de uma imagem RGB. O LibreYOLO envolve a arquitetura dele apenas para detecção de bordas; nenhum checkpoint acompanha a biblioteca."
-keywords: [DexiNed, "Dense Extreme Inception Network", "detecção de bordas", "detecção de bordas python", "edge detection", BIPED, "mapa de bordas de imagem"]
-last_verified: "1.5.0"
+families:
+  - dexined
+seo_title: 'DexiNed: detecção de bordas, com o seu próprio checkpoint'
+description: >-
+  Use o DexiNed no LibreYOLO para predição densa de probabilidade de bordas.
+  Converta um checkpoint licenciado e depois faça predições, valide e exporte.
+lead: >-
+  O DexiNed (Dense Extreme Inception Network) é uma rede convolucional que
+  prediz um mapa denso de probabilidade de bordas a partir de uma imagem RGB. O
+  LibreYOLO envolve a arquitetura dele apenas para detecção de bordas; nenhum
+  checkpoint acompanha a biblioteca.
+keywords:
+  - DexiNed
+  - Dense Extreme Inception Network
+  - detecção de bordas
+  - detecção de bordas python
+  - edge detection
+  - BIPED
+  - mapa de bordas de imagem
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         edges = result.edges
+
         print(edges.array.shape)        # (H, W) float32 em [0, 1]
-        print(edges.binary(0.5).sum())  # contagem de pixels de borda após o limiar
+
+        print(edges.binary(0.5).sum())  # contagem de pixels de borda após o
+        limiar
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=weights/LibreDexiNedb-edge.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=weights/LibreDexiNedb-edge.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -36,8 +58,9 @@ snippets:
         print(metrics["metrics/OIS"])   # F-measure na escala ótima da imagem
     - label: CLI
       language: bash
-      code: |
-        libreyolo val model=weights/LibreDexiNedb-edge.pt data=my-dataset.yaml imgsz=352
+      code: >
+        libreyolo val model=weights/LibreDexiNedb-edge.pt data=my-dataset.yaml
+        imgsz=352
   export:
     - label: Python
       language: python
@@ -49,9 +72,12 @@ snippets:
         model.export(format="tensorrt", imgsz=352, half=True)
     - label: CLI
       language: bash
-      code: |
-        libreyolo export model=weights/LibreDexiNedb-edge.pt format=onnx imgsz=352
-        libreyolo export model=weights/LibreDexiNedb-edge.pt format=tensorrt imgsz=352 half=True
+      code: >
+        libreyolo export model=weights/LibreDexiNedb-edge.pt format=onnx
+        imgsz=352
+
+        libreyolo export model=weights/LibreDexiNedb-edge.pt format=tensorrt
+        imgsz=352 half=True
     - label: Usar o arquivo exportado
       language: python
       code: |
@@ -61,6 +87,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.edges.array.shape)
+source_hash: 342597fde3c4ba65
 ---
 
 ## Instalação

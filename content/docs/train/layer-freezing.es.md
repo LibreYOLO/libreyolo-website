@@ -1,8 +1,15 @@
 ---
 title: Congelación de capas
-seo_title: "Congelar capas durante el entrenamiento en LibreYOLO"
-description: "Congela parte de un modelo para transfer learning: un número entero de grupos de congelación de la familia, una lista explícita de índices, o selectores por nombre de módulo y de parámetro."
-lead: "Congelar mantiene fijos los pesos seleccionados mientras el resto del modelo entrena. Los selectores apuntan a los grupos de congelación ordenados de cada familia o a sus nombres de módulo, no a números de capa sueltos de un grafo YAML."
+seo_title: Congelar capas durante el entrenamiento en LibreYOLO
+description: >-
+  Congela parte de un modelo para transfer learning: un número entero de grupos
+  de congelación de la familia, una lista explícita de índices, o selectores por
+  nombre de módulo y de parámetro.
+lead: >-
+  Congelar mantiene fijos los pesos seleccionados mientras el resto del modelo
+  entrena. Los selectores apuntan a los grupos de congelación ordenados de cada
+  familia o a sus nombres de módulo, no a números de capa sueltos de un grafo
+  YAML.
 keywords:
   - congelar capas yolo
   - transfer learning yolo
@@ -10,7 +17,7 @@ keywords:
   - batchnorm congelado
   - grupos de congelacion
   - entrenar solo la cabeza
-last_verified: "1.5.0"
+last_verified: 1.5.0
 snippets:
   train:
     - label: Python
@@ -53,6 +60,7 @@ snippets:
 
         for index, (name, _module) in enumerate(trainer.get_freeze_groups()):
             print(index, name)
+source_hash: 9f1e7551af6b16fe
 ---
 
 ## Congela algo

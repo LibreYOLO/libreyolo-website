@@ -1,11 +1,25 @@
 ---
 title: FCN
-families: [fcn]
-seo_title: "FCN: predição e exportação de uma FCN ResNet sob BSD-3-Clause"
-description: "Use o FCN no LibreYOLO para segmentação semântica. Instale, faça predições, valide e exporte os checkpoints FCN com ResNet dilatada do torchvision."
-lead: "Um classificador denso por pixel que troca as camadas totalmente conectadas de um detector por convoluções, entregando um mapa de classes em resolução plena em vez de boxes. O LibreYOLO o inclui apenas para segmentação semântica."
-keywords: [FCN, "fully convolutional network", "segmentação semântica", "predição densa", ResNet, "fcn pytorch", "segmentação semântica python", "classificar cada pixel da imagem"]
-last_verified: "1.5.0"
+families:
+  - fcn
+seo_title: 'FCN: predição e exportação de uma FCN ResNet sob BSD-3-Clause'
+description: >-
+  Use o FCN no LibreYOLO para segmentação semântica. Instale, faça predições,
+  valide e exporte os checkpoints FCN com ResNet dilatada do torchvision.
+lead: >-
+  Um classificador denso por pixel que troca as camadas totalmente conectadas de
+  um detector por convoluções, entregando um mapa de classes em resolução plena
+  em vez de boxes. O LibreYOLO o inclui apenas para segmentação semântica.
+keywords:
+  - FCN
+  - fully convolutional network
+  - segmentação semântica
+  - predição densa
+  - ResNet
+  - fcn pytorch
+  - segmentação semântica python
+  - classificar cada pixel da imagem
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +35,10 @@ snippets:
         print(mask.classes)      # ids de classe presentes na imagem, ordenados
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreFCNr50.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreFCNr50.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -63,6 +79,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
+source_hash: 7776b0fc85a208fb
 ---
 
 ## Instalação

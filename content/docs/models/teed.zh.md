@@ -1,11 +1,19 @@
 ---
 title: TEED
-families: [teed]
-seo_title: "TEED：边缘检测，自备检查点"
-description: "在 LibreYOLO 里用 TEED 做稠密的边缘概率预测。转换一个你持有许可的检查点，然后预测、验证并导出它。"
-lead: "TEED（Tiny and Efficient Edge Detector）是一个小型卷积网络，从一张 RGB 图像预测出稠密的边缘概率图。LibreYOLO 只为边缘检测封装了它的架构；库里不附带任何检查点。"
-keywords: [TEED, Tiny and Efficient Edge Detector, "边缘检测 python", BIPED, "图像边缘检测 深度学习"]
-last_verified: "1.5.0"
+families:
+  - teed
+seo_title: TEED：边缘检测，自备检查点
+description: 在 LibreYOLO 里用 TEED 做稠密的边缘概率预测。转换一个你持有许可的检查点，然后预测、验证并导出它。
+lead: >-
+  TEED（Tiny and Efficient Edge Detector）是一个小型卷积网络，从一张 RGB
+  图像预测出稠密的边缘概率图。LibreYOLO 只为边缘检测封装了它的架构；库里不附带任何检查点。
+keywords:
+  - TEED
+  - Tiny and Efficient Edge Detector
+  - 边缘检测 python
+  - BIPED
+  - 图像边缘检测 深度学习
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +29,10 @@ snippets:
         print(edges.binary(0.5).sum())  # 阈值化之后的边缘像素数
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=weights/LibreTEEDt-edge.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=weights/LibreTEEDt-edge.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -36,8 +46,9 @@ snippets:
         print(metrics["metrics/OIS"])   # 单图最优尺度下的 F-measure
     - label: CLI
       language: bash
-      code: |
-        libreyolo val model=weights/LibreTEEDt-edge.pt data=my-dataset.yaml imgsz=352
+      code: >
+        libreyolo val model=weights/LibreTEEDt-edge.pt data=my-dataset.yaml
+        imgsz=352
   export:
     - label: Python
       language: python
@@ -49,9 +60,11 @@ snippets:
         model.export(format="tensorrt", imgsz=352, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=weights/LibreTEEDt-edge.pt format=onnx imgsz=352
-        libreyolo export model=weights/LibreTEEDt-edge.pt format=tensorrt imgsz=352 half=True
+
+        libreyolo export model=weights/LibreTEEDt-edge.pt format=tensorrt
+        imgsz=352 half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -61,6 +74,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.edges.array.shape)
+source_hash: c7203b254e460258
 ---
 
 ## 安装

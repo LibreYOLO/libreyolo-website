@@ -1,16 +1,31 @@
 ---
 title: утилиты libreyolo
-seo_title: "справочник вспомогательных команд CLI libreyolo"
-description: "Небольшие команды LibreYOLO: version, checks, models, formats, cfg, info, metadata, enroll и compare, каждая со своими аргументами и значениями по умолчанию."
-lead: "Девять команд, которые сообщают и осматривают, а не вычисляют. Они печатают сведения об окружении, перечень моделей и форматов, итоговые значения по умолчанию, детали чекпойнта, а также собирают и опрашивают галерею лиц."
-keywords: [libreyolo version, libreyolo checks, список моделей libreyolo, форматы экспорта libreyolo, посмотреть метаданные чекпойнта yolo, проверить окружение libreyolo, галерея лиц libreyolo enroll]
-last_verified: "1.5.0"
+seo_title: справочник вспомогательных команд CLI libreyolo
+description: >-
+  Небольшие команды LibreYOLO: version, checks, models, formats, cfg, info,
+  metadata, enroll и compare, каждая со своими аргументами и значениями по
+  умолчанию.
+lead: >-
+  Девять команд, которые сообщают и осматривают, а не вычисляют. Они печатают
+  сведения об окружении, перечень моделей и форматов, итоговые значения по
+  умолчанию, детали чекпойнта, а также собирают и опрашивают галерею лиц.
+keywords:
+  - libreyolo version
+  - libreyolo checks
+  - список моделей libreyolo
+  - форматы экспорта libreyolo
+  - посмотреть метаданные чекпойнта yolo
+  - проверить окружение libreyolo
+  - галерея лиц libreyolo enroll
+last_verified: 1.5.0
 meta:
   - label: Команды
-    value: version, checks, models, formats, cfg, info, metadata, enroll, compare
+    value: 'version, checks, models, formats, cfg, info, metadata, enroll, compare'
     mono: true
   - label: Вывод
-    value: "stdout, в текстовом виде или с json=true — одним объектом с полем schema_version"
+    value: >-
+      stdout, в текстовом виде или с json=true — одним объектом с полем
+      schema_version
 snippets:
   examples:
     - label: Окружение
@@ -28,6 +43,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
+source_hash: 7b5b53c46df00c06
 ---
 
 ## Синтаксис

@@ -1,8 +1,14 @@
 ---
 title: Fuentes de predicción
-seo_title: "Fuentes de predicción en LibreYOLO"
-description: "Todas las fuentes que acepta predict: imágenes, carpetas, URLs, archivos de vídeo, webcams, RTSP, YouTube, captura de pantalla, listas de imágenes y archivos .streams."
-lead: "El argumento source se clasifica antes de abrir nada, así que una sola llamada resuelve un JPEG, una carpeta, un MP4, un índice de webcam, una URL RTSP, una región de la pantalla o una lista de cámaras."
+seo_title: Fuentes de predicción en LibreYOLO
+description: >-
+  Todas las fuentes que acepta predict: imágenes, carpetas, URLs, archivos de
+  vídeo, webcams, RTSP, YouTube, captura de pantalla, listas de imágenes y
+  archivos .streams.
+lead: >-
+  El argumento source se clasifica antes de abrir nada, así que una sola llamada
+  resuelve un JPEG, una carpeta, un MP4, un índice de webcam, una URL RTSP, una
+  región de la pantalla o una lista de cámaras.
 keywords:
   - inferencia de vídeo yolo python
   - rtsp
@@ -14,8 +20,14 @@ keywords:
   - inferencia youtube
   - vid_stride
   - stream=True
-last_verified: "1.5.0"
-verification: "Clasificación de fuentes leída de libreyolo/utils/source.py (classify_source, SourceKind, StreamSource, MultiStreamSource). Tipos de imagen aceptados y extensiones de directorio de libreyolo/utils/image_loader.py. Extensiones de vídeo y rutas de guardado de libreyolo/utils/video.py. Sintaxis de screen de libreyolo/utils/screen.py. Formas de retorno y valores por defecto de los argumentos de InferenceRunner.__call__ en libreyolo/models/base/inference.py."
+last_verified: 1.5.0
+verification: >-
+  Clasificación de fuentes leída de libreyolo/utils/source.py (classify_source,
+  SourceKind, StreamSource, MultiStreamSource). Tipos de imagen aceptados y
+  extensiones de directorio de libreyolo/utils/image_loader.py. Extensiones de
+  vídeo y rutas de guardado de libreyolo/utils/video.py. Sintaxis de screen de
+  libreyolo/utils/screen.py. Formas de retorno y valores por defecto de los
+  argumentos de InferenceRunner.__call__ en libreyolo/models/base/inference.py.
 snippets:
   images:
     - label: Una imagen
@@ -47,22 +59,32 @@ snippets:
             print(type(source).__name__, len(result.boxes))
     - label: Una carpeta
       language: python
-      code: |
+      code: >
         from pathlib import Path
+
         from PIL import Image
+
 
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         folder = Path("sample_folder")
+
         folder.mkdir(exist_ok=True)
+
         image = Image.open(SAMPLE_IMAGE)
+
         for index in range(3):
             image.save(folder / f"frame_{index}.jpg")
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # Una carpeta devuelve una lista, un Results por imagen, ordenada por ruta.
+
+        # Una carpeta devuelve una lista, un Results por imagen, ordenada por
+        ruta.
+
         results = model(str(folder))
+
         print(len(results), "images")
     - label: CLI
       language: bash
@@ -80,7 +102,7 @@ snippets:
         # Sustituye clip.mp4 por un archivo de vídeo que tengas en disco.
         for result in model("clip.mp4", stream=True):
             print(result.frame_idx, len(result.boxes))
-    - label: Un fotograma de cada tres, escrito en disco
+    - label: 'Un fotograma de cada tres, escrito en disco'
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -92,14 +114,19 @@ snippets:
   live:
     - label: Webcam (requiere una cámara conectada)
       language: python
-      code: |
+      code: >
         import itertools
+
 
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # Índice de webcam 0. Las fuentes en directo no terminan nunca, así que acota el bucle.
+
+        # Índice de webcam 0. Las fuentes en directo no terminan nunca, así que
+        acota el bucle.
+
         for result in itertools.islice(model(0, stream=True), 100):
             print(result.frame_idx, len(result.boxes))
     - label: RTSP (requiere una URL de cámara accesible)
@@ -117,11 +144,14 @@ snippets:
   streams:
     - label: Un archivo .streams (usa tus propias cámaras)
       language: python
-      code: |
+      code: >
         import itertools
+
         from pathlib import Path
 
+
         from libreyolo import LibreYOLO
+
 
         Path("cameras.streams").write_text(
             "# one source per line, blank lines and comments are skipped\n"
@@ -130,8 +160,11 @@ snippets:
             encoding="utf-8",
         )
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
-        for result in itertools.islice(model("cameras.streams", stream=True), 100):
+
+        for result in itertools.islice(model("cameras.streams", stream=True),
+        100):
             print(result.frame_idx, len(result.boxes))
     - label: Una lista de cámaras
       language: python
@@ -156,18 +189,24 @@ snippets:
         # Sin stream=True esto captura un único fotograma.
         result = model("screen")
         print(len(result.boxes), "detections")
-    - label: Una región de un monitor, en continuo
+    - label: 'Una región de un monitor, en continuo'
       language: python
-      code: |
+      code: >
         import itertools
+
 
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
 
+
         # "screen <monitor> <left> <top> <width> <height>"
-        for result in itertools.islice(model("screen 1 100 200 512 256", stream=True), 50):
+
+        for result in itertools.islice(model("screen 1 100 200 512 256",
+        stream=True), 50):
             print(len(result.boxes))
+source_hash: c371965951dd0181
 ---
 
 ## Cómo se clasifica una fuente

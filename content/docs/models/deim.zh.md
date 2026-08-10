@@ -1,11 +1,21 @@
 ---
 title: DEIM
-families: [deim]
-seo_title: "在 LibreYOLO 里使用 DEIM 和 DEIMv2"
-description: "用 LibreYOLO 跑 DEIM 和 DEIMv2 做目标检测。安装、预测、训练、验证和导出，从五十万参数的尺寸往上都有。"
-lead: "一个用密集一对一匹配训练的检测 transformer，收敛所需的轮数远少于它所基于的 DETR 方案。LibreYOLO 收录了它的两个版本，靠你加载的检查点（checkpoint）区分。"
-keywords: [DEIM, DEIMv2, DINOv3, "检测 transformer", DETR, "目标检测 python", "实时目标检测"]
-last_verified: "1.5.0"
+families:
+  - deim
+seo_title: 在 LibreYOLO 里使用 DEIM 和 DEIMv2
+description: 用 LibreYOLO 跑 DEIM 和 DEIMv2 做目标检测。安装、预测、训练、验证和导出，从五十万参数的尺寸往上都有。
+lead: >-
+  一个用密集一对一匹配训练的检测 transformer，收敛所需的轮数远少于它所基于的 DETR 方案。LibreYOLO
+  收录了它的两个版本，靠你加载的检查点（checkpoint）区分。
+keywords:
+  - DEIM
+  - DEIMv2
+  - DINOv3
+  - 检测 transformer
+  - DETR
+  - 目标检测 python
+  - 实时目标检测
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -125,6 +135,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 6edaac5f05abaabe
 ---
 
 ## 安装

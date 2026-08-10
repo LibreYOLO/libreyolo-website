@@ -1,11 +1,27 @@
 ---
 title: DINO-DETR
-families: [dinodetr]
-seo_title: "DINO-DETR: predizione ed esportazione con licenza Apache-2.0"
-description: "Esegui DINO-DETR in LibreYOLO per il rilevamento di oggetti. Installa, fai predizioni, valida ed esporta tre dimensioni con ancore di denoising, tutte con licenza Apache-2.0."
-lead: "DINO-DETR, pubblicato da IDEA Research come DINO, unisce l'addestramento con denoising contrastivo alla mixed query selection, costruita sopra l'attenzione sparsa di Deformable DETR. LibreYOLO distribuisce tre dimensioni per il rilevamento di oggetti, solo in inferenza."
-keywords: [DINO-DETR, DINO, detection transformer, denoising anchor boxes, mixed query selection, object detection python, rilevamento oggetti python, IDEA Research]
-last_verified: "1.5.0"
+families:
+  - dinodetr
+seo_title: 'DINO-DETR: predizione ed esportazione con licenza Apache-2.0'
+description: >-
+  Esegui DINO-DETR in LibreYOLO per il rilevamento di oggetti. Installa, fai
+  predizioni, valida ed esporta tre dimensioni con ancore di denoising, tutte
+  con licenza Apache-2.0.
+lead: >-
+  DINO-DETR, pubblicato da IDEA Research come DINO, unisce l'addestramento con
+  denoising contrastivo alla mixed query selection, costruita sopra l'attenzione
+  sparsa di Deformable DETR. LibreYOLO distribuisce tre dimensioni per il
+  rilevamento di oggetti, solo in inferenza.
+keywords:
+  - DINO-DETR
+  - DINO
+  - detection transformer
+  - denoising anchor boxes
+  - mixed query selection
+  - object detection python
+  - rilevamento oggetti python
+  - IDEA Research
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +36,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDINODETRr50.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDINODETRr50.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -51,9 +69,11 @@ snippets:
         model.export(format="tensorrt", imgsz=800, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDINODETRr50.pt format=onnx imgsz=800
-        libreyolo export model=LibreDINODETRr50.pt format=tensorrt imgsz=800 half=True
+
+        libreyolo export model=LibreDINODETRr50.pt format=tensorrt imgsz=800
+        half=True
     - label: Usare il file esportato
       language: python
       code: |
@@ -66,6 +86,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: dda176ebee3a83de
 ---
 
 ## Installazione

@@ -1,8 +1,14 @@
 ---
 title: Entrenar en una GPU alquilada
-seo_title: "Entrenar LibreYOLO en una GPU cloud alquilada"
-description: "Ejecuta un entrenamiento de LibreYOLO en una GPU alquilada o serverless: prepara los datos, instala, lanza, míralo en vivo, recupera los pesos y deja de pagar."
-lead: "Una GPU alquilada convierte un entrenamiento en un job con un inicio, un final y una factura. El trabajo es el mismo que entrenar en local; lo que cambia es meter los datos, mirar desde fuera, sacar los pesos y apagar la máquina."
+seo_title: Entrenar LibreYOLO en una GPU cloud alquilada
+description: >-
+  Ejecuta un entrenamiento de LibreYOLO en una GPU alquilada o serverless:
+  prepara los datos, instala, lanza, míralo en vivo, recupera los pesos y deja
+  de pagar.
+lead: >-
+  Una GPU alquilada convierte un entrenamiento en un job con un inicio, un final
+  y una factura. El trabajo es el mismo que entrenar en local; lo que cambia es
+  meter los datos, mirar desde fuera, sacar los pesos y apagar la máquina.
 keywords:
   - entrenar en gpu cloud
   - alquilar una gpu
@@ -12,7 +18,7 @@ keywords:
   - entrenamiento remoto
   - subir dataset a hugging face
   - coste gpu por epoch
-last_verified: "1.5.0"
+last_verified: 1.5.0
 snippets:
   install:
     - label: En la máquina
@@ -36,11 +42,13 @@ snippets:
         x = torch.rand(2000, 2000, device="cuda")
         print(float((x @ x).sum()))
   stage:
-    - label: Empaqueta y sube una sola vez, desde tu máquina
+    - label: 'Empaqueta y sube una sola vez, desde tu máquina'
       language: bash
-      code: |
+      code: >
         tar cf my-dataset.tar my-dataset/
-        huggingface-cli upload my-org/my-dataset my-dataset.tar --repo-type dataset
+
+        huggingface-cli upload my-org/my-dataset my-dataset.tar --repo-type
+        dataset
     - label: Preparar los datos en la máquina
       language: python
       code: |
@@ -54,7 +62,7 @@ snippets:
         with tarfile.open(path) as archive:
             archive.extractall("/root/data")
   launch:
-    - label: En segundo plano, para que el job sobreviva a una desconexión
+    - label: 'En segundo plano, para que el job sobreviva a una desconexión'
       language: bash
       code: |
         nohup libreyolo train \
@@ -63,7 +71,7 @@ snippets:
           epochs=100 batch=-1 imgsz=640 \
           project=/root/runs name=run1 \
           > /root/train.log 2>&1 &
-    - label: Multi-GPU, desde un archivo Python
+    - label: 'Multi-GPU, desde un archivo Python'
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -93,7 +101,7 @@ snippets:
 
         print(status["state"], status["current_epoch"], status["eta_seconds"])
         print(status.get("metrics"))
-    - label: En el navegador, por un túnel SSH
+    - label: 'En el navegador, por un túnel SSH'
       language: bash
       code: |
         # En la máquina (escucha en 127.0.0.1:8420 por defecto):
@@ -107,6 +115,7 @@ snippets:
       code: |
         huggingface-cli upload my-org/my-run \
           /root/runs/run1/weights/best.pt best.pt
+source_hash: 75d314de06aca3b6
 ---
 
 ## Antes de alquilar nada

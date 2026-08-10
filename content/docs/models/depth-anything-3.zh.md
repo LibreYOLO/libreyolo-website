@@ -1,11 +1,24 @@
 ---
 title: Depth Anything 3
-families: [depth_anything3]
-seo_title: "Depth Anything 3：在 LibreYOLO 里预测单目深度"
-description: "在 LibreYOLO 里用 Depth Anything 3 做单目深度估计。安装、预测、验证并导出 DA3MONO-LARGE 检查点，采用 Apache-2.0 许可。"
-lead: "Depth Anything 3 就是一个普通的 DINOv2 transformer，训练目标是从一个或多个视角预测深度和相机几何，没有任何架构上的特化。LibreYOLO 为深度任务移植了它的 DA3MONO-LARGE 检查点：支持预测和零样本（zero-shot）验证，没有训练路径。"
-keywords: [Depth Anything 3, DA3, "单目深度估计", DINOv2, "相对深度", "深度图 python", "单张图片估计深度"]
-last_verified: "1.5.0"
+families:
+  - depth_anything3
+seo_title: Depth Anything 3：在 LibreYOLO 里预测单目深度
+description: >-
+  在 LibreYOLO 里用 Depth Anything 3 做单目深度估计。安装、预测、验证并导出 DA3MONO-LARGE 检查点，采用
+  Apache-2.0 许可。
+lead: >-
+  Depth Anything 3 就是一个普通的 DINOv2
+  transformer，训练目标是从一个或多个视角预测深度和相机几何，没有任何架构上的特化。LibreYOLO 为深度任务移植了它的
+  DA3MONO-LARGE 检查点：支持预测和零样本（zero-shot）验证，没有训练路径。
+keywords:
+  - Depth Anything 3
+  - DA3
+  - 单目深度估计
+  - DINOv2
+  - 相对深度
+  - 深度图 python
+  - 单张图片估计深度
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +33,10 @@ snippets:
         print(depth.min, depth.max, depth.mean)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDepthAnything3l-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDepthAnything3l-depth.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: 读取深度图
       language: python
       code: |
@@ -60,9 +75,11 @@ snippets:
         model.export(format="tensorrt", half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDepthAnything3l-depth.pt format=onnx
-        libreyolo export model=LibreDepthAnything3l-depth.pt format=tensorrt half=True
+
+        libreyolo export model=LibreDepthAnything3l-depth.pt format=tensorrt
+        half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -74,6 +91,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
+source_hash: 0ac96180165c4891
 ---
 
 ## 安装

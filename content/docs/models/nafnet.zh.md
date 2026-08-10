@@ -1,11 +1,20 @@
 ---
 title: NAFNet
-families: [nafnet]
-seo_title: "NAFNet：在 MIT 许可下去噪、训练并导出"
-description: "在 LibreYOLO 里用 NAFNet 做图像去噪和图像恢复。安装、预测、训练、验证并导出 SIDD 检查点，采用 MIT 许可。"
-lead: "NAFNet 是一个用于图像恢复的卷积网络，它把典型 UNet 模块里的非线性激活函数去掉，换成逐元素相乘。LibreYOLO 支持它的一个任务，restoration，并发布了一个在 SIDD 上训练的真实图像去噪检查点。"
-keywords: [NAFNet, 图像恢复, "图像去噪 python", "照片降噪 深度学习", "图像去模糊", SIDD]
-last_verified: "1.5.0"
+families:
+  - nafnet
+seo_title: NAFNet：在 MIT 许可下去噪、训练并导出
+description: 在 LibreYOLO 里用 NAFNet 做图像去噪和图像恢复。安装、预测、训练、验证并导出 SIDD 检查点，采用 MIT 许可。
+lead: >-
+  NAFNet 是一个用于图像恢复的卷积网络，它把典型 UNet 模块里的非线性激活函数去掉，换成逐元素相乘。LibreYOLO
+  支持它的一个任务，restoration，并发布了一个在 SIDD 上训练的真实图像去噪检查点。
+keywords:
+  - NAFNet
+  - 图像恢复
+  - 图像去噪 python
+  - 照片降噪 深度学习
+  - 图像去模糊
+  - SIDD
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +29,9 @@ snippets:
         print(restored.array.shape)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreNAFNetl-restore-sidd.pt source=noisy.jpg save=True
+      code: >
+        libreyolo predict model=LibreNAFNetl-restore-sidd.pt source=noisy.jpg
+        save=True
     - label: 保存恢复后的图像
       language: python
       code: |
@@ -34,15 +44,19 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
-        model.train(data="my-dataset.yaml", epochs=100, imgsz=256, batch=16, lr0=1e-3)
+
+        model.train(data="my-dataset.yaml", epochs=100, imgsz=256, batch=16,
+        lr0=1e-3)
     - label: CLI
       language: bash
-      code: |
-        libreyolo train model=LibreNAFNetl-restore-sidd.pt data=my-dataset.yaml \
+      code: >
+        libreyolo train model=LibreNAFNetl-restore-sidd.pt data=my-dataset.yaml
+        \
           epochs=100 imgsz=256 batch=16 lr0=1e-3
     - label: 检查点来源
       language: python
@@ -60,8 +74,9 @@ snippets:
         )
     - label: 多卡训练
       language: bash
-      code: |
-        libreyolo train model=LibreNAFNetl-restore-sidd.pt data=my-dataset.yaml \
+      code: >
+        libreyolo train model=LibreNAFNetl-restore-sidd.pt data=my-dataset.yaml
+        \
           epochs=100 device=0,1 batch=32
   val:
     - label: Python
@@ -91,9 +106,12 @@ snippets:
         model.export(format="tensorrt", imgsz=256, half=True)
     - label: CLI
       language: bash
-      code: |
-        libreyolo export model=LibreNAFNetl-restore-sidd.pt format=onnx imgsz=256
-        libreyolo export model=LibreNAFNetl-restore-sidd.pt format=tensorrt imgsz=256 half=True
+      code: >
+        libreyolo export model=LibreNAFNetl-restore-sidd.pt format=onnx
+        imgsz=256
+
+        libreyolo export model=LibreNAFNetl-restore-sidd.pt format=tensorrt
+        imgsz=256 half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -105,6 +123,7 @@ snippets:
         result = model("noisy.jpg")
 
         result.restored.save("denoised.png")
+source_hash: 9bae9f82bee741bf
 ---
 
 ## 安装

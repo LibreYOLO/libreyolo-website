@@ -1,11 +1,26 @@
 ---
 title: FeyNobg
-families: [feynobg]
-seo_title: "FeyNobg: eliminación de fondo en LibreYOLO"
-description: "Usa FeyNobg en LibreYOLO para eliminar el fondo y para alpha matting, una variante de BiRefNet más profunda creada por Feyn Inc. Instala, predice y valida."
-lead: "Un modelo de eliminación de fondo de Feyn Inc. que profundiza la arquitectura de BiRefNet y la reentrena. LibreYOLO incluye inferencia y validación para la tarea de matte de FeyNobg."
-keywords: [FeyNobg, "quitar el fondo de una imagen", "eliminar fondo python", "segmentación dicotómica de imágenes", "alpha matte", "image matting", "recorte con transparencia", nobg]
-last_verified: "1.5.0"
+families:
+  - feynobg
+seo_title: 'FeyNobg: eliminación de fondo en LibreYOLO'
+description: >-
+  Usa FeyNobg en LibreYOLO para eliminar el fondo y para alpha matting, una
+  variante de BiRefNet más profunda creada por Feyn Inc. Instala, predice y
+  valida.
+lead: >-
+  Un modelo de eliminación de fondo de Feyn Inc. que profundiza la arquitectura
+  de BiRefNet y la reentrena. LibreYOLO incluye inferencia y validación para la
+  tarea de matte de FeyNobg.
+keywords:
+  - FeyNobg
+  - quitar el fondo de una imagen
+  - eliminar fondo python
+  - segmentación dicotómica de imágenes
+  - alpha matte
+  - image matting
+  - recorte con transparencia
+  - nobg
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +35,10 @@ snippets:
         print(matte.array.shape, matte.array.dtype)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreFeyNobgl-matte.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreFeyNobgl-matte.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Recorte
       language: python
       code: |
@@ -48,6 +65,7 @@ snippets:
 
         print(metrics["metrics/MAE"])
         print(metrics["metrics/Smeasure"])
+source_hash: 45de3b578d7ebbf2
 ---
 
 ## Instalación

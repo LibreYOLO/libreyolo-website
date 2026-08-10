@@ -1,11 +1,20 @@
 ---
 title: Deformable DETR
-families: [deformable_detr]
-seo_title: "Deformable DETR：预测与导出，采用 Apache-2.0 许可"
-description: "在 LibreYOLO 里运行 Deformable DETR 做目标检测。安装、预测、验证并导出五种稀疏注意力尺寸，全部采用 Apache-2.0 许可。"
-lead: "Deformable DETR 把 DETR 的稠密交叉注意力换成了围绕每个参考点的稀疏、多尺度采样，正是这一点让 transformer 检测器的训练变得可行。LibreYOLO 提供五种尺寸用于检测，仅支持推理。"
-keywords: [Deformable DETR, "deformable detr 推理", "检测 transformer", 稀疏注意力, 多尺度可变形注意力, "商汤 目标检测"]
-last_verified: "1.5.0"
+families:
+  - deformable_detr
+seo_title: Deformable DETR：预测与导出，采用 Apache-2.0 许可
+description: 在 LibreYOLO 里运行 Deformable DETR 做目标检测。安装、预测、验证并导出五种稀疏注意力尺寸，全部采用 Apache-2.0 许可。
+lead: >-
+  Deformable DETR 把 DETR 的稠密交叉注意力换成了围绕每个参考点的稀疏、多尺度采样，正是这一点让 transformer
+  检测器的训练变得可行。LibreYOLO 提供五种尺寸用于检测，仅支持推理。
+keywords:
+  - Deformable DETR
+  - deformable detr 推理
+  - 检测 transformer
+  - 稀疏注意力
+  - 多尺度可变形注意力
+  - 商汤 目标检测
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +29,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDeformableDETRr50.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDeformableDETRr50.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -51,9 +62,11 @@ snippets:
         model.export(format="tensorrt", imgsz=800, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDeformableDETRr50.pt format=onnx imgsz=800
-        libreyolo export model=LibreDeformableDETRr50.pt format=tensorrt imgsz=800 half=True
+
+        libreyolo export model=LibreDeformableDETRr50.pt format=tensorrt
+        imgsz=800 half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -65,6 +78,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 35225efc54b5ef91
 ---
 
 ## 安装

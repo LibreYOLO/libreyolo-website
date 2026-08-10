@@ -1,8 +1,14 @@
 ---
 title: Trabajar con resultados
-seo_title: "El objeto Results de LibreYOLO"
-description: "Un objeto Results por imagen, con un slot por tipo de payload: boxes, máscaras, keypoints, probs, profundidad, panóptico, OCR y más. Dibujado, guardado y JSON."
-lead: "Cada predicción devuelve un objeto Results por imagen. Tiene un slot con nombre por cada tipo de payload, todos vacíos salvo los que el modelo produce, más los mismos slots sobre un artefacto exportado."
+seo_title: El objeto Results de LibreYOLO
+description: >-
+  Un objeto Results por imagen, con un slot por tipo de payload: boxes,
+  máscaras, keypoints, probs, profundidad, panóptico, OCR y más. Dibujado,
+  guardado y JSON.
+lead: >-
+  Cada predicción devuelve un objeto Results por imagen. Tiene un slot con
+  nombre por cada tipo de payload, todos vacíos salvo los que el modelo produce,
+  más los mismos slots sobre un artefacto exportado.
 keywords:
   - objeto results yolo python
   - results.boxes xyxy
@@ -13,20 +19,32 @@ keywords:
   - mapa de profundidad results
   - results summary yolo
   - onnx mismos resultados yolo
-last_verified: "1.5.0"
-verification: "Payload classes, slots, move semantics, summary(), to_json(), plot(), save() and cutout() read from libreyolo/utils/results.py. Annotation and disk-writing behavior from InferenceRunner._save_annotated_image in libreyolo/models/base/inference.py and resolve_save_path in libreyolo/utils/general.py. Suffix dispatch from LibreYOLO() in libreyolo/models/__init__.py."
+last_verified: 1.5.0
+verification: >-
+  Payload classes, slots, move semantics, summary(), to_json(), plot(), save()
+  and cutout() read from libreyolo/utils/results.py. Annotation and disk-writing
+  behavior from InferenceRunner._save_annotated_image in
+  libreyolo/models/base/inference.py and resolve_save_path in
+  libreyolo/utils/general.py. Suffix dispatch from LibreYOLO() in
+  libreyolo/models/__init__.py.
 snippets:
   basic:
     - label: Boxes
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.orig_shape)   # (alto, ancho) de la imagen original
-        print(result.path)         # ruta de origen, None para entrada en memoria
+
+        print(result.path)         # ruta de origen, None para entrada en
+        memoria
+
 
         for xyxy, conf, cls in zip(
             result.boxes.xyxy.tolist(),
@@ -36,15 +54,22 @@ snippets:
             print(result.names[int(cls)], round(float(conf), 3), xyxy)
     - label: Coordenadas normalizadas
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy[:1])    # píxeles, x1 y1 x2 y2
+
         print(result.boxes.xywh[:1])    # píxeles, centro x, centro y, w, h
-        print(result.boxes.xyxyn[:1])   # el mismo box dividido por el ancho y el alto
+
+        print(result.boxes.xyxyn[:1])   # el mismo box dividido por el ancho y
+        el alto
+
         print(result.boxes.xywhn[:1])
     - label: NumPy y dispositivos
       language: python
@@ -110,6 +135,7 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
+source_hash: 548dbc9c7f5552ec
 ---
 
 ## Un objeto, un slot por payload

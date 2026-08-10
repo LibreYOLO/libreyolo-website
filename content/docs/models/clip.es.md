@@ -1,11 +1,28 @@
 ---
 title: CLIP
-families: [clip]
-seo_title: "CLIP en LibreYOLO: clasificación y embeddings zero-shot"
-description: "Usa CLIP en LibreYOLO para clasificación de imágenes zero-shot y embeddings de imagen y texto. Sin entrenamiento: set_classes() define el conjunto de etiquetas en tiempo de ejecución."
-lead: "CLIP es un modelo de doble torre que puntúa una imagen frente a prompts de texto en lugar de un conjunto fijo de etiquetas. LibreYOLO lo soporta para clasificación zero-shot y embeddings de imagen y texto, sin ningún paso de entrenamiento."
-keywords: [CLIP, OpenCLIP, "clasificación zero-shot", "clasificar imágenes sin entrenar", "embeddings de imágenes python", "embeddings de texto", "búsqueda por similitud imagen texto", "vocabulario abierto", LAION-2B]
-last_verified: "1.5.0"
+families:
+  - clip
+seo_title: 'CLIP en LibreYOLO: clasificación y embeddings zero-shot'
+description: >-
+  Usa CLIP en LibreYOLO para clasificación de imágenes zero-shot y embeddings de
+  imagen y texto. Sin entrenamiento: set_classes() define el conjunto de
+  etiquetas en tiempo de ejecución.
+lead: >-
+  CLIP es un modelo de doble torre que puntúa una imagen frente a prompts de
+  texto en lugar de un conjunto fijo de etiquetas. LibreYOLO lo soporta para
+  clasificación zero-shot y embeddings de imagen y texto, sin ningún paso de
+  entrenamiento.
+keywords:
+  - CLIP
+  - OpenCLIP
+  - clasificación zero-shot
+  - clasificar imágenes sin entrenar
+  - embeddings de imágenes python
+  - embeddings de texto
+  - búsqueda por similitud imagen texto
+  - vocabulario abierto
+  - LAION-2B
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,34 +37,51 @@ snippets:
         print(model.names[result.probs.top1], float(result.probs.top1conf))
     - label: CLI
       language: bash
-      code: |
+      code: >
         # Sin una llamada a set_classes(), predict desde la CLI usa los 1.000
+
         # nombres de clase de ImageNet que el modelo carga por defecto.
-        libreyolo predict model=LibreCLIPb32-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+
+        libreyolo predict model=LibreCLIPb32-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Embeddings de imagen y texto
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
+
         image_embed = model(SAMPLE_IMAGE).embeddings.data
+
         text_embed = model.embed_text("a photo of a forklift")
 
-        # Ambos están normalizados con L2, así que un simple producto escalar es la similitud coseno.
+
+        # Ambos están normalizados con L2, así que un simple producto escalar es
+        la similitud coseno.
+
         similarity = (image_embed @ text_embed.T).item()
   val:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreCLIPb32-cls.pt")
 
+
         # data es una raíz ImageFolder con un split train/; sus nombres de
-        # carpeta se convierten en los prompts de clase zero-shot de esta ejecución.
+
+        # carpeta se convierten en los prompts de clase zero-shot de esta
+        ejecución.
+
         metrics = model.val(data="imagenette160")
 
+
         print(metrics["metrics/accuracy_top1"])
+
         print(metrics["metrics/accuracy_top5"])
     - label: CLI
       language: bash
@@ -79,6 +113,7 @@ snippets:
         # task="embed" traza solo la torre de imagen; no hacen falta clases.
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
         model.export(format="onnx")
+source_hash: ac7cfd75ad6c0fa7
 ---
 
 ## Instalación

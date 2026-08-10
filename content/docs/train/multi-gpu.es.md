@@ -1,8 +1,14 @@
 ---
 title: Entrenamiento multi-GPU
-seo_title: "Entrenamiento multi-GPU en LibreYOLO"
-description: "Entrena en varias GPU con device=\"0,1\". Cómo la biblioteca lanza los workers de DDP, por qué batch es el batch global, cuándo activar sync_bn y la vía de torchrun."
-lead: "El entrenamiento multi-GPU en LibreYOLO es DistributedDataParallel de PyTorch: un proceso por GPU, cada uno con una réplica completa del modelo y una porción de cada batch, con los gradientes promediados entre los ranks en cada paso."
+seo_title: Entrenamiento multi-GPU en LibreYOLO
+description: >-
+  Entrena en varias GPU con device="0,1". Cómo la biblioteca lanza los workers
+  de DDP, por qué batch es el batch global, cuándo activar sync_bn y la vía de
+  torchrun.
+lead: >-
+  El entrenamiento multi-GPU en LibreYOLO es DistributedDataParallel de PyTorch:
+  un proceso por GPU, cada uno con una réplica completa del modelo y una porción
+  de cada batch, con los gradientes promediados entre los ranks en cada paso.
 keywords:
   - entrenamiento ddp pytorch
   - entrenamiento multi gpu
@@ -12,16 +18,20 @@ keywords:
   - tamaño de batch global
   - backend nccl gloo
   - multi gpu windows
-last_verified: "1.5.0"
+last_verified: 1.5.0
 snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # El guard de __main__ es obligatorio: cada worker lanzado reimporta este
+
+        # El guard de __main__ es obligatorio: cada worker lanzado reimporta
+        este
+
         # módulo, y sin el guard relanzaría el entrenamiento de forma recursiva.
+
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(
@@ -67,6 +77,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # Se sondea una vez en la GPU 0 y se escala a un múltiplo del world size.
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
+source_hash: 83c1563d68068cd0
 ---
 
 ## Entrenar en dos GPU

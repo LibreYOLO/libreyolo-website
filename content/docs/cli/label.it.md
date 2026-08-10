@@ -1,16 +1,29 @@
 ---
 title: libreyolo label
-seo_title: "Riferimento del comando libreyolo label"
-description: "Avvia lo strumento locale di annotazione dei bounding box: argomenti con i valori predefiniti, l'interruttore di assistenza IA e che cosa espone il binding su un'interfaccia di rete."
-lead: "Avvia uno strumento web locale per disegnare e modificare i bounding box. Scrive file di etichette nel formato nativo di LibreYOLO, quindi un dataset annotato qui si addestra senza alcun passaggio di conversione."
-keywords: [libreyolo label cli, strumento annotazione bounding box, etichettare dataset yolo, auto labeling cli, condividere libreyolo label]
-last_verified: "1.5.0"
+seo_title: Riferimento del comando libreyolo label
+description: >-
+  Avvia lo strumento locale di annotazione dei bounding box: argomenti con i
+  valori predefiniti, l'interruttore di assistenza IA e che cosa espone il
+  binding su un'interfaccia di rete.
+lead: >-
+  Avvia uno strumento web locale per disegnare e modificare i bounding box.
+  Scrive file di etichette nel formato nativo di LibreYOLO, quindi un dataset
+  annotato qui si addestra senza alcun passaggio di conversione.
+keywords:
+  - libreyolo label cli
+  - strumento annotazione bounding box
+  - etichettare dataset yolo
+  - auto labeling cli
+  - condividere libreyolo label
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo label
     mono: true
   - label: Output
-    value: "Un URL del server su stdout; le etichette vengono scritte come labels/*.txt accanto alle immagini"
+    value: >-
+      Un URL del server su stdout; le etichette vengono scritte come
+      labels/*.txt accanto alle immagini
 snippets:
   examples:
     - label: Base
@@ -18,7 +31,7 @@ snippets:
       code: |
         # Apre la home del progetto; scegli o crea un dataset nel browser.
         libreyolo label
-    - label: Solo manuale, porta fissa
+    - label: 'Solo manuale, porta fissa'
       language: bash
       code: |
         libreyolo label no_assist=true port=9200 no_browser=true
@@ -26,6 +39,7 @@ snippets:
       language: bash
       code: |
         libreyolo label share=true
+source_hash: bddad245877793b1
 ---
 
 ## Sinossi
@@ -77,7 +91,7 @@ non ci si può scrivere.
 
 `share=true` fa il binding sull'indirizzo jolly, il che permette ad altre
 macchine sulla tua rete di raggiungere lo strumento, mentre le azioni
-amministrative — cambiare o eliminare progetti e avviare calcoli — restano su
+amministrative (cambiare o eliminare progetti e avviare calcoli) restano su
 questa macchina.
 
 Impostare `host` su un'interfaccia specifica fa una cosa diversa e meno sicura:

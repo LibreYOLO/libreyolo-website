@@ -1,8 +1,15 @@
 ---
 title: API de visión y lenguaje
-seo_title: "API de LibreVLM: alias, set_classes y chat"
-description: "La factoría LibreVLM, todos sus alias, el vocabulario persistente de set_classes, set_task, la vía de escape de chat y por qué la confianza es un marcador de posición."
-lead: "LibreVLM carga un modelo generativo de visión y lenguaje y lo maneja como un detector de objetos. La lista de clases es un prompt en lugar de una cabeza fija, y el modelo devuelve los mismos Results que devuelve cualquier otra familia."
+seo_title: 'API de LibreVLM: alias, set_classes y chat'
+description: >-
+  La factoría LibreVLM, todos sus alias, el vocabulario persistente de
+  set_classes, set_task, la vía de escape de chat y por qué la confianza es un
+  marcador de posición.
+lead: >-
+  LibreVLM carga un modelo generativo de visión y lenguaje y lo maneja como un
+  detector de objetos. La lista de clases es un prompt en lugar de una cabeza
+  fija, y el modelo devuelve los mismos Results que devuelve cualquier otra
+  familia.
 keywords:
   - LibreVLM
   - detección con modelos de visión y lenguaje
@@ -12,8 +19,12 @@ keywords:
   - SmolVLM2
   - Florence-2
   - libreyolo chat
-last_verified: "1.5.0"
-verification: "Alias leídos de libreyolo/models/vlm/__init__.py; repositorios, tamaños y listas de tareas de los módulos de familia bajo libreyolo/models/vlm/ más libreyolo/models/sensenova/model.py; reglas de llamada y excepciones de libreyolo/models/vlm/base.py, todo en la v1.5.0."
+last_verified: 1.5.0
+verification: >-
+  Alias leídos de libreyolo/models/vlm/__init__.py; repositorios, tamaños y
+  listas de tareas de los módulos de familia bajo libreyolo/models/vlm/ más
+  libreyolo/models/sensenova/model.py; reglas de llamada y excepciones de
+  libreyolo/models/vlm/base.py, todo en la v1.5.0.
 snippets:
   install:
     - label: bash
@@ -39,6 +50,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
+source_hash: 57ddac08bc4d4e05
 ---
 
 ## Instalación

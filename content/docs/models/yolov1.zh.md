@@ -1,11 +1,20 @@
 ---
 title: YOLOv1
-families: [yolo1]
-seo_title: "在 LibreYOLO 里运行 YOLOv1：预测、验证与导出"
-description: "在 LibreYOLO 里运行最初的 YOLOv1 检测器：一个冻结的、仅推理的博物馆家族。可以预测、验证并导出，采用公共领域许可。"
-lead: "YOLOv1 是 2016 年那个最初的检测器，YOLO 家族的名字就来自它：一个卷积网络配上一个全连接 head，一次前向就预测出所有检测框和类别分数，不用锚框。LibreYOLO 以冻结、仅推理的展品形式收录它。"
-keywords: [YOLOv1, "yolov1 目标检测", Darknet, "Pascal VOC", "yolo 第一个版本", "yolov1 预训练权重"]
-last_verified: "1.5.0"
+families:
+  - yolo1
+seo_title: 在 LibreYOLO 里运行 YOLOv1：预测、验证与导出
+description: 在 LibreYOLO 里运行最初的 YOLOv1 检测器：一个冻结的、仅推理的博物馆家族。可以预测、验证并导出，采用公共领域许可。
+lead: >-
+  YOLOv1 是 2016 年那个最初的检测器，YOLO 家族的名字就来自它：一个卷积网络配上一个全连接
+  head，一次前向就预测出所有检测框和类别分数，不用锚框。LibreYOLO 以冻结、仅推理的展品形式收录它。
+keywords:
+  - YOLOv1
+  - yolov1 目标检测
+  - Darknet
+  - Pascal VOC
+  - yolo 第一个版本
+  - yolov1 预训练权重
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +29,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreYOLO1b.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreYOLO1b.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -62,6 +73,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: a786372dba86f2f8
 ---
 
 ## 安装

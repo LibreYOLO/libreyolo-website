@@ -1,11 +1,26 @@
 ---
 title: MoGe-2
-families: [moge2]
-seo_title: "MoGe-2: predice, valida y exporta normales de superficie"
-description: "Usa MoGe-2 en LibreYOLO para predicción densa de normales de superficie. Instala, predice, valida y exporta los checkpoints oficiales ViT-S, ViT-B y ViT-L."
-lead: "MoGe-2 es un modelo de geometría monocular de una sola pasada que predice un campo denso de normales de superficie a partir de una única imagen RGB. LibreYOLO lo soporta solo para estimación de normales, a través de los checkpoints oficiales ViT-S, ViT-B y ViT-L."
-keywords: [MoGe-2, MoGe 2, "estimación de normales de superficie", "mapa de normales", "geometría monocular", "predicción densa python", DINOv2]
-last_verified: "1.5.0"
+families:
+  - moge2
+seo_title: 'MoGe-2: predice, valida y exporta normales de superficie'
+description: >-
+  Usa MoGe-2 en LibreYOLO para predicción densa de normales de superficie.
+  Instala, predice, valida y exporta los checkpoints oficiales ViT-S, ViT-B y
+  ViT-L.
+lead: >-
+  MoGe-2 es un modelo de geometría monocular de una sola pasada que predice un
+  campo denso de normales de superficie a partir de una única imagen RGB.
+  LibreYOLO lo soporta solo para estimación de normales, a través de los
+  checkpoints oficiales ViT-S, ViT-B y ViT-L.
+keywords:
+  - MoGe-2
+  - MoGe 2
+  - estimación de normales de superficie
+  - mapa de normales
+  - geometría monocular
+  - predicción densa python
+  - DINOv2
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +35,10 @@ snippets:
         print(normal.array.shape)   # vectores unitarios float32 (H, W, 3)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreMoGe2s-normal.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreMoGe2s-normal.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -49,9 +66,11 @@ snippets:
         model.export(format="tensorrt", imgsz=518, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreMoGe2s-normal.pt format=onnx imgsz=518
-        libreyolo export model=LibreMoGe2s-normal.pt format=tensorrt imgsz=518 half=True
+
+        libreyolo export model=LibreMoGe2s-normal.pt format=tensorrt imgsz=518
+        half=True
     - label: Usar el archivo exportado
       language: python
       code: |
@@ -61,6 +80,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
+source_hash: ddfacf6b7e9729f6
 ---
 
 ## Instalación

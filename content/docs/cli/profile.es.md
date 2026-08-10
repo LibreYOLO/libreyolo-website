@@ -1,16 +1,27 @@
 ---
 title: libreyolo profile
-seo_title: "referencia del comando libreyolo profile"
-description: "Mide la velocidad del entrenamiento y de la inferencia y lee el resultado: cada subcomando de profile, sus argumentos y valores por defecto, y qué informa cada ángulo de lectura."
-lead: "Un grupo de comandos que mide adónde se va el tiempo en un paso de entrenamiento o en una llamada de inferencia, escribe un perfil autocontenido y vuelve a leer ese perfil desde varios ángulos."
-keywords: [libreyolo profile cli, profiling entrenamiento yolo, medir latencia inferencia yolo, perfilado kernels gpu pytorch, comparar rendimiento libreyolo]
-last_verified: "1.5.0"
+seo_title: referencia del comando libreyolo profile
+description: >-
+  Mide la velocidad del entrenamiento y de la inferencia y lee el resultado:
+  cada subcomando de profile, sus argumentos y valores por defecto, y qué
+  informa cada ángulo de lectura.
+lead: >-
+  Un grupo de comandos que mide adónde se va el tiempo en un paso de
+  entrenamiento o en una llamada de inferencia, escribe un perfil autocontenido
+  y vuelve a leer ese perfil desde varios ángulos.
+keywords:
+  - libreyolo profile cli
+  - profiling entrenamiento yolo
+  - medir latencia inferencia yolo
+  - perfilado kernels gpu pytorch
+  - comparar rendimiento libreyolo
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo profile
     mono: true
   - label: Salida
-    value: "profile.json y profile_trace.json en runs/profile"
+    value: profile.json y profile_trace.json en runs/profile
     mono: true
 snippets:
   examples:
@@ -25,12 +36,17 @@ snippets:
         libreyolo profile summary runs/profile/infer/profile.json
     - label: Comparar dos mediciones
       language: bash
-      code: |
-        libreyolo profile infer --device cpu --warmup 5 --runs 20 --project runs/profile/a
-        libreyolo profile infer --device cpu --warmup 5 --runs 20 --batch 4 --project runs/profile/b
+      code: >
+        libreyolo profile infer --device cpu --warmup 5 --runs 20 --project
+        runs/profile/a
+
+        libreyolo profile infer --device cpu --warmup 5 --runs 20 --batch 4
+        --project runs/profile/b
+
 
         libreyolo profile compare runs/profile/a/infer/profile.json \
           runs/profile/b/infer/profile.json
+source_hash: b967e869fd9ba418
 ---
 
 ## Sinopsis

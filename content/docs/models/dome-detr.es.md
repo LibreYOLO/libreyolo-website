@@ -1,11 +1,29 @@
 ---
 title: Dome-DETR
-families: [domedetr]
-seo_title: "Dome-DETR: detección de objetos diminutos en LibreYOLO"
-description: "Usa Dome-DETR en LibreYOLO para detección de objetos diminutos en imágenes aéreas y de dron. Convierte los pesos de upstream, predice, haz fine-tuning y valida con código bajo licencia MIT."
-lead: "Un especialista en objetos diminutos construido sobre D-FINE: una cabeza de densidad decide dónde hay objetos, la atención del encoder se restringe a las ventanas que los contienen, y el número de queries se dimensiona a partir de esa densidad en lugar de quedar fijo. LibreYOLO lo soporta para detección."
-keywords: [Dome-DETR, "detección de objetos diminutos", "detección de objetos pequeños", "imágenes aéreas", "detección con drones", "teledetección", VisDrone, AI-TOD, DETR, "queries adaptativas a la densidad"]
-last_verified: "1.5.0"
+families:
+  - domedetr
+seo_title: 'Dome-DETR: detección de objetos diminutos en LibreYOLO'
+description: >-
+  Usa Dome-DETR en LibreYOLO para detección de objetos diminutos en imágenes
+  aéreas y de dron. Convierte los pesos de upstream, predice, haz fine-tuning y
+  valida con código bajo licencia MIT.
+lead: >-
+  Un especialista en objetos diminutos construido sobre D-FINE: una cabeza de
+  densidad decide dónde hay objetos, la atención del encoder se restringe a las
+  ventanas que los contienen, y el número de queries se dimensiona a partir de
+  esa densidad en lugar de quedar fijo. LibreYOLO lo soporta para detección.
+keywords:
+  - Dome-DETR
+  - detección de objetos diminutos
+  - detección de objetos pequeños
+  - imágenes aéreas
+  - detección con drones
+  - teledetección
+  - VisDrone
+  - AI-TOD
+  - DETR
+  - queries adaptativas a la densidad
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Convertir y luego predecir
@@ -21,39 +39,55 @@ snippets:
           LibreDOMEDETRs-visdrone.pt --size s --variant visdrone
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # Una ruta local, no un nombre a secas: en esta familia no se descarga nada.
+
+        # Una ruta local, no un nombre a secas: en esta familia no se descarga
+        nada.
+
         model = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
+
         result = model("drone-frame.jpg", save=True)
+
 
         for box in result.boxes:
             print(result.names[int(box.cls)], box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDOMEDETRs-visdrone.pt source=drone-frame.jpg save=True
+      code: >
+        libreyolo predict model=LibreDOMEDETRs-visdrone.pt
+        source=drone-frame.jpg save=True
     - label: Nombres de clase
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # No hay checkpoint de COCO, así que las clases vienen del dataset con el
+
+        # No hay checkpoint de COCO, así que las clases vienen del dataset con
+        el
+
         # que se entrenaron los pesos y se leen de los metadatos del checkpoint.
+
         aitod = LibreYOLO("LibreDOMEDETRs-aitod.pt")
+
         print(aitod.model.names)     # 9 clases de AI-TOD-V2
 
+
         visdrone = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
+
         print(visdrone.model.names)  # 12 clases de VisDrone
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-        model.train(data="my-dataset.yaml", epochs=160, imgsz=800, batch=4, lr0=2e-4)
+
+        model.train(data="my-dataset.yaml", epochs=160, imgsz=800, batch=4,
+        lr0=2e-4)
     - label: CLI
       language: bash
       code: |
@@ -79,6 +113,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreDOMEDETRs-visdrone.pt data=my-dataset.yaml
+source_hash: 381f01d769e7c420
 ---
 
 ## Instalación

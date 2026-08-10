@@ -1,11 +1,25 @@
 ---
 title: D-FINE
-families: [dfine]
-seo_title: "D-FINE: faça fine-tuning, valide e exporte sob a MIT"
-description: "Use o D-FINE no LibreYOLO para detecção de objetos e segmentação de instâncias. Instale, rode predições, faça fine-tuning, valide e exporte, com código licenciado sob a MIT."
-lead: "Um transformer de detecção que reformula a regressão de caixas como uma distribuição de probabilidade sobre cada borda da caixa, refinada ao longo das camadas do decoder. O LibreYOLO o suporta para detecção e segmentação de instâncias."
-keywords: [D-FINE, "transformer de detecção", "detecção de objetos em tempo real", "segmentação de instâncias", "fine-tuning D-FINE", DETR]
-last_verified: "1.5.0"
+families:
+  - dfine
+seo_title: 'D-FINE: faça fine-tuning, valide e exporte sob a MIT'
+description: >-
+  Use o D-FINE no LibreYOLO para detecção de objetos e segmentação de
+  instâncias. Instale, rode predições, faça fine-tuning, valide e exporte, com
+  código licenciado sob a MIT.
+lead: >-
+  Um transformer de detecção que reformula a regressão de caixas como uma
+  distribuição de probabilidade sobre cada borda da caixa, refinada ao longo das
+  camadas do decoder. O LibreYOLO o suporta para detecção e segmentação de
+  instâncias.
+keywords:
+  - D-FINE
+  - transformer de detecção
+  - detecção de objetos em tempo real
+  - segmentação de instâncias
+  - fine-tuning D-FINE
+  - DETR
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +34,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDFINEn.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDFINEn.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Segmentação de instâncias
       language: python
       code: |
@@ -36,11 +52,14 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreDFINEn.pt")
-        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8, lr0=2e-4)
+
+        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8,
+        lr0=2e-4)
     - label: CLI
       language: bash
       code: |
@@ -48,16 +67,22 @@ snippets:
           epochs=50 imgsz=640 batch=8 lr0=2e-4
     - label: Segmentação de instâncias
       language: bash
-      code: |
-        # Continua a partir de pesos de segmentação publicados, cabeça de máscaras incluída.
+      code: >
+        # Continua a partir de pesos de segmentação publicados, cabeça de
+        máscaras incluída.
+
         libreyolo train model=LibreDFINEn-seg.pt data=my-dataset.yaml \
           task=segment epochs=50 imgsz=640
     - label: Segmentação a partir de pesos de detecção
       language: bash
-      code: |
+      code: >
         # Os pesos de detecção não trazem cabeça de máscaras, então isto é uma
-        # transferência explícita: a cabeça começa sem treinamento e só serve depois
+
+        # transferência explícita: a cabeça começa sem treinamento e só serve
+        depois
+
         # de treinada. Pedir task=segment aqui é o que autoriza a transferência.
+
         libreyolo train model=LibreDFINEn.pt data=my-dataset.yaml \
           task=segment epochs=50 imgsz=640
     - label: LoRA
@@ -108,9 +133,11 @@ snippets:
         model.export(format="tensorrt", imgsz=640, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDFINEn.pt format=onnx imgsz=640
-        libreyolo export model=LibreDFINEn.pt format=tensorrt imgsz=640 half=True
+
+        libreyolo export model=LibreDFINEn.pt format=tensorrt imgsz=640
+        half=True
     - label: Usar o arquivo exportado
       language: python
       code: |
@@ -122,6 +149,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 0216631a26185524
 ---
 
 ## Instalação

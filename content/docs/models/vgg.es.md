@@ -1,11 +1,25 @@
 ---
 title: VGG
-families: [vgg]
-seo_title: "VGG: ejecuta clasificadores de imágenes VGG-16/19 en LibreYOLO"
-description: "Predice, valida y exporta clasificadores VGG con LibreYOLO. Pesos de torchvision con licencia BSD-3-Clause; el fine-tuning todavía no está soportado."
-lead: "VGG es un clasificador de imágenes convolucional construido con pilas uniformes de convoluciones pequeñas de 3x3 en lugar de filtros más grandes. LibreYOLO incluye los tamaños de 16 y 19 capas, en versión simple y con batch normalization, para clasificación de imágenes."
-keywords: [VGG, VGG-16, VGG-19, "red neuronal convolucional", "clasificación de imágenes python", "clasificador de imágenes preentrenado"]
-last_verified: "1.5.0"
+families:
+  - vgg
+seo_title: 'VGG: ejecuta clasificadores de imágenes VGG-16/19 en LibreYOLO'
+description: >-
+  Predice, valida y exporta clasificadores VGG con LibreYOLO. Pesos de
+  torchvision con licencia BSD-3-Clause; el fine-tuning todavía no está
+  soportado.
+lead: >-
+  VGG es un clasificador de imágenes convolucional construido con pilas
+  uniformes de convoluciones pequeñas de 3x3 en lugar de filtros más grandes.
+  LibreYOLO incluye los tamaños de 16 y 19 capas, en versión simple y con batch
+  normalization, para clasificación de imágenes.
+keywords:
+  - VGG
+  - VGG-16
+  - VGG-19
+  - red neuronal convolucional
+  - clasificación de imágenes python
+  - clasificador de imágenes preentrenado
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +35,10 @@ snippets:
         print(probs.top5, probs.top5conf)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreVGG16-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreVGG16-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -57,16 +73,24 @@ snippets:
         libreyolo export model=LibreVGG16-cls.pt format=tensorrt half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
         # exportado se carga como cualquier checkpoint y devuelve el mismo
+
         # objeto Results.
+
         model = LibreYOLO("LibreVGG16-cls.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.probs.top1)
+source_hash: 26eb6ff5811533fd
 ---
 
 ## Instalación

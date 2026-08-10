@@ -1,8 +1,16 @@
 ---
 title: Kernels
-seo_title: "Registro de kernels de LibreYOLO y kernels del Hub"
-description: "Cómo selecciona LibreYOLO las implementaciones aceleradas: el registro de kernels en libreyolo/kernels, el kernel opcional MS-deform-attn de Hugging Face Hub y el interruptor de atención fusionada."
-lead: "Cada operación acelerada de LibreYOLO tiene una implementación portable por defecto y, a veces, una variante más rápida registrada por encima. La selección ocurre en tiempo de ejecución mediante un predicado, una dependencia opcional que falta es un fallback y no un error, y un grafo exportado toma siempre el camino portable."
+seo_title: Registro de kernels de LibreYOLO y kernels del Hub
+description: >-
+  Cómo selecciona LibreYOLO las implementaciones aceleradas: el registro de
+  kernels en libreyolo/kernels, el kernel opcional MS-deform-attn de Hugging
+  Face Hub y el interruptor de atención fusionada.
+lead: >-
+  Cada operación acelerada de LibreYOLO tiene una implementación portable por
+  defecto y, a veces, una variante más rápida registrada por encima. La
+  selección ocurre en tiempo de ejecución mediante un predicado, una dependencia
+  opcional que falta es un fallback y no un error, y un grafo exportado toma
+  siempre el camino portable.
 keywords:
   - libreyolo kernels
   - LIBREYOLO_KERNELS
@@ -11,14 +19,22 @@ keywords:
   - kernel ms_deform_attn
   - set_fused_attention
   - kernels triton libreyolo cuda
-last_verified: "1.5.0"
-verification: "API del registro leída de libreyolo/kernels/__init__.py en la v1.5.0, API de atención de libreyolo/kernels/attention/__init__.py y sdpa.py, proveedor del Hub de libreyolo/kernels/attention/ms_deform_attn.py incluyendo su revisión fijada y su predicado de elegibilidad. Estructura de directorios listada desde libreyolo/kernels/. Definición del extra desde pyproject.toml. Notas de comportamiento y cifras de benchmark de docs/kernels.md. El historial del gating de la v1.4.0, del commit que cableó el slot en RF-DETR y de la entrada del CHANGELOG de 1.5.0."
+last_verified: 1.5.0
+verification: >-
+  API del registro leída de libreyolo/kernels/__init__.py en la v1.5.0, API de
+  atención de libreyolo/kernels/attention/__init__.py y sdpa.py, proveedor del
+  Hub de libreyolo/kernels/attention/ms_deform_attn.py incluyendo su revisión
+  fijada y su predicado de elegibilidad. Estructura de directorios listada desde
+  libreyolo/kernels/. Definición del extra desde pyproject.toml. Notas de
+  comportamiento y cifras de benchmark de docs/kernels.md. El historial del
+  gating de la v1.4.0, del commit que cableó el slot en RF-DETR y de la entrada
+  del CHANGELOG de 1.5.0.
 meta:
   - label: Paquete
     value: libreyolo.kernels
     mono: true
   - label: Extra opcional
-    value: libreyolo[hub-kernels]
+    value: 'libreyolo[hub-kernels]'
     mono: true
   - label: Forzar la referencia
     value: LIBREYOLO_KERNELS=off
@@ -27,10 +43,13 @@ snippets:
   usage:
     - label: Ver qué se ha seleccionado
       language: python
-      code: |
+      code: >
         import libreyolo.kernels as kernels
 
-        # Slot de op al nombre de la implementación seleccionada, o "unavailable".
+
+        # Slot de op al nombre de la implementación seleccionada, o
+        "unavailable".
+
         print(kernels.active())
     - label: Forzar el camino de referencia
       language: bash
@@ -63,6 +82,7 @@ snippets:
             name="mybackend",
             predicate=my_check,
         )
+source_hash: 23d504e88b7959f8
 ---
 
 ## El registro

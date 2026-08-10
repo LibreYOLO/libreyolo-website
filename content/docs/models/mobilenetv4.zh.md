@@ -1,11 +1,22 @@
 ---
 title: MobileNetV4
-families: [mobilenetv4]
-seo_title: "MobileNetV4：在 Apache-2.0 下训练、验证与导出"
-description: "在 LibreYOLO 里用 MobileNetV4 做图像分类。安装、预测、微调、验证并导出 LibreMobileNetV4 small/medium/large。"
-lead: "MobileNetV4 是一个为移动端和边缘硬件打造的图像分类器，用通用倒置瓶颈（Universal Inverted Bottleneck）模块把此前几种移动端模块设计统一成一个可搜索的结构。LibreYOLO 只支持它的一个任务：分类。"
-keywords: [MobileNetV4, "MobileNetV4 conv", "图像分类 python", "移动端推理", "端侧分类模型", "imagenet 预训练分类模型"]
-last_verified: "1.5.0"
+families:
+  - mobilenetv4
+seo_title: MobileNetV4：在 Apache-2.0 下训练、验证与导出
+description: >-
+  在 LibreYOLO 里用 MobileNetV4 做图像分类。安装、预测、微调、验证并导出 LibreMobileNetV4
+  small/medium/large。
+lead: >-
+  MobileNetV4 是一个为移动端和边缘硬件打造的图像分类器，用通用倒置瓶颈（Universal Inverted
+  Bottleneck）模块把此前几种移动端模块设计统一成一个可搜索的结构。LibreYOLO 只支持它的一个任务：分类。
+keywords:
+  - MobileNetV4
+  - MobileNetV4 conv
+  - 图像分类 python
+  - 移动端推理
+  - 端侧分类模型
+  - imagenet 预训练分类模型
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +31,9 @@ snippets:
         print(result.probs.top5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreMobileNetV4s-cls.pt source=cat.jpg save=True
+      code: >
+        libreyolo predict model=LibreMobileNetV4s-cls.pt source=cat.jpg
+        save=True
   train:
     - label: Python
       language: python
@@ -32,8 +44,9 @@ snippets:
         model.train(data="imagenette160", epochs=5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo train model=LibreMobileNetV4s-cls.pt data=imagenette160 epochs=5
+      code: >
+        libreyolo train model=LibreMobileNetV4s-cls.pt data=imagenette160
+        epochs=5
     - label: Multi-GPU
       language: bash
       code: |
@@ -65,9 +78,11 @@ snippets:
         model.export(format="tensorrt", half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreMobileNetV4s-cls.pt format=onnx
-        libreyolo export model=LibreMobileNetV4s-cls.pt format=tensorrt half=True
+
+        libreyolo export model=LibreMobileNetV4s-cls.pt format=tensorrt
+        half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -79,6 +94,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: 4a9a1b392ffb136d
 ---
 
 ## 安装

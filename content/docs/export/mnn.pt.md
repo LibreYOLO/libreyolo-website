@@ -1,40 +1,52 @@
 ---
 title: MNN
-seo_title: "Exportar para MNN a partir do LibreYOLO"
-description: "Exporte um detector LibreYOLO para MNN passando por ONNX e mnnconvert: uma forma NCHW fixa, FP32 na CPU e um sidecar de metadados que o contrato do runtime exige."
-lead: "MNN é o motor de inferência leve da Alibaba. O LibreYOLO exporta um grafo ONNX estático, converte esse grafo com a ferramenta mnnconvert que vem no pacote MNN e escreve um sidecar JSON registrando os nomes de entrada e de saída, a forma de entrada fixa e os nomes das classes."
+seo_title: Exportar para MNN a partir do LibreYOLO
+description: >-
+  Exporte um detector LibreYOLO para MNN passando por ONNX e mnnconvert: uma
+  forma NCHW fixa, FP32 na CPU e um sidecar de metadados que o contrato do
+  runtime exige.
+lead: >-
+  MNN é o motor de inferência leve da Alibaba. O LibreYOLO exporta um grafo ONNX
+  estático, converte esse grafo com a ferramenta mnnconvert que vem no pacote
+  MNN e escreve um sidecar JSON registrando os nomes de entrada e de saída, a
+  forma de entrada fixa e os nomes das classes.
 keywords:
   - exportar yolo mnn
   - mnnconvert
   - inferência mnn
   - inferência de detector no celular
   - forma nchw fixa
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="mnn")'
+    value: export(format="mnn")
     mono: true
   - label: Escreve
-    value: "Um arquivo .mnn mais um sidecar de metadados .mnn.json"
+    value: Um arquivo .mnn mais um sidecar de metadados .mnn.json
   - label: Extra
     value: 'pip install "libreyolo[mnn]"'
     mono: true
   - label: Recarrega com
-    value: 'LibreYOLO("weights/LibreYOLO9t.mnn")'
+    value: LibreYOLO("weights/LibreYOLO9t.mnn")
     mono: true
   - label: Formas
-    value: "NCHW fixa. dynamic=True é rejeitado."
+    value: NCHW fixa. dynamic=True é rejeitado.
   - label: Precisão
-    value: "Somente FP32, somente CPU."
+    value: 'Somente FP32, somente CPU.'
   - label: Tarefas
-    value: "Somente detecção nesta versão"
-verification: "Lido de libreyolo/export/mnn.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/mnn.py e pyproject.toml no branch dev."
+    value: Somente detecção nesta versão
+verification: >-
+  Lido de libreyolo/export/mnn.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/mnn.py e pyproject.toml no
+  branch dev.
 snippets:
   install:
     - label: Instalação
       language: bash
-      code: |
-        # O extra inclui libreyolo[onnx]: o MNN converte a partir de um intermediário ONNX.
+      code: >
+        # O extra inclui libreyolo[onnx]: o MNN converte a partir de um
+        intermediário ONNX.
+
         pip install "libreyolo[mnn]"
     - label: Confirmar que o conversor está no path
       language: bash
@@ -79,18 +91,25 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: MNN puro
       language: python
-      code: |
+      code: >
         import json
 
+
         import MNN
+
         import numpy as np
 
+
         meta = json.load(open("weights/LibreYOLO9t.mnn.json"))
-        print(meta["mnn_input_names"], meta["mnn_output_names"], meta["mnn_input_shape"])
+
+        print(meta["mnn_input_names"], meta["mnn_output_names"],
+        meta["mnn_input_shape"])
+
 
         runtime = MNN.nn.create_runtime_manager(
             ({"backend": 0, "precision": 1, "numThread": 4},)
         )
+
         module = MNN.nn.load_module_from_file(
             "weights/LibreYOLO9t.mnn",
             meta["mnn_input_names"],
@@ -100,20 +119,26 @@ snippets:
             shape_mutable=False,
         )
 
+
         blob = np.zeros(meta["mnn_input_shape"], dtype=np.float32)
+
         input_var = MNN.expr.const(
             blob, list(blob.shape), MNN.expr.NCHW, MNN.expr.float
         )
+
         outputs = module.forward([input_var])
+
         for out in outputs:
             print(np.array(MNN.expr.convert(out, MNN.expr.NCHW).read()).shape)
 
-        # O pré-processamento e o pós-processamento são por sua conta nesse caminho.
+        # O pré-processamento e o pós-processamento são por sua conta nesse
+        caminho.
   support:
     - label: Conferir uma família e uma tarefa antes de exportar
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: 68fad34d07aea149
 ---
 
 ## Instalação

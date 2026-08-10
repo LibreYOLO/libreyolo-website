@@ -1,11 +1,26 @@
 ---
 title: L2CS-Net
-families: [l2cs]
-seo_title: "L2CS-Net: estimación de la mirada en LibreYOLO"
-description: "Usa L2CS-Net en LibreYOLO para estimar el pitch y el yaw de la mirada en dos etapas. Instala, predice y exporta; el checkpoint de Gaze360 es solo para investigación."
-lead: "L2CS-Net es un estimador de mirada de dos etapas: un detector de caras las localiza, y un tronco ResNet con dos cabezas de clasificación por bins de ángulo predice el pitch y el yaw de cada cara. LibreYOLO lo integra solo para inferencia."
-keywords: [L2CS-Net, "estimación de la mirada", "hacia dónde mira una persona", "eye tracking python", "pitch yaw mirada", Gaze360, "detección de caras python"]
-last_verified: "1.5.0"
+families:
+  - l2cs
+seo_title: 'L2CS-Net: estimación de la mirada en LibreYOLO'
+description: >-
+  Usa L2CS-Net en LibreYOLO para estimar el pitch y el yaw de la mirada en dos
+  etapas. Instala, predice y exporta; el checkpoint de Gaze360 es solo para
+  investigación.
+lead: >-
+  L2CS-Net es un estimador de mirada de dos etapas: un detector de caras las
+  localiza, y un tronco ResNet con dos cabezas de clasificación por bins de
+  ángulo predice el pitch y el yaw de cada cara. LibreYOLO lo integra solo para
+  inferencia.
+keywords:
+  - L2CS-Net
+  - estimación de la mirada
+  - hacia dónde mira una persona
+  - eye tracking python
+  - pitch yaw mirada
+  - Gaze360
+  - detección de caras python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -22,8 +37,10 @@ snippets:
         print(result.gaze.pitch, result.gaze.yaw)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreL2CSr50.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreL2CSr50.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Origen de las caras
       language: python
       code: |
@@ -66,6 +83,7 @@ snippets:
         yaw_logits, pitch_logits = session.run(
             None, {name: np.zeros((1, 3, 448, 448), dtype=np.float32)}
         )
+source_hash: 4ec43f4673b4be3e
 ---
 
 ## Instalación

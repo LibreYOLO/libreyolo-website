@@ -1,11 +1,21 @@
 ---
 title: OMDet-Turbo
-families: [omdet_turbo]
-seo_title: "OMDet-Turbo：在 LibreYOLO 里做实时零样本检测"
-description: "用 LibreYOLO 里的 OMDet-Turbo 做实时开放词汇检测。装上 openvocab extra，用自由文本词汇表做预测。"
-lead: "OMDet-Turbo 是一个实时开放词汇目标检测器，由 Om AI Lab 开发，它把类别嵌入向量和语言任务提示词解耦。LibreYOLO 把它包装成开放词汇检测器层里一个仅支持预测的家族。"
-keywords: [OMDet-Turbo, OmDet, 开放词汇目标检测, "实时目标检测 python", 零样本目标检测, "文本描述检测物体", LibreOpenVocab]
-last_verified: "1.5.0"
+families:
+  - omdet_turbo
+seo_title: OMDet-Turbo：在 LibreYOLO 里做实时零样本检测
+description: 用 LibreYOLO 里的 OMDet-Turbo 做实时开放词汇检测。装上 openvocab extra，用自由文本词汇表做预测。
+lead: >-
+  OMDet-Turbo 是一个实时开放词汇目标检测器，由 Om AI Lab 开发，它把类别嵌入向量和语言任务提示词解耦。LibreYOLO
+  把它包装成开放词汇检测器层里一个仅支持预测的家族。
+keywords:
+  - OMDet-Turbo
+  - OmDet
+  - 开放词汇目标检测
+  - 实时目标检测 python
+  - 零样本目标检测
+  - 文本描述检测物体
+  - LibreOpenVocab
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -31,6 +41,7 @@ snippets:
         # 后处理把抑制阈值当成一个参数，iou= 不设置时默认为 0.5
         result = model.predict(SAMPLE_IMAGE, conf=0.3, iou=0.7)
         print(result.names, len(result))
+source_hash: c2a375d234341b7e
 ---
 
 ## 安装

@@ -1,11 +1,25 @@
 ---
 title: DeepLabv3
-families: [deeplabv3]
-seo_title: "DeepLabv3: predição e exportação de segmentação semântica com ASPP"
-description: "Use o DeepLabv3 no LibreYOLO para segmentação semântica. Instale, faça predições, valide e exporte os checkpoints ResNet e MobileNetV3 do torchvision."
-lead: "Uma rede de segmentação semântica que agrega características em várias taxas de dilatação em paralelo (atrous spatial pyramid pooling) antes de classificar cada pixel. O LibreYOLO a inclui apenas para segmentação semântica."
-keywords: [DeepLabv3, "segmentação semântica", ASPP, "atrous spatial pyramid pooling", "deeplabv3 pytorch", "segmentação semântica python", "classificar cada pixel da imagem"]
-last_verified: "1.5.0"
+families:
+  - deeplabv3
+seo_title: 'DeepLabv3: predição e exportação de segmentação semântica com ASPP'
+description: >-
+  Use o DeepLabv3 no LibreYOLO para segmentação semântica. Instale, faça
+  predições, valide e exporte os checkpoints ResNet e MobileNetV3 do
+  torchvision.
+lead: >-
+  Uma rede de segmentação semântica que agrega características em várias taxas
+  de dilatação em paralelo (atrous spatial pyramid pooling) antes de classificar
+  cada pixel. O LibreYOLO a inclui apenas para segmentação semântica.
+keywords:
+  - DeepLabv3
+  - segmentação semântica
+  - ASPP
+  - atrous spatial pyramid pooling
+  - deeplabv3 pytorch
+  - segmentação semântica python
+  - classificar cada pixel da imagem
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +35,10 @@ snippets:
         print(mask.classes)      # ids de classe presentes na imagem, ordenados
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDeepLabv3r50-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDeepLabv3r50-sem.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -49,9 +65,11 @@ snippets:
         model.export(format="tensorrt", half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDeepLabv3r50-sem.pt format=onnx
-        libreyolo export model=LibreDeepLabv3r50-sem.pt format=tensorrt half=True
+
+        libreyolo export model=LibreDeepLabv3r50-sem.pt format=tensorrt
+        half=True
     - label: Usar o arquivo exportado
       language: python
       code: |
@@ -63,6 +81,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
+source_hash: 7abf11ebb6cece18
 ---
 
 ## Instalação

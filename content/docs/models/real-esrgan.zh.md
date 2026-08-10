@@ -1,11 +1,18 @@
 ---
 title: Real-ESRGAN
-families: [realesrgan]
-seo_title: "Real-ESRGAN：在 LibreYOLO 里做图像超分辨率"
-description: "在 LibreYOLO 里用 Real-ESRGAN 做实用的图像超分辨率，覆盖 4x、2x 和一档快速 4x。安装、预测、验证并导出。"
-lead: "一个实用的盲超分辨率放大模型，训练用的是合成退化，而不是只有双三次下采样。LibreYOLO 为它的 4x、2x 和快速 4x 检查点提供推理和验证。"
-keywords: [Real-ESRGAN, RRDBNet, SRVGGNetCompact, 图像超分辨率, "图片放大 不失真", "图像恢复 python"]
-last_verified: "1.5.0"
+families:
+  - realesrgan
+seo_title: Real-ESRGAN：在 LibreYOLO 里做图像超分辨率
+description: 在 LibreYOLO 里用 Real-ESRGAN 做实用的图像超分辨率，覆盖 4x、2x 和一档快速 4x。安装、预测、验证并导出。
+lead: 一个实用的盲超分辨率放大模型，训练用的是合成退化，而不是只有双三次下采样。LibreYOLO 为它的 4x、2x 和快速 4x 检查点提供推理和验证。
+keywords:
+  - Real-ESRGAN
+  - RRDBNet
+  - SRVGGNetCompact
+  - 图像超分辨率
+  - 图片放大 不失真
+  - 图像恢复 python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +27,10 @@ snippets:
         print(restored.array.shape, restored.array.dtype)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreRealESRGANx4-restore.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreRealESRGANx4-restore.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: 分块处理大图
       language: python
       code: |
@@ -46,8 +55,9 @@ snippets:
         print(metrics["metrics/SSIM"])
     - label: CLI
       language: bash
-      code: |
-        libreyolo val model=LibreRealESRGANx4-restore.pt data=my-restore-dataset.yaml
+      code: >
+        libreyolo val model=LibreRealESRGANx4-restore.pt
+        data=my-restore-dataset.yaml
   export:
     - label: Python
       language: python
@@ -62,8 +72,9 @@ snippets:
         model.export(format="tensorrt", imgsz=512, half=True)
     - label: CLI
       language: bash
-      code: |
-        libreyolo export model=LibreRealESRGANx4-restore.pt format=onnx imgsz=512
+      code: >
+        libreyolo export model=LibreRealESRGANx4-restore.pt format=onnx
+        imgsz=512
     - label: 使用导出的文件
       language: python
       code: |
@@ -75,6 +86,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.restored.array.shape)
+source_hash: f0efb4f65d38e22d
 ---
 
 ## 安装

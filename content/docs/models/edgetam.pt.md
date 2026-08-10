@@ -1,34 +1,65 @@
 ---
 title: EdgeTAM
-families: [edgetam]
-seo_title: "EdgeTAM: segmentação com prompts em dispositivo no LibreYOLO"
-description: "Use o EdgeTAM no LibreYOLO para segmentação com prompts de ponto e de caixa, feita para velocidade em dispositivo. Instale e faça predições com o checkpoint sob Apache-2.0."
-lead: "O EdgeTAM é uma variante do SAM 2 para rodar no próprio dispositivo, construída para a velocidade de inferência em mobile mantendo o mesmo fluxo de trabalho com prompts de ponto e de caixa. O LibreYOLO suporta seu caminho de segmentação de imagens por meio de uma factory LibreSAM dedicada, separada da factory de detectores LibreYOLO()."
-keywords: [EdgeTAM, SAM 2, "segmentação com prompt", "segmentação interativa python", "segmentar objeto com um clique", "segmentação no dispositivo", "prompt de ponto", Meta Reality Labs]
-last_verified: "1.5.0"
+families:
+  - edgetam
+seo_title: 'EdgeTAM: segmentação com prompts em dispositivo no LibreYOLO'
+description: >-
+  Use o EdgeTAM no LibreYOLO para segmentação com prompts de ponto e de caixa,
+  feita para velocidade em dispositivo. Instale e faça predições com o
+  checkpoint sob Apache-2.0.
+lead: >-
+  O EdgeTAM é uma variante do SAM 2 para rodar no próprio dispositivo,
+  construída para a velocidade de inferência em mobile mantendo o mesmo fluxo de
+  trabalho com prompts de ponto e de caixa. O LibreYOLO suporta seu caminho de
+  segmentação de imagens por meio de uma factory LibreSAM dedicada, separada da
+  factory de detectores LibreYOLO().
+keywords:
+  - EdgeTAM
+  - SAM 2
+  - segmentação com prompt
+  - segmentação interativa python
+  - segmentar objeto com um clique
+  - segmentação no dispositivo
+  - prompt de ponto
+  - Meta Reality Labs
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Prompts de ponto e de caixa
       language: python
-      code: |
+      code: >
         from libreyolo import LibreSAM, SAMPLE_IMAGE
 
-        # O EdgeTAM tem um único tamanho, "edge". Aliases: "edgetam", "edge-tam",
+
+        # O EdgeTAM tem um único tamanho, "edge". Aliases: "edgetam",
+        "edge-tam",
+
         # "edgetam-edge".
+
         model = LibreSAM("edgetam")
 
-        # Um prompt de ponto: [x, y] em coordenadas de pixel, label 1 = primeiro plano.
+
+        # Um prompt de ponto: [x, y] em coordenadas de pixel, label 1 = primeiro
+        plano.
+
         result = model.predict(SAMPLE_IMAGE, points=[640, 420], labels=[1])
+
         print(result.masks.xy)      # um polígono por máscara
+
         print(result.boxes.xyxy)    # caixa ajustada derivada da máscara
 
+
         # Um prompt de caixa em vez de um ponto.
+
         result = model.predict(SAMPLE_IMAGE, bboxes=[300, 200, 900, 700])
 
+
         # Sem prompt nenhum, a imagem inteira é segmentada (um gerador
+
         # automático de máscaras simplificado, não o exaustivo de referência).
+
         result = model.predict(SAMPLE_IMAGE)
-    - label: Codifique uma vez, mande vários prompts
+    - label: 'Codifique uma vez, mande vários prompts'
       language: python
       code: |
         from libreyolo import LibreEdgeTAM, SAMPLE_IMAGE
@@ -41,6 +72,7 @@ snippets:
         a = model.predict(points=[640, 420], labels=[1])
         b = model.predict(bboxes=[300, 200, 900, 700])
         model.reset_image()
+source_hash: e6cce8faad18e73d
 ---
 
 ## Instalação

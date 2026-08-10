@@ -1,11 +1,20 @@
 ---
 title: PP-OCRv5
-families: [ppocr]
-seo_title: "PP-OCRv5：在 LibreYOLO 里做文字检测与识别"
-description: "用 LibreYOLO 里的 PP-OCRv5 做多语言场景文字 OCR。安装、预测并验证 t 和 l 两个检查点，采用 Apache-2.0 许可。"
-lead: "PP-OCRv5 是 PaddleOCR 的文字检测与识别流水线：一个可微二值化（differentiable binarization）检测器定位文字四边形，一个 SVTR/CTC 识别器把它们读出来。LibreYOLO 把它移植到 PyTorch，分成两档。"
-keywords: [PP-OCRv5, PaddleOCR, OCR, 文字检测, "文字识别 python", "ocr 中文识别"]
-last_verified: "1.5.0"
+families:
+  - ppocr
+seo_title: PP-OCRv5：在 LibreYOLO 里做文字检测与识别
+description: 用 LibreYOLO 里的 PP-OCRv5 做多语言场景文字 OCR。安装、预测并验证 t 和 l 两个检查点，采用 Apache-2.0 许可。
+lead: >-
+  PP-OCRv5 是 PaddleOCR 的文字检测与识别流水线：一个可微二值化（differentiable
+  binarization）检测器定位文字四边形，一个 SVTR/CTC 识别器把它们读出来。LibreYOLO 把它移植到 PyTorch，分成两档。
+keywords:
+  - PP-OCRv5
+  - PaddleOCR
+  - OCR
+  - 文字检测
+  - 文字识别 python
+  - ocr 中文识别
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -51,6 +60,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibrePPOCRl-ocr.pt data=my-dataset
+source_hash: 9835057f8bd95bc1
 ---
 
 ## 安装

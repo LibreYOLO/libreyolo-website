@@ -9,7 +9,7 @@ articles, marketing pages, `/docs/experimental`, `/docs/librevlm`. Untranslated
 pages already fall back to English with an English canonical, so partial rollout
 is always safe.
 
-## Final language roster (15 locales + English)
+## Final language roster (13 locales + English)
 
 Status as of 2026-08-10. "Pages" counts `<slug>.<locale>.md` twins out of 174.
 "Assets" means style guide (`scripts/translation/STYLE-<locale>.md`) and UI
@@ -23,7 +23,6 @@ strings (`messages/<locale>.json`) exist.
 | `it` | `it` | `it_IT` | Italiano | 41/174 | yes | `libreria` is correct here (unlike es) |
 | `fr` | `fr` | `fr_FR` | Français | 15/174 | yes | NBSP typography in `fr.json` — do not let a formatter strip it |
 | `ru` | `ru` | `ru_RU` | Русский | 12/174 | yes | Needs ICU plurals for `Models.familyCount` |
-| `ar` | `ar` | `ar_AR` | العربية | 0/174 | yes | MSA. **Blocked on RTL pass**; not in `routing.locales` |
 | `de` | `de` | `de_DE` | Deutsch | 0/174 | no | **Highest-ROI addition** — industrial machine vision |
 | `ja` | `ja` | `ja_JP` | 日本語 | 0/174 | no | Robotics/factory CV; low English-docs tolerance |
 | `ko` | `ko` | `ko_KR` | 한국어 | 0/174 | no | Strong industrial CV sector |
@@ -31,7 +30,12 @@ strings (`messages/<locale>.json`) exist.
 | `uk` | `uk` | `uk_UA` | Українська | 0/174 | no | Keep terminology independent of `ru`, not derived from it |
 | `vi` | `vi` | `vi_VN` | Tiếng Việt | 0/174 | no | Fast-growing dev base, little CV content competition |
 | `id` | `id` | `id_ID` | Bahasa Indonesia | 0/174 | no | Same rationale as `vi` |
-| `th` | `th` | `th_TH` | ไทย | 0/174 | no | Needs a line-breaking check (Thai has no word spaces) |
+
+**Dropped, deliberately:** `ar` (Arabic) and `th` (Thai). Arabic was the only
+right-to-left locale, so no RTL support is needed anywhere in the site; Thai was
+the only script needing special line-breaking. Both had reached the
+style-guide/UI-strings stage — recoverable from git history at commit `8322aeb`
+if that decision is ever revisited.
 
 ### Sequencing for the remaining work
 
@@ -39,13 +43,12 @@ strings (`messages/<locale>.json`) exist.
    Cheapest possible value: the assets and conventions already exist.
 2. **`de`, `ja`, `ko`** — the industrial-CV trio. Highest expected return per
    page of any *new* language for this product.
-3. **`pl`, `uk`, `vi`, `id`, `th`** — reach plays; each needs assets built first.
-4. **`ar`** — last. Only language needing a layout project (Phase 0R) rather
-   than just content.
+3. **`pl`, `uk`, `vi`, `id`** — reach plays; each needs assets built first.
+   Build `uk` terminology independently, never forked from `ru`.
 
 ### Scale consequence (decide before step 2)
 
-15 locales × 174 pages = **2,610 twin files**. Every English docs edit then
+13 locales × 174 pages = **2,262 twin files**. Every English docs edit then
 implies up to 15 twin updates. The `source_hash` frontmatter check plus the CI
 validator (Phase 3) stops being a nice-to-have and becomes the thing that keeps
 the corpus from rotting silently. Wire it before adding an eighth language.
@@ -70,17 +73,7 @@ the corpus from rotting silently. Wire it before adding an eighth language.
    canonical; language switcher shows all 8; sitemap/hreflang emit automatically
    (both derive from `routing.locales` — verified, no edits needed).
 
-## Phase 0R — RTL enablement (blocks Arabic only; defer until its campaign)
-
-- Add a `localeDir` map (`ar: 'rtl'`) in routing; set `dir` on `<html>` in
-  `src/app/[locale]/layout.jsx`.
-- Force `dir="ltr"` on code blocks, inline code, and numeric tables.
-- Audit `DocsShell` (sidebar, breadcrumbs, chevrons, ToC) for physical
-  `ml-/mr-/left-/right-` classes; swap for logical (`ms-/me-/start-/end-`) where
-  layout breaks. Visual pass over ~6 representative pages (model, task, export,
-  reference, cli, start).
-
-## Phase 1 — Translation pipeline (build once, reuse for all 7 campaigns)
+## Phase 1 — Translation pipeline (build once, reuse for every campaign)
 
 1. **Style guide + per-language glossary.** Seed the zh glossary from the 10
    existing `.zh.md` articles; draft the other six from a ~100-term list extracted
@@ -97,15 +90,16 @@ the corpus from rotting silently. Wire it before adding an eighth language.
    touching `content/docs`: per twin — frontmatter keys match EN; heading count and
    levels match; code-block count matches and code bodies identical modulo
    comments; internal link targets match; leftover-English heuristic (Latin-char
-   ratio) for zh/ru/ar.
+   ratio) for non-Latin-script locales (zh, ru, uk, ja, ko).
 3. Agent prompt templates: one for translation (glossary + style guide + file),
    one for an independent review pass (fluency + terminology + nothing-invented).
 
 ## Phase 2 — Per-language campaigns, strictly one language at a time
 
-**Order:** zh → es → pt → ru → fr → it → ar.
-Rationale: zh has proven demand (~25% of site traffic); es/pt are the next largest
-reachable dev markets; ar goes last because it alone needs Phase 0R.
+**Order:** see the sequencing under the roster above — finish `zh`, `pt`, `it`,
+`fr`, `ru` first, then `de`/`ja`/`ko`, then `pl`/`uk`/`vi`/`id`.
+Rationale: zh has proven demand (~25% of site traffic); the industrial-CV trio
+outperforms raw speaker counts for this product.
 
 Each campaign is identical (174 files — see exclusions below):
 

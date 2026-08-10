@@ -1,8 +1,14 @@
 ---
 title: Rendimiento del entrenamiento
-seo_title: "Entrenar más rápido: grafos CUDA, AMP, profiler"
-description: "Haz que un entrenamiento vaya más rápido: captura el paso en grafos CUDA, elige un dtype para AMP y usa el profiler integrado para ver adónde se va realmente el tiempo."
-lead: "Tres palancas cambian lo rápido que va un paso de entrenamiento: la precisión mixta, la captura del forward y el backward de la red en grafos CUDA, y lo que el profiler diga que está frenando el paso de verdad."
+seo_title: 'Entrenar más rápido: grafos CUDA, AMP, profiler'
+description: >-
+  Haz que un entrenamiento vaya más rápido: captura el paso en grafos CUDA,
+  elige un dtype para AMP y usa el profiler integrado para ver adónde se va
+  realmente el tiempo.
+lead: >-
+  Tres palancas cambian lo rápido que va un paso de entrenamiento: la precisión
+  mixta, la captura del forward y el backward de la red en grafos CUDA, y lo que
+  el profiler diga que está frenando el paso de verdad.
 keywords:
   - grafos cuda entrenamiento
   - acelerar entrenamiento yolo
@@ -12,7 +18,7 @@ keywords:
   - entrenamiento limitado por el dataloader
   - overhead de lanzamiento de kernels
   - utilización de la gpu entrenamiento
-last_verified: "1.5.0"
+last_verified: 1.5.0
 snippets:
   profile:
     - label: Perfilar y seguir entrenando
@@ -27,8 +33,10 @@ snippets:
         model.train(data="my-dataset.yaml", epochs=100, profile=True)
     - label: Solo medir y parar
       language: bash
-      code: |
-        # Fija no_aug_epochs=0 y ejecuta las épocas justas para llenar la ventana.
+      code: >
+        # Fija no_aug_epochs=0 y ejecuta las épocas justas para llenar la
+        ventana.
+
         libreyolo profile run coco128 --weights LibreYOLO9s.pt --size s
     - label: Profundizar en el resultado
       language: bash
@@ -62,6 +70,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
+source_hash: ee5bb727065b6099
 ---
 
 ## Medir antes de tocar nada

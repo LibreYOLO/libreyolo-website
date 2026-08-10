@@ -1,37 +1,69 @@
 ---
 title: LocateAnything
-families: [locateanything]
-seo_title: "LocateAnything: detección de vocabulario abierto y puntos"
-description: "Usa LocateAnything en LibreYOLO para detección de vocabulario abierto y localización por puntos. Predice con cualquier etiqueta de texto; el entrenamiento, la validación y la exportación no están soportados."
-lead: "LocateAnything es un modelo de grounding de visión y lenguaje publicado por NVIDIA que decodifica bounding boxes y puntos en paralelo, en lugar de ir token de coordenada en token de coordenada. LibreYOLO lo envuelve como detector y localizador por puntos de vocabulario abierto: cualquier lista de etiquetas de texto se convierte en el conjunto de clases, sin cabeza fija y sin necesidad de hacer fine-tuning."
-keywords: [LocateAnything, NVIDIA, "modelo de visión y lenguaje", "detección de vocabulario abierto", "detección de puntos", VLM, grounding, LibreVLM]
-last_verified: "1.5.0"
+families:
+  - locateanything
+seo_title: 'LocateAnything: detección de vocabulario abierto y puntos'
+description: >-
+  Usa LocateAnything en LibreYOLO para detección de vocabulario abierto y
+  localización por puntos. Predice con cualquier etiqueta de texto; el
+  entrenamiento, la validación y la exportación no están soportados.
+lead: >-
+  LocateAnything es un modelo de grounding de visión y lenguaje publicado por
+  NVIDIA que decodifica bounding boxes y puntos en paralelo, en lugar de ir
+  token de coordenada en token de coordenada. LibreYOLO lo envuelve como
+  detector y localizador por puntos de vocabulario abierto: cualquier lista de
+  etiquetas de texto se convierte en el conjunto de clases, sin cabeza fija y
+  sin necesidad de hacer fine-tuning.
+keywords:
+  - LocateAnything
+  - NVIDIA
+  - modelo de visión y lenguaje
+  - detección de vocabulario abierto
+  - detección de puntos
+  - VLM
+  - grounding
+  - LibreVLM
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreLocateAnything, SAMPLE_IMAGE
+
 
         model = LibreLocateAnything(size="3b")
 
+
         # Vocabulario abierto: vale cualquier palabra, no una cabeza de clases
-        # fija. Persiste en cada predict()/track() posterior hasta volver a fijarlo.
+
+        # fija. Persiste en cada predict()/track() posterior hasta volver a
+        fijarlo.
+
         model.set_classes(["person", "bicycle", "dog"])
+
         result = model(SAMPLE_IMAGE, save=True)
+
 
         for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
     - label: Prompt de punto
       language: python
-      code: |
+      code: >
         from libreyolo import LibreLocateAnything, SAMPLE_IMAGE
 
-        # task="point" devuelve un punto por objeto encontrado en vez de una caja.
+
+        # task="point" devuelve un punto por objeto encontrado en vez de una
+        caja.
+
         # Cambia de tarea en un modelo ya cargado con model.set_task("point").
+
         model = LibreLocateAnything(size="3b", task="point")
+
         model.set_classes(["the person closest to the camera"])
+
         result = model(SAMPLE_IMAGE, save=True)
+
 
         for pt in result.points:
             print(pt.cls, pt.conf, pt.xy)
@@ -46,6 +78,7 @@ snippets:
         # recuentos o cualquier prompt que el envoltorio de cajas no cubra.
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
+source_hash: 378ea758e507a096
 ---
 
 ## Instalación

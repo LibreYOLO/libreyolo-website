@@ -1,8 +1,15 @@
 ---
 title: TFLite
-seo_title: "Exportar para TFLite (LiteRT) a partir do LibreYOLO"
-description: "Exporte um modelo LibreYOLO para um FlatBuffer .tflite através do onnx2tf: formas estáticas, somente FP32, entradas NHWC e as famílias que convertem sem problema."
-lead: "TFLite é o formato FlatBuffer que o LiteRT executa em alvos móveis e embarcados. O LibreYOLO exporta um grafo ONNX estático, converte esse grafo com o onnx2tf em modo flatbuffer-direct e escreve os metadados do modelo ao lado do artefato como um sidecar JSON."
+seo_title: Exportar para TFLite (LiteRT) a partir do LibreYOLO
+description: >-
+  Exporte um modelo LibreYOLO para um FlatBuffer .tflite através do onnx2tf:
+  formas estáticas, somente FP32, entradas NHWC e as famílias que convertem sem
+  problema.
+lead: >-
+  TFLite é o formato FlatBuffer que o LiteRT executa em alvos móveis e
+  embarcados. O LibreYOLO exporta um grafo ONNX estático, converte esse grafo
+  com o onnx2tf em modo flatbuffer-direct e escreve os metadados do modelo ao
+  lado do artefato como um sidecar JSON.
 keywords:
   - exportar yolo tflite
   - litert
@@ -11,26 +18,31 @@ keywords:
   - flatbuffer tflite
   - entrada nhwc tflite
   - inferência em edge
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="tflite")'
+    value: export(format="tflite")
     mono: true
   - label: Escreve
-    value: "Um arquivo .tflite mais um sidecar de metadados .tflite.json"
+    value: Um arquivo .tflite mais um sidecar de metadados .tflite.json
   - label: Extra
     value: 'pip install "libreyolo[tflite]"'
     mono: true
   - label: Recarrega com
-    value: 'LibreYOLO("weights/LibreYOLO9t.tflite")'
+    value: LibreYOLO("weights/LibreYOLO9t.tflite")
     mono: true
   - label: Formas
-    value: "Somente estáticas. dynamic=True é rejeitado."
+    value: Somente estáticas. dynamic=True é rejeitado.
   - label: Precisão
-    value: "Somente FP32. half=True e int8=True são rejeitados."
+    value: Somente FP32. half=True e int8=True são rejeitados.
   - label: Requer
-    value: "Python 3.12 ou superior, porque o onnx2tf 2.4.x não publica wheels mais antigos"
-verification: "Lido de libreyolo/export/tflite.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/tflite.py e pyproject.toml no branch dev."
+    value: >-
+      Python 3.12 ou superior, porque o onnx2tf 2.4.x não publica wheels mais
+      antigos
+verification: >-
+  Lido de libreyolo/export/tflite.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/tflite.py e pyproject.toml no
+  branch dev.
 snippets:
   install:
     - label: Instalação
@@ -63,7 +75,7 @@ snippets:
         libreyolo export --model LibreYOLO9t.pt --format litert --imgsz 640
     - label: Argumentos
       language: python
-      code: |
+      code: >
         model.export(
             format="tflite",
             imgsz=640,        # int, ou (altura, largura)
@@ -73,7 +85,10 @@ snippets:
             verbose=False,    # True transmite o log do onnx2tf
         )
 
-        # dynamic=True levanta ValueError: o conversor precisa de formas estáticas.
+
+        # dynamic=True levanta ValueError: o conversor precisa de formas
+        estáticas.
+
         # half=True e int8=True são rejeitados antes do tracing.
   run:
     - label: Pelo LibreYOLO
@@ -86,32 +101,48 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: LiteRT puro
       language: python
-      code: |
+      code: >
         import json
 
+
         import numpy as np
+
         from ai_edge_litert.interpreter import Interpreter
 
+
         interpreter = Interpreter(model_path="weights/LibreYOLO9t.tflite")
+
         interpreter.allocate_tensors()
+
         detail = interpreter.get_input_details()[0]
+
         print(detail["shape"], detail["dtype"])   # NHWC, não NCHW
 
-        interpreter.set_tensor(detail["index"], np.zeros(detail["shape"], np.float32))
+
+        interpreter.set_tensor(detail["index"], np.zeros(detail["shape"],
+        np.float32))
+
         interpreter.invoke()
+
         for output in interpreter.get_output_details():
             print(output["name"], interpreter.get_tensor(output["index"]).shape)
 
-        # Os nomes das classes, a tarefa e o tamanho de entrada ficam no sidecar.
+        # Os nomes das classes, a tarefa e o tamanho de entrada ficam no
+        sidecar.
+
         meta = json.load(open("weights/LibreYOLO9t.tflite.json"))
+
         print(meta["model_family"], meta["task"], meta["names"])
 
-        # O pré-processamento, a transposição de NCHW para NHWC e o pós-processamento são seus.
+
+        # O pré-processamento, a transposição de NCHW para NHWC e o
+        pós-processamento são seus.
   support:
     - label: Conferir uma família e uma tarefa antes de exportar
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: fa2deaa0ef6d9978
 ---
 
 ## Instalação

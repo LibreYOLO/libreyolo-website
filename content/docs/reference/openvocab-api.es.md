@@ -1,8 +1,15 @@
 ---
 title: API de vocabulario abierto
-seo_title: "API de LibreOpenVocab: alias y argumentos"
-description: "La factoría LibreOpenVocab, sus cuatro familias y todos sus alias, set_classes, los valores de conf por defecto de cada familia y las reglas de text_threshold e iou."
-lead: "LibreOpenVocab es la factoría de detectores condicionados por texto. La lista de clases es un prompt en lugar de una cabeza fija, así que el vocabulario se fija con set_classes y el modelo devuelve Results de detección normales frente a ella."
+seo_title: 'API de LibreOpenVocab: alias y argumentos'
+description: >-
+  La factoría LibreOpenVocab, sus cuatro familias y todos sus alias,
+  set_classes, los valores de conf por defecto de cada familia y las reglas de
+  text_threshold e iou.
+lead: >-
+  LibreOpenVocab es la factoría de detectores condicionados por texto. La lista
+  de clases es un prompt en lugar de una cabeza fija, así que el vocabulario se
+  fija con set_classes y el modelo devuelve Results de detección normales frente
+  a ella.
 keywords:
   - LibreOpenVocab
   - detección de vocabulario abierto python
@@ -11,8 +18,12 @@ keywords:
   - OMDet-Turbo
   - OV-DEIM
   - detectar objetos por texto sin entrenar
-last_verified: "1.5.0"
-verification: "Alias leídos de libreyolo/models/openvocab/__init__.py; repositorios, tamaños y umbrales de grounding_dino.py, owlv2.py, omdet_turbo.py y ov_deim.py; reglas de llamada de libreyolo/models/openvocab/base.py, todo en la v1.5.0. Intención de diseño de docs/adr/0008-open-vocab-detector-contract.md."
+last_verified: 1.5.0
+verification: >-
+  Alias leídos de libreyolo/models/openvocab/__init__.py; repositorios, tamaños
+  y umbrales de grounding_dino.py, owlv2.py, omdet_turbo.py y ov_deim.py; reglas
+  de llamada de libreyolo/models/openvocab/base.py, todo en la v1.5.0. Intención
+  de diseño de docs/adr/0008-open-vocab-detector-contract.md.
 snippets:
   install:
     - label: bash
@@ -31,6 +42,7 @@ snippets:
         result = model.predict(SAMPLE_IMAGE)
         for box, cls in zip(result.boxes.xyxy, result.boxes.cls):
             print(result.names[int(cls)], box.tolist())
+source_hash: 64e4c641c6f8cde0
 ---
 
 ## Instalación

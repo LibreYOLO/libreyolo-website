@@ -1,11 +1,22 @@
 ---
 title: Depth Anything V2
-families: [depth_anything]
-seo_title: "Depth Anything V2：预测并验证单目深度"
-description: "在 LibreYOLO 里用 Depth Anything V2 做单目深度估计。安装、预测并验证；Small 采用 Apache-2.0 许可，Base 和 Large 采用 CC-BY-NC-4.0。"
-lead: "Depth Anything V2 是一个 DINOv2 编码器搭配 DPT 解码器，从单张图像预测稠密的相对逆深度图。LibreYOLO 支持它的 depth 任务：预测和零样本验证，没有训练这一步。"
-keywords: [Depth Anything V2, 单目深度估计, DPT, DINOv2, "深度估计 python", "图像生成深度图"]
-last_verified: "1.5.0"
+families:
+  - depth_anything
+seo_title: Depth Anything V2：预测并验证单目深度
+description: >-
+  在 LibreYOLO 里用 Depth Anything V2 做单目深度估计。安装、预测并验证；Small 采用 Apache-2.0 许可，Base
+  和 Large 采用 CC-BY-NC-4.0。
+lead: >-
+  Depth Anything V2 是一个 DINOv2 编码器搭配 DPT 解码器，从单张图像预测稠密的相对逆深度图。LibreYOLO 支持它的
+  depth 任务：预测和零样本验证，没有训练这一步。
+keywords:
+  - Depth Anything V2
+  - 单目深度估计
+  - DPT
+  - DINOv2
+  - 深度估计 python
+  - 图像生成深度图
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +31,10 @@ snippets:
         print(depth.min, depth.max, depth.mean)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreDepthAnythingV2s-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreDepthAnythingV2s-depth.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: 读取深度图
       language: python
       code: |
@@ -60,9 +73,11 @@ snippets:
         model.export(format="tensorrt", half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDepthAnythingV2s-depth.pt format=onnx
-        libreyolo export model=LibreDepthAnythingV2s-depth.pt format=tensorrt half=True
+
+        libreyolo export model=LibreDepthAnythingV2s-depth.pt format=tensorrt
+        half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -74,6 +89,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
+source_hash: e1043aba1b70b65c
 ---
 
 ## 安装

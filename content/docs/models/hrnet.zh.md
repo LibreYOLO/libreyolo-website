@@ -1,11 +1,21 @@
 ---
 title: HRNet
-families: [hrnet]
-seo_title: "HRNet：LibreYOLO 里的自顶向下姿态估计"
-description: "在 LibreYOLO 里用 HRNet 做自顶向下的 COCO-17 姿态估计。采用 MIT 许可，可以安装、预测、验证并导出 W32 和 W48 检查点。"
-lead: "HRNet 是一个卷积网络，它靠反复的多尺度融合始终保持一路高分辨率特征流，而不是先下采样再把分辨率恢复回来。LibreYOLO 封装了官方的自顶向下姿态变体，用于推理和验证。"
-keywords: [HRNet, "人体姿态估计", "hrnet 姿态估计", "自顶向下姿态估计", "COCO-17 关键点"]
-last_verified: "1.5.0"
+families:
+  - hrnet
+seo_title: HRNet：LibreYOLO 里的自顶向下姿态估计
+description: >-
+  在 LibreYOLO 里用 HRNet 做自顶向下的 COCO-17 姿态估计。采用 MIT 许可，可以安装、预测、验证并导出 W32 和 W48
+  检查点。
+lead: >-
+  HRNet 是一个卷积网络，它靠反复的多尺度融合始终保持一路高分辨率特征流，而不是先下采样再把分辨率恢复回来。LibreYOLO
+  封装了官方的自顶向下姿态变体，用于推理和验证。
+keywords:
+  - HRNet
+  - 人体姿态估计
+  - hrnet 姿态估计
+  - 自顶向下姿态估计
+  - COCO-17 关键点
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -22,8 +32,10 @@ snippets:
         print(result.boxes.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreHRNetw32-pose.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreHRNetw32-pose.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: 人体来源
       language: python
       code: |
@@ -83,6 +95,7 @@ snippets:
         heatmaps = session.run(
             None, {name: np.zeros((1, 3, 256, 192), dtype=np.float32)}
         )[0]
+source_hash: 5a5540fd54ee6f23
 ---
 
 ## 安装

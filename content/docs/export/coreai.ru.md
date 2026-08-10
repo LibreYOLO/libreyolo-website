@@ -1,8 +1,14 @@
 ---
 title: Core AI
-seo_title: "Экспорт в Apple Core AI из LibreYOLO"
-description: "Экспорт модели LibreYOLO в ассет .aimodel для Apple Core AI: только macOS, фиксированный холст, FP32 и контракт порядка именованных выходов, который обязаны соблюдать потребители."
-lead: "Core AI — стек инференса на устройстве от Apple. LibreYOLO захватывает модель через torch.export, понижает её представление конвертером Core AI и записывает ассет .aimodel с метаданными модели и именами экспортированных выходов."
+seo_title: Экспорт в Apple Core AI из LibreYOLO
+description: >-
+  Экспорт модели LibreYOLO в ассет .aimodel для Apple Core AI: только macOS,
+  фиксированный холст, FP32 и контракт порядка именованных выходов, который
+  обязаны соблюдать потребители.
+lead: >-
+  Core AI — стек инференса на устройстве от Apple. LibreYOLO захватывает модель
+  через torch.export, понижает её представление конвертером Core AI и записывает
+  ассет .aimodel с метаданными модели и именами экспортированных выходов.
 keywords:
   - экспорт libreyolo в core ai
   - aimodel
@@ -10,28 +16,35 @@ keywords:
   - torch.export apple
   - инференс на устройстве apple
   - coreai_output_names
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Флаг
-    value: 'export(format="coreai")'
+    value: export(format="coreai")
     mono: true
   - label: Записывает
-    value: "Один ассет .aimodel с прикреплёнными метаданными"
+    value: Один ассет .aimodel с прикреплёнными метаданными
   - label: Extra
     value: 'pip install "libreyolo[coreai]"'
     mono: true
   - label: Обратная загрузка
-    value: "Не через LibreYOLO. Потребители используют среду выполнения Core AI напрямую."
+    value: >-
+      Не через LibreYOLO. Потребители используют среду выполнения Core AI
+      напрямую.
   - label: Формы
-    value: "Фиксированный холст. dynamic=True вызывает NotImplementedError."
+    value: Фиксированный холст. dynamic=True вызывает NotImplementedError.
   - label: Точность
-    value: "Только FP32. half=True и int8=True отклоняются."
+    value: Только FP32. half=True и int8=True отклоняются.
   - label: Требуется
-    value: "macOS. Тулчейн нигде больше не конвертирует и не запускает модели, а coreai-torch фиксирует torch на 2.11.x."
-verification: "Прочитано из libreyolo/export/coreai.py, libreyolo/export/coreai_compat.py, libreyolo/export/exporter.py, libreyolo/export/support.py и pyproject.toml в ветке dev."
+    value: >-
+      macOS. Тулчейн нигде больше не конвертирует и не запускает модели, а
+      coreai-torch фиксирует torch на 2.11.x.
+verification: >-
+  Прочитано из libreyolo/export/coreai.py, libreyolo/export/coreai_compat.py,
+  libreyolo/export/exporter.py, libreyolo/export/support.py и pyproject.toml в
+  ветке dev.
 snippets:
   install:
-    - label: Установка, на macOS
+    - label: 'Установка, на macOS'
       language: bash
       code: |
         # Намеренно не входит ни в один сводный extra: coreai-torch фиксирует
@@ -67,21 +80,30 @@ snippets:
   outputs:
     - label: Чтение порядка выходов перед подключением потребителя
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreYOLO9t.pt")
+
         model.export(format="coreai", imgsz=640)
 
+
         # Метаданные ассета записывают имена экспортированных выходов в порядке
-        # графа под ключом "coreai_output_names". Сопоставляйте по имени словарь,
-        # который возвращает Core AI, используя этот список; никогда не связывайте
+
+        # графа под ключом "coreai_output_names". Сопоставляйте по имени
+        словарь,
+
+        # который возвращает Core AI, используя этот список; никогда не
+        связывайте
+
         # его по позиции с кортежем eager-режима.
   support:
     - label: Проверка одного семейства и задачи перед экспортом
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: a35bfeafac6d6966
 ---
 
 ## Установка

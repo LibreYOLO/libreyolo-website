@@ -1,11 +1,21 @@
 ---
 title: SegFormer
-families: [segformer]
-seo_title: "SegFormer：在 LibreYOLO 里做语义分割"
-description: "在 LibreYOLO 里用 SegFormer 做 ADE20K 语义分割，覆盖 b0-b5 六种尺寸。安装、预测、训练并导出；预训练权重是非商用的。"
-lead: "SegFormer 是一个语义分割 transformer，它把分层的 Mix Transformer（MiT）编码器和一个轻量的 all-MLP 解码 head 配在一起，避开了早期分割 transformer 需要的笨重解码器和固定位置编码。LibreYOLO 只把它用于一个任务，语义分割，覆盖六种尺寸。"
-keywords: [SegFormer, "语义分割 python", "Mix Transformer", MiT, "transformer 语义分割", ADE20K, "segformer 预训练权重"]
-last_verified: "1.5.0"
+families:
+  - segformer
+seo_title: SegFormer：在 LibreYOLO 里做语义分割
+description: 在 LibreYOLO 里用 SegFormer 做 ADE20K 语义分割，覆盖 b0-b5 六种尺寸。安装、预测、训练并导出；预训练权重是非商用的。
+lead: >-
+  SegFormer 是一个语义分割 transformer，它把分层的 Mix Transformer（MiT）编码器和一个轻量的 all-MLP 解码
+  head 配在一起，避开了早期分割 transformer 需要的笨重解码器和固定位置编码。LibreYOLO 只把它用于一个任务，语义分割，覆盖六种尺寸。
+keywords:
+  - SegFormer
+  - 语义分割 python
+  - Mix Transformer
+  - MiT
+  - transformer 语义分割
+  - ADE20K
+  - segformer 预训练权重
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +30,10 @@ snippets:
         print(mask.data.shape, mask.classes)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreSegformerb0-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreSegformerb0-sem.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   train:
     - label: Python（微调）
       language: python
@@ -75,9 +87,11 @@ snippets:
         model.export(format="tensorrt", imgsz=512, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreSegformerb0-sem.pt format=onnx imgsz=512
-        libreyolo export model=LibreSegformerb0-sem.pt format=tensorrt imgsz=512 half=True
+
+        libreyolo export model=LibreSegformerb0-sem.pt format=tensorrt imgsz=512
+        half=True
     - label: 使用导出的文件
       language: python
       code: |
@@ -89,6 +103,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
+source_hash: c236895b991beabf
 ---
 
 ## 安装

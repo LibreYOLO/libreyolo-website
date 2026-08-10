@@ -1,19 +1,30 @@
 ---
 title: libreyolo val
-seo_title: "referência do comando libreyolo val"
-description: "Avalia um checkpoint em um split de um dataset pela linha de comando: cada argumento com seu valor padrão e as chaves de métricas que cada tarefa retorna."
-lead: "Avalia um modelo contra um split de um dataset e imprime as métricas. O conjunto de métricas depende da tarefa do modelo, e os números são os mesmos com que uma linha de benchmark é construída."
-keywords: [libreyolo val cli, comando de validação libreyolo, avaliar modelo yolo linha de comando, calcular mAP50-95 terminal, argumentos libreyolo val]
-last_verified: "1.5.0"
+seo_title: referência do comando libreyolo val
+description: >-
+  Avalia um checkpoint em um split de um dataset pela linha de comando: cada
+  argumento com seu valor padrão e as chaves de métricas que cada tarefa
+  retorna.
+lead: >-
+  Avalia um modelo contra um split de um dataset e imprime as métricas. O
+  conjunto de métricas depende da tarefa do modelo, e os números são os mesmos
+  com que uma linha de benchmark é construída.
+keywords:
+  - libreyolo val cli
+  - comando de validação libreyolo
+  - avaliar modelo yolo linha de comando
+  - calcular mAP50-95 terminal
+  - argumentos libreyolo val
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo val
     mono: true
   - label: Obrigatório
-    value: model, data
+    value: 'model, data'
     mono: true
   - label: Saída
-    value: "Métricas no stdout. Gráficos e JSON COCO em runs/val/exp quando pedidos"
+    value: Métricas no stdout. Gráficos e JSON COCO em runs/val/exp quando pedidos
 snippets:
   examples:
     - label: Básico
@@ -30,6 +41,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
+source_hash: f6507840568c3725
 ---
 
 ## Sinopse

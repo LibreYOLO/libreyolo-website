@@ -1,8 +1,12 @@
 ---
 title: Triton Inference Server
-seo_title: "在 NVIDIA Triton 上部署 LibreYOLO 模型"
-description: "把 LibreYOLO 的 ONNX 导出产物交给 NVIDIA Triton 部署：模型仓库的目录结构、生成的 config.pbtxt，以及对着一个 HTTP 模型 URL 做预测。"
-lead: "Triton Inference Server 托管一个模型仓库，通过 HTTP 响应推理请求。LibreYOLO 导出 ONNX 图，生成一份把导出元数据装进单个 Triton 参数的 config.pbtxt，并把模型 URL 当作一条可加载的模型路径。"
+seo_title: 在 NVIDIA Triton 上部署 LibreYOLO 模型
+description: >-
+  把 LibreYOLO 的 ONNX 导出产物交给 NVIDIA Triton 部署：模型仓库的目录结构、生成的 config.pbtxt，以及对着一个
+  HTTP 模型 URL 做预测。
+lead: >-
+  Triton Inference Server 托管一个模型仓库，通过 HTTP 响应推理请求。LibreYOLO 导出 ONNX
+  图，生成一份把导出元数据装进单个 Triton 参数的 config.pbtxt，并把模型 URL 当作一条可加载的模型路径。
 keywords:
   - libreyolo triton
   - triton 推理服务器
@@ -10,22 +14,27 @@ keywords:
   - tritonclient http
   - triton 模型仓库
   - yolo 远程推理
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: 调用
     value: 'LibreYOLO("http://127.0.0.1:8000/yolo9")'
     mono: true
   - label: 辅助函数
-    value: "create_triton_config(onnx_path, config_path, model_name=..., max_batch_size=8)"
+    value: >-
+      create_triton_config(onnx_path, config_path, model_name=...,
+      max_batch_size=8)
     mono: true
   - label: 额外依赖
     value: 'pip install "libreyolo[onnx,triton]"'
     mono: true
   - label: 协议
-    value: "仅支持 HTTP 与 HTTPS 的 V2 推理。不支持 gRPC、认证、共享内存，也不支持模型的加载与卸载。"
+    value: 仅支持 HTTP 与 HTTPS 的 V2 推理。不支持 gRPC、认证、共享内存，也不支持模型的加载与卸载。
   - label: 超时
-    value: "连接超时与网络超时默认为 30 秒"
-verification: "依据 dev 分支上的 libreyolo/backends/triton.py、libreyolo/models/__init__.py、docs/triton.md 和 pyproject.toml 校对。容器命令沿用 docs/triton.md 中固定的那一套。"
+    value: 连接超时与网络超时默认为 30 秒
+verification: >-
+  依据 dev 分支上的
+  libreyolo/backends/triton.py、libreyolo/models/__init__.py、docs/triton.md 和
+  pyproject.toml 校对。容器命令沿用 docs/triton.md 中固定的那一套。
 snippets:
   install:
     - label: 安装
@@ -79,8 +88,9 @@ snippets:
           tritonserver --model-repository=/models --exit-on-error=true
     - label: 等待就绪
       language: bash
-      code: |
-        until curl --fail --silent http://127.0.0.1:8000/v2/health/ready; do sleep 1; done
+      code: >
+        until curl --fail --silent http://127.0.0.1:8000/v2/health/ready; do
+        sleep 1; done
     - label: 停止服务
       language: bash
       code: |
@@ -117,6 +127,7 @@ snippets:
 
         # 连接超时与网络超时默认为 30 秒
         patient = TritonBackend("http://127.0.0.1:8000/yolo9", timeout=120)
+source_hash: 0652e4faf0224df3
 ---
 
 ## 安装

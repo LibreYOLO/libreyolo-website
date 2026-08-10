@@ -1,10 +1,17 @@
 ---
 title: libreyolo train
-seo_title: "libreyolo train 命令参考"
-description: "从命令行训练模型：全部 59 个参数及其默认值、家族默认值如何覆盖它们，以及哪些参数会被某个家族忽略。"
-lead: "在一个数据集上训练一个模型，并把检查点（checkpoint）、指标和日志写进运行目录。下面每个参数都有一个来自命令定义的默认值，而模型家族自己的训练配置可能会替换它。"
-keywords: [libreyolo train 命令, libreyolo 训练参数, yolo 命令行训练, yolo 训练自己的数据集, libreyolo dry_run, yolo 冻结层]
-last_verified: "1.5.0"
+seo_title: libreyolo train 命令参考
+description: 从命令行训练模型：全部 59 个参数及其默认值、家族默认值如何覆盖它们，以及哪些参数会被某个家族忽略。
+lead: >-
+  在一个数据集上训练一个模型，并把检查点（checkpoint）、指标和日志写进运行目录。下面每个参数都有一个来自命令定义的默认值，而模型家族自己的训练配置可能会替换它。
+keywords:
+  - libreyolo train 命令
+  - libreyolo 训练参数
+  - yolo 命令行训练
+  - yolo 训练自己的数据集
+  - libreyolo dry_run
+  - yolo 冻结层
+last_verified: 1.5.0
 meta:
   - label: 命令
     value: libreyolo train
@@ -13,26 +20,32 @@ meta:
     value: data
     mono: true
   - label: 输出
-    value: "检查点、指标和日志，位于 runs/train/exp"
+    value: 检查点、指标和日志，位于 runs/train/exp
 snippets:
   examples:
     - label: 基本用法
       language: bash
-      code: |
+      code: >
         # coco8.yaml 随包一起分发，首次使用时会下载它的 8 张图片
-        libreyolo train model=LibreYOLO9s.pt data=coco8.yaml epochs=10 imgsz=640 batch=8
+
+        libreyolo train model=LibreYOLO9s.pt data=coco8.yaml epochs=10 imgsz=640
+        batch=8
     - label: 先查看解析后的配置
       language: bash
-      code: |
+      code: >
         # 打印这次运行会使用的配置，包括家族默认值，然后退出，
+
         # 既不训练也不加载数据
-        libreyolo train model=LibreDFINEn.pt data=coco8.yaml epochs=10 dry_run=true
+
+        libreyolo train model=LibreDFINEn.pt data=coco8.yaml epochs=10
+        dry_run=true
     - label: 命名运行，显式指定超参数
       language: bash
       code: |
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
+source_hash: 3aad4298310d3081
 ---
 
 ## 概要

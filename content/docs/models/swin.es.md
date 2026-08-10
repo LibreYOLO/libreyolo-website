@@ -1,11 +1,22 @@
 ---
 title: Swin Transformer
-families: [swin]
-seo_title: "Swin Transformer: clasifica imágenes con LibreSwin de LibreYOLO"
-description: "Predice, valida y exporta clasificadores Swin Transformer con LibreYOLO. Pesos con licencia MIT; el fine-tuning todavía no está soportado."
-lead: "Swin Transformer V1: un vision transformer jerárquico que calcula la atención dentro de ventanas locales desplazadas en lugar de sobre la imagen entera. LibreYOLO incluye cuatro tamaños para clasificación de imágenes."
-keywords: [Swin Transformer, "vision transformer jerárquico", "atención por ventanas desplazadas", "clasificación de imágenes python", "clasificador de imágenes preentrenado"]
-last_verified: "1.5.0"
+families:
+  - swin
+seo_title: 'Swin Transformer: clasifica imágenes con LibreSwin de LibreYOLO'
+description: >-
+  Predice, valida y exporta clasificadores Swin Transformer con LibreYOLO. Pesos
+  con licencia MIT; el fine-tuning todavía no está soportado.
+lead: >-
+  Swin Transformer V1: un vision transformer jerárquico que calcula la atención
+  dentro de ventanas locales desplazadas en lugar de sobre la imagen entera.
+  LibreYOLO incluye cuatro tamaños para clasificación de imágenes.
+keywords:
+  - Swin Transformer
+  - vision transformer jerárquico
+  - atención por ventanas desplazadas
+  - clasificación de imágenes python
+  - clasificador de imágenes preentrenado
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +32,10 @@ snippets:
         print(probs.top5, probs.top5conf)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreSwint-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreSwint-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -57,16 +70,25 @@ snippets:
         libreyolo export model=LibreSwint-cls.pt format=tensorrt half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto
+
         # Results.
+
         model = LibreYOLO("LibreSwint-cls.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.probs.top1)
+source_hash: faa6bbacae62d88e
 ---
 
 ## Instalación

@@ -1,8 +1,15 @@
 ---
 title: TensorRT
-seo_title: "Exportar para TensorRT a partir do LibreYOLO"
-description: "Construa um engine TensorRT a partir de um modelo LibreYOLO: o intermediário ONNX, as builds FP16 e INT8, os perfis de batch dinâmico e os limites de portabilidade do engine."
-lead: "O TensorRT compila um grafo em um engine ajustado para uma GPU específica. O LibreYOLO exporta primeiro um intermediário ONNX, faz o parse dele com o parser ONNX do TensorRT, constrói o engine e escreve os metadados do modelo ao lado dele como um sidecar JSON."
+seo_title: Exportar para TensorRT a partir do LibreYOLO
+description: >-
+  Construa um engine TensorRT a partir de um modelo LibreYOLO: o intermediário
+  ONNX, as builds FP16 e INT8, os perfis de batch dinâmico e os limites de
+  portabilidade do engine.
+lead: >-
+  O TensorRT compila um grafo em um engine ajustado para uma GPU específica. O
+  LibreYOLO exporta primeiro um intermediário ONNX, faz o parse dele com o
+  parser ONNX do TensorRT, constrói o engine e escreve os metadados do modelo ao
+  lado dele como um sidecar JSON.
 keywords:
   - exportar yolo tensorrt
   - engine tensorrt
@@ -11,47 +18,62 @@ keywords:
   - perfil de otimização
   - batch dinâmico tensorrt
   - hardware compatibility level
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="tensorrt")'
+    value: export(format="tensorrt")
     mono: true
   - label: Escreve
-    value: "Um arquivo .engine mais um sidecar de metadados .engine.json"
+    value: Um arquivo .engine mais um sidecar de metadados .engine.json
   - label: Extra
     value: 'pip install "libreyolo[onnx,tensorrt]"'
     mono: true
   - label: Recarrega com
-    value: 'LibreYOLO("weights/LibreYOLO9t.engine")'
+    value: LibreYOLO("weights/LibreYOLO9t.engine")
     mono: true
   - label: Formas
-    value: "Estáticas por padrão; dynamic=True adiciona um perfil de otimização no eixo de batch"
+    value: >-
+      Estáticas por padrão; dynamic=True adiciona um perfil de otimização no
+      eixo de batch
   - label: Precisão
-    value: "FP32, FP16 (half=True), INT8 (int8=True com data=)"
+    value: 'FP32, FP16 (half=True), INT8 (int8=True com data=)'
   - label: Requer
-    value: "Uma GPU NVIDIA na hora de construir e na hora de rodar. Engines não migram entre arquiteturas de GPU."
-verification: "Lido de libreyolo/export/tensorrt.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/tensorrt.py e pyproject.toml no branch dev."
+    value: >-
+      Uma GPU NVIDIA na hora de construir e na hora de rodar. Engines não migram
+      entre arquiteturas de GPU.
+verification: >-
+  Lido de libreyolo/export/tensorrt.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/tensorrt.py e pyproject.toml
+  no branch dev.
 snippets:
   install:
     - label: Instalação
       language: bash
-      code: |
-        # O engine é construído a partir de um intermediário ONNX, então os dois extras são necessários.
+      code: >
+        # O engine é construído a partir de um intermediário ONNX, então os dois
+        extras são necessários.
+
         pip install "libreyolo[onnx,tensorrt]"
     - label: Conferir o toolchain antes de construir
       language: bash
-      code: |
-        python -c "import tensorrt, torch; print(tensorrt.__version__, torch.cuda.is_available())"
+      code: >
+        python -c "import tensorrt, torch; print(tensorrt.__version__,
+        torch.cuda.is_available())"
   export:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # Escreve weights/LibreYOLO9t_fp16.engine e weights/LibreYOLO9t_fp16.engine.json
+
+        # Escreve weights/LibreYOLO9t_fp16.engine e
+        weights/LibreYOLO9t_fp16.engine.json
+
         path = model.export(format="tensorrt", half=True)
+
         print(path)
     - label: CLI
       language: bash
@@ -115,13 +137,17 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: TensorRT puro
       language: python
-      code: |
+      code: >
         import json
+
 
         import tensorrt as trt
 
+
         path = "weights/LibreYOLO9t_fp16.engine"
+
         runtime = trt.Runtime(trt.Logger(trt.Logger.WARNING))
+
         with open(path, "rb") as handle:
             engine = runtime.deserialize_cuda_engine(handle.read())
 
@@ -129,14 +155,19 @@ snippets:
             name = engine.get_tensor_name(i)
             print(engine.get_tensor_mode(name), name, engine.get_tensor_shape(name))
 
-        # Os nomes das classes, a tarefa e o tamanho de entrada ficam no sidecar, não no engine.
-        # A alocação de buffers, o pré-processamento e o pós-processamento ficam por sua conta aqui.
+        # Os nomes das classes, a tarefa e o tamanho de entrada ficam no
+        sidecar, não no engine.
+
+        # A alocação de buffers, o pré-processamento e o pós-processamento ficam
+        por sua conta aqui.
+
         print(json.load(open(path + ".json"))["names"])
   support:
     - label: Conferir uma família e uma tarefa antes de construir
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: cb90fc98ab735233
 ---
 
 ## Instalação

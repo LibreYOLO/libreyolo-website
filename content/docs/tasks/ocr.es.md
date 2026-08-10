@@ -1,10 +1,21 @@
 ---
 title: OCR
-seo_title: "OCR: detección y reconocimiento de texto en LibreYOLO"
-description: "Encuentra y lee texto en imágenes con LibreYOLO. Predice cuadriláteros y transcripciones, etiqueta un dataset JSONL y valida con hmean, F1 end-to-end y 1-NED."
-lead: "El OCR localiza el texto de una imagen y lo lee. LibreYOLO lo expone como la tarea ocr, que devuelve un polígono de cuatro puntos más una transcripción por cada región de texto, en orden de lectura."
-keywords: [ocr python, extraer texto de una imagen python, reconocimiento de texto en escenas, detección de texto en imágenes, PP-OCRv5 python]
-last_verified: "1.5.0"
+seo_title: 'OCR: detección y reconocimiento de texto en LibreYOLO'
+description: >-
+  Encuentra y lee texto en imágenes con LibreYOLO. Predice cuadriláteros y
+  transcripciones, etiqueta un dataset JSONL y valida con hmean, F1 end-to-end y
+  1-NED.
+lead: >-
+  El OCR localiza el texto de una imagen y lo lee. LibreYOLO lo expone como la
+  tarea ocr, que devuelve un polígono de cuatro puntos más una transcripción por
+  cada región de texto, en orden de lectura.
+keywords:
+  - ocr python
+  - extraer texto de una imagen python
+  - reconocimiento de texto en escenas
+  - detección de texto en imágenes
+  - PP-OCRv5 python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Leer el texto de una imagen
@@ -23,29 +34,46 @@ snippets:
             print(repr(text), float(score))
     - label: Leer los cuadriláteros
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibrePPOCRt-ocr.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         regions = result.ocr
+
         print(regions.data.shape)   # polígonos (N, 4, 2), TL TR BR BL
-        print(regions.xyxy)         # envolventes de esos polígonos alineadas a los ejes
+
+        print(regions.xyxy)         # envolventes de esos polígonos alineadas a
+        los ejes
+
         print(regions.det_conf)     # puntuación de detección, distinta de .conf
     - label: Filtrar por confianza de reconocimiento
       language: python
-      code: |
+      code: >
         import numpy as np
+
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibrePPOCRt-ocr.pt")
+
         result = model(SAMPLE_IMAGE)
 
-        # Indexa con posiciones, no con una máscara booleana: el slicing arrastra
-        # las transcripciones y ambos arrays de puntuaciones junto con la geometría.
+
+        # Indexa con posiciones, no con una máscara booleana: el slicing
+        arrastra
+
+        # las transcripciones y ambos arrays de puntuaciones junto con la
+        geometría.
+
         regions = result.ocr.numpy()
+
         keep = regions[np.flatnonzero(regions.conf >= 0.9)]
+
         print(keep.texts)
   val:
     - label: Validar y leer las claves de las métricas
@@ -60,6 +88,7 @@ snippets:
         print(metrics["metrics/det_hmean"])
         print(metrics["metrics/e2e_f1"])       # fitness
         print(metrics["metrics/rec_1-NED"])
+source_hash: 58ad5305c9dd458c
 ---
 
 ## Definición

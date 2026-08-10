@@ -1,8 +1,15 @@
 ---
 title: Validación y métricas
-seo_title: "Validación y métricas en LibreYOLO"
-description: "Ejecuta val() sobre cualquier modelo, consulta las claves de métricas que devuelve cada tarea, elige un backend de evaluación y activa una loss de validación junto a la métrica de precisión."
-lead: "La validación pasa un modelo por un split de un dataset mediante val() y devuelve un diccionario plano de claves de métricas y valores float. Las claves son cadenas literales, y cuáles obtienes depende de la tarea, no de la familia."
+seo_title: Validación y métricas en LibreYOLO
+description: >-
+  Ejecuta val() sobre cualquier modelo, consulta las claves de métricas que
+  devuelve cada tarea, elige un backend de evaluación y activa una loss de
+  validación junto a la métrica de precisión.
+lead: >-
+  La validación pasa un modelo por un split de un dataset mediante val() y
+  devuelve un diccionario plano de claves de métricas y valores float. Las
+  claves son cadenas literales, y cuáles obtienes depende de la tarea, no de la
+  familia.
 keywords:
   - map50-95
   - evaluacion coco
@@ -13,7 +20,7 @@ keywords:
   - miou
   - panoptic quality
   - accuracy top1
-last_verified: "1.5.0"
+last_verified: 1.5.0
 snippets:
   val:
     - label: Python
@@ -56,6 +63,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
+source_hash: d907183492fa3f57
 ---
 
 ## Ejecutar una validación
@@ -184,7 +192,7 @@ validación.
 
 <code-tabs name="valloss" />
 
-Emite `metrics/loss` —la loss, es decir, la función de pérdida— más un
+Emite `metrics/loss` (la loss, es decir, la función de pérdida) más un
 `metrics/loss/<component>` por cada término, ponderados exactamente igual que los
 pondera el entrenamiento, de modo que los componentes suman el total. A través de
 un logger aparecen como `val/loss` y `val/loss/<component>`, y `libreyolo

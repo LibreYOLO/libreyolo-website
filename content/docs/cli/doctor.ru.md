@@ -1,10 +1,21 @@
 ---
 title: libreyolo doctor
-seo_title: "справочник по команде libreyolo doctor"
-description: "Проверка датасета для детекции перед обучением: аргументы со значениями по умолчанию, семейства проверок, которые можно пропустить или выбрать, и коды возврата, по которым CI может остановить сборку."
-lead: "Прогоняет набор проверок по датасету для детекции и сообщает обо всём, что помешает обучению: отсутствующие файлы, битая разметка, повреждённые изображения, утечки между сплитами и дисбаланс классов."
-keywords: [libreyolo doctor cli, проверка датасета yolo, валидация датасета для детекции, утечка данных между сплитами, libreyolo doctor strict]
-last_verified: "1.5.0"
+seo_title: справочник по команде libreyolo doctor
+description: >-
+  Проверка датасета для детекции перед обучением: аргументы со значениями по
+  умолчанию, семейства проверок, которые можно пропустить или выбрать, и коды
+  возврата, по которым CI может остановить сборку.
+lead: >-
+  Прогоняет набор проверок по датасету для детекции и сообщает обо всём, что
+  помешает обучению: отсутствующие файлы, битая разметка, повреждённые
+  изображения, утечки между сплитами и дисбаланс классов.
+keywords:
+  - libreyolo doctor cli
+  - проверка датасета yolo
+  - валидация датасета для детекции
+  - утечка данных между сплитами
+  - libreyolo doctor strict
+last_verified: 1.5.0
 meta:
   - label: Команда
     value: libreyolo doctor
@@ -13,15 +24,17 @@ meta:
     value: data
     mono: true
   - label: Вывод
-    value: "Отчёт о находках в stdout. Код возврата 1, если найдены ошибки"
+    value: 'Отчёт о находках в stdout. Код возврата 1, если найдены ошибки'
 snippets:
   examples:
     - label: Базовый запуск
       language: bash
-      code: |
-        # download=true разрешает встроенному coco8.yaml скачать изображения, если их нет.
+      code: >
+        # download=true разрешает встроенному coco8.yaml скачать изображения,
+        если их нет.
+
         libreyolo doctor coco8.yaml download=true
-    - label: Быстрый проход, без декодирования изображений
+    - label: 'Быстрый проход, без декодирования изображений'
       language: bash
       code: |
         libreyolo doctor coco8.yaml download=true fast=true
@@ -30,6 +43,7 @@ snippets:
       code: |
         libreyolo doctor coco8.yaml download=true strict=true json=true \
           only=labels,files,config
+source_hash: 79e0ef471d567ea3
 ---
 
 ## Синопсис

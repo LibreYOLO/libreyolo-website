@@ -1,11 +1,25 @@
 ---
 title: EfficientNetV2
-families: [efficientnetv2]
-seo_title: "EfficientNetV2: entrena, valida y exporta bajo Apache-2.0"
-description: "Usa EfficientNetV2 en LibreYOLO para clasificación de imágenes. Instala, predice, haz fine-tuning, valida y exporta LibreEfficientNetV2 de b0 a b3."
-lead: "EfficientNetV2 es un clasificador de imágenes cuya profundidad, anchura y elección de bloques por etapa se encontraron mediante búsqueda de arquitecturas neuronales, optimizando a la vez la precisión y la velocidad de entrenamiento en lugar de solo la precisión. LibreYOLO lo soporta para una tarea: clasificación."
-keywords: [EfficientNetV2, EfficientNetV2-b0, "clasificación de imágenes python", "neural architecture search", MBConv, "clasificador ImageNet"]
-last_verified: "1.5.0"
+families:
+  - efficientnetv2
+seo_title: 'EfficientNetV2: entrena, valida y exporta bajo Apache-2.0'
+description: >-
+  Usa EfficientNetV2 en LibreYOLO para clasificación de imágenes. Instala,
+  predice, haz fine-tuning, valida y exporta LibreEfficientNetV2 de b0 a b3.
+lead: >-
+  EfficientNetV2 es un clasificador de imágenes cuya profundidad, anchura y
+  elección de bloques por etapa se encontraron mediante búsqueda de
+  arquitecturas neuronales, optimizando a la vez la precisión y la velocidad de
+  entrenamiento en lugar de solo la precisión. LibreYOLO lo soporta para una
+  tarea: clasificación.
+keywords:
+  - EfficientNetV2
+  - EfficientNetV2-b0
+  - clasificación de imágenes python
+  - neural architecture search
+  - MBConv
+  - clasificador ImageNet
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +34,9 @@ snippets:
         print(result.probs.top5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=cat.jpg save=True
+      code: >
+        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=cat.jpg
+        save=True
   train:
     - label: Python
       language: python
@@ -32,8 +47,9 @@ snippets:
         model.train(data="imagenette160", epochs=5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo train model=LibreEfficientNetV2b0-cls.pt data=imagenette160 epochs=5
+      code: >
+        libreyolo train model=LibreEfficientNetV2b0-cls.pt data=imagenette160
+        epochs=5
     - label: Multi-GPU
       language: bash
       code: |
@@ -65,20 +81,30 @@ snippets:
         model.export(format="tensorrt", half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreEfficientNetV2b0-cls.pt format=onnx
-        libreyolo export model=LibreEfficientNetV2b0-cls.pt format=tensorrt half=True
+
+        libreyolo export model=LibreEfficientNetV2b0-cls.pt format=tensorrt
+        half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreEfficientNetV2b0-cls.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.probs.top1)
+source_hash: ad3ff140aad824bd
 ---
 
 ## Instalación

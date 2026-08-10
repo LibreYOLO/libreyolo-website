@@ -1,8 +1,15 @@
 ---
 title: Matriz de aumento de datos
-seo_title: "Qué familia de LibreYOLO respeta cada parámetro de aumento de datos"
-description: "Soporte de los parámetros de aumento de datos por familia: los dieciséis parámetros de TrainConfig, los tres estados, los seis arquetipos de pipeline y los parámetros que cada familia ignora en silencio."
-lead: "Definir un parámetro de aumento de datos no garantiza que llegue al pipeline. Esta página recoge cómo trata cada familia entrenable cada parámetro de TrainConfig, a partir de la tabla declarativa que la biblioteca incluye como única fuente de verdad."
+seo_title: Qué familia de LibreYOLO respeta cada parámetro de aumento de datos
+description: >-
+  Soporte de los parámetros de aumento de datos por familia: los dieciséis
+  parámetros de TrainConfig, los tres estados, los seis arquetipos de pipeline y
+  los parámetros que cada familia ignora en silencio.
+lead: >-
+  Definir un parámetro de aumento de datos no garantiza que llegue al pipeline.
+  Esta página recoge cómo trata cada familia entrenable cada parámetro de
+  TrainConfig, a partir de la tabla declarativa que la biblioteca incluye como
+  única fuente de verdad.
 keywords:
   - aumento de datos libreyolo
   - mosaic_prob
@@ -11,8 +18,12 @@ keywords:
   - no_aug_epochs
   - matriz de soporte de aumento de datos
   - parámetros de TrainConfig
-last_verified: "1.5.0"
-verification: "La lista de parámetros, los estados, los arquetipos, las desviaciones por familia y las funciones helper están leídos de libreyolo/data/augment/spec.py en la v1.5.0. Esa tabla está anclada a los pipelines reales por tests/unit/test_augment_spec.py."
+last_verified: 1.5.0
+verification: >-
+  La lista de parámetros, los estados, los arquetipos, las desviaciones por
+  familia y las funciones helper están leídos de libreyolo/data/augment/spec.py
+  en la v1.5.0. Esa tabla está anclada a los pipelines reales por
+  tests/unit/test_augment_spec.py.
 snippets:
   usage:
     - label: Consultar la spec directamente
@@ -32,6 +43,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
+source_hash: d2e1b9f5c81072e1
 ---
 
 ## Los parámetros

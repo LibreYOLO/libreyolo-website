@@ -1,8 +1,12 @@
 ---
 title: Core AI
-seo_title: "从 LibreYOLO 导出到 Apple Core AI"
-description: "把 LibreYOLO 模型导出为 Apple Core AI 的 .aimodel 资产：仅限 macOS、固定画布、FP32，以及使用方必须遵守的具名输出顺序约定。"
-lead: "Core AI 是 Apple 的端侧推理技术栈。LibreYOLO 用 torch.export 捕获模型，经 Core AI 转换器完成下降（lowering），并写出一个 .aimodel 资产，其中带有模型元数据和导出的输出名称。"
+seo_title: 从 LibreYOLO 导出到 Apple Core AI
+description: >-
+  把 LibreYOLO 模型导出为 Apple Core AI 的 .aimodel 资产：仅限
+  macOS、固定画布、FP32，以及使用方必须遵守的具名输出顺序约定。
+lead: >-
+  Core AI 是 Apple 的端侧推理技术栈。LibreYOLO 用 torch.export 捕获模型，经 Core AI
+  转换器完成下降（lowering），并写出一个 .aimodel 资产，其中带有模型元数据和导出的输出名称。
 keywords:
   - libreyolo 导出 core ai
   - aimodel
@@ -10,25 +14,28 @@ keywords:
   - torch.export apple
   - apple 端侧推理
   - coreai_output_names
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: 导出参数
-    value: 'export(format="coreai")'
+    value: export(format="coreai")
     mono: true
   - label: 输出
-    value: "一个附带元数据的 .aimodel 资产"
+    value: 一个附带元数据的 .aimodel 资产
   - label: Extra
     value: 'pip install "libreyolo[coreai]"'
     mono: true
   - label: 回读方式
-    value: "不经过 LibreYOLO。使用方直接调用 Core AI 运行时。"
+    value: 不经过 LibreYOLO。使用方直接调用 Core AI 运行时。
   - label: 形状
-    value: "固定画布。dynamic=True 会抛出 NotImplementedError。"
+    value: 固定画布。dynamic=True 会抛出 NotImplementedError。
   - label: 精度
-    value: "仅 FP32。half=True 和 int8=True 会被拒绝。"
+    value: 仅 FP32。half=True 和 int8=True 会被拒绝。
   - label: 环境要求
-    value: "macOS。工具链在别处既不能转换也不能运行，而且 coreai-torch 把 torch 锁定在 2.11.x。"
-verification: "读自 dev 分支上的 libreyolo/export/coreai.py、libreyolo/export/coreai_compat.py、libreyolo/export/exporter.py、libreyolo/export/support.py 和 pyproject.toml。"
+    value: macOS。工具链在别处既不能转换也不能运行，而且 coreai-torch 把 torch 锁定在 2.11.x。
+verification: >-
+  读自 dev 分支上的
+  libreyolo/export/coreai.py、libreyolo/export/coreai_compat.py、libreyolo/export/exporter.py、libreyolo/export/support.py
+  和 pyproject.toml。
 snippets:
   install:
     - label: 安装，在 macOS 上
@@ -81,6 +88,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: a35bfeafac6d6966
 ---
 
 ## 安装

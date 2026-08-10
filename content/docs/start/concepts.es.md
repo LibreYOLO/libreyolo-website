@@ -1,24 +1,38 @@
 ---
 title: Conceptos básicos
-seo_title: "Conceptos básicos de LibreYOLO"
-description: "Cómo encajan las tareas, las familias de modelos, los tamaños y los nombres de archivo de los checkpoints en LibreYOLO, y qué promete cada nivel de soporte."
-lead: "Cuatro ideas describen todos los modelos de LibreYOLO: la tarea que realiza, la familia a la que pertenece, el tamaño dentro de esa familia y el nivel de soporte en el que está la familia. El nombre de archivo del checkpoint codifica las tres primeras."
-keywords: [conceptos libreyolo, tareas libreyolo, familias de modelos libreyolo, nombres de checkpoints libreyolo, niveles de soporte libreyolo, tipos de tareas vision por computador]
-last_verified: "1.5.0"
+seo_title: Conceptos básicos de LibreYOLO
+description: >-
+  Cómo encajan las tareas, las familias de modelos, los tamaños y los nombres de
+  archivo de los checkpoints en LibreYOLO, y qué promete cada nivel de soporte.
+lead: >-
+  Cuatro ideas describen todos los modelos de LibreYOLO: la tarea que realiza,
+  la familia a la que pertenece, el tamaño dentro de esa familia y el nivel de
+  soporte en el que está la familia. El nombre de archivo del checkpoint
+  codifica las tres primeras.
+keywords:
+  - conceptos libreyolo
+  - tareas libreyolo
+  - familias de modelos libreyolo
+  - nombres de checkpoints libreyolo
+  - niveles de soporte libreyolo
+  - tipos de tareas vision por computador
+last_verified: 1.5.0
 meta:
   - label: Esquema del nombre de archivo
-    value: "Libre<FAMILY><size>[-<task>].pt"
+    value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Tareas canónicas
     value: 17
   - label: Niveles de soporte
-    value: Flagship, Core, Supported, Inference only, Museum, Sibling tier
+    value: 'Flagship, Core, Supported, Inference only, Museum, Sibling tier'
 snippets:
   inspect:
     - label: Listar familias
       language: bash
-      code: |
-        # Tareas, tamaños y resoluciones de entrada de todas las familias registradas.
+      code: >
+        # Tareas, tamaños y resoluciones de entrada de todas las familias
+        registradas.
+
         libreyolo models
     - label: Un modelo
       language: python
@@ -32,13 +46,20 @@ snippets:
         print(model.nb_classes, model.names[0])
     - label: Elegir una tarea
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # Los alias se normalizan en la frontera de la API: "keypoints" se resuelve
-        # como "pose", "det" como "detect", "semantic-segmentation" como "semantic".
+
+        # Los alias se normalizan en la frontera de la API: "keypoints" se
+        resuelve
+
+        # como "pose", "det" como "detect", "semantic-segmentation" como
+        "semantic".
+
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
+
         print(model.task)
+source_hash: 23d045463a6a8411
 ---
 
 ## Tareas

@@ -1,8 +1,15 @@
 ---
 title: Esquema de checkpoint
-seo_title: "Esquema de metadatos de checkpoint de LibreYOLO v1.0"
-description: "Los metadatos que lleva todo checkpoint .pt de LibreYOLO: claves obligatorias, añadidos por tarea, claves de runtime de exportación, manifiestos de cuantización y campos de entrenamiento."
-lead: "Un archivo .pt de LibreYOLO es un diccionario plano guardado con torch.save. La clave model contiene el state dict; el resto de claves de primer nivel son metadatos que identifican el checkpoint sin analizar el nombre del archivo ni inspeccionar el state dict."
+seo_title: Esquema de metadatos de checkpoint de LibreYOLO v1.0
+description: >-
+  Los metadatos que lleva todo checkpoint .pt de LibreYOLO: claves obligatorias,
+  añadidos por tarea, claves de runtime de exportación, manifiestos de
+  cuantización y campos de entrenamiento.
+lead: >-
+  Un archivo .pt de LibreYOLO es un diccionario plano guardado con torch.save.
+  La clave model contiene el state dict; el resto de claves de primer nivel son
+  metadatos que identifican el checkpoint sin analizar el nombre del archivo ni
+  inspeccionar el state dict.
 keywords:
   - esquema checkpoint libreyolo
   - metadatos checkpoint pytorch
@@ -10,26 +17,41 @@ keywords:
   - model_family
   - manifiesto cuantización quant
   - wrap_libreyolo_checkpoint
-last_verified: "1.5.0"
-verification: "Refleja docs/checkpoint_schema.md del repositorio libreyolo en la v1.5.0, contrastado con libreyolo/utils/serialization.py y BaseModel.save."
+last_verified: 1.5.0
+verification: >-
+  Refleja docs/checkpoint_schema.md del repositorio libreyolo en la v1.5.0,
+  contrastado con libreyolo/utils/serialization.py y BaseModel.save.
 snippets:
   usage:
     - label: Leer los metadatos de un checkpoint
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
         from libreyolo.utils.serialization import unwrap_libreyolo_checkpoint
+
         import torch
 
-        # Descarga un checkpoint y vuelve a guardarlo para que exista una ruta local.
+
+        # Descarga un checkpoint y vuelve a guardarlo para que exista una ruta
+        local.
+
         LibreYOLO("LibreYOLO9t.pt").save("roundtrip.pt")
 
-        loaded = torch.load("roundtrip.pt", map_location="cpu", weights_only=False)
+
+        loaded = torch.load("roundtrip.pt", map_location="cpu",
+        weights_only=False)
+
         state_dict, metadata = unwrap_libreyolo_checkpoint(loaded)
 
+
         print(metadata["schema_version"], metadata["model_family"])
-        print(metadata["size"], metadata["task"], metadata["nc"], metadata["imgsz"])
+
+        print(metadata["size"], metadata["task"], metadata["nc"],
+        metadata["imgsz"])
+
         print(len(state_dict), "tensors")
+source_hash: ce760f1bed97bfd0
 ---
 
 ## Esquema v1.0

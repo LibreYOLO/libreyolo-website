@@ -1,8 +1,14 @@
 ---
 title: API de Python
-seo_title: "Referencia de la API de Python de LibreYOLO"
-description: "Los nombres que LibreYOLO exporta a nivel de paquete: las cinco factories, las clases de familia, los payloads de Results, backends, validadores, trackers y utilidades de datos."
-lead: "La superficie pública de Python de LibreYOLO es la lista __all__ de libreyolo/__init__.py. Todo lo que aparece en esta página se puede importar con from libreyolo import <nombre>; lo que no esté en esa lista es interno."
+seo_title: Referencia de la API de Python de LibreYOLO
+description: >-
+  Los nombres que LibreYOLO exporta a nivel de paquete: las cinco factories, las
+  clases de familia, los payloads de Results, backends, validadores, trackers y
+  utilidades de datos.
+lead: >-
+  La superficie pública de Python de LibreYOLO es la lista __all__ de
+  libreyolo/__init__.py. Todo lo que aparece en esta página se puede importar
+  con from libreyolo import <nombre>; lo que no esté en esa lista es interno.
 keywords:
   - api python libreyolo
   - importar libreyolo python
@@ -12,8 +18,13 @@ keywords:
   - LibreOpenVocab
   - LibreEnsemble
   - libreyolo __all__
-last_verified: "1.5.0"
-verification: "Nombres y firmas leídos de libreyolo/__init__.py, libreyolo/models/__init__.py, libreyolo/models/base/model.py, libreyolo/models/base/inference.py, libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py y libreyolo/ensemble/model.py en la v1.5.0."
+last_verified: 1.5.0
+verification: >-
+  Nombres y firmas leídos de libreyolo/__init__.py,
+  libreyolo/models/__init__.py, libreyolo/models/base/model.py,
+  libreyolo/models/base/inference.py, libreyolo/models/sam/model.py,
+  libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py y
+  libreyolo/ensemble/model.py en la v1.5.0.
 snippets:
   usage:
     - label: Cargar cualquier cosa desde una sola factory
@@ -41,20 +52,33 @@ snippets:
   factories:
     - label: Los cinco puntos de entrada
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, LibreEnsemble
 
+
         # Factory que inspecciona los pesos, para las familias sin prompt.
+
         detector = LibreYOLO("LibreYOLO9t.pt")
 
+
         # Dos o más detectores tras una sola superficie de predicción.
+
         ens = LibreEnsemble(["LibreYOLO9t.pt", "LibreYOLO9s.pt"])
 
+
         # Las otras tres factories necesitan un extra instalado:
-        #   pip install 'libreyolo[sam]'        -> from libreyolo import LibreSAM
-        #   pip install 'libreyolo[vlm]'        -> from libreyolo import LibreVLM
-        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import LibreOpenVocab
+
+        #   pip install 'libreyolo[sam]'        -> from libreyolo import
+        LibreSAM
+
+        #   pip install 'libreyolo[vlm]'        -> from libreyolo import
+        LibreVLM
+
+        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import
+        LibreOpenVocab
+
         print(type(detector).__name__, ens.fusion)
+source_hash: 66e34e78b2e0fb2d
 ---
 
 ## Puntos de entrada

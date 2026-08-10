@@ -1,11 +1,26 @@
 ---
 title: Faster R-CNN
-families: [faster_rcnn]
-seo_title: "Faster R-CNN en LibreYOLO: predecir, validar y exportar"
-description: "Ejecuta Faster R-CNN en LibreYOLO para detección de objetos con cuatro backbones. Instala, predice, valida y exporta el port de torchvision con licencia BSD-3-Clause."
-lead: "Faster R-CNN detecta objetos con una red de propuestas de regiones que alimenta a un clasificador de dos etapas, la arquitectura que convirtió las propuestas de regiones en parte de la misma red entrenada en lugar de un paso aparte. LibreYOLO incluye un port de la implementación de torchvision para detección."
-keywords: [Faster R-CNN, "detección de objetos python", "red de propuestas de regiones", "detector de dos etapas", "Faster R-CNN pytorch", torchvision]
-last_verified: "1.5.0"
+families:
+  - faster_rcnn
+seo_title: 'Faster R-CNN en LibreYOLO: predecir, validar y exportar'
+description: >-
+  Ejecuta Faster R-CNN en LibreYOLO para detección de objetos con cuatro
+  backbones. Instala, predice, valida y exporta el port de torchvision con
+  licencia BSD-3-Clause.
+lead: >-
+  Faster R-CNN detecta objetos con una red de propuestas de regiones que
+  alimenta a un clasificador de dos etapas, la arquitectura que convirtió las
+  propuestas de regiones en parte de la misma red entrenada en lugar de un paso
+  aparte. LibreYOLO incluye un port de la implementación de torchvision para
+  detección.
+keywords:
+  - Faster R-CNN
+  - detección de objetos python
+  - red de propuestas de regiones
+  - detector de dos etapas
+  - Faster R-CNN pytorch
+  - torchvision
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +35,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreFasterRCNNl.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreFasterRCNNl.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -51,15 +68,23 @@ snippets:
         libreyolo export model=LibreFasterRCNNl.pt format=onnx imgsz=800
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto Results.
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto Results.
+
         model = LibreYOLO("LibreFasterRCNNl.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)
+source_hash: 3fd82eb835399560
 ---
 
 ## Instalación

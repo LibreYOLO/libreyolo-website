@@ -1,11 +1,25 @@
 ---
 title: YOLOv4
-families: [yolo4]
-seo_title: "YOLOv4: ejecutar, validar y exportar en LibreYOLO"
-description: "Ejecuta YOLOv4 en LibreYOLO: una familia de museo congelada y solo de inferencia, con backbone CSPDarknet-53. Predice, valida y exporta, con licencia de dominio público."
-lead: "YOLOv4 combina un backbone CSPDarknet-53, un bloque SPP y un neck PANet con activaciones Mish. LibreYOLO lo incluye como una pieza de museo congelada y solo de inferencia, en tamaños tiny y base."
-keywords: [YOLOv4, Darknet, CSPDarknet-53, PANet, "detección de objetos python", "activación Mish", "familia de museo"]
-last_verified: "1.5.0"
+families:
+  - yolo4
+seo_title: 'YOLOv4: ejecutar, validar y exportar en LibreYOLO'
+description: >-
+  Ejecuta YOLOv4 en LibreYOLO: una familia de museo congelada y solo de
+  inferencia, con backbone CSPDarknet-53. Predice, valida y exporta, con
+  licencia de dominio público.
+lead: >-
+  YOLOv4 combina un backbone CSPDarknet-53, un bloque SPP y un neck PANet con
+  activaciones Mish. LibreYOLO lo incluye como una pieza de museo congelada y
+  solo de inferencia, en tamaños tiny y base.
+keywords:
+  - YOLOv4
+  - Darknet
+  - CSPDarknet-53
+  - PANet
+  - detección de objetos python
+  - activación Mish
+  - familia de museo
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +34,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreYOLO4b.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreYOLO4b.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -53,16 +69,25 @@ snippets:
         libreyolo export model=LibreYOLO4b.pt format=tensorrt half=True
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factoría enruta según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo objeto
+
+        # La factoría enruta según la extensión del archivo, así que un
+        artefacto
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        objeto
+
         # Results.
+
         model = LibreYOLO("LibreYOLO4b.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)
+source_hash: 6070bb4a09d75416
 ---
 
 ## Instalación

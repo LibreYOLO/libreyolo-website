@@ -6,7 +6,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { NextIntlClientProvider, hasLocale } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { routing, localeHtmlLang, localeDir } from '@/i18n/routing'
+import { routing, localeHtmlLang } from '@/i18n/routing'
 import { buildAlternates, ogLocale, localeUrl, SITE_URL, OG_IMAGE } from '@/i18n/metadata'
 
 const outfit = Outfit({
@@ -97,7 +97,6 @@ export default async function LocaleLayout({ children, params }) {
   return (
     <html
       lang={localeHtmlLang[locale]}
-      dir={localeDir(locale)}
       className={`${outfit.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >

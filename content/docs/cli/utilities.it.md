@@ -1,16 +1,31 @@
 ---
 title: utility di libreyolo
-seo_title: "riferimento dei comandi di utility della CLI di libreyolo"
-description: "I comandi piccoli di LibreYOLO: version, checks, models, formats, cfg, info, metadata, enroll e compare, ognuno con i suoi argomenti e i suoi valori predefiniti."
-lead: "Nove comandi che riportano o ispezionano invece di calcolare. Stampano i dati dell'ambiente, l'inventario di modelli e formati, i valori predefiniti già risolti e i dettagli di un checkpoint, e costruiscono e interrogano una galleria di volti."
-keywords: [libreyolo version, libreyolo checks, elencare modelli libreyolo, formati di esportazione libreyolo, vedere metadati checkpoint yolo, galleria volti libreyolo enroll]
-last_verified: "1.5.0"
+seo_title: riferimento dei comandi di utility della CLI di libreyolo
+description: >-
+  I comandi piccoli di LibreYOLO: version, checks, models, formats, cfg, info,
+  metadata, enroll e compare, ognuno con i suoi argomenti e i suoi valori
+  predefiniti.
+lead: >-
+  Nove comandi che riportano o ispezionano invece di calcolare. Stampano i dati
+  dell'ambiente, l'inventario di modelli e formati, i valori predefiniti già
+  risolti e i dettagli di un checkpoint, e costruiscono e interrogano una
+  galleria di volti.
+keywords:
+  - libreyolo version
+  - libreyolo checks
+  - elencare modelli libreyolo
+  - formati di esportazione libreyolo
+  - vedere metadati checkpoint yolo
+  - galleria volti libreyolo enroll
+last_verified: 1.5.0
 meta:
   - label: Comandi
-    value: version, checks, models, formats, cfg, info, metadata, enroll, compare
+    value: 'version, checks, models, formats, cfg, info, metadata, enroll, compare'
     mono: true
   - label: Output
-    value: "stdout, in testo oppure con json=true come un unico oggetto che porta schema_version"
+    value: >-
+      stdout, in testo oppure con json=true come un unico oggetto che porta
+      schema_version
 snippets:
   examples:
     - label: Ambiente
@@ -28,6 +43,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
+source_hash: 7b5b53c46df00c06
 ---
 
 ## Sinossi

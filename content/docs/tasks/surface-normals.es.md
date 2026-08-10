@@ -1,45 +1,75 @@
 ---
 title: Normales de superficie
-seo_title: "Estimación de normales de superficie en LibreYOLO"
-description: "Predice un campo denso de normales de superficie a partir de una sola imagen en LibreYOLO. Consulta el convenio del sistema de cámara, valida el error angular y exporta un modelo."
-lead: "La estimación de normales de superficie predice hacia dónde mira cada superficie visible. LibreYOLO la expone como la tarea normal, que devuelve un campo denso de vectores unitarios sobre el lienzo de la imagen original."
-keywords: [estimación de normales de superficie python, mapa de normales desde una imagen, geometría monocular python, métrica de error angular, predicción densa de normales]
-last_verified: "1.5.0"
+seo_title: Estimación de normales de superficie en LibreYOLO
+description: >-
+  Predice un campo denso de normales de superficie a partir de una sola imagen
+  en LibreYOLO. Consulta el convenio del sistema de cámara, valida el error
+  angular y exporta un modelo.
+lead: >-
+  La estimación de normales de superficie predice hacia dónde mira cada
+  superficie visible. LibreYOLO la expone como la tarea normal, que devuelve un
+  campo denso de vectores unitarios sobre el lienzo de la imagen original.
+keywords:
+  - estimación de normales de superficie python
+  - mapa de normales desde una imagen
+  - geometría monocular python
+  - métrica de error angular
+  - predicción densa de normales
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Predecir un campo de normales
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreMoGe2s-normal.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         normals = result.normal_map
+
         print(normals.data.shape)      # vectores unitarios float32 (H, W, 3)
-        normals.assert_normalized()    # falla si algún píxel no tiene longitud unitaria
+
+        normals.assert_normalized()    # falla si algún píxel no tiene longitud
+        unitaria
     - label: Leer un píxel
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreMoGe2s-normal.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         # Sistema de cámara de OpenCV: +x a la derecha, +y hacia abajo, +z hacia
-        # la escena. Una superficie que mira a la cámara da algo cercano a (0, 0, -1).
+
+        # la escena. Una superficie que mira a la cámara da algo cercano a (0,
+        0, -1).
+
         field = result.normals.data
+
         h, w = field.shape[:2]
+
         print(field[h // 2, w // 2])
     - label: Guardar la visualización
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreMoGe2s-normal.pt")
+
         result = model(SAMPLE_IMAGE)
 
-        # plot() dibuja el campo; está definido para resultados de normales y de bordes.
+
+        # plot() dibuja el campo; está definido para resultados de normales y de
+        bordes.
+
         result.plot().save("normals.png")
   val:
     - label: Validar y leer las claves de las métricas
@@ -64,15 +94,22 @@ snippets:
         model.export(format="onnx", imgsz=518)
     - label: Ejecutar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factory decide según la extensión del archivo, así que un artefacto
-        # exportado se carga como cualquier checkpoint y devuelve el mismo Results.
+
+        # exportado se carga como cualquier checkpoint y devuelve el mismo
+        Results.
+
         model = LibreYOLO("LibreMoGe2s-normal.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.normal_map.data.shape)
+source_hash: d26d26d894b436ff
 ---
 
 ## Definición

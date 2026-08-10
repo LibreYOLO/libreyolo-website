@@ -1,24 +1,39 @@
 ---
 title: libreyolo label
-seo_title: "Referencia del comando libreyolo label"
-description: "Arranca la herramienta local de anotación de bounding boxes: argumentos con sus valores por defecto, el interruptor de asistencia por IA y qué expone enlazar con una interfaz de red."
-lead: "Arranca una herramienta web local para dibujar y editar bounding boxes. Escribe ficheros de etiquetas en el formato nativo de LibreYOLO, así que un dataset anotado aquí se entrena sin ningún paso de conversión."
-keywords: [libreyolo label cli, herramienta de etiquetado bounding box, etiquetar dataset yolo, auto etiquetado cli, compartir libreyolo label]
-last_verified: "1.5.0"
+seo_title: Referencia del comando libreyolo label
+description: >-
+  Arranca la herramienta local de anotación de bounding boxes: argumentos con
+  sus valores por defecto, el interruptor de asistencia por IA y qué expone
+  enlazar con una interfaz de red.
+lead: >-
+  Arranca una herramienta web local para dibujar y editar bounding boxes.
+  Escribe ficheros de etiquetas en el formato nativo de LibreYOLO, así que un
+  dataset anotado aquí se entrena sin ningún paso de conversión.
+keywords:
+  - libreyolo label cli
+  - herramienta de etiquetado bounding box
+  - etiquetar dataset yolo
+  - auto etiquetado cli
+  - compartir libreyolo label
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo label
     mono: true
   - label: Salida
-    value: "Una URL de servidor en stdout; las etiquetas se escriben como labels/*.txt junto a las imágenes"
+    value: >-
+      Una URL de servidor en stdout; las etiquetas se escriben como labels/*.txt
+      junto a las imágenes
 snippets:
   examples:
     - label: Básico
       language: bash
-      code: |
-        # Abre la página de inicio del proyecto; elige o crea un dataset en el navegador.
+      code: >
+        # Abre la página de inicio del proyecto; elige o crea un dataset en el
+        navegador.
+
         libreyolo label
-    - label: Solo manual, puerto fijo
+    - label: 'Solo manual, puerto fijo'
       language: bash
       code: |
         libreyolo label no_assist=true port=9200 no_browser=true
@@ -26,6 +41,7 @@ snippets:
       language: bash
       code: |
         libreyolo label share=true
+source_hash: bddad245877793b1
 ---
 
 ## Sinopsis
@@ -77,7 +93,7 @@ solo lectura también se abre e indica por qué no se puede escribir en él.
 
 `share=true` enlaza la dirección comodín, lo que permite que otras máquinas de
 tu red lleguen a la herramienta mientras que las acciones administrativas
-—cambiar o borrar proyectos y lanzar cómputo— se quedan en esta máquina.
+(cambiar o borrar proyectos y lanzar cómputo) se quedan en esta máquina.
 
 Poner `host` en una interfaz concreta hace algo distinto y menos seguro: el host
 pasa a ser indistinguible de un cliente de red, así que todos los clientes

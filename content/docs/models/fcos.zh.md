@@ -1,11 +1,22 @@
 ---
 title: FCOS
-families: [fcos]
-seo_title: "FCOS：在 LibreYOLO 里预测、验证和导出"
-description: "在 LibreYOLO 里用 FCOS 做无锚框（anchor-free）目标检测。安装、预测、验证并导出这个采用 BSD-3-Clause 许可的 torchvision 移植版，ResNet-50/FPN。"
-lead: "FCOS 逐像素检测目标，而不依赖一组预定义的锚框，它在特征图的每个位置上都预测一个检测框和一个中心度（centerness）分数。LibreYOLO 移植了 torchvision 的实现，用于检测。"
-keywords: [FCOS, "fcos 目标检测", 无锚框检测, 单阶段检测器, torchvision, "fcos onnx 导出"]
-last_verified: "1.5.0"
+families:
+  - fcos
+seo_title: FCOS：在 LibreYOLO 里预测、验证和导出
+description: >-
+  在 LibreYOLO 里用 FCOS 做无锚框（anchor-free）目标检测。安装、预测、验证并导出这个采用 BSD-3-Clause 许可的
+  torchvision 移植版，ResNet-50/FPN。
+lead: >-
+  FCOS 逐像素检测目标，而不依赖一组预定义的锚框，它在特征图的每个位置上都预测一个检测框和一个中心度（centerness）分数。LibreYOLO
+  移植了 torchvision 的实现，用于检测。
+keywords:
+  - FCOS
+  - fcos 目标检测
+  - 无锚框检测
+  - 单阶段检测器
+  - torchvision
+  - fcos onnx 导出
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +31,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreFCOSr50.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreFCOSr50.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -61,6 +74,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: 60bd7b8dfd903a8c
 ---
 
 ## 安装

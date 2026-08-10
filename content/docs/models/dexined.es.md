@@ -1,11 +1,24 @@
 ---
 title: DexiNed
-families: [dexined]
-seo_title: "DexiNed: detección de bordes con tu propio checkpoint"
-description: "Usa DexiNed en LibreYOLO para predecir un mapa denso de probabilidad de borde. Convierte un checkpoint que tengas licenciado y luego predice, valida y expórtalo."
-lead: "DexiNed (Dense Extreme Inception Network) es una red convolucional que predice un mapa denso de probabilidad de borde a partir de una sola imagen RGB. LibreYOLO incluye su arquitectura solo para detección de bordes; la biblioteca no distribuye ningún checkpoint."
-keywords: [DexiNed, Dense Extreme Inception Network, "detección de bordes python", BIPED, "detectar bordes en imágenes deep learning"]
-last_verified: "1.5.0"
+families:
+  - dexined
+seo_title: 'DexiNed: detección de bordes con tu propio checkpoint'
+description: >-
+  Usa DexiNed en LibreYOLO para predecir un mapa denso de probabilidad de borde.
+  Convierte un checkpoint que tengas licenciado y luego predice, valida y
+  expórtalo.
+lead: >-
+  DexiNed (Dense Extreme Inception Network) es una red convolucional que predice
+  un mapa denso de probabilidad de borde a partir de una sola imagen RGB.
+  LibreYOLO incluye su arquitectura solo para detección de bordes; la biblioteca
+  no distribuye ningún checkpoint.
+keywords:
+  - DexiNed
+  - Dense Extreme Inception Network
+  - detección de bordes python
+  - BIPED
+  - detectar bordes en imágenes deep learning
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +34,10 @@ snippets:
         print(edges.binary(0.5).sum())  # nº de píxeles de borde tras el umbral
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=weights/LibreDexiNedb-edge.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=weights/LibreDexiNedb-edge.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -36,8 +51,9 @@ snippets:
         print(metrics["metrics/OIS"])   # F-measure a escala óptima de imagen
     - label: CLI
       language: bash
-      code: |
-        libreyolo val model=weights/LibreDexiNedb-edge.pt data=my-dataset.yaml imgsz=352
+      code: >
+        libreyolo val model=weights/LibreDexiNedb-edge.pt data=my-dataset.yaml
+        imgsz=352
   export:
     - label: Python
       language: python
@@ -49,9 +65,12 @@ snippets:
         model.export(format="tensorrt", imgsz=352, half=True)
     - label: CLI
       language: bash
-      code: |
-        libreyolo export model=weights/LibreDexiNedb-edge.pt format=onnx imgsz=352
-        libreyolo export model=weights/LibreDexiNedb-edge.pt format=tensorrt imgsz=352 half=True
+      code: >
+        libreyolo export model=weights/LibreDexiNedb-edge.pt format=onnx
+        imgsz=352
+
+        libreyolo export model=weights/LibreDexiNedb-edge.pt format=tensorrt
+        imgsz=352 half=True
     - label: Usar el archivo exportado
       language: python
       code: |
@@ -61,6 +80,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.edges.array.shape)
+source_hash: 342597fde3c4ba65
 ---
 
 ## Instalación

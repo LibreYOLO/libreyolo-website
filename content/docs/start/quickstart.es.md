@@ -1,10 +1,21 @@
 ---
 title: Inicio rápido
-seo_title: "Inicio rápido de LibreYOLO"
-description: "Ejecuta un detector sobre una imagen, haz fine-tuning con un dataset pequeño y expórtalo a TorchScript u ONNX, todo en CPU, en unas diez líneas de Python."
-lead: "El camino más corto a través de LibreYOLO: predice sobre una imagen, entrena con un dataset pequeño y luego exporta el resultado. Todos los comandos de esta página se ejecutan en CPU."
-keywords: [libreyolo inicio rápido, tutorial libreyolo, libreyolo predict, entrenar libreyolo, exportar libreyolo onnx, ejemplo yolo python]
-last_verified: "1.5.0"
+seo_title: Inicio rápido de LibreYOLO
+description: >-
+  Ejecuta un detector sobre una imagen, haz fine-tuning con un dataset pequeño y
+  expórtalo a TorchScript u ONNX, todo en CPU, en unas diez líneas de Python.
+lead: >-
+  El camino más corto a través de LibreYOLO: predice sobre una imagen, entrena
+  con un dataset pequeño y luego exporta el resultado. Todos los comandos de
+  esta página se ejecutan en CPU.
+keywords:
+  - libreyolo inicio rápido
+  - tutorial libreyolo
+  - libreyolo predict
+  - entrenar libreyolo
+  - exportar libreyolo onnx
+  - ejemplo yolo python
+last_verified: 1.5.0
 meta:
   - label: Instalación
     value: pip install libreyolo
@@ -36,25 +47,37 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Vídeo y streams
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # stream=True genera un Results por frame en lugar de construir una lista.
-        # Sustituye la ruta por el índice de una webcam, una URL RTSP o una carpeta.
+
+        # stream=True genera un Results por frame en lugar de construir una
+        lista.
+
+        # Sustituye la ruta por el índice de una webcam, una URL RTSP o una
+        carpeta.
+
         for result in model.predict("clip.mp4", stream=True, save=True):
             print(len(result.boxes))
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # coco8 es un dataset de 8 imágenes incluido con la biblioteca. Se descarga
-        # desde una URL en el primer uso, así que no hay que ejecutar ningún script.
+
+        # coco8 es un dataset de 8 imágenes incluido con la biblioteca. Se
+        descarga
+
+        # desde una URL en el primer uso, así que no hay que ejecutar ningún
+        script.
+
         results = model.train(
             data="coco8.yaml",
             epochs=1,
@@ -63,7 +86,9 @@ snippets:
             device="cpu",
         )
 
+
         print(results["save_dir"])
+
         print(results["best_checkpoint"])
     - label: CLI
       language: bash
@@ -105,6 +130,7 @@ snippets:
       code: |
         pip install "libreyolo[onnx]"
         libreyolo export model=yolo9-t format=onnx imgsz=640
+source_hash: c11b6bdbf0b6fdf1
 ---
 
 ## Instalación

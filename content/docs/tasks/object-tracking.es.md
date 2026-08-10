@@ -1,10 +1,26 @@
 ---
 title: Seguimiento de objetos
-seo_title: "Seguimiento de objetos en LibreYOLO"
-description: "Sigue objetos a lo largo de los fotogramas de un vídeo en LibreYOLO con ByteTrack, BoT-SORT, OC-SORT o Deep OC-SORT, sobre cualquier modelo de detección, segmentación o pose."
-lead: "El seguimiento asigna una identidad estable a cada detección a lo largo de los fotogramas de un vídeo. LibreYOLO no lo modela como una tarea con pesos propios: es un modo de predicción, model.track(), que ejecuta el tracker elegido sobre la salida por fotograma de un modelo de detección, segmentación o pose."
-keywords: [seguimiento de objetos python, tracking multiobjeto video, bytetrack, botsort, ocsort, deep ocsort, track id yolo, seguimiento con reid]
-last_verified: "1.5.0"
+seo_title: Seguimiento de objetos en LibreYOLO
+description: >-
+  Sigue objetos a lo largo de los fotogramas de un vídeo en LibreYOLO con
+  ByteTrack, BoT-SORT, OC-SORT o Deep OC-SORT, sobre cualquier modelo de
+  detección, segmentación o pose.
+lead: >-
+  El seguimiento asigna una identidad estable a cada detección a lo largo de los
+  fotogramas de un vídeo. LibreYOLO no lo modela como una tarea con pesos
+  propios: es un modo de predicción, model.track(), que ejecuta el tracker
+  elegido sobre la salida por fotograma de un modelo de detección, segmentación
+  o pose.
+keywords:
+  - seguimiento de objetos python
+  - tracking multiobjeto video
+  - bytetrack
+  - botsort
+  - ocsort
+  - deep ocsort
+  - track id yolo
+  - seguimiento con reid
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -40,19 +56,27 @@ snippets:
             pass
     - label: Ajustar un tracker
       language: python
-      code: |
+      code: >
         from libreyolo import BoTSortConfig, LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
+
         # El tipo de config selecciona el tracker, así que tracker= sobra aquí.
+
         config = BoTSortConfig(track_buffer=60, frame_rate=25, enable_cmc=False)
+
         for result in model.track("video.mp4", tracker_config=config):
             print(result.track_id)
 
-        # O pasa los mismos campos como argumentos y deja que track() la construya.
-        for result in model.track("video.mp4", tracker="botsort", track_buffer=60):
+        # O pasa los mismos campos como argumentos y deja que track() la
+        construya.
+
+        for result in model.track("video.mp4", tracker="botsort",
+        track_buffer=60):
             print(result.track_id)
+source_hash: f1fa7dcf60597d6b
 ---
 
 ## Definición

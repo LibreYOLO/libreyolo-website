@@ -1,11 +1,22 @@
 ---
 title: EdgeTAM
-families: [edgetam]
-seo_title: "EdgeTAM：LibreYOLO 里的端侧可提示分割"
-description: "在 LibreYOLO 里用 EdgeTAM 做点提示和框提示分割，为端侧速度而生。安装并用这个 Apache-2.0 许可的检查点跑预测。"
-lead: "EdgeTAM 是 SAM 2 的端侧变体，为移动端推理速度而构建，同时保留同样的点提示和框提示工作流。LibreYOLO 通过一个专门的 LibreSAM 工厂函数支持它的图像分割路径，与 LibreYOLO() 检测器工厂函数分开。"
-keywords: [EdgeTAM, SAM 2, "可提示分割", "交互式分割 python", "点一下分割物体", "端侧分割", "sam2 轻量版", Meta Reality Labs]
-last_verified: "1.5.0"
+families:
+  - edgetam
+seo_title: EdgeTAM：LibreYOLO 里的端侧可提示分割
+description: 在 LibreYOLO 里用 EdgeTAM 做点提示和框提示分割，为端侧速度而生。安装并用这个 Apache-2.0 许可的检查点跑预测。
+lead: >-
+  EdgeTAM 是 SAM 2 的端侧变体，为移动端推理速度而构建，同时保留同样的点提示和框提示工作流。LibreYOLO 通过一个专门的 LibreSAM
+  工厂函数支持它的图像分割路径，与 LibreYOLO() 检测器工厂函数分开。
+keywords:
+  - EdgeTAM
+  - SAM 2
+  - 可提示分割
+  - 交互式分割 python
+  - 点一下分割物体
+  - 端侧分割
+  - sam2 轻量版
+  - Meta Reality Labs
+last_verified: 1.5.0
 snippets:
   predict:
     - label: 点提示与框提示
@@ -41,6 +52,7 @@ snippets:
         a = model.predict(points=[640, 420], labels=[1])
         b = model.predict(bboxes=[300, 200, 900, 700])
         model.reset_image()
+source_hash: e6cce8faad18e73d
 ---
 
 ## 安装

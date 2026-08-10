@@ -1,8 +1,15 @@
 ---
 title: Triton Inference Server
-seo_title: "Servir um modelo LibreYOLO no NVIDIA Triton"
-description: "Sirva uma exportação ONNX do LibreYOLO através do NVIDIA Triton: o layout do repositório de modelos, o config.pbtxt gerado e a predição contra uma URL de modelo HTTP."
-lead: "O Triton Inference Server hospeda um repositório de modelos e responde a requisições de inferência por HTTP. O LibreYOLO exporta o grafo ONNX, gera um config.pbtxt que carrega os metadados da exportação como um único parâmetro do Triton e trata uma URL de modelo como um caminho de modelo carregável."
+seo_title: Servir um modelo LibreYOLO no NVIDIA Triton
+description: >-
+  Sirva uma exportação ONNX do LibreYOLO através do NVIDIA Triton: o layout do
+  repositório de modelos, o config.pbtxt gerado e a predição contra uma URL de
+  modelo HTTP.
+lead: >-
+  O Triton Inference Server hospeda um repositório de modelos e responde a
+  requisições de inferência por HTTP. O LibreYOLO exporta o grafo ONNX, gera um
+  config.pbtxt que carrega os metadados da exportação como um único parâmetro do
+  Triton e trata uma URL de modelo como um caminho de modelo carregável.
 keywords:
   - libreyolo triton
   - triton inference server
@@ -10,22 +17,29 @@ keywords:
   - tritonclient http
   - repositório de modelos triton
   - inferência yolo remota
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Chamada
     value: 'LibreYOLO("http://127.0.0.1:8000/yolo9")'
     mono: true
   - label: Auxiliar
-    value: "create_triton_config(onnx_path, config_path, model_name=..., max_batch_size=8)"
+    value: >-
+      create_triton_config(onnx_path, config_path, model_name=...,
+      max_batch_size=8)
     mono: true
   - label: Extra
     value: 'pip install "libreyolo[onnx,triton]"'
     mono: true
   - label: Protocolo
-    value: "Somente inferência V2 por HTTP e HTTPS. Sem gRPC, autenticação, memória compartilhada ou carga e descarga de modelos."
+    value: >-
+      Somente inferência V2 por HTTP e HTTPS. Sem gRPC, autenticação, memória
+      compartilhada ou carga e descarga de modelos.
   - label: Timeouts
-    value: "Os timeouts de conexão e de rede são de 30 segundos por padrão"
-verification: "Lido de libreyolo/backends/triton.py, libreyolo/models/__init__.py, docs/triton.md e pyproject.toml no branch dev. Os comandos de container são os fixados em docs/triton.md."
+    value: Os timeouts de conexão e de rede são de 30 segundos por padrão
+verification: >-
+  Lido de libreyolo/backends/triton.py, libreyolo/models/__init__.py,
+  docs/triton.md e pyproject.toml no branch dev. Os comandos de container são os
+  fixados em docs/triton.md.
 snippets:
   install:
     - label: Instalação
@@ -79,8 +93,9 @@ snippets:
           tritonserver --model-repository=/models --exit-on-error=true
     - label: Esperar ficar pronto
       language: bash
-      code: |
-        until curl --fail --silent http://127.0.0.1:8000/v2/health/ready; do sleep 1; done
+      code: >
+        until curl --fail --silent http://127.0.0.1:8000/v2/health/ready; do
+        sleep 1; done
     - label: Parar o servidor
       language: bash
       code: |
@@ -105,7 +120,7 @@ snippets:
         print(len(remote.boxes), len(native.boxes))
         print(remote.boxes.xyxy[:3])
         print(native.boxes.xyxy[:3])
-    - label: Fixar uma versão, ou mudar o timeout
+    - label: 'Fixar uma versão, ou mudar o timeout'
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -117,6 +132,7 @@ snippets:
 
         # Os timeouts de conexão e de rede são de 30 segundos por padrão.
         patient = TritonBackend("http://127.0.0.1:8000/yolo9", timeout=120)
+source_hash: 0652e4faf0224df3
 ---
 
 ## Instalação
@@ -162,7 +178,7 @@ jeito.
 Uma URL de modelo do Triton é um caminho de modelo. `LibreYOLO()` verifica se há um
 esquema `http` ou `https` antes de qualquer tratamento de caminho local e retorna um
 backend que conversa com o servidor, então o ponto de chamada é idêntico ao de um
-checkpoint local — e o objeto `Results` que volta também.
+checkpoint local, e o objeto `Results` que volta também.
 
 <code-tabs name="run" />
 

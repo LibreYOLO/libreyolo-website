@@ -1,10 +1,22 @@
 ---
 title: Detección de objetos
-seo_title: "Detección de objetos en LibreYOLO"
-description: "Detecta objetos como bounding boxes alineados a los ejes en LibreYOLO: las familias que cubren la tarea, el formato de etiquetas y las llamadas de predicción, entrenamiento, validación y exportación."
-lead: "La detección de objetos localiza cada instancia de objeto en una imagen y devuelve un rectángulo alineado a los ejes, una etiqueta de clase y una puntuación para cada una. La clave de la tarea es detect."
-keywords: [detección de objetos python, detectar objetos en imagen, bounding box python, librería detección de objetos licencia MIT, alternativa a YOLO, entrenar detector de objetos dataset propio]
-last_verified: "1.5.0"
+seo_title: Detección de objetos en LibreYOLO
+description: >-
+  Detecta objetos como bounding boxes alineados a los ejes en LibreYOLO: las
+  familias que cubren la tarea, el formato de etiquetas y las llamadas de
+  predicción, entrenamiento, validación y exportación.
+lead: >-
+  La detección de objetos localiza cada instancia de objeto en una imagen y
+  devuelve un rectángulo alineado a los ejes, una etiqueta de clase y una
+  puntuación para cada una. La clave de la tarea es detect.
+keywords:
+  - detección de objetos python
+  - detectar objetos en imagen
+  - bounding box python
+  - librería detección de objetos licencia MIT
+  - alternativa a YOLO
+  - entrenar detector de objetos dataset propio
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -22,15 +34,22 @@ snippets:
       code: |
         libreyolo predict model=LibreYOLO9t.pt save=True \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-    - label: Otra familia, la misma llamada
+    - label: 'Otra familia, la misma llamada'
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # La factory decide según el checkpoint, y todos los detectores devuelven
-        # el mismo objeto Results, así que cambiar de familia es un cambio de una línea.
+
+        # La factory decide según el checkpoint, y todos los detectores
+        devuelven
+
+        # el mismo objeto Results, así que cambiar de familia es un cambio de
+        una línea.
+
         model = LibreYOLO("LibreDFINEn.pt")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.boxes.xyxy.shape)
     - label: Vídeo y streams
@@ -97,15 +116,22 @@ snippets:
         libreyolo export model=LibreYOLO9t.pt format=onnx imgsz=640
     - label: Usar el archivo exportado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # La factory decide según la extensión del archivo, así que un artefacto
-        # exportado se carga como un checkpoint y devuelve el mismo objeto Results.
+
+        # exportado se carga como un checkpoint y devuelve el mismo objeto
+        Results.
+
         model = LibreYOLO("LibreYOLO9t.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)
+source_hash: c735b6e3de78dd2b
 ---
 
 ## Definición

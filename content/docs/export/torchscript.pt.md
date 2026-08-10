@@ -1,8 +1,14 @@
 ---
 title: TorchScript
-seo_title: "Exportar para TorchScript a partir do LibreYOLO"
-description: "Exporte um modelo LibreYOLO para TorchScript: um arquivo .torchscript traçado com os metadados do LibreYOLO dentro, carregável pelo Python ou pelo libtorch."
-lead: "TorchScript é o formato de grafo serializado do próprio PyTorch. O LibreYOLO traça o modelo com torch.jit.trace e salva o resultado junto com um arquivo extra libreyolo_metadata.json, de modo que o arquivo carrega a família, a tarefa, os nomes das classes e o tamanho de entrada."
+seo_title: Exportar para TorchScript a partir do LibreYOLO
+description: >-
+  Exporte um modelo LibreYOLO para TorchScript: um arquivo .torchscript traçado
+  com os metadados do LibreYOLO dentro, carregável pelo Python ou pelo libtorch.
+lead: >-
+  TorchScript é o formato de grafo serializado do próprio PyTorch. O LibreYOLO
+  traça o modelo com torch.jit.trace e salva o resultado junto com um arquivo
+  extra libreyolo_metadata.json, de modo que o arquivo carrega a família, a
+  tarefa, os nomes das classes e o tamanho de entrada.
 keywords:
   - exportar yolo torchscript
   - torch.jit.trace
@@ -10,23 +16,25 @@ keywords:
   - deploy libtorch
   - metadados torchscript
   - extra_files
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Flag
-    value: 'export(format="torchscript")'
+    value: export(format="torchscript")
     mono: true
   - label: Escreve
-    value: "Um arquivo .torchscript com um arquivo extra libreyolo_metadata.json"
+    value: Um arquivo .torchscript com um arquivo extra libreyolo_metadata.json
   - label: Extra
-    value: "Nenhum. O TorchScript vem junto com o PyTorch."
+    value: Nenhum. O TorchScript vem junto com o PyTorch.
   - label: Recarrega com
-    value: 'LibreYOLO("weights/LibreYOLO9t.torchscript")'
+    value: LibreYOLO("weights/LibreYOLO9t.torchscript")
     mono: true
   - label: Formas
-    value: "Fixas. O grafo é traçado em uma única forma de entrada."
+    value: Fixas. O grafo é traçado em uma única forma de entrada.
   - label: Precisão
-    value: "FP32, FP16 (half=True). Sem INT8."
-verification: "Lido de libreyolo/export/torchscript.py, libreyolo/export/exporter.py, libreyolo/export/support.py e libreyolo/backends/torchscript.py no branch dev."
+    value: 'FP32, FP16 (half=True). Sem INT8.'
+verification: >-
+  Lido de libreyolo/export/torchscript.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py e libreyolo/backends/torchscript.py no branch dev.
 snippets:
   install:
     - label: Instalação
@@ -73,23 +81,32 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: PyTorch puro
       language: python
-      code: |
+      code: >
         import json
+
 
         import torch
 
+
         extra_files = {"libreyolo_metadata.json": ""}
+
         module = torch.jit.load(
             "weights/LibreYOLO9t.torchscript",
             map_location="cpu",
             _extra_files=extra_files,
         )
+
         module.eval()
 
+
         metadata = json.loads(extra_files["libreyolo_metadata.json"])
+
         print(metadata["model_family"], metadata["task"], metadata["imgsz"])
 
-        # O pré-processamento e o pós-processamento são sua responsabilidade aqui.
+
+        # O pré-processamento e o pós-processamento são sua responsabilidade
+        aqui.
+
         with torch.no_grad():
             out = module(torch.zeros(1, 3, 640, 640))
         print(out.shape if torch.is_tensor(out) else [t.shape for t in out])
@@ -98,6 +115,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
+source_hash: 286a082969ccd604
 ---
 
 ## Instalação

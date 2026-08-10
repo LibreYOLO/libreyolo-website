@@ -1,10 +1,23 @@
 ---
 title: libreyolo train
-seo_title: "referencia del comando libreyolo train"
-description: "Entrena un modelo desde la línea de comandos: los 59 argumentos con sus valores por defecto, cómo los sustituyen los valores por defecto de cada familia y qué argumentos ignora cada familia."
-lead: "Entrena un modelo sobre un dataset y escribe checkpoints, métricas y logs en un directorio de ejecución. Cada argumento de abajo tiene un valor por defecto tomado de la definición del comando, que la configuración de entrenamiento propia de cada familia de modelos puede sustituir."
-keywords: [libreyolo train cli, entrenar yolo linea de comandos, comando libreyolo train, argumentos libreyolo train, entrenar yolo dataset propio, congelar capas yolo]
-last_verified: "1.5.0"
+seo_title: referencia del comando libreyolo train
+description: >-
+  Entrena un modelo desde la línea de comandos: los 59 argumentos con sus
+  valores por defecto, cómo los sustituyen los valores por defecto de cada
+  familia y qué argumentos ignora cada familia.
+lead: >-
+  Entrena un modelo sobre un dataset y escribe checkpoints, métricas y logs en
+  un directorio de ejecución. Cada argumento de abajo tiene un valor por defecto
+  tomado de la definición del comando, que la configuración de entrenamiento
+  propia de cada familia de modelos puede sustituir.
+keywords:
+  - libreyolo train cli
+  - entrenar yolo linea de comandos
+  - comando libreyolo train
+  - argumentos libreyolo train
+  - entrenar yolo dataset propio
+  - congelar capas yolo
+last_verified: 1.5.0
 meta:
   - label: Comando
     value: libreyolo train
@@ -13,26 +26,34 @@ meta:
     value: data
     mono: true
   - label: Salida
-    value: "Checkpoints, métricas y logs en runs/train/exp"
+    value: 'Checkpoints, métricas y logs en runs/train/exp'
 snippets:
   examples:
     - label: Básico
       language: bash
-      code: |
-        # coco8.yaml viene con el paquete y descarga sus 8 imágenes en el primer uso.
-        libreyolo train model=LibreYOLO9s.pt data=coco8.yaml epochs=10 imgsz=640 batch=8
+      code: >
+        # coco8.yaml viene con el paquete y descarga sus 8 imágenes en el primer
+        uso.
+
+        libreyolo train model=LibreYOLO9s.pt data=coco8.yaml epochs=10 imgsz=640
+        batch=8
     - label: Comprobar primero la configuración resuelta
       language: bash
-      code: |
-        # Imprime lo que usaría la ejecución, incluidos los valores por defecto de
+      code: >
+        # Imprime lo que usaría la ejecución, incluidos los valores por defecto
+        de
+
         # la familia, y sale sin entrenar ni cargar datos.
-        libreyolo train model=LibreDFINEn.pt data=coco8.yaml epochs=10 dry_run=true
+
+        libreyolo train model=LibreDFINEn.pt data=coco8.yaml epochs=10
+        dry_run=true
     - label: Ejecución con nombre y receta explícita
       language: bash
       code: |
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
+source_hash: 3aad4298310d3081
 ---
 
 ## Sinopsis

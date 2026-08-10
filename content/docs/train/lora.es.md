@@ -1,8 +1,14 @@
 ---
 title: Fine-tuning con LoRA
-seo_title: "Fine-tuning con LoRA en LibreYOLO"
-description: "Haz fine-tuning de un detector transformer con poca VRAM usando lora=True. Qué nueve familias lo soportan, la receta de adaptadores de cada una y cómo se comportan los checkpoints."
-lead: "LoRA congela las partes pesadas preentrenadas de un modelo y entrena junto a ellas pequeños adaptadores de bajo rango, más las capas que deben seguir siendo densas. En LibreYOLO toda la interfaz pública es un booleano."
+seo_title: Fine-tuning con LoRA en LibreYOLO
+description: >-
+  Haz fine-tuning de un detector transformer con poca VRAM usando lora=True. Qué
+  nueve familias lo soportan, la receta de adaptadores de cada una y cómo se
+  comportan los checkpoints.
+lead: >-
+  LoRA congela las partes pesadas preentrenadas de un modelo y entrena junto a
+  ellas pequeños adaptadores de bajo rango, más las capas que deben seguir
+  siendo densas. En LibreYOLO toda la interfaz pública es un booleano.
 keywords:
   - fine tuning lora
   - fine tuning eficiente en parametros
@@ -12,7 +18,7 @@ keywords:
   - rf-detr lora
   - d-fine lora
   - fusionar adaptadores lora
-last_verified: "1.5.0"
+last_verified: 1.5.0
 snippets:
   install:
     - label: pip
@@ -50,6 +56,7 @@ snippets:
         merged = merge_lora_adapters(model.model)
 
         print(f"{merged} adapter layers folded into dense weights")
+source_hash: 603fdddf5ec0c316
 ---
 
 ## Instalación

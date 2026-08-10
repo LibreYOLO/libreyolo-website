@@ -1,10 +1,21 @@
 ---
 title: libreyolo quantize
-seo_title: "справочник по команде libreyolo quantize"
-description: "Квантизация чекпойнта в PyTorch из командной строки: рецепты, аргументы калибровки, значения по умолчанию и семейства, которые принимает каждый рецепт."
-lead: "Заменяет float-модули модели на квантизованные, калибрует их на изображениях без разметки, когда рецепту нужна статистика, и сохраняет результат как чекпойнт PyTorch."
-keywords: [libreyolo quantize cli, квантизация int8 из командной строки, квантизация fp8, квантизация после обучения yolo, аргументы libreyolo quantize]
-last_verified: "1.5.0"
+seo_title: справочник по команде libreyolo quantize
+description: >-
+  Квантизация чекпойнта в PyTorch из командной строки: рецепты, аргументы
+  калибровки, значения по умолчанию и семейства, которые принимает каждый
+  рецепт.
+lead: >-
+  Заменяет float-модули модели на квантизованные, калибрует их на изображениях
+  без разметки, когда рецепту нужна статистика, и сохраняет результат как
+  чекпойнт PyTorch.
+keywords:
+  - libreyolo quantize cli
+  - квантизация int8 из командной строки
+  - квантизация fp8
+  - квантизация после обучения yolo
+  - аргументы libreyolo quantize
+last_verified: 1.5.0
 meta:
   - label: Команда
     value: libreyolo quantize
@@ -13,7 +24,9 @@ meta:
     value: model
     mono: true
   - label: Вывод
-    value: "Путь к исходному файлу с -<recipe> перед суффиксом, например LibreYOLO9s-int8.pt"
+    value: >-
+      Путь к исходному файлу с -<recipe> перед суффиксом, например
+      LibreYOLO9s-int8.pt
     mono: true
 snippets:
   examples:
@@ -22,19 +35,23 @@ snippets:
       code: |
         # Калибрует на coco128 и записывает LibreYOLO9s-int8.pt
         libreyolo quantize model=LibreYOLO9s.pt recipe=int8
-    - label: Только приведение типа, без калибровки
+    - label: 'Только приведение типа, без калибровки'
       language: bash
       code: |
         libreyolo quantize model=LibreYOLO9s.pt recipe=fp16 calib=none \
           out=weights/LibreYOLO9s-fp16.pt
     - label: Более широкая калибровка и восстановление точности
       language: bash
-      code: |
+      code: >
         libreyolo quantize model=LibreYOLO9s.pt recipe=int8 \
           calib=coco128.yaml samples=256 batch=16 algorithm=minmax
 
-        # Обучение с учётом квантизации на квантизованном чекпойнте восстанавливает точность.
-        libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10 lr0=0.001
+        # Обучение с учётом квантизации на квантизованном чекпойнте
+        восстанавливает точность.
+
+        libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
+        lr0=0.001
+source_hash: 7ae663e9f117826e
 ---
 
 ## Синтаксис

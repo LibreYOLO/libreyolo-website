@@ -1,8 +1,16 @@
 ---
 title: Cuantización
-seo_title: "Cuantizar un modelo LibreYOLO en PyTorch"
-description: "La API de cuantización de LibreYOLO en PyTorch: nueve recetas, la calibración separada de los datos de entrenamiento, QAT y QAD, y dos artefactos de despliegue."
-lead: "La cuantización en LibreYOLO se ejecuta enteramente en PyTorch: model.quantize() sustituye los módulos Conv2d y Linear de un modelo por equivalentes cuantizados y los calibra. El resultado mantiene el contrato habitual de predict, val, train y save, así que un modelo cuantizado se puntúa con los mismos validadores que uno en float."
+seo_title: Cuantizar un modelo LibreYOLO en PyTorch
+description: >-
+  La API de cuantización de LibreYOLO en PyTorch: nueve recetas, la calibración
+  separada de los datos de entrenamiento, QAT y QAD, y dos artefactos de
+  despliegue.
+lead: >-
+  La cuantización en LibreYOLO se ejecuta enteramente en PyTorch:
+  model.quantize() sustituye los módulos Conv2d y Linear de un modelo por
+  equivalentes cuantizados y los calibra. El resultado mantiene el contrato
+  habitual de predict, val, train y save, así que un modelo cuantizado se puntúa
+  con los mismos validadores que uno en float.
 keywords:
   - cuantización libreyolo
   - ptq int8 pytorch
@@ -12,46 +20,65 @@ keywords:
   - fp8 e4m3
   - dataset de calibración
   - exportar onnx qdq
-last_verified: "1.5.0"
+last_verified: 1.5.0
 meta:
   - label: Llamada
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
     mono: true
   - label: Comando
-    value: "libreyolo quantize --model M.pt --recipe int8 --calib coco128.yaml"
+    value: libreyolo quantize --model M.pt --recipe int8 --calib coco128.yaml
     mono: true
   - label: Extra
-    value: "Ninguno. La cuantización se ejecuta en PyTorch."
+    value: Ninguno. La cuantización se ejecuta en PyTorch.
   - label: Familias
-    value: "yolo9, rfdetr, birefnet, feynobg"
+    value: 'yolo9, rfdetr, birefnet, feynobg'
   - label: Recetas
-    value: "fp16, bf16, fp8, int8, w4a16, w4a8, nvfp4, mxfp4, int2"
+    value: 'fp16, bf16, fp8, int8, w4a16, w4a8, nvfp4, mxfp4, int2'
     mono: true
   - label: Artefactos de despliegue
-    value: 'export(format="pt") para un checkpoint empaquetado, export(format="onnx") para un grafo QDQ INT8'
+    value: >-
+      export(format="pt") para un checkpoint empaquetado, export(format="onnx")
+      para un grafo QDQ INT8
     mono: true
-verification: "Leído de libreyolo/quant/api.py, libreyolo/models/base/model.py, libreyolo/cli/commands/quantize.py y docs/quantization.md en la rama dev. Las cifras de tamaño de los checkpoints son los valores medidos que se registran en docs/quantization.md."
+verification: >-
+  Leído de libreyolo/quant/api.py, libreyolo/models/base/model.py,
+  libreyolo/cli/commands/quantize.py y docs/quantization.md en la rama dev. Las
+  cifras de tamaño de los checkpoints son los valores medidos que se registran
+  en docs/quantization.md.
 snippets:
   quantize:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # Intercambio de estructura más calibración. calib es un pequeño conjunto
+
+        # Intercambio de estructura más calibración. calib es un pequeño
+        conjunto
+
         # de imágenes SIN ETIQUETAR, leído solo hacia delante para derivar los
+
         # rangos de activación y las escalas.
-        qmodel = model.quantize(recipe="int8", calib="coco128.yaml", samples=128)
+
+        qmodel = model.quantize(recipe="int8", calib="coco128.yaml",
+        samples=128)
+
 
         print(qmodel.quant_info())
-        qmodel.val(data="coco8.yaml")          # los mismos validadores que un modelo float
-        qmodel.save("LibreYOLO9s-int8.pt")     # el checkpoint lleva un manifiesto quant
+
+        qmodel.val(data="coco8.yaml")          # los mismos validadores que un
+        modelo float
+
+        qmodel.save("LibreYOLO9s-int8.pt")     # el checkpoint lleva un
+        manifiesto quant
     - label: CLI
       language: bash
-      code: |
-        libreyolo quantize --model LibreYOLO9s.pt --recipe int8 --calib coco128.yaml
+      code: >
+        libreyolo quantize --model LibreYOLO9s.pt --recipe int8 --calib
+        coco128.yaml
     - label: Argumentos
       language: python
       code: |
@@ -77,12 +104,16 @@ snippets:
   train:
     - label: QAT es un train() normal sobre un modelo cuantizado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         qmodel = LibreYOLO("LibreYOLO9s-int8.pt")
 
-        # Un fine-tuning, no una ejecución desde cero: usa learning rates de fine-tuning.
+
+        # Un fine-tuning, no una ejecución desde cero: usa learning rates de
+        fine-tuning.
+
         qmodel.train(data="coco8.yaml", epochs=5, lr0=1e-4)
     - label: QAD añade los argumentos de destilación existentes
       language: python
@@ -95,21 +126,30 @@ snippets:
         )
     - label: CLI
       language: bash
-      code: |
-        libreyolo train --model LibreYOLO9s-int8.pt --data coco8.yaml --epochs 5 --lr0 1e-4
+      code: >
+        libreyolo train --model LibreYOLO9s-int8.pt --data coco8.yaml --epochs 5
+        --lr0 1e-4
   export:
     - label: Checkpoint de PyTorch empaquetado
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         qmodel = LibreYOLO("LibreYOLO9s-int8.pt")
 
-        # Escribe LibreYOLO9s-int8-final.pt: pesos y escalas empaquetados en baja
-        # precisión, maestros fp32 eliminados, resto no cuantizado convertido a fp16.
+
+        # Escribe LibreYOLO9s-int8-final.pt: pesos y escalas empaquetados en
+        baja
+
+        # precisión, maestros fp32 eliminados, resto no cuantizado convertido a
+        fp16.
+
         qmodel.export(format="pt")
 
+
         # remainder="fp32" mantiene exactos los tensores no cuantizados.
+
         qmodel.export(format="pt", remainder="fp32")
     - label: QDQ INT8 ONNX
       language: python
@@ -126,16 +166,22 @@ snippets:
       code: |
         libreyolo export --model LibreYOLO9s-int8.pt --format onnx
   dequantize:
-    - label: Vuelta a float, conservando los pesos entrenados con QAT
+    - label: 'Vuelta a float, conservando los pesos entrenados con QAT'
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         qmodel = LibreYOLO("LibreYOLO9s-int8.pt")
+
         qmodel.dequantize()
 
-        # Ahora sirve cualquier exportador float, en cualquier precisión que soporte.
+
+        # Ahora sirve cualquier exportador float, en cualquier precisión que
+        soporte.
+
         qmodel.export(format="tensorrt", half=True)
+source_hash: 4ffb06b87cad017e
 ---
 
 ## Instalación

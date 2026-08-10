@@ -1,11 +1,23 @@
 ---
 title: SAM
-families: [sam]
-seo_title: "SAM（Segment Anything）：在 LibreYOLO 里预测掩码"
-description: "在 LibreYOLO 里用 SAM 做点提示和框提示的可提示分割。安装并用 Apache-2.0 许可的 base、large 和 huge 检查点跑预测。"
-lead: "SAM（Segment Anything）把一次点击的点或框变成物体掩码。LibreYOLO 通过一个专门的 LibreSAM 工厂函数加载它，与 LibreYOLO() 检测器工厂函数分开，因为一个可提示的模型需要不同的调用形式。"
-keywords: [SAM, Segment Anything, "可提示分割", "交互式分割 python", "点一下分割物体", "sam 分割一切", Meta AI]
-last_verified: "1.5.0"
+families:
+  - sam
+seo_title: SAM（Segment Anything）：在 LibreYOLO 里预测掩码
+description: >-
+  在 LibreYOLO 里用 SAM 做点提示和框提示的可提示分割。安装并用 Apache-2.0 许可的 base、large 和 huge
+  检查点跑预测。
+lead: >-
+  SAM（Segment Anything）把一次点击的点或框变成物体掩码。LibreYOLO 通过一个专门的 LibreSAM 工厂函数加载它，与
+  LibreYOLO() 检测器工厂函数分开，因为一个可提示的模型需要不同的调用形式。
+keywords:
+  - SAM
+  - Segment Anything
+  - 可提示分割
+  - 交互式分割 python
+  - 点一下分割物体
+  - sam 分割一切
+  - Meta AI
+last_verified: 1.5.0
 snippets:
   predict:
     - label: 点提示与框提示
@@ -41,6 +53,7 @@ snippets:
         a = model.predict(points=[640, 420], labels=[1])
         b = model.predict(bboxes=[300, 200, 900, 700])
         model.reset_image()
+source_hash: f8904d241ef8a929
 ---
 
 ## 安装

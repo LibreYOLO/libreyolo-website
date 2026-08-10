@@ -1,11 +1,21 @@
 ---
 title: BiRefNet
-families: [birefnet]
-seo_title: "BiRefNet：LibreYOLO 里的背景移除与抠图"
-description: "在 LibreYOLO 里用 BiRefNet 做背景移除和二分图像分割。安装、预测、验证并导出通用检查点。"
-lead: "一种双边参考（bilateral-reference）网络，预测一张把主体和背景分开的柔和 alpha matte。LibreYOLO 为 BiRefNet 的 matte 任务提供推理和验证。"
-keywords: [BiRefNet, "birefnet 抠图", "背景移除 python", "图像抠图 模型", "alpha matte", "二分图像分割", "透明背景 png python"]
-last_verified: "1.5.0"
+families:
+  - birefnet
+seo_title: BiRefNet：LibreYOLO 里的背景移除与抠图
+description: 在 LibreYOLO 里用 BiRefNet 做背景移除和二分图像分割。安装、预测、验证并导出通用检查点。
+lead: >-
+  一种双边参考（bilateral-reference）网络，预测一张把主体和背景分开的柔和 alpha matte。LibreYOLO 为 BiRefNet
+  的 matte 任务提供推理和验证。
+keywords:
+  - BiRefNet
+  - birefnet 抠图
+  - 背景移除 python
+  - 图像抠图 模型
+  - alpha matte
+  - 二分图像分割
+  - 透明背景 png python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +30,10 @@ snippets:
         print(matte.array.shape, matte.array.dtype)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreBiRefNetl-matte.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreBiRefNetl-matte.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: 抠图
       language: python
       code: |
@@ -71,6 +83,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
+source_hash: 1af1bd7f4f905081
 ---
 
 ## 安装

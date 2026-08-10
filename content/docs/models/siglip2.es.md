@@ -1,11 +1,29 @@
 ---
 title: SigLIP2
-families: [siglip2]
-seo_title: "SigLIP2 en LibreYOLO: clasificación y embeddings zero-shot"
-description: "Usa SigLIP2 en LibreYOLO para clasificación de imágenes zero-shot y embeddings de imagen y texto, con puntuación sigmoide multi-etiqueta. Sin entrenamiento."
-lead: "SigLIP2 es un modelo de doble torre que puntúa una imagen frente a prompts de texto con una sigmoide independiente por clase, en lugar de un softmax compartido sobre un conjunto fijo de etiquetas. LibreYOLO lo soporta para clasificación zero-shot y embeddings de imagen y texto, sin ningún paso de entrenamiento."
-keywords: [SigLIP2, SigLIP 2, "clasificación zero-shot", "clasificar imágenes sin entrenar", "embeddings de imágenes python", "embeddings de texto", "clasificación multietiqueta", "vocabulario abierto", "modelo multilingüe imagen texto", sigmoid loss]
-last_verified: "1.5.0"
+families:
+  - siglip2
+seo_title: 'SigLIP2 en LibreYOLO: clasificación y embeddings zero-shot'
+description: >-
+  Usa SigLIP2 en LibreYOLO para clasificación de imágenes zero-shot y embeddings
+  de imagen y texto, con puntuación sigmoide multi-etiqueta. Sin entrenamiento.
+lead: >-
+  SigLIP2 es un modelo de doble torre que puntúa una imagen frente a prompts de
+  texto con una sigmoide independiente por clase, en lugar de un softmax
+  compartido sobre un conjunto fijo de etiquetas. LibreYOLO lo soporta para
+  clasificación zero-shot y embeddings de imagen y texto, sin ningún paso de
+  entrenamiento.
+keywords:
+  - SigLIP2
+  - SigLIP 2
+  - clasificación zero-shot
+  - clasificar imágenes sin entrenar
+  - embeddings de imágenes python
+  - embeddings de texto
+  - clasificación multietiqueta
+  - vocabulario abierto
+  - modelo multilingüe imagen texto
+  - sigmoid loss
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,10 +38,14 @@ snippets:
         print(model.names[result.probs.top1], float(result.probs.top1conf))
     - label: CLI
       language: bash
-      code: |
+      code: >
         # Sin una llamada a set_classes(), predict desde la CLI usa los 1.000
+
         # nombres de clase de ImageNet que el modelo carga por defecto.
-        libreyolo predict model=LibreSigLIP2b16-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+
+        libreyolo predict model=LibreSigLIP2b16-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Puntuación sigmoide multi-etiqueta
       language: python
       code: |
@@ -40,28 +62,41 @@ snippets:
             print(name, float(r.probs.data[i]))
     - label: Embeddings de imagen y texto
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreSigLIP2b16-cls.pt", task="embed")
+
         image_embed = model(SAMPLE_IMAGE).embeddings.data
+
         text_embed = model.embed_text("a photo of a forklift")
 
-        # Ambos están normalizados con L2, así que un simple producto escalar es la similitud coseno.
+
+        # Ambos están normalizados con L2, así que un simple producto escalar es
+        la similitud coseno.
+
         similarity = (image_embed @ text_embed.T).item()
   val:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreSigLIP2b16-cls.pt")
 
+
         # data es una raíz ImageFolder con un split train/; sus nombres de
-        # carpeta se convierten en los prompts de clase zero-shot de esta ejecución.
+
+        # carpeta se convierten en los prompts de clase zero-shot de esta
+        ejecución.
+
         metrics = model.val(data="imagenette160")
 
+
         print(metrics["metrics/accuracy_top1"])
+
         print(metrics["metrics/accuracy_top5"])
     - label: CLI
       language: bash
@@ -94,6 +129,7 @@ snippets:
         # task="embed" traza solo la torre de imagen; no hacen falta clases.
         model = LibreYOLO("LibreSigLIP2b16-cls.pt", task="embed")
         model.export(format="onnx")
+source_hash: f992655747fd8819
 ---
 
 ## Instalación
