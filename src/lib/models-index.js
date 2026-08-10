@@ -108,8 +108,16 @@ const TASK_META = {
     blurb: 'Denoising, deblurring and upscaling.',
     image: '/showcase/task-restore.jpg',
   },
-  ocr: { label: 'Text recognition', blurb: 'Finding and reading text in an image.' },
-  embed: { label: 'Embeddings', blurb: 'Vectors for search, clustering and retrieval.' },
+  ocr: {
+    label: 'Text recognition',
+    blurb: 'Finding and reading text in an image.',
+    image: '/showcase/task-ocr.jpg',
+  },
+  embed: {
+    label: 'Embeddings',
+    blurb: 'Vectors for search, clustering and retrieval.',
+    image: '/showcase/task-embed.jpg',
+  },
   edge: { label: 'Edge detection', blurb: 'Contours and boundaries.' },
   mesh: { label: 'Mesh', blurb: '3D geometry from an image.' },
 }

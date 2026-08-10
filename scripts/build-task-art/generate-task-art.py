@@ -9,21 +9,18 @@ page is the library's own output rather than a stock illustration.
 Sources are the library's own demo photographs, so the stills sit next to the
 three existing clips without looking borrowed, and nothing new needs licensing.
 
-Rendered today: semantic, panoptic, normal, matte, restore.
+Rendered: semantic, panoptic, normal, matte, restore, ocr, embed.
 
-Still outstanding, each for its own reason:
+Two are still outstanding:
 
   edge   DexiNed and TEED are BIPED-trained and LibreYOLO deliberately does not
-         mirror those checkpoints, so there is nothing to download. Needs a
-         locally converted checkpoint via weights/convert_teed_weights.py.
-  mesh   LibreSAM3DBody weights exist on the org but the loader cannot parse a
-         size out of the filename, so auto-download never starts.
-  ocr    Needs text in frame. The RF100-VL thumbnails that carry text are
-         photographs of real commercial packaging, which is not something to
-         put on a marketing page, and PP-OCR returned no boxes through the
-         attribute this script reads. Needs an unbranded source first.
-  embed  Deliberately absent. Embeddings have no image output, so a still would
-         be an invented diagram rather than a model run.
+         mirror those checkpoints, so there is nothing to download. Convert one
+         you are licensed to use with weights/convert_teed_weights.py, or mirror
+         the checkpoints on the org and this recipe starts working as written.
+  mesh   LibreSAM3DBodyd3-mesh is public on the org but the file is named
+         model.ckpt while the loader expects LibreSAM3DBodyd3-mesh.pt, so it
+         fails with "could not determine download URL". Library bug, not a
+         licence problem.
 
 Each task is independent: one failing model does not stop the rest, and the
 script reports at the end which stills exist and which did not render.
@@ -173,26 +170,180 @@ def art_panoptic():
     return colorize_labels(img, arr)
 
 
-def art_ocr():
-    # Needs text in frame. These thumbnails already ship on the RF100-VL
-    # article page, so no new asset licensing decision is involved.
-    src = next((DATASETS / c for c in ("wine-labels.webp", "invoice-processing.webp",
-                                       "water-meter.webp", "signatures.webp")
-                if (DATASETS / c).exists()), None)
-    if src is None:
-        raise FileNotFoundError("no text-bearing source thumbnail found")
+def make_ocr_document(path: Path) -> None:
+    """Render the sheet PP-OCR reads.
 
-    res, img = predict("LibrePPOCRl-ocr.pt", src)
-    ocr = res.ocr
+    Every text-bearing photograph to hand was of real commercial packaging,
+    which is not something to put on a marketing page, so the input is drawn
+    here instead: an invented calibration certificate with no real company,
+    product or person on it. The input is synthetic; the boxes and the strings
+    on top of it are a real PP-OCRv5 run.
+    """
+    from PIL import Image, ImageDraw, ImageFont
+
+    def font(size, bold=False):
+        for name in (("arialbd.ttf" if bold else "arial.ttf"), "segoeui.ttf"):
+            try:
+                return ImageFont.truetype(name, size)
+            except Exception:
+                continue
+        return ImageFont.load_default()
+
+    # Drawn at 16:9 so the saved still needs no crop; at 1400x900 the centre
+    # crop took the top off the heading.
+    w, h = 1400, 788
+    doc = Image.new("RGB", (w, h), (250, 249, 246))
+    d = ImageDraw.Draw(doc)
+    d.rectangle([0, 0, w, 88], fill=(237, 235, 230))
+    d.text((60, 26), "CALIBRATION REPORT", font=font(38, True), fill=(24, 24, 28))
+    d.text((1030, 34), "No. 4471-B", font=font(25), fill=(70, 70, 76))
+
+    rows = [
+        ("Instrument", "Optical bench K-12"),
+        ("Serial number", "SN 8842 1907"),
+        ("Date of test", "2026-08-10"),
+        ("Ambient temperature", "21.4 C"),
+        ("Relative humidity", "43 %"),
+        ("Measured deviation", "0.018 mm"),
+        ("Tolerance", "0.050 mm"),
+        ("Result", "PASS"),
+    ]
+    y = 124
+    for key, value in rows:
+        d.text((60, y), key, font=font(26), fill=(92, 92, 98))
+        d.text((560, y), value, font=font(26, True), fill=(20, 20, 24))
+        d.line([(60, y + 44), (w - 60, y + 44)], fill=(223, 221, 216), width=2)
+        y += 72
+
+    d.text((60, y + 20), "Signed by the calibration technician", font=font(23), fill=(122, 122, 128))
+    doc.save(path)
+
+
+def art_ocr():
+    from libreyolo import LibreYOLO
+
+    src = Path(__file__).parent / "_ocr-document.png"
+    make_ocr_document(src)
+
+    # PP-OCR returns one result per text region rather than one result holding
+    # every region, so the whole list is the detection set.
+    model = LibreYOLO("LibrePPOCRl-ocr.pt")
+    try:
+        results = model.predict(str(src), verbose=False)
+    finally:
+        del model
+        gc.collect()
+
+    img = cv2.imread(str(src))
+    src.unlink(missing_ok=True)
+
     out = img.copy()
-    # Boxes are quadrilaterals for text detection, so draw polygons rather than
-    # rectangles; slanted labels on a bottle are the whole point of the task.
-    polys = getattr(ocr, "boxes", None)
-    polys = as_array(polys) if polys is not None else np.empty((0,))
-    for poly in polys:
-        pts = np.asarray(poly, dtype=np.int32).reshape(-1, 2)
-        cv2.polylines(out, [pts], isClosed=True, color=(80, 220, 120), thickness=2)
+    drawn = 0
+    for res in results:
+        regions = getattr(res, "ocr", None)
+        if regions is None:
+            continue
+        polys = as_array(getattr(regions, "polygons"))
+        texts = list(getattr(regions, "texts", []) or [])
+        for i, poly in enumerate(polys):
+            pts = np.asarray(poly, dtype=np.int32).reshape(-1, 2)
+            cv2.polylines(out, [pts], isClosed=True, color=(90, 200, 110), thickness=3)
+            drawn += 1
+            # Echo the recognised string above its box, which is the half of
+            # OCR a box alone does not show.
+            if i < len(texts) and texts[i]:
+                x, y = pts[:, 0].min(), pts[:, 1].min()
+                cv2.putText(out, str(texts[i])[:28], (int(x), max(int(y) - 8, 16)),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.62, (28, 120, 44), 2, cv2.LINE_AA)
+
+    if drawn == 0:
+        raise RuntimeError("PP-OCR found no text regions")
+    print(f"    {drawn} text regions read", flush=True)
     return out
+
+
+def art_embed():
+    """Embeddings have no picture of their own, so show what they are for.
+
+    One query thumbnail, then the four nearest of the other ninety-nine by
+    cosine similarity in CLIP space, scored. Every number on it comes from a
+    real forward pass; nothing here is a diagram of how embeddings work.
+    """
+    from libreyolo import LibreYOLO
+
+    thumbs = sorted(DATASETS.glob("*.webp"))
+    if len(thumbs) < 12:
+        raise FileNotFoundError("not enough dataset thumbnails to retrieve against")
+
+    model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
+    try:
+        results = model.predict([str(p) for p in thumbs], verbose=False)
+    finally:
+        del model
+        gc.collect()
+
+    vectors, kept = [], []
+    for path, res in zip(thumbs, results):
+        emb = getattr(res, "embeddings", None)
+        if emb is None:
+            continue
+        vec = as_array(emb).astype(np.float32).reshape(-1)
+        norm = np.linalg.norm(vec)
+        if norm == 0:
+            continue
+        vectors.append(vec / norm)
+        kept.append(path)
+
+    if len(vectors) < 6:
+        raise RuntimeError(f"only {len(vectors)} embeddings came back")
+
+    matrix = np.stack(vectors)
+    sims = matrix @ matrix.T
+    np.fill_diagonal(sims, -1)
+
+    # Query the image whose best match is strongest, so the still shows the
+    # retrieval working rather than an arbitrary and possibly poor example.
+    query = int(sims.max(axis=1).argmax())
+    order = np.argsort(-sims[query])[:4]
+
+    # Composed at the final 16:9 directly, because a wide strip would be
+    # centre-cropped on save and the query tile would be the first thing lost.
+    # Query large on the left, its four nearest in a block on the right, which
+    # fills the frame instead of leaving two thirds of it empty.
+    panel = np.full((OUT_H, OUT_W, 3), 246, np.uint8)
+    big, small, gap = 470, 250, 24
+    font = cv2.FONT_HERSHEY_SIMPLEX
+
+    def place(idx, x, y, size, score=None, is_query=False):
+        img = cv2.imread(str(kept[idx]))
+        if img is None:
+            return
+        panel[y : y + size, x : x + size] = cv2.resize(img, (size, size), interpolation=cv2.INTER_AREA)
+        cv2.rectangle(panel, (x, y), (x + size, y + size),
+                      (40, 40, 44) if is_query else (203, 201, 197), 3 if is_query else 1)
+        head = "query" if is_query else f"{score:.3f}"
+        cv2.putText(panel, head, (x, y - 12), font, 0.78 if is_query else 0.68,
+                    (28, 28, 32) if is_query else (108, 106, 110), 2, cv2.LINE_AA)
+        cv2.putText(panel, kept[idx].stem[:24], (x, y + size + 24), font, 0.5,
+                    (122, 120, 124), 1, cv2.LINE_AA)
+
+    qx, qy = gap * 2, (OUT_H - big) // 2
+    place(query, qx, qy, big, is_query=True)
+
+    # Each neighbour needs a score above it and a name below, so a row is
+    # taller than its tile. Sizing on the tile alone clipped both.
+    label_h, caption_h, row_gap = 30, 28, 26
+    row_h = label_h + small + caption_h
+    gx = qx + big + gap * 3
+    top = (OUT_H - (row_h * 2 + row_gap)) // 2 + label_h
+
+    for n, idx in enumerate(order):
+        col, row = n % 2, n // 2
+        place(int(idx), gx + col * (small + gap * 2), top + row * (row_h + row_gap),
+              small, score=float(sims[query][idx]))
+
+    print(f"    query={kept[query].stem}, top={[kept[i].stem for i in order]}", flush=True)
+    return panel
 
 
 def art_matte():
@@ -273,8 +424,7 @@ RECIPES = {
     "task-edge.jpg": ("edge", art_edge),
     "task-normal.jpg": ("normal", art_normal),
     "task-mesh.jpg": ("mesh", art_mesh),
-    # 'embed' is deliberately absent: embeddings have no image output, so a
-    # still would have to be an invented diagram rather than a model run.
+    "task-embed.jpg": ("embed", art_embed),
 }
 
 

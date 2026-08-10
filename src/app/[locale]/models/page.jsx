@@ -119,22 +119,28 @@ function ModelRow({ model, docsLabel, weightsLabel }) {
             </a>
           )}
           {/* Only the families LibreYOLO does not host carry a note, so the
-              marker doubles as a signal that the link leaves for upstream. */}
-          {model.weightsNote && (
-            <button
-              type="button"
-              onClick={() => setNoteOpen((v) => !v)}
-              aria-expanded={noteOpen}
-              title={model.weightsNote}
-              className={`flex h-4 w-4 items-center justify-center rounded-full border font-mono text-[9px] leading-none transition-colors ${
-                noteOpen
-                  ? 'border-libre-500 text-libre-600 dark:border-libre-400 dark:text-libre-400'
-                  : 'border-surface-300 text-surface-400 hover:border-libre-500 hover:text-libre-600 dark:border-surface-600 dark:text-surface-500 dark:hover:border-libre-400 dark:hover:text-libre-400'
-              }`}
-            >
-              ?
-            </button>
-          )}
+              marker doubles as a signal that the link leaves for upstream.
+              The slot is always rendered, empty when there is nothing to
+              explain, so docs and weights stay on the same vertical line down
+              the whole list instead of shifting row by row. */}
+          <span className="flex h-4 w-4 shrink-0 items-center justify-center self-center">
+            {model.weightsNote && (
+              <button
+                type="button"
+                onClick={() => setNoteOpen((v) => !v)}
+                aria-expanded={noteOpen}
+                aria-label={`Why ${model.name} weights come from elsewhere`}
+                title={model.weightsNote}
+                className={`flex h-4 w-4 items-center justify-center rounded-full border font-mono text-[9px] leading-none transition-colors ${
+                  noteOpen
+                    ? 'border-libre-500 text-libre-600 dark:border-libre-400 dark:text-libre-400'
+                    : 'border-surface-300 text-surface-400 hover:border-libre-500 hover:text-libre-600 dark:border-surface-600 dark:text-surface-500 dark:hover:border-libre-400 dark:hover:text-libre-400'
+                }`}
+              >
+                ?
+              </button>
+            )}
+          </span>
         </div>
       </div>
       {noteOpen && model.weightsNote && (
