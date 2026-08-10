@@ -138,6 +138,11 @@ export function tierMeta(tier) {
 //
 // kind drives nothing but the wording of the note; the link is the point.
 const WEIGHTS_SOURCE = {
+  // Mirrored on the LibreYOLO org. These were upstream links until the weights
+  // were checked for redistribution rights and copied across; the note says so
+  // because the licence still travels with the file.
+  //   sam, moge2, facerec
+
   // Downloaded from the upstream project on first use, permissive licence.
   dinov2: {
     url: 'https://github.com/facebookresearch/dinov2',
@@ -148,20 +153,16 @@ const WEIGHTS_SOURCE = {
     note: 'MIT weights, downloaded from the upstream project on first use.',
   },
   sam: {
-    url: 'https://github.com/facebookresearch/segment-anything',
-    note: 'Apache-2.0 weights, downloaded from the upstream project on first use.',
+    url: 'https://huggingface.co/LibreYOLO?search_models=LibreSAM',
+    note: 'Apache-2.0. Mirrored on the LibreYOLO org, so nothing is fetched from Meta at load time.',
   },
-  // moge2 is mirrored on the org now (s and l), so it is deliberately absent
-  // from this map: weightsLink falls through to the hosted branch once the
-  // registry is regenerated. Until then it keeps the upstream link, which is
-  // still correct for the b size.
   moge2: {
     url: 'https://huggingface.co/LibreYOLO?search_models=LibreMoGe2',
     note: 'Mirrored on the LibreYOLO org for the s and l sizes; b still downloads from the authors on Hugging Face and is checksum-pinned.',
   },
   facerec: {
-    url: 'https://huggingface.co/fal/AuraFace-v1',
-    note: 'Wraps AuraFace. Apache-2.0 weights, downloaded from the upstream repo on first use.',
+    url: 'https://huggingface.co/LibreYOLO?search_models=librefacerec',
+    note: 'Apache-2.0, derived from AuraFace. Already served from the LibreYOLO org as librefacerec-l and librefacerec-det.',
   },
 
   // Restricted checkpoints. LibreYOLO refuses to mirror them and fetches from
