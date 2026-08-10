@@ -1,7 +1,7 @@
 ---
 title: "RF100-VL: benchmarking detectors on one hundred real datasets"
-description: We are running 15 detection families across all 100 RF100-VL datasets. Here is the benchmark explained, an interactive map of the datasets, and the first two verified results.
-date: 2026-07-31
+description: We are running 15 detector configurations across all 100 RF100-VL datasets. Here is the benchmark explained, an interactive map of the datasets, and seven verified results.
+date: 2026-08-09
 author: Xuban
 layout: paper
 tags: [LibreYOLO, RF100-VL, benchmark, object-detection, roboflow]
@@ -9,9 +9,9 @@ faq:
   - q: "What is RF100-VL?"
     a: "RF100-VL is a benchmark of 100 real-world object detection datasets collected from Roboflow Universe, spanning seven domains: aerial, document, flora and fauna, industrial, medical, sports, and a misc category. It was introduced by Roboflow to measure how well detectors generalize beyond COCO. It is a dataset benchmark, not a model: any detector can be evaluated on it."
   - q: "What is the RF100-VL protocol in this report?"
-    a: "For each model family we fine-tune the COCO-pretrained checkpoint for 100 epochs on each dataset's train split, then score that dataset's test split with pycocotools at maxDets 500. We report the unweighted mean of mAP50 and mAP50-95 across the 100 datasets, plus the median training time per dataset. A run only counts as a result when all 100 datasets completed."
+    a: "For each model we fine-tune the COCO-pretrained checkpoint for 100 epochs on each dataset's train split, then score that dataset's test split with pycocotools at maxDets 500. We report the unweighted mean of mAP50 and mAP50-95 across the 100 datasets, plus the median training time per dataset. A run only counts as a result when all 100 datasets completed."
   - q: "Which models have completed the RF100-VL sweep so far?"
-    a: "Two: YOLOv9-S at 0.559 mAP50-95 and 0.814 mAP50, and YOLOv9-T at 0.540 mAP50-95 and 0.796 mAP50. Both trained and scored all 100 datasets with none skipped, at a median of roughly 33 minutes per dataset. The other families are still running and are not listed until they finish a full 100."
+    a: "Seven models have completed verified 100-dataset sweeps. YOLO-NAS-S leads at 0.5800 mAP50-95, followed by YOLOX-M at 0.5701, YOLOv9-S at 0.5591, YOLOX-S at 0.5525, YOLOv9-T at 0.5402, YOLOX-Tiny at 0.5218, and YOLOX-Nano at 0.4853. Every listed model trained and scored all 100 datasets with none skipped."
   - q: "Where can I check the RF100-VL numbers myself?"
     a: "Every artifact is published at huggingface.co/datasets/LibreYOLO/rf100-vl-results: the per-dataset training configs, per-epoch metrics, logs, GPU telemetry, scoring inputs and the submission JSON. Each run carries a manifest.json pinning the exact LibreYOLO and harness commits that produced it."
 ---
@@ -20,7 +20,7 @@ faq:
 
 COCO has 80 classes and a decade of overfitting behind it. If you want to know whether a detector actually works in the real world, you need a harder test. That test is **RF100-VL**: 100 datasets pulled from Roboflow Universe, crowdsourced from real projects, and grouped into seven domains: aerial, document, flora and fauna, industrial, medical, sports, and everything else.
 
-We are running it across **15 detection families** in LibreYOLO: one representative model per family, fine-tuned for 100 epochs on each dataset's `train` split, then evaluated on its `test` split. 15 families x 100 datasets means 1,500 training runs. This article is the living report.
+We are running **15 detector configurations** from LibreYOLO's supported families, each fine-tuned for 100 epochs on every dataset's `train` split, then evaluated on its `test` split. 15 models x 100 datasets means 1,500 training runs. This article is the living report.
 
 ## The 100 datasets
 
@@ -37,18 +37,18 @@ A few things that make RF100-VL genuinely hard:
 
 ## The protocol
 
-For each family we take the COCO-pretrained checkpoint at the smallest practical size (S for most, R18 for RT-DETR, T for YOLOv9 E2E) and fine-tune 100 epochs at 640 px (576 for RF-DETR). Then `model.val(split="test")`, scored with pycocotools at maxDets 500. We track three numbers per family: **mAP50**, **mAP50-95**, and the **median wall-clock training time** per dataset, because accuracy you cannot afford to train is not accuracy.
+For each model we take a COCO-pretrained checkpoint and fine-tune it for 100 epochs, then run `model.val(split="test")`, scored with pycocotools at maxDets 500. We track three numbers per model: **mAP50**, **mAP50-95**, and the **median wall-clock training time** per dataset, because accuracy you cannot afford to train is not accuracy.
 
-One rule governs what appears below: a family is listed only after it has trained and scored all 100 datasets from a clean state under one set of commits. A partial sweep is a debugging artifact, not a result, so it is not shown here at any confidence level.
+One rule governs what appears below: a model is listed only after it has trained and scored all 100 datasets from a clean state under one set of commits. A partial sweep is a debugging artifact, not a result, so it is not shown here at any confidence level.
 
 <rf100vl-results></rf100vl-results>
 
 ## Reading the results
 
-Two families have finished a full 100 so far, and both are YOLOv9. That is not a ranking yet, so read it as two reference points rather than a podium.
+Seven models across three families have finished a full 100. YOLO-NAS-S is the current leader at 0.5800 mAP50-95, with YOLOX-M close behind at 0.5701.
 
-* **Capacity buys less than you would guess.** YOLOv9-S carries 3.6 times the parameters of YOLOv9-T and converts that into 0.019 mAP50-95, from 0.540 to 0.559. On 100 diverse datasets, architecture and scale move the needle by hundredths, not percentage points.
-* **Training cost is flat between them.** Both sit near 33 minutes per dataset in the median, so the larger model is close to free here. Fine-tuning on a few hundred images is dominated by fixed per-dataset overhead, not by model size.
-* **The spread across datasets dwarfs the spread across models.** The gap between the two models is far smaller than the gap between the easiest and hardest datasets for either one. Which datasets resemble your problem matters more than which of these two you pick.
+* **Capacity helps, but family matters just as much.** Within YOLOX, scaling from Nano at 0.90M parameters to M at 25.28M moves mAP50-95 from 0.4853 to 0.5701. Within YOLOv9, 2.02M to 7.20M parameters buys only 0.0189, from 0.5402 to 0.5591. YOLO-NAS-S reaches 0.5800 with 19.02M parameters, beating the larger 25.28M YOLOX-M by 0.0099. The seven results turn the old one-pair anecdote into a consistent warning against choosing by parameter count alone.
+* **Training cost now separates the sizes.** The median training time per dataset runs from 18.8 minutes for YOLOX-Nano to 48.0 minutes for YOLOX-M. YOLO-NAS-S reaches the best accuracy at a 29.0-minute median, so the largest compute bill is not buying the top result.
+* **The spread across datasets dwarfs the spread across models.** The 0.0947 gap from YOLOX-Nano to YOLO-NAS-S is still far smaller than the gap between the easiest and hardest datasets for any one model. Which datasets resemble your problem can matter more than which of these seven you pick.
 
-Every number above is traceable to a published run, and a family appears only once it has trained and scored all 100 datasets. The full per-dataset breakdown, failure analysis and training curves land in the final report; until then this page grows as each sweep finishes.
+Every number above is traceable to a published run, and a model appears only once it has trained and scored all 100 datasets. The full per-dataset breakdown, failure analysis and training curves land in the final report; until then this page grows as each sweep finishes.

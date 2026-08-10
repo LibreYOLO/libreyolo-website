@@ -12,28 +12,92 @@ import './rf100vl-results.css'
 // trainMin is the median per-dataset training wall time, taken from the
 // per-dataset stats files in the same run directory.
 //
-// Families still running are deliberately absent rather than estimated: a
+// Models still running are deliberately absent rather than estimated: a
 // number that cannot be traced to a run is not a result.
 const RESULTS = [
+  {
+    model: 'YOLO-NAS',
+    size: 'S',
+    weights: 'LibreYOLONASs.pt',
+    runId: '20260809-yolonas-s-02926964',
+    runPath: 'yolonas-s/20260809-yolonas-s-02926964',
+    ok: 100,
+    map50: 0.8416,
+    map: 0.5800,
+    trainMin: 29.0,
+    paramsM: 19.02,
+  },
+  {
+    model: 'YOLOX',
+    size: 'M',
+    weights: 'LibreYOLOXm.pt',
+    runId: '20260804-yolox-m-c7bd2a8c',
+    runPath: 'yolox-m/20260804-yolox-m-c7bd2a8c',
+    ok: 100,
+    map50: 0.8486,
+    map: 0.5701,
+    trainMin: 48.0,
+    paramsM: 25.28,
+  },
   {
     model: 'YOLOv9',
     size: 'S',
     weights: 'LibreYOLO9s.pt',
+    runId: '20260802-yolov9s-a8f74d5b',
+    runPath: 'yolov9s/20260802-yolov9s-a8f74d5b',
     ok: 100,
-    map50: 0.814,
-    map: 0.559,
+    map50: 0.8140,
+    map: 0.5591,
     trainMin: 32.5,
     paramsM: 7.2,
+  },
+  {
+    model: 'YOLOX',
+    size: 'S',
+    weights: 'LibreYOLOXs.pt',
+    runId: '20260803-yolox-s-c7bd2a8c',
+    runPath: 'yolox-s/20260803-yolox-s-c7bd2a8c',
+    ok: 100,
+    map50: 0.8354,
+    map: 0.5525,
+    trainMin: 26.8,
+    paramsM: 8.94,
   },
   {
     model: 'YOLOv9',
     size: 'T',
     weights: 'LibreYOLO9t.pt',
+    runId: '20260802-yolov9t-a8f74d5b',
+    runPath: 'yolov9t/20260802-yolov9t-a8f74d5b',
     ok: 100,
-    map50: 0.796,
-    map: 0.540,
+    map50: 0.7963,
+    map: 0.5402,
     trainMin: 32.9,
-    paramsM: 2.0,
+    paramsM: 2.02,
+  },
+  {
+    model: 'YOLOX',
+    size: 'Tiny',
+    weights: 'LibreYOLOXt.pt',
+    runId: '20260803-yolox-tiny-c7bd2a8c',
+    runPath: 'yolox-tiny/20260803-yolox-tiny-c7bd2a8c',
+    ok: 100,
+    map50: 0.8044,
+    map: 0.5218,
+    trainMin: 20.1,
+    paramsM: 5.03,
+  },
+  {
+    model: 'YOLOX',
+    size: 'Nano',
+    weights: 'LibreYOLOXn.pt',
+    runId: '20260803-yolox-nano-c7bd2a8c',
+    runPath: 'yolox-nano/20260803-yolox-nano-c7bd2a8c',
+    ok: 100,
+    map50: 0.7730,
+    map: 0.4853,
+    trainMin: 18.8,
+    paramsM: 0.90,
   },
 ]
 
@@ -83,7 +147,7 @@ export default function RF100VLResults() {
           Verified runs
         </p>
         <h2 className="mt-2 text-2xl md:text-3xl font-bold text-surface-800 dark:text-white tracking-tight">
-          The first two complete campaigns
+          Seven complete campaigns
         </h2>
         <p className="mt-2 text-sm text-surface-500 dark:text-surface-400 max-w-2xl mx-auto">
           Fine-tuned for 100 epochs on each of the 100 datasets, then scored on each
@@ -95,9 +159,9 @@ export default function RF100VLResults() {
       {/* stat strip */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
         <Stat icon={Layers} value="100" label="datasets" />
-        <Stat icon={Cpu} value="2" label="models complete" />
-        <Stat icon={Repeat} value="200" label="runs, none skipped" />
-        <Stat icon={Timer} value="180 h" label="GPU time" />
+        <Stat icon={Cpu} value="7" label="models complete" />
+        <Stat icon={Repeat} value="700" label="runs, none skipped" />
+        <Stat icon={Timer} value="550 h" label="aggregate GPU time" />
       </div>
 
       {/* leaderboard */}
@@ -107,7 +171,7 @@ export default function RF100VLResults() {
         }`}
       >
         {/* header row */}
-        <div className="hidden md:grid grid-cols-[minmax(11rem,1.1fr)_5rem_4.5rem_4.5rem_minmax(12rem,1.4fr)_6rem] items-center gap-x-4 px-5 py-3 border-b border-surface-200 dark:border-surface-800 text-[10px] font-bold uppercase tracking-widest text-surface-500">
+        <div className="hidden lg:grid grid-cols-[minmax(8rem,0.8fr)_4.5rem_4rem_4.5rem_minmax(10rem,1.1fr)_5.5rem_minmax(12rem,1.2fr)] items-center gap-x-3 px-5 py-3 border-b border-surface-200 dark:border-surface-800 text-[10px] font-bold uppercase tracking-widest text-surface-500">
           <span>Model</span>
           <span className="text-right">params</span>
           <span className="text-right">ok/100</span>
@@ -118,6 +182,7 @@ export default function RF100VLResults() {
             mAP<sup>50-95</sup>
           </span>
           <span className="text-right">median train</span>
+          <span>run ID</span>
         </div>
 
         {RESULTS.map((row, idx) => {
@@ -125,7 +190,7 @@ export default function RF100VLResults() {
           return (
             <div
               key={row.weights}
-              className="rf-row grid grid-cols-[1fr_auto] md:grid-cols-[minmax(11rem,1.1fr)_5rem_4.5rem_4.5rem_minmax(12rem,1.4fr)_6rem] items-center gap-x-4 px-5 py-3 border-b last:border-b-0 border-surface-100 dark:border-surface-800/70"
+              className="rf-row grid grid-cols-[1fr_auto] lg:grid-cols-[minmax(8rem,0.8fr)_4.5rem_4rem_4.5rem_minmax(10rem,1.1fr)_5.5rem_minmax(12rem,1.2fr)] items-center gap-x-3 px-5 py-3 border-b last:border-b-0 border-surface-100 dark:border-surface-800/70"
               style={{ '--d': `${idx * 45}ms` }}
             >
               <span className="min-w-0">
@@ -138,22 +203,30 @@ export default function RF100VLResults() {
                   </span>
                 </span>
                 {/* mobile-only metric line */}
-                <span className="md:hidden block mt-1 text-[11px] text-surface-500 tabular-nums">
-                  mAP<sup>50-95</sup> {row.map.toFixed(3)} · ok {row.ok}/100 · ~{row.trainMin} min
+                <span className="lg:hidden block mt-1 text-[11px] text-surface-500 tabular-nums">
+                  mAP<sup>50-95</sup> {row.map.toFixed(4)} · ok {row.ok}/100 · ~{row.trainMin.toFixed(1)} min
                 </span>
+                <a
+                  href={`https://huggingface.co/datasets/LibreYOLO/rf100-vl-results/tree/main/${row.runPath}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="lg:hidden block mt-1 text-[10px] font-mono text-libre-600 dark:text-libre-400 underline underline-offset-2 break-all"
+                >
+                  {row.runId}
+                </a>
               </span>
 
-              <span className="hidden md:block text-right text-sm text-surface-500 tabular-nums">
-                {row.paramsM.toFixed(1)}M
+              <span className="hidden lg:block text-right text-sm text-surface-500 tabular-nums">
+                {row.paramsM.toFixed(2)}M
               </span>
-              <span className="hidden md:block text-right text-sm text-surface-500 tabular-nums">
+              <span className="hidden lg:block text-right text-sm text-surface-500 tabular-nums">
                 {row.ok}
               </span>
-              <span className="hidden md:block text-right text-sm text-surface-500 tabular-nums">
-                {row.map50.toFixed(3)}
+              <span className="hidden lg:block text-right text-sm text-surface-500 tabular-nums">
+                {row.map50.toFixed(4)}
               </span>
 
-              <span className="col-span-2 md:col-span-1 order-last md:order-none mt-2 md:mt-0">
+              <span className="col-span-2 lg:col-span-1 order-last lg:order-none mt-2 lg:mt-0">
                 <span className="flex items-center gap-2">
                   <span className="flex-1 h-2 rounded-full bg-surface-200 dark:bg-surface-800 overflow-hidden">
                     <span
@@ -162,23 +235,33 @@ export default function RF100VLResults() {
                     />
                   </span>
                   <span className="w-12 text-right text-sm font-bold tabular-nums text-surface-600 dark:text-surface-300">
-                    {row.map.toFixed(3)}
+                    {row.map.toFixed(4)}
                   </span>
                 </span>
               </span>
 
-              <span className="hidden md:block text-right text-xs text-surface-500 tabular-nums">
-                ~{row.trainMin} min
+              <span className="hidden lg:block text-right text-xs text-surface-500 tabular-nums">
+                ~{row.trainMin.toFixed(1)} min
               </span>
+
+              <a
+                href={`https://huggingface.co/datasets/LibreYOLO/rf100-vl-results/tree/main/${row.runPath}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={row.runId}
+                className="hidden lg:block text-[10px] font-mono leading-tight text-libre-600 dark:text-libre-400 underline underline-offset-2 break-all"
+              >
+                {row.runId}
+              </a>
             </div>
           )
         })}
       </div>
 
       <p className="mt-4 text-xs text-surface-400 dark:text-surface-500 leading-relaxed max-w-3xl mx-auto text-center">
-        Both runs are complete: 100 of 100 datasets trained and scored, none skipped, all
-        protocol-conformant. Single seed, 640 px, one RTX 5060 Ti. Raw artifacts, per-epoch
-        metrics and the manifest pinning the exact commit are published at{' '}
+        All seven runs are complete: 100 of 100 datasets trained and scored, none skipped,
+        all protocol-conformant. Single seed (0), fp32, on RTX 5060 Ti workers. Raw
+        artifacts, per-epoch metrics and manifests pinning the exact commits are published at{' '}
         <a
           href="https://huggingface.co/datasets/LibreYOLO/rf100-vl-results"
           target="_blank"
@@ -187,8 +270,23 @@ export default function RF100VLResults() {
         >
           LibreYOLO/rf100-vl-results
         </a>
-        . The remaining families are still running and will be added as each one finishes a
-        full 100.
+        . The run IDs above link to the authoritative folders. The remaining families will be
+        added only after they finish a full 100.
+      </p>
+
+      <p className="mt-3 text-[11px] text-surface-400 dark:text-surface-500 leading-relaxed max-w-3xl mx-auto text-center">
+        <strong className="font-semibold text-surface-500 dark:text-surface-400">License note:</strong>{' '}
+        The YOLO-NAS run starts from Deci-provided weights covered by Deci&apos;s separate{' '}
+        <a
+          href="https://github.com/Deci-AI/super-gradients/blob/master/LICENSE.YOLONAS.md"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-libre-600 dark:text-libre-400 underline underline-offset-2"
+        >
+          non-commercial YOLO-NAS license
+        </a>
+        . The YOLOX and YOLOv9 weights shown here use permissive Apache-2.0 and MIT licenses,
+        respectively.
       </p>
     </section>
   )
