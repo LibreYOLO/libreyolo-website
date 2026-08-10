@@ -154,8 +154,6 @@
     ]
   },
   "Models": {
-    "title": "See it run",
-    "subtitle": "Real outputs from LibreYOLO. Each one is a few lines of code.",
     "byTask": "Models by task",
     "weights": "All weights",
     "docs": "Docs",

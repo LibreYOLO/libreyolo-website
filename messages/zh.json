@@ -154,8 +154,6 @@
     ]
   },
   "Models": {
-    "title": "看它运行",
-    "subtitle": "来自 LibreYOLO 的真实输出。每一个都只需几行代码。",
     "byTask": "按任务分类的模型",
     "weights": "全部权重",
     "docs": "文档",

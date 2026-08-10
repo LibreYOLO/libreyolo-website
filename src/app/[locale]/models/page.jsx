@@ -271,23 +271,12 @@ export default function Models() {
   return (
     <div className="pt-28 lg:pt-36 pb-20">
       <div className="max-w-6xl mx-auto px-5 md:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-10 md:mb-14"
-        >
-          <h1 className="text-2xl sm:text-3xl font-semibold text-surface-800 dark:text-white mb-2">
-            {t('title')}
-          </h1>
-          <p className="text-sm text-surface-500 dark:text-surface-400">{t('subtitle')}</p>
-        </motion.div>
-
         {/* Everything the library ships, straight from the docs registry */}
-        <div className="mt-4">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
           <div className="text-center">
-            <h2 className="text-xl font-semibold text-surface-800 dark:text-white sm:text-2xl">
+            <h1 className="text-2xl font-semibold text-surface-800 dark:text-white sm:text-3xl">
               {t('byTask')}
-            </h2>
+            </h1>
             <p className="mt-2 text-sm text-surface-500 dark:text-surface-400">
               {t('indexLead', {
                 families: STATS.families,
@@ -331,7 +320,7 @@ export default function Models() {
               </section>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         <div className="mt-16 flex items-center justify-center gap-8 text-sm">
           <a
