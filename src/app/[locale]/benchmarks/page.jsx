@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Activity, Cpu, Gauge, ShieldCheck, ArrowRight, BarChart3 } from 'lucide-react'
+import { ArrowRight, BarChart3, Gauge } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import RF100VLPanel from '@/components/articles/rf100vl/RF100VLPanel'
 import ThemedEmbed from '@/components/ThemedEmbed'
@@ -19,12 +19,26 @@ const SCATTER_HIGHLIGHT = [
   'rfdetr-n', 'rfdetr-s', 'rfdetr-m', 'rfdetr-l',
 ].join(',')
 
-const HEADLINE_STATS = [
-  { icon: Activity, value: '100', label: 'real-world datasets in RF100-VL' },
-  { icon: Cpu, value: '6', label: 'hardware platforms measured' },
-  { icon: Gauge, value: '700+', label: 'verified benchmark runs' },
-  { icon: ShieldCheck, value: '0.39', label: 'worst mAP drift from the original papers' },
-]
+// Inline link inside body copy. Vision Analysis is a separate site, so those
+// open in a new tab and carry the referral campaign; the RF100-VL one is an
+// anchor down this same page and stays in place.
+function Ref({ href, external = true, children }) {
+  const className =
+    'font-medium text-libre-600 underline decoration-libre-600/30 underline-offset-2 transition-colors hover:decoration-libre-600 dark:text-libre-400 dark:decoration-libre-400/30 dark:hover:decoration-libre-400'
+
+  if (!external) {
+    return (
+      <a href={href} className={className}>
+        {children}
+      </a>
+    )
+  }
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+      {children}
+    </a>
+  )
+}
 
 function SectionHeading({ tag, title, children }) {
   return (
@@ -46,7 +60,7 @@ export default function BenchmarksPage() {
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-surface-200 dark:border-surface-800">
         <div className="absolute inset-0 bg-gradient-to-br from-libre-500/10 via-transparent to-transparent" />
-        <div className="relative mx-auto max-w-6xl px-6 pt-28 pb-14 md:pt-36 md:pb-20">
+        <div className="relative mx-auto max-w-6xl px-6 pt-24 pb-10 md:pt-32 md:pb-14">
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -54,39 +68,6 @@ export default function BenchmarksPage() {
           >
             LibreYOLO Benchmarks
           </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mt-6 max-w-2xl text-lg text-surface-600 dark:text-surface-400 leading-relaxed"
-          >
-            LibreYOLO ships dozens of detection models behind one API, which is fine until you
-            have to choose one. So we measured them. Accuracy on COCO, then transfer onto 100
-            datasets that look nothing like COCO, then speed on hardware you can actually buy.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4"
-          >
-            {HEADLINE_STATS.map(({ icon: Icon, value, label }) => (
-              <div
-                key={label}
-                className="rounded-2xl border border-surface-200 bg-white/70 p-4 backdrop-blur-sm dark:border-surface-800 dark:bg-surface-900/60"
-              >
-                <Icon className="h-4 w-4 text-libre-500" />
-                <div className="mt-2.5 font-mono text-2xl font-bold leading-none text-surface-900 dark:text-white">
-                  {value}
-                </div>
-                <div className="mt-1.5 text-[11px] leading-snug text-surface-500 dark:text-surface-400">
-                  {label}
-                </div>
-              </div>
-            ))}
-          </motion.div>
         </div>
       </section>
 
@@ -94,8 +75,11 @@ export default function BenchmarksPage() {
           Analysis embed. RF100-VL then lands as the "and off COCO?" follow-up. */}
       <section className="mx-auto max-w-6xl px-6 pt-16 pb-16 md:pt-24 md:pb-24">
         <SectionHeading tag="COCO" title="Accuracy against size">
-          How much accuracy each architecture buys for its parameter count. The chart is live
-          from Vision Analysis, so it updates as new runs land.
+          How much accuracy each architecture buys for its parameter count. The chart is from{' '}
+          <Ref href={`${VA}/?${UTM}`}>visionanalysis.org</Ref>, a brother project of LibreYOLO
+          where models are measured on <Ref href={`${VA}/?${UTM}`}>COCO</Ref>, on{' '}
+          <Ref href={`${VA}/hardware?${UTM}`}>latency</Ref> across real hardware, and on the{' '}
+          <Ref href="#rf100-vl" external={false}>RF100-VL</Ref> benchmark.
         </SectionHeading>
 
         <div className="mt-8 overflow-hidden rounded-2xl border border-surface-200 dark:border-surface-800">
@@ -128,58 +112,55 @@ export default function BenchmarksPage() {
       </section>
 
       {/* RF100-VL: the follow-up to COCO, and the centrepiece of the page */}
-      <section className="mx-auto max-w-6xl px-6">
-        <SectionHeading tag="RF100-VL" title="What happens when you leave COCO behind?">
-          COCO is 80 everyday categories, and almost nobody ships a product that detects dogs and
-          sofas. Transfer is the harder question, so we fine-tuned on 100 unrelated real-world
-          datasets and scored each one separately. Pills on a conveyor, chest X-rays, mahjong
-          tiles, varroa mites, wildfire smoke.
+      <section id="rf100-vl" className="mx-auto max-w-6xl scroll-mt-24 px-6">
+        <SectionHeading tag="RF100-VL" title="Does any of that survive contact with your data?">
+          A COCO number is rarely the score you end up with. It is a hint at that score, because
+          most projects start from COCO-pretrained weights and fine-tune from there, and it is the
+          common yardstick that keeps papers comparable. That is worth something, and it is not
+          the thing you are actually buying.
         </SectionHeading>
+
+        <div className="mt-4 max-w-3xl">
+          <p className="text-surface-600 dark:text-surface-400 leading-relaxed">
+            What you are buying is generalisation: whether the architecture, the pretrained
+            weights and the training recipe still hold up on data that looks nothing like COCO.
+            So Roboflow built RF100-VL. A model earns its score by being trained on 100 real
+            datasets, one at a time. Some hand it thousands of objects per image, some give it a
+            few dozen images to learn from. Pills on a conveyor, chest X-rays, mahjong tiles,
+            varroa mites, wildfire smoke.
+          </p>
+          <p className="mt-3 text-surface-600 dark:text-surface-400 leading-relaxed">
+            Read it as one input among several when you pick a model, alongside latency, licence
+            and how much you feel like fighting the training code. It is not a ranking to read off
+            the top.
+          </p>
+        </div>
       </section>
 
       <RF100VLPanel />
 
-      {/* Latency */}
+      {/* Latency lives on Vision Analysis, which measures it on real boards.
+          Embedding one hardware slice here was worse than sending people to
+          the page that lets them pick their own. */}
       <section className="border-t border-surface-200 dark:border-surface-800 bg-surface-50/60 dark:bg-surface-900/30">
         <div className="mx-auto max-w-6xl px-6 py-16 md:py-24">
           <SectionHeading tag="Latency" title="Fast enough on what you own?">
             Accuracy does not change with hardware. Speed changes by two orders of magnitude
-            between a datacentre GPU and a Raspberry Pi. Every run below is published as raw JSON.
+            between a datacentre GPU and a Raspberry Pi, so the only number that matters is the
+            one measured on the board you are shipping on.
           </SectionHeading>
 
-          <div className="mt-8 overflow-hidden rounded-2xl border border-surface-200 dark:border-surface-800">
-            <ThemedEmbed
-              src={`${VA}/embed/leaderboard?hw=jetson_orin&rt=tensorrt_fp16&limit=10`}
-              title="Latency leaderboard across hardware"
-              className="w-full block"
-              /* A table does not get taller as it gets wider, so this one is
-                 sized in pixels. An aspect ratio leaves a huge empty band
-                 under the last row on a wide screen. */
-              height={430}
-              style={{ border: 0, overflow: 'hidden', display: 'block' }}
-            />
-          </div>
+          <a
+            href={`${VA}/hardware?${UTM}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-surface-900 bg-surface-900 px-7 py-4 text-base font-semibold text-white transition-colors hover:bg-surface-700 dark:border-white/15 dark:bg-white/5 dark:font-medium dark:text-surface-100 dark:hover:bg-white/10"
+          >
+            <Gauge className="h-5 w-5" />
+            See latency on every board
+            <ArrowRight className="h-5 w-5" />
+          </a>
         </div>
-      </section>
-
-      {/* Trust */}
-      <section className="mx-auto max-w-6xl px-6 py-16 md:py-24">
-        <SectionHeading tag="Provenance" title="Where these numbers come from">
-          We re-measured every model LibreYOLO ships from scratch on the full COCO val2017 set,
-          then checked each result against what its original authors published. The worst
-          disagreement across every variant is 0.39 mAP. A port that had quietly broken would
-          show up here.
-        </SectionHeading>
-
-        <a
-          href={`${VA}/parity?${UTM}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-libre-600 hover:underline dark:text-libre-400"
-        >
-          See every variant against its original source
-          <ArrowRight className="h-4 w-4" />
-        </a>
       </section>
     </main>
   )

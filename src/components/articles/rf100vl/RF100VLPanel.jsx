@@ -158,7 +158,7 @@ function DomainRings({ focusDomain }) {
 function DatasetDrawer({ dataset, onClose, onSwitch }) {
   const siblings = RF100VL_DATASETS.filter((d) => d.domain === dataset.domain && d !== dataset).slice(0, 6)
   const color = COLOR_BY_DOMAIN[dataset.domain]
-  const scores = MODELS.map((m) => ({ model: m.model, s: m.scores[dataset.name] })).filter((x) => x.s)
+  const scores = MODELS.map((m) => ({ model: m.label ?? m.model, s: m.scores[dataset.name] })).filter((x) => x.s)
 
   return (
     <>
@@ -441,7 +441,7 @@ export default function RF100VLPanel() {
               className={`rfx-model${modelId === m.model ? ' is-on' : ''}`}
               onClick={() => setModelId(m.model)}
             >
-              <span className="rfx-model-name">{m.model}</span>
+              <span className="rfx-model-name">{m.label ?? m.model}</span>
               <span className="rfx-model-score">{pct(m.mean)}</span>
             </button>
           ))}
@@ -456,7 +456,7 @@ export default function RF100VLPanel() {
               <div>
                 <div className="rfb-head-value">{pct(active ? model.scores[active.name]?.m ?? model.mean : model.mean)}</div>
                 <div className="rfb-head-label">
-                  {active ? active.name : `${model.model}, mean of ${ranked.length} datasets`}
+                  {active ? active.name : `${model.label ?? model.model}, mean of ${ranked.length} datasets`}
                 </div>
               </div>
               <div className="rfb-head-preview">
@@ -501,7 +501,7 @@ export default function RF100VLPanel() {
               </span>
               <div className="rfp-core-sub">
                 {tab === 'results' && model
-                  ? (active ? 'on this dataset' : `${model.model}, mean of 100`)
+                  ? (active ? 'on this dataset' : `${model.label ?? model.model}, mean of 100`)
                   : '100 datasets · 7 domains'}
               </div>
             </div>
