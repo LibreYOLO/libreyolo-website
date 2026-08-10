@@ -149,8 +149,8 @@ const WEIGHTS_SOURCE = {
     note: 'Apache-2.0 weights, downloaded from the upstream project on first use.',
   },
   midas: {
-    url: 'https://github.com/isl-org/MiDaS',
-    note: 'MIT weights, downloaded from the upstream project on first use.',
+    url: 'https://huggingface.co/LibreYOLO?search_models=LibreMiDaS',
+    note: 'MIT. Mirrored on the LibreYOLO org. MiDaS trained on a twelve-dataset mixture whose terms are not all permissive, so check those before commercial use.',
   },
   sam: {
     url: 'https://huggingface.co/LibreYOLO?search_models=LibreSAM',
