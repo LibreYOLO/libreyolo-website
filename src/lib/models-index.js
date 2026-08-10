@@ -33,9 +33,12 @@ const TASK_ORDER = [
 
 // Task presentation. `video` wins over `image` when both exist.
 //
-// Nine tasks have no artwork yet and fall back to a typographic card: semantic,
-// panoptic, edge, normal, restore, matte, ocr, embed and mesh. Drop a file into
-// public/showcase and add it here to promote one.
+// Every still under /showcase/task-* is a real LibreYOLO run, rendered by
+// scripts/build-task-art over the library's own demo photographs. Re-run that
+// script to regenerate them.
+//
+// Four tasks still have no artwork and fall back to a typographic card: ocr,
+// embed, edge and mesh. See the script for why each one is outstanding.
 const TASK_META = {
   detect: {
     label: 'Detection',
@@ -80,14 +83,34 @@ const TASK_META = {
     blurb: 'Where a person is looking.',
     image: '/showcase/task-gaze.gif',
   },
-  semantic: { label: 'Semantic segmentation', blurb: 'A class for every pixel, without separating instances.' },
-  panoptic: { label: 'Panoptic segmentation', blurb: 'Semantic and instance masks in one pass.' },
+  semantic: {
+    label: 'Semantic segmentation',
+    blurb: 'A class for every pixel, without separating instances.',
+    image: '/showcase/task-semantic.jpg',
+  },
+  panoptic: {
+    label: 'Panoptic segmentation',
+    blurb: 'Semantic and instance masks in one pass.',
+    image: '/showcase/task-panoptic.jpg',
+  },
+  normal: {
+    label: 'Surface normals',
+    blurb: 'Which way each surface faces.',
+    image: '/showcase/task-normal.jpg',
+  },
+  matte: {
+    label: 'Matting',
+    blurb: 'Alpha cutouts, hair and edges included.',
+    image: '/showcase/task-matte.jpg',
+  },
+  restore: {
+    label: 'Restoration',
+    blurb: 'Denoising, deblurring and upscaling.',
+    image: '/showcase/task-restore.jpg',
+  },
   ocr: { label: 'Text recognition', blurb: 'Finding and reading text in an image.' },
   embed: { label: 'Embeddings', blurb: 'Vectors for search, clustering and retrieval.' },
   edge: { label: 'Edge detection', blurb: 'Contours and boundaries.' },
-  normal: { label: 'Surface normals', blurb: 'Which way each surface faces.' },
-  matte: { label: 'Matting', blurb: 'Alpha cutouts, hair and edges included.' },
-  restore: { label: 'Restoration', blurb: 'Denoising, deblurring and upscaling.' },
   mesh: { label: 'Mesh', blurb: '3D geometry from an image.' },
 }
 
