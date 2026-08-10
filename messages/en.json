@@ -115,15 +115,42 @@
     "ctaModelZoo": "Model Zoo",
     "ctaBenchmarks": "Benchmarks",
     "testimonials": [
-      { "quote": "You have my hearty support for this. I'll be so happy when there is a good, community maintained, MIT licensed alternative to Ultralytics.", "author": "u/Covered_in_bees_" },
-      { "quote": "This is so cool bro. If I see some place I can contribute, I will definitely do so!", "author": "u/FedStan" },
-      { "quote": "This looks like a really good project, and I hope you are able to realize the full vision you seem to have for it. Very exciting.", "author": "u/CalmBet" },
-      { "quote": "Nice work! I'll try it out this week and open issues/PRs.", "author": "u/InternationalMany6" },
-      { "quote": "Looks pretty cool. It's good to see these sorts of developments.", "author": "u/HistoricalMistake681" },
-      { "quote": "Thank you for sharing, this looks interesting.", "author": "u/nemesis1836" },
-      { "quote": "Great initiative.", "author": "u/Outrageous_Sort_8993" },
-      { "quote": "Good job! Are you hosting the models on HuggingFace?", "author": "u/Winners-magic" },
-      { "quote": "Very nice, will add creating a node of it to my todo list.", "author": "u/dr_hamilton" }
+      {
+        "quote": "You have my hearty support for this. I'll be so happy when there is a good, community maintained, MIT licensed alternative to Ultralytics.",
+        "author": "u/Covered_in_bees_"
+      },
+      {
+        "quote": "This is so cool bro. If I see some place I can contribute, I will definitely do so!",
+        "author": "u/FedStan"
+      },
+      {
+        "quote": "This looks like a really good project, and I hope you are able to realize the full vision you seem to have for it. Very exciting.",
+        "author": "u/CalmBet"
+      },
+      {
+        "quote": "Nice work! I'll try it out this week and open issues/PRs.",
+        "author": "u/InternationalMany6"
+      },
+      {
+        "quote": "Looks pretty cool. It's good to see these sorts of developments.",
+        "author": "u/HistoricalMistake681"
+      },
+      {
+        "quote": "Thank you for sharing, this looks interesting.",
+        "author": "u/nemesis1836"
+      },
+      {
+        "quote": "Great initiative.",
+        "author": "u/Outrageous_Sort_8993"
+      },
+      {
+        "quote": "Good job! Are you hosting the models on HuggingFace?",
+        "author": "u/Winners-magic"
+      },
+      {
+        "quote": "Very nice, will add creating a node of it to my todo list.",
+        "author": "u/dr_hamilton"
+      }
     ]
   },
   "Models": {
@@ -131,7 +158,82 @@
     "subtitle": "Real outputs from LibreYOLO. Each one is a few lines of code.",
     "byTask": "Models by task",
     "weights": "All weights",
-    "docs": "Docs"
+    "docs": "Docs",
+    "indexLead": "Every family the library ships, generated from the v{version} model registry: {families} families across {tasks} tasks.",
+    "allTiers": "All",
+    "showing": "{shown} shown",
+    "familyCount": "{count} families",
+    "weightsShort": "weights",
+    "tasks": {
+      "detect": {
+        "label": "Detection",
+        "blurb": "Boxes around objects. The task most of the library is built for."
+      },
+      "segment": {
+        "label": "Segmentation",
+        "blurb": "Per-instance masks rather than boxes."
+      },
+      "pose": {
+        "label": "Keypoints",
+        "blurb": "Skeletons and landmarks on each detected instance."
+      },
+      "classify": {
+        "label": "Classification",
+        "blurb": "One label for the whole image, and the backbones behind everything else."
+      },
+      "obb": {
+        "label": "Oriented boxes",
+        "blurb": "Rotated boxes, for aerial imagery and anything that does not sit axis-aligned."
+      },
+      "depth": {
+        "label": "Depth",
+        "blurb": "Distance per pixel from a single image."
+      },
+      "semantic": {
+        "label": "Semantic segmentation",
+        "blurb": "A class for every pixel, without separating instances."
+      },
+      "panoptic": {
+        "label": "Panoptic segmentation",
+        "blurb": "Semantic and instance masks in one pass."
+      },
+      "point": {
+        "label": "Points and counting",
+        "blurb": "Centroids instead of boxes, cheap enough for microcontrollers."
+      },
+      "ocr": {
+        "label": "Text recognition",
+        "blurb": "Finding and reading text in an image."
+      },
+      "embed": {
+        "label": "Embeddings",
+        "blurb": "Vectors for search, clustering and retrieval."
+      },
+      "gaze": {
+        "label": "Gaze",
+        "blurb": "Where a person is looking."
+      },
+      "edge": {
+        "label": "Edge detection",
+        "blurb": "Contours and boundaries."
+      },
+      "normal": {
+        "label": "Surface normals",
+        "blurb": "Which way each surface faces."
+      },
+      "matte": {
+        "label": "Matting",
+        "blurb": "Alpha cutouts, hair and edges included."
+      },
+      "restore": {
+        "label": "Restoration",
+        "blurb": "Denoising, deblurring and upscaling."
+      },
+      "mesh": {
+        "label": "Mesh",
+        "blurb": "3D geometry from an image."
+      }
+    }
   },
   "Commercial": {
     "titleEmphasis": "Yes",

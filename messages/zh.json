@@ -115,15 +115,42 @@
     "ctaModelZoo": "模型库",
     "ctaBenchmarks": "基准测试",
     "testimonials": [
-      { "quote": "我衷心支持这个项目。当出现一个优秀的、由社区维护的、MIT 许可的 Ultralytics 替代品时，我会非常高兴。", "author": "u/Covered_in_bees_" },
-      { "quote": "太酷了，兄弟。如果我发现有可以贡献的地方，一定会出力！", "author": "u/FedStan" },
-      { "quote": "这看起来是个非常棒的项目，希望你能实现你为它设想的完整愿景。非常令人期待。", "author": "u/CalmBet" },
-      { "quote": "干得漂亮！我这周会试用一下，并提交 issue 和 PR。", "author": "u/InternationalMany6" },
-      { "quote": "看起来很不错。很高兴看到这类项目的出现。", "author": "u/HistoricalMistake681" },
-      { "quote": "感谢分享，这看起来很有意思。", "author": "u/nemesis1836" },
-      { "quote": "很棒的倡议。", "author": "u/Outrageous_Sort_8993" },
-      { "quote": "干得好！模型托管在 HuggingFace 上吗？", "author": "u/Winners-magic" },
-      { "quote": "非常好，我会把为它创建一个节点加入待办清单。", "author": "u/dr_hamilton" }
+      {
+        "quote": "我衷心支持这个项目。当出现一个优秀的、由社区维护的、MIT 许可的 Ultralytics 替代品时，我会非常高兴。",
+        "author": "u/Covered_in_bees_"
+      },
+      {
+        "quote": "太酷了，兄弟。如果我发现有可以贡献的地方，一定会出力！",
+        "author": "u/FedStan"
+      },
+      {
+        "quote": "这看起来是个非常棒的项目，希望你能实现你为它设想的完整愿景。非常令人期待。",
+        "author": "u/CalmBet"
+      },
+      {
+        "quote": "干得漂亮！我这周会试用一下，并提交 issue 和 PR。",
+        "author": "u/InternationalMany6"
+      },
+      {
+        "quote": "看起来很不错。很高兴看到这类项目的出现。",
+        "author": "u/HistoricalMistake681"
+      },
+      {
+        "quote": "感谢分享，这看起来很有意思。",
+        "author": "u/nemesis1836"
+      },
+      {
+        "quote": "很棒的倡议。",
+        "author": "u/Outrageous_Sort_8993"
+      },
+      {
+        "quote": "干得好！模型托管在 HuggingFace 上吗？",
+        "author": "u/Winners-magic"
+      },
+      {
+        "quote": "非常好，我会把为它创建一个节点加入待办清单。",
+        "author": "u/dr_hamilton"
+      }
     ]
   },
   "Models": {
@@ -131,7 +158,82 @@
     "subtitle": "来自 LibreYOLO 的真实输出。每一个都只需几行代码。",
     "byTask": "按任务分类的模型",
     "weights": "全部权重",
-    "docs": "文档"
+    "docs": "文档",
+    "indexLead": "库中的每个系列，由 v{version} 模型注册表生成：{tasks} 类任务下共 {families} 个系列。",
+    "allTiers": "全部",
+    "showing": "显示 {shown} 个",
+    "familyCount": "{count} 个系列",
+    "weightsShort": "权重",
+    "tasks": {
+      "detect": {
+        "label": "目标检测",
+        "blurb": "为目标画出边界框，也是这个库最主要的任务。"
+      },
+      "segment": {
+        "label": "实例分割",
+        "blurb": "为每个实例输出掩码，而不只是边界框。"
+      },
+      "pose": {
+        "label": "关键点",
+        "blurb": "为每个检测到的实例输出骨架和关键点。"
+      },
+      "classify": {
+        "label": "图像分类",
+        "blurb": "为整张图像给出一个标签，同时也是其他任务的主干网络。"
+      },
+      "obb": {
+        "label": "旋转框",
+        "blurb": "带角度的边界框，适用于航拍图像等非水平对齐的目标。"
+      },
+      "depth": {
+        "label": "深度估计",
+        "blurb": "从单张图像估计每个像素的距离。"
+      },
+      "semantic": {
+        "label": "语义分割",
+        "blurb": "为每个像素分配类别，但不区分实例。"
+      },
+      "panoptic": {
+        "label": "全景分割",
+        "blurb": "一次前向同时输出语义和实例掩码。"
+      },
+      "point": {
+        "label": "点检测与计数",
+        "blurb": "用中心点代替边界框，轻到可以跑在单片机上。"
+      },
+      "ocr": {
+        "label": "文字识别",
+        "blurb": "在图像中定位并读出文字。"
+      },
+      "embed": {
+        "label": "特征向量",
+        "blurb": "用于检索、聚类和相似度搜索的向量。"
+      },
+      "gaze": {
+        "label": "视线估计",
+        "blurb": "判断人正在看向哪里。"
+      },
+      "edge": {
+        "label": "边缘检测",
+        "blurb": "轮廓与边界。"
+      },
+      "normal": {
+        "label": "表面法线",
+        "blurb": "每个表面朝向哪个方向。"
+      },
+      "matte": {
+        "label": "抠图",
+        "blurb": "Alpha 通道抠图，连发丝和边缘一起保留。"
+      },
+      "restore": {
+        "label": "图像修复",
+        "blurb": "去噪、去模糊和超分辨率。"
+      },
+      "mesh": {
+        "label": "三维网格",
+        "blurb": "从图像重建三维几何。"
+      }
+    }
   },
   "Commercial": {
     "titleEmphasis": "是的",

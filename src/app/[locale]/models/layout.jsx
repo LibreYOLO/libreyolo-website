@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 import { buildPageMetadata, SITE_URL } from '@/i18n/metadata'
-import { showcaseTaskGroups } from '@/lib/showcase'
+import { getTasksByModel, getAllModels } from '@/lib/models-index'
 
 export async function generateMetadata({ params }) {
   const { locale } = await params
@@ -14,14 +14,12 @@ export async function generateMetadata({ params }) {
 }
 
 // ItemList of every model family shown on the page, with the tasks it covers.
-// Derived from the same showcase data the page renders, so it cannot drift.
+// Derived from the same registry-backed index the page renders, so it cannot
+// drift: a family added to the library appears in both at once, and the list
+// covers all 82 families rather than the 38 the old hand-kept showcase named.
 function modelZooJsonLd() {
-  const tasksByModel = new Map()
-  for (const { task, models } of showcaseTaskGroups()) {
-    for (const model of models) {
-      tasksByModel.set(model, [...(tasksByModel.get(model) ?? []), task])
-    }
-  }
+  const tasksByModel = getTasksByModel()
+  const urlByModel = new Map(getAllModels().map((m) => [m.name, m.docsUrl]))
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -33,6 +31,7 @@ function modelZooJsonLd() {
       '@type': 'ListItem',
       position: i + 1,
       name,
+      url: urlByModel.has(name) ? `${SITE_URL}${urlByModel.get(name)}` : undefined,
       description: `Tasks: ${tasks.join(', ')}`,
     })),
   }
