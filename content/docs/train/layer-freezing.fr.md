@@ -2,21 +2,21 @@
 title: Gel des couches
 seo_title: Geler des couches pendant l'entraînement dans LibreYOLO
 description: >-
-  Geler une partie d'un modèle pour l'apprentissage par transfert : nombre
-  entier de groupes de gel propres à la famille, liste explicite d'indices ou
-  sélecteurs de noms de modules et de paramètres.
+  Gelez une partie d'un modèle pour l'apprentissage par transfert : un nombre
+  entier de groupes de gel propres à la famille, une liste explicite d'indices
+  ou des sélecteurs de noms de modules et de paramètres.
 lead: >-
-  Le gel maintient certains poids fixes pendant l'entraînement du reste du
-  modèle. Les sélecteurs ciblent les groupes de gel ordonnés ou les noms de
-  modules propres à une famille, pas des numéros de couches bruts issus d'un
-  graphe YAML.
+  Le gel maintient les poids sélectionnés fixes tandis que le reste du modèle
+  s'entraîne. Les sélecteurs ciblent les groupes de gel ordonnés ou les noms de
+  modules propres à une famille, pas les numéros de couches bruts d'un graphe
+  YAML.
 keywords:
-  - geler couches
+  - geler couches modèle
   - apprentissage par transfert
   - geler backbone
   - batchnorm gelée
   - groupes de gel
-  - fine tuning tête uniquement
+  - fine-tuning tête uniquement
 last_verified: 1.5.0
 snippets:
   train:
@@ -27,7 +27,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # Les 10 premiers groupes constituent tout le backbone de YOLOv9.
+        # Les 10 premiers groupes constituent tout le backbone YOLOv9.
         model.train(data="my-dataset.yaml", epochs=50, freeze=10)
     - label: CLI
       language: bash
@@ -63,15 +63,15 @@ snippets:
 source_hash: 9f1e7551af6b16fe
 ---
 
-## Geler une partie du modèle
+## Geler des éléments
 
 `freeze` est facultatif et ne gèle rien par défaut.
 
 <code-tabs name="train" />
 
-Le gel intervient après la construction du modèle et toute reconstruction de la
+Le gel s'exécute après la construction du modèle et toute reconstruction de la
 tête pour un nouveau nombre de classes, mais avant la création de l'optimiseur.
-Celui-ci ne reçoit donc que les paramètres entraînables.
+L'optimiseur ne reçoit donc que les paramètres entraînables.
 
 ## Formes possibles d'un sélecteur
 
@@ -81,108 +81,107 @@ Celui-ci ne reçoit donc que les paramètres entraînables.
 | `10` ou `"10"` | Geler les dix premiers groupes de gel de la famille |
 | `[0, 3, 7]` | Geler ces groupes indexés à partir de zéro |
 | `"backbone"` | Geler le groupe, le module ou le préfixe de paramètre correspondant |
-| `["backbone", "neck"]` | Geler chaque sélecteur de la liste |
+| `["backbone", "neck"]` | Geler chaque sélecteur listé |
 | `["backbone", 3]` | Les listes mixtes fonctionnent |
 
 Une chaîne est analysée avant d'être interprétée. La CLI et une configuration
 YAML acceptent donc les mêmes formes que Python. `freeze="[0, 3, 'head']"` est
-analysé comme une liste littérale, `freeze="backbone,neck"` est divisé sur la
-virgule et une chaîne décimale simple devient un nombre.
+analysé comme une liste littérale, `freeze="backbone,neck"` est découpé à la
+virgule et une chaîne décimale seule devient un nombre.
 
-`freeze=True` est refusé, car il est ambigu.
+`freeze=True` est rejeté car ambigu.
 
-Les sélecteurs par nom correspondent à un nom de groupe de gel, un nom de
+Les sélecteurs de noms correspondent à un nom de groupe de gel, un nom de
 module ou un préfixe de nom de paramètre, et les caractères glob `*`, `?` et
-`[` fonctionnent. Un préfixe `model.` initial est traité avec souplesse.
-`backbone` et `model.backbone` atteignent donc la forme employée en interne par
-la famille.
+`[` fonctionnent. Un préfixe `model.` est traité avec souplesse, si bien que
+`backbone` et `model.backbone` correspondent tous deux à la graphie utilisée en
+interne par la famille.
 
-## Groupes définis par la famille
+## Groupes définis par chaque famille
 
-Un entier cible la propre liste ordonnée des groupes de gel d'une famille, et
-non une position dans un graphe partagé. Les familles LibreYOLO ne sont pas
-toutes un modèle séquentiel indexé par YAML. Un numéro de couche brut aurait
-donc un sens différent pour chacune.
+Un entier cible la liste ordonnée de groupes de gel propre à la famille, pas
+une position dans un graphe partagé. Les familles de LibreYOLO ne sont pas
+toutes un modèle séquentiel unique indexé par YAML. Un numéro de couche brut
+aurait donc une signification différente dans chacune.
 
-YOLOv9 ordonne ses groupes depuis l'entrée : dix étages de backbone, puis six
-étages de neck et enfin la tête. `freeze=10` correspond donc exactement au
-backbone. `backbone`, `neck` et `head` sont des sélecteurs par nom stables qui
-s'y ajoutent.
+YOLOv9 ordonne ses groupes depuis l'entrée : dix étapes de backbone, puis six
+étapes de neck, puis la tête. C'est pourquoi `freeze=10` correspond exactement
+au backbone. `backbone`, `neck` et `head` sont des sélecteurs de noms stables
+qui s'y ajoutent.
 
-Les groupes de RF-DETR sont `backbone.encoder`, `backbone.projector`,
-`decoder`, `queries`, `transformer.encoder_output` et `head`. Les noms
-constituent ici le meilleur choix, car les composants Transformer ne
-correspondent pas à un nombre de couches. `backbone` atteint les deux groupes
-de backbone par préfixe.
+Les groupes de RF-DETR sont `backbone.encoder`, `backbone.projector`, `decoder`,
+`queries`, `transformer.encoder_output` et `head`. Les noms constituent ici le
+meilleur choix, car les composants du transformer ne correspondent pas à un
+nombre de couches. `backbone` correspond aux deux groupes du backbone par
+préfixe.
 
-Les familles qui ne définissent pas de groupes sémantiques reviennent à une
-valeur prudente : chaque enfant direct du modèle qui possède au moins un
-paramètre, dans l'ordre de déclaration. Cette liste est généralement courte.
-Un entier élevé ne trouvera donc pas suffisamment de groupes :
+Les familles qui ne définissent pas de groupes sémantiques utilisent une valeur
+par défaut prudente : chaque enfant direct du modèle qui possède au moins un
+paramètre, dans l'ordre de déclaration. La liste est généralement courte, si
+bien qu'un grand entier ne trouve pas assez de groupes :
 
 ```text
 freeze index 10 is out of range for 3 available freeze groups.
 ```
 
-Pour consulter la véritable liste au lieu de la deviner :
+Pour consulter la véritable liste au lieu de deviner :
 
 <code-tabs name="groups" />
 
 ## Échecs explicites
 
-Chaque erreur possible déclenche une exception au lieu d'entraîner autre chose
-que ce que vous avez demandé.
+Chaque erreur d'utilisation provoque une exception au lieu d'entraîner autre
+chose que ce que vous avez demandé.
 
-Un sélecteur sans correspondance déclenche une erreur qui nomme les éléments
-manqués :
+Un sélecteur sans correspondance provoque une erreur qui nomme les sélecteurs
+concernés :
 
 ```text
 freeze selector(s) matched no parameters: 'backbon'
 ```
 
-Un gel qui ne laisserait aucun paramètre entraînable déclenche une erreur, à la
-fois au moment du gel et lors de la construction de l'optimiseur :
+Un gel qui ne laisserait aucun paramètre entraînable provoque une erreur lors
+du gel, puis de nouveau lors de la construction de l'optimiseur :
 
 ```text
 freeze would leave no trainable parameters. Use a smaller freeze value or
 target a narrower module.
 ```
 
-C'est ce que produit `freeze="all"`, puisque `all` correspond à chaque
-paramètre.
+C'est ce que fait `freeze="all"`, puisque `all` correspond à chaque paramètre.
 
-Lorsque le gel réussit, une ligne enregistre ce qui s'est passé :
+Lorsque le gel réussit, une ligne consigne le résultat :
 
 ```text
 Layer freezing: selectors=[10], tensors=124, params=2103776, trainable=1863456/3967232
 ```
 
-## Arrêt des mises à jour de BatchNorm gelée
+## Arrêt des mises à jour de la BatchNorm gelée
 
-Un paramètre gelé reste dans un module dont les statistiques cumulées
-continueraient normalement d'évoluer. Tout module de type BatchNorm dont les
-paramètres appartiennent à l'ensemble gelé passe en mode évaluation. Le
-programme d'entraînement réapplique ce mode après chaque appel à `model.train()`
-d'une époque. Les statistiques restent donc fixes pendant toute l'exécution.
+Un paramètre gelé reste dans un module dont les statistiques courantes
+continueraient d'évoluer. Chaque module de style BatchNorm dont les paramètres
+appartiennent à l'ensemble gelé passe en mode évaluation, et le trainer
+réapplique ce mode après l'appel `model.train()` de chaque époque. Les
+statistiques restent ainsi fixes pendant toute l'exécution.
 
-Ce comportement est activé par défaut et permet au gel d'un backbone de le
-geler réellement.
+Ce comportement est activé par défaut et garantit que geler un backbone le gèle
+réellement.
 
-## Composition avec LoRA
+## Combiner avec LoRA
 
 `freeze` et `lora=True` fonctionnent ensemble. Sur RF-DETR, DEIM et ConvNeXt,
 les paramètres des adaptateurs restent entraînables même lorsque leur groupe
-parent est gelé. C'est la combinaison recherchée : un backbone gelé sur lequel
-des adaptateurs apprennent. Consultez le
+parent est gelé, ce qui correspond à la combinaison recherchée : un backbone
+gelé avec des adaptateurs qui apprennent par-dessus. Consultez le
 [fine-tuning LoRA](/docs/train/lora).
 
-## Périmètre
+## Portée
 
 Il s'agit d'un gel statique décidé au démarrage. Le dégel planifié et le gel
 progressif ne font pas partie de l'interface.
 
-## Voir aussi
+## Pages connexes
 
 - [Hyperparamètres](/docs/train/hyperparameters) pour le reste de `train()`.
-- [Distillation](/docs/train/distillation) pour l'autre manière de transférer
-  les connaissances d'un grand modèle vers un entraînement.
+- [Distillation](/docs/train/distillation) pour l'autre façon de transférer les
+  connaissances d'un grand modèle dans un entraînement.

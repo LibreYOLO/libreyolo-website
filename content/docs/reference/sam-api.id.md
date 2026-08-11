@@ -1,29 +1,29 @@
 ---
-title: Promptable segmentation API
-seo_title: 'LibreSAM API: prompts, aliases and signatures'
+title: API segmentasi yang dapat dipicu lewat prompt
+seo_title: 'API LibreSAM: prompt, alias, dan tanda tangan'
 description: >-
-  The LibreSAM factory, its size aliases, the point, box and concept-text prompt
-  types, the encode-once set_image lifecycle, and what the tier does not
-  support.
+  Pabrik LibreSAM, alias ukuran, tipe prompt titik, kotak, dan konsep-teks,
+  siklus hidup set_image encode-once, dan apa yang tidak didukung oleh tier.
 lead: >-
-  LibreSAM is the factory for promptable segmentation. A forward pass needs a
-  per-image prompt supplied at call time, so the tier owns its own predict
-  surface rather than routing through the promptless inference runner.
+  LibreSAM adalah pabrik untuk segmentasi yang dapat dipicu lewat prompt. Satu
+  proses forward membutuhkan prompt per gambar yang diberikan saat pemanggilan,
+  sehingga tier memiliki permukaan prediksi sendiri daripada melalui runner
+  inferensi tanpa prompt.
 keywords:
   - LibreSAM
-  - promptable segmentation
-  - SAM point prompt
-  - SAM box prompt
+  - segmentasi yang dapat dipicu lewat prompt
+  - prompt titik SAM
+  - prompt kotak SAM
   - set_image
-  - segment everything
-  - libreyolo sam extra
+  - segmentasi semua
+  - libreyolo sam ekstra
 last_verified: 1.5.0
 verification: >-
-  Factory aliases, sizes and repositories read from
-  libreyolo/models/sam/model.py, sam2.py, edgetam.py, sam3.py,
-  libreyolo/models/mobilesam/model.py and libreyolo/models/picosam3/model.py.
-  Prompt contract and defaults read from libreyolo/models/sam/base.py. Design
-  intent from docs/adr/0007-libresam-contract.md, all at v1.5.0.
+  , ukuran dan repositori dibaca dari libreyolo/models/sam/model.py, sam2.py,
+  edgetam.py, sam3.py, libreyolo/models/mobilesam/model.py dan
+  libreyolo/models/picosam3/model.py. Kontrak dan default prompt dibaca dari
+  libreyolo/models/sam/base.py. Niat desain dari
+  docs/adr/0007-libresam-contract.md, semuanya di v1.5.0.
 snippets:
   install:
     - label: bash
@@ -31,7 +31,7 @@ snippets:
       code: |
         pip install 'libreyolo[sam]'
   usage:
-    - label: Point and box prompts
+    - label: Prompt titik dan kotak
       language: python
       code: |
         from libreyolo import LibreSAM, SAMPLE_IMAGE
@@ -44,7 +44,7 @@ snippets:
 
         r = model.predict(SAMPLE_IMAGE, bboxes=[100, 100, 200, 200])
         print(len(r))
-    - label: 'Encode once, prompt many times'
+    - label: 'Encode sekali, prompt berkali-kali'
       language: python
       code: |
         from libreyolo import LibreSAM, SAMPLE_IMAGE
@@ -60,49 +60,49 @@ snippets:
 source_hash: 18e8206c10ce17fd
 ---
 
-## Install
+## Instal
 
-The tier needs the `sam` extra.
+Tier ini membutuhkan tambahan `sam`.
 
 <code-tabs name="install" />
 
-## The factory
+## Pabrik
 
 ```python
 LibreSAM(model: str = "base", **kwargs) -> LibreSAMModel
 ```
 
-`model` is a size alias, not a path. `**kwargs` reaches the family
-constructor, which takes `device` and `multimask`. An unknown alias raises
-`ValueError` and the message lists every known alias.
+`model` adalah alias ukuran, bukan path. `**kwargs` mencapai family
+konstruktor, yang menerima `device` dan `multimask`. Alias yang tidak dikenal memunculkan
+`ValueError` dan pesan mencantumkan setiap alias yang dikenal.
 
 <code-tabs name="usage" />
 
-## Aliases
+## Alias
 
-| Family | Aliases | Sizes | Weights |
+| Family | Alias | Ukuran | Berat |
 |---|---|---|---|
 | SAM-1 | `base`, `large`, `huge`, `b`, `l`, `h`, `sam-base`, `sam-large`, `sam-huge`, `sam_b`, `sam_l`, `sam_h` | `base`, `large`, `huge` | `facebook/sam-vit-base`, `-large`, `-huge` |
-| SAM-2 | `sam2-tiny`, `sam2-small`, `sam2-base-plus`, `sam2-baseplus`, `sam2-large`, and the short forms `sam2-t`, `sam2-s`, `sam2-bp`, `sam2-l`, `sam2_t`, `sam2_s`, `sam2_bp`, `sam2_l` | `tiny`, `small`, `base-plus`, `large` | `LibreYOLO/LibreSAM2tiny`, `-small`, `-base-plus`, `-large` |
+| SAM-2 | `sam2-tiny`, `sam2-small`, `sam2-base-plus`, `sam2-baseplus`, `sam2-large`, dan bentuk pendek `sam2-t`, `sam2-s`, `sam2-bp`, `sam2-l`, `sam2_t`, `sam2_s`, `sam2_bp`, `sam2_l` | `tiny`, `small`, `base-plus`, `large` | `LibreYOLO/LibreSAM2tiny`, `-small`, `-base-plus`, `-large` |
 | EdgeTAM | `edgetam`, `edge-tam`, `edgetam-edge` | `edge` | `LibreYOLO/LibreEdgeTAM` |
 | SAM 3 | `sam3`, `sam-3`, `sam3-large` | `large` | `facebook/sam3` |
 | MobileSAM | `mobilesam`, `mobilesam-tiny`, `mobilesam_t`, `mobile-sam`, `mobile-sam-tiny` | `tiny` | `LibreYOLO/LibreMobileSAM` |
 | PicoSAM3 | `picosam3`, `picosam3-pico`, `picosam3_pico`, `pico-sam3` | `pico` | `LibreYOLO/LibrePicoSAM3` |
 
-The default is `base`. SAM-1, SAM-2, EdgeTAM and MobileSAM run at a nominal
-1024 pixel canvas, SAM 3 at 1008, PicoSAM3 at 96.
+Default adalah `base`. SAM-1, SAM-2, EdgeTAM dan MobileSAM berjalan pada kanvas nominal
+1024 piksel, SAM 3 pada 1008, PicoSAM3 pada 96.
 
-SAM 3 weights are gated. They download from `facebook/sam3` under Meta's
-custom SAM License, which is neither MIT nor Apache-2.0 and is not
-redistributed by LibreYOLO. Accept the terms on the repository page and
-authenticate with Hugging Face before loading; the loader logs the notice
-first.
+Bobot SAM 3 dibatasi. Mereka diunduh dari `facebook/sam3` di bawah Lisensi SAM khusus Meta,
+yang bukan MIT maupun Apache-2.0 dan tidak
+didistribusikan ulang oleh LibreYOLO. Terima syarat di halaman repositori dan
+autentikasi dengan Hugging Face sebelum memuat; pemuat mencatat pemberitahuan
+terlebih dahulu.
 
-The family classes are exported too, so `LibreSAM1`, `LibreSAM2`,
-`LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM` and `LibrePicoSAM3` can be
-constructed directly with `size=`.
+Kelas family juga diekspor, sehingga `LibreSAM1`, `LibreSAM2`,
+`LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM` dan `LibrePicoSAM3` dapat
+dibangun langsung dengan `size=`.
 
-## predict
+## prediksi
 
 ```python
 model.predict(
@@ -122,87 +122,86 @@ model.predict(
 ) -> Results
 ```
 
-| Argument | Default | Meaning |
+| Argumen | Default | Makna |
 |---|---|---|
-| `source` | `None` | Image to segment; `None` reuses the image cached by `set_image()` |
-| `points` | `None` | Point prompt in pixel coordinates |
-| `bboxes` | `None` | Box prompt as `[x1, y1, x2, y2]`, or a list of them for one mask per box |
-| `labels` | `None` | Point labels, `1` positive and `0` negative, shaped to match `points`; all positive when omitted |
-| `masks` | `None` | Reserved; passing one raises `NotImplementedError` |
-| `text` | `None` | Concept prompt; SAM 3 only |
-| `conf` | `None` | Predicted mask-IoU floor |
-| `multimask` | `None` | Return all ambiguity masks per prompt; defaults to the construction setting |
-| `max_det` | `300` | Cap on returned masks |
-| `device` | `None` | Move the model for this and later calls, invalidating cached embeddings |
-| `color_format` | `"auto"` | Color format hint for in-memory arrays |
-| `points_per_side` | `None` | Grid density for segment-everything; defaults to 32 |
+| `source` | `None` | Gambar untuk disegmentasi; `None` menggunakan kembali gambar yang disimpan oleh `set_image()` |
+| `points` | `None` | Prompt titik dalam koordinat piksel |
+| `bboxes` | `None` | Prompt kotak sebagai `[x1, y1, x2, y2]`, atau daftar dari mereka untuk satu mask per kotak |
+| `labels` | `None` | Label titik, `1` positif dan `0` negatif, disesuaikan untuk cocok dengan `points`; semua positif jika dihilangkan |
+| `masks` | `None` | Cadangan; melewati satu memunculkan `NotImplementedError` |
+| `text` | `None` | Prompt konsep; hanya SAM 3 |
+| `conf` | `None` | Prediksi lantai mask-IoU |
+| `multimask` | `None` | Kembalikan semua mask ambiguitas per prompt; default ke pengaturan konstruksi |
+| `max_det` | `300` | Batas pada mask yang dikembalikan |
+| `device` | `None` | Pindahkan model untuk panggilan ini dan panggilan berikutnya, membatalkan penyematan cache |
+| `color_format` | `"auto"` | Petunjuk format warna untuk array dalam memori |
+| `points_per_side` | `None` | Kepadatan grid untuk segment-everything; default ke 32 |
 
-The return is an ordinary `Results` carrying `masks`, plus tight `boxes`
-derived from those masks, with class `0` named `"object"`.
+Kembalian adalah `Results` biasa yang membawa `masks`, plus `boxes` ketat
+yang diperoleh dari mask-mask tersebut, dengan kelas `0` bernama `"object"`.
 
-## Prompt shapes
+## Bentuk prompt
 
-`points` accepts the nested forms `[x, y]` for one object, `[[x, y], ...]` for
-N objects, and `[[[x, y], ...], ...]` for points grouped per object. Numpy
-arrays work everywhere a list does. Coordinates are plain pixels on the source
-image.
+`points` menerima bentuk bersarang `[x, y]` untuk satu objek, `[[x, y], ...]` untuk
+N objek, dan `[[[x, y], ...], ...]` untuk titik yang dikelompokkan per objek. Numpy
+array bekerja di mana pun sebuah daftar bekerja. Koordinat adalah piksel biasa pada sumber
+gambar.
 
-Omitting every spatial prompt runs segment-everything, a grid automatic mask
-generator with a predicted-IoU threshold and box-IoU deduplication. The
-default `points_per_side` of 32 runs roughly 1024 decoder passes, which is
-slow on CPU; lower it for interactive use. The generator omits
-stability-score filtering, multi-crop and mask-IoU deduplication, so it is an
-approximation of the prompted path rather than a match for it.
+Melewatkan setiap prompt spasial menjalankan segment-everything, sebuah mask otomatis grid
+generator dengan ambang IoU yang diprediksi dan deduplikasi box-IoU. The
+default `points_per_side` dari 32 menjalankan kira-kira 1024 pass decoder, yang
+lambat pada CPU; turunkan untuk penggunaan interaktif. Generator mengabaikan
+penyaringan skor-stabilitas, multi-crop dan deduplikasi mask-IoU, jadi itu adalah
+perkiraan dari jalur yang diminta daripada kecocokan dengannya.
 
-## Confidence
+## Kepercayaan
 
-`conf` filters by predicted mask-IoU, which is a mask-quality score and not a
-detection confidence. `None` keeps every mask in the prompted path and applies
-the family grid threshold in segment-everything. `0.0` disables filtering in
-either mode.
+`conf` memfilter berdasarkan mask-IoU yang diprediksi, yang merupakan skor kualitas mask dan bukan
+kepercayaan deteksi. `None` mempertahankan setiap mask di jalur yang diarahkan dan menerapkan
+ambang grid family dalam segment-everything. `0.0` menonaktifkan penyaringan dalam
+salah satu mode.
 
-On SAM 3's text path, `conf` is the Promptable Concept Segmentation detection
-score instead. `None` there means the standard 0.3 threshold, and `0.0` keeps
-all candidates.
+Pada jalur teks SAM 3, `conf` adalah skor deteksi Promptable Concept Segmentation
+sebagai gantinya. `None` di sana berarti ambang standar 0,3, dan `0.0` mempertahankan
+semua kandidat.
 
-## Text prompts
+## Prompt teks
 
-`text=` is SAM 3 only; every spatial-prompt family raises
-`NotImplementedError` for it. Text is mutually exclusive with points and
-boxes. The returned `names` maps class `0` to the requested concept. A text
-call with `source=None` re-encodes the cached image, because the tracker and
-the concept encoder do not share a cache.
+`text=` hanya untuk SAM 3; setiap prompt spasial family meningkatkan
+`NotImplementedError` untuk itu. Teks bersifat saling eksklusif dengan titik dan
+kotak. `names` yang dikembalikan memetakan kelas `0` ke konsep yang diminta. Sebuah teks
+panggilan dengan `source=None` meng-encode ulang gambar yang di-cache, karena pelacak dan
+encoder konsep tidak berbagi cache.
 
-The keyword `exemplars=` is reserved for a future image-exemplar extension and
-is not implemented.
+Kata kunci `exemplars=` dicadangkan untuk ekstensi contoh-gambar di masa depan dan
+tidak diimplementasikan.
 
-## The encode-once lifecycle
+## Siklus hidup encode-sekali
 
 ```python
 model.set_image(source, color_format="auto") -> LibreSAMModel
 model.reset_image() -> LibreSAMModel
 ```
 
-`set_image` runs the heavy image encoder once and caches the embeddings, so
-every later `predict()` with `source=None` is cheap. Both methods return the
-model so calls can chain. Passing `device=` to `predict` moves the model and
-invalidates the cache.
+`set_image` menjalankan pengkode gambar berat sekali dan menyimpan embedding, jadi
+setiap `predict()` berikutnya dengan `source=None` itu murah. Kedua metode mengembalikan
+model sehingga panggilan dapat berantai. Melewatkan `device=` ke `predict` memindahkan model dan
+membatalkan cache.
 
 ## PicoSAM3
 
-PicoSAM3 accepts `bboxes=` only. Point, text, mask, multimask and
-segment-everything prompts raise. The box is expanded by 10 percent and run
-through a 96 pixel ROI network, and PicoSAM3 is the one family in the tier
-that exports, to ONNX only.
+PicoSAM3 hanya menerima `bboxes=`. Titik, teks, mask, multimask dan
+prompts segment-everything meningkat. Kotaknya diperluas sebesar 10 persen dan dijalankan
+melalui jaringan ROI 96 piksel, dan PicoSAM3 adalah family di tingkat tersebut
+yang mengekspor, hanya ke ONNX.
 
-## Not supported
+## Tidak didukung
 
-`train()`, `val()` and `track()` raise `NotImplementedError` on every family
-in the tier. Promptable masks have no fixed class set to score against, so
-mAP has no meaning here. `export()` raises for SAM-1, SAM-2, SAM 3, EdgeTAM
-and MobileSAM.
+`train()`, `val()` dan `track()` menaikkan `NotImplementedError` pada setiap family
+dalam tingkatan. Mask yang dapat dijalankan tidak memiliki satu set kelas tetap untuk dinilai, jadi
+mAP tidak ada artinya di sini. `export()` menaikkan untuk SAM-1, SAM-2, SAM 3, EdgeTAM
+dan MobileSAM.
 
-Video and memory paths for SAM-2, SAM 3 and EdgeTAM are out of scope for this
-version, as are SAM 3 image exemplars and mask prompts.
-
+Jalur video dan memori untuk SAM-2, SAM 3, dan EdgeTAM berada di luar cakupan ini
+versi, seperti halnya contoh gambar SAM 3 dan petunjuk mask.
 

@@ -1,16 +1,16 @@
 ---
-title: Vision-language API
-seo_title: 'LibreVLM API: aliases, set_classes and chat'
+title: API visi-bahasa
+seo_title: 'API LibreVLM: alias, set_classes dan chat'
 description: >-
-  The LibreVLM factory, every model alias, the sticky set_classes vocabulary,
-  set_task, the chat escape hatch, and why confidence is a placeholder.
+  Pabrik LibreVLM, setiap alias model, kosakata set_classes yang permanen,
+  set_task, jalur keluar chat, dan mengapa kepercayaan adalah placeholder.
 lead: >-
-  LibreVLM loads a generative vision-language model and drives it as an object
-  detector. The class list is a prompt rather than a fixed head, and the model
-  returns the same Results any other family returns.
+  LibreVLM memuat model visi-bahasa generatif dan menggunakannya sebagai
+  detektor objek. Daftar kelas adalah prompt daripada head tetap, dan model
+  mengembalikan Results yang sama seperti family lain mengembalikan.
 keywords:
   - LibreVLM
-  - vision language model detection
+  - deteksi model bahasa-visual
   - Qwen3-VL
   - LFM2-VL
   - InternVL3
@@ -19,10 +19,10 @@ keywords:
   - libreyolo chat
 last_verified: 1.5.0
 verification: >-
-  Aliases read from libreyolo/models/vlm/__init__.py; repositories, sizes and
-  task lists from the family modules under libreyolo/models/vlm/ plus
-  libreyolo/models/sensenova/model.py; call rules and raises from
-  libreyolo/models/vlm/base.py, all at v1.5.0.
+  Alias dibaca dari libreyolo/models/vlm/__init__.py; repositori, ukuran, dan
+  daftar task dari modul family di bawah libreyolo/models/vlm/ ditambah
+  libreyolo/models/sensenova/model.py; aturan panggilan dan raise dari
+  libreyolo/models/vlm/base.py, semuanya di v1.5.0.
 snippets:
   install:
     - label: bash
@@ -30,7 +30,7 @@ snippets:
       code: |
         pip install 'libreyolo[vlm]'
   usage:
-    - label: Detect an open vocabulary
+    - label: Deteksi kosakata terbuka
       language: python
       code: |
         from libreyolo import LibreVLM, SAMPLE_IMAGE
@@ -41,7 +41,7 @@ snippets:
         result = model.predict(SAMPLE_IMAGE)
         for box, cls in zip(result.boxes.xyxy, result.boxes.cls):
             print(result.names[int(cls)], box.tolist())
-    - label: Ask a free-form question
+    - label: Ajukan pertanyaan bebas
       language: python
       code: |
         from libreyolo import LibreVLM, SAMPLE_IMAGE
@@ -51,28 +51,28 @@ snippets:
 source_hash: 57ddac08bc4d4e05
 ---
 
-## Install
+## Instal
 
-The tier needs the `vlm` extra.
+Tingkat tersebut membutuhkan tambahan `vlm`.
 
 <code-tabs name="install" />
 
-## The factory
+## Pabrik
 
 ```python
 LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 ```
 
-`model` is an alias, not a path. `**kwargs` reaches the family constructor,
-which takes `device`, `names` (the initial vocabulary, equivalent to calling
-`set_classes` after load), `prompt` (override the detection prompt) and
-`max_new_tokens`. An unknown alias raises `ValueError` listing every alias.
+`model` adalah alias, bukan jalur. `**kwargs` mencapai konstruktor family,
+yang mengambil `device`, `names` (kosakata awal, setara dengan memanggil
+`set_classes` setelah memuat), `prompt` (menimpa prompt deteksi) dan
+`max_new_tokens`. Alias yang tidak dikenal memunculkan `ValueError` yang mencantumkan setiap alias.
 
 <code-tabs name="usage" />
 
-## Aliases
+## Alias
 
-| Family | Aliases | Sizes | Weights |
+| Family | Alias | Ukuran | Berat |
 |---|---|---|---|
 | Qwen3-VL | `qwen3-vl`, `qwen3-vl-2b`, `qwen3-vl-4b`, `qwen3-vl-8b` | `2b`, `4b`, `8b` | `Qwen/Qwen3-VL-2B-Instruct`, `-4B-`, `-8B-` |
 | LFM2-VL | `lfm2-vl`, `lfm2-vl-450m`, `lfm2-vl-1.6b` | `450m`, `1.6b` | `LiquidAI/LFM2.5-VL-450M`, `-1.6B` |
@@ -82,35 +82,35 @@ which takes `device`, `names` (the initial vocabulary, equivalent to calling
 | Kosmos-2 | `kosmos-2`, `kosmos2` | `224` | `microsoft/kosmos-2-patch14-224` |
 | LocateAnything | `locate-anything`, `locateanything`, `locate-anything-3b`, `locateanything-3b` | `3b` | `nvidia/LocateAnything-3B` |
 | SenseNova-Vision | `sensenova-vision`, `sensenova-vision-7b`, `sensenovavision` | `7b` | `LibreYOLO/SenseNovaVision7b` |
-| LibreMODUS | `libremodus`, `libremodus-14b-a7b`, `modus`, `modus-14b-a7b` | `14b-a7b` | Pinned upstream snapshot |
+| LibreMODUS | `libremodus`, `libremodus-14b-a7b`, `modus`, `modus-14b-a7b` | `14b-a7b` | Snapshot hulu yang dipasang |
 
-The default alias is `qwen3-vl-4b`. Sizes for the default alias of each family
-are the ones listed first: `qwen3-vl` resolves to `4b`, `lfm2-vl` to `450m`,
-`internvl3` to `2b`, `smolvlm2` to `2.2b`, `florence-2` to `base`.
+Alias default adalah `qwen3-vl-4b`. Ukuran untuk alias default masing-masing family
+adalah yang tercantum pertama: `qwen3-vl` mengarah ke `4b`, `lfm2-vl` ke `450m`,
+`internvl3` ke `2b`, `smolvlm2` ke `2.2b`, `florence-2` ke `base`.
 
 `LibreVLM`, `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`,
-`LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` and `LibreMODUS`
-(also spelled `LibreModus`) are exported at package level.
+`LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` dan `LibreMODUS`
+(juga dieja `LibreModus`) diekspor pada tingkat paket.
 
-## Tasks
+## Tugas
 
-Most families serve `detect` only. Two serve more:
+Sebagian besar keluarga hanya melayani `detect`. Dua melayani lebih banyak:
 
-| Family | Supported tasks |
+| Family | Tugas yang didukung |
 |---|---|
 | LocateAnything | `detect`, `point` |
 | SenseNova-Vision | `detect`, `segment`, `panoptic`, `pose`, `point`, `depth`, `ocr` |
 
-Because the task is prompt-driven rather than baked into a checkpoint, it can
-be switched on a loaded model:
+Karena task digerakkan oleh prompt daripada tertanam dalam checkpoint, itu dapat
+diaktifkan pada model yang sudah dimuat:
 
 ```python
 model.set_task(task: str) -> LibreVLMModel
 ```
 
-The task is validated against the family's supported list, is sticky across
-later `predict()` and `track()` calls, and the model is returned so calls can
-chain.
+task divalidasi terhadap daftar yang didukung oleh family, tetap lengket di seluruh
+panggilan `predict()` dan `track()` berikutnya, dan model dikembalikan sehingga panggilan dapat
+berantai.
 
 ## set_classes
 
@@ -118,56 +118,55 @@ chain.
 model.set_classes(classes: list[str]) -> LibreVLMModel
 ```
 
-Sets the open vocabulary. Any words work, because the model is prompted with
-them rather than constrained to a fixed head. The list must be non-empty and
-its entries must be unique when compared case-insensitively. Passing a bare
-string raises `TypeError`, because it would enumerate into one-character
-classes. The vocabulary is sticky: set it once after loading and it persists
-until set again.
+Menetapkan kosakata terbuka. Kata apa pun bisa digunakan, karena model diberi prompt dengan
+mereka daripada dibatasi pada head yang tetap. Daftar harus tidak kosong dan
+entri-entri tersebut harus unik jika dibandingkan tanpa memperhatikan huruf besar-kecil. Melewatkan sebuah
+string memunculkan `TypeError`, karena itu akan menghitung menjadi satu karakter
+kelas. Kosakatanya bersifat tetap: atur sekali setelah memuat dan itu akan bertahan
+sampai diatur lagi.
 
-## chat
+## obrolan
 
 ```python
 model.chat(image, prompt, max_new_tokens=None, color_format="auto") -> str
 ```
 
-Raw multimodal generation: image and prompt in, decoded text out, verbatim.
-This is the escape hatch under the detection convenience, for free-form
-questions, counting, or an output format the detection wrapper does not
-cover. `max_new_tokens` falls back to the family's `MAX_NEW_TOKENS`, which is
-1024 on the base class. Decoding is greedy with a mild repetition penalty.
+Generasi multimodal mentah: gambar dan prompt masuk, teks yang didekodekan keluar, kata demi kata.
+Ini adalah pintu keluar darurat di bawah kenyamanan deteksi, untuk bentuk bebas
+pertanyaan, penghitungan, atau format keluaran yang tidak dilakukan oleh pembungkus deteksi
+menutupi. `max_new_tokens` kembali ke family's `MAX_NEW_TOKENS`, yang adalah
+1024 pada kelas dasar. Dekoding dilakukan secara rakus dengan penalti pengulangan yang ringan.
 
-## Confidence
+## Kepercayaan Diri
 
-Generated output has no calibrated per-box confidence. This version assigns a
-constant placeholder so `predict`, drawing and `track` behave, which makes
-`conf=` filtering and mAP soft rather than meaningful. This is also why
-`val()` raises: COCO mAP over placeholder scores would mislead.
+Output yang dihasilkan tidak memiliki kepercayaan per-kotak yang terkalibrasi. Versi ini menetapkan
+placeholder konstan sehingga `predict`, menggambar dan `track` berperilaku, yang membuat
+Penyaringan `conf=` dan mAP bersifat lembut daripada bermakna. Inilah juga alasannya
+`val()` mengangkat: COCO mAP atas skor placeholder akan menyesatkan.
 
-## Predict and track
+## Prediksi dan lacak
 
-The standard predict surface applies, and `track()` works, so a VLM detector
-drops into the same pipeline as any other family. Two class-level policies
-differ from a convolutional detector: test-time augmentation is disabled,
-because multi-scale augmentation is meaningless for a fixed-resolution
-generator, and batched predict is off, because generation is autoregressive
-and preprocessing returns a text-and-image encoding rather than a stackable
-image tensor.
+Permukaan prediksi standar berlaku, dan `track()` berfungsi, jadi sebuah detektor VLM
+jatuh ke dalam pipeline yang sama seperti family lainnya. Dua kebijakan tingkat kelas
+berbeda dari detektor konvolusional: augmentasi saat uji dinonaktifkan,
+karena augmentasi multi-skala tidak berarti untuk generator resolusi tetap,
+dan prediksi berkumpulan dimatikan, karena generasi bersifat autoregresif
+dan pra-pemrosesan mengembalikan pengkodean teks-dan-gambar daripada tumpukan
+tensor gambar.
 
-## Not supported
+## Tidak didukung
 
-`train()`, `val()` and `export()` raise `NotImplementedError`. Fine-tune
-upstream and load the resulting weights.
+`train()`, `val()` dan `export()` menimbulkan `NotImplementedError`. Lakukan pelatihan ulang
+hulu dan muat bobot yang dihasilkan.
 
-## Remote code
+## Kode jarak jauh
 
-Every shipped family loads through a native model class, so LibreYOLO does not
-execute third-party repository code by default. A family that genuinely needs
-it must opt in explicitly and pin a snapshot revision; LocateAnything is the
-one that does, pinned to commit `c32291ca5e996f5a7a485845b4f57a233936bba0`.
+Setiap family yang dikirim dimuat melalui kelas model asli, jadi LibreYOLO tidak
+mengeksekusi kode repositori pihak ketiga secara default. Sebuah family yang benar-benar membutuhkan
+harus memilih secara eksplisit dan menyematkan revisi snapshot; LocateAnything adalah
+yang melakukannya, disematkan ke commit `c32291ca5e996f5a7a485845b4f57a233936bba0`.
 
-LibreMODUS is an explicit exception to the checkpoint schema: its alias
-resolves to a directory of pinned upstream files rather than a LibreYOLO
-`.pt`, and LibreYOLO neither adds v1.0 metadata to it nor republishes it.
-
+LibreMODUS adalah pengecualian eksplisit terhadap skema checkpoint: aliasnya
+merujuk ke direktori file upstream yang disematkan daripada LibreYOLO
+, dan LibreYOLO tidak menambahkan metadata v1.0 ke dalamnya maupun memublikasikannya kembali.
 

@@ -2,22 +2,23 @@
 title: Hyperparamètres
 seo_title: Hyperparamètres d'entraînement dans LibreYOLO
 description: >-
-  Les arguments importants de train() : epochs, batch, lr0, optimizer, EMA, lot
-  automatique, accumulation des gradients et reprise, ainsi que les raisons des
-  différences entre les valeurs par défaut des familles.
+  Les arguments importants de train() : epochs, batch, lr0, optimiseur, EMA,
+  autobatch, accumulation de gradients et reprise, ainsi que la raison des
+  valeurs par défaut propres à chaque famille.
 lead: >-
   Chaque argument d'entraînement est un champ d'une dataclass TrainConfig. La
-  classe de base définit le champ et sa valeur par défaut. Chaque famille de
-  modèles en hérite et remplace les valeurs modifiées par sa recette publiée.
+  classe de base définit le champ et sa valeur par défaut ; chaque famille de
+  modèles en crée une sous-classe et remplace les valeurs par défaut modifiées
+  par sa recette publiée.
 keywords:
-  - arguments train
-  - taux apprentissage
-  - taille lot
-  - lot automatique
+  - arguments entraînement
+  - learning rate
+  - taille de batch
+  - autobatch
   - moyenne mobile exponentielle
   - accumulation gradients
   - reprendre entraînement
-  - patience arrêt anticipé
+  - patience early stopping
   - amp bfloat16
   - configuration entraînement yaml
 last_verified: 1.5.0
@@ -63,8 +64,8 @@ snippets:
     - label: CLI
       language: bash
       code: >
-        # Affiche les valeurs par défaut de train, val et predict, y compris
-        celles de la famille.
+        # Affiche les valeurs par défaut de train, val et predict, remplacements
+        inclus.
 
         libreyolo cfg
   autobatch:
@@ -77,7 +78,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
 
-        # batch=-1 sonde la mémoire GPU et se résout en une puissance de deux
+        # batch=-1 sonde la mémoire GPU et choisit une puissance de deux
         concrète.
 
         model.train(data="my-dataset.yaml", batch=-1, imgsz=640)
@@ -88,12 +89,16 @@ snippets:
   accumulate:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # 4 micro-lots de 16 par étape d'optimisation, lot effectif de 64.
+
+        # 4 micro-batchs de 16 par étape d'optimiseur, soit un batch effectif de
+        64.
+
         model.train(data="my-dataset.yaml", batch=16, nbs=64)
   resume:
     - label: Python
@@ -120,8 +125,8 @@ snippets:
         from libreyolo import LibreYOLO
 
 
-        # Les clés YAML sont des noms de champs TrainConfig. Les kwargs
-        explicites l'emportent.
+        # Les clés du yaml sont des champs TrainConfig. Les kwargs explicites
+        gagnent.
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
@@ -131,41 +136,43 @@ source_hash: d838d1abd45af40f
 
 ## Définir les arguments
 
-`train()` reçoit des arguments nommés et la CLI les mêmes noms sous la forme
-`key=value`.
+`train()` accepte des arguments nommés, et la CLI accepte les mêmes noms sous
+la forme `key=value`.
 
 <code-tabs name="train" />
 
-Les deux parcours aboutissent au même endroit. Les arguments sont transmis à
+Les deux chemins aboutissent au même endroit. Les kwargs sont transmis à
 `TrainConfig.from_kwargs()`, qui construit la dataclass de configuration de la
 famille.
 
-## Une faute de frappe ne déclenche pas d'erreur
+## Une faute de frappe ne provoque pas d'erreur
 
-`from_kwargs()` supprime toute clé qui n'est pas un champ de la configuration
-et émet un `UserWarning` qui la nomme. L'entraînement démarre ensuite avec la
-valeur par défaut :
+`from_kwargs()` élimine toute clé qui n'est pas un champ de la configuration et
+émet un `UserWarning` qui la nomme. L'entraînement démarre alors avec la valeur
+par défaut :
 
 ```python
-# UserWarning: Unknown training config keys (ignored): ['learning_rate']
+# UserWarning : clés de configuration d'entraînement inconnues (ignorées) : ['learning_rate']
 model.train(data="my-dataset.yaml", learning_rate=0.001)
 ```
 
-Rien n'échoue, l'exécution se termine et le taux d'apprentissage n'a jamais pris
-la valeur demandée. Lisez les avertissements de la première époque d'une
-nouvelle recette. La CLI est plus stricte, car elle valide les noms des options
-avant la construction de la configuration. Une option CLI mal orthographiée est
-donc immédiatement refusée.
+Rien n'échoue, l'exécution se termine et le learning rate n'a jamais eu la
+valeur demandée par l'appelant. Lisez les avertissements pendant la première
+époque d'une nouvelle recette. La CLI est plus stricte, car elle valide les
+noms des flags avant la construction de la configuration. Un flag CLI mal
+orthographié est donc rejeté immédiatement.
 
-## Valeurs par défaut propres aux familles
+## Valeurs par défaut propres à chaque famille
 
-`TrainConfig` définit le champ et une valeur de base. Chaque famille en hérite
-et remplace ce que sa recette publiée modifie. Il n'existe donc aucune réponse
-unique à la question du taux d'apprentissage par défaut.
+`TrainConfig` définit le champ et une valeur de base par défaut. Chaque famille
+en crée une sous-classe et remplace ce que sa recette publiée modifie. Il
+n'existe donc pas de réponse unique à la question « quel est le learning rate
+par défaut ? ».
 
-Les valeurs de base sont `optimizer="sgd"`, `lr0=0.01`, `momentum=0.937`,
-`weight_decay=5e-4`, `scheduler="yoloxwarmcos"`, `epochs=300`, `batch=16`,
-`imgsz=640` et `amp=True`. Trois exemples illustrent l'ampleur des écarts :
+Les valeurs de base par défaut sont `optimizer="sgd"`, `lr0=0.01`,
+`momentum=0.937`, `weight_decay=5e-4`, `scheduler="yoloxwarmcos"`, `epochs=300`,
+`batch=16`, `imgsz=640` et `amp=True`. Voici trois exemples de l'écart d'une
+famille par rapport à cette base :
 
 | Champ | Base | YOLOv9 | D-FINE | YOLO-NAS |
 |---|---|---|---|---|
@@ -176,160 +183,160 @@ Les valeurs de base sont `optimizer="sgd"`, `lr0=0.01`, `momentum=0.937`,
 | `epochs` | `300` | `300` | `132` | `300` |
 | `amp` | `True` | `True` | `False` | `False` |
 
-D-FINE et DEIM sont publiés avec `amp=False`, car le décodeur de D-FINE limite
-les activations à 65 504, la plus grande valeur float16 finie. YOLO-NAS et FOMO
-le désactivent également par défaut. L'option `--amp` de la CLI vaut `True` par
-défaut pour chaque famille. Elle compte donc comme fournie par l'utilisateur et
-remplace la valeur par défaut de la famille. Ne la modifiez que volontairement.
+D-FINE et DEIM sont fournis avec `amp=False`, car le décodeur D-FINE borne les
+activations à 65504, la plus grande valeur float16 finie. YOLO-NAS et FOMO la
+désactivent aussi par défaut. Le flag `--amp` de la CLI vaut `True` par défaut
+pour chaque famille. Il est donc compté comme fourni par l'utilisateur et
+remplace la valeur par défaut de la famille ; ne le modifiez que si c'est votre
+intention.
 
-Pour lire les véritables valeurs d'une famille plutôt que de les deviner :
+Pour lire les véritables valeurs par défaut d'une famille au lieu de les
+deviner :
 
 <code-tabs name="defaults" />
 
-## Taille du lot
+## Taille de batch
 
-`batch` désigne le lot global. En entraînement multi-GPU, chaque rang charge
-`batch // world_size`. La valeur transmise reste donc le nombre d'images par
-étape d'optimisation quel que soit le nombre de GPU. Consultez
-[l'entraînement multi-GPU](/docs/train/multi-gpu).
+`batch` est le batch global. Lors d'un entraînement multi-GPU, chaque rang
+charge `batch // world_size`, si bien que le nombre transmis est le nombre
+d'images par étape d'optimiseur quel que soit le nombre de GPU. Consultez
+l'[entraînement multi-GPU](/docs/train/multi-gpu).
 
-`batch=-1` active le lot automatique. Le programme d'entraînement sonde le
-modèle en mode entraînement avec une véritable rétropropagation sur des
-puissances de deux, ajuste une droite à la courbe de mémoire et sélectionne la
-plus grande puissance de deux strictement inférieure à la valeur extrapolée qui
-tient dans 60 % de la VRAM totale.
+`batch=-1` active l'autobatch. Le trainer sonde le modèle en mode entraînement
+avec une véritable passe backward sur des puissances de deux, ajuste une droite
+à la courbe de mémoire et choisit la plus grande puissance de deux strictement
+inférieure à la valeur extrapolée qui tient dans 60 % de la VRAM totale.
 
 <code-tabs name="autobatch" />
 
-L'intérêt réside précisément dans la sonde en mode entraînement avec
-rétropropagation. Une sonde d'inférence omet les activations conservées et les
-tenseurs de gradients, qui représentent plusieurs fois l'empreinte d'inférence
-pour un CNN profond. RF-DETR réduit la fraction cible à 45 %, car la
-rétropropagation synthétique de la sonde sous-estime encore le coût de son
+Le point important est la sonde en mode entraînement avec une passe backward :
+une sonde en mode inférence ne tient pas compte des activations conservées et
+des tenseurs de gradients, qui représentent plusieurs fois l'empreinte de
+l'inférence pour un CNN profond. RF-DETR abaisse la fraction cible à 45 %, car
+la passe backward synthétique de la sonde sous-estime toujours le coût de son
 critère et des couches auxiliaires du décodeur.
 
-Le lot automatique est une fonctionnalité CUDA. Sur CPU ou MPS, il journalise
-une ligne et conserve le lot par défaut.
+L'autobatch est une fonctionnalité CUDA. Sur CPU ou MPS, il journalise une ligne
+et conserve le batch par défaut.
 
-## Accumulation des gradients
+## Accumulation de gradients
 
-`nbs` définit la taille nominale, ou effective, du lot. Le programme
-d'entraînement accumule `round(nbs / batch)` micro-lots par étape d'optimisation.
+`nbs` définit la taille de batch nominale, ou effective. Le trainer accumule
+`round(nbs / batch)` micro-batchs par étape d'optimiseur.
 
 <code-tabs name="accumulate" />
 
 Avec la valeur par défaut `None`, l'accumulation est désactivée et
 l'entraînement reste inchangé.
 
-## Taux d'apprentissage et planning
+## Learning rate et schedule
 
-`lr0` est le taux d'apprentissage initial et `optimizer` accepte `sgd`, `adam`
-et `adamw`. `momentum` désigne le momentum de SGD ou beta1 d'Adam,
-`weight_decay` le terme L2, et `nesterov` s'applique à SGD.
+`lr0` est le learning rate initial et `optimizer` accepte `sgd`, `adam` et
+`adamw`. `momentum` correspond au momentum de SGD ou à beta1 d'Adam,
+`weight_decay` est le terme L2 et `nesterov` s'applique à SGD.
 
-Le planning est façonné par `scheduler`, `warmup_epochs`, `warmup_lr_start` et
-`min_lr_ratio`. `no_aug_epochs` définit le nombre d'époques finales sans
-augmentation forte. Plusieurs plannings l'emploient aussi pour façonner leur
-fin. Il ne s'agit donc pas uniquement d'un réglage d'augmentation. Le
-comportement de chaque famille pour l'autre moitié figure dans les
-[augmentations](/docs/train/augmentations).
+Le schedule est déterminé par `scheduler`, `warmup_epochs`, `warmup_lr_start`
+et `min_lr_ratio`. `no_aug_epochs` définit le nombre d'époques finales sans
+augmentation forte, et plusieurs schedules l'utilisent aussi pour façonner
+leur fin. Il ne s'agit donc pas uniquement d'un paramètre d'augmentation. Le
+comportement de chaque famille pour sa partie augmentation figure dans la page
+sur les [augmentations](/docs/train/augmentations).
 
-Certaines familles ajoutent leurs propres réglages de taux.
+Certaines familles ajoutent leurs propres paramètres de learning rate.
 `backbone_lr_mult` met à l'échelle le groupe du backbone par rapport à la tête,
-`clip_max_norm` fixe l'écrêtage des gradients et SegFormer emploie
-`head_lr_mult` pour exécuter sa tête de décodage à dix fois le taux du backbone.
-Ces champs appartiennent à la sous-classe de configuration de la famille, pas à
-la classe de base.
+`clip_max_norm` définit l'écrêtage des gradients et SegFormer utilise
+`head_lr_mult` pour exécuter sa tête de décodage à dix fois le learning rate du
+backbone. Ces paramètres appartiennent à la sous-classe de configuration de la
+famille, pas à la classe de base.
 
 ## EMA
 
 `ema=True` conserve une moyenne mobile exponentielle des poids à côté des poids
 entraînés. Elle est activée par défaut partout sauf pour FOMO.
 
-`ema_decay` est la décroissance cible. Elle augmente progressivement au lieu de
-démarrer à sa cible. La valeur effective à la mise à jour `n` est
-`ema_decay * (1 - exp(-n / tau))`, avec `tau` égal à 2 000 par défaut. Les
-premières mises à jour suivent ainsi le modèle de plus près, tandis que les
-dernières sont davantage lissées. Les valeurs par défaut des familles vont de
-`0.997` pour la pose YOLO-NAS à `0.9998` pour YOLOX et `0.9999` pour YOLOv9
-et la lignée DETR.
+`ema_decay` est le decay cible. Le decay augmente progressivement au lieu de
+commencer à sa cible : sa valeur effective à la mise à jour `n` est
+`ema_decay * (1 - exp(-n / tau))`, avec `tau` égal à 2000 par défaut. Les
+premières mises à jour suivent donc le modèle de plus près, tandis que les
+dernières le lissent. Les valeurs par défaut des familles vont de `0.997` pour
+la pose YOLO-NAS à `0.9998` pour YOLOX et `0.9999` pour YOLOv9 et la lignée
+DETR.
 
 Les poids EMA sont ceux qui sont validés et stockés dans `best.pt` et `last.pt`.
-Les poids entraînés bruts sont aussi stockés sous la clé `train_model`. Une
-reprise continue ainsi depuis la trajectoire entraînée plutôt que depuis la
+Les poids entraînés bruts sont aussi stockés sous la clé `train_model`, afin
+qu'une reprise continue depuis la trajectoire entraînée plutôt que depuis la
 moyenne.
 
 ## Précision
 
-`amp=True` exécute la propagation avant sous autocast CUDA. `amp_dtype` choisit
-`float16`, valeur par défaut, ou `bfloat16`. Les formes `fp16` et `bf16` sont
+`amp=True` exécute la passe forward sous autocast CUDA. `amp_dtype` sélectionne
+`float16` (valeur par défaut) ou `bfloat16` ; `fp16` et `bf16` sont des formes
 acceptées.
 
-Float16 exige une mise à l'échelle dynamique de la perte et reçoit un
-`GradScaler` actif. La plage d'exposants plus large de bfloat16 n'en a pas
-besoin. Son scaler est construit mais désactivé afin de conserver le même
-parcours d'optimisation. Demander bfloat16 sur un périphérique CUDA incompatible
-déclenche une erreur à la préparation au lieu d'une dégradation silencieuse.
+Float16 nécessite une mise à l'échelle dynamique de la loss et reçoit un
+`GradScaler` actif. La plage d'exposants plus large de Bfloat16 n'en a pas
+besoin, si bien que son scaler est construit mais désactivé, ce qui conserve un
+chemin d'optimiseur identique. Demander bfloat16 sur un appareil CUDA qui ne le
+prend pas en charge provoque une erreur pendant la configuration au lieu d'une
+dégradation silencieuse.
 
 ## Sortie, checkpoints et arrêt
 
-Les exécutions sont écrites sous `project/name`. `project` vaut
-`runs/train` par défaut partout, mais `name` fait partie des valeurs propres aux
-familles. La base emploie `exp`, YOLOv9 `yolo9_exp` et D-FINE `dfine_exp`.
-Avec `exist_ok=False`, valeur par défaut, un répertoire existant reçoit un
-suffixe incrémenté au lieu d'être écrasé.
+Les exécutions sont écrites dans `project/name`. `project` vaut `runs/train`
+par défaut partout, mais `name` fait partie des remplacements propres aux
+familles : la valeur de base par défaut est `exp`, tandis que YOLOv9 utilise
+`yolo9_exp` et D-FINE `dfine_exp`. Avec `exist_ok=False`, la valeur par défaut,
+un répertoire existant reçoit un suffixe incrémenté au lieu d'être écrasé.
 
 `save_period` écrit un fichier `weights/epoch_<N>.pt` supplémentaire toutes les
 N époques, en plus de `weights/last.pt` après chaque époque et de
-`weights/best.pt` à chaque amélioration de la métrique suivie.
-`eval_interval` définit la fréquence de validation. `patience` arrête
-l'exécution après ce nombre d'époques sans amélioration, et `0` désactive
-l'arrêt anticipé.
+`weights/best.pt` à chaque amélioration de la mesure suivie. `eval_interval`
+définit la fréquence de la validation et `patience` arrête l'exécution après ce
+nombre d'époques sans amélioration, `0` désactivant l'early stopping.
 
 `cache` accélère les époques répétées en conservant les images décodées en RAM
-(`True` ou `"ram"`) ou dans des fichiers `.npy` à côté des sources
-(`"disk"`). Les lectures mises en cache sont identiques octet par octet aux
-nouvelles lectures. Avec plusieurs workers du chargeur de données, `"disk"` est
-le choix le plus sûr.
+(`True` ou `"ram"`) ou dans des fichiers `.npy` à côté des sources (`"disk"`).
+Les lectures depuis le cache sont identiques octet par octet aux nouvelles
+lectures. Avec des workers de dataloader, `"disk"` est le choix le plus sûr.
 
 ## Reprendre
 
-`resume=True` continue une exécution interrompue. Le checkpoint doit d'abord
+`resume=True` poursuit une exécution interrompue. Le checkpoint doit d'abord
 être chargé, car la reprise le lit depuis le modèle et non depuis un argument
 séparé.
 
 <code-tabs name="resume" />
 
-La reprise restaure les poids entraînés, l'état de l'optimiseur, les poids et le
-nombre de mises à jour EMA, le suivi de la meilleure métrique, l'échelle du
-`GradScaler` et les états aléatoires PyTorch, CUDA et NumPy. Elle démarre à
-l'époque suivant celle du checkpoint et avance le planning jusqu'à cette
-position.
+La reprise restaure les poids entraînés, l'état de l'optimiseur, les poids EMA
+et le nombre de mises à jour, le suivi de la meilleure mesure, l'échelle du
+`GradScaler`, ainsi que les états aléatoires de PyTorch, CUDA et NumPy. Elle
+commence à l'époque qui suit celle du checkpoint et avance le schedule jusqu'à
+cette position.
 
-Deux opérations restent impossibles. `resume=True` ne peut pas être combiné à
-`pretrained` et déclenche une erreur. Lorsque la clé de la meilleure métrique du
-checkpoint diffère de celle de l'exécution actuelle, le suivi repart de zéro
-avec un avertissement au lieu de comparer des valeurs qui n'ont pas le même
-sens.
+Elle ne fait pas deux choses. `resume=True` ne peut pas être combiné à
+`pretrained`, ce qui provoque une erreur. De plus, lorsque la clé de meilleure
+mesure du checkpoint diffère de celle de l'exécution actuelle, son suivi est
+remis à zéro avec un avertissement au lieu de comparer des valeurs qui n'ont
+pas la même signification.
 
 ## Recettes dans un fichier
 
-`cfg=` charge une association YAML de noms de champs `TrainConfig` et la
-fusionne sous les arguments nommés explicites. Un argument nommé l'emporte donc
+`cfg=` charge une correspondance YAML de noms de champs `TrainConfig` et la
+fusionne sous les arguments nommés explicites, si bien qu'un kwarg l'emporte
 toujours sur le fichier.
 
 <code-tabs name="cfg" />
 
 `size` et `num_classes` sont retirés du fichier, car l'instance du modèle les
-possède déjà. Il n'existe aucune option `--cfg` dans la CLI. Le chemin est un
-argument Python.
+possède déjà. Il n'existe aucun flag `--cfg` dans la CLI ; le chemin du fichier
+est un argument Python.
 
-## Voir aussi
+## Pages connexes
 
-- [Datasets](/docs/train/datasets) pour les formes acceptées par `data=`.
-- [Augmentations](/docs/train/augmentations) pour les réglages d'augmentation et
-  les familles qui les respectent.
+- [Datasets](/docs/train/datasets) pour les valeurs acceptées par `data=`.
+- [Augmentations](/docs/train/augmentations) pour les paramètres d'augmentation
+  et les familles qui les respectent.
 - [Gel des couches](/docs/train/layer-freezing) et [LoRA](/docs/train/lora) pour
-  entraîner un sous-ensemble des poids.
-- [Validation et métriques](/docs/train/validation) pour les valeurs rapportées
+  entraîner une partie des poids.
+- [Validation et mesures](/docs/train/validation) pour les résultats rapportés
   par l'exécution.

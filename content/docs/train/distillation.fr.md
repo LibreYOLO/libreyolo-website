@@ -1,24 +1,24 @@
 ---
-title: Distillation des connaissances
-seo_title: Distillation des connaissances dans LibreYOLO
+title: Distillation de connaissances
+seo_title: Distillation de connaissances dans LibreYOLO
 description: >-
-  Entraîner un petit détecteur avec un enseignant plus grand ou un backbone
-  DINOv2 gelé : pertes MGD, CWD et MSE de caractéristiques, points de
-  prélèvement et familles compatibles.
+  Entraînez un petit détecteur avec un teacher plus grand ou un backbone DINOv2
+  gelé : les loss MGD, CWD et MSE de caractéristiques, les points d'extraction
+  et la prise en charge par famille.
 lead: >-
-  La distillation ajoute un second terme de perte qui rapproche les cartes de
-  caractéristiques intermédiaires de l'élève de celles d'un enseignant gelé.
-  LibreYOLO prélève les caractéristiques avec des hooks de propagation. La tête
-  et la perte propres à l'enseignant n'interviennent jamais.
+  La distillation ajoute un second terme de loss qui rapproche les cartes de
+  caractéristiques intermédiaires du student de celles d'un teacher gelé.
+  LibreYOLO extrait les caractéristiques avec des hooks forward, si bien que la
+  tête et la loss propres au teacher n'interviennent jamais.
 keywords:
-  - distillation connaissances
-  - distillation générative masquée
-  - distillation par canal
+  - distillation de connaissances
+  - masked generative distillation
+  - channel-wise distillation
   - distillation caractéristiques
-  - enseignant dinov2
-  - entraînement enseignant élève
-  - perte mgd
-  - perte cwd
+  - teacher dinov2
+  - entraînement teacher student
+  - loss mgd
+  - loss cwd
 last_verified: 1.5.0
 snippets:
   detector:
@@ -46,7 +46,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        # Un ViT auto-supervisé gelé supervise un étage du backbone.
+        # Un ViT auto-supervisé gelé supervise une étape du backbone.
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(
             data="my-dataset.yaml",
@@ -59,7 +59,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           epochs=100 distill_model=dinov2
   tuned:
-    - label: Régler la perte
+    - label: Régler la loss
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -78,50 +78,50 @@ source_hash: 7210031328f6826f
 ## Distiller depuis un checkpoint plus grand
 
 Définir `distill_model` active la distillation. Sa valeur est un checkpoint
-enseignant, chargé par la même fabrique que tout autre modèle.
+teacher, chargé par la même factory que n'importe quel autre modèle.
 
 <code-tabs name="detector" />
 
-L'enseignant effectue sa propagation sous `no_grad` et sous autocast lorsque
-l'AMP est activée. Le modèle gelé ne paie donc pas un calcul en pleine précision
-à chaque étape. Des hooks de propagation capturent ses cartes de caractéristiques
-à des points nommés, la perte les compare à celles de l'élève, puis le résultat
-est ajouté à la perte d'entraînement et rapporté comme un composant nommé
-`distill`.
+Le teacher exécute sa passe forward sous `no_grad`, et sous autocast lorsque
+l'AMP est active, si bien que le modèle gelé ne paie pas le coût de calcul en
+pleine précision à chaque étape. Des hooks forward capturent ses cartes de
+caractéristiques aux points d'extraction nommés, la loss les compare à celles
+du student, puis le résultat est ajouté à la loss d'entraînement et rapporté
+comme un composant nommé `distill`.
 
 ## Distiller depuis un backbone fondamental gelé
 
-Un ViT auto-supervisé peut à la place superviser un seul étage du backbone de
-l'élève. Les caractéristiques de l'enseignant proviennent de son propre
-extracteur plutôt que de hooks, et la perte gère la différence entre une grille
-de patches et un pas convolutif.
+Un ViT auto-supervisé peut à la place superviser une seule étape du backbone du
+student. Les caractéristiques du teacher proviennent de son propre extracteur
+de caractéristiques plutôt que de hooks, et la loss gère la différence entre
+une grille de patches et un stride convolutionnel.
 
 <code-tabs name="foundation" />
 
 `distill_model` reconnaît `dinov2`, qui correspond à DINOv2-base, ainsi que
 `dinov2_vits14`, `dinov2_vitb14`, `dinov2_vitl14`, `dinov2-small`,
-`dinov2-base`, `dinov2-large` et tout identifiant Hub brut commençant par
+`dinov2-base`, `dinov2-large` et tout identifiant de hub brut commençant par
 `facebook/dinov2`. Toute autre valeur est traitée comme le chemin d'un
-checkpoint enseignant.
+checkpoint teacher.
 
-Ce parcours emploie `feat_mse` quelle que soit la valeur de
-`distill_loss_type` et nécessite l'installation de `transformers`. Si
-l'enseignant se charge avec des clés de poids manquantes, l'exécution s'arrête
-au lieu de distiller depuis un backbone en partie aléatoire.
+Ce chemin utilise `feat_mse` quelle que soit la valeur de `distill_loss_type`,
+et exige l'installation de `transformers`. Un teacher qui se charge avec des
+clés de poids manquantes interrompt l'exécution au lieu d'effectuer une
+distillation avec un backbone partiellement aléatoire.
 
-## Familles compatibles
+## Familles prises en charge
 
-La prise en charge de la distillation repose sur une méthode du modèle élève,
-et deux méthodes existent.
+La prise en charge de la distillation est une méthode du modèle student, et il
+en existe deux.
 
-`get_distill_config()` fournit les points de prélèvement multi-échelles
-supervisés par un enseignant détecteur. YOLOv9, YOLOX et RF-DETR l'implémentent.
+`get_distill_config()` fournit les points d'extraction multi-échelles supervisés
+par un teacher détecteur. YOLOv9, YOLOX et RF-DETR l'implémentent.
 
-`get_backbone_distill_config()` fournit l'unique étage du backbone supervisé
-par un enseignant fondamental. YOLOv9 l'implémente et constitue la seule famille
-compatible.
+`get_backbone_distill_config()` fournit l'unique étape du backbone supervisée
+par un teacher fondamental. YOLOv9 l'implémente et constitue la seule famille à
+le faire.
 
-Tout autre cas déclenche une erreur au lieu d'entraîner sans la perte :
+Tout autre cas lève une erreur au lieu d'entraîner sans la loss :
 
 ```text
 LibreDFINE does not implement get_distill_config(). Distillation is not yet
@@ -133,83 +133,84 @@ Foundation-model distillation into the 'yolox' family is not supported yet
 (no get_backbone_distill_config()).
 ```
 
-## Points de prélèvement
+## Points d'extraction
 
-Les points sont fixés par famille et par rôle. L'enseignant et l'élève n'ont
-donc pas besoin de partager la même architecture, mais leurs pas de
-caractéristiques doivent correspondre.
+Les points d'extraction sont fixes pour chaque famille et chaque rôle. Le
+teacher et le student n'ont donc pas besoin d'utiliser la même architecture,
+mais leurs strides de caractéristiques doivent correspondre.
 
-| Famille | Rôle | Points de prélèvement | Pas |
+| Famille | Rôle | Points d'extraction | Strides |
 |---|---|---|---|
-| YOLOv9 | enseignant ou élève | `neck.elan_up2`, `neck.elan_down1`, `neck.elan_down2` | 8, 16, 32 |
-| YOLOv9 | élève fondamental | `backbone.elan3` | 16 |
-| YOLOX | enseignant ou élève | `backbone.C3_p3`, `backbone.C3_n3`, `backbone.C3_n4` | 8, 16, 32 |
-| RF-DETR | enseignant ou élève | `model.backbone.0.projector.stages.0` | sondé à la configuration |
+| YOLOv9 | teacher ou student | `neck.elan_up2`, `neck.elan_down1`, `neck.elan_down2` | 8, 16, 32 |
+| YOLOv9 | student fondamental | `backbone.elan3` | 16 |
+| YOLOX | teacher ou student | `backbone.C3_p3`, `backbone.C3_n3`, `backbone.C3_n4` | 8, 16, 32 |
+| RF-DETR | teacher ou student | `model.backbone.0.projector.stages.0` | sondé lors de la configuration |
 
-Des pas incompatibles déclenchent une erreur avant le début de l'entraînement :
+Des strides différents provoquent une erreur avant le début de l'entraînement :
 
 ```text
 Teacher and student must have matching strides. Teacher: [8, 16, 32],
 Student: [16]
 ```
 
-Ce contrôle est ignoré pour les enseignants fondamentaux, dont l'objectif est
-précisément de faire correspondre des grilles différentes.
+Cette vérification est ignorée pour les teachers fondamentaux, dont le principe
+même est que les grilles diffèrent.
 
-## Trois pertes
+## Les trois loss
 
-`distill_loss_type` sélectionne la perte de caractéristiques pour un enseignant
-détecteur. Un enseignant fondamental emploie toujours `feat_mse`.
+`distill_loss_type` sélectionne la loss de caractéristiques pour un teacher
+détecteur. Un teacher fondamental utilise toujours `feat_mse`.
 
-`mgd`, la distillation générative masquée, masque une fraction des positions
-spatiales de l'élève et entraîne un petit générateur à deux convolutions pour
-reconstruire toute la carte de l'enseignant depuis les positions restantes.
-`distill_mask_ratio` fixe la fraction masquée, 0,65 par défaut.
+`mgd`, la masked generative distillation, masque une fraction des positions
+spatiales du student et entraîne un petit générateur à deux convolutions pour
+reconstruire la carte de caractéristiques complète du teacher depuis ce qui
+reste. `distill_mask_ratio` définit la fraction masquée, 0.65 par défaut.
 
-`cwd`, la distillation par canal, transforme les activations spatiales de chaque
-canal en distribution de probabilités et minimise la divergence KL canal par
-canal. `distill_tau` est la température du softmax, 1,0 par défaut.
+`cwd`, la channel-wise distillation, transforme les activations spatiales de
+chaque canal en une distribution de probabilité et minimise la divergence KL
+canal par canal. `distill_tau` est la température du softmax, 1.0 par défaut.
 
-`feat_mse` aligne les canaux de l'élève sur ceux de l'enseignant avec une
-convolution 1 x 1, redimensionne bilinéairement la grille de l'enseignant vers
-celle de l'élève et calcule l'erreur quadratique moyenne.
-`distill_normalize=True` normalise d'abord les deux cartes en L2 sur la
-dimension des canaux, ce qui limite la comparaison à l'angle et la rend
-invariante à l'échelle. Sa valeur par défaut est `False`.
+`feat_mse` aligne les canaux du student sur ceux du teacher avec une convolution
+1x1, redimensionne bilinéairement la grille du teacher à celle du student et
+calcule l'erreur quadratique moyenne. `distill_normalize=True` normalise d'abord
+les deux cartes de caractéristiques en L2 sur la dimension des canaux, ce qui
+limite la comparaison à l'angle et la rend invariante à l'échelle. La valeur par
+défaut est `False`.
 
-`dis` est le poids global appliqué par-dessus. S'il est omis, chaque perte
-emploie sa valeur publiée : 2e-5 pour MGD, 1,0 pour CWD et 1,0 pour la MSE de
-caractéristiques. Elles diffèrent de cinq ordres de grandeur. Un poids réglé
-pour un type de perte n'a donc aucun sens pour un autre.
+`dis` est le poids global appliqué au-dessus. S'il n'est pas défini, chaque loss
+utilise sa propre valeur publiée par défaut : 2e-5 pour MGD, 1.0 pour CWD et
+1.0 pour la MSE de caractéristiques. Ces valeurs diffèrent de cinq ordres de
+grandeur, si bien qu'un poids réglé pour un type de loss ne signifie rien pour
+un autre.
 
 <code-tabs name="tuned" />
 
-`distill_mask_ratio`, `distill_tau` et `distill_normalize` ne possèdent aucune
-option CLI. Ce sont des arguments Python ou des clés YAML `cfg=`. Pour RF-DETR,
-toute la distillation est également limitée à Python, car l'association
-d'arguments de sa CLI ne transporte pas les clés de distillation.
+`distill_mask_ratio`, `distill_tau` et `distill_normalize` n'ont aucun flag CLI.
+Ce sont des arguments Python ou des clés YAML `cfg=`. La distillation RF-DETR
+est elle aussi réservée à Python dans son ensemble, car sa correspondance
+d'arguments CLI ne transmet pas les clés de distillation.
 
 ## Adaptateurs, checkpoints et multi-GPU
 
-Chaque perte construit de petits modules entraînables extérieurs à l'élève :
-les adaptateurs de canaux 1 x 1 et le générateur de MGD. Ils reçoivent leur
-propre groupe de paramètres dans l'optimiseur, au taux d'apprentissage effectif
-de l'exécution.
+Chaque loss construit de petits modules entraînables extérieurs au student :
+les adaptateurs de canaux 1x1 et le générateur de MGD. Ils reçoivent leur propre
+groupe de paramètres dans l'optimiseur au learning rate effectif de l'exécution.
 
 Ces modules sont écrits dans le checkpoint sous une clé `distiller` et restaurés
-à la reprise. Une exécution reprise ne redémarre donc pas avec des projecteurs
-non entraînés.
+à la reprise, afin qu'une exécution reprise ne redémarre pas ses projecteurs à
+froid.
 
-Sous DDP, les adaptateurs restent en dehors de l'élève encapsulé. Le réducteur
-DDP ne voit donc jamais leurs gradients. Le programme d'entraînement effectue
-explicitement leur all-reduce à chaque étape afin que tous les rangs entraînent
-les mêmes adaptateurs.
+Sous DDP, les adaptateurs se trouvent hors du student enveloppé, ce qui signifie
+que le réducteur DDP ne voit jamais leurs gradients. Le trainer effectue
+explicitement leur all-reduce à chaque étape, afin que chaque rang entraîne les
+mêmes adaptateurs.
 
-La capture de graphe CUDA n'est pas disponible pendant une distillation.
-Transmettre `cuda_graph=True` journalise une ligne et poursuit en mode eager.
-Consultez les [performances d'entraînement](/docs/train/performance).
+La capture de graphe CUDA n'est pas disponible pendant une exécution avec
+distillation. Passer `cuda_graph=True` journalise une ligne et utilise le mode
+eager. Consultez les
+[performances d'entraînement](/docs/train/performance).
 
-## Voir aussi
+## Pages connexes
 
 - [Gel des couches](/docs/train/layer-freezing) et
   [fine-tuning LoRA](/docs/train/lora), qui peuvent tous deux être combinés à

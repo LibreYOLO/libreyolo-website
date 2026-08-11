@@ -1,54 +1,58 @@
 ---
 title: Datasets
-seo_title: Training datasets in LibreYOLO
+seo_title: Dataset pelatihan di LibreYOLO
 description: >-
-  The dataset YAML LibreYOLO reads, the folder layout it expects, how
-  autodownload works, and the doctor command that checks a dataset before
-  training.
+  YAML dataset LibreYOLO membaca, tata letak folder yang diharapkannya,
+  bagaimana autodownload bekerja, dan perintah doctor yang memeriksa dataset
+  sebelum pelatihan.
 lead: >-
-  A LibreYOLO dataset is a YAML file naming a root, its splits and its class
-  names. Everything else, including where the label files live, is derived from
-  that file by convention.
+  LibreYOLO dataset adalah file YAML yang menamai root, pembagiannya, dan nama
+  kelasnya. Semua hal lain, termasuk tempat file label berada, diturunkan dari
+  file itu berdasarkan konvensi.
 keywords:
-  - yolo dataset format
+  - format yolo dataset
   - data.yaml
-  - custom dataset training
-  - yolo label format
-  - coco json dataset
+  - pelatihan dataset kustom
+  - format label yolo
+  - json coco dataset
   - dataset autodownload
   - libreyolo doctor
-  - class imbalance check
-  - train val split leakage
+  - cek ketidakseimbangan kelas
+  - kebocoran pembagian train val
 last_verified: 1.5.0
 snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # A bundled name, a relative path or an absolute path all work.
+
+        # Nama bundel, jalur relatif, atau jalur absolut semuanya bisa
+        digunakan.
+
         model.train(data="coco8.yaml", epochs=10)
     - label: CLI
       language: bash
       code: |
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml epochs=10
   doctor:
-    - label: Check a dataset
+    - label: Periksa dataset
       language: bash
       code: |
         libreyolo doctor my-dataset.yaml
-    - label: Fail a CI job on warnings too
+    - label: Gagal pada pekerjaan CI juga karena peringatan
       language: bash
       code: |
         libreyolo doctor my-dataset.yaml strict=true json=true
-    - label: Skip the image decode pass
+    - label: Lewati proses dekode gambar
       language: bash
       code: |
-        # Reads labels and YAML only. Corruption, duplicate and split-leakage
-        # checks all need the pixels, so they are skipped.
+        # Membaca label dan YAML saja. Korupsi, duplikat, dan kebocoran terbagi
+        # Semua pemeriksaan membutuhkan piksel, jadi dilewati.
         libreyolo doctor my-dataset.yaml fast=true
     - label: Python
       language: python
@@ -64,80 +68,80 @@ snippets:
 source_hash: 9a12a0551c8b56e9
 ---
 
-## Point train at a dataset
+## Arahkan pelatihan ke dataset
 
-`data=` takes a YAML path or the name of a config that ships with the package.
+`data=` mengambil jalur YAML atau nama konfigurasi yang disertakan dengan paket.
 
 <code-tabs name="train" />
 
-The name is resolved in a fixed order: an absolute path that exists, then the
-name as given relative to the working directory, then the same name with
-`.yaml` appended, then the bundled config directory. When nothing matches, the
-error names every directory that was searched and lists the bundled configs.
+Nama diselesaikan dalam urutan tetap: jalur absolut yang ada, kemudian
+nama seperti yang diberikan relatif terhadap direktori kerja, kemudian nama yang sama dengan
+`.yaml` ditambahkan, kemudian direktori konfigurasi yang dibundel. Ketika tidak ada yang cocok,
+kesalahan menyebutkan setiap direktori yang dicari dan mencantumkan konfigurasi yang dibundel.
 
-## Bundled configs
+## Konfigurasi yang dibundel
 
-Thirteen dataset configs ship inside the package, under
+Tiga belas konfigurasi dataset dikirim di dalam paket, di bawah
 `libreyolo/config/datasets/`.
 
-| Config | Task | Notes |
+| Konfigurasi | Task | Catatan |
 |---|---|---|
-| `coco8.yaml` | detect | 8 images, downloads from a plain URL |
-| `coco128.yaml` | detect | 128 images |
-| `coco1000.yaml` | detect | 800 train, 200 val |
-| `coco5000.yaml` | detect | 4000 train, 1000 val |
-| `coco.yaml` | detect | full COCO 2017 |
-| `coco-val-only.yaml` | detect | val2017 only |
-| `coco8-pose.yaml` | pose | 8 images, COCO-17 keypoints |
-| `coco-pose.yaml` | pose | COCO 2017 keypoints |
-| `ade20k.yaml` | semantic | 150 classes |
-| `cityscapes.yaml` | semantic | 19 classes, download by hand |
-| `cocostuff.yaml` | semantic | 182 classes, download by hand |
-| `gopro.yaml` | restore | deblurring pairs |
-| `sr8.yaml` | restore | super-resolution pairs |
+| `coco8.yaml` | deteksi | 8 gambar, unduh dari URL biasa |
+| `coco128.yaml` | deteksi | 128 gambar |
+| `coco1000.yaml` | deteksi | 800 latihan, 200 validasi |
+| `coco5000.yaml` | deteksi | 4000 latihan, 1000 validasi |
+| `coco.yaml` | deteksi | full COCO 2017 |
+| `coco-val-only.yaml` | deteksi | hanya val2017 |
+| `coco8-pose.yaml` | pose | 8 gambar, keypoints COCO-17 |
+| `coco-pose.yaml` | pose | keypoints COCO 2017 |
+| `ade20k.yaml` | semantik | 150 kelas |
+| `cityscapes.yaml` | semantik | 19 kelas, unduh secara manual |
+| `cocostuff.yaml` | semantik | 182 kelas, unduh secara manual |
+| `gopro.yaml` | pulihkan | pasangan pemburaman |
+| `sr8.yaml` | pulihkan | pasangan super-resolusi |
 
-Only `coco8.yaml` and `coco128.yaml` carry a plain download URL. The rest either
-carry a Python download block, which needs the opt-in described below, or expect
-the data to already be on disk.
+Hanya `coco8.yaml` dan `coco128.yaml` yang memiliki URL unduhan langsung. Sisanya
+menggunakan blok unduhan Python, yang memerlukan persetujuan seperti dijelaskan di bawah, atau mengharapkan
+data sudah ada di disk.
 
-## Where a dataset lives on disk
+## Lokasi dataset di disk
 
-The YAML `path` key names the dataset root. An absolute `path` is used as
-written. A relative one is looked for under the datasets directory first, then
-beside the YAML file itself, and a dataset that is about to be downloaded goes
-under the datasets directory.
+Kunci YAML `path` menamai root dataset. `path` absolut digunakan sebagaimana
+tertulis. Yang relatif dicari terlebih dahulu di bawah direktori datasets, kemudian
+di samping file YAML itu sendiri, dan dataset yang akan diunduh ditempatkan
+di direktori datasets.
 
-That directory is `~/datasets`, overridden by the `LIBREYOLO_DATASETS_DIR`
-environment variable. There is no settings file for it.
+Direktori itu adalah `~/datasets`, digantikan oleh `LIBREYOLO_DATASETS_DIR`
+. Tidak ada file pengaturan untuk itu.
 
-## The YAML keys
+## Kunci YAML
 
 ```yaml
 path: my-dataset        # dataset root
-train: images/train     # required to train
-val: images/val         # required to validate
-test: images/test       # optional
-nc: 3                   # optional; must agree with names
+train: images/train     # diperlukan untuk melatih
+val: images/val         # diperlukan untuk memvalidasi
+test: images/test       # opsional
+nc: 3                   # opsional; harus sesuai dengan nama
 names:
   0: person
   1: helmet
   2: vest
-download: https://example.com/my-dataset.zip   # optional
+download: https://example.com/my-dataset.zip   # opsional
 ```
 
-`train`, `val` and `test` each accept an image directory, a `.txt` file listing
-one image path per line, or a list mixing both. Lines in a `.txt` list may be
-relative, in which case they resolve against the list file's own directory, and
-lines starting with `#` are skipped.
+`train`, `val` dan `test` masing-masing menerima direktori gambar, file `.txt` yang mencantumkan
+satu jalur gambar per baris, atau daftar yang mencampur keduanya. Baris dalam daftar `.txt` dapat
+bersifat relatif, dalam hal ini akan diselesaikan terhadap direktori file daftar itu sendiri, dan
+baris yang dimulai dengan `#` dilewati.
 
-`names` may be a list or an integer-keyed mapping. `nc` is optional; when both
-are present and disagree, the doctor reports it as an error.
+`names` dapat berupa daftar atau pemetaan dengan kunci integer. `nc` bersifat opsional; ketika keduanya
+hadir dan tidak setuju, dokter melaporkannya sebagai kesalahan.
 
-## Directory layout and label files
+## Tata letak direktori dan file label
 
-Detection, segmentation, pose and oriented boxes all share one layout. The label
-path is derived from the image path by rewriting an `images` directory component
-to `labels` and changing the extension to `.txt`:
+Deteksi, segmentasi, pose, dan kotak berorientasi semuanya berbagi satu tata letak. Label
+path diturunkan dari path gambar dengan menulis ulang komponen direktori `images`
+menjadi `labels` dan mengubah ekstensi menjadi `.txt`:
 
 ```text
 my-dataset/
@@ -145,56 +149,56 @@ my-dataset/
   images/val/0002.jpg     ->   labels/val/0002.txt
 ```
 
-Only a whole `images` path component is rewritten, so a directory named
-`images_old` is left alone.
+Hanya seluruh komponen path `images` yang ditulis ulang, sehingga direktori bernama
+`images_old` dibiarkan begitu saja.
 
-A detection row is five fields, all normalized to `[0, 1]` against the original
-image width and height:
+Satu baris deteksi memiliki lima bidang, semua dinormalisasi terhadap `[0, 1]` terhadap lebar
+dan tinggi gambar asli:
 
 ```text
 <class_id> <cx> <cy> <w> <h>
 ```
 
-A missing or empty label file means the image has no objects, and it trains as
-background rather than raising. A row with more than five fields is read as a
-polygon and its box becomes the polygon's extent, so a segmentation export used
-for detection training loads without complaint. The doctor reports how many rows
-took that path.
+File label yang hilang atau kosong berarti gambar tidak memiliki objek, dan itu dilatih sebagai
+daripada menaikkan. Baris dengan lebih dari lima kolom dibaca sebagai
+poligon dan kotaknya menjadi jangkauan poligon, sehingga ekspor segmentasi yang digunakan
+untuk pelatihan deteksi dimuat tanpa keluhan. Dokter melaporkan berapa banyak baris
+yang mengambil jalur itu.
 
-## Other tasks
+## Tugas lainnya
 
-Segmentation keeps the same layout with polygon rows,
-`<class_id> <x1> <y1> ... <xN> <yN>`, at least three points. A five-field
-detection row is accepted and means a rectangular instance.
+Segmentasi mempertahankan tata letak yang sama dengan baris poligon,
+`<class_id> <x1> <y1> ... <xN> <yN>`, setidaknya tiga titik. Sebuah baris
+deteksi lima-kolom diterima dan berarti sebuah instance persegi panjang.
 
-Pose adds `kpt_shape: [K, D]` and an optional `flip_idx` permutation to the YAML.
-Each row is exactly `5 + K * D` fields: the box, then `K` keypoints of `x y` or
-`x y v`, with visibility `0`, `1` or `2`.
+Pose menambahkan `kpt_shape: [K, D]` dan opsi `flip_idx` permutasi ke YAML.
+Setiap baris tepat `5 + K * D` kolom: kotak, kemudian `K` titik kunci `x y` atau
+`x y v`, dengan visibilitas `0`, `1`, atau `2`.
 
-Oriented boxes use exactly nine fields, the class followed by four corner points
-in normalized coordinates. No angle is stored in the file.
+Kotak berorientasi menggunakan tepat sembilan bidang, kelas diikuti oleh empat titik sudut
+dalam koordinat ternormalisasi. Tidak ada sudut yang disimpan di dalam berkas.
 
-Semantic segmentation pairs each image with a single-channel mask of the same
-resolution, resolved by substituting `masks_dir` (default `masks`) for `images`.
-Pixel value `255` means ignore. `label_mapping` remaps source ids to train ids at
-load time.
+Segmentasi semantik memasangkan setiap gambar dengan topeng satu saluran dengan resolusi yang sama,
+diselesaikan dengan menggantikan `masks_dir` (default `masks`) untuk `images`.
+Nilai piksel `255` berarti diabaikan. `label_mapping` memetakan ulang ID sumber ke ID pelatihan pada
+saat dimuat.
 
-Classification uses an ImageFolder tree instead of label files, with `train/` and
-`val/` each containing one directory per class. The class-to-index mapping is the
-sorted folder name order.
+Klasifikasi menggunakan pohon ImageFolder alih-alih berkas label, dengan `train/` dan
+`val/` masing-masing memiliki satu direktori per kelas. Pemetaan kelas-ke-indeks adalah urutan
+nama folder yang diurutkan.
 
-Restoration pairs a degraded input with a clean target of identical resolution
-through `input_dir` and `target_dir`. Depth, surface normals and edges each pair
-an image with a dense map through their own directory key.
+Pemulihan QZL menggabungkan input yang rusak dengan target bersih dengan resolusi yang identik
+melalui `input_dir` dan `target_dir`. Kedalaman, normal permukaan, dan tepi masing-masing menggabungkan
+sebuah gambar dengan peta padat melalui kunci direktori mereka sendiri.
 
-The full per-task contract, including the depth scale conventions and the
-panoptic segment-id PNG encoding, is `docs/dataset_schema.md` in the library
-repository.
+Kontrak penuh per-task, termasuk konvensi skala kedalaman dan
+pengkodean PNG ID segmen panoptik, ada di `docs/dataset_schema.md` dalam repositori
+perpustakaan.
 
-## Native COCO JSON
+## JSON COCO Asli
 
-A COCO JSON annotation file can be used directly. Add an `annotations` mapping,
-and the split path becomes the image root:
+File anotasi JSON COCO dapat digunakan langsung. Tambahkan `annotations` pemetaan,
+dan jalur split menjadi root gambar:
 
 ```yaml
 path: my-dataset
@@ -205,65 +209,64 @@ annotations:
   val: annotations/val.json
 ```
 
-When `names` is present, the JSON category names must match it, and `names`
-defines the label ids the model predicts. Without `names`, COCO category ids are
-sorted and mapped densely to `0..N-1`.
+Ketika `names` hadir, nama kategori JSON harus sesuai dengannya, dan `names`
+mendefinisikan id label yang diprediksi model. Tanpa `names`, id kategori COCO adalah
+disortir dan dipetakan secara padat ke `0..N-1`.
 
-This path expects one image directory per split. A list of paths or a `.txt`
-image list raises rather than silently loading a different set.
+Jalur ini mengharapkan satu direktori gambar per pembagian. Daftar jalur atau `.txt`
+daftar gambar meningkatkan alih-alih diam-diam memuat set yang berbeda.
 
-## Autodownload
+## Unduh Otomatis
 
-A dataset counts as present when its `train` or `val` path resolves to a
-non-empty directory or an existing file. When it does not, and the YAML has a
-`download` key, the value decides what happens next.
+Sebuah dataset dihitung sebagai hadir ketika jalur `train` atau `val`-nya terselesaikan ke
+direktori yang tidak kosong atau file yang sudah ada. Ketika tidak ada, dan YAML memiliki
+Kunci `download`, nilainya menentukan apa yang terjadi selanjutnya.
 
-An `http` or `https` URL is fetched and, if it is a zip, extracted into the
-dataset root. Anything else is treated as an embedded Python script and runs only
-when `allow_download_scripts=True`. Without that, the script is skipped with a
-warning and training continues against whatever is on disk.
+Sebuah URL `http` atau `https` diambil dan, jika itu adalah file zip, diekstrak ke dalam
+dataset root. Apa pun selain itu dianggap sebagai skrip Python yang terlampir dan hanya dijalankan
+ketika `allow_download_scripts=True`. Tanpa itu, skrip dilewati dengan sebuah
+peringatan dan pelatihan terus dilakukan terhadap apapun yang ada di disk.
 
 ```bash
 libreyolo train model=LibreYOLO9s.pt data=coco.yaml allow_download_scripts=true
 ```
 
-The flag is a code-execution gate, not a network gate. URL downloads happen
-either way; it is the `download: |` blocks that need it. The CLI prints a warning
-when the flag is on, and the doctor never enables it.
+flag adalah gerbang eksekusi kode, bukan gerbang jaringan. Unduhan URL terjadi
+bagaimanapun; blok `download: |` yang membutuhkannya. CLI mencetak peringatan
+ketika flag menyala, dan dokter tidak pernah mengaktifkannya.
 
-## Check the dataset before you train
+## Periksa dataset sebelum Anda berlatih
 
-`libreyolo doctor` reads a detection dataset and reports what would go wrong
-before a GPU is involved. It exits 1 when it finds errors, so it works as a CI
-gate.
+`libreyolo doctor` membaca deteksi dataset dan melaporkan apa yang akan salah
+sebelum GPU terlibat. Ia keluar dengan kode 1 ketika menemukan kesalahan, sehingga berfungsi sebagai CI
+gerbang.
 
 <code-tabs name="doctor" />
 
-The checks come in six families:
+Cek datang dalam enam keluarga:
 
-| Family | Looks for |
+| Family | Mencari |
 |---|---|
-| `config` | missing `names`, `nc` that disagrees with `names`, missing or empty splits, duplicate class names |
-| `files` | images with no label file, labels with no image, missing images listed in a split, stem collisions |
-| `labels` | malformed rows, class ids outside `[0, nc)`, coordinates outside `[0, 1]`, zero-area boxes, tiny or huge boxes, duplicate boxes, byte-identical label files |
-| `balance` | classes with zero or few instances, class imbalance ratio, classes present in one split only, background image share |
-| `images` | undecodable files, EXIF rotation, odd channel layouts, uniform images, exact and near duplicates |
-| `splits` | the same image appearing in two splits, exactly or near-identically |
+| `config` | `names`, `nc` yang hilang yang tidak sesuai dengan `names`, split yang hilang atau kosong, nama kelas duplikat |
+| `files` | gambar tanpa file label, label tanpa gambar, gambar yang hilang yang tercantum dalam sebuah split, tabrakan stem |
+| `labels` | baris yang rusak, ID kelas di luar `[0, nc)`, koordinat di luar `[0, 1]`, kotak dengan area nol, kotak sangat kecil atau sangat besar, kotak duplikat, file label identik byte |
+| `balance` | kelas dengan nol atau sedikit instance, rasio ketidakseimbangan kelas, kelas yang hanya ada dalam satu split, bagian gambar latar belakang |
+| `images` | file yang tidak dapat didekode, rotasi EXIF, tata letak saluran aneh, gambar seragam, duplikat tepat dan hampir sama |
+| `splits` | gambar yang sama muncul di dua bagian, tepat atau hampir identik |
 
-`--only` and `--skip` take a check id or a family prefix, so
-`skip=images,labels.tiny_object` is valid. `--fast` drops every check that needs
-to decode pixels, which is the `images` and `splits` families.
+`--only` dan `--skip` mengambil id pemeriksaan atau prefiks family, jadi
+`skip=images,labels.tiny_object` adalah valid. `--fast` menghapus setiap pemeriksaan yang membutuhkan
+untuk mendekode piksel, yang merupakan keluarga `images` dan `splits`.
 
-Two behaviors are worth knowing. `--strict` makes warnings fail the exit code as
-well as errors. And the doctor covers detection datasets only: a pose, segment or
-oriented-box dataset is rejected with a message naming what it detected, rather
-than being checked against the wrong contract.
+Dua perilaku yang perlu diketahui. `--strict` membuat peringatan gagal pada kode keluar sekaligus
+kesalahan. Dan dokter hanya mencakup dataset deteksi: pose, segmen atau
+kotak berorientasi dataset ditolak dengan pesan yang menyebutkan apa yang terdeteksi, bukan
+diperiksa terhadap kontrak yang salah.
 
-## Related
+## Terkait
 
-- [Hyperparameters](/docs/train/hyperparameters) for the arguments `train()`
-  takes once the data is in place.
-- [Validation and metrics](/docs/train/validation) for evaluating on the `val`
-  or `test` split.
-
+- [Hyperparameters](/docs/train/hyperparameters) untuk argumen `train()`
+  dilakukan sekali setelah data tersedia.
+- [Validasi dan metrik ](/docs/train/validation) untuk evaluasi pada `val`
+  atau pembagian `test`.
 

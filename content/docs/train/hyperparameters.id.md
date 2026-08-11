@@ -1,25 +1,24 @@
 ---
 title: Hyperparameters
-seo_title: Training hyperparameters in LibreYOLO
+seo_title: Melatih hiperparameter di LibreYOLO
 description: >-
-  The train() arguments that matter: epochs, batch, lr0, optimizer, EMA,
-  autobatch, gradient accumulation and resume, plus why defaults differ per
-  family.
+  Argumen train() yang penting: epochs, batch, lr0, optimizer, EMA, autobatch,
+  gradient accumulation dan resume, plus mengapa default berbeda per family.
 lead: >-
-  Every training argument is a field on a TrainConfig dataclass. The base class
-  defines the field and its default; each model family subclasses it and
-  overrides the defaults that its published recipe changes.
+  Setiap argumen pelatihan adalah field pada dataclass TrainConfig. Kelas dasar
+  mendefinisikan field dan defaultnya; setiap model family meng-subclass-nya dan
+  mengganti default yang diubah oleh resep yang dipublikasikannya.
 keywords:
-  - train arguments
+  - argumen train
   - learning rate
-  - batch size
+  - ukuran batch
   - autobatch
   - exponential moving average
   - gradient accumulation
-  - resume training
+  - melanjutkan pelatihan
   - early stopping patience
   - amp bfloat16
-  - train config yaml
+  - konfigurasi train yaml
 last_verified: 1.5.0
 snippets:
   train:
@@ -44,7 +43,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           epochs=100 batch=16 imgsz=640 lr0=0.01
   defaults:
-    - label: Read a family's resolved defaults
+    - label: Baca default yang telah diselesaikan dari family
       language: python
       code: |
         from dataclasses import fields
@@ -62,20 +61,22 @@ snippets:
                 print(f"{f.name}: {family_value}")
     - label: CLI
       language: bash
-      code: >
-        # Prints the train, val and predict defaults, including family
-        overrides.
-
+      code: |
+        # Mencetak default train, val, dan predict, termasuk override family.
         libreyolo cfg
   autobatch:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # batch=-1 probes GPU memory and resolves to a concrete power of two.
+
+        # batch=-1 memeriksa memori GPU dan menyelesaikannya menjadi pangkat dua
+        yang konkret.
+
         model.train(data="my-dataset.yaml", batch=-1, imgsz=640)
     - label: CLI
       language: bash
@@ -89,16 +90,20 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # 4 micro-batches of 16 per optimizer step, effective batch 64.
+        # 4 micro-batch dari 16 per langkah optimizer, batch efektif 64.
         model.train(data="my-dataset.yaml", batch=16, nbs=64)
   resume:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # Load the interrupted run's checkpoint, then ask to resume.
+
+        # Memuat checkpoint dari jalannya yang terhenti, lalu minta untuk
+        melanjutkan.
+
         model = LibreYOLO("runs/train/exp/weights/last.pt")
+
         model.train(data="my-dataset.yaml", epochs=100, resume=True)
     - label: CLI
       language: bash
@@ -108,51 +113,55 @@ snippets:
   cfg:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # Keys in the yaml are TrainConfig field names. Explicit kwargs win.
+
+        # Kunci dalam yaml adalah nama field TrainConfig. Kwargs eksplisit
+        menang.
+
         model = LibreYOLO("LibreYOLO9s.pt")
+
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
 source_hash: d838d1abd45af40f
 ---
 
-## Setting arguments
+## Mengatur argumen
 
-`train()` takes keyword arguments and the CLI takes the same names in
-`key=value` form.
+`train()` mengambil argumen kata kunci dan CLI mengambil nama yang sama dalam
+format `key=value`.
 
 <code-tabs name="train" />
 
-Both paths end at the same place. The kwargs are handed to
-`TrainConfig.from_kwargs()`, which builds the family's config dataclass.
+Kedua jalur berakhir pada tempat yang sama. Kwargs diserahkan ke
+`TrainConfig.from_kwargs()`, yang membangun dataclass konfigurasi family.
 
-## A typo does not raise
+## Salah ketik tidak menyebabkan error
 
-`from_kwargs()` drops any key that is not a field on the config and emits a
-`UserWarning` naming it. Training then starts with the default in place:
+`from_kwargs()` menghapus setiap kunci yang bukan merupakan bidang pada konfigurasi dan mengeluarkan sebuah
+Memberi nama `UserWarning`. Pelatihan kemudian dimulai dengan pengaturan default yang ada:
 
 ```python
-# UserWarning: Unknown training config keys (ignored): ['learning_rate']
+# UserWarning: Kunci konfigurasi pelatihan tidak dikenal (diabaikan): ['learning_rate']
 model.train(data="my-dataset.yaml", learning_rate=0.001)
 ```
 
-Nothing fails, the run completes, and the learning rate was never what the caller
-asked for. Read the warnings on the first epoch of a new recipe. The CLI is
-stricter, because it validates flag names before the config is built, so a
-misspelled CLI flag is rejected outright.
+Tidak ada yang gagal, proses selesai, dan learning rate tidak pernah menjadi apa yang pemanggil
+diminta. Baca peringatan pada epoch pertama dari resep baru. CLI adalah
+lebih ketat, karena memvalidasi nama flag sebelum konfigurasi dibuat, sehingga
+CLI flag yang salah eja langsung ditolak.
 
-## Defaults are per family
+## Default adalah per family
 
-`TrainConfig` defines the field and a base default. Each family subclasses it and
-overrides what its published recipe changes, so there is no single correct answer
-to "what is the default learning rate".
+`TrainConfig` mendefinisikan bidang dan default dasar. Setiap family menurunkannya dan
+menimpa perubahan resep yang dipublikasikannya, jadi tidak ada jawaban yang benar secara tunggal
+ke "apa itu learning rate default".
 
-The base defaults are `optimizer="sgd"`, `lr0=0.01`, `momentum=0.937`,
+Default dasar adalah `optimizer="sgd"`, `lr0=0.01`, `momentum=0.937`,
 `weight_decay=5e-4`, `scheduler="yoloxwarmcos"`, `epochs=300`, `batch=16`,
-`imgsz=640` and `amp=True`. Three examples of how far a family moves from that:
+`imgsz=640` dan `amp=True`. Tiga contoh seberapa jauh family bergerak dari itu:
 
-| Field | Base | YOLOv9 | D-FINE | YOLO-NAS |
+| Bidang | Dasar | YOLOv9 | D-FINE | YOLO-NAS |
 |---|---|---|---|---|
 | `optimizer` | `sgd` | `sgd` | `adamw` | `adamw` |
 | `lr0` | `0.01` | `0.01` | `2e-4` | `5e-4` |
@@ -161,144 +170,143 @@ The base defaults are `optimizer="sgd"`, `lr0=0.01`, `momentum=0.937`,
 | `epochs` | `300` | `300` | `132` | `300` |
 | `amp` | `True` | `True` | `False` | `False` |
 
-D-FINE and DEIM ship with `amp=False` because the D-FINE decoder clamps
-activations at 65504, the largest finite float16 value. YOLO-NAS and FOMO also
-default it off. The CLI's `--amp` flag defaults to `True` for every family, so it
-counts as user-provided and overrides the family default; leave it alone unless
-you mean to change it.
+D-FINE dan DEIM dikirim bersama `amp=False` karena decoder D-FINE membatasi
+aktivasi pada 65504, nilai float16 terbesar yang terbatas. YOLO-NAS dan FOMO juga
+secara default mematikannya. `--amp` flag di CLI defaultnya ke `True` untuk setiap family, jadi itu
+dihitung sebagai disediakan pengguna dan menimpa default family; biarkan saja kecuali
+Anda bermaksud untuk mengubahnya.
 
-To read a family's real defaults rather than guessing:
+Untuk membaca default nyata family daripada menebak:
 
 <code-tabs name="defaults" />
 
-## Batch size
+## ukuran Batch
 
-`batch` is the global batch. Under multi-GPU training each rank loads
-`batch // world_size`, so the number you pass is the number of images per
-optimizer step regardless of how many GPUs are involved. See
-[Multi-GPU training](/docs/train/multi-gpu).
+`batch` adalah batch global. Dalam pelatihan multi-GPU setiap peringkat memuat
+`batch // world_size`, jadi nomor yang Anda berikan adalah jumlah gambar per
+dilakukan terlepas dari berapa banyak GPU yang terlibat. Lihat
+[Pelatihan Multi-GPU](/docs/train/multi-gpu).
 
-`batch=-1` turns on autobatch. The trainer probes the model in training mode with
-a real backward pass at powers of two, fits a line to the memory curve, and picks
-the largest power of two strictly below the extrapolated value that fits within
-60 percent of total VRAM.
+`batch=-1` mengaktifkan autobatch. Trainer memeriksa model dalam mode pelatihan dengan
+langkah mundur nyata pada pangkat dua, menyesuaikan garis ke kurva memori, dan memilih
+pangkat dua terbesar yang secara ketat di bawah nilai yang diekstrapolasi yang muat dalam
+60 persen dari total VRAM.
 
 <code-tabs name="autobatch" />
 
-Probing in training mode with a backward pass is the point: an inference-mode
-probe misses the retained activations and gradient tensors, which for a deep CNN
-are several times the inference footprint. RF-DETR lowers the target fraction to
-45 percent, because the probe's synthetic backward still underestimates what its
-criterion and auxiliary decoder layers cost.
+Memeriksa dalam mode pelatihan dengan langkah mundur adalah inti: pemeriksaan dalam mode inferensi
+melewatkan aktivasi yang dipertahankan dan tensor gradien, yang untuk CNN dalam
+adalah beberapa kali jejak inferensi. RF-DETR menurunkan fraksi target menjadi
+45 persen, karena backward sintetis probe masih meremehkan apa yang dibutuhkan oleh
+kriteria probe dan lapisan decoder tambahan.
 
-Autobatch is a CUDA feature. On CPU or MPS it logs one line and keeps the
-default batch.
+Autobatch adalah fitur CUDA. Pada CPU atau MPS ia mencatat satu baris dan mempertahankan
+batch default.
 
-## Gradient accumulation
+## Akumulasi gradien
 
-`nbs` sets the nominal, or effective, batch size. The trainer accumulates
-`round(nbs / batch)` micro-batches per optimizer step.
+`nbs` menetapkan ukuran nominal, atau efektif, batch. Pelatih mengakumulasi
+`round(nbs / batch)` mikro-batch per langkah optimizer.
 
 <code-tabs name="accumulate" />
 
-Left as `None`, the default, accumulation is off and training is unchanged.
+Dibiarkan sebagai `None`, default, akumulasi dimatikan dan pelatihan tidak berubah.
 
-## Learning rate and schedule
+## Learning rate dan jadwal
 
-`lr0` is the initial learning rate and `optimizer` accepts `sgd`, `adam` and
-`adamw`. `momentum` is SGD momentum or Adam's beta1, `weight_decay` is the L2
-term, and `nesterov` applies to SGD.
+`lr0` adalah learning rate awal dan `optimizer` menerima `sgd`, `adam` dan
+`adamw`. `momentum` adalah momentum SGD atau beta1 Adam, `weight_decay` adalah L2
+istilah, dan `nesterov` berlaku untuk SGD.
 
-The schedule is shaped by `scheduler`, `warmup_epochs`, `warmup_lr_start` and
-`min_lr_ratio`. `no_aug_epochs` sets how many final epochs run without strong
-augmentation, and several schedules use it to shape their tail as well, so it is
-not purely an augmentation knob. What each family does with the augmentation half
-of it is on [Augmentations](/docs/train/augmentations).
+Jadwal dibentuk oleh `scheduler`, `warmup_epochs`, `warmup_lr_start` dan
+`min_lr_ratio`. `no_aug_epochs` mengatur berapa banyak epoch akhir yang dijalankan tanpa kuat
+augmentasi, dan beberapa jadwal menggunakannya untuk membentuk ekornya juga, jadi itu
+bukan semata-mata kenop augmentasi. Apa yang dilakukan setiap family dengan setengah augmentasi
+darinya ada di [Augmentations](/docs/train/augmentations).
 
-Some families add their own learning-rate knobs. `backbone_lr_mult` scales the
-backbone group against the head, `clip_max_norm` sets gradient clipping, and
-SegFormer uses `head_lr_mult` to run its decode head at ten times the backbone
-rate. These live on the family's config subclass, not the base one.
+Beberapa keluarga menambahkan tombol tingkat pembelajaran mereka sendiri. `backbone_lr_mult` menyesuaikan
+Kelompok backbone melawan head, `clip_max_norm` menetapkan pemotongan gradien, dan
+SegFormer menggunakan `head_lr_mult` untuk menjalankan decode head-nya sepuluh kali backbone
+tingkat. Ini berada pada subclass konfigurasi family, bukan yang dasar.
 
 ## EMA
 
-`ema=True` keeps an exponential moving average of the weights alongside the
-trained ones. It is on by default everywhere except FOMO.
+`ema=True` menyimpan rata-rata bergerak eksponensial dari bobot bersamaan dengan
+bobot yang dilatih. Ini diaktifkan secara default di mana-mana kecuali FOMO.
 
-`ema_decay` is the target decay. The decay ramps in rather than starting at its
-target: the effective value at update `n` is `ema_decay * (1 - exp(-n / tau))`
-with `tau` defaulting to 2000, so early updates track the model more closely and
-late updates smooth it. Family defaults range from `0.997` on YOLO-NAS pose
-through `0.9998` on YOLOX to `0.9999` on YOLOv9 and the DETR line.
+`ema_decay` adalah target decay. Decay meningkat secara bertahap daripada dimulai pada
+targetnya: nilai efektif pada update `n` adalah `ema_decay * (1 - exp(-n / tau))`
+dengan `tau` default ke 2000, sehingga update awal mengikuti model lebih dekat dan
+update akhir melicinkannya. Default Family berkisar dari `0.997` pada pose YOLO-NAS
+hingga `0.9998` pada YOLOX dan `0.9999` pada YOLOv9 dan lini DETR.
 
-The EMA weights are what gets validated and what `best.pt` and `last.pt` carry.
-The raw trained weights are also stored, under the `train_model` key, so a resume
-continues from the trained trajectory rather than from the average.
+Bobot EMA adalah yang divalidasi dan yang dibawa oleh `best.pt` dan `last.pt`.
+Berat terlatih mentah juga disimpan, di bawah kunci `train_model`, jadi dapat dilanjutkan
+berlanjut dari lintasan yang dilatih daripada dari rata-rata.
 
-## Precision
+## Presisi
 
-`amp=True` runs the forward pass under CUDA autocast. `amp_dtype` selects
-`float16` (the default) or `bfloat16`; `fp16` and `bf16` are accepted spellings.
+`amp=True` menjalankan forward pass di bawah CUDA autocast. `amp_dtype` memilih
+`float16` (default) atau `bfloat16`; `fp16` dan `bf16` adalah ejaan yang diterima.
 
-Float16 needs dynamic loss scaling and gets a live `GradScaler`. Bfloat16's wider
-exponent range does not, so its scaler is constructed but disabled, which keeps
-the optimizer path identical. Asking for bfloat16 on a CUDA device without
-bfloat16 support raises at setup rather than degrading silently.
+Float16 membutuhkan skala loss dinamis dan mendapatkan `GradScaler` langsung. Bfloat16 lebih lebar
+jangkauan eksponen tidak, jadi skalernya dibuat tetapi dinonaktifkan, yang menjaga
+jalur pengoptimal identik. Meminta bfloat16 pada perangkat CUDA tanpa
+Dukungan bfloat16 meningkat saat pengaturan alih-alih menurun secara diam-diam.
 
-## Output, checkpoints and stopping
+## Keluaran, titik pemeriksaan, dan penghentian
 
-Runs are written to `project/name`. `project` defaults to `runs/train`
-everywhere, but `name` is one of the per-family overrides: the base default is
-`exp`, while YOLOv9 uses `yolo9_exp` and D-FINE uses `dfine_exp`. With
-`exist_ok=False`, the default, an existing directory gets an incremented suffix
-instead of being overwritten.
+Run ditulis ke `project/name`. `project` default ke `runs/train`
+di mana-mana, tetapi `name` adalah salah satu override per-family: default dasarnya adalah
+`exp`, sementara YOLOv9 menggunakan `yolo9_exp` dan D-FINE menggunakan `dfine_exp`. Dengan
+`exist_ok=False`, default, direktori yang ada mendapatkan sufiks yang ditingkatkan
+alih-alih ditimpa.
 
-`save_period` writes an extra `weights/epoch_<N>.pt` every N epochs, on top of
-`weights/last.pt` after each epoch and `weights/best.pt` whenever the tracked
-metric improves. `eval_interval` sets how often validation runs, and `patience`
-stops the run after that many epochs without improvement, with `0` disabling
+`save_period` menulis `weights/epoch_<N>.pt` tambahan setiap N epoch, di atas
+`weights/last.pt` setelah setiap epoch dan `weights/best.pt` setiap kali metrik yang dilacak
+membaik. `eval_interval` menentukan seberapa sering validasi dijalankan, dan `patience`
+menghentikan run setelah selama itu epoch tanpa perbaikan, dengan `0` menonaktifkan
 early stopping.
 
-`cache` speeds up repeated epochs by holding decoded images in RAM (`True` or
-`"ram"`) or as `.npy` files beside the sources (`"disk"`). Cached reads are
-byte-identical to fresh ones. With dataloader workers, `"disk"` is the safer of
-the two.
+`cache` mempercepat epoch berulang dengan menyimpan gambar yang telah didekode di RAM (`True` atau
+`"ram"`) atau sebagai file `.npy` di samping sumber (`"disk"`). Bacaan yang di-cache adalah
+identik byte dengan yang baru. Dengan pekerja dataloader, `"disk"` adalah yang lebih aman dari
+keduanya.
 
-## Resume
+## Ringkasan
 
-`resume=True` continues an interrupted run. The checkpoint has to be loaded
-first, because resume reads it from the model, not from a separate argument.
+`resume=True` melanjutkan perjalanan yang terhenti. checkpoint harus dimuat
+pertama, karena resume membacanya dari model, bukan dari argumen terpisah.
 
 <code-tabs name="resume" />
 
-Resume restores the trained weights, the optimizer state, the EMA weights and
-update count, the best-metric tracking, the `GradScaler` scale, and the PyTorch,
-CUDA and NumPy random states. It starts at the checkpoint's epoch plus one and
-fast-forwards the schedule to that position.
+Resume memulihkan bobot yang dilatih, status optimizer, bobot EMA dan
+perbarui jumlah, pelacakan metrik terbaik, skala `GradScaler`, dan PyTorch,
+Status acak CUDA dan NumPy. Itu dimulai pada checkpoint epoch ditambah satu dan
+mempercepat jadwal ke posisi tersebut.
 
-Two things it will not do. `resume=True` cannot be combined with `pretrained`,
-which raises. And when the checkpoint's best-metric key differs from the current
-run's, best-metric tracking resets to zero with a warning rather than comparing
-values that do not mean the same thing.
+Dua hal yang tidak akan dilakukannya. `resume=True` tidak dapat digabungkan dengan `pretrained`,
+yang menimbulkan masalah. Dan ketika kunci metrik-terbaik checkpoint berbeda dari
+jalannya saat ini, pelacakan metrik-terbaik direset ke nol dengan peringatan
+alih-alih membandingkan nilai yang tidak berarti sama.
 
-## Recipes in a file
+## Resep dalam sebuah file
 
-`cfg=` loads a YAML mapping of `TrainConfig` field names and merges it under the
-explicit keyword arguments, so a kwarg always wins over the file.
+`cfg=` memuat pemetaan YAML dari nama-nama bidang `TrainConfig` dan menggabungkannya
+di bawah argumen kata kunci eksplisit, jadi sebuah kwarg selalu menang atas file.
 
 <code-tabs name="cfg" />
 
-`size` and `num_classes` are stripped from the file, because the model instance
-already owns them. There is no `--cfg` flag on the CLI; the file path is a Python
-argument.
+`size` dan `num_classes` dihapus dari file, karena instansi model
+sudah memilikinya. Tidak ada `--cfg` flag di CLI; jalur file adalah Python
+argumen.
 
-## Related
+## Terkait
 
-- [Datasets](/docs/train/datasets) for what `data=` accepts.
-- [Augmentations](/docs/train/augmentations) for the augmentation knobs and which
-  families honor them.
-- [Layer freezing](/docs/train/layer-freezing) and [LoRA](/docs/train/lora) for
-  training a subset of the weights.
-- [Validation and metrics](/docs/train/validation) for what the run reports.
-
+- [Datasets](/docs/train/datasets) untuk apa yang diterima `data=`.
+- [Augmentations](/docs/train/augmentations) untuk kenop augmentasi dan yang mana
+  keluarga menghormati mereka.
+- [Pembekuan layer](/docs/train/layer-freezing) dan [LoRA](/docs/train/lora) untuk
+  melatih sebagian dari bobot.
+- [Validasi dan metrik](/docs/train/validation) untuk apa yang dilaporkan oleh jalannya.
 

@@ -1,41 +1,41 @@
 ---
-title: Ensemble API
-seo_title: LibreEnsemble API and fusion operations
+title: API Ensemble
+seo_title: API LibreEnsemble dan operasi fusi
 description: >-
-  LibreEnsemble, ExternalDetector, and the three fusion ops in libreyolo.ops:
-  weighted boxes fusion, its seeded variant, and class-aware NMS fusion.
+  LibreEnsemble, ExternalDetector, dan tiga operasi fusi di libreyolo.ops: fusi
+  kotak berbobot, variannya yang di-bibit, dan fusi NMS sadar kelas.
 lead: >-
-  LibreEnsemble runs several detectors on the same image and fuses their
-  detections into one Results. Fusion happens after each member's own
-  postprocessing, so members keep their own input size, normalization and
-  suppression.
+  LibreEnsemble menjalankan beberapa detektor pada gambar yang sama dan
+  memfusikan deteksi mereka menjadi satu Results. Fusi terjadi setelah
+  pemrosesan lanjutan masing-masing anggota, sehingga anggota mempertahankan
+  ukuran input, normalisasi, dan penekanannya sendiri.
 keywords:
   - LibreEnsemble
-  - weighted boxes fusion
+  - fusi kotak berbobot
   - wbf
   - ExternalDetector
   - libreyolo.ops.fusion
-  - min_votes consensus
+  - konsensus min_votes
 last_verified: 1.5.0
 verification: >-
-  Signatures and defaults read from libreyolo/ensemble/model.py and
-  libreyolo/ops/fusion.py at v1.5.0. Design intent from
+  Tanda tangan dan default dibaca dari libreyolo/ensemble/model.py dan
+  libreyolo/ops/fusion.py pada v1.5.0. Niat desain dari
   docs/adr/0004-model-ensembling.md.
 snippets:
   usage:
-    - label: 'Two members, default fusion'
+    - label: 'Dua anggota, fusi default'
       language: python
       code: |
         from libreyolo import LibreEnsemble, SAMPLE_IMAGE
 
         ens = LibreEnsemble(["LibreYOLO9t.pt", "LibreYOLO9s.pt"])
 
-        # A single image source returns one Results, not a list.
+        # Satu sumber gambar mengembalikan satu Results, bukan daftar.
         result = ens(SAMPLE_IMAGE, conf=0.25)
 
         print(result.boxes.xyxy)
         print(result.speed)
-    - label: Consensus and per-member thresholds
+    - label: Konsensus dan ambang per anggota
       language: python
       code: |
         from libreyolo import LibreEnsemble, SAMPLE_IMAGE
@@ -50,7 +50,7 @@ snippets:
         result = ens(SAMPLE_IMAGE, conf=[0.25, 0.4])
         print(len(result))
   ops:
-    - label: 'Fusion op, no model involved'
+    - label: 'Operasi fusi, tanpa model yang terlibat'
       language: python
       code: >
         import torch
@@ -89,42 +89,42 @@ LibreEnsemble(
 )
 ```
 
-| Argument | Default | Meaning |
+| Argumen | Default | Makna |
 |---|---|---|
-| `members` | | Two or more detectors |
-| `weights` | `None` | Per-member trust factors; all `1.0` when omitted |
-| `fusion` | `"wbf"` | `"wbf"`, `"wbf_seeded"`, `"nms"`, or a callable |
-| `fusion_iou` | `0.55` | IoU threshold for fusion clustering |
-| `min_votes` | `1` | Keep only boxes confirmed by at least this many members |
+| `members` | | Dua atau lebih detektor |
+| `weights` | `None` | Faktor kepercayaan per anggota; semua `1.0` jika diabaikan |
+| `fusion` | `"wbf"` | `"wbf"`, `"wbf_seeded"`, `"nms"`, atau callable |
+| `fusion_iou` | `0.55` | Ambang IoU untuk klasterisasi fusi |
+| `min_votes` | `1` | Simpan hanya kotak yang dikonfirmasi oleh setidaknya sebanyak anggota ini |
 
-A member is a weights path resolved through the `LibreYOLO()` factory, an
-already-constructed model, an exported backend, or an `ExternalDetector`.
-Every member must be a detect-task model.
+Seorang anggota adalah jalur bobot yang diselesaikan melalui pabrik `LibreYOLO()`, sebuah
+model yang sudah dibuat, backend yang diekspor, atau `ExternalDetector`.
+Setiap anggota harus merupakan model detect-task.
 
 <code-tabs name="usage" />
 
-Construction rejects fewer than two members, a `weights` list of the wrong
-length, a non-positive weight, a `min_votes` that is not a positive integer,
-and a `min_votes` larger than the member count. `fusion="nms"` with
-`min_votes > 1` also raises, because NMS discards cluster membership and
-cannot count votes.
+Konstruksi menolak kurang dari dua anggota, daftar `weights` dari yang salah
+panjang, berat yang tidak positif, `min_votes` yang bukan bilangan bulat positif,
+dan `min_votes` lebih besar dari jumlah anggota. `fusion="nms"` dengan
+`min_votes > 1` juga naik, karena NMS membuang keanggotaan klaster dan
+tidak bisa menghitung suara.
 
-`weights` scales the trust placed in each member. Higher weight pulls fused
-coordinates and scores toward that member. The convention is to make them
-proportional to validation mAP.
+`weights` menilai kepercayaan yang diberikan kepada setiap anggota. Bobot yang lebih tinggi menarik yang tergabung
+koordinat dan skor menuju anggota itu. Konvensinya adalah membuatnya
+sebanding dengan mAP validasi.
 
-## Class spaces
+## Ruang kelas
 
-Members with identical `names` pass straight through. Otherwise the class
-spaces are unioned by name, member class IDs are remapped through lookup
-tables, and the fused `Results.names` is the union. Fusion merges boxes only
-within the same unified class, so a class only one member knows passes through
-unfused. A mismatch logs a warning at construction.
+Anggota dengan `names` yang sama langsung melewati. Jika tidak, kelas
+ruang digabungkan berdasarkan nama, ID kelas anggota dipetakan ulang melalui pencarian
+tabel, dan `Results.names` yang dilebur adalah gabungannya. Peleburan hanya menggabungkan kotak
+dalam kelas tunggal yang sama, jadi sebuah kelas yang hanya diketahui oleh satu anggota melewati
+tidak digabung. Ketidaksesuaian mencatat peringatan saat konstruksi.
 
-`min_votes` is capped per class by how many members' label spaces contain that
-class, so consensus stays meaningful on partially shared vocabularies.
+`min_votes` dibatasi per kelas oleh berapa banyak ruang label anggota yang memuat itu
+kelas, sehingga konsensus tetap berarti pada kosa kata yang dibagi sebagian.
 
-## Calling the ensemble
+## Memanggil ansambel
 
 ```python
 ens(
@@ -149,60 +149,60 @@ ens(
 )
 ```
 
-`predict` is an alias for `__call__`. The return is the usual `Results`, whose
-`speed` breaks the cost down per member and adds a `fusion` entry. A single
-image source returns one of them, a list or directory returns a list, and
-`stream=True` returns a generator.
+`predict` adalah alias untuk `__call__`. Kembalian adalah `Results` biasa, yang
+`speed` merinci biaya per anggota dan menambahkan entri `fusion`. Satu
+sumber gambar mengembalikan salah satunya, daftar atau direktori mengembalikan daftar, dan
+`stream=True` mengembalikan generator.
 
-`conf`, `iou` and `device` broadcast to every member and also accept one value
-per member, so `conf=[0.25, 0.4]` gives member 0 a threshold of 0.25 and
-member 1 a threshold of 0.4. `imgsz` broadcasts when it is an int or a tuple
-and is per-member only when it is a list, so `imgsz=(480, 640)` is one
-rectangular size for everyone while `imgsz=[480, 640]` is 480 for member 0 and
-640 for member 1. Each entry must be valid for that member's family.
+`conf`, `iou` dan `device` menyiarkan ke setiap anggota dan juga menerima satu nilai
+per anggota, jadi `conf=[0.25, 0.4]` memberikan anggota 0 ambang 0,25 dan
+anggota 1 ambang 0,4. `imgsz` menyiarkan saat berupa int atau tuple
+dan hanya per anggota saat berupa daftar, jadi `imgsz=(480, 640)` adalah satu
+ukuran persegi panjang untuk semua orang sementara `imgsz=[480, 640]` adalah 480 untuk anggota 0 dan
+640 untuk anggota 1. Setiap entri harus valid untuk family anggota tersebut.
 
-`augment` broadcasts to members that support test-time augmentation, and
-exported backends ignore it. `classes` takes union class IDs and `max_det`
-applies to the fused result, so members run generously and the ensemble trims
-once. `batch` is accepted for API parity; images are processed sequentially.
+`augment` menyiarkan ke anggota yang mendukung augmentasi saat pengujian, dan
+backend yang diekspor mengabaikannya. `classes` mengambil gabungan ID kelas dan `max_det`
+diterapkan pada hasil gabungan, sehingga anggota menjalankan secara luas dan ensemble memotong
+sekali. `batch` diterima untuk kesetaraan API; gambar diproses secara berurutan.
 
-`val()` and `export()` raise `NotImplementedError`. Validate and export the
-members individually.
+`val()` dan `export()` menaikkan `NotImplementedError`. Validasi dan ekspor
+anggota secara individu.
 
-## ExternalDetector
+## DetektorEksternal
 
 ```python
 ExternalDetector(fn: Callable, names: dict[int, str])
 ```
 
-Adapts any detection callable into a member. `fn` takes a PIL image and
-returns `(boxes, scores, labels)`, where boxes are xyxy in original-image
-pixels and labels are class IDs valid in `names`. Tensors, arrays and nested
-lists all work. LibreYOLO imports nothing from the external code.
+Menyesuaikan setiap callable deteksi menjadi anggota. `fn` menerima gambar PIL dan
+mengembalikan `(boxes, scores, labels)`, di mana kotak adalah xyxy pada gambar asli
+adalah ID kelas yang valid di `names`. Tensor, array, dan daftar
+bersarang semuanya berfungsi. LibreYOLO tidak mengimpor apa pun dari kode eksternal.
 
-The adapter validates the return: it must be a 3-tuple, boxes must have shape
-`(N, 4)`, the three arrays must be the same length, and every class ID must
-appear in `names`. Detections at or below `conf` are dropped before fusion.
+Adapter memvalidasi hasil pengembalian: itu harus berupa tuple 3, kotak harus memiliki bentuk
+`(N, 4)`, ketiga array harus memiliki panjang yang sama, dan setiap ID kelas harus
+muncul di `names`. Deteksi pada atau di bawah `conf` dihapus sebelum fusi.
 
-## Fusion operations
+## Operasi fusi
 
-The fusion primitives are standalone torch ops in `libreyolo.ops`. They are
-model-free and importable on their own, which is why they are exported
-separately from the ensemble.
+Primitif fusi adalah operasi torch mandiri di `libreyolo.ops`. Mereka
+bebas model dan dapat diimpor sendiri, itulah sebabnya mereka diekspor
+secara terpisah dari ansambel.
 
 <code-tabs name="ops" />
 
-All three take the same positional arguments, `boxes, scores, labels,
-model_ids`, and return `(boxes, scores, labels)`.
+Ketiganya mengambil argumen posisi yang sama, `boxes, scores, labels,
+model_ids`, and return `(kotak, skor, label)`.
 
-| Op | Registry key | Behavior |
+| Op | Kunci registri | Perilaku |
 |---|---|---|
-| `weighted_boxes_fusion` | `wbf` | Sequential, paper-faithful weighted boxes fusion |
-| `wbf_seeded` | `wbf_seeded` | Parallel one-pass variant of the same reduction |
-| `nms_fusion` | `nms` | Concatenate everything and apply class-aware NMS |
+| `weighted_boxes_fusion` | `wbf` | Penggabungan kotak berbobot secara berurutan, sesuai dengan makalah |
+| `wbf_seeded` | `wbf_seeded` | Varian satu-lalu-lintas paralel dari pengurangan yang sama |
+| `nms_fusion` | `nms` | Gabungkan semuanya dan terapkan NMS yang mengenal kelas |
 
-`FUSIONS` maps the three registry keys to the callables, and `LibreEnsemble`
-looks up `fusion=` there.
+`FUSIONS` memetakan ketiga kunci registri ke callable, dan `LibreEnsemble`
+mencari `fusion=` di sana.
 
 ```python
 weighted_boxes_fusion(
@@ -219,32 +219,31 @@ weighted_boxes_fusion(
 )
 ```
 
-`wbf_seeded` takes the identical signature. `nms_fusion` takes the same
-arguments except `conf_type`, and raises `ValueError` when `min_votes > 1`.
+`wbf_seeded` mengambil tanda tangan yang identik. `nms_fusion` mengambil argumen yang sama
+kecuali `conf_type`, dan menimbulkan `ValueError` ketika `min_votes > 1`.
 
-In `weighted_boxes_fusion`, detections are visited in order of decreasing
-weight-scaled confidence. Each one either joins the existing cluster whose
-running fused box it overlaps best, at IoU above `iou_thr` and with the same
-label, or starts a new cluster. A cluster's fused box is the
-confidence-weighted average of its members' coordinates, and its score is the
-weighted mean or maximum of their confidences, rescaled so that boxes
-confirmed by fewer models score lower.
+Dalam `weighted_boxes_fusion`, deteksi dikunjungi secara berurutan dari yang menurun
+kepercayaan berskala berat. Masing-masing bergabung dengan klaster yang ada yang
+kotak gabungan yang berjalan itu tumpang tindih terbaik, pada IoU di atas `iou_thr` dan dengan yang sama
+label, atau memulai klaster baru. Kotak gabungan dari klaster adalah
+rata-rata berbobot kepercayaan dari koordinat anggotanya, dan skornya adalah
+rata-rata tertimbang atau maksimum dari kepercayaan mereka, diskalakan ulang sehingga kotak
+dikonfirmasi oleh lebih sedikit model mendapatkan skor lebih rendah.
 
-`wbf_seeded` picks cluster seeds with class-aware NMS at `iou_thr`, assigns
-every detection to its best-IoU seed of the same label, then reduces each
-cluster the same way. Cluster shapes never shift mid-pass, so the whole op is
-fixed-shape tensor math. The two variants agree whenever clusters are
-unambiguous and can differ slightly on overlapping cluster chains.
+`wbf_seeded` memilih benih klaster dengan NMS yang sadar kelas di `iou_thr`, menetapkan
+setiap deteksi ke benih-IoU terbaiknya dengan label yang sama, kemudian mengurangi masing-masing
+mengelompokkan dengan cara yang sama. Bentuk klaster tidak pernah bergeser di tengah proses, jadi seluruh operasi
+matematika tensor bentuk tetap. Kedua variasi setuju kapan pun klaster adalah
+tidak ambigu dan dapat berbeda sedikit pada rantai klaster yang tumpang tindih.
 
-`nms_fusion` keeps the highest-confidence box of each overlapping group,
-unchanged. Per-model `weights` scale confidences for the suppression ranking
-only, and surviving boxes keep their original scores.
+`nms_fusion` mempertahankan kotak dengan kepercayaan tertinggi dari setiap grup yang tumpang tindih,
+tidak berubah. Skor kepercayaan per-model `weights` hanya untuk peringkat penekanan,
+dan kotak yang bertahan mempertahankan skor aslinya.
 
-## Custom fusion
+## Fusi kustom
 
-`fusion=` also accepts a callable with the same signature as the ops above.
-Its name is recorded on `ens.fusion`, or `"custom"` when it has none. The
-return is validated: it must be a `(boxes, scores, labels)` triple with
-consistent shapes.
-
+`fusion=` juga menerima callable dengan tanda tangan yang sama seperti operasi di atas.
+Namanya dicatat di `ens.fusion`, atau `"custom"` ketika tidak ada. Hasilnya
+divalidasi: itu harus merupakan tripel `(boxes, scores, labels)` dengan
+bentuk yang konsisten.
 
