@@ -10,6 +10,11 @@ export const routing = defineRouting({
   locales: ['en', 'zh', 'es', 'it', 'pt', 'fr', 'ru', 'id', 'vi', 'de', 'pl', 'ja', 'ko', 'uk'],
   defaultLocale: 'en',
   localePrefix: 'as-needed',
+  // Never redirect by Accept-Language or cookie: the root always serves
+  // English, and a reader picks their language in the menu. With fourteen
+  // locales, header sniffing sends people to translations they did not ask
+  // for and makes the same URL serve different content per visitor.
+  localeDetection: false,
 })
 
 // BCP-47 tags used for the <html lang> attribute and hreflang alternates.
