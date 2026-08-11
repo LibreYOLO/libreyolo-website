@@ -30,7 +30,26 @@ export const localeHtmlLang = {
   uk: 'uk',
 }
 
-// Autonym labels shown in the language switcher.
+// Full autonyms, listed in the language menu. Each is the language's own name
+// for itself, which is what a reader scanning for their language looks for.
+export const localeNames = {
+  en: 'English',
+  zh: '中文',
+  es: 'Español',
+  it: 'Italiano',
+  pt: 'Português',
+  fr: 'Français',
+  ru: 'Русский',
+  id: 'Bahasa Indonesia',
+  vi: 'Tiếng Việt',
+  de: 'Deutsch',
+  pl: 'Polski',
+  ja: '日本語',
+  ko: '한국어',
+  uk: 'Українська',
+}
+
+// Short labels for the collapsed trigger, where there is no room for a name.
 export const localeLabels = {
   en: 'EN',
   zh: '中文',
