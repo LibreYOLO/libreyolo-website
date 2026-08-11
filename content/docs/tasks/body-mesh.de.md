@@ -82,12 +82,12 @@ Der kanonische Task-Key ist `mesh`. `body-mesh`, `hmr` und
 
 ## Modelle
 
-[SAM 3D Body](/docs/models/sam-3d-body) ist die einzige Familie für diesen Task,
-und sie ist ein Wrapper und keine Portierung: Metas Paket `sam-3d-body` steht
-unter der SAM License, von der der eigene Code von LibreYOLO nicht abgeleitet
-sein darf, deshalb ist nichts davon eingebettet. Zwei Backbones teilen sich
-dasselbe MHR-Körpermodell, `d3` auf einem DINOv3-ViT-H/16+-Encoder und `h` auf
-dem ursprünglichen ViT-H.
+[SAM 3D Body](/docs/models/sam-3d-body) ist die einzige Familie für diese
+Aufgabe, und sie ist ein Wrapper und keine Portierung: Metas Paket `sam-3d-body`
+steht unter der SAM License, von der der eigene Code von LibreYOLO nicht
+abgeleitet sein darf, deshalb ist nichts davon eingebettet. Zwei Backbones
+teilen sich dasselbe MHR-Körpermodell, `d3` auf einem DINOv3-ViT-H/16+-Encoder
+und `h` auf dem ursprünglichen ViT-H.
 
 Vor der ersten Vorhersage gelten drei Voraussetzungen, und keine davon ist
 optional.
@@ -133,7 +133,7 @@ Ergebnissen.
 
 ## Training
 
-Keine Familie in diesem Task trainiert innerhalb von LibreYOLO.
+Keine Familie in dieser Aufgabe trainiert innerhalb von LibreYOLO.
 `LibreSAM3DBody.train()` löst einen Fehler aus: Trainiere im Upstream-Projekt
 und lade den entstandenen Checkpoint hier.
 
@@ -162,7 +162,7 @@ die Ergebnisse in die Millimeter um, die in der Literatur berichtet werden.
 
 ## Export
 
-Der Mesh-Export ist nicht implementiert. LibreYOLO hat für diesen Task keinen
+Der Mesh-Export ist nicht implementiert. LibreYOLO hat für diese Aufgabe keinen
 Metadatenvertrag für den exportierten Graph definiert, auch nicht dafür, wie das
 MHR-Parameterlayout außerhalb von PyTorch mitgeführt wird, deshalb löst
 `export()` einen Fehler aus, statt einen Graph auszugeben, dessen Ausgabe

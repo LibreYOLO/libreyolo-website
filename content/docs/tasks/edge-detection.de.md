@@ -112,7 +112,7 @@ Eine Vorhersage füllt `result.edges`, ein `EdgeMap`-Payload mit einem `(H, W)`
 float32-Array in `[0, 1]` auf der ursprünglichen Bildfläche. `.array` liefert
 diese Karte als NumPy und `.binary(threshold)` eine boolesche Maske.
 `result.boxes` bleibt leer, deshalb haben `conf`, `iou` und `max_det` keine
-Wirkung. `Results.plot()` deckt diesen Task ab und zeichnet die Karte direkt.
+Wirkung. `Results.plot()` deckt diese Aufgabe ab und zeichnet die Karte direkt.
 
 ## Modelle
 

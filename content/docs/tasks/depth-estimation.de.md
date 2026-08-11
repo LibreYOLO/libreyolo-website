@@ -150,7 +150,7 @@ zwischengespeichert, außer bei den beiden oben genannten Familien.
 Die Eingabeauflösung ist je Familie eingeschränkt. Depth Anything V2 und Depth
 Anything 3 bauen auf einem DINOv2-Patchraster auf, deshalb muss `imgsz` glatt
 durch 14 teilbar sein, was LibreYOLO vor dem Lauf prüft. `Results.plot()` deckt
-diesen Task nicht ab; die Methode ist nur für Oberflächennormalen und Kanten
+diese Aufgabe nicht ab; die Methode ist nur für Oberflächennormalen und Kanten
 definiert. Siehe [Vorhersage](/docs/predict) für Quellen, Streaming und den
 Umgang mit Ergebnissen.
 

@@ -2,9 +2,9 @@
 title: Bildklassifikation
 seo_title: Bildklassifikation in LibreYOLO
 description: >-
-  Labele in LibreYOLO ein ganzes Bild: die Familien, die den Task bedienen, das
-  ImageFolder-Datensatzlayout und die Aufrufe für Vorhersage, Training,
-  Validierung und Export.
+  Labele in LibreYOLO ein ganzes Bild: die Familien, die diese Aufgabe
+  bedienen, das ImageFolder-Datensatzlayout und die Aufrufe für Vorhersage,
+  Training, Validierung und Export.
 lead: >-
   Die Bildklassifikation weist einem ganzen Bild eine Labelverteilung zu und
   lokalisiert nichts darin. Der Task-Key ist classify.

@@ -7,7 +7,7 @@ description: >-
   nach ONNX.
 lead: >-
   Die Blickrichtungsschätzung liefert für jedes Gesicht in einem Bild eine
-  Blickrichtung. LibreYOLO modelliert sie als zweistufigen Task: Zuerst läuft
+  Blickrichtung. LibreYOLO modelliert sie als zweistufige Aufgabe: Zuerst läuft
   ein Gesichtsdetektor, dann liest ein Gaze-Head Pitch und Yaw aus jedem
   Gesichtsausschnitt, den dieser zurückgibt.
 keywords:
@@ -95,14 +95,14 @@ Dasselbe Payload stellt `pitch_deg` und `yaw_deg` für Grad bereit sowie
 `direction_3d`, einen `(N, 3)`-Einheitsvektor im Kameraframe mit den Spalten
 `(x, y, z)`.
 
-Weil der Task zweistufig ist, hängt eine Vorhersage an zwei Modellen. Gesichter,
-die der Detektor übersieht, haben keine Gaze-Zeile, und Boxen, die er schlecht
-setzt, erzeugen Winkel aus einem schlecht zugeschnittenen Gesicht. Der kanonische
-Task-Key ist `gaze`; `gaze-estimation` normalisiert darauf.
+Weil die Aufgabe zweistufig ist, hängt eine Vorhersage an zwei Modellen.
+Gesichter, die der Detektor übersieht, haben keine Gaze-Zeile, und Boxen, die er
+schlecht setzt, erzeugen Winkel aus einem schlecht zugeschnittenen Gesicht. Der
+kanonische Task-Key ist `gaze`; `gaze-estimation` normalisiert darauf.
 
 ## Modelle
 
-[L2CS-Net](/docs/models/l2cs) ist die einzige Familie für diesen Task. Sie
+[L2CS-Net](/docs/models/l2cs) ist die einzige Familie für diese Aufgabe. Sie
 kombiniert einen ResNet-Trunk mit zwei parallelen Klassifikations-Heads über
 Winkelbins, einem für Pitch und einem für Yaw, über 448x448 großen
 Gesichtsausschnitten. Architektonisch werden fünf Backbone-Tiefen unterstützt,
@@ -148,7 +148,7 @@ Ergebnissen.
 
 ## Training
 
-Keine Familie in diesem Task trainiert innerhalb von LibreYOLO.
+Keine Familie in dieser Aufgabe trainiert innerhalb von LibreYOLO.
 `LibreL2CS.train()` löst einen Fehler aus: Trainiere im Upstream-Projekt
 L2CS-Net und lade das entstandene State Dict hier.
 
@@ -156,7 +156,7 @@ L2CS-Net und lade das entstandene State Dict hier.
 
 Die Validierung gegen Gaze-Ground-Truth-Datensätze liegt außerhalb des Umfangs,
 und `val()` löst einen Fehler aus, statt Metriken zurückzugeben, die es nicht
-berechnet hat. Für diesen Task gibt es kein `metrics/`-Dictionary. Werte
+berechnet hat. Für diese Aufgabe gibt es kein `metrics/`-Dictionary. Werte
 upstream aus, auf dem Datensatz, für den der Checkpoint trainiert wurde.
 
 ## Export

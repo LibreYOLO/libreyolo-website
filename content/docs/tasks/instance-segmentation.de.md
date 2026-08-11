@@ -2,7 +2,7 @@
 title: Instanzsegmentierung
 seo_title: Instanzsegmentierung in LibreYOLO
 description: >-
-  Segmentiere einzelne Objekte in LibreYOLO: die Familien, die den Task
+  Segmentiere einzelne Objekte in LibreYOLO: die Familien, die diese Aufgabe
   bedienen, das Polygon-Labelformat und die Aufrufe für Vorhersage, Training,
   Validierung und Export.
 lead: >-
@@ -132,7 +132,7 @@ Die Instanzsegmentierung ist Detektion plus Form. Jede Objektinstanz bekommt
 weiterhin eine Box, eine Klasse und einen Score, und zusätzlich eine binäre
 Maske über den Pixeln, die zu ihr gehören. Masken dürfen sich überlappen, und
 Pixel, die zu keinem Objekt gehören, bleiben unzugeordnet, und genau das trennt
-den Task von der
+die Aufgabe von der
 [semantischen Segmentierung](/docs/tasks/semantic-segmentation) und der
 [panoptischen Segmentierung](/docs/tasks/panoptic-segmentation).
 
@@ -266,7 +266,7 @@ abhängt, welche Zahl die Familie als primär bezeichnet hat:
 `metrics/mAP50-95(M)` und `metrics/mAP50-95(B)`, `metrics/mAP50(M)` und
 `metrics/mAP50(B)`, `metrics/precision(M)` und `metrics/precision(B)`,
 `metrics/recall(M)` und `metrics/recall(B)`. Ein `metrics/precision` oder
-`metrics/recall` ohne Suffix gibt es bei diesem Task nicht.
+`metrics/recall` ohne Suffix gibt es bei dieser Aufgabe nicht.
 
 Lies die Precision- und Recall-Keys sorgfältig. Sie bleiben aus
 Abwärtskompatibilität erhalten und sind Aliase, kein Arbeitspunkt:

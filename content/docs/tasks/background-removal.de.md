@@ -104,7 +104,7 @@ source_hash: f7d88c74d9729268
 
 Der `matte`-Task sagt aus einem einzelnen RGB-Bild einen Alphawert pro Pixel
 vorher: `1` ist vollständig Vordergrund und `0` vollständig Hintergrund. Der Wert
-ist kontinuierlich statt binär, und genau darum geht es bei diesem Task. Eine
+ist kontinuierlich statt binär, und genau darum geht es bei dieser Aufgabe. Eine
 harte Maske ist nur einen Schwellenwert entfernt, bei 0.5, während die weiche
 Matte zusätzlich die teilweise Deckung an Haaren, Fell und bewegungsunscharfen
 Kanten trägt, die eine binäre Maske wegwirft.
@@ -120,8 +120,9 @@ ein PNG mit transparentem Hintergrund. `result.boxes` bleibt leer, deshalb haben
 
 Zwei Familien bedienen `matte`, und sie teilen sich einen Forward-Pfad.
 
-[BiRefNet](/docs/models/birefnet) ist das bilaterale Referenznetz, um das der
-Task herum gebaut ist, hier als ein Checkpoint der Swin-L-Stufe veröffentlicht.
+[BiRefNet](/docs/models/birefnet) ist das bilaterale Referenznetz, um das die
+Aufgabe herum gebaut ist, hier als ein Checkpoint der Swin-L-Stufe
+veröffentlicht.
 
 [FeyNobg](/docs/models/feynobg) ist die vertiefte Variante von Feyn Inc.: die
 Architektur von BiRefNet, deren dritte Swin-Stufe von 18 auf 24 Blöcke
@@ -216,7 +217,7 @@ dieselben `Results`.
 
 <code-tabs name="export" />
 
-TorchScript ist der validierte Pfad für diesen Task. Die ONNX-Konvertierung
+TorchScript ist der validierte Pfad für diese Aufgabe. Die ONNX-Konvertierung
 läuft durch, hat dieselbe Paritätshürde aber nicht genommen, und die übrigen
 Formate sind nicht verfügbar. Die Abdeckung pro Format steht auf den Seiten
 [BiRefNet](/docs/models/birefnet) und [FeyNobg](/docs/models/feynobg) sowie in

@@ -111,15 +111,15 @@ unterhalb des Schwellenwerts wird nie untergeschoben.
 
 Der kanonische Task-Key der Bibliothek ist `embed`. `face-recognition`,
 `facial-recognition`, `reid` und `face` normalisieren alle darauf,
-`task="face-recognition"` und `task="embed"` wählen also dasselbe aus. Gesichter
-sind die Region-Form dieses weiteren Tasks; [Embeddings](/docs/tasks/embeddings)
-behandelt die Ganzbild- und die Textform, die gemeinsame API aus `Embeddings`,
-`Identities` und `Gallery` sowie die Modelle, die Vektoren erzeugen, ohne
-irgendetwas zu erkennen.
+`task="face-recognition"` und `task="embed"` wählen also dasselbe aus.
+Gesichter sind die Region-Form dieser weiteren Aufgabe;
+[Embeddings](/docs/tasks/embeddings) behandelt die Ganzbild- und die Textform,
+die gemeinsame API aus `Embeddings`, `Identities` und `Gallery` sowie die
+Modelle, die Vektoren erzeugen, ohne irgendetwas zu erkennen.
 
 ## Modelle
 
-[LibreFaceRec](/docs/models/librefacerec) ist die Familie für diesen Task. Sie
+[LibreFaceRec](/docs/models/librefacerec) ist die Familie für diese Aufgabe. Sie
 besteht aus zwei ONNX-Artefakten hinter einem Aufruf: `librefacerec-l.onnx`,
 einem iResNet100-Erkennungs-Head mit 512-dimensionalen Embeddings, und
 `librefacerec-det.onnx`, dem Standard-Gesichtsdetektor mit fünf Landmarken, aus
@@ -189,14 +189,14 @@ Gesicht, ein Porträt mit Umstehenden registriert also nur sein Motiv. Übergib
 
 ## Training
 
-Keine Familie in diesem Task trainiert innerhalb von LibreYOLO.
+Keine Familie in dieser Aufgabe trainiert innerhalb von LibreYOLO.
 `LibreFaceEmbedder.train()` löst einen Fehler aus: Trainiere einen
 Erkennungs-Head upstream, exportiere ihn nach ArcFace-Konvention zu ONNX und
 lade die Datei über ihren Pfad.
 
 ## Validierung
 
-Für diesen Task gibt es keinen Datensatz-Validator, und `val()` löst einen
+Für diese Aufgabe gibt es keinen Datensatz-Validator, und `val()` löst einen
 Fehler aus, statt etwas anderes vorzugeben. Die Verifikations-Accuracy wird an
 gelabelten Bildpaaren mit `model.verify()` gemessen, wobei du `threshold`
 durchfährst, um den gewünschten Arbeitspunkt zu wählen. Die

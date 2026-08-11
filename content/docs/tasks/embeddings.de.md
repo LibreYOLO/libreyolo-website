@@ -6,7 +6,7 @@ description: >-
   für jede erkannte Region oder für Text. Registriere eine Gallery, matche über
   Kosinusähnlichkeit und suche aus Python oder über die CLI.
 lead: >-
-  Ein Task deckt jeden Vektor ab, den LibreYOLO erzeugt. embed liefert
+  Eine Aufgabe deckt jeden Vektor ab, den LibreYOLO erzeugt. embed liefert
   float32-Zeilen der Länge eins, deren Skalarprodukt ein Ähnlichkeitswert ist,
   egal ob die Zeile ein ganzes Bild, ein einzelnes erkanntes Gesicht oder eine
   Textzeile beschreibt, und dieselbe Gallery matcht sie alle.
@@ -182,7 +182,7 @@ source_hash: ffbaad5599035bc7
 float32-Zeile fester Breite, deren Länge eins ist. Weil jede Zeile ein
 Einheitsvektor ist, ist der Vergleich zweier Zeilen ein Skalarprodukt und der
 Vergleich zweier Mengen davon eine einzige Matrixmultiplikation. Sonst ist
-nichts an diesem Task modellspezifisch: Retrieval, Duplikaterkennung,
+nichts an dieser Aufgabe modellspezifisch: Retrieval, Duplikaterkennung,
 Re-Identifikation und Gesichtserkennung sind alle dieselbe Arithmetik über
 unterschiedlichen Zeilen.
 
@@ -212,7 +212,7 @@ genau dasselbe aus.
 
 ## Modelle
 
-Vier Familien bedienen den Task, und sie teilen sich sauber danach, ob sie
+Vier Familien bedienen die Aufgabe, und sie teilen sich sauber danach, ob sie
 vorher etwas lokalisieren.
 
 | Familie | Form | Dimension | Unterstützt außerdem |
@@ -235,7 +235,7 @@ DINOv2-S-Encoder, deshalb liefern alle vier `D = 384`.
 
 Die reinen Klassifikations-Backbones, die in diesem Release dazugekommen sind,
 [ViT](/docs/models/vit), [Swin](/docs/models/swin) und [DeiT](/docs/models/deit),
-deklarieren nur `classify` und bedienen diesen Task nicht.
+deklarieren nur `classify` und bedienen diese Aufgabe nicht.
 
 <code-tabs name="predict" />
 
@@ -374,17 +374,18 @@ vor, der sie anlegen würde.
 
 ## Gesichter
 
-Die Gesichtserkennung ist die Region-Form dieses Tasks, und sie ist die einzige
-ausgelieferte Implementierung dieser Form. Sie ergänzt eine Erkennungs- und
-Ausrichtungsstufe vor dem Embedding-Head, dazu eine `verify()`-Methode, ein
-Argument für eigene Boxen, veröffentlichte Accuracy-Zahlen und eine Anleitung
-zur Kalibrierung des Schwellenwerts. All das steht unter
-[Gesichtserkennung](/docs/tasks/face-recognition), der Anleitung, der du folgen
-solltest, wenn es um Gesichter geht. Alles auf dieser Seite gilt dort unverändert.
+Die Gesichtserkennung ist die Region-Form dieser Aufgabe, und sie ist die
+einzige ausgelieferte Implementierung dieser Form. Sie ergänzt eine
+Erkennungs- und Ausrichtungsstufe vor dem Embedding-Head, dazu eine
+`verify()`-Methode, ein Argument für eigene Boxen, veröffentlichte
+Accuracy-Zahlen und eine Anleitung zur Kalibrierung des Schwellenwerts. All das
+steht unter [Gesichtserkennung](/docs/tasks/face-recognition), der Anleitung,
+der du folgen solltest, wenn es um Gesichter geht. Alles auf dieser Seite gilt
+dort unverändert.
 
 ## Training, Validierung und Export
 
-Nichts in diesem Task trainiert innerhalb von LibreYOLO. Der Head für
+Nichts in dieser Aufgabe trainiert innerhalb von LibreYOLO. Der Head für
 Gesichts-Embeddings ist ein ONNX-Artefakt, dessen `train()`, `val()` und
 `export()` alle einen Fehler auslösen; trainiere einen Head upstream und lade die
 Datei über ihren Pfad. CLIP, SigLIP 2 und DINOv2 trainieren und exportieren über

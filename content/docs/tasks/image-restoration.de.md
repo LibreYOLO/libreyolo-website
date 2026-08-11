@@ -108,7 +108,7 @@ source_hash: 9dc81cadb3ebf18b
 ## Definition
 
 Der `restore`-Task bildet ein Bild auf ein anderes Bild ab. Entrauschen,
-Entschärfen und Super-Resolution sind hier alle derselbe Task, weil sie einen
+Entschärfen und Super-Resolution sind hier alle dieselbe Aufgabe, weil sie einen
 Vertrag teilen: Das Modell nimmt ein RGB-Bild und liefert ein RGB-Bild, und die
 Degradation, die es rückgängig zu machen gelernt hat, ist eine Eigenschaft des
 Checkpoints und nicht der API.
