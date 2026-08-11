@@ -1,11 +1,22 @@
 ---
 title: Swin Transformer
-families: [swin]
-seo_title: "Swin Transformer: классификация изображений с LibreSwin в LibreYOLO"
-description: "Предсказание, валидация и экспорт классификаторов Swin Transformer в LibreYOLO. Веса под MIT; дообучение пока не поддерживается."
-lead: "Swin Transformer V1 — иерархический vision transformer, который считает внимание внутри сдвинутых локальных окон, а не по всему изображению. LibreYOLO поставляет четыре размера для классификации изображений."
-keywords: [Swin Transformer, иерархический vision transformer, внимание в сдвинутых окнах, классификация изображений python, классификатор ImageNet]
-last_verified: "1.5.0"
+families:
+  - swin
+seo_title: 'Swin Transformer: классификация изображений с LibreSwin в LibreYOLO'
+description: >-
+  Предсказание, валидация и экспорт классификаторов Swin Transformer в
+  LibreYOLO. Веса под MIT; дообучение пока не поддерживается.
+lead: >-
+  Swin Transformer V1 — иерархический vision transformer, который считает
+  внимание внутри сдвинутых локальных окон, а не по всему изображению. LibreYOLO
+  поставляет четыре размера для классификации изображений.
+keywords:
+  - Swin Transformer
+  - иерархический vision transformer
+  - внимание в сдвинутых окнах
+  - классификация изображений python
+  - классификатор ImageNet
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +32,10 @@ snippets:
         print(probs.top5, probs.top5conf)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreSwint-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreSwint-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -66,6 +79,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: faa6bbacae62d88e
 ---
 
 ## Установка

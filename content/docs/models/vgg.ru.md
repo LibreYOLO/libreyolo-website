@@ -1,11 +1,23 @@
 ---
 title: VGG
-families: [vgg]
-seo_title: "VGG: запуск классификаторов изображений VGG-16/19 в LibreYOLO"
-description: "Предсказание, валидация и экспорт классификаторов VGG в LibreYOLO. Веса torchvision под лицензией BSD-3-Clause; дообучение пока не поддерживается."
-lead: "VGG — свёрточный классификатор изображений, собранный из однородных стопок небольших свёрток 3x3 вместо фильтров большего размера. LibreYOLO поставляет размеры на 16 и 19 слоёв, обычные и с батч-нормализацией, для классификации изображений."
-keywords: [VGG, VGG-16, VGG-19, свёрточная нейросеть, классификация изображений python]
-last_verified: "1.5.0"
+families:
+  - vgg
+seo_title: 'VGG: запуск классификаторов изображений VGG-16/19 в LibreYOLO'
+description: >-
+  Предсказание, валидация и экспорт классификаторов VGG в LibreYOLO. Веса
+  torchvision под лицензией BSD-3-Clause; дообучение пока не поддерживается.
+lead: >-
+  VGG — свёрточный классификатор изображений, собранный из однородных стопок
+  небольших свёрток 3x3 вместо фильтров большего размера. LibreYOLO поставляет
+  размеры на 16 и 19 слоёв, обычные и с батч-нормализацией, для классификации
+  изображений.
+keywords:
+  - VGG
+  - VGG-16
+  - VGG-19
+  - свёрточная нейросеть
+  - классификация изображений python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +33,10 @@ snippets:
         print(probs.top5, probs.top5conf)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreVGG16-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreVGG16-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -67,6 +81,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: 26eb6ff5811533fd
 ---
 
 ## Установка

@@ -1,11 +1,25 @@
 ---
 title: SmolVLM2
-families: [smolvlm2]
-seo_title: "SmolVLM2 в LibreYOLO: детекция с открытым словарём"
-description: "SmolVLM2 в LibreYOLO: установка, задание открытого словаря и предсказание или чат с vision-language моделью Hugging Face под лицензией Apache-2.0."
-lead: "SmolVLM2 — небольшая vision-language модель от Hugging Face. LibreYOLO оборачивает её как детектор объектов с открытым словарём и напрямую открывает свободный чат: передайте список классов для детекции или просто задайте вопрос."
-keywords: [SmolVLM2, smolvlm2 python, vision-language модель, детекция с открытым словарём, компактная мультимодальная модель, Hugging Face, VLM]
-last_verified: "1.5.0"
+families:
+  - smolvlm2
+seo_title: 'SmolVLM2 в LibreYOLO: детекция с открытым словарём'
+description: >-
+  SmolVLM2 в LibreYOLO: установка, задание открытого словаря и предсказание или
+  чат с vision-language моделью Hugging Face под лицензией Apache-2.0.
+lead: >-
+  SmolVLM2 — небольшая vision-language модель от Hugging Face. LibreYOLO
+  оборачивает её как детектор объектов с открытым словарём и напрямую открывает
+  свободный чат: передайте список классов для детекции или просто задайте
+  вопрос.
+keywords:
+  - SmolVLM2
+  - smolvlm2 python
+  - vision-language модель
+  - детекция с открытым словарём
+  - компактная мультимодальная модель
+  - Hugging Face
+  - VLM
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -30,6 +44,7 @@ snippets:
         # а не только запрос рамок.
         answer = model.chat(SAMPLE_IMAGE, "What is the cat doing?")
         print(answer)
+source_hash: b30823b62d6347b5
 ---
 
 ## Установка

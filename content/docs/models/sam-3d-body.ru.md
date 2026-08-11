@@ -1,11 +1,25 @@
 ---
 title: SAM 3D Body
-families: [sam3dbody]
-seo_title: "SAM 3D Body: восстановление меша всего тела в LibreYOLO"
-description: "Используйте SAM 3D Body в LibreYOLO для восстановления 3D-меша всего тела человека. Установка и предсказание; доступ к чекпойнтам ограничен лицензией Meta SAM License, нужна CUDA."
-lead: "SAM 3D Body — управляемая промптами модель Meta, которая восстанавливает 3D-меш всего тела, включая кисти и стопы, по одному изображению и рамкам людей. LibreYOLO оборачивает upstream-пакет, а не портирует его."
-keywords: [SAM 3D Body, MHR, Momentum Human Rig, human mesh recovery, 3d меш человека, восстановление 3d модели тела по фото, 3d поза человека python]
-last_verified: "1.5.0"
+families:
+  - sam3dbody
+seo_title: 'SAM 3D Body: восстановление меша всего тела в LibreYOLO'
+description: >-
+  Используйте SAM 3D Body в LibreYOLO для восстановления 3D-меша всего тела
+  человека. Установка и предсказание; доступ к чекпойнтам ограничен лицензией
+  Meta SAM License, нужна CUDA.
+lead: >-
+  SAM 3D Body — управляемая промптами модель Meta, которая восстанавливает
+  3D-меш всего тела, включая кисти и стопы, по одному изображению и рамкам
+  людей. LibreYOLO оборачивает upstream-пакет, а не портирует его.
+keywords:
+  - SAM 3D Body
+  - MHR
+  - Momentum Human Rig
+  - human mesh recovery
+  - 3d меш человека
+  - восстановление 3d модели тела по фото
+  - 3d поза человека python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -38,6 +52,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
+source_hash: 8edc8d7872f3f875
 ---
 
 ## Установка

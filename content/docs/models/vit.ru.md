@@ -1,11 +1,23 @@
 ---
 title: ViT
-families: [vit]
+families:
+  - vit
 seo_title: 'ViT: запуск классических классификаторов Vision Transformer в LibreYOLO'
-description: "Предсказание, валидация и экспорт классификаторов ViT в LibreYOLO. Веса AugReg под лицензией Apache-2.0; дообучение пока не поддерживается."
-lead: "Классический Vision Transformer: чистый трансформер, применённый к патчам изображения фиксированного размера, с обучаемым class-токеном и без свёрток. LibreYOLO поставляет четыре размера с предобучением AugReg для классификации изображений."
-keywords: [ViT, Vision Transformer, AugReg, классификация изображений python, классификатор на трансформере]
-last_verified: "1.5.0"
+description: >-
+  Предсказание, валидация и экспорт классификаторов ViT в LibreYOLO. Веса AugReg
+  под лицензией Apache-2.0; дообучение пока не поддерживается.
+lead: >-
+  Классический Vision Transformer: чистый трансформер, применённый к патчам
+  изображения фиксированного размера, с обучаемым class-токеном и без свёрток.
+  LibreYOLO поставляет четыре размера с предобучением AugReg для классификации
+  изображений.
+keywords:
+  - ViT
+  - Vision Transformer
+  - AugReg
+  - классификация изображений python
+  - классификатор на трансформере
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,8 +33,10 @@ snippets:
         print(probs.top5, probs.top5conf)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreViTti-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreViTti-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -57,15 +71,22 @@ snippets:
         libreyolo export model=LibreViTti-cls.pt format=tensorrt half=True
     - label: Использование экспортированного файла
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Фабрика выбирает загрузчик по суффиксу файла, поэтому экспортированный
-        # артефакт загружается как любой чекпойнт и возвращает тот же объект Results.
+
+        # артефакт загружается как любой чекпойнт и возвращает тот же объект
+        Results.
+
         model = LibreYOLO("LibreViTti-cls.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.probs.top1)
+source_hash: f63e98454913765a
 ---
 
 ## Установка

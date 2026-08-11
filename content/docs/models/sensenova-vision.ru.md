@@ -1,11 +1,29 @@
 ---
 title: SenseNova-Vision
-families: [sensenovavision]
-seo_title: "SenseNova-Vision в LibreYOLO: 7 задач, один чекпойнт"
-description: "Используйте SenseNova-Vision в LibreYOLO для детекции, сегментации, паноптической сегментации, оценки позы, точек, глубины и OCR из одного генеративного чекпойнта, управляемого промптом."
-lead: "SenseNova-Vision — унифицированная мультимодальная модель, которая сводит задачи компьютерного зрения к генерации по промпту на общем декодере: рамки, точки, ключевые точки и слова OCR выходят как размеченный тегами текст, а карты глубины, маски и паноптические карты выходят как изображения, которые отрисовывает декодер. LibreYOLO загружает её через LibreVLM и поддерживает семь задач из одного чекпойнта на 7B."
-keywords: [SenseNova-Vision, SenseTime, унифицированная мультимодальная модель, Bagel, детекция по текстовому промпту, плотные предсказания, сегментация по описанию, паноптическая сегментация python]
-last_verified: "1.5.0"
+families:
+  - sensenovavision
+seo_title: 'SenseNova-Vision в LibreYOLO: 7 задач, один чекпойнт'
+description: >-
+  Используйте SenseNova-Vision в LibreYOLO для детекции, сегментации,
+  паноптической сегментации, оценки позы, точек, глубины и OCR из одного
+  генеративного чекпойнта, управляемого промптом.
+lead: >-
+  SenseNova-Vision — унифицированная мультимодальная модель, которая сводит
+  задачи компьютерного зрения к генерации по промпту на общем декодере: рамки,
+  точки, ключевые точки и слова OCR выходят как размеченный тегами текст, а
+  карты глубины, маски и паноптические карты выходят как изображения, которые
+  отрисовывает декодер. LibreYOLO загружает её через LibreVLM и поддерживает
+  семь задач из одного чекпойнта на 7B.
+keywords:
+  - SenseNova-Vision
+  - SenseTime
+  - унифицированная мультимодальная модель
+  - Bagel
+  - детекция по текстовому промпту
+  - плотные предсказания
+  - сегментация по описанию
+  - паноптическая сегментация python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -24,23 +42,35 @@ snippets:
         depth = result.depth_map.data
     - label: Сегментация по описанию и паноптическая сегментация
       language: python
-      code: |
+      code: >
         from libreyolo import LibreVLM
 
+
         model = LibreVLM("sensenova-vision", task="segment")
-        # Сегментация здесь по описанию: нужна фраза с целью, а не список классов.
+
+        # Сегментация здесь по описанию: нужна фраза с целью, а не список
+        классов.
+
         model.set_classes(["the person furthest to the right"])
+
         result = model.predict("street.jpg")
+
         mask = result.masks.data[0]
 
+
         model.set_task("panoptic")
+
         # Без своего словаря паноптика откатывается к паноптическим категориям
+
         # COCO, на которых настраивали чекпойнт.
+
         result = model.predict("street.jpg")
+
         segment_map = result.panoptic.data
+
         for segment in result.panoptic.segments_info:
             print(segment)
-    - label: Точки, поза и OCR
+    - label: 'Точки, поза и OCR'
       language: python
       code: |
         from libreyolo import LibreVLM
@@ -58,6 +88,7 @@ snippets:
         model.set_task("ocr")
         result = model.predict("sign.jpg")
         print(result.ocr.texts)
+source_hash: 8749277e1910baa4
 ---
 
 ## Установка

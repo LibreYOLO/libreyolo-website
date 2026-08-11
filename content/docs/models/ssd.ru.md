@@ -1,11 +1,25 @@
 ---
 title: SSD
-families: [ssd]
-seo_title: "SSD (SSD300): детекция объектов в LibreYOLO"
-description: "Запуск SSD300 в LibreYOLO: single-shot детектор на VGG16 для предсказания, валидации и экспорта в ONNX под лицензией BSD-3-Clause. Пути обучения нет."
-lead: "SSD (Single Shot MultiBox Detector) предсказывает все рамки и оценки классов из плотной сетки опорных рамок за один прямой проход, без отдельной стадии генерации регионов-кандидатов. LibreYOLO поставляет чекпойнт SSD300 на базе VGG16 как детектор только для инференса."
-keywords: [SSD, SSD300, Single Shot MultiBox Detector, детекция объектов python, ssd300 инференс, VGG16, детектор на якорях]
-last_verified: "1.5.0"
+families:
+  - ssd
+seo_title: 'SSD (SSD300): детекция объектов в LibreYOLO'
+description: >-
+  Запуск SSD300 в LibreYOLO: single-shot детектор на VGG16 для предсказания,
+  валидации и экспорта в ONNX под лицензией BSD-3-Clause. Пути обучения нет.
+lead: >-
+  SSD (Single Shot MultiBox Detector) предсказывает все рамки и оценки классов
+  из плотной сетки опорных рамок за один прямой проход, без отдельной стадии
+  генерации регионов-кандидатов. LibreYOLO поставляет чекпойнт SSD300 на базе
+  VGG16 как детектор только для инференса.
+keywords:
+  - SSD
+  - SSD300
+  - Single Shot MultiBox Detector
+  - детекция объектов python
+  - ssd300 инференс
+  - VGG16
+  - детектор на якорях
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +34,10 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreSSD300.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreSSD300.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
@@ -40,13 +56,18 @@ snippets:
   export:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreSSD300.pt")
 
+
         # imgsz здесь опущен намеренно: SSD300 трассируется на родном холсте
-        # своего чекпойнта, а любое другое значение вызовет ошибку до начала экспорта.
+
+        # своего чекпойнта, а любое другое значение вызовет ошибку до начала
+        экспорта.
+
         model.export(format="onnx")
     - label: CLI
       language: bash
@@ -54,15 +75,22 @@ snippets:
         libreyolo export model=LibreSSD300.pt format=onnx
     - label: Использование экспортированного файла
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # Фабрика выбирает путь по суффиксу файла, поэтому экспортированный артефакт
+
+        # Фабрика выбирает путь по суффиксу файла, поэтому экспортированный
+        артефакт
+
         # загружается как любой чекпойнт и возвращает тот же объект Results.
+
         model = LibreYOLO("LibreSSD300.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)
+source_hash: 3b3f9ea72291c4fa
 ---
 
 ## Установка

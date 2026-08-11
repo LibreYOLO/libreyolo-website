@@ -1,11 +1,25 @@
 ---
 title: SwinIR
-families: [swinir]
-seo_title: "SwinIR: увеличение разрешения изображений в 4x в LibreYOLO"
-description: "Используйте SwinIR в LibreYOLO для увеличения разрешения изображений в 4x. Установка, предсказание, валидация и экспорт лёгкого, среднего и большого чекпойнтов."
-lead: "Сеть на основе Swin Transformer для восстановления изображений. В LibreYOLO есть инференс и валидация для её чекпойнтов с увеличением в 4x: официального лёгкого генератора, а также среднего и большого генераторов для реальных изображений."
-keywords: [SwinIR, Swin Transformer, увеличить разрешение изображения нейросетью, восстановление изображений python, апскейл фото 4x, super resolution python]
-last_verified: "1.5.0"
+families:
+  - swinir
+seo_title: 'SwinIR: увеличение разрешения изображений в 4x в LibreYOLO'
+description: >-
+  Используйте SwinIR в LibreYOLO для увеличения разрешения изображений в 4x.
+  Установка, предсказание, валидация и экспорт лёгкого, среднего и большого
+  чекпойнтов.
+lead: >-
+  Сеть на основе Swin Transformer для восстановления изображений. В LibreYOLO
+  есть инференс и валидация для её чекпойнтов с увеличением в 4x: официального
+  лёгкого генератора, а также среднего и большого генераторов для реальных
+  изображений.
+keywords:
+  - SwinIR
+  - Swin Transformer
+  - увеличить разрешение изображения нейросетью
+  - восстановление изображений python
+  - апскейл фото 4x
+  - super resolution python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +34,10 @@ snippets:
         print(restored.array.shape, restored.array.dtype)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreSwinIRm-restore.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreSwinIRm-restore.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
     - label: Потайловый инференс для больших изображений
       language: python
       code: |
@@ -77,6 +93,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.restored.array.shape)
+source_hash: 87fc3d5524480eec
 ---
 
 ## Установка

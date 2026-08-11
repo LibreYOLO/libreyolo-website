@@ -1,11 +1,26 @@
 ---
 title: TEED
-families: [teed]
-seo_title: "TEED: выделение границ со своим чекпойнтом"
-description: "Используйте TEED в LibreYOLO для плотного предсказания вероятности границ. Конвертируйте лицензированный чекпойнт, а затем запускайте предсказание, валидацию и экспорт."
-lead: "TEED (Tiny and Efficient Edge Detector) — небольшая свёрточная сеть, которая по одному RGB-изображению предсказывает плотную карту вероятности границ. LibreYOLO использует её архитектуру только для выделения границ; чекпойнт с библиотекой не поставляется."
-keywords: [TEED, Tiny and Efficient Edge Detector, выделение границ python, лёгкий детектор границ, карта границ нейросеть, BIPED, плотное предсказание]
-last_verified: "1.5.0"
+families:
+  - teed
+seo_title: 'TEED: выделение границ со своим чекпойнтом'
+description: >-
+  Используйте TEED в LibreYOLO для плотного предсказания вероятности границ.
+  Конвертируйте лицензированный чекпойнт, а затем запускайте предсказание,
+  валидацию и экспорт.
+lead: >-
+  TEED (Tiny and Efficient Edge Detector) — небольшая свёрточная сеть, которая
+  по одному RGB-изображению предсказывает плотную карту вероятности границ.
+  LibreYOLO использует её архитектуру только для выделения границ; чекпойнт с
+  библиотекой не поставляется.
+keywords:
+  - TEED
+  - Tiny and Efficient Edge Detector
+  - выделение границ python
+  - лёгкий детектор границ
+  - карта границ нейросеть
+  - BIPED
+  - плотное предсказание
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -21,23 +36,32 @@ snippets:
         print(edges.binary(0.5).sum())  # число пикселей границ после порога
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=weights/LibreTEEDt-edge.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=weights/LibreTEEDt-edge.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("weights/LibreTEEDt-edge.pt")
+
         metrics = model.val(data="my-dataset.yaml", imgsz=352)
 
-        print(metrics["metrics/ODS"])   # F-мера при оптимальном пороге для датасета
-        print(metrics["metrics/OIS"])   # F-мера при оптимальном пороге для изображения
+
+        print(metrics["metrics/ODS"])   # F-мера при оптимальном пороге для
+        датасета
+
+        print(metrics["metrics/OIS"])   # F-мера при оптимальном пороге для
+        изображения
     - label: CLI
       language: bash
-      code: |
-        libreyolo val model=weights/LibreTEEDt-edge.pt data=my-dataset.yaml imgsz=352
+      code: >
+        libreyolo val model=weights/LibreTEEDt-edge.pt data=my-dataset.yaml
+        imgsz=352
   export:
     - label: Python
       language: python
@@ -49,9 +73,11 @@ snippets:
         model.export(format="tensorrt", imgsz=352, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=weights/LibreTEEDt-edge.pt format=onnx imgsz=352
-        libreyolo export model=weights/LibreTEEDt-edge.pt format=tensorrt imgsz=352 half=True
+
+        libreyolo export model=weights/LibreTEEDt-edge.pt format=tensorrt
+        imgsz=352 half=True
     - label: Использование экспортированного файла
       language: python
       code: |
@@ -61,6 +87,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.edges.array.shape)
+source_hash: c7203b254e460258
 ---
 
 ## Установка

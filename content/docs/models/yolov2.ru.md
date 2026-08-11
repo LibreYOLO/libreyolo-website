@@ -1,23 +1,22 @@
 ---
-title: YOLOv1
+title: YOLOv2
 families:
-  - yolo1
-seo_title: 'YOLOv1 в LibreYOLO: предсказание, валидация, экспорт'
+  - yolo2
+seo_title: 'YOLOv2 в LibreYOLO: предсказание, валидация, экспорт'
 description: >-
-  Запуск оригинального детектора YOLOv1 в LibreYOLO: замороженное музейное
-  семейство только для инференса. Предсказание, валидация и экспорт под
-  лицензией общественного достояния.
+  Запуск YOLOv2 (YOLO9000) в LibreYOLO: замороженное музейное семейство только
+  для инференса. Предсказание, валидация и экспорт под лицензией public domain.
 lead: >-
-  YOLOv1 — оригинальный детектор 2016 года, давший имя всему семейству YOLO:
-  одна свёрточная сеть с полносвязной головой предсказывает все рамки и оценки
-  классов за один проход, без якорей. LibreYOLO поставляет его как замороженный
-  экспонат только для инференса.
+  YOLOv2, опубликованный также под названием YOLO9000, — детектор на Darknet-19,
+  который принёс в линейку YOLO якорные рамки и passthrough-слой. LibreYOLO
+  поставляет его как замороженный экспонат только для инференса.
 keywords:
-  - YOLOv1
-  - YOLO v1
+  - YOLOv2
+  - YOLO9000
   - Darknet
+  - Darknet-19
   - детекция объектов python
-  - Pascal VOC
+  - якорные рамки anchor boxes
   - музейные модели libreyolo
 last_verified: 1.5.0
 snippets:
@@ -27,7 +26,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        model = LibreYOLO("LibreYOLO1b.pt")
+        model = LibreYOLO("LibreYOLO2b.pt")
         result = model(SAMPLE_IMAGE, save=True)
 
         for box in result.boxes:
@@ -35,7 +34,7 @@ snippets:
     - label: CLI
       language: bash
       code: >
-        libreyolo predict model=LibreYOLO1b.pt
+        libreyolo predict model=LibreYOLO2b.pt
         source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
         save=True
   val:
@@ -44,7 +43,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO1b.pt")
+        model = LibreYOLO("LibreYOLO2b.pt")
         metrics = model.val(data="my-dataset.yaml")
 
         print(metrics["metrics/mAP50-95"])
@@ -52,21 +51,21 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo val model=LibreYOLO1b.pt data=my-dataset.yaml
+        libreyolo val model=LibreYOLO2b.pt data=my-dataset.yaml
   export:
     - label: Python
       language: python
       code: |
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO1b.pt")
+        model = LibreYOLO("LibreYOLO2b.pt")
         model.export(format="onnx")
         model.export(format="tensorrt", half=True)
     - label: CLI
       language: bash
       code: |
-        libreyolo export model=LibreYOLO1b.pt format=onnx
-        libreyolo export model=LibreYOLO1b.pt format=tensorrt half=True
+        libreyolo export model=LibreYOLO2b.pt format=onnx
+        libreyolo export model=LibreYOLO2b.pt format=tensorrt half=True
     - label: Использование экспортированного файла
       language: python
       code: >
@@ -78,18 +77,18 @@ snippets:
         # артефакт загружается как любой чекпойнт и возвращает тот же объект
         Results.
 
-        model = LibreYOLO("LibreYOLO1b.onnx")
+        model = LibreYOLO("LibreYOLO2b.onnx")
 
         result = model(SAMPLE_IMAGE)
 
 
         print(result.boxes.xyxy)
-source_hash: a786372dba86f2f8
+source_hash: ba2884a2f6e1b0da
 ---
 
 ## Установка
 
-YOLOv1 не требует ничего сверх базового пакета.
+Сверх базового пакета YOLOv2 не нужны никакие extra.
 
 ```bash
 pip install libreyolo
@@ -104,22 +103,17 @@ Hugging Face при первом запуске и кэшируются лока
 
 <code-tabs name="predict" />
 
-Возвращаемый объект `Results` — тот же, что возвращают все семейства, поэтому
-замена на другой детектор — правка в одну строку. Две вещи специфичны для
-этого семейства. Опубликованный чекпойнт обучен на Pascal VOC (2007+2012), а не
-на COCO, поэтому `box.cls` индексирует 20 категорий VOC (aeroplane, bicycle,
-bird, boat, bottle, bus, car, cat, chair, cow, diningtable, dog, horse,
-motorbike, person, pottedplant, sheep, sofa, train, tvmonitor), а не 80
-категорий COCO. А полносвязная голова детекции принимает по одному изображению
-за раз, поэтому список источников обрабатывается в цикле, а не как настоящий
-батч. Про источники, стриминг и обработку результатов см.
+Возвращаемый объект `Results` — тот же, что возвращает любое семейство, поэтому
+замена на другой детектор занимает одну строку. `conf` задаёт порог уверенности,
+а `iou` — порог NMS; оба применяются к якорным предсказаниям головы `region`.
+Про источники, стриминг и обработку результатов см.
 [предсказание](/docs/predict).
 
 ## Валидация
 
 `val()` возвращает словарь с ключами `metrics/`, покрывающими точность,
-полноту, mAP 50 и mAP 50-95, измеренные на датасете в том же пространстве
-меток в стиле VOC, на котором обучался чекпойнт.
+полноту, mAP 50 и mAP 50-95, измеренные на любом датасете в том формате, в
+котором вы проводите валидацию.
 
 <code-tabs name="val" />
 
@@ -130,8 +124,8 @@ motorbike, person, pottedplant, sheep, sofa, train, tvmonitor), а не 80
 Экспортированный артефакт загружается обратно через `LibreYOLO()` по суффиксу
 файла, поэтому файл `.onnx` или `.engine` ведёт себя как чекпойнт и возвращает
 тот же `Results`. Запуск графа в чистой среде выполнения, без установленной
-LibreYOLO, тоже поддерживается, но тогда препроцессинг и постпроцессинг
-придётся писать самостоятельно.
+библиотеки LibreYOLO, тоже поддерживается, но тогда предобработку и
+постобработку придётся писать самостоятельно.
 
 <code-tabs name="export" />
 

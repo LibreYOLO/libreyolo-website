@@ -1,34 +1,63 @@
 ---
 title: SAM
-families: [sam]
-seo_title: "SAM (Segment Anything): предсказание масок в LibreYOLO"
-description: "Используйте SAM в LibreYOLO для сегментации по промпту — точке или рамке. Установка и предсказание с чекпойнтами base, large и huge под лицензией Apache-2.0."
-lead: "SAM (Segment Anything) превращает клик точкой или рамкой в маску объекта. LibreYOLO загружает его через отдельную фабрику LibreSAM, а не через фабрику детекторов LibreYOLO(), потому что модели с промптами нужна другая форма вызова."
-keywords: [SAM, Segment Anything, сегментация по точке, интерактивная сегментация, segment anything python, сегментация объекта по клику, выделить объект на фото python]
-last_verified: "1.5.0"
+families:
+  - sam
+seo_title: 'SAM (Segment Anything): предсказание масок в LibreYOLO'
+description: >-
+  Используйте SAM в LibreYOLO для сегментации по промпту — точке или рамке.
+  Установка и предсказание с чекпойнтами base, large и huge под лицензией
+  Apache-2.0.
+lead: >-
+  SAM (Segment Anything) превращает клик точкой или рамкой в маску объекта.
+  LibreYOLO загружает его через отдельную фабрику LibreSAM, а не через фабрику
+  детекторов LibreYOLO(), потому что модели с промптами нужна другая форма
+  вызова.
+keywords:
+  - SAM
+  - Segment Anything
+  - сегментация по точке
+  - интерактивная сегментация
+  - segment anything python
+  - сегментация объекта по клику
+  - выделить объект на фото python
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Промпты точкой и рамкой
       language: python
-      code: |
+      code: >
         from libreyolo import LibreSAM, SAMPLE_IMAGE
 
-        # "base" при первом использовании автоматически скачивает facebook/sam-vit-base.
+
+        # "base" при первом использовании автоматически скачивает
+        facebook/sam-vit-base.
+
         # Другие размеры: "large", "huge" (а также "b"/"l"/"h").
+
         model = LibreSAM("base")
 
-        # Промпт точкой: [x, y] в пиксельных координатах, метка 1 = передний план.
+
+        # Промпт точкой: [x, y] в пиксельных координатах, метка 1 = передний
+        план.
+
         result = model.predict(SAMPLE_IMAGE, points=[640, 420], labels=[1])
+
         print(result.masks.xy)      # полигон на каждую маску
+
         print(result.boxes.xyxy)    # плотная рамка, полученная из маски
 
+
         # Промпт рамкой вместо точки.
+
         result = model.predict(SAMPLE_IMAGE, bboxes=[300, 200, 900, 700])
 
+
         # Без промпта сегментируется всё изображение (упрощённый автоматический
+
         # генератор масок, а не исчерпывающий эталонный).
+
         result = model.predict(SAMPLE_IMAGE)
-    - label: Однократное кодирование, много промптов
+    - label: 'Однократное кодирование, много промптов'
       language: python
       code: |
         from libreyolo import LibreSAM, SAMPLE_IMAGE
@@ -42,6 +71,7 @@ snippets:
         a = model.predict(points=[640, 420], labels=[1])
         b = model.predict(bboxes=[300, 200, 900, 700])
         model.reset_image()
+source_hash: f8904d241ef8a929
 ---
 
 ## Установка
