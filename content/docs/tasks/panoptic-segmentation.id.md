@@ -1,20 +1,20 @@
 ---
-title: Panoptic segmentation
-seo_title: Panoptic segmentation in LibreYOLO
+title: Segmentasi panoptik
+seo_title: Segmentasi panoptik di LibreYOLO
 description: >-
-  Assign every pixel one segment in LibreYOLO: the families that serve the task,
-  the COCO-panoptic dataset format, and the predict and validate calls.
+  Tetapkan setiap piksel ke satu segment di LibreYOLO: family yang melayani
+  task, format dataset COCO-panoptic, serta pemanggilan prediksi dan validasi.
 lead: >-
-  Panoptic segmentation assigns every pixel to exactly one non-overlapping
-  segment, unifying countable object instances with amorphous background
-  regions. The task key is panoptic.
+  Segmentasi panoptik menetapkan setiap piksel ke tepat satu segment yang tidak
+  tumpang tindih, menyatukan instance objek yang dapat dihitung dengan region
+  background amorf. Key task-nya adalah panoptic.
 keywords:
-  - panoptic segmentation python
+  - segmentasi panoptik Python
   - panoptic quality
-  - things and stuff segmentation
-  - COCO panoptic format
-  - segment id map
-  - PQ metric
+  - segmentasi things dan stuff
+  - format COCO panoptic
+  - peta segment id
+  - metrik PQ
 last_verified: 1.5.0
 snippets:
   predict:
@@ -23,20 +23,20 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The -panoptic suffix in the filename selects the task, so no task
-        # argument is needed.
+        # Akhiran -panoptic pada nama file memilih task, sehingga argumen task
+        # tidak diperlukan.
         model = LibreYOLO("LibreEoMTl-panoptic.pt")
         result = model(SAMPLE_IMAGE, save=True)
 
         pan = result.panoptic
-        print(pan.data.shape)       # (H, W) segment ids
+        print(pan.data.shape)       # (H, W) id segment
         print(pan.segments_info)    # [{"id": ..., "category_id": ...}, ...]
     - label: CLI
       language: bash
       code: |
         libreyolo predict model=LibreEoMTl-panoptic.pt save=True \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-    - label: One segment at a time
+    - label: Satu segment pada satu waktu
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -47,7 +47,7 @@ snippets:
         for segment in pan.segments_info:
             pixels = pan.segment_mask(segment["id"])   # boolean (H, W)
             print(result.names[segment["category_id"]], int(pixels.sum()))
-    - label: A smaller checkpoint
+    - label: Checkpoint lebih kecil
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -64,7 +64,7 @@ snippets:
 
         model = LibreYOLO("LibreEoMTl-panoptic.pt")
 
-        # val() returns a plain dict, not an object.
+        # val() mengembalikan dict biasa, bukan objek.
         metrics = model.val(data="my-dataset.yaml")
 
         print(metrics["metrics/PQ"])
@@ -77,60 +77,61 @@ snippets:
 source_hash: b8adc9ccde7a4e6c
 ---
 
-## Definition
+## Definisi
 
-Panoptic segmentation is the union of the other two segmentation tasks. Every
-pixel gets exactly one segment, segments never overlap, and a segment is either
-a thing, a countable object instance, or stuff, an amorphous region such as sky
-or road. That makes it stricter than
-[instance segmentation](/docs/tasks/instance-segmentation), which leaves
-background pixels unassigned and lets masks overlap, and stricter than
-[semantic segmentation](/docs/tasks/semantic-segmentation), which labels every
-pixel but merges touching instances of one class.
+Segmentasi panoptik adalah gabungan dua task segmentasi lainnya. Setiap piksel
+memperoleh tepat satu segment, segment tidak pernah tumpang tindih, dan segment
+merupakan thing, yaitu instance objek yang dapat dihitung, atau stuff, yaitu
+region amorf seperti langit atau jalan. Karena itu, task ini lebih ketat daripada
+[segmentasi instance](/docs/tasks/instance-segmentation), yang membiarkan piksel
+background tanpa assignment dan memungkinkan mask tumpang tindih, serta lebih
+ketat daripada [segmentasi semantik](/docs/tasks/semantic-segmentation), yang
+memberi label setiap piksel tetapi menggabungkan instance bersentuhan dari satu class.
 
-`panoptic` is the canonical task key, and the `-panoptic` suffix in a
-checkpoint filename selects it, so `task=` is not needed when loading published
-weights.
+`panoptic` adalah key task kanonis, dan akhiran `-panoptic` pada nama file
+checkpoint memilihnya, sehingga `task=` tidak diperlukan saat memuat bobot terbitan.
 
-`predict()` fills `result.panoptic`. `.data` is an `(H, W)` integer
-segment-id map on the original image canvas. `.segments_info` is a list of
-dicts, one per segment, each carrying at least `{"id", "category_id"}`, where
-`id` matches a value in the map and `category_id` indexes `result.names`.
-`.segment_ids` lists the ids present in sorted order and `.segment_mask(id)`
-returns the boolean `(H, W)` selection for one segment. Segment id `0` is the
-void value: unlabeled pixels, excluded from the metric and left out of
-`.segment_ids`.
+`predict()` mengisi `result.panoptic`. `.data` adalah peta id-segment integer
+`(H, W)` pada kanvas gambar asli. `.segments_info` adalah daftar dict, satu per
+segment, yang masing-masing setidaknya memuat `{"id", "category_id"}`, dengan
+`id` cocok dengan nilai dalam peta dan `category_id` mengindeks `result.names`.
+`.segment_ids` mencantumkan id yang ada dalam urutan terurut dan
+`.segment_mask(id)` mengembalikan pilihan boolean `(H, W)` untuk satu segment.
+Id segment `0` adalah nilai void: piksel tanpa label yang dikecualikan dari
+metrik dan tidak disertakan dalam `.segment_ids`.
 
-Thing versus stuff is a property of the category, not of the individual
-segment. It is carried on the label set's category metadata, and a prediction
-payload may copy it onto each segment as `"isthing"` for convenience, but the
-category metadata remains authoritative.
+Thing atau stuff merupakan properti kategori, bukan segment individual. Properti
+ini dibawa dalam metadata kategori kumpulan label, dan payload prediksi dapat
+menyalinnya ke setiap segment sebagai `"isthing"` demi kemudahan, tetapi metadata
+kategori tetap menjadi sumber otoritatif.
 
-## Models
+## Model
 
-[EoMT](/docs/models/eomt) is the family that serves this task through
-`LibreYOLO()`. It runs on the base package and ships panoptic checkpoints in
-three sizes, s, b and l, trained on COCO.
+[EoMT](/docs/models/eomt) adalah family yang melayani task ini melalui
+`LibreYOLO()`. Model ini berjalan pada package dasar dan menyertakan checkpoint
+panoptik dalam tiga ukuran, s, b, dan l, yang dilatih pada COCO.
 
-[SenseNova-Vision](/docs/models/sensenova-vision) also emits panoptic maps. It
-is a prompted generative model with its own factory, `LibreVLM`, and its own
-extra; with no vocabulary set it falls back to the COCO panoptic categories it
-was tuned on. Its weights are non-commercial. Per-image latency is far higher
-than a purpose-built segmenter, because every prediction is a diffusion decode.
+[SenseNova-Vision](/docs/models/sensenova-vision) juga menghasilkan peta panoptik.
+Model generatif berbasis prompt ini memiliki factory sendiri, `LibreVLM`, dan
+extra sendiri; jika tidak ada vocabulary yang ditetapkan, model kembali ke
+kategori panoptik COCO yang digunakan dalam tuning. Bobotnya bersifat
+nonkomersial. Latensi per gambar jauh lebih tinggi daripada segmenter khusus,
+karena setiap prediksi merupakan diffusion decode.
 
-## Predict
+## Prediksi
 
-Weights download from Hugging Face on first use and are cached locally.
+Bobot diunduh dari Hugging Face saat pertama kali digunakan dan disimpan dalam
+cache lokal.
 
 <code-tabs name="predict" />
 
-`conf` filters query selection. See [prediction](/docs/predict) for sources,
-streaming and result handling.
+`conf` memfilter pemilihan query. Lihat [prediksi](/docs/predict) untuk sumber,
+streaming, dan penanganan hasil.
 
-## Dataset format
+## Format dataset
 
-LibreYOLO adopts the COCO-panoptic format verbatim, from Kirillov et al.,
-CVPR 2019. There is no LibreYOLO-specific panoptic layout.
+LibreYOLO menggunakan format COCO-panoptic apa adanya, dari Kirillov et al.,
+CVPR 2019. Tidak ada tata letak panoptik khusus LibreYOLO.
 
 ```text
 dataset/
@@ -142,17 +143,18 @@ dataset/
     panoptic_val/000000000139.png
 ```
 
-Each image is paired with one RGB PNG at the same resolution, where each
-pixel's color encodes the id of the segment it belongs to:
+Setiap gambar dipasangkan dengan satu PNG RGB beresolusi sama, dengan warna
+setiap piksel mengodekan id segment pemiliknya:
 
 ```text
 segment_id = R + 256 * G + 256 * 256 * B
 ```
 
-Segment id `0`, RGB black, is void: unlabeled pixels that neither reward nor
-penalize a prediction. Every other pixel belongs to exactly one segment.
+Id segment `0`, yaitu RGB hitam, merupakan void: piksel tanpa label yang tidak
+memberi reward maupun penalti pada prediksi. Setiap piksel lain tepat menjadi
+milik satu segment.
 
-The JSON lists, per image, the segment-id PNG and the segments inside it:
+JSON mencantumkan PNG id-segment dan segment di dalamnya untuk setiap gambar:
 
 ```json
 {
@@ -165,13 +167,13 @@ The JSON lists, per image, the segment-id PNG and the segments inside it:
 }
 ```
 
-`annotations[].file_name` names the PNG inside the panoptic directory, and
-`segments_info[].id` matches a value in that PNG. `iscrowd` marks group
-regions: they are never counted as false negatives, and a prediction that
-mostly covers one is not a false positive. `isthing` lives on `categories` and
-never on an individual segment.
+`annotations[].file_name` menamai PNG dalam direktori panoptik, dan
+`segments_info[].id` cocok dengan nilai dalam PNG tersebut. `iscrowd` menandai
+region kelompok: region tersebut tidak pernah dihitung sebagai false negative,
+dan prediksi yang sebagian besar menutupinya bukan false positive. `isthing`
+berada pada `categories`, bukan pada segment individual.
 
-The YAML points at both:
+YAML menunjuk ke keduanya:
 
 ```yaml
 path: dataset
@@ -185,48 +187,48 @@ names:
   1: bicycle
 ```
 
-`annotations` and `panoptic_dir` each accept a single path or a per-split
-mapping. Raw COCO category ids are typically non-contiguous, while models
-predict a contiguous `0..nc-1`, so ids are remapped through `names` by category
-name. A JSON category missing from `names` is an error rather than a silent
-drop, because dropping it would score as a permanent false negative.
+`annotations` dan `panoptic_dir` masing-masing menerima satu path atau pemetaan
+per split. Id kategori mentah COCO biasanya tidak berurutan, sedangkan model
+memprediksi rentang berurutan `0..nc-1`, sehingga id dipetakan ulang melalui
+`names` berdasarkan nama kategori. Kategori JSON yang tidak ada dalam `names`
+merupakan error, bukan diabaikan diam-diam, karena mengabaikannya akan dinilai
+sebagai false negative permanen.
 
-The canonical loader is `libreyolo.data.PanopticDataset`.
+Loader kanonis adalah `libreyolo.data.PanopticDataset`.
 
-## Train
+## Pelatihan
 
-No family trains panoptic segmentation in LibreYOLO today: EoMT's `train()`
-raises `NotImplementedError`, so panoptic checkpoints are used as published.
+Saat ini tidak ada family yang melatih segmentasi panoptik di LibreYOLO:
+`train()` EoMT memunculkan `NotImplementedError`, sehingga checkpoint panoptik
+digunakan sebagaimana diterbitkan.
 
-## Validate
+## Validasi
 
-`val()` returns a plain dictionary of `metrics/` keys, computed at the ground
-truth resolution over the split named by `val` in the dataset YAML. A predicted
-and a true segment of the same category match when their IoU exceeds 0.5, and
-that match is unique.
+`val()` mengembalikan dictionary biasa berisi key `metrics/`, yang dihitung pada
+resolusi ground truth di split bernama `val` dalam YAML dataset. Segment prediksi
+dan ground truth dari kategori yang sama cocok jika IoU-nya melebihi 0,5, dan
+pencocokan tersebut unik.
 
 <code-tabs name="val" />
 
-`metrics/PQ` is Panoptic Quality, the headline number. Within one category it
-is the product of two factors. Segmentation quality is the mean IoU over
-matched segments and says how well the matched shapes line up. Recognition
-quality is `TP / (TP + 0.5 FP + 0.5 FN)`, the F1 score of the matching itself,
-and says how many segments were found at all. All three figures are then
-averaged over the categories that appeared, and reported as `metrics/PQ`,
-`metrics/SQ` and `metrics/RQ`, so the reported PQ is the mean of per-category
-products rather than the product of the two reported means.
+`metrics/PQ` adalah Panoptic Quality dan menjadi angka utama. Dalam satu kategori,
+nilai ini merupakan hasil kali dua faktor. Segmentation quality adalah mean IoU
+pada segment yang cocok dan menunjukkan seberapa baik bentuk hasil pencocokan
+sejajar. Recognition quality adalah `TP / (TP + 0.5 FP + 0.5 FN)`, yaitu skor F1
+dari pencocokan itu sendiri, dan menunjukkan berapa banyak segment yang ditemukan.
+Ketiga angka kemudian dirata-ratakan pada kategori yang muncul dan dilaporkan
+sebagai `metrics/PQ`, `metrics/SQ`, dan `metrics/RQ`, sehingga PQ yang dilaporkan
+merupakan rata-rata hasil kali per kategori, bukan hasil kali dua rata-rata terlapor.
 
-`metrics/PQ_things` and `metrics/PQ_stuff` average the same per-category PQ
-over thing categories and stuff categories separately, and
-`metrics/categories` counts the categories that appeared and were therefore
-averaged over. The dictionary also carries `fitness`, a copy of the PQ value.
+`metrics/PQ_things` dan `metrics/PQ_stuff` merata-ratakan PQ per kategori yang
+sama secara terpisah pada kategori thing dan stuff, sedangkan `metrics/categories`
+menghitung kategori yang muncul dan karenanya masuk ke rata-rata. Dictionary juga
+memuat `fitness`, salinan nilai PQ.
 
-## Export
+## Ekspor
 
-Panoptic checkpoints do not export. `export()` raises `NotImplementedError` for
-this task, because the query-mask output has no runtime export contract yet.
-EoMT's semantic task does export; see
-[semantic segmentation](/docs/tasks/semantic-segmentation) and
-[export and deploy](/docs/export).
-
-
+Checkpoint panoptik tidak dapat diekspor. `export()` memunculkan
+`NotImplementedError` untuk task ini karena output query-mask belum memiliki
+kontrak ekspor runtime. Task semantic EoMT dapat diekspor; lihat
+[segmentasi semantik](/docs/tasks/semantic-segmentation) dan
+[ekspor dan deployment](/docs/export).

@@ -1,6 +1,6 @@
 ---
-title: Training on a rented GPU
-seo_title: Train LibreYOLO on a rented cloud GPU
+title: Pelatihan pada GPU sewaan
+seo_title: Latih LibreYOLO pada GPU cloud sewaan
 description: >-
   Run a LibreYOLO training job on a rented or serverless GPU: stage the data,
   install, launch, watch it live, retrieve the weights and stop paying.
@@ -117,7 +117,7 @@ snippets:
 source_hash: 75d314de06aca3b6
 ---
 
-## Before you rent anything
+## Sebelum menyewa apa pun
 
 Two decisions cost more later than they do now.
 
@@ -133,7 +133,7 @@ Then size the disk. Providers that bill storage bill on allocated capacity, not
 used capacity, and a disk cannot be shrunk after creation. Add up the staged
 data, the checkpoints, and roughly 30 percent of headroom, and stop there.
 
-## Install on the box
+## Instalasi pada mesin
 
 <code-tabs name="install" />
 
@@ -147,7 +147,7 @@ on the device`. One matrix multiply catches it before an hour of setup does not.
 Point `HF_HOME` at persistent storage if the provider offers a volume, so
 checkpoint and dataset downloads survive between runs.
 
-## Launch
+## Jalankan
 
 Run the job detached. An interactive session that dies with your network
 connection takes the training with it.
@@ -165,7 +165,7 @@ On a multi-GPU box, `device="0,1,2,3"` spawns one worker per GPU by itself, and
 mandatory, because each worker re-imports the script. That, and the rest of the
 distributed behavior, is on [Multi-GPU training](/docs/train/multi-gpu).
 
-## Watch it from outside
+## Pantau dari luar
 
 Every run writes `status.json` into its run directory, rewritten atomically each
 epoch. It is the cheap read: a few hundred bytes carrying the state, the current
@@ -181,7 +181,7 @@ beyond LibreYOLO itself. Reach it over an SSH port forward.
 None of these touch the training process, so they attach to a live run, reopen a
 finished one, or inspect a crashed one.
 
-## Get the weights out before you stop paying
+## Ambil bobot sebelum berhenti membayar
 
 The box is disposable. Push checkpoints at milestones, not only at the end,
 because a crash, a preemption or running out of credit otherwise loses the whole
@@ -198,7 +198,7 @@ A callback on `on_train_epoch_end` is the clean way to automate the push. See
 [Experiment loggers](/docs/train/loggers), where the hosted backends also give
 you the metrics without touching the box at all.
 
-## Stop paying
+## Hentikan pembayaran
 
 This is the part that costs real money when it goes wrong, and the rule differs
 by provider model.
@@ -235,7 +235,7 @@ One risk makes stopping unsafe for scarce hardware: stopping releases the GPUs.
 Nothing reserves them, so restarting only succeeds if the host still has them
 free. Your disk is safe; your GPUs are not.
 
-## Serverless, as a function
+## Serverless sebagai fungsi
 
 If you would rather not manage a machine, both Modal and Beam run a decorated
 Python function on a GPU and scale to zero when it returns. LibreYOLO's own
@@ -280,7 +280,7 @@ bill.
 Beam takes the same shape with a `@function` decorator, a `Volume`, and
 `train.remote()` called from `__main__`.
 
-## Right-size by cost per job
+## Tentukan ukuran berdasarkan biaya per job
 
 $/hr is the wrong number to optimize. A small model half-idles a large card, so a
 cheaper and slower GPU is often cheaper per epoch. Run the profiler for a few
@@ -289,10 +289,8 @@ steps on the rented card before committing to a long run: if the verdict is
 larger batch buys a lot. See
 [Training performance](/docs/train/performance).
 
-## Related
+## Terkait
 
 - [Datasets](/docs/train/datasets) for the layout the staged archive should have,
   and the doctor command that catches problems before a GPU is billing.
 - [Multi-GPU training](/docs/train/multi-gpu) for multi-card boxes.
-
-

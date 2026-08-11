@@ -1,19 +1,20 @@
 ---
-title: Semantic segmentation
-seo_title: Semantic segmentation in LibreYOLO
+title: Segmentasi semantik
+seo_title: Segmentasi semantik di LibreYOLO
 description: >-
-  Label every pixel with a class in LibreYOLO: the families that serve the task,
-  the dense mask format, and the predict, train, validate and export calls.
+  Beri label class pada setiap piksel di LibreYOLO: family yang melayani task,
+  format mask rapat, serta pemanggilan prediksi, pelatihan, validasi, dan
+  ekspor.
 lead: >-
-  Semantic segmentation assigns a class to every pixel of an image and draws no
-  distinction between instances of the same class. The task key is semantic.
+  Segmentasi semantik menetapkan class pada setiap piksel gambar dan tidak
+  membedakan instance dari class yang sama. Key task-nya adalah semantic.
 keywords:
-  - semantic segmentation python
-  - pixel classification
+  - segmentasi semantik Python
+  - klasifikasi piksel
   - dense prediction
-  - train segmentation model
+  - melatih model segmentasi
   - mIoU
-  - MIT segmentation library
+  - library segmentasi MIT
 last_verified: 1.5.0
 snippets:
   predict:
@@ -22,20 +23,20 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The -sem suffix in the filename selects the task, so no task
-        # argument is needed.
+        # Akhiran -sem pada nama file memilih task, sehingga argumen task
+        # tidak diperlukan.
         model = LibreYOLO("LibreSegformerb0-sem.pt")
         result = model(SAMPLE_IMAGE, save=True)
 
         mask = result.semantic_mask
-        print(mask.data.shape)   # (H, W) class ids on the original canvas
-        print(mask.classes)      # sorted class ids present, ignoring 255
+        print(mask.data.shape)   # (H, W) id class pada kanvas asli
+        print(mask.classes)      # id class terurut yang ada, mengabaikan 255
     - label: CLI
       language: bash
       code: |
         libreyolo predict model=LibreSegformerb0-sem.pt save=True \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-    - label: One class at a time
+    - label: Satu class pada satu waktu
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -46,7 +47,7 @@ snippets:
         for class_id in mask.classes:
             pixels = mask.class_mask(class_id)   # boolean (H, W)
             print(result.names[class_id], int(pixels.sum()))
-    - label: 'Another family, same call'
+    - label: 'Family lain, pemanggilan sama'
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -68,11 +69,11 @@ snippets:
       code: |
         libreyolo train model=LibreSegformerb0-sem.pt data=my-dataset.yaml \
           epochs=160 imgsz=512 batch=8
-    - label: On ADE20K
+    - label: Pada ADE20K
       language: bash
       code: |
-        # ade20k.yaml carries an embedded download script for the ~1 GB
-        # archive, so it needs explicit permission unless the data is local.
+        # ade20k.yaml memuat skrip unduhan tertanam untuk arsip sekitar 1 GB,
+        # sehingga memerlukan izin eksplisit kecuali datanya sudah lokal.
         libreyolo train model=LibreSegformerb0-sem.pt data=ade20k.yaml \
           epochs=160 imgsz=512 batch=8 allow_download_scripts=True
   val:
@@ -83,7 +84,7 @@ snippets:
 
         model = LibreYOLO("LibreSegformerb0-sem.pt")
 
-        # val() returns a plain dict, not an object.
+        # val() mengembalikan dict biasa, bukan objek.
         metrics = model.val(data="my-dataset.yaml")
 
         print(metrics["metrics/mIoU"])
@@ -104,77 +105,83 @@ snippets:
       language: bash
       code: |
         libreyolo export model=LibreSegformerb0-sem.pt format=onnx imgsz=512
-    - label: Use the exported file
+    - label: Gunakan file hasil ekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The factory routes on the file suffix, so an exported artifact loads
-        # like a checkpoint and returns the same Results object.
+
+        # Factory merutekan berdasarkan akhiran file, sehingga artefak hasil
+
+        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang
+        sama.
+
         model = LibreYOLO("LibreSegformerb0-sem.onnx")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.semantic_mask.data.shape)
 source_hash: 44b92d8ba6062f04
 ---
 
-## Definition
+## Definisi
 
-Semantic segmentation labels pixels, not objects. Every pixel receives one
-class id, and two cars touching in the image become one region of the car
-class with no boundary between them. Counting instances is
-[instance segmentation](/docs/tasks/instance-segmentation); labeling every
-pixel and separating instances at the same time is
-[panoptic segmentation](/docs/tasks/panoptic-segmentation).
+Segmentasi semantik memberi label piksel, bukan objek. Setiap piksel menerima satu
+id class, dan dua mobil yang bersentuhan dalam gambar menjadi satu region class
+mobil tanpa batas di antaranya. Menghitung instance adalah
+[segmentasi instance](/docs/tasks/instance-segmentation); memberi label setiap
+piksel sekaligus memisahkan instance adalah
+[segmentasi panoptik](/docs/tasks/panoptic-segmentation).
 
-`semantic` is the canonical task key, and the `-sem` suffix in a checkpoint
-filename selects it, so `task=` is not needed when loading published weights.
+`semantic` adalah key task kanonis, dan akhiran `-sem` pada nama file checkpoint
+memilihnya, sehingga `task=` tidak diperlukan saat memuat bobot terbitan.
 
-`predict()` fills `result.semantic_mask`. `.data` is an `(H, W)` integer
-class map on the original image canvas, `.classes` lists the ids present in
-sorted order, and `.class_mask(id)` returns the boolean `(H, W)` selection for
-one class. The value `255` is the ignore label: it is never a class, it is
-excluded from loss and metrics, and `.classes` leaves it out.
+`predict()` mengisi `result.semantic_mask`. `.data` adalah peta class integer
+`(H, W)` pada kanvas gambar asli, `.classes` mencantumkan id yang ada dalam urutan
+terurut, dan `.class_mask(id)` mengembalikan pilihan boolean `(H, W)` untuk satu
+class. Nilai `255` adalah label ignore: nilai ini tidak pernah menjadi class,
+dikecualikan dari loss dan metrik, serta tidak disertakan dalam `.classes`.
 
-## Models
+## Model
 
-Three families both train and predict:
-[SegFormer](/docs/models/segformer),
-[LingBot-Vision](/docs/models/lingbot-vision) and
-[DINOv2](/docs/models/dinov2). SegFormer and LingBot-Vision run on the base
-package and ship published weights. DINOv2 needs
-`pip install "libreyolo[rfdetr]"` and has no LibreYOLO-hosted checkpoint: it
-loads the upstream backbone and its dense head starts at random
-initialization, so it is a training starting point rather than a ready
-predictor.
+Tiga family dapat berlatih dan memprediksi:
+[SegFormer](/docs/models/segformer), [LingBot-Vision](/docs/models/lingbot-vision),
+dan [DINOv2](/docs/models/dinov2). SegFormer serta LingBot-Vision berjalan dengan
+package dasar dan menyertakan bobot terbitan. DINOv2 memerlukan
+`pip install "libreyolo[rfdetr]"` dan tidak memiliki checkpoint yang di-host
+LibreYOLO: model ini memuat backbone upstream dan dense head-nya dimulai dengan
+inisialisasi acak, sehingga menjadi titik awal pelatihan, bukan predictor siap pakai.
 
-Four more predict, validate and export, but their `train()` raises
-`NotImplementedError`: [FCN](/docs/models/fcn),
-[DeepLabv3](/docs/models/deeplabv3), [PIDNet](/docs/models/pidnet) and
+Empat lainnya dapat memprediksi, memvalidasi, dan mengekspor, tetapi `train()`-nya
+memunculkan `NotImplementedError`: [FCN](/docs/models/fcn),
+[DeepLabv3](/docs/models/deeplabv3), [PIDNet](/docs/models/pidnet), dan
 [EoMT](/docs/models/eomt).
 
-Class sets differ by checkpoint, not by family. The published weights come from
-datasets whose label spaces have little in common, ADE20K's 150 classes against
-Cityscapes' 19 among them, so a checkpoint's `names` is what tells you what it
-can label, and two checkpoints are only comparable when they were trained on
-the same one.
+Kumpulan class berbeda berdasarkan checkpoint, bukan family. Bobot terbitan
+berasal dari dataset dengan ruang label yang sangat berbeda, termasuk 150 class
+ADE20K dibanding 19 class Cityscapes, sehingga `names` milik checkpoint
+menentukan apa yang dapat diberi label. Dua checkpoint hanya dapat dibandingkan
+jika dilatih pada kumpulan yang sama.
 
-## Predict
+## Prediksi
 
-Weights download from Hugging Face on first use and are cached locally.
+Bobot diunduh dari Hugging Face saat pertama kali digunakan dan disimpan dalam
+cache lokal.
 
 <code-tabs name="predict" />
 
-The map is an argmax per pixel, so there is no NMS step and `iou` never has an
-effect. `conf` and `max_det` are accepted for API parity and do nothing on
-SegFormer, PIDNet and the other dense predictors; EoMT is the exception, where
-`conf` filters query selection. See [prediction](/docs/predict) for sources,
-streaming and result handling.
+Peta merupakan argmax per piksel, sehingga tidak ada langkah NMS dan `iou` tidak
+pernah berpengaruh. `conf` serta `max_det` diterima demi paritas API dan tidak
+berpengaruh pada SegFormer, PIDNet, dan dense predictor lain; EoMT adalah
+pengecualian, karena `conf` memfilter pemilihan query. Lihat
+[prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
 
-## Dataset format
+## Format dataset
 
-Each image is paired with a dense single-channel mask rather than a `.txt`
-label file, found by swapping `images` for the mask directory in the image path.
+Setiap gambar dipasangkan dengan mask satu channel yang rapat, bukan file label
+`.txt`, yang ditemukan dengan mengganti `images` menjadi direktori mask dalam
+path gambar.
 
 ```text
 dataset/
@@ -187,12 +194,12 @@ dataset/
     val/000101.png
 ```
 
-Masks are lossless single-channel images, normally PNG, and palette-mode PNGs
-are read as palette indices. Each pixel value is a class id in `0..nc-1`, the
-value `255` means ignore, and the mask resolution has to equal the paired image
-resolution.
+Mask adalah gambar satu channel lossless, biasanya PNG, dan PNG palette-mode
+dibaca sebagai indeks palette. Setiap nilai piksel adalah id class dalam
+`0..nc-1`, nilai `255` berarti ignore, dan resolusi mask harus sama dengan
+resolusi gambar pasangannya.
 
-The YAML takes two keys on top of the shared contract:
+YAML menambahkan dua key di atas kontrak bersama:
 
 ```yaml
 path: dataset
@@ -205,54 +212,52 @@ names:
   1: sidewalk
 ```
 
-`masks_dir` is the directory name substituted for `images`, defaulting to
-`masks`. `label_mapping` is an optional `{source_id: train_id}` remap applied
-to mask pixel values at load time, which is how a dataset numbered 1 to 150
-becomes 0 to 149; any source value left unmapped becomes ignore, and every
-train id has to fall in `0..nc-1`.
+`masks_dir` adalah nama direktori pengganti `images`, dengan default `masks`.
+`label_mapping` adalah pemetaan opsional `{source_id: train_id}` yang diterapkan
+pada nilai piksel mask saat pemuatan. Dengan cara ini, dataset bernomor 1 hingga
+150 menjadi 0 hingga 149; nilai sumber yang tidak dipetakan menjadi ignore, dan
+setiap train id harus berada dalam `0..nc-1`.
 
-Leaving `masks_dir` out switches the loader to a fallback: masks are
-rasterized at load time from polygon labels resolved through the usual
-`images` to `labels` convention, and a `background` class is appended after the
-object classes, so `nc` grows by one.
+Menghilangkan `masks_dir` mengalihkan loader ke fallback: mask dirasterisasi saat
+pemuatan dari label poligon yang ditemukan melalui konvensi `images` ke `labels`
+biasa, dan class `background` ditambahkan setelah class objek, sehingga `nc`
+bertambah satu.
 
-The canonical loader is `libreyolo.data.SemanticDataset`.
+Loader kanonis adalah `libreyolo.data.SemanticDataset`.
 
-## Train
+## Pelatihan
 
 <code-tabs name="train" />
 
-`imgsz` is constrained here in a way it is not on a detector. Each family
-declares a divisor its input has to be a multiple of, set by its patch grid or
-output stride, and both training and validation raise a `ValueError` before the
-run starts when `imgsz` does not divide evenly. The divisor is 32 for SegFormer,
-16 for LingBot-Vision and EoMT, 14 for DINOv2, and 8 for FCN and PIDNet. See
-[training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
+`imgsz` dibatasi di sini dengan cara yang tidak berlaku pada detector. Setiap
+family mendeklarasikan pembagi yang harus menjadi kelipatan input, sesuai grid
+patch atau output stride, dan pelatihan maupun validasi memunculkan `ValueError`
+sebelum proses dimulai jika `imgsz` tidak habis dibagi. Pembaginya adalah 32 untuk
+SegFormer, 16 untuk LingBot-Vision dan EoMT, 14 untuk DINOv2, serta 8 untuk FCN
+dan PIDNet. Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU,
+dan logger.
 
-## Validate
+## Validasi
 
-`val()` returns a plain dictionary of `metrics/` keys, computed over the split
-named by `val` in the dataset YAML.
+`val()` mengembalikan dictionary biasa berisi key `metrics/`, yang dihitung pada
+split bernama `val` dalam YAML dataset.
 
 <code-tabs name="val" />
 
-`metrics/mIoU` is mean intersection over union: for each class, the overlap
-between predicted and true pixels divided by their union, averaged over
-classes. It is the headline number and the one used to pick the best epoch
-during training. `metrics/pixel_accuracy` is the share of pixels given the
-correct class, which a large background class can inflate, so mIoU is the
-figure to compare on. Pixels marked `255` count toward neither. The dictionary
-also carries `fitness`, a copy of the mIoU value.
+`metrics/mIoU` adalah mean intersection over union: untuk setiap class, overlap
+antara piksel prediksi dan ground truth dibagi union-nya, lalu dirata-ratakan
+pada semua class. Nilai ini menjadi angka utama dan digunakan untuk memilih epoch
+terbaik selama pelatihan. `metrics/pixel_accuracy` adalah bagian piksel yang
+diberi class benar, yang dapat dibesar-besarkan oleh class background besar,
+sehingga mIoU menjadi angka untuk dibandingkan. Piksel bertanda `255` tidak
+dihitung pada keduanya. Dictionary juga memuat `fitness`, salinan nilai mIoU.
 
-## Export
+## Ekspor
 
 <code-tabs name="export" />
 
-An exported artifact loads back through `LibreYOLO()` on its file suffix, so a
-`.onnx` or `.engine` file behaves like a checkpoint and returns the same
-`Results`. Format coverage differs by family; the matrix on each model page is
-generated from the validated set rather than typed by hand. See
-[export and deploy](/docs/export) for the formats, their extras and their
-constraints.
-
-
+Artefak hasil ekspor dimuat kembali melalui `LibreYOLO()` berdasarkan akhiran
+filenya, sehingga file `.onnx` atau `.engine` berperilaku seperti checkpoint dan
+mengembalikan `Results` yang sama. Cakupan format berbeda per family; matriks pada
+setiap halaman model dibuat dari kumpulan tervalidasi, bukan diketik manual.
+Lihat [ekspor dan deployment](/docs/export) untuk format, extra, dan batasannya.

@@ -1,20 +1,21 @@
 ---
-title: Augmentations
-seo_title: Training augmentations in LibreYOLO
+title: Augmentasi
+seo_title: Augmentasi pelatihan di LibreYOLO
 description: >-
-  The augmentation knobs on TrainConfig, the four pipeline shapes behind them,
-  and the per-family table saying which knobs are used, gated or ignored.
+  Pengaturan augmentasi pada TrainConfig, empat bentuk pipeline di baliknya, dan
+  tabel per family yang menunjukkan pengaturan mana yang digunakan, dibatasi,
+  atau diabaikan.
 lead: >-
-  Augmentation is configured by knobs on TrainConfig, but each model family runs
-  its own training pipeline, and a pipeline that has no mosaic branch ignores
-  mosaic_prob rather than approximating it.
+  Augmentasi dikonfigurasi melalui pengaturan pada TrainConfig, tetapi setiap
+  family model menjalankan pipeline pelatihannya sendiri, dan pipeline tanpa
+  cabang mosaic mengabaikan mosaic_prob, bukan mengaproksimasinya.
 keywords:
-  - yolo data augmentation
-  - mosaic augmentation
+  - augmentasi data YOLO
+  - augmentasi mosaic
   - mixup
-  - hsv jitter
+  - HSV jitter
   - random affine
-  - copy paste augmentation
+  - augmentasi copy paste
   - randaugment
   - cutmix
   - no_aug_epochs
@@ -39,12 +40,12 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        # The CLI spells mosaic_prob as mosaic and mixup_prob as mixup.
+        # CLI menulis mosaic_prob sebagai mosaic dan mixup_prob sebagai mixup.
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           epochs=100 mosaic=1.0 mixup=0.15 hsv_prob=1.0 \
           flip_prob=0.5 no_aug_epochs=15
   support:
-    - label: Read the support table for a family
+    - label: Baca tabel dukungan suatu family
       language: python
       code: |
         from libreyolo.data.augment.spec import AUG_KNOBS, aug_support
@@ -52,14 +53,14 @@ snippets:
         for knob, description in AUG_KNOBS.items():
             support = aug_support("yolo9")[knob]
             print(f"{knob:16} {support.status:16} {support.note or description}")
-    - label: Just the ignored ones
+    - label: Hanya yang diabaikan
       language: python
       code: |
         from libreyolo.data.augment.spec import ignored_aug_params
 
         print(sorted(ignored_aug_params("rfdetr")))
   classify:
-    - label: Classification pack
+    - label: Paket classification
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -76,159 +77,152 @@ snippets:
 source_hash: 47461cd13aab580c
 ---
 
-## Setting the knobs
+## Mengatur pengaturan
 
-The augmentation knobs are ordinary `train()` arguments.
+Pengaturan augmentasi adalah argumen `train()` biasa.
 
 <code-tabs name="train" />
 
-Two of them have shorter CLI spellings: `mosaic` maps to `mosaic_prob` and
-`mixup` maps to `mixup_prob`. Every other knob is spelled identically in both
-places.
+Dua pengaturan memiliki ejaan CLI yang lebih pendek: `mosaic` dipetakan ke
+`mosaic_prob` dan `mixup` ke `mixup_prob`. Pengaturan lain dieja sama di keduanya.
 
-## Three states, not two
+## Tiga status, bukan dua
 
-Whether a knob does anything depends on the family. The library keeps a
-declarative table of that, and each entry is one of three states.
+Pengaruh suatu pengaturan bergantung pada family. Library menyimpan tabel
+deklaratif dengan tiga kemungkinan status.
 
-`used` means the knob reaches the pipeline and changes samples. `ignored` means
-it never reaches the pipeline, so setting it does nothing. `gated_by_mosaic`
-means it only applies to samples that took the mosaic branch, so with
-`mosaic_prob=0` it never fires even though it is wired up.
+`used` berarti pengaturan mencapai pipeline dan mengubah sampel. `ignored`
+berarti pengaturan tidak pernah mencapai pipeline. `gated_by_mosaic` berarti
+hanya berlaku pada sampel yang masuk cabang mosaic, sehingga tidak pernah aktif
+jika `mosaic_prob=0`.
 
-That third state is the one that surprises people. On a YOLOX-style pipeline the
-affine warp runs on the mosaic canvas and MixUp blends a mosaic sample, so
-`mosaic_prob=0` silently disables `degrees`, `translate`, `shear`,
-`perspective`, `mosaic_scale`, `mixup_prob` and `mixup_scale` all at once. The
-trainer logs a warning for the MixUp case specifically:
+Status ketiga sering mengejutkan. Pada pipeline bergaya YOLOX, affine warp
+berjalan pada kanvas mosaic dan MixUp mencampur sampel mosaic, sehingga
+`mosaic_prob=0` sekaligus menonaktifkan `degrees`, `translate`, `shear`,
+`perspective`, `mosaic_scale`, `mixup_prob`, dan `mixup_scale`. Trainer mencatat
+warning khusus untuk MixUp:
 
 ```text
 mixup_prob=0.15 has no effect for YOLOv9: mixup only applies to mosaic samples
 and mosaic_prob=0. Set mosaic_prob > 0 to enable mixup.
 ```
 
-The CLI warns about ignored knobs too, listing only the ones you actually typed:
+CLI juga memperingatkan tentang pengaturan yang diabaikan, hanya yang diketik:
 
 ```text
 Warning: RF-DETR ignores these parameters: degrees, mosaic
 ```
 
-## Four pipeline shapes
+## Empat bentuk pipeline
 
-Families cluster into four training pipelines, and the pipeline determines almost
-all of the answers.
+Family terbagi dalam empat pipeline pelatihan yang menentukan hampir semua jawaban.
 
-The YOLOX-style mosaic pipeline applies HSV jitter and flips per sample, then
-runs affine and MixUp inside the mosaic branch. It covers YOLOX, YOLOv7, YOLOv9
-and its E2E and P2 variants, RTMDet, PicoDet, RT-DETR, RT-DETRv2 and FOMO.
+Pipeline mosaic bergaya YOLOX menerapkan HSV jitter dan flip per sampel, lalu
+menjalankan affine serta MixUp dalam cabang mosaic. Pipeline ini mencakup YOLOX,
+YOLOv7, YOLOv9 beserta varian E2E dan P2, RTMDet, PicoDet, RT-DETR, RT-DETRv2,
+dan FOMO.
 
-The DETR-style pass-through pipeline has no mosaic and no affine warp. Its
-photometric distortion, zoom-out and IoU crop are recipe constants rather than
-config knobs, so only `flip_prob` and `no_aug_epochs` are live. It covers D-FINE,
-Dome-DETR, DEIM, DEIMv2, RT-DETRv4, EC and, with one change, RF-DETR.
+Pipeline pass-through bergaya DETR tidak memiliki mosaic atau affine warp.
+Photometric distortion, zoom-out, dan IoU crop adalah konstanta resep, sehingga
+hanya `flip_prob` serta `no_aug_epochs` yang aktif. Pipeline ini mencakup D-FINE,
+Dome-DETR, DEIM, DEIMv2, RT-DETRv4, EC, dan RF-DETR dengan satu perubahan.
 
-The classification ImageFolder pipeline ignores every detection knob. Its
-horizontal flip is a fixed 0.5 that `flip_prob` does not reach. It has its own
-knob pack instead, described below.
+Pipeline ImageFolder classification mengabaikan semua pengaturan deteksi.
+Horizontal flip-nya ditetapkan ke 0,5 dan tidak dipengaruhi `flip_prob`. Pipeline
+ini memiliki paket pengaturan sendiri yang dijelaskan di bawah.
 
-YOLO-NAS is a shape of its own: no mosaic at all, an always-on per-sample affine,
-and MixUp applied independently rather than gated. Its `mosaic_scale` value is
-reused as the affine scale range.
+YOLO-NAS memiliki bentuk tersendiri: tanpa mosaic, affine per sampel yang selalu
+aktif, dan MixUp yang diterapkan secara independen. Nilai `mosaic_scale` digunakan
+kembali sebagai rentang skala affine.
 
-SegFormer and NAFNet each run a task-specific pipeline whose randomness is fixed
-in the family rather than configurable. For SegFormer the live knobs are the
-class attributes `semantic_scale_jitter` and `semantic_hsv_prob`, not
-`mosaic_scale` and `hsv_prob`. NAFNet's crop and flips are coupled input and
-target operations at a fixed 0.5 probability.
+SegFormer dan NAFNet menjalankan pipeline khusus task dengan randomisasi tetap.
+Untuk SegFormer, pengaturan aktif adalah atribut class `semantic_scale_jitter`
+dan `semantic_hsv_prob`, bukan `mosaic_scale` serta `hsv_prob`. Crop dan flip
+NAFNet merupakan operasi input-target berpasangan dengan probabilitas tetap 0,5.
 
-## Which family honors which knob
+## Pengaturan yang dipatuhi setiap family
 
-The table below is the shipped spec at
-`libreyolo/data/augment/spec.py`, which is asserted against the real pipeline
-plumbing by the library's own tests. Read it there rather than inferring from the
-architecture.
+Tabel berikut adalah spesifikasi yang disertakan di
+`libreyolo/data/augment/spec.py` dan diuji terhadap wiring pipeline sebenarnya.
+Baca sumber itu, jangan menyimpulkan dari arsitektur.
 
 <code-tabs name="support" />
 
-Summarized by pipeline, for the base knobs:
+Ringkasan per pipeline untuk pengaturan dasar:
 
-| Knob | YOLOX-style | YOLO-NAS | DETR-style | Classification |
+| Pengaturan | Gaya YOLOX | YOLO-NAS | Gaya DETR | Classification |
 |---|---|---|---|---|
-| `mosaic_prob` | used | ignored | ignored | ignored |
-| `mixup_prob` | gated by mosaic | used | ignored | ignored |
-| `hsv_prob` | used | used | ignored | ignored |
-| `flip_prob` | used | used | used | ignored |
-| `flipud` | used | used | ignored | ignored |
-| `degrees` | gated by mosaic | used | ignored | ignored |
-| `translate` | gated by mosaic | used | ignored | ignored |
-| `shear` | gated by mosaic | used | ignored | ignored |
-| `perspective` | gated by mosaic | used | ignored | ignored |
-| `mosaic_scale` | gated by mosaic | used | ignored | ignored |
-| `mixup_scale` | gated by mosaic | used | ignored | ignored |
-| `no_aug_epochs` | used | used | used | used |
+| `mosaic_prob` | digunakan | diabaikan | diabaikan | diabaikan |
+| `mixup_prob` | dibatasi mosaic | digunakan | diabaikan | diabaikan |
+| `hsv_prob` | digunakan | digunakan | diabaikan | diabaikan |
+| `flip_prob` | digunakan | digunakan | digunakan | diabaikan |
+| `flipud` | digunakan | digunakan | diabaikan | diabaikan |
+| `degrees` | dibatasi mosaic | digunakan | diabaikan | diabaikan |
+| `translate` | dibatasi mosaic | digunakan | diabaikan | diabaikan |
+| `shear` | dibatasi mosaic | digunakan | diabaikan | diabaikan |
+| `perspective` | dibatasi mosaic | digunakan | diabaikan | diabaikan |
+| `mosaic_scale` | dibatasi mosaic | digunakan | diabaikan | diabaikan |
+| `mixup_scale` | dibatasi mosaic | digunakan | diabaikan | diabaikan |
+| `no_aug_epochs` | digunakan | digunakan | digunakan | digunakan |
 
-Exceptions inside those columns, all of them narrowing:
+Pengecualian dalam kolom tersebut hanya mempersempit dukungan:
 
-- RTMDet, PicoDet, RT-DETR, RT-DETRv2 and FOMO have no vertical flip, so
-  `flipud` is ignored. FOMO's mosaic wrapper is also built without perspective.
-- RF-DETR's native pipeline has no HSV jitter, so `hsv_prob` is ignored on top of
-  the DETR-style column.
-- EC honors `hsv_prob`, `degrees` and `translate`, but only for `task="pose"`,
-  whose keypoint-aware transform reads them. Its detect and segment paths use
-  fixed photometric recipes.
-- DINOv2 follows the DETR-style column for its detect and semantic tasks and adds
-  the classification pack for `task="classify"`.
+- RTMDet, PicoDet, RT-DETR, RT-DETRv2, dan FOMO tidak memiliki vertical flip,
+  sehingga `flipud` diabaikan. Wrapper mosaic FOMO juga tidak memiliki perspective.
+- Pipeline native RF-DETR tidak memiliki HSV jitter, sehingga `hsv_prob` diabaikan.
+- EC mematuhi `hsv_prob`, `degrees`, dan `translate` hanya untuk `task="pose"`,
+  yang transform-nya memahami keypoint. Jalur detect dan segment memakai resep tetap.
+- DINOv2 mengikuti kolom gaya DETR untuk task detect dan semantic, lalu menambahkan
+  paket classification untuk `task="classify"`.
 
-`no_aug_epochs` is `used` everywhere, but it does not mean the same thing
-everywhere. On the mosaic pipelines it turns mosaic and MixUp off for the final
-epochs. On the DETR-style pipelines it stops the photometric, zoom-out and crop
-augmentations and shapes the schedule's tail. On the classification and semantic
-pipelines it only shapes the tail.
+`no_aug_epochs` digunakan di semua tempat, tetapi artinya berbeda. Pada pipeline
+mosaic, pengaturan ini menonaktifkan mosaic dan MixUp untuk epoch terakhir. Pada
+pipeline bergaya DETR, pengaturan ini menghentikan augmentasi photometric,
+zoom-out, dan crop serta membentuk ujung schedule. Pada pipeline classification
+dan semantic, pengaturan ini hanya membentuk ujung schedule.
 
-## The classification pack
+## Paket classification
 
-Four knobs drive the classification pipeline and nothing else. Detection families
-ignore all four.
+Empat pengaturan mengendalikan pipeline classification dan tidak memengaruhi
+yang lain. Family deteksi mengabaikan keempatnya.
 
 <code-tabs name="classify" />
 
-`auto_augment` takes `"randaugment"`, `"autoaugment"`, `"augmix"` or `None`.
-`erasing` is the RandomErasing probability. `mixup` and `cutmix` are per-batch
-probabilities producing soft labels; at most one runs per batch, MixUp first,
-so the two are additive and should sum to at most 1.
+`auto_augment` menerima `"randaugment"`, `"autoaugment"`, `"augmix"`, atau
+`None`. `erasing` adalah probabilitas RandomErasing. `mixup` dan `cutmix` adalah
+probabilitas per batch yang menghasilkan soft label; paling banyak satu berjalan
+per batch, dengan MixUp lebih dahulu, sehingga jumlah keduanya maksimal 1.
 
-All four default off, so classification training is unchanged unless you ask.
+Keempatnya default nonaktif, sehingga pelatihan classification tidak berubah
+kecuali diminta.
 
-One naming collision is worth stating plainly: on the CLI, `mixup` is the alias
-for the detection `mixup_prob`. The classification `mixup` field has no CLI
-spelling of its own and is reachable only through `model.train(mixup=...)` in
-Python.
+Ada benturan nama: pada CLI, `mixup` adalah alias untuk `mixup_prob` deteksi.
+Field `mixup` classification tidak memiliki ejaan CLI dan hanya dapat dicapai
+melalui `model.train(mixup=...)` di Python.
 
-## Family-specific knobs
+## Pengaturan khusus family
 
-Some knobs live on a family's config subclass rather than on the base class, so
-they exist for that family only and have no CLI flag.
+Sebagian pengaturan berada pada subclass konfigurasi family, sehingga hanya ada
+untuk family tersebut dan tidak memiliki flag CLI.
 
-| Family | Knob | Effect |
+| Family | Pengaturan | Efek |
 |---|---|---|
-| YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste` | Copy-paste instance augmentation probability, `task="segment"` only |
-| YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste_mode` | `"flip"` reuses the same sample mirrored, `"mixup"` pulls a second sample |
-| YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `rot90` | Random 90 degree rotation probability |
-| YOLOv9 | `max_labels` | Per-image ground-truth cap in the train transforms, default 100 |
-| RF-DETR | `copy_paste`, `copy_paste_mode` | Copy-paste for `task="segment"`, `"flip"` mode only |
-| RF-DETR, D-FINE, EC | `crop_resize_prob` | Random crop-resize probability |
-| EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | Pose-path jitter and keypoint-aware affine probabilities |
+| YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste` | Probabilitas augmentasi instance copy-paste, hanya `task="segment"` |
+| YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste_mode` | `"flip"` memakai ulang sampel yang dicerminkan, `"mixup"` mengambil sampel kedua |
+| YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `rot90` | Probabilitas rotasi acak 90 derajat |
+| YOLOv9 | `max_labels` | Batas ground truth per gambar dalam transform pelatihan, default 100 |
+| RF-DETR | `copy_paste`, `copy_paste_mode` | Copy-paste untuk `task="segment"`, hanya mode `"flip"` |
+| RF-DETR, D-FINE, EC | `crop_resize_prob` | Probabilitas random crop-resize |
+| EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | Jitter jalur pose dan probabilitas affine yang memahami keypoint |
 
-`max_labels` is the one that silently loses data. Boxes past the cap are dropped
-without an error, so dense imagery such as aerial photography needs it raised.
+`max_labels` dapat diam-diam menghilangkan data. Box setelah batas dibuang tanpa
+error, sehingga imagery padat seperti foto aerial perlu menaikkan nilainya.
 
-Mosaic and MixUp are disabled for oriented-box training regardless of the knobs,
-because corner-aware augmentation for rotated boxes is not implemented.
+Mosaic dan MixUp dinonaktifkan untuk pelatihan oriented-box tanpa memandang
+pengaturan karena augmentasi yang memahami sudut box berotasi belum tersedia.
 
-## Related
+## Terkait
 
-- [Hyperparameters](/docs/train/hyperparameters) for `no_aug_epochs` as a
-  schedule argument and the rest of `train()`.
-- [Datasets](/docs/train/datasets) for the label formats these transforms consume.
-
-
+- [Hyperparameter](/docs/train/hyperparameters) untuk `no_aug_epochs` sebagai
+  argumen schedule dan bagian lain `train()`.
+- [Dataset](/docs/train/datasets) untuk format label yang digunakan transform ini.

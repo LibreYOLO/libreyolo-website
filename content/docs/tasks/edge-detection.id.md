@@ -1,35 +1,43 @@
 ---
-title: Edge detection
-seo_title: Edge detection in LibreYOLO
+title: Deteksi tepi
+seo_title: Deteksi tepi di LibreYOLO
 description: >-
-  Predict a dense edge-probability map from one image in LibreYOLO. Convert a
-  checkpoint, threshold the map, validate with ODS and OIS, and export.
+  Prediksi peta probabilitas tepi padat dari satu gambar di LibreYOLO. Konversi
+  checkpoint, ambang peta, validasi dengan ODS dan OIS, dan ekspor.
 lead: >-
-  Edge detection predicts how likely each pixel is to lie on an object boundary.
-  LibreYOLO exposes it as the edge task, which returns a dense probability map
-  on the original image canvas rather than a set of line segments.
+  Deteksi tepi memprediksi seberapa besar kemungkinan setiap piksel berada di
+  batas objek. LibreYOLO mengeksposnya sebagai tepi task, yang mengembalikan
+  peta probabilitas padat pada kanvas gambar asli daripada sekumpulan segmen
+  garis.
 keywords:
-  - edge detection python
-  - boundary detection deep learning
-  - edge probability map
+  - deteksi tepi python
+  - deteksi batas pembelajaran mendalam
+  - peta probabilitas tepi
   - ODS OIS F-measure
-  - dense edge prediction
+  - prediksi tepi padat
 last_verified: 1.5.0
 snippets:
   predict:
-    - label: Predict an edge map
+    - label: Prediksi peta tepi
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # No edge checkpoint ships with LibreYOLO; convert one first (below).
+
+        # Tidak ada checkpoint tepi yang dilengkapi dengan LibreYOLO; konversi
+        terlebih dahulu (di bawah).
+
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         edges = result.edges
-        print(edges.array.shape)          # (H, W) float32 in [0, 1]
-        print(edges.binary(0.5).sum())    # edge-pixel count at 0.5
-    - label: Choose your own threshold
+
+        print(edges.array.shape)          # (H, W) float32 di [0, 1]
+
+        print(edges.binary(0.5).sum())    # jumlah piksel tepi pada 0.5
+    - label: Pilih ambang batas Anda sendiri
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -37,21 +45,26 @@ snippets:
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
         result = model(SAMPLE_IMAGE)
 
-        # The continuous map is kept so the threshold stays your decision.
+        # Peta kontinu tetap sehingga ambang tetap sesuai keputusan Anda.
         for t in (0.3, 0.5, 0.7):
             print(t, int(result.edges.binary(t).sum()))
-    - label: Save the visualization
+    - label: Simpan visualisasi
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
+
         result = model(SAMPLE_IMAGE)
 
-        # plot() renders the map; it is defined for edge and normal results.
+
+        # plot() menampilkan peta; ini didefinisikan untuk results tepi dan
+        normal.
+
         result.plot().save("edges.png")
   val:
-    - label: Validate and read the metric keys
+    - label: Validasi dan baca kunci metrik
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -59,10 +72,10 @@ snippets:
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
         metrics = model.val(data="my-dataset.yaml", imgsz=352)
 
-        print(metrics["metrics/ODS"])              # fitness
+        print(metrics["metrics/ODS"])              # kecocokan
         print(metrics["metrics/OIS"])
         print(metrics["metrics/best_threshold"])
-    - label: Change the sweep and the match tolerance
+    - label: Ubah sapuan dan toleransi cocok
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -84,55 +97,61 @@ snippets:
 
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
         model.export(format="onnx", imgsz=352)
-    - label: Run the exported file
+    - label: Jalankan file yang diekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The factory routes on the file suffix, so an exported artifact loads
-        # like any checkpoint and returns the same Results object.
+
+        # Pabrik mengarahkan pada akhiran file, sehingga artefak yang diekspor
+        dimuat
+
+        # seperti halnya checkpoint dan mengembalikan objek Results yang sama.
+
         model = LibreYOLO("weights/LibreDexiNedb-edge.onnx")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.edges.array.shape)
 source_hash: bc286345540ed966
 ---
 
-## Definition
+## Definisi
 
-The `edge` task predicts one probability per pixel from a single RGB image:
-`0` means non-edge and `1` means edge. The map stays continuous, so choosing the
-threshold that turns it into a binary boundary image is left to the caller, and
-the right threshold depends on the dataset and the downstream use.
+`edge` task memprediksi satu probabilitas per piksel dari satu gambar RGB:
+`0` berarti non-tepi dan `1` berarti tepi. Peta tetap kontinu, jadi memilih
+ambang yang mengubahnya menjadi gambar batas biner diserahkan kepada pemanggil, dan
+ambang yang tepat bergantung pada dataset dan penggunaan hilirnya.
 
-A prediction fills `result.edges`, an `EdgeMap` payload holding an `(H, W)`
-float32 array in `[0, 1]` on the original image canvas. `.array` returns that
-map as NumPy and `.binary(threshold)` returns a boolean mask. `result.boxes`
-stays empty, so `conf`, `iou` and `max_det` have no effect. `Results.plot()`
-covers this task and renders the map directly.
+Sebuah prediksi mengisi `result.edges`, sebuah muatan `EdgeMap` yang memegang `(H, W)`
+array float32 di `[0, 1]` pada kanvas gambar asli. `.array` mengembalikan itu
+peta sebagai NumPy dan `.binary(threshold)` mengembalikan topeng boolean. `result.boxes`
+tetap kosong, jadi `conf`, `iou`, dan `max_det` tidak berpengaruh. `Results.plot()`
+menutupi task ini dan menghasilkan peta secara langsung.
 
-## Models
+## Model
 
-Three families serve `edge`.
+Tiga keluarga melayani `edge`.
 
-[DexiNed](/docs/models/dexined), the Dense Extreme Inception Network, fuses
-several side outputs into one probability map and runs at a native 352 px.
+[DexiNed](/docs/models/dexined), Jaringan Inception Ekstrem Padat, menggabungkan
+beberapa keluaran samping menjadi satu peta probabilitas dan berjalan pada 352 px asli.
 
-[TEED](/docs/models/teed), the Tiny and Efficient Edge Detector, is a small
-network at the same native 352 px, with a downsample stride of 4 against
-DexiNed's 16, so it accepts more values of `imgsz`.
+[TEED](/docs/models/teed), Detektor Tepi Kecil dan Efisien, adalah jaringan kecil
+pada 352 px asli yang sama, dengan langkah downsample 4 dibanding
+DexiNed yang 16, sehingga menerima lebih banyak nilai dari `imgsz`.
 
-[LibreMODUS](/docs/models/libremodus) produces Canny-style edges as one target
-of an any-to-any model. It needs the `modus` extra and your own authenticated
-Hugging Face account, and it offers neither `val()` nor `export()`, so it does
-not take part in the validation and export sections below.
+[LibreMODUS](/docs/models/libremodus) menghasilkan tepi gaya Canny sebagai satu target
+dari model apa pun ke apa pun. Ini membutuhkan `modus` tambahan dan akun Hugging Face
+Anda sendiri yang sah, dan tidak menawarkan `val()` maupun `export()`, sehingga tidak
+ikut serta dalam bagian validasi dan ekspor di bawah ini.
 
-## Predict
+## Prediksi
 
-LibreYOLO publishes no edge checkpoint. The officially released DexiNed and TEED
-weights are trained on BIPED, whose published dataset terms restrict use to
-non-commercial purposes, so LibreYOLO does not mirror them. Convert a checkpoint
-you are licensed to use, then load the converted file by path:
+LibreYOLO menerbitkan checkpoint tanpa tepi. DexiNed dan TEED yang dirilis secara resmi
+bobot dilatih pada BIPED, yang istilah dataset yang dipublikasikan membatasi penggunaan untuk
+tujuan non-komersial, jadi LibreYOLO tidak mencerminkan mereka. Konversi checkpoint
+Anda memiliki lisensi untuk menggunakan, kemudian muat file yang dikonversi melalui jalur:
 
 ```bash
 python weights/convert_dexined_weights.py upstream.pth weights/LibreDexiNedb-edge.pt --verify
@@ -140,15 +159,15 @@ python weights/convert_dexined_weights.py upstream.pth weights/LibreDexiNedb-edg
 
 <code-tabs name="predict" />
 
-The filename has to carry the `-edge` task suffix for the loader to recognize
-it. `imgsz` must be divisible by the network's downsample stride, and LibreYOLO
-raises a clear error naming the divisor when it is not. See
-[prediction](/docs/predict) for sources, streaming and result handling.
+Nama berkas harus memiliki akhiran `-edge` task agar loader dapat mengenalinya
+itu. `imgsz` harus dapat dibagi oleh langkah downsample jaringan, dan LibreYOLO
+menimbulkan kesalahan yang jelas dengan menyebut pembagi saat itu tidak ada. Lihat
+[prediction](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
 
-## Dataset format
+## format Dataset
 
-Edge validation pairs each RGB image with a same-stem single-channel map of the
-same resolution, plus an optional validity mask.
+Validasi tepi memasangkan setiap gambar RGB dengan peta satu saluran berbatang sama dari
+resolusi yang sama, ditambah dengan mask validitas opsional.
 
 ```text
 dataset/
@@ -171,52 +190,51 @@ nc: 1
 names: {0: edge}
 ```
 
-The target is a single-channel PNG or TIF, not an RGB visualization. Integer
-maps are divided by the maximum of their dtype; float maps must already be
-finite and in `[0, 1]`. Mask pixels count as valid when nonzero, and padded
-pixels never contribute to a metric. `edge_invert: true` covers sources that
-store black edges on white. See
-[dataset formats](/docs/reference/dataset-formats) for the full contract.
+Targetnya adalah PNG atau TIF saluran tunggal, bukan visualisasi RGB. Bilangan bulat
+peta dibagi berdasarkan maksimum dtype mereka; peta float harus sudah
+terbatas dan berada di `[0, 1]`. Piksel mask dihitung sebagai valid ketika tidak nol, dan dipadatkan
+piksel tidak pernah berkontribusi pada metrik. `edge_invert: true` mencakup sumber yang
+simpan tepi hitam pada putih. Lihat
+[dataset memformat](/docs/reference/dataset-formats) untuk kontrak penuh.
 
-## Train
+## Kereta
 
-No edge family in LibreYOLO has a training implementation: `train()` raises
-`NotImplementedError` on all three. Each model page names the conversion script
-that turns a checkpoint trained elsewhere into one LibreYOLO can load.
+Tidak ada edge family di LibreYOLO yang memiliki implementasi pelatihan: `train()` memunculkan
+`NotImplementedError` pada ketiganya. Setiap halaman model menyebutkan skrip konversi
+yang mengubah checkpoint yang dilatih di tempat lain menjadi LibreYOLO yang dapat dimuat.
 
-## Validate
+## Validasi
 
-`val()` reports the BSDS-style F-measures. Continuous predictions are thinned
-first with four-direction gradient non-maximum suppression, then predicted and
-ground-truth edge pixels are matched one-to-one within a distance tolerance.
+`val()` melaporkan ukuran F gaya BSDS. Prediksi kontinu ditipiskan
+pertama dengan penekanan maksimum non-empat arah gradien, kemudian diprediksi dan
+piksel tepi ground-truth dipasangkan satu-ke-satu dalam toleransi jarak.
 
 <code-tabs name="val" />
 
-`metrics/ODS` is the optimal-dataset-scale F-measure: match counts are pooled
-across the dataset at each threshold, and the best of those pooled F-measures is
-reported. It is also `fitness`, the number best-checkpoint selection reads.
-`metrics/OIS` is the optimal-image-scale F-measure, the mean over images of each
-image's own best F-measure, so it lets every image pick its own threshold.
-`metrics/best_threshold` is the single threshold that produced ODS, which is the
-one to reuse in `edges.binary()` at inference.
+`metrics/ODS` adalah ukuran F skala optimal-dataset: jumlah kecocokan digabungkan
+di seluruh dataset pada setiap ambang batas, dan F-measure gabungan terbaik dari itu adalah
+dilaporkan. Ini juga `fitness`, nomor baca pemilihan terbaik-checkpoint.
+`metrics/OIS` adalah F-measure skala-gambar-optimal, rata-rata di atas gambar dari masing-masing
+F-measure terbaik gambar itu sendiri, sehingga membiarkan setiap gambar memilih ambang batasnya sendiri.
+`metrics/best_threshold` adalah ambang tunggal yang menghasilkan ODS, yang adalah
+satu untuk digunakan kembali di `edges.binary()` saat inferensi.
 
-Two arguments shape the sweep. `edge_thresholds` is the set of thresholds tried,
-defaulting to 0.01 through 0.99 in hundredths. `edge_max_dist` is the match
-tolerance as a fraction of the image diagonal, defaulting to `0.0075`; a pair
-further apart than that is not a match.
+Dua argumen membentuk rentang. `edge_thresholds` adalah kumpulan ambang batas yang dicoba,
+mengatur default ke 0,01 hingga 0,99 dalam satuan perseratus. `edge_max_dist` adalah kecocokannya
+toleransi sebagai pecahan dari diagonal gambar, secara default adalah `0.0075`; sepasang
+lebih jauh dari itu bukanlah pasangan yang cocok.
 
-## Export
+## Ekspor
 
-An exported edge model loads back through `LibreYOLO()` on its file suffix, so a
-`.onnx` file behaves like a checkpoint and returns the same `Results`.
+Model tepi yang diekspor dimuat kembali melalui `LibreYOLO()` berdasarkan sufiks filenya, jadi a
+File `.onnx` berperilaku seperti checkpoint dan mengembalikan `Results` yang sama.
 
 <code-tabs name="export" />
 
-Edge export uses a fixed-resolution, batch-1 runtime contract: `dynamic` and a
-`batch` other than 1 are rejected, and the exported graph emits a single fused
-probability map. Per-format coverage is on the [DexiNed](/docs/models/dexined)
-and [TEED](/docs/models/teed) pages and in the
-[full export matrix](/docs/reference/export-matrix). [Export](/docs/export)
-lists the arguments every format accepts.
-
+Ekspor Edge menggunakan resolusi tetap, kontrak runtime batch-1: `dynamic` dan sebuah
+`batch` selain 1 ditolak, dan grafik yang diekspor memancarkan sebuah gabungan tunggal
+peta probabilitas. Cakupan per format ada pada [DexiNed](/docs/models/dexined)
+dan [TEED](/docs/models/teed) halaman dan di
+[matriks ekspor penuh](/docs/reference/export-matrix). [Ekspor](/docs/export)
+mencantumkan argumen yang diterima setiap format.
 

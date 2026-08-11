@@ -1,22 +1,23 @@
 ---
-title: Multi-GPU training
-seo_title: Multi-GPU training in LibreYOLO
+title: Pelatihan multi-GPU
+seo_title: Pelatihan multi-GPU di LibreYOLO
 description: >-
-  Train on several GPUs with device="0,1". How the library spawns DDP workers,
-  why batch is the global batch, when to set sync_bn, and the torchrun path.
+  Latih pada beberapa GPU dengan device="0,1". Cara library membuat worker DDP,
+  alasan batch merupakan batch global, kapan menetapkan sync_bn, dan jalur
+  torchrun.
 lead: >-
-  Multi-GPU training in LibreYOLO is PyTorch DistributedDataParallel: one
-  process per GPU, each holding a full model replica and a shard of every batch,
-  with gradients averaged across ranks at each step.
+  Pelatihan multi-GPU di LibreYOLO menggunakan PyTorch DistributedDataParallel:
+  satu proses per GPU, masing-masing memuat replika model lengkap dan shard
+  setiap batch, dengan gradien dirata-ratakan pada semua rank di setiap langkah.
 keywords:
-  - pytorch ddp training
-  - multi gpu training
+  - training PyTorch DDP
+  - training multi GPU
   - torchrun nproc_per_node
   - distributed data parallel
   - syncbatchnorm
   - global batch size
-  - nccl gloo backend
-  - multi gpu windows
+  - backend NCCL Gloo
+  - multi GPU Windows
 last_verified: 1.5.0
 snippets:
   train:
@@ -25,14 +26,14 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        # The __main__ guard is required: each spawned worker re-imports this
-        # module, and without the guard it would relaunch training recursively.
+        # Guard __main__ wajib: setiap worker yang dibuat mengimpor ulang modul
+        # ini, dan tanpanya pelatihan akan diluncurkan ulang secara rekursif.
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(
                 data="my-dataset.yaml",
                 epochs=100,
-                batch=32,     # global batch: 16 images per GPU on two GPUs
+                batch=32,     # batch global: 16 gambar per GPU pada dua GPU
                 device="0,1",
             )
   torchrun:
@@ -44,7 +45,7 @@ snippets:
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(data="my-dataset.yaml", epochs=100, batch=32)
-    - label: Launch
+    - label: Jalankan
       language: bash
       code: |
         torchrun --nproc_per_node=2 train.py
@@ -70,34 +71,33 @@ snippets:
 
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
-            # Probed once on GPU 0, scaled to a world-size multiple.
+            # Diperiksa sekali pada GPU 0, lalu diskalakan ke kelipatan world-size.
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
 source_hash: 83c1563d68068cd0
 ---
 
-## Run on two GPUs
+## Jalankan pada dua GPU
 
-Pass a device list. Nothing else changes.
+Berikan daftar perangkat. Tidak ada hal lain yang berubah.
 
 <code-tabs name="train" />
 
-Given more than one device and no torchrun environment, the model's `train()`
-saves the weights to a temporary file, resolves autobatch if requested, and
-spawns one worker process per GPU with `torch.multiprocessing.spawn`. Each worker
-re-imports the model class, rebuilds it from the saved weights, and runs the
-ordinary single-device path, because from inside a spawned worker the torchrun
-environment variables are set. Rank 0's best checkpoint is loaded back into the
-caller's model instance when the run finishes.
+Jika lebih dari satu perangkat diberikan tanpa environment torchrun, `train()`
+menyimpan bobot ke file sementara, menyelesaikan autobatch jika diminta, lalu
+membuat satu proses worker per GPU dengan `torch.multiprocessing.spawn`. Setiap
+worker mengimpor ulang class model, membangunnya dari bobot tersimpan, dan
+menjalankan jalur satu-perangkat biasa karena variabel environment torchrun telah
+ditetapkan di dalam worker. Checkpoint terbaik rank 0 dimuat kembali ke instance
+model pemanggil setelah proses selesai.
 
-`device` accepts `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"` and
-`"auto"`. Only a list of more than one CUDA index triggers the spawn.
+`device` menerima `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"`, dan
+`"auto"`. Hanya daftar lebih dari satu indeks CUDA yang memicu spawn.
 
-## The `__main__` guard is mandatory
+## Guard `__main__` wajib
 
-Spawned workers re-import the module they came from. Without a
-`if __name__ == "__main__":` guard, that import re-executes the training call and
-each worker spawns its own workers. The library detects the case and raises
-rather than letting it recurse:
+Worker mengimpor ulang modul asal. Tanpa guard `if __name__ == "__main__":`,
+import tersebut menjalankan ulang pemanggilan pelatihan dan setiap worker membuat
+worker sendiri. Library mendeteksinya dan memunculkan error:
 
 ```text
 spawn_ddp_train() was called from inside a spawned subprocess. This usually
@@ -105,18 +105,17 @@ means your script calls model.train(device=...) at the top level without a
 'if __name__ == "__main__":' guard.
 ```
 
-Everything crossing into a worker is pickled, so `callbacks=` has to be
-picklable. A module-level class works; a closure or a lambda does not, and the
-error says so and points at the built-in loggers as the alternative.
+Semua yang dikirim ke worker di-pickle, sehingga `callbacks=` harus dapat
+di-pickle. Class tingkat modul dapat digunakan; closure atau lambda tidak, dan
+error menjelaskannya serta menunjuk logger bawaan sebagai alternatif.
 
-## batch is the global batch
+## batch adalah batch global
 
-`batch` is the number of images per optimizer step across all GPUs. Each rank's
-dataloader is built at `batch // world_size` with a `DistributedSampler`, so
-`batch=32` on two GPUs means 16 images per GPU, not 32.
+`batch` adalah jumlah gambar per langkah optimizer pada seluruh GPU. Dataloader
+setiap rank dibangun dengan `batch // world_size` dan `DistributedSampler`,
+sehingga `batch=32` pada dua GPU berarti 16 gambar per GPU, bukan 32.
 
-A batch that does not divide evenly by the world size raises rather than
-quietly training at a different size:
+Batch yang tidak habis dibagi world size memunculkan error:
 
 ```text
 batch=6 is the global batch and must be divisible by world_size=4: each rank
@@ -124,89 +123,84 @@ trains at batch // world_size, so this value would silently train at a
 different global batch than requested. Use batch=4 or batch=8.
 ```
 
-Gradients are averaged by DDP itself, so the loss is passed through unscaled.
-Multiplying it by the world size on top of that would inflate the effective
-learning rate by roughly the number of GPUs.
+Gradien dirata-ratakan oleh DDP, sehingga loss diteruskan tanpa penskalaan.
+Mengalikannya lagi dengan world size akan menaikkan learning rate efektif kira-kira
+sejumlah GPU.
 
-## Autobatch under DDP
+## Autobatch di bawah DDP
 
-`batch=-1` works, and returns a world-size-divisible global batch.
+`batch=-1` berfungsi dan mengembalikan batch global yang habis dibagi world size.
 
 <code-tabs name="autobatch" />
 
-On the spawn path the probe runs in the parent process on the first device
-before any worker exists, so every worker receives a concrete integer and no
-inter-process coordination is needed. Under torchrun, rank 0 probes and
-broadcasts the result as a single long tensor.
+Pada jalur spawn, pemeriksaan berjalan di proses parent pada perangkat pertama
+sebelum worker dibuat, sehingga setiap worker menerima integer konkret. Di bawah
+torchrun, rank 0 memeriksa dan menyiarkan hasil sebagai satu tensor long.
 
-The probe measures one GPU's capacity and multiplies by the world size. When
-`nbs` is set, the global batch is capped at `nbs` and rounded down to a multiple
-of the world size, so adding GPUs reduces the number of accumulation steps rather
-than shrinking the per-GPU batch. The mechanics of the probe itself are on
-[Hyperparameters](/docs/train/hyperparameters).
+Pemeriksaan mengukur kapasitas satu GPU dan mengalikannya dengan world size. Jika
+`nbs` ditetapkan, batch global dibatasi ke `nbs` dan dibulatkan turun ke kelipatan
+world size, sehingga penambahan GPU mengurangi langkah akumulasi, bukan mengecilkan
+batch per GPU. Mekanisme pemeriksaan tersedia di
+[Hyperparameter](/docs/train/hyperparameters).
 
 ## SyncBatchNorm
 
-Under DDP each rank's BatchNorm layers see only its own shard. At
-`batch // world_size` that shard can be small enough for the running statistics
-to degrade the converged model against a single-GPU run.
+Di bawah DDP, lapisan BatchNorm setiap rank hanya melihat shard-nya. Jika
+`batch // world_size` kecil, running statistics dapat menurunkan hasil model
+dibanding proses satu GPU.
 
-`sync_bn=True` converts every BatchNorm to SyncBatchNorm so the statistics are
-computed across the global batch. The conversion only happens when distributed is
-active, so a single-GPU run is unaffected by the flag either way.
+`sync_bn=True` mengubah setiap BatchNorm menjadi SyncBatchNorm agar statistik
+dihitung pada batch global. Konversi hanya terjadi saat distributed aktif.
 
-It is already on by default for the BatchNorm-heavy convolutional families:
-YOLOX, YOLOv7, YOLOv9 and its variants, YOLO-NAS, PicoDet, RTMDet and FOMO.
-Every other family defaults it off. When a model contains BatchNorm, `sync_bn` is
-off and the per-rank batch is below 16, the trainer warns.
+Pengaturan ini sudah aktif secara default untuk family konvolusional yang banyak
+menggunakan BatchNorm: YOLOX, YOLOv7, YOLOv9 dan variannya, YOLO-NAS, PicoDet,
+RTMDet, serta FOMO. Family lain default nonaktif. Jika model memiliki BatchNorm,
+`sync_bn` nonaktif, dan batch per rank di bawah 16, trainer memberi warning.
 
 <code-tabs name="syncbn" />
 
-There is no CLI flag for `sync_bn`. It is a Python argument.
+Tidak ada flag CLI untuk `sync_bn`; ini argumen Python.
 
-## Launching with torchrun
+## Menjalankan dengan torchrun
 
-torchrun works too, and is the right choice when a cluster scheduler already owns
-process launch. Write the script for a single device and let torchrun set the
-rank environment.
+torchrun juga dapat digunakan dan tepat ketika scheduler cluster mengelola
+peluncuran proses. Tulis skrip untuk satu perangkat dan biarkan torchrun
+menetapkan environment rank.
 
 <code-tabs name="torchrun" />
 
-Do not combine the two. With the torchrun environment present, `device="0,1"`
-does not spawn; the trainer takes `cuda:LOCAL_RANK` and torchrun owns the
-process count.
+Jangan gabungkan keduanya. Jika environment torchrun tersedia, `device="0,1"`
+tidak melakukan spawn; trainer memakai `cuda:LOCAL_RANK` dan torchrun mengelola
+jumlah proses.
 
-## Rank behavior
+## Perilaku rank
 
-Rank 0 owns every side effect. It resolves the run directory and broadcasts the
-resolved name so all ranks agree, writes checkpoints and artifacts, and fires the
-user callbacks and loggers. Other ranks train and contribute gradients.
+Rank 0 menangani semua efek samping. Rank ini menyelesaikan direktori proses dan
+menyiarkan namanya, menulis checkpoint serta artefak, dan menjalankan callback
+serta logger pengguna. Rank lain berlatih dan menyumbangkan gradien.
 
-Each rank seeds its dataloader and augmentation RNG differently, derived from the
-configured `seed`, so the ranks do not draw identical augmentations.
+Setiap rank memberi seed berbeda pada dataloader dan RNG augmentasi, yang
+diturunkan dari `seed`, sehingga rank tidak mengambil augmentasi identik.
 
-## Platform and backend
+## Platform dan backend
 
-The backend is chosen automatically: NCCL when CUDA and NCCL are both available,
-Gloo otherwise. NCCL is not built on Windows, so Windows runs get Gloo without
-any configuration. The process group is initialized with a three hour timeout.
+Backend dipilih otomatis: NCCL jika CUDA dan NCCL tersedia, Gloo jika tidak.
+NCCL tidak dibangun di Windows, sehingga Windows memakai Gloo tanpa konfigurasi.
+Process group diinisialisasi dengan timeout tiga jam.
 
-## What does not run under DDP
+## Yang tidak berjalan di bawah DDP
 
-- CUDA graph capture. `cuda_graph=True` logs one line and trains eager. See
-  [Training performance](/docs/train/performance).
-- The training profiler. `profile=True` is ignored with a warning.
+- CUDA graph capture. `cuda_graph=True` mencatat satu baris dan berlatih secara
+  eager. Lihat [Performa pelatihan](/docs/train/performance).
+- Profiler pelatihan. `profile=True` diabaikan dengan warning.
 
-Not every family supports the automatic spawn. Twenty-four do, covering the
-detection, classification, semantic and restoration families that train. A family
-without it, handed a multi-GPU device, raises an error naming the model API and
-the torchrun command rather than quietly training on one GPU.
+Tidak semua family mendukung spawn otomatis. Dua puluh empat family mendukungnya,
+mencakup family deteksi, classification, semantic, dan restoration yang dapat
+dilatih. Family tanpa dukungan yang menerima multi-GPU memunculkan error berisi
+API model dan perintah torchrun, bukan diam-diam berlatih pada satu GPU.
 
-## Related
+## Terkait
 
-- [Hyperparameters](/docs/train/hyperparameters) for `batch`, `nbs` and resume.
-- [Experiment loggers](/docs/train/loggers) for the picklability constraint on
-  callbacks.
-- [Cloud GPUs](/docs/train/cloud-gpus) for renting a multi-GPU box.
-
-
+- [Hyperparameter](/docs/train/hyperparameters) untuk `batch`, `nbs`, dan resume.
+- [Logger eksperimen](/docs/train/loggers) untuk batasan picklability callback.
+- [GPU cloud](/docs/train/cloud-gpus) untuk menyewa mesin multi-GPU.

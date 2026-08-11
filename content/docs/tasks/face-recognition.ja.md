@@ -1,17 +1,18 @@
 ---
 title: 顔認識
-seo_title: LibreYOLOによる顔認識
-description: LibreYOLOで顔の検出、埋め込み、識別を実行します。PythonまたはCLIからギャラリーを登録し、2枚の画像を比較して、コサイン類似度で照合します。
+seo_title: LibreYOLOの顔認識
+description: >-
+  LibreYOLOで顔を検出し、埋め込み、識別します。PythonまたはCLIからgalleryを登録し、2枚の画像を比較して、cosine類似度で照合します。
 lead: >-
-  顔認識は顔に適用するembedタスクです。検出器が各顔を特定して整列し、認識ヘッドが顔ごとにL2正規化済みベクトルを返します。固定クラスリストではなく、登録済みの参照とのコサイン類似度によって人物を識別します。
+  顔認識は顔に適用するembedタスクです。検出器がすべての顔を特定して位置合わせし、認識ヘッドが顔ごとにL2正規化されたベクトルを返します。IDは固定クラスリストではなく、登録済みreferenceとのcosine類似度で決まります。
 keywords:
-  - Python 顔認識
-  - 顔埋め込み
-  - 顔照合
-  - 顔ギャラリー
-  - ArcFace ONNX
-  - LibreYOLO embedタスク
-  - 顔 コサイン類似度
+  - 顔認識 python
+  - 顔 エンベディング
+  - 顔認証
+  - 顔 gallery
+  - arcface onnx
+  - libreyolo embed task
+  - cosine 類似度 顔
 last_verified: 1.5.0
 snippets:
   predict:
@@ -20,14 +21,14 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # librefacerec-*の名前はファイル拡張子にかかわらず顔埋め込みファミリーへ
-        # 振り分けられ 初回使用時にデフォルト顔検出器とともに
-        # LibreYOLOのHugging Face組織からダウンロードされる
+        # librefacerec-*名はファイル接尾辞に関係なくface-embeddingファミリーへ
+        # 経路を選び、初回使用時にデフォルトの顔検出器とともに
+        # LibreYOLO Hugging Face orgからダウンロード
         model = LibreYOLO("librefacerec-l.onnx")
         result = model(SAMPLE_IMAGE)
 
-        print(result.boxes.xyxy)             # (N, 4) 顔のボックス
-        print(result.embeddings.data.shape)  # (N, D) 顔ごとに1行
+        print(result.boxes.xyxy)             # (N, 4)顔ボックス
+        print(result.embeddings.data.shape)  # (N, D)、顔ごとに1行
         print(result.embeddings.dim)
     - label: CLI
       language: bash
@@ -40,11 +41,11 @@ snippets:
 
         model = LibreYOLO("librefacerec-l.onnx")
 
-        # 両画像で検出と埋め込みを実行し最も信頼度の高い顔を比較する
-        # コサイン類似度の範囲は[-1, 1]
+        # 両方の画像で検出と埋め込みを実行し、もっとも信頼度の高い顔を比較
+        # Cosine similarityは[-1, 1]
         outcome = model.verify("person_a.jpg", "person_b.jpg", threshold=0.4)
         print(outcome["similarity"], outcome["same_person"])
-    - label: ギャラリーへ登録して識別
+    - label: galleryへ登録して識別
       language: python
       code: |
         from libreyolo import Gallery, LibreYOLO
@@ -59,7 +60,7 @@ snippets:
         result = model("group_photo.jpg", gallery=gallery, threshold=0.4)
         for name, score in result.identities.data:
             print(name, score)   # しきい値未満ではnameはNone
-    - label: CLIで登録して識別
+    - label: CLIから登録して識別
       language: bash
       code: >
         libreyolo enroll model=librefacerec-l.onnx source=people/
@@ -67,15 +68,15 @@ snippets:
 
         libreyolo predict model=librefacerec-l.onnx source=group_photo.jpg
         gallery=faces.npz
-    - label: 独自の顔ボックスを使用
+    - label: 独自の顔ボックスを使う
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("librefacerec-l.onnx")
 
-        # face_boxesは検出を完全に省略する face_detectorには
-        # callable LibreYOLO検出モデル FaceDetectorインスタンスを指定できる
+        # face_boxesは検出を完全に省略。face_detectorはcallable
+        # LibreYOLO検出モデル、FaceDetector instanceを受け付ける
         result = model(SAMPLE_IMAGE, face_boxes=[[34, 12, 90, 80]])
         print(result.embeddings.data.shape)
 source_hash: d7dfcb6f812ebb2d
@@ -83,21 +84,21 @@ source_hash: d7dfcb6f812ebb2d
 
 ## 定義
 
-顔認識はラベルではなく、顔ごとにベクトルを返します。推論は2段階で実行されます。まず顔検出器が各顔と5つのランドマークを特定し、クロップを標準化された112×112の配置へ変形します。次に認識ヘッドがL2正規化済みの埋め込みベクトルを出力します。
+顔認識はラベルではなく、顔ごとにベクトルを返します。推論は2段階で行われます。顔検出器が各顔と5つのlandmarkを特定し、cropをcanonicalな112x112配置へwarpし、認識ヘッドがL2正規化された埋め込みベクトルを出力します。
 
-`result.embeddings`は`(N, D)`形状の`Embeddings`ペイロードで、`result.boxes`と行が対応します。そのため、行`i`はボックス`i`内の顔を表します。各行は単位ベクトルなので、コサイン類似度は内積になり、`embeddings.similarity()`を使うと、別の`Embeddings`または行列全体との値を1回で計算できます。
+`result.embeddings` はshape `(N, D)` の `Embeddings` ペイロードで、`result.boxes` と行単位で対応します。そのため、行 `i` はボックス `i` の顔を表します。各行はunit vectorなので、cosine類似度は内積となり、`embeddings.similarity()` により別の `Embeddings` または行列全体に対して1回で計算できます。
 
-顔への名前付けは別の処理です。`Gallery`は名前付きの参照ベクトルを保持します。`predict()`へ`gallery=`を渡すと、埋め込みベクトルと行が対応する`result.identities`が追加され、顔ごとに名前と最良のコサインスコアを保持します。一致しきい値未満の顔の名前は`None`のままで、しきい値未満で最も近い名前へ置き換わることはありません。
+顔への命名は別のステップです。`Gallery` は名前付きreference vectorを保持します。`predict()` へ `gallery=` を渡すと、埋め込みベクトルと行単位で対応する `result.identities` が追加され、顔ごとの名前と最良のcosine scoreを保持します。照合しきい値未満の顔は名前として `None` を維持し、しきい値未満でもっとも近い名前を代わりに設定することはありません。
 
-ライブラリの標準タスクキーは`embed`です。`face-recognition`、`facial-recognition`、`reid`、`face`はすべてこのキーへ正規化されるため、`task="face-recognition"`と`task="embed"`はまったく同じものを選択します。顔はこの広いタスクにおける領域単位の形です。[埋め込み](/docs/tasks/embeddings)では、画像全体とテキストの形、共通の`Embeddings`、`Identities`、`Gallery` API、何も検出せずベクトルを生成するモデルを解説しています。
+ライブラリのcanonical task keyは `embed` です。`face-recognition`、`facial-recognition`、`reid`、`face` はすべてこの値へ正規化されるため、`task="face-recognition"` と `task="embed"` は同じものを選択します。顔は、より広いタスクにおけるregion shapeです。[埋め込みベクトル](/docs/tasks/embeddings)では、画像全体とテキストのshape、共有される `Embeddings`、`Identities`、`Gallery` API、何も検出せずにベクトルを生成するモデルを説明しています。
 
 ## モデル
 
-[LibreFaceRec](/docs/models/librefacerec)はこのタスク用のファミリーです。1つの呼び出しの背後に2つのONNXアーティファクトがあります。`librefacerec-l.onnx`は512次元の埋め込みベクトルを生成するiResNet100認識ヘッド、`librefacerec-det.onnx`はOpenCV zooから取得した5点ランドマーク対応のデフォルト顔検出器です。どちらも初回使用時にLibreYOLOのHugging Face組織からダウンロードされます。他のArcFace規約のONNXファイル（整列済み112×112入力、`(N, D)`出力）も、`librefacerec-*`の名前の代わりにパスを渡すことで認識ヘッドとして使用できます。
+[LibreFaceRec](/docs/models/librefacerec)はこのタスクのファミリーです。1回の呼び出しの背後に2つのONNX成果物があります。`librefacerec-l.onnx` は512次元の埋め込みベクトルを生成するiResNet100認識ヘッド、`librefacerec-det.onnx` はOpenCV zooから取得した5つのlandmarkを持つデフォルトの顔検出器です。どちらも初回使用時にLibreYOLOのHugging Face orgからダウンロードされます。ほかのArcFace規約のONNXファイル（位置合わせ済み112x112を入力し、`(N, D)` を出力）も、`librefacerec-*` 名の代わりにパスを渡せば、認識ヘッドとして利用できます。
 
-`embed`タスクキーは顔だけを対象とするものではありません。[CLIP](/docs/models/clip)、[SigLIP2](/docs/models/siglip2)、[DINOv2](/docs/models/dinov2)も`task="embed"`に対応し、画像全体のベクトルを1つ返します。これは顔の識別ではなく画像検索です。これらも`Gallery`と`Embeddings` APIを共有するため、後述の登録と照合の流れを適用できますが、顔の検出や整列は行いません。
+`embed` タスクキーの対象は顔より広くなります。[CLIP](/docs/models/clip)、[SigLIP2](/docs/models/siglip2)、[DINOv2](/docs/models/dinov2)も `task="embed"` に対応し、画像全体について1つのベクトルを返します。これは顔のIDではなく、画像検索です。`Gallery` と `Embeddings` APIを共有するため、以下の登録・照合ワークフローを転用できますが、顔の検出や位置合わせは行いません。
 
-認識ヘッドは基本インストールに含まれない`onnxruntime`で実行されます。
+認識ヘッドは、基本インストールに含まれない `onnxruntime` 上で動作します。
 
 ```bash
 pip install "libreyolo[onnx]"
@@ -107,13 +108,13 @@ pip install "libreyolo[onnx]"
 
 <code-tabs name="predict" />
 
-指定しない場合、`predict()`はデフォルト検出器をダウンロードして組み合わせます。`face_detector`を指定すると、callable、LibreYOLO検出モデル、`FaceDetector`インスタンスのいずれかで置き換えられ、コンストラクターまたは呼び出しごとに設定できます。`face_boxes`は保持しているボックスを使って検出を省略します。CLIでは`face_detector=`に顔検出器の`.onnx`パスまたはLibreYOLO検出器の名前を指定できます。
+設定を変更しなければ、`predict()` はデフォルトの検出器をダウンロードして組み合わせます。`face_detector` により、callable、LibreYOLO検出モデル、`FaceDetector` instanceで上書きでき、constructorまたは呼び出しごとに設定できます。`face_boxes` はすでに持っているボックスを使い、検出を迂回します。CLIでは、`face_detector=` に顔検出器の `.onnx` パスまたはLibreYOLO検出器の名前を指定できます。
 
-`model.verify(image_a, image_b)`は2枚の画像用の短縮処理です。各画像で最も信頼度の高い顔を埋め込み、`{"similarity", "same_person", "threshold"}`を返します。`model.embed(sources)`は1枚以上の画像に含まれるすべての顔の行を、1つの`(N_total, D)`テンソルへ積み重ねて返します。入力ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
+`model.verify(image_a, image_b)` は2枚画像用のshortcutです。それぞれでもっとも信頼度の高い顔を埋め込み、`{"similarity", "same_person", "threshold"}` を返します。`model.embed(sources)` は1枚以上の画像に含まれるすべての顔の行を単一の `(N_total, D)` テンソルへ積み重ねて返します。ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
 
 ## データセット形式
 
-登録では人物ごとに1つのフォルダーを読み取ります。フォルダー名が人物名となり、中の各画像がその人物の参照として追加されます。
+登録では、IDごとのフォルダーを読み取ります。フォルダー名がIDとなり、その中の各画像がその名前のreferenceになります。
 
 ```text
 people/
@@ -124,18 +125,19 @@ people/
     1.jpg
 ```
 
-`libreyolo enroll`はこのツリーをたどり、`.npz`ギャラリーを書き込みます。既存のギャラリーファイルは置き換えず、その場で拡張されるため、後から人物を追加できます。ギャラリーは埋め込み次元とファイルのフィンガープリントにより、ベクトルを生成した重みに結び付けられます。異なるモデルで照合しようとすると、互換性のないベクトル空間を比較せず例外を送出します。
+`libreyolo enroll` はこのツリーを走査し、`.npz` galleryを書き込みます。既存のgalleryファイルは置き換えられず、その場で拡張されるため、時間をかけてIDを追加できます。galleryは、埋め込みベクトルの次元とファイルfingerprintにより、それを生成した重みに結び付けられます。別のモデルで照合しようとすると、互換性のないベクトル空間を比較せずに例外を送出します。
 
-デフォルトでは各ソース画像から最も信頼度の高い1つの顔を参照行として追加するため、周囲の人が写ったポートレートでも被写体だけが登録されます。`Gallery.enroll`へ`select="all"`を渡すと、返されたすべての行を保存します。
+デフォルトでは各ソース画像から1つ、もっとも信頼度の高い顔のreference行だけが追加されるため、ほかの人が写るportraitでも被写体だけを登録します。返されたすべての行を保存するには、`Gallery.enroll` へ `select="all"` を渡してください。
 
 ## 学習
 
-このタスクのファミリーはLibreYOLO内部では学習できません。`LibreFaceEmbedder.train()`は例外を送出します。アップストリームで認識ヘッドを学習し、ArcFace規約のONNXへエクスポートして、ファイルパスから読み込んでください。
+このタスクのどのファミリーもLibreYOLO内では学習できません。`LibreFaceEmbedder.train()` は例外を送出します。アップストリームで認識ヘッドを学習し、ArcFace規約のONNXへエクスポートして、ファイルをパスで読み込んでください。
 
 ## 検証
 
-このタスクにはデータセット検証器がなく、`val()`は存在するように装わず例外を送出します。照合精度はラベル付きの画像ペアに対して`model.verify()`を実行し、`threshold`を変えて目的の運用点を選ぶことで測定します。識別精度はギャラリーを登録し、保留しておいた画像に対する`result.identities.name`と`result.identities.score`を読み取って測定します。名前が`None`なら拒否として数えます。
+このタスクにはデータセット検証機能がなく、`val()` は対応しているように見せかけずに例外を送出します。認証精度は、ラベル付き画像ペアに対して `model.verify()` を使い、`threshold` を走査して目的の動作点を選ぶことで測定します。識別精度は、galleryを登録してhold-out画像の `result.identities.name` と `result.identities.score` を読み、`None` の名前を拒否として数えることで測定します。
 
 ## エクスポート
 
-認識ヘッドはすでにONNXグラフなので、変換するものはなく、`LibreFaceEmbedder.export()`は例外を送出します。`.onnx`ファイルを直接デプロイするか、LibreYOLOにそのパスを渡して検出、整列、正規化をファミリーに処理させてください。
+認識ヘッドはすでにONNXグラフなので、変換するものはありません。`LibreFaceEmbedder.export()` は例外を送出します。`.onnx` ファイルを直接デプロイするか、LibreYOLOへ渡して、ファミリーに検出、位置合わせ、正規化を処理させてください。
+

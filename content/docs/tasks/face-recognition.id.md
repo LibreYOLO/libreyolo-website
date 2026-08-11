@@ -1,55 +1,71 @@
 ---
-title: Face recognition
-seo_title: Face recognition in LibreYOLO
+title: Pengenalan wajah
+seo_title: Pengenalan wajah di LibreYOLO
 description: >-
-  Detect, embed and identify faces in LibreYOLO. Enroll a gallery, compare two
-  images and match by cosine similarity, from Python or the CLI.
+  Deteksi, buat embedding, dan identifikasi wajah di LibreYOLO. Daftarkan
+  gallery, bandingkan dua gambar, dan lakukan pencocokan dengan cosine
+  similarity dari Python atau CLI.
 lead: >-
-  Face recognition is the embed task applied to faces. A detector locates and
-  aligns every face, a recognition head returns an L2-normalized vector per
-  face, and identity is decided by cosine similarity against enrolled references
-  rather than by a fixed class list.
+  Pengenalan wajah adalah task embed yang diterapkan pada wajah. Detektor
+  melokalisasi dan menyelaraskan setiap wajah, head pengenalan mengembalikan
+  vektor ternormalisasi L2 per wajah, dan identitas ditentukan oleh cosine
+  similarity terhadap referensi terdaftar, bukan list kelas tetap.
 keywords:
-  - face recognition python
+  - pengenalan wajah python
   - face embedding
-  - face verification
+  - verifikasi wajah
   - face gallery
   - arcface onnx
-  - libreyolo embed task
-  - cosine similarity faces
+  - task embed libreyolo
+  - cosine similarity wajah
 last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # librefacerec-* names route to the face-embedding family regardless
-        # of file suffix, and download from the LibreYOLO Hugging Face org on
-        # first use along with the default face detector.
+
+        # Nama librefacerec-* diarahkan ke family face-embedding tanpa
+        memedulikan
+
+        # suffix file, lalu diunduh dari organisasi Hugging Face LibreYOLO saat
+
+        # penggunaan pertama bersama detektor wajah default.
+
         model = LibreYOLO("librefacerec-l.onnx")
+
         result = model(SAMPLE_IMAGE)
 
-        print(result.boxes.xyxy)             # (N, 4) face boxes
-        print(result.embeddings.data.shape)  # (N, D), one row per face
+
+        print(result.boxes.xyxy)             # box wajah (N, 4)
+
+        print(result.embeddings.data.shape)  # (N, D), satu baris per wajah
+
         print(result.embeddings.dim)
     - label: CLI
       language: bash
       code: |
         libreyolo predict model=librefacerec-l.onnx source=photo.jpg
-    - label: Compare two images
+    - label: Bandingkan dua gambar
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("librefacerec-l.onnx")
 
-        # Runs detection and embedding on both images and compares their
-        # most confident face. Cosine similarity is in [-1, 1].
+
+        # Menjalankan deteksi dan embedding pada kedua gambar lalu membandingkan
+
+        # wajah dengan confidence tertinggi. Cosine similarity berada dalam [-1,
+        1].
+
         outcome = model.verify("person_a.jpg", "person_b.jpg", threshold=0.4)
+
         print(outcome["similarity"], outcome["same_person"])
-    - label: Enroll a gallery and identify
+    - label: Daftarkan gallery dan identifikasi
       language: python
       code: |
         from libreyolo import Gallery, LibreYOLO
@@ -63,8 +79,8 @@ snippets:
 
         result = model("group_photo.jpg", gallery=gallery, threshold=0.4)
         for name, score in result.identities.data:
-            print(name, score)   # name is None below the threshold
-    - label: Enroll and identify from the CLI
+            print(name, score)   # name bernilai None di bawah ambang batas
+    - label: Daftarkan dan identifikasi dari CLI
       language: bash
       code: >
         libreyolo enroll model=librefacerec-l.onnx source=people/
@@ -72,63 +88,67 @@ snippets:
 
         libreyolo predict model=librefacerec-l.onnx source=group_photo.jpg
         gallery=faces.npz
-    - label: Bring your own face boxes
+    - label: Gunakan box wajah sendiri
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("librefacerec-l.onnx")
 
-        # face_boxes skips detection entirely; face_detector accepts a
-        # callable, a LibreYOLO detection model, or a FaceDetector instance.
+        # face_boxes melewati deteksi; face_detector menerima callable, model
+        # deteksi LibreYOLO, atau instance FaceDetector.
         result = model(SAMPLE_IMAGE, face_boxes=[[34, 12, 90, 80]])
         print(result.embeddings.data.shape)
 source_hash: d7dfcb6f812ebb2d
 ---
 
-## Definition
+## Definisi
 
-Face recognition returns a vector per face, not a label. Prediction runs two
-stages: a face detector locates each face and its five landmarks, the crop is
-warped to a canonical 112x112 alignment, and a recognition head emits an
-L2-normalized embedding.
+Pengenalan wajah mengembalikan vektor per wajah, bukan label. Prediksi
+menjalankan dua tahap: detektor wajah melokalisasi setiap wajah dan lima
+landmark-nya, crop di-warp ke alignment kanonis 112x112, lalu head pengenalan
+menghasilkan embedding ternormalisasi L2.
 
-`result.embeddings` is an `Embeddings` payload of shape `(N, D)`, row-aligned
-with `result.boxes`, so row `i` describes the face in box `i`. Because rows are
-unit vectors, cosine similarity is a dot product, and `embeddings.similarity()`
-computes it against another `Embeddings` or a whole matrix in one call.
+`result.embeddings` adalah payload `Embeddings` berbentuk `(N, D)`, dengan baris
+selaras terhadap `result.boxes`, sehingga baris `i` menjelaskan wajah dalam box
+`i`. Karena setiap baris adalah vektor satuan, cosine similarity merupakan dot
+product, dan `embeddings.similarity()` menghitungnya terhadap `Embeddings` lain
+atau seluruh matriks dalam satu pemanggilan.
 
-Naming a face is a separate step. A `Gallery` holds named reference vectors;
-passing `gallery=` to `predict()` attaches `result.identities`, row-aligned with
-the embeddings, carrying a name and its best cosine score per face. A face below
-the match threshold keeps `None` as its name, and the nearest below-threshold
-name is never substituted.
+Pemberian nama wajah merupakan langkah terpisah. `Gallery` menyimpan vektor
+referensi bernama; memberikan `gallery=` kepada `predict()` melampirkan
+`result.identities`, dengan baris selaras terhadap embedding serta nama dan
+score cosine terbaik per wajah. Wajah di bawah ambang batas kecocokan tetap
+memiliki nama `None`, dan nama terdekat di bawah ambang batas tidak pernah
+digunakan sebagai pengganti.
 
-The library's canonical task key is `embed`. `face-recognition`, `facial-recognition`,
-`reid` and `face` all normalize to it, so `task="face-recognition"` and
-`task="embed"` select the same thing. Faces are the region shape of that wider
-task; [embeddings](/docs/tasks/embeddings) covers the whole-image and text
-shapes, the shared `Embeddings`, `Identities` and `Gallery` API, and the models
-that produce vectors without detecting anything.
+Key task kanonis library adalah `embed`. `face-recognition`,
+`facial-recognition`, `reid`, dan `face` semuanya dinormalisasi ke sana, sehingga
+`task="face-recognition"` dan `task="embed"` memilih hal sama. Wajah adalah
+bentuk region dari task yang lebih luas; [embedding](/docs/tasks/embeddings)
+menjelaskan bentuk seluruh gambar dan teks, API `Embeddings`, `Identities`, serta
+`Gallery` bersama, dan model yang menghasilkan vektor tanpa deteksi.
 
-## Models
+## Model
 
-[LibreFaceRec](/docs/models/librefacerec) is the family for this task. It is two
-ONNX artifacts behind one call: `librefacerec-l.onnx`, an iResNet100 recognition
-head producing 512-d embeddings, and `librefacerec-det.onnx`, the default face
-detector with five landmarks, taken from the OpenCV zoo. Both download from the
-LibreYOLO Hugging Face org on first use. Any other ArcFace-convention ONNX file
-(aligned 112x112 in, `(N, D)` out) can replace the recognition head by passing
-its path instead of a `librefacerec-*` name.
+[LibreFaceRec](/docs/models/librefacerec) adalah family untuk task ini. Model
+terdiri dari dua artefak ONNX di balik satu pemanggilan: `librefacerec-l.onnx`,
+head pengenalan iResNet100 yang menghasilkan embedding 512-d, dan
+`librefacerec-det.onnx`, detektor wajah default dengan lima landmark dari
+OpenCV zoo. Keduanya diunduh dari organisasi Hugging Face LibreYOLO saat
+penggunaan pertama. File ONNX lain dengan konvensi ArcFace (input 112x112
+selaras, output `(N, D)`) dapat mengganti head pengenalan dengan memberikan
+path-nya.
 
-The `embed` task key is wider than faces. [CLIP](/docs/models/clip),
-[SigLIP2](/docs/models/siglip2) and [DINOv2](/docs/models/dinov2) also support
-`task="embed"` and return one whole-image vector, which is image retrieval rather
-than face identity. They share the `Gallery` and `Embeddings` API, so the
-enroll-and-match workflow below transfers, but they do not detect or align faces.
+Key task `embed` lebih luas daripada wajah. [CLIP](/docs/models/clip),
+[SigLIP2](/docs/models/siglip2), dan [DINOv2](/docs/models/dinov2) juga
+mendukung `task="embed"` dan mengembalikan satu vektor seluruh gambar, yaitu
+image retrieval, bukan identitas wajah. Ketiganya berbagi API `Gallery` dan
+`Embeddings`, sehingga workflow pendaftaran dan pencocokan tetap berlaku, tetapi
+tidak mendeteksi atau menyelaraskan wajah.
 
-The recognition head runs through `onnxruntime`, which the base install does not
-carry:
+Head pengenalan berjalan melalui `onnxruntime`, yang tidak disertakan instalasi
+dasar:
 
 ```bash
 pip install "libreyolo[onnx]"
@@ -138,22 +158,24 @@ pip install "libreyolo[onnx]"
 
 <code-tabs name="predict" />
 
-Left alone, `predict()` downloads and pairs the default detector. `face_detector`
-overrides it with a callable, a LibreYOLO detection model, or a `FaceDetector`
-instance, and can be set on the constructor or per call. `face_boxes` bypasses
-detection with boxes you already hold. On the CLI, `face_detector=` accepts a
-face-detector `.onnx` path or a LibreYOLO detector name.
+Jika dibiarkan, `predict()` mengunduh dan memasangkan detektor default.
+`face_detector` menimpanya dengan callable, model deteksi LibreYOLO, atau
+instance `FaceDetector`, serta dapat ditetapkan pada constructor atau per
+pemanggilan. `face_boxes` melewati deteksi menggunakan box yang sudah ada. Pada
+CLI, `face_detector=` menerima path `.onnx` detektor wajah atau nama detektor
+LibreYOLO.
 
-`model.verify(image_a, image_b)` is the two-image shortcut: it embeds the most
-confident face in each and returns `{"similarity", "same_person", "threshold"}`.
-`model.embed(sources)` returns every face row across one or more images stacked
-into a single `(N_total, D)` tensor. See [prediction](/docs/predict) for sources,
-streaming and result handling.
+`model.verify(image_a, image_b)` adalah shortcut dua gambar: metode ini membuat
+embedding wajah dengan confidence tertinggi dari masing-masing dan mengembalikan
+`{"similarity", "same_person", "threshold"}`. `model.embed(sources)`
+mengembalikan setiap baris wajah lintas satu atau lebih gambar yang ditumpuk
+menjadi tensor `(N_total, D)`. Lihat [prediksi](/docs/predict) untuk sumber,
+streaming, dan penanganan hasil.
 
-## Dataset format
+## Format dataset
 
-Enrollment reads a folder per identity. The folder name becomes the identity,
-and every image inside it contributes references for that name:
+Pendaftaran membaca satu folder per identitas. Nama folder menjadi identitas,
+dan setiap gambar di dalamnya menambahkan referensi untuk nama tersebut:
 
 ```text
 people/
@@ -164,36 +186,35 @@ people/
     1.jpg
 ```
 
-`libreyolo enroll` walks that tree and writes a `.npz` gallery. An existing
-gallery file is extended in place rather than replaced, so identities can be
-added over time. Galleries are bound to the weights that produced them by
-embedding dimension and a file fingerprint; matching with a different model
-raises instead of comparing incompatible vector spaces.
+`libreyolo enroll` menelusuri tree tersebut dan menulis gallery `.npz`. File
+gallery yang sudah ada diperluas di tempat, bukan diganti, sehingga identitas
+dapat ditambahkan bertahap. Gallery terikat pada bobot pembuatnya berdasarkan
+dimensi embedding dan fingerprint file; pencocokan dengan model berbeda
+memunculkan error, bukan membandingkan ruang vektor yang tidak kompatibel.
 
-By default each source image contributes one reference row, the most confident
-face, so a portrait containing bystanders enrolls only its subject. Pass
-`select="all"` to `Gallery.enroll` to store every returned row.
+Secara default, setiap gambar sumber menyumbang satu baris referensi, yaitu
+wajah dengan confidence tertinggi, sehingga portrait dengan orang lain hanya
+mendaftarkan subjek. Berikan `select="all"` kepada `Gallery.enroll` untuk
+menyimpan setiap baris.
 
 ## Train
 
-No family in this task trains inside LibreYOLO. `LibreFaceEmbedder.train()`
-raises: train a recognition head upstream, export it to ONNX in the ArcFace
-convention, and load the file by path.
+Tidak ada family dalam task ini yang berlatih di LibreYOLO.
+`LibreFaceEmbedder.train()` memunculkan error: latih head pengenalan di upstream,
+ekspor ke ONNX dalam konvensi ArcFace, lalu muat file berdasarkan path.
 
 ## Validate
 
-There is no dataset validator for this task, and `val()` raises rather than
-pretending otherwise. Verification accuracy is measured on labeled image pairs
-with `model.verify()`, sweeping `threshold` to pick the operating point you
-want. Identification accuracy is measured by enrolling a gallery and reading
-`result.identities.name` and `result.identities.score` on held-out images,
-counting a `None` name as a rejection.
+Tidak ada validator dataset untuk task ini dan `val()` memunculkan error.
+Akurasi verifikasi diukur pada pasangan gambar berlabel dengan `model.verify()`,
+melakukan sweep `threshold` untuk memilih operating point. Akurasi identifikasi
+diukur dengan mendaftarkan gallery lalu membaca `result.identities.name` dan
+`result.identities.score` pada gambar held-out, dengan nama `None` dihitung
+sebagai penolakan.
 
 ## Export
 
-The recognition head is already an ONNX graph, so there is nothing to convert:
-`LibreFaceEmbedder.export()` raises. Deploy the `.onnx` file directly, or point
-LibreYOLO at it and let the family handle detection, alignment and
-normalization.
-
-
+Head pengenalan sudah berupa graph ONNX, sehingga tidak ada yang dikonversi:
+`LibreFaceEmbedder.export()` memunculkan error. Deploy file `.onnx` secara
+langsung, atau arahkan LibreYOLO ke file tersebut agar family menangani deteksi,
+alignment, dan normalisasi.

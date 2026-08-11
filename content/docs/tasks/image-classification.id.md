@@ -1,60 +1,75 @@
 ---
-title: Image classification
-seo_title: Image classification in LibreYOLO
+title: Klasifikasi gambar
+seo_title: Klasifikasi gambar di LibreYOLO
 description: >-
-  Label a whole image in LibreYOLO: the families that serve the task, the
-  ImageFolder dataset layout, and the predict, train, validate and export calls.
+  Memberi label pada seluruh gambar di LibreYOLO: keluarga yang melayani task,
+  tata letak ImageFolder dataset, dan panggilan predict, train, validate, dan
+  export.
 lead: >-
-  Image classification assigns one label distribution to a whole image and
-  locates nothing inside it. The task key is classify.
+  Klasifikasi gambar menetapkan satu distribusi label pada seluruh gambar dan
+  tidak menempatkan apapun di dalamnya. Kunci task adalah classify.
 keywords:
-  - image classification python
-  - train image classifier
+  - klasifikasi gambar python
+  - melatih pengklasifikasi gambar
   - ImageFolder dataset
-  - top-1 accuracy
-  - zero-shot classification
-  - MIT classification library
+  - akurasi top-1
+  - klasifikasi zero-shot
+  - perpustakaan klasifikasi MIT
 last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The -cls suffix in the filename selects the task, so no task
-        # argument is needed.
+
+        # Sufiks -cls pada nama file memilih task, sehingga tidak perlu argumen
+        task.
+
+        # argumen diperlukan.
+
         model = LibreYOLO("LibreResNet50-cls.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         print(result.names[result.probs.top1], float(result.probs.top1conf))
+
         print(result.probs.top5)
     - label: CLI
       language: bash
       code: |
         libreyolo predict model=LibreResNet50-cls.pt save=True \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-    - label: The whole distribution
-      language: python
-      code: |
-        from libreyolo import LibreYOLO, SAMPLE_IMAGE
-
-        result = LibreYOLO("LibreResNet50-cls.pt")(SAMPLE_IMAGE)
-        probs = result.probs
-
-        # .data is the full (C,) vector; top5/top5conf are ordered views.
-        print(probs.data.shape)
-        for index, score in zip(probs.top5, probs.top5conf):
-            print(result.names[index], float(score))
-    - label: 'Zero-shot, no training'
+    - label: Seluruh distribusi
       language: python
       code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
 
-        # CLIP scores the image against text prompts, so the label set is
+        result = LibreYOLO("LibreResNet50-cls.pt")(SAMPLE_IMAGE)
 
-        # set at call time instead of baked into the checkpoint.
+        probs = result.probs
+
+
+        # .data adalah vektor penuh (C,); top5/top5conf adalah tampilan yang
+        diurutkan.
+
+        print(probs.data.shape)
+
+        for index, score in zip(probs.top5, probs.top5conf):
+            print(result.names[index], float(score))
+    - label: 'Zero-shot, tanpa pelatihan'
+      language: python
+      code: >
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+
+        # CLIP menilai gambar terhadap prompt teks, sehingga set label
+        ditentukan
+
+        # saat pemanggilan, bukan tertanam dalam checkpoint.
 
         model = LibreYOLO("LibreCLIPb32-cls.pt")
 
@@ -68,12 +83,17 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # imagenette160 is a known dataset name and downloads on first use.
-        # Pass a directory with a train/ split for your own data.
+
+        # imagenette160 adalah nama dataset yang dikenal dan diunduh pada
+        penggunaan pertama.
+
+        # Lewatkan direktori dengan pembagian train/ untuk data Anda sendiri.
+
         model = LibreYOLO("LibreResNet50-cls.pt")
+
         model.train(data="imagenette160", epochs=5)
     - label: CLI
       language: bash
@@ -92,7 +112,7 @@ snippets:
 
         model = LibreYOLO("LibreResNet50-cls.pt")
 
-        # val() returns a plain dict, not an object.
+        # val() mengembalikan dict biasa, bukan objek.
         metrics = model.val(data="imagenette160")
 
         print(metrics["metrics/accuracy_top1"])
@@ -113,73 +133,79 @@ snippets:
       language: bash
       code: |
         libreyolo export model=LibreResNet50-cls.pt format=onnx
-    - label: Use the exported file
+    - label: Gunakan file yang diekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The factory routes on the file suffix, so an exported artifact loads
-        # like a checkpoint and returns the same Results object.
+
+        # Pabrik mengarahkan berdasarkan akhiran file, sehingga artifak yang
+        diekspor memuat
+
+        # seperti checkpoint dan mengembalikan objek Results yang sama.
+
         model = LibreYOLO("LibreResNet50-cls.onnx")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.probs.top1, result.probs.top1conf)
 source_hash: 836bea76cd2cdf92
 ---
 
-## Definition
+## Definisi
 
-Image classification produces one score per class for the whole image and no
-coordinates at all. It answers what is in the picture, never where, which is
-what separates it from [object detection](/docs/tasks/object-detection).
+Klasifikasi gambar menghasilkan satu skor per kelas untuk seluruh gambar dan tidak ada
+koordinat sama sekali. Ini menjawab apa yang ada dalam gambar, bukan di mana, yang
+apa yang memisahkannya dari [object detection](/docs/tasks/object-detection).
 
-`classify` is the canonical task key, and the `-cls` suffix in a checkpoint
-filename selects it. That suffix is required rather than optional on
-classification families, so `LibreResNet50.pt` is not read as a classifier and
-only `LibreResNet50-cls.pt` is.
+`classify` adalah kunci task kanonik, dan sufiks `-cls` dalam checkpoint
+nama file memilihnya. Sufiks itu diperlukan dan bukan opsional pada
+keluarga klasifikasi, jadi `LibreResNet50.pt` tidak dibaca sebagai pengklasifikasi dan
+hanya `LibreResNet50-cls.pt` saja.
 
-`predict()` fills `result.probs` and leaves `boxes` empty. `.data` is the
-full score vector, `.top1` the index of the highest score and `.top1conf` its
-value, `.top5` the five highest indices in descending order and `.top5conf`
-their scores. Indices point into `result.names`. Slicing a `Results` object
-never truncates `probs`, because the vector belongs to the image rather than to
-one row.
+`predict()` mengisi `result.probs` dan meninggalkan `boxes` kosong. `.data` adalah
+vektor skor penuh, `.top1` indeks dari skor tertinggi dan `.top1conf`nya
+nilai, `.top5` lima indeks tertinggi dalam urutan menurun dan `.top5conf`
+skor mereka. Indeks menunjuk ke `result.names`. Memotong sebuah objek `Results`
+tidak pernah memotong `probs`, karena vektor tersebut milik gambar, bukan milik
+satu baris.
 
-## Models
+## Model
 
-Five families both train and predict: [ResNet](/docs/models/resnet),
+Lima keluarga baik melatih maupun memprediksi: [ResNet](/docs/models/resnet),
 [ConvNeXt](/docs/models/convnext), [MobileNetV4](/docs/models/mobilenetv4),
-[EfficientNetV2](/docs/models/efficientnetv2) and
-[DINOv2](/docs/models/dinov2). The first four run on the base package and ship
-published weights. DINOv2 needs `pip install "libreyolo[rfdetr]"` and has no
-LibreYOLO-hosted checkpoint: it loads the upstream backbone with a randomly
-initialized linear head, so it is a fine-tuning starting point rather than a
-ready predictor.
+[EfficientNetV2](/docs/models/efficientnetv2) dan
+[DINOv2](/docs/models/dinov2). Empat pertama berjalan pada paket dasar dan dikirim
+bobot yang diterbitkan. DINOv2 membutuhkan `pip install "libreyolo[rfdetr]"` dan tidak memiliki
+LibreYOLO-menghosting checkpoint: ini memuat backbone hulu secara acak
+menginisisialisasi head linier, jadi itu adalah titik awal fine-tuning daripada
+prediktor siap.
 
-Five more predict, validate and export, but their `train()` raises
+Lima lagi memprediksi, memvalidasi, dan mengekspor, tetapi `train()` mereka meningkat
 `NotImplementedError`: [ViT](/docs/models/vit), [Swin](/docs/models/swin),
-[VGG](/docs/models/vgg), [AlexNet](/docs/models/alexnet) and
+[VGG](/docs/models/vgg), [AlexNet](/docs/models/alexnet) dan
 [DeiT](/docs/models/deit).
 
-[CLIP](/docs/models/clip) and [SigLIP2](/docs/models/siglip2) classify without
-a fixed label set. They score the image against text prompts, so
-`set_classes()` defines the classes at call time and there is no training step
-for a new label set at all. Both also serve the `embed` task.
+[CLIP](/docs/models/clip) dan [SigLIP2](/docs/models/siglip2) mengklasifikasikan tanpa
+set label tetap. Mereka menilai gambar terhadap teks prompt, sehingga
+`set_classes()` mendefinisikan kelas pada saat pemanggilan dan tidak ada langkah pelatihan
+untuk set label baru sama sekali. Keduanya juga melayani `embed` task.
 
-## Predict
+## Prediksi
 
-Weights download from Hugging Face on first use and are cached locally.
+Bobot diunduh dari Hugging Face saat pertama digunakan dan disimpan di cache secara lokal.
 
 <code-tabs name="predict" />
 
-`conf`, `iou` and `max_det` have no effect here: there are no candidates to
-threshold or suppress, only one distribution. See
-[prediction](/docs/predict) for sources, streaming and result handling.
+`conf`, `iou` dan `max_det` tidak memiliki efek di sini: tidak ada kandidat untuk
+disaring atau ditekan, hanya ada satu distribusi. Lihat
+[prediksi](/docs/predict) untuk sumber, streaming dan penanganan hasil.
 
-## Dataset format
+## format Dataset
 
-Classification uses a directory tree, not label files and not a YAML. `data` is
-the dataset root.
+Klasifikasi menggunakan pohon direktori, bukan file label dan bukan YAML. `data` adalah
+akar dataset.
 
 ```text
 dataset/
@@ -191,53 +217,52 @@ dataset/
     parachute/000102.jpg
 ```
 
-`train/` is required for training and it defines the class-to-index mapping by
-sorted folder name, so the first folder alphabetically becomes class 0. `val/`
-is required for validation. A `test/` split may be present and the default
-train and validate commands do not use it. Any split other than `train` has to
-contain the same class folder names as the expected class set, which is what
-makes a mismatch fail loudly rather than score as a wrong prediction. The
-accepted image extensions are `.jpg`, `.jpeg`, `.png`, `.bmp`, `.webp`, `.tif`
-and `.tiff`.
+`train/` diperlukan untuk pelatihan dan ini mendefinisikan pemetaan kelas-ke-indeks dengan
+nama folder yang diurutkan, sehingga folder pertama secara alfabet menjadi kelas 0. `val/`
+diperlukan untuk validasi. Pemisahan `test/` mungkin ada dan default
+perintah train dan validate jangan menggunakannya. Setiap pembagian selain `train` harus
+mengandung nama folder kelas yang sama dengan set kelas yang diharapkan, yang adalah apa
+menyebabkan ketidaksesuaian gagal dengan keras daripada dinilai sebagai prediksi yang salah. The
+ekstensi gambar yang diterima adalah `.jpg`, `.jpeg`, `.png`, `.bmp`, `.webp`, `.tif`
+dan `.tiff`.
 
-`data` accepts three things: a path to a directory containing a `train/` split,
-a `.zip` URL, or one of the known dataset names, `imagenette160` and `smoke10`,
-which download and cache on first use.
+`data` menerima tiga hal: jalur ke direktori yang berisi split `train/`,
+URL `.zip`, atau salah satu nama dataset yang dikenal, `imagenette160` dan `smoke10`,
+yang diunduh dan disimpan dalam cache saat penggunaan pertama.
 
-The canonical loader is `libreyolo.data.classify_dataset`.
+Loader kanonik adalah `libreyolo.data.classify_dataset`.
 
-## Train
+## Latih
 
 <code-tabs name="train" />
 
-There is no `nc` to declare: the class count comes from the folder names under
-`train/`, and the final linear layer is rebuilt to match it while the backbone
-transfers unchanged. See [training](/docs/train) for datasets, augmentation,
-multi-GPU and loggers.
+Tidak ada `nc` yang perlu dideklarasikan: jumlah kelas berasal dari nama folder di bawah
+`train/`, dan lapisan linier terakhir dibangun kembali untuk menyesuaikannya sementara backbone
+dipindahkan tanpa perubahan. Lihat [training](/docs/train) untuk dataset, augmentasi,
+multi-GPU dan logger.
 
-## Validate
+## Validasi
 
-`val()` returns a plain dictionary of `metrics/` keys, computed over the `val/`
-split of the dataset root.
+`val()` mengembalikan kamus sederhana dari kunci `metrics/`, dihitung di atas `val/`
+pembagian dari akar dataset.
 
 <code-tabs name="val" />
 
-`metrics/accuracy_top1` is the share of images whose highest-scoring class is
-the true one, and it is the headline number, the one training uses to pick the
-best epoch. `metrics/accuracy_top5` is the share whose true class appears
-anywhere in the five highest-scoring classes, which says less the fewer classes
-the dataset has. The dictionary also carries `fitness`, a copy of the top-1
-value.
+`metrics/accuracy_top1` adalah bagian dari gambar-gambar yang kelas dengan skor tertinggi adalah
+kelas yang benar, dan ini adalah angka utama, yang digunakan pelatihan untuk memilih
+epoch terbaik. `metrics/accuracy_top5` adalah bagian yang kelas aslinya muncul
+di mana saja dalam lima kelas dengan skor tertinggi, yang berarti lebih sedikit sebanyak kelas
+yang dimiliki dataset. Kamus juga memuat `fitness`, salinan dari nilai top-1.
 
-## Export
+
+## Ekspor
 
 <code-tabs name="export" />
 
-An exported artifact loads back through `LibreYOLO()` on its file suffix, so a
-`.onnx` or `.engine` file behaves like a checkpoint and returns the same
-`Results`. Format coverage differs by family; the matrix on each model page is
-generated from the validated set rather than typed by hand. See
-[export and deploy](/docs/export) for the formats, their extras and their
-constraints.
-
+Sebuah artefak yang diekspor dapat dimuat kembali melalui `LibreYOLO()` berdasarkan akhiran file-nya, jadi sebuah
+file `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengembalikan
+`Results` yang sama. Cakupan format berbeda menurut family; matriks di setiap halaman model adalah
+dihasilkan dari set yang tervalidasi daripada diketik secara manual. Lihat
+[ekspor dan deploy](/docs/export) untuk format, tambahan mereka dan
+batasannya.
 

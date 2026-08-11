@@ -1,23 +1,23 @@
 ---
-title: Open-vocabulary detection
-seo_title: Open-vocabulary detection in LibreYOLO
+title: Deteksi open-vocabulary
+seo_title: Deteksi open-vocabulary di LibreYOLO
 description: >-
-  Detect objects from a text vocabulary in LibreYOLO. Load Grounding DINO,
-  OWLv2, OMDet-Turbo or OV-DEIM through LibreOpenVocab and set classes at
+  Deteksi objek dari vocabulary teks di LibreYOLO. Muat Grounding DINO, OWLv2,
+  OMDet-Turbo, atau OV-DEIM melalui LibreOpenVocab dan tetapkan kelas saat
   runtime.
 lead: >-
-  Open-vocabulary detection replaces a checkpoint's fixed class list with words
-  you choose at call time. In LibreYOLO it is not a separate task: it is the
-  detect task served by a separate model tier, loaded through the LibreOpenVocab
-  factory instead of LibreYOLO.
+  Deteksi open-vocabulary mengganti list kelas tetap checkpoint dengan kata yang
+  dipilih saat pemanggilan. Di LibreYOLO, ini bukan task terpisah: ini adalah
+  task detect yang dilayani tier model terpisah, dimuat melalui factory
+  LibreOpenVocab, bukan LibreYOLO.
 keywords:
-  - open vocabulary detection
-  - zero shot object detection
+  - deteksi open vocabulary
+  - deteksi objek zero shot
   - open set detection
   - grounding dino python
   - owlv2
   - omdet turbo
-  - text prompt detection
+  - deteksi prompt teks
 last_verified: 1.5.0
 snippets:
   predict:
@@ -33,142 +33,150 @@ snippets:
         print(result.names)
         for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
-    - label: Swap the vocabulary
+    - label: Ganti vocabulary
       language: python
       code: |
         from libreyolo import LibreOpenVocab, SAMPLE_IMAGE
 
         model = LibreOpenVocab("owlv2-b16")
 
-        # set_classes is sticky: it holds until the next call to it.
-        # Labels must be unique once lowercased and stripped of articles.
+        # set_classes bersifat persisten hingga pemanggilan berikutnya.
+        # Label harus unik setelah diubah ke huruf kecil dan artikel dihapus.
         model.set_classes(["a red backpack", "traffic cone"])
         result = model.predict(SAMPLE_IMAGE)
 
         model.set_classes(["bicycle wheel"])
         result = model.predict(SAMPLE_IMAGE)
-    - label: Grounding DINO text threshold
+    - label: Ambang batas teks Grounding DINO
       language: python
-      code: |
+      code: >
         from libreyolo import LibreOpenVocab, SAMPLE_IMAGE
 
+
         model = LibreOpenVocab("grounding-dino-b")
+
         model.set_classes(["remote control", "school bus"])
 
-        # conf filters by box score, text_threshold by the decoded phrase's
-        # token score. Both default to 0.25 when left unset. Only Grounding
-        # DINO accepts text_threshold; the others raise.
+
+        # conf memfilter berdasarkan score box, text_threshold berdasarkan score
+        token
+
+        # frasa hasil decode. Default keduanya 0.25 jika tidak ditetapkan. Hanya
+        Grounding
+
+        # DINO yang menerima text_threshold; lainnya memunculkan error.
+
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
 source_hash: 17197cf4d80f3d6f
 ---
 
-## Definition
+## Definisi
 
-Open-vocabulary detection returns ordinary detection `Results`: boxes,
-confidences and class indices, with `result.names` mapping those indices back to
-the strings you asked for. What changes is where the class list comes from.
-A conventional detector is trained against a fixed set of categories and can
-never emit a category outside it. These models take the vocabulary as text at
-inference time, so `set_classes(["forklift", "safety cone"])` is enough to make
-those the classes.
+Deteksi open-vocabulary mengembalikan `Results` deteksi biasa: box, confidence,
+dan indeks kelas, dengan `result.names` memetakan indeks ke string yang diminta.
+Perubahannya adalah sumber list kelas. Detektor konvensional dilatih terhadap
+kumpulan kategori tetap dan tidak pernah menghasilkan kategori di luar
+kumpulan tersebut. Model ini menerima vocabulary sebagai teks saat inferensi,
+sehingga `set_classes(["forklift", "safety cone"])` cukup untuk menjadikannya
+kelas.
 
-LibreYOLO has no `open-vocabulary` task key. These models declare
-`SUPPORTED_TASKS = ("detect",)` like any other detector. What separates them is
-the loading path: they are Hugging Face snapshots rather than LibreYOLO
-state-dict checkpoints, so they stay out of the `LibreYOLO()` factory and are
-constructed through `LibreOpenVocab()` instead. That factory is a sibling of
-`LibreSAM()` and `LibreVLM()`, not a replacement for `LibreYOLO()`.
+LibreYOLO tidak memiliki key task `open-vocabulary`. Model ini mendeklarasikan
+`SUPPORTED_TASKS = ("detect",)` seperti detektor lain. Pemisahnya adalah jalur
+pemuatan: model berupa snapshot Hugging Face, bukan checkpoint state dict
+LibreYOLO, sehingga tidak masuk factory `LibreYOLO()` dan dibuat melalui
+`LibreOpenVocab()`. Factory tersebut adalah sibling `LibreSAM()` dan
+`LibreVLM()`, bukan pengganti `LibreYOLO()`.
 
-Scores are real detection scores, not a generated caption parsed after the fact.
-Each family scores image regions against the text embedding of every prompt.
+Score merupakan score deteksi nyata, bukan caption hasil generasi yang di-parse.
+Setiap family menilai region gambar terhadap embedding teks setiap prompt.
 
-## Models
+## Model
 
-Four families make up the tier, all of them predict only. Load any of them by
-alias through `LibreOpenVocab`.
+Empat family membentuk tier ini dan semuanya hanya memprediksi. Muat family
+berdasarkan alias melalui `LibreOpenVocab`.
 
-[Grounding DINO](/docs/models/grounding-dino), from IDEA Research, in `t` and
-`b` sizes. It is the tier default, and the only family that accepts
-`text_threshold`, a second cutoff on the decoded phrase's token score.
+[Grounding DINO](/docs/models/grounding-dino) dari IDEA Research, dalam ukuran
+`t` dan `b`. Ini adalah default tier dan satu-satunya family yang menerima
+`text_threshold`, cutoff kedua untuk score token frasa hasil decode.
 
-[OWLv2](/docs/models/owlv2), from Google Research, in `b16` and `l14` sizes.
-It scores image regions against text embeddings from a CLIP-style encoder.
+[OWLv2](/docs/models/owlv2) dari Google Research, dalam ukuran `b16` dan `l14`.
+Model menilai region gambar terhadap embedding teks dari encoder bergaya CLIP.
 
-[OMDet-Turbo](/docs/models/omdet-turbo), from Om AI Lab, in one `t` size. It
-decouples class embeddings from a language task prompt, and is the one family
-here that suppresses overlapping boxes inside its own post-processing, so `iou=`
-is honored.
+[OMDet-Turbo](/docs/models/omdet-turbo) dari Om AI Lab, dalam satu ukuran `t`.
+Model memisahkan embedding kelas dari prompt task bahasa dan merupakan satu-
+satunya family di sini yang menekan box tumpang tindih dalam postprocessing,
+sehingga `iou=` dipatuhi.
 
-[OV-DEIM](/docs/models/ov-deim), in `s`, `m` and `l` sizes, a DETR-style
-detector that matches decoder queries to text embeddings from a bundled
-MobileCLIP text tower. It is one-to-one matching with top-K selection, so no NMS
-runs anywhere.
+[OV-DEIM](/docs/models/ov-deim), dalam ukuran `s`, `m`, dan `l`, adalah detektor
+bergaya DETR yang mencocokkan query decoder terhadap embedding teks dari text
+tower MobileCLIP bawaan. Model memakai pencocokan one-to-one dengan pemilihan
+top-K, sehingga NMS tidak dijalankan.
 
-OV-DEIM's weights are the restricted case in this tier. The detector weights are
-CC BY-NC 4.0, non-commercial. The bundled text tower is under Apple's Machine
-Learning Research Model license, research use only. The `l` checkpoint adds a
-DINOv3-S backbone fine-tune under Meta's DINOv3 License. All three license texts
-ship inside the weight repository, and the library logs the same summary when it
-resolves the weights, before the model is built. Read
-[OV-DEIM](/docs/models/ov-deim) before deploying it.
+Bobot OV-DEIM adalah kasus terbatas dalam tier ini. Bobot detektor berlisensi
+CC BY-NC 4.0 dan nonkomersial. Text tower bawaan berada di bawah Apple's Machine
+Learning Research Model license, khusus penggunaan penelitian. Checkpoint `l`
+menambahkan fine-tuning backbone DINOv3-S di bawah DINOv3 License milik Meta.
+Ketiga teks lisensi tersedia dalam repository bobot, dan library mencatat
+ringkasan yang sama ketika me-resolve bobot, sebelum model dibangun. Baca
+[OV-DEIM](/docs/models/ov-deim) sebelum deployment.
 
-The tier needs one extra:
+Tier memerlukan satu ekstra:
 
 ```bash
 pip install "libreyolo[openvocab]"
 ```
 
-That covers `transformers` and `timm` for the three wrapped families, and the
-`huggingface_hub`, `safetensors`, `regex` and `ftfy` packages OV-DEIM needs as a
-native port.
+Ekstra mencakup `transformers` dan `timm` untuk tiga family wrapper, serta
+`huggingface_hub`, `safetensors`, `regex`, dan `ftfy` yang diperlukan OV-DEIM
+sebagai port native.
 
-A second tier also takes a text vocabulary: `LibreVLM()` loads generative
-vision-language models, such as [Qwen3-VL](/docs/models/qwen3-vl) and
-[Florence-2](/docs/models/florence-2), and turns their output into the same
-`Results`. It shares the `set_classes()` surface. The difference is what
-produces the boxes: the families on this page are discriminative detectors that
-emit scores directly, while the VLM tier generates them.
+Tier kedua juga menerima vocabulary teks: `LibreVLM()` memuat vision-language
+model generatif seperti [Qwen3-VL](/docs/models/qwen3-vl) dan
+[Florence-2](/docs/models/florence-2), lalu mengubah output-nya menjadi
+`Results` yang sama. Tier tersebut berbagi antarmuka `set_classes()`.
+Perbedaannya adalah penghasil box: family halaman ini berupa detektor
+diskriminatif yang langsung menghasilkan score, sedangkan tier VLM melakukan
+generasi.
 
 ## Predict
 
 <code-tabs name="predict" />
 
-`set_classes()` takes a non-empty list of label strings and holds until it is
-called again. Labels must be unique once lowercased and stripped of leading
-articles, so `"a bus"` and `"bus"` cannot coexist in one vocabulary. Multi-word
-phrases are labels like any other, and each family turns the list into its own
-text input before tokenizing, so `"traffic cone"` is a different query from
-`"cone"`.
+`set_classes()` menerima list string label yang tidak kosong dan bertahan
+hingga dipanggil kembali. Label harus unik setelah diubah ke huruf kecil dan
+artikel di awal dihapus, sehingga `"a bus"` dan `"bus"` tidak dapat berada dalam
+satu vocabulary. Frasa multi-kata merupakan label biasa, dan setiap family
+mengubah list menjadi input teksnya sendiri sebelum tokenization, sehingga
+`"traffic cone"` adalah query berbeda dari `"cone"`.
 
-Three prediction arguments behave differently here than on a native detector.
-`imgsz=` is rejected, because the processor owns resizing for these families.
-`augment=True` is rejected, since test-time augmentation is out of scope for the
-tier. `iou=` applies only to the family whose processor runs its own
-suppression; where nothing is suppressed, passing it warns and is ignored.
+Tiga argumen prediksi berperilaku berbeda dari detektor native. `imgsz=` ditolak
+karena processor mengendalikan resize. `augment=True` ditolak karena augmentasi
+saat pengujian berada di luar cakupan tier. `iou=` hanya berlaku pada family
+yang processor-nya menjalankan suppression; jika tidak ada suppression,
+memberikannya menghasilkan peringatan dan diabaikan.
 
-Left unset, `conf` takes the loaded family's own default rather than
-`predict()`'s usual 0.25, and that default is not the same across the tier. Set
-it explicitly when comparing two families on the same image.
+Jika tidak ditetapkan, `conf` mengambil default milik family yang dimuat, bukan
+default umum `predict()` 0.25, dan nilainya berbeda dalam tier. Tetapkan secara
+eksplisit saat membandingkan dua family pada gambar sama.
 
-`track()` raises across the tier. Run `predict()` per frame instead. See
-[prediction](/docs/predict) for sources, streaming and result handling.
+`track()` memunculkan error di seluruh tier. Jalankan `predict()` per frame.
+Lihat [prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
 
 ## Train
 
-No family in this tier trains inside LibreYOLO. `train()` raises: fine-tune
-upstream and load the resulting weights. The vocabulary passed to
-`set_classes()` is the only setting that changes what a loaded model detects.
+Tidak ada family dalam tier yang berlatih di LibreYOLO. `train()` memunculkan
+error: lakukan fine-tuning di upstream dan muat bobot hasilnya. Vocabulary pada
+`set_classes()` adalah satu-satunya pengaturan yang mengubah yang dideteksi
+model termuat.
 
 ## Validate
 
-There is no validator for this tier, and `val()` raises. Open-vocabulary
-validation needs a dedicated one, because the standard detection validator feeds
-image tensors straight to the model, while these families require
-text-conditioned inputs built alongside them.
+Tidak ada validator untuk tier ini dan `val()` memunculkan error. Validasi
+open-vocabulary memerlukan validator khusus karena validator deteksi standar
+memberikan tensor gambar langsung kepada model, sedangkan family ini memerlukan
+input yang dikondisikan teks.
 
 ## Export
 
-Export is out of scope for the tier and `export()` raises. These models run
-through `predict()` in PyTorch.
-
-
+Ekspor berada di luar cakupan tier dan `export()` memunculkan error. Model
+berjalan melalui `predict()` di PyTorch.

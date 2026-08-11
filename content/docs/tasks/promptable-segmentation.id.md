@@ -1,188 +1,205 @@
 ---
 title: Promptable segmentation
-seo_title: Promptable segmentation in LibreYOLO
+seo_title: Promptable segmentation di LibreYOLO
 description: >-
-  Turn a point, box or text concept into an object mask in LibreYOLO. Load SAM,
-  SAM 2, SAM 3, EdgeTAM, MobileSAM or PicoSAM3 through LibreSAM.
+  Ubah titik, box, atau konsep teks menjadi mask objek di LibreYOLO. Muat SAM,
+  SAM 2, SAM 3, EdgeTAM, MobileSAM, atau PicoSAM3 melalui LibreSAM.
 lead: >-
-  Promptable segmentation turns a click into a mask: you point at an object, or
-  draw a box around it, and the model returns its outline. In LibreYOLO it is
-  not a separate task key but a model tier, loaded through the LibreSAM factory,
-  whose results are ordinary segmentation Results.
+  Promptable segmentation mengubah klik menjadi mask: tunjuk objek atau gambar
+  box di sekitarnya, lalu model mengembalikan outline. Di LibreYOLO, ini bukan
+  key task terpisah, melainkan tier model yang dimuat melalui factory LibreSAM,
+  dengan hasil berupa Results segmentation biasa.
 keywords:
   - promptable segmentation
-  - interactive segmentation
+  - segmentasi interaktif
   - segment anything python
-  - point prompt
-  - box prompt
+  - prompt titik
+  - prompt box
   - SAM python
-  - mask from click
+  - mask dari klik
 last_verified: 1.5.0
 snippets:
   predict:
-    - label: Point and box prompts
+    - label: Prompt titik dan box
       language: python
       code: |
         from libreyolo import LibreSAM, SAMPLE_IMAGE
 
         model = LibreSAM("base")
 
-        # A point is [x, y] in pixels; labels are 1 positive, 0 negative.
+        # Titik adalah [x, y] dalam piksel; label 1 positif dan 0 negatif.
         result = model.predict(SAMPLE_IMAGE, points=[640, 420], labels=[1])
-        print(result.masks.xy)      # polygons
-        print(result.boxes.xyxy)    # tight boxes derived from the masks
+        print(result.masks.xy)      # poligon
+        print(result.boxes.xyxy)    # box rapat yang diturunkan dari mask
 
-        # A box prompt gives one mask per box.
+        # Prompt box memberikan satu mask per box.
         result = model.predict(SAMPLE_IMAGE, bboxes=[300, 200, 900, 700])
-    - label: 'Encode once, prompt many times'
+    - label: 'Encode sekali, berikan prompt berkali-kali'
       language: python
-      code: |
+      code: >
         from libreyolo import LibreSAM, SAMPLE_IMAGE
+
 
         model = LibreSAM("base")
 
-        # set_image runs the heavy image encoder once and caches it.
+
+        # set_image menjalankan image encoder yang berat sekali dan menyimpan
+        cache.
+
         model.set_image(SAMPLE_IMAGE)
+
         first = model.predict(points=[640, 420], labels=[1])
+
         second = model.predict(bboxes=[300, 200, 900, 700])
+
         model.reset_image()
-    - label: Segment everything
+    - label: Segmentasikan semuanya
       language: python
-      code: |
+      code: >
         from libreyolo import LibreSAM, SAMPLE_IMAGE
+
 
         model = LibreSAM("base")
 
-        # No prompt means a grid of points over the whole image. The default
-        # grid of 32 per side is ~1024 decoder passes, which is slow on CPU.
+
+        # Tanpa prompt berarti grid titik di seluruh gambar. Default grid 32 per
+        sisi
+
+        # menghasilkan sekitar 1024 decoder pass, yang lambat pada CPU.
+
         result = model.predict(SAMPLE_IMAGE, points_per_side=8)
+
         print(len(result.masks))
-    - label: Ambiguity masks
+    - label: Mask ambiguitas
       language: python
-      code: |
+      code: >
         from libreyolo import LibreSAM, SAMPLE_IMAGE
+
 
         model = LibreSAM("base")
 
-        # One point can mean a sleeve, a shirt, or a person. multimask=True
-        # returns all three whole-versus-part masks instead of the best one.
+
+        # Satu titik dapat berarti lengan baju, baju, atau orang. multimask=True
+
+        # mengembalikan ketiga mask keseluruhan-versus-bagian, bukan yang
+        terbaik saja.
+
         result = model.predict(
             SAMPLE_IMAGE, points=[640, 420], labels=[1], multimask=True
         )
+
         print(len(result.masks))
 source_hash: bb70ff24e6c0a767
 ---
 
-## Definition
+## Definisi
 
-Promptable segmentation takes an image plus a spatial prompt and returns the
-mask of whatever the prompt points at. Nothing is classified: there is no class
-list, and `result.boxes` holds tight boxes derived from the masks rather than
-detections in their own right. `result.masks` carries the mask data and
-`result.masks.xy` its polygons.
+Promptable segmentation menerima gambar ditambah prompt spasial dan
+mengembalikan mask objek yang ditunjuk prompt. Tidak ada classification: tidak
+ada list kelas, dan `result.boxes` menyimpan box rapat yang diturunkan dari
+mask, bukan deteksi mandiri. `result.masks` memuat data mask dan
+`result.masks.xy` poligonnya.
 
-The prompt is the interface. `points` is `[x, y]` pixel coordinates, one set per
-object, with `labels` marking each point positive (1, include this) or negative
-(0, exclude this). `bboxes` is `[x1, y1, x2, y2]`, one mask per box. Points and
-boxes can be combined, in which case they pair per object and must be the same
-length. Omitting every prompt runs the segment-everything path, a grid of points
-over the image.
+Prompt adalah antarmukanya. `points` berupa koordinat piksel `[x, y]`, satu
+kumpulan per objek, dengan `labels` menandai setiap titik positif (1, sertakan)
+atau negatif (0, kecualikan). `bboxes` berupa `[x1, y1, x2, y2]`, satu mask per
+box. Titik dan box dapat digabungkan, dengan pasangan per objek dan panjang
+yang harus sama. Tanpa prompt, jalur segment-everything menjalankan grid titik
+di seluruh gambar.
 
-A single point is ambiguous by construction. Clicking a sleeve could mean the
-sleeve, the shirt or the person, so `multimask=True` returns all three
-whole-versus-part masks per prompt instead of the single best one. `conf`
-filters on the model's predicted IoU, a mask-quality score, not a detection
-confidence.
+Satu titik secara inheren ambigu. Klik pada lengan baju dapat berarti lengan,
+baju, atau orang, sehingga `multimask=True` mengembalikan ketiga mask
+keseluruhan-versus-bagian per prompt, bukan satu mask terbaik. `conf` memfilter
+berdasarkan predicted IoU model, yaitu score kualitas mask, bukan confidence
+deteksi.
 
-LibreYOLO has no `promptable` task key. The tier registers as `segment`, the
-same key instance segmentation uses. What separates it is the call shape, which
-is why it has its own factory, `LibreSAM()`, a sibling of `LibreYOLO()`,
-`LibreOpenVocab()` and `LibreVLM()`. A single `predict(image)` signature cannot
-express the loop these models are built for: `set_image()` runs the image
-encoder once and caches the embeddings, every later `predict()` call with
-`source=None` pays only for prompt decoding, and `reset_image()` clears the
-cache. The image encoder is the dominant cost and runs once per image, so a
-second prompt on the same image skips it entirely.
+LibreYOLO tidak memiliki key task `promptable`. Tier mendaftar sebagai
+`segment`, key yang sama dengan instance segmentation. Perbedaannya adalah
+bentuk pemanggilan, sehingga tier memiliki factory `LibreSAM()` sendiri,
+sibling dari `LibreYOLO()`, `LibreOpenVocab()`, dan `LibreVLM()`. Signature
+`predict(image)` tunggal tidak dapat mewakili loop model ini: `set_image()`
+menjalankan image encoder sekali dan menyimpan embedding, setiap `predict()`
+berikutnya dengan `source=None` hanya membayar prompt decoding, dan
+`reset_image()` membersihkan cache. Image encoder adalah biaya dominan dan
+berjalan sekali per gambar, sehingga prompt kedua pada gambar sama melewatinya.
 
-## Models
+## Model
 
-Six families load through `LibreSAM` by alias.
+Enam family dimuat melalui `LibreSAM` berdasarkan alias.
 
-[SAM](/docs/models/sam) is the default, in `base`, `large` and `huge` sizes,
-also spelled `b`, `l` and `h`.
+[SAM](/docs/models/sam) adalah default dalam ukuran `base`, `large`, dan `huge`,
+juga ditulis `b`, `l`, dan `h`.
 
-[SAM 2](/docs/models/sam-2), as `sam2-tiny`, `sam2-small`, `sam2-base-plus` and
-`sam2-large`. LibreYOLO supports its image path.
+[SAM 2](/docs/models/sam-2) memakai alias `sam2-tiny`, `sam2-small`,
+`sam2-base-plus`, dan `sam2-large`. LibreYOLO mendukung jalur gambarnya.
 
-[SAM 3](/docs/models/sam-3), as `sam3`, is the one family that accepts a text
-concept prompt: `text="yellow school bus"` returns every matching instance.
-Passing `text=` to any other family raises with a message naming SAM 3. Its
-weights come from Meta under the custom SAM License rather than LibreYOLO's MIT
-license, and the repository is gated: accept the terms on the model page and
-authenticate with `hf auth login` before the first download. Read
-[SAM 3](/docs/models/sam-3) before deploying it.
+[SAM 3](/docs/models/sam-3), alias `sam3`, adalah satu-satunya family yang
+menerima prompt konsep teks: `text="yellow school bus"` mengembalikan setiap
+instance cocok. Memberikan `text=` ke family lain memunculkan error yang
+menyebut SAM 3. Bobot berasal dari Meta berdasarkan SAM License khusus, bukan
+lisensi MIT LibreYOLO, dan repository bersifat gated: terima ketentuan pada
+halaman model dan autentikasi dengan `hf auth login` sebelum pengunduhan
+pertama. Baca [SAM 3](/docs/models/sam-3) sebelum deployment.
 
-[EdgeTAM](/docs/models/edgetam), as `edgetam`, is an on-device variant of SAM 2.
-LibreYOLO supports its image path.
+[EdgeTAM](/docs/models/edgetam), alias `edgetam`, adalah varian SAM 2 untuk
+on-device. LibreYOLO mendukung jalur gambarnya.
 
-[MobileSAM](/docs/models/mobilesam), as `mobilesam`, replaces SAM's ViT-H
-encoder with a distilled TinyViT one.
+[MobileSAM](/docs/models/mobilesam), alias `mobilesam`, mengganti encoder ViT-H
+SAM dengan TinyViT hasil distillation.
 
-[PicoSAM3](/docs/models/picosam3), as `picosam3`, is a compact CNN for
-box-prompted regions on edge sensors. Box prompts are the whole contract here:
-points, text, mask, multimask and segment-everything all raise with a message
-pointing at SAM 2 or SAM 3.
+[PicoSAM3](/docs/models/picosam3), alias `picosam3`, adalah CNN ringkas untuk
+region dengan prompt box pada edge sensor. Prompt box adalah seluruh kontraknya:
+titik, teks, mask, multimask, dan segment-everything memunculkan error yang
+menunjuk ke SAM 2 atau SAM 3.
 
-The tier's extra covers the four families that load through `transformers`:
+Ekstra tier mencakup empat family yang dimuat melalui `transformers`:
 
 ```bash
 pip install "libreyolo[sam]"
 ```
 
-MobileSAM and PicoSAM3 are native LibreYOLO ports and need no `transformers`
-install to run.
+MobileSAM dan PicoSAM3 adalah port native LibreYOLO dan tidak memerlukan
+instalasi `transformers`.
 
 ## Predict
 
 <code-tabs name="predict" />
 
-`source` and `set_image()` are alternatives, not a sequence: pass an image to
-`predict()` for a one-shot call, or call `set_image()` first and then
-`predict(source=None)` for each prompt. Passing `device=` to `predict()` moves
-the model for that call and every later one, and invalidates any cached
-embeddings.
+`source` dan `set_image()` adalah alternatif, bukan urutan: berikan gambar ke
+`predict()` untuk pemanggilan sekali jalan, atau panggil `set_image()` lalu
+`predict(source=None)` untuk setiap prompt. Memberikan `device=` kepada
+`predict()` memindahkan model untuk pemanggilan ini dan berikutnya, serta
+membatalkan embedding yang di-cache.
 
-Segment-everything is the expensive mode. `points_per_side` defaults to 32,
-which is roughly 1024 decoder passes over the image; lower it for anything
-interactive on CPU. In that mode `conf` applies the family's grid threshold when
-left unset, while in the prompted path an unset `conf` keeps every mask. Pass
-`conf=0.0` to disable filtering in either mode, and `max_det` to cap how many
-masks come back.
+Segment-everything adalah mode mahal. Default `points_per_side` 32 menghasilkan
+sekitar 1024 decoder pass; turunkan nilainya untuk penggunaan interaktif pada
+CPU. Dalam mode ini, `conf` yang tidak ditetapkan memakai ambang batas grid
+family, sedangkan pada jalur dengan prompt, `conf` kosong mempertahankan setiap
+mask. Berikan `conf=0.0` untuk menonaktifkan filtering dalam kedua mode, dan
+`max_det` untuk membatasi jumlah mask.
 
-Mask prompts are not supported in this version, and `masks=` raises rather than
-being ignored. `track()` also raises across the tier: these are image
-segmenters, so run `predict()` per frame. See [prediction](/docs/predict) for
-sources and result handling.
+Prompt mask belum didukung dan `masks=` memunculkan error, bukan diabaikan.
+`track()` juga memunculkan error di seluruh tier: model ini merupakan image
+segmenter, jadi jalankan `predict()` per frame. Lihat [prediksi](/docs/predict)
+untuk sumber dan penanganan hasil.
 
 ## Train
 
-No family in this tier trains inside LibreYOLO. `train()` raises: fine-tune
-upstream and load the resulting weights.
+Tidak ada family dalam tier ini yang berlatih di LibreYOLO. `train()`
+memunculkan error: lakukan fine-tuning di upstream dan muat bobot hasilnya.
 
 ## Validate
 
-There is no validator for this tier, and `val()` raises. A promptable mask has
-no fixed class set to score against, so the usual detection and segmentation
-metrics have nothing to key on. Scoring a prompted mask means comparing it to a
-reference mask you supply yourself, against the prompts you care about.
+Tidak ada validator untuk tier ini dan `val()` memunculkan error. Promptable
+mask tidak memiliki kumpulan kelas tetap untuk dinilai, sehingga metrik deteksi
+dan segmentation biasa tidak memiliki key. Penilaian prompt mask berarti
+membandingkannya dengan mask referensi sendiri pada prompt yang relevan.
 
 ## Export
 
-Export is out of scope for the tier as a whole and `export()` raises, with one
-exception. [PicoSAM3](/docs/models/picosam3) exports its raw 96x96 region CNN to
-ONNX as `roi_image -> mask_logits`; box cropping and the mask resize back to
-image coordinates stay in Python. Every other family runs through `predict()` in
-PyTorch. See [export](/docs/export) for the formats available elsewhere in the
+Ekspor berada di luar cakupan tier dan `export()` memunculkan error, dengan satu
+pengecualian. [PicoSAM3](/docs/models/picosam3) mengekspor CNN region mentah
+96x96 ke ONNX sebagai `roi_image -> mask_logits`; cropping box dan resize mask
+kembali ke koordinat gambar tetap di Python. Family lain berjalan melalui
+`predict()` di PyTorch. Lihat [ekspor](/docs/export) untuk format lain dalam
 library.
-
-

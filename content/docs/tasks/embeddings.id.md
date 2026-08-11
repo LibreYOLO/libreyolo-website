@@ -1,61 +1,68 @@
 ---
 title: Embeddings
-seo_title: Image and region embeddings in LibreYOLO
+seo_title: Embedding gambar dan wilayah di LibreYOLO
 description: >-
-  The embed task returns L2-normalized float32 vectors for a whole image, for
-  each detected region, or for text. Enroll a gallery, match by cosine
-  similarity, and search from Python or the CLI.
+  Embed task menghasilkan vektor float32 yang dinormalisasi L2 untuk seluruh
+  gambar, untuk setiap wilayah yang terdeteksi, atau untuk teks. Daftarkan
+  galeri, cocokkan dengan kesamaan kosinus, dan cari dari Python atau CLI.
 lead: >-
-  One task covers every vector LibreYOLO produces. embed returns unit-length
-  float32 rows whose dot product is a similarity score, whether the row
-  describes a whole image, a single detected face, or a line of text, and the
-  same Gallery matches all of them.
+  Satu task mencakup setiap vektor yang dihasilkan LibreYOLO. embed
+  mengembalikan baris float32 dengan panjang satuan yang produk titiknya adalah
+  skor kesamaan, apakah baris menggambarkan seluruh gambar, satu wajah yang
+  terdeteksi, atau satu baris teks, dan Galeri yang sama cocok untuk semuanya.
 keywords:
-  - image embeddings python
-  - l2 normalized embedding
-  - cosine similarity search
+  - embedding gambar python
+  - L2 dinormalisasi embedding
+  - pencarian kesamaan kosinus
   - libreyolo embed task
-  - image retrieval
-  - gallery enroll
-  - clip embeddings
-  - dinov2 embeddings
-  - reid embeddings
+  - pengambilan gambar
+  - pendaftaran galeri
+  - embedding clip
+  - embedding dinov2
+  - embedding reid
 last_verified: 1.5.0
 verification: >-
-  Task key and aliases read from libreyolo/tasks.py. Result payloads from the
-  Embeddings and Identities classes in libreyolo/utils/results.py. Gallery API
-  from libreyolo/utils/gallery.py. embed and _postprocess_embeddings from
-  libreyolo/models/base/model.py. Supported families located by searching
-  libreyolo/models/**/model.py for embed in SUPPORTED_TASKS. CLI surface from
-  libreyolo/cli/__init__.py, libreyolo/cli/commands/special.py and
-  libreyolo/cli/commands/predict.py. Design intent from
+  Task kunci dan alias dibaca dari libreyolo/tasks.py. Payload hasil dari kelas
+  Embeddings dan Identities di libreyolo/utils/results.py. API Gallery dari
+  libreyolo/utils/gallery.py. embed dan _postprocess_embeddings dari
+  libreyolo/models/base/model.py. Keluarga yang didukung ditemukan dengan
+  mencari libreyolo/models/**/model.py untuk embed di SUPPORTED_TASKS. Permukaan
+  CLI dari libreyolo/cli/__init__.py, libreyolo/cli/commands/special.py dan
+  libreyolo/cli/commands/predict.py. Niat desain dari
   docs/adr/0015-embed-generalization.md.
 meta:
-  - label: Task key
+  - label: kunci Task
     value: embed
     mono: true
   - label: Aliases
-    value: 'face-recognition, reid, face'
+    value: 'pengenalan wajah, reid, wajah'
     mono: true
-  - label: Result payloads
+  - label: Payload hasil
     value: 'Embeddings, Identities'
     mono: true
-  - label: Row dtype
-    value: 'float32, unit length'
+  - label: Tipe data Baris
+    value: 'float32, panjang satuan'
 snippets:
   predict:
-    - label: Whole image
+    - label: Seluruh gambar
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # CLIP defaults to classify, so ask for the vector explicitly.
+
+        # CLIP secara default untuk mengklasifikasikan, jadi mintalah vektor
+        secara eksplisit.
+
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
+
         result = model(SAMPLE_IMAGE)
 
-        print(result.embeddings.data.shape)  # (1, 512), one row per image
-        print(result.boxes)                  # None: nothing was localized
-    - label: Per region
+
+        print(result.embeddings.data.shape)  # (1, 512), satu baris per gambar
+
+        print(result.boxes)                  # None: tidak ada yang
+        terlokalisasi
+    - label: Per wilayah
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -63,32 +70,38 @@ snippets:
         model = LibreYOLO("librefacerec-l.onnx")
         result = model(SAMPLE_IMAGE)
 
-        # Row i describes the region in box i.
+        # Baris i menjelaskan wilayah di kotak i.
         print(result.boxes.xyxy.shape)       # (N, 4)
         print(result.embeddings.data.shape)  # (N, 512)
-    - label: Many images at once
+    - label: Banyak gambar sekaligus
       language: python
       code: |
         from libreyolo.models.dinov2.model import LibreDINOv2
 
         model = LibreDINOv2(size="s", task="embed")
 
-        # Every row from every result, concatenated into one tensor.
+        # Setiap baris dari setiap hasil, digabungkan menjadi satu tensor.
         vectors = model.embed(["a.jpg", "b.jpg", "c.jpg"])
         print(vectors.shape)  # (3, 384)
     - label: Text
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
 
-        # Text is a method, never a prediction source. A string passed to
-        # model(...) is still a path or a URL.
+
+        # Teks adalah metode, bukan sumber prediksi. Sebuah string yang
+        diberikan ke
+
+        # model(...) tetap merupakan jalur atau URL.
+
         text = model.embed_text(["a photo of a cat", "a photo of a dog"])
+
         print(text.shape)  # (2, 512)
   similarity:
-    - label: Compare two sets of rows
+    - label: Bandingkan dua set baris
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -98,10 +111,10 @@ snippets:
         query = model.embed("query.jpg")          # (1, 512)
         pool = model.embed(["a.jpg", "b.jpg"])    # (2, 512)
 
-        # Rows are unit length, so cosine similarity is a dot product.
+        # Baris memiliki panjang satu, jadi kesamaan kosinus adalah produk dot.
         scores = model("query.jpg").embeddings.similarity(pool)
         print(scores.shape)  # (1, 2)
-    - label: Image against text
+    - label: Gambar terhadap teks
       language: python
       code: |
         import torch
@@ -115,7 +128,7 @@ snippets:
 
         print(torch.matmul(image, text.T))
   gallery:
-    - label: Enroll and identify
+    - label: Daftar dan identifikasi
       language: python
       code: |
         from libreyolo import Gallery, LibreYOLO
@@ -129,8 +142,8 @@ snippets:
 
         result = model("group.jpg", gallery=gallery, threshold=0.4)
         for name, score in result.identities.data:
-            print(name, score)   # name is None below the threshold
-    - label: Top-k search
+            print(name, score)   # nama adalah None di bawah ambang
+    - label: Pencarian Top-k
       language: python
       code: |
         from libreyolo import Gallery
@@ -141,201 +154,201 @@ snippets:
 
         result = model("query.jpg")
         matches = gallery.match(result.embeddings, top_k=5, threshold=0.4)
-        print(matches[0])   # [(name, score), ...] for the first row
-    - label: Enroll a vector you already hold
+        print(matches[0])   # [(nama, skor), ...] untuk baris pertama
+    - label: Daftarkan vektor yang sudah Anda miliki
       language: python
       code: |
         from libreyolo import Gallery
 
         gallery = Gallery()
-        gallery.enroll_embedding("ada", vector)  # normalized on the way in
+        gallery.enroll_embedding("ada", vector)  # dinormalisasi saat masuk
         print(gallery.identities, gallery.dim, len(gallery))
   cli:
-    - label: Enroll a folder tree
+    - label: Daftarkan pohon folder
       language: bash
       code: >
-        # source/<identity>/*.jpg. An existing gallery is extended in place.
+        # source/<identity>/*.jpg. Galeri yang ada diperluas di tempat.
 
         libreyolo enroll model=librefacerec-l.onnx source=people/
         gallery=refs.npz
-    - label: Identify while predicting
+    - label: Identifikasi sambil memprediksi
       language: bash
       code: |
         libreyolo predict model=librefacerec-l.onnx source=group.jpg \
           gallery=refs.npz gallery_threshold=0.45
-    - label: Compare two images
+    - label: Bandingkan dua gambar
       language: bash
       code: >
         libreyolo compare model=librefacerec-l.onnx \
           source=a.jpg source2=b.jpg threshold=0.4
 
-        # verify is the same command under a second name.
+        # verify adalah perintah yang sama dengan nama kedua.
 
         libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg
         --json
 source_hash: ffbaad5599035bc7
 ---
 
-## Definition
+## Definisi
 
-`embed` turns an image, a region of an image, or a string into a float32 row of
-fixed width whose length is one. Because every row is a unit vector, comparing
-two of them is a dot product, and comparing two sets of them is a single matrix
-multiplication. Nothing else in the task is model specific: retrieval,
-duplicate detection, re-identification and face recognition are all the same
-arithmetic over different rows.
+`embed` mengubah gambar, wilayah dari gambar, atau string menjadi baris float32 dari
+lebar tetap yang panjangnya satu. Karena setiap baris adalah vektor satuan, membandingkan
+dua di antaranya adalah produk titik, dan membandingkan dua set dari mereka adalah satu matriks
+perkalian. Tidak ada yang lain di task yang spesifik model: pengambilan,
+deteksi duplikat, identifikasi ulang, dan pengenalan wajah semuanya sama
+aritmatika di atas baris yang berbeda.
 
-The vector is the output. There is no class list, so a name is attached later by
-comparing against references you supply rather than by anything the network was
-trained to predict.
+Vektor adalah keluaran. Tidak ada daftar kelas, jadi nama ditambahkan kemudian oleh
+membandingkan dengan referensi yang Anda berikan daripada oleh apa pun yang dimiliki jaringan
+dilatih untuk memprediksi.
 
-### Three shapes
+### Tiga bentuk
 
-| Shape | `Results.embeddings` | `Results.boxes` | Produced by |
+| Bentuk | `Results.embeddings` | `Results.boxes` | Diproduksi oleh |
 |---|---|---|---|
-| Whole image | `(1, D)` | `None` | Passing an image to a whole-image family |
-| Region | `(N, D)` | `(N, 4)`, row-aligned | Families that localize first, such as face recognition |
-| Text | not a `Results` at all | | `model.embed_text(texts)`, returning `(M, D)` |
+| Gambar utuh | `(1, D)` | `None` | Mengirim gambar ke family gambar utuh |
+| Wilayah | `(N, D)` | `(N, 4)`, sejajar baris | Keluarga yang melakukan lokalisasi terlebih dahulu, seperti pengenalan wajah |
+| Teks | sama sekali bukan `Results` | | `model.embed_text(texts)`, mengembalikan `(M, D)` |
 
-A whole-image result stays two dimensional even for one image. `(D,)` is not a
-permitted return shape, so a consumer never has to special-case the single-row
-case. Text returns a plain tensor rather than a `Results`, because a string is
-not an image source: passing one to `model(...)` still means a path or a URL,
-and the library never guesses that a string is prose.
+Hasil gambar utuh tetap dua dimensi bahkan untuk satu gambar. `(D,)` bukanlah
+bentuk pengembalian yang diizinkan, sehingga pengguna tidak perlu melakukan kasus khusus untuk baris tunggal.
+Teks mengembalikan tensor biasa daripada `Results`, karena string
+bukan sumber gambar: memberikan satu ke `model(...)` tetap berarti path atau URL,
+dan perpustakaan tidak pernah menebak bahwa string adalah prosa.
 
-The canonical task key is `embed`. `embedding`, `embeddings`,
-`face-recognition`, `facial-recognition`, `recognition`, `face`, `faceid` and
-`reid` all normalize to it, so `task="reid"` and `task="embed"` select exactly
-the same thing.
+Kunci task kanonik adalah `embed`. `embedding`, `embeddings`,
+`face-recognition`, `facial-recognition`, `recognition`, `face`, `faceid` dan
+`reid` semuanya dinormalisasi menjadi itu, sehingga `task="reid"` dan `task="embed"` memilih hal yang sama persis.
 
-## Models
 
-Four families serve the task, and they split cleanly by whether they localize
-anything first.
+## Model
 
-| Family | Shape | Dimension | Also supports |
+Empat keluarga melayani task, dan mereka terbagi dengan jelas berdasarkan apakah mereka memproses lokal terlebih dahulu
+apa pun terlebih dahulu.
+
+| Family | Bentuk | Dimensi | Juga mendukung |
 |---|---|---|---|
-| [LibreFaceRec](/docs/models/librefacerec) | Region, one row per detected face | 512 | Nothing; `embed` is its only task |
-| [CLIP](/docs/models/clip) | Whole image, with a paired text tower | 512 for `b32` and `b16`, 768 for `l14` | `classify`, which stays its default |
-| [SigLIP 2](/docs/models/siglip2) | Whole image, with a paired text tower | 768 for `b16`, 1152 for `so400m` | `classify`, which stays its default |
-| [DINOv2](/docs/models/dinov2) | Whole image, image only | 384 | `semantic`, `classify` |
+| [LibreFaceRec](/docs/models/librefacerec) | Wilayah, satu baris per wajah yang terdeteksi | 512 | Tidak ada; `embed` adalah satu-satunya task |
+| [CLIP](/docs/models/clip) | Gambar lengkap, dengan menara teks yang dipasangkan | 512 untuk `b32` dan `b16`, 768 untuk `l14` | `classify`, yang tetap default-nya |
+| [SigLIP 2](/docs/models/siglip2) | Gambar lengkap, dengan menara teks yang dipasangkan | 768 untuk `b16`, 1152 untuk `so400m` | `classify`, yang tetap default-nya |
+| [DINOv2](/docs/models/dinov2) | Gambar lengkap, hanya gambar | 384 | `semantic`, `classify` |
 
-CLIP and SigLIP 2 keep `classify` as their default task, so `task="embed"` has
-to be asked for. Their existing `-cls` checkpoint is the shared two-tower
-artifact; no duplicate `-embed` checkpoint is published for identical weights.
+CLIP dan SigLIP 2 tetap menggunakan `classify` sebagai task default mereka, sehingga `task="embed"` memiliki
+yang perlu ditanyakan. `-cls` checkpoint yang ada adalah artefak
+dua-menara yang dibagikan; tidak ada `-embed` checkpoint duplikat yang diterbitkan untuk bobot yang identik.
 
-`embed_text` exists only on CLIP and SigLIP 2, the two families with a text
-tower. DINOv2 has none. DINOv2 embedding bypasses the semantic and
-classification heads and reads the final normalized CLS token at 224 pixels; the
-`n`, `s`, `m` and `l` variants all share the DINOv2-S encoder, so all four
-return `D = 384`.
+`embed_text` hanya ada pada CLIP dan SigLIP 2, dua keluarga dengan menara teks
+. DINOv2 tidak memiliki sama sekali. DINOv2 embedding melewati kepala semantik dan klasifikasi
+dan membaca token CLS final yang ternormalisasi pada 224 piksel;
+`n`, `s`, `m` dan `l` varian semuanya menggunakan encoder DINOv2-S yang sama, sehingga keempat
+mengembalikan `D = 384`.
 
-The classification-only backbones added in this release, [ViT](/docs/models/vit),
-[Swin](/docs/models/swin) and [DeiT](/docs/models/deit), declare `classify` only
-and do not serve this task.
+Backbone yang hanya untuk klasifikasi yang ditambahkan dalam rilis ini, [ViT](/docs/models/vit),
+[Swin](/docs/models/swin) dan [DeiT](/docs/models/deit), nyatakan `classify` saja
+dan jangan menyajikan task ini.
 
 <code-tabs name="predict" />
 
-`model.embed(source, **kwargs)` is the batch shortcut: it runs `predict` and
-concatenates every row from every result into one `(N_total, D)` CPU float32
-tensor, raising if the rows have mixed dimensions. A family without `embed` in
-its supported tasks raises `NotImplementedError`.
+`model.embed(source, **kwargs)` adalah pintasan batch: itu menjalankan `predict` dan
+menggabungkan setiap baris dari setiap hasil menjadi satu `(N_total, D)` CPU float32
+tensor, meningkatkan jika baris memiliki dimensi campuran. Sebuah family tanpa `embed` di
+tugas yang didukungnya meningkatkan `NotImplementedError`.
 
-## Result payloads
+## Muatan hasil
 
-`result.embeddings` is an `Embeddings` payload. Its `data` is always `(N, D)`
-float32, already L2-normalized by the inference path, and a non-two-dimensional
-input raises rather than being reshaped silently.
+`result.embeddings` adalah muatan `Embeddings`. `data`-nya selalu `(N, D)`
+float32, sudah dinormalisasi L2 oleh jalur inferensi, dan bukan dua dimensi
+input menimbulkan kesalahan daripada dibentuk ulang secara diam-diam.
 
-| Member | Meaning |
+| Anggota | Makna |
 |---|---|
-| `.data` | The `(N, D)` matrix |
+| `.data` | Matriks `(N, D)` |
 | `.dim` | `D` |
-| `.normalized` | The same rows, defensively re-normalized |
-| `.similarity(other)` | `(N, M)` against another set, or `(N,)` against a single `(D,)` vector |
-| `.verify(i, j, threshold=0.4)` | Whether rows `i` and `j` are the same subject |
+| `.normalized` | Baris yang sama, dinormalisasi ulang secara defensif |
+| `.similarity(other)` | `(N, M)` terhadap set lain, atau `(N,)` terhadap satu vektor `(D,)` |
+| `.verify(i, j, threshold=0.4)` | Apakah baris `i` dan `j` adalah subjek yang sama |
 
-`result.identities` is an `Identities` payload, present only when a gallery was
-passed. It is a plain container, not a tensor, so moving a `Results` between
-devices leaves it alone.
+`result.identities` adalah payload `Identities`, hanya hadir ketika sebuah galeri dilewatkan.
+Ini adalah wadah biasa, bukan tensor, sehingga memindahkan `Results` antar
+perangkat tidak mengubahnya.
 
-| Member | Meaning |
+| Anggota | Makna |
 |---|---|
-| `.name` | List of names, `None` where nothing cleared the threshold |
-| `.score` | `(N,)` float32 best cosine score, kept even when the name is `None` |
-| `.data` | List of `(name, score)` tuples |
+| `.name` | Daftar nama, `None` di mana tidak ada yang melewati ambang |
+| `.score` | `(N,)` float32 skor kosinus terbaik, tetap disimpan bahkan ketika nama adalah `None` |
+| `.data` | Daftar tuple `(name, score)` |
 
 <code-tabs name="similarity" />
 
-Vectors are left out of `summary()` and `to_json()` by default, since a 512-float
-row is about two kilobytes per subject. Each row reports `embedding_dim`
-instead, plus `identity` and `identity_score` when a gallery was used. Pass
-`summary(embeddings=True)` to include the numbers.
+Vektor secara default tidak termasuk dalam `summary()` dan `to_json()`, karena sebuah float 512
+baris sekitar dua kilobita per subjek. Setiap baris melaporkan `embedding_dim`
+sebagai gantinya, ditambah `identity` dan `identity_score` ketika sebuah galeri digunakan. Lulus
+`summary(embeddings=True)` untuk menyertakan angka-angka.
 
-## Galleries
+## Galeri
 
-A `Gallery` is a named set of reference rows. It stores each reference
-separately rather than averaging them, so a name is scored by its single best
-matching reference, and adding a bad photo cannot drag an identity's centroid
-around.
+`Gallery` adalah sekumpulan baris referensi yang diberi nama. Ini menyimpan setiap referensi
+secara terpisah daripada meratanya, jadi sebuah nama dinilai berdasarkan yang terbaik tunggalnya
+mencocokkan referensi, dan menambahkan foto yang buruk tidak dapat menyeret pusat identitas
+sekitar.
 
 <code-tabs name="gallery" />
 
-`Gallery(model)` binds to the weights that will produce its vectors.
-`enroll(name, sources, select="best")` runs prediction on each source and keeps
-the highest-confidence row per result; `select="all"` keeps every row instead,
-which is what you want when a reference image legitimately contains several
-subjects. `enroll_embedding(name, vector)` skips inference and takes a vector
-directly, normalizing it and rejecting an all-zero row.
+`Gallery(model)` menempel pada bobot yang akan menghasilkan vektornya.
+`enroll(name, sources, select="best")` menjalankan prediksi pada setiap sumber dan menyimpan
+baris dengan kepercayaan tertinggi per hasil; `select="all"` tetap menyimpan setiap baris,
+yang merupakan apa yang Anda inginkan ketika gambar referensi secara sah berisi beberapa
+subjek. `enroll_embedding(name, vector)` melewatkan inferensi dan mengambil vektor
+secara langsung, menormalkannya dan menolak baris yang semuanya nol.
 
-`FaceGallery` is a permanent alias of the same class, and archives written by
-earlier face-only releases still load.
+`FaceGallery` adalah alias permanen dari kelas yang sama, dan arsip yang ditulis oleh
+rilis sebelumnya yang hanya berfokus pada wajah masih dapat dimuat.
 
-### Matching and thresholds
+### Pencocokan dan ambang batas
 
-Matching is a dense matrix multiplication against every stored reference,
-reduced to one score per name by taking the maximum. There is no approximate
-index, which keeps the numbers exact and puts a practical ceiling on gallery
-size.
+Pencocokan adalah perkalian matriks padat terhadap setiap referensi yang disimpan,
+dikurangi menjadi satu skor per nama dengan mengambil nilai maksimum. Tidak ada indeks perkiraan,
+yang menjaga angka tetap tepat dan memberikan batas praktis pada ukuran galeri
+.
 
-Two entry points differ in what they do below the threshold. `match()` returns
-`[(name, score), ...]` per row with everything under the threshold dropped, so a
-row with no match is an empty list. `identify()` returns an `Identities` payload
-that always keeps the best score and sets the name to `None` when it is under
-the threshold. Neither ever substitutes the nearest below-threshold name.
+Dua titik masuk berbeda dalam apa yang mereka lakukan di bawah ambang batas. `match()` mengembalikan
+`[(name, score), ...]` per baris dengan semuanya yang berada di bawah ambang dibuang, jadi sebuah
+baris tanpa kecocokan adalah daftar kosong. `identify()` mengembalikan payload `Identities`
+yang selalu mempertahankan skor terbaik dan mengatur namanya menjadi `None` ketika berada di bawah
+ambang. Tidak satu pun pernah menggantikan nama terdekat di bawah ambang.
 
-The default threshold is `0.4` throughout. It is a cosine value, not a
-probability, and the right operating point is a property of your data and your
-tolerance for false matches, so sweep it on labeled pairs rather than accepting
-the default. `libreyolo enroll` and the `gallery=` prediction argument use the
-same number.
+Ambang batas default adalah `0.4` secara menyeluruh. Ini adalah nilai kosinus, bukan
+probabilitas, dan titik operasi yang tepat adalah sifat dari data Anda dan Anda
+toleransi terhadap kecocokan palsu, jadi lakukan penyaringan pada pasangan berlabel daripada langsung menerima
+default. `libreyolo enroll` dan argumen prediksi `gallery=` menggunakan
+nomor yang sama.
 
-### Persistence
+### Ketekunan
 
-`save(path)` writes a compressed `.npz` holding the vectors, the names and a
-metadata block carrying the format version, the embedding dimension and a
-fingerprint of the weights that produced the rows. `Gallery.load(path,
-model=...)` checks both before comparing anything, so pointing a gallery at a
-different model raises instead of silently scoring vectors from two unrelated
-spaces against each other. Saving an empty gallery is refused.
+`save(path)` menulis `.npz` terkompresi yang memegang vektor, nama-nama, dan sebuah
+blok metadata yang membawa versi format, dimensi embedding dan sebuah
+sidik jari dari bobot yang menghasilkan baris. `Gallery.load(path,
+model=...)` memeriksa keduanya sebelum membandingkan apa pun, jadi mengarahkan galeri pada sebuah
+model yang berbeda meningkatkan alih-alih diam-diam memberi skor vektor dari dua yang tidak terkait
+ruang terhadap satu sama lain. Menyimpan galeri kosong ditolak.
 
-## Command line
+## Baris perintah
 
-| Command | Purpose |
+| Perintah | Tujuan |
 |---|---|
-| `libreyolo enroll` | Walk a folder-per-identity tree and write or extend a `.npz` gallery |
-| `libreyolo compare` | Embed the primary subject in two images and report cosine similarity |
-| `libreyolo verify` | The same command under a second name |
-| `libreyolo predict gallery=...` | Attach identities to an ordinary prediction run |
+| `libreyolo enroll` | Menelusuri pohon folder per identitas dan menulis atau memperluas galeri `.npz` |
+| `libreyolo compare` | Menyematkan subjek utama dalam dua gambar dan melaporkan kesamaan kosinus |
+| `libreyolo verify` | Perintah yang sama dengan nama kedua |
+| `libreyolo predict gallery=...` | Menyertakan identitas ke dalam jalannya prediksi biasa |
 
 <code-tabs name="cli" />
 
-Every LibreYOLO command accepts both `key=value` and `--key value`, so
-`gallery=refs.npz` and `--gallery refs.npz` are the same argument.
+Setiap perintah LibreYOLO menerima baik `key=value` maupun `--key value`, jadi
+`gallery=refs.npz` dan `--gallery refs.npz` adalah argumen yang sama.
 
-`enroll` takes `model`, `source` and `gallery`, plus optional `face-detector`,
-`device`, `--json` and `--quiet`. It reads one folder per identity, where the
-folder name is the identity and every image inside contributes references:
+`enroll` mengambil `model`, `source` dan `gallery`, plus opsional `face-detector`,
+`device`, `--json` dan `--quiet`. Ini membaca satu folder per identitas, di mana
+nama folder adalah identitas dan setiap gambar di dalamnya menyumbang referensi:
 
 ```text
 people/
@@ -346,41 +359,40 @@ people/
     1.jpg
 ```
 
-An image that yields nothing is skipped with a line on stderr rather than
-aborting the run, and the summary reports how many references were stored for
-each name. An existing gallery file is extended in place, so identities can be
-added over time.
+Gambar yang tidak menghasilkan apa-apa dilewati dengan sebuah garis pada stderr daripada
+menghentikan jalannya, dan ringkasan melaporkan berapa banyak referensi yang disimpan untuk
+setiap nama. File galeri yang ada diperluas di tempat, sehingga identitas dapat
+ditambahkan seiring waktu.
 
-`compare` and `verify` are one function registered twice. They take `model`,
-`source`, `source2` and an optional `threshold`, and print the cosine
-similarity, the same-or-different verdict and the threshold that produced it.
-`--json` prints the same three fields as an object.
+`compare` dan `verify` adalah satu fungsi yang didaftarkan dua kali. Mereka mengambil `model`,
+`source`, `source2` dan opsional `threshold`, dan mencetak kesamaan kosinus,
+keputusan sama atau berbeda dan ambang yang menghasilkan keputusan tersebut.
+`--json` mencetak tiga bidang yang sama sebagai sebuah objek.
 
-On `predict`, `gallery` points at a saved `.npz` and `gallery_threshold`
-overrides the `0.4` default. Passing a gallery to a model whose task is not
-`embed` is an error rather than a silent no-op, and a missing gallery file
-suggests the `libreyolo enroll` command that would create it.
+Pada `predict`, `gallery` menunjuk pada `.npz` dan `gallery_threshold` yang tersimpan
+menimpa default `0.4`. Mengirimkan galeri ke model yang task-nya tidak
+`embed` adalah sebuah kesalahan daripada operasi tanpa efek, dan sebuah file galeri yang hilang
+menyarankan perintah `libreyolo enroll` yang akan membuatnya.
 
-## Faces
+## Wajah
 
-Face recognition is the region shape of this task, and it is the only shipped
-implementation of that shape. It adds a detection and alignment stage in front
-of the embedding head, plus a `verify()` method, a bring-your-own-boxes
-argument, published accuracy numbers and calibration guidance for the threshold.
-All of that lives on [face recognition](/docs/tasks/face-recognition), which is
-the walkthrough to follow when the subject is faces. Everything on this page
-applies to it unchanged.
+Pengenalan wajah adalah bentuk wilayah dari task ini, dan itu adalah satu-satunya yang dikirim
+implementasi dari bentuk itu. Ini menambahkan tahap deteksi dan penyelarasan di depan
+dari embedding head, ditambah dengan metode `verify()`, membawa kotak sendiri
+argumen, angka akurasi yang dipublikasikan dan panduan kalibrasi untuk ambang batas.
+Semua itu hidup di [pengenalan wajah](/docs/tasks/face-recognition), yang adalah
+panduan langkah demi langkah yang harus diikuti ketika subjeknya adalah wajah. Segala sesuatu di halaman ini
+berlaku untuk itu tanpa perubahan.
 
-## Train, validate and export
+## Latih, validasi, dan ekspor
 
-Nothing in this task trains inside LibreYOLO. The face embedding head is an
-ONNX artifact whose `train()`, `val()` and `export()` all raise; train a head
-upstream and load the file by path. CLIP, SigLIP 2 and DINOv2 train and export
-through their classification and segmentation tasks, not through `embed`.
+Tidak ada dalam task yang dilatih di dalam LibreYOLO. Wajah embedding head adalah
+artefak ONNX yang `train()`, `val()`, dan `export()` semuanya menaikkan; latih head
+hulu dan muat file melalui jalur. CLIP, SigLIP 2, dan DINOv2 melatih dan mengekspor
+melalui tugas klasifikasi dan segmentasi mereka, bukan melalui `embed`.
 
-There is no retrieval validator. Measure verification accuracy on labeled pairs
-by sweeping `threshold`, and identification accuracy by enrolling a gallery and
-reading `identities.name` and `identities.score` on held-out images, counting a
-`None` name as a rejection.
-
+Tidak ada validator pengambilan. Ukur akurasi verifikasi pada pasangan yang diberi label
+dengan menyapu `threshold`, dan akurasi identifikasi dengan mendaftarkan galeri dan
+membaca `identities.name` dan `identities.score` pada gambar yang disimpan, menghitung
+nama `None` sebagai penolakan.
 

@@ -1,52 +1,64 @@
 ---
-title: Instance segmentation
-seo_title: Instance segmentation in LibreYOLO
+title: Segmentasi instance
+seo_title: Segmentasi instance di LibreYOLO
 description: >-
-  Segment individual objects in LibreYOLO: the families that serve the task, the
-  polygon label format, and the predict, train, validate and export calls.
+  Memisahkan objek individual di LibreYOLO: keluarga yang melayani task, format
+  label poligon, dan panggilan predict, train, validate, dan export.
 lead: >-
-  Instance segmentation locates every object instance and returns a per-pixel
-  mask for each one, alongside the box, class and score a detector returns. The
-  task key is segment.
+  Segmentasi instance menempatkan setiap instance objek dan mengembalikan mask
+  per-piksel untuk masing-masing, bersama dengan kotak, kelas dan skor yang
+  dikembalikan oleh detektor. Kunci task adalah segment.
 keywords:
-  - instance segmentation python
-  - object mask prediction
-  - segmentation model training
-  - polygon labels
-  - MIT segmentation library
+  - segmentasi instance python
+  - prediksi mask objek
+  - pelatihan model segmentasi
+  - label poligon
+  - pustaka segmentasi MIT
   - mask mAP
 last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The -seg suffix in the filename selects the mask head, so no task
-        # argument is needed.
+
+        # Akhiran -seg pada nama file memilih head mask, sehingga tidak
+        diperlukan task
+
+        # argumen.
+
         model = LibreYOLO("LibreDFINEn-seg.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
-        print(result.masks.data.shape)   # (N, H, W), one mask per detection
-        print(result.boxes.xyxy.shape)   # (N, 4), the same N rows
+
+        print(result.masks.data.shape)   # (N, H, W), satu mask per deteksi
+
+        print(result.boxes.xyxy.shape)   # (N, 4), N baris yang sama
     - label: CLI
       language: bash
       code: |
         libreyolo predict model=LibreDFINEn-seg.pt save=True \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-    - label: Mask outlines
+    - label: Kontur mask
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreDFINEn-seg.pt")
+
         result = model(SAMPLE_IMAGE)
 
-        # .xy is a list of (P, 2) contours in pixels, .xyn the same normalized.
+
+        # .xy adalah daftar kontur (P, 2) dalam piksel, .xyn normalisasi yang
+        sama.
+
         for name, contour in zip(result.boxes.cls, result.masks.xy):
             print(result.names[int(name)], contour.shape)
-    - label: 'Another family, same call'
+    - label: 'family lain, panggilan yang sama'
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -62,9 +74,9 @@ snippets:
         from libreyolo import LibreYOLO
 
 
-        # Continues from published segmentation weights, mask head included.
+        # Berlanjut dari bobot segmentasi yang diterbitkan, mask head termasuk.
 
-        # data must point at a dataset whose labels carry polygons.
+        # data harus menunjuk ke dataset yang labelnya membawa poligon.
 
         model = LibreYOLO("LibreDFINEn-seg.pt")
 
@@ -75,12 +87,16 @@ snippets:
       code: |
         libreyolo train model=LibreDFINEn-seg.pt data=my-dataset.yaml \
           epochs=50 imgsz=640 batch=8 lr0=2e-4
-    - label: From detection weights
+    - label: Dari bobot deteksi
       language: bash
-      code: |
-        # Detection weights carry no mask head, so this is an explicit
-        # transfer: the head starts untrained. Asking for task=segment is
-        # what authorizes it.
+      code: >
+        # Bobot deteksi tidak membawa mask head, jadi ini adalah transfer
+        eksplisit
+
+        # : head memulai tanpa pelatihan. Meminta task=segment adalah
+
+        # apa yang memberinya wewenang.
+
         libreyolo train model=LibreDFINEn.pt data=my-dataset.yaml \
           task=segment epochs=50 imgsz=640
   val:
@@ -92,9 +108,9 @@ snippets:
         model = LibreYOLO("LibreDFINEn-seg.pt")
         metrics = model.val(data="my-dataset.yaml")
 
-        print(metrics["metrics/mAP50-95"])       # masks
-        print(metrics["metrics/mAP50-95(M)"])    # masks, explicit
-        print(metrics["metrics/mAP50-95(B)"])    # boxes
+        print(metrics["metrics/mAP50-95"])       # mask
+        print(metrics["metrics/mAP50-95(M)"])    # mask, eksplisit
+        print(metrics["metrics/mAP50-95(B)"])    # kotak
     - label: CLI
       language: bash
       code: |
@@ -111,78 +127,84 @@ snippets:
       language: bash
       code: |
         libreyolo export model=LibreDFINEn-seg.pt format=onnx imgsz=640
-    - label: Use the exported file
+    - label: Gunakan file yang diekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The factory routes on the file suffix, so an exported artifact loads
-        # like a checkpoint and returns the same Results object.
+
+        # Pabrik mengarahkan berdasarkan sufiks file, jadi artefak yang diekspor
+        dimuat
+
+        # seperti checkpoint dan mengembalikan objek Results yang sama.
+
         model = LibreYOLO("LibreDFINEn-seg.onnx")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.masks.data.shape)
 source_hash: 33e331eac0f9b0af
 ---
 
-## Definition
+## Definisi
 
-Instance segmentation is detection plus shape. Each object instance still gets
-a box, a class and a score, and it also gets a binary mask covering the pixels
-that belong to it. Masks may overlap, and pixels belonging to no object are
-left unassigned, which is what separates the task from
-[semantic segmentation](/docs/tasks/semantic-segmentation) and
-[panoptic segmentation](/docs/tasks/panoptic-segmentation).
+Segmentasi instance adalah deteksi ditambah bentuk. Setiap instance objek masih mendapatkan
+sebuah kotak, sebuah kelas, dan sebuah skor, dan juga mendapatkan mask biner yang menutupi piksel
+yang termasuk ke dalamnya. Masker dapat tumpang tindih, dan piksel yang tidak termasuk ke objek manapun
+dibiarkan tidak ditetapkan, yang membedakan task dari
+[segmentasi semantik](/docs/tasks/semantic-segmentation) dan
+[segmentasi panoptik](/docs/tasks/panoptic-segmentation).
 
-`segment` is the canonical task key, and the `-seg` suffix in a checkpoint
-filename selects it, so `task=` is not needed when loading published weights.
+`segment` adalah kunci task kanonik, dan akhiran `-seg` dalam nama file checkpoint
+memilihnya, sehingga `task=` tidak diperlukan saat memuat bobot yang dipublikasikan.
 
-`predict()` fills `result.masks` alongside `result.boxes`. `.data` is
-an `(N, H, W)` stack on the original image canvas, row-aligned with the boxes,
-so mask `i` belongs to box `i`. `.xy` converts each mask to its largest outer
-contour as a `(P, 2)` pixel array, and `.xyn` gives the same contour
-normalized.
+`predict()` mengisi `result.masks` bersama `result.boxes`. `.data` adalah
+tumpukan `(N, H, W)` pada kanvas gambar asli, sejajar baris dengan kotak-kotak,
+sehingga mask `i` milik kotak `i`. `.xy` mengubah setiap mask menjadi kontur terluar terbesar sebagai
+array piksel `(P, 2)`, dan `.xyn` memberikan kontur yang sama dalam keadaan normalisasi.
 
-## Models
 
-Four families both train and predict masks: [RF-DETR](/docs/models/rf-detr),
-[EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine) and
-[RTMDet](/docs/models/rtmdet). RF-DETR needs its own extra,
-`pip install "libreyolo[rfdetr]"`; the other three run on the base package.
+## Model
 
-[Mask R-CNN](/docs/models/mask-rcnn) predicts, validates and exports masks, but
-its `train()` raises `NotImplementedError`.
+Empat keluarga baik melatih maupun memprediksi mask: [RF-DETR](/docs/models/rf-detr),
+[EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine) dan
+[RTMDet](/docs/models/rtmdet). RF-DETR membutuhkan tambahan sendiri,
+`pip install "libreyolo[rfdetr]"`; ketiga lainnya berjalan pada paket dasar.
 
-[EoMT](/docs/models/eomt) predicts and validates masks and also cannot train,
-and its export is narrower still: `export()` only accepts the semantic task, and
-raises `NotImplementedError` for `segment` and `panoptic`, because the
-query-mask runtime contract those two need has not been defined. Use EoMT for
-instance masks in Python, not through an exported graph.
+[Mask R-CNN](/docs/models/mask-rcnn) memprediksi, memvalidasi, dan mengekspor mask, tetapi
+`train()`-nya menimbulkan `NotImplementedError`.
 
-A separate group segments from a prompt rather than a class list: a click, a
-box or a phrase picks the object, and the model returns its mask.
+[EoMT](/docs/models/eomt) memprediksi dan memvalidasi mask dan juga tidak dapat melatih,
+dan ekspornya lebih sempit lagi: `export()` hanya menerima task semantik, dan
+menaikkan `NotImplementedError` untuk `segment` dan `panoptic`, karena
+kontrak runtime query-mask yang kedua diperlukan belum didefinisikan. Gunakan EoMT untuk
+mask instance di Python, bukan melalui grafik yang diekspor.
+
+Grup terpisah mengekstrak segmentasi dari prompt daripada daftar kelas: klik,
+kotak atau frase memilih objek, dan model mengembalikan masknya.
 [SAM](/docs/models/sam), [SAM 2](/docs/models/sam-2),
 [SAM 3](/docs/models/sam-3), [MobileSAM](/docs/models/mobilesam),
-[EdgeTAM](/docs/models/edgetam) and [PicoSAM3](/docs/models/picosam3) work this
-way, as does [SenseNova-Vision](/docs/models/sensenova-vision), whose
-segmentation is referring: it takes a phrase naming one object. They load
-through their own factory and extras, and each model page carries the exact
-call.
+[EdgeTAM](/docs/models/edgetam) dan [PicoSAM3](/docs/models/picosam3) bekerja seperti ini
+, begitu juga dengan [SenseNova-Vision](/docs/models/sensenova-vision), yang
+segmentasinya dirujuk: itu mengambil frase yang menamai satu objek. Mereka memuat
+melalui pabrik mereka sendiri dan tambahan, dan setiap halaman model membawa panggilan
+yang tepat.
 
-## Predict
+## Prediksi
 
-Weights download from Hugging Face on first use and are cached locally.
+Bobot diunduh dari Hugging Face saat penggunaan pertama dan disimpan dalam cache secara lokal.
 
 <code-tabs name="predict" />
 
-`conf` and `max_det` shape the output the same way they do for detection, and
-masks are filtered along with the boxes they belong to. See
-[prediction](/docs/predict) for sources, streaming and result handling.
+`conf` dan `max_det` membentuk output dengan cara yang sama seperti mereka melakukan deteksi, dan
+topeng disaring bersama kotak yang mereka miliki. Lihat
+[prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
 
-## Dataset format
+## Format Dataset
 
-The layout is the detection layout: one `.txt` label file per image, found by
-swapping `images` for `labels` in the image path and changing the extension.
+Tata letaknya adalah tata letak deteksi: satu file label `.txt` per gambar, ditemukan dengan
+menukar `images` dengan `labels` dalam jalur gambar dan mengubah ekstensi.
 
 ```text
 dataset/
@@ -195,20 +217,20 @@ dataset/
     val/000101.txt
 ```
 
-What changes is the row. A segment is a class index followed by a flat polygon:
+Yang berubah adalah barisnya. Sebuah segmen adalah indeks kelas diikuti oleh poligon datar:
 
 ```text
 <class_id> <x1> <y1> ... <xN> <yN>
 ```
 
-At least three points, so the coordinate count after the class index is even
-and at least six, and the polygon must be non-degenerate. Coordinates are
-floats in `[0, 1]` relative to the original image width and height. A five
-field detection row is also accepted in a segmentation dataset and is read as a
-rectangular segment, which makes a box-only dataset loadable without a
-conversion pass.
+Setidaknya tiga titik, sehingga jumlah koordinat setelah indeks kelas genap
+dan setidaknya enam, dan poligonnya harus tidak terdeformasi. Koordinatnya adalah
+float dalam `[0, 1]` relatif terhadap lebar dan tinggi gambar asli. Sebuah baris deteksi lima
+bidang juga diterima dalam dataset segmentasi dan dibaca sebagai
+segmen persegi panjang, yang membuat dataset hanya kotak dapat dimuat tanpa
+proses konversi.
 
-The YAML is the detection YAML:
+YAML adalah YAML deteksi:
 
 ```yaml
 path: dataset
@@ -219,57 +241,56 @@ names:
   1: bicycle
 ```
 
-Native COCO JSON works as well: add an `annotations` mapping of split name to
-JSON file, and the split path gives the image root.
+JSON COCO asli juga berfungsi: tambahkan pemetaan `annotations` dari nama split ke
+File JSON, dan jalur split memberikan akar gambar.
 
-## Train
+## Kereta
 
 <code-tabs name="train" />
 
-Training continues from a published `-seg` checkpoint by default. Starting from
-detection weights is possible but is a deliberate transfer: those weights carry
-no mask head, so it starts untrained, and passing `task=segment` is what
-authorizes the swap. See [training](/docs/train) for datasets, augmentation,
-multi-GPU and loggers.
+Pelatihan berlanjut dari `-seg` checkpoint yang diterbitkan secara default. Dimulai dari
+bobot deteksi dimungkinkan tetapi merupakan transfer yang disengaja: bobot-bobot itu membawa
+tidak ada mask head, jadi dimulai tanpa pelatihan, dan melewati `task=segment` itu apa
+mengotorisasi pertukaran. Lihat [training](/docs/train) untuk dataset, augmentasi,
+multi-GPU dan pencatat.
 
-## Validate
+## Validasi
 
-`val()` returns a plain dictionary of `metrics/` keys. Boxes and masks are
-scored separately, both with COCO evaluation, and the mask numbers are the
-primary ones.
+`val()` mengembalikan kamus biasa dari kunci `metrics/`. Kotak dan mask adalah
+dinilai secara terpisah, keduanya dengan evaluasi COCO, dan nomor mask adalah
+utama.
 
 <code-tabs name="val" />
 
-The unsuffixed keys hold mask results: `metrics/mAP50-95`, `metrics/mAP50`,
-`metrics/mAP75`, then `metrics/mAP_small`, `metrics/mAP_medium` and
-`metrics/mAP_large` by object area, and `metrics/AR1`, `metrics/AR10`,
+Kunci tanpa akhiran memegang mask results: `metrics/mAP50-95`, `metrics/mAP50`,
+`metrics/mAP75`, kemudian `metrics/mAP_small`, `metrics/mAP_medium` dan
+`metrics/mAP_large` menurut area objek, dan `metrics/AR1`, `metrics/AR10`,
 `metrics/AR100`, `metrics/AR_small`, `metrics/AR_medium`, `metrics/AR_large`
-for average recall. `metrics/AR_max_det` and `metrics/max_det` record the
-detection cap the run used.
+untuk rata-rata recall. `metrics/AR_max_det` dan `metrics/max_det` merekam
+deteksi kap yang digunakan saat menjalankan.
 
-Four figures are also published under an explicit suffix, `(M)` for mask and
-`(B)` for box, so that a comparison never depends on which number the family
-decided to call primary: `metrics/mAP50-95(M)` and `metrics/mAP50-95(B)`,
-`metrics/mAP50(M)` and `metrics/mAP50(B)`, `metrics/precision(M)` and
-`metrics/precision(B)`, `metrics/recall(M)` and `metrics/recall(B)`. There is
-no unsuffixed `metrics/precision` or `metrics/recall` on this task.
+Empat angka juga diterbitkan dengan akhiran eksplisit, `(M)` untuk mask dan
+`(B)` untuk kotak, sehingga perbandingan tidak pernah bergantung pada nomor mana yang family
+diputuskan untuk dipanggil sebagai utama: `metrics/mAP50-95(M)` dan `metrics/mAP50-95(B)`,
+`metrics/mAP50(M)` dan `metrics/mAP50(B)`, `metrics/precision(M)` dan
+`metrics/precision(B)`, `metrics/recall(M)` dan `metrics/recall(B)`. Ada
+tidak ada `metrics/precision` atau `metrics/recall` tanpa akhiran pada task ini.
 
-Read the precision and recall keys carefully. They are kept for backward
-compatibility and are aliases, not an operating point: `metrics/precision(M)`
-holds the same value as `metrics/mAP50-95(M)`, and `metrics/recall(M)` the same
-value as mask AR at 100 detections, with `(B)` behaving the same way for boxes.
-Plotting a pair of them reports one number twice.
+Baca kunci presisi dan recall dengan hati-hati. Mereka disimpan untuk kompatibilitas
+mundur dan merupakan alias, bukan titik operasi: `metrics/precision(M)`
+memiliki nilai yang sama dengan `metrics/mAP50-95(M)`, dan `metrics/recall(M)` memiliki
+nilai yang sama dengan mask AR pada 100 deteksi, dengan `(B)` berperilaku sama untuk kotak.
+Memetakan sepasang dari mereka melaporkan satu angka dua kali.
 
-## Export
+## Ekspor
 
 <code-tabs name="export" />
 
-An exported artifact loads back through `LibreYOLO()` on its file suffix, so a
-`.onnx` or `.engine` file behaves like a checkpoint and returns the same
-`Results`. Segmentation coverage is narrower than detection coverage on the
-same family. The matrix on each model page is generated from the validated set
-and names the reason a target is unavailable. See
-[export and deploy](/docs/export) for the formats, their extras and their
-constraints.
-
+Artefak yang diekspor dimuat kembali melalui `LibreYOLO()` berdasarkan akhiran filenya, sehingga
+file `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengembalikan
+`Results` yang sama. Cakupan segmentasi lebih sempit daripada cakupan deteksi pada
+sama dengan family. Matriks di setiap halaman model dihasilkan dari set yang tervalidasi
+dan menyebutkan alasan mengapa target tidak tersedia. Lihat
+[ekspor dan deploy](/docs/export) untuk format, tambahan mereka dan batasan
+mereka.
 

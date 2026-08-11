@@ -1,47 +1,60 @@
 ---
-title: Image restoration
-seo_title: Image restoration and upscaling in LibreYOLO
+title: Pemulihan gambar
+seo_title: Pemulihan dan peningkatan gambar dalam LibreYOLO
 description: >-
-  Denoise, deblur and upscale images in LibreYOLO. Predict a restored RGB image,
-  train NAFNet on paired data, and read the PSNR and SSIM keys.
+  Mengurangi noise, menghapus blur, dan meningkatkan resolusi gambar dalam
+  LibreYOLO. Memprediksi gambar RGB yang dipulihkan, melatih NAFNet pada data
+  berpasangan, dan membaca kunci PSNR dan SSIM.
 lead: >-
-  Image restoration takes a degraded image and returns a clean one. LibreYOLO
-  exposes it as the restore task, which covers denoising, deblurring and
-  super-resolution behind a single output contract: one RGB image in, one RGB
-  image out.
+  Pemulihan gambar mengambil gambar yang rusak dan menghasilkan gambar yang
+  bersih. LibreYOLO menampilkannya sebagai pemulihan task, yang mencakup
+  pengurangan noise, penghapusan blur, dan super-resolusi di belakang satu
+  kontrak keluaran: satu gambar RGB masuk, satu gambar RGB keluar.
 keywords:
-  - image restoration python
-  - image denoising model
-  - image super resolution python
-  - deblurring model
-  - PSNR SSIM validation
+  - Pemulihan gambar python
+  - model denoising gambar
+  - super resolusi gambar python
+  - model deblurring
+  - validasi PSNR SSIM
 last_verified: 1.5.0
 snippets:
   predict:
-    - label: Upscale an image
+    - label: Meningkatkan resolusi gambar
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The compact 4x generator; tile bounds peak memory on a large source.
+
+        # Generator kompak 4x; batas ubin memuncak pada penggunaan memori sumber
+        yang besar.
+
         model = LibreYOLO("LibreRealESRGANx4t-restore.pt")
+
         result = model(SAMPLE_IMAGE, tile=512, tile_pad=10)
 
+
         result.restored.save("upscaled.png")
-        print(result.restored.array.shape)   # 4x the input in each axis
-    - label: Denoise an image
+
+        print(result.restored.array.shape)   # 4x input di setiap sumbu
+    - label: Menghilangkan noise dari gambar
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Trained on SIDD real-image noise; output stays at the input size.
+
+        # Dilatih pada noise gambar nyata SIDD; output tetap pada ukuran input.
+
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         result.restored.save("denoised.png")
-        print(result.restore_scale)   # 1: no upscale for this checkpoint
+
+        print(result.restore_scale)   # 1: tidak ada peningkatan skala untuk ini
+        checkpoint
   train:
-    - label: Fine-tune NAFNet on paired images
+    - label: Menyesuaikan NAFNet pada gambar berpasangan
       language: python
       code: >
         from libreyolo import LibreYOLO
@@ -51,15 +64,15 @@ snippets:
 
         model.train(data="my-dataset.yaml", epochs=100, imgsz=256, batch=16,
         lr0=1e-3)
-    - label: Record the provenance on the checkpoint
+    - label: Mencatat asal-usul pada checkpoint
       language: python
       code: |
         from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
 
-        # degradation and dataset are written into the saved checkpoint for
-        # provenance; they take no part in training.
+        # degradasi dan dataset ditulis ke dalam checkpoint yang disimpan untuk
+        # asal-usul; mereka tidak berperan dalam pelatihan.
         model.train(
             data="my-dataset.yaml",
             epochs=100,
@@ -67,94 +80,105 @@ snippets:
             dataset="MyDataset",
         )
   val:
-    - label: Validate and read the metric keys
+    - label: Memvalidasi dan membaca kunci metrik
       language: python
       code: |
         from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
 
-        # val() returns a plain dict, not an object.
+        # val() mengembalikan dict biasa, bukan objek.
         metrics = model.val(data="my-dataset.yaml")
 
-        print(metrics["metrics/PSNR"])   # fitness
+        print(metrics["metrics/PSNR"])   # kecocokan
         print(metrics["metrics/SSIM"])
   export:
     - label: Export
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
 
-        # imgsz is fixed into the graph, so pass the size your deployment
-        # actually feeds the model.
+
+        # imgsz diperbaiki dalam grafik, jadi masukkan ukuran yang sebenarnya
+        digunakan deployment Anda
+
+        # untuk memberi makan model.
+
         model.export(format="onnx", imgsz=256)
-    - label: Run the exported file
+    - label: Jalankan file yang diekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The factory routes on the file suffix, so an exported artifact loads
-        # like any checkpoint and returns the same Results object.
+
+        # Pabrik mengalihkan berdasarkan akhiran file, jadi artefak yang
+        diekspor dimuat
+
+        # seperti halnya checkpoint dan mengembalikan objek Results yang sama.
+
         model = LibreYOLO("LibreNAFNetl-restore-sidd.onnx")
+
         result = model(SAMPLE_IMAGE)
+
 
         result.restored.save("denoised.png")
 source_hash: 9dc81cadb3ebf18b
 ---
 
-## Definition
+## Definisi
 
-The `restore` task maps one image to another image. Denoising, deblurring and
-super-resolution are all the same task here, because they share one contract:
-the model consumes an RGB image and returns an RGB image, and the degradation it
-was trained to undo is a property of the checkpoint rather than of the API.
+`restore` task memetakan satu gambar ke gambar lain. Penghilangan noise, penghilangan blur, dan
+super-resolusi semuanya adalah task yang sama di sini, karena mereka berbagi satu kontrak:
+model mengkonsumsi gambar RGB dan mengembalikan gambar RGB, dan degradasi yang
+dilatih untuk dibatalkan adalah sifat dari checkpoint daripada API.
 
-A prediction fills `result.restored`, a `RestoredImage` payload holding an
-`(H, W, 3)` uint8 RGB array. `.array` returns it as NumPy and `.save(path)`
-writes it to disk. `result.restore_scale` records the upscale factor the
-output canvas carries, which is `1` for a checkpoint that preserves resolution.
-`result.boxes` stays empty, so `conf`, `iou` and `max_det` are accepted for
-signature parity but have no effect, and `save=True` writes the restored image
-directly rather than an annotated photo.
+Sebuah prediksi mengisi `result.restored`, muatan `RestoredImage` yang memegang
+array RGB uint8 `(H, W, 3)`. `.array` mengembalikannya sebagai NumPy dan `.save(path)`
+menuliskannya ke disk. `result.restore_scale` mencatat faktor peningkatan yang
+membawa, yang merupakan `1` untuk checkpoint yang mempertahankan resolusi.
+`result.boxes` tetap kosong, sehingga `conf`, `iou`, dan `max_det` diterima untuk
+paritas tanda tangan tetapi tidak memiliki efek, dan `save=True` menulis gambar yang dipulihkan
+secara langsung daripada foto yang diberi anotasi.
 
-## Models
+## Model
 
-Three families serve `restore`, split by the degradation they undo.
+Tiga keluarga melayani `restore`, dibagi menurut degradasi yang mereka batalkan.
 
-[NAFNet](/docs/models/nafnet) is the denoiser, and the only restore family
-LibreYOLO can train. Its architecture replaces the nonlinear activations of a
-UNet block with elementwise multiplication, and the published checkpoint is
-trained on SIDD real-image noise. Output stays at the input resolution.
+[NAFNet](/docs/models/nafnet) adalah denoiser, dan satu-satunya restore family
+LibreYOLO yang dapat dilatih. Arsitekturnya menggantikan aktivasi nonlinier dari
+blok UNet dengan perkalian elemen demi elemen, dan checkpoint yang dipublikasikan
+dilatih pada noise gambar nyata SIDD. Keluaran tetap pada resolusi input.
 
-[Real-ESRGAN](/docs/models/real-esrgan) is the practical upscaler: three
-checkpoints trained against synthetic degradations rather than only bicubic
-downscaling, at 4x, 2x, and a smaller, faster 4x generator built for lower
-latency.
+[Real-ESRGAN](/docs/models/real-esrgan) adalah penguat skala praktis: tiga
+titik pemeriksaan dilatih terhadap degradasi sintetis daripada hanya bicubic
+penurunan skala, pada 4x, 2x, dan generator 4x yang lebih kecil dan lebih cepat yang dibuat untuk lebih rendah
+latensi.
 
-[SwinIR](/docs/models/swinir) upscales 4x with a Swin Transformer backbone, in
-three sizes covering the official lightweight generator and two real-world
-generators.
+[SwinIR](/docs/models/swinir) meningkatkan skala 4x dengan Swin Transformer backbone, dalam
+tiga ukuran mencakup generator ringan resmi dan dua dunia nyata
+generator.
 
-## Predict
+## Prediksi
 
-Weights download from Hugging Face on first use and are cached locally.
+Bobot diunduh dari Hugging Face saat penggunaan pertama dan disimpan secara lokal.
 
 <code-tabs name="predict" />
 
-Restoration runs at the source image's own resolution rather than a fixed
-network canvas, padding only to the network's downsample factor, so both time
-and memory scale with the pixel count of your input. `tile` splits the forward
-pass into overlapping tiles and blends the seams back together, and `tile_pad`
-is the halo added around each tile before it is cropped back out; both are
-Python keyword arguments. See [prediction](/docs/predict) for sources, streaming
-and result handling.
+Restorasi dijalankan pada resolusi gambar sumber itu sendiri daripada resolusi tetap
+kanvas jaringan, padding hanya pada faktor downsample jaringan, sehingga keduanya waktu
+dan memori meningkat seiring dengan jumlah piksel dari input Anda. `tile` membagi maju
+melewati ubin yang saling tumpang tindih dan menyatukan kembali jahitannya, dan `tile_pad`
+apakah halo ditambahkan di sekitar setiap ubin sebelum dipotong kembali; keduanya adalah
+Argumen kata kunci Python. Lihat [prediction](/docs/predict) untuk sumber, streaming
+dan penanganan hasil.
 
-## Dataset format
+## format Dataset
 
-Restoration pairs each degraded input image with a clean target image of exactly
-the same resolution, matched by filename stem.
+Restorasi memasangkan setiap gambar input yang rusak dengan gambar target yang bersih secara tepat
+resolusi yang sama, dicocokkan berdasarkan nama file.
 
 ```text
 dataset/
@@ -179,55 +203,54 @@ nc: 1
 names: {0: image}
 ```
 
-`nc` and `names` are schema placeholders; a restore model returns
-`Results.restored`, not detections. `degradation` and `dataset` are optional
-provenance labels. `target_stem_suffix` covers datasets that name the clean
-image differently from its degraded pair. Validation keeps native resolution and
-pads only enough to stack a batch, so the metrics are computed on the original
-canvas. See [dataset formats](/docs/reference/dataset-formats) for the full
-contract.
+`nc` dan `names` adalah placeholder skema; sebuah model pemulihan mengembalikan
+`Results.restored`, bukan deteksi. `degradation` dan `dataset` bersifat opsional
+. `target_stem_suffix` mencakup dataset yang memberi nama gambar
+bersih secara berbeda dari pasangannya yang terdegradasi. Validasi mempertahankan resolusi asli dan
+hanya menambahkan padding secukupnya untuk menumpuk batch, sehingga metrik dihitung pada kanvas asli
+. Lihat [dataset formats](/docs/reference/dataset-formats) untuk kontrak lengkap
+.
 
-## Train
+## Latih
 
-NAFNet is the only restore family with a training implementation.
-`Real-ESRGAN.train()` and `SwinIR.train()` both raise `NotImplementedError`:
-those checkpoints come from GAN training over synthetic degradation pipelines,
-and the paired restore trainer would run without reproducing that recipe.
+NAFNet adalah satu-satunya restore family dengan implementasi pelatihan.
+`Real-ESRGAN.train()` dan `SwinIR.train()` sama-sama meningkatkan `NotImplementedError`:
+checkpoint tersebut berasal dari pelatihan GAN melalui jalur degradasi sintetis,
+dan trainer restore berpasangan akan berjalan tanpa mereproduksi resep tersebut.
 
 <code-tabs name="train" />
 
-The trainer takes coupled crops of the input and target pair, so both sides stay
-aligned. See [training](/docs/train) for datasets, multi-GPU and loggers, and
-the [NAFNet page](/docs/models/nafnet) for this family's defaults and the
-inference-time pooling it detaches while training.
+Pelatih mengambil pasangan hasil panen dari input dan target, sehingga kedua sisi tetap
+selaras. Lihat [training](/docs/train) untuk dataset, multi-GPU dan pencatat log, dan
+halaman [NAFNet](/docs/models/nafnet) untuk default family ini dan
+pooling saat inferensi yang dilepaskan saat pelatihan.
 
-## Validate
+## Validasi
 
-`val()` compares the restored output against the clean target, in RGB, on the
-original canvas, with no border crop and no resizing.
+`val()` membandingkan keluaran yang dipulihkan dengan target bersih, dalam RGB, pada
+kanvas asli, tanpa pemotongan tepi dan tanpa pengubahan ukuran.
 
 <code-tabs name="val" />
 
-`metrics/PSNR` is the peak signal-to-noise ratio in decibels, and it is also
-`fitness`, the number best-checkpoint selection reads. `metrics/SSIM` is
-structural similarity in `[0, 1]`, computed with an 11x11 Gaussian window at
-sigma 1.5 and averaged over the three color channels. Higher is better for both.
+`metrics/PSNR` adalah rasio puncak sinyal terhadap kebisingan dalam desibel, dan itu juga
+`fitness`, pembacaan pemilihan best-checkpoint. `metrics/SSIM` adalah
+kesamaan struktural dalam `[0, 1]`, dihitung dengan jendela Gaussian 11x11 pada
+sigma 1.5 dan dirata-ratakan di ketiga saluran warna. Semakin tinggi semakin baik untuk kedua-duanya.
 
-## Export
+## Ekspor
 
-An exported restore model loads back through `LibreYOLO()` on its file suffix,
-so a `.onnx` or `.engine` file behaves like a checkpoint and returns the same
-`Results`, with `restored` carrying the output image.
+Model restore yang diekspor dimuat kembali melalui `LibreYOLO()` pada akhiran berkasnya,
+sehingga berkas `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengembalikan `.onnx` yang sama,
+dengan `restored` membawa gambar keluaran.
 
 <code-tabs name="export" />
 
-Restore export fixes the spatial resolution into the graph, so pass the `imgsz`
-your deployment will actually feed the model. For NAFNet that size must divide
-by the network's downsample factor, and only the batch dimension stays dynamic
-under `dynamic=True`. For Real-ESRGAN and SwinIR, leaving `imgsz` out falls back
-to a small internal patch size rather than your working resolution. Per-format
-coverage is on each model page and in the
-[full export matrix](/docs/reference/export-matrix). [Export](/docs/export)
-lists the arguments every format accepts.
-
+Ekspor restore menetapkan resolusi spasial ke dalam grafik, jadi masukkan `imgsz`
+yang akan digunakan dalam penerapan Anda untuk benar-benar memberi makan model. Untuk NAFNet, ukuran itu harus dapat dibagi
+oleh faktor downsample jaringan, dan hanya dimensi batch yang tetap dinamis
+di bawah `dynamic=True`. Untuk Real-ESRGAN dan SwinIR, meninggalkan `imgsz` akan kembali ke default
+ke ukuran patch internal kecil daripada resolusi kerja Anda. Per-format
+cakupan ada di setiap halaman model dan di
+[matriks ekspor penuh](/docs/reference/export-matrix). [Ekspor](/docs/export)
+mencantumkan argumen yang diterima setiap format.
 

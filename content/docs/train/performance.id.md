@@ -1,41 +1,43 @@
 ---
-title: Training performance
-seo_title: 'Faster training: CUDA graphs, AMP, profiler'
+title: Performa pelatihan
+seo_title: 'Pelatihan lebih cepat: CUDA graph, AMP, profiler'
 description: >-
-  Make a training run faster: capture the step into CUDA graphs, pick an AMP
-  dtype, and use the built-in profiler to find where the time actually goes.
+  Percepat proses pelatihan: tangkap langkah ke CUDA graph, pilih dtype AMP, dan
+  gunakan profiler bawaan untuk menemukan sumber penggunaan waktu.
 lead: >-
-  Three levers change how fast a training step runs: mixed precision, CUDA graph
-  capture of the network's forward and backward, and whatever the profiler says
-  is actually holding the step up.
+  Tiga pengungkit mengubah kecepatan langkah pelatihan: mixed precision, CUDA
+  graph capture untuk forward dan backward jaringan, serta tindakan yang
+  disarankan profiler berdasarkan penghambat sebenarnya.
 keywords:
-  - cuda graphs training
-  - training speed
+  - CUDA graph training
+  - mempercepat training
   - mixed precision training
-  - bfloat16 training
-  - pytorch profiler
-  - dataloader bound
+  - training bfloat16
+  - profiler PyTorch
+  - dataloader bottleneck
   - kernel launch overhead
-  - gpu utilization
+  - utilisasi GPU
 last_verified: 1.5.0
 snippets:
   profile:
-    - label: Profile and keep training
+    - label: Profiling lalu lanjutkan pelatihan
       language: python
       code: |
         from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # Profiles a short window of real steps, prints a verdict, then
-        # continues the run with the hooks removed.
+        # Melakukan profiling pada jendela pendek langkah nyata, mencetak hasil,
+        # lalu melanjutkan proses setelah hook dilepas.
         model.train(data="my-dataset.yaml", epochs=100, profile=True)
-    - label: 'Measure only, then stop'
+    - label: 'Hanya ukur, lalu berhenti'
       language: bash
-      code: |
-        # Sets no_aug_epochs=0 and runs just enough epochs to fill the window.
+      code: >
+        # Menetapkan no_aug_epochs=0 dan menjalankan epoch secukupnya untuk
+        mengisi jendela.
+
         libreyolo profile run coco128 --weights LibreYOLO9s.pt --size s
-    - label: Drill into the result
+    - label: Periksa hasil lebih dalam
       language: bash
       code: |
         libreyolo profile summary runs/profile/prof/profile.json
@@ -70,93 +72,90 @@ snippets:
 source_hash: ee5bb727065b6099
 ---
 
-## Measure before changing anything
+## Ukur sebelum mengubah apa pun
 
-The three levers below fix different problems, and applying the wrong one
-changes nothing. The profiler says which problem you have.
+Tiga pengungkit di bawah mengatasi masalah berbeda. Menerapkan pengungkit yang
+salah tidak mengubah apa pun. Profiler menunjukkan masalah yang terjadi.
 
 <code-tabs name="profile" />
 
-`profile=True` measures a window of real training steps, five discarded then
-twenty measured by default, prints a report, writes its artifacts and then keeps
-training with the hooks dropped. It costs nothing when off, and it is ignored
-under distributed training.
+`profile=True` mengukur jendela langkah pelatihan nyata, default-nya lima langkah
+dibuang lalu dua puluh diukur, mencetak laporan, menulis artefak, dan melanjutkan
+pelatihan setelah hook dilepas. Tidak ada biaya saat nonaktif, dan pengaturan ini
+diabaikan pada pelatihan distributed.
 
-The report ends in one of four verdicts:
+Laporan berakhir dengan salah satu dari empat hasil:
 
-| Verdict | Meaning | Levers |
+| Hasil | Arti | Pengungkit |
 |---|---|---|
-| `dataloader` | the GPU waits on input data | more `workers`, `cache="ram"` or `"disk"`, lighter augmentation, larger batch |
-| `host / launch` | the GPU is fed too slowly, many tiny kernels | larger batch, CUDA graphs, fewer per-step host syncs |
-| `compute` | the GPU is saturated | AMP or bfloat16, or accept it |
-| `memory-pressure` | allocator thrash, VRAM at the edge | lower batch; utilization figures here are unreliable |
+| `dataloader` | GPU menunggu data input | tambah `workers`, `cache="ram"` atau `"disk"`, augmentasi lebih ringan, batch lebih besar |
+| `host / launch` | GPU menerima pekerjaan terlalu lambat, banyak kernel kecil | batch lebih besar, CUDA graph, kurangi sinkronisasi host per langkah |
+| `compute` | GPU jenuh | AMP atau bfloat16, atau terima kondisi ini |
+| `memory-pressure` | allocator terus bekerja, VRAM di batas | turunkan batch; angka utilisasi tidak andal |
 
-The utilization number is kernel busy time over the unsynchronized step time.
-The window is deliberately split: the first half runs with no extra
-synchronization so the verdict reflects real overlap, and only the second half
-brackets each phase with a sync to attribute GPU time. Synchronizing every phase
-hands the dataloader workers slack and hides starvation, so the composition
-numbers are never used to pick the verdict.
+Angka utilisasi adalah waktu kernel sibuk dibagi waktu langkah tanpa sinkronisasi.
+Jendela sengaja dibagi: separuh pertama berjalan tanpa sinkronisasi tambahan agar
+hasil mencerminkan overlap nyata, dan hanya separuh kedua mengapit tiap fase dengan
+sinkronisasi untuk mengatribusikan waktu GPU. Sinkronisasi setiap fase memberi
+kelonggaran pada worker dataloader dan menyembunyikan starvation, sehingga angka
+komposisi tidak digunakan untuk memilih hasil.
 
-Four files land in the run directory: `timeline.html`, which opens in a browser
-by itself, `profile_trace.json` for Perfetto or Nsight, `profile_summary.json`,
-and `profile.json`, the self-contained one to copy around and feed back to the
-`libreyolo profile` subcommands.
+Empat file dibuat di direktori proses: `timeline.html` yang dapat dibuka langsung
+di browser, `profile_trace.json` untuk Perfetto atau Nsight,
+`profile_summary.json`, dan `profile.json`, file mandiri yang dapat disalin serta
+diberikan ke subperintah `libreyolo profile`.
 
-Two things about `profile run` are worth knowing. It sets `no_aug_epochs=0`,
-because the profiler measures epoch 0 and a short run with the default
-`no_aug_epochs` would profile the lighter no-augmentation dataloader rather than
-the one training actually uses. And `--repeat N` reports mean and standard
-deviation, which matters because a launch-bound step is noisy enough that a
-single run misleads; it writes per-trial directories `prof_1`, `prof_2` and so
-on, plus an aggregate `profile_repeat.json`.
+Dua hal mengenai `profile run` perlu diketahui. Perintah ini menetapkan
+`no_aug_epochs=0` karena profiler mengukur epoch 0, dan proses pendek dengan
+default akan mengukur dataloader tanpa augmentasi yang lebih ringan. `--repeat N`
+melaporkan mean dan standard deviation karena langkah yang dibatasi launch cukup
+berisik untuk menyesatkan jika hanya diukur sekali; perintah menulis direktori
+`prof_1`, `prof_2`, dan seterusnya, serta agregat `profile_repeat.json`.
 
 ## Mixed precision
 
-`amp=True` is the default for most families and runs the forward pass under CUDA
-autocast. `amp_dtype` chooses `float16` or `bfloat16`.
+`amp=True` adalah default untuk sebagian besar family dan menjalankan forward pass
+di bawah CUDA autocast. `amp_dtype` memilih `float16` atau `bfloat16`.
 
 <code-tabs name="amp" />
 
-Float16 needs dynamic loss scaling and gets a live gradient scaler; bfloat16's
-wider exponent range does not, so its scaler is disabled. Four families ship with
-`amp=False`, D-FINE, DEIM, YOLO-NAS and FOMO, and the DEIM setting carries
-through to RT-DETRv4 by inheritance. D-FINE states the reason: its decoder clamps
-activations at 65504, the largest finite float16 value.
+Float16 memerlukan dynamic loss scaling dan gradient scaler aktif; rentang
+eksponen bfloat16 lebih lebar sehingga scaler-nya dinonaktifkan. Empat family
+memiliki `amp=False`: D-FINE, DEIM, YOLO-NAS, dan FOMO, dengan pengaturan DEIM
+diwariskan ke RT-DETRv4. D-FINE menyebut alasannya: decoder membatasi aktivasi
+pada 65504, nilai float16 hingga terbesar.
 
-The argument semantics, including what a bfloat16 request does on hardware
-without bfloat16 support, are on
-[Hyperparameters](/docs/train/hyperparameters).
+Semantik argumen, termasuk perilaku permintaan bfloat16 pada hardware tanpa
+dukungan bfloat16, tersedia di [Hyperparameter](/docs/train/hyperparameters).
 
-## CUDA graphs
+## CUDA graph
 
-`cuda_graph=True` captures the network's training forward and backward into a
-CUDA graph, removing per-step kernel launch overhead.
+`cuda_graph=True` menangkap forward dan backward pelatihan jaringan ke CUDA graph,
+menghilangkan overhead peluncuran kernel per langkah.
 
 <code-tabs name="graph" />
 
-The flag is always safe to pass. A family, task or configuration that cannot be
-captured logs one line and trains eager, unchanged.
+Flag selalu aman diberikan. Family, task, atau konfigurasi yang tidak dapat
+ditangkap mencatat satu baris dan tetap berlatih secara eager.
 
-Only the network is captured. The loss stays eager by design, because detection
-losses select with boolean masks, run Hungarian matching and branch on assignment
-results, none of which a graph can record. The optimizer step, gradient clipping,
-EMA update and learning-rate schedule stay eager too.
+Hanya jaringan yang ditangkap. Loss tetap eager karena loss deteksi memilih
+dengan mask boolean, menjalankan Hungarian matching, dan bercabang berdasarkan
+hasil assignment, yang tidak dapat direkam graph. Langkah optimizer, gradient
+clipping, pembaruan EMA, dan schedule learning rate juga tetap eager.
 
-That bounds the win by how much of a step is network, and the share varies
-widely. Measured on an RTX 5070 Ti at 640 px, batch 8: 84 percent of a YOLOv9-t
-step is network, 44 percent of a YOLOv7-b step, 31 percent of a YOLOX-t step and
-26 percent of an RTMDet-t step. The last two spend most of a step inside their
-label assigners, so capturing the network helps them least.
+Keuntungan dibatasi oleh bagian langkah yang merupakan jaringan. Pada RTX 5070 Ti,
+640 px, batch 8: jaringan mencakup 84 persen langkah YOLOv9-t, 44 persen YOLOv7-b,
+31 persen YOLOX-t, dan 26 persen RTMDet-t. Dua terakhir menghabiskan sebagian
+besar langkah di label assigner, sehingga mendapat manfaat paling kecil.
 
-### What it is worth
+### Besarnya manfaat
 
-Conditions for every figure below: RTX 5070 Ti, Windows, AMP, one process per
-arm from a shared saved state, replaying one real batch so the dataloader is out
-of the loop, fastest of 24 steps after warm-up. Detection at 640 px,
-classification at 224 px. Batch size is per row.
+Kondisi semua angka berikut: RTX 5070 Ti, Windows, AMP, satu proses per cabang
+dari state tersimpan yang sama, replay satu batch nyata tanpa dataloader, langkah
+tercepat dari 24 setelah warm-up. Deteksi 640 px, classification 224 px. Ukuran
+batch tercantum per baris.
 
-| Family | Size | Batch | Eager | Graphed | Speedup |
+| Family | Ukuran | Batch | Eager | Graph | Percepatan |
 |---|---|---:|---:|---:|---:|
 | FOMO | s | 16 | 7.0 ms | 1.9 ms | 3.63x |
 | MobileNetV4 | s | 16 | 14.5 ms | 5.3 ms | 2.74x |
@@ -170,26 +169,26 @@ classification at 224 px. Batch size is per row.
 | RTMDet | t | 8 | 149.7 ms | 136.2 ms | 1.10x |
 | YOLOv7 | b | 4 | 102.5 ms | 98.0 ms | 1.05x |
 
-Those isolate the GPU step. A complete fine-tune also pays for the dataloader and
-for validation. YOLOv9-t on a 406-image detection set, 20 epochs, batch 8, 640 px,
-4 dataloader workers, on the same machine: 428.4 s wall clock eager against
-367.7 s graphed, a 1.16x gain, with mAP50-95 of 0.6394 in both arms.
+Angka itu mengisolasi langkah GPU. Fine-tuning lengkap juga membayar dataloader
+dan validasi. YOLOv9-t pada dataset deteksi 406 gambar, 20 epoch, batch 8, 640 px,
+4 worker, di mesin yang sama: 428,4 detik eager dibanding 367,7 detik dengan
+graph, peningkatan 1,16x, dengan mAP50-95 0,6394 pada keduanya.
 
-Three things move these numbers. Small batches are launch-bound and large ones
-are compute-bound, so RT-DETR-r18 gains 1.19x at batch 2 and 1.04x at batch 8.
-Launch overhead is highest on Windows, and Linux gains are roughly a third to
-half of the table. And a dataloader-bound run sees no wall-clock change at all,
-which is why the profiler comes first.
+Tiga hal mengubah angka tersebut. Batch kecil dibatasi launch dan batch besar
+dibatasi compute, sehingga RT-DETR-r18 mendapat 1,19x pada batch 2 dan 1,04x pada
+batch 8. Overhead launch tertinggi di Windows; peningkatan Linux sekitar sepertiga
+hingga setengah tabel. Proses yang dibatasi dataloader tidak mengalami perubahan
+wall-clock, sehingga profiler harus digunakan lebih dahulu.
 
-Capture engages the same way at `amp=False`, but fp32 kernels run longer, so a
-step is less launch-bound and most families gain less. On the same hardware,
-MobileNetV4-s at batch 16 goes from 2.74x under AMP to 3.61x at fp32, while
-YOLOv9-t at batch 8 goes from 1.99x to 1.69x and RT-DETR-r18 at batch 4 from
-1.12x to 0.99x.
+Capture bekerja sama pada `amp=False`, tetapi kernel fp32 berjalan lebih lama,
+sehingga langkah kurang dibatasi launch dan sebagian besar family mendapat
+manfaat lebih kecil. Pada hardware yang sama, MobileNetV4-s batch 16 berubah dari
+2,74x dengan AMP menjadi 3,61x pada fp32, YOLOv9-t batch 8 dari 1,99x menjadi
+1,69x, dan RT-DETR-r18 batch 4 dari 1,12x menjadi 0,99x.
 
-### Where capture applies
+### Cakupan capture
 
-| Task | Families |
+| Task | Family |
 |---|---|
 | detect | yolo9, yolo9_p2, yolo9_e2e, yolox, yolo7, yolonas, picodet, rtmdet, rfdetr, dfine, deim, deimv2, rtdetr, rtdetrv2, rtdetrv4, ec |
 | classify | resnet, convnext, mobilenetv4, efficientnetv2 |
@@ -197,65 +196,58 @@ YOLOv9-t at batch 8 goes from 1.99x to 1.69x and RT-DETR-r18 at batch 4 from
 | point | fomo |
 | restore | nafnet |
 
-Everything else falls back to eager with one log line: other tasks on those
-families, families not listed, distributed runs and distillation runs. A capture
-failure at runtime also drops the rest of the run to eager rather than failing.
+Semua yang lain kembali ke eager dengan satu baris log: task lain pada family
+tersebut, family yang tidak tercantum, proses distributed, dan distilasi.
+Kegagalan capture saat runtime juga mengalihkan sisa proses ke eager.
 
-For the encoder-decoder detectors, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 and v4,
-and EC, only the backbone and encoder are captured. Their decoder reads the
-ground truth to build contrastive-denoising queries, and the number of those
-queries follows the largest ground-truth count in the batch, so its token count
-changes from batch to batch.
+Untuk detector encoder-decoder D-FINE, DEIM, DEIMv2, RT-DETR v1, v2, v4, dan EC,
+hanya backbone serta encoder yang ditangkap. Decoder membaca ground truth untuk
+membangun query contrastive-denoising, yang jumlahnya mengikuti jumlah ground
+truth terbesar dalam batch, sehingga jumlah token berubah antarbatch.
 
-### Shapes
+### Bentuk
 
-A graph is valid for exactly the input shape it was captured with. The trainer
-counts batch shapes and captures once a shape has repeated three times. Batches
-at any other shape run eager: multi-scale batches, and the last partial batch of
-an epoch.
+Graph hanya valid untuk bentuk input saat capture. Trainer menghitung bentuk batch
+dan melakukan capture setelah satu bentuk berulang tiga kali. Batch dengan bentuk
+lain berjalan eager, termasuk batch multiskala dan batch parsial terakhir epoch.
 
-This is the trap for the DETR families, which resize every batch by default. With
-`multi_scale=True` a short run may never see one shape often enough to capture at
-all. Pass `multi_scale=False` when the speedup is the point.
+Ini jebakan bagi family DETR yang mengubah ukuran setiap batch secara default.
+Dengan `multi_scale=True`, proses pendek mungkin tidak melihat satu bentuk cukup
+sering untuk capture. Berikan `multi_scale=False` jika percepatan menjadi tujuan.
 
-YOLOX changes what the captured region computes partway through a run, turning on
-its L1 regression branch when mosaic closes at `no_aug_epochs`. The trainer
-invalidates the capture there and re-captures once the new shape settles.
+YOLOX mengubah komputasi region yang ditangkap di tengah proses dengan menyalakan
+cabang regresi L1 saat mosaic ditutup pada `no_aug_epochs`. Trainer membatalkan
+capture lalu menangkap ulang setelah bentuk baru stabil.
 
-### Numerics and memory
+### Numerik dan memori
 
-Most families reproduce their eager loss trajectory bit for bit under AMP. FOMO
-and LingBot-Vision differ in the last bit of float32 from a different summation
-order. The deformable-attention detectors, D-FINE, DEIM, DEIMv2, RT-DETR, RF-DETR
-and EC, do not reproduce their own eager runs either, because that backward
-accumulates with atomics and TF32 convolutions pick a reduction order per launch;
-the graphed run stays inside that spread. RTMDet differs by roughly 3e-4 relative
-on two of 139 gradients, because it shares head convolutions across pyramid
-levels and the two backward paths sum three contributions in a different order.
-SegFormer has stochastic depth inside the captured region, so a replayed graph
-draws its own random stream and is statistically equivalent to eager rather than
-identical; the manager logs that once at capture time.
+Sebagian besar family mereproduksi trajectory loss eager bit demi bit di bawah
+AMP. FOMO dan LingBot-Vision berbeda pada bit terakhir float32 akibat urutan
+penjumlahan. Detector deformable-attention D-FINE, DEIM, DEIMv2, RT-DETR,
+RF-DETR, dan EC juga tidak mereproduksi proses eager sendiri karena backward
+berakumulasi dengan atomics dan konvolusi TF32 memilih urutan reduksi per launch;
+proses graph tetap dalam sebaran tersebut. RTMDet berbeda sekitar 3e-4 relatif
+pada dua dari 139 gradien karena berbagi konvolusi head antartingkat pyramid.
+SegFormer memiliki stochastic depth dalam region capture, sehingga graph replay
+memakai random stream sendiri dan setara secara statistik, bukan identik; manager
+mencatatnya sekali saat capture.
 
-At `amp=False` bit-identical is not available from anything on this hardware,
-with or without capture. Two identical seeded eager YOLOv9-t runs diverge by
-36 percent relative over 20 steps and YOLOX-t by 2.6 percent, because cuDNN
-picks a nondeterministic weight-gradient algorithm for some fp32 convolution
-shapes.
+Pada `amp=False`, hasil bit-identical tidak tersedia pada hardware ini, dengan
+atau tanpa capture. Dua proses eager YOLOv9-t dengan seed identik berbeda 36
+persen relatif setelah 20 langkah dan YOLOX-t 2,6 persen karena cuDNN memilih
+algoritma weight-gradient nondeterministik untuk bentuk konvolusi fp32 tertentu.
 
-A captured graph pins static input, output and workspace buffers, so peak VRAM
-rises by roughly one extra set of activations. Across the families above, peak
-allocation moved between -5 and +19 percent. The relative cost is largest for the
-small classification models, whose activations are small to begin with: ResNet-18
-at 224 px, batch 16, went from 0.48 GB eager to 0.57 GB graphed. If it pushes a
-run over the limit, lower the batch or leave the flag off.
+Graph yang ditangkap menahan buffer input, output, dan workspace statis, sehingga
+puncak VRAM naik kira-kira satu set aktivasi tambahan. Pada family di atas,
+alokasi puncak berubah antara -5 dan +19 persen. Biaya relatif terbesar pada
+model classification kecil: ResNet-18 224 px, batch 16, naik dari 0,48 GB eager
+menjadi 0,57 GB dengan graph. Jika melewati batas, turunkan batch atau nonaktifkan flag.
 
-## Related
+## Terkait
 
-- [Hyperparameters](/docs/train/hyperparameters) for `batch`, `nbs`, `cache` and
-  `workers`.
-- [Multi-GPU training](/docs/train/multi-gpu), where both CUDA graphs and the
-  profiler are unavailable.
-- [CUDA graphs](/docs/reference/cuda-graphs) for the combined inference and
-  training support matrix, the seam splits and the numerics contract.
-
-
+- [Hyperparameter](/docs/train/hyperparameters) untuk `batch`, `nbs`, `cache`,
+  dan `workers`.
+- [Pelatihan multi-GPU](/docs/train/multi-gpu), yang tidak mendukung CUDA graph
+  maupun profiler.
+- [CUDA graph](/docs/reference/cuda-graphs) untuk matriks dukungan inferensi dan
+  pelatihan gabungan, pembagian seam, serta kontrak numerik.

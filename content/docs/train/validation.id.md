@@ -1,24 +1,23 @@
 ---
-title: Validation and metrics
-seo_title: Validation and metrics in LibreYOLO
+title: Validasi dan metrik
+seo_title: Validasi dan metrik di LibreYOLO
 description: >-
-  Run val() on any model, read the metric keys each task returns, choose an
-  evaluation backend, and turn on a validation loss alongside the accuracy
-  metric.
+  Jalankan val() pada model apa pun, baca key metrik yang dikembalikan setiap
+  task, pilih backend evaluasi, dan aktifkan loss validasi bersama metrik akurasi.
 lead: >-
-  Validation runs a model over a dataset split through val() and returns a flat
-  dictionary of metric keys and float values. The keys are literal strings, and
-  which ones you get depends on the task, not the family.
+  Validasi menjalankan model pada split dataset melalui val() dan mengembalikan
+  dictionary datar berisi key metrik dan nilai float. Key berupa string literal,
+  dan key yang diperoleh bergantung pada task, bukan family.
 keywords:
-  - map50-95
-  - coco evaluation
-  - validation metrics
+  - mAP50-95
+  - evaluasi COCO
+  - metrik validasi
   - faster-coco-eval
   - pycocotools
   - validation loss
-  - miou
+  - mIoU
   - panoptic quality
-  - top1 accuracy
+  - akurasi top-1
 last_verified: 1.5.0
 snippets:
   val:
@@ -37,7 +36,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml
-    - label: On another split
+    - label: Pada split lain
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -55,7 +54,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="coco8.yaml", epochs=10, val_loss=True)
   json:
-    - label: Write COCO-format predictions
+    - label: Tulis prediksi berformat COCO
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -65,14 +64,14 @@ snippets:
 source_hash: d907183492fa3f57
 ---
 
-## Run a validation
+## Jalankan validasi
 
-`val()` takes the dataset and returns the metrics.
+`val()` menerima dataset dan mengembalikan metrik.
 
 <code-tabs name="val" />
 
-The return value is a plain `dict[str, float]`. Every key is literal, so read it
-by name rather than by position.
+Nilai kembaliannya adalah `dict[str, float]` biasa. Setiap key bersifat literal,
+jadi baca berdasarkan nama, bukan posisi.
 
 The main arguments are `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
 `workers`, `device`, `augment`, `save_json` and `verbose`. `conf` defaults to
@@ -85,7 +84,7 @@ Any other field of the validation config passes through as a keyword argument,
 including `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`, `cache`
 and `save_plots`.
 
-## Metric keys per task
+## Key metrik per task
 
 Detection returns the COCO family of numbers:
 
@@ -146,7 +145,7 @@ their families are selected on `metrics/mAP50-95`, which their dicts do
 return. Pose returns neither `fitness` nor `metrics/mAP50-95`; its trainers
 set `best_metric_key` to `metrics/keypoints_mAP50-95` instead.
 
-## Speed keys
+## Key kecepatan
 
 Every validator adds timing:
 
@@ -159,7 +158,7 @@ These are per-image milliseconds averaged over the run. They describe the machin
 and settings you ran on, so a figure taken from them is only meaningful reported
 with its hardware, batch size and precision.
 
-## Evaluation backend
+## Backend evaluasi
 
 Detection and segmentation metrics are computed through a COCO evaluator, and
 `faster_coco_eval=True`, the default, selects the C++ backend when the
@@ -178,7 +177,7 @@ the CLI reports it in its output for detection-style tasks. Set
 `iou_thresholds` is honored only on the OBB path. The COCO path evaluates through
 its own fixed 0.50 to 0.95 sweep and ignores the value.
 
-## Validation loss
+## Loss validasi
 
 By default validation reports accuracy only. `val_loss=True` also computes the
 family's training objective on validation batches.
@@ -236,7 +235,7 @@ loss, and `val_loss=True` only affects which keys it is published under.
 Augmented validation and validation loss cannot be combined, and asking for both
 raises.
 
-## Files a validation writes
+## File yang ditulis validasi
 
 `val()` always writes `config.yaml` into its save directory, defaulting to
 `runs/val/<model>_<size>_<timestamp>` when `save_dir` is not given.
@@ -255,7 +254,7 @@ metric and curve set. The other validators do not implement plots; classificatio
 semantic, panoptic, depth, normal, edge, restore, matte, OCR, OBB and point all
 write nothing there. A plotting failure warns and never aborts the run.
 
-## Validation during training
+## Validasi selama pelatihan
 
 Training validates every `eval_interval` epochs against the dataset's `val`
 split, and the metrics it produces are what drives `best.pt` selection, the
@@ -266,8 +265,6 @@ See [Hyperparameters](/docs/train/hyperparameters) for `eval_interval`,
 `patience` and `save_plots`, and [Experiment loggers](/docs/train/loggers) for
 where the numbers go.
 
-## Related
+## Terkait
 
 - [Datasets](/docs/train/datasets) for the split keys and formats validators read.
-
-

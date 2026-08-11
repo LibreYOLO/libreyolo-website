@@ -1,20 +1,20 @@
 ---
-title: Layer freezing
-seo_title: Freeze layers during training in LibreYOLO
+title: Pembekuan lapisan
+seo_title: Bekukan lapisan selama pelatihan di LibreYOLO
 description: >-
-  Freeze part of a model for transfer learning: an integer count of family
-  freeze groups, an explicit index list, or module and parameter name selectors.
+  Bekukan sebagian model untuk transfer learning: jumlah integer freeze group
+  family, daftar indeks eksplisit, atau selector nama modul dan parameter.
 lead: >-
-  Freezing holds selected weights fixed while the rest of the model trains.
-  Selectors address a family's own ordered freeze groups or its module names,
-  not raw layer numbers from a YAML graph.
+  Pembekuan mempertahankan bobot terpilih tetap sama saat bagian model lainnya
+  berlatih. Selector mengacu pada freeze group terurut atau nama modul milik
+  family, bukan nomor lapisan mentah dari graph YAML.
 keywords:
-  - freeze layers
+  - membekukan lapisan model
   - transfer learning
   - freeze backbone
   - frozen batchnorm
-  - freeze groups
-  - fine tune head only
+  - freeze group
+  - fine tune head saja
 last_verified: 1.5.0
 snippets:
   train:
@@ -25,21 +25,21 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # The first 10 groups are the whole YOLOv9 backbone.
+        # Sepuluh group pertama adalah seluruh backbone YOLOv9.
         model.train(data="my-dataset.yaml", epochs=50, freeze=10)
     - label: CLI
       language: bash
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           epochs=50 freeze=10
-    - label: By name
+    - label: Berdasarkan nama
       language: python
       code: |
         from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibreRFDETRs.pt")
         model.train(data="my-dataset.yaml", epochs=50, freeze="backbone")
-    - label: Several selectors
+    - label: Beberapa selector
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -47,7 +47,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="my-dataset.yaml", freeze=["backbone", "neck"])
   groups:
-    - label: List a family's freeze groups in order
+    - label: Cantumkan freeze group family secara berurutan
       language: python
       code: |
         from libreyolo import LibreYOLO9
@@ -61,119 +61,119 @@ snippets:
 source_hash: 9f1e7551af6b16fe
 ---
 
-## Freeze something
+## Bekukan sesuatu
 
-`freeze` is optional and defaults to no freezing.
+`freeze` bersifat opsional dan default-nya tanpa pembekuan.
 
 <code-tabs name="train" />
 
-Freezing runs after the model is built and after any head rebuild for a new class
-count, and before the optimizer is created, so the optimizer only ever receives
-trainable parameters.
+Pembekuan berjalan setelah model dibangun dan setelah head dibangun ulang untuk
+jumlah class baru, serta sebelum optimizer dibuat, sehingga optimizer hanya
+menerima parameter yang dapat dilatih.
 
-## What a selector can be
+## Bentuk selector
 
-| Value | Meaning |
+| Nilai | Arti |
 |---|---|
-| `None`, `False`, `""`, `"none"` | Train every parameter |
-| `10` or `"10"` | Freeze the first ten family freeze groups |
-| `[0, 3, 7]` | Freeze those zero-based groups |
-| `"backbone"` | Freeze the matching group, module or parameter prefix |
-| `["backbone", "neck"]` | Freeze each listed selector |
-| `["backbone", 3]` | Mixed lists work |
+| `None`, `False`, `""`, `"none"` | Latih setiap parameter |
+| `10` atau `"10"` | Bekukan sepuluh freeze group family pertama |
+| `[0, 3, 7]` | Bekukan group berbasis nol tersebut |
+| `"backbone"` | Bekukan group, modul, atau awalan parameter yang cocok |
+| `["backbone", "neck"]` | Bekukan setiap selector dalam daftar |
+| `["backbone", 3]` | Daftar campuran dapat digunakan |
 
-A string is parsed before it is interpreted, so the CLI and a YAML config accept
-the same shapes as Python. `freeze="[0, 3, 'head']"` is parsed as a literal list,
-`freeze="backbone,neck"` splits on the comma, and a bare decimal string becomes a
-count.
+String di-parse sebelum ditafsirkan, sehingga CLI dan konfigurasi YAML menerima
+bentuk yang sama dengan Python. `freeze="[0, 3, 'head']"` di-parse sebagai daftar
+literal, `freeze="backbone,neck"` dipecah pada koma, dan string desimal tunggal
+menjadi jumlah.
 
-`freeze=True` is rejected as ambiguous.
+`freeze=True` ditolak karena ambigu.
 
-Name selectors match a freeze group name, a module name, or a parameter-name
-prefix, and glob characters `*`, `?` and `[` work. A leading `model.` is treated
-flexibly, so `backbone` and `model.backbone` both hit whichever spelling the
-family uses internally.
+Selector nama mencocokkan nama freeze group, nama modul, atau awalan nama
+parameter, dan karakter glob `*`, `?`, serta `[` dapat digunakan. Awalan `model.`
+diperlakukan secara fleksibel, sehingga `backbone` dan `model.backbone` sama-sama
+mengenai ejaan mana pun yang digunakan family secara internal.
 
-## Groups are family-defined
+## Group didefinisikan family
 
-An integer addresses a family's own ordered list of freeze groups, not a position
-in a shared graph. LibreYOLO's families are not all one YAML-indexed sequential
-model, so a raw layer number would mean something different on each of them.
+Integer mengacu pada daftar freeze group terurut milik family, bukan posisi pada
+graph bersama. Tidak semua family LibreYOLO merupakan satu model sequential
+berindeks YAML, sehingga nomor lapisan mentah akan bermakna berbeda pada tiap family.
 
-YOLOv9 orders its groups from the input side: ten backbone stages, then six neck
-stages, then the head. That is why `freeze=10` is exactly the backbone.
-`backbone`, `neck` and `head` are stable name selectors on top of it.
+YOLOv9 mengurutkan group dari sisi input: sepuluh tahap backbone, lalu enam tahap
+neck, kemudian head. Karena itu, `freeze=10` tepat berarti backbone. `backbone`,
+`neck`, dan `head` adalah selector nama stabil di atasnya.
 
-RF-DETR's groups are `backbone.encoder`, `backbone.projector`, `decoder`,
-`queries`, `transformer.encoder_output` and `head`. Names are the better choice
-here, because transformer components do not map onto a layer count. `backbone`
-matches both backbone groups by prefix.
+Group RF-DETR adalah `backbone.encoder`, `backbone.projector`, `decoder`,
+`queries`, `transformer.encoder_output`, dan `head`. Nama merupakan pilihan yang
+lebih baik di sini karena komponen transformer tidak dipetakan ke jumlah lapisan.
+`backbone` mencocokkan kedua group backbone berdasarkan awalan.
 
-Families that do not define semantic groups fall back to a conservative default:
-each direct child of the model that owns at least one parameter, in declaration
-order. That is usually a short list, so a large integer will not find enough
-groups:
+Family yang tidak mendefinisikan group semantik kembali ke default konservatif:
+setiap child langsung model yang memiliki setidaknya satu parameter, dalam urutan
+deklarasi. Daftar ini biasanya pendek, sehingga integer besar tidak akan
+menemukan cukup group:
 
 ```text
 freeze index 10 is out of range for 3 available freeze groups.
 ```
 
-To see the real list rather than guessing:
+Untuk melihat daftar sebenarnya tanpa menebak:
 
 <code-tabs name="groups" />
 
-## Failures are loud
+## Kegagalan ditampilkan dengan jelas
 
-Every way of getting this wrong raises rather than training something you did not
-ask for.
+Setiap penggunaan yang salah memunculkan error, bukan melatih sesuatu yang tidak
+diminta.
 
-A selector that matches nothing raises, naming the selectors that missed:
+Selector yang tidak cocok dengan apa pun memunculkan error dan menyebutkan
+selector yang gagal:
 
 ```text
 freeze selector(s) matched no parameters: 'backbon'
 ```
 
-A freeze that would leave nothing trainable raises, both at freeze time and again
-when the optimizer is built:
+Pembekuan yang tidak menyisakan apa pun untuk dilatih memunculkan error saat
+pembekuan dan kembali saat optimizer dibangun:
 
 ```text
 freeze would leave no trainable parameters. Use a smaller freeze value or
 target a narrower module.
 ```
 
-Which is what `freeze="all"` does, since `all` matches every parameter.
+Itulah yang dilakukan `freeze="all"`, karena `all` mencocokkan setiap parameter.
 
-When freezing succeeds, one line records what happened:
+Jika pembekuan berhasil, satu baris mencatat hasilnya:
 
 ```text
 Layer freezing: selectors=[10], tensors=124, params=2103776, trainable=1863456/3967232
 ```
 
-## Frozen BatchNorm stops updating
+## BatchNorm beku berhenti diperbarui
 
-A frozen parameter still sits inside a module whose running statistics would keep
-moving. Every BatchNorm-style module whose parameters land in the frozen set is
-switched to eval mode, and the trainer re-applies that after each epoch's
-`model.train()` call, so the statistics stay fixed for the whole run.
+Parameter beku masih berada dalam modul yang running statistics-nya dapat terus
+berubah. Setiap modul bergaya BatchNorm yang parameternya termasuk set beku
+diubah ke mode eval, dan trainer menerapkannya kembali setelah pemanggilan
+`model.train()` setiap epoch, sehingga statistik tetap sama selama seluruh proses.
 
-This is on by default and is what makes freezing a backbone actually freeze it.
+Perilaku ini aktif secara default dan memastikan pembekuan backbone benar-benar
+membekukannya.
 
-## Composing with LoRA
+## Digabungkan dengan LoRA
 
-`freeze` and `lora=True` work together. On RF-DETR, DEIM and ConvNeXt the
-adapter parameters are preserved as trainable even when their parent group is
-frozen, which is the combination you want: a frozen backbone with adapters
-learning on top of it. See [LoRA fine-tuning](/docs/train/lora).
+`freeze` dan `lora=True` dapat digunakan bersama. Pada RF-DETR, DEIM, dan ConvNeXt,
+parameter adapter dipertahankan agar dapat dilatih meskipun parent group-nya
+dibekukan. Inilah kombinasi yang diinginkan: backbone beku dengan adapter yang
+belajar di atasnya. Lihat [fine-tuning LoRA](/docs/train/lora).
 
-## Scope
+## Cakupan
 
-This is static freezing decided at startup. Scheduled unfreezing and progressive
-freezing are not part of the interface.
+Ini adalah pembekuan statis yang ditentukan saat startup. Unfreezing terjadwal
+dan pembekuan progresif bukan bagian interface.
 
-## Related
+## Terkait
 
-- [Hyperparameters](/docs/train/hyperparameters) for the rest of `train()`.
-- [Distillation](/docs/train/distillation) for the other way to move a large
-  model's knowledge into a training run.
-
-
+- [Hyperparameter](/docs/train/hyperparameters) untuk bagian lain `train()`.
+- [Distilasi](/docs/train/distillation) untuk cara lain memindahkan pengetahuan
+  model besar ke proses pelatihan.

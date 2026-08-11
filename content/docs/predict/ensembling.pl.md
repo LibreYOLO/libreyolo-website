@@ -29,18 +29,13 @@ snippets:
   basic:
     - label: Dwa scalone detektory
       language: python
-      code: >
+      code: |
         from libreyolo import LibreEnsemble, SAMPLE_IMAGE
-
-
-        # Elementami mogą być ścieżki punktów kontrolnych lub już załadowane
-        modele.
-
+        
+        # Elementami mogą być ścieżki checkpointów lub już wczytane modele.
         ensemble = LibreEnsemble(["LibreYOLO9s.pt", "LibreRFDETRs.pt"])
-
-
+        
         result = ensemble(SAMPLE_IMAGE)
-
         for xyxy, conf, cls in zip(
             result.boxes.xyxy.tolist(),
             result.boxes.conf.tolist(),
@@ -61,21 +56,16 @@ snippets:
         )
 
         result = ensemble(SAMPLE_IMAGE)
-        print(len(result.boxes), "uzgodnionych detekcji")
+        print(len(result.boxes), "agreed detections")
     - label: Progi poszczególnych elementów
       language: python
-      code: >
+      code: |
         from libreyolo import LibreEnsemble, SAMPLE_IMAGE
-
-
+        
         ensemble = LibreEnsemble(["LibreYOLO9s.pt", "LibreRFDETRs.pt"])
-
-
-        # Skalar dotyczy każdego elementu; lista jest odczytywana osobno dla
-        elementów.
-
+        
+        # Skalar dotyczy każdego elementu; lista jest odczytywana osobno dla każdego z nich.
         result = ensemble(SAMPLE_IMAGE, conf=[0.3, 0.5], iou=0.5)
-
         print(len(result.boxes))
   external:
     - label: Dodanie detektora niezaładowanego przez LibreYOLO
@@ -266,4 +256,3 @@ do tej samej ścieżki ostrzeżenia i braku działania co wszędzie indziej. Pre
 należy skonfigurować osobno dla każdego elementu.
 
 Łączenie w zespół nie ma interfejsu wiersza poleceń. Jest to API Python.
-

@@ -1,47 +1,61 @@
 ---
-title: Surface normals
-seo_title: Surface normal estimation in LibreYOLO
+title: Surface normal
+seo_title: Estimasi surface normal di LibreYOLO
 description: >-
-  Predict a dense surface-normal field from one image in LibreYOLO. Read the
-  camera frame convention, validate angular error, and export a model.
+  Prediksi field surface-normal padat dari satu gambar di LibreYOLO. Baca
+  konvensi frame kamera, validasi angular error, dan ekspor model.
 lead: >-
-  Surface-normal estimation predicts the direction each visible surface faces.
-  LibreYOLO exposes it as the normal task, which returns a dense field of unit
-  vectors on the original image canvas.
+  Estimasi surface-normal memprediksi arah yang dihadapi setiap permukaan
+  terlihat. LibreYOLO menyediakannya sebagai task normal, yang mengembalikan
+  field padat vektor satuan pada canvas gambar asli.
 keywords:
-  - surface normal estimation python
-  - normal map from image
-  - monocular geometry
-  - angular error metric
-  - dense normal prediction
+  - estimasi surface normal python
+  - normal map dari gambar
+  - geometri monokular
+  - metrik angular error
+  - prediksi normal padat
 last_verified: 1.5.0
 snippets:
   predict:
-    - label: Predict a normal field
+    - label: Prediksi field normal
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreMoGe2s-normal.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         normals = result.normal_map
-        print(normals.data.shape)      # (H, W, 3) float32 unit vectors
-        normals.assert_normalized()    # raises if any pixel is not unit length
-    - label: Read one pixel
+
+        print(normals.data.shape)      # vektor satuan float32 (H, W, 3)
+
+        normals.assert_normalized()    # error jika ada piksel yang panjangnya
+        bukan satu
+    - label: Baca satu piksel
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreMoGe2s-normal.pt")
+
         result = model(SAMPLE_IMAGE)
 
-        # OpenCV camera frame: +x right, +y down, +z into the scene. A surface
-        # facing the camera reads close to (0, 0, -1).
+
+        # Frame kamera OpenCV: +x ke kanan, +y ke bawah, +z masuk ke scene.
+        Permukaan
+
+        # yang menghadap kamera terbaca mendekati (0, 0, -1).
+
         field = result.normals.data
+
         h, w = field.shape[:2]
+
         print(field[h // 2, w // 2])
-    - label: Save the visualization
+    - label: Simpan visualisasi
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -49,10 +63,10 @@ snippets:
         model = LibreYOLO("LibreMoGe2s-normal.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot() renders the field; it is defined for normal and edge results.
+        # plot() merender field; tersedia untuk hasil normal dan edge.
         result.plot().save("normals.png")
   val:
-    - label: Validate and read the metric keys
+    - label: Validasi dan baca key metrik
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -60,79 +74,84 @@ snippets:
         model = LibreYOLO("LibreMoGe2s-normal.pt")
         metrics = model.val(data="my-dataset.yaml", imgsz=518)
 
-        print(metrics["metrics/mean_angular_error"])     # degrees
-        print(metrics["metrics/median_angular_error"])   # degrees
-        print(metrics["metrics/within_11_25"])           # percent of pixels
+        print(metrics["metrics/mean_angular_error"])     # derajat
+        print(metrics["metrics/median_angular_error"])   # derajat
+        print(metrics["metrics/within_11_25"])           # persen piksel
         print(metrics["metrics/within_22_5"], metrics["metrics/within_30"])
   export:
-    - label: Export
+    - label: Ekspor
       language: python
       code: |
         from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibreMoGe2s-normal.pt")
         model.export(format="onnx", imgsz=518)
-    - label: Run the exported file
+    - label: Jalankan file hasil ekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The factory routes on the file suffix, so an exported artifact loads
-        # like any checkpoint and returns the same Results object.
+
+        # Factory mengarahkan berdasarkan suffix file, sehingga artefak hasil
+        ekspor dimuat
+
+        # seperti checkpoint dan mengembalikan objek Results yang sama.
+
         model = LibreYOLO("LibreMoGe2s-normal.onnx")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.normal_map.data.shape)
 source_hash: d26d26d894b436ff
 ---
 
-## Definition
+## Definisi
 
-The `normal` task predicts a three-component unit vector per pixel from a single
-RGB image: the direction the surface at that pixel faces. Unlike depth, the
-output has no free scale, so two predictions are directly comparable without
-alignment.
+Task `normal` memprediksi vektor satuan tiga komponen per piksel dari satu gambar
+RGB, yaitu arah yang dihadapi permukaan pada piksel. Berbeda dari depth, output
+tidak memiliki skala bebas, sehingga dua prediksi dapat langsung dibandingkan
+tanpa alignment.
 
-A prediction fills `result.normal_map`, a `NormalMap` payload holding an
-`(H, W, 3)` float32 array on the original image canvas, also reachable as
-`result.normals`. Vectors use LibreYOLO's OpenCV camera frame, with `+x`
-right, `+y` down and `+z` into the scene, and they face the camera, so a
-fronto-parallel surface reads `(0, 0, -1)`. `.assert_normalized()` checks that
-every pixel is finite and unit length within a tolerance. `result.boxes`
-stays empty, so `conf`, `iou` and `max_det` have no effect, and
-`Results.plot()` covers this task.
+Prediksi mengisi `result.normal_map`, payload `NormalMap` berisi array float32
+`(H, W, 3)` pada canvas gambar asli, yang juga dapat diakses sebagai
+`result.normals`. Vektor menggunakan frame kamera OpenCV LibreYOLO, dengan `+x`
+ke kanan, `+y` ke bawah, dan `+z` masuk ke scene, serta menghadap kamera,
+sehingga permukaan fronto-parallel terbaca `(0, 0, -1)`. `.assert_normalized()`
+memeriksa setiap piksel terbatas dan panjangnya satu dalam toleransi.
+`result.boxes` tetap kosong, sehingga `conf`, `iou`, dan `max_det` tidak
+berpengaruh, serta `Results.plot()` mencakup task ini.
 
-## Models
+## Model
 
-Two families serve `normal`.
+Dua family melayani `normal`.
 
-[MoGe-2](/docs/models/moge-2) is the dedicated one: a single-forward monocular
-geometry model in three encoder sizes. LibreYOLO does not copy these checkpoints
-into its own organization; loading one downloads the matching size from the
-official repositories at a pinned revision and verifies it against a recorded
-SHA-256.
+[MoGe-2](/docs/models/moge-2) adalah model khusus: model geometri monokular
+satu-forward dalam tiga ukuran encoder. LibreYOLO tidak menyalin checkpoint ini
+ke organisasinya; pemuatan mengunduh ukuran cocok dari repository resmi pada
+revisi yang di-pin dan memverifikasinya terhadap SHA-256 tercatat.
 
-[LibreMODUS](/docs/models/libremodus) produces normals as one target of an
-any-to-any model, and can take a depth map rather than an RGB image as its
-input. It needs the `modus` extra and your own authenticated Hugging Face
-account, and it offers neither `val()` nor `export()`, so it does not take part
-in the validation and export sections below.
+[LibreMODUS](/docs/models/libremodus) menghasilkan normal sebagai salah satu
+target model any-to-any dan dapat menerima depth map, bukan gambar RGB, sebagai
+input. Model memerlukan ekstra `modus` dan akun Hugging Face terautentikasi,
+serta tidak menawarkan `val()` maupun `export()`, sehingga tidak termasuk bagian
+validasi dan ekspor di bawah.
 
 ## Predict
 
-MoGe-2 weights download on first use and are cached locally.
+Bobot MoGe-2 diunduh saat penggunaan pertama dan di-cache secara lokal.
 
 <code-tabs name="predict" />
 
-`imgsz` must be divisible by the ViT encoder's patch size, which LibreYOLO
-checks before the run starts. Predicting a list of images runs one forward pass
-per image; this task has no stacked-batch fast path. See
-[prediction](/docs/predict) for sources, streaming and result handling.
+`imgsz` harus dapat dibagi patch size encoder ViT, yang diperiksa LibreYOLO
+sebelum run dimulai. Prediksi list gambar menjalankan satu forward pass per
+gambar; task ini tidak memiliki jalur cepat batch bertumpuk. Lihat
+[prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
 
-## Dataset format
+## Format dataset
 
-Normal validation pairs each image with a same-stem three-channel 16-bit PNG of
-the same resolution, plus an optional validity mask.
+Validasi normal memasangkan setiap gambar dengan PNG 16-bit tiga channel dengan
+stem dan resolusi sama, ditambah validity mask opsional.
 
 ```text
 dataset/
@@ -155,46 +174,46 @@ nc: 1
 names: {0: normal}
 ```
 
-The target PNG is exactly three-channel `uint16` with channels stored as RGB.
-Decoding is `n = png / 65535 * 2 - 1` followed by renormalizing each vector, and
-the decoded vectors use the same OpenCV camera frame as the predictions. A mask
-pixel counts as valid when nonzero; without a mask file, every finite nonzero
-decoded vector is valid. Invalid and padded target pixels are held internally as
-`(0, 0, 0)` and never contribute to a metric. See
-[dataset formats](/docs/reference/dataset-formats) for the full contract.
+PNG target harus tepat berupa `uint16` tiga channel yang disimpan sebagai RGB.
+Decode menggunakan `n = png / 65535 * 2 - 1`, lalu setiap vektor dinormalisasi
+ulang, dan vektor hasil decode menggunakan frame kamera OpenCV yang sama dengan
+prediksi. Piksel mask valid jika bukan nol; tanpa file mask, setiap vektor
+hasil decode terbatas dan bukan nol dianggap valid. Piksel target tidak valid
+dan padding disimpan sebagai `(0, 0, 0)` dan tidak pernah berkontribusi pada
+metrik. Lihat [format dataset](/docs/reference/dataset-formats) untuk kontrak
+lengkap.
 
 ## Train
 
-Neither normal family has a training implementation: `train()` raises
-`NotImplementedError` on both. MoGe-2's page points at its pinned official
-checkpoints for predict, validate and export.
+Kedua family normal tidak memiliki implementasi pelatihan: `train()` memunculkan
+`NotImplementedError`. Halaman MoGe-2 menunjuk ke checkpoint resmi yang di-pin
+untuk predict, validate, dan export.
 
 ## Validate
 
-`val()` measures the angle between each predicted vector and its ground-truth
-vector, over the pixels the dataset marks valid.
+`val()` mengukur sudut antara setiap vektor prediksi dan ground truth pada
+piksel yang ditandai valid oleh dataset.
 
 <code-tabs name="val" />
 
-`metrics/mean_angular_error` and `metrics/median_angular_error` are that angle in
-degrees, and lower is better. `metrics/within_11_25`, `metrics/within_22_5` and
-`metrics/within_30` are the percentage of valid pixels whose angular error falls
-within 11.25, 22.5 and 30 degrees, so higher is better. Note the unit: those
-three are percentages, not fractions. `fitness` is `metrics/within_11_25`
-divided by 100, which puts best-checkpoint selection on the same `[0, 1]` scale
-as every other task.
+`metrics/mean_angular_error` dan `metrics/median_angular_error` adalah sudut
+dalam derajat, dan nilai lebih rendah lebih baik. `metrics/within_11_25`,
+`metrics/within_22_5`, dan `metrics/within_30` adalah persentase piksel valid
+dengan angular error dalam 11.25, 22.5, dan 30 derajat, sehingga nilai lebih
+tinggi lebih baik. Ketiganya berupa persentase, bukan fraksi. `fitness` adalah
+`metrics/within_11_25` dibagi 100, sehingga pemilihan checkpoint terbaik
+menggunakan skala `[0, 1]` yang sama dengan task lain.
 
 ## Export
 
-An exported normal model loads back through `LibreYOLO()` on its file suffix, so
-a `.onnx` file behaves like a checkpoint and returns the same `Results`.
+Model normal hasil ekspor dimuat kembali melalui `LibreYOLO()` berdasarkan
+suffix file, sehingga `.onnx` berperilaku seperti checkpoint dan mengembalikan
+`Results` yang sama.
 
 <code-tabs name="export" />
 
-Normal export uses a fixed-resolution, batch-1 runtime contract: `dynamic` and a
-`batch` other than 1 are rejected, and `imgsz` must be divisible by the encoder's
-patch size. Per-format coverage is on the [MoGe-2 page](/docs/models/moge-2) and
-in the [full export matrix](/docs/reference/export-matrix).
-[Export](/docs/export) lists the arguments every format accepts.
-
-
+Ekspor normal menggunakan kontrak runtime resolusi tetap, batch 1: `dynamic`
+dan `batch` selain 1 ditolak, serta `imgsz` harus dapat dibagi patch size
+encoder. Cakupan per format tersedia pada [halaman MoGe-2](/docs/models/moge-2)
+dan [matriks ekspor lengkap](/docs/reference/export-matrix).
+[Ekspor](/docs/export) mencantumkan argumen setiap format.

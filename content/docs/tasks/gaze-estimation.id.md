@@ -1,48 +1,57 @@
 ---
-title: Estimasi arah pandang
-seo_title: Estimasi arah pandang di LibreYOLO
+title: Estimasi pandangan
+seo_title: Estimasi pandangan di LibreYOLO
 description: >-
-  Estimasi pitch dan yaw arah pandang per wajah di LibreYOLO. Lakukan prediksi
-  dari Python atau CLI, baca sudut dalam radian, dan ekspor head gaze ke ONNX.
+  Estimasi pitch dan yaw pandangan per wajah di LibreYOLO. Prediksi dari Python
+  atau CLI, baca sudut dalam radian, dan ekspor pandangan head ke ONNX.
 lead: >-
-  Estimasi arah pandang mengembalikan arah pandangan untuk setiap wajah dalam
+  Estimasi pandangan mengembalikan arah pandangan untuk setiap wajah dalam
   gambar. LibreYOLO memodelkannya sebagai task dua tahap: detektor wajah
-  berjalan lebih dulu, lalu head gaze membaca pitch dan yaw dari setiap crop
-  wajah yang dikembalikan.
+  dijalankan terlebih dahulu, dan pandangan head membaca pitch dan yaw dari
+  setiap potongan wajah yang dikembalikan.
 keywords:
-  - estimasi arah pandang python
-  - eye tracking
-  - pitch yaw gaze
+  - estimasi pandangan python
+  - pelacakan mata
+  - pitch yaw pandangan
   - L2CS-Net
   - arah pandangan
-  - head pose
-  - task gaze libreyolo
+  - pose head
+  - pandangan libreyolo task
 last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Tanpa face_detector, prediksi kembali ke detektor bawaan
-        # OpenCV, sehingga hanya checkpoint yang diunduh.
+
+        # Tanpa face_detector yang diberikan, prediksi kembali menggunakan
+        detektor bawaan OpenCV
+
+        # sehingga tidak ada yang diunduh selain checkpoint.
+
         model = LibreYOLO("LibreL2CSr50.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         gaze = result.gaze
+
         print(gaze.pitch, gaze.yaw)              # radian, satu baris per wajah
+
         print(gaze.pitch_deg, gaze.yaw_deg)      # sudut yang sama dalam derajat
-        print(gaze.direction_3d)                 # vektor satuan (N, 3)
+
+        print(gaze.direction_3d)                 # (N, 3) vektor satuan
     - label: CLI
       language: bash
       code: >
-        # Berbeda dari jalur Python, CLI tidak memiliki fallback otomatis: model
-        gaze
+        # Tidak seperti jalur Python, CLI tidak memiliki cadangan otomatis:
+        pandangan
 
-        # memerlukan detektor wajah eksplisit berupa detektor LibreYOLO
+        # model memerlukan detektor wajah yang eksplisit, dan itu harus
 
-        # yang box-nya merupakan wajah.
+        # LibreYOLO detektor yang kotaknya adalah wajah.
 
         libreyolo predict model=LibreL2CSr50.pt source=photo.jpg
         face_detector=face-detector.pt save=True
@@ -53,10 +62,10 @@ snippets:
 
         model = LibreYOLO("LibreL2CSr50.pt")
 
-        # Berikan box dari detektor yang sudah dijalankan kepada head gaze.
+        # Berikan kotak head pandangan dari detektor yang sudah Anda jalankan.
         result = model(SAMPLE_IMAGE, face_boxes=[[34, 12, 90, 80]])
 
-        # Atau gunakan salah satu detektor bawaan.
+        # Atau sebutkan salah satu detektor yang sudah disertakan.
         result = model(SAMPLE_IMAGE, face_detector="yunet")
   export:
     - label: Python
@@ -75,82 +84,84 @@ source_hash: 22aa3c3d87b0c730
 
 ## Definisi
 
-Estimasi arah pandang mengembalikan dua sudut per wajah. `result.gaze` adalah
-payload `Gaze` berbentuk `(N, 2)`, kolom 0 pitch dan kolom 1 yaw, dalam radian,
-dengan baris yang selaras terhadap `result.boxes`, yaitu box wajah terdeteksi.
-Konvensinya mengikuti L2CS-Net: yaw positif memutar pandangan ke kiri subjek,
+Estimasi pandangan mengembalikan dua sudut per wajah. `result.gaze` adalah muatan `Gaze`
+berbentuk `(N, 2)`, kolom 0 pitch dan kolom 1 yaw, dalam radian, disusun baris per
+baris dengan `result.boxes`, kotak wajah yang terdeteksi. Konvensinya adalah yang
+L2CS-Net menggunakan: yaw positif memutar pandangan ke arah kiri subjek,
 pitch positif memutarnya ke bawah.
 
-Payload yang sama menyediakan `pitch_deg` dan `yaw_deg` untuk derajat, serta
-`direction_3d`, vektor satuan `(N, 3)` dalam frame kamera dengan kolom
+Payload yang sama mengekspos `pitch_deg` dan `yaw_deg` untuk derajat, dan
+`direction_3d`, sebuah `(N, 3)` vektor satuan dalam frame kamera dengan kolom
 `(x, y, z)`.
 
-Karena task terdiri dari dua tahap, prediksi bergantung pada dua model. Wajah
-yang dilewatkan detektor tidak memiliki baris gaze, dan box yang salah
-menghasilkan sudut dari crop wajah yang salah. Key task kanonis adalah `gaze`;
-`gaze-estimation` dinormalisasi ke sana.
+Karena task adalah dua tahap, prediksi bergantung pada dua model. Wajah yang
+terlewat oleh detektor tidak memiliki baris pandangan, dan kotak yang ditempatkan dengan buruk menghasilkan sudut dari
+wajah yang dipotong dengan buruk. Kunci task kanonik adalah `gaze`; `gaze-estimation`
+menormalkannya.
 
 ## Model
 
-[L2CS-Net](/docs/models/l2cs) adalah satu-satunya family untuk task ini. Model
-memasangkan trunk ResNet dengan dua head classification bin sudut paralel, satu
-untuk pitch dan satu untuk yaw, pada crop wajah 448x448. Lima depth backbone
-didukung secara arsitektural dan satu checkpoint ResNet-50 diterbitkan.
+[L2CS-Net](/docs/models/l2cs) adalah satu-satunya family yang melayani task ini. Ini memasangkan sebuah
+Trunk ResNet dengan dua kepala klasifikasi bin-sudut paralel, satu untuk pitch dan
+satu untuk yaw, di atas 448x448 potongan wajah. Lima kedalaman backbone didukung
+Secara arsitektural, dan salah satunya, ResNet-50, memiliki checkpoint yang dipublikasikan.
 
-Bobot memiliki batasan lisensi. Bobot dilatih pada Gaze360, yang hanya
-mengizinkan penelitian dan penggunaan nonkomersial serta melarang distribusi
-ulang, sehingga LibreYOLO tidak mencerminkan apa pun untuk family ini. Satu
-checkpoint yang dapat diambil otomatis berasal langsung dari distribusi Google
-Drive penulis melalui `gdown`, setelah ketentuan lisensi dicetak. Baca
-[L2CS-Net](/docs/models/l2cs) sebelum deployment.
+Bobot tersebut memiliki batasan lisensi. Mereka dilatih pada Gaze360, yang
+lisensi hanya mengizinkan penelitian dan penggunaan non-komersial serta melarang
+redistribusi, jadi LibreYOLO tidak mencerminkan apa pun untuk family ini. Satu checkpoint
+perpustakaan dapat mengambil secara otomatis langsung dari Google milik penulis
+Distribusikan drive, melalui `gdown`, setelah mencetak syarat lisensi. Baca
+[L2CS-Net](/docs/models/l2cs) sebelum menyebarkannya.
 
-Jalur pengunduhan memerlukan ekstra `gaze`:
+Jalur unduhan itu memerlukan tambahan `gaze`:
 
 ```bash
 pip install "libreyolo[gaze]"
 ```
 
-Tanpanya, library mencetak petunjuk pengunduhan manual. Prediksi dan ekspor
-checkpoint yang sudah tersedia tidak memerlukan ekstra.
+Tanpanya, pustaka mencetak instruksi unduhan manual alih-alih mencoba
+transfer. Melakukan prediksi dan mengekspor checkpoint yang sudah Anda miliki tidak memerlukan
+tambahan sama sekali.
 
-## Predict
+## Prediksi
 
 <code-tabs name="predict" />
 
-Sumber wajah dipilih melalui tiga cara. `face_boxes` memberikan box yang sudah
-dihitung dan melewati deteksi. `face_detector` menerima `"auto"`, `"haar"`,
-`"yunet"`, model deteksi LibreYOLO, atau callable biasa, dan dapat ditetapkan
-pada constructor atau per pemanggilan. Jika tidak ditetapkan dalam Python,
-prediksi kembali ke detektor bawaan OpenCV. Pada OpenCV 4, detektor tersebut
-adalah cascade Haar dalam wheel tanpa pengunduhan; pada OpenCV 5, yang menghapus
-API Haar, detektornya YuNet dan mengambil file model kecil dari OpenCV zoo satu
-kali.
+Sumber wajah dipilih dengan salah satu dari tiga cara. `face_boxes` melewati kotak yang
+sudah Anda hitung dan melewati deteksi. `face_detector` menerima `"auto"`,
+`"haar"`, `"yunet"`, model deteksi LibreYOLO, atau callable biasa, dan bisa
+disetel pada konstruktor atau per panggilan. Jika tidak disetel di Python, prediksi akan
+kembali ke detektor yang dibundel OpenCV, sehingga panggilan kosong bekerja tanpa pengaturan.
+OpenCV 4 yaitu Haar cascade yang dikirimkan di dalam wheel, yang tidak membutuhkan
+unduh sama sekali; pada OpenCV 5, di mana API Haar dihapus, itu adalah YuNet, yang
+mengambil satu file model kecil dari OpenCV zoo sekali.
 
-CLI tidak memakai fallback tersebut. `libreyolo predict` menolak model gaze
-tanpa `face_detector=`, dan nilainya harus berupa nama detektor LibreYOLO atau
-path checkpoint. Lihat [prediksi](/docs/predict) untuk sumber, streaming, dan
+CLI tidak membagikan fallback itu. `libreyolo predict` menolak model pandangan
+tanpa `face_detector=`, dan nilai yang diambilnya adalah nama detektor LibreYOLO atau
+Jalur checkpoint. Lihat [prediction](/docs/predict) untuk sumber, streaming dan
 penanganan hasil.
 
-## Train
+## Kereta
 
-Tidak ada family dalam task ini yang berlatih di LibreYOLO.
-`LibreL2CS.train()` memunculkan error: lakukan pelatihan pada project L2CS-Net
-upstream dan muat state dict hasilnya di sini.
+Tidak ada family di task kereta di dalam LibreYOLO. `LibreL2CS.train()` meningkatkan:
+latih di proyek L2CS-Net hulu dan muat dictionary state yang dihasilkan di sini.
 
-## Validate
+## Validasi
 
-Validasi terhadap dataset ground truth gaze berada di luar cakupan, dan `val()`
-memunculkan error alih-alih mengembalikan metrik yang tidak dihitung. Tidak ada
-dictionary `metrics/` untuk task ini. Lakukan evaluasi di upstream pada dataset
-asal checkpoint.
+Validasi terhadap dataset gaze ground-truth berada di luar ruang lingkup, dan `val()`
+menghasilkan alih-alih mengembalikan metrik yang tidak dihitungnya. Tidak ada `metrics/`
+kamus untuk task ini. Evaluasi di hulu, pada dataset checkpoint adalah
+dilatih untuk.
 
-## Export
+## Ekspor
 
 <code-tabs name="export" />
 
-Kontrak ekspor gaze mencakup ONNX, TorchScript, ExecuTorch, TensorRT, dan
-OpenVINO. Yang keluar dari library hanya trunk ResNet dan dua head bin sudut:
-graph menerima crop wajah 448x448 yang sudah dipraproses dan mengembalikan logit
-yaw serta pitch mentah. Deteksi wajah, cropping, softmax, expectation bin, dan
-konversi ke sudut tetap berada di Python dalam `libreyolo.models.l2cs.utils`.
-Lihat [ekspor](/docs/export) untuk format dan argumennya.
+Kontrak ekspor gaze mencakup ONNX, TorchScript, ExecuTorch, TensorRT dan
+OpenVINO. Yang keluar dari pustaka adalah batang ResNet dan dua bin sudut
+hanya kepala: grafik mengambil potongan wajah 448x448 yang telah diproses sebelumnya dan mengembalikan data mentah
+logit yaw dan pitch. Deteksi wajah, pemotongan, softmax, bin
+harapan dan konversi ke sudut semuanya tetap di Python, dalam
+`libreyolo.models.l2cs.utils`. Lihat [export](/docs/export) untuk format dan
+argumennya.
+

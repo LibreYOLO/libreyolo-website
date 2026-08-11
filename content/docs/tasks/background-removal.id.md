@@ -1,23 +1,23 @@
 ---
-title: Background removal
-seo_title: Background removal in LibreYOLO
+title: Penghapusan latar belakang
+seo_title: Penghapusan latar belakang di LibreYOLO
 description: >-
-  Cut a subject out of its background in LibreYOLO. Predict a soft alpha matte,
-  write a transparent PNG, and validate with MAE and S-measure.
+  Memotong subjek dari latar belakangnya di LibreYOLO. Prediksi matte alpha
+  lembut, tulis PNG transparan, dan validasi dengan MAE dan S-measure.
 lead: >-
-  Background removal separates a subject from everything behind it. LibreYOLO
-  exposes it as the matte task, which returns a soft alpha value per pixel
-  rather than a hard foreground mask.
+  Penghapusan latar belakang memisahkan subjek dari segala sesuatu di
+  belakangnya. LibreYOLO menampilkannya sebagai matte task, yang mengembalikan
+  nilai alpha lembut per piksel daripada mask depan keras.
 keywords:
-  - background removal python
-  - alpha matting model
-  - dichotomous image segmentation
-  - transparent png cutout
-  - soft alpha matte
+  - penghapusan latar belakang python
+  - model alpha matting
+  - segmentasi gambar dikotomis
+  - potongan PNG transparan
+  - matte alpha lembut
 last_verified: 1.5.0
 snippets:
   predict:
-    - label: Predict a matte
+    - label: Prediksi matte
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -26,8 +26,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         matte = result.matte
-        print(matte.array.shape, matte.array.dtype)   # (H, W) float32 in [0, 1]
-    - label: Write a transparent PNG
+        print(matte.array.shape, matte.array.dtype)   # (H, W) float32 di [0, 1]
+    - label: Tulis PNG transparan
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -35,12 +35,12 @@ snippets:
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
         result = model(SAMPLE_IMAGE)
 
-        # save() composites the source with the matte as an alpha channel.
+        # save() mengkomposit sumber dengan matte sebagai saluran alpha.
         result.save("subject.png")
 
-        rgba = result.cutout()   # the same (H, W, 4) uint8 array in memory
+        rgba = result.cutout()   # array uint8 (H, W, 4) yang sama di memori
         print(rgba.shape)
-    - label: Composite onto a new background
+    - label: Gabungkan ke latar belakang baru
       language: python
       code: >
         import numpy as np
@@ -57,26 +57,34 @@ snippets:
 
         alpha = rgba[..., 3:4].astype(np.float32) / 255.0
 
-        backdrop = np.full_like(rgba[..., :3], 255)          # white
+        backdrop = np.full_like(rgba[..., :3], 255)          # putih
 
         composited = (rgba[..., :3] * alpha + backdrop * (1 -
         alpha)).astype(np.uint8)
 
         print(composited.shape)
   val:
-    - label: Validate and read the metric keys
+    - label: Validasi dan baca kunci metrik
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
 
-        # A directory holding images/ and a matte directory works in place of
-        # a dataset YAML.
+
+        # Sebuah direktori yang memuat direktori images/ dan matte dapat
+        digunakan sebagai pengganti
+
+        # sebuah dataset YAML.
+
         metrics = model.val(data="my-matte-dataset/")
 
-        print(metrics["metrics/MAE"])        # lower is better
-        print(metrics["metrics/Smeasure"])   # fitness, higher is better
+
+        print(metrics["metrics/MAE"])        # lebih rendah lebih baik
+
+        print(metrics["metrics/Smeasure"])   # kebugaran, lebih tinggi lebih
+        baik
   export:
     - label: Export
       language: python
@@ -85,70 +93,76 @@ snippets:
 
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
         model.export(format="torchscript")
-    - label: Run the exported file
+    - label: Jalankan file yang diekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The factory routes on the file suffix, so an exported artifact loads
-        # like any checkpoint and returns the same Results object.
+
+        # Pabrik menentukan rute berdasarkan akhiran file, sehingga artefak yang
+        diekspor dapat dimuat
+
+        # seperti checkpoint lainnya dan mengembalikan objek Results yang sama.
+
         model = LibreYOLO("LibreBiRefNetl-matte.torchscript")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.matte.array.shape)
 source_hash: f7d88c74d9729268
 ---
 
-## Definition
+## Definisi
 
-The `matte` task predicts one alpha value per pixel from a single RGB image: `1`
-is fully foreground and `0` is fully background. The value is continuous rather
-than binary, which is the point of the task. A hard mask is one threshold away,
-at 0.5, while the soft matte additionally carries the partial coverage at hair,
-fur and motion-blurred edges that a binary mask throws away.
+`matte` task memprediksi satu nilai alpha per piksel dari satu gambar RGB: `1`
+sepenuhnya latar depan dan `0` sepenuhnya latar belakang. Nilainya bersifat kontinu daripada
+daripada biner, yang merupakan inti dari task. Sebuah mask keras hanya satu ambang saja,
+pada 0,5, sementara matte lembut selain itu juga memberikan coverage parsial pada rambut,
+bulu dan tepi yang buram karena gerakan yang dibuang oleh topeng biner.
 
-A prediction fills `result.matte`, a `Matte` payload holding an `(H, W)`
-float32 array in `[0, 1]` on the original image canvas, reachable as NumPy
-through `.array`. `result.cutout()` composites the source image with that
-alpha into an `(H, W, 4)` uint8 RGBA array, and `result.save(path)` writes
-the same thing to a transparent-background PNG. `result.boxes` stays empty,
-so `conf`, `iou` and `max_det` have no effect.
+Sebuah prediksi mengisi `result.matte`, sebuah payload `Matte` yang memuat `(H, W)`
+array float32 di `[0, 1]` pada kanvas gambar asli, dapat diakses sebagai NumPy
+melalui `.array`. `result.cutout()` menyusun gambar sumber dengan itu
+alpha menjadi array RGBA uint8 `(H, W, 4)`, dan `result.save(path)` menulis
+hal yang sama ke PNG dengan latar belakang transparan. `result.boxes` tetap kosong,
+jadi `conf`, `iou` dan `max_det` tidak berpengaruh.
 
-## Models
+## Model
 
-Two families serve `matte`, and they share a forward path.
+Dua keluarga melayani `matte`, dan mereka berbagi jalur maju.
 
-[BiRefNet](/docs/models/birefnet) is the bilateral-reference network the task is
-built around, published here as one Swin-L tier checkpoint.
+[BiRefNet](/docs/models/birefnet) adalah jaringan referensi bilateral task adalah]
+dibangun di sekitar, dipublikasikan di sini sebagai satu tingkat Swin-L checkpoint.
 
-[FeyNobg](/docs/models/feynobg) is Feyn Inc.'s deepened variant: BiRefNet's
-architecture with the third Swin stage grown from 18 to 24 blocks, then
-retrained. LibreYOLO reuses BiRefNet's forward path, preprocessing and
-single-logit output for it, so predict, validate and checkpoint handling behave
-identically; the weights and the family identity are FeyNobg's own.
+[FeyNobg](/docs/models/feynobg) adalah varian yang diperdalam dari Feyn Inc.: BiRefNet's]
+arsitektur dengan tahap Swin ketiga yang dikembangkan dari 18 menjadi 24 blok, kemudian
+dilatih ulang. LibreYOLO menggunakan kembali jalur maju BiRefNet, pra-pemrosesan dan
+output single-logit untuk itu, jadi prediksi, validasi dan penanganan checkpoint berperilaku
+identik; bobot dan identitas family adalah milik FeyNobg sendiri.
 
-The two carry different weight licenses. Both are stated on the model pages, and
-the license on the Hugging Face repository of the specific checkpoint is the
-authoritative one.
+Keduanya memiliki lisensi dengan bobot yang berbeda. Keduanya tercantum di halaman model, dan
+lisensi di repositori Hugging Face dari checkpoint tertentu adalah
+yang berwibawa.
 
-## Predict
+## Prediksi
 
-Weights download from Hugging Face on first use and are cached locally.
+Bobot diunduh dari Hugging Face saat penggunaan pertama dan disimpan secara lokal.
 
 <code-tabs name="predict" />
 
-Both families run at a fixed native 1024x1024 canvas and resize the matte back
-to the original image. A different resolution is not supported, because the Swin
-backbone's relative-position tables are tied to that size, and a mismatch
-interpolates them badly rather than raising. `Results.save()` is defined for
-matte results only and needs the source image, which it reloads from
-`Results.path` unless you pass one. See [prediction](/docs/predict) for sources,
-streaming and result handling.
+Kedua keluarga berjalan pada kanvas asli tetap 1024x1024 dan mengubah ukuran matte kembali
+ke gambar asli. Resolusi yang berbeda tidak didukung, karena Swin
+Tabel posisi relatif backbone terikat pada ukuran itu, dan ketidaksesuaian
+menginterpolasinya dengan buruk daripada meningkatkan. `Results.save()` didefinisikan untuk
+hanya matte results dan membutuhkan gambar sumber, yang dimuat ulang darinya
+`Results.path` kecuali Anda melewati satu. Lihat [prediction](/docs/predict) untuk sumber,
+streaming dan penanganan hasil.
 
-## Dataset format
+## format Dataset
 
-Matte validation pairs each RGB image with a single-channel ground-truth alpha
-matte sharing the same stem, where 0 is background and 255 is foreground.
+Validasi matte memadankan setiap gambar RGB dengan alpha ground-truth satu saluran
+matte yang memiliki stem yang sama, dimana 0 adalah latar belakang dan 255 adalah latar depan.
 
 ```text
 my-matte-dataset/
@@ -158,10 +172,10 @@ my-matte-dataset/
     subject.png
 ```
 
-Passing that root as `data=` is enough: the matte directory is auto-detected
-among `mattes/`, `matte/`, `gt/`, `masks/`, `mask/` and `alpha/`. A dataset YAML
-is the alternative, with `path` plus `val_images` and `val_mattes` naming
-directories relative to it:
+Melewati root itu sebagai `data=` sudah cukup: direktori matte terdeteksi secara otomatis
+di antara `mattes/`, `matte/`, `gt/`, `masks/`, `mask/` dan `alpha/`. dataset YAML
+adalah alternatifnya, dengan `path` plus penamaan `val_images` dan `val_mattes`
+direktori relatif terhadapnya:
 
 ```yaml
 path: my-matte-dataset
@@ -171,44 +185,43 @@ nc: 1
 names: {0: matte}
 ```
 
-`nc` and `names` are schema placeholders; a matte model returns `Results.matte`,
-not detections. Matte values are read as alpha in `[0, 1]` by dividing by 255,
-and a matte whose shape differs from the prediction canvas is resized bilinearly
-to match. See [dataset formats](/docs/reference/dataset-formats) for the full
-contract.
+`nc` dan `names` adalah placeholder skema; model matte mengembalikan `Results.matte`,
+bukan deteksi. Nilai matte dibaca sebagai alpha di `[0, 1]` dengan membagi dengan 255,
+dan sebuah matte yang bentuknya berbeda dari kanvas prediksi diubah ukurannya secara bilinear
+untuk mencocokkan. Lihat [dataset formats](/docs/reference/dataset-formats) untuk selengkapnya
+kontrak.
 
-## Train
+## Kereta
 
-Neither matte family has a training implementation: `train()` raises
-`NotImplementedError` on both, and matte support covers prediction, validation
-and export only. Each model page names the upstream project that ships training
-code and the conversion script that brings a checkpoint back.
+Tidak ada matte family yang memiliki implementasi pelatihan: `train()` memunculkan
+`NotImplementedError` di kedua-duanya, dan dukungan matte mencakup prediksi, validasi
+dan hanya ekspor. Setiap halaman model menyebutkan proyek hulu yang mengirimkan pelatihan
+kode dan skrip konversi yang mengembalikan checkpoint.
 
-## Validate
+## Validasi
 
-`val()` drives the model's own `predict`, so validation uses the family's exact
-preprocessing, and both metrics are computed on the original image canvas.
+`val()` menggerakkan `predict` milik model itu sendiri, jadi validasi menggunakan family yang sama persis
+pra-pemrosesan, dan kedua metrik dihitung pada kanvas gambar asli.
 
 <code-tabs name="val" />
 
-`metrics/MAE` is the mean absolute error against the ground-truth alpha, in
-`[0, 1]`, and lower is better. `metrics/Smeasure` is the S-measure of Fan et al.
-(ICCV 2017), a structural similarity that credits getting the subject's shape
-and its holes right, which a per-pixel average alone misses; higher is better.
-S-measure is also `fitness`, the number best-checkpoint selection reads. Neither
-metric depends on resolution.
+`metrics/MAE` adalah kesalahan absolut rata-rata terhadap alpha yang sebenarnya, dalam
+`[0, 1]`, dan semakin rendah semakin baik. `metrics/Smeasure` adalah S-measure dari Fan et al.
+(ICCV 2017), sebuah kesamaan struktural yang menilai ketepatan bentuk subjek
+dan lubangnya, yang tidak bisa hanya dinilai dengan rata-rata per-piksel; semakin tinggi semakin baik.
+S-measure juga `fitness`, jumlah pembacaan terbaik-checkpoint. Tidak ada
+metrik yang bergantung pada resolusi.
 
-## Export
+## Ekspor
 
-An exported matte model loads back through `LibreYOLO()` on its file suffix, so
-the artifact behaves like a checkpoint and returns the same `Results`.
+Model matte yang diekspor dapat dimuat kembali melalui `LibreYOLO()` berdasarkan akhiran filenya, sehingga
+artefak berperilaku seperti checkpoint dan mengembalikan `Results` yang sama.
 
 <code-tabs name="export" />
 
-TorchScript is the validated path for this task. ONNX conversion runs but has
-not cleared the same parity bar, and the remaining formats are not available.
-Per-format coverage is on the [BiRefNet](/docs/models/birefnet) and
-[FeyNobg](/docs/models/feynobg) pages and in the
-[full export matrix](/docs/reference/export-matrix).
-
+TorchScript adalah jalur yang tervalidasi untuk task ini. Konversi ONNX berjalan tetapi memiliki
+belum melewati batang paritas yang sama, dan format yang tersisa tidak tersedia.
+Cakupan per format ada di [BiRefNet](/docs/models/birefnet) dan
+halaman [FeyNobg](/docs/models/feynobg) dan di
+[matriks ekspor penuh](/docs/reference/export-matrix).
 

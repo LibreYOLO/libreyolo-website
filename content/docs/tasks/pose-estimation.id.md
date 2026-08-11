@@ -1,20 +1,20 @@
 ---
-title: Pose estimation
-seo_title: Pose estimation in LibreYOLO
+title: Estimasi pose
+seo_title: Estimasi pose di LibreYOLO
 description: >-
-  Predict keypoints per instance in LibreYOLO: the families that serve the task,
-  the label format, and the predict, train, validate and export calls.
+  Prediksi keypoint per instance di LibreYOLO: family yang melayani task, format
+  label, serta pemanggilan prediksi, pelatihan, validasi, dan ekspor.
 lead: >-
-  Pose estimation locates each instance and returns an ordered set of named
-  keypoints for it, so the output carries the object's internal structure rather
-  than only its extent. The task key is pose.
+  Estimasi pose melokalisasi setiap instance dan mengembalikan kumpulan keypoint
+  bernama dalam urutan tetap, sehingga output memuat struktur internal objek,
+  bukan hanya luas cakupannya. Key task-nya adalah pose.
 keywords:
-  - pose estimation python
-  - keypoint detection
-  - human pose model
+  - estimasi pose Python
+  - deteksi keypoint
+  - model human pose
   - COCO keypoints
   - OKS mAP
-  - train pose model
+  - melatih model pose
 last_verified: 1.5.0
 snippets:
   predict:
@@ -23,19 +23,19 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The -pose suffix in the filename selects the keypoint head, so no
-        # task argument is needed.
+        # Akhiran -pose pada nama file memilih keypoint head, sehingga argumen
+        # task tidak diperlukan.
         model = LibreYOLO("LibreECs-pose.pt")
         result = model(SAMPLE_IMAGE, save=True)
 
-        print(result.keypoints.xy.shape)   # (N, K, 2) pixel coordinates
-        print(result.boxes.xyxy.shape)     # (N, 4), the same N instances
+        print(result.keypoints.xy.shape)   # (N, K, 2) koordinat piksel
+        print(result.boxes.xyxy.shape)     # (N, 4), N instance yang sama
     - label: CLI
       language: bash
       code: |
         libreyolo predict model=LibreECs-pose.pt save=True \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-    - label: Visible keypoints only
+    - label: Hanya keypoint terlihat
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -43,19 +43,26 @@ snippets:
         result = LibreYOLO("LibreECs-pose.pt")(SAMPLE_IMAGE)
         kpts = result.keypoints
 
-        # .has_visible is derived from the third keypoint column, and is
-        # all-true when the checkpoint predicts only (x, y).
+        # .has_visible diturunkan dari kolom keypoint ketiga, dan seluruhnya
+        # true jika checkpoint hanya memprediksi (x, y).
         for person, visible in zip(kpts.xy, kpts.has_visible):
             print(person[visible])
-    - label: Top-down instead
+    - label: Gunakan top-down
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # HRNet is top-down: it crops each person first. With no person source
-        # given it pairs itself with a LibreYOLO9t detector and logs the choice.
+
+        # HRNet bersifat top-down: model memotong setiap orang lebih dahulu.
+        Tanpa
+
+        # sumber orang, model memasangkan dirinya dengan detector LibreYOLO9t
+        dan mencatat pilihannya.
+
         model = LibreYOLO("LibreHRNetw32-pose.pt")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.keypoints.xy.shape)
   train:
@@ -64,8 +71,8 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        # coco8-pose.yaml carries an embedded download script, so it needs
-        # explicit permission unless the data is already local.
+        # coco8-pose.yaml memuat skrip unduhan tertanam, sehingga memerlukan
+        # izin eksplisit kecuali datanya sudah tersedia secara lokal.
         model = LibreYOLO("LibreECs-pose.pt")
         model.train(
             data="coco8-pose.yaml",
@@ -79,13 +86,13 @@ snippets:
       code: |
         libreyolo train model=LibreECs-pose.pt data=coco8-pose.yaml \
           epochs=50 imgsz=640 batch=4 allow_download_scripts=True
-    - label: Your own dataset
+    - label: Dataset Anda sendiri
       language: python
       code: |
         from libreyolo import LibreYOLO
 
-        # data.yaml must declare kpt_shape, and the label rows must carry
-        # exactly 5 + K * D fields.
+        # data.yaml harus mendeklarasikan kpt_shape, dan baris label harus
+        # memuat tepat 5 + K * D field.
         model = LibreYOLO("LibreECs-pose.pt")
         model.train(data="my-pose-dataset.yaml", epochs=50, imgsz=640, batch=8)
   val:
@@ -98,7 +105,7 @@ snippets:
         model = LibreYOLO("LibreECs-pose.pt")
 
 
-        # val() returns a plain dict, not an object.
+        # val() mengembalikan dict biasa, bukan objek.
 
         metrics = model.val(data="coco8-pose.yaml", allow_download_scripts=True)
 
@@ -124,88 +131,98 @@ snippets:
       language: bash
       code: |
         libreyolo export model=LibreECs-pose.pt format=onnx imgsz=640
-    - label: Use the exported file
+    - label: Gunakan file hasil ekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The factory routes on the file suffix, so an exported artifact loads
-        # like a checkpoint and returns the same Results object.
+
+        # Factory merutekan berdasarkan akhiran file, sehingga artefak hasil
+
+        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang
+        sama.
+
         model = LibreYOLO("LibreECs-pose.onnx")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.keypoints.xy)
 source_hash: 9de01d1f615bdf33
 ---
 
-## Definition
+## Definisi
 
-Pose estimation returns structure, not just extent. Each instance still gets a
-box, a class and a score, and it also gets `K` keypoints in a fixed order, so
-index 5 means the same body part on every instance and in every image. The
-label set defines that order; nothing in the output identifies a keypoint by
-name.
+Estimasi pose mengembalikan struktur, bukan hanya luas cakupan. Setiap instance
+tetap memperoleh box, class, dan skor, serta `K` keypoint dalam urutan tetap,
+sehingga indeks 5 berarti bagian tubuh yang sama pada setiap instance dan gambar.
+Kumpulan label mendefinisikan urutan tersebut; tidak ada bagian output yang
+mengidentifikasi keypoint berdasarkan nama.
 
-`pose` is the canonical task key, and the `-pose` suffix in a checkpoint
-filename selects it, so `task=` is not needed when loading published weights.
+`pose` adalah key task kanonis, dan akhiran `-pose` pada nama file checkpoint
+memilihnya, sehingga `task=` tidak diperlukan saat memuat bobot terbitan.
 
-`predict()` fills `result.keypoints` alongside `result.boxes`. `.data`
-is `(N, K, 2)` or `(N, K, 3)`, row-aligned with the boxes, so instance `i` in
-one is instance `i` in the other. `.xy` slices the pixel coordinates and `.xyn`
-normalizes them by the original image size. `.conf` is the third column when
-the checkpoint predicts one and `None` when it does not, and `.has_visible` is
-the boolean mask derived from it, all-true when there is no third column.
+`predict()` mengisi `result.keypoints` bersama `result.boxes`. `.data` berbentuk
+`(N, K, 2)` atau `(N, K, 3)` dan sejajar per baris dengan boxes, sehingga instance
+`i` dalam satu payload sama dengan instance `i` pada payload lainnya. `.xy`
+mengambil koordinat piksel dan `.xyn` menormalisasinya berdasarkan ukuran gambar
+asli. `.conf` adalah kolom ketiga jika checkpoint memprediksinya dan `None` jika
+tidak, sedangkan `.has_visible` merupakan mask boolean yang diturunkan darinya,
+seluruhnya true jika kolom ketiga tidak ada.
 
-Two architectures reach this output. A one-stage model predicts boxes and
-keypoints in a single pass. A top-down model runs a detector first, crops each
-instance and regresses keypoints inside the crop, so its accuracy depends on
-the detector in front of it.
+Dua arsitektur mencapai output ini. Model one-stage memprediksi box dan keypoint
+dalam satu pass. Model top-down menjalankan detector terlebih dahulu, memotong
+setiap instance, lalu meregresi keypoint di dalam crop, sehingga akurasinya
+bergantung pada detector di depannya.
 
-## Models
+## Model
 
-Three families both train and predict:
-[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) and
-[YOLO-NAS](/docs/models/yolo-nas), all one-stage. RF-DETR needs its own extra,
-`pip install "libreyolo[rfdetr]"`. RF-DETR and EdgeCrafter ship published pose
-checkpoints and both fine-tune on single-class, person-only datasets;
-EdgeCrafter's keypoint head is fixed at construction and rejects a dataset
-declaring a different count, while RF-DETR reinitializes its head for one. YOLO-NAS
-pulls its weights from Deci.AI's own CDN under a non-commercial license, and
-LibreYOLO publishes none of them; its pose head also rebuilds for a new
-keypoint count, and it is the only one of the three whose class count is not
-fixed at one, so it is the family for a multi-class or non-human skeleton, such
-as animal pose.
+Tiga family dapat berlatih dan memprediksi:
+[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), dan
+[YOLO-NAS](/docs/models/yolo-nas), seluruhnya one-stage. RF-DETR memerlukan extra
+sendiri, `pip install "libreyolo[rfdetr]"`. RF-DETR dan EdgeCrafter menyertakan
+checkpoint pose terbitan dan keduanya di-fine-tune pada dataset satu class yang
+hanya berisi orang; keypoint head EdgeCrafter ditetapkan saat konstruksi dan
+menolak dataset dengan jumlah berbeda, sedangkan RF-DETR menginisialisasi ulang
+head-nya. YOLO-NAS mengambil bobot dari CDN milik Deci.AI berdasarkan lisensi
+nonkomersial, dan LibreYOLO tidak menerbitkannya; pose head-nya juga dibangun
+ulang untuk jumlah keypoint baru, dan hanya family ini dari ketiganya yang jumlah
+class-nya tidak ditetapkan ke satu. Karena itu, family ini cocok untuk skeleton
+multi-class atau nonmanusia, seperti pose hewan.
 
-[HRNet](/docs/models/hrnet) is the top-down option. It predicts, validates and
-exports, and its `train()` raises `NotImplementedError`. Given no person
-source, it pairs itself with a LibreYOLO9t detector automatically; `cropped=True`
-treats the whole image as one instance, `person_boxes=` takes boxes you already
-have, and `person_detector=` names a different detector.
+[HRNet](/docs/models/hrnet) adalah pilihan top-down. Model ini memprediksi,
+memvalidasi, dan mengekspor, sedangkan `train()`-nya memunculkan
+`NotImplementedError`. Jika sumber orang tidak diberikan, model otomatis
+memasangkan dirinya dengan detector LibreYOLO9t; `cropped=True` memperlakukan
+seluruh gambar sebagai satu instance, `person_boxes=` menerima box yang sudah
+tersedia, dan `person_detector=` menamai detector lain.
 
-[SenseNova-Vision](/docs/models/sensenova-vision) also emits keypoints. It is a
-prompted generative model with its own factory, `LibreVLM`, and its own extra;
-with no vocabulary set, `set_task("pose")` falls back to the person category.
-Its weights are non-commercial, and per-image latency is far higher than a
-purpose-built pose head, because every prediction is a diffusion decode.
+[SenseNova-Vision](/docs/models/sensenova-vision) juga menghasilkan keypoint.
+Model generatif berbasis prompt ini memiliki factory sendiri, `LibreVLM`, dan
+extra sendiri; tanpa vocabulary, `set_task("pose")` kembali ke kategori orang.
+Bobotnya nonkomersial dan latensi per gambar jauh lebih tinggi daripada pose head
+khusus karena setiap prediksi merupakan diffusion decode.
 
-## Predict
+## Prediksi
 
-Weights download from Hugging Face on first use and are cached locally.
+Bobot diunduh dari Hugging Face saat pertama kali digunakan dan disimpan dalam
+cache lokal.
 
 <code-tabs name="predict" />
 
-Keypoint counts and orders are properties of the checkpoint, not of the
-library, so a model trained on a different skeleton returns a different `K` and
-a different meaning per index. What the third keypoint column holds is also a
-checkpoint property: EdgeCrafter writes a constant there rather than a
-per-point score, and it has no box head at all, so each of its pose boxes is
-the bounding extent of that instance's own keypoints. See
-[prediction](/docs/predict) for sources, streaming and result handling.
+Jumlah dan urutan keypoint merupakan properti checkpoint, bukan library, sehingga
+model yang dilatih pada skeleton berbeda mengembalikan `K` dan arti per indeks
+yang berbeda. Isi kolom keypoint ketiga juga merupakan properti checkpoint:
+EdgeCrafter menulis konstanta di sana, bukan skor per titik, dan tidak memiliki
+box head sama sekali, sehingga setiap pose box-nya adalah batas cakupan keypoint
+instance itu sendiri. Lihat [prediksi](/docs/predict) untuk sumber, streaming, dan
+penanganan hasil.
 
-## Dataset format
+## Format dataset
 
-The layout is the detection layout: one `.txt` label file per image, found by
-swapping `images` for `labels` in the image path and changing the extension.
+Tata letaknya sama dengan deteksi: satu file label `.txt` per gambar, yang
+ditemukan dengan mengganti `images` menjadi `labels` pada path gambar dan
+mengubah ekstensinya.
 
 ```text
 dataset/
@@ -218,18 +235,18 @@ dataset/
     val/000101.txt
 ```
 
-A row is a detection row with the keypoints appended:
+Satu baris adalah baris deteksi dengan keypoint yang ditambahkan:
 
 ```text
 <class_id> <cx> <cy> <w> <h> <k1x> <k1y> [<k1v>] ... <kKx> <kKy> [<kKv>]
 ```
 
-The field count is exactly `5 + K * D`, where `D` is the second value of
-`kpt_shape`. Box and keypoint coordinates are normalized floats relative to the
-original image width and height. Visibility `v`, present only when `D` is 3, is
-`0`, `1` or `2`.
+Jumlah field tepat `5 + K * D`, dengan `D` sebagai nilai kedua `kpt_shape`.
+Koordinat box dan keypoint berupa float ternormalisasi relatif terhadap lebar dan
+tinggi gambar asli. Visibilitas `v`, yang hanya tersedia jika `D` adalah 3,
+bernilai `0`, `1`, atau `2`.
 
-The YAML adds two keys to the shared contract:
+YAML menambahkan dua key ke kontrak bersama:
 
 ```yaml
 path: dataset
@@ -241,54 +258,51 @@ names:
   0: person
 ```
 
-`kpt_shape` is required and is `[K, 2]` or `[K, 3]`. `flip_idx` is optional and
-is a permutation of `0..K-1` giving, for each keypoint, the index it takes
-after a horizontal flip, which is how a left wrist stays a left wrist. Omit it
-and horizontal flip augmentation is switched off for keypoints rather than
-applied with the wrong index order.
+`kpt_shape` wajib dan berbentuk `[K, 2]` atau `[K, 3]`. `flip_idx` bersifat
+opsional dan merupakan permutasi `0..K-1` yang memberikan indeks setiap keypoint
+setelah horizontal flip, sehingga pergelangan kiri tetap menjadi pergelangan
+kiri. Jika dihilangkan, augmentasi horizontal flip dinonaktifkan untuk keypoint,
+bukan diterapkan dengan urutan indeks yang salah.
 
-## Train
+## Pelatihan
 
 <code-tabs name="train" />
 
-Training continues from a published `-pose` checkpoint, which already carries
-the keypoint head; the task is read from the checkpoint you load, not a flag
-passed at train time, so a detection checkpoint does not become a pose run by
-asking for one. `kpt_shape` in your YAML has to match the head exactly for
-EdgeCrafter, since its head is fixed at construction, while RF-DETR and
-YOLO-NAS resize the head for a different count instead. See
-[training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
+Pelatihan dilanjutkan dari checkpoint `-pose` terbitan yang sudah memuat keypoint
+head; task dibaca dari checkpoint yang dimuat, bukan flag saat pelatihan, sehingga
+checkpoint deteksi tidak menjadi proses pose hanya dengan memintanya. `kpt_shape`
+dalam YAML harus persis cocok dengan head untuk EdgeCrafter karena head-nya
+ditetapkan saat konstruksi, sedangkan RF-DETR dan YOLO-NAS mengubah ukuran head
+untuk jumlah berbeda. Lihat [pelatihan](/docs/train) untuk dataset, augmentasi,
+multi-GPU, dan logger.
 
-## Validate
+## Validasi
 
-`val()` returns a plain dictionary of `metrics/` keys. Scoring is COCO keypoint
-evaluation over Object Keypoint Similarity, which weighs each keypoint's
-distance error by the instance scale and by a per-keypoint tolerance, so it
-plays the role IoU plays for boxes. It needs `pycocotools`, which is in the
-base install.
+`val()` mengembalikan dictionary biasa berisi key `metrics/`. Penilaian
+menggunakan evaluasi keypoint COCO berdasarkan Object Keypoint Similarity, yang
+memberi bobot error jarak setiap keypoint menurut skala instance dan toleransi
+per keypoint, sehingga berperan seperti IoU untuk box. Evaluasi ini memerlukan
+`pycocotools`, yang termasuk dalam instalasi dasar.
 
 <code-tabs name="val" />
 
-`metrics/keypoints_mAP50-95` is the headline number, mean average precision
-averaged over OKS thresholds 0.50 to 0.95, and it is what training uses to pick
-the best epoch. `metrics/keypoints_mAP50` and `metrics/keypoints_mAP75` are the
-single-threshold versions, and `metrics/keypoints_mAP_M` and
-`metrics/keypoints_mAP_L` split the average by instance area, medium and large;
-COCO keypoint evaluation defines no small bucket. The matching average recall
-figures are `metrics/keypoints_AR50-95`, `metrics/keypoints_AR50`,
-`metrics/keypoints_AR75`, `metrics/keypoints_AR_M` and
-`metrics/keypoints_AR_L`. Every key on this task is prefixed `keypoints_`, so
-the box `mAP` keys a detector returns do not appear.
+`metrics/keypoints_mAP50-95` adalah angka utama, mean average precision yang
+dirata-ratakan pada ambang batas OKS 0,50 hingga 0,95, dan digunakan pelatihan
+untuk memilih epoch terbaik. `metrics/keypoints_mAP50` serta
+`metrics/keypoints_mAP75` adalah versi satu ambang batas, sedangkan
+`metrics/keypoints_mAP_M` dan `metrics/keypoints_mAP_L` membagi rata-rata menurut
+luas instance, medium dan large; evaluasi keypoint COCO tidak mendefinisikan
+bucket small. Angka average recall pasangannya adalah
+`metrics/keypoints_AR50-95`, `metrics/keypoints_AR50`, `metrics/keypoints_AR75`,
+`metrics/keypoints_AR_M`, dan `metrics/keypoints_AR_L`. Setiap key pada task ini
+diawali `keypoints_`, sehingga key `mAP` box dari detector tidak muncul.
 
-## Export
+## Ekspor
 
 <code-tabs name="export" />
 
-An exported artifact loads back through `LibreYOLO()` on its file suffix, so a
-`.onnx` or `.engine` file behaves like a checkpoint and returns the same
-`Results`. Format coverage differs by family; the matrix on each model page is
-generated from the validated set rather than typed by hand. See
-[export and deploy](/docs/export) for the formats, their extras and their
-constraints.
-
-
+Artefak hasil ekspor dimuat kembali melalui `LibreYOLO()` berdasarkan akhiran
+filenya, sehingga file `.onnx` atau `.engine` berperilaku seperti checkpoint dan
+mengembalikan `Results` yang sama. Cakupan format berbeda per family; matriks pada
+setiap halaman model dibuat dari kumpulan tervalidasi, bukan diketik manual.
+Lihat [ekspor dan deployment](/docs/export) untuk format, extra, dan batasannya.

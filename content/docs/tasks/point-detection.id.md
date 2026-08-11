@@ -1,72 +1,95 @@
 ---
-title: Point detection
-seo_title: Point detection and counting in LibreYOLO
+title: Deteksi titik
+seo_title: Deteksi titik dan penghitungan di LibreYOLO
 description: >-
-  Locate objects as single points instead of boxes in LibreYOLO. Predict
-  centroids, count objects, train FOMO, and read the point metrics.
+  Lokalisasi objek sebagai satu titik, bukan box, di LibreYOLO. Prediksi
+  centroid, hitung objek, latih FOMO, dan baca metrik point.
 lead: >-
-  Point detection returns one x, y location per object instead of a bounding
-  box. LibreYOLO exposes it as the point task, and a prediction carries one row
-  of x, y, class and confidence per object.
+  Deteksi titik mengembalikan satu lokasi x, y per objek sebagai pengganti
+  bounding box. LibreYOLO menyediakannya sebagai task point, dan prediksi memuat
+  satu baris x, y, class, serta confidence per objek.
 keywords:
-  - point detection python
-  - object counting python
-  - centroid detection
-  - FOMO point localization
-  - counting objects in images
+  - deteksi titik Python
+  - menghitung objek Python
+  - deteksi centroid
+  - lokalisasi point FOMO
+  - object counting gambar
   - point localization
 last_verified: 1.5.0
 snippets:
   predict:
-    - label: Predict points and count them
+    - label: Prediksi titik dan hitung objek
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # LibreFOMO weights are not auto-downloaded. Fetch a checkpoint from
-        # https://huggingface.co/LibreYOLO first and load it by local path.
+
+        # Bobot LibreFOMO tidak diunduh otomatis. Ambil checkpoint dari
+
+        # https://huggingface.co/LibreYOLO dahulu dan muat berdasarkan path
+        lokal.
+
         model = LibreYOLO("./LibreFOMOs-point.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         points = result.points
-        print(len(points))     # object count
-        print(points.xy)       # (N, 2) centers in original-image pixels
+
+        print(len(points))     # jumlah objek
+
+        print(points.xy)       # (N, 2) pusat dalam piksel gambar asli
+
         print(points.cls, points.conf)
-    - label: Normalized coordinates and per-class counts
+    - label: Koordinat ternormalisasi dan jumlah per class
       language: python
-      code: |
+      code: >
         from collections import Counter
+
 
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("./LibreFOMOs-point.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         points = result.points.numpy()
-        print(points.xyn)                          # same centers in [0, 1]
+
+        print(points.xyn)                          # pusat yang sama dalam [0,
+        1]
+
         print(Counter(points.cls.astype(int).tolist()))
   train:
-    - label: Train FOMO on a YOLO dataset
+    - label: Latih FOMO pada dataset YOLO
       language: python
       code: |
         from libreyolo import LibreYOLO
 
         model = LibreYOLO("./LibreFOMOs-point.pt")
         model.train(data="my-dataset.yaml", epochs=40, batch=32, lr0=3e-4)
-    - label: Predict with the trained checkpoint
+    - label: Prediksi dengan checkpoint hasil pelatihan
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("./LibreFOMOs-point.pt")
+
         results = model.train(data="my-dataset.yaml", epochs=40)
 
-        # train() reloads the best checkpoint into the same object, so the
-        # model predicts with the trained weights when the call returns.
+
+        # train() memuat ulang checkpoint terbaik ke objek yang sama, sehingga
+
+        # model memprediksi dengan bobot hasil pelatihan saat pemanggilan
+        selesai.
+
         print(results["best_checkpoint"])
+
         print(model(SAMPLE_IMAGE).points.xy)
   val:
-    - label: Validate and read the metric keys
+    - label: Validasi dan baca key metrik
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -78,8 +101,8 @@ snippets:
         print(metrics["metrics/f1"])
         print(metrics["metrics/mAP@[0.01:0.10]"])   # fitness
         print(metrics["metrics/MLE"])               # mean localization error
-        print(metrics["metrics/MAE"], metrics["metrics/RMSE"])   # count error
-    - label: Change the distance thresholds
+        print(metrics["metrics/MAE"], metrics["metrics/RMSE"])   # error jumlah
+    - label: Ubah ambang batas jarak
       language: python
       code: >
         from libreyolo import LibreYOLO
@@ -88,9 +111,9 @@ snippets:
         model = LibreYOLO("./LibreFOMOs-point.pt")
 
 
-        # The sweep bounds are part of the key text, so a custom sweep
+        # Batas sweep menjadi bagian teks key, sehingga sweep kustom
 
-        # renames the mAP keys it produces.
+        # mengubah nama key mAP yang dihasilkannya.
 
         metrics = model.val(data="my-dataset.yaml", dist_thresholds=[0.02,
         0.05])
@@ -100,80 +123,88 @@ snippets:
 
         print(metrics["metrics/mAP@[0.02:0.05]"])
   export:
-    - label: Export
+    - label: Ekspor
       language: python
       code: |
         from libreyolo import LibreYOLO
 
         model = LibreYOLO("./LibreFOMOs-point.pt")
         model.export(format="onnx")
-    - label: Run the exported file
+    - label: Jalankan file hasil ekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The factory routes on the file suffix, so an exported artifact loads
-        # like any checkpoint and returns the same Results object.
+
+        # Factory merutekan berdasarkan akhiran file, sehingga artefak hasil
+
+        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang
+        sama.
+
         model = LibreYOLO("./LibreFOMOs-point.onnx")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.points.xy)
 source_hash: 932153c8870d1c7c
 ---
 
-## Definition
+## Definisi
 
-The `point` task locates each object with a single x, y coordinate and a class,
-with no width, height or mask. Because a prediction is a flat list of objects,
-the row count is the object count, which is what makes this the counting task.
+Task `point` melokalisasi setiap objek dengan satu koordinat x, y dan class,
+tanpa lebar, tinggi, atau mask. Karena prediksi merupakan daftar datar objek,
+jumlah baris adalah jumlah objek, yang menjadikannya task penghitungan.
 
-A prediction fills `result.points`, a `Points` payload wrapping an `(N, 4)`
-array of `x, y, class, confidence` rows in original-image pixels. `.xy` returns
-the coordinates, `.xyn` the same coordinates divided by the image size, `.cls`
-the class indices and `.conf` the scores; `len()` returns the number of points.
-`result.boxes` stays empty, so `iou` and `max_det` have nothing to act on.
+Prediksi mengisi `result.points`, payload `Points` yang membungkus array `(N, 4)`
+berisi baris `x, y, class, confidence` dalam piksel gambar asli. `.xy`
+mengembalikan koordinat, `.xyn` mengembalikan koordinat yang sama dibagi ukuran
+gambar, `.cls` mengembalikan indeks class, dan `.conf` mengembalikan skor;
+`len()` mengembalikan jumlah titik. `result.boxes` tetap kosong, sehingga `iou`
+dan `max_det` tidak memiliki apa pun untuk diproses.
 
-## Models
+## Model
 
-Three families serve `point`, and they are not interchangeable.
+Tiga family melayani `point`, dan ketiganya tidak dapat saling dipertukarkan.
 
-[FOMO](/docs/models/fomo) is the fixed-vocabulary option: a grid classifier that
-labels each cell of a low-resolution grid as background or an object center. It
-is the only point family LibreYOLO can train, and the only one that exports.
+[FOMO](/docs/models/fomo) adalah pilihan vocabulary tetap: grid classifier yang
+memberi label setiap sel grid beresolusi rendah sebagai background atau pusat
+objek. Ini satu-satunya family point yang dapat dilatih LibreYOLO dan satu-satunya
+yang dapat diekspor.
 
-[LocateAnything](/docs/models/locate-anything) takes text instead of a class
-index, so the vocabulary is whatever phrase you write. It needs the `vlm` extra,
-is constructed as `LibreLocateAnything` rather than through the `LibreYOLO()`
-factory, and its weights are restricted to non-commercial use. The exact terms,
-and the two further licenses the checkpoint composes, are on its page.
+[LocateAnything](/docs/models/locate-anything) menerima teks, bukan indeks class,
+sehingga vocabulary-nya adalah frasa apa pun yang Anda tulis. Model ini memerlukan
+extra `vlm`, dibuat sebagai `LibreLocateAnything` dan bukan melalui factory
+`LibreYOLO()`, serta bobotnya dibatasi untuk penggunaan nonkomersial. Ketentuan
+persis dan dua lisensi tambahan yang digabungkan checkpoint tersedia pada halamannya.
 
-[SenseNova-Vision](/docs/models/sensenova-vision) reaches `point` through the
-same prompted-generation checkpoint it uses for six other tasks, loaded with
-`LibreVLM("sensenova-vision", task="point")`. It needs the `sensenova` extra,
-and every prediction is a generation pass over a 7B model, so expect noticeably
-higher per-image latency than a purpose-built detector. Its weights are
-non-commercial; the license is on its page.
+[SenseNova-Vision](/docs/models/sensenova-vision) menjalankan `point` melalui
+checkpoint prompted-generation yang sama untuk enam task lainnya, dimuat dengan
+`LibreVLM("sensenova-vision", task="point")`. Model ini memerlukan extra
+`sensenova`, dan setiap prediksi merupakan generation pass pada model 7B, sehingga
+latensi per gambar jauh lebih tinggi daripada detector khusus. Bobotnya
+nonkomersial; lisensinya tersedia pada halaman model.
 
-## Predict
+## Prediksi
 
-LibreFOMO weights are the one exception to automatic download on this site.
-`LibreYOLO("LibreFOMOs-point.pt")` looks for that file on disk and raises a
-`ValueError` naming it rather than fetching it. Download a checkpoint from the
-[LibreYOLO organization](https://huggingface.co/LibreYOLO) on Hugging Face
-first and load it by local path, or train your own.
+Bobot LibreFOMO adalah satu-satunya pengecualian untuk unduhan otomatis di situs
+ini. `LibreYOLO("LibreFOMOs-point.pt")` mencari file tersebut di disk dan
+memunculkan `ValueError` yang menyebut namanya, bukan mengunduhnya. Unduh checkpoint
+dari [organisasi LibreYOLO](https://huggingface.co/LibreYOLO) di Hugging Face
+terlebih dahulu dan muat berdasarkan path lokal, atau latih model sendiri.
 
 <code-tabs name="predict" />
 
-The filename has to carry the `-point` task suffix for the loader to recognize
-it. `predict(..., nms_radius=1)` controls how many grid cells apart two FOMO
-detections must be to both survive. See [prediction](/docs/predict) for sources,
-streaming and result handling.
+Nama file harus memuat akhiran task `-point` agar loader mengenalinya.
+`predict(..., nms_radius=1)` mengontrol jarak minimum dalam sel grid agar dua
+deteksi FOMO sama-sama bertahan. Lihat [prediksi](/docs/predict) untuk sumber,
+streaming, dan penanganan hasil.
 
-## Dataset format
+## Format dataset
 
-`point` has no label format of its own. The point families read the standard
-YOLO detection layout and derive one center from each box row, so `cx cy` is the
-point and `w h` only decide whether the row is valid.
+`point` tidak memiliki format label sendiri. Family point membaca tata letak
+deteksi YOLO standar dan menurunkan satu pusat dari setiap baris box, sehingga
+`cx cy` adalah titiknya dan `w h` hanya menentukan apakah baris valid.
 
 ```text
 dataset/
@@ -186,7 +217,7 @@ dataset/
     val/scene.txt
 ```
 
-Each label file holds one row per object, with normalized coordinates:
+Setiap file label memuat satu baris per objek dengan koordinat ternormalisasi:
 
 ```text
 <class_id> <cx> <cy> <w> <h>
@@ -200,60 +231,61 @@ nc: 1
 names: {0: seedling}
 ```
 
-A missing or empty label file means no objects. See
-[dataset formats](/docs/reference/dataset-formats) for the full contract.
+File label yang tidak ada atau kosong berarti tidak ada objek. Lihat
+[format dataset](/docs/reference/dataset-formats) untuk kontrak lengkap.
 
-## Train
+## Pelatihan
 
-FOMO is the only point family with a training implementation. `train()` on
-LocateAnything and on SenseNova-Vision raises `NotImplementedError`; fine-tune
-those upstream and load the result.
+FOMO adalah satu-satunya family point dengan implementasi pelatihan. `train()`
+pada LocateAnything dan SenseNova-Vision memunculkan `NotImplementedError`;
+lakukan fine-tuning di upstream dan muat hasilnya.
 
 <code-tabs name="train" />
 
-`imgsz` is not a free choice for FOMO: it defaults to the loaded checkpoint's
-native resolution, and passing a different value raises `ValueError` naming the
-size it expects. See [training](/docs/train) for datasets, loggers and
-multi-GPU, and the [FOMO page](/docs/models/fomo) for this family's defaults.
+`imgsz` bukan pilihan bebas untuk FOMO: default-nya adalah resolusi native dari
+checkpoint yang dimuat, dan memberikan nilai berbeda memunculkan `ValueError`
+yang menyebutkan ukuran yang diharapkan. Lihat [pelatihan](/docs/train) untuk
+dataset, logger, dan multi-GPU, serta [halaman FOMO](/docs/models/fomo) untuk
+default family ini.
 
-## Validate
+## Validasi
 
-`val()` matches predicted points to ground-truth points one-to-one with the
-Hungarian algorithm, over a sweep of distance thresholds. A threshold is a
-Euclidean distance in normalized image coordinates, and the default sweep is ten
-values from 0.01 to 0.10.
+`val()` mencocokkan titik prediksi dengan titik ground truth satu lawan satu
+menggunakan algoritma Hungarian pada sweep ambang batas jarak. Ambang batas
+adalah jarak Euclidean dalam koordinat gambar ternormalisasi, dan sweep default
+terdiri dari sepuluh nilai dari 0,01 hingga 0,10.
 
 <code-tabs name="val" />
 
-`metrics/precision`, `metrics/recall` and `metrics/f1` are macro-averaged over
-classes at the strictest threshold in the sweep, 0.01 by default.
-`metrics/mAP@0.01` is average precision at that same threshold, and
-`metrics/mAP@[0.01:0.10]` is the mean over the whole sweep. That sweep value is
-also `fitness`, the number best-checkpoint selection reads. Both mAP keys are
-built from the thresholds in use, so passing `dist_thresholds=` renames them.
+`metrics/precision`, `metrics/recall`, dan `metrics/f1` dirata-ratakan secara
+makro pada semua class di ambang batas paling ketat dalam sweep, yaitu 0,01 secara
+default. `metrics/mAP@0.01` adalah average precision pada ambang batas yang sama,
+dan `metrics/mAP@[0.01:0.10]` adalah mean untuk seluruh sweep. Nilai sweep tersebut
+juga merupakan `fitness`, angka yang dibaca saat memilih checkpoint terbaik.
+Kedua key mAP dibangun dari ambang batas yang digunakan, sehingga memberikan
+`dist_thresholds=` akan mengubah namanya.
 
-`metrics/MLE` is the mean distance between matched pairs at the strictest
-threshold, in the same normalized units. `metrics/MAE` and `metrics/RMSE` are
-counting metrics rather than localization ones: they measure the per-image
-difference between the number of predicted and ground-truth points.
+`metrics/MLE` adalah mean jarak antara pasangan yang cocok pada ambang batas
+paling ketat, dalam satuan ternormalisasi yang sama. `metrics/MAE` dan
+`metrics/RMSE` merupakan metrik penghitungan, bukan lokalisasi: keduanya mengukur
+perbedaan per gambar antara jumlah titik prediksi dan ground truth.
 
-FOMO adds a second, grid-level group on top of these. It sweeps confidence and
-`nms_radius` and publishes the best-F1 combination as `metrics/grid_F1`,
-`metrics/grid_precision`, `metrics/grid_recall`, `metrics/grid_mean_distance`,
-`metrics/grid_TP`, `metrics/grid_FP` and `metrics/grid_FN`, with the settings
-that produced it under `decode/threshold` and `decode/nms_radius`.
+FOMO menambahkan kelompok kedua pada tingkat grid di atas metrik tersebut. Model
+melakukan sweep confidence dan `nms_radius`, lalu menerbitkan kombinasi F1 terbaik
+sebagai `metrics/grid_F1`, `metrics/grid_precision`, `metrics/grid_recall`,
+`metrics/grid_mean_distance`, `metrics/grid_TP`, `metrics/grid_FP`, dan
+`metrics/grid_FN`, dengan pengaturan yang menghasilkannya dalam `decode/threshold`
+serta `decode/nms_radius`.
 
-## Export
+## Ekspor
 
-FOMO exports through the shared export path, and an exported artifact loads back
-through `LibreYOLO()` on its file suffix, so a `.onnx` or `.engine` file behaves
-like a checkpoint and returns the same `Results`.
+FOMO diekspor melalui jalur ekspor bersama, dan artefak hasil ekspor dimuat
+kembali melalui `LibreYOLO()` berdasarkan akhiran filenya, sehingga file `.onnx`
+atau `.engine` berperilaku seperti checkpoint dan mengembalikan `Results` yang sama.
 
 <code-tabs name="export" />
 
-Per-format coverage is on the [FOMO page](/docs/models/fomo) and in the
-[full export matrix](/docs/reference/export-matrix). LocateAnything and
-SenseNova-Vision do not export: `export()` raises on both, because a generative
-model has no traceable detection graph.
-
-
+Cakupan per format tersedia di [halaman FOMO](/docs/models/fomo) dan
+[matriks ekspor lengkap](/docs/reference/export-matrix). LocateAnything dan
+SenseNova-Vision tidak dapat diekspor: `export()` memunculkan error pada keduanya
+karena model generatif tidak memiliki graph deteksi yang dapat di-trace.

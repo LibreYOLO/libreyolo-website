@@ -1,23 +1,23 @@
 ---
-title: LoRA fine-tuning
-seo_title: LoRA fine-tuning in LibreYOLO
+title: Fine-tuning LoRA
+seo_title: Fine-tuning LoRA di LibreYOLO
 description: >-
-  Fine-tune a transformer detector on low VRAM with lora=True. Which nine
-  families support it, the per-family adapter recipe, and how the checkpoints
-  behave.
+  Fine-tune detector transformer dengan VRAM rendah menggunakan lora=True.
+  Sembilan family yang mendukungnya, resep adapter per family, dan perilaku
+  checkpoint.
 lead: >-
-  LoRA freezes the pretrained heavy parts of a model and trains small low-rank
-  adapters beside them, plus the layers that must stay dense. In LibreYOLO the
-  whole public interface is one boolean.
+  LoRA membekukan bagian berat model yang telah dilatih sebelumnya dan melatih
+  adapter low-rank kecil di sampingnya, ditambah lapisan yang harus tetap rapat.
+  Di LibreYOLO, seluruh interface publiknya hanya satu boolean.
 keywords:
-  - lora fine tuning
+  - fine tuning LoRA
   - parameter efficient fine tuning
-  - peft
-  - dora
-  - low vram training
-  - rf-detr lora
-  - d-fine lora
-  - adapter merge
+  - PEFT
+  - DoRA
+  - training VRAM rendah
+  - LoRA RF-DETR
+  - LoRA D-FINE
+  - merge adapter
 last_verified: 1.5.0
 snippets:
   install:
@@ -39,14 +39,14 @@ snippets:
         libreyolo train model=LibreRFDETRs.pt data=my-dataset.yaml \
           epochs=50 lora=true
   merge:
-    - label: Export merges the adapters
+    - label: Ekspor menggabungkan adapter
       language: python
       code: |
         from libreyolo import LibreYOLO
 
         model = LibreYOLO("runs/train/exp/weights/best.pt")
         model.export(format="onnx")
-    - label: Merge in place
+    - label: Gabungkan langsung
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -59,23 +59,24 @@ snippets:
 source_hash: 603fdddf5ec0c316
 ---
 
-## Install
+## Instalasi
 
-LoRA rides on the optional `peft` dependency.
+LoRA menggunakan dependency opsional `peft`.
 
 <code-tabs name="install" />
 
-Without it, `lora=True` raises an `ImportError` naming that command rather than
-training a full fine-tune by accident.
+Tanpanya, `lora=True` memunculkan `ImportError` yang menyebutkan perintah tersebut,
+bukan tanpa sengaja menjalankan fine-tuning penuh.
 
-## Use it
+## Penggunaan
 
 <code-tabs name="train" />
 
-`lora=True` is the entire interface. Rank, alpha, dropout and target modules are
-fixed per family to match each upstream reference, and are not user-facing knobs.
+`lora=True` adalah seluruh interface. Rank, alpha, dropout, dan modul target
+ditetapkan per family agar sesuai dengan referensi upstream masing-masing, serta
+bukan pengaturan yang dihadapkan kepada pengguna.
 
-A family that does not support LoRA raises at setup rather than ignoring the
+Family yang tidak mendukung LoRA memunculkan error saat setup, bukan mengabaikan
 flag:
 
 ```text
@@ -83,99 +84,94 @@ LoRA fine-tuning (lora=True) is not supported for yolo9. LoRA targets
 transformer components with nn.Linear layers (e.g. RF-DETR, D-FINE, DEIM).
 ```
 
-The CLI rejects it earlier, before the model is built, using its own allowlist of
-the same nine families.
+CLI menolaknya lebih awal, sebelum model dibangun, menggunakan allowlist sendiri
+yang berisi sembilan family yang sama.
 
-## Which families
+## Family yang didukung
 
-RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 and v4, EC and ConvNeXt. The gate
-is the `supports_lora` attribute on each family's trainer class, and the CLI
-carries a matching allowlist.
+RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2, dan v4, EC, serta ConvNeXt.
+Gate-nya adalah atribut `supports_lora` pada class trainer setiap family, dan CLI
+memiliki allowlist yang cocok.
 
-Task coverage is narrower than family coverage. D-FINE and EC support detection
-only, and their segment and pose paths raise. RF-DETR's semantic path raises.
-ConvNeXt is classification.
+Cakupan task lebih sempit daripada cakupan family. D-FINE dan EC hanya mendukung
+deteksi, dan jalur segment serta pose-nya memunculkan error. Jalur semantic
+RF-DETR memunculkan error. ConvNeXt digunakan untuk classification.
 
-Everything else raises. There is no partial or silent mode.
+Semua yang lain memunculkan error. Tidak ada mode parsial atau diam-diam.
 
-## What each recipe does
+## Yang dilakukan setiap resep
 
-The recipes differ because the architectures differ, and a recipe that works on a
-ViT backbone has nothing to attach to on a convolutional one.
+Resep berbeda karena arsitektur berbeda, dan resep yang bekerja pada backbone
+ViT tidak memiliki tempat untuk dipasang pada backbone konvolusional.
 
-RF-DETR uses DoRA, weight-decomposed LoRA, at rank 16 and alpha 16 on the DINOv2
-backbone's attention `query`, `key` and `value` projections, matching the RF-DETR
-reference. The ViT backbone freezes; the projector, decoder and detection head
-keep training normally.
+RF-DETR menggunakan DoRA, yaitu LoRA dengan weight decomposition, pada rank 16
+dan alpha 16 di proyeksi attention `query`, `key`, serta `value` milik backbone
+DINOv2, sesuai referensi RF-DETR. Backbone ViT dibekukan; projector, decoder, dan
+head deteksi tetap berlatih secara normal.
 
-D-FINE, DEIM and RT-DETR v1, v2 and v4 pair a convolutional backbone with a
-transformer hybrid encoder and a deformable decoder, so the split moves. The
-convolutional backbone freezes entirely, which also skips its backward pass. The
-transformer blocks freeze their base weights and train plain LoRA adapters at the
-same rank 16 and alpha 16 on their linear layers: the feed-forward `linear1` and
-`linear2`, the gate, and the deformable attention projections. Everything else,
-the encoder convolution fusion, the input projections, the prediction heads and
-the query embeddings, keeps training densely.
+D-FINE, DEIM, serta RT-DETR v1, v2, dan v4 memasangkan backbone konvolusional
+dengan hybrid encoder transformer dan deformable decoder, sehingga pembagiannya
+bergeser. Backbone konvolusional dibekukan sepenuhnya, yang juga melewati backward
+pass-nya. Blok transformer membekukan bobot dasar dan melatih adapter LoRA biasa
+pada rank 16 serta alpha 16 di lapisan linear: feed-forward `linear1` dan
+`linear2`, gate, serta proyeksi deformable attention. Bagian lainnya, yaitu fusion
+konvolusi encoder, proyeksi input, head prediksi, dan embedding query, tetap
+berlatih secara rapat.
 
-Two details in that recipe are deliberate. Decoder self-attention stays frozen
-without adapters, because PyTorch's `nn.MultiheadAttention` reads
-`out_proj.weight` directly and would silently bypass an injected adapter. And it
-is plain LoRA rather than DoRA, because several decoder linear layers are
-zero-initialized by design and DoRA's magnitude normalization divides by the
-weight norm.
+Dua detail resep tersebut disengaja. Self-attention decoder tetap beku tanpa
+adapter karena `nn.MultiheadAttention` PyTorch membaca `out_proj.weight` secara
+langsung dan akan diam-diam melewati adapter yang diinjeksi. Resep ini juga
+menggunakan LoRA biasa, bukan DoRA, karena beberapa lapisan linear decoder
+diinisialisasi nol dan normalisasi magnitude DoRA membagi dengan norm bobot.
 
-DEIMv2 takes the same recipe with its SwiGLU feed-forward layers `w12` and `w3`
-as the targets. Its S, M, L and X sizes also carry a DINOv3 ViT backbone, where
-the ViT base freezes and its fused attention `qkv` layers get adapters, while the
-Spatial Tuning Adapter convolution pyramid keeps training as the projector
-analog. Those `qkv` adapters go in even when the config shipped the ViT frozen,
-since adapting a frozen backbone is the point. The sub-S sizes use a
-convolutional backbone and take the plain recipe.
+DEIMv2 menggunakan resep yang sama dengan lapisan feed-forward SwiGLU `w12` dan
+`w3` sebagai target. Ukuran S, M, L, dan X juga memiliki backbone ViT DINOv3,
+dengan base ViT dibekukan dan lapisan fused attention `qkv` mendapat adapter,
+sementara pyramid konvolusi Spatial Tuning Adapter tetap berlatih sebagai analog
+projector. Adapter `qkv` tersebut tetap dipasang meskipun konfigurasi menyertakan
+ViT dalam keadaan beku, karena mengadaptasi backbone beku adalah tujuannya.
+Ukuran di bawah S menggunakan backbone konvolusional dan resep biasa.
 
-EC is a DETR whose backbone is a ViT surrounded by a trainable convolution
-projector pyramid. The ViT base freezes and its `qkv` layers get adapters, the
-transformer blocks take the shared recipe, and the projector and heads stay
-dense.
+EC adalah DETR dengan backbone ViT yang dikelilingi pyramid projector konvolusi
+yang dapat dilatih. Base ViT dibekukan dan lapisan `qkv`-nya mendapat adapter,
+blok transformer menggunakan resep bersama, serta projector dan head tetap rapat.
 
-ConvNeXt blocks carry channels-last linear MLPs, `fc1` and `fc2`, and those take
-plain adapters. The depthwise convolutions, the norms and the layer-scale
-parameters freeze. The classification head stays dense so custom class counts
-keep working.
+Blok ConvNeXt memiliki MLP linear channels-last, `fc1` dan `fc2`, yang menerima
+adapter biasa. Konvolusi depthwise, norm, dan parameter layer-scale dibekukan.
+Head classification tetap rapat agar jumlah class kustom terus berfungsi.
 
-The detection and classification heads always stay trainable across every recipe,
-because a custom class count needs a freshly trained head.
+Head deteksi dan classification selalu dapat dilatih di semua resep karena jumlah
+class kustom memerlukan head yang dilatih dari awal.
 
-## Checkpoints and export
+## Checkpoint dan ekspor
 
-`best.pt` and `last.pt` keep the adapter tensors, so a LoRA run resumes or gets
-inspected like any other. Loading one of those checkpoints needs the `lora`
-extra installed, because the loader replays the adapter injection so the keys
-line up.
+`best.pt` dan `last.pt` mempertahankan tensor adapter, sehingga proses LoRA dapat
+dilanjutkan atau diperiksa seperti proses lain. Memuat salah satu checkpoint itu
+memerlukan extra `lora`, karena loader mengulang injeksi adapter agar key cocok.
 
-`export()` merges the adapters into dense weights, so an exported artifact
-carries no dependency on `peft`. The same merge is available directly for an
-in-memory model.
+`export()` menggabungkan adapter ke bobot rapat, sehingga artefak hasil ekspor
+tidak bergantung pada `peft`. Penggabungan yang sama tersedia langsung untuk
+model dalam memori.
 
 <code-tabs name="merge" />
 
-After a merge the module tree is fully dense and a second merge is a no-op.
+Setelah penggabungan, hierarki modul sepenuhnya rapat dan penggabungan kedua
+merupakan no-op.
 
-## What it saves, and what it does not
+## Yang dihemat dan tidak dihemat
 
-LoRA cuts optimizer and gradient memory, and on the families that freeze their
-backbone outright it also skips that backbone's backward pass.
+LoRA mengurangi memori optimizer dan gradien, serta pada family yang membekukan
+backbone sepenuhnya juga melewati backward pass backbone tersebut.
 
-Activation memory is unchanged. Forward activations still have to be retained for
-whatever remains trainable, and that is usually what sets the peak. For the
-tightest VRAM budget, lower `batch` or `imgsz` as well.
+Memori aktivasi tidak berubah. Aktivasi forward tetap harus dipertahankan untuk
+bagian mana pun yang dapat dilatih, dan biasanya bagian inilah yang menentukan
+puncak. Untuk anggaran VRAM paling ketat, turunkan juga `batch` atau `imgsz`.
 
-## Related
+## Terkait
 
-- [Layer freezing](/docs/train/layer-freezing) for the other way to train a
-  subset of the weights, which works on every family and needs no extra
-  dependency. `freeze` and `lora=True` compose: adapter parameters stay trainable
-  even when their parent backbone group is frozen.
-- [Hyperparameters](/docs/train/hyperparameters) for `batch`, `imgsz` and the
-  rest of `train()`.
-
-
+- [Pembekuan lapisan](/docs/train/layer-freezing) untuk cara lain melatih subset
+  bobot, yang berfungsi pada setiap family dan tidak memerlukan dependency extra.
+  `freeze` dan `lora=True` dapat digabungkan: parameter adapter tetap dapat dilatih
+  meskipun parent group backbone dibekukan.
+- [Hyperparameter](/docs/train/hyperparameters) untuk `batch`, `imgsz`, dan bagian
+  lain `train()`.

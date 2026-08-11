@@ -1,37 +1,46 @@
 ---
 title: OCR
-seo_title: 'OCR: text detection and recognition in LibreYOLO'
+seo_title: 'OCR: deteksi dan pengenalan teks di LibreYOLO'
 description: >-
-  Find and read text in images with LibreYOLO. Predict quads and transcripts,
-  label a JSONL dataset, and validate with hmean, end-to-end F1 and 1-NED.
+  Temukan dan baca teks dalam gambar dengan LibreYOLO. Prediksi quad dan
+  transkrip, beri label dataset JSONL, lalu validasi dengan hmean, F1
+  end-to-end, dan 1-NED.
 lead: >-
-  OCR locates text in an image and reads it. LibreYOLO exposes it as the ocr
-  task, which returns one four-point polygon plus one transcript per text
-  region, in reading order.
+  OCR melokalisasi teks dalam gambar dan membacanya. LibreYOLO menyediakannya
+  sebagai task ocr, yang mengembalikan satu poligon empat titik ditambah satu
+  transkrip per region teks dalam urutan baca.
 keywords:
-  - ocr python library
-  - scene text recognition
-  - text detection quads
+  - library ocr python
+  - pengenalan teks scene
+  - text detection quad
   - PP-OCRv5 python
-  - end-to-end text spotting
+  - text spotting end-to-end
 last_verified: 1.5.0
 snippets:
   predict:
-    - label: Read the text in an image
+    - label: Baca teks dalam gambar
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The t tier is the lighter of the two, built for CPU. SAMPLE_IMAGE
-        # keeps this runnable; point it at an image with text of your own.
+
+        # Tier t adalah yang lebih ringan dan dibuat untuk CPU. SAMPLE_IMAGE
+
+        # menjaga contoh dapat dijalankan; arahkan ke gambar berisi teks
+        sendiri.
+
         model = LibreYOLO("LibrePPOCRt-ocr.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         regions = result.ocr
+
         print(len(regions), "regions")
+
         for text, score in zip(regions.texts, regions.conf):
             print(repr(text), float(score))
-    - label: Read the quads
+    - label: Baca quad
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -40,10 +49,10 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         regions = result.ocr
-        print(regions.data.shape)   # (N, 4, 2) polygons, TL TR BR BL
-        print(regions.xyxy)         # axis-aligned hulls of those polygons
-        print(regions.det_conf)     # detection score, separate from .conf
-    - label: Filter by recognition confidence
+        print(regions.data.shape)   # poligon (N, 4, 2), TL TR BR BL
+        print(regions.xyxy)         # hull sejajar sumbu dari poligon
+        print(regions.det_conf)     # score deteksi, terpisah dari .conf
+    - label: Filter berdasarkan confidence pengenalan
       language: python
       code: |
         import numpy as np
@@ -52,13 +61,13 @@ snippets:
         model = LibreYOLO("LibrePPOCRt-ocr.pt")
         result = model(SAMPLE_IMAGE)
 
-        # Index with positions, not a boolean mask: slicing carries the
-        # transcripts and both score arrays along with the geometry.
+        # Lakukan indexing dengan posisi, bukan boolean mask: slicing membawa
+        # transkrip dan kedua array score bersama geometri.
         regions = result.ocr.numpy()
         keep = regions[np.flatnonzero(regions.conf >= 0.9)]
         print(keep.texts)
   val:
-    - label: Validate and read the metric keys
+    - label: Validasi dan baca key metrik
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -73,55 +82,55 @@ snippets:
 source_hash: 58ad5305c9dd458c
 ---
 
-## Definition
+## Definisi
 
-The `ocr` task does two things in one call: it locates every text region in an
-image and transcribes it. Regions come back as four-point polygons rather than
-axis-aligned boxes, because scene text is often rotated, and in reading order,
-top to bottom then left to right.
+Task `ocr` melakukan dua hal dalam satu pemanggilan: melokalisasi setiap region
+teks dalam gambar dan mentranskripsikannya. Region dikembalikan sebagai poligon
+empat titik, bukan box sejajar sumbu, karena teks scene sering berotasi, serta
+dalam urutan baca dari atas ke bawah lalu kiri ke kanan.
 
-A prediction fills `result.ocr`, an `OCRRegions` payload. `.data` is an
-`(N, 4, 2)` float array of polygons in original-image pixels, ordered top-left,
-top-right, bottom-right, bottom-left; `.texts` is the list of N transcripts;
-`.conf` is the per-region recognition score and `.det_conf` the detection score;
-`.xyxy` gives the axis-aligned hull of each polygon. Because the quads are
-genuine polygons, they do not populate `result.boxes`. Slicing an
-`OCRRegions` carries the transcripts and both score arrays along with the
-geometry.
+Prediksi mengisi `result.ocr`, payload `OCRRegions`. `.data` adalah array float
+poligon `(N, 4, 2)` dalam piksel gambar asli, berurutan kiri atas, kanan atas,
+kanan bawah, kiri bawah; `.texts` adalah list N transkrip; `.conf` adalah score
+pengenalan per region dan `.det_conf` score deteksi; `.xyxy` memberikan hull
+sejajar sumbu setiap poligon. Karena quad merupakan poligon sebenarnya,
+`result.boxes` tidak diisi. Slicing `OCRRegions` membawa transkrip dan kedua
+array score bersama geometri.
 
-## Models
+## Model
 
-Two families serve `ocr`.
+Dua family melayani `ocr`.
 
-[PP-OCRv5](/docs/models/pp-ocrv5) is the dedicated pipeline: a
-differentiable-binarization detector finds the text quads and an SVTR/CTC
-recognizer reads them, with both stages bundled into one `.pt` file along with
-the recognition charset. It ships in two tiers, a lighter one for CPU and a
-server one for higher accuracy, and one dictionary covers Simplified and
-Traditional Chinese, English, Japanese and pinyin.
+[PP-OCRv5](/docs/models/pp-ocrv5) adalah pipeline khusus: detektor
+differentiable-binarization menemukan quad teks dan recognizer SVTR/CTC
+membacanya, dengan kedua tahap disatukan dalam satu file `.pt` beserta charset
+pengenalan. Model tersedia dalam dua tier, satu lebih ringan untuk CPU dan satu
+server untuk akurasi lebih tinggi, serta satu dictionary mencakup Mandarin
+Sederhana dan Tradisional, Inggris, Jepang, dan pinyin.
 
-[SenseNova-Vision](/docs/models/sensenova-vision) reaches OCR by generating the
-words as tagged text from the same 7B checkpoint that serves its six other
-tasks, loaded with `LibreVLM("sensenova-vision", task="ocr")`. It needs the
-`sensenova` extra, and its weights are restricted to non-commercial use; the
-license is on its page.
+[SenseNova-Vision](/docs/models/sensenova-vision) menangani OCR dengan
+menghasilkan kata sebagai teks bertag dari checkpoint 7B yang sama dengan enam
+task lain, dimuat melalui `LibreVLM("sensenova-vision", task="ocr")`. Model
+memerlukan ekstra `sensenova`, dan bobotnya terbatas untuk penggunaan
+nonkomersial; lisensi tersedia pada halamannya.
 
 ## Predict
 
-Weights download from Hugging Face on first use and are cached locally.
+Bobot diunduh dari Hugging Face saat penggunaan pertama dan di-cache secara
+lokal.
 
 <code-tabs name="predict" />
 
-PP-OCRv5 runs detection at a fixed long-side limit and then recognizes the
-cropped regions in batches, with `rec_batch` controlling how many crops go
-through the recognizer per forward pass. Multi-image sources run sequentially,
-because a two-stage pipeline does not batch across images. See
-[prediction](/docs/predict) for sources, streaming and result handling.
+PP-OCRv5 menjalankan deteksi pada batas sisi panjang tetap lalu mengenali region
+hasil crop dalam batch, dengan `rec_batch` mengatur jumlah crop per forward pass
+recognizer. Sumber multi-gambar berjalan berurutan karena pipeline dua tahap
+tidak melakukan batching lintas gambar. Lihat [prediksi](/docs/predict) untuk
+sumber, streaming, dan penanganan hasil.
 
-## Dataset format
+## Format dataset
 
-OCR labels are one JSONL file per split, one JSON object per image, beside the
-images themselves.
+Label OCR berupa satu file JSONL per split, satu objek JSON per gambar, di
+samping gambar.
 
 ```text
 my-ocr-dataset/
@@ -131,55 +140,55 @@ my-ocr-dataset/
     val.jsonl
 ```
 
-Each line names an image and lists its regions:
+Setiap baris menamai gambar dan mencantumkan region-nya:
 
 ```json
 {"image": "receipt.jpg", "regions": [{"polygon": [[10, 12], [118, 14], [117, 40], [9, 38]], "text": "TOTAL 12.50"}]}
 ```
 
-`polygon` is a four-point quad in absolute pixel coordinates, ordered top-left,
-top-right, bottom-right, bottom-left. A region whose text cannot be read is
-labeled `"text": "###"`, the ICDAR don't-care convention: it is excluded from
-recognition scoring, and a prediction overlapping it is ignored rather than
-counted as a false positive.
+`polygon` adalah quad empat titik dalam koordinat piksel absolut, berurutan kiri
+atas, kanan atas, kanan bawah, kiri bawah. Region dengan teks tidak terbaca diberi
+label `"text": "###"`, konvensi don't-care ICDAR: region dikecualikan dari
+penilaian pengenalan, dan prediksi yang tumpang tindih diabaikan, bukan dianggap
+false positive.
 
-Passing the root directory as `data=` is enough. A dataset YAML is the
-alternative, with `path` plus optional `images` and `labels` directory names,
-and `nc: 1` with `names: {0: text}` as schema placeholders, since an OCR model
-returns `Results.ocr` rather than detections. See
-[dataset formats](/docs/reference/dataset-formats) for the full contract.
+Memberikan root direktori sebagai `data=` sudah cukup. Alternatifnya adalah YAML
+dataset dengan `path` serta nama direktori `images` dan `labels` opsional, lalu
+`nc: 1` bersama `names: {0: text}` sebagai placeholder skema karena model OCR
+mengembalikan `Results.ocr`, bukan deteksi. Lihat
+[format dataset](/docs/reference/dataset-formats) untuk kontrak lengkap.
 
 ## Train
 
-Neither OCR family has a training implementation: `train()` raises
-`NotImplementedError` on both, and OCR support covers prediction and validation
-only. PP-OCRv5's page names the Apache-2.0 upstream training code and the
-conversion script that brings a fine-tuned checkpoint back into LibreYOLO.
+Kedua family OCR tidak memiliki implementasi pelatihan: `train()` memunculkan
+`NotImplementedError`, dan dukungan OCR mencakup prediksi serta validasi.
+Halaman PP-OCRv5 menyebut kode pelatihan upstream Apache-2.0 dan script konversi
+untuk membawa checkpoint hasil fine-tuning kembali ke LibreYOLO.
 
 ## Validate
 
-`val()` scores the whole pipeline, detection and recognition together, matching
-predicted polygons to ground-truth polygons one-to-one at IoU above 0.5.
+`val()` menilai seluruh pipeline, deteksi dan pengenalan bersama, dengan
+mencocokkan poligon prediksi ke ground truth secara one-to-one pada IoU di atas
+0.5.
 
 <code-tabs name="val" />
 
-`metrics/det_precision`, `metrics/det_recall` and `metrics/det_hmean` score
-localization alone: a match needs only the polygon overlap, whatever the
-transcript says. `metrics/e2e_precision`, `metrics/e2e_recall` and
-`metrics/e2e_f1` add the reading: a match needs the same polygon overlap and an
-exact transcript match after NFKC normalization and whitespace removal, and
-comparison stays case-sensitive. `metrics/e2e_f1` is also `fitness`, the number
-best-checkpoint selection reads.
+`metrics/det_precision`, `metrics/det_recall`, dan `metrics/det_hmean` hanya
+menilai lokalisasi: kecocokan hanya memerlukan tumpang tindih poligon, apa pun
+transkripnya. `metrics/e2e_precision`, `metrics/e2e_recall`, dan
+`metrics/e2e_f1` menambahkan pembacaan: kecocokan memerlukan tumpang tindih yang
+sama dan transkrip persis setelah normalisasi NFKC serta penghapusan whitespace,
+dengan kapitalisasi tetap diperhitungkan. `metrics/e2e_f1` juga menjadi
+`fitness`, angka yang digunakan pemilihan checkpoint terbaik.
 
-`metrics/rec_1-NED` grades the recognizer on its own, over the pairs detection
-already matched: one minus the normalized edit distance, so a transcript off by
-a character scores near 1 where end-to-end F1 scores it 0.
+`metrics/rec_1-NED` menilai recognizer sendiri pada pasangan yang sudah cocok
+dalam deteksi: satu dikurangi normalized edit distance, sehingga transkrip yang
+berbeda satu karakter mendapat score mendekati 1 ketika F1 end-to-end menilainya
+0.
 
 ## Export
 
-No export format is available for this task. PP-OCRv5 is two networks moving
-together rather than one traceable graph, and `export()` raises for every format
-on both families. To deploy outside LibreYOLO, fine-tune upstream and use the
-upstream deployment path.
-
-
+Tidak ada format ekspor untuk task ini. PP-OCRv5 terdiri dari dua network yang
+bergerak bersama, bukan satu graph yang dapat di-trace, dan `export()`
+memunculkan error untuk setiap format pada kedua family. Untuk deployment di
+luar LibreYOLO, lakukan fine-tuning dan gunakan jalur deployment upstream.

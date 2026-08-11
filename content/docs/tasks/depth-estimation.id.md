@@ -1,23 +1,24 @@
 ---
-title: Depth estimation
-seo_title: Monocular depth estimation in LibreYOLO
+title: Estimasi kedalaman
+seo_title: Estimasi kedalaman monokular dalam LibreYOLO
 description: >-
-  Predict a dense relative depth map from one image in LibreYOLO. Compare the
-  depth families, read the depth metrics, and export a depth model.
+  Memprediksi peta kedalaman relatif yang padat dari satu gambar di LibreYOLO.
+  Bandingkan keluarga kedalaman, baca metrik kedalaman, dan ekspor model
+  kedalaman.
 lead: >-
-  Depth estimation predicts how far each pixel is from the camera using a single
-  image. LibreYOLO exposes it as the depth task, which returns a dense relative
-  inverse-depth map on the original image canvas.
+  Estimasi kedalaman memprediksi seberapa jauh setiap piksel dari kamera
+  menggunakan satu gambar. LibreYOLO mengeksposnya sebagai task kedalaman, yang
+  mengembalikan peta kedalaman invers relatif yang padat di kanvas gambar asli.
 keywords:
-  - monocular depth estimation python
-  - depth map from single image
-  - relative depth model
+  - Estimasi kedalaman monokular python
+  - peta kedalaman dari satu gambar
+  - model kedalaman relatif
   - depth anything libreyolo
-  - dense depth prediction
+  - prediksi kedalaman padat
 last_verified: 1.5.0
 snippets:
   predict:
-    - label: Predict a depth map
+    - label: Memprediksi peta kedalaman
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -26,32 +27,44 @@ snippets:
         result = model(SAMPLE_IMAGE, save=True)
 
         depth = result.depth_map
-        print(depth.data.shape)              # (H, W) on the original canvas
+        print(depth.data.shape)              # (H, W) di kanvas asli
         print(depth.min, depth.max, depth.mean)
-    - label: Work with the values
+    - label: Bekerja dengan nilai-nilai tersebut
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
 
         model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")
+
         result = model(SAMPLE_IMAGE)
+
 
         depth = result.depth_map
-        raw = depth.data          # higher is closer; no metric unit, no scale
-        gray = depth.normalized() # rescaled to [0, 1] for visualization
+
+        raw = depth.data          # semakin tinggi semakin dekat; tidak ada
+        satuan metrik, tidak ada skala
+
+        gray = depth.normalized() # diubah skala ke [0, 1] untuk visualisasi
+
         print(raw.shape, float(gray.max()))
-    - label: A compact alternative
+    - label: Alternatif yang ringkas
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Same task contract, a much smaller network built for edge runtimes.
+
+        # Kontrak task yang sama, jaringan yang jauh lebih kecil dibangun untuk
+        runtime edge.
+
         model = LibreYOLO("LibreZipDepthb-depth.pt")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.depth_map.data.shape)
   val:
-    - label: Validate and read the metric keys
+    - label: Validasi dan baca kunci metrik
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -61,7 +74,7 @@ snippets:
 
         print(metrics["metrics/abs_rel"])
         print(metrics["metrics/rmse"])
-        print(metrics["metrics/delta1"])   # fitness
+        print(metrics["metrics/delta1"])   # kebugaran
         print(metrics["metrics/delta2"], metrics["metrics/delta3"])
   export:
     - label: Export
@@ -71,85 +84,91 @@ snippets:
 
         model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")
         model.export(format="onnx")
-    - label: Run the exported file
+    - label: Jalankan file yang diekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # The factory routes on the file suffix, so an exported artifact loads
-        # like any checkpoint and returns the same Results object.
+
+        # Pabrik mengarahkan berdasarkan sufiks file, sehingga artefak yang
+        diekspor dimuat
+
+        # seperti checkpoint apa pun dan mengembalikan objek Results yang sama.
+
         model = LibreYOLO("LibreDepthAnythingV2s-depth.onnx")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.depth_map.data.shape)
 source_hash: e0612c59f9c999b4
 ---
 
-## Definition
+## Definisi
 
-The `depth` task predicts one value per pixel from a single RGB image. LibreYOLO
-defines that value as relative inverse depth: higher means closer to the camera,
-and the numbers carry no metric unit and no scale that holds across two images.
-Comparing depth between two pixels of the same prediction is meaningful;
-comparing a value to a value from another image is not.
+`depth` task memprediksi satu nilai per piksel dari satu gambar RGB. LibreYOLO
+mendefinisikan nilai itu sebagai kedalaman terbalik relatif: lebih tinggi berarti lebih dekat ke kamera,
+dan angka tersebut tidak memiliki satuan metrik dan tidak memiliki skala yang berlaku di antara dua gambar.
+Membandingkan kedalaman antara dua piksel dari prediksi yang sama adalah bermakna;
+membandingkan suatu nilai dengan nilai dari gambar lain tidak demikian.
 
-A prediction fills `result.depth_map`, a `DepthMap` payload holding an
-`(H, W)` array on the original image canvas. `.min`, `.max` and `.mean` read the
-finite values, and `.normalized()` rescales the map to `[0, 1]` for display.
-`result.boxes` stays empty, so `conf`, `iou` and `max_det` have no effect,
-and `save=True` writes a colormapped image of the map rather than an annotated
-photo.
+Sebuah prediksi mengisi `result.depth_map`, sebuah muatan `DepthMap` yang memegang
+array `(H, W)` pada kanvas gambar asli. `.min`, `.max` dan `.mean` membaca
+nilai terbatas, dan `.normalized()` mengubah skala peta ke `[0, 1]` untuk ditampilkan.
+`result.boxes` tetap kosong, sehingga `conf`, `iou` dan `max_det` tidak berpengaruh,
+dan `save=True` menulis gambar berpeta-warna dari peta tersebut alih-alih foto yang diberi anotasi.
+foto.
 
-## Models
+## Model
 
-Six families serve `depth`.
+Enam keluarga melayani `depth`.
 
-[Depth Anything V2](/docs/models/depth-anything-v2) pairs a DINOv2 encoder with
-a DPT decoder and is the general-purpose default here. Licensing decides the
-size as much as accuracy does: the Small checkpoint is Apache-2.0 while Base and
-Large are non-commercial, so check the checkpoint table on its page before
-picking one.
+[Depth Anything V2](/docs/models/depth-anything-v2) memadukan encoder DINOv2 dengan
+adalah decoder DPT dan merupakan default serba guna di sini. Lisensi menentukan
+ukuran sama seperti akurasi: checkpoint Kecil adalah Apache-2.0 sedangkan Base dan
+Besar bersifat non-komersial, jadi periksa tabel checkpoint di halamannya sebelum
+memilih salah satu.
 
-[Depth Anything 3](/docs/models/depth-anything-3) ports the DA3MONO-LARGE
-checkpoint, a plain transformer with no architectural specialization for depth.
+[Depth Anything 3](/docs/models/depth-anything-3) mem-port DA3MONO-LARGE
+checkpoint, sebuah transformer biasa tanpa spesialisasi arsitektur untuk kedalaman.
 
-[ZipDepth](/docs/models/zipdepth) is the compact tier: a reparameterizable CNN
-distilled from Depth Anything V2 Large, with a second checkpoint whose decoder
-avoids gather and unfold operations for NPU compilers that lack them.
+[ZipDepth](/docs/models/zipdepth) adalah tingkatan kompak: CNN yang dapat direparameterisasi
+yang didistilasi dari Depth Anything V2 Large, dengan checkpoint kedua yang decodernya
+menghindari operasi gather dan unfold untuk compiler NPU yang tidak memilikinya.
 
-[MiDaS](/docs/models/midas) is the line of work that established the zero-shot
-relative-depth protocol the other families are measured with. It is the one
-depth family LibreYOLO does not republish: requesting a checkpoint downloads the
-official asset from its authors' GitHub release and checks a pinned SHA-256.
+[MiDaS](/docs/models/midas) adalah lini kerja yang menetapkan zero-shot
+yang digunakan untuk mengukur keluarga lain. Ini adalah satu
+kedalaman family LibreYOLO tidak memublikasikan ulang: permintaan checkpoint mengunduh
+aset resmi dari rilis GitHub penulisnya dan memeriksa SHA-256 yang dipin.
 
-[LibreMODUS](/docs/models/libremodus) reaches depth as one target of an
-any-to-any model rather than as a dedicated head. It needs the `modus` extra and
-your own authenticated Hugging Face account, and it offers neither `val()` nor
+[LibreMODUS](/docs/models/libremodus) mencapai kedalaman sebagai satu target dari
+model apa pun-ke-apa pun daripada sebagai head khusus. Ini membutuhkan `modus` tambahan dan
+akun Hugging Face Anda yang terautentikasi, dan tidak menawarkan `val()` maupun
 `export()`.
 
-[SenseNova-Vision](/docs/models/sensenova-vision) generates the depth map as an
-image through a diffusion decode, from the same 7B checkpoint that serves its
-six other tasks. It needs the `sensenova` extra, and its weights are restricted
-to non-commercial use; the license is on its page.
+[SenseNova-Vision](/docs/models/sensenova-vision) menghasilkan peta kedalaman sebagai
+gambar melalui dekode difusi, dari checkpoint 7B yang sama yang melayani
+enam tugas lainnya. Ini membutuhkan `sensenova` tambahan, dan bobotnya dibatasi
+untuk penggunaan non-komersial; lisensinya ada di halamannya.
 
-## Predict
+## Prediksi
 
-Weights download from Hugging Face on first use and are cached locally, except
-for the two families noted above.
+Bobot diunduh dari Hugging Face pada penggunaan pertama dan disimpan secara lokal dalam cache, kecuali
+untuk dua keluarga yang disebutkan di atas.
 
 <code-tabs name="predict" />
 
-Input resolution is constrained per family. Depth Anything V2 and Depth Anything
-3 build on a DINOv2 patch grid, so `imgsz` must divide evenly by 14, which
-LibreYOLO checks before running. `Results.plot()` does not cover this task; it
-is defined for surface normals and edges only. See [prediction](/docs/predict)
-for sources, streaming and result handling.
+Resolusi input dibatasi sesuai family. Depth Anything V2 dan Depth Anything
+3 dibangun di atas grid patch DINOv2, jadi `imgsz` harus dapat dibagi habis dengan 14, yang
+LibreYOLO periksa sebelum dijalankan. `Results.plot()` tidak mencakup task ini; ini
+didefinisikan hanya untuk normal permukaan dan tepi. Lihat [prediction](/docs/predict)
+untuk sumber, streaming, dan penanganan hasil.
 
-## Dataset format
+## Format Dataset
 
-Depth validation pairs each image with a dense single-channel depth map that has
-the same resolution, found by substituting the depth directory into the image
-path.
+Validasi kedalaman memasangkan setiap gambar dengan peta kedalaman saluran tunggal yang padat yang memiliki
+resolusi yang sama, ditemukan dengan menggantikan direktori kedalaman ke dalam gambar
+jalur.
 
 ```text
 dataset/
@@ -168,51 +187,50 @@ nc: 1
 names: {0: depth}
 ```
 
-Maps are single-channel PNG or TIF, or `.npy`. Values are plain depth in a unit
-the dataset keeps consistent, and `0`, negative, NaN and infinite pixels mark
-invalid samples that are excluded from the metrics. Integer maps are divided by
-`depth_scale`, which defaults to `256.0`, the 16-bit PNG convention; float
-`.npy` maps are used as they are. `depth_stem_suffix` and `depth_mask_suffix`
-cover datasets that name their depth files or validity masks differently. See
-[dataset formats](/docs/reference/dataset-formats) for the full contract.
+Peta adalah PNG atau TIF saluran tunggal, atau `.npy`. Nilai adalah kedalaman biasa dalam suatu satuan
+dataset tetap konsisten, dan `0`, negatif, NaN dan piksel tak hingga ditandai
+sampel tidak valid yang dikecualikan dari metrik. Peta bilangan bulat dibagi oleh
+`depth_scale`, yang default ke `256.0`, konvensi PNG 16-bit; float
+Peta `.npy` digunakan apa adanya. `depth_stem_suffix` dan `depth_mask_suffix`
+menutupi dataset yang menamai file kedalaman atau mask validitas mereka dengan cara yang berbeda. Lihat
+[dataset memformat ](/docs/reference/dataset-formats) untuk kontrak penuh.
 
-## Train
+## Latih
 
-No depth family in LibreYOLO has a training implementation: `train()` raises
-`NotImplementedError` on all six. Each model page names the conversion script
-that turns a checkpoint trained upstream into one LibreYOLO can load.
+Tidak ada kedalaman family di LibreYOLO yang memiliki implementasi pelatihan: `train()` meningkatkan
+`NotImplementedError` pada keenamnya. Setiap halaman model menamai skrip konversi
+yang mengubah checkpoint yang dilatih di hulu menjadi satu LibreYOLO dapat memuat.
 
-## Validate
+## Validasi
 
-`val()` runs the shared depth validator. Relative depth has no absolute scale,
-so each prediction is first fitted to the inverse of its ground truth with a
-per-image least-squares scale and shift, then inverted back to depth. Every
-metric below is computed per image on that aligned map and averaged over the
-dataset, counting only pixels the dataset marks valid.
+`val()` menjalankan validator kedalaman bersama. Kedalaman relatif tidak memiliki skala absolut,
+jadi setiap prediksi pertama-tama disesuaikan dengan invers dari ground truth-nya dengan
+skala dan pergeseran kuadrat terkecil per gambar, kemudian dibalik kembali ke kedalaman. Setiap
+metrik di bawah dihitung per gambar pada peta yang selaras itu dan dirata-rata di seluruh
+dataset, menghitung hanya piksel yang ditandai dataset sebagai valid.
 
 <code-tabs name="val" />
 
-`metrics/abs_rel` is the mean absolute relative error, the residual divided by
-the ground-truth depth, and lower is better. `metrics/rmse` is the root mean
-squared error in the dataset's own depth unit, also lower is better.
-`metrics/delta1`, `metrics/delta2` and `metrics/delta3` are the threshold
-accuracies: the fraction of valid pixels whose ratio to ground truth, taken in
-whichever direction is larger, falls under 1.25, 1.25 squared and 1.25 cubed, so
-higher is better. `metrics/delta1` is also `fitness`, the number
-best-checkpoint selection reads.
+`metrics/abs_rel` adalah kesalahan relatif absolut rata-rata, residu dibagi dengan
+kedalaman ground-truth, dan nilai yang lebih rendah lebih baik. `metrics/rmse` adalah akar rata-rata
+kuadrat kesalahan dalam satuan kedalaman dataset itu sendiri, juga lebih rendah lebih baik.
+`metrics/delta1`, `metrics/delta2` dan `metrics/delta3` adalah akurasi ambang:
+fraksi piksel valid yang rasio terhadap ground truth, diambil dalam
+arah manapun yang lebih besar, berada di bawah 1,25, 1,25 kuadrat dan 1,25 pangkat tiga, sehingga
+nilai yang lebih tinggi lebih baik. `metrics/delta1` juga `fitness`, jumlah
+bacaan pemilihan best-checkpoint.
 
-## Export
+## Ekspor
 
-An exported depth model loads back through `LibreYOLO()` on its file suffix, so
-a `.onnx` or `.engine` file behaves like a checkpoint and returns the same
-`Results`, with `depth_map` in place of boxes.
+Model kedalaman yang diekspor dimuat kembali melalui `LibreYOLO()` berdasarkan akhiran file-nya, sehingga
+file `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengembalikan `.onnx` yang sama,
+dengan `depth_map` menggantikan kotak.
 
 <code-tabs name="export" />
 
-Coverage differs per family, and Depth Anything 3 rejects any format outside its
-validated set rather than attempting an unvalidated conversion. Check the model
-page and the [full export matrix](/docs/reference/export-matrix) before
-committing to a target. LibreMODUS and SenseNova-Vision do not export at all.
-[Export](/docs/export) lists the arguments every format accepts.
-
+Cakupan berbeda per family, dan Depth Anything 3 menolak format apa pun di luar
+set yang divalidasi alih-alih mencoba konversi yang tidak divalidasi. Periksa halaman model
+dan [matriks ekspor penuh ](/docs/reference/export-matrix) sebelum
+berkomitmen ke target. LibreMODUS dan SenseNova-Vision tidak mengekspor sama sekali.
+[Ekspor ](/docs/export) mencantumkan argumen yang diterima setiap format.
 

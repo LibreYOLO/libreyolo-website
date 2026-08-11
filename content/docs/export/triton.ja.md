@@ -1,25 +1,25 @@
 ---
 title: Triton Inference Server
-seo_title: NVIDIA TritonでLibreYOLOモデルを配信
+seo_title: NVIDIA TritonでLibreYOLOモデルを提供
 description: >-
   LibreYOLOのONNXエクスポートをNVIDIA
-  Triton経由で配信します。モデルリポジトリの配置、生成されるconfig.pbtxt、HTTPモデルURLに対する推論を解説します。
+  Tritonから提供します。モデルリポジトリの構成、生成されるconfig.pbtxt、HTTPモデルURLに対する推論を説明します。
 lead: >-
   Triton Inference
-  Serverはモデルリポジトリをホストし、HTTP経由の推論リクエストに応答します。LibreYOLOはONNXグラフをエクスポートし、エクスポートのメタデータを1つのTritonパラメーターとして保持するconfig.pbtxtを生成して、モデルURLを読み込み可能なモデルパスとして扱います。
+  Serverはモデルリポジトリをホストし、HTTP経由の推論要求へ応答します。LibreYOLOはONNXグラフをエクスポートし、エクスポートメタデータを1つのTritonパラメータとして保持するconfig.pbtxtを生成し、モデルURLを読み込み可能なモデルパスとして扱います。
 keywords:
-  - LibreYOLO Triton 使い方
-  - Triton Inference Server
+  - libreyolo triton
+  - triton inference server
   - config.pbtxt
-  - tritonclient HTTP
-  - モデルリポジトリ
-  - YOLO リモート推論
+  - tritonclient http
+  - model repository
+  - remote yolo inference
 last_verified: 1.5.0
 meta:
   - label: 呼び出し
     value: 'LibreYOLO("http://127.0.0.1:8000/yolo9")'
     mono: true
-  - label: ヘルパー
+  - label: helper
     value: >-
       create_triton_config(onnx_path, config_path, model_name=...,
       max_batch_size=8)
@@ -27,12 +27,13 @@ meta:
   - label: 追加パッケージ
     value: 'pip install "libreyolo[onnx,triton]"'
     mono: true
-  - label: プロトコル
-    value: HTTPおよびHTTPS V2推論のみ。gRPC、認証、共有メモリ、モデルの読み込みとアンロードには対応しません。
-  - label: タイムアウト
-    value: 接続とネットワークのタイムアウトはデフォルトで30秒です
+  - label: protocol
+    value: HTTPおよびHTTPS V2推論のみ。gRPC、認証、共有メモリ、モデルの読み込み・取り外しは対象外。
+  - label: timeout
+    value: 接続とネットワークのtimeoutはデフォルトで30秒
 verification: >-
-  devブランチのlibreyolo/backends/triton.py、libreyolo/models/__init__.py、docs/triton.md、pyproject.tomlを参照しました。コンテナコマンドはdocs/triton.mdに固定されているものです。
+  dev
+  branchのlibreyolo/backends/triton.py、libreyolo/models/__init__.py、docs/triton.md、pyproject.tomlから確認しました。containerコマンドはdocs/triton.mdに固定されたものです。
 snippets:
   install:
     - label: インストール
@@ -40,7 +41,7 @@ snippets:
       code: |
         pip install "libreyolo[onnx,triton]"
   repo:
-    - label: リポジトリ構造へエクスポート
+    - label: リポジトリ構成へエクスポート
       language: python
       code: |
         from pathlib import Path
@@ -67,7 +68,7 @@ snippets:
             model_name="yolo9",
             max_batch_size=8,
         )
-    - label: 生成される配置
+    - label: 生成される構成
       language: text
       code: |
         triton_repo/
@@ -76,7 +77,7 @@ snippets:
             1/
               model.onnx
   serve:
-    - label: サーバーを起動
+    - label: serverを起動
       language: bash
       code: |
         docker run --rm --name libreyolo-triton \
@@ -84,17 +85,17 @@ snippets:
           -v "$(pwd)/triton_repo:/models:ro" \
           nvcr.io/nvidia/tritonserver:26.04-py3 \
           tritonserver --model-repository=/models --exit-on-error=true
-    - label: 準備完了まで待機
+    - label: 準備完了を待つ
       language: bash
       code: >
         until curl --fail --silent http://127.0.0.1:8000/v2/health/ready; do
         sleep 1; done
-    - label: サーバーを停止
+    - label: 停止
       language: bash
       code: |
         docker stop libreyolo-triton
   run:
-    - label: 配信中のモデルで推論
+    - label: 提供中のモデルに対して推論
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -113,17 +114,17 @@ snippets:
         print(len(remote.boxes), len(native.boxes))
         print(remote.boxes.xyxy[:3])
         print(native.boxes.xyxy[:3])
-    - label: バージョン固定またはタイムアウト変更
+    - label: versionを固定またはtimeoutを変更
       language: python
       code: |
         from libreyolo import LibreYOLO
         from libreyolo.backends.triton import TritonBackend
 
-        # 2番目のパスセグメントでモデルバージョンを選択する 省略時は
-        # Tritonに設定されたバージョンポリシーが選択する
+        # 2つ目のpath segmentでmodel versionを選択。省略した場合は
+        # Tritonで設定されたversion policyによって選択
         pinned = LibreYOLO("http://127.0.0.1:8000/yolo9/1")
 
-        # 接続とネットワークのタイムアウトはデフォルトで30秒
+        # 接続とネットワークのtimeoutはデフォルトで30秒
         patient = TritonBackend("http://127.0.0.1:8000/yolo9", timeout=120)
 source_hash: 0652e4faf0224df3
 ---
@@ -132,40 +133,41 @@ source_hash: 0652e4faf0224df3
 
 <code-tabs name="install" />
 
-`triton`追加パッケージは`tritonclient[http]`をインストールします。この統合はHTTPおよびHTTPS V2推論専用なので、gRPCと共有メモリの追加パッケージは意図的に除外しています。配信するアーティファクトと設定ジェネレーターはどちらもONNXグラフを使用するため、`onnx`も必要です。
+`triton` 追加パッケージは `tritonclient[http]` をインストールします。gRPCと共有メモリの追加パッケージは意図的に除外されています。この統合はHTTPおよびHTTPS V2推論専用です。提供する成果物とconfig generatorはどちらもONNXグラフから動作するため、`onnx` も必要です。
 
 ## モデルリポジトリを構築
 
-動的バッチ軸を指定し、Tritonが要求するディレクトリ構造へエクスポートします。
+Tritonが想定するディレクトリ構成へ、dynamic batch axisを指定してエクスポートします。
 
 <code-tabs name="repo" />
 
-Tritonのモデル設定レスポンスにはONNXのカスタムメタデータが保持されないため、エクスポート済みの完全なメタデータを別の方法で渡す必要があります。`create_triton_config`は、それを`config.pbtxt`内の`libreyolo_metadata`という名前の1つのJSON文字列パラメーターとしてエンコードします。さらに、グラフの順序で入出力宣言を生成し、JSONのエスケープを処理して、モデルを`KIND_CPU`に固定します。
+Tritonはmodel configの応答でONNXのcustom metadataを維持しないため、完全なエクスポートメタデータを別の方法で渡す必要があります。`create_triton_config` は、`config.pbtxt` 内で `libreyolo_metadata` という1つのJSON文字列パラメータとしてエンコードし、グラフ順で入力・出力宣言を生成し、JSON escapeを処理し、モデルを `KIND_CPU` に固定します。
 
-ヘルパーは書き込み前に検証します。ONNXグラフの入力がちょうど1つであること、出力が1つ以上あること、テンソル形状を解決できること、メタデータの`names`マップに0から`nc - 1`までの各クラスインデックスが定義されていることを要求します。いずれかの確認に失敗したモデルは、最初のリクエスト時ではなく設定時に拒否されます。
+helperは書き込み前に検証します。ONNXグラフの入力が正確に1つ、出力が1つ以上、テンソルshapeが解決可能、メタデータの `names` mapが0から `nc - 1` までのすべてのクラスインデックスを定義している必要があります。いずれかのチェックに失敗するモデルは、最初の要求時ではなくconfig生成時に拒否されます。
 
-`max_batch_size: 8`は動的エクスポートに対応し、サーバーがリクエストごとに最大8枚の画像をバッチ処理できるようにします。固定バッチ1のONNXグラフでは`max_batch_size=0`を使用してください。その場合、LibreYOLOは画像を順次送信します。
+`max_batch_size: 8` はdynamic exportに対応し、serverが要求ごとに最大8枚の画像をバッチ処理できるようにします。固定batch 1のONNXグラフでは `max_batch_size=0` を使います。その場合、LibreYOLOは画像を順番に送信します。
 
-## サーバーを起動
+## serverを起動
 
 <code-tabs name="serve" />
 
-コマンドはTriton Server 26.04に固定され、DockerのGPUフラグを意図的に省略しています。生成された設定の`KIND_CPU`によって、いずれにせよGPUへの配置が防止されるためです。
+コマンドはTriton Server 26.04に固定し、DockerのGPUフラグを意図的に省略しています。生成されたconfigの `KIND_CPU` により、GPUへの配置はどちらにしても防止されるためです。
 
-## アーティファクトを実行
+## 成果物を実行
 
-TritonモデルのURLはモデルパスとして扱われます。`LibreYOLO()`はローカルパスを処理する前に`http`または`https`スキームを確認し、サーバーと通信するバックエンドを返します。そのため、呼び出し側はローカルチェックポイントと同じになり、返される`Results`オブジェクトも同じです。
+TritonモデルURLはモデルパスです。`LibreYOLO()` はローカルパスを処理する前に `http` または `https` schemeを確認し、serverと通信するbackendを返します。そのため、呼び出し側はローカルチェックポイントと同一であり、返される `Results` オブジェクトも同じです。
 
 <code-tabs name="run" />
 
-URLの形式は`http(s)://host:port/model`で、任意でバージョンを表すセグメントを追加できます。ポートは明示する必要があります。埋め込み認証情報、クエリ文字列、フラグメントはすべて拒否され、3つ以上のセグメントを持つパスも拒否されます。
+URLの形式は任意のversion segmentを持つ `http(s)://host:port/model` です。portは明示する必要があります。埋め込みcredentials、query string、fragment、3つ以上のpath segmentはすべて拒否されます。
 
-配置はサーバー側で決定するため、`device`は受け付けられますがログを1行出して無視されます。
+`device` は受け付けられますが、配置はserverが決めるため、ログを1行出して無視されます。
 
 ## 制約
 
-次の条件を満たさない場合、バックエンドは機能を縮退させた結果ではなく、直接エラーを返します。モデル設定にLibreYOLOのメタデータがない、モデル入力が複数ある、設定済みの出力とモデルのメタデータが一致しない、未対応の入力データ型である、またはサーバーかモデルの準備が完了していない場合です。
+仕様が満たされない場合、backendは劣化した結果ではなく直接エラーを返します。model configにLibreYOLOメタデータがない、モデル入力が2つ以上ある、設定済み出力とモデルメタデータが一致しない、対応していない入力datatype、serverまたはモデルの準備ができていない場合です。
 
-このバージョンでは、gRPC、認証、共有メモリ、API経由でのモデルの読み込みとアンロードは契約対象外です。
+このバージョンの仕様外となるものは、gRPC、認証、共有メモリ、API経由のモデル読み込み・取り外しです。
 
-Triton自体が対応する形式はすべて配信できますが、ここでのメタデータパラメーターと生成設定はONNX向けに作られています。そのため、LibreYOLOではリポジトリへ[ONNX](/docs/export/onnx)を配置します。リクエストとレスポンス形式のサーバーではなく、完全な動画パイプラインについては[DeepStream](/docs/export/deepstream)を参照してください。
+Triton自体が対応する任意の形式を提供できますが、ここでのメタデータパラメータと生成configはONNX向けなので、LibreYOLOの経路は[ONNX](/docs/export/onnx)からリポジトリへ配置するものです。request-response serverではなく完全な動画パイプラインについては[DeepStream](/docs/export/deepstream)を参照してください。
+
