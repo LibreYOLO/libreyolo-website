@@ -112,12 +112,13 @@ for (const twin of twins) {
     continue
   }
 
-  let en, tr
+  let en, tr, raw
   try {
     // Normalize CRLF: the English sources are CRLF on this machine and JS's
     // `.` does not match `\r`, which breaks fence detection and code equality.
     en = matter(fs.readFileSync(enPath, 'utf8').replace(/\r\n/g, '\n'))
-    tr = matter(fs.readFileSync(twin, 'utf8').replace(/\r\n/g, '\n'))
+    raw = fs.readFileSync(twin, 'utf8').replace(/\r\n/g, '\n')
+    tr = matter(raw)
   } catch (e) {
     console.log(`FAIL ${rel}: frontmatter does not parse (${e.message})`)
     failures++
@@ -158,6 +159,19 @@ for (const twin of twins) {
 
   if (!eq(linkTargets(en.content), linkTargets(tr.content)))
     problems.push('link targets differ')
+
+  // A translator that tokenizes the source before rewriting it can leak its own
+  // placeholders into the output. Those survive every structural check above
+  // when they land in prose or a table cell, so look for them directly.
+  const leaked = [
+    ...String(raw ?? '').matchAll(/\bZXQP[0-9A-Z]{2,}\b/g),
+    ...tr.content.matchAll(/\bZXQP[0-9A-Z]{2,}\b/g),
+    ...JSON.stringify(tr.data).matchAll(/\bZXQP[0-9A-Z]{2,}\b/g),
+  ]
+  if (leaked.length) {
+    const sample = [...new Set(leaked.map((m) => m[0]))].slice(0, 3).join(', ')
+    problems.push(`leaked translator placeholder tokens (${leaked.length}): ${sample}`)
+  }
 
   if (problems.length) {
     failures++
