@@ -48,7 +48,7 @@ export function GET() {
 
 > LibreYOLO is the MIT-licensed training and inference engine for state-of-the-art YOLO models. Built for commercial applications, free from AGPL restrictions.
 
-libreyolo.com is the official site of the LibreYOLO open-source library: documentation, model zoo, dataset zoo, commercial licensing guide, and articles. Pages are also served under a locale path prefix (e.g. ${SITE_URL}/zh/models) for: ${LOCALE_SUMMARY}. Documentation is fully translated into Spanish, Chinese, Portuguese and Italian; the other locales are still being translated and serve English on the pages they have not reached yet.
+libreyolo.com is the official site of the LibreYOLO open-source library: documentation, model zoo, dataset zoo, commercial licensing guide, and articles. Pages are also served under a locale path prefix (e.g. ${SITE_URL}/zh/models) for: ${LOCALE_SUMMARY}. The documentation is fully translated in every one of those languages; articles are English and Chinese for now.
 
 ## Get started
 - Install: \`pip install libreyolo\`
