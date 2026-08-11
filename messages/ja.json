@@ -1,0 +1,285 @@
+{
+  "Metadata": {
+    "defaultTitle": "LibreYOLO | MITライセンスの物体検出",
+    "description": "最先端のYOLOモデルを学習・推論するための、MITライセンスのエンジンです。商用アプリケーションのために作られ、AGPLの制約はありません。",
+    "twitterDescription": "最先端のYOLOモデルを学習・推論するための、MITライセンスのエンジンです。",
+    "keywords": "YOLO|物体検出|MITライセンス|機械学習|コンピュータビジョン|オープンソース|AI",
+    "modelsTitle": "モデルズー",
+    "modelsDescription": "MITライセンスで公開している学習済みのYOLO重みです。物体検出に使えるモデルを一覧できます。",
+    "commercialTitle": "商用利用ガイド",
+    "commercialDescription": "MITライセンスのもとで、LibreYOLOをプロプライエタリなクローズドソースの商用アプリケーションに使う方法を解説します。",
+    "datasetsTitle": "データセットズー",
+    "datasetsDescription": "YOLOモデルの学習と評価に使えるデータセットです。HuggingFaceで公開中のデータセットを一覧できます。",
+    "scienceTitle": "研究と科学",
+    "scienceDescription": "研究者のためのLibreYOLO。ネイティブな説明可能性、特徴マップ、発見のために設計されたコードベース。",
+    "docsTitle": "ドキュメント",
+    "docsDescription": "物体検出フレームワークLibreYOLOのドキュメントです。",
+    "articlesTitle": "記事",
+    "articlesDescription": "LibreYOLOに関する記事、チュートリアル、ニュース。MITライセンスの物体検出、学習のコツ、モデルのリリース情報、コンピュータビジョンのガイドをお届けします。"
+  },
+  "Nav": {
+    "home": "ホーム",
+    "models": "モデル",
+    "benchmarks": "ベンチマーク",
+    "commercial": "商用利用",
+    "articles": "記事",
+    "docs": "ドキュメント",
+    "github": "GitHub",
+    "star": "Star",
+    "community": "コミュニティ"
+  },
+  "LangSwitcher": {
+    "label": "言語を変更"
+  },
+  "Footer": {
+    "tagline": "最先端の物体検出を提供する、独立したオープンソースプロジェクトです。開発者、研究者、そして商用アプリケーションのために作られています。",
+    "resources": "リソース",
+    "documentation": "ドキュメント",
+    "experimental": "実験的なタスク",
+    "modelZoo": "モデルズー",
+    "liveDemo": "ライブデモ",
+    "benchmarks": "ベンチマーク",
+    "commercialGuide": "商用利用ガイド",
+    "articles": "記事",
+    "contact": "お問い合わせ",
+    "role": "作者・メンテナー",
+    "chat": "お気軽にどうぞ",
+    "mitLicense": "MITライセンス",
+    "copyright": "© {year} LibreYOLO。独立したオープンソースプロジェクトです。",
+    "community": "コミュニティ"
+  },
+  "NotFound": {
+    "title": "物体を検出できませんでした",
+    "body": "モデルはこのページを見つけられませんでした。移動されたか、削除されたか、あるいは最初から存在しなかったのかもしれません。",
+    "goHome": "ホームへ",
+    "browseDocs": "ドキュメントを見る",
+    "codeComment": "# 検出結果"
+  },
+  "DocsNote": {
+    "label": "英語のみ",
+    "text": "このセクションは現在、英語のみで提供しています。"
+  },
+  "Common": {
+    "getStarted": "はじめる"
+  },
+  "Support": {
+    "title": "LibreYOLOを応援する",
+    "body": "いちばんの応援は<star>リポジトリにスターを付けること</star>です。問題や提案があれば<issue>Issueを立ててください</issue>。コードのコントリビューションも<contrib>大歓迎です</contrib>。",
+    "communityBody": "質問も、学習が落ちたときの相談も、リリースの話題も、r/LibreYOLOで交わされています。ぜひ覗いてみてください。",
+    "communityCta": "r/LibreYOLO",
+    "githubCta": "GitHub"
+  },
+  "Home": {
+    "heroTitleLine1": "物体検出。",
+    "heroTitleLine2": "100% MITライセンス。",
+    "heroSubA": "YOLOを、その作者たちが本来意図していたとおり、もう一度誰もが使えるものに。",
+    "heroSubB": "最先端の物体検出を学習してデプロイするための、モダンでMITライセンスのエンジンです。",
+    "viewGithub": "GitHubで見る",
+    "copy": "コピー",
+    "copied": "コピーしました！",
+    "detected": "物体を1個検出しました（人）",
+    "communityTitle": "コミュニティの声",
+    "communityFootnote": "LibreYOLOはとても大きな取り組みです。こうしたメッセージが続ける力になっています。",
+    "featuresTitle": "1つのライブラリで、<accent>ワークフローのすべてを</accent>",
+    "featuresSubtitle": "検出モデルの学習、検証、エクスポート、デプロイを、MITライセンスの寛容な1つのパッケージから行えます。",
+    "feature1Title": "正真正銘のMIT",
+    "feature1Desc": "依存関係のどこにもAGPLはありません。クローズドソースの製品、SaaS、組み込みシステムで使えます。",
+    "feature2Title": "1つのAPI、3つのアーキテクチャ",
+    "feature2Desc": "YOLOX、YOLOv9、RF-DETRを単一のLibreYOLO()呼び出しで扱えます。アーキテクチャ、サイズ、クラス数は重みから自動で判別します。",
+    "feature3Title": "全部入り",
+    "feature3Desc": "入力形式は自由です。パス、URL、PIL、NumPy、OpenCV、テンソル、バイト列に対応します。大きな画像にはタイル分割推論。重みはHuggingFaceから自動でダウンロードします。",
+    "feature4Title": "学習",
+    "feature4Desc": "独自のYOLO形式やCOCO形式のデータセットでファインチューニングできます。データ拡張、混合精度、早期終了を内蔵。どのチェックポイントからでも再開できます。",
+    "feature5Title": "検証",
+    "feature5Desc": "COCO標準の評価に対応し、COCOでも独自のデータセットでもmAP50、mAP50-95、適合率、再現率を計測します。クラスごとの指標と混同行列も標準で出力します。",
+    "feature6Title": "エクスポートとデプロイ",
+    "feature6Desc": "メタデータを埋め込んだONNXへのエクスポートが1行。そのままデプロイに進めます。",
+    "deployBadge": "エッジからクラウドまで",
+    "deployTitle": "<accent>どこにでも</accent>デプロイ",
+    "deploySubtitle": "一度エクスポートすれば、どんなハードウェアでも動きます。35ドルのボードからデータセンターのGPUまで。",
+    "exportFormats": "エクスポート形式",
+    "testedHardware": "検証済みハードウェア",
+    "comparisonTitle": "LibreYOLO vs <muted>Ultralytics</muted>",
+    "comparisonSubtitle": "MITなら、成果物は自分のものです。あとから驚くことはありません。",
+    "compRow1": "プロプライエタリなソフトウェアで使う",
+    "compRow2": "組み込んだ製品を販売する",
+    "compRow3": "ソースコードの公開が不要",
+    "compRow4": "ファインチューニングした重みを非公開にできる",
+    "compRow5": "蒸留して新しいモデルを作る",
+    "compRow6": "商用利用の費用",
+    "compNone": "なし",
+    "compRequired": "必要",
+    "ctaTitle": "<accent>今日から</accent>作りはじめる",
+    "ctaReadDocs": "ドキュメントを読む",
+    "ctaCommercialGuide": "商用利用ガイド",
+    "ctaModelZoo": "モデルズー",
+    "ctaBenchmarks": "ベンチマーク",
+    "testimonials": [
+      {
+        "quote": "You have my hearty support for this. I'll be so happy when there is a good, community maintained, MIT licensed alternative to Ultralytics.",
+        "author": "u/Covered_in_bees_"
+      },
+      {
+        "quote": "This is so cool bro. If I see some place I can contribute, I will definitely do so!",
+        "author": "u/FedStan"
+      },
+      {
+        "quote": "This looks like a really good project, and I hope you are able to realize the full vision you seem to have for it. Very exciting.",
+        "author": "u/CalmBet"
+      },
+      {
+        "quote": "Nice work! I'll try it out this week and open issues/PRs.",
+        "author": "u/InternationalMany6"
+      },
+      {
+        "quote": "Looks pretty cool. It's good to see these sorts of developments.",
+        "author": "u/HistoricalMistake681"
+      },
+      {
+        "quote": "Thank you for sharing, this looks interesting.",
+        "author": "u/nemesis1836"
+      },
+      {
+        "quote": "Great initiative.",
+        "author": "u/Outrageous_Sort_8993"
+      },
+      {
+        "quote": "Good job! Are you hosting the models on HuggingFace?",
+        "author": "u/Winners-magic"
+      },
+      {
+        "quote": "Very nice, will add creating a node of it to my todo list.",
+        "author": "u/dr_hamilton"
+      }
+    ]
+  },
+  "Models": {
+    "byTask": "タスク別のモデル",
+    "weights": "すべての重み",
+    "docs": "ドキュメント",
+    "indexLead": "ライブラリに含まれるすべてのファミリーを、v{version}のモデルレジストリから生成しています。{tasks}種類のタスクにわたる{families}ファミリーです。",
+    "familyCount": "{count}ファミリー",
+    "weightsShort": "重み",
+    "tasks": {
+      "detect": {
+        "label": "検出",
+        "blurb": "物体を囲むボックス。ライブラリの大部分はこのタスクのために作られています。"
+      },
+      "segment": {
+        "label": "セグメンテーション",
+        "blurb": "ボックスではなく、インスタンスごとのマスク。"
+      },
+      "pose": {
+        "label": "キーポイント",
+        "blurb": "検出したインスタンスごとの骨格とランドマーク。"
+      },
+      "classify": {
+        "label": "分類",
+        "blurb": "画像全体に1つのラベル。そして、ほかのすべてを支えるバックボーン。"
+      },
+      "obb": {
+        "label": "回転ボックス",
+        "blurb": "回転したボックス。航空写真や、軸に沿っていないものに。"
+      },
+      "depth": {
+        "label": "深度",
+        "blurb": "1枚の画像からピクセルごとの距離を求めます。"
+      },
+      "semantic": {
+        "label": "セマンティックセグメンテーション",
+        "blurb": "インスタンスを区別せず、すべてのピクセルにクラスを割り当てます。"
+      },
+      "panoptic": {
+        "label": "パノプティックセグメンテーション",
+        "blurb": "セマンティックとインスタンスのマスクを1回の推論で。"
+      },
+      "point": {
+        "label": "点と計数",
+        "blurb": "ボックスではなく重心。マイコンでも動くほど軽量です。"
+      },
+      "ocr": {
+        "label": "文字認識",
+        "blurb": "画像から文字を見つけて読み取ります。"
+      },
+      "embed": {
+        "label": "埋め込み",
+        "blurb": "検索、クラスタリング、類似検索のためのベクトル。"
+      },
+      "gaze": {
+        "label": "視線",
+        "blurb": "人がどこを見ているか。"
+      },
+      "edge": {
+        "label": "エッジ検出",
+        "blurb": "輪郭と境界。"
+      },
+      "normal": {
+        "label": "面法線",
+        "blurb": "それぞれの面がどちらを向いているか。"
+      },
+      "matte": {
+        "label": "マッティング",
+        "blurb": "アルファ抜き。髪の毛や縁も含めて。"
+      },
+      "restore": {
+        "label": "復元",
+        "blurb": "ノイズ除去、ぼけ除去、拡大。"
+      },
+      "mesh": {
+        "label": "メッシュ",
+        "blurb": "1枚の画像から3Dジオメトリを。"
+      }
+    },
+    "docsShort": "ドキュメント"
+  },
+  "Commercial": {
+    "titleEmphasis": "はい",
+    "titleRest": "、使えます。",
+    "subtitle": "100%無料で、条件は一切ありません。LibreYOLOは、YOLOが本来そうあるべきだったとおりのオープンソースです。"
+  },
+  "Datasets": {
+    "badge": "学習データ",
+    "title": "データセット<accent>ズー</accent>",
+    "subtitle": "LibreYOLOのモデルを学習・評価するために厳選したデータセットです。LibreYOLOの学習パイプラインでそのまま使えます。",
+    "browseCta": "HuggingFaceでデータセットを見る",
+    "note": "個々のデータセットのカードは近日公開します。それまでは、<link>LibreYOLOのHuggingFace</link>で公開中のデータセットをご覧ください。"
+  },
+  "Articles": {
+    "title": "記事",
+    "subtitle": "LibreYOLOで検出モデルを動かすためのチュートリアルと、掘り下げた解説。",
+    "empty": "まだ記事はありません。またお越しください。",
+    "minRead": "{minutes}分で読めます",
+    "englishNote": "記事は英語で執筆しています。",
+    "backToArticles": "すべての記事"
+  },
+  "Science": {
+    "heroBadge": "研究と科学",
+    "heroTitle": "<accent>発見</accent>のためのコードベース",
+    "heroSubtitle": "ユーザーだけでなく、研究者のために設計したコードベースです。自由に書き換え、深く覗き込み、その権利に対価を払うことなく発表できます。",
+    "noPaywallTitle": "「研究ライセンス」は不要",
+    "noPaywallIntro": "フレームワークによっては、成果を公開せずにコードを調べるためだけに「研究」や「科学」向けライセンスの別料金を求めます。<b>LibreYOLOは求めません。</b>",
+    "typicalTitle": "よくある「科学ライセンス」",
+    "typical1": "研究を非公開に保つには課金が必要",
+    "typical2": "商用の研究開発には利用料",
+    "typical3": "複雑なライセンス階層",
+    "typical4": "論文発表のたびに法務レビュー",
+    "libreTitle": "LibreYOLO（MIT）",
+    "libre1": "自由に調べて、<b>非公開のままにできる</b>",
+    "libre2": "どんな用途でも費用はゼロ",
+    "libre3": "シンプルなライセンス1つ、MIT",
+    "libre4": "法務の心配なく発表できる",
+    "explainBadge": "ネイティブな説明可能性",
+    "explainTitle": "ブラックボックスの中を見る",
+    "explainSubtitle": "解釈可能性と説明可能性のツールを内蔵しています。外部依存も複雑な設定も不要です。フラグと関数呼び出しだけで使えます。",
+    "featureMapTitle": "特徴マップの抽出",
+    "featureMapDesc": "フラグを1つ。それだけで、すべての層の中間活性を保存できます。各段階でモデルが何を「見て」いるのかを理解するのに最適です。",
+    "camTitle": "CAMの可視化",
+    "experimentalBadge": "実験的",
+    "camDesc": "7種類のClass Activation Map手法を内蔵しています。<code>model.explain()</code>を呼び出すと、モデルが何に注目しているかを示すヒートマップを生成します。この機能は実験的で、結果は変わることがあります。",
+    "modifyTitle": "書き換えられることを前提に",
+    "modifyDesc": "コードベースは読みやすく、書き換えやすいように書かれています。新しいバックボーンを試したい。独自のアテンション機構を実験したい。新しい損失関数を追加したい。どうぞご自由に。",
+    "ctaTitle": "今日から研究を始める",
+    "ctaDesc": "ライセンス料はありません。ペイウォールもありません。成果を非公開にすることへの制限もありません。インストールして、探索を始めるだけです。",
+    "ctaButton": "ドキュメントを見る"
+  }
+}

@@ -1,0 +1,285 @@
+{
+  "Metadata": {
+    "defaultTitle": "LibreYOLO | Deteksi Objek Berlisensi MIT",
+    "description": "Mesin pelatihan dan inferensi berlisensi MIT untuk model YOLO tercanggih. Dibuat untuk aplikasi komersial, bebas dari batasan AGPL.",
+    "twitterDescription": "Mesin pelatihan dan inferensi berlisensi MIT untuk model YOLO tercanggih.",
+    "keywords": "YOLO|deteksi objek|lisensi MIT|machine learning|computer vision|open source|AI",
+    "modelsTitle": "Model Zoo",
+    "modelsDescription": "Bobot YOLO pretrained dengan lisensi MIT. Jelajahi model yang tersedia untuk deteksi objek.",
+    "commercialTitle": "Panduan Komersial",
+    "commercialDescription": "Cara memakai LibreYOLO di aplikasi komersial proprietary dan closed source di bawah lisensi MIT.",
+    "datasetsTitle": "Dataset Zoo",
+    "datasetsDescription": "Dataset untuk melatih dan mengevaluasi model YOLO. Jelajahi dataset yang tersedia di HuggingFace.",
+    "scienceTitle": "Riset dan Sains",
+    "scienceDescription": "LibreYOLO untuk peneliti. Explainability bawaan, feature map, dan basis kode yang dirancang untuk riset.",
+    "docsTitle": "Dokumentasi",
+    "docsDescription": "Dokumentasi untuk framework deteksi objek LibreYOLO.",
+    "articlesTitle": "Artikel",
+    "articlesDescription": "Artikel, tutorial, dan berita tentang LibreYOLO: deteksi objek berlisensi MIT, tips pelatihan, rilis model, dan panduan computer vision."
+  },
+  "Nav": {
+    "home": "Beranda",
+    "models": "Model",
+    "benchmarks": "Benchmark",
+    "commercial": "Komersial",
+    "articles": "Artikel",
+    "docs": "Docs",
+    "github": "GitHub",
+    "star": "Star",
+    "community": "Komunitas"
+  },
+  "LangSwitcher": {
+    "label": "Ganti bahasa"
+  },
+  "Footer": {
+    "tagline": "Proyek open source independen yang menghadirkan deteksi objek tercanggih. Dibuat untuk developer, peneliti, dan aplikasi komersial.",
+    "resources": "Sumber Daya",
+    "documentation": "Dokumentasi",
+    "experimental": "Task Eksperimental",
+    "modelZoo": "Model Zoo",
+    "liveDemo": "Demo Langsung",
+    "benchmarks": "Benchmark",
+    "commercialGuide": "Panduan Komersial",
+    "articles": "Artikel",
+    "contact": "Kontak",
+    "role": "Pembuat dan Pemelihara",
+    "chat": "Mari mengobrol",
+    "mitLicense": "Lisensi MIT",
+    "copyright": "© {year} LibreYOLO. Proyek open source independen.",
+    "community": "Komunitas"
+  },
+  "NotFound": {
+    "title": "Objek Tidak Terdeteksi",
+    "body": "Model kami tidak menemukan halaman ini. Mungkin halamannya sudah dipindahkan, dihapus, atau memang tidak pernah ada.",
+    "goHome": "Ke Beranda",
+    "browseDocs": "Lihat Dokumentasi",
+    "codeComment": "# Hasil deteksi"
+  },
+  "DocsNote": {
+    "label": "Hanya bahasa Inggris",
+    "text": "Untuk saat ini bagian ini hanya tersedia dalam bahasa Inggris."
+  },
+  "Common": {
+    "getStarted": "Mulai"
+  },
+  "Support": {
+    "title": "Dukung LibreYOLO",
+    "body": "Cara terbaik untuk membantu adalah <star>memberi bintang pada repo</star>. Kalau menemui masalah atau punya saran, <issue>buka issue</issue>, dan kontribusi kode <contrib>sangat kami sambut</contrib>.",
+    "communityBody": "Pertanyaan, pelatihan yang gagal di tengah jalan, dan kabar rilis dibahas di r/LibreYOLO. Mampir dan sapa kami.",
+    "communityCta": "r/LibreYOLO",
+    "githubCta": "GitHub"
+  },
+  "Home": {
+    "heroTitleLine1": "Deteksi Objek.",
+    "heroTitleLine2": "100% Berlisensi MIT.",
+    "heroSubA": "Membuat YOLO kembali terbuka untuk semua orang, seperti yang selalu diniatkan para pembuatnya.",
+    "heroSubB": "Mesin modern berlisensi MIT untuk melatih dan menerapkan deteksi objek tercanggih.",
+    "viewGithub": "Lihat di GitHub",
+    "copy": "Salin",
+    "copied": "Tersalin!",
+    "detected": "Terdeteksi 1 objek (orang)",
+    "communityTitle": "Kata Komunitas",
+    "communityFootnote": "LibreYOLO adalah usaha yang sangat besar. Pesan seperti ini yang membuat kami terus jalan.",
+    "featuresTitle": "Satu library, <accent>seluruh alur kerja</accent>",
+    "featuresSubtitle": "Latih, validasi, ekspor, dan terapkan model deteksi dari satu paket permisif berlisensi MIT.",
+    "feature1Title": "Benar-benar MIT",
+    "feature1Desc": "Tidak ada AGPL di seluruh rantai dependensi. Pakai di produk closed source, SaaS, dan sistem embedded.",
+    "feature2Title": "Satu API, tiga arsitektur",
+    "feature2Desc": "YOLOX, YOLOv9, dan RF-DETR di balik satu panggilan LibreYOLO(). Arsitektur, ukuran, dan jumlah kelas terdeteksi otomatis dari bobotnya.",
+    "feature3Title": "Serba lengkap",
+    "feature3Desc": "Format input apa pun: path, URL, PIL, NumPy, OpenCV, tensor, bytes. Inferensi berbasis tile untuk gambar berukuran besar. Bobot diunduh otomatis dari HuggingFace.",
+    "feature4Title": "Latih",
+    "feature4Desc": "Lakukan fine-tuning pada dataset YOLO atau COCO sendiri, dengan augmentasi data bawaan, mixed precision, dan early stopping. Lanjutkan dari checkpoint mana pun.",
+    "feature5Title": "Validasi",
+    "feature5Desc": "Evaluasi standar COCO dengan mAP50, mAP50-95, presisi, dan recall pada dataset COCO maupun dataset sendiri. Metrik per kelas dan confusion matrix tersedia langsung.",
+    "feature6Title": "Ekspor dan terapkan",
+    "feature6Desc": "Ekspor ONNX satu baris dengan metadata tertanam agar penerapan jadi mudah.",
+    "deployBadge": "Dari Edge ke Cloud",
+    "deployTitle": "Terapkan <accent>Di Mana Saja</accent>",
+    "deploySubtitle": "Ekspor sekali, jalankan di hardware apa pun. Dari board seharga $35 sampai GPU datacenter.",
+    "exportFormats": "Format Ekspor",
+    "testedHardware": "Hardware yang Diuji",
+    "comparisonTitle": "LibreYOLO vs <muted>Ultralytics</muted>",
+    "comparisonSubtitle": "MIT berarti hasil kerja Anda tetap milik Anda. Tanpa kejutan.",
+    "compRow1": "Dipakai di software proprietary",
+    "compRow2": "Menjual produk yang memuatnya",
+    "compRow3": "Tidak wajib membuka kode sumber",
+    "compRow4": "Fine-tuning dan bobot tetap privat",
+    "compRow5": "Distilasi menjadi model baru",
+    "compRow6": "Biaya penggunaan komersial",
+    "compNone": "Tidak ada",
+    "compRequired": "Wajib",
+    "ctaTitle": "Mulai Bangun <accent>Hari Ini</accent>",
+    "ctaReadDocs": "Baca Dokumentasi",
+    "ctaCommercialGuide": "Panduan Komersial",
+    "ctaModelZoo": "Model Zoo",
+    "ctaBenchmarks": "Benchmark",
+    "testimonials": [
+      {
+        "quote": "You have my hearty support for this. I'll be so happy when there is a good, community maintained, MIT licensed alternative to Ultralytics.",
+        "author": "u/Covered_in_bees_"
+      },
+      {
+        "quote": "This is so cool bro. If I see some place I can contribute, I will definitely do so!",
+        "author": "u/FedStan"
+      },
+      {
+        "quote": "This looks like a really good project, and I hope you are able to realize the full vision you seem to have for it. Very exciting.",
+        "author": "u/CalmBet"
+      },
+      {
+        "quote": "Nice work! I'll try it out this week and open issues/PRs.",
+        "author": "u/InternationalMany6"
+      },
+      {
+        "quote": "Looks pretty cool. It's good to see these sorts of developments.",
+        "author": "u/HistoricalMistake681"
+      },
+      {
+        "quote": "Thank you for sharing, this looks interesting.",
+        "author": "u/nemesis1836"
+      },
+      {
+        "quote": "Great initiative.",
+        "author": "u/Outrageous_Sort_8993"
+      },
+      {
+        "quote": "Good job! Are you hosting the models on HuggingFace?",
+        "author": "u/Winners-magic"
+      },
+      {
+        "quote": "Very nice, will add creating a node of it to my todo list.",
+        "author": "u/dr_hamilton"
+      }
+    ]
+  },
+  "Models": {
+    "byTask": "Model menurut task",
+    "weights": "Semua bobot",
+    "docs": "Docs",
+    "indexLead": "Semua family yang disertakan library ini, dihasilkan dari registry model v{version}: {families} family pada {tasks} task.",
+    "familyCount": "{count} family",
+    "weightsShort": "bobot",
+    "tasks": {
+      "detect": {
+        "label": "Deteksi",
+        "blurb": "Kotak di sekeliling objek. Task yang menjadi dasar sebagian besar library ini."
+      },
+      "segment": {
+        "label": "Segmentasi",
+        "blurb": "Mask per instance, bukan kotak."
+      },
+      "pose": {
+        "label": "Keypoint",
+        "blurb": "Kerangka dan landmark pada setiap instance yang terdeteksi."
+      },
+      "classify": {
+        "label": "Klasifikasi",
+        "blurb": "Satu label untuk seluruh gambar, sekaligus backbone di balik semua task lain."
+      },
+      "obb": {
+        "label": "Kotak berorientasi",
+        "blurb": "Kotak yang dirotasi, untuk citra udara dan apa pun yang tidak sejajar sumbu."
+      },
+      "depth": {
+        "label": "Kedalaman",
+        "blurb": "Jarak per piksel hanya dari satu gambar."
+      },
+      "semantic": {
+        "label": "Segmentasi semantik",
+        "blurb": "Satu kelas untuk setiap piksel, tanpa memisahkan instance."
+      },
+      "panoptic": {
+        "label": "Segmentasi panoptik",
+        "blurb": "Mask semantik dan instance dalam satu proses."
+      },
+      "point": {
+        "label": "Titik dan penghitungan",
+        "blurb": "Sentroid alih-alih kotak, cukup ringan untuk mikrokontroler."
+      },
+      "ocr": {
+        "label": "Pengenalan teks",
+        "blurb": "Menemukan dan membaca teks di dalam gambar."
+      },
+      "embed": {
+        "label": "Embedding",
+        "blurb": "Vektor untuk pencarian, clustering, dan retrieval."
+      },
+      "gaze": {
+        "label": "Arah pandang",
+        "blurb": "Ke mana seseorang sedang melihat."
+      },
+      "edge": {
+        "label": "Deteksi tepi",
+        "blurb": "Kontur dan batas."
+      },
+      "normal": {
+        "label": "Normal permukaan",
+        "blurb": "Ke arah mana setiap permukaan menghadap."
+      },
+      "matte": {
+        "label": "Matting",
+        "blurb": "Potongan dengan kanal alfa, rambut dan tepi ikut terjaga."
+      },
+      "restore": {
+        "label": "Restorasi",
+        "blurb": "Denoising, deblurring, dan upscaling."
+      },
+      "mesh": {
+        "label": "Mesh",
+        "blurb": "Geometri 3D dari sebuah gambar."
+      }
+    },
+    "docsShort": "docs"
+  },
+  "Commercial": {
+    "titleEmphasis": "Ya",
+    "titleRest": ", Anda boleh memakai ini.",
+    "subtitle": "100% gratis, tanpa syarat tersembunyi. LibreYOLO adalah open source seperti yang seharusnya YOLO sejak dulu."
+  },
+  "Datasets": {
+    "badge": "Data Pelatihan",
+    "title": "Dataset <accent>Zoo</accent>",
+    "subtitle": "Dataset pilihan untuk melatih dan mengevaluasi model LibreYOLO. Siap dipakai dengan pipeline pelatihan LibreYOLO.",
+    "browseCta": "Jelajahi Dataset di HuggingFace",
+    "note": "Kartu untuk tiap dataset akan segera tersedia di sini. Sementara itu, jelajahi semua dataset yang ada di <link>HuggingFace LibreYOLO</link>."
+  },
+  "Articles": {
+    "title": "Artikel",
+    "subtitle": "Tutorial dan pembahasan mendalam soal menjalankan model deteksi dengan LibreYOLO.",
+    "empty": "Belum ada artikel. Cek lagi nanti.",
+    "minRead": "Baca {minutes} menit",
+    "englishNote": "Artikel ditulis dalam bahasa Inggris.",
+    "backToArticles": "Semua artikel"
+  },
+  "Science": {
+    "heroBadge": "Riset dan Sains",
+    "heroTitle": "Dibuat untuk <accent>Penemuan</accent>",
+    "heroSubtitle": "Basis kode yang dirancang untuk peneliti, bukan sekadar pengguna. Ubah sebebasnya, telusuri sedalam mungkin, dan publikasikan tanpa membayar biaya apa pun.",
+    "noPaywallTitle": "Tidak Perlu \"Lisensi Riset\"",
+    "noPaywallIntro": "Sebagian framework menarik biaya terpisah untuk lisensi \"riset\" atau \"sains\" hanya agar Anda boleh memeriksa kodenya tanpa merilis hasil kerja Anda. <b>LibreYOLO tidak begitu.</b>",
+    "typicalTitle": "\"Lisensi Sains\" pada Umumnya",
+    "typical1": "Bayar agar riset tetap privat",
+    "typical2": "Biaya untuk R&D komersial",
+    "typical3": "Tingkatan lisensi yang rumit",
+    "typical4": "Tinjauan hukum sebelum publikasi",
+    "libreTitle": "LibreYOLO (MIT)",
+    "libre1": "Teliti sebebasnya, <b>simpan tetap privat</b>",
+    "libre2": "Nol biaya untuk semua kasus penggunaan",
+    "libre3": "Satu lisensi sederhana: MIT",
+    "libre4": "Publikasikan tanpa kekhawatiran hukum",
+    "explainBadge": "Explainability Bawaan",
+    "explainTitle": "Lihat Isi Kotak Hitam",
+    "explainSubtitle": "Alat bawaan untuk interpretability dan explainability. Tanpa dependensi eksternal, tanpa setup rumit, cukup flag dan pemanggilan fungsi.",
+    "featureMapTitle": "Ekstraksi Feature Map",
+    "featureMapDesc": "Satu flag. Hanya itu yang diperlukan untuk menyimpan aktivasi antara dari setiap lapisan. Cocok untuk memahami apa yang \"dilihat\" model Anda di tiap tahap.",
+    "camTitle": "Visualisasi CAM",
+    "experimentalBadge": "Eksperimental",
+    "camDesc": "7 metode Class Activation Map bawaan. Panggil <code>model.explain()</code> untuk menghasilkan heatmap yang menunjukkan apa yang menjadi fokus model Anda. Fitur ini eksperimental dan hasilnya bisa berbeda-beda.",
+    "modifyTitle": "Dirancang untuk Dimodifikasi",
+    "modifyDesc": "Basis kode ditulis agar mudah dibaca dan diubah. Ingin menguji backbone baru? Bereksperimen dengan mekanisme attention buatan sendiri? Menambahkan fungsi loss yang baru? Silakan.",
+    "ctaTitle": "Mulai Riset Anda Hari Ini",
+    "ctaDesc": "Tanpa biaya lisensi. Tanpa paywall. Tanpa larangan menyimpan hasil kerja Anda secara privat. Cukup pasang dan mulai jelajahi.",
+    "ctaButton": "Lihat Dokumentasi"
+  }
+}

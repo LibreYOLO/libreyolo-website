@@ -1,0 +1,285 @@
+{
+  "Metadata": {
+    "defaultTitle": "LibreYOLO | MIT 라이선스 객체 탐지",
+    "description": "최신 YOLO 모델을 위한 MIT 라이선스 학습 및 추론 엔진입니다. 상업용 애플리케이션을 위해 만들었고, AGPL 제약이 없습니다.",
+    "twitterDescription": "최신 YOLO 모델을 위한 MIT 라이선스 학습 및 추론 엔진입니다.",
+    "keywords": "YOLO|객체 탐지|MIT 라이선스|머신러닝|컴퓨터 비전|오픈 소스|AI",
+    "modelsTitle": "모델 모음",
+    "modelsDescription": "MIT 라이선스로 제공되는 사전 학습된 YOLO 가중치입니다. 객체 탐지에 사용할 수 있는 모델을 둘러보세요.",
+    "commercialTitle": "상업적 이용 가이드",
+    "commercialDescription": "MIT 라이선스로 LibreYOLO를 독점 소프트웨어와 비공개 소스 상업용 애플리케이션에 사용하는 방법.",
+    "datasetsTitle": "데이터셋 모음",
+    "datasetsDescription": "YOLO 모델을 학습하고 평가하기 위한 데이터셋입니다. HuggingFace에서 사용할 수 있는 데이터셋을 둘러보세요.",
+    "scienceTitle": "연구와 과학",
+    "scienceDescription": "연구자를 위한 LibreYOLO. 기본으로 제공되는 설명 가능성, 특징 맵, 그리고 발견을 위해 설계한 코드베이스.",
+    "docsTitle": "문서",
+    "docsDescription": "LibreYOLO 객체 탐지 프레임워크 문서.",
+    "articlesTitle": "아티클",
+    "articlesDescription": "LibreYOLO에 대한 아티클, 튜토리얼, 소식. MIT 라이선스 객체 탐지, 학습 팁, 모델 릴리스, 컴퓨터 비전 가이드를 다룹니다."
+  },
+  "Nav": {
+    "home": "홈",
+    "models": "모델",
+    "benchmarks": "벤치마크",
+    "commercial": "상업적 이용",
+    "articles": "아티클",
+    "docs": "문서",
+    "github": "GitHub",
+    "star": "Star",
+    "community": "커뮤니티"
+  },
+  "LangSwitcher": {
+    "label": "언어 변경"
+  },
+  "Footer": {
+    "tagline": "최신 객체 탐지 기술을 제공하는 독립 오픈 소스 프로젝트입니다. 개발자와 연구자, 그리고 상업용 애플리케이션을 위해 만들었습니다.",
+    "resources": "리소스",
+    "documentation": "문서",
+    "experimental": "실험적 태스크",
+    "modelZoo": "모델 모음",
+    "liveDemo": "라이브 데모",
+    "benchmarks": "벤치마크",
+    "commercialGuide": "상업적 이용 가이드",
+    "articles": "아티클",
+    "contact": "연락처",
+    "role": "제작자 및 메인테이너",
+    "chat": "이야기 나누기",
+    "mitLicense": "MIT 라이선스",
+    "copyright": "© {year} LibreYOLO. 독립 오픈 소스 프로젝트입니다.",
+    "community": "커뮤니티"
+  },
+  "NotFound": {
+    "title": "객체를 탐지하지 못했습니다",
+    "body": "모델이 이 페이지를 찾지 못했습니다. 옮겨졌거나 삭제되었을 수도 있고, 애초에 없었을 수도 있습니다.",
+    "goHome": "홈으로",
+    "browseDocs": "문서 보기",
+    "codeComment": "# 탐지 결과"
+  },
+  "DocsNote": {
+    "label": "영어만 제공",
+    "text": "이 섹션은 현재 영어로만 제공됩니다."
+  },
+  "Common": {
+    "getStarted": "시작하기"
+  },
+  "Support": {
+    "title": "LibreYOLO 응원하기",
+    "body": "가장 큰 도움은 <star>저장소에 스타를 눌러 주는 것</star>입니다. 문제가 생기거나 제안할 내용이 있으면 <issue>이슈를 열어 주세요</issue>. 코드 기여는 <contrib>언제나 환영합니다</contrib>.",
+    "communityBody": "질문, 학습 중에 나는 오류, 릴리스 소식은 r/LibreYOLO에서 이야기합니다. 편하게 인사 남겨 주세요.",
+    "communityCta": "r/LibreYOLO",
+    "githubCta": "GitHub"
+  },
+  "Home": {
+    "heroTitleLine1": "객체 탐지.",
+    "heroTitleLine2": "100% MIT 라이선스.",
+    "heroSubA": "YOLO를 만든 사람들이 바라던 그대로, 다시 누구나 쓸 수 있게.",
+    "heroSubB": "최신 객체 탐지 모델을 학습하고 배포하는 현대적인 MIT 라이선스 엔진.",
+    "viewGithub": "GitHub에서 보기",
+    "copy": "복사",
+    "copied": "복사했습니다",
+    "detected": "객체 1개 탐지 (사람)",
+    "communityTitle": "커뮤니티의 반응",
+    "communityFootnote": "LibreYOLO는 많은 노력이 들어가는 프로젝트입니다. 이런 메시지가 힘이 됩니다.",
+    "featuresTitle": "라이브러리 하나로 <accent>전체 워크플로</accent>",
+    "featuresSubtitle": "MIT 라이선스의 관대한 패키지 하나로 탐지 모델을 학습하고, 검증하고, 내보내고, 배포합니다.",
+    "feature1Title": "진짜 MIT",
+    "feature1Desc": "의존성 어디에도 AGPL이 없습니다. 비공개 소스 제품, SaaS, 임베디드 시스템에 그대로 사용하세요.",
+    "feature2Title": "하나의 API, 세 가지 아키텍처",
+    "feature2Desc": "YOLOX, YOLOv9, RF-DETR 세 계열을 LibreYOLO() 호출 하나로 사용합니다. 아키텍처와 크기, 클래스 수는 가중치에서 자동으로 인식합니다.",
+    "feature3Title": "필요한 것은 다 들어 있습니다",
+    "feature3Desc": "입력 형식은 무엇이든 됩니다. 경로, URL, PIL, NumPy, OpenCV, 텐서, 바이트. 큰 이미지를 위한 타일 추론과 HuggingFace 가중치 자동 다운로드까지 제공합니다.",
+    "feature4Title": "학습",
+    "feature4Desc": "직접 만든 YOLO 또는 COCO 형식 데이터셋으로 파인튜닝합니다. 데이터 증강, 혼합 정밀도, 조기 종료가 기본으로 들어 있고, 어떤 체크포인트에서든 이어서 학습할 수 있습니다.",
+    "feature5Title": "검증",
+    "feature5Desc": "COCO 또는 직접 만든 데이터셋에서 mAP50, mAP50-95, 정밀도, 재현율을 COCO 표준 방식으로 평가합니다. 클래스별 지표와 혼동 행렬도 기본으로 제공됩니다.",
+    "feature6Title": "내보내기와 배포",
+    "feature6Desc": "메타데이터가 포함된 ONNX 파일을 한 줄로 내보내 바로 배포합니다.",
+    "deployBadge": "엣지에서 클라우드까지",
+    "deployTitle": "<accent>어디에나</accent> 배포",
+    "deploySubtitle": "한 번 내보내면 어떤 하드웨어에서도 실행됩니다. 35달러 보드부터 데이터센터 GPU까지.",
+    "exportFormats": "내보내기 형식",
+    "testedHardware": "테스트한 하드웨어",
+    "comparisonTitle": "LibreYOLO vs <muted>Ultralytics</muted>",
+    "comparisonSubtitle": "MIT 라이선스는 내 결과물이 온전히 내 것이라는 뜻입니다. 뜻밖의 일은 없습니다.",
+    "compRow1": "독점 소프트웨어에 사용",
+    "compRow2": "제품에 포함해 판매",
+    "compRow3": "소스 코드 공개 의무 없음",
+    "compRow4": "파인튜닝 후 가중치 비공개 유지",
+    "compRow5": "증류해 새 모델 만들기",
+    "compRow6": "상업적 사용료",
+    "compNone": "없음",
+    "compRequired": "필요",
+    "ctaTitle": "<accent>오늘</accent>부터 만들어 보세요",
+    "ctaReadDocs": "문서 읽기",
+    "ctaCommercialGuide": "상업적 이용 가이드",
+    "ctaModelZoo": "모델 모음",
+    "ctaBenchmarks": "벤치마크",
+    "testimonials": [
+      {
+        "quote": "You have my hearty support for this. I'll be so happy when there is a good, community maintained, MIT licensed alternative to Ultralytics.",
+        "author": "u/Covered_in_bees_"
+      },
+      {
+        "quote": "This is so cool bro. If I see some place I can contribute, I will definitely do so!",
+        "author": "u/FedStan"
+      },
+      {
+        "quote": "This looks like a really good project, and I hope you are able to realize the full vision you seem to have for it. Very exciting.",
+        "author": "u/CalmBet"
+      },
+      {
+        "quote": "Nice work! I'll try it out this week and open issues/PRs.",
+        "author": "u/InternationalMany6"
+      },
+      {
+        "quote": "Looks pretty cool. It's good to see these sorts of developments.",
+        "author": "u/HistoricalMistake681"
+      },
+      {
+        "quote": "Thank you for sharing, this looks interesting.",
+        "author": "u/nemesis1836"
+      },
+      {
+        "quote": "Great initiative.",
+        "author": "u/Outrageous_Sort_8993"
+      },
+      {
+        "quote": "Good job! Are you hosting the models on HuggingFace?",
+        "author": "u/Winners-magic"
+      },
+      {
+        "quote": "Very nice, will add creating a node of it to my todo list.",
+        "author": "u/dr_hamilton"
+      }
+    ]
+  },
+  "Models": {
+    "byTask": "태스크별 모델",
+    "weights": "전체 가중치",
+    "docs": "문서",
+    "indexLead": "라이브러리가 제공하는 모든 계열이며, v{version} 모델 레지스트리에서 생성했습니다. {tasks}개 태스크에 걸쳐 {families}개 계열입니다.",
+    "familyCount": "{count}개 계열",
+    "weightsShort": "가중치",
+    "tasks": {
+      "detect": {
+        "label": "탐지",
+        "blurb": "객체를 감싸는 박스. 라이브러리 대부분이 이 태스크를 위해 만들어졌습니다."
+      },
+      "segment": {
+        "label": "분할",
+        "blurb": "박스 대신 인스턴스별 마스크."
+      },
+      "pose": {
+        "label": "키포인트",
+        "blurb": "탐지한 인스턴스마다 골격과 랜드마크."
+      },
+      "classify": {
+        "label": "분류",
+        "blurb": "이미지 전체에 레이블 하나, 그리고 나머지 모든 것의 바탕이 되는 백본."
+      },
+      "obb": {
+        "label": "회전 박스",
+        "blurb": "회전된 박스. 항공 영상처럼 축에 정렬되지 않는 대상을 위한 것."
+      },
+      "depth": {
+        "label": "깊이",
+        "blurb": "이미지 한 장에서 얻는 픽셀별 거리."
+      },
+      "semantic": {
+        "label": "시맨틱 분할",
+        "blurb": "인스턴스를 구분하지 않고 모든 픽셀에 클래스를 부여."
+      },
+      "panoptic": {
+        "label": "판옵틱 분할",
+        "blurb": "시맨틱 마스크와 인스턴스 마스크를 한 번에."
+      },
+      "point": {
+        "label": "포인트와 카운팅",
+        "blurb": "박스 대신 중심점. 마이크로컨트롤러에서 돌릴 만큼 가볍습니다."
+      },
+      "ocr": {
+        "label": "텍스트 인식",
+        "blurb": "이미지 속 텍스트를 찾아 읽기."
+      },
+      "embed": {
+        "label": "임베딩",
+        "blurb": "검색, 클러스터링, 유사 항목 조회를 위한 벡터."
+      },
+      "gaze": {
+        "label": "시선",
+        "blurb": "사람이 어디를 보고 있는지."
+      },
+      "edge": {
+        "label": "엣지 검출",
+        "blurb": "윤곽과 경계."
+      },
+      "normal": {
+        "label": "표면 법선",
+        "blurb": "각 표면이 향하는 방향."
+      },
+      "matte": {
+        "label": "매팅",
+        "blurb": "알파 채널 컷아웃. 머리카락과 경계까지."
+      },
+      "restore": {
+        "label": "복원",
+        "blurb": "노이즈 제거, 블러 보정, 업스케일링."
+      },
+      "mesh": {
+        "label": "메시",
+        "blurb": "이미지 한 장에서 만드는 3D 형상."
+      }
+    },
+    "docsShort": "문서"
+  },
+  "Commercial": {
+    "titleEmphasis": "네",
+    "titleRest": ", 사용하셔도 됩니다.",
+    "subtitle": "100% 무료이고 조건도 없습니다. LibreYOLO는 YOLO가 원래 그랬어야 할 모습대로 오픈 소스입니다."
+  },
+  "Datasets": {
+    "badge": "학습 데이터",
+    "title": "데이터셋 <accent>모음</accent>",
+    "subtitle": "LibreYOLO 모델을 학습하고 평가하기 위해 선별한 데이터셋입니다. LibreYOLO 학습 파이프라인에 바로 사용할 수 있습니다.",
+    "browseCta": "HuggingFace에서 데이터셋 둘러보기",
+    "note": "데이터셋별 카드는 곧 여기에 올라옵니다. 그때까지는 <link>LibreYOLO의 HuggingFace</link>에서 사용할 수 있는 데이터셋을 모두 확인하세요."
+  },
+  "Articles": {
+    "title": "아티클",
+    "subtitle": "LibreYOLO로 탐지 모델을 실행하는 방법을 다룬 튜토리얼과 심층 분석.",
+    "empty": "아직 아티클이 없습니다. 곧 다시 확인해 주세요.",
+    "minRead": "읽는 데 {minutes}분",
+    "englishNote": "아티클은 영어로 작성되어 있습니다.",
+    "backToArticles": "전체 아티클"
+  },
+  "Science": {
+    "heroBadge": "연구와 과학",
+    "heroTitle": "<accent>발견</accent>을 위해 만들었습니다",
+    "heroSubtitle": "사용자만이 아니라 연구자를 위해 설계한 코드베이스입니다. 자유롭게 수정하고, 깊이 들여다보고, 그 대가를 치르지 않고 논문을 발표하세요.",
+    "noPaywallTitle": "\"연구용 라이선스\"가 필요 없습니다",
+    "noPaywallIntro": "어떤 프레임워크는 결과물을 공개하지 않은 채 코드를 들여다보게 해 주는 대가로 \"연구\"나 \"과학\" 라이선스 비용을 따로 받습니다. <b>LibreYOLO는 그렇지 않습니다.</b>",
+    "typicalTitle": "흔한 \"과학 라이선스\"",
+    "typical1": "연구를 비공개로 유지하려면 비용 지불",
+    "typical2": "상업용 R&D 사용에 요금 부과",
+    "typical3": "복잡한 라이선스 등급",
+    "typical4": "논문 발표 전 법무 검토",
+    "libreTitle": "LibreYOLO (MIT)",
+    "libre1": "자유롭게 연구하고 <b>비공개로 유지</b>",
+    "libre2": "어떤 용도로 쓰든 비용 없음",
+    "libre3": "단순한 라이선스 하나: MIT",
+    "libre4": "법적 걱정 없이 논문 발표",
+    "explainBadge": "기본 제공 설명 가능성",
+    "explainTitle": "블랙박스 안을 들여다보세요",
+    "explainSubtitle": "해석 가능성과 설명 가능성 도구가 기본으로 들어 있습니다. 외부 의존성도 복잡한 설정도 없이 플래그와 함수 호출만으로 충분합니다.",
+    "featureMapTitle": "특징 맵 추출",
+    "featureMapDesc": "플래그 하나면 모든 레이어의 중간 활성화를 저장할 수 있습니다. 모델이 각 단계에서 무엇을 \"보는지\" 이해하기에 좋습니다.",
+    "camTitle": "CAM 시각화",
+    "experimentalBadge": "실험적",
+    "camDesc": "Class Activation Map 방식 7가지가 기본으로 들어 있습니다. <code>model.explain()</code>을 호출하면 모델이 어디에 주목하는지 보여 주는 히트맵을 만듭니다. 이 기능은 실험적이며 결과는 달라질 수 있습니다.",
+    "modifyTitle": "수정을 전제로 설계했습니다",
+    "modifyDesc": "코드베이스는 읽기 쉽고 고치기 쉽게 작성했습니다. 새 백본을 시험해 보고 싶다면, 직접 만든 어텐션 메커니즘을 실험하고 싶다면, 새로운 손실 함수를 추가하고 싶다면, 그렇게 하면 됩니다.",
+    "ctaTitle": "오늘 연구를 시작하세요",
+    "ctaDesc": "라이선스 비용도, 유료 장벽도, 결과물을 비공개로 유지하는 데 대한 제약도 없습니다. 설치하고 바로 살펴보기 시작하세요.",
+    "ctaButton": "문서 보기"
+  }
+}

@@ -7,7 +7,7 @@ export const routing = defineRouting({
   // twin serves translated, and one without it serves English under the
   // English canonical, so a partially translated locale is a valid state.
   // `ar` is deliberately absent until it has pages and the RTL pass is done.
-  locales: ['en', 'zh', 'es', 'it', 'pt', 'fr', 'ru'],
+  locales: ['en', 'zh', 'es', 'it', 'pt', 'fr', 'ru', 'id', 'vi', 'de', 'pl', 'ja', 'ko', 'uk'],
   defaultLocale: 'en',
   localePrefix: 'as-needed',
 })
@@ -21,6 +21,13 @@ export const localeHtmlLang = {
   pt: 'pt-BR',
   fr: 'fr',
   ru: 'ru',
+  id: 'id',
+  vi: 'vi',
+  de: 'de',
+  pl: 'pl',
+  ja: 'ja-JP',
+  ko: 'ko-KR',
+  uk: 'uk',
 }
 
 // Autonym labels shown in the language switcher.
@@ -32,4 +39,11 @@ export const localeLabels = {
   pt: 'PT',
   fr: 'FR',
   ru: 'RU',
+  id: 'ID',
+  vi: 'VI',
+  de: 'DE',
+  pl: 'PL',
+  ja: '日本語',
+  ko: '한국어',
+  uk: 'УКР',
 }

@@ -1,0 +1,285 @@
+{
+  "Metadata": {
+    "defaultTitle": "LibreYOLO | Phát hiện đối tượng với giấy phép MIT",
+    "description": "Engine huấn luyện và inference với giấy phép MIT cho các mô hình YOLO tiên tiến nhất. Xây dựng cho ứng dụng thương mại, không vướng ràng buộc của AGPL.",
+    "twitterDescription": "Engine huấn luyện và inference với giấy phép MIT cho các mô hình YOLO tiên tiến nhất.",
+    "keywords": "YOLO|phát hiện đối tượng|giấy phép MIT|machine learning|thị giác máy tính|mã nguồn mở|AI",
+    "modelsTitle": "Kho mô hình",
+    "modelsDescription": "Trọng số YOLO được huấn luyện sẵn với giấy phép MIT. Khám phá các mô hình có sẵn cho bài toán phát hiện đối tượng.",
+    "commercialTitle": "Hướng dẫn thương mại",
+    "commercialDescription": "Cách dùng LibreYOLO trong các ứng dụng thương mại độc quyền, mã nguồn đóng, theo giấy phép MIT.",
+    "datasetsTitle": "Kho dataset",
+    "datasetsDescription": "Các tập dữ liệu để huấn luyện và đánh giá mô hình YOLO. Khám phá các dataset có sẵn trên HuggingFace.",
+    "scienceTitle": "Nghiên cứu và khoa học",
+    "scienceDescription": "LibreYOLO cho nhà nghiên cứu. Khả năng giải thích có sẵn, feature map, và mã nguồn được thiết kế để khám phá.",
+    "docsTitle": "Tài liệu",
+    "docsDescription": "Tài liệu cho framework phát hiện đối tượng LibreYOLO.",
+    "articlesTitle": "Bài viết",
+    "articlesDescription": "Bài viết, hướng dẫn và tin tức về LibreYOLO: phát hiện đối tượng với giấy phép MIT, mẹo huấn luyện, các bản phát hành mô hình và hướng dẫn thị giác máy tính."
+  },
+  "Nav": {
+    "home": "Trang chủ",
+    "models": "Mô hình",
+    "benchmarks": "Benchmark",
+    "commercial": "Thương mại",
+    "articles": "Bài viết",
+    "docs": "Tài liệu",
+    "github": "GitHub",
+    "star": "Star",
+    "community": "Cộng đồng"
+  },
+  "LangSwitcher": {
+    "label": "Đổi ngôn ngữ"
+  },
+  "Footer": {
+    "tagline": "Một dự án mã nguồn mở độc lập, mang đến khả năng phát hiện đối tượng tiên tiến nhất. Xây dựng cho lập trình viên, nhà nghiên cứu và các ứng dụng thương mại.",
+    "resources": "Tài nguyên",
+    "documentation": "Tài liệu",
+    "experimental": "Tác vụ thử nghiệm",
+    "modelZoo": "Kho mô hình",
+    "liveDemo": "Demo trực tiếp",
+    "benchmarks": "Benchmark",
+    "commercialGuide": "Hướng dẫn thương mại",
+    "articles": "Bài viết",
+    "contact": "Liên hệ",
+    "role": "Tác giả và người duy trì",
+    "chat": "Cùng trò chuyện",
+    "mitLicense": "Giấy phép MIT",
+    "copyright": "© {year} LibreYOLO. Một dự án mã nguồn mở độc lập.",
+    "community": "Cộng đồng"
+  },
+  "NotFound": {
+    "title": "Không phát hiện được đối tượng",
+    "body": "Mô hình của chúng tôi không tìm thấy trang này. Có thể trang đã bị di chuyển, đã bị xóa, hoặc chưa từng tồn tại.",
+    "goHome": "Về trang chủ",
+    "browseDocs": "Xem tài liệu",
+    "codeComment": "# Kết quả phát hiện"
+  },
+  "DocsNote": {
+    "label": "Chỉ có tiếng Anh",
+    "text": "Phần này hiện chỉ có bản tiếng Anh."
+  },
+  "Common": {
+    "getStarted": "Bắt đầu"
+  },
+  "Support": {
+    "title": "Ủng hộ LibreYOLO",
+    "body": "Cách giúp đỡ tốt nhất là <star>gắn sao cho repo</star>. Nếu bạn gặp vấn đề hoặc có góp ý, hãy <issue>mở một issue</issue>, và các đóng góp mã nguồn <contrib>rất được hoan nghênh</contrib>.",
+    "communityBody": "Câu hỏi, lỗi khi huấn luyện và tin tức về các bản phát hành đều được thảo luận ở r/LibreYOLO. Ghé qua chào mọi người.",
+    "communityCta": "r/LibreYOLO",
+    "githubCta": "GitHub"
+  },
+  "Home": {
+    "heroTitleLine1": "Phát hiện đối tượng.",
+    "heroTitleLine2": "100% giấy phép MIT.",
+    "heroSubA": "Đưa YOLO trở lại dễ tiếp cận, đúng như những người tạo ra nó luôn mong muốn.",
+    "heroSubB": "Một engine hiện đại, giấy phép MIT, để huấn luyện và triển khai các mô hình phát hiện đối tượng tiên tiến nhất.",
+    "viewGithub": "Xem trên GitHub",
+    "copy": "Sao chép",
+    "copied": "Đã sao chép!",
+    "detected": "Đã phát hiện 1 đối tượng (người)",
+    "communityTitle": "Cộng đồng nói gì",
+    "communityFootnote": "LibreYOLO là một nỗ lực rất lớn. Những lời nhắn như thế này giúp chúng tôi đi tiếp.",
+    "featuresTitle": "Một thư viện, <accent>trọn vẹn quy trình</accent>",
+    "featuresSubtitle": "Huấn luyện, kiểm định, xuất và triển khai mô hình phát hiện đối tượng từ một gói duy nhất với giấy phép MIT thoáng.",
+    "feature1Title": "MIT thực sự",
+    "feature1Desc": "Không có AGPL ở bất kỳ đâu trong chuỗi phụ thuộc. Dùng được trong sản phẩm mã nguồn đóng, SaaS, hệ thống nhúng.",
+    "feature2Title": "Một API, ba kiến trúc",
+    "feature2Desc": "YOLOX, YOLOv9 và RF-DETR sau một lệnh gọi LibreYOLO() duy nhất. Kiến trúc, kích thước và số lớp đối tượng được tự động nhận diện từ trọng số.",
+    "feature3Title": "Có sẵn mọi thứ",
+    "feature3Desc": "Mọi định dạng đầu vào: đường dẫn, URL, PIL, NumPy, OpenCV, tensor, bytes. Inference chia ô cho ảnh kích thước lớn. Tự động tải trọng số từ HuggingFace.",
+    "feature4Title": "Huấn luyện",
+    "feature4Desc": "Tinh chỉnh trên dataset YOLO hoặc COCO của riêng bạn với tăng cường dữ liệu tích hợp sẵn, mixed precision và early stopping. Tiếp tục từ bất kỳ checkpoint nào.",
+    "feature5Title": "Kiểm định",
+    "feature5Desc": "Đánh giá theo chuẩn COCO với mAP50, mAP50-95, precision và recall trên dataset COCO hoặc dataset riêng. Có sẵn chỉ số theo từng lớp đối tượng và ma trận nhầm lẫn.",
+    "feature6Title": "Xuất và triển khai",
+    "feature6Desc": "Xuất ONNX chỉ với một dòng, kèm metadata nhúng sẵn để triển khai dễ dàng.",
+    "deployBadge": "Từ edge tới cloud",
+    "deployTitle": "Triển khai <accent>ở mọi nơi</accent>",
+    "deploySubtitle": "Xuất một lần, chạy trên mọi phần cứng. Từ bo mạch 35 đô la tới GPU trung tâm dữ liệu.",
+    "exportFormats": "Định dạng xuất",
+    "testedHardware": "Phần cứng đã kiểm thử",
+    "comparisonTitle": "LibreYOLO vs <muted>Ultralytics</muted>",
+    "comparisonSubtitle": "MIT nghĩa là thành quả của bạn là của bạn. Không có bất ngờ khó chịu nào.",
+    "compRow1": "Dùng trong phần mềm độc quyền",
+    "compRow2": "Bán sản phẩm có chứa nó",
+    "compRow3": "Không bắt buộc công khai mã nguồn",
+    "compRow4": "Tinh chỉnh và giữ trọng số riêng tư",
+    "compRow5": "Chưng cất thành một mô hình mới",
+    "compRow6": "Phí sử dụng thương mại",
+    "compNone": "Không có",
+    "compRequired": "Bắt buộc",
+    "ctaTitle": "Bắt đầu xây dựng <accent>ngay hôm nay</accent>",
+    "ctaReadDocs": "Đọc tài liệu",
+    "ctaCommercialGuide": "Hướng dẫn thương mại",
+    "ctaModelZoo": "Kho mô hình",
+    "ctaBenchmarks": "Benchmark",
+    "testimonials": [
+      {
+        "quote": "You have my hearty support for this. I'll be so happy when there is a good, community maintained, MIT licensed alternative to Ultralytics.",
+        "author": "u/Covered_in_bees_"
+      },
+      {
+        "quote": "This is so cool bro. If I see some place I can contribute, I will definitely do so!",
+        "author": "u/FedStan"
+      },
+      {
+        "quote": "This looks like a really good project, and I hope you are able to realize the full vision you seem to have for it. Very exciting.",
+        "author": "u/CalmBet"
+      },
+      {
+        "quote": "Nice work! I'll try it out this week and open issues/PRs.",
+        "author": "u/InternationalMany6"
+      },
+      {
+        "quote": "Looks pretty cool. It's good to see these sorts of developments.",
+        "author": "u/HistoricalMistake681"
+      },
+      {
+        "quote": "Thank you for sharing, this looks interesting.",
+        "author": "u/nemesis1836"
+      },
+      {
+        "quote": "Great initiative.",
+        "author": "u/Outrageous_Sort_8993"
+      },
+      {
+        "quote": "Good job! Are you hosting the models on HuggingFace?",
+        "author": "u/Winners-magic"
+      },
+      {
+        "quote": "Very nice, will add creating a node of it to my todo list.",
+        "author": "u/dr_hamilton"
+      }
+    ]
+  },
+  "Models": {
+    "byTask": "Mô hình theo tác vụ",
+    "weights": "Tất cả trọng số",
+    "docs": "Tài liệu",
+    "indexLead": "Tất cả các họ mô hình mà thư viện cung cấp, sinh ra từ registry mô hình v{version}: {families} họ mô hình trên {tasks} tác vụ.",
+    "familyCount": "{count} họ mô hình",
+    "weightsShort": "trọng số",
+    "tasks": {
+      "detect": {
+        "label": "Phát hiện",
+        "blurb": "Hộp bao quanh các đối tượng. Tác vụ mà phần lớn thư viện được xây dựng để phục vụ."
+      },
+      "segment": {
+        "label": "Phân đoạn",
+        "blurb": "Mặt nạ cho từng thực thể thay vì hộp."
+      },
+      "pose": {
+        "label": "Keypoint",
+        "blurb": "Khung xương và điểm mốc trên mỗi thực thể được phát hiện."
+      },
+      "classify": {
+        "label": "Phân loại",
+        "blurb": "Một nhãn cho toàn bộ ảnh, và những backbone đứng sau mọi thứ còn lại."
+      },
+      "obb": {
+        "label": "Hộp xoay",
+        "blurb": "Hộp được xoay, dành cho ảnh chụp từ trên không và mọi thứ không nằm thẳng theo trục."
+      },
+      "depth": {
+        "label": "Độ sâu",
+        "blurb": "Khoảng cách theo từng pixel từ một ảnh duy nhất."
+      },
+      "semantic": {
+        "label": "Phân đoạn ngữ nghĩa",
+        "blurb": "Một lớp đối tượng cho mỗi pixel, không tách riêng từng thực thể."
+      },
+      "panoptic": {
+        "label": "Phân đoạn toàn cảnh",
+        "blurb": "Mặt nạ ngữ nghĩa và mặt nạ thực thể trong một lượt chạy."
+      },
+      "point": {
+        "label": "Điểm và đếm",
+        "blurb": "Trọng tâm thay vì hộp, đủ nhẹ để chạy trên vi điều khiển."
+      },
+      "ocr": {
+        "label": "Nhận dạng văn bản",
+        "blurb": "Tìm và đọc văn bản trong ảnh."
+      },
+      "embed": {
+        "label": "Embedding",
+        "blurb": "Vector cho tìm kiếm, phân cụm và truy xuất."
+      },
+      "gaze": {
+        "label": "Hướng nhìn",
+        "blurb": "Người trong ảnh đang nhìn về đâu."
+      },
+      "edge": {
+        "label": "Phát hiện biên",
+        "blurb": "Đường viền và ranh giới."
+      },
+      "normal": {
+        "label": "Pháp tuyến bề mặt",
+        "blurb": "Mỗi bề mặt hướng về phía nào."
+      },
+      "matte": {
+        "label": "Matting",
+        "blurb": "Tách nền với kênh alpha, cả tóc và các đường biên."
+      },
+      "restore": {
+        "label": "Phục hồi ảnh",
+        "blurb": "Khử nhiễu, khử mờ và phóng to."
+      },
+      "mesh": {
+        "label": "Lưới 3D",
+        "blurb": "Hình học 3D từ một ảnh."
+      }
+    },
+    "docsShort": "tài liệu"
+  },
+  "Commercial": {
+    "titleEmphasis": "Có",
+    "titleRest": ", bạn được dùng cái này.",
+    "subtitle": "Miễn phí 100%, không ràng buộc gì. LibreYOLO là mã nguồn mở đúng như YOLO vốn phải như vậy."
+  },
+  "Datasets": {
+    "badge": "Dữ liệu huấn luyện",
+    "title": "Kho <accent>dataset</accent>",
+    "subtitle": "Các tập dữ liệu được tuyển chọn để huấn luyện và đánh giá mô hình LibreYOLO. Sẵn sàng dùng với pipeline huấn luyện của LibreYOLO.",
+    "browseCta": "Xem dataset trên HuggingFace",
+    "note": "Thẻ mô tả cho từng dataset sẽ sớm được đăng ở đây. Trong lúc chờ, hãy xem tất cả dataset có sẵn trên <link>HuggingFace của LibreYOLO</link>."
+  },
+  "Articles": {
+    "title": "Bài viết",
+    "subtitle": "Hướng dẫn và phân tích chuyên sâu về cách chạy mô hình phát hiện đối tượng với LibreYOLO.",
+    "empty": "Chưa có bài viết nào. Hãy quay lại sau.",
+    "minRead": "Đọc {minutes} phút",
+    "englishNote": "Các bài viết được viết bằng tiếng Anh.",
+    "backToArticles": "Tất cả bài viết"
+  },
+  "Science": {
+    "heroBadge": "Nghiên cứu và khoa học",
+    "heroTitle": "Xây dựng để <accent>khám phá</accent>",
+    "heroSubtitle": "Mã nguồn được thiết kế cho nhà nghiên cứu, không chỉ cho người dùng. Sửa đổi thoải mái, tìm hiểu thật sâu và công bố mà không phải trả tiền cho đặc quyền đó.",
+    "noPaywallTitle": "Không cần \"giấy phép nghiên cứu\"",
+    "noPaywallIntro": "Một số framework thu phí riêng cho giấy phép \"nghiên cứu\" hoặc \"khoa học\" chỉ để bạn được xem mã nguồn mà không phải công bố công trình của mình. <b>LibreYOLO thì không.</b>",
+    "typicalTitle": "\"Giấy phép khoa học\" điển hình",
+    "typical1": "Trả tiền để giữ nghiên cứu ở chế độ riêng tư",
+    "typical2": "Thu phí cho R&D thương mại",
+    "typical3": "Nhiều bậc giấy phép phức tạp",
+    "typical4": "Phải rà soát pháp lý trước khi công bố",
+    "libreTitle": "LibreYOLO (MIT)",
+    "libre1": "Nghiên cứu thoải mái, <b>giữ riêng tư</b>",
+    "libre2": "Không mất phí với mọi trường hợp sử dụng",
+    "libre3": "Một giấy phép duy nhất: MIT",
+    "libre4": "Công bố mà không lo pháp lý",
+    "explainBadge": "Khả năng giải thích có sẵn",
+    "explainTitle": "Nhìn vào bên trong hộp đen",
+    "explainSubtitle": "Công cụ tích hợp sẵn cho khả năng diễn giải và giải thích mô hình. Không phụ thuộc thư viện ngoài, không cần cấu hình phức tạp: chỉ vài cờ và lời gọi hàm.",
+    "featureMapTitle": "Trích xuất feature map",
+    "featureMapDesc": "Một cờ. Chỉ cần vậy để lưu lại activation trung gian của mọi lớp. Rất hợp để hiểu mô hình của bạn \"thấy\" gì ở từng giai đoạn.",
+    "camTitle": "Trực quan hóa CAM",
+    "experimentalBadge": "Thử nghiệm",
+    "camDesc": "7 phương pháp Class Activation Map tích hợp sẵn. Gọi <code>model.explain()</code> để tạo heatmap cho thấy mô hình đang tập trung vào đâu. Tính năng này đang ở giai đoạn thử nghiệm và kết quả có thể khác nhau.",
+    "modifyTitle": "Thiết kế để sửa đổi",
+    "modifyDesc": "Mã nguồn được viết để dễ đọc và dễ sửa. Muốn thử một backbone mới? Muốn thử nghiệm một cơ chế attention của riêng bạn? Muốn thêm một hàm loss mới? Cứ làm thôi.",
+    "ctaTitle": "Bắt đầu nghiên cứu ngay hôm nay",
+    "ctaDesc": "Không phí giấy phép. Không tường phí. Không hạn chế nào với việc giữ riêng tư công trình của bạn. Chỉ cần cài đặt và bắt đầu khám phá.",
+    "ctaButton": "Xem tài liệu"
+  }
+}

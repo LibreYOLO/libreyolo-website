@@ -1,0 +1,285 @@
+{
+  "Metadata": {
+    "defaultTitle": "LibreYOLO | Detekcja obiektów na licencji MIT",
+    "description": "Silnik trenowania i inferencji na licencji MIT dla najnowocześniejszych modeli YOLO. Stworzony z myślą o zastosowaniach komercyjnych, wolny od ograniczeń licencji AGPL.",
+    "twitterDescription": "Silnik trenowania i inferencji na licencji MIT dla najnowocześniejszych modeli YOLO.",
+    "keywords": "YOLO|detekcja obiektów|licencja MIT|uczenie maszynowe|wizja komputerowa|open source|AI",
+    "modelsTitle": "Katalog modeli",
+    "modelsDescription": "Wstępnie wytrenowane wagi YOLO na licencji MIT. Przeglądaj dostępne modele do detekcji obiektów.",
+    "commercialTitle": "Przewodnik komercyjny",
+    "commercialDescription": "Jak używać LibreYOLO w zastrzeżonych aplikacjach komercyjnych o zamkniętym kodzie źródłowym na licencji MIT.",
+    "datasetsTitle": "Katalog zbiorów danych",
+    "datasetsDescription": "Zbiory danych do trenowania i oceny modeli YOLO. Przeglądaj dostępne zbiory danych na HuggingFace.",
+    "scienceTitle": "Badania i nauka",
+    "scienceDescription": "LibreYOLO dla naukowców. Natywna wyjaśnialność, mapy cech i baza kodu zaprojektowana pod kątem odkryć.",
+    "docsTitle": "Dokumentacja",
+    "docsDescription": "Dokumentacja frameworka do detekcji obiektów LibreYOLO.",
+    "articlesTitle": "Artykuły",
+    "articlesDescription": "Artykuły, samouczki i nowości o LibreYOLO: detekcja obiektów na licencji MIT, wskazówki dotyczące trenowania, wydania modeli i poradniki z zakresu wizji komputerowej."
+  },
+  "Nav": {
+    "home": "Start",
+    "models": "Modele",
+    "benchmarks": "Benchmarki",
+    "commercial": "Dla firm",
+    "articles": "Artykuły",
+    "docs": "Dokumentacja",
+    "github": "GitHub",
+    "star": "Star",
+    "community": "Społeczność"
+  },
+  "LangSwitcher": {
+    "label": "Zmień język"
+  },
+  "Footer": {
+    "tagline": "Niezależny projekt open source oferujący najnowocześniejszą detekcję obiektów. Stworzony dla programistów, naukowców i zastosowań komercyjnych.",
+    "resources": "Zasoby",
+    "documentation": "Dokumentacja",
+    "experimental": "Zadania eksperymentalne",
+    "modelZoo": "Katalog modeli",
+    "liveDemo": "Demo na żywo",
+    "benchmarks": "Benchmarki",
+    "commercialGuide": "Zastosowania komercyjne",
+    "articles": "Artykuły",
+    "contact": "Kontakt",
+    "role": "Twórca i opiekun projektu",
+    "chat": "Napisz do mnie",
+    "mitLicense": "Licencja MIT",
+    "copyright": "© {year} LibreYOLO. Niezależny projekt open source.",
+    "community": "Społeczność"
+  },
+  "NotFound": {
+    "title": "Obiekt nie wykryty",
+    "body": "Nasz model nie znalazł tej strony. Mogła zostać przeniesiona albo usunięta, a być może nigdy nie istniała.",
+    "goHome": "Wróć na stronę główną",
+    "browseDocs": "Otwórz dokumentację",
+    "codeComment": "# Wyniki detekcji"
+  },
+  "DocsNote": {
+    "label": "Tylko po angielsku",
+    "text": "Ta sekcja jest na razie dostępna tylko po angielsku."
+  },
+  "Common": {
+    "getStarted": "Zacznij"
+  },
+  "Support": {
+    "title": "Wesprzyj LibreYOLO",
+    "body": "Najlepszy sposób, żeby pomóc, to <star>dać repozytorium gwiazdkę</star>. Jeśli natrafisz na problem albo masz sugestię, <issue>otwórz issue</issue>, a wkład w kod jest <contrib>bardzo mile widziany</contrib>.",
+    "communityBody": "Pytania, awarie podczas trenowania i nowości o wydaniach są omawiane na r/LibreYOLO. Wpadnij się przywitać.",
+    "communityCta": "r/LibreYOLO",
+    "githubCta": "GitHub"
+  },
+  "Home": {
+    "heroTitleLine1": "Detekcja obiektów.",
+    "heroTitleLine2": "100% na licencji MIT.",
+    "heroSubA": "YOLO znowu dostępne dla każdego, tak jak od zawsze chcieli tego jego twórcy.",
+    "heroSubB": "Nowoczesny silnik na licencji MIT do trenowania i wdrażania najnowocześniejszej detekcji obiektów.",
+    "viewGithub": "Zobacz na GitHubie",
+    "copy": "Kopiuj",
+    "copied": "Skopiowano!",
+    "detected": "Wykryto 1 obiekt (osoba)",
+    "communityTitle": "Co mówi społeczność",
+    "communityFootnote": "LibreYOLO to ogrom pracy. Takie wiadomości dodają sił.",
+    "featuresTitle": "Jedna biblioteka, <accent>cały przepływ pracy</accent>",
+    "featuresSubtitle": "Trenuj, waliduj, eksportuj i wdrażaj modele detekcji z jednego permisywnego pakietu na licencji MIT.",
+    "feature1Title": "Naprawdę MIT",
+    "feature1Desc": "Żadnego AGPL w całym łańcuchu zależności. Używaj w produktach o zamkniętym kodzie, w SaaS, w systemach wbudowanych.",
+    "feature2Title": "Jedno API, trzy architektury",
+    "feature2Desc": "YOLOX, YOLOv9 i RF-DETR za jednym wywołaniem LibreYOLO(). Architektura, rozmiar i liczba klas wykrywane automatycznie z wag.",
+    "feature3Title": "Wszystko w zestawie",
+    "feature3Desc": "Dowolny format wejścia: ścieżki, adresy URL, PIL, NumPy, OpenCV, tensory, bajty. Inferencja kafelkowa dla dużych obrazów. Automatyczne pobieranie wag z HuggingFace.",
+    "feature4Title": "Trenowanie",
+    "feature4Desc": "Dostrajaj na własnych zbiorach danych w formacie YOLO lub COCO, z wbudowaną augmentacją, mieszaną precyzją i early stopping. Wznawiaj z dowolnego checkpointu.",
+    "feature5Title": "Walidacja",
+    "feature5Desc": "Ewaluacja zgodna ze standardem COCO: mAP50, mAP50-95, precyzja i recall na zbiorach COCO lub własnych. Metryki dla każdej klasy i macierz pomyłek od razu po instalacji.",
+    "feature6Title": "Eksport i wdrożenie",
+    "feature6Desc": "Eksport do ONNX w jednej linii, z osadzonymi metadanymi, dla bezproblemowego wdrożenia.",
+    "deployBadge": "Od edge do chmury",
+    "deployTitle": "Wdrażaj <accent>gdziekolwiek</accent>",
+    "deploySubtitle": "Wyeksportuj raz, uruchamiaj na dowolnym sprzęcie. Od płytek za 35 $ po GPU w centrach danych.",
+    "exportFormats": "Formaty eksportu",
+    "testedHardware": "Przetestowany sprzęt",
+    "comparisonTitle": "LibreYOLO vs <muted>Ultralytics</muted>",
+    "comparisonSubtitle": "MIT znaczy, że twoja praca należy do ciebie. Bez niespodzianek.",
+    "compRow1": "Użycie w oprogramowaniu zastrzeżonym",
+    "compRow2": "Sprzedaż produktów, które je zawierają",
+    "compRow3": "Bez obowiązku udostępniania kodu",
+    "compRow4": "Dostrajanie i zachowanie wag jako prywatnych",
+    "compRow5": "Destylacja do nowego modelu",
+    "compRow6": "Opłata za użycie komercyjne",
+    "compNone": "Brak",
+    "compRequired": "Wymagana",
+    "ctaTitle": "Zacznij budować <accent>już dziś</accent>",
+    "ctaReadDocs": "Przeczytaj dokumentację",
+    "ctaCommercialGuide": "Przewodnik komercyjny",
+    "ctaModelZoo": "Katalog modeli",
+    "ctaBenchmarks": "Benchmarki",
+    "testimonials": [
+      {
+        "quote": "You have my hearty support for this. I'll be so happy when there is a good, community maintained, MIT licensed alternative to Ultralytics.",
+        "author": "u/Covered_in_bees_"
+      },
+      {
+        "quote": "This is so cool bro. If I see some place I can contribute, I will definitely do so!",
+        "author": "u/FedStan"
+      },
+      {
+        "quote": "This looks like a really good project, and I hope you are able to realize the full vision you seem to have for it. Very exciting.",
+        "author": "u/CalmBet"
+      },
+      {
+        "quote": "Nice work! I'll try it out this week and open issues/PRs.",
+        "author": "u/InternationalMany6"
+      },
+      {
+        "quote": "Looks pretty cool. It's good to see these sorts of developments.",
+        "author": "u/HistoricalMistake681"
+      },
+      {
+        "quote": "Thank you for sharing, this looks interesting.",
+        "author": "u/nemesis1836"
+      },
+      {
+        "quote": "Great initiative.",
+        "author": "u/Outrageous_Sort_8993"
+      },
+      {
+        "quote": "Good job! Are you hosting the models on HuggingFace?",
+        "author": "u/Winners-magic"
+      },
+      {
+        "quote": "Very nice, will add creating a node of it to my todo list.",
+        "author": "u/dr_hamilton"
+      }
+    ]
+  },
+  "Models": {
+    "byTask": "Modele według zadań",
+    "weights": "Wszystkie wagi",
+    "docs": "Dokumentacja",
+    "indexLead": "Wszystkie rodziny modeli dostępne w bibliotece, wygenerowane z rejestru modeli v{version}: {families, plural, one {{families} rodzina} few {{families} rodziny} many {{families} rodzin} other {{families} rodziny}} w {tasks, plural, one {{tasks} zadaniu} few {{tasks} zadaniach} many {{tasks} zadaniach} other {{tasks} zadaniach}}.",
+    "familyCount": "{count, plural, one {{count} rodzina} few {{count} rodziny} many {{count} rodzin} other {{count} rodziny}}",
+    "weightsShort": "wagi",
+    "tasks": {
+      "detect": {
+        "label": "Detekcja",
+        "blurb": "Ramki wokół obiektów. Zadanie, pod które zbudowana jest większość biblioteki."
+      },
+      "segment": {
+        "label": "Segmentacja",
+        "blurb": "Maski dla każdej instancji zamiast ramek."
+      },
+      "pose": {
+        "label": "Punkty kluczowe",
+        "blurb": "Szkielety i punkty charakterystyczne na każdej wykrytej instancji."
+      },
+      "classify": {
+        "label": "Klasyfikacja",
+        "blurb": "Jedna etykieta dla całego obrazu oraz bloki backbone stojące za wszystkim innym."
+      },
+      "obb": {
+        "label": "Ramki obrócone",
+        "blurb": "Obrócone ramki, do zdjęć lotniczych i wszystkiego, co nie leży równolegle do osi."
+      },
+      "depth": {
+        "label": "Głębia",
+        "blurb": "Odległość dla każdego piksela z pojedynczego obrazu."
+      },
+      "semantic": {
+        "label": "Segmentacja semantyczna",
+        "blurb": "Klasa dla każdego piksela, bez rozdzielania instancji."
+      },
+      "panoptic": {
+        "label": "Segmentacja panoptyczna",
+        "blurb": "Maski semantyczne i maski instancji w jednym przebiegu."
+      },
+      "point": {
+        "label": "Punkty i liczenie",
+        "blurb": "Centroidy zamiast ramek, na tyle tanie, że działają na mikrokontrolerach."
+      },
+      "ocr": {
+        "label": "Rozpoznawanie tekstu",
+        "blurb": "Znajdowanie i odczytywanie tekstu na obrazie."
+      },
+      "embed": {
+        "label": "Embeddingi",
+        "blurb": "Wektory do wyszukiwania, klasteryzacji i wyszukiwania podobieństw."
+      },
+      "gaze": {
+        "label": "Kierunek wzroku",
+        "blurb": "Gdzie patrzy dana osoba."
+      },
+      "edge": {
+        "label": "Detekcja krawędzi",
+        "blurb": "Kontury i granice."
+      },
+      "normal": {
+        "label": "Normalne powierzchni",
+        "blurb": "W którą stronę zwrócona jest każda powierzchnia."
+      },
+      "matte": {
+        "label": "Matting",
+        "blurb": "Wycinki z kanałem alfa, razem z włosami i krawędziami."
+      },
+      "restore": {
+        "label": "Restauracja",
+        "blurb": "Odszumianie, usuwanie rozmycia i skalowanie w górę."
+      },
+      "mesh": {
+        "label": "Siatka",
+        "blurb": "Geometria 3D z obrazu."
+      }
+    },
+    "docsShort": "docs"
+  },
+  "Commercial": {
+    "titleEmphasis": "Tak",
+    "titleRest": ", możesz tego używać.",
+    "subtitle": "100% za darmo, bez haczyków. LibreYOLO jest otwarte tak, jak YOLO miało być od zawsze."
+  },
+  "Datasets": {
+    "badge": "Dane treningowe",
+    "title": "Katalog <accent>zbiorów danych</accent>",
+    "subtitle": "Wyselekcjonowane zbiory danych do trenowania i oceny modeli LibreYOLO. Gotowe do użycia z pipeline'em treningowym LibreYOLO.",
+    "browseCta": "Przeglądaj zbiory danych na HuggingFace",
+    "note": "Karty poszczególnych zbiorów danych pojawią się tutaj wkrótce. Tymczasem przejrzyj wszystkie dostępne zbiory danych na <link>HuggingFace LibreYOLO</link>."
+  },
+  "Articles": {
+    "title": "Artykuły",
+    "subtitle": "Samouczki i pogłębione analizy uruchamiania modeli detekcji z LibreYOLO.",
+    "empty": "Jeszcze nie ma artykułów. Zajrzyj wkrótce.",
+    "minRead": "{minutes} min czytania",
+    "englishNote": "Artykuły są napisane po angielsku.",
+    "backToArticles": "Wszystkie artykuły"
+  },
+  "Science": {
+    "heroBadge": "Badania i nauka",
+    "heroTitle": "Stworzone do <accent>odkrywania</accent>",
+    "heroSubtitle": "Baza kodu zaprojektowana dla naukowców, nie tylko dla użytkowników. Modyfikuj bez ograniczeń, analizuj dogłębnie i publikuj bez płacenia za ten przywilej.",
+    "noPaywallTitle": "Żadnej „licencji badawczej”",
+    "noPaywallIntro": "Niektóre frameworki pobierają osobne opłaty za licencje „badawcze” lub „naukowe” tylko po to, żeby pozwolić ci zajrzeć do kodu bez publikowania swojej pracy. <b>LibreYOLO tego nie robi.</b>",
+    "typicalTitle": "Typowe „licencje naukowe”",
+    "typical1": "Płatność za utrzymanie badań w tajemnicy",
+    "typical2": "Opłaty za komercyjne badania i rozwój",
+    "typical3": "Skomplikowane poziomy licencji",
+    "typical4": "Analiza prawna przed publikacją",
+    "libreTitle": "LibreYOLO (MIT)",
+    "libre1": "Badaj bez ograniczeń, <b>zachowaj to dla siebie</b>",
+    "libre2": "Zero opłat w każdym zastosowaniu",
+    "libre3": "Jedna prosta licencja: MIT",
+    "libre4": "Publikuj bez obaw prawnych",
+    "explainBadge": "Natywna wyjaśnialność",
+    "explainTitle": "Zajrzyj do czarnej skrzynki",
+    "explainSubtitle": "Wbudowane narzędzia do interpretowalności i wyjaśnialności. Bez zewnętrznych zależności, bez skomplikowanej konfiguracji: wystarczą flagi i wywołania funkcji.",
+    "featureMapTitle": "Ekstrakcja map cech",
+    "featureMapDesc": "Jedna flaga. Tyle wystarczy, żeby zapisać pośrednie aktywacje z każdej warstwy. Idealne do zrozumienia, co twój model „widzi” na każdym etapie.",
+    "camTitle": "Wizualizacje CAM",
+    "experimentalBadge": "Eksperymentalne",
+    "camDesc": "7 wbudowanych metod Class Activation Map. Wywołaj <code>model.explain()</code>, aby wygenerować mapy cieplne pokazujące, na czym skupia się twój model. Ta funkcja jest eksperymentalna i wyniki mogą się różnić.",
+    "modifyTitle": "Zaprojektowane do modyfikacji",
+    "modifyDesc": "Baza kodu jest napisana tak, żeby łatwo się ją czytało i modyfikowało. Chcesz przetestować nowy backbone? Poeksperymentować z własnym mechanizmem uwagi? Dodać nowatorską funkcję straty? Śmiało.",
+    "ctaTitle": "Zacznij swoje badania już dziś",
+    "ctaDesc": "Bez opłat licencyjnych. Bez paywalli. Bez ograniczeń w zachowaniu pracy dla siebie. Wystarczy zainstalować i zacząć eksplorować.",
+    "ctaButton": "Zobacz dokumentację"
+  }
+}
