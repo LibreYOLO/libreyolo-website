@@ -110,11 +110,16 @@ Wagi są pobierane z Hugging Face przy pierwszym użyciu i są przechowywane w p
 
 Zwrócony obiekt `Results` jest tym, który zwraca każda rodzina, więc zamiana na inny detektor to zmiana jednej linii. `conf` i `max_det` filtrują wybór zapytania; `iou` jest akceptowany dla zgodności z API, ale nie ma efektu, ponieważ dekoder jest przewidującym zestaw, który nie ma kroku NMS. Zobacz [predykcja](/docs/predict) dla źródeł, streaming i obsługi wyników.
 
-DINO-DETR jest tylko do inferencji w LibreYOLO. Pociągi nadrzędne z kontrastowym denoise'owaniem i dopasowaniem węgierskim; ten przepis nie jest tutaj zaimplementowany, więc `train()` wywołuje `NotImplementedError`.
+DINO-DETR służy w LibreYOLO wyłącznie do inferencji. Model upstream jest
+trenowany z kontrastowym odszumianiem i dopasowaniem węgierskim. Tego przepisu
+nie zaimplementowano tutaj, dlatego `train()` zgłasza `NotImplementedError`.
 
 ## Warianty
 
-Trzy checkpointy, wszystkie o tej samej rozdzielczości wejściowej. `r50` i `r50s5` dzielą ResNet-50 backbone i różnią się tym, ile skal map cech zasila dekoder, cztery w porównaniu do pięciu. `swinl` zamienia backbone na Swin-L i również próbuje pięć skal.
+Trzy checkpointy korzystają z tej samej rozdzielczości wejściowej. Warianty
+`r50` i `r50s5` współdzielą backbone ResNet-50, a różni je liczba skal map cech
+zasilających dekoder: odpowiednio cztery i pięć. Wariant `swinl` zastępuje
+backbone modelem Swin-L i również próbkuje pięć skal.
 
 ## Walidacja
 

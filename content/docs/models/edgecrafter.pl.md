@@ -224,7 +224,10 @@ Wagi są pobierane z Hugging Face przy pierwszym użyciu i są przechowywane lok
 
 Zadanie pochodzi z nazwy pliku, więc checkpoint `-pose` lub `-seg` wybiera swoją własną głowicę i nie przyjmuje argumentu zadania. Wszystkie trzy zwracają obiekt `Results`, który zwraca każda rodzina, z `result.keypoints` dodanym dla pozy i `result.masks` dla segmentacji. Poza obejmuje jedną klasę, osobę, z 17 punktami kluczowymi COCO, a ich liczba jest ustalona podczas tworzenia modelu. Nie ma głowicy do obwiedni, więc każda rama pozy zawiera obwiednię własnych punktów kluczowych, a trzeci kanał punktów kluczowych jest stały, zamiast być oceną dla każdego punktu.
 
-`conf` i `max_det` filtrują wybór zapytań; `iou` jest akceptowany dla zgodności API, ale nie ma żadnego efektu, ponieważ wszystkie trzy głowice dekodują zestaw zapytań bez kroku NMS. Zobacz [prognozę](/docs/predict) dla źródeł, streaming i obsługę wyników.
+Argumenty `conf` i `max_det` filtrują wybór zapytań. Argument `iou` jest
+akceptowany dla zgodności API, ale nie ma wpływu na wynik, ponieważ wszystkie
+trzy głowice dekodują zbiór zapytań bez etapu NMS. Zobacz stronę
+[predykcji](/docs/predict), aby poznać źródła, streaming i obsługę wyników.
 
 ## Warianty
 
@@ -234,7 +237,12 @@ Cztery rozmiary. Wszystkie działają przy tej samej rozdzielczości wejściowej
 
 <va-embed />
 
-Upstream publikuje ECDet, ECPose i ECSeg jako trzy oddzielne modele, a nie jeden model z trzema głowami. Dzielą ECViT, backbone i hybrydowy enkoder, a różnią się tylko głową, więc LibreYOLO scala je w jedną rodzinę i pozwala, aby nazwa pliku checkpointu określała zadanie. Litera oznaczająca rozmiar oznacza więc ten sam backbone i enkoder dla wszystkich trzech, a funkcje predict, validate i export przyjmują te same argumenty, bez względu na to, który z nich załadujesz.
+Projekt upstream publikuje ECDet, ECPose i ECSeg jako trzy osobne modele, a nie
+jeden model z trzema głowicami. Współdzielą ECViT, backbone i hybrydowy enkoder,
+a różni je tylko głowica. LibreYOLO łączy je więc w jedną rodzinę, w której
+nazwa pliku checkpointu wskazuje zadanie. Litera rozmiaru oznacza ten sam
+backbone i enkoder we wszystkich trzech modelach, a metody predykcji, walidacji
+i eksportu przyjmują te same argumenty niezależnie od wczytanego wariantu.
 
 ## Trenowanie
 
@@ -242,7 +250,16 @@ Wszystkie trzy zadania trenują przez `train()`, który odczytuje zadanie z zał
 
 <code-tabs name="train" />
 
-Co zostało sprawdzone pod kątem wykrywania i segmentacji: zgodność inferencji względem upstream przy 1e-5, warstwa po warstwie i według rozmiaru, oraz czy strata i pojedynczy krok treningowy działają na sztucznym wejściu. Co nie zostało sprawdzone, według własnego docstringa `train()`: zbieżność pełnego dopracowania (fine-tune), trening wielozestawowy GPU, krok najlepszej ponownej załadki po zatrzymaniu augmentacji oraz mapowanie klas z Objects365 do COCO. Ścieżka położenia (pose path) podąża za opublikowanym przepisem DETRPose, węgierskim dopasowaniem po klasach, kosztach punktów kluczowych L1 i OKS z kontrastowym odszumianiem punktów kluczowych, a jego zbieżność nie została również sprawdzona end-to-end.
+Dla detekcji i segmentacji sprawdzono zgodność inferencji z projektem upstream
+z tolerancją 1e-5, warstwa po warstwie i dla każdego rozmiaru, a także działanie
+funkcji straty i pojedynczego kroku trenowania na danych syntetycznych. Zgodnie
+z opisem metody `train()` nie sprawdzono zbieżności pełnego dostrajania,
+trenowania na wielu GPU, ponownego wczytania najlepszego modelu po wyłączeniu
+augmentacji ani mapowania klas Objects365 na COCO. Ścieżka estymacji pozy
+korzysta z opublikowanego przepisu DETRPose: dopasowania węgierskiego względem
+klas, kosztów L1 i OKS dla punktów kluczowych oraz kontrastowego odszumiania
+punktów kluczowych. Jej zbieżności również nie zweryfikowano od początku do
+końca.
 
 Pozostawiony sam, trener wykonuje 74 epoki na `lr0=5e-4` z włączoną mieszanką precyzji, zgodnie z recepturą upstream: AdamW, płaski harmonogram kosinusowy, EMA na 0,9999 i wejścia ImageNet-normalized. Poza i segmentacja wymagają `imgsz` w natywnej wielkości checkpointu, ponieważ ich siatka odniesienia do ewaluacji jest tworzona, gdy model jest konstruowany; inna wartość zwiększa się przed rozpoczęciem uruchamiania. Poza wymaga również jednoczęściowego zbioru danych, którego `data.yaml` deklaruje `kpt_shape`, z liczbą punktów kluczowych odpowiadającą głowie.
 

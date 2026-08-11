@@ -2,13 +2,14 @@
 title: L2CS-Net
 families:
   - l2cs
-seo_title: L2CS-Net：LibreYOLOでの視線推定
+seo_title: L2CS-Net：LibreYOLOで視線推定
 description: >-
-  LibreYOLOのL2CS-Netで2段階の視線pitch/yaw推定を行います。インストール、推論、エクスポートに対応します。Gaze360チェックポイントは研究利用専用です。
+  LibreYOLOのL2CS-Netで2段階の視線pitch・yaw推定を行います。インストール、推論、エクスポートを説明します。Gaze360チェックポイントは研究用途専用です。
 lead: >-
-  L2CS-Netは2段階の視線推定器です。顔検出器が顔を特定し、2つの角度ビン分類ヘッドを持つResNetトランクが顔ごとにpitchとyawを予測します。LibreYOLOは推論専用としてこれをラップします。
+  L2CS-Netは2段階の視線推定器です。顔検出器が顔を見つけ、2個のangle-bin分類ヘッドを持つResNet
+  trunkが顔ごとにpitchとyawを予測します。LibreYOLOは推論専用でラップします。
 keywords:
-  - L2CS-Net
+  - L2CS-Net 使い方
   - 視線推定
   - eye tracking
   - pitch yaw
@@ -22,9 +23,9 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # face_detector未指定ではOpenCV同梱の顔検出器へフォールバック
-        # OpenCV 4ではHaarでOpenCV 5ではYuNetを使用するため
-        # L2CSチェックポイント以外に追加ダウンロードは不要
+        # face_detector未指定時はOpenCV同梱の顔検出器へフォールバック
+        # OpenCV 4ではHaar、OpenCV 5ではYuNet。L2CSチェックポイント
+        # 自体以外の追加ダウンロードなしで実行
         model = LibreYOLO("LibreL2CSr50.pt")
         result = model(SAMPLE_IMAGE)
 
@@ -35,17 +36,17 @@ snippets:
         libreyolo predict model=LibreL2CSr50.pt
         source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
         save=True
-    - label: 顔のソース
+    - label: 顔の入力ソース
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreL2CSr50.pt")
 
-        # すでに実行した検出器のボックスをL2CSに渡す
+        # 実行済みの検出器からL2CSへボックスを渡す
         result = model(SAMPLE_IMAGE, face_boxes=[[34, 12, 90, 80]])
 
-        # または同梱された特定の顔検出器を指定
+        # または同梱された特定の顔検出器を名前で指定
         result = model(SAMPLE_IMAGE, face_detector="yunet")
   export:
     - label: Python
@@ -66,10 +67,10 @@ snippets:
         import numpy as np
         import onnxruntime as ort
 
-        # エクスポート済みグラフはResNetトランクと2つの角度ビンヘッドのみ
-        # 前処理済み448x448顔クロップを受け取りデコード済み角度ではなく未処理の
-        # (yaw_logits, pitch_logits)を返す softmaxとビン期待値と度への変換は
-        # Python側に残る 詳細はlibreyolo.models.l2cs.utils.bin_logits_to_angles
+        # エクスポートしたグラフはResNet trunkと2個のangle-binヘッドのみ
+        # 前処理済み448x448顔クロップを受け取り、デコード済み角度ではなく生の
+        # (yaw_logits, pitch_logits)を返す。softmax、bin期待値、度への変換は
+        # Python側に残る。libreyolo.models.l2cs.utils.bin_logits_to_anglesを参照
         session = ort.InferenceSession("LibreL2CSr50.onnx")
         name = session.get_inputs()[0].name
         yaw_logits, pitch_logits = session.run(
@@ -80,29 +81,40 @@ source_hash: 4ec43f4673b4be3e
 
 ## インストール
 
-手元にチェックポイントがある場合、L2CS-Netの構築、推論、エクスポートに追加パッケージは不要です。
+すでにチェックポイントがあるモデルの構築、推論、エクスポートでは、L2CS-Netに追加パッケージは
+必要ありません。
 
 ```bash
 pip install libreyolo
 ```
 
-LibreYOLOが自動取得できる唯一のチェックポイントは、Gaze360で学習したResNet-50です。LibreYOLO組織ではなく著者のGoogle Driveにあるため、通常のHTTPミラーではなく `gdown` でダウンロードします。この経路には `gaze` 追加パッケージが必要です。
+LibreYOLOが自動取得できる唯一のチェックポイントは、Gaze360学習済みResNet-50です。LibreYOLO
+組織ではなく作者のGoogle Driveにあるため、通常のHTTPミラーではなく`gdown`でダウンロードします。
+この経路には`gaze`追加パッケージが必要です。
 
 ```bash
 pip install "libreyolo[gaze]"
 ```
 
-このパッケージがない場合、LibreYOLOは暗黙に失敗する代わりに手動ダウンロード手順を表示します。
+追加パッケージがない場合、LibreYOLOは黙って失敗せず、手動ダウンロードの手順を表示します。
 
 ## 推論
 
 <code-tabs name="predict" />
 
-L2CS-Netは2段階の推定器です。最初に顔検出器を実行し、視線ヘッドが返された各顔クロップからpitchとyawを読み取ります。指定を変えなければ、推論はOpenCV同梱の検出器へフォールバックするため、L2CSチェックポイントを用意した後は、追加のダウンロードなしで通常の呼び出しが動作します。`face_boxes` はすでに実行した検出器のボックスを受け付けます。`face_detector` は `"auto"`、`"haar"`、`"yunet"`、LibreYOLO検出モデル、または通常の呼び出し可能オブジェクトを受け付けます。`result.gaze` はラジアン単位のpitchとyawを保持し、検出された顔ボックスである `result.boxes` と行単位で対応します。ソース、ストリーミング、結果の処理については、[推論](/docs/predict)を参照してください。
+L2CS-Netは2段階の推定器です。最初に顔検出器を実行し、返された各顔クロップから視線ヘッドが
+pitchとyawを読み取ります。何も指定しない場合、推論はOpenCV同梱の検出器へフォールバックします。
+そのため、L2CSチェックポイント自体を取得した後は、追加ダウンロードなしで通常の呼び出しが動作します。
+`face_boxes`は実行済みの検出器からのボックスを受け付けます。`face_detector`は`"auto"`、`"haar"`、
+`"yunet"`、LibreYOLO検出モデル、または通常のcallableを受け付けます。`result.gaze`にはラジアン単位の
+pitchとyawが入り、検出された顔ボックスの`result.boxes`と行単位で揃います。入力ソース、
+ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
 
 ## バリアント
 
-5つのバックボーン深度が1つの入力解像度を共有し、同じ引数を受け取ります。唯一の公開チェックポイントの基になったデータセットであるGaze360はResNet-50を学習しています。その他の4つの深度はアーキテクチャとして対応していますが、読み込める公開済みの重みはありません。
+5種類のバックボーン深度が1つの入力解像度を共有し、同じ引数を受け取ります。唯一の公開
+チェックポイントの基になったデータセットGaze360はResNet-50を学習しました。ほかの4種類の
+深度はアーキテクチャとして対応しますが、読み込める公開済みの重みはありません。
 
 ## エクスポート
 
@@ -114,6 +126,11 @@ L2CS-Netは2段階の推定器です。最初に顔検出器を実行し、視�
 
 <provenance-box>
 
-LibreYOLOはL2CSチェックポイントをホストもミラーもしません。このサイトの他の多くのファミリーとは異なり、LibreYOLOのHugging Face組織にこのファミリーのものは存在しません。ライブラリが自動取得できる唯一のチェックポイントは、著者独自のGoogle Drive配布から直接取得します。転送開始前に表示されるGaze360ライセンス通知の対象であり、上の概要が示唆する「huggingface.co/LibreYOLOで再公開」されたコピーではありません。
+LibreYOLOはL2CSチェックポイントをホストもミラーもしません。このサイトの多くのファミリーと異なり、
+LibreYOLOのHugging Face組織にこのファミリーのファイルはありません。ライブラリが自動取得できる唯一の
+チェックポイントは作者自身のGoogle Drive配布元から直接取得されます。転送開始前に表示される
+Gaze360ライセンス通知による制限があり、上記の概要が示唆する「huggingface.co/LibreYOLOで再公開」
+されたコピーではありません。
 
 </provenance-box>
+

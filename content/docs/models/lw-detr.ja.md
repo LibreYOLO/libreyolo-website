@@ -2,14 +2,14 @@
 title: LW-DETR
 families:
   - lwdetr
-seo_title: LW-DETR：Apache-2.0の下で推論、エクスポート
+seo_title: LW-DETR：Apache-2.0で推論とエクスポート
 description: >-
-  LibreYOLOのLW-DETRでリアルタイム物体検出を行います。すべてApache-2.0ライセンスのViTベース5サイズをインストールし、推論、検証、エクスポートします。
+  LibreYOLOのLW-DETRでリアルタイム物体検出を実行します。すべてApache-2.0のViTベース5サイズについて、インストール、推論、検証、エクスポートを説明します。
 lead: >-
-  BaiduがYOLO検出器に代わるリアルタイムモデルとして位置付けた、通常のViTを使うDetection
-  Transformerです。LibreYOLOは検出向けに5つのサイズを推論専用として提供します。
+  BaiduがYOLO検出器のリアルタイム代替として位置付けたplain-ViT detection
+  transformerです。LibreYOLOは物体検出向けに5サイズを推論専用で提供します。
 keywords:
-  - LW-DETR
+  - LW-DETR 使い方
   - detection transformer
   - リアルタイム 物体検出
   - plain ViT
@@ -74,8 +74,8 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # ファクトリーはファイル接尾辞で振り分けるためエクスポート済み成果物も
-        # チェックポイントと同様に読み込まれて同じResultsオブジェクトを返す
+        # ファクトリがファイル接尾辞で振り分けるため、エクスポートした成果物も
+        # 通常のチェックポイントと同様に読み込まれ、同じResultsオブジェクトを返す
         model = LibreYOLO("LibreLWDETRt.onnx")
         result = model(SAMPLE_IMAGE)
 
@@ -85,7 +85,7 @@ source_hash: badd1d8255df5bbd
 
 ## インストール
 
-LW-DETRにオプションの追加パッケージは不要です。インポートするものはすべて基本インストールに含まれます。
+LW-DETRに任意の追加パッケージは必要ありません。インポートするものはすべて基本インストールに含まれます。
 
 ```bash
 pip install libreyolo
@@ -97,17 +97,17 @@ pip install libreyolo
 
 <code-tabs name="predict" />
 
-返される `Results` オブジェクトはすべてのファミリーで共通のため、別の検出器への置き換えは1行の変更で済みます。`conf` と `max_det` はクエリ選択をフィルタリングします。APIの一貫性のため `iou` は受け付けますが、デコーダーがNMS処理のない集合予測器なので効果はありません。ソース、ストリーミング、結果の処理については、[推論](/docs/predict)を参照してください。
+返される`Results`オブジェクトはすべてのファミリーで共通のため、別の検出器への切り替えは1行の変更だけで済みます。`conf`と`max_det`はqueryの選択を絞り込みます。`iou`はAPIの一貫性のため受け付けますが、デコーダーがNMS処理のないset predictorであるため効果はありません。入力ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
 
-LibreYOLOのLW-DETRは推論専用です。アップストリームは、複数のクエリグループをまたぐGroup-DETRの1対多教師信号と、IoUを考慮する分類損失で学習します。そのレシピはここに接続されていないため、`train()` は `NotImplementedError` を発生させます。
+LibreYOLOのLW-DETRは推論専用です。アップストリームは複数のquery groupにわたるGroup-DETRのone-to-many supervisionとIoU-aware分類損失で学習しますが、そのレシピはここに接続されていません。そのため`train()`は`NotImplementedError`を発生させます。
 
 ## バリアント
 
-サイズは5つで、すべて通常のViTエンコーダー、マルチスケールプロジェクター、変形可能DETRデコーダーを共有し、同じ入力解像度で実行されます。最小の2つは同じエンコーダー幅を共有し、ブロック深度が異なります。次の2つは、より幅広い同じエンコーダーを共有し、デコーダーへ入力するプロジェクターレベル数が異なります。最大サイズは最も幅広いエンコーダーを使用します。
+サイズは5種類で、すべてplain-ViTエンコーダー、multi-scale projector、deformable DETRデコーダーを共有し、同じ入力解像度で動作します。最小の2種類はエンコーダーの幅を共有してブロック深度が異なり、次の2種類はより幅広いエンコーダーを共有してデコーダーへ入力するprojector level数が異なります。最大サイズでは最も幅広いエンコーダーを使います。
 
 ## 検証
 
-`val()` は `metrics/` キーの辞書を返します。内容は適合率、再現率、mAP 50、mAP 50-95で、学習に使用した形式の任意のデータセットに対して測定されます。
+`val()`は、学習に使った形式の任意のデータセットに対して測定した適合率、再現率、mAP 50、mAP 50-95を含む`metrics/`キーの辞書を返します。
 
 <code-tabs name="val" />
 
@@ -115,7 +115,7 @@ LibreYOLOのLW-DETRは推論専用です。アップストリームは、複数�
 
 <export-matrix />
 
-エクスポート済み成果物はファイル接尾辞によって `LibreYOLO()` から再度読み込まれるため、`.onnx` または `.engine` ファイルはチェックポイントのように動作し、同じ `Results` を返します。[エクスポート](/docs/export)では、すべての形式が受け付ける引数を説明しています。
+エクスポートした成果物はファイル接尾辞に基づいて`LibreYOLO()`から再読み込みされます。そのため、`.onnx`または`.engine`ファイルはチェックポイントと同様に動作し、同じ`Results`を返します。[エクスポート](/docs/export)には各形式が受け付ける引数の一覧があります。
 
 <code-tabs name="export" />
 
@@ -132,3 +132,4 @@ LibreYOLOのLW-DETRは推論専用です。アップストリームは、複数�
 ## 引用
 
 <citation-block />
+

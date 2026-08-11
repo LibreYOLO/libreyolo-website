@@ -2,15 +2,15 @@
 title: DETR
 families:
   - detr
-seo_title: DETR：Apache-2.0の下で推論、エクスポート
+seo_title: DETR：Apache-2.0で推論とエクスポート
 description: >-
-  LibreYOLOで初代Detection
-  TransformerのDETRを実行します。すべてApache-2.0ライセンスのResNetベース4サイズをインストールし、推論、検証、エクスポートします。
+  元祖detection
+  transformerのDETRをLibreYOLOで実行します。すべてApache-2.0のResNetベース4サイズについて、インストール、推論、検証、エクスポートを説明します。
 lead: >-
-  DETRは初代Detection Transformerであり、アンカーや密なグリッドの代わりに、Hungarian
-  matchingを使うTransformerデコーダーで固定された物体集合を予測します。LibreYOLOは検出向けに4つのサイズを推論専用として提供します。
+  DETRは元祖detection transformerで、アンカーや密なグリッドの代わりにHungarian
+  matchingを行うtransformerデコーダーで固定数の物体を予測します。LibreYOLOは物体検出向けに4サイズを推論専用で提供します。
 keywords:
-  - DETR
+  - DETR 使い方
   - detection transformer
   - 物体検出
   - Hungarian matching
@@ -75,8 +75,8 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # ファクトリーはファイル接尾辞で振り分けるためエクスポート済み成果物も
-        # チェックポイントと同様に読み込まれて同じResultsオブジェクトを返す
+        # ファクトリがファイル接尾辞で振り分けるため、エクスポートした成果物も
+        # 通常のチェックポイントと同様に読み込まれ、同じResultsオブジェクトを返す
         model = LibreYOLO("LibreDETRr50.onnx")
         result = model(SAMPLE_IMAGE)
 
@@ -86,7 +86,7 @@ source_hash: c5549a596742d2a5
 
 ## インストール
 
-DETRにオプションの追加パッケージは不要です。インポートするものはすべて基本インストールに含まれます。
+DETRに任意の追加パッケージは必要ありません。インポートするものはすべて基本インストールに含まれます。
 
 ```bash
 pip install libreyolo
@@ -98,17 +98,27 @@ pip install libreyolo
 
 <code-tabs name="predict" />
 
-返される `Results` オブジェクトはすべてのファミリーで共通のため、別の検出器への置き換えは1行の変更で済みます。`conf` と `max_det` はクエリ選択をフィルタリングします。APIの一貫性のため `iou` は受け付けますが、デコーダーがNMS処理のない集合予測器なので効果はありません。ソース、ストリーミング、結果の処理については、[推論](/docs/predict)を参照してください。
+返される`Results`オブジェクトはすべてのファミリーで共通のため、別の検出器への切り替えは
+1行の変更だけで済みます。`conf`と`max_det`はqueryの選択を絞り込みます。`iou`はAPIの
+一貫性のため受け付けますが、効果はありません。デコーダーがNMS処理のないset predictorである
+ためです。入力ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
 
-LibreYOLOのDETRは推論専用です。アップストリームはHungarian matchingを使って500エポック学習しますが、そのレシピはここで実装されていないため、`train()` は `NotImplementedError` を発生させます。
+LibreYOLOのDETRは推論専用です。アップストリームはHungarian matchingを使って500エポック
+学習しますが、そのレシピはここでは未実装です。そのため`train()`は`NotImplementedError`を
+発生させます。
 
 ## バリアント
 
-4つのチェックポイントは、ResNet-50またはResNet-101という2つのバックボーン深度と、オプションのdilated C5段階を組み合わせます。DC5バリアントは最後のバックボーン段階でさらにダウンサンプリングせず全解像度を維持するため、デコーダーは同じ入力サイズから、より細かい特徴マップを読み取ります。4つすべてが100個の学習済み物体クエリと6層のTransformerエンコーダー・デコーダーを共有し、同じ入力解像度で実行されます。
+4個のチェックポイントは、ResNet-50またはResNet-101という2種類のバックボーン深度と、任意の
+dilated C5段階を組み合わせます。DC5バリアントはバックボーンの最終段階でさらにダウンサンプリング
+せずフル解像度を維持するため、デコーダーは同じ入力サイズからより細かい特徴マップを読み取ります。
+4種類すべてが100個の学習済みobject queryと6層のtransformer encoder-decoderを共有し、同じ
+入力解像度で動作します。
 
 ## 検証
 
-`val()` は `metrics/` キーの辞書を返します。内容は適合率、再現率、mAP 50、mAP 50-95で、学習に使用した形式の任意のデータセットに対して測定されます。
+`val()`は、学習に使った形式の任意のデータセットに対して測定した適合率、再現率、mAP 50、
+mAP 50-95を含む`metrics/`キーの辞書を返します。
 
 <code-tabs name="val" />
 
@@ -116,7 +126,9 @@ LibreYOLOのDETRは推論専用です。アップストリームはHungarian mat
 
 <export-matrix />
 
-エクスポート済み成果物はファイル接尾辞によって `LibreYOLO()` から再度読み込まれるため、`.onnx` または `.engine` ファイルはチェックポイントのように動作し、同じ `Results` を返します。[エクスポート](/docs/export)では、すべての形式が受け付ける引数を説明しています。
+エクスポートした成果物はファイル接尾辞に基づいて`LibreYOLO()`から再読み込みされます。そのため、
+`.onnx`または`.engine`ファイルはチェックポイントと同様に動作し、同じ`Results`を返します。
+[エクスポート](/docs/export)には各形式が受け付ける引数の一覧があります。
 
 <code-tabs name="export" />
 
@@ -129,3 +141,4 @@ LibreYOLOのDETRは推論専用です。アップストリームはHungarian mat
 ## ライセンス
 
 <provenance-box></provenance-box>
+

@@ -178,7 +178,9 @@ source_hash: 4256e0a0398e5aaf
 ---
 ## Instalacja
 
-LibreDINOv2 rejestruje się tylko wtedy, gdy zainstalowany jest `transformers`, ta sama opcjonalna zależność, której RF-DETR potrzebuje dla swojego DINOv2 backbone, więc potrzebuje tego samego dodatkowego elementu.
+LibreDINOv2 jest rejestrowany tylko wtedy, gdy zainstalowano pakiet
+`transformers`. Jest to ta sama opcjonalna zależność, której RF-DETR wymaga dla
+backbone DINOv2, dlatego potrzebny jest ten sam dodatek.
 
 ```bash
 pip install "libreyolo[rfdetr]"
@@ -186,11 +188,21 @@ pip install "libreyolo[rfdetr]"
 
 ## Predykcja
 
-LibreYOLO nie publikuje checkpointu LibreDINOv2. Zamiast ładować plik, skonstruuj bezpośrednio opakowanie: `model_path=None` (domyślnie) pobiera Apache-2.0 `facebook/dinov2-with-registers-small` backbone Meta z Hugging Face przy pierwszym użyciu. `task=` wybiera, co na nim działa.
+LibreYOLO nie publikuje checkpointu LibreDINOv2. Zamiast wczytywać plik, należy
+utworzyć otokę bezpośrednio. Domyślne `model_path=None` pobiera przy pierwszym
+użyciu z Hugging Face backbone Meta `facebook/dinov2-with-registers-small` na
+licencji Apache-2.0. Argument `task=` wybiera wykonywane na nim zadanie.
 
 <code-tabs name="predict" />
 
-`task="semantic"` i `task="classify"` dodają gęstą lub liniową głowicę na szczycie backbone; ta głowica jest inicjalizowana losowo i przydatna dopiero po jej wytrenowaniu (zobacz [Train](#train)). `task="embed"` pomija każdą głowicę i zwraca ostateczny znormalizowany token CLS backbone jako jeden wiersz całego obrazu w `result.embeddings`, więc wcale nie wymaga treningu. `result.boxes` to zawsze `None`: żadna z trzech zadań nie produkuje detekcji dla poszczególnych przypadków. Zobacz [predykcja](/docs/predict) dla źródeł, streaming i obsługi wyników.
+`task="semantic"` i `task="classify"` dodają do backbone odpowiednio gęstą lub
+liniową głowicę. Głowica jest inicjalizowana losowo i staje się użyteczna dopiero
+po wytrenowaniu (zobacz sekcję [Trenowanie](#train)). `task="embed"` pomija
+wszystkie głowice i zwraca końcowy, znormalizowany token CLS backbone jako jeden
+wiersz reprezentujący cały obraz w `result.embeddings`, dlatego nie wymaga
+trenowania. `result.boxes` zawsze ma wartość `None`, ponieważ żadne z trzech
+zadań nie tworzy detekcji instancji. Zobacz stronę
+[predykcji](/docs/predict), aby poznać źródła, streaming i obsługę wyników.
 
 ## Warianty
 
@@ -198,7 +210,9 @@ LibreYOLO nie publikuje checkpointu LibreDINOv2. Zamiast ładować plik, skonstr
 
 ## Trenowanie
 
-`task="semantic"` i `task="classify"` oba trenują; `task="embed"` nie ma głowy zależnej od klasy do dopasowania i wywołuje `NotImplementedError`, jeśli wywołasz na nim `train()`.
+Zadania `task="semantic"` i `task="classify"` obsługują trenowanie. Zadanie
+`task="embed"` nie ma zależnej od klas głowicy do dopasowania, dlatego wywołanie
+dla niego `train()` zgłasza `NotImplementedError`.
 
 <code-tabs name="train" />
 
@@ -222,7 +236,11 @@ Każde zadanie obsługuje inny podzbiór formatów, pokazany powyżej. Wyeksport
 
 <provenance-box>
 
-Wiersz "Weights" powyżej podaje licencję, która obowiązuje, Apache-2.0, ale w rzeczywistości nic nie jest ponownie publikowane pod LibreYOLO Hugging Face dla tej rodziny: LibreYOLO nie posiada własnego LibreDINOv2 checkpointu. To, co `LibreDINOv2(model_path=None)` pobiera, to własne repozytorium `facebook/dinov2-with-registers-small` firmy Meta, nienaruszone.
+Wiersz „Wagi” powyżej podaje obowiązującą licencję Apache-2.0, ale LibreYOLO nie
+publikuje ponownie żadnych artefaktów tej rodziny na Hugging Face i nie ma
+własnego checkpointu LibreDINOv2. Wywołanie
+`LibreDINOv2(model_path=None)` pobiera niezmienione repozytorium Meta
+`facebook/dinov2-with-registers-small`.
 
 </provenance-box>
 

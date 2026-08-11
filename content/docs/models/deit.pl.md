@@ -4,22 +4,22 @@ families:
   - deit
 seo_title: 'Klasyfikator obrazów DeiT: przewiduj, waliduj, eksportuj'
 description: >-
-  Uruchom klasyfikatory obrazów DeiT w LibreYOLO: zamrożone, tylko do
-  wnioskowania, rodziny muzealne w rozmiarach tiny, small i base, pod
-  Apache-2.0.
+  Uruchamiaj klasyfikatory obrazów DeiT w LibreYOLO. Ta historyczna rodzina,
+  przeznaczona wyłącznie do inferencji, obejmuje rozmiary tiny, small i base
+  na licencji Apache-2.0.
 lead: >-
   DeiT (Data-efficient image Transformer) jest zwykłym klasyfikatorem Vision
   Transformer trenowanym wyłącznie na ImageNet-1k, bez dodatkowych danych do
   wstępnego treningu. LibreYOLO zawiera wersje tiny, small i base o rozmiarze
-  patch-16 jako zamrożone, wyłącznie do wnioskowania.
+  patch-16 jako zamrożone modele przeznaczone wyłącznie do inferencji.
 keywords:
   - DeiT
-  - Transformator Wizji
+  - transformer wizyjny
   - ViT
   - klasyfikacja obrazów
   - ImageNet
-  - wydajne pod względem danych trenowanie
-  - rodzina muzeum
+  - trenowanie efektywne pod względem danych
+  - historyczne modele klasyfikacyjne
 last_verified: 1.5.0
 snippets:
   predict:
@@ -96,11 +96,21 @@ pip install libreyolo
 
 ## Predykcja
 
-Ta rodzina jest tylko do wnioskowania: `train()` podnosi `NotImplementedError`, więc ta strona nie ma sekcji Train. Obsługiwane są Predict, validate i export. Wagi są pobierane z Hugging Face przy pierwszym użyciu i są przechowywane lokalnie w pamięci podręcznej. Sufiks `-cls` w nazwie pliku jest wymagany i wybiera zadanie klasyfikacji.
+Ta rodzina służy wyłącznie do inferencji. Metoda `train()` zgłasza
+`NotImplementedError`, dlatego na tej stronie nie ma sekcji Trenowanie.
+Obsługiwane są predykcja, walidacja i eksport. Przy pierwszym użyciu wagi są
+pobierane z Hugging Face i zapisywane lokalnie w pamięci podręcznej. Wymagany
+sufiks nazwy pliku `-cls` wybiera zadanie klasyfikacji.
 
 <code-tabs name="predict" />
 
-Zwrócony obiekt `Results` zawiera tensor `probs` zamiast `boxes`; `top1` i `top5` indeksują 1 000 klas ImageNet-1k, a `top1conf` jest wynikiem softmax dla najlepszej prognozy. Każdy rozmiar ma stałą rozdzielczość wejściową z osadzenia pozycyjnego: wstępne przetwarzanie zmienia rozmiar i przycina do środka do tej rozdzielczości, a podanie innego `imgsz` powoduje błąd zamiast cichego przeskalowania. Zobacz [prediction](/docs/predict) dla źródeł, streaming i obsługi wyników.
+Zwracany obiekt `Results` zawiera tensor `probs` zamiast `boxes`. Pola `top1`
+i `top5` indeksują 1000 klas ImageNet-1k, a `top1conf` jest wynikiem softmax
+dla najlepszej predykcji. Każdy rozmiar ma stałą rozdzielczość wejściową
+wynikającą z embeddingu pozycyjnego. Przetwarzanie wstępne zmienia rozmiar
+i wykonuje kadrowanie centralne do tej rozdzielczości, natomiast podanie innego
+`imgsz` zgłasza błąd zamiast niejawnie przeskalować dane. Zobacz stronę
+[predykcji](/docs/predict), aby poznać źródła, streaming i obsługę wyników.
 
 ## Walidacja
 
@@ -118,7 +128,7 @@ Eksportowany artefakt ładuje się z powrotem przez `LibreYOLO()` na podstawie j
 
 ## Checkpointy
 
-Każdy opublikowany plik wagowy dla tej rodziny.
+Wszystkie opublikowane pliki wag dla tej rodziny.
 
 <checkpoint-table />
 

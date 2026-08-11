@@ -2,14 +2,14 @@
 title: ViT
 families:
   - vit
-seo_title: ViT：LibreYOLOで古典的なVision Transformer分類器を実行
+seo_title: ViT：LibreYOLOで定番のVision Transformer分類器を実行
 description: >-
-  LibreYOLOでViT分類器を使い、推論、検証、エクスポートを行います。Apache-2.0のAugReg重みを使用し、ファインチューニングにはまだ対応していません。
+  LibreYOLOでViT分類器の推論、検証、エクスポートを行います。Apache-2.0のAugReg重みを使えます。ファインチューニングにはまだ対応していません。
 lead: >-
-  古典的なVision
-  Transformerです。学習可能なクラストークンを持ち、畳み込みを使わず、固定サイズの画像パッチに純粋なTransformerを適用します。LibreYOLOは画像分類向けにAugRegで事前学習した4つのサイズを提供します。
+  定番のVision Transformerです。学習済みclass
+  tokenを持ち、畳み込みを使わず、固定サイズの画像patchへ純粋なtransformerを適用します。LibreYOLOは画像分類向けに、AugReg事前学習済みの4サイズを提供します。
 keywords:
-  - ViT
+  - ViT 使い方
   - Vision Transformer
   - AugReg
   - 画像分類
@@ -42,8 +42,8 @@ snippets:
 
         model = LibreYOLO("LibreViTti-cls.pt")
 
-        # dataはtrain/とval/にクラス別フォルダーを持つディレクトリルート
-        # データセットYAMLではなくImageFolder配置
+        # dataはtrain/とval/のクラス別フォルダーを持つルートディレクトリ
+        # データセットYAMLではなくImageFolderレイアウト
         metrics = model.val(data="imagenet-1k/")
 
         print(metrics["metrics/accuracy_top1"])
@@ -71,8 +71,8 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # ファクトリーはファイル接尾辞で振り分けるためエクスポート済み成果物も
-        # チェックポイントと同様に読み込まれて同じResultsオブジェクトを返す
+        # ファクトリがファイル接尾辞で振り分けるため、エクスポートした成果物も
+        # 通常のチェックポイントと同様に読み込まれ、同じResultsオブジェクトを返す
         model = LibreYOLO("LibreViTti-cls.onnx")
         result = model(SAMPLE_IMAGE)
 
@@ -82,7 +82,7 @@ source_hash: f63e98454913765a
 
 ## インストール
 
-ViTにオプションの追加パッケージは不要です。インポートするものはすべて基本インストールに含まれます。
+ViTに任意の追加パッケージは必要ありません。インポートするものはすべて基本インストールに含まれます。
 
 ```bash
 pip install libreyolo
@@ -94,15 +94,22 @@ pip install libreyolo
 
 <code-tabs name="predict" />
 
-分類器は `result.boxes` ではなく `result.probs` を返します。`top1` と `top5` はクラスインデックスを示し、`top1conf` と `top5conf` はその信頼度を示します。前処理ではtimmのAugReg評価レシピに従い、0.9のクロップ率でバイキュービック補間を使って、固定の224px入力へリサイズして中央をクロップします。ソース、ストリーミング、結果の処理については、[推論](/docs/predict)を参照してください。
+分類器は`result.boxes`ではなく`result.probs`を返します。`top1`と`top5`はクラス
+インデックス、`top1conf`と`top5conf`はそれぞれの信頼度を示します。前処理はtimmのAugReg
+評価レシピを使い、固定224 px入力へリサイズして中央クロップします。crop比率0.9のbicubic補間です。
+入力ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
 
 ## バリアント
 
-サイズはtinyからlargeまでの4つです。固定の224px、パッチ16のグラフを共有し、埋め込み幅とTransformerの深さが異なります。LibreYOLOはこのファミリーを推論専用として提供します。推論、ImageNet形式のtop-1/top-5検証、エクスポートには対応し、AugRegのファインチューニングレシピは実装されていません。
+サイズはtiny〜largeの4種類です。固定224 pxのpatch-16グラフを共有し、埋め込みベクトルの幅と
+transformerの深さが異なります。LibreYOLOはこのファミリーを推論専用で提供します。推論、
+ImageNet形式のtop-1・top-5検証、エクスポートに対応し、AugRegファインチューニングレシピは
+未実装です。
 
 ## 検証
 
-`val()` はImageFolder形式の分割（`train/` と `val/` サブフォルダーを持ち、クラスごとに1つのフォルダーがあるディレクトリ）に対して実行され、top-1とtop-5の精度を返します。
+`val()`はImageFolder形式の分割（`train/`と`val/`サブフォルダーを持ち、クラスごとに1個の
+フォルダーがあるディレクトリ）に対して実行し、top-1とtop-5の精度を返します。
 
 <code-tabs name="val" />
 
@@ -110,7 +117,9 @@ pip install libreyolo
 
 <export-matrix />
 
-エクスポート済み成果物はファイル接尾辞によって `LibreYOLO()` から再度読み込まれるため、`.onnx` または `.engine` ファイルはチェックポイントのように動作し、同じ `Results` を返します。[エクスポート](/docs/export)では、すべての形式が受け付ける引数と、一部の形式が追加するパッケージを説明しています。
+エクスポートした成果物はファイル接尾辞に基づいて`LibreYOLO()`から再読み込みされます。そのため、
+`.onnx`または`.engine`ファイルはチェックポイントと同様に動作し、同じ`Results`を返します。
+[エクスポート](/docs/export)には、各形式が受け付ける引数と、一部の形式で必要になる追加パッケージの一覧があります。
 
 <code-tabs name="export" />
 
@@ -127,3 +136,4 @@ pip install libreyolo
 ## 引用
 
 <citation-block />
+

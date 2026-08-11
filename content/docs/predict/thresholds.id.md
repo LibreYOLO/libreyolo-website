@@ -2,15 +2,15 @@
 title: Ambang batas dan pemfilteran
 seo_title: 'conf, iou, dan max_det di LibreYOLO'
 description: >-
-  Apa yang sebenarnya dilakukan conf, iou, max_det, dan classes saat prediksi,
-  family mana yang mengabaikan iou karena tidak menjalankan NMS, serta alasan
-  agnostic_nms tidak berpengaruh.
+  Fungsi sebenarnya conf, iou, max_det, dan classes saat prediksi, family yang
+  mengabaikan iou karena tidak menjalankan NMS, serta alasan agnostic_nms tidak
+  berpengaruh.
 lead: >-
   Empat argumen menentukan prediksi yang bertahan: conf, iou, max_det, dan
-  classes. Hanya dua yang berlaku untuk setiap family karena set predictor
-  mendekode set query tetap dan tidak pernah menjalankan NMS.
+  classes. Hanya dua yang berlaku pada setiap family karena set predictor
+  mendekode kumpulan query tetap dan tidak pernah menjalankan NMS.
 keywords:
-  - ambang batas conf yolo
+  - yolo conf threshold
   - iou threshold nms
   - max_det
   - filter class detection python
@@ -41,12 +41,12 @@ snippets:
         result = model(
             SAMPLE_IMAGE,
             conf=0.25,      # pertahankan prediksi pada atau di atas skor ini
-            iou=0.45,       # ambang batas overlap NMS, bila NMS berjalan
+            iou=0.45,       # ambang tumpang tindih NMS, jika NMS berjalan
             max_det=300,    # batas per gambar
-            classes=None,   # atau daftar ID kelas
+            classes=None,   # atau daftar id kelas
         )
         print(len(result.boxes))
-    - label: Menyapu conf
+    - label: Menguji berbagai conf
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -62,18 +62,18 @@ snippets:
         libreyolo predict model=LibreYOLO9s.pt conf=0.4 iou=0.5 max_det=100 \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
   classes:
-    - label: Filter ke kelas tertentu
+    - label: Memfilter ke kelas tertentu
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # ID kelas mengindeks model.names. Pada COCO, 0 adalah person.
+        # Id kelas mengindeks model.names. Pada COCO, 0 adalah person.
         result = model(SAMPLE_IMAGE, classes=[0])
 
         print({result.names[int(c)] for c in result.boxes.cls.tolist()})
-    - label: Temukan ID berdasarkan nama
+    - label: Menemukan id dari nama
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -88,14 +88,14 @@ snippets:
         filtered = model(SAMPLE_IMAGE, classes=ids)
         print(len(filtered.boxes))
   nmsfree:
-    - label: iou pada family yang tidak menjalankan NMS
+    - label: iou pada family tanpa NMS
       language: python
       code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
 
-        # RF-DETR mendekode set query tetap, sehingga iou tidak mengubah apa pun
-        di sini.
+        # RF-DETR mendekode kumpulan query tetap, sehingga iou tidak mengubah
+        apa pun.
 
         model = LibreYOLO("LibreRFDETRs.pt")
 
@@ -106,7 +106,7 @@ snippets:
 
 
         # Jumlah sama untuk keduanya. conf dan max_det adalah kontrol yang
-        bekerja.
+        berfungsi.
 
         print(len(loose.boxes), len(tight.boxes))
 source_hash: 0b978963c356027d
@@ -114,7 +114,7 @@ source_hash: 0b978963c356027d
 
 ## Empat argumen
 
-| Argumen | Default | Berlaku untuk |
+| Argumen | Default | Berlaku pada |
 |---|---|---|
 | `conf` | `0.25` | Setiap family |
 | `iou` | `0.45` | Family yang menjalankan non-maximum suppression |
@@ -123,131 +123,117 @@ source_hash: 0b978963c356027d
 
 <code-tabs name="basic" />
 
-Dua argumen bersifat universal dan dua lainnya tidak. Ini adalah hal terpenting
-yang perlu diketahui sebelum menyetel apa pun.
+Dua bersifat universal dan dua lainnya tidak. Inilah hal terpenting yang perlu diketahui
+sebelum menyetel apa pun.
 
-Validasi sengaja memakai nilai default berbeda. `val()` berjalan pada
-`conf=0.001` dan `iou=0.6` karena average precision dihitung pada kurva
-precision-recall penuh, dan cutoff 0.25 akan memotongnya.
+Validasi sengaja memakai default berbeda: `val()` berjalan pada `conf=0.001` dan `iou=0.6`
+karena average precision dihitung pada kurva precision-recall penuh dan batas 0.25 akan
+memotongnya.
 
 ## conf
 
-`conf` adalah skor yang jika tidak tercapai akan membuat prediksi dibuang.
-Argumen ini berlaku untuk setiap family, termasuk yang tidak pernah menjalankan
-NMS, dan menjadi kontrol pertama yang perlu diubah jika deteksi terlalu banyak
-atau terlalu sedikit.
+`conf` adalah skor yang menjadi batas pembuangan prediksi. Argumen ini berlaku pada setiap
+family, termasuk yang tidak pernah menjalankan NMS, dan menjadi kontrol pertama saat deteksi
+terlalu banyak atau terlalu sedikit.
 
-Nilai default `0.25` cocok untuk melihat gambar. Sistem downstream biasanya
-memerlukan nilai lebih tinggi, sedangkan pengukuran akurasi memerlukan nilai
-jauh lebih rendah.
+Default `0.25` cocok untuk melihat gambar. Sistem downstream biasanya memerlukan nilai lebih
+tinggi; pengukuran akurasi memerlukan nilai jauh lebih rendah.
 
 ## iou
 
-`iou` adalah overlap yang jika terlampaui membuat non-maximum suppression
-menghapus box berskor lebih rendah dari dua box berkelas sama. Argumen ini hanya
-bermakna bila family benar-benar menjalankan suppression.
+`iou` adalah nilai tumpang tindih yang membuat non-maximum suppression membuang kotak dengan
+skor lebih rendah dari dua kotak kelas sama. Nilai ini hanya bermakna jika family menjalankan
+suppression.
 
-Set predictor mendekode jumlah query tetap dan mengambil query dengan skor
-tertinggi. Duplikat di-suppress di dalam arsitektur selama pelatihan, bukan
-melalui langkah postprocessing, sehingga tidak ada ambang batas untuk diubah.
-Family berikut menerima `iou` demi paritas API dan mengabaikannya:
+Set predictor mendekode jumlah query tetap dan mengambil yang memiliki skor tertinggi.
+Duplikat ditekan di dalam arsitektur saat pelatihan, bukan melalui tahap pascapemrosesan,
+sehingga tidak ada ambang yang dapat diubah. Family berikut menerima `iou` demi kesetaraan API
+dan mengabaikannya:
 
-CenterNet, DEIM, DETR, Deformable DETR, D-FINE, DINO-DETR, EdgeCrafter,
-Faster R-CNN, LW-DETR, Mask R-CNN, RF-DETR, RT-DETR, dan head end-to-end YOLOv9.
-Varian yang dibangun pada decoder tersebut mewarisi perilakunya.
+CenterNet, DEIM, DETR, Deformable DETR, D-FINE, DINO-DETR, EdgeCrafter, Faster R-CNN,
+LW-DETR, Mask R-CNN, RF-DETR, RT-DETR, dan head YOLOv9 end-to-end. Varian yang dibuat di
+atas decoder tersebut mewarisi perilakunya.
 
 <code-tabs name="nmsfree" />
 
-Sebagian besar menyatakannya dalam docstring postprocessing, tetapi tidak ada
-peringatan saat runtime. Karena itu, penyapuan `iou` pada RF-DETR menghasilkan
-garis datar, bukan error. Faster R-CNN dan Mask R-CNN sedikit berbeda. Keduanya
-sudah menjalankan NMS di dalam model pada ambang batas upstream tetap yang tidak
-dapat diubah secara didukung melalui `iou`.
+Sebagian besar menyatakannya dalam docstring pascapemrosesan, tetapi tidak ada peringatan saat
+runtime, sehingga pengujian berbagai `iou` pada RF-DETR menghasilkan garis datar, bukan error.
+Faster R-CNN dan Mask R-CNN sedikit berbeda: keduanya sudah menjalankan NMS di dalam model
+pada ambang upstream tetap yang tidak dapat diubah oleh `iou`.
 
-Family berikut menggunakannya: YOLOv1 hingga YOLOv4, YOLOv7, YOLOv9, YOLOX,
-YOLO-NAS, RTMDet, PicoDet, EfficientDet, FCOS, RetinaNet, dan SSD.
+Family berikut menggunakannya: YOLOv1 hingga YOLOv4, YOLOv7, YOLOv9, YOLOX, YOLO-NAS,
+RTMDet, PicoDet, EfficientDet, FCOS, RetinaNet, dan SSD.
 
-Dua opsi waktu prediksi membuat `iou` relevan bahkan bagi set predictor karena
-keduanya menggabungkan box setelah model selesai:
+Dua opsi saat prediksi membuat `iou` berpengaruh bahkan untuk set predictor karena keduanya
+menggabungkan kotak setelah model selesai:
 
-- `tiling=True` menyelaraskan tile yang tumpang tindih dengan NMS per kelas pada `iou`
+- `tiling=True` merekonsiliasi tile yang tumpang tindih dengan NMS per kelas pada `iou`
 - `augment=True` menggabungkan tampilan yang dibalik dengan NMS per kelas pada `iou`
 
 Keduanya dibahas dalam [Performa inferensi](/docs/predict/performance).
 
-Detector open-vocabulary memiliki aturan sendiri. Family yang processornya
-menjalankan NMS mendeklarasikan ambang batas default sendiri dan menghormati
-`iou`, seperti OMDet-Turbo. Family tanpa suppression, yaitu Grounding DINO,
-OWLv2, dan OV-DEIM, mengeluarkan peringatan saat `iou` diteruskan. Peringatan
-tersebut adalah satu-satunya yang sejenis dalam library.
+Detektor open-vocabulary memiliki aturan sendiri. Family yang prosesornya menjalankan NMS
+mendeklarasikan ambang default sendiri dan menghormati `iou`, seperti OMDet-Turbo. Family
+tanpa suppression, Grounding DINO, OWLv2, dan OV-DEIM, mengeluarkan peringatan jika `iou`
+diberikan. Peringatan tersebut satu-satunya dari jenisnya dalam library.
 
 ## max_det
 
-`max_det` membatasi jumlah prediksi yang dikembalikan untuk satu gambar. Argumen
-ini berlaku di semua tempat, tetapi melalui mekanisme berbeda. Family NMS
-memotong setelah suppression, sedangkan set predictor menggunakannya sebagai
-ukuran pemilihan top-k.
+`max_det` membatasi jumlah prediksi yang dikembalikan untuk satu gambar. Argumen ini berlaku
+di semua tempat melalui mekanisme berbeda: family NMS memangkas setelah suppression, sedangkan
+set predictor memakainya sebagai ukuran pilihan top-k.
 
-Beberapa family membatasi di bawah nilai yang diminta karena konfigurasi
-referensi upstream menetapkannya demikian. SSD membatasi pada 200, segmentasi
-instance RTMDet pada 100, dan FCOS pada batas deteksi per gambarnya sendiri.
-Menaikkan `max_det` melampaui angka tersebut tidak berpengaruh.
+Beberapa family membatasi di bawah nilai yang diminta karena konfigurasi referensi upstream.
+SSD membatasi pada 200, segmentasi instance RTMDet pada 100, dan FCOS pada batas deteksi per
+gambarnya sendiri. Menaikkan `max_det` melewati angka tersebut tidak berpengaruh.
 
-Satu-satunya tempat `max_det` diterapkan secara terpusat, bukan per family,
-adalah inferensi berbasis tile, saat daftar gabungan dipotong setelah tile
-diselaraskan.
+Satu tempat `max_det` diterapkan secara terpusat, bukan per family, adalah inferensi berbasis
+tile, tempat daftar gabungan dipangkas setelah tile direkonsiliasi.
 
 ## Pemfilteran kelas
 
 <code-tabs name="classes" />
 
-`classes` menerima daftar ID kelas dan hanya mempertahankan prediksi dengan
-kelas yang termasuk di dalamnya. ID mengindeks `result.names`, dan cara paling
-pasti untuk mendapatkannya adalah membaca `names` dari hasil, bukan mengasumsikan
-urutan dataset.
+`classes` menerima daftar id kelas dan hanya mempertahankan prediksi yang kelasnya ada dalam
+daftar. Id mengindeks `result.names`, dan cara paling pasti memperoleh id adalah membaca
+`names` dari hasil, bukan mengasumsikan urutan dataset.
 
-Pemfilteran dilakukan secara terpusat setelah postprocessing setiap family,
-dalam satu funnel yang dilalui setiap jalur prediksi. Hal ini memiliki dua
-konsekuensi penting. Filter bekerja pada setiap family, termasuk yang tanpa
-NMS. Filter juga memotong payload yang selaras dengan box, sehingga mask,
-keypoint, dan box berorientasi dipotong bersamanya dan tidak menjadi tidak
-selaras.
+Pemfilteran terjadi secara terpusat setelah pascapemrosesan setiap family, dalam satu funnel
+yang dilalui setiap jalur prediksi. Ada dua konsekuensi penting. Fitur ini berfungsi pada
+setiap family, termasuk yang tidak memiliki NMS. Fitur ini juga memfilter payload yang sejajar
+dengan kotak, sehingga mask, keypoint, dan kotak berorientasi dipangkas bersamanya dan tidak
+menjadi tidak cocok.
 
-Pada command line, `classes` menerima satu integer, daftar, atau string yang
-dipisahkan koma:
+Pada command line, `classes` menerima bilangan bulat tunggal, daftar, atau string dipisahkan koma:
 
 ```bash
 libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
 libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
 ```
 
-Pemfilteran tidak memberikan akurasi gratis. Model tetap menghabiskan anggaran
-untuk memprediksi kelas yang kemudian dibuang, dan `max_det` diterapkan oleh
-family sebelum filter. Karena itu, gambar yang penuh kelas tidak diinginkan
-dapat mencapai batas sebelum kelas yang dicari tercapai. Turunkan `conf` atau
-naikkan `max_det` jika itu terjadi.
+Pemfilteran bukan akurasi gratis. Model tetap menghabiskan kapasitas untuk memprediksi kelas
+yang kemudian dibuang, dan `max_det` diterapkan oleh family sebelum filter, sehingga gambar
+yang dipenuhi kelas tidak diinginkan dapat mencapai batas sebelum kelas target. Turunkan
+`conf` atau naikkan `max_det` jika itu terjadi.
 
 ## agnostic_nms
 
-`agnostic_nms` diterima dan tidak melakukan apa pun. Meneruskannya memunculkan
-peringatan bahwa argumen ini adalah no-op untuk kompatibilitas command line,
-lalu argumen dibuang.
+`agnostic_nms` diterima dan tidak melakukan apa pun. Meneruskannya memunculkan peringatan bahwa
+argumen tersebut no-op demi kompatibilitas command line, lalu argumen dibuang.
 
-Tidak ada mode suppression class-agnostic. Setiap panggilan NMS dalam library
-bersifat class-aware, sehingga dua box bertumpang tindih dari kelas berbeda
-sama-sama bertahan pada nilai `iou` apa pun. Jika hal ini menjadi masalah,
-filter lebih dulu dengan `classes` atau lakukan suppression lintas kelas sendiri
-pada `result.boxes`.
+Tidak ada mode suppression class-agnostic. Setiap pemanggilan NMS dalam library sadar kelas,
+sehingga dua kotak tumpang tindih dari kelas berbeda sama-sama bertahan pada nilai `iou` apa
+pun. Jika ini bermasalah, filter lebih dulu dengan `classes`, atau lakukan suppression lintas
+kelas sendiri pada `result.boxes`.
 
 ## Hal yang ditolak predict
 
-Dua argumen memunculkan error, bukan peringatan. `visualize` dan `embed`
-keduanya memunculkan `NotImplementedError`. Untuk embedding, muat model dengan
-`task="embed"`, lalu panggil `predict` atau `embed` seperti biasa.
+Dua argumen memunculkan error, bukan peringatan: `visualize` dan `embed` sama-sama memunculkan
+`NotImplementedError`. Untuk embedding, muat model dengan `task="embed"`, lalu panggil
+`predict` atau `embed` seperti biasa.
 
-Argumen yang tidak dikenal memunculkan `TypeError` yang menyebutkan opsi yang
-didukung, sehingga salah ketik langsung gagal dan tidak diabaikan diam-diam.
+Semua argumen tidak dikenal memunculkan `TypeError` yang menyebut opsi yang didukung, sehingga
+kesalahan ketik langsung gagal, bukan diabaikan.
 
-Argumen berikut diterima, memunculkan peringatan, lalu dibuang: `agnostic_nms`,
-`boxes`, `dnn`, `half`, `line_width`, `retina_masks`, `show_conf`,
-`show_labels`, dan `verbose`.
+Argumen berikut diterima, diberi peringatan, lalu dibuang: `agnostic_nms`, `boxes`, `dnn`,
+`half`, `line_width`, `retina_masks`, `show_conf`, `show_labels`, dan `verbose`.

@@ -2,14 +2,15 @@
 title: EfficientDet
 families:
   - efficientdet
-seo_title: EfficientDet：LibreYOLOでの物体検出
+seo_title: EfficientDet：LibreYOLOで物体検出
 description: >-
   LibreYOLOでEfficientDet
-  D0-D4を実行します。Apache-2.0の下で、推論、検証、ONNX、TensorRT、OpenVINOへのエクスポートに対応するBiFPN検出器です。
+  D0〜D4を実行します。Apache-2.0のBiFPN検出器で、推論、検証、ONNX・TensorRT・OpenVINOへのエクスポートを行います。
 lead: >-
-  EfficientDetはEfficientNetバックボーンと、反復する双方向特徴ピラミッドネットワーク（BiFPN）を組み合わせ、5つのサイズ全体で深さ、幅、解像度を同時にスケーリングします。LibreYOLOは推論専用検出器として提供します。
+  EfficientDetはEfficientNetバックボーンと、反復するbi-directional feature pyramid
+  network（BiFPN）を組み合わせ、5種類のサイズにわたって深さ、幅、解像度を同時にスケーリングします。LibreYOLOは推論専用の検出器として提供します。
 keywords:
-  - EfficientDet
+  - EfficientDet 使い方
   - BiFPN
   - EfficientNet
   - 物体検出
@@ -67,8 +68,8 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        # ファクトリーはファイル接尾辞で振り分けるためエクスポート済み成果物も
-        # チェックポイントと同様に読み込まれて同じResultsオブジェクトを返す
+        # ファクトリがファイル接尾辞で振り分けるため、エクスポートした成果物も
+        # 通常のチェックポイントと同様に読み込まれ、同じResultsオブジェクトを返す
         model = LibreYOLO("LibreEfficientDetd0.onnx")
         result = model(SAMPLE_IMAGE)
 
@@ -78,7 +79,8 @@ source_hash: 12c61fb0035437ce
 
 ## インストール
 
-EfficientDetにオプションの追加パッケージは不要です。インポートするものはすべて基本インストールに含まれます。
+EfficientDetに任意の追加パッケージは必要ありません。インポートするものはすべて基本
+インストールに含まれます。
 
 ```bash
 pip install libreyolo
@@ -90,15 +92,21 @@ pip install libreyolo
 
 <code-tabs name="predict" />
 
-返される `Results` オブジェクトはすべてのファミリーで共通のため、別の検出器への置き換えは1行の変更で済みます。EfficientDetはアンカーベースの候補をデコードした後、クラス単位のNMSを実行します。そのため、`conf`、`iou`、`max_det` はすべて実際に効果を持ちます。ソース、ストリーミング、結果の処理については、[推論](/docs/predict)を参照してください。
+返される`Results`オブジェクトはすべてのファミリーで共通のため、別の検出器への切り替えは
+1行の変更だけで済みます。EfficientDetはアンカーベースの候補をデコードした後、クラス単位の
+non-maximum suppressionを実行します。そのため、`conf`、`iou`、`max_det`はすべて実際に
+効果があります。入力ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
 
 ## バリアント
 
-サイズはD0からD4までの5つです。各段階で、より大きなEfficientNetバックボーンと、より深く幅広いBiFPNおよび予測ヘッドを組み合わせます。そのため、論文の複合スケーリング規則に従って、パラメータ数と計算量が同時に増えます。
+サイズはD0〜D4の5種類です。サイズを1段階上げるたびに、より大きなEfficientNetバックボーンと、
+より深く幅広いBiFPNおよび深い推論ヘッドを組み合わせます。そのため、論文のcompound-scaling
+規則に従ってパラメータ数と計算量が同時に増えます。
 
 ## 検証
 
-`val()` は `metrics/` キーの辞書を返します。内容は適合率、再現率、mAP 50、mAP 50-95で、学習に使用した形式の任意のデータセットに対して測定されます。
+`val()`は、学習に使った形式の任意のデータセットに対して測定した適合率、再現率、mAP 50、
+mAP 50-95を含む`metrics/`キーの辞書を返します。
 
 <code-tabs name="val" />
 
@@ -106,7 +114,8 @@ pip install libreyolo
 
 <export-matrix />
 
-エクスポート済み成果物はファイル接尾辞によって `LibreYOLO()` から再度読み込まれるため、`.onnx` または `.engine` ファイルはチェックポイントのように動作し、同じ `Results` を返します。
+エクスポートした成果物はファイル接尾辞に基づいて`LibreYOLO()`から再読み込みされます。そのため、
+`.onnx`または`.engine`ファイルはチェックポイントと同様に動作し、同じ`Results`を返します。
 
 <code-tabs name="export" />
 
@@ -120,6 +129,10 @@ pip install libreyolo
 
 <provenance-box>
 
-LibreYOLOのD0-D4チェックポイントは、Apache-2.0のrwightman/efficientdet-pytorchプロジェクトを通じて変換されています。このプロジェクト自体はgoogle/automlの公式TensorFlow学習済み重みを、学習済みテンソルを変更せずミラーしています。LGPLライセンスのzylo117/Yet-Another-EfficientDet-Pytorchプロジェクトのソースは参照も使用もしていません。
+LibreYOLOのD0〜D4チェックポイントは、Apache-2.0のrwightman/efficientdet-pytorch
+プロジェクトを通じて変換されています。このプロジェクト自体は、google/automlの公式TensorFlow
+学習済み重みを学習済みテンソルを変更せずにミラーします。LGPLライセンスの
+zylo117/Yet-Another-EfficientDet-Pytorchプロジェクトのソースは参照も使用もしていません。
 
 </provenance-box>
+

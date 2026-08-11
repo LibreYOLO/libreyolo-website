@@ -194,7 +194,15 @@ Wersja 1 oferuje pięć rozmiarów, wszystkie przy tym samym rozmiarze wejściow
 
 <va-embed />
 
-Wersja 1 zachowuje architekturę D-FINE i zamienia jej cel klasyfikacyjny na stratę uwzględniającą dopasowalność z przepisu gęstego jeden-do-jednego, dzięki czemu oba rodziny dzielą niemal każdy klucz w słowniku stanu i rozróżnia je metadane w punkcie kontrolnym. Wersja 2 zachowuje ten kontrakt treningowy i miesza backbones: HGNetv2 poniżej `s`, oraz wizualny transformator DINOv3 z adapterem dostrajania przestrzennego przy `s` i powyżej. To backbone nakłada drugą licencję na te cztery checkpointy, więc przeczytaj [licencjonowanie](#licensing) zanim wyślesz jeden z nich.
+Wersja 1 zachowuje architekturę D-FINE i zastępuje jej cel klasyfikacji funkcją
+straty uwzględniającą możliwość dopasowania z gęstego przepisu jeden-do-jednego.
+Obie rodziny współdzielą więc niemal wszystkie klucze słownika stanu, a odróżniają
+je metadane checkpointu. Wersja 2 zachowuje ten kontrakt trenowania i łączy
+różne backbone: HGNetv2 w rozmiarach mniejszych niż `s` oraz transformer wizyjny
+DINOv3 z adapterem dostrajania przestrzennego w rozmiarze `s` i większych.
+Ten backbone powoduje objęcie czterech checkpointów drugą licencją, dlatego
+przed ich wdrożeniem należy przeczytać sekcję
+[Licencjonowanie](#licensing).
 
 ## Trenowanie
 
@@ -202,7 +210,13 @@ Trenowanie zaczyna się od opublikowanego checkpointu. `pretrained` nigdy nie do
 
 <code-tabs name="train" />
 
-Samodzielnie zdaj `lr0` wersję 1. Jego sygnatura Python `train()` domyślnie wynosi `4e-4`, czyli szybkość z opublikowanego COCO przepisu, podczas gdy konfiguracja treningowa rodziny ma `1e-4` jako domyślne ustawienie fine-tune, a ta niższa wartość to ta, którą CLI rozstrzyga, gdy argument jest nieobecny. Konfiguracja rejestruje pomiar stojący za nim: przy rozmiarach partii fine-tune faktycznie używa, na małych zbiorach danych, COCO prędkość wymiernie obniżona w redukcji transferu.
+Dla wersji 1 należy samodzielnie podać `lr0`. Sygnatura metody `train()`
+w Pythonie ma wartość domyślną `4e-4`, pochodzącą z opublikowanego przepisu
+COCO. Konfiguracja trenowania rodziny ustawia natomiast `1e-4` jako domyślną
+wartość dostrajania i właśnie tę niższą wartość wybiera CLI, gdy argumentu nie
+podano. Konfiguracja rejestruje wynik pomiaru uzasadniającego ten wybór: przy
+rozmiarach batcha używanych podczas dostrajania na małych zbiorach danych
+współczynnik z przepisu COCO wyraźnie pogarszał transfer.
 
 Wersja 2 sama rozwiązuje te ustawienia domyślne. Pozostawienie `epochs`, `batch`, `imgsz` i `lr0` nieustawionych powoduje, że program odczytuje każdy z nich z opublikowanego przepisu dla wczytanego rozmiaru, dzięki czemu małe rozmiary trenują w swojej własnej rozdzielczości wejściowej bez konieczności jej podawania, a wartość, którą podasz, nadpisuje przepis. `imgsz` to argument, który ogranicza: musi być dodatnią wielokrotnością 32, a wersja 2 zgłasza błąd przed rozpoczęciem działania w przeciwnym razie.
 
@@ -228,13 +242,17 @@ Eksportowany artefakt ładuje się ponownie przez `LibreYOLO()` na swoim rozszer
 
 ## Checkpointy
 
-Każdy opublikowany plik wagowy dla tej rodziny.
+Wszystkie opublikowane pliki wag dla tej rodziny.
 
 <checkpoint-table />
 
 ## Licencjonowanie
 
-<provenance-box> Cztery rozmiary DEIMv2 od S w górę czerpią swoje backbone z DINOv3, więc ich repozytoria wag zawierają zarówno Apache-2.0, jak i licencję DINOv3 firmy Meta, a LibreYOLO dostarcza źródło DINOv3 backbone na tej samej umowie. Reszta tej rodziny, w tym każdy rozmiar DEIMv2 poniżej S, jest wyłącznie Apache-2.0. </provenance-box>
+<provenance-box> Cztery rozmiary DEIMv2 od S wzwyż korzystają z backbone DINOv3,
+dlatego ich repozytoria wag są objęte zarówno licencją Apache-2.0, jak i licencją
+DINOv3 firmy Meta. LibreYOLO udostępnia kod źródłowy backbone DINOv3 na tych
+samych warunkach. Pozostała część rodziny, w tym wszystkie rozmiary DEIMv2
+mniejsze niż S, jest objęta wyłącznie licencją Apache-2.0. </provenance-box>
 
 ## Cytowanie
 

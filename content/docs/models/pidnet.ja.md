@@ -2,15 +2,17 @@
 title: PIDNet
 families:
   - pidnet
-seo_title: PIDNet：MITの下でリアルタイムセグメンテーションを推論、エクスポート
+seo_title: PIDNet：MITでリアルタイムセグメンテーションを推論・エクスポート
 description: >-
-  LibreYOLOのPIDNetでリアルタイムのセマンティックセグメンテーションを行います。MITの下でs/m/lのCityscapesチェックポイントをインストールし、推論、検証、エクスポートします。
+  LibreYOLOのPIDNetでリアルタイムのセマンティックセグメンテーションを行います。MITのs・m・l
+  Cityscapesチェックポイントについて、インストール、推論、検証、エクスポートを説明します。
 lead: >-
-  比例・積分・微分に着想を得た設計に専用の境界分岐を追加し、リアルタイム推論を目指した3分岐のセマンティックセグメンテーションネットワークです。LibreYOLOはセマンティックセグメンテーション専用として提供します。
+  proportional-integral-derivativeに着想を得た設計へ専用の境界branchを追加した、3
+  branch構成のセマンティックセグメンテーションネットワークです。リアルタイム推論を目的としています。LibreYOLOはセマンティックセグメンテーション専用で提供します。
 keywords:
-  - PIDNet
+  - PIDNet 使い方
   - リアルタイム セマンティックセグメンテーション
-  - 境界認識 セグメンテーション
+  - boundary-aware segmentation
   - Cityscapes
   - dense prediction
 last_verified: 1.5.0
@@ -25,8 +27,8 @@ snippets:
         result = model(SAMPLE_IMAGE, save=True)
 
         mask = result.semantic_mask
-        print(mask.data.shape)   # (H, W)のクラスID
-        print(mask.classes)      # 画像内に存在するクラスIDのソート済み一覧
+        print(mask.data.shape)   # (H, W)クラスID
+        print(mask.classes)      # 画像内に存在するクラスIDをソート
     - label: CLI
       language: bash
       code: >
@@ -67,8 +69,8 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # ファクトリーはファイル接尾辞で振り分けるためエクスポート済み成果物も
-        # チェックポイントと同様に読み込まれて同じResultsオブジェクトを返す
+        # ファクトリがファイル接尾辞で振り分けるため、エクスポートした成果物も
+        # 通常のチェックポイントと同様に読み込まれ、同じResultsオブジェクトを返す
         model = LibreYOLO("LibrePIDNets-sem.onnx")
         result = model(SAMPLE_IMAGE)
 
@@ -78,7 +80,7 @@ source_hash: 489db64a39e3a61a
 
 ## インストール
 
-PIDNetにオプションの追加パッケージは不要です。インポートするものはすべて基本インストールに含まれます。
+PIDNetに任意の追加パッケージは必要ありません。インポートするものはすべて基本インストールに含まれます。
 
 ```bash
 pip install libreyolo
@@ -86,21 +88,29 @@ pip install libreyolo
 
 ## 推論
 
-重みは初回使用時にHugging Faceからダウンロードされ、ローカルにキャッシュされます。このファミリーでは、ファイル名の `-sem` 接尾辞が必要です。
+重みは初回使用時にHugging Faceからダウンロードされ、ローカルにキャッシュされます。この
+ファミリーではファイル名の`-sem`接尾辞が必要です。
 
 <code-tabs name="predict" />
 
-セマンティックセグメンテーションはボックスではなくピクセルごとに1つのクラスIDを返します。そのため、`result.semantic_mask` の `.data` は `(H, W)` 配列を保持し、`.classes` は画像内に存在するクラスIDの一覧を保持します。APIの一貫性のため `conf`、`iou`、`max_det` は受け付けますが、効果はありません。モデルはargmaxによって各ピクセルへクラスを割り当て、信頼度のしきい値やNMS処理を使用しないためです。ソース、ストリーミング、結果の処理については、[推論](/docs/predict)を参照してください。
+セマンティックセグメンテーションはボックスではなく、ピクセルごとに1個のクラスIDを返します。
+`result.semantic_mask`の`.data`には`(H, W)`配列、`.classes`には画像内に存在するクラスIDの
+一覧が入ります。`conf`、`iou`、`max_det`はAPIの一貫性のため受け付けますが、効果はありません。
+モデルはargmaxで各ピクセルへクラスを割り当て、信頼度のしきい値処理もNMS処理も行わないためです。
+入力ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
 
 ## バリアント
 
-サイズは3つで、すべて固定の1024 px入力です。公開チェックポイントは、19クラスの公式PIDNet Cityscapes重みを変換したものです。
+サイズは3種類で、すべて固定1024 px入力です。公開チェックポイントは公式PIDNet Cityscapesの
+19クラス用重みを変換したものです。
 
-LibreYOLOはPIDNetを学習しません。このファミリーで `train()` は `NotImplementedError` を発生させ、上の[サポート階層](/docs/models)でも推論専用と記載されています。
+LibreYOLOはPIDNetを学習しません。このファミリーで`train()`を呼び出すと
+`NotImplementedError`が発生し、上記の[サポート層](/docs/models)でも推論専用と示されています。
 
 ## 検証
 
-`val()` は、学習に使用した形式の任意のデータセットに対して測定した `metrics/mIoU` と `metrics/pixel_accuracy` を返します。
+`val()`は、学習に使った形式の任意のデータセットに対して測定した`metrics/mIoU`と
+`metrics/pixel_accuracy`を返します。
 
 <code-tabs name="val" />
 
@@ -108,7 +118,9 @@ LibreYOLOはPIDNetを学習しません。このファミリーで `train()` は
 
 <export-matrix />
 
-エクスポート済み成果物はファイル接尾辞によって `LibreYOLO()` から再度読み込まれるため、`.onnx` または `.engine` ファイルはチェックポイントのように動作し、同じ `Results` を返します。[エクスポート](/docs/export)では、すべての形式が受け付ける引数を説明しています。
+エクスポートした成果物はファイル接尾辞に基づいて`LibreYOLO()`から再読み込みされます。そのため、
+`.onnx`または`.engine`ファイルはチェックポイントと同様に動作し、同じ`Results`を返します。
+[エクスポート](/docs/export)には各形式が受け付ける引数の一覧があります。
 
 <code-tabs name="export" />
 
@@ -125,3 +137,4 @@ LibreYOLOはPIDNetを学習しません。このファミリーで `train()` は
 ## 引用
 
 <citation-block />
+

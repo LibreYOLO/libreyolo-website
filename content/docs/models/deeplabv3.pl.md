@@ -2,10 +2,10 @@
 title: DeepLabv3
 families:
   - deeplabv3
-seo_title: 'DeepLabv3: predykcja i eksportowanie segmentacji semantycznej ASPP'
+seo_title: 'DeepLabv3: predykcja i eksport segmentacji semantycznej ASPP'
 description: >-
-  Użyj DeepLabv3 w LibreYOLO do segmentacji semantycznej. Instaluj, przewidywaj,
-  sprawdzaj i eksportuj checkpointy ResNet i MobileNetV3 firmy Torchvision.
+  Używaj DeepLabv3 w LibreYOLO do segmentacji semantycznej. Instaluj, uruchamiaj
+  predykcję, waliduj i eksportuj checkpointy ResNet i MobileNetV3 z torchvision.
 lead: >-
   Sieć segmentacji semantycznej, która łączy cechy z kilkoma współczynnikami
   dylatacji równolegle (łączenie piramid przestrzennych z dylatacją) przed
@@ -95,7 +95,8 @@ source_hash: 7abf11ebb6cece18
 ---
 ## Instalacja
 
-DeepLabv3 nie wymaga wyposażenia dodatkowego. Wszystko, co importuje, znajduje się w instalacji podstawowej.
+DeepLabv3 nie wymaga opcjonalnego dodatku. Wszystkie importowane elementy
+znajdują się w instalacji bazowej.
 
 ```bash
 pip install libreyolo
@@ -107,13 +108,26 @@ Wagi pobierane są z Hugging Face przy pierwszym użyciu i zapisywane lokalnie w
 
 <code-tabs name="predict" />
 
-Semantyczna segmentacja zwraca jeden identyfikator klasy na piksel, a nie pola, więc `result.semantic_mask` zawiera tablicę `(H, W)` na `.data` i listę identyfikatorów klas obecnych w obrazie na `.classes`. `conf`, `iou` i `max_det` są akceptowane dla zgodności API, ale nie mają żadnego efektu: model przypisuje klasę do każdego piksela przez argmax, bez progu ufności lub kroku NMS. Zobacz [predykcja](/docs/predict) dla źródeł, streaming i obsługi wyników.
+Segmentacja semantyczna zwraca jeden identyfikator klasy na piksel, a nie
+ramki. Pole `result.semantic_mask.data` zawiera tablicę `(H, W)`, natomiast
+`result.semantic_mask.classes` listę identyfikatorów klas obecnych na obrazie.
+Argumenty `conf`, `iou` i `max_det` są akceptowane dla zgodności API, ale nie
+mają wpływu na wynik. Model przypisuje klasę do każdego piksela przez argmax,
+bez progu pewności ani etapu NMS. Zobacz stronę
+[predykcji](/docs/predict), aby poznać źródła, streaming i obsługę wyników.
 
 ## Warianty
 
-Trzy backbones: rozszerzone ResNet-50, rozszerzone ResNet-101 i rozszerzone MobileNetV3-Large. To jest DeepLabv3, a nie DeepLabv3+, więc nie ma tu żadnego stopnia dekodera ani udoskonalenia CRF, pasującego do implementacji torchvision, a nie do własnego kodu referencyjnego artykułu.
+Trzy warianty backbone: ResNet-50 z dylatacją, ResNet-101 z dylatacją oraz
+MobileNetV3-Large z dylatacją. Jest to DeepLabv3, a nie DeepLabv3+, dlatego nie
+ma etapu dekodera ani udoskonalania CRF. Odpowiada to implementacji torchvision,
+a nie kodowi referencyjnemu publikacji.
 
-LibreYOLO nie trenuje DeepLabv3: `train()` podnosi `NotImplementedError` dla tej rodziny, co [poziom wsparcia](/docs/models) powyżej oznacza jedynie jako inferencja. Trzy opublikowane checkpointy to własne wagi COCO-with-VOC-label firmy Torchvision, przeliczone dla ładowarki LibreYOLO.
+LibreYOLO nie trenuje DeepLabv3. Metoda `train()` zgłasza
+`NotImplementedError` dla tej rodziny, którą [poziom wsparcia](/docs/models)
+oznacza jako przeznaczoną wyłącznie do inferencji. Trzy opublikowane checkpointy
+zawierają wagi torchvision COCO-with-VOC-label przekonwertowane dla modułu
+wczytującego LibreYOLO.
 
 ## Walidacja
 
@@ -125,7 +139,10 @@ LibreYOLO nie trenuje DeepLabv3: `train()` podnosi `NotImplementedError` dla tej
 
 <export-matrix />
 
-Wyeksportowany artefakt jest ładowany ponownie poprzez `LibreYOLO()` zgodnie z sufiksem pliku, zatem plik `.onnx` lub `.engine` zachowuje się jak checkpoint i zwraca ten sam komunikat `Results`. [Eksport](/docs/export) wyświetla listę argumentów akceptowanych przez każdy format.
+Wyeksportowany artefakt jest ponownie wczytywany przez `LibreYOLO()` na
+podstawie sufiksu pliku, dlatego plik `.onnx` lub `.engine` zachowuje się jak
+checkpoint i zwraca ten sam obiekt `Results`. Strona [Eksport](/docs/export)
+zawiera argumenty akceptowane przez każdy format.
 
 <code-tabs name="export" />
 

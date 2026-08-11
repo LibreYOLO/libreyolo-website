@@ -1,22 +1,22 @@
 ---
-title: Odkształcalny DETR
+title: Deformable DETR
 families:
   - deformable_detr
-seo_title: 'Deformowalny DETR: przewiduj i eksportuj, Apache-2.0'
+seo_title: 'Deformable DETR: predykcja i eksport na licencji Apache-2.0'
 description: >-
-  Uruchom Deformable DETR w LibreYOLO do wykrywania obiektów. Zainstaluj,
-  przewiduj, waliduj i eksportuj pięć rozmiarów rzadkiej uwagi, wszystkie
-  licencjonowane przez Apache-2.0.
+  Uruchamiaj Deformable DETR w LibreYOLO do detekcji obiektów. Instaluj,
+  uruchamiaj predykcję, waliduj i eksportuj pięć wariantów z rzadką uwagą,
+  wszystkie na licencji Apache-2.0.
 lead: >-
-  Deformowalny DETR zastępuje gęstą uwagę krzyżową DETR rzadkim, wieloskalowym
+  Deformable DETR zastępuje gęstą uwagę krzyżową DETR rzadkim, wieloskalowym
   próbkowaniem wokół każdego punktu odniesienia, co sprawiło, że trenowanie
   detektorów transformatorowych stało się praktyczne. LibreYOLO oferuje pięć
   rozmiarów do detekcji, tylko do inferencji.
 keywords:
-  - Odkształcalny DETR
-  - transformer wykrywania
+  - Deformable DETR
+  - transformer detekcyjny
   - rzadka uwaga
-  - uwaga wieloskaliowa
+  - uwaga wieloskalowa
   - detekcja obiektów
   - SenseTime
 last_verified: 1.5.0
@@ -107,13 +107,27 @@ Wagi są pobierane z Hugging Face przy pierwszym użyciu i są przechowywane w p
 
 <code-tabs name="predict" />
 
-Zwrócony obiekt `Results` jest tym, który zwraca każda rodzina, więc zamiana na inny detektor to zmiana jednej linii. `conf` i `max_det` filtrują wybór zapytania; `iou` jest akceptowany dla zgodności z API, ale nie ma efektu, ponieważ dekoder jest przewidującym zestaw, który nie ma kroku NMS. Zobacz [prediction](/docs/predict) dla źródeł, streaming i obsługi wyników.
+Zwracany obiekt `Results` jest taki sam dla każdej rodziny, dlatego zamiana
+detektora wymaga zmiany jednego wiersza. Argumenty `conf` i `max_det` filtrują
+wybór zapytań. Argument `iou` jest akceptowany dla zgodności API, ale nie ma
+wpływu na wynik, ponieważ dekoder jest predyktorem zbioru bez etapu NMS. Zobacz
+stronę [predykcji](/docs/predict), aby poznać źródła, streaming i obsługę
+wyników.
 
-Deformowalny DETR jest tylko do wnioskowania w LibreYOLO. W górę strumienia trenowany jest z dopasowaniem węgierskim i stratą klasyfikacyjną fokalną; ten przepis nie jest tutaj zaimplementowany, więc `train()` powoduje `NotImplementedError`.
+Deformable DETR służy w LibreYOLO wyłącznie do inferencji. Model upstream jest
+trenowany z dopasowaniem węgierskim i ogniskową funkcją straty klasyfikacji.
+Tego przepisu nie zaimplementowano tutaj, dlatego `train()` zgłasza
+`NotImplementedError`.
 
 ## Warianty
 
-Pięć checkpointów obejmuje opublikowane konfiguracje, wszystkie przy tym samym rozdzielczości wejściowej. `r50ss` koncentruje uwagę na jednej skali cech; `r50ssdc5` dodaje rozszerzoną fazę C5 backbone na jej szczycie. `r50` to domyślna konfiguracja wieloskalowa, próbkująca z czterech poziomów map cech. `r50refine` dodaje iteracyjne dopracowywanie obszarów ograniczających w warstwach dekodera, a `r50twostage` generuje swoje początkowe propozycje regionów z wyjścia enkodera zamiast z wyuczonych zapytań.
+Pięć checkpointów obejmuje wszystkie opublikowane konfiguracje i korzysta
+z tej samej rozdzielczości wejściowej. `r50ss` skupia uwagę na jednej skali
+cech, a `r50ssdc5` dodaje do niego etap C5 backbone z dylatacją. `r50` jest
+domyślną konfiguracją wieloskalową, która próbkuje cztery poziomy map cech.
+`r50refine` dodaje iteracyjne udoskonalanie ramek między warstwami dekodera,
+a `r50twostage` tworzy początkowe propozycje regionów z wyjścia enkodera zamiast
+z wyuczonych zapytań.
 
 ## Walidacja
 
@@ -131,7 +145,7 @@ Eksportowany artefakt ładuje się z powrotem przez `LibreYOLO()` na podstawie j
 
 ## Checkpointy
 
-Każdy opublikowany plik wagowy dla tej rodziny.
+Wszystkie opublikowane pliki wag dla tej rodziny.
 
 <checkpoint-table />
 
