@@ -18,15 +18,15 @@
     "articlesDescription": "Articoli, tutorial e novità su LibreYOLO: rilevamento di oggetti con licenza MIT, consigli per l'addestramento, rilasci di modelli e guide di computer vision."
   },
   "Nav": {
-    "home": "Home",
+    "home": "Pagina iniziale",
     "models": "Modelli",
     "benchmarks": "Benchmark",
     "commercial": "Commerciale",
     "articles": "Articoli",
-    "docs": "Docs",
+    "docs": "Documentazione",
     "github": "GitHub",
-    "star": "Star",
-    "community": "Community"
+    "star": "Metti una stella",
+    "community": "Comunità"
   },
   "LangSwitcher": {
     "label": "Cambia lingua"
@@ -46,7 +46,7 @@
     "chat": "Parliamone",
     "mitLicense": "Licenza MIT",
     "copyright": "© {year} LibreYOLO. Un progetto open source indipendente.",
-    "community": "Community"
+    "community": "Comunità"
   },
   "NotFound": {
     "title": "Oggetto non rilevato",
@@ -78,8 +78,8 @@
     "copy": "Copia",
     "copied": "Copiato!",
     "detected": "1 oggetto rilevato (persona)",
-    "viewFullDetection": "View full-size detection result",
-    "detectionResultAlt": "LibreYOLO detection result",
+    "viewFullDetection": "Visualizza il risultato del rilevamento a grandezza naturale",
+    "detectionResultAlt": "Risultato del rilevamento di LibreYOLO",
     "communityTitle": "Cosa dice la community",
     "communityFootnote": "LibreYOLO è uno sforzo enorme. Messaggi come questi ci danno la carica.",
     "featuresTitle": "Una libreria, <accent>tutto il flusso di lavoro</accent>",
@@ -101,7 +101,7 @@
     "deploySubtitle": "Esporta una volta ed esegui su qualsiasi hardware. Da schede da 35 $ alle GPU da data center.",
     "exportFormats": "Formati di esportazione",
     "testedHardware": "Hardware testato",
-    "comparisonTitle": "LibreYOLO vs <muted>Ultralytics</muted>",
+    "comparisonTitle": "LibreYOLO rispetto a <muted>Ultralytics</muted>",
     "comparisonSubtitle": "MIT significa che il tuo lavoro è tuo. Nessuna sorpresa.",
     "compRow1": "Uso in software proprietario",
     "compRow2": "Vendere prodotti che lo includono",
@@ -158,7 +158,7 @@
   "Models": {
     "byTask": "Modelli per task",
     "weights": "Tutti i pesi",
-    "docs": "Docs",
+    "docs": "Documentazione",
     "indexLead": "Tutte le famiglie incluse nella libreria, generate dal registro dei modelli v{version}: {families} famiglie su {tasks} task.",
     "familyCount": "{count} famiglie",
     "weightsShort": "pesi",
@@ -220,7 +220,7 @@
         "blurb": "In che direzione è orientata ogni superficie."
       },
       "matte": {
-        "label": "Matting",
+        "label": "Scontornamento",
         "blurb": "Ritagli con canale alfa, capelli e bordi inclusi."
       },
       "restore": {
@@ -228,14 +228,14 @@
         "blurb": "Riduzione del rumore, deblurring e upscaling."
       },
       "mesh": {
-        "label": "Mesh",
+        "label": "Mesh 3D",
         "blurb": "Geometria 3D a partire da un'immagine."
       }
     },
-    "docsShort": "docs",
-    "zooName": "LibreYOLO Model Zoo",
-    "zooDescription": "Model families available in LibreYOLO, the MIT-licensed computer vision library, by task.",
-    "taskList": "Tasks: {tasks}"
+    "docsShort": "documentazione",
+    "zooName": "Zoo di modelli LibreYOLO",
+    "zooDescription": "Famiglie di modelli disponibili in LibreYOLO, la libreria di computer vision con licenza MIT, suddivise per task.",
+    "taskList": "Task: {tasks}"
   },
   "Commercial": {
     "titleEmphasis": "Sì",
@@ -248,8 +248,8 @@
     "subtitle": "Dataset selezionati per addestrare e valutare i modelli LibreYOLO. Pronti all'uso con la pipeline di addestramento di LibreYOLO.",
     "browseCta": "Esplora i dataset su HuggingFace",
     "note": "Le schede dei singoli dataset arriveranno presto. Nel frattempo, esplora tutti i dataset disponibili su <link>HuggingFace di LibreYOLO</link>.",
-    "catalogName": "LibreYOLO Dataset Zoo",
-    "catalogDescription": "Datasets for training and evaluating YOLO models, hosted on Hugging Face."
+    "catalogName": "Zoo di dataset LibreYOLO",
+    "catalogDescription": "Dataset per addestrare e valutare i modelli YOLO, ospitati su Hugging Face."
   },
   "Articles": {
     "title": "Articoli",
@@ -288,694 +288,694 @@
     "ctaTitle": "Inizia oggi la tua ricerca",
     "ctaDesc": "Nessun costo di licenza. Nessun paywall. Nessuna restrizione sul tenere privato il tuo lavoro. Installa e comincia a esplorare.",
     "ctaButton": "Vedi la documentazione",
-    "copyToClipboard": "Copy to clipboard",
+    "copyToClipboard": "Copia negli appunti",
     "featureMapAlts": {
-      "p1": "Backbone P1 feature map",
-      "p2": "Backbone P2 feature map",
-      "p3": "Backbone P3 feature map",
-      "p4": "Backbone P4 feature map",
-      "p5": "Backbone P5 feature map",
-      "sppf": "SPPF feature map",
-      "neck1": "Neck C2F11 feature map",
-      "neck2": "Neck C2F22 feature map",
-      "head8": "Head 8 feature map",
-      "head16": "Head 16 feature map",
-      "head32": "Head 32 feature map"
+      "p1": "Feature map P1 del backbone",
+      "p2": "Feature map P2 del backbone",
+      "p3": "Feature map P3 del backbone",
+      "p4": "Feature map P4 del backbone",
+      "p5": "Feature map P5 del backbone",
+      "sppf": "Feature map SPPF",
+      "neck1": "Feature map del neck C2F11",
+      "neck2": "Feature map del neck C2F22",
+      "head8": "Feature map della testa 8",
+      "head16": "Feature map della testa 16",
+      "head32": "Feature map della testa 32"
     }
   },
   "DocsChrome": {
-    "documentation": "Documentation",
-    "searchTrigger": "Search docs",
-    "searchDialogLabel": "Search documentation",
-    "searchPlaceholder": "Search the documentation",
-    "searchLoading": "Loading the index",
-    "searchNoResults": "No page matches \"{query}\"",
-    "nextRelease": "Next release",
-    "versionIsCurrent": "v{version} is current",
-    "latest": "latest",
-    "onThisPage": "On this page",
-    "docsButton": "Docs",
-    "openNav": "Open documentation navigation",
-    "closeNav": "Close navigation",
-    "breadcrumbLabel": "Breadcrumb",
-    "docsCrumb": "Docs",
-    "planned": "Planned, not written yet",
-    "notWrittenYet": "Not written yet.",
-    "verified": "Verified against LibreYOLO v{version}.",
-    "verifiedGenerated": "Verified against LibreYOLO v{version}. Support tables, checkpoints and benchmark numbers on this page are generated from the released library and the published weights, not written by hand.",
-    "copyPage": "Copy page",
-    "copied": "Copied",
-    "copyFailed": "Copy failed",
-    "copyTitle": "Copy this page as markdown, ready to paste into an assistant",
-    "viewMarkdown": "View as markdown",
-    "viewMarkdownTitle": "View the raw markdown for this page",
+    "documentation": "Documentazione",
+    "searchTrigger": "Cerca nella documentazione",
+    "searchDialogLabel": "Cerca nella documentazione",
+    "searchPlaceholder": "Cerca nella documentazione",
+    "searchLoading": "Caricamento dell'indice",
+    "searchNoResults": "Nessuna pagina corrisponde a \"{query}\"",
+    "nextRelease": "Prossima release",
+    "versionIsCurrent": "v{version} è la versione corrente",
+    "latest": "più recente",
+    "onThisPage": "In questa pagina",
+    "docsButton": "Documentazione",
+    "openNav": "Apri la navigazione della documentazione",
+    "closeNav": "Chiudi la navigazione",
+    "breadcrumbLabel": "Percorso di navigazione",
+    "docsCrumb": "Documentazione",
+    "planned": "Pianificato, non ancora scritto",
+    "notWrittenYet": "Non ancora scritto.",
+    "verified": "Verificato con LibreYOLO v{version}.",
+    "verifiedGenerated": "Verificato con LibreYOLO v{version}. Le tabelle di supporto, i checkpoint e i dati dei benchmark in questa pagina vengono generati dalla libreria rilasciata e dai pesi pubblicati, non scritti a mano.",
+    "copyPage": "Copia pagina",
+    "copied": "Copiato",
+    "copyFailed": "Copia non riuscita",
+    "copyTitle": "Copia questa pagina come markdown, pronta da incollare in un assistente",
+    "viewMarkdown": "Visualizza come markdown",
+    "viewMarkdownTitle": "Visualizza il markdown originale di questa pagina",
     "groups": {
-      "start": "Get started",
-      "tasks": "Tasks",
-      "models": "Models",
-      "train": "Train",
-      "predict": "Predict",
-      "export": "Export",
+      "start": "Per iniziare",
+      "tasks": "Task",
+      "models": "Modelli",
+      "train": "Addestramento",
+      "predict": "Predizione",
+      "export": "Esportazione",
       "cli": "CLI",
-      "reference": "Reference",
-      "about": "About"
+      "reference": "Riferimenti",
+      "about": "Informazioni"
     }
   },
   "Tiers": {
     "g0": {
-      "label": "Flagship",
-      "blurb": "Features are designed and fully GPU-validated here first."
+      "label": "Di punta",
+      "blurb": "Le funzionalità vengono progettate e convalidate completamente su GPU prima per questo livello."
     },
     "g1": {
-      "label": "Core",
-      "blurb": "Core trainable detectors: features follow the flagships in the same release wave."
+      "label": "Principale",
+      "blurb": "Rilevatori addestrabili principali: le funzionalità seguono i modelli di punta nella stessa ondata di release."
     },
     "g2": {
-      "label": "Supported",
-      "blurb": "Supporting trainables: kept green in CI, features land opportunistically."
+      "label": "Supportato",
+      "blurb": "Modelli addestrabili di supporto: mantenuti funzionanti nella CI, ricevono nuove funzionalità quando possibile."
     },
     "g3": {
-      "label": "Inference only",
-      "blurb": "Predict, validate and export only. Training features do not apply."
+      "label": "Solo inferenza",
+      "blurb": "Solo predizione, validazione ed esportazione. Le funzionalità di addestramento non si applicano."
     },
     "g4": {
-      "label": "Museum",
-      "blurb": "Frozen exhibit. Bug fixes only."
+      "label": "Museo",
+      "blurb": "Esemplare congelato. Solo correzioni di bug."
     },
     "s": {
-      "label": "Sibling tier",
-      "blurb": "A separate product surface with its own factory and contract."
+      "label": "Livello parallelo",
+      "blurb": "Un'interfaccia di prodotto separata, con una propria factory e un proprio contratto."
     }
   },
   "ModelBlocks": {
-    "tasks": "Tasks",
-    "sizes": "Sizes",
-    "install": "Install",
-    "supportTierLabel": "Support tier",
-    "supportTier": "{tier}, since v{version}. {blurb}",
-    "upstream": "Upstream",
-    "upstreamValue": "{name} by {org}, {license}. <paper>Paper</paper>, <source>source</source>",
-    "licenses": "Licenses",
-    "licensesValue": "Code {codeLicense}, weights {weightsLicense}. <link>Commercial use</link>",
+    "tasks": "Task",
+    "sizes": "Dimensioni",
+    "install": "Installa",
+    "supportTierLabel": "Livello di supporto",
+    "supportTier": "{tier}, dalla v{version}. {blurb}",
+    "upstream": "Origine",
+    "upstreamValue": "{name} di {org}, {license}. <paper>Articolo</paper>, <source>sorgente</source>",
+    "licenses": "Licenze",
+    "licensesValue": "Codice {codeLicense}, pesi {weightsLicense}. <link>Uso commerciale</link>",
     "checkpoint": "Checkpoint",
-    "inputPx": "Input (px)",
-    "paramsM": "Params (M)",
+    "inputPx": "Ingresso (px)",
+    "paramsM": "Parametri (M)",
     "file": "File",
-    "weightsLicense": "Weights license",
-    "paper": "Paper",
-    "source": "source",
-    "commercialUse": "Commercial use",
-    "benchmarkNote": "{dataset}. Measured by the LibreYOLO benchmark harness and published on <link>Vision Analysis</link>, where latency across hardware and runtimes is compared and the full run records live.",
-    "hostedWeightsNote": "Every file above exists in the <link>LibreYOLO org</link> today and downloads on first use.",
-    "accuracyVersusLatency": "{family} accuracy versus latency",
+    "weightsLicense": "Licenza dei pesi",
+    "paper": "Articolo",
+    "source": "sorgente",
+    "commercialUse": "Uso commerciale",
+    "benchmarkNote": "{dataset}. Misurato con il sistema di benchmark di LibreYOLO e pubblicato su <link>Vision Analysis</link>, dove vengono confrontate le latenze tra hardware e runtime e sono disponibili i record completi delle esecuzioni.",
+    "hostedWeightsNote": "Oggi tutti i file elencati sopra sono presenti nell'<link>organizzazione LibreYOLO</link> e vengono scaricati al primo utilizzo.",
+    "accuracyVersusLatency": "Accuratezza di {family} rispetto alla latenza",
     "task": "Task",
-    "notSupported": "{label}: not supported",
-    "supported": "{label}: supported",
-    "supportedWithReason": "{label}: supported. {reason}",
-    "citationSource": "Copied from the authors' citation block at <link>{source}</link>.",
-    "licensingCaution": "Check the license on the Hugging Face repository of the specific weights you download. Every checkpoint in the <link>LibreYOLO org</link> carries one, and they are not always the same across a family. That repository is the authoritative source; the summary below describes what applied when this page was last verified.",
-    "legalCaution": "This is a description of the licenses involved, not legal advice. If the answer matters commercially, read the licenses yourself and take your own counsel.",
-    "originalWork": "Original work",
-    "upstreamLicense": "Upstream license",
-    "upstreamSource": "Upstream source",
-    "libreyoloCode": "LibreYOLO code",
-    "weights": "Weights",
-    "interpretation": "Interpretation",
-    "trainedOn": "Trained on",
-    "weightsNotHosted": "{license}, distributed by their authors. LibreYOLO does not host or mirror them.",
-    "weightsHosted": "{license}, republished at <link>huggingface.co/LibreYOLO</link>"
+    "notSupported": "{label}: non supportato",
+    "supported": "{label}: supportato",
+    "supportedWithReason": "{label}: supportato. {reason}",
+    "citationSource": "Copiato dal blocco di citazione degli autori disponibile su <link>{source}</link>.",
+    "licensingCaution": "Controlla la licenza nel repository Hugging Face degli specifici pesi che scarichi. Ogni checkpoint nell'<link>organizzazione LibreYOLO</link> ne include una e non è sempre la stessa per tutta la famiglia. Quel repository è la fonte autorevole; il riepilogo seguente descrive le condizioni applicabili al momento dell'ultima verifica di questa pagina.",
+    "legalCaution": "Questa è una descrizione delle licenze coinvolte, non una consulenza legale. Se la risposta è importante a fini commerciali, leggi personalmente le licenze e chiedi una consulenza indipendente.",
+    "originalWork": "Lavoro originale",
+    "upstreamLicense": "Licenza upstream",
+    "upstreamSource": "Sorgente upstream",
+    "libreyoloCode": "Codice LibreYOLO",
+    "weights": "Pesi",
+    "interpretation": "Interpretazione",
+    "trainedOn": "Addestrato su",
+    "weightsNotHosted": "{license}, distribuiti dai rispettivi autori. LibreYOLO non li ospita né ne mantiene una copia.",
+    "weightsHosted": "{license}, ripubblicati su <link>huggingface.co/LibreYOLO</link>"
   },
   "DocsLanding": {
-    "metaTitle": "LibreYOLO documentation",
-    "metaDescription": "Install, train, evaluate and export every model in LibreYOLO, the MIT-licensed computer vision library. One API across detection, segmentation, pose, depth, OCR and more.",
-    "jsonLdDescription": "Documentation for LibreYOLO, the MIT-licensed computer vision library.",
-    "title": "LibreYOLO documentation",
-    "intro": "One Python API for computer vision: detection, segmentation, pose, depth, OCR and more, with training, validation and export for each. The code is MIT licensed, so what you build with it stays yours.",
-    "installLabel": "install",
-    "quickstart": "Quickstart",
-    "browseModels": "Browse models",
-    "browseTasks": "Browse tasks",
+    "metaTitle": "Documentazione di LibreYOLO",
+    "metaDescription": "Installa, addestra, valuta ed esporta ogni modello in LibreYOLO, la libreria di computer vision con licenza MIT. Un'unica API per rilevamento, segmentazione, posa, profondità, OCR e altro.",
+    "jsonLdDescription": "Documentazione di LibreYOLO, la libreria di computer vision con licenza MIT.",
+    "title": "Documentazione di LibreYOLO",
+    "intro": "Un'unica API Python per la computer vision: rilevamento, segmentazione, posa, profondità, OCR e altro, con addestramento, validazione ed esportazione per ogni task. Il codice ha licenza MIT, quindi ciò che costruisci resta tuo.",
+    "installLabel": "installazione",
+    "quickstart": "Avvio rapido",
+    "browseModels": "Esplora i modelli",
+    "browseTasks": "Esplora i task",
     "facts": {
       "models": {
-        "label": "Models",
-        "text": "{count} families, from the current flagships back to the historic detectors, behind one factory"
+        "label": "Modelli",
+        "text": "{count} famiglie, dagli attuali modelli di punta ai rilevatori storici, dietro un'unica factory"
       },
       "tasks": {
-        "label": "Tasks",
-        "text": "{count}, from detection to gaze estimation and human mesh recovery"
+        "label": "Task",
+        "text": "{count}, dal rilevamento alla stima dello sguardo e alla ricostruzione della mesh umana"
       },
       "weights": {
-        "label": "Weights",
-        "text": "{count, plural, =0 {Downloaded on first use from <hf>huggingface.co/LibreYOLO</hf>} other {# published checkpoints for the families documented here, downloaded on first use from <hf>huggingface.co/LibreYOLO</hf>}}"
+        "label": "Pesi",
+        "text": "{count, plural, =0 {Downloaded, cioè scaricati al primo utilizzo da <hf>huggingface.co/LibreYOLO</hf>} other {# checkpoint pubblicati per le famiglie documentate qui, scaricati al primo utilizzo da <hf>huggingface.co/LibreYOLO</hf>}}"
       },
       "export": {
-        "label": "Export",
-        "text": "{count} formats, ONNX through TensorRT, CoreML, TFLite and Core AI"
+        "label": "Esportazione",
+        "text": "{count} formati, da ONNX a TensorRT, CoreML, TFLite e Core AI"
       },
       "license": {
-        "label": "License",
-        "text": "MIT for the code. Weights carry their upstream license, stated per checkpoint"
+        "label": "Licenza",
+        "text": "MIT per il codice. I pesi mantengono la rispettiva licenza upstream, indicata per ogni checkpoint"
       }
     },
-    "whatToDo": "What do you want to do?",
-    "whichModel": "Which model?",
-    "measured": "Measured, not claimed",
-    "workflows": "Working with a model",
-    "onTheLicense": "On the license",
-    "allTasks": "All tasks",
-    "allModels": "All models",
-    "detection": "Detection",
-    "familyTaskCount": "{count, plural, one {# task} other {# tasks}}",
-    "checkpointCount": "{count, plural, one {# checkpoint.} other {# checkpoints.}}",
-    "weightsDistributed": "weights distributed by their authors, not by us.",
+    "whatToDo": "Cosa vuoi fare?",
+    "whichModel": "Quale modello?",
+    "measured": "Misurato, non dichiarato",
+    "workflows": "Lavorare con un modello",
+    "onTheLicense": "Informazioni sulla licenza",
+    "allTasks": "Tutti i task",
+    "allModels": "Tutti i modelli",
+    "detection": "Rilevamento",
+    "familyTaskCount": "{count, plural, one {# task} other {# task}}",
+    "checkpointCount": "{count, plural, one {# checkpoint.} other {# checkpoint.}}",
+    "weightsDistributed": "pesi distribuiti dai rispettivi autori, non da noi.",
     "modelRouteNote": "{tasks}, {weights}",
-    "flagship": "Start with a flagship unless you have a reason not to. Every feature is designed and GPU-validated against those first, and each page carries the checkpoints, the export matrix and the licensing for that family.",
+    "flagship": "Inizia con un modello di punta, a meno che tu non abbia un motivo per non farlo. Ogni funzionalità viene progettata e convalidata su GPU prima con questi modelli, e ogni pagina riporta i checkpoint, la matrice di esportazione e le licenze della famiglia.",
     "visionAnalysis": "Vision Analysis",
-    "measuredParagraph": "Every accuracy and latency number in these docs comes from a run we publish, with the hardware, runtime and precision recorded alongside it. The chart below is live.",
-    "iframeTitle": "Detection models on COCO, accuracy against latency",
+    "measuredParagraph": "Ogni dato di accuratezza e latenza nella documentazione proviene da un'esecuzione che pubblichiamo insieme a hardware, runtime e precisione utilizzati. Il grafico seguente è aggiornato in tempo reale.",
+    "iframeTitle": "Modelli di rilevamento su COCO, accuratezza rispetto alla latenza",
     "workflowRows": {
       "train": {
-        "label": "Train",
-        "note": "Datasets, arguments, augmentation, multi-GPU and experiment loggers."
+        "label": "Addestra",
+        "note": "Dataset, argomenti, data augmentation, multi-GPU e logger degli esperimenti."
       },
       "predict": {
-        "label": "Predict",
-        "note": "Images, folders, video, webcams and RTSP streams."
+        "label": "Fai predizioni",
+        "note": "Immagini, cartelle, video, webcam e stream RTSP."
       },
       "export": {
-        "label": "Export and deploy",
-        "note": "Twelve targets, with a support matrix per family."
+        "label": "Esporta e metti in produzione",
+        "note": "Dodici destinazioni, con una matrice di supporto per famiglia."
       },
       "cli": {
-        "label": "Command line",
-        "note": "Everything the Python API does, without writing Python."
+        "label": "Riga di comando",
+        "note": "Tutto ciò che fa l'API Python, senza scrivere codice Python."
       }
     },
-    "licensingParagraph": "LibreYOLO's code is MIT. It does not require you to open source your application, it does not reach your model weights, and it does not change if you sell what you build. Pretrained weights are separate: each one carries the license of whoever trained it, and the docs state that per checkpoint rather than averaging it into a claim. A few are non-commercial, and those say so.",
-    "howLicensingWorks": "How licensing works here",
-    "footer": "These docs describe LibreYOLO v{version}. Documentation for earlier releases stays available at <link>/docs/versions</link>.",
+    "licensingParagraph": "Il codice di LibreYOLO è MIT. Non ti obbliga a rendere open source la tua applicazione, non si estende ai pesi del tuo modello e non cambia se vendi ciò che costruisci. I pesi preaddestrati sono separati: ciascuno mantiene la licenza di chi lo ha addestrato e la documentazione la indica per ogni checkpoint, senza generalizzare. Alcuni sono riservati all'uso non commerciale e lo dichiarano esplicitamente.",
+    "howLicensingWorks": "Come funzionano le licenze",
+    "footer": "Questa documentazione descrive LibreYOLO v{version}. La documentazione delle release precedenti resta disponibile su <link>/docs/versions</link>.",
     "taskBlurbs": {
-      "object-detection": "Boxes and classes. The default task, and the one most families serve.",
-      "instance-segmentation": "Per-object masks, one mask per detection.",
-      "semantic-segmentation": "A class for every pixel, without separating objects.",
-      "panoptic-segmentation": "Semantic and instance segmentation in one output.",
-      "pose-estimation": "Keypoints per object, top-down or bottom-up.",
-      "image-classification": "One label per image, including zero-shot with CLIP and SigLIP2.",
-      "oriented-detection": "Rotated boxes, for aerial and document imagery.",
-      "point-detection": "Centroids instead of boxes. Counting, and very small models.",
-      "depth-estimation": "Per-pixel depth from a single image.",
-      "image-restoration": "Denoising, deblurring and upscaling.",
-      "background-removal": "Alpha mattes for cutouts.",
-      "ocr": "Text detection and recognition in one pass.",
-      "face-recognition": "Face embeddings and identity galleries.",
-      "gaze-estimation": "Where a person is looking.",
-      "object-tracking": "Identities across video frames, over any detector.",
-      "open-vocabulary-detection": "Detect classes you name at runtime, with no training.",
-      "promptable-segmentation": "Segment anything you point at, with SAM and friends."
+      "object-detection": "Bounding box e classi. Il task predefinito e quello supportato dalla maggior parte delle famiglie.",
+      "instance-segmentation": "Maschere per oggetto, una maschera per ogni rilevamento.",
+      "semantic-segmentation": "Una classe per ogni pixel, senza separare gli oggetti.",
+      "panoptic-segmentation": "Segmentazione semantica e di istanze in un unico output.",
+      "pose-estimation": "Keypoint per oggetto, top-down o bottom-up.",
+      "image-classification": "Un'etichetta per immagine, incluso lo zero-shot con CLIP e SigLIP2.",
+      "oriented-detection": "Box ruotati, per immagini aeree e documenti.",
+      "point-detection": "Centroidi invece dei box. Conteggio e modelli molto piccoli.",
+      "depth-estimation": "Profondità per pixel da una singola immagine.",
+      "image-restoration": "Riduzione del rumore, deblurring e upscaling.",
+      "background-removal": "Maschere alfa per gli scontornamenti.",
+      "ocr": "Rilevamento e riconoscimento del testo in un unico passaggio.",
+      "face-recognition": "Embedding dei volti e gallerie di identità.",
+      "gaze-estimation": "Dove sta guardando una persona.",
+      "object-tracking": "Identità tra i fotogrammi di un video, con qualsiasi rilevatore.",
+      "open-vocabulary-detection": "Rileva le classi indicate durante l'esecuzione, senza addestramento.",
+      "promptable-segmentation": "Segmenta qualsiasi cosa indichi, con SAM e modelli simili."
     }
   },
   "DocsSections": {
-    "metaTitle": "{title} | LibreYOLO docs",
+    "metaTitle": "{title} | Documentazione LibreYOLO",
     "models": {
-      "title": "Models",
-      "lead": "Every model family in LibreYOLO, grouped by how heavily it is supported.",
-      "description": "All model families supported by LibreYOLO, from the flagship detectors to the historic ones, with their support tier."
+      "title": "Modelli",
+      "lead": "Tutte le famiglie di modelli in LibreYOLO, raggruppate in base al livello di supporto.",
+      "description": "Tutte le famiglie di modelli supportate da LibreYOLO, dai rilevatori di punta a quelli storici, con il relativo livello di supporto."
     },
     "tasks": {
-      "title": "Tasks",
-      "lead": "What LibreYOLO can do, and which models serve each capability.",
-      "description": "Every task LibreYOLO supports, from detection and segmentation to depth, OCR and gaze estimation."
+      "title": "Task",
+      "lead": "Cosa può fare LibreYOLO e quali modelli offrono ogni funzionalità.",
+      "description": "Tutti i task supportati da LibreYOLO, dal rilevamento e dalla segmentazione alla profondità, all'OCR e alla stima dello sguardo."
     },
     "export": {
-      "title": "Export and deploy",
-      "lead": "Take a trained model out of PyTorch and run it somewhere else.",
-      "description": "Export a LibreYOLO model to ONNX, TensorRT, OpenVINO, CoreML, TFLite and other deployment targets."
+      "title": "Esporta e metti in produzione",
+      "lead": "Porta un modello addestrato fuori da PyTorch ed eseguilo altrove.",
+      "description": "Esporta un modello LibreYOLO in ONNX, TensorRT, OpenVINO, CoreML, TFLite e altre destinazioni di deployment."
     },
     "train": {
-      "title": "Train",
-      "lead": "Datasets, arguments, multi-GPU and the machinery shared by every trainable family.",
-      "description": "Training models in LibreYOLO: datasets, hyperparameters, augmentation, multi-GPU and experiment loggers."
+      "title": "Addestramento",
+      "lead": "Dataset, argomenti, multi-GPU e i meccanismi condivisi da ogni famiglia addestrabile.",
+      "description": "Addestrare modelli in LibreYOLO: dataset, iperparametri, data augmentation, multi-GPU e logger degli esperimenti."
     },
     "predict": {
-      "title": "Predict",
-      "lead": "Running a model over images, folders, video and streams.",
-      "description": "Running inference with LibreYOLO: sources, streaming, results objects and ensembling."
+      "title": "Predizione",
+      "lead": "Eseguire un modello su immagini, cartelle, video e stream.",
+      "description": "Eseguire l'inferenza con LibreYOLO: sorgenti, streaming, oggetti dei risultati ed ensemble."
     },
     "cli": {
       "title": "CLI",
-      "lead": "Every command the libreyolo executable exposes.",
-      "description": "The LibreYOLO command line: predict, train, val, export and the utility commands."
+      "lead": "Tutti i comandi esposti dall'eseguibile libreyolo.",
+      "description": "La riga di comando di LibreYOLO: predict, train, val, export e i comandi di utilità."
     },
     "reference": {
-      "title": "Reference",
-      "lead": "The public Python surface, schemas and generated matrices.",
-      "description": "LibreYOLO reference: Python API, results types, dataset formats and the full export matrix."
+      "title": "Riferimenti",
+      "lead": "L'interfaccia Python pubblica, gli schemi e le matrici generate.",
+      "description": "Riferimenti di LibreYOLO: API Python, tipi dei risultati, formati dei dataset e matrice di esportazione completa."
     }
   },
   "DocsKit": {
-    "documentation": "Documentation",
-    "copyTitle": "LibreYOLO Documentation",
-    "copy": "Copy",
-    "copied": "Copied!",
-    "backToCoreDocs": "Back to core docs",
-    "related": "Related",
-    "openNavigation": "Open navigation",
-    "docs": "Docs",
-    "coreDocumentation": "Core documentation",
-    "copyDocs": "Copy docs",
-    "copiedDocs": "Copied docs"
+    "documentation": "Documentazione",
+    "copyTitle": "Documentazione LibreYOLO",
+    "copy": "Copia",
+    "copied": "Copiato!",
+    "backToCoreDocs": "Torna alla documentazione principale",
+    "related": "Correlati",
+    "openNavigation": "Apri la navigazione",
+    "docs": "Documentazione",
+    "coreDocumentation": "Documentazione principale",
+    "copyDocs": "Copia la documentazione",
+    "copiedDocs": "Documentazione copiata"
   },
   "UnderConstruction": {
-    "ariaLabel": "This article is unfinished and AI-generated",
-    "title": "AI-generated article, under construction",
-    "body": "This draft was written with AI assistance and is still being edited and fact-checked. Wording and framing will change. The benchmark numbers shown are the real, published campaign results, but treat everything around them as a work in progress."
+    "ariaLabel": "Questo articolo generato dall'IA non è ancora completo",
+    "title": "Articolo generato dall'IA, in costruzione",
+    "body": "Questa bozza è stata scritta con l'aiuto dell'IA ed è ancora in fase di revisione e verifica dei fatti. La formulazione e l'impostazione cambieranno. I dati dei benchmark mostrati sono i risultati reali e pubblicati della campagna, ma considera tutto ciò che li accompagna come un lavoro in corso."
   },
   "CursorHackathon": {
-    "metaTitle": "LibreYOLO Track | Cursor Hackathon",
-    "metaDescription": "Everything you need for the LibreYOLO track of the Cursor Madrid Hackathon 3: intro, setup tutorial, and a working example.",
+    "metaTitle": "Percorso LibreYOLO | Cursor Hackathon",
+    "metaDescription": "Tutto ciò che ti serve per il percorso LibreYOLO del Cursor Madrid Hackathon 3: introduzione, tutorial di configurazione e un esempio funzionante.",
     "sections": {
-      "overview": "Overview",
-      "whatIs": "What is LibreYOLO",
-      "setup": "Setup tutorial",
-      "example1": "Example 1",
-      "example2": "Example 2",
-      "example3": "Example 3",
-      "example4": "Example 4",
-      "example5": "Example 5"
+      "overview": "Panoramica",
+      "whatIs": "Cos'è LibreYOLO",
+      "setup": "Tutorial di configurazione",
+      "example1": "Esempio 1",
+      "example2": "Esempio 2",
+      "example3": "Esempio 3",
+      "example4": "Esempio 4",
+      "example5": "Esempio 5"
     },
-    "copy": "Copy",
-    "copied": "Copied!",
-    "codeHint": "Click anywhere inside the box to select all, or use the Copy button.",
+    "copy": "Copia",
+    "copied": "Copiato!",
+    "codeHint": "Fai clic in un punto qualsiasi del riquadro per selezionare tutto oppure usa il pulsante Copia.",
     "sidebarTitle": "Cursor Hackathon",
-    "external": "External",
-    "repo": "Repo",
-    "openNavigation": "Open navigation",
-    "closeNavigation": "Close navigation",
+    "external": "Esterno",
+    "repo": "Repository",
+    "openNavigation": "Apri la navigazione",
+    "closeNavigation": "Chiudi la navigazione",
     "mobileTitle": "Hackathon",
     "heroTitleLine1": "Cursor Madrid",
     "heroTitleLine2": "Hackathon 3",
-    "heroTrack": "LibreYOLO Track",
-    "heroWelcome": "Welcome, hackers. Read what LibreYOLO is, follow the setup tutorial, copy the example, and start building.",
-    "whatIsTitle": "What is LibreYOLO",
-    "whatIsBody": "LibreYOLO is a modern, 100% MIT-licensed engine for training and deploying state-of-the-art object detection. It exists to make YOLO accessible again, the way its creators always intended.",
-    "detectionResultAlt": "LibreYOLO detection result",
-    "detected": "Detected 1 object (person)",
-    "setupTitle": "Setup tutorial",
-    "setupBody": "Paste the prompt below into Cursor. It walks the agent through installing LibreYOLO from source and verifying the install. Works on Windows, macOS, and Linux.",
-    "setupPrompt": "Setup prompt",
-    "detectionTitle": "Example 1: Object detection",
-    "detectionBody": "A minimal end-to-end detection example with the lightweight YOLO9t flagship. Once LibreYOLO is installed, paste this into a Python file or a notebook to confirm everything works and to see the shape of the results object.",
-    "segmentationTitle": "Example 2: Segmentation with RF-DETR",
-    "segmentationBody": "Instance segmentation with the RF-DETR transformer flagship. The <code>-seg</code> suffix tells the factory to load the segmentation head, so you get bounding boxes plus per-instance binary masks from the same call.",
-    "keypointsTitle": "Example 3: Human keypoints",
-    "keypointsBody": "Human pose estimation with YOLO-NAS pose. The <code>-pose</code> suffix loads the keypoint head, returning person boxes plus 17 COCO keypoints for each detected person.",
-    "videoTitle": "Example 4: Video inference",
-    "videoBody": "Run the same LibreYOLO call on a video. Swap one model line to do detection, segmentation, or keypoints; RF-DETR segmentation still needs the <code>rfdetr</code> extra from Example 2.",
-    "trackingTitle": "Example 5: Object tracking",
-    "trackingBody": "ByteTrack adds stable IDs across video frames. This is the fastest path from detection to people counting, sports clips, traffic analysis, or anything that needs to know whether the same object is still on screen.",
-    "installRfdetr": "Install RF-DETR extra",
-    "installTracking": "Install tracking extra",
-    "copyInstall": "Copy install",
-    "copyExample": "Copy example",
-    "openRepo": "Open the repo",
-    "readDocs": "Read the full docs"
+    "heroTrack": "Percorso LibreYOLO",
+    "heroWelcome": "Benvenuto, hacker. Scopri cos'è LibreYOLO, segui il tutorial di configurazione, copia l'esempio e inizia a costruire.",
+    "whatIsTitle": "Cos'è LibreYOLO",
+    "whatIsBody": "LibreYOLO è un motore moderno con licenza MIT al 100% per addestrare e mettere in produzione il rilevamento di oggetti allo stato dell'arte. Esiste per rendere YOLO di nuovo accessibile, come i suoi creatori hanno sempre voluto.",
+    "detectionResultAlt": "Risultato del rilevamento di LibreYOLO",
+    "detected": "1 oggetto rilevato (persona)",
+    "setupTitle": "Tutorial di configurazione",
+    "setupBody": "Incolla il prompt seguente in Cursor. Guida l'agente nell'installazione di LibreYOLO dal sorgente e nella verifica dell'installazione. Funziona su Windows, macOS e Linux.",
+    "setupPrompt": "Prompt di configurazione",
+    "detectionTitle": "Esempio 1: rilevamento di oggetti",
+    "detectionBody": "Un esempio minimo di rilevamento end-to-end con il leggero modello di punta YOLO9t. Dopo aver installato LibreYOLO, incollalo in un file Python o in un notebook per verificare che tutto funzioni e vedere la struttura dell'oggetto dei risultati.",
+    "segmentationTitle": "Esempio 2: segmentazione con RF-DETR",
+    "segmentationBody": "Segmentazione di istanze con il modello transformer di punta RF-DETR. Il suffisso <code>-seg</code> indica alla factory di caricare la testa di segmentazione, così la stessa chiamata restituisce bounding box e maschere binarie per ogni istanza.",
+    "keypointsTitle": "Esempio 3: keypoint umani",
+    "keypointsBody": "Stima della posa umana con YOLO-NAS pose. Il suffisso <code>-pose</code> carica la testa dei keypoint e restituisce i box delle persone insieme ai 17 keypoint COCO per ogni persona rilevata.",
+    "videoTitle": "Esempio 4: inferenza su video",
+    "videoBody": "Esegui la stessa chiamata LibreYOLO su un video. Cambia una sola riga del modello per eseguire rilevamento, segmentazione o keypoint; la segmentazione RF-DETR richiede comunque il pacchetto extra <code>rfdetr</code> dell'Esempio 2.",
+    "trackingTitle": "Esempio 5: tracking degli oggetti",
+    "trackingBody": "ByteTrack aggiunge ID stabili tra i fotogrammi del video. È il percorso più rapido dal rilevamento al conteggio delle persone, ai filmati sportivi, all'analisi del traffico o a qualsiasi attività che debba sapere se lo stesso oggetto è ancora sullo schermo.",
+    "installRfdetr": "Installa il pacchetto extra RF-DETR",
+    "installTracking": "Installa il pacchetto extra per il tracking",
+    "copyInstall": "Copia l'installazione",
+    "copyExample": "Copia l'esempio",
+    "openRepo": "Apri il repository",
+    "readDocs": "Leggi la documentazione completa"
   },
   "Benchmarks": {
     "metaTitle": "Benchmarks",
-    "metaDescription": "Measured benchmarks for every model LibreYOLO ships: COCO accuracy, RF100-VL transfer across 100 real-world datasets, and latency on real hardware. Nothing copied from a paper.",
-    "datasetName": "LibreYOLO RF100-VL benchmark results",
-    "datasetDescription": "Per-dataset mAP@50-95 for LibreYOLO models fine-tuned and evaluated on each of the 100 RF100-VL datasets, plus COCO val2017 accuracy and measured latency across hardware.",
-    "title": "LibreYOLO Benchmarks",
-    "cocoTitle": "Accuracy against size",
-    "cocoBody": "How much accuracy each architecture buys for its parameter count. The chart is from <vision>visionanalysis.org</vision>, a brother project of LibreYOLO where models are measured on <coco>COCO</coco>, on <latency>latency</latency> across real hardware, and on the <rf>RF100-VL</rf> benchmark.",
-    "cocoIframeTitle": "Accuracy vs parameters, COCO val2017",
-    "openLeaderboard": "Open the full leaderboard",
-    "browseModelZoo": "Browse the model zoo",
-    "rfTitle": "Does any of that survive contact with your data?",
-    "rfIntro": "A COCO number is rarely the score you end up with. It is a hint at that score, because most projects start from COCO-pretrained weights and fine-tune from there, and it is the common yardstick that keeps papers comparable. That is worth something, and it is not the thing you are actually buying.",
-    "rfGeneralisation": "What you are buying is generalisation: whether the architecture, the pretrained weights and the training recipe still hold up on data that looks nothing like COCO. So Roboflow built RF100-VL. A model earns its score by being trained on 100 real datasets, one at a time. Some hand it thousands of objects per image, some give it a few dozen images to learn from. Pills on a conveyor, chest X-rays, mahjong tiles, varroa mites, wildfire smoke.",
-    "rfAdvice": "Read it as one input among several when you pick a model, alongside latency, licence and how much you feel like fighting the training code. It is not a ranking to read off the top.",
-    "latencyTag": "Latency",
-    "latencyTitle": "Fast enough on what you own?",
-    "latencyBody": "Accuracy does not change with hardware. Speed changes by two orders of magnitude between a datacentre GPU and a Raspberry Pi, so the only number that matters is the one measured on the board you are shipping on.",
-    "latencyCta": "See latency on every board"
+    "metaDescription": "Benchmark misurati per ogni modello distribuito da LibreYOLO: accuratezza su COCO, trasferimento RF100-VL su 100 dataset reali e latenza su hardware reale. Nessun dato copiato da un articolo.",
+    "datasetName": "Risultati del benchmark RF100-VL di LibreYOLO",
+    "datasetDescription": "mAP@50-95 per dataset dei modelli LibreYOLO sottoposti a fine-tuning e valutati su ciascuno dei 100 dataset RF100-VL, oltre all'accuratezza su COCO val2017 e alla latenza misurata su diversi hardware.",
+    "title": "Benchmark di LibreYOLO",
+    "cocoTitle": "Accuratezza rispetto alle dimensioni",
+    "cocoBody": "Quanta accuratezza offre ogni architettura in rapporto al numero di parametri. Il grafico proviene da <vision>visionanalysis.org</vision>, un progetto collegato a LibreYOLO in cui i modelli vengono misurati su <coco>COCO</coco>, sulla <latency>latenza</latency> con hardware reale e sul benchmark <rf>RF100-VL</rf>.",
+    "cocoIframeTitle": "Accuratezza rispetto ai parametri, COCO val2017",
+    "openLeaderboard": "Apri la classifica completa",
+    "browseModelZoo": "Esplora lo zoo di modelli",
+    "rfTitle": "Qualcosa di tutto questo resiste al contatto con i tuoi dati?",
+    "rfIntro": "Un dato COCO raramente è il punteggio finale che ottieni. È un'indicazione di quel punteggio, perché la maggior parte dei progetti parte da pesi preaddestrati su COCO e procede da lì con il fine-tuning, ed è il metro comune che rende confrontabili gli articoli. Ha un suo valore, ma non è ciò che stai davvero acquistando.",
+    "rfGeneralisation": "Ciò che stai acquistando è la generalizzazione: la capacità dell'architettura, dei pesi preaddestrati e della procedura di addestramento di funzionare ancora bene su dati completamente diversi da COCO. Per questo Roboflow ha creato RF100-VL. Un modello ottiene il proprio punteggio venendo addestrato su 100 dataset reali, uno alla volta. Alcuni contengono migliaia di oggetti per immagine, altri offrono solo poche decine di immagini da cui imparare. Pillole su un nastro trasportatore, radiografie del torace, tessere del mahjong, acari varroa, fumo degli incendi.",
+    "rfAdvice": "Consideralo uno dei vari elementi nella scelta di un modello, insieme a latenza, licenza e voglia di lottare con il codice di addestramento. Non è una classifica da leggere semplicemente dall'alto.",
+    "latencyTag": "Latenza",
+    "latencyTitle": "È abbastanza veloce sull'hardware che possiedi?",
+    "latencyBody": "L'accuratezza non cambia con l'hardware. La velocità varia di due ordini di grandezza tra una GPU da data center e un Raspberry Pi, quindi l'unico dato che conta è quello misurato sulla scheda che userai nel prodotto.",
+    "latencyCta": "Vedi la latenza su ogni scheda"
   },
   "RF100VL": {
-    "themedRings": "The seven RF100-VL domains as themed rings",
-    "datasetDomainCountLong": "100 real-world datasets, 7 domains",
-    "datasetDomainCount": "100 datasets · 7 domains",
-    "exploreDatasets": "Explore the 100 datasets",
-    "datasetDialog": "{name} dataset",
-    "closeDatasetPanel": "Close dataset panel",
-    "annotatedSampleAlt": "Annotated sample from the {name} dataset",
-    "annotatedSample": "annotated sample",
-    "inDomain": "in domain",
-    "fineTune": "fine-tune",
-    "samplePreviews": "Sample previews",
-    "placeholderCrops": "placeholder crops",
-    "explorerComing": "The full per-dataset image explorer ships with the final report.",
-    "moreFrom": "More from {domain}",
-    "openRoboflow": "Open on Roboflow Universe",
-    "benchmarkReport": "RF100-VL benchmark report",
-    "reportEyebrow": "LibreYOLO · Benchmark report",
-    "livingReport": "Living report · updates as the sweep progresses",
-    "openDataset": "Open the {name} dataset ({domain})",
-    "sampleAlt": "Sample from the {name} dataset",
-    "backToOverview": "Back to overview",
-    "interactionHint": "hover to preview · click a planet to open the dataset",
+    "themedRings": "I sette domini RF100-VL rappresentati come anelli tematici",
+    "datasetDomainCountLong": "100 dataset reali, 7 domini",
+    "datasetDomainCount": "100 dataset · 7 domini",
+    "exploreDatasets": "Esplora i 100 dataset",
+    "datasetDialog": "Dataset {name}",
+    "closeDatasetPanel": "Chiudi il pannello del dataset",
+    "annotatedSampleAlt": "Esempio annotato dal dataset {name}",
+    "annotatedSample": "esempio annotato",
+    "inDomain": "nel dominio",
+    "fineTune": "fai fine-tuning",
+    "samplePreviews": "Anteprime degli esempi",
+    "placeholderCrops": "ritagli segnaposto",
+    "explorerComing": "L'esploratore completo delle immagini per ogni dataset sarà disponibile con il report finale.",
+    "moreFrom": "Altro da {domain}",
+    "openRoboflow": "Apri in Roboflow Universe",
+    "benchmarkReport": "Report del benchmark RF100-VL",
+    "reportEyebrow": "LibreYOLO · Report del benchmark",
+    "livingReport": "Report in evoluzione · si aggiorna con l'avanzamento delle esecuzioni",
+    "openDataset": "Apri il dataset {name} ({domain})",
+    "sampleAlt": "Esempio dal dataset {name}",
+    "backToOverview": "Torna alla panoramica",
+    "interactionHint": "passa il mouse per l'anteprima · fai clic su un pianeta per aprire il dataset",
     "links": {
       "arxiv": "arXiv",
-      "code": "Code",
+      "code": "Codice",
       "site": "rf100-vl.org",
-      "datasets": "Datasets"
+      "datasets": "Dataset"
     },
-    "scoresHere": "How LibreYOLO scores here",
-    "scoreMethod": "mAP@50-95 on this dataset's own test split, after fine-tuning on it.",
-    "scoreDetails": "{images} test images, {classes, plural, one {# class} other {# classes}}.",
-    "meanScore": "mean {score}",
-    "strongest": "strongest",
-    "weakest": "weakest",
-    "sortedDatasets": "{count} datasets, sorted by score",
-    "benchmarkAria": "RF100-VL benchmark",
-    "viewsAria": "RF100-VL views",
+    "scoresHere": "I risultati di LibreYOLO in questo caso",
+    "scoreMethod": "mAP@50-95 sullo split di test del dataset, dopo il fine-tuning sullo stesso.",
+    "scoreDetails": "{images} immagini di test, {classes, plural, one {# classe} other {# classi}}.",
+    "meanScore": "media {score}",
+    "strongest": "migliore",
+    "weakest": "peggiore",
+    "sortedDatasets": "{count} dataset, ordinati per punteggio",
+    "benchmarkAria": "Benchmark RF100-VL",
+    "viewsAria": "Viste RF100-VL",
     "tabs": {
-      "benchmark": "The benchmark",
-      "exploreDatasets": "Explore 100 datasets",
-      "results": "Results"
+      "benchmark": "Il benchmark",
+      "exploreDatasets": "Esplora 100 dataset",
+      "results": "Risultati"
     },
-    "modelMean": "{model}, mean of {count} datasets",
-    "modelMean100": "{model}, mean of 100",
-    "onThisDataset": "on this dataset",
+    "modelMean": "{model}, media di {count} dataset",
+    "modelMean100": "{model}, media su 100",
+    "onThisDataset": "su questo dataset",
     "bands": {
       "band75": "75+",
-      "band60": "60 to 75",
-      "band45": "45 to 60",
-      "band30": "30 to 45",
-      "bandUnder30": "under 30"
+      "band60": "da 60 a 75",
+      "band45": "da 45 a 60",
+      "band30": "da 30 a 45",
+      "bandUnder30": "meno di 30"
     },
-    "strongestDatasets": "Strongest datasets",
-    "weakestDatasets": "Weakest datasets"
+    "strongestDatasets": "Dataset migliori",
+    "weakestDatasets": "Dataset peggiori"
   },
   "LibreVLM": {
-    "metaTitle": "LibreVLM | Open-Vocabulary Detection",
-    "metaDescription": "LibreVLM wraps modern vision language models (Qwen3-VL, Florence-2, LFM2-VL, InternVL3, SmolVLM2, Kosmos-2) and exposes them as open-vocabulary object detectors behind the familiar LibreYOLO Results API.",
-    "keywords": "LibreVLM|open vocabulary detection|vision language model|Qwen3-VL|Florence-2|LFM2-VL|InternVL3|SmolVLM2|Kosmos-2|zero-shot detection",
+    "metaTitle": "LibreVLM | Rilevamento a vocabolario aperto",
+    "metaDescription": "LibreVLM racchiude moderni modelli visione-linguaggio (Qwen3-VL, Florence-2, LFM2-VL, InternVL3, SmolVLM2, Kosmos-2) e li espone come rilevatori di oggetti a vocabolario aperto dietro la nota API Results di LibreYOLO.",
+    "keywords": "LibreVLM|rilevamento a vocabolario aperto|vision language model|Qwen3-VL|Florence-2|LFM2-VL|InternVL3|SmolVLM2|Kosmos-2|rilevamento zero-shot",
     "sections": {
-      "introduction": "Introduction",
-      "installation": "Installation",
-      "quickstart": "Quickstart",
-      "models": "Supported Models",
-      "vocabulary": "Setting the Vocabulary",
-      "prediction": "Prediction",
-      "examples": "Examples",
-      "chat": "Raw Chat",
-      "backends": "How Backends Differ",
-      "limitations": "Limitations"
+      "introduction": "Introduzione",
+      "installation": "Installazione",
+      "quickstart": "Avvio rapido",
+      "models": "Modelli supportati",
+      "vocabulary": "Impostare il vocabolario",
+      "prediction": "Predizione",
+      "examples": "Esempi",
+      "chat": "Chat diretta",
+      "backends": "Differenze tra i backend",
+      "limitations": "Limitazioni"
     },
     "related": {
-      "coreDocs": "Core documentation",
-      "experimentalTasks": "Experimental tasks",
-      "modelZoo": "Model Zoo"
+      "coreDocs": "Documentazione principale",
+      "experimentalTasks": "Task sperimentali",
+      "modelZoo": "Zoo di modelli"
     },
     "eyebrow": "LibreVLM",
-    "copyTitle": "LibreVLM Documentation",
-    "badge": "Experimental tier",
+    "copyTitle": "Documentazione LibreVLM",
+    "badge": "Livello sperimentale",
     "heroTitle": "Libre",
     "heroAccent": "VLM",
-    "heroLead": "Point a vision language model at an image, hand it a list of words, and get back boxes. LibreVLM turns Qwen3-VL, Florence-2 and friends into open-vocabulary object detectors that speak the exact same Results API as every other LibreYOLO model.",
+    "heroLead": "Punta un modello visione-linguaggio su un'immagine, forniscigli un elenco di parole e ottieni dei box. LibreVLM trasforma Qwen3-VL, Florence-2 e modelli simili in rilevatori di oggetti a vocabolario aperto che usano esattamente la stessa API Results di ogni altro modello LibreYOLO.",
     "introduction": {
-      "body": "A classic detector ships with a fixed list of classes baked into its head. LibreVLM throws that constraint away. It wraps modern instruction-tuned vision language models, prompts them to emit bounding boxes, parses the generated text, and returns the same <code>Results</code> object you already use for YOLO9 and RF-DETR. The class list is just a list of words you supply at runtime, so adding a new category costs nothing and works zero-shot.",
+      "body": "Un rilevatore classico include nella propria testa un elenco fisso di classi. LibreVLM elimina questo vincolo. Racchiude moderni modelli visione-linguaggio ottimizzati per seguire istruzioni, chiede loro di generare bounding box, analizza il testo prodotto e restituisce lo stesso oggetto <code>Results</code> che usi già per YOLO9 e RF-DETR. L'elenco delle classi è semplicemente un elenco di parole fornito durante l'esecuzione, quindi aggiungere una nuova categoria non costa nulla e funziona in modalità zero-shot.",
       "features": {
-        "openVocabulary": "<strong>Open vocabulary.</strong> Detect <code>\"pink car\"</code>, <code>\"license plate\"</code>, or <code>\"the small island\"</code> without ever training a head for them.",
-        "contract": "<strong>One factory, one contract.</strong> <code>LibreVLM(...)</code> returns the standard <code>Results</code> with <code>boxes.xyxy</code>, <code>boxes.cls</code>, <code>boxes.conf</code>, plus <code>.plot()</code> and <code>.save()</code>.",
-        "backends": "<strong>Swappable backends.</strong> Six model families behind one alias string, from a 230M Florence-2 to an 8B Qwen3-VL.",
-        "chat": "<strong>A raw escape hatch.</strong> <code>chat()</code> gives you free-form image question answering when you need more than boxes."
+        "openVocabulary": "<strong>Vocabolario aperto.</strong> Rileva <code>\"pink car\"</code>, <code>\"license plate\"</code> o <code>\"the small island\"</code> senza addestrare una testa specifica.",
+        "contract": "<strong>Una factory, un contratto.</strong> <code>LibreVLM(...)</code> restituisce l'oggetto <code>Results</code> standard con <code>boxes.xyxy</code>, <code>boxes.cls</code>, <code>boxes.conf</code>, oltre a <code>.plot()</code> e <code>.save()</code>.",
+        "backends": "<strong>Backend intercambiabili.</strong> Sei famiglie di modelli dietro un'unica stringa alias, da Florence-2 con 230M parametri a Qwen3-VL con 8B.",
+        "chat": "<strong>Una via d'uscita diretta.</strong> <code>chat()</code> permette di fare domande libere sulle immagini quando ti serve qualcosa di più dei box."
       },
-      "tierTitle": "Why a separate tier (and a separate page)",
-      "tierBody": "LibreVLM is deliberately kept out of the closed-vocabulary <code>LibreYOLO(...)</code> factory and its <code>.pt</code> registry. These models are prompt-driven, open vocabulary, and report synthetic confidence, so they honor a different contract. Treating them as their own tier keeps the core detection docs clean and honest about what is being measured.",
-      "devTitle": "On the dev branch",
-      "devBody": "LibreVLM currently lives on the <code>dev</code> branch and is targeted for the v1.3 release; it is not part of v1.2.0. It is a Python-only inference tier: there is no training, validation, export, or CLI path yet, and confidence scores are placeholders. Read the <link>Limitations</link> section before you build on top of it."
+      "tierTitle": "Perché un livello separato e una pagina separata",
+      "tierBody": "LibreVLM viene deliberatamente tenuto fuori dalla factory a vocabolario chiuso <code>LibreYOLO(...)</code> e dal suo registro <code>.pt</code>. Questi modelli sono guidati da prompt, usano un vocabolario aperto e riportano una confidenza sintetica, quindi rispettano un contratto diverso. Trattarli come un livello indipendente mantiene chiara la documentazione principale sul rilevamento e descrive con trasparenza ciò che viene misurato.",
+      "devTitle": "Nel branch dev",
+      "devBody": "LibreVLM si trova attualmente nel branch <code>dev</code> ed è previsto per la release v1.3; non fa parte della v1.2.0. È un livello di inferenza disponibile solo tramite Python: non esistono ancora percorsi per addestramento, validazione, esportazione o CLI e i punteggi di confidenza sono segnaposto. Leggi la sezione <link>Limitazioni</link> prima di costruirci sopra."
     },
     "installation": {
-      "body": "LibreVLM lives behind the optional <code>vlm</code> extra. It pulls in a recent <code>transformers</code> and the helpers a couple of processors need. Without the extra, importing a VLM family raises an <code>ImportError</code> that points you here.",
-      "weights": "Weights are downloaded from the Hugging Face Hub on first use into a local <code>weights/</code> folder. A few families ship under non-OSI licenses and log a one-time notice before downloading. A GPU is recommended for the larger backends, but every model also runs on CPU with <code>device=\"cpu\"</code>."
+      "body": "LibreVLM è disponibile tramite il pacchetto extra opzionale <code>vlm</code>. Installa una versione recente di <code>transformers</code> e gli strumenti ausiliari richiesti da alcuni processori. Senza il pacchetto extra, l'importazione di una famiglia VLM genera un <code>ImportError</code> che rimanda a questa pagina.",
+      "weights": "I pesi vengono scaricati da Hugging Face Hub al primo utilizzo in una cartella locale <code>weights/</code>. Alcune famiglie vengono distribuite con licenze non OSI e mostrano un avviso una sola volta prima del download. Per i backend più grandi è consigliata una GPU, ma ogni modello funziona anche su CPU con <code>device=\"cpu\"</code>."
     },
     "quickstart": {
-      "body": "Construct a model, declare the words you care about, and predict. The default backend is Qwen3-VL-4B, the strongest detector in the tier and Apache-2.0 licensed.",
-      "after": "That is the whole loop. Everything downstream of <code>predict()</code> behaves like a normal detector, so existing visualization, cropping, and tracking code keeps working."
+      "body": "Crea un modello, dichiara le parole che ti interessano ed esegui la predizione. Il backend predefinito è Qwen3-VL-4B, il rilevatore più potente del livello, con licenza Apache-2.0.",
+      "after": "Questo è l'intero ciclo. Tutto ciò che segue <code>predict()</code> si comporta come un normale rilevatore, quindi il codice esistente per visualizzazione, ritaglio e tracking continua a funzionare."
     },
     "models": {
-      "body": "Pick a backend with the alias you pass to <code>LibreVLM(...)</code>. A bare family name resolves to its default size. The default backend overall is <code>qwen3-vl-4b</code>. In practice the strongest detectors are <strong>Qwen3-VL</strong>, <strong>LFM2-VL</strong>, and <strong>Florence-2</strong>.",
+      "body": "Scegli un backend tramite l'alias che passi a <code>LibreVLM(...)</code>. Il solo nome della famiglia seleziona la dimensione predefinita. Il backend predefinito complessivo è <code>qwen3-vl-4b</code>. In pratica, i rilevatori più potenti sono <strong>Qwen3-VL</strong>, <strong>LFM2-VL</strong> e <strong>Florence-2</strong>.",
       "table": {
-        "family": "Family",
+        "family": "Famiglia",
         "alias": "Alias",
-        "sizes": "Sizes (params)",
-        "license": "License",
-        "notes": "Notes",
-        "qwenNote": "Default and strongest. Recommended starting point.",
-        "lfmNote": "Edge sized, surprisingly strong small detector. Notice gated.",
-        "internNote": "Good grounding at 8B; small sizes are weak. Notice gated.",
-        "florenceNote": "Purpose-built grounding model. Tight boxes, no <code>chat()</code>.",
-        "smolNote": "Tiny and fast; weaker detector. Good for quick trials.",
-        "kosmosNote": "2023 grounder. Coarser boxes, no <code>chat()</code>."
+        "sizes": "Dimensioni (parametri)",
+        "license": "Licenza",
+        "notes": "Note",
+        "qwenNote": "Predefinito e più potente. Punto di partenza consigliato.",
+        "lfmNote": "Dimensioni adatte all'edge, piccolo rilevatore sorprendentemente potente. Richiede la conferma di un avviso.",
+        "internNote": "Buon grounding nella versione 8B; le dimensioni piccole sono deboli. Richiede la conferma di un avviso.",
+        "florenceNote": "Modello creato appositamente per il grounding. Box precisi, senza <code>chat()</code>.",
+        "smolNote": "Piccolo e veloce; rilevatore meno potente. Adatto per prove rapide.",
+        "kosmosNote": "Modello di grounding del 2023. Box più approssimativi, senza <code>chat()</code>."
       },
-      "choosing": "Choosing a backend",
+      "choosing": "Scegliere un backend",
       "choices": {
-        "quality": "<strong>Best quality:</strong> <code>qwen3-vl-8b</code> or <code>qwen3-vl-4b</code> (the default).",
-        "tight": "<strong>Tight boxes, small footprint:</strong> <code>florence-2-large</code>.",
-        "edge": "<strong>Edge / CPU:</strong> <code>lfm2-vl-450m</code> or <code>smolvlm2-500m</code>.",
-        "license": "<strong>Fully permissive license:</strong> any Qwen3-VL, SmolVLM2, Florence-2 or Kosmos-2 size."
+        "quality": "<strong>Qualità migliore:</strong> <code>qwen3-vl-8b</code> o <code>qwen3-vl-4b</code> (il predefinito).",
+        "tight": "<strong>Box precisi e ingombro ridotto:</strong> <code>florence-2-large</code>.",
+        "edge": "<strong>Edge / CPU:</strong> <code>lfm2-vl-450m</code> o <code>smolvlm2-500m</code>.",
+        "license": "<strong>Licenza completamente permissiva:</strong> qualsiasi dimensione di Qwen3-VL, SmolVLM2, Florence-2 o Kosmos-2."
       },
-      "licensingTitle": "Licensing",
-      "licensingBody": "Qwen3-VL and SmolVLM2 are Apache-2.0; Florence-2 and Kosmos-2 are MIT. LFM2-VL and InternVL3 carry non-OSI licenses and emit a one-time notice before their first download, so you can make an informed choice for commercial use."
+      "licensingTitle": "Licenze",
+      "licensingBody": "Qwen3-VL e SmolVLM2 hanno licenza Apache-2.0; Florence-2 e Kosmos-2 hanno licenza MIT. LFM2-VL e InternVL3 usano licenze non OSI e mostrano un avviso una sola volta prima del primo download, così puoi fare una scelta informata per l'uso commerciale."
     },
     "vocabulary": {
-      "body": "The vocabulary is the heart of open-vocabulary detection. Call <code>set_classes()</code> with a list of label strings. It is sticky: it persists across every later <code>predict()</code> and <code>track()</code> call until you set it again. It returns <code>self</code>, so it chains.",
-      "rules": "Labels can be any phrase. They must be unique case-insensitively, and you must pass a list, not a bare string. If you never call <code>set_classes()</code>, the model falls back to the COCO-80 vocabulary so a bare <code>predict()</code> still does something sensible."
+      "body": "Il vocabolario è il cuore del rilevamento a vocabolario aperto. Chiama <code>set_classes()</code> con un elenco di stringhe di etichette. L'impostazione è persistente: rimane valida per ogni successiva chiamata a <code>predict()</code> e <code>track()</code> finché non la modifichi. Il metodo restituisce <code>self</code>, quindi può essere concatenato.",
+      "rules": "Le etichette possono essere qualsiasi frase. Devono essere univoche senza distinzione tra maiuscole e minuscole e devi passare un elenco, non una singola stringa. Se non chiami mai <code>set_classes()</code>, il modello usa come fallback il vocabolario COCO-80, così anche un semplice <code>predict()</code> produce un risultato sensato."
     },
     "prediction": {
-      "body": "<code>predict()</code> (and the equivalent <code>model(...)</code> call) accepts the same source types as any LibreYOLO detector: a path, a PIL image, a numpy array, a URL, a folder, or a video. <code>stream=True</code> and <code>track()</code> work too.",
-      "returnShape": "Return shape",
-      "returnBody": "You get back the standard <code>Results</code> object, identical to a closed-vocabulary detector:",
+      "body": "<code>predict()</code> e la chiamata equivalente <code>model(...)</code> accettano gli stessi tipi di sorgente di qualsiasi rilevatore LibreYOLO: un percorso, un'immagine PIL, un array numpy, un URL, una cartella o un video. Funzionano anche <code>stream=True</code> e <code>track()</code>.",
+      "returnShape": "Struttura restituita",
+      "returnBody": "Ottieni l'oggetto <code>Results</code> standard, identico a quello di un rilevatore a vocabolario chiuso:",
       "table": {
-        "field": "Field",
-        "shapeType": "Shape / type",
-        "meaning": "Meaning",
-        "xyxy": "Pixel boxes [x1, y1, x2, y2], scaled to the original image.",
-        "cls": "Class ids indexing into your set_classes() vocabulary.",
-        "conf": "Synthetic confidence: 1.0 for every box (see Limitations).",
-        "helpers": "The usual drawing and saving helpers."
+        "field": "Campo",
+        "shapeType": "Forma / tipo",
+        "meaning": "Significato",
+        "xyxy": "Box in pixel [x1, y1, x2, y2], ridimensionati in base all'immagine originale.",
+        "cls": "ID delle classi che indicizzano il vocabolario di set_classes().",
+        "conf": "Confidenza sintetica: 1.0 per ogni box (vedi Limitazioni).",
+        "helpers": "I consueti strumenti ausiliari per disegnare e salvare."
       },
-      "parsing": "Under the hood, LibreVLM tolerantly parses the model output (handling markdown fences, stray prose, duplicated boxes, and truncated arrays), maps free-text labels back to your class ids, and drops any label that is not in your vocabulary. That last step is what makes a free-form generator behave like a closed-set detector."
+      "parsing": "Dietro le quinte, LibreVLM analizza in modo tollerante l'output del modello, gestendo delimitatori markdown, testo estraneo, box duplicati e array troncati; associa le etichette in testo libero agli ID delle classi e scarta ogni etichetta che non appartiene al vocabolario. Quest'ultimo passaggio fa sì che un generatore a forma libera si comporti come un rilevatore a insieme chiuso."
     },
     "examples": {
-      "coloredObject": "Detect a specific colored object",
-      "florence": "Tight boxes with Florence-2",
-      "filter": "Filter to a single class on the fly",
-      "cpu": "Run on CPU with a built-in sample image",
-      "batches": "Batches, folders, and video"
+      "coloredObject": "Rileva un oggetto di un colore specifico",
+      "florence": "Box precisi con Florence-2",
+      "filter": "Filtra al volo una singola classe",
+      "cpu": "Esegui su CPU con un'immagine di esempio integrata",
+      "batches": "Batch, cartelle e video"
     },
     "chat": {
-      "body": "Sometimes you want the model, not the detector. The chat-template families expose <code>chat()</code>, which takes an image and a free-form prompt and returns the decoded text verbatim. Use it for counting, captioning, or quick visual questions.",
-      "callout": "<code>chat()</code> is available on the chat-template families (Qwen3-VL, LFM2-VL, SmolVLM2, InternVL3). Florence-2 and Kosmos-2 are task-token grounders and raise <code>NotImplementedError</code>; use <code>predict()</code> with them."
+      "body": "A volte ti serve il modello, non il rilevatore. Le famiglie con template di chat espongono <code>chat()</code>, che riceve un'immagine e un prompt a forma libera e restituisce il testo decodificato senza modifiche. Usalo per il conteggio, la generazione di didascalie o domande visive rapide.",
+      "callout": "<code>chat()</code> è disponibile nelle famiglie con template di chat (Qwen3-VL, LFM2-VL, SmolVLM2, InternVL3). Florence-2 e Kosmos-2 sono modelli di grounding basati su token di task e generano <code>NotImplementedError</code>; con questi modelli usa <code>predict()</code>."
     },
     "backends": {
-      "body": "Every family returns the same <code>Results</code>, but they reach it differently. You rarely need to care, yet it helps to know why some backends behave the way they do. The chat families are prompted for a JSON array of boxes; the grounders use dedicated task tokens.",
+      "body": "Ogni famiglia restituisce lo stesso oggetto <code>Results</code>, ma lo ottiene in modo diverso. Raramente è necessario occuparsene, ma aiuta a capire perché alcuni backend si comportano in un determinato modo. Alle famiglie di chat viene richiesto un array JSON di box; i modelli di grounding usano token di task dedicati.",
       "table": {
-        "family": "Family",
-        "prompting": "Prompting",
-        "coordinates": "Coordinate space",
-        "jsonPrompt": "JSON box prompt",
-        "rescaled1000": "0 to 1000, rescaled",
-        "normalized01": "Normalized 0 to 1",
-        "taskToken": "Task token",
-        "nativePixels": "Native pixels",
-        "groundingPrompt": "Grounding prompt",
-        "normalizedRescaled": "Normalized, rescaled",
-        "yes": "Yes",
+        "family": "Famiglia",
+        "prompting": "Prompt",
+        "coordinates": "Spazio delle coordinate",
+        "jsonPrompt": "Prompt JSON per i box",
+        "rescaled1000": "Da 0 a 1000, ridimensionato",
+        "normalized01": "Normalizzato da 0 a 1",
+        "taskToken": "Token di task",
+        "nativePixels": "Pixel nativi",
+        "groundingPrompt": "Prompt di grounding",
+        "normalizedRescaled": "Normalizzato e ridimensionato",
+        "yes": "Sì",
         "no": "No"
       },
-      "options": "For the chat families you can override the detection prompt with the <code>prompt=</code> constructor argument, and cap generation length with <code>max_new_tokens=</code>. Device and dtype are resolved automatically: bf16 or fp16 on CUDA, fp32 on CPU."
+      "options": "Per le famiglie di chat puoi sostituire il prompt di rilevamento con l'argomento <code>prompt=</code> del costruttore e limitare la lunghezza della generazione con <code>max_new_tokens=</code>. Il dispositivo e il dtype vengono determinati automaticamente: bf16 o fp16 su CUDA, fp32 su CPU."
     },
     "limitations": {
-      "body": "LibreVLM is powerful but young. Knowing the boundaries up front saves surprises later.",
+      "body": "LibreVLM è potente ma ancora giovane. Conoscerne subito i limiti evita sorprese in seguito.",
       "items": {
-        "confidence": "<strong>Synthetic confidence.</strong> Every box is scored 1.0. The <code>conf=</code> filter therefore behaves as all-or-nothing rather than a real threshold.",
-        "validation": "<strong>No mAP / validation.</strong> <code>val()</code> raises, because synthetic scores would make COCO mAP misleading.",
-        "training": "<strong>No training or export.</strong> <code>train()</code> and <code>export()</code> raise. Fine-tune the VLM upstream and load the resulting weights instead.",
-        "tracking": "<strong>Tracking is degraded.</strong> <code>track()</code> runs, but uniform scores make the tracker's low-confidence recovery stage inert.",
-        "sequential": "<strong>One image at a time.</strong> Generation is sequential in v1, so larger <code>batch=</code> values give no speedup.",
-        "python": "<strong>Python API only.</strong> The <code>libreyolo</code> CLI does not resolve VLM aliases yet."
+        "confidence": "<strong>Confidenza sintetica.</strong> Ogni box riceve un punteggio di 1.0. Il filtro <code>conf=</code> si comporta quindi in modo tutto o niente, anziché come una vera soglia.",
+        "validation": "<strong>Niente mAP o validazione.</strong> <code>val()</code> genera un errore perché i punteggi sintetici renderebbero fuorviante la mAP COCO.",
+        "training": "<strong>Niente addestramento o esportazione.</strong> <code>train()</code> ed <code>export()</code> generano un errore. Esegui invece il fine-tuning del VLM upstream e carica i pesi risultanti.",
+        "tracking": "<strong>Tracking limitato.</strong> <code>track()</code> funziona, ma i punteggi uniformi rendono inattiva la fase di recupero a bassa confidenza del tracker.",
+        "sequential": "<strong>Un'immagine alla volta.</strong> Nella v1 la generazione è sequenziale, quindi valori maggiori di <code>batch=</code> non aumentano la velocità.",
+        "python": "<strong>Solo API Python.</strong> La CLI <code>libreyolo</code> non riconosce ancora gli alias VLM."
       },
-      "shinesTitle": "Where it shines",
-      "shinesBody": "Use LibreVLM when the class set is open ended, changes often, or is hard to label up front: rapid prototyping, long-tail or rare categories, and \"find the thing I describe in words\" workflows. When you need calibrated confidence, throughput, or a deployable artifact, train a closed-vocabulary YOLO9 or RF-DETR from the <link>core docs</link>.",
-      "inferenceOnly": "Inference only",
-      "devTarget": "dev branch / targeting v1.3",
-      "source": "Source on <link>GitHub</link>"
+      "shinesTitle": "Dove dà il meglio",
+      "shinesBody": "Usa LibreVLM quando l'insieme di classi è aperto, cambia spesso o è difficile da etichettare in anticipo: prototipazione rapida, categorie rare o a coda lunga e flussi di lavoro del tipo \"trova la cosa che descrivo a parole\". Quando ti servono confidenza calibrata, throughput o un artefatto pronto per il deployment, addestra un modello YOLO9 o RF-DETR a vocabolario chiuso seguendo la <link>documentazione principale</link>.",
+      "inferenceOnly": "Solo inferenza",
+      "devTarget": "branch dev / previsto per la v1.3",
+      "source": "Sorgente su <link>GitHub</link>"
     }
   },
   "Experimental": {
-    "metaTitle": "Experimental Tasks | Classification, OBB, Pose, LoRA",
-    "metaDescription": "Experimental LibreYOLO capabilities: image classification and oriented bounding boxes (OBB) for YOLO9 and RF-DETR, keypoint and pose estimation, and LoRA/DoRA fine-tuning for RF-DETR.",
-    "keywords": "LibreYOLO experimental|image classification|oriented bounding boxes|OBB|pose estimation|keypoints|LoRA|DoRA|RF-DETR fine-tuning|YOLO9",
+    "metaTitle": "Task sperimentali | Classificazione, OBB, posa, LoRA",
+    "metaDescription": "Funzionalità sperimentali di LibreYOLO: classificazione delle immagini e box orientati (OBB) per YOLO9 e RF-DETR, stima di keypoint e posa e fine-tuning LoRA/DoRA per RF-DETR.",
+    "keywords": "LibreYOLO sperimentale|classificazione immagini|box orientati|OBB|stima della posa|keypoint|LoRA|DoRA|fine-tuning RF-DETR|YOLO9",
     "sections": {
-      "overview": "Overview",
-      "taskSelection": "Selecting a Task",
-      "classification": "Classification",
-      "obb": "Oriented Boxes (OBB)",
-      "pose": "Keypoints / Pose",
-      "smallObject": "Small-Object Detection",
+      "overview": "Panoramica",
+      "taskSelection": "Selezionare un task",
+      "classification": "Classificazione",
+      "obb": "Box orientati (OBB)",
+      "pose": "Keypoint / Posa",
+      "smallObject": "Rilevamento di piccoli oggetti",
       "lora": "LoRA / DoRA",
-      "status": "Stability"
+      "status": "Stabilità"
     },
     "related": {
-      "coreDocs": "Core documentation",
+      "coreDocs": "Documentazione principale",
       "librevlm": "LibreVLM",
-      "modelZoo": "Model Zoo"
+      "modelZoo": "Zoo di modelli"
     },
-    "eyebrow": "Experimental",
-    "copyTitle": "LibreYOLO Experimental Tasks",
-    "badge": "Experimental tasks",
-    "heroTitle": "What's ",
-    "heroAccent": "next",
-    "heroLead": "The detection and segmentation paths are the validated core. This page documents the new task heads and training tricks we are actively building on top of them: classification, oriented boxes, pose, and parameter-efficient fine-tuning.",
+    "eyebrow": "Sperimentale",
+    "copyTitle": "Task sperimentali di LibreYOLO",
+    "badge": "Task sperimentali",
+    "heroTitle": "Le prossime ",
+    "heroAccent": "novità",
+    "heroLead": "I percorsi di rilevamento e segmentazione costituiscono il nucleo convalidato. Questa pagina documenta le nuove teste dei task e le tecniche di addestramento che stiamo sviluppando su questa base: classificazione, box orientati, posa e fine-tuning efficiente in termini di parametri.",
     "overview": {
-      "body": "LibreYOLO is a multi-task framework: the same model family can wear different heads. Alongside the validated detect and segment paths, several new tasks are landing for the two flagship families, YOLO9 and RF-DETR. They all plug into the same <code>LibreYOLO(...)</code> factory and the same <code>Results</code> container, so once you know the core API these are small additions.",
+      "body": "LibreYOLO è un framework multi-task: la stessa famiglia di modelli può usare teste diverse. Accanto ai percorsi detect e segment convalidati, stanno arrivando diversi nuovi task per le due famiglie di punta, YOLO9 e RF-DETR. Si collegano tutti alla stessa factory <code>LibreYOLO(...)</code> e allo stesso contenitore <code>Results</code>, quindi una volta appresa l'API principale si tratta di piccole aggiunte.",
       "features": {
-        "classification": "<strong>Classification</strong> for YOLO9 and RF-DETR. Whole-image labels with top-1 / top-5 probabilities.",
-        "obb": "<strong>Oriented bounding boxes (OBB)</strong> for YOLO9 and RF-DETR. Rotated boxes for aerial and document imagery.",
-        "pose": "<strong>Keypoints / pose</strong> for YOLO9 and RF-DETR. COCO-17 person keypoints.",
-        "smallObject": "<strong>Small-object detection</strong> with YOLO9-P2, a YOLOv9 variant with a stride-4 scale for the 4-16 px objects of aerial and drone imagery, including a VisDrone research-preview checkpoint.",
-        "lora": "<strong>LoRA / DoRA</strong> fine-tuning for RF-DETR. Adapt the transformer backbone with a fraction of the memory."
+        "classification": "<strong>Classificazione</strong> per YOLO9 e RF-DETR. Etichette per l'intera immagine con probabilità top-1 / top-5.",
+        "obb": "<strong>Box orientati (OBB)</strong> per YOLO9 e RF-DETR. Box ruotati per immagini aeree e documenti.",
+        "pose": "<strong>Keypoint / posa</strong> per YOLO9 e RF-DETR. Keypoint COCO-17 delle persone.",
+        "smallObject": "<strong>Rilevamento di piccoli oggetti</strong> con YOLO9-P2, una variante di YOLOv9 con una scala stride 4 per gli oggetti da 4-16 px nelle immagini aeree e dei droni, incluso un checkpoint VisDrone in anteprima di ricerca.",
+        "lora": "Fine-tuning <strong>LoRA / DoRA</strong> per RF-DETR. Adatta il backbone transformer usando una frazione della memoria."
       },
-      "calloutTitle": "Read this first",
-      "calloutBody": "Everything on this page is experimental and some of it is still in flight on feature branches. APIs, defaults, and label formats can change before they are promoted into the validated core. The <link>Stability</link> section tracks exactly where each feature stands."
+      "calloutTitle": "Leggi prima questa sezione",
+      "calloutBody": "Tutto ciò che trovi in questa pagina è sperimentale e alcune parti sono ancora in lavorazione su branch di funzionalità. Le API, i valori predefiniti e i formati delle etichette possono cambiare prima di essere promossi nel nucleo convalidato. La sezione <link>Stabilità</link> indica esattamente lo stato di ogni funzionalità."
     },
     "taskSelection": {
-      "body": "Every family defaults to detection. You opt into another task in one of three ways, resolved in this order of precedence:",
+      "body": "Ogni famiglia usa il rilevamento per impostazione predefinita. Puoi scegliere un altro task in uno dei tre modi seguenti, risolti in questo ordine di precedenza:",
       "table": {
-        "priority": "Priority",
-        "mechanism": "Mechanism",
-        "example": "Example",
-        "explicit": "Explicit argument",
-        "metadata": "Checkpoint metadata",
-        "recorded": "task recorded inside a trained .pt",
-        "suffix": "Filename suffix",
-        "default": "Family default"
+        "priority": "Priorità",
+        "mechanism": "Meccanismo",
+        "example": "Esempio",
+        "explicit": "Argomento esplicito",
+        "metadata": "Metadati del checkpoint",
+        "recorded": "task registrato in un file .pt addestrato",
+        "suffix": "Suffisso del nome file",
+        "default": "Valore predefinito della famiglia"
       },
-      "after": "Because the public <code>LibreYOLO(...)</code> factory expects a real weights file, the cleanest way to start one of these tasks from scratch is to construct the family class directly and pass <code>task=</code>. Trained checkpoints load back through the unified factory and auto-detect their task."
+      "after": "Poiché la factory pubblica <code>LibreYOLO(...)</code> richiede un file di pesi reale, il modo più semplice per avviare uno di questi task da zero è creare direttamente la classe della famiglia e passare <code>task=</code>. I checkpoint addestrati vengono ricaricati tramite la factory unificata, che ne rileva automaticamente il task."
     },
     "commonTable": {
-      "field": "Field",
-      "type": "Type",
-      "shape": "Shape",
-      "meaning": "Meaning"
+      "field": "Campo",
+      "type": "Tipo",
+      "shape": "Forma",
+      "meaning": "Significato"
     },
     "classification": {
-      "title": "Image Classification",
-      "body": "Classification gives a single label for a whole image. YOLO9 keeps its backbone and bolts on a lightweight classification head; RF-DETR reuses its DINOv2 encoder and adds a pooled linear head. Both run at 224 by 224.",
-      "inferenceTitle": "Inference and the Probs result",
-      "inferenceBody": "Prediction returns a <code>Results</code> object whose <code>probs</code> field carries a softmax over the classes.",
+      "title": "Classificazione delle immagini",
+      "body": "La classificazione assegna una singola etichetta a un'intera immagine. YOLO9 mantiene il proprio backbone e aggiunge una testa di classificazione leggera; RF-DETR riutilizza il proprio encoder DINOv2 e aggiunge una testa lineare con pooling. Entrambi operano a 224 per 224.",
+      "inferenceTitle": "Inferenza e risultato Probs",
+      "inferenceBody": "La predizione restituisce un oggetto <code>Results</code> il cui campo <code>probs</code> contiene una softmax sulle classi.",
       "table": {
-        "top1": "Argmax class id.",
-        "top5": "Top-5 class ids, descending.",
-        "top1conf": "Probability of the top-1 class.",
-        "top5conf": "Probabilities of the top-5 classes.",
-        "data": "Full softmax vector."
+        "top1": "ID della classe argmax.",
+        "top5": "ID delle classi top-5, in ordine decrescente.",
+        "top1conf": "Probabilità della classe top-1.",
+        "top5conf": "Probabilità delle classi top-5.",
+        "data": "Vettore softmax completo."
       },
-      "trainingTitle": "Dataset format and training",
-      "trainingBody": "Classification uses an <strong>ImageFolder</strong> layout, not a YAML. Class names are the sorted subfolder names, pinned to the train split.",
-      "dataBody": "The <code>data=</code> argument accepts a folder, a <code>.zip</code> URL, or a known auto-download name (<code>imagenette160</code> and <code>imagenet10</code>). The head is rebuilt to match the dataset's class count automatically.",
-      "referenceTitle": "Reference runs",
-      "referenceBody": "Quick sanity checks from development: YOLO9-t reached top-1 0.79 / top-5 0.975 on imagenette160 (10 epochs), and RF-DETR-n reached top-1 0.69 / top-5 0.96 (6 epochs). RF-DETR benefits from internet access on first run to fetch its DINOv2 backbone; offline it falls back to random init."
+      "trainingTitle": "Formato del dataset e addestramento",
+      "trainingBody": "La classificazione usa una struttura <strong>ImageFolder</strong>, non un file YAML. I nomi delle classi corrispondono ai nomi ordinati delle sottocartelle, fissati in base allo split di addestramento.",
+      "dataBody": "L'argomento <code>data=</code> accetta una cartella, l'URL di un file <code>.zip</code> o il nome di un download automatico noto (<code>imagenette160</code> e <code>imagenet10</code>). La testa viene ricostruita automaticamente in base al numero di classi del dataset.",
+      "referenceTitle": "Esecuzioni di riferimento",
+      "referenceBody": "Rapidi controlli di coerenza durante lo sviluppo: YOLO9-t ha raggiunto top-1 0,79 / top-5 0,975 su imagenette160 (10 epoche), mentre RF-DETR-n ha raggiunto top-1 0,69 / top-5 0,96 (6 epoche). RF-DETR trae vantaggio dall'accesso a Internet alla prima esecuzione per scaricare il backbone DINOv2; offline usa come fallback un'inizializzazione casuale."
     },
     "obb": {
-      "title": "Oriented Bounding Boxes (OBB)",
-      "body": "Oriented boxes carry a rotation angle, which is what aerial imagery, documents, and densely packed scenes need. YOLO9 adds an angle branch to its detect head; RF-DETR adds a learnable angle embedding to its decoder.",
-      "inferenceTitle": "Inference and the OBB result",
-      "inferenceBody": "Results expose an <code>obb</code> field. Angles are in <strong>radians</strong>.",
+      "title": "Box orientati (OBB)",
+      "body": "I box orientati includono un angolo di rotazione, necessario per immagini aeree, documenti e scene con elementi molto ravvicinati. YOLO9 aggiunge un ramo per l'angolo alla propria testa detect; RF-DETR aggiunge al decoder un embedding dell'angolo apprendibile.",
+      "inferenceTitle": "Inferenza e risultato OBB",
+      "inferenceBody": "Results espone un campo <code>obb</code>. Gli angoli sono espressi in <strong>radianti</strong>.",
       "table": {
-        "xywhr": "[cx, cy, w, h, angle], angle in radians.",
-        "corners": "Four corner points per box.",
-        "conf": "Confidence per box.",
-        "cls": "Class id per box."
+        "xywhr": "[cx, cy, w, h, angle], angolo in radianti.",
+        "corners": "Quattro punti d'angolo per box.",
+        "conf": "Confidenza per box.",
+        "cls": "ID della classe per box."
       },
-      "trainingTitle": "Dataset format and training",
-      "trainingBody": "OBB uses a standard detect-style data YAML, but labels are YOLO-OBB text files with <strong>exactly nine fields</strong> per row: a class id followed by four normalized corner points. The angle is derived from the corners, not stored.",
-      "warmStart": "A plain detection checkpoint cannot be loaded directly into an OBB model. Going from detect to OBB is only allowed as a training warm-start: pass <code>pretrained=True</code> (YOLO9) or the explicit transfer flag on RF-DETR. Mosaic and mixup are disabled for OBB until corner-aware augmentation lands, and tiled inference is not supported.",
-      "validation": "Validation uses rotated-IoU AP, reported as mAP50 and mAP50-95 under the OBB metric group."
+      "trainingTitle": "Formato del dataset e addestramento",
+      "trainingBody": "OBB usa un file YAML dei dati standard in stile detect, ma le etichette sono file di testo YOLO-OBB con <strong>esattamente nove campi</strong> per riga: un ID di classe seguito da quattro punti d'angolo normalizzati. L'angolo viene derivato dai vertici, non memorizzato.",
+      "warmStart": "Un normale checkpoint di rilevamento non può essere caricato direttamente in un modello OBB. Il passaggio da detect a OBB è consentito solo come inizializzazione dell'addestramento: passa <code>pretrained=True</code> per YOLO9 o il flag di trasferimento esplicito per RF-DETR. Mosaic e mixup sono disabilitati per OBB finché non sarà disponibile una data augmentation che gestisce i vertici, mentre l'inferenza a tasselli non è supportata.",
+      "validation": "La validazione usa l'AP con IoU ruotata, riportata come mAP50 e mAP50-95 nel gruppo di metriche OBB."
     },
     "pose": {
-      "title": "Keypoints / Pose",
-      "body": "Pose estimation predicts keypoints per detected instance. The default layout is COCO-17 person keypoints. YOLO9 and RF-DETR pose are person-only single-class in their first version; YOLO-NAS and EdgeCrafter pose are already available in the tree.",
-      "inferenceTitle": "Inference and the Keypoints result",
-      "inferenceBody": "Results expose a <code>keypoints</code> field of shape <code>(N, K, 3)</code>, where the last channel is visibility or confidence, in original-image pixel coordinates.",
+      "title": "Keypoint / Posa",
+      "body": "La stima della posa predice i keypoint per ogni istanza rilevata. La struttura predefinita usa i keypoint COCO-17 delle persone. Nella prima versione, la posa di YOLO9 e RF-DETR supporta una sola classe, le persone; la posa di YOLO-NAS ed EdgeCrafter è già disponibile nel codice.",
+      "inferenceTitle": "Inferenza e risultato Keypoints",
+      "inferenceBody": "Results espone un campo <code>keypoints</code> di forma <code>(N, K, 3)</code>, dove l'ultimo canale rappresenta visibilità o confidenza, in coordinate pixel dell'immagine originale.",
       "table": {
-        "xy": "Pixel keypoint coordinates.",
-        "xyn": "Normalized keypoint coordinates.",
-        "conf": "Per-keypoint visibility / confidence.",
-        "visible": "Boolean visible mask."
+        "xy": "Coordinate pixel dei keypoint.",
+        "xyn": "Coordinate normalizzate dei keypoint.",
+        "conf": "Visibilità / confidenza per keypoint.",
+        "visible": "Maschera booleana di visibilità."
       },
-      "trainingTitle": "Dataset format and training",
-      "trainingBody": "Pose uses a data YAML that must declare <code>kpt_shape: [K, 2|3]</code> and, for horizontal-flip augmentation, a <code>flip_idx</code>. Labels are YOLO-pose text rows: a class id, a normalized box, then <code>K</code> keypoint triplets <code>(x, y, v)</code> with visibility <code>v</code> in <code>'{0, 1, 2}'</code>.",
-      "devTitle": "In active development",
-      "devBody": "YOLO9 and RF-DETR pose are on a feature branch and have not been merged yet; treat the API above as the intended contract rather than a frozen one. YOLO-NAS pose weights are linked from upstream rather than mirrored and must be staged manually."
+      "trainingTitle": "Formato del dataset e addestramento",
+      "trainingBody": "La posa usa un file YAML dei dati che deve dichiarare <code>kpt_shape: [K, 2|3]</code> e, per la data augmentation con ribaltamento orizzontale, un <code>flip_idx</code>. Le etichette sono righe di testo YOLO-pose: un ID di classe, un box normalizzato, quindi <code>K</code> terne di keypoint <code>(x, y, v)</code> con visibilità <code>v</code> in <code>'{0, 1, 2}'</code>.",
+      "devTitle": "In sviluppo attivo",
+      "devBody": "La posa di YOLO9 e RF-DETR si trova in un branch di funzionalità e non è ancora stata integrata; considera l'API precedente come il contratto previsto, non come definitivo. I pesi per la posa di YOLO-NAS sono collegati dal progetto upstream anziché duplicati e devono essere predisposti manualmente."
     },
     "smallObject": {
-      "title": "Small-Object Detection (YOLO9-P2)",
-      "body": "YOLO9-P2 is YOLOv9 with a fourth detection scale at <strong>stride 4</strong>. Stock YOLOv9 detects at strides 8/16/32, so objects below ~16 px fall under its finest grid; the P2 head catches the 4-16 px range that dominates aerial and drone footage.",
-      "resultsIntro": "In a controlled A/B on VisDrone (same recipe, same resolution, same init; the only change was the P2 head), small-object AP improved by <strong>+49%</strong> over stock YOLOv9 of the same size. Adding higher training resolution and the bigger s size roughly doubled small-object AP across the project:",
+      "title": "Rilevamento di piccoli oggetti (YOLO9-P2)",
+      "body": "YOLO9-P2 è YOLOv9 con una quarta scala di rilevamento a <strong>stride 4</strong>. YOLOv9 standard rileva agli stride 8/16/32, quindi gli oggetti sotto ~16 px sfuggono alla griglia più fine; la testa P2 copre l'intervallo 4-16 px dominante nei filmati aerei e dei droni.",
+      "resultsIntro": "In un confronto A/B controllato su VisDrone, con stessa configurazione, risoluzione e inizializzazione e con la sola modifica della testa P2, l'AP dei piccoli oggetti è migliorata del <strong>+49%</strong> rispetto a YOLOv9 standard della stessa dimensione. L'aggiunta di una risoluzione di addestramento maggiore e della dimensione s più grande ha quasi raddoppiato l'AP dei piccoli oggetti nel progetto:",
       "table": {
-        "model": "Model",
-        "control": "Stock YOLO9-t @640 (control)",
-        "ab": "YOLO9-P2-t @640 (same-recipe A/B)",
-        "preview": "YOLO9-P2-s @768 (released preview)"
+        "model": "Modello",
+        "control": "YOLO9-t standard @640 (controllo)",
+        "ab": "YOLO9-P2-t @640 (stessa configurazione A/B)",
+        "preview": "YOLO9-P2-s @768 (anteprima rilasciata)"
       },
-      "tableNote": "VisDrone2019-DET val (548 images), pycocotools, single seed; treat ±1 point as noise.",
-      "previewTitle": "The VisDrone research preview",
-      "previewBody": "A trained checkpoint is published as <link>LibreYOLO9P2s-visdrone</link>. The family is merged on <code>dev</code> but not yet in a PyPI release, so install from source until the next release.",
-      "licenseTitle": "Non-commercial license",
-      "licenseBody": "The preview checkpoint is trained on VisDrone2019-DET (AISKYEYE, Tianjin University), licensed CC BY-NC-SA 3.0: <strong>non-commercial use only</strong>, unlike LibreYOLO's MIT code and COCO-default weights. It detects the 10 VisDrone aerial classes, not COCO. The model card ships the exact training recipe, the per-epoch metrics, and a clean-room dataset converter so you can reproduce it or retrain on your own data.",
-      "whenTitle": "When (not) to use it",
-      "whenBody": "Match the architecture to the arena. On COCO-like data (\"small\" means 16-32 px) the P2 head does <strong>not</strong> help; stock YOLOv9 is the better pick there. Reach for YOLO9-P2 when your objects live under ~16 px: drone and aerial footage, distant CCTV, satellite tiles. The extra scale roughly doubles compute and anchor count. That is the price of the stride-4 grid.",
-      "trainingTitle": "Training your own",
-      "trainingBody": "YOLO9-P2 transfer-initializes from stock YOLOv9 detect checkpoints: the backbone, shared neck, and existing head towers load; the new P2 modules start fresh. The recipe below encodes what we learned the hard way on tiny-object data:"
+      "tableNote": "VisDrone2019-DET val (548 immagini), pycocotools, un singolo seed; considera ±1 punto come rumore.",
+      "previewTitle": "L'anteprima di ricerca VisDrone",
+      "previewBody": "Un checkpoint addestrato è pubblicato come <link>LibreYOLO9P2s-visdrone</link>. La famiglia è integrata in <code>dev</code> ma non ancora in una release PyPI, quindi installala dal sorgente fino alla prossima release.",
+      "licenseTitle": "Licenza non commerciale",
+      "licenseBody": "Il checkpoint in anteprima è addestrato su VisDrone2019-DET (AISKYEYE, Tianjin University), con licenza CC BY-NC-SA 3.0: <strong>solo per uso non commerciale</strong>, a differenza del codice MIT di LibreYOLO e dei pesi predefiniti per COCO. Rileva le 10 classi aeree VisDrone, non quelle COCO. La scheda del modello include l'esatta configurazione di addestramento, le metriche per epoca e un convertitore del dataset sviluppato in clean room, così puoi riprodurlo o riaddestrarlo sui tuoi dati.",
+      "whenTitle": "Quando usarlo e quando non usarlo",
+      "whenBody": "Adatta l'architettura al contesto. Su dati simili a COCO, dove \"piccolo\" significa 16-32 px, la testa P2 <strong>non</strong> aiuta; in quel caso YOLOv9 standard è la scelta migliore. Scegli YOLO9-P2 quando i tuoi oggetti sono sotto ~16 px: filmati di droni e aerei, videosorveglianza distante, tasselli satellitari. La scala aggiuntiva raddoppia approssimativamente il calcolo e il numero di anchor. È il prezzo della griglia stride 4.",
+      "trainingTitle": "Addestrare il tuo modello",
+      "trainingBody": "YOLO9-P2 viene inizializzato per trasferimento dai checkpoint detect di YOLOv9 standard: vengono caricati il backbone, il neck condiviso e le torri delle teste esistenti; i nuovi moduli P2 partono da zero. La configurazione seguente raccoglie ciò che abbiamo imparato con fatica sui dati di oggetti minuscoli:"
     },
     "lora": {
-      "title": "LoRA / DoRA Fine-Tuning",
-      "body": "LoRA-style adapters let you fine-tune RF-DETR's transformer backbone by training a small set of low-rank matrices while the base weights stay frozen. That cuts optimizer and gradient memory, which is ideal for adapting a strong checkpoint to a new domain on modest hardware.",
-      "enablingTitle": "Enabling it",
-      "enablingBody": "The whole public API is a single flag on <code>train()</code>. There are no rank, alpha, or target-module knobs to tune; the recipe is fixed to a well-tested configuration. Under the hood the implementation uses <strong>DoRA</strong> (weight-decomposed LoRA, rank 16) applied to the DINOv2 attention query, key, and value projections.",
-      "checkpointsTitle": "Checkpoints and export",
+      "title": "Fine-tuning LoRA / DoRA",
+      "body": "Gli adattatori in stile LoRA consentono di fare fine-tuning del backbone transformer di RF-DETR addestrando un piccolo insieme di matrici a rango ridotto, mentre i pesi di base restano congelati. In questo modo si riduce la memoria usata dall'ottimizzatore e dai gradienti, una soluzione ideale per adattare un checkpoint potente a un nuovo dominio con hardware modesto.",
+      "enablingTitle": "Abilitazione",
+      "enablingBody": "L'intera API pubblica consiste in un singolo flag su <code>train()</code>. Non ci sono impostazioni di rank, alpha o moduli di destinazione da regolare; la procedura usa una configurazione fissa e ben collaudata. Dietro le quinte, l'implementazione usa <strong>DoRA</strong> (LoRA con scomposizione dei pesi, rank 16) applicato alle proiezioni query, key e value dell'attenzione DINOv2.",
+      "checkpointsTitle": "Checkpoint ed esportazione",
       "items": {
-        "checkpoints": "Training checkpoints keep the adapter tensors, and the config records that LoRA was used, so loading and resuming rebuild the adapter graph automatically.",
-        "head": "The detection head always stays trainable, so you can still adapt to a new class count.",
-        "export": "<code>export()</code> merges the adapters back into dense weights. Exported models are plain and carry no <code>peft</code> dependency.",
-        "only": "LoRA is RF-DETR only; passing <code>lora=True</code> to other families raises a clear error."
+        "checkpoints": "I checkpoint di addestramento conservano i tensori degli adattatori e la configurazione registra l'uso di LoRA, quindi il caricamento e la ripresa ricostruiscono automaticamente il grafo degli adattatori.",
+        "head": "La testa di rilevamento resta sempre addestrabile, quindi puoi comunque adattarla a un nuovo numero di classi.",
+        "export": "<code>export()</code> riunisce gli adattatori nei pesi densi. I modelli esportati sono standard e non richiedono la dipendenza <code>peft</code>.",
+        "only": "LoRA è disponibile solo per RF-DETR; passare <code>lora=True</code> ad altre famiglie genera un errore chiaro."
       },
-      "installTitle": "Install extra",
-      "installBody": "LoRA training needs the adapter dependency: <code>pip install \"libreyolo[lora]\"</code>, which pulls in the RF-DETR stack and <code>peft</code>. Exported (merged) models do not need it at inference time."
+      "installTitle": "Installa il pacchetto extra",
+      "installBody": "L'addestramento LoRA richiede la dipendenza per gli adattatori: <code>pip install \"libreyolo[lora]\"</code>, che installa lo stack RF-DETR e <code>peft</code>. I modelli esportati, con gli adattatori riuniti, non ne hanno bisogno durante l'inferenza."
     },
     "status": {
-      "body": "Where each feature stands today. Everything here is experimental; this table is the honest map.",
+      "body": "Lo stato attuale di ogni funzionalità. Tutto ciò che trovi qui è sperimentale; questa tabella ne offre una panoramica trasparente.",
       "table": {
-        "feature": "Feature",
-        "families": "Families",
-        "state": "State",
-        "classification": "Classification",
-        "obb": "Oriented boxes (OBB)",
-        "pose": "Keypoints / pose",
-        "smallObject": "Small-object detection",
-        "prOpen": "PR open",
-        "experimental": "Experimental",
-        "landingSoon": "Landing soon",
-        "available": "Available",
-        "researchPreview": "Research preview",
-        "reviewed": "Reviewed"
+        "feature": "Funzionalità",
+        "families": "Famiglie",
+        "state": "Stato",
+        "classification": "Classificazione",
+        "obb": "Box orientati (OBB)",
+        "pose": "Keypoint / posa",
+        "smallObject": "Rilevamento di piccoli oggetti",
+        "prOpen": "PR aperta",
+        "experimental": "Sperimentale",
+        "landingSoon": "In arrivo",
+        "available": "Disponibile",
+        "researchPreview": "Anteprima di ricerca",
+        "reviewed": "Revisionata"
       },
-      "stableTitle": "Looking for the stable path?",
-      "stableBody": "For production work, the validated core is YOLO9 detection and RF-DETR detection and segmentation. See the <docs>core documentation</docs> for those, and <vlm>LibreVLM</vlm> for open-vocabulary detection.",
-      "source": "Track progress and source on <link>GitHub</link>"
+      "stableTitle": "Cerchi il percorso stabile?",
+      "stableBody": "Per l'uso in produzione, il nucleo convalidato comprende il rilevamento con YOLO9 e il rilevamento e la segmentazione con RF-DETR. Consulta la <docs>documentazione principale</docs> per questi modelli e <vlm>LibreVLM</vlm> per il rilevamento a vocabolario aperto.",
+      "source": "Segui i progressi e consulta il sorgente su <link>GitHub</link>"
     }
   }
 }

@@ -4,11 +4,11 @@
     "description": "Mesin pelatihan dan inferensi berlisensi MIT untuk model YOLO tercanggih. Dibuat untuk aplikasi komersial, bebas dari batasan AGPL.",
     "twitterDescription": "Mesin pelatihan dan inferensi berlisensi MIT untuk model YOLO tercanggih.",
     "keywords": "YOLO|deteksi objek|lisensi MIT|machine learning|computer vision|open source|AI",
-    "modelsTitle": "Model Zoo",
+    "modelsTitle": "Katalog Model",
     "modelsDescription": "Bobot YOLO pretrained dengan lisensi MIT. Jelajahi model yang tersedia untuk deteksi objek.",
     "commercialTitle": "Panduan Komersial",
     "commercialDescription": "Cara memakai LibreYOLO di aplikasi komersial proprietary dan closed source di bawah lisensi MIT.",
-    "datasetsTitle": "Dataset Zoo",
+    "datasetsTitle": "Katalog Dataset",
     "datasetsDescription": "Dataset untuk melatih dan mengevaluasi model YOLO. Jelajahi dataset yang tersedia di HuggingFace.",
     "scienceTitle": "Riset dan Sains",
     "scienceDescription": "LibreYOLO untuk peneliti. Explainability bawaan, feature map, dan basis kode yang dirancang untuk riset.",
@@ -23,9 +23,9 @@
     "benchmarks": "Benchmark",
     "commercial": "Komersial",
     "articles": "Artikel",
-    "docs": "Docs",
+    "docs": "Dokumentasi",
     "github": "GitHub",
-    "star": "Star",
+    "star": "Beri Bintang",
     "community": "Komunitas"
   },
   "LangSwitcher": {
@@ -36,7 +36,7 @@
     "resources": "Sumber Daya",
     "documentation": "Dokumentasi",
     "experimental": "Task Eksperimental",
-    "modelZoo": "Model Zoo",
+    "modelZoo": "Katalog Model",
     "liveDemo": "Demo Langsung",
     "benchmarks": "Benchmark",
     "commercialGuide": "Panduan Komersial",
@@ -78,8 +78,8 @@
     "copy": "Salin",
     "copied": "Tersalin!",
     "detected": "Terdeteksi 1 objek (orang)",
-    "viewFullDetection": "View full-size detection result",
-    "detectionResultAlt": "LibreYOLO detection result",
+    "viewFullDetection": "Lihat hasil deteksi berukuran penuh",
+    "detectionResultAlt": "Hasil deteksi LibreYOLO",
     "communityTitle": "Kata Komunitas",
     "communityFootnote": "LibreYOLO adalah usaha yang sangat besar. Pesan seperti ini yang membuat kami terus jalan.",
     "featuresTitle": "Satu library, <accent>seluruh alur kerja</accent>",
@@ -101,7 +101,7 @@
     "deploySubtitle": "Ekspor sekali, jalankan di hardware apa pun. Dari board seharga $35 sampai GPU datacenter.",
     "exportFormats": "Format Ekspor",
     "testedHardware": "Hardware yang Diuji",
-    "comparisonTitle": "LibreYOLO vs <muted>Ultralytics</muted>",
+    "comparisonTitle": "LibreYOLO dibanding <muted>Ultralytics</muted>",
     "comparisonSubtitle": "MIT berarti hasil kerja Anda tetap milik Anda. Tanpa kejutan.",
     "compRow1": "Dipakai di software proprietary",
     "compRow2": "Menjual produk yang memuatnya",
@@ -114,7 +114,7 @@
     "ctaTitle": "Mulai Bangun <accent>Hari Ini</accent>",
     "ctaReadDocs": "Baca Dokumentasi",
     "ctaCommercialGuide": "Panduan Komersial",
-    "ctaModelZoo": "Model Zoo",
+    "ctaModelZoo": "Katalog Model",
     "ctaBenchmarks": "Benchmark",
     "testimonials": [
       {
@@ -158,7 +158,7 @@
   "Models": {
     "byTask": "Model menurut task",
     "weights": "Semua bobot",
-    "docs": "Docs",
+    "docs": "Dokumentasi",
     "indexLead": "Semua family yang disertakan library ini, dihasilkan dari registry model v{version}: {families} family pada {tasks} task.",
     "familyCount": "{count} family",
     "weightsShort": "bobot",
@@ -220,7 +220,7 @@
         "blurb": "Ke arah mana setiap permukaan menghadap."
       },
       "matte": {
-        "label": "Matting",
+        "label": "Matte Alfa",
         "blurb": "Potongan dengan kanal alfa, rambut dan tepi ikut terjaga."
       },
       "restore": {
@@ -228,14 +228,14 @@
         "blurb": "Denoising, deblurring, dan upscaling."
       },
       "mesh": {
-        "label": "Mesh",
+        "label": "Mesh 3D",
         "blurb": "Geometri 3D dari sebuah gambar."
       }
     },
-    "docsShort": "docs",
-    "zooName": "LibreYOLO Model Zoo",
-    "zooDescription": "Model families available in LibreYOLO, the MIT-licensed computer vision library, by task.",
-    "taskList": "Tasks: {tasks}"
+    "docsShort": "dokumentasi",
+    "zooName": "Katalog Model LibreYOLO",
+    "zooDescription": "Family model yang tersedia di LibreYOLO, library computer vision berlisensi MIT, menurut task.",
+    "taskList": "Task: {tasks}"
   },
   "Commercial": {
     "titleEmphasis": "Ya",
@@ -244,12 +244,12 @@
   },
   "Datasets": {
     "badge": "Data Pelatihan",
-    "title": "Dataset <accent>Zoo</accent>",
+    "title": "Katalog <accent>Dataset</accent>",
     "subtitle": "Dataset pilihan untuk melatih dan mengevaluasi model LibreYOLO. Siap dipakai dengan pipeline pelatihan LibreYOLO.",
     "browseCta": "Jelajahi Dataset di HuggingFace",
     "note": "Kartu untuk tiap dataset akan segera tersedia di sini. Sementara itu, jelajahi semua dataset yang ada di <link>HuggingFace LibreYOLO</link>.",
-    "catalogName": "LibreYOLO Dataset Zoo",
-    "catalogDescription": "Datasets for training and evaluating YOLO models, hosted on Hugging Face."
+    "catalogName": "Katalog Dataset LibreYOLO",
+    "catalogDescription": "Dataset untuk melatih dan mengevaluasi model YOLO, yang dihosting di Hugging Face."
   },
   "Articles": {
     "title": "Artikel",
@@ -288,694 +288,694 @@
     "ctaTitle": "Mulai Riset Anda Hari Ini",
     "ctaDesc": "Tanpa biaya lisensi. Tanpa paywall. Tanpa larangan menyimpan hasil kerja Anda secara privat. Cukup pasang dan mulai jelajahi.",
     "ctaButton": "Lihat Dokumentasi",
-    "copyToClipboard": "Copy to clipboard",
+    "copyToClipboard": "Salin ke papan klip",
     "featureMapAlts": {
-      "p1": "Backbone P1 feature map",
-      "p2": "Backbone P2 feature map",
-      "p3": "Backbone P3 feature map",
-      "p4": "Backbone P4 feature map",
-      "p5": "Backbone P5 feature map",
-      "sppf": "SPPF feature map",
-      "neck1": "Neck C2F11 feature map",
-      "neck2": "Neck C2F22 feature map",
-      "head8": "Head 8 feature map",
-      "head16": "Head 16 feature map",
-      "head32": "Head 32 feature map"
+      "p1": "Feature map backbone P1",
+      "p2": "Feature map backbone P2",
+      "p3": "Feature map backbone P3",
+      "p4": "Feature map backbone P4",
+      "p5": "Feature map backbone P5",
+      "sppf": "Feature map SPPF",
+      "neck1": "Feature map neck C2F11",
+      "neck2": "Feature map neck C2F22",
+      "head8": "Feature map head 8",
+      "head16": "Feature map head 16",
+      "head32": "Feature map head 32"
     }
   },
   "DocsChrome": {
-    "documentation": "Documentation",
-    "searchTrigger": "Search docs",
-    "searchDialogLabel": "Search documentation",
-    "searchPlaceholder": "Search the documentation",
-    "searchLoading": "Loading the index",
-    "searchNoResults": "No page matches \"{query}\"",
-    "nextRelease": "Next release",
-    "versionIsCurrent": "v{version} is current",
-    "latest": "latest",
-    "onThisPage": "On this page",
-    "docsButton": "Docs",
-    "openNav": "Open documentation navigation",
-    "closeNav": "Close navigation",
-    "breadcrumbLabel": "Breadcrumb",
-    "docsCrumb": "Docs",
-    "planned": "Planned, not written yet",
-    "notWrittenYet": "Not written yet.",
-    "verified": "Verified against LibreYOLO v{version}.",
-    "verifiedGenerated": "Verified against LibreYOLO v{version}. Support tables, checkpoints and benchmark numbers on this page are generated from the released library and the published weights, not written by hand.",
-    "copyPage": "Copy page",
-    "copied": "Copied",
-    "copyFailed": "Copy failed",
-    "copyTitle": "Copy this page as markdown, ready to paste into an assistant",
-    "viewMarkdown": "View as markdown",
-    "viewMarkdownTitle": "View the raw markdown for this page",
+    "documentation": "Dokumentasi",
+    "searchTrigger": "Cari dokumentasi",
+    "searchDialogLabel": "Cari di dokumentasi",
+    "searchPlaceholder": "Cari di dalam dokumentasi",
+    "searchLoading": "Memuat indeks",
+    "searchNoResults": "Tidak ada halaman yang cocok dengan \"{query}\"",
+    "nextRelease": "Rilis berikutnya",
+    "versionIsCurrent": "v{version} adalah versi saat ini",
+    "latest": "terbaru",
+    "onThisPage": "Di halaman ini",
+    "docsButton": "Dokumentasi",
+    "openNav": "Buka navigasi dokumentasi",
+    "closeNav": "Tutup navigasi",
+    "breadcrumbLabel": "Jejak navigasi",
+    "docsCrumb": "Dokumentasi",
+    "planned": "Direncanakan, belum ditulis",
+    "notWrittenYet": "Belum ditulis.",
+    "verified": "Diverifikasi dengan LibreYOLO v{version}.",
+    "verifiedGenerated": "Diverifikasi dengan LibreYOLO v{version}. Tabel dukungan, checkpoint, dan angka benchmark di halaman ini dihasilkan dari library yang telah dirilis dan bobot yang dipublikasikan, bukan ditulis manual.",
+    "copyPage": "Salin halaman",
+    "copied": "Tersalin",
+    "copyFailed": "Gagal menyalin",
+    "copyTitle": "Salin halaman ini sebagai markdown, siap ditempel ke asisten",
+    "viewMarkdown": "Lihat sebagai markdown",
+    "viewMarkdownTitle": "Lihat markdown mentah untuk halaman ini",
     "groups": {
-      "start": "Get started",
-      "tasks": "Tasks",
-      "models": "Models",
-      "train": "Train",
-      "predict": "Predict",
-      "export": "Export",
+      "start": "Mulai",
+      "tasks": "Task",
+      "models": "Model",
+      "train": "Pelatihan",
+      "predict": "Prediksi",
+      "export": "Ekspor",
       "cli": "CLI",
-      "reference": "Reference",
-      "about": "About"
+      "reference": "Referensi",
+      "about": "Tentang"
     }
   },
   "Tiers": {
     "g0": {
-      "label": "Flagship",
-      "blurb": "Features are designed and fully GPU-validated here first."
+      "label": "Unggulan",
+      "blurb": "Fitur dirancang dan divalidasi sepenuhnya pada GPU di sini terlebih dahulu."
     },
     "g1": {
-      "label": "Core",
-      "blurb": "Core trainable detectors: features follow the flagships in the same release wave."
+      "label": "Inti",
+      "blurb": "Detektor inti yang dapat dilatih: fitur menyusul tier unggulan dalam gelombang rilis yang sama."
     },
     "g2": {
-      "label": "Supported",
-      "blurb": "Supporting trainables: kept green in CI, features land opportunistically."
+      "label": "Didukung",
+      "blurb": "Model pendukung yang dapat dilatih: CI dijaga tetap lulus, fitur ditambahkan saat ada kesempatan."
     },
     "g3": {
-      "label": "Inference only",
-      "blurb": "Predict, validate and export only. Training features do not apply."
+      "label": "Hanya inferensi",
+      "blurb": "Hanya prediksi, validasi, dan ekspor. Fitur pelatihan tidak berlaku."
     },
     "g4": {
-      "label": "Museum",
-      "blurb": "Frozen exhibit. Bug fixes only."
+      "label": "Arsip",
+      "blurb": "Pameran beku. Hanya perbaikan bug."
     },
     "s": {
-      "label": "Sibling tier",
-      "blurb": "A separate product surface with its own factory and contract."
+      "label": "Tier sejajar",
+      "blurb": "Permukaan produk terpisah dengan factory dan kontraknya sendiri."
     }
   },
   "ModelBlocks": {
-    "tasks": "Tasks",
-    "sizes": "Sizes",
-    "install": "Install",
-    "supportTierLabel": "Support tier",
-    "supportTier": "{tier}, since v{version}. {blurb}",
-    "upstream": "Upstream",
-    "upstreamValue": "{name} by {org}, {license}. <paper>Paper</paper>, <source>source</source>",
-    "licenses": "Licenses",
-    "licensesValue": "Code {codeLicense}, weights {weightsLicense}. <link>Commercial use</link>",
+    "tasks": "Task",
+    "sizes": "Ukuran",
+    "install": "Instalasi",
+    "supportTierLabel": "Tier dukungan",
+    "supportTier": "{tier}, sejak v{version}. {blurb}",
+    "upstream": "Proyek upstream",
+    "upstreamValue": "{name} oleh {org}, {license}. <paper>Makalah</paper>, <source>sumber</source>",
+    "licenses": "Lisensi",
+    "licensesValue": "Kode {codeLicense}, bobot {weightsLicense}. <link>Penggunaan komersial</link>",
     "checkpoint": "Checkpoint",
-    "inputPx": "Input (px)",
-    "paramsM": "Params (M)",
-    "file": "File",
-    "weightsLicense": "Weights license",
-    "paper": "Paper",
-    "source": "source",
-    "commercialUse": "Commercial use",
-    "benchmarkNote": "{dataset}. Measured by the LibreYOLO benchmark harness and published on <link>Vision Analysis</link>, where latency across hardware and runtimes is compared and the full run records live.",
-    "hostedWeightsNote": "Every file above exists in the <link>LibreYOLO org</link> today and downloads on first use.",
-    "accuracyVersusLatency": "{family} accuracy versus latency",
+    "inputPx": "Input (piksel)",
+    "paramsM": "Parameter (juta)",
+    "file": "Berkas",
+    "weightsLicense": "Lisensi bobot",
+    "paper": "Makalah",
+    "source": "sumber",
+    "commercialUse": "Penggunaan komersial",
+    "benchmarkNote": "{dataset}. Diukur oleh perangkat benchmark LibreYOLO dan dipublikasikan di <link>Vision Analysis</link>, tempat latensi pada berbagai hardware dan runtime dibandingkan serta rekaman lengkap setiap pengujian tersedia.",
+    "hostedWeightsNote": "Setiap berkas di atas saat ini tersedia di <link>organisasi LibreYOLO</link> dan diunduh saat pertama kali digunakan.",
+    "accuracyVersusLatency": "Akurasi dibanding latensi untuk {family}",
     "task": "Task",
-    "notSupported": "{label}: not supported",
-    "supported": "{label}: supported",
-    "supportedWithReason": "{label}: supported. {reason}",
-    "citationSource": "Copied from the authors' citation block at <link>{source}</link>.",
-    "licensingCaution": "Check the license on the Hugging Face repository of the specific weights you download. Every checkpoint in the <link>LibreYOLO org</link> carries one, and they are not always the same across a family. That repository is the authoritative source; the summary below describes what applied when this page was last verified.",
-    "legalCaution": "This is a description of the licenses involved, not legal advice. If the answer matters commercially, read the licenses yourself and take your own counsel.",
-    "originalWork": "Original work",
-    "upstreamLicense": "Upstream license",
-    "upstreamSource": "Upstream source",
-    "libreyoloCode": "LibreYOLO code",
-    "weights": "Weights",
-    "interpretation": "Interpretation",
-    "trainedOn": "Trained on",
-    "weightsNotHosted": "{license}, distributed by their authors. LibreYOLO does not host or mirror them.",
-    "weightsHosted": "{license}, republished at <link>huggingface.co/LibreYOLO</link>"
+    "notSupported": "{label}: tidak didukung",
+    "supported": "{label}: didukung",
+    "supportedWithReason": "{label}: didukung. {reason}",
+    "citationSource": "Disalin dari blok sitasi penulis di <link>{source}</link>.",
+    "licensingCaution": "Periksa lisensi di repositori Hugging Face untuk bobot tertentu yang diunduh. Setiap checkpoint di <link>organisasi LibreYOLO</link> memiliki lisensi, dan lisensinya tidak selalu sama dalam satu family. Repositori tersebut adalah sumber resmi. Ringkasan di bawah menjelaskan ketentuan yang berlaku saat halaman ini terakhir diverifikasi.",
+    "legalCaution": "Ini adalah deskripsi lisensi yang terlibat, bukan nasihat hukum. Jika jawabannya penting secara komersial, baca sendiri lisensinya dan mintalah nasihat dari penasihat hukum Anda.",
+    "originalWork": "Karya asli",
+    "upstreamLicense": "Lisensi upstream",
+    "upstreamSource": "Sumber upstream",
+    "libreyoloCode": "Kode LibreYOLO",
+    "weights": "Bobot",
+    "interpretation": "Interpretasi",
+    "trainedOn": "Dilatih dengan",
+    "weightsNotHosted": "{license}, didistribusikan oleh penulisnya. LibreYOLO tidak menghosting atau mencerminkannya.",
+    "weightsHosted": "{license}, dipublikasikan ulang di <link>huggingface.co/LibreYOLO</link>"
   },
   "DocsLanding": {
-    "metaTitle": "LibreYOLO documentation",
-    "metaDescription": "Install, train, evaluate and export every model in LibreYOLO, the MIT-licensed computer vision library. One API across detection, segmentation, pose, depth, OCR and more.",
-    "jsonLdDescription": "Documentation for LibreYOLO, the MIT-licensed computer vision library.",
-    "title": "LibreYOLO documentation",
-    "intro": "One Python API for computer vision: detection, segmentation, pose, depth, OCR and more, with training, validation and export for each. The code is MIT licensed, so what you build with it stays yours.",
-    "installLabel": "install",
-    "quickstart": "Quickstart",
-    "browseModels": "Browse models",
-    "browseTasks": "Browse tasks",
+    "metaTitle": "Dokumentasi LibreYOLO",
+    "metaDescription": "Instal, latih, evaluasi, dan ekspor setiap model di LibreYOLO, library computer vision berlisensi MIT. Satu API untuk deteksi, segmentasi, pose, kedalaman, OCR, dan lainnya.",
+    "jsonLdDescription": "Dokumentasi untuk LibreYOLO, library computer vision berlisensi MIT.",
+    "title": "Dokumentasi LibreYOLO",
+    "intro": "Satu API Python untuk computer vision: deteksi, segmentasi, pose, kedalaman, OCR, dan lainnya, lengkap dengan pelatihan, validasi, dan ekspor untuk masing-masing task. Kodenya berlisensi MIT, jadi hasil kerja Anda tetap milik Anda.",
+    "installLabel": "instalasi",
+    "quickstart": "Mulai cepat",
+    "browseModels": "Jelajahi model",
+    "browseTasks": "Jelajahi task",
     "facts": {
       "models": {
-        "label": "Models",
-        "text": "{count} families, from the current flagships back to the historic detectors, behind one factory"
+        "label": "Model",
+        "text": "{count} family, dari model unggulan saat ini hingga detektor bersejarah, di balik satu factory"
       },
       "tasks": {
-        "label": "Tasks",
-        "text": "{count}, from detection to gaze estimation and human mesh recovery"
+        "label": "Task",
+        "text": "{count}, dari deteksi hingga estimasi arah pandang dan rekonstruksi mesh manusia"
       },
       "weights": {
-        "label": "Weights",
-        "text": "{count, plural, =0 {Downloaded on first use from <hf>huggingface.co/LibreYOLO</hf>} other {# published checkpoints for the families documented here, downloaded on first use from <hf>huggingface.co/LibreYOLO</hf>}}"
+        "label": "Bobot",
+        "text": "{count, plural, =0 {Downloaded: bobot diunduh saat pertama kali digunakan dari <hf>huggingface.co/LibreYOLO</hf>} other {# checkpoint yang dipublikasikan untuk family yang didokumentasikan di sini, diunduh saat pertama kali digunakan dari <hf>huggingface.co/LibreYOLO</hf>}}"
       },
       "export": {
-        "label": "Export",
-        "text": "{count} formats, ONNX through TensorRT, CoreML, TFLite and Core AI"
+        "label": "Ekspor",
+        "text": "{count} format, dari ONNX hingga TensorRT, CoreML, TFLite, dan Core AI"
       },
       "license": {
-        "label": "License",
-        "text": "MIT for the code. Weights carry their upstream license, stated per checkpoint"
+        "label": "Lisensi",
+        "text": "MIT untuk kode. Bobot menggunakan lisensi upstream masing-masing, yang dicantumkan per checkpoint"
       }
     },
-    "whatToDo": "What do you want to do?",
-    "whichModel": "Which model?",
-    "measured": "Measured, not claimed",
-    "workflows": "Working with a model",
-    "onTheLicense": "On the license",
-    "allTasks": "All tasks",
-    "allModels": "All models",
-    "detection": "Detection",
-    "familyTaskCount": "{count, plural, one {# task} other {# tasks}}",
-    "checkpointCount": "{count, plural, one {# checkpoint.} other {# checkpoints.}}",
-    "weightsDistributed": "weights distributed by their authors, not by us.",
+    "whatToDo": "Apa yang ingin dilakukan?",
+    "whichModel": "Model mana?",
+    "measured": "Diukur, bukan sekadar klaim",
+    "workflows": "Bekerja dengan model",
+    "onTheLicense": "Tentang lisensi",
+    "allTasks": "Semua task",
+    "allModels": "Semua model",
+    "detection": "Deteksi",
+    "familyTaskCount": "{count, plural, one {# task} other {# task}}",
+    "checkpointCount": "{count, plural, one {# checkpoint.} other {# checkpoint.}}",
+    "weightsDistributed": "bobot didistribusikan oleh penulisnya, bukan oleh kami.",
     "modelRouteNote": "{tasks}, {weights}",
-    "flagship": "Start with a flagship unless you have a reason not to. Every feature is designed and GPU-validated against those first, and each page carries the checkpoints, the export matrix and the licensing for that family.",
+    "flagship": "Mulailah dengan model unggulan kecuali ada alasan untuk memilih yang lain. Setiap fitur dirancang dan divalidasi pada GPU terlebih dahulu dengan model tersebut, dan setiap halaman memuat checkpoint, matriks ekspor, serta lisensi untuk family itu.",
     "visionAnalysis": "Vision Analysis",
-    "measuredParagraph": "Every accuracy and latency number in these docs comes from a run we publish, with the hardware, runtime and precision recorded alongside it. The chart below is live.",
-    "iframeTitle": "Detection models on COCO, accuracy against latency",
+    "measuredParagraph": "Setiap angka akurasi dan latensi dalam dokumentasi ini berasal dari pengujian yang kami publikasikan, lengkap dengan hardware, runtime, dan presisi yang dicatat. Bagan di bawah diperbarui langsung.",
+    "iframeTitle": "Model deteksi pada COCO, akurasi dibanding latensi",
     "workflowRows": {
       "train": {
-        "label": "Train",
-        "note": "Datasets, arguments, augmentation, multi-GPU and experiment loggers."
+        "label": "Pelatihan",
+        "note": "Dataset, argumen, augmentasi, multi-GPU, dan pencatat eksperimen."
       },
       "predict": {
-        "label": "Predict",
-        "note": "Images, folders, video, webcams and RTSP streams."
+        "label": "Prediksi",
+        "note": "Gambar, folder, video, webcam, dan stream RTSP."
       },
       "export": {
-        "label": "Export and deploy",
-        "note": "Twelve targets, with a support matrix per family."
+        "label": "Ekspor dan deployment",
+        "note": "Dua belas target, dengan matriks dukungan per family."
       },
       "cli": {
-        "label": "Command line",
-        "note": "Everything the Python API does, without writing Python."
+        "label": "Baris perintah",
+        "note": "Semua yang dapat dilakukan API Python, tanpa menulis Python."
       }
     },
-    "licensingParagraph": "LibreYOLO's code is MIT. It does not require you to open source your application, it does not reach your model weights, and it does not change if you sell what you build. Pretrained weights are separate: each one carries the license of whoever trained it, and the docs state that per checkpoint rather than averaging it into a claim. A few are non-commercial, and those say so.",
-    "howLicensingWorks": "How licensing works here",
-    "footer": "These docs describe LibreYOLO v{version}. Documentation for earlier releases stays available at <link>/docs/versions</link>.",
+    "licensingParagraph": "Kode LibreYOLO berlisensi MIT. Lisensi ini tidak mewajibkan aplikasi Anda menjadi open source, tidak mencakup bobot model Anda, dan tidak berubah jika hasil kerja Anda dijual. Bobot pretrained terpisah: masing-masing menggunakan lisensi dari pihak yang melatihnya, dan dokumentasi mencantumkannya per checkpoint alih-alih menyederhanakannya menjadi satu klaim. Beberapa bobot hanya boleh digunakan secara nonkomersial, dan status itu dinyatakan dengan jelas.",
+    "howLicensingWorks": "Cara kerja lisensi di sini",
+    "footer": "Dokumentasi ini menjelaskan LibreYOLO v{version}. Dokumentasi untuk rilis sebelumnya tetap tersedia di <link>/docs/versions</link>.",
     "taskBlurbs": {
-      "object-detection": "Boxes and classes. The default task, and the one most families serve.",
-      "instance-segmentation": "Per-object masks, one mask per detection.",
-      "semantic-segmentation": "A class for every pixel, without separating objects.",
-      "panoptic-segmentation": "Semantic and instance segmentation in one output.",
-      "pose-estimation": "Keypoints per object, top-down or bottom-up.",
-      "image-classification": "One label per image, including zero-shot with CLIP and SigLIP2.",
-      "oriented-detection": "Rotated boxes, for aerial and document imagery.",
-      "point-detection": "Centroids instead of boxes. Counting, and very small models.",
-      "depth-estimation": "Per-pixel depth from a single image.",
-      "image-restoration": "Denoising, deblurring and upscaling.",
-      "background-removal": "Alpha mattes for cutouts.",
-      "ocr": "Text detection and recognition in one pass.",
-      "face-recognition": "Face embeddings and identity galleries.",
-      "gaze-estimation": "Where a person is looking.",
-      "object-tracking": "Identities across video frames, over any detector.",
-      "open-vocabulary-detection": "Detect classes you name at runtime, with no training.",
-      "promptable-segmentation": "Segment anything you point at, with SAM and friends."
+      "object-detection": "Kotak dan kelas. Task default yang didukung oleh sebagian besar family.",
+      "instance-segmentation": "Mask per objek, satu mask per deteksi.",
+      "semantic-segmentation": "Satu kelas untuk setiap piksel, tanpa memisahkan objek.",
+      "panoptic-segmentation": "Segmentasi semantik dan instance dalam satu output.",
+      "pose-estimation": "Keypoint per objek, dengan pendekatan top-down atau bottom-up.",
+      "image-classification": "Satu label per gambar, termasuk zero-shot dengan CLIP dan SigLIP2.",
+      "oriented-detection": "Kotak yang dirotasi, untuk gambar udara dan dokumen.",
+      "point-detection": "Sentroid alih-alih kotak. Untuk penghitungan dan model berukuran sangat kecil.",
+      "depth-estimation": "Kedalaman per piksel dari satu gambar.",
+      "image-restoration": "Denoising, deblurring, dan upscaling.",
+      "background-removal": "Matte alfa untuk potongan gambar.",
+      "ocr": "Deteksi dan pengenalan teks dalam satu proses.",
+      "face-recognition": "Embedding wajah dan galeri identitas.",
+      "gaze-estimation": "Arah pandang seseorang.",
+      "object-tracking": "Identitas di sepanjang frame video, dengan detektor apa pun.",
+      "open-vocabulary-detection": "Deteksi kelas yang ditentukan saat runtime, tanpa pelatihan.",
+      "promptable-segmentation": "Segmentasikan apa pun yang ditunjuk, dengan SAM dan model sejenis."
     }
   },
   "DocsSections": {
-    "metaTitle": "{title} | LibreYOLO docs",
+    "metaTitle": "{title} | Dokumentasi LibreYOLO",
     "models": {
-      "title": "Models",
-      "lead": "Every model family in LibreYOLO, grouped by how heavily it is supported.",
-      "description": "All model families supported by LibreYOLO, from the flagship detectors to the historic ones, with their support tier."
+      "title": "Model",
+      "lead": "Setiap family model di LibreYOLO, dikelompokkan menurut tingkat dukungannya.",
+      "description": "Semua family model yang didukung LibreYOLO, dari detektor unggulan hingga model bersejarah, lengkap dengan tier dukungannya."
     },
     "tasks": {
-      "title": "Tasks",
-      "lead": "What LibreYOLO can do, and which models serve each capability.",
-      "description": "Every task LibreYOLO supports, from detection and segmentation to depth, OCR and gaze estimation."
+      "title": "Task",
+      "lead": "Kemampuan LibreYOLO dan model yang mendukung setiap kemampuan.",
+      "description": "Setiap task yang didukung LibreYOLO, dari deteksi dan segmentasi hingga kedalaman, OCR, dan estimasi arah pandang."
     },
     "export": {
-      "title": "Export and deploy",
-      "lead": "Take a trained model out of PyTorch and run it somewhere else.",
-      "description": "Export a LibreYOLO model to ONNX, TensorRT, OpenVINO, CoreML, TFLite and other deployment targets."
+      "title": "Ekspor dan deployment",
+      "lead": "Keluarkan model terlatih dari PyTorch dan jalankan di tempat lain.",
+      "description": "Ekspor model LibreYOLO ke ONNX, TensorRT, OpenVINO, CoreML, TFLite, dan target deployment lainnya."
     },
     "train": {
-      "title": "Train",
-      "lead": "Datasets, arguments, multi-GPU and the machinery shared by every trainable family.",
-      "description": "Training models in LibreYOLO: datasets, hyperparameters, augmentation, multi-GPU and experiment loggers."
+      "title": "Pelatihan",
+      "lead": "Dataset, argumen, multi-GPU, dan mekanisme yang digunakan bersama oleh setiap family yang dapat dilatih.",
+      "description": "Melatih model di LibreYOLO: dataset, hyperparameter, augmentasi, multi-GPU, dan pencatat eksperimen."
     },
     "predict": {
-      "title": "Predict",
-      "lead": "Running a model over images, folders, video and streams.",
-      "description": "Running inference with LibreYOLO: sources, streaming, results objects and ensembling."
+      "title": "Prediksi",
+      "lead": "Menjalankan model pada gambar, folder, video, dan stream.",
+      "description": "Menjalankan inferensi dengan LibreYOLO: sumber, streaming, objek hasil, dan ensemble."
     },
     "cli": {
       "title": "CLI",
-      "lead": "Every command the libreyolo executable exposes.",
-      "description": "The LibreYOLO command line: predict, train, val, export and the utility commands."
+      "lead": "Setiap perintah yang disediakan executable libreyolo.",
+      "description": "Baris perintah LibreYOLO: predict, train, val, export, dan perintah utilitas."
     },
     "reference": {
-      "title": "Reference",
-      "lead": "The public Python surface, schemas and generated matrices.",
-      "description": "LibreYOLO reference: Python API, results types, dataset formats and the full export matrix."
+      "title": "Referensi",
+      "lead": "Antarmuka Python publik, skema, dan matriks yang dihasilkan.",
+      "description": "Referensi LibreYOLO: API Python, tipe hasil, format dataset, dan matriks ekspor lengkap."
     }
   },
   "DocsKit": {
-    "documentation": "Documentation",
-    "copyTitle": "LibreYOLO Documentation",
-    "copy": "Copy",
-    "copied": "Copied!",
-    "backToCoreDocs": "Back to core docs",
-    "related": "Related",
-    "openNavigation": "Open navigation",
-    "docs": "Docs",
-    "coreDocumentation": "Core documentation",
-    "copyDocs": "Copy docs",
-    "copiedDocs": "Copied docs"
+    "documentation": "Dokumentasi",
+    "copyTitle": "Dokumentasi LibreYOLO",
+    "copy": "Salin",
+    "copied": "Tersalin!",
+    "backToCoreDocs": "Kembali ke dokumentasi inti",
+    "related": "Terkait",
+    "openNavigation": "Buka navigasi",
+    "docs": "Dokumentasi",
+    "coreDocumentation": "Dokumentasi inti",
+    "copyDocs": "Salin dokumentasi",
+    "copiedDocs": "Dokumentasi tersalin"
   },
   "UnderConstruction": {
-    "ariaLabel": "This article is unfinished and AI-generated",
-    "title": "AI-generated article, under construction",
-    "body": "This draft was written with AI assistance and is still being edited and fact-checked. Wording and framing will change. The benchmark numbers shown are the real, published campaign results, but treat everything around them as a work in progress."
+    "ariaLabel": "Artikel ini belum selesai dan dihasilkan oleh AI",
+    "title": "Artikel buatan AI, masih dikerjakan",
+    "body": "Draf ini ditulis dengan bantuan AI dan masih disunting serta diperiksa faktanya. Susunan kata dan penyajiannya akan berubah. Angka benchmark yang ditampilkan adalah hasil nyata dari rangkaian pengujian yang telah dipublikasikan, tetapi anggap semua informasi lain di sekitarnya masih dalam pengerjaan."
   },
   "CursorHackathon": {
-    "metaTitle": "LibreYOLO Track | Cursor Hackathon",
-    "metaDescription": "Everything you need for the LibreYOLO track of the Cursor Madrid Hackathon 3: intro, setup tutorial, and a working example.",
+    "metaTitle": "Jalur LibreYOLO | Cursor Hackathon",
+    "metaDescription": "Semua yang diperlukan untuk jalur LibreYOLO di Cursor Madrid Hackathon 3: pengantar, tutorial setup, dan contoh yang dapat dijalankan.",
     "sections": {
-      "overview": "Overview",
-      "whatIs": "What is LibreYOLO",
-      "setup": "Setup tutorial",
-      "example1": "Example 1",
-      "example2": "Example 2",
-      "example3": "Example 3",
-      "example4": "Example 4",
-      "example5": "Example 5"
+      "overview": "Ringkasan",
+      "whatIs": "Apa itu LibreYOLO",
+      "setup": "Tutorial setup",
+      "example1": "Contoh 1",
+      "example2": "Contoh 2",
+      "example3": "Contoh 3",
+      "example4": "Contoh 4",
+      "example5": "Contoh 5"
     },
-    "copy": "Copy",
-    "copied": "Copied!",
-    "codeHint": "Click anywhere inside the box to select all, or use the Copy button.",
+    "copy": "Salin",
+    "copied": "Tersalin!",
+    "codeHint": "Klik di mana saja di dalam kotak untuk memilih semuanya, atau gunakan tombol Salin.",
     "sidebarTitle": "Cursor Hackathon",
-    "external": "External",
-    "repo": "Repo",
-    "openNavigation": "Open navigation",
-    "closeNavigation": "Close navigation",
+    "external": "Eksternal",
+    "repo": "Repositori",
+    "openNavigation": "Buka navigasi",
+    "closeNavigation": "Tutup navigasi",
     "mobileTitle": "Hackathon",
     "heroTitleLine1": "Cursor Madrid",
     "heroTitleLine2": "Hackathon 3",
-    "heroTrack": "LibreYOLO Track",
-    "heroWelcome": "Welcome, hackers. Read what LibreYOLO is, follow the setup tutorial, copy the example, and start building.",
-    "whatIsTitle": "What is LibreYOLO",
-    "whatIsBody": "LibreYOLO is a modern, 100% MIT-licensed engine for training and deploying state-of-the-art object detection. It exists to make YOLO accessible again, the way its creators always intended.",
-    "detectionResultAlt": "LibreYOLO detection result",
-    "detected": "Detected 1 object (person)",
-    "setupTitle": "Setup tutorial",
-    "setupBody": "Paste the prompt below into Cursor. It walks the agent through installing LibreYOLO from source and verifying the install. Works on Windows, macOS, and Linux.",
-    "setupPrompt": "Setup prompt",
-    "detectionTitle": "Example 1: Object detection",
-    "detectionBody": "A minimal end-to-end detection example with the lightweight YOLO9t flagship. Once LibreYOLO is installed, paste this into a Python file or a notebook to confirm everything works and to see the shape of the results object.",
-    "segmentationTitle": "Example 2: Segmentation with RF-DETR",
-    "segmentationBody": "Instance segmentation with the RF-DETR transformer flagship. The <code>-seg</code> suffix tells the factory to load the segmentation head, so you get bounding boxes plus per-instance binary masks from the same call.",
-    "keypointsTitle": "Example 3: Human keypoints",
-    "keypointsBody": "Human pose estimation with YOLO-NAS pose. The <code>-pose</code> suffix loads the keypoint head, returning person boxes plus 17 COCO keypoints for each detected person.",
-    "videoTitle": "Example 4: Video inference",
-    "videoBody": "Run the same LibreYOLO call on a video. Swap one model line to do detection, segmentation, or keypoints; RF-DETR segmentation still needs the <code>rfdetr</code> extra from Example 2.",
-    "trackingTitle": "Example 5: Object tracking",
-    "trackingBody": "ByteTrack adds stable IDs across video frames. This is the fastest path from detection to people counting, sports clips, traffic analysis, or anything that needs to know whether the same object is still on screen.",
-    "installRfdetr": "Install RF-DETR extra",
-    "installTracking": "Install tracking extra",
-    "copyInstall": "Copy install",
-    "copyExample": "Copy example",
-    "openRepo": "Open the repo",
-    "readDocs": "Read the full docs"
+    "heroTrack": "Jalur LibreYOLO",
+    "heroWelcome": "Selamat datang, para hacker. Baca penjelasan tentang LibreYOLO, ikuti tutorial setup, salin contoh, lalu mulai membangun.",
+    "whatIsTitle": "Apa itu LibreYOLO",
+    "whatIsBody": "LibreYOLO adalah mesin modern berlisensi MIT 100% untuk melatih dan menerapkan deteksi objek tercanggih. Proyek ini hadir agar YOLO kembali dapat diakses, seperti yang selalu diniatkan para pembuatnya.",
+    "detectionResultAlt": "Hasil deteksi LibreYOLO",
+    "detected": "Terdeteksi 1 objek (orang)",
+    "setupTitle": "Tutorial setup",
+    "setupBody": "Tempel prompt di bawah ke Cursor. Prompt ini memandu agen untuk memasang LibreYOLO dari sumber dan memverifikasi instalasinya. Dapat digunakan di Windows, macOS, dan Linux.",
+    "setupPrompt": "Prompt setup",
+    "detectionTitle": "Contoh 1: Deteksi objek",
+    "detectionBody": "Contoh deteksi end-to-end minimal dengan model unggulan YOLO9t yang ringan. Setelah LibreYOLO terpasang, tempel kode ini ke berkas Python atau notebook untuk memastikan semuanya berfungsi dan melihat struktur objek hasil.",
+    "segmentationTitle": "Contoh 2: Segmentasi dengan RF-DETR",
+    "segmentationBody": "Segmentasi instance dengan model unggulan transformer RF-DETR. Sufiks <code>-seg</code> memberi tahu factory agar memuat head segmentasi, sehingga satu pemanggilan menghasilkan bounding box beserta mask biner per instance.",
+    "keypointsTitle": "Contoh 3: Keypoint manusia",
+    "keypointsBody": "Estimasi pose manusia dengan YOLO-NAS pose. Sufiks <code>-pose</code> memuat head keypoint dan mengembalikan kotak orang beserta 17 keypoint COCO untuk setiap orang yang terdeteksi.",
+    "videoTitle": "Contoh 4: Inferensi video",
+    "videoBody": "Jalankan pemanggilan LibreYOLO yang sama pada video. Ganti satu baris model untuk melakukan deteksi, segmentasi, atau keypoint. Segmentasi RF-DETR tetap memerlukan paket tambahan <code>rfdetr</code> dari Contoh 2.",
+    "trackingTitle": "Contoh 5: Pelacakan objek",
+    "trackingBody": "ByteTrack menambahkan ID yang stabil di sepanjang frame video. Ini adalah jalur tercepat dari deteksi ke penghitungan orang, klip olahraga, analisis lalu lintas, atau kebutuhan lain yang harus mengetahui apakah objek yang sama masih terlihat.",
+    "installRfdetr": "Instal paket tambahan RF-DETR",
+    "installTracking": "Instal paket tambahan pelacakan",
+    "copyInstall": "Salin perintah instalasi",
+    "copyExample": "Salin contoh",
+    "openRepo": "Buka repositori",
+    "readDocs": "Baca dokumentasi lengkap"
   },
   "Benchmarks": {
-    "metaTitle": "Benchmarks",
-    "metaDescription": "Measured benchmarks for every model LibreYOLO ships: COCO accuracy, RF100-VL transfer across 100 real-world datasets, and latency on real hardware. Nothing copied from a paper.",
-    "datasetName": "LibreYOLO RF100-VL benchmark results",
-    "datasetDescription": "Per-dataset mAP@50-95 for LibreYOLO models fine-tuned and evaluated on each of the 100 RF100-VL datasets, plus COCO val2017 accuracy and measured latency across hardware.",
-    "title": "LibreYOLO Benchmarks",
-    "cocoTitle": "Accuracy against size",
-    "cocoBody": "How much accuracy each architecture buys for its parameter count. The chart is from <vision>visionanalysis.org</vision>, a brother project of LibreYOLO where models are measured on <coco>COCO</coco>, on <latency>latency</latency> across real hardware, and on the <rf>RF100-VL</rf> benchmark.",
-    "cocoIframeTitle": "Accuracy vs parameters, COCO val2017",
-    "openLeaderboard": "Open the full leaderboard",
-    "browseModelZoo": "Browse the model zoo",
-    "rfTitle": "Does any of that survive contact with your data?",
-    "rfIntro": "A COCO number is rarely the score you end up with. It is a hint at that score, because most projects start from COCO-pretrained weights and fine-tune from there, and it is the common yardstick that keeps papers comparable. That is worth something, and it is not the thing you are actually buying.",
-    "rfGeneralisation": "What you are buying is generalisation: whether the architecture, the pretrained weights and the training recipe still hold up on data that looks nothing like COCO. So Roboflow built RF100-VL. A model earns its score by being trained on 100 real datasets, one at a time. Some hand it thousands of objects per image, some give it a few dozen images to learn from. Pills on a conveyor, chest X-rays, mahjong tiles, varroa mites, wildfire smoke.",
-    "rfAdvice": "Read it as one input among several when you pick a model, alongside latency, licence and how much you feel like fighting the training code. It is not a ranking to read off the top.",
-    "latencyTag": "Latency",
-    "latencyTitle": "Fast enough on what you own?",
-    "latencyBody": "Accuracy does not change with hardware. Speed changes by two orders of magnitude between a datacentre GPU and a Raspberry Pi, so the only number that matters is the one measured on the board you are shipping on.",
-    "latencyCta": "See latency on every board"
+    "metaTitle": "Benchmark",
+    "metaDescription": "Benchmark terukur untuk setiap model yang disediakan LibreYOLO: akurasi COCO, transfer RF100-VL pada 100 dataset dunia nyata, dan latensi pada hardware nyata. Tidak ada yang disalin dari makalah.",
+    "datasetName": "Hasil benchmark RF100-VL LibreYOLO",
+    "datasetDescription": "mAP@50-95 per dataset untuk model LibreYOLO yang melalui fine-tuning dan evaluasi pada masing-masing dari 100 dataset RF100-VL, ditambah akurasi COCO val2017 dan latensi terukur pada berbagai hardware.",
+    "title": "Benchmark LibreYOLO",
+    "cocoTitle": "Akurasi dibanding ukuran",
+    "cocoBody": "Akurasi yang diberikan setiap arsitektur untuk jumlah parameternya. Bagan ini berasal dari <vision>visionanalysis.org</vision>, proyek saudara LibreYOLO tempat model diukur pada <coco>COCO</coco>, <latency>latensi</latency> di berbagai hardware nyata, dan benchmark <rf>RF100-VL</rf>.",
+    "cocoIframeTitle": "Akurasi dibanding parameter, COCO val2017",
+    "openLeaderboard": "Buka papan peringkat lengkap",
+    "browseModelZoo": "Jelajahi katalog model",
+    "rfTitle": "Apakah semua itu tetap berlaku pada data Anda?",
+    "rfIntro": "Angka COCO jarang menjadi skor akhir yang diperoleh. Angka itu memberi petunjuk tentang skor tersebut karena sebagian besar proyek dimulai dengan bobot pretrained pada COCO lalu melakukan fine-tuning, dan COCO menjadi tolok ukur umum agar makalah dapat dibandingkan. Hal itu berguna, tetapi bukan hal utama yang sebenarnya dicari.",
+    "rfGeneralisation": "Hal utama yang dicari adalah generalisasi: apakah arsitektur, bobot pretrained, dan resep pelatihan tetap bekerja pada data yang sama sekali tidak menyerupai COCO. Karena itu, Roboflow membuat RF100-VL. Model memperoleh skornya dengan dilatih pada 100 dataset nyata, satu per satu. Beberapa dataset berisi ribuan objek per gambar, sedangkan yang lain hanya menyediakan beberapa puluh gambar untuk dipelajari. Pil di ban berjalan, rontgen dada, ubin mahyong, tungau varroa, dan asap kebakaran hutan.",
+    "rfAdvice": "Gunakan hasil ini sebagai salah satu dari beberapa pertimbangan saat memilih model, bersama latensi, lisensi, dan seberapa besar upaya yang siap dikeluarkan untuk menangani kode pelatihan. Ini bukan peringkat yang cukup dibaca dari posisi teratas.",
+    "latencyTag": "Latensi",
+    "latencyTitle": "Cukup cepat di hardware yang Anda miliki?",
+    "latencyBody": "Akurasi tidak berubah menurut hardware. Kecepatan dapat berbeda hingga dua orde magnitudo antara GPU pusat data dan Raspberry Pi, jadi angka yang penting adalah angka yang diukur pada board yang digunakan untuk produk.",
+    "latencyCta": "Lihat latensi di setiap board"
   },
   "RF100VL": {
-    "themedRings": "The seven RF100-VL domains as themed rings",
-    "datasetDomainCountLong": "100 real-world datasets, 7 domains",
-    "datasetDomainCount": "100 datasets · 7 domains",
-    "exploreDatasets": "Explore the 100 datasets",
-    "datasetDialog": "{name} dataset",
-    "closeDatasetPanel": "Close dataset panel",
-    "annotatedSampleAlt": "Annotated sample from the {name} dataset",
-    "annotatedSample": "annotated sample",
-    "inDomain": "in domain",
-    "fineTune": "fine-tune",
-    "samplePreviews": "Sample previews",
-    "placeholderCrops": "placeholder crops",
-    "explorerComing": "The full per-dataset image explorer ships with the final report.",
-    "moreFrom": "More from {domain}",
-    "openRoboflow": "Open on Roboflow Universe",
-    "benchmarkReport": "RF100-VL benchmark report",
-    "reportEyebrow": "LibreYOLO · Benchmark report",
-    "livingReport": "Living report · updates as the sweep progresses",
-    "openDataset": "Open the {name} dataset ({domain})",
-    "sampleAlt": "Sample from the {name} dataset",
-    "backToOverview": "Back to overview",
-    "interactionHint": "hover to preview · click a planet to open the dataset",
+    "themedRings": "Tujuh domain RF100-VL sebagai cincin bertema",
+    "datasetDomainCountLong": "100 dataset dunia nyata, 7 domain",
+    "datasetDomainCount": "100 dataset · 7 domain",
+    "exploreDatasets": "Jelajahi 100 dataset",
+    "datasetDialog": "Dataset {name}",
+    "closeDatasetPanel": "Tutup panel dataset",
+    "annotatedSampleAlt": "Sampel beranotasi dari dataset {name}",
+    "annotatedSample": "sampel beranotasi",
+    "inDomain": "dalam domain",
+    "fineTune": "fine-tuning",
+    "samplePreviews": "Pratinjau sampel",
+    "placeholderCrops": "potongan placeholder",
+    "explorerComing": "Penjelajah gambar lengkap per dataset akan hadir bersama laporan akhir.",
+    "moreFrom": "Lainnya dari {domain}",
+    "openRoboflow": "Buka di Roboflow Universe",
+    "benchmarkReport": "Laporan benchmark RF100-VL",
+    "reportEyebrow": "LibreYOLO · Laporan benchmark",
+    "livingReport": "Laporan aktif · diperbarui seiring kemajuan rangkaian pengujian",
+    "openDataset": "Buka dataset {name} ({domain})",
+    "sampleAlt": "Sampel dari dataset {name}",
+    "backToOverview": "Kembali ke ringkasan",
+    "interactionHint": "arahkan pointer untuk melihat pratinjau · klik planet untuk membuka dataset",
     "links": {
       "arxiv": "arXiv",
-      "code": "Code",
+      "code": "Kode",
       "site": "rf100-vl.org",
-      "datasets": "Datasets"
+      "datasets": "Dataset"
     },
-    "scoresHere": "How LibreYOLO scores here",
-    "scoreMethod": "mAP@50-95 on this dataset's own test split, after fine-tuning on it.",
-    "scoreDetails": "{images} test images, {classes, plural, one {# class} other {# classes}}.",
-    "meanScore": "mean {score}",
-    "strongest": "strongest",
-    "weakest": "weakest",
-    "sortedDatasets": "{count} datasets, sorted by score",
-    "benchmarkAria": "RF100-VL benchmark",
-    "viewsAria": "RF100-VL views",
+    "scoresHere": "Skor LibreYOLO di sini",
+    "scoreMethod": "mAP@50-95 pada split pengujian dataset ini sendiri, setelah melakukan fine-tuning pada dataset tersebut.",
+    "scoreDetails": "{images} gambar pengujian, {classes, plural, one {# kelas} other {# kelas}}.",
+    "meanScore": "rata-rata {score}",
+    "strongest": "terkuat",
+    "weakest": "terlemah",
+    "sortedDatasets": "{count} dataset, diurutkan menurut skor",
+    "benchmarkAria": "Benchmark RF100-VL",
+    "viewsAria": "Tampilan RF100-VL",
     "tabs": {
-      "benchmark": "The benchmark",
-      "exploreDatasets": "Explore 100 datasets",
-      "results": "Results"
+      "benchmark": "Benchmark",
+      "exploreDatasets": "Jelajahi 100 dataset",
+      "results": "Hasil"
     },
-    "modelMean": "{model}, mean of {count} datasets",
-    "modelMean100": "{model}, mean of 100",
-    "onThisDataset": "on this dataset",
+    "modelMean": "{model}, rata-rata dari {count} dataset",
+    "modelMean100": "{model}, rata-rata dari 100 dataset",
+    "onThisDataset": "pada dataset ini",
     "bands": {
       "band75": "75+",
-      "band60": "60 to 75",
-      "band45": "45 to 60",
-      "band30": "30 to 45",
-      "bandUnder30": "under 30"
+      "band60": "60 hingga 75",
+      "band45": "45 hingga 60",
+      "band30": "30 hingga 45",
+      "bandUnder30": "di bawah 30"
     },
-    "strongestDatasets": "Strongest datasets",
-    "weakestDatasets": "Weakest datasets"
+    "strongestDatasets": "Dataset terkuat",
+    "weakestDatasets": "Dataset terlemah"
   },
   "LibreVLM": {
-    "metaTitle": "LibreVLM | Open-Vocabulary Detection",
-    "metaDescription": "LibreVLM wraps modern vision language models (Qwen3-VL, Florence-2, LFM2-VL, InternVL3, SmolVLM2, Kosmos-2) and exposes them as open-vocabulary object detectors behind the familiar LibreYOLO Results API.",
-    "keywords": "LibreVLM|open vocabulary detection|vision language model|Qwen3-VL|Florence-2|LFM2-VL|InternVL3|SmolVLM2|Kosmos-2|zero-shot detection",
+    "metaTitle": "LibreVLM | Deteksi Open-Vocabulary",
+    "metaDescription": "LibreVLM membungkus vision language model modern (Qwen3-VL, Florence-2, LFM2-VL, InternVL3, SmolVLM2, Kosmos-2) dan menyediakannya sebagai detektor objek open-vocabulary di balik API Results LibreYOLO yang sudah dikenal.",
+    "keywords": "LibreVLM|deteksi open vocabulary|vision language model|Qwen3-VL|Florence-2|LFM2-VL|InternVL3|SmolVLM2|Kosmos-2|deteksi zero-shot",
     "sections": {
-      "introduction": "Introduction",
-      "installation": "Installation",
-      "quickstart": "Quickstart",
-      "models": "Supported Models",
-      "vocabulary": "Setting the Vocabulary",
-      "prediction": "Prediction",
-      "examples": "Examples",
-      "chat": "Raw Chat",
-      "backends": "How Backends Differ",
-      "limitations": "Limitations"
+      "introduction": "Pengantar",
+      "installation": "Instalasi",
+      "quickstart": "Mulai cepat",
+      "models": "Model yang Didukung",
+      "vocabulary": "Mengatur Kosakata",
+      "prediction": "Prediksi",
+      "examples": "Contoh",
+      "chat": "Chat Mentah",
+      "backends": "Perbedaan Backend",
+      "limitations": "Keterbatasan"
     },
     "related": {
-      "coreDocs": "Core documentation",
-      "experimentalTasks": "Experimental tasks",
-      "modelZoo": "Model Zoo"
+      "coreDocs": "Dokumentasi inti",
+      "experimentalTasks": "Task eksperimental",
+      "modelZoo": "Katalog model"
     },
     "eyebrow": "LibreVLM",
-    "copyTitle": "LibreVLM Documentation",
-    "badge": "Experimental tier",
+    "copyTitle": "Dokumentasi LibreVLM",
+    "badge": "Tier eksperimental",
     "heroTitle": "Libre",
     "heroAccent": "VLM",
-    "heroLead": "Point a vision language model at an image, hand it a list of words, and get back boxes. LibreVLM turns Qwen3-VL, Florence-2 and friends into open-vocabulary object detectors that speak the exact same Results API as every other LibreYOLO model.",
+    "heroLead": "Arahkan vision language model ke sebuah gambar, berikan daftar kata, lalu dapatkan kotak. LibreVLM mengubah Qwen3-VL, Florence-2, dan model sejenis menjadi detektor objek open-vocabulary yang menggunakan API Results yang sama persis dengan setiap model LibreYOLO lainnya.",
     "introduction": {
-      "body": "A classic detector ships with a fixed list of classes baked into its head. LibreVLM throws that constraint away. It wraps modern instruction-tuned vision language models, prompts them to emit bounding boxes, parses the generated text, and returns the same <code>Results</code> object you already use for YOLO9 and RF-DETR. The class list is just a list of words you supply at runtime, so adding a new category costs nothing and works zero-shot.",
+      "body": "Detektor klasik disertai daftar kelas tetap yang tertanam di dalam head. LibreVLM menghapus batasan tersebut. LibreVLM membungkus vision language model modern yang telah disetel dengan instruksi, memintanya menghasilkan bounding box, mengurai teks yang dihasilkan, lalu mengembalikan objek <code>Results</code> yang sama dengan yang sudah digunakan untuk YOLO9 dan RF-DETR. Daftar kelas hanyalah daftar kata yang diberikan saat runtime, sehingga kategori baru dapat ditambahkan tanpa biaya dan berfungsi secara zero-shot.",
       "features": {
-        "openVocabulary": "<strong>Open vocabulary.</strong> Detect <code>\"pink car\"</code>, <code>\"license plate\"</code>, or <code>\"the small island\"</code> without ever training a head for them.",
-        "contract": "<strong>One factory, one contract.</strong> <code>LibreVLM(...)</code> returns the standard <code>Results</code> with <code>boxes.xyxy</code>, <code>boxes.cls</code>, <code>boxes.conf</code>, plus <code>.plot()</code> and <code>.save()</code>.",
-        "backends": "<strong>Swappable backends.</strong> Six model families behind one alias string, from a 230M Florence-2 to an 8B Qwen3-VL.",
-        "chat": "<strong>A raw escape hatch.</strong> <code>chat()</code> gives you free-form image question answering when you need more than boxes."
+        "openVocabulary": "<strong>Open vocabulary.</strong> Deteksi <code>\"pink car\"</code>, <code>\"license plate\"</code>, atau <code>\"the small island\"</code> tanpa pernah melatih head untuk kategori tersebut.",
+        "contract": "<strong>Satu factory, satu kontrak.</strong> <code>LibreVLM(...)</code> mengembalikan <code>Results</code> standar dengan <code>boxes.xyxy</code>, <code>boxes.cls</code>, <code>boxes.conf</code>, ditambah <code>.plot()</code> dan <code>.save()</code>.",
+        "backends": "<strong>Backend yang dapat ditukar.</strong> Enam family model di balik satu string alias, dari Florence-2 230M hingga Qwen3-VL 8B.",
+        "chat": "<strong>Jalur keluar mentah.</strong> <code>chat()</code> menyediakan tanya jawab gambar berformat bebas saat diperlukan lebih dari sekadar kotak."
       },
-      "tierTitle": "Why a separate tier (and a separate page)",
-      "tierBody": "LibreVLM is deliberately kept out of the closed-vocabulary <code>LibreYOLO(...)</code> factory and its <code>.pt</code> registry. These models are prompt-driven, open vocabulary, and report synthetic confidence, so they honor a different contract. Treating them as their own tier keeps the core detection docs clean and honest about what is being measured.",
-      "devTitle": "On the dev branch",
-      "devBody": "LibreVLM currently lives on the <code>dev</code> branch and is targeted for the v1.3 release; it is not part of v1.2.0. It is a Python-only inference tier: there is no training, validation, export, or CLI path yet, and confidence scores are placeholders. Read the <link>Limitations</link> section before you build on top of it."
+      "tierTitle": "Alasan menggunakan tier terpisah (dan halaman terpisah)",
+      "tierBody": "LibreVLM sengaja dipisahkan dari factory closed-vocabulary <code>LibreYOLO(...)</code> dan registry <code>.pt</code>-nya. Model ini digerakkan oleh prompt, bersifat open vocabulary, dan melaporkan skor keyakinan sintetis, sehingga menggunakan kontrak yang berbeda. Menempatkannya dalam tier tersendiri menjaga dokumentasi deteksi inti tetap jelas dan jujur tentang hal yang diukur.",
+      "devTitle": "Di branch dev",
+      "devBody": "LibreVLM saat ini berada di branch <code>dev</code> dan ditargetkan untuk rilis v1.3. Fitur ini bukan bagian dari v1.2.0. Tier inferensi ini hanya tersedia melalui Python: belum ada jalur pelatihan, validasi, ekspor, atau CLI, dan skor keyakinannya masih berupa placeholder. Baca bagian <link>Keterbatasan</link> sebelum membangun sesuatu di atasnya."
     },
     "installation": {
-      "body": "LibreVLM lives behind the optional <code>vlm</code> extra. It pulls in a recent <code>transformers</code> and the helpers a couple of processors need. Without the extra, importing a VLM family raises an <code>ImportError</code> that points you here.",
-      "weights": "Weights are downloaded from the Hugging Face Hub on first use into a local <code>weights/</code> folder. A few families ship under non-OSI licenses and log a one-time notice before downloading. A GPU is recommended for the larger backends, but every model also runs on CPU with <code>device=\"cpu\"</code>."
+      "body": "LibreVLM tersedia melalui paket tambahan opsional <code>vlm</code>. Paket ini memasang versi terbaru <code>transformers</code> dan helper yang diperlukan beberapa processor. Tanpa paket tambahan tersebut, mengimpor family VLM memicu <code>ImportError</code> yang mengarahkan ke halaman ini.",
+      "weights": "Bobot diunduh dari Hugging Face Hub saat pertama kali digunakan ke folder lokal <code>weights/</code>. Beberapa family menggunakan lisensi non-OSI dan mencatat pemberitahuan satu kali sebelum mengunduh. GPU disarankan untuk backend yang lebih besar, tetapi setiap model juga dapat dijalankan pada CPU dengan <code>device=\"cpu\"</code>."
     },
     "quickstart": {
-      "body": "Construct a model, declare the words you care about, and predict. The default backend is Qwen3-VL-4B, the strongest detector in the tier and Apache-2.0 licensed.",
-      "after": "That is the whole loop. Everything downstream of <code>predict()</code> behaves like a normal detector, so existing visualization, cropping, and tracking code keeps working."
+      "body": "Buat model, tentukan kata yang diperlukan, lalu jalankan prediksi. Backend default adalah Qwen3-VL-4B, detektor terkuat di tier ini yang berlisensi Apache-2.0.",
+      "after": "Itulah seluruh alurnya. Semua yang berjalan setelah <code>predict()</code> berperilaku seperti detektor biasa, sehingga kode visualisasi, pemotongan, dan pelacakan yang sudah ada tetap berfungsi."
     },
     "models": {
-      "body": "Pick a backend with the alias you pass to <code>LibreVLM(...)</code>. A bare family name resolves to its default size. The default backend overall is <code>qwen3-vl-4b</code>. In practice the strongest detectors are <strong>Qwen3-VL</strong>, <strong>LFM2-VL</strong>, and <strong>Florence-2</strong>.",
+      "body": "Pilih backend melalui alias yang diberikan ke <code>LibreVLM(...)</code>. Nama family tanpa ukuran akan menggunakan ukuran default. Backend default secara keseluruhan adalah <code>qwen3-vl-4b</code>. Dalam praktiknya, detektor terkuat adalah <strong>Qwen3-VL</strong>, <strong>LFM2-VL</strong>, dan <strong>Florence-2</strong>.",
       "table": {
-        "family": "Family",
-        "alias": "Alias",
-        "sizes": "Sizes (params)",
-        "license": "License",
-        "notes": "Notes",
-        "qwenNote": "Default and strongest. Recommended starting point.",
-        "lfmNote": "Edge sized, surprisingly strong small detector. Notice gated.",
-        "internNote": "Good grounding at 8B; small sizes are weak. Notice gated.",
-        "florenceNote": "Purpose-built grounding model. Tight boxes, no <code>chat()</code>.",
-        "smolNote": "Tiny and fast; weaker detector. Good for quick trials.",
-        "kosmosNote": "2023 grounder. Coarser boxes, no <code>chat()</code>."
+        "family": "Family model",
+        "alias": "Nama alias",
+        "sizes": "Ukuran (parameter)",
+        "license": "Lisensi",
+        "notes": "Catatan",
+        "qwenNote": "Default dan paling kuat. Titik awal yang disarankan.",
+        "lfmNote": "Berukuran untuk edge, detektor kecil yang ternyata kuat. Memerlukan pemberitahuan.",
+        "internNote": "Grounding yang baik pada 8B. Ukuran kecilnya lemah. Memerlukan pemberitahuan.",
+        "florenceNote": "Model grounding yang dibuat khusus. Kotak rapat, tanpa <code>chat()</code>.",
+        "smolNote": "Sangat kecil dan cepat, tetapi detektornya lebih lemah. Cocok untuk percobaan cepat.",
+        "kosmosNote": "Model grounding dari 2023. Kotak lebih kasar, tanpa <code>chat()</code>."
       },
-      "choosing": "Choosing a backend",
+      "choosing": "Memilih backend",
       "choices": {
-        "quality": "<strong>Best quality:</strong> <code>qwen3-vl-8b</code> or <code>qwen3-vl-4b</code> (the default).",
-        "tight": "<strong>Tight boxes, small footprint:</strong> <code>florence-2-large</code>.",
-        "edge": "<strong>Edge / CPU:</strong> <code>lfm2-vl-450m</code> or <code>smolvlm2-500m</code>.",
-        "license": "<strong>Fully permissive license:</strong> any Qwen3-VL, SmolVLM2, Florence-2 or Kosmos-2 size."
+        "quality": "<strong>Kualitas terbaik:</strong> <code>qwen3-vl-8b</code> atau <code>qwen3-vl-4b</code> (default).",
+        "tight": "<strong>Kotak rapat, footprint kecil:</strong> <code>florence-2-large</code>.",
+        "edge": "<strong>Edge / CPU:</strong> <code>lfm2-vl-450m</code> atau <code>smolvlm2-500m</code>.",
+        "license": "<strong>Lisensi yang sepenuhnya permisif:</strong> semua ukuran Qwen3-VL, SmolVLM2, Florence-2, atau Kosmos-2."
       },
-      "licensingTitle": "Licensing",
-      "licensingBody": "Qwen3-VL and SmolVLM2 are Apache-2.0; Florence-2 and Kosmos-2 are MIT. LFM2-VL and InternVL3 carry non-OSI licenses and emit a one-time notice before their first download, so you can make an informed choice for commercial use."
+      "licensingTitle": "Lisensi",
+      "licensingBody": "Qwen3-VL dan SmolVLM2 berlisensi Apache-2.0. Florence-2 dan Kosmos-2 berlisensi MIT. LFM2-VL dan InternVL3 menggunakan lisensi non-OSI dan menampilkan pemberitahuan satu kali sebelum unduhan pertama, sehingga pilihan untuk penggunaan komersial dapat dibuat dengan informasi yang memadai."
     },
     "vocabulary": {
-      "body": "The vocabulary is the heart of open-vocabulary detection. Call <code>set_classes()</code> with a list of label strings. It is sticky: it persists across every later <code>predict()</code> and <code>track()</code> call until you set it again. It returns <code>self</code>, so it chains.",
-      "rules": "Labels can be any phrase. They must be unique case-insensitively, and you must pass a list, not a bare string. If you never call <code>set_classes()</code>, the model falls back to the COCO-80 vocabulary so a bare <code>predict()</code> still does something sensible."
+      "body": "Kosakata adalah inti deteksi open-vocabulary. Panggil <code>set_classes()</code> dengan daftar string label. Pengaturan ini melekat: nilainya bertahan pada setiap pemanggilan <code>predict()</code> dan <code>track()</code> berikutnya hingga diatur kembali. Metode ini mengembalikan <code>self</code>, sehingga pemanggilannya dapat dirangkai.",
+      "rules": "Label dapat berupa frasa apa pun. Setiap label harus unik tanpa membedakan huruf besar dan kecil, dan input harus berupa daftar, bukan satu string. Jika <code>set_classes()</code> tidak pernah dipanggil, model kembali ke kosakata COCO-80 sehingga pemanggilan <code>predict()</code> tanpa pengaturan tetap menghasilkan sesuatu yang masuk akal."
     },
     "prediction": {
-      "body": "<code>predict()</code> (and the equivalent <code>model(...)</code> call) accepts the same source types as any LibreYOLO detector: a path, a PIL image, a numpy array, a URL, a folder, or a video. <code>stream=True</code> and <code>track()</code> work too.",
-      "returnShape": "Return shape",
-      "returnBody": "You get back the standard <code>Results</code> object, identical to a closed-vocabulary detector:",
+      "body": "<code>predict()</code> (dan pemanggilan <code>model(...)</code> yang setara) menerima tipe sumber yang sama dengan semua detektor LibreYOLO: path, gambar PIL, array numpy, URL, folder, atau video. <code>stream=True</code> dan <code>track()</code> juga berfungsi.",
+      "returnShape": "Struktur hasil",
+      "returnBody": "Objek <code>Results</code> standar akan dikembalikan, sama seperti detektor closed-vocabulary:",
       "table": {
-        "field": "Field",
-        "shapeType": "Shape / type",
-        "meaning": "Meaning",
-        "xyxy": "Pixel boxes [x1, y1, x2, y2], scaled to the original image.",
-        "cls": "Class ids indexing into your set_classes() vocabulary.",
-        "conf": "Synthetic confidence: 1.0 for every box (see Limitations).",
-        "helpers": "The usual drawing and saving helpers."
+        "field": "Atribut",
+        "shapeType": "Shape / tipe",
+        "meaning": "Arti",
+        "xyxy": "Kotak piksel [x1, y1, x2, y2], diskalakan ke gambar asli.",
+        "cls": "ID kelas yang mengindeks kosakata set_classes().",
+        "conf": "Skor keyakinan sintetis: 1.0 untuk setiap kotak (lihat Keterbatasan).",
+        "helpers": "Helper untuk menggambar dan menyimpan seperti biasa."
       },
-      "parsing": "Under the hood, LibreVLM tolerantly parses the model output (handling markdown fences, stray prose, duplicated boxes, and truncated arrays), maps free-text labels back to your class ids, and drops any label that is not in your vocabulary. That last step is what makes a free-form generator behave like a closed-set detector."
+      "parsing": "Di balik layar, LibreVLM mengurai output model secara toleran (menangani pembatas markdown, prosa yang terselip, kotak duplikat, dan array yang terpotong), memetakan label teks bebas kembali ke ID kelas Anda, dan membuang label yang tidak ada dalam kosakata. Langkah terakhir itulah yang membuat generator berformat bebas berperilaku seperti detektor dengan himpunan tertutup."
     },
     "examples": {
-      "coloredObject": "Detect a specific colored object",
-      "florence": "Tight boxes with Florence-2",
-      "filter": "Filter to a single class on the fly",
-      "cpu": "Run on CPU with a built-in sample image",
-      "batches": "Batches, folders, and video"
+      "coloredObject": "Deteksi objek dengan warna tertentu",
+      "florence": "Kotak rapat dengan Florence-2",
+      "filter": "Filter ke satu kelas secara langsung",
+      "cpu": "Jalankan pada CPU dengan gambar sampel bawaan",
+      "batches": "Batch, folder, dan video"
     },
     "chat": {
-      "body": "Sometimes you want the model, not the detector. The chat-template families expose <code>chat()</code>, which takes an image and a free-form prompt and returns the decoded text verbatim. Use it for counting, captioning, or quick visual questions.",
-      "callout": "<code>chat()</code> is available on the chat-template families (Qwen3-VL, LFM2-VL, SmolVLM2, InternVL3). Florence-2 and Kosmos-2 are task-token grounders and raise <code>NotImplementedError</code>; use <code>predict()</code> with them."
+      "body": "Terkadang yang diperlukan adalah modelnya, bukan detektornya. Family dengan template chat menyediakan <code>chat()</code>, yang menerima gambar dan prompt berformat bebas lalu mengembalikan teks hasil dekode apa adanya. Gunakan untuk penghitungan, pembuatan caption, atau pertanyaan visual cepat.",
+      "callout": "<code>chat()</code> tersedia pada family dengan template chat (Qwen3-VL, LFM2-VL, SmolVLM2, InternVL3). Florence-2 dan Kosmos-2 adalah model grounding berbasis token task dan memicu <code>NotImplementedError</code>. Gunakan <code>predict()</code> untuk keduanya."
     },
     "backends": {
-      "body": "Every family returns the same <code>Results</code>, but they reach it differently. You rarely need to care, yet it helps to know why some backends behave the way they do. The chat families are prompted for a JSON array of boxes; the grounders use dedicated task tokens.",
+      "body": "Setiap family mengembalikan <code>Results</code> yang sama, tetapi mencapainya dengan cara berbeda. Perbedaan ini jarang perlu diperhatikan, tetapi membantu menjelaskan perilaku beberapa backend. Family chat diminta menghasilkan array kotak dalam JSON, sedangkan model grounding menggunakan token task khusus.",
       "table": {
-        "family": "Family",
-        "prompting": "Prompting",
-        "coordinates": "Coordinate space",
-        "jsonPrompt": "JSON box prompt",
-        "rescaled1000": "0 to 1000, rescaled",
-        "normalized01": "Normalized 0 to 1",
-        "taskToken": "Task token",
-        "nativePixels": "Native pixels",
-        "groundingPrompt": "Grounding prompt",
-        "normalizedRescaled": "Normalized, rescaled",
-        "yes": "Yes",
-        "no": "No"
+        "family": "Family model",
+        "prompting": "Metode prompt",
+        "coordinates": "Ruang koordinat",
+        "jsonPrompt": "Prompt kotak JSON",
+        "rescaled1000": "0 hingga 1000, diskalakan ulang",
+        "normalized01": "Dinormalisasi dari 0 hingga 1",
+        "taskToken": "Token task",
+        "nativePixels": "Piksel asli",
+        "groundingPrompt": "Prompt grounding",
+        "normalizedRescaled": "Dinormalisasi, diskalakan ulang",
+        "yes": "Ya",
+        "no": "Tidak"
       },
-      "options": "For the chat families you can override the detection prompt with the <code>prompt=</code> constructor argument, and cap generation length with <code>max_new_tokens=</code>. Device and dtype are resolved automatically: bf16 or fp16 on CUDA, fp32 on CPU."
+      "options": "Untuk family chat, prompt deteksi dapat ditimpa dengan argumen constructor <code>prompt=</code>, dan panjang generasi dapat dibatasi dengan <code>max_new_tokens=</code>. Perangkat dan dtype ditentukan secara otomatis: bf16 atau fp16 pada CUDA, fp32 pada CPU."
     },
     "limitations": {
-      "body": "LibreVLM is powerful but young. Knowing the boundaries up front saves surprises later.",
+      "body": "LibreVLM kuat, tetapi masih muda. Mengetahui batasannya sejak awal mencegah kejutan di kemudian hari.",
       "items": {
-        "confidence": "<strong>Synthetic confidence.</strong> Every box is scored 1.0. The <code>conf=</code> filter therefore behaves as all-or-nothing rather than a real threshold.",
-        "validation": "<strong>No mAP / validation.</strong> <code>val()</code> raises, because synthetic scores would make COCO mAP misleading.",
-        "training": "<strong>No training or export.</strong> <code>train()</code> and <code>export()</code> raise. Fine-tune the VLM upstream and load the resulting weights instead.",
-        "tracking": "<strong>Tracking is degraded.</strong> <code>track()</code> runs, but uniform scores make the tracker's low-confidence recovery stage inert.",
-        "sequential": "<strong>One image at a time.</strong> Generation is sequential in v1, so larger <code>batch=</code> values give no speedup.",
-        "python": "<strong>Python API only.</strong> The <code>libreyolo</code> CLI does not resolve VLM aliases yet."
+        "confidence": "<strong>Skor keyakinan sintetis.</strong> Setiap kotak diberi skor 1.0. Karena itu, filter <code>conf=</code> bersifat semua-atau-tidak-sama-sekali, bukan sebagai ambang batas nyata.",
+        "validation": "<strong>Tanpa mAP / validasi.</strong> <code>val()</code> memicu error karena skor sintetis akan membuat mAP COCO menyesatkan.",
+        "training": "<strong>Tanpa pelatihan atau ekspor.</strong> <code>train()</code> dan <code>export()</code> memicu error. Sebagai gantinya, lakukan fine-tuning pada VLM upstream lalu muat bobot yang dihasilkan.",
+        "tracking": "<strong>Kualitas pelacakan menurun.</strong> <code>track()</code> dapat dijalankan, tetapi skor yang seragam membuat tahap pemulihan dengan skor keyakinan rendah pada pelacak tidak berfungsi.",
+        "sequential": "<strong>Satu gambar setiap kali.</strong> Generasi berlangsung secara berurutan di v1, sehingga nilai <code>batch=</code> yang lebih besar tidak mempercepat proses.",
+        "python": "<strong>Hanya API Python.</strong> CLI <code>libreyolo</code> belum dapat mengenali alias VLM."
       },
-      "shinesTitle": "Where it shines",
-      "shinesBody": "Use LibreVLM when the class set is open ended, changes often, or is hard to label up front: rapid prototyping, long-tail or rare categories, and \"find the thing I describe in words\" workflows. When you need calibrated confidence, throughput, or a deployable artifact, train a closed-vocabulary YOLO9 or RF-DETR from the <link>core docs</link>.",
-      "inferenceOnly": "Inference only",
-      "devTarget": "dev branch / targeting v1.3",
-      "source": "Source on <link>GitHub</link>"
+      "shinesTitle": "Keunggulannya",
+      "shinesBody": "Gunakan LibreVLM ketika himpunan kelas bersifat terbuka, sering berubah, atau sulit diberi label sejak awal: pembuatan prototipe cepat, kategori long-tail atau langka, dan alur kerja \"temukan benda yang saya jelaskan dengan kata-kata\". Jika memerlukan skor keyakinan terkalibrasi, throughput, atau artefak yang dapat diterapkan, latih YOLO9 atau RF-DETR closed-vocabulary dari <link>dokumentasi inti</link>.",
+      "inferenceOnly": "Hanya inferensi",
+      "devTarget": "branch dev / ditargetkan untuk v1.3",
+      "source": "Sumber di <link>GitHub</link>"
     }
   },
   "Experimental": {
-    "metaTitle": "Experimental Tasks | Classification, OBB, Pose, LoRA",
-    "metaDescription": "Experimental LibreYOLO capabilities: image classification and oriented bounding boxes (OBB) for YOLO9 and RF-DETR, keypoint and pose estimation, and LoRA/DoRA fine-tuning for RF-DETR.",
-    "keywords": "LibreYOLO experimental|image classification|oriented bounding boxes|OBB|pose estimation|keypoints|LoRA|DoRA|RF-DETR fine-tuning|YOLO9",
+    "metaTitle": "Task Eksperimental | Klasifikasi, OBB, Pose, LoRA",
+    "metaDescription": "Kemampuan eksperimental LibreYOLO: klasifikasi gambar dan bounding box berorientasi (OBB) untuk YOLO9 dan RF-DETR, estimasi keypoint dan pose, serta fine-tuning LoRA/DoRA untuk RF-DETR.",
+    "keywords": "LibreYOLO eksperimental|klasifikasi gambar|bounding box berorientasi|OBB|estimasi pose|keypoint|LoRA|DoRA|fine-tuning RF-DETR|YOLO9",
     "sections": {
-      "overview": "Overview",
-      "taskSelection": "Selecting a Task",
-      "classification": "Classification",
-      "obb": "Oriented Boxes (OBB)",
-      "pose": "Keypoints / Pose",
-      "smallObject": "Small-Object Detection",
+      "overview": "Ringkasan",
+      "taskSelection": "Memilih Task",
+      "classification": "Klasifikasi",
+      "obb": "Bounding Box Berorientasi (OBB)",
+      "pose": "Keypoint / Pose",
+      "smallObject": "Deteksi Objek Kecil",
       "lora": "LoRA / DoRA",
-      "status": "Stability"
+      "status": "Stabilitas"
     },
     "related": {
-      "coreDocs": "Core documentation",
+      "coreDocs": "Dokumentasi inti",
       "librevlm": "LibreVLM",
-      "modelZoo": "Model Zoo"
+      "modelZoo": "Katalog model"
     },
-    "eyebrow": "Experimental",
-    "copyTitle": "LibreYOLO Experimental Tasks",
-    "badge": "Experimental tasks",
-    "heroTitle": "What's ",
-    "heroAccent": "next",
-    "heroLead": "The detection and segmentation paths are the validated core. This page documents the new task heads and training tricks we are actively building on top of them: classification, oriented boxes, pose, and parameter-efficient fine-tuning.",
+    "eyebrow": "Eksperimental",
+    "copyTitle": "Task Eksperimental LibreYOLO",
+    "badge": "Task eksperimental",
+    "heroTitle": "Apa yang ",
+    "heroAccent": "berikutnya",
+    "heroLead": "Jalur deteksi dan segmentasi merupakan inti yang telah divalidasi. Halaman ini mendokumentasikan head task baru dan teknik pelatihan yang sedang kami bangun di atasnya: klasifikasi, bounding box berorientasi, pose, dan fine-tuning yang hemat parameter.",
     "overview": {
-      "body": "LibreYOLO is a multi-task framework: the same model family can wear different heads. Alongside the validated detect and segment paths, several new tasks are landing for the two flagship families, YOLO9 and RF-DETR. They all plug into the same <code>LibreYOLO(...)</code> factory and the same <code>Results</code> container, so once you know the core API these are small additions.",
+      "body": "LibreYOLO adalah framework multi-task: satu family model dapat menggunakan head yang berbeda. Selain jalur deteksi dan segmentasi yang telah divalidasi, beberapa task baru sedang ditambahkan untuk dua family unggulan, YOLO9 dan RF-DETR. Semuanya terhubung ke factory <code>LibreYOLO(...)</code> dan container <code>Results</code> yang sama, sehingga hanya menjadi tambahan kecil setelah memahami API inti.",
       "features": {
-        "classification": "<strong>Classification</strong> for YOLO9 and RF-DETR. Whole-image labels with top-1 / top-5 probabilities.",
-        "obb": "<strong>Oriented bounding boxes (OBB)</strong> for YOLO9 and RF-DETR. Rotated boxes for aerial and document imagery.",
-        "pose": "<strong>Keypoints / pose</strong> for YOLO9 and RF-DETR. COCO-17 person keypoints.",
-        "smallObject": "<strong>Small-object detection</strong> with YOLO9-P2, a YOLOv9 variant with a stride-4 scale for the 4-16 px objects of aerial and drone imagery, including a VisDrone research-preview checkpoint.",
-        "lora": "<strong>LoRA / DoRA</strong> fine-tuning for RF-DETR. Adapt the transformer backbone with a fraction of the memory."
+        "classification": "<strong>Klasifikasi</strong> untuk YOLO9 dan RF-DETR. Label seluruh gambar dengan probabilitas top-1 / top-5.",
+        "obb": "<strong>Bounding box berorientasi (OBB)</strong> untuk YOLO9 dan RF-DETR. Kotak yang dirotasi untuk gambar udara dan dokumen.",
+        "pose": "<strong>Keypoint / pose</strong> untuk YOLO9 dan RF-DETR. Keypoint orang COCO-17.",
+        "smallObject": "<strong>Deteksi objek kecil</strong> dengan YOLO9-P2, varian YOLOv9 dengan skala stride 4 untuk objek berukuran 4-16 piksel pada gambar udara dan drone, termasuk checkpoint pratinjau riset VisDrone.",
+        "lora": "Fine-tuning <strong>LoRA / DoRA</strong> untuk RF-DETR. Adaptasikan backbone transformer dengan sebagian kecil memori."
       },
-      "calloutTitle": "Read this first",
-      "calloutBody": "Everything on this page is experimental and some of it is still in flight on feature branches. APIs, defaults, and label formats can change before they are promoted into the validated core. The <link>Stability</link> section tracks exactly where each feature stands."
+      "calloutTitle": "Baca ini terlebih dahulu",
+      "calloutBody": "Semua yang ada di halaman ini bersifat eksperimental dan sebagian masih dikembangkan di branch fitur. API, nilai default, dan format label dapat berubah sebelum dipromosikan ke inti yang telah divalidasi. Bagian <link>Stabilitas</link> mencatat status setiap fitur secara tepat."
     },
     "taskSelection": {
-      "body": "Every family defaults to detection. You opt into another task in one of three ways, resolved in this order of precedence:",
+      "body": "Setiap family menggunakan deteksi secara default. Pilih task lain melalui salah satu dari tiga cara berikut, yang ditentukan menurut urutan prioritas ini:",
       "table": {
-        "priority": "Priority",
-        "mechanism": "Mechanism",
-        "example": "Example",
-        "explicit": "Explicit argument",
-        "metadata": "Checkpoint metadata",
-        "recorded": "task recorded inside a trained .pt",
-        "suffix": "Filename suffix",
-        "default": "Family default"
+        "priority": "Prioritas",
+        "mechanism": "Mekanisme",
+        "example": "Contoh",
+        "explicit": "Argumen eksplisit",
+        "metadata": "Metadata checkpoint",
+        "recorded": "task yang dicatat di dalam berkas .pt terlatih",
+        "suffix": "Sufiks nama berkas",
+        "default": "Default family"
       },
-      "after": "Because the public <code>LibreYOLO(...)</code> factory expects a real weights file, the cleanest way to start one of these tasks from scratch is to construct the family class directly and pass <code>task=</code>. Trained checkpoints load back through the unified factory and auto-detect their task."
+      "after": "Karena factory publik <code>LibreYOLO(...)</code> mengharapkan berkas bobot nyata, cara paling jelas untuk memulai salah satu task ini dari nol adalah membuat class family secara langsung dan memberikan <code>task=</code>. Checkpoint terlatih dapat dimuat kembali melalui factory terpadu dan task-nya akan terdeteksi secara otomatis."
     },
     "commonTable": {
-      "field": "Field",
-      "type": "Type",
-      "shape": "Shape",
-      "meaning": "Meaning"
+      "field": "Atribut",
+      "type": "Tipe",
+      "shape": "Dimensi",
+      "meaning": "Arti"
     },
     "classification": {
-      "title": "Image Classification",
-      "body": "Classification gives a single label for a whole image. YOLO9 keeps its backbone and bolts on a lightweight classification head; RF-DETR reuses its DINOv2 encoder and adds a pooled linear head. Both run at 224 by 224.",
-      "inferenceTitle": "Inference and the Probs result",
-      "inferenceBody": "Prediction returns a <code>Results</code> object whose <code>probs</code> field carries a softmax over the classes.",
+      "title": "Klasifikasi Gambar",
+      "body": "Klasifikasi memberikan satu label untuk seluruh gambar. YOLO9 mempertahankan backbone dan menambahkan head klasifikasi ringan. RF-DETR menggunakan kembali encoder DINOv2 dan menambahkan head linear dengan pooling. Keduanya berjalan pada ukuran 224 kali 224.",
+      "inferenceTitle": "Inferensi dan hasil Probs",
+      "inferenceBody": "Prediksi mengembalikan objek <code>Results</code> dengan field <code>probs</code> yang memuat softmax untuk seluruh kelas.",
       "table": {
-        "top1": "Argmax class id.",
-        "top5": "Top-5 class ids, descending.",
-        "top1conf": "Probability of the top-1 class.",
-        "top5conf": "Probabilities of the top-5 classes.",
-        "data": "Full softmax vector."
+        "top1": "ID kelas argmax.",
+        "top5": "ID kelas top-5, dalam urutan menurun.",
+        "top1conf": "Probabilitas kelas top-1.",
+        "top5conf": "Probabilitas kelas top-5.",
+        "data": "Vektor softmax lengkap."
       },
-      "trainingTitle": "Dataset format and training",
-      "trainingBody": "Classification uses an <strong>ImageFolder</strong> layout, not a YAML. Class names are the sorted subfolder names, pinned to the train split.",
-      "dataBody": "The <code>data=</code> argument accepts a folder, a <code>.zip</code> URL, or a known auto-download name (<code>imagenette160</code> and <code>imagenet10</code>). The head is rebuilt to match the dataset's class count automatically.",
-      "referenceTitle": "Reference runs",
-      "referenceBody": "Quick sanity checks from development: YOLO9-t reached top-1 0.79 / top-5 0.975 on imagenette160 (10 epochs), and RF-DETR-n reached top-1 0.69 / top-5 0.96 (6 epochs). RF-DETR benefits from internet access on first run to fetch its DINOv2 backbone; offline it falls back to random init."
+      "trainingTitle": "Format dataset dan pelatihan",
+      "trainingBody": "Klasifikasi menggunakan tata letak <strong>ImageFolder</strong>, bukan YAML. Nama kelas diambil dari nama subfolder yang telah diurutkan dan ditetapkan berdasarkan split pelatihan.",
+      "dataBody": "Argumen <code>data=</code> menerima folder, URL <code>.zip</code>, atau nama unduhan otomatis yang dikenal (<code>imagenette160</code> dan <code>imagenet10</code>). Head dibangun ulang secara otomatis agar sesuai dengan jumlah kelas dalam dataset.",
+      "referenceTitle": "Pengujian referensi",
+      "referenceBody": "Pemeriksaan kewajaran singkat dari pengembangan: YOLO9-t mencapai top-1 0.79 / top-5 0.975 pada imagenette160 (10 epoch), dan RF-DETR-n mencapai top-1 0.69 / top-5 0.96 (6 epoch). RF-DETR diuntungkan oleh akses internet pada pengujian pertama untuk mengambil backbone DINOv2. Tanpa koneksi, model kembali menggunakan inisialisasi acak."
     },
     "obb": {
-      "title": "Oriented Bounding Boxes (OBB)",
-      "body": "Oriented boxes carry a rotation angle, which is what aerial imagery, documents, and densely packed scenes need. YOLO9 adds an angle branch to its detect head; RF-DETR adds a learnable angle embedding to its decoder.",
-      "inferenceTitle": "Inference and the OBB result",
-      "inferenceBody": "Results expose an <code>obb</code> field. Angles are in <strong>radians</strong>.",
+      "title": "Bounding Box Berorientasi (OBB)",
+      "body": "Bounding box berorientasi memiliki sudut rotasi, yang diperlukan untuk gambar udara, dokumen, dan adegan yang padat. YOLO9 menambahkan cabang sudut ke head deteksi. RF-DETR menambahkan embedding sudut yang dapat dipelajari ke decoder.",
+      "inferenceTitle": "Inferensi dan hasil OBB",
+      "inferenceBody": "Results menyediakan field <code>obb</code>. Sudut dinyatakan dalam <strong>radian</strong>.",
       "table": {
-        "xywhr": "[cx, cy, w, h, angle], angle in radians.",
-        "corners": "Four corner points per box.",
-        "conf": "Confidence per box.",
-        "cls": "Class id per box."
+        "xywhr": "[cx, cy, w, h, angle], sudut dalam radian.",
+        "corners": "Empat titik sudut per kotak.",
+        "conf": "Skor keyakinan per kotak.",
+        "cls": "ID kelas per kotak."
       },
-      "trainingTitle": "Dataset format and training",
-      "trainingBody": "OBB uses a standard detect-style data YAML, but labels are YOLO-OBB text files with <strong>exactly nine fields</strong> per row: a class id followed by four normalized corner points. The angle is derived from the corners, not stored.",
-      "warmStart": "A plain detection checkpoint cannot be loaded directly into an OBB model. Going from detect to OBB is only allowed as a training warm-start: pass <code>pretrained=True</code> (YOLO9) or the explicit transfer flag on RF-DETR. Mosaic and mixup are disabled for OBB until corner-aware augmentation lands, and tiled inference is not supported.",
-      "validation": "Validation uses rotated-IoU AP, reported as mAP50 and mAP50-95 under the OBB metric group."
+      "trainingTitle": "Format dataset dan pelatihan",
+      "trainingBody": "OBB menggunakan data YAML bergaya deteksi standar, tetapi labelnya berupa berkas teks YOLO-OBB dengan <strong>tepat sembilan field</strong> per baris: ID kelas diikuti empat titik sudut yang dinormalisasi. Sudut dihitung dari titik-titik sudut, bukan disimpan.",
+      "warmStart": "Checkpoint deteksi biasa tidak dapat dimuat langsung ke model OBB. Peralihan dari deteksi ke OBB hanya diizinkan sebagai warm-start pelatihan: berikan <code>pretrained=True</code> (YOLO9) atau flag transfer eksplisit pada RF-DETR. Mosaic dan mixup dinonaktifkan untuk OBB hingga augmentasi yang memahami titik sudut tersedia, dan inferensi berbasis tile tidak didukung.",
+      "validation": "Validasi menggunakan AP rotated-IoU, yang dilaporkan sebagai mAP50 dan mAP50-95 dalam grup metrik OBB."
     },
     "pose": {
-      "title": "Keypoints / Pose",
-      "body": "Pose estimation predicts keypoints per detected instance. The default layout is COCO-17 person keypoints. YOLO9 and RF-DETR pose are person-only single-class in their first version; YOLO-NAS and EdgeCrafter pose are already available in the tree.",
-      "inferenceTitle": "Inference and the Keypoints result",
-      "inferenceBody": "Results expose a <code>keypoints</code> field of shape <code>(N, K, 3)</code>, where the last channel is visibility or confidence, in original-image pixel coordinates.",
+      "title": "Keypoint / Pose",
+      "body": "Estimasi pose memprediksi keypoint per instance yang terdeteksi. Tata letak default adalah keypoint orang COCO-17. Pose YOLO9 dan RF-DETR hanya mendukung satu kelas orang pada versi pertamanya. Pose YOLO-NAS dan EdgeCrafter sudah tersedia dalam source tree.",
+      "inferenceTitle": "Inferensi dan hasil Keypoints",
+      "inferenceBody": "Results menyediakan field <code>keypoints</code> dengan shape <code>(N, K, 3)</code>, dengan kanal terakhir menyatakan visibilitas atau skor keyakinan dalam koordinat piksel gambar asli.",
       "table": {
-        "xy": "Pixel keypoint coordinates.",
-        "xyn": "Normalized keypoint coordinates.",
-        "conf": "Per-keypoint visibility / confidence.",
-        "visible": "Boolean visible mask."
+        "xy": "Koordinat piksel keypoint.",
+        "xyn": "Koordinat keypoint yang dinormalisasi.",
+        "conf": "Visibilitas / skor keyakinan per keypoint.",
+        "visible": "Mask visibilitas boolean."
       },
-      "trainingTitle": "Dataset format and training",
-      "trainingBody": "Pose uses a data YAML that must declare <code>kpt_shape: [K, 2|3]</code> and, for horizontal-flip augmentation, a <code>flip_idx</code>. Labels are YOLO-pose text rows: a class id, a normalized box, then <code>K</code> keypoint triplets <code>(x, y, v)</code> with visibility <code>v</code> in <code>'{0, 1, 2}'</code>.",
-      "devTitle": "In active development",
-      "devBody": "YOLO9 and RF-DETR pose are on a feature branch and have not been merged yet; treat the API above as the intended contract rather than a frozen one. YOLO-NAS pose weights are linked from upstream rather than mirrored and must be staged manually."
+      "trainingTitle": "Format dataset dan pelatihan",
+      "trainingBody": "Pose menggunakan data YAML yang harus mendeklarasikan <code>kpt_shape: [K, 2|3]</code> dan, untuk augmentasi pembalikan horizontal, <code>flip_idx</code>. Label berupa baris teks YOLO-pose: ID kelas, kotak yang dinormalisasi, lalu <code>K</code> triplet keypoint <code>(x, y, v)</code> dengan visibilitas <code>v</code> dalam <code>'{0, 1, 2}'</code>.",
+      "devTitle": "Dalam pengembangan aktif",
+      "devBody": "Pose YOLO9 dan RF-DETR berada di branch fitur dan belum digabungkan. Perlakukan API di atas sebagai kontrak yang dituju, bukan kontrak yang sudah dibekukan. Bobot pose YOLO-NAS ditautkan dari upstream alih-alih dicerminkan dan harus disiapkan secara manual."
     },
     "smallObject": {
-      "title": "Small-Object Detection (YOLO9-P2)",
-      "body": "YOLO9-P2 is YOLOv9 with a fourth detection scale at <strong>stride 4</strong>. Stock YOLOv9 detects at strides 8/16/32, so objects below ~16 px fall under its finest grid; the P2 head catches the 4-16 px range that dominates aerial and drone footage.",
-      "resultsIntro": "In a controlled A/B on VisDrone (same recipe, same resolution, same init; the only change was the P2 head), small-object AP improved by <strong>+49%</strong> over stock YOLOv9 of the same size. Adding higher training resolution and the bigger s size roughly doubled small-object AP across the project:",
+      "title": "Deteksi Objek Kecil (YOLO9-P2)",
+      "body": "YOLO9-P2 adalah YOLOv9 dengan skala deteksi keempat pada <strong>stride 4</strong>. YOLOv9 standar mendeteksi pada stride 8/16/32, sehingga objek di bawah ~16 piksel berada di bawah grid terhalusnya. Head P2 menangkap rentang 4-16 piksel yang mendominasi rekaman udara dan drone.",
+      "resultsIntro": "Dalam A/B terkontrol pada VisDrone (resep, resolusi, dan inisialisasi sama, hanya head P2 yang berubah), AP objek kecil meningkat <strong>+49%</strong> dibanding YOLOv9 standar dengan ukuran yang sama. Penambahan resolusi pelatihan yang lebih tinggi dan ukuran s yang lebih besar kira-kira menggandakan AP objek kecil di seluruh proyek:",
       "table": {
         "model": "Model",
-        "control": "Stock YOLO9-t @640 (control)",
-        "ab": "YOLO9-P2-t @640 (same-recipe A/B)",
-        "preview": "YOLO9-P2-s @768 (released preview)"
+        "control": "YOLO9-t standar @640 (kontrol)",
+        "ab": "YOLO9-P2-t @640 (A/B dengan resep yang sama)",
+        "preview": "YOLO9-P2-s @768 (pratinjau yang dirilis)"
       },
-      "tableNote": "VisDrone2019-DET val (548 images), pycocotools, single seed; treat ±1 point as noise.",
-      "previewTitle": "The VisDrone research preview",
-      "previewBody": "A trained checkpoint is published as <link>LibreYOLO9P2s-visdrone</link>. The family is merged on <code>dev</code> but not yet in a PyPI release, so install from source until the next release.",
-      "licenseTitle": "Non-commercial license",
-      "licenseBody": "The preview checkpoint is trained on VisDrone2019-DET (AISKYEYE, Tianjin University), licensed CC BY-NC-SA 3.0: <strong>non-commercial use only</strong>, unlike LibreYOLO's MIT code and COCO-default weights. It detects the 10 VisDrone aerial classes, not COCO. The model card ships the exact training recipe, the per-epoch metrics, and a clean-room dataset converter so you can reproduce it or retrain on your own data.",
-      "whenTitle": "When (not) to use it",
-      "whenBody": "Match the architecture to the arena. On COCO-like data (\"small\" means 16-32 px) the P2 head does <strong>not</strong> help; stock YOLOv9 is the better pick there. Reach for YOLO9-P2 when your objects live under ~16 px: drone and aerial footage, distant CCTV, satellite tiles. The extra scale roughly doubles compute and anchor count. That is the price of the stride-4 grid.",
-      "trainingTitle": "Training your own",
-      "trainingBody": "YOLO9-P2 transfer-initializes from stock YOLOv9 detect checkpoints: the backbone, shared neck, and existing head towers load; the new P2 modules start fresh. The recipe below encodes what we learned the hard way on tiny-object data:"
+      "tableNote": "Validasi VisDrone2019-DET (548 gambar), pycocotools, satu seed. Anggap ±1 poin sebagai noise.",
+      "previewTitle": "Pratinjau riset VisDrone",
+      "previewBody": "Checkpoint terlatih dipublikasikan sebagai <link>LibreYOLO9P2s-visdrone</link>. Family ini telah digabungkan ke <code>dev</code>, tetapi belum tersedia dalam rilis PyPI. Instal dari sumber hingga rilis berikutnya.",
+      "licenseTitle": "Lisensi nonkomersial",
+      "licenseBody": "Checkpoint pratinjau dilatih pada VisDrone2019-DET (AISKYEYE, Tianjin University) yang berlisensi CC BY-NC-SA 3.0: <strong>hanya untuk penggunaan nonkomersial</strong>, berbeda dari kode MIT LibreYOLO dan bobot default COCO. Model ini mendeteksi 10 kelas udara VisDrone, bukan COCO. Kartu model menyertakan resep pelatihan yang tepat, metrik per epoch, dan konverter dataset clean-room agar hasilnya dapat direproduksi atau model dapat dilatih ulang pada data Anda sendiri.",
+      "whenTitle": "Kapan sebaiknya digunakan (atau tidak)",
+      "whenBody": "Sesuaikan arsitektur dengan situasi. Pada data seperti COCO (\"kecil\" berarti 16-32 piksel), head P2 <strong>tidak</strong> membantu. YOLOv9 standar adalah pilihan yang lebih baik untuk data tersebut. Gunakan YOLO9-P2 saat objek berukuran di bawah ~16 piksel: rekaman drone dan udara, CCTV jarak jauh, atau tile satelit. Skala tambahan kira-kira menggandakan komputasi dan jumlah anchor. Itulah konsekuensi dari grid stride 4.",
+      "trainingTitle": "Melatih model sendiri",
+      "trainingBody": "YOLO9-P2 melakukan inisialisasi transfer dari checkpoint deteksi YOLOv9 standar: backbone, neck bersama, dan menara head yang sudah ada dimuat, sedangkan modul P2 baru dimulai dari awal. Resep di bawah merangkum pelajaran yang kami peroleh dengan susah payah dari data objek sangat kecil:"
     },
     "lora": {
-      "title": "LoRA / DoRA Fine-Tuning",
-      "body": "LoRA-style adapters let you fine-tune RF-DETR's transformer backbone by training a small set of low-rank matrices while the base weights stay frozen. That cuts optimizer and gradient memory, which is ideal for adapting a strong checkpoint to a new domain on modest hardware.",
-      "enablingTitle": "Enabling it",
-      "enablingBody": "The whole public API is a single flag on <code>train()</code>. There are no rank, alpha, or target-module knobs to tune; the recipe is fixed to a well-tested configuration. Under the hood the implementation uses <strong>DoRA</strong> (weight-decomposed LoRA, rank 16) applied to the DINOv2 attention query, key, and value projections.",
-      "checkpointsTitle": "Checkpoints and export",
+      "title": "Fine-Tuning LoRA / DoRA",
+      "body": "Adapter bergaya LoRA memungkinkan fine-tuning pada backbone transformer RF-DETR dengan melatih sekumpulan kecil matriks rank rendah sementara bobot dasar tetap dibekukan. Cara ini mengurangi memori optimizer dan gradien, sehingga ideal untuk mengadaptasikan checkpoint yang kuat ke domain baru pada hardware sederhana.",
+      "enablingTitle": "Mengaktifkannya",
+      "enablingBody": "Seluruh API publik hanya berupa satu flag pada <code>train()</code>. Tidak ada pengaturan rank, alpha, atau modul target yang perlu disetel. Resepnya ditetapkan pada konfigurasi yang telah diuji dengan baik. Di balik layar, implementasinya menggunakan <strong>DoRA</strong> (LoRA dengan dekomposisi bobot, rank 16) yang diterapkan pada proyeksi query, key, dan value attention DINOv2.",
+      "checkpointsTitle": "Checkpoint dan ekspor",
       "items": {
-        "checkpoints": "Training checkpoints keep the adapter tensors, and the config records that LoRA was used, so loading and resuming rebuild the adapter graph automatically.",
-        "head": "The detection head always stays trainable, so you can still adapt to a new class count.",
-        "export": "<code>export()</code> merges the adapters back into dense weights. Exported models are plain and carry no <code>peft</code> dependency.",
-        "only": "LoRA is RF-DETR only; passing <code>lora=True</code> to other families raises a clear error."
+        "checkpoints": "Checkpoint pelatihan menyimpan tensor adapter, dan konfigurasi mencatat bahwa LoRA digunakan, sehingga pemuatan dan pelanjutan pelatihan membangun ulang graph adapter secara otomatis.",
+        "head": "Head deteksi selalu dapat dilatih, sehingga model tetap dapat diadaptasikan ke jumlah kelas baru.",
+        "export": "<code>export()</code> menggabungkan kembali adapter ke bobot padat. Model yang diekspor bersifat biasa dan tidak memiliki dependensi <code>peft</code>.",
+        "only": "LoRA hanya tersedia untuk RF-DETR. Memberikan <code>lora=True</code> ke family lain memicu error yang jelas."
       },
-      "installTitle": "Install extra",
-      "installBody": "LoRA training needs the adapter dependency: <code>pip install \"libreyolo[lora]\"</code>, which pulls in the RF-DETR stack and <code>peft</code>. Exported (merged) models do not need it at inference time."
+      "installTitle": "Instal paket tambahan",
+      "installBody": "Pelatihan LoRA memerlukan dependensi adapter: <code>pip install \"libreyolo[lora]\"</code>, yang memasang stack RF-DETR dan <code>peft</code>. Model yang telah diekspor (digabungkan) tidak memerlukannya saat inferensi."
     },
     "status": {
-      "body": "Where each feature stands today. Everything here is experimental; this table is the honest map.",
+      "body": "Status setiap fitur saat ini. Semua yang ada di sini bersifat eksperimental. Tabel ini menunjukkan kondisi sebenarnya.",
       "table": {
-        "feature": "Feature",
-        "families": "Families",
-        "state": "State",
-        "classification": "Classification",
-        "obb": "Oriented boxes (OBB)",
-        "pose": "Keypoints / pose",
-        "smallObject": "Small-object detection",
-        "prOpen": "PR open",
-        "experimental": "Experimental",
-        "landingSoon": "Landing soon",
-        "available": "Available",
-        "researchPreview": "Research preview",
-        "reviewed": "Reviewed"
+        "feature": "Fitur",
+        "families": "Family model",
+        "state": "Status",
+        "classification": "Klasifikasi",
+        "obb": "Bounding box berorientasi (OBB)",
+        "pose": "Keypoint / pose",
+        "smallObject": "Deteksi objek kecil",
+        "prOpen": "PR terbuka",
+        "experimental": "Eksperimental",
+        "landingSoon": "Segera hadir",
+        "available": "Tersedia",
+        "researchPreview": "Pratinjau riset",
+        "reviewed": "Ditinjau"
       },
-      "stableTitle": "Looking for the stable path?",
-      "stableBody": "For production work, the validated core is YOLO9 detection and RF-DETR detection and segmentation. See the <docs>core documentation</docs> for those, and <vlm>LibreVLM</vlm> for open-vocabulary detection.",
-      "source": "Track progress and source on <link>GitHub</link>"
+      "stableTitle": "Mencari jalur yang stabil?",
+      "stableBody": "Untuk penggunaan di produksi, inti yang telah divalidasi adalah deteksi YOLO9 serta deteksi dan segmentasi RF-DETR. Lihat <docs>dokumentasi inti</docs> untuk kemampuan tersebut, dan <vlm>LibreVLM</vlm> untuk deteksi open-vocabulary.",
+      "source": "Pantau perkembangan dan kode sumber di <link>GitHub</link>"
     }
   }
 }
