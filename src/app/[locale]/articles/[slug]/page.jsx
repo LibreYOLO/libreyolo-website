@@ -71,8 +71,10 @@ export async function generateMetadata({ params }) {
   }
 }
 
+// Format in the reader's own locale. Intl wants a BCP-47 tag, which is exactly
+// what localeHtmlLang already holds, so a new locale needs no edit here.
 function formatDate(dateString, locale) {
-  return new Date(dateString).toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US', {
+  return new Date(dateString).toLocaleDateString(localeHtmlLang[locale] ?? 'en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -208,7 +210,7 @@ export default async function ArticlePage({ params }) {
           }
         />
         <article className="max-w-3xl mx-auto px-6 lg:px-8 pt-14 pb-20">
-          {locale === 'zh' && !article.translated && (
+          {locale !== routing.defaultLocale && !article.translated && (
             <p className="mb-8 text-sm text-surface-500">{t('englishNote')}</p>
           )}
           <ReactMarkdown
@@ -258,7 +260,7 @@ export default async function ArticlePage({ params }) {
               {article.author}
             </span>
           </div>
-          {locale === 'zh' && !article.translated && (
+          {locale !== routing.defaultLocale && !article.translated && (
             <p className="mt-4 text-sm text-surface-400 dark:text-surface-500">
               {t('englishNote')}
             </p>

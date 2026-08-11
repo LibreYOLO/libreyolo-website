@@ -144,7 +144,7 @@ Prediksi edge adalah map probabilitas float32 padat dalam `[0, 1]`.
 
 Checkpoint restore dapat menambahkan `degradation`, label kerusakan pendek
 seperti `deblur`, `denoise`, atau `super-resolution`; `dataset`, label asal
-seperti `GoPro` atau `SIDD`; serta `scale`, faktor upscale output-ke-input
+seperti `GoPro` atau `SIDD`; serta `scale`, faktor upscale output terhadap input
 bilangan bulat positif, misalnya `4` untuk model super-resolution x4. Nilai yang
 tidak ada atau `1` berarti gambar hasil restorasi mempertahankan resolusi input.
 Runtime juga menurunkan skala dari family dan ukuran, sehingga `scale` merupakan
@@ -334,5 +334,4 @@ unwrap_libreyolo_checkpoint(loaded, *, strict=False) -> tuple[dict, dict]
 error; dengan `strict=True`, metode ini memunculkan `CheckpointMetadataError`.
 `model.save(path)` adalah cara yang didukung untuk menulis checkpoint yang
 sesuai.
-
 

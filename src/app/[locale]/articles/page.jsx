@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { getAllArticles } from '@/lib/articles'
 import { buildPageMetadata } from '@/i18n/metadata'
+import { localeHtmlLang, routing } from '@/i18n/routing'
 import { Link } from '@/i18n/navigation'
 
 export async function generateMetadata({ params }) {
@@ -14,8 +15,10 @@ export async function generateMetadata({ params }) {
   })
 }
 
+// Format in the reader's own locale. Intl wants a BCP-47 tag, which is exactly
+// what localeHtmlLang already holds, so a new locale needs no edit here.
 function formatDate(dateString, locale) {
-  return new Date(dateString).toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US', {
+  return new Date(dateString).toLocaleDateString(localeHtmlLang[locale] ?? 'en-US', {
     month: 'short',
     day: 'numeric',
   })
@@ -44,7 +47,7 @@ export default async function Articles({ params }) {
           <p className="text-lg text-surface-500 dark:text-surface-400">
             {t('subtitle')}
           </p>
-          {locale === 'zh' && hasUntranslated && (
+          {locale !== routing.defaultLocale && hasUntranslated && (
             <p className="mt-3 text-sm text-surface-400 dark:text-surface-500">
               {t('englishNote')}
             </p>

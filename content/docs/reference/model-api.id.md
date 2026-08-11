@@ -116,7 +116,7 @@ model(
 | `batch` | `1` | Jumlah gambar per forward pass untuk sumber direktori dan list |
 | `stream` | `False` | Mengembalikan generator, bukan list yang diwujudkan |
 | `stream_buffer` | `False` | Mempertahankan setiap frame live yang ditangkap, bukan hanya yang terbaru |
-| `vid_stride` | `1` | Memproses setiap frame video atau layar ke-N |
+| `vid_stride` | `1` | Memproses setiap frame video atau layar bernomor N |
 | `show` | `False` | Menampilkan frame beranotasi dalam window |
 | `output_path` | `None` | Path output ketika `save=True` |
 | `color_format` | `"auto"` | Petunjuk format warna untuk array dalam memori |
@@ -335,5 +335,4 @@ dan `CudaGraphUnavailable` ketika capture gagal.
 Objek `Results` memiliki `.to()`, `.cpu()`, `.cuda()`, dan `.numpy()`; lihat
 [Jenis Results](/docs/reference/results-types). Model dipindahkan dengan
 memberikan `device=` kepada `predict`, atau saat konstruksi.
-
 

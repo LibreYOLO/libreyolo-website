@@ -185,7 +185,7 @@ dataset/
     parachute/000102.jpg
 ```
 
-`train/` diperlukan untuk pelatihan dan ini mendefinisikan pemetaan kelas-ke-indeks dengan
+`train/` diperlukan untuk pelatihan dan ini mendefinisikan pemetaan kelas ke indeks dengan
 nama folder yang diurutkan, sehingga folder pertama secara alfabet menjadi kelas 0. `val/`
 diperlukan untuk validasi. Pemisahan `test/` mungkin ada dan default
 perintah train dan validate jangan menggunakannya. Setiap pembagian selain `train` harus
@@ -233,5 +233,4 @@ berkas `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengembalikan
 dihasilkan dari set yang tervalidasi daripada diketik secara manual. Lihat
 [ekspor dan deploy](/docs/export) untuk format, tambahan mereka dan
 batasannya.
-
 

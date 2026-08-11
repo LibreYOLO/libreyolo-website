@@ -124,7 +124,7 @@ source_hash: 33e331eac0f9b0af
 
 Segmentasi instance adalah deteksi ditambah bentuk. Setiap instance objek masih mendapatkan
 sebuah kotak, sebuah kelas, dan sebuah skor, dan juga mendapatkan mask biner yang menutupi piksel
-yang termasuk ke dalamnya. Masker dapat tumpang tindih, dan piksel yang tidak termasuk ke objek manapun
+yang termasuk ke dalamnya. Mask dapat tumpang tindih, dan piksel yang tidak termasuk ke objek mana pun
 dibiarkan tidak ditetapkan, yang membedakan task dari
 [segmentasi semantik](/docs/tasks/semantic-segmentation) dan
 [segmentasi panoptik](/docs/tasks/panoptic-segmentation).
@@ -266,5 +266,4 @@ sama dengan family. Matriks di setiap halaman model dihasilkan dari set yang ter
 dan menyebutkan alasan mengapa target tidak tersedia. Lihat
 [ekspor dan deploy](/docs/export) untuk format, tambahan mereka dan batasan
 mereka.
-
 

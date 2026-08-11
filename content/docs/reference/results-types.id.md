@@ -68,7 +68,7 @@ mengembalikan generator yang menghasilkan objek tersebut.
 | `speed` | `dict[str, float]` | Milidetik per tahap |
 | `track_id` | tensor | Id track ketika hasil berasal dari `track()` |
 | `frame_idx` | `int` | Indeks frame untuk sumber video dan stream |
-| `restore_scale` | `int` | Faktor upscale output-ke-input dari hasil restore; `1` di tempat lain |
+| `restore_scale` | `int` | Faktor upscale output terhadap input dari hasil restore; `1` di tempat lain |
 
 <code-tabs name="usage" />
 
@@ -313,6 +313,5 @@ mengembalikan string JSON.
 `plot()` merender hasil normal atau edge padat dalam visualisasi kanonis;
 metode ini memunculkan error untuk jenis hasil lain. Gambar beranotasi untuk
 task lain berasal dari `predict(save=True)`.
-
 
 

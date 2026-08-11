@@ -188,7 +188,7 @@ Bobot diunduh dari Hugging Face saat penggunaan pertama dan disimpan secara loka
 
 `conf` mengatur ambang kepercayaan dan `max_det` membatasi jumlah baris.
 `iou` adalah ambang NMS, sehingga hanya berpengaruh pada family yang menjalankan NMS;
-RF-DETR dan YOLOv9 head ujung-ke-ujung mendekodekan satu set prediksi tetap dan
+RF-DETR dan YOLOv9 head ujung ke ujung mendekodekan satu set prediksi tetap dan
 abaikan itu. Lihat [prediksi](/docs/predict) untuk sumber, streaming, dan hasil
 penanganan.
 
@@ -282,5 +282,4 @@ Berkas `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengembalikan h
 dihasilkan dari set yang tervalidasi daripada diketik dengan tangan. Lihat
 [ekspor dan deploy](/docs/export) untuk format, tambahannya, dan mereka]
 batasan.
-
 

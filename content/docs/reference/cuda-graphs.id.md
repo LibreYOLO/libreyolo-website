@@ -131,7 +131,7 @@ SenseNova.
 
 Verifikasi bersifat bitwise, bukan perkiraan. Versi awal protokol menilai paritas
 berdasarkan magnitudo relatif dan secara keliru menurunkan tiga family sehat,
-YOLOX, EfficientNetV2, dan YOLOv7, yang perbedaan eager-ke-graph-nya terukur
+YOLOX, EfficientNetV2, dan YOLOv7, yang perbedaan antara eager dan graph terukur
 sekitar 1e-7 meski identik secara bit pada probe yang penting.
 
 ## Dukungan pelatihan
@@ -287,5 +287,4 @@ Suite paritas inferensi berjalan tanpa paket `kernels` opsional terinstal,
 sehingga keamanan capture dengan kernel Hub terkompilasi aktif tidak dicakup.
 Tetapkan `LIBREYOLO_HUB_KERNELS=0` untuk mengeluarkannya saat mengisolasi masalah
 capture. Lihat [kernel](/docs/reference/kernels).
-
 

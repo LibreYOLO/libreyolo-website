@@ -451,7 +451,7 @@ dataset_root/
     class_b/*.jpg
 ```
 
-`train/` wajib untuk pelatihan dan menentukan mapping kelas-ke-indeks
+`train/` wajib untuk pelatihan dan menentukan pemetaan kelas ke indeks
 berdasarkan nama folder yang diurutkan. `val/` wajib untuk validasi. `test/`
 dapat tersedia, tetapi perintah train dan val default tidak menggunakannya.
 Split selain pelatihan harus memuat nama folder kelas yang sama seperti kumpulan
@@ -466,5 +466,4 @@ untuk `gaze`.
 `point` adalah task output model, bukan skema label dataset. Family point dapat
 mengadaptasi label yang ada secara internal, misalnya dengan menurunkan pusat
 objek dari baris bounding box, tetapi format label teks khusus point tidak didefinisikan.
-
 

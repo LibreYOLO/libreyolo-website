@@ -189,7 +189,7 @@ yang mengubah checkpoint yang dilatih di tempat lain menjadi LibreYOLO yang dapa
 
 `val()` melaporkan ukuran F gaya BSDS. Prediksi kontinu ditipiskan
 pertama dengan penekanan maksimum non-empat arah gradien, kemudian diprediksi dan
-piksel tepi ground-truth dipasangkan satu-ke-satu dalam toleransi jarak.
+piksel tepi ground-truth dipasangkan satu ke satu dalam toleransi jarak.
 
 <code-tabs name="val" />
 
@@ -219,5 +219,4 @@ peta probabilitas. Cakupan per format ada pada [DexiNed](/docs/models/dexined)
 dan [TEED](/docs/models/teed) halaman dan di
 [matriks ekspor penuh](/docs/reference/export-matrix). [Ekspor](/docs/export)
 mencantumkan argumen yang diterima setiap format.
-
 

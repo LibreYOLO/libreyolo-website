@@ -184,7 +184,7 @@ Nilai piksel `255` berarti diabaikan. `label_mapping` memetakan ulang ID sumber 
 saat dimuat.
 
 Klasifikasi menggunakan pohon ImageFolder alih-alih berkas label, dengan `train/` dan
-`val/` masing-masing memiliki satu direktori per kelas. Pemetaan kelas-ke-indeks adalah urutan
+`val/` masing-masing memiliki satu direktori per kelas. Pemetaan kelas ke indeks adalah urutan
 nama folder yang diurutkan.
 
 Pemulihan QZL menggabungkan input yang rusak dengan target bersih dengan resolusi yang identik
@@ -269,5 +269,4 @@ diperiksa terhadap kontrak yang salah.
   dilakukan sekali setelah data tersedia.
 - [Validasi dan metrik ](/docs/train/validation) untuk evaluasi pada `val`
   atau pembagian `test`.
-
 

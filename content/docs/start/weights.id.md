@@ -18,7 +18,7 @@ keywords:
   - metadata checkpoint
 last_verified: 1.5.0
 meta:
-  - label: Di-host di
+  - label: Lokasi hosting
     value: 'Satu repositori Hugging Face per checkpoint:'
     links:
       - label: huggingface.co/LibreYOLO
@@ -218,5 +218,4 @@ jalur kompatibilitas dengan peringatan yang menyebutkan kekurangan.
 
 `libreyolo metadata` tidak pernah membuat model, sehingga dapat digunakan pada
 berkas yang family-nya belum diinstal dan pada berkas yang belum diyakini.
-
 

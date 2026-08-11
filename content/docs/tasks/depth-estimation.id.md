@@ -124,7 +124,7 @@ kedalaman family LibreYOLO tidak memublikasikan ulang: permintaan checkpoint men
 aset resmi dari rilis GitHub penulisnya dan memeriksa SHA-256 yang dipin.
 
 [LibreMODUS](/docs/models/libremodus) mencapai kedalaman sebagai satu target dari
-model apa pun-ke-apa pun daripada sebagai head khusus. Ini membutuhkan `modus` tambahan dan
+model apa pun ke apa pun daripada sebagai head khusus. Ini membutuhkan `modus` tambahan dan
 akun Hugging Face Anda yang terautentikasi, dan tidak menawarkan `val()` maupun
 `export()`.
 
@@ -215,6 +215,5 @@ set yang divalidasi alih-alih mencoba konversi yang tidak divalidasi. Periksa ha
 dan [matriks ekspor penuh ](/docs/reference/export-matrix) sebelum
 berkomitmen ke target. LibreMODUS dan SenseNova-Vision tidak mengekspor sama sekali.
 [Ekspor ](/docs/export) mencantumkan argumen yang diterima setiap format.
-
 
 
