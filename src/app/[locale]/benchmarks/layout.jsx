@@ -1,31 +1,26 @@
 import { buildPageMetadata, SITE_URL } from '@/i18n/metadata'
-
-const TITLE = 'Benchmarks'
-const DESCRIPTION =
-  'Measured benchmarks for every model LibreYOLO ships: COCO accuracy, RF100-VL transfer across 100 real-world datasets, and latency on real hardware. Nothing copied from a paper.'
+import { getTranslations } from 'next-intl/server'
 
 export async function generateMetadata({ params }) {
   const { locale } = await params
-  // The page copy is not translated yet, so /zh/benchmarks canonicalises to the
-  // English URL rather than advertising a translation that does not exist.
+  const t = await getTranslations({ locale, namespace: 'Benchmarks' })
   return buildPageMetadata({
-    title: TITLE,
-    description: DESCRIPTION,
+    title: t('metaTitle'),
+    description: t('metaDescription'),
     path: '/benchmarks',
     locale,
-    englishOnly: true,
+    englishOnly: false,
   })
 }
 
 // Dataset + measurement provenance for the RF100-VL sweep, so the numbers on
 // this page are machine-readable rather than locked inside the visualisation.
-function benchmarksJsonLd() {
+function benchmarksJsonLd(t) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
-    name: 'LibreYOLO RF100-VL benchmark results',
-    description:
-      'Per-dataset mAP@50-95 for LibreYOLO models fine-tuned and evaluated on each of the 100 RF100-VL datasets, plus COCO val2017 accuracy and measured latency across hardware.',
+    name: t('datasetName'),
+    description: t('datasetDescription'),
     url: `${SITE_URL}/benchmarks`,
     license: 'https://opensource.org/licenses/MIT',
     creator: { '@type': 'Organization', name: 'LibreYOLO', url: SITE_URL },
@@ -35,12 +30,14 @@ function benchmarksJsonLd() {
   }
 }
 
-export default function BenchmarksLayout({ children }) {
+export default async function BenchmarksLayout({ children, params }) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'Benchmarks' })
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(benchmarksJsonLd()) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(benchmarksJsonLd(t)) }}
       />
       {children}
     </>

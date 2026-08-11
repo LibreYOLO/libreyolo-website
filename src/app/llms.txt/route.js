@@ -66,6 +66,7 @@ libreyolo.com is the official site of the LibreYOLO open-source library: documen
 - [Articles](${SITE_URL}/articles): tutorials, comparisons, and news about MIT-licensed object detection
 - [LibreVLM](${SITE_URL}/docs/librevlm): vision-language model documentation
 - [Experimental tasks](${SITE_URL}/docs/experimental): research previews and experimental model documentation
+- [Cursor Hackathon track](${SITE_URL}/cursor-hackathon): setup tutorial and working examples for the LibreYOLO track
 
 ## Documentation versions
 ${SITE_URL}/docs always describes the current release. These single-page docs for

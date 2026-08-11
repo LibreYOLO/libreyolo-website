@@ -11,6 +11,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronRight, ChevronDown, Hash } from 'lucide-react'
 import PageActions from '@/components/docs/PageActions'
@@ -18,6 +19,7 @@ import DocsSearch from '@/components/docs/DocsSearch'
 import { DOCS_PRERELEASE, DOCS_CURRENT_VERSION } from '@/data/docs-versions'
 
 function NavGroup({ group, activePath, onNavigate }) {
+  const t = useTranslations('DocsChrome')
   const containsActive = group.items.some((item) => item.slug === activePath)
   const [open, setOpen] = useState(containsActive)
 
@@ -31,7 +33,7 @@ function NavGroup({ group, activePath, onNavigate }) {
         <ChevronRight
           className={`w-3.5 h-3.5 shrink-0 transition-transform duration-200 ${open ? 'rotate-90' : ''}`}
         />
-        {group.label}
+        {t(`groups.${group.id}`)}
       </button>
 
       {open && (
@@ -43,7 +45,7 @@ function NavGroup({ group, activePath, onNavigate }) {
                 <li key={item.slug}>
                   <span
                     className="block py-1 pl-3 text-[13.5px] text-surface-400/80 dark:text-surface-600 cursor-default select-none"
-                    title="Planned, not written yet"
+                    title={t('planned')}
                   >
                     {item.label}
                   </span>
@@ -79,11 +81,12 @@ function NavGroup({ group, activePath, onNavigate }) {
 }
 
 function NavTree({ nav, activePath, version, onNavigate }) {
+  const t = useTranslations('DocsChrome')
   return (
     <div>
       <div className="px-3 pb-4 mb-2 border-b border-surface-200 dark:border-white/[0.06]">
         <Link href="/docs" onClick={onNavigate} className="block group">
-          <span className="text-sm font-bold text-surface-900 dark:text-white">Documentation</span>
+          <span className="text-sm font-bold text-surface-900 dark:text-white">{t('documentation')}</span>
         </Link>
         {/*
           The rail states which release these pages describe, and it must not
@@ -99,21 +102,21 @@ function NavTree({ nav, activePath, version, onNavigate }) {
           <span className="mt-1 flex flex-col gap-0.5 text-xs font-medium">
             <span className="inline-flex items-center gap-1.5 text-surface-500 dark:text-surface-500">
               <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-              Next release
+              {t('nextRelease')}
             </span>
             <Link
               href={`/docs/v${DOCS_CURRENT_VERSION}`}
               onClick={onNavigate}
               className="pl-3 text-surface-400 underline-offset-2 hover:underline dark:text-surface-600"
             >
-              v{DOCS_CURRENT_VERSION} is current
+              {t('versionIsCurrent', { version: DOCS_CURRENT_VERSION })}
             </Link>
           </span>
         ) : (
           <span className="mt-1 inline-flex items-center gap-1.5 text-xs font-medium text-surface-500 dark:text-surface-500">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
             v{version}
-            <span className="text-surface-400 dark:text-surface-600">latest</span>
+            <span className="text-surface-400 dark:text-surface-600">{t('latest')}</span>
           </span>
         )}
         <div className="mt-3">
@@ -130,6 +133,7 @@ function NavTree({ nav, activePath, version, onNavigate }) {
 }
 
 function OnThisPage({ headings }) {
+  const t = useTranslations('DocsChrome')
   const [active, setActive] = useState(headings[0]?.id)
 
   useEffect(() => {
@@ -148,10 +152,10 @@ function OnThisPage({ headings }) {
   }, [headings])
 
   return (
-    <nav aria-label="On this page">
+    <nav aria-label={t('onThisPage')}>
       <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-surface-500 dark:text-surface-500 mb-3">
         <Hash className="w-3 h-3" />
-        On this page
+        {t('onThisPage')}
       </p>
       <ul className="space-y-px border-l border-surface-200 dark:border-white/[0.08]">
         {headings.map(({ id, title }) => (
@@ -174,6 +178,7 @@ function OnThisPage({ headings }) {
 }
 
 export default function DocsShell({ nav, activePath, version, headings = [], breadcrumbs = [], showActions = true, children }) {
+  const t = useTranslations('DocsChrome')
   const [drawerOpen, setDrawerOpen] = useState(false)
   const closeDrawer = () => setDrawerOpen(false)
 
@@ -193,7 +198,7 @@ export default function DocsShell({ nav, activePath, version, headings = [], bre
               so neither needs a band of its own. */}
           <div className="mb-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
             {breadcrumbs.length > 0 ? (
-            <nav aria-label="Breadcrumb">
+            <nav aria-label={t('breadcrumbLabel')}>
               <ol className="flex flex-wrap items-center gap-1.5 text-[13px] text-surface-500 dark:text-surface-500">
                 {breadcrumbs.map((crumb, index) => (
                   <li key={crumb.href || crumb.label} className="flex items-center gap-1.5">
@@ -229,10 +234,10 @@ export default function DocsShell({ nav, activePath, version, headings = [], bre
       <button
         onClick={() => setDrawerOpen(true)}
         className="lg:hidden fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full bg-surface-900 dark:bg-white px-4 py-3 text-sm font-semibold text-white dark:text-surface-900 shadow-lg shadow-surface-900/20"
-        aria-label="Open documentation navigation"
+        aria-label={t('openNav')}
       >
         <Menu className="w-4 h-4" />
-        Docs
+        {t('docsButton')}
       </button>
 
       <AnimatePresence>
@@ -256,7 +261,7 @@ export default function DocsShell({ nav, activePath, version, headings = [], bre
                 <button
                   onClick={closeDrawer}
                   className="rounded-lg p-2 text-surface-500 hover:bg-surface-100 hover:text-surface-900 dark:hover:bg-white/[0.06] dark:hover:text-white"
-                  aria-label="Close navigation"
+                  aria-label={t('closeNav')}
                 >
                   <X className="w-5 h-5" />
                 </button>

@@ -21,6 +21,7 @@
 
 import { Fragment } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { getTaskMeta, getTierMeta, getExportFormats } from '@/lib/docs'
 
 const HF_BASE = 'https://huggingface.co/LibreYOLO'
@@ -89,6 +90,8 @@ function Td({ children, className = '' }) {
  * from reading as decoration.
  */
 export function ModelHeader({ doc, family }) {
+  const t = useTranslations('ModelBlocks')
+  const tiers = useTranslations('Tiers')
   const tier = getTierMeta(family.tier)
   const u = family.upstream
   const taskNames = family.tasks.map((t) => getTaskMeta(t).label.toLowerCase()).join(', ')
@@ -103,29 +106,40 @@ export function ModelHeader({ doc, family }) {
       </p>
 
       <dl className="mt-5 flex flex-col gap-y-1 border-t border-surface-200 pt-4 text-[13.5px] dark:border-white/[0.09]">
-        <Meta label="Tasks">{taskNames}</Meta>
-        <Meta label="Sizes">{family.sizes_label}</Meta>
-        <Meta label="Install">
+        <Meta label={t('tasks')}>{taskNames}</Meta>
+        <Meta label={t('sizes')}>{family.sizes_label}</Meta>
+        <Meta label={t('install')}>
           {/* Most families need no extra; only quote the bracket form when
               there is actually one, or the row reads pip install "libreyolo[]". */}
           <code className="font-mono text-[12.5px]">
             {family.extra ? `pip install "libreyolo[${family.extra}]"` : 'pip install libreyolo'}
           </code>
         </Meta>
-        <Meta label="Support tier">
-          {tier?.label}, since v{family.added_in}. {tier?.blurb}
+        <Meta label={t('supportTierLabel')}>
+          {t('supportTier', {
+            tier: tier ? tiers(`${family.tier}.label`) : '',
+            version: family.added_in,
+            blurb: tier ? tiers(`${family.tier}.blurb`) : '',
+          })}
         </Meta>
-        <Meta label="Upstream">
-          {u.name} by {u.org}, {u.license}. <ExtLink href={u.paper_url}>Paper</ExtLink>
-          {', '}
-          <ExtLink href={u.code_url}>source</ExtLink>
+        <Meta label={t('upstream')}>
+          {t.rich('upstreamValue', {
+            name: u.name,
+            org: u.org,
+            license: u.license,
+            paper: (chunks) => <ExtLink href={u.paper_url}>{chunks}</ExtLink>,
+            source: (chunks) => <ExtLink href={u.code_url}>{chunks}</ExtLink>,
+          })}
         </Meta>
-        <Meta label="Licenses">
+        <Meta label={t('licenses')}>
           {/* LibreYOLO's own code is MIT, but a vendored port keeps its
               upstream license, so the header cannot assert MIT for every
               family. `code_license` overrides where they differ. */}
-          Code {u.code_license ?? 'MIT'}, weights {u.license}.{' '}
-          <Link href="#licensing" className="text-libre-700 underline-offset-2 hover:underline dark:text-libre-400">Commercial use</Link>
+          {t.rich('licensesValue', {
+            codeLicense: u.code_license ?? 'MIT',
+            weightsLicense: u.license,
+            link: (chunks) => <Link href="#licensing" className="text-libre-700 underline-offset-2 hover:underline dark:text-libre-400">{chunks}</Link>,
+          })}
         </Meta>
       </dl>
     </header>
@@ -215,6 +229,7 @@ export function HeroMedia({ media }) {
 /* ── benchmarks ─────────────────────────────────────────────────── */
 
 export function BenchmarkTable({ family, task = 'detect' }) {
+  const t = useTranslations('ModelBlocks')
   const bench = family.benchmarks?.[task]
   if (!bench) return null
 
@@ -227,10 +242,10 @@ export function BenchmarkTable({ family, task = 'detect' }) {
                 No latency columns: a millisecond figure is meaningless without
                 its hardware and runtime, and Vision Analysis already compares
                 those properly. The embed below carries that axis. */}
-            <Th>Checkpoint</Th>
-            <Th align="right">Input (px)</Th>
+            <Th>{t('checkpoint')}</Th>
+            <Th align="right">{t('inputPx')}</Th>
             <Th align="right">{bench.metric}</Th>
-            <Th align="right">Params (M)</Th>
+            <Th align="right">{t('paramsM')}</Th>
           </tr>
         </thead>
         <tbody>
@@ -250,16 +265,16 @@ export function BenchmarkTable({ family, task = 'detect' }) {
           ))}
         </tbody>
       </Table>
-      <Note>
-        {bench.dataset}. Measured by the LibreYOLO benchmark harness and published on{' '}
-        <ExtLink href={bench.source_url}>Vision Analysis</ExtLink>, where latency across hardware and
-        runtimes is compared and the full run records live.
-      </Note>
+      <Note>{t.rich('benchmarkNote', {
+        dataset: bench.dataset,
+        link: (chunks) => <ExtLink href={bench.source_url}>{chunks}</ExtLink>,
+      })}</Note>
     </div>
   )
 }
 
 export function VaEmbed({ family }) {
+  const t = useTranslations('ModelBlocks')
   const src = family.va_embed?.scatter
   if (!src) return null
   return (
@@ -267,7 +282,7 @@ export function VaEmbed({ family }) {
       <div className="relative w-full" style={{ paddingTop: '62.5%' }}>
         <iframe
           src={src}
-          title={`${family.display} accuracy versus latency`}
+          title={t('accuracyVersusLatency', { family: family.display })}
           loading="lazy"
           className="absolute inset-0 h-full w-full border border-surface-200 dark:border-white/[0.09]"
           style={{ border: 0 }}
@@ -280,6 +295,7 @@ export function VaEmbed({ family }) {
 /* ── checkpoints ────────────────────────────────────────────────── */
 
 export function CheckpointTable({ family }) {
+  const t = useTranslations('ModelBlocks')
   const grouped = family.tasks
     .map((task) => ({ task, rows: family.checkpoints.filter((c) => c.task === task) }))
     .filter((g) => g.rows.length)
@@ -300,9 +316,9 @@ export function CheckpointTable({ family }) {
               models. The linked repository is the authority for provenance,
               which is what the licensing note already tells the reader.
             */}
-            <Th>File</Th>
-            <Th align="right">Input (px)</Th>
-            <Th>Weights license</Th>
+            <Th>{t('file')}</Th>
+            <Th align="right">{t('inputPx')}</Th>
+            <Th>{t('weightsLicense')}</Th>
           </tr>
         </thead>
         <tbody>
@@ -334,10 +350,9 @@ export function CheckpointTable({ family }) {
           ))}
         </tbody>
       </Table>
-      <Note>
-        Every file above exists in the <ExtLink href={HF_BASE}>LibreYOLO org</ExtLink> today and
-        downloads on first use.
-      </Note>
+      <Note>{t.rich('hostedWeightsNote', {
+        link: (chunks) => <ExtLink href={HF_BASE}>{chunks}</ExtLink>,
+      })}</Note>
     </div>
   )
 }
@@ -373,24 +388,26 @@ const TICK = (
  * "why is this not validated" gets the real answer rather than a category.
  */
 function Mark({ state, label, reason }) {
+  const t = useTranslations('ModelBlocks')
   const supported = SUPPORTED_STATES.has(state)
   if (!supported) {
     return (
-      <span className="sr-only">{`${label}: not supported`}</span>
+      <span className="sr-only">{t('notSupported', { label })}</span>
     )
   }
   return (
     <span
       className="inline-flex text-emerald-600 dark:text-emerald-400"
-      title={reason ? `${label}: supported. ${reason}` : `${label}: supported`}
+      title={reason ? t('supportedWithReason', { label, reason }) : t('supported', { label })}
     >
       {TICK}
-      <span className="sr-only">{`${label}: supported. ${reason || ''}`}</span>
+      <span className="sr-only">{reason ? t('supportedWithReason', { label, reason }) : t('supported', { label })}</span>
     </span>
   )
 }
 
 export function ExportMatrix({ family }) {
+  const t = useTranslations('ModelBlocks')
   const formats = getExportFormats()
 
   return (
@@ -400,7 +417,7 @@ export function ExportMatrix({ family }) {
           <thead>
             <tr>
               <th scope="col" className="border-b border-surface-300 px-3 py-1.5 text-left font-semibold text-surface-700 dark:border-white/20 dark:text-surface-300">
-                Task
+                {t('task')}
               </th>
               {formats.map((f) => (
                 <th
@@ -447,6 +464,7 @@ export function ExportMatrix({ family }) {
  * or change a venue, readers credit the wrong people. Never author one by hand.
  */
 export function Citation({ family }) {
+  const t = useTranslations('ModelBlocks')
   const u = family.upstream
   if (!u?.bibtex) return null
   return (
@@ -455,10 +473,10 @@ export function Citation({ family }) {
         {u.bibtex}
       </pre>
       {u.bibtex_source_url && (
-        <Note>
-          Copied from the authors' citation block at{' '}
-          <ExtLink href={u.bibtex_source_url}>{u.bibtex_source_url.replace('https://', '')}</ExtLink>.
-        </Note>
+        <Note>{t.rich('citationSource', {
+          link: (chunks) => <ExtLink href={u.bibtex_source_url}>{chunks}</ExtLink>,
+          source: u.bibtex_source_url.replace('https://', ''),
+        })}</Note>
       )}
     </div>
   )
@@ -472,6 +490,7 @@ export function Citation({ family }) {
  * from upstream and which are ours.
  */
 export function Provenance({ family, children }) {
+  const t = useTranslations('ModelBlocks')
   const u = family.upstream
   return (
     <div>
@@ -482,44 +501,35 @@ export function Provenance({ family, children }) {
         licenses can differ per checkpoint inside one family.
       */}
       <div className="mb-5 border-l-2 border-surface-300 pl-4 text-[13.5px] leading-relaxed text-surface-600 dark:border-white/20 dark:text-surface-400">
-        <p className="mb-2">
-          Check the license on the Hugging Face repository of the specific weights you
-          download. Every checkpoint in the{' '}
-          <ExtLink href={HF_BASE}>LibreYOLO org</ExtLink> carries one, and they are not
-          always the same across a family. That repository is the authoritative source;
-          the summary below describes what applied when this page was last verified.
-        </p>
-        <p>
-          This is a description of the licenses involved, not legal advice. If the
-          answer matters commercially, read the licenses yourself and take your own
-          counsel.
-        </p>
+        <p className="mb-2">{t.rich('licensingCaution', {
+          link: (chunks) => <ExtLink href={HF_BASE}>{chunks}</ExtLink>,
+        })}</p>
+        <p>{t('legalCaution')}</p>
       </div>
 
       <dl className="flex flex-col gap-y-1 text-[13.5px]">
-        <Meta label="Original work">{u.name}, {u.org}</Meta>
-        <Meta label="Upstream license">{u.license}</Meta>
-        <Meta label="Upstream source"><ExtLink href={u.code_url}>{u.code_url.replace('https://', '')}</ExtLink></Meta>
-        <Meta label="LibreYOLO code">MIT</Meta>
+        <Meta label={t('originalWork')}>{u.name}, {u.org}</Meta>
+        <Meta label={t('upstreamLicense')}>{u.license}</Meta>
+        <Meta label={t('upstreamSource')}><ExtLink href={u.code_url}>{u.code_url.replace('https://', '')}</ExtLink></Meta>
+        <Meta label={t('libreyoloCode')}>MIT</Meta>
         {/*
           Only claim we republish weights when we actually host some. Several
           families are deliberately NOT mirrored because their licenses forbid
           it (research-only, gated, or non-commercial), and asserting otherwise
           on those pages is both false and legally careless.
         */}
-        <Meta label="Weights">
+        <Meta label={t('weights')}>
           {family.weights_hosted === false ? (
-            <>
-              {u.license}, distributed by their authors. LibreYOLO does not host or mirror them.
-            </>
+            t('weightsNotHosted', { license: u.license })
           ) : (
-            <>
-              {u.license}, republished at <ExtLink href={HF_BASE}>huggingface.co/LibreYOLO</ExtLink>
-            </>
+            t.rich('weightsHosted', {
+              license: u.license,
+              link: (chunks) => <ExtLink href={HF_BASE}>{chunks}</ExtLink>,
+            })
           )}
         </Meta>
         {u.license_interpretation && (
-          <Meta label="Interpretation">{u.license_interpretation}</Meta>
+          <Meta label={t('interpretation')}>{u.license_interpretation}</Meta>
         )}
       </dl>
       {children && <div className="mt-4 text-surface-600 dark:text-surface-400">{children}</div>}

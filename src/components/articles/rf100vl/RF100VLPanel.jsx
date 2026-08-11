@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import {
   X, Orbit, ExternalLink, Grid3x3, Trophy, ArrowUpRight,
   // ring motifs
@@ -57,9 +58,9 @@ const COLOR_BY_DOMAIN = Object.fromEntries(RF100VL_DOMAINS.map((d) => [d.name, d
 const MODELS = Object.values(RESULTS_BY_DATASET).sort((a, b) => b.mean - a.mean)
 
 const TABS = [
-  { id: 'domains', label: 'The benchmark', icon: Orbit },
-  { id: 'datasets', label: 'Explore 100 datasets', icon: Grid3x3 },
-  { id: 'results', label: 'Results', icon: Trophy },
+  { id: 'domains', labelKey: 'benchmark', icon: Orbit },
+  { id: 'datasets', labelKey: 'exploreDatasets', icon: Grid3x3 },
+  { id: 'results', labelKey: 'results', icon: Trophy },
 ]
 
 // Score bands. RF100-VL spans a huge range, so colour carries the verdict.
@@ -89,11 +90,11 @@ function bandVars(m) {
 }
 
 const BANDS = [
-  { label: '75+', v: 0.8 },
-  { label: '60 to 75', v: 0.65 },
-  { label: '45 to 60', v: 0.5 },
-  { label: '30 to 45', v: 0.35 },
-  { label: 'under 30', v: 0.1 },
+  { labelKey: 'band75', v: 0.8 },
+  { labelKey: 'band60', v: 0.65 },
+  { labelKey: 'band45', v: 0.5 },
+  { labelKey: 'band30', v: 0.35 },
+  { labelKey: 'bandUnder30', v: 0.1 },
 ]
 
 function pct(v) {
@@ -103,8 +104,9 @@ function pct(v) {
 /* ---------------------------------------------------------------- Tab 1 */
 
 function DomainRings({ focusDomain }) {
+  const t = useTranslations('RF100VL')
   return (
-    <div className="rfa-layer" aria-label="The seven RF100-VL domains as themed rings">
+    <div className="rfa-layer" aria-label={t('themedRings')}>
       {RINGS.map((ring) => (
         <div
           key={`body-${ring.domain}`}
@@ -147,7 +149,7 @@ function DomainRings({ focusDomain }) {
 
       <div className="rfa-core">
         <span className="rfa-core-pill">RF100-VL</span>
-        <div className="rfa-core-sub">100 real-world datasets, 7 domains</div>
+        <div className="rfa-core-sub">{t('datasetDomainCountLong')}</div>
       </div>
     </div>
   )
@@ -156,6 +158,7 @@ function DomainRings({ focusDomain }) {
 /* ---------------------------------------------------------------- Drawer */
 
 function DatasetDrawer({ dataset, onClose, onSwitch }) {
+  const t = useTranslations('RF100VL')
   const siblings = RF100VL_DATASETS.filter((d) => d.domain === dataset.domain && d !== dataset).slice(0, 6)
   const color = COLOR_BY_DOMAIN[dataset.domain]
   const scores = MODELS.map((m) => ({ model: m.label ?? m.model, s: m.scores[dataset.name] })).filter((x) => x.s)
@@ -163,7 +166,7 @@ function DatasetDrawer({ dataset, onClose, onSwitch }) {
   return (
     <>
       <div className="rfd-backdrop" onClick={onClose} aria-hidden="true" />
-      <aside className="rfd-drawer" role="dialog" aria-label={`${dataset.name} dataset`}>
+      <aside className="rfd-drawer" role="dialog" aria-label={t('datasetDialog', { name: dataset.name })}>
         <div className="flex items-start justify-between gap-4 p-5 pb-4">
           <div className="min-w-0">
             <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-surface-500 dark:text-surface-400">
@@ -174,22 +177,22 @@ function DatasetDrawer({ dataset, onClose, onSwitch }) {
               {dataset.name}
             </h3>
           </div>
-          <button type="button" className="rfd-close" aria-label="Close dataset panel" onClick={onClose}>
+          <button type="button" className="rfd-close" aria-label={t('closeDatasetPanel')} onClick={onClose}>
             <X className="h-4 w-4" />
           </button>
         </div>
 
         <div className="px-5">
           <div className="rfd-main-img" style={{ '--c': color }}>
-            <img src={dataset.img} alt={`Annotated sample from the ${dataset.name} dataset`} />
-            <span className="rfd-img-tag">annotated sample</span>
+            <img src={dataset.img} alt={t('annotatedSampleAlt', { name: dataset.name })} />
+            <span className="rfd-img-tag">{t('annotatedSample')}</span>
           </div>
         </div>
 
         {scores.length > 0 && (
           <div className="px-5 pt-4">
             <h4 className="text-xs font-bold uppercase tracking-[0.15em] text-surface-500 dark:text-surface-400">
-              How LibreYOLO scores here
+              {t('scoresHere')}
             </h4>
             <div className="mt-2.5 space-y-2">
               {scores.map(({ model, s }) => (
@@ -203,8 +206,8 @@ function DatasetDrawer({ dataset, onClose, onSwitch }) {
               ))}
             </div>
             <p className="mt-2 text-[11px] leading-relaxed text-surface-400 dark:text-surface-500">
-              mAP@50-95 on this dataset&apos;s own test split, after fine-tuning on it.
-              {scores[0]?.s && ` ${scores[0].s.img} test images, ${scores[0].s.cls} ${scores[0].s.cls === 1 ? 'class' : 'classes'}.`}
+              {t('scoreMethod')}
+              {scores[0]?.s && ` ${t('scoreDetails', { images: scores[0].s.img, classes: scores[0].s.cls })}`}
             </p>
           </div>
         )}
@@ -212,7 +215,7 @@ function DatasetDrawer({ dataset, onClose, onSwitch }) {
         {siblings.length > 0 && (
           <div className="px-5 pt-6">
             <h4 className="text-xs font-bold uppercase tracking-[0.15em] text-surface-500 dark:text-surface-400">
-              More from {dataset.domain}
+              {t('moreFrom', { domain: dataset.domain })}
             </h4>
             <div className="mt-2.5 grid grid-cols-3 gap-2">
               {siblings.map((d) => (
@@ -233,7 +236,7 @@ function DatasetDrawer({ dataset, onClose, onSwitch }) {
             className="rfd-cta"
           >
             <ExternalLink className="h-4 w-4" />
-            Open on Roboflow Universe
+            {t('openRoboflow')}
           </a>
         </div>
       </aside>
@@ -244,6 +247,7 @@ function DatasetDrawer({ dataset, onClose, onSwitch }) {
 /* ---------------------------------------------------------------- Tab 2/3 */
 
 function PlanetRings({ colorFor, dimFor, onHover, onOpen, active, drawerDs, focusDomain }) {
+  const t = useTranslations('RF100VL')
   return (
     <div className="rfe-layer">
       {RINGS.map((ring) => (
@@ -286,7 +290,7 @@ function PlanetRings({ colorFor, dimFor, onHover, onOpen, active, drawerDs, focu
                     type="button"
                     className={`rfp-planet${isActive ? ' is-active' : ''}${isDim ? ' is-dim' : ''}`}
                     style={{ '--c': colorFor(dataset, ring) }}
-                    aria-label={`Open the ${dataset.name} dataset (${ring.domain})`}
+                    aria-label={t('openDataset', { name: dataset.name, domain: ring.domain })}
                     title={dataset.name}
                     onMouseEnter={() => onHover(dataset)}
                     onMouseLeave={() => onHover(null)}
@@ -311,6 +315,7 @@ function PlanetRings({ colorFor, dimFor, onHover, onOpen, active, drawerDs, focu
 // One bar per dataset, tallest first. The shape of the curve is the story:
 // a long strong shoulder, then a cliff into the datasets nothing handles well.
 function ResultBars({ rows, onHover, onOpen, active }) {
+  const t = useTranslations('RF100VL')
   if (rows.length === 0) return null
   const mean = rows.reduce((a, r) => a + r.s.m, 0) / rows.length
 
@@ -323,7 +328,7 @@ function ResultBars({ rows, onHover, onOpen, active }) {
           </div>
         ))}
         <div className="rfb-mean" style={{ bottom: `${mean * 100}%` }}>
-          <span>mean {pct(mean)}</span>
+          <span>{t('meanScore', { score: pct(mean) })}</span>
         </div>
 
         <div className="rfb-bars">
@@ -346,9 +351,9 @@ function ResultBars({ rows, onHover, onOpen, active }) {
       </div>
 
       <div className="rfb-foot">
-        <span>strongest</span>
-        <span className="rfb-foot-mid">{rows.length} datasets, sorted by score</span>
-        <span>weakest</span>
+        <span>{t('strongest')}</span>
+        <span className="rfb-foot-mid">{t('sortedDatasets', { count: rows.length })}</span>
+        <span>{t('weakest')}</span>
       </div>
     </div>
   )
@@ -357,6 +362,7 @@ function ResultBars({ rows, onHover, onOpen, active }) {
 /* ---------------------------------------------------------------- Panel */
 
 export default function RF100VLPanel() {
+  const t = useTranslations('RF100VL')
   const [tab, setTab] = useState('domains')
   const [drawerDs, setDrawerDs] = useState(null)
   const [hoverDs, setHoverDs] = useState(null)
@@ -405,7 +411,7 @@ export default function RF100VLPanel() {
   }
 
   return (
-    <section aria-label="RF100-VL benchmark" className="rfp-hero not-prose">
+    <section aria-label={t('benchmarkAria')} className="rfp-hero not-prose">
       <div className="rfp-stars" aria-hidden="true" />
       <div className="rfp-grid" aria-hidden="true" />
       <div className={`rfp-bg${orbiting && active ? ' is-on' : ''}`} aria-hidden="true">
@@ -414,8 +420,8 @@ export default function RF100VLPanel() {
 
       {/* Tabs */}
       <div className="relative z-10 flex justify-center px-6 pt-10" ref={tabRef}>
-        <div className="rfx-tabs" role="tablist" aria-label="RF100-VL views">
-          {TABS.map(({ id, label, icon: Icon }) => (
+        <div className="rfx-tabs" role="tablist" aria-label={t('viewsAria')}>
+          {TABS.map(({ id, labelKey, icon: Icon }) => (
             <button
               key={id}
               role="tab"
@@ -425,7 +431,7 @@ export default function RF100VLPanel() {
               onClick={() => selectTab(id)}
             >
               <Icon className="h-3.5 w-3.5" />
-              {label}
+              {t(`tabs.${labelKey}`)}
             </button>
           ))}
         </div>
@@ -456,7 +462,7 @@ export default function RF100VLPanel() {
               <div>
                 <div className="rfb-head-value">{pct(active ? model.scores[active.name]?.m ?? model.mean : model.mean)}</div>
                 <div className="rfb-head-label">
-                  {active ? active.name : `${model.label ?? model.model}, mean of ${ranked.length} datasets`}
+                  {active ? active.name : t('modelMean', { model: model.label ?? model.model, count: ranked.length })}
                 </div>
               </div>
               <div className="rfb-head-preview">
@@ -501,15 +507,15 @@ export default function RF100VLPanel() {
               </span>
               <div className="rfp-core-sub">
                 {tab === 'results' && model
-                  ? (active ? 'on this dataset' : `${model.label ?? model.model}, mean of 100`)
-                  : '100 datasets · 7 domains'}
+                  ? (active ? t('onThisDataset') : t('modelMean100', { model: model.label ?? model.model }))
+                  : t('datasetDomainCount')}
               </div>
             </div>
 
             <div className={`rfp-info${active && !drawerDs ? ' is-on' : ''}`} aria-live="polite">
               {active && (
                 <>
-                  <img src={active.img} alt={`Sample from the ${active.name} dataset`} />
+                  <img src={active.img} alt={t('sampleAlt', { name: active.name })} />
                   <div className="min-w-0">
                     <div className="rfp-info-name">{active.name}</div>
                     <div className="rfp-info-domain">
@@ -532,7 +538,7 @@ export default function RF100VLPanel() {
 
       {orbiting && (
         <p className="relative z-10 mt-2 text-center font-mono text-[10px] uppercase tracking-[0.22em] text-surface-400 dark:text-surface-600">
-          hover to preview · click a planet to open the dataset
+          {t('interactionHint')}
         </p>
       )}
 
@@ -540,9 +546,9 @@ export default function RF100VLPanel() {
       <div className="relative z-10 mt-4 flex flex-wrap justify-center gap-2 px-6">
         {tab === 'results'
           ? BANDS.map((b) => (
-              <span key={b.label} className="rfp-legend-chip" style={{ '--c': bandColor(b.v) }}>
+              <span key={b.labelKey} className="rfp-legend-chip" style={{ '--c': bandColor(b.v) }}>
                 <span className="rfp-swatch" style={{ background: bandColor(b.v) }} />
-                {b.label}
+                {t(`bands.${b.labelKey}`)}
               </span>
             ))
           : RF100VL_DOMAINS.map((domain) => (
@@ -567,8 +573,8 @@ export default function RF100VLPanel() {
       {tab === 'results' && model && (
         <div className="relative z-10 mx-auto mt-8 grid max-w-4xl gap-3 px-6 pb-12 sm:grid-cols-2">
           {[
-            { title: 'Strongest datasets', rows: ranked.slice(0, 5) },
-            { title: 'Weakest datasets', rows: ranked.slice(-5).reverse() },
+            { title: t('strongestDatasets'), rows: ranked.slice(0, 5) },
+            { title: t('weakestDatasets'), rows: ranked.slice(-5).reverse() },
           ].map(({ title, rows }) => (
             <div key={title} className="rfx-list">
               <div className="rfx-list-head">{title}</div>

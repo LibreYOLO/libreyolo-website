@@ -254,6 +254,7 @@ function getCodeLabel(language, filename) {
 /* ─── Primitives ─── */
 
 export function CodeBlock({ children, language = 'python', filename }) {
+  const t = useTranslations('DocsKit')
   const [copied, setCopied] = useState(false)
   const code = typeof children === 'string' ? children : String(children ?? '')
   const lines = code.split('\n')
@@ -281,7 +282,7 @@ export function CodeBlock({ children, language = 'python', filename }) {
           className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-surface-500 dark:text-surface-400 hover:text-surface-900 dark:hover:text-white hover:bg-surface-200 dark:hover:bg-white/10 transition-all"
         >
           {copied ? <Check className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-          {copied ? 'Copied!' : 'Copy'}
+          {copied ? t('copied') : t('copy')}
         </button>
       </div>
       <pre className="text-left overflow-x-auto">
@@ -421,6 +422,7 @@ export function Callout({ icon: Icon, tone = 'libre', title, children, className
 /* ─── Layout shell (sidebar + scroll spy + mobile menu + copy docs) ─── */
 
 function Sidebar({ sections, eyebrow, activeSection, onNavigate, relatedLinks }) {
+  const t = useTranslations('DocsKit')
   return (
     <nav>
       <div className="flex items-center gap-2 mb-6 px-3">
@@ -433,7 +435,7 @@ function Sidebar({ sections, eyebrow, activeSection, onNavigate, relatedLinks })
         className="flex items-center gap-2 mb-6 mx-3 rounded-lg border border-surface-200 dark:border-white/[0.08] bg-surface-50 dark:bg-white/[0.03] px-3 py-2 text-sm font-medium text-surface-600 dark:text-surface-400 hover:text-surface-900 dark:hover:text-white hover:bg-white dark:hover:bg-white/[0.05] transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        Back to core docs
+        {t('backToCoreDocs')}
       </Link>
 
       <ul className="space-y-0.5">
@@ -460,7 +462,7 @@ function Sidebar({ sections, eyebrow, activeSection, onNavigate, relatedLinks })
       {relatedLinks?.length ? (
         <div className="mt-8 mx-3 pt-6 border-t border-surface-200 dark:border-white/[0.06]">
           <div className="text-[11px] font-semibold uppercase tracking-wide text-surface-500 dark:text-surface-500 mb-2">
-            Related
+            {t('related')}
           </div>
           <div className="space-y-1">
             {relatedLinks.map(({ href, label }) => (
@@ -479,9 +481,12 @@ function Sidebar({ sections, eyebrow, activeSection, onNavigate, relatedLinks })
   )
 }
 
-export function DocLayout({ sections, eyebrow = 'Documentation', copyTitle = 'LibreYOLO Documentation', relatedLinks, children }) {
+export function DocLayout({ sections, eyebrow, copyTitle, relatedLinks, children }) {
   const locale = useLocale()
   const tNote = useTranslations('DocsNote')
+  const t = useTranslations('DocsKit')
+  const resolvedEyebrow = eyebrow ?? t('documentation')
+  const resolvedCopyTitle = copyTitle ?? t('copyTitle')
   const [activeSection, setActiveSection] = useState(sections[0]?.id)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [docsCopied, setDocsCopied] = useState(false)
@@ -527,7 +532,7 @@ export function DocLayout({ sections, eyebrow = 'Documentation', copyTitle = 'Li
 
   const copyDocs = async () => {
     const docsText = document.querySelector('[data-docs-content]')?.innerText || ''
-    await navigator.clipboard.writeText(`# ${copyTitle}\n\n${docsText}`)
+    await navigator.clipboard.writeText(`# ${resolvedCopyTitle}\n\n${docsText}`)
     setDocsCopied(true)
     setTimeout(() => setDocsCopied(false), 2000)
   }
@@ -536,14 +541,14 @@ export function DocLayout({ sections, eyebrow = 'Documentation', copyTitle = 'Li
     <div className="flex min-h-screen">
       {/* Desktop sidebar */}
       <aside className="hidden lg:block fixed left-0 top-20 bottom-0 w-64 border-r border-surface-200 dark:border-white/[0.06] bg-white/80 dark:bg-surface-950/50 backdrop-blur-sm overflow-y-auto py-8 px-4 z-30">
-        <Sidebar sections={sections} eyebrow={eyebrow} activeSection={activeSection} onNavigate={navigateTo} relatedLinks={relatedLinks} />
+        <Sidebar sections={sections} eyebrow={resolvedEyebrow} activeSection={activeSection} onNavigate={navigateTo} relatedLinks={relatedLinks} />
       </aside>
 
       {/* Mobile sidebar toggle */}
       <button
         onClick={() => setMobileMenuOpen(true)}
         className="lg:hidden fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-libre-500 text-white shadow-lg shadow-libre-500/30 flex items-center justify-center hover:bg-libre-400 transition-colors"
-        aria-label="Open navigation"
+        aria-label={t('openNavigation')}
       >
         <Menu className="w-5 h-5" />
       </button>
@@ -567,7 +572,7 @@ export function DocLayout({ sections, eyebrow = 'Documentation', copyTitle = 'Li
               className="fixed left-0 top-0 bottom-0 w-72 bg-white dark:bg-surface-950 border-r border-surface-200 dark:border-white/[0.06] z-50 lg:hidden overflow-y-auto py-6 px-4"
             >
               <div className="flex items-center justify-between mb-4 px-3">
-                <span className="text-sm font-semibold text-surface-800 dark:text-white tracking-wide uppercase">Docs</span>
+                <span className="text-sm font-semibold text-surface-800 dark:text-white tracking-wide uppercase">{t('docs')}</span>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
                   className="p-1.5 rounded-lg text-surface-500 dark:text-surface-400 hover:text-surface-900 dark:hover:text-white hover:bg-surface-100 dark:hover:bg-white/[0.06] transition-colors"
@@ -575,7 +580,7 @@ export function DocLayout({ sections, eyebrow = 'Documentation', copyTitle = 'Li
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              <Sidebar sections={sections} eyebrow={eyebrow} activeSection={activeSection} onNavigate={navigateTo} relatedLinks={relatedLinks} />
+              <Sidebar sections={sections} eyebrow={resolvedEyebrow} activeSection={activeSection} onNavigate={navigateTo} relatedLinks={relatedLinks} />
             </motion.aside>
           </>
         )}
@@ -595,14 +600,14 @@ export function DocLayout({ sections, eyebrow = 'Documentation', copyTitle = 'Li
               className="inline-flex items-center gap-1.5 text-sm font-medium text-surface-500 dark:text-surface-400 hover:text-libre-600 dark:hover:text-libre-400 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
-              Core documentation
+              {t('coreDocumentation')}
             </Link>
             <button
               onClick={copyDocs}
               className="inline-flex items-center justify-center gap-2 rounded-lg border border-surface-200 dark:border-white/[0.08] bg-surface-950 px-3.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-surface-800 dark:bg-white dark:text-surface-950 dark:hover:bg-surface-200"
             >
               {docsCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-              {docsCopied ? 'Copied docs' : 'Copy docs'}
+              {docsCopied ? t('copiedDocs') : t('copyDocs')}
             </button>
           </div>
 

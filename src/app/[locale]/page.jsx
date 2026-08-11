@@ -153,11 +153,11 @@ function HeroSection() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block relative group"
-                      aria-label="View full-size detection result"
+                      aria-label={t('viewFullDetection')}
                     >
                       <img
                         src="https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour_result.jpg"
-                        alt="LibreYOLO detection result"
+                        alt={t('detectionResultAlt')}
                         className="w-full h-auto block"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-active:opacity-100 transition-opacity" />
@@ -190,7 +190,7 @@ function HeroSection() {
                   <div className="p-3">
                     <img
                       src="https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour_result.jpg"
-                      alt="LibreYOLO Detection Result"
+                      alt={t('detectionResultAlt')}
                       className="rounded-lg w-full"
                     />
                     <div className="mt-3 flex items-center justify-between text-xs">

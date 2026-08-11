@@ -15,8 +15,10 @@
  */
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 export default function PageActions({ path }) {
+  const t = useTranslations('DocsChrome')
   const [state, setState] = useState('idle')
   const markdownUrl = `${path}.md`
 
@@ -32,23 +34,23 @@ export default function PageActions({ path }) {
     setTimeout(() => setState('idle'), 2000)
   }
 
-  const label = state === 'copied' ? 'Copied' : state === 'failed' ? 'Copy failed' : 'Copy page'
+  const label = state === 'copied' ? t('copied') : state === 'failed' ? t('copyFailed') : t('copyPage')
 
   return (
     <div className="flex shrink-0 items-center gap-3 text-[13px]">
       <button
         onClick={copy}
         className="text-surface-500 transition-colors hover:text-surface-900 dark:text-surface-500 dark:hover:text-surface-200"
-        title="Copy this page as markdown, ready to paste into an assistant"
+        title={t('copyTitle')}
       >
         {label}
       </button>
       <a
         href={markdownUrl}
         className="text-surface-500 transition-colors hover:text-surface-900 dark:text-surface-500 dark:hover:text-surface-200"
-        title="View the raw markdown for this page"
+        title={t('viewMarkdownTitle')}
       >
-        View as markdown
+        {t('viewMarkdown')}
       </a>
     </div>
   )

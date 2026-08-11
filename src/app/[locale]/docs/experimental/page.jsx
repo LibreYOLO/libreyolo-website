@@ -1,5 +1,5 @@
 'use client'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 import { motion } from 'framer-motion'
 import {
@@ -11,89 +11,79 @@ import {
   CodeBlock, DocTable, FeatureItem, Callout, SupportBadge, ExternalRef,
 } from '@/components/DocsKit'
 
-const sections = [
-  { id: 'overview', title: 'Overview', icon: FlaskConical },
-  { id: 'task-selection', title: 'Selecting a Task', icon: GitBranch },
-  { id: 'classification', title: 'Classification', icon: Tags },
-  { id: 'obb', title: 'Oriented Boxes (OBB)', icon: Rotate3d },
-  { id: 'pose', title: 'Keypoints / Pose', icon: PersonStanding },
-  { id: 'small-object', title: 'Small-Object Detection', icon: Crosshair },
-  { id: 'lora', title: 'LoRA / DoRA', icon: Layers2 },
-  { id: 'status', title: 'Stability', icon: AlertTriangle },
+const sectionDefs = [
+  { id: 'overview', titleKey: 'overview', icon: FlaskConical },
+  { id: 'task-selection', titleKey: 'taskSelection', icon: GitBranch },
+  { id: 'classification', titleKey: 'classification', icon: Tags },
+  { id: 'obb', titleKey: 'obb', icon: Rotate3d },
+  { id: 'pose', titleKey: 'pose', icon: PersonStanding },
+  { id: 'small-object', titleKey: 'smallObject', icon: Crosshair },
+  { id: 'lora', titleKey: 'lora', icon: Layers2 },
+  { id: 'status', titleKey: 'status', icon: AlertTriangle },
 ]
 
-const relatedLinks = [
-  { href: '/docs', label: 'Core documentation' },
-  { href: '/docs/librevlm', label: 'LibreVLM' },
-  { href: '/models', label: 'Model Zoo' },
+const relatedLinkDefs = [
+  { href: '/docs', labelKey: 'coreDocs' },
+  { href: '/docs/librevlm', labelKey: 'librevlm' },
+  { href: '/models', labelKey: 'modelZoo' },
 ]
 
 function ExperimentalPage() {
+  const t = useTranslations('Experimental')
+  const sections = sectionDefs.map(({ titleKey, ...section }) => ({ ...section, title: t(`sections.${titleKey}`) }))
+  const relatedLinks = relatedLinkDefs.map(({ labelKey, ...link }) => ({ ...link, label: t(`related.${labelKey}`) }))
+  const rich = {
+    code: (chunks) => <InlineCode>{chunks}</InlineCode>,
+    strong: (chunks) => <strong className="text-surface-800 dark:text-white">{chunks}</strong>,
+  }
   return (
     <DocLayout
       sections={sections}
-      eyebrow="Experimental"
-      copyTitle="LibreYOLO Experimental Tasks"
+      eyebrow={t('eyebrow')}
+      copyTitle={t('copyTitle')}
       relatedLinks={relatedLinks}
     >
       <DocHero
-        badge="Experimental tasks"
+        badge={t('badge')}
         badgeTone="experimental"
-        title="What's "
-        accent="next"
-        lead="The detection and segmentation paths are the validated core. This page documents the new task heads and training tricks we are actively building on top of them: classification, oriented boxes, pose, and parameter-efficient fine-tuning."
+        title={t('heroTitle')}
+        accent={t('heroAccent')}
+        lead={t('heroLead')}
       />
 
       {/* ───────── OVERVIEW ───────── */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <SectionHeading id="overview" icon={FlaskConical}>Overview</SectionHeading>
-        <P>
-          LibreYOLO is a multi-task framework: the same model family can wear different heads. Alongside
-          the validated detect and segment paths, several new tasks are landing for the two flagship
-          families, YOLO9 and RF-DETR. They all plug into the same{' '}
-          <InlineCode>LibreYOLO(...)</InlineCode> factory and the same <InlineCode>Results</InlineCode>{' '}
-          container, so once you know the core API these are small additions.
-        </P>
+        <SectionHeading id="overview" icon={FlaskConical}>{t('sections.overview')}</SectionHeading>
+        <P>{t.rich('overview.body', rich)}</P>
         <ul className="space-y-2 mb-4">
-          <FeatureItem><strong className="text-surface-800 dark:text-white">Classification</strong> for YOLO9 and RF-DETR. Whole-image labels with top-1 / top-5 probabilities.</FeatureItem>
-          <FeatureItem><strong className="text-surface-800 dark:text-white">Oriented bounding boxes (OBB)</strong> for YOLO9 and RF-DETR. Rotated boxes for aerial and document imagery.</FeatureItem>
-          <FeatureItem><strong className="text-surface-800 dark:text-white">Keypoints / pose</strong> for YOLO9 and RF-DETR. COCO-17 person keypoints.</FeatureItem>
-          <FeatureItem><strong className="text-surface-800 dark:text-white">Small-object detection</strong> with YOLO9-P2, a YOLOv9 variant with a stride-4 scale for the 4-16 px objects of aerial and drone imagery, including a VisDrone research-preview checkpoint.</FeatureItem>
-          <FeatureItem><strong className="text-surface-800 dark:text-white">LoRA / DoRA</strong> fine-tuning for RF-DETR. Adapt the transformer backbone with a fraction of the memory.</FeatureItem>
+          <FeatureItem>{t.rich('overview.features.classification', rich)}</FeatureItem>
+          <FeatureItem>{t.rich('overview.features.obb', rich)}</FeatureItem>
+          <FeatureItem>{t.rich('overview.features.pose', rich)}</FeatureItem>
+          <FeatureItem>{t.rich('overview.features.smallObject', rich)}</FeatureItem>
+          <FeatureItem>{t.rich('overview.features.lora', rich)}</FeatureItem>
         </ul>
-        <Callout icon={AlertTriangle} tone="amber" title="Read this first">
-          <p>
-            Everything on this page is experimental and some of it is still in flight on feature
-            branches. APIs, defaults, and label formats can change before they are promoted into the
-            validated core. The <a href="#status" className="text-libre-600 dark:text-libre-400 hover:underline">Stability</a>{' '}
-            section tracks exactly where each feature stands.
-          </p>
+        <Callout icon={AlertTriangle} tone="amber" title={t('overview.calloutTitle')}>
+          <p>{t.rich('overview.calloutBody', {
+            link: (chunks) => <a href="#status" className="text-libre-600 dark:text-libre-400 hover:underline">{chunks}</a>,
+          })}</p>
         </Callout>
       </motion.div>
 
       <Divider />
 
       {/* ───────── TASK SELECTION ───────── */}
-      <SectionHeading id="task-selection" icon={GitBranch}>Selecting a Task</SectionHeading>
-      <P>
-        Every family defaults to detection. You opt into another task in one of three ways, resolved in
-        this order of precedence:
-      </P>
+      <SectionHeading id="task-selection" icon={GitBranch}>{t('sections.taskSelection')}</SectionHeading>
+      <P>{t('taskSelection.body')}</P>
       <DocTable
-        headers={['Priority', 'Mechanism', 'Example']}
+        headers={[t('taskSelection.table.priority'), t('taskSelection.table.mechanism'), t('taskSelection.table.example')]}
         rows={[
-          ['1', 'Explicit argument', <InlineCode key="a">task="obb"</InlineCode>],
-          ['2', 'Checkpoint metadata', 'task recorded inside a trained .pt'],
-          ['3', 'Filename suffix', <span key="c"><InlineCode>-cls</InlineCode>, <InlineCode>-obb</InlineCode>, <InlineCode>-pose</InlineCode></span>],
-          ['4', 'Family default', 'detect'],
+          ['1', t('taskSelection.table.explicit'), <InlineCode key="a">task="obb"</InlineCode>],
+          ['2', t('taskSelection.table.metadata'), t('taskSelection.table.recorded')],
+          ['3', t('taskSelection.table.suffix'), <span key="c"><InlineCode>-cls</InlineCode>, <InlineCode>-obb</InlineCode>, <InlineCode>-pose</InlineCode></span>],
+          ['4', t('taskSelection.table.default'), 'detect'],
         ]}
       />
-      <P>
-        Because the public <InlineCode>LibreYOLO(...)</InlineCode> factory expects a real weights file,
-        the cleanest way to start one of these tasks from scratch is to construct the family class
-        directly and pass <InlineCode>task=</InlineCode>. Trained checkpoints load back through the unified
-        factory and auto-detect their task.
-      </P>
+      <P>{t.rich('taskSelection.after', rich)}</P>
       <CodeBlock language="python">{`from libreyolo import LibreYOLO, LibreYOLO9, LibreRFDETR
 
 # Start a task from scratch via the family class
@@ -105,22 +95,15 @@ m = LibreYOLO("LibreYOLO9t-obb.pt")`}</CodeBlock>
       <Divider />
 
       {/* ───────── CLASSIFICATION ───────── */}
-      <SectionHeading id="classification" icon={Tags}>Image Classification</SectionHeading>
+      <SectionHeading id="classification" icon={Tags}>{t('classification.title')}</SectionHeading>
       <div className="flex flex-wrap gap-2 mb-5">
         <SupportBadge variant="experimental">YOLO9: t, s, m, c</SupportBadge>
         <SupportBadge variant="experimental">RF-DETR: n, s, m, l</SupportBadge>
       </div>
-      <P>
-        Classification gives a single label for a whole image. YOLO9 keeps its backbone and bolts on a
-        lightweight classification head; RF-DETR reuses its DINOv2 encoder and adds a pooled linear head.
-        Both run at 224 by 224.
-      </P>
+      <P>{t('classification.body')}</P>
 
-      <SubHeading>Inference and the Probs result</SubHeading>
-      <P>
-        Prediction returns a <InlineCode>Results</InlineCode> object whose <InlineCode>probs</InlineCode>{' '}
-        field carries a softmax over the classes.
-      </P>
+      <SubHeading>{t('classification.inferenceTitle')}</SubHeading>
+      <P>{t.rich('classification.inferenceBody', rich)}</P>
       <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 model = LibreYOLO("LibreYOLO9t-cls.pt")
@@ -131,21 +114,18 @@ print(r.probs.top1conf)    # its probability
 print(r.probs.top5)        # [id, id, id, id, id]
 print(model.names[r.probs.top1])  # human-readable label`}</CodeBlock>
       <DocTable
-        headers={['Field', 'Type', 'Meaning']}
+        headers={[t('commonTable.field'), t('commonTable.type'), t('commonTable.meaning')]}
         rows={[
-          [<InlineCode key="a">probs.top1</InlineCode>, 'int', 'Argmax class id.'],
-          [<InlineCode key="b">probs.top5</InlineCode>, 'list[int]', 'Top-5 class ids, descending.'],
-          [<InlineCode key="c">probs.top1conf</InlineCode>, 'float', 'Probability of the top-1 class.'],
-          [<InlineCode key="d">probs.top5conf</InlineCode>, 'tensor', 'Probabilities of the top-5 classes.'],
-          [<InlineCode key="e">probs.data</InlineCode>, 'tensor', 'Full softmax vector.'],
+          [<InlineCode key="a">probs.top1</InlineCode>, 'int', t('classification.table.top1')],
+          [<InlineCode key="b">probs.top5</InlineCode>, 'list[int]', t('classification.table.top5')],
+          [<InlineCode key="c">probs.top1conf</InlineCode>, 'float', t('classification.table.top1conf')],
+          [<InlineCode key="d">probs.top5conf</InlineCode>, 'tensor', t('classification.table.top5conf')],
+          [<InlineCode key="e">probs.data</InlineCode>, 'tensor', t('classification.table.data')],
         ]}
       />
 
-      <SubHeading>Dataset format and training</SubHeading>
-      <P>
-        Classification uses an <strong className="text-surface-800 dark:text-white">ImageFolder</strong>{' '}
-        layout, not a YAML. Class names are the sorted subfolder names, pinned to the train split.
-      </P>
+      <SubHeading>{t('classification.trainingTitle')}</SubHeading>
+      <P>{t.rich('classification.trainingBody', rich)}</P>
       <CodeBlock language="text" filename="dataset/">{`dataset/
   train/
     cat/   img001.jpg ...
@@ -153,12 +133,7 @@ print(model.names[r.probs.top1])  # human-readable label`}</CodeBlock>
   val/
     cat/   ...
     dog/   ...`}</CodeBlock>
-      <P>
-        The <InlineCode>data=</InlineCode> argument accepts a folder, a <InlineCode>.zip</InlineCode> URL,
-        or a known auto-download name (<InlineCode>imagenette160</InlineCode> and{' '}
-        <InlineCode>imagenet10</InlineCode>). The head is rebuilt to match the dataset's class count
-        automatically.
-      </P>
+      <P>{t.rich('classification.dataBody', rich)}</P>
       <CodeBlock language="python">{`from libreyolo import LibreYOLO9
 
 model = LibreYOLO9(None, size="t", task="classify", nb_classes=10)
@@ -168,33 +143,22 @@ result = model.train(
     optimizer="adamw", lr0=1e-3,
 )
 # Validation reports metrics/accuracy_top1 and metrics/accuracy_top5`}</CodeBlock>
-      <Callout icon={Sparkles} tone="emerald" title="Reference runs">
-        <p>
-          Quick sanity checks from development: YOLO9-t reached top-1 0.79 / top-5 0.975 on imagenette160
-          (10 epochs), and RF-DETR-n reached top-1 0.69 / top-5 0.96 (6 epochs). RF-DETR benefits from
-          internet access on first run to fetch its DINOv2 backbone; offline it falls back to random init.
-        </p>
+      <Callout icon={Sparkles} tone="emerald" title={t('classification.referenceTitle')}>
+        <p>{t('classification.referenceBody')}</p>
       </Callout>
 
       <Divider />
 
       {/* ───────── OBB ───────── */}
-      <SectionHeading id="obb" icon={Rotate3d}>Oriented Bounding Boxes (OBB)</SectionHeading>
+      <SectionHeading id="obb" icon={Rotate3d}>{t('obb.title')}</SectionHeading>
       <div className="flex flex-wrap gap-2 mb-5">
         <SupportBadge variant="experimental">YOLO9: t, s, m, c</SupportBadge>
         <SupportBadge variant="experimental">RF-DETR: n, s, m, l</SupportBadge>
       </div>
-      <P>
-        Oriented boxes carry a rotation angle, which is what aerial imagery, documents, and densely packed
-        scenes need. YOLO9 adds an angle branch to its detect head; RF-DETR adds a learnable angle
-        embedding to its decoder.
-      </P>
+      <P>{t('obb.body')}</P>
 
-      <SubHeading>Inference and the OBB result</SubHeading>
-      <P>
-        Results expose an <InlineCode>obb</InlineCode> field. Angles are in{' '}
-        <strong className="text-surface-800 dark:text-white">radians</strong>.
-      </P>
+      <SubHeading>{t('obb.inferenceTitle')}</SubHeading>
+      <P>{t.rich('obb.inferenceBody', rich)}</P>
       <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 model = LibreYOLO("LibreYOLO9t-obb.pt")
@@ -205,30 +169,21 @@ for i in range(len(r.obb.cls)):
     corners = r.obb.xyxyxyxy[i]           # 4 (x, y) corner points
     conf, cls = r.obb.conf[i], r.obb.cls[i]`}</CodeBlock>
       <DocTable
-        headers={['Field', 'Shape', 'Meaning']}
+        headers={[t('commonTable.field'), t('commonTable.shape'), t('commonTable.meaning')]}
         rows={[
-          [<InlineCode key="a">obb.xywhr</InlineCode>, 'N x 5', '[cx, cy, w, h, angle], angle in radians.'],
-          [<InlineCode key="b">obb.xyxyxyxy</InlineCode>, 'N x 4 x 2', 'Four corner points per box.'],
-          [<InlineCode key="c">obb.conf</InlineCode>, 'N', 'Confidence per box.'],
-          [<InlineCode key="d">obb.cls</InlineCode>, 'N', 'Class id per box.'],
+          [<InlineCode key="a">obb.xywhr</InlineCode>, 'N x 5', t('obb.table.xywhr')],
+          [<InlineCode key="b">obb.xyxyxyxy</InlineCode>, 'N x 4 x 2', t('obb.table.corners')],
+          [<InlineCode key="c">obb.conf</InlineCode>, 'N', t('obb.table.conf')],
+          [<InlineCode key="d">obb.cls</InlineCode>, 'N', t('obb.table.cls')],
         ]}
       />
 
-      <SubHeading>Dataset format and training</SubHeading>
-      <P>
-        OBB uses a standard detect-style data YAML, but labels are YOLO-OBB text files with{' '}
-        <strong className="text-surface-800 dark:text-white">exactly nine fields</strong> per row: a class
-        id followed by four normalized corner points. The angle is derived from the corners, not stored.
-      </P>
+      <SubHeading>{t('obb.trainingTitle')}</SubHeading>
+      <P>{t.rich('obb.trainingBody', rich)}</P>
       <CodeBlock language="text" filename="labels/aerial_001.txt">{`# class_id  x1 y1  x2 y2  x3 y3  x4 y4   (all normalized to [0, 1])
 0  0.51 0.32  0.66 0.38  0.62 0.55  0.47 0.49
 2  0.10 0.71  0.18 0.69  0.20 0.80  0.12 0.82`}</CodeBlock>
-      <P>
-        A plain detection checkpoint cannot be loaded directly into an OBB model. Going from detect to OBB
-        is only allowed as a training warm-start: pass <InlineCode>pretrained=True</InlineCode> (YOLO9) or
-        the explicit transfer flag on RF-DETR. Mosaic and mixup are disabled for OBB until corner-aware
-        augmentation lands, and tiled inference is not supported.
-      </P>
+      <P>{t.rich('obb.warmStart', rich)}</P>
       <CodeBlock language="python">{`from libreyolo import LibreYOLO9
 
 model = LibreYOLO9(None, size="t", task="obb")
@@ -237,30 +192,20 @@ result = model.train(data="dota8.yaml", pretrained=True, epochs=100, imgsz=640)
 
 # CLI equivalent
 # libreyolo train model=LibreYOLO9t.pt data=dota8.yaml --task obb`}</CodeBlock>
-      <P>
-        Validation uses rotated-IoU AP, reported as mAP50 and mAP50-95 under the OBB metric group.
-      </P>
+      <P>{t('obb.validation')}</P>
 
       <Divider />
 
       {/* ───────── POSE ───────── */}
-      <SectionHeading id="pose" icon={PersonStanding}>Keypoints / Pose</SectionHeading>
+      <SectionHeading id="pose" icon={PersonStanding}>{t('pose.title')}</SectionHeading>
       <div className="flex flex-wrap gap-2 mb-5">
         <SupportBadge variant="wip">YOLO9 + RF-DETR: landing soon</SupportBadge>
         <SupportBadge variant="experimental">YOLO-NAS, EdgeCrafter: available</SupportBadge>
       </div>
-      <P>
-        Pose estimation predicts keypoints per detected instance. The default layout is COCO-17 person
-        keypoints. YOLO9 and RF-DETR pose are person-only single-class in their first version; YOLO-NAS
-        and EdgeCrafter pose are already available in the tree.
-      </P>
+      <P>{t('pose.body')}</P>
 
-      <SubHeading>Inference and the Keypoints result</SubHeading>
-      <P>
-        Results expose a <InlineCode>keypoints</InlineCode> field of shape{' '}
-        <InlineCode>(N, K, 3)</InlineCode>, where the last channel is visibility or confidence, in
-        original-image pixel coordinates.
-      </P>
+      <SubHeading>{t('pose.inferenceTitle')}</SubHeading>
+      <P>{t.rich('pose.inferenceBody', rich)}</P>
       <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 model = LibreYOLO("LibreYOLO9t-pose.pt")
@@ -272,23 +217,17 @@ print(kp.conf)       # (N, 17)    per-keypoint visibility / confidence
 print(kp.xyn)        # normalized coordinates
 print(r.boxes.xyxy)  # person boxes still come along`}</CodeBlock>
       <DocTable
-        headers={['Field', 'Shape', 'Meaning']}
+        headers={[t('commonTable.field'), t('commonTable.shape'), t('commonTable.meaning')]}
         rows={[
-          [<InlineCode key="a">keypoints.xy</InlineCode>, 'N x K x 2', 'Pixel keypoint coordinates.'],
-          [<InlineCode key="b">keypoints.xyn</InlineCode>, 'N x K x 2', 'Normalized keypoint coordinates.'],
-          [<InlineCode key="c">keypoints.conf</InlineCode>, 'N x K', 'Per-keypoint visibility / confidence.'],
-          [<InlineCode key="d">keypoints.has_visible</InlineCode>, 'N x K', 'Boolean visible mask.'],
+          [<InlineCode key="a">keypoints.xy</InlineCode>, 'N x K x 2', t('pose.table.xy')],
+          [<InlineCode key="b">keypoints.xyn</InlineCode>, 'N x K x 2', t('pose.table.xyn')],
+          [<InlineCode key="c">keypoints.conf</InlineCode>, 'N x K', t('pose.table.conf')],
+          [<InlineCode key="d">keypoints.has_visible</InlineCode>, 'N x K', t('pose.table.visible')],
         ]}
       />
 
-      <SubHeading>Dataset format and training</SubHeading>
-      <P>
-        Pose uses a data YAML that must declare <InlineCode>kpt_shape: [K, 2|3]</InlineCode> and, for
-        horizontal-flip augmentation, a <InlineCode>flip_idx</InlineCode>. Labels are YOLO-pose text rows:
-        a class id, a normalized box, then <InlineCode>K</InlineCode> keypoint triplets{' '}
-        <InlineCode>(x, y, v)</InlineCode> with visibility <InlineCode>v</InlineCode> in{' '}
-        <InlineCode>{'{0, 1, 2}'}</InlineCode>.
-      </P>
+      <SubHeading>{t('pose.trainingTitle')}</SubHeading>
+      <P>{t.rich('pose.trainingBody', rich)}</P>
       <CodeBlock language="yaml" filename="coco8-pose.yaml">{`path: coco8-pose
 train: images/train
 val: images/val
@@ -304,54 +243,37 @@ model = LibreYOLO9("LibreYOLO9t.pt", size="t", task="pose")
 model.train(data="coco8-pose.yaml", epochs=100, imgsz=640)
 
 # Validation reports OKS-based AP via the pose validator`}</CodeBlock>
-      <Callout icon={AlertTriangle} tone="rose" title="In active development">
-        <p>
-          YOLO9 and RF-DETR pose are on a feature branch and have not been merged yet; treat the API
-          above as the intended contract rather than a frozen one. YOLO-NAS pose weights are linked from
-          upstream rather than mirrored and must be staged manually.
-        </p>
+      <Callout icon={AlertTriangle} tone="rose" title={t('pose.devTitle')}>
+        <p>{t('pose.devBody')}</p>
       </Callout>
 
       <Divider />
 
       {/* ───────── SMALL-OBJECT ───────── */}
-      <SectionHeading id="small-object" icon={Crosshair}>Small-Object Detection (YOLO9-P2)</SectionHeading>
+      <SectionHeading id="small-object" icon={Crosshair}>{t('smallObject.title')}</SectionHeading>
       <div className="flex flex-wrap gap-2 mb-5">
         <SupportBadge variant="experimental">YOLO9-P2: t, s</SupportBadge>
         <SupportBadge variant="experimental">VisDrone research preview</SupportBadge>
       </div>
-      <P>
-        YOLO9-P2 is YOLOv9 with a fourth detection scale at{' '}
-        <strong className="text-surface-800 dark:text-white">stride 4</strong>. Stock YOLOv9 detects at
-        strides 8/16/32, so objects below ~16 px fall under its finest grid; the P2 head catches the
-        4-16 px range that dominates aerial and drone footage.
-      </P>
-      <P>
-        In a controlled A/B on VisDrone (same recipe, same resolution, same init; the only change was
-        the P2 head), small-object AP improved by{' '}
-        <strong className="text-surface-800 dark:text-white">+49%</strong> over stock YOLOv9 of the same
-        size. Adding higher training resolution and the bigger s size roughly doubled small-object AP
-        across the project:
-      </P>
+      <P>{t.rich('smallObject.body', rich)}</P>
+      <P>{t.rich('smallObject.resultsIntro', rich)}</P>
       <DocTable
-        headers={['Model', 'AP', 'AP50', 'AP_small']}
+        headers={[t('smallObject.table.model'), 'AP', 'AP50', 'AP_small']}
         rows={[
-          ['Stock YOLO9-t @640 (control)', '0.123', '0.220', '0.047'],
-          ['YOLO9-P2-t @640 (same-recipe A/B)', '0.138', '0.254', '0.070'],
-          [<strong key="s">YOLO9-P2-s @768 (released preview)</strong>, '0.226', '0.385', '0.141'],
+          [t('smallObject.table.control'), '0.123', '0.220', '0.047'],
+          [t('smallObject.table.ab'), '0.138', '0.254', '0.070'],
+          [<strong key="s">{t('smallObject.table.preview')}</strong>, '0.226', '0.385', '0.141'],
         ]}
       />
       <P className="text-sm">
-        VisDrone2019-DET val (548 images), pycocotools, single seed; treat &plusmn;1 point as noise.
+        {t('smallObject.tableNote')}
       </P>
 
-      <SubHeading>The VisDrone research preview</SubHeading>
-      <P>
-        A trained checkpoint is published as{' '}
-        <a href="https://huggingface.co/LibreYOLO/LibreYOLO9P2s-visdrone" target="_blank" rel="noopener noreferrer" className="text-libre-600 dark:text-libre-400 hover:underline">LibreYOLO9P2s-visdrone</a>.
-        The family is merged on <InlineCode>dev</InlineCode> but not yet in a PyPI release, so install
-        from source until the next release.
-      </P>
+      <SubHeading>{t('smallObject.previewTitle')}</SubHeading>
+      <P>{t.rich('smallObject.previewBody', {
+        ...rich,
+        link: (chunks) => <a href="https://huggingface.co/LibreYOLO/LibreYOLO9P2s-visdrone" target="_blank" rel="noopener noreferrer" className="text-libre-600 dark:text-libre-400 hover:underline">{chunks}</a>,
+      })}</P>
       <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 # Auto-downloads from the LibreYOLO Hugging Face org
@@ -359,31 +281,17 @@ model = LibreYOLO("LibreYOLO9P2s-visdrone.pt")
 
 # Evaluate/predict at 768 - the resolution it was trained at
 results = model.predict("aerial.jpg", imgsz=768, conf=0.25)`}</CodeBlock>
-      <Callout icon={AlertTriangle} tone="amber" title="Non-commercial license">
-        <p>
-          The preview checkpoint is trained on VisDrone2019-DET (AISKYEYE, Tianjin University), licensed
-          CC BY-NC-SA 3.0: <strong>non-commercial use only</strong>, unlike LibreYOLO&apos;s MIT
-          code and COCO-default weights. It detects the 10 VisDrone aerial classes, not COCO. The model
-          card ships the exact training recipe, the per-epoch metrics, and a clean-room dataset converter
-          so you can reproduce it or retrain on your own data.
-        </p>
+      <Callout icon={AlertTriangle} tone="amber" title={t('smallObject.licenseTitle')}>
+        <p>{t.rich('smallObject.licenseBody', {
+          strong: (chunks) => <strong>{chunks}</strong>,
+        })}</p>
       </Callout>
 
-      <SubHeading>When (not) to use it</SubHeading>
-      <P>
-        Match the architecture to the arena. On COCO-like data (&quot;small&quot; means 16-32 px)
-        the P2 head does <strong className="text-surface-800 dark:text-white">not</strong> help;
-        stock YOLOv9 is the better pick there. Reach for YOLO9-P2 when your objects live under ~16 px:
-        drone and aerial footage, distant CCTV, satellite tiles. The extra scale roughly doubles compute
-        and anchor count. That is the price of the stride-4 grid.
-      </P>
+      <SubHeading>{t('smallObject.whenTitle')}</SubHeading>
+      <P>{t.rich('smallObject.whenBody', rich)}</P>
 
-      <SubHeading>Training your own</SubHeading>
-      <P>
-        YOLO9-P2 transfer-initializes from stock YOLOv9 detect checkpoints: the backbone, shared neck,
-        and existing head towers load; the new P2 modules start fresh. The recipe below encodes what we
-        learned the hard way on tiny-object data:
-      </P>
+      <SubHeading>{t('smallObject.trainingTitle')}</SubHeading>
+      <P>{t('smallObject.trainingBody')}</P>
       <CodeBlock language="python">{`from libreyolo import LibreYOLO9P2
 
 model = LibreYOLO9P2(None, size="s")
@@ -402,24 +310,14 @@ model.train(
       <Divider />
 
       {/* ───────── LoRA ───────── */}
-      <SectionHeading id="lora" icon={Layers2}>LoRA / DoRA Fine-Tuning</SectionHeading>
+      <SectionHeading id="lora" icon={Layers2}>{t('lora.title')}</SectionHeading>
       <div className="flex flex-wrap gap-2 mb-5">
         <SupportBadge variant="experimental">RF-DETR: n, s, m, l</SupportBadge>
       </div>
-      <P>
-        LoRA-style adapters let you fine-tune RF-DETR's transformer backbone by training a small set of
-        low-rank matrices while the base weights stay frozen. That cuts optimizer and gradient memory,
-        which is ideal for adapting a strong checkpoint to a new domain on modest hardware.
-      </P>
+      <P>{t('lora.body')}</P>
 
-      <SubHeading>Enabling it</SubHeading>
-      <P>
-        The whole public API is a single flag on <InlineCode>train()</InlineCode>. There are no rank,
-        alpha, or target-module knobs to tune; the recipe is fixed to a well-tested configuration. Under
-        the hood the implementation uses <strong className="text-surface-800 dark:text-white">DoRA</strong>{' '}
-        (weight-decomposed LoRA, rank 16) applied to the DINOv2 attention query, key, and value
-        projections.
-      </P>
+      <SubHeading>{t('lora.enablingTitle')}</SubHeading>
+      <P>{t.rich('lora.enablingBody', rich)}</P>
       <CodeBlock language="python">{`from libreyolo import LibreYOLO
 
 model = LibreYOLO("rf-detr-nano.pth")   # sizes n, s, m, l
@@ -434,53 +332,46 @@ model.train(data="data.yaml", resume=True)`}</CodeBlock>
       <CodeBlock language="bash">{`# CLI equivalent
 libreyolo train --model rf-detr-nano.pth --data data.yaml --lora`}</CodeBlock>
 
-      <SubHeading>Checkpoints and export</SubHeading>
+      <SubHeading>{t('lora.checkpointsTitle')}</SubHeading>
       <ul className="space-y-2 mb-4">
-        <FeatureItem>Training checkpoints keep the adapter tensors, and the config records that LoRA was used, so loading and resuming rebuild the adapter graph automatically.</FeatureItem>
-        <FeatureItem>The detection head always stays trainable, so you can still adapt to a new class count.</FeatureItem>
-        <FeatureItem><InlineCode>export()</InlineCode> merges the adapters back into dense weights. Exported models are plain and carry no <InlineCode>peft</InlineCode> dependency.</FeatureItem>
-        <FeatureItem>LoRA is RF-DETR only; passing <InlineCode>lora=True</InlineCode> to other families raises a clear error.</FeatureItem>
+        <FeatureItem>{t('lora.items.checkpoints')}</FeatureItem>
+        <FeatureItem>{t('lora.items.head')}</FeatureItem>
+        <FeatureItem>{t.rich('lora.items.export', rich)}</FeatureItem>
+        <FeatureItem>{t.rich('lora.items.only', rich)}</FeatureItem>
       </ul>
-      <Callout icon={ShieldCheck} tone="emerald" title="Install extra">
-        <p>
-          LoRA training needs the adapter dependency: <InlineCode>pip install "libreyolo[lora]"</InlineCode>,
-          which pulls in the RF-DETR stack and <InlineCode>peft</InlineCode>. Exported (merged) models do
-          not need it at inference time.
-        </p>
+      <Callout icon={ShieldCheck} tone="emerald" title={t('lora.installTitle')}>
+        <p>{t.rich('lora.installBody', rich)}</p>
       </Callout>
 
       <Divider />
 
       {/* ───────── STATUS ───────── */}
-      <SectionHeading id="status" icon={AlertTriangle}>Stability</SectionHeading>
-      <P>
-        Where each feature stands today. Everything here is experimental; this table is the honest map.
-      </P>
+      <SectionHeading id="status" icon={AlertTriangle}>{t('sections.status')}</SectionHeading>
+      <P>{t('status.body')}</P>
       <DocTable
-        headers={['Feature', 'Families', 'State']}
+        headers={[t('status.table.feature'), t('status.table.families'), t('status.table.state')]}
         rows={[
-          ['Classification', 'YOLO9, RF-DETR', <SupportBadge key="a" variant="experimental">PR open</SupportBadge>],
-          ['Oriented boxes (OBB)', 'YOLO9, RF-DETR', <SupportBadge key="b" variant="experimental">Experimental</SupportBadge>],
-          ['Keypoints / pose', 'YOLO9, RF-DETR', <SupportBadge key="c" variant="wip">Landing soon</SupportBadge>],
-          ['Keypoints / pose', 'YOLO-NAS, EdgeCrafter', <SupportBadge key="d" variant="experimental">Available</SupportBadge>],
-          ['Small-object detection', 'YOLO9-P2', <SupportBadge key="f" variant="experimental">Research preview</SupportBadge>],
-          ['LoRA / DoRA', 'RF-DETR', <SupportBadge key="e" variant="experimental">Reviewed</SupportBadge>],
+          [t('status.table.classification'), 'YOLO9, RF-DETR', <SupportBadge key="a" variant="experimental">{t('status.table.prOpen')}</SupportBadge>],
+          [t('status.table.obb'), 'YOLO9, RF-DETR', <SupportBadge key="b" variant="experimental">{t('status.table.experimental')}</SupportBadge>],
+          [t('status.table.pose'), 'YOLO9, RF-DETR', <SupportBadge key="c" variant="wip">{t('status.table.landingSoon')}</SupportBadge>],
+          [t('status.table.pose'), 'YOLO-NAS, EdgeCrafter', <SupportBadge key="d" variant="experimental">{t('status.table.available')}</SupportBadge>],
+          [t('status.table.smallObject'), 'YOLO9-P2', <SupportBadge key="f" variant="experimental">{t('status.table.researchPreview')}</SupportBadge>],
+          ['LoRA / DoRA', 'RF-DETR', <SupportBadge key="e" variant="experimental">{t('status.table.reviewed')}</SupportBadge>],
         ]}
       />
-      <Callout icon={Crosshair} tone="libre" title="Looking for the stable path?">
-        <p>
-          For production work, the validated core is YOLO9 detection and RF-DETR detection and
-          segmentation. See the{' '}
-          <a href="/docs" className="text-libre-600 dark:text-libre-400 hover:underline">core documentation</a>{' '}
-          for those, and <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM</a>{' '}
-          for open-vocabulary detection.
-        </p>
+      <Callout icon={Crosshair} tone="libre" title={t('status.stableTitle')}>
+        <p>{t.rich('status.stableBody', {
+          docs: (chunks) => <a href="/docs" className="text-libre-600 dark:text-libre-400 hover:underline">{chunks}</a>,
+          vlm: (chunks) => <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">{chunks}</a>,
+        })}</p>
       </Callout>
 
       <div className="mt-12 flex flex-wrap gap-3 items-center">
         <GraduationCap className="w-5 h-5 text-surface-400" />
         <span className="text-sm text-surface-500 dark:text-surface-400">
-          Track progress and source on <ExternalRef href="https://github.com/LibreYOLO/libreyolo">GitHub</ExternalRef>
+          {t.rich('status.source', {
+            link: (chunks) => <ExternalRef href="https://github.com/LibreYOLO/libreyolo">{chunks}</ExternalRef>,
+          })}
         </span>
       </div>
     </DocLayout>

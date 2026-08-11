@@ -18,19 +18,9 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { Search, CornerDownLeft } from 'lucide-react'
 import { slugifyHeading } from '@/lib/slugify-heading'
-
-const SECTION_LABEL = {
-  start: 'Get started',
-  tasks: 'Tasks',
-  models: 'Models',
-  train: 'Train',
-  predict: 'Predict',
-  export: 'Export',
-  cli: 'CLI',
-  reference: 'Reference',
-}
 
 /*
  * How well `term` matches inside `text`, 0 to 1.
@@ -84,12 +74,17 @@ function scoreEntry(entry, terms) {
 }
 
 export default function DocsSearch() {
+  const t = useTranslations('DocsChrome')
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [index, setIndex] = useState(null)
   const [active, setActive] = useState(0)
   const inputRef = useRef(null)
+  const sectionLabels = Object.fromEntries(
+    ['start', 'tasks', 'models', 'train', 'predict', 'export', 'cli', 'reference']
+      .map((id) => [id, t(`groups.${id}`)])
+  )
 
   const load = useCallback(async () => {
     if (index) return
@@ -160,7 +155,7 @@ export default function DocsSearch() {
         className="flex w-full items-center gap-2 rounded-lg border border-surface-200 px-3 py-2 text-[13px] text-surface-500 transition-colors hover:border-surface-300 dark:border-white/[0.08] dark:text-surface-500 dark:hover:border-white/20"
       >
         <Search className="h-3.5 w-3.5 shrink-0" />
-        <span>Search docs</span>
+        <span>{t('searchTrigger')}</span>
         <kbd className="ml-auto hidden font-sans text-[11px] text-surface-400 dark:text-surface-600 sm:block">
           /
         </kbd>
@@ -174,7 +169,7 @@ export default function DocsSearch() {
           <div
             role="dialog"
             aria-modal="true"
-            aria-label="Search documentation"
+            aria-label={t('searchDialogLabel')}
             onClick={(e) => e.stopPropagation()}
             className="w-full max-w-xl overflow-hidden rounded-xl border border-surface-200 bg-white shadow-2xl dark:border-white/[0.08] dark:bg-surface-950"
           >
@@ -185,8 +180,8 @@ export default function DocsSearch() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={onInputKey}
-                placeholder="Search the documentation"
-                aria-label="Search the documentation"
+                placeholder={t('searchPlaceholder')}
+                aria-label={t('searchPlaceholder')}
                 className="w-full bg-transparent py-3.5 text-[15px] text-surface-900 outline-none placeholder:text-surface-400 dark:text-white dark:placeholder:text-surface-600"
               />
             </div>
@@ -195,7 +190,7 @@ export default function DocsSearch() {
               <ul className="max-h-[55vh] overflow-y-auto py-1.5">
                 {results.length === 0 && (
                   <li className="px-4 py-6 text-center text-[13.5px] text-surface-500 dark:text-surface-500">
-                    {index === null ? 'Loading the index' : `No page matches "${query}"`}
+                    {index === null ? t('searchLoading') : t('searchNoResults', { query })}
                   </li>
                 )}
                 {results.map((hit, i) => (
@@ -217,7 +212,7 @@ export default function DocsSearch() {
                           )}
                         </span>
                         <span className="block truncate text-[12.5px] text-surface-500 dark:text-surface-500">
-                          {SECTION_LABEL[hit.entry.s] || hit.entry.s}
+                          {sectionLabels[hit.entry.s] || hit.entry.s}
                         </span>
                       </span>
                       {i === active && (

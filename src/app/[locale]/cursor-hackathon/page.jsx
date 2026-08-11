@@ -22,14 +22,14 @@ import {
 } from 'lucide-react'
 
 const SECTIONS = [
-  { id: 'overview', title: 'Overview', icon: Rocket },
-  { id: 'what-is-libreyolo', title: 'What is LibreYOLO', icon: Sparkles },
-  { id: 'setup-tutorial', title: 'Setup tutorial', icon: Terminal },
-  { id: 'example-detection', title: 'Example 1', icon: Code2 },
-  { id: 'example-segmentation', title: 'Example 2', icon: Scissors },
-  { id: 'example-keypoints', title: 'Example 3', icon: PersonStanding },
-  { id: 'example-video', title: 'Example 4', icon: Video },
-  { id: 'example-tracking', title: 'Example 5', icon: Activity },
+  { id: 'overview', titleKey: 'overview', icon: Rocket },
+  { id: 'what-is-libreyolo', titleKey: 'whatIs', icon: Sparkles },
+  { id: 'setup-tutorial', titleKey: 'setup', icon: Terminal },
+  { id: 'example-detection', titleKey: 'example1', icon: Code2 },
+  { id: 'example-segmentation', titleKey: 'example2', icon: Scissors },
+  { id: 'example-keypoints', titleKey: 'example3', icon: PersonStanding },
+  { id: 'example-video', titleKey: 'example4', icon: Video },
+  { id: 'example-tracking', titleKey: 'example5', icon: Activity },
 ]
 
 const SETUP_PROMPT = `# Install LibreYOLO (Cursor Hackathon, LibreYOLO Track)
@@ -184,7 +184,8 @@ for result in model.track(
     print(result.frame_idx, result.track_id)
 `
 
-function CopyButton({ value, label = 'Copy' }) {
+function CopyButton({ value, label }) {
+  const t = useTranslations('CursorHackathon')
   const [copied, setCopied] = useState(false)
 
   const handleCopy = async () => {
@@ -202,7 +203,7 @@ function CopyButton({ value, label = 'Copy' }) {
       {copied ? (
         <>
           <Check className="w-4 h-4" />
-          Copied!
+          {t('copied')}
         </>
       ) : (
         <>
@@ -214,7 +215,8 @@ function CopyButton({ value, label = 'Copy' }) {
   )
 }
 
-function CodeBlockCard({ icon: Icon, label, content, copyLabel = 'Copy' }) {
+function CodeBlockCard({ icon: Icon, label, content, copyLabel }) {
+  const t = useTranslations('CursorHackathon')
   return (
     <div>
       <div className="flex items-center justify-between mb-3 gap-3">
@@ -224,7 +226,7 @@ function CodeBlockCard({ icon: Icon, label, content, copyLabel = 'Copy' }) {
             {label}
           </span>
         </div>
-        <CopyButton value={content} label={copyLabel} />
+        <CopyButton value={content} label={copyLabel ?? t('copy')} />
       </div>
 
       <div className="relative code-block rounded-2xl overflow-hidden">
@@ -234,7 +236,7 @@ function CodeBlockCard({ icon: Icon, label, content, copyLabel = 'Copy' }) {
       </div>
 
       <p className="mt-2 text-xs text-surface-500 dark:text-surface-500">
-        Click anywhere inside the box to select all, or use the Copy button.
+        {t('codeHint')}
       </p>
     </div>
   )
@@ -290,17 +292,18 @@ function SectionHeading({ id, icon: Icon, children }) {
 }
 
 function Sidebar({ activeSection, onNavigate }) {
+  const t = useTranslations('CursorHackathon')
   return (
     <nav>
       <div className="flex items-center gap-2 mb-6 px-3">
         <Sparkles className="w-5 h-5 text-libre-600 dark:text-libre-400" />
         <span className="text-sm font-semibold text-surface-800 dark:text-white tracking-wide uppercase">
-          Cursor Hackathon
+          {t('sidebarTitle')}
         </span>
       </div>
 
       <ul className="space-y-0.5 mb-4">
-        {SECTIONS.map(({ id, title, icon: Icon }) => {
+        {SECTIONS.map(({ id, titleKey, icon: Icon }) => {
           const isActive = activeSection === id
           return (
             <li key={id}>
@@ -317,7 +320,7 @@ function Sidebar({ activeSection, onNavigate }) {
                     isActive ? 'text-libre-600 dark:text-libre-400' : 'text-surface-400 dark:text-surface-600'
                   }`}
                 />
-                {title}
+                {t(`sections.${titleKey}`)}
               </button>
             </li>
           )
@@ -326,7 +329,7 @@ function Sidebar({ activeSection, onNavigate }) {
 
       <div className="border-t border-surface-200 dark:border-white/[0.06] pt-4 px-3">
         <div className="text-[11px] font-semibold uppercase tracking-wide text-surface-500 dark:text-surface-500 mb-2">
-          External
+          {t('external')}
         </div>
         <a
           href="https://github.com/LibreYOLO/libreyolo"
@@ -336,7 +339,7 @@ function Sidebar({ activeSection, onNavigate }) {
         >
           <span className="flex items-center gap-2.5">
             <Github className="w-4 h-4 text-surface-400 dark:text-surface-600" />
-            Repo
+            {t('repo')}
           </span>
           <ExternalLink className="w-3.5 h-3.5 text-surface-400" />
         </a>
@@ -348,6 +351,7 @@ function Sidebar({ activeSection, onNavigate }) {
 export default function CursorHackathon() {
   const locale = useLocale()
   const tNote = useTranslations('DocsNote')
+  const t = useTranslations('CursorHackathon')
   const [activeSection, setActiveSection] = useState(SECTIONS[0].id)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -388,7 +392,7 @@ export default function CursorHackathon() {
       <button
         onClick={() => setMobileMenuOpen(true)}
         className="lg:hidden fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-libre-500 text-white shadow-lg shadow-libre-500/30 flex items-center justify-center hover:bg-libre-400 transition-colors"
-        aria-label="Open navigation"
+        aria-label={t('openNavigation')}
       >
         <Menu className="w-5 h-5" />
       </button>
@@ -413,12 +417,12 @@ export default function CursorHackathon() {
             >
               <div className="flex items-center justify-between mb-4 px-3">
                 <span className="text-sm font-semibold text-surface-800 dark:text-white tracking-wide uppercase">
-                  Hackathon
+                  {t('mobileTitle')}
                 </span>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
                   className="p-1.5 rounded-lg text-surface-500 dark:text-surface-400 hover:text-surface-900 dark:hover:text-white hover:bg-surface-100 dark:hover:bg-white/[0.06] transition-colors"
-                  aria-label="Close navigation"
+                  aria-label={t('closeNavigation')}
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -446,10 +450,10 @@ export default function CursorHackathon() {
               className="text-center"
             >
               <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-surface-900 dark:text-white leading-[0.95] mb-4">
-                Cursor Madrid<br />Hackathon 3
+                {t('heroTitleLine1')}<br />{t('heroTitleLine2')}
               </h1>
               <p className="text-xl sm:text-2xl font-semibold text-surface-600 dark:text-surface-300 tracking-tight mb-8">
-                LibreYOLO Track
+                {t('heroTrack')}
               </p>
 
               <div className="flex justify-center mb-8">
@@ -457,8 +461,7 @@ export default function CursorHackathon() {
               </div>
 
               <p className="text-base sm:text-lg text-surface-600 dark:text-surface-400 max-w-xl mx-auto">
-                Welcome, hackers. Read what LibreYOLO is, follow the setup
-                tutorial, copy the example, and start building.
+                {t('heroWelcome')}
               </p>
             </motion.div>
           </section>
@@ -466,13 +469,11 @@ export default function CursorHackathon() {
           {/* ────────── WHAT IS LIBREYOLO ────────── */}
           <section className="mb-16">
             <SectionHeading id="what-is-libreyolo" icon={Sparkles}>
-              What is LibreYOLO
+              {t('whatIsTitle')}
             </SectionHeading>
 
             <p className="text-base sm:text-lg text-surface-700 dark:text-surface-300 leading-relaxed mb-8">
-              LibreYOLO is a modern, 100% MIT-licensed engine for training and
-              deploying state-of-the-art object detection. It exists to make
-              YOLO accessible again, the way its creators always intended.
+              {t('whatIsBody')}
             </p>
 
             <div className="relative max-w-lg mx-auto">
@@ -486,11 +487,11 @@ export default function CursorHackathon() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour_result.jpg"
-                    alt="LibreYOLO detection result"
+                    alt={t('detectionResultAlt')}
                     className="rounded-lg w-full"
                   />
                   <div className="mt-3 flex items-center justify-between text-xs">
-                    <span className="text-emerald-600 dark:text-emerald-400 font-mono">&check; Detected 1 object (person)</span>
+                    <span className="text-emerald-600 dark:text-emerald-400 font-mono">&check; {t('detected')}</span>
                     <span className="text-surface-500 font-mono">0.023s</span>
                   </div>
                 </div>
@@ -501,18 +502,16 @@ export default function CursorHackathon() {
           {/* ────────── SETUP TUTORIAL ────────── */}
           <section className="mb-16">
             <SectionHeading id="setup-tutorial" icon={Terminal}>
-              Setup tutorial
+              {t('setupTitle')}
             </SectionHeading>
 
             <p className="text-base text-surface-600 dark:text-surface-400 leading-relaxed mb-6">
-              Paste the prompt below into Cursor. It walks the agent through
-              installing LibreYOLO from source and verifying the install. Works
-              on Windows, macOS, and Linux.
+              {t('setupBody')}
             </p>
 
             <CodeBlockCard
               icon={Terminal}
-              label="Setup prompt"
+              label={t('setupPrompt')}
               content={SETUP_PROMPT}
             />
           </section>
@@ -520,44 +519,39 @@ export default function CursorHackathon() {
           {/* ────────── EXAMPLE 1: DETECTION ────────── */}
           <section className="mb-16">
             <SectionHeading id="example-detection" icon={Code2}>
-              Example 1: Object detection
+              {t('detectionTitle')}
             </SectionHeading>
 
             <p className="text-base text-surface-600 dark:text-surface-400 leading-relaxed mb-6">
-              A minimal end-to-end detection example with the lightweight
-              YOLO9t flagship. Once LibreYOLO is installed, paste this into a
-              Python file or a notebook to confirm everything works and to see
-              the shape of the results object.
+              {t('detectionBody')}
             </p>
 
             <CodeBlockCard
               icon={Code2}
               label="detect.py"
               content={EXAMPLE_DETECTION_CODE}
-              copyLabel="Copy example"
+              copyLabel={t('copyExample')}
             />
           </section>
 
           {/* ────────── EXAMPLE 2: SEGMENTATION ────────── */}
           <section className="mb-16">
             <SectionHeading id="example-segmentation" icon={Scissors}>
-              Example 2: Segmentation with RF-DETR
+              {t('segmentationTitle')}
             </SectionHeading>
 
             <p className="text-base text-surface-600 dark:text-surface-400 leading-relaxed mb-6">
-              Instance segmentation with the RF-DETR transformer flagship. The
-              <code className="mx-1 px-1.5 py-0.5 rounded bg-surface-100 dark:bg-white/[0.06] text-libre-700 dark:text-libre-300 font-mono text-[0.9em]">-seg</code>
-              suffix tells the factory to load the segmentation head, so you
-              get bounding boxes plus per-instance binary masks from the same
-              call.
+              {t.rich('segmentationBody', {
+                code: (chunks) => <code className="mx-1 px-1.5 py-0.5 rounded bg-surface-100 dark:bg-white/[0.06] text-libre-700 dark:text-libre-300 font-mono text-[0.9em]">{chunks}</code>,
+              })}
             </p>
 
             <div className="mb-6">
               <CodeBlockCard
                 icon={Terminal}
-                label="Install RF-DETR extra"
+                label={t('installRfdetr')}
                 content={RFDETR_EXTRA_CODE}
-                copyLabel="Copy install"
+                copyLabel={t('copyInstall')}
               />
             </div>
 
@@ -565,71 +559,66 @@ export default function CursorHackathon() {
               icon={Scissors}
               label="segment.py"
               content={EXAMPLE_SEGMENTATION_CODE}
-              copyLabel="Copy example"
+              copyLabel={t('copyExample')}
             />
           </section>
 
           {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ EXAMPLE 3: KEYPOINTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           <section className="mb-16">
             <SectionHeading id="example-keypoints" icon={PersonStanding}>
-              Example 3: Human keypoints
+              {t('keypointsTitle')}
             </SectionHeading>
 
             <p className="text-base text-surface-600 dark:text-surface-400 leading-relaxed mb-6">
-              Human pose estimation with YOLO-NAS pose. The
-              <code className="mx-1 px-1.5 py-0.5 rounded bg-surface-100 dark:bg-white/[0.06] text-libre-700 dark:text-libre-300 font-mono text-[0.9em]">-pose</code>
-              suffix loads the keypoint head, returning person boxes plus 17
-              COCO keypoints for each detected person.
+              {t.rich('keypointsBody', {
+                code: (chunks) => <code className="mx-1 px-1.5 py-0.5 rounded bg-surface-100 dark:bg-white/[0.06] text-libre-700 dark:text-libre-300 font-mono text-[0.9em]">{chunks}</code>,
+              })}
             </p>
 
             <CodeBlockCard
               icon={PersonStanding}
               label="keypoints.py"
               content={EXAMPLE_KEYPOINTS_CODE}
-              copyLabel="Copy example"
+              copyLabel={t('copyExample')}
             />
           </section>
 
           {/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ EXAMPLE 4: VIDEO Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */}
           <section className="mb-16">
             <SectionHeading id="example-video" icon={Video}>
-              Example 4: Video inference
+              {t('videoTitle')}
             </SectionHeading>
 
             <p className="text-base text-surface-600 dark:text-surface-400 leading-relaxed mb-6">
-              Run the same LibreYOLO call on a video. Swap one model line to do
-              detection, segmentation, or keypoints; RF-DETR segmentation still
-              needs the <code className="mx-1 px-1.5 py-0.5 rounded bg-surface-100 dark:bg-white/[0.06] text-libre-700 dark:text-libre-300 font-mono text-[0.9em]">rfdetr</code>
-              extra from Example 2.
+              {t.rich('videoBody', {
+                code: (chunks) => <code className="mx-1 px-1.5 py-0.5 rounded bg-surface-100 dark:bg-white/[0.06] text-libre-700 dark:text-libre-300 font-mono text-[0.9em]">{chunks}</code>,
+              })}
             </p>
 
             <CodeBlockCard
               icon={Video}
               label="video.py"
               content={EXAMPLE_VIDEO_CODE}
-              copyLabel="Copy example"
+              copyLabel={t('copyExample')}
             />
           </section>
 
           {/* EXAMPLE 5: TRACKING */}
           <section className="mb-16">
             <SectionHeading id="example-tracking" icon={Activity}>
-              Example 5: Object tracking
+              {t('trackingTitle')}
             </SectionHeading>
 
             <p className="text-base text-surface-600 dark:text-surface-400 leading-relaxed mb-6">
-              ByteTrack adds stable IDs across video frames. This is the fastest
-              path from detection to people counting, sports clips, traffic
-              analysis, or anything that needs to know whether the same object
-              is still on screen.
+              {t('trackingBody')}
             </p>
 
             <div className="mb-6">
               <CodeBlockCard
                 icon={Terminal}
-                label="Install tracking extra"
+                label={t('installTracking')}
                 content={TRACKING_EXTRA_CODE}
-                copyLabel="Copy install"
+                copyLabel={t('copyInstall')}
               />
             </div>
 
@@ -637,7 +626,7 @@ export default function CursorHackathon() {
               icon={Activity}
               label="track.py"
               content={EXAMPLE_TRACKING_CODE}
-              copyLabel="Copy example"
+              copyLabel={t('copyExample')}
             />
 
             <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
@@ -648,14 +637,14 @@ export default function CursorHackathon() {
                 className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white dark:bg-white/5 hover:bg-surface-100 dark:hover:bg-white/10 border border-surface-300 dark:border-white/10 text-surface-800 dark:text-white font-medium transition-all shadow-sm dark:shadow-none"
               >
                 <Github className="w-5 h-5 text-libre-500 dark:text-libre-400" />
-                Open the repo
+                {t('openRepo')}
               </a>
               <a
                 href="/docs"
                 className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white dark:bg-white/5 hover:bg-surface-100 dark:hover:bg-white/10 border border-surface-300 dark:border-white/10 text-surface-800 dark:text-white font-medium transition-all shadow-sm dark:shadow-none"
               >
                 <Code2 className="w-5 h-5 text-libre-500 dark:text-libre-400" />
-                Read the full docs
+                {t('readDocs')}
               </a>
             </div>
           </section>

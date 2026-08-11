@@ -10,6 +10,7 @@ import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 
 function CopyButton({ code }) {
+  const t = useTranslations('Science')
   const [copied, setCopied] = useState(false)
 
   const handleCopy = async () => {
@@ -22,7 +23,7 @@ function CopyButton({ code }) {
     <button
       onClick={handleCopy}
       className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
-      title="Copy to clipboard"
+      title={t('copyToClipboard')}
     >
       {copied ? (
         <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
@@ -314,17 +315,17 @@ results = model(image="parkour.jpg")
               <ImageCarousel
                 accentColor="cyan"
                 images={[
-                  { label: 'P1', filename: 'backbone_p1.png', src: '/feature_maps/backbone_p1.png', alt: 'Backbone P1 feature map' },
-                  { label: 'P2', filename: 'backbone_p2.png', src: '/feature_maps/backbone_p2.png', alt: 'Backbone P2 feature map' },
-                  { label: 'P3', filename: 'backbone_p3.png', src: '/feature_maps/backbone_p3.png', alt: 'Backbone P3 feature map' },
-                  { label: 'P4', filename: 'backbone_p4.png', src: '/feature_maps/backbone_p4.png', alt: 'Backbone P4 feature map' },
-                  { label: 'P5', filename: 'backbone_p5.png', src: '/feature_maps/backbone_p5.png', alt: 'Backbone P5 feature map' },
-                  { label: 'SPPF', filename: 'backbone_sppf_P5.png', src: '/feature_maps/backbone_sppf_P5.png', alt: 'SPPF feature map' },
-                  { label: 'Neck 1', filename: 'neck_c2f11.png', src: '/feature_maps/neck_c2f11.png', alt: 'Neck C2F11 feature map' },
-                  { label: 'Neck 2', filename: 'neck_c2f22.png', src: '/feature_maps/neck_c2f22.png', alt: 'Neck C2F22 feature map' },
-                  { label: 'Head 8', filename: 'head8_conv21.png', src: '/feature_maps/head8_conv21.png', alt: 'Head 8 feature map' },
-                  { label: 'Head 16', filename: 'head16_conv21.png', src: '/feature_maps/head16_conv21.png', alt: 'Head 16 feature map' },
-                  { label: 'Head 32', filename: 'head32_conv21.png', src: '/feature_maps/head32_conv21.png', alt: 'Head 32 feature map' },
+                  { label: 'P1', filename: 'backbone_p1.png', src: '/feature_maps/backbone_p1.png', alt: t('featureMapAlts.p1') },
+                  { label: 'P2', filename: 'backbone_p2.png', src: '/feature_maps/backbone_p2.png', alt: t('featureMapAlts.p2') },
+                  { label: 'P3', filename: 'backbone_p3.png', src: '/feature_maps/backbone_p3.png', alt: t('featureMapAlts.p3') },
+                  { label: 'P4', filename: 'backbone_p4.png', src: '/feature_maps/backbone_p4.png', alt: t('featureMapAlts.p4') },
+                  { label: 'P5', filename: 'backbone_p5.png', src: '/feature_maps/backbone_p5.png', alt: t('featureMapAlts.p5') },
+                  { label: 'SPPF', filename: 'backbone_sppf_P5.png', src: '/feature_maps/backbone_sppf_P5.png', alt: t('featureMapAlts.sppf') },
+                  { label: 'Neck 1', filename: 'neck_c2f11.png', src: '/feature_maps/neck_c2f11.png', alt: t('featureMapAlts.neck1') },
+                  { label: 'Neck 2', filename: 'neck_c2f22.png', src: '/feature_maps/neck_c2f22.png', alt: t('featureMapAlts.neck2') },
+                  { label: 'Head 8', filename: 'head8_conv21.png', src: '/feature_maps/head8_conv21.png', alt: t('featureMapAlts.head8') },
+                  { label: 'Head 16', filename: 'head16_conv21.png', src: '/feature_maps/head16_conv21.png', alt: t('featureMapAlts.head16') },
+                  { label: 'Head 32', filename: 'head32_conv21.png', src: '/feature_maps/head32_conv21.png', alt: t('featureMapAlts.head32') },
                 ]}
               />
             </div>
@@ -534,4 +535,3 @@ export default function Science() {
     </div>
   )
 }
-

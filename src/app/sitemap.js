@@ -1,7 +1,7 @@
 import { getAllArticles, getArticleBySlug } from '@/lib/articles'
 import { routing, localeHtmlLang } from '@/i18n/routing'
 import { localeUrl } from '@/i18n/metadata'
-import { getAllDocPages, DOCS_SECTION_INDEXES } from '@/lib/docs'
+import { getAllDocPages, getDoc, DOCS_SECTION_INDEXES } from '@/lib/docs'
 
 function languageMap(path, locales) {
   const languages = {}
@@ -49,6 +49,8 @@ export default function sitemap() {
     { path: '/articles', priority: 0.9 },
     { path: '/docs/librevlm', priority: 0.8 },
     { path: '/docs/experimental', priority: 0.8 },
+    { path: '/benchmarks', priority: 0.9 },
+    { path: '/cursor-hackathon', priority: 0.4 },
   ].flatMap(({ path, priority }) => bilingual(path, priority))
 
   /*
@@ -56,29 +58,26 @@ export default function sitemap() {
    *
    * Enumerating 169 pages by hand is how a sitemap silently goes stale, so this
    * reads the same manifest the nav, the markdown twins and llms.txt read.
-   * English-only for now: the tree has no translations yet, so a bilingual entry
-   * would advertise a Chinese page that does not exist.
+   * Section indexes are message-driven in every locale. Markdown-backed pages
+   * only advertise the locales that have a translated twin; untranslated locale
+   * fallbacks canonicalize to English and therefore stay out of the sitemap.
    *
    * The frozen v1.1 to v1.4 single-page docs are deliberately absent. They stay
    * reachable and carry a canonical pointing at /docs, and a canonicalised page
    * does not belong in a sitemap.
    */
-  const docsRoutes = [
-    ...DOCS_SECTION_INDEXES.map((path) => ({ path, priority: path === '/docs' ? 1.0 : 0.8 })),
-    ...getAllDocPages().map((page) => ({
-      path: page.path,
-      priority: page.section === 'models' || page.section === 'tasks' ? 0.8 : 0.7,
-      lastModified: page.lastModified,
-    })),
-  ].flatMap(({ path, priority, lastModified }) =>
-    englishOnly(path, priority, 'weekly', lastModified))
+  const docsIndexRoutes = DOCS_SECTION_INDEXES.flatMap((path) =>
+    bilingual(path, path === '/docs' ? 1.0 : 0.8))
 
-  const englishOnlyRoutes = [
-    { path: '/cursor-hackathon', priority: 0.4 },
-    // English only until the benchmark copy is translated; the /zh URL renders
-    // English content today, so it is not independently indexable.
-    { path: '/benchmarks', priority: 0.9 },
-  ].flatMap(({ path, priority }) => englishOnly(path, priority))
+  const docsContentRoutes = getAllDocPages().flatMap((page) => {
+    const locales = routing.locales.filter((locale) =>
+      locale === routing.defaultLocale || getDoc(page.section, page.slug, locale)?.translated
+    )
+    const priority = page.section === 'models' || page.section === 'tasks' ? 0.8 : 0.7
+    return locales.length > 1
+      ? localized(page.path, locales, priority, 'weekly', page.lastModified)
+      : englishOnly(page.path, priority, 'weekly', page.lastModified)
+  })
 
   const articleRoutes = getAllArticles().flatMap((article) => {
     const locales = routing.locales.filter((locale) =>
@@ -91,5 +90,5 @@ export default function sitemap() {
       : englishOnly(path, 0.7, 'monthly', lastModified)
   })
 
-  return [...bilingualRoutes, ...docsRoutes, ...englishOnlyRoutes, ...articleRoutes]
+  return [...bilingualRoutes, ...docsIndexRoutes, ...docsContentRoutes, ...articleRoutes]
 }

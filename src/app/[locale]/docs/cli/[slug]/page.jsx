@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
-import { setRequestLocale } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 
-import { getDoc, getDocSlugs, extractHeadings, DOCS_NAV, DOCS_VERSION } from '@/lib/docs'
+import { getDoc, getDocSlugs, extractHeadings, DOCS_VERSION, localizeNav } from '@/lib/docs'
 import { buildPageMetadata, localeUrl, SITE_URL } from '@/i18n/metadata'
 import { routing } from '@/i18n/routing'
 import DocsShell from '@/components/docs/DocsShell'
@@ -10,7 +10,6 @@ import { PageHeader } from '@/components/docs/ModelBlocks'
 
 // One page per command. The synopsis and argument table live in the markdown body; the header rows carry the command and its one-line purpose.
 const SECTION = 'cli'
-const SECTION_LABEL = 'CLI'
 
 export function generateStaticParams() {
   return getDocSlugs(SECTION).map((slug) => ({ slug }))
@@ -41,6 +40,7 @@ export async function generateMetadata({ params }) {
 export default async function DocPage({ params }) {
   const { locale, slug } = await params
   setRequestLocale(locale)
+  const t = await getTranslations({ locale, namespace: 'DocsChrome' })
 
   const doc = getDoc(SECTION, slug, locale)
   if (!doc) notFound()
@@ -50,8 +50,8 @@ export default async function DocPage({ params }) {
   const headings = extractHeadings(doc.content)
 
   const breadcrumbs = [
-    { label: 'Docs', href: '/docs' },
-    { label: SECTION_LABEL, href: `/docs/${SECTION}` },
+    { label: t('docsCrumb'), href: '/docs' },
+    { label: t(`groups.${SECTION}`), href: `/docs/${SECTION}` },
     { label: doc.title },
   ]
 
@@ -90,7 +90,7 @@ export default async function DocPage({ params }) {
       ))}
 
       <DocsShell
-        nav={DOCS_NAV}
+        nav={localizeNav(locale)}
         activePath={path}
         version={DOCS_VERSION}
         headings={headings}
@@ -105,8 +105,7 @@ export default async function DocPage({ params }) {
 
           <footer className="mt-16 border-t border-surface-200 pt-6 text-sm text-surface-500 dark:border-white/[0.06] dark:text-surface-500">
             <p>
-              {doc.verification ||
-                `Verified against LibreYOLO v${doc.last_verified}.`}
+              {doc.verification || t('verified', { version: doc.last_verified })}
             </p>
           </footer>
         </article>

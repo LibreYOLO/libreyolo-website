@@ -1,14 +1,14 @@
 import { notFound } from 'next/navigation'
-import { setRequestLocale } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import Link from 'next/link'
 
 import {
-  DOCS_NAV,
   DOCS_VERSION,
   getTierMeta,
   getDoc,
   getDocSlugs,
   extractHeadings,
+  localizeNav,
 } from '@/lib/docs'
 import { buildPageMetadata, localeUrl, SITE_URL } from '@/i18n/metadata'
 import { routing } from '@/i18n/routing'
@@ -31,45 +31,24 @@ import { PageHeader } from '@/components/docs/ModelBlocks'
 const SECTIONS = {
   models: {
     group: 'models',
-    title: 'Models',
-    lead: 'Every model family in LibreYOLO, grouped by how heavily it is supported.',
-    description: 'All model families supported by LibreYOLO, from the flagship detectors to the historic ones, with their support tier.',
   },
   tasks: {
     group: 'tasks',
-    title: 'Tasks',
-    lead: 'What LibreYOLO can do, and which models serve each capability.',
-    description: 'Every task LibreYOLO supports, from detection and segmentation to depth, OCR and gaze estimation.',
   },
   export: {
     group: 'export',
-    title: 'Export and deploy',
-    lead: 'Take a trained model out of PyTorch and run it somewhere else.',
-    description: 'Export a LibreYOLO model to ONNX, TensorRT, OpenVINO, CoreML, TFLite and other deployment targets.',
   },
   train: {
     group: 'train',
-    title: 'Train',
-    lead: 'Datasets, arguments, multi-GPU and the machinery shared by every trainable family.',
-    description: 'Training models in LibreYOLO: datasets, hyperparameters, augmentation, multi-GPU and experiment loggers.',
   },
   predict: {
     group: 'predict',
-    title: 'Predict',
-    lead: 'Running a model over images, folders, video and streams.',
-    description: 'Running inference with LibreYOLO: sources, streaming, results objects and ensembling.',
   },
   cli: {
     group: 'cli',
-    title: 'CLI',
-    lead: 'Every command the libreyolo executable exposes.',
-    description: 'The LibreYOLO command line: predict, train, val, export and the utility commands.',
   },
   reference: {
     group: 'reference',
-    title: 'Reference',
-    lead: 'The public Python surface, schemas and generated matrices.',
-    description: 'LibreYOLO reference: Python API, results types, dataset formats and the full export matrix.',
   },
 }
 
@@ -93,12 +72,13 @@ export async function generateMetadata({ params }) {
   const { locale, section } = await params
   const meta = SECTIONS[section]
   if (meta) {
+    const t = await getTranslations({ locale, namespace: 'DocsSections' })
     return buildPageMetadata({
-      title: `${meta.title} | LibreYOLO docs`,
-      description: meta.description,
+      title: t('metaTitle', { title: t(`${section}.title`) }),
+      description: t(`${section}.description`),
       path: `/docs/${section}`,
       locale,
-      englishOnly: true,
+      englishOnly: false,
       ownImage: true,
     })
   }
@@ -121,16 +101,21 @@ export async function generateMetadata({ params }) {
 export default async function SectionIndex({ params }) {
   const { locale, section } = await params
   setRequestLocale(locale)
+  const t = await getTranslations({ locale, namespace: 'DocsSections' })
+  const chrome = await getTranslations({ locale, namespace: 'DocsChrome' })
+  const tiers = await getTranslations({ locale, namespace: 'Tiers' })
+  const docsNav = localizeNav(locale)
 
   const meta = SECTIONS[section]
   if (!meta) return <StandalonePage locale={locale} slug={section} />
 
-  const group = DOCS_NAV.groups.find((g) => g.id === meta.group)
+  const group = docsNav.groups.find((g) => g.id === meta.group)
   if (!group) notFound()
 
   // The section's own index entry would just link to this page.
   const items = group.items.filter((item) => item.slug !== `/docs/${section}`)
-  const breadcrumbs = [{ label: 'Docs', href: '/docs' }, { label: meta.title }]
+  const title = t(`${section}.title`)
+  const breadcrumbs = [{ label: chrome('docsCrumb'), href: '/docs' }, { label: title }]
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -146,13 +131,13 @@ export default async function SectionIndex({ params }) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <DocsShell nav={DOCS_NAV} activePath={`/docs/${section}`} version={DOCS_VERSION} breadcrumbs={breadcrumbs} showActions={false}>
+      <DocsShell nav={docsNav} activePath={`/docs/${section}`} version={DOCS_VERSION} breadcrumbs={breadcrumbs} showActions={false}>
         <div className="max-w-3xl">
           <h1 className="text-[2.1rem] font-semibold tracking-tight text-surface-900 dark:text-white">
-            {meta.title}
+            {title}
           </h1>
           <p className="mt-2 max-w-[62ch] text-[15px] leading-relaxed text-surface-600 dark:text-surface-400">
-            {meta.lead}
+            {t(`${section}.lead`)}
           </p>
 
           <dl className="mt-8 text-[14px]">
@@ -173,9 +158,9 @@ export default async function SectionIndex({ params }) {
                     )}
                   </dt>
                   <dd className="text-surface-500 dark:text-surface-500">
-                    {tier ? tier.label : ''}
+                    {tier ? tiers(`${item.tier}.label`) : ''}
                     {tier && !item.built ? '. ' : ''}
-                    {!item.built ? 'Not written yet.' : ''}
+                    {!item.built ? chrome('notWrittenYet') : ''}
                   </dd>
                 </div>
               )
@@ -197,13 +182,14 @@ export default async function SectionIndex({ params }) {
  * there is no group above it.
  */
 async function StandalonePage({ locale, slug }) {
+  const chrome = await getTranslations({ locale, namespace: 'DocsChrome' })
   const doc = getDoc(STANDALONE, slug, locale)
   if (!doc) notFound()
 
   const path = `/docs/${slug}`
   const url = localeUrl(path, doc.translated ? locale : routing.defaultLocale)
   const headings = extractHeadings(doc.content)
-  const breadcrumbs = [{ label: 'Docs', href: '/docs' }, { label: doc.title }]
+  const breadcrumbs = [{ label: chrome('docsCrumb'), href: '/docs' }, { label: doc.title }]
 
   const jsonLd = [
     {
@@ -240,7 +226,7 @@ async function StandalonePage({ locale, slug }) {
       ))}
 
       <DocsShell
-        nav={DOCS_NAV}
+        nav={localizeNav(locale)}
         activePath={path}
         version={DOCS_VERSION}
         headings={headings}
@@ -255,7 +241,7 @@ async function StandalonePage({ locale, slug }) {
 
           <footer className="mt-16 border-t border-surface-200 pt-6 text-sm text-surface-500 dark:border-white/[0.06] dark:text-surface-500">
             <p>
-              {doc.verification || `Verified against LibreYOLO v${doc.last_verified}.`}
+              {doc.verification || chrome('verified', { version: doc.last_verified })}
             </p>
           </footer>
         </article>

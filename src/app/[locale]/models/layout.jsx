@@ -17,14 +17,14 @@ export async function generateMetadata({ params }) {
 // Derived from the same registry-backed index the page renders, so it cannot
 // drift: a family added to the library appears in both at once, and the list
 // covers all 82 families rather than the 38 the old hand-kept showcase named.
-function modelZooJsonLd() {
+function modelZooJsonLd(t) {
   const tasksByModel = getTasksByModel()
   const urlByModel = new Map(getAllModels().map((m) => [m.name, m.docsUrl]))
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'LibreYOLO Model Zoo',
-    description: 'Model families available in LibreYOLO, the MIT-licensed computer vision library, by task.',
+    name: t('zooName'),
+    description: t('zooDescription'),
     url: `${SITE_URL}/models`,
     numberOfItems: tasksByModel.size,
     itemListElement: [...tasksByModel].map(([name, tasks], i) => ({
@@ -32,17 +32,19 @@ function modelZooJsonLd() {
       position: i + 1,
       name,
       url: urlByModel.has(name) ? `${SITE_URL}${urlByModel.get(name)}` : undefined,
-      description: `Tasks: ${tasks.join(', ')}`,
+      description: t('taskList', { tasks: tasks.join(', ') }),
     })),
   }
 }
 
-export default function ModelsLayout({ children }) {
+export default async function ModelsLayout({ children, params }) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'Models' })
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(modelZooJsonLd()) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(modelZooJsonLd(t)) }}
       />
       {children}
     </>

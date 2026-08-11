@@ -4,11 +4,47 @@ import matter from 'gray-matter'
 
 import registry from '@/data/docs/registry.json'
 import nav from '@/data/docs/nav.json'
+import { routing } from '@/i18n/routing'
 
 const docsDir = path.join(process.cwd(), 'content', 'docs')
 
 export const DOCS_VERSION = registry.libreyolo_version
 export const DOCS_NAV = nav
+
+const localizedNavTitleCache = new Map()
+
+/*
+ * Resolve translated frontmatter titles once per locale, then reuse the map for
+ * every page rendered during the build. Section indexes have no markdown twin,
+ * so they naturally retain the label from nav.json.
+ */
+export function localizeNav(locale) {
+  if (!locale || locale === routing.defaultLocale) return DOCS_NAV
+
+  let titles = localizedNavTitleCache.get(locale)
+  if (!titles) {
+    titles = new Map()
+    for (const group of DOCS_NAV.groups) {
+      for (const item of group.items) {
+        const parts = item.slug.replace(/^\/docs\/?/, '').split('/').filter(Boolean)
+        if (!parts.length) continue
+        const section = parts.length === 1 ? 'start' : parts[0]
+        const slug = parts.length === 1 ? parts[0] : parts.slice(1).join('/')
+        const file = path.join(docsDir, section, `${slug}.${locale}.md`)
+        if (!fs.existsSync(file)) continue
+        const { data } = matter(fs.readFileSync(file, 'utf8'))
+        if (data.title) titles.set(item.slug, data.title)
+      }
+    }
+    localizedNavTitleCache.set(locale, titles)
+  }
+
+  const localized = structuredClone(DOCS_NAV)
+  for (const group of localized.groups) {
+    for (const item of group.items) item.label = titles.get(item.slug) ?? item.label
+  }
+  return localized
+}
 
 // Docs pages mirror the article convention: the English source is
 // `content/docs/<section>/<slug>.md` and a translation sits beside it as

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import {
   FileText,
   Github,
@@ -142,10 +143,10 @@ const RINGS = RF100VL_DOMAINS.map((domain, i) => {
 const COLOR_BY_DOMAIN = Object.fromEntries(RF100VL_DOMAINS.map((d) => [d.name, d.color]))
 
 const LINKS = [
-  { label: 'arXiv', href: 'https://arxiv.org/abs/2505.20612', icon: FileText },
-  { label: 'Code', href: 'https://github.com/LibreYOLO/libreyolo', icon: Github },
-  { label: 'rf100-vl.org', href: 'https://rf100-vl.org', icon: Globe },
-  { label: 'Datasets', href: 'https://universe.roboflow.com/rf100-vl/', icon: Database },
+  { labelKey: 'arxiv', href: 'https://arxiv.org/abs/2505.20612', icon: FileText },
+  { labelKey: 'code', href: 'https://github.com/LibreYOLO/libreyolo', icon: Github },
+  { labelKey: 'site', href: 'https://rf100-vl.org', icon: Globe },
+  { labelKey: 'datasets', href: 'https://universe.roboflow.com/rf100-vl/', icon: Database },
 ]
 
 // Datasets with visually distinctive samples, used for the idle auto-cycle.
@@ -180,8 +181,9 @@ const PREVIEW_CROPS = [
 ]
 
 function ArtRings({ focusDomain, onExplore }) {
+  const t = useTranslations('RF100VL')
   return (
-    <div className="rfa-layer" aria-label="The seven RF100-VL domains as themed rings">
+    <div className="rfa-layer" aria-label={t('themedRings')}>
       {RINGS.map((ring) => (
         <div
           key={`body-${ring.domain}`}
@@ -234,10 +236,10 @@ function ArtRings({ focusDomain, onExplore }) {
 
       <div className="rfa-core">
         <span className="rfa-core-pill">RF100-VL</span>
-        <div className="rfa-core-sub">100 real-world datasets, 7 domains</div>
+        <div className="rfa-core-sub">{t('datasetDomainCountLong')}</div>
         <button type="button" className="rfa-explore-btn" onClick={onExplore}>
           <Orbit className="h-4 w-4" />
-          Explore the 100 datasets
+          {t('exploreDatasets')}
         </button>
       </div>
     </div>
@@ -245,6 +247,7 @@ function ArtRings({ focusDomain, onExplore }) {
 }
 
 function DatasetDrawer({ dataset, onClose, onSwitch }) {
+  const t = useTranslations('RF100VL')
   const siblings = RF100VL_DATASETS.filter(
     (d) => d.domain === dataset.domain && d !== dataset
   ).slice(0, 6)
@@ -253,7 +256,7 @@ function DatasetDrawer({ dataset, onClose, onSwitch }) {
   return (
     <>
       <div className="rfd-backdrop" onClick={onClose} aria-hidden="true" />
-      <aside className="rfd-drawer" role="dialog" aria-label={`${dataset.name} dataset`}>
+      <aside className="rfd-drawer" role="dialog" aria-label={t('datasetDialog', { name: dataset.name })}>
         <div className="flex items-start justify-between gap-4 p-5 pb-4">
           <div className="min-w-0">
             <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-surface-500 dark:text-surface-400">
@@ -267,7 +270,7 @@ function DatasetDrawer({ dataset, onClose, onSwitch }) {
           <button
             type="button"
             className="rfd-close"
-            aria-label="Close dataset panel"
+            aria-label={t('closeDatasetPanel')}
             onClick={onClose}
           >
             <X className="h-4 w-4" />
@@ -276,8 +279,8 @@ function DatasetDrawer({ dataset, onClose, onSwitch }) {
 
         <div className="px-5">
           <div className="rfd-main-img" style={{ '--c': color }}>
-            <img src={dataset.img} alt={`Annotated sample from the ${dataset.name} dataset`} />
-            <span className="rfd-img-tag">annotated sample</span>
+            <img src={dataset.img} alt={t('annotatedSampleAlt', { name: dataset.name })} />
+            <span className="rfd-img-tag">{t('annotatedSample')}</span>
           </div>
         </div>
 
@@ -288,20 +291,20 @@ function DatasetDrawer({ dataset, onClose, onSwitch }) {
           </div>
           <div className="rfd-stat">
             <div className="rfd-stat-value">{RF100VL_DATASETS.filter((d) => d.domain === dataset.domain).length}</div>
-            <div className="rfd-stat-label">in domain</div>
+            <div className="rfd-stat-label">{t('inDomain')}</div>
           </div>
           <div className="rfd-stat">
             <div className="rfd-stat-value">100 ep</div>
-            <div className="rfd-stat-label">fine-tune</div>
+            <div className="rfd-stat-label">{t('fineTune')}</div>
           </div>
         </div>
 
         <div className="px-5 pt-6">
           <div className="flex items-baseline justify-between">
             <h4 className="text-xs font-bold uppercase tracking-[0.15em] text-surface-500 dark:text-surface-400">
-              Sample previews
+              {t('samplePreviews')}
             </h4>
-            <span className="text-[10px] text-surface-400 dark:text-surface-500">placeholder crops</span>
+            <span className="text-[10px] text-surface-400 dark:text-surface-500">{t('placeholderCrops')}</span>
           </div>
           <div className="mt-2.5 grid grid-cols-3 gap-2">
             {PREVIEW_CROPS.map((crop, i) => (
@@ -316,14 +319,14 @@ function DatasetDrawer({ dataset, onClose, onSwitch }) {
             ))}
           </div>
           <p className="mt-2 text-[11px] leading-relaxed text-surface-400 dark:text-surface-500">
-            The full per-dataset image explorer ships with the final report.
+            {t('explorerComing')}
           </p>
         </div>
 
         {siblings.length > 0 && (
           <div className="px-5 pt-6">
             <h4 className="text-xs font-bold uppercase tracking-[0.15em] text-surface-500 dark:text-surface-400">
-              More from {dataset.domain}
+              {t('moreFrom', { domain: dataset.domain })}
             </h4>
             <div className="mt-2.5 grid grid-cols-3 gap-2">
               {siblings.map((d) => (
@@ -350,7 +353,7 @@ function DatasetDrawer({ dataset, onClose, onSwitch }) {
             className="rfd-cta"
           >
             <ExternalLink className="h-4 w-4" />
-            Open on Roboflow Universe
+            {t('openRoboflow')}
           </a>
         </div>
       </aside>
@@ -359,6 +362,7 @@ function DatasetDrawer({ dataset, onClose, onSwitch }) {
 }
 
 export default function RF100VLHero({ title, author, dateISO, dateLabel, backLink }) {
+  const t = useTranslations('RF100VL')
   // Two stages: 'art' shows the seven themed domain rings around the benchmark;
   // 'explore' swaps them for the 100 dataset planets. In explore mode,
   // hovering previews a dataset and clicking opens the lateral panel.
@@ -410,7 +414,7 @@ export default function RF100VLHero({ title, author, dateISO, dateLabel, backLin
   }
 
   return (
-    <section aria-label="RF100-VL benchmark report" className="rfp-hero not-prose">
+    <section aria-label={t('benchmarkReport')} className="rfp-hero not-prose">
       {/* backdrop: stars (dark), faint grid, and the active dataset sample */}
       <div className="rfp-stars" aria-hidden="true" />
       <div className="rfp-grid" aria-hidden="true" />
@@ -422,7 +426,7 @@ export default function RF100VLHero({ title, author, dateISO, dateLabel, backLin
       <header className="relative z-10 max-w-4xl mx-auto px-6 pt-28 md:pt-36 text-center">
         {backLink && <div className="mb-8 text-left">{backLink}</div>}
         <p className="font-mono text-[10px] md:text-xs font-semibold uppercase tracking-[0.35em] text-libre-600 dark:text-libre-300/90">
-          LibreYOLO · Benchmark report
+          {t('reportEyebrow')}
         </p>
         <h1 className="mt-4 text-3xl sm:text-4xl md:text-5xl font-bold text-surface-900 dark:text-white tracking-tight leading-tight">
           {title}
@@ -438,20 +442,20 @@ export default function RF100VLHero({ title, author, dateISO, dateLabel, backLin
         </div>
         <div className="mt-3">
           <span className="inline-block rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-700 dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-300">
-            Living report · updates as the sweep progresses
+            {t('livingReport')}
           </span>
         </div>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          {LINKS.map(({ label, href, icon: Icon }) => (
+          {LINKS.map(({ labelKey, href, icon: Icon }) => (
             <a
-              key={label}
+              key={labelKey}
               href={href}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full border border-surface-900 bg-surface-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-surface-700 hover:border-surface-700 dark:border-white/15 dark:bg-white/5 dark:font-medium dark:text-surface-200 dark:hover:border-white/30 dark:hover:bg-white/10"
             >
               <Icon className="h-4 w-4" />
-              {label}
+              {t(`links.${labelKey}`)}
             </a>
           ))}
         </div>
@@ -482,7 +486,7 @@ export default function RF100VLHero({ title, author, dateISO, dateLabel, backLin
 
             <div className="rfp-core" aria-hidden="true">
               <span className="rfp-core-pill">RF100-VL</span>
-              <div className="rfp-core-sub">100 datasets · 7 domains</div>
+              <div className="rfp-core-sub">{t('datasetDomainCount')}</div>
             </div>
 
             {RINGS.map((ring) => (
@@ -524,7 +528,7 @@ export default function RF100VLHero({ title, author, dateISO, dateLabel, backLin
                           type="button"
                           className={`rfp-planet${isActive ? ' is-active' : ''}${isDim ? ' is-dim' : ''}`}
                           style={{ '--c': ring.color }}
-                          aria-label={`Open the ${dataset.name} dataset (${ring.domain})`}
+                          aria-label={t('openDataset', { name: dataset.name, domain: ring.domain })}
                           title={dataset.name}
                           onMouseEnter={() => setHoverDs(dataset)}
                           onMouseLeave={() => setHoverDs(null)}
@@ -545,7 +549,7 @@ export default function RF100VLHero({ title, author, dateISO, dateLabel, backLin
             <div className={`rfp-info${active && !drawerDs ? ' is-on' : ''}`} aria-live="polite">
               {active && (
                 <>
-                  <img src={active.img} alt={`Sample from the ${active.name} dataset`} />
+                  <img src={active.img} alt={t('sampleAlt', { name: active.name })} />
                   <div className="min-w-0">
                     <div className="rfp-info-name">{active.name}</div>
                     <div className="rfp-info-domain">
@@ -562,7 +566,7 @@ export default function RF100VLHero({ title, author, dateISO, dateLabel, backLin
 
             <button type="button" className="rfe-exit" onClick={exitExplore}>
               <ArrowLeft className="h-3.5 w-3.5" />
-              Back to overview
+              {t('backToOverview')}
             </button>
           </div>
         )}
@@ -570,7 +574,7 @@ export default function RF100VLHero({ title, author, dateISO, dateLabel, backLin
 
       {exploring && (
         <p className="relative z-10 mt-2 text-center font-mono text-[10px] uppercase tracking-[0.22em] text-surface-400 dark:text-surface-600">
-          hover to preview · click a planet to open the dataset
+          {t('interactionHint')}
         </p>
       )}
 

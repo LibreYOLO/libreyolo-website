@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
-import { setRequestLocale } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 
-import { getDoc, getDocSlugs, extractHeadings, DOCS_NAV, DOCS_VERSION } from '@/lib/docs'
+import { getDoc, getDocSlugs, extractHeadings, DOCS_VERSION, localizeNav } from '@/lib/docs'
 import { buildPageMetadata, localeUrl, SITE_URL } from '@/i18n/metadata'
 import { routing } from '@/i18n/routing'
 import DocsShell from '@/components/docs/DocsShell'
@@ -43,6 +43,7 @@ export async function generateMetadata({ params }) {
 export default async function ExportDocPage({ params }) {
   const { locale, slug } = await params
   setRequestLocale(locale)
+  const t = await getTranslations({ locale, namespace: 'DocsChrome' })
 
   const doc = getDoc(SECTION, slug, locale)
   if (!doc) notFound()
@@ -52,8 +53,8 @@ export default async function ExportDocPage({ params }) {
   const headings = extractHeadings(doc.content)
 
   const breadcrumbs = [
-    { label: 'Docs', href: '/docs' },
-    { label: 'Export', href: '/docs/export' },
+    { label: t('docsCrumb'), href: '/docs' },
+    { label: t('groups.export'), href: '/docs/export' },
     { label: doc.title },
   ]
 
@@ -92,7 +93,7 @@ export default async function ExportDocPage({ params }) {
       ))}
 
       <DocsShell
-        nav={DOCS_NAV}
+        nav={localizeNav(locale)}
         activePath={path}
         version={DOCS_VERSION}
         headings={headings}
@@ -107,8 +108,7 @@ export default async function ExportDocPage({ params }) {
 
           <footer className="mt-16 border-t border-surface-200 pt-6 text-sm text-surface-500 dark:border-white/[0.06] dark:text-surface-500">
             <p>
-              {doc.verification ||
-                `Verified against LibreYOLO v${doc.last_verified}.`}
+              {doc.verification || t('verified', { version: doc.last_verified })}
             </p>
           </footer>
         </article>
