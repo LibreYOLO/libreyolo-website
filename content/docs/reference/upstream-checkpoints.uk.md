@@ -1,16 +1,28 @@
 ---
 title: Контрольні точки upstream-проєктів
-seo_title: "Завантаження контрольних точок upstream-проєктів у LibreYOLO"
-description: "Як автоматичне перетворення створює контрольну точку LibreYOLO v1.0 з опублікованої upstream-контрольної точки: які структури воно розпаковує, що розпізнають різні сімейства та де проходять межі можливостей."
-lead: "Сімейства LibreYOLO портовано з upstream-проєктів, опубліковані контрольні точки яких майже готові до завантаження, але не містять метаданих LibreYOLO. Автоматичне перетворення розпізнає ці файли, загортає їх у схему v1.0 і записує результат поруч із джерелом."
+seo_title: Завантаження контрольних точок upstream-проєктів у LibreYOLO
+description: >-
+  Як автоматичне перетворення створює контрольну точку LibreYOLO v1.0 з
+  опублікованої upstream-контрольної точки: які структури воно розпаковує, що
+  розпізнають різні сімейства та де проходять межі можливостей.
+lead: >-
+  Сімейства LibreYOLO портовано з upstream-проєктів, опубліковані контрольні
+  точки яких майже готові до завантаження, але не містять метаданих LibreYOLO.
+  Автоматичне перетворення розпізнає ці файли, загортає їх у схему v1.0 і
+  записує результат поруч із джерелом.
 keywords:
   - libreyolo автоматичне перетворення
   - завантажити upstream checkpoint
   - convert_upstream_state_dict
   - upstream ваги libreyolo
   - конвертація контрольної точки
-last_verified: "1.5.0"
-verification: "Поведінку звірено з libreyolo/models/autoconvert.py і BaseModel.convert_upstream_state_dict; засоби розпізнавання окремих сімейств перевірено за перевизначеннями convert_upstream_state_dict для кожного сімейства, усе у версії v1.5.0. Правила COCO для RF-DETR взято з docs/checkpoint_schema.md."
+last_verified: 1.5.0
+verification: >-
+  Поведінку звірено з libreyolo/models/autoconvert.py і
+  BaseModel.convert_upstream_state_dict; засоби розпізнавання окремих сімейств
+  перевірено за перевизначеннями convert_upstream_state_dict для кожного
+  сімейства, усе у версії v1.5.0. Правила COCO для RF-DETR взято з
+  docs/checkpoint_schema.md.
 snippets:
   usage:
     - label: Просто передайте файл фабриці
@@ -25,6 +37,7 @@ snippets:
         # Будь-яка контрольна точка LibreYOLO завантажується без змін.
         model = LibreYOLO("LibreYOLO9t.pt")
         print(model.family, model.size, model.task, model.nb_classes)
+source_hash: c6022771a2a207a1
 ---
 
 ## Що відбувається під час завантаження

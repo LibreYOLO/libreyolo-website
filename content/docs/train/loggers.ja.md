@@ -1,8 +1,11 @@
 ---
 title: 実験ロガー
-seo_title: "LibreYOLOの実験ロガーとコールバック"
-description: "学習指標をTensorBoard、MLflow、Weights & Biases、Comet、ClearML、Neptune、DVCLiveへ送信し、4つの学習フックに独自のコールバックを記述します。"
-lead: "学習可能なすべてのファミリーは4つの学習イベントを発行します。組み込みロガーは同じイベントを監視するコールバックオブジェクトなので、バックエンド統合とカスタムフックは1つのインターフェースを使います。"
+seo_title: LibreYOLOの実験ロガーとコールバック
+description: >-
+  学習指標をTensorBoard、MLflow、Weights &
+  Biases、Comet、ClearML、Neptune、DVCLiveへ送信し、4つの学習フックに独自のコールバックを記述します。
+lead: >-
+  学習可能なすべてのファミリーは4つの学習イベントを発行します。組み込みロガーは同じイベントを監視するコールバックオブジェクトなので、バックエンド統合とカスタムフックは1つのインターフェースを使います。
 keywords:
   - tensorboard 学習
   - mlflow 実験管理
@@ -14,7 +17,7 @@ keywords:
   - 学習 コールバック
   - 学習 指標 csv
   - libreyolo monitor
-last_verified: "1.5.0"
+last_verified: 1.5.0
 snippets:
   logger:
     - label: 名前で指定
@@ -52,9 +55,12 @@ snippets:
         model.train(data="coco8.yaml", epochs=10, callbacks=on_epoch)
     - label: 複数のフックを持つオブジェクト
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
-        from libreyolo.training import TrainEndEvent, TrainEpochEvent, TrainStartEvent
+
+        from libreyolo.training import TrainEndEvent, TrainEpochEvent,
+        TrainStartEvent
+
 
 
         class RunLog:
@@ -70,6 +76,7 @@ snippets:
 
 
         model = LibreYOLO("LibreYOLO9s.pt")
+
         model.train(data="coco8.yaml", epochs=10, callbacks=RunLog())
   monitor:
     - label: ブラウザーで実行を監視
@@ -77,6 +84,7 @@ snippets:
       code: |
         libreyolo monitor                     # runs/以下の最新実行
         libreyolo monitor runs/train/exp      # 指定した実行
+source_hash: de035acbaed32804
 ---
 
 ## ロガーを有効化

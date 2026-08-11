@@ -1,8 +1,11 @@
 ---
 title: ハイパーパラメータ
-seo_title: "LibreYOLOの学習ハイパーパラメータ"
-description: "重要なtrain()引数について説明します：epochs、batch、lr0、optimizer、EMA、自動バッチ、勾配累積、再開、およびファミリーごとにデフォルトが異なる理由。"
-lead: "すべての学習引数はTrainConfig dataclassのフィールドです。基底クラスがフィールドとデフォルト値を定義し、各モデルファミリーがそれをサブクラス化して、公開レシピで異なるデフォルト値をオーバーライドします。"
+seo_title: LibreYOLOの学習ハイパーパラメータ
+description: >-
+  重要なtrain()引数について説明します：epochs、batch、lr0、optimizer、EMA、自動バッチ、勾配累積、再開、およびファミリーごとにデフォルトが異なる理由。
+lead: >-
+  すべての学習引数はTrainConfig
+  dataclassのフィールドです。基底クラスがフィールドとデフォルト値を定義し、各モデルファミリーがそれをサブクラス化して、公開レシピで異なるデフォルト値をオーバーライドします。
 keywords:
   - train 引数
   - 学習率
@@ -14,7 +17,7 @@ keywords:
   - 早期終了 patience
   - amp bfloat16
   - train config yaml
-last_verified: "1.5.0"
+last_verified: 1.5.0
 snippets:
   train:
     - label: Python
@@ -106,6 +109,7 @@ snippets:
         # yamlのキーはTrainConfigフィールド名。明示的なkwargsが優先
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
+source_hash: d838d1abd45af40f
 ---
 
 ## 引数の設定

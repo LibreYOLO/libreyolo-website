@@ -1,10 +1,22 @@
 ---
 title: Встановлення
-seo_title: "Встановлення LibreYOLO"
-description: "Встановіть LibreYOLO з PyPI, виберіть необов'язкові набори залежностей для потрібного сімейства моделей або цілі експорту й переконайтеся, що PyTorch бачить GPU."
-lead: "LibreYOLO опубліковано на PyPI як libreyolo. Базовий пакет охоплює передбачення, навчання, валідацію та сімейства моделей, яким не потрібно нічого крім PyTorch; необов'язкові набори залежностей додають решту."
-keywords: [встановити libreyolo, pip install libreyolo, додаткові залежності libreyolo, libreyolo cuda, libreyolo gpu, системні вимоги libreyolo]
-last_verified: "1.5.0"
+seo_title: Встановлення LibreYOLO
+description: >-
+  Встановіть LibreYOLO з PyPI, виберіть необов'язкові набори залежностей для
+  потрібного сімейства моделей або цілі експорту й переконайтеся, що PyTorch
+  бачить GPU.
+lead: >-
+  LibreYOLO опубліковано на PyPI як libreyolo. Базовий пакет охоплює
+  передбачення, навчання, валідацію та сімейства моделей, яким не потрібно
+  нічого крім PyTorch; необов'язкові набори залежностей додають решту.
+keywords:
+  - встановити libreyolo
+  - pip install libreyolo
+  - додаткові залежності libreyolo
+  - libreyolo cuda
+  - libreyolo gpu
+  - системні вимоги libreyolo
+last_verified: 1.5.0
 meta:
   - label: Пакет
     value: libreyolo
@@ -23,8 +35,10 @@ snippets:
         pip install libreyolo
     - label: З додатковими залежностями
       language: bash
-      code: |
-        # Щоб поєднати кілька наборів в одному встановленні, розділяйте їх комами.
+      code: >
+        # Щоб поєднати кілька наборів в одному встановленні, розділяйте їх
+        комами.
+
         pip install "libreyolo[rfdetr,onnx]"
     - label: Усе
       language: bash
@@ -56,6 +70,7 @@ snippets:
         # роздільною здатністю входу. Для сімейств без потрібного набору
         # залежностей наведено команду pip, яка їх вмикає.
         libreyolo models
+source_hash: 34fc6d3e24d03fb4
 ---
 
 ## Встановлення

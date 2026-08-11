@@ -1,10 +1,20 @@
 ---
 title: Видалення тла
-seo_title: "Видалення тла в LibreYOLO"
-description: "Виріжте об'єкт із тла в LibreYOLO. Передбачте м'яку альфа-маску, запишіть прозорий PNG і виконайте валідацію за MAE та S-measure."
-lead: "Видалення тла відокремлює об'єкт від усього позаду нього. LibreYOLO надає цю можливість як задачу matte, що повертає м'яке альфа-значення для кожного пікселя замість жорсткої маски переднього плану."
-keywords: [видалення тла python, модель alpha matting, дихотомічна сегментація зображень, вирізати об'єкт прозорий png, м'яка альфа маска]
-last_verified: "1.5.0"
+seo_title: Видалення тла в LibreYOLO
+description: >-
+  Виріжте об'єкт із тла в LibreYOLO. Передбачте м'яку альфа-маску, запишіть
+  прозорий PNG і виконайте валідацію за MAE та S-measure.
+lead: >-
+  Видалення тла відокремлює об'єкт від усього позаду нього. LibreYOLO надає цю
+  можливість як задачу matte, що повертає м'яке альфа-значення для кожного
+  пікселя замість жорсткої маски переднього плану.
+keywords:
+  - видалення тла python
+  - модель alpha matting
+  - дихотомічна сегментація зображень
+  - вирізати об'єкт прозорий png
+  - м'яка альфа маска
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Передбачити матову маску
@@ -32,17 +42,26 @@ snippets:
         print(rgba.shape)
     - label: Накласти на нове тло
       language: python
-      code: |
+      code: >
         import numpy as np
+
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         rgba = result.cutout()
+
         alpha = rgba[..., 3:4].astype(np.float32) / 255.0
+
         backdrop = np.full_like(rgba[..., :3], 255)          # білий
-        composited = (rgba[..., :3] * alpha + backdrop * (1 - alpha)).astype(np.uint8)
+
+        composited = (rgba[..., :3] * alpha + backdrop * (1 -
+        alpha)).astype(np.uint8)
+
         print(composited.shape)
   val:
     - label: Виконати валідацію та прочитати ключі метрик
@@ -68,15 +87,22 @@ snippets:
         model.export(format="torchscript")
     - label: Запустити експортований файл
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Фабрика маршрутизує за суфіксом файла, тому експортований артефакт
-        # завантажується як будь-яка контрольна точка й повертає той самий Results.
+
+        # завантажується як будь-яка контрольна точка й повертає той самий
+        Results.
+
         model = LibreYOLO("LibreBiRefNetl-matte.torchscript")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.matte.array.shape)
+source_hash: f7d88c74d9729268
 ---
 
 ## Визначення

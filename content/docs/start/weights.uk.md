@@ -1,16 +1,28 @@
 ---
 title: Контрольні точки та ваги
-seo_title: "Контрольні точки й ваги LibreYOLO"
-description: "Як LibreYOLO знаходить, завантажує та перевіряє ваги моделей, де вони розміщені, як працювати без мережі та що забезпечує безпечне завантаження контрольної точки."
-lead: "Контрольна точка LibreYOLO є словником torch.save, який містить словник стану та метадані, потрібні для її ідентифікації. Ця сторінка пояснює, звідки беруться ці файли, куди вони потрапляють і як завантажуються."
-keywords: [ваги libreyolo, контрольні точки libreyolo, завантажити ваги libreyolo, libreyolo офлайн, libreyolo hugging face, метадані контрольної точки]
-last_verified: "1.5.0"
+seo_title: Контрольні точки й ваги LibreYOLO
+description: >-
+  Як LibreYOLO знаходить, завантажує та перевіряє ваги моделей, де вони
+  розміщені, як працювати без мережі та що забезпечує безпечне завантаження
+  контрольної точки.
+lead: >-
+  Контрольна точка LibreYOLO є словником torch.save, який містить словник стану
+  та метадані, потрібні для її ідентифікації. Ця сторінка пояснює, звідки
+  беруться ці файли, куди вони потрапляють і як завантажуються.
+keywords:
+  - ваги libreyolo
+  - контрольні точки libreyolo
+  - завантажити ваги libreyolo
+  - libreyolo офлайн
+  - libreyolo hugging face
+  - метадані контрольної точки
+last_verified: 1.5.0
 meta:
   - label: Розміщення
-    value: "Один репозиторій Hugging Face для кожної контрольної точки:"
+    value: 'Один репозиторій Hugging Face для кожної контрольної точки:'
     links:
       - label: huggingface.co/LibreYOLO
-        href: https://huggingface.co/LibreYOLO
+        href: 'https://huggingface.co/LibreYOLO'
   - label: Локальний кеш
     value: weights/ у робочому каталозі
     mono: true
@@ -49,17 +61,24 @@ snippets:
         libreyolo metadata path=weights/LibreYOLO9t.pt --json
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo.utils.serialization import (
             load_untrusted_torch_file,
             validate_checkpoint_metadata,
         )
 
+
         loaded = load_untrusted_torch_file("weights/LibreYOLO9t.pt")
 
-        # Повертає список проблем. Порожній список означає відповідність файла схемі v1.0.
+
+        # Повертає список проблем. Порожній список означає відповідність файла
+        схемі v1.0.
+
         print(validate_checkpoint_metadata(loaded))
-        print(loaded["model_family"], loaded["size"], loaded["task"], loaded["nc"])
+
+        print(loaded["model_family"], loaded["size"], loaded["task"],
+        loaded["nc"])
+source_hash: 210a12baa1417cfb
 ---
 
 ## Де шукається контрольна точка

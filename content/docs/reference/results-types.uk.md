@@ -1,8 +1,14 @@
 ---
 title: Типи Results
-seo_title: "Довідник об'єкта Results у LibreYOLO"
-description: "Усі дані, які може містити об'єкт Results у LibreYOLO, по одному слоту для кожного типу задачі: рамки, маски, ключові точки, probs, obb, глибина, ocr, ембединги та ще десять."
-lead: "Results є єдиним типом повернення для одного зображення в усіх моделях LibreYOLO. Він містить вісімнадцять необов'язкових слотів даних, по одному для кожного типу задачі, і заповнює лише ті, які створила модель."
+seo_title: Довідник об'єкта Results у LibreYOLO
+description: >-
+  Усі дані, які може містити об'єкт Results у LibreYOLO, по одному слоту для
+  кожного типу задачі: рамки, маски, ключові точки, probs, obb, глибина, ocr,
+  ембединги та ще десять.
+lead: >-
+  Results є єдиним типом повернення для одного зображення в усіх моделях
+  LibreYOLO. Він містить вісімнадцять необов'язкових слотів даних, по одному для
+  кожного типу задачі, і заповнює лише ті, які створила модель.
 keywords:
   - libreyolo об'єкт results
   - Results.boxes
@@ -11,8 +17,11 @@ keywords:
   - Results.depth_map
   - Results.summary
   - libreyolo results to_json
-last_verified: "1.5.0"
-verification: "Назви слотів, форми, властивості та типові значення звірено з libreyolo/utils/results.py у версії v1.5.0. Семантику взято з докстрингів класів даних."
+last_verified: 1.5.0
+verification: >-
+  Назви слотів, форми, властивості та типові значення звірено з
+  libreyolo/utils/results.py у версії v1.5.0. Семантику взято з докстрингів
+  класів даних.
 snippets:
   usage:
     - label: Python
@@ -42,6 +51,7 @@ snippets:
         # Рядки як звичайні словники, а потім як JSON.
         print(result.summary()[:1])
         print(result.to_json())
+source_hash: 16f654364ae6448a
 ---
 
 ## Об'єкт Results

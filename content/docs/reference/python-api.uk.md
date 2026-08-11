@@ -1,19 +1,30 @@
 ---
 title: Python API
-seo_title: "Довідник Python API LibreYOLO"
-description: "Назви, які LibreYOLO експортує на рівні пакета: п'ять фабрик, класи сімейств, корисні дані Results, бекенди, валідатори, трекери та допоміжні засоби для даних."
-lead: "Публічна поверхня Python у LibreYOLO визначається списком __all__ у libreyolo/__init__.py. Усе на цій сторінці можна імпортувати як from libreyolo import <name>; усе, чого немає в списку, є внутрішнім."
+seo_title: Довідник Python API LibreYOLO
+description: >-
+  Назви, які LibreYOLO експортує на рівні пакета: п'ять фабрик, класи сімейств,
+  корисні дані Results, бекенди, валідатори, трекери та допоміжні засоби для
+  даних.
+lead: >-
+  Публічна поверхня Python у LibreYOLO визначається списком __all__ у
+  libreyolo/__init__.py. Усе на цій сторінці можна імпортувати як from libreyolo
+  import <name>; усе, чого немає в списку, є внутрішнім.
 keywords:
-  - "libreyolo python api"
-  - "libreyolo import"
-  - "фабрика LibreYOLO"
+  - libreyolo python api
+  - libreyolo import
+  - фабрика LibreYOLO
   - LibreSAM
   - LibreVLM
   - LibreOpenVocab
   - LibreEnsemble
-  - "libreyolo __all__"
-last_verified: "1.5.0"
-verification: "Назви й сигнатури взято з libreyolo/__init__.py, libreyolo/models/__init__.py, libreyolo/models/base/model.py, libreyolo/models/base/inference.py, libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py та libreyolo/ensemble/model.py у v1.5.0."
+  - libreyolo __all__
+last_verified: 1.5.0
+verification: >-
+  Назви й сигнатури взято з libreyolo/__init__.py, libreyolo/models/__init__.py,
+  libreyolo/models/base/model.py, libreyolo/models/base/inference.py,
+  libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py,
+  libreyolo/models/openvocab/__init__.py та libreyolo/ensemble/model.py у
+  v1.5.0.
 snippets:
   usage:
     - label: Завантаження будь-чого через одну фабрику
@@ -41,20 +52,33 @@ snippets:
   factories:
     - label: П'ять точок входу
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, LibreEnsemble
 
+
         # Фабрика з аналізом ваг для сімейств без підказок.
+
         detector = LibreYOLO("LibreYOLO9t.pt")
 
+
         # Два або більше детекторів за однією поверхнею передбачення.
+
         ens = LibreEnsemble(["LibreYOLO9t.pt", "LibreYOLO9s.pt"])
 
+
         # Для інших трьох фабрик потрібно встановити додатковий пакет:
-        #   pip install 'libreyolo[sam]'        -> from libreyolo import LibreSAM
-        #   pip install 'libreyolo[vlm]'        -> from libreyolo import LibreVLM
-        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import LibreOpenVocab
+
+        #   pip install 'libreyolo[sam]'        -> from libreyolo import
+        LibreSAM
+
+        #   pip install 'libreyolo[vlm]'        -> from libreyolo import
+        LibreVLM
+
+        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import
+        LibreOpenVocab
+
         print(type(detector).__name__, ens.fusion)
+source_hash: 66e34e78b2e0fb2d
 ---
 
 ## Точки входу

@@ -1,10 +1,21 @@
 ---
 title: Оцінювання глибини
-seo_title: "Монокулярне оцінювання глибини в LibreYOLO"
-description: "Передбачте щільну карту відносної глибини за одним зображенням у LibreYOLO. Порівняйте сімейства глибини, прочитайте метрики глибини та експортуйте модель."
-lead: "Оцінювання глибини передбачає відстань кожного пікселя до камери за одним зображенням. LibreYOLO надає його як задачу depth, що повертає щільну карту відносної оберненої глибини на полотні початкового зображення."
-keywords: [монокулярне оцінювання глибини python, карта глибини з одного зображення, модель відносної глибини, depth anything libreyolo, передбачення щільної глибини]
-last_verified: "1.5.0"
+seo_title: Монокулярне оцінювання глибини в LibreYOLO
+description: >-
+  Передбачте щільну карту відносної глибини за одним зображенням у LibreYOLO.
+  Порівняйте сімейства глибини, прочитайте метрики глибини та експортуйте
+  модель.
+lead: >-
+  Оцінювання глибини передбачає відстань кожного пікселя до камери за одним
+  зображенням. LibreYOLO надає його як задачу depth, що повертає щільну карту
+  відносної оберненої глибини на полотні початкового зображення.
+keywords:
+  - монокулярне оцінювання глибини python
+  - карта глибини з одного зображення
+  - модель відносної глибини
+  - depth anything libreyolo
+  - передбачення щільної глибини
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Передбачити карту глибини
@@ -20,15 +31,22 @@ snippets:
         print(depth.min, depth.max, depth.mean)
     - label: Робота зі значеннями
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         depth = result.depth_map
-        raw = depth.data          # вище означає ближче; немає метричної одиниці чи масштабу
+
+        raw = depth.data          # вище означає ближче; немає метричної одиниці
+        чи масштабу
+
         gray = depth.normalized() # перемасштабовано до [0, 1] для візуалізації
+
         print(raw.shape, float(gray.max()))
     - label: Компактна альтернатива
       language: python
@@ -63,15 +81,22 @@ snippets:
         model.export(format="onnx")
     - label: Запустити експортований файл
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Фабрика маршрутизує за суфіксом файла, тому експортований артефакт
-        # завантажується як будь-яка контрольна точка й повертає той самий Results.
+
+        # завантажується як будь-яка контрольна точка й повертає той самий
+        Results.
+
         model = LibreYOLO("LibreDepthAnythingV2s-depth.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.depth_map.data.shape)
+source_hash: e0612c59f9c999b4
 ---
 
 ## Визначення

@@ -1,10 +1,21 @@
 ---
 title: Виявлення об'єктів
-seo_title: "Виявлення об'єктів у LibreYOLO"
-description: "Виявляйте об'єкти як вирівняні за осями рамки в LibreYOLO: сімейства для цієї задачі, формат міток і виклики передбачення, навчання, валідації та експорту."
-lead: "Виявлення об'єктів локалізує кожен екземпляр об'єкта на зображенні й повертає для нього вирівняний за осями прямокутник, мітку класу та оцінку. Ключ задачі має назву detect."
-keywords: [виявлення об'єктів python, детекція об'єктів на зображенні, bounding box detection, MIT бібліотека детекції, альтернатива YOLO, навчити детектор об'єктів]
-last_verified: "1.5.0"
+seo_title: Виявлення об'єктів у LibreYOLO
+description: >-
+  Виявляйте об'єкти як вирівняні за осями рамки в LibreYOLO: сімейства для цієї
+  задачі, формат міток і виклики передбачення, навчання, валідації та експорту.
+lead: >-
+  Виявлення об'єктів локалізує кожен екземпляр об'єкта на зображенні й повертає
+  для нього вирівняний за осями прямокутник, мітку класу та оцінку. Ключ задачі
+  має назву detect.
+keywords:
+  - виявлення об'єктів python
+  - детекція об'єктів на зображенні
+  - bounding box detection
+  - MIT бібліотека детекції
+  - альтернатива YOLO
+  - навчити детектор об'єктів
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -22,7 +33,7 @@ snippets:
       code: |
         libreyolo predict model=LibreYOLO9t.pt save=True \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-    - label: Інше сімейство, той самий виклик
+    - label: 'Інше сімейство, той самий виклик'
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -47,13 +58,18 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # coco128.yaml завантажує вибірку зі 128 зображень під час першого використання.
+
+        # coco128.yaml завантажує вибірку зі 128 зображень під час першого
+        використання.
+
         # Для справжнього запуску вкажіть у data YAML власного датасету.
+
         model.train(data="coco128.yaml", epochs=50, imgsz=640, batch=8)
     - label: CLI
       language: bash
@@ -106,6 +122,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
+source_hash: c735b6e3de78dd2b
 ---
 
 ## Визначення

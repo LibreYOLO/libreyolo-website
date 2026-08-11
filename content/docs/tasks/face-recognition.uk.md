@@ -1,25 +1,49 @@
 ---
 title: Розпізнавання облич
-seo_title: "Розпізнавання облич у LibreYOLO"
-description: "Виявляйте обличчя, створюйте ембединги та ідентифікуйте людей у LibreYOLO. Додайте дані до галереї, порівняйте два зображення й зіставляйте за косинусною подібністю з Python або CLI."
-lead: "Розпізнавання облич є задачею embed, застосованою до облич. Детектор знаходить і вирівнює кожне обличчя, голова розпізнавання повертає L2-нормалізований вектор для кожного обличчя, а ідентичність визначається косинусною подібністю до доданих еталонів, а не фіксованим списком класів."
-keywords: [розпізнавання облич python, ембединг обличчя, верифікація облич, галерея облич, arcface onnx, libreyolo embed, косинусна подібність облич]
-last_verified: "1.5.0"
+seo_title: Розпізнавання облич у LibreYOLO
+description: >-
+  Виявляйте обличчя, створюйте ембединги та ідентифікуйте людей у LibreYOLO.
+  Додайте дані до галереї, порівняйте два зображення й зіставляйте за косинусною
+  подібністю з Python або CLI.
+lead: >-
+  Розпізнавання облич є задачею embed, застосованою до облич. Детектор знаходить
+  і вирівнює кожне обличчя, голова розпізнавання повертає L2-нормалізований
+  вектор для кожного обличчя, а ідентичність визначається косинусною подібністю
+  до доданих еталонів, а не фіксованим списком класів.
+keywords:
+  - розпізнавання облич python
+  - ембединг обличчя
+  - верифікація облич
+  - галерея облич
+  - arcface onnx
+  - libreyolo embed
+  - косинусна подібність облич
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Назви librefacerec-* маршрутизуються до сімейства ембедингів облич
-        # незалежно від суфікса файла й під час першого використання завантажуються
-        # з організації LibreYOLO у Hugging Face разом із типовим детектором облич.
+
+        # незалежно від суфікса файла й під час першого використання
+        завантажуються
+
+        # з організації LibreYOLO у Hugging Face разом із типовим детектором
+        облич.
+
         model = LibreYOLO("librefacerec-l.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)             # (N, 4) рамки облич
+
         print(result.embeddings.data.shape)  # (N, D), один рядок на обличчя
+
         print(result.embeddings.dim)
     - label: CLI
       language: bash
@@ -53,9 +77,12 @@ snippets:
             print(name, score)   # нижче порога name має значення None
     - label: Додати та ідентифікувати з CLI
       language: bash
-      code: |
-        libreyolo enroll model=librefacerec-l.onnx source=people/ gallery=faces.npz
-        libreyolo predict model=librefacerec-l.onnx source=group_photo.jpg gallery=faces.npz
+      code: >
+        libreyolo enroll model=librefacerec-l.onnx source=people/
+        gallery=faces.npz
+
+        libreyolo predict model=librefacerec-l.onnx source=group_photo.jpg
+        gallery=faces.npz
     - label: Використати власні рамки облич
       language: python
       code: |
@@ -67,6 +94,7 @@ snippets:
         # callable, модель виявлення LibreYOLO або екземпляр FaceDetector.
         result = model(SAMPLE_IMAGE, face_boxes=[[34, 12, 90, 80]])
         print(result.embeddings.data.shape)
+source_hash: d7dfcb6f812ebb2d
 ---
 
 ## Визначення

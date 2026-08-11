@@ -1,24 +1,43 @@
 ---
 title: Виявлення країв
-seo_title: "Виявлення країв у LibreYOLO"
-description: "Передбачте щільну карту ймовірностей країв за одним зображенням у LibreYOLO. Перетворіть контрольну точку, застосуйте поріг до карти, виконайте валідацію за ODS і OIS та експортуйте модель."
-lead: "Виявлення країв передбачає ймовірність того, що кожен піксель лежить на межі об'єкта. LibreYOLO надає його як задачу edge, що повертає щільну карту ймовірностей на полотні початкового зображення замість набору відрізків."
-keywords: [виявлення країв python, нейромережа для меж об'єктів, карта ймовірностей країв, ODS OIS F-міра, передбачення країв зображення]
-last_verified: "1.5.0"
+seo_title: Виявлення країв у LibreYOLO
+description: >-
+  Передбачте щільну карту ймовірностей країв за одним зображенням у LibreYOLO.
+  Перетворіть контрольну точку, застосуйте поріг до карти, виконайте валідацію
+  за ODS і OIS та експортуйте модель.
+lead: >-
+  Виявлення країв передбачає ймовірність того, що кожен піксель лежить на межі
+  об'єкта. LibreYOLO надає його як задачу edge, що повертає щільну карту
+  ймовірностей на полотні початкового зображення замість набору відрізків.
+keywords:
+  - виявлення країв python
+  - нейромережа для меж об'єктів
+  - карта ймовірностей країв
+  - ODS OIS F-міра
+  - передбачення країв зображення
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Передбачити карту країв
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # LibreYOLO не постачає контрольну точку країв; спочатку перетворіть її (нижче).
+
+        # LibreYOLO не постачає контрольну точку країв; спочатку перетворіть її
+        (нижче).
+
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         edges = result.edges
+
         print(edges.array.shape)          # (H, W) float32 у [0, 1]
-        print(edges.binary(0.5).sum())    # кількість пікселів краю за порога 0.5
+
+        print(edges.binary(0.5).sum())    # кількість пікселів краю за порога
+        0.5
     - label: Вибрати власний поріг
       language: python
       code: |
@@ -76,15 +95,22 @@ snippets:
         model.export(format="onnx", imgsz=352)
     - label: Запустити експортований файл
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Фабрика маршрутизує за суфіксом файла, тому експортований артефакт
-        # завантажується як будь-яка контрольна точка й повертає той самий Results.
+
+        # завантажується як будь-яка контрольна точка й повертає той самий
+        Results.
+
         model = LibreYOLO("weights/LibreDexiNedb-edge.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.edges.array.shape)
+source_hash: bc286345540ed966
 ---
 
 ## Визначення

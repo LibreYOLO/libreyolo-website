@@ -1,8 +1,15 @@
 ---
 title: API сегментації за підказками
-seo_title: "API LibreSAM: підказки, псевдоніми та сигнатури"
-description: "Фабрика LibreSAM, її псевдоніми розмірів, типи точкових, рамкових і текстових концептуальних підказок, життєвий цикл set_image з одноразовим кодуванням та обмеження цього рівня."
-lead: "LibreSAM є фабрикою сегментації за підказками. Для прямого проходу потрібна підказка для кожного зображення, яку надають під час виклику, тому цей рівень має власний інтерфейс передбачення замість маршрутизації через засіб інференсу без підказок."
+seo_title: 'API LibreSAM: підказки, псевдоніми та сигнатури'
+description: >-
+  Фабрика LibreSAM, її псевдоніми розмірів, типи точкових, рамкових і текстових
+  концептуальних підказок, життєвий цикл set_image з одноразовим кодуванням та
+  обмеження цього рівня.
+lead: >-
+  LibreSAM є фабрикою сегментації за підказками. Для прямого проходу потрібна
+  підказка для кожного зображення, яку надають під час виклику, тому цей рівень
+  має власний інтерфейс передбачення замість маршрутизації через засіб інференсу
+  без підказок.
 keywords:
   - LibreSAM
   - сегментація за підказками
@@ -11,8 +18,14 @@ keywords:
   - set_image
   - сегментувати все зображення
   - libreyolo sam extra
-last_verified: "1.5.0"
-verification: "Псевдоніми фабрики, розміри й репозиторії звірено з libreyolo/models/sam/model.py, sam2.py, edgetam.py, sam3.py, libreyolo/models/mobilesam/model.py і libreyolo/models/picosam3/model.py. Контракт підказок і типові значення звірено з libreyolo/models/sam/base.py. Проєктні рішення взято з docs/adr/0007-libresam-contract.md, усе для версії v1.5.0."
+last_verified: 1.5.0
+verification: >-
+  Псевдоніми фабрики, розміри й репозиторії звірено з
+  libreyolo/models/sam/model.py, sam2.py, edgetam.py, sam3.py,
+  libreyolo/models/mobilesam/model.py і libreyolo/models/picosam3/model.py.
+  Контракт підказок і типові значення звірено з libreyolo/models/sam/base.py.
+  Проєктні рішення взято з docs/adr/0007-libresam-contract.md, усе для версії
+  v1.5.0.
 snippets:
   install:
     - label: bash
@@ -33,7 +46,7 @@ snippets:
 
         r = model.predict(SAMPLE_IMAGE, bboxes=[100, 100, 200, 200])
         print(len(r))
-    - label: Одноразове кодування, багато підказок
+    - label: 'Одноразове кодування, багато підказок'
       language: python
       code: |
         from libreyolo import LibreSAM, SAMPLE_IMAGE
@@ -46,6 +59,7 @@ snippets:
         print(len(a), len(b))
 
         model.reset_image()
+source_hash: 18e8206c10ce17fd
 ---
 
 ## Встановлення

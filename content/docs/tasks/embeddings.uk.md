@@ -1,35 +1,66 @@
 ---
 title: Ембединги
-seo_title: "Ембединги зображень та областей у LibreYOLO"
-description: "Задача embed повертає L2-нормалізовані вектори float32 для всього зображення, кожної виявленої області або тексту. Додайте дані до галереї, зіставляйте за косинусною подібністю та шукайте з Python або CLI."
-lead: "Одна задача охоплює кожен вектор, який створює LibreYOLO. embed повертає рядки float32 одиничної довжини, скалярний добуток яких є оцінкою подібності, незалежно від того, чи описує рядок усе зображення, одне виявлене обличчя або рядок тексту; та сама Gallery зіставляє їх усі."
-keywords: [ембединги зображень python, l2 нормалізований ембединг, пошук за косинусною подібністю, libreyolo embed, пошук схожих зображень, додати до gallery, clip embeddings, dinov2 embeddings, reid embeddings]
-last_verified: "1.5.0"
-verification: "Ключ задачі та псевдоніми звірено з libreyolo/tasks.py. Об'єкти даних результатів звірено з класами Embeddings та Identities у libreyolo/utils/results.py. API Gallery звірено з libreyolo/utils/gallery.py. embed і _postprocess_embeddings звірено з libreyolo/models/base/model.py. Підтримувані сімейства знайдено пошуком embed у SUPPORTED_TASKS у libreyolo/models/**/model.py. Інтерфейс CLI звірено з libreyolo/cli/__init__.py, libreyolo/cli/commands/special.py і libreyolo/cli/commands/predict.py. Проєктні рішення взято з docs/adr/0015-embed-generalization.md."
+seo_title: Ембединги зображень та областей у LibreYOLO
+description: >-
+  Задача embed повертає L2-нормалізовані вектори float32 для всього зображення,
+  кожної виявленої області або тексту. Додайте дані до галереї, зіставляйте за
+  косинусною подібністю та шукайте з Python або CLI.
+lead: >-
+  Одна задача охоплює кожен вектор, який створює LibreYOLO. embed повертає рядки
+  float32 одиничної довжини, скалярний добуток яких є оцінкою подібності,
+  незалежно від того, чи описує рядок усе зображення, одне виявлене обличчя або
+  рядок тексту; та сама Gallery зіставляє їх усі.
+keywords:
+  - ембединги зображень python
+  - l2 нормалізований ембединг
+  - пошук за косинусною подібністю
+  - libreyolo embed
+  - пошук схожих зображень
+  - додати до gallery
+  - clip embeddings
+  - dinov2 embeddings
+  - reid embeddings
+last_verified: 1.5.0
+verification: >-
+  Ключ задачі та псевдоніми звірено з libreyolo/tasks.py. Об'єкти даних
+  результатів звірено з класами Embeddings та Identities у
+  libreyolo/utils/results.py. API Gallery звірено з libreyolo/utils/gallery.py.
+  embed і _postprocess_embeddings звірено з libreyolo/models/base/model.py.
+  Підтримувані сімейства знайдено пошуком embed у SUPPORTED_TASKS у
+  libreyolo/models/**/model.py. Інтерфейс CLI звірено з
+  libreyolo/cli/__init__.py, libreyolo/cli/commands/special.py і
+  libreyolo/cli/commands/predict.py. Проєктні рішення взято з
+  docs/adr/0015-embed-generalization.md.
 meta:
   - label: Ключ задачі
     value: embed
     mono: true
   - label: Псевдоніми
-    value: face-recognition, reid, face
+    value: 'face-recognition, reid, face'
     mono: true
   - label: Об'єкти даних результатів
-    value: Embeddings, Identities
+    value: 'Embeddings, Identities'
     mono: true
   - label: Тип даних рядка
-    value: float32, одинична довжина
+    value: 'float32, одинична довжина'
 snippets:
   predict:
     - label: Усе зображення
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Типовою задачею CLIP є classify, тому запитайте вектор явно.
+
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
+
         result = model(SAMPLE_IMAGE)
 
-        print(result.embeddings.data.shape)  # (1, 512), один рядок на зображення
+
+        print(result.embeddings.data.shape)  # (1, 512), один рядок на
+        зображення
+
         print(result.boxes)                  # None: нічого не локалізовано
     - label: Для кожної області
       language: python
@@ -66,16 +97,23 @@ snippets:
   similarity:
     - label: Порівняти два набори рядків
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
 
+
         query = model.embed("query.jpg")          # (1, 512)
+
         pool = model.embed(["a.jpg", "b.jpg"])    # (2, 512)
 
-        # Рядки мають одиничну довжину, тому косинусна подібність є скалярним добутком.
+
+        # Рядки мають одиничну довжину, тому косинусна подібність є скалярним
+        добутком.
+
         scores = model("query.jpg").embeddings.similarity(pool)
+
         print(scores.shape)  # (1, 2)
     - label: Зображення порівняно з текстом
       language: python
@@ -120,18 +158,24 @@ snippets:
         print(matches[0])   # [(name, score), ...] для першого рядка
     - label: Додати наявний вектор
       language: python
-      code: |
+      code: >
         from libreyolo import Gallery
 
+
         gallery = Gallery()
-        gallery.enroll_embedding("ada", vector)  # нормалізується під час додавання
+
+        gallery.enroll_embedding("ada", vector)  # нормалізується під час
+        додавання
+
         print(gallery.identities, gallery.dim, len(gallery))
   cli:
     - label: Додати дерево каталогів
       language: bash
-      code: |
+      code: >
         # source/<identity>/*.jpg. Наявна галерея розширюється на місці.
-        libreyolo enroll model=librefacerec-l.onnx source=people/ gallery=refs.npz
+
+        libreyolo enroll model=librefacerec-l.onnx source=people/
+        gallery=refs.npz
     - label: Ідентифікувати під час передбачення
       language: bash
       code: |
@@ -139,12 +183,15 @@ snippets:
           gallery=refs.npz gallery_threshold=0.45
     - label: Порівняти два зображення
       language: bash
-      code: |
+      code: >
         libreyolo compare model=librefacerec-l.onnx \
           source=a.jpg source2=b.jpg threshold=0.4
 
         # verify є тією самою командою під другою назвою.
-        libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg --json
+
+        libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg
+        --json
+source_hash: ffbaad5599035bc7
 ---
 
 ## Визначення

@@ -1,42 +1,69 @@
 ---
 title: Відновлення зображень
-seo_title: "Відновлення та збільшення зображень у LibreYOLO"
-description: "Усувайте шум і розмиття та збільшуйте зображення в LibreYOLO. Передбачте відновлене зображення RGB, навчіть NAFNet на парних даних і прочитайте ключі PSNR та SSIM."
-lead: "Відновлення зображень приймає погіршене зображення й повертає чисте. LibreYOLO надає його як задачу restore, що охоплює усунення шуму, розмиття та підвищення роздільної здатності за єдиним вихідним контрактом: одне зображення RGB на вході й одне на виході."
-keywords: [відновлення зображень python, модель усунення шуму зображення, super resolution python, модель усунення розмиття, валідація PSNR SSIM]
-last_verified: "1.5.0"
+seo_title: Відновлення та збільшення зображень у LibreYOLO
+description: >-
+  Усувайте шум і розмиття та збільшуйте зображення в LibreYOLO. Передбачте
+  відновлене зображення RGB, навчіть NAFNet на парних даних і прочитайте ключі
+  PSNR та SSIM.
+lead: >-
+  Відновлення зображень приймає погіршене зображення й повертає чисте. LibreYOLO
+  надає його як задачу restore, що охоплює усунення шуму, розмиття та підвищення
+  роздільної здатності за єдиним вихідним контрактом: одне зображення RGB на
+  вході й одне на виході.
+keywords:
+  - відновлення зображень python
+  - модель усунення шуму зображення
+  - super resolution python
+  - модель усунення розмиття
+  - валідація PSNR SSIM
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Збільшити зображення
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Компактний генератор 4x; tile обмежує пікову пам'ять для великого джерела.
+
+        # Компактний генератор 4x; tile обмежує пікову пам'ять для великого
+        джерела.
+
         model = LibreYOLO("LibreRealESRGANx4t-restore.pt")
+
         result = model(SAMPLE_IMAGE, tile=512, tile_pad=10)
 
+
         result.restored.save("upscaled.png")
+
         print(result.restored.array.shape)   # у 4 рази більше за кожною віссю
     - label: Усунути шум із зображення
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Навчено на шумі реальних зображень SIDD; вихід зберігає розмір входу.
+
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         result.restored.save("denoised.png")
-        print(result.restore_scale)   # 1: ця контрольна точка не збільшує зображення
+
+        print(result.restore_scale)   # 1: ця контрольна точка не збільшує
+        зображення
   train:
     - label: Донавчити NAFNet на парних зображеннях
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
-        model.train(data="my-dataset.yaml", epochs=100, imgsz=256, batch=16, lr0=1e-3)
+
+        model.train(data="my-dataset.yaml", epochs=100, imgsz=256, batch=16,
+        lr0=1e-3)
     - label: Записати походження в контрольній точці
       language: python
       code: |
@@ -78,15 +105,22 @@ snippets:
         model.export(format="onnx", imgsz=256)
     - label: Запустити експортований файл
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Фабрика маршрутизує за суфіксом файла, тому експортований артефакт
-        # завантажується як будь-яка контрольна точка й повертає той самий Results.
+
+        # завантажується як будь-яка контрольна точка й повертає той самий
+        Results.
+
         model = LibreYOLO("LibreNAFNetl-restore-sidd.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         result.restored.save("denoised.png")
+source_hash: 9dc81cadb3ebf18b
 ---
 
 ## Визначення

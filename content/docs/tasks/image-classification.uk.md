@@ -1,10 +1,21 @@
 ---
 title: Класифікація зображень
-seo_title: "Класифікація зображень у LibreYOLO"
-description: "Призначте мітку всьому зображенню в LibreYOLO: сімейства для цієї задачі, структура датасету ImageFolder і виклики передбачення, навчання, валідації та експорту."
-lead: "Класифікація зображень призначає один розподіл міток усьому зображенню й нічого в ньому не локалізує. Ключ задачі має назву classify."
-keywords: [класифікація зображень python, навчити класифікатор зображень, датасет ImageFolder, top-1 accuracy, класифікація zero-shot, MIT бібліотека класифікації]
-last_verified: "1.5.0"
+seo_title: Класифікація зображень у LibreYOLO
+description: >-
+  Призначте мітку всьому зображенню в LibreYOLO: сімейства для цієї задачі,
+  структура датасету ImageFolder і виклики передбачення, навчання, валідації та
+  експорту.
+lead: >-
+  Класифікація зображень призначає один розподіл міток усьому зображенню й
+  нічого в ньому не локалізує. Ключ задачі має назву classify.
+keywords:
+  - класифікація зображень python
+  - навчити класифікатор зображень
+  - датасет ImageFolder
+  - top-1 accuracy
+  - класифікація zero-shot
+  - MIT бібліотека класифікації
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -26,37 +37,55 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Повний розподіл
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         result = LibreYOLO("LibreResNet50-cls.pt")(SAMPLE_IMAGE)
+
         probs = result.probs
 
-        # .data є повним вектором (C,); top5/top5conf є впорядкованими поданнями.
+
+        # .data є повним вектором (C,); top5/top5conf є впорядкованими
+        поданнями.
+
         print(probs.data.shape)
+
         for index, score in zip(probs.top5, probs.top5conf):
             print(result.names[index], float(score))
     - label: Zero-shot без навчання
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # CLIP оцінює зображення за текстовими підказками, тому набір міток
+
         # задається під час виклику, а не вбудовується в контрольну точку.
+
         model = LibreYOLO("LibreCLIPb32-cls.pt")
-        model.set_classes(["a person jumping", "an empty street", "a parked car"])
+
+        model.set_classes(["a person jumping", "an empty street", "a parked
+        car"])
+
         result = model(SAMPLE_IMAGE)
+
 
         print(model.names[result.probs.top1], float(result.probs.top1conf))
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # imagenette160 є відомою назвою датасету й завантажується під час першого використання.
+
+        # imagenette160 є відомою назвою датасету й завантажується під час
+        першого використання.
+
         # Для власних даних передайте каталог із розбиттям train/.
+
         model = LibreYOLO("LibreResNet50-cls.pt")
+
         model.train(data="imagenette160", epochs=5)
     - label: CLI
       language: bash
@@ -107,6 +136,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1, result.probs.top1conf)
+source_hash: 836bea76cd2cdf92
 ---
 
 ## Визначення

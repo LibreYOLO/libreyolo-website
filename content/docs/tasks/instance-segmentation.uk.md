@@ -1,10 +1,21 @@
 ---
 title: Сегментація екземплярів
-seo_title: "Сегментація екземплярів у LibreYOLO"
-description: "Сегментуйте окремі об'єкти в LibreYOLO: сімейства для цієї задачі, формат полігональних міток і виклики передбачення, навчання, валідації та експорту."
-lead: "Сегментація екземплярів локалізує кожен екземпляр об'єкта й повертає для нього попіксельну маску разом із рамкою, класом та оцінкою, які повертає детектор. Ключ задачі має назву segment."
-keywords: [сегментація екземплярів python, передбачення маски об'єкта, навчання моделі сегментації, полігональні мітки, MIT бібліотека сегментації, mask mAP]
-last_verified: "1.5.0"
+seo_title: Сегментація екземплярів у LibreYOLO
+description: >-
+  Сегментуйте окремі об'єкти в LibreYOLO: сімейства для цієї задачі, формат
+  полігональних міток і виклики передбачення, навчання, валідації та експорту.
+lead: >-
+  Сегментація екземплярів локалізує кожен екземпляр об'єкта й повертає для нього
+  попіксельну маску разом із рамкою, класом та оцінкою, які повертає детектор.
+  Ключ задачі має назву segment.
+keywords:
+  - сегментація екземплярів python
+  - передбачення маски об'єкта
+  - навчання моделі сегментації
+  - полігональні мітки
+  - MIT бібліотека сегментації
+  - mask mAP
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -26,16 +37,21 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Контури масок
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreDFINEn-seg.pt")
+
         result = model(SAMPLE_IMAGE)
 
-        # .xy є списком контурів (P, 2) у пікселях, .xyn містить ті самі нормалізовані контури.
+
+        # .xy є списком контурів (P, 2) у пікселях, .xyn містить ті самі
+        нормалізовані контури.
+
         for name, contour in zip(result.boxes.cls, result.masks.xy):
             print(result.names[int(name)], contour.shape)
-    - label: Інше сімейство, той самий виклик
+    - label: 'Інше сімейство, той самий виклик'
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -47,13 +63,18 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         # Продовжує з опублікованих ваг сегментації, включно з головою масок.
+
         # data має вказувати на датасет, мітки якого містять полігони.
+
         model = LibreYOLO("LibreDFINEn-seg.pt")
-        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8, lr0=2e-4)
+
+        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8,
+        lr0=2e-4)
     - label: CLI
       language: bash
       code: |
@@ -105,6 +126,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
+source_hash: 33e331eac0f9b0af
 ---
 
 ## Визначення

@@ -1,18 +1,28 @@
 ---
 title: API моделі
-seo_title: "Методи й сигнатури об'єкта моделі LibreYOLO"
-description: "Кожен метод завантаженої моделі LibreYOLO: predict, embed, track, val, train, export, save, quantize, info та засоби керування графами CUDA з фактичними типовими значеннями."
-lead: "Завантажена модель LibreYOLO є екземпляром BaseModel. На цій сторінці перелічено методи цього екземпляра із сигнатурами й типовими значеннями з libreyolo/models/base/model.py."
+seo_title: Методи й сигнатури об'єкта моделі LibreYOLO
+description: >-
+  Кожен метод завантаженої моделі LibreYOLO: predict, embed, track, val, train,
+  export, save, quantize, info та засоби керування графами CUDA з фактичними
+  типовими значеннями.
+lead: >-
+  Завантажена модель LibreYOLO є екземпляром BaseModel. На цій сторінці
+  перелічено методи цього екземпляра із сигнатурами й типовими значеннями з
+  libreyolo/models/base/model.py.
 keywords:
-  - "методи моделі libreyolo"
-  - "аргументи libreyolo predict"
-  - "аргументи libreyolo val"
-  - "аргументи libreyolo export"
+  - методи моделі libreyolo
+  - аргументи libreyolo predict
+  - аргументи libreyolo val
+  - аргументи libreyolo export
   - model.track
   - model.quantize
   - capture_graph
-last_verified: "1.5.0"
-verification: "Сигнатури й типові значення взято з libreyolo/models/base/model.py та libreyolo/models/base/inference.py у v1.5.0. Класи сімейств можуть звужувати чи розширювати їх; train() визначається окремо для кожного сімейства, тому тут документовано лише його спільну обгортку cfg=."
+last_verified: 1.5.0
+verification: >-
+  Сигнатури й типові значення взято з libreyolo/models/base/model.py та
+  libreyolo/models/base/inference.py у v1.5.0. Класи сімейств можуть звужувати
+  чи розширювати їх; train() визначається окремо для кожного сімейства, тому тут
+  документовано лише його спільну обгортку cfg=.
 snippets:
   usage:
     - label: Python
@@ -38,6 +48,7 @@ snippets:
         # stream=True повертає генератор з одним Results на кадр або зображення.
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
+source_hash: da0776970ded8716
 ---
 
 ## Створення
