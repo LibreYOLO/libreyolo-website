@@ -1,11 +1,24 @@
 ---
 title: EoMT
-families: [eomt]
-seo_title: "EoMT: dự đoán phân đoạn ngữ nghĩa, thực thể và toàn cảnh"
-description: "Dùng EoMT trong LibreYOLO để phân đoạn ngữ nghĩa, thực thể và toàn cảnh trên vision transformer DINOv2 thuần túy, không cần decoder. Dùng giấy phép MIT."
-lead: "Mạng phân đoạn được xây dựng trên vision transformer thuần túy không có pixel decoder chuyên dụng: các query được học bổ sung vào chính encoder sẽ dự đoán mặt nạ. LibreYOLO hỗ trợ mô hình này cho phân đoạn ngữ nghĩa, thực thể và toàn cảnh."
-keywords: [EoMT, encoder-only mask transformer, DINOv2, phân đoạn toàn cảnh, phân đoạn thực thể, phân đoạn ngữ nghĩa]
-last_verified: "1.5.0"
+families:
+  - eomt
+seo_title: 'EoMT: dự đoán phân đoạn ngữ nghĩa, thực thể và toàn cảnh'
+description: >-
+  Dùng EoMT trong LibreYOLO để phân đoạn ngữ nghĩa, thực thể và toàn cảnh trên
+  vision transformer DINOv2 thuần túy, không cần decoder. Dùng giấy phép MIT.
+lead: >-
+  Mạng phân đoạn được xây dựng trên vision transformer thuần túy không có pixel
+  decoder chuyên dụng: các query được học bổ sung vào chính encoder sẽ dự đoán
+  mặt nạ. LibreYOLO hỗ trợ mô hình này cho phân đoạn ngữ nghĩa, thực thể và toàn
+  cảnh.
+keywords:
+  - EoMT
+  - encoder-only mask transformer
+  - DINOv2
+  - phân đoạn toàn cảnh
+  - phân đoạn thực thể
+  - phân đoạn ngữ nghĩa
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Phân đoạn ngữ nghĩa
@@ -44,8 +57,10 @@ snippets:
         print(pan.segments_info)    # [{"id": ..., "category_id": ...}, ...]
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreEoMTl-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+      code: >
+        libreyolo predict model=LibreEoMTl-sem.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   val:
     - label: Semantic
       language: python
@@ -106,6 +121,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
+source_hash: 64b2da642999f150
 ---
 
 ## Cài đặt

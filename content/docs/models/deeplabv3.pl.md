@@ -2,25 +2,25 @@
 title: DeepLabv3
 families:
   - deeplabv3
-seo_title: 'DeepLabv3: przewidywanie i eksportowanie segmentacji semantycznej ASPP'
+seo_title: 'DeepLabv3: predykcja i eksportowanie segmentacji semantycznej ASPP'
 description: >-
   Użyj DeepLabv3 w LibreYOLO do segmentacji semantycznej. Instaluj, przewidywaj,
   sprawdzaj i eksportuj checkpointy ResNet i MobileNetV3 firmy Torchvision.
 lead: >-
   Sieć segmentacji semantycznej, która łączy cechy z kilkoma współczynnikami
-  dylatacji równolegle (okropne łączenie piramid przestrzennych) przed
+  dylatacji równolegle (łączenie piramid przestrzennych z dylatacją) przed
   sklasyfikowaniem każdego piksela. LibreYOLO dostarcza go wyłącznie do
   segmentacji semantycznej.
 keywords:
   - DeepLabv3
-  - okropne przestrzenne piramidowanie
+  - łączenie piramid przestrzennych z dylatacją
   - ASPP
   - segmentacja semantyczna
   - gęsta prognoza
 last_verified: 1.5.0
 snippets:
   predict:
-    - label: Pyton
+    - label: Python
       language: python
       code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -44,7 +44,7 @@ snippets:
         source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
         save=True
   val:
-    - label: Pyton
+    - label: Python
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -59,7 +59,7 @@ snippets:
       code: |
         libreyolo val model=LibreDeepLabv3r50-sem.pt data=my-dataset.yaml
   export:
-    - label: Pyton
+    - label: Python
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -83,7 +83,7 @@ snippets:
         # Trasy fabryczne na sufiksie pliku, więc wyeksportowany artefakt
         zostaje załadowany
 
-        # jak każdy punkt kontrolny i zwraca ten sam obiekt Results.
+        # jak każdy checkpoint i zwraca ten sam obiekt Results.
 
         model = LibreYOLO("LibreDeepLabv3r50-sem.onnx")
 
@@ -93,57 +93,43 @@ snippets:
         print(result.semantic_mask.data.shape)
 source_hash: 7abf11ebb6cece18
 ---
-## Zainstaluj
+## Instalacja
 
-DeepLabv3 nie wymaga wyposażenia dodatkowego. Wszystko, co importuje, znajduje się w bazie
-zainstaluj.
+DeepLabv3 nie wymaga wyposażenia dodatkowego. Wszystko, co importuje, znajduje się w instalacji podstawowej.
 
-ZXQBLOCK0QXZ
+```bash
+pip install libreyolo
+```
 
-## Przewiduj
+## Predykcja
 
-Ciężary pobierane są z Hugging Face przy pierwszym użyciu i zapisywane lokalnie w pamięci podręcznej. The
-Dla tej rodziny wymagany jest przyrostek nazwy pliku `-sem`.
+Wagi pobierane są z Hugging Face przy pierwszym użyciu i zapisywane lokalnie w pamięci podręcznej. Dla tej rodziny wymagany jest przyrostek nazwy pliku `-sem`.
 
 <code-tabs name="predict" />
 
-Segmentacja semantyczna zwraca jeden identyfikator klasy na piksel, a nie pola, tzw
-`result.semantic_mask` zawiera tablicę `(H, W)` na `.data` i listę
-identyfikatory klas obecne na obrazie na `.classes`. `conf`, `iou` i `max_det` są
-akceptowane dla parzystości API, ale nie mają żadnego efektu: model przypisuje każdemu klasę
-piksel według argmax, bez progu ufności lub kroku NMS. Zobacz
-[przewidywanie](/docs/predict) dla źródeł, przesyłania strumieniowego i obsługi wyników.
+Semantyczna segmentacja zwraca jeden identyfikator klasy na piksel, a nie pola, więc `result.semantic_mask` zawiera tablicę `(H, W)` na `.data` i listę identyfikatorów klas obecnych w obrazie na `.classes`. `conf`, `iou` i `max_det` są akceptowane dla zgodności API, ale nie mają żadnego efektu: model przypisuje klasę do każdego piksela przez argmax, bez progu ufności lub kroku NMS. Zobacz [predykcja](/docs/predict) dla źródeł, streaming i obsługi wyników.
 
 ## Warianty
 
-Trzy kręgosłupy: rozszerzony ResNet-50, rozszerzony ResNet-101 i rozszerzony
-MobileNetV3-Large. To jest DeepLabv3, a nie DeepLabv3+, więc nie ma dekodera
-etap lub udoskonalenie CRF, pasujące raczej do implementacji Torchvision niż do
-własny kod referencyjny papieru.
+Trzy backbones: rozszerzone ResNet-50, rozszerzone ResNet-101 i rozszerzone MobileNetV3-Large. To jest DeepLabv3, a nie DeepLabv3+, więc nie ma tu żadnego stopnia dekodera ani udoskonalenia CRF, pasującego do implementacji torchvision, a nie do własnego kodu referencyjnego artykułu.
 
-LibreYOLO nie trenuje DeepLabv3: `train()` podnosi `NotImplementedError` dla
-ta rodzina, którą [poziom wsparcia] (/docs/models) powyżej oznacza jako wniosek
-tylko. Trzy opublikowane checkpointy to COCO-with-VOC-label firmy Torchvision
-obciążniki przeliczone dla ładowarki LibreYOLO.
+LibreYOLO nie trenuje DeepLabv3: `train()` podnosi `NotImplementedError` dla tej rodziny, co [poziom wsparcia](/docs/models) powyżej oznacza jedynie jako inferencja. Trzy opublikowane checkpointy to własne wagi COCO-with-VOC-label firmy Torchvision, przeliczone dla ładowarki LibreYOLO.
 
-## Sprawdź
+## Walidacja
 
-`val()` zwraca `metrics/mIoU` i `metrics/pixel_accuracy`, mierzone względem
-dowolny zbiór danych w formacie, na którym trenowałeś.
+`val()` zwraca `metrics/mIoU` i `metrics/pixel_accuracy`, mierzone względem dowolnego zbioru danych w formacie, na którym trenowałeś.
 
 <code-tabs name="val" />
 
-## Eksportuj
+## Eksport
 
 <export-matrix />
 
-Wyeksportowany artefakt wczytuje się ponownie poprzez `LibreYOLO()` zgodnie z sufiksem pliku, więc
-Plik `.onnx` lub `.engine` zachowuje się jak punkt kontrolny i zwraca to samo
-`Results`. [Eksport](/docs/export) wyświetla listę argumentów akceptowanych przez każdy format.
+Wyeksportowany artefakt jest ładowany ponownie poprzez `LibreYOLO()` zgodnie z sufiksem pliku, zatem plik `.onnx` lub `.engine` zachowuje się jak checkpoint i zwraca ten sam komunikat `Results`. [Eksport](/docs/export) wyświetla listę argumentów akceptowanych przez każdy format.
 
 <code-tabs name="export" />
 
-## Punkty kontrolne
+## Checkpointy
 
 Każdy opublikowany plik wag dla tej rodziny.
 

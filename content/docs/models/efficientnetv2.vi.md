@@ -1,11 +1,24 @@
 ---
 title: EfficientNetV2
-families: [efficientnetv2]
-seo_title: "EfficientNetV2: huấn luyện, xác thực và xuất theo Apache-2.0"
-description: "Dùng EfficientNetV2 trong LibreYOLO để phân loại ảnh. Cài đặt, dự đoán, tinh chỉnh, xác thực và xuất LibreEfficientNetV2 từ b0 đến b3."
-lead: "EfficientNetV2 là bộ phân loại ảnh có độ sâu, độ rộng và lựa chọn block theo từng giai đoạn được tìm bằng neural architecture search, đồng thời tối ưu độ chính xác và tốc độ huấn luyện thay vì chỉ độ chính xác. LibreYOLO hỗ trợ mô hình này cho một tác vụ: phân loại."
-keywords: [EfficientNetV2, EfficientNetV2-b0, phân loại ảnh, neural architecture search, MBConv, bộ phân loại ImageNet]
-last_verified: "1.5.0"
+families:
+  - efficientnetv2
+seo_title: 'EfficientNetV2: huấn luyện, xác thực và xuất theo Apache-2.0'
+description: >-
+  Dùng EfficientNetV2 trong LibreYOLO để phân loại ảnh. Cài đặt, dự đoán, tinh
+  chỉnh, xác thực và xuất LibreEfficientNetV2 từ b0 đến b3.
+lead: >-
+  EfficientNetV2 là bộ phân loại ảnh có độ sâu, độ rộng và lựa chọn block theo
+  từng giai đoạn được tìm bằng neural architecture search, đồng thời tối ưu độ
+  chính xác và tốc độ huấn luyện thay vì chỉ độ chính xác. LibreYOLO hỗ trợ mô
+  hình này cho một tác vụ: phân loại.
+keywords:
+  - EfficientNetV2
+  - EfficientNetV2-b0
+  - phân loại ảnh
+  - neural architecture search
+  - MBConv
+  - bộ phân loại ImageNet
+last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
@@ -20,8 +33,9 @@ snippets:
         print(result.probs.top5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=cat.jpg save=True
+      code: >
+        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=cat.jpg
+        save=True
   train:
     - label: Python
       language: python
@@ -32,8 +46,9 @@ snippets:
         model.train(data="imagenette160", epochs=5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo train model=LibreEfficientNetV2b0-cls.pt data=imagenette160 epochs=5
+      code: >
+        libreyolo train model=LibreEfficientNetV2b0-cls.pt data=imagenette160
+        epochs=5
     - label: Multi-GPU
       language: bash
       code: |
@@ -65,9 +80,11 @@ snippets:
         model.export(format="tensorrt", half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreEfficientNetV2b0-cls.pt format=onnx
-        libreyolo export model=LibreEfficientNetV2b0-cls.pt format=tensorrt half=True
+
+        libreyolo export model=LibreEfficientNetV2b0-cls.pt format=tensorrt
+        half=True
     - label: Dùng tệp đã xuất
       language: python
       code: |
@@ -79,6 +96,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
+source_hash: ad3ff140aad824bd
 ---
 
 ## Cài đặt
