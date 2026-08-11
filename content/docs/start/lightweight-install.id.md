@@ -3,7 +3,7 @@ title: Instalasi ringan
 seo_title: Menjalankan inferensi ONNX LibreYOLO tanpa PyTorch
 description: >-
   Instal LibreYOLO dengan --no-deps dan jalankan deteksi ONNX hanya dengan
-  numpy, tanpa torch di disk. Teknik, batasan, dan list package persisnya.
+  numpy, tanpa torch di disk. Teknik, batasan, dan list paket persisnya.
 lead: >-
   Jalur inferensi ONNX LibreYOLO menggunakan numpy dari awal hingga akhir,
   termasuk decode dan NMS. Tidak ada bagian runtime yang memerlukan PyTorch,
@@ -31,8 +31,8 @@ snippets:
     - label: Ringan
       language: bash
       code: |
-        # Instal package tanpa list dependency-nya, lalu sediakan
-        # empat package yang benar-benar diimpor jalur deteksi ONNX.
+        # Instal paket tanpa list dependency-nya, lalu sediakan
+        # empat paket yang benar-benar diimpor jalur deteksi ONNX.
         pip install --no-deps libreyolo
         pip install numpy pillow opencv-python-headless onnxruntime
     - label: Torch khusus CPU
@@ -44,44 +44,37 @@ snippets:
   predict:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo.backends.onnx import OnnxBackend
 
-
         model = OnnxBackend("libreyolo9t.onnx")
-
-        result =
-        model.predict("https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg")
-
+        result = model.predict("https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg")
 
         # xyxy di sini adalah ndarray numpy, bukan tensor torch.
-
         print(result.boxes.xyxy)
-
         print(result.boxes.conf)
-
         print(result.boxes.cls)
 source_hash: e60e83d32d13026e
 ---
 
 ## Mengapa cara ini berfungsi
 
-`pip install --no-deps libreyolo` menginstal package dan melewati seluruh list
-dependency. Tidak ada yang di-resolve secara otomatis, dan pengguna bertanggung
+`pip install --no-deps libreyolo` menginstal paket dan melewati seluruh list
+dependency. Tidak ada yang diselesaikan secara otomatis, dan pengguna bertanggung
 jawab menginstal yang benar-benar digunakan.
 
 Cara ini hanya berguna jika jalur kode yang diinginkan benar-benar tidak
 memerlukan dependency yang dilewati, dan deteksi ONNX memang tidak memerlukannya.
 Decode, termasuk non-maximum suppression, menggunakan numpy. Resep preprocessing
-menggunakan numpy. PyTorch adalah dependency pelatihan dan eager inference, dan
+menggunakan numpy. PyTorch adalah dependency pelatihan dan inferensi eager, dan
 tidak pernah dipanggil pada jalur ini.
 
-Sebelum release ini, import tetap gagal: mengimpor apa pun di bawah
+Sebelum rilis ini, import tetap gagal: mengimpor apa pun di bawah
 `libreyolo.models` membangun setiap kelas model untuk mengisi registry deteksi
 otomatis checkpoint, dan kelas tersebut merupakan subclass `torch.nn.Module`.
-Resep preprocessing kini berada dalam package sendiri, `libreyolo.preprocess`,
+Resep preprocessing kini berada dalam paket sendiri, `libreyolo.preprocess`,
 dan import torch ditunda hingga atribut torch disentuh, sehingga jalur ONNX
-dapat diimpor tanpa torch pada mesin. Package tersebut memuat preprocessor
+dapat diimpor tanpa torch pada mesin. Paket tersebut memuat preprocessor
 native numpy per family: `yolo9`, `yolonas`, `yolox`, `ec`, `rtdetr`, `rfdetr`,
 `dfine`, `deim`, dan `deimv2`, dua lebih banyak daripada tujuh family yang
 diverifikasi end-to-end di bawah. Setiap
@@ -123,7 +116,7 @@ belum diuji, bukan didukung atau rusak.
 
 Dalam cakupan tersebut, hasil identik dengan instalasi normal, bukan sekadar
 mendekati. Setiap family diekspor ke ONNX dan dijalankan dua kali, sekali secara
-normal dan sekali dengan torch diblokir; box, score, dan kelas cocok persis.
+normal dan sekali dengan torch diblokir; bounding box, skor, dan kelas cocok persis.
 Pengujian paritas dalam suite menjaga kontrak agar tidak menyimpang.
 
 ## Lima hal yang sering menjebak pengguna
@@ -133,7 +126,7 @@ memerlukan torch karena `LibreYOLO9` sendiri adalah subclass `nn.Module`. Ini
 kesalahan paling mungkin karena setiap halaman lain memuat model melalui kelas
 atau `LibreYOLO()`.
 
-**Lakukan ekspor di tempat lain.** Pembuatan file `.onnx` memerlukan torch,
+**Lakukan ekspor di tempat lain.** Pembuatan berkas `.onnx` memerlukan torch,
 sehingga mesin ringan tidak dapat membuatnya. Ekspor pada mesin development atau
 CI lalu kirim artefak ke target ramping.
 
@@ -144,18 +137,18 @@ yang memanggil `.cpu()` atau `.numpy()` pada hasil akan gagal.
 **Satu gambar mengembalikan satu `Results`.** `predict()` mengembalikan satu
 `Results` untuk satu gambar dan list untuk beberapa gambar. Melakukan indexing
 pada satu hasil dengan `[0]` memilih deteksi pertama, bukan gambar pertama, yang
-diam-diam menghasilkan hasil satu box alih-alih error.
+diam-diam menghasilkan hasil satu bounding box alih-alih error.
 
-**CLI tidak akan berfungsi.** `typer` dan `click` tidak termasuk empat package,
+**CLI tidak akan berfungsi.** `typer` dan `click` tidak termasuk empat paket,
 sehingga perintah `libreyolo` tidak tersedia. Ini adalah instalasi library.
 
-## Predict
+## Prediksi
 
 <code-tabs name="predict" />
 
 Ganti `onnxruntime` dengan `onnxruntime-gpu` untuk berjalan pada CUDA. Empat
-package tersebut adalah package yang benar-benar diimpor oleh `predict()` tanpa
-torch penuh, dicatat selama pemanggilan, bukan disimpulkan. Package
+paket tersebut adalah paket yang benar-benar diimpor oleh `predict()` tanpa
+torch penuh, dicatat selama pemanggilan, bukan disimpulkan. Paket
 `opencv-python-headless` menggantikan `opencv-python` yang dideklarasikan:
 modulnya sama, tanpa library GUI, dan lebih kecil di disk.
 
@@ -165,15 +158,15 @@ sedangkan `typer` dan `click` untuk CLI.
 
 ## List ini sengaja dapat berubah
 
-List package di atas tepat untuk release yang disebutkan di bagian atas halaman.
+List paket di atas tepat untuk rilis yang disebutkan di bagian atas halaman.
 `--no-deps` membuat pengguna keluar dari resolve dependency, sehingga tidak ada
-yang memeriksanya secara otomatis, dan release berikutnya dapat mengimpor hal
+yang memeriksanya secara otomatis, dan rilis berikutnya dapat mengimpor hal
 yang tidak tercantum.
 
-Jika muncul `ModuleNotFoundError`, tekniknya sudah jelas: instal package yang
+Jika muncul `ModuleNotFoundError`, tekniknya sudah jelas: instal paket yang
 hilang. Itulah model maintenance yang dimaksud, bukan bug report. Jalur ini
 bersifat upaya terbaik dan bukan distribusi yang didukung secara terpisah. Karena
-itu, tidak ada package ringan kedua pada PyPI dan tidak ada rencana membuatnya.
+itu, tidak ada paket ringan kedua pada PyPI dan tidak ada rencana membuatnya.
 
 Untuk memastikan environment benar-benar tanpa torch, bukan diam-diam kembali
 ke salinan terinstal, gunakan assertion:
@@ -184,6 +177,8 @@ import importlib.util
 assert importlib.util.find_spec("torch") is None, "torch is installed"
 ```
 
-Pemeriksaan ini layak dipertahankan dalam CI untuk image ramping. Tanpanya,
+Pemeriksaan ini layak dipertahankan dalam CI untuk gambar ramping. Tanpanya,
 environment yang kebetulan memiliki torch akan lolos setiap pengujian tanpa
 memberikan informasi apa pun.
+
+

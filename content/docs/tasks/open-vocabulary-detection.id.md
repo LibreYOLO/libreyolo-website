@@ -58,7 +58,7 @@ snippets:
         model.set_classes(["remote control", "school bus"])
 
 
-        # conf memfilter berdasarkan score box, text_threshold berdasarkan score
+        # conf memfilter berdasarkan skor bounding box, text_threshold berdasarkan skor
         token
 
         # frasa hasil decode. Default keduanya 0.25 jika tidak ditetapkan. Hanya
@@ -72,7 +72,7 @@ source_hash: 17197cf4d80f3d6f
 
 ## Definisi
 
-Deteksi open-vocabulary mengembalikan `Results` deteksi biasa: box, confidence,
+Deteksi open-vocabulary mengembalikan `Results` deteksi biasa: bounding box, confidence,
 dan indeks kelas, dengan `result.names` memetakan indeks ke string yang diminta.
 Perubahannya adalah sumber list kelas. Detektor konvensional dilatih terhadap
 kumpulan kategori tetap dan tidak pernah menghasilkan kategori di luar
@@ -80,14 +80,14 @@ kumpulan tersebut. Model ini menerima vocabulary sebagai teks saat inferensi,
 sehingga `set_classes(["forklift", "safety cone"])` cukup untuk menjadikannya
 kelas.
 
-LibreYOLO tidak memiliki key task `open-vocabulary`. Model ini mendeklarasikan
+LibreYOLO tidak memiliki kunci task `open-vocabulary`. Model ini mendeklarasikan
 `SUPPORTED_TASKS = ("detect",)` seperti detektor lain. Pemisahnya adalah jalur
 pemuatan: model berupa snapshot Hugging Face, bukan checkpoint state dict
 LibreYOLO, sehingga tidak masuk factory `LibreYOLO()` dan dibuat melalui
 `LibreOpenVocab()`. Factory tersebut adalah sibling `LibreSAM()` dan
 `LibreVLM()`, bukan pengganti `LibreYOLO()`.
 
-Score merupakan score deteksi nyata, bukan caption hasil generasi yang di-parse.
+Skor merupakan skor deteksi nyata, bukan caption hasil generasi yang diurai.
 Setiap family menilai region gambar terhadap embedding teks setiap prompt.
 
 ## Model
@@ -97,14 +97,14 @@ berdasarkan alias melalui `LibreOpenVocab`.
 
 [Grounding DINO](/docs/models/grounding-dino) dari IDEA Research, dalam ukuran
 `t` dan `b`. Ini adalah default tier dan satu-satunya family yang menerima
-`text_threshold`, cutoff kedua untuk score token frasa hasil decode.
+`text_threshold`, cutoff kedua untuk skor token frasa hasil decode.
 
 [OWLv2](/docs/models/owlv2) dari Google Research, dalam ukuran `b16` dan `l14`.
 Model menilai region gambar terhadap embedding teks dari encoder bergaya CLIP.
 
 [OMDet-Turbo](/docs/models/omdet-turbo) dari Om AI Lab, dalam satu ukuran `t`.
 Model memisahkan embedding kelas dari prompt task bahasa dan merupakan satu-
-satunya family di sini yang menekan box tumpang tindih dalam postprocessing,
+satunya family di sini yang menekan bounding box tumpang tindih dalam postprocessing,
 sehingga `iou=` dipatuhi.
 
 [OV-DEIM](/docs/models/ov-deim), dalam ukuran `s`, `m`, dan `l`, adalah detektor
@@ -116,7 +116,7 @@ Bobot OV-DEIM adalah kasus terbatas dalam tier ini. Bobot detektor berlisensi
 CC BY-NC 4.0 dan nonkomersial. Text tower bawaan berada di bawah Apple's Machine
 Learning Research Model license, khusus penggunaan penelitian. Checkpoint `l`
 menambahkan fine-tuning backbone DINOv3-S di bawah DINOv3 License milik Meta.
-Ketiga teks lisensi tersedia dalam repository bobot, dan library mencatat
+Ketiga teks lisensi tersedia dalam repositori bobot, dan library mencatat
 ringkasan yang sama ketika me-resolve bobot, sebelum model dibangun. Baca
 [OV-DEIM](/docs/models/ov-deim) sebelum deployment.
 
@@ -134,11 +134,11 @@ Tier kedua juga menerima vocabulary teks: `LibreVLM()` memuat vision-language
 model generatif seperti [Qwen3-VL](/docs/models/qwen3-vl) dan
 [Florence-2](/docs/models/florence-2), lalu mengubah output-nya menjadi
 `Results` yang sama. Tier tersebut berbagi antarmuka `set_classes()`.
-Perbedaannya adalah penghasil box: family halaman ini berupa detektor
-diskriminatif yang langsung menghasilkan score, sedangkan tier VLM melakukan
+Perbedaannya adalah penghasil bounding box: family halaman ini berupa detektor
+diskriminatif yang langsung menghasilkan skor, sedangkan tier VLM melakukan
 generasi.
 
-## Predict
+## Prediksi
 
 <code-tabs name="predict" />
 
@@ -162,21 +162,24 @@ eksplisit saat membandingkan dua family pada gambar sama.
 `track()` memunculkan error di seluruh tier. Jalankan `predict()` per frame.
 Lihat [prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
 
-## Train
+## Pelatihan
 
 Tidak ada family dalam tier yang berlatih di LibreYOLO. `train()` memunculkan
 error: lakukan fine-tuning di upstream dan muat bobot hasilnya. Vocabulary pada
 `set_classes()` adalah satu-satunya pengaturan yang mengubah yang dideteksi
 model termuat.
 
-## Validate
+## Validasi
 
 Tidak ada validator untuk tier ini dan `val()` memunculkan error. Validasi
 open-vocabulary memerlukan validator khusus karena validator deteksi standar
 memberikan tensor gambar langsung kepada model, sedangkan family ini memerlukan
 input yang dikondisikan teks.
 
-## Export
+## Ekspor
 
 Ekspor berada di luar cakupan tier dan `export()` memunculkan error. Model
 berjalan melalui `predict()` di PyTorch.
+
+
+

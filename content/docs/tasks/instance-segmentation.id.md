@@ -3,7 +3,7 @@ title: Segmentasi instance
 seo_title: Segmentasi instance di LibreYOLO
 description: >-
   Memisahkan objek individual di LibreYOLO: keluarga yang melayani task, format
-  label poligon, dan panggilan predict, train, validate, dan export.
+  label poligon, dan panggilan predict, train, validate, dan ekspor.
 lead: >-
   Segmentasi instance menempatkan setiap instance objek dan mengembalikan mask
   per-piksel untuk masing-masing, bersama dengan kotak, kelas dan skor yang
@@ -20,22 +20,15 @@ snippets:
   predict:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Akhiran -seg pada nama file memilih head mask, sehingga tidak
-        diperlukan task
-
+        # Akhiran -seg pada nama berkas memilih head mask, sehingga tidak diperlukan task
         # argumen.
-
         model = LibreYOLO("LibreDFINEn-seg.pt")
-
         result = model(SAMPLE_IMAGE, save=True)
 
-
         print(result.masks.data.shape)   # (N, H, W), satu mask per deteksi
-
         print(result.boxes.xyxy.shape)   # (N, 4), N baris yang sama
     - label: CLI
       language: bash
@@ -44,18 +37,13 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Kontur mask
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("LibreDFINEn-seg.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
-        # .xy adalah daftar kontur (P, 2) dalam piksel, .xyn normalisasi yang
-        sama.
-
+        # .xy adalah daftar kontur (P, 2) dalam piksel, .xyn normalisasi yang sama.
         for name, contour in zip(result.boxes.cls, result.masks.xy):
             print(result.names[int(name)], contour.shape)
     - label: 'family lain, panggilan yang sama'
@@ -70,18 +58,13 @@ snippets:
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
         # Berlanjut dari bobot segmentasi yang diterbitkan, mask head termasuk.
-
         # data harus menunjuk ke dataset yang labelnya membawa poligon.
-
         model = LibreYOLO("LibreDFINEn-seg.pt")
-
-        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8,
-        lr0=2e-4)
+        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8, lr0=2e-4)
     - label: CLI
       language: bash
       code: |
@@ -89,14 +72,10 @@ snippets:
           epochs=50 imgsz=640 batch=8 lr0=2e-4
     - label: Dari bobot deteksi
       language: bash
-      code: >
-        # Bobot deteksi tidak membawa mask head, jadi ini adalah transfer
-        eksplisit
-
+      code: |
+        # Bobot deteksi tidak membawa mask head, jadi ini adalah transfer eksplisit
         # : head memulai tanpa pelatihan. Meminta task=segment adalah
-
         # apa yang memberinya wewenang.
-
         libreyolo train model=LibreDFINEn.pt data=my-dataset.yaml \
           task=segment epochs=50 imgsz=640
   val:
@@ -127,21 +106,15 @@ snippets:
       language: bash
       code: |
         libreyolo export model=LibreDFINEn-seg.pt format=onnx imgsz=640
-    - label: Gunakan file yang diekspor
+    - label: Gunakan berkas yang diekspor
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Pabrik mengarahkan berdasarkan sufiks file, jadi artefak yang diekspor
-        dimuat
-
+        # Pabrik mengarahkan berdasarkan sufiks berkas, jadi artefak yang diekspor dimuat
         # seperti checkpoint dan mengembalikan objek Results yang sama.
-
         model = LibreYOLO("LibreDFINEn-seg.onnx")
-
         result = model(SAMPLE_IMAGE)
-
 
         print(result.masks.data.shape)
 source_hash: 33e331eac0f9b0af
@@ -156,7 +129,7 @@ dibiarkan tidak ditetapkan, yang membedakan task dari
 [segmentasi semantik](/docs/tasks/semantic-segmentation) dan
 [segmentasi panoptik](/docs/tasks/panoptic-segmentation).
 
-`segment` adalah kunci task kanonik, dan akhiran `-seg` dalam nama file checkpoint
+`segment` adalah kunci task kanonik, dan akhiran `-seg` dalam nama berkas checkpoint
 memilihnya, sehingga `task=` tidak diperlukan saat memuat bobot yang dipublikasikan.
 
 `predict()` mengisi `result.masks` bersama `result.boxes`. `.data` adalah
@@ -201,9 +174,9 @@ Bobot diunduh dari Hugging Face saat penggunaan pertama dan disimpan dalam cache
 topeng disaring bersama kotak yang mereka miliki. Lihat
 [prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
 
-## Format Dataset
+## Format dataset
 
-Tata letaknya adalah tata letak deteksi: satu file label `.txt` per gambar, ditemukan dengan
+Tata letaknya adalah tata letak deteksi: satu berkas label `.txt` per gambar, ditemukan dengan
 menukar `images` dengan `labels` dalam jalur gambar dan mengubah ekstensi.
 
 ```text
@@ -242,7 +215,7 @@ names:
 ```
 
 JSON COCO asli juga berfungsi: tambahkan pemetaan `annotations` dari nama split ke
-File JSON, dan jalur split memberikan akar gambar.
+Berkas JSON, dan jalur split memberikan akar gambar.
 
 ## Kereta
 
@@ -251,7 +224,7 @@ File JSON, dan jalur split memberikan akar gambar.
 Pelatihan berlanjut dari `-seg` checkpoint yang diterbitkan secara default. Dimulai dari
 bobot deteksi dimungkinkan tetapi merupakan transfer yang disengaja: bobot-bobot itu membawa
 tidak ada mask head, jadi dimulai tanpa pelatihan, dan melewati `task=segment` itu apa
-mengotorisasi pertukaran. Lihat [training](/docs/train) untuk dataset, augmentasi,
+mengotorisasi pertukaran. Lihat [pelatihan](/docs/train) untuk dataset, augmentasi,
 multi-GPU dan pencatat.
 
 ## Validasi
@@ -287,10 +260,11 @@ Memetakan sepasang dari mereka melaporkan satu angka dua kali.
 <code-tabs name="export" />
 
 Artefak yang diekspor dimuat kembali melalui `LibreYOLO()` berdasarkan akhiran filenya, sehingga
-file `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengembalikan
+berkas `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengembalikan
 `Results` yang sama. Cakupan segmentasi lebih sempit daripada cakupan deteksi pada
 sama dengan family. Matriks di setiap halaman model dihasilkan dari set yang tervalidasi
 dan menyebutkan alasan mengapa target tidak tersedia. Lihat
 [ekspor dan deploy](/docs/export) untuk format, tambahan mereka dan batasan
 mereka.
+
 

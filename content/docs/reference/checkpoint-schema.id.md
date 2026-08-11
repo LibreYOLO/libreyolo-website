@@ -2,12 +2,12 @@
 title: Skema checkpoint
 seo_title: Skema metadata checkpoint LibreYOLO v1.0
 description: >-
-  Metadata yang dibawa setiap checkpoint .pt LibreYOLO: key wajib, tambahan per
-  task, key runtime ekspor, manifest terkuantisasi, dan field pelatihan.
+  Metadata yang dibawa setiap checkpoint .pt LibreYOLO: kunci wajib, tambahan per
+  task, kunci runtime ekspor, manifest terkuantisasi, dan kolom pelatihan.
 lead: >-
-  File .pt LibreYOLO adalah dictionary flat yang disimpan dengan torch.save. Key
-  model menyimpan state dict; key top-level lainnya adalah metadata yang
-  mengidentifikasi checkpoint tanpa parsing nama file atau sniffing state dict.
+  Berkas .pt LibreYOLO adalah dictionary flat yang disimpan dengan torch.save. Kunci
+  model menyimpan state dict; kunci top-level lainnya adalah metadata yang
+  mengidentifikasi checkpoint tanpa parsing nama berkas atau sniffing state dict.
 keywords:
   - skema checkpoint libreyolo
   - schema_version 1.0
@@ -17,7 +17,7 @@ keywords:
   - wrap_libreyolo_checkpoint
 last_verified: 1.5.0
 verification: >-
-  Mencerminkan docs/checkpoint_schema.md dalam repository libreyolo pada v1.5.0,
+  Mencerminkan docs/checkpoint_schema.md dalam repositori libreyolo pada v1.5.0,
   diperiksa silang terhadap libreyolo/utils/serialization.py dan BaseModel.save.
 snippets:
   usage:
@@ -69,7 +69,7 @@ Setiap checkpoint `.pt` resmi LibreYOLO memuat:
 }
 ```
 
-| Key | Jenis | Arti |
+| Kunci | Jenis | Arti |
 |---|---|---|
 | `model` | state dict | Bobot model |
 | `schema_version` | str | Versi kontrak metadata; v1.0 menggunakan string `"1.0"` |
@@ -78,20 +78,20 @@ Setiap checkpoint `.pt` resmi LibreYOLO memuat:
 | `size` | str | Varian dalam family, seperti `t`, `s`, `r18`, `atto` |
 | `task` | str | Nama task kanonis |
 | `nc` | int | Jumlah kelas positif |
-| `names` | dict | `dict[int, str]` dengan key dalam `0..nc-1` |
+| `names` | dict | `dict[int, str]` dengan kunci dalam `0..nc-1` |
 | `imgsz` | int | Resolusi input persegi positif, atau skalar lama untuk kontrak rectangle |
 
 `task` adalah salah satu dari `detect`, `segment`, `semantic`, `panoptic`,
 `pose`, `classify`, `gaze`, `obb`, `point`, `depth`, `edge`, `normal`,
 `restore`, `matte`, `ocr`, `embed`, atau `mesh`.
 
-Checkpoint resmi menulis setiap key `names`. Reader dapat menambahkan label
-`class_i` untuk key yang hilang pada mapping sparse lama, tetapi key di luar
+Checkpoint resmi menulis setiap kunci `names`. Reader dapat menambahkan label
+`class_i` untuk kunci yang hilang pada mapping sparse lama, tetapi kunci di luar
 rentang tidak valid.
 
 Checkpoint rectangle mempertahankan `imgsz` skalar bagi reader lama, dengan
 nilai `max(imgsz_h, imgsz_w)`, dan juga menulis `imgsz_h` serta `imgsz_w` dengan
-dimensi sebenarnya. Reader yang memahami field rectangle harus
+dimensi sebenarnya. Reader yang memahami kolom rectangle harus
 memprioritaskannya daripada skalar. Family dengan kontrak rectangle tetap,
 seperti pose HRNet, menolak ukuran runtime yang tidak kompatibel.
 
@@ -106,7 +106,7 @@ juga mendukung pose multi-kelas dengan satu skeleton keypoint bersama. Dalam
 kasus itu, `nc` dan `names` menjelaskan kelas seperti dalam deteksi. Ekspor pose
 runtime menghasilkan `scores` berbentuk `[batch, anchors, nc]`.
 
-| Key | Arti |
+| Kunci | Arti |
 |---|---|
 | `num_keypoints` | Jumlah keypoint positif yang digunakan head pose |
 | `keypoint_dim` | `2` untuk label `x,y` atau `3` untuk label `x,y,visibility`; output model selalu menyediakan `x,y,visibility` |
@@ -116,12 +116,12 @@ runtime menghasilkan `scores` berbentuk `[batch, anchors, nc]`.
 ## Tambahan mesh
 
 Checkpoint mesh menggunakan `task: "mesh"`, `nc: 1`, dan
-`names: {0: "person"}`. Layout parameter berbeda antar body model, sehingga
+`names: {0: "person"}`. Tata letak parameter berbeda antar body model, sehingga
 dimensinya dicatat, bukan diasumsikan.
 
-| Key | Arti |
+| Kunci | Arti |
 |---|---|
-| `body_model` | Parameterization seperti `mhr`; wajib dan digunakan untuk menafsirkan setiap field di bawah |
+| `body_model` | Parameterization seperti `mhr`; wajib dan digunakan untuk menafsirkan setiap kolom di bawah |
 | `num_betas` | Jumlah koefisien identitas dan bentuk; 45 untuk MHR |
 | `num_body_pose` | Lebar block parameter body-pose; 130 untuk MHR. Berupa vektor flat, bukan satu triplet per joint, karena joint rig memiliki degree of freedom berbeda |
 | `num_vertices` | Jumlah vertex yang dihasilkan decoder; 18439 untuk MHR |
@@ -153,11 +153,11 @@ metadata asal, bukan persyaratan saat pemuatan.
 ## Tambahan OCR
 
 Family `ppocr` menyediakan satu checkpoint komposit per tier, dengan state dict
-`model` yang menyimpan dua submodel di bawah namespace key `det.*` dan `rec.*`.
+`model` yang menyimpan dua submodel di bawah namespace kunci `det.*` dan `rec.*`.
 
-| Key | Arti |
+| Kunci | Arti |
 |---|---|
-| `charset` | Alfabet CTC lengkap dalam urutan indeks output: indeks 0 adalah CTC blank, diikuti dictionary pengenalan, lalu karakter spasi. Loader harus membacanya dari checkpoint, bukan file samping |
+| `charset` | Alfabet CTC lengkap dalam urutan indeks output: indeks 0 adalah CTC blank, diikuti dictionary pengenalan, lalu karakter spasi. Loader harus membacanya dari checkpoint, bukan berkas samping |
 | `pipeline` | Default pipeline yang ditanam saat konversi: `det_limit_side_len`, `det_db_thresh`, `det_db_box_thresh`, `det_db_unclip_ratio`, `rec_image_shape`. Argumen runtime dapat menimpanya per pemanggilan |
 | `components` | Dicadangkan untuk tahap pipeline opsional seperti orientasi dokumen, unwarping, dan rotasi baris teks. Kosong pada v1 |
 
@@ -165,7 +165,7 @@ Family `ppocr` menyediakan satu checkpoint komposit per tier, dengan state dict
 
 Artefak hasil ekspor menggunakan konvensi dual-write rectangle yang sama:
 `imgsz_h` dan `imgsz_w` ditulis di samping `imgsz` skalar lama, dan reader yang
-tidak memahami field rectangle tidak boleh diam-diam memperlakukan skalar
+tidak memahami kolom rectangle tidak boleh diam-diam memperlakukan skalar
 sebagai kontrak persegi.
 
 Dukungan runtime rectangle dibatasi family dan format. Ekspor family YOLO9,
@@ -176,9 +176,9 @@ sebagai persegi. Ekspor HRNet adalah head person-crop tetap, batch satu, FP32,
 dengan W32 menerima 256x192 dan W48 menerima 384x288, serta detektor orang
 tidak disematkan dalam graph.
 
-Ekspor dengan NMS tertanam dapat menambahkan key flat berikut:
+Ekspor dengan NMS tertanam dapat menambahkan kunci flat berikut:
 
-| Key | Arti |
+| Kunci | Arti |
 |---|---|
 | `nms` | Boolean string; `"true"` berarti graph memuat output postprocessing tertanam |
 | `nms_conf` | Ambang batas confidence yang ditanam ke output |
@@ -195,7 +195,7 @@ menggunakan output pertama.
 
 Ekspor pose dapat menambahkan `num_keypoints`; `keypoint_dim`, dengan ekspor
 mentah bergaya GroupPose mungkin menggunakan nilai lebih besar seperti `8`
-ketika tensor memuat field presisi atau logit kelas; `num_keypoints_per_class`
+ketika tensor memuat kolom presisi atau logit kelas; `num_keypoints_per_class`
 sebagai list berformat JSON, dengan slot kelas tanpa keypoint harus dipertahankan
 karena mendefinisikan skema; dan `pose_input`, dengan `"person_crop"` berarti
 graph menerima satu crop yang sudah diekstrak dan tidak memuat detektor. Ekspor
@@ -220,12 +220,12 @@ bilangan bulat positif dalam urutan `[batch, channels, height, width]`, dan
 `mnn_batch` sama dengan `mnn_input_shape[0]`. Loader menolak metadata dinamis,
 selain FP32, selain deteksi, family tidak didukung, atau bentuk tidak konsisten.
 
-File `.pte` dan `.mnn` merupakan artefak khusus backend, bukan checkpoint
+Berkas `.pte` dan `.mnn` merupakan artefak khusus backend, bukan checkpoint
 PyTorch.
 
 ## Checkpoint terkuantisasi
 
-Model terkuantisasi menambahkan satu key flat opsional, `quant`, yang menyimpan
+Model terkuantisasi menambahkan satu kunci flat opsional, `quant`, yang menyimpan
 dict manifest dengan `schema`, `recipe`, `keep_high_precision`, `execution`,
 asal kalibrasi, `module_count`, dan `state`. Manifest FP8 juga dapat memuat
 `fp8_tensorwise_weights`, list tepat nama modul `QuantLinear` yang skala bobotnya
@@ -237,7 +237,7 @@ membangun ulang struktur modul terkuantisasi dan kebijakan scaling sebelum
 
 `"prepared"`, yang merupakan default, menyimpan master weight FP32 ditambah
 buffer skala `_q_*` dan dapat dilatih. Reader tanpa dukungan kuantisasi dapat
-mengabaikan key `quant` dan memuat master sebagai model float.
+mengabaikan kunci `quant` dan memuat master sebagai model float.
 
 `"finalized"` adalah bentuk deployment yang ditulis oleh `export(format="pt")`.
 Master dihapus dan setiap modul terkuantisasi menyimpan bobot terkemas:
@@ -255,13 +255,13 @@ Buffer rentang aktivasi `_q_act_lo`, `_q_act_hi`, dan `_q_calibrated`
 dipertahankan untuk int8. Manifest mencatat `remainder`, `"fp16"` atau
 `"fp32"`, bagi tensor yang tidak dikuantisasi. Unpacking mereproduksi simulasi
 bit demi bit, sehingga inferensi finalized sama persis dengan inferensi prepared
-pada device finalisasi. Layout ini adalah kontrak stabil bagi exporter dan
+pada device finalisasi. Tata letak ini adalah kontrak stabil bagi exporter dan
 runtime eksternal.
 
 ## Checkpoint pelatihan
 
 Checkpoint trainer menggunakan inti metadata wajib yang sama dan dapat
-menambahkan field flat pelatihan serta resume:
+menambahkan kolom flat pelatihan serta resume:
 
 ```python
 {
@@ -286,16 +286,16 @@ status resume. Bobot inferensi yang dipublikasikan sebaiknya ramping dan tidak
 menyertakan optimizer, epoch, konfigurasi, loss, atau status resume EMA kecuali
 sengaja didistribusikan sebagai checkpoint pelatihan.
 
-Untuk kompatibilitas release, reader menerima alias metrik terbaik lama
+Untuk kompatibilitas rilis, reader menerima alias metrik terbaik lama
 `best_mAP50_95`, `best_mAP50`, `best_metric`, dan `best_metric_name`.
 
 ## Snapshot eksternal
 
-Skema mengatur file `.pt` yang dibuat LibreYOLO. Skema tidak mengganti nama atau
-membungkus snapshot upstream multi-file yang digunakan oleh tier model terpisah.
+Skema mengatur berkas `.pt` yang dibuat LibreYOLO. Skema tidak mengganti nama atau
+membungkus snapshot upstream multi-berkas yang digunakan oleh tier model terpisah.
 
-LibreMODUS ukuran `14b-a7b` adalah pengecualian eksplisit: alias di-resolve
-melalui `LibreVLM(...)` ke direktori file upstream yang di-pin, dan LibreYOLO
+LibreMODUS ukuran `14b-a7b` adalah pengecualian eksplisit: alias diselesaikan
+melalui `LibreVLM(...)` ke direktori berkas upstream yang dikunci versinya, dan LibreYOLO
 tidak menambahkan metadata v1.0 maupun memublikasikannya kembali sebagai `.pt`.
 
 ## Bobot lama dan asing
@@ -334,3 +334,5 @@ unwrap_libreyolo_checkpoint(loaded, *, strict=False) -> tuple[dict, dict]
 error; dengan `strict=True`, metode ini memunculkan `CheckpointMetadataError`.
 `model.save(path)` adalah cara yang didukung untuk menulis checkpoint yang
 sesuai.
+
+

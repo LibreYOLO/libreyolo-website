@@ -30,20 +30,14 @@ snippets:
   predict:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Mengunduh checkpoint saat pertama digunakan, lalu menyimpannya di
-        weights/.
-
+        # Mengunduh checkpoint saat pertama digunakan, lalu menyimpannya di weights/.
         model = LibreYOLO("LibreYOLO9t.pt")
 
-
         # Satu gambar mengembalikan satu objek Results.
-
         result = model(SAMPLE_IMAGE, save=True)
-
 
         for box in result.boxes:
             print(result.names[int(box.cls)], float(box.conf), box.xyxy.tolist())
@@ -66,18 +60,13 @@ snippets:
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-
         # coco8 adalah dataset 8 gambar yang disertakan bersama library. Dataset
-
-        # diunduh dari URL saat pertama digunakan, sehingga tidak ada script
-        yang dijalankan.
-
+        # diunduh dari URL saat pertama digunakan, sehingga tidak ada script yang dijalankan.
         results = model.train(
             data="coco8.yaml",
             epochs=1,
@@ -86,9 +75,7 @@ snippets:
             device="cpu",
         )
 
-
         print(results["save_dir"])
-
         print(results["best_checkpoint"])
     - label: CLI
       language: bash
@@ -111,29 +98,19 @@ snippets:
   export:
     - label: TorchScript
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
-
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-
-        # export() mengembalikan path yang ditulis.
-
+        # ekspor() mengembalikan path yang ditulis.
         path = model.export(format="torchscript")
-
         print(path)
 
-
-        # Factory mengarahkan berdasarkan suffix file, sehingga artefak dimuat
-        kembali
-
+        # Factory mengarahkan berdasarkan suffix berkas, sehingga artefak dimuat kembali
         # seperti checkpoint dan mengembalikan objek Results yang sama.
-
         exported = LibreYOLO(path)
-
         result = exported(SAMPLE_IMAGE)
-
         print(len(result.boxes))
     - label: ONNX
       language: bash
@@ -152,11 +129,11 @@ pip install libreyolo
 Itulah semua yang diperlukan bagian predict dan train di bawah. Ekspor ke ONNX
 menambahkan satu ekstra; lihat [instalasi](/docs/install) untuk list lengkap.
 
-## Predict
+## Prediksi
 
 <code-tabs name="predict" />
 
-`LibreYOLO()` adalah factory. Factory membaca file, menentukan family asal
+`LibreYOLO()` adalah factory. Factory membaca berkas, menentukan family asal
 bobot, dan mengembalikan model family tersebut, sehingga mengganti detektor
 hanya memerlukan perubahan satu baris. Memberikan `LibreYOLO9t.pt` tanpa
 direktori akan mencari `weights/LibreYOLO9t.pt` relatif terhadap direktori kerja
@@ -170,13 +147,13 @@ dan `names` memetakan indeks kelas ke labelnya. Path satu gambar mengembalikan
 satu `Results`; direktori, list gambar, atau `stream=True` mengembalikan list
 atau generator.
 
-## Train
+## Pelatihan
 
 <code-tabs name="train" />
 
 `data` adalah YAML dataset. `coco8.yaml` disertakan bersama library, sehingga
 snippet dapat langsung dijalankan; nama yang tidak disertakan dibaca sebagai
-path. Dataset di-resolve di bawah `~/datasets`, atau di bawah
+path. Dataset diselesaikan di bawah `~/datasets`, atau di bawah
 `LIBREYOLO_DATASETS_DIR` jika variabel tersebut ditetapkan.
 
 Run menulis ke `project/name`, dengan default direktori di bawah `runs/train`,
@@ -189,7 +166,7 @@ Tidak setiap family dapat dilatih. Jika family hanya mendukung inferensi,
 `train()` memunculkan `NotImplementedError` dan menyatakannya. [Konsep
 inti](/docs/concepts) menjelaskan arti setiap tier dukungan.
 
-## Export
+## Ekspor
 
 <code-tabs name="export" />
 
@@ -200,7 +177,7 @@ per task, bukan seragam: lihat [ekspor dan deployment](/docs/export).
 Argumen yang diterima setiap format mencakup `imgsz` (int atau pasangan tinggi
 dan lebar), `batch` (default 1), `half`, `int8` dengan YAML `data` untuk
 kalibrasi, `dynamic` (default True), `simplify` (default True), `opset`, `device`,
-dan `output_path`. Jika `output_path` tidak diberikan, file ditulis di bawah
+dan `output_path`. Jika `output_path` tidak diberikan, berkas ditulis di bawah
 `weights/` dengan nama yang diturunkan dari checkpoint.
 
 ## Langkah berikutnya
@@ -209,4 +186,6 @@ dan `output_path`. Jika `output_path` tidak diberikan, file ditulis di bawah
 - [Checkpoint dan bobot](/docs/weights) untuk pengunduhan otomatis, penggunaan offline, dan keamanan pemuatan.
 - [Impor bobot yang ada](/docs/migrate) jika sudah memiliki checkpoint dari project upstream.
 - [Semua model](/docs/models) untuk memilih family yang sesuai masalah.
-- [Train](/docs/train), [Predict](/docs/predict), dan [Export](/docs/export) untuk workflow lengkap.
+- [Pelatihan](/docs/train), [Prediksi](/docs/predict), dan [Ekspor](/docs/export) untuk alur kerja lengkap.
+
+

@@ -21,49 +21,34 @@ snippets:
   predict:
     - label: Meningkatkan resolusi gambar
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Generator kompak 4x; batas ubin memuncak pada penggunaan memori sumber
-        yang besar.
-
+        # Generator kompak 4x; batas ubin memuncak pada penggunaan memori sumber yang besar.
         model = LibreYOLO("LibreRealESRGANx4t-restore.pt")
-
         result = model(SAMPLE_IMAGE, tile=512, tile_pad=10)
 
-
         result.restored.save("upscaled.png")
-
         print(result.restored.array.shape)   # 4x input di setiap sumbu
     - label: Menghilangkan noise dari gambar
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         # Dilatih pada noise gambar nyata SIDD; output tetap pada ukuran input.
-
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
         result.restored.save("denoised.png")
-
-        print(result.restore_scale)   # 1: tidak ada peningkatan skala untuk ini
-        checkpoint
+        print(result.restore_scale)   # 1: tidak ada peningkatan skala untuk ini checkpoint
   train:
     - label: Menyesuaikan NAFNet pada gambar berpasangan
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
-
-        model.train(data="my-dataset.yaml", epochs=100, imgsz=256, batch=16,
-        lr0=1e-3)
+        model.train(data="my-dataset.yaml", epochs=100, imgsz=256, batch=16, lr0=1e-3)
     - label: Mencatat asal-usul pada checkpoint
       language: python
       code: |
@@ -93,36 +78,25 @@ snippets:
         print(metrics["metrics/PSNR"])   # kecocokan
         print(metrics["metrics/SSIM"])
   export:
-    - label: Export
+    - label: Ekspor
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
 
-
-        # imgsz diperbaiki dalam grafik, jadi masukkan ukuran yang sebenarnya
-        digunakan deployment Anda
-
+        # imgsz diperbaiki dalam grafik, jadi masukkan ukuran yang sebenarnya digunakan deployment Anda
         # untuk memberi makan model.
-
         model.export(format="onnx", imgsz=256)
-    - label: Jalankan file yang diekspor
+    - label: Jalankan berkas yang diekspor
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Pabrik mengalihkan berdasarkan akhiran file, jadi artefak yang
-        diekspor dimuat
-
+        # Pabrik mengalihkan berdasarkan akhiran berkas, jadi artefak yang diekspor dimuat
         # seperti halnya checkpoint dan mengembalikan objek Results yang sama.
-
         model = LibreYOLO("LibreNAFNetl-restore-sidd.onnx")
-
         result = model(SAMPLE_IMAGE)
-
 
         result.restored.save("denoised.png")
 source_hash: 9dc81cadb3ebf18b
@@ -172,13 +146,13 @@ kanvas jaringan, padding hanya pada faktor downsample jaringan, sehingga keduany
 dan memori meningkat seiring dengan jumlah piksel dari input Anda. `tile` membagi maju
 melewati ubin yang saling tumpang tindih dan menyatukan kembali jahitannya, dan `tile_pad`
 apakah halo ditambahkan di sekitar setiap ubin sebelum dipotong kembali; keduanya adalah
-Argumen kata kunci Python. Lihat [prediction](/docs/predict) untuk sumber, streaming
+Argumen kata kunci Python. Lihat [prediksi](/docs/predict) untuk sumber, streaming
 dan penanganan hasil.
 
-## format Dataset
+## Format dataset
 
 Restorasi memasangkan setiap gambar input yang rusak dengan gambar target yang bersih secara tepat
-resolusi yang sama, dicocokkan berdasarkan nama file.
+resolusi yang sama, dicocokkan berdasarkan nama berkas.
 
 ```text
 dataset/
@@ -221,7 +195,7 @@ dan trainer restore berpasangan akan berjalan tanpa mereproduksi resep tersebut.
 <code-tabs name="train" />
 
 Pelatih mengambil pasangan hasil panen dari input dan target, sehingga kedua sisi tetap
-selaras. Lihat [training](/docs/train) untuk dataset, multi-GPU dan pencatat log, dan
+selaras. Lihat [pelatihan](/docs/train) untuk dataset, multi-GPU dan pencatat log, dan
 halaman [NAFNet](/docs/models/nafnet) untuk default family ini dan
 pooling saat inferensi yang dilepaskan saat pelatihan.
 
@@ -253,4 +227,5 @@ ke ukuran patch internal kecil daripada resolusi kerja Anda. Per-format
 cakupan ada di setiap halaman model dan di
 [matriks ekspor penuh](/docs/reference/export-matrix). [Ekspor](/docs/export)
 mencantumkan argumen yang diterima setiap format.
+
 

@@ -7,7 +7,7 @@ description: >-
 lead: >-
   Segmentasi panoptik menetapkan setiap piksel ke tepat satu segment yang tidak
   tumpang tindih, menyatukan instance objek yang dapat dihitung dengan region
-  background amorf. Key task-nya adalah panoptic.
+  background amorf. Kunci task-nya adalah panoptic.
 keywords:
   - segmentasi panoptik Python
   - panoptic quality
@@ -23,7 +23,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Akhiran -panoptic pada nama file memilih task, sehingga argumen task
+        # Akhiran -panoptic pada nama berkas memilih task, sehingga argumen task
         # tidak diperlukan.
         model = LibreYOLO("LibreEoMTl-panoptic.pt")
         result = model(SAMPLE_IMAGE, save=True)
@@ -86,9 +86,9 @@ region amorf seperti langit atau jalan. Karena itu, task ini lebih ketat daripad
 [segmentasi instance](/docs/tasks/instance-segmentation), yang membiarkan piksel
 background tanpa assignment dan memungkinkan mask tumpang tindih, serta lebih
 ketat daripada [segmentasi semantik](/docs/tasks/semantic-segmentation), yang
-memberi label setiap piksel tetapi menggabungkan instance bersentuhan dari satu class.
+memberi label setiap piksel tetapi menggabungkan instance bersentuhan dari satu kelas.
 
-`panoptic` adalah key task kanonis, dan akhiran `-panoptic` pada nama file
+`panoptic` adalah kunci task kanonis, dan akhiran `-panoptic` pada nama berkas
 checkpoint memilihnya, sehingga `task=` tidak diperlukan saat memuat bobot terbitan.
 
 `predict()` mengisi `result.panoptic`. `.data` adalah peta id-segment integer
@@ -108,7 +108,7 @@ kategori tetap menjadi sumber otoritatif.
 ## Model
 
 [EoMT](/docs/models/eomt) adalah family yang melayani task ini melalui
-`LibreYOLO()`. Model ini berjalan pada package dasar dan menyertakan checkpoint
+`LibreYOLO()`. Model ini berjalan pada paket dasar dan menyertakan checkpoint
 panoptik dalam tiga ukuran, s, b, dan l, yang dilatih pada COCO.
 
 [SenseNova-Vision](/docs/models/sensenova-vision) juga menghasilkan peta panoptik.
@@ -204,7 +204,7 @@ digunakan sebagaimana diterbitkan.
 
 ## Validasi
 
-`val()` mengembalikan dictionary biasa berisi key `metrics/`, yang dihitung pada
+`val()` mengembalikan dictionary biasa berisi kunci `metrics/`, yang dihitung pada
 resolusi ground truth di split bernama `val` dalam YAML dataset. Segment prediksi
 dan ground truth dari kategori yang sama cocok jika IoU-nya melebihi 0,5, dan
 pencocokan tersebut unik.
@@ -232,3 +232,4 @@ Checkpoint panoptik tidak dapat diekspor. `export()` memunculkan
 kontrak ekspor runtime. Task semantic EoMT dapat diekspor; lihat
 [segmentasi semantik](/docs/tasks/semantic-segmentation) dan
 [ekspor dan deployment](/docs/export).
+

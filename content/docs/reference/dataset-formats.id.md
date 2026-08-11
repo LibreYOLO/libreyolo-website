@@ -2,11 +2,11 @@
 title: Format dataset
 seo_title: Format dataset LibreYOLO untuk setiap task
 description: >-
-  Kontrak file dataset per task kanonis: key YAML, layout folder, baris label,
+  Kontrak berkas dataset per task kanonis: kunci YAML, tata letak folder, baris label,
   konvensi mask dan map, serta loader yang membacanya.
 lead: >-
-  Halaman ini mencerminkan kontrak file dataset dalam docs/dataset_schema.md
-  milik library. Cakupannya meliputi key YAML dan layout di disk yang diharapkan
+  Halaman ini mencerminkan kontrak berkas dataset dalam docs/dataset_schema.md
+  milik library. Cakupannya meliputi kunci YAML dan tata letak di disk yang diharapkan
   setiap task kanonis.
 keywords:
   - format dataset libreyolo
@@ -18,7 +18,7 @@ keywords:
   - pose kpt_shape
 last_verified: 1.5.0
 verification: >-
-  Mencerminkan docs/dataset_schema.md dalam repository libreyolo pada v1.5.0,
+  Mencerminkan docs/dataset_schema.md dalam repositori libreyolo pada v1.5.0,
   dengan nama loader diperiksa silang terhadap libreyolo/data/.
 snippets:
   usage:
@@ -44,25 +44,25 @@ source_hash: a8282c079624044d
 
 Berlaku untuk `detect`, `segment`, `pose`, dan `obb`.
 
-| Key | Wajib | Arti |
+| Kunci | Wajib | Arti |
 |---|---|---|
 | `path` | | Root dataset |
 | `train` | Untuk pelatihan | Gambar pelatihan |
 | `val` | Untuk validasi | Gambar validasi |
 | `test` | | Gambar pengujian |
-| `names` | Ya | List kelas atau mapping dengan key bilangan bulat |
+| `names` | Ya | List kelas atau mapping dengan kunci bilangan bulat |
 | `nc` | | Jumlah kelas; harus cocok dengan `names` jika ada |
 | `download` | | Petunjuk pengunduhan; script Python memerlukan keikutsertaan eksplisit |
-| `annotations` | | Split ke file JSON COCO native, untuk detect, segment, dan obb |
+| `annotations` | | Split ke berkas JSON COCO native, untuk detect, segment, dan obb |
 
-`train`, `val`, dan `test` dapat berupa direktori gambar, file `.txt` berisi
+`train`, `val`, dan `test` dapat berupa direktori gambar, berkas `.txt` berisi
 list gambar, atau list dari keduanya. Path label mengikuti satu substitusi:
 
 ```text
 images/.../image.jpg -> labels/.../image.txt
 ```
 
-Untuk dataset JSON COCO native, `annotations` memetakan split ke file JSON dan
+Untuk dataset JSON COCO native, `annotations` memetakan split ke berkas JSON dan
 path split menentukan root gambar:
 
 ```yaml
@@ -78,13 +78,13 @@ Jika `names` tersedia, nama kategori JSON COCO native harus cocok dengan nama
 kelas YAML, dan nama tersebut menentukan id label model. Tanpa `names`, id
 kategori COCO diurutkan dan dipetakan secara padat ke `0..N-1`.
 
-YAML dataset tidak memiliki key `task`. Pemilihan model dan task eksplisit
+YAML dataset tidak memiliki kunci `task`. Pemilihan model dan task eksplisit
 selalu menang.
 
-Aturan yang berlaku untuk setiap file label teks:
+Aturan yang berlaku untuk setiap berkas label teks:
 
-- satu file label `.txt` per gambar;
-- file label yang hilang atau kosong berarti tidak ada objek;
+- satu berkas label `.txt` per gambar;
+- berkas label yang hilang atau kosong berarti tidak ada objek;
 - `class_id` adalah bilangan bulat dalam `0..nc-1`;
 - koordinat berupa float ternormalisasi terbatas dalam `[0, 1]`;
 - koordinat relatif terhadap lebar dan tinggi gambar asli;
@@ -94,13 +94,13 @@ Aturan yang berlaku untuk setiap file label teks:
 
 ## detect
 
-Tepat lima field per baris:
+Tepat lima kolom per baris:
 
 ```text
 <class_id> <cx> <cy> <w> <h>
 ```
 
-`cx cy w h` adalah box sejajar sumbu yang dinormalisasi, sedangkan `w` dan `h`
+`cx cy w h` adalah bounding box sejajar sumbu yang dinormalisasi, sedangkan `w` dan `h`
 harus positif.
 
 ## segment
@@ -112,7 +112,7 @@ Baris poligon:
 ```
 
 `N` setidaknya 3, jumlah koordinat setelah `class_id` harus genap, dan poligon
-tidak boleh degenerat. Baris deteksi lima field juga diterima dan mewakili
+tidak boleh degenerat. Baris deteksi lima kolom juga diterima dan mewakili
 segmen rectangle.
 
 ## pose
@@ -124,13 +124,13 @@ YAML menambahkan `kpt_shape`, yang wajib berupa `[K, 2]` atau `[K, 3]`, serta
 <class_id> <cx> <cy> <w> <h> <k1x> <k1y> [<k1v>] ... <kKx> <kKy> [<kKv>]
 ```
 
-Jumlah field tepat `5 + K * D`, dengan `D` adalah nilai kedua `kpt_shape`.
+Jumlah kolom tepat `5 + K * D`, dengan `D` adalah nilai kedua `kpt_shape`.
 Koordinat keypoint dinormalisasi. Visibility `v`, jika ada, bernilai `0`, `1`,
 atau `2`.
 
 ## obb
 
-Tepat sembilan field:
+Tepat sembilan kolom:
 
 ```text
 <class_id> <x1> <y1> <x2> <y2> <x3> <y3> <x4> <y4>
@@ -138,23 +138,23 @@ Tepat sembilan field:
 
 Keempat titik merupakan koordinat gambar ternormalisasi dalam `[0, 1]` dan
 membentuk oriented rectangle yang tidak degenerat. Tidak ada sudut yang
-disimpan dalam file label.
+disimpan dalam berkas label.
 
 Parser kanonis bersifat ketat secara default dan menolak koordinat di luar
 rentang. Proses ingestion dataset dan validasi dapat membatasi koordinat ke
-`[0, 1]` untuk label batas crop yang sebaliknya valid, lalu tetap menolak box
-degenerat. Parsing memperhitungkan task: sembilan field berarti `obb` hanya
+`[0, 1]` untuk label batas crop yang sebaliknya valid, lalu tetap menolak bounding box
+degenerat. Parsing memperhitungkan task: sembilan kolom berarti `obb` hanya
 dalam mode `obb`, sedangkan dalam mode `segment` dapat berupa poligon empat
 titik.
 
 Secara internal, sudut ternormalisasi dikonversi menjadi `xywhr` kanonis, dengan
-sudut dalam radian yang mewakili rotasi sisi lebar di sekitar pusat box. Hasil
+sudut dalam radian yang mewakili rotasi sisi lebar di sekitar pusat bounding box. Hasil
 publik menyediakan deteksi OBB sebagai baris `xywhr, conf, cls`.
 
 Pemuatan OBB JSON COCO native menerima anotasi dalam urutan prioritas berikut:
 `obb` sebagai delapan sudut dalam ruang piksel; `obb` sebagai
 `[cx, cy, w, h, angle]` dengan sudut dalam radian; poligon atau RLE
-`segmentation` COCO yang di-fit ulang menjadi rectangle area minimum; dan
+`segmentation` COCO yang dicocokkan ulang menjadi rectangle area minimum; dan
 `bbox` COCO yang dibaca sebagai sejajar sumbu lalu dikanonisasi.
 
 Mosaic dan mixup dinonaktifkan untuk pelatihan OBB hingga tersedia augmentasi
@@ -165,7 +165,7 @@ Parser baris kanonis adalah `libreyolo.data.parse_yolo_obb_label_line`.
 ## semantic
 
 Setiap gambar dipasangkan dengan mask satu channel padat dalam format lossless,
-biasanya PNG, bukan file `.txt`:
+biasanya PNG, bukan berkas `.txt`:
 
 ```text
 images/.../image.jpg -> <masks_dir>/.../image.png
@@ -176,14 +176,14 @@ Setiap nilai piksel merupakan id kelas dalam `0..nc-1`, nilai piksel `255`
 berarti ignore dan tidak disertakan dalam loss maupun metrik, serta resolusi mask
 harus sama dengan resolusi gambar.
 
-Dua key YAML opsional ditambahkan di atas kontrak umum. `masks_dir` adalah nama
+Dua kunci YAML opsional ditambahkan di atas kontrak umum. `masks_dir` adalah nama
 direktori mask yang menggantikan `images` dalam setiap path gambar, dengan
 default `masks`. `label_mapping` adalah remap `{source_id: train_id}` yang
 diterapkan ke nilai piksel mask saat pemuatan. Nilai sumber yang tidak dipetakan
 menjadi ignore dan id pelatihan harus berada dalam `0..nc-1`.
 
 Ketika `masks_dir` tidak diberikan, mask dirasterisasi saat pemuatan dari label
-poligon `segment` yang di-resolve melalui konvensi `images` ke `labels`, lalu
+poligon `segment` yang diselesaikan melalui konvensi `images` ke `labels`, lalu
 kelas `background` ditambahkan setelah kelas objek, sehingga `nc` bertambah satu.
 
 Loader kanonis: `libreyolo.data.SemanticDataset`.
@@ -257,12 +257,12 @@ Setiap gambar dipasangkan dengan depth map satu channel padat:
 images/.../image.jpg -> <depths_dir>/.../image.png
 ```
 
-Map berupa PNG atau TIF satu channel, atau file `.npy`, pada resolusi gambar.
+Map berupa PNG atau TIF satu channel, atau berkas `.npy`, pada resolusi gambar.
 Nilai adalah depth biasa dalam satuan yang konsisten di dataset. Nilai nol,
 negatif, NaN, dan tak hingga menandai piksel tidak valid serta dikecualikan dari
 loss dan metrik.
 
-| Key | Default | Arti |
+| Kunci | Default | Arti |
 |---|---|---|
 | `depths_dir` | `depths` | Direktori depth yang menggantikan `images` |
 | `depth_stem_suffix` | | Suffix yang ditambahkan ke stem gambar; jika tidak ada, stem sama dan suffix `_depth` sama-sama dicoba |
@@ -290,7 +290,7 @@ edge. Piksel mask opsional valid jika bukan nol. Pengubahan ukuran menggunakan
 interpolasi nearest-neighbor untuk target dan mask, sedangkan piksel padding
 tidak valid dan tidak berkontribusi pada validasi.
 
-| Key | Default | Arti |
+| Kunci | Default | Arti |
 |---|---|---|
 | `edges_dir` | `edges` | Direktori edge map yang menggantikan `images` |
 | `edge_stem_suffix` | | Suffix yang ditambahkan ke stem gambar |
@@ -338,7 +338,7 @@ menginterpolasi tiga komponen secara bilinear lalu menormalisasinya ulang,
 validity mask menggunakan nearest-neighbor, dan flip horizontal juga membalik
 tanda komponen x.
 
-| Key | Default | Arti |
+| Kunci | Default | Arti |
 |---|---|---|
 | `normals_dir` | `normals` | Direktori normal map yang menggantikan `images` |
 | `masks_dir` | `masks` | Direktori validity mask opsional |
@@ -356,13 +356,13 @@ Setiap gambar input terdegradasi dipasangkan dengan target RGB bersih:
 inputs/.../image.jpg -> targets/.../image.jpg
 ```
 
-Input dan target berupa file gambar yang kompatibel dengan RGB dan resolusinya
+Input dan target berupa berkas gambar yang kompatibel dengan RGB dan resolusinya
 harus sama persis. Validasi mempertahankan resolusi native dan hanya menambahkan
 padding secukupnya untuk menumpuk batch, sedangkan metrik dihitung pada canvas
 gambar asli. Pelatihan menerapkan crop dan flip horizontal yang berpasangan pada
 input dan target.
 
-| Key | Default | Arti |
+| Kunci | Default | Arti |
 |---|---|---|
 | `input_dir` | `inputs` | Direktori input terdegradasi yang digunakan dalam path split |
 | `target_dir` | `targets` | Direktori target bersih yang menggantikan `input_dir` |
@@ -371,7 +371,7 @@ input dan target.
 | `degradation` | | Label metadata seperti `deblur` atau `denoise` |
 | `dataset` | | Label dataset atau asal |
 
-Field YAML mirip kelas adalah placeholder skema: gunakan `nc: 1` dan
+Kolom YAML mirip kelas adalah placeholder skema: gunakan `nc: 1` dan
 `names: {0: image}`. Model restore menyediakan `Results.restored`, bukan deteksi.
 
 Loader kanonis: `libreyolo.data.RestoreDataset`.
@@ -385,7 +385,7 @@ yang sama, dengan 0 berarti background dan 255 berarti foreground:
 images/subject.jpg -> mattes/subject.png
 ```
 
-Dua layout diterima. Root direktori yang memuat `images/` dan direktori matte,
+Dua tata letak diterima. Root direktori yang memuat `images/` dan direktori matte,
 yang dideteksi otomatis di antara `mattes/`, `matte/`, `gt/`, `masks/`,
 `mask/`, dan `alpha/`, diberikan sebagai `data=`. Alternatifnya adalah YAML
 dengan `path` ditambah `val_images` dan `val_mattes` per split, serta opsional
@@ -393,11 +393,11 @@ dengan `path` ditambah `val_images` dan `val_mattes` per split, serta opsional
 absolut.
 
 Matte berupa grayscale dan dibaca sebagai opasitas dalam `[0, 1]`, serta
-di-resize ke canvas prediksi dengan interpolasi bilinear jika bentuk berbeda.
+diubah ukurannya ke canvas prediksi dengan interpolasi bilinear jika bentuk berbeda.
 Metriknya adalah MAE dan S-measure (Fan et al., ICCV 2017) pada canvas gambar
 asli, dengan S-measure sebagai fitness checkpoint terbaik.
 
-Field YAML mirip kelas adalah placeholder skema: gunakan `nc: 1` dan
+Kolom YAML mirip kelas adalah placeholder skema: gunakan `nc: 1` dan
 `names: {0: matte}`. Model matte menyediakan `Results.matte`.
 
 Validasi hanya mendukung inferensi pada versi ini. Resolver pasangan kanonis:
@@ -405,7 +405,7 @@ Validasi hanya mendukung inferensi pada versi ini. Resolver pasangan kanonis:
 
 ## ocr
 
-Label berupa satu file JSONL per split, satu objek JSON per gambar:
+Label berupa satu berkas JSONL per split, satu objek JSON per gambar:
 
 ```text
 images/val/receipt.jpg -> labels/val.jsonl
@@ -427,11 +427,11 @@ setelah normalisasi NFKC serta penghapusan whitespace, dengan kapitalisasi
 diperhitungkan, dan 1-NED pada pasangan yang cocok. Fitness checkpoint terbaik
 adalah F1 end-to-end.
 
-Dua layout diterima: root direktori yang memuat `images/<split>/` dan
+Dua tata letak diterima: root direktori yang memuat `images/<split>/` dan
 `labels/<split>.jsonl`, diberikan sebagai `data=`, atau YAML dengan `path`
 ditambah nama direktori `images` dan `labels` opsional.
 
-Field YAML mirip kelas adalah placeholder skema: gunakan `nc: 1` dan
+Kolom YAML mirip kelas adalah placeholder skema: gunakan `nc: 1` dan
 `names: {0: text}`. Model OCR menyediakan `Results.ocr`.
 
 Validasi hanya mendukung inferensi pada versi ini. Resolver sampel kanonis:
@@ -439,7 +439,7 @@ Validasi hanya mendukung inferensi pada versi ini. Resolver sampel kanonis:
 
 ## classify
 
-Tree direktori bergaya ImageFolder, bukan file label:
+Tree direktori bergaya ImageFolder, bukan berkas label:
 
 ```text
 dataset_root/
@@ -460,9 +460,11 @@ didefinisikan dalam `libreyolo.data.classify_dataset.IMAGE_EXTENSIONS`.
 
 ## gaze dan point
 
-Tidak ada kontrak file dataset pelatihan atau validasi yang diimplementasikan
+Tidak ada kontrak berkas dataset pelatihan atau validasi yang diimplementasikan
 untuk `gaze`.
 
 `point` adalah task output model, bukan skema label dataset. Family point dapat
 mengadaptasi label yang ada secara internal, misalnya dengan menurunkan pusat
-objek dari baris box, tetapi format label teks khusus point tidak didefinisikan.
+objek dari baris bounding box, tetapi format label teks khusus point tidak didefinisikan.
+
+

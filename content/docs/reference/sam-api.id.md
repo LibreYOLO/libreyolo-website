@@ -148,7 +148,7 @@ array bekerja di mana pun sebuah daftar bekerja. Koordinat adalah piksel biasa p
 gambar.
 
 Melewatkan setiap prompt spasial menjalankan segment-everything, sebuah mask otomatis grid
-generator dengan ambang IoU yang diprediksi dan deduplikasi box-IoU. The
+generator dengan ambang IoU yang diprediksi dan deduplikasi bounding box-IoU. The
 default `points_per_side` dari 32 menjalankan kira-kira 1024 pass decoder, yang
 lambat pada CPU; turunkan untuk penggunaan interaktif. Generator mengabaikan
 penyaringan skor-stabilitas, multi-crop dan deduplikasi mask-IoU, jadi itu adalah
@@ -170,7 +170,7 @@ semua kandidat.
 `text=` hanya untuk SAM 3; setiap prompt spasial family meningkatkan
 `NotImplementedError` untuk itu. Teks bersifat saling eksklusif dengan titik dan
 kotak. `names` yang dikembalikan memetakan kelas `0` ke konsep yang diminta. Sebuah teks
-panggilan dengan `source=None` meng-encode ulang gambar yang di-cache, karena pelacak dan
+panggilan dengan `source=None` mengodekan ulang gambar yang disimpan dalam cache, karena pelacak dan
 encoder konsep tidak berbagi cache.
 
 Kata kunci `exemplars=` dicadangkan untuk ekstensi contoh-gambar di masa depan dan
@@ -204,4 +204,6 @@ dan MobileSAM.
 
 Jalur video dan memori untuk SAM-2, SAM 3, dan EdgeTAM berada di luar cakupan ini
 versi, seperti halnya contoh gambar SAM 3 dan petunjuk mask.
+
+
 

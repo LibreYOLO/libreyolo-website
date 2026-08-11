@@ -1,6 +1,6 @@
 ---
 title: Embeddings
-seo_title: Embeddings d'images et de régions dans LibreYOLO
+seo_title: "Embeddings d'images et de régions dans LibreYOLO"
 description: >-
   La tâche embed renvoie des vecteurs float32 normalisés L2 pour une image
   entière, pour chaque région détectée ou pour du texte. Enregistrez une

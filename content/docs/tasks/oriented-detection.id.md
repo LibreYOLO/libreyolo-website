@@ -2,13 +2,13 @@
 title: Deteksi berorientasi
 seo_title: Deteksi berorientasi di LibreYOLO
 description: >-
-  Deteksi objek yang berotasi di LibreYOLO: family yang melayani box
+  Deteksi objek yang berotasi di LibreYOLO: family yang melayani bounding box
   berorientasi, baris label empat sudut, serta pemanggilan prediksi, pelatihan,
   validasi, dan ekspor.
 lead: >-
   Deteksi objek berorientasi melokalisasi setiap instance dengan persegi panjang
   berotasi, bukan persegi panjang sejajar sumbu, sehingga objek miring dibatasi
-  dengan rapat alih-alih oleh box yang penuh background. Key task-nya adalah
+  dengan rapat alih-alih oleh bounding box yang penuh background. Kunci task-nya adalah
   obb.
 keywords:
   - deteksi oriented bounding box
@@ -26,7 +26,7 @@ snippets:
         # Memerlukan extra rfdetr: pip install "libreyolo[rfdetr]"
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Akhiran -obb pada nama file memilih task, sehingga argumen task
+        # Akhiran -obb pada nama berkas memilih task, sehingga argumen task
         # tidak diperlukan.
         model = LibreYOLO("LibreRFDETRs-obb.pt")
         result = model(SAMPLE_IMAGE, save=True)
@@ -49,7 +49,7 @@ snippets:
 
         print(obb.xyxyxyxy.shape)    # (N, 4, 2) titik sudut dalam piksel
         print(obb.xyxyxyxyn.shape)   # hal yang sama, ternormalisasi
-        print(obb.xyxy.shape)        # (N, 4) box sejajar sumbu yang melingkupi
+        print(obb.xyxy.shape)        # (N, 4) bounding box sejajar sumbu yang melingkupi
     - label: Checkpoint lebih kecil
       language: python
       code: |
@@ -64,7 +64,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        # Bobot DOTA v1.0, 15 class aerial pada 1024 px. Graph berorientasi
+        # Bobot DOTA v1.0, 15 kelas aerial pada 1024 px. Graph berorientasi
         # dikenali dari tensor checkpoint sendiri, jadi tanpa argumen task.
         model = LibreYOLO("LibreRTDETRv2n-obb.pt")
         result = model("aerial.png", save=True)
@@ -75,18 +75,13 @@ snippets:
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
         # Melanjutkan dari bobot berorientasi terbitan. data harus menunjuk ke
-
         # dataset yang baris labelnya memuat empat sudut.
-
         model = LibreYOLO("LibreRFDETRs-obb.pt")
-
-        model.train(data="my-obb-dataset.yaml", epochs=50, imgsz=512, batch=8,
-        lr0=1e-4)
+        model.train(data="my-obb-dataset.yaml", epochs=50, imgsz=512, batch=8, lr0=1e-4)
     - label: CLI
       language: bash
       code: |
@@ -135,30 +130,20 @@ snippets:
         libreyolo export model=LibreRFDETRs-obb.pt format=onnx imgsz=512
     - label: RT-DETRv2
       language: bash
-      code: >
+      code: |
         # ONNX dan TorchScript adalah target tervalidasi di sini, pada FP32,
-
         # batch 1, di kanvas tetap 1024 kali 1024.
-
         libreyolo export model=LibreRTDETRv2n-obb.pt format=onnx imgsz=1024
-
-        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript
-        imgsz=1024
-    - label: Gunakan file hasil ekspor
+        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript imgsz=1024
+    - label: Gunakan berkas hasil ekspor
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Factory merutekan berdasarkan akhiran file, sehingga artefak hasil
-
-        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang
-        sama.
-
+        # Factory merutekan berdasarkan akhiran berkas, sehingga artefak hasil
+        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang sama.
         model = LibreYOLO("LibreRFDETRs-obb.onnx")
-
         result = model(SAMPLE_IMAGE)
-
 
         print(result.obb.xywhr)
 source_hash: 0d605d956f3ea025
@@ -167,22 +152,22 @@ source_hash: 0d605d956f3ea025
 ## Definisi
 
 Deteksi berorientasi menambahkan satu angka pada deteksi: angle. Setiap instance
-memperoleh persegi panjang berotasi, class, dan skor. Keuntungannya adalah batas
+memperoleh persegi panjang berotasi, kelas, dan skor. Keuntungannya adalah batas
 yang rapat. Kapal pada sudut 45 derajat, atap gudang, atau deretan truk terparkir
-akan dikelilingi box sejajar sumbu yang sebagian besar berisi background, dan dua
-box berdekatan saling tumpang tindih meskipun objeknya tidak. Itulah alasan task
+akan dikelilingi bounding box sejajar sumbu yang sebagian besar berisi background, dan dua
+bounding box berdekatan saling tumpang tindih meskipun objeknya tidak. Itulah alasan task
 ini umum dalam pencitraan aerial dan tata letak dokumen, serta alasan DOTA menjadi
 dataset referensinya.
 
-`obb` adalah key task kanonis, dan akhiran `-obb` pada nama file checkpoint
+`obb` adalah kunci task kanonis, dan akhiran `-obb` pada nama berkas checkpoint
 memilihnya, sehingga `task=` tidak diperlukan saat memuat bobot terbitan.
 
 `predict()` mengisi `result.obb`. `.xywhr` adalah bentuk kanonis `(N, 5)`: pusat
 x, pusat y, lebar, tinggi, dan angle dalam radian yang menyatakan rotasi sisi
-lebar di sekitar pusat. `.conf` dan `.cls` memuat skor serta indeks class dalam
+lebar di sekitar pusat. `.conf` dan `.cls` memuat skor serta indeks kelas dalam
 `result.names`, sedangkan `.id` memuat track id saat tracking. `.xyxyxyxy`
 mengubah setiap baris menjadi empat titik sudut sebagai piksel `(N, 4, 2)`,
-`.xyxyxyxyn` menormalisasi sudut tersebut, dan `.xyxy` memberikan box sejajar
+`.xyxyxyxyn` menormalisasi sudut tersebut, dan `.xyxy` memberikan bounding box sejajar
 sumbu yang melingkupi, untuk digunakan ketika kode downstream hanya memahami
 persegi panjang. `result.boxes` juga diisi dengan bentuk sejajar sumbu.
 
@@ -191,7 +176,7 @@ persegi panjang. `result.boxes` juga diisi dengan bentuk sejajar sumbu.
 Dua family melayani task ini, dan pilihan bergantung pada kebutuhan pelatihan.
 
 [RF-DETR](/docs/models/rf-detr) adalah family yang dapat dilatih. Model ini
-memprediksi, melatih, memvalidasi, dan mengekspor box berorientasi, serta
+memprediksi, melatih, memvalidasi, dan mengekspor bounding box berorientasi, serta
 menyertakan checkpoint berorientasi terbitan dalam empat ukuran, n, s, m, dan l.
 Model ini memerlukan extra sendiri, `pip install "libreyolo[rfdetr]"`, dan halaman
 modelnya memuat lisensi serta asal-usul bobot.
@@ -202,12 +187,12 @@ sebelum mengandalkannya.
 [RT-DETRv2](/docs/models/rt-detr) adalah family dengan bobot aerial. Model ini
 menerbitkan `LibreRTDETRv2n-obb.pt` hingga `LibreRTDETRv2x-obb.pt`, yaitu
 checkpoint single-scale DOTA v1.0 resmi yang dikonversi ke format LibreYOLO,
-mencakup 15 class DOTA pada 1024 px. Tidak diperlukan extra selain package dasar,
+mencakup 15 kelas DOTA pada 1024 px. Tidak diperlukan extra selain paket dasar,
 graph berorientasi dikenali dari tensor checkpoint sendiri, dan prediksi,
 validasi, serta ekspor ONNX dan TorchScript didukung. Pelatihan tidak didukung:
 task berorientasi hanya untuk inferensi pada family ini, `train()` memunculkan
 error, dan tidak ada transfer dari bobot deteksinya yang menggunakan backbone
-berbeda. Tracking dan test-time augmentation juga tidak tersedia untuk box
+berbeda. Tracking dan test-time augmentation juga tidak tersedia untuk bounding box
 berorientasi.
 
 Ringkasnya: untuk kategori DOTA siap pakai, gunakan RT-DETRv2. Untuk label
@@ -222,13 +207,13 @@ cache lokal.
 
 Pahami checkpoint terbitan RF-DETR sebelum menjalankannya. Meskipun DOTA menjadi
 benchmark referensi task ini, bobot tersebut tidak dilatih padanya. Keempatnya
-diinisialisasi dari bobot deteksi RF-DETR dan di-fine-tune pada satu dataset
-Roboflow Universe berisi rekaman UAV, dengan enam class kendaraan: bike, bus,
+diinisialisasi dari bobot deteksi RF-DETR dan mendapat fine-tuning pada satu dataset
+Roboflow Universe berisi rekaman UAV, dengan enam kelas kendaraan: bike, bus,
 car, other_vehicle, taxi, dan truck. Model card mendeskripsikannya sebagai bobot
 pengembangan yang dihasilkan saat memvalidasi dukungan pelatihan berorientasi,
 serta menyatakan bahwa bobot tersebut bukan bobot production atau benchmark resmi.
 
-Dalam praktiknya, bobot tersebut menjadi titik awal yang berfungsi untuk box
+Dalam praktiknya, bobot tersebut menjadi titik awal yang berfungsi untuk bounding box
 berorientasi pada kendaraan yang terlihat dari atas dan untuk memverifikasi bahwa
 pipeline berjalan end-to-end. Domain lain memerlukan pelatihan pada label
 berorientasi Anda sendiri, dan untuk kategori aerial yang dikenal dari DOTA,
@@ -238,7 +223,7 @@ dan `max_det` membentuk output seperti pada deteksi. Lihat
 
 ## Format dataset
 
-Tata letaknya sama dengan deteksi: satu file label `.txt` per gambar, yang
+Tata letaknya sama dengan deteksi: satu berkas label `.txt` per gambar, yang
 ditemukan dengan mengganti `images` menjadi `labels` pada path gambar dan
 mengubah ekstensinya.
 
@@ -253,7 +238,7 @@ dataset/
     val/P0101.txt
 ```
 
-Satu baris berisi tepat sembilan field, yaitu indeks class yang diikuti empat
+Satu baris berisi tepat sembilan kolom, yaitu indeks kelas yang diikuti empat
 titik sudut secara berurutan:
 
 ```text
@@ -262,12 +247,12 @@ titik sudut secara berurutan:
 
 Keempat titik berupa float ternormalisasi dalam `[0, 1]` dan harus membentuk
 persegi panjang berorientasi yang tidak degeneratif. Angle tidak disimpan dalam
-file label: loader menurunkan `xywhr` kanonis dari sudut. Secara default, parser
+berkas label: loader menurunkan `xywhr` kanonis dari sudut. Secara default, parser
 bersifat ketat dan menolak koordinat di luar rentang, sedangkan proses ingestion
 dataset serta validasi dapat lebih dahulu memotong ke `[0, 1]` untuk label batas
-crop yang valid, lalu tetap menolak box degeneratif.
+crop yang valid, lalu tetap menolak bounding box degeneratif.
 
-Parsing baris memahami task. Sembilan field berarti box berorientasi hanya dalam
+Parsing baris memahami task. Sembilan kolom berarti bounding box berorientasi hanya dalam
 mode `obb`; dalam mode `segment`, baris yang sama dibaca sebagai poligon empat titik.
 
 YAML-nya sama dengan YAML deteksi:
@@ -282,9 +267,9 @@ names:
 ```
 
 JSON COCO native juga dapat dimuat, dengan pemetaan `annotations` dari nama split
-ke file JSON. Anotasi dibaca menurut urutan prioritas: field `obb` berisi delapan
-sudut dalam ruang piksel, field `obb` berupa `[cx, cy, w, h, angle]` dengan angle
-dalam radian, poligon `segmentation` atau RLE yang di-fit ulang ke persegi panjang
+ke berkas JSON. Anotasi dibaca menurut urutan prioritas: kolom `obb` berisi delapan
+sudut dalam ruang piksel, kolom `obb` berupa `[cx, cy, w, h, angle]` dengan angle
+dalam radian, poligon `segmentation` atau RLE yang dicocokkan ulang ke persegi panjang
 minimum-area, atau `bbox` COCO biasa yang diperlakukan sebagai persegi panjang
 sejajar sumbu dan dikanonisasi menjadi `xywhr`.
 
@@ -299,28 +284,28 @@ dari checkpoint `-obb` terbitan. Memulai dari bobot deteksi merupakan transfer
 yang disengaja: bobot tersebut tidak memprediksi angle, dan memberikan `task=obb`
 mengotorisasi penggantian tersebut. Pertahankan `lr0` pada atau di bawah `1e-4`,
 seperti task lain dalam family. Checkpoint berorientasi RT-DETRv2 tidak dapat
-di-fine-tune; gunakan apa adanya atau latih model RF-DETR pada label Anda sendiri.
+mendapat fine-tuning; gunakan apa adanya atau latih model RF-DETR pada label Anda sendiri.
 Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
 
 ## Validasi
 
-`val()` mengembalikan dictionary biasa berisi key `metrics/`. Pencocokan
+`val()` mengembalikan dictionary biasa berisi kunci `metrics/`. Pencocokan
 menggunakan rotated IoU, yang dihitung antara persegi panjang berorientasi, bukan
-box sejajar sumbu yang melingkupinya, sehingga prediksi dengan posisi benar dan
+bounding box sejajar sumbu yang melingkupinya, sehingga prediksi dengan posisi benar dan
 angle salah dinilai meleset.
 
 <code-tabs name="val" />
 
-`metrics/mAP50-95` adalah mean average precision yang dirata-ratakan pada ambang
+`metrics/mAP50-95` adalah presisi rata-rata yang dirata-ratakan pada ambang
 batas IoU 0,50 hingga 0,95 dalam langkah 0,05, dan menjadi angka utama. Berbeda
 dari jalur COCO untuk deteksi, task ini mematuhi `iou_thresholds` dalam konfigurasi
 validasi, sehingga sweep dapat diubah. `metrics/mAP50` dan `metrics/mAP75` adalah
 versi satu ambang batas. `metrics/precision` dan `metrics/recall` merupakan
-precision dan recall sebenarnya pada IoU 0,50, dibaca pada operating point paling
+presisi dan recall sebenarnya pada IoU 0,50, dibaca pada titik operasi paling
 longgar: setiap prediksi yang melewati ambang batas confidence dihitung, dan
 ambang batas tersebut default ke 0,001 selama validasi. Menaikkan `conf` akan
 mengubah keduanya, sedangkan angka mAP yang menggunakan seluruh kurva
-precision-recall tetap. Empat key diulang dengan akhiran `(OBB)`, yaitu
+presisi-recall tetap. Empat kunci diulang dengan akhiran `(OBB)`, yaitu
 `metrics/mAP50-95(OBB)`, `metrics/mAP50(OBB)`, `metrics/precision(OBB)`, dan
 `metrics/recall(OBB)`, agar pemanggil dapat membedakan hasil berorientasi dari
 hasil sejajar sumbu saat keduanya berada dalam tabel yang sama.
@@ -335,8 +320,10 @@ diimplementasikan.
 <code-tabs name="export" />
 
 Artefak hasil ekspor dimuat kembali melalui `LibreYOLO()` berdasarkan akhiran
-filenya, sehingga file `.onnx` atau `.engine` berperilaku seperti checkpoint dan
+filenya, sehingga berkas `.onnx` atau `.engine` berperilaku seperti checkpoint dan
 mengembalikan `Results` yang sama. Cakupan format berbeda berdasarkan task pada
 family yang sama, dan matriks halaman model dibuat dari kumpulan tervalidasi serta
 menyebutkan alasan target tidak tersedia. Lihat
 [ekspor dan deployment](/docs/export) untuk format, extra, dan batasannya.
+
+

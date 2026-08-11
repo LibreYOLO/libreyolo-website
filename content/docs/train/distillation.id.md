@@ -100,7 +100,7 @@ ketidakcocokan antara grid patch dan stride konvolusional.
 lain diperlakukan sebagai path checkpoint teacher.
 
 Jalur ini menggunakan `feat_mse` tanpa memandang `distill_loss_type` dan
-memerlukan instalasi `transformers`. Teacher yang dimuat dengan key bobot hilang
+memerlukan instalasi `transformers`. Teacher yang dimuat dengan kunci bobot hilang
 menghentikan proses, bukan melakukan distilasi dari backbone yang sebagian acak.
 
 ## Family yang didukung
@@ -172,14 +172,14 @@ hanya berdasarkan sudut dan tidak bergantung skala. Default-nya `False`.
 `dis` adalah bobot global yang diterapkan di atasnya. Jika tidak ditetapkan,
 setiap loss memakai default terbitannya sendiri: 2e-5 untuk MGD, 1,0 untuk CWD,
 dan 1,0 untuk feature MSE. Nilai tersebut berbeda lima orde magnitudo, sehingga
-bobot yang di-tuning untuk satu jenis loss tidak bermakna bagi jenis lain.
+bobot yang disetel untuk satu jenis loss tidak bermakna bagi jenis lain.
 
 <code-tabs name="tuned" />
 
 `distill_mask_ratio`, `distill_tau`, dan `distill_normalize` tidak memiliki flag
-CLI. Ketiganya merupakan argumen Python atau key YAML `cfg=`. Distilasi RF-DETR
+CLI. Ketiganya merupakan argumen Python atau kunci YAML `cfg=`. Distilasi RF-DETR
 secara keseluruhan juga hanya tersedia di Python karena pemetaan argumen CLI-nya
-tidak membawa key distilasi.
+tidak membawa kunci distilasi.
 
 ## Adapter, checkpoint, dan multi-GPU
 
@@ -187,7 +187,7 @@ Setiap loss membangun modul kecil yang dapat dilatih di luar student: adapter
 channel 1x1 dan generator MGD. Modul tersebut mendapat group parameter optimizer
 sendiri pada learning rate efektif proses.
 
-Modul itu ditulis ke checkpoint dalam key `distiller` dan dipulihkan saat resume,
+Modul itu ditulis ke checkpoint dalam kunci `distiller` dan dipulihkan saat resume,
 sehingga proses lanjutan tidak memulai projectornya dari keadaan dingin.
 
 Di bawah DDP, adapter berada di luar student yang dibungkus sehingga reducer DDP
@@ -204,3 +204,5 @@ CUDA graph capture tidak tersedia pada proses distilasi. Memberikan
   [fine-tuning LoRA](/docs/train/lora), yang keduanya dapat digabungkan dengan
   distilasi.
 - [Hyperparameter](/docs/train/hyperparameters) untuk bagian lain `train()`.
+
+

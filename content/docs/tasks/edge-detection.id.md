@@ -20,22 +20,15 @@ snippets:
   predict:
     - label: Prediksi peta tepi
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Tidak ada checkpoint tepi yang dilengkapi dengan LibreYOLO; konversi
-        terlebih dahulu (di bawah).
-
+        # Tidak ada checkpoint tepi yang dilengkapi dengan LibreYOLO; konversi terlebih dahulu (di bawah).
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
-
         result = model(SAMPLE_IMAGE, save=True)
 
-
         edges = result.edges
-
         print(edges.array.shape)          # (H, W) float32 di [0, 1]
-
         print(edges.binary(0.5).sum())    # jumlah piksel tepi pada 0.5
     - label: Pilih ambang batas Anda sendiri
       language: python
@@ -50,18 +43,13 @@ snippets:
             print(t, int(result.edges.binary(t).sum()))
     - label: Simpan visualisasi
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
-        # plot() menampilkan peta; ini didefinisikan untuk results tepi dan
-        normal.
-
+        # plot() menampilkan peta; ini didefinisikan untuk results tepi dan normal.
         result.plot().save("edges.png")
   val:
     - label: Validasi dan baca kunci metrik
@@ -90,28 +78,22 @@ snippets:
 
         print(metrics["metrics/ODS"], metrics["metrics/best_threshold"])
   export:
-    - label: Export
+    - label: Ekspor
       language: python
       code: |
         from libreyolo import LibreYOLO
 
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
         model.export(format="onnx", imgsz=352)
-    - label: Jalankan file yang diekspor
+    - label: Jalankan berkas yang diekspor
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Pabrik mengarahkan pada akhiran file, sehingga artefak yang diekspor
-        dimuat
-
+        # Pabrik mengarahkan pada akhiran berkas, sehingga artefak yang diekspor dimuat
         # seperti halnya checkpoint dan mengembalikan objek Results yang sama.
-
         model = LibreYOLO("weights/LibreDexiNedb-edge.onnx")
-
         result = model(SAMPLE_IMAGE)
-
 
         print(result.edges.array.shape)
 source_hash: bc286345540ed966
@@ -151,7 +133,7 @@ ikut serta dalam bagian validasi dan ekspor di bawah ini.
 LibreYOLO menerbitkan checkpoint tanpa tepi. DexiNed dan TEED yang dirilis secara resmi
 bobot dilatih pada BIPED, yang istilah dataset yang dipublikasikan membatasi penggunaan untuk
 tujuan non-komersial, jadi LibreYOLO tidak mencerminkan mereka. Konversi checkpoint
-Anda memiliki lisensi untuk menggunakan, kemudian muat file yang dikonversi melalui jalur:
+Anda memiliki lisensi untuk menggunakan, kemudian muat berkas yang dikonversi melalui jalur:
 
 ```bash
 python weights/convert_dexined_weights.py upstream.pth weights/LibreDexiNedb-edge.pt --verify
@@ -162,9 +144,9 @@ python weights/convert_dexined_weights.py upstream.pth weights/LibreDexiNedb-edg
 Nama berkas harus memiliki akhiran `-edge` task agar loader dapat mengenalinya
 itu. `imgsz` harus dapat dibagi oleh langkah downsample jaringan, dan LibreYOLO
 menimbulkan kesalahan yang jelas dengan menyebut pembagi saat itu tidak ada. Lihat
-[prediction](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
+[prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
 
-## format Dataset
+## Format dataset
 
 Validasi tepi memasangkan setiap gambar RGB dengan peta satu saluran berbatang sama dari
 resolusi yang sama, ditambah dengan mask validitas opsional.
@@ -227,7 +209,7 @@ lebih jauh dari itu bukanlah pasangan yang cocok.
 ## Ekspor
 
 Model tepi yang diekspor dimuat kembali melalui `LibreYOLO()` berdasarkan sufiks filenya, jadi a
-File `.onnx` berperilaku seperti checkpoint dan mengembalikan `Results` yang sama.
+Berkas `.onnx` berperilaku seperti checkpoint dan mengembalikan `Results` yang sama.
 
 <code-tabs name="export" />
 
@@ -237,4 +219,5 @@ peta probabilitas. Cakupan per format ada pada [DexiNed](/docs/models/dexined)
 dan [TEED](/docs/models/teed) halaman dan di
 [matriks ekspor penuh](/docs/reference/export-matrix). [Ekspor](/docs/export)
 mencantumkan argumen yang diterima setiap format.
+
 

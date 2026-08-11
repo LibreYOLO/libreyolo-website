@@ -1,6 +1,6 @@
 ---
 title: Gel des couches
-seo_title: Geler des couches pendant l'entraînement dans LibreYOLO
+seo_title: "Geler des couches pendant l'entraînement dans LibreYOLO"
 description: >-
   Gelez une partie d'un modèle pour l'apprentissage par transfert : un nombre
   entier de groupes de gel propres à la famille, une liste explicite d'indices
@@ -49,7 +49,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="my-dataset.yaml", freeze=["backbone", "neck"])
   groups:
-    - label: Lister dans l'ordre les groupes de gel d'une famille
+    - label: "Lister dans l'ordre les groupes de gel d'une famille"
       language: python
       code: |
         from libreyolo import LibreYOLO9

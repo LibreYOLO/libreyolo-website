@@ -58,12 +58,9 @@ snippets:
         model.train(data="coco8.yaml", epochs=10, callbacks=on_epoch)
     - label: Sebuah objek dengan beberapa hook
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
-        from libreyolo.training import TrainEndEvent, TrainEpochEvent,
-        TrainStartEvent
-
+        from libreyolo.training import TrainEndEvent, TrainEpochEvent, TrainStartEvent
 
 
         class RunLog:
@@ -79,7 +76,6 @@ snippets:
 
 
         model = LibreYOLO("LibreYOLO9s.pt")
-
         model.train(data="coco8.yaml", epochs=10, callbacks=RunLog())
   monitor:
     - label: Tonton sebuah run di peramban
@@ -105,8 +101,8 @@ adalah argumen Python.
 
 ## Apa yang dicatat setiap backend
 
-Semua dari mereka menulis nama metrik yang sama, sehingga dasbor terlihat sama di mana pun
-kamu pilih:
+Semua backend menulis nama metrik yang sama, sehingga dasbor terlihat sama di mana pun
+Anda memilihnya:
 
 | Kunci | Nilai |
 |---|---|
@@ -153,10 +149,10 @@ Impor kelas-kelas dari `libreyolo.training`.
 
 Catatan khusus backend yang perlu diketahui sebelum jalankan pertama:
 
-File-event TensorBoard default ke `<save_dir>/tensorboard`. Lihat dengan
+Berkas-event TensorBoard default ke `<save_dir>/tensorboard`. Lihat dengan
 `tensorboard --logdir runs/train`.
 
-MLflow 3.x menghentikan penggunaan local `./mlruns` file store dan akan menimbulkan kesalahan kecuali
+MLflow 3.x menghentikan penggunaan local `./mlruns` berkas store dan akan menimbulkan kesalahan kecuali
 `MLFLOW_ALLOW_FILE_STORE=true`. Untuk pelacakan lokal tanpa server, gunakan URI database
 sebagai gantinya, seperti pada cuplikan di atas, dan baca dengan
 `mlflow ui --backend-store-uri sqlite:///mlflow.db`.
@@ -213,7 +209,7 @@ fungsi daripada sebuah closure atau lambda. Lihat
 
 ## Apa yang ditulis setiap lari bagaimanapun
 
-Tiga file mendarat di direktori run tanpa konfigurasi sama sekali, pada setiap
+Tiga berkas mendarat di direktori run tanpa konfigurasi sama sekali, pada setiap
 family:
 
 | Berkas | Tertulis | Isi |
@@ -223,7 +219,7 @@ family:
 | `train.log` | langsung | output konsol dari run |
 
 `status.json` adalah pembacaan murah untuk skrip atau agen yang memeriksa run, dan
-penulisan atomik berarti pembaca tidak pernah melihat file yang setengah ditulis.
+penulisan atomik berarti pembaca tidak pernah melihat berkas yang setengah ditulis.
 
 `results.csv` dan `summary.json` terpisah dan digerakkan oleh family. Mereka ditulis
 untuk YOLOv9, YOLOv9-E2E, YOLOv9-P2, YOLOv7, YOLO-NAS, RF-DETR, EC dan DINOv2, dan
@@ -239,7 +235,7 @@ titik pemeriksaan di bawah `weights/`.
 
 <code-tabs name="monitor" />
 
-`libreyolo monitor` menyediakan dasbor peramban atas file-file di atas hanya menggunakan
+`libreyolo monitor` menyediakan dasbor peramban atas berkas-berkas di atas hanya menggunakan
 perpustakaan standar: grafik metrik, ekor log, dan semua gambar validasi,
 menyegarkan saat lari aktif. Ini hanya-baca dan tidak pernah menyentuh
 proses pelatihan, sehingga menempel pada jalannya yang sedang berlangsung, membuka kembali yang sudah selesai, atau
@@ -251,4 +247,3 @@ memeriksa yang jatuh.
   dan bagaimana cara menambahkan validasi loss.
 - [Kinerja pelatihan](/docs/train/performance) untuk profiler, yang merupakan
   alat yang berbeda dengan pertanyaan yang berbeda.
-

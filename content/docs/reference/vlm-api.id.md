@@ -167,6 +167,7 @@ harus memilih secara eksplisit dan menyematkan revisi snapshot; LocateAnything a
 yang melakukannya, disematkan ke commit `c32291ca5e996f5a7a485845b4f57a233936bba0`.
 
 LibreMODUS adalah pengecualian eksplisit terhadap skema checkpoint: aliasnya
-merujuk ke direktori file upstream yang disematkan daripada LibreYOLO
+merujuk ke direktori berkas upstream yang disematkan daripada LibreYOLO
 , dan LibreYOLO tidak menambahkan metadata v1.0 ke dalamnya maupun memublikasikannya kembali.
+
 

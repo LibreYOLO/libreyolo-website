@@ -4,7 +4,7 @@ seo_title: Klasifikasi gambar di LibreYOLO
 description: >-
   Memberi label pada seluruh gambar di LibreYOLO: keluarga yang melayani task,
   tata letak ImageFolder dataset, dan panggilan predict, train, validate, dan
-  export.
+  ekspor.
 lead: >-
   Klasifikasi gambar menetapkan satu distribusi label pada seluruh gambar dan
   tidak menempatkan apapun di dalamnya. Kunci task adalah classify.
@@ -20,22 +20,15 @@ snippets:
   predict:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Sufiks -cls pada nama file memilih task, sehingga tidak perlu argumen
-        task.
-
+        # Sufiks -cls pada nama berkas memilih task, sehingga tidak perlu argumen task.
         # argumen diperlukan.
-
         model = LibreYOLO("LibreResNet50-cls.pt")
-
         result = model(SAMPLE_IMAGE, save=True)
 
-
         print(result.names[result.probs.top1], float(result.probs.top1conf))
-
         print(result.probs.top5)
     - label: CLI
       language: bash
@@ -44,56 +37,37 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Seluruh distribusi
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         result = LibreYOLO("LibreResNet50-cls.pt")(SAMPLE_IMAGE)
-
         probs = result.probs
 
-
-        # .data adalah vektor penuh (C,); top5/top5conf adalah tampilan yang
-        diurutkan.
-
+        # .data adalah vektor penuh (C,); top5/top5conf adalah tampilan yang diurutkan.
         print(probs.data.shape)
-
         for index, score in zip(probs.top5, probs.top5conf):
             print(result.names[index], float(score))
     - label: 'Zero-shot, tanpa pelatihan'
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # CLIP menilai gambar terhadap prompt teks, sehingga set label
-        ditentukan
-
+        # CLIP menilai gambar terhadap prompt teks, sehingga set label ditentukan
         # saat pemanggilan, bukan tertanam dalam checkpoint.
-
         model = LibreYOLO("LibreCLIPb32-cls.pt")
-
-        model.set_classes(["a person jumping", "an empty street", "a parked
-        car"])
-
+        model.set_classes(["a person jumping", "an empty street", "a parked car"])
         result = model(SAMPLE_IMAGE)
-
 
         print(model.names[result.probs.top1], float(result.probs.top1conf))
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
-        # imagenette160 adalah nama dataset yang dikenal dan diunduh pada
-        penggunaan pertama.
-
+        # imagenette160 adalah nama dataset yang dikenal dan diunduh pada penggunaan pertama.
         # Lewatkan direktori dengan pembagian train/ untuk data Anda sendiri.
-
         model = LibreYOLO("LibreResNet50-cls.pt")
-
         model.train(data="imagenette160", epochs=5)
     - label: CLI
       language: bash
@@ -133,21 +107,15 @@ snippets:
       language: bash
       code: |
         libreyolo export model=LibreResNet50-cls.pt format=onnx
-    - label: Gunakan file yang diekspor
+    - label: Gunakan berkas yang diekspor
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Pabrik mengarahkan berdasarkan akhiran file, sehingga artifak yang
-        diekspor memuat
-
+        # Pabrik mengarahkan berdasarkan akhiran berkas, sehingga artifak yang diekspor memuat
         # seperti checkpoint dan mengembalikan objek Results yang sama.
-
         model = LibreYOLO("LibreResNet50-cls.onnx")
-
         result = model(SAMPLE_IMAGE)
-
 
         print(result.probs.top1, result.probs.top1conf)
 source_hash: 836bea76cd2cdf92
@@ -160,7 +128,7 @@ koordinat sama sekali. Ini menjawab apa yang ada dalam gambar, bukan di mana, ya
 apa yang memisahkannya dari [object detection](/docs/tasks/object-detection).
 
 `classify` adalah kunci task kanonik, dan sufiks `-cls` dalam checkpoint
-nama file memilihnya. Sufiks itu diperlukan dan bukan opsional pada
+nama berkas memilihnya. Sufiks itu diperlukan dan bukan opsional pada
 keluarga klasifikasi, jadi `LibreResNet50.pt` tidak dibaca sebagai pengklasifikasi dan
 hanya `LibreResNet50-cls.pt` saja.
 
@@ -202,9 +170,9 @@ Bobot diunduh dari Hugging Face saat pertama digunakan dan disimpan di cache sec
 disaring atau ditekan, hanya ada satu distribusi. Lihat
 [prediksi](/docs/predict) untuk sumber, streaming dan penanganan hasil.
 
-## format Dataset
+## Format dataset
 
-Klasifikasi menggunakan pohon direktori, bukan file label dan bukan YAML. `data` adalah
+Klasifikasi menggunakan pohon direktori, bukan berkas label dan bukan YAML. `data` adalah
 akar dataset.
 
 ```text
@@ -238,7 +206,7 @@ Loader kanonik adalah `libreyolo.data.classify_dataset`.
 
 Tidak ada `nc` yang perlu dideklarasikan: jumlah kelas berasal dari nama folder di bawah
 `train/`, dan lapisan linier terakhir dibangun kembali untuk menyesuaikannya sementara backbone
-dipindahkan tanpa perubahan. Lihat [training](/docs/train) untuk dataset, augmentasi,
+dipindahkan tanpa perubahan. Lihat [pelatihan](/docs/train) untuk dataset, augmentasi,
 multi-GPU dan logger.
 
 ## Validasi
@@ -259,10 +227,11 @@ yang dimiliki dataset. Kamus juga memuat `fitness`, salinan dari nilai top-1.
 
 <code-tabs name="export" />
 
-Sebuah artefak yang diekspor dapat dimuat kembali melalui `LibreYOLO()` berdasarkan akhiran file-nya, jadi sebuah
-file `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengembalikan
+Sebuah artefak yang diekspor dapat dimuat kembali melalui `LibreYOLO()` berdasarkan akhiran berkas-nya, jadi sebuah
+berkas `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengembalikan
 `Results` yang sama. Cakupan format berbeda menurut family; matriks di setiap halaman model adalah
 dihasilkan dari set yang tervalidasi daripada diketik secara manual. Lihat
 [ekspor dan deploy](/docs/export) untuk format, tambahan mereka dan
 batasannya.
+
 

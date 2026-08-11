@@ -3,7 +3,7 @@ title: API Ensemble
 seo_title: API LibreEnsemble dan operasi fusi
 description: >-
   LibreEnsemble, ExternalDetector, dan tiga operasi fusi di libreyolo.ops: fusi
-  kotak berbobot, variannya yang di-bibit, dan fusi NMS sadar kelas.
+  kotak berbobot, variannya yang seeded, dan fusi NMS sadar kelas.
 lead: >-
   LibreEnsemble menjalankan beberapa detektor pada gambar yang sama dan
   memfusikan deteksi mereka menjadi satu Results. Fusi terjadi setelah
@@ -52,26 +52,18 @@ snippets:
   ops:
     - label: 'Operasi fusi, tanpa model yang terlibat'
       language: python
-      code: >
+      code: |
         import torch
-
         from libreyolo.ops import weighted_boxes_fusion
 
-
-        boxes = torch.tensor([[10.0, 10.0, 50.0, 50.0], [12.0, 11.0, 51.0,
-        49.0]])
-
+        boxes = torch.tensor([[10.0, 10.0, 50.0, 50.0], [12.0, 11.0, 51.0, 49.0]])
         scores = torch.tensor([0.9, 0.8])
-
         labels = torch.tensor([0, 0])
-
         model_ids = torch.tensor([0, 1])
-
 
         fused = weighted_boxes_fusion(
             boxes, scores, labels, model_ids, num_models=2, iou_thr=0.55
         )
-
         print(fused)
 source_hash: 3834f628efb1193d
 ---
@@ -192,7 +184,7 @@ secara terpisah dari ansambel.
 
 <code-tabs name="ops" />
 
-Ketiganya mengambil argumen posisi yang sama, `boxes, scores, labels,
+Ketiganya mengambil argumen posisi yang sama, `bounding box, skor, label,
 model_ids`, and return `(kotak, skor, label)`.
 
 | Op | Kunci registri | Perilaku |
@@ -246,4 +238,5 @@ dan kotak yang bertahan mempertahankan skor aslinya.
 Namanya dicatat di `ens.fusion`, atau `"custom"` ketika tidak ada. Hasilnya
 divalidasi: itu harus merupakan tripel `(boxes, scores, labels)` dengan
 bentuk yang konsisten.
+
 

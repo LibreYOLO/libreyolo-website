@@ -20,10 +20,10 @@ meta:
     value: LibreYOLO("path/to/upstream.pth")
     mono: true
   - label: Ditulis di samping sumber sebagai
-    value: '<source>-<Prefix><size>[-task].pt'
+    value: '<sumber>-<Prefix><size>[-task].pt'
     mono: true
   - label: Konverter berbasis script
-    value: weights/ dalam repository
+    value: bobot/ dalam repositori
     mono: true
 snippets:
   convert:
@@ -33,7 +33,7 @@ snippets:
         from libreyolo import LibreYOLO
 
 
-        # Ganti dengan path checkpoint yang sudah tersedia. Layout upstream yang
+        # Ganti dengan path checkpoint yang sudah tersedia. Tata letak upstream yang
 
         # dikenali dikonversi saat pemuatan, ditulis di samping sumber,
 
@@ -42,7 +42,7 @@ snippets:
         model = LibreYOLO("path/to/upstream-checkpoint.pth")
 
 
-        # Jumlah dan nama kelas berasal dari tensor serta metadata file sendiri,
+        # Jumlah dan nama kelas berasal dari tensor serta metadata berkas sendiri,
 
         # sehingga hasil fine-tuning mempertahankan kumpulan labelnya, bukan
         COCO.
@@ -58,7 +58,7 @@ snippets:
     - label: Periksa hasil
       language: bash
       code: |
-        # File hasil konversi memenuhi skema yang sama seperti file terbitan.
+        # Berkas hasil konversi memenuhi skema yang sama seperti berkas terbitan.
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
 source_hash: bf9d7c7d168fd2c0
 ---
@@ -66,29 +66,29 @@ source_hash: bf9d7c7d168fd2c0
 Halaman ini membahas checkpoint dari project lain. Jika memindahkan kode sendiri
 dari LibreYOLO lama, lihat [upgrade ke 1.5.0](/docs/upgrade).
 
-## Yang terjadi ketika file asing dimuat
+## Yang terjadi ketika berkas asing dimuat
 
-`LibreYOLO()` terlebih dahulu memuat setiap file bobot melalui jalur restricted
-weights-only. Jika hasil memiliki metadata LibreYOLO lengkap, file langsung
-digunakan. Jika tidak, file dikirim ke konverter otomatis sebelum proses lain.
+`LibreYOLO()` terlebih dahulu memuat setiap berkas bobot melalui jalur restricted
+bobot-only. Jika hasil memiliki metadata LibreYOLO lengkap, berkas langsung
+digunakan. Jika tidak, berkas dikirim ke konverter otomatis sebelum proses lain.
 Jika pemuatan restricted gagal sepenuhnya, yang terjadi ketika checkpoint
-memiliki objek pihak ketiga yang di-pickle, konverter otomatis dicoba dengan
+memiliki objek pihak ketiga yang diserialisasi dengan pickle, konverter otomatis dicoba dengan
 loader yang menetralkan objek tersebut.
 
 Konversi otomatis melakukan empat hal. Proses ini membuka dictionary tensor dari
-layout yang digunakan project upstream. Lalu, setiap family terdaftar ditanya
-apakah mengenali key tersebut, dengan remapping nama ketika penamaan upstream
+tata letak yang digunakan project upstream. Lalu, setiap family terdaftar ditanya
+apakah mengenali kunci tersebut, dengan remapping nama ketika penamaan upstream
 berbeda dari port LibreYOLO. Pemenang dibungkus dalam checkpoint yang memenuhi
 skema metadata v1.0, dengan ukuran, task, dan jumlah kelas dibaca dari tensor.
-Terakhir, hasil ditulis di samping file sumber dan dimuat.
+Terakhir, hasil ditulis di samping berkas sumber dan dimuat.
 
 <code-tabs name="convert" />
 
-Konversi tidak berlangsung diam-diam. File hasil konversi dicatat bersama
+Konversi tidak berlangsung diam-diam. Berkas hasil konversi dicatat bersama
 family, nama sumber, nama output, dan jumlah kelas hasil, sehingga log run
 merekam yang dimuat secara tepat.
 
-## Layout yang dibuka
+## Tata letak yang dibuka
 
 Checkpoint upstream menempatkan bobot di sejumlah lokasi konvensional, dan
 konverter mencobanya berurutan hingga menemukan tensor: block EMA di bawah
@@ -103,7 +103,7 @@ beberapa redistribusi.
 
 ## Yang dibaca dan sumbernya
 
-Ukuran, task, dan jumlah kelas berasal dari tensor, bukan nama file. Karena itu,
+Ukuran, task, dan jumlah kelas berasal dari tensor, bukan nama berkas. Karena itu,
 checkpoint hasil fine-tuning dikonversi dengan jumlah kelas sendiri, bukan
 default arsitektur. Nama kelas diambil dari metadata checkpoint jika ada, dari
 block `args` atau `hyper_parameters` jika berada di sana, lalu dipangkas hingga
@@ -114,7 +114,7 @@ Task padat ditangani secara eksplisit, bukan diberi label buatan. Checkpoint dep
 mendapat satu kelas bernama `depth`, checkpoint restore satu kelas bernama
 `image`. Checkpoint pose harus menghasilkan jumlah keypoint, baik dari tensor
 maupun family; jika keduanya tidak menghasilkan nilai, konversi ditolak
-alih-alih menulis file tidak lengkap.
+alih-alih menulis berkas tidak lengkap.
 
 RF-DETR memiliki recognizer sendiri karena deteksi ukuran memerlukan seluruh
 checkpoint dan head-nya memiliki 91 output ketika LibreYOLO menggunakan
@@ -124,7 +124,7 @@ dataset, atau sama sekali tidak memiliki metadata kelas maupun dataset. Model
 90 kelas asli yang diidentifikasi berdasarkan nama, jumlah eksplisit selain 80,
 atau petunjuk dataset non-COCO dipertahankan sebagaimana adanya.
 
-## Lokasi file hasil konversi
+## Lokasi berkas hasil konversi
 
 Output ditulis di samping sumber dengan nama berdasarkan sumber:
 
@@ -135,12 +135,12 @@ Output ditulis di samping sumber dengan nama berdasarkan sumber:
 Detektor YOLOv9 tiny yang disimpan sebagai `upstream-checkpoint.pth` menjadi
 `upstream-checkpoint-LibreYOLO9t.pt`. Penamaan berdasarkan sumber berarti dua
 hasil fine-tuning dari family dan ukuran sama dalam satu direktori tidak saling
-menimpa dan tidak bertabrakan dengan checkpoint resmi. File ditulis ulang pada
+menimpa dan tidak bertabrakan dengan checkpoint resmi. Berkas ditulis ulang pada
 setiap pemuatan agar tidak pernah tertinggal dari sumber. Jika direktori
-read-only, file hasil konversi masuk ke direktori sementara privat baru dan log
+read-only, berkas hasil konversi masuk ke direktori sementara privat baru dan log
 menyatakan lokasinya.
 
-Setelah itu, file menjadi checkpoint LibreYOLO biasa: dimuat melalui jalur
+Setelah itu, berkas menjadi checkpoint LibreYOLO biasa: dimuat melalui jalur
 metadata, dan `libreyolo metadata` melaporkannya valid.
 
 ## Kasus yang memerlukan penanganan manual
@@ -154,27 +154,27 @@ Checkpoint PIDNet upstream mentah ditolak, dengan error yang menunjuk ke
 `weights/convert_pidnet_weights.py`. Script tersebut menulis metadata semantic
 Cityscapes yang diperlukan checkpoint.
 
-D-FINE dan DEIM berbagi key arsitektur yang sama, sehingga tensor saja tidak
-dapat membedakannya. Ketika keduanya mengklaim file dan tidak ada sibling family
-dengan marker pembeda, nama file menentukan: nama berbentuk
+D-FINE dan DEIM berbagi kunci arsitektur yang sama, sehingga tensor saja tidak
+dapat membedakannya. Ketika keduanya mengklaim berkas dan tidak ada sibling family
+dengan marker pembeda, nama berkas menentukan: nama berbentuk
 `dfine_hgnetv2_n_coco.pth` atau `deim_hgnetv2_n_coco.pth` menyelesaikannya,
 sedangkan nama tanpa petunjuk ditolak dengan penjelasan, bukan ditebak. Membuat
 `LibreDFINE` atau `LibreDEIM` secara langsung juga menyelesaikannya.
 
-Jika beberapa family secara sah mengklaim satu file, subclass mengalahkan base
-class yang disempurnakannya, dan urutan registry menentukan sisanya karena
-urutan tersebut mengenkode spesifisitas pemeriksaan setiap family. Nama file
-hanya diperiksa untuk tie D-FINE dan DEIM, sehingga nama file tidak pernah dapat
+Jika beberapa family secara sah mengklaim satu berkas, subclass mengalahkan base
+kelas yang disempurnakannya, dan urutan registry menentukan sisanya karena
+urutan tersebut mengenkode spesifisitas pemeriksaan setiap family. Nama berkas
+hanya diperiksa untuk tie D-FINE dan DEIM, sehingga nama berkas tidak pernah dapat
 mempromosikan kecocokan luas di atas kecocokan tepat.
 
 ## Konverter berbasis script
 
-Repository memiliki script konversi per family di bawah `weights/`, ditambah
-helper bersama untuk plumbing berulang. Script menjadi jalur bagi file yang
+Repositori memiliki script konversi per family di bawah `weights/`, ditambah
+helper bersama untuk plumbing berulang. Script menjadi jalur bagi berkas yang
 ditolak runtime, untuk menghasilkan checkpoint sebelum waktu pemuatan, serta
 bagi family yang metadata-nya harus diberikan, bukan disimpulkan dari tensor.
 
-Script tersebut merupakan bagian repository, bukan package terinstal, sehingga
+Script tersebut merupakan bagian repositori, bukan paket terinstal, sehingga
 penggunaannya memerlukan clone:
 
 ```bash
@@ -186,3 +186,4 @@ python weights/convert_pidnet_weights.py --help
 Setiap script menulis checkpoint yang memenuhi skema v1.0, yaitu standar sama
 yang dipenuhi konversi otomatis dan bobot terbitan. Lihat
 [checkpoint dan bobot](/docs/weights) untuk isi skema tersebut.
+

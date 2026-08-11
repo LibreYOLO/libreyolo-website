@@ -2,7 +2,7 @@
 title: API Python
 seo_title: Referensi API Python LibreYOLO
 description: >-
-  Nama yang diekspor LibreYOLO pada level package: lima factory, kelas family,
+  Nama yang diekspor LibreYOLO pada level paket: lima factory, kelas family,
   payload Results, backend, validator, tracker, dan helper data.
 lead: >-
   Antarmuka Python publik LibreYOLO adalah list __all__ dalam
@@ -88,16 +88,16 @@ arsitektur.
 
 | Factory | Memuat | Prompt saat pemanggilan | Ekstra yang diperlukan |
 |---|---|---|---|
-| `LibreYOLO` | Family tanpa prompt, dengan sniffing checkpoint atau suffix file | | |
-| `LibreSAM` | Segmenter yang dapat menerima prompt, berdasarkan alias ukuran | Titik, box, atau teks konsep | `sam` |
+| `LibreYOLO` | Family tanpa prompt, dengan sniffing checkpoint atau suffix berkas | | |
+| `LibreSAM` | Segmenter yang dapat menerima prompt, berdasarkan alias ukuran | Titik, bounding box, atau teks konsep | `sam` |
 | `LibreVLM` | Detektor vision-language generatif, berdasarkan alias | Vocabulary kelas atau prompt bebas | `vlm` |
 | `LibreOpenVocab` | Detektor yang dikondisikan oleh teks, berdasarkan alias | Vocabulary kelas | `openvocab` |
 | `LibreEnsemble` | Dua detektor atau lebih yang digabungkan menjadi satu antarmuka | | |
 
 <code-tabs name="factories" />
 
-`LibreYOLO` adalah satu-satunya yang membaca file. Tiga factory lain menerima
-alias string dan me-resolve-nya ke repository Hugging Face, sehingga argumennya
+`LibreYOLO` adalah satu-satunya yang membaca berkas. Tiga factory lain menerima
+alias string dan me-resolve-nya ke repositori Hugging Face, sehingga argumennya
 berupa nama model, bukan path.
 
 ```python
@@ -112,7 +112,7 @@ LibreYOLO(
 )
 ```
 
-`model_path` menerima checkpoint `.pt`, file ONNX `.onnx`, ExecuTorch `.pte`,
+`model_path` menerima checkpoint `.pt`, berkas ONNX `.onnx`, ExecuTorch `.pte`,
 MNN `.mnn`, TensorRT `.engine`, direktori OpenVINO, Paddle, atau ncnn, maupun
 URL model HTTP atau HTTPS Triton. `size` dan `nb_classes` dibaca dari checkpoint
 ketika tidak diberikan. `compute_units` hanya dibaca untuk pemuatan `.mlpackage`
@@ -143,7 +143,7 @@ Family deteksi dan multi-task: `LibreYOLO9`, `LibreYOLO9E2E`,
 `LibreRetinaNet`, `LibreSSD`, `LibreCenterNet`, `LibreEfficientDet`,
 `LibreEC`, `LibrePICODET`, `LibreRTMDet`, `LibreFOMO`.
 
-Family dense prediction: `LibreMiDaS`, `LibreDepthAnythingV2`,
+Family dense prediksi: `LibreMiDaS`, `LibreDepthAnythingV2`,
 `LibreDepthAnything3`, `LibreZipDepth`, `LibreMoGe2`, `LibreTEED`,
 `LibreDexiNed`, `LibreNAFNet`, `LibreRealESRGAN`, `LibreSwinIR`,
 `LibreBiRefNet`, `LibreFeyNobg`, `LibreFCN`, `LibreEoMT`, `LibreDeepLabv3`,
@@ -156,7 +156,7 @@ Family classification dan embedding: `LibreViT`, `LibreMobileNetV4`,
 Task lain: `LibreHRNet` (pose), `LibreL2CS` (gaze), `LibrePPOCR` (ocr),
 `LibreFaceEmbedder` (embed).
 
-Sibling tier juga mengekspor kelas family-nya: `LibreSAM1`, `LibreSAM2`,
+Tingkat saudara juga mengekspor kelas family-nya: `LibreSAM1`, `LibreSAM2`,
 `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`;
 `LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo`; `LibreLFM2VL`,
 `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`,
@@ -200,9 +200,9 @@ mengembalikan list `Results`, sedangkan `stream=True` mengembalikan generator.
 Metode lain pada objek model didokumentasikan di
 [halaman API model](/docs/reference/model-api).
 
-## Payload Results
+## Muatan Results
 
-`Results` dan delapan belas kelas payload-nya diekspor pada level package:
+`Results` dan delapan belas kelas payload-nya diekspor pada level paket:
 `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`,
 `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`,
 `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`.
@@ -210,7 +210,7 @@ Setiap kelas dijelaskan dalam [Jenis Results](/docs/reference/results-types).
 
 ## Backend
 
-Artefak hasil ekspor dimuat melalui `LibreYOLO()` berdasarkan suffix file,
+Artefak hasil ekspor dimuat melalui `LibreYOLO()` berdasarkan suffix berkas,
 sehingga kelas backend jarang dibuat secara manual. Kelas tersebut diekspor
 untuk kasus ketika backend harus dipilih secara eksplisit: `OnnxBackend`,
 `OpenVINOBackend`, `PaddleBackend`, `TensorRTBackend`, `TritonBackend`,
@@ -237,7 +237,7 @@ konfigurasinya juga diekspor: `ByteTracker` dengan `TrackConfig`,
 `DATASETS_DIR` adalah root dataset hasil resolve, `load_data_config` membaca YAML
 dataset, dan `check_dataset` memvalidasinya. Loader khusus task yang disebutkan
 dalam [Format dataset](/docs/reference/dataset-formats) berada di
-`libreyolo.data`, bukan pada level package.
+`libreyolo.data`, bukan pada level paket.
 
 ## Gallery dan distillation
 
@@ -247,17 +247,20 @@ dalam [Format dataset](/docs/reference/dataset-formats) berada di
 
 ## Aset
 
-`SAMPLE_IMAGE` adalah path absolut ke gambar yang disertakan dalam package,
+`SAMPLE_IMAGE` adalah path absolut ke gambar yang disertakan dalam paket,
 sehingga setiap snippet dalam dokumentasi ini berjalan tanpa mengunduh gambar
 terlebih dahulu.
 
 ## Lazy import dan kelas yang diganti namanya
 
-Sebagian besar nama sibling tier, backend, validator, dan helper data di-resolve
+Sebagian besar nama sibling tier, backend, validator, dan helper data diselesaikan
 melalui `__getattr__` pada level modul, sehingga mengimpor `libreyolo` tidak
 mengimpor dependency-nya. Import tetap gagal dengan pesan jelas ketika ekstra
 yang diperlukan tidak ada.
 
-Dua nama kelas telah diubah dan ejaan lama masih di-resolve, disertai
+Dua nama kelas telah diubah dan ejaan lama masih diselesaikan, disertai
 `DeprecationWarning`: `LibreYOLORTDETR` kini menjadi `LibreRTDETR`, dan
 `LibreYOLORFDETR` kini menjadi `LibreRFDETR`.
+
+
+

@@ -2,21 +2,21 @@
 title: Entraînement multi-GPU
 seo_title: Entraînement multi-GPU dans LibreYOLO
 description: >-
-  Entraîner sur plusieurs GPU avec device="0,1". Comprendre la création des
-  workers DDP, pourquoi batch désigne le lot global, quand définir sync_bn et
-  comment utiliser torchrun.
+  Entraînez sur plusieurs GPU avec device="0,1". Le lancement des workers DDP
+  par la bibliothèque, la raison pour laquelle batch est global, l'usage de
+  sync_bn et le chemin torchrun.
 lead: >-
-  L'entraînement multi-GPU de LibreYOLO emploie DistributedDataParallel de
-  PyTorch : un processus par GPU, chacun contenant une réplique complète du
-  modèle et une partition de chaque lot, avec des gradients moyennés entre les
-  rangs à chaque étape.
+  L'entraînement multi-GPU dans LibreYOLO utilise PyTorch
+  DistributedDataParallel : un processus par GPU, chacun contenant une réplique
+  complète du modèle et un fragment de chaque batch, avec les gradients moyennés
+  entre les rangs à chaque étape.
 keywords:
   - entraînement pytorch ddp
   - entraînement multi gpu
   - torchrun nproc_per_node
   - distributed data parallel
   - syncbatchnorm
-  - taille lot globale
+  - taille batch globale
   - backend nccl gloo
   - multi gpu windows
 last_verified: 1.5.0
@@ -27,14 +27,14 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        # La garde __main__ est obligatoire : chaque worker créé réimporte ce
-        # module. Sans la garde, il relancerait récursivement l'entraînement.
+        # La protection __main__ est requise : chaque worker lancé réimporte ce
+        # module et, sans elle, relancerait récursivement l'entraînement.
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(
                 data="my-dataset.yaml",
                 epochs=100,
-                batch=32,     # lot global : 16 images par GPU avec deux GPU
+                batch=32,     # batch global : 16 images par GPU sur deux GPU
                 device="0,1",
             )
   torchrun:
@@ -72,37 +72,35 @@ snippets:
 
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
-            # Sondé une fois sur le GPU 0, puis ajusté à un multiple du nombre de processus.
+            # Sondé une fois sur le GPU 0, puis ajusté à un multiple du world size.
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
 source_hash: 83c1563d68068cd0
 ---
 
 ## Exécuter sur deux GPU
 
-Transmettez une liste de périphériques. Rien d'autre ne change.
+Passez une liste d'appareils. Rien d'autre ne change.
 
 <code-tabs name="train" />
 
-Lorsque plusieurs périphériques sont fournis sans environnement torchrun, la
+Lorsque plusieurs appareils sont fournis hors d'un environnement torchrun, la
 méthode `train()` du modèle enregistre les poids dans un fichier temporaire,
-résout le lot automatique s'il est demandé, puis crée un worker par GPU avec
+résout l'autobatch s'il est demandé, puis lance un processus worker par GPU avec
 `torch.multiprocessing.spawn`. Chaque worker réimporte la classe du modèle, le
-reconstruit depuis les poids enregistrés et exécute le parcours ordinaire à un
-périphérique, car les variables d'environnement torchrun sont définies depuis
-un worker créé. Le meilleur checkpoint du rang 0 est rechargé dans l'instance
-du modèle de l'appelant à la fin de l'exécution.
+reconstruit depuis les poids enregistrés et exécute le chemin ordinaire à un
+seul appareil, car les variables d'environnement torchrun sont définies depuis
+un worker lancé. À la fin de l'exécution, le meilleur checkpoint du rang 0 est
+rechargé dans l'instance du modèle de l'appelant.
 
 `device` accepte `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"` et
-`"auto"`. Seule une liste de plusieurs indices CUDA déclenche la création de
-processus.
+`"auto"`. Seule une liste de plusieurs indices CUDA déclenche le spawn.
 
-## Garde `__main__` obligatoire
+## La protection `__main__` est obligatoire
 
-Les workers créés réimportent le module dont ils proviennent. Sans garde
+Les workers lancés réimportent le module dont ils proviennent. Sans protection
 `if __name__ == "__main__":`, cette importation réexécute l'appel
-d'entraînement et chaque worker crée ses propres workers. La bibliothèque
-détecte ce cas et déclenche une erreur au lieu de laisser la récursion se
-produire :
+d'entraînement et chaque worker lance ses propres workers. La bibliothèque
+détecte ce cas et provoque une erreur au lieu de le laisser récursif :
 
 ```text
 spawn_ddp_train() was called from inside a spawned subprocess. This usually
@@ -111,19 +109,19 @@ means your script calls model.train(device=...) at the top level without a
 ```
 
 Tout ce qui entre dans un worker est sérialisé par pickle. `callbacks=` doit
-donc être sérialisable. Une classe au niveau du module fonctionne, contrairement
-à une fermeture ou une lambda. Le message d'erreur le précise et renvoie vers
-les systèmes de journalisation intégrés.
+donc être sérialisable. Une classe au niveau du module fonctionne ; une closure
+ou une lambda ne fonctionne pas, et l'erreur l'indique tout en désignant les
+loggers intégrés comme solution de remplacement.
 
-## `batch` désigne le lot global
+## batch est le batch global
 
-`batch` est le nombre d'images par étape d'optimisation sur l'ensemble des GPU.
-Le chargeur de données de chaque rang est construit avec
-`batch // world_size` et un `DistributedSampler`. `batch=32` sur deux GPU
-signifie donc 16 images par GPU, pas 32.
+`batch` est le nombre d'images par étape d'optimiseur sur tous les GPU. Le
+dataloader de chaque rang est construit avec `batch // world_size` et un
+`DistributedSampler`. `batch=32` sur deux GPU signifie donc 16 images par GPU,
+pas 32.
 
-Un lot qui n'est pas divisible par le nombre de processus déclenche une erreur
-au lieu d'entraîner silencieusement avec une autre taille :
+Un batch qui n'est pas divisible par le world size provoque une erreur au lieu
+d'entraîner silencieusement avec une autre taille :
 
 ```text
 batch=6 is the global batch and must be divisible by world_size=4: each rank
@@ -131,98 +129,98 @@ trains at batch // world_size, so this value would silently train at a
 different global batch than requested. Use batch=4 or batch=8.
 ```
 
-DDP moyenne lui-même les gradients. La perte est donc transmise sans changement
-d'échelle. La multiplier en plus par le nombre de processus augmenterait le
-taux d'apprentissage effectif d'environ le nombre de GPU.
+Les gradients sont moyennés par DDP lui-même, si bien que la loss est transmise
+sans mise à l'échelle. La multiplier en plus par le world size augmenterait le
+learning rate effectif d'environ un facteur égal au nombre de GPU.
 
-## Lot automatique sous DDP
+## Autobatch sous DDP
 
-`batch=-1` fonctionne et renvoie un lot global divisible par le nombre de
-processus.
+`batch=-1` fonctionne et renvoie un batch global divisible par le world size.
 
 <code-tabs name="autobatch" />
 
-Dans le parcours de création automatique, la sonde s'exécute dans le processus
-parent sur le premier périphérique avant la création des workers. Chacun reçoit
-donc un entier concret, sans coordination interprocessus. Sous torchrun, le
-rang 0 effectue la sonde et diffuse le résultat comme un unique tenseur long.
+Sur le chemin spawn, la sonde s'exécute dans le processus parent sur le premier
+appareil avant la création de tout worker. Chaque worker reçoit donc un entier
+concret, sans nécessiter de coordination interprocessus. Sous torchrun, le rang
+0 effectue la sonde et diffuse le résultat sous forme d'un unique tenseur long.
 
-La sonde mesure la capacité d'un GPU et la multiplie par le nombre de processus.
-Lorsque `nbs` est défini, le lot global est limité à `nbs` et arrondi au
-multiple inférieur du nombre de processus. Ajouter des GPU réduit ainsi le
-nombre d'étapes d'accumulation au lieu de diminuer le lot par GPU. Le
-fonctionnement de la sonde figure dans les
+La sonde mesure la capacité d'un GPU et la multiplie par le world size. Lorsque
+`nbs` est défini, le batch global est plafonné à `nbs` et arrondi vers le bas à
+un multiple du world size. L'ajout de GPU réduit ainsi le nombre d'étapes
+d'accumulation au lieu de réduire le batch par GPU. Le fonctionnement de la
+sonde elle-même figure dans les
 [hyperparamètres](/docs/train/hyperparameters).
 
 ## SyncBatchNorm
 
 Sous DDP, les couches BatchNorm de chaque rang ne voient que leur propre
-partition. Si `batch // world_size` est faible, les statistiques cumulées
-peuvent dégrader le modèle convergé par rapport à une exécution sur un GPU.
+fragment. Avec `batch // world_size`, ce fragment peut devenir assez petit pour
+que les statistiques courantes dégradent le modèle convergé par rapport à une
+exécution sur un seul GPU.
 
-`sync_bn=True` convertit chaque BatchNorm en SyncBatchNorm afin de calculer les
-statistiques sur le lot global. La conversion n'a lieu que lorsque le mode
-distribué est actif. L'option ne modifie donc pas une exécution à un GPU.
+`sync_bn=True` convertit chaque BatchNorm en SyncBatchNorm afin que les
+statistiques soient calculées sur le batch global. La conversion ne se produit
+que lorsque le mode distribué est actif. Une exécution sur un seul GPU n'est
+donc jamais affectée par le flag.
 
-Elle est déjà activée par défaut pour les familles convolutives riches en
-BatchNorm : YOLOX, YOLOv7, YOLOv9 et ses variantes, YOLO-NAS, PicoDet, RTMDet et
-FOMO. Toutes les autres familles la désactivent par défaut. Lorsque le modèle
-contient BatchNorm, que `sync_bn` est désactivé et que le lot par rang est
-inférieur à 16, le programme d'entraînement affiche un avertissement.
+Cette option est déjà activée par défaut pour les familles convolutionnelles
+riches en BatchNorm : YOLOX, YOLOv7, YOLOv9 et ses variantes, YOLO-NAS, PicoDet,
+RTMDet et FOMO. Toutes les autres familles la désactivent par défaut. Lorsqu'un
+modèle contient une BatchNorm, que `sync_bn` est désactivé et que le batch par
+rang est inférieur à 16, le trainer émet un avertissement.
 
 <code-tabs name="syncbn" />
 
-`sync_bn` ne possède aucune option CLI. Il s'agit d'un argument Python.
+Il n'existe aucun flag CLI pour `sync_bn`. C'est un argument Python.
 
 ## Lancer avec torchrun
 
-torchrun fonctionne également et convient lorsqu'un ordonnanceur de cluster
-gère déjà le lancement des processus. Écrivez le script pour un seul
-périphérique et laissez torchrun définir l'environnement des rangs.
+torchrun fonctionne aussi et constitue le bon choix lorsqu'un ordonnanceur de
+cluster contrôle déjà le lancement des processus. Écrivez le script pour un
+seul appareil et laissez torchrun définir l'environnement des rangs.
 
 <code-tabs name="torchrun" />
 
-Ne combinez pas les deux parcours. En présence de l'environnement torchrun,
-`device="0,1"` ne crée aucun processus. Le programme d'entraînement utilise
-`cuda:LOCAL_RANK` et torchrun contrôle le nombre de processus.
+Ne combinez pas les deux méthodes. En présence de l'environnement torchrun,
+`device="0,1"` ne déclenche aucun spawn ; le trainer utilise `cuda:LOCAL_RANK`
+et torchrun contrôle le nombre de processus.
 
 ## Comportement des rangs
 
-Le rang 0 gère tous les effets de bord. Il résout le répertoire d'exécution et
-diffuse son nom afin que tous les rangs soient d'accord, écrit les checkpoints
-et les artefacts, puis déclenche les callbacks et les systèmes de
-journalisation de l'utilisateur. Les autres rangs s'entraînent et contribuent
-aux gradients.
+Le rang 0 contrôle chaque effet de bord. Il résout le répertoire d'exécution et
+diffuse le nom résolu afin que tous les rangs concordent, écrit les checkpoints
+et les artefacts, puis déclenche les callbacks et les loggers de l'utilisateur.
+Les autres rangs s'entraînent et contribuent aux gradients.
 
-Chaque rang initialise son chargeur de données et son générateur aléatoire
-d'augmentations différemment à partir de la valeur `seed` configurée. Les rangs
-ne tirent donc pas des augmentations identiques.
+Chaque rang initialise son dataloader et le générateur aléatoire d'augmentation
+différemment à partir de la valeur `seed` configurée, afin que les rangs ne
+tirent pas des augmentations identiques.
 
 ## Plateforme et backend
 
-Le backend est choisi automatiquement : NCCL lorsque CUDA et NCCL sont tous
-deux disponibles, Gloo dans les autres cas. NCCL n'est pas compilé sous
-Windows. Les exécutions Windows emploient donc Gloo sans configuration. Le
-groupe de processus est initialisé avec un délai d'expiration de trois heures.
+Le backend est choisi automatiquement : NCCL lorsque CUDA et NCCL sont tous les
+deux disponibles, Gloo sinon. NCCL n'est pas compilé sur Windows, les exécutions
+Windows utilisent donc Gloo sans configuration. Le groupe de processus est
+initialisé avec un délai maximal de trois heures.
 
-## Fonctions indisponibles sous DDP
+## Éléments non exécutés sous DDP
 
-- Capture de graphe CUDA. `cuda_graph=True` journalise une ligne et poursuit en
-  mode eager. Consultez les
+- La capture de graphe CUDA. `cuda_graph=True` journalise une ligne et utilise
+  le mode eager. Consultez les
   [performances d'entraînement](/docs/train/performance).
-- Profileur d'entraînement. `profile=True` est ignoré avec un avertissement.
+- Le profileur d'entraînement. `profile=True` est ignoré avec un avertissement.
 
-Toutes les familles ne prennent pas en charge la création automatique de
-processus. Vingt-quatre la prennent en charge, couvrant les familles de
-détection, de classification, de segmentation sémantique et de restauration
-entraînables. Une famille incompatible à laquelle plusieurs GPU sont transmis
-déclenche une erreur qui nomme l'API du modèle et la commande torchrun au lieu
-de s'entraîner silencieusement sur un GPU.
+Toutes les familles ne prennent pas le spawn automatique en charge. Vingt-quatre
+le font, couvrant les familles de détection, de classification, de segmentation
+sémantique et de restauration qui s'entraînent. Lorsqu'une famille ne le prend
+pas en charge et reçoit un appareil multi-GPU, elle provoque une erreur qui
+nomme l'API du modèle et la commande torchrun au lieu d'entraîner silencieusement
+sur un seul GPU.
 
-## Voir aussi
+## Pages connexes
 
 - [Hyperparamètres](/docs/train/hyperparameters) pour `batch`, `nbs` et la
   reprise.
-- [Systèmes de journalisation des expériences](/docs/train/loggers) pour la
-  contrainte de sérialisation des callbacks.
-- [GPU dans le cloud](/docs/train/cloud-gpus) pour louer une machine multi-GPU.
+- [Loggers d'expériences](/docs/train/loggers) pour la contrainte de
+  sérialisabilité des callbacks.
+- [GPU cloud](/docs/train/cloud-gpus) pour louer une machine multi-GPU.

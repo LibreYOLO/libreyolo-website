@@ -5,7 +5,7 @@ description: >-
   Instal LibreYOLO dari PyPI, pilih ekstra opsional yang diperlukan family model
   atau target ekspor, dan pastikan PyTorch melihat GPU.
 lead: >-
-  LibreYOLO diterbitkan di PyPI sebagai libreyolo. Package dasar mencakup
+  LibreYOLO diterbitkan di PyPI sebagai libreyolo. Paket dasar mencakup
   prediksi, pelatihan, validasi, dan family model yang hanya memerlukan PyTorch;
   ekstra opsional menambahkan sisanya.
 keywords:
@@ -17,7 +17,7 @@ keywords:
   - dependency libreyolo
 last_verified: 1.5.0
 meta:
-  - label: Package
+  - label: Paket
     value: libreyolo
     mono: true
   - label: Python
@@ -43,7 +43,7 @@ snippets:
       language: bash
       code: |
         pip install "libreyolo[all]"
-    - label: Dari source
+    - label: Dari sumber
       language: bash
       code: |
         git clone https://github.com/LibreYOLO/libreyolo.git
@@ -54,7 +54,7 @@ snippets:
       language: bash
       code: |
         # Python, Torch, CUDA, cuDNN, setiap GPU yang terlihat, dan
-        # package opsional yang terinstal.
+        # paket opsional yang terinstal.
         libreyolo checks
     - label: Python
       language: python
@@ -79,7 +79,7 @@ source_hash: 34fc6d3e24d03fb4
 Python 3.10 atau lebih baru diperlukan. Instalasi dasar menarik PyTorch,
 torchvision, NumPy, Pillow, OpenCV, PyYAML, requests, mss, tqdm, pycocotools,
 typer, click, safetensors, dan SciPy, sehingga YOLOv9 serta family lain yang
-tidak memerlukan package tambahan langsung berfungsi setelah
+tidak memerlukan paket tambahan langsung berfungsi setelah
 `pip install libreyolo`.
 
 Clone mengambil branch `release`, yaitu branch stabil dengan kode yang cocok
@@ -104,7 +104,7 @@ baik ekstra tersedia maupun tidak.
 | `openvocab` | `transformers`, `timm`, `regex`, `ftfy` |
 | `sensenova` | `transformers`, `accelerate`, dan `bitsandbytes` kecuali macOS |
 | `modus` | `transformers`, `accelerate` |
-| `clip` | `regex` dan `ftfy`, diperlukan tokenizer teks CLIP yang di-vendor |
+| `clip` | `regex` dan `ftfy`, diperlukan tokenizer teks CLIP yang disertakan |
 | `siglip2` | `sentencepiece`, diperlukan tokenizer SigLIP 2 multibahasa |
 | `gaze` | `gdown`, yang mengaktifkan pengunduhan otomatis checkpoint L2CS |
 | `rtdetr` | Tidak ada. RT-DETR tidak memerlukan dependency ekstra; namanya dipertahankan stabil |
@@ -141,7 +141,7 @@ baik ekstra tersedia maupun tidak.
 | `dvclive`, alias `dvc` | `dvclive` |
 
 `fast-eval` bersifat opt-in, bukan dependency wajib, agar platform tanpa wheel
-prebuilt tidak merusak instalasi biasa. Jika package tidak tersedia, evaluasi
+prebuilt tidak merusak instalasi biasa. Jika paket tidak tersedia, evaluasi
 COCO kembali ke pycocotools dan run berlanjut.
 
 ### Alat
@@ -204,7 +204,7 @@ terakhir dikembangkan menjadi `cuda:<n>`.
 Mulailah dengan `libreyolo checks`, yang mencetak versi Torch, versi CUDA dan
 cuDNN yang menjadi dasar build Torch, serta setiap GPU terlihat beserta
 memorinya. Jika perintah melaporkan tidak ada CUDA pada mesin dengan kartu
-NVIDIA, wheel PyTorch yang di-resolve pip adalah build CPU. Instal build CUDA
+NVIDIA, wheel PyTorch yang diselesaikan pip adalah build CPU. Instal build CUDA
 dari indeks PyTorch terlebih dahulu, lalu instal LibreYOLO:
 
 ```bash
@@ -212,7 +212,7 @@ pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
 pip install libreyolo
 ```
 
-Itulah indeks yang sama dengan yang di-pin repository untuk environment kelolaan
+Itulah indeks yang sama dengan yang dikunci versinya repositori untuk environment kelolaan
 uv pada Linux dan Windows. Driver NVIDIA 555 atau lebih baru diperlukan, sesuai
 persyaratan runtime CUDA 12.8. macOS tetap menggunakan wheel PyPI karena host
 unduhan PyTorch tidak menerbitkan build Darwin.
@@ -225,3 +225,5 @@ unduhan PyTorch tidak menerbitkan build Darwin.
 family dengan dependency yang hilang dicetak bersama perintah pip persis yang
 mengaktifkannya. Kedua perintah juga menerima `--json`, yang mencetak data sama
 sebagai objek machine-readable ke stdout.
+
+

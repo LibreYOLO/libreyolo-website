@@ -2,12 +2,12 @@
 title: Konsep inti
 seo_title: Konsep inti LibreYOLO
 description: >-
-  Hubungan antara task, family model, ukuran, dan nama file checkpoint di
+  Hubungan antara task, family model, ukuran, dan nama berkas checkpoint di
   LibreYOLO, serta jaminan setiap tier dukungan.
 lead: >-
   Empat gagasan menjelaskan setiap model di LibreYOLO: task yang dikerjakan,
   family asalnya, ukuran dalam family tersebut, dan tier dukungan family itu.
-  Nama file checkpoint mengenkode tiga hal pertama.
+  Nama berkas checkpoint mengenkode tiga hal pertama.
 keywords:
   - konsep libreyolo
   - task libreyolo
@@ -16,13 +16,13 @@ keywords:
   - tier dukungan libreyolo
 last_verified: 1.5.0
 meta:
-  - label: Skema nama file
+  - label: Skema nama berkas
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Task kanonis
     value: 17
   - label: Tier dukungan
-    value: 'Flagship, Core, Supported, Inference only, Museum, Sibling tier'
+    value: 'Unggulan, Inti, Didukung, Hanya inferensi, Museum, Tingkat saudara'
 snippets:
   inspect:
     - label: Cantumkan family
@@ -46,7 +46,7 @@ snippets:
         from libreyolo import LibreYOLO
 
 
-        # Alias dinormalisasi pada batas API: "keypoints" di-resolve menjadi
+        # Alias dinormalisasi pada batas API: "keypoints" diselesaikan menjadi
 
         # "pose", "det" menjadi "detect", "semantic-segmentation" menjadi
         "semantic".
@@ -60,21 +60,21 @@ source_hash: 23d045463a6a8411
 ## Task
 
 Task adalah yang dikembalikan model. LibreYOLO memiliki tujuh belas nama task
-kanonis, dan setiap nama menunjuk field pada objek `Results` yang membawa
+kanonis, dan setiap nama menunjuk kolom pada objek `Results` yang membawa
 output-nya.
 
 | Task | Mengembalikan |
 |---|---|
-| `detect` | Box sejajar sumbu dengan kelas dan confidence |
+| `detect` | Bounding box sejajar sumbu dengan kelas dan confidence |
 | `segment` | Mask per instance, satu mask per objek terdeteksi |
 | `semantic` | Satu label kelas per piksel, tanpa pemisahan instance |
 | `panoptic` | Satu label tidak tumpang tindih per piksel, menggabungkan thing yang dapat dihitung dengan stuff amorf |
-| `pose` | Keypoint per instance, dengan baris yang selaras dengan box |
+| `pose` | Keypoint per instance, dengan baris yang selaras dengan bounding box |
 | `classify` | Probabilitas atas kumpulan label untuk seluruh gambar |
-| `obb` | Oriented box dengan sudut rotasi |
-| `point` | Satu koordinat gambar per deteksi, bukan box |
+| `obb` | Oriented bounding box dengan sudut rotasi |
+| `point` | Satu koordinat gambar per deteksi, bukan bounding box |
 | `depth` | Map inverse-depth relatif padat |
-| `normal` | Field surface-normal vektor satuan padat |
+| `normal` | Kolom surface-normal vektor satuan padat |
 | `edge` | Map probabilitas edge padat |
 | `restore` | Gambar RGB hasil restorasi untuk deblurring, denoising, atau super-resolution |
 | `matte` | Map foreground lunak dari 0 hingga 1 untuk penghapusan latar belakang |
@@ -83,7 +83,7 @@ output-nya.
 | `gaze` | Arah pandang per wajah terdeteksi |
 | `mesh` | Tubuh 3D berpose per orang terdeteksi |
 
-Nama tersebut muncul dalam metadata checkpoint dan nama file. Alias yang umum
+Nama tersebut muncul dalam metadata checkpoint dan nama berkas. Alias yang umum
 diterima di semua tempat yang menerima task dan dinormalisasi sebelum proses
 lain: `detection` dan `det` menjadi `detect`, `keypoints` menjadi `pose`, `cls`
 menjadi `classify`, `deblur`, `denoise`, dan `super-resolution` semuanya menjadi
@@ -92,7 +92,7 @@ tidak dikenal memunculkan error, bukan kembali ke default secara diam-diam.
 
 `segment`, `semantic`, dan `panoptic` adalah tiga task berbeda, bukan tiga kata
 untuk hal yang sama. Instance mask, label per piksel, dan map gabungan
-thing-plus-stuff memiliki ground truth, metrik, dan field hasil berbeda.
+thing-plus-stuff memiliki ground truth, metrik, dan kolom hasil berbeda.
 
 ## Family model
 
@@ -101,8 +101,8 @@ postprocessing sendiri. Setiap family mendeklarasikan identifier `FAMILY`
 seperti `yolo9`, `rfdetr`, atau `dfine`, task yang didukung, serta resolusi input
 untuk setiap ukuran yang disediakan.
 
-`LibreYOLO()` adalah factory, bukan kelas. Berdasarkan path, factory memuat file,
-mengidentifikasi family dari metadata checkpoint atau, jika gagal, dari key
+`LibreYOLO()` adalah factory, bukan kelas. Berdasarkan path, factory memuat berkas,
+mengidentifikasi family dari metadata checkpoint atau, jika gagal, dari kunci
 tensor itu sendiri, lalu mengembalikan instance model family tersebut. Karena
 itu, mengganti detektor hanya memerlukan perubahan satu baris: objek yang
 dihasilkan menyediakan antarmuka `predict`, `train`, `val`, dan `export` yang
@@ -135,9 +135,9 @@ Ukuran juga menetapkan resolusi input, dan pada family dengan beberapa task,
 resolusi dapat berbeda per task. Keduanya dibaca dari family, tidak pernah
 diasumsikan; `libreyolo models` mencetaknya.
 
-## Nama file checkpoint
+## Nama berkas checkpoint
 
-Setiap file bobot terbitan mengikuti satu skema:
+Setiap berkas bobot terbitan mengikuti satu skema:
 
 ```text
 Libre<FAMILY><size>[-<task>].pt
@@ -172,12 +172,12 @@ segmentation dari family yang sama.
 Family tanpa task tanpa-suffix dapat mewajibkan suffix, sehingga nama tanpa
 suffix bukan checkpoint valid baginya. Family yang menerbitkan bobot hasil
 pelatihan pada dataset selain default menambahkan nama dataset sebagai suffix
-lanjutan, dan varian tersebut tetap menjadi bagian nama repository tempat file
+lanjutan, dan varian tersebut tetap menjadi bagian nama repositori tempat berkas
 diunduh.
 
 Tiga tier berada di luar skema ini. Family promptable segmentation, family
 vision-language, dan detektor open-vocabulary tidak terdaftar ke factory
-checkpoint dan tidak menghasilkan file `Libre<FAMILY><size>.pt`. Prefix mereka
+checkpoint dan tidak menghasilkan berkas `Libre<FAMILY><size>.pt`. Prefix mereka
 menamai snapshot Hugging Face yang diunduh atau checkpoint promptable, dan
 kapitalisasi merek upstream sengaja dipertahankan di sana.
 
@@ -185,7 +185,7 @@ kapitalisasi merek upstream sengaja dipertahankan di sana.
 
 Ketika beberapa sinyal dapat menentukan task, semuanya diperiksa dalam urutan
 tetap dan sinyal pertama yang tersedia menang: argumen `task` yang diberikan,
-lalu task dalam metadata checkpoint, kemudian suffix task pada nama file, dan
+lalu task dalam metadata checkpoint, kemudian suffix task pada nama berkas, dan
 akhirnya task default family. Hasil diperiksa terhadap task yang didukung family
 sebelum model dibangun, sehingga ketidakcocokan gagal saat pemuatan, bukan
 menghasilkan output salah kemudian.
@@ -196,21 +196,23 @@ Family didaftarkan tepat ke satu tier. Tier adalah pernyataan tentang perhatian
 engineering, bukan akurasi: tier menjelaskan tempat fitur baru diterapkan lebih
 dahulu dan hal yang dijaga tetap berfungsi.
 
-| Tier | Artinya |
+| Tingkat | Artinya |
 |---|---|
-| Flagship | Fitur dirancang dan divalidasi penuh pada GPU di sini terlebih dahulu |
-| Core | Detektor inti yang dapat dilatih. Fitur mengikuti flagship dalam gelombang release yang sama |
-| Supported | Family pendukung yang dapat dilatih. Dijaga tetap hijau dalam CI, fitur diterapkan secara oportunistis |
-| Inference only | Predict, validate, dan export. Fitur pelatihan tidak berlaku |
+| Unggulan | Fitur dirancang dan divalidasi penuh pada GPU di sini terlebih dahulu |
+| Inti | Detektor inti yang dapat dilatih. Fitur mengikuti family unggulan dalam gelombang rilis yang sama |
+| Didukung | Family pendukung yang dapat dilatih. Dijaga tetap hijau dalam CI, fitur diterapkan secara oportunistis |
+| Hanya inferensi | Prediksi, validasi, dan ekspor. Fitur pelatihan tidak berlaku |
 | Museum | Pameran beku. Hanya perbaikan bug |
-| Sibling tier | Antarmuka produk terpisah dengan factory dan kontraknya sendiri |
+| Tingkat saudara | Antarmuka produk terpisah dengan factory dan kontraknya sendiri |
 
-Setiap halaman model memuat tier family pada header. Dua family flagship adalah
+Setiap halaman model memuat tingkat family pada header. Dua family unggulan adalah
 [YOLOv9](/docs/models/yolov9) untuk detektor CNN dan
 [RF-DETR](/docs/models/rf-detr) untuk detektor transformer; mulailah dari sana
 kecuali ada alasan untuk memilih yang lain.
 
-Inference only menyatakan yang tidak ada, yaitu loop pelatihan dalam LibreYOLO.
-Predict, validate, dan export jika didukung family tetap berfungsi. Memanggil
+Hanya inferensi menyatakan yang tidak ada, yaitu loop pelatihan dalam LibreYOLO.
+Prediksi, validasi, dan ekspor jika didukung family tetap berfungsi. Memanggil
 `train()` pada family tersebut memunculkan `NotImplementedError` yang menyebutkan
 alasannya.
+
+

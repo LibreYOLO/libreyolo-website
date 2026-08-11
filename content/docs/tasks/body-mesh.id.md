@@ -1,11 +1,11 @@
 ---
-title: Body mesh
+title: Mesh tubuh
 seo_title: Rekonstruksi body mesh di LibreYOLO
 description: >-
   Rekonstruksi body mesh 3D parametrik per orang di LibreYOLO. Lakukan prediksi
-  dari box orang atau detektor, lalu baca vertex, joint, dan translasi kamera.
+  dari bounding box orang atau detektor, lalu baca vertex, joint, dan translasi kamera.
 lead: >-
-  Rekonstruksi body mesh mengubah satu gambar dan kumpulan box orang menjadi
+  Rekonstruksi body mesh mengubah satu gambar dan kumpulan bounding box orang menjadi
   tubuh 3D parametrik per orang: parameter bentuk dan pose, vertex berpose,
   joint 3D, serta translasi kamera yang menempatkannya di depan lensa.
 keywords:
@@ -21,54 +21,32 @@ snippets:
   predict:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import SAMPLE_IMAGE
-
         from libreyolo.models.sam3dbody import LibreSAM3DBody
 
-
         # Family ini tidak terdaftar pada factory LibreYOLO(), sehingga dibuat
-
-        # secara langsung. model_path=None memicu pengunduhan Hugging Face
-        gated;
-
-        # string diperlakukan sebagai checkpoint lokal yang sudah ada dan tidak
-        pernah
-
+        # secara langsung. model_path=None memicu pengunduhan Hugging Face gated;
+        # string diperlakukan sebagai checkpoint lokal yang sudah ada dan tidak pernah
         # diambil. Inferensi memerlukan CUDA.
-
         model = LibreSAM3DBody(None, size="d3", device="cuda")
-
         result = model(SAMPLE_IMAGE, person_boxes=[[34, 12, 220, 400]])
 
-
         meshes = result.meshes
-
-        print(meshes.body_model)      # parameterization yang digunakan tensor
-        ini
-
+        print(meshes.body_model)      # parameterization yang digunakan tensor ini
         print(meshes.vertices.shape)  # (N, V, 3), frame kamera, meter
-
         print(meshes.joints3d.shape)  # (N, J, 3)
-
         print(meshes.joints2d.shape)  # (N, J, 2), piksel pada gambar sumber
     - label: Dengan detektor orang
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
-
         from libreyolo.models.sam3dbody import LibreSAM3DBody
 
-
-        # person_detector menerima detektor LibreYOLO yang sudah dibuat,
-        callable biasa,
-
+        # person_detector menerima detektor LibreYOLO yang sudah dibuat, callable biasa,
         # atau instance PersonDetector. Tidak ada shortcut nama.
-
         detector = LibreYOLO("LibreYOLO9s.pt")
-
         model = LibreSAM3DBody(None, size="d3", device="cuda")
-
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
 source_hash: 31c5b44171cbcd0e
@@ -78,38 +56,38 @@ source_hash: 31c5b44171cbcd0e
 
 Rekonstruksi body mesh mengembalikan payload `Meshes` per gambar, dengan baris
 yang diselaraskan terhadap `result.boxes`: baris `i` menjelaskan orang dalam
-box `i`, sama seperti kontrak keypoint task pose.
+bounding box `i`, sama seperti kontrak keypoint task pose.
 
 Semuanya dinyatakan dalam frame kamera gambar asli. `transl` bersifat metrik
 dalam meter, dengan +z menjauhi kamera. `vertices` dan `joints3d` bersifat
 metrik serta sudah menyertakan `transl`, sehingga tidak memerlukan komposisi
 lanjutan. `joints2d` berada dalam piksel pada canvas gambar asli, bukan crop yang
-dilihat network. `faces` menyimpan topologi mesh satu kali untuk seluruh gambar,
+dilihat jaringan. `faces` menyimpan topologi mesh satu kali untuk seluruh gambar,
 bukan per baris, karena setiap orang menggunakannya bersama. Versi ini tidak
-memiliki frame dunia atau gravitasi, dan tidak ada field yang diam-diam
+memiliki frame dunia atau gravitasi, dan tidak ada kolom yang diam-diam
 menggantikannya.
 
-Layout parameter berbeda antar body model, sehingga tidak ada bentuk tetap:
+Tata letak parameter berbeda antar body model, sehingga tidak ada bentuk tetap:
 `body_model` menamai parameterization dan jumlahnya dibaca dari tensor. Untuk
 `"mhr"`, Momentum Human Rig, rotasi berupa sudut Euler dalam radian, bukan
 axis-angle, `body_pose` adalah vektor parameter per joint yang flat, bukan satu
 triplet per joint, dan `betas` adalah koefisien identity blendshape. Skala
 skeleton, pose tangan, dan ekspresi wajah berada dalam `extras`.
 
-Key task kanonis adalah `mesh`. `body-mesh`, `hmr`, dan
+Kunci task kanonis adalah `mesh`. `body-mesh`, `hmr`, dan
 `human-mesh-recovery` dinormalisasi ke sana.
 
 ## Model
 
 [SAM 3D Body](/docs/models/sam-3d-body) adalah satu-satunya family untuk task
-ini dan berupa wrapper, bukan port: package `sam-3d-body` milik Meta diterbitkan
+ini dan berupa wrapper, bukan port: paket `sam-3d-body` milik Meta diterbitkan
 berdasarkan SAM License, yang tidak mengizinkan kode LibreYOLO diturunkan
-darinya, sehingga tidak ada yang di-vendor. Dua backbone berbagi body model MHR
+darinya, sehingga tidak ada yang disertakan. Dua backbone berbagi body model MHR
 yang sama, `d3` pada encoder DINOv3 ViT-H/16+ dan `h` pada ViT-H asli.
 
 Tiga persyaratan berlaku sebelum prediksi pertama dan semuanya wajib.
 
-Package upstream diinstal oleh pengguna, bukan LibreYOLO:
+Paket upstream diinstal oleh pengguna, bukan LibreYOLO:
 
 ```bash
 git clone https://github.com/facebookresearch/sam-3d-body
@@ -122,21 +100,21 @@ import.
 
 Mirror checkpoint bersifat gated. Terima lisensi pada halaman model Hugging Face
 dan lakukan autentikasi dengan `hf auth login`, atau pengunduhan pertama gagal.
-Body model MHR sendiri merupakan release Apache-2.0 terpisah, diambil dari
-lokasi publiknya dan di-cache secara lokal.
+Body model MHR sendiri merupakan rilis Apache-2.0 terpisah, diambil dari
+lokasi publiknya dan disimpan dalam cache secara lokal.
 
 Inferensi memerlukan device CUDA. Estimator upstream memindahkan batch ke GPU
 tanpa pemeriksaan, sehingga tidak ada jalur CPU dan `device="cpu"` memunculkan
 error.
 
-## Predict
+## Prediksi
 
 <code-tabs name="predict" />
 
-Orang mencapai model melalui dua cara. `person_boxes` memberikan box yang sudah
-tersedia, khusus satu gambar: kumpulan box tetap tidak dapat mengikuti orang
+Orang mencapai model melalui dua cara. `person_boxes` memberikan bounding box yang sudah
+tersedia, khusus satu gambar: kumpulan bounding box tetap tidak dapat mengikuti orang
 lintas frame video, sehingga memberikannya bersama sumber video memunculkan
-error, bukan diam-diam menggunakan kembali box frame pertama. `person_detector`
+error, bukan diam-diam menggunakan kembali bounding box frame pertama. `person_detector`
 menerima detektor LibreYOLO yang sudah dibuat, callable, atau `PersonDetector`,
 dan merupakan jalur untuk video. `focal_length` memberikan intrinsic kamera yang
 diketahui; jika tidak diberikan, model memakai estimasinya sendiri, yang
@@ -146,13 +124,13 @@ Family ini tidak dihubungkan ke factory `LibreYOLO()` atau perintah CLI
 `libreyolo predict`. `LibreSAM3DBody` adalah satu-satunya entry point. Lihat
 [prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
 
-## Train
+## Pelatihan
 
 Tidak ada family task ini yang berlatih dalam LibreYOLO.
 `LibreSAM3DBody.train()` memunculkan error: lakukan pelatihan pada project
 upstream dan muat checkpoint hasilnya di sini.
 
-## Validate
+## Validasi
 
 Tidak ada validator mesh dan `val()` memunculkan error. Benchmark yang umum
 digunakan hanya berlisensi penelitian, sehingga tidak disertakan atau diambil
@@ -160,7 +138,7 @@ otomatis.
 
 Metriknya tersedia sebagai `libreyolo.validation.mesh_metrics` untuk evaluasi
 terhadap dataset yang sudah dimiliki. Fungsi menerima joint prediksi dan target,
-vertex prediksi serta target opsional, lalu mengembalikan dictionary dengan key
+vertex prediksi serta target opsional, lalu mengembalikan dictionary dengan kunci
 seperti validator:
 
 `metrics/mpjpe` adalah mean per-joint position error setelah menyelaraskan root
@@ -174,9 +152,11 @@ hanya muncul jika kedua array vertex diberikan. Ketiganya lebih rendah lebih
 baik. Input diasumsikan metrik dalam meter, dan `scale_to_mm` mengonversi hasil
 ke milimeter seperti laporan literatur.
 
-## Export
+## Ekspor
 
 Ekspor mesh belum diimplementasikan. LibreYOLO belum mendefinisikan kontrak
-metadata graph hasil ekspor untuk task ini, termasuk cara membawa layout
+metadata graph hasil ekspor untuk task ini, termasuk cara membawa tata letak
 parameter MHR di luar PyTorch, sehingga `export()` memunculkan error alih-alih
 menghasilkan graph dengan output yang tidak dapat ditafsirkan.
+
+

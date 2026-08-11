@@ -68,7 +68,7 @@ source_hash: 9f1e7551af6b16fe
 <code-tabs name="train" />
 
 Pembekuan berjalan setelah model dibangun dan setelah head dibangun ulang untuk
-jumlah class baru, serta sebelum optimizer dibuat, sehingga optimizer hanya
+jumlah kelas baru, serta sebelum optimizer dibuat, sehingga optimizer hanya
 menerima parameter yang dapat dilatih.
 
 ## Bentuk selector
@@ -82,8 +82,8 @@ menerima parameter yang dapat dilatih.
 | `["backbone", "neck"]` | Bekukan setiap selector dalam daftar |
 | `["backbone", 3]` | Daftar campuran dapat digunakan |
 
-String di-parse sebelum ditafsirkan, sehingga CLI dan konfigurasi YAML menerima
-bentuk yang sama dengan Python. `freeze="[0, 3, 'head']"` di-parse sebagai daftar
+String diurai sebelum ditafsirkan, sehingga CLI dan konfigurasi YAML menerima
+bentuk yang sama dengan Python. `freeze="[0, 3, 'head']"` diurai sebagai daftar
 literal, `freeze="backbone,neck"` dipecah pada koma, dan string desimal tunggal
 menjadi jumlah.
 
@@ -177,3 +177,5 @@ dan pembekuan progresif bukan bagian interface.
 - [Hyperparameter](/docs/train/hyperparameters) untuk bagian lain `train()`.
 - [Distilasi](/docs/train/distillation) untuk cara lain memindahkan pengetahuan
   model besar ke proses pelatihan.
+
+

@@ -2,21 +2,20 @@
 title: モデルAPI
 seo_title: LibreYOLOモデルオブジェクトのメソッドとシグネチャ
 description: >-
-  読み込んだLibreYOLOモデルの全メソッドを説明します。predict、embed、track、val、train、export、save、quantize、info、CUDA
-  Graph制御を実際のデフォルト値とともに扱います。
+  読み込んだLibreYOLOモデルの全メソッド：predict、embed、track、val、train、export、save、quantize、info、CUDAグラフ制御について、実際のデフォルト値とともに説明します。
 lead: >-
-  読み込んだLibreYOLOモデルはBaseModelのインスタンスです。このページでは、libreyolo/models/base/model.pyから確認したシグネチャとデフォルト値を使い、インスタンスが持つメソッドを一覧にします。
+  読み込んだLibreYOLOモデルはBaseModelのインスタンスです。このページでは、そのインスタンスが持つメソッドを、libreyolo/models/base/model.pyから読み取ったシグネチャとデフォルト値とともに一覧化します。
 keywords:
-  - LibreYOLO model メソッド
-  - LibreYOLO predict 引数
-  - LibreYOLO val 引数
-  - LibreYOLO export 引数
+  - libreyolo モデル メソッド
+  - libreyolo predict 引数
+  - libreyolo val 引数
+  - libreyolo export 引数
   - model.track
   - model.quantize
   - capture_graph
 last_verified: 1.5.0
 verification: >-
-  v1.5.0のlibreyolo/models/base/model.pyとlibreyolo/models/base/inference.pyからシグネチャとデフォルト値を確認しました。ファミリークラスはこれらを限定または拡張する場合があります。train()はファミリーごとに定義されるため、共有のcfg=ラッパーだけをここで説明します。
+  v1.5.0のlibreyolo/models/base/model.pyとlibreyolo/models/base/inference.pyからシグネチャとデフォルト値を確認しました。ファミリークラスでは、これらが制限または拡張される場合があります。train()はファミリーごとに定義されているため、ここでは共有のcfg=ラッパーだけを説明します。
 snippets:
   usage:
     - label: Python
@@ -39,7 +38,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # stream=Trueはフレームまたは画像ごとに1つのResultsを返すジェネレーターです。
+        # stream=Trueはジェネレーターを返し、フレームまたは画像ごとにResultsを1つ生成
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
 source_hash: da0776970ded8716
@@ -47,17 +46,22 @@ source_hash: da0776970ded8716
 
 ## 構築
 
-ファクトリーはファミリークラスのインスタンスを返します。そのクラスを直接構築する場合も同じ引数を受け取りますが、`size`は必須です。
+ファクトリーはファミリークラスのインスタンスを返します。そのクラスを直接構築する場合も
+同じ引数を取りますが、`size`は必須です。
 
 ```python
 Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 ```
 
-`device="auto"`は利用可能な場合にCUDA、次にMPS、最後にCPUを選択します。整数または数字の文字列はCUDAのordinalとして解釈されるため、`device=0`と`device="0"`はどちらも`cuda:0`を意味します。`task`はファミリーの`SUPPORTED_TASKS`に照らして検証されます。`model_path=None`を渡すとアーキテクチャを構築して学習モードのままにし、`dict`を渡すとそのstate dictを直接読み込みます。
+`device="auto"`は、利用できる場合はCUDA、次にMPS、最後にCPUを選択します。整数または
+数字の文字列はCUDAの序数として読み取られるため、`device=0`と`device="0"`はいずれも
+`cuda:0`を意味します。`task`はファミリーの`SUPPORTED_TASKS`に照らして検証されます。
+`model_path=None`を渡すとアーキテクチャを構築して学習モードのままにし、`dict`を渡すと
+そのstate dictを直接読み込みます。
 
 ## predictと\_\_call\_\_
 
-`predict`は`__call__`のエイリアスです。
+`predict`は`__call__`の別名です。
 
 ```python
 model(
@@ -88,34 +92,38 @@ model(
 
 | 引数 | デフォルト | 意味 |
 |---|---|---|
-| `source` | `None` | 画像、メモリ上の画像のリストまたはタプル、ディレクトリ、動画ファイル、`"screen"`、`"screen 1"`、`"screen 1 100 200 512 256"`のような画面ソース |
-| `conf` | `0.25` | 信頼度しきい値 |
+| `source` | `None` | 画像、メモリ内画像のリストまたはタプル、ディレクトリ、動画ファイル、または`"screen"`、`"screen 1"`、`"screen 1 100 200 512 256"`などの画面ソース |
+| `conf` | `0.25` | 信頼度のしきい値 |
 | `iou` | `0.45` | NMSのIoUしきい値 |
-| `imgsz` | `None` | 入力サイズのオーバーライド。`None`ではモデルのネイティブサイズを使用 |
-| `device` | `None` | この呼び出し用のデバイスオーバーライド |
-| `classes` | `None` | 指定したクラスIDだけを保持 |
-| `max_det` | `300` | 画像ごとの最大検出数 |
-| `augment` | `False` | テスト時拡張 |
-| `save` | `False` | アノテーション付き画像または動画を書き込み |
-| `batch` | `1` | ディレクトリおよびリストソースでの順伝播1回あたりの画像数 |
-| `stream` | `False` | 実体化したリストではなくジェネレーターを返す |
-| `stream_buffer` | `False` | 最新フレームだけでなく、取得したすべてのライブフレームを保持 |
-| `vid_stride` | `1` | 動画または画面のNフレームごとに処理 |
+| `imgsz` | `None` | 入力サイズの上書き。`None`はモデル固有のサイズを使用 |
+| `device` | `None` | この呼び出しで使用するデバイスの上書き |
+| `classes` | `None` | 指定したクラスIDのみを保持 |
+| `max_det` | `300` | 画像あたりの最大検出数 |
+| `augment` | `False` | テスト時データ拡張 |
+| `save` | `False` | アノテーション付き画像または動画を書き出す |
+| `batch` | `1` | ディレクトリおよびリストのソースで、順伝播1回あたりの画像数 |
+| `stream` | `False` | 実体化したリストの代わりにジェネレーターを返す |
+| `stream_buffer` | `False` | 取り込んだライブフレームを最新のものだけでなくすべて保持 |
+| `vid_stride` | `1` | 動画または画面のN番目ごとのフレームを処理 |
 | `show` | `False` | アノテーション付きフレームをウィンドウに表示 |
 | `output_path` | `None` | `save=True`の場合の出力パス |
-| `color_format` | `"auto"` | メモリ上の配列に対する色形式のヒント |
-| `tiling` | `False` | 大きな画像向けのタイル推論 |
+| `color_format` | `"auto"` | メモリ内配列のカラーフォーマット指定 |
+| `tiling` | `False` | 大きな画像に対するタイル分割推論 |
 | `overlap_ratio` | `0.2` | タイルの重複率 |
-| `output_file_format` | `None` | `"jpg"`、`"png"`、`"webp"`のいずれか |
-| `cuda_graph` | `False` | `True`では入力形状ごとの初回使用時にキャプチャし、`"auto"`では形状の再出現を待機 |
+| `output_file_format` | `None` | `"jpg"`、`"png"`、または`"webp"` |
+| `cuda_graph` | `False` | `True`は入力形状ごとの初回使用時にキャプチャし、`"auto"`は同じ形状が繰り返されるまで待機 |
 
-単一の画像ソースでは1つの`Results`を返します。リスト、タプル、ディレクトリではリストを返し、`stream=True`ではすべての場合にジェネレーターを返します。
+単一の画像ソースは1つの`Results`を返します。リスト、タプル、またはディレクトリは
+それらのリストを返し、`stream=True`はどの場合もジェネレーターを返します。
 
-ライブストリームソースには終端がないため、`stream=True`が必要です。`tiling`と`augment`は併用できません。`embed`、`point`、`edge`タスクではテスト時拡張を指定すると例外が発生します。
+ライブストリームのソースには終端がなく、`stream=True`が必要です。`tiling`と`augment`は
+同時に使用できません。テスト時データ拡張は、`embed`、`point`、`edge`タスクでは例外を
+発生させます。
 
 <code-tabs name="usage" />
 
-`batch > 1`の場合、`SUPPORTS_BATCHED_PREDICT`がtrueのファミリーはchunkごとにstackした順伝播を1回実行します。`batch=1`では画像ごとに1回の順伝播を維持します。
+`batch > 1`では、`SUPPORTS_BATCHED_PREDICT`がtrueのファミリーはチャンクごとに
+スタックした順伝播を1回実行します。`batch=1`では画像ごとに順伝播を1回実行します。
 
 <code-tabs name="stream" />
 
@@ -125,7 +133,9 @@ model(
 model.embed(source=None, **kwargs) -> torch.Tensor
 ```
 
-すべての埋め込み行を単一の`(N_total, D)`テンソルへstackする、`predict`の簡易ラッパーです。モデルが`task="embed"`で構築されている必要があり、それ以外では`NotImplementedError`が発生します。
+`predict`の便利なラッパーで、すべての埋め込みベクトルの行を1つの`(N_total, D)`テンソルに
+スタックします。モデルは`task="embed"`で構築されている必要があり、それ以外の場合は
+`NotImplementedError`を発生させます。
 
 ## track
 
@@ -149,7 +159,11 @@ model.track(
 ) -> Generator[Results, None, None]
 ```
 
-`track_id`を設定した`Results`をフレームごとに1つyieldします。`tracker`は`"bytetrack"`、`"botsort"`、`"ocsort"`、`"deepocsort"`のいずれかです。`tracker_config`を指定すると、その構成の型がトラッカーを選ぶため`tracker`は無視されます。`track_conf`はByteTrackとBoT-SORTでは`track_high_thresh`に、OC-SORTとDeep OC-SORTでは`det_thresh`にマッピングされます。`output_path`のデフォルトは`runs/track/<video_stem>.mp4`です。
+`track_id`を設定した`Results`をフレームごとに1つ生成します。`tracker`には
+`"bytetrack"`、`"botsort"`、`"ocsort"`、または`"deepocsort"`を指定できます。
+`tracker_config`を指定した場合は設定の型がトラッカーを選択するため、`tracker`は無視されます。
+`track_conf`は、ByteTrackとBoT-SORTでは`track_high_thresh`に、OC-SORTとDeep OC-SORTでは
+`det_thresh`に対応します。`output_path`のデフォルトは`runs/track/<video_stem>.mp4`です。
 
 ## val
 
@@ -173,20 +187,28 @@ model.val(
 ) -> Dict
 ```
 
-タスクによってキーが異なる指標辞書を返します。物体検出では`metrics/precision`、`metrics/recall`、`metrics/mAP50`、`metrics/mAP50-95`を返します。`imgsz`は正方形の整数または`(height, width)`タプルを受け取り、デフォルトはモデルのネイティブ入力サイズです。`plots`は`save_plots`のエイリアスです。`allow_download_scripts`は、データセットYAMLの`download`フィールドに含まれる可能性がある埋め込みPythonの実行を制御します。
+タスクに応じたキーを持つ指標辞書を返します。検出では`metrics/precision`、
+`metrics/recall`、`metrics/mAP50`、`metrics/mAP50-95`を返します。`imgsz`は正方形の整数値
+または`(height, width)`タプルを受け取り、デフォルトではモデル固有の入力サイズを使います。
+`plots`は`save_plots`の別名です。`allow_download_scripts`は、データセットYAMLの`download`
+フィールドに含まれる可能性がある埋め込みPythonの実行可否を制御します。
 
-`faster_coco_eval`は`**kwargs`を通じて受け付け、デフォルトは`True`です。パッケージがインストールされていない場合はpycocotoolsへフォールバックします。実際に使用したバックエンドは`model.last_eval_backend`で報告されます。
+`faster_coco_eval`は`**kwargs`を通じて受け入れられ、デフォルトは`True`です。パッケージが
+インストールされていない場合はpycocotoolsへフォールバックします。実行されたバックエンドは
+`model.last_eval_backend`で報告されます。
 
-`obb`と`pose`タスクでは、拡張付き検証を指定すると例外が発生します。
+拡張検証は、`obb`と`pose`タスクでは例外を発生させます。
 
 ## train
 
-`train`はファミリーごとに定義されるため、引数も異なります。基本クラスが各ファミリーの`train`をラップするため、2つの動作は共通です。
+`train`はファミリーごとに定義されているため、引数が異なります。基底クラスが各ファミリーの
+`train`をラップするため、2つの動作は共通です。
 
-- `cfg=`はYAMLパスを受け取り、キーを呼び出しに統合します。明示的なキーワード引数がファイルより優先されます。
-- coverage group `g0`または`g1`のファミリーで`pretrained=False`を指定すると、学習前にモデルをスクラッチから再初期化します。`resume=True`とは併用できません。
+- `cfg=`は、キーが呼び出しへマージされるYAMLパスを受け取ります。明示的なキーワード引数がファイルより優先されます。
+- カバレッジグループ`g0`または`g1`のファミリーで`pretrained=False`を指定すると、学習前にモデルを最初から再初期化します。`resume=True`とは併用できません。
 
-ファミリーが実際に対応するデータ拡張設定はファミリーごとに異なります。[データ拡張マトリックス](/docs/reference/augmentation-matrix)を参照してください。
+ファミリーが実際にどのデータ拡張設定を尊重するかは、ファミリーごとに異なります。
+[データ拡張マトリックス](/docs/reference/augmentation-matrix)を参照してください。
 
 ## export
 
@@ -194,25 +216,30 @@ model.val(
 model.export(format="onnx", **kwargs) -> str
 ```
 
-書き込んだアーティファクトのパスを返します。`format`はエクスポーターレジストリーから解決され、`engine`は`tensorrt`、`litert`は`tflite`のエイリアスです。すべてのエクスポーターに共通する引数は次のとおりです。
+書き出された成果物のパスを返します。`format`はエクスポーターレジストリによって解決されます。
+ここでは`engine`が`tensorrt`の別名、`litert`が`tflite`の別名です。すべてのエクスポーターに
+共通する引数は次のとおりです。
 
 | 引数 | デフォルト | 意味 |
 |---|---|---|
-| `output_path` | `None` | 出力ファイルパス。省略すると`weights/`の下に生成 |
-| `imgsz` | `None` | `(height, width)`タプルまたは単一の整数。デフォルトはネイティブサイズ |
+| `output_path` | `None` | 出力ファイルのパス。省略時は`weights/`以下に生成 |
+| `imgsz` | `None` | `(height, width)`タプルまたは単一の整数。デフォルトは固有サイズ |
 | `opset` | `None` | ONNX opsetバージョン |
 | `simplify` | `True` | ONNXグラフの簡略化を実行 |
 | `dynamic` | `True` | 動的軸を有効化 |
 | `half` | `False` | FP16精度 |
 | `int8` | `False` | INT8精度 |
-| `batch` | `1` | アーティファクトへ固定するバッチサイズ |
-| `device` | `None` | traceを実行するデバイス |
-| `data` | `None` | INT8 calibration用のdata.yaml |
-| `fraction` | `1.0` | 使用するcalibrationデータセットの割合 |
-| `allow_download_scripts` | `False` | データセットYAMLのダウンロードに含まれる埋め込みPythonを許可 |
-| `verbose` | `False` | 詳細なエクスポーターログ |
+| `batch` | `1` | 成果物に組み込むバッチサイズ |
+| `device` | `None` | トレースに使うデバイス |
+| `data` | `None` | INT8キャリブレーション用のdata.yaml |
+| `fraction` | `1.0` | 使用するキャリブレーションデータセットの割合 |
+| `allow_download_scripts` | `False` | データセットYAMLのダウンロード処理に埋め込まれたPythonを許可 |
+| `verbose` | `False` | エクスポーターの詳細ログ |
 
-禁止された組み合わせはtrace前のpreflightで`NotImplementedError`を発生させます。対応状況とルールは[エクスポートマトリックス](/docs/reference/export-matrix)のページにあります。有効なLoRAアダプターがある場合は密な重みへ統合されますが、そのmergeはすべてのリクエスト拒否判定後にだけ行われます。
+禁止された組み合わせは、トレース前の事前検査で`NotImplementedError`を発生させます。
+カバレッジとその規則は[エクスポートマトリックス](/docs/reference/export-matrix)のページに
+あります。有効なLoRAアダプターが存在する場合は密な重みに統合されます。この統合は、すべての
+要求拒否を確認した後にのみ行われます。
 
 ## save
 
@@ -220,7 +247,10 @@ model.export(format="onnx", **kwargs) -> str
 model.save(path) -> str
 ```
 
-v1.0スキーマのLibreYOLOチェックポイントを書き込みます。state dictと[チェックポイントスキーマ](/docs/reference/checkpoint-schema)に記載されたメタデータです。量子化済みモデルでは`quant`manifestも追加されるため、`LibreYOLO(path)`が量子化構造とscaleを復元します。
+スキーマv1.0のLibreYOLOチェックポイントを書き出します。これはstate dictと、
+[チェックポイントスキーマ](/docs/reference/checkpoint-schema)で説明されているメタデータです。
+量子化モデルには`quant`マニフェストも含まれるため、`LibreYOLO(path)`は量子化された構造と
+スケールを復元します。
 
 ## quantize、quant_info、dequantize
 
@@ -237,9 +267,17 @@ model.quantize(
 )
 ```
 
-その場で量子化し、モデルを返します。`recipe`はcastの`fp16`と`bf16`、ConvとLinear向けの`int8`と`fp8`、またはLinear専用の`w4a16`、`w4a8`、`nvfp4`、`mxfp4`、`int2`のいずれかです。最後のLinear専用レシピにはRF-DETRなどのTransformerファミリーが対応します。`int2`にはQATが必要です。`calib`はdata.yamlのパスまたは組み込みデータセット名を受け取り、画像を順伝播だけで読み込みます。ラベルは読み取りません。`calib=None`でcalibrationをスキップします。`algorithm`は`"minmax"`、`"percentile"`、`"auto"`のいずれかです。
+その場で量子化し、モデルを返します。`recipe`にはキャストの`fp16`と`bf16`、ConvとLinearの
+レシピ`int8`と`fp8`、またはLinear専用のレシピ`w4a16`、`w4a8`、`nvfp4`、`mxfp4`、`int2`の
+いずれかを指定します。後者はRF-DETRなどのTransformerファミリーでサポートされます。
+`int2`にはQATが必要です。`calib`はdata.yamlのパスまたは組み込みデータセット名を受け取り、
+順伝播専用で画像を読み込みます。ラベルは一切読みません。キャリブレーションを省略するには
+`calib=None`を渡します。`algorithm`は`"minmax"`、`"percentile"`、または`"auto"`です。
 
-`model.quant_info()`は量子化状態の要約を返し、浮動小数点モデルでは`None`を返します。`model.dequantize()`は量子化学習済みのmaster weightを維持しながら、その場で浮動小数点モジュールを復元します。これはQATから`export(format="onnx", int8=True, data=...)`へつなぐ橋渡しです。
+`model.quant_info()`は量子化状態の概要を返し、浮動小数点モデルでは`None`を返します。
+`model.dequantize()`は、量子化学習済みのマスター重みを維持しながら、その場で浮動小数点
+モジュールを復元します。これはQATから`export(format="onnx", int8=True, data=...)`への
+橋渡しになります。
 
 ## infoとlayers
 
@@ -249,11 +287,13 @@ model.get_available_layer_names() -> List[str]
 model.get_distill_config() -> Dict
 ```
 
-`info`はJSONで扱える辞書を返し、`verbose`がtrueの場合は人が読める要約をログへ出力します。`get_available_layer_names`は、蒸留または特徴抽出の構成で指定できる層を一覧にします。
+`info`はJSON互換の辞書を返し、`verbose`がtrueの場合は人間が読める概要をログへ記録します。
+`get_available_layer_names`は、蒸留または特徴量抽出の設定で名前を指定できる層を一覧化します。
 
-## CUDA Graph
+## CUDAグラフ
 
-`SUPPORTS_CUDA_GRAPH`クラス属性がtrueのファミリーで利用できます。再生結果はeager実行とビット単位で同一です。
+`SUPPORTS_CUDA_GRAPH`クラス属性がtrueのファミリーで利用できます。リプレイはeager実行と
+ビット単位で同一です。
 
 ```python
 model.capture_graph(imgsz=None, batch=1, dtype=None) -> None
@@ -262,8 +302,15 @@ model.graph_info() -> Dict[str, Any]
 model.release_graphs() -> None
 ```
 
-キャプチャしたグラフはキャプチャ時とまったく同じ形状でだけ有効なので、`batch`と`imgsz`は後の`predict`呼び出しと一致する必要があります。`capture_graph`はキャプチャコストを最初のリクエストより前に移します。`mode`は、初回使用時にキャプチャする`True`または`"on"`、同じ形状が現れるまで待つ`"auto"`、何もしない`False`を受け付けます。ファミリーが対応していない場合、`capture_graph`は`NotImplementedError`を発生させ、キャプチャに失敗した場合は`CudaGraphUnavailable`を発生させます。
+キャプチャしたグラフは、キャプチャ時と完全に同じ形状でのみ有効です。そのため、`batch`と
+`imgsz`は後続の`predict`呼び出しと一致する必要があります。`capture_graph`はキャプチャの
+コストを最初の要求から切り離します。`mode`には、初回使用時にキャプチャする`True`または
+`"on"`、形状が繰り返されるまで待つ`"auto"`、何もしない`False`を指定できます。
+ファミリーがオプトインしていない場合、`capture_graph`は`NotImplementedError`を発生させ、
+キャプチャに失敗した場合は`CudaGraphUnavailable`を発生させます。
 
 ## デバイスとdtype
 
-`Results`オブジェクトは`.to()`、`.cpu()`、`.cuda()`、`.numpy()`を備えます。[Resultsの型](/docs/reference/results-types)を参照してください。モデル自体は、構築時または`predict`に`device=`を渡して移動します。
+`Results`オブジェクトには`.to()`、`.cpu()`、`.cuda()`、`.numpy()`があります。
+[Resultsの型](/docs/reference/results-types)を参照してください。モデル自体を移動するには、
+`predict`または構築時に`device=`を渡します。

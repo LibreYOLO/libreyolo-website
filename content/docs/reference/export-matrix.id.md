@@ -50,34 +50,25 @@ snippets:
   export:
     - label: Ekspor dan baca penolakan
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
         from libreyolo.export.support import get_support
 
-
         model = LibreYOLO("LibreYOLO9t.pt")
-
         print(model.export(format="onnx"))
 
-
-        # Periksa sebelum memanggil: kombinasi blocked memunculkan error saat
-        preflight
-
+        # Periksa sebelum memanggil: kombinasi blocked memunculkan error saat preflight
         # dan pesan memuat alasan ini.
-
         blocked = get_support("domedetr", "detect", "onnx")
-
         print(blocked.tier)
-
         print(blocked.reason)
 source_hash: 83de3289634888c6
 ---
 
 ## Bentuk matriks
 
-Matriks menggunakan key `(family, task, format)`. Key family adalah nama
-kanonis dari registry model, key task berasal dari `libreyolo.tasks.TASKS`, dan
+Matriks menggunakan kunci `(family, task, format)`. Kunci family adalah nama
+kanonis dari registry model, kunci task berasal dari `libreyolo.tasks.TASKS`, dan
 terdapat dua belas format:
 
 `onnx`, `torchscript`, `executorch`, `tensorrt`, `openvino`, `paddle`, `mnn`,
@@ -89,9 +80,9 @@ Format dan suffix `.tflite` tidak berubah.
 
 <code-tabs name="usage" />
 
-Karena sebuah cell merupakan fungsi dari tiga key, grid lengkap berukuran besar
-dan berubah pada setiap release. Grid dihasilkan, bukan ditulis manual, dan
-berada di `docs/export_support.md` dalam repository library. Lakukan query pada
+Karena sebuah cell merupakan fungsi dari tiga kunci, grid lengkap berukuran besar
+dan berubah pada setiap rilis. Grid dihasilkan, bukan ditulis manual, dan
+berada di `docs/export_support.md` dalam repositori library. Lakukan query pada
 matriks dari Python atau CLI alih-alih membaca salinannya.
 
 ## Tiga tier
@@ -107,9 +98,9 @@ peringatan umum. Bukti dan constraint yang tercatat tetap terlihat dalam
 dokumentasi yang dihasilkan. Kombinasi blocked gagal sebelum pemeriksaan
 dependency, pemuatan kalibrasi, tracing, atau pembuatan artefak.
 
-Penambahan entri validated memerlukan pengujian paritas dan field `since`.
+Penambahan entri validated memerlukan pengujian paritas dan kolom `since`.
 
-`SupportEntry` memiliki empat field: `tier`, string `reason`, release `since`,
+`SupportEntry` memiliki empat kolom: `tier`, string `reason`, rilis `since`,
 dan string `constraint`. Constraint adalah bagian yang penting saat integrasi:
 tanda centang hanya berlaku pada kondisi yang disebutkan, biasanya canvas input
 tetap, batch 1, FP32, dan versi runtime tertentu.
@@ -142,7 +133,7 @@ Task berikut diblokir untuk setiap family tanpa entri eksplisit.
 
 | Task | Alasan |
 |---|---|
-| `ocr` | Dua network dengan cropping dinamis per region tidak sesuai dengan kontrak ekspor satu graph |
+| `ocr` | Dua jaringan dengan cropping dinamis per region tidak sesuai dengan kontrak ekspor satu graph |
 | `point` | Family belum dihubungkan ke kontrak heatmap titik bersama dan peak-decoding backend |
 | `semantic` | Family belum dihubungkan ke kontrak dense-logits bersama dan argmax backend |
 | `mesh` | Output graph body-mesh, metadata, dan kontrak runtime belum didefinisikan |
@@ -166,7 +157,7 @@ terhubung untuk tetap diekspor.
 | `grounding_dino`, `owlv2`, `omdet_turbo`, `ov_deim` | Setiap format; ekspor runtime open-vocabulary berada di luar cakupan v1 |
 | `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything` | Setiap format; ekspor VLM generatif berada di luar cakupan v1 |
 
-PicoSAM3 adalah pengecualian dalam tier promptable: model ini mengekspor network
+PicoSAM3 adalah pengecualian dalam tier promptable: model ini mengekspor jaringan
 ROI mentah 96 piksel ke ONNX.
 
 ## Diblokir untuk NCNN
@@ -184,7 +175,7 @@ batas berikut:
 
 | Kelompok task | Ambang batas |
 |---|---|
-| Deteksi dan OBB | IoU box yang cocok di atas 0.95, MAE score di bawah 0.01 |
+| Deteksi dan OBB | IoU bounding box yang cocok di atas 0.95, MAE skor di bawah 0.01 |
 | Segmentation dan panoptic | IoU mask di atas 0.95 |
 | Pose | L2 keypoint di bawah 2 piksel pada resolusi native |
 | Classification | Cosine logits di atas 0.999 dan kelas top-1 sama |

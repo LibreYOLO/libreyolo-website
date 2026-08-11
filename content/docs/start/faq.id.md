@@ -48,29 +48,29 @@ adalah build CPU; [instalasi](/docs/install) menjelaskan cara menggantinya.
 ## Di mana bobot hasil unduhan disimpan?
 
 Dalam `weights/` relatif terhadap direktori kerja. Referensi model tanpa
-komponen direktori di-resolve di sana dan diunduh saat penggunaan pertama;
+komponen direktori diselesaikan di sana dan diunduh saat penggunaan pertama;
 referensi yang menyertakan direktori digunakan persis sebagaimana ditulis dan
 tidak pernah diambil. Lihat [checkpoint dan bobot](/docs/weights).
 
-## Dapatkah LibreYOLO berjalan tanpa akses network?
+## Dapatkah LibreYOLO berjalan tanpa akses jaringan?
 
 Ya. Ambil checkpoint satu kali pada mesin terhubung, salin direktori `weights/`,
-dan tidak ada akses network lagi. Path read-only bersama juga berfungsi karena
-referensi yang memuat direktori diperlakukan secara literal. Dataset di-resolve
+dan tidak ada akses jaringan lagi. Path read-only bersama juga berfungsi karena
+referensi yang memuat direktori diperlakukan secara literal. Dataset diselesaikan
 di bawah `~/datasets`, atau di bawah `LIBREYOLO_DATASETS_DIR`.
 
 ## Dapatkah LibreYOLO digunakan secara komersial?
 
 Kode berlisensi MIT. Bobot pretrained merupakan pertanyaan terpisah: bobot dapat
 mewarisi ketentuan dari project atau dataset asalnya, dan ketentuannya tidak
-seragam bahkan dalam satu family. Lisensi pada repository Hugging Face tertentu
+seragam bahkan dalam satu family. Lisensi pada repositori Hugging Face tertentu
 adalah sumber otoritatif, dan setiap halaman model memiliki bagian lisensi yang
 mereproduksinya. Jika bobot dibatasi, LibreYOLO mencetak batasan sebelum
 pengunduhan dimulai.
 
 ## Dapatkah checkpoint dari project lain dimuat?
 
-Biasanya bisa, dengan memberikan path-nya kepada `LibreYOLO()`. Layout upstream
+Biasanya bisa, dengan memberikan path-nya kepada `LibreYOLO()`. Tata letak upstream
 yang dikenali dikonversi saat pemuatan dengan mempertahankan jumlah dan nama
 kelasnya, lalu checkpoint LibreYOLO ditulis di samping sumber. [Impor bobot yang
 ada](/docs/migrate) menjelaskan yang dikenali dan yang memerlukan script konversi.
@@ -78,25 +78,25 @@ ada](/docs/migrate) menjelaskan yang dikenali dan yang memerlukan script konvers
 ## Mengapa train memunculkan NotImplementedError?
 
 Karena family tersebut hanya mendukung inferensi, dan exception menyebutkan
-alasannya. Predict, validate, dan export jika didukung tetap berfungsi; tidak
+alasannya. Prediksi, validasi, dan ekspor jika didukung tetap berfungsi; tidak
 ada loop pelatihan untuk arsitektur tersebut dalam LibreYOLO. Tier dukungan pada
 header halaman model memberi tahu hal ini sebelum dicoba. Lihat
 [konsep inti](/docs/concepts).
 
 ## Apa yang dikembalikan val?
 
-Dictionary biasa, bukan objek. Key deteksi mencakup `metrics/precision`,
+Dictionary biasa, bukan objek. Kunci deteksi mencakup `metrics/precision`,
 `metrics/recall`, `metrics/mAP50`, dan `metrics/mAP50-95`. Task lain
-mengembalikan key yang relevan, seperti `metrics/accuracy_top1` untuk
+mengembalikan kunci yang relevan, seperti `metrics/accuracy_top1` untuk
 classification atau `metrics/PQ`, `metrics/SQ`, dan `metrics/RQ` untuk
 panoptic segmentation.
 
 ## Bagaimana menjalankan folder, video, atau webcam?
 
-Berikan sebagai source. Path file adalah satu gambar, direktori adalah setiap
+Berikan sebagai sumber. Path berkas adalah satu gambar, direktori adalah setiap
 gambar di dalamnya, path video adalah video, bilangan bulat adalah indeks
-webcam, dan URL RTSP, RTMP, TCP, UDP, atau HLS adalah live stream. File
-`.streams` mencantumkan beberapa sumber sekaligus. Live source memerlukan
+webcam, dan URL RTSP, RTMP, TCP, UDP, atau HLS adalah live stream. Berkas
+`.streams` mencantumkan beberapa sumber sekaligus. Live sumber memerlukan
 `stream=True`, yang menghasilkan satu `Results` per frame alih-alih membangun
 list; flag yang sama layak digunakan untuk video panjang dan direktori besar.
 Hanya URL halaman YouTube yang memerlukan ekstra `libreyolo[stream]`.
@@ -107,9 +107,9 @@ Berikan `classes` kepada `predict` dengan indeks kelas yang diinginkan, misalnya
 `classes=[0, 2]`. `conf` menetapkan ambang batas confidence dengan default
 `0.25`, dan `max_det` membatasi deteksi per gambar dengan default `300`.
 
-## Apakah CLI menggunakan flag atau pasangan key=value?
+## Apakah CLI menggunakan flag atau pasangan kunci=value?
 
-Key dan value yang disambung tanda sama dengan untuk setiap perintah:
+Kunci dan value yang disambung tanda sama dengan untuk setiap perintah:
 
 ```bash
 libreyolo predict model=yolo9-t source=my-image.jpg save=True
@@ -132,7 +132,7 @@ ekspor family; [bagian ekspor](/docs/export) menjelaskan formatnya.
 Ketiganya merupakan task berbeda. `segment` menghasilkan satu mask per objek
 terdeteksi. `semantic` memberi label kelas pada setiap piksel tanpa memisahkan
 instance. `panoptic` memberi setiap piksel tepat satu label, menggabungkan thing
-yang dapat dihitung dengan stuff amorf. Ground truth, field hasil, dan metriknya
+yang dapat dihitung dengan stuff amorf. Ground truth, kolom hasil, dan metriknya
 berbeda, dan family mendukung task yang muncul dalam list task-nya.
 
 ## Bagaimana melatih dengan kelas sendiri?
@@ -147,13 +147,16 @@ sebagai gate CI.
 ## Mengapa pemuatan menampilkan peringatan metadata?
 
 Karena checkpoint tidak memiliki metadata v1.0 lengkap. Pemuatan berlanjut
-melalui jalur kompatibilitas, dan peringatan menyebutkan key yang hilang.
+melalui jalur kompatibilitas, dan peringatan menyebutkan kunci yang hilang.
 Jalankan `libreyolo metadata path=<file>` untuk melihat isinya, dan lihat
 [checkpoint dan bobot](/docs/weights) untuk persyaratan skema.
 
 ## Import berhenti berfungsi setelah upgrade. Apa yang berubah?
 
 Dua nama kelas diubah agar konsisten: `LibreYOLORTDETR` menjadi `LibreRTDETR`
-dan `LibreYOLORFDETR` menjadi `LibreRFDETR`. Nama lama tetap di-resolve dan
+dan `LibreYOLORFDETR` menjadi `LibreRFDETR`. Nama lama tetap diselesaikan dan
 menghasilkan `DeprecationWarning` yang menunjuk ke nama baru, sehingga kode lama
 tetap berjalan selama diperbarui.
+
+
+

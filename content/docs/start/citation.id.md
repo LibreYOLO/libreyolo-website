@@ -19,13 +19,13 @@ source_hash: 0f3f23e4e85e38be
 
 ## Mengutip LibreYOLO
 
-Repository menerbitkan metadata sitasinya sebagai
+Repositori menerbitkan metadata sitasinya sebagai
 [`CITATION.cff`](https://github.com/LibreYOLO/libreyolo/blob/release/CITATION.cff),
-bukan sebagai block BibTeX. GitHub membaca file tersebut dan menyediakan tombol
-Cite this repository pada halaman repository, yang menghasilkan format APA dan
+bukan sebagai block BibTeX. GitHub membaca berkas tersebut dan menyediakan tombol
+Cite this repositori pada halaman repositori, yang menghasilkan format APA dan
 BibTeX. Ambil entri dari sana, bukan mengetiknya sendiri.
 
-Isi lengkap file:
+Isi lengkap berkas:
 
 ```yaml
 cff-version: 1.2.0
@@ -41,10 +41,10 @@ url: "https://github.com/LibreYOLO/libreyolo"
 repository-code: "https://github.com/LibreYOLO/libreyolo"
 ```
 
-File ini sengaja tidak memuat versi maupun tanggal release.
+Berkas ini sengaja tidak memuat versi maupun tanggal rilis.
 [`RELEASING.md`](https://github.com/LibreYOLO/libreyolo/blob/release/RELEASING.md)
 meminta maintainer agar tidak pernah menaikkan versi, memberi tanggal, atau
-mengubah judul `CITATION.cff` maupun `.zenodo.json` saat release, sehingga
+mengubah judul `CITATION.cff` maupun `.zenodo.json` saat rilis, sehingga
 setiap sitasi mengarah ke satu rekaman dan tidak tersebar antarversi. Sebutkan
 versi yang digunakan dalam teks sendiri dan biarkan sitasinya tetap.
 
@@ -57,7 +57,7 @@ yang salah.
 
 Semua yang diperlukan tersedia pada halaman family. Baris Upstream di header
 menyebutkan karya asli dan organisasi di baliknya, serta menautkan paper dan
-repository sumber. Bagian Sitasi di bawahnya memuat BibTeX.
+repositori sumber. Bagian Sitasi di bawahnya memuat BibTeX.
 
 BibTeX tersebut disalin persis dari block sitasi milik penulis, biasanya bagian
 Citation pada README upstream atau sebuah `CITATION.cff`. Tampilannya menyertakan
@@ -79,10 +79,11 @@ benar:
 
 - Library, dikutip dari `CITATION.cff`, beserta versi yang digunakan. `libreyolo version` mencetaknya bersama versi Python, torch, dan CUDA yang digunakan saat berjalan.
 - Karya upstream, dikutip dari bagian Sitasi pada halaman family.
-- Nama file checkpoint yang persis, seperti `LibreRFDETRm.pt`. Ukuran dalam satu family berperilaku berbeda, dan beberapa family menerbitkan checkpoint yang dilatih pada dataset berbeda dengan prefix yang sama. Karena itu, nama family saja tidak mengidentifikasi yang dijalankan.
+- Nama berkas checkpoint yang persis, seperti `LibreRFDETRm.pt`. Ukuran dalam satu family berperilaku berbeda, dan beberapa family menerbitkan checkpoint yang dilatih pada dataset berbeda dengan prefix yang sama. Karena itu, nama family saja tidak mengidentifikasi yang dijalankan.
 
 Atribusi juga merupakan ketentuan lisensi bagi banyak hal yang diterbitkan
 LibreYOLO. Apache-2.0 dan family CC BY sama-sama mewajibkan pemberitahuan tetap
 menyertai bobot yang didistribusikan ulang. Kewajiban ini terpisah dari mengutip
 paper. Lihat [lisensi](/docs/licensing) untuk mengetahui ketentuan yang berlaku
 pada setiap checkpoint.
+

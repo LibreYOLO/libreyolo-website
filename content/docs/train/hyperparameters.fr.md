@@ -1,6 +1,6 @@
 ---
 title: Hyperparamètres
-seo_title: Hyperparamètres d'entraînement dans LibreYOLO
+seo_title: "Hyperparamètres d'entraînement dans LibreYOLO"
 description: >-
   Les arguments importants de train() : epochs, batch, lr0, optimiseur, EMA,
   autobatch, accumulation de gradients et reprise, ainsi que la raison des
@@ -45,7 +45,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           epochs=100 batch=16 imgsz=640 lr0=0.01
   defaults:
-    - label: Lire les valeurs par défaut résolues d'une famille
+    - label: "Lire les valeurs par défaut résolues d'une famille"
       language: python
       code: |
         from dataclasses import fields

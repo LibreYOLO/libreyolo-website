@@ -90,7 +90,7 @@ yang berisi sembilan family yang sama.
 ## Family yang didukung
 
 RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2, dan v4, EC, serta ConvNeXt.
-Gate-nya adalah atribut `supports_lora` pada class trainer setiap family, dan CLI
+Gate-nya adalah atribut `supports_lora` pada kelas trainer setiap family, dan CLI
 memiliki allowlist yang cocok.
 
 Cakupan task lebih sempit daripada cakupan family. D-FINE dan EC hanya mendukung
@@ -138,16 +138,16 @@ blok transformer menggunakan resep bersama, serta projector dan head tetap rapat
 
 Blok ConvNeXt memiliki MLP linear channels-last, `fc1` dan `fc2`, yang menerima
 adapter biasa. Konvolusi depthwise, norm, dan parameter layer-scale dibekukan.
-Head classification tetap rapat agar jumlah class kustom terus berfungsi.
+Head classification tetap rapat agar jumlah kelas kustom terus berfungsi.
 
 Head deteksi dan classification selalu dapat dilatih di semua resep karena jumlah
-class kustom memerlukan head yang dilatih dari awal.
+kelas kustom memerlukan head yang dilatih dari awal.
 
 ## Checkpoint dan ekspor
 
 `best.pt` dan `last.pt` mempertahankan tensor adapter, sehingga proses LoRA dapat
 dilanjutkan atau diperiksa seperti proses lain. Memuat salah satu checkpoint itu
-memerlukan extra `lora`, karena loader mengulang injeksi adapter agar key cocok.
+memerlukan extra `lora`, karena loader mengulang injeksi adapter agar kunci cocok.
 
 `export()` menggabungkan adapter ke bobot rapat, sehingga artefak hasil ekspor
 tidak bergantung pada `peft`. Penggabungan yang sama tersedia langsung untuk
@@ -175,3 +175,4 @@ puncak. Untuk anggaran VRAM paling ketat, turunkan juga `batch` atau `imgsz`.
   meskipun parent group backbone dibekukan.
 - [Hyperparameter](/docs/train/hyperparameters) untuk `batch`, `imgsz`, dan bagian
   lain `train()`.
+

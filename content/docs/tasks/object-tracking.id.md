@@ -31,7 +31,7 @@ snippets:
 
         # track() adalah generator: satu Results per frame yang diproses.
         for result in model.track("video.mp4"):
-            print(result.track_id)        # tensor int (N,), selaras dengan box
+            print(result.track_id)        # tensor int (N,), selaras dengan bounding box
             print(result.boxes.xyxy)
     - label: Pilih tracker
       language: python
@@ -50,7 +50,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # Tanpa output_path, file berada di runs/track/<video_stem>.mp4.
+        # Tanpa output_path, berkas berada di runs/track/<video_stem>.mp4.
         for result in model.track("video.mp4", save=True, vid_stride=2):
             pass
     - label: Sesuaikan tracker
@@ -69,7 +69,7 @@ snippets:
         for result in model.track("video.mp4", tracker_config=config):
             print(result.track_id)
 
-        # Atau berikan field yang sama sebagai keyword argument dan biarkan
+        # Atau berikan kolom yang sama sebagai keyword argument dan biarkan
         track() membuatnya.
 
         for result in model.track("video.mp4", tracker="botsort",
@@ -80,7 +80,7 @@ source_hash: f1fa7dcf60597d6b
 
 ## Definisi
 
-Tracking bukan salah satu key task LibreYOLO dan tidak ada checkpoint tracking
+Tracking bukan salah satu kunci task LibreYOLO dan tidak ada checkpoint tracking
 untuk diunduh. Tracking adalah metode pada model, `model.track(source)`, yang
 menjalankan deteksi pada setiap frame dan mengasosiasikan hasil lintas waktu.
 Metode ini berupa generator: menghasilkan satu `Results` per frame yang diproses,
@@ -94,23 +94,23 @@ varian OC-SORT, sehingga objek yang ditemukan kembali dalam window tersebut
 mempertahankan id asli.
 
 Karena asosiasi terjadi setelah deteksi, payload lain pada frame tetap tersedia:
-`Results` tracking adalah `Results` deteksi yang di-slice ke baris cocok, sehingga
-mask dan keypoint diteruskan bersama box.
+`Results` tracking adalah `Results` deteksi yang dipotong ke baris cocok, sehingga
+mask dan keypoint diteruskan bersama bounding box.
 
 ## Model
 
-Dua pilihan independen membentuk run tracking: model yang menghasilkan box per
+Dua pilihan independen membentuk run tracking: model yang menghasilkan bounding box per
 frame dan tracker yang menghubungkannya.
 
 Setiap model LibreYOLO native dengan task deteksi, segmentation, atau pose
 menyediakan `track()`. Lihat [indeks model](/docs/models) untuk list lengkap,
 atau mulai dari [YOLO9](/docs/models/yolov9),
 [RF-DETR](/docs/models/rf-detr), [D-FINE](/docs/models/d-fine), atau
-[RTMDet](/docs/models/rtmdet). Task tanpa box untuk diasosiasikan menolak
-pemanggilan: classification, oriented box, point, depth, surface normal, edge,
+[RTMDet](/docs/models/rtmdet). Task tanpa bounding box untuk diasosiasikan menolak
+pemanggilan: classification, oriented bounding box, point, depth, surface normal, edge,
 semantic dan panoptic segmentation, restoration, OCR, serta body mesh.
 
-Dua tier model juga menolaknya. Model `LibreSAM` adalah image segmenter dan
+Dua tier model juga menolaknya. Model `LibreSAM` adalah gambar segmenter dan
 model `LibreOpenVocab` adalah detektor per frame; keduanya memunculkan error dari
 `track()` dan menggunakan `predict()` per frame.
 
@@ -139,11 +139,11 @@ ditemukan kembali. Dikonfigurasi dengan `OCSortConfig`.
 `"deepocsort"` memperluas OC-SORT dengan appearance. Setiap track mempertahankan
 moving average embedding re-identification yang dibobot confidence, dan cosine
 similarity masuk biaya asosiasi, sehingga identitas bertahan melalui occlusion
-panjang dan target yang bersilangan. Biayanya satu forward network embedding
+panjang dan target yang bersilangan. Biayanya satu forward jaringan embedding
 kecil per frame, dan bobot OSNet diunduh saat penggunaan pertama. Dikonfigurasi
 dengan `DeepOCSortConfig`.
 
-## Predict
+## Prediksi
 
 <code-tabs name="predict" />
 
@@ -157,19 +157,22 @@ dengan atau di atas `track_low_thresh`, dengan default 0.1.
 
 Pengaturan tracker masuk melalui dua cara. Berikan instance konfigurasi ke
 `tracker_config=`, dan jenisnya memilih tracker sehingga `tracker=` redundan.
-Atau berikan field sebagai keyword argument dan biarkan `track()` membuat
-konfigurasi untuk tracker terpilih; key tidak dikenal menghasilkan peringatan.
-Dalam kedua cara, `track_conf` diabaikan setelah key pencocokan ditetapkan
+Atau berikan kolom sebagai keyword argument dan biarkan `track()` membuat
+konfigurasi untuk tracker terpilih; kunci tidak dikenal menghasilkan peringatan.
+Dalam kedua cara, `track_conf` diabaikan setelah kunci pencocokan ditetapkan
 eksplisit.
 
 Argumen lain mencerminkan prediksi: `iou`, `imgsz`, `classes`, `max_det`,
-`vid_stride`, `show`, dan `save` bersama `output_path`. Source adalah path file
+`vid_stride`, `show`, dan `save` bersama `output_path`. Sumber adalah path berkas
 video. Lihat [prediksi](/docs/predict) untuk penanganan hasil.
 
-## Train
+## Pelatihan
 
 Tracker tidak dilatih. Tiga dari empat tracker merupakan model motion murni
-tanpa parameter terpelajari, sedangkan network appearance Deep OC-SORT adalah
+tanpa parameter terpelajari, sedangkan jaringan appearance Deep OC-SORT adalah
 checkpoint re-identification terbitan yang diunduh saat penggunaan pertama.
 Peningkatan kualitas tracking berarti memperbaiki detektor atau menyesuaikan
 ambang batas asosiasi di atas.
+
+
+

@@ -1,15 +1,15 @@
 ---
-title: Systèmes de journalisation des expériences
-seo_title: Systèmes de journalisation et callbacks dans LibreYOLO
+title: Loggers d'expériences
+seo_title: Loggers d'expériences et callbacks dans LibreYOLO
 description: >-
-  Envoyer les métriques d'entraînement à TensorBoard, MLflow, Weights & Biases,
-  Comet, ClearML, Neptune ou DVCLive, et écrire votre propre callback sur les
+  Envoyez les mesures d'entraînement vers TensorBoard, MLflow, Weights & Biases,
+  Comet, ClearML, Neptune ou DVCLive, et écrivez votre propre callback sur les
   quatre hooks d'entraînement.
 lead: >-
-  Chaque famille entraînable émet quatre événements d'entraînement. Les systèmes
-  de journalisation intégrés sont des objets callback à l'écoute de ces mêmes
-  événements. Une intégration de backend et un hook personnalisé partagent donc
-  une interface.
+  Chaque famille entraînable émet quatre événements d'entraînement. Les loggers
+  intégrés sont des objets callback qui écoutent ces mêmes événements, si bien
+  qu'une intégration de backend et un hook personnalisé utilisent une interface
+  unique.
 keywords:
   - entraînement tensorboard
   - suivi mlflow
@@ -20,7 +20,7 @@ keywords:
   - dvclive
   - callbacks entraînement
   - métriques entraînement csv
-  - surveillance libreyolo
+  - libreyolo monitor
 last_verified: 1.5.0
 snippets:
   logger:
@@ -44,7 +44,7 @@ snippets:
             loggers=[MLflowLogger(tracking_uri="sqlite:///mlflow.db"), "tensorboard"],
         )
   callback:
-    - label: Une fonction ordinaire
+    - label: Une fonction simple
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -89,56 +89,56 @@ snippets:
         libreyolo monitor                     # exécution la plus récente sous
         runs/
 
-        libreyolo monitor runs/train/exp      # exécution précise
+        libreyolo monitor runs/train/exp      # une exécution précise
 source_hash: de035acbaed32804
 ---
 
-## Activer un système de journalisation
+## Activer un logger
 
 `loggers=` accepte un nom enregistré, une instance configurée ou un itérable
 qui mélange les deux.
 
 <code-tabs name="logger" />
 
-Les noms sont insensibles à la casse. L'ensemble enregistré comprend
-`tensorboard`, `mlflow`, `wandb`, `comet`, `clearml`, `neptune`, `dvclive` et
-`dvc`, ce dernier étant un alias de `dvclive`. Toute autre valeur déclenche
-immédiatement une erreur qui énumère les noms valides. Aucune valeur ne les
-active tous et il n'existe aucune option CLI. `loggers=` est un argument Python.
+Les noms sont insensibles à la casse. L'ensemble enregistré est `tensorboard`,
+`mlflow`, `wandb`, `comet`, `clearml`, `neptune`, `dvclive` et `dvc`, ce dernier
+étant un alias de `dvclive`. Toute autre valeur provoque immédiatement une
+erreur qui liste les noms valides. Aucune valeur ne les active tous et il
+n'existe aucun flag CLI : `loggers=` est un argument Python.
 
 ## Données enregistrées par chaque backend
 
-Tous écrivent les mêmes noms de métriques. Un tableau de bord garde donc la
-même apparence quel que soit votre choix.
+Tous écrivent les mêmes noms de mesures. Un tableau de bord se présente donc de
+la même façon quel que soit votre choix :
 
 | Clé | Valeur |
 |---|---|
-| `train/loss` | Perte d'entraînement moyenne de l'époque |
-| `train/loss/<component>` | Chaque composant de perte rapporté par la famille |
-| `lr/<group>` | Taux d'apprentissage de chaque groupe de paramètres de l'optimiseur |
-| `val/<metric>` | Chaque métrique de validation, sans son préfixe `metrics/` |
-| `time/epoch_seconds` | Temps réel de l'époque |
+| `train/loss` | loss d'entraînement moyenne de l'époque |
+| `train/loss/<component>` | chaque composant de loss rapporté par la famille |
+| `lr/<group>` | learning rate de chaque groupe de paramètres de l'optimiseur |
+| `val/<metric>` | chaque mesure de validation, sans son préfixe `metrics/` |
+| `time/epoch_seconds` | temps réel de l'époque |
 
-L'étape est le numéro d'époque à partir de 1. La configuration d'entraînement
-entièrement résolue est journalisée comme paramètres au début. Le nom
-d'exécution vaut par défaut `<family><size>-<task>`, par exemple
+L'étape est l'époque indexée à partir de 1. La configuration d'entraînement
+entièrement résolue est enregistrée comme paramètres au début de l'entraînement,
+et le nom d'exécution vaut par défaut `<family><size>-<task>`, par exemple
 `yolo9s-detect`.
 
-À la fin, les backends compatibles avec les artefacts téléversent
-`results.csv`, `train_config.yaml` et `summary.json` lorsqu'ils existent, ainsi
-que `weights/best.pt` avec `log_checkpoints=True`. TensorBoard ne téléverse rien
-car il ne possède aucun concept d'artefact. Aucun système de journalisation ne
-téléverse les graphiques de validation.
+À la fin de l'entraînement, les backends qui prennent en charge les artefacts
+envoient `results.csv`, `train_config.yaml` et `summary.json` lorsqu'ils
+existent, ainsi que `weights/best.pt` avec `log_checkpoints=True`. TensorBoard
+n'envoie rien, car il n'a aucun concept d'artefact. Aucun logger n'envoie les
+images de graphiques de validation.
 
 ## Comportement en cas d'échec
 
-L'absence du paquet d'un backend déclenche une erreur à sa construction avec la
-commande d'installation. Demander un système de journalisation sans rien
-obtenir masquerait un bogue.
+Un package de backend absent provoque une erreur à la construction, qui indique
+la commande d'installation, car demander un logger et ne rien obtenir
+silencieusement masque un bug.
 
-Un échec du backend pendant l'exécution produit le comportement inverse. La
-première exception d'un gestionnaire désactive ce système pour le reste de
-l'exécution, la journalise, termine l'exécution du backend comme échouée, puis
+Une défaillance du backend pendant l'exécution produit l'effet inverse. La
+première exception d'un handler désactive ce logger pour le reste de
+l'exécution, la journalise, termine l'exécution du backend comme un échec, puis
 l'entraînement continue. La panne d'un serveur de suivi ne vous coûte pas
 l'entraînement.
 
@@ -158,39 +158,39 @@ Chacun nécessite son propre extra.
 
 Importez les classes depuis `libreyolo.training`.
 
-Quelques particularités des backends sont utiles avant la première exécution.
+Quelques remarques propres aux backends sont à connaître avant la première
+exécution :
 
-Les fichiers d'événements TensorBoard sont placés par défaut dans
-`<save_dir>/tensorboard`. Affichez-les avec
+Les fichiers d'événements TensorBoard vont par défaut dans
+`<save_dir>/tensorboard`. Consultez-les avec
 `tensorboard --logdir runs/train`.
 
-MLflow 3.x a déprécié le stockage local `./mlruns` et déclenche une erreur sauf
-si `MLFLOW_ALLOW_FILE_STORE=true`. Pour un suivi local sans serveur, transmettez
-plutôt une URI de base de données comme dans l'extrait, puis lisez-la avec
-`mlflow ui --backend-store-uri sqlite:///mlflow.db`.
+MLflow 3.x a déprécié le stockage local `./mlruns` et provoque une erreur sauf
+si `MLFLOW_ALLOW_FILE_STORE=true`. Pour un suivi local sans serveur, passez
+plutôt une URI de base de données comme dans l'extrait ci-dessus, puis lisez-la
+avec `mlflow ui --backend-store-uri sqlite:///mlflow.db`.
 
-Weights & Biases revient à la variable d'environnement `WANDB_PROJECT`, puis à
-`libreyolo`. Comet revient à `COMET_PROJECT_NAME`, puis à `libreyolo`, et tire
-ses identifiants de sa propre configuration. `online=False` produit une
-expérience hors ligne. ClearML crée une nouvelle tâche, rapporte la
-configuration sous `TrainConfig` et désactive la capture automatique des
-frameworks afin de ne pas rapporter deux fois les métriques. Neptune emploie le
-client `neptune-scale` actuel plutôt que l'ancien paquet, et `mode="offline"`
+Weights & Biases se rabat sur la variable d'environnement `WANDB_PROJECT`, puis
+sur `libreyolo`. Comet se rabat sur `COMET_PROJECT_NAME`, puis sur `libreyolo`,
+et récupère les identifiants dans sa propre configuration ; `online=False`
+produit une expérience hors ligne. ClearML crée une nouvelle tâche, rapporte la
+configuration sous `TrainConfig` et désactive la capture automatique du
+framework pour éviter de rapporter les mesures deux fois. Neptune utilise le
+client `neptune-scale` actuel plutôt que l'ancien package, et `mode="offline"`
 journalise localement.
 
-DVCLive écrit dans `<save_dir>/dvclive`. Il construit son arbre de résumé à
-partir de `/` et ne peut pas stocker un nombre flottant à un chemin qui sert
-aussi de parent. `train/loss/box` devient donc `train/loss.box` tandis que
-`train/loss` conserve son nom. LibreYOLO désactive également les comportements
-habituels de DVCLive qui enregistrent une expérience DVC et écrivent un
-`dvc.yaml` à la racine. Un système activé explicitement ne crée ainsi aucun
-état de contrôle de version hors du répertoire d'exécution. Transmettez
-`save_dvc_exp=True` ou un `dvcyaml=` explicite pour les réactiver.
+DVCLive écrit dans `<save_dir>/dvclive`. Il construit son arborescence de résumé
+à partir de `/` et ne peut pas contenir un nombre flottant à un chemin qui est
+aussi un parent. `train/loss/box` est donc écrit comme `train/loss.box`, tandis
+que `train/loss` conserve son nom. LibreYOLO désactive également les valeurs par
+défaut habituelles de DVCLive qui enregistrent une expérience DVC et écrivent un
+fichier `dvc.yaml` à la racine. Un logger activé explicitement ne crée donc
+aucun état de contrôle de version hors du répertoire d'exécution ; passez
+`save_dvc_exp=True` ou un `dvcyaml=` explicite pour les rétablir.
 
-Neptune est volontairement exclu de `libreyolo[all]`. Son client stable exige
-une version de protobuf antérieure à 7, tandis que l'extra TFLite exige
-protobuf 7. Installez `libreyolo[neptune]` dans un environnement dépourvu de
-l'extra TFLite.
+Neptune est délibérément exclu de `libreyolo[all]` : son client stable exige une
+version de protobuf inférieure à 7, tandis que l'extra TFLite exige protobuf 7.
+Installez `libreyolo[neptune]` dans un environnement sans l'extra TFLite.
 
 ## Écrire un callback
 
@@ -202,69 +202,71 @@ Les quatre mêmes événements pilotent tout.
 |---|---|---|
 | `TrainStartEvent` | après la configuration, avant l'époque 1 | `start_epoch`, `total_epochs`, `model_family`, `model_size`, `task`, `save_dir`, `config` |
 | `TrainEpochEvent` | après chaque époque, entraînement et validation | `epoch`, `train_loss`, `train_loss_items`, `lr`, `val_metrics`, `validated`, `is_best`, `current_metric`, `best_metric`, `best_epoch`, `epoch_seconds` |
-| `TrainEndEvent` | après la fin de l'entraînement | `completed_epochs`, `final_loss`, `best_metric`, `best_epoch`, `total_seconds`, `results` |
-| `TrainExceptionEvent` | si l'entraînement déclenche une erreur | `epoch`, `exception`, `exception_type`, `exception_message`, `elapsed_seconds` |
+| `TrainEndEvent` | à la fin de l'entraînement | `completed_epochs`, `final_loss`, `best_metric`, `best_epoch`, `total_seconds`, `results` |
+| `TrainExceptionEvent` | si l'entraînement lève une erreur | `epoch`, `exception`, `exception_type`, `exception_message`, `elapsed_seconds` |
 
-Une fonction ordinaire reçoit uniquement `TrainEpochEvent`. Un objet peut
-implémenter tout sous-ensemble de `on_train_start`, `on_train_epoch_end`,
-`on_train_end` et `on_train_exception`. Les méthodes absentes sont ignorées.
+Un callable simple reçoit uniquement `TrainEpochEvent`. Un objet peut
+implémenter n'importe quel sous-ensemble de `on_train_start`,
+`on_train_epoch_end`, `on_train_end` et `on_train_exception` ; les méthodes
+absentes sont ignorées.
 
-`TrainStartEvent.config` est la configuration entièrement résolue, les
-arguments utilisateur étant fusionnés avec les valeurs par défaut de la
-famille, sous forme d'association en lecture seule. Les événements sont des
-dataclasses figées et leurs associations sont en lecture seule. Un callback ne
-peut donc pas modifier l'exécution en y écrivant.
+`TrainStartEvent.config` est la configuration entièrement résolue, où les kwargs
+de l'utilisateur sont fusionnés avec les valeurs par défaut de la famille, sous
+forme de correspondance en lecture seule. Les événements sont des dataclasses
+gelées et leurs correspondances sont en lecture seule. Un callback ne peut donc
+pas modifier l'exécution en y écrivant.
 
-Une exception de `on_train_start`, `on_train_epoch_end` ou `on_train_end` se
-propage et termine l'exécution. Seul `on_train_exception` est protégé afin de
-ne pas masquer l'échec d'origine.
+Une exception issue de `on_train_start`, `on_train_epoch_end` ou `on_train_end`
+se propage et termine l'exécution. Seul `on_train_exception` est protégé, afin
+qu'il ne puisse pas masquer l'échec d'origine.
 
-En entraînement multi-GPU, les callbacks ne se déclenchent que sur le rang 0.
-Avec la création DDP automatique, ils doivent aussi être sérialisables par
-pickle, soit une classe ou une fonction au niveau du module plutôt qu'une
-fermeture ou une lambda. Consultez
-[l'entraînement multi-GPU](/docs/train/multi-gpu).
+Pendant un entraînement multi-GPU, les callbacks se déclenchent uniquement sur
+le rang 0. Avec le spawn DDP automatique, ils doivent aussi être sérialisables
+par pickle, ce qui exige une classe ou une fonction au niveau du module plutôt
+qu'une closure ou une lambda. Consultez l'
+[entraînement multi-GPU](/docs/train/multi-gpu).
 
-## Fichiers écrits par chaque exécution
+## Fichiers toujours écrits par chaque exécution
 
 Trois fichiers sont placés dans le répertoire d'exécution sans aucune
-configuration, pour chaque famille.
+configuration, pour chaque famille :
 
 | Fichier | Écriture | Contenu |
 |---|---|---|
-| `status.json` | atomiquement, à chaque époque et au démarrage, à la fin et en cas d'échec | `state` valant `running`, `completed` ou `failed`, `current_epoch`, `total_epochs`, `progress`, `eta_seconds`, dernières `metrics`, `best_metric`, `best_epoch` et objet `error` en cas d'échec |
-| `metrics.jsonl` | une ligne ajoutée par époque | une ligne JSON par époque, avec le même schéma que `results.csv` |
-| `train.log` | en direct | sortie console de l'exécution |
+| `status.json` | atomiquement, à chaque époque ainsi qu'au début, à la fin et en cas d'échec | `state` parmi `running`, `completed` ou `failed`, `current_epoch`, `total_epochs`, `progress`, `eta_seconds`, dernières `metrics`, `best_metric`, `best_epoch` et objet `error` en cas d'échec |
+| `metrics.jsonl` | ajout d'une ligne par époque | une ligne JSON par époque, selon le même schéma que `results.csv` |
+| `train.log` | en direct | sortie de console de l'exécution |
 
-`status.json` est la lecture peu coûteuse pour un script ou un agent qui
-interroge une exécution. Son écriture atomique empêche un lecteur de voir un
-fichier partiellement écrit.
+`status.json` constitue la lecture peu coûteuse pour un script ou un agent qui
+interroge une exécution, et l'écriture atomique garantit qu'un lecteur ne voit
+jamais un fichier partiellement écrit.
 
-`results.csv` et `summary.json` sont distincts et dépendent de la famille. Ils
-sont écrits pour YOLOv9, YOLOv9-E2E, YOLOv9-P2, YOLOv7, YOLO-NAS, RF-DETR, EC
-et DINOv2, mais pas pour les autres familles. `results.csv` reçoit une ligne
-par époque avec les composants de perte, les métriques de validation et les
-taux d'apprentissage en colonnes. Son en-tête s'élargit lorsqu'une nouvelle
-colonne apparaît. Lors d'une reprise, il est tronqué aux lignes antérieures à
-l'époque reprise afin d'éviter les doublons.
+`results.csv` et `summary.json` sont séparés et dépendent de la famille. Ils
+sont écrits pour YOLOv9, YOLOv9-E2E, YOLOv9-P2, YOLOv7, YOLO-NAS, RF-DETR, EC et
+DINOv2, mais pas pour les autres familles. `results.csv` reçoit une ligne par
+époque avec les composants de loss, les mesures de validation et les learning
+rates sous forme de colonnes, et son en-tête s'élargit lorsqu'une nouvelle
+colonne apparaît. Lors d'une reprise, il est ramené aux lignes antérieures à
+l'époque reprise au lieu de les dupliquer.
 
-Le programme d'entraînement écrit également toujours `train_config.yaml` à la
+En parallèle, le trainer écrit toujours `train_config.yaml` pendant la
 configuration et les checkpoints sous `weights/`.
 
 ## Suivre une exécution en direct
 
 <code-tabs name="monitor" />
 
-`libreyolo monitor` sert avec la seule bibliothèque standard un tableau de bord
-dans le navigateur au-dessus de ces fichiers : graphiques des métriques, fin du
-journal et éventuelles images de validation, avec actualisation pendant
-l'exécution. Il est en lecture seule et ne touche jamais le processus
-d'entraînement. Il peut donc se connecter à une exécution active, rouvrir une
-exécution terminée ou inspecter une exécution interrompue.
+`libreyolo monitor` fournit un tableau de bord dans le navigateur à partir des
+fichiers ci-dessus en utilisant uniquement la bibliothèque standard :
+graphiques de mesures, fin du journal et éventuelles images de validation, avec
+actualisation tant que l'exécution est active. Il est en lecture seule et ne
+touche jamais au processus d'entraînement. Il peut donc se rattacher à une
+exécution active, rouvrir une exécution terminée ou inspecter une exécution qui
+a planté.
 
-## Voir aussi
+## Pages connexes
 
-- [Validation et métriques](/docs/train/validation) pour la signification des
-  clés `val/` et l'ajout d'une perte de validation.
-- [Performances d'entraînement](/docs/train/performance) pour le profileur, qui
-  répond à une autre question.
+- [Validation et mesures](/docs/train/validation) pour la signification des clés
+  `val/` et la façon d'ajouter une loss de validation.
+- [Performances d'entraînement](/docs/train/performance) pour le profileur, un
+  outil différent qui répond à une autre question.

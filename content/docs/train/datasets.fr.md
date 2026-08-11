@@ -1,6 +1,6 @@
 ---
 title: Datasets
-seo_title: Datasets d'entraînement dans LibreYOLO
+seo_title: "Datasets d'entraînement dans LibreYOLO"
 description: >-
   Le YAML de dataset lu par LibreYOLO, la disposition de dossiers attendue, le
   fonctionnement du téléchargement automatique et la commande doctor qui vérifie

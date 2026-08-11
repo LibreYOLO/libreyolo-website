@@ -3,7 +3,7 @@ title: API model
 seo_title: Metode dan signature objek model LibreYOLO
 description: >-
   Setiap metode pada model LibreYOLO yang dimuat: predict, embed, track, val,
-  train, export, save, quantize, info, dan kontrol CUDA graph, dengan default
+  train, ekspor, save, quantize, info, dan kontrol CUDA graph, dengan default
   sebenarnya.
 lead: >-
   Model LibreYOLO yang dimuat adalah instance BaseModel. Halaman ini
@@ -104,7 +104,7 @@ model(
 
 | Argumen | Default | Arti |
 |---|---|---|
-| `source` | `None` | Gambar, list atau tuple gambar dalam memori, direktori, file video, atau sumber layar seperti `"screen"`, `"screen 1"`, `"screen 1 100 200 512 256"` |
+| `source` | `None` | Gambar, list atau tuple gambar dalam memori, direktori, berkas video, atau sumber layar seperti `"screen"`, `"screen 1"`, `"screen 1 100 200 512 256"` |
 | `conf` | `0.25` | Ambang batas confidence |
 | `iou` | `0.45` | Ambang batas IoU untuk NMS |
 | `imgsz` | `None` | Override ukuran input; `None` menggunakan ukuran native model |
@@ -202,15 +202,15 @@ model.val(
 ) -> Dict
 ```
 
-Mengembalikan dictionary metrik yang key-nya bergantung pada task; deteksi
+Mengembalikan dictionary metrik yang kunci-nya bergantung pada task; deteksi
 mengembalikan `metrics/precision`, `metrics/recall`, `metrics/mAP50`, dan
 `metrics/mAP50-95`. `imgsz` menerima int persegi atau tuple `(height, width)`
 dan default-nya menggunakan ukuran input native model. `plots` adalah alias
 untuk `save_plots`. `allow_download_scripts` mengendalikan Python tertanam yang
-dapat dibawa YAML dataset dalam field `download`.
+dapat dibawa YAML dataset dalam kolom `download`.
 
 `faster_coco_eval` diterima melalui `**kwargs` dengan default `True`, lalu
-kembali ke pycocotools ketika package tidak diinstal. Backend yang dijalankan
+kembali ke pycocotools ketika paket tidak diinstal. Backend yang dijalankan
 dilaporkan pada `model.last_eval_backend`.
 
 Validasi dengan augmentasi memunculkan error untuk task `obb` dan `pose`.
@@ -218,27 +218,27 @@ Validasi dengan augmentasi memunculkan error untuk task `obb` dan `pose`.
 ## train
 
 `train` didefinisikan per family, sehingga argumennya berbeda. Dua perilaku
-digunakan bersama karena base class membungkus `train` setiap family:
+digunakan bersama karena base kelas membungkus `train` setiap family:
 
-- `cfg=` menerima path YAML yang key-nya digabungkan ke pemanggilan. Keyword argument eksplisit mengalahkan file.
+- `cfg=` menerima path YAML yang kunci-nya digabungkan ke pemanggilan. Keyword argument eksplisit mengalahkan berkas.
 - `pretrained=False` pada family dalam kelompok cakupan `g0` atau `g1` melakukan reinitialization model dari awal sebelum pelatihan dan tidak dapat digabungkan dengan `resume=True`.
 
 Knob augmentasi yang benar-benar dipatuhi family merupakan pertanyaan per
 family; lihat [matriks augmentasi](/docs/reference/augmentation-matrix).
 
-## export
+## ekspor
 
 ```python
 model.export(format="onnx", **kwargs) -> str
 ```
 
-Mengembalikan path artefak yang ditulis. `format` di-resolve melalui registry
+Mengembalikan path artefak yang ditulis. `format` diselesaikan melalui registry
 exporter, dengan `engine` sebagai alias `tensorrt` dan `litert` sebagai alias
 `tflite`. Argumen yang digunakan bersama oleh setiap exporter:
 
 | Argumen | Default | Arti |
 |---|---|---|
-| `output_path` | `None` | Path file output; dibuat di bawah `weights/` ketika tidak diberikan |
+| `output_path` | `None` | Path berkas output; dibuat di bawah `weights/` ketika tidak diberikan |
 | `imgsz` | `None` | Tuple `(height, width)` atau satu int; default-nya ukuran native |
 | `opset` | `None` | Versi opset ONNX |
 | `simplify` | `True` | Menjalankan simplifikasi graph ONNX |
@@ -335,3 +335,5 @@ dan `CudaGraphUnavailable` ketika capture gagal.
 Objek `Results` memiliki `.to()`, `.cpu()`, `.cuda()`, dan `.numpy()`; lihat
 [Jenis Results](/docs/reference/results-types). Model dipindahkan dengan
 memberikan `device=` kepada `predict`, atau saat konstruksi.
+
+

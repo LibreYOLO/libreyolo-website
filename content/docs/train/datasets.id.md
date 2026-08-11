@@ -1,14 +1,14 @@
 ---
-title: Datasets
+title: Dataset
 seo_title: Dataset pelatihan di LibreYOLO
 description: >-
-  YAML dataset LibreYOLO membaca, tata letak folder yang diharapkannya,
-  bagaimana autodownload bekerja, dan perintah doctor yang memeriksa dataset
+  YAML dataset yang dibaca LibreYOLO, tata letak folder yang diharapkan,
+  cara kerja pengunduhan otomatis, dan perintah doctor yang memeriksa dataset
   sebelum pelatihan.
 lead: >-
-  LibreYOLO dataset adalah file YAML yang menamai root, pembagiannya, dan nama
-  kelasnya. Semua hal lain, termasuk tempat file label berada, diturunkan dari
-  file itu berdasarkan konvensi.
+  Dataset LibreYOLO adalah berkas YAML yang menamai root, split, dan nama
+  kelasnya. Semua hal lain, termasuk lokasi berkas label, diturunkan dari
+  berkas tersebut berdasarkan konvensi.
 keywords:
   - format yolo dataset
   - data.yaml
@@ -107,12 +107,12 @@ data sudah ada di disk.
 ## Lokasi dataset di disk
 
 Kunci YAML `path` menamai root dataset. `path` absolut digunakan sebagaimana
-tertulis. Yang relatif dicari terlebih dahulu di bawah direktori datasets, kemudian
-di samping file YAML itu sendiri, dan dataset yang akan diunduh ditempatkan
-di direktori datasets.
+tertulis. Yang relatif dicari terlebih dahulu di bawah direktori dataset, kemudian
+di samping berkas YAML itu sendiri, dan dataset yang akan diunduh ditempatkan
+di direktori dataset.
 
 Direktori itu adalah `~/datasets`, digantikan oleh `LIBREYOLO_DATASETS_DIR`
-. Tidak ada file pengaturan untuk itu.
+. Tidak ada berkas pengaturan untuk itu.
 
 ## Kunci YAML
 
@@ -129,15 +129,15 @@ names:
 download: https://example.com/my-dataset.zip   # opsional
 ```
 
-`train`, `val` dan `test` masing-masing menerima direktori gambar, file `.txt` yang mencantumkan
+`train`, `val` dan `test` masing-masing menerima direktori gambar, berkas `.txt` yang mencantumkan
 satu jalur gambar per baris, atau daftar yang mencampur keduanya. Baris dalam daftar `.txt` dapat
-bersifat relatif, dalam hal ini akan diselesaikan terhadap direktori file daftar itu sendiri, dan
+bersifat relatif, dalam hal ini akan diselesaikan terhadap direktori berkas daftar itu sendiri, dan
 baris yang dimulai dengan `#` dilewati.
 
 `names` dapat berupa daftar atau pemetaan dengan kunci integer. `nc` bersifat opsional; ketika keduanya
 hadir dan tidak setuju, dokter melaporkannya sebagai kesalahan.
 
-## Tata letak direktori dan file label
+## Tata letak direktori dan berkas label
 
 Deteksi, segmentasi, pose, dan kotak berorientasi semuanya berbagi satu tata letak. Label
 path diturunkan dari path gambar dengan menulis ulang komponen direktori `images`
@@ -159,7 +159,7 @@ dan tinggi gambar asli:
 <class_id> <cx> <cy> <w> <h>
 ```
 
-File label yang hilang atau kosong berarti gambar tidak memiliki objek, dan itu dilatih sebagai
+Berkas label yang hilang atau kosong berarti gambar tidak memiliki objek, dan itu dilatih sebagai
 daripada menaikkan. Baris dengan lebih dari lima kolom dibaca sebagai
 poligon dan kotaknya menjadi jangkauan poligon, sehingga ekspor segmentasi yang digunakan
 untuk pelatihan deteksi dimuat tanpa keluhan. Dokter melaporkan berapa banyak baris
@@ -197,7 +197,7 @@ perpustakaan.
 
 ## JSON COCO Asli
 
-File anotasi JSON COCO dapat digunakan langsung. Tambahkan `annotations` pemetaan,
+Berkas anotasi JSON COCO dapat digunakan langsung. Tambahkan `annotations` pemetaan,
 dan jalur split menjadi root gambar:
 
 ```yaml
@@ -219,10 +219,10 @@ daftar gambar meningkatkan alih-alih diam-diam memuat set yang berbeda.
 ## Unduh Otomatis
 
 Sebuah dataset dihitung sebagai hadir ketika jalur `train` atau `val`-nya terselesaikan ke
-direktori yang tidak kosong atau file yang sudah ada. Ketika tidak ada, dan YAML memiliki
+direktori yang tidak kosong atau berkas yang sudah ada. Ketika tidak ada, dan YAML memiliki
 Kunci `download`, nilainya menentukan apa yang terjadi selanjutnya.
 
-Sebuah URL `http` atau `https` diambil dan, jika itu adalah file zip, diekstrak ke dalam
+Sebuah URL `http` atau `https` diambil dan, jika itu adalah berkas zip, diekstrak ke dalam
 dataset root. Apa pun selain itu dianggap sebagai skrip Python yang terlampir dan hanya dijalankan
 ketika `allow_download_scripts=True`. Tanpa itu, skrip dilewati dengan sebuah
 peringatan dan pelatihan terus dilakukan terhadap apapun yang ada di disk.
@@ -248,10 +248,10 @@ Cek datang dalam enam keluarga:
 | Family | Mencari |
 |---|---|
 | `config` | `names`, `nc` yang hilang yang tidak sesuai dengan `names`, split yang hilang atau kosong, nama kelas duplikat |
-| `files` | gambar tanpa file label, label tanpa gambar, gambar yang hilang yang tercantum dalam sebuah split, tabrakan stem |
-| `labels` | baris yang rusak, ID kelas di luar `[0, nc)`, koordinat di luar `[0, 1]`, kotak dengan area nol, kotak sangat kecil atau sangat besar, kotak duplikat, file label identik byte |
+| `files` | gambar tanpa berkas label, label tanpa gambar, gambar yang hilang yang tercantum dalam sebuah split, tabrakan stem |
+| `labels` | baris yang rusak, ID kelas di luar `[0, nc)`, koordinat di luar `[0, 1]`, kotak dengan area nol, kotak sangat kecil atau sangat besar, kotak duplikat, berkas label identik byte |
 | `balance` | kelas dengan nol atau sedikit instance, rasio ketidakseimbangan kelas, kelas yang hanya ada dalam satu split, bagian gambar latar belakang |
-| `images` | file yang tidak dapat didekode, rotasi EXIF, tata letak saluran aneh, gambar seragam, duplikat tepat dan hampir sama |
+| `images` | berkas yang tidak dapat didekode, rotasi EXIF, tata letak saluran aneh, gambar seragam, duplikat tepat dan hampir sama |
 | `splits` | gambar yang sama muncul di dua bagian, tepat atau hampir identik |
 
 `--only` dan `--skip` mengambil id pemeriksaan atau prefiks family, jadi
@@ -269,4 +269,5 @@ diperiksa terhadap kontrak yang salah.
   dilakukan sekali setelah data tersedia.
 - [Validasi dan metrik ](/docs/train/validation) untuk evaluasi pada `val`
   atau pembagian `test`.
+
 

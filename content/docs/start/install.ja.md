@@ -2,13 +2,13 @@
 title: インストール
 seo_title: LibreYOLOをインストール
 description: >-
-  PyPIからLibreYOLOをインストールし、モデルファミリーやエクスポート先に必要な任意追加パッケージを選び、PyTorchがGPUを認識することを確認します。
+  PyPIからLibreYOLOをインストールし、モデルファミリーやエクスポート先に必要な任意の追加パッケージを選び、PyTorchがGPUを認識していることを確認します。
 lead: >-
-  LibreYOLOはlibreyoloとしてPyPIで公開されています。基本パッケージは推論、学習、検証と、PyTorch以外を必要としないモデルファミリーに対応し、任意追加パッケージで残りの機能を追加できます。
+  LibreYOLOはlibreyoloとしてPyPIで公開されています。基本パッケージは予測、学習、検証と、PyTorch以外を必要としないモデルファミリーに対応し、任意の追加パッケージでその他の機能を導入できます。
 keywords:
   - LibreYOLO インストール
   - pip install LibreYOLO
-  - LibreYOLO 追加パッケージ
+  - LibreYOLO extras
   - LibreYOLO CUDA
   - LibreYOLO GPU
   - LibreYOLO 必要環境
@@ -21,7 +21,7 @@ meta:
     value: 3.10以降
   - label: コードライセンス
     value: MIT
-  - label: 中核依存関係
+  - label: コア依存関係
     value: PyTorch 2.4以降
 snippets:
   install:
@@ -29,16 +29,16 @@ snippets:
       language: bash
       code: |
         pip install libreyolo
-    - label: 追加パッケージを指定
+    - label: 追加パッケージを含める
       language: bash
       code: |
-        # 複数を1回でインストールするにはカンマで区切る
+        # 複数を一度にインストールするにはカンマで区切ります。
         pip install "libreyolo[rfdetr,onnx]"
     - label: すべて
       language: bash
       code: |
         pip install "libreyolo[all]"
-    - label: ソースから
+    - label: ソースからインストール
       language: bash
       code: |
         git clone https://github.com/LibreYOLO/libreyolo.git
@@ -48,8 +48,8 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        # Python Torch CUDA cuDNN 認識されている全GPU
-        # インストール済みの任意パッケージを表示する
+        # Python、PyTorch、CUDA、cuDNN、認識されている全GPU、インストール済みの
+        # 任意パッケージを表示します。
         libreyolo checks
     - label: Python
       language: python
@@ -60,8 +60,8 @@ snippets:
     - label: モデル一覧
       language: bash
       code: |
-        # 登録済みの全ファミリーについてタスク サイズ 入力解像度を表示する
-        # 追加パッケージがないファミリーには有効化するpipコマンドも表示される
+        # 登録済みの各ファミリーと、タスク、サイズ、入力解像度を表示します。
+        # 追加パッケージがないファミリーには、有効化するpipコマンドも表示されます。
         libreyolo models
 source_hash: 34fc6d3e24d03fb4
 ---
@@ -70,30 +70,30 @@ source_hash: 34fc6d3e24d03fb4
 
 <code-tabs name="install" />
 
-Python 3.10以降が必要です。基本インストールではPyTorch、torchvision、NumPy、Pillow、OpenCV、PyYAML、requests、mss、tqdm、pycocotools、typer、click、safetensors、SciPyが導入されます。そのため、YOLOv9など追加依存関係のないファミリーは`pip install libreyolo`の直後から動作します。
+Python 3.10以降が必要です。基本インストールにはPyTorch、torchvision、NumPy、Pillow、OpenCV、PyYAML、requests、mss、tqdm、pycocotools、typer、click、safetensors、SciPyが含まれます。このため、YOLOv9や追加依存関係のないその他のファミリーは、`pip install libreyolo`の直後から動作します。
 
-クローンでは、このドキュメントと一致する安定版ブランチ`release`がチェックアウトされます。未リリースの作業を含む統合ブランチは`dev`です。
+cloneすると、安定版ブランチ`release`がcheckoutされます。このブランチのコードが本ドキュメントと一致します。未公開の作業を含む統合ブランチは`dev`です。
 
-## 任意追加パッケージ
+## 任意の追加パッケージ
 
-追加パッケージは角括弧で囲んだ名前で、モデルファミリーまたはエクスポート先が必要とする依存関係を追加します。それ以外は変わらず、追加パッケージの有無にかかわらずAPIは同じです。
+追加パッケージは角括弧付きの名前で、モデルファミリーまたはエクスポート先に必要な依存関係を追加します。その他は変わらず、追加パッケージの有無にかかわらずAPIは同じです。
 
 ### モデルファミリー
 
 | 追加パッケージ | 追加内容 |
 |---|---|
-| `rfdetr` | RF-DETRバックボーンを提供する`transformers` |
+| `rfdetr` | RF-DETRのバックボーンを提供する`transformers` |
 | `eomt` | `transformers` |
-| `midas` | MiDaSのViT-L/16とEfficientNet-Lite3エンコーダーを提供する`timm` 1.0.x |
+| `midas` | MiDaSのViT-L/16およびEfficientNet-Lite3エンコーダーを提供する`timm` 1.0.x |
 | `vlm` | `transformers`、`num2words`、`decord`、`lmdb`、`peft` |
 | `sam` | `transformers`、`timm` |
 | `openvocab` | `transformers`、`timm`、`regex`、`ftfy` |
-| `sensenova` | `transformers`、`accelerate`、macOS以外では`bitsandbytes` |
+| `sensenova` | `transformers`、`accelerate`と、macOS以外では`bitsandbytes` |
 | `modus` | `transformers`、`accelerate` |
-| `clip` | 同梱CLIPテキストトークナイザーに必要な`regex`と`ftfy` |
-| `siglip2` | 多言語SigLIP 2トークナイザーに必要な`sentencepiece` |
+| `clip` | 同梱のCLIP text tokenizerに必要な`regex`と`ftfy` |
+| `siglip2` | 多言語SigLIP 2 tokenizerに必要な`sentencepiece` |
 | `gaze` | L2CSチェックポイントの自動ダウンロードを有効にする`gdown` |
-| `rtdetr` | なし。RT-DETRに追加依存関係は不要ですが、名前の安定性のため維持 |
+| `rtdetr` | なし。RT-DETRに追加依存関係はありませんが、名前を安定して維持 |
 
 ### エクスポートとランタイム
 
@@ -103,11 +103,11 @@ Python 3.10以降が必要です。基本インストールではPyTorch、torch
 | `tensorrt` | macOS以外で`tensorrt-cu12` 10.16.1.11と`pycuda` |
 | `openvino` | `openvino` |
 | `coreml` | `coremltools` |
-| `coreai` | `coreai-torch`、macOSのみ |
-| `tflite`、別名`litert` | `libreyolo[onnx]`に加えて`onnx2tf`、`ai-edge-litert`、`onnx-graphsurgeon`、`onnx-simplifier` |
-| `mnn` | `libreyolo[onnx]`に加えて`MNN` |
+| `coreai` | `coreai-torch`。macOSのみ |
+| `tflite`（エイリアス`litert`） | `libreyolo[onnx]`に加え、`onnx2tf`、`ai-edge-litert`、`onnx-graphsurgeon`、`onnx-simplifier` |
+| `mnn` | `libreyolo[onnx]`と`MNN` |
 | `ncnn` | `pnnx`と`ncnn` |
-| `paddle` | `libreyolo[onnx]`に加えて`paddlepaddle` 2.6.2と`x2paddle` 1.6.0 |
+| `paddle` | `libreyolo[onnx]`に加え、`paddlepaddle` 2.6.2と`x2paddle` 1.6.0 |
 | `executorch` | `executorch` |
 | `triton` | HTTPおよびHTTPS V2推論用の`tritonclient[http]` |
 
@@ -117,65 +117,65 @@ Python 3.10以降が必要です。基本インストールではPyTorch、torch
 |---|---|
 | `lora` | `lora=True`のファインチューニング用に`libreyolo[rfdetr]`と`peft` |
 | `plots` | `matplotlib` |
-| `fast-eval` | C++のCOCO評価バックエンド`faster-coco-eval` |
+| `fast-eval` | C++ COCO評価バックエンドの`faster-coco-eval` |
 | `tensorboard` | `tensorboard` |
 | `mlflow` | `mlflow` |
 | `wandb` | `wandb` |
 | `comet` | `comet-ml` |
 | `clearml` | `clearml` |
 | `neptune` | `neptune-scale` |
-| `dvclive`、別名`dvc` | `dvclive` |
+| `dvclive`（エイリアス`dvc`） | `dvclive` |
 
-`fast-eval`は必須依存関係ではなく任意です。ビルド済みwheelのないプラットフォームで通常のインストールが壊れないようにするためです。パッケージがない場合、COCO評価はpycocotoolsへフォールバックし、実行を続けます。
+`fast-eval`が必須依存関係ではなく明示的な追加になっているのは、ビルド済みwheelがないプラットフォームでも通常インストールを失敗させないためです。パッケージがない場合、COCO評価はpycocotoolsへフォールバックし、実行を継続します。
 
 ### ツール
 
 | 追加パッケージ | 追加内容 |
 |---|---|
-| `stream` | YouTubeページURLの解決だけに必要な`yt-dlp` |
-| `tracking` | なし。追跡の依存関係はすべて中核依存関係に含まれる |
-| `label` | `libreyolo label`でクリックからマスクを生成する補助機能を有効にする`libreyolo[sam]` |
-| `hub-kernels` | コンパイル済みHubカーネル用の任意ローダー`kernels`。インストールによりRF-DETRの推論結果が浮動小数点許容差の範囲で変わる可能性については[カーネル](/docs/reference/kernels)を参照 |
-| `clip-convert` | 重み変換と一致度確認用の`libreyolo[clip]`と`open_clip_torch` |
+| `stream` | YouTubeページURLの解決にだけ必要な`yt-dlp` |
+| `tracking` | なし。すべてのtracking依存関係はコア依存関係に含まれる |
+| `label` | `libreyolo label`でクリックによるマスク補助を有効にする`libreyolo[sam]` |
+| `hub-kernels` | コンパイル済みHubカーネル用の任意ローダー`kernels`。インストールによりRF-DETRの予測が浮動小数点の許容範囲内で変わる可能性については[カーネル](/docs/reference/kernels)を参照 |
+| `clip-convert` | 重み変換と同等性確認用の`libreyolo[clip]`と`open_clip_torch` |
 | `siglip2-convert` | 同じ目的の`libreyolo[siglip2]`と`transformers` |
 
 Webカメラ、RTSP、RTMP、TCP、UDP、HLS、ローカルのマルチストリームリストに追加パッケージは不要です。必要なのはYouTubeページURLだけです。
 
 ### 集約追加パッケージ
 
-`libreyolo[all]`はモデル、エクスポート、追跡、ロギングの追加パッケージを1つのコマンドでインストールします。一部は意図的に含まれません。`neptune`は安定版`neptune-scale`がprotobuf 7未満を必要とする一方、TFLite経路はprotobuf 7を必要とするため除外されます。`executorch`は対応するPyTorchバージョンを制約し、`coreai`は`coreai-torch`がPyTorchを2.11.xへ固定して環境全体をそのバージョンへ移すため除外されます。`fast-eval`、`hub-kernels`、`clip-convert`、`siglip2-convert`も含まれません。必要なものは名前で個別にインストールしてください。
+`libreyolo[all]`はモデル、エクスポート、tracking、ロギングの追加パッケージを1つのコマンドでインストールします。意図的に除外されるものもあります。`neptune`は、安定版`neptune-scale`がprotobuf 7未満を要求する一方、TFLite経路がprotobuf 7を要求するため除外されます。`executorch`は組み合わせるPyTorchバージョンを制限し、`coreai`は`coreai-torch`がPyTorchを2.11.xへ固定して環境全体をそのバージョンへ移行させるため除外されます。`fast-eval`、`hub-kernels`、`clip-convert`、`siglip2-convert`も含まれません。必要なものを名前でインストールしてください。
 
 ## プラットフォームの制約
 
-3つの追加パッケージは依存関係マーカーでプラットフォームを限定します。そのため、wheelがない場所でもインストール自体は成功し、導入されるものが少なくなります。
+3つの追加パッケージは依存関係マーカーでプラットフォームが限定されています。このためインストール自体はどこでも成功し、wheelが存在しない環境では導入されるものが少なくなります。
 
 | 追加パッケージ | 制約 |
 |---|---|
-| `coreai` | macOSのみ。Core AIツールチェーンは他では変換も実行もできない |
-| `tensorrt` | CUDAのないmacOSでは省略 |
-| `tflite`、`litert` | `onnx2tf`と`ai-edge-litert`にはPython 3.12以降が必要 |
+| `coreai` | macOSのみ。Core AIツールチェーンはほかの環境で変換も実行もできない |
+| `tensorrt` | CUDAのないmacOSではスキップ |
+| `tflite`、`litert` | `onnx2tf`と`ai-edge-litert`にPython 3.12以降が必要 |
 
-`sensenova`はwheelが公開されていないmacOSで`bitsandbytes`を省略し、それ以外は通常どおりインストールします。
+`sensenova`はwheelが公開されていないmacOSで`bitsandbytes`をスキップし、その他は通常どおりインストールします。
 
-ディスク容量が制約になる場合、その大半はPyTorchで、PyTorchの大半はデフォルトwheelに同梱されるCUDAペイロードです。CPU専用wheelを使えば機能を失わず削減できます。torchを一切含めないマシンでONNX検出を実行する方法は[軽量インストール](/docs/lightweight-install)を参照してください。
+ディスク容量が制約なら、その大半はPyTorchで、さらに大半はデフォルトwheelに同梱されるCUDAペイロードです。CPU専用wheelなら機能を失わずにそれを除去できます。PyTorchを一切含めないマシンでONNX物体検出を使う場合は、[軽量インストール](/docs/lightweight-install)を参照してください。
 
 ## GPUとCUDA
 
-デバイスはモデル構築時に選択されます。デフォルトの`device="auto"`は`torch.cuda.is_available()`がtrueならCUDA、次に`torch.backends.mps.is_available()`がtrueならMetal Performance Shaders、それ以外はCPUを使用します。ライブラリの他の場所でハードウェアを調べることはないため、PyTorchがGPUを認識できなければLibreYOLOも認識できません。
+デバイスはモデル構築時に選択されます。デフォルトの`device="auto"`は、`torch.cuda.is_available()`がtrueならCUDA、次に`torch.backends.mps.is_available()`がtrueならMetal Performance Shaders、それ以外ではCPUを使用します。ライブラリ内のその他の箇所はハードウェアを検査しないため、PyTorchがGPUを認識できなければLibreYOLOも認識できません。
 
 デバイスを固定するには、モデルまたは`predict`、`train`、`val`、`export`へ`device`を渡します。`"cpu"`、`"cuda"`、`"cuda:0"`、`"mps"`、`0`のような整数、`"0"`のような数字の文字列を受け付けます。最後の2つは`cuda:<n>`へ展開されます。
 
-最初に`libreyolo checks`を実行してください。Torchのバージョン、Torchのビルドに使われたCUDAとcuDNNのバージョン、認識されているすべてのGPUとメモリを表示します。NVIDIAカードがあるマシンでCUDAなしと表示される場合、pipが解決したPyTorch wheelはCPUビルドです。先にPyTorchのインデックスからCUDAビルドをインストールし、その後にLibreYOLOをインストールしてください。
+最初に`libreyolo checks`を実行してください。PyTorchバージョン、PyTorchのビルド対象CUDAおよびcuDNNバージョン、認識されている各GPUとメモリを表示します。NVIDIA GPUを搭載するマシンでCUDAなしと報告される場合、pipが解決したPyTorch wheelはCPUビルドです。先にPyTorchのインデックスからCUDAビルドをインストールし、次にLibreYOLOをインストールしてください。
 
 ```bash
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
 pip install libreyolo
 ```
 
-これはリポジトリがLinuxとWindowsのuv管理環境で固定しているものと同じインデックスです。CUDA 12.8ランタイムの要件としてNVIDIAドライバー555以降が必要です。PyTorchのダウンロードホストはDarwin向けビルドを公開していないため、macOSではPyPIのwheelを維持します。
+これはリポジトリ自身がLinuxとWindowsのuv管理環境で固定しているものと同じインデックスです。CUDA 12.8ランタイムの要件としてNVIDIA driver 555以降が必要です。PyTorchのダウンロードホストはDarwinビルドを公開していないため、macOSではPyPI wheelを維持します。
 
-## インストールを確認
+## インストールの確認
 
 <code-tabs name="verify" />
 
-`libreyolo models`は追加パッケージが有効になったか確認する最速の方法です。依存関係のないファミリーには、有効化する正確なpipコマンドが表示されます。どちらのコマンドも`--json`を受け付け、同じデータを機械可読なオブジェクトとして標準出力へ表示します。
+追加パッケージが有効になったか確認する最も速い方法は`libreyolo models`です。依存関係がないファミリーには、有効化する正確なpipコマンドが表示されます。どちらのコマンドも`--json`を受け付け、同じデータを機械可読オブジェクトとしてstdoutへ表示します。

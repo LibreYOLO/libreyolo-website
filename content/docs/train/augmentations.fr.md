@@ -1,6 +1,6 @@
 ---
 title: Augmentations
-seo_title: Augmentations d'entraînement dans LibreYOLO
+seo_title: "Augmentations d'entraînement dans LibreYOLO"
 description: >-
   Les paramètres d'augmentation de TrainConfig, les quatre formes de pipeline
   qui les sous-tendent et la table par famille indiquant quels paramètres sont
@@ -45,7 +45,7 @@ snippets:
           epochs=100 mosaic=1.0 mixup=0.15 hsv_prob=1.0 \
           flip_prob=0.5 no_aug_epochs=15
   support:
-    - label: Lire la table de prise en charge d'une famille
+    - label: "Lire la table de prise en charge d'une famille"
       language: python
       code: |
         from libreyolo.data.augment.spec import AUG_KNOBS, aug_support

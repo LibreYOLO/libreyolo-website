@@ -44,7 +44,7 @@ meta:
     mono: true
 snippets:
   usage:
-    - label: Predict
+    - label: Prediksi
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -54,7 +54,7 @@ snippets:
         # True menangkap saat penggunaan pertama per bentuk input.
         # "auto" menunggu hingga bentuk berulang sebelum membayar biaya capture.
         result = model(SAMPLE_IMAGE, cuda_graph=True)
-    - label: Train
+    - label: Pelatihan
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -73,7 +73,7 @@ source_hash: 67c46199939278f2
 
 Graph merekam urutan kernel tetap dan alamat memori yang dibaca serta ditulis.
 Graph tidak merekam nilai, bentuk, atau control flow. Replay menjadi satu launch
-alih-alih ratusan, sehingga peningkatan terbesar terjadi pada network kecil dan
+alih-alih ratusan, sehingga peningkatan terbesar terjadi pada jaringan kecil dan
 ukuran batch kecil, ketika sebuah langkah didominasi overhead launch, bukan
 aritmetika.
 
@@ -81,8 +81,8 @@ Kedua entry point menangkap jumlah pekerjaan yang berbeda.
 
 | | Di dalam graph | Eager |
 |---|---|---|
-| Inferensi | Forward network, `model._forward(x)` | Preprocessing, NMS, seluruh postprocessing |
-| Pelatihan | Forward dan backward network | Loss, optimizer step, gradient clipping, EMA, schedule LR |
+| Inferensi | Forward jaringan, `model._forward(x)` | Preprocessing, NMS, seluruh postprocessing |
+| Pelatihan | Forward dan backward jaringan | Loss, optimizer step, gradient clipping, EMA, schedule LR |
 
 NMS maupun loss deteksi bukan kandidat. Keduanya memilih dengan boolean mask,
 menjalankan Hungarian matching atau assigner, dan bercabang berdasarkan hasil,
@@ -136,7 +136,7 @@ sekitar 1e-7 meski identik secara bit pada probe yang penting.
 
 ## Dukungan pelatihan
 
-Capture pelatihan bertambah dari dua family menjadi 24 pada release ini, dalam
+Capture pelatihan bertambah dari dua family menjadi 24 pada rilis ini, dalam
 lima task.
 
 | Task | Family |
@@ -180,10 +180,10 @@ menjalankan semuanya secara eager.
 
 | Family | Ditangkap | Eager dan alasannya |
 |---|---|---|
-| Depth Anything 3 | Network | Tahap sky, yaitu pekerjaan yang terlihat host setelah forward |
+| Depth Anything 3 | Jaringan | Tahap sky, yaitu pekerjaan yang terlihat host setelah forward |
 | BiRefNet | Encoder, `forward_enc` | Decoder, dengan `deform_conv2d` yang menghasilkan nilai berbeda saat replay capture |
 | PP-OCR | Tahap deteksi, `forward_det` | Pengenalan, karena lebar crop berbeda per baris |
-| SAM | Image encoder | Jalur prompt, yang berjalan berkali-kali per encode |
+| SAM | Gambar encoder | Jalur prompt, yang berjalan berkali-kali per encode |
 | SenseNova | Vision tower | Generasi autoregresif dengan cache KV yang bertambah setiap langkah |
 | Detektor encoder-decoder | Backbone dan encoder | Decoder dan Hungarian criterion |
 
@@ -264,7 +264,7 @@ dataloader atau validasi. Fine-tuning YOLOv9-t selama 20 epoch pada 406 gambar
 turun dari 428.4 detik menjadi 367.7 detik, peningkatan end-to-end 1.16x, dengan
 mAP50-95 identik sebesar 0.6394 pada kedua kelompok dan loss per epoch identik.
 
-Batas atas ditentukan oleh porsi network dalam satu langkah. Pada hardware yang
+Batas atas ditentukan oleh porsi jaringan dalam satu langkah. Pada hardware yang
 sama di 640 px dan batch 8, porsinya 84 persen untuk YOLOv9-t, tetapi hanya 26
 persen untuk RTMDet-t, yang menghabiskan sebagian besar langkah dalam label
 assigner. Overhead launch tertinggi ada di Windows, sehingga peningkatan Linux
@@ -283,7 +283,9 @@ Ukuran batch lebih berpengaruh daripada family: RT-DETR-r18 meningkat 1.19x pada
 batch 2 dan 1.04x pada batch 8 karena batch besar dibatasi komputasi dan memiliki
 lebih sedikit overhead launch yang dapat dihilangkan.
 
-Suite paritas inferensi berjalan tanpa package `kernels` opsional terinstal,
+Suite paritas inferensi berjalan tanpa paket `kernels` opsional terinstal,
 sehingga keamanan capture dengan kernel Hub terkompilasi aktif tidak dicakup.
 Tetapkan `LIBREYOLO_HUB_KERNELS=0` untuk mengeluarkannya saat mengisolasi masalah
 capture. Lihat [kernel](/docs/reference/kernels).
+
+

@@ -1,54 +1,67 @@
 ---
-title: Pelatihan pada GPU sewaan
-seo_title: Latih LibreYOLO pada GPU cloud sewaan
+title: Pelatihan pada GPU yang disewa
+seo_title: Melatih LibreYOLO pada GPU cloud yang disewa
 description: >-
-  Run a LibreYOLO training job on a rented or serverless GPU: stage the data,
-  install, launch, watch it live, retrieve the weights and stop paying.
+  Jalankan pekerjaan pelatihan LibreYOLO pada GPU yang disewa atau tanpa server:
+  siapkan data, instal, luncurkan, tonton langsung, ambil bobot, dan hentikan
+  pembayaran.
 lead: >-
-  A rented GPU turns a training run into a job with a start, an end, and a bill.
-  The work is the same as training locally; what changes is getting the data in,
-  watching from outside, getting the weights out, and shutting the machine down.
+  GPU yang disewa mengubah latihan menjadi pekerjaan dengan awal, akhir, dan
+  tagihan. Pekerjaannya sama seperti melatih secara lokal; yang berubah adalah
+  memasukkan data, menonton dari luar, mengambil bobot, dan mematikan mesin.
 keywords:
-  - cloud gpu training
-  - rent a gpu
-  - vast.ai training
-  - modal serverless gpu
+  - pelatihan gpu cloud
+  - sewa gpu
+  - pelatihan vast.ai
+  - gpu serverless modal
   - beam gpu
-  - remote training
-  - hugging face dataset staging
-  - gpu cost per epoch
+  - pelatihan jarak jauh
+  - staging hugging face dataset
+  - biaya gpu per epoch
 last_verified: 1.5.0
 snippets:
   install:
-    - label: On the box
+    - label: Di kotak
       language: bash
-      code: |
+      code: >
         pip install libreyolo
 
-        # Add only the extras the run needs. rfdetr for RF-DETR training,
-        # lora for parameter-efficient fine-tuning, onnx to export afterwards.
+
+        # Tambahkan hanya tambahan yang dibutuhkan oleh jalannya. rfdetr untuk
+        pelatihan RF-DETR,
+
+        # lora untuk parameter-efisien fine-tuning, onnx untuk ekspor
+        setelahnya.
+
         pip install "libreyolo[rfdetr,lora]"
-    - label: Check the GPU before anything else
+    - label: Periksa GPU sebelum hal lainnya
       language: python
-      code: |
+      code: >
         import torch
 
+
         print(torch.__version__, torch.cuda.is_available())
+
         print(torch.cuda.get_device_name(0))
 
-        # A wheel built for another architecture reports True and then fails
-        # on the first real kernel, so run one.
+
+        # Sebuah wheel yang dibuat untuk arsitektur lain melaporkan True dan
+        kemudian gagal
+
+        # pada kernel nyata pertama, jadi jalankan satu.
+
         x = torch.rand(2000, 2000, device="cuda")
+
         print(float((x @ x).sum()))
   stage:
-    - label: 'Pack and upload once, from your machine'
+    - label: 'Kemasi dan unggah satu kali, dari mesin Anda'
       language: bash
       code: >
         tar cf my-dataset.tar my-dataset/
 
         huggingface-cli upload my-org/my-dataset my-dataset.tar --repo-type
         dataset
-    - label: Stage on the box
+    - label: Tahapkan di bounding box
       language: python
       code: |
         import tarfile
@@ -61,7 +74,7 @@ snippets:
         with tarfile.open(path) as archive:
             archive.extractall("/root/data")
   launch:
-    - label: 'Detached, so the job survives a disconnect'
+    - label: 'Terpisah, sehingga pekerjaan bertahan dari putusnya koneksi'
       language: bash
       code: |
         nohup libreyolo train \
@@ -70,7 +83,7 @@ snippets:
           epochs=100 batch=-1 imgsz=640 \
           project=/root/runs name=run1 \
           > /root/train.log 2>&1 &
-    - label: 'Multi-GPU, from a Python file'
+    - label: 'Multi-GPU, dari berkas Python'
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -80,17 +93,17 @@ snippets:
             model.train(
                 data="/root/data/my-dataset/data.yaml",
                 epochs=100,
-                batch=64,          # global batch across all GPUs
+                batch=64,          # global batch di semua GPU
                 device="0,1,2,3",
                 project="/root/runs",
                 name="run1",
             )
   watch:
-    - label: One cheap read
+    - label: Satu baca murah
       language: bash
       code: |
         cat /root/runs/run1/status.json
-    - label: From a script
+    - label: Dari skrip
       language: python
       code: |
         import json
@@ -100,16 +113,16 @@ snippets:
 
         print(status["state"], status["current_epoch"], status["eta_seconds"])
         print(status.get("metrics"))
-    - label: 'In a browser, over an SSH tunnel'
+    - label: 'Di browser, melalui terowongan SSH'
       language: bash
       code: |
-        # On the box (binds 127.0.0.1:8420 by default):
+        # Pada bounding box (mengikat 127.0.0.1:8420 secara default):
         libreyolo monitor /root/runs/run1 --no-browser
 
-        # From your machine, then open http://localhost:8420 locally:
+        # Dari mesin Anda, lalu buka http://localhost:8420 secara lokal:
         #   ssh -L 8420:localhost:8420 <user>@<host>
   push:
-    - label: Push the weights somewhere permanent
+    - label: Dorong beban ke tempat yang permanen
       language: bash
       code: |
         huggingface-cli upload my-org/my-run \
@@ -117,137 +130,137 @@ snippets:
 source_hash: 75d314de06aca3b6
 ---
 
-## Sebelum menyewa apa pun
+## Sebelum Anda menyewa apa pun
 
-Two decisions cost more later than they do now.
+Dua keputusan akan lebih mahal nanti daripada sekarang.
 
-Get the dataset onto a CDN first. Packing it as a single tar in a Hugging Face
-dataset repository works the same on every provider, serves fast to all of them,
-and needs nothing but an `HF_TOKEN` in the job environment when the repo is
-private. Copying a dataset up from a home connection, or pulling it from a slow
-origin on the box, is billed GPU time spent waiting.
+Dapatkan dataset ke dalam CDN dulu. Mengemasnya sebagai tar tunggal di Hugging Face
+repositori dataset bekerja sama di setiap penyedia, melayani cepat untuk semuanya,
+dan tidak membutuhkan apa pun kecuali `HF_TOKEN` di lingkungan pekerjaan ketika repositori
+bersifat pribadi. Menyalin dataset dari koneksi rumah, atau menariknya dari
+asal yang lambat di kotak, akan dihitung sebagai waktu GPU yang dihabiskan menunggu.
 
 <code-tabs name="stage" />
 
-Then size the disk. Providers that bill storage bill on allocated capacity, not
-used capacity, and a disk cannot be shrunk after creation. Add up the staged
-data, the checkpoints, and roughly 30 percent of headroom, and stop there.
+Kemudian ukur disk. Penyedia yang menagih penyimpanan menagih berdasarkan kapasitas yang dialokasikan, bukan
+kapasitas yang digunakan, dan sebuah disk tidak dapat diperkecil setelah dibuat. Tambahkan yang ditahap
+data, titik pemeriksaan, dan sekitar 30 persen ruang cadangan, dan berhenti di situ.
 
-## Instalasi pada mesin
+## Pasang di kotak
 
 <code-tabs name="install" />
 
-Install PyTorch first if the image does not already carry a CUDA build matching
-the card, then LibreYOLO, so pip does not resolve its own CPU-only torch. The
-second snippet is not optional ceremony: a wheel built for the wrong GPU
-architecture reports `torch.cuda.is_available() == True` and then fails on the
-first real operation with `CUDA error: no kernel image is available for execution
-on the device`. One matrix multiply catches it before an hour of setup does not.
+Pasang PyTorch terlebih dahulu jika gambar belum memiliki build CUDA yang sesuai
+kartunya, lalu LibreYOLO, jadi pip tidak menyelesaikan torchnya sendiri yang hanya untuk CPU. The
+cuplikan kedua bukan upacara opsional: sebuah roda yang dibuat untuk GPU yang salah
+arsitektur melaporkan `torch.cuda.is_available() == True` dan kemudian gagal pada
+operasi nyata pertama dengan `CUDA error: no kernel gambar is available for execution
+di perangkat`. Satu perkalian matriks menangkapnya sebelum satu jam penyiapan tidak.
 
-Point `HF_HOME` at persistent storage if the provider offers a volume, so
-checkpoint and dataset downloads survive between runs.
+Tunjuk `HF_HOME` pada penyimpanan persisten jika penyedia menawarkan volume, jadi
+Unduhan checkpoint dan dataset bertahan di antara sesi.
 
-## Jalankan
+## Peluncuran
 
-Run the job detached. An interactive session that dies with your network
-connection takes the training with it.
+Jalankan pekerjaan secara terpisah. Sesi interaktif yang mati dengan jaringan Anda
+koneksi membawa pelatihan bersamanya.
 
 <code-tabs name="launch" />
 
-`batch=-1` is worth using here specifically, because you are usually on a card
-you have not trained on before. It probes the model in training mode with a real
-backward pass and picks the largest power of two that fits, which is faster than
-discovering the ceiling with an out-of-memory error twenty minutes in. See
+`batch=-1` layak digunakan di sini secara khusus, karena Anda biasanya menggunakan kartu
+Anda belum pernah dilatih sebelumnya. Ini menyelidiki model dalam mode pelatihan dengan yang nyata
+lalu mundur dan memilih pangkat dua terbesar yang muat, yang lebih cepat daripada
+menemukan batas maksimum dengan kesalahan kehabisan memori dua puluh menit kemudian. Lihat
 [Hyperparameters](/docs/train/hyperparameters).
 
-On a multi-GPU box, `device="0,1,2,3"` spawns one worker per GPU by itself, and
-`batch` stays the global batch across all of them. The `__main__` guard is
-mandatory, because each worker re-imports the script. That, and the rest of the
-distributed behavior, is on [Multi-GPU training](/docs/train/multi-gpu).
+Pada sebuah kotak multi-GPU, `device="0,1,2,3"` secara otomatis membuat satu pekerja per GPU, dan
+`batch` tetap menjadi batch global di seluruh GPU tersebut. Penjaga `__main__`
+wajib, karena setiap pekerja mengimpor ulang skrip. Hal itu, dan perilaku terdistribusi lainnya,
+ada di [Pelatihan Multi-GPU](/docs/train/multi-gpu).
 
-## Pantau dari luar
+## Mengamatinya dari luar
 
-Every run writes `status.json` into its run directory, rewritten atomically each
-epoch. It is the cheap read: a few hundred bytes carrying the state, the current
-epoch, the ETA and the latest metrics, without parsing a log.
+Setiap jalankan menulis `status.json` ke dalam direktori jalankannya, ditulis ulang secara atomik setiap
+epoch. Ini adalah pembacaan yang murah: beberapa ratus byte membawa status, epoch saat ini,
+perkiraan waktu tiba (ETA), dan metrik terbaru, tanpa harus mengurai log.
 
 <code-tabs name="watch" />
 
-`metrics.jsonl` alongside it has the full per-epoch history, and `train.log` has
-the console output. `libreyolo monitor` serves a browser dashboard over all
-three using only the standard library, so it needs nothing installed on the box
-beyond LibreYOLO itself. Reach it over an SSH port forward.
+`metrics.jsonl` di sampingnya memiliki riwayat lengkap per-epoch, dan `train.log` memiliki
+keluaran konsol. `libreyolo monitor` menyajikan dasbor browser di semua
+tiga menggunakan hanya pustaka standar, jadi tidak memerlukan instalasi apapun di mesin
+selain LibreYOLO itu sendiri. Akses melalui penerusan port SSH.
 
-None of these touch the training process, so they attach to a live run, reopen a
-finished one, or inspect a crashed one.
+Tidak ada dari ini yang menyentuh proses pelatihan, jadi mereka dapat menempel pada jalannya yang sedang berlangsung, membuka kembali yang
+selesai, atau memeriksa yang mengalami kegagalan.
 
-## Ambil bobot sebelum berhenti membayar
+## Ambil bobot sebelum Anda berhenti membayar
 
-The box is disposable. Push checkpoints at milestones, not only at the end,
-because a crash, a preemption or running out of credit otherwise loses the whole
-run.
+Mesin ini bisa dibuang. Dorong titik pemeriksaan pada tonggak, bukan hanya di akhir,
+karena kegagalan, prapemrosesan, atau kehabisan kredit akan menyebabkan kehilangan seluruh
+jalannya.
 
 <code-tabs name="push" />
 
-`weights/best.pt` and `weights/last.pt` are written every epoch and on every
-improvement. `save_period=N` adds `weights/epoch_<N>.pt` snapshots on top, which
-is what makes a mid-run push cheap. `summary.json` and `results.csv`, where the
-family writes them, are small and worth taking too.
+`weights/best.pt` dan `weights/last.pt` ditulis setiap epoch dan pada setiap
+. `save_period=N` menambahkan snapshot `weights/epoch_<N>.pt` di atasnya, yang
+adalah yang membuat dorongan tengah berjalan menjadi murah. `summary.json` dan `results.csv`, di mana
+family menulis mereka, kecil dan juga layak diambil.
 
-A callback on `on_train_epoch_end` is the clean way to automate the push. See
-[Experiment loggers](/docs/train/loggers), where the hosted backends also give
-you the metrics without touching the box at all.
+Sebuah callback pada `on_train_epoch_end` adalah cara yang bersih untuk mengotomatiskan dorongan. Lihat
+[Pencatat percobaan](/docs/train/loggers), di mana backend yang dihosting juga memberikan
+Anda metrik tanpa menyentuh kotak sama sekali.
 
-## Hentikan pembayaran
+## Berhenti membayar
 
-This is the part that costs real money when it goes wrong, and the rule differs
-by provider model.
+Inilah bagian yang menelan biaya nyata ketika salah, dan aturannya berbeda
+menurut model penyedia.
 
-On a marketplace where you rent a raw machine, billing runs on wall clock until
-the instance is destroyed. An idle GPU bills exactly like a busy one, so killing
-the training process saves nothing on its own. A stopped instance still bills its
+Di pasar tempat Anda menyewa mesin mentah, penagihan berjalan berdasarkan jam dinding sampai
+instansinya dihancurkan. GPU yang menganggur ditagih persis seperti yang sibuk, jadi membunuh
+proses pelatihan tidak menyimpan apa pun dengan sendirinya. Sebuah instance yang dihentikan tetap menagih
 disk.
 
-On a serverless platform where the job is a decorated function, the container
-scales to zero when the function returns, so a forgotten box is much less likely.
-A hung job with no timeout still bills, so always set one.
+Pada platform tanpa server di mana pekerjaan adalah fungsi yang dihias, kontainer
+mengurangi menjadi nol ketika fungsi kembali, sehingga kotak yang terlupakan jauh lebih kecil kemungkinannya.
+Pekerjaan yang macet tanpa batas waktu tetap dikenai biaya, jadi selalu tetapkan satu.
 
-Stopping instead of destroying is a real lever, and a real trap. Measured on a
-rented 8x RTX 4090 with a 250 GB disk on 2026-07-31: running billed $3.4828 per
-hour, stopped billed $0.0694 per hour for the disk alone, and destroyed billed
-nothing. That is a 98 percent saving while keeping the environment, the staged
-data and the checkpoints in place.
+Berhenti alih-alih menghancurkan adalah tuas yang nyata, dan jebakan yang nyata. Diukur pada sebuah
+menyewa 8x RTX 4090 dengan disk 250 GB pada 2026-07-31: berjalan ditagih $3,4828 per
+jam, dihentikan ditagih $0,0694 per jam hanya untuk disk, dan dihancurkan ditagih
+tidak ada. Itu adalah penghematan 98 persen sambil menjaga lingkungan, yang bertahap
+data dan titik pemeriksaan yang ada.
 
-The stopped rate is arithmetic you can do before renting:
+Tarif berhenti adalah aritmetika yang bisa Anda lakukan sebelum menyewa:
 
 ```text
 stopped $/hr = allocated_GB * storage_cost_per_GB_per_month / 730
              = 250 * 0.20 / 730 = $0.0694/hr
 ```
 
-Compare it against what a rebuild costs: renting again, pulling the image,
-installing, and re-staging the data. On that same box a rebuild was about 15
-minutes of setup plus 43 GB of inbound transfer, roughly $1.00 all in. Against
-$0.0694 per hour, coming back within about 14 hours favors stopping and a longer
-gap favors destroying and rebuilding from the staged copy.
+Bandingkan dengan biaya membangun ulang: menyewa lagi, menarik gambar,
+menginstal, dan menata ulang data. Di kotak yang sama, pembangunan ulang sekitar 15
+menit pengaturan ditambah 43 GB transfer masuk, sekitar $1,00 semuanya. Dibandingkan
+dengan $0,0694 per jam, kembali dalam sekitar 14 jam lebih menguntungkan untuk berhenti dan
+jeda yang lebih lama lebih menguntungkan untuk menghancurkan dan membangun ulang dari salinan yang ditata.
 
-One risk makes stopping unsafe for scarce hardware: stopping releases the GPUs.
-Nothing reserves them, so restarting only succeeds if the host still has them
-free. Your disk is safe; your GPUs are not.
+Satu risiko membuat berhenti tidak aman untuk perangkat keras yang langka: berhenti melepaskan GPU.
+Tidak ada yang memesan mereka, jadi memulai ulang hanya berhasil jika host masih memilikinya
+gratis. Disk Anda aman; GPU Anda tidak.
 
-## Serverless sebagai fungsi
+## Tanpa server, sebagai sebuah fungsi
 
-If you would rather not manage a machine, both Modal and Beam run a decorated
-Python function on a GPU and scale to zero when it returns. LibreYOLO's own
-nightly test suite runs on Modal, and `tools/ci/modal_nightly.py` in the library
-repository is the working in-repo example to copy from.
+Jika Anda lebih memilih untuk tidak mengelola mesin, baik Modal maupun Beam menjalankan versi yang dihias
+Fungsi Python pada GPU dan skala ke nol ketika ia mengembalikan. Milik LibreYOLO sendiri
+suite pengujian malam dijalankan di Modal, dan `tools/ci/modal_nightly.py` di perpustakaan
+repositori adalah contoh in-repo yang sedang digunakan untuk disalin.
 
 ```python
 import modal
 
 image = (
     modal.Image.debian_slim(python_version="3.11")
-    .apt_install("git", "libgl1", "libglib2.0-0")   # OpenCV system libraries
+    .apt_install("git", "libgl1", "libglib2.0-0")   # Perpustakaan sistem OpenCV
     .pip_install("libreyolo[rfdetr]")
 )
 app = modal.App("libreyolo-train")
@@ -258,13 +271,13 @@ cache = modal.Volume.from_name("libreyolo-cache", create_if_missing=True)
 def train():
     import os
 
-    os.environ["HF_HOME"] = "/cache/hf"          # cache weights across runs
+    os.environ["HF_HOME"] = "/cache/hf"          # menyimpan bobot di seluruh percobaan
 
     from libreyolo import LibreYOLO
 
     model = LibreYOLO("LibreYOLO9s.pt")
     model.train(data="coco8.yaml", epochs=100, project="/cache/runs")
-    cache.commit()                                # persist the volume
+    cache.commit()                                # pertahankan volume
 
 
 @app.local_entrypoint()
@@ -272,25 +285,27 @@ def main():
     train.remote()
 ```
 
-Run it with `modal run modal_train.py`. The container filesystem is ephemeral, so
-anything worth keeping goes in the volume or gets pushed out. Set `timeout=`
-explicitly; that is the only thing standing between a hung run and an open-ended
-bill.
+Jalankan dengan `modal run modal_train.py`. Sistem berkas kontainer bersifat sementara, jadi
+apa pun yang layak disimpan dimasukkan ke dalam volume atau didorong keluar. Set `timeout=`
+secara eksplisit; itu adalah satu-satunya hal yang memisahkan antara jalan yang macet dan yang terbuka
+tagihan.
 
-Beam takes the same shape with a `@function` decorator, a `Volume`, and
-`train.remote()` called from `__main__`.
+Balok mengambil bentuk yang sama dengan dekorator `@function`, `Volume`, dan
+`train.remote()` menelepon dari `__main__`.
 
-## Tentukan ukuran berdasarkan biaya per job
+## Sesuaikan ukuran berdasarkan biaya per pekerjaan
 
-$/hr is the wrong number to optimize. A small model half-idles a large card, so a
-cheaper and slower GPU is often cheaper per epoch. Run the profiler for a few
-steps on the rented card before committing to a long run: if the verdict is
-`dataloader` or `host / launch`, a faster GPU buys nothing and more workers or a
-larger batch buys a lot. See
-[Training performance](/docs/train/performance).
+$/jam adalah angka yang salah untuk dioptimalkan. Model kecil setengah-menganggur pada kartu besar, jadi
+GPU yang lebih murah dan lebih lambat seringkali lebih murah per epoch. Jalankan profiler selama beberapa
+langkah-langkah pada kartu sewaan sebelum berkomitmen untuk lari jarak jauh: jika keputusannya adalah
+`dataloader` atau `host / launch`, GPU yang lebih cepat tidak membeli apa-apa dan lebih banyak pekerja atau sebuah
+batch yang lebih besar membeli banyak. Lihat
+[Kinerja pelatihan](/docs/train/performance).
 
 ## Terkait
 
-- [Datasets](/docs/train/datasets) for the layout the staged archive should have,
-  and the doctor command that catches problems before a GPU is billing.
-- [Multi-GPU training](/docs/train/multi-gpu) for multi-card boxes.
+- [Dataset](/docs/train/datasets) untuk tata letak arsip yang dipentaskan harus memiliki,
+  dan perintah dokter yang menangkap masalah sebelum GPU ditagih.
+- [Pelatihan Multi-GPU](/docs/train/multi-gpu) untuk kotak multi-kartu.
+
+

@@ -136,7 +136,7 @@ aktif, dan MixUp yang diterapkan secara independen. Nilai `mosaic_scale` digunak
 kembali sebagai rentang skala affine.
 
 SegFormer dan NAFNet menjalankan pipeline khusus task dengan randomisasi tetap.
-Untuk SegFormer, pengaturan aktif adalah atribut class `semantic_scale_jitter`
+Untuk SegFormer, pengaturan aktif adalah atribut kelas `semantic_scale_jitter`
 dan `semantic_hsv_prob`, bukan `mosaic_scale` serta `hsv_prob`. Crop dan flip
 NAFNet merupakan operasi input-target berpasangan dengan probabilitas tetap 0,5.
 
@@ -197,7 +197,7 @@ Keempatnya default nonaktif, sehingga pelatihan classification tidak berubah
 kecuali diminta.
 
 Ada benturan nama: pada CLI, `mixup` adalah alias untuk `mixup_prob` deteksi.
-Field `mixup` classification tidak memiliki ejaan CLI dan hanya dapat dicapai
+Kolom `mixup` classification tidak memiliki ejaan CLI dan hanya dapat dicapai
 melalui `model.train(mixup=...)` di Python.
 
 ## Pengaturan khusus family
@@ -215,14 +215,15 @@ untuk family tersebut dan tidak memiliki flag CLI.
 | RF-DETR, D-FINE, EC | `crop_resize_prob` | Probabilitas random crop-resize |
 | EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | Jitter jalur pose dan probabilitas affine yang memahami keypoint |
 
-`max_labels` dapat diam-diam menghilangkan data. Box setelah batas dibuang tanpa
+`max_labels` dapat diam-diam menghilangkan data. Bounding box setelah batas dibuang tanpa
 error, sehingga imagery padat seperti foto aerial perlu menaikkan nilainya.
 
-Mosaic dan MixUp dinonaktifkan untuk pelatihan oriented-box tanpa memandang
-pengaturan karena augmentasi yang memahami sudut box berotasi belum tersedia.
+Mosaic dan MixUp dinonaktifkan untuk pelatihan oriented-bounding box tanpa memandang
+pengaturan karena augmentasi yang memahami sudut bounding box berotasi belum tersedia.
 
 ## Terkait
 
 - [Hyperparameter](/docs/train/hyperparameters) untuk `no_aug_epochs` sebagai
   argumen schedule dan bagian lain `train()`.
 - [Dataset](/docs/train/datasets) untuk format label yang digunakan transform ini.
+

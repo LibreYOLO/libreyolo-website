@@ -5,7 +5,7 @@ description: >-
   Percepat proses pelatihan: tangkap langkah ke CUDA graph, pilih dtype AMP, dan
   gunakan profiler bawaan untuk menemukan sumber penggunaan waktu.
 lead: >-
-  Tiga pengungkit mengubah kecepatan langkah pelatihan: mixed precision, CUDA
+  Tiga pengungkit mengubah kecepatan langkah pelatihan: mixed presisi, CUDA
   graph capture untuk forward dan backward jaringan, serta tindakan yang
   disarankan profiler berdasarkan penghambat sebenarnya.
 keywords:
@@ -32,10 +32,8 @@ snippets:
         model.train(data="my-dataset.yaml", epochs=100, profile=True)
     - label: 'Hanya ukur, lalu berhenti'
       language: bash
-      code: >
-        # Menetapkan no_aug_epochs=0 dan menjalankan epoch secukupnya untuk
-        mengisi jendela.
-
+      code: |
+        # Menetapkan no_aug_epochs=0 dan menjalankan epoch secukupnya untuk mengisi jendela.
         libreyolo profile run coco128 --weights LibreYOLO9s.pt --size s
     - label: Periksa hasil lebih dalam
       language: bash
@@ -100,9 +98,9 @@ sinkronisasi untuk mengatribusikan waktu GPU. Sinkronisasi setiap fase memberi
 kelonggaran pada worker dataloader dan menyembunyikan starvation, sehingga angka
 komposisi tidak digunakan untuk memilih hasil.
 
-Empat file dibuat di direktori proses: `timeline.html` yang dapat dibuka langsung
+Empat berkas dibuat di direktori proses: `timeline.html` yang dapat dibuka langsung
 di browser, `profile_trace.json` untuk Perfetto atau Nsight,
-`profile_summary.json`, dan `profile.json`, file mandiri yang dapat disalin serta
+`profile_summary.json`, dan `profile.json`, berkas mandiri yang dapat disalin serta
 diberikan ke subperintah `libreyolo profile`.
 
 Dua hal mengenai `profile run` perlu diketahui. Perintah ini menetapkan
@@ -112,7 +110,7 @@ melaporkan mean dan standard deviation karena langkah yang dibatasi launch cukup
 berisik untuk menyesatkan jika hanya diukur sekali; perintah menulis direktori
 `prof_1`, `prof_2`, dan seterusnya, serta agregat `profile_repeat.json`.
 
-## Mixed precision
+## Mixed presisi
 
 `amp=True` adalah default untuk sebagian besar family dan menjalankan forward pass
 di bawah CUDA autocast. `amp_dtype` memilih `float16` atau `bfloat16`.

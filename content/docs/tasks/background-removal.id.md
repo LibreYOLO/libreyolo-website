@@ -42,72 +42,49 @@ snippets:
         print(rgba.shape)
     - label: Gabungkan ke latar belakang baru
       language: python
-      code: >
+      code: |
         import numpy as np
-
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
         rgba = result.cutout()
-
         alpha = rgba[..., 3:4].astype(np.float32) / 255.0
-
         backdrop = np.full_like(rgba[..., :3], 255)          # putih
-
-        composited = (rgba[..., :3] * alpha + backdrop * (1 -
-        alpha)).astype(np.uint8)
-
+        composited = (rgba[..., :3] * alpha + backdrop * (1 - alpha)).astype(np.uint8)
         print(composited.shape)
   val:
     - label: Validasi dan baca kunci metrik
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
 
-
-        # Sebuah direktori yang memuat direktori images/ dan matte dapat
-        digunakan sebagai pengganti
-
+        # Sebuah direktori yang memuat direktori gambar/ dan matte dapat digunakan sebagai pengganti
         # sebuah dataset YAML.
-
         metrics = model.val(data="my-matte-dataset/")
 
-
         print(metrics["metrics/MAE"])        # lebih rendah lebih baik
-
-        print(metrics["metrics/Smeasure"])   # kebugaran, lebih tinggi lebih
-        baik
+        print(metrics["metrics/Smeasure"])   # kebugaran, lebih tinggi lebih baik
   export:
-    - label: Export
+    - label: Ekspor
       language: python
       code: |
         from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
         model.export(format="torchscript")
-    - label: Jalankan file yang diekspor
+    - label: Jalankan berkas yang diekspor
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Pabrik menentukan rute berdasarkan akhiran file, sehingga artefak yang
-        diekspor dapat dimuat
-
+        # Pabrik menentukan rute berdasarkan akhiran berkas, sehingga artefak yang diekspor dapat dimuat
         # seperti checkpoint lainnya dan mengembalikan objek Results yang sama.
-
         model = LibreYOLO("LibreBiRefNetl-matte.torchscript")
-
         result = model(SAMPLE_IMAGE)
-
 
         print(result.matte.array.shape)
 source_hash: f7d88c74d9729268
@@ -156,10 +133,10 @@ ke gambar asli. Resolusi yang berbeda tidak didukung, karena Swin
 Tabel posisi relatif backbone terikat pada ukuran itu, dan ketidaksesuaian
 menginterpolasinya dengan buruk daripada meningkatkan. `Results.save()` didefinisikan untuk
 hanya matte results dan membutuhkan gambar sumber, yang dimuat ulang darinya
-`Results.path` kecuali Anda melewati satu. Lihat [prediction](/docs/predict) untuk sumber,
+`Results.path` kecuali Anda melewati satu. Lihat [prediksi](/docs/predict) untuk sumber,
 streaming dan penanganan hasil.
 
-## format Dataset
+## Format dataset
 
 Validasi matte memadankan setiap gambar RGB dengan alpha ground-truth satu saluran
 matte yang memiliki stem yang sama, dimana 0 adalah latar belakang dan 255 adalah latar depan.
@@ -224,4 +201,5 @@ belum melewati batang paritas yang sama, dan format yang tersisa tidak tersedia.
 Cakupan per format ada di [BiRefNet](/docs/models/birefnet) dan
 halaman [FeyNobg](/docs/models/feynobg) dan di
 [matriks ekspor penuh](/docs/reference/export-matrix).
+
 

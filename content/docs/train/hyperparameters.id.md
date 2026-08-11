@@ -1,12 +1,12 @@
 ---
-title: Hyperparameters
-seo_title: Melatih hiperparameter di LibreYOLO
+title: Hyperparameter
+seo_title: Hyperparameter pelatihan di LibreYOLO
 description: >-
   Argumen train() yang penting: epochs, batch, lr0, optimizer, EMA, autobatch,
   gradient accumulation dan resume, plus mengapa default berbeda per family.
 lead: >-
-  Setiap argumen pelatihan adalah field pada dataclass TrainConfig. Kelas dasar
-  mendefinisikan field dan defaultnya; setiap model family meng-subclass-nya dan
+  Setiap argumen pelatihan adalah kolom pada dataclass TrainConfig. Kelas dasar
+  mendefinisikan kolom dan defaultnya; setiap model family membuat subclass darinya dan
   mengganti default yang diubah oleh resep yang dipublikasikannya.
 keywords:
   - argumen train
@@ -117,7 +117,7 @@ snippets:
         from libreyolo import LibreYOLO
 
 
-        # Kunci dalam yaml adalah nama field TrainConfig. Kwargs eksplisit
+        # Kunci dalam yaml adalah nama kolom TrainConfig. Kwargs eksplisit
         menang.
 
         model = LibreYOLO("LibreYOLO9s.pt")
@@ -269,7 +269,7 @@ menghentikan run setelah selama itu epoch tanpa perbaikan, dengan `0` menonaktif
 early stopping.
 
 `cache` mempercepat epoch berulang dengan menyimpan gambar yang telah didekode di RAM (`True` atau
-`"ram"`) atau sebagai file `.npy` di samping sumber (`"disk"`). Bacaan yang di-cache adalah
+`"ram"`) atau sebagai berkas `.npy` di samping sumber (`"disk"`). Bacaan yang disimpan dalam cache adalah
 identik byte dengan yang baru. Dengan pekerja dataloader, `"disk"` adalah yang lebih aman dari
 keduanya.
 
@@ -290,23 +290,26 @@ yang menimbulkan masalah. Dan ketika kunci metrik-terbaik checkpoint berbeda dar
 jalannya saat ini, pelacakan metrik-terbaik direset ke nol dengan peringatan
 alih-alih membandingkan nilai yang tidak berarti sama.
 
-## Resep dalam sebuah file
+## Resep dalam sebuah berkas
 
 `cfg=` memuat pemetaan YAML dari nama-nama bidang `TrainConfig` dan menggabungkannya
-di bawah argumen kata kunci eksplisit, jadi sebuah kwarg selalu menang atas file.
+di bawah argumen kata kunci eksplisit, jadi sebuah kwarg selalu menang atas berkas.
 
 <code-tabs name="cfg" />
 
-`size` dan `num_classes` dihapus dari file, karena instansi model
-sudah memilikinya. Tidak ada `--cfg` flag di CLI; jalur file adalah Python
+`size` dan `num_classes` dihapus dari berkas, karena instansi model
+sudah memilikinya. Tidak ada `--cfg` flag di CLI; jalur berkas adalah Python
 argumen.
 
 ## Terkait
 
-- [Datasets](/docs/train/datasets) untuk apa yang diterima `data=`.
+- [Dataset](/docs/train/datasets) untuk apa yang diterima `data=`.
 - [Augmentations](/docs/train/augmentations) untuk kenop augmentasi dan yang mana
   keluarga menghormati mereka.
 - [Pembekuan layer](/docs/train/layer-freezing) dan [LoRA](/docs/train/lora) untuk
   melatih sebagian dari bobot.
 - [Validasi dan metrik](/docs/train/validation) untuk apa yang dilaporkan oleh jalannya.
+
+
+
 

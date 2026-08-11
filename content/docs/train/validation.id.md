@@ -2,22 +2,24 @@
 title: Validasi dan metrik
 seo_title: Validasi dan metrik di LibreYOLO
 description: >-
-  Jalankan val() pada model apa pun, baca key metrik yang dikembalikan setiap
-  task, pilih backend evaluasi, dan aktifkan loss validasi bersama metrik akurasi.
+  Jalankan val() pada model apa pun, baca kunci metrik yang dikembalikan setiap
+  task, pilih backend evaluasi, dan nyalakan validasi loss bersama dengan metrik
+  akurasi.
 lead: >-
-  Validasi menjalankan model pada split dataset melalui val() dan mengembalikan
-  dictionary datar berisi key metrik dan nilai float. Key berupa string literal,
-  dan key yang diperoleh bergantung pada task, bukan family.
+  Validasi menjalankan model pada pembagian dataset melalui val() dan
+  mengembalikan kamus datar dari kunci metrik dan nilai float. Kuncinya adalah
+  string literal, dan kunci yang Anda dapatkan tergantung pada task, bukan
+  family.
 keywords:
-  - mAP50-95
-  - evaluasi COCO
+  - map50-95
+  - evaluasi coco
   - metrik validasi
   - faster-coco-eval
   - pycocotools
-  - validation loss
-  - mIoU
-  - panoptic quality
-  - akurasi top-1
+  - validasi loss
+  - miou
+  - kualitas panoptic
+  - akurasi top1
 last_verified: 1.5.0
 snippets:
   val:
@@ -36,7 +38,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml
-    - label: Pada split lain
+    - label: Pada pembagian lain
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -54,7 +56,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="coco8.yaml", epochs=10, val_loss=True)
   json:
-    - label: Tulis prediksi berformat COCO
+    - label: Tulis prediksi dalam format COCO
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -66,27 +68,27 @@ source_hash: d907183492fa3f57
 
 ## Jalankan validasi
 
-`val()` menerima dataset dan mengembalikan metrik.
+`val()` mengambil dataset dan mengembalikan metrik.
 
 <code-tabs name="val" />
 
-Nilai kembaliannya adalah `dict[str, float]` biasa. Setiap key bersifat literal,
-jadi baca berdasarkan nama, bukan posisi.
+Nilai kembaliannya adalah `dict[str, float]` biasa. Setiap kunci bersifat literal, jadi bacalah
+berdasarkan nama daripada posisi.
 
-The main arguments are `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
-`workers`, `device`, `augment`, `save_json` and `verbose`. `conf` defaults to
-`0.001` and `iou` to `0.6`, both far looser than prediction defaults, because a
-mAP sweep needs the low-confidence tail. `imgsz` defaults to the model's own
-input size rather than a fixed number. `split` accepts `val`, `test` or `train`
-and nothing else.
+Argumen utama adalah `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
+`workers`, `device`, `augment`, `save_json` dan `verbose`. `conf` secara default adalah
+`0.001` dan `iou` ke `0.6`, keduanya jauh lebih longgar daripada default prediksi, karena
+pencarian mAP membutuhkan ekor dengan kepercayaan rendah. `imgsz` secara default adalah ukuran input model itu sendiri
+daripada angka tetap. `split` menerima `val`, `test` atau `train`
+dan tidak ada lainnya.
 
-Any other field of the validation config passes through as a keyword argument,
-including `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`, `cache`
-and `save_plots`.
+Setiap bidang lain dari konfigurasi validasi diteruskan sebagai argumen kata kunci,
+termasuk `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`, `cache`
+dan `save_plots`.
 
-## Key metrik per task
+## Kunci metrik per task
 
-Detection returns the COCO family of numbers:
+Deteksi mengembalikan family COCO dari angka:
 
 ```text
 metrics/mAP50-95   metrics/mAP50    metrics/mAP75
@@ -97,24 +99,24 @@ metrics/precision  metrics/recall
 metrics/precision(B)  metrics/recall(B)  metrics/mAP50(B)  metrics/mAP50-95(B)
 ```
 
-Two of those are traps. `metrics/precision` and `metrics/recall` are aliases held
-for backward compatibility: they carry the mAP 50-95 and AR@100 values, not a
-precision and recall pair. Use the named keys.
+Dua dari mereka adalah jebakan. `metrics/precision` dan `metrics/recall` adalah alias yang dijaga
+untuk kompatibilitas belakang: mereka membawa nilai mAP 50-95 dan AR@100, bukan
+pasangan presisi dan recall. Gunakan kunci bernama.
 
-Instance segmentation returns the mAP and AR figures above as mask numbers
-under the unsuffixed keys, with the box versions under a `(B)` suffix and the
-mask versions repeated under `(M)`. Precision and recall exist only in
-suffixed form for this task, as `metrics/precision(B)`/`metrics/recall(B)` and
-`metrics/precision(M)`/`metrics/recall(M)`, and both pairs carry the same
-alias values as detect's: the `(B)` pair is box mAP50-95 and box AR@100, the
-`(M)` pair is mask mAP50-95 and mask AR@100.
+Segmentasi instance mengembalikan angka mAP dan AR di atas sebagai angka mask
+di bawah kunci tanpa akhiran, dengan versi kotak berada di bawah akhiran `(B)` dan
+diulang di bawah `(M)`. Presisi dan recall hanya ada dalam bentuk akhiran
+untuk task ini, seperti `metrics/precision(B)`/`metrics/recall(B)` dan
+`metrics/precision(M)`/`metrics/recall(M)`, dan kedua pasangan membawa nilai alias
+yang sama seperti detect: pasangan `(B)` adalah bounding box mAP50-95 dan bounding box AR@100, pasangan
+`(M)` adalah mask mAP50-95 dan mask AR@100.
 
-| Task | Keys |
+| Task | Kunci |
 |---|---|
-| detect | `metrics/mAP50-95`, `metrics/mAP50`, `metrics/mAP75`, plus the size and recall breakdowns above |
-| segment | mask versions of the detect keys above (unsuffixed keys are mask); `precision`/`recall` exist only as `(B)`/`(M)`, both aliased the same way |
-| pose | `metrics/keypoints_mAP50-95`, `metrics/keypoints_mAP50`, `metrics/keypoints_mAP75`, `metrics/keypoints_mAP_M`, `metrics/keypoints_mAP_L`, and the matching `keypoints_AR` keys |
-| obb | `metrics/mAP50-95`, `metrics/mAP50`, `metrics/mAP75`, `metrics/precision`, `metrics/recall`, plus `(OBB)`-suffixed copies |
+| detect | `metrics/mAP50-95`, `metrics/mAP50`, `metrics/mAP75`, plus pembagian ukuran dan recall di atas |
+| segment | versi mask dari kunci detect di atas (kunci tanpa akhiran adalah mask); `precision`/`recall` hanya ada sebagai `(B)`/`(M)`, keduanya dialiaskan dengan cara yang sama |
+| pose | `metrics/keypoints_mAP50-95`, `metrics/keypoints_mAP50`, `metrics/keypoints_mAP75`, `metrics/keypoints_mAP_M`, `metrics/keypoints_mAP_L`, dan kunci `keypoints_AR` yang sesuai |
+| obb | `metrics/mAP50-95`, `metrics/mAP50`, `metrics/mAP75`, `metrics/precision`, `metrics/recall`, plus salinan dengan akhiran `(OBB)` |
 | classify | `metrics/accuracy_top1`, `metrics/accuracy_top5` |
 | semantic | `metrics/mIoU`, `metrics/pixel_accuracy` |
 | panoptic | `metrics/PQ`, `metrics/SQ`, `metrics/RQ`, `metrics/PQ_things`, `metrics/PQ_stuff`, `metrics/categories` |
@@ -124,147 +126,150 @@ alias values as detect's: the `(B)` pair is box mAP50-95 and box AR@100, the
 | restore | `metrics/PSNR`, `metrics/SSIM` |
 | matte | `metrics/MAE`, `metrics/Smeasure` |
 | ocr | `metrics/det_precision`, `metrics/det_recall`, `metrics/det_hmean`, `metrics/e2e_precision`, `metrics/e2e_recall`, `metrics/e2e_f1`, `metrics/rec_1-NED` |
-| point | `metrics/precision`, `metrics/recall`, `metrics/f1`, `metrics/MLE`, `metrics/MAE`, `metrics/RMSE`, plus a mAP sweep key |
+| titik | `metrics/precision`, `metrics/recall`, `metrics/f1`, `metrics/MLE`, `metrics/MAE`, `metrics/RMSE`, ditambah kunci sweep mAP |
 
-OBB's `metrics/precision` and `metrics/recall` are not aliases: they are the
-real precision and recall at IoU 0.50, taken at the loosest operating point
-(every prediction that survives `conf`, default `0.001`). The `(OBB)`-suffixed
-copies repeat the same four values under a task-specific name, the same
-convention as `(B)` and `(M)` above.
+OBB `metrics/precision` dan `metrics/recall` bukan alias: mereka adalah
+presisi nyata dan recall pada IoU 0,50, diambil pada titik operasi paling longgar
+(setiap prediksi yang bertahan `conf`, default `0.001`). Salinan yang berakhiran `(OBB)`
+mengulangi keempat nilai yang sama dengan nama spesifik task, konvensi yang sama
+seperti `(B)` dan `(M)` di atas.
 
-`accuracy_top5` is really top-`min(5, num_classes)`, so on a three-class dataset
-it is top-3, which every sample satisfies and which therefore reads 1.0.
+`accuracy_top5` sebenarnya top-`min(5, num_classes)`, jadi pada dataset tiga kelas
+itu adalah top-3, yang dipenuhi setiap sampel dan akibatnya terbaca 1,0.
 
-The point task's sweep key is built from the distance thresholds, so with the
-defaults it reads `metrics/mAP@[0.01:0.10]` and the single-threshold key reads
-`metrics/mAP@0.01`. Passing `dist_thresholds` changes both strings.
+Kunci sweep titik task dibangun dari ambang jarak, jadi dengan
+secara default terbaca `metrics/mAP@[0.01:0.10]` dan tombol ambang tunggal terbaca
+`metrics/mAP@0.01`. Melewati `dist_thresholds` mengubah kedua string.
 
-Most tasks also return a `fitness` key, the single number best-checkpoint
-selection uses by default. Detection, segmentation and OBB do not carry one;
-their families are selected on `metrics/mAP50-95`, which their dicts do
-return. Pose returns neither `fitness` nor `metrics/mAP50-95`; its trainers
-set `best_metric_key` to `metrics/keypoints_mAP50-95` instead.
+Sebagian besar tugas juga mengembalikan kunci `fitness`, angka tunggal terbaik-checkpoint
+seleksi digunakan secara default. Deteksi, segmentasi, dan OBB tidak membawa satu;
+keluarga mereka dipilih pada `metrics/mAP50-95`, yang dilakukan oleh kamus mereka
+kembali. Pose tidak mengembalikan `fitness` maupun `metrics/mAP50-95`; pelatihnya
+atur `best_metric_key` ke `metrics/keypoints_mAP50-95` sebagai gantinya.
 
-## Key kecepatan
+## Tombol pintas
 
-Every validator adds timing:
+Setiap validator menambahkan waktu:
 
 ```text
 speed/preprocess_ms   speed/inference_ms   speed/postprocess_ms
 speed/total_ms        speed/total_s        speed/images_seen
 ```
 
-These are per-image milliseconds averaged over the run. They describe the machine
-and settings you ran on, so a figure taken from them is only meaningful reported
-with its hardware, batch size and precision.
+Ini adalah milidetik per gambar yang dirata-ratakan selama seluruh proses. Mereka menggambarkan mesin
+dan pengaturan yang Anda jalankan, sehingga angka yang diambil dari mereka hanya berarti jika dilaporkan
+dengan perangkat kerasnya, batch ukuran dan presisi.
 
-## Backend evaluasi
+## Backend Evaluasi
 
-Detection and segmentation metrics are computed through a COCO evaluator, and
-`faster_coco_eval=True`, the default, selects the C++ backend when the
-`faster-coco-eval` package is installed. When it is not, the run falls back to
-pycocotools with one warning per process:
+Metrik deteksi dan segmentasi dihitung melalui evaluator COCO, dan
+`faster_coco_eval=True`, default-nya, memilih backend C++ ketika
+paket `faster-coco-eval` terinstal. Ketika tidak, proses berjalan kembali ke
+pycocotools dengan satu peringatan per proses:
 
 ```text
 faster_coco_eval requested but not installed; falling back to pycocotools.
 Install with: pip install faster-coco-eval
 ```
 
-Which backend actually ran is recorded on the model as `last_eval_backend`, and
-the CLI reports it in its output for detection-style tasks. Set
-`LIBREYOLO_FASTER_COCO_EVAL` to override the config value from the environment.
+Backend yang sebenarnya dijalankan dicatat pada model sebagai `last_eval_backend`, dan
+CLI melaporkannya dalam output untuk tugas gaya deteksi. Atur
+`LIBREYOLO_FASTER_COCO_EVAL` untuk mengganti nilai konfigurasi dari lingkungan.
 
-`iou_thresholds` is honored only on the OBB path. The COCO path evaluates through
-its own fixed 0.50 to 0.95 sweep and ignores the value.
+`iou_thresholds` hanya dihormati pada jalur OBB. Jalur COCO dievaluasi melalui
+sweep 0,50 hingga 0,95 yang tetap sendiri dan mengabaikan nilainya.
 
-## Loss validasi
+## Validasi loss
 
-By default validation reports accuracy only. `val_loss=True` also computes the
-family's training objective on validation batches.
+Secara default, validasi hanya melaporkan akurasi. `val_loss=True` juga menghitung
+tujuan pelatihan family pada batch validasi.
 
 <code-tabs name="valloss" />
 
-It emits `metrics/loss` plus one `metrics/loss/<component>` per term, weighted
-exactly as training weights them, so the components sum to the total. Through a
-logger they appear as `val/loss` and `val/loss/<component>`, and `libreyolo
+Ini mengeluarkan `metrics/loss` ditambah satu `metrics/loss/<component>` per istilah, diberi bobot
+persis seperti bobot pelatihan, sehingga komponen-komponennya berjumlah total. Melalui
+logger, mereka muncul sebagai `val/loss` dan `val/loss/<component>`, dan `libreyolo
 monitor` overlays `metrics/loss` with `train/loss`.
 
-The components are the family's own:
+Komponen-komponen ini adalah milik family sendiri:
 
-| Task | Families | Components |
+| Task | Families | Komponen |
 |---|---|---|
 | detect | `yolo9`, `yolo9_p2`, `yolo9_e2e` | `box`, `cls`, `dfl` |
 | detect | `yolonas` | `cls`, `iou`, `dfl` |
-| detect | `rfdetr` | `ce`, `bbox`, `giou` |
-| detect | `rtdetr`, `rtdetrv2` | `vfl`, `bbox`, `giou` |
-| detect | `dfine` | `vfl`, `bbox`, `giou`, `fgl`, `ddf` |
-| detect | `domedetr` | `vfl`, `bbox`, `giou`, `fgl`, `ddf`, `defe_density`, `defe_reg` |
-| detect | `deim`, `deimv2`, `rtdetrv4`, `ec` | `mal`, `bbox`, `giou`, `fgl`, `ddf` |
-| detect | `rtmdet` | `cls`, `bbox` |
-| detect | `picodet` | `cls`, `bbox`, `dfl` |
-| detect | `yolox` | `iou`, `obj`, `cls`, `l1` |
-| detect | `yolo7` | `iou`, `obj`, `cls` |
-| point | `fomo` | `ce` |
-| classify | `resnet`, `convnext`, `mobilenetv4`, `efficientnetv2` | `ce` |
-| semantic | `segformer`, `lingbotvision`, `dinov2` | `sem` |
-| restore | `nafnet` | `restore` |
+| mendeteksi | `rfdetr` | `ce`, `bbox`, `giou` |
+| mendeteksi | `rtdetr`, `rtdetrv2` | `vfl`, `bbox`, `giou` |
+| mendeteksi | `dfine` | `vfl`, `bbox`, `giou`, `fgl`, `ddf` |
+| mendeteksi | `domedetr` | `vfl`, `bbox`, `giou`, `fgl`, `ddf`, `defe_density`, `defe_reg` |
+| mendeteksi | `deim`, `deimv2`, `rtdetrv4`, `ec` | `mal`, `bbox`, `giou`, `fgl`, `ddf` |
+| mendeteksi | `rtmdet` | `cls`, `bbox` |
+| mendeteksi | `picodet` | `cls`, `bbox`, `dfl` |
+| mendeteksi | `yolox` | `iou`, `obj`, `cls`, `l1` |
+| mendeteksi | `yolo7` | `iou`, `obj`, `cls` |
+| menunjukkan | `fomo` | `ce` |
+| klasifikasi | `resnet`, `convnext`, `mobilenetv4`, `efficientnetv2` | `ce` |
+| semantik | `segformer`, `lingbotvision`, `dinov2` | `sem` |
+| pulihkan | `nafnet` | `restore` |
 
-It is off by default because target assignment adds time and memory to
-validation. The validator reuses the model output already produced for the
-accuracy metric rather than running a second forward pass, it runs under
-`no_grad` on the evaluation or EMA model, and under multi-GPU training it is
-computed locally on rank 0 with no collectives. Best-checkpoint selection stays
-on the accuracy metric.
+Ini dimatikan secara default karena penugasan target menambahkan waktu dan memori ke
+validasi. Validator menggunakan kembali output model yang sudah dihasilkan untuk
+metrik akurasi daripada menjalankan lintasan maju kedua, ia dijalankan di bawah
+`no_grad` pada model evaluasi atau EMA, dan di bawah pelatihan multi-GPU itu
+dihitung secara lokal pada peringkat 0 tanpa kolektif. Pemilihan Best-checkpoint tetap
+pada metrik akurasi.
 
-Three things it deliberately does not do. It never includes contrastive-denoising
-terms, because those need the ground truth at forward time and validation
-forwards without it. It reports the evaluation-mode model, so where a family's
-train and eval forwards genuinely differ, in BatchNorm statistics or stochastic
-depth, the number reflects eval mode; that is the intended comparison. And a task
-a family has not implemented it for raises a configuration error at setup rather
-than quietly skipping:
+Tiga hal yang dengan sengaja tidak dilakukannya. Ia tidak pernah termasuk denoising-kontrastas
+persyaratan, karena itu memerlukan ground truth pada waktu maju dan validasi
+maju tanpa itu. Ini melaporkan model dalam mode evaluasi, jadi di mana family's
+train dan eval benar-benar berbeda di depan, dalam statistik BatchNorm atau stokastik
+kedalaman, angka tersebut mencerminkan mode evaluasi; itu adalah perbandingan yang dimaksud. Dan sebuah task
+family belum menerapkannya sehingga menyebabkan kesalahan konfigurasi saat pengaturan
+daripada diam-diam melewatkan:
 
 ```text
 val_loss=True currently supports RF-DETR detection only; segment, pose, OBB,
 classify, and semantic tasks are not supported
 ```
 
-FOMO is the exception that changes nothing: its validator always computed this
-loss, and `val_loss=True` only affects which keys it is published under.
+FOMO adalah pengecualian yang tidak mengubah apa pun: validatornya selalu menghitung ini
+loss, dan `val_loss=True` hanya memengaruhi tombol mana yang diterbitkan dengannya.
 
-Augmented validation and validation loss cannot be combined, and asking for both
-raises.
+Validasi yang ditingkatkan dan validasi loss tidak dapat dikombinasikan, dan meminta keduanya
+meningkatkan.
 
-## File yang ditulis validasi
+## Berkas menulis validasi
 
-`val()` always writes `config.yaml` into its save directory, defaulting to
-`runs/val/<model>_<size>_<timestamp>` when `save_dir` is not given.
+`val()` selalu menulis `config.yaml` ke direktori simpanannya, secara default ke
+`runs/val/<model>_<size>_<timestamp>` ketika `save_dir` tidak diberikan.
 
 <code-tabs name="json" />
 
-`save_json=True` writes `predictions.json` for detection, and
-`predictions_bbox.json` plus `predictions_masks.json` for segmentation. OBB does
-not support it and says so.
+`save_json=True` menulis `predictions.json` untuk deteksi, dan
+`predictions_bbox.json` ditambah `predictions_masks.json` untuk segmentasi. OBB tidak
+mendukungnya dan menyatakannya.
 
-`save_plots=True` writes into a `plots/` subdirectory. Detection gets
-`box_metrics.png`, per-class AP and recall charts, precision-recall and
-confidence curves, a confusion matrix, and annotated sample images when OpenCV is
-installed. Segmentation adds the mask-side copies of each, and pose gets its own
-metric and curve set. The other validators do not implement plots; classification,
-semantic, panoptic, depth, normal, edge, restore, matte, OCR, OBB and point all
-write nothing there. A plotting failure warns and never aborts the run.
+`save_plots=True` menulis ke dalam subdirektori `plots/`. Deteksi mendapatkan
+`box_metrics.png`, AP per kelas dan grafik recall, presisi-recall dan
+kurva kepercayaan, matriks kebingungan, dan contoh gambar beranotasi ketika OpenCV
+terpasang. Segmentasi menambahkan salinan sisi mask dari masing-masing, dan pose mendapatkan miliknya sendiri
+. Validator lain tidak mengimplementasikan plot; klasifikasi,
+semantik, panoptik, kedalaman, normal, tepi, pemulihan, matte, OCR, OBB, dan poin semuanya
+tidak menulis apa pun di sana. Kegagalan plot akan memberi peringatan dan tidak pernah menghentikan jalannya.
 
 ## Validasi selama pelatihan
 
-Training validates every `eval_interval` epochs against the dataset's `val`
-split, and the metrics it produces are what drives `best.pt` selection, the
-`patience` early stop, and the `val/` keys in every logger. The validation runs
-on the EMA weights when EMA is on.
+Pelatihan memvalidasi setiap `eval_interval` epoch terhadap dataset's `val`
+split, dan metrik yang dihasilkannya adalah yang menjadi penggerak pemilihan `best.pt`,
+`patience` early stop, dan `val/` kunci di setiap logger. Validasi dijalankan
+pada bobot EMA ketika EMA aktif.
 
-See [Hyperparameters](/docs/train/hyperparameters) for `eval_interval`,
-`patience` and `save_plots`, and [Experiment loggers](/docs/train/loggers) for
-where the numbers go.
+Lihat [Hyperparameters](/docs/train/hyperparameters) untuk `eval_interval`,
+`patience` dan `save_plots`, serta [Experiment loggers](/docs/train/loggers) untuk
+di mana angkanya pergi.
 
 ## Terkait
 
-- [Datasets](/docs/train/datasets) for the split keys and formats validators read.
+- [Dataset](/docs/train/datasets) untuk kunci split dan validator format dibaca.
+
+
+

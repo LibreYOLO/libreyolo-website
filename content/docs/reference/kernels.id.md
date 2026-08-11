@@ -24,12 +24,12 @@ verification: >-
   API registry dibaca dari libreyolo/kernels/__init__.py pada v1.5.0, API
   attention dari libreyolo/kernels/attention/__init__.py dan sdpa.py, provider
   Hub dari libreyolo/kernels/attention/ms_deform_attn.py termasuk revisi yang
-  di-pin dan predicate kelayakannya. Layout direktori dicantumkan dari
+  dikunci versinya dan predicate kelayakannya. Tata letak direktori dicantumkan dari
   libreyolo/kernels/. Definisi ekstra dari pyproject.toml. Catatan perilaku dan
   angka benchmark dari docs/kernels.md. Riwayat gating v1.4.0 dari commit
   penghubungan slot RF-DETR dan entri CHANGELOG 1.5.0.
 meta:
-  - label: Package
+  - label: Paket
     value: libreyolo.kernels
     mono: true
   - label: Ekstra untuk ikut serta
@@ -90,7 +90,7 @@ terdaftar pertama yang lolos predicate, dengan pendaftaran terbaru sebagai
 pemenang, lalu kembali ke implementasi referensi jika tidak ada yang berlaku.
 
 Struktur ini memastikan dependency opsional tidak pernah menjadi persyaratan
-keras. Mesin tanpa Triton, CUDA, atau package `kernels` menjalankan kode yang
+keras. Mesin tanpa Triton, CUDA, atau paket `kernels` menjalankan kode yang
 sama dan menghasilkan angka yang sama, hanya lebih lambat.
 
 | Fungsi | Tujuan |
@@ -99,7 +99,7 @@ sama dan menghasilkan angka yang sama, hanya lebih lambat.
 | `resolve(op)` | Callable yang akan dijalankan, atau `None` |
 | `register(op, impl, *, name, predicate=None)` | Menambahkan implementasi, yang terbaru lebih dulu |
 | `unregister(op, name)` | Menghapus satu implementasi |
-| `clear_cache()` | Menghapus hasil resolve yang di-memoize |
+| `clear_cache()` | Menghapus hasil resolve yang disimpan melalui memoization |
 
 <code-tabs name="usage" />
 
@@ -107,7 +107,7 @@ Predicate yang memunculkan error ditangkap dan menghasilkan peringatan, tidak
 pernah diteruskan. Dengan demikian, implementasi pihak ketiga yang rusak kembali
 ke jalur portabel alih-alih merusak prediksi.
 
-### Layout
+### Tata letak
 
 Tree diatur berdasarkan tujuan terlebih dahulu dan backend kemudian, sehingga
 slot ditemukan berdasarkan yang dihitung, bukan library yang kebetulan
@@ -115,12 +115,12 @@ mengimplementasikannya saat ini.
 
 | Direktori | Isi |
 |---|---|
-| `kernels/quant/simulate/` | Kernel fake-quantization Triton, dengan backward straight-through, pada device apa pun. Digunakan oleh QAT dan simulasi kuantisasi pascapelatihan |
-| `kernels/quant/execute/` | Jalur presisi nyata khusus model final, tanpa backward: GEMM tensor-core FP8, prologue dan epilogue Triton yang di-fuse, serta kernel unpack bobot terkemas |
+| `kernels/quant/simulate/` | Kernel fake-kuantisasi Triton, dengan backward straight-through, pada device apa pun. Digunakan oleh QAT dan simulasi kuantisasi pascapelatihan |
+| `kernels/quant/execute/` | Jalur presisi nyata khusus model final, tanpa backward: GEMM tensor-core FP8, prologue dan epilogue Triton yang digabungkan, serta kernel unpack bobot terkemas |
 | `kernels/attention/` | Operasi attention bersama lintas family: slot `ms_deform_attn` dan kebijakan fused-SDPA |
 
 Batas antara `simulate` dan `execute` ditentukan oleh apakah model telah
-difinalisasi, bukan apakah sedang dilatih atau di-deploy. Implementasi referensi
+difinalisasi, bukan apakah sedang dilatih atau diterapkan. Implementasi referensi
 tetap berada di `libreyolo/quant/`, yang mendefinisikan arti angka;
 `kernels/` hanya mempercepatnya. Packing bobot tidak memiliki varian karena
 merupakan kontrak checkpoint.
@@ -143,8 +143,8 @@ ditetapkan. Keduanya tercantum bersama variabel lain pada
 ## Kernel Hub
 
 Kernel CUDA terkompilasi yang dipublikasikan pada Hugging Face Hub dimuat saat
-runtime melalui package `kernels` opsional. Tidak ada yang di-vendor ke
-LibreYOLO; artefak diambil dan di-cache oleh package tersebut, dan setiap
+runtime melalui paket `kernels` opsional. Tidak ada yang disertakan ke
+LibreYOLO; artefak diambil dan disimpan dalam cache oleh paket tersebut, dan setiap
 provider menetapkan revisi commit yang telah diaudit. Karena itu, perubahan pin
 memerlukan run paritas GPU sebelum diterapkan.
 
@@ -154,7 +154,7 @@ Menginstal ekstra berarti ikut serta:
 pip install "libreyolo[hub-kernels]"
 ```
 
-Tanpa package tersebut, tidak ada yang berubah dan tidak ada permintaan network.
+Tanpa paket tersebut, tidak ada yang berubah dan tidak ada permintaan jaringan.
 `LIBREYOLO_HUB_KERNELS=0` menonaktifkan pengambilan tanpa menghapus instalasi.
 Kernel yang gagal dimuat atau dijalankan menonaktifkan diri selama sisa process
 dan kembali ke fallback dengan satu peringatan.
@@ -169,7 +169,7 @@ dikompilasi, pelatihan dan prediksi sama-sama memperoleh manfaat.
 Kelayakannya sengaja dibatasi. Input harus menggunakan CUDA dan float32, serta
 eksekusi harus eager: provider menolak ketika `torch.jit.is_tracing()`,
 `torch.compiler.is_compiling()`, `torch.compiler.is_exporting()`, dan
-`torch.onnx.is_in_onnx_export()` aktif. Dua layout input juga kembali ke jalur
+`torch.onnx.is_in_onnx_export()` aktif. Dua tata letak input juga kembali ke jalur
 portabel, yaitu jumlah titik per level yang berbeda antarlevel dan sampling
 indeks bilangan bulat diskret. Varian pose EC tidak dihubungkan.
 
@@ -217,7 +217,7 @@ Fitur ini layak digunakan jika berlaku. Pada RTX 5070 Ti dengan autocast fp16,
 Swin window attention turun dari 1.278 ms ke 0.721 ms, peningkatan 1.77x, dan
 OWLv2 vision attention dari 6.483 ms ke 1.735 ms, peningkatan 3.74x.
 
-## Hardware
+## Perangkat keras
 
 | Platform | Perilaku |
 |---|---|
@@ -228,7 +228,7 @@ OWLv2 vision attention dari 6.483 ms ke 1.735 ms, peningkatan 3.74x.
 ## Menambahkan implementasi
 
 Panggil `register()` dengan nama dan predicate. Kernel terkompilasi di luar tree
-dapat disediakan sebagai package `libreyolo_kernels` terpisah yang mendaftarkan
+dapat disediakan sebagai paket `libreyolo_kernels` terpisah yang mendaftarkan
 diri saat import, sehingga backend privat sepenuhnya berada di luar tree
 LibreYOLO.
 
@@ -237,5 +237,8 @@ persis dengan referensi, dan gradien harus berada dalam 1e-6 dari estimator
 straight-through, pada kumpulan bentuk yang dibawa test suite.
 
 Pemilihan kernel berinteraksi dengan [CUDA graph](/docs/reference/cuda-graphs):
-matriks paritas inferensi dijalankan tanpa package `kernels` terinstal, sehingga
+matriks paritas inferensi dijalankan tanpa paket `kernels` terinstal, sehingga
 keamanan capture dengan kernel terkompilasi aktif tidak dicakup olehnya.
+
+
+

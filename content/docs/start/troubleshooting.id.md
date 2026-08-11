@@ -23,13 +23,13 @@ Error dikelompokkan berdasarkan teks yang terlihat. Jika pesan tidak tersedia di
 sini, [FAQ](/docs/faq) menjawab pertanyaan yang bukan kegagalan, dan
 `libreyolo models` melaporkan model yang benar-benar dapat dimuat instalasi.
 
-## ModuleNotFoundError menyebut package yang tidak pernah diimpor
+## ModuleNotFoundError menyebut paket yang tidak pernah diimpor
 
-Beberapa family memerlukan ekstra opsional. Pesan menyebut package yang hilang,
+Beberapa family memerlukan ekstra opsional. Pesan menyebut paket yang hilang,
 bukan ekstra, sehingga perbaikannya tidak selalu terlihat jelas dari traceback.
 
 Jalankan `libreyolo models`. Setiap family dengan dependency yang hilang dicetak
-bersama perintah pip persis yang mengaktifkannya, sehingga package tidak perlu
+bersama perintah pip persis yang mengaktifkannya, sehingga paket tidak perlu
 dipetakan kembali ke ekstra secara manual. `libreyolo models --json` mencetak
 informasi yang sama sebagai objek.
 
@@ -41,7 +41,7 @@ informasi yang sama sebagai objek.
 ImportError: ONNX inference requires onnxruntime. Install with: pip install onnxruntime
 ```
 
-Package dasar tidak bergantung pada runtime karena pilihan runtime bergantung
+Paket dasar tidak bergantung pada runtime karena pilihan runtime bergantung
 pada hardware. Instal `onnxruntime` untuk CPU atau `onnxruntime-gpu` untuk CUDA.
 Keduanya menyediakan modul `onnxruntime` yang sama, jadi instal salah satu,
 bukan keduanya.
@@ -52,21 +52,21 @@ bukan keduanya.
 FileNotFoundError: ONNX model not found: <path>
 ```
 
-Path di-resolve relatif terhadap direktori kerja, bukan script. Pesan ini juga
+Path diselesaikan relatif terhadap direktori kerja, bukan script. Pesan ini juga
 muncul ketika ekspor menulis ke tempat lain tanpa disadari: `export()`
 mengembalikan path yang ditulis, jadi simpan nilai kembalian alih-alih
 mengasumsikan nama.
 
 ## NotImplementedError dari train()
 
-Tidak setiap family dapat dilatih. Beberapa di-port hanya untuk prediksi,
+Tidak setiap family dapat dilatih. Beberapa diadaptasi hanya untuk prediksi,
 validasi, dan ekspor, serta `train()`-nya memunculkan error alih-alih berpura-
 pura berjalan.
 
 [Entri FAQ](/docs/faq) menjelaskan alasannya. Untuk memeriksa family tertentu
 sebelum menulis script pelatihan, lihat dukungan pelatihan pada halaman model.
 
-## NotImplementedError dari export()
+## NotImplementedError dari ekspor()
 
 Family dapat mendukung task tetapi tidak mendukung ekspornya. EoMT sering
 ditemui: `export()` menerima task semantic dan memunculkan error untuk `segment`
@@ -96,14 +96,14 @@ yang menjalankan monitor dapat memicunya.
 
 ## Bobot tidak dapat diunduh
 
-Bobot diambil dari Hugging Face saat penggunaan pertama dan di-cache secara
+Bobot diambil dari Hugging Face saat penggunaan pertama dan disimpan dalam cache secara
 lokal. [FAQ](/docs/faq) menjelaskan lokasi cache dan cara berjalan sepenuhnya
 offline.
 
-Jika pengunduhan menghasilkan 404, periksa nama file yang diberikan. URL
+Jika pengunduhan menghasilkan 404, periksa nama berkas yang diberikan. URL
 diturunkan dari nama tersebut, termasuk suffix task, sehingga nama yang tidak
 cocok dengan checkpoint terbitan menghasilkan URL yang tidak ada. Tabel
-checkpoint pada setiap halaman model mencantumkan nama file terbitan persis.
+checkpoint pada setiap halaman model mencantumkan nama berkas terbitan persis.
 
 ## Pelatihan macet atau dimulai ulang di Windows
 
@@ -142,12 +142,12 @@ result[0].boxes                       # SATU deteksi, diam-diam
 
 Tidak ada error karena melakukan indexing pada `Results` adalah operasi valid
 yang mengembalikan subset. Kode yang ditulis untuk bentuk list diam-diam
-melaporkan satu box per gambar. Hanya lakukan indexing pada objek yang diketahui
+melaporkan satu bounding box per gambar. Hanya lakukan indexing pada objek yang diketahui
 berupa list.
 
 ### Membaca metrik sebagai atribut
 
-`val()` mengembalikan dictionary biasa dengan key nama metrik, bukan objek
+`val()` mengembalikan dictionary biasa dengan kunci nama metrik, bukan objek
 dengan akses atribut:
 
 ```python
@@ -156,7 +156,7 @@ metrics["metrics/mAP50-95"]   # benar
 metrics.box.map               # AttributeError
 ```
 
-Key menggunakan namespace `metrics/` dan `speed/`. Cetak dictionary satu kali
+Kunci menggunakan namespace `metrics/` dan `speed/`. Cetak dictionary satu kali
 untuk melihat output task karena kumpulannya berbeda per task.
 
 ## Memeriksa dataset sebelum pelatihan
@@ -175,3 +175,5 @@ if report.errors:
 ```
 
 Lihat [perintah doctor](/docs/cli/doctor) untuk katalog pemeriksaan.
+
+

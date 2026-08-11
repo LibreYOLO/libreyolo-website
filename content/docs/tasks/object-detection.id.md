@@ -4,7 +4,7 @@ seo_title: ''
 description: >-
   Mendeteksi objek sebagai kotak yang sejajar dengan sumbu di LibreYOLO:
   keluarga yang melayani task, format label, dan panggilan predict, train,
-  validate, dan export.
+  validate, dan ekspor.
 lead: >-
   Deteksi objek menemukan setiap contoh objek dalam gambar dan mengembalikan
   persegi panjang yang sejajar dengan sumbu, label kelas, dan skor untuk
@@ -36,52 +36,36 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: 'family lain, panggilan yang sama'
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         # Pabrik merutekan di checkpoint, dan setiap pendeteksi mengembalikan
-
-        # objek Results yang sama, sehingga mengganti family hanya butuh satu
-        baris perubahan.
-
+        # objek Results yang sama, sehingga mengganti family hanya butuh satu baris perubahan.
         model = LibreYOLO("LibreDFINEn.pt")
-
         result = model(SAMPLE_IMAGE)
-
 
         print(result.boxes.xyxy.shape)
     - label: Video dan streaming
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-
-        # Sumber apa pun yang diterima perpustakaan: file, folder, URL, indeks
-        webcam,
-
+        # Sumber apa pun yang diterima perpustakaan: berkas, folder, URL, indeks webcam,
         # aliran RTSP, atau daftar .streams.
-
         for result in model.predict("clip.mp4", stream=True, save=True):
             print(len(result.boxes))
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-
-        # coco128.yaml mengunduh sampel 128 gambar pada penggunaan pertama.
-        Arahkan data
-
+        # coco128.yaml mengunduh sampel 128 gambar pada penggunaan pertama. Arahkan data
         # ke YAML dataset Anda sendiri untuk menjalankan yang sesungguhnya.
-
         model.train(data="coco128.yaml", epochs=50, imgsz=640, batch=8)
     - label: CLI
       language: bash
@@ -123,21 +107,15 @@ snippets:
       language: bash
       code: |
         libreyolo export model=LibreYOLO9t.pt format=onnx imgsz=640
-    - label: Gunakan file yang diekspor
+    - label: Gunakan berkas yang diekspor
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Pabrik memproses berdasarkan akhiran file, jadi artefak yang diekspor
-        dimuat
-
+        # Pabrik memproses berdasarkan akhiran berkas, jadi artefak yang diekspor dimuat
         # seperti checkpoint dan mengembalikan objek Results yang sama.
-
         model = LibreYOLO("LibreYOLO9t.onnx")
-
         result = model(SAMPLE_IMAGE)
-
 
         print(result.boxes.xyxy)
 source_hash: c735b6e3de78dd2b
@@ -211,12 +189,12 @@ Bobot diunduh dari Hugging Face saat penggunaan pertama dan disimpan secara loka
 `conf` mengatur ambang kepercayaan dan `max_det` membatasi jumlah baris.
 `iou` adalah ambang NMS, sehingga hanya berpengaruh pada family yang menjalankan NMS;
 RF-DETR dan YOLOv9 head ujung-ke-ujung mendekodekan satu set prediksi tetap dan
-abaikan itu. Lihat [prediction](/docs/predict) untuk sumber, streaming, dan hasil
+abaikan itu. Lihat [prediksi](/docs/predict) untuk sumber, streaming, dan hasil
 penanganan.
 
-## format Dataset
+## Format dataset
 
-Satu file label `.txt` per gambar, ditemukan dengan menukar `images` dengan `labels` di
+Satu berkas label `.txt` per gambar, ditemukan dengan menukar `images` dengan `labels` di
 jalur gambar dan mengubah ekstensi.
 
 ```text
@@ -238,7 +216,7 @@ kotak-tengah-dan-ukuran:
 ```
 
 Koordinat adalah bilangan desimal di `[0, 1]`, relatif terhadap lebar gambar asli dan
-tinggi. `w` dan `h` harus positif. File label yang hilang atau kosong berarti
+tinggi. `w` dan `h` harus positif. Berkas label yang hilang atau kosong berarti
 Gambar tidak memiliki objek. Baris tidak membawa kepercayaan dan tidak ada ID jalur.
 
 YAML menamai pembagian dan kelas-kelasnya:
@@ -252,9 +230,9 @@ names:
   1: bicycle
 ```
 
-`train` dan `val` mungkin adalah direktori gambar, file daftar-gambar `.txt`, atau daftar
+`train` dan `val` mungkin adalah direktori gambar, berkas daftar-gambar `.txt`, atau daftar
 dari keduanya. `nc` bersifat opsional dan harus cocok dengan `names` jika ada. Native COCO
-JSON juga berfungsi: tambahkan pemetaan `annotations` dari nama split ke file JSON, dan
+JSON juga berfungsi: tambahkan pemetaan `annotations` dari nama split ke berkas JSON, dan
 jalur yang terpisah kemudian memberikan akar gambar. Ketika `names` ada, itu menentukan
 ID label, jadi nama kategori JSON harus cocok dengannya.
 
@@ -266,7 +244,7 @@ ID label, jadi nama kategori JSON harus cocok dengannya.
 yang tidak terbawa antar keluarga: sebuah laju detektor konvolusional
 tolerates akan menyimpang dari satu transformer, jadi ambil nilai dari halaman model
 daripada dari contoh family lainnya. family juga dapat mengabaikan sebuah argumen
-secara langsung, dan halamannya mencantumkan yang mana. Lihat [training](/docs/train) untuk set data,
+secara langsung, dan halamannya mencantumkan yang mana. Lihat [pelatihan](/docs/train) untuk set data,
 augmentasi, multi-GPU, dan pencatat.
 
 ## Validasi
@@ -298,10 +276,11 @@ juga memprediksi mask: `metrics/mAP50-95(B)`, `metrics/mAP50(B)`,
 
 <code-tabs name="export" />
 
-Sebuah artefak yang diekspor dimuat kembali melalui `LibreYOLO()` pada akhiran file-nya, jadi sebuah
-File `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengembalikan hal yang sama
+Sebuah artefak yang diekspor dimuat kembali melalui `LibreYOLO()` pada akhiran berkas-nya, jadi sebuah
+Berkas `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengembalikan hal yang sama
 `Results`. Cakupan format berbeda menurut family; matriks pada setiap halaman model adalah
 dihasilkan dari set yang tervalidasi daripada diketik dengan tangan. Lihat
 [ekspor dan deploy](/docs/export) untuk format, tambahannya, dan mereka]
 batasan.
+
 

@@ -31,36 +31,24 @@ snippets:
         print(depth.min, depth.max, depth.mean)
     - label: Bekerja dengan nilai-nilai tersebut
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
         depth = result.depth_map
-
-        raw = depth.data          # semakin tinggi semakin dekat; tidak ada
-        satuan metrik, tidak ada skala
-
+        raw = depth.data          # semakin tinggi semakin dekat; tidak ada satuan metrik, tidak ada skala
         gray = depth.normalized() # diubah skala ke [0, 1] untuk visualisasi
-
         print(raw.shape, float(gray.max()))
     - label: Alternatif yang ringkas
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Kontrak task yang sama, jaringan yang jauh lebih kecil dibangun untuk
-        runtime edge.
-
+        # Kontrak task yang sama, jaringan yang jauh lebih kecil dibangun untuk runtime edge.
         model = LibreYOLO("LibreZipDepthb-depth.pt")
-
         result = model(SAMPLE_IMAGE)
-
 
         print(result.depth_map.data.shape)
   val:
@@ -77,28 +65,22 @@ snippets:
         print(metrics["metrics/delta1"])   # kebugaran
         print(metrics["metrics/delta2"], metrics["metrics/delta3"])
   export:
-    - label: Export
+    - label: Ekspor
       language: python
       code: |
         from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")
         model.export(format="onnx")
-    - label: Jalankan file yang diekspor
+    - label: Jalankan berkas yang diekspor
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Pabrik mengarahkan berdasarkan sufiks file, sehingga artefak yang
-        diekspor dimuat
-
+        # Pabrik mengarahkan berdasarkan sufiks berkas, sehingga artefak yang diekspor dimuat
         # seperti checkpoint apa pun dan mengembalikan objek Results yang sama.
-
         model = LibreYOLO("LibreDepthAnythingV2s-depth.onnx")
-
         result = model(SAMPLE_IMAGE)
-
 
         print(result.depth_map.data.shape)
 source_hash: e0612c59f9c999b4
@@ -129,7 +111,7 @@ ukuran sama seperti akurasi: checkpoint Kecil adalah Apache-2.0 sedangkan Base d
 Besar bersifat non-komersial, jadi periksa tabel checkpoint di halamannya sebelum
 memilih salah satu.
 
-[Depth Anything 3](/docs/models/depth-anything-3) mem-port DA3MONO-LARGE
+[Depth Anything 3](/docs/models/depth-anything-3) mengadaptasi DA3MONO-LARGE
 checkpoint, sebuah transformer biasa tanpa spesialisasi arsitektur untuk kedalaman.
 
 [ZipDepth](/docs/models/zipdepth) adalah tingkatan kompak: CNN yang dapat direparameterisasi
@@ -161,10 +143,10 @@ untuk dua keluarga yang disebutkan di atas.
 Resolusi input dibatasi sesuai family. Depth Anything V2 dan Depth Anything
 3 dibangun di atas grid patch DINOv2, jadi `imgsz` harus dapat dibagi habis dengan 14, yang
 LibreYOLO periksa sebelum dijalankan. `Results.plot()` tidak mencakup task ini; ini
-didefinisikan hanya untuk normal permukaan dan tepi. Lihat [prediction](/docs/predict)
+didefinisikan hanya untuk normal permukaan dan tepi. Lihat [prediksi](/docs/predict)
 untuk sumber, streaming, dan penanganan hasil.
 
-## Format Dataset
+## Format dataset
 
 Validasi kedalaman memasangkan setiap gambar dengan peta kedalaman saluran tunggal yang padat yang memiliki
 resolusi yang sama, ditemukan dengan menggantikan direktori kedalaman ke dalam gambar
@@ -192,7 +174,7 @@ dataset tetap konsisten, dan `0`, negatif, NaN dan piksel tak hingga ditandai
 sampel tidak valid yang dikecualikan dari metrik. Peta bilangan bulat dibagi oleh
 `depth_scale`, yang default ke `256.0`, konvensi PNG 16-bit; float
 Peta `.npy` digunakan apa adanya. `depth_stem_suffix` dan `depth_mask_suffix`
-menutupi dataset yang menamai file kedalaman atau mask validitas mereka dengan cara yang berbeda. Lihat
+menutupi dataset yang menamai berkas kedalaman atau mask validitas mereka dengan cara yang berbeda. Lihat
 [dataset memformat ](/docs/reference/dataset-formats) untuk kontrak penuh.
 
 ## Latih
@@ -222,8 +204,8 @@ bacaan pemilihan best-checkpoint.
 
 ## Ekspor
 
-Model kedalaman yang diekspor dimuat kembali melalui `LibreYOLO()` berdasarkan akhiran file-nya, sehingga
-file `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengembalikan `.onnx` yang sama,
+Model kedalaman yang diekspor dimuat kembali melalui `LibreYOLO()` berdasarkan akhiran berkas-nya, sehingga
+berkas `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengembalikan `.onnx` yang sama,
 dengan `depth_map` menggantikan kotak.
 
 <code-tabs name="export" />
@@ -233,4 +215,6 @@ set yang divalidasi alih-alih mencoba konversi yang tidak divalidasi. Periksa ha
 dan [matriks ekspor penuh ](/docs/reference/export-matrix) sebelum
 berkomitmen ke target. LibreMODUS dan SenseNova-Vision tidak mengekspor sama sekali.
 [Ekspor ](/docs/export) mencantumkan argumen yang diterima setiap format.
+
+
 

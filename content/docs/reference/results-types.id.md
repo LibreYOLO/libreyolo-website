@@ -3,7 +3,7 @@ title: Jenis Results
 seo_title: Referensi objek Results LibreYOLO
 description: >-
   Setiap payload yang dapat dibawa objek Results LibreYOLO, satu slot per bentuk
-  task: box, mask, keypoint, probs, obb, depth, ocr, embedding, dan sepuluh
+  task: bounding box, mask, keypoint, probs, obb, depth, ocr, embedding, dan sepuluh
   lainnya.
 lead: >-
   Results adalah satu-satunya jenis nilai kembalian per gambar dari setiap model
@@ -101,13 +101,13 @@ ditentukan oleh task-nya.
 `result.normals` adalah alias baca-tulis untuk `result.normal_map`.
 
 Lebih dari satu slot dapat ditetapkan sekaligus. Model segmentation mengisi
-`boxes` dan `masks`; model gaze mengisi `boxes` dengan box wajah dan `gaze`
-dengan sudut; model mesh mengisi `boxes` dengan box orang dan `meshes` yang
+`boxes` dan `masks`; model gaze mengisi `boxes` dengan bounding box wajah dan `gaze`
+dengan sudut; model mesh mengisi `boxes` dengan bounding box orang dan `meshes` yang
 barisnya diselaraskan dengannya.
 
-## Boxes
+## Bounding box
 
-Box deteksi untuk satu gambar.
+Bounding box deteksi untuk satu gambar.
 
 | Anggota | Mengembalikan |
 |---|---|
@@ -115,14 +115,14 @@ Box deteksi untuk satu gambar.
 | `xywh` | Pusat dan ukuran dalam piksel |
 | `xyxyn` | Sudut yang dinormalisasi ke `[0, 1]` |
 | `xywhn` | Pusat dan ukuran yang dinormalisasi ke `[0, 1]` |
-| `conf` | Confidence per box |
-| `cls` | Indeks kelas per box |
-| `id` | Id track per box, atau `None` |
+| `conf` | Confidence per bounding box |
+| `cls` | Indeks kelas per bounding box |
+| `id` | Id track per bounding box, atau `None` |
 | `is_track` | `True` ketika terdapat id track |
 | `data` | Tensor terkemas |
 
 `with_id(id)` dan `with_orig_shape(orig_shape)` mengembalikan `Boxes` baru
-dengan field tersebut diganti.
+dengan kolom tersebut diganti.
 
 ## Masks
 
@@ -145,12 +145,12 @@ Lokalisasi titik untuk satu gambar. `data` berbentuk `(N, 4)` dengan baris
 
 ## Probs
 
-Score classification. `top1` adalah indeks pemenang, `top5` adalah lima indeks
-terbaik, dan `top1conf` serta `top5conf` adalah score-nya.
+Skor classification. `top1` adalah indeks pemenang, `top5` adalah lima indeks
+terbaik, dan `top1conf` serta `top5conf` adalah skor-nya.
 
 ## OBB
 
-Oriented box. `data` menyimpan 7 atau 8 nilai per baris: `xywhr`, id track
+Oriented bounding box. `data` menyimpan 7 atau 8 nilai per baris: `xywhr`, id track
 opsional, lalu confidence dan kelas.
 
 | Anggota | Mengembalikan |
@@ -164,7 +164,7 @@ opsional, lalu confidence dan kelas.
 ## Gaze
 
 Sudut arah pandang per wajah dalam radian, berbentuk `(N, 2)`, dengan baris
-yang diselaraskan terhadap box wajah dalam `boxes`. Kolom 0 adalah pitch dan
+yang diselaraskan terhadap bounding box wajah dalam `boxes`. Kolom 0 adalah pitch dan
 kolom 1 adalah yaw menurut konvensi L2CS: yaw positif memutar pandangan ke arah
 kiri subjek dan pitch positif memutarnya ke bawah. `pitch_deg` dan `yaw_deg`
 mengonversi ke derajat, sedangkan `direction_3d` mengembalikan vektor arah
@@ -202,7 +202,7 @@ meter metrik. `min`, `max`, dan `mean` dihitung pada nilai terbatas, sedangkan
 
 ## NormalMap
 
-Field surface-normal padat, float32 `(H, W, 3)` pada canvas gambar asli, dalam
+Kolom surface-normal padat, float32 `(H, W, 3)` pada canvas gambar asli, dalam
 frame kamera OpenCV: `+x` ke kanan, `+y` ke bawah, dan `+z` masuk ke scene.
 Normal menghadap kamera, sehingga permukaan fronto-parallel adalah
 `(0, 0, -1)`. Setiap piksel berupa vektor satuan.
@@ -240,16 +240,16 @@ ulang dari `Results.path`.
 Teks terlokalisasi beserta transkrip. `data` adalah poligon float `(N, 4, 2)`
 dalam piksel gambar asli, berurutan kiri atas, kanan atas, kanan bawah, kiri
 bawah, dan region berada dalam urutan baca, atas ke bawah lalu kiri ke kanan.
-`texts` adalah list N transkrip. `conf` adalah score pengenalan per region dan
-`det_conf` adalah score deteksi, keduanya berbentuk `(N,)`.
+`texts` adalah list N transkrip. `conf` adalah skor pengenalan per region dan
+`det_conf` adalah skor deteksi, keduanya berbentuk `(N,)`.
 
 Quad deteksi merupakan poligon sebenarnya, sehingga tidak mengisi
 `Results.boxes`. `xyxy` memberikan hull yang sejajar sumbu.
 
-## Embeddings
+## Embedding
 
 Vektor ternormalisasi L2 dari task `embed`, selalu berbentuk `(N, D)`. Hasil
-seluruh gambar memuat satu baris tanpa box; embedding region memiliki baris yang
+seluruh gambar memuat satu baris tanpa bounding box; embedding region memiliki baris yang
 diselaraskan dengan `boxes`. Karena setiap baris dinormalisasi, cosine similarity
 merupakan dot product.
 
@@ -266,22 +266,22 @@ Kecocokan gallery bernama, dengan baris yang diselaraskan terhadap `embeddings`.
 Dihasilkan ketika `Gallery` diberikan kepada prediksi `embed`. `name` adalah
 list dengan entri bernilai `None` di bawah ambang batas kecocokan, dan nama
 terdekat yang berada di bawah ambang batas tidak pernah ditebak. `score` adalah
-array score kecocokan dan `data` memasangkan keduanya.
+array skor kecocokan dan `data` memasangkan keduanya.
 
 ## Meshes
 
-Body mesh manusia parametrik, dengan baris yang diselaraskan terhadap box orang
+Body mesh manusia parametrik, dengan baris yang diselaraskan terhadap bounding box orang
 dalam `boxes`. Semuanya berada dalam frame kamera gambar asli. `transl` bersifat
 metrik dalam meter dengan `+z` menjauhi kamera; `vertices` dan `joints3d`
 bersifat metrik dan sudah menyertakan `transl`; `joints2d` berada dalam piksel
-pada canvas gambar asli, bukan crop yang dilihat network. Tidak ada field yang
+pada canvas gambar asli, bukan crop yang dilihat jaringan. Tidak ada kolom yang
 memuat frame dunia atau gravitasi.
 
-Layout parameter berbeda antar body model, sehingga tidak ada bentuk yang
-di-hard-code. `body_model` menyebut parameterization dan jumlahnya dibaca dari
+Tata letak parameter berbeda antar body model, sehingga tidak ada bentuk yang
+ditetapkan langsung. `body_model` menyebut parameterization dan jumlahnya dibaca dari
 tensor: `num_vertices`, `num_joints`, `num_betas`, dan `has_vertices`. `params`
 mengembalikan dict parameter, sedangkan `save_obj(path, index=0)` menulis satu
-mesh. Field-nya adalah `global_orient`, `body_pose`, `betas`, `transl`,
+mesh. Kolom-nya adalah `global_orient`, `body_pose`, `betas`, `transl`,
 `vertices`, `faces`, `joints3d`, `joints2d`, `conf`, `focal_length`, dan
 `extras`.
 
@@ -299,7 +299,7 @@ terisi sekaligus.
 <code-tabs name="convert" />
 
 `result[idx]` memilih baris lintas payload yang selaras baris. `len(result)`
-adalah jumlah deteksi, atau jumlah titik jika tidak ada box. `result.update(...)`
+adalah jumlah deteksi, atau jumlah titik jika tidak ada bounding box. `result.update(...)`
 mengembalikan salinan dengan slot bernama diganti; metode ini menerima setiap
 slot ditambah `track_id` dan `restore_scale`.
 
@@ -313,3 +313,6 @@ mengembalikan string JSON.
 `plot()` merender hasil normal atau edge padat dalam visualisasi kanonis;
 metode ini memunculkan error untuk jenis hasil lain. Gambar beranotasi untuk
 task lain berasal dari `predict(save=True)`.
+
+
+

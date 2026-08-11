@@ -1,18 +1,18 @@
 ---
-title: Embeddings
+title: Embedding
 seo_title: Embedding gambar dan wilayah di LibreYOLO
 description: >-
-  Embed task menghasilkan vektor float32 yang dinormalisasi L2 untuk seluruh
+  Task `embed` menghasilkan vektor float32 yang dinormalisasi L2 untuk seluruh
   gambar, untuk setiap wilayah yang terdeteksi, atau untuk teks. Daftarkan
   galeri, cocokkan dengan kesamaan kosinus, dan cari dari Python atau CLI.
 lead: >-
-  Satu task mencakup setiap vektor yang dihasilkan LibreYOLO. embed
-  mengembalikan baris float32 dengan panjang satuan yang produk titiknya adalah
-  skor kesamaan, apakah baris menggambarkan seluruh gambar, satu wajah yang
-  terdeteksi, atau satu baris teks, dan Galeri yang sama cocok untuk semuanya.
+  Satu task mencakup setiap vektor yang dihasilkan LibreYOLO. `embed`
+  mengembalikan baris float32 dengan panjang satuan yang dot product-nya menjadi
+  skor kesamaan, baik baris tersebut menggambarkan seluruh gambar, satu wajah yang
+  terdeteksi, maupun satu baris teks. `Gallery` yang sama cocok untuk semuanya.
 keywords:
   - embedding gambar python
-  - L2 dinormalisasi embedding
+  - embedding ternormalisasi L2
   - pencarian kesamaan kosinus
   - libreyolo embed task
   - pengambilan gambar
@@ -46,22 +46,15 @@ snippets:
   predict:
     - label: Seluruh gambar
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # CLIP secara default untuk mengklasifikasikan, jadi mintalah vektor
-        secara eksplisit.
-
+        # CLIP secara default untuk mengklasifikasikan, jadi mintalah vektor secara eksplisit.
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
-
         result = model(SAMPLE_IMAGE)
 
-
         print(result.embeddings.data.shape)  # (1, 512), satu baris per gambar
-
-        print(result.boxes)                  # None: tidak ada yang
-        terlokalisasi
+        print(result.boxes)                  # None: tidak ada yang terlokalisasi
     - label: Per wilayah
       language: python
       code: |
@@ -85,20 +78,14 @@ snippets:
         print(vectors.shape)  # (3, 384)
     - label: Text
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
 
-
-        # Teks adalah metode, bukan sumber prediksi. Sebuah string yang
-        diberikan ke
-
+        # Teks adalah metode, bukan sumber prediksi. Sebuah string yang diberikan ke
         # model(...) tetap merupakan jalur atau URL.
-
         text = model.embed_text(["a photo of a cat", "a photo of a dog"])
-
         print(text.shape)  # (2, 512)
   similarity:
     - label: Bandingkan dua set baris
@@ -166,11 +153,9 @@ snippets:
   cli:
     - label: Daftarkan pohon folder
       language: bash
-      code: >
-        # source/<identity>/*.jpg. Galeri yang ada diperluas di tempat.
-
-        libreyolo enroll model=librefacerec-l.onnx source=people/
-        gallery=refs.npz
+      code: |
+        # sumber/<identity>/*.jpg. Galeri yang ada diperluas di tempat.
+        libreyolo enroll model=librefacerec-l.onnx source=people/ gallery=refs.npz
     - label: Identifikasi sambil memprediksi
       language: bash
       code: |
@@ -178,14 +163,12 @@ snippets:
           gallery=refs.npz gallery_threshold=0.45
     - label: Bandingkan dua gambar
       language: bash
-      code: >
+      code: |
         libreyolo compare model=librefacerec-l.onnx \
           source=a.jpg source2=b.jpg threshold=0.4
 
         # verify adalah perintah yang sama dengan nama kedua.
-
-        libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg
-        --json
+        libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg --json
 source_hash: ffbaad5599035bc7
 ---
 
@@ -361,7 +344,7 @@ people/
 
 Gambar yang tidak menghasilkan apa-apa dilewati dengan sebuah garis pada stderr daripada
 menghentikan jalannya, dan ringkasan melaporkan berapa banyak referensi yang disimpan untuk
-setiap nama. File galeri yang ada diperluas di tempat, sehingga identitas dapat
+setiap nama. Berkas galeri yang ada diperluas di tempat, sehingga identitas dapat
 ditambahkan seiring waktu.
 
 `compare` dan `verify` adalah satu fungsi yang didaftarkan dua kali. Mereka mengambil `model`,
@@ -371,7 +354,7 @@ keputusan sama atau berbeda dan ambang yang menghasilkan keputusan tersebut.
 
 Pada `predict`, `gallery` menunjuk pada `.npz` dan `gallery_threshold` yang tersimpan
 menimpa default `0.4`. Mengirimkan galeri ke model yang task-nya tidak
-`embed` adalah sebuah kesalahan daripada operasi tanpa efek, dan sebuah file galeri yang hilang
+`embed` adalah sebuah kesalahan daripada operasi tanpa efek, dan sebuah berkas galeri yang hilang
 menyarankan perintah `libreyolo enroll` yang akan membuatnya.
 
 ## Wajah
@@ -388,7 +371,7 @@ berlaku untuk itu tanpa perubahan.
 
 Tidak ada dalam task yang dilatih di dalam LibreYOLO. Wajah embedding head adalah
 artefak ONNX yang `train()`, `val()`, dan `export()` semuanya menaikkan; latih head
-hulu dan muat file melalui jalur. CLIP, SigLIP 2, dan DINOv2 melatih dan mengekspor
+hulu dan muat berkas melalui jalur. CLIP, SigLIP 2, dan DINOv2 melatih dan mengekspor
 melalui tugas klasifikasi dan segmentasi mereka, bukan melalui `embed`.
 
 Tidak ada validator pengambilan. Ukur akurasi verifikasi pada pasangan yang diberi label

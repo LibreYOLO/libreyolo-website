@@ -83,9 +83,9 @@ Berikan daftar perangkat. Tidak ada hal lain yang berubah.
 <code-tabs name="train" />
 
 Jika lebih dari satu perangkat diberikan tanpa environment torchrun, `train()`
-menyimpan bobot ke file sementara, menyelesaikan autobatch jika diminta, lalu
+menyimpan bobot ke berkas sementara, menyelesaikan autobatch jika diminta, lalu
 membuat satu proses worker per GPU dengan `torch.multiprocessing.spawn`. Setiap
-worker mengimpor ulang class model, membangunnya dari bobot tersimpan, dan
+worker mengimpor ulang kelas model, membangunnya dari bobot tersimpan, dan
 menjalankan jalur satu-perangkat biasa karena variabel environment torchrun telah
 ditetapkan di dalam worker. Checkpoint terbaik rank 0 dimuat kembali ke instance
 model pemanggil setelah proses selesai.
@@ -105,8 +105,8 @@ means your script calls model.train(device=...) at the top level without a
 'if __name__ == "__main__":' guard.
 ```
 
-Semua yang dikirim ke worker di-pickle, sehingga `callbacks=` harus dapat
-di-pickle. Class tingkat modul dapat digunakan; closure atau lambda tidak, dan
+Semua yang dikirim ke worker diserialisasi dengan pickle, sehingga `callbacks=` harus dapat
+diserialisasi dengan pickle. Kelas tingkat modul dapat digunakan; closure atau lambda tidak, dan
 error menjelaskannya serta menunjuk logger bawaan sebagai alternatif.
 
 ## batch adalah batch global
@@ -204,3 +204,5 @@ API model dan perintah torchrun, bukan diam-diam berlatih pada satu GPU.
 - [Hyperparameter](/docs/train/hyperparameters) untuk `batch`, `nbs`, dan resume.
 - [Logger eksperimen](/docs/train/loggers) untuk batasan picklability callback.
 - [GPU cloud](/docs/train/cloud-gpus) untuk menyewa mesin multi-GPU.
+
+
