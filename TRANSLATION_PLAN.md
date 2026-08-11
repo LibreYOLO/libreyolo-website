@@ -11,25 +11,28 @@ is always safe.
 
 ## Final language roster (13 locales + English)
 
-Status as of 2026-08-10. "Pages" counts `<slug>.<locale>.md` twins out of 174.
-"Assets" means style guide (`scripts/translation/STYLE-<locale>.md`) and UI
-strings (`messages/<locale>.json`) exist.
+Status as of 2026-08-11. "Pages" counts `<slug>.<locale>.md` twins out of 174.
+Every locale now has its style guide (`scripts/translation/STYLE-<locale>.md`),
+its UI strings (`messages/<locale>.json`) and its routing entry, so nothing but
+translation volume is left.
 
-| Locale | hreflang | OG locale | Label | Pages | Assets | Notes |
-|--------|----------|-----------|-------|-------|--------|-------|
-| `es` | `es` | `es_ES` | Español | **174/174** | yes | Complete. Neutral international Spanish, `tú` |
-| `zh` | `zh-CN` | `zh_CN` | 中文 | 106/174 | yes | ~25% of site traffic — highest-value locale |
-| `pt` | `pt-BR` | `pt_BR` | Português | 46/174 | yes | pt-BR; glossary marks pt-PT splits for a later fork |
-| `it` | `it` | `it_IT` | Italiano | 41/174 | yes | `libreria` is correct here (unlike es) |
-| `fr` | `fr` | `fr_FR` | Français | 15/174 | yes | NBSP typography in `fr.json` — do not let a formatter strip it |
-| `ru` | `ru` | `ru_RU` | Русский | 12/174 | yes | Needs ICU plurals for `Models.familyCount` |
-| `de` | `de` | `de_DE` | Deutsch | 0/174 | no | **Highest-ROI addition** — industrial machine vision |
-| `ja` | `ja` | `ja_JP` | 日本語 | 0/174 | no | Robotics/factory CV; low English-docs tolerance |
-| `ko` | `ko` | `ko_KR` | 한국어 | 0/174 | no | Strong industrial CV sector |
-| `pl` | `pl` | `pl_PL` | Polski | 0/174 | no | Large EU dev population |
-| `uk` | `uk` | `uk_UA` | Українська | 0/174 | no | Keep terminology independent of `ru`, not derived from it |
-| `vi` | `vi` | `vi_VN` | Tiếng Việt | 0/174 | no | Fast-growing dev base, little CV content competition |
-| `id` | `id` | `id_ID` | Bahasa Indonesia | 0/174 | no | Same rationale as `vi` |
+| Locale | hreflang | OG locale | Label | Pages | Notes |
+|--------|----------|-----------|-------|-------|-------|
+| `es` | `es` | `es_ES` | Español | **174/174** | Complete. Neutral international Spanish, `tú` |
+| `zh` | `zh-CN` | `zh_CN` | 中文 | **174/174** | Complete. ~25% of site traffic, the highest-value locale |
+| `pt` | `pt-BR` | `pt_BR` | Português | **174/174** | Complete. pt-BR; glossary marks pt-PT splits for a later fork |
+| `it` | `it` | `it_IT` | Italiano | **174/174** | Complete. `libreria` is correct here, unlike es |
+| `ru` | `ru` | `ru_RU` | Русский | **174/174** | Complete. Still wants ICU plurals in `Models.familyCount` |
+| `fr` | `fr` | `fr_FR` | Français | 69/174 | NBSP typography in `fr.json`, do not let a formatter strip it |
+| `de` | `de` | `de_DE` | Deutsch | 48/174 | Industrial machine vision. `task` -> "die Aufgabe" except the `task=` concept |
+| `id` | `id` | `id_ID` | Bahasa Indonesia | 48/174 | Never calque *instance* as `instansi`, that means a government agency |
+| `vi` | `vi` | `vi_VN` | Tiếng Việt | 31/174 | `lớp` collides: bare for *layer*, `lớp đối tượng` for *class* |
+| `pl` | `pl` | `pl_PL` | Polski | 28/174 | Impersonal register, since 2nd person would gender the reader |
+| `ja` | `ja` | `ja_JP` | 日本語 | 18/174 | No space at the JA/Latin boundary, the opposite of the zh rule |
+| `uk` | `uk` | `uk_UA` | Українська | 15/174 | Terminology built independently of `ru`, never forked from it |
+| `ko` | `ko` | `ko_KR` | 한국어 | 15/174 | Particle choice after Latin identifiers follows the spoken reading |
+
+**Remaining: 1,120 pages** across the eight incomplete locales.
 
 **Dropped, deliberately:** `ar` (Arabic) and `th` (Thai). Arabic was the only
 right-to-left locale, so no RTL support is needed anywhere in the site; Thai was
