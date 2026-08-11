@@ -49,6 +49,30 @@ export const localeNames = {
   uk: 'Українська',
 }
 
+// Flags shown beside each language in the menu.
+//
+// A flag is a country, not a language, so these are decoration next to the
+// autonym and never the only way to identify an option. Where our locale
+// already targets a specific variant the choice is factual: `pt` is pt-BR so
+// it flies Brazil, `zh` is zh-CN. Two are genuinely arbitrary: `en` and `es`,
+// which we write as neutral international Spanish rather than Spain's.
+export const localeFlags = {
+  en: '🇬🇧',
+  zh: '🇨🇳',
+  es: '🇪🇸',
+  it: '🇮🇹',
+  pt: '🇧🇷',
+  fr: '🇫🇷',
+  ru: '🇷🇺',
+  id: '🇮🇩',
+  vi: '🇻🇳',
+  de: '🇩🇪',
+  pl: '🇵🇱',
+  ja: '🇯🇵',
+  ko: '🇰🇷',
+  uk: '🇺🇦',
+}
+
 // Short labels for the collapsed trigger, where there is no room for a name.
 export const localeLabels = {
   en: 'EN',

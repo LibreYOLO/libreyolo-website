@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useTransition } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Check, Globe } from 'lucide-react'
 import { usePathname, useRouter } from '@/i18n/navigation'
-import { routing, localeHtmlLang, localeLabels, localeNames } from '@/i18n/routing'
+import { routing, localeFlags, localeHtmlLang, localeLabels, localeNames } from '@/i18n/routing'
 
 // Language menu. This was a two-button EN / 中文 toggle; with fourteen locales a
 // row of buttons no longer fits a navbar, so the trigger collapses to the
@@ -91,7 +91,15 @@ export default function LanguageSwitcher({ className = '' }) {
                     : 'text-surface-600 hover:bg-surface-50 dark:text-surface-300 dark:hover:bg-white/5'
                 }`}
               >
-                <span>{localeNames[code]}</span>
+                <span className="flex items-center gap-2">
+                  {/* Decoration only: a flag is a country, not a language, and
+                      Windows ships no colour flag glyphs, so the autonym beside
+                      it stays the thing that actually identifies the option. */}
+                  <span aria-hidden="true" className="text-base leading-none">
+                    {localeFlags[code]}
+                  </span>
+                  {localeNames[code]}
+                </span>
                 {isActive && <Check className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />}
               </button>
             )
