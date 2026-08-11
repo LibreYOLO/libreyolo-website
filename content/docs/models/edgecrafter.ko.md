@@ -2,19 +2,19 @@
 title: EdgeCrafter
 families:
   - ec
-seo_title: 'EdgeCrafter: LibreYOLO에서 탐지, 자세 인식 및 분할'
+seo_title: 'EdgeCrafter: LibreYOLO의 탐지, 자세 추정 및 분할'
 description: >-
-  EdgeCrafter를 LibreYOLO에서 탐지, 자세 및 인스턴스 분할에 사용하십시오. MIT 라이선스 코드로 설치, 예측, 검증 및
-  내보내기를 수행하십시오.
+  LibreYOLO에서 EdgeCrafter로 탐지, 자세 추정, 인스턴스 분할을 수행합니다. MIT 라이선스 코드로 설치, 예측, 검증,
+  내보내기합니다.
 lead: >-
-  엣지 하드웨어에서 밀도 예측을 위한 컴팩트 비전 트랜스포머로, 상위에 세 개의 형제 모델인 ECDet, ECPose, ECSeg로
-  공개되었습니다. LibreYOLO는 세 가지 모델을 하나의 계열로 모두 로드하며, 작업은 체크포인트가 수행합니다.
+  엣지 하드웨어의 조밀 예측을 위한 소형 vision transformer로 업스트림에서는 ECDet, ECPose, ECSeg의 세 형제
+  모델로 공개됩니다. LibreYOLO는 셋을 하나의 제품군으로 불러오며 체크포인트가 작업을 나타냅니다.
 keywords:
-  - 엣지크래프터
+  - EdgeCrafter 사용법
   - ECDet
   - ECPose
   - ECSeg
-  - 컴팩트 비전 트랜스포머
+  - 소형 vision transformer
   - 객체 탐지
   - 자세 추정
   - 인스턴스 분할
@@ -38,13 +38,13 @@ snippets:
         libreyolo predict model=LibreECs.pt
         source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
         save=True
-    - label: 자세
+    - label: 자세 추정
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # 파일 이름의 -pose 접미사는 키포인트 헤드를 선택하므로, 아니요
-        # 여기에 작업 인수가 필요합니다.
+        # 파일명의 -pose 접미사가 키포인트 헤드를 선택하므로 여기서는
+        # task 인수가 필요하지 않습니다.
         model = LibreYOLO("LibreECs-pose.pt")
         result = model(SAMPLE_IMAGE, save=True)
 
@@ -78,13 +78,13 @@ snippets:
       code: >
         libreyolo train model=LibreECs.pt data=my-dataset.yaml epochs=50
         imgsz=640 batch=8 lr0=5e-4
-    - label: 자세
+    - label: 자세 추정
       language: python
       code: |
         from libreyolo import LibreYOLO
 
-        # data.yaml가 선언하는 단일 클래스 키포인트 데이터셋이 필요합니다
-        # 체크포인트의 원래 크기에서 kpt_shape과 imgsz.
+        # data.yaml에 kpt_shape가 선언된 단일 클래스 키포인트 데이터셋과
+        # 체크포인트의 기본 크기로 설정한 imgsz가 필요합니다.
         model = LibreYOLO("LibreECs-pose.pt")
         model.train(
             data="my-pose-dataset.yaml",
@@ -96,7 +96,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        # 체크포인트의 원래 크기에서 다각형 레이블과 이미지 크기가 필요합니다.
+        # 폴리곤 레이블과 체크포인트의 기본 크기로 설정한 imgsz가 필요합니다.
         model = LibreYOLO("LibreECs-seg.pt")
         model.train(
             data="my-dataset.yaml",
@@ -129,7 +129,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreECs.pt data=my-dataset.yaml
-    - label: 자세
+    - label: 자세 추정
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -148,7 +148,7 @@ snippets:
         metrics = model.val(data="my-dataset.yaml")
 
         print(metrics["metrics/mAP50-95(M)"])   # 마스크
-        print(metrics["metrics/mAP50-95(B)"])   # 상자들
+        print(metrics["metrics/mAP50-95(B)"])   # 박스
   export:
     - label: Python
       language: python
@@ -164,13 +164,13 @@ snippets:
         libreyolo export model=LibreECs.pt format=onnx imgsz=640
         libreyolo export model=LibreECs-pose.pt format=onnx imgsz=640
         libreyolo export model=LibreECs-seg.pt format=onnx imgsz=640
-    - label: 내보낸 파일 사용하기
+    - label: 내보낸 파일 사용
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # 팩토리는 파일 접미사에 따라 경로를 지정하므로, 내보낸 아티팩트가 로드됩니다
-        # 모든 체크포인트와 마찬가지로 같은 Results 객체를 반환합니다.
+        # 팩토리는 파일 접미사에 따라 라우팅하므로 내보낸 아티팩트도
+        # 다른 체크포인트처럼 불러와 동일한 Results 객체를 반환합니다.
         model = LibreYOLO("LibreECs.onnx")
         result = model(SAMPLE_IMAGE)
 
@@ -180,13 +180,13 @@ source_hash: 39c6975fc16b3ff1
 
 ## 설치
 
-EdgeCrafter에는 선택적인 추가 항목이 필요 없습니다. 가져오는 모든 것은 기본 설치에 포함되어 있습니다.
+EdgeCrafter에는 선택적 extra가 필요하지 않습니다. 가져오는 모든 항목이 기본 설치에 포함됩니다.
 
 ```bash
 pip install libreyolo
 ```
 
-`lora=True`를 사용한 어댑터 파인튜닝은 예외이며, `lora` 추가가 필요합니다.
+단, `lora=True`를 사용하는 어댑터 미세 조정에는 `lora` extra가 필요합니다.
 
 ```bash
 pip install "libreyolo[lora]"
@@ -194,57 +194,57 @@ pip install "libreyolo[lora]"
 
 ## 예측
 
-가중치는 처음 사용할 때 Hugging Face에서 다운로드되며 로컬에 캐시됩니다.
+처음 사용할 때 Hugging Face에서 가중치를 다운로드해 로컬에 캐시합니다.
 
 <code-tabs name="predict" />
 
-작업은 파일 이름에서 결정되므로, `-pose` 또는 `-seg` 체크포인트는 자체 헤드를 선택하며 작업 인자를 필요로 하지 않습니다. 세 가지 모두가 모든 계열가 반환하는 `Results` 객체를 반환하며, 포즈의 경우 `result.keypoints`가, 세그멘테이션의 경우 `result.masks`가 추가됩니다. 포즈는 17개의 COCO 키포인트를 가진 한 클래스인 사람을 다루며, 모델이 구축될 때 수가 고정됩니다. 박스 헤드가 없기 때문에 각 포즈 박스는 자체 키포인트의 범위를 경계로 하며, 세 번째 키포인트 채널은 개별 점 점수가 아니라 상수입니다.
+작업은 파일명에서 가져오므로 `-pose` 또는 `-seg` 체크포인트가 자체 헤드를 선택하며 task 인수를 받지 않습니다. 셋 모두 각 제품군이 반환하는 `Results` 객체를 반환하고 자세 추정에는 `result.keypoints`, 분할에는 `result.masks`가 추가됩니다. 자세 추정은 COCO 키포인트 17개를 가진 사람 클래스 하나를 다루며 모델을 구축할 때 개수가 고정됩니다. 박스 헤드가 없으므로 각 자세 박스는 자체 키포인트의 경계 범위이고 세 번째 키포인트 채널은 점별 점수가 아닌 상수입니다.
 
-`conf`와 `max_det`는 쿼리 선택을 필터링합니다; `iou`는 API 일치를 위해 허용되지만 효과가 없습니다. 세 개의 헤드 모두 NMS 단계 없이 쿼리 집합을 디코딩하기 때문입니다. 소스, 스트리밍 및 결과 처리는 [prediction](/docs/predict)을 참조하십시오.
+`conf`와 `max_det`은 쿼리 선택을 필터링합니다. 세 헤드 모두 NMS 단계 없이 쿼리 집합을 디코딩하므로 `iou`는 API 일관성을 위해 허용되지만 효과가 없습니다. 소스, 스트리밍, 결과 처리는 [예측](/docs/predict)을 참조합니다.
 
 ## 변형
 
-네 가지 크기. 모두 동일한 입력 해상도로 실행되므로, 표는 매개변수 수와 정확도로 구분되어 있습니다.
+크기는 네 가지입니다. 모두 같은 입력 해상도에서 실행되므로 아래 표는 매개변수 수와 정확도로 구분합니다.
 
 <benchmark-table task="detect" />
 
 <va-embed />
 
-Upstream는 ECDet, ECPose, ECSeg를 세 개의 별도 모델로 게시하며, 세 개의 헤드를 가진 하나의 모델로 게시하지 않습니다. 이들은 ECViT 백본과 하이브리드 인코더를 공유하며 헤드만 다르기 때문에 LibreYOLO는 이를 하나의 계열로 합치고 체크포인트 파일 이름에 작업을 표시하도록 합니다. 따라서 사이즈 문자는 세 모델 모두 동일한 백본과 인코더를 의미하며, 어떤 모델을 불러오더라도 predict, validate, export는 동일한 인수를 사용합니다.
+업스트림은 ECDet, ECPose, ECSeg를 세 헤드가 있는 하나의 모델이 아니라 세 개의 별도 모델로 게시합니다. ECViT 백본과 하이브리드 인코더를 공유하고 헤드만 다르므로 LibreYOLO는 하나의 제품군으로 합치고 체크포인트 파일명이 작업을 나타내게 합니다. 따라서 크기 문자는 세 작업에서 같은 백본과 인코더를 뜻하고 예측, 검증, 내보내기는 어떤 모델을 불러와도 같은 인수를 받습니다.
 
 ## 학습
 
-세 가지 작업 모두 `train()`를 통해 학습되며, 이는 로드된 체크포인트에서 작업을 읽고 일치하는 트레이너를 선택합니다.
+세 작업 모두 `train()`으로 학습하며 불러온 체크포인트에서 작업을 읽고 일치하는 학습기를 선택합니다.
 
 <code-tabs name="train" />
 
-탐지 및 분할에 대해 확인된 사항: 업스트림 대비 추론 일관성(1e-5 기준), 레이어별 및 크기별 확인, 손실과 단일 학습 단계가 합성 입력에서 실행되는지 여부. `train()`의 자체 docstring에 따르면 확인되지 않은 사항: 전체 파인튜닝의 수렴, 다중 GPU 학습, stop-augmentation 최적 재로드 단계, Objects365를 COCO 클래스에 재매핑. 포즈 경로는 DETRPose의 공개 레시피를 따르며, 클래스, 키포인트 L1, OKS 비용에 대한 헝가리안 매처와 대조적 키포인트 디노이징을 사용하며, 수렴도 끝까지 확인되지 않음.
+탐지와 분할에서 확인한 항목은 크기별 계층 단위 업스트림 대비 1e-5 추론 동등성과 합성 입력에서 손실 및 단일 학습 단계 실행입니다. `train()` 자체의 docstring에 따라 확인하지 않은 항목은 전체 미세 조정 수렴, 다중 GPU 학습, 증강 중단 후 최고 모델 다시 불러오기 단계, Objects365에서 COCO로의 클래스 재매핑입니다. 자세 경로는 클래스, 키포인트 L1, OKS 비용에 헝가리안 매처와 대조적 키포인트 노이즈 제거를 사용하는 DETRPose 공개 레시피를 따르며 이 수렴도 처음부터 끝까지 확인하지 않았습니다.
 
-혼자 남겨진 상태에서, 트레이너는 업스트림 레시피를 따라 혼합 정밀도를 켠 상태로 `lr0=5e-4`에서 74 에폭을 수행합니다: AdamW, 평탄한 코사인 스케줄, EMA 0.9999, 그리고 ImageNet 정규화 입력. 포즈와 세그멘테이션은 모두 체크포인트의 기본 크기에서 `imgsz`를 필요로 합니다. 이는 평가 앵커 그리가 모델이 구축될 때 만들어지기 때문이며, 다른 값을 사용하면 실행 시작 전에 오류가 발생합니다. 포즈는 또한 `data.yaml`가 `kpt_shape`를 선언하는 단일 클래스 데이터셋을 필요로 하며, 키포인트 수가 헤드와 일치해야 합니다.
+기본 설정에서는 혼합 정밀도를 활성화하고 `lr0=5e-4`로 74 epoch를 실행하며 업스트림 레시피에 따라 AdamW, flat cosine 일정, EMA 0.9999, ImageNet 정규화 입력을 사용합니다. 자세 추정과 분할은 평가 앵커 그리드가 모델 생성 시 구축되므로 체크포인트의 기본 크기와 같은 `imgsz`가 필요하며 다른 값은 실행 전에 예외를 발생시킵니다. 자세 추정에는 `data.yaml`이 `kpt_shape`를 선언하고 키포인트 수가 헤드와 일치하는 단일 클래스 데이터셋도 필요합니다.
 
-`lora=True`는 탐지에만 적용됩니다; 포즈와 세그멘테이션은 그 위에 `ValueError`를 발생시킵니다. Apple 실리콘에서는 트레이너가 GPU에서 실행을 유지하고 하나의 연산을 CPU로 전송하는데, 이는 변형 가능 주의(deformable attention) 내의 그리드 샘플 역전파로, PyTorch가 Metal에서는 구현하지 않습니다.
+`lora=True`는 탐지에만 적용됩니다. 자세 추정과 분할에서는 `ValueError`가 발생합니다. Apple silicon에서 학습기는 실행을 GPU에 유지하고 PyTorch가 Metal에서 구현하지 않은 deformable attention 내부의 grid-sample 역전파 연산 하나만 CPU로 보냅니다.
 
-[training](/docs/train)에서 데이터셋, 증강, 멀티 GPU 및 로거에 대해 확인하십시오.
+데이터셋, 증강, 다중 GPU, 로거는 [학습](/docs/train)을 참조합니다.
 
 ## 검증
 
-`val()`는 메트릭 이름을 키로 하는 사전을 반환하며, `verbose`가 켜져 있으면 클래스별 결과를 출력합니다.
+`val()`은 지표 이름으로 키가 지정된 사전을 반환하며 `verbose`가 활성화되어 있으면 클래스별 결과를 출력합니다.
 
 <code-tabs name="val" />
 
-포즈는 `metrics/keypoints_*` 아래에서 주요 지점 OKS 지표를 보고합니다. 세그멘테이션은 일반 `metrics/mAP50-95` 키 아래에서 마스크를 보고하며, 한 번의 실행으로 두 뷰를 모두 반복하고, 박스는 `(B)` 아래에서, 마스크는 `(M)` 아래에서 보고합니다.
+자세 추정은 `metrics/keypoints_*` 아래에 키포인트 OKS 지표를 보고합니다. 분할은 일반 `metrics/mAP50-95` 키 아래에 마스크를 보고하고 한 번의 패스에서 `(B)` 아래의 박스와 `(M)` 아래의 마스크도 반복해 제공합니다.
 
 ## 내보내기
 
 <export-matrix />
 
-내보낸 아티팩트는 파일 접미사를 통해 `LibreYOLO()`로 다시 로드되므로, `.onnx` 또는 `.engine` 파일은 체크포인트처럼 동작하며 동일한 `Results`를 반환합니다. 포즈 및 세그멘테이션 내보내기는 동적 형태가 아닌 고정 640x640 입력에서 수행되며, 여러 탐지 대상도 고정 캔버스입니다. 여기에는 OpenVINO, Paddle, MNN, ExecuTorch 및 Core AI가 포함됩니다. [Export](/docs/export)는 각 형식이 허용하는 인수와 몇몇 형식이 추가하는 추가 항목을 나열합니다.
+내보낸 아티팩트는 파일 접미사에 따라 `LibreYOLO()`로 다시 불러오므로 `.onnx` 또는 `.engine` 파일은 체크포인트처럼 동작하며 동일한 `Results`를 반환합니다. 자세 추정과 분할은 동적 형태가 아닌 고정 640x640 입력으로 내보내며 OpenVINO, Paddle, MNN, ExecuTorch, Core AI를 포함한 여러 탐지 대상도 고정 캔버스를 사용합니다. 각 형식이 받는 인수와 일부 형식이 추가하는 extra는 [내보내기](/docs/export)에 나와 있습니다.
 
 <code-tabs name="export" />
 
 ## 체크포인트
 
-이 계열용으로 발행된 모든 무게 파일.
+이 제품군에 공개된 모든 가중치 파일입니다.
 
 <checkpoint-table />
 

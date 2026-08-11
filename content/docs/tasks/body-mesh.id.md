@@ -1,159 +1,182 @@
 ---
 title: Body mesh
-seo_title: Body mesh recovery in LibreYOLO
+seo_title: Rekonstruksi body mesh di LibreYOLO
 description: >-
-  Recover a parametric 3D body mesh per person in LibreYOLO. Predict from person
-  boxes or a detector, and read vertices, joints and camera translation.
+  Rekonstruksi body mesh 3D parametrik per orang di LibreYOLO. Lakukan prediksi
+  dari box orang atau detektor, lalu baca vertex, joint, dan translasi kamera.
 lead: >-
-  Body mesh recovery turns a single image and a set of person boxes into a
-  parametric 3D body per person: shape and pose parameters, posed vertices, 3D
-  joints, and the camera translation that places them in front of the lens.
+  Rekonstruksi body mesh mengubah satu gambar dan kumpulan box orang menjadi
+  tubuh 3D parametrik per orang: parameter bentuk dan pose, vertex berpose,
+  joint 3D, serta translasi kamera yang menempatkannya di depan lensa.
 keywords:
   - human mesh recovery python
   - body mesh
-  - 3d body pose
+  - pose tubuh 3d
   - SAM 3D Body
   - MHR
-  - parametric body model
-  - libreyolo mesh task
+  - model tubuh parametrik
+  - task mesh libreyolo
 last_verified: 1.5.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import SAMPLE_IMAGE
+
         from libreyolo.models.sam3dbody import LibreSAM3DBody
 
-        # This family is not registered with the LibreYOLO() factory, so it
-        # is constructed directly. model_path=None triggers the gated
-        # Hugging Face download; a string is treated as an existing local
-        # checkpoint and is never fetched. Inference requires CUDA.
+
+        # Family ini tidak terdaftar pada factory LibreYOLO(), sehingga dibuat
+
+        # secara langsung. model_path=None memicu pengunduhan Hugging Face
+        gated;
+
+        # string diperlakukan sebagai checkpoint lokal yang sudah ada dan tidak
+        pernah
+
+        # diambil. Inferensi memerlukan CUDA.
+
         model = LibreSAM3DBody(None, size="d3", device="cuda")
+
         result = model(SAMPLE_IMAGE, person_boxes=[[34, 12, 220, 400]])
 
+
         meshes = result.meshes
-        print(meshes.body_model)      # the parameterization these tensors use
-        print(meshes.vertices.shape)  # (N, V, 3), camera frame, meters
+
+        print(meshes.body_model)      # parameterization yang digunakan tensor
+        ini
+
+        print(meshes.vertices.shape)  # (N, V, 3), frame kamera, meter
+
         print(meshes.joints3d.shape)  # (N, J, 3)
-        print(meshes.joints2d.shape)  # (N, J, 2), pixels on the source image
-    - label: With a person detector
+
+        print(meshes.joints2d.shape)  # (N, J, 2), piksel pada gambar sumber
+    - label: Dengan detektor orang
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
         from libreyolo.models.sam3dbody import LibreSAM3DBody
 
-        # person_detector accepts a constructed LibreYOLO detector, a plain
-        # callable, or a PersonDetector instance. There is no name shortcut.
+
+        # person_detector menerima detektor LibreYOLO yang sudah dibuat,
+        callable biasa,
+
+        # atau instance PersonDetector. Tidak ada shortcut nama.
+
         detector = LibreYOLO("LibreYOLO9s.pt")
+
         model = LibreSAM3DBody(None, size="d3", device="cuda")
+
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
 source_hash: 31c5b44171cbcd0e
 ---
 
-## Definition
+## Definisi
 
-Body mesh recovery returns a `Meshes` payload per image, row-aligned with
-`result.boxes`: row `i` describes the person in box `i`, the same contract the
-pose task uses for keypoints.
+Rekonstruksi body mesh mengembalikan payload `Meshes` per gambar, dengan baris
+yang diselaraskan terhadap `result.boxes`: baris `i` menjelaskan orang dalam
+box `i`, sama seperti kontrak keypoint task pose.
 
-Everything is expressed in the camera frame of the original image.
-`transl` is metric, in meters, with +z pointing away from the camera.
-`vertices` and `joints3d` are metric and already include `transl`, so they need
-no further composition. `joints2d` is in pixels on the original image canvas,
-not on the crop the network saw. `faces` holds the mesh topology once for the
-whole image rather than per row, because every person shares it. There is no
-world or gravity frame in this version, and no field silently stands in for one.
+Semuanya dinyatakan dalam frame kamera gambar asli. `transl` bersifat metrik
+dalam meter, dengan +z menjauhi kamera. `vertices` dan `joints3d` bersifat
+metrik serta sudah menyertakan `transl`, sehingga tidak memerlukan komposisi
+lanjutan. `joints2d` berada dalam piksel pada canvas gambar asli, bukan crop yang
+dilihat network. `faces` menyimpan topologi mesh satu kali untuk seluruh gambar,
+bukan per baris, karena setiap orang menggunakannya bersama. Versi ini tidak
+memiliki frame dunia atau gravitasi, dan tidak ada field yang diam-diam
+menggantikannya.
 
-Parameter layouts differ between body models, so nothing about the shapes is
-fixed: `body_model` names the parameterization and the counts are read back from
-the tensors. For `"mhr"`, the Momentum Human Rig, rotations are Euler angles in
-radians rather than axis-angle, `body_pose` is a flat per-joint parameter vector
-rather than one triplet per joint, and `betas` are identity blendshape
-coefficients. Skeleton scale, hand pose and facial expression live in `extras`.
+Layout parameter berbeda antar body model, sehingga tidak ada bentuk tetap:
+`body_model` menamai parameterization dan jumlahnya dibaca dari tensor. Untuk
+`"mhr"`, Momentum Human Rig, rotasi berupa sudut Euler dalam radian, bukan
+axis-angle, `body_pose` adalah vektor parameter per joint yang flat, bukan satu
+triplet per joint, dan `betas` adalah koefisien identity blendshape. Skala
+skeleton, pose tangan, dan ekspresi wajah berada dalam `extras`.
 
-The canonical task key is `mesh`. `body-mesh`, `hmr` and `human-mesh-recovery`
-normalize to it.
+Key task kanonis adalah `mesh`. `body-mesh`, `hmr`, dan
+`human-mesh-recovery` dinormalisasi ke sana.
 
-## Models
+## Model
 
-[SAM 3D Body](/docs/models/sam-3d-body) is the only family serving this task,
-and it is a wrapper rather than a port: Meta's `sam-3d-body` package is
-published under the SAM License, which LibreYOLO's own code may not derive
-from, so none of it is vendored. Two backbones share the same MHR body model,
-`d3` on a DINOv3 ViT-H/16+ encoder and `h` on the original ViT-H.
+[SAM 3D Body](/docs/models/sam-3d-body) adalah satu-satunya family untuk task
+ini dan berupa wrapper, bukan port: package `sam-3d-body` milik Meta diterbitkan
+berdasarkan SAM License, yang tidak mengizinkan kode LibreYOLO diturunkan
+darinya, sehingga tidak ada yang di-vendor. Dua backbone berbagi body model MHR
+yang sama, `d3` pada encoder DINOv3 ViT-H/16+ dan `h` pada ViT-H asli.
 
-Three requirements apply before a first prediction, and none of them is
-optional.
+Tiga persyaratan berlaku sebelum prediksi pertama dan semuanya wajib.
 
-The upstream package is installed by you, not by LibreYOLO:
+Package upstream diinstal oleh pengguna, bukan LibreYOLO:
 
 ```bash
 git clone https://github.com/facebookresearch/sam-3d-body
 pip install roma einops yacs omegaconf braceexpand pytorch-lightning timm
 ```
 
-Point the library at the clone with `sam_3d_body_path=` or the
-`SAM_3D_BODY_PATH` environment variable. A user who never constructs this
-family never triggers the import.
+Arahkan library ke clone dengan `sam_3d_body_path=` atau variabel environment
+`SAM_3D_BODY_PATH`. Pengguna yang tidak pernah membuat family ini tidak memicu
+import.
 
-The checkpoint mirror is gated. Accept the license on the Hugging Face model
-page and authenticate with `hf auth login`, or the first download fails. The
-MHR body model itself is a separate Apache-2.0 release, fetched from its own
-public location and cached locally.
+Mirror checkpoint bersifat gated. Terima lisensi pada halaman model Hugging Face
+dan lakukan autentikasi dengan `hf auth login`, atau pengunduhan pertama gagal.
+Body model MHR sendiri merupakan release Apache-2.0 terpisah, diambil dari
+lokasi publiknya dan di-cache secara lokal.
 
-Inference needs a CUDA device. The upstream estimator moves its batch to the
-GPU without checking, so there is no CPU path to fall back to and
-`device="cpu"` raises.
+Inferensi memerlukan device CUDA. Estimator upstream memindahkan batch ke GPU
+tanpa pemeriksaan, sehingga tidak ada jalur CPU dan `device="cpu"` memunculkan
+error.
 
 ## Predict
 
 <code-tabs name="predict" />
 
-People reach the model in one of two ways. `person_boxes` passes boxes you
-already hold, for a single image only: a fixed set of boxes cannot follow people
-across video frames, so passing it with a video source raises instead of
-silently reusing frame one's boxes. `person_detector` accepts a constructed
-LibreYOLO detector, a callable, or a `PersonDetector`, and is the path for
-video. `focal_length` supplies a known camera intrinsic; left unset, the model
-uses its own estimate, which is what `meshes.focal_length` reports.
+Orang mencapai model melalui dua cara. `person_boxes` memberikan box yang sudah
+tersedia, khusus satu gambar: kumpulan box tetap tidak dapat mengikuti orang
+lintas frame video, sehingga memberikannya bersama sumber video memunculkan
+error, bukan diam-diam menggunakan kembali box frame pertama. `person_detector`
+menerima detektor LibreYOLO yang sudah dibuat, callable, atau `PersonDetector`,
+dan merupakan jalur untuk video. `focal_length` memberikan intrinsic kamera yang
+diketahui; jika tidak diberikan, model memakai estimasinya sendiri, yang
+dilaporkan `meshes.focal_length`.
 
-This family is not wired into the `LibreYOLO()` factory or the
-`libreyolo predict` CLI command. `LibreSAM3DBody` is the only entry point. See
-[prediction](/docs/predict) for sources, streaming and result handling.
+Family ini tidak dihubungkan ke factory `LibreYOLO()` atau perintah CLI
+`libreyolo predict`. `LibreSAM3DBody` adalah satu-satunya entry point. Lihat
+[prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
 
 ## Train
 
-No family in this task trains inside LibreYOLO. `LibreSAM3DBody.train()`
-raises: train at the upstream project and load the resulting checkpoint here.
+Tidak ada family task ini yang berlatih dalam LibreYOLO.
+`LibreSAM3DBody.train()` memunculkan error: lakukan pelatihan pada project
+upstream dan muat checkpoint hasilnya di sini.
 
 ## Validate
 
-There is no mesh validator, and `val()` raises. The usual benchmarks are
-research-license only, so none is bundled and none can be fetched for you.
+Tidak ada validator mesh dan `val()` memunculkan error. Benchmark yang umum
+digunakan hanya berlisensi penelitian, sehingga tidak disertakan atau diambil
+otomatis.
 
-The metrics themselves are available as `libreyolo.validation.mesh_metrics`, for
-evaluating against a dataset you already hold. It takes predicted and target
-joints, optionally predicted and target vertices, and returns a dictionary keyed
-exactly like a validator's:
+Metriknya tersedia sebagai `libreyolo.validation.mesh_metrics` untuk evaluasi
+terhadap dataset yang sudah dimiliki. Fungsi menerima joint prediksi dan target,
+vertex prediksi serta target opsional, lalu mengembalikan dictionary dengan key
+seperti validator:
 
-`metrics/mpjpe` is mean per-joint position error after aligning the root joint,
-so it scores pose while ignoring where the person stands in the scene.
-`metrics/pa_mpjpe` is the same quantity after a full Procrustes alignment,
-rotation, uniform scale and translation, which removes global orientation and
-body-size error and leaves the articulated pose. `metrics/pve` is mean
-per-vertex error over the mesh surface after aligning on the vertex centroid;
-unlike the joint metrics it is sensitive to body shape, and it appears only when
-both vertex arrays are supplied. All three are lower-is-better. Inputs are
-assumed metric, in meters, and `scale_to_mm` converts the results to the
-millimeters the literature reports.
+`metrics/mpjpe` adalah mean per-joint position error setelah menyelaraskan root
+joint, sehingga menilai pose sambil mengabaikan lokasi orang dalam scene.
+`metrics/pa_mpjpe` adalah nilai sama setelah alignment Procrustes penuh, yaitu
+rotasi, skala seragam, dan translasi, yang menghapus error orientasi global dan
+ukuran tubuh serta menyisakan pose artikulasi. `metrics/pve` adalah mean
+per-vertex error di seluruh permukaan mesh setelah alignment pada centroid
+vertex; berbeda dari metrik joint, nilai ini sensitif terhadap bentuk tubuh dan
+hanya muncul jika kedua array vertex diberikan. Ketiganya lebih rendah lebih
+baik. Input diasumsikan metrik dalam meter, dan `scale_to_mm` mengonversi hasil
+ke milimeter seperti laporan literatur.
 
 ## Export
 
-Mesh export is not implemented. LibreYOLO has not defined an exported-graph
-metadata contract for this task, including how to carry the MHR parameter layout
-outside PyTorch, so `export()` raises rather than emitting a graph whose output
-could not be interpreted.
-
-
+Ekspor mesh belum diimplementasikan. LibreYOLO belum mendefinisikan kontrak
+metadata graph hasil ekspor untuk task ini, termasuk cara membawa layout
+parameter MHR di luar PyTorch, sehingga `export()` memunculkan error alih-alih
+menghasilkan graph dengan output yang tidak dapat ditafsirkan.
