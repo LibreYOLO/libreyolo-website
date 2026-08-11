@@ -1,7 +1,14 @@
 import { getAllArticles } from '@/lib/articles'
 import { getAllDocPages } from '@/lib/docs'
 import { SITE_URL } from '@/i18n/metadata'
+import { routing, localeLabels } from '@/i18n/routing'
 import { GITHUB_URL, REDDIT_URL } from '@/lib/links'
+
+// Derived from routing.locales so adding a locale never leaves this stale.
+const LOCALE_SUMMARY = routing.locales
+  .filter((locale) => locale !== routing.defaultLocale)
+  .map((locale) => `/${locale} (${localeLabels[locale]})`)
+  .join(', ')
 
 // Serves /llms.txt, the emerging "sitemap for AI" convention: a markdown index
 // that states what the site is and points LLMs at the high-signal pages. It
@@ -41,7 +48,7 @@ export function GET() {
 
 > LibreYOLO is the MIT-licensed training and inference engine for state-of-the-art YOLO models. Built for commercial applications, free from AGPL restrictions.
 
-libreyolo.com is the official site of the LibreYOLO open-source library: documentation, model zoo, dataset zoo, commercial licensing guide, and articles. Every key page is also available in Chinese under the /zh path prefix (e.g. ${SITE_URL}/zh/models).
+libreyolo.com is the official site of the LibreYOLO open-source library: documentation, model zoo, dataset zoo, commercial licensing guide, and articles. Pages are also served under a locale path prefix (e.g. ${SITE_URL}/zh/models) for: ${LOCALE_SUMMARY}. Documentation is fully translated into Spanish, Chinese, Portuguese and Italian; the other locales are still being translated and serve English on the pages they have not reached yet.
 
 ## Get started
 - Install: \`pip install libreyolo\`

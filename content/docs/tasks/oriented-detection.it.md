@@ -190,7 +190,7 @@ pubblicati.
 `predict()` riempie `result.obb`. `.xywhr` è la forma canonica `(N, 5)`:
 centro x, centro y, larghezza, altezza e un angolo in radianti che dà la
 rotazione del lato della larghezza attorno al centro. `.conf` e `.cls` portano
-il punteggio e l'indice di classe dentro `result.names`, e `.id` un id di
+il punteggio e l'indice della classe in `result.names`, e `.id` un id di
 traccia quando si fa tracking. `.xyxyxyxy` converte ogni riga nei suoi quattro
 vertici come pixel `(N, 4, 2)`, `.xyxyxyxyn` normalizza quei vertici e `.xyxy`
 dà il box allineato agli assi che lo racchiude, che è quello da usare quando
@@ -199,30 +199,30 @@ riempito, con la forma allineata agli assi.
 
 ## Modelli
 
-Due famiglie servono questo task, e quale scegliere dipende dal fatto che tu
+Due famiglie coprono questo task, e quale scegliere dipende dal fatto che tu
 debba addestrare o no.
 
 [RF-DETR](/docs/models/rf-detr) è quella che si addestra. Predice, addestra,
 valida ed esporta box orientati, e pubblica checkpoint orientati in quattro
-taglie, n, s, m e l. Richiede il suo extra,
-`pip install "libreyolo[rfdetr]"`, e la sua pagina del modello riporta la
-licenza dei pesi e la provenienza.
+taglie, n, s, m e l. Richiede il proprio extra,
+`pip install "libreyolo[rfdetr]"`, e la pagina del modello riporta la licenza
+dei pesi e la provenienza.
 
 Leggi la sezione qui sotto su che cosa predicono davvero quei checkpoint prima
-di fare piani intorno a essi.
+di basare i tuoi piani su di essi.
 
-[RT-DETRv2](/docs/models/rt-detr) è quella con i pesi aerei. Pubblica da
-`LibreRTDETRv2n-obb.pt` a `LibreRTDETRv2x-obb.pt`, i checkpoint ufficiali DOTA
-v1.0 a scala singola convertiti nel formato di LibreYOLO, che coprono le 15
-classi di DOTA a 1024 px. Non richiede nessun extra oltre al pacchetto base,
-il grafo orientato viene riconosciuto dai tensori stessi del checkpoint, e
-predizione, validazione ed esportazione ONNX e TorchScript sono tutte
-supportate. L'addestramento no: su quella famiglia il task orientato è di sola
-inferenza, `train()` solleva un errore, e non c'è transfer dai suoi pesi di
-rilevamento, che usano un backbone diverso. Anche il tracking e la
+[RT-DETRv2](/docs/models/rt-detr) è quella con i pesi per le immagini aeree.
+Pubblica da `LibreRTDETRv2n-obb.pt` a `LibreRTDETRv2x-obb.pt`, i checkpoint
+ufficiali DOTA v1.0 a scala singola convertiti nel formato di LibreYOLO, che
+coprono le 15 classi di DOTA a 1024 px. Non richiede nessun extra oltre al
+pacchetto base, il grafo orientato viene riconosciuto dai tensori stessi del
+checkpoint, e predizione, validazione ed esportazione ONNX e TorchScript sono
+tutte supportate. L'addestramento no: su quella famiglia il task orientato è
+di sola inferenza, `train()` solleva un errore, e non c'è transfer dai suoi
+pesi di rilevamento, che usano un backbone diverso. Anche il tracking e la
 test-time augmentation non sono disponibili per i box orientati.
 
-Quindi: categorie DOTA pronte all'uso, RT-DETRv2. Etichette orientate tue,
+Quindi: categorie DOTA pronte all'uso, RT-DETRv2. Le tue etichette orientate,
 RF-DETR.
 
 ## Predizione
@@ -276,11 +276,11 @@ quattro vertici in ordine:
 
 I quattro punti sono float normalizzati in `[0, 1]` e devono formare un
 rettangolo orientato non degenere. Nel file di etichette non è memorizzato
-alcun angolo: il loader ricava il `xywhr` canonico dai vertici. Il parser è
-strict per default e rifiuta le coordinate fuori intervallo, mentre
-l'acquisizione del dataset e della validazione può prima fare clip a `[0, 1]`
-per etichette al bordo di un ritaglio altrimenti valide, e poi rifiutare
-comunque i box degeneri.
+alcun angolo: il loader ricava lo `xywhr` canonico dai vertici. Il parser è
+rigoroso per default e rifiuta le coordinate fuori intervallo, mentre
+l'acquisizione del dataset e della validazione può prima limitare le
+coordinate a `[0, 1]` per etichette al bordo di un ritaglio altrimenti valide,
+e poi rifiutare comunque i box degeneri.
 
 Il parsing delle righe tiene conto del task. Nove campi significano un box
 orientato solo in modalità `obb`; in modalità `segment` la stessa riga viene
@@ -332,8 +332,8 @@ giusta e l'angolo sbagliato viene contata come un mancato rilevamento.
 `metrics/mAP50-95` è la mean average precision mediata sulle soglie di IoU da
 0.50 a 0.95 a passi di 0.05, ed è il numero di riferimento. A differenza del
 percorso COCO usato dal rilevamento, questo task rispetta `iou_thresholds`
-nella configurazione di validazione, quindi la scansione si può cambiare.
-`metrics/mAP50` e `metrics/mAP75` sono le versioni a soglia singola.
+nella configurazione di validazione, quindi l'intervallo di soglie si può
+cambiare. `metrics/mAP50` e `metrics/mAP75` sono le versioni a soglia singola.
 `metrics/precision` e `metrics/recall` sono la precisione e il recall reali a
 IoU 0.50, letti nel punto di lavoro più permissivo: viene contata ogni
 predizione che ha superato la soglia di confidenza, e in validazione quella

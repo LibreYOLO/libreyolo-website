@@ -77,8 +77,8 @@ quindi leggila per nome e non per posizione.
 
 Gli argomenti principali sono `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
 `workers`, `device`, `augment`, `save_json` e `verbose`. `conf` vale `0.001` di
-default e `iou` vale `0.6`, entrambi molto più larghi dei default della
-predizione, perché una sweep di mAP ha bisogno della coda a bassa confidenza.
+default e `iou` vale `0.6`, entrambi molto più permissivi dei default della
+predizione, perché uno sweep di mAP ha bisogno della coda a bassa confidenza.
 `imgsz` di default vale la dimensione di input del modello stesso invece di un
 numero fisso. `split` accetta `val`, `test` o `train` e nient'altro.
 
@@ -103,7 +103,7 @@ Due di queste sono trappole. `metrics/precision` e `metrics/recall` sono alias
 tenuti per retrocompatibilità: contengono i valori di mAP 50-95 e AR@100, non una
 coppia di precisione e recall. Usa le chiavi con il nome esplicito.
 
-La segmentazione di istanze restituisce le cifre di mAP e AR viste sopra come
+La segmentazione di istanze restituisce i valori di mAP e AR visti sopra come
 numeri sulle maschere sotto le chiavi senza suffisso, con le versioni sui box
 sotto un suffisso `(B)` e le versioni sulle maschere ripetute sotto `(M)`.
 Precisione e recall esistono solo in forma suffissata per questo task, come
@@ -115,7 +115,7 @@ box, la coppia `(M)` è mAP50-95 sulle maschere e AR@100 sulle maschere.
 | Task | Chiavi |
 |---|---|
 | detect | `metrics/mAP50-95`, `metrics/mAP50`, `metrics/mAP75`, più le suddivisioni per dimensione e per recall viste sopra |
-| segment | versioni sulle maschere delle chiavi di detect viste sopra (le chiavi senza suffisso sono quelle sulle maschere); `precision`/`recall` esistono solo come `(B)`/`(M)`, entrambe con lo stesso alias |
+| segment | versioni sulle maschere delle chiavi di detect viste sopra (le chiavi senza suffisso sono quelle sulle maschere); `precision`/`recall` esistono solo come `(B)`/`(M)`, entrambe con lo stesso schema di alias |
 | pose | `metrics/keypoints_mAP50-95`, `metrics/keypoints_mAP50`, `metrics/keypoints_mAP75`, `metrics/keypoints_mAP_M`, `metrics/keypoints_mAP_L`, e le corrispondenti chiavi `keypoints_AR` |
 | obb | `metrics/mAP50-95`, `metrics/mAP50`, `metrics/mAP75`, `metrics/precision`, `metrics/recall`, più le copie con suffisso `(OBB)` |
 | classify | `metrics/accuracy_top1`, `metrics/accuracy_top5` |
@@ -132,8 +132,8 @@ box, la coppia `(M)` è mAP50-95 sulle maschere e AR@100 sulle maschere.
 `metrics/precision` e `metrics/recall` di OBB non sono alias: sono la precisione
 e il recall veri a IoU 0.50, presi nel punto di lavoro più permissivo (ogni
 predizione che sopravvive a `conf`, di default `0.001`). Le copie con suffisso
-`(OBB)` ripetono gli stessi quattro valori sotto un nome specifico del task, la
-stessa convenzione di `(B)` e `(M)` viste sopra.
+`(OBB)` ripetono gli stessi quattro valori sotto un nome specifico del task, con
+la stessa convenzione vista sopra per `(B)` e `(M)`.
 
 `accuracy_top5` è in realtà top-`min(5, num_classes)`, quindi su un dataset a tre
 classi è top-3, che ogni campione soddisfa e che perciò vale 1.0.
@@ -151,7 +151,7 @@ a `metrics/keypoints_mAP50-95`.
 
 ## Chiavi di velocità
 
-Ogni validator aggiunge i tempi:
+Ogni validatore aggiunge i tempi:
 
 ```text
 speed/preprocess_ms   speed/inference_ms   speed/postprocess_ms
@@ -165,23 +165,23 @@ precisione.
 
 ## Backend di valutazione
 
-Le metriche di rilevamento e di segmentazione sono calcolate attraverso un
+Le metriche di rilevamento e di segmentazione vengono calcolate tramite un
 evaluator COCO, e `faster_coco_eval=True`, il default, seleziona il backend C++
 quando il pacchetto `faster-coco-eval` è installato. Quando non lo è,
-l'esecuzione ripiega su pycocotools con un avviso per processo:
+l'esecuzione ripiega su pycocotools con un solo avviso per processo:
 
 ```text
 faster_coco_eval requested but not installed; falling back to pycocotools.
 Install with: pip install faster-coco-eval
 ```
 
-Quale backend sia stato usato davvero è registrato sul modello come
+Il backend effettivamente usato viene registrato sul modello come
 `last_eval_backend`, e la CLI lo riporta nel proprio output per i task in stile
 rilevamento. Imposta `LIBREYOLO_FASTER_COCO_EVAL` per sovrascrivere dall'ambiente
 il valore della configurazione.
 
 `iou_thresholds` è rispettato solo sul percorso OBB. Il percorso COCO valuta con
-la propria sweep fissa da 0.50 a 0.95 e ignora il valore.
+il proprio sweep fisso da 0.50 a 0.95 e ignora il valore.
 
 ## Loss di validazione
 
@@ -191,8 +191,8 @@ anche l'obiettivo di addestramento della famiglia sui batch di validazione.
 <code-tabs name="valloss" />
 
 Emette `metrics/loss` più un `metrics/loss/<component>` per ogni termine, pesato
-esattamente come lo pesa l'addestramento, così le componenti sommano al totale.
-Attraverso un logger compaiono come `val/loss` e `val/loss/<component>`, e
+esattamente come lo pesa l'addestramento, così le componenti sommate danno il
+totale. Tramite un logger compaiono come `val/loss` e `val/loss/<component>`, e
 `libreyolo monitor` sovrappone `metrics/loss` a `train/loss`.
 
 Le componenti sono quelle proprie di ogni famiglia:
@@ -216,27 +216,28 @@ Le componenti sono quelle proprie di ogni famiglia:
 | restore | `nafnet` | `restore` |
 
 È disattivata di default perché l'assegnazione dei target aggiunge tempo e memoria
-alla validazione. Il validator riusa l'output del modello già prodotto per la
-metrica di accuratezza invece di eseguire un secondo forward pass, gira sotto
-`no_grad` sul modello di valutazione o EMA, e nell'addestramento multi-GPU è
-calcolata localmente sul rank 0 senza collettive. La selezione del checkpoint
-migliore resta sulla metrica di accuratezza.
+alla validazione. Il validatore riusa l'output del modello già prodotto per la
+metrica di accuratezza invece di eseguire un secondo forward pass, opera sotto
+`no_grad` sul modello di valutazione o EMA, e nell'addestramento multi-GPU la
+calcola localmente sul rank 0, senza operazioni collettive. La selezione del
+checkpoint migliore resta sulla metrica di accuratezza.
 
 Tre cose che deliberatamente non fa. Non include mai i termini di contrastive
 denoising, perché hanno bisogno del ground truth al momento del forward e la
-validazione fa il forward senza. Riporta il modello in modalità valutazione,
+validazione fa il forward senza. Riporta i numeri del modello in modalità
+valutazione,
 quindi dove il forward di train e quello di eval di una famiglia differiscono
 davvero, nelle statistiche di BatchNorm o nella stochastic depth, il numero
 riflette la modalità eval; è questo il confronto voluto. E un task per cui una
 famiglia non l'ha implementata solleva un errore di configurazione al setup invece
-di saltarlo in silenzio:
+di saltarla in silenzio:
 
 ```text
 val_loss=True currently supports RF-DETR detection only; segment, pose, OBB,
 classify, and semantic tasks are not supported
 ```
 
-FOMO è l'eccezione che non cambia nulla: il suo validator ha sempre calcolato
+FOMO è l'eccezione che non cambia nulla: il suo validatore ha sempre calcolato
 questa loss, e `val_loss=True` incide solo sulle chiavi sotto cui viene
 pubblicata.
 
@@ -255,26 +256,26 @@ indicato.
 `predictions_bbox.json` più `predictions_masks.json` per la segmentazione. OBB non
 lo supporta e lo dice.
 
-`save_plots=True` scrive in una sottodirectory `plots/`. Il rilevamento ottiene
-`box_metrics.png`, i grafici di AP e recall per classe, le curve
+`save_plots=True` scrive in una sottodirectory `plots/`. Per il rilevamento
+vengono scritti `box_metrics.png`, i grafici di AP e recall per classe, le curve
 precision-recall e di confidenza, una matrice di confusione, e immagini di
 esempio annotate quando OpenCV è installato. La segmentazione aggiunge le copie
 lato maschera di ciascuno, e pose ha il proprio set di metriche e di curve. Gli
-altri validator non implementano i plot; classificazione, semantic, panoptic,
-depth, normal, edge, restore, matte, OCR, OBB e point non scrivono nulla lì. Un errore
-nel plotting genera un avviso e non interrompe mai l'esecuzione.
+altri validatori non implementano i plot; classificazione, semantic, panoptic,
+depth, normal, edge, restore, matte, OCR, OBB e point non scrivono nulla lì. Un
+errore nel plotting genera un avviso e non interrompe mai l'esecuzione.
 
 ## Validazione durante l'addestramento
 
 L'addestramento valida ogni `eval_interval` epoche sullo split `val` del dataset,
 e le metriche che produce sono ciò che guida la selezione di `best.pt`, l'early
-stop di `patience` e le chiavi `val/` in ogni logger. La validazione gira sui pesi
-EMA quando l'EMA è attiva.
+stop di `patience` e le chiavi `val/` in ogni logger. La validazione viene
+eseguita sui pesi EMA quando l'EMA è attiva.
 
 Vedi [Iperparametri](/docs/train/hyperparameters) per `eval_interval`, `patience`
-e `save_plots`, e [Logger di esperimenti](/docs/train/loggers) per dove finiscono
+e `save_plots`, e [Logger degli esperimenti](/docs/train/loggers) per dove finiscono
 i numeri.
 
 ## Correlati
 
-- [Dataset](/docs/train/datasets) per le chiavi degli split e i formati che i validator leggono.
+- [Dataset](/docs/train/datasets) per le chiavi degli split e i formati che i validatori leggono.

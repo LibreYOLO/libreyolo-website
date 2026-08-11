@@ -129,7 +129,7 @@ Due decisioni costano più dopo di quanto costino adesso.
 
 Per prima cosa porta il dataset su una CDN. Impacchettarlo come un singolo tar in
 un repository dataset di Hugging Face funziona allo stesso modo su ogni provider,
-viene servito veloce a tutti, e non richiede altro che un `HF_TOKEN`
+viene servito rapidamente a tutti, e non richiede altro che un `HF_TOKEN`
 nell'ambiente del job quando il repository è privato. Caricare un dataset da una
 connessione casalinga, o scaricarlo sulla macchina da un'origine lenta, è tempo
 GPU fatturato passato ad aspettare.
@@ -137,17 +137,17 @@ GPU fatturato passato ad aspettare.
 <code-tabs name="stage" />
 
 Poi dimensiona il disco. I provider che fatturano lo storage lo fatturano sulla
-capacità allocata, non su quella usata, e un disco non si può rimpicciolire dopo
-la creazione. Somma i dati preparati, i checkpoint e circa il 30 percento di
+capacità allocata, non su quella usata, e un disco non si può ridurre dopo la
+creazione. Somma i dati preparati, i checkpoint e circa il 30 per cento di
 margine, e fermati lì.
 
 ## Installazione sulla macchina
 
 <code-tabs name="install" />
 
-Installa prima PyTorch se l'immagine non porta già una build CUDA compatibile con
-la scheda, poi LibreYOLO, così pip non risolve un torch solo CPU per conto suo.
-Il secondo snippet non è una cerimonia opzionale: una wheel compilata per
+Installa prima PyTorch se l'immagine non include già una build CUDA compatibile
+con la scheda, poi LibreYOLO, così pip non risolve un torch solo CPU per conto
+suo. Il secondo snippet non è un formalismo opzionale: una wheel compilata per
 l'architettura GPU sbagliata riporta `torch.cuda.is_available() == True` e poi
 fallisce alla prima operazione reale con `CUDA error: no kernel image is
 available for execution on the device`. Una sola moltiplicazione di matrici lo
@@ -172,7 +172,7 @@ venti minuti. Vedi [Iperparametri](/docs/train/hyperparameters).
 Su una macchina multi-GPU, `device="0,1,2,3"` avvia da sé un worker per GPU, e
 `batch` resta il batch globale su tutte quante. Il guard `__main__` è
 obbligatorio, perché ogni worker reimporta lo script. Questo, e il resto del
-comportamento distribuito, sta su
+comportamento distribuito, si trova in
 [Addestramento multi-GPU](/docs/train/multi-gpu).
 
 ## Seguirlo da fuori
@@ -184,15 +184,15 @@ analizzare un log.
 
 <code-tabs name="watch" />
 
-`metrics.jsonl`, accanto a esso, ha la cronologia completa per epoca, e
-`train.log` ha l'output della console. `libreyolo monitor` serve una dashboard
-nel browser su tutti e tre usando solo la libreria standard, quindi non richiede
-nulla di installato sulla macchina oltre a LibreYOLO stesso. Raggiungila con un
+`metrics.jsonl`, lì accanto, contiene la cronologia completa per epoca, e
+`train.log` l'output della console. `libreyolo monitor` serve una dashboard nel
+browser su tutti e tre usando solo la libreria standard, quindi non serve
+installare nulla sulla macchina oltre a LibreYOLO stesso. Raggiungila con un
 port forward SSH.
 
-Nessuno di questi tocca il processo di addestramento, quindi si agganciano a
-un'esecuzione in corso, riaprono una già finita o ispezionano una andata in
-crash.
+Nessuno di questi strumenti tocca il processo di addestramento: si agganciano a
+un'esecuzione in corso, ne riaprono una già finita o ne ispezionano una andata
+in crash.
 
 ## Tira fuori i pesi prima di smettere di pagare
 
@@ -217,10 +217,11 @@ ospitati ti danno anche le metriche senza toccare affatto la macchina.
 Questa è la parte che costa soldi veri quando va male, e la regola cambia in base
 al modello del provider.
 
-Su un marketplace dove noleggi una macchina nuda, la fatturazione va a tempo
-reale finché l'istanza non viene distrutta. Una GPU inattiva costa esattamente
-come una occupata, quindi uccidere il processo di addestramento da solo non fa
-risparmiare niente. Un'istanza fermata continua a far pagare il suo disco.
+Su un marketplace dove noleggi una macchina nuda, la fatturazione va avanti a
+tempo trascorso finché l'istanza non viene distrutta. Una GPU inattiva costa
+esattamente quanto una che sta lavorando, quindi terminare il processo di
+addestramento, da solo, non fa risparmiare niente. Un'istanza fermata continua a
+far pagare il suo disco.
 
 Su una piattaforma serverless dove il job è una funzione decorata, il container
 scala a zero quando la funzione ritorna, quindi è molto meno probabile
@@ -229,11 +230,11 @@ costare, quindi impostane sempre uno.
 
 Fermare invece di distruggere è una leva reale, e una trappola reale. Misurato su
 un 8x RTX 4090 noleggiato con un disco da 250 GB il 2026-07-31: in esecuzione
-fatturava $3.4828 all'ora, fermata fatturava $0.0694 all'ora per il solo disco, e
-distrutta non fatturava niente. È un risparmio del 98 percento tenendo al loro
-posto l'ambiente, i dati preparati e i checkpoint.
+l'istanza fatturava $3.4828 all'ora, da ferma $0.0694 all'ora per il solo disco
+e, una volta distrutta, niente. È un risparmio del 98 per cento mantenendo al
+loro posto l'ambiente, i dati preparati e i checkpoint.
 
-La tariffa da fermo è un'aritmetica che puoi fare prima di noleggiare:
+La tariffa da fermo è un calcolo che puoi fare prima di noleggiare:
 
 ```text
 stopped $/hr = allocated_GB * storage_cost_per_GB_per_month / 730
@@ -247,8 +248,8 @@ tutto circa $1.00. Contro $0.0694 all'ora, se torni entro circa 14 ore conviene
 fermare, mentre con una pausa più lunga conviene distruggere e ricostruire dalla
 copia preparata.
 
-Un rischio rende insicuro fermare quando l'hardware è scarso: fermare rilascia le
-GPU. Nulla le riserva, quindi il riavvio riesce solo se l'host le ha ancora
+Un rischio rende poco sicuro fermare quando l'hardware è scarso: fermare rilascia
+le GPU. Nulla le riserva, quindi il riavvio riesce solo se l'host le ha ancora
 libere. Il tuo disco è al sicuro; le tue GPU no.
 
 ## Serverless, come funzione
@@ -289,8 +290,8 @@ def main():
 ```
 
 Eseguilo con `modal run modal_train.py`. Il filesystem del container è effimero,
-quindi tutto ciò che vale la pena conservare va nel volume o viene caricato
-fuori. Imposta `timeout=` esplicitamente; è l'unica cosa che sta tra
+quindi tutto ciò che vale la pena conservare va nel volume o va caricato
+altrove. Imposta `timeout=` esplicitamente; è l'unica cosa che sta tra
 un'esecuzione bloccata e una fattura senza fine.
 
 Beam ha la stessa forma, con un decoratore `@function`, un `Volume` e
@@ -298,8 +299,8 @@ Beam ha la stessa forma, con un decoratore `@function`, un `Volume` e
 
 ## Dimensiona in base al costo per job
 
-I $/ora sono il numero sbagliato da ottimizzare. Un modello piccolo lascia una
-scheda grande a metà inattiva, quindi una GPU più lenta ed economica spesso costa
+I $/ora sono il numero sbagliato da ottimizzare. Un modello piccolo tiene una
+scheda grande per metà inattiva, quindi una GPU più lenta ed economica spesso costa
 meno per epoca. Esegui il profiler per qualche step sulla scheda noleggiata prima
 di impegnarti in un'esecuzione lunga: se il verdetto è `dataloader`
 oppure `host / launch`, una GPU più veloce non serve a niente e più worker o un

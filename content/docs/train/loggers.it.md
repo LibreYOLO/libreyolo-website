@@ -59,12 +59,9 @@ snippets:
         model.train(data="coco8.yaml", epochs=10, callbacks=on_epoch)
     - label: Un oggetto con più hook
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
-        from libreyolo.training import TrainEndEvent, TrainEpochEvent,
-        TrainStartEvent
-
+        from libreyolo.training import TrainEndEvent, TrainEpochEvent, TrainStartEvent
 
 
         class RunLog:
@@ -80,7 +77,6 @@ snippets:
 
 
         model = LibreYOLO("LibreYOLO9s.pt")
-
         model.train(data="coco8.yaml", epochs=10, callbacks=RunLog())
   monitor:
     - label: Seguire un run nel browser
@@ -112,10 +108,10 @@ aspetto qualunque backend tu scelga:
 | Chiave | Valore |
 |---|---|
 | `train/loss` | la loss media di addestramento dell'epoca |
-| `train/loss/<component>` | ogni componente della loss riportata dalla famiglia |
-| `lr/<group>` | il learning rate di ogni gruppo di parametri dell'optimizer |
+| `train/loss/<component>` | ogni componente della loss che la famiglia riporta |
+| `lr/<group>` | il learning rate di ogni gruppo di parametri dell'ottimizzatore |
 | `val/<metric>` | ogni metrica di validazione, con il prefisso `metrics/` rimosso |
-| `time/epoch_seconds` | il tempo reale impiegato dall'epoca |
+| `time/epoch_seconds` | il tempo reale trascorso durante l'epoca |
 
 Lo step è l'epoca contata a partire da 1. La configurazione di addestramento
 completamente risolta viene registrata come parametri all'avvio
@@ -159,7 +155,7 @@ Note specifiche dei singoli backend che vale la pena conoscere prima del primo
 run:
 
 I file di evento di TensorBoard finiscono per impostazione predefinita in
-`<save_dir>/tensorboard`. Li guardi con `tensorboard --logdir runs/train`.
+`<save_dir>/tensorboard`. Li visualizzi con `tensorboard --logdir runs/train`.
 
 MLflow 3.x ha deprecato lo store su file locale `./mlruns` e solleva un errore se
 non è impostato `MLFLOW_ALLOW_FILE_STORE=true`. Per un tracking locale senza
@@ -206,7 +202,7 @@ un sottoinsieme qualsiasi di `on_train_start`, `on_train_epoch_end`,
 
 `TrainStartEvent.config` è la configurazione completamente risolta, i kwargs
 dell'utente uniti ai default della famiglia, come mapping di sola lettura. Gli
-eventi sono dataclass congelate e i loro mapping sono di sola lettura, quindi un
+eventi sono dataclass frozen e i loro mapping sono di sola lettura, quindi un
 callback non può cambiare il run scrivendoci dentro.
 
 Un'eccezione sollevata da `on_train_start`, `on_train_epoch_end` o
@@ -220,26 +216,26 @@ di una lambda. Vedi [Addestramento multi-GPU](/docs/train/multi-gpu).
 
 ## Cosa scrive comunque ogni run
 
-Tre file finiscono nella directory del run senza nessuna configurazione, con ogni
-famiglia:
+Tre file finiscono nella directory del run senza alcuna configurazione, con
+qualsiasi famiglia:
 
 | File | Scritto | Contenuto |
 |---|---|---|
 | `status.json` | in modo atomico, a ogni epoca e all'avvio, alla fine e in caso di fallimento | `state` con valore `running`, `completed` o `failed`, `current_epoch`, `total_epochs`, `progress`, `eta_seconds`, le `metrics` più recenti, `best_metric`, `best_epoch`, e un oggetto `error` in caso di fallimento |
 | `metrics.jsonl` | in append una volta per epoca | una riga JSON per epoca, con lo stesso schema di `results.csv` |
-| `train.log` | live | l'output su console del run |
+| `train.log` | in tempo reale | l'output su console del run |
 
-`status.json` è la lettura economica per uno script o un agente che interroga un
-run, e la scrittura atomica fa sì che un lettore non veda mai un file scritto a
-metà.
+`status.json` è la lettura a basso costo per uno script o un agente che controlla
+periodicamente un run, e la scrittura atomica fa sì che un lettore non veda mai
+un file scritto a metà.
 
 `results.csv` e `summary.json` sono separati e dipendono dalla famiglia. Vengono
 scritti per YOLOv9, YOLOv9-E2E, YOLOv9-P2, YOLOv7, YOLO-NAS, RF-DETR, EC e
 DINOv2, e non per le altre famiglie. `results.csv` riceve una riga per epoca con
 le componenti della loss, le metriche di validazione e i learning rate come
 colonne, e la sua intestazione si allarga quando compare una nuova colonna. Alla
-ripresa viene tagliato fino alle righe precedenti all'epoca da cui si riprende,
-invece di duplicarle.
+ripresa viene troncato alle righe precedenti all'epoca da cui si riparte, invece
+di duplicarle.
 
 Accanto a questi, il trainer scrive sempre `train_config.yaml` al setup e i
 checkpoint sotto `weights/`.
@@ -248,11 +244,11 @@ checkpoint sotto `weights/`.
 
 <code-tabs name="monitor" />
 
-`libreyolo monitor` serve una dashboard nel browser costruita sui file qui sopra
+`libreyolo monitor` espone nel browser una dashboard costruita sui file qui sopra
 usando solo la libreria standard: grafici delle metriche, la coda del log e le
 eventuali immagini di validazione, che si aggiornano mentre il run è attivo. È di
 sola lettura e non tocca mai il processo di addestramento, quindi si aggancia a
-un run live, riapre uno finito o ispeziona uno andato in crash.
+un run in corso, riapre uno finito o ispeziona uno andato in crash.
 
 ## Correlati
 

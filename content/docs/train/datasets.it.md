@@ -54,7 +54,7 @@ snippets:
         # Legge solo le etichette e lo YAML. I controlli su corruzione,
         duplicati
 
-        # e fuga tra split hanno tutti bisogno dei pixel, quindi vengono
+        # e leakage tra split hanno tutti bisogno dei pixel, quindi vengono
         saltati.
 
         libreyolo doctor my-dataset.yaml fast=true
@@ -72,14 +72,14 @@ snippets:
 source_hash: 9a12a0551c8b56e9
 ---
 
-## Indicare un dataset a train
+## Indicare a train quale dataset usare
 
 `data=` accetta un percorso YAML o il nome di una config inclusa nel pacchetto.
 
 <code-tabs name="train" />
 
 Il nome viene risolto in un ordine fisso: un percorso assoluto che esiste, poi il
-nome così com'è dato relativo alla directory di lavoro, poi lo stesso nome con
+nome così com'è, relativo alla directory di lavoro, poi lo stesso nome con
 `.yaml` in coda, poi la directory delle config incluse. Quando non corrisponde
 niente, l'errore indica ogni directory in cui ha cercato ed elenca le config
 incluse.
@@ -91,7 +91,7 @@ Nel pacchetto sono incluse tredici config di dataset, sotto
 
 | Config | Task | Note |
 |---|---|---|
-| `coco8.yaml` | detect | 8 immagini, scarica da un semplice URL |
+| `coco8.yaml` | detect | 8 immagini, si scarica da un semplice URL |
 | `coco128.yaml` | detect | 128 immagini |
 | `coco1000.yaml` | detect | 800 train, 200 val |
 | `coco5000.yaml` | detect | 4000 train, 1000 val |
@@ -105,9 +105,9 @@ Nel pacchetto sono incluse tredici config di dataset, sotto
 | `gopro.yaml` | restore | coppie per il deblurring |
 | `sr8.yaml` | restore | coppie per la super-risoluzione |
 
-Solo `coco8.yaml` e `coco128.yaml` portano un semplice URL di download. Le altre
-o portano un blocco di download Python, che richiede il consenso esplicito
-descritto sotto, oppure si aspettano che i dati siano già su disco.
+Solo `coco8.yaml` e `coco128.yaml` contengono un semplice URL di download. Le
+altre contengono un blocco di download Python, che richiede il consenso
+esplicito descritto sotto, oppure si aspettano che i dati siano già su disco.
 
 ## Dove si trova un dataset su disco
 
@@ -136,7 +136,7 @@ download: https://example.com/my-dataset.zip   # opzionale
 
 `train`, `val` e `test` accettano ciascuno una directory di immagini, un file
 `.txt` che elenca un percorso immagine per riga, o una lista che mescola le due
-cose. Le righe di una lista `.txt` possono essere relative, e in quel caso si
+cose. Le righe di una lista `.txt` possono essere relative, nel qual caso si
 risolvono rispetto alla directory del file di lista stesso, e le righe che
 iniziano con `#` vengono saltate.
 
@@ -157,7 +157,7 @@ my-dataset/
 ```
 
 Viene riscritto solo un componente di percorso `images` intero, quindi una
-directory chiamata `images_old` viene lasciata stare.
+directory chiamata `images_old` non viene toccata.
 
 Una riga di rilevamento è fatta di cinque campi, tutti normalizzati a `[0, 1]`
 rispetto a larghezza e altezza originali dell'immagine:
@@ -170,8 +170,8 @@ Un file di etichette mancante o vuoto significa che l'immagine non ha oggetti, e
 viene addestrata come sfondo invece di sollevare un errore. Una riga con più di
 cinque campi viene letta come un poligono e il suo box diventa l'estensione del
 poligono, così un'esportazione di segmentazione usata per addestrare al
-rilevamento si carica senza lamentele. Il doctor riporta quante righe hanno preso
-quella strada.
+rilevamento si carica senza errori. Il doctor segnala quante righe hanno seguito
+questo percorso.
 
 ## Altri task
 
@@ -188,8 +188,8 @@ d'angolo in coordinate normalizzate. Nel file non viene salvato nessun angolo.
 
 La segmentazione semantica abbina a ogni immagine una maschera a canale singolo
 della stessa risoluzione, risolta sostituendo `masks_dir` (di default `masks`) a
-`images`. Il valore di pixel `255` significa ignora. `label_mapping` rimappa gli
-id di origine agli id di addestramento al momento del caricamento.
+`images`. Il valore di pixel `255` indica di ignorare il pixel. `label_mapping`
+rimappa gli id di origine agli id di addestramento al momento del caricamento.
 
 La classificazione usa un albero ImageFolder invece dei file di etichette, con
 `train/` e `val/` che contengono ciascuno una directory per classe. La mappatura
@@ -222,14 +222,14 @@ Quando `names` è presente, i nomi delle categorie del JSON devono corrisponderg
 e `names` definisce gli id delle etichette che il modello predice. Senza `names`,
 gli id delle categorie COCO vengono ordinati e mappati in modo denso su `0..N-1`.
 
-Questa strada si aspetta una sola directory di immagini per split. Una lista di
+Questa modalità si aspetta una sola directory di immagini per split. Una lista di
 percorsi o una lista di immagini `.txt` solleva un errore invece di caricare in
 silenzio un insieme diverso.
 
 ## Download automatico
 
-Un dataset conta come presente quando il suo percorso `train` o `val` si risolve
-in una directory non vuota o in un file esistente. Quando non è così, e lo YAML ha
+Un dataset è considerato presente quando il suo percorso `train` o `val` si
+risolve in una directory non vuota o in un file esistente. Quando non è così, e lo YAML ha
 una chiave `download`, è il valore a decidere cosa succede.
 
 Un URL `http` o `https` viene scaricato e, se è uno zip, estratto nella radice del
@@ -249,8 +249,8 @@ stampa un avviso quando il flag è attivo, e il doctor non lo abilita mai.
 ## Controlla il dataset prima di addestrare
 
 `libreyolo doctor` legge un dataset di rilevamento e segnala cosa andrebbe storto
-prima che entri in gioco una GPU. Esce con 1 quando trova errori, quindi funziona
-come gate di CI.
+prima che entri in gioco una GPU. Esce con codice 1 quando trova errori, quindi
+funziona come gate di CI.
 
 <code-tabs name="doctor" />
 
@@ -266,14 +266,14 @@ I controlli si dividono in sei famiglie:
 | `splits` | la stessa immagine che compare in due split, in modo esatto o quasi identico |
 
 `--only` e `--skip` accettano un id di controllo o un prefisso di famiglia, quindi
-`skip=images,labels.tiny_object` è valido. `--fast` elimina ogni controllo che ha
+`skip=images,labels.tiny_object` è valido. `--fast` salta ogni controllo che ha
 bisogno di decodificare i pixel, cioè le famiglie `images` e `splits`.
 
 Ci sono due comportamenti da conoscere. `--strict` fa sì che anche gli avvisi,
-oltre agli errori, facciano fallire il codice di uscita. E il doctor copre solo i
-dataset di rilevamento: un dataset di posa, di segmentazione o di box orientati
-viene rifiutato con un messaggio che indica cosa ha riconosciuto, invece di essere
-controllato contro il contratto sbagliato.
+oltre agli errori, facciano fallire il comando. E il doctor copre solo i dataset
+di rilevamento: un dataset di posa, di segmentazione o di box orientati viene
+rifiutato con un messaggio che indica cosa ha riconosciuto, invece di essere
+controllato rispetto al contratto sbagliato.
 
 ## Correlati
 

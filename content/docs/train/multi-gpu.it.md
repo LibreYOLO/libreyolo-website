@@ -23,15 +23,11 @@ snippets:
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
-        # Il guard __main__ è obbligatorio: ogni worker avviato reimporta questo
-
-        # modulo, e senza il guard rilancerebbe l'addestramento in modo
-        ricorsivo.
-
+        # Il guard __main__ è obbligatorio: ogni worker reimporta questo modulo
+        # e senza il guard rilancerebbe l'addestramento in modo ricorsivo.
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(
@@ -96,14 +92,14 @@ miglior checkpoint del rank 0 viene ricaricato nell'istanza del modello del
 chiamante.
 
 `device` accetta `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"` e
-`"auto"`. Solo una lista di più di un indice CUDA innesca lo spawn.
+`"auto"`. Solo una lista con più di un indice CUDA innesca lo spawn.
 
 ## Il guard `__main__` è obbligatorio
 
 I worker avviati reimportano il modulo da cui provengono. Senza un guard
 `if __name__ == "__main__":`, quell'import riesegue la chiamata di addestramento e
 ogni worker avvia i propri worker. La libreria rileva il caso e solleva un errore
-invece di lasciare che ricorra:
+invece di lasciare che la ricorsione prosegua:
 
 ```text
 spawn_ddp_train() was called from inside a spawned subprocess. This usually
@@ -111,10 +107,10 @@ means your script calls model.train(device=...) at the top level without a
 'if __name__ == "__main__":' guard.
 ```
 
-Tutto ciò che passa dentro a un worker viene serializzato con pickle, quindi
-`callbacks=` deve essere picklable. Una classe a livello di modulo funziona; una
-closure o una lambda no, e l'errore lo dice e indica i logger integrati come
-alternativa.
+Tutto ciò che entra in un worker viene serializzato con pickle, quindi
+`callbacks=` deve essere serializzabile con pickle. Una classe a livello di
+modulo funziona; una closure o una lambda no, e l'errore lo dice e indica i
+logger integrati come alternativa.
 
 ## batch è il batch globale
 
@@ -165,9 +161,9 @@ vengono calcolate sull'intero batch globale. La conversione avviene solo quando 
 modalità distribuita è attiva, quindi un'esecuzione su una sola GPU non è
 influenzata dal flag in nessun caso.
 
-È già attivo per default nelle famiglie convoluzionali ricche di BatchNorm: YOLOX,
+È già attivo di default nelle famiglie convoluzionali ricche di BatchNorm: YOLOX,
 YOLOv7, YOLOv9 e le sue varianti, YOLO-NAS, PicoDet, RTMDet e FOMO. Tutte le altre
-famiglie lo lasciano disattivato per default. Quando un modello contiene
+famiglie lo lasciano disattivato di default. Quando un modello contiene
 BatchNorm, `sync_bn` è disattivato e il batch per rank è inferiore a 16, il
 trainer avvisa.
 
@@ -222,6 +218,6 @@ invece di addestrare in silenzio su una sola GPU.
 
 - [Iperparametri](/docs/train/hyperparameters) per `batch`, `nbs` e la ripresa
   dell'addestramento.
-- [Logger degli esperimenti](/docs/train/loggers) per il vincolo di picklability
-  sulle callback.
+- [Logger degli esperimenti](/docs/train/loggers) per il vincolo di
+  serializzabilità con pickle sulle callback.
 - [GPU cloud](/docs/train/cloud-gpus) per noleggiare una macchina multi-GPU.

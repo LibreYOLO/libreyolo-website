@@ -139,7 +139,7 @@ Entrambe le strade finiscono nello stesso punto. I kwarg vengono passati a
 ## Un refuso non solleva errori
 
 `from_kwargs()` scarta qualsiasi chiave che non sia un campo della configurazione ed
-emette un `UserWarning` che la nomina. L'addestramento parte poi con il valore
+emette un `UserWarning` che la nomina. A quel punto l'addestramento parte con il valore
 predefinito al suo posto:
 
 ```python
@@ -161,7 +161,8 @@ una sola risposta corretta a «qual è il learning rate predefinito».
 
 I default di base sono `optimizer="sgd"`, `lr0=0.01`, `momentum=0.937`,
 `weight_decay=5e-4`, `scheduler="yoloxwarmcos"`, `epochs=300`, `batch=16`,
-`imgsz=640` e `amp=True`. Tre esempi di quanto una famiglia si allontani da lì:
+`imgsz=640` e `amp=True`. Tre esempi di quanto una famiglia possa allontanarsi da
+quei valori:
 
 | Campo | Base | YOLOv9 | D-FINE | YOLO-NAS |
 |---|---|---|---|---|
@@ -173,8 +174,8 @@ I default di base sono `optimizer="sgd"`, `lr0=0.01`, `momentum=0.937`,
 | `amp` | `True` | `True` | `False` | `False` |
 
 D-FINE e DEIM arrivano con `amp=False` perché il decoder di D-FINE limita le
-attivazioni a 65504, il più grande valore float16 finito. Anche YOLO-NAS e FOMO lo
-tengono disattivato per default. Il flag `--amp` della CLI vale `True` per default in
+attivazioni a 65504, il più grande valore finito rappresentabile in float16. Anche
+YOLO-NAS e FOMO lo tengono disattivato per default. Il flag `--amp` della CLI vale `True` per default in
 ogni famiglia, quindi conta come fornito dall'utente e sovrascrive il default della
 famiglia; lascialo stare a meno che tu non voglia davvero cambiarlo.
 
@@ -192,15 +193,16 @@ dell'optimizer, indipendentemente da quante GPU sono coinvolte. Vedi
 `batch=-1` attiva l'autobatch. Il trainer sonda il modello in modalità di addestramento
 con un vero passo backward su potenze di due, interpola una retta sulla curva di
 memoria e sceglie la più grande potenza di due strettamente sotto il valore estrapolato
-che sta entro il 60 percento della VRAM totale.
+che rientra nel 60 per cento della VRAM totale.
 
 <code-tabs name="autobatch" />
 
-Sondare in modalità di addestramento con un passo backward è il punto: una sonda in
-modalità inferenza si perde le attivazioni trattenute e i tensori dei gradienti, che per
-una CNN profonda valgono diverse volte l'ingombro dell'inferenza. RF-DETR abbassa la
-frazione obiettivo al 45 percento, perché il backward sintetico della sonda sottostima
-comunque quanto costano il suo criterion e i layer del decoder ausiliario.
+Sondare in modalità di addestramento con un passo backward è il punto chiave:
+una sonda in modalità inferenza non tiene conto delle attivazioni trattenute e dei
+tensori dei gradienti, che per una CNN profonda valgono diverse volte l'ingombro
+dell'inferenza. RF-DETR abbassa la frazione obiettivo al 45 per cento, perché il
+backward sintetico della sonda sottostima comunque quanto costano il suo criterion e i
+layer del decoder ausiliario.
 
 L'autobatch è una funzionalità CUDA. Su CPU o MPS scrive una riga di log e mantiene il
 batch predefinito.
@@ -222,16 +224,16 @@ cambia.
 `nesterov` vale per SGD.
 
 La forma dello schedule è data da `scheduler`, `warmup_epochs`, `warmup_lr_start` e
-`min_lr_ratio`. `no_aug_epochs` stabilisce quante epoche finali girano senza
+`min_lr_ratio`. `no_aug_epochs` stabilisce quante epoche finali girano senza data
 augmentation forte, e diversi schedule lo usano anche per dare forma alla loro coda,
-quindi non è solo una manopola di augmentation. Cosa fa ogni famiglia con la metà di
-augmentation è su [Data augmentation](/docs/train/augmentations).
+quindi non è solo una leva per la data augmentation. Cosa fa ogni famiglia con la parte
+di data augmentation è su [Data augmentation](/docs/train/augmentations).
 
-Alcune famiglie aggiungono le proprie manopole per il learning rate.
+Alcune famiglie aggiungono le proprie leve per il learning rate.
 `backbone_lr_mult` scala il gruppo del backbone rispetto alla testa, `clip_max_norm`
 imposta il gradient clipping e SegFormer usa `head_lr_mult` per far girare la sua
-decode head a dieci volte il rate del backbone. Queste vivono sulla sottoclasse di
-configurazione della famiglia, non su quella di base.
+decode head a dieci volte il learning rate del backbone. Queste stanno sulla sottoclasse
+di configurazione della famiglia, non su quella di base.
 
 ## EMA
 
@@ -242,8 +244,8 @@ configurazione della famiglia, non su quella di base.
 obiettivo: il valore effettivo all'aggiornamento `n` è `ema_decay * (1 - exp(-n / tau))`
 con `tau` che vale 2000 per default, quindi gli aggiornamenti iniziali seguono il
 modello più da vicino e quelli tardivi lo smussano. I default di famiglia vanno da
-`0.997` su YOLO-NAS pose a `0.9998` su YOLOX fino a `0.9999` su YOLOv9 e sulla linea
-DETR.
+`0.997` su YOLO-NAS pose, passando per `0.9998` su YOLOX, fino a `0.9999` su YOLOv9 e
+sulla linea DETR.
 
 I pesi EMA sono quelli che vengono validati e quelli che `best.pt` e `last.pt` portano
 con sé. Anche i pesi addestrati grezzi vengono salvati, sotto la chiave `train_model`,
@@ -276,8 +278,8 @@ disattiva l'early stopping.
 
 `cache` accelera le epoche ripetute tenendo le immagini decodificate in RAM (`True` o
 `"ram"`) o come file `.npy` accanto alle sorgenti (`"disk"`). Le letture dalla cache
-sono identiche byte per byte a quelle fresche. Con i worker del dataloader, `"disk"` è
-la più sicura delle due.
+sono identiche byte per byte a quelle lette direttamente dalle sorgenti. Con i worker
+del dataloader, `"disk"` è la più sicura delle due.
 
 ## Resume
 
@@ -291,9 +293,9 @@ degli aggiornamenti, il tracciamento della metrica migliore, la scala del `GradS
 gli stati random di PyTorch, CUDA e NumPy. Riparte dall'epoca del checkpoint più uno e
 manda avanti lo schedule fino a quella posizione.
 
-Due cose non le fa. `resume=True` non si può combinare con `pretrained`, e provarci
-solleva un errore. E quando la chiave della metrica migliore del checkpoint è diversa da
-quella della run corrente, il tracciamento della metrica migliore si azzera con un
+Ci sono due cose che non fa. `resume=True` non si può combinare con `pretrained`, e
+provarci solleva un errore. E quando la chiave della metrica migliore del checkpoint è
+diversa da quella della run corrente, il tracciamento della metrica migliore si azzera con un
 warning invece di confrontare valori che non significano la stessa cosa.
 
 ## Ricette in un file
@@ -310,7 +312,7 @@ Python.
 ## Correlati
 
 - [Dataset](/docs/train/datasets) per cosa accetta `data=`.
-- [Data augmentation](/docs/train/augmentations) per le manopole di augmentation e
+- [Data augmentation](/docs/train/augmentations) per le leve della data augmentation e
   quali famiglie le rispettano.
 - [Congelamento dei layer](/docs/train/layer-freezing) e [LoRA](/docs/train/lora) per
   addestrare un sottoinsieme dei pesi.

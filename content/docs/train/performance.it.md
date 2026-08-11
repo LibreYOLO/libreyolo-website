@@ -34,8 +34,8 @@ snippets:
     - label: 'Solo misurare, poi fermarsi'
       language: bash
       code: >
-        # Imposta no_aug_epochs=0 ed esegue le epoche necessarie a riempire la
-        finestra.
+        # Imposta no_aug_epochs=0 ed esegue solo le epoche necessarie a riempire
+        la finestra.
 
         libreyolo profile run coco128 --weights LibreYOLO9s.pt --size s
     - label: Approfondire il risultato
@@ -124,13 +124,13 @@ il forward sotto l'autocast CUDA. `amp_dtype` sceglie tra `float16` e `bfloat16`
 
 Float16 ha bisogno del loss scaling dinamico e riceve uno scaler dei gradienti
 attivo; l'intervallo di esponenti più ampio di bfloat16 non ne ha bisogno, quindi
-il suo scaler è disattivato. Quattro famiglie arrivano con `amp=False`, D-FINE,
-DEIM, YOLO-NAS e FOMO, e l'impostazione di DEIM si propaga a RT-DETRv4 per
+il suo scaler è disattivato. Quattro famiglie vengono fornite con `amp=False`,
+D-FINE, DEIM, YOLO-NAS e FOMO, e l'impostazione di DEIM si propaga a RT-DETRv4 per
 ereditarietà. D-FINE ne dichiara il motivo: il suo decoder limita le attivazioni
 a 65504, il più grande valore finito di float16.
 
-La semantica degli argomenti, incluso cosa fa una richiesta di bfloat16 su
-hardware che non supporta bfloat16, è su
+La semantica degli argomenti, compreso cosa fa una richiesta di bfloat16 su
+hardware che non supporta bfloat16, è descritta in
 [Iperparametri](/docs/train/hyperparameters).
 
 ## CUDA graph
@@ -141,8 +141,8 @@ un CUDA graph, eliminando l'overhead di lancio dei kernel a ogni step.
 <code-tabs name="graph" />
 
 Passare il flag è sempre sicuro. Una famiglia, un task o una configurazione che
-non si possono catturare scrivono una riga di log e addestrano in eager, senza
-cambiare nulla.
+non si può catturare scrive una riga di log e addestra in eager, senza cambiare
+nulla.
 
 Viene catturata solo la rete. La loss resta eager per scelta, perché le loss di
 rilevamento selezionano con maschere booleane, eseguono il matching ungherese e
@@ -155,7 +155,7 @@ parecchio. Misurato su una RTX 5070 Ti a 640 px, batch 8: l'84 percento di uno
 step di YOLOv9-t è rete, il 44 percento di uno step di YOLOv7-b, il 31 percento
 di uno step di YOLOX-t e il 26 percento di uno step di RTMDet-t. Gli ultimi due
 passano la maggior parte dello step dentro i loro assegnatori di etichette,
-quindi catturare la rete è ciò che li aiuta meno.
+quindi sono quelli a cui catturare la rete giova di meno.
 
 ### Quanto vale
 
@@ -210,8 +210,8 @@ RT-DETR-r18 con batch 4 da 1.12x a 0.99x.
 
 Tutto il resto ricade su eager con una riga di log: gli altri task su quelle
 famiglie, le famiglie non elencate, le esecuzioni distribuite e le esecuzioni con
-distillazione. Anche una cattura che fallisce a runtime fa scendere in eager il
-resto dell'esecuzione invece di generare un errore.
+distillazione. Anche una cattura che fallisce a runtime fa passare a eager il
+resto dell'esecuzione invece di far fallire tutto.
 
 Per i detector encoder-decoder, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 e v4, ed EC,
 vengono catturati solo il backbone e l'encoder. Il loro decoder legge il ground
@@ -259,7 +259,7 @@ stesso seed divergono del 36 percento in valore relativo su 20 step, e YOLOX-t d
 gradiente dei pesi con alcune shape di convoluzione fp32.
 
 Un graph catturato fissa buffer statici di input, output e workspace, quindi il
-picco di VRAM sale di circa un set di attivazioni in più. Sulle famiglie qui
+picco di VRAM sale di circa un set di attivazioni in più. Tra le famiglie qui
 sopra, il picco di allocazione si è spostato tra il -5 e il +19 percento. Il costo
 relativo è massimo per i piccoli modelli di classificazione, le cui attivazioni
 sono già piccole di partenza: ResNet-18 a 224 px, batch 16, è passato da 0.48 GB

@@ -92,10 +92,11 @@ teacher, caricato con la stessa factory di qualsiasi altro modello.
 <code-tabs name="detector" />
 
 Il teacher esegue il forward sotto `no_grad`, e sotto autocast quando AMP è
-attivo, così il modello congelato non paga calcolo a precisione piena a ogni
-passo. I forward hook catturano le sue feature map nei punti di prelievo con
-nome, la loss le confronta con quelle dello student, e il risultato si somma alla
-loss di addestramento e viene riportato come componente di nome `distill`.
+attivo, così il modello congelato non paga il costo del calcolo a precisione
+piena a ogni passo. I forward hook catturano le sue feature map nei punti di
+prelievo indicati per nome, la loss le confronta con quelle dello student, e il
+risultato si somma alla loss di addestramento e viene riportato come componente
+di nome `distill`.
 
 ## Distillare da un backbone foundation congelato
 
@@ -108,12 +109,13 @@ griglia di patch e uno stride convoluzionale.
 
 `distill_model` riconosce `dinov2`, che è DINOv2-base, più `dinov2_vits14`,
 `dinov2_vitb14`, `dinov2_vitl14`, `dinov2-small`, `dinov2-base`, `dinov2-large`,
-e qualsiasi id grezzo dell'hub che inizi con `facebook/dinov2`. Tutto il resto
-viene trattato come il percorso di un checkpoint di teacher.
+e qualsiasi id dell'hub che inizi con `facebook/dinov2`. Tutto il resto viene
+trattato come il percorso di un checkpoint di teacher.
 
-Questa strada usa `feat_mse` a prescindere da `distill_loss_type`, e richiede
-`transformers` installato. Un teacher che si carica con chiavi di pesi mancanti
-si interrompe invece di distillare contro un backbone in parte casuale.
+Questa modalità usa `feat_mse` a prescindere da `distill_loss_type`, e richiede
+`transformers` installato. Se il teacher si carica con chiavi dei pesi mancanti,
+l'esecuzione si interrompe invece di distillare contro un backbone in parte
+casuale.
 
 ## Quali famiglie
 
@@ -180,10 +182,10 @@ per canale. `distill_tau` è la temperatura del softmax, di default 1.0.
 convoluzione 1x1, ridimensiona la griglia del teacher a quella dello student in
 modo bilineare, e prende l'errore quadratico medio. `distill_normalize=True`
 normalizza prima entrambe le feature map con L2 sulla dimensione dei canali, il
-che rende la corrispondenza solo di angolo e invariante alla scala. Di default
+che rende il confronto puramente angolare e invariante alla scala. Di default
 vale `False`.
 
-`dis` è il peso globale applicato sopra a tutto. Se non lo imposti, ogni loss usa
+`dis` è il peso globale applicato al di sopra. Se non lo imposti, ogni loss usa
 il proprio valore predefinito pubblicato: 2e-5 per MGD, 1.0 per CWD e 1.0 per
 feature MSE. Differiscono di cinque ordini di grandezza, quindi un peso regolato
 per un tipo di loss non significa nulla per un altro.
@@ -193,7 +195,7 @@ per un tipo di loss non significa nulla per un altro.
 `distill_mask_ratio`, `distill_tau` e `distill_normalize` non hanno flag da CLI.
 Sono argomenti Python o chiavi YAML di `cfg=`. Anche RF-DETR è solo Python per la
 distillazione nel suo complesso, perché la sua mappatura degli argomenti della
-CLI non porta le chiavi della distillazione.
+CLI non include le chiavi della distillazione.
 
 ## Adattatori, checkpoint e multi-GPU
 
@@ -217,6 +219,6 @@ Passare `cuda_graph=True` registra una riga e addestra in modalità eager. Vedi
 ## Correlati
 
 - [Congelamento dei layer](/docs/train/layer-freezing) e
-  [fine-tuning con LoRA](/docs/train/lora), a nessuno dei quali è impedito di
-  essere combinato con la distillazione.
+  [fine-tuning con LoRA](/docs/train/lora), che nulla impedisce di combinare con
+  la distillazione.
 - [Iperparametri](/docs/train/hyperparameters) per il resto di `train()`.
