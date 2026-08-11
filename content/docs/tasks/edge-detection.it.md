@@ -91,7 +91,7 @@ snippets:
 
         print(metrics["metrics/ODS"], metrics["metrics/best_threshold"])
   export:
-    - label: Esportazione
+    - label: Esportare
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -154,9 +154,9 @@ compare nelle sezioni di validazione ed esportazione qui sotto.
 ## Predizione
 
 LibreYOLO non pubblica nessun checkpoint edge. I pesi DexiNed e TEED rilasciati
-ufficialmente sono addestrati su BIPED, i cui termini di pubblicazione del
-dataset limitano l'uso a scopi non commerciali, quindi LibreYOLO non ne fa il
-mirror. Converti un checkpoint che sei autorizzato a usare, poi carica il file
+ufficialmente sono addestrati su BIPED, i cui termini pubblicati del dataset
+limitano l'uso a scopi non commerciali, quindi LibreYOLO non ne fa il mirror.
+Converti un checkpoint che sei autorizzato a usare, poi carica il file
 convertito indicandone il percorso:
 
 ```bash
@@ -231,7 +231,7 @@ di ciascuna immagine, quindi lascia che ogni immagine scelga la propria soglia.
 `metrics/best_threshold` è la singola soglia che ha prodotto ODS, ed è quella da
 riusare in `edges.binary()` durante l'inferenza.
 
-Due argomenti danno forma allo sweep. `edge_thresholds` è l'insieme delle soglie
+Due argomenti controllano lo sweep. `edge_thresholds` è l'insieme delle soglie
 provate, che per default va da 0.01 a 0.99 a passi di un centesimo.
 `edge_max_dist` è la tolleranza di corrispondenza espressa come frazione della
 diagonale dell'immagine, con default `0.0075`; una coppia più distante di così

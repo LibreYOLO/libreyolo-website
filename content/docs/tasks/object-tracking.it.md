@@ -3,7 +3,7 @@ title: Tracciamento di oggetti
 seo_title: Tracciamento di oggetti in LibreYOLO
 description: >-
   Segui gli oggetti lungo i frame di un video in LibreYOLO con ByteTrack,
-  BoT-SORT, OC-SORT o Deep OC-SORT, sopra qualsiasi modello di rilevamento,
+  BoT-SORT, OC-SORT o Deep OC-SORT, su qualsiasi modello di rilevamento,
   segmentazione o posa.
 lead: >-
   Il tracking assegna un'identità stabile a ogni rilevamento lungo i frame di un
@@ -70,8 +70,8 @@ snippets:
         for result in model.track("video.mp4", tracker_config=config):
             print(result.track_id)
 
-        # Oppure passa gli stessi campi come argomenti keyword e lascia che li
-        usi track().
+        # Oppure passa gli stessi campi come argomenti keyword e lascia che sia
+        track() a costruirla.
 
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
@@ -114,14 +114,14 @@ restituire ID privi di significato: classificazione, box orientati, punti,
 profondità, normali di superficie, bordi, segmentazione semantica e panottica,
 restauro, OCR e mesh corporea sollevano tutti un errore da `track()`.
 
-Anche due dei livelli di modelli di LibreYOLO lo rifiutano. I modelli caricati
+Anche due delle fasce di modelli di LibreYOLO lo rifiutano. I modelli caricati
 tramite `LibreSAM` sono segmentatori di immagini, e i modelli caricati tramite
 `LibreOpenVocab` sono rilevatori per singolo frame; entrambi sollevano un errore
 da `track()` e si usano invece con `predict()` su ogni frame.
 
 Il tracking gira sui modelli PyTorch nativi. Un artefatto esportato caricato con
-`LibreYOLO("model.onnx")` restituisce un oggetto backend di runtime, che porta
-con sé `predict()` ma non `track()`.
+`LibreYOLO("model.onnx")` restituisce un oggetto backend di runtime, che espone
+`predict()` ma non `track()`.
 
 La libreria include quattro tracker, selezionati dall'argomento `tracker`:
 
@@ -132,14 +132,14 @@ abbinarsi a una traccia esistente prima di essere scartati, infine le tracce non
 confermate. Si configura con `TrackConfig`.
 
 `"botsort"` mantiene il ciclo di vita a tre fasi di ByteTrack ma usa uno stato
-di Kalman centro-larghezza-altezza e compensa il movimento della camera nelle
-tracce predette prima dell'abbinamento. È la variante di BoT-SORT basata solo
+di Kalman centro-larghezza-altezza e compensa il movimento della telecamera
+nelle tracce predette prima dell'abbinamento. È la variante di BoT-SORT basata solo
 sul movimento; non esegue nessun modello di aspetto. Si configura con
 `BoTSortConfig`, che aggiunge `enable_cmc`, `cmc_method` e `cmc_downscale`.
 
 Anche `"ocsort"` usa solo il movimento, e aggiunge al costo di associazione un
 termine di direzione della velocità, un secondo passaggio di associazione
-rispetto all'ultima osservazione reale di ogni traccia, e un livellamento dello
+rispetto all'ultima osservazione reale di ogni traccia, e uno smoothing dello
 stato di Kalman lungo una traiettoria virtuale quando una traccia viene
 ritrovata. Si configura con `OCSortConfig`.
 
@@ -147,8 +147,8 @@ ritrovata. Si configura con `OCSortConfig`.
 mobile pesata per confidenza degli embedding di re-identificazione, e un termine
 di similarità coseno si unisce al costo di associazione, così le identità
 sopravvivono a occlusioni lunghe e a bersagli che si incrociano. Costa un
-passaggio in avanti di una piccola rete di embedding per frame, e i suoi pesi
-OSNet vengono scaricati al primo utilizzo. Si configura con `DeepOCSortConfig`.
+forward pass di una piccola rete di embedding per frame, e i suoi pesi OSNet
+vengono scaricati al primo utilizzo. Si configura con `DeepOCSortConfig`.
 
 ## Predizione
 
@@ -162,9 +162,9 @@ restano disponibili per il passaggio di recupero. Deep OC-SORT esegue il
 rilevatore proprio a `det_thresh`. Per ByteTrack e BoT-SORT, `track_conf` deve
 essere pari o superiore a `track_low_thresh`, che vale 0.1 per default.
 
-Le impostazioni del tracker arrivano in due modi. Passa un'istanza di config a
-`tracker_config=`, e il suo tipo seleziona il tracker, rendendo `tracker=`
-ridondante. Oppure passa i campi come argomenti keyword e lascia che `track()`
+Le impostazioni del tracker si possono fornire in due modi. Passa un'istanza di
+config a `tracker_config=`, e il suo tipo seleziona il tracker, rendendo
+`tracker=` ridondante. Oppure passa i campi come argomenti keyword e lascia che `track()`
 costruisca la config per il tracker che hai indicato; le chiavi sconosciute
 generano un warning invece di essere applicate in silenzio. In entrambi i casi,
 `track_conf` viene ignorato quando la chiave corrispondente è impostata

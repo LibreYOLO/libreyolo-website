@@ -103,10 +103,10 @@ source_hash: f7d88c74d9729268
 
 Il task `matte` predice un valore alfa per pixel a partire da una singola
 immagine RGB: `1` è primo piano pieno e `0` è sfondo pieno. Il valore è continuo
-anziché binario, ed è questo il punto del task. Una maschera netta è a una sola
-soglia di distanza, a 0.5, mentre il matte morbido porta con sé anche la
-copertura parziale su capelli, pelo e bordi sfocati dal movimento che una
-maschera binaria butta via.
+anziché binario, ed è questo il punto del task. Per una maschera netta basta una
+soglia, a 0.5, mentre il matte morbido porta con sé anche la copertura parziale
+su capelli, pelo e bordi sfocati dal movimento che una maschera binaria butta
+via.
 
 Una predizione riempie `result.matte`, un payload `Matte` che contiene un array
 float32 `(H, W)` in `[0, 1]` sul canvas dell'immagine originale, raggiungibile
@@ -123,16 +123,16 @@ Due famiglie coprono `matte`, e condividono lo stesso forward path.
 cui è costruito il task, pubblicata qui come un unico checkpoint di livello
 Swin-L.
 
-[FeyNobg](/docs/models/feynobg) è la variante più profonda di Feyn Inc.:
+[FeyNobg](/docs/models/feynobg) è la variante resa più profonda da Feyn Inc.:
 l'architettura di BiRefNet con il terzo stage Swin cresciuto da 18 a 24 blocchi,
-poi riaddestrata. Per essa LibreYOLO riusa il forward path, il preprocessing e
-l'output a logit singolo di BiRefNet, quindi predizione, validazione e gestione
-dei checkpoint si comportano in modo identico; i pesi e l'identità della
-famiglia sono di FeyNobg.
+poi riaddestrata. Per questa famiglia LibreYOLO riusa il forward path, il
+preprocessing e l'output a logit singolo di BiRefNet, quindi predizione,
+validazione e gestione dei checkpoint si comportano in modo identico; i pesi e
+l'identità della famiglia sono di FeyNobg.
 
-Le due hanno licenze dei pesi diverse. Entrambe sono indicate nelle pagine dei
-modelli, e la licenza sul repository Hugging Face dello specifico checkpoint è
-quella che fa fede.
+Le due famiglie hanno licenze dei pesi diverse. Entrambe sono indicate nelle
+pagine dei modelli, e la licenza sul repository Hugging Face dello specifico
+checkpoint è quella che fa fede.
 
 ## Predizione
 
@@ -166,7 +166,7 @@ my-matte-dataset/
 Basta passare quella radice come `data=`: la directory dei matte viene rilevata
 automaticamente tra `mattes/`, `matte/`, `gt/`, `masks/`, `mask/` e `alpha/`.
 L'alternativa è un YAML di dataset, con `path` più `val_images` e `val_mattes`
-che nominano directory relative a esso:
+che indicano le directory relative a `path`:
 
 ```yaml
 path: my-matte-dataset
@@ -200,10 +200,11 @@ calcolate sul canvas dell'immagine originale.
 
 `metrics/MAE` è l'errore assoluto medio rispetto all'alfa di ground truth, in
 `[0, 1]`, e più basso è meglio. `metrics/Smeasure` è la S-measure di Fan et al.
-(ICCV 2017), una similarità strutturale che premia l'aver azzeccato la forma del
-soggetto e i suoi buchi, cosa che una media per pixel da sola non coglie; più
-alto è meglio. La S-measure è anche `fitness`, il numero che legge la selezione
-del checkpoint migliore. Nessuna delle due metriche dipende dalla risoluzione.
+(ICCV 2017), una similarità strutturale che premia la resa corretta della forma
+del soggetto e dei suoi buchi, cosa che una media per pixel da sola non coglie;
+più alto è meglio. La S-measure è anche `fitness`, il numero che legge la
+selezione del checkpoint migliore. Nessuna delle due metriche dipende dalla
+risoluzione.
 
 ## Esportazione
 

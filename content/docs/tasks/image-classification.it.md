@@ -2,7 +2,7 @@
 title: Classificazione di immagini
 seo_title: Classificazione di immagini in LibreYOLO
 description: >-
-  Etichetta un'immagine intera in LibreYOLO: le famiglie che servono il task, il
+  Etichetta un'immagine intera in LibreYOLO: le famiglie che coprono il task, il
   layout del dataset ImageFolder e le chiamate predict, train, validate ed
   export.
 lead: >-
@@ -144,27 +144,27 @@ intera e nessuna coordinata. Risponde a che cosa c'è nella foto, mai a dove, ed
 questo che la separa dal [rilevamento di oggetti](/docs/tasks/object-detection).
 
 `classify` è la chiave canonica del task, e il suffisso `-cls` nel nome del file
-di un checkpoint la seleziona. Sulle famiglie di classificazione quel suffisso è
+di un checkpoint la seleziona. Nelle famiglie di classificazione quel suffisso è
 obbligatorio anziché opzionale, quindi `LibreResNet50.pt` non viene letto come un
-classificatore e solo `LibreResNet50-cls.pt` lo è.
+classificatore e solo `LibreResNet50-cls.pt` viene letto come tale.
 
 `predict()` riempie `result.probs` e lascia `boxes` vuoto. `.data` è il vettore
 completo dei punteggi, `.top1` l'indice del punteggio più alto e `.top1conf` il
 suo valore, `.top5` i cinque indici più alti in ordine decrescente e `.top5conf`
-i loro punteggi. Gli indici puntano dentro `result.names`. Fare lo slicing di un
+i loro punteggi. Gli indici si riferiscono a `result.names`. Fare lo slicing di un
 oggetto `Results` non tronca mai `probs`, perché il vettore appartiene
 all'immagine e non a una singola riga.
 
 ## Modelli
 
-Cinque famiglie sia addestrano sia predicono: [ResNet](/docs/models/resnet),
+Cinque famiglie addestrano e predicono: [ResNet](/docs/models/resnet),
 [ConvNeXt](/docs/models/convnext), [MobileNetV4](/docs/models/mobilenetv4),
 [EfficientNetV2](/docs/models/efficientnetv2) e
 [DINOv2](/docs/models/dinov2). Le prime quattro girano con il pacchetto base e
 hanno pesi pubblicati. DINOv2 richiede `pip install "libreyolo[rfdetr]"` e non ha
 un checkpoint ospitato da LibreYOLO: carica il backbone originale con una testa
-lineare inizializzata a caso, quindi è un punto di partenza per il fine-tuning
-più che un predittore pronto all'uso.
+lineare inizializzata in modo casuale, quindi è un punto di partenza per il
+fine-tuning più che un predittore pronto all'uso.
 
 Altre cinque predicono, validano ed esportano, ma il loro `train()` solleva
 `NotImplementedError`: [ViT](/docs/models/vit), [Swin](/docs/models/swin),
@@ -175,7 +175,7 @@ Altre cinque predicono, validano ed esportano, ma il loro `train()` solleva
 insieme fisso di etichette. Confrontano l'immagine con dei prompt testuali,
 quindi `set_classes()` definisce le classi al momento della chiamata e per un
 nuovo insieme di etichette non c'è alcun passaggio di addestramento. Entrambe
-servono anche il task `embed`.
+coprono anche il task `embed`.
 
 ## Predizione
 
@@ -184,7 +184,7 @@ I pesi si scaricano da Hugging Face al primo uso e restano in cache in locale.
 <code-tabs name="predict" />
 
 `conf`, `iou` e `max_det` qui non hanno effetto: non ci sono candidati da
-sogliare o sopprimere, solo una distribuzione. Vedi
+filtrare con una soglia o da sopprimere, solo una distribuzione. Vedi
 [predizione](/docs/predict) per sorgenti, streaming e gestione dei risultati.
 
 ## Formato del dataset
@@ -203,14 +203,14 @@ dataset/
 ```
 
 `train/` è obbligatorio per l'addestramento e definisce la corrispondenza tra
-classe e indice in base al nome ordinato delle cartelle, quindi la prima cartella
-in ordine alfabetico diventa la classe 0. `val/` è obbligatorio per la
+classe e indice ordinando i nomi delle cartelle, quindi la prima cartella in
+ordine alfabetico diventa la classe 0. `val/` è obbligatorio per la
 validazione. Può essere presente uno split `test/`, e i comandi predefiniti di
 addestramento e validazione non lo usano. Ogni split diverso da `train` deve
 contenere gli stessi nomi di cartelle di classe dell'insieme di classi atteso, ed
-è questo che fa fallire rumorosamente una discrepanza invece di conteggiarla come
-una predizione sbagliata. Le estensioni di immagine accettate sono `.jpg`,
-`.jpeg`, `.png`, `.bmp`, `.webp`, `.tif` e `.tiff`.
+è questo che fa sì che una discrepanza dia subito errore invece di essere
+conteggiata come una predizione sbagliata. Le estensioni di immagine accettate
+sono `.jpg`, `.jpeg`, `.png`, `.bmp`, `.webp`, `.tif` e `.tiff`.
 
 `data` accetta tre cose: un percorso a una directory che contiene uno split
 `train/`, un URL `.zip`, oppure uno dei nomi di dataset noti, `imagenette160` e
@@ -224,7 +224,7 @@ Il loader canonico è `libreyolo.data.classify_dataset`.
 
 Non c'è nessun `nc` da dichiarare: il numero di classi viene dai nomi delle
 cartelle sotto `train/`, e il layer lineare finale viene ricostruito per
-corrispondere mentre il backbone si trasferisce invariato. Vedi
+adattarsi a quel numero, mentre il backbone viene trasferito invariato. Vedi
 [addestramento](/docs/train) per dataset, augmentation, multi-GPU e logger.
 
 ## Validazione
@@ -236,10 +236,10 @@ split `val/` della radice del dataset.
 
 `metrics/accuracy_top1` è la quota di immagini la cui classe con il punteggio più
 alto è quella vera, ed è il numero di riferimento, quello che l'addestramento usa
-per scegliere l'epoca migliore. `metrics/accuracy_top5` è la quota in cui la
-classe vera compare in un punto qualsiasi delle cinque classi con il punteggio
-più alto, e dice tanto meno quante meno classi ha il dataset. Il dizionario porta
-anche `fitness`, una copia del valore top-1.
+per scegliere l'epoca migliore. `metrics/accuracy_top5` è la quota di immagini la
+cui classe vera compare in una qualsiasi delle cinque classi con il punteggio più
+alto, e diventa tanto meno informativa quante meno classi ha il dataset. Il
+dizionario contiene anche `fitness`, una copia del valore top-1.
 
 ## Esportazione
 

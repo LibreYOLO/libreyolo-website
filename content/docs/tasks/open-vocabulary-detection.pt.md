@@ -35,25 +35,17 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: Trocar o vocabulário
       language: python
-      code: >
+      code: |
         from libreyolo import LibreOpenVocab, SAMPLE_IMAGE
-
 
         model = LibreOpenVocab("owlv2-b16")
 
-
         # set_classes é persistente: vale até a próxima chamada dele.
-
-        # Os rótulos precisam ser únicos depois de passar para minúsculas e
-        perder os artigos.
-
+        # Os rótulos precisam ser únicos em minúsculas e sem os artigos.
         model.set_classes(["a red backpack", "traffic cone"])
-
         result = model.predict(SAMPLE_IMAGE)
 
-
         model.set_classes(["bicycle wheel"])
-
         result = model.predict(SAMPLE_IMAGE)
     - label: Limiar de texto do Grounding DINO
       language: python
@@ -75,7 +67,7 @@ source_hash: 17197cf4d80f3d6f
 A detecção de vocabulário aberto retorna `Results` de detecção comuns: caixas,
 confianças e índices de classe, com `result.names` mapeando esses índices de
 volta para as strings que você pediu. O que muda é de onde vem a lista de
-classes. Um detector convencional é treinado contra um conjunto fixo de
+classes. Um detector convencional é treinado com um conjunto fixo de
 categorias e nunca consegue emitir uma categoria fora dele. Esses modelos
 recebem o vocabulário como texto no momento da inferência, então
 `set_classes(["forklift", "safety cone"])` basta para que essas sejam as
@@ -89,21 +81,21 @@ checkpoints de state-dict do LibreYOLO, então ficam de fora da factory
 `LibreSAM()` e `LibreVLM()`, não uma substituta de `LibreYOLO()`.
 
 Os scores são scores de detecção reais, não uma legenda gerada e interpretada
-depois. Cada família pontua regiões da imagem contra o embedding de texto de
-cada prompt.
+depois. Cada família pontua as regiões da imagem em relação ao embedding de
+texto de cada prompt.
 
 ## Modelos
 
-Quatro famílias formam o tier, todas elas somente de predição. Carregue qualquer
-uma delas por alias através do `LibreOpenVocab`.
+Quatro famílias formam o tier, e todas elas só fazem predição. Carregue qualquer
+uma delas por alias pelo `LibreOpenVocab`.
 
 [Grounding DINO](/docs/models/grounding-dino), da IDEA Research, nos tamanhos
 `t` e `b`. É o padrão do tier e a única família que aceita `text_threshold`, um
 segundo corte sobre o score de token da frase decodificada.
 
 [OWLv2](/docs/models/owlv2), do Google Research, nos tamanhos `b16` e `l14`.
-Ele pontua regiões da imagem contra embeddings de texto de um codificador no
-estilo CLIP.
+Ele pontua as regiões da imagem em relação a embeddings de texto de um
+codificador no estilo CLIP.
 
 [OMDet-Turbo](/docs/models/omdet-turbo), do Om AI Lab, em um único tamanho `t`.
 Ele desacopla os embeddings de classe de um prompt de tarefa em linguagem
@@ -146,9 +138,9 @@ diretamente, enquanto o tier de VLMs as gera.
 <code-tabs name="predict" />
 
 `set_classes()` recebe uma lista não vazia de strings de rótulo e vale até ser
-chamada de novo. Os rótulos precisam ser únicos depois de passar para minúsculas
-e perder os artigos iniciais, então `"a bus"` e `"bus"` não podem coexistir em
-um mesmo vocabulário. Frases de várias palavras são rótulos como quaisquer
+chamada de novo. Os rótulos precisam ser únicos depois de convertidos para
+minúsculas e sem os artigos iniciais, então `"a bus"` e `"bus"` não podem
+coexistir em um mesmo vocabulário. Frases de várias palavras são rótulos como quaisquer
 outros, e cada família transforma a lista na sua própria entrada de texto antes
 de tokenizar, então `"traffic cone"` é uma query diferente de `"cone"`.
 
@@ -157,14 +149,14 @@ detector nativo. `imgsz=` é rejeitado, porque o processador é quem cuida do
 redimensionamento nessas famílias. `augment=True` é rejeitado, já que o data
 augmentation em tempo de teste está fora do escopo do tier. `iou=` vale apenas
 para a família cujo processador roda a própria supressão; onde nada é suprimido,
-passá-lo emite um aviso e é ignorado.
+passá-lo gera um aviso e o valor é ignorado.
 
 Quando não é definido, `conf` assume o padrão da própria família carregada em
 vez do 0.25 usual de `predict()`, e esse padrão não é o mesmo em todo o tier.
 Defina o valor explicitamente ao comparar duas famílias na mesma imagem.
 
-`track()` levanta erro em todo o tier. Rode `predict()` quadro a quadro no
-lugar. Veja [predição](/docs/predict) para fontes, streaming e tratamento de
+`track()` levanta erro em todo o tier. Em vez disso, rode `predict()` quadro a
+quadro. Veja [predição](/docs/predict) para fontes, streaming e tratamento de
 resultados.
 
 ## Treinamento

@@ -7,9 +7,9 @@ description: >-
   pacchetti.
 lead: >-
   Il percorso di inferenza ONNX di LibreYOLO è numpy dall'inizio alla fine,
-  decode e NMS inclusi. Niente su quel percorso ha bisogno di PyTorch a runtime,
-  quindi un'installazione che salta la risoluzione delle dipendenze può eseguire
-  il rilevamento con torch assente dalla macchina.
+  decodifica e NMS incluse. Niente su quel percorso ha bisogno di PyTorch a
+  runtime, quindi un'installazione che salta la risoluzione delle dipendenze può
+  eseguire il rilevamento con torch assente dalla macchina.
 keywords:
   - inferenza senza torch
   - libreyolo senza pytorch
@@ -78,7 +78,7 @@ di installare ciò che usi davvero.
 
 Questo è utile solo se il percorso di codice che ti interessa davvero non ha
 bisogno delle dipendenze che hai saltato, e per il rilevamento ONNX non ne ha
-bisogno. Il decode, non-maximum suppression inclusa, è numpy. Le ricette di
+bisogno. La decodifica, non-maximum suppression inclusa, è numpy. Le ricette di
 preprocessing sono numpy. PyTorch è una dipendenza per l'addestramento e per
 l'inferenza eager, e su questo percorso non viene mai chiamato.
 
@@ -92,20 +92,20 @@ importa con torch assente dalla macchina. Quel pacchetto contiene un
 preprocessore nativo in numpy per famiglia: `yolo9`, `yolonas`, `yolox`, `ec`,
 `rtdetr`, `rfdetr`, `dfine`, `deim` e `deimv2`, due in più delle sette famiglie
 verificate end to end qui sotto. Ogni
-`libreyolo/models/<family>/utils.py` ri-esporta da lì, così i percorsi di import
+`libreyolo/models/<family>/utils.py` riesporta da lì, così i percorsi di import
 esistenti continuano a funzionare.
 
 ## Prova prima il wheel solo CPU
 
-Quasi tutti quelli che chiedono questa cosa vogliono evitare un'installazione da
-diversi gigabyte, e la dimensione è concentrata in un punto solo: il wheel
-`torch` predefinito include CUDA. Una build solo CPU è una frazione di quella e
-non richiede nessun percorso di installazione speciale.
+La maggior parte di chi chiede questa possibilità vuole evitare
+un'installazione da diversi gigabyte, e la dimensione è concentrata in un punto
+solo: il wheel `torch` predefinito include CUDA. Una build solo CPU è una
+frazione di quella e non richiede nessun percorso di installazione speciale.
 
 <code-tabs name="install" />
 
 L'opzione solo CPU mantiene ogni funzionalità di LibreYOLO: addestramento,
-validazione, ogni task, ogni famiglia, la CLI. Prendi il percorso leggero quando
+validazione, ogni task, ogni famiglia, la CLI. Scegli il percorso leggero quando
 vuoi zero torch sulla macchina, non semplicemente meno torch.
 
 ## Cosa copre l'installazione leggera
@@ -125,7 +125,7 @@ Su questo percorso sono state verificate sette famiglie:
 
 Questo è l'ambito verificato, non un confine che la libreria impone. Altri task
 e altre famiglie sono semplicemente fuori da ciò che è stato controllato: alcuni
-tireranno dentro torch quando li chiami, e qualcuno potrebbe funzionare per
+caricheranno torch quando li chiami, e qualcuno potrebbe funzionare per puro
 caso. Tratta tutto ciò che va oltre questo elenco come non testato, piuttosto
 che come supportato o come rotto.
 
@@ -145,7 +145,7 @@ documentazione carica un modello attraverso la sua classe o attraverso
 
 **Esporta da un'altra parte.** Produrre il file `.onnx` richiede torch, quindi
 la macchina leggera non può crearne uno. Esporta su una macchina di sviluppo o
-di CI e spedisci l'artefatto al target snello.
+di CI e trasferisci l'artefatto sul target snello.
 
 **I risultati portano array numpy.** Qui `result.boxes.xyxy` è un `ndarray`. I
 contenitori accettano entrambi i tipi, quindi i nomi degli attributi non
@@ -167,10 +167,10 @@ libreria.
 <code-tabs name="predict" />
 
 Sostituisci `onnxruntime` con `onnxruntime-gpu` per girare su CUDA. I quattro
-pacchetti sono quelli che una `predict()` davvero priva di torch importa sul
-serio, registrati durante la chiamata invece che dedotti a tavolino.
-`opencv-python-headless` sostituisce il dichiarato `opencv-python`: stesso
-modulo, nessuna libreria GUI, meno spazio su disco.
+pacchetti sono quelli che una `predict()` completa e priva di torch importa
+davvero, registrati durante la chiamata invece che dedotti a tavolino.
+`opencv-python-headless` prende il posto di `opencv-python`, il pacchetto
+dichiarato: stesso modulo, nessuna libreria GUI, meno spazio su disco.
 
 Delle restanti dipendenze dichiarate, `requests` serve solo a caricare
 un'immagine da un URL, `pycocotools` e `scipy` sono validazione e valutazione, e
@@ -180,7 +180,7 @@ un'immagine da un URL, `pycocotools` e `scipy` sono validazione e valutazione, e
 
 L'elenco di pacchetti qui sopra è corretto per la release indicata in cima a
 questa pagina. `--no-deps` ti fa rinunciare alla risoluzione delle dipendenze,
-quindi nessuno lo controlla al posto tuo, e una release successiva potrebbe
+quindi nulla lo controlla al posto tuo, e una release successiva potrebbe
 importare qualcosa che qui non è elencato.
 
 Se incontri un `ModuleNotFoundError`, la tecnica l'hai già capita: installa il
@@ -190,8 +190,7 @@ parte, motivo per cui non esiste un secondo pacchetto leggero su PyPI e non c'è
 alcun piano per farne uno.
 
 Per confermare che il tuo ambiente sia davvero senza torch e non stia
-silenziosamente ripiegando su una copia installata, mettilo per iscritto con un
-assert:
+silenziosamente ripiegando su una copia installata, verificalo con un assert:
 
 ```python
 import importlib.util
@@ -199,5 +198,5 @@ import importlib.util
 assert importlib.util.find_spec("torch") is None, "torch is installed"
 ```
 
-Quel controllo vale la pena tenerlo in CI per l'immagine snella. Senza, un
+Quel controllo vale la pena tenerlo in CI per l'immagine snella. Altrimenti un
 ambiente che per caso ha torch passerà ogni test senza dirti nulla.

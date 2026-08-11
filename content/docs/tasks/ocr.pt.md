@@ -25,7 +25,7 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # O nível t é o mais leve dos dois, feito para CPU. O SAMPLE_IMAGE
-        # mantém isso executável; aponte para uma imagem com texto sua.
+        # mantém isso executável; aponte para uma imagem sua que tenha texto.
         model = LibreYOLO("LibrePPOCRt-ocr.pt")
         result = model(SAMPLE_IMAGE)
 
@@ -141,7 +141,7 @@ resultados.
 
 ## Formato do dataset
 
-Os labels de OCR são um arquivo JSONL por split, um objeto JSON por imagem, ao
+Os rótulos de OCR são um arquivo JSONL por split, um objeto JSON por imagem, ao
 lado das próprias imagens.
 
 ```text
@@ -197,11 +197,11 @@ melhor checkpoint lê.
 
 `metrics/rec_1-NED` avalia o reconhecedor sozinho, sobre os pares que a detecção
 já casou: um menos a distância de edição normalizada, de modo que uma transcrição
-errada por um caractere pontua perto de 1 onde o F1 end-to-end lhe dá 0.
+que erra um caractere pontua perto de 1, enquanto o F1 end-to-end dá 0 a ela.
 
 ## Exportação
 
 Nenhum formato de exportação está disponível para esta tarefa. O PP-OCRv5 são
-duas redes andando juntas em vez de um único grafo rastreável, e `export()`
+duas redes trabalhando juntas em vez de um único grafo rastreável, e `export()`
 levanta erro para todo formato nas duas famílias. Para fazer deploy fora do
 LibreYOLO, faça fine-tuning upstream e use o caminho de deploy upstream.

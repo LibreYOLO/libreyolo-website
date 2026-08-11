@@ -27,7 +27,7 @@ e os exportadores, os carregadores de dataset e os scripts de conversão em
 de copyright e o texto da licença junto de qualquer cópia que você redistribuir,
 e a obrigação termina aí.
 
-A concessão para no código. O arquivo
+A concessão termina no código. O arquivo
 [`LICENSE`](https://github.com/LibreYOLO/libreyolo/blob/release/LICENSE)
 diz isso sem rodeios:
 
@@ -80,14 +80,14 @@ cada licença na íntegra.
 
 ## Pesos, por checkpoint
 
-Nenhum arquivo de pesos pré-treinados vai dentro do pacote. Os checkpoints
+Nenhum arquivo de pesos pré-treinados vem dentro do pacote. Os checkpoints
 publicados ficam no Hugging Face sob a [organização
 LibreYOLO](https://huggingface.co/LibreYOLO), e cada repositório carrega o
 próprio `LICENSE` e a própria atribuição, refletindo o projeto de onde os pesos
 vieram.
 
-Esse repositório é a fonte autoritativa dos termos. Não esta página, não a
-página do modelo e não o resumo na árvore de código. Veja
+Esse repositório é a fonte autoritativa dos termos. Não esta página, nem a
+página do modelo, nem o resumo na árvore de código. Veja
 [checkpoints e pesos](/docs/weights) para saber como os arquivos são nomeados e
 de onde são baixados.
 
@@ -107,7 +107,7 @@ usados em um produto comercial:
 - O SegFormer é a separação mais clara entre as duas camadas. A implementação é
   um port Apache-2.0 do código do Hugging Face Transformers. Os checkpoints
   ADE20K publicados são convertidos do release da NVIDIA sob a NVIDIA Source
-  Code License, que permite a redistribuição mas limita o uso a pesquisa ou
+  Code License, que permite a redistribuição, mas limita o uso a pesquisa ou
   avaliação não comerciais, e leva esse limite adiante para os trabalhos
   derivados. Esses checkpoints não são cobertos pelos termos permissivos do
   LibreYOLO.
@@ -122,7 +122,7 @@ Algumas famílias não têm checkpoint nenhum hospedado pelo LibreYOLO, e as
 páginas delas dizem isso na linha Weights. O SAM 3 tem acesso restrito no
 Hugging Face sob a SAM License própria da Meta e é baixado direto da Meta. Os
 assets de release do MiDaS são buscados nas URLs oficiais e verificados por hash
-em vez de rehospedados. O Dome-DETR é linkado ao upstream porque o model card
+em vez de rehospedados. O Dome-DETR aponta para o upstream porque o model card
 dele não declara licença nenhuma nos metadados enquanto o texto afirma
 Apache-2.0 e ao mesmo tempo restringe o uso a pesquisa acadêmica, e essas duas
 coisas não batem. As arquiteturas TEED e DexiNed são MIT, mas os checkpoints
@@ -130,7 +130,7 @@ publicados pelos autores foram treinados no BIPED, cujos termos de dataset são
 não comerciais, então o LibreYOLO não os inclui nem os baixa automaticamente.
 
 Vários checkpoints do torchvision não têm arquivo de licença próprio. O
-LibreYOLO os espelha na licença que o projeto que os publica usa, declara em
+LibreYOLO os espelha na licença usada pelo projeto que os publica, declara em
 cada model card que a base é implícita e não uma concessão por checkpoint, e
 repete o próprio aviso do torchvision de que os termos de um modelo pré-treinado
 podem derivar dos dados de treinamento.
@@ -138,15 +138,15 @@ podem derivar dos dados de treinamento.
 ## Encontrar os termos de um modelo
 
 A página do modelo traz uma linha **Licenses** no cabeçalho, na forma
-`Code X, weights Y`, que linka para baixo, até a seção Licensing da página. Essa
+`Code X, weights Y`, que leva à seção Licensing mais abaixo na página. Essa
 seção lista o trabalho original e seus autores, a licença upstream, a origem
 upstream, a licença do código do LibreYOLO, os pesos e uma interpretação do que
 os termos permitem. A tabela Checkpoints da mesma página tem uma coluna
 **Weights license**, com uma linha por arquivo publicado, então uma família com
 termos mistos os mostra arquivo por arquivo.
 
-Tudo isso é renderizado a partir dos mesmos dados contra os quais a biblioteca é
-verificada, e é por isso que esta página não repete a informação em forma de
+Tudo isso é renderizado a partir dos mesmos dados usados para verificar a
+biblioteca, e é por isso que esta página não repete a informação em forma de
 tabela. Uma matriz de licenças escrita à mão fica errada dentro de uma mesma
 versão, e errar aqui sai caro.
 
@@ -156,16 +156,16 @@ Na árvore de código, os equivalentes são `NOTICE` para o código incluído,
 para um resumo por família dos checkpoints publicados.
 
 Depois confira o repositório do Hugging Face do arquivo exato que você está
-prestes a baixar. Ele é autoritativo, e pode mudar sem que uma página de
+prestes a baixar. Ele é a fonte autoritativa, e pode mudar sem que uma página de
 documentação mude junto.
 
 ## Uso comercial
 
-O código raramente é o problema. MIT, Apache-2.0 e BSD-3-Clause permitem todas o
-uso comercial e de código fechado. Cada uma pede que você mantenha o texto da
-licença e os avisos de atribuição nas cópias que redistribuir, a Apache-2.0
-também concede uma licença de patentes, e nenhuma delas impõe condições ao
-código da sua própria aplicação.
+O código raramente é o problema. MIT, Apache-2.0 e BSD-3-Clause permitem, todas
+as três, uso comercial e de código fechado. Cada uma pede que você mantenha o
+texto da licença e os avisos de atribuição nas cópias que redistribuir, a
+Apache-2.0 também concede uma licença de patentes, e nenhuma delas impõe
+condições ao código da sua própria aplicação.
 
 É nos checkpoints que os produtos empacam. Um checkpoint não comercial continua
 não comercial por mais permissivo que seja o código em volta, e converter o
@@ -175,7 +175,7 @@ construído a partir de um checkpoint restrito herda a restrição.
 
 Quando uma licença leva a restrição adiante para os trabalhos derivados, como a
 NVIDIA Source Code License faz, o fine-tuning também não escapa dela. Treinar a
-mesma arquitetura do zero com dados que você tem o direito de usar escapa: o
+mesma arquitetura do zero, com dados que você tem o direito de usar, escapa: o
 código é permissivo, então um modelo que você mesmo treina é seu, e os termos do
 checkpoint pré-treinado nunca entram nele. A página do SegFormer detalha isso
 para os pesos dela; leia a linha Interpretation na página da família que você

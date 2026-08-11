@@ -66,7 +66,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9t.pt")
 
         # coco128.yaml scarica un campione di 128 immagini al primo utilizzo.
-        # Punta data al YAML del tuo dataset per una esecuzione reale.
+        # Punta data allo YAML del tuo dataset per un'esecuzione reale.
         model.train(data="coco128.yaml", epochs=50, imgsz=640, batch=8)
     - label: CLI
       language: bash
@@ -125,7 +125,7 @@ source_hash: c735b6e3de78dd2b
 
 ## Definizione
 
-Il rilevamento di oggetti risponde a dove si trova ogni oggetto e a che cosa è.
+Il rilevamento di oggetti dice dove si trova ogni oggetto e che cos'è.
 Un'immagine in ingresso, una riga per istanza in uscita: quattro numeri per il
 rettangolo, un indice di classe e un punteggio. Non c'è nulla sulla forma a
 livello di pixel, sull'orientamento o sulle parti, ed è questo che lo separa
@@ -145,16 +145,16 @@ un oggetto `Boxes` produce slice di una sola riga, quindi `box.cls`, `box.conf` 
 
 ## Modelli
 
-Dodici famiglie sia addestrano sia predicono: [YOLOv9](/docs/models/yolov9),
+Dodici famiglie addestrano e predicono: [YOLOv9](/docs/models/yolov9),
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
 [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine),
 [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr),
 [YOLO-NAS](/docs/models/yolo-nas),
 [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7),
 [RTMDet](/docs/models/rtmdet) e [PicoDet](/docs/models/picodet). YOLOv9 e
-RF-DETR sono le due famiglie di punta, e le novità arrivano prima su di loro.
-RF-DETR ha bisogno del suo extra, `pip install "libreyolo[rfdetr]"`; le altre
-funzionano con il pacchetto base.
+RF-DETR sono le due famiglie di punta, e le nuove funzionalità arrivano prima su
+di loro. RF-DETR richiede il suo extra, `pip install "libreyolo[rfdetr]"`; le
+altre funzionano con il pacchetto base.
 
 Altre undici predicono, validano ed esportano, ma il loro `train()` solleva
 `NotImplementedError`: [LW-DETR](/docs/models/lw-detr),
@@ -165,9 +165,9 @@ Altre undici predicono, validano ed esportano, ma il loro `train()` solleva
 [CenterNet](/docs/models/centernet) e
 [EfficientDet](/docs/models/efficientdet).
 
-La stirpe Darknet, [YOLOv1](/docs/models/yolov1),
+La linea Darknet, [YOLOv1](/docs/models/yolov1),
 [YOLOv2](/docs/models/yolov2), [YOLOv3](/docs/models/yolov3) e
-[YOLOv4](/docs/models/yolov4), è conservata come pezzo da museo congelato:
+[YOLOv4](/docs/models/yolov4), è conservata come un pezzo da museo congelato:
 predizione, validazione ed esportazione funzionano, l'addestramento no.
 
 Un gruppo a parte prende la sua lista di classi a runtime invece che dal
@@ -198,7 +198,7 @@ streaming e gestione dei risultati.
 
 ## Formato del dataset
 
-Un file di etichette `.txt` per immagine, trovato sostituendo `images` con
+Un file di etichette `.txt` per immagine, individuato sostituendo `images` con
 `labels` nel percorso dell'immagine e cambiando l'estensione.
 
 ```text
@@ -213,7 +213,7 @@ dataset/
 ```
 
 Ogni riga ha esattamente cinque campi, un indice di classe seguito da un box
-normalizzato in centro e dimensioni:
+normalizzato espresso come centro e dimensioni:
 
 ```text
 <class_id> <cx> <cy> <w> <h>
@@ -224,7 +224,7 @@ dell'immagine originale. `w` e `h` devono essere positivi. Un file di etichette
 mancante o vuoto significa che l'immagine non ha oggetti. Le righe non portano
 né la confidenza né un id di traccia.
 
-Il YAML nomina gli split e le classi:
+Lo YAML indica gli split e le classi:
 
 ```yaml
 path: dataset
@@ -238,8 +238,8 @@ names:
 `train` e `val` possono essere directory di immagini, file `.txt` con la lista
 delle immagini, oppure liste dell'uno o dell'altro tipo. `nc` è facoltativo e,
 quando c'è, deve corrispondere a `names`. Funziona anche il JSON COCO nativo:
-aggiungi una mappatura `annotations` dal nome dello split al file JSON, e il
-percorso dello split dà allora la radice delle immagini. Quando `names` è
+aggiungi una mappatura `annotations` dal nome dello split al file JSON, e a quel
+punto il percorso dello split indica la radice delle immagini. Quando `names` è
 presente definisce gli id delle etichette, quindi i nomi delle categorie nel
 JSON devono corrispondergli.
 
@@ -248,17 +248,17 @@ JSON devono corrispondergli.
 <code-tabs name="train" />
 
 `epochs`, `imgsz`, `batch` e `lr0` sono gli argomenti che si toccano per primi.
-`lr0` è quello che non si trasferisce da una famiglia all'altra: un tasso che un
-rilevatore convoluzionale tollera fa divergere uno transformer, quindi prendi il
-valore dalla pagina del modello e non dall'esempio di un'altra famiglia. Una
-famiglia può anche ignorare del tutto un argomento, e la sua pagina elenca
-quali. Vedi [addestramento](/docs/train) per dataset, data augmentation,
+`lr0` è quello che non si trasferisce da una famiglia all'altra: un valore che
+un rilevatore convoluzionale tollera fa divergere un rilevatore transformer,
+quindi prendilo dalla pagina del modello e non dall'esempio di un'altra
+famiglia. Una famiglia può anche ignorare del tutto un argomento, e la sua
+pagina elenca quali. Vedi [addestramento](/docs/train) per dataset, data augmentation,
 multi-GPU e logger.
 
 ## Validazione
 
 `val()` restituisce un semplice dizionario di chiavi `metrics/`, calcolate con
-la valutazione COCO sullo split indicato da `val` nel YAML del dataset.
+la valutazione COCO sullo split indicato da `val` nello YAML del dataset.
 
 <code-tabs name="val" />
 
@@ -267,12 +267,12 @@ la valutazione COCO sullo split indicato da `val` nel YAML del dataset.
 sono le versioni a soglia singola. `metrics/mAP_small`, `metrics/mAP_medium` e
 `metrics/mAP_large` suddividono la stessa media per area dell'oggetto, e
 `metrics/AR1`, `metrics/AR10`, `metrics/AR100`, `metrics/AR_small`,
-`metrics/AR_medium` e `metrics/AR_large` sono le cifre di average recall
+`metrics/AR_medium` e `metrics/AR_large` sono i valori di average recall
 corrispondenti. `metrics/AR_max_det` e `metrics/max_det` registrano il limite di
-rilevamenti usato dalla run.
+rilevamenti usato dall'esecuzione.
 
 Leggi `metrics/precision` e `metrics/recall` con attenzione su questo task. Sono
-mantenute per retrocompatibilità e sono alias, non un punto di lavoro:
+mantenute per retrocompatibilità e sono alias, non un punto operativo:
 `metrics/precision` contiene lo stesso valore di `metrics/mAP50-95`, e
 `metrics/recall` lo stesso valore di `metrics/AR100`. Rappresentarle come una
 coppia precisione-recall riporta lo stesso numero due volte. Quattro chiavi si

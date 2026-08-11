@@ -44,7 +44,7 @@ snippets:
         result = LibreYOLO("LibreECs-pose.pt")(SAMPLE_IMAGE)
         kpts = result.keypoints
 
-        # .has_visible deriva dalla terza colonna dei keypoint ed è tutta a vero
+        # .has_visible deriva dalla terza colonna dei keypoint ed è tutta True
         # quando il checkpoint predice solo (x, y).
         for person, visible in zip(kpts.xy, kpts.has_visible):
             print(person[visible])
@@ -174,17 +174,17 @@ pubblicati.
 uno è l'istanza `i` nell'altro. `.xy` estrae le coordinate in pixel e `.xyn` le
 normalizza rispetto alla dimensione dell'immagine originale. `.conf` è la terza
 colonna quando il checkpoint la predice ed è `None` quando non lo fa, e
-`.has_visible` è la maschera booleana che ne deriva, tutta a vero quando non
+`.has_visible` è la maschera booleana che ne deriva, tutta `True` quando non
 c'è una terza colonna.
 
 Due architetture arrivano a questo output. Un modello one-stage predice box e
 keypoint in un solo passaggio. Un modello top-down esegue prima un rilevatore,
-ritaglia ogni istanza e regredisce i keypoint dentro il ritaglio, quindi la sua
+ritaglia ogni istanza e ne stima i keypoint per regressione dentro il ritaglio, quindi la sua
 accuratezza dipende dal rilevatore che ha davanti.
 
 ## Modelli
 
-Tre famiglie sia addestrano sia predicono:
+Tre famiglie coprono sia l'addestramento sia la predizione:
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) e
 [YOLO-NAS](/docs/models/yolo-nas), tutte one-stage. RF-DETR richiede il suo
 extra, `pip install "libreyolo[rfdetr]"`. RF-DETR ed EdgeCrafter pubblicano
@@ -196,7 +196,7 @@ Deci.AI con una licenza non commerciale, e LibreYOLO non ne pubblica nessuno;
 anche la sua testa pose si ricostruisce per un nuovo numero di keypoint, ed è
 l'unica delle tre il cui numero di classi non è fissato a uno, quindi è la
 famiglia da usare per uno scheletro multi-classe o non umano, come la posa
-animale.
+degli animali.
 
 [HRNet](/docs/models/hrnet) è l'opzione top-down. Predice, valida ed esporta, e
 il suo `train()` solleva `NotImplementedError`. Se non gli dai una sorgente di
@@ -208,8 +208,8 @@ Anche [SenseNova-Vision](/docs/models/sensenova-vision) emette keypoint. È un
 modello generativo guidato da prompt, con una factory propria, `LibreVLM`, e un
 extra proprio; senza un vocabolario impostato, `set_task("pose")` ricade sulla
 categoria persona. I suoi pesi sono non commerciali, e la latenza per immagine è
-molto più alta di quella di una testa pose dedicata, perché ogni predizione è un
-decode di diffusione.
+molto più alta di quella di una testa pose dedicata, perché ogni predizione è una
+decodifica per diffusione.
 
 ## Predizione
 
@@ -288,8 +288,8 @@ testa per un conteggio diverso. Vedi
 
 ## Validazione
 
-`val()` restituisce un semplice dizionario di chiavi `metrics/`. Il punteggio è
-la valutazione COCO dei keypoint basata sulla Object Keypoint Similarity, che
+`val()` restituisce un semplice dizionario di chiavi `metrics/`. Il punteggio si
+calcola con la valutazione COCO dei keypoint basata sulla Object Keypoint Similarity, che
 pesa l'errore di distanza di ogni keypoint in base alla scala dell'istanza e a
 una tolleranza per keypoint, quindi svolge il ruolo che IoU svolge per i box.
 Richiede `pycocotools`, che è nell'installazione base.
@@ -302,7 +302,7 @@ l'addestramento usa per scegliere l'epoca migliore. `metrics/keypoints_mAP50` e
 `metrics/keypoints_mAP75` sono le versioni a soglia singola, e
 `metrics/keypoints_mAP_M` e `metrics/keypoints_mAP_L` dividono la media per area
 dell'istanza, media e grande; la valutazione COCO dei keypoint non definisce un
-gruppo small. Le corrispondenti cifre di average recall sono
+gruppo small. I valori corrispondenti di average recall sono
 `metrics/keypoints_AR50-95`, `metrics/keypoints_AR50`,
 `metrics/keypoints_AR75`, `metrics/keypoints_AR_M` e
 `metrics/keypoints_AR_L`. Ogni chiave di questo task ha il prefisso
@@ -316,7 +316,7 @@ compaiono.
 Un artefatto esportato si ricarica tramite `LibreYOLO()` in base al suffisso del
 file, quindi un file `.onnx` o `.engine` si comporta come un checkpoint e
 restituisce lo stesso `Results`. La copertura dei formati cambia da famiglia a
-famiglia; la matrice su ogni pagina modello è generata dall'insieme validato
+famiglia; la matrice sulla pagina di ogni modello è generata dall'insieme validato
 invece che scritta a mano. Vedi
 [esportazione e deployment](/docs/export) per i formati, i loro extra e i loro
 vincoli.

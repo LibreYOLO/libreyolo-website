@@ -96,11 +96,11 @@ ID original.
 
 Como a associação acontece depois da detecção, os demais payloads do frame
 sobrevivem a ela: o `Results` rastreado é o `Results` da detecção fatiado nas
-linhas casadas, então máscaras e keypoints vêm junto com os boxes.
+linhas correspondentes, então máscaras e keypoints vêm junto com os boxes.
 
 ## Modelos
 
-Duas escolhas independentes entram em uma execução de tracking: o modelo que
+Duas escolhas independentes entram em uma execução de rastreamento: o modelo que
 produz os boxes a cada frame, e o tracker que os liga.
 
 Qualquer modelo nativo do LibreYOLO cuja tarefa seja detecção, segmentação ou
@@ -111,43 +111,43 @@ pose expõe `track()`, então a escolha do detector é a de sempre. Veja
 resultados não têm box para associar recusam a chamada em vez de devolver IDs
 sem sentido: classificação, caixas orientadas, pontos, profundidade, normais de
 superfície, bordas, segmentação semântica e panóptica, restauração, OCR e malha
-corporal todas levantam erro em `track()`.
+corporal, todas lançam exceção em `track()`.
 
-Dois dos níveis de modelo do LibreYOLO também dispensam o método. Modelos
+Dois dos níveis de modelo do LibreYOLO também não o oferecem. Modelos
 carregados por `LibreSAM` são segmentadores de imagem, e modelos carregados por
-`LibreOpenVocab` são detectores por frame; ambos levantam erro em `track()` e
+`LibreOpenVocab` são detectores por frame; ambos lançam exceção em `track()` e
 são usados com `predict()` por frame no lugar disso.
 
-O tracking roda em modelos PyTorch nativos. Um artefato exportado carregado por
-`LibreYOLO("model.onnx")` devolve um objeto de backend de runtime, que traz
+O rastreamento roda em modelos PyTorch nativos. Um artefato exportado carregado
+por `LibreYOLO("model.onnx")` devolve um objeto de backend de runtime, que traz
 `predict()` mas não `track()`.
 
 Quatro trackers acompanham a biblioteca, selecionados pelo argumento `tracker`:
 
-`"bytetrack"` é o padrão. É só movimento, com um filtro de Kalman e uma
+`"bytetrack"` é o padrão. Usa apenas movimento, com um filtro de Kalman e uma
 associação em três estágios: primeiro as detecções de alta confiança, depois uma
-segunda passada que dá às detecções de baixa confiança a chance de casar com um
+segunda passada que dá às detecções de baixa confiança a chance de parear com um
 track existente antes de serem descartadas, e então os tracks não confirmados.
 Configurado com `TrackConfig`.
 
 `"botsort"` mantém o ciclo de vida em três estágios do ByteTrack, mas usa um
 estado de Kalman de centro-largura-altura e compensa os tracks previstos pelo
-movimento da câmera antes do casamento. Esta é a variante só de movimento do
-BoT-SORT; ela não roda nenhum modelo de aparência. Configurado com
+movimento da câmera antes do pareamento. Esta é a variante do BoT-SORT que usa
+apenas movimento; ela não roda nenhum modelo de aparência. Configurado com
 `BoTSortConfig`, que acrescenta `enable_cmc`, `cmc_method` e `cmc_downscale`.
 
-`"ocsort"` também é só movimento, e acrescenta um termo de direção da velocidade
-ao custo de associação, uma segunda passada de associação contra a última
-observação real de cada track, e uma suavização do estado de Kalman ao longo de
-uma trajetória virtual quando um track é reencontrado. Configurado com
+`"ocsort"` também usa apenas movimento, e acrescenta um termo de direção da
+velocidade ao custo de associação, uma segunda passada de associação contra a
+última observação real de cada track, e uma suavização do estado de Kalman ao
+longo de uma trajetória virtual quando um track é reencontrado. Configurado com
 `OCSortConfig`.
 
 `"deepocsort"` estende o OC-SORT com aparência. Cada track guarda uma média
 móvel ponderada pela confiança de embeddings de reidentificação, e um termo de
 similaridade de cosseno se junta ao custo de associação, então as identidades
-sobrevivem a oclusões longas e a alvos que se cruzam. Custa uma passada para a
-frente de uma pequena rede de embedding por frame, e os pesos OSNet dela são
-baixados no primeiro uso. Configurado com `DeepOCSortConfig`.
+sobrevivem a oclusões longas e a alvos que se cruzam. Custa um forward pass de
+uma pequena rede de embedding a cada frame, e os pesos OSNet dela são baixados
+no primeiro uso. Configurado com `DeepOCSortConfig`.
 
 ## Predição
 
@@ -157,12 +157,11 @@ baixados no primeiro uso. Configurado com `DeepOCSortConfig`.
 `track_high_thresh` para ByteTrack e BoT-SORT, `det_thresh` para OC-SORT e Deep
 OC-SORT. Não é o `conf` do `predict()`, e para ByteTrack, BoT-SORT e OC-SORT o
 detector roda internamente com um limiar mais baixo para que detecções fracas
-continuem disponíveis para a passada de recuperação. O Deep OC-SORT, por sua
-vez, roda o detector no próprio `det_thresh`. Para ByteTrack e BoT-SORT,
-`track_conf` precisa ser igual ou superior a `track_low_thresh`, cujo padrão é
-0.1.
+continuem disponíveis para a passada de recuperação. O Deep OC-SORT roda o
+detector no próprio `det_thresh`. Para ByteTrack e BoT-SORT, `track_conf`
+precisa ser igual ou superior a `track_low_thresh`, cujo padrão é 0.1.
 
-As configurações do tracker chegam de dois jeitos. Passe uma instância de config
+As configurações do tracker chegam de duas formas. Passe uma instância de config
 para `tracker_config=`, e o tipo dela seleciona o tracker, tornando `tracker=`
 redundante. Ou passe os campos como keyword arguments e deixe `track()` montar a
 config para o tracker que você nomeou; chaves desconhecidas emitem aviso em vez
@@ -179,5 +178,5 @@ resultados.
 Trackers não são treinados. Três dos quatro são modelos puramente de movimento,
 sem nenhum parâmetro aprendido, e a rede de aparência do Deep OC-SORT é um
 checkpoint de reidentificação publicado que é baixado no primeiro uso. Melhorar
-a qualidade do tracking significa melhorar o detector, ou ajustar os limiares de
-associação acima.
+a qualidade do rastreamento significa melhorar o detector, ou ajustar os limiares
+de associação acima.

@@ -31,10 +31,9 @@ snippets:
 
         # Questa famiglia non è registrata nella factory LibreYOLO(), quindi si
 
-        # costruisce direttamente. model_path=None avvia il download
-        condizionato
+        # costruisce direttamente. model_path=None avvia il download da Hugging Face,
 
-        # da Hugging Face; una stringa è trattata come un checkpoint locale già
+        # ad accesso condizionato; una stringa è trattata come un checkpoint locale
 
         # esistente e non viene mai scaricata. L'inferenza richiede CUDA.
 
@@ -92,27 +91,27 @@ perché è condivisa da tutte le persone. In questa versione non esiste un
 sistema di riferimento del mondo o della gravità, e nessun campo ne fa
 silenziosamente le veci.
 
-I layout dei parametri differiscono tra i modelli corporei, quindi nulla delle
-forme è fisso: `body_model` indica la parametrizzazione e i conteggi si
-rileggono dai tensori. Per `"mhr"`, il Momentum Human Rig, le rotazioni sono
-angoli di Eulero in radianti anziché asse-angolo, `body_pose` è un vettore di
-parametri piatto per giunto anziché una tripletta per giunto, e `betas` sono
-coefficienti di blendshape dell'identità. La scala dello scheletro, la posa
-delle mani e l'espressione facciale si trovano in `extras`.
+I layout dei parametri differiscono da un modello corporeo all'altro, quindi
+nessuna dimensione dei tensori è fissa: `body_model` indica la parametrizzazione
+e i conteggi si rileggono dai tensori. Per `"mhr"`, il Momentum Human Rig, le
+rotazioni sono angoli di Eulero in radianti anziché asse-angolo, `body_pose` è
+un vettore piatto di parametri per giunto anziché una tripletta per giunto, e
+`betas` sono coefficienti di blendshape dell'identità. La scala dello scheletro,
+la posa delle mani e l'espressione facciale si trovano in `extras`.
 
 La chiave canonica del task è `mesh`. `body-mesh`, `hmr` e
-`human-mesh-recovery` vi si normalizzano.
+`human-mesh-recovery` vengono normalizzati a questa chiave.
 
 ## Modelli
 
 [SAM 3D Body](/docs/models/sam-3d-body) è l'unica famiglia che serve questo
-task, ed è un wrapper anziché un port: il pacchetto `sam-3d-body` di Meta è
+task, ed è un wrapper anziché un porting: il pacchetto `sam-3d-body` di Meta è
 pubblicato sotto la SAM License, da cui il codice di LibreYOLO non può derivare,
-quindi non ne è incluso nulla nel repository. Due backbone condividono lo stesso
-modello corporeo MHR, `d3` su un encoder DINOv3 ViT-H/16+ e `h` sul ViT-H
-originale.
+quindi non ne viene incluso nulla nel repository. Due backbone condividono lo
+stesso modello corporeo MHR, `d3` su un encoder DINOv3 ViT-H/16+ e `h` sul
+ViT-H originale.
 
-Prima di una prima predizione valgono tre requisiti, e nessuno di essi è
+Prima della prima predizione valgono tre requisiti, e nessuno di essi è
 opzionale.
 
 Il pacchetto upstream lo installi tu, non LibreYOLO:
@@ -132,7 +131,7 @@ il primo download fallisce. Il modello corporeo MHR è invece una release
 Apache-2.0 separata, scaricata da una sua posizione pubblica e memorizzata nella
 cache locale.
 
-L'inferenza richiede un dispositivo CUDA. L'estimatore upstream sposta il suo
+L'inferenza richiede un dispositivo CUDA. Lo stimatore upstream sposta il suo
 batch sulla GPU senza controlli, quindi non c'è un percorso CPU di ripiego e
 `device="cpu"` solleva un'eccezione.
 
@@ -156,7 +155,7 @@ Questa famiglia non è collegata alla factory `LibreYOLO()` né al comando CLI
 
 ## Addestramento
 
-Nessuna famiglia di questo task si addestra dentro LibreYOLO.
+Nessuna famiglia di questo task si addestra all'interno di LibreYOLO.
 `LibreSAM3DBody.train()` solleva un'eccezione: addestra nel progetto upstream e
 carica qui il checkpoint risultante.
 
@@ -167,9 +166,10 @@ benchmark abituali hanno licenza solo per la ricerca, quindi nessuno è incluso 
 nessuno può essere scaricato al posto tuo.
 
 Le metriche in sé sono disponibili come `libreyolo.validation.mesh_metrics`, per
-valutare su un dataset che possiedi già. Prende i giunti predetti e quelli di
-riferimento, opzionalmente i vertici predetti e quelli di riferimento, e
-restituisce un dizionario con le stesse chiavi di quello di un validatore:
+valutare su un dataset che possiedi già. La funzione accetta i giunti predetti e
+quelli di riferimento, opzionalmente anche i vertici predetti e quelli di
+riferimento, e restituisce un dizionario con esattamente le stesse chiavi di
+quello di un validatore:
 
 `metrics/mpjpe` è l'errore medio di posizione per giunto dopo l'allineamento del
 giunto radice, quindi valuta la posa ignorando dove si trova la persona nella
@@ -179,14 +179,14 @@ orientamento globale e di dimensione del corpo e lascia la posa articolata.
 `metrics/pve` è l'errore medio per vertice sulla superficie della mesh dopo
 l'allineamento sul centroide dei vertici; a differenza delle metriche sui giunti
 è sensibile alla forma del corpo, e compare solo quando vengono forniti entrambi
-gli array di vertici. Per tutte e tre, più basso è meglio. Gli input sono
-assunti metrici, in metri, e `scale_to_mm` converte i risultati nei millimetri
-riportati in letteratura.
+gli array di vertici. Per tutte e tre, valori più bassi sono migliori. Si assume
+che gli input siano metrici, in metri, e `scale_to_mm` converte i risultati nei
+millimetri riportati in letteratura.
 
 ## Esportazione
 
 L'esportazione delle mesh non è implementata. LibreYOLO non ha definito un
-contratto di metadati per il grafo esportato di questo task, incluso come
-trasportare il layout dei parametri MHR fuori da PyTorch, quindi `export()`
+contratto di metadati per il grafo esportato di questo task, compreso il modo in
+cui trasportare il layout dei parametri MHR fuori da PyTorch, quindi `export()`
 solleva un'eccezione anziché emettere un grafo il cui output non potrebbe essere
 interpretato.

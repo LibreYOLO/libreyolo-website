@@ -80,19 +80,19 @@ source_hash: bb70ff24e6c0a767
 
 ## Definizione
 
-La segmentazione promptable prende un'immagine più un prompt spaziale e
+La segmentazione promptable prende in input un'immagine e un prompt spaziale e
 restituisce la maschera di ciò che il prompt indica. Non viene classificato
-nulla: non c'è nessuna lista di classi, e `result.boxes` contiene box aderenti
-derivati dalle maschere, non rilevamenti a sé stanti. `result.masks` porta i
+nulla: non esiste un elenco di classi, e `result.boxes` contiene box aderenti
+derivati dalle maschere, non rilevamenti a sé stanti. `result.masks` contiene i
 dati delle maschere e `result.masks.xy` i loro poligoni.
 
 Il prompt è l'interfaccia. `points` sono coordinate `[x, y]` in pixel, un
-insieme per oggetto, con `labels` che marca ogni punto come positivo (1,
+insieme per oggetto, con `labels` che contrassegna ogni punto come positivo (1,
 includi questo) o negativo (0, escludi questo). `bboxes` è
 `[x1, y1, x2, y2]`, una maschera per box. Punti e box si possono combinare, e in
-quel caso si accoppiano per oggetto e devono avere la stessa lunghezza. Omettere
-ogni prompt esegue il percorso segment-everything, una griglia di punti
-sull'immagine.
+quel caso si accoppiano oggetto per oggetto e devono avere la stessa lunghezza.
+Se non passi alcun prompt viene eseguito il percorso segment-everything, una
+griglia di punti sull'immagine.
 
 Un singolo punto è ambiguo per costruzione. Cliccare su una manica può voler
 dire la manica, la camicia o la persona, quindi `multimask=True` restituisce per
@@ -113,7 +113,7 @@ per immagine, quindi un secondo prompt sulla stessa immagine lo salta del tutto.
 
 ## Modelli
 
-Sei famiglie si caricano tramite `LibreSAM` per alias.
+Sei famiglie si caricano tramite `LibreSAM` usando il rispettivo alias.
 
 [SAM](/docs/models/sam) è quella predefinita, nelle dimensioni `base`, `large` e
 `huge`, scrivibili anche `b`, `l` e `h`.
@@ -124,8 +124,8 @@ Sei famiglie si caricano tramite `LibreSAM` per alias.
 [SAM 3](/docs/models/sam-3), come `sam3`, è l'unica famiglia che accetta un
 prompt di concetto testuale: `text="yellow school bus"` restituisce ogni istanza
 corrispondente. Passare `text=` a qualunque altra famiglia solleva un'eccezione
-con un messaggio che nomina SAM 3. I suoi pesi arrivano da Meta sotto la SAM
-License personalizzata invece che sotto la licenza MIT di LibreYOLO, e il
+con un messaggio che nomina SAM 3. I suoi pesi provengono da Meta, sotto la SAM
+License personalizzata anziché sotto la licenza MIT di LibreYOLO, e il
 repository è ad accesso controllato: accetta i termini sulla pagina del modello
 e autenticati con `hf auth login` prima del primo download. Leggi
 [SAM 3](/docs/models/sam-3) prima di metterlo in produzione.
@@ -148,8 +148,8 @@ L'extra del tier copre le quattro famiglie che si caricano tramite
 pip install "libreyolo[sam]"
 ```
 
-MobileSAM e PicoSAM3 sono port nativi di LibreYOLO e non hanno bisogno di
-installare `transformers` per funzionare.
+MobileSAM e PicoSAM3 sono port nativi di LibreYOLO e non richiedono
+l'installazione di `transformers` per funzionare.
 
 ## Predizione
 
@@ -165,7 +165,7 @@ Segment-everything è la modalità costosa. `points_per_side` vale 32 per defaul
 cioè circa 1024 passaggi del decoder sull'immagine; abbassalo per qualsiasi cosa
 interattiva su CPU. In quella modalità `conf`, se lasciato non impostato, applica
 la soglia di griglia della famiglia, mentre nel percorso con prompt un `conf` non
-impostato tiene tutte le maschere. Passa `conf=0.0` per disattivare il
+impostato conserva tutte le maschere. Passa `conf=0.0` per disattivare il
 filtraggio in entrambe le modalità, e `max_det` per limitare quante maschere
 tornano indietro.
 
@@ -193,8 +193,8 @@ interessano.
 
 L'esportazione è fuori dallo scopo del tier nel suo insieme e `export()` solleva
 un'eccezione, tranne in un caso. [PicoSAM3](/docs/models/picosam3) esporta in
-ONNX la sua CNN di regione grezza 96x96 come `roi_image -> mask_logits`; il
-ritaglio del box e il ridimensionamento della maschera verso le coordinate
-dell'immagine restano in Python. Ogni altra famiglia gira tramite `predict()` in
-PyTorch. Vedi [esportazione](/docs/export) per i formati disponibili altrove
+ONNX la sua CNN grezza da 96x96 sulla regione, come `roi_image -> mask_logits`;
+il ritaglio del box e il ridimensionamento della maschera alle coordinate
+dell'immagine restano in Python. Tutte le altre famiglie passano da `predict()`
+in PyTorch. Vedi [esportazione](/docs/export) per i formati disponibili altrove
 nella libreria.

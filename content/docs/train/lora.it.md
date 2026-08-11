@@ -66,15 +66,15 @@ LoRA si appoggia alla dipendenza opzionale `peft`.
 <code-tabs name="install" />
 
 Senza di essa, `lora=True` solleva un `ImportError` che nomina quel comando,
-invece di addestrare per sbaglio un fine-tuning completo.
+invece di eseguire per sbaglio un fine-tuning completo.
 
 ## Come si usa
 
 <code-tabs name="train" />
 
 `lora=True` è tutta l'interfaccia. Rango, alpha, dropout e moduli target sono
-fissati per famiglia per corrispondere a ciascun riferimento upstream, e non sono
-parametri esposti all'utente.
+fissati per famiglia in modo da corrispondere a ciascun riferimento upstream, e
+non sono parametri esposti all'utente.
 
 Una famiglia che non supporta LoRA solleva un errore al setup invece di ignorare
 il flag:
@@ -84,16 +84,16 @@ LoRA fine-tuning (lora=True) is not supported for yolo9. LoRA targets
 transformer components with nn.Linear layers (e.g. RF-DETR, D-FINE, DEIM).
 ```
 
-La CLI lo rifiuta prima ancora, prima che il modello venga costruito, usando la
-sua allowlist delle stesse nove famiglie.
+La CLI lo rifiuta prima ancora che il modello venga costruito, usando una propria
+allowlist delle stesse nove famiglie.
 
 ## Quali famiglie
 
 RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 e v4, EC e ConvNeXt. Il controllo è
 l'attributo `supports_lora` sulla classe trainer di ogni famiglia, e la CLI porta
-con sé una allowlist corrispondente.
+con sé un'allowlist corrispondente.
 
-La copertura dei task è più stretta di quella delle famiglie. D-FINE ed EC
+La copertura dei task è più ristretta di quella delle famiglie. D-FINE ed EC
 supportano solo il rilevamento, e i loro percorsi segment e pose sollevano un
 errore. Il percorso semantico di RF-DETR solleva un errore. ConvNeXt è
 classificazione.
@@ -112,8 +112,8 @@ e la testa di rilevamento continuano ad addestrarsi normalmente.
 
 D-FINE, DEIM e RT-DETR v1, v2 e v4 abbinano un backbone convoluzionale a un
 encoder ibrido transformer e a un decoder deformabile, quindi la divisione si
-sposta. Il backbone convoluzionale si congela per intero, il che salta anche il
-suo backward pass. I blocchi transformer congelano i loro pesi di base e
+sposta. Il backbone convoluzionale si congela per intero, il che ne evita anche il
+backward pass. I blocchi transformer congelano i loro pesi di base e
 addestrano semplici adapter LoRA allo stesso rango 16 e alpha 16 sui loro layer
 lineari: i feed-forward `linear1` e `linear2`, il gate e le proiezioni di
 deformable attention. Tutto il resto, la fusione convoluzionale dell'encoder, le
@@ -132,12 +132,12 @@ come target. Le sue taglie S, M, L e X portano anche un backbone ViT DINOv3, dov
 la base ViT si congela e i suoi layer di attenzione fusa `qkv` ricevono gli
 adapter, mentre la piramide di convoluzioni dello Spatial Tuning Adapter continua
 ad addestrarsi come analogo del projector. Quegli adapter su `qkv` entrano anche
-quando la config ha spedito il ViT già congelato, dato che adattare un backbone
-congelato è proprio il punto. Le taglie sotto la S usano un backbone
+quando la config arriva con il ViT già congelato, dato che adattare un backbone
+congelato è proprio lo scopo. Le taglie sotto la S usano un backbone
 convoluzionale e prendono la ricetta semplice.
 
-EC è un DETR il cui backbone è un ViT circondato da una piramide di projector
-convoluzionali addestrabile. La base ViT si congela e i suoi layer `qkv` ricevono
+EC è un DETR il cui backbone è un ViT circondato da una piramide addestrabile di
+projector convoluzionali. La base ViT si congela e i suoi layer `qkv` ricevono
 gli adapter, i blocchi transformer prendono la ricetta condivisa, e il projector e
 le teste restano densi.
 
@@ -148,7 +148,7 @@ conteggi di classi personalizzati continuano a funzionare.
 
 Le teste di rilevamento e di classificazione restano sempre addestrabili in ogni
 ricetta, perché un conteggio di classi personalizzato ha bisogno di una testa
-addestrata da zero.
+addestrata ex novo.
 
 ## Checkpoint ed esportazione
 
@@ -172,8 +172,8 @@ LoRA taglia la memoria dell'optimizer e dei gradienti, e sulle famiglie che
 congelano del tutto il backbone salta anche il backward pass di quel backbone.
 
 La memoria delle attivazioni non cambia. Le attivazioni del forward vanno comunque
-mantenute per tutto ciò che resta addestrabile, ed è di solito quello a fissare il
-picco. Per il budget di VRAM più stretto, abbassa anche `batch` o `imgsz`.
+mantenute per tutto ciò che resta addestrabile, e di solito è questo a determinare
+il picco. Per il budget di VRAM più ristretto, abbassa anche `batch` o `imgsz`.
 
 ## Correlati
 

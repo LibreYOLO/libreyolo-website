@@ -163,7 +163,7 @@ classe, senza larghezza, altezza o maschera. Poiché una predizione è un elenco
 piatto di oggetti, il numero di righe è il numero di oggetti, ed è questo che ne
 fa il task di conteggio.
 
-Una predizione riempie `result.points`, un payload `Points` che avvolge un array
+Una predizione riempie `result.points`, un payload `Points` che incapsula un array
 `(N, 4)` di righe `x, y, class, confidence` in pixel dell'immagine originale.
 `.xy` restituisce le coordinate, `.xyn` le stesse coordinate divise per la
 dimensione dell'immagine, `.cls` gli indici di classe e `.conf` i punteggi;
@@ -179,7 +179,7 @@ griglia che etichetta ogni cella di una griglia a bassa risoluzione come sfondo 
 come centro di un oggetto. È l'unica famiglia point che LibreYOLO può addestrare,
 e l'unica che si esporta.
 
-[LocateAnything](/docs/models/locate-anything) accetta del testo invece di un
+[LocateAnything](/docs/models/locate-anything) accetta testo invece di un
 indice di classe, quindi il vocabolario è qualunque frase tu scriva. Richiede
 l'extra `vlm`, si costruisce come `LibreLocateAnything` invece che tramite la
 factory `LibreYOLO()`, e i suoi pesi sono limitati all'uso non commerciale. I
@@ -212,7 +212,7 @@ devono essere distanti due rilevamenti FOMO perché sopravvivano entrambi. Vedi
 ## Formato del dataset
 
 `point` non ha un formato di etichette proprio. Le famiglie point leggono il
-layout standard di detection YOLO e ricavano un centro da ogni riga di box,
+layout standard di rilevamento YOLO e ricavano un centro da ogni riga di box,
 quindi `cx cy` è il punto e `w h` decidono soltanto se la riga è valida.
 
 ```text
@@ -241,7 +241,7 @@ nc: 1
 names: {0: seedling}
 ```
 
-Un file di etichette mancante o vuoto significa nessun oggetto. Vedi
+Un file di etichette mancante o vuoto significa che non ci sono oggetti. Vedi
 [formati dei dataset](/docs/reference/dataset-formats) per il contratto completo.
 
 ## Addestramento
@@ -267,11 +267,11 @@ in coordinate immagine normalizzate, e lo sweep predefinito è di dieci valori d
 
 <code-tabs name="val" />
 
-`metrics/precision`, `metrics/recall` e `metrics/f1` sono mediate per macro sulle
-classi alla soglia più severa dello sweep, 0.01 per impostazione predefinita.
-`metrics/mAP@0.01` è la average precision a quella stessa soglia, e
+`metrics/precision`, `metrics/recall` e `metrics/f1` sono mediate a livello macro
+sulle classi alla soglia più severa dello sweep, 0.01 per impostazione
+predefinita. `metrics/mAP@0.01` è l'average precision a quella stessa soglia, e
 `metrics/mAP@[0.01:0.10]` è la media sull'intero sweep. Quel valore dello sweep è
-anche `fitness`, il numero che legge la selezione del checkpoint migliore.
+anche `fitness`, il numero letto dalla selezione del checkpoint migliore.
 Entrambe le chiavi mAP sono costruite a partire dalle soglie in uso, quindi
 passare `dist_thresholds=` le rinomina.
 
@@ -280,7 +280,7 @@ nelle stesse unità normalizzate. `metrics/MAE` e `metrics/RMSE` sono metriche d
 conteggio più che di localizzazione: misurano la differenza, immagine per
 immagine, tra il numero di punti predetti e quello dei punti ground truth.
 
-FOMO aggiunge sopra a queste un secondo gruppo a livello di griglia. Fa uno sweep
+A queste FOMO aggiunge un secondo gruppo, a livello di griglia. Fa uno sweep
 su confidenza e `nms_radius` e pubblica la combinazione con l'F1 migliore come
 `metrics/grid_F1`, `metrics/grid_precision`, `metrics/grid_recall`,
 `metrics/grid_mean_distance`, `metrics/grid_TP`, `metrics/grid_FP` e
@@ -300,4 +300,4 @@ La copertura per formato è sulla [pagina di FOMO](/docs/models/fomo) e nella
 [matrice completa delle esportazioni](/docs/reference/export-matrix).
 LocateAnything e SenseNova-Vision non si esportano: `export()` solleva
 un'eccezione in entrambi i casi, perché un modello generativo non ha un grafo di
-detection tracciabile.
+rilevamento tracciabile.

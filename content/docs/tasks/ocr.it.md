@@ -121,14 +121,14 @@ geometria.
 
 Due famiglie servono `ocr`.
 
-[PP-OCRv5](/docs/models/pp-ocrv5) è la pipeline dedicata: un detector a
+[PP-OCRv5](/docs/models/pp-ocrv5) è la pipeline dedicata: un rilevatore a
 binarizzazione differenziabile trova i quadrilateri di testo e un riconoscitore
 SVTR/CTC li legge, con entrambi gli stadi impacchettati in un unico file `.pt`
-insieme al charset di riconoscimento. Arriva in due tier, uno più leggero per la
-CPU e uno server per un'accuratezza più alta, e un solo dizionario copre cinese
-semplificato e tradizionale, inglese, giapponese e pinyin.
+insieme al charset di riconoscimento. È disponibile in due tier, uno più leggero
+per la CPU e uno server per un'accuratezza più alta, e un solo dizionario copre
+cinese semplificato e tradizionale, inglese, giapponese e pinyin.
 
-[SenseNova-Vision](/docs/models/sensenova-vision) arriva all'OCR generando le
+[SenseNova-Vision](/docs/models/sensenova-vision) affronta l'OCR generando le
 parole come testo con tag dallo stesso checkpoint da 7B che serve gli altri sei
 task, caricato con `LibreVLM("sensenova-vision", task="ocr")`. Richiede l'extra
 `sensenova` e i suoi pesi sono limitati all'uso non commerciale; la licenza è
@@ -170,8 +170,8 @@ Ogni riga nomina un'immagine ed elenca le sue regioni:
 ordinate in alto a sinistra, in alto a destra, in basso a destra, in basso a
 sinistra. Una regione il cui testo non è leggibile si etichetta con
 `"text": "###"`, la convenzione don't-care di ICDAR: viene esclusa dal punteggio
-di riconoscimento, e una predizione che la sovrappone viene ignorata invece che
-contata come falso positivo.
+di riconoscimento, e una predizione che vi si sovrappone viene ignorata invece
+che contata come falso positivo.
 
 Basta passare la directory radice come `data=`. L'alternativa è uno YAML di
 dataset, con `path` più i nomi opzionali delle directory `images` e `labels`, e
@@ -190,8 +190,8 @@ in LibreYOLO un checkpoint sottoposto a fine-tuning.
 ## Validazione
 
 `val()` valuta l'intera pipeline, rilevamento e riconoscimento insieme,
-accoppiando uno a uno i poligoni predetti con quelli del ground truth con IoU
-sopra 0.5.
+accoppiando uno a uno i poligoni predetti con quelli del ground truth a un IoU
+superiore a 0.5.
 
 <code-tabs name="val" />
 
@@ -201,12 +201,12 @@ poligoni, qualunque cosa dica la trascrizione. `metrics/e2e_precision`,
 `metrics/e2e_recall` e `metrics/e2e_f1` aggiungono la lettura: serve la stessa
 sovrapposizione dei poligoni più una trascrizione identica dopo la
 normalizzazione NFKC e la rimozione degli spazi, e il confronto resta sensibile
-alle maiuscole. `metrics/e2e_f1` è anche `fitness`, il numero che legge la
+alle maiuscole. `metrics/e2e_f1` è anche `fitness`, il numero letto dalla
 selezione del checkpoint migliore.
 
 `metrics/rec_1-NED` valuta il riconoscitore da solo, sulle coppie che il
-rilevamento ha già accoppiato: uno meno la distanza di edit normalizzata, così
-una trascrizione sbagliata di un carattere prende quasi 1 dove l'F1 end-to-end
+rilevamento ha già associato: uno meno la distanza di edit normalizzata, così
+una trascrizione sbagliata di un carattere ottiene quasi 1 dove l'F1 end-to-end
 le dà 0.
 
 ## Esportazione

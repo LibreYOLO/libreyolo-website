@@ -7,9 +7,9 @@ description: >-
   selettori per nome di modulo e di parametro.
 lead: >-
   Il congelamento tiene fissi i pesi selezionati mentre il resto del modello si
-  addestra. I selettori indirizzano i gruppi di congelamento ordinati di una
-  famiglia o i suoi nomi di modulo, non numeri di layer grezzi presi da un grafo
-  YAML.
+  addestra. I selettori fanno riferimento ai gruppi di congelamento ordinati
+  propri di una famiglia o ai suoi nomi di modulo, non a numeri di layer grezzi
+  presi da un grafo YAML.
 keywords:
   - congelare layer yolo
   - transfer learning yolo
@@ -65,7 +65,7 @@ source_hash: 9f1e7551af6b16fe
 
 ## Congela qualcosa
 
-`freeze` è opzionale e per default non congela nulla.
+`freeze` è opzionale e di default non congela nulla.
 
 <code-tabs name="train" />
 
@@ -94,13 +94,13 @@ virgola, e una semplice stringa decimale diventa un conteggio.
 I selettori per nome corrispondono al nome di un gruppo di congelamento, al nome
 di un modulo o a un prefisso di nome di parametro, e i caratteri glob `*`, `?` e
 `[` funzionano. Un `model.` iniziale è trattato in modo flessibile, così sia
-`backbone` sia `model.backbone` colpiscono la forma che la famiglia usa
-internamente.
+`backbone` sia `model.backbone` funzionano, qualunque sia la forma usata
+internamente dalla famiglia.
 
 ## I gruppi li definisce la famiglia
 
-Un intero indirizza la lista ordinata di gruppi di congelamento propria della
-famiglia, non una posizione in un grafo condiviso. Le famiglie di LibreYOLO non
+Un intero fa riferimento alla lista ordinata di gruppi di congelamento propria
+della famiglia, non a una posizione in un grafo condiviso. Le famiglie di LibreYOLO non
 sono tutte un unico modello sequenziale indicizzato da YAML, quindi un numero di
 layer grezzo significherebbe una cosa diversa su ciascuna di esse.
 
@@ -111,10 +111,10 @@ esso.
 
 I gruppi di RF-DETR sono `backbone.encoder`, `backbone.projector`, `decoder`,
 `queries`, `transformer.encoder_output` e `head`. Qui i nomi sono la scelta
-migliore, perché i componenti di un transformer non si mappano su un conteggio di
-layer. `backbone` corrisponde per prefisso a entrambi i gruppi del backbone.
+migliore, perché i componenti di un transformer non corrispondono a un conteggio
+di layer. `backbone` corrisponde per prefisso a entrambi i gruppi del backbone.
 
-Le famiglie che non definiscono gruppi semantici ricadono su un default
+Le famiglie che non definiscono gruppi semantici ripiegano su un default
 conservativo: ogni figlio diretto del modello che possiede almeno un parametro, in
 ordine di dichiarazione. Di solito è una lista corta, quindi un intero grande non
 troverà abbastanza gruppi:
@@ -157,9 +157,9 @@ Layer freezing: selectors=[10], tensors=124, params=2103776, trainable=1863456/3
 
 ## Il BatchNorm congelato smette di aggiornarsi
 
-Un parametro congelato sta comunque dentro un modulo le cui statistiche correnti
-continuerebbero a muoversi. Ogni modulo di tipo BatchNorm i cui parametri
-finiscono nell'insieme congelato viene messo in modalità eval, e il trainer lo
+Un parametro congelato sta comunque dentro un modulo le cui statistiche di
+running continuerebbero a muoversi. Ogni modulo di tipo BatchNorm i cui parametri
+finiscono nell'insieme congelato viene messo in modalità eval, e il trainer la
 riapplica dopo la chiamata a `model.train()` di ogni epoca, così le statistiche
 restano fisse per tutta l'esecuzione.
 
@@ -181,5 +181,5 @@ il congelamento progressivo non fanno parte dell'interfaccia.
 ## Correlati
 
 - [Iperparametri](/docs/train/hyperparameters) per il resto di `train()`.
-- [Distillazione](/docs/train/distillation) per l'altro modo di far passare la
-  conoscenza di un modello grande dentro un addestramento.
+- [Distillazione](/docs/train/distillation) per l'altro modo di trasferire la
+  conoscenza di un modello grande in un addestramento.

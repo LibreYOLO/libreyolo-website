@@ -1,8 +1,15 @@
 ---
 title: Iperparametri
-seo_title: "Iperparametri di addestramento in LibreYOLO"
-description: "Gli argomenti di train() che contano: epochs, batch, lr0, optimizer, EMA, autobatch, accumulo dei gradienti e resume, più perché i default cambiano da famiglia a famiglia."
-lead: "Ogni argomento di addestramento è un campo di una dataclass TrainConfig. La classe base definisce il campo e il suo default; ogni famiglia di modelli ne fa una sottoclasse e sovrascrive i default che la sua ricetta pubblicata cambia."
+seo_title: Iperparametri di addestramento in LibreYOLO
+description: >-
+  Gli argomenti di train() che contano: epochs, batch, lr0, optimizer, EMA,
+  autobatch, accumulo dei gradienti e resume, più perché i default cambiano da
+  famiglia a famiglia.
+lead: >-
+  Ogni argomento di addestramento è un campo di una dataclass TrainConfig. La
+  classe base definisce il campo e il suo default; ogni famiglia di modelli ne
+  fa una sottoclasse e sovrascrive i default che la sua ricetta pubblicata
+  cambia.
 keywords:
   - iperparametri addestramento yolo
   - learning rate
@@ -14,7 +21,7 @@ keywords:
   - early stopping patience
   - amp bfloat16
   - train config yaml
-last_verified: "1.5.0"
+last_verified: 1.5.0
 snippets:
   train:
     - label: Python
@@ -56,18 +63,24 @@ snippets:
                 print(f"{f.name}: {family_value}")
     - label: CLI
       language: bash
-      code: |
-        # Stampa i default di train, val e predict, comprese le sovrascritture di famiglia.
+      code: >
+        # Stampa i default di train, val e predict, comprese le sovrascritture
+        di famiglia.
+
         libreyolo cfg
   autobatch:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # batch=-1 sonda la memoria GPU e si risolve in una potenza di due concreta.
+
+        # batch=-1 sonda la memoria GPU e si risolve in una potenza di due
+        concreta.
+
         model.train(data="my-dataset.yaml", batch=-1, imgsz=640)
     - label: CLI
       language: bash
@@ -100,12 +113,17 @@ snippets:
   cfg:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # Le chiavi nello yaml sono nomi di campo di TrainConfig. I kwarg espliciti vincono.
+
+        # Le chiavi nello yaml sono nomi di campo di TrainConfig. I kwarg
+        espliciti vincono.
+
         model = LibreYOLO("LibreYOLO9s.pt")
+
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
+source_hash: d838d1abd45af40f
 ---
 
 ## Impostare gli argomenti

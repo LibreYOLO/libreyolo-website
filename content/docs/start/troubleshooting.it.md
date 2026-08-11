@@ -167,7 +167,7 @@ task a task.
 
 ## Controllare un dataset prima di addestrare
 
-La maggior parte dei fallimenti in addestramento sono problemi del dataset.
+La maggior parte degli errori in addestramento dipende dal dataset.
 `libreyolo doctor data.yaml` esegue controlli di integrità su un dataset di
 rilevamento e riporta i risultati per gravità, il che è più rapido che leggere
 un traceback alla prima epoca.

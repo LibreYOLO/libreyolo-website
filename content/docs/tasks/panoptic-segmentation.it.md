@@ -83,34 +83,34 @@ source_hash: b8adc9ccde7a4e6c
 La segmentazione panottica è l'unione degli altri due task di segmentazione.
 Ogni pixel riceve esattamente un segmento, i segmenti non si sovrappongono mai e
 un segmento è o una thing, cioè un'istanza di oggetto numerabile, oppure stuff,
-cioè una regione amorfa come il cielo o la strada. Questo la rende più rigida
+cioè una regione amorfa come il cielo o la strada. Questo la rende più rigorosa
 della [segmentazione di istanze](/docs/tasks/instance-segmentation), che lascia
 i pixel di sfondo non assegnati e permette alle maschere di sovrapporsi, e più
-rigida della [segmentazione semantica](/docs/tasks/semantic-segmentation), che
+rigorosa della [segmentazione semantica](/docs/tasks/semantic-segmentation), che
 etichetta ogni pixel ma unisce le istanze adiacenti di una stessa classe.
 
 `panoptic` è la chiave canonica del task, e il suffisso `-panoptic` nel nome del
 file di un checkpoint la seleziona, quindi `task=` non serve quando carichi i
 pesi pubblicati.
 
-`predict()` riempie `result.panoptic`. `.data` è una mappa intera `(H, W)` di id
-dei segmenti sul canvas dell'immagine originale. `.segments_info` è una lista di
-dict, uno per segmento, ciascuno con almeno `{"id", "category_id"}`, dove `id`
+`predict()` riempie `result.panoptic`. `.data` è una mappa `(H, W)` di id di
+segmento interi sul canvas dell'immagine originale. `.segments_info` è una lista
+di dict, uno per segmento, ciascuno con almeno `{"id", "category_id"}`, dove `id`
 corrisponde a un valore nella mappa e `category_id` indicizza `result.names`.
 `.segment_ids` elenca in ordine gli id presenti e `.segment_mask(id)` restituisce
 la selezione booleana `(H, W)` di un singolo segmento. L'id di segmento `0` è il
 valore void: pixel non etichettati, esclusi dalla metrica e lasciati fuori da
 `.segment_ids`.
 
-Thing contro stuff è una proprietà della categoria, non del singolo segmento.
-Viene portata dai metadati di categoria dell'insieme di etichette, e un payload
-di predizione può copiarla su ogni segmento come `"isthing"` per comodità, ma i
-metadati di categoria restano l'autorità.
+La distinzione tra thing e stuff è una proprietà della categoria, non del
+singolo segmento. È registrata nei metadati di categoria dell'insieme di
+etichette, e un payload di predizione può copiarla su ogni segmento come
+`"isthing"` per comodità, ma sono i metadati di categoria a fare fede.
 
 ## Modelli
 
 [EoMT](/docs/models/eomt) è la famiglia che serve questo task tramite
-`LibreYOLO()`. Gira sul pacchetto base e distribuisce checkpoint panottici in
+`LibreYOLO()`. Gira con il pacchetto base e distribuisce checkpoint panottici in
 tre taglie, s, b e l, addestrati su COCO.
 
 [SenseNova-Vision](/docs/models/sensenova-vision) emette anch'esso mappe
@@ -177,7 +177,7 @@ regioni di gruppo: non vengono mai contate come falsi negativi, e una predizione
 che ne copre gran parte non è un falso positivo. `isthing` sta su `categories` e
 mai su un singolo segmento.
 
-Il YAML punta a entrambi:
+Lo YAML punta a entrambi:
 
 ```yaml
 path: dataset
@@ -195,7 +195,7 @@ names:
 mappatura per split. Gli id di categoria COCO grezzi sono di solito non
 contigui, mentre i modelli predicono un intervallo contiguo `0..nc-1`, quindi gli
 id vengono rimappati attraverso `names` per nome di categoria. Una categoria del
-JSON che manca da `names` è un errore, non uno scarto silenzioso, perché
+JSON assente da `names` è un errore, non uno scarto silenzioso, perché
 scartarla varrebbe come un falso negativo permanente.
 
 Il loader canonico è `libreyolo.data.PanopticDataset`.
@@ -209,17 +209,18 @@ usano così come sono pubblicati.
 ## Validazione
 
 `val()` restituisce un semplice dizionario di chiavi `metrics/`, calcolate alla
-risoluzione del ground truth sullo split indicato da `val` nel YAML del dataset.
+risoluzione del ground truth sullo split indicato da `val` nello YAML del dataset.
 Un segmento predetto e uno vero della stessa categoria corrispondono quando il
 loro IoU supera 0.5, e quella corrispondenza è unica.
 
 <code-tabs name="val" />
 
 `metrics/PQ` è la Panoptic Quality, il numero di riferimento. All'interno di una
-categoria è il prodotto di due fattori. La qualità di segmentazione è lo IoU
-medio sui segmenti accoppiati e dice quanto bene combaciano le forme accoppiate.
-La qualità di riconoscimento è `TP / (TP + 0.5 FP + 0.5 FN)`, l'F1 score
-dell'accoppiamento stesso, e dice quanti segmenti sono stati trovati in assoluto.
+categoria è il prodotto di due fattori. La qualità di segmentazione è l'IoU
+medio sui segmenti corrispondenti e dice quanto bene combaciano le forme messe
+in corrispondenza. La qualità di riconoscimento è `TP / (TP + 0.5 FP + 0.5 FN)`,
+l'F1 score della corrispondenza stessa, e dice quanti segmenti sono stati
+effettivamente trovati.
 Tutti e tre i valori vengono poi mediati sulle categorie che sono comparse, e
 riportati come `metrics/PQ`, `metrics/SQ` e `metrics/RQ`, quindi la PQ riportata
 è la media dei prodotti per categoria e non il prodotto delle due medie

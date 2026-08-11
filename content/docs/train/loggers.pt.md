@@ -3,12 +3,12 @@ title: Loggers de experimentos
 seo_title: Loggers de experimentos e callbacks no LibreYOLO
 description: >-
   Envie as métricas de treinamento para TensorBoard, MLflow, Weights & Biases,
-  Comet, ClearML, Neptune ou DVCLive, e escreva seu próprio callback sobre os
-  quatro hooks de treinamento.
+  Comet, ClearML, Neptune ou DVCLive, e escreva seu próprio callback nos quatro
+  hooks de treinamento.
 lead: >-
   Toda família treinável emite quatro eventos de treinamento. Os loggers
-  embutidos são objetos de callback escutando esses mesmos eventos, então uma
-  integração com backend e um hook próprio usam uma única interface.
+  embutidos são objetos de callback que escutam esses mesmos eventos, portanto
+  uma integração com backend e um hook próprio usam uma única interface.
 keywords:
   - tensorboard treinamento
   - mlflow tracking
@@ -90,7 +90,7 @@ snippets:
 source_hash: de035acbaed32804
 ---
 
-## Ligue um logger
+## Ative um logger
 
 `loggers=` aceita um nome registrado, uma instância configurada ou um iterável
 misturando os dois.
@@ -105,7 +105,7 @@ existe flag de CLI: `loggers=` é um argumento Python.
 
 ## O que cada backend registra
 
-Todos eles gravam os mesmos nomes de métrica, então um dashboard fica igual
+Todos eles gravam os mesmos nomes de métrica, por isso o dashboard fica igual
 qualquer que seja a sua escolha:
 
 | Chave | Valor |
@@ -129,14 +129,14 @@ de validação.
 
 ## Comportamento em caso de falha
 
-Um pacote de backend ausente gera erro na construção, nomeando o comando de
+Um pacote de backend ausente gera erro na construção, indicando o comando de
 instalação, porque pedir um logger e silenciosamente não receber nada esconde um
 bug.
 
 Uma falha do backend durante a execução faz o oposto. A primeira exceção vinda
 de um handler desabilita aquele logger pelo resto da execução, registra o
-ocorrido, encerra a execução do backend como falha, e o treinamento continua. Um
-servidor de tracking que cai não te custa o treinamento.
+ocorrido, encerra a execução do backend como falha, e o treinamento continua. Se
+o servidor de tracking cair, você não perde o treinamento.
 
 ## Os backends
 
@@ -154,7 +154,8 @@ Cada um precisa do seu próprio extra.
 
 Importe as classes de `libreyolo.training`.
 
-Notas específicas de cada backend que vale conhecer antes da primeira execução:
+Notas específicas de cada backend que vale a pena conhecer antes da primeira
+execução:
 
 Os arquivos de evento do TensorBoard vão por padrão para
 `<save_dir>/tensorboard`. Visualize com `tensorboard --logdir runs/train`.
@@ -166,16 +167,16 @@ de banco de dados no lugar, como no snippet acima, e leia com
 
 O Weights & Biases recorre à variável de ambiente `WANDB_PROJECT` e depois a
 `libreyolo`. O Comet recorre a `COMET_PROJECT_NAME` e depois a `libreyolo`, e
-pega as credenciais da própria configuração; `online=False` dá um experimento
+pega as credenciais da própria configuração; `online=False` cria um experimento
 offline. O ClearML cria uma task nova, reporta a configuração em `TrainConfig` e
 desabilita a captura automática de framework para que as métricas não sejam
 reportadas duas vezes. O Neptune usa o cliente atual `neptune-scale` em vez do
 pacote legado, e `mode="offline"` registra localmente.
 
 O DVCLive grava em `<save_dir>/dvclive`. Ele monta sua árvore de resumo a partir
-de `/`, e não consegue guardar um float em um caminho que também é um pai, então
-`train/loss/box` é gravado como `train/loss.box` enquanto `train/loss` mantém o
-nome. O LibreYOLO também desliga os padrões usuais do DVCLive de salvar um
+de `/`, e não consegue guardar um float em um caminho que também seja um nó pai,
+então `train/loss/box` é gravado como `train/loss.box` enquanto `train/loss`
+mantém o nome. O LibreYOLO também desliga os padrões usuais do DVCLive de salvar um
 experimento DVC e gravar um `dvc.yaml` na raiz, de modo que um logger opcional
 não cria nenhum estado de controle de versão fora do diretório da execução;
 passe `save_dvc_exp=True` ou um `dvcyaml=` explícito para tê-los de volta.
@@ -204,7 +205,7 @@ qualquer subconjunto de `on_train_start`, `on_train_epoch_end`, `on_train_end` e
 `TrainStartEvent.config` é a configuração totalmente resolvida, os kwargs do
 usuário mesclados com os padrões da família, como um mapeamento somente leitura.
 Os eventos são dataclasses congeladas e seus mapeamentos são somente leitura,
-então um callback não consegue mudar a execução escrevendo em um deles.
+portanto um callback não consegue mudar a execução escrevendo em um deles.
 
 Uma exceção gerada em `on_train_start`, `on_train_epoch_end` ou `on_train_end`
 se propaga e encerra a execução. Só `on_train_exception` é protegido, para que
@@ -234,8 +235,8 @@ gravado pela metade.
 gravados para YOLOv9, YOLOv9-E2E, YOLOv9-P2, YOLOv7, YOLO-NAS, RF-DETR, EC e
 DINOv2, e não para as outras famílias. `results.csv` recebe uma linha por época
 com os componentes da loss, as métricas de validação e os learning rates como
-colunas, e seu cabeçalho se alarga quando uma coluna nova aparece. Em um resume
-ele é cortado de volta para as linhas anteriores à época retomada, em vez de
+colunas, e seu cabeçalho se amplia quando uma coluna nova aparece. Ao retomar um
+treinamento, ele é truncado nas linhas anteriores à época retomada, em vez de
 duplicá-las.
 
 Ao lado desses, o trainer sempre grava `train_config.yaml` no setup e os
@@ -248,7 +249,7 @@ checkpoints em `weights/`.
 `libreyolo monitor` serve um dashboard de navegador sobre os arquivos acima
 usando apenas a biblioteca padrão: gráficos de métricas, o tail do log e
 quaisquer imagens de validação, atualizando enquanto a execução está ativa. Ele
-é somente leitura e nunca toca no processo de treinamento, então se conecta a
+é somente leitura e nunca toca no processo de treinamento, por isso se conecta a
 uma execução ao vivo, reabre uma que terminou ou inspeciona uma que quebrou.
 
 ## Relacionados

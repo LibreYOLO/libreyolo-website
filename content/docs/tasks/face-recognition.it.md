@@ -112,21 +112,22 @@ source_hash: d7dfcb6f812ebb2d
 ## Definizione
 
 Il riconoscimento facciale restituisce un vettore per volto, non un'etichetta. La
-predizione avviene in due stadi: un rilevatore di volti localizza ogni volto e i suoi
-cinque landmark, il ritaglio viene deformato in un allineamento canonico 112x112, e
+predizione avviene in due fasi: un rilevatore di volti localizza ogni volto e i suoi
+cinque landmark, il ritaglio viene trasformato nell'allineamento canonico 112x112, e
 una testa di riconoscimento emette un embedding normalizzato L2.
 
 `result.embeddings` è un payload `Embeddings` di forma `(N, D)`, allineato per righe
 con `result.boxes`, quindi la riga `i` descrive il volto nel box `i`. Poiché le righe
 sono vettori unitari, la similarità del coseno è un prodotto scalare, e
-`embeddings.similarity()` la calcola contro un altro `Embeddings` o contro un'intera
+`embeddings.similarity()` la calcola rispetto a un altro `Embeddings` o a un'intera
 matrice in una sola chiamata.
 
 Dare un nome a un volto è un passo separato. Una `Gallery` contiene vettori di
 riferimento con un nome; passare `gallery=` a `predict()` aggiunge
-`result.identities`, allineato per righe con gli embedding, che porta un nome e il
-suo miglior punteggio coseno per volto. Un volto sotto la soglia di match mantiene
-`None` come nome, e il nome più vicino ma sotto soglia non viene mai sostituito.
+`result.identities`, allineato per righe con gli embedding, che contiene per ogni
+volto un nome e il relativo miglior punteggio coseno. Un volto sotto la soglia di
+match mantiene `None` come nome, e il nome più vicino ma rimasto sotto soglia non
+viene mai messo al suo posto.
 
 La chiave di task canonica della libreria è `embed`. `face-recognition`,
 `facial-recognition`, `reid` e `face` si normalizzano tutte a quella, quindi
@@ -149,12 +150,12 @@ passandone il percorso al posto di un nome `librefacerec-*`.
 La chiave di task `embed` è più ampia dei volti. Anche [CLIP](/docs/models/clip),
 [SigLIP2](/docs/models/siglip2) e [DINOv2](/docs/models/dinov2) supportano
 `task="embed"` e restituiscono un solo vettore per l'immagine intera, il che è
-recupero di immagini più che identità facciale. Condividono l'API `Gallery` ed
-`Embeddings`, quindi il flusso di registrazione e match qui sotto si trasferisce, ma
-non rilevano né allineano volti.
+recupero di immagini piuttosto che identità facciale. Condividono l'API `Gallery` ed
+`Embeddings`, quindi il flusso di registrazione e match descritto qui sotto vale
+anche per loro, ma non rilevano né allineano volti.
 
-La testa di riconoscimento gira attraverso `onnxruntime`, che l'installazione base
-non porta con sé:
+La testa di riconoscimento gira su `onnxruntime`, che l'installazione base non
+include:
 
 ```bash
 pip install "libreyolo[onnx]"
@@ -173,14 +174,14 @@ un rilevatore LibreYOLO.
 
 `model.verify(image_a, image_b)` è la scorciatoia a due immagini: genera l'embedding
 del volto con la confidenza più alta in ciascuna e restituisce `{"similarity",
-"same_person", "threshold"}`. `model.embed(sources)` restituisce ogni riga di volto
-su una o più immagini, impilate in un unico tensore `(N_total, D)`. Vedi
-[predizione](/docs/predict) per sorgenti, streaming e gestione dei risultati.
+"same_person", "threshold"}`. `model.embed(sources)` restituisce tutte le righe dei
+volti presenti in una o più immagini, impilate in un unico tensore `(N_total, D)`.
+Vedi [predizione](/docs/predict) per sorgenti, streaming e gestione dei risultati.
 
 ## Formato del dataset
 
 La registrazione legge una cartella per identità. Il nome della cartella diventa
-l'identità, e ogni immagine al suo interno contribuisce riferimenti per quel nome:
+l'identità, e ogni immagine al suo interno fornisce riferimenti per quel nome:
 
 ```text
 people/
@@ -197,23 +198,24 @@ possono aggiungere nel tempo. Le gallerie sono legate ai pesi che le hanno prodo
 tramite la dimensione dell'embedding e un'impronta del file; fare match con un modello
 diverso solleva un errore invece di confrontare spazi vettoriali incompatibili.
 
-Di default ogni immagine sorgente contribuisce una riga di riferimento, il volto con
+Di default ogni immagine sorgente fornisce una riga di riferimento, il volto con
 la confidenza più alta, quindi un ritratto che contiene passanti registra solo il suo
 soggetto. Passa `select="all"` a `Gallery.enroll` per memorizzare ogni riga
 restituita.
 
 ## Addestramento
 
-Nessuna famiglia di questo task si addestra dentro LibreYOLO.
+Nessuna famiglia di questo task si addestra all'interno di LibreYOLO.
 `LibreFaceEmbedder.train()` solleva un errore: addestra una testa di riconoscimento a
-monte, esportala in ONNX con la convenzione ArcFace e carica il file per percorso.
+monte, esportala in ONNX con la convenzione ArcFace e carica il file indicandone il
+percorso.
 
 ## Validazione
 
 Non esiste un validatore di dataset per questo task, e `val()` solleva un errore
-invece di fingere il contrario. L'accuratezza di verifica si misura su coppie di
-immagini etichettate con `model.verify()`, facendo variare `threshold` per scegliere
-il punto di lavoro che vuoi. L'accuratezza di identificazione si misura registrando
+invece di fingere il contrario. L'accuratezza di verifica si misura con
+`model.verify()` su coppie di immagini etichettate, facendo variare `threshold` per
+scegliere il punto di lavoro che vuoi. L'accuratezza di identificazione si misura registrando
 una galleria e leggendo `result.identities.name` e `result.identities.score` su
 immagini tenute da parte, contando un nome `None` come un rifiuto.
 

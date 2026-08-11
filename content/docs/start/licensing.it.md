@@ -32,13 +32,13 @@ dice chiaramente:
 
 > Quelle licenze variano e non sono tutte permissive: alcuni pesi pubblicati
 > sono non commerciali o comunque soggetti a restrizioni, e questa MIT License
-> non si estende a loro. Scegliere un modello significa scegliere la sua
+> non si estende a essi. Scegliere un modello significa scegliere la sua
 > licenza.
 
 ## Codice upstream, per famiglia
 
-La maggior parte delle famiglie sono port di ricerca pubblicata, e diverse
-includono direttamente il sorgente upstream. Un file incluso da upstream
+La maggior parte delle famiglie sono port di lavori di ricerca pubblicati, e
+diverse includono direttamente il sorgente upstream. Un file incluso da upstream
 mantiene l'header di copyright originale e la licenza originale. MIT non lo
 sovrascrive, e LibreYOLO non cambia la licenza del lavoro di nessuno.
 Apache-2.0 e BSD-3-Clause sono le due che ricorrono più spesso.
@@ -50,7 +50,7 @@ Hugging Face Transformers, PP-OCRv5 dei PaddlePaddle Authors, SwinIR del
 Computer Vision Lab dell'ETH di Zurigo, e Depth Anything 3 di ByteDance Seed.
 Copre anche i classificatori derivati da timm di Ross Wightman e dei
 contributori di timm, tra cui ResNet, DeiT, EfficientNetV2, MobileNetV4 e Swin,
-i cui nomi dei moduli rispecchiano quelli di timm in modo che i suoi tensori
+i cui nomi di modulo rispecchiano quelli di timm in modo che i suoi tensori
 ImageNet si carichino senza modifiche.
 
 BSD-3-Clause copre tutto ciò che deriva da torchvision: Faster R-CNN,
@@ -98,7 +98,7 @@ di una stessa famiglia. Due esempi del secondo caso:
 - I checkpoint COCO di YOLO9 sono MIT. `LibreYOLO9P2s-visdrone.pt`, addestrato
   su VisDrone2019-DET, è CC BY-NC-SA 3.0, quindi non commerciale.
 - I checkpoint di rilevamento di RF-DETR sono Apache-2.0. I checkpoint per box
-  orientati sono CC BY 4.0, perché hanno fatto fine-tuning su un dataset di
+  orientati sono CC BY 4.0, perché sono stati affinati su un dataset di
   Roboflow Universe pubblicato sotto CC BY 4.0 e i pesi portano avanti
   l'obbligo di attribuzione di quel dataset.
 
@@ -129,8 +129,8 @@ upstream perché la sua model card non indica alcuna licenza nei metadati mentre
 il testo dichiara Apache-2.0 e allo stesso tempo limita l'uso alla ricerca
 accademica, e le due cose non concordano. Le architetture TEED e DexiNed sono
 MIT, ma i checkpoint rilasciati dagli autori sono stati addestrati su BIPED, i
-cui termini di dataset sono non commerciali, quindi LibreYOLO non li include né
-li scarica automaticamente.
+cui termini d'uso sono non commerciali, quindi LibreYOLO non li include né li
+scarica automaticamente.
 
 Diversi checkpoint di torchvision non hanno un proprio file di licenza.
 LibreYOLO ne fa il mirror sotto la licenza usata dal progetto che li rilascia,
@@ -180,9 +180,9 @@ Quando una licenza trasferisce la sua restrizione alle opere derivate, come fa
 la NVIDIA Source Code License, nemmeno il fine-tuning permette di sfuggirle.
 Addestrare la stessa architettura da zero su dati che hai il diritto di usare
 sì: il codice è permissivo, quindi un modello che addestri tu è tuo, e i
-termini del checkpoint preaddestrato non vi entrano mai. La pagina di SegFormer
-lo esplicita per i propri pesi; leggi la riga Interpretazione sulla pagina
-della famiglia che intendi mettere in produzione.
+termini del checkpoint preaddestrato non entrano mai in gioco. La pagina di
+SegFormer lo esplicita per i propri pesi; leggi la riga Interpretazione sulla
+pagina della famiglia che intendi mettere in produzione.
 
 Decidi la questione della licenza quando scegli il modello, non quando vai in
 produzione, e leggi i termini del file che hai effettivamente scaricato, perché

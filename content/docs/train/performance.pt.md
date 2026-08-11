@@ -28,15 +28,13 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # Perfila uma janela curta de passos reais, imprime um veredito e
+        # Perfila uma janela curta de passos reais, imprime um veredicto e
         # depois continua a execução com os hooks removidos.
         model.train(data="my-dataset.yaml", epochs=100, profile=True)
     - label: Só medir e parar
       language: bash
-      code: >
-        # Define no_aug_epochs=0 e roda só as épocas necessárias para preencher
-        a janela.
-
+      code: |
+        # Define no_aug_epochs=0 e roda só as épocas necessárias para encher a janela.
         libreyolo profile run coco128 --weights LibreYOLO9s.pt --size s
     - label: Detalhar o resultado
       language: bash
@@ -94,8 +92,8 @@ O relatório termina em um de quatro veredictos:
 | `compute` | a GPU está saturada | AMP ou bfloat16, ou aceitar |
 | `memory-pressure` | thrash do alocador, VRAM no limite | reduza o batch; os números de utilização aqui não são confiáveis |
 
-O número de utilização é o tempo de kernel ocupado dividido pelo tempo do passo
-sem sincronização. A janela é dividida de propósito: a primeira metade roda sem
+O número de utilização é o tempo em que os kernels ficam ocupados dividido pelo
+tempo do passo sem sincronização. A janela é dividida de propósito: a primeira metade roda sem
 sincronização extra, para que o veredicto reflita a sobreposição real, e só a
 segunda metade cerca cada fase com um sync para atribuir o tempo de GPU.
 Sincronizar cada fase dá folga aos workers do dataloader e esconde a starvation,
@@ -110,9 +108,9 @@ Vale saber duas coisas sobre o `profile run`. Ele define `no_aug_epochs=0`,
 porque o profiler mede a época 0 e uma execução curta com o `no_aug_epochs`
 padrão perfilaria o dataloader mais leve, sem augmentation, em vez do que o
 treinamento de fato usa. E `--repeat N` reporta média e desvio padrão, o que
-importa porque um passo limitado por lançamentos é ruidoso o bastante para uma
-única execução enganar; ele grava diretórios por tentativa, `prof_1`, `prof_2` e
-assim por diante, além de um `profile_repeat.json` agregado.
+importa porque um passo limitado por lançamento é ruidoso o bastante para que
+uma única execução engane; ele grava diretórios por tentativa, `prof_1`,
+`prof_2` e assim por diante, além de um `profile_repeat.json` agregado.
 
 ## Precisão mista
 
@@ -185,9 +183,9 @@ de 0.6394 nos dois braços.
 Três coisas mexem nesses números. Batches pequenos são limitados por lançamento
 e os grandes são limitados por computação, então o RT-DETR-r18 ganha 1.19x com
 batch 2 e 1.04x com batch 8. O overhead de lançamento é maior no Windows, e os
-ganhos no Linux ficam por volta de um terço a metade da tabela. E uma execução
-limitada pelo dataloader não vê mudança nenhuma no wall clock, e é por isso que
-o profiler vem primeiro.
+ganhos no Linux ficam entre um terço e a metade dos valores da tabela. E uma
+execução limitada pelo dataloader não vê mudança nenhuma no wall clock, e é por
+isso que o profiler vem primeiro.
 
 A captura entra em ação do mesmo jeito com `amp=False`, mas os kernels fp32
 rodam por mais tempo, então o passo fica menos limitado por lançamento e a
@@ -258,9 +256,9 @@ Um grafo capturado fixa buffers estáticos de entrada, saída e workspace, entã
 pico de VRAM sobe mais ou menos um conjunto extra de ativações. Nas famílias
 acima, a alocação de pico variou entre -5 e +19 por cento. O custo relativo é
 maior nos modelos pequenos de classificação, cujas ativações já são pequenas de
-saída: o ResNet-18 a 224 px, batch 16, foi de 0.48 GB em eager para 0.57 GB com
-grafo. Se isso empurrar uma execução para além do limite, reduza o batch ou
-deixe a flag desligada.
+início: o ResNet-18 a 224 px, batch 16, foi de 0.48 GB em eager para 0.57 GB com
+grafo. Se isso empurrar uma execução além do limite, reduza o batch ou deixe a
+flag desligada.
 
 ## Relacionados
 

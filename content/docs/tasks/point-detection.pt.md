@@ -2,7 +2,7 @@
 title: Detecção de pontos
 seo_title: Detecção de pontos e contagem no LibreYOLO
 description: >-
-  Localize objetos como pontos únicos em vez de caixas no LibreYOLO. Preveja
+  Localize objetos como um único ponto em vez de caixas no LibreYOLO. Preveja
   centroides, conte objetos, treine o FOMO e leia as métricas de ponto.
 lead: >-
   A detecção de pontos devolve uma localização x, y por objeto em vez de um
@@ -13,7 +13,7 @@ keywords:
   - contar objetos em imagem python
   - detecção de centroide
   - contagem de objetos visão computacional
-  - FOMO localização de pontos
+  - localização de pontos FOMO
   - localizar objetos por ponto python
 last_verified: 1.5.0
 snippets:
@@ -24,10 +24,10 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
 
-        # Os pesos do LibreFOMO não têm download automático. Baixe antes um
+        # Os pesos do LibreFOMO não têm download automático. Baixe primeiro um
 
-        # checkpoint de https://huggingface.co/LibreYOLO e carregue pelo caminho
-        local.
+        # checkpoint de https://huggingface.co/LibreYOLO e carregue-o pelo
+        caminho local.
 
         model = LibreYOLO("./LibreFOMOs-point.pt")
 
@@ -145,8 +145,9 @@ sem largura, altura ou máscara. Como uma predição é uma lista plana de objet
 contagem de linhas é a contagem de objetos, e é isso que faz desta a tarefa de
 contagem.
 
-Uma predição preenche `result.points`, um payload `Points` que envolve um array
-`(N, 4)` de linhas `x, y, classe, confiança` em pixels da imagem original. `.xy`
+Uma predição preenche `result.points`, um payload `Points` que encapsula um
+array `(N, 4)` de linhas `x, y, class, confidence` em pixels da imagem original.
+`.xy`
 devolve as coordenadas, `.xyn` as mesmas coordenadas divididas pelo tamanho da
 imagem, `.cls` os índices de classe e `.conf` os scores; `len()` devolve o número
 de pontos. `result.boxes` fica vazio, então `iou` e `max_det` não têm sobre o que
@@ -178,9 +179,9 @@ pesos são não comerciais; a licença está na página dele.
 
 Os pesos do LibreFOMO são a única exceção ao download automático neste site.
 `LibreYOLO("LibreFOMOs-point.pt")` procura esse arquivo no disco e levanta um
-`ValueError` nomeando-o em vez de baixá-lo. Baixe antes um checkpoint da
+`ValueError` nomeando-o em vez de baixá-lo. Baixe primeiro um checkpoint da
 [organização LibreYOLO](https://huggingface.co/LibreYOLO) no Hugging Face e
-carregue pelo caminho local, ou treine o seu.
+carregue-o pelo caminho local, ou treine o seu.
 
 <code-tabs name="predict" />
 

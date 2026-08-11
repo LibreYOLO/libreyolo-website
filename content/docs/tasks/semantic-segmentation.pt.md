@@ -29,7 +29,7 @@ snippets:
         result = model(SAMPLE_IMAGE, save=True)
 
         mask = result.semantic_mask
-        print(mask.data.shape)   # (H, W) ids de classe na tela original
+        print(mask.data.shape)   # (H, W) ids de classe no canvas original
         print(mask.classes)      # ids de classe presentes, ordenados, sem o 255
     - label: CLI
       language: bash
@@ -136,21 +136,21 @@ pixel e separar instâncias ao mesmo tempo é
 um checkpoint a seleciona, então `task=` não é necessário ao carregar pesos
 publicados.
 
-`predict()` preenche `result.semantic_mask`. `.data` é um mapa de classes
-inteiro `(H, W)` sobre a tela da imagem original, `.classes` lista os ids
-presentes em ordem, e `.class_mask(id)` retorna a seleção booleana `(H, W)` de
-uma classe. O valor `255` é o rótulo de ignorar: nunca é uma classe, fica de
-fora da loss e das métricas, e `.classes` o deixa de lado.
+`predict()` preenche `result.semantic_mask`. `.data` é um mapa inteiro de
+classes `(H, W)` no canvas da imagem original, `.classes` lista os ids
+presentes em ordem crescente, e `.class_mask(id)` retorna a seleção booleana
+`(H, W)` de uma classe. O valor `255` é o rótulo de ignorar: nunca é uma
+classe, fica de fora da loss e das métricas, e `.classes` o deixa de lado.
 
 ## Modelos
 
-Três famílias treinam e predizem:
+Três famílias tanto treinam quanto predizem:
 [SegFormer](/docs/models/segformer),
 [LingBot-Vision](/docs/models/lingbot-vision) e
 [DINOv2](/docs/models/dinov2). SegFormer e LingBot-Vision rodam com o pacote
 base e trazem pesos publicados. DINOv2 precisa de
 `pip install "libreyolo[rfdetr]"` e não tem checkpoint hospedado pelo LibreYOLO:
-carrega o backbone original e sua cabeça densa começa com inicialização
+carrega o backbone do upstream e sua cabeça densa começa com inicialização
 aleatória, então é um ponto de partida para treinamento em vez de um preditor
 pronto para uso.
 
@@ -160,10 +160,10 @@ Outras quatro predizem, validam e exportam, mas seu `train()` lança
 [EoMT](/docs/models/eomt).
 
 Os conjuntos de classes variam por checkpoint, não por família. Os pesos
-publicados vêm de datasets cujos espaços de rótulos têm pouco em comum, as 150
-classes do ADE20K contra as 19 do Cityscapes entre eles, então o `names` de um
+publicados vêm de datasets cujos espaços de rótulos têm pouco em comum, entre
+eles as 150 classes do ADE20K contra as 19 do Cityscapes, então o `names` de um
 checkpoint é o que diz o que ele consegue rotular, e dois checkpoints só são
-comparáveis quando foram treinados no mesmo.
+comparáveis quando foram treinados no mesmo espaço de rótulos.
 
 ## Predição
 
@@ -172,7 +172,7 @@ localmente.
 
 <code-tabs name="predict" />
 
-O mapa é um argmax por pixel, então não há passo de NMS e `iou` nunca tem
+O mapa é um argmax por pixel, então não há etapa de NMS e `iou` nunca tem
 efeito. `conf` e `max_det` são aceitos por paridade de API e não fazem nada no
 SegFormer, no PIDNet e nos demais preditores densos; o EoMT é a exceção, onde
 `conf` filtra a seleção de queries. Veja [predição](/docs/predict) para fontes,
@@ -230,12 +230,12 @@ O loader canônico é `libreyolo.data.SemanticDataset`.
 
 <code-tabs name="train" />
 
-Aqui `imgsz` é restrito de um jeito que não é num detector. Cada família declara
-um divisor do qual sua entrada tem que ser múltipla, definido pela sua grade de
-patches ou pelo seu stride de saída, e tanto o treinamento quanto a validação
-lançam um `ValueError` antes de a execução começar quando `imgsz` não divide
-exato. O divisor é 32 para SegFormer, 16 para LingBot-Vision e EoMT, 14 para
-DINOv2, e 8 para FCN e PIDNet. Veja [treinamento](/docs/train) para datasets,
+Aqui o `imgsz` tem uma restrição que não existe em um detector. Cada família
+declara um divisor do qual a entrada precisa ser múltipla, definido pela grade
+de patches ou pelo stride de saída, e tanto o treinamento quanto a validação
+lançam um `ValueError` antes de a execução começar quando o `imgsz` não é
+múltiplo dele. O divisor é 32 para SegFormer, 16 para LingBot-Vision e EoMT, 14
+para DINOv2, e 8 para FCN e PIDNet. Veja [treinamento](/docs/train) para datasets,
 data augmentation, multi-GPU e loggers.
 
 ## Validação

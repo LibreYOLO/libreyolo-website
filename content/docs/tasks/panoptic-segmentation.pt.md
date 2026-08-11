@@ -12,7 +12,7 @@ lead: >-
 keywords:
   - segmentação panóptica python
   - panoptic quality PQ
-  - things and stuff segmentação
+  - segmentação things e stuff
   - formato COCO panoptic
   - mapa de ids de segmento
   - métrica PQ
@@ -83,11 +83,11 @@ source_hash: b8adc9ccde7a4e6c
 A segmentação panóptica é a união das outras duas tarefas de segmentação. Cada
 pixel recebe exatamente um segmento, os segmentos nunca se sobrepõem, e um
 segmento é ou um *thing*, uma instância de objeto contável, ou *stuff*, uma
-região amorfa como o céu ou a estrada. Isso a torna mais estrita que a
+região amorfa como o céu ou a estrada. Isso a torna mais rigorosa que a
 [segmentação de instâncias](/docs/tasks/instance-segmentation), que deixa os
 pixels de fundo sem atribuição e permite que as máscaras se sobreponham, e mais
-estrita que a [segmentação semântica](/docs/tasks/semantic-segmentation), que
-rotula cada pixel mas funde instâncias vizinhas de uma mesma classe.
+rigorosa que a [segmentação semântica](/docs/tasks/semantic-segmentation), que
+rotula cada pixel, mas funde instâncias de uma mesma classe que se tocam.
 
 `panoptic` é a chave canônica da tarefa, e o sufixo `-panoptic` no nome do
 arquivo de um checkpoint a seleciona, então `task=` não é necessário ao carregar
@@ -103,8 +103,8 @@ valor void: pixels sem rótulo, excluídos da métrica e deixados de fora de
 `.segment_ids`.
 
 Ser *thing* ou *stuff* é uma propriedade da categoria, não do segmento
-individual. Isso vai nos metadados de categoria do conjunto de rótulos, e um
-payload de predição pode copiar essa informação para cada segmento como
+individual. Essa informação fica nos metadados de categoria do conjunto de
+rótulos, e um payload de predição pode copiá-la para cada segmento como
 `"isthing"` por conveniência, mas os metadados de categoria continuam sendo a
 fonte autoritativa.
 
@@ -209,19 +209,20 @@ tal como publicados.
 
 `val()` retorna um dicionário simples de chaves `metrics/`, calculadas na
 resolução do ground truth sobre o split indicado por `val` no YAML do dataset.
-Um segmento predito e um verdadeiro da mesma categoria casam quando seu IoU
-supera 0.5, e essa correspondência é única.
+Um segmento predito e um verdadeiro da mesma categoria correspondem quando o IoU
+entre eles supera 0.5, e essa correspondência é única.
 
 <code-tabs name="val" />
 
 `metrics/PQ` é a Panoptic Quality, o número principal. Dentro de uma categoria,
 é o produto de dois fatores. A qualidade de segmentação é o IoU médio sobre os
-segmentos casados e diz o quão bem as formas casadas se encaixam. A qualidade de
-reconhecimento é `TP / (TP + 0.5 FP + 0.5 FN)`, o F1 da própria correspondência,
-e diz quantos segmentos foram encontrados afinal. Os três números passam então
-por uma média sobre as categorias que apareceram, e são reportados como
-`metrics/PQ`, `metrics/SQ` e `metrics/RQ`, de modo que o PQ reportado é a média
-dos produtos por categoria, e não o produto das duas médias reportadas.
+segmentos correspondentes e diz o quão bem as formas correspondentes se alinham.
+A qualidade de reconhecimento é `TP / (TP + 0.5 FP + 0.5 FN)`, o F1 da própria
+correspondência, e diz quantos segmentos foram de fato encontrados. Em seguida,
+é feita a média dos três números sobre as categorias que apareceram, e eles são
+reportados como `metrics/PQ`, `metrics/SQ` e `metrics/RQ`, de modo que o PQ
+reportado é a média dos produtos por categoria, e não o produto das duas médias
+reportadas.
 
 `metrics/PQ_things` e `metrics/PQ_stuff` fazem a média desse mesmo PQ por
 categoria sobre as categorias thing e as categorias stuff separadamente, e
@@ -233,6 +234,6 @@ valor de PQ.
 
 Checkpoints panópticos não exportam. `export()` levanta `NotImplementedError`
 para esta tarefa, porque a saída de máscaras por query ainda não tem um contrato
-de exportação em runtime. A tarefa semântica do EoMT exporta; veja
+de exportação de runtime. A tarefa semântica do EoMT exporta; veja
 [segmentação semântica](/docs/tasks/semantic-segmentation) e
 [exportação e deploy](/docs/export).

@@ -198,8 +198,8 @@ modello riporta la chiamata esatta.
 
 ## Predizione
 
-I pesi vengono scaricati da Hugging Face al primo utilizzo e messi in cache in
-locale.
+I pesi vengono scaricati da Hugging Face al primo utilizzo e memorizzati nella
+cache locale.
 
 <code-tabs name="predict" />
 
@@ -211,8 +211,8 @@ risultati.
 ## Formato del dataset
 
 La struttura è quella del rilevamento: un file di etichette `.txt` per
-immagine, trovato sostituendo `images` con `labels` nel percorso dell'immagine e
-cambiando l'estensione.
+immagine, che si ricava sostituendo `images` con `labels` nel percorso
+dell'immagine e cambiando l'estensione.
 
 ```text
 dataset/
@@ -239,7 +239,7 @@ dataset di segmentazione è accettata anche una riga di rilevamento a cinque
 campi, che viene letta come un segmento rettangolare: questo rende caricabile un
 dataset con soli box senza un passaggio di conversione.
 
-Il YAML è quello del rilevamento:
+Lo YAML è quello del rilevamento:
 
 ```yaml
 path: dataset
@@ -281,7 +281,7 @@ Le chiavi senza suffisso contengono i risultati delle maschere:
 usato dall'esecuzione.
 
 Quattro valori vengono pubblicati anche con un suffisso esplicito, `(M)` per
-mask e `(B)` per box, così che un confronto non dipenda mai da quale numero la
+maschera e `(B)` per box, così che un confronto non dipenda mai da quale numero la
 famiglia ha deciso di considerare principale: `metrics/mAP50-95(M)` e
 `metrics/mAP50-95(B)`, `metrics/mAP50(M)` e `metrics/mAP50(B)`,
 `metrics/precision(M)` e `metrics/precision(B)`, `metrics/recall(M)` e

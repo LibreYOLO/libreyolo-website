@@ -8,7 +8,7 @@ description: >-
 lead: >-
   Il rilevamento a vocabolario aperto sostituisce la lista fissa di classi di un
   checkpoint con le parole che scegli al momento della chiamata. In LibreYOLO
-  non è un task a parte: è il task detect servito da una famiglia di modelli
+  non è un task a parte: è il task detect servito da una fascia di modelli
   separata, caricata attraverso la factory LibreOpenVocab invece che LibreYOLO.
 keywords:
   - open vocabulary detection
@@ -70,8 +70,8 @@ Il rilevamento a vocabolario aperto restituisce normali `Results` di rilevamento
 box, confidenze e indici di classe, con `result.names` che riporta quegli indici
 alle stringhe che hai chiesto. Quello che cambia è da dove arriva la lista delle
 classi. Un rilevatore convenzionale viene addestrato su un insieme fisso di
-categorie e non può mai emettere una categoria che ne stia fuori. Questi modelli
-prendono il vocabolario come testo al momento dell'inferenza, quindi
+categorie e non può mai emettere una categoria esterna a quell'insieme. Questi
+modelli prendono il vocabolario come testo al momento dell'inferenza, quindi
 `set_classes(["forklift", "safety cone"])` basta a rendere quelle le classi.
 
 LibreYOLO non ha una chiave di task `open-vocabulary`. Questi modelli dichiarano
@@ -82,13 +82,13 @@ e si costruiscono con `LibreOpenVocab()`. Quella factory è una sorella di
 `LibreSAM()` e `LibreVLM()`, non un sostituto di `LibreYOLO()`.
 
 I punteggi sono veri punteggi di rilevamento, non una didascalia generata e poi
-interpretata a posteriori. Ogni famiglia confronta le regioni dell'immagine con
-l'embedding testuale di ogni prompt.
+interpretata a posteriori. Ogni famiglia assegna un punteggio alle regioni
+dell'immagine confrontandole con l'embedding testuale di ogni prompt.
 
 ## Modelli
 
-Quattro famiglie compongono questa fascia, tutte solo in predizione. Puoi
-caricarle tutte per alias attraverso `LibreOpenVocab`.
+Quattro famiglie compongono questa fascia, tutte utilizzabili solo in
+predizione. Puoi caricare ognuna di esse per alias con `LibreOpenVocab`.
 
 [Grounding DINO](/docs/models/grounding-dino), di IDEA Research, nelle taglie `t`
 e `b`. È il default della fascia e l'unica famiglia che accetta
@@ -96,23 +96,24 @@ e `b`. È il default della fascia e l'unica famiglia che accetta
 decodificata.
 
 [OWLv2](/docs/models/owlv2), di Google Research, nelle taglie `b16` e `l14`.
-Confronta le regioni dell'immagine con embedding testuali prodotti da un encoder
-in stile CLIP.
+Assegna un punteggio alle regioni dell'immagine confrontandole con embedding
+testuali prodotti da un encoder in stile CLIP.
 
 [OMDet-Turbo](/docs/models/omdet-turbo), di Om AI Lab, in un'unica taglia `t`.
-Separa gli embedding di classe da un prompt testuale di task ed è l'unica
-famiglia qui che sopprime i box sovrapposti nel proprio post-processing, quindi
-`iou=` viene rispettato.
+Separa gli embedding di classe da un prompt di task in linguaggio naturale ed è
+l'unica famiglia qui che sopprime i box sovrapposti nel proprio post-processing,
+quindi `iou=` viene rispettato.
 
 [OV-DEIM](/docs/models/ov-deim), nelle taglie `s`, `m` e `l`, è un rilevatore in
 stile DETR che associa le query del decoder a embedding testuali prodotti da una
 text tower MobileCLIP inclusa. Usa un matching uno-a-uno con selezione top-K,
-quindi non gira NMS da nessuna parte.
+quindi non viene eseguito NMS da nessuna parte.
 
-I pesi di OV-DEIM sono il caso vincolato di questa fascia. I pesi del rilevatore
-sono CC BY-NC 4.0, non commerciali. La text tower inclusa è coperta dalla Machine
-Learning Research Model license di Apple, solo per uso di ricerca. Il checkpoint
-`l` aggiunge un fine-tune del backbone DINOv3-S sotto la DINOv3 License di Meta.
+I pesi di OV-DEIM sono il caso soggetto a restrizioni di questa fascia. I pesi
+del rilevatore sono CC BY-NC 4.0, non commerciali. La text tower inclusa è
+coperta dalla Machine Learning Research Model license di Apple, solo per uso di
+ricerca. Il checkpoint `l` aggiunge un fine-tune del backbone DINOv3-S coperto
+dalla DINOv3 License di Meta.
 Tutti e tre i testi di licenza sono distribuiti dentro il repository dei pesi, e
 la libreria registra lo stesso riepilogo quando risolve i pesi, prima che il
 modello venga costruito. Leggi [OV-DEIM](/docs/models/ov-deim) prima di metterlo
@@ -131,9 +132,10 @@ quanto port nativo.
 Anche una seconda fascia accetta un vocabolario testuale: `LibreVLM()` carica
 modelli generativi vision-language, come [Qwen3-VL](/docs/models/qwen3-vl) e
 [Florence-2](/docs/models/florence-2), e trasforma il loro output negli stessi
-`Results`. Condivide la stessa superficie `set_classes()`. La differenza è che
-cosa produce i box: le famiglie di questa pagina sono rilevatori discriminativi
-che emettono punteggi direttamente, mentre la fascia VLM li genera.
+`Results`. Condivide la stessa interfaccia `set_classes()`. La differenza sta in
+ciò che produce i box: le famiglie di questa pagina sono rilevatori
+discriminativi che emettono punteggi direttamente, mentre la fascia VLM li
+genera.
 
 ## Predizione
 
@@ -180,4 +182,4 @@ a loro.
 ## Esportazione
 
 L'esportazione è fuori dallo scopo della fascia e `export()` solleva
-un'eccezione. Questi modelli girano attraverso `predict()` in PyTorch.
+un'eccezione. Questi modelli si eseguono con `predict()` in PyTorch.

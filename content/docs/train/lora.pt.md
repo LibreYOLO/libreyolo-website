@@ -7,7 +7,7 @@ description: >-
   os checkpoints se comportam.
 lead: >-
   O LoRA congela as partes pesadas pré-treinadas de um modelo e treina pequenos
-  adaptadores de baixo rank ao lado delas, mais as camadas que precisam
+  adaptadores de baixo rank ao lado delas, além das camadas que precisam
   continuar densas. No LibreYOLO toda a interface pública é um booleano.
 keywords:
   - fine tuning lora
@@ -84,8 +84,8 @@ LoRA fine-tuning (lora=True) is not supported for yolo9. LoRA targets
 transformer components with nn.Linear layers (e.g. RF-DETR, D-FINE, DEIM).
 ```
 
-A CLI rejeita antes disso, antes de o modelo ser construído, usando a própria
-allowlist das mesmas nove famílias.
+A CLI rejeita a flag mais cedo, antes mesmo de o modelo ser construído, usando a
+própria allowlist com as mesmas nove famílias.
 
 ## Quais famílias
 
@@ -93,7 +93,7 @@ RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 e v4, EC e ConvNeXt. A trava é o
 atributo `supports_lora` na classe de treinador de cada família, e a CLI carrega
 uma allowlist correspondente.
 
-A cobertura por tarefa é mais estreita que a cobertura por família. D-FINE e EC
+A cobertura por tarefa é mais restrita que a cobertura por família. D-FINE e EC
 só têm suporte a detecção, e seus caminhos de segmentação e de pose levantam
 erro. O caminho semântico do RF-DETR levanta erro. ConvNeXt é classificação.
 
@@ -104,7 +104,7 @@ Todo o resto levanta erro. Não existe modo parcial nem silencioso.
 As receitas diferem porque as arquiteturas diferem, e uma receita que funciona em
 um backbone ViT não tem onde se prender em um backbone convolucional.
 
-O RF-DETR usa DoRA, o LoRA decomposto em pesos, com rank 16 e alpha 16 nas
+O RF-DETR usa DoRA, o LoRA com decomposição de pesos, com rank 16 e alpha 16 nas
 projeções de atenção `query`, `key` e `value` do backbone DINOv2, seguindo a
 referência do RF-DETR. O backbone ViT congela; o projetor, o decodificador e a
 cabeça de detecção continuam treinando normalmente.
@@ -130,13 +130,13 @@ O DEIMv2 usa a mesma receita, com suas camadas feed-forward SwiGLU `w12` e `w3`
 como alvos. Seus tamanhos S, M, L e X também trazem um backbone ViT DINOv3, onde
 a base ViT congela e suas camadas de atenção fundida `qkv` recebem adaptadores,
 enquanto a pirâmide de convoluções do Spatial Tuning Adapter continua treinando
-como análoga ao projetor. Esses adaptadores de `qkv` entram mesmo quando a config
+no papel análogo ao do projetor. Esses adaptadores de `qkv` entram mesmo quando a config
 já vinha com o ViT congelado, já que adaptar um backbone congelado é justamente o
 objetivo. Os tamanhos abaixo de S usam um backbone convolucional e ficam com a
 receita simples.
 
-O EC é um DETR cujo backbone é um ViT cercado por uma pirâmide de projetores
-convolucionais treinável. A base ViT congela e suas camadas `qkv` recebem
+O EC é um DETR cujo backbone é um ViT cercado por uma pirâmide treinável de
+projetores convolucionais. A base ViT congela e suas camadas `qkv` recebem
 adaptadores, os blocos transformer ficam com a receita compartilhada, e o
 projetor e as cabeças continuam densos.
 
@@ -172,7 +172,7 @@ backbone por completo ele também pula o backward pass desse backbone.
 
 A memória de ativações não muda. As ativações do forward ainda precisam ser
 guardadas para tudo o que continua treinável, e em geral é isso que define o
-pico. Para o orçamento de VRAM mais apertado, reduza também `batch` ou `imgsz`.
+pico. Nos orçamentos de VRAM mais apertados, reduza também `batch` ou `imgsz`.
 
 ## Relacionado
 

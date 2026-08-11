@@ -42,9 +42,10 @@ segue è solo la parte che richiede qualcosa da te.
 ### `allow_experimental=True` non esiste più
 
 Il gate di conferma non c'è più, insieme al meccanismo
-`ddp_aware(experimental_key=...)` che ci stava dietro. L'addestramento e
-l'esportazione di EC, RTMDet, PicoDet e FOMO richiedevano prima quell'argomento,
-quindi è interessato qualsiasi script che addestri una di quelle famiglie.
+`ddp_aware(experimental_key=...)` che lo implementava. L'addestramento e
+l'esportazione di EC, RTMDet, PicoDet e FOMO in precedenza richiedevano
+quell'argomento, quindi è interessato qualsiasi script che addestri una di
+quelle famiglie.
 
 ```python
 # 1.4.0
@@ -71,8 +72,8 @@ from libreyolo.export.support import Tier
 # 1.5.0: Literal["validated", "available", "blocked"]
 ```
 
-Il codice che si dirama sulla stringa del livello deve leggere `"available"`
-dove leggeva `"experimental"`. `BaseExporter` non emette più un
+Il codice che si dirama in base alla stringa del livello dovrebbe leggere
+`"available"` dove leggeva `"experimental"`. `BaseExporter` non emette più un
 `RuntimeWarning` per quei formati. Lo stato di ogni singolo formato è elencato
 nella [matrice di esportazione](/docs/reference/export-matrix).
 
@@ -132,7 +133,7 @@ split di test di RF100-VL: 1381 valori di metrica su 1400 identici bit a bit,
 deviazione massima 2.22e-16, delta principali esattamente 0, con una velocità
 15,6x superiore in generale e 56x sui dataset densi di rilevamenti. I tuoi
 numeri non dovrebbero cambiare. Sono comunque prodotti da un'implementazione
-diversa, ed è per questo che la voce è in elenco.
+diversa, ed è per questo che compare in questo elenco.
 
 pycocotools resta il fallback automatico quando faster-coco-eval non è
 installato. Per forzarlo:
@@ -148,7 +149,7 @@ model.val(data="coco.yaml", faster_coco_eval=False)
 `LIBREYOLO_FASTER_COCO_EVAL=0` fa la stessa cosa a livello globale. Il backend
 effettivamente usato viene registrato a livello INFO, esposto come
 `model.last_eval_backend` dopo `val()` e incluso come `eval_backend` nel
-payload JSON della [CLI](/docs/cli/val). Installa il percorso veloce con
+payload JSON della [CLI](/docs/cli/val). Installa il backend veloce con
 `pip install libreyolo[fast-eval]`.
 
 ### I checkpoint YOLOX addestrati prima della 1.5.0 richiedono un override di eps
@@ -157,7 +158,7 @@ Questa è la trappola della release. Leggila se hai fatto fine-tuning di
 [YOLOX](/docs/models/yolox).
 
 YOLOX specifica BatchNorm con `eps=1e-3` e `momentum=0.03`. Fino alla 1.5.0
-quei valori venivano applicati come correzione a posteriori che non
+quei valori venivano applicati come una correzione a posteriori che non
 sopravviveva alla ricostruzione per numero di classi che `train()` esegue
 quando l'`nc` del tuo dataset è diverso da quello del checkpoint. Un
 fine-tuning del genere si addestrava e riportava la validazione durante
@@ -216,8 +217,8 @@ DEIM usa ancora il 3 fissato nel codice. I dettagli della famiglia sono su
   RTMDet, il riscalamento di YOLO-NAS e la scalatura del ground truth nel
   validatore ora usano altezza e larghezza per asse invece di un solo scalare.
   Con `imgsz` quadrato non cambia un bit. L'inferenza o la validazione
-  rettangolare eseguite sulla 1.4.0 erano scalate male. YOLO-NAS ora rifiuta
-  apertamente un `imgsz` rettangolare invece di produrre in silenzio un output
+  rettangolare eseguite sulla 1.4.0 erano scalate male. YOLO-NAS ora rifiuta a
+  priori un `imgsz` rettangolare invece di produrre in silenzio un output
   sbagliato.
 - **I dizionari delle metriche hanno nuove chiavi.** `max_det`, `ar_max_det` e
   `AR_max_det` dal valutatore COCO, e `metrics/loss` più `metrics/loss/ce` da
@@ -232,7 +233,7 @@ DEIM usa ancora il 3 fissato nel codice. I dettagli della famiglia sono su
   1.5.0.
 - **`libreyolo[hub-kernels]` su CUDA ora attiva davvero il kernel nativo
   MS-deform-attn.** La 1.4.0 lo teneva dietro una condizione che RF-DETR non
-  prendeva mai, quindi il kernel non veniva mai eseguito. Le predizioni possono
+  soddisfaceva mai, quindi il kernel non veniva mai eseguito. Le predizioni possono
   spostarsi entro la tolleranza float per RF-DETR e per le altre famiglie ad
   attenzione deformabile. Le installazioni standard non sono interessate, e
   `LIBREYOLO_HUB_KERNELS=0` lo disattiva.
@@ -255,11 +256,12 @@ DEIM usa ancora il 3 fissato nel codice. I dettagli della famiglia sono su
   la risoluzione dei pari merito nella NMS può differire da torchvision. Con
   torch installato il comportamento non cambia di un byte. Vedi
   [installazione leggera](/docs/lightweight-install).
-- **Gli oggetti di configurazione validano di più alla costruzione.**
+- **Gli oggetti di configurazione eseguono più controlli al momento della
+  costruzione.**
   `TrainConfig` ha ora un `__post_init__` che prima non aveva, quindi una
   configurazione già non valida solleva subito un errore invece di fallire a
   esecuzione inoltrata. La serializzazione di `ValidationConfig` ha una nuova
-  chiave `edge_thresholds`, che rompe un round-trip stretto
+  chiave `edge_thresholds`, che rompe un round-trip rigoroso
   `ValidationConfig(**dump)` a partire da un dump della 1.4.0.
 - **I nomi dei file dei pesi per le famiglie con suffisso di task si risolvono
   in modo diverso.** `segformer-b0` ora si risolve in
@@ -272,10 +274,10 @@ DEIM usa ancora il 3 fissato nel codice. I dettagli della famiglia sono su
 ## Checkpoint e dataset
 
 I checkpoint scritti dalla 1.4.0 si caricano senza modifiche. Lo
-[schema](/docs/reference/checkpoint-schema) ha guadagnato `imgsz_h` e
+[schema](/docs/reference/checkpoint-schema) ha aggiunto `imgsz_h` e
 `imgsz_w` per i modelli rettangolari, e scrive ancora lo scalare
 `imgsz = max(h, w)` per i lettori più vecchi. Le esportazioni
 [ExecuTorch](/docs/export/executorch) e [MNN](/docs/export/mnn) ora richiedono
-un file affiancato, rispettivamente `<program>.pte.json` e `<model>.mnn.json`,
+un file sidecar, rispettivamente `<program>.pte.json` e `<model>.mnn.json`,
 e le esportazioni HRNet portano `pose_input: "person_crop"`. I formati dei
 dataset non cambiano.

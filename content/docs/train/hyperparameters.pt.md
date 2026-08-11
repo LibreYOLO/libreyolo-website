@@ -152,7 +152,7 @@ model.train(data="my-dataset.yaml", learning_rate=0.001)
 Nada falha, a execução termina, e o learning rate nunca foi o que quem chamou
 pediu. Leia os avisos na primeira época de uma receita nova. A CLI é mais rígida,
 porque valida os nomes das flags antes de a config ser construída, então uma flag
-de CLI escrita errada é rejeitada de saída.
+de CLI escrita errada é rejeitada de imediato.
 
 ## Os padrões são por família
 
@@ -162,7 +162,7 @@ correta para "qual é o learning rate padrão".
 
 Os padrões base são `optimizer="sgd"`, `lr0=0.01`, `momentum=0.937`,
 `weight_decay=5e-4`, `scheduler="yoloxwarmcos"`, `epochs=300`, `batch=16`,
-`imgsz=640` e `amp=True`. Três exemplos de o quanto uma família se afasta disso:
+`imgsz=640` e `amp=True`. Três exemplos do quanto uma família se afasta disso:
 
 | Campo | Base | YOLOv9 | D-FINE | YOLO-NAS |
 |---|---|---|---|---|
@@ -174,7 +174,7 @@ Os padrões base são `optimizer="sgd"`, `lr0=0.01`, `momentum=0.937`,
 | `amp` | `True` | `True` | `False` | `False` |
 
 D-FINE e DEIM vêm com `amp=False` porque o decoder do D-FINE limita as ativações
-em 65504, o maior valor finito de float16. YOLO-NAS e FOMO também deixam isso
+a 65504, o maior valor finito de float16. YOLO-NAS e FOMO também deixam isso
 desligado por padrão. A flag `--amp` da CLI tem `True` como padrão para todas as
 famílias, então ela conta como fornecida pelo usuário e sobrescreve o padrão da
 família; não mexa nela a menos que você queira mesmo mudá-la.
@@ -199,7 +199,8 @@ em 60 por cento da VRAM total.
 
 Sondar em modo de treinamento com um backward pass é justamente o ponto: uma sonda
 em modo de inferência não enxerga as ativações retidas nem os tensores de
-gradiente, que para uma CNN profunda são várias vezes a pegada da inferência. O
+gradiente, que em uma CNN profunda consomem várias vezes mais memória do que a
+inferência. O
 RF-DETR baixa a fração alvo para 45 por cento, porque o backward sintético da sonda
 ainda subestima o custo do seu critério e das camadas auxiliares do decoder.
 
@@ -225,10 +226,10 @@ muda.
 O schedule é moldado por `scheduler`, `warmup_epochs`, `warmup_lr_start` e
 `min_lr_ratio`. `no_aug_epochs` define quantas épocas finais rodam sem augmentation
 forte, e vários schedules também o usam para moldar sua cauda, então ele não é
-puramente um botão de augmentation. O que cada família faz com a metade de
-augmentation dele está em [Augmentations](/docs/train/augmentations).
+puramente um parâmetro de augmentation. O que cada família faz com a metade de
+augmentation dele está em [Aumento de dados](/docs/train/augmentations).
 
-Algumas famílias acrescentam seus próprios botões de learning rate.
+Algumas famílias acrescentam seus próprios parâmetros de learning rate.
 `backbone_lr_mult` escala o grupo do backbone em relação à cabeça, `clip_max_norm`
 define o clipping de gradiente, e o SegFormer usa `head_lr_mult` para rodar sua
 cabeça de decodificação a dez vezes a taxa do backbone. Eles ficam na subclasse de
@@ -273,7 +274,7 @@ em vez de ser sobrescrito.
 `save_period` escreve um `weights/epoch_<N>.pt` extra a cada N épocas, além de
 `weights/last.pt` depois de cada época e `weights/best.pt` sempre que a métrica
 acompanhada melhora. `eval_interval` define com que frequência a validação roda, e
-`patience` para a execução depois desse tanto de épocas sem melhora, com `0`
+`patience` para a execução após esse número de épocas sem melhora, com `0`
 desativando o early stopping.
 
 `cache` acelera as épocas repetidas mantendo as imagens decodificadas na RAM
@@ -313,8 +314,8 @@ Python.
 ## Relacionados
 
 - [Datasets](/docs/train/datasets) para o que `data=` aceita.
-- [Augmentations](/docs/train/augmentations) para os botões de augmentation e quais
-  famílias os respeitam.
+- [Aumento de dados](/docs/train/augmentations) para os parâmetros de augmentation
+  e quais famílias os respeitam.
 - [Congelamento de camadas](/docs/train/layer-freezing) e [LoRA](/docs/train/lora)
   para treinar um subconjunto dos pesos.
 - [Validação e métricas](/docs/train/validation) para o que a execução reporta.

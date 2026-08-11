@@ -1,6 +1,6 @@
 ---
-title: Quickstart
-seo_title: Quickstart LibreYOLO
+title: Avvio rapido
+seo_title: Avvio rapido di LibreYOLO
 description: >-
   Esegui un rilevatore su un'immagine, fai fine-tuning su un piccolo dataset ed
   esportalo in TorchScript o ONNX, tutto su CPU, in circa dieci righe di Python.
@@ -144,9 +144,9 @@ source_hash: c11b6bdbf0b6fdf1
 pip install libreyolo
 ```
 
-È tutto ciò che serve alle sezioni di predizione e addestramento qui sotto.
-L'esportazione in ONNX aggiunge un extra; vedi [installazione](/docs/install)
-per l'elenco completo.
+Questo è tutto ciò che serve alle sezioni di predizione e addestramento qui
+sotto. L'esportazione in ONNX aggiunge un extra; vedi
+[installazione](/docs/install) per l'elenco completo.
 
 ## Predizione
 
@@ -154,10 +154,10 @@ per l'elenco completo.
 
 `LibreYOLO()` è una factory. Legge il file, capisce a quale famiglia appartengono
 i pesi e restituisce il modello di quella famiglia, così passare a un rilevatore
-diverso è una modifica di una riga. Passare `LibreYOLO9t.pt` senza directory
-cerca `weights/LibreYOLO9t.pt` rispetto alla directory di lavoro e lo scarica lì
-quando manca. Vedi [checkpoint e pesi](/docs/weights) per le regole di download
-e per come lavorare offline.
+diverso è una modifica di una riga. Se passi `LibreYOLO9t.pt` senza directory,
+viene cercato `weights/LibreYOLO9t.pt` rispetto alla directory di lavoro e, se
+manca, viene scaricato lì. Vedi [checkpoint e pesi](/docs/weights) per le regole
+di download e per come lavorare offline.
 
 `save=True` scrive una copia annotata sotto `runs/detect/`, in una directory
 `predict` che si incrementa a ogni esecuzione. Il `Results` restituito porta con
@@ -182,9 +182,10 @@ restituisce un dizionario che include `save_dir`, `best_checkpoint`,
 checkpoint addestrato si carica con `LibreYOLO()` esattamente come quello
 preaddestrato.
 
-Non tutte le famiglie sono addestrabili. Dove una famiglia offre solo
-l'inferenza, `train()` solleva `NotImplementedError` e lo dice. [Concetti di
-base](/docs/concepts) spiega che cosa significa ciascun livello di supporto.
+Non tutte le famiglie sono addestrabili. Quando una famiglia offre solo
+l'inferenza, `train()` solleva `NotImplementedError` e lo segnala. [Concetti
+fondamentali](/docs/concepts) spiega che cosa significa ciascun livello di
+supporto.
 
 ## Esportazione
 
@@ -202,7 +203,7 @@ scritto sotto `weights/` con un nome derivato dal checkpoint.
 
 ## Dove proseguire
 
-- [Concetti di base](/docs/concepts) per task, famiglie, taglie e nomi dei checkpoint.
+- [Concetti fondamentali](/docs/concepts) per task, famiglie, taglie e nomi dei checkpoint.
 - [Checkpoint e pesi](/docs/weights) per il download automatico, l'uso offline e la sicurezza del caricamento.
 - [Importare pesi esistenti](/docs/migrate) se hai già un checkpoint da un progetto upstream.
 - [Tutti i modelli](/docs/models) per la famiglia adatta al tuo problema.

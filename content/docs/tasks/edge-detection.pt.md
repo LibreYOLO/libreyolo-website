@@ -4,12 +4,12 @@ seo_title: Detecção de bordas no LibreYOLO
 description: >-
   Prediga um mapa denso de probabilidade de bordas a partir de uma imagem no
   LibreYOLO. Converta um checkpoint, aplique um limiar ao mapa, valide com ODS e
-  OIS, e exporte.
+  OIS e exporte.
 lead: >-
-  A detecção de bordas prediz o quanto é provável que cada pixel esteja sobre a
-  borda de um objeto. O LibreYOLO expõe isso como a tarefa edge, que retorna um
-  mapa denso de probabilidade no canvas da imagem original em vez de um conjunto
-  de segmentos de reta.
+  A detecção de bordas prediz a probabilidade de cada pixel estar na borda de um
+  objeto. O LibreYOLO expõe isso como a tarefa edge, que retorna um mapa denso de
+  probabilidade no canvas da imagem original em vez de um conjunto de segmentos
+  de reta.
 keywords:
   - detecção de bordas python
   - detecção de contornos deep learning
@@ -38,7 +38,7 @@ snippets:
         print(edges.array.shape)          # (H, W) float32 em [0, 1]
 
         print(edges.binary(0.5).sum())    # contagem de pixels de borda em 0.5
-    - label: Escolher o seu próprio limiar
+    - label: Escolher seu próprio limiar
       language: python
       code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -103,7 +103,7 @@ snippets:
 
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
         model.export(format="onnx", imgsz=352)
-    - label: Usar o arquivo exportado
+    - label: Rodar o arquivo exportado
       language: python
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
@@ -132,7 +132,7 @@ mapa como NumPy e `.binary(threshold)` retorna uma máscara booleana.
 
 ## Modelos
 
-Três famílias atendem a tarefa `edge`.
+Três famílias atendem `edge`.
 
 O [DexiNed](/docs/models/dexined), a Dense Extreme Inception Network, funde
 várias saídas laterais em um único mapa de probabilidade e roda em 352 px
@@ -163,7 +163,7 @@ python weights/convert_dexined_weights.py upstream.pth weights/LibreDexiNedb-edg
 
 O nome do arquivo precisa carregar o sufixo de tarefa `-edge` para o loader
 reconhecê-lo. `imgsz` precisa ser divisível pelo stride de downsample da rede, e
-o LibreYOLO levanta um erro claro informando o divisor quando não é. Veja
+o LibreYOLO levanta um erro claro informando o divisor quando não for. Veja
 [predição](/docs/predict) para fontes, streaming e tratamento dos resultados.
 
 ## Formato do dataset
@@ -217,11 +217,11 @@ dentro de uma tolerância de distância.
 
 `metrics/ODS` é a F-measure na escala ótima do dataset: as contagens de
 pareamento são agregadas em todo o dataset a cada limiar, e a melhor dessas
-F-measures agregadas é reportada. Ela também é o `fitness`, o número que a
-seleção do melhor checkpoint lê. `metrics/OIS` é a F-measure na escala ótima da
+F-measures agregadas é reportada. Ela também é o `fitness`, o número lido pela
+seleção do melhor checkpoint. `metrics/OIS` é a F-measure na escala ótima da
 imagem, a média sobre as imagens da melhor F-measure de cada imagem, então ela
 deixa cada imagem escolher o próprio limiar. `metrics/best_threshold` é o limiar
-único que produziu o ODS, que é o que se deve reutilizar em `edges.binary()` na
+que produziu o ODS, e é ele que você deve reutilizar em `edges.binary()` na
 inferência.
 
 Dois argumentos moldam a varredura. `edge_thresholds` é o conjunto de limiares

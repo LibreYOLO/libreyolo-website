@@ -9,7 +9,7 @@ lead: >-
   O reconhecimento facial é a tarefa embed aplicada a rostos. Um detector
   localiza e alinha cada rosto, uma cabeça de reconhecimento devolve um vetor
   normalizado por L2 para cada rosto, e a identidade é decidida por similaridade
-  de cosseno contra referências cadastradas, e não por uma lista fixa de
+  de cosseno em relação a referências cadastradas, e não por uma lista fixa de
   classes.
 keywords:
   - reconhecimento facial python
@@ -113,24 +113,24 @@ source_hash: d7dfcb6f812ebb2d
 
 O reconhecimento facial devolve um vetor por rosto, não uma label. A predição
 roda em duas etapas: um detector de rostos localiza cada rosto e seus cinco
-landmarks, o recorte é ajustado para um alinhamento canônico de 112x112, e uma
-cabeça de reconhecimento emite um embedding normalizado por L2.
+landmarks, o recorte é transformado para um alinhamento canônico de 112x112, e
+uma cabeça de reconhecimento emite um embedding normalizado por L2.
 
 `result.embeddings` é um payload `Embeddings` de shape `(N, D)`, alinhado linha a
 linha com `result.boxes`, então a linha `i` descreve o rosto do box `i`. Como as
 linhas são vetores unitários, a similaridade de cosseno é um produto escalar, e
-`embeddings.similarity()` a calcula contra outro `Embeddings` ou contra uma
+`embeddings.similarity()` a calcula em relação a outro `Embeddings` ou a uma
 matriz inteira em uma única chamada.
 
 Dar nome a um rosto é uma etapa separada. Uma `Gallery` guarda vetores de
 referência nomeados; passar `gallery=` para `predict()` anexa
-`result.identities`, alinhado linha a linha com os embeddings, carregando um nome
-e o melhor escore de cosseno por rosto. Um rosto abaixo do limiar de
-correspondência mantém `None` como nome, e o nome mais próximo abaixo do limiar
-nunca é colocado no lugar.
+`result.identities`, alinhado linha a linha com os embeddings, com um nome e o
+melhor score de cosseno por rosto. Um rosto abaixo do limiar de correspondência
+mantém `None` como nome, e o nome mais próximo abaixo do limiar nunca é colocado
+no lugar.
 
 A chave de tarefa canônica da biblioteca é `embed`. `face-recognition`,
-`facial-recognition`, `reid` e `face` normalizam todas para ela, então
+`facial-recognition`, `reid` e `face` são todas normalizadas para ela, então
 `task="face-recognition"` e `task="embed"` selecionam a mesma coisa. Os rostos
 são o formato por região dessa tarefa mais ampla; [embeddings](/docs/tasks/embeddings)
 cobre os formatos de imagem inteira e de texto, a API compartilhada de
@@ -152,10 +152,10 @@ A chave de tarefa `embed` é mais ampla que rostos. [CLIP](/docs/models/clip),
 [SigLIP2](/docs/models/siglip2) e [DINOv2](/docs/models/dinov2) também suportam
 `task="embed"` e devolvem um vetor por imagem inteira, o que é recuperação de
 imagens e não identidade facial. Eles compartilham a API de `Gallery` e
-`Embeddings`, então o fluxo de cadastrar e casar descrito abaixo se transfere,
-mas eles não detectam nem alinham rostos.
+`Embeddings`, então o fluxo de cadastro e correspondência descrito abaixo também
+vale, mas eles não detectam nem alinham rostos.
 
-A cabeça de reconhecimento roda através do `onnxruntime`, que a instalação base
+A cabeça de reconhecimento roda em cima do `onnxruntime`, que a instalação base
 não traz:
 
 ```bash
@@ -196,27 +196,28 @@ people/
 
 `libreyolo enroll` percorre essa árvore e escreve uma galeria `.npz`. Um arquivo
 de galeria já existente é estendido no lugar em vez de substituído, então dá
-para adicionar identidades ao longo do tempo. As galerias ficam presas aos pesos
-que as produziram pela dimensão do embedding e por uma impressão digital do
-arquivo; casar com um modelo diferente levanta um erro em vez de comparar
-espaços vetoriais incompatíveis.
+para adicionar identidades ao longo do tempo. As galerias ficam vinculadas aos
+pesos que as produziram pela dimensão do embedding e por uma impressão digital
+do arquivo; fazer a correspondência com um modelo diferente levanta um erro em
+vez de comparar espaços vetoriais incompatíveis.
 
 Por padrão cada imagem de origem contribui com uma linha de referência, a do
 rosto com maior confiança, então um retrato com pessoas ao fundo cadastra apenas
-o seu sujeito. Passe `select="all"` para `Gallery.enroll` para armazenar todas as
+o retratado. Passe `select="all"` para `Gallery.enroll` para armazenar todas as
 linhas devolvidas.
 
 ## Treinamento
 
 Nenhuma família desta tarefa treina dentro do LibreYOLO.
 `LibreFaceEmbedder.train()` levanta um erro: treine uma cabeça de reconhecimento
-fora, exporte-a para ONNX na convenção ArcFace e carregue o arquivo pelo caminho.
+por fora, exporte-a para ONNX na convenção ArcFace e carregue o arquivo pelo
+caminho.
 
 ## Validação
 
 Não há validador de dataset para esta tarefa, e `val()` levanta um erro em vez de
-fingir o contrário. A acurácia de verificação é medida em pares de imagens
-rotulados com `model.verify()`, varrendo `threshold` para escolher o ponto de
+fingir o contrário. A acurácia de verificação é medida com `model.verify()` em
+pares de imagens rotulados, varrendo `threshold` para escolher o ponto de
 operação que você quer. A acurácia de identificação é medida cadastrando uma
 galeria e lendo `result.identities.name` e `result.identities.score` em imagens
 separadas, contando um nome `None` como rejeição.

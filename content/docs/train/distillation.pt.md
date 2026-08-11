@@ -6,10 +6,10 @@ description: >-
   DINOv2 congelado: as losses MGD, CWD e feature-MSE, os pontos de captura e o
   suporte por família.
 lead: >-
-  A destilação adiciona um segundo termo de loss que puxa os mapas de
-  características intermediários do student na direção dos de um teacher
-  congelado. O LibreYOLO captura as características com forward hooks, então a
-  cabeça e a loss do próprio teacher nunca entram em jogo.
+  A destilação adiciona um segundo termo de loss que aproxima os mapas de
+  características intermediários do student dos de um teacher congelado. O
+  LibreYOLO captura as características com forward hooks, de modo que a cabeça e
+  a loss do próprio teacher nunca entram em jogo.
 keywords:
   - destilação de conhecimento
   - masked generative distillation
@@ -43,15 +43,11 @@ snippets:
   foundation:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
-        # Um ViT auto-supervisionado e congelado supervisiona uma etapa do
-        backbone.
-
+        # Um ViT auto-supervisionado e congelado supervisiona um estágio do backbone.
         model = LibreYOLO("LibreYOLO9s.pt")
-
         model.train(
             data="my-dataset.yaml",
             epochs=100,
@@ -87,14 +83,14 @@ carregado pela mesma factory que qualquer outro modelo.
 <code-tabs name="detector" />
 
 O teacher roda o forward sob `no_grad`, e sob autocast quando o AMP está ligado,
-então o modelo congelado não paga cômputo em precisão completa a cada passo.
-Forward hooks capturam os mapas de características dele em pontos de captura
-nomeados, a loss os compara com os do student, e o resultado é somado à loss de
-treinamento e reportado como um componente chamado `distill`.
+de modo que o modelo congelado não gasta computação em precisão total a cada
+passo. Forward hooks capturam os mapas de características dele em pontos de
+captura nomeados, a loss os compara com os do student, e o resultado é somado à
+loss de treinamento e reportado como um componente chamado `distill`.
 
 ## Destilar a partir de um backbone fundacional congelado
 
-Um ViT auto-supervisionado pode, em vez disso, supervisionar uma única etapa do
+Um ViT auto-supervisionado pode, em vez disso, supervisionar um único estágio do
 backbone do student. As características do teacher vêm do extrator de
 características dele mesmo, e não de hooks, e a loss cuida do descompasso entre
 uma grade de patches e um stride convolucional.
@@ -103,8 +99,8 @@ uma grade de patches e um stride convolucional.
 
 `distill_model` reconhece `dinov2`, que é o DINOv2-base, além de `dinov2_vits14`,
 `dinov2_vitb14`, `dinov2_vitl14`, `dinov2-small`, `dinov2-base`, `dinov2-large`,
-e qualquer id de hub cru que comece com `facebook/dinov2`. Qualquer outra coisa é
-tratada como o caminho de um checkpoint de teacher.
+e qualquer id bruto do hub que comece com `facebook/dinov2`. Qualquer outra coisa
+é tratada como o caminho de um checkpoint de teacher.
 
 Esse caminho usa `feat_mse` independentemente de `distill_loss_type`, e precisa
 do `transformers` instalado. Um teacher que carrega com chaves de pesos faltando
@@ -112,14 +108,14 @@ aborta em vez de destilar contra um backbone parcialmente aleatório.
 
 ## Quais famílias
 
-O suporte a destilação é um método no modelo student, e são dois deles.
+O suporte a destilação é um método no modelo student, e há dois deles.
 
 `get_distill_config()` fornece os pontos de captura multiescala que um teacher
 detector supervisiona. YOLOv9, YOLOX e RF-DETR o implementam.
 
-`get_backbone_distill_config()` fornece a única etapa do backbone que um teacher
-fundacional supervisiona. O YOLOv9 o implementa, e é a única família que faz
-isso.
+`get_backbone_distill_config()` fornece o único estágio do backbone que um
+teacher fundacional supervisiona. O YOLOv9 o implementa, e é a única família que
+faz isso.
 
 Qualquer outra coisa levanta um erro em vez de treinar sem a loss:
 
@@ -135,9 +131,9 @@ Foundation-model distillation into the 'yolox' family is not supported yet
 
 ## Pontos de captura
 
-Os pontos de captura são fixos por família e por papel, então teacher e student
-não precisam ser a mesma arquitetura; precisam de strides de características que
-coincidam.
+Os pontos de captura são fixos por família e por papel, de modo que teacher e
+student não precisam ser a mesma arquitetura; precisam de strides de
+características que coincidam.
 
 | Família | Papel | Pontos de captura | Strides |
 |---|---|---|---|
@@ -153,8 +149,8 @@ Teacher and student must have matching strides. Teacher: [8, 16, 32],
 Student: [16]
 ```
 
-Essa checagem é pulada para teachers fundacionais, cuja razão de ser é
-justamente que as grades sejam diferentes.
+Essa verificação é ignorada para teachers fundacionais, cuja razão de ser é
+justamente o fato de as grades serem diferentes.
 
 ## As três losses
 
@@ -171,12 +167,12 @@ em uma distribuição de probabilidade e minimiza a divergência KL canal a cana
 `distill_tau` é a temperatura do softmax, 1.0 por padrão.
 
 `feat_mse` alinha os canais do student aos do teacher com uma convolução 1x1,
-redimensiona a grade do teacher para a do student de forma bilinear, e tira o
-erro quadrático médio. `distill_normalize=True` normaliza antes os dois mapas de
-características com L2 sobre a dimensão de canais, o que torna a comparação
+redimensiona a grade do teacher para a do student de forma bilinear, e calcula o
+erro quadrático médio. `distill_normalize=True` normaliza primeiro os dois mapas
+de características com L2 sobre a dimensão de canais, o que torna a comparação
 apenas angular e invariante à escala. O padrão é `False`.
 
-`dis` é o peso global aplicado por cima. Se ficar sem definição, cada loss usa o
+`dis` é o peso global aplicado por cima. Se não for definido, cada loss usa o
 próprio valor padrão publicado: 2e-5 para MGD, 1.0 para CWD e 1.0 para o feature
 MSE. Eles diferem em cinco ordens de grandeza, então um peso ajustado para um
 tipo de loss não significa nada para outro.
@@ -191,18 +187,19 @@ carrega as chaves de destilação.
 ## Adaptadores, checkpoints e multi-GPU
 
 Cada loss constrói pequenos módulos treináveis que vivem fora do student: os
-adaptadores de canal 1x1, e o gerador do MGD. Eles ganham o próprio grupo de
-parâmetros do otimizador, no learning rate efetivo da execução.
+adaptadores de canal 1x1, e o gerador do MGD. Eles recebem o próprio grupo de
+parâmetros no otimizador, com o learning rate efetivo da execução.
 
 Esses módulos são gravados no checkpoint sob uma chave `distiller` e restaurados
 ao retomar, então uma execução retomada não reinicia seus projetores do zero.
 
 Sob DDP os adaptadores ficam fora do student encapsulado, o que significa que o
 reducer do DDP nunca vê os gradientes deles. O trainer faz um all-reduce
-explícito deles a cada passo, então todos os ranks treinam os mesmos adaptadores.
+explícito deles a cada passo, de modo que todos os ranks treinam os mesmos
+adaptadores.
 
 A captura de CUDA graphs não está disponível em uma execução com destilação.
-Passar `cuda_graph=True` registra uma linha e treina em modo eager. Veja
+Passar `cuda_graph=True` registra uma linha no log e treina em modo eager. Veja
 [Desempenho do treinamento](/docs/train/performance).
 
 ## Relacionado

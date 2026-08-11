@@ -43,7 +43,7 @@ snippets:
 
         model = LibreSAM("base")
 
-        # set_image roda o pesado encoder de imagem uma vez e o guarda em cache.
+        # set_image roda o encoder de imagem (a parte pesada) uma vez e guarda em cache.
         model.set_image(SAMPLE_IMAGE)
         first = model.predict(points=[640, 420], labels=[1])
         second = model.predict(bboxes=[300, 200, 900, 700])
@@ -83,16 +83,16 @@ source_hash: bb70ff24e6c0a767
 
 ## Definição
 
-A segmentação por prompt recebe uma imagem mais um prompt espacial e retorna a
-máscara daquilo que o prompt aponta. Nada é classificado: não existe lista de
+A segmentação por prompt recebe uma imagem e um prompt espacial e retorna a
+máscara do objeto apontado pelo prompt. Nada é classificado: não existe lista de
 classes, e `result.boxes` guarda boxes justos derivados das máscaras, e não
-detecções por direito próprio. `result.masks` carrega os dados das máscaras e
+detecções propriamente ditas. `result.masks` carrega os dados das máscaras e
 `result.masks.xy` os polígonos delas.
 
 O prompt é a interface. `points` são coordenadas de pixel `[x, y]`, um conjunto
 por objeto, com `labels` marcando cada ponto como positivo (1, inclua este) ou
 negativo (0, exclua este). `bboxes` é `[x1, y1, x2, y2]`, uma máscara por box.
-Pontos e boxes podem ser combinados, e nesse caso eles se pareiam por objeto e
+Pontos e boxes podem ser combinados; nesse caso, são pareados objeto a objeto e
 precisam ter o mesmo comprimento. Omitir todos os prompts roda o caminho de
 segmentar tudo, uma grade de pontos sobre a imagem.
 
@@ -106,7 +106,7 @@ O LibreYOLO não tem uma chave de tarefa `promptable`. O nível se registra como
 `segment`, a mesma chave que a segmentação de instâncias usa. O que o separa é o
 formato da chamada, e é por isso que ele tem a própria factory, `LibreSAM()`,
 irmã de `LibreYOLO()`, `LibreOpenVocab()` e `LibreVLM()`. Uma única assinatura
-`predict(image)` não consegue expressar o laço para o qual esses modelos foram
+`predict(image)` não consegue expressar o loop para o qual esses modelos foram
 feitos: `set_image()` roda o encoder de imagem uma vez e guarda os embeddings em
 cache, cada chamada posterior de `predict()` com `source=None` paga só pela
 decodificação do prompt, e `reset_image()` limpa o cache. O encoder de imagem é
@@ -115,7 +115,7 @@ imagem o pula por completo.
 
 ## Modelos
 
-Seis famílias carregam pelo `LibreSAM` por alias.
+Seis famílias são carregadas pelo `LibreSAM` por alias.
 
 O [SAM](/docs/models/sam) é o padrão, nos tamanhos `base`, `large` e `huge`,
 também escritos `b`, `l` e `h`.
@@ -125,7 +125,7 @@ e `sam2-large`. O LibreYOLO suporta o caminho de imagem dele.
 
 O [SAM 3](/docs/models/sam-3), como `sam3`, é a única família que aceita um
 prompt de conceito em texto: `text="yellow school bus"` retorna todas as
-instâncias que combinam. Passar `text=` para qualquer outra família levanta um
+instâncias correspondentes. Passar `text=` para qualquer outra família levanta um
 erro com uma mensagem citando o SAM 3. Os pesos dele vêm da Meta sob a SAM
 License personalizada, em vez da licença MIT do LibreYOLO, e o repositório é
 restrito: aceite os termos na página do modelo e autentique-se com
@@ -165,8 +165,8 @@ invalida qualquer embedding em cache.
 Segmentar tudo é o modo caro. `points_per_side` vale 32 por padrão, o que dá
 aproximadamente 1024 passagens do decoder sobre a imagem; abaixe esse valor para
 qualquer coisa interativa na CPU. Nesse modo, `conf` aplica o limiar de grade da
-família quando é deixado sem definir, enquanto no caminho com prompt um `conf`
-sem definir mantém todas as máscaras. Passe `conf=0.0` para desativar a
+família quando não é definido, enquanto no caminho com prompt um `conf` não
+definido mantém todas as máscaras. Passe `conf=0.0` para desativar a
 filtragem em qualquer um dos dois modos, e `max_det` para limitar quantas
 máscaras voltam.
 
@@ -191,8 +191,8 @@ mesmo fornece, contra os prompts que importam para você.
 ## Exportação
 
 A exportação está fora do escopo do nível como um todo e `export()` levanta um
-erro, com uma exceção. O [PicoSAM3](/docs/models/picosam3) exporta a CNN de
-região 96x96 crua dele para ONNX como `roi_image -> mask_logits`; o recorte pelo
+erro, com uma exceção. O [PicoSAM3](/docs/models/picosam3) exporta a sua CNN de
+região 96x96 bruta para ONNX como `roi_image -> mask_logits`; o recorte pelo
 box e o redimensionamento da máscara de volta para as coordenadas da imagem
 continuam em Python. Todas as outras famílias rodam por `predict()` no PyTorch.
 Veja [exportação](/docs/export) para os formatos disponíveis no resto da

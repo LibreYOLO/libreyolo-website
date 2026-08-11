@@ -1,9 +1,9 @@
 ---
-title: Aumento de dados
+title: Data augmentation
 seo_title: Data augmentation de treinamento no LibreYOLO
 description: >-
   Os parâmetros de data augmentation do TrainConfig, os quatro formatos de
-  pipeline por trás deles e a tabela por família dizendo quais parâmetros são
+  pipeline por trás deles e a tabela por família que diz quais parâmetros são
   usados, condicionados ou ignorados.
 lead: >-
   O data augmentation é configurado por parâmetros do TrainConfig, mas cada
@@ -90,7 +90,7 @@ igual nos dois lugares.
 
 ## Três estados, não dois
 
-Se um parâmetro faz alguma coisa ou não depende da família. A biblioteca mantém
+Se um parâmetro tem algum efeito depende da família. A biblioteca mantém
 uma tabela declarativa disso, e cada entrada é um de três estados.
 
 `used` significa que o parâmetro chega ao pipeline e altera as amostras.

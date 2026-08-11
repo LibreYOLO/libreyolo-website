@@ -166,19 +166,19 @@ máscara booleana derivada dela, toda verdadeira quando não há terceira coluna
 
 Duas arquiteturas chegam a essa saída. Um modelo de um estágio prevê caixas e
 keypoints em uma única passada. Um modelo top-down roda um detector primeiro,
-recorta cada instância e regride os keypoints dentro do recorte, então sua
-acurácia depende do detector que está na frente dele.
+recorta cada instância e faz a regressão dos keypoints dentro do recorte, então
+sua acurácia depende do detector que está na frente dele.
 
 ## Modelos
 
-Três famílias treinam e preveem:
+Três famílias treinam e fazem predição:
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) e
 [YOLO-NAS](/docs/models/yolo-nas), todas de um estágio. O RF-DETR precisa do seu
 próprio extra, `pip install "libreyolo[rfdetr]"`. RF-DETR e EdgeCrafter trazem
 checkpoints de pose publicados e ambos fazem fine-tuning em datasets de classe
 única, apenas com pessoas; a cabeça de keypoints do EdgeCrafter é fixada na
 construção e rejeita um dataset que declare uma contagem diferente, enquanto o
-RF-DETR reinicializa sua cabeça para ela. O YOLO-NAS puxa seus pesos do CDN da
+RF-DETR reinicializa sua cabeça para ela. O YOLO-NAS baixa seus pesos do CDN da
 própria Deci.AI sob uma licença não comercial, e o LibreYOLO não publica nenhum
 deles; sua cabeça de pose também é reconstruída para uma nova contagem de
 keypoints, e ela é a única das três cuja contagem de classes não é fixada em um,
@@ -192,8 +192,9 @@ imagem inteira como uma instância, `person_boxes=` recebe caixas que você já
 tem, e `person_detector=` nomeia um detector diferente.
 
 O [SenseNova-Vision](/docs/models/sensenova-vision) também emite keypoints. É um
-modelo generativo por prompt com sua própria factory, `LibreVLM`, e seu próprio
-extra; sem vocabulário definido, `set_task("pose")` recorre à categoria pessoa.
+modelo generativo guiado por prompt, com sua própria factory, `LibreVLM`, e seu
+próprio extra; sem nenhum vocabulário definido, `set_task("pose")` recorre à
+categoria pessoa.
 Seus pesos são não comerciais, e a latência por imagem é bem mais alta do que a
 de uma cabeça de pose feita para isso, porque cada predição é uma decodificação
 por difusão.
@@ -276,20 +277,21 @@ cabeça para uma contagem diferente. Veja
 
 ## Validação
 
-`val()` retorna um dicionário simples de chaves `metrics/`. A pontuação é a
-avaliação de keypoints do COCO sobre a Object Keypoint Similarity, que pondera o
-erro de distância de cada keypoint pela escala da instância e por uma tolerância
-por keypoint, então ela faz o papel que o IoU faz para as caixas. Ela precisa do
-`pycocotools`, que está na instalação base.
+`val()` retorna um dicionário simples de chaves `metrics/`. A pontuação usa a
+avaliação de keypoints do COCO baseada na Object Keypoint Similarity, que pondera
+o erro de distância de cada keypoint pela escala da instância e por uma
+tolerância por keypoint, então ela faz o papel que o IoU faz para as caixas. Ela
+precisa do `pycocotools`, que está na instalação base.
 
 <code-tabs name="val" />
 
-`metrics/keypoints_mAP50-95` é o número principal, a média da precisão média
-sobre os limiares de OKS de 0.50 a 0.95, e é o que o treinamento usa para escolher a
-melhor época. `metrics/keypoints_mAP50` e `metrics/keypoints_mAP75` são as
-versões de limiar único, e `metrics/keypoints_mAP_M` e
-`metrics/keypoints_mAP_L` separam a média por área da instância, média e grande;
-a avaliação de keypoints do COCO não define um grupo de pequenas. Os números de
+`metrics/keypoints_mAP50-95` é o número principal, a precisão média (mean
+average precision) calculada sobre os limiares de OKS de 0.50 a 0.95, e é o que
+o treinamento usa para escolher a melhor época. `metrics/keypoints_mAP50` e
+`metrics/keypoints_mAP75` são as versões de limiar único, e
+`metrics/keypoints_mAP_M` e `metrics/keypoints_mAP_L` separam a média por área
+da instância, média e grande; a avaliação de keypoints do COCO não define um
+grupo de instâncias pequenas. Os números de
 recall médio correspondentes são `metrics/keypoints_AR50-95`,
 `metrics/keypoints_AR50`, `metrics/keypoints_AR75`, `metrics/keypoints_AR_M` e
 `metrics/keypoints_AR_L`. Toda chave desta tarefa tem o prefixo `keypoints_`,

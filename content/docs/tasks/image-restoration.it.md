@@ -119,8 +119,8 @@ source_hash: 9dc81cadb3ebf18b
 
 Il task `restore` mappa un'immagine su un'altra immagine. Riduzione del rumore,
 correzione della sfocatura e super-risoluzione qui sono tutte lo stesso task,
-perché condividono un unico contratto: il modello consuma un'immagine RGB e
-restituisce un'immagine RGB, e la degradazione che è stato addestrato ad
+perché condividono un unico contratto: il modello prende in ingresso un'immagine
+RGB e restituisce un'immagine RGB, e la degradazione che è stato addestrato ad
 annullare è una proprietà del checkpoint, non dell'API.
 
 Una predizione riempie `result.restored`, un payload `RestoredImage` che
@@ -133,7 +133,7 @@ scrive direttamente l'immagine restaurata invece di una foto annotata.
 
 ## Modelli
 
-Tre famiglie servono `restore`, divise per la degradazione che annullano.
+Tre famiglie coprono il task `restore`, divise per la degradazione che annullano.
 
 [NAFNet](/docs/models/nafnet) è il denoiser, e l'unica famiglia di restore che
 LibreYOLO può addestrare. La sua architettura sostituisce le attivazioni non
@@ -142,7 +142,7 @@ checkpoint pubblicato è addestrato sul rumore reale di SIDD. L'output resta all
 risoluzione dell'input.
 
 [Real-ESRGAN](/docs/models/real-esrgan) è l'upscaler pratico: tre checkpoint
-addestrati contro degradazioni sintetiche invece che solo contro il downscaling
+addestrati su degradazioni sintetiche e non solo sul downscaling
 bicubico, a 4x, 2x e un generatore 4x più piccolo e veloce, pensato per una
 latenza più bassa.
 
@@ -161,7 +161,7 @@ Il restauro gira alla risoluzione propria dell'immagine di partenza invece che
 su una tela di rete fissa, aggiungendo padding solo fino al fattore di
 downsample della rete, quindi sia il tempo sia la memoria crescono con il numero
 di pixel del tuo input. `tile` divide il forward pass in tasselli sovrapposti e
-ricompone le giunture, e `tile_pad` è l'alone aggiunto attorno a ogni tassello
+ne sfuma le giunzioni, e `tile_pad` è l'alone aggiunto attorno a ogni tassello
 prima che venga ritagliato via; entrambi sono argomenti keyword di Python. Vedi
 [predizione](/docs/predict) per sorgenti, streaming e gestione dei risultati.
 
@@ -208,15 +208,16 @@ completo.
 NAFNet è l'unica famiglia di restore con un'implementazione dell'addestramento.
 `Real-ESRGAN.train()` e `SwinIR.train()` sollevano entrambi
 `NotImplementedError`: quei checkpoint nascono da un addestramento GAN su
-pipeline di degradazione sintetiche, e il trainer di restore appaiato girerebbe
-senza riprodurre quella ricetta.
+pipeline di degradazione sintetiche, e il trainer di restore su dati appaiati
+girerebbe senza riprodurre quella ricetta.
 
 <code-tabs name="train" />
 
 Il trainer prende ritagli accoppiati della coppia input e target, così i due
 lati restano allineati. Vedi [addestramento](/docs/train) per dataset, multi-GPU
 e logger, e la [pagina di NAFNet](/docs/models/nafnet) per i valori predefiniti
-di questa famiglia e il pooling da inferenza che stacca durante l'addestramento.
+di questa famiglia e il pooling da inferenza che disattiva durante
+l'addestramento.
 
 ## Validazione
 
@@ -226,10 +227,10 @@ originale, senza ritaglio dei bordi e senza ridimensionamento.
 <code-tabs name="val" />
 
 `metrics/PSNR` è il rapporto segnale-rumore di picco in decibel, ed è anche
-`fitness`, il numero che legge la selezione del checkpoint migliore.
+`fitness`, il valore letto dalla selezione del checkpoint migliore.
 `metrics/SSIM` è la similarità strutturale in `[0, 1]`, calcolata con una
-finestra gaussiana 11x11 a sigma 1.5 e mediata sui tre canali di colore. Per
-entrambe, più alto è meglio.
+finestra gaussiana 11x11 a sigma 1.5 e mediata sui tre canali di colore. In
+entrambi i casi, più alto è meglio.
 
 ## Esportazione
 

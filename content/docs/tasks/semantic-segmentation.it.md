@@ -73,7 +73,7 @@ snippets:
     - label: Su ADE20K
       language: bash
       code: |
-        # ade20k.yaml contiene uno script di download per l'archivio da ~1 GB,
+        # ade20k.yaml incorpora uno script di download per l'archivio da ~1 GB,
         # quindi serve un permesso esplicito se i dati non sono già locali.
         libreyolo train model=LibreSegformerb0-sem.pt data=ade20k.yaml \
           epochs=160 imgsz=512 batch=8 allow_download_scripts=True
@@ -126,23 +126,23 @@ source_hash: 44b92d8ba6062f04
 La segmentazione semantica etichetta i pixel, non gli oggetti. Ogni pixel
 riceve un id di classe, e due auto che si toccano nell'immagine diventano
 un'unica regione della classe auto, senza alcun confine tra loro. Contare le
-istanze è [segmentazione di istanze](/docs/tasks/instance-segmentation);
-etichettare ogni pixel e separare al tempo stesso le istanze è
+istanze è la [segmentazione di istanze](/docs/tasks/instance-segmentation);
+etichettare ogni pixel e separare al tempo stesso le istanze è la
 [segmentazione panottica](/docs/tasks/panoptic-segmentation).
 
 `semantic` è la chiave canonica del task, e il suffisso `-sem` nel nome del
 file di un checkpoint la seleziona, quindi `task=` non serve quando carichi
 pesi pubblicati.
 
-`predict()` riempie `result.semantic_mask`. `.data` è una mappa di classi
-intera `(H, W)` sul canvas dell'immagine originale, `.classes` elenca gli id
+`predict()` riempie `result.semantic_mask`. `.data` è una mappa `(H, W)` di id
+di classe interi sul canvas dell'immagine originale, `.classes` elenca gli id
 presenti in ordine crescente e `.class_mask(id)` restituisce la selezione
 booleana `(H, W)` per una classe. Il valore `255` è l'etichetta ignore: non è
 mai una classe, è escluso da loss e metriche, e `.classes` lo lascia fuori.
 
 ## Modelli
 
-Tre famiglie sanno sia addestrarsi sia fare predizioni:
+Tre famiglie sia addestrano sia predicono:
 [SegFormer](/docs/models/segformer),
 [LingBot-Vision](/docs/models/lingbot-vision) e
 [DINOv2](/docs/models/dinov2). SegFormer e LingBot-Vision funzionano con il
@@ -162,7 +162,7 @@ famiglia. I pesi pubblicati vengono da dataset i cui spazi di etichette hanno
 poco in comune, tra cui le 150 classi di ADE20K contro le 19 di Cityscapes,
 quindi il campo `names` di un checkpoint è ciò che ti dice che cosa sa
 etichettare, e due checkpoint sono confrontabili solo se sono stati addestrati
-sullo stesso.
+sullo stesso dataset.
 
 ## Predizione
 
@@ -200,7 +200,7 @@ palette. Ogni valore di pixel è un id di classe in `0..nc-1`, il valore `255`
 significa ignore, e la risoluzione della maschera deve essere uguale a quella
 dell'immagine abbinata.
 
-Il YAML prende due chiavi in più rispetto al contratto condiviso:
+Lo YAML accetta due chiavi in più rispetto al contratto condiviso:
 
 ```yaml
 path: dataset
@@ -220,10 +220,11 @@ caricamento, ed è così che un dataset numerato da 1 a 150 diventa da 0 a 149;
 qualsiasi valore di origine non mappato diventa ignore, e ogni train id deve
 ricadere in `0..nc-1`.
 
-Omettere `masks_dir` fa passare il loader a un ripiego: le maschere vengono
-rasterizzate al caricamento a partire dalle etichette a poligoni risolte con la
-solita convenzione da `images` a `labels`, e una classe `background` viene
-aggiunta dopo le classi degli oggetti, quindi `nc` cresce di uno.
+Omettere `masks_dir` fa passare il loader a un percorso di ripiego: le maschere
+vengono rasterizzate al caricamento a partire dalle etichette poligonali
+risolte con la solita convenzione da `images` a `labels`, e una classe
+`background` viene aggiunta dopo le classi degli oggetti, quindi `nc` cresce di
+uno.
 
 Il loader canonico è `libreyolo.data.SemanticDataset`.
 
@@ -234,15 +235,15 @@ Il loader canonico è `libreyolo.data.SemanticDataset`.
 Qui `imgsz` è vincolato in un modo che non vale per un detector. Ogni famiglia
 dichiara un divisore di cui il suo input deve essere un multiplo, fissato dalla
 griglia di patch o dallo stride di output, e sia l'addestramento sia la
-validazione sollevano un `ValueError` prima che la corsa inizi quando `imgsz`
-non è divisibile esattamente. Il divisore è 32 per SegFormer, 16 per
+validazione sollevano un `ValueError` prima che l'esecuzione inizi quando
+`imgsz` non è divisibile esattamente. Il divisore è 32 per SegFormer, 16 per
 LingBot-Vision ed EoMT, 14 per DINOv2 e 8 per FCN e PIDNet. Vedi
 [addestramento](/docs/train) per dataset, augmentation, multi-GPU e logger.
 
 ## Validazione
 
 `val()` restituisce un dizionario semplice di chiavi `metrics/`, calcolate
-sullo split indicato da `val` nel YAML del dataset.
+sullo split indicato da `val` nello YAML del dataset.
 
 <code-tabs name="val" />
 
@@ -251,7 +252,7 @@ sovrapposizione tra i pixel predetti e quelli veri divisa per la loro unione,
 mediata sulle classi. È il numero di riferimento, ed è quello usato per
 scegliere l'epoca migliore durante l'addestramento. `metrics/pixel_accuracy` è
 la quota di pixel a cui è stata assegnata la classe corretta, che una classe di
-sfondo estesa può gonfiare, quindi mIoU è il valore su cui confrontarsi. I
+sfondo estesa può gonfiare, quindi mIoU è il valore su cui fare i confronti. I
 pixel marcati `255` non contano né per l'una né per l'altra. Il dizionario
 porta anche `fitness`, una copia del valore di mIoU.
 

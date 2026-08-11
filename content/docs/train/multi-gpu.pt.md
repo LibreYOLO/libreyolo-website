@@ -8,7 +8,7 @@ description: >-
 lead: >-
   O treinamento multi-GPU no LibreYOLO é o DistributedDataParallel do PyTorch:
   um processo por GPU, cada um com uma réplica completa do modelo e uma fatia de
-  cada batch, com os gradientes promediados entre os ranks a cada passo.
+  cada batch, e a média dos gradientes é feita entre os ranks a cada passo.
 keywords:
   - treinamento ddp pytorch
   - treinamento multi gpu
@@ -45,7 +45,7 @@ snippets:
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(data="my-dataset.yaml", epochs=100, batch=32)
-    - label: Lançamento
+    - label: Execução
       language: bash
       code: |
         torchrun --nproc_per_node=2 train.py
@@ -127,9 +127,9 @@ trains at batch // world_size, so this value would silently train at a
 different global batch than requested. Use batch=4 or batch=8.
 ```
 
-Os gradientes são promediados pelo próprio DDP, então a loss é repassada sem
+A média dos gradientes é feita pelo próprio DDP, então a loss é repassada sem
 escala. Multiplicá-la pelo world size além disso inflaria o learning rate efetivo
-por algo próximo ao número de GPUs.
+por um fator próximo ao número de GPUs.
 
 ## Autobatch sob DDP
 
@@ -207,8 +207,8 @@ inicializado com um timeout de três horas.
 - O profiler de treinamento. `profile=True` é ignorado com um aviso.
 
 Nem toda família suporta o spawn automático. Vinte e quatro suportam, cobrindo as
-famílias de detecção, classificação, semânticas e de restauração que treinam. Uma
-família sem esse suporte, ao receber um device multi-GPU, levanta um erro que
+famílias de detecção, classificação, semântica e restauração que treinam. Uma
+família sem esse suporte, ao receber um dispositivo multi-GPU, levanta um erro que
 nomeia a API do modelo e o comando do torchrun em vez de treinar silenciosamente
 em uma GPU só.
 

@@ -1,12 +1,12 @@
 ---
 title: Stima della profondità
-seo_title: Stima monocolare della profondità in LibreYOLO
+seo_title: Stima monoculare della profondità in LibreYOLO
 description: >-
   Predici una mappa densa di profondità relativa da una sola immagine in
   LibreYOLO. Confronta le famiglie depth, leggi le metriche di profondità ed
   esporta un modello depth.
 lead: >-
-  La stima della profondità predice quanto dista dalla fotocamera ogni pixel
+  La stima della profondità predice quanto ogni pixel dista dalla fotocamera
   usando una sola immagine. LibreYOLO la espone come task depth, che restituisce
   una mappa densa di profondità inversa relativa sul canvas dell'immagine
   originale.
@@ -122,33 +122,34 @@ di una foto annotata.
 
 ## Modelli
 
-Sei famiglie servono `depth`.
+Sei famiglie coprono `depth`.
 
 [Depth Anything V2](/docs/models/depth-anything-v2) abbina un encoder DINOv2 a un
 decoder DPT ed è qui l'opzione predefinita per l'uso generico. La licenza decide la
-taglia quanto l'accuratezza: il checkpoint Small è Apache-2.0 mentre Base e Large
-sono non commerciali, quindi controlla la tabella dei checkpoint nella sua pagina
-prima di sceglierne uno.
+taglia tanto quanto l'accuratezza: il checkpoint Small è Apache-2.0 mentre Base e
+Large sono non commerciali, quindi controlla la tabella dei checkpoint sulla sua
+pagina prima di sceglierne uno.
 
-[Depth Anything 3](/docs/models/depth-anything-3) porta il checkpoint DA3MONO-LARGE,
-un transformer semplice senza specializzazioni architetturali per la profondità.
+[Depth Anything 3](/docs/models/depth-anything-3) è il porting del checkpoint
+DA3MONO-LARGE, un transformer semplice senza specializzazioni architetturali per la
+profondità.
 
 [ZipDepth](/docs/models/zipdepth) è la fascia compatta: una CNN riparametrizzabile
 distillata da Depth Anything V2 Large, con un secondo checkpoint il cui decoder
 evita le operazioni gather e unfold per i compilatori NPU che non le supportano.
 
-[MiDaS](/docs/models/midas) è la linea di lavoro che ha stabilito il protocollo
+[MiDaS](/docs/models/midas) è il filone di ricerca che ha stabilito il protocollo
 zero-shot di profondità relativa con cui vengono misurate le altre famiglie. È
 l'unica famiglia depth che LibreYOLO non ripubblica: richiedere un checkpoint scarica
-l'asset ufficiale dalla release GitHub dei suoi autori e ne verifica uno SHA-256 fissato.
+l'asset ufficiale dalla release GitHub dei suoi autori e ne verifica lo SHA-256 fissato.
 
-[LibreMODUS](/docs/models/libremodus) arriva alla profondità come uno dei target di
-un modello any-to-any invece che con una testa dedicata. Richiede l'extra `modus` e
+[LibreMODUS](/docs/models/libremodus) copre la profondità come uno dei target di
+un modello any-to-any, non con una testa dedicata. Richiede l'extra `modus` e
 un tuo account Hugging Face autenticato, e non offre né `val()` né `export()`.
 
 [SenseNova-Vision](/docs/models/sensenova-vision) genera la mappa di profondità come
-immagine attraverso un decode di diffusione, dallo stesso checkpoint da 7B che serve
-gli altri sei task. Richiede l'extra `sensenova`, e i suoi pesi sono limitati a un
+immagine tramite una decodifica per diffusione, dallo stesso checkpoint da 7B che
+copre gli altri sei task. Richiede l'extra `sensenova`, e i suoi pesi sono limitati a un
 uso non commerciale; la licenza è nella sua pagina.
 
 ## Predizione
@@ -158,16 +159,16 @@ per le due famiglie appena citate.
 
 <code-tabs name="predict" />
 
-La risoluzione di input è vincolata per famiglia. Depth Anything V2 e Depth Anything
-3 si basano su una griglia di patch DINOv2, quindi `imgsz` deve essere divisibile per
-14, cosa che LibreYOLO controlla prima di eseguire. `Results.plot()` non copre questo
+La risoluzione di input è vincolata in modo diverso per ogni famiglia. Depth Anything
+V2 e Depth Anything 3 si basano su una griglia di patch DINOv2, quindi `imgsz` deve
+essere divisibile per 14, cosa che LibreYOLO controlla prima di eseguire. `Results.plot()` non copre questo
 task; è definito solo per le normali di superficie e i bordi. Vedi
 [predizione](/docs/predict) per sorgenti, streaming e gestione dei risultati.
 
 ## Formato del dataset
 
-La validazione della profondità accoppia ogni immagine con una mappa di profondità
-densa a singolo canale con la stessa risoluzione, trovata sostituendo la directory
+La validazione della profondità abbina a ogni immagine una mappa di profondità densa
+a singolo canale della stessa risoluzione, individuata sostituendo la directory
 delle profondità nel percorso dell'immagine.
 
 ```text
@@ -187,9 +188,9 @@ nc: 1
 names: {0: depth}
 ```
 
-Le mappe sono PNG o TIF a singolo canale, oppure `.npy`. I valori sono profondità
-semplice in un'unità che il dataset mantiene coerente, e i pixel a `0`, negativi, NaN
-e infiniti segnalano campioni non validi, esclusi dalle metriche. Le mappe intere
+Le mappe sono PNG o TIF a singolo canale, oppure `.npy`. I valori esprimono la
+profondità in un'unità che il dataset mantiene coerente, e i pixel a `0`, negativi,
+NaN e infiniti segnalano campioni non validi, esclusi dalle metriche. Le mappe intere
 vengono divise per `depth_scale`, che di default vale `256.0`, la convenzione dei PNG
 a 16 bit; le mappe `.npy` in float sono usate così come sono. `depth_stem_suffix` e
 `depth_mask_suffix` coprono i dataset che nominano diversamente i loro file di
@@ -215,13 +216,14 @@ segna come validi.
 <code-tabs name="val" />
 
 `metrics/abs_rel` è l'errore relativo assoluto medio, il residuo diviso per la
-profondità di ground truth, e più basso è meglio. `metrics/rmse` è la radice
-dell'errore quadratico medio nell'unità di profondità del dataset stesso, anche qui
-più basso è meglio. `metrics/delta1`, `metrics/delta2` e `metrics/delta3` sono le
-accuratezze a soglia: la frazione di pixel validi il cui rapporto con il ground
-truth, preso nella direzione in cui è maggiore, sta sotto 1.25, 1.25 al quadrato e
-1.25 al cubo, quindi più alto è meglio. `metrics/delta1` è anche `fitness`, il numero
-che legge la selezione del checkpoint migliore.
+profondità di ground truth, e valori più bassi sono migliori. `metrics/rmse` è la
+radice dell'errore quadratico medio nell'unità di profondità del dataset stesso,
+anche qui valori più bassi sono migliori. `metrics/delta1`, `metrics/delta2` e
+`metrics/delta3` sono le accuratezze a soglia: la frazione di pixel validi il cui
+rapporto con il ground truth, preso nella direzione in cui è maggiore, resta sotto
+1.25, 1.25 al quadrato e 1.25 al cubo, quindi valori più alti sono migliori.
+`metrics/delta1` è anche `fitness`, il numero su cui si basa la selezione del
+checkpoint migliore.
 
 ## Esportazione
 

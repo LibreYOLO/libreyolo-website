@@ -130,8 +130,8 @@ Coloque o dataset em uma CDN primeiro. Empacotá-lo como um único tar em um
 repositório de dataset do Hugging Face funciona igual em qualquer provedor,
 entrega rápido para todos eles, e não precisa de nada além de um `HF_TOKEN` no
 ambiente do job quando o repositório é privado. Subir um dataset por uma conexão
-doméstica, ou puxá-lo de uma origem lenta na máquina, é tempo de GPU faturado
-esperando.
+doméstica, ou puxá-lo de uma origem lenta na máquina, é tempo de GPU cobrado
+enquanto você espera.
 
 <code-tabs name="stage" />
 
@@ -144,7 +144,7 @@ folga, e pare por aí.
 
 <code-tabs name="install" />
 
-Instale o PyTorch primeiro se a imagem já não trouxer um build CUDA compatível
+Instale o PyTorch primeiro se a imagem ainda não trouxer um build CUDA compatível
 com a placa, e só então o LibreYOLO, para o pip não resolver um torch só de CPU
 por conta própria. O segundo snippet não é cerimônia opcional: uma wheel
 compilada para a arquitetura de GPU errada reporta
@@ -178,7 +178,7 @@ comportamento distribuído, está em
 
 ## Acompanhe de fora
 
-Toda execução escreve um `status.json` no diretório da run, reescrito
+Toda execução escreve um `status.json` no diretório da execução, reescrito
 atomicamente a cada época. É a leitura barata: algumas centenas de bytes
 carregando o estado, a época atual, o ETA e as métricas mais recentes, sem
 precisar parsear um log.
@@ -186,7 +186,7 @@ precisar parsear um log.
 <code-tabs name="watch" />
 
 Ao lado dele, o `metrics.jsonl` tem o histórico completo por época, e o
-`train.log` tem a saída do console. O `libreyolo monitor` serve um dashboard de
+`train.log` tem a saída do console. O `libreyolo monitor` serve um dashboard no
 navegador em cima dos três usando apenas a biblioteca padrão, então não precisa
 de nada instalado na máquina além do próprio LibreYOLO. Chegue até ele por um
 redirecionamento de porta SSH.
@@ -197,7 +197,7 @@ execução em andamento, reabrem uma que terminou ou inspecionam uma que quebrou
 ## Tire os pesos antes de parar de pagar
 
 A máquina é descartável. Envie checkpoints em marcos intermediários, não só no
-fim, porque senão uma queda, uma preempção ou o crédito acabando perde a
+fim, porque senão um crash, uma preempção ou o crédito acabando levam junto a
 execução inteira.
 
 <code-tabs name="push" />
@@ -206,19 +206,19 @@ execução inteira.
 melhora. `save_period=N` adiciona snapshots `weights/epoch_<N>.pt` por cima, que
 é o que torna barato um envio no meio da execução. `summary.json` e
 `results.csv`, onde a família os escreve, são pequenos e também vale a pena
-levar.
+levá-los.
 
 Um callback em `on_train_epoch_end` é o jeito limpo de automatizar o envio. Veja
 [Loggers de experimentos](/docs/train/loggers), onde os backends hospedados
-também te dão as métricas sem tocar na máquina.
+também te dão as métricas sem nem tocar na máquina.
 
 ## Pare de pagar
 
 Essa é a parte que custa dinheiro de verdade quando dá errado, e a regra muda
 conforme o modelo do provedor.
 
-Em um marketplace onde você aluga uma máquina crua, a cobrança corre no relógio
-até a instância ser destruída. Uma GPU ociosa cobra exatamente como uma ocupada,
+Em um marketplace onde você aluga a máquina em si, a cobrança corre em tempo de
+relógio até a instância ser destruída. Uma GPU ociosa cobra exatamente como uma ocupada,
 então matar o processo de treinamento não economiza nada por si só. Uma
 instância parada continua cobrando o disco.
 
@@ -233,7 +233,7 @@ cobrava $3.4828 por hora, parada cobrava $0.0694 por hora só pelo disco, e
 destruída não cobrava nada. Isso é uma economia de 98 por cento mantendo o
 ambiente, os dados preparados e os checkpoints no lugar.
 
-A taxa parada é uma conta que dá para fazer antes de alugar:
+A tarifa no estado parado é uma conta que dá para fazer antes de alugar:
 
 ```text
 stopped $/hr = allocated_GB * storage_cost_per_GB_per_month / 730
@@ -253,7 +253,7 @@ está seguro; suas GPUs não.
 
 ## Serverless, como uma função
 
-Se você prefere não gerenciar uma máquina, tanto o Modal quanto o Beam rodam uma
+Se você preferir não gerenciar uma máquina, tanto o Modal quanto o Beam rodam uma
 função Python decorada em uma GPU e escalam para zero quando ela retorna. A
 própria suíte de testes noturnos do LibreYOLO roda no Modal, e
 `tools/ci/modal_nightly.py` no repositório da biblioteca é o exemplo funcional
@@ -303,8 +303,8 @@ $/hr é o número errado para otimizar. Um modelo pequeno deixa uma placa grande
 metade ociosa, então uma GPU mais barata e mais lenta costuma sair mais barata
 por época. Rode o profiler por alguns passos na placa alugada antes de se
 comprometer com uma execução longa: se o veredito for `dataloader` ou
-`host / launch`, uma GPU mais rápida não compra nada e mais workers ou um batch
-maior compram muito. Veja
+`host / launch`, uma GPU mais rápida não resolve nada e mais workers ou um batch
+maior resolvem muito. Veja
 [Desempenho de treinamento](/docs/train/performance).
 
 ## Relacionados

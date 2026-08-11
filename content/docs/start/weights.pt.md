@@ -35,7 +35,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Um nome de arquivo puro resolve para weights/LibreYOLO9t.pt e é
+        # Um nome de arquivo simples resolve para weights/LibreYOLO9t.pt e é
         # baixado ali se ainda não estiver presente.
         model = LibreYOLO("LibreYOLO9t.pt")
         print(model(SAMPLE_IMAGE).boxes)
@@ -52,7 +52,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        # Lê os metadados sem construir um modelo, e informa se eles
+        # Lê os metadados sem construir um modelo e informa se eles
         # cumprem o esquema.
         libreyolo metadata path=weights/LibreYOLO9t.pt
     - label: JSON
@@ -61,37 +61,31 @@ snippets:
         libreyolo metadata path=weights/LibreYOLO9t.pt --json
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo.utils.serialization import (
             load_untrusted_torch_file,
             validate_checkpoint_metadata,
         )
 
-
         loaded = load_untrusted_torch_file("weights/LibreYOLO9t.pt")
 
-
-        # Retorna uma lista de problemas. Vazia significa que o arquivo cumpre a
-        v1.0.
-
+        # Retorna uma lista de problemas. Vazia significa que o arquivo cumpre a v1.0.
         print(validate_checkpoint_metadata(loaded))
-
-        print(loaded["model_family"], loaded["size"], loaded["task"],
-        loaded["nc"])
+        print(loaded["model_family"], loaded["size"], loaded["task"], loaded["nc"])
 source_hash: 210a12baa1417cfb
 ---
 
 ## Onde um checkpoint é procurado
 
 Uma referência de modelo sem componente de diretório, como `LibreYOLO9t.pt`, é
-resolvida em `weights/` relativo ao diretório de trabalho atual. Se
+resolvida dentro de `weights/`, a partir do diretório de trabalho atual. Se
 `weights/LibreYOLO9t.pt` existir, ele é usado; se um arquivo com esse nome
 existir no próprio diretório de trabalho, ele é usado no lugar; caso contrário,
 `weights/LibreYOLO9t.pt` passa a ser o destino do download.
 
 Uma referência que de fato contém um diretório, absoluto ou relativo, é tomada
-literalmente. É essa a forma a usar quando os pesos ficam em um lugar central e
-nada deve ser buscado na rede.
+literalmente. É essa a forma a ser usada quando os pesos ficam em um lugar
+central e nada deve ser buscado na rede.
 
 <code-tabs name="load" />
 
@@ -109,7 +103,7 @@ https://huggingface.co/LibreYOLO/<name>/resolve/main/<name>.pt
 
 Um sufixo de variante de dataset continua fazendo parte do nome do repositório,
 então um checkpoint treinado em algo diferente do padrão da família resolve para
-o próprio repositório em vez de sobrescrever o padrão.
+o seu próprio repositório em vez de sobrescrever o padrão.
 
 A transferência em si é defensiva, porque um arquivo de pesos truncado falha
 mais adiante com um erro pouco útil. Os downloads são transmitidos para um
@@ -117,9 +111,10 @@ arquivo `.part` e movidos para o lugar de forma atômica só quando completos, d
 modo que um processo interrompido nunca deixa um checkpoint escrito pela metade
 no caminho final. Uma transferência interrompida é retomada a partir do seu
 offset em bytes usando um validador HTTP, e recomeça do zero se o servidor
-indicar que o objeto mudou. As falhas são repetidas três vezes com backoff
-exponencial. Processos concorrentes que apontam para o mesmo caminho pegam um
-arquivo de lock, então dois treinamentos que começam juntos baixam uma vez só.
+indicar que o objeto mudou. Em caso de falha, há três novas tentativas com
+backoff exponencial. Processos concorrentes que apontam para o mesmo caminho
+adquirem um arquivo de lock, então dois treinamentos que começam juntos baixam
+uma vez só.
 Quando uma família busca de um host de terceiros em vez da organização
 LibreYOLO, ela pode fixar um checksum e recusar o arquivo se ele não bater.
 
@@ -141,9 +136,9 @@ Os pesos publicados ficam em
 [huggingface.co/LibreYOLO](https://huggingface.co/LibreYOLO), um repositório por
 checkpoint. Cada repositório carrega uma licença, e a licença não é uniforme
 dentro de uma família: uma família cujo código é MIT pode ter alguns pesos que
-não são. O repositório é a fonte autoritativa. A página de cada modelo lista os
-checkpoints publicados daquela família e suas licenças nas seções Checkpoints e
-Licenciamento.
+não são. O repositório é a referência definitiva. A página de cada modelo lista
+os checkpoints publicados daquela família e suas licenças nas seções Checkpoints
+e Licenciamento.
 
 ## Trabalhando offline
 
@@ -177,20 +172,20 @@ vez de ser feito de forma insegura.
 Alguns checkpoints de treinamento upstream embutem objetos que o unpickler
 restrito rejeita, como um objeto de configuração do framework em que foram
 treinados. Esses objetos são metadados de que o LibreYOLO não precisa, então,
-durante a conversão, cada classe bloqueada é substituída por um substituto
-inerte que satisfaz o unpickler sem executar nada, e apenas os tensores
-sobrevivem no arquivo convertido. Nomes de módulo sensíveis são recusados de
-saída em vez de virarem stub, e o laço de retentativas é limitado, de modo que
-um arquivo construído para introduzir uma série infinita de classes bloqueadas
-falha de forma fechada. Veja [importar pesos existentes](/docs/migrate) para o
-resto desse caminho.
+durante a conversão, cada classe bloqueada é trocada por um substituto inerte
+que satisfaz o unpickler sem executar nada, e apenas os tensores sobrevivem no
+arquivo convertido. Nomes de módulo sensíveis são recusados de imediato em vez
+de virarem stub, e o laço de retentativas é limitado, de modo que um arquivo
+construído para introduzir uma série infinita de classes bloqueadas falha de
+forma segura (fail closed). Veja [importar pesos existentes](/docs/migrate) para
+o resto desse caminho.
 
 ## Metadados do checkpoint
 
 Um checkpoint do LibreYOLO é um dicionário cuja chave `model` guarda o state
 dict do PyTorch. Nove chaves são exigidas pelo esquema v1.0, e juntas elas
 permitem que a factory identifique um arquivo sem analisar o nome dele nem
-adivinhar pelos formatos dos tensores.
+adivinhar pelas dimensões dos tensores.
 
 | Chave | Significado |
 |---|---|
@@ -214,7 +209,7 @@ pesos de inferência publicados não devem carregar isso.
 
 Um arquivo que cumpre as nove chaves carrega pelo caminho de metadados. Um que
 não cumpre é convertido, se alguma família reconhecer seu layout, ou carregado
-pelo caminho de compatibilidade com um aviso nomeando o que está faltando.
+pelo caminho de compatibilidade com um aviso que diz o que está faltando.
 
 ## Inspecionando um checkpoint
 

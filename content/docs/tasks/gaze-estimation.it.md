@@ -14,7 +14,7 @@ keywords:
   - gaze estimation python
   - eye tracking python
   - direzione dello sguardo
-  - pitch yaw sguardo
+  - pitch yaw gaze
   - L2CS-Net
   - head pose estimation
   - stima dello sguardo libreyolo
@@ -95,19 +95,19 @@ colonne `(x, y, z)`.
 Poiché il task è in due fasi, una predizione dipende da due modelli. I volti che
 il rilevatore non trova non hanno alcuna riga di sguardo, e i box che colloca
 male producono angoli calcolati su un volto ritagliato male. La chiave canonica
-del task è `gaze`; `gaze-estimation` viene normalizzata verso di essa.
+del task è `gaze`; `gaze-estimation` si normalizza a questa chiave.
 
 ## Modelli
 
 [L2CS-Net](/docs/models/l2cs) è l'unica famiglia che serve questo task. Abbina
 un tronco ResNet a due teste parallele di classificazione a bin di angoli, una
-per il pitch e una per lo yaw, su ritagli di volto 448x448. Architetturalmente
-sono supportate cinque profondità di backbone, e una, la ResNet-50, ha un
-checkpoint pubblicato.
+per il pitch e una per lo yaw, su ritagli di volto 448x448. L'architettura
+supporta cinque profondità di backbone, e una, la ResNet-50, ha un checkpoint
+pubblicato.
 
-I pesi portano con sé una restrizione di licenza. Sono addestrati su Gaze360, la
-cui licenza consente solo l'uso di ricerca e non commerciale e vieta la
-ridistribuzione, quindi LibreYOLO non fa da mirror a nulla per questa famiglia.
+I pesi sono soggetti a una restrizione di licenza. Sono addestrati su Gaze360, la
+cui licenza consente solo l'uso a scopo di ricerca e non commerciale e vieta la
+ridistribuzione, quindi per questa famiglia LibreYOLO non ospita alcun mirror.
 L'unico checkpoint che la libreria può scaricare automaticamente arriva
 direttamente dalla distribuzione su Google Drive degli autori stessi, tramite
 `gdown`, dopo aver stampato i termini della licenza. Leggi
@@ -120,22 +120,22 @@ pip install "libreyolo[gaze]"
 ```
 
 Senza di esso la libreria stampa le istruzioni per il download manuale invece di
-tentare il trasferimento. Fare predizioni ed esportare un checkpoint che hai già
-non richiede alcun extra.
+tentare il trasferimento. Fare predizioni su un checkpoint che hai già ed
+esportarlo non richiede alcun extra.
 
 ## Predizione
 
 <code-tabs name="predict" />
 
-La sorgente dei volti si sceglie in tre modi. `face_boxes` passa box che hai già
-calcolato e salta il rilevamento. `face_detector` accetta `"auto"`, `"haar"`,
+La sorgente dei volti si sceglie in uno di tre modi. `face_boxes` passa box che
+hai già calcolato e salta il rilevamento. `face_detector` accetta `"auto"`, `"haar"`,
 `"yunet"`, un modello di rilevamento LibreYOLO o un semplice callable, e può
-essere impostato nel costruttore oppure per singola chiamata. Se lo lasci
-inutilizzato in Python, la predizione ricade sul rilevatore incluso in OpenCV,
-così una chiamata nuda funziona senza alcun cablaggio. Su OpenCV 4 si tratta
-della cascata di Haar distribuita dentro il wheel, che non richiede alcun
-download; su OpenCV 5, dove l'API di Haar è stata rimossa, è YuNet, che scarica
-una volta un piccolo file di modello dallo zoo di OpenCV.
+essere impostato nel costruttore oppure per singola chiamata. Se in Python non lo
+imposti, la predizione ricade sul rilevatore incluso in OpenCV, così una chiamata
+essenziale funziona senza configurare nulla. Su OpenCV 4 si tratta della cascata
+di Haar inclusa nel wheel, che non richiede alcun download; su OpenCV 5, dove
+l'API di Haar è stata rimossa, è YuNet, che scarica una sola volta un piccolo
+file di modello dallo zoo di OpenCV.
 
 La CLI non condivide quel fallback. `libreyolo predict` rifiuta un modello gaze
 senza `face_detector=`, e il valore che accetta è il nome di un rilevatore
@@ -145,14 +145,15 @@ risultati.
 
 ## Addestramento
 
-Nessuna famiglia di questo task si addestra dentro LibreYOLO.
+Nessuna famiglia di questo task si addestra all'interno di LibreYOLO.
 `LibreL2CS.train()` solleva un'eccezione: addestra nel progetto originale
 L2CS-Net e carica qui lo state dict risultante.
 
 ## Validazione
 
-La validazione contro dataset con ground truth di sguardo è fuori ambito, e
-`val()` solleva un'eccezione invece di restituire metriche che non ha calcolato.
+La validazione su dataset con ground truth dello sguardo è fuori dallo scopo
+della libreria, e `val()` solleva un'eccezione invece di restituire metriche che
+non ha calcolato.
 Per questo task non esiste alcun dizionario `metrics/`. Valuta a monte, sul
 dataset per cui il checkpoint è stato addestrato.
 
@@ -161,8 +162,8 @@ dataset per cui il checkpoint è stato addestrato.
 <code-tabs name="export" />
 
 Il contratto di esportazione per lo sguardo copre ONNX, TorchScript, ExecuTorch,
-TensorRT e OpenVINO. Ciò che esce dalla libreria è il tronco ResNet e le due
-teste a bin di angoli soltanto: il grafo prende un ritaglio di volto 448x448
+TensorRT e OpenVINO. Dalla libreria escono soltanto il tronco ResNet e le due
+teste a bin di angoli: il grafo prende un ritaglio di volto 448x448
 preprocessato e restituisce i logit grezzi di yaw e pitch. Il rilevamento dei
 volti, il ritaglio, la softmax, il valore atteso sui bin e la conversione in
 angoli restano tutti in Python, in `libreyolo.models.l2cs.utils`. Vedi

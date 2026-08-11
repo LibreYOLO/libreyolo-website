@@ -8,7 +8,7 @@ description: >-
 lead: >-
   A estimativa de normais de superfície prevê a direção para a qual cada
   superfície visível aponta. O LibreYOLO expõe isso como a tarefa normal, que
-  devolve um campo denso de vetores unitários sobre o canvas da imagem original.
+  devolve um campo denso de vetores unitários no canvas da imagem original.
 keywords:
   - estimativa de normais de superfície python
   - gerar mapa de normais de uma imagem
@@ -114,19 +114,19 @@ Diferente da profundidade, a saída não tem escala livre, então duas prediçõ
 diretamente comparáveis sem alinhamento.
 
 Uma predição preenche `result.normal_map`, um payload `NormalMap` que guarda um
-array `(H, W, 3)` float32 sobre o canvas da imagem original, também acessível
-como `result.normals`. Os vetores usam o referencial de câmera do OpenCV do
-LibreYOLO, com `+x` à direita, `+y` para baixo e `+z` para dentro da cena, e
-apontam para a câmera, então uma superfície fronto-paralela é `(0, 0, -1)`.
-`.assert_normalized()` verifica que todo pixel é finito e unitário dentro de uma
-tolerância. `result.boxes` fica vazio, então `conf`, `iou` e `max_det` não têm
+array `(H, W, 3)` float32 no canvas da imagem original, também acessível
+como `result.normals`. Os vetores usam o referencial de câmera OpenCV do
+LibreYOLO, com `+x` para a direita, `+y` para baixo e `+z` para dentro da cena,
+e apontam para a câmera, então uma superfície fronto-paralela é `(0, 0, -1)`.
+`.assert_normalized()` verifica se todo pixel é finito e tem comprimento
+unitário dentro de uma tolerância. `result.boxes` fica vazio, então `conf`, `iou` e `max_det` não têm
 efeito, e `Results.plot()` cobre esta tarefa.
 
 ## Modelos
 
 Duas famílias atendem `normal`.
 
-[MoGe-2](/docs/models/moge-2) é a dedicada: um modelo de geometria monocular de
+[MoGe-2](/docs/models/moge-2) é a família dedicada: um modelo de geometria monocular de
 uma única passagem em três tamanhos de encoder. O LibreYOLO não copia esses
 checkpoints para a sua própria organização; carregar um baixa o tamanho
 correspondente dos repositórios oficiais em uma revisão fixada e o confere contra
@@ -194,7 +194,7 @@ checkpoints oficiais fixados para predição, validação e exportação.
 ## Validação
 
 `val()` mede o ângulo entre cada vetor predito e o seu vetor de ground truth,
-sobre os pixels que o dataset marca como válidos.
+nos pixels que o dataset marca como válidos.
 
 <code-tabs name="val" />
 

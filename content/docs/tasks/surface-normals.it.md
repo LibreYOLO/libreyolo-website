@@ -13,7 +13,7 @@ lead: >-
 keywords:
   - surface normal estimation python
   - normal map da immagine
-  - geometria monocolare
+  - geometria monoculare
   - metrica errore angolare
   - predizione densa di normali
 last_verified: 1.5.0
@@ -129,7 +129,7 @@ lunghezza unitaria entro una tolleranza. `result.boxes` resta vuoto, quindi `con
 
 Due famiglie servono `normal`.
 
-[MoGe-2](/docs/models/moge-2) è quella dedicata: un modello di geometria monocolare a
+[MoGe-2](/docs/models/moge-2) è quella dedicata: un modello di geometria monoculare a
 singolo forward in tre taglie di encoder. LibreYOLO non copia questi checkpoint nella
 propria organizzazione; caricarne uno scarica la taglia corrispondente dai repository
 ufficiali a una revisione fissata e la verifica contro uno SHA-256 registrato.
@@ -184,8 +184,8 @@ RGB. La decodifica è `n = png / 65535 * 2 - 1` seguita dalla rinormalizzazione 
 vettore, e i vettori decodificati usano lo stesso sistema di riferimento della
 fotocamera OpenCV delle predizioni. Un pixel della maschera conta come valido quando è
 diverso da zero; senza un file di maschera, ogni vettore decodificato finito e diverso
-da zero è valido. I pixel di target non validi e quelli di padding sono tenuti
-internamente a `(0, 0, 0)` e non contribuiscono mai a una metrica. Vedi
+da zero è valido. I pixel di target non validi e quelli di padding sono rappresentati
+internamente da `(0, 0, 0)` e non contribuiscono mai a una metrica. Vedi
 [formati dei dataset](/docs/reference/dataset-formats) per il contratto completo.
 
 ## Addestramento

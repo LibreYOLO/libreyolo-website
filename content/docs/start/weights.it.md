@@ -84,7 +84,7 @@ source_hash: 210a12baa1417cfb
 ## Dove viene cercato un checkpoint
 
 Un riferimento a un modello senza componente di directory, come `LibreYOLO9t.pt`,
-viene risolto rispetto a `weights/` relativo alla directory di lavoro corrente.
+viene risolto rispetto a `weights/`, a partire dalla directory di lavoro corrente.
 Se `weights/LibreYOLO9t.pt` esiste viene usato quello; se un file con quel nome
 esiste nella directory di lavoro stessa viene usato quest'ultimo; altrimenti
 `weights/LibreYOLO9t.pt` diventa la destinazione del download.
@@ -117,29 +117,30 @@ avanti con un errore poco utile. I download vengono scritti in streaming su un
 file `.part` e spostati al loro posto in modo atomico solo quando sono completi,
 così un processo interrotto non può mai lasciare un checkpoint scritto a metà nel
 percorso finale. Un trasferimento interrotto riprende dal proprio offset in byte
-usando un validator HTTP, e riparte da zero se il server segnala che l'oggetto è
-cambiato. I fallimenti vengono ritentati tre volte con backoff esponenziale. I
-processi concorrenti che puntano allo stesso percorso prendono un file di lock,
-così due addestramenti che partono insieme scaricano una volta sola. Dove una
+usando un validatore HTTP, e riparte da zero se il server segnala che l'oggetto è
+cambiato. I tentativi falliti vengono ripetuti tre volte con backoff
+esponenziale. I processi concorrenti che puntano allo stesso percorso
+acquisiscono un file di lock,
+così due addestramenti che partono insieme scaricano una volta sola. Quando una
 famiglia scarica da un host di terze parti invece che dall'organizzazione
 LibreYOLO, può fissare un checksum e rifiutare il file in caso di mancata
 corrispondenza.
 
-Se `HF_TOKEN` è impostata, o se un token è nella cache in
+Se `HF_TOKEN` è impostata, o se un token è salvato nella cache in
 `~/.cache/huggingface/token`, viene allegato come bearer token. Viene allegato
 solo agli URL di `huggingface.co`, quindi una famiglia che scarica da un altro
 host non lo riceve mai.
 
-Non tutte le famiglie scaricano automaticamente. Alcune deliberatamente non
-restituiscono alcun URL perché i pesi rilasciati non possono essere
-ridistribuiti, e l'errore spiega allora cosa fornire al loro posto. Altre
+Non tutte le famiglie scaricano automaticamente. Alcune non restituiscono
+deliberatamente alcun URL perché i pesi rilasciati non possono essere
+ridistribuiti, e in quel caso l'errore spiega cosa fornire al loro posto. Altre
 stampano un avviso di licenza prima che il trasferimento inizi. Quell'avviso è il
 segnale, a runtime, che i termini di un checkpoint sono più restrittivi di quelli
 del codice, e vale la pena leggerlo invece di scorrere oltre.
 
 ## L'organizzazione su Hugging Face
 
-I pesi pubblicati stanno su
+I pesi pubblicati si trovano su
 [huggingface.co/LibreYOLO](https://huggingface.co/LibreYOLO), un repository per
 ogni checkpoint. Ogni repository porta con sé una licenza, e la licenza non è
 uniforme all'interno di una famiglia: una famiglia il cui codice è MIT può avere
@@ -150,9 +151,10 @@ Checkpoint e Licenze.
 ## Lavorare offline
 
 Nulla nella libreria richiede accesso alla rete una volta che i file sono in
-locale. Funzionano due approcci:
+locale. Ci sono due approcci possibili:
 
-Prepopola una directory `weights/` accanto al punto in cui gira il job. Basta
+Prepara in anticipo una directory `weights/` accanto al punto in cui gira il
+job. Basta
 scaricare i checkpoint una volta su una macchina connessa e poi copiare la
 directory; il passo di risoluzione descritto sopra li trova e non arriva mai alla
 rete.
@@ -181,7 +183,7 @@ Alcuni checkpoint di addestramento upstream contengono oggetti che l'unpickler
 ristretto rifiuta, come un oggetto di configurazione del framework con cui sono
 stati addestrati. Quegli oggetti sono metadati di cui LibreYOLO non ha bisogno,
 quindi durante la conversione ogni classe bloccata viene sostituita da un
-sostituto inerte che soddisfa l'unpickler senza eseguire nulla, e nel file
+segnaposto inerte che soddisfa l'unpickler senza eseguire nulla, e nel file
 convertito sopravvivono solo i tensori. I nomi di moduli sensibili vengono
 rifiutati del tutto invece di essere sostituiti da uno stub, e il ciclo di retry
 è limitato, così un file costruito ad arte per introdurre una serie infinita di
@@ -213,7 +215,7 @@ possono aggiungere le sigma OKS per keypoint. I checkpoint OCR incorporano
 l'intero charset CTC, così il file è autosufficiente. I checkpoint di restore
 possono registrare il tipo di degradazione e un fattore di upscale. I checkpoint
 del trainer aggiungono lo stato di ripresa, come `epoch`, lo stato
-dell'optimizer e i pesi EMA; i pesi di inferenza pubblicati non dovrebbero
+dell'ottimizzatore e i pesi EMA; i pesi di inferenza pubblicati non dovrebbero
 contenerli.
 
 Un file che soddisfa tutte e nove le chiavi viene caricato attraverso il percorso

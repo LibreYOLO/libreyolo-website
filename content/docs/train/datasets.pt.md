@@ -24,16 +24,12 @@ snippets:
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-
-        # Um nome incluído no pacote, um caminho relativo ou um caminho absoluto
-        funcionam.
-
+        # Um nome incluído no pacote, um caminho relativo ou um absoluto funcionam.
         model.train(data="coco8.yaml", epochs=10)
     - label: CLI
       language: bash
@@ -44,18 +40,15 @@ snippets:
       language: bash
       code: |
         libreyolo doctor my-dataset.yaml
-    - label: Falhar um job de CI também com avisos
+    - label: Fazer um job de CI falhar também com avisos
       language: bash
       code: |
         libreyolo doctor my-dataset.yaml strict=true json=true
     - label: Pular a passada de decodificação das imagens
       language: bash
-      code: >
-        # Lê apenas os rótulos e o YAML. As verificações de corrupção,
-        duplicatas
-
-        # e vazamento entre splits precisam dos pixels, então são puladas.
-
+      code: |
+        # Lê apenas os rótulos e o YAML. Corrupção, duplicatas e vazamento
+        # entre splits precisam dos pixels, então essas verificações são puladas.
         libreyolo doctor my-dataset.yaml fast=true
     - label: Python
       language: python
@@ -81,7 +74,7 @@ pacote.
 O nome é resolvido em uma ordem fixa: um caminho absoluto que exista, depois o
 nome como foi dado relativo ao diretório de trabalho, depois o mesmo nome com
 `.yaml` no fim, depois o diretório de configs incluídos no pacote. Quando nada
-corresponde, o erro nomeia cada diretório que foi procurado e lista os configs
+corresponde, o erro nomeia cada diretório consultado e lista os configs
 incluídos.
 
 ## Configs incluídos
@@ -137,8 +130,8 @@ download: https://example.com/my-dataset.zip   # opcional
 `train`, `val` e `test` aceitam cada um um diretório de imagens, um arquivo
 `.txt` listando um caminho de imagem por linha, ou uma lista misturando os dois.
 As linhas de uma lista `.txt` podem ser relativas, e nesse caso são resolvidas
-contra o diretório do próprio arquivo de lista, e linhas que começam com `#` são
-puladas.
+em relação ao diretório do próprio arquivo de lista, e linhas que começam com `#`
+são puladas.
 
 `names` pode ser uma lista ou um mapeamento com chaves inteiras. `nc` é
 opcional; quando os dois estão presentes e discordam, o doctor reporta isso como
@@ -192,12 +185,12 @@ mesma resolução, resolvida substituindo `images` por `masks_dir` (padrão
 ids de origem para ids de treinamento no momento do carregamento.
 
 A classificação usa uma árvore ImageFolder em vez de arquivos de rótulos, com
-`train/` e `val/` contendo cada um um diretório por classe. O mapeamento de
-classe para índice é a ordem dos nomes de pasta ordenados.
+`train/` e `val/` contendo, cada um, um diretório por classe. O mapeamento de
+classe para índice é a ordem alfabética dos nomes de pasta.
 
 A restauração pareia uma entrada degradada com um alvo limpo de resolução
-idêntica através de `input_dir` e `target_dir`. Profundidade, normais de
-superfície e bordas pareiam cada uma uma imagem com um mapa denso através da sua
+idêntica por meio de `input_dir` e `target_dir`. Profundidade, normais de
+superfície e bordas pareiam uma imagem com um mapa denso, cada uma pela sua
 própria chave de diretório.
 
 O contrato completo por tarefa, incluindo as convenções de escala de
@@ -248,8 +241,8 @@ imprime um aviso quando a flag está ligada, e o doctor nunca a habilita.
 ## Confira o dataset antes de treinar
 
 `libreyolo doctor` lê um dataset de detecção e informa o que daria errado antes
-de envolver uma GPU. Ele sai com 1 quando encontra erros, então funciona como um
-gate de CI.
+de envolver uma GPU. Ele sai com código 1 quando encontra erros, então funciona
+como um gate de CI.
 
 <code-tabs name="doctor" />
 
@@ -258,21 +251,21 @@ As verificações vêm em seis famílias:
 | Família | Procura por |
 |---|---|
 | `config` | `names` faltando, `nc` que discorda de `names`, splits faltando ou vazios, nomes de classe duplicados |
-| `files` | imagens sem arquivo de rótulos, rótulos sem imagem, imagens faltando listadas em um split, colisões de nome-base |
+| `files` | imagens sem arquivo de rótulos, rótulos sem imagem, imagens listadas em um split que não existem, colisões de nome-base |
 | `labels` | linhas malformadas, ids de classe fora de `[0, nc)`, coordenadas fora de `[0, 1]`, boxes de área zero, boxes minúsculos ou enormes, boxes duplicados, arquivos de rótulos idênticos byte a byte |
 | `balance` | classes com zero ou poucas instâncias, razão de desbalanceamento entre classes, classes presentes em um só split, proporção de imagens de background |
-| `images` | arquivos que não decodificam, rotação EXIF, layouts de canais estranhos, imagens uniformes, duplicatas exatas e quase exatas |
+| `images` | arquivos que não podem ser decodificados, rotação EXIF, layouts de canais estranhos, imagens uniformes, duplicatas exatas e quase exatas |
 | `splits` | a mesma imagem aparecendo em dois splits, de forma exata ou quase idêntica |
 
 `--only` e `--skip` aceitam um id de verificação ou um prefixo de família, então
 `skip=images,labels.tiny_object` é válido. `--fast` descarta toda verificação que
 precisa decodificar pixels, que são as famílias `images` e `splits`.
 
-Vale conhecer dois comportamentos. `--strict` faz com que os avisos também façam
-o código de saída falhar, além dos erros. E o doctor cobre apenas datasets de
-detecção: um dataset de pose, segmentação ou caixas orientadas é rejeitado com
-uma mensagem nomeando o que ele detectou, em vez de ser conferido contra o
-contrato errado.
+Vale conhecer dois comportamentos. Com `--strict`, os avisos também derrubam o
+código de saída, e não só os erros. E o doctor cobre apenas datasets de detecção:
+um dataset de pose, segmentação ou caixas orientadas é rejeitado com uma mensagem
+nomeando o que ele detectou, em vez de ser conferido em relação ao contrato
+errado.
 
 ## Relacionados
 

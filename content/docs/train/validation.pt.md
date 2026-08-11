@@ -3,8 +3,8 @@ title: Validação e métricas
 seo_title: Validação e métricas no LibreYOLO
 description: >-
   Rode val() em qualquer modelo, leia as chaves de métrica que cada tarefa
-  retorna, escolha um backend de avaliação e ligue uma loss de validação ao lado
-  da métrica de acurácia.
+  retorna, escolha um backend de avaliação e ligue uma loss de validação junto
+  com a métrica de acurácia.
 lead: >-
   A validação roda um modelo sobre um split do dataset através do val() e
   retorna um dicionário plano de chaves de métrica e valores float. As chaves
@@ -88,7 +88,7 @@ nomeado, incluindo `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`,
 
 ## Chaves de métrica por tarefa
 
-A detecção retorna a família COCO de números:
+A detecção retorna a família de números do COCO:
 
 ```text
 metrics/mAP50-95   metrics/mAP50    metrics/mAP75
@@ -99,7 +99,7 @@ metrics/precision  metrics/recall
 metrics/precision(B)  metrics/recall(B)  metrics/mAP50(B)  metrics/mAP50-95(B)
 ```
 
-Duas delas são armadilhas. `metrics/precision` e `metrics/recall` são apelidos
+Duas delas são armadilhas. `metrics/precision` e `metrics/recall` são aliases
 mantidos por compatibilidade retroativa: eles carregam os valores de mAP 50-95 e
 AR@100, não um par de precisão e recall. Use as chaves nomeadas.
 
@@ -108,13 +108,13 @@ máscara nas chaves sem sufixo, com as versões de box sob o sufixo `(B)` e as
 versões de máscara repetidas sob `(M)`. Precisão e recall existem apenas na forma
 sufixada nessa tarefa, como `metrics/precision(B)`/`metrics/recall(B)` e
 `metrics/precision(M)`/`metrics/recall(M)`, e os dois pares carregam os mesmos
-valores de apelido que os de detect: o par `(B)` é o mAP50-95 de box e o AR@100
+valores de alias que os de detect: o par `(B)` é o mAP50-95 de box e o AR@100
 de box, o par `(M)` é o mAP50-95 de máscara e o AR@100 de máscara.
 
 | Tarefa | Chaves |
 |---|---|
 | detect | `metrics/mAP50-95`, `metrics/mAP50`, `metrics/mAP75`, mais os detalhamentos por tamanho e de recall acima |
-| segment | versões de máscara das chaves de detect acima (as chaves sem sufixo são as de máscara); `precision`/`recall` existem apenas como `(B)`/`(M)`, ambos apelidados da mesma forma |
+| segment | versões de máscara das chaves de detect acima (as chaves sem sufixo são as de máscara); `precision`/`recall` existem apenas como `(B)`/`(M)`, os dois com o mesmo alias |
 | pose | `metrics/keypoints_mAP50-95`, `metrics/keypoints_mAP50`, `metrics/keypoints_mAP75`, `metrics/keypoints_mAP_M`, `metrics/keypoints_mAP_L`, e as chaves `keypoints_AR` correspondentes |
 | obb | `metrics/mAP50-95`, `metrics/mAP50`, `metrics/mAP75`, `metrics/precision`, `metrics/recall`, mais cópias sufixadas com `(OBB)` |
 | classify | `metrics/accuracy_top1`, `metrics/accuracy_top5` |
@@ -128,7 +128,7 @@ de box, o par `(M)` é o mAP50-95 de máscara e o AR@100 de máscara.
 | ocr | `metrics/det_precision`, `metrics/det_recall`, `metrics/det_hmean`, `metrics/e2e_precision`, `metrics/e2e_recall`, `metrics/e2e_f1`, `metrics/rec_1-NED` |
 | point | `metrics/precision`, `metrics/recall`, `metrics/f1`, `metrics/MLE`, `metrics/MAE`, `metrics/RMSE`, mais uma chave de varredura de mAP |
 
-`metrics/precision` e `metrics/recall` do OBB não são apelidos: são a precisão e
+`metrics/precision` e `metrics/recall` do OBB não são aliases: são a precisão e
 o recall reais em IoU 0.50, tomados no ponto de operação mais frouxo (toda
 predição que sobrevive ao `conf`, padrão `0.001`). As cópias sufixadas com
 `(OBB)` repetem os mesmos quatro valores sob um nome específico da tarefa, a
@@ -166,7 +166,7 @@ quando reportado junto com o hardware, o tamanho de batch e a precisão.
 
 As métricas de detecção e segmentação são calculadas por um avaliador COCO, e
 `faster_coco_eval=True`, o padrão, seleciona o backend em C++ quando o pacote
-`faster-coco-eval` está instalado. Quando não está, a execução recai para o
+`faster-coco-eval` está instalado. Quando não está, a execução recorre ao
 pycocotools com um aviso por processo:
 
 ```text
@@ -176,8 +176,8 @@ Install with: pip install faster-coco-eval
 
 Qual backend realmente rodou fica registrado no modelo como `last_eval_backend`,
 e a CLI reporta isso na saída para tarefas do estilo detecção. Defina
-`LIBREYOLO_FASTER_COCO_EVAL` para sobrescrever o valor da configuração pelo
-ambiente.
+`LIBREYOLO_FASTER_COCO_EVAL` para sobrescrever o valor da configuração a partir
+do ambiente.
 
 `iou_thresholds` só é respeitado no caminho do OBB. O caminho COCO avalia pela
 sua própria varredura fixa de 0.50 a 0.95 e ignora o valor.
@@ -191,7 +191,7 @@ objetivo de treinamento da família sobre os batches de validação.
 
 Ele emite `metrics/loss` mais um `metrics/loss/<component>` por termo,
 ponderados exatamente como o treinamento os pondera, de modo que os componentes
-somam o total. Através de um logger eles aparecem como `val/loss` e
+somam o total. Em um logger, eles aparecem como `val/loss` e
 `val/loss/<component>`, e o `libreyolo monitor` sobrepõe `metrics/loss` a
 `train/loss`.
 
@@ -219,12 +219,12 @@ Vem desligado por padrão porque a atribuição de alvos adiciona tempo e memór
 validação. O validador reaproveita a saída do modelo já produzida para a métrica
 de acurácia em vez de rodar um segundo forward, roda sob `no_grad` no modelo de
 avaliação ou de EMA, e em treinamento multi-GPU é calculado localmente no rank 0,
-sem coletivas. A seleção do melhor checkpoint continua na métrica de acurácia.
+sem operações coletivas. A seleção do melhor checkpoint continua na métrica de acurácia.
 
 Três coisas que ele deliberadamente não faz. Nunca inclui termos de contrastive
 denoising, porque esses precisam do ground truth na hora do forward e a validação
 faz o forward sem ele. Ele reporta o modelo em modo de avaliação, então onde o
-forward de treino e o de avaliação de uma família realmente diferem, em
+forward de treinamento e o de avaliação de uma família realmente diferem, em
 estatísticas de BatchNorm ou stochastic depth, o número reflete o modo de
 avaliação; essa é a comparação pretendida. E uma tarefa para a qual uma família
 não implementou isso gera um erro de configuração já na inicialização, em vez de
@@ -263,8 +263,8 @@ ao plotar emite um aviso e nunca aborta a execução.
 
 ## Validação durante o treinamento
 
-O treinamento valida a cada `eval_interval` épocas contra o split `val` do
-dataset, e as métricas que ele produz são o que dirige a seleção do `best.pt`, o
+O treinamento valida a cada `eval_interval` épocas no split `val` do dataset, e
+as métricas que ele produz são as que determinam a seleção do `best.pt`, o
 early stopping por `patience` e as chaves `val/` em todo logger. A validação
 roda sobre os pesos de EMA quando o EMA está ligado.
 

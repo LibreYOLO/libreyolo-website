@@ -77,9 +77,9 @@ topologia da malha uma vez para a imagem inteira, em vez de por linha, porque
 todas as pessoas compartilham a mesma. Não existe referencial de mundo nem de
 gravidade nesta versão, e nenhum campo faz esse papel em silêncio.
 
-Os layouts de parâmetros diferem entre modelos corporais, então nada nos
+Os layouts de parâmetros diferem entre modelos corporais, então nada sobre os
 formatos é fixo: `body_model` dá o nome da parametrização e as contagens são
-lidas de volta a partir dos tensores. Para `"mhr"`, o Momentum Human Rig, as
+lidas dos próprios tensores. Para `"mhr"`, o Momentum Human Rig, as
 rotações são ângulos de Euler em radianos em vez de axis-angle, `body_pose` é um
 vetor plano de parâmetros por articulação em vez de um trio por articulação, e
 `betas` são coeficientes de blendshape de identidade. A escala do esqueleto, a
@@ -97,7 +97,8 @@ derivar, então nada dele vem embutido. Dois backbones compartilham o mesmo
 modelo corporal MHR, `d3` sobre um encoder DINOv3 ViT-H/16+ e `h` sobre o ViT-H
 original.
 
-Três requisitos valem antes da primeira predição, e nenhum deles é opcional.
+Três requisitos se aplicam antes da primeira predição, e nenhum deles é
+opcional.
 
 O pacote upstream é instalado por você, não pelo LibreYOLO:
 
@@ -112,11 +113,11 @@ import.
 
 O espelho do checkpoint é restrito. Aceite a licença na página do modelo no
 Hugging Face e autentique com `hf auth login`, ou o primeiro download falha. O
-modelo corporal MHR em si é uma versão Apache-2.0 separada, baixada do próprio
-local público dele e guardada em cache localmente.
+modelo corporal MHR em si é uma versão Apache-2.0 separada, baixada de um local
+público próprio e mantida em cache localmente.
 
 A inferência precisa de um dispositivo CUDA. O estimador upstream move o batch
-dele para a GPU sem checar nada, então não há caminho por CPU para o qual cair e
+para a GPU sem verificar, então não há caminho por CPU para o qual recorrer e
 `device="cpu"` lança uma exceção.
 
 ## Predição
@@ -140,19 +141,19 @@ Essa família não está ligada à fábrica `LibreYOLO()` nem ao comando de CLI
 ## Treinamento
 
 Nenhuma família desta tarefa treina dentro do LibreYOLO. `LibreSAM3DBody.train()`
-lança uma exceção: treine no projeto original e carregue aqui o checkpoint
+lança uma exceção: treine no projeto upstream e carregue aqui o checkpoint
 resultante.
 
 ## Validação
 
 Não existe validador de malha, e `val()` lança uma exceção. Os benchmarks
-habituais são de licença apenas para pesquisa, então nenhum vem junto e nenhum
+habituais têm licença apenas para pesquisa, então nenhum vem junto e nenhum
 pode ser baixado para você.
 
 As métricas em si estão disponíveis como `libreyolo.validation.mesh_metrics`,
-para avaliar contra um dataset que você já tem. Ela recebe as articulações
+para avaliar contra um dataset que você já tem. A função recebe as articulações
 preditas e as de referência, opcionalmente os vértices preditos e os de
-referência, e devolve um dicionário com exatamente as mesmas chaves de um
+referência, e retorna um dicionário com exatamente as mesmas chaves de um
 validador:
 
 `metrics/mpjpe` é o erro médio de posição por articulação depois de alinhar a
@@ -161,8 +162,8 @@ articulação raiz, então ele pontua a pose ignorando onde a pessoa está na ce
 completo, rotação, escala uniforme e translação, o que remove a orientação
 global e o erro de tamanho do corpo e deixa a pose articulada. `metrics/pve` é o
 erro médio por vértice sobre a superfície da malha depois de alinhar pelo
-centroide dos vértices; diferente das métricas de articulação, ele é sensível à
-forma do corpo, e só aparece quando os dois arrays de vértices são fornecidos.
+centroide dos vértices; ao contrário das métricas de articulação, ele é sensível
+à forma do corpo, e só aparece quando os dois arrays de vértices são fornecidos.
 Nos três, quanto menor, melhor. As entradas são consideradas métricas, em
 metros, e `scale_to_mm` converte os resultados para os milímetros que a
 literatura reporta.

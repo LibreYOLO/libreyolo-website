@@ -124,7 +124,7 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # A factory roteia pelo sufixo do arquivo, então um artefato exportado
-        # carrega como um checkpoint e retorna o mesmo objeto Results.
+        # é carregado como um checkpoint e retorna o mesmo objeto Results.
         model = LibreYOLO("LibreDFINEn-seg.onnx")
         result = model(SAMPLE_IMAGE)
 
@@ -149,12 +149,13 @@ publicados.
 `predict()` preenche `result.masks` junto com `result.boxes`. `.data` é uma
 pilha `(N, H, W)` no canvas da imagem original, alinhada linha a linha com as
 caixas, então a máscara `i` pertence à caixa `i`. `.xy` converte cada máscara em
-seu maior contorno externo como um array de pixels `(P, 2)`, e `.xyn` dá o mesmo
+seu maior contorno externo como um array `(P, 2)` de pixels, e `.xyn` dá o mesmo
 contorno normalizado.
 
 ## Modelos
 
-Quatro famílias treinam e predizem máscaras: [RF-DETR](/docs/models/rf-detr),
+Quatro famílias tanto treinam quanto predizem máscaras:
+[RF-DETR](/docs/models/rf-detr),
 [EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine) e
 [RTMDet](/docs/models/rtmdet). A RF-DETR precisa do próprio extra,
 `pip install "libreyolo[rfdetr]"`; as outras três rodam no pacote base.
@@ -163,10 +164,10 @@ O [Mask R-CNN](/docs/models/mask-rcnn) prediz, valida e exporta máscaras, mas
 seu `train()` levanta `NotImplementedError`.
 
 O [EoMT](/docs/models/eomt) prediz e valida máscaras e também não treina, e sua
-exportação é ainda mais estreita: `export()` só aceita a tarefa semântica, e
+exportação é ainda mais restrita: `export()` só aceita a tarefa semântica, e
 levanta `NotImplementedError` para `segment` e `panoptic`, porque o contrato de
-runtime de máscaras por query que essas duas precisam não foi definido. Use o
-EoMT para máscaras de instância em Python, não através de um grafo exportado.
+runtime de máscaras por query de que essas duas precisam não foi definido. Use o
+EoMT para máscaras de instância em Python, e não por meio de um grafo exportado.
 
 Um grupo à parte segmenta a partir de um prompt em vez de uma lista de classes:
 um clique, uma caixa ou uma frase escolhe o objeto, e o modelo retorna a máscara
@@ -174,9 +175,9 @@ dele. [SAM](/docs/models/sam), [SAM 2](/docs/models/sam-2),
 [SAM 3](/docs/models/sam-3), [MobileSAM](/docs/models/mobilesam),
 [EdgeTAM](/docs/models/edgetam) e [PicoSAM3](/docs/models/picosam3) funcionam
 assim, e o [SenseNova-Vision](/docs/models/sensenova-vision) também, cuja
-segmentação é referring: ele recebe uma frase que nomeia um objeto. Eles
-carregam pela própria factory e pelos próprios extras, e cada página de modelo
-traz a chamada exata.
+segmentação é do tipo referring: ele recebe uma frase que nomeia um objeto. Eles
+são carregados pela própria factory e pelos próprios extras, e cada página de
+modelo traz a chamada exata.
 
 ## Predição
 
@@ -185,7 +186,7 @@ localmente.
 
 <code-tabs name="predict" />
 
-`conf` e `max_det` moldam a saída do mesmo jeito que fazem na detecção, e as
+`conf` e `max_det` moldam a saída do mesmo jeito que na detecção, e as
 máscaras são filtradas junto com as caixas às quais pertencem. Veja
 [predição](/docs/predict) para fontes, streaming e tratamento de resultados.
 
@@ -217,8 +218,8 @@ No mínimo três pontos, então a contagem de coordenadas depois do índice de
 classe é par e no mínimo seis, e o polígono precisa ser não degenerado. As
 coordenadas são floats em `[0, 1]` relativos à largura e à altura originais da
 imagem. Uma linha de detecção de cinco campos também é aceita em um dataset de
-segmentação e é lida como um segmento retangular, o que torna um dataset só de
-caixas carregável sem uma passagem de conversão.
+segmentação e é lida como um segmento retangular, o que permite carregar um
+dataset só de caixas sem uma etapa de conversão.
 
 O YAML é o YAML de detecção:
 
@@ -279,10 +280,11 @@ o mesmo número duas vezes.
 
 <code-tabs name="export" />
 
-Um artefato exportado carrega de volta por `LibreYOLO()` pelo sufixo do arquivo,
-então um arquivo `.onnx` ou `.engine` se comporta como um checkpoint e retorna o
-mesmo `Results`. A cobertura de segmentação é mais estreita que a cobertura de
-detecção na mesma família. A matriz em cada página de modelo é gerada a partir
-do conjunto validado e nomeia o motivo de um alvo não estar disponível. Veja
+Um artefato exportado é carregado de volta por `LibreYOLO()` pelo sufixo do
+arquivo, então um arquivo `.onnx` ou `.engine` se comporta como um checkpoint e
+retorna o mesmo `Results`. A cobertura de segmentação é mais restrita que a
+cobertura de detecção na mesma família. A matriz em cada página de modelo é
+gerada a partir do conjunto validado e indica o motivo de um alvo não estar
+disponível. Veja
 [exportação e deploy](/docs/export) para os formatos, seus extras e suas
 restrições.

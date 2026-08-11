@@ -144,8 +144,9 @@ ativações não lineares de um bloco UNet por multiplicação elemento a elemen
 o checkpoint publicado é treinado com ruído real de imagem do SIDD. A saída
 mantém a resolução de entrada.
 
-[Real-ESRGAN](/docs/models/real-esrgan) é o upscaler prático: três checkpoints
-treinados contra degradações sintéticas e não apenas contra redução bicúbica, em
+[Real-ESRGAN](/docs/models/real-esrgan) é o modelo prático de aumento de
+escala: três checkpoints treinados contra degradações sintéticas, e não apenas
+contra redução de escala bicúbica, em
 4x, 2x e um gerador 4x menor e mais rápido, feito para menor latência.
 
 [SwinIR](/docs/models/swinir) aumenta a escala em 4x com um backbone Swin
@@ -159,8 +160,8 @@ localmente.
 
 <code-tabs name="predict" />
 
-A restauração roda na resolução da própria imagem de origem, e não numa tela de
-rede fixa, aplicando padding apenas até o fator de subamostragem da rede, então
+A restauração roda na resolução da própria imagem de origem, e não em um canvas
+fixo da rede, aplicando padding apenas até o fator de subamostragem da rede, então
 tanto o tempo quanto a memória escalam com a quantidade de pixels da sua entrada.
 `tile` divide o forward pass em tiles sobrepostos e mistura as emendas de volta,
 e `tile_pad` é o halo adicionado em volta de cada tile antes de ele ser recortado
@@ -200,13 +201,14 @@ retorna `Results.restored`, não detecções. `degradation` e `dataset` são ró
 opcionais de procedência. `target_stem_suffix` cobre datasets que nomeiam a
 imagem limpa de forma diferente do seu par degradado. A validação mantém a
 resolução nativa e aplica padding apenas o suficiente para empilhar um batch,
-então as métricas são calculadas na tela original. Veja
+então as métricas são calculadas no canvas original. Veja
 [formatos de dataset](/docs/reference/dataset-formats) para o contrato completo.
 
 ## Treinamento
 
 NAFNet é a única família de restauração com implementação de treinamento.
-`Real-ESRGAN.train()` e `SwinIR.train()` levantam `NotImplementedError`: esses
+Tanto `Real-ESRGAN.train()` quanto `SwinIR.train()` lançam `NotImplementedError`:
+esses
 checkpoints vêm de treinamento GAN sobre pipelines de degradação sintética, e o
 treinador de restauração pareada rodaria sem reproduzir essa receita.
 
@@ -219,7 +221,7 @@ família e o pooling de inferência que ele desativa durante o treinamento.
 
 ## Validação
 
-`val()` compara a saída restaurada com o alvo limpo, em RGB, na tela original,
+`val()` compara a saída restaurada com o alvo limpo, em RGB, no canvas original,
 sem recorte de borda e sem redimensionamento.
 
 <code-tabs name="val" />

@@ -7,9 +7,9 @@ description: >-
   nome de módulo e de parâmetro.
 lead: >-
   O congelamento mantém fixos os pesos selecionados enquanto o resto do modelo
-  treina. Os seletores endereçam os grupos de congelamento ordenados da própria
-  família ou os nomes dos seus módulos, não números de camada crus de um grafo
-  YAML.
+  treina. Os seletores apontam para os grupos de congelamento ordenados da
+  própria família ou para os nomes dos seus módulos, e não para números brutos
+  de camada de um grafo YAML.
 keywords:
   - congelar camadas yolo
   - transfer learning yolo python
@@ -70,7 +70,7 @@ source_hash: 9f1e7551af6b16fe
 <code-tabs name="train" />
 
 O congelamento acontece depois que o modelo é construído e depois de qualquer
-reconstrução da cabeça para uma nova contagem de classes, e antes de o otimizador
+reconstrução da cabeça para um novo número de classes, e antes de o otimizador
 ser criado, então o otimizador só recebe parâmetros treináveis.
 
 ## O que um seletor pode ser
@@ -86,7 +86,7 @@ ser criado, então o otimizador só recebe parâmetros treináveis.
 
 Uma string passa por parsing antes de ser interpretada, então a CLI e uma
 configuração YAML aceitam os mesmos formatos que o Python. `freeze="[0, 3, 'head']"`
-é lido como uma lista literal, `freeze="backbone,neck"` é dividido na vírgula, e
+é lido como uma lista literal, `freeze="backbone,neck"` é dividido pela vírgula, e
 uma string decimal simples vira uma contagem.
 
 `freeze=True` é rejeitado por ser ambíguo.
@@ -99,22 +99,22 @@ internamente.
 
 ## Os grupos são definidos pela família
 
-Um inteiro endereça a lista ordenada de grupos de congelamento da própria
-família, não uma posição em um grafo compartilhado. As famílias do LibreYOLO não
-são todas um único modelo sequencial indexado por YAML, então um número de camada
-cru significaria algo diferente em cada uma delas.
+Um inteiro aponta para a lista ordenada de grupos de congelamento da própria
+família, não para uma posição em um grafo compartilhado. As famílias do LibreYOLO
+não são todas um único modelo sequencial indexado por YAML, então um número bruto
+de camada significaria algo diferente em cada uma delas.
 
 O YOLOv9 ordena seus grupos a partir da entrada: dez estágios do backbone, depois
 seis estágios do neck, depois a cabeça. É por isso que `freeze=10` é exatamente o
-backbone. `backbone`, `neck` e `head` são seletores por nome estáveis em cima
-disso.
+backbone. `backbone`, `neck` e `head` são seletores por nome estáveis sobre essa
+ordem.
 
 Os grupos do RF-DETR são `backbone.encoder`, `backbone.projector`, `decoder`,
 `queries`, `transformer.encoder_output` e `head`. Aqui os nomes são a melhor
 escolha, porque componentes de transformer não correspondem a uma contagem de
 camadas. `backbone` casa com os dois grupos de backbone por prefixo.
 
-Famílias que não definem grupos semânticos caem em um padrão conservador: cada
+Famílias que não definem grupos semânticos recorrem a um padrão conservador: cada
 filho direto do modelo que tenha ao menos um parâmetro, na ordem de declaração.
 Isso costuma ser uma lista curta, então um inteiro grande não vai encontrar
 grupos suficientes:
@@ -158,13 +158,13 @@ Layer freezing: selectors=[10], tensors=124, params=2103776, trainable=1863456/3
 ## BatchNorm congelado para de atualizar
 
 Um parâmetro congelado continua dentro de um módulo cujas estatísticas acumuladas
-continuariam se movendo. Todo módulo do tipo BatchNorm cujos parâmetros caem no
+continuariam mudando. Todo módulo do tipo BatchNorm cujos parâmetros caem no
 conjunto congelado é colocado em modo eval, e o trainer reaplica isso depois da
 chamada de `model.train()` de cada época, então as estatísticas ficam fixas
 durante toda a execução.
 
-Isso vem ligado por padrão e é o que faz congelar um backbone realmente
-congelá-lo.
+Isso vem ligado por padrão e é o que faz com que congelar um backbone realmente
+congele o backbone.
 
 ## Combinando com LoRA
 

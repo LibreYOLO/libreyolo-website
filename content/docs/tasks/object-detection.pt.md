@@ -125,13 +125,13 @@ source_hash: c735b6e3de78dd2b
 
 A detecção de objetos responde onde cada objeto está e o que ele é. Uma imagem
 entra, uma linha por instância sai: quatro números para o retângulo, um índice
-de classe e um score. Nada sobre a forma em pixels, orientação ou partes entra
-aí, e é isso que a separa da [segmentação de instâncias](/docs/tasks/instance-segmentation),
+de classe e um score. Nada de forma em pixels, orientação ou partes é incluído,
+e é isso que a separa da [segmentação de instâncias](/docs/tasks/instance-segmentation),
 das [caixas orientadas](/docs/tasks/oriented-detection) e da
 [pose](/docs/tasks/pose-estimation).
 
 `detect` é a chave canônica da tarefa e o padrão: um checkpoint cujo nome de
-arquivo não carrega sufixo de tarefa carrega como detector.
+arquivo não traz sufixo de tarefa é carregado como detector.
 
 `predict()` preenche `result.boxes`. `.xyxy` dá os cantos em pixels no canvas
 da imagem original, `.conf` o score e `.cls` o índice da classe em
@@ -142,7 +142,7 @@ um objeto `Boxes` produz fatias de uma linha, então `box.cls`, `box.conf` e
 
 ## Modelos
 
-Doze famílias treinam e predizem: [YOLOv9](/docs/models/yolov9),
+Doze famílias treinam e fazem predição: [YOLOv9](/docs/models/yolov9),
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
 [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine),
 [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr),
@@ -154,7 +154,7 @@ O RF-DETR precisa do seu próprio extra, `pip install "libreyolo[rfdetr]"`; o
 resto roda no pacote base.
 
 Outras onze fazem predição, validação e exportação, mas o `train()` delas
-levanta `NotImplementedError`: [LW-DETR](/docs/models/lw-detr),
+lança `NotImplementedError`: [LW-DETR](/docs/models/lw-detr),
 [DETR](/docs/models/detr), [Deformable DETR](/docs/models/deformable-detr),
 [DINO-DETR](/docs/models/dino-detr), [Faster R-CNN](/docs/models/faster-rcnn),
 [Mask R-CNN](/docs/models/mask-rcnn), [FCOS](/docs/models/fcos),
@@ -164,7 +164,7 @@ levanta `NotImplementedError`: [LW-DETR](/docs/models/lw-detr),
 
 A linhagem Darknet, [YOLOv1](/docs/models/yolov1),
 [YOLOv2](/docs/models/yolov2), [YOLOv3](/docs/models/yolov3) e
-[YOLOv4](/docs/models/yolov4), é mantida como peça de museu congelada:
+[YOLOv4](/docs/models/yolov4), é mantida congelada, como peça de museu:
 predição, validação e exportação funcionam, treinamento não.
 
 Um grupo à parte recebe sua lista de classes em runtime, e não do checkpoint,
@@ -243,9 +243,9 @@ os ids dos rótulos, então os nomes de categoria do JSON têm que bater com ele
 
 <code-tabs name="train" />
 
-`epochs`, `imgsz`, `batch` e `lr0` são os argumentos que se mexem primeiro.
-`lr0` é o que não se transfere entre famílias: uma taxa que um detector
-convolucional tolera faz um transformer divergir, então pegue o valor na página
+`epochs`, `imgsz`, `batch` e `lr0` são os primeiros argumentos a mexer. `lr0`
+é o que não se transfere entre famílias: uma taxa que um detector convolucional
+tolera faz um transformer divergir, então pegue o valor na página
 do modelo em vez do exemplo de outra família. Uma família também pode ignorar
 um argumento por completo, e a página dela lista quais. Veja
 [treinamento](/docs/train) para datasets, data augmentation, multi-GPU e
@@ -258,7 +258,7 @@ avaliação COCO sobre o split indicado por `val` no YAML do dataset.
 
 <code-tabs name="val" />
 
-`metrics/mAP50-95` é a mean average precision calculada sobre os limiares de
+`metrics/mAP50-95` é a média da mean average precision sobre os limiares de
 IoU de 0.50 a 0.95, e é o número de destaque. `metrics/mAP50` e
 `metrics/mAP75` são as versões de um único limiar. `metrics/mAP_small`,
 `metrics/mAP_medium` e `metrics/mAP_large` separam a mesma média por área do
@@ -272,8 +272,8 @@ mantidas por compatibilidade retroativa e são apelidos, não um ponto de
 operação: `metrics/precision` guarda o mesmo valor que `metrics/mAP50-95`, e
 `metrics/recall` o mesmo valor que `metrics/AR100`. Plotar as duas como um par
 precisão-recall reporta o mesmo número duas vezes. Quatro chaves também se
-repetem com o sufixo `(B)`, de box, para que uma chave de detecção se leia
-igual em um modelo que também prediz máscaras: `metrics/mAP50-95(B)`,
+repetem com o sufixo `(B)`, de box, para que uma chave de detecção seja lida do
+mesmo jeito em um modelo que também prediz máscaras: `metrics/mAP50-95(B)`,
 `metrics/mAP50(B)`, `metrics/precision(B)` e `metrics/recall(B)`.
 
 ## Exportação

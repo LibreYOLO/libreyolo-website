@@ -85,21 +85,21 @@ I parametri di augmentation sono normali argomenti di `train()`.
 
 Due di questi hanno una forma più breve sulla CLI: `mosaic` corrisponde a
 `mosaic_prob` e `mixup` corrisponde a `mixup_prob`. Tutti gli altri parametri si
-scrivono allo stesso modo in entrambi i posti.
+scrivono allo stesso modo in entrambi i casi.
 
 ## Tre stati, non due
 
-Che un parametro faccia qualcosa o no dipende dalla famiglia. La libreria
-mantiene una tabella dichiarativa di questo, e ogni voce è uno di tre stati.
+Che un parametro abbia effetto o meno dipende dalla famiglia. La libreria ne
+tiene una tabella dichiarativa, e ogni voce è uno di tre stati.
 
 `used` significa che il parametro arriva alla pipeline e modifica i campioni.
 `ignored` significa che non arriva mai alla pipeline, quindi impostarlo non fa
 nulla. `gated_by_mosaic` significa che si applica solo ai campioni passati dal
 ramo mosaic, quindi con `mosaic_prob=0` non scatta mai anche se è collegato.
 
-Il terzo stato è quello che sorprende. In una pipeline in stile YOLOX la
-trasformazione affine viene applicata sulla tela del mosaic e MixUp fonde un
-campione mosaic, quindi `mosaic_prob=0` disattiva silenziosamente `degrees`,
+Il terzo stato è quello che coglie tutti di sorpresa. In una pipeline in stile
+YOLOX la trasformazione affine viene applicata sul canvas del mosaic e MixUp
+fonde un campione mosaic, quindi `mosaic_prob=0` disattiva silenziosamente `degrees`,
 `translate`, `shear`, `perspective`, `mosaic_scale`, `mixup_prob` e
 `mixup_scale` tutti insieme. Il trainer registra un avviso specifico per il caso
 di MixUp:
@@ -109,7 +109,7 @@ mixup_prob=0.15 has no effect for YOLOv9: mixup only applies to mosaic samples
 and mosaic_prob=0. Set mosaic_prob > 0 to enable mixup.
 ```
 
-La CLI avvisa anche sui parametri ignorati, elencando solo quelli che hai
+La CLI segnala anche i parametri ignorati, elencando solo quelli che hai
 effettivamente scritto:
 
 ```text
@@ -148,8 +148,8 @@ sono operazioni accoppiate su input e target con probabilità fissa a 0.5.
 ## Quale famiglia rispetta quale parametro
 
 La tabella qui sotto è la spec distribuita in
-`libreyolo/data/augment/spec.py`, verificata contro il vero cablaggio delle
-pipeline dai test della libreria stessa. Leggila lì invece di dedurla
+`libreyolo/data/augment/spec.py`, che i test della libreria stessa confrontano
+con il funzionamento reale delle pipeline. Leggila lì invece di dedurla
 dall'architettura.
 
 <code-tabs name="support" />
@@ -179,8 +179,8 @@ Eccezioni all'interno di quelle colonne, tutte restrittive:
 - La pipeline nativa di RF-DETR non ha il jitter HSV, quindi `hsv_prob` è
   ignorato in aggiunta alla colonna in stile DETR.
 - EC rispetta `hsv_prob`, `degrees` e `translate`, ma solo per `task="pose"`, la
-  cui trasformazione consapevole dei keypoint li legge. I suoi percorsi detect e
-  segment usano ricette fotometriche fisse.
+  cui trasformazione, che tiene conto dei keypoint, li legge. I suoi percorsi
+  detect e segment usano ricette fotometriche fisse.
 - DINOv2 segue la colonna in stile DETR per i suoi task detect e semantic e
   aggiunge il pacchetto di classificazione per `task="classify"`.
 
@@ -212,8 +212,8 @@ classificazione non ha una sua forma sulla CLI e si raggiunge solo con
 
 ## Parametri specifici per famiglia
 
-Alcuni parametri vivono sulla sottoclasse di configurazione di una famiglia
-invece che sulla classe base, quindi esistono solo per quella famiglia e non
+Alcuni parametri risiedono nella sottoclasse di configurazione di una famiglia
+invece che nella classe base, quindi esistono solo per quella famiglia e non
 hanno un flag sulla CLI.
 
 | Famiglia | Parametro | Effetto |
@@ -224,19 +224,19 @@ hanno un flag sulla CLI.
 | YOLOv9 | `max_labels` | Limite di ground truth per immagine nelle trasformazioni di addestramento, default 100 |
 | RF-DETR | `copy_paste`, `copy_paste_mode` | Copy-paste per `task="segment"`, solo modalità `"flip"` |
 | RF-DETR, D-FINE, EC | `crop_resize_prob` | Probabilità di crop-resize casuale |
-| EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | Probabilità di jitter sul percorso pose e di affine consapevole dei keypoint |
+| EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | Probabilità di jitter sul percorso pose e di affine che tiene conto dei keypoint |
 
 `max_labels` è quello che perde dati in silenzio. I box oltre il limite vengono
-scartati senza errore, quindi immagini dense come le riprese aeree richiedono di
-alzarlo.
+scartati senza errore, quindi con immagini dense come la fotografia aerea va
+alzato.
 
 Mosaic e MixUp sono disattivati per l'addestramento con box orientati
-indipendentemente dai parametri, perché l'augmentation consapevole degli angoli
-per i box ruotati non è implementata.
+indipendentemente dai parametri, perché l'augmentation che tiene conto degli
+angoli per i box ruotati non è implementata.
 
 ## Correlati
 
 - [Iperparametri](/docs/train/hyperparameters) per `no_aug_epochs` come
   argomento dello schedule e per il resto di `train()`.
 - [Dataset](/docs/train/datasets) per i formati di etichette che queste
-  trasformazioni consumano.
+  trasformazioni accettano in ingresso.

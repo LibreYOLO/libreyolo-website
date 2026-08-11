@@ -22,10 +22,10 @@ source_hash: a729b43a6642f2a0
 
 ## Con quale modello conviene iniziare?
 
-YOLOv9 per un detector CNN e RF-DETR per uno basato su transformer. Entrambi
-stanno nel livello flagship, il che significa che le funzionalità vengono
-progettate e validate su GPU su di loro prima che su qualsiasi altro modello.
-Vedi [YOLOv9](/docs/models/yolov9) e [RF-DETR](/docs/models/rf-detr), oppure
+YOLOv9 per un rilevatore basato su CNN e RF-DETR per uno basato su transformer.
+Entrambi stanno nel livello flagship, il che significa che le funzionalità
+vengono progettate e validate su GPU con questi modelli prima che con qualsiasi
+altro. Vedi [YOLOv9](/docs/models/yolov9) e [RF-DETR](/docs/models/rf-detr), oppure
 [tutti i modelli](/docs/models) per il resto.
 
 ## Mi serve una GPU?
@@ -35,11 +35,11 @@ No. Ogni modello gira su CPU, e tutto quello che sta nel
 quanto tempo richiedono l'addestramento e l'inferenza su video, non se
 funzionano.
 
-## Come sceglie il dispositivo LibreYOLO?
+## Come fa LibreYOLO a scegliere il dispositivo?
 
 Il valore predefinito è `device="auto"`, che usa CUDA quando PyTorch la segnala
-disponibile, poi Metal Performance Shaders quando sono disponibili, e la CPU
-altrimenti. Per fissarlo, passa `device` al modello oppure a `predict`, `train`,
+come disponibile, poi Metal Performance Shaders quando sono disponibili, e la
+CPU altrimenti. Per fissarlo, passa `device` al modello oppure a `predict`, `train`,
 `val` ed `export`. Accetta `"cpu"`, `"cuda"`, `"cuda:0"`, `"mps"`, un semplice
 intero come `0`, o una stringa di cifre; gli ultimi due si espandono in
 `cuda:<n>`.
@@ -51,7 +51,7 @@ sostituirlo.
 
 ## Dove finiscono i pesi scaricati?
 
-In `weights/`, relativa alla directory di lavoro. Un riferimento a un modello
+In `weights/`, con percorso relativo alla directory di lavoro. Un riferimento a un modello
 senza componente di directory si risolve lì e viene scaricato al primo uso; un
 riferimento che include una directory viene usato esattamente come è scritto e
 non viene mai scaricato. Vedi [checkpoint e pesi](/docs/weights).
@@ -84,10 +84,10 @@ riconosciuto e cosa richiede uno script di conversione.
 ## Perché train solleva NotImplementedError?
 
 Perché quella famiglia offre solo l'inferenza, e l'eccezione ne indica il
-motivo. Predizione, validazione e, dove è supportata, esportazione funzionano
-tutte; per quell'architettura non c'è un ciclo di addestramento in LibreYOLO. Il
-livello di supporto nell'intestazione della pagina di un modello te lo dice
-prima ancora di provarci. Vedi [concetti fondamentali](/docs/concepts).
+motivo. La predizione, la validazione e, dove è supportata, l'esportazione
+funzionano tutte; per quell'architettura non c'è un ciclo di addestramento in
+LibreYOLO. Il livello di supporto nell'intestazione della pagina di un modello
+te lo dice prima ancora che tu ci provi. Vedi [concetti fondamentali](/docs/concepts).
 
 ## Cosa restituisce val?
 
@@ -104,8 +104,8 @@ directory è ogni immagine al suo interno, il percorso di un video è un video, 
 intero è l'indice di una webcam, e un URL RTSP, RTMP, TCP, UDP o HLS è uno
 stream dal vivo. Un file `.streams` elenca più sorgenti in una volta sola. Le
 sorgenti dal vivo richiedono `stream=True`, che restituisce un `Results` per
-frame invece di costruire una lista; lo stesso flag vale la pena di usarlo anche
-per video lunghi e directory grandi. Solo gli URL delle pagine YouTube
+frame invece di costruire una lista; vale la pena usare lo stesso flag anche per
+i video lunghi e le directory di grandi dimensioni. Solo gli URL delle pagine YouTube
 richiedono un extra, `libreyolo[stream]`.
 
 ## Come tengo solo alcune classi?
@@ -141,8 +141,8 @@ Tre task distinti. `segment` produce una maschera per ogni oggetto rilevato.
 `semantic` etichetta ogni pixel con una classe e non separa nulla in istanze.
 `panoptic` assegna a ogni pixel esattamente un'etichetta, unendo le cose
 numerabili con la materia amorfa. Hanno ground truth diverso, campi di risultato
-diversi e metriche diverse, e una famiglia supporta quelli tra loro che
-compaiono nella sua lista di task.
+diversi e metriche diverse, e ogni famiglia supporta quelli che compaiono nella
+sua lista di task.
 
 ## Come addestro sulle mie classi?
 

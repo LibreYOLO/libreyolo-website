@@ -195,7 +195,7 @@ lado da largura em torno do centro. `.conf` e `.cls` carregam a pontuação e o
 índice da classe em `result.names`, e `.id` um id de rastreamento quando há
 rastreamento. `.xyxyxyxy` converte cada linha nos seus quatro pontos de canto
 como `(N, 4, 2)` pixels, `.xyxyxyxyn` normaliza esses cantos, e `.xyxy` dá a
-caixa envolvente alinhada aos eixos, que é o que usar quando o código a jusante
+caixa envolvente alinhada aos eixos, que é o que usar quando o código downstream
 só entende retângulos. `result.boxes` também é preenchido, com a forma alinhada
 aos eixos.
 
@@ -206,7 +206,7 @@ precisar ou não treinar.
 
 O [RF-DETR](/docs/models/rf-detr) é o que treina. Ele prediz, treina, valida e
 exporta caixas orientadas, e vem com checkpoints orientados publicados em
-quatro tamanhos, n, s, m e l. Ele precisa do seu próprio extra,
+quatro tamanhos, n, s, m e l. Ele precisa de um extra próprio,
 `pip install "libreyolo[rfdetr]"`, e a página do modelo traz a licença dos
 pesos e a proveniência.
 
@@ -220,8 +220,8 @@ single-scale do DOTA v1.0 convertidos para o formato do LibreYOLO, cobrindo as
 base, o grafo orientado é reconhecido pelos próprios tensores do checkpoint, e
 predição, validação e exportação para ONNX e TorchScript são todas suportadas.
 Treinamento não é: a tarefa orientada é somente inferência nessa família,
-`train()` lança erro, e não há transferência a partir dos seus pesos de
-detecção, que usam um backbone diferente. Rastreamento e test-time augmentation
+`train()` lança erro, e não há transferência a partir dos pesos de detecção
+dela, que usam um backbone diferente. Rastreamento e test-time augmentation
 também não estão disponíveis para caixas orientadas.
 
 Então: categorias do DOTA prontas para uso, RT-DETRv2. Seus próprios rótulos
@@ -239,8 +239,8 @@ de o DOTA ser o benchmark de referência para esta tarefa, esses pesos não fora
 treinados nele. Todos os quatro foram inicializados a partir dos pesos de
 detecção do RF-DETR e passaram por fine-tuning em um único dataset do Roboflow
 Universe com imagens de drone, com seis classes de veículos: bike, bus, car,
-other_vehicle, taxi e truck. Os model cards deles os descrevem como pesos de
-desenvolvimento, produzidos durante a validação do suporte a treinamento
+other_vehicle, taxi e truck. Os model cards descrevem esses checkpoints como
+pesos de desenvolvimento, produzidos durante a validação do suporte a treinamento
 orientado, e dizem que não devem ser lidos como pesos de produção nem como
 pesos oficiais de benchmark.
 
@@ -300,7 +300,7 @@ names:
   1: ship
 ```
 
-COCO JSON nativo também carrega, com um mapeamento `annotations` de nome do
+COCO JSON nativo também é carregado, com um mapeamento `annotations` de nome do
 split para arquivo JSON. As anotações são lidas em ordem de prioridade: um
 campo `obb` com oito cantos em espaço de pixels, um campo `obb` com
 `[cx, cy, w, h, angle]` e o ângulo em radianos, um polígono `segmentation` ou
@@ -337,9 +337,9 @@ Diferentemente do caminho COCO usado pela detecção, esta tarefa respeita
 `iou_thresholds` na configuração de validação, então a varredura pode ser
 alterada. `metrics/mAP50` e `metrics/mAP75` são as versões de limiar único.
 `metrics/precision` e `metrics/recall` são precisão e recall de verdade a IoU
-0.50, lidos no ponto de operação mais frouxo: toda predição que sobreviveu ao
+0.50, lidos no ponto de operação mais permissivo: toda predição que sobreviveu ao
 limiar de confiança é contada, e esse limiar tem 0.001 como padrão durante a
-validação. Aumentar `conf` portanto move esses números, enquanto os valores de
+validação. Portanto, aumentar `conf` move esses números, enquanto os valores de
 mAP, que usam a curva de precisão-recall inteira, ficam onde estão. Quatro
 deles se repetem com um sufixo `(OBB)`, `metrics/mAP50-95(OBB)`,
 `metrics/mAP50(OBB)`, `metrics/precision(OBB)` e `metrics/recall(OBB)`, que é
@@ -354,10 +354,10 @@ estão implementados.
 
 <code-tabs name="export" />
 
-Um artefato exportado carrega de volta por `LibreYOLO()` pelo sufixo do
-arquivo, então um arquivo `.onnx` ou `.engine` se comporta como um checkpoint e
-retorna o mesmo `Results`. A cobertura de formatos difere por tarefa dentro da
+Um artefato exportado é carregado de volta por `LibreYOLO()` a partir do sufixo
+do arquivo, então um arquivo `.onnx` ou `.engine` se comporta como um checkpoint
+e retorna o mesmo `Results`. A cobertura de formatos difere por tarefa dentro da
 mesma família, e a matriz na página do modelo é gerada a partir do conjunto
-validado e nomeia o motivo de um alvo estar indisponível. Veja
+validado e informa o motivo de um alvo estar indisponível. Veja
 [exportação e deploy](/docs/export) para os formatos, seus extras e suas
 restrições.

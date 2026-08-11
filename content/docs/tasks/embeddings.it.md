@@ -73,7 +73,7 @@ snippets:
         # La riga i descrive la regione nel box i.
         print(result.boxes.xyxy.shape)       # (N, 4)
         print(result.embeddings.data.shape)  # (N, 512)
-    - label: Molte immagini in una volta
+    - label: Più immagini in una volta sola
       language: python
       code: |
         from libreyolo.models.dinov2.model import LibreDINOv2
@@ -199,9 +199,9 @@ insiemi di righe è una sola moltiplicazione tra matrici. Nient'altro nel task
 dipende dal modello: retrieval, rilevamento di duplicati, re-identificazione e
 riconoscimento facciale sono tutti la stessa aritmetica su righe diverse.
 
-Il vettore è l'output. Non c'è un elenco di classi, quindi un nome viene
-attaccato dopo, confrontando con i riferimenti che fornisci tu e non con
-qualcosa che la rete è stata addestrata a predire.
+Il vettore è l'output. Non c'è un elenco di classi, quindi il nome viene
+assegnato in un secondo momento, confrontando con i riferimenti che fornisci tu
+e non con qualcosa che la rete è stata addestrata a predire.
 
 ### Tre forme
 
@@ -220,12 +220,12 @@ percorso o un URL, e la libreria non indovina mai che una stringa sia prosa.
 
 La chiave canonica del task è `embed`. `embedding`, `embeddings`,
 `face-recognition`, `facial-recognition`, `recognition`, `face`, `faceid` e
-`reid` si normalizzano tutte a essa, quindi `task="reid"` e `task="embed"`
+`reid` si normalizzano tutti su di essa, quindi `task="reid"` e `task="embed"`
 selezionano esattamente la stessa cosa.
 
 ## Modelli
 
-Quattro famiglie servono il task, e si dividono nettamente in base al fatto che
+Quattro famiglie coprono il task, e si dividono nettamente in base al fatto che
 localizzino o meno qualcosa prima.
 
 | Famiglia | Forma | Dimensione | Supporta anche |
@@ -248,7 +248,7 @@ restituiscono `D = 384`.
 
 I backbone di sola classificazione aggiunti in questa release, [ViT](/docs/models/vit),
 [Swin](/docs/models/swin) e [DeiT](/docs/models/deit), dichiarano solo `classify`
-e non servono questo task.
+e non coprono questo task.
 
 <code-tabs name="predict" />
 
@@ -323,9 +323,9 @@ migliore e mette il nome a `None` quando è sotto la soglia. Nessuno dei due
 sostituisce mai il nome più vicino ma sotto soglia.
 
 La soglia predefinita è `0.4` ovunque. È un valore coseno, non una probabilità, e
-il punto di lavoro giusto è una proprietà dei tuoi dati e della tua tolleranza ai
-falsi accoppiamenti, quindi esplorala su coppie etichettate invece di accettare
-il valore predefinito. `libreyolo enroll` e l'argomento di predizione `gallery=`
+il punto di lavoro giusto è una proprietà dei tuoi dati e della tua tolleranza
+alle false corrispondenze, quindi tarala su coppie etichettate invece di
+accettare il valore predefinito. `libreyolo enroll` e l'argomento di predizione `gallery=`
 usano lo stesso numero.
 
 ### Persistenza
@@ -354,7 +354,7 @@ Ogni comando LibreYOLO accetta sia `key=value` sia `--key value`, quindi
 
 `enroll` prende `model`, `source` e `gallery`, più gli opzionali `face-detector`,
 `device`, `--json` e `--quiet`. Legge una cartella per identità, dove il nome
-della cartella è l'identità e ogni immagine al suo interno contribuisce dei
+della cartella è l'identità e ogni immagine al suo interno fornisce dei
 riferimenti:
 
 ```text
@@ -386,17 +386,18 @@ di gallery mancante suggerisce il comando `libreyolo enroll` che lo creerebbe.
 Il riconoscimento facciale è la forma a regione di questo task, ed è l'unica
 implementazione di quella forma inclusa nella libreria. Aggiunge una fase di
 rilevamento e allineamento davanti alla testa di embedding, più un metodo
-`verify()`, un argomento per portare i tuoi box, numeri di accuratezza pubblicati
+`verify()`, un argomento per fornire box propri, numeri di accuratezza pubblicati
 e indicazioni per calibrare la soglia. Tutto questo sta su
 [riconoscimento facciale](/docs/tasks/face-recognition), che è la guida da
 seguire quando il soggetto sono i volti. Tutto quello che c'è in questa pagina
-vale per lui senza modifiche.
+vale anche in quel caso, senza modifiche.
 
 ## Addestramento, validazione ed esportazione
 
 In questo task non si addestra nulla dentro LibreYOLO. La testa di embedding
 facciale è un artefatto ONNX i cui `train()`, `val()` ed `export()` sollevano
-tutti un errore; addestra una testa a monte e carica il file per percorso. CLIP,
+tutti un errore; addestra una testa a monte e carica il file indicandone il
+percorso. CLIP,
 SigLIP 2 e DINOv2 si addestrano ed esportano attraverso i loro task di
 classificazione e segmentazione, non attraverso `embed`.
 

@@ -35,10 +35,8 @@ snippets:
         pip install libreyolo
     - label: Con extra
       language: bash
-      code: >
-        # Separali con la virgola per combinarne più di uno in una sola
-        installazione.
-
+      code: |
+        # Usa la virgola per combinarne più di uno in una sola installazione.
         pip install "libreyolo[rfdetr,onnx]"
     - label: Tutto
       language: bash
@@ -77,14 +75,14 @@ source_hash: 34fc6d3e24d03fb4
 
 <code-tabs name="install" />
 
-È richiesto Python 3.10 o superiore. L'installazione base tira dentro PyTorch,
+È richiesto Python 3.10 o superiore. L'installazione base porta con sé PyTorch,
 torchvision, NumPy, Pillow, OpenCV, PyYAML, requests, mss, tqdm, pycocotools,
 typer, click, safetensors e SciPy, così YOLOv9 e le altre famiglie che non
 richiedono altro funzionano subito dopo `pip install libreyolo`.
 
-Un clone lascia attivo `release`, il branch stabile il cui codice corrisponde a
-questa documentazione. Il branch di integrazione, che porta il lavoro non ancora
-rilasciato, è `dev`.
+Un clone fa il checkout di `release`, il branch stabile il cui codice corrisponde
+a questa documentazione. Il branch di integrazione, che contiene il lavoro non
+ancora rilasciato, è `dev`.
 
 ## Extra opzionali
 
@@ -102,7 +100,7 @@ l'API è la stessa con o senza l'extra.
 | `vlm` | `transformers`, `num2words`, `decord`, `lmdb`, `peft` |
 | `sam` | `transformers`, `timm` |
 | `openvocab` | `transformers`, `timm`, `regex`, `ftfy` |
-| `sensenova` | `transformers`, `accelerate` e `bitsandbytes` fuori da macOS |
+| `sensenova` | `transformers`, `accelerate` e `bitsandbytes` tranne su macOS |
 | `modus` | `transformers`, `accelerate` |
 | `clip` | `regex` e `ftfy`, necessari al tokenizer di testo CLIP incluso nella libreria |
 | `siglip2` | `sentencepiece`, necessario al tokenizer multilingue di SigLIP 2 |
@@ -114,7 +112,7 @@ l'API è la stessa con o senza l'extra.
 | Extra | Aggiunge |
 |---|---|
 | `onnx` | `onnx`, `onnxsim`, `onnxruntime` |
-| `tensorrt` | `tensorrt-cu12` 10.16.1.11 e `pycuda`, fuori da macOS |
+| `tensorrt` | `tensorrt-cu12` 10.16.1.11 e `pycuda`, tranne su macOS |
 | `openvino` | `openvino` |
 | `coreml` | `coremltools` |
 | `coreai` | `coreai-torch`, solo macOS |
@@ -141,8 +139,8 @@ l'API è la stessa con o senza l'extra.
 | `dvclive`, alias `dvc` | `dvclive` |
 
 `fast-eval` è opzionale invece che una dipendenza obbligatoria, così una
-piattaforma senza wheel precompilata non può rompere un'installazione semplice.
-Quando il pacchetto manca, la valutazione COCO ricade su pycocotools e
+piattaforma senza wheel precompilata non può far fallire un'installazione
+semplice. Quando il pacchetto manca, la valutazione COCO ripiega su pycocotools e
 l'esecuzione continua.
 
 ### Strumenti
@@ -150,14 +148,14 @@ l'esecuzione continua.
 | Extra | Aggiunge |
 |---|---|
 | `stream` | `yt-dlp`, necessario solo per risolvere gli URL delle pagine di YouTube |
-| `tracking` | Niente. Ogni dipendenza del tracking è già una dipendenza core |
+| `tracking` | Niente. Ogni dipendenza del tracking è già una dipendenza principale |
 | `label` | `libreyolo[sam]`, che abilita l'assistenza click-to-mask in `libreyolo label` |
-| `hub-kernels` | `kernels`, il loader opzionale per i kernel compilati dell'Hub. Vedi [kernels](/docs/reference/kernels), dove si nota che installarlo può spostare le predizioni di RF-DETR entro la tolleranza float |
+| `hub-kernels` | `kernels`, il loader opzionale per i kernel compilati dell'Hub. Vedi [kernels](/docs/reference/kernels), dove si segnala che installarlo può spostare le predizioni di RF-DETR entro la tolleranza float |
 | `clip-convert` | `libreyolo[clip]` più `open_clip_torch`, per la conversione dei pesi e i controlli di parità |
 | `siglip2-convert` | `libreyolo[siglip2]` più `transformers`, per lo stesso motivo |
 
 Le webcam, RTSP, RTMP, TCP, UDP, HLS e le liste multi-stream locali non
-richiedono alcun extra. Solo gli URL delle pagine di YouTube lo richiedono.
+richiedono alcun extra. Solo gli URL delle pagine di YouTube ne hanno bisogno.
 
 ### L'extra aggregato
 
@@ -202,7 +200,7 @@ quindi se PyTorch non vede una GPU, non la vede nemmeno LibreYOLO.
 
 Per fissare invece il dispositivo, passa `device` al modello oppure a `predict`,
 `train`, `val` ed `export`. Accetta `"cpu"`, `"cuda"`, `"cuda:0"`, `"mps"`, un
-intero semplice come `0`, o una stringa di cifre come `"0"`; gli ultimi due
+semplice intero come `0`, o una stringa di cifre come `"0"`; gli ultimi due
 vengono espansi in `cuda:<n>`.
 
 Parti da `libreyolo checks`, che stampa la versione di Torch, le versioni di

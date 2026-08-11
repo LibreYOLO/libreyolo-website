@@ -36,12 +36,12 @@ em vídeo levam, não se funcionam.
 
 ## Como o LibreYOLO escolhe o dispositivo?
 
-O padrão é `device="auto"`, que usa CUDA quando o PyTorch informa que ela está
+O padrão é `device="auto"`, que usa CUDA quando o PyTorch informa que está
 disponível, depois Metal Performance Shaders quando estão disponíveis, e CPU
 caso contrário. Para fixar, passe `device` para o modelo ou para `predict`,
 `train`, `val` e `export`. Ele aceita `"cpu"`, `"cuda"`, `"cuda:0"`, `"mps"`, um
-inteiro puro como `0`, ou uma string de dígitos; os dois últimos viram
-`cuda:<n>`.
+inteiro simples como `0`, ou uma string de dígitos; os dois últimos se expandem
+para `cuda:<n>`.
 
 `libreyolo checks` imprime o build do Torch, suas versões de CUDA e cuDNN, e
 todas as GPUs que ele consegue enxergar. Se esse comando não mostrar CUDA, o
@@ -60,16 +60,16 @@ baixada. Veja [checkpoints e pesos](/docs/weights).
 Dá. Baixe os checkpoints uma vez em uma máquina conectada, copie o diretório
 `weights/` para a outra, e nada mais vai acessar a rede. Um caminho
 compartilhado somente leitura também funciona, já que uma referência que contém
-um diretório é tomada literalmente. Os datasets são resolvidos em `~/datasets`,
-ou em `LIBREYOLO_DATASETS_DIR`.
+um diretório é interpretada literalmente. Os datasets são resolvidos em
+`~/datasets`, ou em `LIBREYOLO_DATASETS_DIR`.
 
 ## Posso usar o LibreYOLO comercialmente?
 
-O código é licenciado sob MIT. Os pesos pré-treinados são outra história: eles
+O código é licenciado sob MIT. Os pesos pré-treinados são um caso à parte: eles
 podem herdar termos do projeto ou do dataset de onde vieram, e esses termos não
 são uniformes nem dentro de uma mesma família. A licença no repositório
-específico do Hugging Face é a autoridade, e toda página de modelo traz uma
-seção de licenciamento que a reproduz. Onde os pesos são restritos, o LibreYOLO
+específico do Hugging Face é a que vale, e toda página de modelo traz uma seção
+de licenciamento que a reproduz. Quando os pesos são restritos, o LibreYOLO
 imprime a restrição antes de o download começar.
 
 ## Posso carregar um checkpoint de outro projeto?
@@ -80,11 +80,11 @@ classes, e um checkpoint do LibreYOLO é gravado ao lado do original.
 [Importar pesos existentes](/docs/migrate) cobre o que é reconhecido e o que
 precisa de um script de conversão.
 
-## Por que o train levanta NotImplementedError?
+## Por que o train lança NotImplementedError?
 
-Porque aquela família vem só com inferência, e a exceção diz o motivo. Predict,
+Porque essa família vem só com inferência, e a exceção diz o motivo. Predição,
 validação e, onde há suporte, exportação funcionam; não existe loop de
-treinamento para aquela arquitetura no LibreYOLO. O nível de suporte no
+treinamento para essa arquitetura no LibreYOLO. O nível de suporte no
 cabeçalho da página do modelo avisa antes de você tentar. Veja
 [conceitos básicos](/docs/concepts).
 
@@ -98,7 +98,7 @@ Outras tarefas retornam as chaves que fazem sentido para elas, como
 
 ## Como rodo em uma pasta, um vídeo ou uma webcam?
 
-Passe como source. Um caminho de arquivo é uma imagem, um diretório é todas as
+Passe como fonte. Um caminho de arquivo é uma imagem, um diretório é todas as
 imagens dentro dele, um caminho de vídeo é um vídeo, um inteiro é o índice de
 uma webcam, e uma URL RTSP, RTMP, TCP, UDP ou HLS é um stream ao vivo. Um
 arquivo `.streams` lista várias fontes de uma vez. Fontes ao vivo exigem
@@ -106,7 +106,7 @@ arquivo `.streams` lista várias fontes de uma vez. Fontes ao vivo exigem
 vale usar a mesma flag para vídeos longos e diretórios grandes. Só as URLs de
 páginas do YouTube precisam de um extra, `libreyolo[stream]`.
 
-## Como fico só com algumas classes?
+## Como mantenho só algumas classes?
 
 Passe `classes` para `predict` com os índices das classes que você quer, por
 exemplo `classes=[0, 2]`. `conf` define o limiar de confiança, padrão `0.25`, e
@@ -124,7 +124,7 @@ libreyolo train model=yolo9-t data=coco8.yaml epochs=50 imgsz=640
 `model` aceita um caminho ou um nome curto no formato `family-size`,
 opcionalmente com um sufixo de tarefa, e `libreyolo models` lista todos os
 válidos. Comandos de diagnóstico e de inventário também aceitam `--json`, que
-imprime os mesmos dados como um objeto legível por máquina na stdout.
+imprime os mesmos dados como um objeto legível por máquina no stdout.
 
 ## Todo modelo exporta para todo formato?
 
@@ -148,12 +148,12 @@ Escreva um YAML de dataset com `train`, `val` e `names`. As labels ficam ao lado
 das imagens em uma árvore `labels/` paralela, um `.txt` por imagem, com
 coordenadas normalizadas. `nc` é opcional e precisa bater com `names` quando
 está presente. Rode `libreyolo doctor <data.yaml>` antes: ele procura problemas
-no dataset e sai com código diferente de zero quando encontra erros, o que o
-torna utilizável como gate de CI.
+no dataset e sai com código diferente de zero quando encontra erros, o que
+permite usá-lo como gate de CI.
 
 ## Por que o carregamento imprime um aviso de metadados?
 
-Porque o checkpoint não carrega os metadados v1.0 completos. O carregamento
+Porque o checkpoint não traz os metadados v1.0 completos. O carregamento
 continua por um caminho de compatibilidade, e o aviso diz exatamente quais
 chaves estão faltando. Rode `libreyolo metadata path=<file>` para ver o que
 existe, e veja [checkpoints e pesos](/docs/weights) para saber o que o schema
@@ -163,5 +163,5 @@ exige.
 
 Dois nomes de classe foram renomeados por consistência: `LibreYOLORTDETR` virou
 `LibreRTDETR` e `LibreYOLORFDETR` virou `LibreRFDETR`. Os nomes antigos
-continuam resolvendo e emitem um `DeprecationWarning` apontando para o novo,
+continuam funcionando e emitem um `DeprecationWarning` apontando para o novo,
 então o código existente continua rodando enquanto você o atualiza.

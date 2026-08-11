@@ -76,7 +76,7 @@ La conversione automatica fa quattro cose. Estrae il dizionario dei tensori dal
 layout usato dal progetto upstream, qualunque esso sia. Chiede a ogni famiglia
 registrata se riconosce le chiavi risultanti, rimappando i nomi là dove la
 nomenclatura upstream differisce da quella del port di LibreYOLO. Impacchetta la
-vincitrice in un checkpoint che soddisfa la versione 1.0 dello schema dei
+famiglia vincente in un checkpoint che soddisfa la versione 1.0 dello schema dei
 metadati, leggendo dimensione, task e numero di classi dai tensori stessi. Poi
 scrive il risultato accanto al file sorgente e carica quello.
 
@@ -104,7 +104,7 @@ che alcune redistribuzioni aggiungono.
 ## Cosa legge, e da dove
 
 Dimensione, task e numero di classi vengono dai tensori, non dal nome del file,
-ed è per questo che un checkpoint affinato con il fine-tuning si converte con il
+ed è per questo che un checkpoint sottoposto a fine-tuning si converte con il
 proprio numero di classi invece che con quello predefinito dell'architettura. I
 nomi delle classi vengono presi dai metadati del checkpoint stesso quando ci
 sono, da un blocco `args` o `hyper_parameters` se i nomi stanno lì, e vengono
@@ -129,7 +129,7 @@ com'è.
 
 ## Dove finisce il file convertito
 
-L'output viene scritto accanto alla sorgente, con un nome che deriva dal suo:
+L'output viene scritto accanto al file sorgente e ne riprende il nome:
 
 ```text
 <source stem>-<FilenamePrefix><size>[-<task suffix>].pt
@@ -145,21 +145,21 @@ sorgente. Se la directory è in sola lettura, il file convertito finisce invece 
 una nuova directory temporanea privata e il log dice dove.
 
 Da quel momento è un normale checkpoint LibreYOLO: si carica attraverso il
-percorso dei metadati e `libreyolo metadata` lo segnala come valido.
+percorso dei metadati e `libreyolo metadata` lo riporta come valido.
 
 ## Casi che richiedono una mano
 
 Due famiglie stanno fuori dal riconoscitore generico. La famiglia gaze è esclusa
-del tutto: è solo di inferenza e i pesi che rilascia hanno restrizioni di
+del tutto: funziona solo in inferenza e i pesi rilasciati portano restrizioni di
 ridistribuzione. RF-DETR è escluso perché ha il riconoscitore dedicato descritto
 sopra, che è quello che se ne occupa al suo posto.
 
-I checkpoint PIDNet upstream grezzi vengono rifiutati, con un errore che rimanda
+I checkpoint grezzi di PIDNet upstream vengono rifiutati, con un errore che rimanda
 a `weights/convert_pidnet_weights.py`. Quello script scrive i metadati semantici
 Cityscapes di cui il checkpoint ha bisogno.
 
 D-FINE e DEIM condividono le stesse chiavi dell'architettura, quindi i soli
-tensori non bastano a distinguerli. Quando entrambe rivendicano un file e in gara
+tensori non bastano a distinguerli. Quando entrambi rivendicano un file e in gara
 non c'è nessuna famiglia sorella con un marcatore distintivo, decide il nome del
 file: un nome nella forma `dfine_hgnetv2_n_coco.pth` o `deim_hgnetv2_n_coco.pth`
 chiude la questione, mentre un nome che non dice nulla porta a un rifiuto con
