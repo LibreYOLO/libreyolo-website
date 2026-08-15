@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Cpu, Layers, Repeat, Timer } from 'lucide-react'
+import RESULTS from './results-summary.json'
 import './rf100vl-results.css'
 
 // Verified campaign runs only. Every row here comes from a submission with
@@ -14,94 +15,11 @@ import './rf100vl-results.css'
 //
 // Models still running are deliberately absent rather than estimated: a
 // number that cannot be traced to a run is not a result.
-const RESULTS = [
-  {
-    model: 'YOLO-NAS',
-    size: 'S',
-    weights: 'LibreYOLONASs.pt',
-    runId: '20260809-yolonas-s-02926964',
-    runPath: 'yolonas-s/20260809-yolonas-s-02926964',
-    ok: 100,
-    map50: 0.8416,
-    map: 0.5800,
-    trainMin: 29.0,
-    paramsM: 19.02,
-  },
-  {
-    model: 'YOLOX',
-    size: 'M',
-    weights: 'LibreYOLOXm.pt',
-    runId: '20260804-yolox-m-c7bd2a8c',
-    runPath: 'yolox-m/20260804-yolox-m-c7bd2a8c',
-    ok: 100,
-    map50: 0.8486,
-    map: 0.5701,
-    trainMin: 48.0,
-    paramsM: 25.28,
-  },
-  {
-    model: 'YOLOv9',
-    size: 'S',
-    weights: 'LibreYOLO9s.pt',
-    runId: '20260802-yolov9s-a8f74d5b',
-    runPath: 'yolov9s/20260802-yolov9s-a8f74d5b',
-    ok: 100,
-    map50: 0.8140,
-    map: 0.5591,
-    trainMin: 32.5,
-    paramsM: 7.2,
-  },
-  {
-    model: 'YOLOX',
-    size: 'S',
-    weights: 'LibreYOLOXs.pt',
-    runId: '20260803-yolox-s-c7bd2a8c',
-    runPath: 'yolox-s/20260803-yolox-s-c7bd2a8c',
-    ok: 100,
-    map50: 0.8354,
-    map: 0.5525,
-    trainMin: 26.8,
-    paramsM: 8.94,
-  },
-  {
-    model: 'YOLOv9',
-    size: 'T',
-    weights: 'LibreYOLO9t.pt',
-    runId: '20260802-yolov9t-a8f74d5b',
-    runPath: 'yolov9t/20260802-yolov9t-a8f74d5b',
-    ok: 100,
-    map50: 0.7963,
-    map: 0.5402,
-    trainMin: 32.9,
-    paramsM: 2.02,
-  },
-  {
-    model: 'YOLOX',
-    size: 'Tiny',
-    weights: 'LibreYOLOXt.pt',
-    runId: '20260803-yolox-tiny-c7bd2a8c',
-    runPath: 'yolox-tiny/20260803-yolox-tiny-c7bd2a8c',
-    ok: 100,
-    map50: 0.8044,
-    map: 0.5218,
-    trainMin: 20.1,
-    paramsM: 5.03,
-  },
-  {
-    model: 'YOLOX',
-    size: 'Nano',
-    weights: 'LibreYOLOXn.pt',
-    runId: '20260803-yolox-nano-c7bd2a8c',
-    runPath: 'yolox-nano/20260803-yolox-nano-c7bd2a8c',
-    ok: 100,
-    map50: 0.7730,
-    map: 0.4853,
-    trainMin: 18.8,
-    paramsM: 0.90,
-  },
-]
-
 const BEST_MAP = Math.max(...RESULTS.map((r) => r.map))
+const COMPLETE_RUNS = RESULTS.length * 100
+const AGGREGATE_GPU_HOURS = Math.round(
+  RESULTS.reduce((total, result) => total + result.trainHours, 0) / 10,
+) * 10
 
 function Stat({ icon: Icon, value, label }) {
   return (
@@ -147,7 +65,7 @@ export default function RF100VLResults() {
           Verified runs
         </p>
         <h2 className="mt-2 text-2xl md:text-3xl font-bold text-surface-800 dark:text-white tracking-tight">
-          Seven complete campaigns
+          {RESULTS.length} complete campaigns
         </h2>
         <p className="mt-2 text-sm text-surface-500 dark:text-surface-400 max-w-2xl mx-auto">
           Fine-tuned for 100 epochs on each of the 100 datasets, then scored on each
@@ -159,9 +77,13 @@ export default function RF100VLResults() {
       {/* stat strip */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
         <Stat icon={Layers} value="100" label="datasets" />
-        <Stat icon={Cpu} value="7" label="models complete" />
-        <Stat icon={Repeat} value="700" label="runs, none skipped" />
-        <Stat icon={Timer} value="550 h" label="aggregate GPU time" />
+        <Stat icon={Cpu} value={RESULTS.length} label="models complete" />
+        <Stat icon={Repeat} value={COMPLETE_RUNS.toLocaleString('en-US')} label="runs, none skipped" />
+        <Stat
+          icon={Timer}
+          value={`${AGGREGATE_GPU_HOURS.toLocaleString('en-US')} h`}
+          label="aggregate GPU time"
+        />
       </div>
 
       {/* leaderboard */}
@@ -187,6 +109,7 @@ export default function RF100VLResults() {
 
         {RESULTS.map((row, idx) => {
           const pct = Math.max((row.map / BEST_MAP) * 100, 1.5)
+          const runId = row.runPath.split('/').pop()
           return (
             <div
               key={row.weights}
@@ -204,7 +127,7 @@ export default function RF100VLResults() {
                 </span>
                 {/* mobile-only metric line */}
                 <span className="lg:hidden block mt-1 text-[11px] text-surface-500 tabular-nums">
-                  mAP<sup>50-95</sup> {row.map.toFixed(4)} · ok {row.ok}/100 · ~{row.trainMin.toFixed(1)} min
+                  mAP<sup>50-95</sup> {row.map.toFixed(4)} · ok 100/100 · ~{row.trainMin.toFixed(1)} min
                 </span>
                 <a
                   href={`https://huggingface.co/datasets/LibreYOLO/rf100-vl-results/tree/main/${row.runPath}`}
@@ -212,7 +135,7 @@ export default function RF100VLResults() {
                   rel="noopener noreferrer"
                   className="lg:hidden block mt-1 text-[10px] font-mono text-libre-600 dark:text-libre-400 underline underline-offset-2 break-all"
                 >
-                  {row.runId}
+                  {runId}
                 </a>
               </span>
 
@@ -220,7 +143,7 @@ export default function RF100VLResults() {
                 {row.paramsM.toFixed(2)}M
               </span>
               <span className="hidden lg:block text-right text-sm text-surface-500 tabular-nums">
-                {row.ok}
+                100
               </span>
               <span className="hidden lg:block text-right text-sm text-surface-500 tabular-nums">
                 {row.map50.toFixed(4)}
@@ -248,10 +171,10 @@ export default function RF100VLResults() {
                 href={`https://huggingface.co/datasets/LibreYOLO/rf100-vl-results/tree/main/${row.runPath}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                title={row.runId}
+                title={runId}
                 className="hidden lg:block text-[10px] font-mono leading-tight text-libre-600 dark:text-libre-400 underline underline-offset-2 break-all"
               >
-                {row.runId}
+                {runId}
               </a>
             </div>
           )
@@ -259,9 +182,10 @@ export default function RF100VLResults() {
       </div>
 
       <p className="mt-4 text-xs text-surface-400 dark:text-surface-500 leading-relaxed max-w-3xl mx-auto text-center">
-        All seven runs are complete: 100 of 100 datasets trained and scored, none skipped,
-        all protocol-conformant. Single seed (0), fp32, on RTX 5060 Ti workers. Raw
-        artifacts, per-epoch metrics and manifests pinning the exact commits are published at{' '}
+        All {RESULTS.length} campaigns are complete: 100 of 100 datasets trained and scored,
+        none skipped, all protocol-conformant. Every campaign uses seed 0 and RTX 5060 Ti
+        workers; training precision follows the published recipe for each family. Raw artifacts,
+        per-epoch metrics and manifests pinning the exact commits are published at{' '}
         <a
           href="https://huggingface.co/datasets/LibreYOLO/rf100-vl-results"
           target="_blank"
@@ -270,8 +194,8 @@ export default function RF100VLResults() {
         >
           LibreYOLO/rf100-vl-results
         </a>
-        . The run IDs above link to the authoritative folders. The remaining families will be
-        added only after they finish a full 100.
+        . The run IDs above link to the authoritative folders. More families will be added only
+        after they finish a full 100.
       </p>
 
       <p className="mt-3 text-[11px] text-surface-400 dark:text-surface-500 leading-relaxed max-w-3xl mx-auto text-center">
@@ -285,8 +209,7 @@ export default function RF100VLResults() {
         >
           non-commercial YOLO-NAS license
         </a>
-        . The YOLOX and YOLOv9 weights shown here use permissive Apache-2.0 and MIT licenses,
-        respectively.
+        . RF-DETR, EdgeCrafter and YOLOX use Apache-2.0 weights; YOLOv9 uses MIT weights.
       </p>
     </section>
   )

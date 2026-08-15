@@ -29,6 +29,7 @@ const OUT_DIR = resolve(HERE, '../../src/components/articles/rf100vl')
 // the page wants, so they are pinned here. A model absent from this map still
 // renders, it just falls back to the raw campaign id.
 const DISPLAY = {
+  'rfdetr-s': { model: 'RF-DETR', size: 'S', weights: 'LibreRFDETRs.pt' },
   'yolov9t': { model: 'YOLOv9', size: 'T', weights: 'LibreYOLO9t.pt' },
   'yolov9s': { model: 'YOLOv9', size: 'S', weights: 'LibreYOLO9s.pt' },
   'yolov9m': { model: 'YOLOv9', size: 'M', weights: 'LibreYOLO9m.pt' },
@@ -39,6 +40,8 @@ const DISPLAY = {
   'yolonas-s': { model: 'YOLO-NAS', size: 'S', weights: 'LibreYOLONASs.pt' },
   'yolonas-m': { model: 'YOLO-NAS', size: 'M', weights: 'LibreYOLONASm.pt' },
   'ec-s': { model: 'EdgeCrafter', size: 'S', weights: 'LibreECs.pt' },
+  'ec-m': { model: 'EdgeCrafter', size: 'M', weights: 'LibreECm.pt' },
+  'ec-l': { model: 'EdgeCrafter', size: 'L', weights: 'LibreECl.pt' },
 }
 
 async function tree(path = '') {
@@ -51,6 +54,50 @@ async function json(path) {
   const res = await fetch(`${RAW}/${path}`)
   if (!res.ok) throw new Error(`fetch ${path} failed: ${res.status}`)
   return res.json()
+}
+
+async function mapLimit(items, limit, fn) {
+  const results = new Array(items.length)
+  let next = 0
+
+  async function worker() {
+    while (next < items.length) {
+      const index = next
+      next += 1
+      results[index] = await fn(items[index])
+    }
+  }
+
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker))
+  return results
+}
+
+function median(values) {
+  const ordered = [...values].sort((a, b) => a - b)
+  const middle = Math.floor(ordered.length / 2)
+  return ordered.length % 2
+    ? ordered[middle]
+    : (ordered[middle - 1] + ordered[middle]) / 2
+}
+
+async function trainingTimes(runPath) {
+  const files = (await tree(`${runPath}/stats`)).filter(
+    (entry) => entry.type === 'file' && entry.path.endsWith('.json'),
+  )
+  if (files.length !== 100) {
+    throw new Error(`${runPath}: expected 100 training stats files, found ${files.length}`)
+  }
+
+  const stats = await mapLimit(files, 12, (file) => json(file.path))
+  const seconds = stats.map((stat) => stat.wall_seconds)
+  if (seconds.some((value) => !Number.isFinite(value))) {
+    throw new Error(`${runPath}: a training stats file has no wall_seconds value`)
+  }
+
+  return {
+    trainMin: median(seconds) / 60,
+    trainHours: seconds.reduce((total, value) => total + value, 0) / 3600,
+  }
 }
 
 // Every submission file in the repo, across every model and run directory.
@@ -110,22 +157,34 @@ async function main() {
     }
 
     const prev = best.get(id)
-    if (!prev || sub.created_at > prev.created_at) best.set(id, sub)
+    const isCanonicalPath = path.startsWith(`${id}/`)
+    const prevIsCanonicalPath = prev?.path.startsWith(`${id}/`)
+    if (
+      !prev ||
+      sub.created_at > prev.sub.created_at ||
+      (sub.created_at === prev.sub.created_at && isCanonicalPath && !prevIsCanonicalPath)
+    ) {
+      best.set(id, { sub, path })
+    }
   }
 
   for (const line of rejected) console.log(`  skipped ${line}`)
 
   // Best accuracy first, which is the order both the table and the bar chart read in.
   const ordered = [...best.values()].sort(
-    (a, b) => b.accuracy.mAP_50_95 - a.accuracy.mAP_50_95,
+    (a, b) => b.sub.accuracy.mAP_50_95 - a.sub.accuracy.mAP_50_95,
   )
 
   const byDataset = {}
   const summary = []
 
-  for (const sub of ordered) {
+  for (const { sub, path } of ordered) {
     const id = sub.model.id
-    const display = DISPLAY[id] ?? { model: id, size: '', weights: '' }
+    const display = DISPLAY[id] ?? {
+      model: sub.model.name ?? id,
+      size: '',
+      weights: sub.model.weights ?? '',
+    }
     const paramsM = sub.model_stats?.params_millions ?? null
 
     const scores = {}
@@ -147,10 +206,11 @@ async function main() {
       scores,
     }
 
-    // runPath is what the article links to so a reader can open the artifacts.
-    const runPath = sub.rf100vl.per_dataset_results_dir
-      ? `${id}/${sub.submission_id}`
-      : `${id}/${sub.submission_id}`
+    // Link to the real published run directory, not the submission id. The
+    // two differ, and resumed campaigns can carry earlier submissions inside
+    // a later model's directory.
+    const runPath = path.split('/submissions/')[0]
+    const times = await trainingTimes(runPath)
 
     summary.push({
       id,
@@ -161,12 +221,19 @@ async function main() {
       createdAt: sub.created_at,
       runPath,
       inputSize: sub.model.input_size,
+      trainingPrecision: sub.rf100vl.training_precision,
+      gpu: sub.hardware?.gpu ?? null,
+      ...times,
     })
   }
 
   await writeFile(
     `${OUT_DIR}/results-by-dataset.json`,
     `${JSON.stringify(byDataset, null, 2)}\n`,
+  )
+  await writeFile(
+    `${OUT_DIR}/results-summary.json`,
+    `${JSON.stringify(summary, null, 2)}\n`,
   )
 
   console.log(`\nwrote ${ordered.length} complete sweeps:`)
@@ -177,11 +244,7 @@ async function main() {
     )
   }
 
-  // The article's summary table lives in RF100VLResults.jsx as hand-kept
-  // source, because it carries median training times this script cannot see.
-  // The summary lands next to the script as a reference for updating it by
-  // hand, rather than in the component directory where it would look like
-  // something the site imports.
+  // Keep a copy next to the importer as a compact audit artifact.
   await writeFile(`${HERE}/last-run-summary.json`, `${JSON.stringify(summary, null, 2)}\n`)
   console.log(`\nsummary written to scripts/build-rf100vl-results/last-run-summary.json`)
 }

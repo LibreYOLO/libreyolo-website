@@ -2,9 +2,10 @@
 
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import { ArrowRight, BarChart3, Gauge } from 'lucide-react'
+import { ArrowRight, BarChart3, Gauge, Trophy } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import RF100VLPanel from '@/components/articles/rf100vl/RF100VLPanel'
+import RF100VL_RESULTS from '@/components/articles/rf100vl/results-summary.json'
 import ThemedEmbed from '@/components/ThemedEmbed'
 
 // Defaults to the live site. Point NEXT_PUBLIC_VA_URL at a local Vision
@@ -19,6 +20,12 @@ const SCATTER_HIGHLIGHT = [
   'yolov9t', 'yolov9s', 'yolov9m', 'yolov9c',
   'rfdetr-n', 'rfdetr-s', 'rfdetr-m', 'rfdetr-l',
 ].join(',')
+
+const RF100VL_LEADERS = RF100VL_RESULTS.slice(0, 5)
+
+function resultLabel(result) {
+  return `${result.model}-${result.size}`
+}
 
 // Inline link inside body copy. Vision Analysis is a separate site, so those
 // open in a new tab and carry the referral campaign; the RF100-VL one is an
@@ -57,6 +64,7 @@ function SectionHeading({ tag, title, children }) {
 
 export default function BenchmarksPage() {
   const t = useTranslations('Benchmarks')
+  const rf = useTranslations('RF100VL')
   return (
     <main className="min-h-screen bg-white dark:bg-surface-950">
       {/* Hero */}
@@ -127,6 +135,41 @@ export default function BenchmarksPage() {
           <p className="mt-3 text-surface-600 dark:text-surface-400 leading-relaxed">
             {t('rfAdvice')}
           </p>
+        </div>
+
+        <div className="mt-8 max-w-3xl overflow-hidden rounded-2xl border border-surface-200 bg-surface-50/70 dark:border-surface-800 dark:bg-surface-900/50">
+          <div className="flex items-center justify-between gap-4 border-b border-surface-200 px-5 py-4 dark:border-surface-800">
+            <div className="flex items-center gap-2 text-sm font-semibold text-surface-900 dark:text-white">
+              <Trophy className="h-4 w-4 text-libre-600 dark:text-libre-400" />
+              {rf('tabs.results')}
+            </div>
+            <Link
+              href="/articles/rf100vl-benchmark"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-libre-600 hover:text-libre-700 dark:text-libre-400 dark:hover:text-libre-300"
+            >
+              {rf('benchmarkReport')}
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+
+          <ol aria-label={rf('tabs.results')} className="divide-y divide-surface-200 dark:divide-surface-800">
+            {RF100VL_LEADERS.map((result, index) => {
+              const model = resultLabel(result)
+              return (
+                <li key={result.id} className="flex items-center gap-3 px-5 py-3">
+                  <span className="w-5 shrink-0 font-mono text-xs font-semibold text-surface-400">
+                    {index + 1}
+                  </span>
+                  <span className="min-w-0 flex-1 text-sm font-medium text-surface-700 dark:text-surface-200">
+                    {rf('modelMean100', { model })}
+                  </span>
+                  <span className="font-mono text-sm font-bold tabular-nums text-surface-900 dark:text-white">
+                    {(result.map * 100).toFixed(1)}%
+                  </span>
+                </li>
+              )
+            })}
+          </ol>
         </div>
       </section>
 

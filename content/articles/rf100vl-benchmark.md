@@ -1,7 +1,7 @@
 ---
 title: "RF100-VL: benchmarking detectors on one hundred real datasets"
-description: We are running 15 detector configurations across all 100 RF100-VL datasets. Here is the benchmark explained, an interactive map of the datasets, and seven verified results.
-date: 2026-08-09
+description: We are running 15 detector configurations across all 100 RF100-VL datasets. Here is the benchmark explained, an interactive map of the datasets, and thirteen verified results.
+date: 2026-08-15
 author: Xuban
 layout: paper
 tags: [LibreYOLO, RF100-VL, benchmark, object-detection, roboflow]
@@ -11,7 +11,7 @@ faq:
   - q: "What is the RF100-VL protocol in this report?"
     a: "For each model we fine-tune the COCO-pretrained checkpoint for 100 epochs on each dataset's train split, then score that dataset's test split with pycocotools at maxDets 500. We report the unweighted mean of mAP50 and mAP50-95 across the 100 datasets, plus the median training time per dataset. A run only counts as a result when all 100 datasets completed."
   - q: "Which models have completed the RF100-VL sweep so far?"
-    a: "Seven models have completed verified 100-dataset sweeps. YOLO-NAS-S leads at 0.5800 mAP50-95, followed by YOLOX-M at 0.5701, YOLOv9-S at 0.5591, YOLOX-S at 0.5525, YOLOv9-T at 0.5402, YOLOX-Tiny at 0.5218, and YOLOX-Nano at 0.4853. Every listed model trained and scored all 100 datasets with none skipped."
+    a: "Thirteen models across five families have completed verified 100-dataset sweeps. RF-DETR-S leads at 0.6041 mAP50-95. The completed field also includes YOLO-NAS-S and M, EdgeCrafter-S, M and L, YOLOX-Nano, Tiny, S and M, and YOLOv9-T, S and M. Every listed model trained and scored all 100 datasets with none skipped."
   - q: "Where can I check the RF100-VL numbers myself?"
     a: "Every artifact is published at huggingface.co/datasets/LibreYOLO/rf100-vl-results: the per-dataset training configs, per-epoch metrics, logs, GPU telemetry, scoring inputs and the submission JSON. Each run carries a manifest.json pinning the exact LibreYOLO and harness commits that produced it."
 ---
@@ -45,10 +45,11 @@ One rule governs what appears below: a model is listed only after it has trained
 
 ## Reading the results
 
-Seven models across three families have finished a full 100. YOLO-NAS-S is the current leader at 0.5800 mAP50-95, with YOLOX-M close behind at 0.5701.
+Thirteen models across five families have finished a full 100. RF-DETR-S is the first campaign above 0.60, leading at 0.6041 mAP50-95. YOLO-NAS-S and M and EdgeCrafter-M form a tight second group at 0.5793 to 0.5800.
 
-* **Capacity helps, but family matters just as much.** Within YOLOX, scaling from Nano at 0.90M parameters to M at 25.28M moves mAP50-95 from 0.4853 to 0.5701. Within YOLOv9, 2.02M to 7.20M parameters buys only 0.0189, from 0.5402 to 0.5591. YOLO-NAS-S reaches 0.5800 with 19.02M parameters, beating the larger 25.28M YOLOX-M by 0.0099. The seven results turn the old one-pair anecdote into a consistent warning against choosing by parameter count alone.
-* **Training cost now separates the sizes.** The median training time per dataset runs from 18.8 minutes for YOLOX-Nano to 48.0 minutes for YOLOX-M. YOLO-NAS-S reaches the best accuracy at a 29.0-minute median, so the largest compute bill is not buying the top result.
-* **The spread across datasets dwarfs the spread across models.** The 0.0947 gap from YOLOX-Nano to YOLO-NAS-S is still far smaller than the gap between the easiest and hardest datasets for any one model. Which datasets resemble your problem can matter more than which of these seven you pick.
+* **Capacity alone does not predict transfer.** YOLOX scales cleanly from Nano at 0.4853 to M at 0.5701, but the other completed size ladders do not. YOLO-NAS-S narrowly edges M, EdgeCrafter-M beats both S and L, and YOLOv9-S beats both T and M. Architecture size, pretraining and the family-specific recipe have to be judged together.
+* **RF-DETR-S opens a real lead.** Its 0.6041 is 0.0241 ahead of YOLO-NAS-S and 0.0340 ahead of YOLOX-M. It is also the only completed model above 0.60, despite sitting below YOLO-NAS-M in parameter count.
+* **Training cost separates the campaigns.** Median training time per dataset runs from 18.7 minutes for YOLOX-Nano to 64.3 minutes for EdgeCrafter-S. RF-DETR-S takes 55.6 minutes at the median, while the three models near 0.58 span 29.0 to 60.9 minutes.
+* **The spread across datasets still dwarfs the spread across models.** The 0.1189 gap from YOLOX-Nano to RF-DETR-S remains far smaller than the gap between the easiest and hardest datasets for any one model. Which datasets resemble your problem can matter more than which of these thirteen you pick.
 
-Every number above is traceable to a published run, and a model appears only once it has trained and scored all 100 datasets. The full per-dataset breakdown, failure analysis and training curves land in the final report; until then this page grows as each sweep finishes.
+Every number above is traceable to a published run, and a model appears only once it has trained and scored all 100 datasets. The interactive dataset view now includes all thirteen complete campaigns. Failure analysis and training curves land in the final report; until then this page grows as the remaining sweeps finish.
