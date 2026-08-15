@@ -1,86 +1,28 @@
 ---
-title: How to run YOLOX with LibreYOLO
-description: YOLOX is Apache 2.0, commercially clean, and still competitive. The original repo is abandoned. Here is how to run it with LibreYOLO instead.
-date: 2026-06-26
+title: "YOLOX Alternative in 2026: Run It with LibreYOLO"
+description: "The latest YOLOX release is from 2022. Run, train, validate and export YOLOX through the LibreYOLO API."
+date: 2026-08-15
 author: Xuban
-tags: [LibreYOLO, yolox, object-detection, tutorial]
+tags: [LibreYOLO, yolox-alternative, object-detection, tutorial]
 faq:
-  - q: "Is YOLOX free for commercial use?"
-    a: "Yes. YOLOX code and weights are both Apache 2.0, with no non-commercial restrictions and no platform lock-in. LibreYOLO's own code is MIT, so the whole stack stays commercially clean."
-  - q: "Is the original YOLOX repo still maintained?"
-    a: "No. pip install yolox still gives you version 0.3.0 from April 2022, the repo has been in maintenance-only mode since mid-2022, and its ONNX export depends on a private PyTorch API that was removed in PyTorch 2.x. CoreML export does not exist at all."
-  - q: "How do I run YOLOX on modern PyTorch?"
-    a: "Install LibreYOLO (pip install libreyolo) and load the weights by name: LibreYOLOXs.pt auto-downloads on first run. All six sizes work, and export covers ONNX, TorchScript, CoreML, OpenVINO, NCNN, TFLite, and TensorRT."
+  - q: "Is YOLOX abandoned?"
+    a: "The official repository is not archived, but its latest release is YOLOX 0.3.0 from April 2022. Quiet is more accurate than formally abandoned."
+  - q: "Can LibreYOLO train YOLOX?"
+    a: "Yes. LibreYOLO supports YOLOX prediction, training, validation and export."
 ---
 
-YOLOX is an anchor-free detector from Megvii with seven model sizes ranging from 0.91M parameters (Nano) to 99.1M (X). The large variant hits 49.7 mAP on COCO val. It is Apache 2.0 on both code and weights, which makes it one of the few competitive detectors you can ship in a commercial product without any restrictions.
-
-<div style="position:relative;width:100%;padding-top:62.5%">
-  <iframe
-    src="https://www.visionanalysis.org/embed/scatter?highlight=yolox-nano%2Cyolox-tiny%2Cyolox-s%2Cyolox-m%2Cyolox-l%2Cyolox-x&title=YOLOX%3A%20accuracy%20vs.%20model%20size"
-    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;border-radius:12px"
-    loading="lazy"
-    title="YOLOX accuracy vs parameters - visionanalysis.org">
-  </iframe>
-</div>
-
-The problem is the original library. `pip install yolox` gets you version 0.3.0 from April 2022 and has not moved since. Running inference is not a one-liner:
-
-* You instantiate an `Exp` object to configure the model,
-
-* load the checkpoint manually into the architecture,
-
-* preprocess your image through `ValTransform`,
-
-* pass it through the model and call `postprocess()` to get boxes and scores out of the raw output tensor.
-
-The ONNX export uses `torch.onnx._export`, a private PyTorch API that was removed in PyTorch 2.x. The hard-pinned `onnx-simplifier==0.4.10` in `requirements.txt` conflicts with any newer `onnx` install. CoreML export does not exist at all. The repo has been in maintenance-only mode since mid-2022.
-
-LibreYOLO gives you the same YOLOX weights through the same API you already know:
+YOLOX is still a useful Apache-2.0 detector. Its [official repository](https://github.com/Megvii-BaseDetection/YOLOX) is not archived, but the latest release, 0.3.0, dates to April 2022. The maintenance problem is real. The model still works.
 
 ```python
 from libreyolo import LibreYOLO
 
-model = LibreYOLO("LibreYOLOXs.pt")  # auto-downloads on first run
-results = model("image.jpg", save=True)
+model = LibreYOLO("LibreYOLOXs.pt")
+result = model("image.jpg", save=True)
+print(result.boxes.xyxy)
 ```
 
-All six sizes work: Nano (`n`), Tiny (`t`), Small (`s`), Medium (`m`), Large (`l`), Extra-large (`x`). Nano and Tiny run at 416 px input; the rest at 640 px. LibreYOLO handles that automatically.
+LibreYOLO supports six YOLOX sizes, from Nano to X, with prediction, training, validation and export behind one API. Use the original project if you need its exact `Exp` configuration workflow.
 
-```python
-print(results[0].boxes.xyxy)  # xyxy coordinates
-print(results[0].boxes.conf)  # confidence scores
-```
+Start with `pip install libreyolo`. The [YOLOX docs](https://www.libreyolo.com/docs/models/yolox) cover the full API. There is also a short [YOLO-NAS alternative](/articles/yolo-nas-with-libreyolo).
 
-Export is broader than what the original library offers. LibreYOLO can export YOLOX to ONNX, TorchScript, CoreML, OpenVINO, NCNN, TFLite, and TensorRT. The original repo has no CoreML path and its ONNX export is broken on modern PyTorch.
-
-Training works too:
-
-```python
-model.train(data="your_dataset.yaml", epochs=100, batch=16)
-```
-
-## A note on the license
-
-YOLOX weights are Apache 2.0. That means no non-commercial restrictions, no need to contact anyone, no platform lock-in.
-
-LibreYOLO's own code is MIT.
-
-## Try it
-
-```bash
-pip install libreyolo
-```
-
-```python
-from libreyolo import LibreYOLO
-
-model = LibreYOLO("LibreYOLOXl.pt")
-results = model("image.jpg", save=True)
-print(results[0].boxes.xyxy)
-print(results[0].boxes.conf)
-```
-
-LibreYOLO is MIT-licensed, runs on Linux, Mac, and Windows, and works on GPU, Apple Silicon, and plain CPU with no code change. One API spans RF-DETR, D-FINE, DEIM, YOLO-NAS, YOLOX, segmentation, pose, depth, and more.
-
-Star it on GitHub: [github.com/LibreYOLO/libreyolo](https://github.com/LibreYOLO/libreyolo) | Docs: [libreyolo.com/docs](https://www.libreyolo.com/docs/v1.3.1)
+[GitHub](https://github.com/LibreYOLO/libreyolo) | [Documentation](https://www.libreyolo.com/docs)
