@@ -16,6 +16,7 @@ import {
 } from '@/i18n/metadata'
 import { routing } from '@/i18n/routing'
 import { Link } from '@/i18n/navigation'
+import { slugifyHeading } from '@/lib/slugify-heading'
 import ThemedEmbed from '@/components/ThemedEmbed'
 import RF100VLHero from '@/components/articles/rf100vl/RF100VLHero'
 import RF100VLResults from '@/components/articles/rf100vl/RF100VLResults'
@@ -81,10 +82,38 @@ function formatDate(dateString, locale) {
   })
 }
 
-const markdownComponents = {
-  h1: (props) => <h2 className="text-3xl font-bold text-surface-800 dark:text-white mt-12 mb-4" {...props} />,
-  h2: (props) => <h2 className="text-2xl font-bold text-surface-800 dark:text-white mt-12 mb-4" {...props} />,
-  h3: (props) => <h3 className="text-xl font-semibold text-surface-800 dark:text-white mt-8 mb-3" {...props} />,
+function textOf(children) {
+  if (typeof children === 'string') return children
+  if (Array.isArray(children)) return children.map(textOf).join('')
+  if (children?.props?.children) return textOf(children.props.children)
+  return ''
+}
+
+function createMarkdownComponents() {
+  const headingCounts = new Map()
+  const headingId = (children) => {
+    const base = slugifyHeading(textOf(children)) || 'section'
+    const count = headingCounts.get(base) || 0
+    headingCounts.set(base, count + 1)
+    return count === 0 ? base : `${base}-${count}`
+  }
+
+  return {
+  h1: ({ node, children, ...props }) => (
+    <h2 id={headingId(children)} className="scroll-mt-24 text-3xl font-bold text-surface-800 dark:text-white mt-12 mb-4" {...props}>
+      {children}
+    </h2>
+  ),
+  h2: ({ node, children, ...props }) => (
+    <h2 id={headingId(children)} className="scroll-mt-24 text-2xl font-bold text-surface-800 dark:text-white mt-12 mb-4" {...props}>
+      {children}
+    </h2>
+  ),
+  h3: ({ node, children, ...props }) => (
+    <h3 id={headingId(children)} className="scroll-mt-24 text-xl font-semibold text-surface-800 dark:text-white mt-8 mb-3" {...props}>
+      {children}
+    </h3>
+  ),
   p: (props) => <p className="text-surface-600 dark:text-surface-400 leading-relaxed mb-5" {...props} />,
   a: (props) => (
     <a
@@ -132,6 +161,7 @@ const markdownComponents = {
   // e.g. <rf100vl-results />. rehype-raw keeps unknown tags, so they land here.
   'rf100vl-results': () => <RF100VLResults />,
   'under-construction': () => <UnderConstruction />,
+  }
 }
 
 // Articles with `layout: paper` swap the standard header for a full-bleed,
@@ -146,6 +176,7 @@ export default async function ArticlePage({ params }) {
   const article = getArticleBySlug(slug, locale)
   if (!article) notFound()
   const t = await getTranslations({ locale, namespace: 'Articles' })
+  const markdownComponents = createMarkdownComponents()
 
   const jsonLd = {
     '@context': 'https://schema.org',
