@@ -1,5 +1,21 @@
 [
   {
+    "id": "rfdetr-m",
+    "model": "RF-DETR",
+    "size": "M",
+    "weights": "LibreRFDETRm.pt",
+    "paramsM": 33.37,
+    "map": 0.6112503547882693,
+    "map50": 0.8739281523005081,
+    "createdAt": "2026-08-17T10:45:01.367468Z",
+    "runPath": "rfdetr-m/20260817-rfdetr-m-fc99ba9c",
+    "inputSize": 576,
+    "trainingPrecision": "bfloat16",
+    "gpu": "NVIDIA GeForce RTX 5060 Ti",
+    "trainMin": 69.68668871319193,
+    "trainHours": 154.72290805772988
+  },
+  {
     "id": "rfdetr-s",
     "model": "RF-DETR",
     "size": "S",
@@ -60,6 +76,38 @@
     "gpu": "NVIDIA GeForce RTX 5060 Ti",
     "trainMin": 33.739531881940394,
     "trainHours": 115.69219955749972
+  },
+  {
+    "id": "rfdetr-n",
+    "model": "RF-DETR",
+    "size": "N",
+    "weights": "LibreRFDETRn.pt",
+    "paramsM": 30.15,
+    "map": 0.573612070656918,
+    "map50": 0.8480852101679281,
+    "createdAt": "2026-08-16T12:19:51.321211Z",
+    "runPath": "rfdetr-n/20260816-rfdetr-n-1b1190ee",
+    "inputSize": 384,
+    "trainingPrecision": "bfloat16",
+    "gpu": "NVIDIA GeForce RTX 5060 Ti",
+    "trainMin": 45.10063480748407,
+    "trainHours": 104.06194152064602
+  },
+  {
+    "id": "rfdetr-s-lora",
+    "model": "RF-DETR",
+    "size": "S LoRA",
+    "weights": "LibreRFDETRs.pt",
+    "paramsM": 32.25,
+    "map": 0.5718595071982058,
+    "map50": 0.8441914578640345,
+    "createdAt": "2026-08-15T20:14:55.156458Z",
+    "runPath": "rfdetr-s-lora/20260815-rfdetr-s-lora-1e542b7e",
+    "inputSize": 512,
+    "trainingPrecision": "bfloat16",
+    "gpu": "NVIDIA GeForce RTX 5060 Ti",
+    "trainMin": 48.38945645486044,
+    "trainHours": 148.21421218705254
   },
   {
     "id": "yolox-m",

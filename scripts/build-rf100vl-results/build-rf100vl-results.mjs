@@ -15,6 +15,8 @@
 // article promises they are never shown.
 
 import { writeFile } from 'node:fs/promises'
+import { readFileSync } from 'node:fs'
+import { homedir } from 'node:os'
 import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
 
@@ -29,7 +31,11 @@ const OUT_DIR = resolve(HERE, '../../src/components/articles/rf100vl')
 // the page wants, so they are pinned here. A model absent from this map still
 // renders, it just falls back to the raw campaign id.
 const DISPLAY = {
+  'rfdetr-n': { model: 'RF-DETR', size: 'N', weights: 'LibreRFDETRn.pt' },
   'rfdetr-s': { model: 'RF-DETR', size: 'S', weights: 'LibreRFDETRs.pt' },
+  'rfdetr-s-lora': { model: 'RF-DETR', size: 'S LoRA', weights: 'LibreRFDETRs.pt' },
+  'rfdetr-m': { model: 'RF-DETR', size: 'M', weights: 'LibreRFDETRm.pt' },
+  'rfdetr-l': { model: 'RF-DETR', size: 'L', weights: 'LibreRFDETRl.pt' },
   'yolov9t': { model: 'YOLOv9', size: 'T', weights: 'LibreYOLO9t.pt' },
   'yolov9s': { model: 'YOLOv9', size: 'S', weights: 'LibreYOLO9s.pt' },
   'yolov9m': { model: 'YOLOv9', size: 'M', weights: 'LibreYOLO9m.pt' },
@@ -44,16 +50,55 @@ const DISPLAY = {
   'ec-l': { model: 'EdgeCrafter', size: 'L', weights: 'LibreECl.pt' },
 }
 
-async function tree(path = '') {
-  const res = await fetch(path ? `${API}/${path}` : API)
-  if (!res.ok) throw new Error(`tree ${path || '/'} failed: ${res.status}`)
+// A full rebuild walks a few thousand small files, which the Hub answers with
+// 429 well before it answers with data. Anonymous requests hit that wall first,
+// so an HF token is used when one is around, and every request backs off and
+// retries rather than losing the whole crawl to one throttled file.
+const TOKEN = process.env.HF_TOKEN || process.env.HUGGING_FACE_HUB_TOKEN || cachedToken()
+const HEADERS = TOKEN ? { authorization: `Bearer ${TOKEN}` } : {}
+
+function cachedToken() {
+  for (const file of [
+    resolve(homedir(), '.cache/huggingface/token'),
+    resolve(homedir(), '.huggingface/token'),
+  ]) {
+    try {
+      const value = readFileSync(file, 'utf8').trim()
+      if (value) return value
+    } catch {
+      // no cached token here, try the next location
+    }
+  }
+  return null
+}
+
+const sleep = (ms) => new Promise((done) => setTimeout(done, ms))
+
+async function get(url, label, attempt = 1) {
+  let res
+  try {
+    res = await fetch(url, { headers: HEADERS })
+  } catch (err) {
+    if (attempt > 5) throw new Error(`${label} failed: ${err.message}`)
+    await sleep(2000 * attempt)
+    return get(url, label, attempt + 1)
+  }
+  if (res.status === 429 || res.status >= 500) {
+    if (attempt > 5) throw new Error(`${label} failed: ${res.status}`)
+    const retryAfter = Number(res.headers.get('retry-after'))
+    await sleep(Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : 2000 * attempt)
+    return get(url, label, attempt + 1)
+  }
+  if (!res.ok) throw new Error(`${label} failed: ${res.status}`)
   return res.json()
 }
 
+async function tree(path = '') {
+  return get(path ? `${API}/${path}` : API, `tree ${path || '/'}`)
+}
+
 async function json(path) {
-  const res = await fetch(`${RAW}/${path}`)
-  if (!res.ok) throw new Error(`fetch ${path} failed: ${res.status}`)
-  return res.json()
+  return get(`${RAW}/${path}`, `fetch ${path}`)
 }
 
 async function mapLimit(items, limit, fn) {
@@ -88,7 +133,7 @@ async function trainingTimes(runPath) {
     throw new Error(`${runPath}: expected 100 training stats files, found ${files.length}`)
   }
 
-  const stats = await mapLimit(files, 12, (file) => json(file.path))
+  const stats = await mapLimit(files, 6, (file) => json(file.path))
   const seconds = stats.map((stat) => stat.wall_seconds)
   if (seconds.some((value) => !Number.isFinite(value))) {
     throw new Error(`${runPath}: a training stats file has no wall_seconds value`)

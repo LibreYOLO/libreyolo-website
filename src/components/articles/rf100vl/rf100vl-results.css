@@ -18,9 +18,36 @@
   transform: translateY(0);
 }
 
+/* Podium: the plinths grow up from the ground line (bronze first, gold last),
+   then the numeral on the face and the score above each block fade in. */
+.rf-plinth-block {
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--d, 0ms);
+}
+.rf-bars-in .rf-plinth-block {
+  transform: scaleY(1);
+}
+.rf-plinth-face,
+.rf-plinth-top {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition-delay: var(--d, 0ms);
+}
+.rf-bars-in .rf-plinth-face,
+.rf-bars-in .rf-plinth-top {
+  opacity: 1;
+  transform: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .rf-bar-fill,
-  .rf-row {
+  .rf-row,
+  .rf-plinth-block,
+  .rf-plinth-face,
+  .rf-plinth-top {
     transition: none;
     opacity: 1;
     transform: none;

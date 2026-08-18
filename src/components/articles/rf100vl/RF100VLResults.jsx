@@ -21,6 +21,27 @@ const AGGREGATE_GPU_HOURS = Math.round(
   RESULTS.reduce((total, result) => total + result.trainHours, 0) / 10,
 ) * 10
 
+// The only medal colouring anywhere: a hairline of metal on each plinth's top
+// edge, the engraved rank numeral, and a matching dot beside the top three
+// rows of the table. Everything else stays in the site's slate and cyan.
+const METALS = [
+  {
+    edge: 'linear-gradient(90deg, #d97706, #fef08a 50%, #d97706)',
+    numeral: 'text-amber-300',
+    dot: '#f59e0b',
+  },
+  {
+    edge: 'linear-gradient(90deg, #94a3b8, #f1f5f9 50%, #94a3b8)',
+    numeral: 'text-slate-300',
+    dot: '#94a3b8',
+  },
+  {
+    edge: 'linear-gradient(90deg, #7c2d12, #fb923c 50%, #7c2d12)',
+    numeral: 'text-orange-300',
+    dot: '#ea580c',
+  },
+]
+
 function Stat({ icon: Icon, value, label }) {
   return (
     <div className="flex items-center gap-3 rounded-xl border border-surface-200 dark:border-surface-800 bg-white/60 dark:bg-surface-900/60 px-4 py-3">
@@ -29,6 +50,89 @@ function Stat({ icon: Icon, value, label }) {
         <div className="text-lg font-bold leading-none text-surface-800 dark:text-white">{value}</div>
         <div className="mt-1 text-[11px] uppercase tracking-wider text-surface-500">{label}</div>
       </div>
+    </div>
+  )
+}
+
+// The podium is drawn to scale: each plinth's height above the third-place
+// baseline is proportional to its mAP50-95 lead, so the near-tie at the top
+// and the drop to third are the structure itself, not a caption. Ranks come
+// straight from RESULTS, which the build script sorts by mAP50-95, so the
+// podium can never disagree with the leaderboard under it.
+const PLINTH_BASE_PX = 96
+const PX_PER_MAP = 2200
+
+function Podium() {
+  const top = RESULTS.slice(0, 3)
+  const floor = top[2].map
+  // Visual order 2-1-3; the blocks rise bronze first, gold last.
+  const order = ['order-2', 'order-1', 'order-3']
+  const rise = [260, 130, 0]
+
+  return (
+    <div className="mb-10">
+      <ol aria-label="Top three models" className="grid grid-cols-3 items-end gap-2 sm:gap-4">
+        {top.map((row, idx) => {
+          const metal = METALS[idx]
+          const next = RESULTS[idx + 1]
+          const height = Math.round(PLINTH_BASE_PX + (row.map - floor) * PX_PER_MAP)
+          return (
+            <li key={row.id} className={`${order[idx]} flex min-w-0 flex-col justify-end text-center`}>
+              <div className="rf-plinth-top px-1" style={{ '--d': `${rise[idx] + 340}ms` }}>
+                <span className="flex flex-wrap items-center justify-center gap-x-1.5 gap-y-0.5">
+                  <span className="text-xs sm:text-sm font-semibold text-surface-700 dark:text-surface-200">
+                    {row.model}
+                  </span>
+                  <span className="rounded border border-surface-300 px-1 py-px font-mono text-[9px] sm:text-[10px] text-surface-500 dark:border-surface-700">
+                    {row.size}
+                  </span>
+                </span>
+                <span
+                  className={`mt-1 block font-mono font-bold tabular-nums leading-none text-surface-900 dark:text-white ${
+                    idx === 0 ? 'text-2xl sm:text-4xl' : 'text-xl sm:text-3xl'
+                  }`}
+                >
+                  {row.map.toFixed(4)}
+                </span>
+                <span className="mt-1 mb-2.5 block text-[9px] sm:text-[10px] uppercase tracking-wider text-surface-400 dark:text-surface-500">
+                  mAP<sup>50-95</sup>
+                </span>
+              </div>
+
+              <div
+                className="rf-plinth-block relative overflow-hidden rounded-t-lg bg-surface-900 dark:border dark:border-b-0 dark:border-white/10 dark:bg-white/[0.06]"
+                style={{ height: `${height}px`, '--d': `${rise[idx]}ms` }}
+              >
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 top-0 h-[3px]"
+                  style={{ background: metal.edge }}
+                />
+                <div
+                  className="rf-plinth-face flex flex-col items-center pt-4"
+                  style={{ '--d': `${rise[idx] + 300}ms` }}
+                >
+                  <span className={`font-mono text-4xl sm:text-5xl font-bold leading-none ${metal.numeral}`}>
+                    {idx + 1}
+                  </span>
+                  {next && (
+                    <span className="mt-2 px-1 font-mono text-[9px] sm:text-[10px] tabular-nums leading-tight text-white/50">
+                      +{(row.map - next.map).toFixed(4)}
+                      <span className="hidden sm:inline">
+                        {' '}vs {next.model}-{next.size}
+                      </span>
+                    </span>
+                  )}
+                </div>
+              </div>
+            </li>
+          )
+        })}
+      </ol>
+      <div className="border-t-2 border-surface-900 dark:border-white/20" />
+      <p className="mt-2 text-center text-[11px] text-surface-400 dark:text-surface-500">
+        The steps are to scale: each plinth&apos;s height above third place is its mAP<sup>50-95</sup> lead.
+      </p>
     </div>
   )
 }
@@ -86,6 +190,10 @@ export default function RF100VLResults() {
         />
       </div>
 
+      <div className={inView ? 'rf-bars-in' : undefined}>
+        <Podium />
+      </div>
+
       {/* leaderboard */}
       <div
         className={`rounded-2xl border border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 overflow-hidden${
@@ -93,7 +201,8 @@ export default function RF100VLResults() {
         }`}
       >
         {/* header row */}
-        <div className="hidden lg:grid grid-cols-[minmax(8rem,0.8fr)_4.5rem_4rem_4.5rem_minmax(10rem,1.1fr)_5.5rem_minmax(12rem,1.2fr)] items-center gap-x-3 px-5 py-3 border-b border-surface-200 dark:border-surface-800 text-[10px] font-bold uppercase tracking-widest text-surface-500">
+        <div className="hidden lg:grid grid-cols-[1.5rem_minmax(8rem,0.8fr)_4.5rem_4rem_4.5rem_minmax(10rem,1.1fr)_5.5rem_minmax(12rem,1.2fr)] items-center gap-x-3 px-5 py-3 border-b border-surface-200 dark:border-surface-800 text-[10px] font-bold uppercase tracking-widest text-surface-500">
+          <span className="text-right">#</span>
           <span>Model</span>
           <span className="text-right">params</span>
           <span className="text-right">ok/100</span>
@@ -112,12 +221,22 @@ export default function RF100VLResults() {
           const runId = row.runPath.split('/').pop()
           return (
             <div
-              key={row.weights}
-              className="rf-row grid grid-cols-[1fr_auto] lg:grid-cols-[minmax(8rem,0.8fr)_4.5rem_4rem_4.5rem_minmax(10rem,1.1fr)_5.5rem_minmax(12rem,1.2fr)] items-center gap-x-3 px-5 py-3 border-b last:border-b-0 border-surface-100 dark:border-surface-800/70"
+              key={row.id}
+              className="rf-row grid grid-cols-[1fr_auto] lg:grid-cols-[1.5rem_minmax(8rem,0.8fr)_4.5rem_4rem_4.5rem_minmax(10rem,1.1fr)_5.5rem_minmax(12rem,1.2fr)] items-center gap-x-3 px-5 py-3 border-b last:border-b-0 border-surface-100 dark:border-surface-800/70 transition-colors hover:bg-surface-50 dark:hover:bg-white/[0.03]"
               style={{ '--d': `${idx * 45}ms` }}
             >
+              <span className="hidden lg:block text-right font-mono text-xs tabular-nums text-surface-400 dark:text-surface-500">
+                {idx + 1}
+              </span>
               <span className="min-w-0">
                 <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  {idx < 3 && (
+                    <span
+                      aria-hidden="true"
+                      className="inline-block h-1.5 w-1.5 shrink-0 rounded-full"
+                      style={{ background: METALS[idx].dot }}
+                    />
+                  )}
                   <span className="font-semibold truncate text-surface-700 dark:text-surface-200">
                     {row.model}
                   </span>

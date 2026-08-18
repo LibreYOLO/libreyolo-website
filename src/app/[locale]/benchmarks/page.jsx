@@ -23,6 +23,10 @@ const SCATTER_HIGHLIGHT = [
 
 const RF100VL_LEADERS = RF100VL_RESULTS.slice(0, 5)
 
+// Same metal dots the article's podium and leaderboard use for the top three,
+// so a reader moving between the two pages sees one system.
+const MEDAL_DOTS = ['#f59e0b', '#94a3b8', '#ea580c']
+
 function resultLabel(result) {
   return `${result.model}-${result.size}`
 }
@@ -157,14 +161,38 @@ export default function BenchmarksPage() {
               const model = resultLabel(result)
               return (
                 <li key={result.id} className="flex items-center gap-3 px-5 py-3">
-                  <span className="w-5 shrink-0 font-mono text-xs font-semibold text-surface-400">
+                  <span className="w-5 shrink-0 text-right font-mono text-xs font-semibold text-surface-400">
                     {index + 1}
                   </span>
-                  <span className="min-w-0 flex-1 text-sm font-medium text-surface-700 dark:text-surface-200">
-                    {rf('modelMean100', { model })}
+                  <span className="min-w-0 flex-1">
+                    <span className="flex items-center gap-2">
+                      {index < 3 && (
+                        <span
+                          aria-hidden="true"
+                          className="h-1.5 w-1.5 shrink-0 rounded-full"
+                          style={{ background: MEDAL_DOTS[index] }}
+                        />
+                      )}
+                      <span
+                        className={`truncate text-sm text-surface-700 dark:text-surface-200 ${
+                          index === 0 ? 'font-semibold' : 'font-medium'
+                        }`}
+                      >
+                        {rf('modelMean100', { model })}
+                      </span>
+                    </span>
+                    {/* Absolute scale on purpose: near-equal bars are the point.
+                        The models are close; the page says not to read this as a
+                        ranking, so the bars should not exaggerate the gaps. */}
+                    <span className="mt-1.5 block h-1 overflow-hidden rounded-full bg-surface-200 dark:bg-surface-800">
+                      <span
+                        className="block h-full rounded-full bg-libre-500"
+                        style={{ width: `${(result.map * 100).toFixed(2)}%` }}
+                      />
+                    </span>
                   </span>
                   <span className="font-mono text-sm font-bold tabular-nums text-surface-900 dark:text-white">
-                    {(result.map * 100).toFixed(1)}%
+                    {(result.map * 100).toFixed(2)}%
                   </span>
                 </li>
               )
