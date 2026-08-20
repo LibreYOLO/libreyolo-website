@@ -23,6 +23,6 @@ print(result.boxes.xyxy)
 
 LibreYOLO supports six YOLOX sizes, from Nano to X, with prediction, training, validation and export behind one API. Use the original project if you need its exact `Exp` configuration workflow.
 
-Start with `pip install libreyolo`. The [YOLOX docs](https://www.libreyolo.com/docs/models/yolox) cover the full API. There is also a short [YOLO-NAS alternative](/articles/yolo-nas-with-libreyolo).
+Start with `pip install libreyolo`. The [YOLOX docs](https://www.libreyolo.com/docs/models/yolox) cover the full API. There is also a short note that [YOLO-NAS is still maintained](/articles/yolo-nas-with-libreyolo).
 
 [GitHub](https://github.com/LibreYOLO/libreyolo) | [Documentation](https://www.libreyolo.com/docs)

@@ -56,7 +56,7 @@ model = LibreYOLO("LibreYOLONASs.pt")
 model.train(data="my-dataset.yaml", epochs=100, imgsz=640, batch=16)
 ```
 
-You can also train from a randomly initialized model, which matters for licensing (more on that below). Validation returns mAP metrics against any dataset in your format, and export covers ONNX, TorchScript, OpenVINO, NCNN, and TFLite. That is a wider export matrix than the original library ever shipped for YOLO-NAS. The full details are on the [YOLO-NAS docs page](https://www.libreyolo.com/docs/models/yolo-nas), and we wrote a shorter hands-on walkthrough [here](/articles/yolo-nas-with-libreyolo).
+You can also train from a randomly initialized model, which matters for licensing (more on that below). Validation returns mAP metrics against any dataset in your format, and export covers ONNX, TorchScript, OpenVINO, NCNN, and TFLite. That is a wider export matrix than the original library ever shipped for YOLO-NAS. The full details are on the [YOLO-NAS docs page](https://www.libreyolo.com/docs/models/yolo-nas), and there is a shorter note that [YOLO-NAS is still maintained](/articles/yolo-nas-with-libreyolo).
 
 ## Where the old repo is still the right choice
 
