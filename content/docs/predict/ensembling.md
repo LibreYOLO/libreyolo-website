@@ -141,9 +141,13 @@ Three are accepted by name, and a callable is accepted too.
 
 | `fusion` | Behavior |
 |---|---|
-| `"wbf"` | Weighted boxes fusion, sequential and faithful to the paper. The default |
+| `"wbf"` | Weighted boxes fusion, sequential and faithful to the paper [1]. The default |
 | `"wbf_seeded"` | One-pass weighted boxes fusion; class-aware NMS picks cluster seeds |
 | `"nms"` | Concatenate every member's boxes, then class-aware NMS |
+
+[1] Roman Solovyev, Weimin Wang, Tatiana Gabruseva, ["Weighted boxes fusion:
+Ensembling boxes from different object detection models"](https://arxiv.org/abs/1910.13302),
+arXiv:1910.13302.
 
 Weighted boxes fusion averages the coordinates of a cluster weighted by
 confidence, producing a box no single member proposed. The two weighted

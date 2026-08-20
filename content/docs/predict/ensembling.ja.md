@@ -84,7 +84,7 @@ snippets:
         # clip.mp4 をディスク上の動画ファイルに置き換える
         for result in ensemble("clip.mp4", stream=True, vid_stride=2):
             print(result.frame_idx, len(result.boxes))
-source_hash: 4f4c54c52b295795
+source_hash: 6dcd2f84ec6f3f65
 ---
 
 ## アンサンブルとは
@@ -128,9 +128,13 @@ LibreEnsemble(
 
 | `fusion` | 動作 |
 |---|---|
-| `"wbf"` | 順次処理で論文に忠実なweighted boxes fusion。デフォルト |
+| `"wbf"` | 順次処理で論文 [1] に忠実なweighted boxes fusion。デフォルト |
 | `"wbf_seeded"` | 1パスのweighted boxes fusion。クラス対応NMSでクラスターのシードを選択 |
 | `"nms"` | すべてのメンバーのボックスを連結し、クラス対応NMSを実行 |
+
+[1] Roman Solovyev, Weimin Wang, Tatiana Gabruseva, ["Weighted boxes fusion:
+Ensembling boxes from different object detection models"](https://arxiv.org/abs/1910.13302),
+arXiv:1910.13302.
 
 Weighted boxes fusionは、信頼度で重み付けしてクラスターの座標を平均し、どの単独メンバーも提案していないボックスを生成します。2つの重み付きバリアントは、クラスターが明確なら一致し、重なり合うクラスターの連鎖ではわずかに異なることがあります。`"nms"`は平均ではなく残すボックスを選ぶため、残ったボックスは元のスコアを維持し、重みはどのボックスが勝つかだけに影響します。クラスター化せずに選択するので投票数を数えられません。`fusion="nms"`と`1`より大きい`min_votes`を組み合わせると`ValueError`が発生します。
 

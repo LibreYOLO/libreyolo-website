@@ -104,7 +104,7 @@ snippets:
         # Замініть clip.mp4 на відеофайл із диска.
         for result in ensemble("clip.mp4", stream=True, vid_stride=2):
             print(result.frame_idx, len(result.boxes))
-source_hash: 4f4c54c52b295795
+source_hash: 6dcd2f84ec6f3f65
 ---
 
 ## Що таке ансамбль
@@ -165,9 +165,13 @@ LibreEnsemble(
 
 | `fusion` | Поведінка |
 |---|---|
-| `"wbf"` | Послідовне зважене злиття рамок, що точно відповідає статті. Типовий варіант |
+| `"wbf"` | Послідовне зважене злиття рамок, що точно відповідає статті [1]. Типовий варіант |
 | `"wbf_seeded"` | Однопрохідне зважене злиття рамок; NMS з урахуванням класів вибирає початкові елементи кластерів |
 | `"nms"` | Об'єднання рамок усіх учасників із подальшим NMS з урахуванням класів |
+
+[1] Roman Solovyev, Weimin Wang, Tatiana Gabruseva, ["Weighted boxes fusion:
+Ensembling boxes from different object detection models"](https://arxiv.org/abs/1910.13302),
+arXiv:1910.13302.
 
 Зважене злиття рамок усереднює координати кластера з вагами на основі
 впевненості, утворюючи рамку, якої не запропонував жоден окремий учасник. Два

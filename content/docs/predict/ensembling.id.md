@@ -93,7 +93,7 @@ snippets:
         # Ganti clip.mp4 dengan berkas video di disk.
         for result in ensemble("clip.mp4", stream=True, vid_stride=2):
             print(result.frame_idx, len(result.boxes))
-source_hash: 4f4c54c52b295795
+source_hash: 6dcd2f84ec6f3f65
 ---
 
 ## Apa itu ensemble
@@ -153,9 +153,13 @@ Tiga nama diterima, dan callable juga dapat diberikan.
 
 | `fusion` | Perilaku |
 |---|---|
-| `"wbf"` | Weighted boxes fusion, berurutan dan sesuai makalah. Ini default |
+| `"wbf"` | Weighted boxes fusion, berurutan dan sesuai makalah [1]. Ini default |
 | `"wbf_seeded"` | Weighted boxes fusion satu tahap; NMS yang sadar kelas memilih seed cluster |
 | `"nms"` | Gabungkan kotak semua anggota, lalu jalankan NMS yang sadar kelas |
+
+[1] Roman Solovyev, Weimin Wang, Tatiana Gabruseva, ["Weighted boxes fusion:
+Ensembling boxes from different object detection models"](https://arxiv.org/abs/1910.13302),
+arXiv:1910.13302.
 
 Weighted boxes fusion merata-ratakan koordinat cluster dengan pembobotan confidence, sehingga
 menghasilkan kotak yang tidak diusulkan oleh satu anggota pun. Kedua varian berbobot memberikan

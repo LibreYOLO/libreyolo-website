@@ -93,7 +93,7 @@ snippets:
         # Замените clip.mp4 на видеофайл на диске.
         for result in ensemble("clip.mp4", stream=True, vid_stride=2):
             print(result.frame_idx, len(result.boxes))
-source_hash: 4f4c54c52b295795
+source_hash: 6dcd2f84ec6f3f65
 ---
 
 ## Что такое ансамбль
@@ -157,9 +157,13 @@ LibreEnsemble(
 
 | `fusion` | Поведение |
 |---|---|
-| `"wbf"` | Weighted boxes fusion: последовательный алгоритм, в точности как в статье. Значение по умолчанию |
+| `"wbf"` | Weighted boxes fusion: последовательный алгоритм, в точности как в статье [1]. Значение по умолчанию |
 | `"wbf_seeded"` | Weighted boxes fusion в один проход; затравки кластеров выбирает NMS с учётом классов |
 | `"nms"` | Склеить рамки всех участников, затем NMS с учётом классов |
+
+[1] Roman Solovyev, Weimin Wang, Tatiana Gabruseva, ["Weighted boxes fusion:
+Ensembling boxes from different object detection models"](https://arxiv.org/abs/1910.13302),
+arXiv:1910.13302.
 
 Weighted boxes fusion усредняет координаты кластера с весами по уверенности и
 выдаёт рамку, которую не предлагал ни один участник. Два взвешенных варианта

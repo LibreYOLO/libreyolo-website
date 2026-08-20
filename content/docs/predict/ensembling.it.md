@@ -98,7 +98,7 @@ snippets:
         # Sostituisci clip.mp4 con un file video sul disco.
         for result in ensemble("clip.mp4", stream=True, vid_stride=2):
             print(result.frame_idx, len(result.boxes))
-source_hash: 4f4c54c52b295795
+source_hash: 6dcd2f84ec6f3f65
 ---
 
 ## Che cos'è un ensemble
@@ -161,9 +161,13 @@ Tre sono accettati per nome, e si accetta anche un callable.
 
 | `fusion` | Comportamento |
 |---|---|
-| `"wbf"` | Weighted boxes fusion, sequenziale e fedele al paper. Il default |
+| `"wbf"` | Weighted boxes fusion, sequenziale e fedele al paper [1]. Il default |
 | `"wbf_seeded"` | Weighted boxes fusion in un solo passaggio; una NMS per classe sceglie i seed dei cluster |
 | `"nms"` | Concatena i box di tutti i membri, poi applica una NMS per classe |
+
+[1] Roman Solovyev, Weimin Wang, Tatiana Gabruseva, ["Weighted boxes fusion:
+Ensembling boxes from different object detection models"](https://arxiv.org/abs/1910.13302),
+arXiv:1910.13302.
 
 La weighted boxes fusion media le coordinate di un cluster pesandole per la
 confidenza, producendo un box che nessun singolo membro aveva proposto. Le due

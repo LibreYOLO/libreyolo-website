@@ -88,7 +88,7 @@ snippets:
         # 把 clip.mp4 换成磁盘上的视频文件
         for result in ensemble("clip.mp4", stream=True, vid_stride=2):
             print(result.frame_idx, len(result.boxes))
-source_hash: 4f4c54c52b295795
+source_hash: 6dcd2f84ec6f3f65
 ---
 
 ## 什么是集成
@@ -142,9 +142,13 @@ LibreEnsemble(
 
 | `fusion` | 行为 |
 |---|---|
-| `"wbf"` | 加权检测框融合（weighted boxes fusion），顺序执行，忠于论文。默认值 |
+| `"wbf"` | 加权检测框融合（weighted boxes fusion），顺序执行，忠于论文 [1]。默认值 |
 | `"wbf_seeded"` | 单遍加权检测框融合，由类别感知的 NMS 挑选簇的种子 |
 | `"nms"` | 把每个成员的检测框拼接起来，然后做类别感知的 NMS |
+
+[1] Roman Solovyev, Weimin Wang, Tatiana Gabruseva, ["Weighted boxes fusion:
+Ensembling boxes from different object detection models"](https://arxiv.org/abs/1910.13302),
+arXiv:1910.13302.
 
 加权检测框融合按置信度加权平均一簇框的坐标，得到的框没有任何单个成员提出过。两个
 加权变体在簇没有歧义时结果一致，在重叠簇连成链时可能略有差别。`"nms"` 是挑出一个

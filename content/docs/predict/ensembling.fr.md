@@ -104,7 +104,7 @@ snippets:
         # Remplacez clip.mp4 par un fichier vidéo présent sur le disque.
         for result in ensemble("clip.mp4", stream=True, vid_stride=2):
             print(result.frame_idx, len(result.boxes))
-source_hash: 4f4c54c52b295795
+source_hash: 6dcd2f84ec6f3f65
 ---
 
 ## Définition d'un ensemble
@@ -171,9 +171,13 @@ Trois noms sont acceptés, ainsi qu'un callable.
 
 | `fusion` | Comportement |
 |---|---|
-| `"wbf"` | Weighted boxes fusion séquentielle et fidèle à l'article. Valeur par défaut |
+| `"wbf"` | Weighted boxes fusion séquentielle et fidèle à l'article [1]. Valeur par défaut |
 | `"wbf_seeded"` | Weighted boxes fusion en une passe\u00a0; une NMS consciente des classes choisit les graines des groupes |
 | `"nms"` | Concatène les bounding boxes de tous les membres, puis applique une NMS consciente des classes |
+
+[1] Roman Solovyev, Weimin Wang, Tatiana Gabruseva, ["Weighted boxes fusion:
+Ensembling boxes from different object detection models"](https://arxiv.org/abs/1910.13302),
+arXiv:1910.13302.
 
 La weighted boxes fusion calcule la moyenne des coordonnées d'un groupe,
 pondérée par la confiance, et produit ainsi une bounding box qu'aucun membre

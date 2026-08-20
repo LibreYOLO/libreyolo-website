@@ -93,7 +93,7 @@ snippets:
         # Zastąp clip.mp4 plikiem wideo na dysku.
         for result in ensemble("clip.mp4", stream=True, vid_stride=2):
             print(result.frame_idx, len(result.boxes))
-source_hash: 4f4c54c52b295795
+source_hash: 6dcd2f84ec6f3f65
 ---
 
 ## Czym jest zespół
@@ -154,9 +154,13 @@ Akceptowane są trzy nazwy oraz obiekt wywoływalny.
 
 | `fusion` | Zachowanie |
 |---|---|
-| `"wbf"` | Ważone scalanie ramek, sekwencyjne i zgodne z publikacją. Wartość domyślna |
+| `"wbf"` | Ważone scalanie ramek, sekwencyjne i zgodne z publikacją [1]. Wartość domyślna |
 | `"wbf_seeded"` | Jednoprzebiegowe ważone scalanie ramek; NMS uwzględniające klasy wybiera zalążki klastrów |
 | `"nms"` | Połączenie ramek wszystkich elementów, a następnie NMS uwzględniające klasy |
+
+[1] Roman Solovyev, Weimin Wang, Tatiana Gabruseva, ["Weighted boxes fusion:
+Ensembling boxes from different object detection models"](https://arxiv.org/abs/1910.13302),
+arXiv:1910.13302.
 
 Ważone scalanie ramek uśrednia współrzędne klastra z wagami wynikającymi z pewności,
 tworząc ramkę, której nie zaproponował żaden pojedynczy element. Oba warianty

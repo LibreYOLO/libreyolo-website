@@ -90,7 +90,7 @@ snippets:
         # clip.mp4를 디스크에 있는 비디오 파일로 교체하십시오.
         for result in ensemble("clip.mp4", stream=True, vid_stride=2):
             print(result.frame_idx, len(result.boxes))
-source_hash: 4f4c54c52b295795
+source_hash: 6dcd2f84ec6f3f65
 ---
 
 ## 앙상블이란 무엇인가
@@ -134,9 +134,13 @@ LibreEnsemble(
 
 | `fusion` | 행동 |
 |---|---|
-| `"wbf"` | 가중치 박스 융합, 순차적이며 논문에 충실함. 기본값 |
+| `"wbf"` | 가중치 박스 융합, 순차적이며 논문 [1]에 충실함. 기본값 |
 | `"wbf_seeded"` | 원패스 가중 박스 융합; 클래스 인식 NMS가 클러스터 시드를 선택함 |
 | `"nms"` | 모든 멤버의 박스를 연결한 후, 클래스 인식 NMS를 수행 |
+
+[1] Roman Solovyev, Weimin Wang, Tatiana Gabruseva, ["Weighted boxes fusion:
+Ensembling boxes from different object detection models"](https://arxiv.org/abs/1910.13302),
+arXiv:1910.13302.
 
 가중 박스 융합은 신뢰도에 의해 가중된 클러스터의 좌표를 평균하여 단일 멤버가 제안하지 않은 박스를 생성합니다. 두 가지 가중 변형은 클러스터가 명확할 때 항상 일치하며, 겹치는 클러스터 체인에서는 약간 다를 수 있습니다. `"nms"`는 평균 대신 생존자를 선택하므로 생존자는 원래 점수를 유지하고, 가중치는 어떤 박스가 승리할지에만 영향을 미칩니다. 선택을 클러스터링이 아닌 방식으로 수행하기 때문에 투표를 계산할 수 없습니다: `fusion="nms"`와 `min_votes`를 결합하여 `1`보다 크면 `ValueError`가 증가합니다.
 

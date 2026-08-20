@@ -98,7 +98,7 @@ snippets:
         # Thay clip.mp4 bằng tệp video trên đĩa.
         for result in ensemble("clip.mp4", stream=True, vid_stride=2):
             print(result.frame_idx, len(result.boxes))
-source_hash: 4f4c54c52b295795
+source_hash: 6dcd2f84ec6f3f65
 ---
 
 ## Ensemble là gì
@@ -158,9 +158,13 @@ Ba phương pháp được chấp nhận theo tên, đồng thời cũng chấp 
 
 | `fusion` | Hành vi |
 |---|---|
-| `"wbf"` | Weighted boxes fusion tuần tự, trung thành với bài báo. Mặc định |
+| `"wbf"` | Weighted boxes fusion tuần tự, trung thành với bài báo [1]. Mặc định |
 | `"wbf_seeded"` | Weighted boxes fusion một lượt; NMS nhận biết lớp chọn tâm cụm |
 | `"nms"` | Nối box của mọi thành viên, sau đó chạy NMS nhận biết lớp |
+
+[1] Roman Solovyev, Weimin Wang, Tatiana Gabruseva, ["Weighted boxes fusion:
+Ensembling boxes from different object detection models"](https://arxiv.org/abs/1910.13302),
+arXiv:1910.13302.
 
 Weighted boxes fusion lấy trung bình tọa độ của cụm theo trọng số độ tin cậy,
 tạo ra box mà không thành viên đơn lẻ nào đề xuất. Hai biến thể có trọng số đồng

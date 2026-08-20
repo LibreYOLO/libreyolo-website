@@ -99,7 +99,7 @@ snippets:
         # Ersetze clip.mp4 durch eine lokale Videodatei.
         for result in ensemble("clip.mp4", stream=True, vid_stride=2):
             print(result.frame_idx, len(result.boxes))
-source_hash: 4f4c54c52b295795
+source_hash: 6dcd2f84ec6f3f65
 ---
 
 ## Funktionsweise eines Ensembles
@@ -143,9 +143,13 @@ Drei Namen sowie eine eigene aufrufbare Funktion werden akzeptiert.
 
 | `fusion` | Verhalten |
 |---|---|
-| `"wbf"` | Sequenzielle Weighted Boxes Fusion entsprechend dem Paper. Der Standard |
+| `"wbf"` | Sequenzielle Weighted Boxes Fusion entsprechend dem Paper [1]. Der Standard |
 | `"wbf_seeded"` | Weighted Boxes Fusion in einem Durchlauf; klassenbewusstes NMS wählt die Cluster-Startpunkte |
 | `"nms"` | Boxen aller Mitglieder zusammenfügen und anschließend klassenbewusstes NMS ausführen |
+
+[1] Roman Solovyev, Weimin Wang, Tatiana Gabruseva, ["Weighted boxes fusion:
+Ensembling boxes from different object detection models"](https://arxiv.org/abs/1910.13302),
+arXiv:1910.13302.
 
 Weighted Boxes Fusion mittelt die Koordinaten eines Clusters, gewichtet nach Konfidenz. Dadurch entsteht eine Box, die kein einzelnes Mitglied vorgeschlagen hat. Die beiden gewichteten Varianten stimmen bei eindeutigen Clustern überein und können sich bei Ketten überlappender Cluster leicht unterscheiden. `"nms"` wählt statt einer Mittelung einen verbleibenden Kandidaten aus. Dieser behält seine ursprüngliche Bewertung und die Gewichte beeinflussen nur, welche Box gewinnt. Da diese Methode auswählt statt Cluster zu bilden, kann sie keine Stimmen zählen. Die Kombination aus `fusion="nms"` und einem `min_votes` größer als `1` löst `ValueError` aus.
 
