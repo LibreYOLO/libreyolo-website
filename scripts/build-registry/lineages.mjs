@@ -28,6 +28,7 @@ export const LINEAGES = [
   { slug: 'rtmdet', display: 'RTMDet', keys: ['rtmdet'] },
   { slug: 'picodet', display: 'PicoDet', keys: ['picodet'] },
   { slug: 'fomo', display: 'FOMO', keys: ['fomo'] },
+  { slug: 'dome-detr', display: 'Dome-DETR', keys: ['domedetr'] },
   { slug: 'segformer', display: 'SegFormer', keys: ['segformer'] },
   { slug: 'lingbot-vision', display: 'LingBot-Vision', keys: ['lingbotvision'] },
   { slug: 'dinov2', display: 'DINOv2', keys: ['dinov2'] },

@@ -166,7 +166,14 @@ function parseFamily(key) {
   }
   const sizes = tables.INPUT_SIZES ?? {}
 
-  const taskBlock = text.match(/TASK_INPUT_SIZES[^=]*=\s*\{([\s\S]*?)\n    \}/)?.[1] ?? ''
+  // The declaration is either a multi-line dict closed by a brace at the
+  // class-body indent, or a one-liner ({"detect": INPUT_SIZES, "obb":
+  // OBB_INPUT_SIZES}). Matching only the multi-line shape silently dropped
+  // RT-DETRv2's per-task tables, which is how its 1024 px OBB resolution
+  // went missing from the registry.
+  const taskBlock = text.match(/TASK_INPUT_SIZES[^=]*=\s*\{(.*)\}/)?.[1]
+    ?? text.match(/TASK_INPUT_SIZES[^=]*=\s*\{([\s\S]*?)\n    \}/)?.[1]
+    ?? ''
   const taskSizes = {}
   for (const m of taskBlock.matchAll(/"([a-z]+)"\s*:\s*([A-Z][A-Z0-9_]*|\{[^}]*\})/g)) {
     const [, task, ref] = m
