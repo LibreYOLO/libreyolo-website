@@ -1,4 +1,613 @@
 {
+  "rfdetr-l": {
+    "model": "rfdetr-l",
+    "label": "RF-DETR-L",
+    "paramsM": 33.61,
+    "mean": 0.61757286832596,
+    "mean50": 0.8796343291627028,
+    "scores": {
+      "-grccs": {
+        "m": 0.684,
+        "m50": 0.9509,
+        "img": 119,
+        "cls": 7
+      },
+      "13-lkc01": {
+        "m": 0.5041,
+        "m50": 0.8738,
+        "img": 34,
+        "cls": 1
+      },
+      "2024-frc": {
+        "m": 0.7462,
+        "m50": 0.936,
+        "img": 141,
+        "cls": 11
+      },
+      "actions": {
+        "m": 0.5394,
+        "m50": 0.8912,
+        "img": 409,
+        "cls": 6
+      },
+      "activity-diagrams": {
+        "m": 0.556,
+        "m50": 0.8615,
+        "img": 39,
+        "cls": 12
+      },
+      "aerial-airport": {
+        "m": 0.5909,
+        "m50": 0.94,
+        "img": 34,
+        "cls": 1
+      },
+      "aerial-cows": {
+        "m": 0.4803,
+        "m50": 0.8741,
+        "img": 112,
+        "cls": 1
+      },
+      "aerial-pool": {
+        "m": 0.5068,
+        "m50": 0.8581,
+        "img": 95,
+        "cls": 5
+      },
+      "aerial-sheep": {
+        "m": 0.5978,
+        "m50": 0.9654,
+        "img": 173,
+        "cls": 1
+      },
+      "aircraft-turnaround-dataset": {
+        "m": 0.5927,
+        "m50": 0.9046,
+        "img": 101,
+        "cls": 5
+      },
+      "all-elements": {
+        "m": 0.7283,
+        "m50": 0.9232,
+        "img": 70,
+        "cls": 10
+      },
+      "apoce-aerial-photographs-for-object-detection-of-construction-equipment": {
+        "m": 0.6322,
+        "m50": 0.8297,
+        "img": 94,
+        "cls": 7
+      },
+      "aquarium-combined": {
+        "m": 0.5719,
+        "m50": 0.8593,
+        "img": 65,
+        "cls": 7
+      },
+      "asphaltdistressdetection": {
+        "m": 0.4376,
+        "m50": 0.6463,
+        "img": 316,
+        "cls": 6
+      },
+      "ball": {
+        "m": 0.7106,
+        "m50": 0.9449,
+        "img": 45,
+        "cls": 18
+      },
+      "bees": {
+        "m": 0.4427,
+        "m50": 0.9129,
+        "img": 500,
+        "cls": 1
+      },
+      "bibdetection": {
+        "m": 0.5206,
+        "m50": 0.8927,
+        "img": 125,
+        "cls": 1
+      },
+      "buoy-onboarding": {
+        "m": 0.3735,
+        "m50": 0.7122,
+        "img": 58,
+        "cls": 7
+      },
+      "cable-damage": {
+        "m": 0.4701,
+        "m50": 0.934,
+        "img": 133,
+        "cls": 2
+      },
+      "canalstenosis": {
+        "m": 0.6412,
+        "m50": 0.9741,
+        "img": 50,
+        "cls": 5
+      },
+      "car-logo-detection": {
+        "m": 0.5933,
+        "m50": 0.7552,
+        "img": 17,
+        "cls": 2
+      },
+      "circuit-voltages": {
+        "m": 0.4268,
+        "m50": 0.9656,
+        "img": 14,
+        "cls": 3
+      },
+      "clashroyalechardetector": {
+        "m": 0.5494,
+        "m50": 0.9172,
+        "img": 148,
+        "cls": 34
+      },
+      "cod-mw-warzone": {
+        "m": 0.5919,
+        "m50": 0.9173,
+        "img": 316,
+        "cls": 2
+      },
+      "conveyor-t-shirts": {
+        "m": 0.6762,
+        "m50": 0.989,
+        "img": 45,
+        "cls": 1
+      },
+      "countingpills": {
+        "m": 0.9389,
+        "m50": 0.9901,
+        "img": 200,
+        "cls": 1
+      },
+      "crystal-clean-brain-tumors-mri-dataset": {
+        "m": 0.7546,
+        "m50": 0.9941,
+        "img": 24,
+        "cls": 4
+      },
+      "dataconvert": {
+        "m": 0.902,
+        "m50": 0.9841,
+        "img": 19,
+        "cls": 1
+      },
+      "deepfruits": {
+        "m": 0.6413,
+        "m50": 0.9038,
+        "img": 18,
+        "cls": 1
+      },
+      "deeppcb": {
+        "m": 0.8143,
+        "m50": 0.9812,
+        "img": 150,
+        "cls": 6
+      },
+      "defect-detection": {
+        "m": 0.7153,
+        "m50": 0.9813,
+        "img": 188,
+        "cls": 4
+      },
+      "dentalai": {
+        "m": 0.647,
+        "m50": 0.9165,
+        "img": 128,
+        "cls": 4
+      },
+      "electric-pylon-detection-in-rsi": {
+        "m": 0.6227,
+        "m50": 0.9413,
+        "img": 151,
+        "cls": 1
+      },
+      "everdaynew": {
+        "m": 0.7733,
+        "m50": 0.9935,
+        "img": 37,
+        "cls": 5
+      },
+      "exploratorium-daphnia": {
+        "m": 0.3061,
+        "m50": 0.5035,
+        "img": 34,
+        "cls": 13
+      },
+      "flir-camera-objects": {
+        "m": 0.5454,
+        "m50": 0.9074,
+        "img": 500,
+        "cls": 4
+      },
+      "floating-waste": {
+        "m": 0.5756,
+        "m50": 0.9144,
+        "img": 277,
+        "cls": 5
+      },
+      "football-player-detection": {
+        "m": 0.5732,
+        "m50": 0.8822,
+        "img": 124,
+        "cls": 2
+      },
+      "fruitjes": {
+        "m": 0.7189,
+        "m50": 0.7652,
+        "img": 341,
+        "cls": 7
+      },
+      "grapes-5": {
+        "m": 0.6668,
+        "m50": 0.8396,
+        "img": 32,
+        "cls": 2
+      },
+      "grass-weeds": {
+        "m": 0.5324,
+        "m50": 0.9234,
+        "img": 249,
+        "cls": 1
+      },
+      "gwhd2021": {
+        "m": 0.5402,
+        "m50": 0.9295,
+        "img": 500,
+        "cls": 1
+      },
+      "halo-infinite-angel-videogame": {
+        "m": 0.7437,
+        "m50": 0.9485,
+        "img": 54,
+        "cls": 4
+      },
+      "human-detection-in-floods": {
+        "m": 0.755,
+        "m50": 0.982,
+        "img": 45,
+        "cls": 2
+      },
+      "inbreast": {
+        "m": 0.7544,
+        "m50": 1,
+        "img": 65,
+        "cls": 1
+      },
+      "infraredimageofpowerequipment": {
+        "m": 0.6562,
+        "m50": 0.947,
+        "img": 75,
+        "cls": 9
+      },
+      "into-the-vale": {
+        "m": 0.7039,
+        "m50": 0.8991,
+        "img": 127,
+        "cls": 6
+      },
+      "invoice-processing": {
+        "m": 0.5153,
+        "m50": 0.8118,
+        "img": 12,
+        "cls": 8
+      },
+      "ism-band-packet-detection": {
+        "m": 0.6952,
+        "m50": 0.97,
+        "img": 38,
+        "cls": 3
+      },
+      "jellyfish": {
+        "m": 0.4471,
+        "m50": 0.8973,
+        "img": 64,
+        "cls": 1
+      },
+      "l10ul502": {
+        "m": 0.6811,
+        "m50": 0.9417,
+        "img": 150,
+        "cls": 8
+      },
+      "label-printing-defect-version-2": {
+        "m": 0.7763,
+        "m50": 0.9461,
+        "img": 80,
+        "cls": 2
+      },
+      "lacrosse-object-detection": {
+        "m": 0.6771,
+        "m50": 0.8666,
+        "img": 50,
+        "cls": 4
+      },
+      "liver-disease": {
+        "m": 0.4041,
+        "m50": 0.6316,
+        "img": 398,
+        "cls": 4
+      },
+      "macro-segmentation": {
+        "m": 0.6286,
+        "m50": 0.8794,
+        "img": 120,
+        "cls": 16
+      },
+      "mahjong": {
+        "m": 0.7301,
+        "m50": 0.9744,
+        "img": 214,
+        "cls": 34
+      },
+      "marine-sharks": {
+        "m": 0.4847,
+        "m50": 0.7543,
+        "img": 337,
+        "cls": 4
+      },
+      "needle-base-tip-min-max": {
+        "m": 0.5414,
+        "m50": 0.8653,
+        "img": 151,
+        "cls": 5
+      },
+      "new-defects-in-wood": {
+        "m": 0.5058,
+        "m50": 0.8327,
+        "img": 128,
+        "cls": 5
+      },
+      "nih-xray": {
+        "m": 0.1125,
+        "m50": 0.198,
+        "img": 88,
+        "cls": 8
+      },
+      "orgharvest": {
+        "m": 0.295,
+        "m50": 0.5834,
+        "img": 26,
+        "cls": 2
+      },
+      "orionproducts": {
+        "m": 0.6429,
+        "m50": 0.9243,
+        "img": 59,
+        "cls": 8
+      },
+      "paper-parts": {
+        "m": 0.7047,
+        "m50": 0.8918,
+        "img": 499,
+        "cls": 19
+      },
+      "peixos-fish": {
+        "m": 0.5167,
+        "m50": 0.8136,
+        "img": 119,
+        "cls": 2
+      },
+      "penguin-finder-seg": {
+        "m": 0.7955,
+        "m50": 0.9253,
+        "img": 57,
+        "cls": 1
+      },
+      "pig-detection": {
+        "m": 0.7223,
+        "m50": 0.9842,
+        "img": 500,
+        "cls": 4
+      },
+      "pill": {
+        "m": 0.7377,
+        "m50": 0.9751,
+        "img": 140,
+        "cls": 5
+      },
+      "recode-waste": {
+        "m": 0.8938,
+        "m50": 0.9607,
+        "img": 251,
+        "cls": 6
+      },
+      "roboflow-trained-dataset": {
+        "m": 0.7002,
+        "m50": 0.9949,
+        "img": 196,
+        "cls": 4
+      },
+      "screwdetectclassification": {
+        "m": 0.869,
+        "m50": 1,
+        "img": 37,
+        "cls": 5
+      },
+      "sea-cucumbers-new-tiles": {
+        "m": 0.7461,
+        "m50": 0.9382,
+        "img": 203,
+        "cls": 1
+      },
+      "signatures": {
+        "m": 0.725,
+        "m50": 0.979,
+        "img": 35,
+        "cls": 1
+      },
+      "smd-components": {
+        "m": 0.9061,
+        "m50": 0.989,
+        "img": 205,
+        "cls": 11
+      },
+      "soda-bottles": {
+        "m": 0.5287,
+        "m50": 0.9365,
+        "img": 226,
+        "cls": 3
+      },
+      "speech-bubbles-detection": {
+        "m": 0.6845,
+        "m50": 0.8447,
+        "img": 181,
+        "cls": 6
+      },
+      "spinefrxnormalvindr": {
+        "m": 0.3361,
+        "m50": 0.6995,
+        "img": 22,
+        "cls": 3
+      },
+      "sssod": {
+        "m": 0.5083,
+        "m50": 0.6349,
+        "img": 45,
+        "cls": 2
+      },
+      "stomata-cells": {
+        "m": 0.6392,
+        "m50": 0.8851,
+        "img": 211,
+        "cls": 2
+      },
+      "taco-trash-annotations-in-context": {
+        "m": 0.3316,
+        "m50": 0.4072,
+        "img": 139,
+        "cls": 22
+      },
+      "the-dreidel-project": {
+        "m": 0.7687,
+        "m50": 0.9232,
+        "img": 54,
+        "cls": 6
+      },
+      "thermal-cheetah": {
+        "m": 0.8562,
+        "m50": 0.9866,
+        "img": 13,
+        "cls": 1
+      },
+      "tomatoes-2": {
+        "m": 0.8586,
+        "m50": 0.9646,
+        "img": 103,
+        "cls": 2
+      },
+      "trail-camera": {
+        "m": 0.7695,
+        "m50": 0.9768,
+        "img": 132,
+        "cls": 2
+      },
+      "train": {
+        "m": 0.2819,
+        "m50": 0.6534,
+        "img": 63,
+        "cls": 2
+      },
+      "truck-movement": {
+        "m": 0.754,
+        "m50": 0.8841,
+        "img": 104,
+        "cls": 5
+      },
+      "tube": {
+        "m": 0.8535,
+        "m50": 0.984,
+        "img": 38,
+        "cls": 5
+      },
+      "uavdet-small": {
+        "m": 0.6802,
+        "m50": 0.873,
+        "img": 100,
+        "cls": 7
+      },
+      "ufba-425": {
+        "m": 0.7499,
+        "m50": 0.9653,
+        "img": 58,
+        "cls": 32
+      },
+      "underwater-objects": {
+        "m": 0.3469,
+        "m50": 0.6357,
+        "img": 500,
+        "cls": 5
+      },
+      "urine-analysis1": {
+        "m": 0.5727,
+        "m50": 0.8919,
+        "img": 51,
+        "cls": 5
+      },
+      "varroa-mites-detection--test-set": {
+        "m": 0.3279,
+        "m50": 0.886,
+        "img": 95,
+        "cls": 1
+      },
+      "water-meter": {
+        "m": 0.6645,
+        "m50": 0.9933,
+        "img": 70,
+        "cls": 10
+      },
+      "wb-prova": {
+        "m": 0.8354,
+        "m50": 0.9947,
+        "img": 146,
+        "cls": 3
+      },
+      "weeds4": {
+        "m": 0.5564,
+        "m50": 0.7665,
+        "img": 38,
+        "cls": 5
+      },
+      "wheel-defect-detection": {
+        "m": 0.5512,
+        "m50": 0.8676,
+        "img": 32,
+        "cls": 4
+      },
+      "wildfire-smoke": {
+        "m": 0.6137,
+        "m50": 0.9782,
+        "img": 75,
+        "cls": 1
+      },
+      "wine-labels": {
+        "m": 0.478,
+        "m50": 0.6572,
+        "img": 465,
+        "cls": 11
+      },
+      "x-ray-id": {
+        "m": 0.7661,
+        "m50": 0.9894,
+        "img": 385,
+        "cls": 6
+      },
+      "xray": {
+        "m": 0.3585,
+        "m50": 0.8137,
+        "img": 104,
+        "cls": 1
+      },
+      "zebrasatasturias": {
+        "m": 0.5852,
+        "m50": 0.9847,
+        "img": 39,
+        "cls": 1
+      }
+    }
+  },
   "rfdetr-m": {
     "model": "rfdetr-m",
     "label": "RF-DETR-M",

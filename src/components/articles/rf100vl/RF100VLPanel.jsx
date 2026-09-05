@@ -361,9 +361,9 @@ function ResultBars({ rows, onHover, onOpen, active }) {
 
 /* ---------------------------------------------------------------- Panel */
 
-export default function RF100VLPanel() {
+export default function RF100VLPanel({ initialTab = 'domains' }) {
   const t = useTranslations('RF100VL')
-  const [tab, setTab] = useState('domains')
+  const [tab, setTab] = useState(initialTab)
   const [drawerDs, setDrawerDs] = useState(null)
   const [hoverDs, setHoverDs] = useState(null)
   const [focusDomain, setFocusDomain] = useState(null)

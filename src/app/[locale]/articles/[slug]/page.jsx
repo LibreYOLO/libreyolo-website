@@ -20,6 +20,7 @@ import { slugifyHeading } from '@/lib/slugify-heading'
 import ThemedEmbed from '@/components/ThemedEmbed'
 import RF100VLHero from '@/components/articles/rf100vl/RF100VLHero'
 import RF100VLResults from '@/components/articles/rf100vl/RF100VLResults'
+import RF100VLPanel from '@/components/articles/rf100vl/RF100VLPanel'
 import UnderConstruction from '@/components/articles/UnderConstruction'
 
 export function generateStaticParams() {
@@ -160,6 +161,11 @@ function createMarkdownComponents() {
   // Custom widgets an article can drop inline via raw-HTML tags in the markdown,
   // e.g. <rf100vl-results />. rehype-raw keeps unknown tags, so they land here.
   'rf100vl-results': () => <RF100VLResults />,
+  'rf100vl-explorer': () => (
+    <div className="not-prose my-8 overflow-hidden rounded-xl border border-surface-200 dark:border-surface-800" style={{ width: 'min(94vw, 1040px)', marginLeft: 'calc(50% - min(47vw, 520px))' }}>
+      <RF100VLPanel initialTab="results" />
+    </div>
+  ),
   'under-construction': () => <UnderConstruction />,
   }
 }

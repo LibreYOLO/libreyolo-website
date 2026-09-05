@@ -2,19 +2,20 @@
 // the published campaign artifacts on Hugging Face.
 //
 //   node scripts/build-rf100vl-results/build-rf100vl-results.mjs
+//   node scripts/build-rf100vl-results/build-rf100vl-results.mjs --artifacts-dir /path/to/download
 //
 // Every campaign run uploads a submission JSON per model under
 // <model>/<run-id>/submissions/. A run directory can hold submissions for
 // models other than the one it is named after, because a resumed campaign
-// carries the earlier models' submissions along with it. So rather than trust
-// the directory name, this walks every submission it can find, groups them by
-// the model id inside the file, and keeps the newest valid sweep for each.
+// carries the earlier models' submissions along with it. This accepts only
+// submissions whose model id matches their top-level model directory, then
+// keeps that model's newest valid complete sweep.
 //
 // A sweep counts only when the harness marked it valid and all 100 datasets
 // scored with none skipped. Partial sweeps are debugging artifacts, and the
 // article promises they are never shown.
 
-import { writeFile } from 'node:fs/promises'
+import { writeFile, readFile, readdir } from 'node:fs/promises'
 import { readFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { fileURLToPath } from 'node:url'
@@ -26,6 +27,13 @@ const RAW = `https://huggingface.co/datasets/${REPO}/resolve/main`
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const OUT_DIR = resolve(HERE, '../../src/components/articles/rf100vl')
+// An existing download can rebuild the report without fetching the same
+// submissions and 1,700 stats records again.
+const localArg = process.argv.indexOf('--artifacts-dir')
+if (localArg !== -1 && !process.argv[localArg + 1]) {
+  throw new Error('--artifacts-dir requires the root of an artifact download')
+}
+const ARTIFACT_DIR = localArg === -1 ? null : resolve(process.argv[localArg + 1])
 
 // Display names and weight files are not in the submission payload in the form
 // the page wants, so they are pinned here. A model absent from this map still
@@ -94,10 +102,18 @@ async function get(url, label, attempt = 1) {
 }
 
 async function tree(path = '') {
+  if (ARTIFACT_DIR) {
+    const entries = await readdir(resolve(ARTIFACT_DIR, path), { withFileTypes: true })
+    return entries.map((entry) => ({
+      type: entry.isDirectory() ? 'directory' : 'file',
+      path: path ? `${path}/${entry.name}` : entry.name,
+    }))
+  }
   return get(path ? `${API}/${path}` : API, `tree ${path || '/'}`)
 }
 
 async function json(path) {
+  if (ARTIFACT_DIR) return JSON.parse(await readFile(resolve(ARTIFACT_DIR, path), 'utf8'))
   return get(`${RAW}/${path}`, `fetch ${path}`)
 }
 
@@ -138,8 +154,14 @@ async function trainingTimes(runPath) {
   if (seconds.some((value) => !Number.isFinite(value))) {
     throw new Error(`${runPath}: a training stats file has no wall_seconds value`)
   }
+  if (new Set(stats.map((stat) => stat.dataset)).size !== 100 ||
+      stats.some((stat) => !stat.protocol_conformant || stat.epochs_requested !== 100 ||
+        stat.seed !== 0 || stat.batch?.effective_batch !== 16)) {
+    throw new Error(`${runPath}: training stats disagree with the campaign protocol`)
+  }
 
   return {
+    trainingPrecision: stats[0].precision,
     trainMin: median(seconds) / 60,
     trainHours: seconds.reduce((total, value) => total + value, 0) / 3600,
   }
@@ -191,6 +213,9 @@ async function main() {
       rejected.push(`${path}: not an RF100-VL submission`)
       continue
     }
+    // Other models' directories contain stale copies. Only a model's own
+    // run may supply the result and its corresponding training statistics.
+    if (!path.startsWith(`${id}/`)) continue
 
     const datasets = rf.datasets ?? []
     const skipped = rf.skipped_datasets ?? []
@@ -200,15 +225,14 @@ async function main() {
       )
       continue
     }
+    const mean = datasets.reduce((total, d) => total + d.mAP_50_95, 0) / 100
+    if (new Set(datasets.map((d) => d.dataset)).size !== 100 ||
+        !Number.isFinite(mean) || Math.abs(mean - sub.accuracy.mAP_50_95) > 1e-10) {
+      throw new Error(`${path}: headline AP does not match 100 distinct dataset scores`)
+    }
 
     const prev = best.get(id)
-    const isCanonicalPath = path.startsWith(`${id}/`)
-    const prevIsCanonicalPath = prev?.path.startsWith(`${id}/`)
-    if (
-      !prev ||
-      sub.created_at > prev.sub.created_at ||
-      (sub.created_at === prev.sub.created_at && isCanonicalPath && !prevIsCanonicalPath)
-    ) {
+    if (!prev || sub.created_at > prev.sub.created_at) {
       best.set(id, { sub, path })
     }
   }
@@ -265,6 +289,7 @@ async function main() {
       map50: sub.accuracy.mAP_50,
       createdAt: sub.created_at,
       runPath,
+      submissionPath: path,
       inputSize: sub.model.input_size,
       trainingPrecision: sub.rf100vl.training_precision,
       gpu: sub.hardware?.gpu ?? null,
