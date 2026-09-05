@@ -44,9 +44,9 @@ export function GET() {
     .map((a) => `- [${a.title}](${SITE_URL}/articles/${a.slug})${a.description ? `: ${a.description}` : ''}`)
     .join('\n')
 
-  const body = `# LibreYOLO: MIT-Licensed Object Detection
+  const body = `# LibreYOLO: The MIT-Licensed YOLO Library
 
-> LibreYOLO is the MIT-licensed training and inference engine for state-of-the-art YOLO models. Built for commercial applications, free from AGPL restrictions.
+> LibreYOLO is an MIT-licensed Python library for YOLO and other computer vision models. It is an independent alternative to Ultralytics, with training, prediction, validation and export. Pretrained weights carry separate licenses.
 
 libreyolo.com is the official site of the LibreYOLO open-source library: documentation, model zoo, dataset zoo, commercial licensing guide, and articles. Pages are also served under a locale path prefix (e.g. ${SITE_URL}/zh/models) for: ${LOCALE_SUMMARY}. The documentation is fully translated in every one of those languages; articles are English and Chinese for now.
 
@@ -57,8 +57,8 @@ libreyolo.com is the official site of the LibreYOLO open-source library: documen
 - [The whole documentation as one file](${SITE_URL}/llms-full.txt)
 
 ## Key pages
-- [Home](${SITE_URL}/): project overview and quickstart
-- [Model Zoo](${SITE_URL}/models): pre-trained weights with MIT licensing, browsable per family
+- [Home](${SITE_URL}/): the YOLO library, task explorer, quickstart and guidance for moving from Ultralytics
+- [Model Zoo](${SITE_URL}/models): model families and pretrained weights; check each checkpoint's license
 - [Benchmarks](${SITE_URL}/benchmarks): measured COCO accuracy, RF100-VL transfer across 100 real-world datasets, and latency on real hardware
 - [Dataset Zoo](${SITE_URL}/datasets): datasets for training and evaluating models, hosted on Hugging Face
 - [Commercial Guide](${SITE_URL}/commercial): how to use LibreYOLO in proprietary, closed-source commercial applications under the MIT license

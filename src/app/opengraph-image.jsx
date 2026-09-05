@@ -4,7 +4,7 @@ import path from 'path'
 
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
-export const alt = 'LibreYOLO: MIT-Licensed Object Detection'
+export const alt = 'LibreYOLO: The MIT-Licensed YOLO Library'
 
 export default function OpenGraphImage() {
   const logoData = fs.readFileSync(path.join(process.cwd(), 'public', 'logo.png'))
@@ -21,8 +21,6 @@ export default function OpenGraphImage() {
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: '#020617',
-          backgroundImage:
-            'radial-gradient(circle at 25% 25%, rgba(8, 145, 178, 0.25) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.15) 0%, transparent 50%)',
           fontFamily: 'sans-serif',
         }}
       >
@@ -33,7 +31,7 @@ export default function OpenGraphImage() {
               LibreYOLO
             </div>
             <div style={{ fontSize: 36, color: '#67e8f9', marginTop: 8 }}>
-              MIT-Licensed Object Detection
+              The MIT-licensed YOLO library
             </div>
           </div>
         </div>
@@ -46,7 +44,7 @@ export default function OpenGraphImage() {
             textAlign: 'center',
           }}
         >
-          Train and deploy state-of-the-art YOLO models in commercial applications, free from AGPL restrictions
+          Train, predict and export with YOLO9, RF-DETR and more.
         </div>
         <div style={{ fontSize: 24, color: '#0891b2', marginTop: 36 }}>libreyolo.com</div>
       </div>

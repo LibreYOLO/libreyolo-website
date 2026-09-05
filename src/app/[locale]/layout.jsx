@@ -69,8 +69,9 @@ export async function generateMetadata({ params }) {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
+  '@id': `${SITE_URL}/#software`,
   name: 'LibreYOLO',
-  description: 'MIT-licensed training and inference engine for state-of-the-art YOLO object detection models.',
+  description: 'MIT-licensed Python library for YOLO and other computer vision models, with training, prediction, validation and export.',
   url: SITE_URL,
   applicationCategory: 'DeveloperApplication',
   operatingSystem: 'Windows, macOS, Linux',
