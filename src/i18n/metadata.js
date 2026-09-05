@@ -11,7 +11,7 @@ export const OG_IMAGE = {
   url: '/opengraph-image',
   width: 1200,
   height: 630,
-  alt: 'LibreYOLO: MIT-Licensed Object Detection',
+  alt: 'LibreYOLO: The MIT-Licensed YOLO Library',
 }
 
 // OpenGraph locale string per app locale.
