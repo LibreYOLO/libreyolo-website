@@ -602,7 +602,7 @@
   },
   "Benchmarks": {
     "metaTitle": "Benchmark",
-    "metaDescription": "So sánh khả năng tổng quát hóa ngoài COCO, độ chính xác của checkpoint và độ trễ suy luận.",
+    "metaDescription": "So sánh độ chính xác COCO, khả năng khái quát hóa và tốc độ suy luận.",
     "datasetName": "Kết quả benchmark LibreYOLO RF100-VL",
     "datasetDescription": "RF100-VL đo khả năng thích nghi của mô hình phát hiện đối tượng với các miền mới qua fine-tuning trên 100 bộ dữ liệu thực tế. Mỗi cấu hình được huấn luyện riêng trên từng bộ dữ liệu. Checkpoint được chọn trên tập validation và chấm điểm trên tập test bằng pycocotools với maxDets 500. Kết quả là trung bình AP50:95 không trọng số của cả 100 bộ dữ liệu.",
     "title": "Benchmark LibreYOLO",
@@ -619,10 +619,17 @@
     "latencyTitle": "Tốc độ suy luận trên phần cứng của bạn",
     "latencyBody": "So sánh số đo cho thiết bị, runtime và độ chính xác số dự định triển khai. Các benchmark phần cứng này tách biệt với kết quả fine-tuning RF100-VL.",
     "latencyCta": "Xem độ trễ trên mọi bo mạch",
-    "intro": "So sánh khả năng tổng quát hóa ngoài COCO, độ chính xác của checkpoint và độ trễ suy luận.",
+    "intro": "So sánh độ chính xác COCO, khả năng khái quát hóa và tốc độ suy luận.",
     "rfComplete": "{count} cấu hình · AP50:95 trung bình",
     "rfCaveat": "* Điểm YOLOv9 được đo trước các bản sửa lỗi huấn luyện. YOLO-NAS dùng trọng số huấn luyện sẵn theo giấy phép phi thương mại riêng.",
-    "rfHarness": "Bộ công cụ huấn luyện và đánh giá công khai"
+    "rfHarness": "Bộ công cụ huấn luyện và đánh giá công khai",
+    "rfXAxis": "Tổng tham số (triệu)",
+    "rfYAxis": "AP50:95 trung bình",
+    "rfChartTitle": "Độ chính xác RF100-VL theo số tham số",
+    "rfChartHint": "Di chuột hoặc chạm vào một điểm để xem chi tiết mô hình.",
+    "rfChartNote": "Các đường nối những kích thước mô hình. Cấu hình huấn luyện và độ phân giải khác nhau; LoRA được hiển thị riêng.",
+    "rfMethodology": "Phương pháp và giới hạn",
+    "latencyShort": "So sánh độ trễ theo thiết bị, môi trường thực thi và độ chính xác số."
   },
   "RF100VL": {
     "themedRings": "Bảy lĩnh vực RF100-VL dưới dạng các vòng theo chủ đề",

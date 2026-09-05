@@ -602,7 +602,7 @@
   },
   "Benchmarks": {
     "metaTitle": "Benchmarki",
-    "metaDescription": "Porównaj generalizację poza COCO, dokładność checkpointów i opóźnienie inferencji.",
+    "metaDescription": "Porównaj dokładność na COCO, generalizację i szybkość inferencji.",
     "datasetName": "Wyniki benchmarku LibreYOLO RF100-VL",
     "datasetDescription": "RF100-VL mierzy adaptację detektorów do nowych domen przez dostrajanie na 100 rzeczywistych zbiorach danych. Każdą konfigurację trenujemy osobno na każdym zbiorze. Checkpointy wybieramy na zbiorze walidacyjnym i oceniamy na testowym za pomocą pycocotools przy maxDets 500. Wynikiem jest nieważona średnia AP50:95 ze wszystkich 100 zbiorów.",
     "title": "Benchmarki LibreYOLO",
@@ -619,10 +619,17 @@
     "latencyTitle": "Szybkość inferencji na Twoim sprzęcie",
     "latencyBody": "Porównaj pomiary dla urządzenia, środowiska wykonawczego i precyzji numerycznej planowanego wdrożenia. Te benchmarki sprzętowe są oddzielne od wyników dostrajania na RF100-VL.",
     "latencyCta": "Zobacz opóźnienie na każdej płytce",
-    "intro": "Porównaj generalizację poza COCO, dokładność checkpointów i opóźnienie inferencji.",
+    "intro": "Porównaj dokładność na COCO, generalizację i szybkość inferencji.",
     "rfComplete": "{count} konfiguracji · średnie AP50:95",
     "rfCaveat": "* Wyniki YOLOv9 pochodzą sprzed poprawek treningu. YOLO-NAS korzysta z wytrenowanych wag na osobnej licencji niekomercyjnej.",
-    "rfHarness": "Publiczne narzędzie do treningu i ewaluacji"
+    "rfHarness": "Publiczne narzędzie do treningu i ewaluacji",
+    "rfXAxis": "Parametry łącznie (M)",
+    "rfYAxis": "Średnia AP50:95",
+    "rfChartTitle": "Dokładność RF100-VL a liczba parametrów",
+    "rfChartHint": "Najedź na punkt lub dotknij go, aby zobaczyć szczegóły modelu.",
+    "rfChartNote": "Linie łączą rozmiary modeli. Receptury treningowe i rozdzielczości różnią się; LoRA jest pokazana osobno.",
+    "rfMethodology": "Metodologia i ograniczenia",
+    "latencyShort": "Porównaj opóźnienia według urządzenia, środowiska wykonawczego i precyzji."
   },
   "RF100VL": {
     "themedRings": "Siedem domen RF100-VL jako pierścienie tematyczne",

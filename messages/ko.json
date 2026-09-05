@@ -602,7 +602,7 @@
   },
   "Benchmarks": {
     "metaTitle": "벤치마크",
-    "metaDescription": "COCO를 넘어선 일반화 성능, 체크포인트 정확도, 추론 지연 시간을 비교하세요.",
+    "metaDescription": "COCO 정확도, 일반화 성능, 추론 속도를 비교합니다.",
     "datasetName": "LibreYOLO RF100-VL 벤치마크 결과",
     "datasetDescription": "RF100-VL은 100개의 실제 데이터셋에서 파인튜닝하여 객체 탐지 모델이 새로운 도메인에 적응하는 능력을 측정합니다. 각 구성을 데이터셋마다 별도로 학습합니다. 검증 데이터로 체크포인트를 선택한 뒤 테스트 데이터에서 pycocotools와 maxDets 500으로 평가합니다. 결과는 100개 데이터셋의 AP50:95를 동일한 가중치로 평균한 값입니다.",
     "title": "LibreYOLO 벤치마크",
@@ -619,10 +619,17 @@
     "latencyTitle": "사용할 하드웨어의 추론 속도",
     "latencyBody": "배포할 장치, 런타임, 수치 정밀도에 해당하는 측정값을 비교하세요. 이 하드웨어 벤치마크는 RF100-VL 파인튜닝 결과와 별개입니다.",
     "latencyCta": "모든 보드의 지연 시간 보기",
-    "intro": "COCO를 넘어선 일반화 성능, 체크포인트 정확도, 추론 지연 시간을 비교하세요.",
+    "intro": "COCO 정확도, 일반화 성능, 추론 속도를 비교합니다.",
     "rfComplete": "{count}개 구성 · 평균 AP50:95",
     "rfCaveat": "* YOLOv9 점수는 학습 수정 이전의 결과입니다. YOLO-NAS는 별도의 비상업용 라이선스가 적용되는 사전 학습 가중치를 사용합니다.",
-    "rfHarness": "공개 학습 및 평가 하네스"
+    "rfHarness": "공개 학습 및 평가 하네스",
+    "rfXAxis": "총 파라미터 수 (백만)",
+    "rfYAxis": "평균 AP50:95",
+    "rfChartTitle": "RF100-VL 정확도와 파라미터 수",
+    "rfChartHint": "점 위에 마우스를 올리거나 탭하면 모델 세부 정보를 볼 수 있습니다.",
+    "rfChartNote": "선은 모델 크기를 연결합니다. 학습 설정과 해상도는 서로 다르며, LoRA는 별도로 표시합니다.",
+    "rfMethodology": "평가 방법 및 한계",
+    "latencyShort": "기기, 런타임, 수치 정밀도별로 지연 시간을 비교합니다."
   },
   "RF100VL": {
     "themedRings": "테마형 고리로 표현한 RF100-VL의 7개 도메인",

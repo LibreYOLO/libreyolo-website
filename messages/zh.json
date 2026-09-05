@@ -602,7 +602,7 @@
   },
   "Benchmarks": {
     "metaTitle": "基准测试",
-    "metaDescription": "比较 COCO 之外的泛化能力、检查点精度和推理延迟。",
+    "metaDescription": "比较 COCO 精度、泛化能力和推理速度。",
     "datasetName": "LibreYOLO RF100-VL 基准测试结果",
     "datasetDescription": "RF100-VL 通过在 100 个真实数据集上微调，衡量目标检测模型适应新领域的能力。 每个配置都在各数据集上单独训练。根据验证集选择检查点，再使用 pycocotools、maxDets 500 在测试集上评分。结果是全部 100 个数据集 AP50:95 的不加权平均值。",
     "title": "LibreYOLO 基准测试",
@@ -619,10 +619,17 @@
     "latencyTitle": "你的硬件上的推理速度",
     "latencyBody": "请比较计划部署的设备、运行时和数值精度对应的测量结果。这些硬件基准与 RF100-VL 微调结果是分开的。",
     "latencyCta": "查看各开发板上的延迟",
-    "intro": "比较 COCO 之外的泛化能力、检查点精度和推理延迟。",
+    "intro": "比较 COCO 精度、泛化能力和推理速度。",
     "rfComplete": "{count} 个配置 · 平均 AP50:95",
     "rfCaveat": "* YOLOv9 分数来自训练修复之前的实现。YOLO-NAS 使用受独立非商业许可证约束的预训练权重。",
-    "rfHarness": "公开的训练与评估工具"
+    "rfHarness": "公开的训练与评估工具",
+    "rfXAxis": "总参数量（百万）",
+    "rfYAxis": "平均 AP50:95",
+    "rfChartTitle": "RF100-VL 精度与参数量",
+    "rfChartHint": "悬停或点击数据点，查看模型详情。",
+    "rfChartNote": "折线连接不同模型规模。训练方案和分辨率有所不同；LoRA 单独显示。",
+    "rfMethodology": "方法与局限",
+    "latencyShort": "按设备、运行时和数值精度比较延迟。"
   },
   "RF100VL": {
     "themedRings": "以主题环呈现 RF100-VL 的 7 个领域",

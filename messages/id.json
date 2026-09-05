@@ -602,7 +602,7 @@
   },
   "Benchmarks": {
     "metaTitle": "Benchmark",
-    "metaDescription": "Bandingkan generalisasi di luar COCO, akurasi checkpoint, dan latensi inferensi.",
+    "metaDescription": "Bandingkan akurasi COCO, generalisasi, dan kecepatan inferensi.",
     "datasetName": "Hasil benchmark RF100-VL LibreYOLO",
     "datasetDescription": "RF100-VL mengukur adaptasi detektor objek ke domain baru melalui fine-tuning pada 100 dataset dunia nyata. Setiap konfigurasi dilatih secara terpisah pada setiap dataset. Checkpoint dipilih pada split validasi dan dinilai pada split test dengan pycocotools pada maxDets 500. Hasilnya adalah rata-rata AP50:95 tanpa pembobotan dari seluruh 100 dataset.",
     "title": "Benchmark LibreYOLO",
@@ -619,10 +619,17 @@
     "latencyTitle": "Kecepatan inferensi pada perangkat Anda",
     "latencyBody": "Bandingkan pengukuran untuk perangkat, runtime, dan presisi numerik yang akan digunakan. Benchmark perangkat keras ini terpisah dari hasil fine-tuning RF100-VL.",
     "latencyCta": "Lihat latensi di setiap board",
-    "intro": "Bandingkan generalisasi di luar COCO, akurasi checkpoint, dan latensi inferensi.",
+    "intro": "Bandingkan akurasi COCO, generalisasi, dan kecepatan inferensi.",
     "rfComplete": "{count} konfigurasi · rata-rata AP50:95",
     "rfCaveat": "* Skor YOLOv9 berasal dari sebelum perbaikan pelatihan. YOLO-NAS memakai bobot pralatih dengan lisensi nonkomersial terpisah.",
-    "rfHarness": "Harness pelatihan dan evaluasi publik"
+    "rfHarness": "Harness pelatihan dan evaluasi publik",
+    "rfXAxis": "Total parameter (juta)",
+    "rfYAxis": "Rata-rata AP50:95",
+    "rfChartTitle": "Akurasi RF100-VL vs parameter",
+    "rfChartHint": "Arahkan kursor atau ketuk titik untuk melihat detail model.",
+    "rfChartNote": "Garis menghubungkan ukuran model. Resep pelatihan dan resolusi bervariasi; LoRA ditampilkan terpisah.",
+    "rfMethodology": "Metodologi dan batasan",
+    "latencyShort": "Bandingkan latensi berdasarkan perangkat, runtime, dan presisi."
   },
   "RF100VL": {
     "themedRings": "Tujuh domain RF100-VL sebagai cincin bertema",

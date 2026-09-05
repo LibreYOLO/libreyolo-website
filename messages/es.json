@@ -602,7 +602,7 @@
   },
   "Benchmarks": {
     "metaTitle": "Pruebas de rendimiento",
-    "metaDescription": "Compara la generalización más allá de COCO, la precisión de los checkpoints y la latencia de inferencia.",
+    "metaDescription": "Compara la precisión en COCO, la generalización y la velocidad de inferencia.",
     "datasetName": "Resultados del benchmark RF100-VL de LibreYOLO",
     "datasetDescription": "RF100-VL mide cómo se adaptan los detectores a nuevos dominios mediante fine-tuning en 100 datasets reales. Cada configuración se entrena por separado en cada dataset. Los checkpoints se seleccionan en validación y se evalúan en test con pycocotools y maxDets 500. El resultado es la media no ponderada de AP50:95 de los 100 datasets.",
     "title": "Benchmarks de LibreYOLO",
@@ -619,10 +619,17 @@
     "latencyTitle": "Velocidad de inferencia en tu hardware",
     "latencyBody": "Compara mediciones del dispositivo, runtime y precisión numérica que quieras desplegar. Estos benchmarks de hardware son independientes de los resultados de fine-tuning en RF100-VL.",
     "latencyCta": "Ver la latencia en cada placa",
-    "intro": "Compara la generalización más allá de COCO, la precisión de los checkpoints y la latencia de inferencia.",
+    "intro": "Compara la precisión en COCO, la generalización y la velocidad de inferencia.",
     "rfComplete": "{count} configuraciones · AP50:95 medio",
     "rfCaveat": "* Las puntuaciones de YOLOv9 son anteriores a las correcciones de entrenamiento. YOLO-NAS usa pesos preentrenados con una licencia no comercial independiente.",
-    "rfHarness": "Harness público de entrenamiento y evaluación"
+    "rfHarness": "Harness público de entrenamiento y evaluación",
+    "rfXAxis": "Parámetros totales (M)",
+    "rfYAxis": "AP50:95 media",
+    "rfChartTitle": "Precisión RF100-VL frente a parámetros",
+    "rfChartHint": "Pasa el cursor o toca un punto para ver los detalles del modelo.",
+    "rfChartNote": "Las líneas conectan tamaños de modelos. Las recetas y resoluciones varían; LoRA se muestra por separado.",
+    "rfMethodology": "Metodología y limitaciones",
+    "latencyShort": "Compara la latencia por dispositivo, entorno de ejecución y precisión."
   },
   "RF100VL": {
     "themedRings": "Los siete dominios de RF100-VL como anillos temáticos",

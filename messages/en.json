@@ -602,7 +602,7 @@
   },
   "Benchmarks": {
     "metaTitle": "Benchmarks",
-    "metaDescription": "Compare generalization beyond COCO, checkpoint accuracy and inference latency.",
+    "metaDescription": "Compare COCO accuracy, generalization and inference speed.",
     "datasetName": "LibreYOLO RF100-VL benchmark results",
     "datasetDescription": "RF100-VL measures how object detectors adapt to new domains through fine-tuning on 100 real-world datasets. Each configuration trains separately on each dataset. Checkpoints are selected on validation and scored on test with pycocotools at maxDets 500. The result is the unweighted mean AP50:95 across all 100 datasets.",
     "title": "LibreYOLO Benchmarks",
@@ -619,10 +619,17 @@
     "latencyTitle": "Inference speed on your hardware",
     "latencyBody": "Compare measurements for the device, runtime and numerical precision you plan to deploy. These hardware benchmarks are separate from the RF100-VL fine-tuning results.",
     "latencyCta": "See latency on every board",
-    "intro": "Compare generalization beyond COCO, checkpoint accuracy and inference latency.",
+    "intro": "Compare COCO accuracy, generalization and inference speed.",
     "rfComplete": "{count} configurations · mean AP50:95",
     "rfCaveat": "* YOLOv9 scores predate training fixes. YOLO-NAS uses separately licensed, non-commercial pretrained weights.",
-    "rfHarness": "Public training and evaluation harness"
+    "rfHarness": "Public training and evaluation harness",
+    "rfXAxis": "Total parameters (M)",
+    "rfYAxis": "Mean AP50:95",
+    "rfChartTitle": "RF100-VL accuracy vs parameters",
+    "rfChartHint": "Hover or tap a point for model details.",
+    "rfChartNote": "Lines connect model sizes. Recipes and resolutions vary; LoRA is shown separately.",
+    "rfMethodology": "Methodology and caveats",
+    "latencyShort": "Compare latency by device, runtime and precision."
   },
   "RF100VL": {
     "themedRings": "The seven RF100-VL domains as themed rings",

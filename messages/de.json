@@ -602,7 +602,7 @@
   },
   "Benchmarks": {
     "metaTitle": "Benchmarks",
-    "metaDescription": "Vergleichen Sie Generalisierung über COCO hinaus, Checkpoint-Genauigkeit und Inferenzlatenz.",
+    "metaDescription": "COCO-Genauigkeit, Generalisierung und Inferenzgeschwindigkeit vergleichen.",
     "datasetName": "LibreYOLO RF100-VL Benchmark-Ergebnisse",
     "datasetDescription": "RF100-VL misst, wie sich Objektdetektoren durch Fine-Tuning auf 100 realen Datensätzen an neue Domänen anpassen. Jede Konfiguration wird auf jedem Datensatz separat trainiert. Checkpoints werden anhand der Validierungsdaten ausgewählt und mit pycocotools bei maxDets 500 auf den Testdaten bewertet. Das Ergebnis ist der ungewichtete Mittelwert der AP50:95 über alle 100 Datensätze.",
     "title": "LibreYOLO-Benchmarks",
@@ -619,10 +619,17 @@
     "latencyTitle": "Inferenzgeschwindigkeit auf Ihrer Hardware",
     "latencyBody": "Vergleichen Sie Messungen für das Gerät, die Laufzeitumgebung und die numerische Präzision Ihres geplanten Deployments. Diese Hardware-Benchmarks sind von den RF100-VL-Fine-Tuning-Ergebnissen getrennt.",
     "latencyCta": "Latenz auf jedem Board ansehen",
-    "intro": "Vergleichen Sie Generalisierung über COCO hinaus, Checkpoint-Genauigkeit und Inferenzlatenz.",
+    "intro": "COCO-Genauigkeit, Generalisierung und Inferenzgeschwindigkeit vergleichen.",
     "rfComplete": "{count} Konfigurationen · mittlere AP50:95",
     "rfCaveat": "* Die YOLOv9-Werte stammen aus der Zeit vor den Trainingskorrekturen. YOLO-NAS verwendet vortrainierte Gewichte unter einer separaten nichtkommerziellen Lizenz.",
-    "rfHarness": "Öffentliches Trainings- und Evaluationswerkzeug"
+    "rfHarness": "Öffentliches Trainings- und Evaluationswerkzeug",
+    "rfXAxis": "Parameter insgesamt (M)",
+    "rfYAxis": "Mittlere AP50:95",
+    "rfChartTitle": "RF100-VL-Genauigkeit nach Parameterzahl",
+    "rfChartHint": "Mit der Maus über einen Punkt fahren oder darauf tippen, um Modelldetails zu sehen.",
+    "rfChartNote": "Linien verbinden Modellgrößen. Trainingsrezepte und Auflösungen variieren; LoRA wird separat dargestellt.",
+    "rfMethodology": "Methodik und Einschränkungen",
+    "latencyShort": "Latenz nach Gerät, Laufzeitumgebung und numerischer Präzision vergleichen."
   },
   "RF100VL": {
     "themedRings": "Die sieben RF100-VL-Domänen als Themenringe",
