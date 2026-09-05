@@ -1,8 +1,3 @@
-import { RF100VL_DATASETS } from './datasets'
-
-const SAMPLES = ['nih-xray', 'deeppcb', 'aerial-airport', 'mahjong', 'underwater-objects', 'wildfire-smoke']
-  .map((name) => RF100VL_DATASETS.find((dataset) => dataset.name === name))
-
 export default function RF100VLHero({ title, author, dateISO, dateLabel, backLink }) {
   return (
     <header className="border-b border-surface-200 dark:border-surface-800 bg-surface-50 dark:bg-surface-950 pt-28 pb-10 md:pt-36 md:pb-14">
@@ -24,17 +19,10 @@ export default function RF100VLHero({ title, author, dateISO, dateLabel, backLin
         <nav aria-label="Report sections" className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold text-libre-700 dark:text-libre-400">
           <a className="underline underline-offset-4" href="#results">Results</a>
           <a className="underline underline-offset-4" href="#methodology">Methodology</a>
+          <a className="underline underline-offset-4" href="#what-the-workload-improved">What improved</a>
           <a className="underline underline-offset-4" href="#thank-you-roboflow">Thank you, Roboflow</a>
           <a className="underline underline-offset-4" href="https://huggingface.co/datasets/LibreYOLO/rf100-vl-results/tree/main">Public artifacts</a>
         </nav>
-        <div className="mt-9 grid grid-cols-3 sm:grid-cols-6 gap-2">
-          {SAMPLES.map((dataset) => (
-            <figure key={dataset.name} className="min-w-0">
-              <img src={dataset.img} alt={`RF100-VL dataset sample: ${dataset.name}`} width="240" height="160" className="w-full aspect-[3/2] object-cover rounded-md bg-surface-200 dark:bg-surface-800" />
-              <figcaption className="mt-2 text-[10px] sm:text-xs text-surface-500 dark:text-surface-400 break-words">{dataset.name}</figcaption>
-            </figure>
-          ))}
-        </div>
       </div>
     </header>
   )

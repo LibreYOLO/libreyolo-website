@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import {
-  X, Orbit, ExternalLink, Grid3x3, Trophy, ArrowUpRight,
+  X, ExternalLink, Grid3x3, ArrowUpRight,
   // ring motifs
   Trophy as TrophyIcon, Target, Medal, Bike, Dumbbell,
   FileText, ScrollText, PenLine, Receipt, BookOpen,
@@ -58,9 +58,7 @@ const COLOR_BY_DOMAIN = Object.fromEntries(RF100VL_DOMAINS.map((d) => [d.name, d
 const MODELS = Object.values(RESULTS_BY_DATASET).sort((a, b) => b.mean - a.mean)
 
 const TABS = [
-  { id: 'domains', labelKey: 'benchmark', icon: Orbit },
   { id: 'datasets', labelKey: 'exploreDatasets', icon: Grid3x3 },
-  { id: 'results', labelKey: 'results', icon: Trophy },
 ]
 
 // Score bands. RF100-VL spans a huge range, so colour carries the verdict.
@@ -361,7 +359,7 @@ function ResultBars({ rows, onHover, onOpen, active }) {
 
 /* ---------------------------------------------------------------- Panel */
 
-export default function RF100VLPanel({ initialTab = 'domains' }) {
+export default function RF100VLPanel({ initialTab = 'datasets', showTabs = true }) {
   const t = useTranslations('RF100VL')
   const [tab, setTab] = useState(initialTab)
   const [drawerDs, setDrawerDs] = useState(null)
@@ -372,8 +370,8 @@ export default function RF100VLPanel({ initialTab = 'domains' }) {
   const model = useMemo(() => MODELS.find((m) => m.model === modelId) ?? null, [modelId])
   const engaged = Boolean(hoverDs || drawerDs)
   const active = hoverDs
-  // Rings are for exploring what the benchmark is made of. Scores read better
-  // as a sorted bar chart, so the results tab drops the orbit entirely.
+  // Dataset exploration uses the orbit. Scores read better as a sorted bar
+  // chart, so the results tab drops the orbit entirely.
   const orbiting = tab === 'datasets'
 
   const ranked = useMemo(() => {
@@ -405,7 +403,7 @@ export default function RF100VLPanel({ initialTab = 'domains' }) {
     setDrawerDs(null)
     setHoverDs(null)
     const url = new URL(window.location.href)
-    if (id === 'domains') url.searchParams.delete('tab')
+    if (id === 'datasets') url.searchParams.delete('tab')
     else url.searchParams.set('tab', id)
     window.history.replaceState(null, '', url)
   }
@@ -418,28 +416,31 @@ export default function RF100VLPanel({ initialTab = 'domains' }) {
         {orbiting && active && <img key={active.name} src={active.img} alt="" />}
       </div>
 
-      {/* Tabs */}
-      <div className="relative z-10 flex justify-center px-6 pt-10" ref={tabRef}>
-        <div className="rfx-tabs" role="tablist" aria-label={t('viewsAria')}>
-          {TABS.map(({ id, labelKey, icon: Icon }) => (
-            <button
-              key={id}
-              role="tab"
-              type="button"
-              aria-selected={tab === id}
-              className={`rfx-tab${tab === id ? ' is-on' : ''}`}
-              onClick={() => selectTab(id)}
-            >
-              <Icon className="h-3.5 w-3.5" />
-              {t(`tabs.${labelKey}`)}
-            </button>
-          ))}
+      {/* The dataset view keeps its label. Results are rendered as a separate
+          article section, where the ranking chart can lead the explanation. */}
+      {showTabs && (
+        <div className="relative z-10 flex justify-center px-6 pt-10" ref={tabRef}>
+          <div className="rfx-tabs" role="tablist" aria-label={t('viewsAria')}>
+            {TABS.map(({ id, labelKey, icon: Icon }) => (
+              <button
+                key={id}
+                role="tab"
+                type="button"
+                aria-selected={tab === id}
+                className={`rfx-tab${tab === id ? ' is-on' : ''}`}
+                onClick={() => selectTab(id)}
+              >
+                <Icon className="h-3.5 w-3.5" />
+                {t(`tabs.${labelKey}`)}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Model picker, results tab only */}
       {tab === 'results' && MODELS.length > 0 && (
-        <div className="relative z-10 mt-4 flex flex-wrap items-center justify-center gap-2 px-6">
+        <div className={`relative z-10 flex flex-wrap items-center justify-center gap-2 px-6 ${showTabs ? 'mt-4' : 'pt-8'}`}>
           {MODELS.map((m) => (
             <button
               key={m.model}
@@ -481,8 +482,6 @@ export default function RF100VLPanel({ initialTab = 'domains' }) {
 
       {tab !== 'results' && (
       <div className={`rfp-orbit${engaged ? ' rfp-paused' : ''}`} onMouseLeave={() => setHoverDs(null)}>
-        {tab === 'domains' && <DomainRings focusDomain={focusDomain} />}
-
         {orbiting && (
           <>
             <PlanetRings

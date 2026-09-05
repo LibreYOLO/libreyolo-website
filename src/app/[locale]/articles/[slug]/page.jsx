@@ -21,6 +21,7 @@ import ThemedEmbed from '@/components/ThemedEmbed'
 import RF100VLHero from '@/components/articles/rf100vl/RF100VLHero'
 import RF100VLResults from '@/components/articles/rf100vl/RF100VLResults'
 import RF100VLPanel from '@/components/articles/rf100vl/RF100VLPanel'
+import RF100VLChart from '@/components/benchmarks/RF100VLChart'
 import UnderConstruction from '@/components/articles/UnderConstruction'
 
 export function generateStaticParams() {
@@ -163,7 +164,17 @@ function createMarkdownComponents() {
   'rf100vl-results': () => <RF100VLResults />,
   'rf100vl-explorer': () => (
     <div className="not-prose my-8 overflow-hidden rounded-xl border border-surface-200 dark:border-surface-800" style={{ width: 'min(94vw, 1040px)', marginLeft: 'calc(50% - min(47vw, 520px))' }}>
-      <RF100VLPanel initialTab="results" />
+      <RF100VLPanel initialTab="datasets" />
+    </div>
+  ),
+  'rf100vl-results-chart': () => (
+    <div className="not-prose my-8" style={{ width: 'min(94vw, 1040px)', marginLeft: 'calc(50% - min(47vw, 520px))' }}>
+      <RF100VLChart />
+    </div>
+  ),
+  'rf100vl-results-detail': () => (
+    <div className="not-prose my-8 overflow-hidden rounded-xl border border-surface-200 dark:border-surface-800" style={{ width: 'min(94vw, 1040px)', marginLeft: 'calc(50% - min(47vw, 520px))' }}>
+      <RF100VLPanel initialTab="results" showTabs={false} />
     </div>
   ),
   'under-construction': () => <UnderConstruction />,
