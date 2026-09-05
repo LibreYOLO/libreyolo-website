@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import { ArrowRight, BarChart3, Gauge, Trophy } from 'lucide-react'
+import { ArrowRight, BarChart3, Gauge } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import RF100VLPanel from '@/components/articles/rf100vl/RF100VLPanel'
 import RF100VL_RESULTS from '@/components/articles/rf100vl/results-summary.json'
@@ -20,12 +20,6 @@ const SCATTER_HIGHLIGHT = [
   'yolov9t', 'yolov9s', 'yolov9m', 'yolov9c',
   'rfdetr-n', 'rfdetr-s', 'rfdetr-m', 'rfdetr-l',
 ].join(',')
-
-const RF100VL_LEADERS = RF100VL_RESULTS.slice(0, 5)
-
-// Same metal dots the article's podium and leaderboard use for the top three,
-// so a reader moving between the two pages sees one system.
-const MEDAL_DOTS = ['#f59e0b', '#94a3b8', '#ea580c']
 
 function resultLabel(result) {
   return `${result.model}-${result.size}`
@@ -82,12 +76,90 @@ export default function BenchmarksPage() {
           >
             {t('title')}
           </motion.h1>
+          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-surface-600 dark:text-surface-400">
+            {t('intro')}
+          </p>
         </div>
       </section>
 
-      {/* COCO first: the baseline everyone already knows, via a Vision
-          Analysis embed. RF100-VL then lands as the "and off COCO?" follow-up. */}
-      <section className="mx-auto max-w-6xl px-6 pt-16 pb-16 md:pt-24 md:pb-24">
+      <section id="rf100-vl" className="mx-auto max-w-6xl scroll-mt-24 px-6 pt-16 md:pt-24">
+        <SectionHeading tag="RF100-VL" title={t('rfTitle')}>
+          {t('rfIntro')}
+        </SectionHeading>
+
+        <div className="mt-4 max-w-3xl">
+          <p className="text-surface-600 dark:text-surface-400 leading-relaxed">
+            {t('rfGeneralisation')}
+          </p>
+          <p className="mt-3 text-surface-600 dark:text-surface-400 leading-relaxed">
+            {t('rfAdvice')}
+          </p>
+        </div>
+
+        <div className="mt-8 max-w-3xl overflow-hidden rounded-2xl border border-surface-200 bg-surface-50/70 dark:border-surface-800 dark:bg-surface-900/50">
+          <div className="flex items-center justify-between gap-4 border-b border-surface-200 px-5 py-4 dark:border-surface-800">
+            <div className="flex items-center gap-2 text-sm font-semibold text-surface-900 dark:text-white">
+              <BarChart3 className="h-4 w-4 text-libre-600 dark:text-libre-400" />
+              <span>{t('rfComplete', { count: RF100VL_RESULTS.length })}</span>
+            </div>
+            <Link
+              href="/articles/rf100vl-benchmark"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-libre-600 hover:text-libre-700 dark:text-libre-400 dark:hover:text-libre-300"
+            >
+              {rf('benchmarkReport')}
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+
+          <ol aria-label={rf('tabs.results')} className="divide-y divide-surface-200 dark:divide-surface-800">
+            {RF100VL_RESULTS.map((result, index) => {
+              const model = resultLabel(result)
+              return (
+                <li key={result.id} className="flex items-center gap-3 px-5 py-3">
+                  <span className="w-5 shrink-0 text-right font-mono text-xs font-semibold text-surface-400">
+                    {index + 1}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="flex items-center gap-2">
+                      <a
+                        href={`https://huggingface.co/datasets/LibreYOLO/rf100-vl-results/blob/main/${result.submissionPath}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`truncate text-sm text-surface-700 dark:text-surface-200 ${
+                          index === 0 ? 'font-semibold' : 'font-medium'
+                        }`}
+                      >
+                        {model}{result.id.startsWith('yolov9') ? '*' : ''}
+                      </a>
+                    </span>
+                    {/* A fixed 0 to 100 AP scale keeps close scores visually close. */}
+                    <span className="mt-1.5 block h-1 overflow-hidden rounded-full bg-surface-200 dark:bg-surface-800">
+                      <span
+                        className="block h-full rounded-full bg-libre-500"
+                        style={{ width: `${(result.map * 100).toFixed(2)}%` }}
+                      />
+                    </span>
+                  </span>
+                  <span className="font-mono text-sm font-bold tabular-nums text-surface-900 dark:text-white">
+                    {(result.map * 100).toFixed(2)}
+                  </span>
+                </li>
+              )
+            })}
+          </ol>
+        </div>
+        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-surface-600 dark:text-surface-400">{t('rfCaveat')}</p>
+        <div className="mt-6 mb-8 flex flex-wrap gap-4">
+          <a href="https://github.com/LibreYOLO/vision-analysis-benchmark/tree/rf100vl-harness" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-semibold text-libre-600 underline underline-offset-4 dark:text-libre-400">
+            {t('rfHarness')}<ArrowRight className="h-4 w-4" />
+          </a>
+        </div>
+      </section>
+
+      <RF100VLPanel initialTab="results" />
+
+      {/* COCO accuracy is a separate checkpoint benchmark. */}
+      <section id="coco" className="mx-auto max-w-6xl px-6 pt-16 pb-16 md:pt-24 md:pb-24">
         <SectionHeading tag="COCO" title={t('cocoTitle')}>
           {t.rich('cocoBody', {
             vision: (chunks) => <Ref href={`${VA}/?${UTM}`}>{chunks}</Ref>,
@@ -125,83 +197,6 @@ export default function BenchmarksPage() {
           </Link>
         </div>
       </section>
-
-      {/* RF100-VL: the follow-up to COCO, and the centrepiece of the page */}
-      <section id="rf100-vl" className="mx-auto max-w-6xl scroll-mt-24 px-6">
-        <SectionHeading tag="RF100-VL" title={t('rfTitle')}>
-          {t('rfIntro')}
-        </SectionHeading>
-
-        <div className="mt-4 max-w-3xl">
-          <p className="text-surface-600 dark:text-surface-400 leading-relaxed">
-            {t('rfGeneralisation')}
-          </p>
-          <p className="mt-3 text-surface-600 dark:text-surface-400 leading-relaxed">
-            {t('rfAdvice')}
-          </p>
-        </div>
-
-        <div className="mt-8 max-w-3xl overflow-hidden rounded-2xl border border-surface-200 bg-surface-50/70 dark:border-surface-800 dark:bg-surface-900/50">
-          <div className="flex items-center justify-between gap-4 border-b border-surface-200 px-5 py-4 dark:border-surface-800">
-            <div className="flex items-center gap-2 text-sm font-semibold text-surface-900 dark:text-white">
-              <Trophy className="h-4 w-4 text-libre-600 dark:text-libre-400" />
-              {rf('tabs.results')}
-            </div>
-            <Link
-              href="/articles/rf100vl-benchmark"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-libre-600 hover:text-libre-700 dark:text-libre-400 dark:hover:text-libre-300"
-            >
-              {rf('benchmarkReport')}
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-
-          <ol aria-label={rf('tabs.results')} className="divide-y divide-surface-200 dark:divide-surface-800">
-            {RF100VL_LEADERS.map((result, index) => {
-              const model = resultLabel(result)
-              return (
-                <li key={result.id} className="flex items-center gap-3 px-5 py-3">
-                  <span className="w-5 shrink-0 text-right font-mono text-xs font-semibold text-surface-400">
-                    {index + 1}
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="flex items-center gap-2">
-                      {index < 3 && (
-                        <span
-                          aria-hidden="true"
-                          className="h-1.5 w-1.5 shrink-0 rounded-full"
-                          style={{ background: MEDAL_DOTS[index] }}
-                        />
-                      )}
-                      <span
-                        className={`truncate text-sm text-surface-700 dark:text-surface-200 ${
-                          index === 0 ? 'font-semibold' : 'font-medium'
-                        }`}
-                      >
-                        {rf('modelMean100', { model })}
-                      </span>
-                    </span>
-                    {/* Absolute scale on purpose: near-equal bars are the point.
-                        The models are close; the page says not to read this as a
-                        ranking, so the bars should not exaggerate the gaps. */}
-                    <span className="mt-1.5 block h-1 overflow-hidden rounded-full bg-surface-200 dark:bg-surface-800">
-                      <span
-                        className="block h-full rounded-full bg-libre-500"
-                        style={{ width: `${(result.map * 100).toFixed(2)}%` }}
-                      />
-                    </span>
-                  </span>
-                  <span className="font-mono text-sm font-bold tabular-nums text-surface-900 dark:text-white">
-                    {(result.map * 100).toFixed(2)}%
-                  </span>
-                </li>
-              )
-            })}
-          </ol>
-        </div>
-      </section>
-
-      <RF100VLPanel />
 
       {/* Latency lives on Vision Analysis, which measures it on real boards.
           Embedding one hardware slice here was worse than sending people to
