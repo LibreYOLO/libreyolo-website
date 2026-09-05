@@ -123,6 +123,16 @@ The table's training times are medians of `wall_seconds` in the 100 training-sta
 
 We have not run these configurations through Roboflow's T4 single-artifact latency protocol. Training duration and inference latency answer different questions; neither should be substituted for the other.
 
+## A published RF100-VL training harness
+
+The [vision-analysis-benchmark harness](https://github.com/LibreYOLO/vision-analysis-benchmark/tree/rf100vl-harness) is public under Apache-2.0. It runs the training and evaluation workflow used for these results: dataset-specific fine-tuning, validation-based checkpoint selection, test evaluation and submission generation.
+
+The runner supports parallel dataset jobs across GPUs, multiple jobs on a GPU and DDP lanes. Resume and recovery paths let work continue after interruptions or failed jobs. A dashboard shows dataset progress, GPU activity, training curves and worker logs.
+
+Reproducibility is part of the output. Each campaign records the recipe, dataset version lock and installed code commits, then publishes training statistics, checkpoints, scores and prediction dumps. The same records make it possible to inspect a result or rescore saved predictions without repeating training.
+
+The harness is available for other benchmark campaigns, with a [runbook covering setup, execution and artifact publication](https://github.com/LibreYOLO/vision-analysis-benchmark/blob/rf100vl-harness/docs/rf100vl-operator-runbook.md). The results in this article are one use of that shared tooling.
+
 ## Inspect the datasets and reproduce the scores
 
 The explorer contains all 17 configurations. Choose a model to inspect its per-dataset scores, or open a dataset to see the annotated sample and search for it on Roboflow Universe.
@@ -148,7 +158,7 @@ Each headline mean can be recomputed from the 100 dataset scores in its submissi
 
 ## Thank you, Roboflow
 
-Joseph Nelson offered GPU support after I wrote that I wanted to benchmark beyond COCO but could not afford the runs. Matvei Popov supplied reference setups, explained the evaluation settings and followed the results. Thank you both, and the Roboflow team, for the $500 budget and the time you put into helping this happen.
+Joseph Nelson offered GPU support after I wrote that I wanted to benchmark beyond COCO but could not afford the runs. Matvei Popov supplied reference setups, explained the evaluation settings and followed the results. Thank you both, and the Roboflow team, for the GPU funding and the time you put into helping this happen.
 
 The sustained training workload gave us a reason to investigate problems that affected ordinary LibreYOLO users too. These are the main changes that came out of the campaign and the follow-up optimization work:
 
