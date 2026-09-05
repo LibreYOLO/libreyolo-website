@@ -1,29 +1,29 @@
 ---
-title: "RF100-VL: 1,700 fine-tunes with LibreYOLO"
-description: Results from 17 detector configurations trained on all 100 RF100-VL datasets, with the recipes, limitations, public artifacts and library improvements behind the runs.
+title: "RF100-VL: how well do LibreYOLO models generalize?"
+description: RF100-VL results measuring how YOLOv9, YOLOX, YOLO-NAS, EdgeCrafter and RF-DETR generalize across 100 real-world datasets after fine-tuning.
 date: 2026-09-05
 author: Xuban
 layout: paper
 tags: [LibreYOLO, RF100-VL, benchmark, object-detection, roboflow]
 ---
 
-We ran 17 detector configurations through RF100-VL: one fine-tune on each of its 100 datasets, for 1,700 completed model-dataset runs. The sweep covers YOLOv9, YOLOX, YOLO-NAS, EdgeCrafter and RF-DETR, including a separate RF-DETR-S LoRA experiment. RF-DETR-L has the highest mean test AP in this sweep at 61.76.
+RF100-VL measures how well object detectors generalize across domains after fine-tuning. Its 100 datasets cover tasks such as detecting objects in aerial imagery, finding defects in industrial parts and analyzing medical scans. The benchmark tests how pretrained models adapt to the kinds of custom datasets used in computer vision projects.
 
-Roboflow provided a $500 GPU budget and guidance on the protocol. The completed campaigns ran in August 2026, using rented RTX 5060 Ti workers on Vast.ai. We published the checkpoints, recipes, training statistics and test predictions in the [RF100-VL artifact archive](https://huggingface.co/datasets/LibreYOLO/rf100-vl-results/tree/main).
+A strong COCO score is useful when comparing pretrained checkpoints. Choosing a model for a new task also requires evidence of how well it can adapt to different objects and imaging conditions. Roboflow calls this [domain adaptability](https://blog.roboflow.com/rf-detr/), and evaluates it with RF100-VL alongside COCO accuracy and inference speed.
 
-The goal was to measure how well these implementations fine-tune on unfamiliar datasets. Running them also exposed bugs and bottlenecks that a short training smoke test had missed. The results come first below; the final section covers what we changed in LibreYOLO because of the work.
+The results below compare YOLOv9, YOLOX, YOLO-NAS, EdgeCrafter and RF-DETR. RF-DETR-L has the highest mean test AP in this comparison at 61.76. Per-dataset results, training recipes and checkpoints are available in the [public artifact archive](https://huggingface.co/datasets/LibreYOLO/rf100-vl-results/tree/main).
 
-## What RF100-VL measures
+## The RF100-VL benchmark
 
-A COCO score tells you how a checkpoint performs on COCO. RF100-VL adds a different measurement: take a pretrained detector, fine-tune it separately on 100 datasets, and evaluate each resulting model on that dataset's held-out test split.
+In the fully supervised setting used here, a pretrained detector is fine-tuned separately on each dataset's training split. The selected checkpoint is then evaluated on that dataset's held-out test split. Generalization is measured after adaptation to each task; these are not zero-shot results.
 
-The [RF100-VL paper](https://arxiv.org/abs/2505.20612) groups the datasets into seven domains. The collection includes chest X-rays, aerial imagery, manufacturing defects, documents, wildlife and sports. Our released data contains 115,777 training images, 33,137 validation images and 14,237 test images. Training sets range from 72 to 8,791 images, with a median of 705. These split counts describe the [version-locked data used here](https://huggingface.co/datasets/LibreYOLO/rf100-vl); the paper's headline image count also includes images outside those released splits.
+The [RF100-VL paper](https://arxiv.org/abs/2505.20612) groups the datasets into seven domains: aerial, document, flora and fauna, industrial, medical, sports and other. The [released splits used for these results](https://huggingface.co/datasets/LibreYOLO/rf100-vl) contain 115,777 training images, 33,137 validation images and 14,237 test images. Training sets range from 72 to 8,791 images, with a median of 705. The paper's headline image count also includes images outside those released splits.
 
-The score reflects the architecture, pretrained weights, training recipe and implementation together. It is useful evidence when choosing what to fine-tune, but it does not isolate architecture quality or guarantee the same ranking on your dataset.
+The score reflects the architecture, pretrained weights, training recipe and implementation together. It provides evidence of transfer across a range of tasks, while a representative evaluation on your own data remains necessary for model selection.
 
 ## Results
 
-All 17 configurations completed training and test evaluation on all 100 datasets. AP is shown on a 0 to 100 scale. The headline AP50:95 is the unweighted mean of the 100 dataset scores, so a small dataset counts as much as a large one.
+The comparison includes 17 configurations, each trained and evaluated on all 100 datasets. AP is shown on a 0 to 100 scale. The headline AP50:95 is the unweighted mean of the 100 dataset scores, so a small dataset counts as much as a large one.
 
 <div>
 <rf100vl-results></rf100vl-results>
@@ -46,9 +46,9 @@ The results are close to [Roboflow's published RF-DETR table](https://rfdetr.rob
 
 That is a useful check on RF-DETR's behavior in LibreYOLO. It is not an exact reproduction: the starting checkpoints, resizing and some physical batch sizes differ, as documented in the methodology. Resolution also rises with size, from 384 for N to 704 for L. This sweep cannot tell us how much of the gain comes from resolution versus the other model differences.
 
-### YOLO-NAS-S and YOLOX-M remain useful results
+### YOLO-NAS and YOLOX
 
-YOLO-NAS-S scores 58.00 AP and YOLOX-M 57.01. These were two results Matvei called out when we shared the first seven campaigns. Both exceed the 56.5 maximum in Roboflow's published YOLO11 table, although comparable inference latency remains unmeasured in this project.
+YOLO-NAS-S scores 58.00 AP and YOLOX-M 57.01. Both exceed the 56.5 maximum in Roboflow's published YOLO11 table, although comparable inference latency remains unmeasured in this project.
 
 YOLO-NAS-S and M differ by only 0.015 AP before rounding. Treat them as tied here. M wins more individual datasets, but a few larger losses bring its mean just below S. S also has a lower recorded median training time, 29.0 versus 60.9 minutes. Those timings came from the campaign, with the execution caveats below.
 
@@ -60,7 +60,7 @@ RF-DETR-S with backbone LoRA scores 57.19 AP, compared with 60.41 for full fine-
 
 Median recorded training time falls from 55.6 to 48.4 minutes per dataset. Summed recorded job time does not fall: it is about 148 hours for LoRA versus 147 for full fine-tuning. Memory fallbacks, retries and the mix of dataset durations matter. This experiment supports an accuracy tradeoff for this adapter recipe; it does not establish a general compute saving from LoRA.
 
-### The YOLOv9-M result exposed a problem to investigate
+### YOLOv9 results and implementation limits
 
 YOLOv9-M scored 52.71 AP, below T at 54.02 and S at 55.91. On `thermal-cheetah`, M was about 64 AP points below S. That pattern led to an [investigation of the training implementation](https://github.com/LibreYOLO/libreyolo/issues/795).
 
@@ -113,9 +113,9 @@ This distinction affects multi-scale training: a fresh scale is drawn per forwar
 
 Our RF-DETR recipes also disclose public COCO starting weights versus Roboflow's private Objects365 checkpoints and OpenCV resizing without antialiasing. Roboflow's historical table predates a head-initialization fix in its own implementation. The [M recipe](https://huggingface.co/datasets/LibreYOLO/rf100-vl-results/blob/main/rfdetr-m/20260817-rfdetr-m-fc99ba9c/provenance/rfdetr-m-accum2.json) and [L recipe](https://huggingface.co/datasets/LibreYOLO/rf100-vl-results/blob/main/rfdetr-l/20260822-rfdetr-l-51d770a9/provenance/rfdetr-l-b8.json) preserve these deviations.
 
-## Why we started with smaller models
+## Model sizes and training cost
 
-Every additional configuration costs another 100 fine-tunes. We started with smaller variants to cover useful models within the budget, then extended the sweep to medium and large configurations and LoRA. The inexpensive 16 GB cards also constrained which batches would fit.
+The model selection emphasizes smaller variants to provide coverage within a fixed compute budget, with medium and large configurations and LoRA included as well. Each configuration requires 100 separate fine-tunes. The August 2026 runs used rented RTX 5060 Ti workers on Vast.ai; their 16 GB memory also constrained the physical batch sizes.
 
 The workload was often limited by image loading, evaluation or CPU launch overhead. A faster GPU alone did not remove those costs. Running several datasets concurrently could improve throughput, but packing too many jobs onto a card or CPU could make the longest dataset finish later. The [campaign runbook](https://github.com/LibreYOLO/vision-analysis-benchmark/blob/rf100vl-harness/docs/rf100vl-operator-runbook.md) records the operating details.
 
@@ -144,7 +144,7 @@ Use the record links in the results table to locate each configuration's submiss
 
 YOLOX Nano and Tiny require one extra note: their training histories live in the original folders, while corrected checkpoints and evaluation live in the replacement folders. A BatchNorm epsilon mismatch between training and reload had corrupted evaluation, especially for Nano. We repaired the checkpoints by folding the epsilon difference into the BatchNorm scale and rescored them. The archive keeps the [repair and supersession record](https://huggingface.co/datasets/LibreYOLO/rf100-vl-results/blob/main/yolox-nano/20260803-yolox-nano-c7bd2a8c/provenance/SUPERSEDES.md). Nano's earlier 36.01 AP is superseded by 48.53.
 
-For this report, we recomputed every headline mean from its 100 dataset scores, checked all 1,700 training-stat records and matched the published recipe bytes to the recorded hashes. That is an artifact consistency check, not a second independent training campaign.
+Each headline mean can be recomputed from the 100 dataset scores in its submission. The recipe hashes, dataset locks and per-dataset training statistics make the configuration and selection procedure inspectable. The results comprise 1,700 completed model-dataset fine-tunes, with no missing datasets in the published means.
 
 ## Thank you, Roboflow
 
@@ -167,4 +167,4 @@ The sustained training workload gave us a reason to investigate problems that af
 
 The kernel and training-speed measurements above were separate experiments, largely on an RTX 5070 Ti. Their gains depend on the model, batch, precision and workload, and they should not be multiplied together. The linked changes record the checks and limits for each one.
 
-I wanted to finish the benchmark and share the results. Roboflow's support also gave me the time on real workloads to make LibreYOLO's training faster and more reliable. Thank you for making that possible.
+Roboflow's support helped make these results public and enabled improvements to LibreYOLO's training and evaluation. Thank you for the generosity and guidance.
