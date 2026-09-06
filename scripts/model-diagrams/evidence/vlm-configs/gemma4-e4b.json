@@ -1,0 +1,492 @@
+{
+  "family": "gemma4",
+  "size": "e4b",
+  "repo": "LibreYOLO/LibreGemma4e4b",
+  "revision": "main",
+  "source": "libreyolo/models/vlm/gemma4.py",
+  "input": 896,
+  "properties": {
+    "FAMILY": "gemma4",
+    "HF_REPOS": {
+      "e2b": "LibreYOLO/LibreGemma4e2b",
+      "e4b": "LibreYOLO/LibreGemma4e4b"
+    },
+    "INPUT_SIZES": {
+      "e2b": 896,
+      "e4b": 896
+    },
+    "BBOX_KEY": "box_2d",
+    "COORD_DIVISOR": 1000.0,
+    "BOX_FORMAT": "yxyx"
+  },
+  "resolved_revision": "80662d5dc7f69bfe5d1b5be53da3558b8d481998",
+  "config": {
+    "text_config": {
+      "output_hidden_states": false,
+      "return_dict": true,
+      "dtype": "bfloat16",
+      "chunk_size_feed_forward": 0,
+      "is_encoder_decoder": false,
+      "problem_type": null,
+      "vocab_size": 262144,
+      "hidden_size": 2560,
+      "intermediate_size": 10240,
+      "num_hidden_layers": 42,
+      "num_attention_heads": 8,
+      "num_key_value_heads": 2,
+      "head_dim": 256,
+      "hidden_activation": "gelu_pytorch_tanh",
+      "max_position_embeddings": 131072,
+      "initializer_range": 0.02,
+      "rms_norm_eps": 1e-06,
+      "use_cache": true,
+      "pad_token_id": 0,
+      "eos_token_id": 1,
+      "bos_token_id": 2,
+      "tie_word_embeddings": true,
+      "rope_parameters": {
+        "full_attention": {
+          "partial_rotary_factor": 0.25,
+          "rope_theta": 1000000.0,
+          "rope_type": "proportional"
+        },
+        "sliding_attention": {
+          "rope_theta": 10000.0,
+          "rope_type": "default"
+        }
+      },
+      "attention_bias": false,
+      "attention_dropout": 0.0,
+      "sliding_window": 512,
+      "layer_types": [
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention"
+      ],
+      "final_logit_softcapping": 30.0,
+      "use_bidirectional_attention": null,
+      "vocab_size_per_layer_input": 262144,
+      "hidden_size_per_layer_input": 256,
+      "attention_k_eq_v": false,
+      "num_kv_shared_layers": 18,
+      "enable_moe_block": false,
+      "use_double_wide_mlp": false,
+      "num_experts": null,
+      "top_k_experts": null,
+      "moe_intermediate_size": null,
+      "expert_intermediate_size": null,
+      "model_type": "gemma4_text",
+      "output_attentions": false,
+      "per_layer_config": {
+        "05": {
+          "head_dim": 512
+        },
+        "11": {
+          "head_dim": 512
+        },
+        "17": {
+          "head_dim": 512
+        },
+        "23": {
+          "head_dim": 512
+        },
+        "29": {
+          "head_dim": 512
+        },
+        "35": {
+          "head_dim": 512
+        },
+        "41": {
+          "head_dim": 512
+        }
+      }
+    },
+    "vision_config": {
+      "output_hidden_states": false,
+      "return_dict": true,
+      "dtype": "bfloat16",
+      "chunk_size_feed_forward": 0,
+      "is_encoder_decoder": false,
+      "problem_type": null,
+      "hidden_size": 768,
+      "intermediate_size": 3072,
+      "num_hidden_layers": 16,
+      "num_attention_heads": 12,
+      "num_key_value_heads": 12,
+      "head_dim": 64,
+      "hidden_activation": "gelu_pytorch_tanh",
+      "rms_norm_eps": 1e-06,
+      "max_position_embeddings": 131072,
+      "attention_bias": false,
+      "attention_dropout": 0.0,
+      "rope_parameters": {
+        "rope_theta": 100.0,
+        "rope_type": "default"
+      },
+      "pooling_kernel_size": 3,
+      "patch_size": 16,
+      "position_embedding_size": 10240,
+      "use_clipped_linears": true,
+      "standardize": false,
+      "initializer_range": 0.02,
+      "default_output_length": 280,
+      "global_head_dim": 64,
+      "model_type": "gemma4_vision",
+      "output_attentions": false
+    },
+    "tie_word_embeddings": true,
+    "model_type": "gemma4"
+  },
+  "backend_version": "5.16.1",
+  "meta": {
+    "family": "gemma4",
+    "size": "e4b",
+    "status": "meta",
+    "model_class": "Gemma4ForConditionalGeneration",
+    "parameters": 7941100832,
+    "modules": {
+      "model.vision_tower.encoder.layers.0.self_attn.q_proj.linear": [
+        768,
+        768
+      ],
+      "model.vision_tower.encoder.layers.0.self_attn.k_proj.linear": [
+        768,
+        768
+      ],
+      "model.vision_tower.encoder.layers.0.self_attn.v_proj.linear": [
+        768,
+        768
+      ],
+      "model.vision_tower.encoder.layers.0.self_attn.o_proj.linear": [
+        768,
+        768
+      ],
+      "model.vision_tower.encoder.layers.0.mlp.gate_proj.linear": [
+        768,
+        3072
+      ],
+      "model.vision_tower.encoder.layers.0.mlp.up_proj.linear": [
+        768,
+        3072
+      ],
+      "model.vision_tower.encoder.layers.0.mlp.down_proj.linear": [
+        3072,
+        768
+      ],
+      "model.language_model.layers.0.self_attn.q_proj": [
+        2560,
+        2048
+      ],
+      "model.language_model.layers.0.self_attn.k_proj": [
+        2560,
+        512
+      ],
+      "model.language_model.layers.0.self_attn.v_proj": [
+        2560,
+        512
+      ],
+      "model.language_model.layers.0.self_attn.o_proj": [
+        2048,
+        2560
+      ],
+      "model.language_model.layers.0.mlp.gate_proj": [
+        2560,
+        10240
+      ],
+      "model.language_model.layers.0.mlp.up_proj": [
+        2560,
+        10240
+      ],
+      "model.language_model.layers.0.mlp.down_proj": [
+        10240,
+        2560
+      ],
+      "model.language_model.layers.0.per_layer_input_gate": [
+        2560,
+        256
+      ],
+      "model.language_model.layers.0.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.1.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.2.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.3.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.4.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.5.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.6.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.7.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.8.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.9.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.10.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.11.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.12.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.13.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.14.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.15.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.16.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.17.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.18.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.19.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.20.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.21.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.22.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.23.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.24.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.25.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.26.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.27.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.28.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.29.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.30.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.31.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.32.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.33.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.34.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.35.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.36.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.37.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.38.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.39.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.40.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.layers.41.per_layer_projection": [
+        256,
+        2560
+      ],
+      "model.language_model.per_layer_model_projection": [
+        2560,
+        10752
+      ],
+      "model.audio_tower.subsample_conv_projection.input_proj_linear": [
+        1024,
+        1024
+      ],
+      "model.audio_tower.layers.0.feed_forward1.ffw_layer_1.linear": [
+        1024,
+        4096
+      ],
+      "model.audio_tower.layers.0.feed_forward1.ffw_layer_2.linear": [
+        4096,
+        1024
+      ],
+      "model.audio_tower.layers.0.feed_forward2.ffw_layer_1.linear": [
+        1024,
+        4096
+      ],
+      "model.audio_tower.layers.0.feed_forward2.ffw_layer_2.linear": [
+        4096,
+        1024
+      ],
+      "model.audio_tower.layers.0.self_attn.q_proj.linear": [
+        1024,
+        1024
+      ],
+      "model.audio_tower.layers.0.self_attn.k_proj.linear": [
+        1024,
+        1024
+      ],
+      "model.audio_tower.layers.0.self_attn.v_proj.linear": [
+        1024,
+        1024
+      ],
+      "model.audio_tower.layers.0.self_attn.post.linear": [
+        1024,
+        1024
+      ],
+      "model.audio_tower.layers.0.self_attn.relative_k_proj": [
+        1024,
+        1024
+      ],
+      "model.audio_tower.layers.0.lconv1d.linear_start.linear": [
+        1024,
+        2048
+      ],
+      "model.audio_tower.layers.0.lconv1d.linear_end.linear": [
+        1024,
+        1024
+      ],
+      "model.audio_tower.layers.0.lconv1d.depthwise_conv1d": {
+        "in": 1024,
+        "out": 1024,
+        "kernel": [
+          5
+        ],
+        "stride": [
+          1
+        ],
+        "groups": 1024
+      },
+      "model.embed_vision.embedding_projection": [
+        768,
+        2560
+      ],
+      "model.embed_audio.embedding_projection": [
+        1536,
+        2560
+      ],
+      "lm_head": [
+        2560,
+        262144
+      ]
+    }
+  }
+}

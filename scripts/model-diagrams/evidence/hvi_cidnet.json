@@ -1,0 +1,259 @@
+{
+  "family": "hvi_cidnet",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "sources": [
+    "libreyolo/models/hvi_cidnet/nn.py:CIDNet.forward, HV_LCA, I_LCA, CAB, IEL, RGB_HVI",
+    "libreyolo/models/hvi_cidnet/model.py:INPUT_SIZES"
+  ],
+  "records": {
+    "t": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        256,
+        256
+      ],
+      "output": [
+        1,
+        3,
+        256,
+        256
+      ],
+      "hooks": {
+        "IE_block0": {
+          "input": [
+            [
+              1,
+              1,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            36,
+            256,
+            256
+          ]
+        },
+        "HVE_block0": {
+          "input": [
+            [
+              1,
+              3,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            36,
+            256,
+            256
+          ]
+        },
+        "HVE_block1": {
+          "input": [
+            [
+              1,
+              36,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            36,
+            128,
+            128
+          ]
+        },
+        "HVE_block2": {
+          "input": [
+            [
+              1,
+              36,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            72,
+            64,
+            64
+          ]
+        },
+        "I_LCA2": {
+          "input": [
+            [
+              1,
+              72,
+              64,
+              64
+            ],
+            [
+              1,
+              72,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            72,
+            64,
+            64
+          ]
+        },
+        "HV_LCA2": {
+          "input": [
+            [
+              1,
+              72,
+              64,
+              64
+            ],
+            [
+              1,
+              72,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            72,
+            64,
+            64
+          ]
+        },
+        "HVE_block3": {
+          "input": [
+            [
+              1,
+              72,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            144,
+            32,
+            32
+          ]
+        },
+        "HVD_block3": {
+          "input": [
+            [
+              1,
+              144,
+              32,
+              32
+            ],
+            [
+              1,
+              72,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            72,
+            64,
+            64
+          ]
+        },
+        "I_LCA5": {
+          "input": [
+            [
+              1,
+              72,
+              64,
+              64
+            ],
+            [
+              1,
+              72,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            72,
+            64,
+            64
+          ]
+        },
+        "ID_block2": {
+          "input": [
+            [
+              1,
+              72,
+              64,
+              64
+            ],
+            [
+              1,
+              36,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            36,
+            128,
+            128
+          ]
+        },
+        "ID_block0": {
+          "input": [
+            [
+              1,
+              36,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            1,
+            256,
+            256
+          ]
+        },
+        "HVD_block0": {
+          "input": [
+            [
+              1,
+              36,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            2,
+            256,
+            256
+          ]
+        }
+      },
+      "parameters": 1975569,
+      "pretrained": false
+    }
+  },
+  "notes": [
+    "CPU actual256 forward. Defaultchannels36,36,72,144; heads2,4,8; noNormDownsample/NormUpsample LayerNorm.",
+    "LCA2 results feed skip2 only; deepest downsamplers read their pre-LCA2 inputs.",
+    "I_LCA5 executes but its output is overwritten by ID_block2(i_dec3,...); this source quirk is explicitly shown, not repaired.",
+    "HV_LCA has no final IEL residual; I_LCA does. Color stem consumes full3-channelHVI, not just2-channelHV."
+  ],
+  "visual_qa": "Parent agent; not executed by this builder."
+}

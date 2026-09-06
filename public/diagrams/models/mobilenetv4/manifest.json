@@ -1,0 +1,42 @@
+{
+  "family": "mobilenetv4",
+  "slug": "mobilenetv4",
+  "title": "MobileNetV4",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "s-classify",
+  "views": [
+    {
+      "id": "s-classify",
+      "label": "MobileNetV4 s",
+      "task": "classify",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/mobilenetv4/s-classify.svg",
+      "html": "/diagrams/models/mobilenetv4/s-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "cpu"
+    },
+    {
+      "id": "m-classify",
+      "label": "MobileNetV4 m",
+      "task": "classify",
+      "size": "m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/mobilenetv4/m-classify.svg",
+      "html": "/diagrams/models/mobilenetv4/m-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "l-classify",
+      "label": "MobileNetV4 l",
+      "task": "classify",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/mobilenetv4/l-classify.svg",
+      "html": "/diagrams/models/mobilenetv4/l-classify.html",
+      "input": "1 \u00d7 3 \u00d7 256 \u00d7 256",
+      "verification": "meta"
+    }
+  ]
+}

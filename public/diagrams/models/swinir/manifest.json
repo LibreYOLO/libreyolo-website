@@ -1,0 +1,53 @@
+{
+  "family": "swinir",
+  "slug": "swinir",
+  "title": "SwinIR",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "s-restore",
+  "views": [
+    {
+      "id": "s-restore",
+      "label": "s",
+      "task": "restore",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/swinir/s-restore.svg",
+      "html": "/diagrams/models/swinir/s-restore.html",
+      "input": "3\u00d764\u00d764",
+      "verification": "cpu"
+    },
+    {
+      "id": "m-restore",
+      "label": "m",
+      "task": "restore",
+      "size": "m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/swinir/m-restore.svg",
+      "html": "/diagrams/models/swinir/m-restore.html",
+      "input": "3\u00d764\u00d764",
+      "verification": "cpu"
+    },
+    {
+      "id": "l-restore",
+      "label": "l",
+      "task": "restore",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/swinir/l-restore.svg",
+      "html": "/diagrams/models/swinir/l-restore.html",
+      "input": "3\u00d764\u00d764",
+      "verification": "cpu"
+    },
+    {
+      "id": "family",
+      "label": "Family with explicit head/residual alternatives",
+      "task": "restore",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/swinir/family.svg",
+      "html": "/diagrams/models/swinir/family.html",
+      "input": "3\u00d764\u00d764",
+      "verification": "source"
+    }
+  ]
+}

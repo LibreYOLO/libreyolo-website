@@ -1,0 +1,7224 @@
+{
+  "family": "ppyoloe",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "source_files": [
+    "libreyolo/models/ppyoloe/nn.py"
+  ],
+  "shapes": {
+    "s": {
+      "backbone.stem.conv1.seq": {
+        "input": [
+          [
+            1,
+            3,
+            640,
+            640
+          ]
+        ],
+        "output": [
+          1,
+          16,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv1": {
+        "input": [
+          [
+            1,
+            3,
+            640,
+            640
+          ]
+        ],
+        "output": [
+          1,
+          16,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv2.seq": {
+        "input": [
+          [
+            1,
+            16,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          16,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv2": {
+        "input": [
+          [
+            1,
+            16,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          16,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv3.seq": {
+        "input": [
+          [
+            1,
+            16,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          32,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv3": {
+        "input": [
+          [
+            1,
+            16,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          32,
+          320,
+          320
+        ]
+      },
+      "backbone.stem": {
+        "input": [
+          [
+            1,
+            3,
+            640,
+            640
+          ]
+        ],
+        "output": [
+          1,
+          32,
+          320,
+          320
+        ]
+      },
+      "backbone.stages.0.conv_down": {
+        "input": [
+          [
+            1,
+            32,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          48,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.conv1": {
+        "input": [
+          [
+            1,
+            48,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          24,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.conv2": {
+        "input": [
+          [
+            1,
+            48,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          24,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.blocks": {
+        "input": [
+          [
+            1,
+            24,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          24,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.attn": {
+        "input": [
+          [
+            1,
+            48,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          48,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.conv3": {
+        "input": [
+          [
+            1,
+            48,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          64,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0": {
+        "input": [
+          [
+            1,
+            32,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          64,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.1.conv_down": {
+        "input": [
+          [
+            1,
+            64,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.conv1": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          48,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.conv2": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          48,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.blocks": {
+        "input": [
+          [
+            1,
+            48,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          48,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.attn": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.conv3": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          128,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1": {
+        "input": [
+          [
+            1,
+            64,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          128,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.2.conv_down": {
+        "input": [
+          [
+            1,
+            128,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.conv1": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.conv2": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.blocks": {
+        "input": [
+          [
+            1,
+            96,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.attn": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.conv3": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          256,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2": {
+        "input": [
+          [
+            1,
+            128,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          256,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.3.conv_down": {
+        "input": [
+          [
+            1,
+            256,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.conv1": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.conv2": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.blocks": {
+        "input": [
+          [
+            1,
+            192,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.attn": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.conv3": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          512,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3": {
+        "input": [
+          [
+            1,
+            256,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          512,
+          20,
+          20
+        ]
+      },
+      "backbone": {
+        "input": [
+          [
+            1,
+            3,
+            640,
+            640
+          ]
+        ],
+        "output": [
+          [
+            1,
+            128,
+            80,
+            80
+          ],
+          [
+            1,
+            256,
+            40,
+            40
+          ],
+          [
+            1,
+            512,
+            20,
+            20
+          ]
+        ]
+      },
+      "neck.fpn_stages.0.0": {
+        "input": [
+          [
+            1,
+            512,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "neck.fpn_stages.0": {
+        "input": [
+          [
+            1,
+            512,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "neck.fpn_routes.0.seq": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          20,
+          20
+        ]
+      },
+      "neck.fpn_routes.0": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          20,
+          20
+        ]
+      },
+      "neck.fpn_stages.1.0": {
+        "input": [
+          [
+            1,
+            448,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "neck.fpn_stages.1": {
+        "input": [
+          [
+            1,
+            448,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "neck.fpn_routes.1.seq": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          40,
+          40
+        ]
+      },
+      "neck.fpn_routes.1": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          40,
+          40
+        ]
+      },
+      "neck.fpn_stages.2.0": {
+        "input": [
+          [
+            1,
+            224,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "neck.fpn_stages.2": {
+        "input": [
+          [
+            1,
+            224,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "neck.pan_routes.1.seq": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          40,
+          40
+        ]
+      },
+      "neck.pan_routes.1": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          40,
+          40
+        ]
+      },
+      "neck.pan_stages.1.0": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "neck.pan_stages.1": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "neck.pan_routes.0.seq": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          20,
+          20
+        ]
+      },
+      "neck.pan_routes.0": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          20,
+          20
+        ]
+      },
+      "neck.pan_stages.0.0": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "neck.pan_stages.0": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "neck": {
+        "input": [
+          [
+            [
+              1,
+              128,
+              80,
+              80
+            ],
+            [
+              1,
+              256,
+              40,
+              40
+            ],
+            [
+              1,
+              512,
+              20,
+              20
+            ]
+          ]
+        ],
+        "output": [
+          [
+            1,
+            384,
+            20,
+            20
+          ],
+          [
+            1,
+            192,
+            40,
+            40
+          ],
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ]
+      },
+      "head.stem_cls.0.fc": {
+        "input": [
+          [
+            1,
+            384,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          1,
+          1
+        ]
+      },
+      "head.stem_cls.0.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0.conv.seq.act": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0.conv.seq": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0.conv": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ],
+          [
+            1,
+            384,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "head.pred_cls.0": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          80,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.fc": {
+        "input": [
+          [
+            1,
+            384,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          1,
+          1
+        ]
+      },
+      "head.stem_reg.0.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.conv.seq.act": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.conv.seq": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.conv": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ],
+          [
+            1,
+            384,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "head.pred_reg.0": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          68,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.1.fc": {
+        "input": [
+          [
+            1,
+            192,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          1,
+          1
+        ]
+      },
+      "head.stem_cls.1.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1.conv.seq.act": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1.conv.seq": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1.conv": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ],
+          [
+            1,
+            192,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "head.pred_cls.1": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          80,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.fc": {
+        "input": [
+          [
+            1,
+            192,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          1,
+          1
+        ]
+      },
+      "head.stem_reg.1.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.conv.seq.act": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.conv.seq": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.conv": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ],
+          [
+            1,
+            192,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "head.pred_reg.1": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          68,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.2.fc": {
+        "input": [
+          [
+            1,
+            96,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          1,
+          1
+        ]
+      },
+      "head.stem_cls.2.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2.conv.seq.act": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2.conv.seq": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2.conv": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ],
+          [
+            1,
+            96,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "head.pred_cls.2": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          80,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.fc": {
+        "input": [
+          [
+            1,
+            96,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          1,
+          1
+        ]
+      },
+      "head.stem_reg.2.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.conv.seq.act": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.conv.seq": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.conv": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ],
+          [
+            1,
+            96,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "head.pred_reg.2": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          68,
+          80,
+          80
+        ]
+      },
+      "head": {
+        "input": [
+          [
+            [
+              1,
+              384,
+              20,
+              20
+            ],
+            [
+              1,
+              192,
+              40,
+              40
+            ],
+            [
+              1,
+              96,
+              80,
+              80
+            ]
+          ]
+        ],
+        "output": [
+          [
+            [
+              1,
+              8400,
+              4
+            ],
+            [
+              1,
+              8400,
+              80
+            ]
+          ],
+          [
+            [
+              1,
+              8400,
+              80
+            ],
+            [
+              1,
+              8400,
+              68
+            ],
+            [
+              8400,
+              4
+            ],
+            [
+              8400,
+              2
+            ],
+            [
+              400,
+              1600,
+              6400
+            ],
+            [
+              8400,
+              1
+            ]
+          ]
+        ]
+      }
+    },
+    "m": {
+      "backbone.stem.conv1.seq": {
+        "input": [
+          [
+            1,
+            3,
+            640,
+            640
+          ]
+        ],
+        "output": [
+          1,
+          24,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv1": {
+        "input": [
+          [
+            1,
+            3,
+            640,
+            640
+          ]
+        ],
+        "output": [
+          1,
+          24,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv2.seq": {
+        "input": [
+          [
+            1,
+            24,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          24,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv2": {
+        "input": [
+          [
+            1,
+            24,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          24,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv3.seq": {
+        "input": [
+          [
+            1,
+            24,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          48,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv3": {
+        "input": [
+          [
+            1,
+            24,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          48,
+          320,
+          320
+        ]
+      },
+      "backbone.stem": {
+        "input": [
+          [
+            1,
+            3,
+            640,
+            640
+          ]
+        ],
+        "output": [
+          1,
+          48,
+          320,
+          320
+        ]
+      },
+      "backbone.stages.0.conv_down": {
+        "input": [
+          [
+            1,
+            48,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          72,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.conv1": {
+        "input": [
+          [
+            1,
+            72,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          36,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.conv2": {
+        "input": [
+          [
+            1,
+            72,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          36,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.blocks": {
+        "input": [
+          [
+            1,
+            36,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          36,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.attn": {
+        "input": [
+          [
+            1,
+            72,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          72,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.conv3": {
+        "input": [
+          [
+            1,
+            72,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0": {
+        "input": [
+          [
+            1,
+            48,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.1.conv_down": {
+        "input": [
+          [
+            1,
+            96,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.conv1": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          72,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.conv2": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          72,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.blocks": {
+        "input": [
+          [
+            1,
+            72,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          72,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.attn": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.conv3": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1": {
+        "input": [
+          [
+            1,
+            96,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.2.conv_down": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.conv1": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.conv2": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.blocks": {
+        "input": [
+          [
+            1,
+            144,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.attn": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.conv3": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.3.conv_down": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.conv1": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.conv2": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.blocks": {
+        "input": [
+          [
+            1,
+            288,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.attn": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.conv3": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "backbone": {
+        "input": [
+          [
+            1,
+            3,
+            640,
+            640
+          ]
+        ],
+        "output": [
+          [
+            1,
+            192,
+            80,
+            80
+          ],
+          [
+            1,
+            384,
+            40,
+            40
+          ],
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ]
+      },
+      "neck.fpn_stages.0.0": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "neck.fpn_stages.0": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "neck.fpn_routes.0.seq": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          20,
+          20
+        ]
+      },
+      "neck.fpn_routes.0": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          20,
+          20
+        ]
+      },
+      "neck.fpn_stages.1.0": {
+        "input": [
+          [
+            1,
+            672,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "neck.fpn_stages.1": {
+        "input": [
+          [
+            1,
+            672,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "neck.fpn_routes.1.seq": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          40,
+          40
+        ]
+      },
+      "neck.fpn_routes.1": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          40,
+          40
+        ]
+      },
+      "neck.fpn_stages.2.0": {
+        "input": [
+          [
+            1,
+            336,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          80,
+          80
+        ]
+      },
+      "neck.fpn_stages.2": {
+        "input": [
+          [
+            1,
+            336,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          80,
+          80
+        ]
+      },
+      "neck.pan_routes.1.seq": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          40,
+          40
+        ]
+      },
+      "neck.pan_routes.1": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          40,
+          40
+        ]
+      },
+      "neck.pan_stages.1.0": {
+        "input": [
+          [
+            1,
+            432,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "neck.pan_stages.1": {
+        "input": [
+          [
+            1,
+            432,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "neck.pan_routes.0.seq": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          20,
+          20
+        ]
+      },
+      "neck.pan_routes.0": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          20,
+          20
+        ]
+      },
+      "neck.pan_stages.0.0": {
+        "input": [
+          [
+            1,
+            864,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "neck.pan_stages.0": {
+        "input": [
+          [
+            1,
+            864,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "neck": {
+        "input": [
+          [
+            [
+              1,
+              192,
+              80,
+              80
+            ],
+            [
+              1,
+              384,
+              40,
+              40
+            ],
+            [
+              1,
+              768,
+              20,
+              20
+            ]
+          ]
+        ],
+        "output": [
+          [
+            1,
+            576,
+            20,
+            20
+          ],
+          [
+            1,
+            288,
+            40,
+            40
+          ],
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ]
+      },
+      "head.stem_cls.0.fc": {
+        "input": [
+          [
+            1,
+            576,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          1,
+          1
+        ]
+      },
+      "head.stem_cls.0.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0.conv.seq.act": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0.conv.seq": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0.conv": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ],
+          [
+            1,
+            576,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "head.pred_cls.0": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          80,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.fc": {
+        "input": [
+          [
+            1,
+            576,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          1,
+          1
+        ]
+      },
+      "head.stem_reg.0.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.conv.seq.act": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.conv.seq": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.conv": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ],
+          [
+            1,
+            576,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          576,
+          20,
+          20
+        ]
+      },
+      "head.pred_reg.0": {
+        "input": [
+          [
+            1,
+            576,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          68,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.1.fc": {
+        "input": [
+          [
+            1,
+            288,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          1,
+          1
+        ]
+      },
+      "head.stem_cls.1.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1.conv.seq.act": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1.conv.seq": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1.conv": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ],
+          [
+            1,
+            288,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "head.pred_cls.1": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          80,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.fc": {
+        "input": [
+          [
+            1,
+            288,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          1,
+          1
+        ]
+      },
+      "head.stem_reg.1.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.conv.seq.act": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.conv.seq": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.conv": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ],
+          [
+            1,
+            288,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          288,
+          40,
+          40
+        ]
+      },
+      "head.pred_reg.1": {
+        "input": [
+          [
+            1,
+            288,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          68,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.2.fc": {
+        "input": [
+          [
+            1,
+            144,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          1,
+          1
+        ]
+      },
+      "head.stem_cls.2.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2.conv.seq.act": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2.conv.seq": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2.conv": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ],
+          [
+            1,
+            144,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          80,
+          80
+        ]
+      },
+      "head.pred_cls.2": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          80,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.fc": {
+        "input": [
+          [
+            1,
+            144,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          1,
+          1
+        ]
+      },
+      "head.stem_reg.2.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.conv.seq.act": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.conv.seq": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.conv": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ],
+          [
+            1,
+            144,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          144,
+          80,
+          80
+        ]
+      },
+      "head.pred_reg.2": {
+        "input": [
+          [
+            1,
+            144,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          68,
+          80,
+          80
+        ]
+      },
+      "head": {
+        "input": [
+          [
+            [
+              1,
+              576,
+              20,
+              20
+            ],
+            [
+              1,
+              288,
+              40,
+              40
+            ],
+            [
+              1,
+              144,
+              80,
+              80
+            ]
+          ]
+        ],
+        "output": [
+          [
+            [
+              1,
+              8400,
+              4
+            ],
+            [
+              1,
+              8400,
+              80
+            ]
+          ],
+          [
+            [
+              1,
+              8400,
+              80
+            ],
+            [
+              1,
+              8400,
+              68
+            ],
+            [
+              8400,
+              4
+            ],
+            [
+              8400,
+              2
+            ],
+            [
+              400,
+              1600,
+              6400
+            ],
+            [
+              8400,
+              1
+            ]
+          ]
+        ]
+      }
+    },
+    "l": {
+      "backbone.stem.conv1.seq": {
+        "input": [
+          [
+            1,
+            3,
+            640,
+            640
+          ]
+        ],
+        "output": [
+          1,
+          32,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv1": {
+        "input": [
+          [
+            1,
+            3,
+            640,
+            640
+          ]
+        ],
+        "output": [
+          1,
+          32,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv2.seq": {
+        "input": [
+          [
+            1,
+            32,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          32,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv2": {
+        "input": [
+          [
+            1,
+            32,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          32,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv3.seq": {
+        "input": [
+          [
+            1,
+            32,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          64,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv3": {
+        "input": [
+          [
+            1,
+            32,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          64,
+          320,
+          320
+        ]
+      },
+      "backbone.stem": {
+        "input": [
+          [
+            1,
+            3,
+            640,
+            640
+          ]
+        ],
+        "output": [
+          1,
+          64,
+          320,
+          320
+        ]
+      },
+      "backbone.stages.0.conv_down": {
+        "input": [
+          [
+            1,
+            64,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.conv1": {
+        "input": [
+          [
+            1,
+            96,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          48,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.conv2": {
+        "input": [
+          [
+            1,
+            96,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          48,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.blocks": {
+        "input": [
+          [
+            1,
+            48,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          48,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.attn": {
+        "input": [
+          [
+            1,
+            96,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.conv3": {
+        "input": [
+          [
+            1,
+            96,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          128,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0": {
+        "input": [
+          [
+            1,
+            64,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          128,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.1.conv_down": {
+        "input": [
+          [
+            1,
+            128,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.conv1": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.conv2": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.blocks": {
+        "input": [
+          [
+            1,
+            96,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          96,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.attn": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.conv3": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          256,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1": {
+        "input": [
+          [
+            1,
+            128,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          256,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.2.conv_down": {
+        "input": [
+          [
+            1,
+            256,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.conv1": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.conv2": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.blocks": {
+        "input": [
+          [
+            1,
+            192,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.attn": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.conv3": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          512,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2": {
+        "input": [
+          [
+            1,
+            256,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          512,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.3.conv_down": {
+        "input": [
+          [
+            1,
+            512,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.conv1": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.conv2": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.blocks": {
+        "input": [
+          [
+            1,
+            384,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.attn": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.conv3": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          1024,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3": {
+        "input": [
+          [
+            1,
+            512,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          1024,
+          20,
+          20
+        ]
+      },
+      "backbone": {
+        "input": [
+          [
+            1,
+            3,
+            640,
+            640
+          ]
+        ],
+        "output": [
+          [
+            1,
+            256,
+            80,
+            80
+          ],
+          [
+            1,
+            512,
+            40,
+            40
+          ],
+          [
+            1,
+            1024,
+            20,
+            20
+          ]
+        ]
+      },
+      "neck.fpn_stages.0.0": {
+        "input": [
+          [
+            1,
+            1024,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "neck.fpn_stages.0": {
+        "input": [
+          [
+            1,
+            1024,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "neck.fpn_routes.0.seq": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "neck.fpn_routes.0": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "neck.fpn_stages.1.0": {
+        "input": [
+          [
+            1,
+            896,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "neck.fpn_stages.1": {
+        "input": [
+          [
+            1,
+            896,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "neck.fpn_routes.1.seq": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "neck.fpn_routes.1": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "neck.fpn_stages.2.0": {
+        "input": [
+          [
+            1,
+            448,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "neck.fpn_stages.2": {
+        "input": [
+          [
+            1,
+            448,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "neck.pan_routes.1.seq": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "neck.pan_routes.1": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          40,
+          40
+        ]
+      },
+      "neck.pan_stages.1.0": {
+        "input": [
+          [
+            1,
+            576,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "neck.pan_stages.1": {
+        "input": [
+          [
+            1,
+            576,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "neck.pan_routes.0.seq": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "neck.pan_routes.0": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          20,
+          20
+        ]
+      },
+      "neck.pan_stages.0.0": {
+        "input": [
+          [
+            1,
+            1152,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "neck.pan_stages.0": {
+        "input": [
+          [
+            1,
+            1152,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "neck": {
+        "input": [
+          [
+            [
+              1,
+              256,
+              80,
+              80
+            ],
+            [
+              1,
+              512,
+              40,
+              40
+            ],
+            [
+              1,
+              1024,
+              20,
+              20
+            ]
+          ]
+        ],
+        "output": [
+          [
+            1,
+            768,
+            20,
+            20
+          ],
+          [
+            1,
+            384,
+            40,
+            40
+          ],
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ]
+      },
+      "head.stem_cls.0.fc": {
+        "input": [
+          [
+            1,
+            768,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          1,
+          1
+        ]
+      },
+      "head.stem_cls.0.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0.conv.seq.act": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0.conv.seq": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0.conv": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ],
+          [
+            1,
+            768,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "head.pred_cls.0": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          80,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.fc": {
+        "input": [
+          [
+            1,
+            768,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          1,
+          1
+        ]
+      },
+      "head.stem_reg.0.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.conv.seq.act": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.conv.seq": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.conv": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ],
+          [
+            1,
+            768,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          768,
+          20,
+          20
+        ]
+      },
+      "head.pred_reg.0": {
+        "input": [
+          [
+            1,
+            768,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          68,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.1.fc": {
+        "input": [
+          [
+            1,
+            384,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          1,
+          1
+        ]
+      },
+      "head.stem_cls.1.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1.conv.seq.act": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1.conv.seq": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1.conv": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ],
+          [
+            1,
+            384,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "head.pred_cls.1": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          80,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.fc": {
+        "input": [
+          [
+            1,
+            384,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          1,
+          1
+        ]
+      },
+      "head.stem_reg.1.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.conv.seq.act": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.conv.seq": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.conv": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ],
+          [
+            1,
+            384,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          384,
+          40,
+          40
+        ]
+      },
+      "head.pred_reg.1": {
+        "input": [
+          [
+            1,
+            384,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          68,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.2.fc": {
+        "input": [
+          [
+            1,
+            192,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          1,
+          1
+        ]
+      },
+      "head.stem_cls.2.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2.conv.seq.act": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2.conv.seq": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2.conv": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ],
+          [
+            1,
+            192,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "head.pred_cls.2": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          80,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.fc": {
+        "input": [
+          [
+            1,
+            192,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          1,
+          1
+        ]
+      },
+      "head.stem_reg.2.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.conv.seq.act": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.conv.seq": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.conv": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ],
+          [
+            1,
+            192,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          192,
+          80,
+          80
+        ]
+      },
+      "head.pred_reg.2": {
+        "input": [
+          [
+            1,
+            192,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          68,
+          80,
+          80
+        ]
+      },
+      "head": {
+        "input": [
+          [
+            [
+              1,
+              768,
+              20,
+              20
+            ],
+            [
+              1,
+              384,
+              40,
+              40
+            ],
+            [
+              1,
+              192,
+              80,
+              80
+            ]
+          ]
+        ],
+        "output": [
+          [
+            [
+              1,
+              8400,
+              4
+            ],
+            [
+              1,
+              8400,
+              80
+            ]
+          ],
+          [
+            [
+              1,
+              8400,
+              80
+            ],
+            [
+              1,
+              8400,
+              68
+            ],
+            [
+              8400,
+              4
+            ],
+            [
+              8400,
+              2
+            ],
+            [
+              400,
+              1600,
+              6400
+            ],
+            [
+              8400,
+              1
+            ]
+          ]
+        ]
+      }
+    },
+    "x": {
+      "backbone.stem.conv1.seq": {
+        "input": [
+          [
+            1,
+            3,
+            640,
+            640
+          ]
+        ],
+        "output": [
+          1,
+          40,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv1": {
+        "input": [
+          [
+            1,
+            3,
+            640,
+            640
+          ]
+        ],
+        "output": [
+          1,
+          40,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv2.seq": {
+        "input": [
+          [
+            1,
+            40,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          40,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv2": {
+        "input": [
+          [
+            1,
+            40,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          40,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv3.seq": {
+        "input": [
+          [
+            1,
+            40,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          80,
+          320,
+          320
+        ]
+      },
+      "backbone.stem.conv3": {
+        "input": [
+          [
+            1,
+            40,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          80,
+          320,
+          320
+        ]
+      },
+      "backbone.stem": {
+        "input": [
+          [
+            1,
+            3,
+            640,
+            640
+          ]
+        ],
+        "output": [
+          1,
+          80,
+          320,
+          320
+        ]
+      },
+      "backbone.stages.0.conv_down": {
+        "input": [
+          [
+            1,
+            80,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          120,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.conv1": {
+        "input": [
+          [
+            1,
+            120,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          60,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.conv2": {
+        "input": [
+          [
+            1,
+            120,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          60,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.blocks": {
+        "input": [
+          [
+            1,
+            60,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          60,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.attn": {
+        "input": [
+          [
+            1,
+            120,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          120,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0.conv3": {
+        "input": [
+          [
+            1,
+            120,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          160,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.0": {
+        "input": [
+          [
+            1,
+            80,
+            320,
+            320
+          ]
+        ],
+        "output": [
+          1,
+          160,
+          160,
+          160
+        ]
+      },
+      "backbone.stages.1.conv_down": {
+        "input": [
+          [
+            1,
+            160,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.conv1": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          120,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.conv2": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          120,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.blocks": {
+        "input": [
+          [
+            1,
+            120,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          120,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.attn": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1.conv3": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          320,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.1": {
+        "input": [
+          [
+            1,
+            160,
+            160,
+            160
+          ]
+        ],
+        "output": [
+          1,
+          320,
+          80,
+          80
+        ]
+      },
+      "backbone.stages.2.conv_down": {
+        "input": [
+          [
+            1,
+            320,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.conv1": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.conv2": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.blocks": {
+        "input": [
+          [
+            1,
+            240,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.attn": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2.conv3": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          640,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.2": {
+        "input": [
+          [
+            1,
+            320,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          640,
+          40,
+          40
+        ]
+      },
+      "backbone.stages.3.conv_down": {
+        "input": [
+          [
+            1,
+            640,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.conv1": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.conv2": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.blocks": {
+        "input": [
+          [
+            1,
+            480,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.attn": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3.conv3": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          1280,
+          20,
+          20
+        ]
+      },
+      "backbone.stages.3": {
+        "input": [
+          [
+            1,
+            640,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          1280,
+          20,
+          20
+        ]
+      },
+      "backbone": {
+        "input": [
+          [
+            1,
+            3,
+            640,
+            640
+          ]
+        ],
+        "output": [
+          [
+            1,
+            320,
+            80,
+            80
+          ],
+          [
+            1,
+            640,
+            40,
+            40
+          ],
+          [
+            1,
+            1280,
+            20,
+            20
+          ]
+        ]
+      },
+      "neck.fpn_stages.0.0": {
+        "input": [
+          [
+            1,
+            1280,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "neck.fpn_stages.0": {
+        "input": [
+          [
+            1,
+            1280,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "neck.fpn_routes.0.seq": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          20,
+          20
+        ]
+      },
+      "neck.fpn_routes.0": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          20,
+          20
+        ]
+      },
+      "neck.fpn_stages.1.0": {
+        "input": [
+          [
+            1,
+            1120,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "neck.fpn_stages.1": {
+        "input": [
+          [
+            1,
+            1120,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "neck.fpn_routes.1.seq": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          40,
+          40
+        ]
+      },
+      "neck.fpn_routes.1": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          40,
+          40
+        ]
+      },
+      "neck.fpn_stages.2.0": {
+        "input": [
+          [
+            1,
+            560,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          80,
+          80
+        ]
+      },
+      "neck.fpn_stages.2": {
+        "input": [
+          [
+            1,
+            560,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          80,
+          80
+        ]
+      },
+      "neck.pan_routes.1.seq": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          40,
+          40
+        ]
+      },
+      "neck.pan_routes.1": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          40,
+          40
+        ]
+      },
+      "neck.pan_stages.1.0": {
+        "input": [
+          [
+            1,
+            720,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "neck.pan_stages.1": {
+        "input": [
+          [
+            1,
+            720,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "neck.pan_routes.0.seq": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          20,
+          20
+        ]
+      },
+      "neck.pan_routes.0": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          20,
+          20
+        ]
+      },
+      "neck.pan_stages.0.0": {
+        "input": [
+          [
+            1,
+            1440,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "neck.pan_stages.0": {
+        "input": [
+          [
+            1,
+            1440,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "neck": {
+        "input": [
+          [
+            [
+              1,
+              320,
+              80,
+              80
+            ],
+            [
+              1,
+              640,
+              40,
+              40
+            ],
+            [
+              1,
+              1280,
+              20,
+              20
+            ]
+          ]
+        ],
+        "output": [
+          [
+            1,
+            960,
+            20,
+            20
+          ],
+          [
+            1,
+            480,
+            40,
+            40
+          ],
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ]
+      },
+      "head.stem_cls.0.fc": {
+        "input": [
+          [
+            1,
+            960,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          1,
+          1
+        ]
+      },
+      "head.stem_cls.0.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0.conv.seq.act": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0.conv.seq": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0.conv": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.0": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ],
+          [
+            1,
+            960,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "head.pred_cls.0": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          80,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.fc": {
+        "input": [
+          [
+            1,
+            960,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          1,
+          1
+        ]
+      },
+      "head.stem_reg.0.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.conv.seq.act": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.conv.seq": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0.conv": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "head.stem_reg.0": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ],
+          [
+            1,
+            960,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          960,
+          20,
+          20
+        ]
+      },
+      "head.pred_reg.0": {
+        "input": [
+          [
+            1,
+            960,
+            20,
+            20
+          ]
+        ],
+        "output": [
+          1,
+          68,
+          20,
+          20
+        ]
+      },
+      "head.stem_cls.1.fc": {
+        "input": [
+          [
+            1,
+            480,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          1,
+          1
+        ]
+      },
+      "head.stem_cls.1.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1.conv.seq.act": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1.conv.seq": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1.conv": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.1": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ],
+          [
+            1,
+            480,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "head.pred_cls.1": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          80,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.fc": {
+        "input": [
+          [
+            1,
+            480,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          1,
+          1
+        ]
+      },
+      "head.stem_reg.1.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.conv.seq.act": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.conv.seq": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1.conv": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "head.stem_reg.1": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ],
+          [
+            1,
+            480,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          480,
+          40,
+          40
+        ]
+      },
+      "head.pred_reg.1": {
+        "input": [
+          [
+            1,
+            480,
+            40,
+            40
+          ]
+        ],
+        "output": [
+          1,
+          68,
+          40,
+          40
+        ]
+      },
+      "head.stem_cls.2.fc": {
+        "input": [
+          [
+            1,
+            240,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          1,
+          1
+        ]
+      },
+      "head.stem_cls.2.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2.conv.seq.act": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2.conv.seq": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2.conv": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          80,
+          80
+        ]
+      },
+      "head.stem_cls.2": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ],
+          [
+            1,
+            240,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          80,
+          80
+        ]
+      },
+      "head.pred_cls.2": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          80,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.fc": {
+        "input": [
+          [
+            1,
+            240,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          1,
+          1
+        ]
+      },
+      "head.stem_reg.2.conv.seq.conv": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.conv.seq.bn": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.conv.seq.act": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.conv.seq": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2.conv": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          80,
+          80
+        ]
+      },
+      "head.stem_reg.2": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ],
+          [
+            1,
+            240,
+            1,
+            1
+          ]
+        ],
+        "output": [
+          1,
+          240,
+          80,
+          80
+        ]
+      },
+      "head.pred_reg.2": {
+        "input": [
+          [
+            1,
+            240,
+            80,
+            80
+          ]
+        ],
+        "output": [
+          1,
+          68,
+          80,
+          80
+        ]
+      },
+      "head": {
+        "input": [
+          [
+            [
+              1,
+              960,
+              20,
+              20
+            ],
+            [
+              1,
+              480,
+              40,
+              40
+            ],
+            [
+              1,
+              240,
+              80,
+              80
+            ]
+          ]
+        ],
+        "output": [
+          [
+            [
+              1,
+              8400,
+              4
+            ],
+            [
+              1,
+              8400,
+              80
+            ]
+          ],
+          [
+            [
+              1,
+              8400,
+              80
+            ],
+            [
+              1,
+              8400,
+              68
+            ],
+            [
+              8400,
+              4
+            ],
+            [
+              8400,
+              2
+            ],
+            [
+              400,
+              1600,
+              6400
+            ],
+            [
+              8400,
+              1
+            ]
+          ]
+        ]
+      }
+    }
+  },
+  "routes": {
+    "s": {
+      "findings": [],
+      "skipped": [],
+      "segments": 153,
+      "total_findings": 0
+    },
+    "m": {
+      "findings": [],
+      "skipped": [],
+      "segments": 154,
+      "total_findings": 0
+    },
+    "l": {
+      "findings": [],
+      "skipped": [],
+      "segments": 154,
+      "total_findings": 0
+    },
+    "x": {
+      "findings": [],
+      "skipped": [],
+      "segments": 154,
+      "total_findings": 0
+    },
+    "family": {
+      "findings": [],
+      "skipped": [],
+      "segments": 154,
+      "total_findings": 0
+    }
+  },
+  "verification": "CPU all 4 sizes, no downloads; decoded and raw contracts asserted",
+  "visual": "Parent performs browser/PNG QA",
+  "reproduce": "python scripts/model-diagrams/builders/ppyoloe.py --source /path/to/libreyolo"
+}

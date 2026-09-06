@@ -1,0 +1,42 @@
+{
+  "family": "fcn",
+  "slug": "fcn",
+  "title": "FCN",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "r50-semantic",
+  "views": [
+    {
+      "id": "r50-semantic",
+      "label": "r50",
+      "task": "semantic",
+      "size": "r50",
+      "kind": "concrete",
+      "svg": "/diagrams/models/fcn/r50-semantic.svg",
+      "html": "/diagrams/models/fcn/r50-semantic.html",
+      "input": "3\u00d7520\u00d7520",
+      "verification": "cpu"
+    },
+    {
+      "id": "r101-semantic",
+      "label": "r101",
+      "task": "semantic",
+      "size": "r101",
+      "kind": "concrete",
+      "svg": "/diagrams/models/fcn/r101-semantic.svg",
+      "html": "/diagrams/models/fcn/r101-semantic.html",
+      "input": "3\u00d7520\u00d7520",
+      "verification": "cpu"
+    },
+    {
+      "id": "family",
+      "label": "Shared r50/r101 topology",
+      "task": "semantic",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/fcn/family.svg",
+      "html": "/diagrams/models/fcn/family.html",
+      "input": "3\u00d7520\u00d7520",
+      "verification": "source"
+    }
+  ]
+}

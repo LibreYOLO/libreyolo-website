@@ -1,0 +1,42 @@
+{
+  "family": "birefnet",
+  "slug": "birefnet",
+  "title": "BiRefNet",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "t-matte",
+  "views": [
+    {
+      "id": "t-matte",
+      "label": "t",
+      "task": "matte",
+      "size": "t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/birefnet/t-matte.svg",
+      "html": "/diagrams/models/birefnet/t-matte.html",
+      "input": "3\u00d71024\u00d71024 normalized RGB",
+      "verification": "meta"
+    },
+    {
+      "id": "l-matte",
+      "label": "l",
+      "task": "matte",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/birefnet/l-matte.svg",
+      "html": "/diagrams/models/birefnet/l-matte.html",
+      "input": "3\u00d71024\u00d71024 normalized RGB",
+      "verification": "meta"
+    },
+    {
+      "id": "family",
+      "label": "Shared dual-scale topology",
+      "task": "matte",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/birefnet/family.svg",
+      "html": "/diagrams/models/birefnet/family.html",
+      "input": "3\u00d71024\u00d71024 normalized RGB",
+      "verification": "source"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "family": "mask_rcnn",
+  "slug": "mask-rcnn",
+  "title": "Mask R-CNN",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "r50-segment",
+  "views": [
+    {
+      "id": "r50-segment",
+      "label": "Mask R-CNN R50 segmentation",
+      "task": "segment",
+      "size": "r50",
+      "kind": "concrete",
+      "svg": "/diagrams/models/mask-rcnn/r50-segment.svg",
+      "html": "/diagrams/models/mask-rcnn/r50-segment.html",
+      "input": "1 \u00d7 3 \u00d7 800 \u00d7 800",
+      "verification": "cpu"
+    },
+    {
+      "id": "r50-detect",
+      "label": "Mask R-CNN R50 detection",
+      "task": "detect",
+      "size": "r50",
+      "kind": "concrete",
+      "svg": "/diagrams/models/mask-rcnn/r50-detect.svg",
+      "html": "/diagrams/models/mask-rcnn/r50-detect.html",
+      "input": "1 \u00d7 3 \u00d7 800 \u00d7 800",
+      "verification": "cpu"
+    }
+  ]
+}

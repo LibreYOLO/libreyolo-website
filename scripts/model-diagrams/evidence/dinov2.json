@@ -1,0 +1,8076 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "source": "libreyolo/models/dinov2/model.py",
+  "shapes": {
+    "semantic": {
+      "device": "cpu",
+      "input": [
+        1,
+        3,
+        518,
+        518
+      ],
+      "output": [
+        1,
+        19,
+        518,
+        518
+      ],
+      "modules": {
+        "segmenter.backbone.encoder.encoder.embeddings.patch_embeddings.projection": {
+          "input": [
+            1,
+            3,
+            518,
+            518
+          ],
+          "output": [
+            1,
+            384,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.embeddings.patch_embeddings": {
+          "input": [
+            1,
+            3,
+            518,
+            518
+          ],
+          "output": [
+            1,
+            1369,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.embeddings.dropout": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.embeddings": {
+          "input": [
+            1,
+            3,
+            518,
+            518
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.0.norm1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.0.attention.attention.query": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.0.attention.attention.key": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.0.attention.attention.value": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.0.attention.output.dense": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.0.attention.output.dropout": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.0.attention.output": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.0.layer_scale1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.0.drop_path": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.0.norm2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.0.mlp.fc1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.0.mlp.activation": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.0.mlp.fc2": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.0.mlp": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.0.layer_scale2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.1.norm1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.1.attention.attention.query": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.1.attention.attention.key": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.1.attention.attention.value": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.1.attention.output.dense": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.1.attention.output.dropout": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.1.attention.output": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.1.layer_scale1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.1.drop_path": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.1.norm2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.1.mlp.fc1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.1.mlp.activation": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.1.mlp.fc2": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.1.mlp": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.1.layer_scale2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.2.norm1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.2.attention.attention.query": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.2.attention.attention.key": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.2.attention.attention.value": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.2.attention.output.dense": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.2.attention.output.dropout": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.2.attention.output": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.2.layer_scale1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.2.drop_path": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.2.norm2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.2.mlp.fc1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.2.mlp.activation": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.2.mlp.fc2": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.2.mlp": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.2.layer_scale2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.3.norm1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.3.attention.attention.query": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.3.attention.attention.key": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.3.attention.attention.value": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.3.attention.output.dense": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.3.attention.output.dropout": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.3.attention.output": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.3.layer_scale1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.3.drop_path": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.3.norm2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.3.mlp.fc1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.3.mlp.activation": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.3.mlp.fc2": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.3.mlp": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.3.layer_scale2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.4.norm1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.4.attention.attention.query": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.4.attention.attention.key": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.4.attention.attention.value": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.4.attention.output.dense": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.4.attention.output.dropout": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.4.attention.output": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.4.layer_scale1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.4.drop_path": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.4.norm2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.4.mlp.fc1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.4.mlp.activation": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.4.mlp.fc2": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.4.mlp": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.4.layer_scale2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.5.norm1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.5.attention.attention.query": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.5.attention.attention.key": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.5.attention.attention.value": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.5.attention.output.dense": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.5.attention.output.dropout": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.5.attention.output": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.5.layer_scale1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.5.drop_path": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.5.norm2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.5.mlp.fc1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.5.mlp.activation": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.5.mlp.fc2": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.5.mlp": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.5.layer_scale2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.6.norm1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.6.attention.attention.query": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.6.attention.attention.key": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.6.attention.attention.value": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.6.attention.output.dense": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.6.attention.output.dropout": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.6.attention.output": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.6.layer_scale1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.6.drop_path": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.6.norm2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.6.mlp.fc1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.6.mlp.activation": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.6.mlp.fc2": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.6.mlp": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.6.layer_scale2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.7.norm1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.7.attention.attention.query": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.7.attention.attention.key": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.7.attention.attention.value": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.7.attention.output.dense": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.7.attention.output.dropout": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.7.attention.output": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.7.layer_scale1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.7.drop_path": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.7.norm2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.7.mlp.fc1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.7.mlp.activation": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.7.mlp.fc2": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.7.mlp": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.7.layer_scale2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.8.norm1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.8.attention.attention.query": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.8.attention.attention.key": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.8.attention.attention.value": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.8.attention.output.dense": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.8.attention.output.dropout": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.8.attention.output": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.8.layer_scale1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.8.drop_path": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.8.norm2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.8.mlp.fc1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.8.mlp.activation": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.8.mlp.fc2": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.8.mlp": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.8.layer_scale2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.9.norm1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.9.attention.attention.query": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.9.attention.attention.key": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.9.attention.attention.value": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.9.attention.output.dense": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.9.attention.output.dropout": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.9.attention.output": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.9.layer_scale1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.9.drop_path": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.9.norm2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.9.mlp.fc1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.9.mlp.activation": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.9.mlp.fc2": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.9.mlp": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.9.layer_scale2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.10.norm1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.10.attention.attention.query": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.10.attention.attention.key": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.10.attention.attention.value": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.10.attention.output.dense": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.10.attention.output.dropout": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.10.attention.output": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.10.layer_scale1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.10.drop_path": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.10.norm2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.10.mlp.fc1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.10.mlp.activation": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.10.mlp.fc2": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.10.mlp": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.10.layer_scale2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.11.norm1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.11.attention.attention.query": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.11.attention.attention.key": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.11.attention.attention.value": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.11.attention.output.dense": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.11.attention.output.dropout": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.11.attention.output": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.11.layer_scale1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.11.drop_path": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.11.norm2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.11.mlp.fc1": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.11.mlp.activation": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            1536
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.11.mlp.fc2": {
+          "input": [
+            1,
+            1370,
+            1536
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.11.mlp": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.encoder.layer.11.layer_scale2": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.encoder.encoder.layernorm": {
+          "input": [
+            1,
+            1370,
+            384
+          ],
+          "output": [
+            1,
+            1370,
+            384
+          ]
+        },
+        "segmenter.backbone.projector.stages_sampling.0.0": {
+          "input": [
+            1,
+            384,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            384,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages_sampling.0.1": {
+          "input": [
+            1,
+            384,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            384,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages_sampling.0.2": {
+          "input": [
+            1,
+            384,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            384,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages_sampling.0.3": {
+          "input": [
+            1,
+            384,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            384,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.cv1.conv": {
+          "input": [
+            1,
+            1536,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.cv1.bn": {
+          "input": [
+            1,
+            256,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.cv1.act": {
+          "input": [
+            1,
+            256,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.cv1": {
+          "input": [
+            1,
+            1536,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.0.cv1.conv": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.0.cv1.bn": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.0.cv1.act": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.0.cv1": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.0.cv2.conv": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.0.cv2.bn": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.0.cv2.act": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.0.cv2": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.0": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.1.cv1.conv": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.1.cv1.bn": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.1.cv1.act": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.1.cv1": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.1.cv2.conv": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.1.cv2.bn": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.1.cv2.act": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.1.cv2": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.1": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.2.cv1.conv": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.2.cv1.bn": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.2.cv1.act": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.2.cv1": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.2.cv2.conv": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.2.cv2.bn": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.2.cv2.act": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.2.cv2": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.m.2": {
+          "input": [
+            1,
+            128,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            128,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.cv2.conv": {
+          "input": [
+            1,
+            640,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.cv2.bn": {
+          "input": [
+            1,
+            256,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.cv2.act": {
+          "input": [
+            1,
+            256,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0.cv2": {
+          "input": [
+            1,
+            640,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.0": {
+          "input": [
+            1,
+            1536,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0.1": {
+          "input": [
+            1,
+            256,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.backbone.projector.stages.0": {
+          "input": [
+            1,
+            1536,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.laterals.0": {
+          "input": [
+            1,
+            256,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.smooth.0": {
+          "input": [
+            1,
+            256,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.smooth.1": {
+          "input": [
+            1,
+            256,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.smooth.2": {
+          "input": [
+            1,
+            256,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.smooth": {
+          "input": [
+            1,
+            256,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.drop": {
+          "input": [
+            1,
+            256,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            256,
+            37,
+            37
+          ]
+        },
+        "segmenter.predict": {
+          "input": [
+            1,
+            256,
+            37,
+            37
+          ],
+          "output": [
+            1,
+            19,
+            37,
+            37
+          ]
+        },
+        "segmenter": {
+          "input": [
+            1,
+            3,
+            518,
+            518
+          ],
+          "output": [
+            1,
+            19,
+            518,
+            518
+          ]
+        }
+      }
+    },
+    "classify": {
+      "device": "cpu",
+      "input": [
+        1,
+        3,
+        224,
+        224
+      ],
+      "output": [
+        1,
+        1000
+      ],
+      "modules": {
+        "classifier.backbone.encoder.encoder.embeddings.patch_embeddings.projection": {
+          "input": [
+            1,
+            3,
+            224,
+            224
+          ],
+          "output": [
+            1,
+            384,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.encoder.encoder.embeddings.patch_embeddings": {
+          "input": [
+            1,
+            3,
+            224,
+            224
+          ],
+          "output": [
+            1,
+            256,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.embeddings.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.embeddings": {
+          "input": [
+            1,
+            3,
+            224,
+            224
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.0.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.0.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.0.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.0.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.0.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.0.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.0.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.0.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.0.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.0.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.0.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.0.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.0.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.0.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.0.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.1.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.1.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.1.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.1.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.1.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.1.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.1.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.1.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.1.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.1.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.1.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.1.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.1.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.1.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.1.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.2.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.2.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.2.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.2.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.2.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.2.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.2.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.2.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.2.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.2.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.2.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.2.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.2.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.2.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.2.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.3.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.3.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.3.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.3.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.3.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.3.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.3.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.3.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.3.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.3.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.3.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.3.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.3.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.3.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.3.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.4.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.4.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.4.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.4.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.4.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.4.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.4.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.4.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.4.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.4.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.4.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.4.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.4.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.4.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.4.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.5.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.5.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.5.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.5.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.5.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.5.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.5.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.5.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.5.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.5.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.5.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.5.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.5.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.5.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.5.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.6.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.6.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.6.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.6.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.6.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.6.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.6.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.6.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.6.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.6.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.6.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.6.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.6.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.6.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.6.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.7.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.7.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.7.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.7.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.7.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.7.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.7.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.7.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.7.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.7.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.7.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.7.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.7.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.7.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.7.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.8.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.8.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.8.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.8.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.8.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.8.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.8.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.8.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.8.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.8.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.8.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.8.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.8.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.8.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.8.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.9.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.9.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.9.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.9.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.9.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.9.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.9.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.9.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.9.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.9.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.9.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.9.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.9.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.9.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.9.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.10.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.10.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.10.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.10.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.10.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.10.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.10.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.10.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.10.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.10.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.10.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.10.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.10.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.10.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.10.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.11.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.11.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.11.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.11.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.11.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.11.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.11.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.11.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.11.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.11.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.11.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.11.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.11.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.11.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.encoder.layer.11.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.encoder.encoder.layernorm": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "classifier.backbone.projector.stages_sampling.0.0": {
+          "input": [
+            1,
+            384,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            384,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages_sampling.0.1": {
+          "input": [
+            1,
+            384,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            384,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages_sampling.0.2": {
+          "input": [
+            1,
+            384,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            384,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages_sampling.0.3": {
+          "input": [
+            1,
+            384,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            384,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.cv1.conv": {
+          "input": [
+            1,
+            1536,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            256,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.cv1.bn": {
+          "input": [
+            1,
+            256,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            256,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.cv1.act": {
+          "input": [
+            1,
+            256,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            256,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.cv1": {
+          "input": [
+            1,
+            1536,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            256,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.0.cv1.conv": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.0.cv1.bn": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.0.cv1.act": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.0.cv1": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.0.cv2.conv": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.0.cv2.bn": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.0.cv2.act": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.0.cv2": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.0": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.1.cv1.conv": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.1.cv1.bn": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.1.cv1.act": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.1.cv1": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.1.cv2.conv": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.1.cv2.bn": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.1.cv2.act": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.1.cv2": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.1": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.2.cv1.conv": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.2.cv1.bn": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.2.cv1.act": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.2.cv1": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.2.cv2.conv": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.2.cv2.bn": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.2.cv2.act": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.2.cv2": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.m.2": {
+          "input": [
+            1,
+            128,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.cv2.conv": {
+          "input": [
+            1,
+            640,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            256,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.cv2.bn": {
+          "input": [
+            1,
+            256,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            256,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.cv2.act": {
+          "input": [
+            1,
+            256,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            256,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0.cv2": {
+          "input": [
+            1,
+            640,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            256,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.0": {
+          "input": [
+            1,
+            1536,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            256,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0.1": {
+          "input": [
+            1,
+            256,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            256,
+            16,
+            16
+          ]
+        },
+        "classifier.backbone.projector.stages.0": {
+          "input": [
+            1,
+            1536,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            256,
+            16,
+            16
+          ]
+        },
+        "classifier.pool": {
+          "input": [
+            1,
+            256,
+            16,
+            16
+          ],
+          "output": [
+            1,
+            256,
+            1,
+            1
+          ]
+        },
+        "classifier.drop": {
+          "input": [
+            1,
+            256
+          ],
+          "output": [
+            1,
+            256
+          ]
+        },
+        "classifier.linear": {
+          "input": [
+            1,
+            256
+          ],
+          "output": [
+            1,
+            1000
+          ]
+        },
+        "classifier": {
+          "input": [
+            1,
+            3,
+            224,
+            224
+          ],
+          "output": [
+            1,
+            1000
+          ]
+        }
+      }
+    },
+    "embed": {
+      "device": "cpu",
+      "input": [
+        1,
+        3,
+        224,
+        224
+      ],
+      "output": [
+        1,
+        384
+      ],
+      "modules": {
+        "backbone.encoder.encoder.embeddings.patch_embeddings.projection": {
+          "input": [
+            1,
+            3,
+            224,
+            224
+          ],
+          "output": [
+            1,
+            384,
+            16,
+            16
+          ]
+        },
+        "backbone.encoder.encoder.embeddings.patch_embeddings": {
+          "input": [
+            1,
+            3,
+            224,
+            224
+          ],
+          "output": [
+            1,
+            256,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.embeddings.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.embeddings": {
+          "input": [
+            1,
+            3,
+            224,
+            224
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.0.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.0.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.0.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.0.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.0.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.0.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.0.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.0.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.0.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.0.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.0.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.0.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.0.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.0.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.0.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.1.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.1.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.1.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.1.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.1.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.1.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.1.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.1.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.1.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.1.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.1.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.1.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.1.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.1.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.1.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.2.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.2.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.2.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.2.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.2.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.2.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.2.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.2.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.2.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.2.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.2.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.2.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.2.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.2.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.2.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.3.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.3.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.3.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.3.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.3.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.3.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.3.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.3.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.3.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.3.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.3.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.3.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.3.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.3.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.3.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.4.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.4.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.4.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.4.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.4.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.4.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.4.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.4.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.4.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.4.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.4.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.4.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.4.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.4.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.4.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.5.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.5.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.5.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.5.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.5.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.5.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.5.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.5.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.5.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.5.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.5.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.5.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.5.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.5.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.5.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.6.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.6.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.6.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.6.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.6.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.6.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.6.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.6.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.6.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.6.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.6.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.6.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.6.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.6.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.6.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.7.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.7.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.7.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.7.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.7.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.7.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.7.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.7.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.7.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.7.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.7.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.7.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.7.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.7.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.7.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.8.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.8.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.8.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.8.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.8.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.8.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.8.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.8.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.8.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.8.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.8.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.8.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.8.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.8.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.8.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.9.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.9.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.9.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.9.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.9.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.9.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.9.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.9.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.9.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.9.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.9.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.9.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.9.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.9.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.9.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.10.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.10.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.10.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.10.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.10.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.10.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.10.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.10.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.10.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.10.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.10.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.10.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.10.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.10.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.10.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.11.norm1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.11.attention.attention.query": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.11.attention.attention.key": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.11.attention.attention.value": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.11.attention.output.dense": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.11.attention.output.dropout": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.11.attention.output": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.11.layer_scale1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.11.drop_path": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.11.norm2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.11.mlp.fc1": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.11.mlp.activation": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            1536
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.11.mlp.fc2": {
+          "input": [
+            1,
+            257,
+            1536
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.11.mlp": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.encoder.layer.11.layer_scale2": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        },
+        "backbone.encoder.encoder.layernorm": {
+          "input": [
+            1,
+            257,
+            384
+          ],
+          "output": [
+            1,
+            257,
+            384
+          ]
+        }
+      }
+    },
+    "size_equivalence": {
+      "compared_fields": [
+        "encoder",
+        "hidden_dim",
+        "out_feature_indexes",
+        "projector_scale"
+      ],
+      "sizes": [
+        "n",
+        "s",
+        "m",
+        "l"
+      ],
+      "all_equal": true,
+      "runtime": "Only n executed; other views use source-equivalent factory settings."
+    }
+  },
+  "verification_limits": "Meta checks validate shape propagation, not numerical behavior. CPU checks use random weights. Source inspection establishes functional branches. Browser and PNG QA belongs to integration review."
+}

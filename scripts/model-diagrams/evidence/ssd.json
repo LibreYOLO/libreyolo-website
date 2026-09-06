@@ -1,0 +1,1335 @@
+{
+  "family": "ssd",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "source_files": [
+    "libreyolo/models/ssd/nn.py",
+    "libreyolo/postprocess/ssd.py"
+  ],
+  "shapes": {
+    "backbone.features.0": {
+      "input": [
+        [
+          1,
+          3,
+          300,
+          300
+        ]
+      ],
+      "output": [
+        1,
+        64,
+        300,
+        300
+      ]
+    },
+    "backbone.features.1": {
+      "input": [
+        [
+          1,
+          64,
+          300,
+          300
+        ]
+      ],
+      "output": [
+        1,
+        64,
+        300,
+        300
+      ]
+    },
+    "backbone.features.2": {
+      "input": [
+        [
+          1,
+          64,
+          300,
+          300
+        ]
+      ],
+      "output": [
+        1,
+        64,
+        300,
+        300
+      ]
+    },
+    "backbone.features.3": {
+      "input": [
+        [
+          1,
+          64,
+          300,
+          300
+        ]
+      ],
+      "output": [
+        1,
+        64,
+        300,
+        300
+      ]
+    },
+    "backbone.features.4": {
+      "input": [
+        [
+          1,
+          64,
+          300,
+          300
+        ]
+      ],
+      "output": [
+        1,
+        64,
+        150,
+        150
+      ]
+    },
+    "backbone.features.5": {
+      "input": [
+        [
+          1,
+          64,
+          150,
+          150
+        ]
+      ],
+      "output": [
+        1,
+        128,
+        150,
+        150
+      ]
+    },
+    "backbone.features.6": {
+      "input": [
+        [
+          1,
+          128,
+          150,
+          150
+        ]
+      ],
+      "output": [
+        1,
+        128,
+        150,
+        150
+      ]
+    },
+    "backbone.features.7": {
+      "input": [
+        [
+          1,
+          128,
+          150,
+          150
+        ]
+      ],
+      "output": [
+        1,
+        128,
+        150,
+        150
+      ]
+    },
+    "backbone.features.8": {
+      "input": [
+        [
+          1,
+          128,
+          150,
+          150
+        ]
+      ],
+      "output": [
+        1,
+        128,
+        150,
+        150
+      ]
+    },
+    "backbone.features.9": {
+      "input": [
+        [
+          1,
+          128,
+          150,
+          150
+        ]
+      ],
+      "output": [
+        1,
+        128,
+        75,
+        75
+      ]
+    },
+    "backbone.features.10": {
+      "input": [
+        [
+          1,
+          128,
+          75,
+          75
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        75,
+        75
+      ]
+    },
+    "backbone.features.11": {
+      "input": [
+        [
+          1,
+          256,
+          75,
+          75
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        75,
+        75
+      ]
+    },
+    "backbone.features.12": {
+      "input": [
+        [
+          1,
+          256,
+          75,
+          75
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        75,
+        75
+      ]
+    },
+    "backbone.features.13": {
+      "input": [
+        [
+          1,
+          256,
+          75,
+          75
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        75,
+        75
+      ]
+    },
+    "backbone.features.14": {
+      "input": [
+        [
+          1,
+          256,
+          75,
+          75
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        75,
+        75
+      ]
+    },
+    "backbone.features.15": {
+      "input": [
+        [
+          1,
+          256,
+          75,
+          75
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        75,
+        75
+      ]
+    },
+    "backbone.features.16": {
+      "input": [
+        [
+          1,
+          256,
+          75,
+          75
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        38,
+        38
+      ]
+    },
+    "backbone.features.17": {
+      "input": [
+        [
+          1,
+          256,
+          38,
+          38
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        38,
+        38
+      ]
+    },
+    "backbone.features.18": {
+      "input": [
+        [
+          1,
+          512,
+          38,
+          38
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        38,
+        38
+      ]
+    },
+    "backbone.features.19": {
+      "input": [
+        [
+          1,
+          512,
+          38,
+          38
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        38,
+        38
+      ]
+    },
+    "backbone.features.20": {
+      "input": [
+        [
+          1,
+          512,
+          38,
+          38
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        38,
+        38
+      ]
+    },
+    "backbone.features.21": {
+      "input": [
+        [
+          1,
+          512,
+          38,
+          38
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        38,
+        38
+      ]
+    },
+    "backbone.features.22": {
+      "input": [
+        [
+          1,
+          512,
+          38,
+          38
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        38,
+        38
+      ]
+    },
+    "backbone.features": {
+      "input": [
+        [
+          1,
+          3,
+          300,
+          300
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        38,
+        38
+      ]
+    },
+    "backbone.extra.0.0": {
+      "input": [
+        [
+          1,
+          512,
+          38,
+          38
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        19,
+        19
+      ]
+    },
+    "backbone.extra.0.1": {
+      "input": [
+        [
+          1,
+          512,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        19,
+        19
+      ]
+    },
+    "backbone.extra.0.2": {
+      "input": [
+        [
+          1,
+          512,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        19,
+        19
+      ]
+    },
+    "backbone.extra.0.3": {
+      "input": [
+        [
+          1,
+          512,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        19,
+        19
+      ]
+    },
+    "backbone.extra.0.4": {
+      "input": [
+        [
+          1,
+          512,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        19,
+        19
+      ]
+    },
+    "backbone.extra.0.5": {
+      "input": [
+        [
+          1,
+          512,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        19,
+        19
+      ]
+    },
+    "backbone.extra.0.6": {
+      "input": [
+        [
+          1,
+          512,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        19,
+        19
+      ]
+    },
+    "backbone.extra.0.7.0": {
+      "input": [
+        [
+          1,
+          512,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        19,
+        19
+      ]
+    },
+    "backbone.extra.0.7.1": {
+      "input": [
+        [
+          1,
+          512,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        1024,
+        19,
+        19
+      ]
+    },
+    "backbone.extra.0.7.2": {
+      "input": [
+        [
+          1,
+          1024,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        1024,
+        19,
+        19
+      ]
+    },
+    "backbone.extra.0.7.3": {
+      "input": [
+        [
+          1,
+          1024,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        1024,
+        19,
+        19
+      ]
+    },
+    "backbone.extra.0.7.4": {
+      "input": [
+        [
+          1,
+          1024,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        1024,
+        19,
+        19
+      ]
+    },
+    "backbone.extra.0.7": {
+      "input": [
+        [
+          1,
+          512,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        1024,
+        19,
+        19
+      ]
+    },
+    "backbone.extra.0": {
+      "input": [
+        [
+          1,
+          512,
+          38,
+          38
+        ]
+      ],
+      "output": [
+        1,
+        1024,
+        19,
+        19
+      ]
+    },
+    "backbone.extra.1.0": {
+      "input": [
+        [
+          1,
+          1024,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        19,
+        19
+      ]
+    },
+    "backbone.extra.1.1": {
+      "input": [
+        [
+          1,
+          256,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        19,
+        19
+      ]
+    },
+    "backbone.extra.1.2": {
+      "input": [
+        [
+          1,
+          256,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        10,
+        10
+      ]
+    },
+    "backbone.extra.1.3": {
+      "input": [
+        [
+          1,
+          512,
+          10,
+          10
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        10,
+        10
+      ]
+    },
+    "backbone.extra.1": {
+      "input": [
+        [
+          1,
+          1024,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        512,
+        10,
+        10
+      ]
+    },
+    "backbone.extra.2.0": {
+      "input": [
+        [
+          1,
+          512,
+          10,
+          10
+        ]
+      ],
+      "output": [
+        1,
+        128,
+        10,
+        10
+      ]
+    },
+    "backbone.extra.2.1": {
+      "input": [
+        [
+          1,
+          128,
+          10,
+          10
+        ]
+      ],
+      "output": [
+        1,
+        128,
+        10,
+        10
+      ]
+    },
+    "backbone.extra.2.2": {
+      "input": [
+        [
+          1,
+          128,
+          10,
+          10
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        5,
+        5
+      ]
+    },
+    "backbone.extra.2.3": {
+      "input": [
+        [
+          1,
+          256,
+          5,
+          5
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        5,
+        5
+      ]
+    },
+    "backbone.extra.2": {
+      "input": [
+        [
+          1,
+          512,
+          10,
+          10
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        5,
+        5
+      ]
+    },
+    "backbone.extra.3.0": {
+      "input": [
+        [
+          1,
+          256,
+          5,
+          5
+        ]
+      ],
+      "output": [
+        1,
+        128,
+        5,
+        5
+      ]
+    },
+    "backbone.extra.3.1": {
+      "input": [
+        [
+          1,
+          128,
+          5,
+          5
+        ]
+      ],
+      "output": [
+        1,
+        128,
+        5,
+        5
+      ]
+    },
+    "backbone.extra.3.2": {
+      "input": [
+        [
+          1,
+          128,
+          5,
+          5
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        3,
+        3
+      ]
+    },
+    "backbone.extra.3.3": {
+      "input": [
+        [
+          1,
+          256,
+          3,
+          3
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        3,
+        3
+      ]
+    },
+    "backbone.extra.3": {
+      "input": [
+        [
+          1,
+          256,
+          5,
+          5
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        3,
+        3
+      ]
+    },
+    "backbone.extra.4.0": {
+      "input": [
+        [
+          1,
+          256,
+          3,
+          3
+        ]
+      ],
+      "output": [
+        1,
+        128,
+        3,
+        3
+      ]
+    },
+    "backbone.extra.4.1": {
+      "input": [
+        [
+          1,
+          128,
+          3,
+          3
+        ]
+      ],
+      "output": [
+        1,
+        128,
+        3,
+        3
+      ]
+    },
+    "backbone.extra.4.2": {
+      "input": [
+        [
+          1,
+          128,
+          3,
+          3
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        1,
+        1
+      ]
+    },
+    "backbone.extra.4.3": {
+      "input": [
+        [
+          1,
+          256,
+          1,
+          1
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        1,
+        1
+      ]
+    },
+    "backbone.extra.4": {
+      "input": [
+        [
+          1,
+          256,
+          3,
+          3
+        ]
+      ],
+      "output": [
+        1,
+        256,
+        1,
+        1
+      ]
+    },
+    "backbone": {
+      "input": [
+        [
+          1,
+          3,
+          300,
+          300
+        ]
+      ],
+      "output": {
+        "0": [
+          1,
+          512,
+          38,
+          38
+        ],
+        "1": [
+          1,
+          1024,
+          19,
+          19
+        ],
+        "2": [
+          1,
+          512,
+          10,
+          10
+        ],
+        "3": [
+          1,
+          256,
+          5,
+          5
+        ],
+        "4": [
+          1,
+          256,
+          3,
+          3
+        ],
+        "5": [
+          1,
+          256,
+          1,
+          1
+        ]
+      }
+    },
+    "head.regression_head.module_list.0": {
+      "input": [
+        [
+          1,
+          512,
+          38,
+          38
+        ]
+      ],
+      "output": [
+        1,
+        16,
+        38,
+        38
+      ]
+    },
+    "head.regression_head.module_list.1": {
+      "input": [
+        [
+          1,
+          1024,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        24,
+        19,
+        19
+      ]
+    },
+    "head.regression_head.module_list.2": {
+      "input": [
+        [
+          1,
+          512,
+          10,
+          10
+        ]
+      ],
+      "output": [
+        1,
+        24,
+        10,
+        10
+      ]
+    },
+    "head.regression_head.module_list.3": {
+      "input": [
+        [
+          1,
+          256,
+          5,
+          5
+        ]
+      ],
+      "output": [
+        1,
+        24,
+        5,
+        5
+      ]
+    },
+    "head.regression_head.module_list.4": {
+      "input": [
+        [
+          1,
+          256,
+          3,
+          3
+        ]
+      ],
+      "output": [
+        1,
+        16,
+        3,
+        3
+      ]
+    },
+    "head.regression_head.module_list.5": {
+      "input": [
+        [
+          1,
+          256,
+          1,
+          1
+        ]
+      ],
+      "output": [
+        1,
+        16,
+        1,
+        1
+      ]
+    },
+    "head.regression_head": {
+      "input": [
+        [
+          [
+            1,
+            512,
+            38,
+            38
+          ],
+          [
+            1,
+            1024,
+            19,
+            19
+          ],
+          [
+            1,
+            512,
+            10,
+            10
+          ],
+          [
+            1,
+            256,
+            5,
+            5
+          ],
+          [
+            1,
+            256,
+            3,
+            3
+          ],
+          [
+            1,
+            256,
+            1,
+            1
+          ]
+        ]
+      ],
+      "output": [
+        1,
+        8732,
+        4
+      ]
+    },
+    "head.classification_head.module_list.0": {
+      "input": [
+        [
+          1,
+          512,
+          38,
+          38
+        ]
+      ],
+      "output": [
+        1,
+        364,
+        38,
+        38
+      ]
+    },
+    "head.classification_head.module_list.1": {
+      "input": [
+        [
+          1,
+          1024,
+          19,
+          19
+        ]
+      ],
+      "output": [
+        1,
+        546,
+        19,
+        19
+      ]
+    },
+    "head.classification_head.module_list.2": {
+      "input": [
+        [
+          1,
+          512,
+          10,
+          10
+        ]
+      ],
+      "output": [
+        1,
+        546,
+        10,
+        10
+      ]
+    },
+    "head.classification_head.module_list.3": {
+      "input": [
+        [
+          1,
+          256,
+          5,
+          5
+        ]
+      ],
+      "output": [
+        1,
+        546,
+        5,
+        5
+      ]
+    },
+    "head.classification_head.module_list.4": {
+      "input": [
+        [
+          1,
+          256,
+          3,
+          3
+        ]
+      ],
+      "output": [
+        1,
+        364,
+        3,
+        3
+      ]
+    },
+    "head.classification_head.module_list.5": {
+      "input": [
+        [
+          1,
+          256,
+          1,
+          1
+        ]
+      ],
+      "output": [
+        1,
+        364,
+        1,
+        1
+      ]
+    },
+    "head.classification_head": {
+      "input": [
+        [
+          [
+            1,
+            512,
+            38,
+            38
+          ],
+          [
+            1,
+            1024,
+            19,
+            19
+          ],
+          [
+            1,
+            512,
+            10,
+            10
+          ],
+          [
+            1,
+            256,
+            5,
+            5
+          ],
+          [
+            1,
+            256,
+            3,
+            3
+          ],
+          [
+            1,
+            256,
+            1,
+            1
+          ]
+        ]
+      ],
+      "output": [
+        1,
+        8732,
+        91
+      ]
+    },
+    "head": {
+      "input": [
+        [
+          [
+            1,
+            512,
+            38,
+            38
+          ],
+          [
+            1,
+            1024,
+            19,
+            19
+          ],
+          [
+            1,
+            512,
+            10,
+            10
+          ],
+          [
+            1,
+            256,
+            5,
+            5
+          ],
+          [
+            1,
+            256,
+            3,
+            3
+          ],
+          [
+            1,
+            256,
+            1,
+            1
+          ]
+        ]
+      ],
+      "output": {
+        "bbox_regression": [
+          1,
+          8732,
+          4
+        ],
+        "cls_logits": [
+          1,
+          8732,
+          91
+        ]
+      }
+    }
+  },
+  "routes": {
+    "findings": [],
+    "skipped": [],
+    "segments": 95,
+    "total_findings": 0
+  },
+  "verification": "CPU random-weight forward; all feature/head modules hooked",
+  "visual": "Parent performs browser/PNG QA",
+  "reproduce": "python scripts/model-diagrams/builders/ssd.py --source /path/to/libreyolo"
+}

@@ -1,0 +1,28 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "backend": "Transformers5.16.1 native Apache-2.0",
+  "configs": [
+    {
+      "repo": "LibreYOLO/LibreGroundFlorence2base",
+      "resolved_revision": "5c38507977a281f21455e755551d093461cf15d1",
+      "size": "base",
+      "source": "libreyolo/models/ground/florence.py",
+      "meta": {}
+    },
+    {
+      "repo": "florence-community/Florence-2-large",
+      "resolved_revision": "4271c66b88cdbc05735372ec13b2360108de5317",
+      "size": "large",
+      "source": "libreyolo/models/ground/florence.py",
+      "meta": {}
+    }
+  ],
+  "checks": [
+    "Pinned configuration and meta module construction",
+    "Native DaViT and BART forward-path source inspection"
+  ],
+  "limits": [
+    "No pretrained execution",
+    "Nominal square input; processor owns resizing"
+  ]
+}

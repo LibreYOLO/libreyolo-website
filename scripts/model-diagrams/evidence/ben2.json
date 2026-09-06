@@ -1,0 +1,279 @@
+{
+  "family": "ben2",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "sources": [
+    "libreyolo/models/ben2/nn.py:LibreBEN2Model,BEN2Backbone,MultiFieldCrossAttention,MultiFieldRefinement",
+    "libreyolo/models/birefnet/nn.py:shared Swin-v1 primitives",
+    "libreyolo/models/ben2/utils.py:ImageNet normalization"
+  ],
+  "records": {
+    "b": {
+      "device": "meta",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "output": [
+        1,
+        1,
+        1024,
+        1024
+      ],
+      "hooks": {
+        "backbone": {
+          "input": [
+            [
+              5,
+              3,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            [
+              5,
+              128,
+              128,
+              128
+            ],
+            [
+              5,
+              128,
+              128,
+              128
+            ],
+            [
+              5,
+              256,
+              64,
+              64
+            ],
+            [
+              5,
+              512,
+              32,
+              32
+            ],
+            [
+              5,
+              1024,
+              16,
+              16
+            ]
+          ]
+        },
+        "output5": {
+          "input": [
+            [
+              5,
+              1024,
+              16,
+              16
+            ]
+          ],
+          "output": [
+            5,
+            128,
+            16,
+            16
+          ]
+        },
+        "multifieldcrossatt": {
+          "input": [
+            [
+              4,
+              128,
+              16,
+              16
+            ],
+            [
+              1,
+              128,
+              16,
+              16
+            ]
+          ],
+          "output": [
+            5,
+            128,
+            16,
+            16
+          ]
+        },
+        "dec_blk4": {
+          "input": [
+            [
+              5,
+              128,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            [
+              5,
+              128,
+              32,
+              32
+            ],
+            [
+              1,
+              1,
+              64,
+              64
+            ]
+          ]
+        },
+        "dec_blk3": {
+          "input": [
+            [
+              5,
+              128,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            [
+              5,
+              128,
+              64,
+              64
+            ],
+            [
+              1,
+              1,
+              128,
+              128
+            ]
+          ]
+        },
+        "dec_blk2": {
+          "input": [
+            [
+              5,
+              128,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            [
+              5,
+              128,
+              128,
+              128
+            ],
+            [
+              1,
+              1,
+              256,
+              256
+            ]
+          ]
+        },
+        "dec_blk1": {
+          "input": [
+            [
+              5,
+              128,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            [
+              5,
+              128,
+              128,
+              128
+            ],
+            [
+              1,
+              1,
+              256,
+              256
+            ]
+          ]
+        },
+        "insmask_head": {
+          "input": [
+            [
+              1,
+              128,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            256,
+            256
+          ]
+        },
+        "upsample1": {
+          "input": [
+            [
+              1,
+              128,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            512,
+            512
+          ]
+        },
+        "upsample2": {
+          "input": [
+            [
+              1,
+              128,
+              1024,
+              1024
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            1024,
+            1024
+          ]
+        },
+        "output": {
+          "input": [
+            [
+              1,
+              128,
+              1024,
+              1024
+            ]
+          ],
+          "output": [
+            1,
+            1,
+            1024,
+            1024
+          ]
+        }
+      },
+      "parameters": 94134658,
+      "pretrained": false,
+      "limitation": "Meta forward validates shape propagation only; numerical inference was not executed."
+    }
+  },
+  "notes": [
+    "Actual1024meta forward,notnumericalCPU inference. No pretrainedweights.",
+    "Eachimage becomes4local512quadrants plusoneglobal512image. Backbone sees5fields inbatch.",
+    "Fivebackboneoutputs includepatchembedding andstage1 atsame128grid.",
+    "Finaloutput islogits; sharedmatte postprocess appliessigmoidonce. Optionalforegroundcolour/video helpers arenotpart ofthenativegraph."
+  ],
+  "visual_qa": "Parent agent; not executed by this builder."
+}

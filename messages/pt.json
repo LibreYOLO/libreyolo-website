@@ -977,5 +977,11 @@
       "stableBody": "Para trabalho em produção, o núcleo validado é a detecção com YOLO9 e a detecção e segmentação com RF-DETR. Consulte a <docs>documentação principal</docs> para essas opções e o <vlm>LibreVLM</vlm> para detecção de vocabulário aberto.",
       "source": "Acompanhe o progresso e o código-fonte no <link>GitHub</link>"
     }
+  },
+  "ModelDiagram": {
+    "title": "Arquitetura de {model}",
+    "open": "Abrir o diagrama completo",
+    "description": "Escolha uma variante ou a visão da família e selecione um bloco para ver os detalhes. Abra o diagrama completo para ampliar ou baixar SVG e PNG. Os diagramas estão em inglês.",
+    "view": "Diagrama"
   }
 }

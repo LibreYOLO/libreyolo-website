@@ -1,0 +1,621 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "backend": "Transformers5.16.1 native Apache-2.0",
+  "configs": [
+    {
+      "repo": "LibreYOLO/LibreGemma4e2b",
+      "resolved_revision": "507bec1827280677ff6332406cc6e2500670b0a6",
+      "source": "libreyolo/models/vlm/gemma4.py",
+      "meta": {
+        "family": "gemma4",
+        "size": "e2b",
+        "status": "meta",
+        "model_class": "Gemma4ForConditionalGeneration",
+        "parameters": 5104297504,
+        "modules": {
+          "model.vision_tower.encoder.layers.0.self_attn.q_proj.linear": [
+            768,
+            768
+          ],
+          "model.vision_tower.encoder.layers.0.self_attn.k_proj.linear": [
+            768,
+            768
+          ],
+          "model.vision_tower.encoder.layers.0.self_attn.v_proj.linear": [
+            768,
+            768
+          ],
+          "model.vision_tower.encoder.layers.0.self_attn.o_proj.linear": [
+            768,
+            768
+          ],
+          "model.vision_tower.encoder.layers.0.mlp.gate_proj.linear": [
+            768,
+            3072
+          ],
+          "model.vision_tower.encoder.layers.0.mlp.up_proj.linear": [
+            768,
+            3072
+          ],
+          "model.vision_tower.encoder.layers.0.mlp.down_proj.linear": [
+            3072,
+            768
+          ],
+          "model.language_model.layers.0.self_attn.q_proj": [
+            1536,
+            2048
+          ],
+          "model.language_model.layers.0.self_attn.k_proj": [
+            1536,
+            256
+          ],
+          "model.language_model.layers.0.self_attn.v_proj": [
+            1536,
+            256
+          ],
+          "model.language_model.layers.0.self_attn.o_proj": [
+            2048,
+            1536
+          ],
+          "model.language_model.layers.0.mlp.gate_proj": [
+            1536,
+            6144
+          ],
+          "model.language_model.layers.0.mlp.up_proj": [
+            1536,
+            6144
+          ],
+          "model.language_model.layers.0.mlp.down_proj": [
+            6144,
+            1536
+          ],
+          "model.language_model.layers.0.per_layer_input_gate": [
+            1536,
+            256
+          ],
+          "model.language_model.layers.0.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.1.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.2.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.3.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.4.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.5.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.6.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.7.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.8.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.9.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.10.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.11.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.12.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.13.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.14.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.15.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.16.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.17.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.18.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.19.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.20.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.21.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.22.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.23.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.24.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.25.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.26.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.27.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.28.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.29.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.30.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.31.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.32.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.33.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.layers.34.per_layer_projection": [
+            256,
+            1536
+          ],
+          "model.language_model.per_layer_model_projection": [
+            1536,
+            8960
+          ],
+          "model.audio_tower.subsample_conv_projection.input_proj_linear": [
+            1024,
+            1024
+          ],
+          "model.audio_tower.layers.0.feed_forward1.ffw_layer_1.linear": [
+            1024,
+            4096
+          ],
+          "model.audio_tower.layers.0.feed_forward1.ffw_layer_2.linear": [
+            4096,
+            1024
+          ],
+          "model.audio_tower.layers.0.feed_forward2.ffw_layer_1.linear": [
+            1024,
+            4096
+          ],
+          "model.audio_tower.layers.0.feed_forward2.ffw_layer_2.linear": [
+            4096,
+            1024
+          ],
+          "model.audio_tower.layers.0.self_attn.q_proj.linear": [
+            1024,
+            1024
+          ],
+          "model.audio_tower.layers.0.self_attn.k_proj.linear": [
+            1024,
+            1024
+          ],
+          "model.audio_tower.layers.0.self_attn.v_proj.linear": [
+            1024,
+            1024
+          ],
+          "model.audio_tower.layers.0.self_attn.post.linear": [
+            1024,
+            1024
+          ],
+          "model.audio_tower.layers.0.self_attn.relative_k_proj": [
+            1024,
+            1024
+          ],
+          "model.audio_tower.layers.0.lconv1d.linear_start.linear": [
+            1024,
+            2048
+          ],
+          "model.audio_tower.layers.0.lconv1d.linear_end.linear": [
+            1024,
+            1024
+          ],
+          "model.audio_tower.layers.0.lconv1d.depthwise_conv1d": {
+            "in": 1024,
+            "out": 1024,
+            "kernel": [
+              5
+            ],
+            "stride": [
+              1
+            ],
+            "groups": 1024
+          },
+          "model.embed_vision.embedding_projection": [
+            768,
+            1536
+          ],
+          "model.embed_audio.embedding_projection": [
+            1536,
+            1536
+          ],
+          "lm_head": [
+            1536,
+            262144
+          ]
+        }
+      }
+    },
+    {
+      "repo": "LibreYOLO/LibreGemma4e4b",
+      "resolved_revision": "80662d5dc7f69bfe5d1b5be53da3558b8d481998",
+      "source": "libreyolo/models/vlm/gemma4.py",
+      "meta": {
+        "family": "gemma4",
+        "size": "e4b",
+        "status": "meta",
+        "model_class": "Gemma4ForConditionalGeneration",
+        "parameters": 7941100832,
+        "modules": {
+          "model.vision_tower.encoder.layers.0.self_attn.q_proj.linear": [
+            768,
+            768
+          ],
+          "model.vision_tower.encoder.layers.0.self_attn.k_proj.linear": [
+            768,
+            768
+          ],
+          "model.vision_tower.encoder.layers.0.self_attn.v_proj.linear": [
+            768,
+            768
+          ],
+          "model.vision_tower.encoder.layers.0.self_attn.o_proj.linear": [
+            768,
+            768
+          ],
+          "model.vision_tower.encoder.layers.0.mlp.gate_proj.linear": [
+            768,
+            3072
+          ],
+          "model.vision_tower.encoder.layers.0.mlp.up_proj.linear": [
+            768,
+            3072
+          ],
+          "model.vision_tower.encoder.layers.0.mlp.down_proj.linear": [
+            3072,
+            768
+          ],
+          "model.language_model.layers.0.self_attn.q_proj": [
+            2560,
+            2048
+          ],
+          "model.language_model.layers.0.self_attn.k_proj": [
+            2560,
+            512
+          ],
+          "model.language_model.layers.0.self_attn.v_proj": [
+            2560,
+            512
+          ],
+          "model.language_model.layers.0.self_attn.o_proj": [
+            2048,
+            2560
+          ],
+          "model.language_model.layers.0.mlp.gate_proj": [
+            2560,
+            10240
+          ],
+          "model.language_model.layers.0.mlp.up_proj": [
+            2560,
+            10240
+          ],
+          "model.language_model.layers.0.mlp.down_proj": [
+            10240,
+            2560
+          ],
+          "model.language_model.layers.0.per_layer_input_gate": [
+            2560,
+            256
+          ],
+          "model.language_model.layers.0.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.1.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.2.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.3.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.4.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.5.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.6.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.7.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.8.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.9.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.10.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.11.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.12.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.13.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.14.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.15.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.16.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.17.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.18.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.19.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.20.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.21.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.22.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.23.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.24.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.25.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.26.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.27.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.28.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.29.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.30.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.31.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.32.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.33.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.34.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.35.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.36.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.37.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.38.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.39.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.40.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.layers.41.per_layer_projection": [
+            256,
+            2560
+          ],
+          "model.language_model.per_layer_model_projection": [
+            2560,
+            10752
+          ],
+          "model.audio_tower.subsample_conv_projection.input_proj_linear": [
+            1024,
+            1024
+          ],
+          "model.audio_tower.layers.0.feed_forward1.ffw_layer_1.linear": [
+            1024,
+            4096
+          ],
+          "model.audio_tower.layers.0.feed_forward1.ffw_layer_2.linear": [
+            4096,
+            1024
+          ],
+          "model.audio_tower.layers.0.feed_forward2.ffw_layer_1.linear": [
+            1024,
+            4096
+          ],
+          "model.audio_tower.layers.0.feed_forward2.ffw_layer_2.linear": [
+            4096,
+            1024
+          ],
+          "model.audio_tower.layers.0.self_attn.q_proj.linear": [
+            1024,
+            1024
+          ],
+          "model.audio_tower.layers.0.self_attn.k_proj.linear": [
+            1024,
+            1024
+          ],
+          "model.audio_tower.layers.0.self_attn.v_proj.linear": [
+            1024,
+            1024
+          ],
+          "model.audio_tower.layers.0.self_attn.post.linear": [
+            1024,
+            1024
+          ],
+          "model.audio_tower.layers.0.self_attn.relative_k_proj": [
+            1024,
+            1024
+          ],
+          "model.audio_tower.layers.0.lconv1d.linear_start.linear": [
+            1024,
+            2048
+          ],
+          "model.audio_tower.layers.0.lconv1d.linear_end.linear": [
+            1024,
+            1024
+          ],
+          "model.audio_tower.layers.0.lconv1d.depthwise_conv1d": {
+            "in": 1024,
+            "out": 1024,
+            "kernel": [
+              5
+            ],
+            "stride": [
+              1
+            ],
+            "groups": 1024
+          },
+          "model.embed_vision.embedding_projection": [
+            768,
+            2560
+          ],
+          "model.embed_audio.embedding_projection": [
+            1536,
+            2560
+          ],
+          "lm_head": [
+            2560,
+            262144
+          ]
+        }
+      }
+    }
+  ],
+  "checks": [
+    "Native forward-path inspection",
+    "Meta constructor dimensions including shared KV and per-layer input"
+  ],
+  "limits": [
+    "Image path only",
+    "No pretrained inference",
+    "Checkpoint clipping bounds not resolved"
+  ]
+}

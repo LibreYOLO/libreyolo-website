@@ -1,0 +1,42 @@
+{
+  "family": "zipdepth",
+  "slug": "zipdepth",
+  "title": "ZipDepth",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "b-depth",
+  "views": [
+    {
+      "id": "b-depth",
+      "label": "b",
+      "task": "depth",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/zipdepth/b-depth.svg",
+      "html": "/diagrams/models/zipdepth/b-depth.html",
+      "input": "3\u00d7384\u00d7384",
+      "verification": "cpu"
+    },
+    {
+      "id": "bnpu-depth",
+      "label": "bnpu",
+      "task": "depth",
+      "size": "bnpu",
+      "kind": "concrete",
+      "svg": "/diagrams/models/zipdepth/bnpu-depth.svg",
+      "html": "/diagrams/models/zipdepth/bnpu-depth.html",
+      "input": "3\u00d7384\u00d7384",
+      "verification": "cpu"
+    },
+    {
+      "id": "family",
+      "label": "Shared base withbothhead alternatives",
+      "task": "depth",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/zipdepth/family.svg",
+      "html": "/diagrams/models/zipdepth/family.html",
+      "input": "3\u00d7384\u00d7384",
+      "verification": "source"
+    }
+  ]
+}

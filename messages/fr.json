@@ -977,5 +977,11 @@
       "stableBody": "Pour la production, le cœur validé comprend la détection YOLO9 ainsi que la détection et la segmentation RF-DETR. Consultez la <docs>documentation principale</docs> correspondante, et <vlm>LibreVLM</vlm> pour la détection à vocabulaire ouvert.",
       "source": "Suivre l'avancement et consulter la source sur <link>GitHub</link>"
     }
+  },
+  "ModelDiagram": {
+    "title": "Architecture de {model}",
+    "open": "Ouvrir le schéma complet",
+    "description": "Choisissez une variante ou la vue de la famille, puis un bloc pour les détails. Ouvrez le schéma complet pour zoomer ou télécharger SVG et PNG. Les schémas sont en anglais.",
+    "view": "Schéma"
   }
 }

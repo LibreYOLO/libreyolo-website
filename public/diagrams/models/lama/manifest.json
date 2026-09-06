@@ -1,0 +1,20 @@
+{
+  "family": "lama",
+  "slug": "lama",
+  "title": "LaMa",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "b-inpaint",
+  "views": [
+    {
+      "id": "b-inpaint",
+      "label": "Base pinned ONNX architecture",
+      "task": "restore",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/lama/b-inpaint.svg",
+      "html": "/diagrams/models/lama/b-inpaint.html",
+      "input": "image3\u00d7512\u00d7512 + mask1\u00d7512\u00d7512",
+      "verification": "source"
+    }
+  ]
+}

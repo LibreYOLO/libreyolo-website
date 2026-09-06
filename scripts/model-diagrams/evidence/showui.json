@@ -1,0 +1,14 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "backend": "Transformers5.16.1 Apache-2.0 native source",
+  "families": [
+    {
+      "size": "2b",
+      "repo": "LibreYOLO/LibreShowUI2b",
+      "resolved_revision": "a7b6f5f59056823ce6136144f64b7e1b6c61f2f7",
+      "source": "libreyolo/models/ground/showui.py",
+      "meta": {}
+    }
+  ],
+  "scope": "Image inference path, configuration and native module-shape verification; no weights or remote Python. Runtime token counts are explicit symbols. Adapter parser rules read from LibreYOLO source."
+}

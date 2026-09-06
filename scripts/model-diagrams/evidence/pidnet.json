@@ -1,0 +1,592 @@
+{
+  "family": "pidnet",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "sources": [
+    "libreyolo/models/pidnet/nn.py:SIZE_CONFIGS, LibrePIDNetNet.forward, PagFM, PAPPM, DAPPM, LightBag, Bag",
+    "libreyolo/models/pidnet/model.py:INPUT_SIZES"
+  ],
+  "records": {
+    "s": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "output": [
+        1,
+        19,
+        128,
+        128
+      ],
+      "hooks": {
+        "layer1": {
+          "input": [
+            [
+              1,
+              32,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            32,
+            256,
+            256
+          ]
+        },
+        "layer2": {
+          "input": [
+            [
+              1,
+              32,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            128,
+            128
+          ]
+        },
+        "layer3": {
+          "input": [
+            [
+              1,
+              64,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            64,
+            64
+          ]
+        },
+        "layer4": {
+          "input": [
+            [
+              1,
+              128,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            32,
+            32
+          ]
+        },
+        "layer5_": {
+          "input": [
+            [
+              1,
+              64,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            128,
+            128
+          ]
+        },
+        "layer5_d": {
+          "input": [
+            [
+              1,
+              64,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            128,
+            128
+          ]
+        },
+        "layer5": {
+          "input": [
+            [
+              1,
+              256,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            16,
+            16
+          ]
+        },
+        "spp": {
+          "input": [
+            [
+              1,
+              512,
+              16,
+              16
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            16
+          ]
+        },
+        "dfm": {
+          "input": [
+            [
+              1,
+              128,
+              128,
+              128
+            ],
+            [
+              1,
+              128,
+              128,
+              128
+            ],
+            [
+              1,
+              128,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            128,
+            128
+          ]
+        },
+        "final_layer": {
+          "input": [
+            [
+              1,
+              128,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            19,
+            128,
+            128
+          ]
+        }
+      },
+      "parameters": 7625715,
+      "pretrained": false
+    },
+    "m": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "output": [
+        1,
+        19,
+        128,
+        128
+      ],
+      "hooks": {
+        "layer1": {
+          "input": [
+            [
+              1,
+              64,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            256,
+            256
+          ]
+        },
+        "layer2": {
+          "input": [
+            [
+              1,
+              64,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            128,
+            128
+          ]
+        },
+        "layer3": {
+          "input": [
+            [
+              1,
+              128,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            64,
+            64
+          ]
+        },
+        "layer4": {
+          "input": [
+            [
+              1,
+              256,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            32,
+            32
+          ]
+        },
+        "layer5_": {
+          "input": [
+            [
+              1,
+              128,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            128,
+            128
+          ]
+        },
+        "layer5_d": {
+          "input": [
+            [
+              1,
+              128,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            128,
+            128
+          ]
+        },
+        "layer5": {
+          "input": [
+            [
+              1,
+              512,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            1024,
+            16,
+            16
+          ]
+        },
+        "spp": {
+          "input": [
+            [
+              1,
+              1024,
+              16,
+              16
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            16,
+            16
+          ]
+        },
+        "dfm": {
+          "input": [
+            [
+              1,
+              256,
+              128,
+              128
+            ],
+            [
+              1,
+              256,
+              128,
+              128
+            ],
+            [
+              1,
+              256,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            128,
+            128
+          ]
+        },
+        "final_layer": {
+          "input": [
+            [
+              1,
+              256,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            19,
+            128,
+            128
+          ]
+        }
+      },
+      "parameters": 28538515,
+      "pretrained": false
+    },
+    "l": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "output": [
+        1,
+        19,
+        128,
+        128
+      ],
+      "hooks": {
+        "layer1": {
+          "input": [
+            [
+              1,
+              64,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            256,
+            256
+          ]
+        },
+        "layer2": {
+          "input": [
+            [
+              1,
+              64,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            128,
+            128
+          ]
+        },
+        "layer3": {
+          "input": [
+            [
+              1,
+              128,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            64,
+            64
+          ]
+        },
+        "layer4": {
+          "input": [
+            [
+              1,
+              256,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            32,
+            32
+          ]
+        },
+        "layer5_": {
+          "input": [
+            [
+              1,
+              128,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            128,
+            128
+          ]
+        },
+        "layer5_d": {
+          "input": [
+            [
+              1,
+              128,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            128,
+            128
+          ]
+        },
+        "layer5": {
+          "input": [
+            [
+              1,
+              512,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            1024,
+            16,
+            16
+          ]
+        },
+        "spp": {
+          "input": [
+            [
+              1,
+              1024,
+              16,
+              16
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            16,
+            16
+          ]
+        },
+        "dfm": {
+          "input": [
+            [
+              1,
+              256,
+              128,
+              128
+            ],
+            [
+              1,
+              256,
+              128,
+              128
+            ],
+            [
+              1,
+              256,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            128,
+            128
+          ]
+        },
+        "final_layer": {
+          "input": [
+            [
+              1,
+              256,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            19,
+            128,
+            128
+          ]
+        }
+      },
+      "parameters": 36939571,
+      "pretrained": false
+    }
+  },
+  "notes": [
+    "All three1024 presets checked onCPU. Native output is19\u00d7128\u00d7128, not19\u00d71024\u00d71024.",
+    "S/M have PAPPM andLightBag; L hasDAPPM andBag plusa differentD stream.",
+    "BasicBlock expansion1, Bottleneck expansion2. Last block activation flags preserved in main graph."
+  ],
+  "visual_qa": "Parent agent; not executed by this builder."
+}

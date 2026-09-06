@@ -1,0 +1,243 @@
+{
+  "family": "depth_anything3",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "sources": [
+    "libreyolo/models/depth_anything3/nn.py:LibreDepthAnything3Net",
+    "libreyolo/models/depth_anything3/_vendor/dinov2/vision_transformer.py:mono get_intermediate_layers",
+    "libreyolo/models/depth_anything3/_vendor/dpt.py:DPT and FeatureFusionBlock"
+  ],
+  "records": {
+    "l": {
+      "device": "meta",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        504,
+        504
+      ],
+      "output": [
+        [
+          1,
+          1,
+          504,
+          504
+        ],
+        [
+          1,
+          1,
+          504,
+          504
+        ]
+      ],
+      "hooks": {
+        "model.backbone": {
+          "input": [
+            [
+              1,
+              1,
+              3,
+              504,
+              504
+            ]
+          ],
+          "output": [
+            [
+              [
+                [
+                  1,
+                  1,
+                  1296,
+                  1024
+                ],
+                [
+                  1,
+                  1,
+                  1024
+                ]
+              ],
+              [
+                [
+                  1,
+                  1,
+                  1296,
+                  1024
+                ],
+                [
+                  1,
+                  1,
+                  1024
+                ]
+              ],
+              [
+                [
+                  1,
+                  1,
+                  1296,
+                  1024
+                ],
+                [
+                  1,
+                  1,
+                  1024
+                ]
+              ],
+              [
+                [
+                  1,
+                  1,
+                  1296,
+                  1024
+                ],
+                [
+                  1,
+                  1,
+                  1024
+                ]
+              ]
+            ],
+            []
+          ]
+        },
+        "model.head.scratch.refinenet1": {
+          "input": [
+            [
+              1,
+              256,
+              144,
+              144
+            ],
+            [
+              1,
+              256,
+              144,
+              144
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            288,
+            288
+          ]
+        },
+        "model.head.scratch.output_conv1": {
+          "input": [
+            [
+              1,
+              256,
+              288,
+              288
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            288,
+            288
+          ]
+        },
+        "model.head": {
+          "input": [
+            [
+              [
+                [
+                  1,
+                  1,
+                  1296,
+                  1024
+                ],
+                [
+                  1,
+                  1,
+                  1024
+                ]
+              ],
+              [
+                [
+                  1,
+                  1,
+                  1296,
+                  1024
+                ],
+                [
+                  1,
+                  1,
+                  1024
+                ]
+              ],
+              [
+                [
+                  1,
+                  1,
+                  1296,
+                  1024
+                ],
+                [
+                  1,
+                  1,
+                  1024
+                ]
+              ],
+              [
+                [
+                  1,
+                  1,
+                  1296,
+                  1024
+                ],
+                [
+                  1,
+                  1,
+                  1024
+                ]
+              ]
+            ],
+            "<class 'int'>",
+            "<class 'int'>"
+          ],
+          "output": {
+            "depth": [
+              1,
+              1,
+              504,
+              504
+            ],
+            "sky": [
+              1,
+              1,
+              504,
+              504
+            ]
+          }
+        }
+      },
+      "parameters": 334171394,
+      "pretrained": false,
+      "limitation": "Meta forward validates shape propagation only; numerical inference was not executed.",
+      "finish_depth_cpu": {
+        "input": [
+          1,
+          1,
+          504,
+          504
+        ],
+        "output": [
+          1,
+          1,
+          504,
+          504
+        ],
+        "finite": true,
+        "note": "Synthetic positive depth plus half-sky mask; network remains meta."
+      }
+    }
+  },
+  "notes": [
+    "Actual neural core meta forward with504 canvas; numerical network forward not run.",
+    "Sky heuristic and inverse-depth conversion separately executed on CPU synthetic504 depth/sky maps.",
+    "DA3 LayerNorm epsilon defaults1e-5, unlike V2 vendor1e-6. No alternate-view attention, QK normalization or RoPE in mono preset.",
+    "Meta constructor materializes its small linspace schedule on CPU; weights stay meta."
+  ],
+  "visual_qa": "Parent agent; not executed by this builder."
+}

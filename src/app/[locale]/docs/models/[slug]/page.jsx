@@ -6,7 +6,9 @@ import { buildPageMetadata, localeUrl, SITE_URL } from '@/i18n/metadata'
 import { routing } from '@/i18n/routing'
 import DocsShell from '@/components/docs/DocsShell'
 import DocMarkdown from '@/components/docs/DocMarkdown'
-import { ModelHeader, HeroMedia } from '@/components/docs/ModelBlocks'
+import { getModelDiagram } from '@/lib/model-diagrams'
+import ModelArchitecture from '@/components/docs/ModelArchitecture'
+import { ModelHeader, HeroMedia, PageHeader } from '@/components/docs/ModelBlocks'
 
 const SECTION = 'models'
 
@@ -44,14 +46,20 @@ export default async function ModelDocPage({ params }) {
   const doc = getDoc(SECTION, slug, locale)
   if (!doc) notFound()
 
-  const [family] = getFamilies(doc.families)
-  if (!family) notFound()
+  const diagram = getModelDiagram(slug)
+  const [registeredFamily] = getFamilies(doc.families)
+  if (!registeredFamily && !(doc.architecture_only && diagram)) notFound()
+  const family = registeredFamily || { display: doc.title }
 
   const path = `/docs/models/${slug}`
   const url = localeUrl(path, doc.translated ? locale : routing.defaultLocale)
   // Model pages are a usage reference: install, predict, variants, train,
   // validate, export, licensing. No FAQ and no related-links section.
   const headings = extractHeadings(doc.content)
+  if (diagram) {
+    const labels = await getTranslations({ locale, namespace: 'ModelDiagram' })
+    headings.push({ id: 'architecture', title: labels('title', { model: diagram.title }) })
+  }
 
   const breadcrumbs = [
     { label: t('docsCrumb'), href: '/docs' },
@@ -123,17 +131,18 @@ export default async function ModelDocPage({ params }) {
         breadcrumbs={breadcrumbs}
       >
         <article className="max-w-3xl">
-          <ModelHeader doc={doc} family={family} />
+          {registeredFamily ? <ModelHeader doc={doc} family={family} /> : <PageHeader doc={doc} />}
           <HeroMedia media={doc.hero} />
 
           <DocMarkdown family={family} snippets={doc.snippets || {}}>
             {doc.content}
           </DocMarkdown>
 
-          <footer className="mt-16 border-t border-surface-200 pt-6 text-sm text-surface-500 dark:border-white/[0.06] dark:text-surface-500">
+          {!doc.architecture_only && <footer className="mt-16 border-t border-surface-200 pt-6 text-sm text-surface-500 dark:border-white/[0.06] dark:text-surface-500">
             <p>{t('verifiedGenerated', { version: doc.last_verified })}</p>
-          </footer>
+          </footer>}
         </article>
+        {diagram && <ModelArchitecture key={slug} diagram={diagram} />}
       </DocsShell>
     </>
   )

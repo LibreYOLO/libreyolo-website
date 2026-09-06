@@ -1,0 +1,64 @@
+{
+  "family": "depth_anything",
+  "slug": "depth-anything-v2",
+  "title": "Depth Anything V2",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "s-depth",
+  "views": [
+    {
+      "id": "s-depth",
+      "label": "s",
+      "task": "depth",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/depth-anything-v2/s-depth.svg",
+      "html": "/diagrams/models/depth-anything-v2/s-depth.html",
+      "input": "3\u00d7518\u00d7518",
+      "verification": "cpu"
+    },
+    {
+      "id": "b-depth",
+      "label": "b",
+      "task": "depth",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/depth-anything-v2/b-depth.svg",
+      "html": "/diagrams/models/depth-anything-v2/b-depth.html",
+      "input": "3\u00d7518\u00d7518",
+      "verification": "cpu"
+    },
+    {
+      "id": "l-depth",
+      "label": "l",
+      "task": "depth",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/depth-anything-v2/l-depth.svg",
+      "html": "/diagrams/models/depth-anything-v2/l-depth.html",
+      "input": "3\u00d7518\u00d7518",
+      "verification": "meta"
+    },
+    {
+      "id": "g-depth",
+      "label": "g",
+      "task": "depth",
+      "size": "g",
+      "kind": "concrete",
+      "svg": "/diagrams/models/depth-anything-v2/g-depth.svg",
+      "html": "/diagrams/models/depth-anything-v2/g-depth.html",
+      "input": "3\u00d7518\u00d7518",
+      "verification": "meta"
+    },
+    {
+      "id": "family",
+      "label": "Family topology with explicit g FFN exception",
+      "task": "depth",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/depth-anything-v2/family.svg",
+      "html": "/diagrams/models/depth-anything-v2/family.html",
+      "input": "3\u00d7518\u00d7518",
+      "verification": "source"
+    }
+  ]
+}

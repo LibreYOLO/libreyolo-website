@@ -1,0 +1,53 @@
+{
+  "family": "picodet",
+  "slug": "picodet",
+  "title": "PicoDet",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "s",
+  "views": [
+    {
+      "id": "s",
+      "label": "PicoDet S",
+      "task": "detect",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/picodet/s.svg",
+      "html": "/diagrams/models/picodet/s.html",
+      "input": "1 \u00d73 \u00d7320 \u00d7320",
+      "verification": "cpu"
+    },
+    {
+      "id": "m",
+      "label": "PicoDet M",
+      "task": "detect",
+      "size": "m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/picodet/m.svg",
+      "html": "/diagrams/models/picodet/m.html",
+      "input": "1 \u00d73 \u00d7416 \u00d7416",
+      "verification": "cpu"
+    },
+    {
+      "id": "l",
+      "label": "PicoDet L",
+      "task": "detect",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/picodet/l.svg",
+      "html": "/diagrams/models/picodet/l.html",
+      "input": "1 \u00d73 \u00d7640 \u00d7640",
+      "verification": "cpu"
+    },
+    {
+      "id": "family",
+      "label": "PicoDet family",
+      "task": "detect",
+      "size": "s/m/l",
+      "kind": "family",
+      "svg": "/diagrams/models/picodet/family.svg",
+      "html": "/diagrams/models/picodet/family.html",
+      "input": "H from family table",
+      "verification": "cpu"
+    }
+  ]
+}

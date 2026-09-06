@@ -1,0 +1,297 @@
+{
+  "family": "fcn",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "sources": [
+    "libreyolo/models/fcn/nn.py:LibreFCNModel and FCNHead",
+    "libreyolo/models/fcn/model.py:INPUT_SIZES and class defaults",
+    "torchvision.models.resnet:Bottleneck"
+  ],
+  "records": {
+    "r50": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        520,
+        520
+      ],
+      "output": {
+        "out": [
+          1,
+          21,
+          520,
+          520
+        ],
+        "aux": [
+          1,
+          21,
+          520,
+          520
+        ]
+      },
+      "hooks": {
+        "backbone.conv1": {
+          "input": [
+            [
+              1,
+              3,
+              520,
+              520
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            260,
+            260
+          ]
+        },
+        "backbone.layer1": {
+          "input": [
+            [
+              1,
+              64,
+              130,
+              130
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            130,
+            130
+          ]
+        },
+        "backbone.layer2": {
+          "input": [
+            [
+              1,
+              256,
+              130,
+              130
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            65,
+            65
+          ]
+        },
+        "backbone.layer3": {
+          "input": [
+            [
+              1,
+              512,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            1024,
+            65,
+            65
+          ]
+        },
+        "backbone.layer4": {
+          "input": [
+            [
+              1,
+              1024,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            2048,
+            65,
+            65
+          ]
+        },
+        "classifier": {
+          "input": [
+            [
+              1,
+              2048,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            21,
+            65,
+            65
+          ]
+        },
+        "aux_classifier": {
+          "input": [
+            [
+              1,
+              1024,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            21,
+            65,
+            65
+          ]
+        }
+      },
+      "parameters": 35322218,
+      "pretrained": false
+    },
+    "r101": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        520,
+        520
+      ],
+      "output": {
+        "out": [
+          1,
+          21,
+          520,
+          520
+        ],
+        "aux": [
+          1,
+          21,
+          520,
+          520
+        ]
+      },
+      "hooks": {
+        "backbone.conv1": {
+          "input": [
+            [
+              1,
+              3,
+              520,
+              520
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            260,
+            260
+          ]
+        },
+        "backbone.layer1": {
+          "input": [
+            [
+              1,
+              64,
+              130,
+              130
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            130,
+            130
+          ]
+        },
+        "backbone.layer2": {
+          "input": [
+            [
+              1,
+              256,
+              130,
+              130
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            65,
+            65
+          ]
+        },
+        "backbone.layer3": {
+          "input": [
+            [
+              1,
+              512,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            1024,
+            65,
+            65
+          ]
+        },
+        "backbone.layer4": {
+          "input": [
+            [
+              1,
+              1024,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            2048,
+            65,
+            65
+          ]
+        },
+        "classifier": {
+          "input": [
+            [
+              1,
+              2048,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            21,
+            65,
+            65
+          ]
+        },
+        "aux_classifier": {
+          "input": [
+            [
+              1,
+              1024,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            21,
+            65,
+            65
+          ]
+        }
+      },
+      "parameters": 54314346,
+      "pretrained": false
+    }
+  },
+  "notes": [
+    "ResNet50/101 use dilation replacement [False,True,True]. First stage3/4 blocks retain previous dilation1/2; remaining blocks use2/4.",
+    "Auxiliary FCN head executes in native eval.",
+    "Reproduction requires installed BSD-3-Clause torchvision; no pretrained weights."
+  ],
+  "visual_qa": "Parent agent; not executed by this builder."
+}

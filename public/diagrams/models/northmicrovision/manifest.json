@@ -1,0 +1,20 @@
+{
+  "family": "northmicrovision",
+  "slug": "northmicrovision",
+  "title": "North Micro Vision",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "2-4b-detect",
+  "views": [
+    {
+      "id": "2-4b-detect",
+      "label": "North Micro Vision 2.4B",
+      "task": "detect",
+      "size": "2.4b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/northmicrovision/2-4b-detect.svg",
+      "html": "/diagrams/models/northmicrovision/2-4b-detect.html",
+      "input": "1024 nominal; processor-dependent",
+      "verification": "meta"
+    }
+  ]
+}

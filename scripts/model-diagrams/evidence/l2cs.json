@@ -1,0 +1,656 @@
+{
+  "family": "l2cs",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "sources": [
+    "libreyolo/models/l2cs/nn.py:_RESNET_LAYERS, L2CS.forward",
+    "libreyolo/models/l2cs/utils.py:logits_to_angles",
+    "libreyolo/models/l2cs/model.py:INPUT_SIZES"
+  ],
+  "records": {
+    "r18": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        448,
+        448
+      ],
+      "output": [
+        [
+          1,
+          90
+        ],
+        [
+          1,
+          90
+        ]
+      ],
+      "hooks": {
+        "layer1": {
+          "input": [
+            [
+              1,
+              64,
+              112,
+              112
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            112,
+            112
+          ]
+        },
+        "layer2": {
+          "input": [
+            [
+              1,
+              64,
+              112,
+              112
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            56,
+            56
+          ]
+        },
+        "layer3": {
+          "input": [
+            [
+              1,
+              128,
+              56,
+              56
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            28,
+            28
+          ]
+        },
+        "layer4": {
+          "input": [
+            [
+              1,
+              256,
+              28,
+              28
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            14,
+            14
+          ]
+        },
+        "avgpool": {
+          "input": [
+            [
+              1,
+              512,
+              14,
+              14
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            1,
+            1
+          ]
+        },
+        "fc_yaw_gaze": {
+          "input": [
+            [
+              1,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            90
+          ]
+        },
+        "fc_pitch_gaze": {
+          "input": [
+            [
+              1,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            90
+          ]
+        }
+      },
+      "parameters": 11268852,
+      "pretrained": false
+    },
+    "r34": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        448,
+        448
+      ],
+      "output": [
+        [
+          1,
+          90
+        ],
+        [
+          1,
+          90
+        ]
+      ],
+      "hooks": {
+        "layer1": {
+          "input": [
+            [
+              1,
+              64,
+              112,
+              112
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            112,
+            112
+          ]
+        },
+        "layer2": {
+          "input": [
+            [
+              1,
+              64,
+              112,
+              112
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            56,
+            56
+          ]
+        },
+        "layer3": {
+          "input": [
+            [
+              1,
+              128,
+              56,
+              56
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            28,
+            28
+          ]
+        },
+        "layer4": {
+          "input": [
+            [
+              1,
+              256,
+              28,
+              28
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            14,
+            14
+          ]
+        },
+        "avgpool": {
+          "input": [
+            [
+              1,
+              512,
+              14,
+              14
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            1,
+            1
+          ]
+        },
+        "fc_yaw_gaze": {
+          "input": [
+            [
+              1,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            90
+          ]
+        },
+        "fc_pitch_gaze": {
+          "input": [
+            [
+              1,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            90
+          ]
+        }
+      },
+      "parameters": 21377012,
+      "pretrained": false
+    },
+    "r50": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        448,
+        448
+      ],
+      "output": [
+        [
+          1,
+          90
+        ],
+        [
+          1,
+          90
+        ]
+      ],
+      "hooks": {
+        "layer1": {
+          "input": [
+            [
+              1,
+              64,
+              112,
+              112
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            112,
+            112
+          ]
+        },
+        "layer2": {
+          "input": [
+            [
+              1,
+              256,
+              112,
+              112
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            56,
+            56
+          ]
+        },
+        "layer3": {
+          "input": [
+            [
+              1,
+              512,
+              56,
+              56
+            ]
+          ],
+          "output": [
+            1,
+            1024,
+            28,
+            28
+          ]
+        },
+        "layer4": {
+          "input": [
+            [
+              1,
+              1024,
+              28,
+              28
+            ]
+          ],
+          "output": [
+            1,
+            2048,
+            14,
+            14
+          ]
+        },
+        "avgpool": {
+          "input": [
+            [
+              1,
+              2048,
+              14,
+              14
+            ]
+          ],
+          "output": [
+            1,
+            2048,
+            1,
+            1
+          ]
+        },
+        "fc_yaw_gaze": {
+          "input": [
+            [
+              1,
+              2048
+            ]
+          ],
+          "output": [
+            1,
+            90
+          ]
+        },
+        "fc_pitch_gaze": {
+          "input": [
+            [
+              1,
+              2048
+            ]
+          ],
+          "output": [
+            1,
+            90
+          ]
+        }
+      },
+      "parameters": 23876852,
+      "pretrained": false
+    },
+    "r101": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        448,
+        448
+      ],
+      "output": [
+        [
+          1,
+          90
+        ],
+        [
+          1,
+          90
+        ]
+      ],
+      "hooks": {
+        "layer1": {
+          "input": [
+            [
+              1,
+              64,
+              112,
+              112
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            112,
+            112
+          ]
+        },
+        "layer2": {
+          "input": [
+            [
+              1,
+              256,
+              112,
+              112
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            56,
+            56
+          ]
+        },
+        "layer3": {
+          "input": [
+            [
+              1,
+              512,
+              56,
+              56
+            ]
+          ],
+          "output": [
+            1,
+            1024,
+            28,
+            28
+          ]
+        },
+        "layer4": {
+          "input": [
+            [
+              1,
+              1024,
+              28,
+              28
+            ]
+          ],
+          "output": [
+            1,
+            2048,
+            14,
+            14
+          ]
+        },
+        "avgpool": {
+          "input": [
+            [
+              1,
+              2048,
+              14,
+              14
+            ]
+          ],
+          "output": [
+            1,
+            2048,
+            1,
+            1
+          ]
+        },
+        "fc_yaw_gaze": {
+          "input": [
+            [
+              1,
+              2048
+            ]
+          ],
+          "output": [
+            1,
+            90
+          ]
+        },
+        "fc_pitch_gaze": {
+          "input": [
+            [
+              1,
+              2048
+            ]
+          ],
+          "output": [
+            1,
+            90
+          ]
+        }
+      },
+      "parameters": 42868980,
+      "pretrained": false
+    },
+    "r152": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        448,
+        448
+      ],
+      "output": [
+        [
+          1,
+          90
+        ],
+        [
+          1,
+          90
+        ]
+      ],
+      "hooks": {
+        "layer1": {
+          "input": [
+            [
+              1,
+              64,
+              112,
+              112
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            112,
+            112
+          ]
+        },
+        "layer2": {
+          "input": [
+            [
+              1,
+              256,
+              112,
+              112
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            56,
+            56
+          ]
+        },
+        "layer3": {
+          "input": [
+            [
+              1,
+              512,
+              56,
+              56
+            ]
+          ],
+          "output": [
+            1,
+            1024,
+            28,
+            28
+          ]
+        },
+        "layer4": {
+          "input": [
+            [
+              1,
+              1024,
+              28,
+              28
+            ]
+          ],
+          "output": [
+            1,
+            2048,
+            14,
+            14
+          ]
+        },
+        "avgpool": {
+          "input": [
+            [
+              1,
+              2048,
+              14,
+              14
+            ]
+          ],
+          "output": [
+            1,
+            2048,
+            1,
+            1
+          ]
+        },
+        "fc_yaw_gaze": {
+          "input": [
+            [
+              1,
+              2048
+            ]
+          ],
+          "output": [
+            1,
+            90
+          ]
+        },
+        "fc_pitch_gaze": {
+          "input": [
+            [
+              1,
+              2048
+            ]
+          ],
+          "output": [
+            1,
+            90
+          ]
+        }
+      },
+      "parameters": 58512628,
+      "pretrained": false
+    }
+  },
+  "notes": [
+    "All five native sizes checked on CPU with448 face crop.",
+    "Network tuple is yaw then pitch; external decoded tensor is pitch then yaw. No detector weights downloaded."
+  ],
+  "visual_qa": "Parent agent; not executed by this builder."
+}

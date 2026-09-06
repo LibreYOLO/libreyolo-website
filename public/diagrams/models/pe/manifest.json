@@ -1,0 +1,141 @@
+{
+  "family": "pe",
+  "slug": "pe",
+  "title": "PE Core",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "t16-classify",
+  "views": [
+    {
+      "id": "t16-classify",
+      "label": "PE Core t16 classify",
+      "task": "classify",
+      "size": "t16",
+      "kind": "concrete",
+      "svg": "/diagrams/models/pe/t16-classify.svg",
+      "html": "/diagrams/models/pe/t16-classify.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 384 \u00d7 384; text: 1 \u00d7 32",
+      "verification": "cpu"
+    },
+    {
+      "id": "t16-embed",
+      "label": "PE Core t16 embed",
+      "task": "embed",
+      "size": "t16",
+      "kind": "concrete",
+      "svg": "/diagrams/models/pe/t16-embed.svg",
+      "html": "/diagrams/models/pe/t16-embed.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 384 \u00d7 384; text: 1 \u00d7 32",
+      "verification": "cpu"
+    },
+    {
+      "id": "s16-classify",
+      "label": "PE Core s16 classify",
+      "task": "classify",
+      "size": "s16",
+      "kind": "concrete",
+      "svg": "/diagrams/models/pe/s16-classify.svg",
+      "html": "/diagrams/models/pe/s16-classify.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 384 \u00d7 384; text: 1 \u00d7 32",
+      "verification": "meta"
+    },
+    {
+      "id": "s16-embed",
+      "label": "PE Core s16 embed",
+      "task": "embed",
+      "size": "s16",
+      "kind": "concrete",
+      "svg": "/diagrams/models/pe/s16-embed.svg",
+      "html": "/diagrams/models/pe/s16-embed.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 384 \u00d7 384; text: 1 \u00d7 32",
+      "verification": "meta"
+    },
+    {
+      "id": "b16-classify",
+      "label": "PE Core b16 classify",
+      "task": "classify",
+      "size": "b16",
+      "kind": "concrete",
+      "svg": "/diagrams/models/pe/b16-classify.svg",
+      "html": "/diagrams/models/pe/b16-classify.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 224 \u00d7 224; text: 1 \u00d7 32",
+      "verification": "meta"
+    },
+    {
+      "id": "b16-embed",
+      "label": "PE Core b16 embed",
+      "task": "embed",
+      "size": "b16",
+      "kind": "concrete",
+      "svg": "/diagrams/models/pe/b16-embed.svg",
+      "html": "/diagrams/models/pe/b16-embed.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 224 \u00d7 224; text: 1 \u00d7 32",
+      "verification": "meta"
+    },
+    {
+      "id": "l14-classify",
+      "label": "PE Core l14 classify",
+      "task": "classify",
+      "size": "l14",
+      "kind": "concrete",
+      "svg": "/diagrams/models/pe/l14-classify.svg",
+      "html": "/diagrams/models/pe/l14-classify.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 336 \u00d7 336; text: 1 \u00d7 32",
+      "verification": "meta"
+    },
+    {
+      "id": "l14-embed",
+      "label": "PE Core l14 embed",
+      "task": "embed",
+      "size": "l14",
+      "kind": "concrete",
+      "svg": "/diagrams/models/pe/l14-embed.svg",
+      "html": "/diagrams/models/pe/l14-embed.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 336 \u00d7 336; text: 1 \u00d7 32",
+      "verification": "meta"
+    },
+    {
+      "id": "g14-classify",
+      "label": "PE Core g14 classify",
+      "task": "classify",
+      "size": "g14",
+      "kind": "concrete",
+      "svg": "/diagrams/models/pe/g14-classify.svg",
+      "html": "/diagrams/models/pe/g14-classify.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 448 \u00d7 448; text: 1 \u00d7 72",
+      "verification": "meta"
+    },
+    {
+      "id": "g14-embed",
+      "label": "PE Core g14 embed",
+      "task": "embed",
+      "size": "g14",
+      "kind": "concrete",
+      "svg": "/diagrams/models/pe/g14-embed.svg",
+      "html": "/diagrams/models/pe/g14-embed.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 448 \u00d7 448; text: 1 \u00d7 72",
+      "verification": "meta"
+    },
+    {
+      "id": "family-classify",
+      "label": "PE Core family classify",
+      "task": "classify",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/pe/family-classify.svg",
+      "html": "/diagrams/models/pe/family-classify.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 S \u00d7 S; text: 1 \u00d7 L",
+      "verification": "source"
+    },
+    {
+      "id": "family-embed",
+      "label": "PE Core family embed",
+      "task": "embed",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/pe/family-embed.svg",
+      "html": "/diagrams/models/pe/family-embed.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 S \u00d7 S; text: 1 \u00d7 L",
+      "verification": "source"
+    }
+  ]
+}

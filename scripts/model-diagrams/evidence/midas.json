@@ -1,0 +1,177 @@
+{
+  "family": "midas",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "sources": [
+    "libreyolo/models/midas/nn.py:MiDaSSmall, DPTLarge, _make_efficientnet_lite3, ProjectReadout",
+    "timm==1.0.28:tf_efficientnet_lite3 and vit_large_patch16_384 (Apache-2.0)"
+  ],
+  "records": {
+    "s": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        256,
+        256
+      ],
+      "output": [
+        1,
+        1,
+        256,
+        256
+      ],
+      "hooks": {
+        "pretrained.layer1": {
+          "input": [
+            [
+              1,
+              3,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            32,
+            64,
+            64
+          ]
+        },
+        "pretrained.layer2": {
+          "input": [
+            [
+              1,
+              32,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            48,
+            32,
+            32
+          ]
+        },
+        "pretrained.layer3": {
+          "input": [
+            [
+              1,
+              48,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            136,
+            16,
+            16
+          ]
+        },
+        "pretrained.layer4": {
+          "input": [
+            [
+              1,
+              136,
+              16,
+              16
+            ]
+          ],
+          "output": [
+            1,
+            384,
+            8,
+            8
+          ]
+        },
+        "scratch.refinenet1": {
+          "input": [
+            [
+              1,
+              64,
+              64,
+              64
+            ],
+            [
+              1,
+              64,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            128,
+            128
+          ]
+        },
+        "scratch.output_conv": {
+          "input": [
+            [
+              1,
+              64,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            1,
+            256,
+            256
+          ]
+        }
+      },
+      "parameters": 21320545,
+      "pretrained": false
+    },
+    "l": {
+      "device": "meta",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        384,
+        384
+      ],
+      "output": [
+        1,
+        1,
+        384,
+        384
+      ],
+      "hooks": {
+        "scratch.output_conv": {
+          "input": [
+            [
+              1,
+              256,
+              192,
+              192
+            ]
+          ],
+          "output": [
+            1,
+            1,
+            384,
+            384
+          ]
+        }
+      },
+      "parameters": 344055465,
+      "pretrained": false,
+      "limitation": "Meta forward validates shape propagation only; numerical inference was not executed."
+    },
+    "timm_version": "1.0.28"
+  },
+  "notes": [
+    "Installedtimm1.0.28 with --no-deps; no existingpackagesupgraded.",
+    "Small checkedCPU256; Large checkedmeta384. No weights downloaded.",
+    "Small decoder progressively halves512 to256 to128 to64; Large stays256.",
+    "Large uses CLS-conditioned projectedreadout; source taps before finalnorm. Small is a distinctCNN topology, so no misleading shared family graph."
+  ],
+  "visual_qa": "Parent agent; not executed by this builder."
+}

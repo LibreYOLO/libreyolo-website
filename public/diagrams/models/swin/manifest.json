@@ -1,0 +1,64 @@
+{
+  "family": "swin",
+  "slug": "swin",
+  "title": "Swin",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "t-classify",
+  "views": [
+    {
+      "id": "t-classify",
+      "label": "Swin t",
+      "task": "classify",
+      "size": "t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/swin/t-classify.svg",
+      "html": "/diagrams/models/swin/t-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "cpu"
+    },
+    {
+      "id": "s-classify",
+      "label": "Swin s",
+      "task": "classify",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/swin/s-classify.svg",
+      "html": "/diagrams/models/swin/s-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "b-classify",
+      "label": "Swin b",
+      "task": "classify",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/swin/b-classify.svg",
+      "html": "/diagrams/models/swin/b-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "l-classify",
+      "label": "Swin l",
+      "task": "classify",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/swin/l-classify.svg",
+      "html": "/diagrams/models/swin/l-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "family-classify",
+      "label": "Swin family",
+      "task": "classify",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/swin/family-classify.svg",
+      "html": "/diagrams/models/swin/family-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "source"
+    }
+  ]
+}

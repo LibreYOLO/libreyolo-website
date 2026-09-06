@@ -1,0 +1,20 @@
+{
+  "family": "facerec",
+  "slug": "facerec",
+  "title": "Face recognition",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "l-embed",
+  "views": [
+    {
+      "id": "l-embed",
+      "label": "Face recognition l",
+      "task": "embed",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/facerec/l-embed.svg",
+      "html": "/diagrams/models/facerec/l-embed.html",
+      "input": "Per face: 1 \u00d7 3 \u00d7 112 \u00d7 112",
+      "verification": "source"
+    }
+  ]
+}

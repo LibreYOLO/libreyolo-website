@@ -1,0 +1,793 @@
+{
+  "family": "deeplabv3",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "sources": [
+    "libreyolo/models/deeplabv3/nn.py:LibreDeepLabv3Net, DeepLabHead, ASPP, ASPPConv, ASPPPooling",
+    "libreyolo/models/deeplabv3/model.py:INPUT_SIZES",
+    "torchvision.models.mobilenetv3:InvertedResidual (BSD-3-Clause)"
+  ],
+  "records": {
+    "r50": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        520,
+        520
+      ],
+      "output": [
+        1,
+        21,
+        520,
+        520
+      ],
+      "hooks": {
+        "backbone.layer1": {
+          "input": [
+            [
+              1,
+              64,
+              130,
+              130
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            130,
+            130
+          ]
+        },
+        "backbone.layer2": {
+          "input": [
+            [
+              1,
+              256,
+              130,
+              130
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            65,
+            65
+          ]
+        },
+        "backbone.layer3": {
+          "input": [
+            [
+              1,
+              512,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            1024,
+            65,
+            65
+          ]
+        },
+        "backbone.layer4": {
+          "input": [
+            [
+              1,
+              1024,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            2048,
+            65,
+            65
+          ]
+        },
+        "classifier.0": {
+          "input": [
+            [
+              1,
+              2048,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            65,
+            65
+          ]
+        },
+        "classifier": {
+          "input": [
+            [
+              1,
+              2048,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            21,
+            65,
+            65
+          ]
+        }
+      },
+      "parameters": 39638869,
+      "pretrained": false
+    },
+    "r101": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        520,
+        520
+      ],
+      "output": [
+        1,
+        21,
+        520,
+        520
+      ],
+      "hooks": {
+        "backbone.layer1": {
+          "input": [
+            [
+              1,
+              64,
+              130,
+              130
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            130,
+            130
+          ]
+        },
+        "backbone.layer2": {
+          "input": [
+            [
+              1,
+              256,
+              130,
+              130
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            65,
+            65
+          ]
+        },
+        "backbone.layer3": {
+          "input": [
+            [
+              1,
+              512,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            1024,
+            65,
+            65
+          ]
+        },
+        "backbone.layer4": {
+          "input": [
+            [
+              1,
+              1024,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            2048,
+            65,
+            65
+          ]
+        },
+        "classifier.0": {
+          "input": [
+            [
+              1,
+              2048,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            65,
+            65
+          ]
+        },
+        "classifier": {
+          "input": [
+            [
+              1,
+              2048,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            21,
+            65,
+            65
+          ]
+        }
+      },
+      "parameters": 58630997,
+      "pretrained": false
+    },
+    "mv3": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        520,
+        520
+      ],
+      "output": [
+        1,
+        21,
+        520,
+        520
+      ],
+      "hooks": {
+        "backbone.0": {
+          "input": [
+            [
+              1,
+              3,
+              520,
+              520
+            ]
+          ],
+          "output": [
+            1,
+            16,
+            260,
+            260
+          ]
+        },
+        "backbone.1": {
+          "input": [
+            [
+              1,
+              16,
+              260,
+              260
+            ]
+          ],
+          "output": [
+            1,
+            16,
+            260,
+            260
+          ]
+        },
+        "backbone.2": {
+          "input": [
+            [
+              1,
+              16,
+              260,
+              260
+            ]
+          ],
+          "output": [
+            1,
+            24,
+            130,
+            130
+          ]
+        },
+        "backbone.3": {
+          "input": [
+            [
+              1,
+              24,
+              130,
+              130
+            ]
+          ],
+          "output": [
+            1,
+            24,
+            130,
+            130
+          ]
+        },
+        "backbone.4": {
+          "input": [
+            [
+              1,
+              24,
+              130,
+              130
+            ]
+          ],
+          "output": [
+            1,
+            40,
+            65,
+            65
+          ]
+        },
+        "backbone.5": {
+          "input": [
+            [
+              1,
+              40,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            40,
+            65,
+            65
+          ]
+        },
+        "backbone.6": {
+          "input": [
+            [
+              1,
+              40,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            40,
+            65,
+            65
+          ]
+        },
+        "backbone.7": {
+          "input": [
+            [
+              1,
+              40,
+              65,
+              65
+            ]
+          ],
+          "output": [
+            1,
+            80,
+            33,
+            33
+          ]
+        },
+        "backbone.8": {
+          "input": [
+            [
+              1,
+              80,
+              33,
+              33
+            ]
+          ],
+          "output": [
+            1,
+            80,
+            33,
+            33
+          ]
+        },
+        "backbone.9": {
+          "input": [
+            [
+              1,
+              80,
+              33,
+              33
+            ]
+          ],
+          "output": [
+            1,
+            80,
+            33,
+            33
+          ]
+        },
+        "backbone.10": {
+          "input": [
+            [
+              1,
+              80,
+              33,
+              33
+            ]
+          ],
+          "output": [
+            1,
+            80,
+            33,
+            33
+          ]
+        },
+        "backbone.11": {
+          "input": [
+            [
+              1,
+              80,
+              33,
+              33
+            ]
+          ],
+          "output": [
+            1,
+            112,
+            33,
+            33
+          ]
+        },
+        "backbone.12": {
+          "input": [
+            [
+              1,
+              112,
+              33,
+              33
+            ]
+          ],
+          "output": [
+            1,
+            112,
+            33,
+            33
+          ]
+        },
+        "backbone.13": {
+          "input": [
+            [
+              1,
+              112,
+              33,
+              33
+            ]
+          ],
+          "output": [
+            1,
+            160,
+            33,
+            33
+          ]
+        },
+        "backbone.14": {
+          "input": [
+            [
+              1,
+              160,
+              33,
+              33
+            ]
+          ],
+          "output": [
+            1,
+            160,
+            33,
+            33
+          ]
+        },
+        "backbone.15": {
+          "input": [
+            [
+              1,
+              160,
+              33,
+              33
+            ]
+          ],
+          "output": [
+            1,
+            160,
+            33,
+            33
+          ]
+        },
+        "backbone.16": {
+          "input": [
+            [
+              1,
+              160,
+              33,
+              33
+            ]
+          ],
+          "output": [
+            1,
+            960,
+            33,
+            33
+          ]
+        },
+        "classifier.0": {
+          "input": [
+            [
+              1,
+              960,
+              33,
+              33
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            33,
+            33
+          ]
+        },
+        "classifier": {
+          "input": [
+            [
+              1,
+              960,
+              33,
+              33
+            ]
+          ],
+          "output": [
+            1,
+            21,
+            33,
+            33
+          ]
+        }
+      },
+      "parameters": 11025477,
+      "pretrained": false
+    }
+  },
+  "notes": [
+    "ResNet output stride8; MobileNet output stride16 and actual33\u00d733 map for520 input.",
+    "ASPP rates12,24,36 are unchanged across all backbones. No auxiliary FCN head."
+  ],
+  "visual_qa": "Parent agent; not executed by this builder.",
+  "mobilenet_specs": [
+    {
+      "index": 1,
+      "cin": 16,
+      "expanded": 16,
+      "cout": 16,
+      "k": 3,
+      "s": 1,
+      "d": 1,
+      "act": "ReLU",
+      "expand": false,
+      "se": null,
+      "residual": true
+    },
+    {
+      "index": 2,
+      "cin": 16,
+      "expanded": 64,
+      "cout": 24,
+      "k": 3,
+      "s": 2,
+      "d": 1,
+      "act": "ReLU",
+      "expand": true,
+      "se": null,
+      "residual": false
+    },
+    {
+      "index": 3,
+      "cin": 24,
+      "expanded": 72,
+      "cout": 24,
+      "k": 3,
+      "s": 1,
+      "d": 1,
+      "act": "ReLU",
+      "expand": true,
+      "se": null,
+      "residual": true
+    },
+    {
+      "index": 4,
+      "cin": 24,
+      "expanded": 72,
+      "cout": 40,
+      "k": 5,
+      "s": 2,
+      "d": 1,
+      "act": "ReLU",
+      "expand": true,
+      "se": {
+        "cin": 72,
+        "reduced": 24
+      },
+      "residual": false
+    },
+    {
+      "index": 5,
+      "cin": 40,
+      "expanded": 120,
+      "cout": 40,
+      "k": 5,
+      "s": 1,
+      "d": 1,
+      "act": "ReLU",
+      "expand": true,
+      "se": {
+        "cin": 120,
+        "reduced": 32
+      },
+      "residual": true
+    },
+    {
+      "index": 6,
+      "cin": 40,
+      "expanded": 120,
+      "cout": 40,
+      "k": 5,
+      "s": 1,
+      "d": 1,
+      "act": "ReLU",
+      "expand": true,
+      "se": {
+        "cin": 120,
+        "reduced": 32
+      },
+      "residual": true
+    },
+    {
+      "index": 7,
+      "cin": 40,
+      "expanded": 240,
+      "cout": 80,
+      "k": 3,
+      "s": 2,
+      "d": 1,
+      "act": "Hardswish",
+      "expand": true,
+      "se": null,
+      "residual": false
+    },
+    {
+      "index": 8,
+      "cin": 80,
+      "expanded": 200,
+      "cout": 80,
+      "k": 3,
+      "s": 1,
+      "d": 1,
+      "act": "Hardswish",
+      "expand": true,
+      "se": null,
+      "residual": true
+    },
+    {
+      "index": 9,
+      "cin": 80,
+      "expanded": 184,
+      "cout": 80,
+      "k": 3,
+      "s": 1,
+      "d": 1,
+      "act": "Hardswish",
+      "expand": true,
+      "se": null,
+      "residual": true
+    },
+    {
+      "index": 10,
+      "cin": 80,
+      "expanded": 184,
+      "cout": 80,
+      "k": 3,
+      "s": 1,
+      "d": 1,
+      "act": "Hardswish",
+      "expand": true,
+      "se": null,
+      "residual": true
+    },
+    {
+      "index": 11,
+      "cin": 80,
+      "expanded": 480,
+      "cout": 112,
+      "k": 3,
+      "s": 1,
+      "d": 1,
+      "act": "Hardswish",
+      "expand": true,
+      "se": {
+        "cin": 480,
+        "reduced": 120
+      },
+      "residual": false
+    },
+    {
+      "index": 12,
+      "cin": 112,
+      "expanded": 672,
+      "cout": 112,
+      "k": 3,
+      "s": 1,
+      "d": 1,
+      "act": "Hardswish",
+      "expand": true,
+      "se": {
+        "cin": 672,
+        "reduced": 168
+      },
+      "residual": true
+    },
+    {
+      "index": 13,
+      "cin": 112,
+      "expanded": 672,
+      "cout": 160,
+      "k": 5,
+      "s": 1,
+      "d": 2,
+      "act": "Hardswish",
+      "expand": true,
+      "se": {
+        "cin": 672,
+        "reduced": 168
+      },
+      "residual": false
+    },
+    {
+      "index": 14,
+      "cin": 160,
+      "expanded": 960,
+      "cout": 160,
+      "k": 5,
+      "s": 1,
+      "d": 2,
+      "act": "Hardswish",
+      "expand": true,
+      "se": {
+        "cin": 960,
+        "reduced": 240
+      },
+      "residual": true
+    },
+    {
+      "index": 15,
+      "cin": 160,
+      "expanded": 960,
+      "cout": 160,
+      "k": 5,
+      "s": 1,
+      "d": 2,
+      "act": "Hardswish",
+      "expand": true,
+      "se": {
+        "cin": 960,
+        "reduced": 240
+      },
+      "residual": true
+    }
+  ]
+}

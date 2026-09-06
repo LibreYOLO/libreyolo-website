@@ -1,0 +1,7429 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "source": "libreyolo/models/clip/nn.py",
+  "shapes": {
+    "b32": {
+      "device": "cpu",
+      "config": {
+        "embed_dim": 512,
+        "image_size": 224,
+        "patch_size": 32,
+        "vision_width": 768,
+        "vision_layers": 12,
+        "context_length": 77,
+        "vocab_size": 49408,
+        "text_width": 512,
+        "text_heads": 8,
+        "text_layers": 12
+      },
+      "image_output": [
+        1,
+        512
+      ],
+      "text_output": [
+        1,
+        512
+      ],
+      "modules": {
+        "visual.conv1": {
+          "input": [
+            1,
+            3,
+            224,
+            224
+          ],
+          "output": [
+            1,
+            768,
+            7,
+            7
+          ]
+        },
+        "visual.ln_pre": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.0.ln_1": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.0.ln_2": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.0.mlp.c_fc": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.0.mlp.gelu": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.0.mlp.c_proj": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.0.mlp": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.0": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.1.ln_1": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.1.ln_2": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.1.mlp.c_fc": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.1.mlp.gelu": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.1.mlp.c_proj": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.1.mlp": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.1": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.2.ln_1": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.2.ln_2": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.2.mlp.c_fc": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.2.mlp.gelu": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.2.mlp.c_proj": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.2.mlp": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.2": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.3.ln_1": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.3.ln_2": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.3.mlp.c_fc": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.3.mlp.gelu": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.3.mlp.c_proj": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.3.mlp": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.3": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.4.ln_1": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.4.ln_2": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.4.mlp.c_fc": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.4.mlp.gelu": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.4.mlp.c_proj": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.4.mlp": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.4": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.5.ln_1": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.5.ln_2": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.5.mlp.c_fc": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.5.mlp.gelu": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.5.mlp.c_proj": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.5.mlp": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.5": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.6.ln_1": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.6.ln_2": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.6.mlp.c_fc": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.6.mlp.gelu": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.6.mlp.c_proj": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.6.mlp": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.6": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.7.ln_1": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.7.ln_2": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.7.mlp.c_fc": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.7.mlp.gelu": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.7.mlp.c_proj": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.7.mlp": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.7": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.8.ln_1": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.8.ln_2": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.8.mlp.c_fc": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.8.mlp.gelu": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.8.mlp.c_proj": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.8.mlp": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.8": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.9.ln_1": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.9.ln_2": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.9.mlp.c_fc": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.9.mlp.gelu": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.9.mlp.c_proj": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.9.mlp": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.9": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.10.ln_1": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.10.ln_2": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.10.mlp.c_fc": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.10.mlp.gelu": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.10.mlp.c_proj": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.10.mlp": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.10": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.11.ln_1": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.11.ln_2": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.11.mlp.c_fc": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.11.mlp.gelu": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.11.mlp.c_proj": {
+          "input": [
+            1,
+            50,
+            3072
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.11.mlp": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.11": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.transformer": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual.ln_post": {
+          "input": [
+            1,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            768
+          ]
+        },
+        "visual": {
+          "input": [
+            1,
+            3,
+            224,
+            224
+          ],
+          "output": [
+            1,
+            512
+          ]
+        },
+        "token_embedding": {
+          "input": [
+            1,
+            77
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.0.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.0.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.0.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.0.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.0.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.0.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.0": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.1.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.1.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.1.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.1.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.1.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.1.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.2.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.2.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.2.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.2.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.2.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.2.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.3.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.3.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.3.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.3.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.3.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.3.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.3": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.4.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.4.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.4.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.4.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.4.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.4.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.4": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.5.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.5.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.5.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.5.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.5.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.5.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.5": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.6.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.6.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.6.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.6.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.6.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.6.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.6": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.7.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.7.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.7.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.7.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.7.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.7.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.7": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.8.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.8.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.8.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.8.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.8.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.8.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.8": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.9.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.9.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.9.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.9.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.9.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.9.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.9": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.10.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.10.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.10.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.10.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.10.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.10.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.10": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.11.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.11.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.11.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.11.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.11.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.11.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.11": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "ln_final": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        }
+      }
+    },
+    "b16": {
+      "device": "meta",
+      "config": {
+        "embed_dim": 512,
+        "image_size": 224,
+        "patch_size": 16,
+        "vision_width": 768,
+        "vision_layers": 12,
+        "context_length": 77,
+        "vocab_size": 49408,
+        "text_width": 512,
+        "text_heads": 8,
+        "text_layers": 12
+      },
+      "image_output": [
+        1,
+        512
+      ],
+      "text_output": [
+        1,
+        512
+      ],
+      "modules": {
+        "visual.conv1": {
+          "input": [
+            1,
+            3,
+            224,
+            224
+          ],
+          "output": [
+            1,
+            768,
+            14,
+            14
+          ]
+        },
+        "visual.ln_pre": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.0.ln_1": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.0.ln_2": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.0.mlp.c_fc": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.0.mlp.gelu": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.0.mlp.c_proj": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.0.mlp": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.0": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.1.ln_1": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.1.ln_2": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.1.mlp.c_fc": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.1.mlp.gelu": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.1.mlp.c_proj": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.1.mlp": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.1": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.2.ln_1": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.2.ln_2": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.2.mlp.c_fc": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.2.mlp.gelu": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.2.mlp.c_proj": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.2.mlp": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.2": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.3.ln_1": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.3.ln_2": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.3.mlp.c_fc": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.3.mlp.gelu": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.3.mlp.c_proj": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.3.mlp": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.3": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.4.ln_1": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.4.ln_2": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.4.mlp.c_fc": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.4.mlp.gelu": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.4.mlp.c_proj": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.4.mlp": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.4": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.5.ln_1": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.5.ln_2": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.5.mlp.c_fc": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.5.mlp.gelu": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.5.mlp.c_proj": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.5.mlp": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.5": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.6.ln_1": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.6.ln_2": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.6.mlp.c_fc": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.6.mlp.gelu": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.6.mlp.c_proj": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.6.mlp": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.6": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.7.ln_1": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.7.ln_2": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.7.mlp.c_fc": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.7.mlp.gelu": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.7.mlp.c_proj": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.7.mlp": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.7": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.8.ln_1": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.8.ln_2": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.8.mlp.c_fc": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.8.mlp.gelu": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.8.mlp.c_proj": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.8.mlp": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.8": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.9.ln_1": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.9.ln_2": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.9.mlp.c_fc": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.9.mlp.gelu": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.9.mlp.c_proj": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.9.mlp": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.9": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.10.ln_1": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.10.ln_2": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.10.mlp.c_fc": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.10.mlp.gelu": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.10.mlp.c_proj": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.10.mlp": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.10": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.11.ln_1": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.11.ln_2": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.11.mlp.c_fc": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.11.mlp.gelu": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            3072
+          ]
+        },
+        "visual.transformer.resblocks.11.mlp.c_proj": {
+          "input": [
+            1,
+            197,
+            3072
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.11.mlp": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer.resblocks.11": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.transformer": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual.ln_post": {
+          "input": [
+            1,
+            197,
+            768
+          ],
+          "output": [
+            1,
+            197,
+            768
+          ]
+        },
+        "visual": {
+          "input": [
+            1,
+            3,
+            224,
+            224
+          ],
+          "output": [
+            1,
+            512
+          ]
+        },
+        "token_embedding": {
+          "input": [
+            1,
+            77
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.0.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.0.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.0.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.0.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.0.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.0.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.0": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.1.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.1.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.1.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.1.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.1.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.1.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.2.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.2.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.2.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.2.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.2.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.2.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.3.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.3.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.3.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.3.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.3.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.3.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.3": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.4.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.4.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.4.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.4.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.4.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.4.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.4": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.5.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.5.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.5.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.5.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.5.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.5.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.5": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.6.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.6.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.6.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.6.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.6.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.6.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.6": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.7.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.7.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.7.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.7.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.7.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.7.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.7": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.8.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.8.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.8.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.8.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.8.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.8.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.8": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.9.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.9.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.9.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.9.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.9.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.9.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.9": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.10.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.10.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.10.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.10.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.10.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.10.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.10": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.11.ln_1": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.11.ln_2": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.11.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.11.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            2048
+          ]
+        },
+        "transformer.resblocks.11.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            2048
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.11.mlp": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer.resblocks.11": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "transformer": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        },
+        "ln_final": {
+          "input": [
+            1,
+            77,
+            512
+          ],
+          "output": [
+            1,
+            77,
+            512
+          ]
+        }
+      }
+    },
+    "l14": {
+      "device": "meta",
+      "config": {
+        "embed_dim": 768,
+        "image_size": 224,
+        "patch_size": 14,
+        "vision_width": 1024,
+        "vision_layers": 24,
+        "context_length": 77,
+        "vocab_size": 49408,
+        "text_width": 768,
+        "text_heads": 12,
+        "text_layers": 12
+      },
+      "image_output": [
+        1,
+        768
+      ],
+      "text_output": [
+        1,
+        768
+      ],
+      "modules": {
+        "visual.conv1": {
+          "input": [
+            1,
+            3,
+            224,
+            224
+          ],
+          "output": [
+            1,
+            1024,
+            16,
+            16
+          ]
+        },
+        "visual.ln_pre": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.0.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.0.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.0.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.0.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.0.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.0.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.0": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.1.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.1.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.1.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.1.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.1.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.1.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.2.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.2.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.2.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.2.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.2.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.2.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.3.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.3.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.3.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.3.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.3.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.3.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.3": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.4.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.4.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.4.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.4.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.4.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.4.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.4": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.5.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.5.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.5.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.5.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.5.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.5.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.5": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.6.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.6.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.6.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.6.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.6.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.6.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.6": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.7.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.7.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.7.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.7.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.7.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.7.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.7": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.8.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.8.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.8.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.8.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.8.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.8.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.8": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.9.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.9.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.9.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.9.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.9.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.9.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.9": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.10.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.10.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.10.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.10.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.10.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.10.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.10": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.11.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.11.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.11.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.11.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.11.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.11.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.11": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.12.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.12.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.12.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.12.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.12.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.12.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.12": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.13.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.13.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.13.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.13.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.13.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.13.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.13": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.14.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.14.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.14.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.14.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.14.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.14.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.14": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.15.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.15.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.15.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.15.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.15.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.15.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.15": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.16.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.16.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.16.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.16.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.16.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.16.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.16": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.17.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.17.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.17.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.17.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.17.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.17.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.17": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.18.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.18.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.18.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.18.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.18.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.18.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.18": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.19.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.19.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.19.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.19.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.19.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.19.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.19": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.20.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.20.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.20.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.20.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.20.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.20.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.20": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.21.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.21.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.21.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.21.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.21.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.21.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.21": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.22.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.22.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.22.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.22.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.22.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.22.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.22": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.23.ln_1": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.23.ln_2": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.23.mlp.c_fc": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.23.mlp.gelu": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            4096
+          ]
+        },
+        "visual.transformer.resblocks.23.mlp.c_proj": {
+          "input": [
+            1,
+            257,
+            4096
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.23.mlp": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer.resblocks.23": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.transformer": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual.ln_post": {
+          "input": [
+            1,
+            257,
+            1024
+          ],
+          "output": [
+            1,
+            257,
+            1024
+          ]
+        },
+        "visual": {
+          "input": [
+            1,
+            3,
+            224,
+            224
+          ],
+          "output": [
+            1,
+            768
+          ]
+        },
+        "token_embedding": {
+          "input": [
+            1,
+            77
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.0.ln_1": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.0.ln_2": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.0.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.0.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.0.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.0.mlp": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.0": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.1.ln_1": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.1.ln_2": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.1.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.1.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.1.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.1.mlp": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.1": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.2.ln_1": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.2.ln_2": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.2.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.2.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.2.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.2.mlp": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.2": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.3.ln_1": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.3.ln_2": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.3.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.3.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.3.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.3.mlp": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.3": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.4.ln_1": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.4.ln_2": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.4.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.4.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.4.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.4.mlp": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.4": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.5.ln_1": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.5.ln_2": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.5.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.5.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.5.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.5.mlp": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.5": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.6.ln_1": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.6.ln_2": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.6.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.6.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.6.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.6.mlp": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.6": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.7.ln_1": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.7.ln_2": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.7.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.7.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.7.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.7.mlp": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.7": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.8.ln_1": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.8.ln_2": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.8.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.8.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.8.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.8.mlp": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.8": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.9.ln_1": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.9.ln_2": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.9.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.9.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.9.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.9.mlp": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.9": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.10.ln_1": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.10.ln_2": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.10.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.10.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.10.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.10.mlp": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.10": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.11.ln_1": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.11.ln_2": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.11.mlp.c_fc": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.11.mlp.gelu": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            3072
+          ]
+        },
+        "transformer.resblocks.11.mlp.c_proj": {
+          "input": [
+            1,
+            77,
+            3072
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.11.mlp": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer.resblocks.11": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "transformer": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        },
+        "ln_final": {
+          "input": [
+            1,
+            77,
+            768
+          ],
+          "output": [
+            1,
+            77,
+            768
+          ]
+        }
+      }
+    }
+  },
+  "verification_limits": "Meta checks validate shape propagation, not numerical behavior. CPU checks use random weights. Source inspection establishes functional branches. Browser and PNG QA belongs to integration review."
+}

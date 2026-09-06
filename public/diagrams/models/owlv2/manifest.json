@@ -1,0 +1,42 @@
+{
+  "family": "owlv2",
+  "slug": "owlv2",
+  "title": "OWLv2",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "b16-detect",
+  "views": [
+    {
+      "id": "b16-detect",
+      "label": "OWLv2 b16",
+      "task": "detect",
+      "size": "b16",
+      "kind": "concrete",
+      "svg": "/diagrams/models/owlv2/b16-detect.svg",
+      "html": "/diagrams/models/owlv2/b16-detect.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 960 \u00d7 960; text: 3 \u00d7 16",
+      "verification": "meta"
+    },
+    {
+      "id": "l14-detect",
+      "label": "OWLv2 l14",
+      "task": "detect",
+      "size": "l14",
+      "kind": "concrete",
+      "svg": "/diagrams/models/owlv2/l14-detect.svg",
+      "html": "/diagrams/models/owlv2/l14-detect.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 1008 \u00d7 1008; text: 3 \u00d7 16",
+      "verification": "meta"
+    },
+    {
+      "id": "family-detect",
+      "label": "OWLv2 family",
+      "task": "detect",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/owlv2/family-detect.svg",
+      "html": "/diagrams/models/owlv2/family-detect.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 S \u00d7 S; text: 3 \u00d7 16",
+      "verification": "source"
+    }
+  ]
+}

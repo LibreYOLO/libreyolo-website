@@ -1,0 +1,31 @@
+{
+  "family": "retinanet",
+  "slug": "retinanet",
+  "title": "RetinaNet",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "r50",
+  "views": [
+    {
+      "id": "r50",
+      "label": "RetinaNet R50",
+      "task": "detect",
+      "size": "r50",
+      "kind": "concrete",
+      "svg": "/diagrams/models/retinanet/r50.svg",
+      "html": "/diagrams/models/retinanet/r50.html",
+      "input": "1 \u00d7 3 \u00d7 800 \u00d7 800",
+      "verification": "cpu"
+    },
+    {
+      "id": "r50v2",
+      "label": "RetinaNet R50V2",
+      "task": "detect",
+      "size": "r50v2",
+      "kind": "concrete",
+      "svg": "/diagrams/models/retinanet/r50v2.svg",
+      "html": "/diagrams/models/retinanet/r50v2.html",
+      "input": "1 \u00d7 3 \u00d7 800 \u00d7 800",
+      "verification": "cpu"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "family": "sam3",
+  "slug": "sam-3",
+  "title": "SAM 3",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "large-visual-default",
+  "views": [
+    {
+      "id": "large-visual-default",
+      "label": "SAM 3 large visual prompts (default config)",
+      "task": "segment",
+      "size": "large",
+      "kind": "concrete",
+      "svg": "/diagrams/models/sam-3/large-visual-default.svg",
+      "html": "/diagrams/models/sam-3/large-visual-default.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 1008 \u00d7 1008; box: 1 \u00d7 1 \u00d7 4",
+      "verification": "meta"
+    },
+    {
+      "id": "large-text-default",
+      "label": "SAM 3 large concept text (default config)",
+      "task": "segment",
+      "size": "large",
+      "kind": "concrete",
+      "svg": "/diagrams/models/sam-3/large-text-default.svg",
+      "html": "/diagrams/models/sam-3/large-text-default.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 1008 \u00d7 1008; text: 1 \u00d7 32; no geometry prompts",
+      "verification": "meta"
+    }
+  ]
+}

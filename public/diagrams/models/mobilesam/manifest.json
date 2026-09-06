@@ -1,0 +1,20 @@
+{
+  "family": "mobilesam",
+  "slug": "mobilesam",
+  "title": "MobileSAM",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "tiny-box-segment",
+  "views": [
+    {
+      "id": "tiny-box-segment",
+      "label": "MobileSAM tiny",
+      "task": "segment",
+      "size": "tiny",
+      "kind": "concrete",
+      "svg": "/diagrams/models/mobilesam/tiny-box-segment.svg",
+      "html": "/diagrams/models/mobilesam/tiny-box-segment.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 1024 \u00d7 1024; box: 1 \u00d7 1 \u00d7 4",
+      "verification": "meta"
+    }
+  ]
+}

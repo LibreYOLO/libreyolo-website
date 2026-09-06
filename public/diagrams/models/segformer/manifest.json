@@ -1,0 +1,86 @@
+{
+  "family": "segformer",
+  "slug": "segformer",
+  "title": "SegFormer",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "b0-semantic",
+  "views": [
+    {
+      "id": "b0-semantic",
+      "label": "b0",
+      "task": "semantic",
+      "size": "b0",
+      "kind": "concrete",
+      "svg": "/diagrams/models/segformer/b0-semantic.svg",
+      "html": "/diagrams/models/segformer/b0-semantic.html",
+      "input": "3\u00d7512\u00d7512",
+      "verification": "cpu"
+    },
+    {
+      "id": "b1-semantic",
+      "label": "b1",
+      "task": "semantic",
+      "size": "b1",
+      "kind": "concrete",
+      "svg": "/diagrams/models/segformer/b1-semantic.svg",
+      "html": "/diagrams/models/segformer/b1-semantic.html",
+      "input": "3\u00d7512\u00d7512",
+      "verification": "cpu"
+    },
+    {
+      "id": "b2-semantic",
+      "label": "b2",
+      "task": "semantic",
+      "size": "b2",
+      "kind": "concrete",
+      "svg": "/diagrams/models/segformer/b2-semantic.svg",
+      "html": "/diagrams/models/segformer/b2-semantic.html",
+      "input": "3\u00d7512\u00d7512",
+      "verification": "cpu"
+    },
+    {
+      "id": "b3-semantic",
+      "label": "b3",
+      "task": "semantic",
+      "size": "b3",
+      "kind": "concrete",
+      "svg": "/diagrams/models/segformer/b3-semantic.svg",
+      "html": "/diagrams/models/segformer/b3-semantic.html",
+      "input": "3\u00d7512\u00d7512",
+      "verification": "cpu"
+    },
+    {
+      "id": "b4-semantic",
+      "label": "b4",
+      "task": "semantic",
+      "size": "b4",
+      "kind": "concrete",
+      "svg": "/diagrams/models/segformer/b4-semantic.svg",
+      "html": "/diagrams/models/segformer/b4-semantic.html",
+      "input": "3\u00d7512\u00d7512",
+      "verification": "cpu"
+    },
+    {
+      "id": "b5-semantic",
+      "label": "b5",
+      "task": "semantic",
+      "size": "b5",
+      "kind": "concrete",
+      "svg": "/diagrams/models/segformer/b5-semantic.svg",
+      "html": "/diagrams/models/segformer/b5-semantic.html",
+      "input": "3\u00d7640\u00d7640",
+      "verification": "cpu"
+    },
+    {
+      "id": "family",
+      "label": "Shared B0-B5 topology",
+      "task": "semantic",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/segformer/family.svg",
+      "html": "/diagrams/models/segformer/family.html",
+      "input": "3\u00d7H\u00d7H",
+      "verification": "source"
+    }
+  ]
+}

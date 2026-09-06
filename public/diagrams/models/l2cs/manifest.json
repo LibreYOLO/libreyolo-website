@@ -1,0 +1,86 @@
+{
+  "family": "l2cs",
+  "slug": "l2cs",
+  "title": "L2CS-Net",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "r18-gaze",
+  "views": [
+    {
+      "id": "r18-gaze",
+      "label": "r18",
+      "task": "gaze",
+      "size": "r18",
+      "kind": "concrete",
+      "svg": "/diagrams/models/l2cs/r18-gaze.svg",
+      "html": "/diagrams/models/l2cs/r18-gaze.html",
+      "input": "3\u00d7448\u00d7448",
+      "verification": "cpu"
+    },
+    {
+      "id": "r34-gaze",
+      "label": "r34",
+      "task": "gaze",
+      "size": "r34",
+      "kind": "concrete",
+      "svg": "/diagrams/models/l2cs/r34-gaze.svg",
+      "html": "/diagrams/models/l2cs/r34-gaze.html",
+      "input": "3\u00d7448\u00d7448",
+      "verification": "cpu"
+    },
+    {
+      "id": "r50-gaze",
+      "label": "r50",
+      "task": "gaze",
+      "size": "r50",
+      "kind": "concrete",
+      "svg": "/diagrams/models/l2cs/r50-gaze.svg",
+      "html": "/diagrams/models/l2cs/r50-gaze.html",
+      "input": "3\u00d7448\u00d7448",
+      "verification": "cpu"
+    },
+    {
+      "id": "r101-gaze",
+      "label": "r101",
+      "task": "gaze",
+      "size": "r101",
+      "kind": "concrete",
+      "svg": "/diagrams/models/l2cs/r101-gaze.svg",
+      "html": "/diagrams/models/l2cs/r101-gaze.html",
+      "input": "3\u00d7448\u00d7448",
+      "verification": "cpu"
+    },
+    {
+      "id": "r152-gaze",
+      "label": "r152",
+      "task": "gaze",
+      "size": "r152",
+      "kind": "concrete",
+      "svg": "/diagrams/models/l2cs/r152-gaze.svg",
+      "html": "/diagrams/models/l2cs/r152-gaze.html",
+      "input": "3\u00d7448\u00d7448",
+      "verification": "cpu"
+    },
+    {
+      "id": "basic-family",
+      "label": "basic-family",
+      "task": "gaze",
+      "size": "basic-family",
+      "kind": "family",
+      "svg": "/diagrams/models/l2cs/basic-family.svg",
+      "html": "/diagrams/models/l2cs/basic-family.html",
+      "input": "3\u00d7448\u00d7448",
+      "verification": "source"
+    },
+    {
+      "id": "bottleneck-family",
+      "label": "bottleneck-family",
+      "task": "gaze",
+      "size": "bottleneck-family",
+      "kind": "family",
+      "svg": "/diagrams/models/l2cs/bottleneck-family.svg",
+      "html": "/diagrams/models/l2cs/bottleneck-family.html",
+      "input": "3\u00d7448\u00d7448",
+      "verification": "source"
+    }
+  ]
+}

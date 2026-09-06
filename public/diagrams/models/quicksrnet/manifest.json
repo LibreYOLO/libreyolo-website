@@ -1,0 +1,20 @@
+{
+  "family": "quicksrnet",
+  "slug": "quicksrnet",
+  "title": "QuickSRNet",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "m2-restore",
+  "views": [
+    {
+      "id": "m2-restore",
+      "label": "Medium 2x",
+      "task": "restore",
+      "size": "m2",
+      "kind": "concrete",
+      "svg": "/diagrams/models/quicksrnet/m2-restore.svg",
+      "html": "/diagrams/models/quicksrnet/m2-restore.html",
+      "input": "3\u00d764\u00d764",
+      "verification": "cpu"
+    }
+  ]
+}

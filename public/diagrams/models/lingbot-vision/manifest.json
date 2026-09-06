@@ -1,0 +1,64 @@
+{
+  "family": "lingbotvision",
+  "slug": "lingbot-vision",
+  "title": "LingBot-Vision",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "s-semantic",
+  "views": [
+    {
+      "id": "s-semantic",
+      "label": "s",
+      "task": "semantic",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/lingbot-vision/s-semantic.svg",
+      "html": "/diagrams/models/lingbot-vision/s-semantic.html",
+      "input": "3\u00d7512\u00d7512",
+      "verification": "cpu"
+    },
+    {
+      "id": "b-semantic",
+      "label": "b",
+      "task": "semantic",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/lingbot-vision/b-semantic.svg",
+      "html": "/diagrams/models/lingbot-vision/b-semantic.html",
+      "input": "3\u00d7512\u00d7512",
+      "verification": "cpu"
+    },
+    {
+      "id": "l-semantic",
+      "label": "l",
+      "task": "semantic",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/lingbot-vision/l-semantic.svg",
+      "html": "/diagrams/models/lingbot-vision/l-semantic.html",
+      "input": "3\u00d7512\u00d7512",
+      "verification": "meta"
+    },
+    {
+      "id": "g-semantic",
+      "label": "g",
+      "task": "semantic",
+      "size": "g",
+      "kind": "concrete",
+      "svg": "/diagrams/models/lingbot-vision/g-semantic.svg",
+      "html": "/diagrams/models/lingbot-vision/g-semantic.html",
+      "input": "3\u00d7512\u00d7512",
+      "verification": "meta"
+    },
+    {
+      "id": "mlp-family",
+      "label": "Shared s/b/l topology",
+      "task": "semantic",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/lingbot-vision/mlp-family.svg",
+      "html": "/diagrams/models/lingbot-vision/mlp-family.html",
+      "input": "3\u00d7512\u00d7512",
+      "verification": "source"
+    }
+  ]
+}

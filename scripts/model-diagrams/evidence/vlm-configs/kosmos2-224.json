@@ -1,0 +1,201 @@
+{
+  "family": "kosmos2",
+  "size": "224",
+  "repo": "microsoft/kosmos-2-patch14-224",
+  "revision": "main",
+  "source": "libreyolo/models/vlm/kosmos2.py",
+  "input": 224,
+  "properties": {
+    "FAMILY": "kosmos2",
+    "HF_REPOS": {
+      "224": "microsoft/kosmos-2-patch14-224"
+    },
+    "INPUT_SIZES": {
+      "224": 224
+    }
+  },
+  "resolved_revision": "e91cfbcb4ce051b6a55bfb5f96165a3bbf5eb82c",
+  "config": {
+    "text_config": {
+      "output_hidden_states": false,
+      "return_dict": true,
+      "dtype": null,
+      "chunk_size_feed_forward": 0,
+      "is_encoder_decoder": false,
+      "problem_type": null,
+      "vocab_size": 65037,
+      "max_position_embeddings": 2048,
+      "embed_dim": 2048,
+      "layers": 24,
+      "ffn_dim": 8192,
+      "attention_heads": 32,
+      "activation_function": "gelu",
+      "dropout": 0.1,
+      "attention_dropout": 0.1,
+      "activation_dropout": 0.0,
+      "layerdrop": 0.0,
+      "layer_norm_eps": 1e-05,
+      "init_std": 0.02,
+      "scale_embedding": true,
+      "use_cache": true,
+      "tie_word_embeddings": true,
+      "pad_token_id": 1,
+      "bos_token_id": 0,
+      "eos_token_id": 2,
+      "add_cross_attention": false,
+      "cross_attention_hidden_size": null,
+      "decoder_start_token_id": null,
+      "finetuning_task": null,
+      "is_decoder": false,
+      "model_type": "kosmos_2_text_model",
+      "prefix": null,
+      "pruned_heads": {},
+      "sep_token_id": null,
+      "task_specific_params": null,
+      "tf_legacy_loss": false,
+      "tie_encoder_decoder": false,
+      "tokenizer_class": null,
+      "torchscript": false,
+      "use_bfloat16": false,
+      "output_attentions": false
+    },
+    "vision_config": {
+      "output_hidden_states": false,
+      "return_dict": true,
+      "dtype": null,
+      "chunk_size_feed_forward": 0,
+      "is_encoder_decoder": false,
+      "problem_type": null,
+      "hidden_size": 1024,
+      "intermediate_size": 4096,
+      "num_hidden_layers": 24,
+      "num_attention_heads": 16,
+      "num_channels": 3,
+      "image_size": 224,
+      "patch_size": 14,
+      "hidden_act": "quick_gelu",
+      "layer_norm_eps": 1e-05,
+      "attention_dropout": 0.0,
+      "initializer_range": 0.02,
+      "initializer_factor": 1.0,
+      "add_cross_attention": false,
+      "bos_token_id": null,
+      "cross_attention_hidden_size": null,
+      "decoder_start_token_id": null,
+      "eos_token_id": null,
+      "finetuning_task": null,
+      "is_decoder": false,
+      "model_type": "kosmos_2_vision_model",
+      "pad_token_id": null,
+      "prefix": null,
+      "pruned_heads": {},
+      "sep_token_id": null,
+      "task_specific_params": null,
+      "tf_legacy_loss": false,
+      "tie_encoder_decoder": false,
+      "tie_word_embeddings": true,
+      "tokenizer_class": null,
+      "torchscript": false,
+      "use_bfloat16": false,
+      "output_attentions": false
+    },
+    "latent_query_num": 64,
+    "tie_word_embeddings": true,
+    "model_type": "kosmos-2"
+  },
+  "backend_version": "5.16.1",
+  "meta": {
+    "family": "kosmos2",
+    "size": "224",
+    "status": "meta",
+    "model_class": "Kosmos2ForConditionalGeneration",
+    "parameters": 1664485376,
+    "modules": {
+      "text_model.model.layers.0.self_attn.k_proj": [
+        2048,
+        2048
+      ],
+      "text_model.model.layers.0.self_attn.v_proj": [
+        2048,
+        2048
+      ],
+      "text_model.model.layers.0.self_attn.q_proj": [
+        2048,
+        2048
+      ],
+      "text_model.model.layers.0.self_attn.out_proj": [
+        2048,
+        2048
+      ],
+      "text_model.model.layers.0.ffn.fc1": [
+        2048,
+        8192
+      ],
+      "text_model.model.layers.0.ffn.fc2": [
+        8192,
+        2048
+      ],
+      "text_model.lm_head": [
+        2048,
+        65037
+      ],
+      "vision_model.model.embeddings.patch_embedding": {
+        "in": 3,
+        "out": 1024,
+        "kernel": [
+          14,
+          14
+        ],
+        "stride": [
+          14,
+          14
+        ],
+        "groups": 1
+      },
+      "vision_model.model.encoder.layers.0.self_attn.k_proj": [
+        1024,
+        1024
+      ],
+      "vision_model.model.encoder.layers.0.self_attn.v_proj": [
+        1024,
+        1024
+      ],
+      "vision_model.model.encoder.layers.0.self_attn.q_proj": [
+        1024,
+        1024
+      ],
+      "vision_model.model.encoder.layers.0.self_attn.out_proj": [
+        1024,
+        1024
+      ],
+      "vision_model.model.encoder.layers.0.mlp.fc1": [
+        1024,
+        4096
+      ],
+      "vision_model.model.encoder.layers.0.mlp.fc2": [
+        4096,
+        1024
+      ],
+      "image_to_text_projection.dense": [
+        1024,
+        2048
+      ],
+      "image_to_text_projection.x_attn.k_proj": [
+        2048,
+        2048
+      ],
+      "image_to_text_projection.x_attn.v_proj": [
+        2048,
+        2048
+      ],
+      "image_to_text_projection.x_attn.q_proj": [
+        2048,
+        2048
+      ],
+      "image_to_text_projection.x_attn.out_proj": [
+        2048,
+        2048
+      ]
+    }
+  }
+}

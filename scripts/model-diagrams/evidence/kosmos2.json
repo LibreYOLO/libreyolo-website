@@ -1,0 +1,110 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "backend": "Transformers5.16.1 native Apache-2.0",
+  "config": {
+    "repo": "microsoft/kosmos-2-patch14-224",
+    "resolved_revision": "e91cfbcb4ce051b6a55bfb5f96165a3bbf5eb82c",
+    "source": "libreyolo/models/vlm/kosmos2.py",
+    "meta": {
+      "family": "kosmos2",
+      "size": "224",
+      "status": "meta",
+      "model_class": "Kosmos2ForConditionalGeneration",
+      "parameters": 1664485376,
+      "modules": {
+        "text_model.model.layers.0.self_attn.k_proj": [
+          2048,
+          2048
+        ],
+        "text_model.model.layers.0.self_attn.v_proj": [
+          2048,
+          2048
+        ],
+        "text_model.model.layers.0.self_attn.q_proj": [
+          2048,
+          2048
+        ],
+        "text_model.model.layers.0.self_attn.out_proj": [
+          2048,
+          2048
+        ],
+        "text_model.model.layers.0.ffn.fc1": [
+          2048,
+          8192
+        ],
+        "text_model.model.layers.0.ffn.fc2": [
+          8192,
+          2048
+        ],
+        "text_model.lm_head": [
+          2048,
+          65037
+        ],
+        "vision_model.model.embeddings.patch_embedding": {
+          "in": 3,
+          "out": 1024,
+          "kernel": [
+            14,
+            14
+          ],
+          "stride": [
+            14,
+            14
+          ],
+          "groups": 1
+        },
+        "vision_model.model.encoder.layers.0.self_attn.k_proj": [
+          1024,
+          1024
+        ],
+        "vision_model.model.encoder.layers.0.self_attn.v_proj": [
+          1024,
+          1024
+        ],
+        "vision_model.model.encoder.layers.0.self_attn.q_proj": [
+          1024,
+          1024
+        ],
+        "vision_model.model.encoder.layers.0.self_attn.out_proj": [
+          1024,
+          1024
+        ],
+        "vision_model.model.encoder.layers.0.mlp.fc1": [
+          1024,
+          4096
+        ],
+        "vision_model.model.encoder.layers.0.mlp.fc2": [
+          4096,
+          1024
+        ],
+        "image_to_text_projection.dense": [
+          1024,
+          2048
+        ],
+        "image_to_text_projection.x_attn.k_proj": [
+          2048,
+          2048
+        ],
+        "image_to_text_projection.x_attn.v_proj": [
+          2048,
+          2048
+        ],
+        "image_to_text_projection.x_attn.q_proj": [
+          2048,
+          2048
+        ],
+        "image_to_text_projection.x_attn.out_proj": [
+          2048,
+          2048
+        ]
+      }
+    }
+  },
+  "checks": [
+    "Native forward-path inspection",
+    "Meta constructor dimensions"
+  ],
+  "limits": [
+    "No pretrained inference"
+  ]
+}

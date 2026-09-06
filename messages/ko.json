@@ -977,5 +977,11 @@
       "stableBody": "프로덕션 작업에서 검증된 코어는 YOLO9 탐지와 RF-DETR 탐지 및 분할입니다. 관련 내용은 <docs>코어 문서</docs>를, 오픈 보캐뷸러리 탐지는 <vlm>LibreVLM</vlm>을 참조하십시오.",
       "source": "<link>GitHub</link>에서 진행 상황과 소스 확인"
     }
+  },
+  "ModelDiagram": {
+    "title": "{model} 아키텍처",
+    "open": "전체 다이어그램 열기",
+    "description": "모델 변형 또는 제품군 개요를 선택한 다음 블록을 선택하여 상세 정보를 확인하세요. 전체 다이어그램에서 확대하거나 SVG 및 PNG를 다운로드할 수 있습니다. 다이어그램은 영어로 표시됩니다.",
+    "view": "다이어그램"
   }
 }

@@ -1,0 +1,440 @@
+[
+  {
+    "slug": "alexnet",
+    "title": "AlexNet",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/alexnet#architecture"
+  },
+  {
+    "slug": "birefnet",
+    "title": "BiRefNet",
+    "views": 3,
+    "url": "http://localhost:8772/docs/models/birefnet#architecture"
+  },
+  {
+    "slug": "clip",
+    "title": "CLIP",
+    "views": 8,
+    "url": "http://localhost:8772/docs/models/clip#architecture"
+  },
+  {
+    "slug": "convnext",
+    "title": "ConvNeXt",
+    "views": 4,
+    "url": "http://localhost:8772/docs/models/convnext#architecture"
+  },
+  {
+    "slug": "deeplabv3",
+    "title": "DeepLabv3",
+    "views": 4,
+    "url": "http://localhost:8772/docs/models/deeplabv3#architecture"
+  },
+  {
+    "slug": "deit",
+    "title": "DeiT",
+    "views": 4,
+    "url": "http://localhost:8772/docs/models/deit#architecture"
+  },
+  {
+    "slug": "depth-anything-v2",
+    "title": "Depth Anything V2",
+    "views": 5,
+    "url": "http://localhost:8772/docs/models/depth-anything-v2#architecture"
+  },
+  {
+    "slug": "depth-anything-3",
+    "title": "Depth Anything 3",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/depth-anything-3#architecture"
+  },
+  {
+    "slug": "dexined",
+    "title": "DexiNed",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/dexined#architecture"
+  },
+  {
+    "slug": "dinov2",
+    "title": "DINOv2",
+    "views": 15,
+    "url": "http://localhost:8772/docs/models/dinov2#architecture"
+  },
+  {
+    "slug": "edgetam",
+    "title": "EdgeTAM",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/edgetam#architecture"
+  },
+  {
+    "slug": "efficientdet",
+    "title": "EfficientDet",
+    "views": 6,
+    "url": "http://localhost:8772/docs/models/efficientdet#architecture"
+  },
+  {
+    "slug": "efficientnetv2",
+    "title": "EfficientNetV2",
+    "views": 5,
+    "url": "http://localhost:8772/docs/models/efficientnetv2#architecture"
+  },
+  {
+    "slug": "eomt",
+    "title": "EoMT",
+    "views": 13,
+    "url": "http://localhost:8772/docs/models/eomt#architecture"
+  },
+  {
+    "slug": "librefacerec",
+    "title": "Face recognition",
+    "views": 3,
+    "url": "http://localhost:8772/docs/models/librefacerec#architecture"
+  },
+  {
+    "slug": "faster-rcnn",
+    "title": "Faster R-CNN",
+    "views": 5,
+    "url": "http://localhost:8772/docs/models/faster-rcnn#architecture"
+  },
+  {
+    "slug": "fcn",
+    "title": "FCN",
+    "views": 3,
+    "url": "http://localhost:8772/docs/models/fcn#architecture"
+  },
+  {
+    "slug": "fcos",
+    "title": "FCOS",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/fcos#architecture"
+  },
+  {
+    "slug": "feynobg",
+    "title": "FeyNobg",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/feynobg#architecture"
+  },
+  {
+    "slug": "florence-2",
+    "title": "Florence-2",
+    "views": 3,
+    "url": "http://localhost:8772/docs/models/florence-2#architecture"
+  },
+  {
+    "slug": "fomo",
+    "title": "FOMO",
+    "views": 4,
+    "url": "http://localhost:8772/docs/models/fomo#architecture"
+  },
+  {
+    "slug": "grounding-dino",
+    "title": "Grounding DINO",
+    "views": 3,
+    "url": "http://localhost:8772/docs/models/grounding-dino#architecture"
+  },
+  {
+    "slug": "internvl3",
+    "title": "InternVL3",
+    "views": 4,
+    "url": "http://localhost:8772/docs/models/internvl3#architecture"
+  },
+  {
+    "slug": "kosmos-2",
+    "title": "Kosmos-2",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/kosmos-2#architecture"
+  },
+  {
+    "slug": "l2cs",
+    "title": "L2CS-Net",
+    "views": 7,
+    "url": "http://localhost:8772/docs/models/l2cs#architecture"
+  },
+  {
+    "slug": "lfm2-vl",
+    "title": "LFM2.5-VL",
+    "views": 4,
+    "url": "http://localhost:8772/docs/models/lfm2-vl#architecture"
+  },
+  {
+    "slug": "lingbot-vision",
+    "title": "LingBot-Vision",
+    "views": 5,
+    "url": "http://localhost:8772/docs/models/lingbot-vision#architecture"
+  },
+  {
+    "slug": "mask-rcnn",
+    "title": "Mask R-CNN",
+    "views": 2,
+    "url": "http://localhost:8772/docs/models/mask-rcnn#architecture"
+  },
+  {
+    "slug": "midas",
+    "title": "MiDaS",
+    "views": 2,
+    "url": "http://localhost:8772/docs/models/midas#architecture"
+  },
+  {
+    "slug": "mobilenetv4",
+    "title": "MobileNetV4",
+    "views": 3,
+    "url": "http://localhost:8772/docs/models/mobilenetv4#architecture"
+  },
+  {
+    "slug": "mobilesam",
+    "title": "MobileSAM",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/mobilesam#architecture"
+  },
+  {
+    "slug": "moge-2",
+    "title": "MoGe-2",
+    "views": 4,
+    "url": "http://localhost:8772/docs/models/moge-2#architecture"
+  },
+  {
+    "slug": "nafnet",
+    "title": "NAFNet",
+    "views": 3,
+    "url": "http://localhost:8772/docs/models/nafnet#architecture"
+  },
+  {
+    "slug": "owlv2",
+    "title": "OWLv2",
+    "views": 3,
+    "url": "http://localhost:8772/docs/models/owlv2#architecture"
+  },
+  {
+    "slug": "picodet",
+    "title": "PicoDet",
+    "views": 4,
+    "url": "http://localhost:8772/docs/models/picodet#architecture"
+  },
+  {
+    "slug": "picosam3",
+    "title": "PicoSAM3",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/picosam3#architecture"
+  },
+  {
+    "slug": "pidnet",
+    "title": "PIDNet",
+    "views": 4,
+    "url": "http://localhost:8772/docs/models/pidnet#architecture"
+  },
+  {
+    "slug": "qwen3-vl",
+    "title": "Qwen3-VL",
+    "views": 4,
+    "url": "http://localhost:8772/docs/models/qwen3-vl#architecture"
+  },
+  {
+    "slug": "real-esrgan",
+    "title": "Real-ESRGAN",
+    "views": 4,
+    "url": "http://localhost:8772/docs/models/real-esrgan#architecture"
+  },
+  {
+    "slug": "resnet",
+    "title": "ResNet",
+    "views": 6,
+    "url": "http://localhost:8772/docs/models/resnet#architecture"
+  },
+  {
+    "slug": "retinanet",
+    "title": "RetinaNet",
+    "views": 2,
+    "url": "http://localhost:8772/docs/models/retinanet#architecture"
+  },
+  {
+    "slug": "rtmdet",
+    "title": "RTMDet",
+    "views": 13,
+    "url": "http://localhost:8772/docs/models/rtmdet#architecture"
+  },
+  {
+    "slug": "sam",
+    "title": "SAM",
+    "views": 4,
+    "url": "http://localhost:8772/docs/models/sam#architecture"
+  },
+  {
+    "slug": "sam-2",
+    "title": "SAM 2",
+    "views": 5,
+    "url": "http://localhost:8772/docs/models/sam-2#architecture"
+  },
+  {
+    "slug": "sam-3",
+    "title": "SAM 3",
+    "views": 2,
+    "url": "http://localhost:8772/docs/models/sam-3#architecture"
+  },
+  {
+    "slug": "segformer",
+    "title": "SegFormer",
+    "views": 7,
+    "url": "http://localhost:8772/docs/models/segformer#architecture"
+  },
+  {
+    "slug": "siglip2",
+    "title": "SigLIP2",
+    "views": 6,
+    "url": "http://localhost:8772/docs/models/siglip2#architecture"
+  },
+  {
+    "slug": "smolvlm2",
+    "title": "SmolVLM2",
+    "views": 3,
+    "url": "http://localhost:8772/docs/models/smolvlm2#architecture"
+  },
+  {
+    "slug": "ssd",
+    "title": "SSD300",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/ssd#architecture"
+  },
+  {
+    "slug": "swin",
+    "title": "Swin",
+    "views": 5,
+    "url": "http://localhost:8772/docs/models/swin#architecture"
+  },
+  {
+    "slug": "swinir",
+    "title": "SwinIR",
+    "views": 4,
+    "url": "http://localhost:8772/docs/models/swinir#architecture"
+  },
+  {
+    "slug": "teed",
+    "title": "TEED",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/teed#architecture"
+  },
+  {
+    "slug": "vgg",
+    "title": "VGG",
+    "views": 6,
+    "url": "http://localhost:8772/docs/models/vgg#architecture"
+  },
+  {
+    "slug": "vit",
+    "title": "ViT",
+    "views": 5,
+    "url": "http://localhost:8772/docs/models/vit#architecture"
+  },
+  {
+    "slug": "yolov1",
+    "title": "YOLOv1",
+    "views": 2,
+    "url": "http://localhost:8772/docs/models/yolov1#architecture"
+  },
+  {
+    "slug": "yolov2",
+    "title": "YOLOv2",
+    "views": 2,
+    "url": "http://localhost:8772/docs/models/yolov2#architecture"
+  },
+  {
+    "slug": "yolov3",
+    "title": "YOLOv3",
+    "views": 3,
+    "url": "http://localhost:8772/docs/models/yolov3#architecture"
+  },
+  {
+    "slug": "yolov4",
+    "title": "YOLOv4",
+    "views": 2,
+    "url": "http://localhost:8772/docs/models/yolov4#architecture"
+  },
+  {
+    "slug": "yolov9",
+    "title": "YOLOv9",
+    "views": 13,
+    "url": "http://localhost:8772/docs/models/yolov9#architecture"
+  },
+  {
+    "slug": "yolox",
+    "title": "YOLOX",
+    "views": 7,
+    "url": "http://localhost:8772/docs/models/yolox#architecture"
+  },
+  {
+    "slug": "zipdepth",
+    "title": "ZipDepth",
+    "views": 3,
+    "url": "http://localhost:8772/docs/models/zipdepth#architecture"
+  },
+  {
+    "slug": "ground-florence2",
+    "title": "Florence-2 grounding",
+    "views": 3,
+    "url": "http://localhost:8772/docs/models/ground-florence2#architecture"
+  },
+  {
+    "slug": "ground-qwen3vl",
+    "title": "Qwen3-VL grounding",
+    "views": 4,
+    "url": "http://localhost:8772/docs/models/ground-qwen3vl#architecture"
+  },
+  {
+    "slug": "hvi-cidnet",
+    "title": "HVI-CIDNet",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/hvi-cidnet#architecture"
+  },
+  {
+    "slug": "lama",
+    "title": "LaMa",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/lama#architecture"
+  },
+  {
+    "slug": "northmicrovision",
+    "title": "North Micro Vision",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/northmicrovision#architecture"
+  },
+  {
+    "slug": "pe",
+    "title": "PE Core",
+    "views": 12,
+    "url": "http://localhost:8772/docs/models/pe#architecture"
+  },
+  {
+    "slug": "ppliteseg",
+    "title": "PP-LiteSeg",
+    "views": 5,
+    "url": "http://localhost:8772/docs/models/ppliteseg#architecture"
+  },
+  {
+    "slug": "ppyoloe",
+    "title": "PP-YOLOE",
+    "views": 5,
+    "url": "http://localhost:8772/docs/models/ppyoloe#architecture"
+  },
+  {
+    "slug": "quicksrnet",
+    "title": "QuickSRNet",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/quicksrnet#architecture"
+  },
+  {
+    "slug": "showui",
+    "title": "ShowUI",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/showui#architecture"
+  },
+  {
+    "slug": "vitmatte",
+    "title": "ViTMatte",
+    "views": 1,
+    "url": "http://localhost:8772/docs/models/vitmatte#architecture"
+  },
+  {
+    "slug": "vjepa2",
+    "title": "V-JEPA 2",
+    "views": 10,
+    "url": "http://localhost:8772/docs/models/vjepa2#architecture"
+  }
+]

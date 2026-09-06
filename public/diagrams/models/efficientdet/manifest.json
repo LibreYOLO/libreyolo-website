@@ -1,0 +1,75 @@
+{
+  "family": "efficientdet",
+  "slug": "efficientdet",
+  "title": "EfficientDet",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "d0",
+  "views": [
+    {
+      "id": "d0",
+      "label": "EfficientDet D0",
+      "task": "detect",
+      "size": "d0",
+      "kind": "concrete",
+      "svg": "/diagrams/models/efficientdet/d0.svg",
+      "html": "/diagrams/models/efficientdet/d0.html",
+      "input": "1 \u00d7 3 \u00d7 512 \u00d7 512",
+      "verification": "cpu"
+    },
+    {
+      "id": "d1",
+      "label": "EfficientDet D1",
+      "task": "detect",
+      "size": "d1",
+      "kind": "concrete",
+      "svg": "/diagrams/models/efficientdet/d1.svg",
+      "html": "/diagrams/models/efficientdet/d1.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "d2",
+      "label": "EfficientDet D2",
+      "task": "detect",
+      "size": "d2",
+      "kind": "concrete",
+      "svg": "/diagrams/models/efficientdet/d2.svg",
+      "html": "/diagrams/models/efficientdet/d2.html",
+      "input": "1 \u00d7 3 \u00d7 768 \u00d7 768",
+      "verification": "cpu"
+    },
+    {
+      "id": "d3",
+      "label": "EfficientDet D3",
+      "task": "detect",
+      "size": "d3",
+      "kind": "concrete",
+      "svg": "/diagrams/models/efficientdet/d3.svg",
+      "html": "/diagrams/models/efficientdet/d3.html",
+      "input": "1 \u00d7 3 \u00d7 896 \u00d7 896",
+      "verification": "cpu"
+    },
+    {
+      "id": "d4",
+      "label": "EfficientDet D4",
+      "task": "detect",
+      "size": "d4",
+      "kind": "concrete",
+      "svg": "/diagrams/models/efficientdet/d4.svg",
+      "html": "/diagrams/models/efficientdet/d4.html",
+      "input": "1 \u00d7 3 \u00d7 1024 \u00d7 1024",
+      "verification": "cpu"
+    },
+    {
+      "id": "family",
+      "label": "EfficientDet family",
+      "task": "detect",
+      "size": "d0/d1/d2/d3/d4",
+      "kind": "family",
+      "svg": "/diagrams/models/efficientdet/family.svg",
+      "html": "/diagrams/models/efficientdet/family.html",
+      "input": "H from table",
+      "verification": "cpu"
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "family": "rtmdet",
+  "slug": "rtmdet",
+  "title": "RTMDet",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "s",
+  "views": [
+    {
+      "id": "t",
+      "label": "RTMDet-T",
+      "task": "detect",
+      "size": "t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/rtmdet/t.svg",
+      "html": "/diagrams/models/rtmdet/t.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "s",
+      "label": "RTMDet-S",
+      "task": "detect",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/rtmdet/s.svg",
+      "html": "/diagrams/models/rtmdet/s.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "m",
+      "label": "RTMDet-M",
+      "task": "detect",
+      "size": "m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/rtmdet/m.svg",
+      "html": "/diagrams/models/rtmdet/m.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "l",
+      "label": "RTMDet-L",
+      "task": "detect",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/rtmdet/l.svg",
+      "html": "/diagrams/models/rtmdet/l.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "x",
+      "label": "RTMDet-X",
+      "task": "detect",
+      "size": "x",
+      "kind": "concrete",
+      "svg": "/diagrams/models/rtmdet/x.svg",
+      "html": "/diagrams/models/rtmdet/x.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "t-seg",
+      "label": "RTMDet Ins-T",
+      "task": "segment",
+      "size": "t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/rtmdet/t-seg.svg",
+      "html": "/diagrams/models/rtmdet/t-seg.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "s-seg",
+      "label": "RTMDet Ins-S",
+      "task": "segment",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/rtmdet/s-seg.svg",
+      "html": "/diagrams/models/rtmdet/s-seg.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "m-seg",
+      "label": "RTMDet Ins-M",
+      "task": "segment",
+      "size": "m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/rtmdet/m-seg.svg",
+      "html": "/diagrams/models/rtmdet/m-seg.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "l-seg",
+      "label": "RTMDet Ins-L",
+      "task": "segment",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/rtmdet/l-seg.svg",
+      "html": "/diagrams/models/rtmdet/l-seg.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "x-seg",
+      "label": "RTMDet Ins-X",
+      "task": "segment",
+      "size": "x",
+      "kind": "concrete",
+      "svg": "/diagrams/models/rtmdet/x-seg.svg",
+      "html": "/diagrams/models/rtmdet/x-seg.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "family-ts",
+      "label": "RTMDet TS family",
+      "task": "detect",
+      "size": "t/s",
+      "kind": "family",
+      "svg": "/diagrams/models/rtmdet/family-ts.svg",
+      "html": "/diagrams/models/rtmdet/family-ts.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "family-mlx",
+      "label": "RTMDet MLX family",
+      "task": "detect",
+      "size": "m/l/x",
+      "kind": "family",
+      "svg": "/diagrams/models/rtmdet/family-mlx.svg",
+      "html": "/diagrams/models/rtmdet/family-mlx.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "family-tsmlx-seg",
+      "label": "RTMDet Ins TSMLX family",
+      "task": "segment",
+      "size": "t/s/m/l/x",
+      "kind": "family",
+      "svg": "/diagrams/models/rtmdet/family-tsmlx-seg.svg",
+      "html": "/diagrams/models/rtmdet/family-tsmlx-seg.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    }
+  ]
+}

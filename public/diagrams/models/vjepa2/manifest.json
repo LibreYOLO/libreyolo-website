@@ -1,0 +1,119 @@
+{
+  "family": "vjepa2",
+  "slug": "vjepa2",
+  "title": "V-JEPA 2",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "l256-embed",
+  "views": [
+    {
+      "id": "l256-embed",
+      "label": "V-JEPA 2 l256-embed",
+      "task": "embed",
+      "size": "l256",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vjepa2/l256-embed.svg",
+      "html": "/diagrams/models/vjepa2/l256-embed.html",
+      "input": "1 \u00d7 64 \u00d7 3 \u00d7 256 \u00d7 256",
+      "verification": "meta"
+    },
+    {
+      "id": "h256-embed",
+      "label": "V-JEPA 2 h256-embed",
+      "task": "embed",
+      "size": "h256",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vjepa2/h256-embed.svg",
+      "html": "/diagrams/models/vjepa2/h256-embed.html",
+      "input": "1 \u00d7 64 \u00d7 3 \u00d7 256 \u00d7 256",
+      "verification": "meta"
+    },
+    {
+      "id": "g256-embed",
+      "label": "V-JEPA 2 g256-embed",
+      "task": "embed",
+      "size": "g256",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vjepa2/g256-embed.svg",
+      "html": "/diagrams/models/vjepa2/g256-embed.html",
+      "input": "1 \u00d7 64 \u00d7 3 \u00d7 256 \u00d7 256",
+      "verification": "meta"
+    },
+    {
+      "id": "g384-embed",
+      "label": "V-JEPA 2 g384-embed",
+      "task": "embed",
+      "size": "g384",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vjepa2/g384-embed.svg",
+      "html": "/diagrams/models/vjepa2/g384-embed.html",
+      "input": "1 \u00d7 64 \u00d7 3 \u00d7 384 \u00d7 384",
+      "verification": "meta"
+    },
+    {
+      "id": "l256-classify-ssv2",
+      "label": "V-JEPA 2 l256-classify-ssv2",
+      "task": "classify",
+      "size": "l256",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vjepa2/l256-classify-ssv2.svg",
+      "html": "/diagrams/models/vjepa2/l256-classify-ssv2.html",
+      "input": "1 \u00d7 16 \u00d7 3 \u00d7 256 \u00d7 256",
+      "verification": "meta"
+    },
+    {
+      "id": "l256-classify-diving48",
+      "label": "V-JEPA 2 l256-classify-diving48",
+      "task": "classify",
+      "size": "l256",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vjepa2/l256-classify-diving48.svg",
+      "html": "/diagrams/models/vjepa2/l256-classify-diving48.html",
+      "input": "1 \u00d7 32 \u00d7 3 \u00d7 256 \u00d7 256",
+      "verification": "meta"
+    },
+    {
+      "id": "g384-classify-ssv2",
+      "label": "V-JEPA 2 g384-classify-ssv2",
+      "task": "classify",
+      "size": "g384",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vjepa2/g384-classify-ssv2.svg",
+      "html": "/diagrams/models/vjepa2/g384-classify-ssv2.html",
+      "input": "1 \u00d7 64 \u00d7 3 \u00d7 384 \u00d7 384",
+      "verification": "meta"
+    },
+    {
+      "id": "g384-classify-diving48",
+      "label": "V-JEPA 2 g384-classify-diving48",
+      "task": "classify",
+      "size": "g384",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vjepa2/g384-classify-diving48.svg",
+      "html": "/diagrams/models/vjepa2/g384-classify-diving48.html",
+      "input": "1 \u00d7 32 \u00d7 3 \u00d7 384 \u00d7 384",
+      "verification": "meta"
+    },
+    {
+      "id": "family-embed",
+      "label": "V-JEPA 2 family-embed",
+      "task": "embed",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/vjepa2/family-embed.svg",
+      "html": "/diagrams/models/vjepa2/family-embed.html",
+      "input": "1 \u00d7 F \u00d7 3 \u00d7 S \u00d7 S",
+      "verification": "source"
+    },
+    {
+      "id": "family-classify",
+      "label": "V-JEPA 2 family-classify",
+      "task": "classify",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/vjepa2/family-classify.svg",
+      "html": "/diagrams/models/vjepa2/family-classify.html",
+      "input": "1 \u00d7 F \u00d7 3 \u00d7 S \u00d7 S",
+      "verification": "source"
+    }
+  ]
+}

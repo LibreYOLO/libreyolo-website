@@ -977,5 +977,11 @@
       "stableBody": "对于生产工作，经过验证的核心是 YOLO9 检测以及 RF-DETR 检测和分割。相关内容请参阅<docs>核心文档</docs>；开放词汇检测请参阅 <vlm>LibreVLM</vlm>。",
       "source": "在 <link>GitHub</link> 上跟踪进度并查看源码"
     }
+  },
+  "ModelDiagram": {
+    "title": "{model} 架构",
+    "open": "打开完整架构图",
+    "description": "选择具体变体或系列概览，然后选择模块查看详情。打开完整架构图可缩放或下载 SVG 和 PNG。图中标签为英文。",
+    "view": "架构图"
   }
 }

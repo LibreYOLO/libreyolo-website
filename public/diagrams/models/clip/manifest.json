@@ -1,0 +1,97 @@
+{
+  "family": "clip",
+  "slug": "clip",
+  "title": "CLIP",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "b32-classify",
+  "views": [
+    {
+      "id": "b32-classify",
+      "label": "CLIP b32 classify",
+      "task": "classify",
+      "size": "b32",
+      "kind": "concrete",
+      "svg": "/diagrams/models/clip/b32-classify.svg",
+      "html": "/diagrams/models/clip/b32-classify.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 224 \u00d7 224; text: 1 \u00d7 77",
+      "verification": "cpu"
+    },
+    {
+      "id": "b32-embed",
+      "label": "CLIP b32 embed",
+      "task": "embed",
+      "size": "b32",
+      "kind": "concrete",
+      "svg": "/diagrams/models/clip/b32-embed.svg",
+      "html": "/diagrams/models/clip/b32-embed.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 224 \u00d7 224; text: 1 \u00d7 77",
+      "verification": "cpu"
+    },
+    {
+      "id": "b16-classify",
+      "label": "CLIP b16 classify",
+      "task": "classify",
+      "size": "b16",
+      "kind": "concrete",
+      "svg": "/diagrams/models/clip/b16-classify.svg",
+      "html": "/diagrams/models/clip/b16-classify.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 224 \u00d7 224; text: 1 \u00d7 77",
+      "verification": "meta"
+    },
+    {
+      "id": "b16-embed",
+      "label": "CLIP b16 embed",
+      "task": "embed",
+      "size": "b16",
+      "kind": "concrete",
+      "svg": "/diagrams/models/clip/b16-embed.svg",
+      "html": "/diagrams/models/clip/b16-embed.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 224 \u00d7 224; text: 1 \u00d7 77",
+      "verification": "meta"
+    },
+    {
+      "id": "l14-classify",
+      "label": "CLIP l14 classify",
+      "task": "classify",
+      "size": "l14",
+      "kind": "concrete",
+      "svg": "/diagrams/models/clip/l14-classify.svg",
+      "html": "/diagrams/models/clip/l14-classify.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 224 \u00d7 224; text: 1 \u00d7 77",
+      "verification": "meta"
+    },
+    {
+      "id": "l14-embed",
+      "label": "CLIP l14 embed",
+      "task": "embed",
+      "size": "l14",
+      "kind": "concrete",
+      "svg": "/diagrams/models/clip/l14-embed.svg",
+      "html": "/diagrams/models/clip/l14-embed.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 224 \u00d7 224; text: 1 \u00d7 77",
+      "verification": "meta"
+    },
+    {
+      "id": "family-classify",
+      "label": "CLIP family classify",
+      "task": "classify",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/clip/family-classify.svg",
+      "html": "/diagrams/models/clip/family-classify.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 224 \u00d7 224; text: 1 \u00d7 77",
+      "verification": "source"
+    },
+    {
+      "id": "family-embed",
+      "label": "CLIP family embed",
+      "task": "embed",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/clip/family-embed.svg",
+      "html": "/diagrams/models/clip/family-embed.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 224 \u00d7 224; text: 1 \u00d7 77",
+      "verification": "source"
+    }
+  ]
+}

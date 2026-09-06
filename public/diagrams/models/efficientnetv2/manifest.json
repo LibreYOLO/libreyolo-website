@@ -1,0 +1,64 @@
+{
+  "family": "efficientnetv2",
+  "slug": "efficientnetv2",
+  "title": "EfficientNetV2",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "b0-classify",
+  "views": [
+    {
+      "id": "b0-classify",
+      "label": "EfficientNetV2 b0",
+      "task": "classify",
+      "size": "b0",
+      "kind": "concrete",
+      "svg": "/diagrams/models/efficientnetv2/b0-classify.svg",
+      "html": "/diagrams/models/efficientnetv2/b0-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "cpu"
+    },
+    {
+      "id": "b1-classify",
+      "label": "EfficientNetV2 b1",
+      "task": "classify",
+      "size": "b1",
+      "kind": "concrete",
+      "svg": "/diagrams/models/efficientnetv2/b1-classify.svg",
+      "html": "/diagrams/models/efficientnetv2/b1-classify.html",
+      "input": "1 \u00d7 3 \u00d7 240 \u00d7 240",
+      "verification": "meta"
+    },
+    {
+      "id": "b2-classify",
+      "label": "EfficientNetV2 b2",
+      "task": "classify",
+      "size": "b2",
+      "kind": "concrete",
+      "svg": "/diagrams/models/efficientnetv2/b2-classify.svg",
+      "html": "/diagrams/models/efficientnetv2/b2-classify.html",
+      "input": "1 \u00d7 3 \u00d7 260 \u00d7 260",
+      "verification": "meta"
+    },
+    {
+      "id": "b3-classify",
+      "label": "EfficientNetV2 b3",
+      "task": "classify",
+      "size": "b3",
+      "kind": "concrete",
+      "svg": "/diagrams/models/efficientnetv2/b3-classify.svg",
+      "html": "/diagrams/models/efficientnetv2/b3-classify.html",
+      "input": "1 \u00d7 3 \u00d7 300 \u00d7 300",
+      "verification": "meta"
+    },
+    {
+      "id": "family-classify",
+      "label": "EfficientNetV2 family",
+      "task": "classify",
+      "size": "b0/b1/b2/b3",
+      "kind": "family",
+      "svg": "/diagrams/models/efficientnetv2/family-classify.svg",
+      "html": "/diagrams/models/efficientnetv2/family-classify.html",
+      "input": "S in {224,240,260,300}",
+      "verification": "source"
+    }
+  ]
+}

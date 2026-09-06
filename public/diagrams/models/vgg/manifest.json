@@ -1,0 +1,75 @@
+{
+  "family": "vgg",
+  "slug": "vgg",
+  "title": "VGG",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "16-classify",
+  "views": [
+    {
+      "id": "16-classify",
+      "label": "VGG-16",
+      "task": "classify",
+      "size": "16",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vgg/16-classify.svg",
+      "html": "/diagrams/models/vgg/16-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "19-classify",
+      "label": "VGG-19",
+      "task": "classify",
+      "size": "19",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vgg/19-classify.svg",
+      "html": "/diagrams/models/vgg/19-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "16bn-classify",
+      "label": "VGG-16bn",
+      "task": "classify",
+      "size": "16bn",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vgg/16bn-classify.svg",
+      "html": "/diagrams/models/vgg/16bn-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "19bn-classify",
+      "label": "VGG-19bn",
+      "task": "classify",
+      "size": "19bn",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vgg/19bn-classify.svg",
+      "html": "/diagrams/models/vgg/19bn-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "family-plain",
+      "label": "VGG family",
+      "task": "classify",
+      "size": "16/19",
+      "kind": "family",
+      "svg": "/diagrams/models/vgg/family-plain.svg",
+      "html": "/diagrams/models/vgg/family-plain.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "source"
+    },
+    {
+      "id": "family-bn",
+      "label": "VGG family with BatchNorm",
+      "task": "classify",
+      "size": "16/19bn",
+      "kind": "family",
+      "svg": "/diagrams/models/vgg/family-bn.svg",
+      "html": "/diagrams/models/vgg/family-bn.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "source"
+    }
+  ]
+}

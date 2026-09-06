@@ -1,0 +1,8382 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "source": "libreyolo/models/grounding_dino/nn.py",
+  "shapes": {
+    "configurations": {
+      "t": {
+        "repo": "LibreYOLO/LibreGroundingDINOt",
+        "revision": "842ba2640b927b39c4c06a62e4d2238a9df965f1",
+        "config": {
+          "activation_dropout": 0.0,
+          "activation_function": "relu",
+          "architectures": [
+            "GroundingDinoForObjectDetection"
+          ],
+          "attention_dropout": 0.0,
+          "auxiliary_loss": false,
+          "backbone": null,
+          "backbone_config": {
+            "depths": [
+              2,
+              2,
+              6,
+              2
+            ],
+            "model_type": "swin",
+            "num_heads": [
+              3,
+              6,
+              12,
+              24
+            ],
+            "out_features": [
+              "stage2",
+              "stage3",
+              "stage4"
+            ],
+            "out_indices": [
+              2,
+              3,
+              4
+            ]
+          },
+          "backbone_kwargs": null,
+          "bbox_cost": 5.0,
+          "bbox_loss_coefficient": 5.0,
+          "class_cost": 1.0,
+          "d_model": 256,
+          "decoder_attention_heads": 8,
+          "decoder_bbox_embed_share": true,
+          "decoder_ffn_dim": 2048,
+          "decoder_layers": 6,
+          "decoder_n_points": 4,
+          "disable_custom_kernels": false,
+          "dropout": 0.1,
+          "embedding_init_target": true,
+          "encoder_attention_heads": 8,
+          "encoder_ffn_dim": 2048,
+          "encoder_layers": 6,
+          "encoder_n_points": 4,
+          "focal_alpha": 0.25,
+          "fusion_dropout": 0.0,
+          "fusion_droppath": 0.1,
+          "giou_cost": 2.0,
+          "giou_loss_coefficient": 2.0,
+          "init_std": 0.02,
+          "is_encoder_decoder": true,
+          "layer_norm_eps": 1e-05,
+          "max_text_len": 256,
+          "model_type": "grounding-dino",
+          "num_feature_levels": 4,
+          "num_queries": 900,
+          "position_embedding_type": "sine",
+          "positional_embedding_temperature": 20,
+          "query_dim": 4,
+          "text_config": {
+            "model_type": "bert"
+          },
+          "text_enhancer_dropout": 0.0,
+          "torch_dtype": "float32",
+          "transformers_version": "4.40.0.dev0",
+          "two_stage": true,
+          "two_stage_bbox_embed_share": false,
+          "use_pretrained_backbone": false,
+          "use_timm_backbone": false
+        }
+      },
+      "b": {
+        "repo": "LibreYOLO/LibreGroundingDINOb",
+        "revision": "2d2f9b44aa8740a3c6a5b84c5d739441f22b7494",
+        "config": {
+          "activation_dropout": 0.0,
+          "activation_function": "relu",
+          "architectures": [
+            "GroundingDinoForObjectDetection"
+          ],
+          "attention_dropout": 0.0,
+          "auxiliary_loss": false,
+          "backbone": null,
+          "backbone_config": {
+            "depths": [
+              2,
+              2,
+              18,
+              2
+            ],
+            "embed_dim": 128,
+            "hidden_size": 1024,
+            "image_size": 384,
+            "model_type": "swin",
+            "num_heads": [
+              4,
+              8,
+              16,
+              32
+            ],
+            "out_features": [
+              "stage2",
+              "stage3",
+              "stage4"
+            ],
+            "out_indices": [
+              2,
+              3,
+              4
+            ],
+            "window_size": 12
+          },
+          "backbone_kwargs": null,
+          "bbox_cost": 5.0,
+          "bbox_loss_coefficient": 5.0,
+          "class_cost": 1.0,
+          "d_model": 256,
+          "decoder_attention_heads": 8,
+          "decoder_bbox_embed_share": true,
+          "decoder_ffn_dim": 2048,
+          "decoder_layers": 6,
+          "decoder_n_points": 4,
+          "disable_custom_kernels": false,
+          "dropout": 0.1,
+          "embedding_init_target": true,
+          "encoder_attention_heads": 8,
+          "encoder_ffn_dim": 2048,
+          "encoder_layers": 6,
+          "encoder_n_points": 4,
+          "focal_alpha": 0.25,
+          "fusion_dropout": 0.0,
+          "fusion_droppath": 0.1,
+          "giou_cost": 2.0,
+          "giou_loss_coefficient": 2.0,
+          "init_std": 0.02,
+          "is_encoder_decoder": true,
+          "layer_norm_eps": 1e-05,
+          "max_text_len": 256,
+          "model_type": "grounding-dino",
+          "num_feature_levels": 4,
+          "num_queries": 900,
+          "position_embedding_type": "sine",
+          "positional_embedding_temperature": 20,
+          "query_dim": 4,
+          "text_config": {
+            "model_type": "bert"
+          },
+          "text_enhancer_dropout": 0.0,
+          "torch_dtype": "float32",
+          "transformers_version": "4.40.0.dev0",
+          "two_stage": true,
+          "two_stage_bbox_embed_share": false,
+          "use_pretrained_backbone": false,
+          "use_timm_backbone": false
+        }
+      }
+    },
+    "resolved_configs": {
+      "t": {
+        "transformers_version": "5.16.1",
+        "architectures": [
+          "GroundingDinoForObjectDetection"
+        ],
+        "output_hidden_states": false,
+        "return_dict": true,
+        "dtype": "float32",
+        "chunk_size_feed_forward": 0,
+        "is_encoder_decoder": true,
+        "id2label": {
+          "0": "LABEL_0",
+          "1": "LABEL_1"
+        },
+        "label2id": {
+          "LABEL_0": 0,
+          "LABEL_1": 1
+        },
+        "problem_type": null,
+        "backbone_config": {
+          "architectures": null,
+          "output_hidden_states": false,
+          "return_dict": true,
+          "dtype": null,
+          "chunk_size_feed_forward": 0,
+          "is_encoder_decoder": false,
+          "id2label": {
+            "0": "LABEL_0",
+            "1": "LABEL_1"
+          },
+          "label2id": {
+            "LABEL_0": 0,
+            "LABEL_1": 1
+          },
+          "problem_type": null,
+          "image_size": 224,
+          "patch_size": 4,
+          "num_channels": 3,
+          "embed_dim": 96,
+          "depths": [
+            2,
+            2,
+            6,
+            2
+          ],
+          "num_heads": [
+            3,
+            6,
+            12,
+            24
+          ],
+          "window_size": 7,
+          "mlp_ratio": 4.0,
+          "qkv_bias": true,
+          "hidden_dropout_prob": 0.0,
+          "attention_probs_dropout_prob": 0.0,
+          "drop_path_rate": 0.1,
+          "hidden_act": "gelu",
+          "use_absolute_embeddings": false,
+          "initializer_range": 0.02,
+          "layer_norm_eps": 1e-05,
+          "encoder_stride": 32,
+          "num_layers": 4,
+          "hidden_size": 768,
+          "stage_names": [
+            "stem",
+            "stage1",
+            "stage2",
+            "stage3",
+            "stage4"
+          ],
+          "_name_or_path": "",
+          "model_type": "swin",
+          "output_attentions": false,
+          "out_features": [
+            "stage2",
+            "stage3",
+            "stage4"
+          ],
+          "out_indices": [
+            2,
+            3,
+            4
+          ]
+        },
+        "text_config": {
+          "architectures": null,
+          "output_hidden_states": false,
+          "return_dict": true,
+          "dtype": null,
+          "chunk_size_feed_forward": 0,
+          "is_encoder_decoder": false,
+          "id2label": {
+            "0": "LABEL_0",
+            "1": "LABEL_1"
+          },
+          "label2id": {
+            "LABEL_0": 0,
+            "LABEL_1": 1
+          },
+          "problem_type": null,
+          "vocab_size": 30522,
+          "hidden_size": 768,
+          "num_hidden_layers": 12,
+          "num_attention_heads": 12,
+          "intermediate_size": 3072,
+          "hidden_act": "gelu",
+          "hidden_dropout_prob": 0.1,
+          "attention_probs_dropout_prob": 0.1,
+          "max_position_embeddings": 512,
+          "type_vocab_size": 2,
+          "initializer_range": 0.02,
+          "layer_norm_eps": 1e-12,
+          "pad_token_id": 0,
+          "use_cache": true,
+          "classifier_dropout": null,
+          "is_decoder": false,
+          "add_cross_attention": false,
+          "bos_token_id": null,
+          "eos_token_id": null,
+          "tie_word_embeddings": true,
+          "_name_or_path": "",
+          "model_type": "bert",
+          "output_attentions": false
+        },
+        "num_queries": 900,
+        "encoder_layers": 6,
+        "encoder_ffn_dim": 2048,
+        "encoder_attention_heads": 8,
+        "decoder_layers": 6,
+        "decoder_ffn_dim": 2048,
+        "decoder_attention_heads": 8,
+        "activation_function": "relu",
+        "d_model": 256,
+        "dropout": 0.1,
+        "attention_dropout": 0.0,
+        "activation_dropout": 0.0,
+        "auxiliary_loss": false,
+        "position_embedding_type": "sine",
+        "num_feature_levels": 4,
+        "encoder_n_points": 4,
+        "decoder_n_points": 4,
+        "two_stage": true,
+        "class_cost": 1.0,
+        "bbox_cost": 5.0,
+        "giou_cost": 2.0,
+        "bbox_loss_coefficient": 5.0,
+        "giou_loss_coefficient": 2.0,
+        "focal_alpha": 0.25,
+        "disable_custom_kernels": false,
+        "max_text_len": 256,
+        "text_enhancer_dropout": 0.0,
+        "fusion_droppath": 0.1,
+        "fusion_dropout": 0.0,
+        "embedding_init_target": true,
+        "query_dim": 4,
+        "decoder_bbox_embed_share": true,
+        "two_stage_bbox_embed_share": false,
+        "positional_embedding_temperature": 20,
+        "init_std": 0.02,
+        "layer_norm_eps": 1e-05,
+        "tie_word_embeddings": true,
+        "_name_or_path": "",
+        "backbone": null,
+        "model_type": "grounding-dino",
+        "output_attentions": false
+      },
+      "b": {
+        "transformers_version": "5.16.1",
+        "architectures": [
+          "GroundingDinoForObjectDetection"
+        ],
+        "output_hidden_states": false,
+        "return_dict": true,
+        "dtype": "float32",
+        "chunk_size_feed_forward": 0,
+        "is_encoder_decoder": true,
+        "id2label": {
+          "0": "LABEL_0",
+          "1": "LABEL_1"
+        },
+        "label2id": {
+          "LABEL_0": 0,
+          "LABEL_1": 1
+        },
+        "problem_type": null,
+        "backbone_config": {
+          "architectures": null,
+          "output_hidden_states": false,
+          "return_dict": true,
+          "dtype": null,
+          "chunk_size_feed_forward": 0,
+          "is_encoder_decoder": false,
+          "id2label": {
+            "0": "LABEL_0",
+            "1": "LABEL_1"
+          },
+          "label2id": {
+            "LABEL_0": 0,
+            "LABEL_1": 1
+          },
+          "problem_type": null,
+          "image_size": 384,
+          "patch_size": 4,
+          "num_channels": 3,
+          "embed_dim": 128,
+          "depths": [
+            2,
+            2,
+            18,
+            2
+          ],
+          "num_heads": [
+            4,
+            8,
+            16,
+            32
+          ],
+          "window_size": 12,
+          "mlp_ratio": 4.0,
+          "qkv_bias": true,
+          "hidden_dropout_prob": 0.0,
+          "attention_probs_dropout_prob": 0.0,
+          "drop_path_rate": 0.1,
+          "hidden_act": "gelu",
+          "use_absolute_embeddings": false,
+          "initializer_range": 0.02,
+          "layer_norm_eps": 1e-05,
+          "encoder_stride": 32,
+          "num_layers": 4,
+          "hidden_size": 1024,
+          "stage_names": [
+            "stem",
+            "stage1",
+            "stage2",
+            "stage3",
+            "stage4"
+          ],
+          "_name_or_path": "",
+          "model_type": "swin",
+          "output_attentions": false,
+          "out_features": [
+            "stage2",
+            "stage3",
+            "stage4"
+          ],
+          "out_indices": [
+            2,
+            3,
+            4
+          ]
+        },
+        "text_config": {
+          "architectures": null,
+          "output_hidden_states": false,
+          "return_dict": true,
+          "dtype": null,
+          "chunk_size_feed_forward": 0,
+          "is_encoder_decoder": false,
+          "id2label": {
+            "0": "LABEL_0",
+            "1": "LABEL_1"
+          },
+          "label2id": {
+            "LABEL_0": 0,
+            "LABEL_1": 1
+          },
+          "problem_type": null,
+          "vocab_size": 30522,
+          "hidden_size": 768,
+          "num_hidden_layers": 12,
+          "num_attention_heads": 12,
+          "intermediate_size": 3072,
+          "hidden_act": "gelu",
+          "hidden_dropout_prob": 0.1,
+          "attention_probs_dropout_prob": 0.1,
+          "max_position_embeddings": 512,
+          "type_vocab_size": 2,
+          "initializer_range": 0.02,
+          "layer_norm_eps": 1e-12,
+          "pad_token_id": 0,
+          "use_cache": true,
+          "classifier_dropout": null,
+          "is_decoder": false,
+          "add_cross_attention": false,
+          "bos_token_id": null,
+          "eos_token_id": null,
+          "tie_word_embeddings": true,
+          "_name_or_path": "",
+          "model_type": "bert",
+          "output_attentions": false
+        },
+        "num_queries": 900,
+        "encoder_layers": 6,
+        "encoder_ffn_dim": 2048,
+        "encoder_attention_heads": 8,
+        "decoder_layers": 6,
+        "decoder_ffn_dim": 2048,
+        "decoder_attention_heads": 8,
+        "activation_function": "relu",
+        "d_model": 256,
+        "dropout": 0.1,
+        "attention_dropout": 0.0,
+        "activation_dropout": 0.0,
+        "auxiliary_loss": false,
+        "position_embedding_type": "sine",
+        "num_feature_levels": 4,
+        "encoder_n_points": 4,
+        "decoder_n_points": 4,
+        "two_stage": true,
+        "class_cost": 1.0,
+        "bbox_cost": 5.0,
+        "giou_cost": 2.0,
+        "bbox_loss_coefficient": 5.0,
+        "giou_loss_coefficient": 2.0,
+        "focal_alpha": 0.25,
+        "disable_custom_kernels": false,
+        "max_text_len": 256,
+        "text_enhancer_dropout": 0.0,
+        "fusion_droppath": 0.1,
+        "fusion_dropout": 0.0,
+        "embedding_init_target": true,
+        "query_dim": 4,
+        "decoder_bbox_embed_share": true,
+        "two_stage_bbox_embed_share": false,
+        "positional_embedding_temperature": 20,
+        "init_std": 0.02,
+        "layer_norm_eps": 1e-05,
+        "tie_word_embeddings": true,
+        "_name_or_path": "",
+        "backbone": null,
+        "model_type": "grounding-dino",
+        "output_attentions": false
+      }
+    },
+    "cpu_tiny": {
+      "input_image": [
+        1,
+        3,
+        800,
+        800
+      ],
+      "input_ids": [
+        [
+          101,
+          1037,
+          4937,
+          1012,
+          1037,
+          3899,
+          1012,
+          1037,
+          2206,
+          1012,
+          102,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "outputs": {
+        "logits": [
+          1,
+          900,
+          256
+        ],
+        "pred_boxes": [
+          1,
+          900,
+          4
+        ]
+      },
+      "seconds": 1.7040481567382812,
+      "modules": {
+        "text_backbone.embeddings.word_embeddings": {
+          "input": [
+            1,
+            16
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.embeddings.position_embeddings": {
+          "input": [
+            1,
+            16
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.embeddings.token_type_embeddings": {
+          "input": [
+            1,
+            16
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.embeddings.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.embeddings": {
+          "input": [
+            1,
+            16
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.0.attention.self.query": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.0.attention.self.key": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.0.attention.self.value": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.0.attention.self": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.0.attention.output.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.0.attention.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.0.attention.output": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.0.attention": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.0.intermediate.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            3072
+          ]
+        },
+        "text_backbone.encoder.layer.0.output.dense": {
+          "input": [
+            1,
+            16,
+            3072
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.0.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.0": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.1.attention.self.query": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.1.attention.self.key": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.1.attention.self.value": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.1.attention.self": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.1.attention.output.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.1.attention.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.1.attention.output": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.1.attention": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.1.intermediate.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            3072
+          ]
+        },
+        "text_backbone.encoder.layer.1.output.dense": {
+          "input": [
+            1,
+            16,
+            3072
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.1.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.1": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.2.attention.self.query": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.2.attention.self.key": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.2.attention.self.value": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.2.attention.self": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.2.attention.output.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.2.attention.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.2.attention.output": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.2.attention": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.2.intermediate.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            3072
+          ]
+        },
+        "text_backbone.encoder.layer.2.output.dense": {
+          "input": [
+            1,
+            16,
+            3072
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.2.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.2": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.3.attention.self.query": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.3.attention.self.key": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.3.attention.self.value": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.3.attention.self": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.3.attention.output.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.3.attention.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.3.attention.output": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.3.attention": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.3.intermediate.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            3072
+          ]
+        },
+        "text_backbone.encoder.layer.3.output.dense": {
+          "input": [
+            1,
+            16,
+            3072
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.3.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.3": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.4.attention.self.query": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.4.attention.self.key": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.4.attention.self.value": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.4.attention.self": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.4.attention.output.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.4.attention.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.4.attention.output": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.4.attention": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.4.intermediate.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            3072
+          ]
+        },
+        "text_backbone.encoder.layer.4.output.dense": {
+          "input": [
+            1,
+            16,
+            3072
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.4.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.4": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.5.attention.self.query": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.5.attention.self.key": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.5.attention.self.value": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.5.attention.self": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.5.attention.output.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.5.attention.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.5.attention.output": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.5.attention": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.5.intermediate.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            3072
+          ]
+        },
+        "text_backbone.encoder.layer.5.output.dense": {
+          "input": [
+            1,
+            16,
+            3072
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.5.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.5": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.6.attention.self.query": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.6.attention.self.key": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.6.attention.self.value": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.6.attention.self": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.6.attention.output.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.6.attention.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.6.attention.output": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.6.attention": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.6.intermediate.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            3072
+          ]
+        },
+        "text_backbone.encoder.layer.6.output.dense": {
+          "input": [
+            1,
+            16,
+            3072
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.6.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.6": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.7.attention.self.query": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.7.attention.self.key": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.7.attention.self.value": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.7.attention.self": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.7.attention.output.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.7.attention.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.7.attention.output": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.7.attention": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.7.intermediate.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            3072
+          ]
+        },
+        "text_backbone.encoder.layer.7.output.dense": {
+          "input": [
+            1,
+            16,
+            3072
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.7.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.7": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.8.attention.self.query": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.8.attention.self.key": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.8.attention.self.value": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.8.attention.self": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.8.attention.output.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.8.attention.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.8.attention.output": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.8.attention": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.8.intermediate.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            3072
+          ]
+        },
+        "text_backbone.encoder.layer.8.output.dense": {
+          "input": [
+            1,
+            16,
+            3072
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.8.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.8": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.9.attention.self.query": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.9.attention.self.key": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.9.attention.self.value": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.9.attention.self": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.9.attention.output.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.9.attention.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.9.attention.output": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.9.attention": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.9.intermediate.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            3072
+          ]
+        },
+        "text_backbone.encoder.layer.9.output.dense": {
+          "input": [
+            1,
+            16,
+            3072
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.9.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.9": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.10.attention.self.query": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.10.attention.self.key": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.10.attention.self.value": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.10.attention.self": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.10.attention.output.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.10.attention.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.10.attention.output": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.10.attention": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.10.intermediate.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            3072
+          ]
+        },
+        "text_backbone.encoder.layer.10.output.dense": {
+          "input": [
+            1,
+            16,
+            3072
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.10.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.10": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.11.attention.self.query": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.11.attention.self.key": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.11.attention.self.value": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.11.attention.self": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.11.attention.output.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.11.attention.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.11.attention.output": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.11.attention": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.11.intermediate.dense": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            3072
+          ]
+        },
+        "text_backbone.encoder.layer.11.output.dense": {
+          "input": [
+            1,
+            16,
+            3072
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.11.output.LayerNorm": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone.encoder.layer.11": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_backbone": {
+          "input": [
+            1,
+            16
+          ],
+          "output": [
+            1,
+            16,
+            768
+          ]
+        },
+        "text_projection": {
+          "input": [
+            1,
+            16,
+            768
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "backbone_conv._backbone.patch_embed.proj": {
+          "input": [
+            1,
+            3,
+            800,
+            800
+          ],
+          "output": [
+            1,
+            96,
+            200,
+            200
+          ]
+        },
+        "backbone_conv._backbone.patch_embed.norm": {
+          "input": [
+            1,
+            200,
+            200,
+            96
+          ],
+          "output": [
+            1,
+            200,
+            200,
+            96
+          ]
+        },
+        "backbone_conv._backbone.patch_embed": {
+          "input": [
+            1,
+            3,
+            800,
+            800
+          ],
+          "output": [
+            1,
+            200,
+            200,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.0.downsample": {
+          "input": [
+            1,
+            200,
+            200,
+            96
+          ],
+          "output": [
+            1,
+            200,
+            200,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.0.norm1": {
+          "input": [
+            1,
+            200,
+            200,
+            96
+          ],
+          "output": [
+            1,
+            200,
+            200,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.0.attn.qkv": {
+          "input": [
+            841,
+            49,
+            96
+          ],
+          "output": [
+            841,
+            49,
+            288
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.0.attn.proj": {
+          "input": [
+            841,
+            49,
+            96
+          ],
+          "output": [
+            841,
+            49,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.0.attn": {
+          "input": [
+            841,
+            49,
+            96
+          ],
+          "output": [
+            841,
+            49,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.0.norm2": {
+          "input": [
+            1,
+            40000,
+            96
+          ],
+          "output": [
+            1,
+            40000,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.0.mlp.fc1": {
+          "input": [
+            1,
+            40000,
+            96
+          ],
+          "output": [
+            1,
+            40000,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.0.mlp.act": {
+          "input": [
+            1,
+            40000,
+            384
+          ],
+          "output": [
+            1,
+            40000,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.0.mlp.fc2": {
+          "input": [
+            1,
+            40000,
+            384
+          ],
+          "output": [
+            1,
+            40000,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.0.mlp": {
+          "input": [
+            1,
+            40000,
+            96
+          ],
+          "output": [
+            1,
+            40000,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.0": {
+          "input": [
+            1,
+            200,
+            200,
+            96
+          ],
+          "output": [
+            1,
+            200,
+            200,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.1.norm1": {
+          "input": [
+            1,
+            200,
+            200,
+            96
+          ],
+          "output": [
+            1,
+            200,
+            200,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.1.attn.qkv": {
+          "input": [
+            841,
+            49,
+            96
+          ],
+          "output": [
+            841,
+            49,
+            288
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.1.attn.proj": {
+          "input": [
+            841,
+            49,
+            96
+          ],
+          "output": [
+            841,
+            49,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.1.attn": {
+          "input": [
+            841,
+            49,
+            96
+          ],
+          "output": [
+            841,
+            49,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.1.norm2": {
+          "input": [
+            1,
+            40000,
+            96
+          ],
+          "output": [
+            1,
+            40000,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.1.mlp.fc1": {
+          "input": [
+            1,
+            40000,
+            96
+          ],
+          "output": [
+            1,
+            40000,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.1.mlp.act": {
+          "input": [
+            1,
+            40000,
+            384
+          ],
+          "output": [
+            1,
+            40000,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.1.mlp.fc2": {
+          "input": [
+            1,
+            40000,
+            384
+          ],
+          "output": [
+            1,
+            40000,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.1.mlp": {
+          "input": [
+            1,
+            40000,
+            96
+          ],
+          "output": [
+            1,
+            40000,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.0.blocks.1": {
+          "input": [
+            1,
+            200,
+            200,
+            96
+          ],
+          "output": [
+            1,
+            200,
+            200,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.0": {
+          "input": [
+            1,
+            200,
+            200,
+            96
+          ],
+          "output": [
+            1,
+            200,
+            200,
+            96
+          ]
+        },
+        "backbone_conv._backbone.layers.1.downsample.norm": {
+          "input": [
+            1,
+            100,
+            100,
+            384
+          ],
+          "output": [
+            1,
+            100,
+            100,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.1.downsample.reduction": {
+          "input": [
+            1,
+            100,
+            100,
+            384
+          ],
+          "output": [
+            1,
+            100,
+            100,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.1.downsample": {
+          "input": [
+            1,
+            200,
+            200,
+            96
+          ],
+          "output": [
+            1,
+            100,
+            100,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.0.norm1": {
+          "input": [
+            1,
+            100,
+            100,
+            192
+          ],
+          "output": [
+            1,
+            100,
+            100,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.0.attn.qkv": {
+          "input": [
+            225,
+            49,
+            192
+          ],
+          "output": [
+            225,
+            49,
+            576
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.0.attn.proj": {
+          "input": [
+            225,
+            49,
+            192
+          ],
+          "output": [
+            225,
+            49,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.0.attn": {
+          "input": [
+            225,
+            49,
+            192
+          ],
+          "output": [
+            225,
+            49,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.0.norm2": {
+          "input": [
+            1,
+            10000,
+            192
+          ],
+          "output": [
+            1,
+            10000,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.0.mlp.fc1": {
+          "input": [
+            1,
+            10000,
+            192
+          ],
+          "output": [
+            1,
+            10000,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.0.mlp.act": {
+          "input": [
+            1,
+            10000,
+            768
+          ],
+          "output": [
+            1,
+            10000,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.0.mlp.fc2": {
+          "input": [
+            1,
+            10000,
+            768
+          ],
+          "output": [
+            1,
+            10000,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.0.mlp": {
+          "input": [
+            1,
+            10000,
+            192
+          ],
+          "output": [
+            1,
+            10000,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.0": {
+          "input": [
+            1,
+            100,
+            100,
+            192
+          ],
+          "output": [
+            1,
+            100,
+            100,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.1.norm1": {
+          "input": [
+            1,
+            100,
+            100,
+            192
+          ],
+          "output": [
+            1,
+            100,
+            100,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.1.attn.qkv": {
+          "input": [
+            225,
+            49,
+            192
+          ],
+          "output": [
+            225,
+            49,
+            576
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.1.attn.proj": {
+          "input": [
+            225,
+            49,
+            192
+          ],
+          "output": [
+            225,
+            49,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.1.attn": {
+          "input": [
+            225,
+            49,
+            192
+          ],
+          "output": [
+            225,
+            49,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.1.norm2": {
+          "input": [
+            1,
+            10000,
+            192
+          ],
+          "output": [
+            1,
+            10000,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.1.mlp.fc1": {
+          "input": [
+            1,
+            10000,
+            192
+          ],
+          "output": [
+            1,
+            10000,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.1.mlp.act": {
+          "input": [
+            1,
+            10000,
+            768
+          ],
+          "output": [
+            1,
+            10000,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.1.mlp.fc2": {
+          "input": [
+            1,
+            10000,
+            768
+          ],
+          "output": [
+            1,
+            10000,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.1.mlp": {
+          "input": [
+            1,
+            10000,
+            192
+          ],
+          "output": [
+            1,
+            10000,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.1.blocks.1": {
+          "input": [
+            1,
+            100,
+            100,
+            192
+          ],
+          "output": [
+            1,
+            100,
+            100,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.1": {
+          "input": [
+            1,
+            200,
+            200,
+            96
+          ],
+          "output": [
+            1,
+            100,
+            100,
+            192
+          ]
+        },
+        "backbone_conv._backbone.layers.2.downsample.norm": {
+          "input": [
+            1,
+            50,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.2.downsample.reduction": {
+          "input": [
+            1,
+            50,
+            50,
+            768
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.downsample": {
+          "input": [
+            1,
+            100,
+            100,
+            192
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.0.norm1": {
+          "input": [
+            1,
+            50,
+            50,
+            384
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.0.attn.qkv": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            1152
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.0.attn.proj": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.0.attn": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.0.norm2": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.0.mlp.fc1": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            1536
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.0.mlp.act": {
+          "input": [
+            1,
+            2500,
+            1536
+          ],
+          "output": [
+            1,
+            2500,
+            1536
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.0.mlp.fc2": {
+          "input": [
+            1,
+            2500,
+            1536
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.0.mlp": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.0": {
+          "input": [
+            1,
+            50,
+            50,
+            384
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.1.norm1": {
+          "input": [
+            1,
+            50,
+            50,
+            384
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.1.attn.qkv": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            1152
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.1.attn.proj": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.1.attn": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.1.norm2": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.1.mlp.fc1": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            1536
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.1.mlp.act": {
+          "input": [
+            1,
+            2500,
+            1536
+          ],
+          "output": [
+            1,
+            2500,
+            1536
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.1.mlp.fc2": {
+          "input": [
+            1,
+            2500,
+            1536
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.1.mlp": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.1": {
+          "input": [
+            1,
+            50,
+            50,
+            384
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.2.norm1": {
+          "input": [
+            1,
+            50,
+            50,
+            384
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.2.attn.qkv": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            1152
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.2.attn.proj": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.2.attn": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.2.norm2": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.2.mlp.fc1": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            1536
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.2.mlp.act": {
+          "input": [
+            1,
+            2500,
+            1536
+          ],
+          "output": [
+            1,
+            2500,
+            1536
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.2.mlp.fc2": {
+          "input": [
+            1,
+            2500,
+            1536
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.2.mlp": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.2": {
+          "input": [
+            1,
+            50,
+            50,
+            384
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.3.norm1": {
+          "input": [
+            1,
+            50,
+            50,
+            384
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.3.attn.qkv": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            1152
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.3.attn.proj": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.3.attn": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.3.norm2": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.3.mlp.fc1": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            1536
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.3.mlp.act": {
+          "input": [
+            1,
+            2500,
+            1536
+          ],
+          "output": [
+            1,
+            2500,
+            1536
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.3.mlp.fc2": {
+          "input": [
+            1,
+            2500,
+            1536
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.3.mlp": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.3": {
+          "input": [
+            1,
+            50,
+            50,
+            384
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.4.norm1": {
+          "input": [
+            1,
+            50,
+            50,
+            384
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.4.attn.qkv": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            1152
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.4.attn.proj": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.4.attn": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.4.norm2": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.4.mlp.fc1": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            1536
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.4.mlp.act": {
+          "input": [
+            1,
+            2500,
+            1536
+          ],
+          "output": [
+            1,
+            2500,
+            1536
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.4.mlp.fc2": {
+          "input": [
+            1,
+            2500,
+            1536
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.4.mlp": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.4": {
+          "input": [
+            1,
+            50,
+            50,
+            384
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.5.norm1": {
+          "input": [
+            1,
+            50,
+            50,
+            384
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.5.attn.qkv": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            1152
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.5.attn.proj": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.5.attn": {
+          "input": [
+            64,
+            49,
+            384
+          ],
+          "output": [
+            64,
+            49,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.5.norm2": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.5.mlp.fc1": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            1536
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.5.mlp.act": {
+          "input": [
+            1,
+            2500,
+            1536
+          ],
+          "output": [
+            1,
+            2500,
+            1536
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.5.mlp.fc2": {
+          "input": [
+            1,
+            2500,
+            1536
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.5.mlp": {
+          "input": [
+            1,
+            2500,
+            384
+          ],
+          "output": [
+            1,
+            2500,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2.blocks.5": {
+          "input": [
+            1,
+            50,
+            50,
+            384
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.2": {
+          "input": [
+            1,
+            100,
+            100,
+            192
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            384
+          ]
+        },
+        "backbone_conv._backbone.layers.3.downsample.norm": {
+          "input": [
+            1,
+            25,
+            25,
+            1536
+          ],
+          "output": [
+            1,
+            25,
+            25,
+            1536
+          ]
+        },
+        "backbone_conv._backbone.layers.3.downsample.reduction": {
+          "input": [
+            1,
+            25,
+            25,
+            1536
+          ],
+          "output": [
+            1,
+            25,
+            25,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.3.downsample": {
+          "input": [
+            1,
+            50,
+            50,
+            384
+          ],
+          "output": [
+            1,
+            25,
+            25,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.0.norm1": {
+          "input": [
+            1,
+            25,
+            25,
+            768
+          ],
+          "output": [
+            1,
+            25,
+            25,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.0.attn.qkv": {
+          "input": [
+            16,
+            49,
+            768
+          ],
+          "output": [
+            16,
+            49,
+            2304
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.0.attn.proj": {
+          "input": [
+            16,
+            49,
+            768
+          ],
+          "output": [
+            16,
+            49,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.0.attn": {
+          "input": [
+            16,
+            49,
+            768
+          ],
+          "output": [
+            16,
+            49,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.0.norm2": {
+          "input": [
+            1,
+            625,
+            768
+          ],
+          "output": [
+            1,
+            625,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.0.mlp.fc1": {
+          "input": [
+            1,
+            625,
+            768
+          ],
+          "output": [
+            1,
+            625,
+            3072
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.0.mlp.act": {
+          "input": [
+            1,
+            625,
+            3072
+          ],
+          "output": [
+            1,
+            625,
+            3072
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.0.mlp.fc2": {
+          "input": [
+            1,
+            625,
+            3072
+          ],
+          "output": [
+            1,
+            625,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.0.mlp": {
+          "input": [
+            1,
+            625,
+            768
+          ],
+          "output": [
+            1,
+            625,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.0": {
+          "input": [
+            1,
+            25,
+            25,
+            768
+          ],
+          "output": [
+            1,
+            25,
+            25,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.1.norm1": {
+          "input": [
+            1,
+            25,
+            25,
+            768
+          ],
+          "output": [
+            1,
+            25,
+            25,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.1.attn.qkv": {
+          "input": [
+            16,
+            49,
+            768
+          ],
+          "output": [
+            16,
+            49,
+            2304
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.1.attn.proj": {
+          "input": [
+            16,
+            49,
+            768
+          ],
+          "output": [
+            16,
+            49,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.1.attn": {
+          "input": [
+            16,
+            49,
+            768
+          ],
+          "output": [
+            16,
+            49,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.1.norm2": {
+          "input": [
+            1,
+            625,
+            768
+          ],
+          "output": [
+            1,
+            625,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.1.mlp.fc1": {
+          "input": [
+            1,
+            625,
+            768
+          ],
+          "output": [
+            1,
+            625,
+            3072
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.1.mlp.act": {
+          "input": [
+            1,
+            625,
+            3072
+          ],
+          "output": [
+            1,
+            625,
+            3072
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.1.mlp.fc2": {
+          "input": [
+            1,
+            625,
+            3072
+          ],
+          "output": [
+            1,
+            625,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.1.mlp": {
+          "input": [
+            1,
+            625,
+            768
+          ],
+          "output": [
+            1,
+            625,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.3.blocks.1": {
+          "input": [
+            1,
+            25,
+            25,
+            768
+          ],
+          "output": [
+            1,
+            25,
+            25,
+            768
+          ]
+        },
+        "backbone_conv._backbone.layers.3": {
+          "input": [
+            1,
+            50,
+            50,
+            384
+          ],
+          "output": [
+            1,
+            25,
+            25,
+            768
+          ]
+        },
+        "backbone_conv.hidden_states_norms.0": {
+          "input": [
+            1,
+            100,
+            100,
+            192
+          ],
+          "output": [
+            1,
+            100,
+            100,
+            192
+          ]
+        },
+        "backbone_conv.hidden_states_norms.1": {
+          "input": [
+            1,
+            50,
+            50,
+            384
+          ],
+          "output": [
+            1,
+            50,
+            50,
+            384
+          ]
+        },
+        "backbone_conv.hidden_states_norms.2": {
+          "input": [
+            1,
+            25,
+            25,
+            768
+          ],
+          "output": [
+            1,
+            25,
+            25,
+            768
+          ]
+        },
+        "input_proj_vision.0.0": {
+          "input": [
+            1,
+            192,
+            100,
+            100
+          ],
+          "output": [
+            1,
+            256,
+            100,
+            100
+          ]
+        },
+        "input_proj_vision.0.1": {
+          "input": [
+            1,
+            256,
+            100,
+            100
+          ],
+          "output": [
+            1,
+            256,
+            100,
+            100
+          ]
+        },
+        "input_proj_vision.0": {
+          "input": [
+            1,
+            192,
+            100,
+            100
+          ],
+          "output": [
+            1,
+            256,
+            100,
+            100
+          ]
+        },
+        "input_proj_vision.1.0": {
+          "input": [
+            1,
+            384,
+            50,
+            50
+          ],
+          "output": [
+            1,
+            256,
+            50,
+            50
+          ]
+        },
+        "input_proj_vision.1.1": {
+          "input": [
+            1,
+            256,
+            50,
+            50
+          ],
+          "output": [
+            1,
+            256,
+            50,
+            50
+          ]
+        },
+        "input_proj_vision.1": {
+          "input": [
+            1,
+            384,
+            50,
+            50
+          ],
+          "output": [
+            1,
+            256,
+            50,
+            50
+          ]
+        },
+        "input_proj_vision.2.0": {
+          "input": [
+            1,
+            768,
+            25,
+            25
+          ],
+          "output": [
+            1,
+            256,
+            25,
+            25
+          ]
+        },
+        "input_proj_vision.2.1": {
+          "input": [
+            1,
+            256,
+            25,
+            25
+          ],
+          "output": [
+            1,
+            256,
+            25,
+            25
+          ]
+        },
+        "input_proj_vision.2": {
+          "input": [
+            1,
+            768,
+            25,
+            25
+          ],
+          "output": [
+            1,
+            256,
+            25,
+            25
+          ]
+        },
+        "position_embedding": {
+          "input": [
+            1,
+            13,
+            13
+          ],
+          "output": [
+            1,
+            256,
+            13,
+            13
+          ]
+        },
+        "input_proj_vision.3.0": {
+          "input": [
+            1,
+            768,
+            25,
+            25
+          ],
+          "output": [
+            1,
+            256,
+            13,
+            13
+          ]
+        },
+        "input_proj_vision.3.1": {
+          "input": [
+            1,
+            256,
+            13,
+            13
+          ],
+          "output": [
+            1,
+            256,
+            13,
+            13
+          ]
+        },
+        "input_proj_vision.3": {
+          "input": [
+            1,
+            768,
+            25,
+            25
+          ],
+          "output": [
+            1,
+            256,
+            13,
+            13
+          ]
+        },
+        "encoder.layers.0.fusion_layer.layer_norm_vision": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.0.fusion_layer.layer_norm_text": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.0.fusion_layer.attn.vision_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            1024
+          ]
+        },
+        "encoder.layers.0.fusion_layer.attn.text_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.0.fusion_layer.attn.values_vision_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            1024
+          ]
+        },
+        "encoder.layers.0.fusion_layer.attn.values_text_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.0.fusion_layer.attn.out_vision_proj": {
+          "input": [
+            1,
+            13294,
+            1024
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.0.fusion_layer.attn.out_text_proj": {
+          "input": [
+            1,
+            16,
+            1024
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.0.text_enhancer_layer.self_attn.query": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.0.text_enhancer_layer.self_attn.key": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.0.text_enhancer_layer.self_attn.value": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.0.text_enhancer_layer.self_attn.out_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.0.text_enhancer_layer.self_attn": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.0.text_enhancer_layer.layer_norm_before": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.0.text_enhancer_layer.fc1": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.0.text_enhancer_layer.fc2": {
+          "input": [
+            1,
+            16,
+            1024
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.0.text_enhancer_layer.layer_norm_after": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.0.text_enhancer_layer": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.0.deformable_layer.self_attn.value_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.0.deformable_layer.self_attn.sampling_offsets": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.0.deformable_layer.self_attn.attention_weights": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            128
+          ]
+        },
+        "encoder.layers.0.deformable_layer.self_attn.output_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.0.deformable_layer.self_attn": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.0.deformable_layer.self_attn_layer_norm": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.0.deformable_layer.fc1": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            2048
+          ]
+        },
+        "encoder.layers.0.deformable_layer.fc2": {
+          "input": [
+            1,
+            13294,
+            2048
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.0.deformable_layer.final_layer_norm": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.0.deformable_layer": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.1.fusion_layer.layer_norm_vision": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.1.fusion_layer.layer_norm_text": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.1.fusion_layer.attn.vision_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            1024
+          ]
+        },
+        "encoder.layers.1.fusion_layer.attn.text_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.1.fusion_layer.attn.values_vision_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            1024
+          ]
+        },
+        "encoder.layers.1.fusion_layer.attn.values_text_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.1.fusion_layer.attn.out_vision_proj": {
+          "input": [
+            1,
+            13294,
+            1024
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.1.fusion_layer.attn.out_text_proj": {
+          "input": [
+            1,
+            16,
+            1024
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.1.text_enhancer_layer.self_attn.query": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.1.text_enhancer_layer.self_attn.key": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.1.text_enhancer_layer.self_attn.value": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.1.text_enhancer_layer.self_attn.out_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.1.text_enhancer_layer.self_attn": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.1.text_enhancer_layer.layer_norm_before": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.1.text_enhancer_layer.fc1": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.1.text_enhancer_layer.fc2": {
+          "input": [
+            1,
+            16,
+            1024
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.1.text_enhancer_layer.layer_norm_after": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.1.text_enhancer_layer": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.1.deformable_layer.self_attn.value_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.1.deformable_layer.self_attn.sampling_offsets": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.1.deformable_layer.self_attn.attention_weights": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            128
+          ]
+        },
+        "encoder.layers.1.deformable_layer.self_attn.output_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.1.deformable_layer.self_attn": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.1.deformable_layer.self_attn_layer_norm": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.1.deformable_layer.fc1": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            2048
+          ]
+        },
+        "encoder.layers.1.deformable_layer.fc2": {
+          "input": [
+            1,
+            13294,
+            2048
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.1.deformable_layer.final_layer_norm": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.1.deformable_layer": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.2.fusion_layer.layer_norm_vision": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.2.fusion_layer.layer_norm_text": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.2.fusion_layer.attn.vision_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            1024
+          ]
+        },
+        "encoder.layers.2.fusion_layer.attn.text_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.2.fusion_layer.attn.values_vision_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            1024
+          ]
+        },
+        "encoder.layers.2.fusion_layer.attn.values_text_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.2.fusion_layer.attn.out_vision_proj": {
+          "input": [
+            1,
+            13294,
+            1024
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.2.fusion_layer.attn.out_text_proj": {
+          "input": [
+            1,
+            16,
+            1024
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.2.text_enhancer_layer.self_attn.query": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.2.text_enhancer_layer.self_attn.key": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.2.text_enhancer_layer.self_attn.value": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.2.text_enhancer_layer.self_attn.out_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.2.text_enhancer_layer.self_attn": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.2.text_enhancer_layer.layer_norm_before": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.2.text_enhancer_layer.fc1": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.2.text_enhancer_layer.fc2": {
+          "input": [
+            1,
+            16,
+            1024
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.2.text_enhancer_layer.layer_norm_after": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.2.text_enhancer_layer": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.2.deformable_layer.self_attn.value_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.2.deformable_layer.self_attn.sampling_offsets": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.2.deformable_layer.self_attn.attention_weights": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            128
+          ]
+        },
+        "encoder.layers.2.deformable_layer.self_attn.output_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.2.deformable_layer.self_attn": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.2.deformable_layer.self_attn_layer_norm": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.2.deformable_layer.fc1": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            2048
+          ]
+        },
+        "encoder.layers.2.deformable_layer.fc2": {
+          "input": [
+            1,
+            13294,
+            2048
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.2.deformable_layer.final_layer_norm": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.2.deformable_layer": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.3.fusion_layer.layer_norm_vision": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.3.fusion_layer.layer_norm_text": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.3.fusion_layer.attn.vision_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            1024
+          ]
+        },
+        "encoder.layers.3.fusion_layer.attn.text_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.3.fusion_layer.attn.values_vision_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            1024
+          ]
+        },
+        "encoder.layers.3.fusion_layer.attn.values_text_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.3.fusion_layer.attn.out_vision_proj": {
+          "input": [
+            1,
+            13294,
+            1024
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.3.fusion_layer.attn.out_text_proj": {
+          "input": [
+            1,
+            16,
+            1024
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.3.text_enhancer_layer.self_attn.query": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.3.text_enhancer_layer.self_attn.key": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.3.text_enhancer_layer.self_attn.value": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.3.text_enhancer_layer.self_attn.out_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.3.text_enhancer_layer.self_attn": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.3.text_enhancer_layer.layer_norm_before": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.3.text_enhancer_layer.fc1": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.3.text_enhancer_layer.fc2": {
+          "input": [
+            1,
+            16,
+            1024
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.3.text_enhancer_layer.layer_norm_after": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.3.text_enhancer_layer": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.3.deformable_layer.self_attn.value_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.3.deformable_layer.self_attn.sampling_offsets": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.3.deformable_layer.self_attn.attention_weights": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            128
+          ]
+        },
+        "encoder.layers.3.deformable_layer.self_attn.output_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.3.deformable_layer.self_attn": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.3.deformable_layer.self_attn_layer_norm": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.3.deformable_layer.fc1": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            2048
+          ]
+        },
+        "encoder.layers.3.deformable_layer.fc2": {
+          "input": [
+            1,
+            13294,
+            2048
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.3.deformable_layer.final_layer_norm": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.3.deformable_layer": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.4.fusion_layer.layer_norm_vision": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.4.fusion_layer.layer_norm_text": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.4.fusion_layer.attn.vision_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            1024
+          ]
+        },
+        "encoder.layers.4.fusion_layer.attn.text_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.4.fusion_layer.attn.values_vision_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            1024
+          ]
+        },
+        "encoder.layers.4.fusion_layer.attn.values_text_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.4.fusion_layer.attn.out_vision_proj": {
+          "input": [
+            1,
+            13294,
+            1024
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.4.fusion_layer.attn.out_text_proj": {
+          "input": [
+            1,
+            16,
+            1024
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.4.text_enhancer_layer.self_attn.query": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.4.text_enhancer_layer.self_attn.key": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.4.text_enhancer_layer.self_attn.value": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.4.text_enhancer_layer.self_attn.out_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.4.text_enhancer_layer.self_attn": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.4.text_enhancer_layer.layer_norm_before": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.4.text_enhancer_layer.fc1": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.4.text_enhancer_layer.fc2": {
+          "input": [
+            1,
+            16,
+            1024
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.4.text_enhancer_layer.layer_norm_after": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.4.text_enhancer_layer": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.4.deformable_layer.self_attn.value_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.4.deformable_layer.self_attn.sampling_offsets": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.4.deformable_layer.self_attn.attention_weights": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            128
+          ]
+        },
+        "encoder.layers.4.deformable_layer.self_attn.output_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.4.deformable_layer.self_attn": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.4.deformable_layer.self_attn_layer_norm": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.4.deformable_layer.fc1": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            2048
+          ]
+        },
+        "encoder.layers.4.deformable_layer.fc2": {
+          "input": [
+            1,
+            13294,
+            2048
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.4.deformable_layer.final_layer_norm": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.4.deformable_layer": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.5.fusion_layer.layer_norm_vision": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.5.fusion_layer.layer_norm_text": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.5.fusion_layer.attn.vision_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            1024
+          ]
+        },
+        "encoder.layers.5.fusion_layer.attn.text_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.5.fusion_layer.attn.values_vision_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            1024
+          ]
+        },
+        "encoder.layers.5.fusion_layer.attn.values_text_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.5.fusion_layer.attn.out_vision_proj": {
+          "input": [
+            1,
+            13294,
+            1024
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.5.fusion_layer.attn.out_text_proj": {
+          "input": [
+            1,
+            16,
+            1024
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.5.text_enhancer_layer.self_attn.query": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.5.text_enhancer_layer.self_attn.key": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.5.text_enhancer_layer.self_attn.value": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.5.text_enhancer_layer.self_attn.out_proj": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.5.text_enhancer_layer.self_attn": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.5.text_enhancer_layer.layer_norm_before": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.5.text_enhancer_layer.fc1": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            1024
+          ]
+        },
+        "encoder.layers.5.text_enhancer_layer.fc2": {
+          "input": [
+            1,
+            16,
+            1024
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.5.text_enhancer_layer.layer_norm_after": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.5.text_enhancer_layer": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "encoder.layers.5.deformable_layer.self_attn.value_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.5.deformable_layer.self_attn.sampling_offsets": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.5.deformable_layer.self_attn.attention_weights": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            128
+          ]
+        },
+        "encoder.layers.5.deformable_layer.self_attn.output_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.5.deformable_layer.self_attn": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.5.deformable_layer.self_attn_layer_norm": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.5.deformable_layer.fc1": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            2048
+          ]
+        },
+        "encoder.layers.5.deformable_layer.fc2": {
+          "input": [
+            1,
+            13294,
+            2048
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.5.deformable_layer.final_layer_norm": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder.layers.5.deformable_layer": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "enc_output": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "enc_output_norm": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder_output_bbox_embed.layers.0": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder_output_bbox_embed.layers.1": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "encoder_output_bbox_embed.layers.2": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            4
+          ]
+        },
+        "encoder_output_bbox_embed": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            4
+          ]
+        },
+        "decoder.reference_points_head.layers.0": {
+          "input": [
+            1,
+            900,
+            512
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.reference_points_head.layers.1": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.reference_points_head": {
+          "input": [
+            1,
+            900,
+            512
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0.self_attn.query": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0.self_attn.key": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0.self_attn.value": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0.self_attn.out_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0.self_attn": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0.self_attn_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0.encoder_attn_text.query": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0.encoder_attn_text.key": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "decoder.layers.0.encoder_attn_text.value": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "decoder.layers.0.encoder_attn_text.out_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0.encoder_attn_text": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0.encoder_attn_text_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0.encoder_attn.value_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "decoder.layers.0.encoder_attn.sampling_offsets": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0.encoder_attn.attention_weights": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            128
+          ]
+        },
+        "decoder.layers.0.encoder_attn.output_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0.encoder_attn": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0.encoder_attn_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0.fc1": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            2048
+          ]
+        },
+        "decoder.layers.0.fc2": {
+          "input": [
+            1,
+            900,
+            2048
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0.final_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.0": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.0.layers.0": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.0.layers.1": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.0.layers.2": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            4
+          ]
+        },
+        "decoder.bbox_embed.0": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            4
+          ]
+        },
+        "decoder.layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1.self_attn.query": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1.self_attn.key": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1.self_attn.value": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1.self_attn.out_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1.self_attn": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1.self_attn_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1.encoder_attn_text.query": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1.encoder_attn_text.key": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "decoder.layers.1.encoder_attn_text.value": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "decoder.layers.1.encoder_attn_text.out_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1.encoder_attn_text": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1.encoder_attn_text_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1.encoder_attn.value_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "decoder.layers.1.encoder_attn.sampling_offsets": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1.encoder_attn.attention_weights": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            128
+          ]
+        },
+        "decoder.layers.1.encoder_attn.output_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1.encoder_attn": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1.encoder_attn_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1.fc1": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            2048
+          ]
+        },
+        "decoder.layers.1.fc2": {
+          "input": [
+            1,
+            900,
+            2048
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1.final_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.1": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.1.layers.0": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.1.layers.1": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.1.layers.2": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            4
+          ]
+        },
+        "decoder.bbox_embed.1": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            4
+          ]
+        },
+        "decoder.layers.2.self_attn.query": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.2.self_attn.key": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.2.self_attn.value": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.2.self_attn.out_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.2.self_attn": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.2.self_attn_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.2.encoder_attn_text.query": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.2.encoder_attn_text.key": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "decoder.layers.2.encoder_attn_text.value": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "decoder.layers.2.encoder_attn_text.out_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.2.encoder_attn_text": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.2.encoder_attn_text_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.2.encoder_attn.value_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "decoder.layers.2.encoder_attn.sampling_offsets": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.2.encoder_attn.attention_weights": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            128
+          ]
+        },
+        "decoder.layers.2.encoder_attn.output_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.2.encoder_attn": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.2.encoder_attn_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.2.fc1": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            2048
+          ]
+        },
+        "decoder.layers.2.fc2": {
+          "input": [
+            1,
+            900,
+            2048
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.2.final_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.2": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.2.layers.0": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.2.layers.1": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.2.layers.2": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            4
+          ]
+        },
+        "decoder.bbox_embed.2": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            4
+          ]
+        },
+        "decoder.layers.3.self_attn.query": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.3.self_attn.key": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.3.self_attn.value": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.3.self_attn.out_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.3.self_attn": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.3.self_attn_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.3.encoder_attn_text.query": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.3.encoder_attn_text.key": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "decoder.layers.3.encoder_attn_text.value": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "decoder.layers.3.encoder_attn_text.out_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.3.encoder_attn_text": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.3.encoder_attn_text_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.3.encoder_attn.value_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "decoder.layers.3.encoder_attn.sampling_offsets": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.3.encoder_attn.attention_weights": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            128
+          ]
+        },
+        "decoder.layers.3.encoder_attn.output_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.3.encoder_attn": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.3.encoder_attn_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.3.fc1": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            2048
+          ]
+        },
+        "decoder.layers.3.fc2": {
+          "input": [
+            1,
+            900,
+            2048
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.3.final_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.3": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.3.layers.0": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.3.layers.1": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.3.layers.2": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            4
+          ]
+        },
+        "decoder.bbox_embed.3": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            4
+          ]
+        },
+        "decoder.layers.4.self_attn.query": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.4.self_attn.key": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.4.self_attn.value": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.4.self_attn.out_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.4.self_attn": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.4.self_attn_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.4.encoder_attn_text.query": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.4.encoder_attn_text.key": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "decoder.layers.4.encoder_attn_text.value": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "decoder.layers.4.encoder_attn_text.out_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.4.encoder_attn_text": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.4.encoder_attn_text_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.4.encoder_attn.value_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "decoder.layers.4.encoder_attn.sampling_offsets": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.4.encoder_attn.attention_weights": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            128
+          ]
+        },
+        "decoder.layers.4.encoder_attn.output_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.4.encoder_attn": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.4.encoder_attn_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.4.fc1": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            2048
+          ]
+        },
+        "decoder.layers.4.fc2": {
+          "input": [
+            1,
+            900,
+            2048
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.4.final_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.4": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.4.layers.0": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.4.layers.1": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.4.layers.2": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            4
+          ]
+        },
+        "decoder.bbox_embed.4": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            4
+          ]
+        },
+        "decoder.layers.5.self_attn.query": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.5.self_attn.key": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.5.self_attn.value": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.5.self_attn.out_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.5.self_attn": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.5.self_attn_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.5.encoder_attn_text.query": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.5.encoder_attn_text.key": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "decoder.layers.5.encoder_attn_text.value": {
+          "input": [
+            1,
+            16,
+            256
+          ],
+          "output": [
+            1,
+            16,
+            256
+          ]
+        },
+        "decoder.layers.5.encoder_attn_text.out_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.5.encoder_attn_text": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.5.encoder_attn_text_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.5.encoder_attn.value_proj": {
+          "input": [
+            1,
+            13294,
+            256
+          ],
+          "output": [
+            1,
+            13294,
+            256
+          ]
+        },
+        "decoder.layers.5.encoder_attn.sampling_offsets": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.5.encoder_attn.attention_weights": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            128
+          ]
+        },
+        "decoder.layers.5.encoder_attn.output_proj": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.5.encoder_attn": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.5.encoder_attn_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.5.fc1": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            2048
+          ]
+        },
+        "decoder.layers.5.fc2": {
+          "input": [
+            1,
+            900,
+            2048
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.5.final_layer_norm": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.layers.5": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.5.layers.0": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.5.layers.1": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            256
+          ]
+        },
+        "decoder.bbox_embed.5.layers.2": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            4
+          ]
+        },
+        "decoder.bbox_embed.5": {
+          "input": [
+            1,
+            900,
+            256
+          ],
+          "output": [
+            1,
+            900,
+            4
+          ]
+        }
+      }
+    },
+    "base_meta": {
+      "scope": "Swin backbone and all four feature projections; multimodal head config matches the CPU-tested tiny graph",
+      "backbone": [
+        [
+          1,
+          256,
+          100,
+          100
+        ],
+        [
+          1,
+          512,
+          50,
+          50
+        ],
+        [
+          1,
+          1024,
+          25,
+          25
+        ]
+      ],
+      "projected": [
+        [
+          1,
+          256,
+          100,
+          100
+        ],
+        [
+          1,
+          256,
+          50,
+          50
+        ],
+        [
+          1,
+          256,
+          25,
+          25
+        ],
+        [
+          1,
+          256,
+          13,
+          13
+        ]
+      ]
+    },
+    "cpu_base": {
+      "outputs": {
+        "logits": [
+          1,
+          900,
+          256
+        ],
+        "pred_boxes": [
+          1,
+          900,
+          4
+        ]
+      },
+      "seconds": 2.295858860015869
+    }
+  },
+  "verification_limits": "Meta checks validate shape propagation, not numerical behavior. CPU checks use random weights. Source inspection establishes functional branches. Browser and PNG QA belongs to integration review."
+}

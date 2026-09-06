@@ -1,0 +1,64 @@
+{
+  "family": "ppyoloe",
+  "slug": "ppyoloe",
+  "title": "PP-YOLOE",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "s",
+  "views": [
+    {
+      "id": "s",
+      "label": "PP-YOLOE S",
+      "task": "detect",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/ppyoloe/s.svg",
+      "html": "/diagrams/models/ppyoloe/s.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "m",
+      "label": "PP-YOLOE M",
+      "task": "detect",
+      "size": "m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/ppyoloe/m.svg",
+      "html": "/diagrams/models/ppyoloe/m.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "l",
+      "label": "PP-YOLOE L",
+      "task": "detect",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/ppyoloe/l.svg",
+      "html": "/diagrams/models/ppyoloe/l.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "x",
+      "label": "PP-YOLOE X",
+      "task": "detect",
+      "size": "x",
+      "kind": "concrete",
+      "svg": "/diagrams/models/ppyoloe/x.svg",
+      "html": "/diagrams/models/ppyoloe/x.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "family",
+      "label": "PP-YOLOE family",
+      "task": "detect",
+      "size": "s/m/l/x",
+      "kind": "family",
+      "svg": "/diagrams/models/ppyoloe/family.svg",
+      "html": "/diagrams/models/ppyoloe/family.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    }
+  ]
+}

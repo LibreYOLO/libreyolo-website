@@ -1,3 +1,4 @@
+import { getModelDiagram } from '@/lib/model-diagrams'
 import registry, { getFamilies, getTaskMeta, getExportFormats, expandSelfClosingTags } from '@/lib/docs'
 
 /*
@@ -120,6 +121,11 @@ export function docToMarkdown(doc) {
     doc.last_verified ? `Verified against LibreYOLO v${doc.last_verified}.` : '',
   ].filter(Boolean).join('\n')
 
+  const diagram = doc.section === 'models' ? getModelDiagram(doc.slug) : null
+  if (diagram) {
+    const views = diagram.views.map(view => `- ${view.label}: [SVG](${view.svg}), [interactive diagram](${view.html})`).join('\n')
+    body += `\n\n## ${diagram.title} architecture\n\n${views}`
+  }
   return `${header}\n\n${body.trim()}\n`
 }
 

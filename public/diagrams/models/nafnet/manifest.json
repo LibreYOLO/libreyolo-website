@@ -1,0 +1,42 @@
+{
+  "family": "nafnet",
+  "slug": "nafnet",
+  "title": "NAFNet",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "s-restore",
+  "views": [
+    {
+      "id": "s-restore",
+      "label": "S",
+      "task": "restore",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/nafnet/s-restore.svg",
+      "html": "/diagrams/models/nafnet/s-restore.html",
+      "input": "3\u00d7256\u00d7256",
+      "verification": "cpu"
+    },
+    {
+      "id": "l-restore",
+      "label": "L",
+      "task": "restore",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/nafnet/l-restore.svg",
+      "html": "/diagrams/models/nafnet/l-restore.html",
+      "input": "3\u00d7256\u00d7256",
+      "verification": "cpu"
+    },
+    {
+      "id": "family",
+      "label": "Shared s/l topology",
+      "task": "restore",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/nafnet/family.svg",
+      "html": "/diagrams/models/nafnet/family.html",
+      "input": "3\u00d7256\u00d7256",
+      "verification": "source"
+    }
+  ]
+}

@@ -673,6 +673,66 @@
           "label": "SmolVLM2",
           "built": true,
           "tier": "s"
+        },
+        {
+          "label": "QuickSRNet",
+          "slug": "/docs/models/quicksrnet",
+          "built": true
+        },
+        {
+          "label": "Qwen3-VL grounding",
+          "slug": "/docs/models/ground-qwen3vl",
+          "built": true
+        },
+        {
+          "label": "HVI-CIDNet",
+          "slug": "/docs/models/hvi-cidnet",
+          "built": true
+        },
+        {
+          "label": "LaMa",
+          "slug": "/docs/models/lama",
+          "built": true
+        },
+        {
+          "label": "North Micro Vision",
+          "slug": "/docs/models/northmicrovision",
+          "built": true
+        },
+        {
+          "label": "PE Core",
+          "slug": "/docs/models/pe",
+          "built": true
+        },
+        {
+          "label": "PP-LiteSeg",
+          "slug": "/docs/models/ppliteseg",
+          "built": true
+        },
+        {
+          "label": "ShowUI",
+          "slug": "/docs/models/showui",
+          "built": true
+        },
+        {
+          "label": "V-JEPA 2",
+          "slug": "/docs/models/vjepa2",
+          "built": true
+        },
+        {
+          "label": "Florence-2 grounding",
+          "slug": "/docs/models/ground-florence2",
+          "built": true
+        },
+        {
+          "label": "PP-YOLOE",
+          "slug": "/docs/models/ppyoloe",
+          "built": true
+        },
+        {
+          "label": "ViTMatte",
+          "slug": "/docs/models/vitmatte",
+          "built": true
         }
       ]
     },

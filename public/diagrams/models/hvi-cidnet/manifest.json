@@ -1,0 +1,20 @@
+{
+  "family": "hvi_cidnet",
+  "slug": "hvi-cidnet",
+  "title": "HVI-CIDNet",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "t-restore",
+  "views": [
+    {
+      "id": "t-restore",
+      "label": "Tiny",
+      "task": "restore",
+      "size": "t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/hvi-cidnet/t-restore.svg",
+      "html": "/diagrams/models/hvi-cidnet/t-restore.html",
+      "input": "3\u00d7256\u00d7256",
+      "verification": "cpu"
+    }
+  ]
+}

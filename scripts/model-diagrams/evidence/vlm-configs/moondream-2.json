@@ -1,0 +1,41 @@
+{
+  "family": "moondream",
+  "size": "2",
+  "repo": "LibreYOLO/LibreMoondream2",
+  "revision": "148fe3489ad456f3b0e5301d684116eb3ad2bece",
+  "source": "libreyolo/models/vlm/moondream.py",
+  "input": 384,
+  "properties": {
+    "FAMILY": "moondream",
+    "HF_REPOS": {
+      "2": "LibreYOLO/LibreMoondream2",
+      "3": "LibreYOLO/LibreMoondream3"
+    },
+    "HF_REVISIONS": {
+      "2": "148fe3489ad456f3b0e5301d684116eb3ad2bece",
+      "3": "27c8082b22b45de224c30431b3961ef8ee6c740e"
+    },
+    "INPUT_SIZES": {
+      "2": 384,
+      "3": 512
+    },
+    "SUPPORTED_TASKS": [
+      "detect",
+      "point"
+    ],
+    "BBOX_KEY": "bbox",
+    "COORD_DIVISOR": 1.0,
+    "BOX_FORMAT": "xyxy"
+  },
+  "resolved_revision": "148fe3489ad456f3b0e5301d684116eb3ad2bece",
+  "config": {
+    "model_type": "moondream1"
+  },
+  "backend_version": "5.16.1",
+  "meta": {
+    "family": "moondream",
+    "size": "2",
+    "status": "source",
+    "error": "ValueError: The repository /tmp/libreyolo-diagram-configs/moondream/2 contains custom code which must be executed to correctly load the model. You can inspect the repository content at /tmp/libreyolo-diagram-configs/moondream/2 .\n You can inspect the repository content at https://hf.co//tmp/libreyolo-diagram-configs/moondream/2.\nPlease pass the argument `trust"
+  }
+}

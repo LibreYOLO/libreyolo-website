@@ -1,0 +1,20 @@
+{
+  "family": "showui",
+  "slug": "showui",
+  "title": "ShowUI",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "2b-point",
+  "views": [
+    {
+      "id": "2b-point",
+      "label": "ShowUI 2B",
+      "task": "point",
+      "size": "2b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/showui/2b-point.svg",
+      "html": "/diagrams/models/showui/2b-point.html",
+      "input": "1344 nominal; processor-dependent",
+      "verification": "source"
+    }
+  ]
+}

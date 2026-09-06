@@ -977,5 +977,11 @@
       "stableBody": "Đối với ứng dụng production, phần cốt lõi đã được kiểm chứng gồm phát hiện bằng YOLO9 và phát hiện, phân đoạn bằng RF-DETR. Xem <docs>tài liệu cốt lõi</docs> cho các tác vụ đó và <vlm>LibreVLM</vlm> cho phát hiện với từ vựng mở.",
       "source": "Theo dõi tiến độ và mã nguồn trên <link>GitHub</link>"
     }
+  },
+  "ModelDiagram": {
+    "title": "Kiến trúc {model}",
+    "open": "Mở sơ đồ đầy đủ",
+    "description": "Chọn một biến thể hoặc tổng quan dòng mô hình, rồi chọn khối để xem chi tiết. Mở sơ đồ đầy đủ để phóng to hoặc tải xuống SVG và PNG. Sơ đồ sử dụng tiếng Anh.",
+    "view": "Sơ đồ"
   }
 }

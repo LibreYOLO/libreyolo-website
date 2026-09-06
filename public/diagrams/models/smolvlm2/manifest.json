@@ -1,0 +1,42 @@
+{
+  "family": "smolvlm2",
+  "slug": "smolvlm2",
+  "title": "SmolVLM2",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "500m-detect",
+  "views": [
+    {
+      "id": "500m-detect",
+      "label": "SmolVLM2 500M",
+      "task": "detect",
+      "size": "500m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/smolvlm2/500m-detect.svg",
+      "html": "/diagrams/models/smolvlm2/500m-detect.html",
+      "input": "512 nominal; processor-dependent",
+      "verification": "meta"
+    },
+    {
+      "id": "2-2b-detect",
+      "label": "SmolVLM2 2.2B",
+      "task": "detect",
+      "size": "2.2b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/smolvlm2/2-2b-detect.svg",
+      "html": "/diagrams/models/smolvlm2/2-2b-detect.html",
+      "input": "512 nominal; processor-dependent",
+      "verification": "meta"
+    },
+    {
+      "id": "family",
+      "label": "SmolVLM2 family",
+      "task": "detect",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/smolvlm2/family.svg",
+      "html": "/diagrams/models/smolvlm2/family.html",
+      "input": "512 nominal; processor-dependent",
+      "verification": "meta"
+    }
+  ]
+}

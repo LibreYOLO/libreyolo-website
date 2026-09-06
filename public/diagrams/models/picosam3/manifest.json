@@ -1,0 +1,20 @@
+{
+  "family": "picosam3",
+  "slug": "picosam3",
+  "title": "PicoSAM3",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "pico-segment",
+  "views": [
+    {
+      "id": "pico-segment",
+      "label": "PicoSAM3 pico",
+      "task": "segment",
+      "size": "pico",
+      "kind": "concrete",
+      "svg": "/diagrams/models/picosam3/pico-segment.svg",
+      "html": "/diagrams/models/picosam3/pico-segment.html",
+      "input": "1 \u00d7 3 \u00d7 96 \u00d7 96",
+      "verification": "cpu"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "family": "ddcolor",
+  "slug": "ddcolor",
+  "title": "DDColor",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "t-restore",
+  "views": [
+    {
+      "id": "t-restore",
+      "label": "t",
+      "task": "restore",
+      "size": "t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/ddcolor/t-restore.svg",
+      "html": "/diagrams/models/ddcolor/t-restore.html",
+      "input": "3\u00d7512\u00d7512 grayscaleRGB",
+      "verification": "cpu"
+    },
+    {
+      "id": "l-restore",
+      "label": "l",
+      "task": "restore",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/ddcolor/l-restore.svg",
+      "html": "/diagrams/models/ddcolor/l-restore.html",
+      "input": "3\u00d7512\u00d7512 grayscaleRGB",
+      "verification": "meta"
+    },
+    {
+      "id": "family",
+      "label": "Shared T/L topology",
+      "task": "restore",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/ddcolor/family.svg",
+      "html": "/diagrams/models/ddcolor/family.html",
+      "input": "3\u00d7512\u00d7512 grayscaleRGB",
+      "verification": "source"
+    }
+  ]
+}

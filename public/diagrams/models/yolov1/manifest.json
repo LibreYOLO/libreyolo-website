@@ -1,0 +1,31 @@
+{
+  "family": "yolo1",
+  "slug": "yolov1",
+  "title": "YOLOv1",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "b",
+  "views": [
+    {
+      "id": "t",
+      "label": "YOLOv1 T",
+      "task": "detect",
+      "size": "t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolov1/t.svg",
+      "html": "/diagrams/models/yolov1/t.html",
+      "input": "1 \u00d7 3 \u00d7 448 \u00d7 448",
+      "verification": "cpu"
+    },
+    {
+      "id": "b",
+      "label": "YOLOv1 B",
+      "task": "detect",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolov1/b.svg",
+      "html": "/diagrams/models/yolov1/b.html",
+      "input": "1 \u00d7 3 \u00d7 448 \u00d7 448",
+      "verification": "meta"
+    }
+  ]
+}

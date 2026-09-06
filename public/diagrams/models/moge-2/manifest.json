@@ -1,0 +1,53 @@
+{
+  "family": "moge2",
+  "slug": "moge-2",
+  "title": "MoGe-2",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "s-normal",
+  "views": [
+    {
+      "id": "s-normal",
+      "label": "s",
+      "task": "normal",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/moge-2/s-normal.svg",
+      "html": "/diagrams/models/moge-2/s-normal.html",
+      "input": "3\u00d7518\u00d7518",
+      "verification": "cpu"
+    },
+    {
+      "id": "b-normal",
+      "label": "b",
+      "task": "normal",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/moge-2/b-normal.svg",
+      "html": "/diagrams/models/moge-2/b-normal.html",
+      "input": "3\u00d7518\u00d7518",
+      "verification": "cpu"
+    },
+    {
+      "id": "l-normal",
+      "label": "l",
+      "task": "normal",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/moge-2/l-normal.svg",
+      "html": "/diagrams/models/moge-2/l-normal.html",
+      "input": "3\u00d7518\u00d7518",
+      "verification": "meta"
+    },
+    {
+      "id": "family",
+      "label": "Shared normal-only topology",
+      "task": "normal",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/moge-2/family.svg",
+      "html": "/diagrams/models/moge-2/family.html",
+      "input": "3\u00d7518\u00d7518",
+      "verification": "source"
+    }
+  ]
+}

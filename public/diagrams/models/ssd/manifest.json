@@ -1,0 +1,20 @@
+{
+  "family": "ssd",
+  "slug": "ssd",
+  "title": "SSD300",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "300",
+  "views": [
+    {
+      "id": "300",
+      "label": "SSD300 VGG16",
+      "task": "detect",
+      "size": "300",
+      "kind": "concrete",
+      "svg": "/diagrams/models/ssd/300.svg",
+      "html": "/diagrams/models/ssd/300.html",
+      "input": "1 \u00d7 3 \u00d7 300 \u00d7 300",
+      "verification": "cpu"
+    }
+  ]
+}

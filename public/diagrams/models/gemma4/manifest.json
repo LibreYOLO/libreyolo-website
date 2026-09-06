@@ -1,0 +1,42 @@
+{
+  "family": "gemma4",
+  "slug": "gemma4",
+  "title": "Gemma4",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "e2b-detect",
+  "views": [
+    {
+      "id": "e2b-detect",
+      "label": "Gemma4 E2B",
+      "size": "e2b",
+      "task": "detect",
+      "kind": "concrete",
+      "svg": "/diagrams/models/gemma4/e2b-detect.svg",
+      "html": "/diagrams/models/gemma4/e2b-detect.html",
+      "verification": "meta",
+      "input": "896 nominal; max560 soft tokens"
+    },
+    {
+      "id": "e4b-detect",
+      "label": "Gemma4 E4B",
+      "size": "e4b",
+      "task": "detect",
+      "kind": "concrete",
+      "svg": "/diagrams/models/gemma4/e4b-detect.svg",
+      "html": "/diagrams/models/gemma4/e4b-detect.html",
+      "verification": "meta",
+      "input": "896 nominal; max560 soft tokens"
+    },
+    {
+      "id": "family",
+      "label": "Gemma4 family",
+      "size": "family",
+      "task": "detect",
+      "kind": "family",
+      "svg": "/diagrams/models/gemma4/family.svg",
+      "html": "/diagrams/models/gemma4/family.html",
+      "verification": "meta",
+      "input": "896 nominal; max560 soft tokens"
+    }
+  ]
+}

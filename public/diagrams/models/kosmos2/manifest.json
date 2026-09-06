@@ -1,0 +1,20 @@
+{
+  "family": "kosmos2",
+  "slug": "kosmos2",
+  "title": "Kosmos-2",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "224-detect",
+  "views": [
+    {
+      "id": "224-detect",
+      "label": "Kosmos-2 patch14-224",
+      "size": "224",
+      "task": "detect",
+      "kind": "concrete",
+      "svg": "/diagrams/models/kosmos2/224-detect.svg",
+      "html": "/diagrams/models/kosmos2/224-detect.html",
+      "verification": "meta",
+      "input": "224 \u00d7 224"
+    }
+  ]
+}

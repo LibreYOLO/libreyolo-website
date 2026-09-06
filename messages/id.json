@@ -977,5 +977,11 @@
       "stableBody": "Untuk penggunaan di produksi, inti yang telah divalidasi adalah deteksi YOLO9 serta deteksi dan segmentasi RF-DETR. Lihat <docs>dokumentasi inti</docs> untuk kemampuan tersebut, dan <vlm>LibreVLM</vlm> untuk deteksi open-vocabulary.",
       "source": "Pantau perkembangan dan kode sumber di <link>GitHub</link>"
     }
+  },
+  "ModelDiagram": {
+    "title": "Arsitektur {model}",
+    "open": "Buka diagram lengkap",
+    "description": "Pilih varian atau ikhtisar keluarga, lalu pilih blok untuk melihat detail. Buka diagram lengkap untuk memperbesar atau mengunduh SVG dan PNG. Diagram menggunakan bahasa Inggris.",
+    "view": "Diagram"
   }
 }

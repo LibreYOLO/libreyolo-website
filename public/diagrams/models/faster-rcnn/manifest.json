@@ -1,0 +1,64 @@
+{
+  "family": "faster_rcnn",
+  "slug": "faster-rcnn",
+  "title": "Faster R-CNN",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "m",
+  "views": [
+    {
+      "id": "n",
+      "label": "Faster R-CNN N",
+      "task": "detect",
+      "size": "n",
+      "kind": "concrete",
+      "svg": "/diagrams/models/faster-rcnn/n.svg",
+      "html": "/diagrams/models/faster-rcnn/n.html",
+      "input": "1 \u00d7 3 \u00d7 320 \u00d7 320",
+      "verification": "cpu"
+    },
+    {
+      "id": "s",
+      "label": "Faster R-CNN S",
+      "task": "detect",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/faster-rcnn/s.svg",
+      "html": "/diagrams/models/faster-rcnn/s.html",
+      "input": "1 \u00d7 3 \u00d7 800 \u00d7 800",
+      "verification": "cpu"
+    },
+    {
+      "id": "m",
+      "label": "Faster R-CNN M",
+      "task": "detect",
+      "size": "m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/faster-rcnn/m.svg",
+      "html": "/diagrams/models/faster-rcnn/m.html",
+      "input": "1 \u00d7 3 \u00d7 800 \u00d7 800",
+      "verification": "cpu"
+    },
+    {
+      "id": "l",
+      "label": "Faster R-CNN L",
+      "task": "detect",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/faster-rcnn/l.svg",
+      "html": "/diagrams/models/faster-rcnn/l.html",
+      "input": "1 \u00d7 3 \u00d7 800 \u00d7 800",
+      "verification": "cpu"
+    },
+    {
+      "id": "family-mobile",
+      "label": "Faster R-CNN MobileNet N/S family",
+      "task": "detect",
+      "size": "n/s",
+      "kind": "family",
+      "svg": "/diagrams/models/faster-rcnn/family-mobile.svg",
+      "html": "/diagrams/models/faster-rcnn/family-mobile.html",
+      "input": "H from N/S table",
+      "verification": "cpu"
+    }
+  ]
+}

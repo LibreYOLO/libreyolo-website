@@ -1,0 +1,64 @@
+{
+  "family": "sam2",
+  "slug": "sam-2",
+  "title": "SAM 2",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "tiny-box-segment",
+  "views": [
+    {
+      "id": "tiny-box-segment",
+      "label": "SAM 2 tiny",
+      "task": "segment",
+      "size": "tiny",
+      "kind": "concrete",
+      "svg": "/diagrams/models/sam-2/tiny-box-segment.svg",
+      "html": "/diagrams/models/sam-2/tiny-box-segment.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 1024 \u00d7 1024; box: 1 \u00d7 1 \u00d7 4",
+      "verification": "meta"
+    },
+    {
+      "id": "small-box-segment",
+      "label": "SAM 2 small",
+      "task": "segment",
+      "size": "small",
+      "kind": "concrete",
+      "svg": "/diagrams/models/sam-2/small-box-segment.svg",
+      "html": "/diagrams/models/sam-2/small-box-segment.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 1024 \u00d7 1024; box: 1 \u00d7 1 \u00d7 4",
+      "verification": "meta"
+    },
+    {
+      "id": "base-plus-box-segment",
+      "label": "SAM 2 base-plus",
+      "task": "segment",
+      "size": "base-plus",
+      "kind": "concrete",
+      "svg": "/diagrams/models/sam-2/base-plus-box-segment.svg",
+      "html": "/diagrams/models/sam-2/base-plus-box-segment.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 1024 \u00d7 1024; box: 1 \u00d7 1 \u00d7 4",
+      "verification": "meta"
+    },
+    {
+      "id": "large-box-segment",
+      "label": "SAM 2 large",
+      "task": "segment",
+      "size": "large",
+      "kind": "concrete",
+      "svg": "/diagrams/models/sam-2/large-box-segment.svg",
+      "html": "/diagrams/models/sam-2/large-box-segment.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 1024 \u00d7 1024; box: 1 \u00d7 1 \u00d7 4",
+      "verification": "meta"
+    },
+    {
+      "id": "family-box-segment",
+      "label": "SAM 2 family",
+      "task": "segment",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/sam-2/family-box-segment.svg",
+      "html": "/diagrams/models/sam-2/family-box-segment.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 1024 \u00d7 1024; box: 1 \u00d7 1 \u00d7 4",
+      "verification": "source"
+    }
+  ]
+}

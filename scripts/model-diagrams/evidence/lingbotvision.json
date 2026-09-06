@@ -1,0 +1,291 @@
+{
+  "family": "lingbotvision",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "sources": [
+    "libreyolo/models/lingbotvision/nn.py:SIZE_CONFIGS, SelfAttention, RopePositionEmbedding, SwiGLUFFN, LingBotVisionSemanticSegmenter",
+    "libreyolo/models/lingbotvision/model.py:INPUT_SIZES and UNPUBLISHED_SIZES"
+  ],
+  "records": {
+    "s": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        512,
+        512
+      ],
+      "output": {
+        "semantic_logits": [
+          1,
+          150,
+          32,
+          32
+        ]
+      },
+      "hooks": {
+        "backbone.patch_embed": {
+          "input": [
+            [
+              1,
+              3,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            32,
+            32,
+            384
+          ]
+        },
+        "backbone.norm": {
+          "input": [
+            [
+              1,
+              1029,
+              384
+            ]
+          ],
+          "output": [
+            1,
+            1029,
+            384
+          ]
+        },
+        "predict": {
+          "input": [
+            [
+              1,
+              384,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            150,
+            32,
+            32
+          ]
+        }
+      },
+      "parameters": 21658902,
+      "pretrained": false
+    },
+    "b": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        512,
+        512
+      ],
+      "output": {
+        "semantic_logits": [
+          1,
+          150,
+          32,
+          32
+        ]
+      },
+      "hooks": {
+        "backbone.patch_embed": {
+          "input": [
+            [
+              1,
+              3,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            32,
+            32,
+            768
+          ]
+        },
+        "backbone.norm": {
+          "input": [
+            [
+              1,
+              1029,
+              768
+            ]
+          ],
+          "output": [
+            1,
+            1029,
+            768
+          ]
+        },
+        "predict": {
+          "input": [
+            [
+              1,
+              768,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            150,
+            32,
+            32
+          ]
+        }
+      },
+      "parameters": 85784982,
+      "pretrained": false
+    },
+    "l": {
+      "device": "meta",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        512,
+        512
+      ],
+      "output": {
+        "semantic_logits": [
+          1,
+          150,
+          32,
+          32
+        ]
+      },
+      "hooks": {
+        "backbone.patch_embed": {
+          "input": [
+            [
+              1,
+              3,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            32,
+            32,
+            1024
+          ]
+        },
+        "backbone.norm": {
+          "input": [
+            [
+              1,
+              1029,
+              1024
+            ]
+          ],
+          "output": [
+            1,
+            1029,
+            1024
+          ]
+        },
+        "predict": {
+          "input": [
+            [
+              1,
+              1024,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            150,
+            32,
+            32
+          ]
+        }
+      },
+      "parameters": 303307926,
+      "pretrained": false,
+      "limitation": "Meta forward validates shape propagation only; numerical inference was not executed."
+    },
+    "g": {
+      "device": "meta",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        512,
+        512
+      ],
+      "output": {
+        "semantic_logits": [
+          1,
+          150,
+          32,
+          32
+        ]
+      },
+      "hooks": {
+        "backbone.patch_embed": {
+          "input": [
+            [
+              1,
+              3,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            32,
+            32,
+            1536
+          ]
+        },
+        "backbone.norm": {
+          "input": [
+            [
+              1,
+              1029,
+              1536
+            ]
+          ],
+          "output": [
+            1,
+            1029,
+            1536
+          ]
+        },
+        "predict": {
+          "input": [
+            [
+              1,
+              1536,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            150,
+            32,
+            32
+          ]
+        }
+      },
+      "parameters": 1134705302,
+      "pretrained": false,
+      "limitation": "Meta forward validates shape propagation only; numerical inference was not executed."
+    }
+  },
+  "notes": [
+    "s/b checked numerically on CPU; l/g use actual meta forward to avoid allocating300M+ parameters.",
+    "g is implemented but listed UNPUBLISHED_SIZES in public family.",
+    "Native forward returns150\u00d732\u00d732 logits, not full512\u00d7512.",
+    "No weights or network requests."
+  ],
+  "visual_qa": "Parent agent; not executed by this builder."
+}

@@ -1,0 +1,671 @@
+{
+  "family": "ppliteseg",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "sources": [
+    "libreyolo/models/ppliteseg/nn.py:SIZE_CONFIGS, STDCBlock, STDCBackbone, SPPM, UAFM, LibrePPLiteSegNet"
+  ],
+  "records": {
+    "t50": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        512,
+        1024
+      ],
+      "output": [
+        1,
+        19,
+        512,
+        1024
+      ],
+      "hooks": {
+        "encoder.backbone": {
+          "input": [
+            [
+              1,
+              3,
+              512,
+              1024
+            ]
+          ],
+          "output": [
+            [
+              1,
+              256,
+              64,
+              128
+            ],
+            [
+              1,
+              512,
+              32,
+              64
+            ],
+            [
+              1,
+              1024,
+              16,
+              32
+            ]
+          ]
+        },
+        "encoder.context_module": {
+          "input": [
+            [
+              1,
+              1024,
+              16,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            32
+          ]
+        },
+        "encoder.proj_convs.0": {
+          "input": [
+            [
+              1,
+              256,
+              64,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            64,
+            128
+          ]
+        },
+        "decoder.up_stages.0": {
+          "input": [
+            [
+              1,
+              128,
+              16,
+              32
+            ],
+            [
+              1,
+              128,
+              16,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            32
+          ]
+        },
+        "decoder.up_stages.1": {
+          "input": [
+            [
+              1,
+              128,
+              16,
+              32
+            ],
+            [
+              1,
+              128,
+              32,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            32,
+            64
+          ]
+        },
+        "decoder.up_stages.2": {
+          "input": [
+            [
+              1,
+              64,
+              32,
+              64
+            ],
+            [
+              1,
+              64,
+              64,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            32,
+            64,
+            128
+          ]
+        },
+        "seg_head": {
+          "input": [
+            [
+              1,
+              32,
+              64,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            19,
+            512,
+            1024
+          ]
+        }
+      },
+      "parameters": 8197056,
+      "pretrained": false
+    },
+    "b50": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        512,
+        1024
+      ],
+      "output": [
+        1,
+        19,
+        512,
+        1024
+      ],
+      "hooks": {
+        "encoder.backbone": {
+          "input": [
+            [
+              1,
+              3,
+              512,
+              1024
+            ]
+          ],
+          "output": [
+            [
+              1,
+              256,
+              64,
+              128
+            ],
+            [
+              1,
+              512,
+              32,
+              64
+            ],
+            [
+              1,
+              1024,
+              16,
+              32
+            ]
+          ]
+        },
+        "encoder.context_module": {
+          "input": [
+            [
+              1,
+              1024,
+              16,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            32
+          ]
+        },
+        "encoder.proj_convs.0": {
+          "input": [
+            [
+              1,
+              256,
+              64,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            96,
+            64,
+            128
+          ]
+        },
+        "decoder.up_stages.0": {
+          "input": [
+            [
+              1,
+              128,
+              16,
+              32
+            ],
+            [
+              1,
+              128,
+              16,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            16,
+            32
+          ]
+        },
+        "decoder.up_stages.1": {
+          "input": [
+            [
+              1,
+              128,
+              16,
+              32
+            ],
+            [
+              1,
+              128,
+              32,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            96,
+            32,
+            64
+          ]
+        },
+        "decoder.up_stages.2": {
+          "input": [
+            [
+              1,
+              96,
+              32,
+              64
+            ],
+            [
+              1,
+              96,
+              64,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            64,
+            128
+          ]
+        },
+        "seg_head": {
+          "input": [
+            [
+              1,
+              64,
+              64,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            19,
+            512,
+            1024
+          ]
+        }
+      },
+      "parameters": 12412704,
+      "pretrained": false
+    },
+    "t75": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        768,
+        1536
+      ],
+      "output": [
+        1,
+        19,
+        768,
+        1536
+      ],
+      "hooks": {
+        "encoder.backbone": {
+          "input": [
+            [
+              1,
+              3,
+              768,
+              1536
+            ]
+          ],
+          "output": [
+            [
+              1,
+              256,
+              96,
+              192
+            ],
+            [
+              1,
+              512,
+              48,
+              96
+            ],
+            [
+              1,
+              1024,
+              24,
+              48
+            ]
+          ]
+        },
+        "encoder.context_module": {
+          "input": [
+            [
+              1,
+              1024,
+              24,
+              48
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            24,
+            48
+          ]
+        },
+        "encoder.proj_convs.0": {
+          "input": [
+            [
+              1,
+              256,
+              96,
+              192
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            96,
+            192
+          ]
+        },
+        "decoder.up_stages.0": {
+          "input": [
+            [
+              1,
+              128,
+              24,
+              48
+            ],
+            [
+              1,
+              128,
+              24,
+              48
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            24,
+            48
+          ]
+        },
+        "decoder.up_stages.1": {
+          "input": [
+            [
+              1,
+              128,
+              24,
+              48
+            ],
+            [
+              1,
+              128,
+              48,
+              96
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            48,
+            96
+          ]
+        },
+        "decoder.up_stages.2": {
+          "input": [
+            [
+              1,
+              64,
+              48,
+              96
+            ],
+            [
+              1,
+              64,
+              96,
+              192
+            ]
+          ],
+          "output": [
+            1,
+            32,
+            96,
+            192
+          ]
+        },
+        "seg_head": {
+          "input": [
+            [
+              1,
+              32,
+              96,
+              192
+            ]
+          ],
+          "output": [
+            1,
+            19,
+            768,
+            1536
+          ]
+        }
+      },
+      "parameters": 8197056,
+      "pretrained": false
+    },
+    "b75": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        768,
+        1536
+      ],
+      "output": [
+        1,
+        19,
+        768,
+        1536
+      ],
+      "hooks": {
+        "encoder.backbone": {
+          "input": [
+            [
+              1,
+              3,
+              768,
+              1536
+            ]
+          ],
+          "output": [
+            [
+              1,
+              256,
+              96,
+              192
+            ],
+            [
+              1,
+              512,
+              48,
+              96
+            ],
+            [
+              1,
+              1024,
+              24,
+              48
+            ]
+          ]
+        },
+        "encoder.context_module": {
+          "input": [
+            [
+              1,
+              1024,
+              24,
+              48
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            24,
+            48
+          ]
+        },
+        "encoder.proj_convs.0": {
+          "input": [
+            [
+              1,
+              256,
+              96,
+              192
+            ]
+          ],
+          "output": [
+            1,
+            96,
+            96,
+            192
+          ]
+        },
+        "decoder.up_stages.0": {
+          "input": [
+            [
+              1,
+              128,
+              24,
+              48
+            ],
+            [
+              1,
+              128,
+              24,
+              48
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            24,
+            48
+          ]
+        },
+        "decoder.up_stages.1": {
+          "input": [
+            [
+              1,
+              128,
+              24,
+              48
+            ],
+            [
+              1,
+              128,
+              48,
+              96
+            ]
+          ],
+          "output": [
+            1,
+            96,
+            48,
+            96
+          ]
+        },
+        "decoder.up_stages.2": {
+          "input": [
+            [
+              1,
+              96,
+              48,
+              96
+            ],
+            [
+              1,
+              96,
+              96,
+              192
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            96,
+            192
+          ]
+        },
+        "seg_head": {
+          "input": [
+            [
+              1,
+              64,
+              96,
+              192
+            ]
+          ],
+          "output": [
+            1,
+            19,
+            768,
+            1536
+          ]
+        }
+      },
+      "parameters": 12412704,
+      "pretrained": false
+    }
+  },
+  "notes": [
+    "All four actual rectangular recipe canvases checked on CPU.",
+    "50/75 are validation scaling tokens, not width multipliers. SPPM adds3 branches, UAFM uses sigmoid spatial attention and complementary weights.",
+    "Projection skip inside UAFM is identity for all registered configurations. Training auxiliary heads excluded from eval graph."
+  ],
+  "visual_qa": "Parent agent; not executed by this builder."
+}

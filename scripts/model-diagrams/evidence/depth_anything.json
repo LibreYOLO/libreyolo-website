@@ -1,0 +1,568 @@
+{
+  "family": "depth_anything",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "sources": [
+    "libreyolo/models/depth_anything/nn.py:DEPTH_ANYTHING_V2_CONFIGS",
+    "libreyolo/models/depth_anything/_vendor/dpt.py:DepthAnythingV2 and DPTHead",
+    "libreyolo/models/depth_anything/_vendor/dinov2.py:DINOv2 and get_intermediate_layers",
+    "libreyolo/models/depth_anything/_vendor/util/blocks.py:ResidualConvUnit and FeatureFusionBlock"
+  ],
+  "records": {
+    "s": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        518,
+        518
+      ],
+      "output": [
+        1,
+        1,
+        518,
+        518
+      ],
+      "hooks": {
+        "pretrained.patch_embed": {
+          "input": [
+            [
+              1,
+              3,
+              518,
+              518
+            ]
+          ],
+          "output": [
+            1,
+            1369,
+            384
+          ]
+        },
+        "depth_head.resize_layers.0": {
+          "input": [
+            [
+              1,
+              48,
+              37,
+              37
+            ]
+          ],
+          "output": [
+            1,
+            48,
+            148,
+            148
+          ]
+        },
+        "depth_head.resize_layers.1": {
+          "input": [
+            [
+              1,
+              96,
+              37,
+              37
+            ]
+          ],
+          "output": [
+            1,
+            96,
+            74,
+            74
+          ]
+        },
+        "depth_head.resize_layers.2": {
+          "input": [
+            [
+              1,
+              192,
+              37,
+              37
+            ]
+          ],
+          "output": [
+            1,
+            192,
+            37,
+            37
+          ]
+        },
+        "depth_head.resize_layers.3": {
+          "input": [
+            [
+              1,
+              384,
+              37,
+              37
+            ]
+          ],
+          "output": [
+            1,
+            384,
+            19,
+            19
+          ]
+        },
+        "depth_head.scratch.refinenet1": {
+          "input": [
+            [
+              1,
+              64,
+              148,
+              148
+            ],
+            [
+              1,
+              64,
+              148,
+              148
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            296,
+            296
+          ]
+        },
+        "depth_head.scratch.output_conv2": {
+          "input": [
+            [
+              1,
+              32,
+              518,
+              518
+            ]
+          ],
+          "output": [
+            1,
+            1,
+            518,
+            518
+          ]
+        }
+      },
+      "parameters": 24785089,
+      "pretrained": false
+    },
+    "b": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        518,
+        518
+      ],
+      "output": [
+        1,
+        1,
+        518,
+        518
+      ],
+      "hooks": {
+        "pretrained.patch_embed": {
+          "input": [
+            [
+              1,
+              3,
+              518,
+              518
+            ]
+          ],
+          "output": [
+            1,
+            1369,
+            768
+          ]
+        },
+        "depth_head.resize_layers.0": {
+          "input": [
+            [
+              1,
+              96,
+              37,
+              37
+            ]
+          ],
+          "output": [
+            1,
+            96,
+            148,
+            148
+          ]
+        },
+        "depth_head.resize_layers.1": {
+          "input": [
+            [
+              1,
+              192,
+              37,
+              37
+            ]
+          ],
+          "output": [
+            1,
+            192,
+            74,
+            74
+          ]
+        },
+        "depth_head.resize_layers.2": {
+          "input": [
+            [
+              1,
+              384,
+              37,
+              37
+            ]
+          ],
+          "output": [
+            1,
+            384,
+            37,
+            37
+          ]
+        },
+        "depth_head.resize_layers.3": {
+          "input": [
+            [
+              1,
+              768,
+              37,
+              37
+            ]
+          ],
+          "output": [
+            1,
+            768,
+            19,
+            19
+          ]
+        },
+        "depth_head.scratch.refinenet1": {
+          "input": [
+            [
+              1,
+              128,
+              148,
+              148
+            ],
+            [
+              1,
+              128,
+              148,
+              148
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            296,
+            296
+          ]
+        },
+        "depth_head.scratch.output_conv2": {
+          "input": [
+            [
+              1,
+              64,
+              518,
+              518
+            ]
+          ],
+          "output": [
+            1,
+            1,
+            518,
+            518
+          ]
+        }
+      },
+      "parameters": 97470785,
+      "pretrained": false
+    },
+    "l": {
+      "device": "meta",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        518,
+        518
+      ],
+      "output": [
+        1,
+        1,
+        518,
+        518
+      ],
+      "hooks": {
+        "pretrained.patch_embed": {
+          "input": [
+            [
+              1,
+              3,
+              518,
+              518
+            ]
+          ],
+          "output": [
+            1,
+            1369,
+            1024
+          ]
+        },
+        "depth_head.resize_layers.0": {
+          "input": [
+            [
+              1,
+              256,
+              37,
+              37
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            148,
+            148
+          ]
+        },
+        "depth_head.resize_layers.1": {
+          "input": [
+            [
+              1,
+              512,
+              37,
+              37
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            74,
+            74
+          ]
+        },
+        "depth_head.resize_layers.2": {
+          "input": [
+            [
+              1,
+              1024,
+              37,
+              37
+            ]
+          ],
+          "output": [
+            1,
+            1024,
+            37,
+            37
+          ]
+        },
+        "depth_head.resize_layers.3": {
+          "input": [
+            [
+              1,
+              1024,
+              37,
+              37
+            ]
+          ],
+          "output": [
+            1,
+            1024,
+            19,
+            19
+          ]
+        },
+        "depth_head.scratch.refinenet1": {
+          "input": [
+            [
+              1,
+              256,
+              148,
+              148
+            ],
+            [
+              1,
+              256,
+              148,
+              148
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            296,
+            296
+          ]
+        },
+        "depth_head.scratch.output_conv2": {
+          "input": [
+            [
+              1,
+              128,
+              518,
+              518
+            ]
+          ],
+          "output": [
+            1,
+            1,
+            518,
+            518
+          ]
+        }
+      },
+      "parameters": 335315649,
+      "pretrained": false,
+      "limitation": "Meta forward validates shape propagation only; numerical inference was not executed."
+    },
+    "g": {
+      "device": "meta",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        518,
+        518
+      ],
+      "output": [
+        1,
+        1,
+        518,
+        518
+      ],
+      "hooks": {
+        "pretrained.patch_embed": {
+          "input": [
+            [
+              1,
+              3,
+              518,
+              518
+            ]
+          ],
+          "output": [
+            1,
+            1369,
+            1536
+          ]
+        },
+        "depth_head.resize_layers.0": {
+          "input": [
+            [
+              1,
+              1536,
+              37,
+              37
+            ]
+          ],
+          "output": [
+            1,
+            1536,
+            148,
+            148
+          ]
+        },
+        "depth_head.resize_layers.1": {
+          "input": [
+            [
+              1,
+              1536,
+              37,
+              37
+            ]
+          ],
+          "output": [
+            1,
+            1536,
+            74,
+            74
+          ]
+        },
+        "depth_head.resize_layers.2": {
+          "input": [
+            [
+              1,
+              1536,
+              37,
+              37
+            ]
+          ],
+          "output": [
+            1,
+            1536,
+            37,
+            37
+          ]
+        },
+        "depth_head.resize_layers.3": {
+          "input": [
+            [
+              1,
+              1536,
+              37,
+              37
+            ]
+          ],
+          "output": [
+            1,
+            1536,
+            19,
+            19
+          ]
+        },
+        "depth_head.scratch.refinenet1": {
+          "input": [
+            [
+              1,
+              384,
+              148,
+              148
+            ],
+            [
+              1,
+              384,
+              148,
+              148
+            ]
+          ],
+          "output": [
+            1,
+            384,
+            296,
+            296
+          ]
+        },
+        "depth_head.scratch.output_conv2": {
+          "input": [
+            [
+              1,
+              192,
+              518,
+              518
+            ]
+          ],
+          "output": [
+            1,
+            1,
+            518,
+            518
+          ]
+        }
+      },
+      "parameters": 1258132225,
+      "pretrained": false,
+      "limitation": "Meta forward validates shape propagation only; numerical inference was not executed."
+    }
+  },
+  "notes": [
+    "s/b CPU forward; l/g meta shape propagation. Constructor-only torch.linspace stochastic-depth constants materialized on CPU to allow .item(), parameters remain meta. No weights.",
+    "37\u00d737 patch grid produces adapters148,74,37,19; fusion uses exact resize19 to37 rather than assuming power-of-two18.",
+    "Giant has SwiGLU; other sizes GELU MLP. Source code Apache-2.0 according to repository THIRD_PARTY_NOTICES; weight licenses are separate."
+  ],
+  "visual_qa": "Parent agent; not executed by this builder."
+}

@@ -1,0 +1,175 @@
+{
+  "family": "smolvlm2",
+  "size": "2.2b",
+  "repo": "HuggingFaceTB/SmolVLM2-2.2B-Instruct",
+  "revision": "main",
+  "source": "libreyolo/models/vlm/smolvlm.py",
+  "input": 512,
+  "properties": {
+    "FAMILY": "smolvlm2",
+    "HF_REPOS": {
+      "2.2b": "HuggingFaceTB/SmolVLM2-2.2B-Instruct",
+      "500m": "HuggingFaceTB/SmolVLM2-500M-Video-Instruct"
+    },
+    "INPUT_SIZES": {
+      "2.2b": 512,
+      "500m": 512
+    }
+  },
+  "resolved_revision": "482adb537c021c86670beed01cd58990d01e72e4",
+  "config": {
+    "tie_word_embeddings": false,
+    "vision_config": {
+      "output_hidden_states": false,
+      "return_dict": true,
+      "dtype": null,
+      "chunk_size_feed_forward": 0,
+      "is_encoder_decoder": false,
+      "problem_type": null,
+      "hidden_size": 1152,
+      "intermediate_size": 4304,
+      "num_hidden_layers": 27,
+      "num_attention_heads": 16,
+      "num_channels": 3,
+      "image_size": 384,
+      "patch_size": 14,
+      "hidden_act": "gelu_pytorch_tanh",
+      "layer_norm_eps": 1e-06,
+      "attention_dropout": 0.0,
+      "initializer_range": 0.02,
+      "max_image_size": {
+        "longest_edge": 384
+      },
+      "model_type": "smolvlm_vision",
+      "size": {
+        "longest_edge": 1920
+      },
+      "tie_word_embeddings": false,
+      "use_base_siglip": false,
+      "output_attentions": false
+    },
+    "text_config": {
+      "output_hidden_states": false,
+      "return_dict": true,
+      "dtype": "bfloat16",
+      "chunk_size_feed_forward": 0,
+      "is_encoder_decoder": false,
+      "problem_type": null,
+      "vocab_size": 49280,
+      "hidden_size": 2048,
+      "intermediate_size": 8192,
+      "num_hidden_layers": 24,
+      "num_attention_heads": 32,
+      "num_key_value_heads": 32,
+      "hidden_act": "silu",
+      "max_position_embeddings": 8192,
+      "initializer_range": 0.02,
+      "rms_norm_eps": 1e-05,
+      "use_cache": true,
+      "pad_token_id": 2,
+      "bos_token_id": 1,
+      "eos_token_id": 2,
+      "pretraining_tp": 1,
+      "tie_word_embeddings": false,
+      "rope_parameters": {
+        "rope_theta": 130000,
+        "rope_type": "default"
+      },
+      "attention_bias": false,
+      "attention_dropout": 0.0,
+      "mlp_bias": false,
+      "head_dim": 64,
+      "model_type": "llama",
+      "neftune_noise_alpha": 0.0,
+      "pixel_shuffle_factor": 3,
+      "qk_layer_norms": false,
+      "use_resampler": false,
+      "output_attentions": false
+    },
+    "scale_factor": 3,
+    "model_type": "smolvlm"
+  },
+  "backend_version": "5.16.1",
+  "meta": {
+    "family": "smolvlm2",
+    "size": "2.2b",
+    "status": "meta",
+    "model_class": "SmolVLMForConditionalGeneration",
+    "parameters": 2246784880,
+    "modules": {
+      "model.vision_model.embeddings.patch_embedding": {
+        "in": 3,
+        "out": 1152,
+        "kernel": [
+          14,
+          14
+        ],
+        "stride": [
+          14,
+          14
+        ],
+        "groups": 1
+      },
+      "model.vision_model.encoder.layers.0.self_attn.k_proj": [
+        1152,
+        1152
+      ],
+      "model.vision_model.encoder.layers.0.self_attn.v_proj": [
+        1152,
+        1152
+      ],
+      "model.vision_model.encoder.layers.0.self_attn.q_proj": [
+        1152,
+        1152
+      ],
+      "model.vision_model.encoder.layers.0.self_attn.out_proj": [
+        1152,
+        1152
+      ],
+      "model.vision_model.encoder.layers.0.mlp.fc1": [
+        1152,
+        4304
+      ],
+      "model.vision_model.encoder.layers.0.mlp.fc2": [
+        4304,
+        1152
+      ],
+      "model.connector.modality_projection.proj": [
+        10368,
+        2048
+      ],
+      "model.text_model.layers.0.self_attn.q_proj": [
+        2048,
+        2048
+      ],
+      "model.text_model.layers.0.self_attn.k_proj": [
+        2048,
+        2048
+      ],
+      "model.text_model.layers.0.self_attn.v_proj": [
+        2048,
+        2048
+      ],
+      "model.text_model.layers.0.self_attn.o_proj": [
+        2048,
+        2048
+      ],
+      "model.text_model.layers.0.mlp.gate_proj": [
+        2048,
+        8192
+      ],
+      "model.text_model.layers.0.mlp.up_proj": [
+        2048,
+        8192
+      ],
+      "model.text_model.layers.0.mlp.down_proj": [
+        8192,
+        2048
+      ],
+      "lm_head": [
+        2048,
+        49280
+      ]
+    }
+  }
+}

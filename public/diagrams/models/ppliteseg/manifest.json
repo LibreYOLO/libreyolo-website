@@ -1,0 +1,64 @@
+{
+  "family": "ppliteseg",
+  "slug": "ppliteseg",
+  "title": "PP-LiteSeg",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "t50-semantic",
+  "views": [
+    {
+      "id": "t50-semantic",
+      "label": "t50",
+      "task": "semantic",
+      "size": "t50",
+      "kind": "concrete",
+      "svg": "/diagrams/models/ppliteseg/t50-semantic.svg",
+      "html": "/diagrams/models/ppliteseg/t50-semantic.html",
+      "input": "3\u00d7512\u00d71024",
+      "verification": "cpu"
+    },
+    {
+      "id": "b50-semantic",
+      "label": "b50",
+      "task": "semantic",
+      "size": "b50",
+      "kind": "concrete",
+      "svg": "/diagrams/models/ppliteseg/b50-semantic.svg",
+      "html": "/diagrams/models/ppliteseg/b50-semantic.html",
+      "input": "3\u00d7512\u00d71024",
+      "verification": "cpu"
+    },
+    {
+      "id": "t75-semantic",
+      "label": "t75",
+      "task": "semantic",
+      "size": "t75",
+      "kind": "concrete",
+      "svg": "/diagrams/models/ppliteseg/t75-semantic.svg",
+      "html": "/diagrams/models/ppliteseg/t75-semantic.html",
+      "input": "3\u00d7768\u00d71536",
+      "verification": "cpu"
+    },
+    {
+      "id": "b75-semantic",
+      "label": "b75",
+      "task": "semantic",
+      "size": "b75",
+      "kind": "concrete",
+      "svg": "/diagrams/models/ppliteseg/b75-semantic.svg",
+      "html": "/diagrams/models/ppliteseg/b75-semantic.html",
+      "input": "3\u00d7768\u00d71536",
+      "verification": "cpu"
+    },
+    {
+      "id": "family",
+      "label": "Shared topology",
+      "task": "semantic",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/ppliteseg/family.svg",
+      "html": "/diagrams/models/ppliteseg/family.html",
+      "input": "3\u00d7H\u00d7W",
+      "verification": "source"
+    }
+  ]
+}

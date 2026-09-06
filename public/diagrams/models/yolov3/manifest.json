@@ -1,0 +1,42 @@
+{
+  "family": "yolo3",
+  "slug": "yolov3",
+  "title": "YOLOv3",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "b",
+  "views": [
+    {
+      "id": "t",
+      "label": "YOLOv3 T",
+      "task": "detect",
+      "size": "t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolov3/t.svg",
+      "html": "/diagrams/models/yolov3/t.html",
+      "input": "1 \u00d7 3 \u00d7 416 \u00d7 416",
+      "verification": "cpu"
+    },
+    {
+      "id": "b",
+      "label": "YOLOv3 B",
+      "task": "detect",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolov3/b.svg",
+      "html": "/diagrams/models/yolov3/b.html",
+      "input": "1 \u00d7 3 \u00d7 416 \u00d7 416",
+      "verification": "cpu"
+    },
+    {
+      "id": "spp",
+      "label": "YOLOv3 SPP",
+      "task": "detect",
+      "size": "spp",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolov3/spp.svg",
+      "html": "/diagrams/models/yolov3/spp.html",
+      "input": "1 \u00d7 3 \u00d7 608 \u00d7 608",
+      "verification": "cpu"
+    }
+  ]
+}

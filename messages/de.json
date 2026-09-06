@@ -977,5 +977,11 @@
       "stableBody": "Für den Produktionseinsatz besteht der validierte Kern aus YOLO9-Erkennung sowie RF-DETR-Erkennung und -Segmentierung. Informationen dazu findest du in der <docs>Kerndokumentation</docs>, Informationen zur Open-Vocabulary-Erkennung unter <vlm>LibreVLM</vlm>.",
       "source": "Fortschritt und Quellcode auf <link>GitHub</link> verfolgen"
     }
+  },
+  "ModelDiagram": {
+    "title": "{model}-Architektur",
+    "open": "Vollständiges Diagramm öffnen",
+    "description": "Wähle eine Variante oder die Familienübersicht und dann einen Block für Details. Öffne das vollständige Diagramm zum Zoomen oder Herunterladen als SVG und PNG. Die Diagramme sind auf Englisch.",
+    "view": "Diagramm"
   }
 }

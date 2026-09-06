@@ -1,0 +1,152 @@
+{
+  "family": "eomt",
+  "slug": "eomt",
+  "title": "EoMT",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "s-semantic",
+  "views": [
+    {
+      "id": "s-semantic",
+      "label": "EoMT s semantic",
+      "task": "semantic",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/eomt/s-semantic.svg",
+      "html": "/diagrams/models/eomt/s-semantic.html",
+      "input": "1 \u00d7 3 \u00d7 512 \u00d7 512",
+      "verification": "meta"
+    },
+    {
+      "id": "b-semantic",
+      "label": "EoMT b semantic",
+      "task": "semantic",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/eomt/b-semantic.svg",
+      "html": "/diagrams/models/eomt/b-semantic.html",
+      "input": "1 \u00d7 3 \u00d7 512 \u00d7 512",
+      "verification": "meta"
+    },
+    {
+      "id": "l-semantic",
+      "label": "EoMT l semantic",
+      "task": "semantic",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/eomt/l-semantic.svg",
+      "html": "/diagrams/models/eomt/l-semantic.html",
+      "input": "1 \u00d7 3 \u00d7 512 \u00d7 512",
+      "verification": "meta"
+    },
+    {
+      "id": "family-semantic",
+      "label": "EoMT family semantic",
+      "task": "semantic",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/eomt/family-semantic.svg",
+      "html": "/diagrams/models/eomt/family-semantic.html",
+      "input": "1 \u00d7 3 \u00d7 512 \u00d7 512",
+      "verification": "source"
+    },
+    {
+      "id": "s-segment",
+      "label": "EoMT s segment",
+      "task": "segment",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/eomt/s-segment.svg",
+      "html": "/diagrams/models/eomt/s-segment.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "meta"
+    },
+    {
+      "id": "b-segment",
+      "label": "EoMT b segment",
+      "task": "segment",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/eomt/b-segment.svg",
+      "html": "/diagrams/models/eomt/b-segment.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "meta"
+    },
+    {
+      "id": "l-segment",
+      "label": "EoMT l segment",
+      "task": "segment",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/eomt/l-segment.svg",
+      "html": "/diagrams/models/eomt/l-segment.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "meta"
+    },
+    {
+      "id": "family-segment",
+      "label": "EoMT family segment",
+      "task": "segment",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/eomt/family-segment.svg",
+      "html": "/diagrams/models/eomt/family-segment.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "source"
+    },
+    {
+      "id": "s-panoptic",
+      "label": "EoMT s panoptic",
+      "task": "panoptic",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/eomt/s-panoptic.svg",
+      "html": "/diagrams/models/eomt/s-panoptic.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "meta"
+    },
+    {
+      "id": "b-panoptic",
+      "label": "EoMT b panoptic",
+      "task": "panoptic",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/eomt/b-panoptic.svg",
+      "html": "/diagrams/models/eomt/b-panoptic.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "meta"
+    },
+    {
+      "id": "l-panoptic",
+      "label": "EoMT l panoptic",
+      "task": "panoptic",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/eomt/l-panoptic.svg",
+      "html": "/diagrams/models/eomt/l-panoptic.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "meta"
+    },
+    {
+      "id": "family-panoptic",
+      "label": "EoMT family panoptic",
+      "task": "panoptic",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/eomt/family-panoptic.svg",
+      "html": "/diagrams/models/eomt/family-panoptic.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "source"
+    },
+    {
+      "id": "l-segment-1280",
+      "label": "EoMT l segment 1280px",
+      "task": "segment",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/eomt/l-segment-1280.svg",
+      "html": "/diagrams/models/eomt/l-segment-1280.html",
+      "input": "1 \u00d7 3 \u00d7 1280 \u00d7 1280",
+      "verification": "meta"
+    }
+  ]
+}

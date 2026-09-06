@@ -1,0 +1,236 @@
+{
+  "family": "northmicrovision",
+  "size": "2.4b",
+  "repo": "CohereLabs/North-Micro-Vision-Instruct",
+  "revision": "main",
+  "source": "libreyolo/models/vlm/northmicro.py",
+  "input": 1024,
+  "properties": {
+    "FAMILY": "northmicrovision",
+    "HF_REPOS": {
+      "2.4b": "CohereLabs/North-Micro-Vision-Instruct"
+    },
+    "INPUT_SIZES": {
+      "2.4b": 1024
+    },
+    "COORD_DIVISOR": 1000.0
+  },
+  "resolved_revision": "79fa3ec7baf7ac92cb38233ca01d8ea8161ee036",
+  "config": {
+    "text_config": {
+      "output_hidden_states": false,
+      "return_dict": true,
+      "dtype": "bfloat16",
+      "chunk_size_feed_forward": 0,
+      "is_encoder_decoder": false,
+      "problem_type": null,
+      "vocab_size": 262144,
+      "hidden_size": 2048,
+      "intermediate_size": 6144,
+      "logit_scale": 0.25,
+      "num_hidden_layers": 28,
+      "num_attention_heads": 16,
+      "num_key_value_heads": 8,
+      "hidden_act": "silu",
+      "max_position_embeddings": 500000,
+      "initializer_range": 0.02,
+      "layer_norm_eps": 1e-05,
+      "use_cache": true,
+      "pad_token_id": 0,
+      "bos_token_id": 2,
+      "eos_token_id": 255001,
+      "tie_word_embeddings": true,
+      "rope_parameters": {
+        "sliding_attention": {
+          "mrope_interleaved": true,
+          "mrope_section": [
+            24,
+            20,
+            20
+          ],
+          "rope_type": "default",
+          "rope_theta": 50000
+        },
+        "full_attention": null,
+        "rope_theta": 10000.0,
+        "rope_type": "default"
+      },
+      "attention_bias": false,
+      "attention_dropout": 0.0,
+      "sliding_window": 4096,
+      "layer_types": [
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention"
+      ],
+      "pooling": null,
+      "head_dim": 128,
+      "score_shift_a": null,
+      "score_shift_b": null,
+      "model_type": "cohere_compass_text",
+      "output_attentions": false
+    },
+    "vision_config": {
+      "output_hidden_states": false,
+      "return_dict": true,
+      "dtype": "bfloat16",
+      "chunk_size_feed_forward": 0,
+      "is_encoder_decoder": false,
+      "problem_type": null,
+      "depth": 27,
+      "hidden_size": 1152,
+      "hidden_act": "gelu_pytorch_tanh",
+      "intermediate_size": 4304,
+      "num_heads": 16,
+      "in_channels": 3,
+      "patch_size": 16,
+      "spatial_merge_size": 2,
+      "temporal_patch_size": 2,
+      "out_hidden_size": 2048,
+      "num_position_embeddings": 2304,
+      "deepstack_visual_indexes": [
+        8,
+        16,
+        24
+      ],
+      "initializer_range": 0.02,
+      "model_type": "cohere_compass_vision",
+      "output_attentions": false
+    },
+    "tie_word_embeddings": true,
+    "fusion_config": {
+      "patch_embeddings": true
+    },
+    "model_type": "cohere_compass"
+  },
+  "backend_version": "5.16.1",
+  "meta": {
+    "family": "northmicrovision",
+    "size": "2.4b",
+    "status": "meta",
+    "model_class": "CohereCompassForConditionalGeneration",
+    "parameters": 2484847856,
+    "modules": {
+      "model.visual.patch_embed.proj": {
+        "in": 3,
+        "out": 1152,
+        "kernel": [
+          2,
+          16,
+          16
+        ],
+        "stride": [
+          2,
+          16,
+          16
+        ],
+        "groups": 1
+      },
+      "model.visual.blocks.0.attn.qkv": [
+        1152,
+        3456
+      ],
+      "model.visual.blocks.0.attn.proj": [
+        1152,
+        1152
+      ],
+      "model.visual.blocks.0.mlp.linear_fc1": [
+        1152,
+        4304
+      ],
+      "model.visual.blocks.0.mlp.linear_fc2": [
+        4304,
+        1152
+      ],
+      "model.visual.merger.linear_fc1": [
+        4608,
+        4608
+      ],
+      "model.visual.merger.linear_fc2": [
+        4608,
+        2048
+      ],
+      "model.visual.deepstack_merger_list.0.linear_fc1": [
+        4608,
+        4608
+      ],
+      "model.visual.deepstack_merger_list.0.linear_fc2": [
+        4608,
+        2048
+      ],
+      "model.visual.deepstack_merger_list.1.linear_fc1": [
+        4608,
+        4608
+      ],
+      "model.visual.deepstack_merger_list.1.linear_fc2": [
+        4608,
+        2048
+      ],
+      "model.visual.deepstack_merger_list.2.linear_fc1": [
+        4608,
+        4608
+      ],
+      "model.visual.deepstack_merger_list.2.linear_fc2": [
+        4608,
+        2048
+      ],
+      "model.language_model.layers.0.self_attn.q_proj": [
+        2048,
+        2048
+      ],
+      "model.language_model.layers.0.self_attn.k_proj": [
+        2048,
+        1024
+      ],
+      "model.language_model.layers.0.self_attn.v_proj": [
+        2048,
+        1024
+      ],
+      "model.language_model.layers.0.self_attn.o_proj": [
+        2048,
+        2048
+      ],
+      "model.language_model.layers.0.mlp.gate_proj": [
+        2048,
+        6144
+      ],
+      "model.language_model.layers.0.mlp.up_proj": [
+        2048,
+        6144
+      ],
+      "model.language_model.layers.0.mlp.down_proj": [
+        6144,
+        2048
+      ],
+      "lm_head": [
+        2048,
+        262144
+      ]
+    }
+  }
+}

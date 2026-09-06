@@ -1,0 +1,191 @@
+{
+  "family": "lfm2vl",
+  "size": "450m",
+  "repo": "LiquidAI/LFM2.5-VL-450M",
+  "revision": "main",
+  "source": "libreyolo/models/vlm/lfm2.py",
+  "input": 512,
+  "properties": {
+    "FAMILY": "lfm2vl",
+    "HF_REPOS": {
+      "450m": "LiquidAI/LFM2.5-VL-450M",
+      "1.6b": "LiquidAI/LFM2.5-VL-1.6B",
+      "3b": "LiquidAI/LFM2.5-VL-3B"
+    },
+    "INPUT_SIZES": {
+      "450m": 512,
+      "1.6b": 512,
+      "3b": 512
+    }
+  },
+  "resolved_revision": "fc6221ca597f3315e4f82fc2df606783267b34ba",
+  "config": {
+    "vision_config": {
+      "output_hidden_states": false,
+      "return_dict": true,
+      "dtype": "bfloat16",
+      "chunk_size_feed_forward": 0,
+      "is_encoder_decoder": false,
+      "problem_type": null,
+      "hidden_size": 768,
+      "intermediate_size": 3072,
+      "num_hidden_layers": 12,
+      "num_attention_heads": 12,
+      "num_channels": 3,
+      "patch_size": 16,
+      "hidden_act": "gelu_pytorch_tanh",
+      "layer_norm_eps": 1e-06,
+      "attention_dropout": 0.0,
+      "num_patches": 256,
+      "model_type": "siglip2_vision_model",
+      "vision_use_head": false,
+      "output_attentions": false
+    },
+    "text_config": {
+      "output_hidden_states": false,
+      "return_dict": true,
+      "dtype": "bfloat16",
+      "chunk_size_feed_forward": 0,
+      "is_encoder_decoder": false,
+      "problem_type": null,
+      "vocab_size": 65536,
+      "hidden_size": 1024,
+      "intermediate_size": 6656,
+      "num_hidden_layers": 16,
+      "num_attention_heads": 16,
+      "num_key_value_heads": 8,
+      "max_position_embeddings": 128000,
+      "initializer_range": 0.02,
+      "norm_eps": 1e-05,
+      "use_cache": true,
+      "pad_token_id": 0,
+      "bos_token_id": 1,
+      "eos_token_id": 7,
+      "tie_word_embeddings": true,
+      "rope_parameters": {
+        "rope_theta": 1000000.0,
+        "rope_type": "default"
+      },
+      "conv_bias": false,
+      "conv_L_cache": 3,
+      "block_multiple_of": 256,
+      "block_ffn_dim_multiplier": 1.0,
+      "block_auto_adjust_ff_dim": true,
+      "full_attn_idxs": null,
+      "layer_types": [
+        "conv",
+        "conv",
+        "full_attention",
+        "conv",
+        "conv",
+        "full_attention",
+        "conv",
+        "conv",
+        "full_attention",
+        "conv",
+        "full_attention",
+        "conv",
+        "full_attention",
+        "conv",
+        "full_attention",
+        "conv"
+      ],
+      "block_dim": 1024,
+      "block_mlp_init_scale": 1.0,
+      "block_norm_eps": 1e-05,
+      "block_out_init_scale": 1.0,
+      "block_use_swiglu": true,
+      "block_use_xavier_init": true,
+      "conv_dim": 1024,
+      "conv_dim_out": 1024,
+      "conv_use_xavier_init": true,
+      "model_type": "lfm2",
+      "num_heads": 16,
+      "use_pos_enc": true,
+      "output_attentions": false
+    },
+    "projector_hidden_act": "gelu",
+    "projector_hidden_size": 2048,
+    "projector_use_layernorm": false,
+    "downsample_factor": 2,
+    "tie_word_embeddings": true,
+    "model_type": "lfm2_vl"
+  },
+  "backend_version": "5.16.1",
+  "meta": {
+    "family": "lfm2vl",
+    "size": "450m",
+    "status": "meta",
+    "model_class": "Lfm2VlForConditionalGeneration",
+    "parameters": 448718848,
+    "modules": {
+      "model.vision_tower.encoder.layers.0.self_attn.k_proj": [
+        768,
+        768
+      ],
+      "model.vision_tower.encoder.layers.0.self_attn.v_proj": [
+        768,
+        768
+      ],
+      "model.vision_tower.encoder.layers.0.self_attn.q_proj": [
+        768,
+        768
+      ],
+      "model.vision_tower.encoder.layers.0.self_attn.out_proj": [
+        768,
+        768
+      ],
+      "model.vision_tower.encoder.layers.0.mlp.fc1": [
+        768,
+        3072
+      ],
+      "model.vision_tower.encoder.layers.0.mlp.fc2": [
+        3072,
+        768
+      ],
+      "model.multi_modal_projector.linear_1": [
+        3072,
+        2048
+      ],
+      "model.multi_modal_projector.linear_2": [
+        2048,
+        1024
+      ],
+      "model.language_model.layers.0.conv.conv": {
+        "in": 1024,
+        "out": 1024,
+        "kernel": [
+          3
+        ],
+        "stride": [
+          1
+        ],
+        "groups": 1024
+      },
+      "model.language_model.layers.0.conv.in_proj": [
+        1024,
+        3072
+      ],
+      "model.language_model.layers.0.conv.out_proj": [
+        1024,
+        1024
+      ],
+      "model.language_model.layers.0.feed_forward.w1": [
+        1024,
+        4608
+      ],
+      "model.language_model.layers.0.feed_forward.w3": [
+        1024,
+        4608
+      ],
+      "model.language_model.layers.0.feed_forward.w2": [
+        4608,
+        1024
+      ],
+      "lm_head": [
+        1024,
+        65536
+      ]
+    }
+  }
+}

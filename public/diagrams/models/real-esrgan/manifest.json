@@ -1,0 +1,53 @@
+{
+  "family": "realesrgan",
+  "slug": "real-esrgan",
+  "title": "Real-ESRGAN",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "x4-restore",
+  "views": [
+    {
+      "id": "x4-restore",
+      "label": "x4",
+      "task": "restore",
+      "size": "x4",
+      "kind": "concrete",
+      "svg": "/diagrams/models/real-esrgan/x4-restore.svg",
+      "html": "/diagrams/models/real-esrgan/x4-restore.html",
+      "input": "3\u00d764\u00d764",
+      "verification": "cpu"
+    },
+    {
+      "id": "x2-restore",
+      "label": "x2",
+      "task": "restore",
+      "size": "x2",
+      "kind": "concrete",
+      "svg": "/diagrams/models/real-esrgan/x2-restore.svg",
+      "html": "/diagrams/models/real-esrgan/x2-restore.html",
+      "input": "3\u00d764\u00d764",
+      "verification": "cpu"
+    },
+    {
+      "id": "x4t-restore",
+      "label": "x4t (SRVGG)",
+      "task": "restore",
+      "size": "x4t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/real-esrgan/x4t-restore.svg",
+      "html": "/diagrams/models/real-esrgan/x4t-restore.html",
+      "input": "3\u00d764\u00d764",
+      "verification": "cpu"
+    },
+    {
+      "id": "rrdb-family",
+      "label": "RRDBNet shared topology",
+      "task": "restore",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/real-esrgan/rrdb-family.svg",
+      "html": "/diagrams/models/real-esrgan/rrdb-family.html",
+      "input": "3\u00d764\u00d764",
+      "verification": "source"
+    }
+  ]
+}

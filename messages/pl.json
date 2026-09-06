@@ -977,5 +977,11 @@
       "stableBody": "Do zastosowań produkcyjnych zweryfikowaną podstawą jest detekcja YOLO9 oraz detekcja i segmentacja RF-DETR. Informacje na ich temat zawiera <docs>główna dokumentacja</docs>, a detekcję z otwartym słownikiem opisuje <vlm>LibreVLM</vlm>.",
       "source": "Śledź postęp i kod źródłowy na <link>GitHubie</link>"
     }
+  },
+  "ModelDiagram": {
+    "title": "Architektura {model}",
+    "open": "Otwórz pełny diagram",
+    "description": "Wybierz wariant lub przegląd rodziny, a następnie blok, aby zobaczyć szczegóły. Otwórz pełny diagram, aby powiększyć go lub pobrać SVG i PNG. Diagramy są w języku angielskim.",
+    "view": "Diagram"
   }
 }

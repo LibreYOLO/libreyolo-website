@@ -1,0 +1,53 @@
+{
+  "family": "pidnet",
+  "slug": "pidnet",
+  "title": "PIDNet",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "s-semantic",
+  "views": [
+    {
+      "id": "s-semantic",
+      "label": "s",
+      "task": "semantic",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/pidnet/s-semantic.svg",
+      "html": "/diagrams/models/pidnet/s-semantic.html",
+      "input": "3\u00d71024\u00d71024",
+      "verification": "cpu"
+    },
+    {
+      "id": "m-semantic",
+      "label": "m",
+      "task": "semantic",
+      "size": "m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/pidnet/m-semantic.svg",
+      "html": "/diagrams/models/pidnet/m-semantic.html",
+      "input": "3\u00d71024\u00d71024",
+      "verification": "cpu"
+    },
+    {
+      "id": "l-semantic",
+      "label": "l",
+      "task": "semantic",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/pidnet/l-semantic.svg",
+      "html": "/diagrams/models/pidnet/l-semantic.html",
+      "input": "3\u00d71024\u00d71024",
+      "verification": "cpu"
+    },
+    {
+      "id": "sm-family",
+      "label": "Shared S/M topology",
+      "task": "semantic",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/pidnet/sm-family.svg",
+      "html": "/diagrams/models/pidnet/sm-family.html",
+      "input": "3\u00d71024\u00d71024",
+      "verification": "source"
+    }
+  ]
+}

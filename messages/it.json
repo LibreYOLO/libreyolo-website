@@ -977,5 +977,11 @@
       "stableBody": "Per l'uso in produzione, il nucleo convalidato comprende il rilevamento con YOLO9 e il rilevamento e la segmentazione con RF-DETR. Consulta la <docs>documentazione principale</docs> per questi modelli e <vlm>LibreVLM</vlm> per il rilevamento a vocabolario aperto.",
       "source": "Segui i progressi e consulta il sorgente su <link>GitHub</link>"
     }
+  },
+  "ModelDiagram": {
+    "title": "Architettura di {model}",
+    "open": "Apri il diagramma completo",
+    "description": "Scegli una variante o la vista della famiglia, poi un blocco per i dettagli. Apri il diagramma completo per ingrandire o scaricare SVG e PNG. I diagrammi sono in inglese.",
+    "view": "Diagramma"
   }
 }

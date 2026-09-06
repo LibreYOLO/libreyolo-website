@@ -1,0 +1,315 @@
+{
+  "family": "realesrgan",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "sources": [
+    "libreyolo/models/realesrgan/model.py:REALESRGAN_SIZE_CONFIGS",
+    "libreyolo/models/realesrgan/nn.py:RRDBNet, RRDB, ResidualDenseBlock, SRVGGNetCompact"
+  ],
+  "records": {
+    "x4": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        64,
+        64
+      ],
+      "output": [
+        1,
+        3,
+        256,
+        256
+      ],
+      "hooks": {
+        "conv_first": {
+          "input": [
+            [
+              1,
+              3,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            64,
+            64
+          ]
+        },
+        "body": {
+          "input": [
+            [
+              1,
+              64,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            64,
+            64
+          ]
+        },
+        "conv_body": {
+          "input": [
+            [
+              1,
+              64,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            64,
+            64
+          ]
+        },
+        "conv_up1": {
+          "input": [
+            [
+              1,
+              64,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            128,
+            128
+          ]
+        },
+        "conv_up2": {
+          "input": [
+            [
+              1,
+              64,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            256,
+            256
+          ]
+        },
+        "conv_last": {
+          "input": [
+            [
+              1,
+              64,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            3,
+            256,
+            256
+          ]
+        }
+      },
+      "parameters": 16697987,
+      "pretrained": false
+    },
+    "x2": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        64,
+        64
+      ],
+      "output": [
+        1,
+        3,
+        128,
+        128
+      ],
+      "hooks": {
+        "conv_first": {
+          "input": [
+            [
+              1,
+              12,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            32,
+            32
+          ]
+        },
+        "body": {
+          "input": [
+            [
+              1,
+              64,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            32,
+            32
+          ]
+        },
+        "conv_body": {
+          "input": [
+            [
+              1,
+              64,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            32,
+            32
+          ]
+        },
+        "conv_up1": {
+          "input": [
+            [
+              1,
+              64,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            64,
+            64
+          ]
+        },
+        "conv_up2": {
+          "input": [
+            [
+              1,
+              64,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            128,
+            128
+          ]
+        },
+        "conv_last": {
+          "input": [
+            [
+              1,
+              64,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            3,
+            128,
+            128
+          ]
+        }
+      },
+      "parameters": 16703171,
+      "pretrained": false
+    },
+    "x4t": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        64,
+        64
+      ],
+      "output": [
+        1,
+        3,
+        256,
+        256
+      ],
+      "hooks": {
+        "body.0": {
+          "input": [
+            [
+              1,
+              3,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            64,
+            64
+          ]
+        },
+        "body.66": {
+          "input": [
+            [
+              1,
+              64,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            48,
+            64,
+            64
+          ]
+        },
+        "upsampler": {
+          "input": [
+            [
+              1,
+              48,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            3,
+            256,
+            256
+          ]
+        }
+      },
+      "parameters": 1213296,
+      "pretrained": false
+    }
+  },
+  "notes": [
+    "Input 64\u00d764 is the configured representative; inference may accept native-resolution images.",
+    "x4/x2 share RRDB trunk but have explicit differing input rearrangement. x4t is separately drawn SRVGG topology."
+  ],
+  "visual_qa": "Parent agent; not executed by this builder."
+}

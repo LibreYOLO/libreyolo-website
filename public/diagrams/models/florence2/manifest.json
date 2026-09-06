@@ -1,0 +1,42 @@
+{
+  "family": "florence2",
+  "slug": "florence2",
+  "title": "Florence-2",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "base-detect",
+  "views": [
+    {
+      "id": "base-detect",
+      "label": "Florence-2 base",
+      "kind": "concrete",
+      "task": "detect",
+      "size": "base",
+      "svg": "/diagrams/models/florence2/base-detect.svg",
+      "html": "/diagrams/models/florence2/base-detect.html",
+      "verification": "meta",
+      "input": "768 \u00d7 768"
+    },
+    {
+      "id": "large-detect",
+      "label": "Florence-2 large",
+      "kind": "concrete",
+      "task": "detect",
+      "size": "large",
+      "svg": "/diagrams/models/florence2/large-detect.svg",
+      "html": "/diagrams/models/florence2/large-detect.html",
+      "verification": "meta",
+      "input": "768 \u00d7 768"
+    },
+    {
+      "id": "family",
+      "label": "Florence-2 family",
+      "kind": "family",
+      "task": "detect",
+      "size": "family",
+      "svg": "/diagrams/models/florence2/family.svg",
+      "html": "/diagrams/models/florence2/family.html",
+      "verification": "meta",
+      "input": "768 \u00d7 768"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "family": "sam",
+  "slug": "sam",
+  "title": "SAM",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "base-box-segment",
+  "views": [
+    {
+      "id": "base-box-segment",
+      "label": "SAM base",
+      "task": "segment",
+      "size": "base",
+      "kind": "concrete",
+      "svg": "/diagrams/models/sam/base-box-segment.svg",
+      "html": "/diagrams/models/sam/base-box-segment.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 1024 \u00d7 1024; box: 1 \u00d7 1 \u00d7 4",
+      "verification": "meta"
+    },
+    {
+      "id": "large-box-segment",
+      "label": "SAM large",
+      "task": "segment",
+      "size": "large",
+      "kind": "concrete",
+      "svg": "/diagrams/models/sam/large-box-segment.svg",
+      "html": "/diagrams/models/sam/large-box-segment.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 1024 \u00d7 1024; box: 1 \u00d7 1 \u00d7 4",
+      "verification": "meta"
+    },
+    {
+      "id": "huge-box-segment",
+      "label": "SAM huge",
+      "task": "segment",
+      "size": "huge",
+      "kind": "concrete",
+      "svg": "/diagrams/models/sam/huge-box-segment.svg",
+      "html": "/diagrams/models/sam/huge-box-segment.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 1024 \u00d7 1024; box: 1 \u00d7 1 \u00d7 4",
+      "verification": "meta"
+    },
+    {
+      "id": "family-box-segment",
+      "label": "SAM family",
+      "task": "segment",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/sam/family-box-segment.svg",
+      "html": "/diagrams/models/sam/family-box-segment.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 1024 \u00d7 1024; box: 1 \u00d7 1 \u00d7 4",
+      "verification": "source"
+    }
+  ]
+}

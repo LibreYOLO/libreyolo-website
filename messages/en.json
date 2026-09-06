@@ -977,5 +977,11 @@
       "stableBody": "For production work, the validated core is YOLO9 detection and RF-DETR detection and segmentation. See the <docs>core documentation</docs> for those, and <vlm>LibreVLM</vlm> for open-vocabulary detection.",
       "source": "Track progress and source on <link>GitHub</link>"
     }
+  },
+  "ModelDiagram": {
+    "title": "{model} architecture",
+    "open": "Open full diagram",
+    "description": "Select a variant or family overview, then select a block for details. Open the full diagram to zoom or download SVG and PNG.",
+    "view": "Diagram"
   }
 }

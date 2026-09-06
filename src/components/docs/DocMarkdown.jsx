@@ -45,7 +45,15 @@ export default function DocMarkdown({ children, family, snippets = {} }) {
     ),
     // Paragraph spacing stays clearly larger than intra-paragraph leading, or
     // paragraph boundaries dissolve and the page reads as one grey field.
-    p: (props) => <p className="mb-5 max-w-[68ch] text-[15px] leading-[1.6] text-surface-600 dark:text-surface-400" {...dom(props)} />,
+    p: ({ node, ...props }) => {
+      // Markdown treats custom tags as inline HTML. Their React renderers emit
+      // block elements, which cannot sit inside a p without hydration repair.
+      const hasBlock = node?.children?.some(child => child.type === 'element' &&
+        ['code-tabs', 'benchmark-table', 'checkpoint-table', 'export-matrix',
+          'citation-block', 'provenance-box', 'va-embed', 'task-support'].includes(child.tagName))
+      const Tag = hasBlock ? 'div' : 'p'
+      return <Tag className={hasBlock ? "mb-5" : "mb-5 max-w-[68ch] text-[15px] leading-[1.6] text-surface-600 dark:text-surface-400"} {...dom(props)} />
+    },
     a: (props) => (
       <a
         className="font-medium text-libre-600 underline-offset-2 hover:underline dark:text-libre-400"

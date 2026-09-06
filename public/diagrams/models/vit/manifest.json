@@ -1,0 +1,64 @@
+{
+  "family": "vit",
+  "slug": "vit",
+  "title": "ViT",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "ti-classify",
+  "views": [
+    {
+      "id": "ti-classify",
+      "label": "ViT ti",
+      "task": "classify",
+      "size": "ti",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vit/ti-classify.svg",
+      "html": "/diagrams/models/vit/ti-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "cpu"
+    },
+    {
+      "id": "s-classify",
+      "label": "ViT s",
+      "task": "classify",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vit/s-classify.svg",
+      "html": "/diagrams/models/vit/s-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "b-classify",
+      "label": "ViT b",
+      "task": "classify",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vit/b-classify.svg",
+      "html": "/diagrams/models/vit/b-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "l-classify",
+      "label": "ViT l",
+      "task": "classify",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vit/l-classify.svg",
+      "html": "/diagrams/models/vit/l-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "family-classify",
+      "label": "ViT family",
+      "task": "classify",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/vit/family-classify.svg",
+      "html": "/diagrams/models/vit/family-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "source"
+    }
+  ]
+}

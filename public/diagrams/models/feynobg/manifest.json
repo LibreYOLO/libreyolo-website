@@ -1,0 +1,20 @@
+{
+  "family": "feynobg",
+  "slug": "feynobg",
+  "title": "FeyNobg",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "l-matte",
+  "views": [
+    {
+      "id": "l-matte",
+      "label": "l",
+      "task": "matte",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/feynobg/l-matte.svg",
+      "html": "/diagrams/models/feynobg/l-matte.html",
+      "input": "3\u00d71024\u00d71024 normalized RGB",
+      "verification": "meta"
+    }
+  ]
+}

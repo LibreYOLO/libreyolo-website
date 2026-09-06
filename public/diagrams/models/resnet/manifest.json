@@ -1,0 +1,75 @@
+{
+  "family": "resnet",
+  "slug": "resnet",
+  "title": "ResNet",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "18-classify",
+  "views": [
+    {
+      "id": "18-classify",
+      "label": "ResNet-18",
+      "task": "classify",
+      "size": "18",
+      "kind": "concrete",
+      "svg": "/diagrams/models/resnet/18-classify.svg",
+      "html": "/diagrams/models/resnet/18-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "cpu"
+    },
+    {
+      "id": "34-classify",
+      "label": "ResNet-34",
+      "task": "classify",
+      "size": "34",
+      "kind": "concrete",
+      "svg": "/diagrams/models/resnet/34-classify.svg",
+      "html": "/diagrams/models/resnet/34-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "50-classify",
+      "label": "ResNet-50",
+      "task": "classify",
+      "size": "50",
+      "kind": "concrete",
+      "svg": "/diagrams/models/resnet/50-classify.svg",
+      "html": "/diagrams/models/resnet/50-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "101-classify",
+      "label": "ResNet-101",
+      "task": "classify",
+      "size": "101",
+      "kind": "concrete",
+      "svg": "/diagrams/models/resnet/101-classify.svg",
+      "html": "/diagrams/models/resnet/101-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "family-basic-classify",
+      "label": "ResNet-18 / 34 family",
+      "task": "classify",
+      "size": "family-basic",
+      "kind": "family",
+      "svg": "/diagrams/models/resnet/family-basic-classify.svg",
+      "html": "/diagrams/models/resnet/family-basic-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "source"
+    },
+    {
+      "id": "family-bottleneck-classify",
+      "label": "ResNet-50 / 101 family",
+      "task": "classify",
+      "size": "family-bottleneck",
+      "kind": "family",
+      "svg": "/diagrams/models/resnet/family-bottleneck-classify.svg",
+      "html": "/diagrams/models/resnet/family-bottleneck-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "source"
+    }
+  ]
+}

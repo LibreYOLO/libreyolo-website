@@ -1,0 +1,91 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "source": "libreyolo/models/owlv2/nn.py",
+  "shapes": {
+    "b16": {
+      "device": "meta",
+      "config": {
+        "vision_hidden": 768,
+        "vision_layers": 12,
+        "vision_heads": 12,
+        "vision_intermediate": 3072,
+        "patch_size": 16,
+        "image_size": 960,
+        "vision_act": "quick_gelu",
+        "text_hidden": 512,
+        "text_layers": 12,
+        "text_heads": 8,
+        "text_intermediate": 2048,
+        "vocab_size": 49408,
+        "max_position_embeddings": 16,
+        "text_act": "quick_gelu",
+        "projection_dim": 512,
+        "layer_norm_eps": 1e-05
+      },
+      "outputs": {
+        "logits": [
+          1,
+          3600,
+          3
+        ],
+        "pred_boxes": [
+          1,
+          3600,
+          4
+        ],
+        "objectness_logits": [
+          1,
+          3600
+        ],
+        "class_embeds": [
+          1,
+          3600,
+          512
+        ]
+      }
+    },
+    "l14": {
+      "device": "meta",
+      "config": {
+        "vision_hidden": 1024,
+        "vision_layers": 24,
+        "vision_heads": 16,
+        "vision_intermediate": 4096,
+        "patch_size": 14,
+        "image_size": 1008,
+        "vision_act": "quick_gelu",
+        "text_hidden": 768,
+        "text_layers": 12,
+        "text_heads": 12,
+        "text_intermediate": 3072,
+        "vocab_size": 49408,
+        "max_position_embeddings": 16,
+        "text_act": "quick_gelu",
+        "projection_dim": 768,
+        "layer_norm_eps": 1e-05
+      },
+      "outputs": {
+        "logits": [
+          1,
+          5184,
+          3
+        ],
+        "pred_boxes": [
+          1,
+          5184,
+          4
+        ],
+        "objectness_logits": [
+          1,
+          5184
+        ],
+        "class_embeds": [
+          1,
+          5184,
+          768
+        ]
+      }
+    }
+  },
+  "verification_limits": "Meta checks validate shape propagation, not numerical behavior. CPU checks use random weights. Source inspection establishes functional branches. Browser and PNG QA belongs to integration review."
+}

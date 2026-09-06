@@ -1,0 +1,253 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "backend": "Transformers5.16.1 Apache-2.0 native source",
+  "families": [
+    {
+      "size": "450m",
+      "repo": "LiquidAI/LFM2.5-VL-450M",
+      "resolved_revision": "fc6221ca597f3315e4f82fc2df606783267b34ba",
+      "source": "libreyolo/models/vlm/lfm2.py",
+      "meta": {
+        "family": "lfm2vl",
+        "size": "450m",
+        "status": "meta",
+        "model_class": "Lfm2VlForConditionalGeneration",
+        "parameters": 448718848,
+        "modules": {
+          "model.vision_tower.encoder.layers.0.self_attn.k_proj": [
+            768,
+            768
+          ],
+          "model.vision_tower.encoder.layers.0.self_attn.v_proj": [
+            768,
+            768
+          ],
+          "model.vision_tower.encoder.layers.0.self_attn.q_proj": [
+            768,
+            768
+          ],
+          "model.vision_tower.encoder.layers.0.self_attn.out_proj": [
+            768,
+            768
+          ],
+          "model.vision_tower.encoder.layers.0.mlp.fc1": [
+            768,
+            3072
+          ],
+          "model.vision_tower.encoder.layers.0.mlp.fc2": [
+            3072,
+            768
+          ],
+          "model.multi_modal_projector.linear_1": [
+            3072,
+            2048
+          ],
+          "model.multi_modal_projector.linear_2": [
+            2048,
+            1024
+          ],
+          "model.language_model.layers.0.conv.conv": {
+            "in": 1024,
+            "out": 1024,
+            "kernel": [
+              3
+            ],
+            "stride": [
+              1
+            ],
+            "groups": 1024
+          },
+          "model.language_model.layers.0.conv.in_proj": [
+            1024,
+            3072
+          ],
+          "model.language_model.layers.0.conv.out_proj": [
+            1024,
+            1024
+          ],
+          "model.language_model.layers.0.feed_forward.w1": [
+            1024,
+            4608
+          ],
+          "model.language_model.layers.0.feed_forward.w3": [
+            1024,
+            4608
+          ],
+          "model.language_model.layers.0.feed_forward.w2": [
+            4608,
+            1024
+          ],
+          "lm_head": [
+            1024,
+            65536
+          ]
+        }
+      }
+    },
+    {
+      "size": "1.6b",
+      "repo": "LiquidAI/LFM2.5-VL-1.6B",
+      "resolved_revision": "919fde3d022e3f90a4716006f993938ee8c2eb97",
+      "source": "libreyolo/models/vlm/lfm2.py",
+      "meta": {
+        "family": "lfm2vl",
+        "size": "1.6b",
+        "status": "meta",
+        "model_class": "Lfm2VlForConditionalGeneration",
+        "parameters": 1596625904,
+        "modules": {
+          "model.vision_tower.encoder.layers.0.self_attn.k_proj": [
+            1152,
+            1152
+          ],
+          "model.vision_tower.encoder.layers.0.self_attn.v_proj": [
+            1152,
+            1152
+          ],
+          "model.vision_tower.encoder.layers.0.self_attn.q_proj": [
+            1152,
+            1152
+          ],
+          "model.vision_tower.encoder.layers.0.self_attn.out_proj": [
+            1152,
+            1152
+          ],
+          "model.vision_tower.encoder.layers.0.mlp.fc1": [
+            1152,
+            4304
+          ],
+          "model.vision_tower.encoder.layers.0.mlp.fc2": [
+            4304,
+            1152
+          ],
+          "model.multi_modal_projector.linear_1": [
+            4608,
+            2048
+          ],
+          "model.multi_modal_projector.linear_2": [
+            2048,
+            2048
+          ],
+          "model.language_model.layers.0.conv.conv": {
+            "in": 2048,
+            "out": 2048,
+            "kernel": [
+              3
+            ],
+            "stride": [
+              1
+            ],
+            "groups": 2048
+          },
+          "model.language_model.layers.0.conv.in_proj": [
+            2048,
+            6144
+          ],
+          "model.language_model.layers.0.conv.out_proj": [
+            2048,
+            2048
+          ],
+          "model.language_model.layers.0.feed_forward.w1": [
+            2048,
+            8192
+          ],
+          "model.language_model.layers.0.feed_forward.w3": [
+            2048,
+            8192
+          ],
+          "model.language_model.layers.0.feed_forward.w2": [
+            8192,
+            2048
+          ],
+          "lm_head": [
+            2048,
+            65536
+          ]
+        }
+      }
+    },
+    {
+      "size": "3b",
+      "repo": "LiquidAI/LFM2.5-VL-3B",
+      "resolved_revision": "a3af5799199acdd2a4f56ac4342816abb46c12a9",
+      "source": "libreyolo/models/vlm/lfm2.py",
+      "meta": {
+        "family": "lfm2vl",
+        "size": "3b",
+        "status": "meta",
+        "model_class": "Lfm2VlForConditionalGeneration",
+        "parameters": 3123483888,
+        "modules": {
+          "model.vision_tower.encoder.layers.0.self_attn.k_proj": [
+            1152,
+            1152
+          ],
+          "model.vision_tower.encoder.layers.0.self_attn.v_proj": [
+            1152,
+            1152
+          ],
+          "model.vision_tower.encoder.layers.0.self_attn.q_proj": [
+            1152,
+            1152
+          ],
+          "model.vision_tower.encoder.layers.0.self_attn.out_proj": [
+            1152,
+            1152
+          ],
+          "model.vision_tower.encoder.layers.0.mlp.fc1": [
+            1152,
+            4304
+          ],
+          "model.vision_tower.encoder.layers.0.mlp.fc2": [
+            4304,
+            1152
+          ],
+          "model.multi_modal_projector.linear_1": [
+            4608,
+            2048
+          ],
+          "model.multi_modal_projector.linear_2": [
+            2048,
+            2048
+          ],
+          "model.language_model.layers.0.conv.conv": {
+            "in": 2048,
+            "out": 2048,
+            "kernel": [
+              3
+            ],
+            "stride": [
+              1
+            ],
+            "groups": 2048
+          },
+          "model.language_model.layers.0.conv.in_proj": [
+            2048,
+            6144
+          ],
+          "model.language_model.layers.0.conv.out_proj": [
+            2048,
+            2048
+          ],
+          "model.language_model.layers.0.feed_forward.w1": [
+            2048,
+            10752
+          ],
+          "model.language_model.layers.0.feed_forward.w3": [
+            2048,
+            10752
+          ],
+          "model.language_model.layers.0.feed_forward.w2": [
+            10752,
+            2048
+          ],
+          "lm_head": [
+            2048,
+            128000
+          ]
+        }
+      }
+    }
+  ],
+  "scope": "Image inference path, configuration and native module-shape verification; no weights or remote Python. Runtime token counts are explicit symbols. Adapter parser rules read from LibreYOLO source."
+}

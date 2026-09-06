@@ -1,0 +1,53 @@
+{
+  "family": "fomo",
+  "slug": "fomo",
+  "title": "FOMO",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "m",
+  "views": [
+    {
+      "id": "s",
+      "label": "FOMO-S",
+      "task": "point",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/fomo/s.svg",
+      "html": "/diagrams/models/fomo/s.html",
+      "input": "1 \u00d7 3 \u00d7 96 \u00d7 96",
+      "verification": "cpu"
+    },
+    {
+      "id": "m",
+      "label": "FOMO-M",
+      "task": "point",
+      "size": "m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/fomo/m.svg",
+      "html": "/diagrams/models/fomo/m.html",
+      "input": "1 \u00d7 3 \u00d7 192 \u00d7 192",
+      "verification": "cpu"
+    },
+    {
+      "id": "l",
+      "label": "FOMO-L",
+      "task": "point",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/fomo/l.svg",
+      "html": "/diagrams/models/fomo/l.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "cpu"
+    },
+    {
+      "id": "family",
+      "label": "FOMO family",
+      "task": "point",
+      "size": "s/m/l",
+      "kind": "family",
+      "svg": "/diagrams/models/fomo/family.svg",
+      "html": "/diagrams/models/fomo/family.html",
+      "input": "H \u00d7 H RGB; H in table",
+      "verification": "cpu"
+    }
+  ]
+}

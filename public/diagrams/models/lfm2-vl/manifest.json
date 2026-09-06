@@ -1,0 +1,53 @@
+{
+  "family": "lfm2vl",
+  "slug": "lfm2-vl",
+  "title": "LFM2.5-VL",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "450m-detect",
+  "views": [
+    {
+      "id": "450m-detect",
+      "label": "LFM2.5-VL 450M",
+      "task": "detect",
+      "size": "450m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/lfm2-vl/450m-detect.svg",
+      "html": "/diagrams/models/lfm2-vl/450m-detect.html",
+      "input": "512 nominal; processor-dependent",
+      "verification": "meta"
+    },
+    {
+      "id": "1-6b-detect",
+      "label": "LFM2.5-VL 1.6B",
+      "task": "detect",
+      "size": "1.6b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/lfm2-vl/1-6b-detect.svg",
+      "html": "/diagrams/models/lfm2-vl/1-6b-detect.html",
+      "input": "512 nominal; processor-dependent",
+      "verification": "meta"
+    },
+    {
+      "id": "3b-detect",
+      "label": "LFM2.5-VL 3B",
+      "task": "detect",
+      "size": "3b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/lfm2-vl/3b-detect.svg",
+      "html": "/diagrams/models/lfm2-vl/3b-detect.html",
+      "input": "512 nominal; processor-dependent",
+      "verification": "meta"
+    },
+    {
+      "id": "family-16-layer",
+      "label": "LFM2.5-VL family",
+      "task": "detect",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/lfm2-vl/family-16-layer.svg",
+      "html": "/diagrams/models/lfm2-vl/family-16-layer.html",
+      "input": "512 nominal; processor-dependent",
+      "verification": "meta"
+    }
+  ]
+}

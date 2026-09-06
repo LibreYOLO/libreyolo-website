@@ -1,0 +1,31 @@
+{
+  "family": "midas",
+  "slug": "midas",
+  "title": "MiDaS",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "s-depth",
+  "views": [
+    {
+      "id": "s-depth",
+      "label": "Small EfficientNet-Lite3",
+      "task": "depth",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/midas/s-depth.svg",
+      "html": "/diagrams/models/midas/s-depth.html",
+      "input": "3\u00d7256\u00d7256",
+      "verification": "cpu"
+    },
+    {
+      "id": "l-depth",
+      "label": "Large ViT-L/16",
+      "task": "depth",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/midas/l-depth.svg",
+      "html": "/diagrams/models/midas/l-depth.html",
+      "input": "3\u00d7384\u00d7384",
+      "verification": "meta"
+    }
+  ]
+}

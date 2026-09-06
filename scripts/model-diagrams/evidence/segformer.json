@@ -1,0 +1,735 @@
+{
+  "family": "segformer",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "sources": [
+    "libreyolo/models/segformer/nn.py:SIZE_CONFIGS, OverlapPatchEmbeddings, EfficientSelfAttention, MixMLP, SegformerDecodeHead",
+    "libreyolo/models/segformer/model.py:INPUT_SIZES"
+  ],
+  "records": {
+    "b0": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        512,
+        512
+      ],
+      "output": [
+        1,
+        150,
+        512,
+        512
+      ],
+      "hooks": {
+        "encoder.stages.0": {
+          "input": [
+            [
+              1,
+              3,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            32,
+            128,
+            128
+          ]
+        },
+        "encoder.stages.1": {
+          "input": [
+            [
+              1,
+              32,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            64,
+            64
+          ]
+        },
+        "encoder.stages.2": {
+          "input": [
+            [
+              1,
+              64,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            160,
+            32,
+            32
+          ]
+        },
+        "encoder.stages.3": {
+          "input": [
+            [
+              1,
+              160,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            16,
+            16
+          ]
+        },
+        "decode_head": {
+          "input": [
+            [
+              [
+                1,
+                32,
+                128,
+                128
+              ],
+              [
+                1,
+                64,
+                64,
+                64
+              ],
+              [
+                1,
+                160,
+                32,
+                32
+              ],
+              [
+                1,
+                256,
+                16,
+                16
+              ]
+            ]
+          ],
+          "output": [
+            1,
+            150,
+            128,
+            128
+          ]
+        }
+      },
+      "parameters": 3752694,
+      "pretrained": false
+    },
+    "b1": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        512,
+        512
+      ],
+      "output": [
+        1,
+        150,
+        512,
+        512
+      ],
+      "hooks": {
+        "encoder.stages.0": {
+          "input": [
+            [
+              1,
+              3,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            128,
+            128
+          ]
+        },
+        "encoder.stages.1": {
+          "input": [
+            [
+              1,
+              64,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            64,
+            64
+          ]
+        },
+        "encoder.stages.2": {
+          "input": [
+            [
+              1,
+              128,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            320,
+            32,
+            32
+          ]
+        },
+        "encoder.stages.3": {
+          "input": [
+            [
+              1,
+              320,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            16,
+            16
+          ]
+        },
+        "decode_head": {
+          "input": [
+            [
+              [
+                1,
+                64,
+                128,
+                128
+              ],
+              [
+                1,
+                128,
+                64,
+                64
+              ],
+              [
+                1,
+                320,
+                32,
+                32
+              ],
+              [
+                1,
+                512,
+                16,
+                16
+              ]
+            ]
+          ],
+          "output": [
+            1,
+            150,
+            128,
+            128
+          ]
+        }
+      },
+      "parameters": 13715798,
+      "pretrained": false
+    },
+    "b2": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        512,
+        512
+      ],
+      "output": [
+        1,
+        150,
+        512,
+        512
+      ],
+      "hooks": {
+        "encoder.stages.0": {
+          "input": [
+            [
+              1,
+              3,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            128,
+            128
+          ]
+        },
+        "encoder.stages.1": {
+          "input": [
+            [
+              1,
+              64,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            64,
+            64
+          ]
+        },
+        "encoder.stages.2": {
+          "input": [
+            [
+              1,
+              128,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            320,
+            32,
+            32
+          ]
+        },
+        "encoder.stages.3": {
+          "input": [
+            [
+              1,
+              320,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            16,
+            16
+          ]
+        },
+        "decode_head": {
+          "input": [
+            [
+              [
+                1,
+                64,
+                128,
+                128
+              ],
+              [
+                1,
+                128,
+                64,
+                64
+              ],
+              [
+                1,
+                320,
+                32,
+                32
+              ],
+              [
+                1,
+                512,
+                16,
+                16
+              ]
+            ]
+          ],
+          "output": [
+            1,
+            150,
+            128,
+            128
+          ]
+        }
+      },
+      "parameters": 27461974,
+      "pretrained": false
+    },
+    "b3": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        512,
+        512
+      ],
+      "output": [
+        1,
+        150,
+        512,
+        512
+      ],
+      "hooks": {
+        "encoder.stages.0": {
+          "input": [
+            [
+              1,
+              3,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            128,
+            128
+          ]
+        },
+        "encoder.stages.1": {
+          "input": [
+            [
+              1,
+              64,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            64,
+            64
+          ]
+        },
+        "encoder.stages.2": {
+          "input": [
+            [
+              1,
+              128,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            320,
+            32,
+            32
+          ]
+        },
+        "encoder.stages.3": {
+          "input": [
+            [
+              1,
+              320,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            16,
+            16
+          ]
+        },
+        "decode_head": {
+          "input": [
+            [
+              [
+                1,
+                64,
+                128,
+                128
+              ],
+              [
+                1,
+                128,
+                64,
+                64
+              ],
+              [
+                1,
+                320,
+                32,
+                32
+              ],
+              [
+                1,
+                512,
+                16,
+                16
+              ]
+            ]
+          ],
+          "output": [
+            1,
+            150,
+            128,
+            128
+          ]
+        }
+      },
+      "parameters": 47337814,
+      "pretrained": false
+    },
+    "b4": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        512,
+        512
+      ],
+      "output": [
+        1,
+        150,
+        512,
+        512
+      ],
+      "hooks": {
+        "encoder.stages.0": {
+          "input": [
+            [
+              1,
+              3,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            128,
+            128
+          ]
+        },
+        "encoder.stages.1": {
+          "input": [
+            [
+              1,
+              64,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            64,
+            64
+          ]
+        },
+        "encoder.stages.2": {
+          "input": [
+            [
+              1,
+              128,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            320,
+            32,
+            32
+          ]
+        },
+        "encoder.stages.3": {
+          "input": [
+            [
+              1,
+              320,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            16,
+            16
+          ]
+        },
+        "decode_head": {
+          "input": [
+            [
+              [
+                1,
+                64,
+                128,
+                128
+              ],
+              [
+                1,
+                128,
+                64,
+                64
+              ],
+              [
+                1,
+                320,
+                32,
+                32
+              ],
+              [
+                1,
+                512,
+                16,
+                16
+              ]
+            ]
+          ],
+          "output": [
+            1,
+            150,
+            128,
+            128
+          ]
+        }
+      },
+      "parameters": 64108374,
+      "pretrained": false
+    },
+    "b5": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        640,
+        640
+      ],
+      "output": [
+        1,
+        150,
+        640,
+        640
+      ],
+      "hooks": {
+        "encoder.stages.0": {
+          "input": [
+            [
+              1,
+              3,
+              640,
+              640
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            160,
+            160
+          ]
+        },
+        "encoder.stages.1": {
+          "input": [
+            [
+              1,
+              64,
+              160,
+              160
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            80,
+            80
+          ]
+        },
+        "encoder.stages.2": {
+          "input": [
+            [
+              1,
+              128,
+              80,
+              80
+            ]
+          ],
+          "output": [
+            1,
+            320,
+            40,
+            40
+          ]
+        },
+        "encoder.stages.3": {
+          "input": [
+            [
+              1,
+              320,
+              40,
+              40
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            20,
+            20
+          ]
+        },
+        "decode_head": {
+          "input": [
+            [
+              [
+                1,
+                64,
+                160,
+                160
+              ],
+              [
+                1,
+                128,
+                80,
+                80
+              ],
+              [
+                1,
+                320,
+                40,
+                40
+              ],
+              [
+                1,
+                512,
+                20,
+                20
+              ]
+            ]
+          ],
+          "output": [
+            1,
+            150,
+            160,
+            160
+          ]
+        }
+      },
+      "parameters": 84708694,
+      "pretrained": false
+    }
+  },
+  "notes": [
+    "B5 uses640 input; other sizes512. Attention reduced K/V tokens are20\u00d720 for B5 and16\u00d716 for other sizes.",
+    "Every LayerNorm epsilon is1e-5. Decoder concatenates projected stages in reverse order."
+  ],
+  "visual_qa": "Parent agent; not executed by this builder."
+}

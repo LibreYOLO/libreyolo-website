@@ -1,0 +1,210 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "source": "libreyolo/models/sam/model.py",
+  "shapes": {
+    "configuration_sources": {
+      "base": {
+        "repo": "facebook/sam-vit-base",
+        "revision": "70c1a07f894ebb5b307fd9eaaee97b9dfc16068f"
+      },
+      "large": {
+        "repo": "LibreYOLO/LibreSAMlarge",
+        "revision": "968f146bd38c19687620ad44405de79350ef476e"
+      },
+      "huge": {
+        "repo": "LibreYOLO/LibreSAMhuge",
+        "revision": "e039bce0f0565ffbb58f99e446a43080c60b9695"
+      }
+    },
+    "backend": {
+      "package": "transformers",
+      "version": "5.16.1",
+      "license": "Apache-2.0",
+      "source": "transformers/models/sam/modeling_sam.py"
+    },
+    "base": {
+      "device": "meta",
+      "vision_config": {
+        "transformers_version": "5.16.1",
+        "architectures": null,
+        "output_hidden_states": false,
+        "return_dict": true,
+        "dtype": null,
+        "chunk_size_feed_forward": 0,
+        "is_encoder_decoder": false,
+        "id2label": {
+          "0": "LABEL_0",
+          "1": "LABEL_1"
+        },
+        "label2id": {
+          "LABEL_0": 0,
+          "LABEL_1": 1
+        },
+        "problem_type": null,
+        "hidden_size": 768,
+        "output_channels": 256,
+        "num_hidden_layers": 12,
+        "num_attention_heads": 12,
+        "num_channels": 3,
+        "image_size": 1024,
+        "patch_size": 16,
+        "hidden_act": "gelu",
+        "layer_norm_eps": 1e-06,
+        "attention_dropout": 0.0,
+        "initializer_range": 1e-10,
+        "qkv_bias": true,
+        "mlp_ratio": 4.0,
+        "use_abs_pos": true,
+        "use_rel_pos": true,
+        "window_size": 14,
+        "global_attn_indexes": [
+          2,
+          5,
+          8,
+          11
+        ],
+        "num_pos_feats": 128,
+        "mlp_dim": 3072,
+        "scale": 384,
+        "_name_or_path": "",
+        "model_type": "sam_vision_model",
+        "output_attentions": false
+      },
+      "pred_masks": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "iou_scores": [
+        1,
+        1,
+        3
+      ]
+    },
+    "large": {
+      "device": "meta",
+      "vision_config": {
+        "transformers_version": "5.16.1",
+        "architectures": null,
+        "output_hidden_states": false,
+        "return_dict": true,
+        "dtype": null,
+        "chunk_size_feed_forward": 0,
+        "is_encoder_decoder": false,
+        "id2label": {
+          "0": "LABEL_0",
+          "1": "LABEL_1"
+        },
+        "label2id": {
+          "LABEL_0": 0,
+          "LABEL_1": 1
+        },
+        "problem_type": null,
+        "hidden_size": 1024,
+        "output_channels": 256,
+        "num_hidden_layers": 24,
+        "num_attention_heads": 16,
+        "num_channels": 3,
+        "image_size": 1024,
+        "patch_size": 16,
+        "hidden_act": "gelu",
+        "layer_norm_eps": 1e-06,
+        "attention_dropout": 0.0,
+        "initializer_range": 1e-10,
+        "qkv_bias": true,
+        "mlp_ratio": 4.0,
+        "use_abs_pos": true,
+        "use_rel_pos": true,
+        "window_size": 14,
+        "global_attn_indexes": [
+          5,
+          11,
+          17,
+          23
+        ],
+        "num_pos_feats": 128,
+        "mlp_dim": 4096,
+        "scale": 512,
+        "_name_or_path": "",
+        "model_type": "sam_vision_model",
+        "output_attentions": false
+      },
+      "pred_masks": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "iou_scores": [
+        1,
+        1,
+        3
+      ]
+    },
+    "huge": {
+      "device": "meta",
+      "vision_config": {
+        "transformers_version": "5.16.1",
+        "architectures": null,
+        "output_hidden_states": false,
+        "return_dict": true,
+        "dtype": null,
+        "chunk_size_feed_forward": 0,
+        "is_encoder_decoder": false,
+        "id2label": {
+          "0": "LABEL_0",
+          "1": "LABEL_1"
+        },
+        "label2id": {
+          "LABEL_0": 0,
+          "LABEL_1": 1
+        },
+        "problem_type": null,
+        "hidden_size": 1280,
+        "output_channels": 256,
+        "num_hidden_layers": 32,
+        "num_attention_heads": 16,
+        "num_channels": 3,
+        "image_size": 1024,
+        "patch_size": 16,
+        "hidden_act": "gelu",
+        "layer_norm_eps": 1e-06,
+        "attention_dropout": 0.0,
+        "initializer_range": 1e-10,
+        "qkv_bias": true,
+        "mlp_ratio": 4.0,
+        "use_abs_pos": true,
+        "use_rel_pos": true,
+        "window_size": 14,
+        "global_attn_indexes": [
+          7,
+          15,
+          23,
+          31
+        ],
+        "num_pos_feats": 128,
+        "mlp_dim": 5120,
+        "scale": 640,
+        "_name_or_path": "",
+        "model_type": "sam_vision_model",
+        "output_attentions": false
+      },
+      "pred_masks": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "iou_scores": [
+        1,
+        1,
+        3
+      ]
+    }
+  },
+  "verification_limits": "Meta checks validate shape propagation, not numerical behavior. CPU checks use random weights. Source inspection establishes functional branches. Browser and PNG QA belongs to integration review."
+}

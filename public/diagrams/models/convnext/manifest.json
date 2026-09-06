@@ -1,0 +1,53 @@
+{
+  "family": "convnext",
+  "slug": "convnext",
+  "title": "ConvNeXt",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "t-classify",
+  "views": [
+    {
+      "id": "t-classify",
+      "label": "ConvNeXt t",
+      "task": "classify",
+      "size": "t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/convnext/t-classify.svg",
+      "html": "/diagrams/models/convnext/t-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "cpu"
+    },
+    {
+      "id": "s-classify",
+      "label": "ConvNeXt s",
+      "task": "classify",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/convnext/s-classify.svg",
+      "html": "/diagrams/models/convnext/s-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "b-classify",
+      "label": "ConvNeXt b",
+      "task": "classify",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/convnext/b-classify.svg",
+      "html": "/diagrams/models/convnext/b-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "family-classify",
+      "label": "ConvNeXt family",
+      "task": "classify",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/convnext/family-classify.svg",
+      "html": "/diagrams/models/convnext/family-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "source"
+    }
+  ]
+}

@@ -1,0 +1,174 @@
+{
+  "family": "dinov2",
+  "slug": "dinov2",
+  "title": "DINOv2",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "n-semantic",
+  "views": [
+    {
+      "id": "n-semantic",
+      "label": "DINOv2 n semantic",
+      "task": "semantic",
+      "size": "n",
+      "kind": "concrete",
+      "svg": "/diagrams/models/dinov2/n-semantic.svg",
+      "html": "/diagrams/models/dinov2/n-semantic.html",
+      "input": "1 \u00d7 3 \u00d7 518 \u00d7 518",
+      "verification": "cpu"
+    },
+    {
+      "id": "s-semantic",
+      "label": "DINOv2 s semantic",
+      "task": "semantic",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/dinov2/s-semantic.svg",
+      "html": "/diagrams/models/dinov2/s-semantic.html",
+      "input": "1 \u00d7 3 \u00d7 518 \u00d7 518",
+      "verification": "source"
+    },
+    {
+      "id": "m-semantic",
+      "label": "DINOv2 m semantic",
+      "task": "semantic",
+      "size": "m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/dinov2/m-semantic.svg",
+      "html": "/diagrams/models/dinov2/m-semantic.html",
+      "input": "1 \u00d7 3 \u00d7 518 \u00d7 518",
+      "verification": "source"
+    },
+    {
+      "id": "l-semantic",
+      "label": "DINOv2 l semantic",
+      "task": "semantic",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/dinov2/l-semantic.svg",
+      "html": "/diagrams/models/dinov2/l-semantic.html",
+      "input": "1 \u00d7 3 \u00d7 518 \u00d7 518",
+      "verification": "source"
+    },
+    {
+      "id": "family-semantic",
+      "label": "DINOv2 family semantic",
+      "task": "semantic",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/dinov2/family-semantic.svg",
+      "html": "/diagrams/models/dinov2/family-semantic.html",
+      "input": "1 \u00d7 3 \u00d7 518 \u00d7 518",
+      "verification": "source"
+    },
+    {
+      "id": "n-classify",
+      "label": "DINOv2 n classify",
+      "task": "classify",
+      "size": "n",
+      "kind": "concrete",
+      "svg": "/diagrams/models/dinov2/n-classify.svg",
+      "html": "/diagrams/models/dinov2/n-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "cpu"
+    },
+    {
+      "id": "s-classify",
+      "label": "DINOv2 s classify",
+      "task": "classify",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/dinov2/s-classify.svg",
+      "html": "/diagrams/models/dinov2/s-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "source"
+    },
+    {
+      "id": "m-classify",
+      "label": "DINOv2 m classify",
+      "task": "classify",
+      "size": "m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/dinov2/m-classify.svg",
+      "html": "/diagrams/models/dinov2/m-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "source"
+    },
+    {
+      "id": "l-classify",
+      "label": "DINOv2 l classify",
+      "task": "classify",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/dinov2/l-classify.svg",
+      "html": "/diagrams/models/dinov2/l-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "source"
+    },
+    {
+      "id": "family-classify",
+      "label": "DINOv2 family classify",
+      "task": "classify",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/dinov2/family-classify.svg",
+      "html": "/diagrams/models/dinov2/family-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "source"
+    },
+    {
+      "id": "n-embed",
+      "label": "DINOv2 n embed",
+      "task": "embed",
+      "size": "n",
+      "kind": "concrete",
+      "svg": "/diagrams/models/dinov2/n-embed.svg",
+      "html": "/diagrams/models/dinov2/n-embed.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "cpu"
+    },
+    {
+      "id": "s-embed",
+      "label": "DINOv2 s embed",
+      "task": "embed",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/dinov2/s-embed.svg",
+      "html": "/diagrams/models/dinov2/s-embed.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "source"
+    },
+    {
+      "id": "m-embed",
+      "label": "DINOv2 m embed",
+      "task": "embed",
+      "size": "m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/dinov2/m-embed.svg",
+      "html": "/diagrams/models/dinov2/m-embed.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "source"
+    },
+    {
+      "id": "l-embed",
+      "label": "DINOv2 l embed",
+      "task": "embed",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/dinov2/l-embed.svg",
+      "html": "/diagrams/models/dinov2/l-embed.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "source"
+    },
+    {
+      "id": "family-embed",
+      "label": "DINOv2 family embed",
+      "task": "embed",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/dinov2/family-embed.svg",
+      "html": "/diagrams/models/dinov2/family-embed.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "source"
+    }
+  ]
+}

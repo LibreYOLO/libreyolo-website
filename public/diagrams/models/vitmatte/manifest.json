@@ -1,0 +1,20 @@
+{
+  "family": "vitmatte",
+  "slug": "vitmatte",
+  "title": "ViTMatte",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "s-matte",
+  "views": [
+    {
+      "id": "s-matte",
+      "label": "Small",
+      "task": "matte",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/vitmatte/s-matte.svg",
+      "html": "/diagrams/models/vitmatte/s-matte.html",
+      "input": "normalizedRGB3 + trimap1,512\u00d7512",
+      "verification": "cpu"
+    }
+  ]
+}

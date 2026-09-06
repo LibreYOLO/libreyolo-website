@@ -1,0 +1,20 @@
+{
+  "family": "dexined",
+  "slug": "dexined",
+  "title": "DexiNed",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "b-edge",
+  "views": [
+    {
+      "id": "b-edge",
+      "label": "Base",
+      "task": "edge",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/dexined/b-edge.svg",
+      "html": "/diagrams/models/dexined/b-edge.html",
+      "input": "3\u00d7352\u00d7352",
+      "verification": "cpu"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "family": "grounding_dino",
+  "slug": "grounding-dino",
+  "title": "Grounding DINO",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "t-detect",
+  "views": [
+    {
+      "id": "t-detect",
+      "label": "Grounding DINO t",
+      "task": "detect",
+      "size": "t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/grounding-dino/t-detect.svg",
+      "html": "/diagrams/models/grounding-dino/t-detect.html",
+      "input": "Image: 1 \u00d73 \u00d7800 \u00d7800; text: 1 \u00d716",
+      "verification": "cpu"
+    },
+    {
+      "id": "b-detect",
+      "label": "Grounding DINO b",
+      "task": "detect",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/grounding-dino/b-detect.svg",
+      "html": "/diagrams/models/grounding-dino/b-detect.html",
+      "input": "Image: 1 \u00d73 \u00d7800 \u00d7800; text: 1 \u00d716",
+      "verification": "cpu"
+    },
+    {
+      "id": "family-detect",
+      "label": "Grounding DINO family",
+      "task": "detect",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/grounding-dino/family-detect.svg",
+      "html": "/diagrams/models/grounding-dino/family-detect.html",
+      "input": "Image: 1 \u00d73 \u00d7800 \u00d7800; text: 1 \u00d716",
+      "verification": "source"
+    }
+  ]
+}

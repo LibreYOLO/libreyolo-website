@@ -1,0 +1,42 @@
+{
+  "family": "ground_florence2",
+  "slug": "ground-florence2",
+  "title": "Florence-2 grounding",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "base-point",
+  "views": [
+    {
+      "id": "base-point",
+      "label": "Florence-2 grounding base",
+      "kind": "concrete",
+      "task": "point",
+      "size": "base",
+      "svg": "/diagrams/models/ground-florence2/base-point.svg",
+      "html": "/diagrams/models/ground-florence2/base-point.html",
+      "verification": "meta",
+      "input": "768 \u00d7 768"
+    },
+    {
+      "id": "large-point",
+      "label": "Florence-2 grounding large",
+      "kind": "concrete",
+      "task": "point",
+      "size": "large",
+      "svg": "/diagrams/models/ground-florence2/large-point.svg",
+      "html": "/diagrams/models/ground-florence2/large-point.html",
+      "verification": "meta",
+      "input": "768 \u00d7 768"
+    },
+    {
+      "id": "family",
+      "label": "Florence-2 grounding family",
+      "kind": "family",
+      "task": "point",
+      "size": "family",
+      "svg": "/diagrams/models/ground-florence2/family.svg",
+      "html": "/diagrams/models/ground-florence2/family.html",
+      "verification": "meta",
+      "input": "768 \u00d7 768"
+    }
+  ]
+}

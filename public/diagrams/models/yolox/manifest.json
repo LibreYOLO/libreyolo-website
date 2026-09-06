@@ -1,0 +1,86 @@
+{
+  "family": "yolox",
+  "slug": "yolox",
+  "title": "YOLOX",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "s",
+  "views": [
+    {
+      "id": "n",
+      "label": "YOLOX N",
+      "task": "detect",
+      "size": "n",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolox/n.svg",
+      "html": "/diagrams/models/yolox/n.html",
+      "input": "1 \u00d7 3 \u00d7 416 \u00d7 416",
+      "verification": "cpu"
+    },
+    {
+      "id": "t",
+      "label": "YOLOX T",
+      "task": "detect",
+      "size": "t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolox/t.svg",
+      "html": "/diagrams/models/yolox/t.html",
+      "input": "1 \u00d7 3 \u00d7 416 \u00d7 416",
+      "verification": "cpu"
+    },
+    {
+      "id": "s",
+      "label": "YOLOX S",
+      "task": "detect",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolox/s.svg",
+      "html": "/diagrams/models/yolox/s.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "m",
+      "label": "YOLOX M",
+      "task": "detect",
+      "size": "m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolox/m.svg",
+      "html": "/diagrams/models/yolox/m.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "l",
+      "label": "YOLOX L",
+      "task": "detect",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolox/l.svg",
+      "html": "/diagrams/models/yolox/l.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "x",
+      "label": "YOLOX X",
+      "task": "detect",
+      "size": "x",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolox/x.svg",
+      "html": "/diagrams/models/yolox/x.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "family-regular",
+      "label": "YOLOX regular family",
+      "task": "detect",
+      "size": "t/s/m/l/x",
+      "kind": "family",
+      "svg": "/diagrams/models/yolox/family-regular.svg",
+      "html": "/diagrams/models/yolox/family-regular.html",
+      "input": "H from table",
+      "verification": "cpu"
+    }
+  ]
+}

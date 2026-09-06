@@ -1,0 +1,53 @@
+{
+  "family": "internvl3",
+  "slug": "internvl3",
+  "title": "InternVL3",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "1b-detect",
+  "views": [
+    {
+      "id": "1b-detect",
+      "label": "InternVL3 1B",
+      "task": "detect",
+      "size": "1b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/internvl3/1b-detect.svg",
+      "html": "/diagrams/models/internvl3/1b-detect.html",
+      "input": "448 nominal; processor-dependent",
+      "verification": "meta"
+    },
+    {
+      "id": "2b-detect",
+      "label": "InternVL3 2B",
+      "task": "detect",
+      "size": "2b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/internvl3/2b-detect.svg",
+      "html": "/diagrams/models/internvl3/2b-detect.html",
+      "input": "448 nominal; processor-dependent",
+      "verification": "meta"
+    },
+    {
+      "id": "8b-detect",
+      "label": "InternVL3 8B",
+      "task": "detect",
+      "size": "8b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/internvl3/8b-detect.svg",
+      "html": "/diagrams/models/internvl3/8b-detect.html",
+      "input": "448 nominal; processor-dependent",
+      "verification": "meta"
+    },
+    {
+      "id": "family",
+      "label": "InternVL3 family",
+      "task": "detect",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/internvl3/family.svg",
+      "html": "/diagrams/models/internvl3/family.html",
+      "input": "448 nominal; processor-dependent",
+      "verification": "meta"
+    }
+  ]
+}

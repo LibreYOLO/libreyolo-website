@@ -1,0 +1,183 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "backend": "Transformers5.16.1 Apache-2.0 native source",
+  "families": [
+    {
+      "size": "500m",
+      "repo": "HuggingFaceTB/SmolVLM2-500M-Video-Instruct",
+      "resolved_revision": "7b375e1b73b11138ff12fe22c8f2822d8fe03467",
+      "source": "libreyolo/models/vlm/smolvlm.py",
+      "meta": {
+        "family": "smolvlm2",
+        "size": "500m",
+        "status": "meta",
+        "model_class": "SmolVLMForConditionalGeneration",
+        "parameters": 507482304,
+        "modules": {
+          "model.vision_model.embeddings.patch_embedding": {
+            "in": 3,
+            "out": 768,
+            "kernel": [
+              16,
+              16
+            ],
+            "stride": [
+              16,
+              16
+            ],
+            "groups": 1
+          },
+          "model.vision_model.encoder.layers.0.self_attn.k_proj": [
+            768,
+            768
+          ],
+          "model.vision_model.encoder.layers.0.self_attn.v_proj": [
+            768,
+            768
+          ],
+          "model.vision_model.encoder.layers.0.self_attn.q_proj": [
+            768,
+            768
+          ],
+          "model.vision_model.encoder.layers.0.self_attn.out_proj": [
+            768,
+            768
+          ],
+          "model.vision_model.encoder.layers.0.mlp.fc1": [
+            768,
+            3072
+          ],
+          "model.vision_model.encoder.layers.0.mlp.fc2": [
+            3072,
+            768
+          ],
+          "model.connector.modality_projection.proj": [
+            12288,
+            960
+          ],
+          "model.text_model.layers.0.self_attn.q_proj": [
+            960,
+            960
+          ],
+          "model.text_model.layers.0.self_attn.k_proj": [
+            960,
+            320
+          ],
+          "model.text_model.layers.0.self_attn.v_proj": [
+            960,
+            320
+          ],
+          "model.text_model.layers.0.self_attn.o_proj": [
+            960,
+            960
+          ],
+          "model.text_model.layers.0.mlp.gate_proj": [
+            960,
+            2560
+          ],
+          "model.text_model.layers.0.mlp.up_proj": [
+            960,
+            2560
+          ],
+          "model.text_model.layers.0.mlp.down_proj": [
+            2560,
+            960
+          ],
+          "lm_head": [
+            960,
+            49280
+          ]
+        }
+      }
+    },
+    {
+      "size": "2.2b",
+      "repo": "HuggingFaceTB/SmolVLM2-2.2B-Instruct",
+      "resolved_revision": "482adb537c021c86670beed01cd58990d01e72e4",
+      "source": "libreyolo/models/vlm/smolvlm.py",
+      "meta": {
+        "family": "smolvlm2",
+        "size": "2.2b",
+        "status": "meta",
+        "model_class": "SmolVLMForConditionalGeneration",
+        "parameters": 2246784880,
+        "modules": {
+          "model.vision_model.embeddings.patch_embedding": {
+            "in": 3,
+            "out": 1152,
+            "kernel": [
+              14,
+              14
+            ],
+            "stride": [
+              14,
+              14
+            ],
+            "groups": 1
+          },
+          "model.vision_model.encoder.layers.0.self_attn.k_proj": [
+            1152,
+            1152
+          ],
+          "model.vision_model.encoder.layers.0.self_attn.v_proj": [
+            1152,
+            1152
+          ],
+          "model.vision_model.encoder.layers.0.self_attn.q_proj": [
+            1152,
+            1152
+          ],
+          "model.vision_model.encoder.layers.0.self_attn.out_proj": [
+            1152,
+            1152
+          ],
+          "model.vision_model.encoder.layers.0.mlp.fc1": [
+            1152,
+            4304
+          ],
+          "model.vision_model.encoder.layers.0.mlp.fc2": [
+            4304,
+            1152
+          ],
+          "model.connector.modality_projection.proj": [
+            10368,
+            2048
+          ],
+          "model.text_model.layers.0.self_attn.q_proj": [
+            2048,
+            2048
+          ],
+          "model.text_model.layers.0.self_attn.k_proj": [
+            2048,
+            2048
+          ],
+          "model.text_model.layers.0.self_attn.v_proj": [
+            2048,
+            2048
+          ],
+          "model.text_model.layers.0.self_attn.o_proj": [
+            2048,
+            2048
+          ],
+          "model.text_model.layers.0.mlp.gate_proj": [
+            2048,
+            8192
+          ],
+          "model.text_model.layers.0.mlp.up_proj": [
+            2048,
+            8192
+          ],
+          "model.text_model.layers.0.mlp.down_proj": [
+            8192,
+            2048
+          ],
+          "lm_head": [
+            2048,
+            49280
+          ]
+        }
+      }
+    }
+  ],
+  "scope": "Image inference path, configuration and native module-shape verification; no weights or remote Python. Runtime token counts are explicit symbols. Adapter parser rules read from LibreYOLO source."
+}

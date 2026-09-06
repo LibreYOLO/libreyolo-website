@@ -1,0 +1,68 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "source": "libreyolo/models/facerec/model.py",
+  "shapes": {
+    "preprocess_cpu": {
+      "input": [
+        112,
+        112,
+        3
+      ],
+      "output": [
+        1,
+        3,
+        112,
+        112
+      ],
+      "dtype": "float32",
+      "range": [
+        -1.0,
+        -1.0
+      ]
+    },
+    "alignment_cpu": [
+      [
+        0.9999999999999999,
+        -3.0402602500248917e-19,
+        7.105427357601002e-15
+      ],
+      [
+        5.633357129859144e-19,
+        1.0,
+        0.0
+      ]
+    ],
+    "normalization_cpu": {
+      "input": [
+        2,
+        512
+      ],
+      "output": [
+        2,
+        512
+      ],
+      "l2_norms": [
+        0.9999999403953552,
+        0.9999999403953552
+      ]
+    },
+    "boundary": "Both actual ONNX graphs were downloaded under their documented permissive licenses and inspected with ONNX shape inference at batch1. Full recognition and detector views replace the earlier opaque-core boundary.",
+    "onnx_artifacts": [
+      {
+        "name": "librefacerec-l",
+        "url": "https://huggingface.co/LibreYOLO/librefacerec-l/resolve/main/librefacerec-l.onnx",
+        "revision": null,
+        "bytes": 260694151,
+        "sha256": "a7933ea5330113b01c9b60351d8f4c33003f145d8470ac5f0e52ee2effe25c60"
+      },
+      {
+        "name": "librefacerec-det",
+        "url": "https://huggingface.co/LibreYOLO/librefacerec-det/resolve/main/librefacerec-det.onnx",
+        "revision": null,
+        "bytes": 232589,
+        "sha256": "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4"
+      }
+    ]
+  },
+  "verification_limits": "Meta checks validate shape propagation, not numerical behavior. CPU checks use random weights. Source inspection establishes functional branches. Browser and PNG QA belongs to integration review."
+}

@@ -1,0 +1,388 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "source": "libreyolo/models/eomt/nn.py",
+  "shapes": {
+    "specs": {
+      "s": {
+        "hidden_act": "gelu",
+        "hidden_dropout_prob": 0.0,
+        "initializer_range": 0.02,
+        "layer_norm_eps": 1e-06,
+        "image_size": 512,
+        "patch_size": 16,
+        "num_channels": 3,
+        "mlp_ratio": 4,
+        "layerscale_value": 1e-05,
+        "drop_path_rate": 0.0,
+        "num_upscale_blocks": 2,
+        "attention_dropout": 0.0,
+        "use_swiglu_ffn": false,
+        "no_object_weight": 0.1,
+        "class_weight": 2.0,
+        "mask_weight": 5.0,
+        "dice_weight": 5.0,
+        "train_num_points": 12544,
+        "oversample_ratio": 3.0,
+        "importance_sample_ratio": 0.75,
+        "num_queries": 100,
+        "num_register_tokens": 4,
+        "hidden_size": 384,
+        "num_hidden_layers": 12,
+        "num_attention_heads": 6,
+        "num_blocks": 3
+      },
+      "b": {
+        "hidden_act": "gelu",
+        "hidden_dropout_prob": 0.0,
+        "initializer_range": 0.02,
+        "layer_norm_eps": 1e-06,
+        "image_size": 512,
+        "patch_size": 16,
+        "num_channels": 3,
+        "mlp_ratio": 4,
+        "layerscale_value": 1e-05,
+        "drop_path_rate": 0.0,
+        "num_upscale_blocks": 2,
+        "attention_dropout": 0.0,
+        "use_swiglu_ffn": false,
+        "no_object_weight": 0.1,
+        "class_weight": 2.0,
+        "mask_weight": 5.0,
+        "dice_weight": 5.0,
+        "train_num_points": 12544,
+        "oversample_ratio": 3.0,
+        "importance_sample_ratio": 0.75,
+        "num_queries": 100,
+        "num_register_tokens": 4,
+        "hidden_size": 768,
+        "num_hidden_layers": 12,
+        "num_attention_heads": 12,
+        "num_blocks": 3
+      },
+      "l": {
+        "hidden_act": "gelu",
+        "hidden_dropout_prob": 0.0,
+        "initializer_range": 0.02,
+        "layer_norm_eps": 1e-06,
+        "image_size": 512,
+        "patch_size": 16,
+        "num_channels": 3,
+        "mlp_ratio": 4,
+        "layerscale_value": 1e-05,
+        "drop_path_rate": 0.0,
+        "num_upscale_blocks": 2,
+        "attention_dropout": 0.0,
+        "use_swiglu_ffn": false,
+        "no_object_weight": 0.1,
+        "class_weight": 2.0,
+        "mask_weight": 5.0,
+        "dice_weight": 5.0,
+        "train_num_points": 12544,
+        "oversample_ratio": 3.0,
+        "importance_sample_ratio": 0.75,
+        "num_queries": 100,
+        "num_register_tokens": 4,
+        "hidden_size": 1024,
+        "num_hidden_layers": 24,
+        "num_attention_heads": 16,
+        "num_blocks": 4
+      }
+    },
+    "backend": {
+      "version": "5.16.1",
+      "license": "Apache-2.0",
+      "source": "transformers/models/eomt/modeling_eomt.py"
+    },
+    "query_contract": "Published ADE20K semantic config uses 100 queries; all COCO instance/panoptic configs checked use 200. Small/base segment views correspond to supported things-only panoptic conversion. Semantic small/base are supported scratch configurations.",
+    "s-semantic": {
+      "device": "meta",
+      "input": [
+        1,
+        3,
+        512,
+        512
+      ],
+      "outputs": {
+        "semantic_logits": [
+          1,
+          150,
+          512,
+          512
+        ],
+        "class_queries_logits": [
+          1,
+          100,
+          151
+        ],
+        "masks_queries_logits": [
+          1,
+          100,
+          512,
+          512
+        ]
+      },
+      "mask_schedule": "ones on CPU; matches fresh model defaults"
+    },
+    "b-semantic": {
+      "device": "meta",
+      "input": [
+        1,
+        3,
+        512,
+        512
+      ],
+      "outputs": {
+        "semantic_logits": [
+          1,
+          150,
+          512,
+          512
+        ],
+        "class_queries_logits": [
+          1,
+          100,
+          151
+        ],
+        "masks_queries_logits": [
+          1,
+          100,
+          512,
+          512
+        ]
+      },
+      "mask_schedule": "ones on CPU; matches fresh model defaults"
+    },
+    "l-semantic": {
+      "device": "meta",
+      "input": [
+        1,
+        3,
+        512,
+        512
+      ],
+      "outputs": {
+        "semantic_logits": [
+          1,
+          150,
+          512,
+          512
+        ],
+        "class_queries_logits": [
+          1,
+          100,
+          151
+        ],
+        "masks_queries_logits": [
+          1,
+          100,
+          512,
+          512
+        ]
+      },
+      "mask_schedule": "ones on CPU; matches fresh model defaults"
+    },
+    "s-segment": {
+      "device": "meta",
+      "input": [
+        1,
+        3,
+        640,
+        640
+      ],
+      "outputs": {
+        "semantic_logits": [
+          1,
+          80,
+          640,
+          640
+        ],
+        "class_queries_logits": [
+          1,
+          200,
+          81
+        ],
+        "masks_queries_logits": [
+          1,
+          200,
+          640,
+          640
+        ]
+      },
+      "mask_schedule": "ones on CPU; matches fresh model defaults"
+    },
+    "b-segment": {
+      "device": "meta",
+      "input": [
+        1,
+        3,
+        640,
+        640
+      ],
+      "outputs": {
+        "semantic_logits": [
+          1,
+          80,
+          640,
+          640
+        ],
+        "class_queries_logits": [
+          1,
+          200,
+          81
+        ],
+        "masks_queries_logits": [
+          1,
+          200,
+          640,
+          640
+        ]
+      },
+      "mask_schedule": "ones on CPU; matches fresh model defaults"
+    },
+    "l-segment": {
+      "device": "meta",
+      "input": [
+        1,
+        3,
+        640,
+        640
+      ],
+      "outputs": {
+        "semantic_logits": [
+          1,
+          80,
+          640,
+          640
+        ],
+        "class_queries_logits": [
+          1,
+          200,
+          81
+        ],
+        "masks_queries_logits": [
+          1,
+          200,
+          640,
+          640
+        ]
+      },
+      "mask_schedule": "ones on CPU; matches fresh model defaults"
+    },
+    "s-panoptic": {
+      "device": "meta",
+      "input": [
+        1,
+        3,
+        640,
+        640
+      ],
+      "outputs": {
+        "semantic_logits": [
+          1,
+          133,
+          640,
+          640
+        ],
+        "class_queries_logits": [
+          1,
+          200,
+          134
+        ],
+        "masks_queries_logits": [
+          1,
+          200,
+          640,
+          640
+        ]
+      },
+      "mask_schedule": "ones on CPU; matches fresh model defaults"
+    },
+    "b-panoptic": {
+      "device": "meta",
+      "input": [
+        1,
+        3,
+        640,
+        640
+      ],
+      "outputs": {
+        "semantic_logits": [
+          1,
+          133,
+          640,
+          640
+        ],
+        "class_queries_logits": [
+          1,
+          200,
+          134
+        ],
+        "masks_queries_logits": [
+          1,
+          200,
+          640,
+          640
+        ]
+      },
+      "mask_schedule": "ones on CPU; matches fresh model defaults"
+    },
+    "l-panoptic": {
+      "device": "meta",
+      "input": [
+        1,
+        3,
+        640,
+        640
+      ],
+      "outputs": {
+        "semantic_logits": [
+          1,
+          133,
+          640,
+          640
+        ],
+        "class_queries_logits": [
+          1,
+          200,
+          134
+        ],
+        "masks_queries_logits": [
+          1,
+          200,
+          640,
+          640
+        ]
+      },
+      "mask_schedule": "ones on CPU; matches fresh model defaults"
+    },
+    "l-segment-1280": {
+      "device": "meta",
+      "input": [
+        1,
+        3,
+        1280,
+        1280
+      ],
+      "outputs": {
+        "semantic_logits": [
+          1,
+          80,
+          1280,
+          1280
+        ],
+        "class_queries_logits": [
+          1,
+          200,
+          81
+        ],
+        "masks_queries_logits": [
+          1,
+          200,
+          1280,
+          1280
+        ]
+      }
+    }
+  },
+  "verification_limits": "Meta checks validate shape propagation, not numerical behavior. CPU checks use random weights. Source inspection establishes functional branches. Browser and PNG QA belongs to integration review."
+}

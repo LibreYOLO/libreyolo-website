@@ -1,0 +1,886 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "backend": "Transformers5.16.1 native Apache-2.0",
+  "configs": [
+    {
+      "repo": "florence-community/Florence-2-base",
+      "resolved_revision": "00921df66db728a9ceb750f5eca43e5c203a2051",
+      "size": "base",
+      "source": "libreyolo/models/vlm/florence2.py",
+      "meta": {
+        "family": "florence2",
+        "size": "base",
+        "status": "meta",
+        "model_class": "Florence2ForConditionalGeneration",
+        "parameters": 231443968,
+        "modules": {
+          "model.vision_tower.convs.0.conv": {
+            "in": 3,
+            "out": 128,
+            "kernel": [
+              7,
+              7
+            ],
+            "stride": [
+              4,
+              4
+            ],
+            "groups": 1
+          },
+          "model.vision_tower.blocks.0.0.spatial_block.conv1": {
+            "in": 128,
+            "out": 128,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 128
+          },
+          "model.vision_tower.blocks.0.0.spatial_block.window_attn.qkv": [
+            128,
+            384
+          ],
+          "model.vision_tower.blocks.0.0.spatial_block.window_attn.proj": [
+            128,
+            128
+          ],
+          "model.vision_tower.blocks.0.0.spatial_block.conv2": {
+            "in": 128,
+            "out": 128,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 128
+          },
+          "model.vision_tower.blocks.0.0.spatial_block.ffn.fc1": [
+            128,
+            512
+          ],
+          "model.vision_tower.blocks.0.0.spatial_block.ffn.fc2": [
+            512,
+            128
+          ],
+          "model.vision_tower.blocks.0.0.channel_block.conv1": {
+            "in": 128,
+            "out": 128,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 128
+          },
+          "model.vision_tower.blocks.0.0.channel_block.channel_attn.qkv": [
+            128,
+            384
+          ],
+          "model.vision_tower.blocks.0.0.channel_block.channel_attn.proj": [
+            128,
+            128
+          ],
+          "model.vision_tower.blocks.0.0.channel_block.conv2": {
+            "in": 128,
+            "out": 128,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 128
+          },
+          "model.vision_tower.blocks.0.0.channel_block.ffn.fc1": [
+            128,
+            512
+          ],
+          "model.vision_tower.blocks.0.0.channel_block.ffn.fc2": [
+            512,
+            128
+          ],
+          "model.vision_tower.blocks.1.0.spatial_block.conv1": {
+            "in": 256,
+            "out": 256,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 256
+          },
+          "model.vision_tower.blocks.1.0.spatial_block.window_attn.qkv": [
+            256,
+            768
+          ],
+          "model.vision_tower.blocks.1.0.spatial_block.window_attn.proj": [
+            256,
+            256
+          ],
+          "model.vision_tower.blocks.1.0.spatial_block.conv2": {
+            "in": 256,
+            "out": 256,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 256
+          },
+          "model.vision_tower.blocks.1.0.spatial_block.ffn.fc1": [
+            256,
+            1024
+          ],
+          "model.vision_tower.blocks.1.0.spatial_block.ffn.fc2": [
+            1024,
+            256
+          ],
+          "model.vision_tower.blocks.1.0.channel_block.conv1": {
+            "in": 256,
+            "out": 256,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 256
+          },
+          "model.vision_tower.blocks.1.0.channel_block.channel_attn.qkv": [
+            256,
+            768
+          ],
+          "model.vision_tower.blocks.1.0.channel_block.channel_attn.proj": [
+            256,
+            256
+          ],
+          "model.vision_tower.blocks.1.0.channel_block.conv2": {
+            "in": 256,
+            "out": 256,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 256
+          },
+          "model.vision_tower.blocks.1.0.channel_block.ffn.fc1": [
+            256,
+            1024
+          ],
+          "model.vision_tower.blocks.1.0.channel_block.ffn.fc2": [
+            1024,
+            256
+          ],
+          "model.vision_tower.blocks.2.0.spatial_block.conv1": {
+            "in": 512,
+            "out": 512,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 512
+          },
+          "model.vision_tower.blocks.2.0.spatial_block.window_attn.qkv": [
+            512,
+            1536
+          ],
+          "model.vision_tower.blocks.2.0.spatial_block.window_attn.proj": [
+            512,
+            512
+          ],
+          "model.vision_tower.blocks.2.0.spatial_block.conv2": {
+            "in": 512,
+            "out": 512,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 512
+          },
+          "model.vision_tower.blocks.2.0.spatial_block.ffn.fc1": [
+            512,
+            2048
+          ],
+          "model.vision_tower.blocks.2.0.spatial_block.ffn.fc2": [
+            2048,
+            512
+          ],
+          "model.vision_tower.blocks.2.0.channel_block.conv1": {
+            "in": 512,
+            "out": 512,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 512
+          },
+          "model.vision_tower.blocks.2.0.channel_block.channel_attn.qkv": [
+            512,
+            1536
+          ],
+          "model.vision_tower.blocks.2.0.channel_block.channel_attn.proj": [
+            512,
+            512
+          ],
+          "model.vision_tower.blocks.2.0.channel_block.conv2": {
+            "in": 512,
+            "out": 512,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 512
+          },
+          "model.vision_tower.blocks.2.0.channel_block.ffn.fc1": [
+            512,
+            2048
+          ],
+          "model.vision_tower.blocks.2.0.channel_block.ffn.fc2": [
+            2048,
+            512
+          ],
+          "model.vision_tower.blocks.3.0.spatial_block.conv1": {
+            "in": 1024,
+            "out": 1024,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 1024
+          },
+          "model.vision_tower.blocks.3.0.spatial_block.window_attn.qkv": [
+            1024,
+            3072
+          ],
+          "model.vision_tower.blocks.3.0.spatial_block.window_attn.proj": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.blocks.3.0.spatial_block.conv2": {
+            "in": 1024,
+            "out": 1024,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 1024
+          },
+          "model.vision_tower.blocks.3.0.spatial_block.ffn.fc1": [
+            1024,
+            4096
+          ],
+          "model.vision_tower.blocks.3.0.spatial_block.ffn.fc2": [
+            4096,
+            1024
+          ],
+          "model.vision_tower.blocks.3.0.channel_block.conv1": {
+            "in": 1024,
+            "out": 1024,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 1024
+          },
+          "model.vision_tower.blocks.3.0.channel_block.channel_attn.qkv": [
+            1024,
+            3072
+          ],
+          "model.vision_tower.blocks.3.0.channel_block.channel_attn.proj": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.blocks.3.0.channel_block.conv2": {
+            "in": 1024,
+            "out": 1024,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 1024
+          },
+          "model.vision_tower.blocks.3.0.channel_block.ffn.fc1": [
+            1024,
+            4096
+          ],
+          "model.vision_tower.blocks.3.0.channel_block.ffn.fc2": [
+            4096,
+            1024
+          ],
+          "model.multi_modal_projector.image_projection": [
+            1024,
+            768
+          ],
+          "model.language_model.encoder.layers.0.self_attn.k_proj": [
+            768,
+            768
+          ],
+          "model.language_model.encoder.layers.0.self_attn.v_proj": [
+            768,
+            768
+          ],
+          "model.language_model.encoder.layers.0.self_attn.q_proj": [
+            768,
+            768
+          ],
+          "model.language_model.encoder.layers.0.self_attn.out_proj": [
+            768,
+            768
+          ],
+          "model.language_model.encoder.layers.0.fc1": [
+            768,
+            3072
+          ],
+          "model.language_model.encoder.layers.0.fc2": [
+            3072,
+            768
+          ],
+          "model.language_model.decoder.layers.0.self_attn.k_proj": [
+            768,
+            768
+          ],
+          "model.language_model.decoder.layers.0.self_attn.v_proj": [
+            768,
+            768
+          ],
+          "model.language_model.decoder.layers.0.self_attn.q_proj": [
+            768,
+            768
+          ],
+          "model.language_model.decoder.layers.0.self_attn.out_proj": [
+            768,
+            768
+          ],
+          "model.language_model.decoder.layers.0.encoder_attn.k_proj": [
+            768,
+            768
+          ],
+          "model.language_model.decoder.layers.0.encoder_attn.v_proj": [
+            768,
+            768
+          ],
+          "model.language_model.decoder.layers.0.encoder_attn.q_proj": [
+            768,
+            768
+          ],
+          "model.language_model.decoder.layers.0.encoder_attn.out_proj": [
+            768,
+            768
+          ],
+          "model.language_model.decoder.layers.0.fc1": [
+            768,
+            3072
+          ],
+          "model.language_model.decoder.layers.0.fc2": [
+            3072,
+            768
+          ],
+          "lm_head": [
+            768,
+            51328
+          ]
+        }
+      }
+    },
+    {
+      "repo": "florence-community/Florence-2-large",
+      "resolved_revision": "4271c66b88cdbc05735372ec13b2360108de5317",
+      "size": "large",
+      "source": "libreyolo/models/vlm/florence2.py",
+      "meta": {
+        "family": "florence2",
+        "size": "large",
+        "status": "meta",
+        "model_class": "Florence2ForConditionalGeneration",
+        "parameters": 776505344,
+        "modules": {
+          "model.vision_tower.convs.0.conv": {
+            "in": 3,
+            "out": 256,
+            "kernel": [
+              7,
+              7
+            ],
+            "stride": [
+              4,
+              4
+            ],
+            "groups": 1
+          },
+          "model.vision_tower.blocks.0.0.spatial_block.conv1": {
+            "in": 256,
+            "out": 256,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 256
+          },
+          "model.vision_tower.blocks.0.0.spatial_block.window_attn.qkv": [
+            256,
+            768
+          ],
+          "model.vision_tower.blocks.0.0.spatial_block.window_attn.proj": [
+            256,
+            256
+          ],
+          "model.vision_tower.blocks.0.0.spatial_block.conv2": {
+            "in": 256,
+            "out": 256,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 256
+          },
+          "model.vision_tower.blocks.0.0.spatial_block.ffn.fc1": [
+            256,
+            1024
+          ],
+          "model.vision_tower.blocks.0.0.spatial_block.ffn.fc2": [
+            1024,
+            256
+          ],
+          "model.vision_tower.blocks.0.0.channel_block.conv1": {
+            "in": 256,
+            "out": 256,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 256
+          },
+          "model.vision_tower.blocks.0.0.channel_block.channel_attn.qkv": [
+            256,
+            768
+          ],
+          "model.vision_tower.blocks.0.0.channel_block.channel_attn.proj": [
+            256,
+            256
+          ],
+          "model.vision_tower.blocks.0.0.channel_block.conv2": {
+            "in": 256,
+            "out": 256,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 256
+          },
+          "model.vision_tower.blocks.0.0.channel_block.ffn.fc1": [
+            256,
+            1024
+          ],
+          "model.vision_tower.blocks.0.0.channel_block.ffn.fc2": [
+            1024,
+            256
+          ],
+          "model.vision_tower.blocks.1.0.spatial_block.conv1": {
+            "in": 512,
+            "out": 512,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 512
+          },
+          "model.vision_tower.blocks.1.0.spatial_block.window_attn.qkv": [
+            512,
+            1536
+          ],
+          "model.vision_tower.blocks.1.0.spatial_block.window_attn.proj": [
+            512,
+            512
+          ],
+          "model.vision_tower.blocks.1.0.spatial_block.conv2": {
+            "in": 512,
+            "out": 512,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 512
+          },
+          "model.vision_tower.blocks.1.0.spatial_block.ffn.fc1": [
+            512,
+            2048
+          ],
+          "model.vision_tower.blocks.1.0.spatial_block.ffn.fc2": [
+            2048,
+            512
+          ],
+          "model.vision_tower.blocks.1.0.channel_block.conv1": {
+            "in": 512,
+            "out": 512,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 512
+          },
+          "model.vision_tower.blocks.1.0.channel_block.channel_attn.qkv": [
+            512,
+            1536
+          ],
+          "model.vision_tower.blocks.1.0.channel_block.channel_attn.proj": [
+            512,
+            512
+          ],
+          "model.vision_tower.blocks.1.0.channel_block.conv2": {
+            "in": 512,
+            "out": 512,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 512
+          },
+          "model.vision_tower.blocks.1.0.channel_block.ffn.fc1": [
+            512,
+            2048
+          ],
+          "model.vision_tower.blocks.1.0.channel_block.ffn.fc2": [
+            2048,
+            512
+          ],
+          "model.vision_tower.blocks.2.0.spatial_block.conv1": {
+            "in": 1024,
+            "out": 1024,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 1024
+          },
+          "model.vision_tower.blocks.2.0.spatial_block.window_attn.qkv": [
+            1024,
+            3072
+          ],
+          "model.vision_tower.blocks.2.0.spatial_block.window_attn.proj": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.blocks.2.0.spatial_block.conv2": {
+            "in": 1024,
+            "out": 1024,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 1024
+          },
+          "model.vision_tower.blocks.2.0.spatial_block.ffn.fc1": [
+            1024,
+            4096
+          ],
+          "model.vision_tower.blocks.2.0.spatial_block.ffn.fc2": [
+            4096,
+            1024
+          ],
+          "model.vision_tower.blocks.2.0.channel_block.conv1": {
+            "in": 1024,
+            "out": 1024,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 1024
+          },
+          "model.vision_tower.blocks.2.0.channel_block.channel_attn.qkv": [
+            1024,
+            3072
+          ],
+          "model.vision_tower.blocks.2.0.channel_block.channel_attn.proj": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.blocks.2.0.channel_block.conv2": {
+            "in": 1024,
+            "out": 1024,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 1024
+          },
+          "model.vision_tower.blocks.2.0.channel_block.ffn.fc1": [
+            1024,
+            4096
+          ],
+          "model.vision_tower.blocks.2.0.channel_block.ffn.fc2": [
+            4096,
+            1024
+          ],
+          "model.vision_tower.blocks.3.0.spatial_block.conv1": {
+            "in": 2048,
+            "out": 2048,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 2048
+          },
+          "model.vision_tower.blocks.3.0.spatial_block.window_attn.qkv": [
+            2048,
+            6144
+          ],
+          "model.vision_tower.blocks.3.0.spatial_block.window_attn.proj": [
+            2048,
+            2048
+          ],
+          "model.vision_tower.blocks.3.0.spatial_block.conv2": {
+            "in": 2048,
+            "out": 2048,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 2048
+          },
+          "model.vision_tower.blocks.3.0.spatial_block.ffn.fc1": [
+            2048,
+            8192
+          ],
+          "model.vision_tower.blocks.3.0.spatial_block.ffn.fc2": [
+            8192,
+            2048
+          ],
+          "model.vision_tower.blocks.3.0.channel_block.conv1": {
+            "in": 2048,
+            "out": 2048,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 2048
+          },
+          "model.vision_tower.blocks.3.0.channel_block.channel_attn.qkv": [
+            2048,
+            6144
+          ],
+          "model.vision_tower.blocks.3.0.channel_block.channel_attn.proj": [
+            2048,
+            2048
+          ],
+          "model.vision_tower.blocks.3.0.channel_block.conv2": {
+            "in": 2048,
+            "out": 2048,
+            "kernel": [
+              3,
+              3
+            ],
+            "stride": [
+              1,
+              1
+            ],
+            "groups": 2048
+          },
+          "model.vision_tower.blocks.3.0.channel_block.ffn.fc1": [
+            2048,
+            8192
+          ],
+          "model.vision_tower.blocks.3.0.channel_block.ffn.fc2": [
+            8192,
+            2048
+          ],
+          "model.multi_modal_projector.image_projection": [
+            2048,
+            1024
+          ],
+          "model.language_model.encoder.layers.0.self_attn.k_proj": [
+            1024,
+            1024
+          ],
+          "model.language_model.encoder.layers.0.self_attn.v_proj": [
+            1024,
+            1024
+          ],
+          "model.language_model.encoder.layers.0.self_attn.q_proj": [
+            1024,
+            1024
+          ],
+          "model.language_model.encoder.layers.0.self_attn.out_proj": [
+            1024,
+            1024
+          ],
+          "model.language_model.encoder.layers.0.fc1": [
+            1024,
+            4096
+          ],
+          "model.language_model.encoder.layers.0.fc2": [
+            4096,
+            1024
+          ],
+          "model.language_model.decoder.layers.0.self_attn.k_proj": [
+            1024,
+            1024
+          ],
+          "model.language_model.decoder.layers.0.self_attn.v_proj": [
+            1024,
+            1024
+          ],
+          "model.language_model.decoder.layers.0.self_attn.q_proj": [
+            1024,
+            1024
+          ],
+          "model.language_model.decoder.layers.0.self_attn.out_proj": [
+            1024,
+            1024
+          ],
+          "model.language_model.decoder.layers.0.encoder_attn.k_proj": [
+            1024,
+            1024
+          ],
+          "model.language_model.decoder.layers.0.encoder_attn.v_proj": [
+            1024,
+            1024
+          ],
+          "model.language_model.decoder.layers.0.encoder_attn.q_proj": [
+            1024,
+            1024
+          ],
+          "model.language_model.decoder.layers.0.encoder_attn.out_proj": [
+            1024,
+            1024
+          ],
+          "model.language_model.decoder.layers.0.fc1": [
+            1024,
+            4096
+          ],
+          "model.language_model.decoder.layers.0.fc2": [
+            4096,
+            1024
+          ],
+          "lm_head": [
+            1024,
+            51328
+          ]
+        }
+      }
+    }
+  ],
+  "checks": [
+    "Pinned configuration and meta module construction",
+    "Native DaViT and BART forward-path source inspection"
+  ],
+  "limits": [
+    "No pretrained execution",
+    "Nominal square input; processor owns resizing"
+  ]
+}

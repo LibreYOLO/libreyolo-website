@@ -1,0 +1,344 @@
+{
+  "family": "nafnet",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "sources": [
+    "libreyolo/models/nafnet/model.py:NAFNET_SIZE_CONFIGS and infer_nafnet_config",
+    "libreyolo/models/nafnet/nn.py:NAFNetLocal, NAFNet, NAFBlock, SimpleGate, LayerNorm2d, AvgPool2d"
+  ],
+  "records": {
+    "s": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        256,
+        256
+      ],
+      "output": [
+        1,
+        3,
+        256,
+        256
+      ],
+      "hooks": {
+        "intro": {
+          "input": [
+            [
+              1,
+              3,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            32,
+            256,
+            256
+          ]
+        },
+        "encoders.0": {
+          "input": [
+            [
+              1,
+              32,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            32,
+            256,
+            256
+          ]
+        },
+        "encoders.1": {
+          "input": [
+            [
+              1,
+              64,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            128,
+            128
+          ]
+        },
+        "encoders.2": {
+          "input": [
+            [
+              1,
+              128,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            64,
+            64
+          ]
+        },
+        "encoders.3": {
+          "input": [
+            [
+              1,
+              256,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            32,
+            32
+          ]
+        },
+        "middle_blks": {
+          "input": [
+            [
+              1,
+              512,
+              16,
+              16
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            16,
+            16
+          ]
+        },
+        "ups.0": {
+          "input": [
+            [
+              1,
+              512,
+              16,
+              16
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            32,
+            32
+          ]
+        },
+        "ups.3": {
+          "input": [
+            [
+              1,
+              64,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            32,
+            256,
+            256
+          ]
+        },
+        "ending": {
+          "input": [
+            [
+              1,
+              32,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            3,
+            256,
+            256
+          ]
+        }
+      },
+      "parameters": 17111907,
+      "pretrained": false
+    },
+    "l": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        256,
+        256
+      ],
+      "output": [
+        1,
+        3,
+        256,
+        256
+      ],
+      "hooks": {
+        "intro": {
+          "input": [
+            [
+              1,
+              3,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            256,
+            256
+          ]
+        },
+        "encoders.0": {
+          "input": [
+            [
+              1,
+              64,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            256,
+            256
+          ]
+        },
+        "encoders.1": {
+          "input": [
+            [
+              1,
+              128,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            128,
+            128,
+            128
+          ]
+        },
+        "encoders.2": {
+          "input": [
+            [
+              1,
+              256,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            64,
+            64
+          ]
+        },
+        "encoders.3": {
+          "input": [
+            [
+              1,
+              512,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            32,
+            32
+          ]
+        },
+        "middle_blks": {
+          "input": [
+            [
+              1,
+              1024,
+              16,
+              16
+            ]
+          ],
+          "output": [
+            1,
+            1024,
+            16,
+            16
+          ]
+        },
+        "ups.0": {
+          "input": [
+            [
+              1,
+              1024,
+              16,
+              16
+            ]
+          ],
+          "output": [
+            1,
+            512,
+            32,
+            32
+          ]
+        },
+        "ups.3": {
+          "input": [
+            [
+              1,
+              128,
+              128,
+              128
+            ]
+          ],
+          "output": [
+            1,
+            64,
+            256,
+            256
+          ]
+        },
+        "ending": {
+          "input": [
+            [
+              1,
+              64,
+              256,
+              256
+            ]
+          ],
+          "output": [
+            1,
+            3,
+            256,
+            256
+          ]
+        }
+      },
+      "parameters": 67888835,
+      "pretrained": false
+    }
+  },
+  "notes": [
+    "Default constructors s/l have encoder [1,1,1,28], middle1, decoder [1,1,1,1]. SIDD checkpoint can infer [2,2,4,8]/middle12; not loaded or asserted as default.",
+    "At a 256\u00d7256 canvas, TLC kernels calibrated from base384 cover each feature map and use global adaptive mean.",
+    "No weights or network requests."
+  ],
+  "visual_qa": "Parent agent; not executed by this builder."
+}

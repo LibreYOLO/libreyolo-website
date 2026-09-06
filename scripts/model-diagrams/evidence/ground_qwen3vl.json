@@ -1,0 +1,28 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "backend": "Transformers5.16.1 Apache-2.0 native source",
+  "families": [
+    {
+      "size": "2b",
+      "repo": "LibreYOLO/LibreGroundQwen3VL2b",
+      "resolved_revision": "51b2c7bc82f3bbbdf3254c413986c9d105849775",
+      "source": "libreyolo/models/ground/qwen3vl.py",
+      "meta": {}
+    },
+    {
+      "size": "4b",
+      "repo": "Qwen/Qwen3-VL-4B-Instruct",
+      "resolved_revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "source": "libreyolo/models/ground/qwen3vl.py",
+      "meta": {}
+    },
+    {
+      "size": "8b",
+      "repo": "Qwen/Qwen3-VL-8B-Instruct",
+      "resolved_revision": "0c351dd01ed87e9c1b53cbc748cba10e6187ff3b",
+      "source": "libreyolo/models/ground/qwen3vl.py",
+      "meta": {}
+    }
+  ],
+  "scope": "Image inference path, configuration and native module-shape verification; no weights or remote Python. Runtime token counts are explicit symbols. Adapter parser rules read from LibreYOLO source."
+}

@@ -1,0 +1,98 @@
+{
+  "family": "quicksrnet",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "sources": [
+    "libreyolo/models/quicksrnet/model.py:QUICKSRNET_SIZE_CONFIGS",
+    "libreyolo/models/quicksrnet/nn.py:QuickSRNet"
+  ],
+  "records": {
+    "m2": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        3,
+        64,
+        64
+      ],
+      "output": [
+        1,
+        3,
+        128,
+        128
+      ],
+      "hooks": {
+        "cnn": {
+          "input": [
+            [
+              1,
+              3,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            32,
+            64,
+            64
+          ]
+        },
+        "conv_last": {
+          "input": [
+            [
+              1,
+              32,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            12,
+            64,
+            64
+          ]
+        },
+        "clip_output": {
+          "input": [
+            [
+              1,
+              12,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            12,
+            64,
+            64
+          ]
+        },
+        "depth_to_space": {
+          "input": [
+            [
+              1,
+              12,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            3,
+            128,
+            128
+          ]
+        }
+      },
+      "parameters": 50604,
+      "pretrained": false
+    }
+  },
+  "notes": [
+    "Only registered size is m2. Native images may vary; 64\u00d764 is the configured representative input."
+  ],
+  "visual_qa": "Parent agent; not executed by this builder."
+}

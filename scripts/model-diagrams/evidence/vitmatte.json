@@ -1,0 +1,207 @@
+{
+  "family": "vitmatte",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "sources": [
+    "libreyolo/models/vitmatte/nn.py:constants,VitDetLayer,VitDetAttention,VitDetResBottleneckBlock,VitMatteDetailCaptureModule,constrain_alpha_to_trimap",
+    "libreyolo/models/vitmatte/model.py:INPUT_SIZES"
+  ],
+  "records": {
+    "s": {
+      "device": "cpu",
+      "torch": "2.14.0",
+      "input": [
+        1,
+        4,
+        512,
+        512
+      ],
+      "output": [
+        1,
+        1,
+        512,
+        512
+      ],
+      "hooks": {
+        "backbone.embeddings": {
+          "input": [
+            [
+              1,
+              4,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            384,
+            32,
+            32
+          ]
+        },
+        "backbone.encoder.layer.2": {
+          "input": [
+            [
+              1,
+              384,
+              32,
+              32
+            ]
+          ],
+          "output": [
+            1,
+            384,
+            32,
+            32
+          ]
+        },
+        "backbone": {
+          "input": [
+            [
+              1,
+              4,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            384,
+            32,
+            32
+          ]
+        },
+        "decoder.convstream": {
+          "input": [
+            [
+              1,
+              4,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            [
+              1,
+              4,
+              512,
+              512
+            ],
+            [
+              1,
+              48,
+              256,
+              256
+            ],
+            [
+              1,
+              96,
+              128,
+              128
+            ],
+            [
+              1,
+              192,
+              64,
+              64
+            ]
+          ]
+        },
+        "decoder.fusion_blocks.0": {
+          "input": [
+            [
+              1,
+              384,
+              32,
+              32
+            ],
+            [
+              1,
+              192,
+              64,
+              64
+            ]
+          ],
+          "output": [
+            1,
+            256,
+            64,
+            64
+          ]
+        },
+        "decoder.fusion_blocks.3": {
+          "input": [
+            [
+              1,
+              64,
+              256,
+              256
+            ],
+            [
+              1,
+              4,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            32,
+            512,
+            512
+          ]
+        },
+        "decoder.matting_head": {
+          "input": [
+            [
+              1,
+              32,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            1,
+            512,
+            512
+          ]
+        },
+        "decoder": {
+          "input": [
+            [
+              1,
+              384,
+              32,
+              32
+            ],
+            [
+              1,
+              4,
+              512,
+              512
+            ]
+          ],
+          "output": [
+            1,
+            1,
+            512,
+            512
+          ]
+        }
+      },
+      "parameters": 25814753,
+      "pretrained": false,
+      "trimap_constraints": {
+        "background_exact_zero": true,
+        "foreground_exact_one": true
+      }
+    }
+  },
+  "notes": [
+    "CPU full512 check including background/unknown/foreground trimapstrips.",
+    "Local attention isunshifted14\u00d714; full attention andCNN residual bottlenecks occur atzero-based2,5,8,11.",
+    "Relativeposition termsdependonqueries andseparate height/width tables; notSwin staticrelativebias.",
+    "Single sigmoid inside decoder; public callers receive alpha probabilities."
+  ],
+  "visual_qa": "Parent agent; not executed by this builder."
+}

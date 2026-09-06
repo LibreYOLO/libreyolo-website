@@ -1,0 +1,84 @@
+{
+  "family": "locateanything",
+  "size": "3b",
+  "repo": "nvidia/LocateAnything-3B",
+  "revision": "c32291ca5e996f5a7a485845b4f57a233936bba0",
+  "source": "libreyolo/models/vlm/locateanything.py",
+  "input": 2500,
+  "properties": {
+    "FAMILY": "locateanything",
+    "HF_REPOS": {
+      "3b": "nvidia/LocateAnything-3B"
+    },
+    "HF_REVISIONS": {
+      "3b": "c32291ca5e996f5a7a485845b4f57a233936bba0"
+    },
+    "INPUT_SIZES": {
+      "3b": 2500
+    },
+    "SUPPORTED_TASKS": [
+      "detect",
+      "point"
+    ],
+    "COORD_DIVISOR": 1000.0
+  },
+  "resolved_revision": "c32291ca5e996f5a7a485845b4f57a233936bba0",
+  "config": {
+    "model_type": "locateanything",
+    "text_config": {
+      "attention_dropout": 0.0,
+      "block_size": 6,
+      "bos_token_id": 151643,
+      "causal_attn": false,
+      "eos_token_id": 151645,
+      "hidden_act": "silu",
+      "hidden_size": 2048,
+      "initializer_range": 0.02,
+      "intermediate_size": 11008,
+      "max_position_embeddings": 32768,
+      "max_window_layers": 70,
+      "model_type": "qwen2",
+      "null_token_id": 152678,
+      "num_attention_heads": 16,
+      "num_hidden_layers": 36,
+      "num_key_value_heads": 2,
+      "rms_norm_eps": 1e-06,
+      "rope_scaling": null,
+      "rope_theta": 1000000.0,
+      "sliding_window": 32768,
+      "switch_token_id": 152679,
+      "text_mask_token_id": 151676,
+      "tie_word_embeddings": true,
+      "torch_dtype": "bfloat16",
+      "use_cache": false,
+      "use_sliding_window": false,
+      "vocab_size": 152681
+    },
+    "vision_config": {
+      "auto_map": {
+        "AutoConfig": "moonshotai/MoonViT-SO-400M--configuration_moonvit.MoonViTConfig",
+        "AutoModel": "moonshotai/MoonViT-SO-400M--modeling_moonvit.MoonVitPretrainedModel"
+      },
+      "hidden_size": 1152,
+      "init_pos_emb_height": 64,
+      "init_pos_emb_width": 64,
+      "intermediate_size": 4304,
+      "merge_kernel_size": [
+        2,
+        2
+      ],
+      "model_type": "moonvit",
+      "num_attention_heads": 16,
+      "num_hidden_layers": 27,
+      "patch_size": 14,
+      "torch_dtype": "bfloat16"
+    }
+  },
+  "backend_version": "5.16.1",
+  "meta": {
+    "family": "locateanything",
+    "size": "3b",
+    "status": "source",
+    "error": "ValueError: The repository /tmp/libreyolo-diagram-configs/locateanything/3b contains custom code which must be executed to correctly load the model. You can inspect the repository content at /tmp/libreyolo-diagram-configs/locateanything/3b .\n You can inspect the repository content at https://hf.co//tmp/libreyolo-diagram-configs/locateanything/3b.\nPlease pass t"
+  }
+}

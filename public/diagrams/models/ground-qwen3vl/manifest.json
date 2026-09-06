@@ -1,0 +1,53 @@
+{
+  "family": "ground_qwen3vl",
+  "slug": "ground-qwen3vl",
+  "title": "Qwen3-VL grounding",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "2b-point",
+  "views": [
+    {
+      "id": "2b-point",
+      "label": "Qwen3-VL grounding 2B",
+      "task": "point",
+      "size": "2b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/ground-qwen3vl/2b-point.svg",
+      "html": "/diagrams/models/ground-qwen3vl/2b-point.html",
+      "input": "1024 nominal; processor-dependent",
+      "verification": "source"
+    },
+    {
+      "id": "4b-point",
+      "label": "Qwen3-VL grounding 4B",
+      "task": "point",
+      "size": "4b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/ground-qwen3vl/4b-point.svg",
+      "html": "/diagrams/models/ground-qwen3vl/4b-point.html",
+      "input": "1024 nominal; processor-dependent",
+      "verification": "source"
+    },
+    {
+      "id": "8b-point",
+      "label": "Qwen3-VL grounding 8B",
+      "task": "point",
+      "size": "8b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/ground-qwen3vl/8b-point.svg",
+      "html": "/diagrams/models/ground-qwen3vl/8b-point.html",
+      "input": "1024 nominal; processor-dependent",
+      "verification": "source"
+    },
+    {
+      "id": "family",
+      "label": "Qwen3-VL grounding family",
+      "task": "point",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/ground-qwen3vl/family.svg",
+      "html": "/diagrams/models/ground-qwen3vl/family.html",
+      "input": "1024 nominal; processor-dependent",
+      "verification": "source"
+    }
+  ]
+}

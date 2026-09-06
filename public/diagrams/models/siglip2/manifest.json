@@ -1,0 +1,75 @@
+{
+  "family": "siglip2",
+  "slug": "siglip2",
+  "title": "SigLIP2",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "b16-classify",
+  "views": [
+    {
+      "id": "b16-classify",
+      "label": "SigLIP2 b16 classify",
+      "task": "classify",
+      "size": "b16",
+      "kind": "concrete",
+      "svg": "/diagrams/models/siglip2/b16-classify.svg",
+      "html": "/diagrams/models/siglip2/b16-classify.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 256 \u00d7 256; text: 1 \u00d7 64",
+      "verification": "meta"
+    },
+    {
+      "id": "b16-embed",
+      "label": "SigLIP2 b16 embed",
+      "task": "embed",
+      "size": "b16",
+      "kind": "concrete",
+      "svg": "/diagrams/models/siglip2/b16-embed.svg",
+      "html": "/diagrams/models/siglip2/b16-embed.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 256 \u00d7 256; text: 1 \u00d7 64",
+      "verification": "meta"
+    },
+    {
+      "id": "so400m-classify",
+      "label": "SigLIP2 so400m classify",
+      "task": "classify",
+      "size": "so400m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/siglip2/so400m-classify.svg",
+      "html": "/diagrams/models/siglip2/so400m-classify.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 384 \u00d7 384; text: 1 \u00d7 64",
+      "verification": "meta"
+    },
+    {
+      "id": "so400m-embed",
+      "label": "SigLIP2 so400m embed",
+      "task": "embed",
+      "size": "so400m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/siglip2/so400m-embed.svg",
+      "html": "/diagrams/models/siglip2/so400m-embed.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 384 \u00d7 384; text: 1 \u00d7 64",
+      "verification": "meta"
+    },
+    {
+      "id": "family-classify",
+      "label": "SigLIP2 family classify",
+      "task": "classify",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/siglip2/family-classify.svg",
+      "html": "/diagrams/models/siglip2/family-classify.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 S \u00d7 S; text: 1 \u00d7 64",
+      "verification": "source"
+    },
+    {
+      "id": "family-embed",
+      "label": "SigLIP2 family embed",
+      "task": "embed",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/siglip2/family-embed.svg",
+      "html": "/diagrams/models/siglip2/family-embed.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 S \u00d7 S; text: 1 \u00d7 64",
+      "verification": "source"
+    }
+  ]
+}

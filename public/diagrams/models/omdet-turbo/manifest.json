@@ -1,0 +1,20 @@
+{
+  "family": "omdet_turbo",
+  "slug": "omdet-turbo",
+  "title": "OMDet-Turbo",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "t-detect",
+  "views": [
+    {
+      "id": "t-detect",
+      "label": "OMDet-Turbo t",
+      "task": "detect",
+      "size": "t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/omdet-turbo/t-detect.svg",
+      "html": "/diagrams/models/omdet-turbo/t-detect.html",
+      "input": "Image1 \u00d73 \u00d7640 \u00d7640;3 class rows \u00d777;task row77 with16 valid tokens",
+      "verification": "cpu"
+    }
+  ]
+}

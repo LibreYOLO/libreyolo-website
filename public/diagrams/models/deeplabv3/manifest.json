@@ -1,0 +1,53 @@
+{
+  "family": "deeplabv3",
+  "slug": "deeplabv3",
+  "title": "DeepLabv3",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "r50-semantic",
+  "views": [
+    {
+      "id": "r50-semantic",
+      "label": "r50",
+      "task": "semantic",
+      "size": "r50",
+      "kind": "concrete",
+      "svg": "/diagrams/models/deeplabv3/r50-semantic.svg",
+      "html": "/diagrams/models/deeplabv3/r50-semantic.html",
+      "input": "3\u00d7520\u00d7520",
+      "verification": "cpu"
+    },
+    {
+      "id": "r101-semantic",
+      "label": "r101",
+      "task": "semantic",
+      "size": "r101",
+      "kind": "concrete",
+      "svg": "/diagrams/models/deeplabv3/r101-semantic.svg",
+      "html": "/diagrams/models/deeplabv3/r101-semantic.html",
+      "input": "3\u00d7520\u00d7520",
+      "verification": "cpu"
+    },
+    {
+      "id": "mv3-semantic",
+      "label": "mv3",
+      "task": "semantic",
+      "size": "mv3",
+      "kind": "concrete",
+      "svg": "/diagrams/models/deeplabv3/mv3-semantic.svg",
+      "html": "/diagrams/models/deeplabv3/mv3-semantic.html",
+      "input": "3\u00d7520\u00d7520",
+      "verification": "cpu"
+    },
+    {
+      "id": "resnet-family",
+      "label": "ResNet shared topology",
+      "task": "semantic",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/deeplabv3/resnet-family.svg",
+      "html": "/diagrams/models/deeplabv3/resnet-family.html",
+      "input": "3\u00d7520\u00d7520",
+      "verification": "source"
+    }
+  ]
+}

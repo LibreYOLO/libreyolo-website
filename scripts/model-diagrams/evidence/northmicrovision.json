@@ -1,0 +1,117 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "backend": "Transformers5.16.1 Apache-2.0 native source",
+  "families": [
+    {
+      "size": "2.4b",
+      "repo": "CohereLabs/North-Micro-Vision-Instruct",
+      "resolved_revision": "79fa3ec7baf7ac92cb38233ca01d8ea8161ee036",
+      "source": "libreyolo/models/vlm/northmicro.py",
+      "meta": {
+        "family": "northmicrovision",
+        "size": "2.4b",
+        "status": "meta",
+        "model_class": "CohereCompassForConditionalGeneration",
+        "parameters": 2484847856,
+        "modules": {
+          "model.visual.patch_embed.proj": {
+            "in": 3,
+            "out": 1152,
+            "kernel": [
+              2,
+              16,
+              16
+            ],
+            "stride": [
+              2,
+              16,
+              16
+            ],
+            "groups": 1
+          },
+          "model.visual.blocks.0.attn.qkv": [
+            1152,
+            3456
+          ],
+          "model.visual.blocks.0.attn.proj": [
+            1152,
+            1152
+          ],
+          "model.visual.blocks.0.mlp.linear_fc1": [
+            1152,
+            4304
+          ],
+          "model.visual.blocks.0.mlp.linear_fc2": [
+            4304,
+            1152
+          ],
+          "model.visual.merger.linear_fc1": [
+            4608,
+            4608
+          ],
+          "model.visual.merger.linear_fc2": [
+            4608,
+            2048
+          ],
+          "model.visual.deepstack_merger_list.0.linear_fc1": [
+            4608,
+            4608
+          ],
+          "model.visual.deepstack_merger_list.0.linear_fc2": [
+            4608,
+            2048
+          ],
+          "model.visual.deepstack_merger_list.1.linear_fc1": [
+            4608,
+            4608
+          ],
+          "model.visual.deepstack_merger_list.1.linear_fc2": [
+            4608,
+            2048
+          ],
+          "model.visual.deepstack_merger_list.2.linear_fc1": [
+            4608,
+            4608
+          ],
+          "model.visual.deepstack_merger_list.2.linear_fc2": [
+            4608,
+            2048
+          ],
+          "model.language_model.layers.0.self_attn.q_proj": [
+            2048,
+            2048
+          ],
+          "model.language_model.layers.0.self_attn.k_proj": [
+            2048,
+            1024
+          ],
+          "model.language_model.layers.0.self_attn.v_proj": [
+            2048,
+            1024
+          ],
+          "model.language_model.layers.0.self_attn.o_proj": [
+            2048,
+            2048
+          ],
+          "model.language_model.layers.0.mlp.gate_proj": [
+            2048,
+            6144
+          ],
+          "model.language_model.layers.0.mlp.up_proj": [
+            2048,
+            6144
+          ],
+          "model.language_model.layers.0.mlp.down_proj": [
+            6144,
+            2048
+          ],
+          "lm_head": [
+            2048,
+            262144
+          ]
+        }
+      }
+    }
+  ],
+  "scope": "Image inference path, configuration and native module-shape verification; no weights or remote Python. Runtime token counts are explicit symbols. Adapter parser rules read from LibreYOLO source."
+}

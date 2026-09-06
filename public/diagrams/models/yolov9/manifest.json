@@ -1,0 +1,152 @@
+{
+  "family": "yolo9",
+  "slug": "yolov9",
+  "title": "YOLOv9",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "t",
+  "views": [
+    {
+      "id": "t",
+      "label": "YOLO9-T",
+      "task": "detect",
+      "size": "t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolov9/t.svg",
+      "html": "/diagrams/models/yolov9/t.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "s",
+      "label": "YOLO9-S",
+      "task": "detect",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolov9/s.svg",
+      "html": "/diagrams/models/yolov9/s.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "m",
+      "label": "YOLO9-M",
+      "task": "detect",
+      "size": "m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolov9/m.svg",
+      "html": "/diagrams/models/yolov9/m.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "c",
+      "label": "YOLO9-C",
+      "task": "detect",
+      "size": "c",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolov9/c.svg",
+      "html": "/diagrams/models/yolov9/c.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "family-ts",
+      "label": "YOLO9 T/S family",
+      "task": "detect",
+      "size": "t/s",
+      "kind": "family",
+      "svg": "/diagrams/models/yolov9/family-ts.svg",
+      "html": "/diagrams/models/yolov9/family-ts.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "e2e-t",
+      "label": "YOLO9 E2E-T",
+      "task": "detect",
+      "size": "t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolov9/e2e-t.svg",
+      "html": "/diagrams/models/yolov9/e2e-t.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "e2e-s",
+      "label": "YOLO9 E2E-S",
+      "task": "detect",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolov9/e2e-s.svg",
+      "html": "/diagrams/models/yolov9/e2e-s.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "e2e-m",
+      "label": "YOLO9 E2E-M",
+      "task": "detect",
+      "size": "m",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolov9/e2e-m.svg",
+      "html": "/diagrams/models/yolov9/e2e-m.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "e2e-c",
+      "label": "YOLO9 E2E-C",
+      "task": "detect",
+      "size": "c",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolov9/e2e-c.svg",
+      "html": "/diagrams/models/yolov9/e2e-c.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "e2e-family-ts",
+      "label": "YOLO9 E2E T/S family",
+      "task": "detect",
+      "size": "t/s",
+      "kind": "family",
+      "svg": "/diagrams/models/yolov9/e2e-family-ts.svg",
+      "html": "/diagrams/models/yolov9/e2e-family-ts.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "p2-t",
+      "label": "YOLO9 P2-T",
+      "task": "detect",
+      "size": "t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolov9/p2-t.svg",
+      "html": "/diagrams/models/yolov9/p2-t.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "p2-s",
+      "label": "YOLO9 P2-S",
+      "task": "detect",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/yolov9/p2-s.svg",
+      "html": "/diagrams/models/yolov9/p2-s.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    },
+    {
+      "id": "p2-family-ts",
+      "label": "YOLO9 P2 T/S family",
+      "task": "detect",
+      "size": "t/s",
+      "kind": "family",
+      "svg": "/diagrams/models/yolov9/p2-family-ts.svg",
+      "html": "/diagrams/models/yolov9/p2-family-ts.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "cpu"
+    }
+  ]
+}

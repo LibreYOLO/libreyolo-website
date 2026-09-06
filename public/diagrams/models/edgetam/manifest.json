@@ -1,0 +1,20 @@
+{
+  "family": "edgetam",
+  "slug": "edgetam",
+  "title": "EdgeTAM",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "edge-box-segment",
+  "views": [
+    {
+      "id": "edge-box-segment",
+      "label": "EdgeTAM edge",
+      "task": "segment",
+      "size": "edge",
+      "kind": "concrete",
+      "svg": "/diagrams/models/edgetam/edge-box-segment.svg",
+      "html": "/diagrams/models/edgetam/edge-box-segment.html",
+      "input": "Image: 1 \u00d7 3 \u00d7 1024 \u00d7 1024; box: 1 \u00d7 1 \u00d7 4",
+      "verification": "source"
+    }
+  ]
+}

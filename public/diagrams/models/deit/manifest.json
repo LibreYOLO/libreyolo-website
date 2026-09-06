@@ -1,0 +1,53 @@
+{
+  "family": "deit",
+  "slug": "deit",
+  "title": "DeiT",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "t-classify",
+  "views": [
+    {
+      "id": "t-classify",
+      "label": "DeiT t",
+      "task": "classify",
+      "size": "t",
+      "kind": "concrete",
+      "svg": "/diagrams/models/deit/t-classify.svg",
+      "html": "/diagrams/models/deit/t-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "cpu"
+    },
+    {
+      "id": "s-classify",
+      "label": "DeiT s",
+      "task": "classify",
+      "size": "s",
+      "kind": "concrete",
+      "svg": "/diagrams/models/deit/s-classify.svg",
+      "html": "/diagrams/models/deit/s-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "b-classify",
+      "label": "DeiT b",
+      "task": "classify",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/deit/b-classify.svg",
+      "html": "/diagrams/models/deit/b-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "meta"
+    },
+    {
+      "id": "family-classify",
+      "label": "DeiT family",
+      "task": "classify",
+      "size": "family",
+      "kind": "family",
+      "svg": "/diagrams/models/deit/family-classify.svg",
+      "html": "/diagrams/models/deit/family-classify.html",
+      "input": "1 \u00d7 3 \u00d7 224 \u00d7 224",
+      "verification": "source"
+    }
+  ]
+}

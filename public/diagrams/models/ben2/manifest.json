@@ -1,0 +1,20 @@
+{
+  "family": "ben2",
+  "slug": "ben2",
+  "title": "BEN2",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "b-matte",
+  "views": [
+    {
+      "id": "b-matte",
+      "label": "Base",
+      "task": "matte",
+      "size": "b",
+      "kind": "concrete",
+      "svg": "/diagrams/models/ben2/b-matte.svg",
+      "html": "/diagrams/models/ben2/b-matte.html",
+      "input": "3\u00d71024\u00d71024 normalizedRGB",
+      "verification": "meta"
+    }
+  ]
+}

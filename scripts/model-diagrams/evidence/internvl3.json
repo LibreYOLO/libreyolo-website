@@ -1,0 +1,559 @@
+{
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "backend": "Transformers5.16.1 Apache-2.0 native source",
+  "families": [
+    {
+      "size": "1b",
+      "repo": "OpenGVLab/InternVL3-1B-hf",
+      "resolved_revision": "014c0583a0d4bedf29fbe2dbff4f865eb998e171",
+      "source": "libreyolo/models/vlm/internvl3.py",
+      "meta": {
+        "family": "internvl3",
+        "size": "1b",
+        "status": "meta",
+        "model_class": "InternVLForConditionalGeneration",
+        "parameters": 802293120,
+        "modules": {
+          "model.vision_tower.embeddings.patch_embeddings.projection": {
+            "in": 3,
+            "out": 1024,
+            "kernel": [
+              14,
+              14
+            ],
+            "stride": [
+              14,
+              14
+            ],
+            "groups": 1
+          },
+          "model.vision_tower.encoder.layer.0.attention.q_proj": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.0.attention.k_proj": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.0.attention.v_proj": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.0.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.0.mlp.fc1": [
+            1024,
+            4096
+          ],
+          "model.vision_tower.encoder.layer.0.mlp.fc2": [
+            4096,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.1.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.2.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.3.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.4.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.5.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.6.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.7.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.8.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.9.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.10.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.11.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.12.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.13.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.14.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.15.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.16.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.17.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.18.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.19.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.20.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.21.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.22.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.23.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.multi_modal_projector.linear_1": [
+            4096,
+            896
+          ],
+          "model.multi_modal_projector.linear_2": [
+            896,
+            896
+          ],
+          "model.language_model.layers.0.self_attn.q_proj": [
+            896,
+            896
+          ],
+          "model.language_model.layers.0.self_attn.k_proj": [
+            896,
+            128
+          ],
+          "model.language_model.layers.0.self_attn.v_proj": [
+            896,
+            128
+          ],
+          "model.language_model.layers.0.self_attn.o_proj": [
+            896,
+            896
+          ],
+          "model.language_model.layers.0.mlp.gate_proj": [
+            896,
+            4864
+          ],
+          "model.language_model.layers.0.mlp.up_proj": [
+            896,
+            4864
+          ],
+          "model.language_model.layers.0.mlp.down_proj": [
+            4864,
+            896
+          ],
+          "lm_head": [
+            896,
+            151674
+          ]
+        }
+      }
+    },
+    {
+      "size": "2b",
+      "repo": "OpenGVLab/InternVL3-2B-hf",
+      "resolved_revision": "cb57a075cb75a2e6d1b668b128d48bb00ae321d2",
+      "source": "libreyolo/models/vlm/internvl3.py",
+      "meta": {
+        "family": "internvl3",
+        "size": "2b",
+        "status": "meta",
+        "model_class": "InternVLForConditionalGeneration",
+        "parameters": 1855986176,
+        "modules": {
+          "model.vision_tower.embeddings.patch_embeddings.projection": {
+            "in": 3,
+            "out": 1024,
+            "kernel": [
+              14,
+              14
+            ],
+            "stride": [
+              14,
+              14
+            ],
+            "groups": 1
+          },
+          "model.vision_tower.encoder.layer.0.attention.q_proj": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.0.attention.k_proj": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.0.attention.v_proj": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.0.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.0.mlp.fc1": [
+            1024,
+            4096
+          ],
+          "model.vision_tower.encoder.layer.0.mlp.fc2": [
+            4096,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.1.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.2.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.3.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.4.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.5.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.6.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.7.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.8.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.9.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.10.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.11.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.12.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.13.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.14.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.15.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.16.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.17.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.18.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.19.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.20.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.21.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.22.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.23.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.multi_modal_projector.linear_1": [
+            4096,
+            1536
+          ],
+          "model.multi_modal_projector.linear_2": [
+            1536,
+            1536
+          ],
+          "model.language_model.layers.0.self_attn.q_proj": [
+            1536,
+            1536
+          ],
+          "model.language_model.layers.0.self_attn.k_proj": [
+            1536,
+            256
+          ],
+          "model.language_model.layers.0.self_attn.v_proj": [
+            1536,
+            256
+          ],
+          "model.language_model.layers.0.self_attn.o_proj": [
+            1536,
+            1536
+          ],
+          "model.language_model.layers.0.mlp.gate_proj": [
+            1536,
+            8960
+          ],
+          "model.language_model.layers.0.mlp.up_proj": [
+            1536,
+            8960
+          ],
+          "model.language_model.layers.0.mlp.down_proj": [
+            8960,
+            1536
+          ],
+          "lm_head": [
+            1536,
+            151674
+          ]
+        }
+      }
+    },
+    {
+      "size": "8b",
+      "repo": "OpenGVLab/InternVL3-8B-hf",
+      "resolved_revision": "259a3b64a14623c0ec91a045cb43f7c5af5fa6af",
+      "source": "libreyolo/models/vlm/internvl3.py",
+      "meta": {
+        "family": "internvl3",
+        "size": "8b",
+        "status": "meta",
+        "model_class": "InternVLForConditionalGeneration",
+        "parameters": 7400774144,
+        "modules": {
+          "model.vision_tower.embeddings.patch_embeddings.projection": {
+            "in": 3,
+            "out": 1024,
+            "kernel": [
+              14,
+              14
+            ],
+            "stride": [
+              14,
+              14
+            ],
+            "groups": 1
+          },
+          "model.vision_tower.encoder.layer.0.attention.q_proj": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.0.attention.k_proj": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.0.attention.v_proj": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.0.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.0.mlp.fc1": [
+            1024,
+            4096
+          ],
+          "model.vision_tower.encoder.layer.0.mlp.fc2": [
+            4096,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.1.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.2.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.3.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.4.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.5.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.6.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.7.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.8.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.9.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.10.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.11.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.12.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.13.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.14.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.15.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.16.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.17.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.18.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.19.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.20.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.21.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.22.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.vision_tower.encoder.layer.23.attention.projection_layer": [
+            1024,
+            1024
+          ],
+          "model.multi_modal_projector.linear_1": [
+            4096,
+            3584
+          ],
+          "model.multi_modal_projector.linear_2": [
+            3584,
+            3584
+          ],
+          "model.language_model.layers.0.self_attn.q_proj": [
+            3584,
+            3584
+          ],
+          "model.language_model.layers.0.self_attn.k_proj": [
+            3584,
+            512
+          ],
+          "model.language_model.layers.0.self_attn.v_proj": [
+            3584,
+            512
+          ],
+          "model.language_model.layers.0.self_attn.o_proj": [
+            3584,
+            3584
+          ],
+          "model.language_model.layers.0.mlp.gate_proj": [
+            3584,
+            18944
+          ],
+          "model.language_model.layers.0.mlp.up_proj": [
+            3584,
+            18944
+          ],
+          "model.language_model.layers.0.mlp.down_proj": [
+            18944,
+            3584
+          ],
+          "lm_head": [
+            3584,
+            151674
+          ]
+        }
+      }
+    }
+  ],
+  "scope": "Image inference path, configuration and native module-shape verification; no weights or remote Python. Runtime token counts are explicit symbols. Adapter parser rules read from LibreYOLO source."
+}

@@ -1,0 +1,42 @@
+{
+  "family": "facerec",
+  "slug": "librefacerec",
+  "title": "Face recognition",
+  "source_revision": "a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb",
+  "default_view": "l-core-embed",
+  "views": [
+    {
+      "id": "l-core-embed",
+      "label": "Face recognition l: ONNX iResNet100",
+      "task": "embed",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/librefacerec/l-core-embed.svg",
+      "html": "/diagrams/models/librefacerec/l-core-embed.html",
+      "input": "1 \u00d7 3 \u00d7 112 \u00d7 112",
+      "verification": "source"
+    },
+    {
+      "id": "detector-640",
+      "label": "Face recognition default detector: ONNX graph",
+      "task": "detect",
+      "size": "det",
+      "kind": "concrete",
+      "svg": "/diagrams/models/librefacerec/detector-640.svg",
+      "html": "/diagrams/models/librefacerec/detector-640.html",
+      "input": "1 \u00d7 3 \u00d7 640 \u00d7 640",
+      "verification": "source"
+    },
+    {
+      "id": "l-embed",
+      "label": "Face recognition l",
+      "task": "embed",
+      "size": "l",
+      "kind": "concrete",
+      "svg": "/diagrams/models/librefacerec/l-embed.svg",
+      "html": "/diagrams/models/librefacerec/l-embed.html",
+      "input": "Per face: 1 \u00d7 3 \u00d7 112 \u00d7 112",
+      "verification": "source"
+    }
+  ]
+}
