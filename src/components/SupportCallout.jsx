@@ -1,7 +1,8 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Star } from 'lucide-react'
+import { Star, Heart } from 'lucide-react'
+import { Link } from '@/i18n/navigation'
 import { GithubIcon, RedditIcon } from './BrandIcons'
 import { GITHUB_URL as REPO_URL, REDDIT_URL } from '@/lib/links'
 
@@ -54,6 +55,13 @@ export default function SupportCallout({ className = '', community = true }) {
           <GithubIcon className="w-4 h-4" />
           {t('githubCta')}
         </a>
+        <Link
+          href="/sponsors"
+          className="inline-flex items-center justify-center gap-2 rounded-lg border border-surface-200 dark:border-white/10 px-3.5 py-2 text-sm font-medium text-surface-500 dark:text-surface-400 hover:text-surface-900 dark:hover:text-white hover:border-surface-300 dark:hover:border-white/20 hover:bg-surface-50 dark:hover:bg-white/5 transition-colors whitespace-nowrap"
+        >
+          <Heart className="w-4 h-4" />
+          Sponsor
+        </Link>
         <a
           href={REDDIT_URL}
           target="_blank"

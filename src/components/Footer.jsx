@@ -110,6 +110,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/sponsors" className="text-surface-500 dark:text-surface-400 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
+                  Sponsors
+                </Link>
+              </li>
+              <li>
                 <a
                   href={REDDIT_URL}
                   target="_blank"

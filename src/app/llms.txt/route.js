@@ -62,6 +62,7 @@ libreyolo.com is the official site of the LibreYOLO open-source library: documen
 - [Benchmarks](${SITE_URL}/benchmarks): measured COCO accuracy, RF100-VL transfer across 100 real-world datasets, and latency on real hardware
 - [Dataset Zoo](${SITE_URL}/datasets): datasets for training and evaluating models, hosted on Hugging Face
 - [Commercial Guide](${SITE_URL}/commercial): how to use LibreYOLO in proprietary, closed-source commercial applications under the MIT license
+- [Sponsors](${SITE_URL}/sponsors): the LibreYOLO Sponsorship Program, how the project accepts money, what it funds, and what sponsors receive
 - [Research & Science](${SITE_URL}/science): native explainability, feature maps, and a codebase designed for discovery
 - [Articles](${SITE_URL}/articles): tutorials, comparisons, and news about MIT-licensed object detection
 - [LibreVLM](${SITE_URL}/docs/librevlm): vision-language model documentation

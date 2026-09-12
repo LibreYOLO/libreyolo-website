@@ -44,6 +44,7 @@ export default function sitemap() {
     { path: '', priority: 1.0 },
     { path: '/models', priority: 0.9 },
     { path: '/commercial', priority: 0.8 },
+    { path: '/sponsors', priority: 0.6 },
     { path: '/science', priority: 0.8 },
     { path: '/datasets', priority: 0.7 },
     { path: '/articles', priority: 0.9 },
