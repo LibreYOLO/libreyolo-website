@@ -57,7 +57,7 @@ export default function sitemap() {
   /*
    * The v2 docs tree, generated from the content directory.
    *
-   * Enumerating 169 pages by hand is how a sitemap silently goes stale, so this
+   * Enumerating docs pages by hand is how a sitemap silently goes stale, so this
    * reads the same manifest the nav, the markdown twins and llms.txt read.
    * Section indexes are message-driven in every locale. Markdown-backed pages
    * only advertise the locales that have a translated twin; untranslated locale

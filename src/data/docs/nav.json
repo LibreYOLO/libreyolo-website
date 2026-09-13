@@ -751,6 +751,11 @@
           "built": true
         },
         {
+          "slug": "/docs/train/event-histograms",
+          "label": "Event histograms (Prophesee)",
+          "built": true
+        },
+        {
           "slug": "/docs/train/hyperparameters",
           "label": "Hyperparameters",
           "built": true

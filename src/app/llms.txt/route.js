@@ -48,7 +48,7 @@ export function GET() {
 
 > LibreYOLO is an MIT-licensed Python library for YOLO and other computer vision models. It is an independent alternative to Ultralytics, with training, prediction, validation and export. Pretrained weights carry separate licenses.
 
-libreyolo.com is the official site of the LibreYOLO open-source library: documentation, model zoo, dataset zoo, commercial licensing guide, and articles. Pages are also served under a locale path prefix (e.g. ${SITE_URL}/zh/models) for: ${LOCALE_SUMMARY}. The documentation is fully translated in every one of those languages; articles are English and Chinese for now.
+libreyolo.com is the official site of the LibreYOLO open-source library: documentation, model zoo, dataset zoo, commercial licensing guide, and articles. Pages are also served under a locale path prefix (e.g. ${SITE_URL}/zh/models) for: ${LOCALE_SUMMARY}. Documentation is available in those languages; a page without a translated twin falls back to English. Articles are English and Chinese for now.
 
 ## Get started
 - Install: \`pip install libreyolo\`
@@ -70,7 +70,9 @@ libreyolo.com is the official site of the LibreYOLO open-source library: documen
 - [Cursor Hackathon track](${SITE_URL}/cursor-hackathon): setup tutorial and working examples for the LibreYOLO track
 
 ## Documentation versions
-${SITE_URL}/docs always describes the current release. These single-page docs for
+${SITE_URL}/docs describes released features unless a page explicitly labels its
+availability as dev or an upcoming version. Check that notice before choosing an
+installation command. These single-page docs for
 earlier releases stay reachable for anyone pinned to them, but they are frozen,
 no longer updated, and canonicalised to ${SITE_URL}/docs. Prefer /docs.
 - [v1.4.0 (frozen)](${SITE_URL}/docs/v1.4.0)
