@@ -1,5 +1,5 @@
 {
-  "_comment": "GENERATED FILE. Do not hand-edit. Produced by scripts/build-registry against a pinned libreyolo release plus the LibreYOLO Hugging Face org listing. Docs pages render this; prose never restates these facts inline. Pilot note: this file currently carries the rfdetr slice only, written from libreyolo dev @ 91b3518, docs/export_support.md, the HF org listing (265 repos), and vision-analysis generated/verified-results.v1.json.",
+  "_comment": "GENERATED FILE. Do not hand-edit. Produced by scripts/build-registry against a pinned libreyolo release plus the LibreYOLO Hugging Face org listing. Docs pages render this; prose never restates these facts inline. This file carries every documented family, written from libreyolo dev @ 91b3518, docs/export_support.md, the HF org listing (265 repos), and vision-analysis generated/verified-results.v1.json. The generator knows domedetr (lineages.mjs) and one-line TASK_INPUT_SIZES (RT-DETRv2 OBB). A clean regen of families that landed after 91b3518 needs dump-inputs.mjs at a newer revision.",
   "libreyolo_version": "1.5.0",
   "source": {
     "library_commit": "91b3518",

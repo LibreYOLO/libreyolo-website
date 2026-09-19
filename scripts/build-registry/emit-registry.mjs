@@ -28,16 +28,40 @@ const EXTRAS = { rfdetr: 'rfdetr', rtdetr: 'rtdetr' } // families needing a pip 
  * null renders as an empty cell, the house convention for "not recorded".
  */
 
-// "n, s, m, l at 640 px" style summary, derived from INPUT_SIZES.
+// "n, s, m, l at 640 px" style summary, derived from INPUT_SIZES. When a key
+// declares per-task tables that run at DIFFERENT resolutions (RT-DETRv2
+// detects at 640 px but reads oriented boxes at 1024 px), one blended segment
+// would misstate at least one task, so the label switches to per-task
+// segments: "r18, r34, r50, r50m, r101 for detection at 640 px, n, s, m, l, x
+// for oriented boxes at 1024 px". Tables that differ only in size codes keep
+// the single INPUT_SIZES segment, matching how those families present
+// themselves everywhere else.
+const TASK_WORDS = {
+  ...Object.fromEntries(Object.entries(TASK_LABELS).map(([k, v]) => [k, v.label.toLowerCase()])),
+  semantic: 'semantic segmentation',
+  panoptic: 'panoptic segmentation',
+}
 function sizesLabel(lin) {
+  const res = (table) => {
+    const px = [...new Set(Object.values(table))]
+    return px.length === 1 ? `at ${px[0]} px` : `at ${Math.min(...px)} to ${Math.max(...px)} px`
+  }
   const parts = []
   for (const key of lin.keys) {
-    const table = lin.sizes[key] || {}
-    const codes = Object.keys(table)
-    if (!codes.length) continue
-    const px = [...new Set(Object.values(table))]
-    const res = px.length === 1 ? `at ${px[0]} px` : `at ${Math.min(...px)} to ${Math.max(...px)} px`
-    parts.push(lin.keys.length > 1 ? `${key}: ${codes.join(', ')} ${res}` : `${codes.join(', ')} ${res}`)
+    const perTask = Object.entries(lin.task_sizes?.[key] ?? {})
+      .filter(([, t]) => Object.keys(t).length)
+    const pxSets = new Set(perTask.map(([, t]) => JSON.stringify([...new Set(Object.values(t))].sort())))
+    let text
+    if (perTask.length > 1 && pxSets.size > 1) {
+      text = perTask
+        .map(([task, table]) => `${Object.keys(table).join(', ')} for ${TASK_WORDS[task] ?? task} ${res(table)}`)
+        .join(', ')
+    } else {
+      const table = lin.sizes[key] || {}
+      if (!Object.keys(table).length) continue
+      text = `${Object.keys(table).join(', ')} ${res(table)}`
+    }
+    parts.push(lin.keys.length > 1 ? `${key}: ${text}` : text)
   }
   return parts.join('; ') || null
 }
@@ -72,7 +96,17 @@ for (const lin of ex.lineages) {
   const sizeOf = (name, task) => {
     const bare = name.replace(/-(seg|pose|obb|cls|sem|point)$/, '')
     const entry = ex.lineages.find((l) => l.slug === lin.slug)
-    for (const key of lin.keys) {
+    // A checkpoint belongs to one sibling key: the one whose filename prefix
+    // matches, longest first. That key's tables are consulted before the
+    // siblings' (lineage order let LibreRTDETR's detection table claim
+    // LibreRTDETRv2 OBB checkpoints and stamp 640 px on 1024 px weights), but
+    // the siblings stay as fallback because variant keys like yolo9_e2e
+    // inherit their base family's sizes and declare none of their own.
+    const owner = lin.keys
+      .filter((k) => lin.prefixes?.[k] && bare.startsWith(lin.prefixes[k]))
+      .sort((a, b) => lin.prefixes[b].length - lin.prefixes[a].length)[0]
+    const ordered = owner ? [owner, ...lin.keys.filter((k) => k !== owner)] : lin.keys
+    for (const key of ordered) {
       const perTask = entry.task_sizes?.[key]
       // If a family declares per-task sizes at all, only its table for THIS
       // task may be used. Falling back to INPUT_SIZES would silently report
@@ -189,13 +223,19 @@ if (prev && families['rfdetr']) {
   // source than the hand-written rows it replaces.
 }
 
+// Families are emitted in key order, not lineage-table order: the shipped
+// file is sorted, and matching it keeps a regeneration diff reviewable.
+const sortedFamilies = Object.fromEntries(
+  Object.keys(families).sort().map((k) => [k, families[k]])
+)
+
 const out = {
   ...current,
   _comment: current._comment,
   _generated_by: 'scripts/build-registry (prototype). Mechanical fields are extracted from docs/export_support.md, each family model.py, models/registry.py, the LibreYOLO HF org listing and the vision-analysis results. Upstream metadata is merged from src/data/docs/upstream/<slug>.json after per-family human verification.',
   tasks: TASK_LABELS,
   library: ex.library ?? null,
-  families,
+  families: sortedFamilies,
   discrepancies: ex.discrepancies,
 }
 fs.writeFileSync(outPath, JSON.stringify(out, null, 2))
