@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl'
 import { Star, Heart } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { GithubIcon, RedditIcon } from './BrandIcons'
-import { GITHUB_URL as REPO_URL, REDDIT_URL } from '@/lib/links'
+import { GITHUB_URL as REPO_URL, REDDIT_URL, externalRel } from '@/lib/links'
 
 export default function SupportCallout({ className = '', community = true }) {
   const t = useTranslations('Support')
@@ -15,7 +15,7 @@ export default function SupportCallout({ className = '', community = true }) {
         <a
           href={href}
           target="_blank"
-          rel="noopener noreferrer"
+          rel={externalRel(href)}
           className="text-libre-600 dark:text-libre-400 hover:underline"
         >
           {chunks}
@@ -49,7 +49,7 @@ export default function SupportCallout({ className = '', community = true }) {
         <a
           href={REPO_URL}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener"
           className="inline-flex items-center justify-center gap-2 rounded-lg bg-surface-950 px-3.5 py-2 text-sm font-semibold text-white transition-colors hover:bg-surface-800 dark:bg-white dark:text-surface-950 dark:hover:bg-surface-200 whitespace-nowrap"
         >
           <GithubIcon className="w-4 h-4" />

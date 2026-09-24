@@ -35,7 +35,7 @@ export default function Footer() {
               <a
                 href={GITHUB_URL}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener"
                 className="text-surface-500 dark:text-surface-400 hover:text-libre-500 transition-colors"
                 aria-label="GitHub"
               >

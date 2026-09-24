@@ -101,7 +101,7 @@ export function HeroSection({ quickstartTabs = false }) {
             <a
               href="https://github.com/LibreYOLO/libreyolo"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener"
               className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-white dark:bg-white/5 hover:bg-surface-100 dark:hover:bg-white/10 border border-surface-300 dark:border-white/10 rounded-xl text-surface-800 dark:text-white font-medium text-base sm:text-lg transition-all shadow-sm dark:shadow-none"
             >
               <Code2 className="w-5 h-5 text-libre-500 dark:text-libre-400" />

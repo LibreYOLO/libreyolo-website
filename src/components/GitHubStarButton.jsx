@@ -80,7 +80,7 @@ export default function GitHubStarButton({ className = '' }) {
     <a
       href={`https://github.com/${REPO}`}
       target="_blank"
-      rel="noopener noreferrer"
+      rel="noopener"
       aria-label={`${t('star')} LibreYOLO on GitHub`}
       className={`group flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium border border-surface-200 dark:border-white/10 text-surface-600 dark:text-surface-200 hover:text-surface-900 dark:hover:text-white hover:border-surface-300 dark:hover:border-white/20 hover:bg-surface-50 dark:hover:bg-white/5 transition-all duration-200 ${className}`}
     >

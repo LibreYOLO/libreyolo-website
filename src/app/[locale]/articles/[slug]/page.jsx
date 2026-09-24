@@ -23,6 +23,7 @@ import RF100VLResults from '@/components/articles/rf100vl/RF100VLResults'
 import RF100VLPanel from '@/components/articles/rf100vl/RF100VLPanel'
 import RF100VLChart from '@/components/benchmarks/RF100VLChart'
 import UnderConstruction from '@/components/articles/UnderConstruction'
+import { externalRel } from '@/lib/links'
 
 export function generateStaticParams() {
   return getAllArticles().map((article) => ({ slug: article.slug }))
@@ -121,7 +122,7 @@ function createMarkdownComponents() {
     <a
       className="text-libre-600 dark:text-libre-400 hover:text-libre-700 dark:hover:text-libre-300 underline underline-offset-2 transition-colors"
       target={props.href?.startsWith('http') ? '_blank' : undefined}
-      rel={props.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
+      rel={props.href?.startsWith('http') ? externalRel(props.href) : undefined}
       {...props}
     />
   ),

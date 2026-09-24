@@ -117,7 +117,7 @@ export default function Navbar() {
               <a
                 href={GITHUB_URL}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener"
                 className={repoButtonClass}
               >
                 <GithubIcon className="w-4 h-4" />
@@ -188,7 +188,7 @@ export default function Navbar() {
               <a
                 href={GITHUB_URL}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener"
                 className={`${repoButtonClass} mt-2 justify-center`}
               >
                 <GithubIcon className="w-4 h-4" />

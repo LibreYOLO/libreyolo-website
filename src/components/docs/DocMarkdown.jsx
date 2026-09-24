@@ -17,6 +17,7 @@ import {
   SectionTitle, BenchmarkTable, VaEmbed, CheckpointTable, ExportMatrix,
   Provenance, Citation,
 } from '@/components/docs/ModelBlocks'
+import { externalRel } from '@/lib/links'
 
 function textOf(children) {
   if (typeof children === 'string') return children
@@ -58,7 +59,7 @@ export default function DocMarkdown({ children, family, snippets = {} }) {
       <a
         className="font-medium text-libre-600 underline-offset-2 hover:underline dark:text-libre-400"
         target={props.href?.startsWith('http') ? '_blank' : undefined}
-        rel={props.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
+        rel={props.href?.startsWith('http') ? externalRel(props.href) : undefined}
         {...dom(props)}
       />
     ),

@@ -16,6 +16,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   BookOpen, Copy, Check, Menu, X, ChevronRight, ArrowLeft, ExternalLink,
 } from 'lucide-react'
+import { externalRel } from '@/lib/links'
 
 /* ─── Minimal syntax highlighter (python / bash / yaml) ─── */
 
@@ -645,7 +646,7 @@ export function ExternalRef({ href, children }) {
     <a
       href={href}
       target="_blank"
-      rel="noopener noreferrer"
+      rel={externalRel(href)}
       className="inline-flex items-center gap-1 text-libre-600 dark:text-libre-400 hover:underline"
     >
       {children}
