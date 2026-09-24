@@ -74,8 +74,6 @@ License: Apache-2.0 (Nano, Small, Medium, Large). Best for production detection 
 
 RF-DETR, from Roboflow and published at ICLR 2026, is the most production-ready model on this list. It is well engineered, it comes from a team that ships, and when you need detection or segmentation that works and that you can trust in a real system, it is a strong first choice. The `rfdetr` package and the Nano through Large weights are Apache-2.0. The larger XL and 2XL weights use Roboflow's PML license.
 
-The limits are scope and deployment. It covers detection and segmentation, with a keypoint/pose model in preview, and no classification. And it does not reach constrained hardware. Official export is ONNX and TFLite; TensorRT is an ONNX conversion that needs a CUDA GPU. There is no NCNN path, which is the usual route onto a Raspberry Pi, and no Hailo NPU support. On a Pi 5 CPU it runs at roughly a second or more per frame, not real time. Roboflow's own advice for real time is to use a GPU, apply TensorRT, pick the smallest model, and lower the resolution. That is fine with a GPU or a Jetson-class board, and a problem for a cheap edge SoC or an NPU. Its published latencies are TensorRT FP16 on an NVIDIA T4, not CPU numbers.
-
 ## 3. Lightly
 
 Best for unlabeled data, self-supervised pretraining, and distilling a DINO backbone.

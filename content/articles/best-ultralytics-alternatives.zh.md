@@ -74,8 +74,6 @@ results = model("image.jpg", save=True)
 
 RF-DETR 来自 Roboflow，发表于 ICLR 2026，是这份榜单上最具生产可用性的模型。它工程做得扎实，出自一支真正在交付产品的团队，当你需要能在真实系统中放心使用、切实可用的检测或分割时，它是一个很强的首选。`rfdetr` 包以及 Nano 到 Large 的权重都是 Apache-2.0。更大的 XL 和 2XL 权重则使用 Roboflow 的 PML 许可。
 
-它的局限在于范围和部署。它覆盖检测和分割，并有一个预览版的关键点/姿态模型，但没有分类。而且它触及不到受限硬件。官方导出是 ONNX 和 TFLite；TensorRT 是需要 CUDA GPU 的 ONNX 转换。它没有 NCNN 路径，而那通常是上树莓派的常规途径，也不支持 Hailo NPU。在树莓派 5 的 CPU 上，它大约每帧要一秒甚至更久，谈不上实时。Roboflow 自己给出的实时建议是：用 GPU、上 TensorRT、选最小的模型、降低分辨率。有 GPU 或 Jetson 级别的板子时这没问题，但对廉价的边缘 SoC 或 NPU 来说就成了难题。它公布的延迟数据是 NVIDIA T4 上的 TensorRT FP16，而不是 CPU 数据。
-
 ## 3. Lightly
 
 最适合：无标注数据、自监督预训练，以及蒸馏一个 DINO 骨干。
