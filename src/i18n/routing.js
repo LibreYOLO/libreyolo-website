@@ -17,6 +17,13 @@ export const routing = defineRouting({
   localeDetection: false,
 })
 
+// The language a reader picked in the menu, remembered for a year. Written
+// only when they choose, never by detection, so the proxy can send them back
+// to that language when a search result or a shared link lands them on
+// another one. next-intl's own NEXT_LOCALE cookie cannot carry this: the
+// middleware rewrites it to the current URL's locale on every response.
+export const localePreferenceCookie = 'LIBREYOLO_LOCALE'
+
 // BCP-47 tags used for the <html lang> attribute and hreflang alternates.
 export const localeHtmlLang = {
   en: 'en',

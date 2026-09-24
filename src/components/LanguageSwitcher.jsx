@@ -4,7 +4,14 @@ import { useEffect, useRef, useState, useTransition } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Check, Globe } from 'lucide-react'
 import { usePathname, useRouter } from '@/i18n/navigation'
-import { routing, localeFlags, localeHtmlLang, localeLabels, localeNames } from '@/i18n/routing'
+import {
+  routing,
+  localeFlags,
+  localeHtmlLang,
+  localeLabels,
+  localeNames,
+  localePreferenceCookie,
+} from '@/i18n/routing'
 
 // Language menu. This was a two-button EN / 中文 toggle; with fourteen locales a
 // row of buttons no longer fits a navbar, so the trigger collapses to the
@@ -46,6 +53,10 @@ export default function LanguageSwitcher({ className = '' }) {
 
   const switchTo = (next) => {
     setOpen(false)
+    // Remember the choice before navigating, so the proxy already sees it on
+    // this request. Picking the current language also counts: it pins the
+    // reader to it even if they have not switched before.
+    document.cookie = `${localePreferenceCookie}=${next}; Path=/; Max-Age=31536000; SameSite=Lax`
     if (next === locale) return
     startTransition(() => {
       router.replace(pathname, { locale: next })

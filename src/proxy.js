@@ -1,7 +1,32 @@
 import createMiddleware from 'next-intl/middleware'
-import { routing } from './i18n/routing'
+import { NextResponse } from 'next/server'
+import { routing, localePreferenceCookie } from './i18n/routing'
 
-export default createMiddleware(routing)
+const intlMiddleware = createMiddleware(routing)
+
+// A reader who picked a language in the menu keeps it: landing on
+// /es/models with English chosen redirects to /models, and the other way
+// round. Readers who never picked one are untouched, so the root still
+// serves English to everyone by default and crawlers (which send no
+// cookies) see every locale at its own URL.
+export default function proxy(request) {
+  const preferred = request.cookies.get(localePreferenceCookie)?.value
+  if (routing.locales.includes(preferred)) {
+    const { pathname } = request.nextUrl
+    const [, first, ...rest] = pathname.split('/')
+    const hasPrefix = routing.locales.includes(first)
+    const current = hasPrefix ? first : routing.defaultLocale
+    if (preferred !== current) {
+      const bare = hasPrefix ? `/${rest.join('/')}` : pathname
+      const target =
+        preferred === routing.defaultLocale ? bare : `/${preferred}${bare === '/' ? '' : bare}`
+      // Resolve against request.url, not nextUrl: nextUrl can report a
+      // different host than the one the reader typed.
+      return NextResponse.redirect(new URL(target + request.nextUrl.search, request.url))
+    }
+  }
+  return intlMiddleware(request)
+}
 
 export const config = {
   // Run on every path except API routes, Next internals, the dynamic OG image,
