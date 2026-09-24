@@ -48,7 +48,7 @@ export function GET() {
 
 > LibreYOLO is an MIT-licensed Python library for YOLO and other computer vision models. It is an independent alternative to Ultralytics, with training, prediction, validation and export. Pretrained weights carry separate licenses.
 
-libreyolo.com is the official site of the LibreYOLO open-source library: documentation, model zoo, dataset zoo, commercial licensing guide, and articles. Pages are also served under a locale path prefix (e.g. ${SITE_URL}/zh/models) for: ${LOCALE_SUMMARY}. Documentation is available in those languages; a page without a translated twin falls back to English. Articles are English and Chinese for now.
+libreyolo.com is the official site of the LibreYOLO open-source library: documentation, model zoo, dataset zoo, commercial licensing guide, and articles. Pages are also served under a locale path prefix (e.g. ${SITE_URL}/zh/models) for: ${LOCALE_SUMMARY}. Documentation is available in those languages; a page without a translated twin falls back to English. Article translations are available per article; untranslated articles fall back to English.
 
 ## Get started
 - Install: \`pip install libreyolo\`
@@ -86,7 +86,7 @@ Generated from the docs tree, so this list cannot drift from what is published.
 ${docsLines}
 
 ## Articles
-Every article is also available as raw markdown: append .md to its URL (or .zh.md for the Chinese translation).
+Every article is also available as raw markdown: append .md to its URL, or .<locale>.md for an available translation (for example, .ja.md or .fr.md).
 ${articleLines}
 
 ## Project links
