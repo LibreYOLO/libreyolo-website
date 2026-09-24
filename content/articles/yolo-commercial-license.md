@@ -93,6 +93,8 @@ LibreYOLO is a real, maintained framework, not a wrapper: object detection, segm
 
 If you are here from the broader "leaving the AGPL YOLO" question, we wrote a fuller comparison of the ecosystem in [Best Ultralytics Alternatives in 2026](/articles/best-ultralytics-alternatives).
 
+For the license of every other YOLO, from the public-domain Darknet originals through YOLOv9, YOLOv10, YOLOv12, YOLOv13 and YOLO26, see [Every YOLO License, Explained](/articles/yolo-licenses-explained).
+
 ### Why MIT matters for a business
 
 The MIT license lets you use, modify, embed, and sell software built on LibreYOLO with **no obligation to disclose your source** and **no fee**. It is the license behind much of the modern software stack precisely because it is safe for commercial adoption. You own your product; you owe nothing.

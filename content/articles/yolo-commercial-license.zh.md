@@ -93,6 +93,8 @@ LibreYOLO 是一个真正的、持续维护的框架，而不是一层封装：�
 
 如果你是带着更宽泛的"离开 AGPL 的 YOLO"这个问题来的，我们在 [2026 年最佳 Ultralytics 替代方案](/articles/best-ultralytics-alternatives) 一文里对整个生态做了更完整的比较。
 
+想了解其他每一个 YOLO 的许可，从公有领域的 Darknet 原版一直到 YOLOv9、YOLOv10、YOLOv12、YOLOv13 和 YOLO26，请看 [YOLO 许可全解](/articles/yolo-licenses-explained)。
+
 ### 为什么 MIT 对企业很重要
 
 MIT 许可允许你使用、修改、嵌入并销售基于 LibreYOLO 构建的软件，**无需公开你的源代码**，也**无需付费**。现代软件栈的很大一部分之所以采用这一许可，正是因为它对商业采用是安全的。你拥有你的产品；你什么都不欠。
