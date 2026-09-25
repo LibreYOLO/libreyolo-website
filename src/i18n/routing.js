@@ -15,6 +15,12 @@ export const routing = defineRouting({
   // locales, header sniffing sends people to translations they did not ask
   // for and makes the same URL serve different content per visitor.
   localeDetection: false,
+  // No hreflang `Link` response header. next-intl would advertise every locale
+  // for every URL, including pages with no translation that canonicalize to
+  // English, and with bare codes (`zh`, `ja`) that disagree with the region
+  // tags below. The page <head> and the sitemap already carry the correct,
+  // per-page alternates.
+  alternateLinks: false,
 })
 
 // The language a reader picked in the menu, remembered for a year. Written
