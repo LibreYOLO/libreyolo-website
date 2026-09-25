@@ -130,7 +130,8 @@ export default async function ModelDocPage({ params }) {
         headings={headings}
         breadcrumbs={breadcrumbs}
       >
-        <article className="max-w-3xl">
+        {/* An untranslated twin serves the English source under /xx/: mark it English. */}
+        <article className="max-w-3xl" lang={doc.translated ? undefined : "en"}>
           {registeredFamily ? <ModelHeader doc={doc} family={family} /> : <PageHeader doc={doc} />}
           <HeroMedia media={doc.hero} />
 

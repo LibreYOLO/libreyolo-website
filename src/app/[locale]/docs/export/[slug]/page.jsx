@@ -99,7 +99,8 @@ export default async function ExportDocPage({ params }) {
         headings={headings}
         breadcrumbs={breadcrumbs}
       >
-        <article className="max-w-3xl">
+        {/* An untranslated twin serves the English source under /xx/: mark it English. */}
+        <article className="max-w-3xl" lang={doc.translated ? undefined : "en"}>
           <PageHeader doc={doc} />
 
           <DocMarkdown snippets={doc.snippets || {}} bareTables>
