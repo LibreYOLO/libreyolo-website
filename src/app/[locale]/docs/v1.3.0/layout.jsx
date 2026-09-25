@@ -3,12 +3,12 @@ import FrozenVersionBanner from '@/components/docs/FrozenVersionBanner'
 
 const metadataByLocale = {
   en: {
-    title: 'Docs v1.3.0 (previous release)',
-    description: 'Documentation for LibreYOLO v1.3.0, the previous release: model families for classification, depth, and point localization, RF-DETR pose and oriented boxes, new CLI tools, training loggers, and export updates. For the current release see the v1.3.1 docs.',
+    title: 'Docs v1.3.0 (earlier release)',
+    description: 'Documentation for LibreYOLO v1.3.0, an earlier release: model families for classification, depth, and point localization, RF-DETR pose and oriented boxes, new CLI tools, training loggers, and export updates.',
   },
   zh: {
-    title: 'v1.3.0 文档（上一版本）',
-    description: 'LibreYOLO v1.3.0 上一版本文档：分类、深度和点定位模型系列、RF-DETR 姿态与旋转框、新增 CLI 工具、训练日志记录器以及导出更新。当前版本请参阅 v1.3.1 文档。',
+    title: 'v1.3.0 文档（早期版本）',
+    description: 'LibreYOLO v1.3.0 早期版本文档：分类、深度和点定位模型系列、RF-DETR 姿态与旋转框、新增 CLI 工具、训练日志记录器以及导出更新。',
   },
 }
 

@@ -13,7 +13,7 @@ import {
   Boxes, Gauge, Timer,
 } from 'lucide-react'
 import SupportCallout from '@/components/SupportCallout'
-import { docsVersions } from '@/data/docs-versions'
+import { docsVersions, DOCS_CURRENT_VERSION } from '@/data/docs-versions'
 
 /* ─── Section metadata for sidebar ─── */
 const sections = [
@@ -1033,7 +1033,7 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
               <div>
                 <p className="text-sm text-surface-600 dark:text-surface-400">
                     {isLatest
-                    ? 'These are the docs for v1.3.1, the previous release. The latest docs are v1.4.0, available from the version menu.'
+                    ? `These are the docs for v1.3.1, an earlier release. The latest stable docs are v${DOCS_CURRENT_VERSION}, at /docs.`
                     : 'This archived version is kept linkable so older installs, search results, and agents can target the right documentation.'}
                 </p>
               </div>
@@ -1154,7 +1154,7 @@ print(result.saved_path)`}</CodeBlock>
           <SubHeading>From PyPI</SubHeading>
           <CodeBlock language="bash">{`pip install libreyolo`}</CodeBlock>
           <P>
-            v1.3.1 is the current release on PyPI, and it is what these docs describe. Everything on this page works from the published package: you do not need a source install.
+            These docs describe v1.3.1, an earlier release. To install exactly this version, run <InlineCode>pip install libreyolo==1.3.1</InlineCode>.
           </P>
 
           <SubHeading>From source</SubHeading>
@@ -4494,7 +4494,7 @@ function DocsPageZh({ version = 'v1.3.1', isLatest = true }) {
               <div>
                 <p className="text-sm text-surface-600 dark:text-surface-400">
                     {isLatest
-                    ? '这是上一个版本 v1.3.1 的文档。最新文档为 v1.4.0，可在版本菜单中找到。'
+                    ? `这是早期版本 v1.3.1 的文档。最新稳定文档为 v${DOCS_CURRENT_VERSION}，位于 /docs。`
                     : '保留此归档版本的可链接性，以便较旧的安装、搜索结果和智能体能够定位到正确的文档。'}
                 </p>
               </div>
@@ -4613,7 +4613,7 @@ print(result.saved_path)`}</CodeBlock>
           <SubHeading>从 PyPI 安装</SubHeading>
           <CodeBlock language="bash">{`pip install libreyolo`}</CodeBlock>
           <P>
-            v1.3.1 是 PyPI 上的当前版本，也是本文档所描述的版本。本页所有内容都可直接使用已发布的软件包，无需源码安装。
+            本文档描述的是早期版本 v1.3.1。如需安装该版本，请运行 <InlineCode>pip install libreyolo==1.3.1</InlineCode>。
           </P>
 
           <SubHeading>从源码安装</SubHeading>

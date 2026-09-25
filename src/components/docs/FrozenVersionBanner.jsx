@@ -33,7 +33,7 @@ export default function FrozenVersionBanner({ version }) {
           href={DOCS_PRERELEASE ? `/docs/v${DOCS_CURRENT_VERSION}` : '/docs'}
           className="font-medium text-libre-700 underline underline-offset-2 dark:text-libre-400"
         >
-          Read the docs for {DOCS_PRERELEASE ? `v${DOCS_CURRENT_VERSION}, the current release` : 'the current release'}
+          Read the docs for v{DOCS_CURRENT_VERSION}, the latest stable release
         </Link>
         .
       </p>

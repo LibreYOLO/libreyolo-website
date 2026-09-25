@@ -10,7 +10,7 @@ import {
   Sparkles, Tags, Video, Activity, Scissors, PersonStanding, Eye, SquareTerminal,
   ShieldCheck,
 } from 'lucide-react'
-import { docsVersions } from '@/data/docs-versions'
+import { docsVersions, DOCS_CURRENT_VERSION } from '@/data/docs-versions'
 
 /* ─── Section metadata for sidebar ─── */
 const sections = [
@@ -1084,7 +1084,7 @@ function DocsPage({ version = 'v1.2.0', isLatest = true }) {
               <div>
                 <p className="text-sm text-surface-600 dark:text-surface-400">
                     {isLatest
-                    ? 'These are the docs for v1.2.0, an earlier release. The latest docs are v1.4.0, available from the version menu.'
+                    ? `These are the docs for v1.2.0, an earlier release. The latest stable docs are v${DOCS_CURRENT_VERSION}, at /docs.`
                     : 'This archived version is kept linkable so older installs, search results, and agents can target the right documentation.'}
                 </p>
               </div>
@@ -3374,7 +3374,7 @@ function DocsPageZh({ version = 'v1.2.0', isLatest = true }) {
               <div>
                 <p className="text-sm text-surface-600 dark:text-surface-400">
                     {isLatest
-                    ? '这是早期版本 v1.2.0 的文档。最新文档为 v1.4.0，可在版本菜单中找到。'
+                    ? `这是早期版本 v1.2.0 的文档。最新稳定文档为 v${DOCS_CURRENT_VERSION}，位于 /docs。`
                     : '此归档版本保留可链接状态，以便旧版安装、搜索结果和智能体能够定位到正确的文档。'}
                 </p>
               </div>
