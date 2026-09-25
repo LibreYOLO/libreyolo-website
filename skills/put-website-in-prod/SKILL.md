@@ -47,8 +47,13 @@ The token persists at `~/.vercel/auth.json` (platform equivalent on Windows).
 From the repo root:
 
 ```bash
+node scripts/content-dates.mjs   # sitemap <lastmod> dates from git
 vercel --prod --yes
 ```
+
+Run `content-dates.mjs` first, every time. The Vercel build has no git history,
+so the sitemap's `<lastmod>` dates come from `src/data/content-dates.json`, and
+that file is only correct if it was regenerated from the tree being deployed.
 
 - **`--prod`** deploys to production and aliases to `www.libreyolo.com`.
 - **`--yes`** accepts defaults non-interactively (required in agent sessions).
@@ -63,6 +68,18 @@ Success looks like:
 ```
 
 If you see **`Aliased`**, production is live.
+
+## Tell Bing about the changes
+
+Once the deploy is aliased, ping IndexNow (Bing, Yandex and others) with the
+URLs whose `<lastmod>` changed:
+
+```bash
+node scripts/indexnow.mjs            # lastmod within the last 2 days
+node scripts/indexnow.mjs --since 2026-09-20   # after several days without a deploy
+```
+
+Google does not use IndexNow and needs nothing here.
 
 ## Verify
 
