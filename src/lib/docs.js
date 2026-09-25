@@ -177,7 +177,6 @@ export function getAllDocPages() {
         path: section === STANDALONE_DIR ? `/docs/${slug}` : `/docs/${section}/${slug}`,
         title: doc.title || slug,
         description: doc.description || doc.lead || '',
-        lastModified: fs.statSync(path.join(dir, `${slug}.md`)).mtime,
       })
     }
   }

@@ -2,6 +2,7 @@ import { getAllArticles, getArticleBySlug } from '@/lib/articles'
 import { routing, localeHtmlLang } from '@/i18n/routing'
 import { localeUrl } from '@/i18n/metadata'
 import { getAllDocPages, getDoc, DOCS_SECTION_INDEXES } from '@/lib/docs'
+import { contentDate, localeFile } from '@/lib/content-dates'
 
 function languageMap(path, locales) {
   const languages = {}
@@ -14,11 +15,13 @@ function languageMap(path, locales) {
 
 // Localized pages: one entry per translated locale, each carrying the same
 // reciprocal hreflang map so search engines can pair every available version.
+// `lastModified` is a date, or a function of the locale when each translation
+// has its own file and therefore its own last change.
 function localized(path, locales, priority, changeFrequency = 'weekly', lastModified) {
   const languages = languageMap(path, locales)
   return locales.map((locale) => ({
     url: localeUrl(path, locale),
-    ...(lastModified ? { lastModified } : {}),
+    ...dateOf(lastModified, locale),
     changeFrequency,
     priority,
     alternates: { languages },
@@ -27,6 +30,11 @@ function localized(path, locales, priority, changeFrequency = 'weekly', lastModi
 
 function bilingual(path, priority, changeFrequency = 'weekly', lastModified) {
   return localized(path, routing.locales, priority, changeFrequency, lastModified)
+}
+
+function dateOf(lastModified, locale) {
+  const date = typeof lastModified === 'function' ? lastModified(locale) : lastModified
+  return date ? { lastModified: date } : {}
 }
 
 // Genuinely English-only pages get one canonical sitemap entry.
@@ -75,9 +83,11 @@ export default function sitemap() {
       locale === routing.defaultLocale || getDoc(page.section, page.slug, locale)?.translated
     )
     const priority = page.section === 'models' || page.section === 'tasks' ? 0.8 : 0.7
+    const base = `content/docs/${page.section}/${page.slug}`
+    const lastModified = (locale) => contentDate(localeFile(base, locale))
     return locales.length > 1
-      ? localized(page.path, locales, priority, 'weekly', page.lastModified)
-      : englishOnly(page.path, priority, 'weekly', page.lastModified)
+      ? localized(page.path, locales, priority, 'weekly', lastModified)
+      : englishOnly(page.path, priority, 'weekly', lastModified('en'))
   })
 
   const articleRoutes = getAllArticles().flatMap((article) => {
@@ -85,10 +95,12 @@ export default function sitemap() {
       locale === routing.defaultLocale || getArticleBySlug(article.slug, locale)?.translated
     )
     const path = `/articles/${article.slug}`
-    const lastModified = new Date(article.date)
+    const base = `content/articles/${article.slug}`
+    const lastModified = (locale) =>
+      contentDate(localeFile(base, locale)) ?? new Date(article.date)
     return locales.length > 1
       ? localized(path, locales, 0.7, 'monthly', lastModified)
-      : englishOnly(path, 0.7, 'monthly', lastModified)
+      : englishOnly(path, 0.7, 'monthly', lastModified('en'))
   })
 
   return [...bilingualRoutes, ...docsIndexRoutes, ...docsContentRoutes, ...articleRoutes]
