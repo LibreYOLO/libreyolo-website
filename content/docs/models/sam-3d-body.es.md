@@ -2,7 +2,7 @@
 title: SAM 3D Body
 families:
   - sam3dbody
-seo_title: 'SAM 3D Body: recuperación de malla de cuerpo completo en LibreYOLO'
+seo_title: 'SAM 3D Body en Python: malla humana 3D desde una imagen'
 description: >-
   Usa SAM 3D Body en LibreYOLO para recuperar la malla 3D de un cuerpo humano
   completo. Instala y predice; la SAM License de Meta restringe los checkpoints
@@ -67,7 +67,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 8edc8d7872f3f875
+source_hash: 5f47acceaf23ab64
 ---
 
 ## Instalación

@@ -2,7 +2,7 @@
 title: MoGe-2
 families:
   - moge2
-seo_title: 'MoGe-2: dự đoán, xác thực và xuất pháp tuyến bề mặt'
+seo_title: 'MoGe-2 với Python: pháp tuyến bề mặt từ một ảnh, MIT'
 description: >-
   Dùng MoGe-2 trong LibreYOLO để dự đoán pháp tuyến bề mặt dense. Cài đặt, dự
   đoán, xác thực và xuất các checkpoint ViT-S, ViT-B và ViT-L chính thức.
@@ -78,7 +78,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: ddfacf6b7e9729f6
+source_hash: d96b89f18ac10a40
 ---
 
 ## Cài đặt

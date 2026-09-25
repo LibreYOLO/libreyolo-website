@@ -2,7 +2,7 @@
 title: SigLIP2
 families:
   - siglip2
-seo_title: 'SigLIP2 trong LibreYOLO: phân loại zero-shot và tạo embedding'
+seo_title: 'SigLIP2 Python: zero-shot và embedding, Apache-2.0'
 description: >-
   Dùng SigLIP2 trong LibreYOLO để phân loại ảnh zero-shot và tạo embedding
   ảnh/văn bản với cách chấm điểm sigmoid đa nhãn. Không cần huấn luyện.
@@ -119,7 +119,7 @@ snippets:
         # task="embed" chỉ truy vết image tower; không cần lớp.
         model = LibreYOLO("LibreSigLIP2b16-cls.pt", task="embed")
         model.export(format="onnx")
-source_hash: f992655747fd8819
+source_hash: 5cb33276cb5efaa8
 ---
 
 ## Cài đặt

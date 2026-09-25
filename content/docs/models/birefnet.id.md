@@ -2,7 +2,7 @@
 title: BiRefNet
 families:
   - birefnet
-seo_title: 'BiRefNet: penghapusan background dan matting di LibreYOLO'
+seo_title: 'BiRefNet dengan Python: hapus latar, MIT, pip install'
 description: >-
   Gunakan BiRefNet di LibreYOLO untuk penghapusan background dan dichotomous
   image segmentation. Pasang, prediksi, validasi dan ekspor checkpoint
@@ -88,7 +88,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: 1af1bd7f4f905081
+source_hash: 2524eab687f9ebab
 ---
 
 ## Instalasi

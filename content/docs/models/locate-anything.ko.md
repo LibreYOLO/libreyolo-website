@@ -2,7 +2,7 @@
 title: LocateAnything
 families:
   - locateanything
-seo_title: 'LocateAnything: 오픈 보캐뷸러리 탐지와 포인팅'
+seo_title: 'LocateAnything: Python 오픈 보캐뷸러리 탐지'
 description: >-
   LibreYOLO에서 LocateAnything으로 오픈 보캐뷸러리 탐지와 포인팅을 수행합니다. 어떤 텍스트 레이블로도 예측할 수 있으며
   학습, 검증, 내보내기는 지원하지 않습니다.
@@ -58,7 +58,7 @@ snippets:
         # 박스 래퍼가 지원하지 않는 모든 프롬프트를 사용할 수 있습니다.
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 378ea758e507a096
+source_hash: b6181f99b171c8cf
 ---
 
 ## 설치

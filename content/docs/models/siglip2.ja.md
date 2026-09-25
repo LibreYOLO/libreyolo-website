@@ -2,7 +2,7 @@
 title: SigLIP2
 families:
   - siglip2
-seo_title: LibreYOLOのSigLIP2：ゼロショット分類と埋め込み
+seo_title: SigLIP2：Pythonでゼロショット分類と埋め込み、Apache-2.0
 description: LibreYOLOでSigLIP2を使い、シグモイドによるマルチラベルスコアリングでゼロショット画像分類と画像・テキスト埋め込みを行います。学習は不要です。
 lead: >-
   SigLIP2は、固定ラベルセット全体で共有するsoftmaxではなく、クラスごとに独立したsigmoidを使って画像とテキストプロンプトのスコアを算出するデュアルタワーモデルです。LibreYOLOは、学習ステップなしでゼロショット分類と画像・テキスト埋め込みに対応します。
@@ -108,7 +108,7 @@ snippets:
         # task="embed"は画像タワーだけをトレースするため、クラスは不要
         model = LibreYOLO("LibreSigLIP2b16-cls.pt", task="embed")
         model.export(format="onnx")
-source_hash: f992655747fd8819
+source_hash: 5cb33276cb5efaa8
 ---
 
 ## インストール

@@ -2,7 +2,7 @@
 title: SAM 3D Body
 families:
   - sam3dbody
-seo_title: 'SAM 3D Body: vollständige Körper-Mesh-Rekonstruktion in LibreYOLO'
+seo_title: 'SAM 3D Body mit Python: 3D-Körpermesh aus einem Bild'
 description: >-
   Nutze SAM 3D Body in LibreYOLO für die Rekonstruktion vollständiger
   menschlicher Körper-Meshes. Installiere und sage vorher. Metas SAM License
@@ -70,7 +70,7 @@ snippets:
 
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 8edc8d7872f3f875
+source_hash: 5f47acceaf23ab64
 ---
 
 ## Installation

@@ -2,7 +2,7 @@
 title: MoGe-2
 families:
   - moge2
-seo_title: 'MoGe-2: prediga, valide e exporte normais de superfície'
+seo_title: 'MoGe-2 com Python: normais de superfície de uma imagem, MIT'
 description: >-
   Use o MoGe-2 no LibreYOLO para predição densa de normais de superfície.
   Instale, faça predições, valide e exporte os checkpoints oficiais ViT-S, ViT-B
@@ -82,7 +82,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: ddfacf6b7e9729f6
+source_hash: d96b89f18ac10a40
 ---
 
 ## Instalação

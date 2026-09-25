@@ -2,7 +2,7 @@
 title: SigLIP2
 families:
   - siglip2
-seo_title: 'SigLIP2 no LibreYOLO: classificação e embeddings zero-shot'
+seo_title: 'SigLIP2 em Python: zero-shot e embeddings, Apache-2.0'
 description: >-
   Use o SigLIP2 no LibreYOLO para classificação de imagens zero-shot e embedding
   de imagem e texto, com pontuação multi-rótulo por sigmoide. Sem treinamento.
@@ -125,7 +125,7 @@ snippets:
         model = LibreYOLO("LibreSigLIP2b16-cls.pt", task="embed")
 
         model.export(format="onnx")
-source_hash: f992655747fd8819
+source_hash: 5cb33276cb5efaa8
 ---
 
 ## Instalação

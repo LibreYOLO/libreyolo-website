@@ -1,7 +1,7 @@
 ---
 title: BiRefNet
 families: [birefnet]
-seo_title: "BiRefNet: background removal and matting in LibreYOLO"
+seo_title: "BiRefNet in Python: background removal, MIT, pip install"
 description: "Use BiRefNet in LibreYOLO for background removal and dichotomous image segmentation. Install, predict, validate and export the general checkpoint."
 lead: "A bilateral-reference network that predicts a soft alpha matte separating a subject from its background. LibreYOLO ships inference and validation for BiRefNet's matte task."
 keywords: [BiRefNet, background removal, dichotomous image segmentation, alpha matte, image matting, cutout]

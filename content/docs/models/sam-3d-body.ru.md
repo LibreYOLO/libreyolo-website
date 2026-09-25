@@ -2,7 +2,7 @@
 title: SAM 3D Body
 families:
   - sam3dbody
-seo_title: 'SAM 3D Body: восстановление меша всего тела в LibreYOLO'
+seo_title: 'SAM 3D Body в Python: 3D-меш человека по одному изображению'
 description: >-
   Используйте SAM 3D Body в LibreYOLO для восстановления 3D-меша всего тела
   человека. Установка и предсказание; доступ к чекпойнтам закрывает SAM License
@@ -24,21 +24,34 @@ snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import SAMPLE_IMAGE
+
         from libreyolo.models.sam3dbody import LibreSAM3DBody
 
+
         # Это семейство не зарегистрировано в фабрике LibreYOLO(), поэтому
+
         # объект создаётся напрямую. model_path=None запускает скачивание
+
         # с Hugging Face, доступ к которому ограничен; строка же трактуется
+
         # как путь к уже существующему локальному чекпойнту и никогда не
+
         # скачивается автоматически.
+
         # Для инференса нужно устройство с CUDA; пути через CPU нет.
+
         model = LibreSAM3DBody(None, size="d3", device="cuda")
+
         result = model(SAMPLE_IMAGE, person_boxes=[[34, 12, 220, 400]])
 
+
         meshes = result.meshes
-        print(meshes.vertices.shape)    # (N, V, 3), система координат камеры, метры
+
+        print(meshes.vertices.shape)    # (N, V, 3), система координат камеры,
+        метры
+
         print(meshes.joints3d.shape)    # (N, J, 3)
     - label: С детектором людей
       language: python
@@ -52,7 +65,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 8edc8d7872f3f875
+source_hash: 5f47acceaf23ab64
 ---
 
 ## Установка

@@ -2,7 +2,7 @@
 title: LocateAnything
 families:
   - locateanything
-seo_title: 'LocateAnything: phát hiện open-vocabulary và xác định điểm'
+seo_title: 'LocateAnything với Python: phát hiện từ vựng mở'
 description: >-
   Dùng LocateAnything trong LibreYOLO để phát hiện open-vocabulary và xác định
   điểm. Dự đoán với bất kỳ nhãn văn bản nào; không hỗ trợ huấn luyện, đánh giá
@@ -76,7 +76,7 @@ snippets:
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
 
         print(text)
-source_hash: 378ea758e507a096
+source_hash: b6181f99b171c8cf
 ---
 
 ## Cài đặt

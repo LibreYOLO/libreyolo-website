@@ -2,7 +2,7 @@
 title: SAM 3D Body
 families:
   - sam3dbody
-seo_title: SAM 3D Body：LibreYOLO 里的全身网格恢复
+seo_title: SAM 3D Body：用 Python 从单张图像重建 3D 人体网格
 description: >-
   在 LibreYOLO 里用 SAM 3D Body 做全身人体网格恢复。安装并跑预测；检查点受 Meta 的 SAM License 限制，且必须有
   CUDA。
@@ -48,7 +48,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 8edc8d7872f3f875
+source_hash: 5f47acceaf23ab64
 ---
 
 ## 安装

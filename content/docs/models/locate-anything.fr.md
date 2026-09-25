@@ -2,7 +2,7 @@
 title: LocateAnything
 families:
   - locateanything
-seo_title: 'LocateAnything : détection à vocabulaire ouvert et pointage'
+seo_title: 'LocateAnything avec Python : détection à vocabulaire ouvert'
 description: >-
   Utilisez LocateAnything dans LibreYOLO pour la détection à vocabulaire ouvert
   et le pointage. Prédisez avec n'importe quelle étiquette texte ;
@@ -63,7 +63,7 @@ snippets:
         # libres, comptage, ou tout prompt que le wrapper ne couvre pas.
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 378ea758e507a096
+source_hash: b6181f99b171c8cf
 ---
 
 ## Installation

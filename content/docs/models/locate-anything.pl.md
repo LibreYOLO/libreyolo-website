@@ -2,7 +2,7 @@
 title: LocateAnything
 families:
   - locateanything
-seo_title: 'LocateAnything: detekcja i wskazywanie z otwartym słownikiem'
+seo_title: 'LocateAnything w Python: wykrywanie z otwartym słownikiem'
 description: >-
   Używaj LocateAnything w LibreYOLO do detekcji i wskazywania z otwartym
   słownikiem. Przewiduj z dowolną etykietą tekstową. Trenowanie, walidacja i
@@ -78,7 +78,7 @@ snippets:
         # zliczanie lub dowolny prompt nieobsługiwany przez wrapper ramek.
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 378ea758e507a096
+source_hash: b6181f99b171c8cf
 ---
 
 ## Instalacja

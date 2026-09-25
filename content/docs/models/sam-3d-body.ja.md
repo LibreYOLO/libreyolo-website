@@ -2,7 +2,7 @@
 title: SAM 3D Body
 families:
   - sam3dbody
-seo_title: SAM 3D Body：LibreYOLOで全身メッシュを復元
+seo_title: SAM 3D Body：Pythonで1枚の画像から3D人体メッシュを復元
 description: >-
   LibreYOLOのSAM 3D Bodyで人体の全身メッシュを復元します。インストールと推論を説明します。チェックポイントはMetaのSAM
   Licenseでアクセス制限され、CUDAが必要です。
@@ -47,7 +47,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 8edc8d7872f3f875
+source_hash: 5f47acceaf23ab64
 ---
 
 ## インストール

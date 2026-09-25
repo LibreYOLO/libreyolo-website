@@ -2,7 +2,7 @@
 title: BiRefNet
 families:
   - birefnet
-seo_title: BiRefNet：LibreYOLOで背景除去とマッティング
+seo_title: BiRefNet：Pythonで背景除去、MIT、pip install
 description: >-
   LibreYOLOのBiRefNetで背景除去とdichotomous image
   segmentationを行います。generalチェックポイントのインストール、推論、検証、エクスポートを説明します。
@@ -84,7 +84,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: 1af1bd7f4f905081
+source_hash: 2524eab687f9ebab
 ---
 
 ## インストール

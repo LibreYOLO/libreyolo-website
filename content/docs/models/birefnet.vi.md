@@ -2,7 +2,7 @@
 title: BiRefNet
 families:
   - birefnet
-seo_title: 'BiRefNet: xóa nền và matting trong LibreYOLO'
+seo_title: 'BiRefNet với Python: xóa nền, MIT, pip install'
 description: >-
   Dùng BiRefNet trong LibreYOLO để xóa nền và dichotomous image segmentation.
   Cài đặt, dự đoán, kiểm định và xuất checkpoint general.
@@ -86,7 +86,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: 1af1bd7f4f905081
+source_hash: 2524eab687f9ebab
 ---
 
 ## Cài đặt

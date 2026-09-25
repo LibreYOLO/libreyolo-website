@@ -2,7 +2,7 @@
 title: BiRefNet
 families:
   - birefnet
-seo_title: 'BiRefNet: удаление фона и маттинг в LibreYOLO'
+seo_title: 'BiRefNet в Python: удаление фона, MIT, pip install'
 description: >-
   Используйте BiRefNet в LibreYOLO для удаления фона и дихотомической
   сегментации изображений. Установка, предсказание, валидация и экспорт общего
@@ -88,7 +88,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: 1af1bd7f4f905081
+source_hash: 2524eab687f9ebab
 ---
 
 ## Установка

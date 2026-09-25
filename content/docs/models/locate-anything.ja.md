@@ -2,7 +2,7 @@
 title: LocateAnything
 families:
   - locateanything
-seo_title: LocateAnything：オープンボキャブラリ検出と点指示
+seo_title: LocateAnything：Pythonでオープン語彙検出
 description: >-
   LibreYOLOのLocateAnythingでオープンボキャブラリ検出と点指示を行います。任意のテキストラベルで推論できますが、学習、検証、エクスポートには対応していません。
 lead: >-
@@ -57,7 +57,7 @@ snippets:
         # ボックスラッパーが扱わない任意のプロンプトに対応
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 378ea758e507a096
+source_hash: b6181f99b171c8cf
 ---
 
 ## インストール

@@ -2,7 +2,7 @@
 title: MoGe-2
 families:
   - moge2
-seo_title: 'MoGe-2: predykcja, walidacja i eksport normalnych powierzchni'
+seo_title: 'MoGe-2 w Python: normalne powierzchni z jednego obrazu, MIT'
 description: >-
   Używaj MoGe-2 w LibreYOLO do gęstej predykcji normalnych powierzchni.
   Instaluj, przewiduj, waliduj i eksportuj oficjalne checkpointy ViT-S, ViT-B i
@@ -80,7 +80,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: ddfacf6b7e9729f6
+source_hash: d96b89f18ac10a40
 ---
 
 ## Instalacja

@@ -2,7 +2,7 @@
 title: BiRefNet
 families:
   - birefnet
-seo_title: 'BiRefNet: usuwanie tła i matting w LibreYOLO'
+seo_title: 'BiRefNet w Python: usuwanie tła, MIT, pip install'
 description: >-
   Używaj BiRefNet w LibreYOLO do usuwania tła i dychotomicznej segmentacji
   obrazów. Zainstaluj model, uruchamiaj predykcję i walidację oraz eksportuj
@@ -93,7 +93,7 @@ snippets:
 
 
         print(result.matte.array.shape)
-source_hash: 1af1bd7f4f905081
+source_hash: 2524eab687f9ebab
 ---
 
 ## Instalacja

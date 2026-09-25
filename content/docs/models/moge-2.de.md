@@ -2,7 +2,7 @@
 title: MoGe-2
 families:
   - moge2
-seo_title: 'MoGe-2: Oberflächennormalen vorhersagen, validieren und exportieren'
+seo_title: 'MoGe-2 mit Python: Oberflächennormalen aus einem Bild, MIT'
 description: >-
   Nutze MoGe-2 in LibreYOLO für die dichte Vorhersage von Oberflächennormalen.
   Installiere, sage vorher, validiere und exportiere die offiziellen ViT-S-,
@@ -79,7 +79,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: ddfacf6b7e9729f6
+source_hash: d96b89f18ac10a40
 ---
 
 ## Installation

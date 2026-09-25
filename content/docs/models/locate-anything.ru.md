@@ -2,7 +2,7 @@
 title: LocateAnything
 families:
   - locateanything
-seo_title: 'LocateAnything: детекция с открытым словарём и указание точек'
+seo_title: 'LocateAnything в Python: детекция с открытым словарём'
 description: >-
   LocateAnything в LibreYOLO: детекция с открытым словарём и указание точек.
   Предсказание по любой текстовой метке; обучение, валидация и экспорт не
@@ -84,7 +84,7 @@ snippets:
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
 
         print(text)
-source_hash: 378ea758e507a096
+source_hash: b6181f99b171c8cf
 ---
 
 ## Установка

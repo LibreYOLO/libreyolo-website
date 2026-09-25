@@ -1,7 +1,7 @@
 ---
 title: SigLIP2
 families: [siglip2]
-seo_title: "SigLIP2 in LibreYOLO: zero-shot classify and embed"
+seo_title: "SigLIP2 in Python: zero-shot classify and embed, Apache-2.0"
 description: "Use SigLIP2 in LibreYOLO for zero-shot image classification and image/text embedding, with sigmoid multi-label scoring. No training needed."
 lead: "SigLIP2 is a dual-tower model that scores an image against text prompts with an independent sigmoid per class, instead of a shared softmax over a fixed label set. LibreYOLO supports it for zero-shot classification and image/text embedding, with no training step."
 keywords: [SigLIP2, SigLIP 2, zero-shot classification, image embedding, text embedding, open vocabulary, multilingual, sigmoid loss]

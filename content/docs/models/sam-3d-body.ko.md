@@ -2,7 +2,7 @@
 title: SAM 3D Body
 families:
   - sam3dbody
-seo_title: 'SAM 3D Body: LibreYOLO의 전신 메시 복원'
+seo_title: 'SAM 3D Body: Python으로 한 이미지에서 3D 인체 메시 복원'
 description: >-
   LibreYOLO에서 SAM 3D Body로 전신 인체 메시를 복원합니다. 설치 후 예측할 수 있으며 체크포인트에는 Meta의 SAM
   License 접근 제한과 CUDA가 필요합니다.
@@ -47,7 +47,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 8edc8d7872f3f875
+source_hash: 5f47acceaf23ab64
 ---
 
 ## 설치

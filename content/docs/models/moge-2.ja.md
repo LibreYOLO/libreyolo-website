@@ -2,7 +2,7 @@
 title: MoGe-2
 families:
   - moge2
-seo_title: MoGe-2：サーフェス法線の推論、検証、エクスポート
+seo_title: MoGe-2：Pythonで1枚の画像から表面法線を推定、MIT
 description: >-
   LibreYOLOのMoGe-2で密なサーフェス法線を予測します。公式ViT-S、ViT-B、ViT-Lチェックポイントのインストール、推論、検証、エクスポートを説明します。
 lead: >-
@@ -75,7 +75,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: ddfacf6b7e9729f6
+source_hash: d96b89f18ac10a40
 ---
 
 ## インストール

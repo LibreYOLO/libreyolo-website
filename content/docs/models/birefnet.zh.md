@@ -2,7 +2,7 @@
 title: BiRefNet
 families:
   - birefnet
-seo_title: BiRefNet：LibreYOLO 里的背景移除与抠图
+seo_title: BiRefNet：用 Python 移除背景，MIT，pip install
 description: 在 LibreYOLO 里用 BiRefNet 做背景移除和二分图像分割。安装、预测、验证并导出通用检查点。
 lead: >-
   一种双边参考（bilateral-reference）网络，预测一张把主体和背景分开的柔和 alpha matte。LibreYOLO 为 BiRefNet
@@ -83,7 +83,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: 1af1bd7f4f905081
+source_hash: 2524eab687f9ebab
 ---
 
 ## 安装

@@ -2,7 +2,7 @@
 title: SAM 3D Body
 families:
   - sam3dbody
-seo_title: 'SAM 3D Body: khôi phục mesh toàn thân trong LibreYOLO'
+seo_title: 'SAM 3D Body với Python: lưới cơ thể 3D từ một ảnh'
 description: >-
   Dùng SAM 3D Body trong LibreYOLO để khôi phục mesh toàn thân người. Cài đặt và
   dự đoán; các checkpoint bị giới hạn truy cập theo SAM License của Meta và yêu
@@ -68,7 +68,7 @@ snippets:
 
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 8edc8d7872f3f875
+source_hash: 5f47acceaf23ab64
 ---
 
 ## Cài đặt

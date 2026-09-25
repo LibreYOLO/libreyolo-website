@@ -2,7 +2,7 @@
 title: MoGe-2
 families:
   - moge2
-seo_title: 'MoGe-2: 표면 노멀 예측, 검증 및 내보내기'
+seo_title: 'MoGe-2: Python으로 한 이미지에서 표면 노멀 예측, MIT'
 description: >-
   LibreYOLO에서 MoGe-2로 조밀한 표면 노멀을 예측합니다. 공식 ViT-S, ViT-B, ViT-L 체크포인트를 설치하고 예측,
   검증, 내보내기합니다.
@@ -77,7 +77,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: ddfacf6b7e9729f6
+source_hash: d96b89f18ac10a40
 ---
 
 ## 설치

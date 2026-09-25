@@ -2,7 +2,7 @@
 title: SigLIP2
 families:
   - siglip2
-seo_title: 'LibreYOLO의 SigLIP2: 제로샷 분류와 임베딩'
+seo_title: 'SigLIP2: Python 제로샷 분류와 임베딩, Apache-2.0'
 description: >-
   LibreYOLO에서 SigLIP2로 sigmoid 멀티 레이블 점수를 사용하는 제로샷 이미지 분류와 이미지/텍스트 임베딩을 수행합니다.
   학습은 필요하지 않습니다.
@@ -110,7 +110,7 @@ snippets:
         # task="embed"는 이미지 타워만 추적하므로 클래스가 필요하지 않습니다.
         model = LibreYOLO("LibreSigLIP2b16-cls.pt", task="embed")
         model.export(format="onnx")
-source_hash: f992655747fd8819
+source_hash: 5cb33276cb5efaa8
 ---
 
 ## 설치

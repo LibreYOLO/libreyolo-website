@@ -2,7 +2,7 @@
 title: SAM 3D Body
 families:
   - sam3dbody
-seo_title: 'SAM 3D Body: odtwarzanie siatki całego ciała w LibreYOLO'
+seo_title: 'SAM 3D Body w Python: siatka 3D człowieka z jednego obrazu'
 description: >-
   Używaj SAM 3D Body w LibreYOLO do odtwarzania siatki 3D całego ciała
   człowieka. Instaluj i przewiduj. Checkpointy są kontrolowane licencją SAM
@@ -62,7 +62,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 8edc8d7872f3f875
+source_hash: 5f47acceaf23ab64
 ---
 
 ## Instalacja

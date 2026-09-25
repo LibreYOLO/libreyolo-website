@@ -2,7 +2,7 @@
 title: LocateAnything
 families:
   - locateanything
-seo_title: 'LocateAnything: Open-Vocabulary-Erkennung und Punktlokalisierung'
+seo_title: 'LocateAnything mit Python: Open-Vocabulary-Erkennung'
 description: >-
   Nutze LocateAnything in LibreYOLO für Open-Vocabulary-Erkennung und
   Punktlokalisierung. Sage mit beliebigen Textlabels vorher. Training,
@@ -77,7 +77,7 @@ snippets:
         # Zählaufgaben oder beliebige Prompts außerhalb des Boxen-Wrappers.
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 378ea758e507a096
+source_hash: b6181f99b171c8cf
 ---
 
 ## Installation

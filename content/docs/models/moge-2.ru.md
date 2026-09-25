@@ -2,7 +2,7 @@
 title: MoGe-2
 families:
   - moge2
-seo_title: 'MoGe-2: предсказание, валидация и экспорт нормалей поверхности'
+seo_title: 'MoGe-2 в Python: нормали поверхности по одному изображению, MIT'
 description: >-
   Используйте MoGe-2 в LibreYOLO для плотного предсказания нормалей поверхности.
   Установка, предсказание, валидация и экспорт официальных чекпойнтов ViT-S,
@@ -81,7 +81,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: ddfacf6b7e9729f6
+source_hash: d96b89f18ac10a40
 ---
 
 ## Установка

@@ -2,7 +2,7 @@
 title: SigLIP2
 families:
   - siglip2
-seo_title: SigLIP2：在 LibreYOLO 里做零样本分类和嵌入向量
+seo_title: SigLIP2：用 Python 做零样本分类和嵌入，Apache-2.0
 description: 用 LibreYOLO 里的 SigLIP2 做零样本图像分类和图像/文本嵌入向量，按类别独立的 sigmoid 多标签打分。无需训练。
 lead: >-
   SigLIP2 是一个双塔（dual-tower）模型，它拿图像去和文本提示词打分，每个类别用一个独立的
@@ -109,7 +109,7 @@ snippets:
         # task="embed" 只追踪图像塔，不需要类别
         model = LibreYOLO("LibreSigLIP2b16-cls.pt", task="embed")
         model.export(format="onnx")
-source_hash: f992655747fd8819
+source_hash: 5cb33276cb5efaa8
 ---
 
 ## 安装

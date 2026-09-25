@@ -1,7 +1,7 @@
 ---
 title: MoGe-2
 families: [moge2]
-seo_title: "MoGe-2: predict, validate and export surface normals"
+seo_title: "MoGe-2 in Python: surface normals from one image, MIT"
 description: "Use MoGe-2 in LibreYOLO for dense surface-normal prediction. Install, predict, validate and export the official ViT-S, ViT-B and ViT-L checkpoints."
 lead: "MoGe-2 is a single-forward monocular geometry model that predicts a dense surface-normal field from one RGB image. LibreYOLO supports it for normal estimation only, through the official ViT-S, ViT-B and ViT-L checkpoints."
 keywords: [MoGe-2, MoGe 2, surface normal estimation, monocular geometry, normal map, dense prediction, DINOv2]

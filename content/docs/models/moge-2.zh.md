@@ -2,7 +2,7 @@
 title: MoGe-2
 families:
   - moge2
-seo_title: MoGe-2：预测、验证并导出表面法线
+seo_title: MoGe-2：用 Python 从单张图像预测表面法线，MIT
 description: 在 LibreYOLO 里用 MoGe-2 做稠密表面法线预测。安装、预测、验证并导出官方的 ViT-S、ViT-B 和 ViT-L 检查点。
 lead: >-
   MoGe-2 是一个单次前向的单目几何模型，从一张 RGB 图像预测稠密的表面法线场。LibreYOLO 只把它用于法线估计，通过官方的
@@ -75,7 +75,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: ddfacf6b7e9729f6
+source_hash: d96b89f18ac10a40
 ---
 
 ## 安装

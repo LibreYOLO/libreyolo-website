@@ -2,7 +2,7 @@
 title: SAM 3D Body
 families:
   - sam3dbody
-seo_title: "SAM 3D Body\_: reconstruction d'un maillage corporel complet dans LibreYOLO"
+seo_title: 'SAM 3D Body avec Python : maillage 3D humain sur image'
 description: "Utilisez SAM 3D Body dans LibreYOLO pour reconstruire le maillage 3D d'un corps humain complet. Installez-le et lancez des prédictions\_; les checkpoints sont soumis à la SAM License de Meta et CUDA est requis."
 lead: >-
   SAM 3D Body est le modèle guidable de Meta qui reconstruit, à partir d'une
@@ -68,7 +68,7 @@ snippets:
 
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 8edc8d7872f3f875
+source_hash: 5f47acceaf23ab64
 ---
 
 ## Installer

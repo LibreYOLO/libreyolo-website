@@ -2,7 +2,7 @@
 title: BiRefNet
 families:
   - birefnet
-seo_title: 'BiRefNet: Hintergrundentfernung und Matting in LibreYOLO'
+seo_title: 'BiRefNet mit Python: Hintergrund entfernen, MIT, pip install'
 description: >-
   Nutze BiRefNet in LibreYOLO für Hintergrundentfernung und dichotome
   Bildsegmentierung. Installiere, sage vorher, validiere und exportiere den
@@ -87,7 +87,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: 1af1bd7f4f905081
+source_hash: 2524eab687f9ebab
 ---
 
 ## Installation

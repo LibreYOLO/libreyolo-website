@@ -2,7 +2,7 @@
 title: LocateAnything
 families:
   - locateanything
-seo_title: LocateAnything：开放词汇检测与点定位
+seo_title: LocateAnything：用 Python 做开放词汇检测
 description: 在 LibreYOLO 里用 LocateAnything 做开放词汇检测和点定位。用任意文本标签跑预测；不支持训练、验证和导出。
 lead: >-
   LocateAnything 是英伟达发布的视觉定位（grounding）模型，它并行解码检测框和点，而不是一次只解码一个坐标
@@ -58,7 +58,7 @@ snippets:
         # 检测框封装覆盖不到的提示词
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 378ea758e507a096
+source_hash: b6181f99b171c8cf
 ---
 
 ## 安装

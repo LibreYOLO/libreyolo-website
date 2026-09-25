@@ -1,7 +1,7 @@
 ---
 title: LocateAnything
 families: [locateanything]
-seo_title: "LocateAnything: open-vocabulary detection and pointing"
+seo_title: "LocateAnything in Python: open-vocabulary detection"
 description: "Use LocateAnything in LibreYOLO for open-vocabulary detection and pointing. Predict with any text label; training, validation and export are not supported."
 lead: "LocateAnything is a vision-language grounding model released by NVIDIA that decodes bounding boxes and points in parallel rather than one coordinate token at a time. LibreYOLO wraps it as an open-vocabulary detector and pointer: any list of text labels becomes the class set, with no fixed head and no fine-tuning required."
 keywords: [LocateAnything, NVIDIA, vision-language model, open-vocabulary detection, point detection, VLM, grounding, LibreVLM]

@@ -2,7 +2,7 @@
 title: LocateAnything
 families:
   - locateanything
-seo_title: 'LocateAnything: detecção de vocabulário aberto e localização por pontos'
+seo_title: 'LocateAnything com Python: detecção de vocabulário aberto'
 description: >-
   Use o LocateAnything no LibreYOLO para detecção de vocabulário aberto e
   localização por pontos. Faça predições com qualquer rótulo de texto;
@@ -66,7 +66,7 @@ snippets:
         # contagens ou qualquer prompt que o wrapper de boxes não cubra.
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 378ea758e507a096
+source_hash: b6181f99b171c8cf
 ---
 
 ## Instalação

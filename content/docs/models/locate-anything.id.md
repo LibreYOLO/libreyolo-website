@@ -2,7 +2,7 @@
 title: LocateAnything
 families:
   - locateanything
-seo_title: 'LocateAnything: deteksi open-vocabulary dan penunjukan'
+seo_title: 'LocateAnything dengan Python: deteksi kosakata terbuka'
 description: >-
   Gunakan LocateAnything di LibreYOLO untuk deteksi open-vocabulary dan
   penunjukan. Prediksi dengan label teks apa pun. Pelatihan, validasi, dan
@@ -78,7 +78,7 @@ snippets:
         # penghitungan, atau prompt apa pun yang tidak dicakup wrapper box.
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 378ea758e507a096
+source_hash: b6181f99b171c8cf
 ---
 
 ## Instalasi

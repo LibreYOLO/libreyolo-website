@@ -1,7 +1,7 @@
 ---
 title: SAM 3D Body
 families: [sam3dbody]
-seo_title: "SAM 3D Body: full-body mesh recovery in LibreYOLO"
+seo_title: "SAM 3D Body in Python: 3D human mesh from one image"
 description: "Use SAM 3D Body in LibreYOLO for full-body human mesh recovery. Install and predict; Meta's SAM License gates the checkpoints, CUDA required."
 lead: "SAM 3D Body is Meta's promptable model for recovering a full-body 3D mesh, including hands and feet, from a single image and person boxes. LibreYOLO wraps the upstream package rather than porting it."
 keywords: [SAM 3D Body, human mesh recovery, body mesh, MHR, Momentum Human Rig, 3D pose]

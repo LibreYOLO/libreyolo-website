@@ -2,7 +2,7 @@
 title: BiRefNet
 families:
   - birefnet
-seo_title: "BiRefNet\_: suppression d'arrière-plan et matting dans LibreYOLO"
+seo_title: 'BiRefNet en Python : supprimer le fond, MIT, pip install'
 description: >-
   Utilisez BiRefNet dans LibreYOLO pour la suppression d'arrière-plan et la
   segmentation dichotomique d'images. Installez, prédisez, validez et exportez
@@ -87,7 +87,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: 1af1bd7f4f905081
+source_hash: 2524eab687f9ebab
 ---
 
 ## Installation

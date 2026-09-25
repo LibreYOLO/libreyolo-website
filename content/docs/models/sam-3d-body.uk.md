@@ -2,7 +2,7 @@
 title: SAM 3D Body
 families:
   - sam3dbody
-seo_title: 'SAM 3D Body: відновлення сітки всього тіла в LibreYOLO'
+seo_title: 'SAM 3D Body у Python: 3D-сітка тіла з одного зображення'
 description: >-
   Використовуйте SAM 3D Body у LibreYOLO для відновлення тривимірної сітки
   всього тіла людини. Встановлення й передбачення; доступ до контрольних точок
@@ -70,7 +70,7 @@ snippets:
 
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 8edc8d7872f3f875
+source_hash: 5f47acceaf23ab64
 ---
 
 ## Встановлення
