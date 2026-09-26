@@ -355,8 +355,8 @@ Update this list in the same commit as the work. It is the resume point.
 - [x] Phase 4: all 8 release-level pages complete, including 103 changelog entries (A90 excluded), migration guidance and all existing twins. Versions retains TODO(owner); no archive route.
 - [x] Phase 5: nav, sitemap, llms.txt and generated indexes verified. Task count is generated (20); added labels for the three tasks and guarded missing artwork, without changing homepage layout.
 - [x] Phase 6: 936 existing locale twins updated (Japanese 84; each other locale 71). All 13 locale validators pass, and `sync-check` passes 2,275 / 2,275. Final `--stamp` changes zero already-current hashes. Brand-new pages remain English-only.
-- [x] Initial Vercel preview build passes (4,189 generated routes): https://libreyolo-website-gkdbjoexh-xubanceccons-projects.vercel.app . Its production sitemap has 3,040 unique canonical URLs and excludes untranslated fallbacks. A final preview will follow the complete translation set.
-- [ ] PR description: done, not done, `TODO(1.6.0)` list, changelog corrections, owner decisions
+- [x] Final Vercel preview passes: https://libreyolo-website-bh907qcdc-xubanceccons-projects.vercel.app (4,189 generated routes). Its production sitemap has 3,040 unique canonical URLs; new routes, English fallbacks, llms.txt and representative localized content verified.
+- [x] PR description updated with done/not done, empty unmerged-PR `TODO(1.6.0)` list, changelog/source corrections, validation results, release catch-up and owner defaults. PR #6 remains a draft.
 
 ## 6. Done means
 
@@ -393,3 +393,9 @@ Update this list in the same commit as the work. It is the resume point.
 - Checkpoint schema QA names both stored fields explicitly: `fitness_source="callback"` and `best_metric_key="fitness/custom"`; all locale twins carry the same keys.
 
 - Provenance distinguishes source-code licenses from weights: PP-YOLOE, DEKR, PP-LiteSeg and FCOS3D do not acquire a separate artifact grant from a code-license label. The summary records that gap without adding dataset-derived restrictions.
+
+## 9. Completion
+
+Phases 1 through 6 and all pre-release checks are complete. Final changes: **30 new English pages, 86 updated English pages and 936 updated translations**. `sync-check` passes 2,275 / 2,275; all 13 validators pass; final Vercel preview is READY and verified. Phase 7 waits for the absent v1.6.0 tag. No archive routes, merge, ready transition or production deployment were performed.
+
+The detached source worktree is removed after final verification. The recorded dev SHA and reproducible registry/catch-up scripts are the handoff.
