@@ -70,12 +70,11 @@ libreyolo.com is the official site of the LibreYOLO open-source library: documen
 - [Cursor Hackathon track](${SITE_URL}/cursor-hackathon): setup tutorial and working examples for the LibreYOLO track
 
 ## Documentation versions
-- [v1.6.0](${SITE_URL}/docs): current documentation tree; release preparation follows library dev until the v1.6.0 tag
-${SITE_URL}/docs describes released features unless a page explicitly labels its
-availability as dev or an upcoming version. Check that notice before choosing an
-installation command. These single-page docs for
-earlier releases stay reachable for anyone pinned to them, but they are frozen,
-no longer updated, and canonicalised to ${SITE_URL}/docs. Prefer /docs.
+- [v1.6.0](${SITE_URL}/docs): current documentation tree
+Earlier releases stay reachable for anyone pinned to them. They are frozen, no
+longer updated, and canonicalised to the matching page under ${SITE_URL}/docs.
+Prefer /docs unless you are pinned to an older version. v1.5.0 is a full docs
+tree; v1.1.0 to v1.4.0 are single pages.
 - [v1.5.0 (frozen)](${SITE_URL}/docs/v1.5.0): the full 1.5.0 docs tree, one page per topic at the same paths as /docs (for example ${SITE_URL}/docs/v1.5.0/models/rf-detr, or append .md for markdown)
 - [v1.4.0 (frozen)](${SITE_URL}/docs/v1.4.0)
 - [v1.3.1 (frozen)](${SITE_URL}/docs/v1.3.1)
