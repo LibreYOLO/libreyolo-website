@@ -1,0 +1,12 @@
+{
+  "name": "BiRefNet",
+  "org": "Nankai University",
+  "paper_title": "Bilateral Reference for High-Resolution Dichotomous Image Segmentation",
+  "paper_url": "https://arxiv.org/abs/2401.03407",
+  "code_url": "https://github.com/ZhengPeng7/BiRefNet",
+  "license": "MIT",
+  "license_interpretation": "MIT is a permissive license, so these weights can be used in commercial and closed-source products. The one standing obligation is to keep the license text and copyright notice with any copy you redistribute. It places no condition on your own application code. LibreYOLO's checkpoint is a format conversion of the official pretrained BiRefNet-general weights (the Swin-L, quality-default tier), with the learned parameters unchanged; fine-tuning is not wired into this library in v1, so there is no LibreYOLO-trained variant to license separately.",
+  "bibtex": "@article{zheng2024birefnet,\n  title={Bilateral Reference for High-Resolution Dichotomous Image Segmentation},\n  author={Zheng, Peng and Gao, Dehong and Fan, Deng-Ping and Liu, Li and Laaksonen, Jorma and Ouyang, Wanli and Sebe, Nicu},\n  journal={CAAI Artificial Intelligence Research},\n  volume = {3},\n  pages = {9150038},\n  year={2024}\n}",
+  "bibtex_source_url": "https://github.com/ZhengPeng7/BiRefNet#citation",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README on branch main. Cross-checked against the arXiv API for 2401.03407: seven authors in the same order (Zheng, Gao, Fan, Liu, Laaksonen, Ouyang, Sebe), identical title, latest version v7 dated 2025-07-25, and an arxiv:journal_ref field reading exactly 'Bilateral Reference for High-Resolution Dichotomous Image Segmentation. CAAI Artificial Intelligence Research, 2024, 3: 9150038', matching the journal, volume, pages and year the authors' entry carries. Do not hand-edit; a wrong citation misattributes someone's work."
+}

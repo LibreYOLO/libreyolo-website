@@ -1,0 +1,13 @@
+{
+  "name": "DeiT",
+  "org": "Meta Research",
+  "paper_title": "Training data-efficient image transformers & distillation through attention",
+  "paper_url": "https://arxiv.org/abs/2012.12877",
+  "code_url": "https://github.com/facebookresearch/deit",
+  "license": "Apache-2.0",
+  "code_license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. It places no obligation on your own application code, and weights you train yourself on your own data are yours. LibreYOLO ships the plain tiny, small and base patch-16 classifiers at fixed 224px only; the distillation-token, CaiT, DeiT III and 384px variants from the same repository are out of scope.",
+  "bibtex": "@InProceedings{pmlr-v139-touvron21a,\n  title =     {Training data-efficient image transformers & distillation through attention},\n  author =    {Touvron, Hugo and Cord, Matthieu and Douze, Matthijs and Massa, Francisco and Sablayrolles, Alexandre and Jegou, Herve},\n  booktitle = {International Conference on Machine Learning},\n  pages =     {10347--10357},\n  year =      {2021},\n  volume =    {139},\n  month =     {July}\n}",
+  "bibtex_source_url": "https://github.com/facebookresearch/deit#-model-zoo",
+  "bibtex_verified": "2026-08-08, copied verbatim from the DeiT entry of the upstream README on branch main, which collapses the citation into an expandable block per paper. Cross-checked against the arXiv API for 2012.12877: the title matches and all six authors appear in the same order, Hugo Touvron, Matthieu Cord, Matthijs Douze, Francisco Massa, Alexandre Sablayrolles and Herve Jegou. The entry is already an @InProceedings citing ICML 2021 (PMLR volume 139), the venue the paper was accepted to, not the December 2020 arXiv preprint date. Do not hand-edit; a wrong citation misattributes someone's work."
+}

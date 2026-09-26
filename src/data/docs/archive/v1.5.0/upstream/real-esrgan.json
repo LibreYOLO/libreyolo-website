@@ -1,0 +1,13 @@
+{
+  "name": "Real-ESRGAN",
+  "org": "Tencent ARC Lab and Shenzhen Institutes of Advanced Technology, Chinese Academy of Sciences",
+  "paper_title": "Real-ESRGAN: Training Real-World Blind Super-Resolution with Pure Synthetic Data",
+  "paper_url": "https://arxiv.org/abs/2107.10833",
+  "code_url": "https://github.com/xinntao/Real-ESRGAN",
+  "license": "BSD-3-Clause",
+  "code_license": "Apache-2.0 and BSD-3-Clause",
+  "license_interpretation": "BSD-3-Clause is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep the copyright notice, the condition list and the disclaimer with any copy you redistribute, in source or compiled form, and its third clause forbids using the names of Xintao Wang or the project's contributors to endorse or promote a derived product without separate written permission. It carries no patent grant, unlike Apache-2.0. LibreYOLO's checkpoints are format conversions of the official pretrained generators, with the learned parameters unchanged; Real-ESRGAN's training is a GAN over a synthetic degradation pipeline that is not wired into this library, so there is no LibreYOLO-trained variant to license separately.",
+  "bibtex": "@InProceedings{wang2021realesrgan,\n    author    = {Xintao Wang and Liangbin Xie and Chao Dong and Ying Shan},\n    title     = {Real-ESRGAN: Training Real-World Blind Super-Resolution with Pure Synthetic Data},\n    booktitle = {International Conference on Computer Vision Workshops (ICCVW)},\n    date      = {2021}\n}",
+  "bibtex_source_url": "https://github.com/xinntao/Real-ESRGAN#bibtex",
+  "bibtex_verified": "2026-08-08, copied verbatim from the BibTeX section of the upstream README on branch master. Cross-checked against the arXiv API for 2107.10833: four authors in the same order (Wang, Xie, Dong, Shan), identical title, latest version v2 dated 2021-08-17 with no journal reference, so the authors' own ICCVW 2021 venue and 2021 date are reproduced as given. Do not hand-edit; a wrong citation misattributes someone's work."
+}
