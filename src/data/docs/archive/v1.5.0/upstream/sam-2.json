@@ -1,0 +1,12 @@
+{
+  "name": "SAM 2",
+  "org": "Meta FAIR",
+  "paper_title": "SAM 2: Segment Anything in Images and Videos",
+  "paper_url": "https://arxiv.org/abs/2408.00714",
+  "code_url": "https://github.com/facebookresearch/sam2",
+  "license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so this code and these weights can be used in commercial and closed-source products. It asks you to keep the license text and attribution notices with any copy you redistribute, and it grants a patent license. LibreYOLO loads SAM 2 through the Apache-2.0 Transformers implementation and republishes Transformers-compatible snapshots of the tiny, small, base-plus and large checkpoints on its own Hugging Face org, tagged Apache-2.0 there as well. LibreYOLO ships image inference only; SAM 2's video-memory tracking is out of scope for this family.",
+  "bibtex": "@article{ravi2024sam2,\n  title={SAM 2: Segment Anything in Images and Videos},\n  author={Ravi, Nikhila and Gabeur, Valentin and Hu, Yuan-Ting and Hu, Ronghang and Ryali, Chaitanya and Ma, Tengyu and Khedr, Haitham and R{\\\"a}dle, Roman and Rolland, Chloe and Gustafson, Laura and Mintun, Eric and Pan, Junting and Alwala, Kalyan Vasudev and Carion, Nicolas and Wu, Chao-Yuan and Girshick, Ross and Doll{\\'a}r, Piotr and Feichtenhofer, Christoph},\n  journal={arXiv preprint arXiv:2408.00714},\n  url={https://arxiv.org/abs/2408.00714},\n  year={2024}\n}",
+  "bibtex_source_url": "https://github.com/facebookresearch/sam2#citing-sam-2",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citing SAM 2 section of the upstream README on branch main. Cross-checked against the arXiv API for 2408.00714: seventeen authors in the same order, identical title. The upstream README still cites it as an arXiv preprint, so this page does too rather than asserting a venue upstream has not."
+}

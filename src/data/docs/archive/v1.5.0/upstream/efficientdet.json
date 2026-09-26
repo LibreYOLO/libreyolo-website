@@ -1,0 +1,13 @@
+{
+  "name": "EfficientDet",
+  "org": "Google Research",
+  "paper_title": "EfficientDet: Scalable and Efficient Object Detection",
+  "paper_url": "https://arxiv.org/abs/1911.09070",
+  "code_url": "https://github.com/rwightman/efficientdet-pytorch",
+  "license": "Apache-2.0",
+  "code_license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. It places no obligation on your own application code. LibreYOLO's D0-D4 checkpoints are converted from Google's official TensorFlow-trained release assets through the Apache-2.0 rwightman/efficientdet-pytorch project; those release assets carry no separate per-checkpoint license, so redistribution here rests on Apache-2.0 implied by the releasing project, the same basis rwightman/efficientdet-pytorch itself uses for its own converted weights.",
+  "bibtex": null,
+  "bibtex_source_url": null,
+  "bibtex_verified": "2026-08-08: no BibTeX block or CITATION.cff found in either authors' repository. google/automl's efficientdet README cites the paper as a plain reference line, '[1] Mingxing Tan, Ruoming Pang, Quoc V. Le. EfficientDet: Scalable and Efficient Object Detection. CVPR 2020.', with no BibTeX. rwightman/efficientdet-pytorch, the Apache-2.0 project LibreYOLO's checkpoints are actually converted through, has no citation section either. The arXiv API for 1911.09070 confirms the three authors in order and a journal-ref to the CVPR 2020 proceedings, but per policy no BibTeX is assembled by hand from that metadata. Leave bibtex null until an authoritative block is published."
+}

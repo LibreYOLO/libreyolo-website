@@ -1,0 +1,12 @@
+{
+  "name": "LFM2-VL",
+  "org": "Liquid AI",
+  "paper_title": "LFM2 Technical Report",
+  "paper_url": "https://arxiv.org/abs/2511.23404",
+  "code_url": "https://huggingface.co/LiquidAI/LFM2.5-VL-450M",
+  "license": "LFM Open License v1.0",
+  "license_interpretation": "The LFM Open License v1.0 permits Commercial Use, reproduction and modification, but only below a $10 million annual revenue threshold; a Legal Entity at or above that threshold is not licensed under this agreement at all for Commercial Use, and must contact Liquid AI directly. Qualified non-profit organizations are exempt from the threshold for non-commercial or research use. Redistribution must keep the license text, and any modified file must carry a notice saying so. LibreYOLO ships no LiquidAI source code, since the model loads through the Apache-2.0 transformers library, and does not host or redistribute the weights: LibreLFM2VL downloads the matching size directly from Liquid AI's own Hugging Face repository the first time it runs, and logs a one-time notice before that download.",
+  "bibtex": "@article{liquidai2025lfm2,\n title={LFM2 Technical Report},\n author={Liquid AI},\n journal={arXiv preprint arXiv:2511.23404},\n year={2025}\n}",
+  "bibtex_source_url": "https://huggingface.co/LiquidAI/LFM2.5-VL-450M#citation",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the LiquidAI/LFM2.5-VL-450M model card on Hugging Face (the LiquidAI/LFM2.5-VL-1.6B card carries the identical entry). Cross-checked against the arXiv API for 2511.23404: identical title 'LFM2 Technical Report'; the abstract explicitly covers this family ('We further build multimodal and retrieval variants: LFM2-VL for vision-language tasks...'), so the technical report is the correct citation even though it is not an LFM2-VL-specific paper. The authors' own entry lists the author field as the organization 'Liquid AI' rather than individual names; reproduced as published. Do not hand-edit; a wrong citation misattributes someone's work."
+}
