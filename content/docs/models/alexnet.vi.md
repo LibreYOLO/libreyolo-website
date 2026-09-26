@@ -4,19 +4,18 @@ families:
   - alexnet
 seo_title: 'AlexNet: chạy bộ phân loại ImageNet kinh điển trong LibreYOLO'
 description: >-
-  Dự đoán, đánh giá và xuất AlexNet với LibreYOLO. Trọng số torchvision theo
-  giấy phép BSD-3-Clause; tinh chỉnh (fine-tuning) chưa được hỗ trợ.
+  Dự đoán, đánh giá và xuất AlexNet với LibreYOLO. Trọng số torchvision theo giấy phép BSD-3-Clause; tinh
+  chỉnh (fine-tuning) chưa được hỗ trợ.
 lead: >-
-  AlexNet là mạng tích chập đã thắng ILSVRC 2012 và góp phần khởi đầu kỷ nguyên
-  deep learning trong computer vision. LibreYOLO cung cấp bản sửa đổi
-  single-tower về sau của kiến trúc này cho bài toán phân loại ảnh.
+  AlexNet là mạng tích chập đã thắng ILSVRC 2012 và góp phần khởi đầu kỷ nguyên deep learning trong computer
+  vision. LibreYOLO cung cấp bản sửa đổi single-tower về sau của kiến trúc này cho bài toán phân loại ảnh.
 keywords:
   - AlexNet
   - ImageNet
   - phân loại ảnh python
   - image classification
   - mạng nơ-ron tích chập
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -39,23 +38,16 @@ snippets:
   val:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreAlexNetb-cls.pt")
 
-
         # data là thư mục gốc chứa các split train/ và val/ theo dạng một thư
-
-        # mục cho mỗi lớp đối tượng (bố cục ImageFolder), không phải YAML
-        dataset
-
+        # mục cho mỗi lớp đối tượng (bố cục ImageFolder), không phải YAML dataset
         metrics = model.val(data="imagenet-1k/")
 
-
         print(metrics["metrics/accuracy_top1"])
-
         print(metrics["metrics/accuracy_top5"])
     - label: CLI
       language: bash
@@ -86,9 +78,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 68c09f080c74bb87
+source_hash: c996d557da01e4d4
 ---
-
 ## Cài đặt
 
 AlexNet không cần extra tùy chọn nào. Mọi thứ nó import đều nằm trong bản cài
@@ -125,6 +116,8 @@ chỉnh thì chưa có phần hiện thực.
 và top-5.
 
 <code-tabs name="val" />
+
+Đánh giá và hiệu chuẩn INT8 dùng phép biến đổi đánh giá của họ mô hình. Metadata xuất ghi `norm_mean`, `norm_std` và `resize_mode`; các tệp cũ dùng giá trị của họ mô hình khi thiếu metadata. Bộ tiền xử lý hiệu chuẩn trả về mảng CHW và tỷ lệ cần thiết.
 
 ## Xuất mô hình
 

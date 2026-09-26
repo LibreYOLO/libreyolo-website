@@ -20,7 +20,8 @@ keywords:
   - ImageNet
   - предобученный трансформер для классификации
   - музейные модели libreyolo
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 snippets:
   predict:
     - label: Python
@@ -85,7 +86,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: 9c67c8554b2af5c6
+source_hash: 4dad5f1aa0943dd9
 ---
 
 ## Установка
@@ -120,6 +121,8 @@ Hugging Face при первом запуске и кэшируются лока
 разложенном по обычной структуре папок `train/<class>/` и `val/<class>/`.
 
 <code-tabs name="val" />
+
+Валидация и калибровка INT8 используют преобразование семейства для оценки. Метаданные экспорта записывают `norm_mean`, `norm_std` и `resize_mode`; старые артефакты используют значения семейства. Предобработчики калибровки возвращают требуемые массив CHW и коэффициент масштаба.
 
 ## Экспорт
 

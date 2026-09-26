@@ -19,7 +19,7 @@ keywords:
   - neural architecture search
   - MBConv
   - ImageNet classifier
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -35,7 +35,7 @@ snippets:
     - label: CLI
       language: bash
       code: >
-        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=cat.jpg
+        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
         save=True
   train:
     - label: Python
@@ -98,7 +98,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: ad3ff140aad824bd
+source_hash: 23b7d651fb4eae89
 ---
 
 ## Instalasi
@@ -155,12 +155,16 @@ MBConv di family ini tidak punya.
 Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU dan
 logger.
 
+`cls_pw=0` menonaktifkan pembobotan loss; nilai hingga 1 memakai bobot invers frekuensi yang dinormalisasi ke rata-rata 1. `class_weights=True` memakai invers frekuensi yang dinormalisasi berdasarkan sampel dan tidak dapat digabung dengan `cls_pw>0`. Pengaturan ini harus sama saat melanjutkan pelatihan. Lihat [klasifikasi](/docs/tasks/image-classification).
+
 ## Validasi
 
 `val()` mengembalikan dictionary berisi kunci `metrics/`. Untuk klasifikasi,
 isinya akurasi top-1 dan top-5 pada split validasi.
 
 <code-tabs name="val" />
+
+Validasi dan kalibrasi INT8 memakai transformasi evaluasi family. Metadata ekspor mencatat `norm_mean`, `norm_std`, dan `resize_mode`; artefak lama memakai nilai family sebagai fallback. Prapemroses kalibrasi mengembalikan array CHW dan rasio yang diperlukan.
 
 ## Ekspor
 

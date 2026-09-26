@@ -4,14 +4,12 @@ families:
   - deit
 seo_title: 'Bộ phân loại ảnh DeiT: dự đoán, xác thực, xuất'
 description: >-
-  Chạy các bộ phân loại ảnh DeiT trong LibreYOLO: một họ mô hình bảo tàng đóng
-  băng, chỉ dành cho inference, với kích thước tiny, small và base theo
-  Apache-2.0.
+  Chạy các bộ phân loại ảnh DeiT trong LibreYOLO: một họ mô hình bảo tàng đóng băng, chỉ dành cho inference,
+  với kích thước tiny, small và base theo Apache-2.0.
 lead: >-
-  DeiT (Data-efficient image Transformer) là bộ phân loại Vision Transformer
-  thuần túy được huấn luyện chỉ trên ImageNet-1k, không dùng thêm dữ liệu huấn
-  luyện sẵn. LibreYOLO lưu giữ các kích thước patch-16 tiny, small và base như
-  một hiện vật đóng băng, chỉ dành cho inference.
+  DeiT (Data-efficient image Transformer) là bộ phân loại Vision Transformer thuần túy được huấn luyện chỉ
+  trên ImageNet-1k, không dùng thêm dữ liệu huấn luyện sẵn. LibreYOLO lưu giữ các kích thước patch-16 tiny,
+  small và base như một hiện vật đóng băng, chỉ dành cho inference.
 keywords:
   - DeiT
   - Vision Transformer
@@ -20,7 +18,7 @@ keywords:
   - ImageNet
   - huấn luyện tiết kiệm dữ liệu
   - họ mô hình bảo tàng
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -78,9 +76,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 9c67c8554b2af5c6
+source_hash: 4dad5f1aa0943dd9
 ---
-
 ## Cài đặt
 
 DeiT không cần extra ngoài package cơ sở.
@@ -102,6 +99,8 @@ Họ mô hình này chỉ dành cho inference: `train()` phát sinh `NotImplemen
 `val()` trả về dictionary có độ chính xác top-1 và top-5, được đo trên dataset bố trí theo cấu trúc thư mục thông thường `train/<class>/` và `val/<class>/`.
 
 <code-tabs name="val" />
+
+Đánh giá và hiệu chuẩn INT8 dùng phép biến đổi đánh giá của họ mô hình. Metadata xuất ghi `norm_mean`, `norm_std` và `resize_mode`; các tệp cũ dùng giá trị của họ mô hình khi thiếu metadata. Bộ tiền xử lý hiệu chuẩn trả về mảng CHW và tỷ lệ cần thiết.
 
 ## Xuất
 

@@ -17,7 +17,7 @@ keywords:
   - bildklassifizierung python
   - convolutional neural network erklärt
   - vortrainierter bildklassifikator
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -80,7 +80,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 68c09f080c74bb87
+source_hash: "c996d557da01e4d4"
 ---
 
 ## Installation
@@ -120,6 +120,8 @@ Unterordnern `train/` und `val/`, ein Ordner pro Klasse) und liefert die Top-1-
 und Top-5-Accuracy.
 
 <code-tabs name="val" />
+
+Validierung und INT8-Kalibrierung verwenden die Auswertungstransformation der Familie. Die Exportmetadaten speichern `norm_mean`, `norm_std` und `resize_mode`; ältere Artefakte greifen auf die Familienwerte zurück. Kalibrierungsvorverarbeiter geben das erforderliche CHW-Array und das Verhältnis zurück.
 
 ## Export
 

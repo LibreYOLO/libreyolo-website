@@ -20,7 +20,7 @@ keywords:
   - classificare immagini python
   - ImageNet
   - transformer visione artificiale
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -79,7 +79,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 9c67c8554b2af5c6
+source_hash: 4dad5f1aa0943dd9
 ---
 
 ## Installazione
@@ -117,6 +117,8 @@ un dataset organizzato nella struttura di cartelle convenzionale
 `train/<class>/` e `val/<class>/`.
 
 <code-tabs name="val" />
+
+La validazione e la calibrazione INT8 usano la trasformazione di valutazione della famiglia. I metadati di esportazione registrano `norm_mean`, `norm_std` e `resize_mode`; gli artefatti più vecchi usano i valori della famiglia. I preprocessori di calibrazione restituiscono l'array CHW e il rapporto richiesti.
 
 ## Esportazione
 

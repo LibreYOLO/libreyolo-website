@@ -15,7 +15,7 @@ keywords:
   - 图像分类 python
   - 纯卷积网络
   - imagenet 预训练分类模型
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -31,7 +31,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreConvNeXtt-cls.pt source=cat.jpg save=True
+        libreyolo predict model=LibreConvNeXtt-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python
       language: python
@@ -96,7 +96,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 1682cc69cf2925e6
+source_hash: 8f33a40e4d3a8f29
 ---
 
 ## 安装
@@ -135,17 +135,23 @@ pip install "libreyolo[lora]"
 
 关于数据集、数据增强、多卡训练和 logger，见[训练](/docs/train)。
 
+`cls_pw=0` 禁用损失加权；不超过 1 的值使用逆频率权重，并将均值归一化为 1。`class_weights=True` 改用按样本数归一化的逆频率，不能与 `cls_pw>0` 同时使用。续训时这些设置必须匹配。见[分类](/docs/tasks/image-classification)。
+
 ## 验证
 
 `val()` 返回一个由 `metrics/` 键组成的字典。对分类来说就是验证集上的 top-1 和 top-5 精度。
 
 <code-tabs name="val" />
 
+验证和 INT8 校准使用家族的评估变换。导出元数据记录 `norm_mean`、`norm_std` 和 `resize_mode`；旧产物回退到家族值。校准预处理器返回所需的 CHW 数组和比例。
+
 ## 导出
 
 <export-matrix />
 
 导出产物会按文件后缀通过 `LibreYOLO()` 重新加载回来，所以一个 `.onnx` 或 `.engine` 文件的表现就像一个检查点，返回同样的 `Results`。[导出](/docs/export)列出了每种格式都接受的参数，以及少数格式额外加上的参数。
+
+<code-tabs name="export" />
 
 ## 检查点
 
@@ -157,7 +163,7 @@ pip install "libreyolo[lora]"
 
 <provenance-box>
 
-这个家族只提供 ConvNeXt V1。ConvNeXt-V2 的小尺寸预训练检查点采用 CC-BY-NC-4.0 许可，被刻意排除在外，因为非商用权重没法在一个 MIT/商用库里重新分发。
+本页介绍 ConvNeXt V1。[ConvNeXt V2](/docs/models/convnextv2) 是独立的家族，其官方预训练权重保留 CC-BY-NC-4.0 许可。
 
 </provenance-box>
 

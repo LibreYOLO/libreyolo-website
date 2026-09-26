@@ -14,7 +14,7 @@ keywords:
   - VGG-19
   - 畳み込みニューラルネットワーク
   - 画像分類
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -77,7 +77,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 26eb6ff5811533fd
+source_hash: 7e22e5bf59ca038a
 ---
 
 ## インストール
@@ -112,6 +112,8 @@ pip install libreyolo
 フォルダーがあるディレクトリ）に対して実行し、top-1とtop-5の精度を返します。
 
 <code-tabs name="val" />
+
+検証とINT8キャリブレーションでは、ファミリーの評価用変換を使います。エクスポートのメタデータには`norm_mean`、`norm_std`、`resize_mode`が記録されます。古いファイルでは、ファミリーの値にフォールバックします。キャリブレーションの前処理は、必要なCHW配列と比率を返します。
 
 ## エクスポート
 

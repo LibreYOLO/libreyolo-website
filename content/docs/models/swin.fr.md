@@ -13,7 +13,7 @@ keywords:
   - vision transformer hiérarchique
   - shifted window attention
   - classification d'images
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -89,7 +89,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: faa6bbacae62d88e
+source_hash: 7020bd102e5ba1d6
 ---
 
 ## Installer
@@ -134,6 +134,8 @@ des sous-dossiers `train/` et `val/`, un dossier par classe) et renvoie
 l'exactitude top-1 et top-5.
 
 <code-tabs name="val" />
+
+La validation et la calibration INT8 utilisent la transformation d'évaluation de la famille. Les métadonnées d'export enregistrent `norm_mean`, `norm_std` et `resize_mode` ; les anciens artefacts utilisent les valeurs de la famille par défaut. Les préprocesseurs de calibration renvoient le tableau CHW et le ratio requis.
 
 ## Exporter
 

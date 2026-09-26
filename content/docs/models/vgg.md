@@ -5,7 +5,7 @@ seo_title: "VGG: run VGG-16/19 image classifiers in LibreYOLO"
 description: "Predict, validate and export VGG classifiers with LibreYOLO. BSD-3-Clause torchvision weights; fine-tuning is not yet supported."
 lead: "VGG is a convolutional image classifier built from uniform stacks of small 3x3 convolutions instead of larger filters. LibreYOLO ships the 16- and 19-layer sizes, plain and with batch normalization, for image classification."
 keywords: [VGG, VGG-16, VGG-19, convolutional neural network, image classification]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -103,6 +103,8 @@ fine-tuning is not implemented.
 `val/` subfolders, one folder per class) and returns top-1 and top-5 accuracy.
 
 <code-tabs name="val" />
+
+Validation and INT8 calibration use the family evaluation transform. Export metadata records `norm_mean`, `norm_std` and `resize_mode`; older artifacts fall back to family values. Calibration preprocessors return the required CHW array and ratio.
 
 ## Export
 

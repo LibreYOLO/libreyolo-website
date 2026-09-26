@@ -4,13 +4,12 @@ families:
   - resnet
 seo_title: 'ResNet: huấn luyện, xác thực và xuất theo Apache-2.0'
 description: >-
-  Dùng ResNet trong LibreYOLO để phân loại ảnh. Cài đặt, dự đoán, tinh chỉnh,
-  xác thực và xuất LibreResNet18/34/50/101.
+  Dùng ResNet trong LibreYOLO để phân loại ảnh. Cài đặt, dự đoán, tinh chỉnh, xác thực và xuất
+  LibreResNet18/34/50/101.
 lead: >-
-  ResNet là bộ phân loại ảnh được xây dựng từ các residual block, với skip
-  connection cho phép mạng thêm nhiều lớp hơn mà không bị giảm độ chính xác như
-  các stack tích chập sâu thuần túy. LibreYOLO hỗ trợ mô hình cho một tác vụ:
-  phân loại.
+  ResNet là bộ phân loại ảnh được xây dựng từ các residual block, với skip connection cho phép mạng thêm nhiều
+  lớp hơn mà không bị giảm độ chính xác như các stack tích chập sâu thuần túy. LibreYOLO hỗ trợ mô hình cho
+  một tác vụ: phân loại.
 keywords:
   - ResNet
   - ResNet50
@@ -18,7 +17,7 @@ keywords:
   - residual learning
   - mạng residual sâu
   - bộ phân loại ImageNet
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -33,8 +32,10 @@ snippets:
         print(result.probs.top5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreResNet50-cls.pt source=cat.jpg save=True
+      code: >
+        libreyolo predict model=LibreResNet50-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   train:
     - label: Python
       language: python
@@ -92,9 +93,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: e2f46c73716af1b7
+source_hash: 2442e8c325bbe791
 ---
-
 ## Cài đặt
 
 ResNet không cần extra tùy chọn. Mọi thành phần mà mô hình import đều có trong bản cài đặt cơ sở.
@@ -125,11 +125,15 @@ Khi giữ nguyên thiết lập, trainer chạy 100 epoch ở `lr0=1e-3` với A
 
 Xem [huấn luyện](/docs/train) để biết về dataset, tăng cường dữ liệu (data augmentation), multi-GPU và logger.
 
+`cls_pw=0` tắt trọng số loss; các giá trị đến 1 dùng trọng số nghịch đảo tần suất được chuẩn hóa về trung bình 1. `class_weights=True` dùng nghịch đảo tần suất chuẩn hóa theo mẫu và không thể kết hợp với `cls_pw>0`. Các thiết lập này phải khớp khi tiếp tục huấn luyện. Xem [phân loại](/docs/tasks/image-classification).
+
 ## Xác thực
 
 `val()` trả về dictionary gồm các key `metrics/`. Với tác vụ phân loại, đó là độ chính xác top-1 và top-5 trên phần tách xác thực.
 
 <code-tabs name="val" />
+
+Đánh giá và hiệu chuẩn INT8 dùng phép biến đổi đánh giá của họ mô hình. Metadata xuất ghi `norm_mean`, `norm_std` và `resize_mode`; các tệp cũ dùng giá trị của họ mô hình khi thiếu metadata. Bộ tiền xử lý hiệu chuẩn trả về mảng CHW và tỷ lệ cần thiết.
 
 ## Xuất
 
@@ -152,5 +156,3 @@ Mọi tệp trọng số đã phát hành cho họ mô hình này.
 ## Trích dẫn
 
 <citation-block />
-
-

@@ -5,7 +5,7 @@ seo_title: "AlexNet: run the classic ImageNet classifier in LibreYOLO"
 description: "Predict, validate and export AlexNet with LibreYOLO. BSD-3-Clause torchvision weights; fine-tuning is not yet supported."
 lead: "AlexNet is the convolutional network that won ILSVRC 2012 and helped start the deep learning era in computer vision. LibreYOLO ships the single-tower, later revision of the architecture for image classification."
 keywords: [AlexNet, ImageNet, convolutional neural network, image classification]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -102,6 +102,8 @@ validation and export are supported, and fine-tuning is not implemented.
 `val/` subfolders, one folder per class) and returns top-1 and top-5 accuracy.
 
 <code-tabs name="val" />
+
+Validation and INT8 calibration use the family evaluation transform. Export metadata records `norm_mean`, `norm_std` and `resize_mode`; older artifacts fall back to family values. Calibration preprocessors return the required CHW array and ratio.
 
 ## Export
 

@@ -17,7 +17,7 @@ keywords:
   - ImageNet
   - classifieur d'images pré-entraîné
   - famille de musée
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -76,7 +76,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 9c67c8554b2af5c6
+source_hash: 4dad5f1aa0943dd9
 ---
 
 ## Installation
@@ -114,6 +114,8 @@ dataset organisé selon la structure de dossiers classique `train/<class>/` et
 `val/<class>/`.
 
 <code-tabs name="val" />
+
+La validation et la calibration INT8 utilisent la transformation d'évaluation de la famille. Les métadonnées d'export enregistrent `norm_mean`, `norm_std` et `resize_mode` ; les anciens artefacts utilisent les valeurs de la famille par défaut. Les préprocesseurs de calibration renvoient le tableau CHW et le ratio requis.
 
 ## Exporter
 

@@ -351,7 +351,7 @@ Update this list in the same commit as the work. It is the resume point.
 - [x] Phase 2: 30 new English pages and 12 stub-to-full pages (42 / 42), including the two existing grounding stubs. All 12 existing Japanese twins updated. Custom tracking fits the existing task page; VLM tuning has a separate workflow because its trainer and checkpoint contract differ from detector LoRA.
   - Local HTTP render checks cover all 42 pages. PP-LiteSeg export/checkpoint tables checked at 390 px in dark mode; table and code containers scroll.
   - Nav, sitemap and llms discovery wired in this phase so the added routes are indexed in the same change. Full plumbing audit remains Phase 5.
-- [ ] Phase 3: existing English pages and every existing locale twin committed (16 / 66). All structural and freshness checks pass.
+- [ ] Phase 3: existing English pages and every existing locale twin committed (25 / 66). All structural and freshness checks pass.
 - [ ] Phase 4: 8 English release-level pages drafted; 103 changelog entries covered after excluding A90. Versions keeps the 1.5.0 TODO(owner), no archive route. Existing twins in progress.
 - [x] Phase 5: nav, sitemap, llms.txt and generated indexes verified. Task count is generated (20); added labels for the three tasks and guarded missing artwork, without changing homepage layout.
 - [x] Phase 6: 936 existing locale twins updated (Japanese 84; each other locale 71). All 13 locale validators pass, and `sync-check` passes 2,275 / 2,275. Final `--stamp` changes zero already-current hashes. Brand-new pages remain English-only.

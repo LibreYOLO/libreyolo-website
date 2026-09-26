@@ -19,7 +19,7 @@ keywords:
   - залишкове навчання
   - глибокі залишкові мережі
   - класифікатор ImageNet
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -35,7 +35,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreResNet50-cls.pt source=cat.jpg save=True
+        libreyolo predict model=LibreResNet50-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python
       language: python
@@ -99,7 +99,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: e2f46c73716af1b7
+source_hash: 2442e8c325bbe791
 ---
 
 ## Встановлення
@@ -154,12 +154,16 @@ pip install libreyolo
 Датасети, аугментацію, кілька GPU та логери описано в розділі
 [навчання](/docs/train).
 
+`cls_pw=0` вимикає зважування втрат; значення до 1 використовують ваги, обернені до частот і нормалізовані до середнього 1. `class_weights=True` натомість використовує обернені частоти, нормалізовані за зразками, і не поєднується з `cls_pw>0`. Під час відновлення ці налаштування мають збігатися. Див. [класифікацію](/docs/tasks/image-classification).
+
 ## Валідація
 
 `val()` повертає словник ключів `metrics/`. Для класифікації це правильність
 top-1 і top-5 на валідаційному поділі.
 
 <code-tabs name="val" />
+
+Валідація й калібрування INT8 використовують перетворення оцінювання сімейства. Метадані експорту записують `norm_mean`, `norm_std` і `resize_mode`; старіші артефакти використовують резервні значення сімейства. Калібрувальні препроцесори повертають потрібний масив CHW і коефіцієнт масштабу.
 
 ## Експорт
 

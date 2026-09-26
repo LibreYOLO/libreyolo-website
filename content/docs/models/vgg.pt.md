@@ -18,7 +18,7 @@ keywords:
   - VGG-19
   - rede neural convolucional
   - classificação de imagens python
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -81,7 +81,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 26eb6ff5811533fd
+source_hash: 7e22e5bf59ca038a
 ---
 
 ## Instalação
@@ -123,6 +123,8 @@ subpastas `train/` e `val/`, uma pasta por classe) e retorna a acurácia top-1 e
 top-5.
 
 <code-tabs name="val" />
+
+Validação e calibração INT8 usam a transformação de avaliação da família. Os metadados de exportação registram `norm_mean`, `norm_std` e `resize_mode`; artefatos antigos usam os valores da família como fallback. Os pré-processadores de calibração retornam o array CHW e a razão exigidos.
 
 ## Exportação
 

@@ -18,7 +18,7 @@ keywords:
   - bildklassifikation python
   - convnext modell trainieren
   - imagenet klassifikator
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -34,7 +34,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreConvNeXtt-cls.pt source=cat.jpg save=True
+        libreyolo predict model=LibreConvNeXtt-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python
       language: python
@@ -99,7 +99,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 1682cc69cf2925e6
+source_hash: 8f33a40e4d3a8f29
 ---
 
 ## Installation
@@ -163,6 +163,8 @@ Block-MLPs ein, statt das ganze Backbone nachzutrainieren.
 Siehe [Training](/docs/train) für Datensätze, Augmentierung, Multi-GPU und
 Logger.
 
+`cls_pw=0` deaktiviert die Loss-Gewichtung; Werte bis 1 verwenden inverse Häufigkeitsgewichte, die auf den Mittelwert 1 normiert sind. `class_weights=True` verwendet stattdessen anhand der Stichproben normierte inverse Häufigkeiten und lässt sich nicht mit `cls_pw>0` kombinieren. Diese Einstellungen müssen beim Fortsetzen übereinstimmen. Siehe [Klassifikation](/docs/tasks/image-classification).
+
 ## Validierung
 
 `val()` gibt ein Dictionary mit `metrics/`-Schlüsseln zurück. Bei der
@@ -170,6 +172,8 @@ Klassifikation sind das die Top-1- und die Top-5-Accuracy über dem
 Validierungs-Split.
 
 <code-tabs name="val" />
+
+Validierung und INT8-Kalibrierung verwenden die Auswertungstransformation der Familie. Die Exportmetadaten speichern `norm_mean`, `norm_std` und `resize_mode`; ältere Artefakte greifen auf die Familienwerte zurück. Kalibrierungsvorverarbeiter geben das erforderliche CHW-Array und das Verhältnis zurück.
 
 ## Export
 
@@ -193,11 +197,7 @@ Jede veröffentlichte Gewichtsdatei dieser Familie.
 
 <provenance-box>
 
-In dieser Familie wird nur ConvNeXt V1 ausgeliefert. Die kleinen
-vortrainierten Checkpoints von ConvNeXt-V2 stehen unter CC-BY-NC 4.0 und sind
-bewusst ausgeschlossen, denn nicht-kommerzielle Gewichte lassen sich nicht
-innerhalb einer MIT-lizenzierten, kommerziell nutzbaren Bibliothek
-weiterverbreiten.
+Diese Seite behandelt ConvNeXt V1. [ConvNeXt V2](/docs/models/convnextv2) ist eine eigene Familie; ihre offiziellen vortrainierten Gewichte behalten CC-BY-NC-4.0.
 
 </provenance-box>
 

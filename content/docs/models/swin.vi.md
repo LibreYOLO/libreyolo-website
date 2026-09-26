@@ -4,18 +4,17 @@ families:
   - swin
 seo_title: 'Swin Transformer: phân loại ảnh bằng LibreSwin của LibreYOLO'
 description: >-
-  Dự đoán, xác thực và xuất bộ phân loại Swin Transformer bằng LibreYOLO. Trọng
-  số MIT; chưa hỗ trợ tinh chỉnh.
+  Dự đoán, xác thực và xuất bộ phân loại Swin Transformer bằng LibreYOLO. Trọng số MIT; chưa hỗ trợ tinh
+  chỉnh.
 lead: >-
-  Swin Transformer V1: vision transformer phân cấp tính attention bên trong các
-  cửa sổ cục bộ dịch chuyển thay vì trên toàn ảnh. LibreYOLO cung cấp bốn kích
-  thước để phân loại ảnh.
+  Swin Transformer V1: vision transformer phân cấp tính attention bên trong các cửa sổ cục bộ dịch chuyển thay
+  vì trên toàn ảnh. LibreYOLO cung cấp bốn kích thước để phân loại ảnh.
 keywords:
   - Swin Transformer
   - vision transformer phân cấp
   - shifted window attention
   - phân loại ảnh
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -38,23 +37,16 @@ snippets:
   val:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreSwint-cls.pt")
 
-
-        # data là thư mục gốc có các phần tách thư mục lớp đối tượng train/ và
-        val/
-
+        # data là thư mục gốc có các phần tách thư mục lớp đối tượng train/ và val/
         # (bố cục ImageFolder), không phải YAML dataset.
-
         metrics = model.val(data="imagenet-1k/")
 
-
         print(metrics["metrics/accuracy_top1"])
-
         print(metrics["metrics/accuracy_top5"])
     - label: CLI
       language: bash
@@ -85,9 +77,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: faa6bbacae62d88e
+source_hash: 7020bd102e5ba1d6
 ---
-
 ## Cài đặt
 
 Swin không cần extra tùy chọn. Mọi thành phần mà mô hình import đều có trong bản cài đặt cơ sở.
@@ -114,6 +105,8 @@ Có bốn kích thước từ tiny đến large, được xây dựng từ cùng
 
 <code-tabs name="val" />
 
+Đánh giá và hiệu chuẩn INT8 dùng phép biến đổi đánh giá của họ mô hình. Metadata xuất ghi `norm_mean`, `norm_std` và `resize_mode`; các tệp cũ dùng giá trị của họ mô hình khi thiếu metadata. Bộ tiền xử lý hiệu chuẩn trả về mảng CHW và tỷ lệ cần thiết.
+
 ## Xuất
 
 <export-matrix />
@@ -135,5 +128,3 @@ Mọi tệp trọng số đã phát hành cho họ mô hình này.
 ## Trích dẫn
 
 <citation-block />
-
-

@@ -5,7 +5,7 @@ seo_title: "ResNet: train, validate and export under Apache-2.0"
 description: "Use ResNet in LibreYOLO for image classification. Install, predict, fine-tune, validate and export LibreResNet18/34/50/101."
 lead: "ResNet is an image classifier built from residual blocks, skip connections that let a network add many more layers without the accuracy loss deep plain convolutional stacks otherwise suffer. LibreYOLO supports it for one task: classification."
 keywords: [ResNet, ResNet50, image classification, residual learning, deep residual networks, ImageNet classifier]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -21,7 +21,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreResNet50-cls.pt source=cat.jpg save=True
+        libreyolo predict model=LibreResNet50-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python
       language: python
@@ -128,12 +128,16 @@ with `nn.Linear` layers and ResNet has none.
 See [training](/docs/train) for datasets, augmentation, multi-GPU and
 loggers.
 
+`cls_pw=0` disables loss weighting; values up to 1 use inverse-frequency weights normalized to mean 1. `class_weights=True` instead uses sample-normalized inverse frequencies and cannot combine with `cls_pw>0`. These settings must match when resuming. See [classification](/docs/tasks/image-classification).
+
 ## Validate
 
 `val()` returns a dictionary of `metrics/` keys. For classification that is
 top-1 and top-5 accuracy over the validation split.
 
 <code-tabs name="val" />
+
+Validation and INT8 calibration use the family evaluation transform. Export metadata records `norm_mean`, `norm_std` and `resize_mode`; older artifacts fall back to family values. Calibration preprocessors return the required CHW array and ratio.
 
 ## Export
 
