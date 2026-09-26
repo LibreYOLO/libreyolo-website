@@ -6,7 +6,7 @@ import { archivedDocsMetadata, ArchivedDocsView } from '@/components/docs/DocVie
 /*
  * Frozen docs for LibreYOLO 1.5.0: the whole v2 tree as it stood at release,
  * rendered by the same views as /docs from the snapshot in
- * content/docs-archive/v1.5.0 and src/data/docs/archive/v1.5.0. Every page
+ * content/archive/docs/v1.5.0 and src/data/docs/archive/v1.5.0. Every page
  * canonicalises to its current counterpart and none is in the sitemap.
  */
 const source = getDocsArchive('v1.5.0')

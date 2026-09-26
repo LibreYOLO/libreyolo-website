@@ -44,15 +44,22 @@ export const DOCS_SECTION_INDEXES = [
  * follow inside that tree: identity for the current tree, and the version
  * prefix for an archive when the archive has that page. A link to something
  * the archive never had (LibreVLM, the older single-page docs) is left alone.
+ *
+ * `docDir`, `docFile` and `upstreamFile` build paths from a literal prefix and
+ * extension at the call site, not from a directory passed in. The bundler's
+ * file tracer can then narrow each tree to its own folder; a path joined from a
+ * parameter makes it match every file in the project and warn. For the same
+ * reason the archives live under content/archive/, not beside content/docs,
+ * where the current tree's `content/docs<anything>` pattern would match them.
  */
-function createDocsSource({ version, registry, nav, docsDir, upstreamDir, basePath = '/docs', archived = false }) {
+function createDocsSource({ version, registry, nav, docsDir, docDir, docFile, upstreamFile, basePath = '/docs', archived = false }) {
   const localizedNavCache = new Map()
   let pageSet = null
 
   function readDoc(section, slug, locale) {
-    const englishPath = path.join(docsDir, section, `${slug}.md`)
+    const englishPath = docFile(section, slug)
     const localizedPath =
-      locale && locale !== 'en' ? path.join(docsDir, section, `${slug}.${locale}.md`) : null
+      locale && locale !== 'en' ? docFile(section, `${slug}.${locale}`) : null
 
     let filePath = englishPath
     let translated = false
@@ -67,7 +74,7 @@ function createDocsSource({ version, registry, nav, docsDir, upstreamDir, basePa
   }
 
   function getDocSlugs(section) {
-    const dir = path.join(docsDir, section)
+    const dir = docDir(section)
     if (!fs.existsSync(dir)) return []
     return fs
       .readdirSync(dir)
@@ -76,7 +83,7 @@ function createDocsSource({ version, registry, nav, docsDir, upstreamDir, basePa
   }
 
   function readUpstream(slug) {
-    const file = path.join(upstreamDir, `${slug}.json`)
+    const file = upstreamFile(slug)
     if (!slug || !fs.existsSync(file)) return null
     return JSON.parse(fs.readFileSync(file, 'utf8'))
   }
@@ -85,7 +92,7 @@ function createDocsSource({ version, registry, nav, docsDir, upstreamDir, basePa
     if (!fs.existsSync(docsDir)) return []
     const pages = []
     for (const section of fs.readdirSync(docsDir)) {
-      const dir = path.join(docsDir, section)
+      const dir = docDir(section)
       if (!fs.statSync(dir).isDirectory()) continue
       for (const slug of getDocSlugs(section)) {
         const doc = readDoc(section, slug, 'en')
@@ -136,7 +143,7 @@ function createDocsSource({ version, registry, nav, docsDir, upstreamDir, basePa
           if (!parts.length) continue
           const section = parts.length === 1 ? STANDALONE_DIR : parts[0]
           const slug = parts.length === 1 ? parts[0] : parts.slice(1).join('/')
-          const file = path.join(docsDir, section, `${slug}.${key}.md`)
+          const file = docFile(section, `${slug}.${key}`)
           if (!fs.existsSync(file)) continue
           const { data } = matter(fs.readFileSync(file, 'utf8'))
           if (data.title) titles.set(item.slug, data.title)
@@ -210,7 +217,9 @@ export const currentDocs = createDocsSource({
   registry,
   nav,
   docsDir: path.join(process.cwd(), 'content', 'docs'),
-  upstreamDir: path.join(process.cwd(), 'src', 'data', 'docs', 'upstream'),
+  docDir: (section) => path.join(process.cwd(), 'content', 'docs', section),
+  docFile: (section, name) => path.join(process.cwd(), 'content', 'docs', section, `${name}.md`),
+  upstreamFile: (slug) => path.join(process.cwd(), 'src', 'data', 'docs', 'upstream', `${slug}.json`),
 })
 
 /*
@@ -225,8 +234,10 @@ export const DOCS_ARCHIVES = {
     version: '1.5.0',
     registry: registryV150,
     nav: navV150,
-    docsDir: path.join(process.cwd(), 'content', 'docs-archive', 'v1.5.0'),
-    upstreamDir: path.join(process.cwd(), 'src', 'data', 'docs', 'archive', 'v1.5.0', 'upstream'),
+    docsDir: path.join(process.cwd(), 'content', 'archive', 'docs', 'v1.5.0'),
+    docDir: (section) => path.join(process.cwd(), 'content', 'archive', 'docs', 'v1.5.0', section),
+    docFile: (section, name) => path.join(process.cwd(), 'content', 'archive', 'docs', 'v1.5.0', section, `${name}.md`),
+    upstreamFile: (slug) => path.join(process.cwd(), 'src', 'data', 'docs', 'archive', 'v1.5.0', 'upstream', `${slug}.json`),
     basePath: '/docs/v1.5.0',
     archived: true,
   }),
