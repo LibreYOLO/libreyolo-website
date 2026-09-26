@@ -11,8 +11,8 @@ keywords:
   - coco panoptic format
   - depth dataset
   - pose kpt_shape
-last_verified: "1.5.0"
-verification: "Mirrors docs/dataset_schema.md in the libreyolo repository at v1.5.0, with loader names cross-checked against libreyolo/data/."
+last_verified: "1.6.0"
+verification: "Mirrors docs/dataset_schema.md in the libreyolo repository at v1.6.0, with loader names cross-checked against libreyolo/data/."
 snippets:
   usage:
     - label: Parse one detection label row
@@ -114,6 +114,8 @@ optional `flip_idx`, an integer permutation of `0..K-1`.
 The field count is exactly `5 + K * D`, where `D` is the second `kpt_shape`
 value. Keypoint coordinates are normalized. Visibility `v`, when present, is
 `0`, `1` or `2`.
+
+RF-DETR multi-class datasets require `names` and may define `kpt_names` per class. Empty keypoint-name lists mark box-only classes. At least one class must have keypoints.
 
 ## obb
 
@@ -447,3 +449,15 @@ No training or validation dataset-file contract is implemented for `gaze`.
 `point` is a model-output task rather than a dataset-label schema. Point
 families may adapt existing labels internally, for example by deriving object
 centers from box rows, but a point-only text label format is not defined.
+
+## Event histograms
+
+YOLO9 and RF-DETR detection accept `.npy` HWC arrays with two nonnegative finite count planes, positive then negative. `input_profile` requires `format: event_histogram`, `layout: HWC`, `polarity: positive_negative`, `encoding: counts`, positive `scale` and positive integer `window_us`. Labels use normal detection text files. See [input preparation](/docs/train/event-histograms).
+
+## Robot policies
+
+The `act` task uses a LeRobot v3 dataset directory or Hub dataset ID, containing episode, camera, state and action features. It does not use detection YAML. See [robot policies](/docs/tasks/robot-policies).
+
+## albedo
+
+Pair `images/<split>/<name>.<image extension>` with `albedo/<split>/<name>.npy`. Targets are finite floating-point `(H, W, 3)` linear-RGB values in [0, 1] with the same dimensions as the image. Set `input_dir` and `albedo_dir` to single-component folder names if needed. Display PNGs and sRGB values are not quantitative albedo targets.

@@ -1,12 +1,8 @@
 ---
 title: 결과 유형
 seo_title: LibreYOLO 결과 객체 참조
-description: >-
-  LibreYOLO Results 객체가 담을 수 있는 모든 페이로드, 작업 형태별 슬롯 하나: 박스, 마스크, 키포인트, 확률, OBB,
-  깊이, OCR, 임베딩 및 추가 열 개.
-lead: >-
-  Results는 모든 LibreYOLO 모델의 단일 이미지별 반환 유형입니다. 그것은 18개의 선택적 페이로드 슬롯을 가지고 있으며, 각
-  슬롯은 하나의 작업 형태에 해당하며, 모델이 생성한 것만 채웁니다.
+description: "LibreYOLO 결과 페이로드: 박스, 마스크, 키포인트, 분류, 깊이, 알베도, 3D 직육면체 및 로봇 액션 청크."
+lead: Results는 모든 LibreYOLO 모델이 이미지별로 반환하는 단일 타입입니다. 작업 형태별 선택적 페이로드 슬롯이 있으며 모델이 생성한 슬롯만 채웁니다.
 keywords:
   - libreyolo 결과 객체
   - 결과.상자
@@ -15,10 +11,8 @@ keywords:
   - 결과.깊이_맵
   - 결과.요약
   - libreyolo 결과를 json으로
-last_verified: 1.5.0
-verification: >-
-  슬롯 이름, 형태, 속성 및 기본값은 v1.5.0의 libreyolo/utils/results.py에서 읽었습니다. 의미는 페이로드 클래스
-  도큐스트링에서 인용했습니다.
+last_verified: 1.6.0
+verification: '슬롯 이름, 형태, 속성 및 기본값은 v1.6.0의 libreyolo/utils/results.py에서 읽었습니다. 의미는 페이로드 클래스 도큐스트링에서 인용했습니다.'
 snippets:
   usage:
     - label: Python
@@ -48,7 +42,7 @@ snippets:
         # 행을 일반 딕셔너리로, 그 다음에는 JSON으로.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 16f654364ae6448a
+source_hash: d74276d805c22c92
 ---
 
 ## 결과 객체
@@ -160,6 +154,8 @@ source_hash: 16f654364ae6448a
 
 조밀한 상대 역-깊이 지도, 원본 이미지 캔버스에서 `(H, W)` 형태의 부동 소수점. 값이 높을수록 카메라에 더 가까움. 값은 상대적이며, 미터 단위가 아님. `min`, `max` 및 `mean`는 유한 값에 대해 계산되며, `normalized()`는 지도를 `[0, 1]`로 재조정함.
 
+`DepthMap(data, orig_shape=None, encoding="inverse_depth")`는 `encoding="depth"`와 `encoding="log_depth"`도 받습니다. 검증기는 정렬 전에 이를 해석합니다. 상대 깊이 값에는 여전히 미터 단위 스케일 보장이 없습니다.
+
 ## 노말맵
 
 조밀한 표면 법선 필드, 원본 이미지 캔버스에서 float32 `(H, W, 3)`, OpenCV 카메라 프레임에서: `+x` 오른쪽, `+y` 아래, `+z` 장면 안쪽. 법선은 카메라를 향하므로, 정면 평행 표면은 `(0, 0, -1)`. 모든 픽셀은 단위 벡터입니다. `assert_normalized(atol=1e-4)`가 그 불변성을 확인합니다.
@@ -219,4 +215,16 @@ source_hash: 16f654364ae6448a
 
 `summary(normalize=False, decimals=5, embeddings=False)`는 설정된 슬롯에 따라 탐지, 세그먼트, 포인트 또는 영역당 한 행씩의 일반 딕셔너리 목록을 반환합니다. `to_json(**kwargs)`는 자신의 인수를 `summary`에 전달하고 JSON 문자열을 반환합니다.
 
-`plot()`는 표준 시각화에서 조밀한 정상 또는 엣지 결과를 렌더링하며, 다른 결과 유형에서는 증가합니다. 다른 작업에 대한 주석된 이미지는 `predict(save=True)`에서 가져옵니다.
+`plot()`은 모든 작업 페이로드를 렌더링합니다. 이미지 오버레이의 기본값은 BGR 배열이며, `pil=True`로 PIL을 요청합니다. 엣지와 법선 맵 결과는 PIL 기본값을 유지합니다.
+
+## Boxes3D
+
+`Boxes3D(data, orig_shape=None, intrinsics=None)`는 `(N, 14)` 행을 담습니다. 중심 xyz, 크기 wlh, 쿼터니언 wxyz, 순위 점수, 클래스 ID, 2D 신뢰도, 3D 신뢰도입니다. 좌표는 카메라 좌표계의 미터 단위이며 x는 오른쪽, y는 아래쪽, z는 앞쪽입니다. 월드 좌표계를 의미하지는 않습니다. 3x3 내부 파라미터는 원본 캔버스를 기준으로 합니다. 행은 `Results.boxes`와 정렬됩니다.
+
+## AlbedoMap
+
+`AlbedoMap(data, orig_shape=None)`은 선형 RGB를 담습니다. 표시용 변환은 sRGB를 만들며, 정량적 알베도 검증은 원래 선형 값을 사용합니다.
+
+## Actions
+
+`Actions(data, orig_shape=None, names=None, fps=None, instruction=None)`는 float32 동작 청크 `(T, D)`를 나타냅니다. `first`는 첫 행을 반환하며 슬라이싱은 시간 단계를 선택합니다. 값은 정책 데이터셋의 단위를 유지합니다. `names`는 동작 차원, `fps`는 제어 주파수, `instruction`은 조건 텍스트를 설명합니다.

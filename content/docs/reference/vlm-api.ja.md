@@ -14,9 +14,9 @@ keywords:
   - SmolVLM2
   - Florence-2
   - libreyolo chat
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  別名はlibreyolo/models/vlm/__init__.py、リポジトリ、サイズ、タスクリストはlibreyolo/models/vlm/以下のファミリーモジュールとlibreyolo/models/sensenova/model.py、呼び出し規則と例外はlibreyolo/models/vlm/base.pyから、すべてv1.5.0時点で確認しました。
+  別名はlibreyolo/models/vlm/__init__.py、リポジトリ、サイズ、タスクリストはlibreyolo/models/vlm/以下のファミリーモジュールとlibreyolo/models/sensenova/model.py、呼び出し規則と例外はlibreyolo/models/vlm/base.pyから、すべてv1.6.0時点で確認しました。
 snippets:
   install:
     - label: bash
@@ -42,7 +42,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 57ddac08bc4d4e05
+source_hash: 77a04856cfe4f88c
 ---
 
 ## インストール
@@ -79,9 +79,11 @@ LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 
 `LibreVLM`、`LibreLFM2VL`、`LibreQwen3VL`、`LibreSmolVLM2`、`LibreInternVL3`、`LibreFlorence2`、`LibreKosmos2`、`LibreLocateAnything`、`LibreMODUS`（`LibreModus` という綴りも可能）はパッケージレベルでエクスポートされます。
 
+物体検出には、`north-micro-vision`、`gemma-4-e2b`、`gemma-4-e4b`、`moondream-2`、`moondream-3`、`lfm2-vl-3b`もあります。単独の`gemma-4`という別名はE4Bを選択します。Molmo2の別名は`molmo2-4b`、`molmo2-8b`、`molmo2-o-7b`で、デフォルトは4Bです。別名は振り分け先を定めるもので、すべてのリモートスナップショットのダウンロードとテストが完了していることを意味しません。
+
 ## タスク
 
-ほとんどのファミリーは `detect` だけを提供します。2つのファミリーは、さらに多くのタスクを提供します。
+対応するタスクはファミリーごとに異なります。次のアダプターは複数のタスクに対応します。
 
 | ファミリー | 対応タスク |
 |---|---|
@@ -95,6 +97,8 @@ model.set_task(task: str) -> LibreVLMModel
 ```
 
 タスクはファミリーの対応リストに照らして検証され、その後の `predict()` と `track()` の呼び出しでも維持されます。また、呼び出しを連鎖できるようモデルが返されます。
+
+Molmo2は点を返し、独自のポイント指定テンプレートには`{label}`が必要です。Moondreamは物体検出、点、ネイティブのチャットに対応します。指示からクリック位置を得るクエリには[LibreGround](/docs/reference/ground-api)を使ってください。
 
 ## set_classes
 
@@ -122,7 +126,7 @@ model.chat(image, prompt, max_new_tokens=None, color_format="auto") -> str
 
 ## 非対応
 
-`train()`、`val()`、`export()` は `NotImplementedError` を送出します。アップストリームでファインチューニングし、得られた重みを読み込んでください。
+エクスポートと検出mAPの検証には対応していません。学習への対応は、後述するQwen3-VLのワークフローに限定されます。
 
 ## リモートコード
 
@@ -130,3 +134,6 @@ model.chat(image, prompt, max_new_tokens=None, color_format="auto") -> str
 
 LibreMODUSはチェックポイントスキーマの明示的な例外です。その別名はLibreYOLOの `.pt` ではなく、固定されたアップストリームファイルのディレクトリに解決されます。LibreYOLOはv1.0メタデータを追加せず、再公開もしません。
 
+## 学習
+
+`libreyolo[vlm-train]`をインストールすると、Qwen3-VLは`train(data=...)`による検出用LoRAに対応します。視覚エンコーダーを凍結し、検証損失で最良チェックポイントを選択して、チェックポイントディレクトリを保存します。[VLMのファインチューニング](/docs/train/vlm-fine-tuning)を参照してください。

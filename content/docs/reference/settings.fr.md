@@ -16,8 +16,8 @@ keywords:
   - HF_TOKEN
   - dossier poids libreyolo
   - cache libreyolo
-last_verified: 1.5.0
-verification: "Variables trouvées en recherchant os.environ et os.getenv dans libreyolo/**/*.py en v1.5.0\_; sémantique lue à chaque site d'utilisation. Conventions de répertoires lues dans libreyolo/data/utils.py, libreyolo/utils/download.py, libreyolo/export/exporter.py, libreyolo/models/base/model.py et libreyolo/models/sam3dbody/mhr_body.py."
+last_verified: "1.6.0"
+verification: "Variables trouvées en recherchant os.environ et os.getenv dans libreyolo/**/*.py en v1.6.0\_; sémantique lue à chaque site d'utilisation. Conventions de répertoires lues dans libreyolo/data/utils.py, libreyolo/utils/download.py, libreyolo/export/exporter.py, libreyolo/models/base/model.py et libreyolo/models/sam3dbody/mhr_body.py."
 snippets:
   usage:
     - label: Déplacer la racine des datasets
@@ -35,7 +35,7 @@ snippets:
         moment de l'import.
 
         print(DATASETS_DIR)
-source_hash: 462f1288582225ce
+source_hash: 82fbf9f3b1540603
 ---
 
 ## Variables d'environnement
@@ -68,6 +68,8 @@ La sélection des kernels court-circuite aussi les imports. Lorsque
 inclus dans l'arborescence ne sont jamais importés. Le registre contrôlé par
 ces trois variables est documenté dans la page sur les
 [kernels](/docs/reference/kernels).
+
+`LIBREYOLO_TRITON_MSDA=0` désactive le fournisseur intégré d'attention déformable Triton. `LIBREYOLO_HUB_KERNELS=0` désactive les kernels du Hub et leur suggestion d'installation. Les deux conservent la solution de repli portable.
 
 ## Variables définies par la bibliothèque
 
@@ -107,6 +109,8 @@ Un token n'est requis que pour les dépôts protégés. SAM 3 est l'exemple
 fourni\u00a0: ses poids sont téléchargés depuis un dépôt protégé par une licence
 personnalisée, vous devez donc accepter les conditions sur la page du dépôt et
 authentifier la session.
+
+`HF_TOKEN` authentifie le chargement et la publication de checkpoints Hub ainsi que le logger Hub. `OPENAI_API_KEY` et `OPENROUTER_API_KEY` fournissent les identifiants des [routes de fournisseurs LibreLLM](/docs/reference/llm-api) correspondantes.
 
 ## Répertoires
 

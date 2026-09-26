@@ -17,9 +17,9 @@ keywords:
   - formato coco panoptic
   - dataset profundidad
   - pose kpt_shape
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  Refleja docs/dataset_schema.md del repositorio libreyolo en la v1.5.0, con los
+  Refleja docs/dataset_schema.md del repositorio libreyolo en la v1.6.0, con los
   nombres de los loaders verificados contra libreyolo/data/.
 snippets:
   usage:
@@ -38,7 +38,7 @@ snippets:
         # (class_id, x1, y1, x2, y2, area) en píxeles
 
         print(row)
-source_hash: a8282c079624044d
+source_hash: 5f4bc7d17822a85d
 ---
 
 ## YAML común
@@ -130,6 +130,8 @@ opcional `flip_idx`, una permutación entera de `0..K-1`.
 El número de campos es exactamente `5 + K * D`, donde `D` es el segundo valor
 de `kpt_shape`. Las coordenadas de los keypoints están normalizadas. La
 visibilidad `v`, cuando está presente, es `0`, `1` o `2`.
+
+Los datasets multiclase de RF-DETR requieren `names` y pueden definir `kpt_names` por clase. Las listas vacías de nombres de keypoints indican clases solo con cajas. Al menos una clase debe tener keypoints.
 
 ## obb
 
@@ -480,3 +482,15 @@ de validación para `gaze`.
 dataset. Las familias point pueden adaptar internamente etiquetas existentes,
 por ejemplo derivando los centros de los objetos a partir de filas de box, pero
 no está definido un formato de etiquetas de texto exclusivo de point.
+
+## Histogramas de eventos
+
+La detección de YOLO9 y RF-DETR acepta arrays `.npy` HWC con dos planos de recuentos finitos no negativos, positivo y luego negativo. `input_profile` requiere `format: event_histogram`, `layout: HWC`, `polarity: positive_negative`, `encoding: counts`, `scale` positivo y `window_us` entero positivo. Las etiquetas usan archivos de texto de detección normales. Consulta [preparación de entradas](/docs/train/event-histograms).
+
+## Políticas robóticas
+
+La tarea `act` usa un directorio de dataset LeRobot v3 o un ID de dataset del Hub con datos de episodios, cámaras, estados y acciones. No usa YAML de detección. Consulta [políticas robóticas](/docs/tasks/robot-policies).
+
+## albedo
+
+Empareja `images/<split>/<name>.<image extension>` con `albedo/<split>/<name>.npy`. Los targets son valores RGB lineales `(H, W, 3)` finitos de coma flotante en [0, 1], con las mismas dimensiones que la imagen. Define `input_dir` y `albedo_dir` como nombres de carpeta de un solo componente si hace falta. Los PNG de visualización y los valores sRGB no son targets de albedo cuantitativos.

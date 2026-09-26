@@ -1,10 +1,8 @@
 ---
 title: Python API
 seo_title: LibreYOLO Python API 参考
-description: LibreYOLO 在包层面导出的名字：五个工厂函数、家族类、Results 载荷、后端、验证器、跟踪器和数据辅助函数。
-lead: >-
-  LibreYOLO 的公开 Python 接口就是 libreyolo/__init__.py 里的 __all__ 列表。这个页面上的所有名字都能用
-  from libreyolo import <name> 导入；不在那个列表里的都是内部实现。
+description: "LibreYOLO 在包级别导出的名称：工厂、家族类、Results 载荷、后端、验证器、跟踪器和数据辅助函数。"
+lead: "LibreYOLO 的公开 Python 接口是 libreyolo/__init__.py 中的 __all__ 列表。包级别导出使用 from libreyolo import <name>；下面的跟踪和训练协议使用各自指定的子模块。"
 keywords:
   - libreyolo python api
   - libreyolo 导入
@@ -14,11 +12,8 @@ keywords:
   - LibreOpenVocab
   - LibreEnsemble
   - libreyolo __all__
-last_verified: 1.5.0
-verification: >-
-  名字与签名读取自 v1.5.0 的
-  libreyolo/__init__.py、libreyolo/models/__init__.py、libreyolo/models/base/model.py、libreyolo/models/base/inference.py、libreyolo/models/sam/model.py、libreyolo/models/vlm/__init__.py、libreyolo/models/openvocab/__init__.py
-  和 libreyolo/ensemble/model.py。
+last_verified: "1.6.0"
+verification: "名字与签名读取自 v1.6.0 的 libreyolo/__init__.py、libreyolo/models/__init__.py、libreyolo/models/base/model.py、libreyolo/models/base/inference.py、libreyolo/models/sam/model.py、libreyolo/models/vlm/__init__.py、libreyolo/models/openvocab/__init__.py 和 libreyolo/ensemble/model.py。"
 snippets:
   usage:
     - label: 用一个工厂函数加载任何模型
@@ -44,7 +39,7 @@ snippets:
 
         print(len(result))
   factories:
-    - label: 五个入口
+    - label: "入口"
       language: python
       code: >
         from libreyolo import LibreYOLO, LibreEnsemble
@@ -72,12 +67,12 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 66e34e78b2e0fb2d
+source_hash: 02fbec762b1ffced
 ---
 
 ## 入口
 
-有五个可调用对象负责加载模型。它们按调用约定划分，而不是按架构划分。
+工厂加载模型或配置 API 客户端。它们按调用约定划分，而不是按架构划分。
 
 | 工厂函数 | 加载什么 | 调用时的提示 | 需要的额外依赖（extra） |
 |---|---|---|---|
@@ -89,8 +84,7 @@ source_hash: 66e34e78b2e0fb2d
 
 <code-tabs name="factories" />
 
-`LibreYOLO` 是唯一读取文件的那个。另外三个接受一个字符串别名，并把它解析成一个
-Hugging Face 仓库，所以那个参数是模型名而不是路径。
+`LibreYOLO` 接受检查点文件和导出产物。其他工厂接受模型别名；`LibreVLM` 和 `LibreVLA` 还可以重新加载各自保存的检查点目录。
 
 ```python
 LibreYOLO(
@@ -113,6 +107,10 @@ Triton 的 HTTP 或 HTTPS 模型 URL。省略时，`size` 和 `nb_classes` 从�
 
 <code-tabs name="usage" />
 
+`LibreGround` 将指令映射为图像点；`LibreVLA` 预测机器人动作块；`LibreLLM` 调用兼容的远程语言模型端点。见[定位 API](/docs/reference/ground-api)、[策略 API](/docs/reference/vla-api) 和[语言模型客户端](/docs/reference/llm-api)。
+
+`LibreYOLO("hf://owner/repo@revision/filename")` 加载 Hub 检查点。`model.push_to_hub(repo_id, private=False)` 发布检查点和模型卡。[Hub 参考](/docs/reference/hugging-face)定义了解析和身份验证方式。
+
 ## 家族类
 
 工厂函数能返回的每个家族也都按名字导出，所以提前知道检查点是哪个时，可以直接构造
@@ -122,8 +120,7 @@ Triton 的 HTTP 或 HTTPS 模型 URL。省略时，`size` 和 `nb_classes` 从�
 Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 ```
 
-在家族类上 `size` 没有默认值，这就是它和工厂函数的区别。YOLO9 及其变体在 `size`
-之后插入 `reg_max: int = 16`。
+构造器默认值因家族而异；直接构造前请检查签名。YOLO9 及其变体在 `size` 后插入 `reg_max: int = 16`。
 
 检测与多任务家族：`LibreYOLO9`、`LibreYOLO9E2E`、
 `LibreYOLO9P2`、`LibreYOLONAS`、`LibreYOLOX`、`LibreYOLO7`、`LibreYOLO4`、
@@ -191,11 +188,9 @@ model(
 
 ## Results 载荷
 
-`Results` 和它的十八个载荷类都在包层面导出：
-`Results`、`Boxes`、`Masks`、`Keypoints`、`Points`、`Probs`、`OBB`、`Gaze`、
-`SemanticMask`、`PanopticSegmentation`、`DepthMap`、`EdgeMap`、`NormalMap`、
-`RestoredImage`、`Matte`、`Meshes`、`OCRRegions`、`Embeddings`、`Identities`。
-每一个都在 [Results 类型](/docs/reference/results-types)里有说明。
+`Results` 及其载荷类在包级别导出：`Results`、`Boxes`、`Masks`、`Keypoints`、`Points`、`Probs`、`OBB`、`Gaze`、`SemanticMask`、`PanopticSegmentation`、`DepthMap`、`EdgeMap`、`NormalMap`、`RestoredImage`、`Matte`、`Meshes`、`OCRRegions`、`Embeddings`、`Identities`。[Results 类型](/docs/reference/results-types)逐一说明。
+
+`Boxes3D`、`AlbedoMap` 和 `Actions` 分别新增 3D 长方体、内在反照率和动作块。见[结果类型](/docs/reference/results-types)。
 
 ## 后端
 
@@ -218,6 +213,8 @@ model(
 `ByteTracker` 配 `TrackConfig`、`BoTSortTracker` 配 `BoTSortConfig`、
 `OCSortTracker` 配 `OCSortConfig`。
 
+`libreyolo.tracking.Tracker` 为自定义跟踪器实例定义 `reset()` 和 `update(results, image=None)`。
+
 ## 数据辅助函数
 
 `DATASETS_DIR` 是解析后的数据集根目录，`load_data_config` 读取数据集 YAML，
@@ -229,6 +226,8 @@ model(
 `Gallery` 和 `FaceGallery` 为 `embed` 任务保存注册进来的身份向量，构成底库
 （gallery），并产出 `Identities` 载荷。`Distiller` 和 `get_distill_config` 驱动
 师生训练。
+
+`libreyolo.training.TrainFitnessCallback` 定义用于自定义检查点选择的 `fitness(metrics)`。见[适应度回调](/docs/train/fitness-callbacks)。
 
 ## 资源
 

@@ -2,13 +2,14 @@
 title: API Python
 seo_title: Referência da API Python do LibreYOLO
 description: >-
-  Os nomes que o LibreYOLO exporta no nível do pacote: as cinco factories, as
-  classes de família, os payloads de Results, backends, validadores, trackers e
-  helpers de dados.
+  Os nomes que LibreYOLO exporta no nível do pacote: factories, classes de
+  famílias, payloads de Results, backends, validadores, trackers e utilitários
+  de dados.
 lead: >-
-  A superfície pública em Python do LibreYOLO é a lista __all__ em
-  libreyolo/__init__.py. Tudo nesta página é importável como from libreyolo
-  import <name>; qualquer coisa fora dessa lista é interna.
+  A interface pública Python do LibreYOLO é a lista __all__ em
+  libreyolo/__init__.py. Exportações no nível do pacote usam from libreyolo
+  import <name>; os protocolos de rastreamento e treinamento abaixo usam seus
+  submódulos nomeados.
 keywords:
   - api python libreyolo
   - importar libreyolo python
@@ -18,13 +19,13 @@ keywords:
   - LibreOpenVocab
   - LibreEnsemble
   - libreyolo __all__
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Nomes e assinaturas lidos de libreyolo/__init__.py,
   libreyolo/models/__init__.py, libreyolo/models/base/model.py,
   libreyolo/models/base/inference.py, libreyolo/models/sam/model.py,
   libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py e
-  libreyolo/ensemble/model.py na v1.5.0.
+  libreyolo/ensemble/model.py na v1.6.0.
 snippets:
   usage:
     - label: Carregar qualquer coisa por uma única factory
@@ -50,7 +51,7 @@ snippets:
 
         print(len(result))
   factories:
-    - label: Os cinco pontos de entrada
+    - label: Pontos de entrada
       language: python
       code: >
         from libreyolo import LibreYOLO, LibreEnsemble
@@ -78,13 +79,12 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 66e34e78b2e0fb2d
+source_hash: 02fbec762b1ffced
 ---
 
 ## Pontos de entrada
 
-Cinco chamáveis carregam um modelo. Eles são separados pelo contrato de
-chamada, não pela arquitetura.
+As factories carregam modelos ou configuram clientes de API. Elas são separadas pelo contrato de chamada, não pela arquitetura.
 
 | Factory | Carrega | Prompt no momento da chamada | Extra necessário |
 |---|---|---|---|
@@ -96,9 +96,7 @@ chamada, não pela arquitetura.
 
 <code-tabs name="factories" />
 
-`LibreYOLO` é a única que lê um arquivo. As outras três recebem um alias em
-string e o resolvem para um repositório do Hugging Face, então o argumento é um
-nome de modelo e não um caminho.
+`LibreYOLO` aceita arquivos de checkpoint e artefatos exportados. As demais factories aceitam aliases de modelos; `LibreVLM` e `LibreVLA` também recarregam seus próprios diretórios de checkpoints salvos.
 
 ```python
 LibreYOLO(
@@ -122,6 +120,10 @@ lido em cargas de CoreML `.mlpackage` e é um de `all`, `cpu_only`,
 
 <code-tabs name="usage" />
 
+`LibreGround` mapeia instruções para pontos na imagem; `LibreVLA` prevê blocos de ações de robôs; `LibreLLM` chama um endpoint remoto compatível de modelo de linguagem. Veja a [API de grounding](/docs/reference/ground-api), a [API de políticas](/docs/reference/vla-api) e o [cliente de modelo de linguagem](/docs/reference/llm-api).
+
+`LibreYOLO("hf://owner/repo@revision/filename")` carrega checkpoints do Hub. `model.push_to_hub(repo_id, private=False)` publica um checkpoint e um card. A [referência do Hub](/docs/reference/hugging-face) define a resolução e a autenticação.
+
 ## Classes de família
 
 Toda família que a factory pode retornar também é exportada por nome, então uma
@@ -132,9 +134,7 @@ antemão. Os construtores seguem `BaseModel.__init__`:
 Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 ```
 
-`size` não tem valor padrão em uma classe de família, que é a diferença em
-relação à factory. YOLO9 e suas variantes inserem `reg_max: int = 16` depois de
-`size`.
+Os padrões do construtor variam por família; confira sua assinatura antes de construí-la diretamente. YOLO9 e suas variantes inserem `reg_max: int = 16` depois de `size`.
 
 Famílias de detecção e multitarefa: `LibreYOLO9`, `LibreYOLO9E2E`,
 `LibreYOLO9P2`, `LibreYOLONAS`, `LibreYOLOX`, `LibreYOLO7`, `LibreYOLO4`,
@@ -204,11 +204,9 @@ outros métodos do objeto de modelo estão documentados na
 
 ## Payloads de Results
 
-`Results` e suas dezoito classes de payload são exportados no nível do pacote:
-`Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`,
-`SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`,
-`RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`.
-Cada uma é descrita em [Tipos de Results](/docs/reference/results-types).
+`Results` e suas classes de payload são exportadas no nível do pacote: `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`, `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`, `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`. Cada uma é descrita em [tipos de Results](/docs/reference/results-types).
+
+`Boxes3D`, `AlbedoMap` e `Actions` adicionam cuboides 3D, albedo intrínseco e blocos de ações. Veja [tipos de resultados](/docs/reference/results-types).
 
 ## Backends
 
@@ -235,6 +233,8 @@ dataclasses de configuração também são exportadas: `ByteTracker` com
 `TrackConfig`, `BoTSortTracker` com `BoTSortConfig` e `OCSortTracker` com
 `OCSortConfig`.
 
+`libreyolo.tracking.Tracker` define `reset()` e `update(results, image=None)` para instâncias de trackers personalizados.
+
 ## Helpers de dados
 
 `DATASETS_DIR` é a raiz resolvida dos datasets, `load_data_config` lê um YAML
@@ -247,6 +247,8 @@ citados em [formatos de dataset](/docs/reference/dataset-formats) ficam em
 `Gallery` e `FaceGallery` guardam os vetores de identidade cadastrados para a
 tarefa `embed` e produzem o payload `Identities`. `Distiller` e
 `get_distill_config` conduzem o treinamento professor-aluno.
+
+`libreyolo.training.TrainFitnessCallback` define `fitness(metrics)` para seleção personalizada de checkpoints. Veja [callbacks de fitness](/docs/train/fitness-callbacks).
 
 ## Assets
 

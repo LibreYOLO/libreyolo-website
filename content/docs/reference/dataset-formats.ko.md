@@ -13,10 +13,8 @@ keywords:
   - 코코 파노프틱 형식
   - 깊이 데이터셋
   - 포즈 kpt_모양
-last_verified: 1.5.0
-verification: >-
-  v1.5.0에서 libreyolo 저장소의 docs/dataset_schema.md를 미러링하며, 로더 이름은
-  libreyolo/data/.와 교차 검증됨
+last_verified: 1.6.0
+verification: 'v1.6.0에서 libreyolo 저장소의 docs/dataset_schema.md를 미러링하며, 로더 이름은 libreyolo/data/.와 교차 검증됨'
 snippets:
   usage:
     - label: 하나의 탐지 레이블 행을 파싱하다
@@ -34,7 +32,7 @@ snippets:
         # (class_id, x1, y1, x2, y2, area) 픽셀 단위로
 
         print(row)
-source_hash: a8282c079624044d
+source_hash: "5f4bc7d17822a85d"
 ---
 
 ## 일반 YAML
@@ -113,6 +111,8 @@ YAML은 필수인 `kpt_shape`를 추가하며, 이는 `[K, 2]` 또는 `[K, 3]`�
 ```
 
 필드 수는 정확히 `5 + K * D`이며, 여기서 `D`는 두 번째 `kpt_shape` 값입니다. 키포인트 좌표는 정규화되어 있습니다. 가시성 `v`는 존재할 경우 `0`, `1` 또는 `2`입니다.
+
+RF-DETR 다중 클래스 데이터셋에는 `names`가 필요하며 클래스별 `kpt_names`를 정의할 수 있습니다. 빈 키포인트 이름 목록은 바운딩 박스만 있는 클래스를 나타냅니다. 하나 이상의 클래스에 키포인트가 있어야 합니다.
 
 ## obb
 
@@ -351,3 +351,15 @@ dataset_root/
 `gaze`에는 학습 또는 검증 데이터셋 파일 계약이 구현되지 않았습니다.
 
 `point`는 데이터셋-레이블 스키마라기보다는 모델 출력 작업입니다. 포인트 계열은 내부적으로 기존 레이블을 조정할 수 있는데, 예를 들어 박스 행에서 객체 중심을 도출하는 방식이 있을 수 있지만, 포인트 전용 텍스트 레이블 형식은 정의되어 있지 않습니다.
+
+## 이벤트 히스토그램
+
+YOLO9과 RF-DETR 탐지는 양수 극성, 음수 극성 순서로 된 두 개의 비음수 유한 카운트 평면을 담은 `.npy` HWC 배열을 받습니다. `input_profile`에는 `format: event_histogram`, `layout: HWC`, `polarity: positive_negative`, `encoding: counts`, 양수 `scale`, 양의 정수 `window_us`가 필요합니다. 레이블은 일반 탐지 텍스트 파일을 사용합니다. [입력 준비](/docs/train/event-histograms)를 참조하십시오.
+
+## 로봇 정책
+
+`act` 작업은 에피소드, 카메라, 상태, 동작 특징이 포함된 LeRobot v3 데이터셋 디렉터리 또는 Hub 데이터셋 ID를 사용합니다. 탐지 YAML은 사용하지 않습니다. [로봇 정책](/docs/tasks/robot-policies)을 참조하십시오.
+
+## 알베도
+
+`images/<split>/<name>.<image extension>`을 `albedo/<split>/<name>.npy`와 짝지어 배치합니다. 타깃은 이미지와 크기가 같고 [0, 1] 범위의 유한한 부동소수점 `(H, W, 3)` 선형 RGB 값입니다. 필요하면 `input_dir`와 `albedo_dir`를 경로 구분자 없는 폴더 이름으로 설정합니다. 표시용 PNG와 sRGB 값은 정량적 알베도 타깃이 아닙니다.

@@ -1,8 +1,8 @@
 ---
 title: Results types
 seo_title: "LibreYOLO Results object reference"
-description: "Every payload a LibreYOLO Results object can carry, one slot per task shape: boxes, masks, keypoints, probs, obb, depth, ocr, embeddings and ten more."
-lead: "Results is the single per-image return type of every LibreYOLO model. It carries eighteen optional payload slots, one per task shape, and populates only the ones the model produced."
+description: "LibreYOLO result payloads: boxes, masks, keypoints, classification, depth, albedo, 3D cuboids and robot action chunks."
+lead: "Results is the single per-image return type of every LibreYOLO model. It carries optional payload slots, one per task shape, and populates only the ones the model produced."
 keywords:
   - libreyolo results object
   - Results.boxes
@@ -11,8 +11,8 @@ keywords:
   - Results.depth_map
   - Results.summary
   - libreyolo results to_json
-last_verified: "1.5.0"
-verification: "Slot names, shapes, properties and defaults read from libreyolo/utils/results.py at v1.5.0. Semantics quoted from the payload class docstrings."
+last_verified: "1.6.0"
+verification: "Slot names, shapes, properties and defaults read from libreyolo/utils/results.py at v1.6.0. Semantics quoted from the payload class docstrings."
 snippets:
   usage:
     - label: Python
@@ -186,6 +186,8 @@ image canvas. Higher values mean closer to the camera. Values are relative,
 not metric meters. `min`, `max` and `mean` are computed over finite values,
 and `normalized()` rescales the map to `[0, 1]`.
 
+`DepthMap(data, orig_shape=None, encoding="inverse_depth")` also accepts `encoding="depth"` and `encoding="log_depth"`. Validators interpret this before alignment. Relative-depth values still have no metric-scale guarantee.
+
 ## NormalMap
 
 Dense surface-normal field, float32 `(H, W, 3)` on the original image canvas,
@@ -292,6 +294,16 @@ plain dicts, one row per detection, segment, point or region depending on
 which slots are set. `to_json(**kwargs)` passes its arguments to `summary`
 and returns the JSON string.
 
-`plot()` renders a dense normal or edge result in its canonical
-visualization; it raises for other result types. Annotated images for the
-other tasks come from `predict(save=True)`.
+`plot()` renders every task payload. Image overlays default to BGR arrays; `pil=True` requests PIL. Edge and normal-map results retain their PIL defaults.
+
+## Boxes3D
+
+`Boxes3D(data, orig_shape=None, intrinsics=None)` holds `(N, 14)` rows: center xyz, dimensions wlh, quaternion wxyz, ranking score, class ID, 2D confidence and 3D confidence. Coordinates are camera-frame meters with x right, y down and z forward; no world frame is implied. The 3x3 intrinsics refer to the original canvas. Rows align with `Results.boxes`.
+
+## AlbedoMap
+
+`AlbedoMap(data, orig_shape=None)` holds linear RGB. Display conversion produces sRGB; quantitative albedo validation uses the original linear values.
+
+## Actions
+
+`Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` represents a float32 action chunk `(T, D)`. `first` returns the first row; slicing selects timesteps. Values stay in the policy dataset units. `names` describes action dimensions, `fps` the control rate and `instruction` the conditioning text.

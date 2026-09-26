@@ -14,11 +14,8 @@ keywords:
   - SmolVLM2
   - Florence-2
   - libreyolo chat
-last_verified: 1.5.0
-verification: >-
-  别名读自 libreyolo/models/vlm/__init__.py；仓库、尺寸和任务列表读自 libreyolo/models/vlm/
-  下的各家族模块，以及 libreyolo/models/sensenova/model.py；调用规则和抛出的异常读自
-  libreyolo/models/vlm/base.py，均为 v1.5.0。
+last_verified: "1.6.0"
+verification: "别名读自 libreyolo/models/vlm/__init__.py；仓库、尺寸和任务列表读自 libreyolo/models/vlm/ 下的各家族模块，以及 libreyolo/models/sensenova/model.py；调用规则和抛出的异常读自 libreyolo/models/vlm/base.py，均为 v1.6.0。"
 snippets:
   install:
     - label: bash
@@ -44,7 +41,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 57ddac08bc4d4e05
+source_hash: 77a04856cfe4f88c
 ---
 
 ## 安装
@@ -87,9 +84,11 @@ LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 `LibreFlorence2`、`LibreKosmos2`、`LibreLocateAnything` 和 `LibreMODUS`
 （也可以写成 `LibreModus`）在包级别导出。
 
+检测还包括 `north-micro-vision`、`gemma-4-e2b`、`gemma-4-e4b`、`moondream-2`、`moondream-3` 和 `lfm2-vl-3b`。不带后缀的 `gemma-4` 别名选择 E4B。Molmo2 别名为 `molmo2-4b`、`molmo2-8b` 和 `molmo2-o-7b`；默认选择 4B。别名确定路由，并不表示每个远程快照都已下载并测试。
+
 ## 任务
 
-大多数家族只服务 `detect`。有两个提供得更多：
+任务支持因家族而异。以下适配器支持多个任务：
 
 | 家族 | 支持的任务 |
 |---|---|
@@ -105,6 +104,8 @@ model.set_task(task: str) -> LibreVLMModel
 
 任务会按家族支持的列表做校验，并且在之后的 `predict()` 和 `track()` 调用中一直
 沿用；模型本身会被返回，所以调用可以链起来。
+
+Molmo2 返回点，自定义指点模板必须包含 `{label}`。Moondream 支持检测、点和原生聊天。指令到点击位置的查询请使用 [LibreGround](/docs/reference/ground-api)。
 
 ## set_classes
 
@@ -143,8 +144,7 @@ model.chat(image, prompt, max_new_tokens=None, color_format="auto") -> str
 
 ## 不支持
 
-`train()`、`val()` 和 `export()` 都会抛出 `NotImplementedError`。微调请在上游做，
-然后把得到的权重加载进来。
+不支持导出和检测 mAP 验证。训练支持仅限于下面的 Qwen3-VL 工作流。
 
 ## 远程代码
 
@@ -155,3 +155,7 @@ model.chat(image, prompt, max_new_tokens=None, color_format="auto") -> str
 LibreMODUS 是检查点结构的一个显式例外：它的别名解析到的是一个装着固定上游文件的
 目录，而不是一个 LibreYOLO `.pt`，并且 LibreYOLO 既不给它加 v1.0 元数据，也不再
 分发它。
+
+## 训练
+
+安装 `libreyolo[vlm-train]` 后，Qwen3-VL 可通过 `train(data=...)` 支持检测 LoRA。它冻结视觉塔，按验证损失选择最佳检查点，并保存检查点目录。见 [VLM 微调](/docs/train/vlm-fine-tuning)。

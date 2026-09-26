@@ -19,16 +19,8 @@ keywords:
   - kernel ms_deform_attn
   - set_fused_attention
   - kernel triton libreyolo cuda
-last_verified: 1.5.0
-verification: >-
-  API del registro letta da libreyolo/kernels/__init__.py alla v1.5.0, API
-  dell'attenzione da libreyolo/kernels/attention/__init__.py e sdpa.py, provider
-  dell'Hub da libreyolo/kernels/attention/ms_deform_attn.py inclusa la sua
-  revisione fissata e il suo predicato di idoneità. Struttura delle directory
-  elencata da libreyolo/kernels/. Definizione dell'extra da pyproject.toml. Note
-  di comportamento e cifre dei benchmark da docs/kernels.md. La storia del
-  gating della v1.4.0 dal commit che ha collegato lo slot in RF-DETR e dalla
-  voce del CHANGELOG della 1.5.0.
+last_verified: 1.6.0
+verification: API del registro letta da libreyolo/kernels/__init__.py alla v1.6.0, API dell'attenzione da libreyolo/kernels/attention/__init__.py e sdpa.py, provider dell'Hub da libreyolo/kernels/attention/ms_deform_attn.py inclusa la sua revisione fissata e il suo predicato di idoneità. Struttura delle directory elencata da libreyolo/kernels/. Definizione dell'extra da pyproject.toml. Note di comportamento e cifre dei benchmark da docs/kernels.md. La storia del gating della v1.4.0 dal commit che ha collegato lo slot in RF-DETR e dalla voce del CHANGELOG della 1.5.0.
 meta:
   - label: Pacchetto
     value: libreyolo.kernels
@@ -79,7 +71,7 @@ snippets:
             name="mybackend",
             predicate=my_check,
         )
-source_hash: 23d504e88b7959f8
+source_hash: 2cdb2d344ab3faf5
 ---
 
 ## Il registro
@@ -195,6 +187,8 @@ standard, senza l'extra, non è toccata. Se stai confrontando le metriche prima 
 dopo l'aggiornamento, tieni fisso l'extra o imposta `LIBREYOLO_HUB_KERNELS=0` da
 entrambe le parti.
 
+MSDA dell'Hub accetta FP16 e BF16 convertendo gli input del kernel in FP32, ripristinando il dtype dell'output e conservando i gradienti attraverso le conversioni. Le chiamate CUDA eager senza un provider accelerato accettato emettono un solo suggerimento di installazione di `libreyolo[hub-kernels]`. `ms_deform_attn_available(value=None)` può ispezionare il percorso specifico di un tensore.
+
 ## Attenzione fusa
 
 L'attenzione scaled dot-product fusa non richiede nessuna dipendenza opzionale,
@@ -246,3 +240,7 @@ La selezione dei kernel interagisce con i [grafi CUDA](/docs/reference/cuda-grap
 la matrice di parità dell'inferenza è stata eseguita senza il pacchetto `kernels`
 installato, quindi la sicurezza della cattura con un kernel compilato attivo non
 è coperta da essa.
+
+## Attenzione deformabile Triton
+
+Il provider Triton MSDA incluso nel codice supporta l'inferenza CUDA compatibile con FP32, FP16 e BF16. Rifiuta input che richiedono gradienti e usa l'attenzione portabile quando non è disponibile. L'Hub resta preferito. `LIBREYOLO_TRITON_MSDA=0` disattiva Triton; `LIBREYOLO_HUB_KERNELS=0` disattiva il provider Hub e il relativo suggerimento di installazione.

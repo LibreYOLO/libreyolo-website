@@ -2,13 +2,12 @@
 title: Lược đồ checkpoint
 seo_title: Lược đồ metadata checkpoint LibreYOLO v1.0
 description: >-
-  Metadata có trong mọi checkpoint .pt của LibreYOLO: các khóa bắt buộc, phần bổ
-  sung theo tác vụ, khóa runtime khi xuất, manifest lượng tử hóa (quantization)
-  và các trường huấn luyện.
+  Metadata có trong mọi checkpoint .pt của LibreYOLO: các khóa bắt buộc, phần bổ sung theo tác vụ, khóa
+  runtime khi xuất, manifest lượng tử hóa (quantization) và các trường huấn luyện.
 lead: >-
-  Tệp .pt của LibreYOLO là một dictionary phẳng được lưu bằng torch.save. Khóa
-  model chứa state dict; các khóa cấp cao nhất khác là metadata dùng để xác định
-  checkpoint mà không cần phân tích tên tệp hay dò xét state dict.
+  Tệp .pt của LibreYOLO là một dictionary phẳng được lưu bằng torch.save. Khóa model chứa state dict; các khóa
+  cấp cao nhất khác là metadata dùng để xác định checkpoint mà không cần phân tích tên tệp hay dò xét state
+  dict.
 keywords:
   - lược đồ checkpoint libreyolo
   - schema_version 1.0
@@ -16,42 +15,30 @@ keywords:
   - metadata checkpoint libreyolo
   - manifest quantization
   - wrap_libreyolo_checkpoint
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  Phản ánh docs/checkpoint_schema.md trong repo libreyolo tại v1.5.0, được đối
-  chiếu với libreyolo/utils/serialization.py và BaseModel.save.
+  Phản ánh docs/checkpoint_schema.md trong repo libreyolo tại v1.6.0, được đối chiếu với
+  libreyolo/utils/serialization.py và BaseModel.save.
 snippets:
   usage:
     - label: Đọc metadata từ checkpoint
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
         from libreyolo.utils.serialization import unwrap_libreyolo_checkpoint
-
         import torch
 
-
         # Tải checkpoint xuống, rồi lưu lại để có đường dẫn cục bộ
-
         LibreYOLO("LibreYOLO9t.pt").save("roundtrip.pt")
 
-
-        loaded = torch.load("roundtrip.pt", map_location="cpu",
-        weights_only=False)
-
+        loaded = torch.load("roundtrip.pt", map_location="cpu", weights_only=False)
         state_dict, metadata = unwrap_libreyolo_checkpoint(loaded)
 
-
         print(metadata["schema_version"], metadata["model_family"])
-
-        print(metadata["size"], metadata["task"], metadata["nc"],
-        metadata["imgsz"])
-
+        print(metadata["size"], metadata["task"], metadata["nc"], metadata["imgsz"])
         print(len(state_dict), "tensors")
-source_hash: ce760f1bed97bfd0
+source_hash: c3aa0ff92444b10c
 ---
-
 ## Lược đồ v1.0
 
 Mọi checkpoint `.pt` chính thức của LibreYOLO đều chứa:
@@ -102,10 +89,7 @@ Lược đồ được thiết kế dạng phẳng, và `model` được thiết
 
 ## Phần bổ sung cho pose
 
-Pose thường chỉ có một lớp đối tượng, `nc: 1` với `person`, nhưng head pose của
-YOLO-NAS cũng hỗ trợ pose nhiều lớp đối tượng với một bộ khung keypoint dùng chung.
-Trong trường hợp đó, `nc` và `names` mô tả các lớp đối tượng như trong phát hiện.
-Bản xuất runtime cho pose phát ra `scores` với shape `[batch, anchors, nc]`.
+Checkpoint tư thế ghi schema lớp đối tượng và keypoint. YOLO-NAS hỗ trợ nhiều lớp với một bộ xương chung; RF-DETR còn hỗ trợ số keypoint riêng theo lớp. `nc` và `names` mô tả các lớp đối tượng. Tệp xuất tư thế cho runtime tạo `scores` có hình dạng `[batch, anchors, nc]`.
 
 | Khóa | Ý nghĩa |
 |---|---|
@@ -113,6 +97,8 @@ Bản xuất runtime cho pose phát ra `scores` với shape `[batch, anchors, nc
 | `keypoint_dim` | `2` cho nhãn `x,y` hoặc `3` cho nhãn `x,y,visibility`; đầu ra của mô hình luôn cung cấp `x,y,visibility` |
 | `oks_sigmas` | Các sigma OKS tùy chọn theo từng keypoint; khi không có, giá trị mặc định của tác vụ cho `num_keypoints` được sử dụng |
 | `num_keypoints_per_class` | Số keypoint tùy chọn theo từng lớp đối tượng cho các head kiểu GroupPose có tensor keypoint được đệm theo lớp đối tượng; `0` cho các lớp đối tượng không có keypoint |
+
+RF-DETR có thể ghi `num_keypoints_per_class` cùng `kpt_names`. Số lượng tương ứng các lớp đối tượng của dataset; 0 đánh dấu lớp chỉ có bounding box và dự đoán được đệm đến hình dạng keypoint tối đa.
 
 ## Phần bổ sung cho mesh
 
@@ -224,6 +210,8 @@ shape không nhất quán.
 Tệp `.pte` và `.mnn` là các tạo tác dành riêng cho backend, không phải
 checkpoint PyTorch.
 
+Bộ phân loại ghi `norm_mean`, `norm_std` và `resize_mode`. Khung ảnh hình chữ nhật giữ `imgsz_h` và `imgsz_w`. `letterbox_pad` của YOLO9 là `topleft` hoặc `center`; thiếu metadata sẽ giữ hình học góc trên trái cũ.
+
 ## Checkpoint lượng tử hóa
 
 Mô hình đã lượng tử hóa thêm một khóa phẳng tùy chọn là `quant`, chứa một
@@ -290,6 +278,8 @@ chủ ý phân phối dưới dạng checkpoint huấn luyện.
 Để tương thích với bản phát hành, trình đọc chấp nhận các bí danh metric tốt nhất cũ
 `best_mAP50_95`, `best_mAP50`, `best_metric` và `best_metric_name`.
 
+Chọn tùy chỉnh ghi `fitness_source="callback"` và `fitness/custom`. Mã/trạng thái callback không được lưu; không thể tiếp tục các lần chạy này. Bắt đầu lần chạy mới từ trọng số của chúng.
+
 ## Snapshot bên ngoài
 
 Lược đồ điều chỉnh các tệp `.pt` do LibreYOLO tạo. Nó không đổi tên hay bao bọc
@@ -334,3 +324,7 @@ unwrap_libreyolo_checkpoint(loaded, *, strict=False) -> tuple[dict, dict]
 `validate_checkpoint_metadata` không sửa đổi dữ liệu và trả về danh sách
 lỗi; với `strict=True`, hàm này sẽ phát sinh `CheckpointMetadataError`.
 `model.save(path)` là cách được hỗ trợ để ghi một checkpoint tuân thủ lược đồ.
+
+## Hồ sơ đầu vào
+
+Checkpoint histogram hai cực giữ toàn bộ `input_profile`, gồm định dạng, bố cục, cực tính, mã hóa, tỷ lệ và độ dài cửa sổ, cùng `input_initialization`. Tải lại để dự đoán không cần YAML dataset; huấn luyện/đánh giá từ chối hồ sơ không khớp. Xem [histogram sự kiện](/docs/train/event-histograms).

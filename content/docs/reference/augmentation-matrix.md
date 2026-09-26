@@ -11,8 +11,8 @@ keywords:
   - no_aug_epochs
   - augmentation support matrix
   - TrainConfig knobs
-last_verified: "1.5.0"
-verification: "Knob list, statuses, archetypes, per-family deviations and helper functions read from libreyolo/data/augment/spec.py at v1.5.0. That table is pinned to the real pipelines by tests/unit/test_augment_spec.py."
+last_verified: "1.6.0"
+verification: "Knob list, statuses, archetypes, per-family deviations and helper functions read from libreyolo/data/augment/spec.py at v1.6.0. That table is pinned to the real pipelines by tests/unit/test_augment_spec.py."
 snippets:
   usage:
     - label: Ask the spec directly
@@ -59,8 +59,7 @@ aliases onto them, so `--mosaic` sets `mosaic_prob`.
 | `cutmix` | Classification batch-CutMix probability, with soft labels |
 
 The last four are the classification pack. Detection families ignore them.
-`mixup` is an API-only knob: the CLI `--mixup` is the alias for the detection
-`mixup_prob`.
+The CLI routes `mixup` to classification batch mixing for classifiers and to `mixup_prob` for detectors.
 
 <code-tabs name="usage" />
 
@@ -87,14 +86,14 @@ deviations listed below.
 | `mosaic_prob` | used | ignored | ignored | ignored | ignored | ignored |
 | `mixup_prob` | gated | used | ignored | ignored | ignored | ignored |
 | `hsv_prob` | used | used | ignored | ignored | ignored | ignored |
-| `flip_prob` | used | used | used | ignored | ignored | ignored |
+| `flip_prob` | used | used | used | used | ignored | ignored |
 | `degrees` | gated | used | ignored | ignored | ignored | ignored |
 | `translate` | gated | used | ignored | ignored | ignored | ignored |
 | `mosaic_scale` | gated | used | ignored | ignored | ignored | ignored |
 | `mixup_scale` | gated | used | ignored | ignored | ignored | ignored |
 | `shear` | gated | used | ignored | ignored | ignored | ignored |
 | `perspective` | gated | used | ignored | ignored | ignored | ignored |
-| `flipud` | used | used | ignored | ignored | ignored | ignored |
+| `flipud` | used | used | ignored | used | ignored | ignored |
 | `no_aug_epochs` | used | used | used | used | used | used |
 | `auto_augment` | ignored | ignored | ignored | used | ignored | ignored |
 | `erasing` | ignored | ignored | ignored | used | ignored | ignored |
@@ -110,15 +109,14 @@ range.
 The DETR-style pipeline is a pass-through transform with no mosaic. Its
 photometric distortion, zoom-out and IoU-crop are recipe constants rather than
 configurable knobs, which is why `hsv_prob` and the geometry knobs never reach
-it. The classification pipeline uses an ImageFolder transform whose horizontal
-flip is a fixed 0.5 rather than `flip_prob`. Semantic scale jitter and HSV come
+it. Classification uses `flip_prob` for horizontal flips and `flipud` for vertical flips. Semantic scale jitter and HSV come
 from family class attributes rather than config knobs, and restoration flips
 are coupled input-and-target operations with a fixed 0.5 probability.
 
 `no_aug_epochs` is honored everywhere, though what it turns off differs: mosaic
 and MixUp for YOLOX-style, the affine and MixUp for YOLO-NAS, the strong
 photometric and crop augmentations plus the learning-rate tail for DETR-style,
-and the scheduler tail for the rest.
+and auto-augmentation, erasing, MixUp and CutMix for classification. Classification crop and flips remain enabled.
 
 ## Families by archetype
 

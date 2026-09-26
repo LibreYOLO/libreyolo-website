@@ -14,8 +14,8 @@ keywords:
   - commande libreyolo formats
   - seuil parité export
   - NotImplementedError export
-last_verified: 1.5.0
-verification: "Formats, niveaux, ordre de repli, blocages de tâches et familles et blocages NCNN lus dans libreyolo/export/support.py\_; alias et arguments partagés lus dans libreyolo/export/exporter.py\_; définitions des niveaux lues dans docs/adr/0011-export-support-tiers.md\_; seuils de parité lus dans docs/export_support.md, le tout en v1.5.0. Les cellules par combinaison ne sont pas retranscrites ici\_; interrogez-les avec l'extrait ci-dessous."
+last_verified: "1.6.0"
+verification: "Formats, niveaux, ordre de repli, blocages de tâches et familles et blocages NCNN lus dans libreyolo/export/support.py\_; alias et arguments partagés lus dans libreyolo/export/exporter.py\_; définitions des niveaux lues dans docs/adr/0011-export-support-tiers.md\_; seuils de parité lus dans docs/export_support.md, le tout en v1.6.0. Les cellules par combinaison ne sont pas retranscrites ici\_; interrogez-les avec l'extrait ci-dessous."
 snippets:
   usage:
     - label: Interroger la matrice sans modèle
@@ -63,7 +63,7 @@ snippets:
         print(blocked.tier)
 
         print(blocked.reason)
-source_hash: 83de3289634888c6
+source_hash: 70b9541fb8949352
 ---
 
 ## Structure de la matrice
@@ -85,6 +85,8 @@ Comme une cellule dépend de trois clés, la grille complète est volumineuse et
 change à chaque version. Elle est générée plutôt qu'écrite à la main et se
 trouve dans `docs/export_support.md` dans le dépôt de la bibliothèque.
 Interrogez la matrice depuis Python ou le CLI au lieu d'en lire une copie.
+
+Le registre généré comprend PP-YOLOE, TinyFormer, DEKR, PP-LiteSeg, ConvNeXt V2, PE, V-JEPA 2 et LeVJEPA. Consultez chaque page de modèle pour ses contraintes de forme et de tâche. U-Net, les quatre adaptateurs 3D, Marigold V2 et les politiques robotiques ne fournissent pas d'export.
 
 ## Trois niveaux
 

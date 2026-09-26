@@ -14,9 +14,9 @@ keywords:
   - libreyolo チェックポイント メタデータ
   - quant manifest
   - wrap_libreyolo_checkpoint
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  libreyoloリポジトリv1.5.0のdocs/checkpoint_schema.mdに対応し、libreyolo/utils/serialization.pyとBaseModel.saveに照らして確認しました。
+  libreyoloリポジトリv1.6.0のdocs/checkpoint_schema.mdに対応し、libreyolo/utils/serialization.pyとBaseModel.saveに照らして確認しました。
 snippets:
   usage:
     - label: チェックポイントからメタデータを読み取る
@@ -46,7 +46,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: ce760f1bed97bfd0
+source_hash: c3aa0ff92444b10c
 ---
 
 ## スキーマv1.0
@@ -91,7 +91,7 @@ source_hash: ce760f1bed97bfd0
 
 ## 姿勢推定の追加項目
 
-姿勢推定は通常、`person`を持つ単一クラスの`nc: 1`です。ただし、YOLO-NASの姿勢推定ヘッドは1つの共有キーポイントスケルトンを使うマルチクラス姿勢推定にも対応します。その場合、`nc`と`names`は検出と同様にクラスを記述します。姿勢推定のランタイムエクスポートは、形状`[batch, anchors, nc]`の`scores`を出力します。
+姿勢推定のチェックポイントは、クラスとキーポイントのスキーマを記録します。YOLO-NASは共通のスケルトンを使う複数クラスに対応し、RF-DETRはクラスごとのキーポイント数にも対応します。`nc`と`names`はクラスを表します。姿勢推定のエクスポートは、形状`[batch, anchors, nc]`の`scores`を出力します。
 
 | キー | 意味 |
 |---|---|
@@ -99,6 +99,8 @@ source_hash: ce760f1bed97bfd0
 | `keypoint_dim` | `x,y`ラベルでは`2`、`x,y,visibility`ラベルでは`3`。モデル出力は常に`x,y,visibility`を公開 |
 | `oks_sigmas` | キーポイントごとの任意のOKS sigma。省略時は`num_keypoints`に対応するタスクのデフォルトを使用 |
 | `num_keypoints_per_class` | キーポイントテンソルをクラス単位でパディングするGroupPose形式ヘッド向けの任意のクラス別キーポイント数。キーポイントがないクラスでは`0` |
+
+RF-DETRは、`kpt_names`とともに`num_keypoints_per_class`を記録する場合があります。個数はデータセットのクラスに対応し、0はボックスのみのクラスを表します。推論では最大のキーポイント形状までパディングします。
 
 ## メッシュの追加項目
 
@@ -166,6 +168,8 @@ MNNエクスポートは、必須の`<model>.mnn.json`サイドカーにフラ�
 
 `.pte`と`.mnn`はバックエンド固有の成果物であり、PyTorchチェックポイントではありません。
 
+分類器は`norm_mean`、`norm_std`、`resize_mode`を記録します。長方形のキャンバスは`imgsz_h`と`imgsz_w`を保持します。YOLO9の`letterbox_pad`は`topleft`または`center`で、メタデータがない場合は従来の左上配置を維持します。
+
 ## 量子化チェックポイント
 
 量子化モデルは、任意のフラットキー`quant`を1つ追加します。値は`schema`、`recipe`、`keep_high_precision`、`execution`、較正の出所、`module_count`、`state`を持つマニフェスト辞書です。FP8マニフェストは`fp8_tensorwise_weights`も持つことがあり、重みのスケールが出力チャンネルごとではなくテンソル単位である`QuantLinear`モジュール名の正確な一覧です。`quant`を見つけたローダーは、`load_state_dict`の前に量子化モジュールの構造とスケーリングポリシーを再構築します。
@@ -212,6 +216,8 @@ int8では活性化範囲バッファ`_q_act_lo`、`_q_act_hi`、`_q_calibrated`
 
 リリース互換性のため、リーダーはレガシーの最良メトリクス別名`best_mAP50_95`、`best_mAP50`、`best_metric`、`best_metric_name`を受け付けます。
 
+独自の選択では`fitness_source="callback"`と`fitness/custom`を記録します。コールバックのコードと状態は保存しないため、これらの実行は再開できません。その重みから新しい実行を始めてください。
+
 ## 外部スナップショット
 
 このスキーマはLibreYOLOが作成した`.pt`ファイルを管理します。別のモデルtierが使う複数ファイル構成のアップストリームスナップショットを改名またはラップするものではありません。
@@ -248,3 +254,6 @@ unwrap_libreyolo_checkpoint(loaded, *, strict=False) -> tuple[dict, dict]
 
 `validate_checkpoint_metadata`は値を変更せず、エラーの一覧を返します。`strict=True`では代わりに`CheckpointMetadataError`を発生させます。規約に準拠したチェックポイントを書き込むためにサポートされる方法は`model.save(path)`です。
 
+## 入力プロファイル
+
+2極性ヒストグラムのチェックポイントは、形式、配置、極性、エンコーディング、スケール、時間ウィンドウを含む完全な`input_profile`と、`input_initialization`を保持します。推論のための再読み込みにデータセットYAMLは不要です。学習と検証は、一致しないプロファイルを拒否します。[イベントヒストグラム](/docs/train/event-histograms)を参照してください。

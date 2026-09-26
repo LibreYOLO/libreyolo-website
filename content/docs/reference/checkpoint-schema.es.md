@@ -17,9 +17,9 @@ keywords:
   - model_family
   - manifiesto cuantización quant
   - wrap_libreyolo_checkpoint
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  Refleja docs/checkpoint_schema.md del repositorio libreyolo en la v1.5.0,
+  Refleja docs/checkpoint_schema.md del repositorio libreyolo en la v1.6.0,
   contrastado con libreyolo/utils/serialization.py y BaseModel.save.
 snippets:
   usage:
@@ -51,7 +51,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: ce760f1bed97bfd0
+source_hash: c3aa0ff92444b10c
 ---
 
 ## Esquema v1.0
@@ -106,11 +106,7 @@ forma deliberada.
 
 ## Añadidos de pose
 
-La pose suele ser de una sola clase, `nc: 1` con `person`, pero la cabeza de
-pose de YOLO-NAS también admite pose multiclase con un único esqueleto de
-keypoints compartido, en cuyo caso `nc` y `names` describen las clases igual
-que en detección. Las exportaciones de pose para runtime emiten `scores` con
-forma `[batch, anchors, nc]`.
+Los checkpoints de pose registran su esquema de clases y puntos clave. YOLO-NAS admite varias clases con un esqueleto compartido; RF-DETR también admite cantidades de puntos clave por clase. `nc` y `names` describen las clases. Las exportaciones de pose emiten `scores` con forma `[batch, anchors, nc]`.
 
 | Clave | Significado |
 |---|---|
@@ -118,6 +114,8 @@ forma `[batch, anchors, nc]`.
 | `keypoint_dim` | `2` para etiquetas `x,y` o `3` para etiquetas `x,y,visibility`; las salidas del modelo siempre exponen `x,y,visibility` |
 | `oks_sigmas` | Sigmas OKS opcionales por keypoint; cuando no están, se usa el valor por defecto de la tarea para `num_keypoints` |
 | `num_keypoints_per_class` | Recuentos opcionales de keypoints por clase para cabezas de estilo GroupPose cuyo tensor de keypoints está rellenado por clase; `0` para las clases sin keypoints |
+
+RF-DETR puede registrar `num_keypoints_per_class` junto con `kpt_names`. Los recuentos se alinean con las clases del dataset; cero indica una clase solo con cajas y las predicciones se rellenan hasta la forma máxima de keypoints.
 
 ## Añadidos de mesh
 
@@ -238,6 +236,8 @@ que tienen formas inconsistentes.
 Un `.pte` y un `.mnn` son artefactos específicos de un backend, no checkpoints
 de PyTorch.
 
+Los clasificadores registran `norm_mean`, `norm_std` y `resize_mode`. Los lienzos rectangulares conservan `imgsz_h` e `imgsz_w`. En YOLO9, `letterbox_pad` es `topleft` o `center`; si faltan metadatos se conserva la geometría heredada de esquina superior izquierda.
+
 ## Checkpoints cuantizados
 
 Un modelo cuantizado añade una clave plana opcional, `quant`, que contiene un
@@ -309,6 +309,8 @@ Por compatibilidad entre versiones, los lectores aceptan los alias heredados
 de mejor métrica `best_mAP50_95`, `best_mAP50`, `best_metric` y
 `best_metric_name`.
 
+La selección personalizada registra `fitness_source="callback"` y `fitness/custom`. El código y el estado del callback no se guardan; estas ejecuciones no pueden reanudarse. Inicia una ejecución nueva a partir de sus pesos.
+
 ## Snapshots externos
 
 El esquema rige los archivos `.pt` creados por LibreYOLO. No renombra ni
@@ -355,3 +357,7 @@ unwrap_libreyolo_checkpoint(loaded, *, strict=False) -> tuple[dict, dict]
 `validate_checkpoint_metadata` no muta nada y devuelve la lista de errores;
 con `strict=True` lanza `CheckpointMetadataError` en su lugar.
 `model.save(path)` es la forma soportada de escribir un checkpoint conforme.
+
+## Perfiles de entrada
+
+Los checkpoints de histogramas de dos polaridades conservan el `input_profile` completo, incluidos formato, layout, polaridad, codificación, escala y duración de ventana, además de `input_initialization`. La recarga para predicción no necesita YAML del dataset; el entrenamiento y la validación rechazan perfiles que no coincidan. Consulta [histogramas de eventos](/docs/train/event-histograms).

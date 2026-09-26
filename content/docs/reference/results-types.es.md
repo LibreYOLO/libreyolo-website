@@ -1,13 +1,10 @@
 ---
 title: Tipos de Results
 seo_title: Referencia del objeto Results de LibreYOLO
-description: >-
-  Todos los payloads que puede llevar un objeto Results de LibreYOLO, un slot
-  por forma de tarea: boxes, masks, keypoints, probs, obb, depth, ocr,
-  embeddings y diez más.
+description: "Payloads de resultados de LibreYOLO: cajas, máscaras, puntos clave, clasificación, profundidad, albedo, cuboides 3D y acciones robóticas."
 lead: >-
   Results es el único tipo de retorno por imagen de todos los modelos de
-  LibreYOLO. Lleva dieciocho slots de payload opcionales, uno por forma de
+  LibreYOLO. Lleva slots de payload opcionales, uno por forma de
   tarea, y solo rellena los que el modelo ha producido.
 keywords:
   - objeto Results de libreyolo
@@ -17,10 +14,10 @@ keywords:
   - Results.depth_map
   - resultados de deteccion a json python
   - obtener coordenadas de bounding box python
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Nombres de slot, formas, propiedades y valores por defecto leídos de
-  libreyolo/utils/results.py en la v1.5.0. Semántica citada de los docstrings de
+  libreyolo/utils/results.py en la v1.6.0. Semántica citada de los docstrings de
   las clases de payload.
 snippets:
   usage:
@@ -51,7 +48,7 @@ snippets:
         # Las filas, como dicts planos, y luego como JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 16f654364ae6448a
+source_hash: d74276d805c22c92
 ---
 
 ## El objeto Results
@@ -199,6 +196,8 @@ lienzo de la imagen original. Los valores más altos significan más cerca de la
 cámara. Los valores son relativos, no metros métricos. `min`, `max` y `mean` se
 calculan sobre los valores finitos, y `normalized()` reescala el mapa a `[0, 1]`.
 
+`DepthMap(data, orig_shape=None, encoding="inverse_depth")` también acepta `encoding="depth"` y `encoding="log_depth"`. Los validadores lo interpretan antes de la alineación. Los valores de profundidad relativa siguen sin garantizar una escala métrica.
+
 ## NormalMap
 
 Campo denso de normales de superficie, float32 `(H, W, 3)` sobre el lienzo de la
@@ -310,6 +309,16 @@ dicts planos, una fila por detección, segmento, punto o región según qué slo
 estén rellenos. `to_json(**kwargs)` pasa sus argumentos a `summary` y devuelve
 la cadena JSON.
 
-`plot()` renderiza un resultado denso de normales o de bordes en su
-visualización canónica; lanza una excepción para los demás tipos de resultado.
-Las imágenes anotadas de las otras tareas salen de `predict(save=True)`.
+`plot()` renderiza los payloads de todas las tareas. Las superposiciones sobre imágenes usan arrays BGR por defecto; `pil=True` solicita PIL. Los resultados de bordes y mapas de normales conservan PIL por defecto.
+
+## Boxes3D
+
+`Boxes3D(data, orig_shape=None, intrinsics=None)` contiene filas `(N, 14)`: centro xyz, dimensiones wlh, cuaternión wxyz, puntuación de ordenación, ID de clase, confianza 2D y confianza 3D. Las coordenadas son metros en el sistema de cámara, con x hacia la derecha, y hacia abajo y z hacia delante; no se implica un sistema de mundo. Los parámetros intrínsecos 3x3 corresponden al lienzo original. Las filas se alinean con `Results.boxes`.
+
+## AlbedoMap
+
+`AlbedoMap(data, orig_shape=None)` contiene RGB lineal. La conversión para visualización produce sRGB; la validación cuantitativa de albedo usa los valores lineales originales.
+
+## Actions
+
+`Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` representa una secuencia de acciones float32 `(T, D)`. `first` devuelve la primera fila; el slicing selecciona pasos temporales. Los valores conservan las unidades del dataset de la política. `names` describe las dimensiones de acción, `fps` la frecuencia de control e `instruction` el texto de condicionamiento.

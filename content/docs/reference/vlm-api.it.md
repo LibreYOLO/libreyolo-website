@@ -19,12 +19,8 @@ keywords:
   - SmolVLM2
   - Florence-2
   - libreyolo chat
-last_verified: 1.5.0
-verification: >-
-  Alias letti da libreyolo/models/vlm/__init__.py; repository, dimensioni ed
-  elenchi di task dai moduli delle famiglie sotto libreyolo/models/vlm/ più
-  libreyolo/models/sensenova/model.py; regole di chiamata ed eccezioni da
-  libreyolo/models/vlm/base.py, tutto alla v1.5.0.
+last_verified: 1.6.0
+verification: Alias letti da libreyolo/models/vlm/__init__.py; repository, dimensioni ed elenchi di task dai moduli delle famiglie sotto libreyolo/models/vlm/ più libreyolo/models/sensenova/model.py; regole di chiamata ed eccezioni da libreyolo/models/vlm/base.py, tutto alla v1.6.0.
 snippets:
   install:
     - label: bash
@@ -50,7 +46,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 57ddac08bc4d4e05
+source_hash: 77a04856cfe4f88c
 ---
 
 ## Installazione
@@ -96,9 +92,11 @@ ogni famiglia sono quelle elencate per prime: `qwen3-vl` risolve a `4b`,
 `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` e `LibreMODUS`
 (scritto anche `LibreModus`) sono esportati a livello di pacchetto.
 
+Il rilevamento include anche `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` e `lfm2-vl-3b`. L'alias semplice `gemma-4` seleziona E4B. Gli alias Molmo2 sono `molmo2-4b`, `molmo2-8b` e `molmo2-o-7b`; il default è 4B. Gli alias definiscono l'instradamento, ma non attestano che ogni snapshot remoto sia stato scaricato e testato.
+
 ## Task
 
-La maggior parte delle famiglie serve solo `detect`. Due ne servono di più:
+Il supporto dei task è specifico per famiglia. Questi adattatori supportano più task:
 
 | Famiglia | Task supportati |
 |---|---|
@@ -115,6 +113,8 @@ model.set_task(task: str) -> LibreVLMModel
 Il task viene validato rispetto all'elenco supportato dalla famiglia, resta
 valido nelle chiamate successive a `predict()` e `track()`, e il modello viene
 restituito così che le chiamate si possano concatenare.
+
+Molmo2 restituisce punti e richiede `{label}` nei template di puntamento personalizzati. Moondream supporta rilevamento, punti e chat nativa. Usa [LibreGround](/docs/reference/ground-api) per query che trasformano istruzioni in clic.
 
 ## set_classes
 
@@ -164,8 +164,7 @@ impilabile.
 
 ## Non supportato
 
-`train()`, `val()` ed `export()` sollevano `NotImplementedError`. Fai
-fine-tuning a monte e carica i pesi risultanti.
+L'esportazione e la validazione della mAP di rilevamento non sono supportate. Il supporto all'addestramento è limitato al flusso Qwen3-VL descritto sotto.
 
 ## Codice remoto
 
@@ -178,3 +177,7 @@ commit `c32291ca5e996f5a7a485845b4f57a233936bba0`.
 LibreMODUS è un'eccezione esplicita allo schema dei checkpoint: il suo alias
 risolve a una directory di file upstream fissati invece che a un `.pt` di
 LibreYOLO, e LibreYOLO non gli aggiunge metadati v1.0 né lo ripubblica.
+
+## Addestramento
+
+Qwen3-VL supporta LoRA di rilevamento tramite `train(data=...)` dopo l'installazione di `libreyolo[vlm-train]`. Congela l'encoder visivo, sceglie i checkpoint migliori in base alla loss di validazione e salva directory di checkpoint. Vedi [fine-tuning dei VLM](/docs/train/vlm-fine-tuning).

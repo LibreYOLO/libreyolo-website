@@ -18,10 +18,10 @@ keywords:
   - no_aug_epochs
   - Augmentation Unterstützungsmatrix
   - TrainConfig Einstellungen
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Liste der Einstellungen, Statuswerte, Archetypen, familienbezogene
-  Abweichungen und Hilfsfunktionen aus libreyolo/data/augment/spec.py in v1.5.0
+  Abweichungen und Hilfsfunktionen aus libreyolo/data/augment/spec.py in v1.6.0
   gelesen. Die Zuordnung dieser Tabelle zu den tatsächlichen Pipelines wird
   durch tests/unit/test_augment_spec.py abgesichert.
 snippets:
@@ -43,7 +43,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: d2e1b9f5c81072e1
+source_hash: f3cba41ceadf131f
 ---
 
 ## Einstellungen
@@ -69,7 +69,7 @@ Dies sind Feldnamen von `TrainConfig`, nicht ihre Schreibweisen in der CLI. Die 
 | `mixup` | Batch-MixUp-Wahrscheinlichkeit mit weichen Labels für Klassifizierung |
 | `cutmix` | Batch-CutMix-Wahrscheinlichkeit mit weichen Labels für Klassifizierung |
 
-Die letzten vier bilden das Klassifizierungspaket. Erkennungsfamilien ignorieren sie. `mixup` ist ausschließlich über die API verfügbar. Das CLI-Argument `--mixup` ist der Alias für das bei der Erkennung verwendete `mixup_prob`.
+Die letzten vier bilden die Klassifikationsparameter. Detektionsfamilien ignorieren sie. Die CLI leitet `mixup` bei Klassifikatoren an die Batch-Mischung und bei Detektoren an `mixup_prob` weiter.
 
 <code-tabs name="usage" />
 
@@ -92,14 +92,14 @@ Jede erfasste Familie folgt einer von sechs Pipelines. Einige familienbezogene A
 | `mosaic_prob` | verwendet | ignoriert | ignoriert | ignoriert | ignoriert | ignoriert |
 | `mixup_prob` | gekoppelt | verwendet | ignoriert | ignoriert | ignoriert | ignoriert |
 | `hsv_prob` | verwendet | verwendet | ignoriert | ignoriert | ignoriert | ignoriert |
-| `flip_prob` | verwendet | verwendet | verwendet | ignoriert | ignoriert | ignoriert |
+| `flip_prob` | verwendet | verwendet | verwendet | verwendet | ignoriert | ignoriert |
 | `degrees` | gekoppelt | verwendet | ignoriert | ignoriert | ignoriert | ignoriert |
 | `translate` | gekoppelt | verwendet | ignoriert | ignoriert | ignoriert | ignoriert |
 | `mosaic_scale` | gekoppelt | verwendet | ignoriert | ignoriert | ignoriert | ignoriert |
 | `mixup_scale` | gekoppelt | verwendet | ignoriert | ignoriert | ignoriert | ignoriert |
 | `shear` | gekoppelt | verwendet | ignoriert | ignoriert | ignoriert | ignoriert |
 | `perspective` | gekoppelt | verwendet | ignoriert | ignoriert | ignoriert | ignoriert |
-| `flipud` | verwendet | verwendet | ignoriert | ignoriert | ignoriert | ignoriert |
+| `flipud` | verwendet | verwendet | ignoriert | verwendet | ignoriert | ignoriert |
 | `no_aug_epochs` | verwendet | verwendet | verwendet | verwendet | verwendet | verwendet |
 | `auto_augment` | ignoriert | ignoriert | ignoriert | verwendet | ignoriert | ignoriert |
 | `erasing` | ignoriert | ignoriert | ignoriert | verwendet | ignoriert | ignoriert |
@@ -108,9 +108,9 @@ Jede erfasste Familie folgt einer von sechs Pipelines. Einige familienbezogene A
 
 In der Pipeline im YOLOX-Stil wendet die Vorverarbeitung je Sample HSV-Jitter und Spiegelungen an. Die affine Transformation und MixUp laufen nur innerhalb des Mosaic-Zweigs. YOLO-NAS führt dagegen immer eine affine Transformation je Sample aus, ignoriert Mosaic und wendet MixUp unabhängig an. Dabei wird `mosaic_scale` als Skalierungsbereich der affinen Transformation wiederverwendet.
 
-Die Pipeline im DETR-Stil verwendet eine unveränderte Durchleitung ohne Mosaic. Fotometrische Verzerrung, Zoom-out und IoU-Beschnitt sind feste Rezeptwerte und keine konfigurierbaren Einstellungen. Deshalb erreichen `hsv_prob` und die Geometrieeinstellungen diese Pipeline nie. Die Klassifizierungspipeline verwendet eine ImageFolder-Transformation mit einer festen Wahrscheinlichkeit von 0,5 für horizontales Spiegeln statt `flip_prob`. Bei der semantischen Segmentierung stammen Skalierungs-Jitter und HSV aus Klassenattributen der Familie statt aus Konfigurationseinstellungen. Restauration koppelt die Spiegelungen von Eingabe und Ziel mit einer festen Wahrscheinlichkeit von 0,5.
+Die DETR-Pipeline verwendet eine Transformation ohne Mosaic. Photometrische Verzerrung, Zoom-out und IoU-Cropping sind Rezeptkonstanten statt konfigurierbarer Parameter; `hsv_prob` und die Geometrieparameter steuern sie daher nicht. Klassifikation verwendet `flip_prob` für horizontales und `flipud` für vertikales Spiegeln. Semantische Skalierungsvariation und HSV stammen aus Attributen der Modellklasse. Bei Restaurierung werden Eingabe und Ziel gemeinsam mit einer festen Wahrscheinlichkeit von 0.5 gespiegelt.
 
-`no_aug_epochs` wird überall berücksichtigt, schaltet aber unterschiedliche Elemente ab. Im YOLOX-Stil betrifft dies Mosaic und MixUp, bei YOLO-NAS die affine Transformation und MixUp, im DETR-Stil die starken fotometrischen und Beschnitt-Augmentationen sowie das Ende des Lernratenverlaufs und bei den übrigen Pipelines das Ende des Schedulers.
+`no_aug_epochs` wird überall berücksichtigt, schaltet aber unterschiedliche Operationen ab: Mosaic und MixUp bei YOLOX-Pipelines, affine Transformation und MixUp bei YOLO-NAS, starke photometrische Augmentierung und Cropping sowie die Schlussphase des Lernratenplans bei DETR, automatische Augmentierung, Erasing, MixUp und CutMix bei Klassifikation. Cropping und Spiegeln bleiben bei Klassifikation aktiv.
 
 ## Familien nach Archetyp
 

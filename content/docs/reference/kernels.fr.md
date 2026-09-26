@@ -16,9 +16,9 @@ keywords:
   - kernel ms_deform_attn
   - set_fused_attention
   - kernels triton libreyolo
-last_verified: 1.5.0
+last_verified: "1.6.0"
 verification: >-
-  API du registre lue dans libreyolo/kernels/__init__.py en v1.5.0, API
+  API du registre lue dans libreyolo/kernels/__init__.py en v1.6.0, API
   d'attention lue dans libreyolo/kernels/attention/__init__.py et sdpa.py,
   fournisseur du Hub lu dans libreyolo/kernels/attention/ms_deform_attn.py, y
   compris sa révision épinglée et son prédicat d'éligibilité. Arborescence des
@@ -79,7 +79,7 @@ snippets:
             name="mybackend",
             predicate=my_check,
         )
-source_hash: 23d504e88b7959f8
+source_hash: 2cdb2d344ab3faf5
 ---
 
 ## Registre
@@ -195,6 +195,8 @@ installation standard sans l'extra n'est pas affectée. Pour comparer les
 métriques avant et après la mise à niveau, conservez le même état de l'extra ou
 définissez `LIBREYOLO_HUB_KERNELS=0` des deux côtés.
 
+Le MSDA du Hub accepte FP16 et BF16 en convertissant les entrées du kernel en FP32, puis en restaurant le type de sortie et en préservant les gradients à travers les conversions. Les appels CUDA eager sans fournisseur accéléré accepté émettent une unique suggestion d'installation de `libreyolo[hub-kernels]`. `ms_deform_attn_available(value=None)` peut inspecter un parcours propre à un tenseur.
+
 ## Attention fusionnée
 
 L'attention par produit scalaire mis à l'échelle fusionnée ne nécessite aucune
@@ -246,3 +248,7 @@ La sélection des kernels interagit avec les
 [graphes CUDA](/docs/reference/cuda-graphs)\u00a0: la matrice de parité de
 l'inférence a été exécutée sans le package `kernels`, elle ne couvre donc pas
 la sécurité de capture lorsqu'un kernel compilé est actif.
+
+## Attention déformable Triton
+
+Le fournisseur MSDA Triton intégré prend en charge l'inférence CUDA éligible en FP32, FP16 et BF16. Il rejette les entrées qui nécessitent des gradients et utilise l'attention portable par défaut lorsqu'il est indisponible. Le Hub reste prioritaire. `LIBREYOLO_TRITON_MSDA=0` désactive Triton ; `LIBREYOLO_HUB_KERNELS=0` désactive le fournisseur Hub et sa suggestion d'installation.

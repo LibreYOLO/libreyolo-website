@@ -16,13 +16,8 @@ keywords:
   - HF_TOKEN
   - variabili ambiente libreyolo
   - cartella pesi libreyolo
-last_verified: 1.5.0
-verification: >-
-  Variabili individuate cercando os.environ e os.getenv in libreyolo/**/*.py
-  alla v1.5.0; semantica letta in ogni punto di utilizzo. Convenzioni sulle
-  directory lette da libreyolo/data/utils.py, libreyolo/utils/download.py,
-  libreyolo/export/exporter.py, libreyolo/models/base/model.py e
-  libreyolo/models/sam3dbody/mhr_body.py.
+last_verified: 1.6.0
+verification: Variabili individuate cercando os.environ e os.getenv in libreyolo/**/*.py alla v1.6.0; semantica letta in ogni punto di utilizzo. Convenzioni sulle directory lette da libreyolo/data/utils.py, libreyolo/utils/download.py, libreyolo/export/exporter.py, libreyolo/models/base/model.py e libreyolo/models/sam3dbody/mhr_body.py.
 snippets:
   usage:
     - label: Puntare la radice dei dataset altrove
@@ -40,7 +35,7 @@ snippets:
         sovrascrive al momento dell'import.
 
         print(DATASETS_DIR)
-source_hash: 462f1288582225ce
+source_hash: 82fbf9f3b1540603
 ---
 
 ## Variabili d'ambiente
@@ -71,6 +66,8 @@ Anche la selezione dei kernel accorcia gli import: quando `LIBREYOLO_KERNELS`
 forza `off` o `reference`, i provider accelerati interni non vengono importati
 affatto. Il registro che queste tre variabili controllano è documentato su
 [kernels](/docs/reference/kernels).
+
+`LIBREYOLO_TRITON_MSDA=0` disattiva il provider di attenzione deformabile Triton incluso nel codice. `LIBREYOLO_HUB_KERNELS=0` disattiva i kernel Hub e il relativo suggerimento di installazione. Entrambi mantengono il fallback portabile.
 
 ## Variabili che la libreria imposta
 
@@ -110,6 +107,8 @@ Un token serve solo per i repository ad accesso limitato. SAM 3 è l'esempio
 incluso: i suoi pesi si scaricano da un repository ad accesso limitato con una
 licenza personalizzata, quindi bisogna accettare i termini sulla pagina del
 repository e la sessione deve essere autenticata.
+
+`HF_TOKEN` autentica il caricamento e la pubblicazione dei checkpoint Hub e il logger Hub. `OPENAI_API_KEY` e `OPENROUTER_API_KEY` forniscono le credenziali per i corrispondenti [percorsi dei provider LibreLLM](/docs/reference/llm-api).
 
 ## Directory
 

@@ -18,12 +18,12 @@ keywords:
   - SmolVLM2
   - Florence-2
   - libreyolo chat
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Aliasse aus libreyolo/models/vlm/__init__.py; Repositorys, Größen und
   Aufgabenlisten aus den Familienmodulen unter libreyolo/models/vlm/ sowie
   libreyolo/models/sensenova/model.py; Aufrufregeln und Ausnahmen aus
-  libreyolo/models/vlm/base.py, jeweils für v1.5.0.
+  libreyolo/models/vlm/base.py, jeweils für v1.6.0.
 snippets:
   install:
     - label: bash
@@ -49,7 +49,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 57ddac08bc4d4e05
+source_hash: 77a04856cfe4f88c
 ---
 
 ## Installation
@@ -95,9 +95,11 @@ Familie verwendet die zuerst aufgeführte Größe: `qwen3-vl` wird zu `4b`,
 `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` und `LibreMODUS` (auch
 `LibreModus` geschrieben) werden auf Paketebene exportiert.
 
+Die Erkennung umfasst außerdem `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` und `lfm2-vl-3b`. Der Alias `gemma-4` ohne Zusatz wählt E4B. Molmo2-Aliasse sind `molmo2-4b`, `molmo2-8b` und `molmo2-o-7b`; Standard ist 4B. Aliasse legen die Weiterleitung fest, sagen aber nicht aus, dass jeder entfernte Snapshot heruntergeladen und getestet wurde.
+
 ## Aufgaben
 
-Die meisten Familien unterstützen nur `detect`. Zwei unterstützen mehr:
+Die unterstützten Aufgaben hängen von der Modellfamilie ab. Diese Adapter unterstützen mehrere Aufgaben:
 
 | Familie | Unterstützte Aufgaben |
 |---|---|
@@ -114,6 +116,8 @@ model.set_task(task: str) -> LibreVLMModel
 Die Aufgabe wird anhand der von der Familie unterstützten Liste validiert,
 bleibt für spätere Aufrufe von `predict()` und `track()` aktiv und gibt das
 Modell zurück, damit Aufrufe verkettet werden können.
+
+Molmo2 liefert Punkte und benötigt `{label}` in eigenen Pointing-Vorlagen. Moondream unterstützt Erkennung, Punkte und nativen Chat. Verwende [LibreGround](/docs/reference/ground-api) für Anweisung-zu-Klick-Anfragen.
 
 ## set_classes
 
@@ -163,8 +167,7 @@ Codierung statt eines stapelbaren Bildtensors zurückgibt.
 
 ## Nicht unterstützte Funktionen
 
-`train()`, `val()` und `export()` lösen `NotImplementedError` aus. Führe das
-Fine-Tuning im Upstream-Projekt durch und lade die resultierenden Gewichte.
+Export und Validierung der Erkennungs-mAP werden nicht unterstützt. Die Trainingsunterstützung ist auf den folgenden Qwen3-VL-Workflow beschränkt.
 
 ## Remote-Code
 
@@ -180,3 +183,6 @@ wird zu einem Verzeichnis festgelegter Upstream-Dateien statt einer
 LibreYOLO-`.pt` aufgelöst. LibreYOLO ergänzt weder v1.0-Metadaten noch
 veröffentlicht es die Dateien erneut.
 
+## Training
+
+Qwen3-VL unterstützt LoRA für Erkennung über `train(data=...)` nach Installation von `libreyolo[vlm-train]`. Es friert den Vision-Tower ein, wählt die besten Checkpoints anhand des Validierungs-Losses und speichert Checkpoint-Verzeichnisse. Siehe [VLM-Fine-Tuning](/docs/train/vlm-fine-tuning).

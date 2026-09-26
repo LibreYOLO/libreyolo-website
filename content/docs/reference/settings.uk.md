@@ -15,13 +15,8 @@ keywords:
   - HF_TOKEN
   - каталог ваг LibreYOLO
   - кеш LibreYOLO
-last_verified: 1.5.0
-verification: >-
-  Змінні знайдено пошуком os.environ і os.getenv у libreyolo/**/*.py версії
-  v1.5.0; семантику прочитано в кожному місці використання. Угоди щодо каталогів
-  взято з libreyolo/data/utils.py, libreyolo/utils/download.py,
-  libreyolo/export/exporter.py, libreyolo/models/base/model.py і
-  libreyolo/models/sam3dbody/mhr_body.py.
+last_verified: "1.6.0"
+verification: Змінні знайдено пошуком os.environ і os.getenv у libreyolo/**/*.py версії v1.6.0; семантику прочитано в кожному місці використання. Угоди щодо каталогів взято з libreyolo/data/utils.py, libreyolo/utils/download.py, libreyolo/export/exporter.py, libreyolo/models/base/model.py і libreyolo/models/sam3dbody/mhr_body.py.
 snippets:
   usage:
     - label: Спрямування кореневого каталогу датасетів в інше місце
@@ -39,7 +34,7 @@ snippets:
         його під час імпорту.
 
         print(DATASETS_DIR)
-source_hash: 462f1288582225ce
+source_hash: 82fbf9f3b1540603
 ---
 
 ## Змінні середовища
@@ -71,6 +66,8 @@ source_hash: 462f1288582225ce
 задає `off` або `reference`, вбудовані прискорені постачальники взагалі
 не імпортуються. Реєстр, яким керують ці три змінні, описано в розділі
 [ядра](/docs/reference/kernels).
+
+`LIBREYOLO_TRITON_MSDA=0` вимикає вбудований провайдер деформівної уваги Triton. `LIBREYOLO_HUB_KERNELS=0` вимикає ядра Hub і підказку їх встановлення. Обидва зберігають переносний резервний шлях.
 
 ## Змінні, які задає бібліотека
 
@@ -110,6 +107,8 @@ Hugging Face. Працюють обидва варіанти.
 із постачання: її ваги завантажуються із закритого репозиторію за спеціальною
 ліцензією, тому потрібно прийняти умови на сторінці репозиторію й
 автентифікувати сеанс.
+
+`HF_TOKEN` забезпечує автентифікацію для завантаження контрольних точок Hub, публікації й логера Hub. `OPENAI_API_KEY` і `OPENROUTER_API_KEY` надають облікові дані для відповідних [маршрутів провайдерів LibreLLM](/docs/reference/llm-api).
 
 ## Каталоги
 
@@ -155,4 +154,3 @@ YAML датасету може містити поле `download` із кодо�
 виконується, якщо виклику, що читає його, не передано
 `allow_download_scripts=True`. Це аргумент функцій `val()` і
 `export()`, а не змінна середовища.
-

@@ -18,10 +18,10 @@ keywords:
   - no_aug_epochs
   - macierz obsługi augmentacji
   - parametry TrainConfig
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Listę parametrów, statusy, archetypy, odchylenia poszczególnych rodzin i
-  funkcje pomocnicze odczytano z libreyolo/data/augment/spec.py w wersji 1.5.0.
+  funkcje pomocnicze odczytano z libreyolo/data/augment/spec.py w wersji 1.6.0.
   Powiązanie tej tabeli z rzeczywistymi pipeline'ami jest sprawdzane przez
   tests/unit/test_augment_spec.py.
 snippets:
@@ -43,7 +43,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: d2e1b9f5c81072e1
+source_hash: f3cba41ceadf131f
 ---
 
 ## Parametry
@@ -70,9 +70,7 @@ na te pola, dlatego `--mosaic` ustawia `mosaic_prob`.
 | `mixup` | Prawdopodobieństwo batch-MixUp dla klasyfikacji, z miękkimi etykietami |
 | `cutmix` | Prawdopodobieństwo batch-CutMix dla klasyfikacji, z miękkimi etykietami |
 
-Ostatnie cztery parametry tworzą pakiet klasyfikacyjny. Rodziny detekcyjne je
-ignorują. `mixup` jest parametrem dostępnym tylko przez API: `--mixup` w CLI to
-alias detekcyjnego parametru `mixup_prob`.
+Ostatnie cztery parametry tworzą pakiet klasyfikacji. Rodziny detekcji je ignorują. CLI kieruje `mixup` do mieszania batchy w klasyfikatorach i do `mixup_prob` w detektorach.
 
 <code-tabs name="usage" />
 
@@ -100,14 +98,14 @@ odchyleniami dla poszczególnych rodzin opisanymi poniżej.
 | `mosaic_prob` | używany | ignorowany | ignorowany | ignorowany | ignorowany | ignorowany |
 | `mixup_prob` | zależny | używany | ignorowany | ignorowany | ignorowany | ignorowany |
 | `hsv_prob` | używany | używany | ignorowany | ignorowany | ignorowany | ignorowany |
-| `flip_prob` | używany | używany | używany | ignorowany | ignorowany | ignorowany |
+| `flip_prob` | używany | używany | używany | używany | ignorowany | ignorowany |
 | `degrees` | zależny | używany | ignorowany | ignorowany | ignorowany | ignorowany |
 | `translate` | zależny | używany | ignorowany | ignorowany | ignorowany | ignorowany |
 | `mosaic_scale` | zależny | używany | ignorowany | ignorowany | ignorowany | ignorowany |
 | `mixup_scale` | zależny | używany | ignorowany | ignorowany | ignorowany | ignorowany |
 | `shear` | zależny | używany | ignorowany | ignorowany | ignorowany | ignorowany |
 | `perspective` | zależny | używany | ignorowany | ignorowany | ignorowany | ignorowany |
-| `flipud` | używany | używany | ignorowany | ignorowany | ignorowany | ignorowany |
+| `flipud` | używany | używany | ignorowany | używany | ignorowany | ignorowany |
 | `no_aug_epochs` | używany | używany | używany | używany | używany | używany |
 | `auto_augment` | ignorowany | ignorowany | ignorowany | używany | ignorowany | ignorowany |
 | `erasing` | ignorowany | ignorowany | ignorowany | używany | ignorowany | ignorowany |
@@ -123,8 +121,7 @@ używając ponownie `mosaic_scale` jako zakresu skali transformacji afinicznej.
 Pipeline w stylu DETR jest transformacją przepuszczającą bez mosaic. Jego
 zniekształcenie fotometryczne, oddalenie i przycięcie IoU są stałymi receptury,
 a nie konfigurowalnymi parametrami, dlatego `hsv_prob` ani parametry geometrii
-do niego nie trafiają. Pipeline klasyfikacji używa transformacji ImageFolder,
-której odbicie poziome ma stałe prawdopodobieństwo 0.5 zamiast `flip_prob`.
+do niego nie trafiają. Klasyfikacja używa `flip_prob` do odbić poziomych i `flipud` do pionowych.
 Losowa zmiana skali semantycznej i HSV pochodzą z atrybutów klas rodzin, a nie
 z parametrów konfiguracji, natomiast odbicia przy przywracaniu są sprzężonymi
 operacjami na wejściu i celu o stałym prawdopodobieństwie 0.5.
@@ -132,7 +129,7 @@ operacjami na wejściu i celu o stałym prawdopodobieństwie 0.5.
 `no_aug_epochs` jest uwzględniany wszędzie, choć wyłącza różne elementy: mosaic
 i MixUp w stylu YOLOX, transformację afiniczną i MixUp w YOLO-NAS, silne
 augmentacje fotometryczne i przycinanie wraz z końcową częścią współczynnika
-uczenia w stylu DETR oraz końcową część harmonogramu w pozostałych przypadkach.
+uczenia w stylu DETR oraz automatyczną augmentację, erasing, MixUp i CutMix w klasyfikacji. Wycinanie i odbicia klasyfikacji pozostają włączone.
 
 ## Rodziny według archetypu
 

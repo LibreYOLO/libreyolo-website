@@ -2,14 +2,12 @@
 title: Ma trận tăng cường dữ liệu
 seo_title: Họ LibreYOLO nào hỗ trợ phép tăng cường dữ liệu nào
 description: >-
-  Hỗ trợ điều khiển tăng cường dữ liệu theo từng họ: mười sáu điều khiển
-  TrainConfig, ba trạng thái, sáu kiểu pipeline và các điều khiển mà một họ âm
-  thầm bỏ qua.
+  Hỗ trợ điều khiển tăng cường dữ liệu theo từng họ: mười sáu điều khiển TrainConfig, ba trạng thái, sáu kiểu
+  pipeline và các điều khiển mà một họ âm thầm bỏ qua.
 lead: >-
-  Việc đặt điều khiển tăng cường dữ liệu không bảo đảm nó đến được pipeline.
-  Trang này ghi cách từng họ có thể huấn luyện xử lý mỗi điều khiển trong
-  TrainConfig, dùng bảng khai báo do thư viện phân phối làm nguồn chân lý duy
-  nhất.
+  Việc đặt điều khiển tăng cường dữ liệu không bảo đảm nó đến được pipeline. Trang này ghi cách từng họ có thể
+  huấn luyện xử lý mỗi điều khiển trong TrainConfig, dùng bảng khai báo do thư viện phân phối làm nguồn chân
+  lý duy nhất.
 keywords:
   - tăng cường dữ liệu libreyolo
   - mosaic_prob
@@ -18,11 +16,11 @@ keywords:
   - no_aug_epochs
   - ma trận hỗ trợ tăng cường dữ liệu
   - điều khiển TrainConfig
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  Danh sách điều khiển, trạng thái, kiểu pipeline, sai khác theo họ và hàm trợ
-  giúp được đọc từ libreyolo/data/augment/spec.py ở v1.5.0. Bảng đó được gắn với
-  pipeline thực bằng tests/unit/test_augment_spec.py.
+  Danh sách điều khiển, trạng thái, kiểu pipeline, sai khác theo họ và hàm trợ giúp được đọc từ
+  libreyolo/data/augment/spec.py ở v1.6.0. Bảng đó được gắn với pipeline thực bằng
+  tests/unit/test_augment_spec.py.
 snippets:
   usage:
     - label: Truy vấn spec trực tiếp
@@ -42,9 +40,8 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: d2e1b9f5c81072e1
+source_hash: f3cba41ceadf131f
 ---
-
 ## Các điều khiển
 
 Đây là tên trường `TrainConfig`, không phải cách viết CLI. CLI ánh xạ các bí danh
@@ -69,8 +66,7 @@ riêng vào chúng, nên `--mosaic` đặt `mosaic_prob`.
 | `mixup` | Xác suất batch-MixUp phân loại với nhãn mềm |
 | `cutmix` | Xác suất batch-CutMix phân loại với nhãn mềm |
 
-Bốn mục cuối là gói phân loại. Các họ phát hiện bỏ qua chúng. `mixup` là điều
-khiển chỉ có trong API: `--mixup` của CLI là bí danh cho `mixup_prob` phát hiện.
+Bốn tham số cuối thuộc nhóm phân loại. Các họ phát hiện bỏ qua chúng. CLI định tuyến `mixup` sang trộn batch phân loại cho bộ phân loại và sang `mixup_prob` cho bộ phát hiện.
 
 <code-tabs name="usage" />
 
@@ -96,14 +92,14 @@ Mọi họ được bao quát tuân theo một trong sáu pipeline, với một 
 | `mosaic_prob` | dùng | bỏ qua | bỏ qua | bỏ qua | bỏ qua | bỏ qua |
 | `mixup_prob` | có điều kiện | dùng | bỏ qua | bỏ qua | bỏ qua | bỏ qua |
 | `hsv_prob` | dùng | dùng | bỏ qua | bỏ qua | bỏ qua | bỏ qua |
-| `flip_prob` | dùng | dùng | dùng | bỏ qua | bỏ qua | bỏ qua |
+| `flip_prob` | dùng | dùng | dùng | dùng | bỏ qua | bỏ qua |
 | `degrees` | có điều kiện | dùng | bỏ qua | bỏ qua | bỏ qua | bỏ qua |
 | `translate` | có điều kiện | dùng | bỏ qua | bỏ qua | bỏ qua | bỏ qua |
 | `mosaic_scale` | có điều kiện | dùng | bỏ qua | bỏ qua | bỏ qua | bỏ qua |
 | `mixup_scale` | có điều kiện | dùng | bỏ qua | bỏ qua | bỏ qua | bỏ qua |
 | `shear` | có điều kiện | dùng | bỏ qua | bỏ qua | bỏ qua | bỏ qua |
 | `perspective` | có điều kiện | dùng | bỏ qua | bỏ qua | bỏ qua | bỏ qua |
-| `flipud` | dùng | dùng | bỏ qua | bỏ qua | bỏ qua | bỏ qua |
+| `flipud` | dùng | dùng | bỏ qua | dùng | bỏ qua | bỏ qua |
 | `no_aug_epochs` | dùng | dùng | dùng | dùng | dùng | dùng |
 | `auto_augment` | bỏ qua | bỏ qua | bỏ qua | dùng | bỏ qua | bỏ qua |
 | `erasing` | bỏ qua | bỏ qua | bỏ qua | dùng | bỏ qua | bỏ qua |
@@ -115,17 +111,9 @@ Trong pipeline kiểu YOLOX, tiền xử lý theo mẫu áp dụng nhiễu HSV v
 affine theo mẫu luôn bật, bỏ qua mosaic và áp dụng MixUp độc lập, dùng lại
 `mosaic_scale` làm phạm vi scale affine.
 
-Pipeline kiểu DETR là biến đổi passthrough không có mosaic. Biến dạng quang học,
-zoom-out và crop theo IoU là hằng số công thức thay vì điều khiển có thể cấu hình,
-vì vậy `hsv_prob` và các điều khiển hình học không bao giờ đến được pipeline.
-Pipeline phân loại dùng biến đổi ImageFolder có xác suất lật ngang cố định 0.5
-thay vì `flip_prob`. Nhiễu scale và HSV semantic đến từ thuộc tính lớp của họ
-thay vì điều khiển cấu hình, còn phép lật khôi phục là thao tác đầu vào-và-đích
-được ghép với xác suất cố định 0.5.
+Pipeline kiểu DETR là phép biến đổi truyền qua không có mosaic. Biến dạng quang học, zoom-out và IoU-crop là hằng số trong công thức thay vì tham số cấu hình, vì vậy `hsv_prob` và các tham số hình học không tác động đến nó. Phân loại dùng `flip_prob` cho lật ngang và `flipud` cho lật dọc. Scale jitter và HSV ngữ nghĩa lấy từ thuộc tính lớp của họ mô hình thay vì tham số cấu hình, còn lật ảnh phục hồi là thao tác đồng thời trên đầu vào và nhãn đích với xác suất cố định 0.5.
 
-`no_aug_epochs` được tuân theo ở mọi nơi dù phần bị tắt khác nhau: mosaic và
-MixUp cho kiểu YOLOX, affine và MixUp cho YOLO-NAS, tăng cường quang học cùng crop
-mạnh và phần đuôi learning rate cho kiểu DETR, phần đuôi scheduler cho phần còn lại.
+`no_aug_epochs` được áp dụng ở mọi nơi, nhưng những gì nó tắt khác nhau: mosaic và MixUp cho kiểu YOLOX, affine và MixUp cho YOLO-NAS, augmentation quang học mạnh và cắt ảnh cùng phần cuối learning rate cho kiểu DETR, và auto-augmentation, erasing, MixUp, CutMix cho phân loại. Cắt và lật ảnh phân loại vẫn bật.
 
 ## Các họ theo kiểu
 
@@ -197,4 +185,3 @@ Với họ kiểu YOLOX, `mixup_prob=0.5` cùng `mosaic_prob=0` tắt hoàn toà
 MixUp chỉ áp dụng cho mẫu mosaic. Tổ hợp đó dễ xuất hiện khi tắt mosaic ở cuối
 quá trình huấn luyện. Trình huấn luyện ghi cảnh báo nêu tên họ, còn
 `mixup_gating_warning` là hàm thuần đứng sau cảnh báo.
-

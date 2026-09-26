@@ -15,10 +15,10 @@ keywords:
   - no_aug_epochs
   - matrice support augmentation
   - réglages TrainConfig
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Liste des réglages, états, archétypes, écarts par famille et fonctions
-  d'assistance lus dans libreyolo/data/augment/spec.py en v1.5.0. Cette table
+  d'assistance lus dans libreyolo/data/augment/spec.py en v1.6.0. Cette table
   est reliée aux véritables pipelines par tests/unit/test_augment_spec.py.
 snippets:
   usage:
@@ -39,7 +39,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: d2e1b9f5c81072e1
+source_hash: f3cba41ceadf131f
 ---
 
 ## Réglages
@@ -67,9 +67,7 @@ Le CLI associe ses propres alias à ces champs, `--mosaic` définit donc
 | `mixup` | Probabilité de batch-MixUp de classification, avec étiquettes souples |
 | `cutmix` | Probabilité de batch-CutMix de classification, avec étiquettes souples |
 
-Les quatre derniers constituent le groupe de classification. Les familles de
-détection les ignorent. `mixup` est un réglage réservé à l'API\u00a0: l'option
-`--mixup` du CLI est l'alias du réglage de détection `mixup_prob`.
+Les quatre derniers forment les contrôles de classification. Les familles de détection les ignorent. La CLI route `mixup` vers le mélange de lots pour les classifieurs et vers `mixup_prob` pour les détecteurs.
 
 <code-tabs name="usage" />
 
@@ -97,14 +95,14 @@ famille énumérés ci-dessous.
 | `mosaic_prob` | used | ignored | ignored | ignored | ignored | ignored |
 | `mixup_prob` | gated | used | ignored | ignored | ignored | ignored |
 | `hsv_prob` | used | used | ignored | ignored | ignored | ignored |
-| `flip_prob` | used | used | used | ignored | ignored | ignored |
+| `flip_prob` | used | used | used | used | ignored | ignored |
 | `degrees` | gated | used | ignored | ignored | ignored | ignored |
 | `translate` | gated | used | ignored | ignored | ignored | ignored |
 | `mosaic_scale` | gated | used | ignored | ignored | ignored | ignored |
 | `mixup_scale` | gated | used | ignored | ignored | ignored | ignored |
 | `shear` | gated | used | ignored | ignored | ignored | ignored |
 | `perspective` | gated | used | ignored | ignored | ignored | ignored |
-| `flipud` | used | used | ignored | ignored | ignored | ignored |
+| `flipud` | used | used | ignored | used | ignored | ignored |
 | `no_aug_epochs` | used | used | used | used | used | used |
 | `auto_augment` | ignored | ignored | ignored | used | ignored | ignored |
 | `erasing` | ignored | ignored | ignored | used | ignored | ignored |
@@ -118,21 +116,9 @@ une transformation affine par échantillon toujours active, ignore mosaic et
 applique MixUp indépendamment, en réutilisant `mosaic_scale` comme plage
 d'échelle affine.
 
-Le pipeline de style DETR utilise une transformation directe sans mosaic. Sa
-distorsion photométrique, son zoom arrière et son recadrage IoU sont des
-constantes de la recette plutôt que des réglages configurables. `hsv_prob` et
-les réglages géométriques ne l'atteignent donc jamais. Le pipeline de
-classification utilise une transformation ImageFolder dont le retournement
-horizontal est fixé à 0.5 plutôt que défini par `flip_prob`. La variation
-d'échelle sémantique et le HSV proviennent d'attributs de classe des familles,
-et non des réglages de configuration. Les retournements de restauration sont
-des opérations couplées sur l'entrée et la cible, avec une probabilité fixe de
-0.5.
+Le pipeline de type DETR est une transformation sans mosaic. La distorsion photométrique, le zoom-out et le recadrage par IoU sont des constantes de recette, pas des paramètres configurables : `hsv_prob` et les contrôles géométriques ne les pilotent donc pas. La classification utilise `flip_prob` pour les retournements horizontaux et `flipud` pour les verticaux. Les variations d'échelle et HSV de segmentation sémantique viennent d'attributs de la classe du modèle ; les retournements de restauration s'appliquent conjointement à l'entrée et à la cible avec une probabilité fixe de 0.5.
 
-`no_aug_epochs` est respecté partout, mais les éléments désactivés diffèrent\u00a0:
-mosaic et MixUp pour le style YOLOX, la transformation affine et MixUp pour
-YOLO-NAS, les fortes augmentations photométriques et de recadrage ainsi que la
-fin du learning rate pour le style DETR, et la fin du scheduler pour les autres.
+`no_aug_epochs` est pris en compte partout, mais désactive des opérations différentes : mosaic et MixUp pour les pipelines de type YOLOX ; la transformation affine et MixUp pour YOLO-NAS ; les augmentations photométriques fortes et le recadrage, avec la fin du planning du taux d'apprentissage, pour DETR ; l'augmentation automatique, erasing, MixUp et CutMix pour la classification. Le recadrage et les retournements de classification restent actifs.
 
 ## Familles par archétype
 
@@ -211,4 +197,3 @@ désactive entièrement MixUp, car celui-ci ne s'applique qu'aux échantillons
 mosaic. Cette combinaison survient facilement lorsque mosaic est désactivé en
 fin d'entraînement. Le trainer consigne un avertissement qui nomme la famille,
 et `mixup_gating_warning` est la fonction pure qui le produit.
-

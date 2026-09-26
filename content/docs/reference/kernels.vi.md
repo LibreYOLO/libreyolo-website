@@ -2,14 +2,12 @@
 title: Kernels
 seo_title: Registry kernel LibreYOLO và kernel Hub
 description: >-
-  Cách LibreYOLO chọn bản triển khai tăng tốc: registry kernel trong
-  libreyolo/kernels, kernel MS-deform-attn tùy chọn trên Hugging Face Hub và
-  công tắc fused attention.
+  Cách LibreYOLO chọn bản triển khai tăng tốc: registry kernel trong libreyolo/kernels, kernel MS-deform-attn
+  tùy chọn trên Hugging Face Hub và công tắc fused attention.
 lead: >-
-  Mọi thao tác tăng tốc trong LibreYOLO đều có bản mặc định khả chuyển và đôi
-  khi có biến thể nhanh hơn được đăng ký bên trên. Việc lựa chọn diễn ra trong
-  runtime theo predicate; thiếu dependency tùy chọn sẽ dùng luồng dự phòng thay
-  vì lỗi; đồ thị đã xuất luôn dùng luồng khả chuyển.
+  Mọi thao tác tăng tốc trong LibreYOLO đều có bản mặc định khả chuyển và đôi khi có biến thể nhanh hơn được
+  đăng ký bên trên. Việc lựa chọn diễn ra trong runtime theo predicate; thiếu dependency tùy chọn sẽ dùng
+  luồng dự phòng thay vì lỗi; đồ thị đã xuất luôn dùng luồng khả chuyển.
 keywords:
   - libreyolo kernels
   - LIBREYOLO_KERNELS
@@ -18,15 +16,14 @@ keywords:
   - ms_deform_attn kernel
   - set_fused_attention
   - libreyolo triton kernels
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  API registry được đọc từ libreyolo/kernels/__init__.py ở v1.5.0, API attention
-  từ libreyolo/kernels/attention/__init__.py và sdpa.py, provider Hub từ
-  libreyolo/kernels/attention/ms_deform_attn.py gồm revision được ghim và
-  predicate đủ điều kiện. Bố cục thư mục được liệt kê từ libreyolo/kernels/.
-  Định nghĩa extra lấy từ pyproject.toml. Ghi chú hành vi và số liệu benchmark
-  lấy từ docs/kernels.md. Lịch sử điều kiện v1.4.0 lấy từ commit nối slot
-  RF-DETR và mục CHANGELOG 1.5.0.
+  API registry được đọc từ libreyolo/kernels/__init__.py ở v1.6.0, API attention từ
+  libreyolo/kernels/attention/__init__.py và sdpa.py, provider Hub từ
+  libreyolo/kernels/attention/ms_deform_attn.py gồm revision được ghim và predicate đủ điều kiện. Bố cục thư
+  mục được liệt kê từ libreyolo/kernels/. Định nghĩa extra lấy từ pyproject.toml. Ghi chú hành vi và số liệu
+  benchmark lấy từ docs/kernels.md. Lịch sử điều kiện v1.4.0 lấy từ commit nối slot RF-DETR và mục CHANGELOG
+  1.5.0.
 meta:
   - label: Package
     value: libreyolo.kernels
@@ -41,13 +38,10 @@ snippets:
   usage:
     - label: Xem lựa chọn hiện tại
       language: python
-      code: >
+      code: |
         import libreyolo.kernels as kernels
 
-
-        # Ánh xạ slot thao tác đến tên bản triển khai được chọn hoặc
-        "unavailable".
-
+        # Ánh xạ slot thao tác đến tên bản triển khai được chọn hoặc "unavailable".
         print(kernels.active())
     - label: Buộc dùng luồng tham chiếu
       language: bash
@@ -80,9 +74,8 @@ snippets:
             name="mybackend",
             predicate=my_check,
         )
-source_hash: 23d504e88b7959f8
+source_hash: 2cdb2d344ab3faf5
 ---
-
 ## Registry
 
 `libreyolo/kernels/` là registry runtime nhỏ gồm các bản triển khai có thể cắm
@@ -182,6 +175,8 @@ khiến RF-DETR cùng dòng mô hình lần đầu lấy forward từ binary đ�
 định không có extra không bị ảnh hưởng. Nếu so sánh chỉ số qua bản nâng cấp, hãy
 giữ extra cố định hoặc đặt `LIBREYOLO_HUB_KERNELS=0` ở cả hai phía.
 
+Hub MSDA chấp nhận FP16 và BF16 bằng cách ép đầu vào kernel sang FP32, khôi phục kiểu dữ liệu đầu ra và giữ gradient qua các phép ép kiểu. Lệnh CUDA eager không có bộ cung cấp tăng tốc được chấp nhận sẽ đưa ra một gợi ý cài `libreyolo[hub-kernels]`. `ms_deform_attn_available(value=None)` có thể kiểm tra đường xử lý riêng cho tensor.
+
 ## Fused attention
 
 Fused scaled dot-product attention không cần dependency tùy chọn, chỉ cần
@@ -229,3 +224,6 @@ Lựa chọn kernel tương tác với [CUDA graph](/docs/reference/cuda-graphs)
 tương đương suy luận chạy khi chưa cài gói `kernels`, nên không bao quát độ an
 toàn capture khi kernel đã biên dịch hoạt động.
 
+## Deformable attention Triton
+
+Bộ cung cấp Triton MSDA trong cây mã nguồn hỗ trợ inference CUDA đủ điều kiện với FP32, FP16 và BF16. Nó từ chối đầu vào cần gradient và chuyển sang attention khả chuyển khi không sẵn có. Hub vẫn được ưu tiên. `LIBREYOLO_TRITON_MSDA=0` tắt Triton; `LIBREYOLO_HUB_KERNELS=0` tắt bộ cung cấp Hub và gợi ý cài đặt.

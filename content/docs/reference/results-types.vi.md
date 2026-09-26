@@ -2,12 +2,11 @@
 title: Các kiểu Results
 seo_title: Tham chiếu object Results của LibreYOLO
 description: >-
-  Mọi payload mà object Results LibreYOLO có thể chứa, một slot cho mỗi dạng tác
-  vụ: box, mask, keypoint, probs, obb, depth, ocr, embedding và mười loại khác.
+  Dữ liệu kết quả LibreYOLO: bounding box, mặt nạ, keypoint, phân loại, độ sâu, albedo, khối hộp 3D và đoạn
+  hành động robot.
 lead: >-
-  Results là kiểu trả về theo ảnh duy nhất của mọi mô hình LibreYOLO. Nó có mười
-  tám slot payload tùy chọn, mỗi slot ứng với một dạng tác vụ và chỉ điền những
-  slot mô hình tạo ra.
+  Results là kiểu trả về theo ảnh duy nhất của mọi mô hình LibreYOLO. Nó chứa các vị trí dữ liệu tùy chọn, một
+  cho mỗi dạng tác vụ, và chỉ điền những vị trí mô hình tạo ra.
 keywords:
   - object results libreyolo
   - Results.boxes
@@ -16,11 +15,10 @@ keywords:
   - Results.depth_map
   - Results.summary
   - libreyolo results to_json
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  Tên slot, shape, thuộc tính và giá trị mặc định được đọc từ
-  libreyolo/utils/results.py ở v1.5.0. Ngữ nghĩa được lấy từ docstring của các
-  lớp payload.
+  Tên slot, shape, thuộc tính và giá trị mặc định được đọc từ libreyolo/utils/results.py ở v1.6.0. Ngữ nghĩa
+  được lấy từ docstring của các lớp payload.
 snippets:
   usage:
     - label: Python
@@ -50,9 +48,8 @@ snippets:
         # Các hàng dưới dạng dict thuần, sau đó là JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 16f654364ae6448a
+source_hash: d74276d805c22c92
 ---
-
 ## Object Results
 
 Một `Results` mô tả một ảnh. Source là một ảnh trả về một object, source dạng
@@ -194,6 +191,8 @@ canvas ảnh gốc. Giá trị cao hơn nghĩa là gần camera hơn. Giá trị
 đối, không phải mét theo hệ metric. `min`, `max` và `mean` được tính trên các
 giá trị hữu hạn, còn `normalized()` rescale bản đồ vào `[0, 1]`.
 
+`DepthMap(data, orig_shape=None, encoding="inverse_depth")` còn chấp nhận `encoding="depth"` và `encoding="log_depth"`. Bộ đánh giá diễn giải giá trị này trước khi căn chỉnh. Giá trị độ sâu tương đối vẫn không được bảo đảm có thang đo theo đơn vị thực.
+
 ## NormalMap
 
 Trường pháp tuyến bề mặt dày đặc, float32 `(H, W, 3)` trên canvas ảnh gốc, theo
@@ -293,6 +292,16 @@ các slot được nêu thay thế; nó nhận mọi slot cùng `track_id` và `
 thuần, mỗi detection, segment, điểm hoặc vùng một hàng tùy các slot đã đặt.
 `to_json(**kwargs)` chuyển đối số đến `summary` và trả về chuỗi JSON.
 
-`plot()` render kết quả pháp tuyến dense hoặc cạnh trong biểu diễn chuẩn; nó báo
-lỗi với loại kết quả khác. Ảnh chú thích cho các tác vụ còn lại đến từ
-`predict(save=True)`.
+`plot()` dựng dữ liệu của mọi tác vụ. Lớp phủ ảnh mặc định là mảng BGR; `pil=True` yêu cầu PIL. Kết quả biên và bản đồ pháp tuyến giữ mặc định PIL.
+
+## Boxes3D
+
+`Boxes3D(data, orig_shape=None, intrinsics=None)` chứa các hàng `(N, 14)`: tâm xyz, kích thước wlh, quaternion wxyz, điểm xếp hạng, ID lớp đối tượng, độ tin cậy 2D và độ tin cậy 3D. Tọa độ tính bằng mét trong hệ camera, x sang phải, y xuống dưới và z hướng trước; không ngụ ý hệ tọa độ thế giới. Ma trận nội tại 3x3 tham chiếu khung ảnh gốc. Các hàng tương ứng với `Results.boxes`.
+
+## AlbedoMap
+
+`AlbedoMap(data, orig_shape=None)` chứa RGB tuyến tính. Chuyển đổi hiển thị tạo sRGB; đánh giá albedo định lượng dùng các giá trị tuyến tính gốc.
+
+## Actions
+
+`Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` biểu diễn đoạn hành động float32 `(T, D)`. `first` trả về hàng đầu tiên; slicing chọn các bước thời gian. Giá trị giữ đơn vị của dataset chính sách. `names` mô tả các chiều hành động, `fps` là tần số điều khiển và `instruction` là văn bản điều kiện.

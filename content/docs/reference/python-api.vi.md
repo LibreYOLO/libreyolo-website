@@ -2,12 +2,12 @@
 title: Python API
 seo_title: Tham chiếu Python API LibreYOLO
 description: >-
-  Các tên LibreYOLO export ở cấp package: năm factory, lớp họ, payload Results,
-  backend, validator, tracker và helper dữ liệu.
+  Các tên LibreYOLO xuất ở cấp package: factory, lớp họ mô hình, dữ liệu Results, backend, bộ đánh giá,
+  tracker và tiện ích dữ liệu.
 lead: >-
-  Giao diện Python công khai của LibreYOLO là danh sách __all__ trong
-  libreyolo/__init__.py. Mọi thành phần trên trang này có thể import bằng from
-  libreyolo import <name>; thành phần không nằm trong danh sách là nội bộ.
+  API Python công khai của LibreYOLO là danh sách __all__ trong libreyolo/__init__.py. Thành phần xuất ở cấp
+  package dùng from libreyolo import <name>; các giao thức theo dõi và huấn luyện bên dưới dùng phân hệ có tên
+  riêng.
 keywords:
   - libreyolo python api
   - import libreyolo
@@ -17,13 +17,12 @@ keywords:
   - LibreOpenVocab
   - LibreEnsemble
   - libreyolo __all__
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  Tên và signature được đọc từ libreyolo/__init__.py,
-  libreyolo/models/__init__.py, libreyolo/models/base/model.py,
-  libreyolo/models/base/inference.py, libreyolo/models/sam/model.py,
-  libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py và
-  libreyolo/ensemble/model.py ở v1.5.0.
+  Tên và signature được đọc từ libreyolo/__init__.py, libreyolo/models/__init__.py,
+  libreyolo/models/base/model.py, libreyolo/models/base/inference.py, libreyolo/models/sam/model.py,
+  libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py và libreyolo/ensemble/model.py ở
+  v1.6.0.
 snippets:
   usage:
     - label: Nạp mọi thứ qua một factory
@@ -51,39 +50,25 @@ snippets:
   factories:
     - label: Năm điểm vào
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, LibreEnsemble
 
-
         # Factory dò trọng số trên các họ không có prompt.
-
         detector = LibreYOLO("LibreYOLO9t.pt")
 
-
         # Hai detector trở lên phía sau một giao diện dự đoán.
-
         ens = LibreEnsemble(["LibreYOLO9t.pt", "LibreYOLO9s.pt"])
 
-
         # Ba factory còn lại cần cài gói bổ sung:
-
-        #   pip install 'libreyolo[sam]'        -> from libreyolo import
-        LibreSAM
-
-        #   pip install 'libreyolo[vlm]'        -> from libreyolo import
-        LibreVLM
-
-        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import
-        LibreOpenVocab
-
+        #   pip install 'libreyolo[sam]'        -> from libreyolo import LibreSAM
+        #   pip install 'libreyolo[vlm]'        -> from libreyolo import LibreVLM
+        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import LibreOpenVocab
         print(type(detector).__name__, ens.fusion)
-source_hash: 66e34e78b2e0fb2d
+source_hash: 02fbec762b1ffced
 ---
-
 ## Điểm vào
 
-Năm callable nạp mô hình. Chúng được tách theo call contract chứ không theo
-kiến trúc.
+Factory tải mô hình hoặc cấu hình API client. Chúng được phân chia theo giao ước gọi, không theo kiến trúc.
 
 | Factory | Nội dung nạp | Prompt lúc gọi | Gói bổ sung cần thiết |
 |---|---|---|---|
@@ -95,9 +80,7 @@ kiến trúc.
 
 <code-tabs name="factories" />
 
-`LibreYOLO` là factory duy nhất đọc file. Ba factory còn lại nhận alias chuỗi và
-phân giải sang repo Hugging Face, vì vậy đối số là tên mô hình chứ không phải
-đường dẫn.
+`LibreYOLO` chấp nhận tệp checkpoint và tệp đã xuất. Các factory cùng cấp chấp nhận tên thay thế của mô hình; `LibreVLM` và `LibreVLA` còn tải lại thư mục checkpoint do chúng lưu.
 
 ```python
 LibreYOLO(
@@ -120,6 +103,10 @@ từ `libreyolo.tasks.TASKS`.
 
 <code-tabs name="usage" />
 
+`LibreGround` ánh xạ chỉ dẫn thành điểm trên ảnh; `LibreVLA` dự đoán đoạn hành động robot; `LibreLLM` gọi endpoint mô hình ngôn ngữ từ xa tương thích. Xem [API grounding](/docs/reference/ground-api), [API chính sách](/docs/reference/vla-api) và [client mô hình ngôn ngữ](/docs/reference/llm-api).
+
+`LibreYOLO("hf://owner/repo@revision/filename")` tải checkpoint Hub. `model.push_to_hub(repo_id, private=False)` công bố checkpoint và model card. [Tài liệu Hub](/docs/reference/hugging-face) xác định cách phân giải và xác thực.
+
 ## Lớp họ
 
 Mọi họ mà factory có thể trả về cũng được export theo tên, vì vậy có thể dựng
@@ -130,8 +117,7 @@ trực tiếp lớp khi biết trước checkpoint. Constructor tuân theo
 Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 ```
 
-`size` không có giá trị mặc định trên lớp họ, đây là điểm khác factory. YOLO9
-và các biến thể chèn `reg_max: int = 16` sau `size`.
+Giá trị mặc định của hàm khởi tạo khác nhau theo họ mô hình; kiểm tra chữ ký trước khi khởi tạo trực tiếp. YOLO9 và các biến thể chèn `reg_max: int = 16` sau `size`.
 
 Các họ detection và đa tác vụ: `LibreYOLO9`, `LibreYOLO9E2E`,
 `LibreYOLO9P2`, `LibreYOLONAS`, `LibreYOLOX`, `LibreYOLO7`, `LibreYOLO4`,
@@ -199,11 +185,9 @@ mô hình được mô tả tại [trang model API](/docs/reference/model-api).
 
 ## Payload Results
 
-`Results` và mười tám lớp payload được export ở cấp package: `Results`,
-`Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`,
-`SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`,
-`RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`.
-Từng lớp được mô tả trong [các kiểu Results](/docs/reference/results-types).
+`Results` và các lớp dữ liệu của nó được xuất ở cấp package: `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`, `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`, `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`. Mỗi lớp được mô tả trong [các kiểu Results](/docs/reference/results-types).
+
+`Boxes3D`, `AlbedoMap` và `Actions` bổ sung khối hộp 3D, albedo nội tại và đoạn hành động. Xem [các kiểu kết quả](/docs/reference/results-types).
 
 ## Backend
 
@@ -227,6 +211,8 @@ export để dùng trực tiếp và tạo subclass: `DetectionValidator`,
 được export: `ByteTracker` với `TrackConfig`, `BoTSortTracker` với
 `BoTSortConfig`, và `OCSortTracker` với `OCSortConfig`.
 
+`libreyolo.tracking.Tracker` định nghĩa `reset()` và `update(results, image=None)` cho đối tượng tracker tùy chỉnh.
+
 ## Helper dữ liệu
 
 `DATASETS_DIR` là thư mục gốc dataset đã phân giải, `load_data_config` đọc YAML
@@ -239,6 +225,8 @@ thay vì cấp package.
 `Gallery` và `FaceGallery` giữ vector danh tính đã đăng ký cho tác vụ `embed`
 và tạo payload `Identities`. `Distiller` cùng `get_distill_config` điều khiển
 huấn luyện teacher-student.
+
+`libreyolo.training.TrainFitnessCallback` định nghĩa `fitness(metrics)` để tùy chỉnh chọn checkpoint. Xem [callback fitness](/docs/train/fitness-callbacks).
 
 ## Asset
 

@@ -17,11 +17,8 @@ keywords:
   - metadati checkpoint libreyolo
   - quant manifest
   - wrap_libreyolo_checkpoint
-last_verified: 1.5.0
-verification: >-
-  Rispecchia docs/checkpoint_schema.md nel repository libreyolo alla v1.5.0,
-  verificato per confronto con libreyolo/utils/serialization.py e
-  BaseModel.save.
+last_verified: 1.6.0
+verification: Rispecchia docs/checkpoint_schema.md nel repository libreyolo alla v1.6.0, verificato per confronto con libreyolo/utils/serialization.py e BaseModel.save.
 snippets:
   usage:
     - label: Leggere i metadati di un checkpoint
@@ -51,7 +48,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: ce760f1bed97bfd0
+source_hash: c3aa0ff92444b10c
 ---
 
 ## Schema v1.0
@@ -105,11 +102,7 @@ Lo schema è volutamente piatto, e `model` è volutamente uno state dict.
 
 ## Aggiunte per la stima della posa
 
-La posa di solito è a classe singola, `nc: 1` con `person`, ma la testa pose di
-YOLO-NAS supporta anche la posa multiclasse con un unico scheletro di keypoint
-condiviso, nel qual caso `nc` e `names` descrivono le classi come nel
-rilevamento. Le esportazioni pose di runtime emettono `scores` con forma
-`[batch, anchors, nc]`.
+I checkpoint di posa registrano il proprio schema di classi e keypoint. YOLO-NAS supporta più classi con uno scheletro condiviso; RF-DETR supporta anche conteggi di keypoint per classe. `nc` e `names` descrivono le classi. Le esportazioni di posa per i runtime emettono `scores` con forma `[batch, anchors, nc]`.
 
 | Chiave | Significato |
 |---|---|
@@ -117,6 +110,8 @@ rilevamento. Le esportazioni pose di runtime emettono `scores` con forma
 | `keypoint_dim` | `2` per etichette `x,y` o `3` per etichette `x,y,visibility`; gli output del modello espongono sempre `x,y,visibility` |
 | `oks_sigmas` | Sigma OKS opzionali per keypoint; se assenti si usa il valore predefinito del task per `num_keypoints` |
 | `num_keypoints_per_class` | Conteggi opzionali di keypoint per classe, per le teste in stile GroupPose il cui tensore dei keypoint è riempito per classe; `0` per le classi senza keypoint |
+
+RF-DETR può registrare `num_keypoints_per_class` insieme a `kpt_names`. I conteggi sono allineati alle classi del dataset; zero indica una classe con soli box e le predizioni aggiungono padding fino alla dimensione massima dei keypoint.
 
 ## Aggiunte per le mesh
 
@@ -235,6 +230,8 @@ non di rilevamento, di famiglie non supportate o incoerenti.
 Un `.pte` e un `.mnn` sono artefatti specifici del backend, non checkpoint
 PyTorch.
 
+I classificatori registrano `norm_mean`, `norm_std` e `resize_mode`. I canvas rettangolari conservano `imgsz_h` e `imgsz_w`. `letterbox_pad` di YOLO9 è `topleft` o `center`; in assenza di metadati viene mantenuta la geometria precedente allineata in alto a sinistra.
+
 ## Checkpoint quantizzati
 
 Un modello quantizzato aggiunge una chiave piatta opzionale, `quant`, che
@@ -302,6 +299,8 @@ addestramento.
 Per compatibilità tra release, i lettori accettano i vecchi alias della metrica
 migliore `best_mAP50_95`, `best_mAP50`, `best_metric` e `best_metric_name`.
 
+La selezione personalizzata registra `fitness_source="callback"` e `fitness/custom`. Il codice e lo stato della callback non vengono salvati; queste esecuzioni non possono essere riprese. Avvia una nuova esecuzione dai loro pesi.
+
 ## Snapshot esterni
 
 Lo schema governa i file `.pt` prodotti da LibreYOLO. Non rinomina né incapsula
@@ -347,3 +346,7 @@ unwrap_libreyolo_checkpoint(loaded, *, strict=False) -> tuple[dict, dict]
 `validate_checkpoint_metadata` non muta nulla e restituisce l'elenco degli
 errori; con `strict=True` solleva invece `CheckpointMetadataError`.
 `model.save(path)` è il modo supportato per scrivere un checkpoint conforme.
+
+## Profili di input
+
+I checkpoint di istogrammi a due polarità conservano l'intero `input_profile`, inclusi formato, layout, polarità, codifica, scala e durata della finestra, più `input_initialization`. Il ricaricamento per la predizione non richiede lo YAML del dataset; addestramento e validazione rifiutano profili non corrispondenti. Vedi [istogrammi di eventi](/docs/train/event-histograms).

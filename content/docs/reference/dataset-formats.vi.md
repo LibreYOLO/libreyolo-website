@@ -2,13 +2,11 @@
 title: Định dạng tập dữ liệu
 seo_title: Định dạng tập dữ liệu LibreYOLO cho mọi tác vụ
 description: >-
-  Hợp đồng tệp cho tập dữ liệu (dataset) theo từng tác vụ chuẩn: khóa YAML, bố
-  cục thư mục, hàng nhãn, quy ước mặt nạ (mask) và map, cùng trình tải đọc từng
-  định dạng.
+  Hợp đồng tệp cho tập dữ liệu (dataset) theo từng tác vụ chuẩn: khóa YAML, bố cục thư mục, hàng nhãn, quy ước
+  mặt nạ (mask) và map, cùng trình tải đọc từng định dạng.
 lead: >-
-  Trang này phản ánh hợp đồng tệp dataset trong docs/dataset_schema.md của chính
-  thư viện. Nội dung bao quát các khóa YAML và bố cục trên ổ đĩa mà mỗi tác vụ
-  chuẩn yêu cầu.
+  Trang này phản ánh hợp đồng tệp dataset trong docs/dataset_schema.md của chính thư viện. Nội dung bao quát
+  các khóa YAML và bố cục trên ổ đĩa mà mỗi tác vụ chuẩn yêu cầu.
 keywords:
   - định dạng dataset libreyolo
   - định dạng nhãn yolo
@@ -17,30 +15,24 @@ keywords:
   - định dạng coco panoptic
   - dataset độ sâu
   - pose kpt_shape
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  Phản ánh docs/dataset_schema.md trong repo libreyolo tại v1.5.0, với tên các
-  trình tải được đối chiếu với libreyolo/data/.
+  Phản ánh docs/dataset_schema.md trong repo libreyolo tại v1.6.0, với tên các trình tải được đối chiếu với
+  libreyolo/data/.
 snippets:
   usage:
     - label: Phân tích một hàng nhãn phát hiện
       language: python
-      code: >
+      code: |
         from libreyolo.data import parse_yolo_label_line
 
-
         # class_id cx cy w h, được chuẩn hóa về [0, 1]
-
-        row = parse_yolo_label_line("0 0.5 0.5 0.25 0.5", 640, 480,
-        num_classes=80)
-
+        row = parse_yolo_label_line("0 0.5 0.5 0.25 0.5", 640, 480, num_classes=80)
 
         # (class_id, x1, y1, x2, y2, area) theo pixel
-
         print(row)
-source_hash: a8282c079624044d
+source_hash: 5f4bc7d17822a85d
 ---
-
 ## YAML chung
 
 Áp dụng cho `detect`, `segment`, `pose` và `obb`.
@@ -128,6 +120,8 @@ YAML bổ sung `kpt_shape`, đây là trường bắt buộc và có giá trị 
 Số trường chính xác là `5 + K * D`, trong đó `D` là giá trị thứ hai của
 `kpt_shape`. Tọa độ keypoint được chuẩn hóa. Giá trị visibility `v`, khi có,
 là `0`, `1` hoặc `2`.
+
+Dataset nhiều lớp đối tượng của RF-DETR cần `names` và có thể định nghĩa `kpt_names` theo lớp. Danh sách tên keypoint rỗng đánh dấu lớp chỉ có bounding box. Ít nhất một lớp phải có keypoint.
 
 ## obb
 
@@ -461,3 +455,15 @@ Chưa triển khai hợp đồng tệp dataset để huấn luyện hoặc xác 
 `point` là tác vụ đầu ra mô hình chứ không phải lược đồ nhãn dataset. Các họ point
 có thể điều chỉnh nhãn hiện có ở bên trong, ví dụ bằng cách suy ra tâm đối tượng
 từ các hàng box, nhưng định dạng nhãn văn bản chỉ dành cho point chưa được định nghĩa.
+
+## Histogram sự kiện
+
+Phát hiện YOLO9 và RF-DETR chấp nhận mảng HWC `.npy` với hai mặt phẳng số đếm hữu hạn không âm, dương rồi âm. `input_profile` yêu cầu `format: event_histogram`, `layout: HWC`, `polarity: positive_negative`, `encoding: counts`, `scale` dương và `window_us` là số nguyên dương. Nhãn dùng tệp văn bản phát hiện thông thường. Xem [chuẩn bị đầu vào](/docs/train/event-histograms).
+
+## Chính sách robot
+
+Tác vụ `act` dùng thư mục dataset LeRobot v3 hoặc ID dataset Hub, chứa đặc trưng episode, camera, trạng thái và hành động. Nó không dùng YAML phát hiện. Xem [chính sách robot](/docs/tasks/robot-policies).
+
+## albedo
+
+Ghép `images/<split>/<name>.<image extension>` với `albedo/<split>/<name>.npy`. Nhãn đích là giá trị RGB tuyến tính số thực hữu hạn `(H, W, 3)` trong [0, 1], có cùng kích thước với ảnh. Đặt `input_dir` và `albedo_dir` thành tên thư mục một thành phần nếu cần. PNG hiển thị và giá trị sRGB không phải nhãn đích albedo định lượng.

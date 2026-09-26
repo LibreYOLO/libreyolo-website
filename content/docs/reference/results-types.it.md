@@ -1,14 +1,8 @@
 ---
 title: Tipi di Results
 seo_title: Riferimento dell'oggetto Results di LibreYOLO
-description: >-
-  Ogni payload che un oggetto Results di LibreYOLO può portare, uno slot per
-  forma di task: boxes, masks, keypoints, probs, obb, depth, ocr, embeddings e
-  altri dieci.
-lead: >-
-  Results è l'unico tipo di ritorno per immagine di ogni modello LibreYOLO.
-  Porta diciotto slot di payload opzionali, uno per forma di task, e popola solo
-  quelli che il modello ha prodotto.
+description: "Payload dei risultati LibreYOLO: box, maschere, keypoint, classificazione, profondità, albedo, cuboidi 3D e sequenze di azioni robotiche."
+lead: Results è l'unico tipo di ritorno per immagine di ogni modello LibreYOLO. Contiene slot di payload opzionali, uno per forma di task, e popola solo quelli prodotti dal modello.
 keywords:
   - oggetto Results libreyolo
   - Results.boxes
@@ -17,11 +11,8 @@ keywords:
   - Results.depth_map
   - risultati detection in json python
   - ottenere coordinate bounding box python
-last_verified: 1.5.0
-verification: >-
-  Nomi degli slot, shape, proprietà e valori predefiniti letti da
-  libreyolo/utils/results.py alla v1.5.0. Semantica citata dalle docstring delle
-  classi di payload.
+last_verified: 1.6.0
+verification: Nomi degli slot, shape, proprietà e valori predefiniti letti da libreyolo/utils/results.py alla v1.6.0. Semantica citata dalle docstring delle classi di payload.
 snippets:
   usage:
     - label: Python
@@ -51,7 +42,7 @@ snippets:
         # Le righe, come dict semplici, poi come JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 16f654364ae6448a
+source_hash: d74276d805c22c92
 ---
 
 ## L'oggetto Results
@@ -201,6 +192,8 @@ dell'immagine originale. Valori più alti significano più vicino alla camera. I
 valori sono relativi, non metri in scala metrica. `min`, `max` e `mean` sono
 calcolati sui valori finiti, e `normalized()` riscala la mappa in `[0, 1]`.
 
+`DepthMap(data, orig_shape=None, encoding="inverse_depth")` accetta anche `encoding="depth"` ed `encoding="log_depth"`. I validatori interpretano la codifica prima dell'allineamento. I valori di profondità relativa continuano a non garantire una scala metrica.
+
 ## NormalMap
 
 Campo denso di normali alla superficie, float32 `(H, W, 3)` sul canvas
@@ -316,6 +309,16 @@ di dict semplici, una riga per ogni rilevamento, segmento, punto o regione a
 seconda di quali slot sono valorizzati. `to_json(**kwargs)` passa i suoi
 argomenti a `summary` e restituisce la stringa JSON.
 
-`plot()` rende un risultato denso di normali o di bordi nella sua
-visualizzazione canonica; per gli altri tipi di risultato solleva un'eccezione.
-Le immagini annotate per gli altri task si ottengono con `predict(save=True)`.
+`plot()` visualizza i dati di ogni task. Le sovrapposizioni sulle immagini restituiscono array BGR di default; `pil=True` richiede PIL. I risultati di bordi e mappe delle normali mantengono PIL come default.
+
+## Boxes3D
+
+`Boxes3D(data, orig_shape=None, intrinsics=None)` contiene righe `(N, 14)`: centro xyz, dimensioni wlh, quaternione wxyz, punteggio di ordinamento, ID di classe, confidenza 2D e confidenza 3D. Le coordinate sono in metri nel sistema della camera, con x verso destra, y verso il basso e z in avanti; non è implicito alcun sistema di coordinate del mondo. La matrice intrinseca 3x3 si riferisce al canvas originale. Le righe sono allineate con `Results.boxes`.
+
+## AlbedoMap
+
+`AlbedoMap(data, orig_shape=None)` contiene RGB lineare. La conversione per la visualizzazione produce sRGB; la validazione quantitativa dell'albedo usa i valori lineari originali.
+
+## Actions
+
+`Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` rappresenta un blocco di azioni float32 `(T, D)`. `first` restituisce la prima riga; lo slicing seleziona i passi temporali. I valori restano nelle unità del dataset della policy. `names` descrive le dimensioni delle azioni, `fps` la frequenza di controllo e `instruction` il testo di condizionamento.

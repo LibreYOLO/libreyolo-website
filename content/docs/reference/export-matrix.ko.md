@@ -14,12 +14,8 @@ keywords:
   - libreyolo 명령 형식
   - 내보내기 균형 임계값
   - NotImplementedError 내보내기
-last_verified: 1.5.0
-verification: >-
-  형식, 계층, 대체 순서, 작업 및 계열 블록과 NCNN 블록은 libreyolo/export/support.py에서 읽음; 별칭과 공유
-  인수는 libreyolo/export/exporter.py에서 읽음; 계층 정의는
-  docs/adr/0011-export-support-tiers.md에서 읽음; 패리티 임계값은 docs/export_support.md에서
-  읽음, 모두 v1.5.0 기준. 조합별 셀은 여기서 기록되지 않음; 아래 스니펫으로 조회하십시오.
+last_verified: 1.6.0
+verification: '형식, 계층, 대체 순서, 작업 및 계열 블록과 NCNN 블록은 libreyolo/export/support.py에서 읽음; 별칭과 공유 인수는 libreyolo/export/exporter.py에서 읽음; 계층 정의는 docs/adr/0011-export-support-tiers.md에서 읽음; 패리티 임계값은 docs/export_support.md에서 읽음, 모두 v1.6.0 기준. 조합별 셀은 여기서 기록되지 않음; 아래 스니펫으로 조회하십시오.'
 snippets:
   usage:
     - label: '행렬을 조회하십시오, 모델은 필요 없습니다'
@@ -58,7 +54,7 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
-source_hash: 83de3289634888c6
+source_hash: "70b9541fb8949352"
 ---
 
 ## 행렬의 형태
@@ -72,6 +68,8 @@ source_hash: 83de3289634888c6
 <code-tabs name="usage" />
 
 셀은 세 개의 키의 함수이기 때문에 전체 그리드는 크고 릴리스마다 변경됩니다. 그것은 수작업으로 작성되는 것이 아니라 생성되며, 라이브러리 저장소의 `docs/export_support.md`에 있습니다. 사본을 읽는 대신 Python이나 CLI에서 매트릭스를 조회하십시오.
+
+생성된 레지스트리는 PP-YOLOE, TinyFormer, DEKR, PP-LiteSeg, ConvNeXt V2, PE, V-JEPA 2, LeVJEPA를 포함합니다. 형태와 작업 제약은 각 모델 페이지를 참조하십시오. U-Net, 네 가지 3D 어댑터, Marigold V2, 로봇 정책은 내보내기를 제공하지 않습니다.
 
 ## 세 단계
 

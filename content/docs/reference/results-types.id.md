@@ -1,14 +1,9 @@
 ---
 title: Jenis Results
 seo_title: Referensi objek Results LibreYOLO
-description: >-
-  Setiap payload yang dapat dibawa objek Results LibreYOLO, satu slot per bentuk
-  task: bounding box, mask, keypoint, probs, obb, depth, ocr, embedding, dan sepuluh
-  lainnya.
-lead: >-
-  Results adalah satu-satunya jenis nilai kembalian per gambar dari setiap model
-  LibreYOLO. Objek ini memiliki delapan belas slot payload opsional, satu per
-  bentuk task, dan hanya mengisi slot yang dihasilkan model.
+description: "Payload hasil LibreYOLO: kotak, mask, keypoint, klasifikasi, kedalaman, albedo, kuboid 3D, dan rangkaian aksi robot."
+lead: Results adalah satu-satunya tipe hasil per gambar dari setiap model LibreYOLO. Objek ini memiliki
+  slot payload opsional, satu per bentuk task, dan hanya mengisi slot yang dihasilkan model.
 keywords:
   - objek results libreyolo
   - Results.boxes
@@ -17,11 +12,9 @@ keywords:
   - Results.depth_map
   - Results.summary
   - results libreyolo ke json
-last_verified: 1.5.0
-verification: >-
-  Nama slot, bentuk, properti, dan default dibaca dari
-  libreyolo/utils/results.py pada v1.5.0. Semantik dikutip dari docstring kelas
-  payload.
+last_verified: 1.6.0
+verification: Nama slot, bentuk, properti, dan nilai default dibaca dari libreyolo/utils/results.py
+  pada v1.6.0. Maknanya dikutip dari docstring kelas payload.
 snippets:
   usage:
     - label: Python
@@ -51,7 +44,7 @@ snippets:
         # Baris sebagai dict biasa, lalu sebagai JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 16f654364ae6448a
+source_hash: d74276d805c22c92
 ---
 
 ## Objek Results
@@ -200,6 +193,8 @@ asli. Nilai lebih tinggi berarti lebih dekat ke kamera. Nilainya relatif, bukan
 meter metrik. `min`, `max`, dan `mean` dihitung pada nilai terbatas, sedangkan
 `normalized()` melakukan rescale map ke `[0, 1]`.
 
+`DepthMap(data, orig_shape=None, encoding="inverse_depth")` juga menerima `encoding="depth"` dan `encoding="log_depth"`. Validator menafsirkannya sebelum penyelarasan. Nilai kedalaman relatif tetap tidak menjamin skala metrik.
+
 ## NormalMap
 
 Kolom surface-normal padat, float32 `(H, W, 3)` pada canvas gambar asli, dalam
@@ -310,8 +305,16 @@ biasa, satu baris per deteksi, segmen, titik, atau region bergantung pada slot
 yang ditetapkan. `to_json(**kwargs)` meneruskan argumennya ke `summary` dan
 mengembalikan string JSON.
 
-`plot()` merender hasil normal atau edge padat dalam visualisasi kanonis;
-metode ini memunculkan error untuk jenis hasil lain. Gambar beranotasi untuk
-task lain berasal dari `predict(save=True)`.
+`plot()` merender payload setiap task. Overlay gambar memakai array BGR secara default; `pil=True` meminta PIL. Hasil edge dan peta normal mempertahankan default PIL.
 
+## Boxes3D
 
+`Boxes3D(data, orig_shape=None, intrinsics=None)` menyimpan baris `(N, 14)`: pusat xyz, dimensi wlh, quaternion wxyz, skor peringkat, ID kelas, skor keyakinan 2D, dan skor keyakinan 3D. Koordinat memakai meter dalam kerangka kamera, dengan x ke kanan, y ke bawah, dan z ke depan; tidak menyiratkan kerangka dunia. Intrinsik 3x3 merujuk ke kanvas asli. Baris sejajar dengan `Results.boxes`.
+
+## AlbedoMap
+
+`AlbedoMap(data, orig_shape=None)` menyimpan RGB linear. Konversi tampilan menghasilkan sRGB; validasi albedo kuantitatif memakai nilai linear asli.
+
+## Actions
+
+`Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` merepresentasikan potongan aksi float32 `(T, D)`. `first` mengembalikan baris pertama; slicing memilih timestep. Nilai tetap dalam satuan dataset policy. `names` menjelaskan dimensi aksi, `fps` laju kontrol, dan `instruction` teks pengondisi.

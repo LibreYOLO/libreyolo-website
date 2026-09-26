@@ -19,16 +19,8 @@ keywords:
   - ядро ms_deform_attn
   - set_fused_attention
   - triton kernels libreyolo
-last_verified: 1.5.0
-verification: >-
-  API реєстру взято з libreyolo/kernels/__init__.py у v1.5.0, API уваги з
-  libreyolo/kernels/attention/__init__.py і sdpa.py, провайдер Hub із
-  libreyolo/kernels/attention/ms_deform_attn.py разом із його закріпленою
-  ревізією та предикатом придатності. Структуру каталогів перелічено за
-  libreyolo/kernels/. Визначення додаткового пакета взято з pyproject.toml.
-  Примітки щодо поведінки й результати бенчмарків взято з docs/kernels.md.
-  Історію шлюзу v1.4.0 взято з коміту під'єднання слотів RF-DETR і запису
-  CHANGELOG для 1.5.0.
+last_verified: "1.6.0"
+verification: API реєстру взято з libreyolo/kernels/__init__.py у v1.6.0, API уваги з libreyolo/kernels/attention/__init__.py і sdpa.py, провайдер Hub із libreyolo/kernels/attention/ms_deform_attn.py разом із його закріпленою ревізією та предикатом придатності. Структуру каталогів перелічено за libreyolo/kernels/. Визначення додаткового пакета взято з pyproject.toml. Примітки щодо поведінки й результати бенчмарків взято з docs/kernels.md. Історію шлюзу v1.4.0 взято з коміту під'єднання слотів RF-DETR і запису CHANGELOG для 1.5.0.
 meta:
   - label: Пакет
     value: libreyolo.kernels
@@ -82,7 +74,7 @@ snippets:
             name="mybackend",
             predicate=my_check,
         )
-source_hash: 23d504e88b7959f8
+source_hash: 2cdb2d344ab3faf5
 ---
 
 ## Реєстр
@@ -190,6 +182,8 @@ DEIMv2, EC і OV-DEIM. Оскільки зворотний прохід тако
 пакета не змінюється. Під час порівняння метрик до й після оновлення зберігайте
 однаковий стан додаткового пакета або задайте `LIBREYOLO_HUB_KERNELS=0` з обох боків.
 
+Hub MSDA приймає FP16 і BF16, перетворюючи вхідні дані ядра на FP32, відновлюючи вихідний тип даних і зберігаючи градієнти через перетворення. Виклики eager CUDA без прийнятного прискореного провайдера виводять одну підказку встановлення `libreyolo[hub-kernels]`. `ms_deform_attn_available(value=None)` може перевірити шлях для конкретного тензора.
+
 ## Злита увага
 
 Для злитої масштабованої уваги за скалярним добутком не потрібна необов'язкова
@@ -238,3 +232,7 @@ fp16 віконна увага Swin скорочується з 1.278 мс до 
 Вибір ядра взаємодіє з [графами CUDA](/docs/reference/cuda-graphs): матриця
 відповідності інференсу запускалася без установленого пакета `kernels`, тому
 безпека захоплення з активним скомпільованим ядром не охоплена.
+
+## Деформівна увага Triton
+
+Вбудований провайдер Triton MSDA підтримує придатний інференс CUDA з FP32, FP16 і BF16. Він відхиляє входи, що потребують градієнтів, і повертається до переносної уваги, якщо недоступний. Hub залишається пріоритетним. `LIBREYOLO_TRITON_MSDA=0` вимикає Triton; `LIBREYOLO_HUB_KERNELS=0` вимикає провайдер Hub і його підказку встановлення.
