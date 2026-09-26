@@ -55,7 +55,7 @@ function ExtLink({ href, children }) {
    Hairline row rules only, and its own horizontal scroll container. */
 function Table({ children, className = '' }) {
   return (
-    <div className="-mx-1 overflow-x-auto px-1">
+    <div className="relative -mx-1 overflow-x-auto px-1">
       <table className={`w-full border-collapse text-[13.5px] ${className}`}>{children}</table>
     </div>
   )
@@ -122,6 +122,7 @@ export function ModelHeader({ doc, family }) {
             blurb: tier ? tiers(`${family.tier}.blurb`) : '',
           })}
         </Meta>
+        {u.paper_url && (
         <Meta label={t('upstream')}>
           {t.rich('upstreamValue', {
             name: u.name,
@@ -131,6 +132,7 @@ export function ModelHeader({ doc, family }) {
             source: (chunks) => <ExtLink href={u.code_url}>{chunks}</ExtLink>,
           })}
         </Meta>
+        )}
         <Meta label={t('licenses')}>
           {/* LibreYOLO's own code is MIT, but a vendored port keeps its
               upstream license, so the header cannot assert MIT for every
@@ -300,6 +302,9 @@ export function CheckpointTable({ family }) {
     .map((task) => ({ task, rows: family.checkpoints.filter((c) => c.task === task) }))
     .filter((g) => g.rows.length)
 
+  const recordedInputs = family.checkpoints.filter((row) => row.imgsz != null).length
+  const showInput = recordedInputs > 0 && recordedInputs >= family.checkpoints.length / 2
+
   return (
     <div>
       <Table>
@@ -317,7 +322,7 @@ export function CheckpointTable({ family }) {
               which is what the licensing note already tells the reader.
             */}
             <Th>{t('file')}</Th>
-            <Th align="right">{t('inputPx')}</Th>
+            {showInput && <Th align="right">{t('inputPx')}</Th>}
             <Th>{t('weightsLicense')}</Th>
           </tr>
         </thead>
@@ -325,7 +330,7 @@ export function CheckpointTable({ family }) {
           {grouped.map(({ task, rows }) => (
             <Fragment key={task}>
               <tr>
-                <td colSpan={3} className="border-b border-surface-200/70 px-3 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wider text-surface-500 dark:border-white/[0.07] dark:text-surface-500">
+                <td colSpan={showInput ? 3 : 2} className="border-b border-surface-200/70 px-3 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wider text-surface-500 dark:border-white/[0.07] dark:text-surface-500">
                   {getTaskMeta(task).label}
                 </td>
               </tr>
@@ -341,7 +346,7 @@ export function CheckpointTable({ family }) {
                       {row.name}
                     </a>
                   </Td>
-                  <Td className="text-right tabular-nums">{row.imgsz}</Td>
+                  {showInput && <Td className="text-right tabular-nums">{row.imgsz}</Td>}
 
                   <Td>{row.license}</Td>
                 </tr>
@@ -412,7 +417,7 @@ export function ExportMatrix({ family }) {
 
   return (
     <div>
-      <div className="-mx-1 overflow-x-auto px-1">
+      <div className="relative -mx-1 overflow-x-auto px-1">
         <table className="w-full min-w-[640px] border-collapse text-[13.5px]">
           <thead>
             <tr>

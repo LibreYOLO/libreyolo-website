@@ -2,7 +2,7 @@
 title: PP-LiteSeg
 families:
   - ppliteseg
-seo_title: PP-LiteSeg：LibreYOLOでの推論と学習
+seo_title: PP-LiteSegをLibreYOLOで使う
 description: PP-LiteSegは、STDCバックボーンと融合デコーダーを使って各ピクセルに意味クラスを割り当てます。
 lead: PP-LiteSegは、STDCバックボーンと融合デコーダーを使って各ピクセルに意味クラスを割り当てます。
 keywords:
@@ -19,7 +19,7 @@ snippets:
 
         model = LibreYOLO("LibrePPLiteSegt50-sem.pt", device="cpu")
         result = model(SAMPLE_IMAGE)
-        print(result.semantic)
+        print(result.semantic_mask)
   train:
     - label: Python
       language: python
@@ -33,7 +33,24 @@ snippets:
 
         model.train(data=input("Dataset path: "), epochs=1, device="cpu",
         workers=0)
-source_hash: 658c2f20a21759c7
+  val:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibrePPLiteSegt50-sem.pt", device="cpu")
+        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        print(metrics)
+  export:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibrePPLiteSegt50-sem.pt", device="cpu")
+        model.export(format="onnx")
+source_hash: 5bd90ff464ca783f
 ---
 
 ## インストール
@@ -56,9 +73,18 @@ t50とb50は`(512, 1024)`で、t75とb75は`(768, 1536)`で評価します。寸
 
 <code-tabs name="train" />
 
+
+## 検証
+
+<code-tabs name="val" />
+
+タスクに対応する形式のデータセットを使います。[検証](/docs/train/validation)でデータセットの要件と返される指標を説明しています。
+
 ## エクスポート
 
 <export-matrix />
+
+<code-tabs name="export" />
 
 形式ごとの依存関係とエクスポートしたファイルの読み込みについては[エクスポートの設定](/docs/export)を参照してください。
 

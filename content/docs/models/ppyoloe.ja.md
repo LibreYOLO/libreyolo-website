@@ -2,7 +2,7 @@
 title: PP-YOLOE
 families:
   - ppyoloe
-seo_title: PP-YOLOE：LibreYOLOでの推論と学習
+seo_title: PP-YOLOEをLibreYOLOで使う
 description: PP-YOLOEは、物体検出の学習とクラスヘッドのサイズ変更に対応するアンカーフリーの物体検出モデルです。
 lead: PP-YOLOEは、物体検出の学習とクラスヘッドのサイズ変更に対応するアンカーフリーの物体検出モデルです。
 keywords:
@@ -14,31 +14,43 @@ snippets:
   predict:
     - label: Python
       language: python
-      code: >
-        from libreyolo import LibrePPYOLOE, SAMPLE_IMAGE
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        model = LibrePPYOLOE(model_path=input("Path to upstream weights: "),
-        device="cpu")
-
+        model = LibrePPYOLOE(input("Path to upstream weights: "), device="cpu")
         result = model(SAMPLE_IMAGE)
-
         print(result.boxes)
   train:
     - label: Python
       language: python
       code: >
-        from libreyolo import LibrePPYOLOE
+        from libreyolo import LibreYOLO
 
 
-        model = LibrePPYOLOE(model_path=input("Path to upstream weights: "),
-        device="cpu")
+        model = LibrePPYOLOE(input("Path to upstream weights: "), device="cpu")
 
-        # データセットYAMLまたは分類フォルダーのパスを入力
+        # Enter the path to your dataset YAML or classification folder.
 
         model.train(data=input("Dataset path: "), epochs=1, device="cpu",
         workers=0)
-source_hash: fb96c61dcba9c0bc
+  val:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibrePPYOLOE(input("Path to upstream weights: "), device="cpu")
+        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        print(metrics)
+  export:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibrePPYOLOE(input("Path to upstream weights: "), device="cpu")
+        model.export(format="onnx")
+source_hash: fd9631d1ff31aba4
 ---
 
 ## インストール
@@ -61,9 +73,18 @@ pip install "libreyolo"
 
 <code-tabs name="train" />
 
+
+## 検証
+
+<code-tabs name="val" />
+
+タスクに対応する形式のデータセットを使います。[検証](/docs/train/validation)でデータセットの要件と返される指標を説明しています。
+
 ## エクスポート
 
 <export-matrix />
+
+<code-tabs name="export" />
 
 形式ごとの依存関係とエクスポートしたファイルの読み込みについては[エクスポートの設定](/docs/export)を参照してください。
 

@@ -20,7 +20,7 @@ snippets:
         model = LibreGround("florence-2-base", device="cpu")
         result = model(SAMPLE_IMAGE, prompt="the person")
         print(result.points.xy)
-source_hash: 0a1bc561778f7efc
+source_hash: d43ceec5814fb01e
 ---
 
 ## インストール
@@ -38,3 +38,7 @@ pip install "libreyolo[ground]"
 ## ライセンス
 
 <provenance-box></provenance-box>
+
+## 引用
+
+<citation-block />

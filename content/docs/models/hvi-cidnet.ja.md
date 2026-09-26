@@ -2,7 +2,7 @@
 title: HVI-CIDNet
 families:
   - hvi_cidnet
-seo_title: HVI-CIDNet：LibreYOLOでの推論と学習
+seo_title: HVI-CIDNetをLibreYOLOで使う
 description: HVI-CIDNetは、色相、彩度、強度の処理によって低照度画像を復元します。
 lead: HVI-CIDNetは、色相、彩度、強度の処理によって低照度画像を復元します。
 keywords:
@@ -20,7 +20,16 @@ snippets:
         model = LibreYOLO("LibreHVICIDNett-restore.pt", device="cpu")
         result = model(SAMPLE_IMAGE, gamma=1.0, saturation=1.0, intensity=1.0)
         result.restored.save("enhanced.png")
-source_hash: 443c3e4bbaf05712
+  val:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreHVICIDNett-restore.pt", device="cpu")
+        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        print(metrics)
+source_hash: 1dd58d9b380af94b
 ---
 
 ## インストール
@@ -35,6 +44,13 @@ pip install "libreyolo"
 
 `gamma`、`saturation`、`intensity`のデフォルトはいずれも1.0です。検証にはペア画像データを使います。学習とエクスポートには対応していません。
 
+
+## 検証
+
+<code-tabs name="val" />
+
+タスクに対応する形式のデータセットを使います。[検証](/docs/train/validation)でデータセットの要件と返される指標を説明しています。
+
 ## チェックポイント
 
 <checkpoint-table />
@@ -42,3 +58,7 @@ pip install "libreyolo"
 ## ライセンス
 
 <provenance-box></provenance-box>
+
+## 引用
+
+<citation-block />

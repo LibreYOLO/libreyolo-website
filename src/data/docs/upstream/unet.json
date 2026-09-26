@@ -1,8 +1,6 @@
 {
   "name": "U-Net",
   "org": "U-Net authors",
-  "paper_title": "U-Net",
-  "paper_url": "https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/",
   "code_url": "https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/",
   "license": "Apache-2.0 implementation",
   "license_interpretation": "The adapter uses an Apache-2.0 implementation of the U-Net architecture. No converted checkpoint was verified in the LibreYOLO Hub inventory."

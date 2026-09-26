@@ -1,8 +1,6 @@
 {
   "name": "BEN2",
   "org": "Prama LLC",
-  "paper_title": "BEN2",
-  "paper_url": "https://github.com/PramaLLC/BEN2",
   "code_url": "https://github.com/PramaLLC/BEN2",
   "license": "MIT",
   "license_interpretation": "The publisher declares MIT for the source and pretrained model."

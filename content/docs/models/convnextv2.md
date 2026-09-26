@@ -2,7 +2,7 @@
 title: ConvNeXt V2
 families:
   - convnextv2
-seo_title: 'ConvNeXt V2: prediction and training in LibreYOLO'
+seo_title: ConvNeXt V2 in LibreYOLO
 description: ConvNeXt V2 is an image classifier with global response normalization.
 lead: ConvNeXt V2 is an image classifier with global response normalization.
 keywords:
@@ -33,6 +33,23 @@ snippets:
 
         model.train(data=input("Dataset path: "), epochs=1, device="cpu",
         workers=0)
+  val:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreConvNeXtV2atto-cls.pt", device="cpu")
+        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        print(metrics)
+  export:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreConvNeXtV2atto-cls.pt", device="cpu")
+        model.export(format="onnx")
 ---
 
 ## Install
@@ -55,9 +72,18 @@ Training rebuilds the classification head for an ImageFolder dataset. `cls_pw` a
 
 <code-tabs name="train" />
 
+
+## Validate
+
+<code-tabs name="val" />
+
+Use the dataset format for this task. [Validation](/docs/train/validation) explains the dataset requirements and returned metrics.
+
 ## Export
 
 <export-matrix />
+
+<code-tabs name="export" />
 
 [Export setup](/docs/export) lists format dependencies and loading exported artifacts.
 

@@ -2,7 +2,7 @@
 title: Perception Encoder
 families:
   - pe
-seo_title: 'Perception Encoder: prediction and training in LibreYOLO'
+seo_title: Perception Encoder in LibreYOLO
 description: >-
   Perception Encoder maps images, text and finite video clips into a shared
   embedding space.
@@ -26,12 +26,20 @@ snippets:
         model.set_classes(["person", "building"])
         result = model(SAMPLE_IMAGE)
         print(result.probs)
+  export:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibrePEt16-cls.pt", device="cpu")
+        model.export(format="onnx")
 ---
 
 ## Install
 
 ```bash
-pip install "libreyolo"
+pip install "libreyolo[clip]"
 ```
 
 ## Predict
@@ -43,6 +51,8 @@ Set classes before zero-shot classification. Select `task="embed"` when loading 
 ## Export
 
 <export-matrix />
+
+<code-tabs name="export" />
 
 [Export setup](/docs/export) lists format dependencies and loading exported artifacts.
 

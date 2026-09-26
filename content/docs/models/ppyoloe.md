@@ -2,7 +2,7 @@
 title: PP-YOLOE
 families:
   - ppyoloe
-seo_title: 'PP-YOLOE: prediction and training in LibreYOLO'
+seo_title: PP-YOLOE in LibreYOLO
 description: >-
   PP-YOLOE is an anchor-free object detector with detection training and
   class-head resizing.
@@ -18,30 +18,42 @@ snippets:
   predict:
     - label: Python
       language: python
-      code: >
-        from libreyolo import LibrePPYOLOE, SAMPLE_IMAGE
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        model = LibrePPYOLOE(model_path=input("Path to upstream weights: "),
-        device="cpu")
-
+        model = LibrePPYOLOE(input("Path to upstream weights: "), device="cpu")
         result = model(SAMPLE_IMAGE)
-
         print(result.boxes)
   train:
     - label: Python
       language: python
       code: >
-        from libreyolo import LibrePPYOLOE
+        from libreyolo import LibreYOLO
 
 
-        model = LibrePPYOLOE(model_path=input("Path to upstream weights: "),
-        device="cpu")
+        model = LibrePPYOLOE(input("Path to upstream weights: "), device="cpu")
 
         # Enter the path to your dataset YAML or classification folder.
 
         model.train(data=input("Dataset path: "), epochs=1, device="cpu",
         workers=0)
+  val:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibrePPYOLOE(input("Path to upstream weights: "), device="cpu")
+        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        print(metrics)
+  export:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibrePPYOLOE(input("Path to upstream weights: "), device="cpu")
+        model.export(format="onnx")
 ---
 
 ## Install
@@ -64,9 +76,18 @@ Training uses ATSS assignment before switching to task-aligned assignment. `stat
 
 <code-tabs name="train" />
 
+
+## Validate
+
+<code-tabs name="val" />
+
+Use the dataset format for this task. [Validation](/docs/train/validation) explains the dataset requirements and returned metrics.
+
 ## Export
 
 <export-matrix />
+
+<code-tabs name="export" />
 
 [Export setup](/docs/export) lists format dependencies and loading exported artifacts.
 

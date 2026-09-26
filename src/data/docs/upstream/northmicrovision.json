@@ -1,8 +1,6 @@
 {
   "name": "North Micro Vision",
   "org": "Cohere",
-  "paper_title": "North Micro Vision",
-  "paper_url": "https://huggingface.co/CohereLabs",
   "code_url": "https://huggingface.co/CohereLabs",
   "license": "Apache-2.0",
   "license_interpretation": "The model publisher declares Apache-2.0."

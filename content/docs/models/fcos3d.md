@@ -49,3 +49,7 @@ FCOS3D runs natively on CPU or CUDA and requires original-image camera intrinsic
 ## Licensing
 
 <provenance-box></provenance-box>
+
+## Citation
+
+<citation-block />

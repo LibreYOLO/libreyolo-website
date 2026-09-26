@@ -2,7 +2,7 @@
 title: LeVJEPA
 families:
   - levjepa
-seo_title: 'LeVJEPA: prediction and training in LibreYOLO'
+seo_title: LeVJEPA in LibreYOLO
 description: LeVJEPA produces clip embeddings and spatial patch tokens from video.
 lead: LeVJEPA produces clip embeddings and spatial patch tokens from video.
 keywords:
@@ -21,6 +21,14 @@ snippets:
         result = model(SAMPLE_IMAGE)
         print(result.embeddings)
         print(model.embed_tokens(SAMPLE_IMAGE).shape)
+  export:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreLeVJEPAl-embed.pt", device="cpu")
+        model.export(format="onnx")
 ---
 
 ## Install
@@ -38,6 +46,8 @@ The encoder uses 16 frames at 224 pixels. Finite videos use a centered window sa
 ## Export
 
 <export-matrix />
+
+<code-tabs name="export" />
 
 [Export setup](/docs/export) lists format dependencies and loading exported artifacts.
 

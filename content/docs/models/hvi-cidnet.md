@@ -2,7 +2,7 @@
 title: HVI-CIDNet
 families:
   - hvi_cidnet
-seo_title: 'HVI-CIDNet: prediction and training in LibreYOLO'
+seo_title: HVI-CIDNet in LibreYOLO
 description: >-
   HVI-CIDNet restores low-light images through hue, saturation and intensity
   processing.
@@ -24,6 +24,15 @@ snippets:
         model = LibreYOLO("LibreHVICIDNett-restore.pt", device="cpu")
         result = model(SAMPLE_IMAGE, gamma=1.0, saturation=1.0, intensity=1.0)
         result.restored.save("enhanced.png")
+  val:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreHVICIDNett-restore.pt", device="cpu")
+        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        print(metrics)
 ---
 
 ## Install
@@ -38,6 +47,13 @@ pip install "libreyolo"
 
 `gamma`, `saturation` and `intensity` each default to 1.0. Validation uses paired image data. Training and export are not supported.
 
+
+## Validate
+
+<code-tabs name="val" />
+
+Use the dataset format for this task. [Validation](/docs/train/validation) explains the dataset requirements and returned metrics.
+
 ## Checkpoints
 
 <checkpoint-table />
@@ -45,3 +61,7 @@ pip install "libreyolo"
 ## Licensing
 
 <provenance-box></provenance-box>
+
+## Citation
+
+<citation-block />

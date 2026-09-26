@@ -2,7 +2,7 @@
 title: V-JEPA 2
 families:
   - vjepa2
-seo_title: 'V-JEPA 2: prediction and training in LibreYOLO'
+seo_title: V-JEPA 2 in LibreYOLO
 description: >-
   V-JEPA 2 produces video embeddings and supports training an attentive
   classification probe.
@@ -40,6 +40,23 @@ snippets:
 
         model.train(data=input("Dataset path: "), epochs=1, device="cpu",
         workers=0)
+  val:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreVJEPA2l256-cls-ssv2.pt", device="cpu")
+        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        print(metrics)
+  export:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreVJEPA2l256-embed.pt", device="cpu")
+        model.export(format="onnx")
 ---
 
 ## Install
@@ -62,9 +79,18 @@ Only the attentive probe and linear classifier train; the encoder stays frozen. 
 
 <code-tabs name="train" />
 
+
+## Validate
+
+<code-tabs name="val" />
+
+Use the dataset format for this task. [Validation](/docs/train/validation) explains the dataset requirements and returned metrics.
+
 ## Export
 
 <export-matrix />
+
+<code-tabs name="export" />
 
 [Export setup](/docs/export) lists format dependencies and loading exported artifacts.
 

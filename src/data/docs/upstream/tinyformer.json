@@ -1,9 +1,12 @@
 {
   "name": "TinyFormer",
   "org": "TinyFormer authors",
-  "paper_title": "TinyFormer",
-  "paper_url": "https://github.com/mmpmmpmmpjosh/TinyFormer",
+  "paper_title": "TinyFormer: Preserving Tiny Objects in YOLO-DETR Hybrid Real-time Detectors",
+  "paper_url": "https://arxiv.org/abs/2605.25046",
   "code_url": "https://github.com/mmpmmpmmpjosh/TinyFormer",
   "license": "Apache-2.0; DINOv3 terms",
-  "license_interpretation": "The detector uses Apache-2.0 source and a DINOv3 backbone with its own terms. Check the publisher declarations for the chosen checkpoint."
+  "license_interpretation": "The detector uses Apache-2.0 source and a DINOv3 backbone with its own terms. Check the publisher declarations for the chosen checkpoint.",
+  "bibtex": "@article{hsieh2026tinyformer,\n\n  title={TinyFormer: Preserving Tiny Objects in YOLO-DETR Hybrid Real-time Detectors},\n\n  author={Hsieh, Jun-Wei and Kao, Meng-Yu and Kurniawan, Ghufron Wahyu and Peng, Kuan-Chuan},\n\n  journal={arXiv preprint arXiv:2605.25046},\n\n  year={2026}\n\n}",
+  "bibtex_source_url": "https://raw.githubusercontent.com/mmpmmpmmpjosh/TinyFormer/main/README.md",
+  "bibtex_verified": "2026-09-26: copied verbatim from the authors' upstream README. Cross-checked title and every author in order against the arXiv API for 2605.25046. Upstream preprint form retained."
 }

@@ -2,7 +2,7 @@
 title: LaMa
 families:
   - lama
-seo_title: 'LaMa: prediction and training in LibreYOLO'
+seo_title: LaMa in LibreYOLO
 description: LaMa fills masked regions of an image.
 lead: LaMa fills masked regions of an image.
 keywords:
@@ -35,6 +35,15 @@ snippets:
         result = model(image, mask=mask)
 
         result.restored.save("inpainted.png")
+  val:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreLaMab-restore.pt", device="cpu")
+        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        print(metrics)
 ---
 
 ## Install
@@ -48,6 +57,13 @@ pip install "libreyolo[onnx]"
 <code-tabs name="predict" />
 
 Pass `mask=` for single-image inference: nonzero pixels mark the region to fill. The checkpoint embeds an ONNX graph and requires ONNX Runtime 1.18 or later. Training and export are not supported.
+
+
+## Validate
+
+<code-tabs name="val" />
+
+Use the dataset format for this task. [Validation](/docs/train/validation) explains the dataset requirements and returned metrics.
 
 ## Checkpoints
 

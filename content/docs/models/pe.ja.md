@@ -2,7 +2,7 @@
 title: Perception Encoder
 families:
   - pe
-seo_title: Perception Encoder：LibreYOLOでの推論と学習
+seo_title: Perception EncoderをLibreYOLOで使う
 description: Perception Encoderは、画像、テキスト、有限長の動画クリップを共通の埋め込み空間に変換します。
 lead: Perception Encoderは、画像、テキスト、有限長の動画クリップを共通の埋め込み空間に変換します。
 keywords:
@@ -22,13 +22,21 @@ snippets:
         model.set_classes(["person", "building"])
         result = model(SAMPLE_IMAGE)
         print(result.probs)
-source_hash: 6cf7a6142312f63a
+  export:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibrePEt16-cls.pt", device="cpu")
+        model.export(format="onnx")
+source_hash: 6e0183876fd868e3
 ---
 
 ## インストール
 
 ```bash
-pip install "libreyolo"
+pip install "libreyolo[clip]"
 ```
 
 ## 推論
@@ -40,6 +48,8 @@ pip install "libreyolo"
 ## エクスポート
 
 <export-matrix />
+
+<code-tabs name="export" />
 
 形式ごとの依存関係とエクスポートしたファイルの読み込みについては[エクスポートの設定](/docs/export)を参照してください。
 

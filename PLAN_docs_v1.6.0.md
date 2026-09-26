@@ -342,7 +342,7 @@ command, per the skill.
 
 Update this list in the same commit as the work. It is the resume point.
 
-- [x] Phase 1: registry rebuilt against dev SHA `4da12d005eb41a8e694a86124c97ea5faaee9b7c`; 110 lineages / 117 families / 20 tasks; upstream JSON for all new lineages. 11 new BibTeX records copied verbatim and cross-checked. Citation sections omitted for unverified entries; V-JEPA 2 author mismatch is recorded for follow-up.
+- [x] Phase 1: registry rebuilt against dev SHA `4da12d005eb41a8e694a86124c97ea5faaee9b7c`; 110 lineages / 117 families / 20 tasks; upstream JSON for all new lineages. 14 new BibTeX records copied verbatim and cross-checked, plus two reused verified citations for the grounding adapters. Citation sections omitted for unverified entries; V-JEPA 2 author mismatch is recorded for follow-up.
   - Rebuild command: `sh scripts/build-registry/rebuild.sh <detached-library-checkout> <vision-analysis/generated/verified-results.v1.json>`.
   - Existing capability changes: YOLO-NAS (OBB), FeyNobg and YOLOv2 (exports), LFM2-VL and RT-DETR (sizes); refreshed checkpoint inventories across 40 families.
   - Hub collection checks the matching asset, not just repository existence. U-Net has no verified hosted asset. PP-YOLOE and DEKR use source CDN downloads.
@@ -351,10 +351,10 @@ Update this list in the same commit as the work. It is the resume point.
 - [x] Phase 2: 30 new English pages and 12 stub-to-full pages (42 / 42), including the two existing grounding stubs. All 12 existing Japanese twins updated. Custom tracking fits the existing task page; VLM tuning has a separate workflow because its trainer and checkpoint contract differ from detector LoRA.
   - Local HTTP render checks cover all 42 pages. PP-LiteSeg export/checkpoint tables checked at 390 px in dark mode; table and code containers scroll.
   - Nav, sitemap and llms discovery wired in this phase so the added routes are indexed in the same change. Full plumbing audit remains Phase 5.
-- [ ] Phase 3: English updates complete (65 / 65); waiting for all 13 existing locale twins before commit/push.
+- [ ] Phase 3: English updates complete (66 / 66); waiting for all 13 existing locale twins before commit/push.
 - [ ] Phase 4: 8 English release-level pages drafted; 103 changelog entries covered after excluding A90. Versions keeps the 1.5.0 TODO(owner), no archive route. Existing twins in progress.
 - [x] Phase 5: nav, sitemap, llms.txt and generated indexes verified. Task count is generated (20); added labels for the three tasks and guarded missing artwork, without changing homepage layout.
-- [ ] Phase 6: Japanese (83), Spanish (70) and French (70) twins updated; German, Italian and Portuguese in progress; remaining locales queued. Global `sync-check` pending. Brand-new pages remain English-only.
+- [x] Phase 6: 936 existing locale twins updated (Japanese 84; each other locale 71). All 13 locale validators pass, and `sync-check` passes 2,275 / 2,275. Final `--stamp` changes zero already-current hashes. Brand-new pages remain English-only.
 - [x] Initial Vercel preview build passes (4,189 generated routes): https://libreyolo-website-gkdbjoexh-xubanceccons-projects.vercel.app . Its production sitemap has 3,040 unique canonical URLs and excludes untranslated fallbacks. A final preview will follow the complete translation set.
 - [ ] PR description: done, not done, `TODO(1.6.0)` list, changelog corrections, owner decisions
 
@@ -383,3 +383,9 @@ Update this list in the same commit as the work. It is the resume point.
 - Initial Vercel authorization failure was resolved by relinking this worktree to the authenticated `xubanceccons-projects/libreyolo-website` project. No production deployment occurred.
 - Checkpoint inventory verifies matching `.pt` assets, while hosted snapshot status checks the actual repository files separately. Runtime extras and inherited train/validation capabilities are collected statically without importing optional ML runtimes.
 - Citation follow-up: V-JEPA 2 upstream README and arXiv author records disagree (Mahmoud/Mido Assran and split Mojtaba Komeili metadata). No assembled or silently corrected BibTeX is published.
+
+- Final QA: 66 frontmatter Python snippets on new/expanded pages pass syntax checks; pinned-source CPU payload smoke passes for Actions, AlbedoMap, Boxes3D, depth encodings and restoration saving. No model training, GPU benchmarking or complete heavy-model inference sweep was run.
+- Mobile QA found and fixed export-table screen-reader text escaping its scroll container; the page now stays within a 390 px viewport in dark mode. Mostly-empty checkpoint input-size columns and unknown size metadata are omitted.
+- Additional source corrections found during review: MiDaS needs the `midas` extra, PE needs `clip` tokenizer dependencies, and automatic 3D checkpoint acquisition needs `hf`. ConvNeXt V1 no longer claims V2 is excluded.
+
+- Final render audit passes 42 / 42 new or expanded English pages, including each declared checkpoint, export, licensing and citation block plus canonical URL. All 13 locale validators pass (174 each; Japanese 187).

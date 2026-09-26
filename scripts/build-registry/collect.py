@@ -73,7 +73,7 @@ for cls, family in class_families.items():
 inv = ast.parse((root / 'libreyolo/models/inventory.py').read_text())
 optional = next(ast.literal_eval(n.value) for n in inv.body if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'OPTIONAL_MODELS' for t in n.targets))
 extras = {class_families[cls]: extra for _, cls, extra, _ in optional if cls in class_families}
-extras.update({'rfdetr': 'rfdetr', 'dinov2': 'rfdetr', 'lama': 'onnx', 'clip': 'clip', 'siglip2': 'siglip2', 'midas': 'midas', 'eomt': 'eomt', 'sensenovavision': 'sensenova', 'libremodus': 'modus'})
+extras.update({'rfdetr': 'rfdetr', 'dinov2': 'rfdetr', 'lama': 'onnx', 'clip': 'clip', 'pe': 'clip', 'fcos3d': 'hf', 'wilddet3d': 'hf', '3dmood': 'hf', 'detany3d': 'hf', 'siglip2': 'siglip2', 'midas': 'midas', 'eomt': 'eomt', 'sensenovavision': 'sensenova', 'libremodus': 'modus'})
 (out / 'extras.json').write_text(json.dumps(extras))
 for src, dest in [('libreyolo/models/registry.py', 'registry.py'), ('libreyolo/tasks.py', 'tasks.py'), ('docs/export_support.md', 'export_support.md')]:
     shutil.copyfile(root / src, out / dest)

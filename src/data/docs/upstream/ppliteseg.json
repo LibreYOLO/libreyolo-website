@@ -1,8 +1,6 @@
 {
   "name": "PP-LiteSeg",
   "org": "PaddlePaddle",
-  "paper_title": "PP-LiteSeg",
-  "paper_url": "https://github.com/PaddlePaddle/PaddleSeg",
   "code_url": "https://github.com/PaddlePaddle/PaddleSeg",
   "license": "Apache-2.0",
   "license_interpretation": "The upstream implementation declares Apache-2.0. The STDC backbone also carries its original MIT attribution."

@@ -2,7 +2,7 @@
 title: U-Net
 families:
   - unet
-seo_title: 'U-Net: prediction and training in LibreYOLO'
+seo_title: U-Net in LibreYOLO
 description: >-
   U-Net performs semantic segmentation with an encoder, skip connections and an
   upsampling decoder.
@@ -24,7 +24,7 @@ snippets:
         # Random initialization: train before using predictions.
         model = LibreUNet(size="s", device="cpu")
         result = model(SAMPLE_IMAGE)
-        print(result.semantic)
+        print(result.semantic_mask)
   train:
     - label: Python
       language: python
@@ -40,6 +40,19 @@ snippets:
 
         model.train(data=input("Dataset path: "), pretrained=False, epochs=1,
         device="cpu", workers=0)
+  val:
+    - label: Python
+      language: python
+      code: >
+        from libreyolo import LibreUNet
+
+
+        model = LibreUNet(model_path=input("Trained checkpoint path: "),
+        device="cpu")
+
+        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+
+        print(metrics)
 ---
 
 ## Install
@@ -61,6 +74,13 @@ Use a semantic dataset with image/mask pairs. Training defaults to 160 epochs, b
 [Dataset setup](/docs/train/datasets) describes the required training data.
 
 <code-tabs name="train" />
+
+
+## Validate
+
+<code-tabs name="val" />
+
+Use the dataset format for this task. [Validation](/docs/train/validation) explains the dataset requirements and returned metrics.
 
 ## Licensing
 

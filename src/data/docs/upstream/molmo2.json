@@ -1,8 +1,6 @@
 {
   "name": "Molmo2",
   "org": "Allen Institute for AI",
-  "paper_title": "Molmo2",
-  "paper_url": "https://huggingface.co/allenai",
   "code_url": "https://huggingface.co/allenai",
   "license": "Apache-2.0",
   "license_interpretation": "The model publisher declares Apache-2.0."

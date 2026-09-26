@@ -2,7 +2,7 @@
 title: PP-LiteSeg
 families:
   - ppliteseg
-seo_title: 'PP-LiteSeg: prediction and training in LibreYOLO'
+seo_title: PP-LiteSeg in LibreYOLO
 description: >-
   PP-LiteSeg assigns a semantic class to each pixel using an STDC backbone and a
   fusion decoder.
@@ -23,7 +23,7 @@ snippets:
 
         model = LibreYOLO("LibrePPLiteSegt50-sem.pt", device="cpu")
         result = model(SAMPLE_IMAGE)
-        print(result.semantic)
+        print(result.semantic_mask)
   train:
     - label: Python
       language: python
@@ -37,6 +37,23 @@ snippets:
 
         model.train(data=input("Dataset path: "), epochs=1, device="cpu",
         workers=0)
+  val:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibrePPLiteSegt50-sem.pt", device="cpu")
+        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        print(metrics)
+  export:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibrePPLiteSegt50-sem.pt", device="cpu")
+        model.export(format="onnx")
 ---
 
 ## Install
@@ -59,9 +76,18 @@ Training defaults to 800 epochs, batch 8 and `amp=False`. The default crop is `(
 
 <code-tabs name="train" />
 
+
+## Validate
+
+<code-tabs name="val" />
+
+Use the dataset format for this task. [Validation](/docs/train/validation) explains the dataset requirements and returned metrics.
+
 ## Export
 
 <export-matrix />
+
+<code-tabs name="export" />
 
 [Export setup](/docs/export) lists format dependencies and loading exported artifacts.
 

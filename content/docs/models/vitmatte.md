@@ -2,7 +2,7 @@
 title: ViTMatte
 families:
   - vitmatte
-seo_title: 'ViTMatte: prediction and training in LibreYOLO'
+seo_title: ViTMatte in LibreYOLO
 description: ViTMatte predicts a foreground alpha matte from an image and a trimap.
 lead: ViTMatte predicts a foreground alpha matte from an image and a trimap.
 keywords:
@@ -35,6 +35,15 @@ snippets:
         result = model(image, trimap=trimap)
 
         result.save("cutout.png")
+  val:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreViTMattes-matte.pt", device="cpu")
+        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        print(metrics)
 ---
 
 ## Install
@@ -48,6 +57,13 @@ pip install "libreyolo"
 <code-tabs name="predict" />
 
 A trimap marks background as 0, unknown pixels as 128 and foreground as 255. Pass it through `trimap=` for a single image. Validation accepts `trimap_dir` or derives guides with `trimap_radius`. Training and export are not supported.
+
+
+## Validate
+
+<code-tabs name="val" />
+
+Use the dataset format for this task. [Validation](/docs/train/validation) explains the dataset requirements and returned metrics.
 
 ## Checkpoints
 

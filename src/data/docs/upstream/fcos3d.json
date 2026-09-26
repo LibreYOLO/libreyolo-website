@@ -1,9 +1,12 @@
 {
   "name": "FCOS3D",
   "org": "OpenMMLab",
-  "paper_title": "FCOS3D",
-  "paper_url": "https://github.com/open-mmlab/mmdetection3d",
+  "paper_title": "FCOS3D: Fully Convolutional One-Stage Monocular 3D Object Detection",
+  "paper_url": "https://arxiv.org/abs/2104.10956",
   "code_url": "https://github.com/open-mmlab/mmdetection3d",
   "license": "Apache-2.0 code",
-  "license_interpretation": "The upstream repository declares Apache-2.0. A distinct per-artifact checkpoint license is not recorded in the library source."
+  "license_interpretation": "The upstream repository declares Apache-2.0. A distinct per-artifact checkpoint license is not recorded in the library source.",
+  "bibtex": "@inproceedings{wang2021fcos3d,\n\ttitle={{FCOS3D: Fully} Convolutional One-Stage Monocular 3D Object Detection},\n\tauthor={Wang, Tai and Zhu, Xinge and Pang, Jiangmiao and Lin, Dahua},\n\tbooktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV) Workshops},\n\tyear={2021}\n}",
+  "bibtex_source_url": "https://raw.githubusercontent.com/open-mmlab/mmdetection3d/main/configs/fcos3d/README.md",
+  "bibtex_verified": "2026-09-26: copied verbatim from the authors' upstream README. Cross-checked title and every author in order against the arXiv API for 2104.10956. ICCV Workshops 2021 confirmed by the CVF publisher."
 }
