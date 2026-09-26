@@ -17,7 +17,7 @@ keywords:
   - dataset DOTA
   - detecção de objetos em imagens aéreas
   - IoU rotacionado
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -171,7 +171,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.obb.xywhr)
-source_hash: 0d605d956f3ea025
+source_hash: dddb69a3bd3541a8
 ---
 
 ## Definição
@@ -201,14 +201,9 @@ aos eixos.
 
 ## Modelos
 
-Duas famílias atendem a esta tarefa, e qual delas escolher depende de você
-precisar ou não treinar.
+Três famílias atendem a essa tarefa.
 
-O [RF-DETR](/docs/models/rf-detr) é o que treina. Ele prediz, treina, valida e
-exporta caixas orientadas, e vem com checkpoints orientados publicados em
-quatro tamanhos, n, s, m e l. Ele precisa de um extra próprio,
-`pip install "libreyolo[rfdetr]"`, e a página do modelo traz a licença dos
-pesos e a proveniência.
+[RF-DETR](/docs/models/rf-detr) suporta treinamento. Prevê, treina, valida e exporta caixas orientadas, e tem checkpoints orientados publicados em quatro tamanhos, n, s, m e l. Precisa do seu próprio extra, `pip install "libreyolo[rfdetr]"`, e sua página de modelo traz a licença dos pesos e a procedência.
 
 Leia a seção abaixo sobre o que esses checkpoints realmente predizem antes de
 planejar em cima deles.
@@ -224,8 +219,9 @@ Treinamento não é: a tarefa orientada é somente inferência nessa família,
 dela, que usam um backbone diferente. Rastreamento e test-time augmentation
 também não estão disponíveis para caixas orientadas.
 
-Então: categorias do DOTA prontas para uso, RT-DETRv2. Seus próprios rótulos
-orientados, RF-DETR.
+Escolha o conjunto de classes do checkpoint e o suporte a treinamento necessários para seu dataset.
+
+[YOLO-NAS](/docs/models/yolo-nas) também suporta treinamento e inferência OBB. Seus pesos pré-treinados mantêm os termos não comerciais upstream.
 
 ## Predição
 
@@ -234,15 +230,7 @@ localmente.
 
 <code-tabs name="predict" />
 
-Saiba o que são os checkpoints publicados do RF-DETR antes de rodá-los. Apesar
-de o DOTA ser o benchmark de referência para esta tarefa, esses pesos não foram
-treinados nele. Todos os quatro foram inicializados a partir dos pesos de
-detecção do RF-DETR e passaram por fine-tuning em um único dataset do Roboflow
-Universe com imagens de drone, com seis classes de veículos: bike, bus, car,
-other_vehicle, taxi e truck. Os model cards descrevem esses checkpoints como
-pesos de desenvolvimento, produzidos durante a validação do suporte a treinamento
-orientado, e dizem que não devem ser lidos como pesos de produção nem como
-pesos oficiais de benchmark.
+Saiba o que são os checkpoints publicados do RF-DETR antes de rodá-los. Embora DOTA seja o benchmark de referência dessa tarefa, esses pesos não foram treinados nele. Os quatro foram inicializados a partir dos pesos de detecção do RF-DETR e passaram por fine-tuning em um único dataset de imagens de UAV, com seis classes de veículos: bike, bus, car, other_vehicle, taxi e truck. Seus model cards os descrevem como pesos de desenvolvimento, produzidos durante a validação do suporte a treinamento orientado, e dizem que não devem ser considerados pesos de produção nem oficiais de benchmark.
 
 Na prática isso significa que eles são um ponto de partida funcional para
 caixas orientadas em veículos vistos de cima, e para verificar que o seu
@@ -313,14 +301,9 @@ O parser canônico de linhas é `libreyolo.data.parse_yolo_obb_label_line`.
 
 <code-tabs name="train" />
 
-Treinar nesta tarefa significa RF-DETR. O treinamento continua a partir de um
-checkpoint `-obb` publicado por padrão. Partir de pesos de detecção é uma
-transferência deliberada: esses pesos não predizem ângulo, e passar `task=obb`
-é o que autoriza a troca. Mantenha `lr0` em `1e-4` ou abaixo, como nas outras
-tarefas da família. Os checkpoints orientados do RT-DETRv2 não podem passar por
-fine-tuning; use-os como estão, ou treine um modelo RF-DETR com os seus
-próprios rótulos. Veja [treinamento](/docs/train) para datasets, augmentation,
-multi-GPU e loggers.
+O treinamento do RF-DETR continua a partir de um checkpoint `-obb` publicado por padrão. Começar com pesos de detecção é uma transferência deliberada: esses pesos não preveem ângulo, e passar `task=obb` autoriza a troca. Mantenha `lr0` em `1e-4` ou abaixo, como nas outras tarefas da família. Os checkpoints orientados de RT-DETRv2 não podem passar por fine-tuning; use-os como estão ou treine um modelo RF-DETR com suas próprias labels. Veja [treinamento](/docs/train) para datasets, data augmentation, multi-GPU e loggers.
+
+YOLO-NAS OBB usa atribuição e losses rotacionadas, data augmentation com espelhamento/HSV e `amp=False` por padrão. Seleciona checkpoints com `metrics/mAP50-95(OBB)`.
 
 ## Validação
 

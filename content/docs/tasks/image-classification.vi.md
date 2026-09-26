@@ -2,11 +2,9 @@
 title: Phân loại ảnh
 seo_title: Phân loại ảnh trong LibreYOLO
 description: >-
-  Gán nhãn cho toàn ảnh trong LibreYOLO: các family phục vụ tác vụ, bố cục
-  dataset ImageFolder và các lời gọi dự đoán, huấn luyện, xác thực cùng xuất.
-lead: >-
-  Phân loại ảnh gán một phân phối nhãn cho toàn ảnh và không định vị gì bên
-  trong. Key tác vụ là classify.
+  Gán nhãn cho toàn ảnh trong LibreYOLO: các family phục vụ tác vụ, bố cục dataset ImageFolder và các lời gọi
+  dự đoán, huấn luyện, xác thực cùng xuất.
+lead: Phân loại ảnh gán một phân phối nhãn cho toàn ảnh và không định vị gì bên trong. Key tác vụ là classify.
 keywords:
   - phân loại ảnh python
   - huấn luyện image classifier
@@ -14,7 +12,7 @@ keywords:
   - độ chính xác top-1
   - phân loại zero-shot
   - thư viện phân loại MIT
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -48,37 +46,25 @@ snippets:
             print(result.names[index], float(score))
     - label: 'Zero-shot, không huấn luyện'
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         # CLIP tính điểm ảnh so với text prompt, vì vậy tập nhãn được đặt
-
         # tại thời điểm gọi thay vì ghi cố định trong checkpoint.
-
         model = LibreYOLO("LibreCLIPb32-cls.pt")
-
-        model.set_classes(["a person jumping", "an empty street", "a parked
-        car"])
-
+        model.set_classes(["a person jumping", "an empty street", "a parked car"])
         result = model(SAMPLE_IMAGE)
-
 
         print(model.names[result.probs.top1], float(result.probs.top1conf))
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
-        # imagenette160 là tên dataset đã biết và được tải trong lần sử dụng đầu
-        tiên.
-
+        # imagenette160 là tên dataset đã biết và được tải trong lần sử dụng đầu tiên.
         # Truyền thư mục có split train/ cho dữ liệu riêng của bạn.
-
         model = LibreYOLO("LibreResNet50-cls.pt")
-
         model.train(data="imagenette160", epochs=5)
     - label: CLI
       language: bash
@@ -129,9 +115,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 836bea76cd2cdf92
+source_hash: 90aed355e0ddf5e3
 ---
-
 ## Định nghĩa
 
 Phân loại ảnh tạo một điểm số trên mỗi lớp đối tượng cho toàn ảnh và hoàn toàn
@@ -151,7 +136,7 @@ giờ cắt `probs` vì vector thuộc về ảnh, không phải một dòng.
 
 ## Mô hình
 
-Năm family vừa huấn luyện vừa dự đoán: [ResNet](/docs/models/resnet),
+Các bộ phân loại ảnh có thể huấn luyện gồm: [ResNet](/docs/models/resnet),
 [ConvNeXt](/docs/models/convnext), [MobileNetV4](/docs/models/mobilenetv4),
 [EfficientNetV2](/docs/models/efficientnetv2) và
 [DINOv2](/docs/models/dinov2). Bốn family đầu chạy trên package cơ sở và cung
@@ -169,6 +154,8 @@ Năm family khác dự đoán, xác thực và xuất, nhưng `train()` phát si
 có tập nhãn cố định. Chúng tính điểm ảnh so với text prompt, vì vậy
 `set_classes()` định nghĩa lớp đối tượng tại thời điểm gọi và hoàn toàn không có
 bước huấn luyện cho tập nhãn mới. Cả hai cũng phục vụ tác vụ `embed`.
+
+[ConvNeXt V2](/docs/models/convnextv2) bổ sung phân loại có giám sát với trọng số được huấn luyện sẵn CC-BY-NC-4.0. [PE](/docs/models/pe) hỗ trợ phân loại zero-shot; [V-JEPA 2](/docs/models/vjepa2) huấn luyện các probe phân loại video.
 
 ## Dự đoán
 
@@ -219,6 +206,8 @@ Không có `nc` để khai báo: số lượng lớp đối tượng lấy từ 
 nguyên trạng. Xem [huấn luyện](/docs/train) để biết về dataset, augmentation,
 multi-GPU và logger.
 
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 và DINOv2 hỗ trợ trọng số loss `cls_pw` hoặc `class_weights`. `scale` trong phân loại điều khiển diện tích cắt, còn `crop_pct` điều khiển cắt ảnh khi đánh giá. Xem [augmentation](/docs/train/augmentations).
+
 ## Xác thực
 
 `val()` trả về dictionary thuần gồm các key `metrics/`, được tính trên split
@@ -231,6 +220,8 @@ và là con số chính mà quá trình huấn luyện dùng để chọn epoch 
 `metrics/accuracy_top5` là tỷ lệ ảnh có lớp thật xuất hiện ở bất kỳ vị trí nào
 trong năm lớp đạt điểm cao nhất, số liệu này cung cấp ít thông tin hơn khi
 dataset có ít lớp hơn. Dictionary còn có `fitness`, bản sao của giá trị top-1.
+
+Đánh giá ImageFolder còn trả về macro `metrics/precision`, `metrics/recall` và `metrics/f1`, lấy trung bình trên các lớp đối tượng có trong nhãn đích đánh giá. Lớp không được dự đoán đóng góp precision bằng 0. Fitness mặc định vẫn là độ chính xác top-1. Đánh giá và hiệu chuẩn dùng phép biến đổi đánh giá của mô hình.
 
 ## Xuất
 

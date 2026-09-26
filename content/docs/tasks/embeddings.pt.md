@@ -22,7 +22,7 @@ keywords:
   - clip embeddings
   - dinov2 embeddings
   - reid embeddings
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Chave da tarefa e aliases lidos de libreyolo/tasks.py. Payloads de resultado
   das classes Embeddings e Identities em libreyolo/utils/results.py. API da
@@ -176,7 +176,7 @@ snippets:
 
         libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg
         --json
-source_hash: ffbaad5599035bc7
+source_hash: 3197bfe9a3d53756
 ---
 
 ## Definição
@@ -214,8 +214,7 @@ selecionam exatamente a mesma coisa.
 
 ## Modelos
 
-Quatro famílias atendem à tarefa, e elas se dividem com clareza entre as que
-localizam algo primeiro e as que não localizam.
+As famílias de embeddings diferem quanto a codificar uma imagem inteira, um clipe ou uma região detectada.
 
 | Família | Formato | Dimensão | Também suporta |
 |---|---|---|---|
@@ -229,11 +228,7 @@ precisa ser pedido. O checkpoint `-cls` que já existe é o artefato de duas
 torres compartilhado; nenhum checkpoint `-embed` duplicado é publicado para
 pesos idênticos.
 
-`embed_text` existe apenas no CLIP e no SigLIP 2, as duas famílias com torre de
-texto. O DINOv2 não tem nenhuma. O embedding do DINOv2 contorna as cabeças
-semântica e de classificação e lê o token CLS normalizado final em 224 pixels;
-as variantes `n`, `s`, `m` e `l` compartilham todas o encoder DINOv2-S, então
-todas as quatro retornam `D = 384`.
+`embed_text` está disponível em CLIP, SigLIP 2 e PE, que têm torres de texto. DINOv2 não tem uma. O embedding do DINOv2 ignora as cabeças semântica e de classificação e lê o token CLS normalizado final a 224 pixels; as variantes `n`, `s`, `m` e `l` compartilham o encoder DINOv2-S, então todas retornam `D = 384`.
 
 Os backbones somente de classificação adicionados nesta versão,
 [ViT](/docs/models/vit), [Swin](/docs/models/swin) e [DeiT](/docs/models/deit),
@@ -246,6 +241,8 @@ concatena todas as linhas de todos os resultados em um único tensor float32 de
 CPU `(N_total, D)`, levantando erro se as linhas tiverem dimensões diferentes.
 Uma família sem `embed` entre suas tarefas suportadas levanta
 `NotImplementedError`.
+
+[PE](/docs/models/pe) suporta embeddings de imagem, texto e vídeo de duração finita com `clip_frames=8` por padrão. [V-JEPA 2](/docs/models/vjepa2) e [LeVJEPA](/docs/models/levjepa) produzem embeddings de clipes e expõem tokens de patches por `embed_tokens()`. Suas páginas de modelo descrevem a amostragem de clipes e as restrições de exportação para runtime direto.
 
 ## Payloads de resultado
 

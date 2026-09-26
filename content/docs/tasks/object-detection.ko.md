@@ -14,7 +14,7 @@ keywords:
   - MIT 객체 탐지 라이브러리
   - YOLO 대안
   - 객체 탐지기 학습
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -116,7 +116,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: c735b6e3de78dd2b
+source_hash: "28d7cbb721e0f109"
 ---
 
 ## 정의
@@ -129,13 +129,15 @@ source_hash: c735b6e3de78dd2b
 
 ## 모델들
 
-12개의 계열는 학습과 예측을 모두 수행합니다: [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet) 및 [PicoDet](/docs/models/picodet). YOLOv9와 RF-DETR은 두 가지 주력 계열이며, 기능들이 먼저 이들에 적용됩니다. RF-DETR은 자체 추가 요소 `pip install "libreyolo[rfdetr]"`가 필요하며, 나머지는 기본 패키지에서 실행됩니다.
+다음 계열은 학습과 예측을 지원합니다. [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet), [PicoDet](/docs/models/picodet). YOLOv9과 RF-DETR은 두 주력 계열이며 새 기능이 먼저 적용됩니다. RF-DETR은 전용 추가 패키지 `pip install "libreyolo[rfdetr]"`이 필요하며, 나머지는 기본 패키지에서 실행됩니다.
 
 추가로 열 가지가 예측, 검증 및 내보내기를 수행하지만, 그들의 `train()`는 `NotImplementedError`를 발생시킵니다: [LW-DETR](/docs/models/lw-detr), [DETR](/docs/models/detr), [Deformable DETR](/docs/models/deformable-detr), [DINO-DETR](/docs/models/dino-detr), [Faster R-CNN](/docs/models/faster-rcnn), [Mask R-CNN](/docs/models/mask-rcnn), [FCOS](/docs/models/fcos), [RetinaNet](/docs/models/retinanet), [SSD](/docs/models/ssd), [CenterNet](/docs/models/centernet) 및 [EfficientDet](/docs/models/efficientdet).
 
 다크넷 계열, [YOLOv1](/docs/models/yolov1), [YOLOv2](/docs/models/yolov2), [YOLOv3](/docs/models/yolov3) 및 [YOLOv4](/docs/models/yolov4)는 냉동된 전시물처럼 유지됩니다: 예측, 검증 및 내보내기는 가능하지만, 학습은 되지 않습니다.
 
 별도의 그룹은 체크포인트에서 가져오는 대신 실행 시점에 클래스 목록을 가져오므로 학습에서 한 번도 본 적 없는 이름도 탐지합니다: [Grounding DINO](/docs/models/grounding-dino), [OWLv2](/docs/models/owlv2), [OMDet-Turbo](/docs/models/omdet-turbo) 및 [OV-DEIM](/docs/models/ov-deim), 그리고 비전-언어 계열 [Florence-2](/docs/models/florence-2), [Kosmos-2](/docs/models/kosmos-2), [Qwen3-VL](/docs/models/qwen3-vl), [SmolVLM2](/docs/models/smolvlm2), [InternVL3](/docs/models/internvl3), [LFM2-VL](/docs/models/lfm2-vl), [LocateAnything](/docs/models/locate-anything), [SenseNova-Vision](/docs/models/sensenova-vision) 및 [LibreMODUS](/docs/models/libremodus). 이들은 자체 팩토리과 추가 항목을 통해 로드되며; 각 모델 페이지는 정확한 호출을 포함합니다.
+
+[PP-YOLOE](/docs/models/ppyoloe)와 [TinyFormer](/docs/models/tinyformer)도 탐지 학습을 지원합니다.
 
 ## 예측
 
@@ -186,6 +188,8 @@ names:
 <code-tabs name="train" />
 
 `epochs`, `imgsz`, `batch` 및 `lr0`는 먼저 이동하는 인수입니다. `lr0`는 계열 간에 전달되지 않는 인수입니다. 컨볼루션 탐지기가 허용하는 속도는 트랜스포머에서는 다르게 나타나므로, 다른 계열의 예가 아닌 모델 페이지에서 값을 가져오십시오. 계열은 또한 어떤 인수를 완전히 무시할 수도 있으며, 해당 페이지에 어떤 인수를 무시하는지 목록이 나와 있습니다. 데이터셋, 증강, 멀티 GPU 및 로거에 대해서는 [training](/docs/train)을 참조하십시오.
+
+`classes=`는 선택한 원본 데이터셋 ID를 유지하며, `single_cls=True`는 유지된 레이블을 클래스 0으로 합칩니다. 지원 계열과 검증 시 설정 상속은 [하이퍼파라미터](/docs/train/hyperparameters)를 참조하십시오.
 
 ## 검증
 

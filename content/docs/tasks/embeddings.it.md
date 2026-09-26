@@ -20,7 +20,7 @@ keywords:
   - clip embeddings
   - dinov2 embeddings
   - reid embeddings
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Chiave del task e alias letti da libreyolo/tasks.py. Payload dei risultati
   dalle classi Embeddings e Identities in libreyolo/utils/results.py. API
@@ -187,7 +187,7 @@ snippets:
 
         libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg
         --json
-source_hash: ffbaad5599035bc7
+source_hash: 3197bfe9a3d53756
 ---
 
 ## Definizione
@@ -225,8 +225,7 @@ selezionano esattamente la stessa cosa.
 
 ## Modelli
 
-Quattro famiglie coprono il task, e si dividono nettamente in base al fatto che
-localizzino o meno qualcosa prima.
+Le famiglie di embedding si distinguono in base a ciò che codificano: un'immagine intera, una clip o una regione rilevata.
 
 | Famiglia | Forma | Dimensione | Supporta anche |
 |---|---|---|---|
@@ -240,11 +239,7 @@ va chiesto esplicitamente. Il loro checkpoint `-cls` esistente è l'artefatto
 condiviso a due torri; per pesi identici non viene pubblicato un checkpoint
 `-embed` duplicato.
 
-`embed_text` esiste solo su CLIP e SigLIP 2, le due famiglie con una torre
-testuale. DINOv2 non ne ha. L'embedding di DINOv2 aggira le teste semantica e di
-classificazione e legge il token CLS finale normalizzato a 224 pixel; le varianti
-`n`, `s`, `m` e `l` condividono tutte l'encoder DINOv2-S, quindi tutte e quattro
-restituiscono `D = 384`.
+`embed_text` è disponibile su CLIP, SigLIP 2 e PE, che hanno encoder testuali. DINOv2 non ne ha. L'embedding DINOv2 salta le teste semantica e di classificazione e legge il token CLS finale normalizzato a 224 pixel; le varianti `n`, `s`, `m` e `l` condividono tutte l'encoder DINOv2-S, quindi restituiscono tutte `D = 384`.
 
 I backbone di sola classificazione aggiunti in questa release, [ViT](/docs/models/vit),
 [Swin](/docs/models/swin) e [DeiT](/docs/models/deit), dichiarano solo `classify`
@@ -256,6 +251,8 @@ e non coprono questo task.
 concatena ogni riga di ogni risultato in un unico tensore float32 su CPU
 `(N_total, D)`, sollevando un errore se le righe hanno dimensioni diverse. Una
 famiglia che non ha `embed` tra i task supportati solleva `NotImplementedError`.
+
+[PE](/docs/models/pe) supporta embedding di immagini, testo e video finiti con `clip_frames=8` di default. [V-JEPA 2](/docs/models/vjepa2) e [LeVJEPA](/docs/models/levjepa) producono embedding di clip ed espongono i token delle patch tramite `embed_tokens()`. Le pagine dei modelli descrivono il campionamento delle clip e i vincoli di esportazione per l'uso diretto del runtime.
 
 ## Payload dei risultati
 

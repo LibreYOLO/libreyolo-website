@@ -2,38 +2,31 @@
 title: Pháp tuyến bề mặt
 seo_title: Ước lượng pháp tuyến bề mặt trong LibreYOLO
 description: >-
-  Dự đoán trường pháp tuyến bề mặt dày đặc từ một ảnh trong LibreYOLO. Đọc quy
-  ước hệ tọa độ camera, xác thực sai số góc và xuất mô hình.
+  Dự đoán trường pháp tuyến bề mặt dày đặc từ một ảnh trong LibreYOLO. Đọc quy ước hệ tọa độ camera, xác thực
+  sai số góc và xuất mô hình.
 lead: >-
-  Ước lượng pháp tuyến bề mặt dự đoán hướng mà mỗi bề mặt nhìn thấy đang quay
-  về. LibreYOLO cung cấp dưới dạng tác vụ normal, trả về trường vector đơn vị
-  dày đặc trên canvas ảnh gốc.
+  Ước lượng pháp tuyến bề mặt dự đoán hướng mà mỗi bề mặt nhìn thấy đang quay về. LibreYOLO cung cấp dưới dạng
+  tác vụ normal, trả về trường vector đơn vị dày đặc trên canvas ảnh gốc.
 keywords:
   - ước lượng pháp tuyến bề mặt python
   - tạo normal map từ ảnh
   - hình học monocular
   - metric sai số góc
   - dự đoán pháp tuyến dày đặc
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Dự đoán trường pháp tuyến
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("LibreMoGe2s-normal.pt")
-
         result = model(SAMPLE_IMAGE, save=True)
 
-
         normals = result.normal_map
-
         print(normals.data.shape)      # (H, W, 3) vector đơn vị float32
-
-        normals.assert_normalized()    # phát sinh lỗi nếu pixel nào không có độ
-        dài đơn vị
+        normals.assert_normalized()    # phát sinh lỗi nếu pixel nào không có độ dài đơn vị
     - label: Đọc một pixel
       language: python
       code: |
@@ -49,18 +42,13 @@ snippets:
         print(field[h // 2, w // 2])
     - label: Lưu ảnh trực quan hóa
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("LibreMoGe2s-normal.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
-        # plot() render trường; phương thức được định nghĩa cho kết quả normal
-        và edge.
-
+        # plot() render trường; phương thức được định nghĩa cho kết quả normal và edge.
         result.plot().save("normals.png")
   val:
     - label: Xác thực và đọc các key metric
@@ -94,9 +82,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.data.shape)
-source_hash: d26d26d894b436ff
+source_hash: b033fdf3a2210ce5
 ---
-
 ## Định nghĩa
 
 Tác vụ `normal` dự đoán một vector đơn vị ba thành phần trên mỗi pixel từ một
@@ -115,18 +102,17 @@ kiểm tra mọi pixel hữu hạn và có độ dài đơn vị trong phạm vi
 
 ## Mô hình
 
-Hai family phục vụ tác vụ `normal`.
+Các họ sau phục vụ `normal`.
 
-[MoGe-2](/docs/models/moge-2) là mô hình chuyên dụng: mô hình hình học monocular
-chạy một forward pass với ba kích thước encoder. LibreYOLO không sao chép các
-checkpoint này vào tổ chức riêng; việc nạp một checkpoint tải kích thước tương
-ứng từ repo chính thức tại revision cố định và xác minh bằng SHA-256 đã ghi lại.
+[MoGe-2](/docs/models/moge-2) là họ chuyên dụng: mô hình hình học một camera dùng một lượt truyền xuôi với ba kích thước bộ mã hóa. Kích thước s và l dùng bản sao của LibreYOLO; b vẫn ở upstream.
 
 [LibreMODUS](/docs/models/libremodus) tạo pháp tuyến như một target của mô hình
 any-to-any và có thể nhận depth map thay vì ảnh RGB làm đầu vào. Nó cần thành
 phần bổ sung `modus` và tài khoản Hugging Face đã xác thực riêng của bạn, đồng
 thời không cung cấp `val()` lẫn `export()`, vì vậy không tham gia các phần xác
 thực và xuất bên dưới.
+
+[Marigold V2](/docs/models/marigold-v2) cũng ước lượng pháp tuyến bề mặt. Inference bốn bit mặc định cần CUDA và extra `marigold`; mô hình không xuất.
 
 ## Dự đoán
 
@@ -175,9 +161,7 @@ dạng dataset](/docs/reference/dataset-formats) để biết hợp đồng đ�
 
 ## Huấn luyện
 
-Không family pháp tuyến nào có implementation huấn luyện: `train()` phát sinh
-`NotImplementedError` trên cả hai. Trang MoGe-2 trỏ tới các checkpoint chính
-thức được cố định để dự đoán, xác thực và xuất.
+Các họ ước lượng pháp tuyến này chưa triển khai huấn luyện. Trang MoGe-2 dẫn đến checkpoint chính thức đã ghim để dự đoán, đánh giá và xuất.
 
 ## Xác thực
 

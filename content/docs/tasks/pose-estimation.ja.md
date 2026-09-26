@@ -12,7 +12,7 @@ keywords:
   - COCO keypoints
   - OKS mAP
   - 姿勢推定 モデル 学習
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -132,7 +132,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 9de01d1f615bdf33
+source_hash: 1b9e7614546d8f00
 ---
 
 ## 定義
@@ -161,12 +161,10 @@ source_hash: 9de01d1f615bdf33
 [RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter)、
 [YOLO-NAS](/docs/models/yolo-nas)で、すべて1段階方式です。RF-DETRには専用のextraである
 `pip install "libreyolo[rfdetr]"`が必要です。RF-DETRとEdgeCrafterは公開済みの姿勢
-チェックポイントを提供し、どちらも単一クラスの人物専用データセットでファインチューニング
-します。EdgeCrafterのキーポイントヘッドは構築時に固定され、異なる個数を宣言するデータセットを
+チェックポイントを提供します。RF-DETRは複数クラスの姿勢推定も学習できます。EdgeCrafterのキーポイントヘッドは構築時に固定され、異なる個数を宣言するデータセットを
 拒否しますが、RF-DETRはそれに合わせてヘッドを再初期化します。YOLO-NASは非商用ライセンスの
 下でDeci.AI独自のCDNから重みを取得し、LibreYOLOはどの重みも公開しません。その姿勢ヘッドも
-新しいキーポイント数に合わせて再構築されます。また、3つのうちクラス数が1に固定されていない
-唯一のファミリーなので、動物の姿勢など、マルチクラスまたは人物以外のスケルトンに適しています。
+新しいキーポイント数に合わせて再構築され、複数クラスまたは人物以外のスケルトンにも対応します。
 
 [HRNet](/docs/models/hrnet)はトップダウン方式の選択肢です。推論、検証、エクスポートに対応し、
 `train()`は`NotImplementedError`を発生させます。人物ソースを指定しない場合は、
@@ -178,6 +176,8 @@ LibreYOLO9t検出器と自動的に組み合わされます。`cropped=True`は�
 `LibreVLM`と独自のextraを持つプロンプト型生成モデルです。語彙が設定されていない場合、
 `set_task("pose")`は人物カテゴリーへフォールバックします。重みは非商用で、すべての推論が
 拡散デコードを行うため、画像あたりのレイテンシは姿勢専用ヘッドよりはるかに高くなります。
+
+[DEKR](/docs/models/dekr)は、別の人物検出器を必要としないボトムアップ方式の複数人姿勢推定を提供します。推論と検証に対応しますが、学習には対応しません。
 
 ## 推論
 
@@ -234,6 +234,8 @@ names:
 対し水平反転後に取るインデックスを示す`0..K-1`の順列です。これにより、左手首が左手首のままに
 なります。省略した場合、誤ったインデックス順で適用するのではなく、キーポイントの水平反転
 データ拡張が無効になります。
+
+RF-DETRの複数クラスの姿勢推定では、クラス名またはIDをキーとする`kpt_names`を使い、クラスごとに先頭から名前付きキーポイントを選択します。空のリストはボックスのみのクラスを表します。複数クラスのデータセットには`names`と、少なくとも1つのキーポイントを持つクラスが必要です。不正なラベルの診断では、ファイル、行、期待される`kpt_shape`の配置を示します。
 
 ## 学習
 

@@ -20,7 +20,7 @@ keywords:
   - deep ocsort
   - identifiant suivi
   - suivi réidentification
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -82,7 +82,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: f1fa7dcf60597d6b
+source_hash: 384ee3d6a05190aa
 ---
 
 ## Définition
@@ -185,8 +185,12 @@ mise en correspondance est définie explicitement.
 
 Les autres arguments reproduisent ceux de la prédiction : `iou`, `imgsz`,
 `classes`, `max_det`, `vid_stride`, `show` et `save` avec `output_path`. La
-source est le chemin d'un fichier vidéo. Consultez la page
+source peut être une vidéo ou une séquence ordonnée d'images. Consultez la page
 [prédiction](/docs/predict) pour la gestion des résultats.
+
+Des images, dossiers triés par nom de fichier, listes, tuples et itérateurs d'images paresseux peuvent fournir des images consécutives. `fps=30.0` fournit leur cadence et `color_format="auto"` sélectionne l'interprétation de l'entrée. `vid_stride` réduit la cadence conservée à `fps / vid_stride`.
+
+Passez une instance de tracker personnalisée via `tracker=`. Elle implémente `reset()` et `update(results, image=None)` de `libreyolo.tracking.Tracker`. Une exécution la réinitialise une fois et transmet l'image PIL RGB d'origine. Le `track_id` renvoyé doit être un tableau ou tenseur entier unidimensionnel aligné avec les boîtes sur le même backend et appareil. Les instances personnalisées utilisent `track_conf=0.25` par défaut ; configurez directement l'instance au lieu de passer des arguments nommés de tracker ou `tracker_config`.
 
 ## Entraîner
 

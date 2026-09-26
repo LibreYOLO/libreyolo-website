@@ -15,7 +15,7 @@ keywords:
   - treinar modelo de segmentação
   - mIoU
   - biblioteca de segmentação licença MIT
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -120,7 +120,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 44b92d8ba6062f04
+source_hash: f642c33d64f6878c
 ---
 
 ## Definição
@@ -144,15 +144,7 @@ classe, fica de fora da loss e das métricas, e `.classes` o deixa de lado.
 
 ## Modelos
 
-Três famílias tanto treinam quanto predizem:
-[SegFormer](/docs/models/segformer),
-[LingBot-Vision](/docs/models/lingbot-vision) e
-[DINOv2](/docs/models/dinov2). SegFormer e LingBot-Vision rodam com o pacote
-base e trazem pesos publicados. DINOv2 precisa de
-`pip install "libreyolo[rfdetr]"` e não tem checkpoint hospedado pelo LibreYOLO:
-carrega o backbone do upstream e sua cabeça densa começa com inicialização
-aleatória, então é um ponto de partida para treinamento em vez de um preditor
-pronto para uso.
+As famílias treináveis incluem: [SegFormer](/docs/models/segformer), [LingBot-Vision](/docs/models/lingbot-vision) e [DINOv2](/docs/models/dinov2). SegFormer e LingBot-Vision rodam com o pacote base e têm pesos publicados. DINOv2 precisa de `pip install "libreyolo[rfdetr]"` e não tem checkpoint hospedado pelo LibreYOLO: carrega o backbone upstream e sua cabeça densa começa com inicialização aleatória, então é um ponto de partida para treinamento, não um preditor pronto.
 
 Outras quatro predizem, validam e exportam, mas seu `train()` lança
 `NotImplementedError`: [FCN](/docs/models/fcn),
@@ -164,6 +156,8 @@ publicados vêm de datasets cujos espaços de rótulos têm pouco em comum, entr
 eles as 150 classes do ADE20K contra as 19 do Cityscapes, então o `names` de um
 checkpoint é o que diz o que ele consegue rotular, e dois checkpoints só são
 comparáveis quando foram treinados no mesmo espaço de rótulos.
+
+[PP-LiteSeg](/docs/models/ppliteseg) e [U-Net](/docs/models/unet) são famílias semânticas treináveis. U-Net atualmente não tem conversão hospedada verificada.
 
 ## Predição
 
@@ -237,6 +231,8 @@ lançam um `ValueError` antes de a execução começar quando o `imgsz` não é
 múltiplo dele. O divisor é 32 para SegFormer, 16 para LingBot-Vision e EoMT, 14
 para DINOv2, e 8 para FCN e PIDNet. Veja [treinamento](/docs/train) para datasets,
 data augmentation, multi-GPU e loggers.
+
+Datasets semânticos aceitam telas `(height, width)`. PP-LiteSeg e U-Net distinguem recortes de treinamento de retângulos de avaliação. A amostragem com redimensionamento e recorte preenche regiões ausentes com a label de ignorar; transformações fotométricas da família são aplicadas quando configuradas.
 
 ## Validação
 

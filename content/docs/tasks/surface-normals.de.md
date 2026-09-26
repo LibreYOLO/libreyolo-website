@@ -16,7 +16,7 @@ keywords:
   - monokulare geometrie
   - winkelfehler metrik
   - dichte normalen vorhersage
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Normalenfeld vorhersagen
@@ -91,7 +91,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.data.shape)
-source_hash: d26d26d894b436ff
+source_hash: "b033fdf3a2210ce5"
 ---
 
 ## Definition
@@ -114,14 +114,9 @@ Wirkung. `Results.plot()` deckt diese Aufgabe ab.
 
 ## Modelle
 
-Zwei Familien unterstützen `normal`.
+Die folgenden Familien unterstützen `normal`.
 
-[MoGe-2](/docs/models/moge-2) ist die dafür vorgesehene Familie: ein
-monokulares Geometriemodell mit einem einzelnen Forward Pass in drei
-Encoder-Größen. LibreYOLO kopiert diese Checkpoints nicht in seine eigene
-Organisation. Beim Laden wird die passende Größe aus den offiziellen
-Repositorys mit festgelegter Revision heruntergeladen und anhand eines
-gespeicherten SHA-256-Werts überprüft.
+[MoGe-2](/docs/models/moge-2) ist darauf spezialisiert: ein monokulares Geometriemodell mit einem Forward-Pass in drei Encoder-Größen. Die Größen s und l verwenden LibreYOLO-Mirrors; b bleibt bei Upstream.
 
 [LibreMODUS](/docs/models/libremodus) erzeugt Normalen als eines der Ziele eines
 Any-to-Any-Modells und kann statt eines RGB-Bilds eine Tiefenkarte als Eingabe
@@ -129,6 +124,8 @@ verwenden. Dafür sind das Extra `modus` und ein eigenes authentifiziertes Konto
 bei Hugging Face erforderlich. Da die Familie weder `val()` noch `export()`
 anbietet, nimmt sie nicht an den nachfolgenden Abschnitten zu Validierung und
 Export teil.
+
+[Marigold V2](/docs/models/marigold-v2) schätzt ebenfalls Oberflächennormalen. Seine standardmäßige Vier-Bit-Inferenz benötigt CUDA und das Extra `marigold`; es unterstützt keinen Export.
 
 ## Vorhersage
 
@@ -182,9 +179,7 @@ vollständigen Vertrag.
 
 ## Training
 
-Keine der beiden Normalenfamilien implementiert Training. `train()` löst bei
-beiden `NotImplementedError` aus. Die Seite zu MoGe-2 verweist für Vorhersage,
-Validierung und Export auf die festgelegten offiziellen Checkpoints.
+Diese Familien zur Normalenschätzung haben keine Trainingsimplementierung. Die MoGe-2-Seite verweist auf die festgelegten offiziellen Checkpoints für Vorhersage, Validierung und Export.
 
 ## Validierung
 
@@ -218,4 +213,3 @@ Unterstützung der einzelnen Formate wird auf der
 [MoGe-2-Seite](/docs/models/moge-2) und in der
 [vollständigen Exportmatrix](/docs/reference/export-matrix) beschrieben.
 [Export](/docs/export) führt die von allen Formaten akzeptierten Argumente auf.
-

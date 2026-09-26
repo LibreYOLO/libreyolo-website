@@ -16,7 +16,7 @@ keywords:
   - points clés COCO
   - mAP OKS
   - entraîner modèle pose
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -147,7 +147,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 9de01d1f615bdf33
+source_hash: 1b9e7614546d8f00
 ---
 
 ## Définition
@@ -182,15 +182,12 @@ Trois familles peuvent être entraînées et effectuer des prédictions :
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) et
 [YOLO-NAS](/docs/models/yolo-nas), toutes en une étape. RF-DETR nécessite son
 propre extra, `pip install "libreyolo[rfdetr]"`. RF-DETR et EdgeCrafter
-publient des checkpoints de pose et s'affinent tous deux sur des datasets à une
-classe réservée aux personnes. La tête de points clés d'EdgeCrafter est fixée à
+publient des checkpoints de pose. RF-DETR entraîne aussi des poses multiclasses. La tête de points clés d'EdgeCrafter est fixée à
 la construction et refuse un dataset qui déclare un autre nombre, tandis que
 RF-DETR réinitialise sa tête. YOLO-NAS récupère ses poids depuis le propre CDN
 de Deci.AI sous une licence non commerciale, et LibreYOLO n'en publie aucun. Sa
 tête de pose se reconstruit également pour un nouveau nombre de points clés.
-C'est la seule des trois familles dont le nombre de classes n'est pas fixé à
-un. Elle convient donc à un squelette multiclasse ou non humain, comme la pose
-animale.
+Elle prend aussi en charge les squelettes multiclasses ou non humains.
 
 [HRNet](/docs/models/hrnet) constitue l'option descendante. Il prédit, valide et
 exporte, tandis que sa méthode `train()` déclenche une
@@ -206,6 +203,8 @@ clés. Il s'agit d'un modèle génératif guidé doté de sa propre fabrique,
 un usage non commercial, et sa latence par image est bien supérieure à celle
 d'une tête de pose spécialisée, car chaque prédiction passe par un décodage de
 diffusion.
+
+[DEKR](/docs/models/dekr) fournit une pose ascendante de plusieurs personnes sans détecteur de personnes distinct. Il prend en charge l'inférence et la validation, mais pas l'entraînement.
 
 ## Prédire
 
@@ -270,6 +269,8 @@ indice après un retournement horizontal. Un poignet gauche reste ainsi un
 poignet gauche. Si cette clé est omise, l'augmentation par retournement
 horizontal est désactivée pour les points clés plutôt qu'appliquée dans le
 mauvais ordre d'indices.
+
+La pose multiclasse RF-DETR utilise `kpt_names`, indexé par nom ou identifiant de classe, pour sélectionner les premiers points clés nommés de chaque classe. Une liste vide indique une classe avec uniquement des boîtes. Les datasets multiclasses exigent `names` et au moins une classe avec des points clés. Les diagnostics d'étiquettes mal formées indiquent le fichier, la ligne et la disposition `kpt_shape` attendue.
 
 ## Entraîner
 

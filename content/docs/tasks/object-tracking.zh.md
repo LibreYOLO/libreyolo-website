@@ -16,7 +16,7 @@ keywords:
   - deep ocsort
   - yolo 视频跟踪
   - reid 跟踪
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -71,7 +71,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: f1fa7dcf60597d6b
+source_hash: 384ee3d6a05190aa
 ---
 
 ## 定义
@@ -141,8 +141,11 @@ BoT-SORT 来说，`track_conf` 必须大于或等于 `track_low_thresh`，后者
 跟踪器构建配置；不认识的键会告警，而不是被悄悄应用。无论哪种方式，一旦对应的键被显式
 设置，`track_conf` 就会被忽略。
 
-其余参数和预测保持一致：`iou`、`imgsz`、`classes`、`max_det`、`vid_stride`、`show`，
-以及 `save` 配 `output_path`。源是一个视频文件路径。结果处理见[预测](/docs/predict)。
+其余参数与预测一致：`iou`、`imgsz`、`classes`、`max_det`、`vid_stride`、`show`，以及带 `output_path` 的 `save`。数据源可以是视频或有序图像序列。结果处理见[预测](/docs/predict)。
+
+图像、按文件名排序的文件夹、列表、元组和惰性图像迭代器都可以提供连续帧。`fps=30.0` 提供时间信息，`color_format="auto"` 选择输入解释方式。`vid_stride` 将保留帧率降为 `fps / vid_stride`。
+
+通过 `tracker=` 传入自定义跟踪器实例。它实现 `libreyolo.tracking.Tracker` 的 `reset()` 和 `update(results, image=None)`。一次运行会将它重置一次，并传入原始 RGB PIL 帧。返回的 `track_id` 必须是在相同后端/设备上、与检测框对齐的一维整数数组或张量。自定义实例默认使用 `track_conf=0.25`；请直接配置实例，不要传入跟踪器关键字参数或 `tracker_config`。
 
 ## 训练
 

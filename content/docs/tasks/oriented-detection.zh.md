@@ -10,7 +10,7 @@ keywords:
   - dota 数据集
   - 航拍目标检测
   - 旋转 iou
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -148,7 +148,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.obb.xywhr)
-source_hash: 0d605d956f3ea025
+source_hash: dddb69a3bd3541a8
 ---
 
 ## 定义
@@ -161,15 +161,17 @@ source_hash: 0d605d956f3ea025
 
 ## 模型
 
-有两个模型家族提供这个任务，选哪一个取决于你需不需要训练。
+三个家族支持这个任务。
 
-[RF-DETR](/docs/models/rf-detr) 是能训练的那个。它对旋转框可以预测、训练、验证和导出，并且发布了 n、s、m、l 四种尺寸的旋转框检查点。它需要自己的附加依赖 `pip install "libreyolo[rfdetr]"`，权重许可和来源写在它的模型页上。
+[RF-DETR](/docs/models/rf-detr) 支持训练。它可以预测、训练、验证和导出旋转框，并提供 n、s、m、l 四种尺寸的已发布旋转框检查点。它需要自己的 extra，`pip install "libreyolo[rfdetr]"`，模型页面列出了权重许可和来源。
 
 在围绕这些检查点做规划之前，先读下面那一节，弄清它们实际预测的是什么。
 
 [RT-DETRv2](/docs/models/rt-detr) 是带航拍权重的那个。它发布了从 `LibreRTDETRv2n-obb.pt` 到 `LibreRTDETRv2x-obb.pt` 的一系列权重，是官方 DOTA v1.0 单尺度检查点转成 LibreYOLO 格式的产物，覆盖 DOTA 在 1024 px 下的 15 个类别。除了基础包之外它不需要任何附加依赖，旋转框计算图由检查点自带的张量识别出来，预测、验证以及 ONNX 和 TorchScript 导出都支持。训练不支持：在这个家族上旋转框任务只能做推理，`train()` 会抛异常，也没有从它的检测权重迁移过来的路径，因为那些权重用的是另一套骨干。跟踪和测试时增强对旋转框同样不可用。
 
-所以：要开箱即用的 DOTA 类别，用 RT-DETRv2。要用你自己的旋转框标注，用 RF-DETR。
+按数据集的需要选择检查点标签集和训练支持。
+
+[YOLO-NAS](/docs/models/yolo-nas) 也支持 OBB 训练和推理。其预训练权重保留上游的非商用条款。
 
 ## 预测
 
@@ -177,7 +179,7 @@ source_hash: 0d605d956f3ea025
 
 <code-tabs name="predict" />
 
-跑 RF-DETR 已发布的检查点之前，先弄清它们是什么。尽管 DOTA 是这个任务的参考基准测试，这些权重并不是在它上面训练的。四个权重全都是从 RF-DETR 的检测权重初始化，然后在一个来自 Roboflow Universe 的无人机航拍数据集上微调出来的，带六个车辆类别：bike、bus、car、other_vehicle、taxi 和 truck。它们的模型卡把它们描述为开发用权重，是在验证旋转框训练支持时产出的，并说明不应该把它们当成生产权重或基准测试的官方权重。
+运行 RF-DETR 已发布的检查点之前，请先了解它们的来源。DOTA 虽然是这个任务的参考基准，但这些权重并不是在 DOTA 上训练的。四个检查点都从 RF-DETR 检测权重初始化，然后在同一个无人机视频数据集上微调，包含六个车辆类别：bike、bus、car、other_vehicle、taxi 和 truck。模型卡将它们描述为验证旋转框训练支持时生成的开发权重，说明不应把它们当作生产权重或官方基准权重。
 
 实际用起来，这意味着它们是从上往下看的车辆旋转框的一个可用起点，也可以用来验证你的流水线能端到端跑通。换成别的任何领域，就得用你自己的旋转框标注来训练；而对于 DOTA 出名的那些航拍类别，真正在那份数据上训练过的是 RT-DETRv2 的检查点。`conf` 和 `max_det` 塑造输出的方式和检测任务里一样。图像来源、流式输入和结果处理见[预测](/docs/predict)。
 
@@ -225,7 +227,9 @@ names:
 
 <code-tabs name="train" />
 
-在这个任务上训练就意味着用 RF-DETR。默认情况下，训练是从一个已发布的 `-obb` 检查点继续的。从检测权重起步是一次刻意的迁移：那些权重不预测角度，传入 `task=obb` 才是授权这次替换的动作。和这个家族的其他任务一样，把 `lr0` 保持在 `1e-4` 或更低。RT-DETRv2 的旋转框检查点无法微调；要么照原样使用，要么在你自己的标注上训练一个 RF-DETR 模型。数据集、数据增强、多卡训练和日志器见[训练](/docs/train)。
+RF-DETR 训练默认从已发布的 `-obb` 检查点继续。从检测权重开始则是有意的迁移：这些权重不预测角度，传入 `task=obb` 才会授权替换。与这个家族的其他任务一样，将 `lr0` 保持在 `1e-4` 或更低。RT-DETRv2 的旋转框检查点无法微调；请直接使用，或用自己的标签训练 RF-DETR。数据集、数据增强、多卡训练和日志记录器见[训练](/docs/train)。
+
+YOLO-NAS OBB 使用旋转分配与损失函数、翻转/HSV 数据增强，默认 `amp=False`。它通过 `metrics/mAP50-95(OBB)` 选择检查点。
 
 ## 验证
 

@@ -16,7 +16,7 @@ keywords:
   - entrenar modelo de segmentación
   - mIoU
   - biblioteca de segmentación MIT
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -124,7 +124,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: 44b92d8ba6062f04
+source_hash: f642c33d64f6878c
 ---
 
 ## Definición
@@ -148,7 +148,7 @@ excluye de la loss y de las métricas, y `.classes` la deja fuera.
 
 ## Modelos
 
-Tres familias entrenan y predicen:
+Las familias entrenables incluyen:
 [SegFormer](/docs/models/segformer),
 [LingBot-Vision](/docs/models/lingbot-vision) y
 [DINOv2](/docs/models/dinov2). SegFormer y LingBot-Vision funcionan con el
@@ -168,6 +168,8 @@ publicados vienen de datasets cuyos espacios de etiquetas tienen poco en común,
 las 150 clases de ADE20K frente a las 19 de Cityscapes entre ellos, así que el
 `names` de un checkpoint es lo que te dice qué puede etiquetar, y dos
 checkpoints solo son comparables cuando se entrenaron con el mismo.
+
+[PP-LiteSeg](/docs/models/ppliteseg) y [U-Net](/docs/models/unet) son familias semánticas entrenables. U-Net no tiene actualmente una conversión alojada verificada.
 
 ## Predicción
 
@@ -241,6 +243,8 @@ validación lanzan un `ValueError` antes de arrancar cuando `imgsz` no divide
 exacto. El divisor es 32 para SegFormer, 16 para LingBot-Vision y EoMT, 14 para
 DINOv2, y 8 para FCN y PIDNet. Consulta [entrenamiento](/docs/train) para
 datasets, aumento de datos, multi-GPU y loggers.
+
+Los datasets semánticos aceptan lienzos `(height, width)`. PP-LiteSeg y U-Net distinguen los recortes de entrenamiento de los rectángulos de evaluación. El muestreo con reescalado y recorte rellena las regiones ausentes con la etiqueta de ignorar; se aplican las transformaciones fotométricas de la familia cuando están configuradas.
 
 ## Validación
 

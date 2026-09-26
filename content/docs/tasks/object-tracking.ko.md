@@ -16,7 +16,7 @@ keywords:
   - 딥 오코르트
   - 트랙 아이디
   - 레이드 추적
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -71,7 +71,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: f1fa7dcf60597d6b
+source_hash: "384ee3d6a05190aa"
 ---
 
 ## 정의
@@ -110,7 +110,11 @@ LibreYOLO의 모델 계층 중 두 개도 이를 거부합니다. `LibreSAM`를 
 
 트래커 설정은 두 가지 방법 중 하나로 이루어집니다. 구성 인스턴스를 `tracker_config=`에 전달하면, 해당 타입이 트래커를 선택하여 `tracker=`는 불필요해집니다. 또는 필드를 키워드 인수로 전달하고 `track()`가 지정한 트래커용 구성을 생성하도록 할 수 있습니다. 알 수 없는 키는 조용히 적용되지 않고 경고를 표시합니다. 어느 쪽이든, 일치하는 키가 명시적으로 설정되면 `track_conf`는 무시됩니다.
 
-나머지 인수는 예측을 반영합니다: `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show`, `save` 및 `output_path`. 소스는 비디오 파일 경로입니다. 결과 처리는 [prediction](/docs/predict)를 참조하십시오.
+나머지 인수는 예측과 동일합니다. `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show`, 그리고 `output_path`와 함께 쓰는 `save`입니다. 소스는 비디오 또는 순서가 있는 이미지 시퀀스일 수 있습니다. 결과 처리는 [예측](/docs/predict)을 참조하십시오.
+
+이미지, 파일 이름순으로 정렬된 폴더, 리스트, 튜플, 지연 이미지 이터레이터를 연속 프레임으로 사용할 수 있습니다. `fps=30.0`은 시간 간격을 지정하며 `color_format="auto"`는 입력 해석 방식을 선택합니다. `vid_stride`는 유지되는 프레임 속도를 `fps / vid_stride`로 줄입니다.
+
+`tracker=`로 사용자 정의 추적기 인스턴스를 전달합니다. 인스턴스는 `libreyolo.tracking.Tracker`의 `reset()`과 `update(results, image=None)`을 구현합니다. 실행 시 한 번 초기화하고 원본 RGB PIL 프레임을 전달합니다. 반환하는 `track_id`는 바운딩 박스와 같은 백엔드/장치에 있고 순서가 일치하는 1차원 정수 배열 또는 텐서여야 합니다. 사용자 정의 인스턴스의 기본값은 `track_conf=0.25`이며, 추적기 키워드 인수나 `tracker_config`를 전달하는 대신 인스턴스를 직접 설정합니다.
 
 ## 학습
 

@@ -15,7 +15,7 @@ keywords:
   - 올브이2
   - 옴뎃 터보
   - 텍스트 프롬프트 탐지
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -56,7 +56,7 @@ snippets:
         # 토큰 점수. 설정하지 않으면 둘 다 기본값은 0.25입니다. 오직 그라운딩만
         # DINO는 text_threshold를 허용합니다; 다른 것들은 오류를 발생시킵니다.
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 17197cf4d80f3d6f
+source_hash: "10f41b40f357b037"
 ---
 
 ## 정의
@@ -91,6 +91,8 @@ pip install "libreyolo[openvocab]"
 
 두 번째 계층도 텍스트 어휘를 사용합니다: `LibreVLM()`는 [Qwen3-VL](/docs/models/qwen3-vl)과 [Florence-2](/docs/models/florence-2)와 같은 생성형 비전-언어 모델을 로드하고, 그들의 출력을 동일한 `Results`로 변환합니다. 그것은 `set_classes()` 표면을 공유합니다. 차이점은 박스를 생성하는 방식입니다: 이 페이지의 계열들은 점수를 직접 출력하는 판별 탐지기인 반면, VLM 계층은 박스를 생성합니다.
 
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision)은 `LibreVLM` 탐지 선택지를 확장합니다. [Molmo2](/docs/models/molmo2)는 점을 반환합니다. 탐지 어휘 대신 지시문으로 클릭 위치를 찾는 쿼리에는 [LibreGround](/docs/reference/ground-api)를 사용합니다.
+
 ## 예측
 
 <code-tabs name="predict" />
@@ -106,6 +108,8 @@ pip install "libreyolo[openvocab]"
 ## 학습
 
 이 계층에는 LibreYOLO 안에서 학습하는 계열이 없습니다. `train()`가 올립니다: 업스트림을 파인튜닝하고 결과 가중치를 로드합니다. `set_classes()`에 전달된 어휘만이 로드된 모델이 탐지하는 것을 변경하는 유일한 설정입니다.
+
+Qwen3-VL에는 별도의 [VLM 파인튜닝](/docs/train/vlm-fine-tuning) 경로가 있습니다. 이것이 네 가지 `LibreOpenVocab` 어댑터에 학습 지원을 추가하지는 않습니다.
 
 ## 검증
 

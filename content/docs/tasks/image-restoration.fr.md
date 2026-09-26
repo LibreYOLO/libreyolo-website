@@ -16,7 +16,7 @@ keywords:
   - super résolution image python
   - modèle défloutage
   - validation PSNR SSIM
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Agrandir une image
@@ -115,7 +115,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         result.restored.save("denoised.png")
-source_hash: 9dc81cadb3ebf18b
+source_hash: c1c1270071053132
 ---
 
 ## Définition
@@ -137,8 +137,7 @@ qu'une photo annotée.
 
 ## Modèles
 
-Trois familles couvrent `restore`, réparties selon la dégradation qu'elles
-annulent.
+Les familles de restauration ciblent différentes dégradations d'image.
 
 [NAFNet](/docs/models/nafnet) est le modèle de débruitage et la seule famille de
 restauration que LibreYOLO peut entraîner. Son architecture remplace les
@@ -155,6 +154,8 @@ que sur le seul sous-échantillonnage bicubique. Ils couvrent les facteurs 4x,
 Transformer. Ses trois tailles couvrent le générateur léger officiel et deux
 générateurs pour les images réelles.
 
+[QuickSRNet](/docs/models/quicksrnet) fournit un agrandissement 2x, [DDColor](/docs/models/ddcolor) la colorisation, [HVI-CIDNet](/docs/models/hvi-cidnet) l'amélioration des images en faible luminosité et [LaMa](/docs/models/lama) l'inpainting. Ces quatre familles ne prennent pas en charge l'entraînement.
+
 ## Prédire
 
 Les poids sont téléchargés depuis Hugging Face à la première utilisation et mis
@@ -162,7 +163,7 @@ en cache localement.
 
 <code-tabs name="predict" />
 
-La restauration s'exécute à la propre résolution de l'image source plutôt que
+NAFNet, Real-ESRGAN et SwinIR s'exécutent à la propre résolution de l'image source plutôt que
 sur un canevas réseau fixe. Elle ajoute seulement le remplissage nécessaire au
 facteur de sous-échantillonnage du réseau. Le temps et la mémoire évoluent donc
 avec le nombre de pixels de l'entrée. `tile` divise la propagation en tuiles qui
@@ -170,6 +171,8 @@ se chevauchent et fusionne les raccords. `tile_pad` est la marge ajoutée autour
 de chaque tuile avant de la recadrer. Tous deux sont des arguments nommés Python.
 Consultez la page [prédiction](/docs/predict) pour les sources, le streaming et
 la gestion des résultats.
+
+LaMa exige un `mask=` pour une image unique. HVI-CIDNet expose `gamma`, `saturation` et `intensity`, chacun à 1.0 par défaut. Les contraintes de canevas et d'export propres à chaque modèle figurent sur sa page.
 
 ## Format du dataset
 

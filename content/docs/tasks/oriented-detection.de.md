@@ -17,7 +17,7 @@ keywords:
   - DOTA Datensatz
   - Objekterkennung Luftbilder
   - Rotated IoU
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -183,7 +183,7 @@ snippets:
 
 
         print(result.obb.xywhr)
-source_hash: 0d605d956f3ea025
+source_hash: "dddb69a3bd3541a8"
 ---
 
 ## Definition
@@ -196,15 +196,17 @@ Die orientierte Objekterkennung ergänzt eine Erkennung um eine Zahl: den Winkel
 
 ## Modelle
 
-Zwei Familien unterstützen diese Aufgabe. Die Auswahl hängt davon ab, ob du trainieren möchtest.
+Drei Familien decken diese Aufgabe ab.
 
-[RF-DETR](/docs/models/rf-detr) unterstützt Training. Es sagt orientierte Boxen vorher, trainiert, validiert und exportiert sie und stellt veröffentlichte orientierte Checkpoints in vier Größen bereit: n, s, m und l. Die Familie benötigt das eigene Extra `pip install "libreyolo[rfdetr]"`. Lizenz und Herkunft der Gewichte stehen auf ihrer Modellseite.
+[RF-DETR](/docs/models/rf-detr) unterstützt Training. Es unterstützt Vorhersage, Training, Validierung und Export orientierter Boxen und bietet veröffentlichte orientierte Checkpoints in vier Größen: n, s, m und l. Es benötigt sein eigenes Extra, `pip install "libreyolo[rfdetr]"`; seine Modellseite enthält die Gewichtslizenz und Herkunft.
 
 Lies vor der Planung mit diesen Checkpoints den folgenden Abschnitt über ihre tatsächlichen Vorhersagen.
 
 [RT-DETRv2](/docs/models/rt-detr) bietet Gewichte für Luftbilder. Die Checkpoints `LibreRTDETRv2n-obb.pt` bis `LibreRTDETRv2x-obb.pt` sind die offiziellen, in das LibreYOLO-Format konvertierten Single-Scale-Checkpoints für DOTA v1.0. Sie decken die 15 DOTA-Klassen bei 1024 px ab. Neben dem Basispaket ist kein Extra erforderlich. Der orientierte Graph wird anhand der Tensoren des Checkpoints erkannt. Vorhersage, Validierung sowie Export nach ONNX und TorchScript werden unterstützt. Training wird nicht unterstützt. Die orientierte Aufgabe ist bei dieser Familie nur für die Inferenz vorgesehen, `train()` löst einen Fehler aus und eine Übertragung aus den Erkennungsgewichten mit anderem Backbone ist nicht möglich. Tracking und Test-Time Augmentation sind für orientierte Boxen ebenfalls nicht verfügbar.
 
-Kurz gesagt: Verwende RT-DETRv2 für fertige DOTA-Kategorien und RF-DETR für eigene orientierte Labels.
+Wähle den Labelsatz des Checkpoints und die Trainingsunterstützung passend zu deinem Datensatz.
+
+[YOLO-NAS](/docs/models/yolo-nas) unterstützt ebenfalls OBB-Training und -Inferenz. Seine vortrainierten Gewichte behalten die nichtkommerziellen Upstream-Bedingungen.
 
 ## Vorhersage
 
@@ -212,7 +214,7 @@ Die Gewichte werden bei der ersten Verwendung von Hugging Face heruntergeladen u
 
 <code-tabs name="predict" />
 
-Informiere dich vor der Ausführung über die veröffentlichten RF-DETR-Checkpoints. Obwohl DOTA der Referenzbenchmark dieser Aufgabe ist, wurden diese Gewichte nicht darauf trainiert. Alle vier wurden mit RF-DETR-Erkennungsgewichten initialisiert und auf einem einzigen Roboflow-Universe-Datensatz mit UAV-Aufnahmen feinabgestimmt. Er enthält sechs Fahrzeugklassen: bike, bus, car, other_vehicle, taxi und truck. Die Modellkarten bezeichnen sie als Entwicklungsgewichte, die während der Prüfung der Unterstützung für orientiertes Training entstanden. Sie sollen nicht als produktionsreife oder offizielle Benchmark-Gewichte verstanden werden.
+Prüfe vor der Verwendung, was die veröffentlichten RF-DETR-Checkpoints enthalten. Obwohl DOTA der Referenzbenchmark für diese Aufgabe ist, wurden diese Gewichte nicht darauf trainiert. Alle vier wurden mit RF-DETR-Erkennungsgewichten initialisiert und auf einem einzelnen UAV-Videodatensatz mit sechs Fahrzeugklassen nachtrainiert: bike, bus, car, other_vehicle, taxi und truck. Ihre Modellkarten bezeichnen sie als Entwicklungsgewichte, die zur Validierung der Unterstützung für orientiertes Training entstanden sind, und ausdrücklich nicht als Produktionsgewichte oder offizielle Benchmarkgewichte.
 
 In der Praxis sind sie ein funktionierender Ausgangspunkt für orientierte Boxen um Fahrzeuge aus der Vogelperspektive und zur Prüfung einer vollständigen Pipeline. Jede andere Domäne erfordert Training mit eigenen orientierten Labels. Für die bekannten Luftbildkategorien von DOTA wurden tatsächlich die RT-DETRv2-Checkpoints auf diesen Daten trainiert. `conf` und `max_det` formen die Ausgabe wie bei der Objekterkennung. Unter [Vorhersage](/docs/predict) findest du Informationen zu Quellen, Streaming und Ergebnisverarbeitung.
 
@@ -260,7 +262,9 @@ Der kanonische Zeilenparser heißt `libreyolo.data.parse_yolo_obb_label_line`.
 
 <code-tabs name="train" />
 
-Training für diese Aufgabe bedeutet RF-DETR. Standardmäßig wird das Training aus einem veröffentlichten `-obb`-Checkpoint fortgesetzt. Der Start mit Erkennungsgewichten ist eine bewusste Übertragung. Diese Gewichte sagen keinen Winkel vorher und erst `task=obb` autorisiert den Austausch. Halte `lr0` wie bei den anderen Aufgaben der Familie bei höchstens `1e-4`. Die orientierten Checkpoints von RT-DETRv2 lassen sich nicht feinabstimmen. Verwende sie unverändert oder trainiere ein RF-DETR-Modell mit eigenen Labels. Unter [Training](/docs/train) findest du Informationen zu Datensätzen, Augmentation, Multi-GPU und Loggern.
+RF-DETR setzt das Training standardmäßig mit einem veröffentlichten `-obb`-Checkpoint fort. Der Start mit Erkennungsgewichten ist ein bewusster Transfer: Diese Gewichte sagen keinen Winkel vorher, und `task=obb` erlaubt den Wechsel. Halte `lr0` wie bei den anderen Aufgaben der Familie bei höchstens `1e-4`. Die orientierten Checkpoints von RT-DETRv2 lassen sich nicht nachtrainieren; verwende sie unverändert oder trainiere ein RF-DETR-Modell mit deinen eigenen Labels. Siehe [Training](/docs/train) für Datensätze, Augmentierung, Multi-GPU und Logger.
+
+YOLO-NAS OBB verwendet gedrehte Zuordnung und Losses, Spiegelungs-/HSV-Augmentierung sowie standardmäßig `amp=False`. Es wählt Checkpoints anhand von `metrics/mAP50-95(OBB)`.
 
 ## Validierung
 

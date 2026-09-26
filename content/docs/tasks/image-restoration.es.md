@@ -17,7 +17,7 @@ keywords:
   - escalar imagen sin perder calidad
   - modelo para quitar desenfoque
   - validación PSNR SSIM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Escalar una imagen
@@ -121,7 +121,7 @@ snippets:
 
 
         result.restored.save("denoised.png")
-source_hash: 9dc81cadb3ebf18b
+source_hash: c1c1270071053132
 ---
 
 ## Definición
@@ -142,7 +142,7 @@ escribe directamente la imagen restaurada en lugar de una foto anotada.
 
 ## Modelos
 
-Tres familias sirven `restore`, repartidas según la degradación que deshacen.
+Las familias de restauración abordan distintas degradaciones de imagen.
 
 [NAFNet](/docs/models/nafnet) es el modelo de eliminación de ruido, y la única
 familia de restauración que LibreYOLO puede entrenar. Su arquitectura sustituye
@@ -159,13 +159,15 @@ para menor latencia.
 tres tamaños que cubren el generador ligero oficial y dos generadores para
 imágenes reales.
 
+[QuickSRNet](/docs/models/quicksrnet) proporciona escalado 2x; [DDColor](/docs/models/ddcolor), colorización; [HVI-CIDNet](/docs/models/hvi-cidnet), mejora con poca luz; y [LaMa](/docs/models/lama), inpainting. Estas cuatro familias no soportan entrenamiento.
+
 ## Predicción
 
 Los pesos se descargan de Hugging Face en el primer uso y se cachean en local.
 
 <code-tabs name="predict" />
 
-La restauración se ejecuta a la resolución propia de la imagen de origen y no
+NAFNet, Real-ESRGAN y SwinIR se ejecutan a la resolución propia de la imagen de origen y no
 sobre un lienzo de red fijo, con padding solo hasta el factor de submuestreo de
 la red, así que tanto el tiempo como la memoria escalan con el número de píxeles
 de tu entrada. `tile` divide el forward pass en tiles solapados y funde las
@@ -173,6 +175,8 @@ costuras al recomponerlos, y `tile_pad` es el halo que se añade alrededor de
 cada tile antes de recortarlo de nuevo; ambos son argumentos de palabra clave de
 Python. Consulta [predicción](/docs/predict) para fuentes, streaming y manejo de
 resultados.
+
+LaMa requiere un `mask=` para una sola imagen. HVI-CIDNet expone `gamma`, `saturation` e `intensity`, cada uno con un valor por defecto de 1.0. Las restricciones de lienzo y exportación de cada modelo están en su página.
 
 ## Formato del dataset
 

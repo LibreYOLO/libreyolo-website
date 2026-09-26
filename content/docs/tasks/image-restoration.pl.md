@@ -16,7 +16,7 @@ keywords:
   - super resolution python
   - model usuwania rozmycia
   - walidacja PSNR SSIM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Powiększenie obrazu
@@ -120,7 +120,7 @@ snippets:
 
 
         result.restored.save("denoised.png")
-source_hash: 9dc81cadb3ebf18b
+source_hash: c1c1270071053132
 ---
 
 ## Definicja
@@ -140,7 +140,7 @@ bezpośrednio odtworzony obraz zamiast zdjęcia z adnotacjami.
 
 ## Modele
 
-Zadanie `restore` obsługują trzy rodziny podzielone według usuwanej degradacji.
+Rodziny rekonstrukcji obsługują różne rodzaje degradacji obrazów.
 
 [NAFNet](/docs/models/nafnet) jest modelem odszumiającym i jedyną rodziną
 odtwarzania, którą LibreYOLO może trenować. Jego architektura zastępuje
@@ -158,6 +158,8 @@ opóźnienia.
 Transformer. Występuje w trzech rozmiarach obejmujących oficjalny lekki
 generator i dwa generatory do rzeczywistych obrazów.
 
+[QuickSRNet](/docs/models/quicksrnet) zapewnia powiększanie 2x, [DDColor](/docs/models/ddcolor) koloryzację, [HVI-CIDNet](/docs/models/hvi-cidnet) poprawę obrazów przy słabym oświetleniu, a [LaMa](/docs/models/lama) uzupełnianie brakujących obszarów. Te cztery rodziny nie obsługują trenowania.
+
 ## Predykcja
 
 Przy pierwszym użyciu wagi są pobierane z Hugging Face i zapisywane w lokalnej
@@ -165,13 +167,9 @@ pamięci podręcznej.
 
 <code-tabs name="predict" />
 
-Odtwarzanie działa w rozdzielczości obrazu źródłowego, a nie na stałym płótnie
-sieci. Dopełnienie jest stosowane tylko do współczynnika próbkowania w dół
-sieci, dlatego czas i pamięć rosną wraz z liczbą pikseli wejściowych. `tile`
-dzieli przebieg forward na nakładające się kafelki i ponownie łączy ich szwy, a
-`tile_pad` jest obramowaniem dodawanym wokół każdego kafelka przed ponownym
-przycięciem. Oba są argumentami nazwanymi Pythona. Informacje o źródłach,
-streamingu i obsłudze wyników zawiera strona [predykcji](/docs/predict).
+NAFNet, Real-ESRGAN i SwinIR działają w rozdzielczości obrazu źródłowego, zamiast używać stałego obszaru wejściowego sieci. Uzupełniają go tylko do współczynnika zmniejszania rozdzielczości sieci, więc czas i pamięć rosną z liczbą pikseli wejścia. `tile` dzieli przebieg w przód na nakładające się kafelki i łączy ich krawędzie, a `tile_pad` określa margines dodawany wokół każdego kafelka przed ponownym przycięciem; oba są argumentami nazwanymi Pythona. Źródła, streaming i obsługę wyników opisano w sekcji [predykcji](/docs/predict).
+
+LaMa wymaga `mask=` dla pojedynczego obrazu. HVI-CIDNet udostępnia `gamma`, `saturation` i `intensity`, wszystkie domyślnie równe 1.0. Ograniczenia obszaru wejściowego i eksportu podano na stronach modeli.
 
 ## Format zbioru danych
 

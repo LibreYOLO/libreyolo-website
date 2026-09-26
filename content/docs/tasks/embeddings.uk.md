@@ -20,17 +20,8 @@ keywords:
   - clip embeddings
   - dinov2 embeddings
   - reid embeddings
-last_verified: 1.5.0
-verification: >-
-  Ключ задачі та псевдоніми звірено з libreyolo/tasks.py. Об'єкти даних
-  результатів звірено з класами Embeddings та Identities у
-  libreyolo/utils/results.py. API Gallery звірено з libreyolo/utils/gallery.py.
-  embed і _postprocess_embeddings звірено з libreyolo/models/base/model.py.
-  Підтримувані сімейства знайдено пошуком embed у SUPPORTED_TASKS у
-  libreyolo/models/**/model.py. Інтерфейс CLI звірено з
-  libreyolo/cli/__init__.py, libreyolo/cli/commands/special.py і
-  libreyolo/cli/commands/predict.py. Проєктні рішення взято з
-  docs/adr/0015-embed-generalization.md.
+last_verified: "1.6.0"
+verification: Ключ задачі та псевдоніми звірено з libreyolo/tasks.py. Об'єкти даних результатів звірено з класами Embeddings та Identities у libreyolo/utils/results.py. API Gallery звірено з libreyolo/utils/gallery.py. embed і _postprocess_embeddings звірено з libreyolo/models/base/model.py. Підтримувані сімейства знайдено пошуком embed у SUPPORTED_TASKS у libreyolo/models/**/model.py. Інтерфейс CLI звірено з libreyolo/cli/__init__.py, libreyolo/cli/commands/special.py і libreyolo/cli/commands/predict.py. Проєктні рішення взято з docs/adr/0015-embed-generalization.md.
 meta:
   - label: Ключ задачі
     value: embed
@@ -191,7 +182,7 @@ snippets:
 
         libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg
         --json
-source_hash: ffbaad5599035bc7
+source_hash: 3197bfe9a3d53756
 ---
 
 ## Визначення
@@ -229,8 +220,7 @@ source_hash: ffbaad5599035bc7
 
 ## Моделі
 
-Задачу виконують чотири сімейства, які чітко поділяються за тим, чи виконують
-вони спочатку локалізацію.
+Сімейства ембедингів відрізняються тим, що кодують: ціле зображення, кліп або виявлену ділянку.
 
 | Сімейство | Форма | Розмірність | Також підтримує |
 |---|---|---|---|
@@ -244,7 +234,7 @@ CLIP і SigLIP 2 зберігають `classify` як типову задачу,
 артефактом із двома вежами; окрема контрольна точка `-embed` з ідентичними
 вагами не публікується.
 
-`embed_text` існує лише в CLIP і SigLIP 2, двох сімействах із текстовою вежею.
+`embed_text` доступний у CLIP, SigLIP 2 і PE, які мають текстові гілки.
 DINOv2 її не має. Ембединг DINOv2 обходить голови семантичної сегментації та
 класифікації й читає кінцевий нормалізований токен CLS за розміру 224 пікселі;
 варіанти `n`, `s`, `m` і `l` мають спільний кодувальник DINOv2-S, тому всі
@@ -261,6 +251,8 @@ DINOv2 її не має. Ембединг DINOv2 обходить голови �
 у формі `(N_total, D)`, спричиняючи помилку, якщо рядки мають різні
 розмірності. Сімейство без `embed` у підтримуваних задачах спричиняє
 `NotImplementedError`.
+
+[PE](/docs/models/pe) підтримує ембединги зображень, тексту й скінченного відео з типовим `clip_frames=8`. [V-JEPA 2](/docs/models/vjepa2) і [LeVJEPA](/docs/models/levjepa) створюють ембединги кліпів і надають токени патчів через `embed_tokens()`. Сторінки моделей описують вибірку кліпів і обмеження експорту для безпосереднього запуску в середовищі виконання.
 
 ## Об'єкти даних результатів
 

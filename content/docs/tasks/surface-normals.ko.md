@@ -13,7 +13,7 @@ keywords:
   - 단안 기하학
   - 각도 오류 측정
   - 밀집한 정규 예측
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: 정상적인 필드를 예측하다
@@ -82,7 +82,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.data.shape)
-source_hash: d26d26d894b436ff
+source_hash: "b033fdf3a2210ce5"
 ---
 
 ## 정의
@@ -93,11 +93,13 @@ source_hash: d26d26d894b436ff
 
 ## 모델들
 
-두 계열이 `normal`를 제공합니다.
+다음 계열이 `normal`을 지원합니다.
 
-[MoGe-2](/docs/models/moge-2)는 전용 모델입니다: 세 가지 인코더 크기의 단일-포워드 단안 기하 모델입니다. LibreYOLO는 이러한 체크포인트를 자체 조직으로 복사하지 않습니다; 하나를 로드하면 고정된 리비전의 공식 저장소에서 일치하는 크기를 다운로드하고 기록된 SHA-256과 대조하여 검증합니다.
+[MoGe-2](/docs/models/moge-2)는 이 작업 전용 모델로, 세 가지 인코더 크기를 제공하며 한 번의 순전파로 단안 기하를 예측합니다. s와 l 크기는 LibreYOLO 미러를 사용하며 b는 업스트림에 유지됩니다.
 
 [LibreMODUS](/docs/models/libremodus)은 any-to-any 모델의 한 타겟으로 노멀을 생성하며, 입력으로 RGB 이미지 대신 깊이 맵을 사용할 수 있습니다. 이 모델은 `modus` 추가 요소와 사용자의 인증된 Hugging Face 계정이 필요하며, `val()`나 `export()`는 제공하지 않으므로 아래의 검증 및 내보내기 섹션에는 참여하지 않습니다.
+
+[Marigold V2](/docs/models/marigold-v2)도 표면 법선을 추정합니다. 기본 4비트 추론에는 CUDA와 `marigold` 추가 패키지가 필요하며, 내보내기는 지원하지 않습니다.
 
 ## 예측
 
@@ -136,7 +138,7 @@ names: {0: normal}
 
 ## 학습
 
-어느 정상 계열도 학습 실행을 가지고 있지 않습니다: `train()`는 둘 다에서 `NotImplementedError`를 발생시킵니다. MoGe-2의 페이지는 예측, 검증 및 내보내기를 위한 고정된 공식 체크포인트를 가리킵니다.
+이 법선 추정 계열에는 학습 구현이 없습니다. MoGe-2 페이지는 예측, 검증, 내보내기에 사용하는 고정된 공식 체크포인트를 안내합니다.
 
 ## 검증
 

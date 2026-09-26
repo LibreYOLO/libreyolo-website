@@ -16,7 +16,7 @@ keywords:
   - super resolusi gambar python
   - model deblurring
   - validasi PSNR SSIM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Meningkatkan resolusi gambar
@@ -99,7 +99,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         result.restored.save("denoised.png")
-source_hash: 9dc81cadb3ebf18b
+source_hash: c1c1270071053132
 ---
 
 ## Definisi
@@ -119,7 +119,7 @@ secara langsung daripada foto yang diberi anotasi.
 
 ## Model
 
-Tiga keluarga melayani `restore`, dibagi menurut degradasi yang mereka batalkan.
+Family restorasi menangani jenis degradasi gambar yang berbeda.
 
 [NAFNet](/docs/models/nafnet) adalah denoiser, dan satu-satunya restore family
 LibreYOLO yang dapat dilatih. Arsitekturnya menggantikan aktivasi nonlinier dari
@@ -135,19 +135,17 @@ latensi.
 tiga ukuran mencakup generator ringan resmi dan dua dunia nyata
 generator.
 
+[QuickSRNet](/docs/models/quicksrnet) menyediakan pembesaran 2x, [DDColor](/docs/models/ddcolor) pewarnaan, [HVI-CIDNet](/docs/models/hvi-cidnet) peningkatan gambar kurang cahaya, dan [LaMa](/docs/models/lama) inpainting. Keempatnya tidak mendukung pelatihan.
+
 ## Prediksi
 
 Bobot diunduh dari Hugging Face saat penggunaan pertama dan disimpan secara lokal.
 
 <code-tabs name="predict" />
 
-Restorasi dijalankan pada resolusi gambar sumber itu sendiri daripada resolusi tetap
-kanvas jaringan, padding hanya pada faktor downsample jaringan, sehingga keduanya waktu
-dan memori meningkat seiring dengan jumlah piksel dari input Anda. `tile` membagi maju
-melewati ubin yang saling tumpang tindih dan menyatukan kembali jahitannya, dan `tile_pad`
-apakah halo ditambahkan di sekitar setiap ubin sebelum dipotong kembali; keduanya adalah
-Argumen kata kunci Python. Lihat [prediksi](/docs/predict) untuk sumber, streaming
-dan penanganan hasil.
+NAFNet, Real-ESRGAN, dan SwinIR berjalan pada resolusi asli gambar sumber, bukan kanvas jaringan tetap, dengan padding hanya sesuai faktor downsampling jaringan, sehingga waktu dan memori meningkat mengikuti jumlah piksel input. `tile` membagi forward pass menjadi tile yang tumpang tindih dan memadukan sambungannya, sedangkan `tile_pad` adalah area tambahan di sekitar setiap tile sebelum dipotong kembali; keduanya adalah argumen kata kunci Python. Lihat [prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
+
+LaMa memerlukan `mask=` untuk satu gambar. HVI-CIDNet menyediakan `gamma`, `saturation`, dan `intensity`, masing-masing default 1.0. Batasan kanvas dan ekspor tiap model ada di halamannya.
 
 ## Format dataset
 
@@ -227,5 +225,3 @@ ke ukuran patch internal kecil daripada resolusi kerja Anda. Per-format
 cakupan ada di setiap halaman model dan di
 [matriks ekspor penuh](/docs/reference/export-matrix). [Ekspor](/docs/export)
 mencantumkan argumen yang diterima setiap format.
-
-

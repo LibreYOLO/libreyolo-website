@@ -18,7 +18,7 @@ keywords:
   - owlv2
   - omdet turbo
   - rilevamento a vocabolario aperto
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -61,7 +61,7 @@ snippets:
         # entrambi valgono 0.25. Solo Grounding DINO accetta text_threshold;
         # gli altri sollevano un'eccezione.
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 17197cf4d80f3d6f
+source_hash: 10f41b40f357b037
 ---
 
 ## Definizione
@@ -137,6 +137,8 @@ ciò che produce i box: le famiglie di questa pagina sono rilevatori
 discriminativi che emettono punteggi direttamente, mentre la fascia VLM li
 genera.
 
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) e [North Micro Vision](/docs/models/northmicrovision) ampliano le opzioni di rilevamento di `LibreVLM`. [Molmo2](/docs/models/molmo2) restituisce punti. Usa [LibreGround](/docs/reference/ground-api) per query che trasformano istruzioni in clic invece di un vocabolario di rilevamento.
+
 ## Predizione
 
 <code-tabs name="predict" />
@@ -170,6 +172,8 @@ Nessuna famiglia di questa fascia si addestra dentro LibreYOLO. `train()` sollev
 un'eccezione: fai fine-tuning a monte e carica i pesi risultanti. Il vocabolario
 passato a `set_classes()` è l'unica impostazione che cambia cosa rileva un
 modello caricato.
+
+Qwen3-VL ha un percorso separato di [fine-tuning dei VLM](/docs/train/vlm-fine-tuning). Questo non aggiunge l'addestramento ai quattro adattatori `LibreOpenVocab`.
 
 ## Validazione
 

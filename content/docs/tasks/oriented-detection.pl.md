@@ -17,7 +17,7 @@ keywords:
   - zbiór danych DOTA
   - detekcja obiektów lotniczych
   - rotated IoU
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -179,7 +179,7 @@ snippets:
 
 
         print(result.obb.xywhr)
-source_hash: 0d605d956f3ea025
+source_hash: dddb69a3bd3541a8
 ---
 
 ## Definicja
@@ -209,14 +209,9 @@ wyrównaną do osi.
 
 ## Modele
 
-To zadanie obsługują dwie rodziny. Wybór zależy od tego, czy potrzebne jest
-trenowanie.
+To zadanie obsługują trzy rodziny.
 
-[RF-DETR](/docs/models/rf-detr) jest rodziną, którą można trenować. Przewiduje,
-trenuje, waliduje i eksportuje obrócone ramki oraz udostępnia opublikowane
-checkpointy obróconych ramek w czterech rozmiarach: n, s, m i l. Wymaga własnego
-dodatku `pip install "libreyolo[rfdetr]"`, a strona modelu zawiera informacje o
-licencji i pochodzeniu wag.
+[RF-DETR](/docs/models/rf-detr) obsługuje trenowanie. Przewiduje, trenuje, waliduje i eksportuje obrócone ramki oraz udostępnia checkpointy tego zadania w czterech rozmiarach: n, s, m i l. Wymaga własnego dodatku, `pip install "libreyolo[rfdetr]"`, a strona modelu podaje licencję wag i ich pochodzenie.
 
 Przed zaplanowaniem użycia tych checkpointów należy przeczytać poniższą sekcję,
 która wyjaśnia, co faktycznie przewidują.
@@ -232,8 +227,9 @@ tej rodzinie służy tylko do inferencji, `train()` zgłasza błąd i nie ma tra
 z wag detekcji, które używają innego backbone. Śledzenie i augmentacja w czasie
 testu również nie są dostępne dla obróconych ramek.
 
-Podsumowując, do gotowych klas DOTA służy RT-DETRv2, a do własnych etykiet
-obróconych ramek RF-DETR.
+Należy wybrać zestaw etykiet checkpointu i obsługę trenowania odpowiednie dla zbioru danych.
+
+[YOLO-NAS](/docs/models/yolo-nas) również obsługuje trenowanie i inferencję OBB. Jego wstępnie wytrenowane wagi zachowują niekomercyjne warunki projektu źródłowego.
 
 ## Predykcja
 
@@ -245,7 +241,7 @@ pamięci podręcznej.
 Przed uruchomieniem opublikowanych checkpointów RF-DETR warto wiedzieć, czego
 dotyczą. Choć DOTA jest referencyjnym benchmarkiem tego zadania, wagi te nie
 zostały na nim wytrenowane. Wszystkie cztery zainicjowano wagami detekcji RF-DETR
-i dostrojono na jednym zbiorze danych Roboflow Universe z nagraniami z dronów,
+i dostrojono na jednym zbiorze danych z nagraniami z dronów,
 obejmującym sześć klas pojazdów: bike, bus, car, other_vehicle, taxi i truck.
 Karty modeli opisują je jako wagi rozwojowe utworzone podczas walidacji obsługi
 trenowania obróconych ramek i zaznaczają, że nie należy ich traktować jako wag
@@ -320,14 +316,15 @@ Kanoniczny parser wiersza to `libreyolo.data.parse_yolo_obb_label_line`.
 
 <code-tabs name="train" />
 
-Trenowanie w tym zadaniu oznacza użycie RF-DETR. Domyślnie jest kontynuowane z
-opublikowanego checkpointu `-obb`. Rozpoczęcie od wag detekcji jest świadomym
+Trenowanie RF-DETR jest domyślnie kontynuowane z opublikowanego checkpointu `-obb`. Rozpoczęcie od wag detekcji jest świadomym
 transferem. Wagi te nie przewidują kąta, a przekazanie `task=obb` zezwala na
 zamianę. Wartość `lr0` należy utrzymać na poziomie `1e-4` lub niższym, podobnie
 jak w pozostałych zadaniach tej rodziny. Checkpointów obróconych ramek RT-DETRv2
 nie można dostrajać. Należy używać ich bez zmian lub wytrenować model RF-DETR na
 własnych etykietach. Informacje o zbiorach danych, augmentacji, wielu GPU i
 loggerach znajdują się w sekcji [trenowanie](/docs/train).
+
+YOLO-NAS OBB używa przypisywania i funkcji strat dla obróconych ramek, augmentacji odbiciami i HSV oraz domyślnie `amp=False`. Wybiera checkpointy według `metrics/mAP50-95(OBB)`.
 
 ## Walidacja
 
@@ -367,4 +364,3 @@ zwraca ten sam obiekt `Results`. Zakres formatów różni się między zadaniami
 tej samej rodzinie. Macierz na stronie modelu jest generowana ze zweryfikowanego
 zestawu i podaje przyczynę niedostępności celu. Formaty, ich dodatki i
 ograniczenia opisano w sekcji [eksport i wdrożenie](/docs/export).
-

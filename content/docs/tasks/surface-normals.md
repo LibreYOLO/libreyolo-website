@@ -4,7 +4,7 @@ seo_title: "Surface normal estimation in LibreYOLO"
 description: "Predict a dense surface-normal field from one image in LibreYOLO. Read the camera frame convention, validate angular error, and export a model."
 lead: "Surface-normal estimation predicts the direction each visible surface faces. LibreYOLO exposes it as the normal task, which returns a dense field of unit vectors on the original image canvas."
 keywords: [surface normal estimation python, normal map from image, monocular geometry, angular error metric, dense normal prediction]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Predict a normal field
@@ -93,19 +93,18 @@ stays empty, so `conf`, `iou` and `max_det` have no effect, and
 
 ## Models
 
-Two families serve `normal`.
+The following families serve `normal`.
 
 [MoGe-2](/docs/models/moge-2) is the dedicated one: a single-forward monocular
-geometry model in three encoder sizes. LibreYOLO does not copy these checkpoints
-into its own organization; loading one downloads the matching size from the
-official repositories at a pinned revision and verifies it against a recorded
-SHA-256.
+geometry model in three encoder sizes. Sizes s and l use LibreYOLO mirrors; b remains upstream.
 
 [LibreMODUS](/docs/models/libremodus) produces normals as one target of an
 any-to-any model, and can take a depth map rather than an RGB image as its
 input. It needs the `modus` extra and your own authenticated Hugging Face
 account, and it offers neither `val()` nor `export()`, so it does not take part
 in the validation and export sections below.
+
+[Marigold V2](/docs/models/marigold-v2) also estimates surface normals. Its default four-bit inference requires CUDA and the `marigold` extra; it does not export.
 
 ## Predict
 
@@ -154,8 +153,7 @@ decoded vector is valid. Invalid and padded target pixels are held internally as
 
 ## Train
 
-Neither normal family has a training implementation: `train()` raises
-`NotImplementedError` on both. MoGe-2's page points at its pinned official
+These normal-estimation families have no training implementation. MoGe-2's page points at its pinned official
 checkpoints for predict, validate and export.
 
 ## Validate

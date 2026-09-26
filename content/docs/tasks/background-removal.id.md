@@ -14,7 +14,7 @@ keywords:
   - segmentasi gambar dikotomis
   - potongan PNG transparan
   - matte alpha lembut
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Prediksi matte
@@ -87,7 +87,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: f7d88c74d9729268
+source_hash: 69fbc1d967b2d546
 ---
 
 ## Definisi
@@ -107,7 +107,7 @@ jadi `conf`, `iou` dan `max_det` tidak berpengaruh.
 
 ## Model
 
-Dua keluarga melayani `matte`, dan mereka berbagi jalur maju.
+BiRefNet dan FeyNobg memakai jalur forward yang sama.
 
 [BiRefNet](/docs/models/birefnet) adalah jaringan referensi bilateral task adalah]
 dibangun di sekitar, dipublikasikan di sini sebagai satu tingkat Swin-L checkpoint.
@@ -122,19 +122,17 @@ Keduanya memiliki lisensi dengan bobot yang berbeda. Keduanya tercantum di halam
 lisensi di repositori Hugging Face dari checkpoint tertentu adalah
 yang berwibawa.
 
+[BEN2](/docs/models/ben2) menambahkan penghapusan latar belakang dengan ukuran tetap 1024. [ViTMatte](/docs/models/vitmatte) menerima gambar dan `trimap=` tiga tingkat yang menandai piksel latar belakang, tidak diketahui, dan latar depan.
+
 ## Prediksi
 
 Bobot diunduh dari Hugging Face saat penggunaan pertama dan disimpan secara lokal.
 
 <code-tabs name="predict" />
 
-Kedua keluarga berjalan pada kanvas asli tetap 1024x1024 dan mengubah ukuran matte kembali
-ke gambar asli. Resolusi yang berbeda tidak didukung, karena Swin
-Tabel posisi relatif backbone terikat pada ukuran itu, dan ketidaksesuaian
-menginterpolasinya dengan buruk daripada meningkatkan. `Results.save()` didefinisikan untuk
-hanya matte results dan membutuhkan gambar sumber, yang dimuat ulang darinya
-`Results.path` kecuali Anda melewati satu. Lihat [prediksi](/docs/predict) untuk sumber,
-streaming dan penanganan hasil.
+BiRefNet dan FeyNobg berjalan pada kanvas asli tetap 1024x1024 dan mengubah ukuran matte kembali ke gambar asli. Resolusi lain tidak didukung, karena tabel posisi relatif backbone Swin terikat pada ukuran tersebut; ketidakcocokan menyebabkan interpolasi yang buruk, bukan galat. `Results.save()` memakai gambar sumber untuk potongan matte, yang dimuat ulang dari `Results.path` kecuali Anda memberikan gambar. Lihat [prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
+
+`Results.save()` menulis potongan matte sebagai RGBA. `plot()` merender gambar untuk diperiksa. BEN2 mendukung prediksi native dalam batch; ViTMatte memerlukan panduan untuk satu gambar.
 
 ## Format dataset
 
@@ -170,10 +168,7 @@ kontrak.
 
 ## Kereta
 
-Tidak ada matte family yang memiliki implementasi pelatihan: `train()` memunculkan
-`NotImplementedError` di kedua-duanya, dan dukungan matte mencakup prediksi, validasi
-dan hanya ekspor. Setiap halaman model menyebutkan proyek hulu yang mengirimkan pelatihan
-kode dan skrip konversi yang mengembalikan checkpoint.
+Family matte ini tidak memiliki implementasi pelatihan. Dukungan ekspor berbeda menurut family; ViTMatte tidak mendukung ekspor. Setiap halaman model menyebut proyek upstream yang menyediakan kode pelatihan dan skrip konversi untuk membawa checkpoint kembali.
 
 ## Validasi
 
@@ -201,5 +196,3 @@ belum melewati batang paritas yang sama, dan format yang tersisa tidak tersedia.
 Cakupan per format ada di [BiRefNet](/docs/models/birefnet) dan
 halaman [FeyNobg](/docs/models/feynobg) dan di
 [matriks ekspor penuh](/docs/reference/export-matrix).
-
-

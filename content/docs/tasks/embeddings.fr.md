@@ -21,7 +21,7 @@ keywords:
   - embeddings clip
   - embeddings dinov2
   - embeddings reid
-last_verified: 1.5.0
+last_verified: "1.6.0"
 verification: >-
   Clé de tâche et alias lus dans libreyolo/tasks.py. Données de résultat issues
   des classes Embeddings et Identities dans libreyolo/utils/results.py. API
@@ -187,7 +187,7 @@ snippets:
 
         libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg
         --json
-source_hash: ffbaad5599035bc7
+source_hash: 3197bfe9a3d53756
 ---
 
 ## Définition
@@ -226,8 +226,7 @@ La clé de tâche canonique est `embed`. `embedding`, `embeddings`,
 
 ## Modèles
 
-Quatre familles prennent en charge cette tâche et se répartissent nettement
-selon qu'elles localisent ou non quelque chose au préalable.
+Les familles d'embeddings diffèrent selon qu'elles encodent une image entière, un clip ou une région détectée.
 
 | Famille | Forme | Dimension | Prend aussi en charge |
 |---|---|---|---|
@@ -241,8 +240,7 @@ demander `task="embed"`. Leur checkpoint `-cls` existant est l'artefact partagé
 à deux tours ; aucun checkpoint `-embed` en double n'est publié pour des poids
 identiques.
 
-`embed_text` n'existe que sur CLIP et SigLIP 2, les deux familles dotées d'une
-tour de texte. DINOv2 n'en possède pas. L'embedding DINOv2 contourne les têtes
+`embed_text` est disponible sur CLIP, SigLIP 2 et PE, qui possèdent des tours de texte. DINOv2 n'en possède pas. L'embedding DINOv2 contourne les têtes
 de segmentation sémantique et de classification et lit le token CLS final
 normalisé à 224 pixels ; les variantes `n`, `s`, `m` et `l` utilisent toutes
 l'encodeur DINOv2-S, elles renvoient donc toutes `D = 384`.
@@ -258,6 +256,8 @@ déclarent uniquement `classify` et ne prennent pas cette tâche en charge.
 float32 CPU `(N_total, D)`, avec une erreur si les lignes ont des dimensions
 différentes. Une famille dont les tâches prises en charge ne contiennent pas
 `embed` lève `NotImplementedError`.
+
+[PE](/docs/models/pe) prend en charge les embeddings d'images, de texte et de vidéos finies avec `clip_frames=8` par défaut. [V-JEPA 2](/docs/models/vjepa2) et [LeVJEPA](/docs/models/levjepa) produisent des embeddings de clips et exposent les tokens de patches via `embed_tokens()`. Leurs pages décrivent l'échantillonnage des clips et les contraintes d'export pour une exécution directe dans le runtime.
 
 ## Données de résultat
 

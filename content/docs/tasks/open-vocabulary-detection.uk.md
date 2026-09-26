@@ -18,7 +18,7 @@ keywords:
   - OWLv2
   - OMDet-Turbo
   - виявлення за текстовою підказкою
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -74,7 +74,7 @@ snippets:
         # Лише Grounding DINO приймає text_threshold; інші спричиняють помилку.
 
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 17197cf4d80f3d6f
+source_hash: 10f41b40f357b037
 ---
 
 ## Визначення
@@ -148,6 +148,8 @@ pip install "libreyolo[openvocab]"
 дискримінативними детекторами, які безпосередньо видають оцінки, тоді як
 рівень VLM генерує їх.
 
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) і [North Micro Vision](/docs/models/northmicrovision) розширюють вибір детекторів `LibreVLM`. [Molmo2](/docs/models/molmo2) повертає точки. Для запитів клацання за інструкцією замість словника виявлення використовуйте [LibreGround](/docs/reference/ground-api).
+
 ## Передбачення
 
 <code-tabs name="predict" />
@@ -182,6 +184,8 @@ pip install "libreyolo[openvocab]"
 переданий до `set_classes()`, є єдиним налаштуванням, яке змінює об'єкти,
 що виявляє завантажена модель.
 
+Qwen3-VL має окремий шлях [донавчання VLM](/docs/train/vlm-fine-tuning). Це не додає навчання чотирьом адаптерам `LibreOpenVocab`.
+
 ## Валідація
 
 Для цього рівня немає валідатора, і `val()` спричиняє помилку. Для
@@ -193,4 +197,3 @@ pip install "libreyolo[openvocab]"
 
 Експорт не підтримується на цьому рівні, і `export()` спричиняє помилку.
 Ці моделі працюють через `predict()` у PyTorch.
-

@@ -2,14 +2,12 @@
 title: Theo dõi đối tượng
 seo_title: Theo dõi đối tượng trong LibreYOLO
 description: >-
-  Theo dõi đối tượng qua các frame video trong LibreYOLO bằng ByteTrack,
-  BoT-SORT, OC-SORT hoặc Deep OC-SORT, trên mọi mô hình phát hiện, phân đoạn
-  hoặc tư thế.
+  Theo dõi đối tượng qua các frame video trong LibreYOLO bằng ByteTrack, BoT-SORT, OC-SORT hoặc Deep OC-SORT,
+  trên mọi mô hình phát hiện, phân đoạn hoặc tư thế.
 lead: >-
-  Theo dõi gán định danh ổn định cho từng kết quả phát hiện qua các frame video.
-  LibreYOLO không biểu diễn đây là tác vụ có trọng số riêng: đó là chế độ dự
-  đoán model.track(), chạy tracker đã chọn trên đầu ra theo từng frame của mô
-  hình phát hiện, phân đoạn hoặc tư thế.
+  Theo dõi gán định danh ổn định cho từng kết quả phát hiện qua các frame video. LibreYOLO không biểu diễn đây
+  là tác vụ có trọng số riêng: đó là chế độ dự đoán model.track(), chạy tracker đã chọn trên đầu ra theo từng
+  frame của mô hình phát hiện, phân đoạn hoặc tư thế.
 keywords:
   - theo dõi đối tượng python
   - multi object tracking
@@ -19,7 +17,7 @@ keywords:
   - deep ocsort
   - track id
   - reid tracking
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -55,29 +53,21 @@ snippets:
             pass
     - label: Điều chỉnh tracker
       language: python
-      code: >
+      code: |
         from libreyolo import BoTSortConfig, LibreYOLO
-
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-
         # Kiểu cấu hình chọn tracker, vì vậy tracker= là dư thừa ở đây.
-
         config = BoTSortConfig(track_buffer=60, frame_rate=25, enable_cmc=False)
-
         for result in model.track("video.mp4", tracker_config=config):
             print(result.track_id)
 
-        # Hoặc truyền cùng các trường dưới dạng đối số keyword để track() tự
-        dựng.
-
-        for result in model.track("video.mp4", tracker="botsort",
-        track_buffer=60):
+        # Hoặc truyền cùng các trường dưới dạng đối số keyword để track() tự dựng.
+        for result in model.track("video.mp4", tracker="botsort", track_buffer=60):
             print(result.track_id)
-source_hash: f1fa7dcf60597d6b
+source_hash: 384ee3d6a05190aa
 ---
-
 ## Định nghĩa
 
 Theo dõi không phải một trong các key tác vụ của LibreYOLO và không có
@@ -160,9 +150,11 @@ Hoặc truyền các trường dưới dạng đối số keyword và để `tra
 cho tracker đã nêu; key không xác định sẽ cảnh báo thay vì được âm thầm áp dụng.
 Theo cả hai cách, `track_conf` bị bỏ qua khi key tương ứng được đặt tường minh.
 
-Các đối số còn lại giống dự đoán: `iou`, `imgsz`, `classes`, `max_det`,
-`vid_stride`, `show` và `save` với `output_path`. Nguồn là đường dẫn tệp video.
-Xem [dự đoán](/docs/predict) để biết cách xử lý kết quả.
+Các tham số còn lại giống dự đoán: `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show` và `save` cùng `output_path`. Nguồn có thể là video hoặc chuỗi ảnh có thứ tự. Xem [dự đoán](/docs/predict) để biết cách xử lý kết quả.
+
+Ảnh, thư mục sắp theo tên tệp, danh sách, tuple và iterator ảnh lười có thể cung cấp các khung hình liên tiếp. `fps=30.0` cung cấp thời gian của chúng và `color_format="auto"` chọn cách diễn giải đầu vào. `vid_stride` giảm tốc độ giữ lại xuống `fps / vid_stride`.
+
+Truyền đối tượng tracker tùy chỉnh qua `tracker=`. Nó triển khai `reset()` và `update(results, image=None)` từ `libreyolo.tracking.Tracker`. Mỗi lần chạy đặt lại nó một lần và truyền khung hình PIL RGB gốc. `track_id` trả về phải là mảng hoặc tensor số nguyên một chiều, tương ứng với bounding box trên cùng backend/thiết bị. Đối tượng tùy chỉnh mặc định dùng `track_conf=0.25`; cấu hình trực tiếp đối tượng thay vì truyền các kwargs của tracker hoặc `tracker_config`.
 
 ## Huấn luyện
 

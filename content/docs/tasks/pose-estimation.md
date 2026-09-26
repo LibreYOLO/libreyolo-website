@@ -4,7 +4,7 @@ seo_title: "Pose estimation in LibreYOLO"
 description: "Predict keypoints per instance in LibreYOLO: the families that serve the task, the label format, and the predict, train, validate and export calls."
 lead: "Pose estimation locates each instance and returns an ordered set of named keypoints for it, so the output carries the object's internal structure rather than only its extent. The task key is pose."
 keywords: [pose estimation python, keypoint detection, human pose model, COCO keypoints, OKS mAP, train pose model]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -149,14 +149,12 @@ Three families both train and predict:
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) and
 [YOLO-NAS](/docs/models/yolo-nas), all one-stage. RF-DETR needs its own extra,
 `pip install "libreyolo[rfdetr]"`. RF-DETR and EdgeCrafter ship published pose
-checkpoints and both fine-tune on single-class, person-only datasets;
+checkpoints. RF-DETR also trains multi-class poses;
 EdgeCrafter's keypoint head is fixed at construction and rejects a dataset
 declaring a different count, while RF-DETR reinitializes its head for one. YOLO-NAS
 pulls its weights from Deci.AI's own CDN under a non-commercial license, and
 LibreYOLO publishes none of them; its pose head also rebuilds for a new
-keypoint count, and it is the only one of the three whose class count is not
-fixed at one, so it is the family for a multi-class or non-human skeleton, such
-as animal pose.
+keypoint count, and supports multi-class or non-human skeletons.
 
 [HRNet](/docs/models/hrnet) is the top-down option. It predicts, validates and
 exports, and its `train()` raises `NotImplementedError`. Given no person
@@ -169,6 +167,8 @@ prompted generative model with its own factory, `LibreVLM`, and its own extra;
 with no vocabulary set, `set_task("pose")` falls back to the person category.
 Its weights are non-commercial, and per-image latency is far higher than a
 purpose-built pose head, because every prediction is a diffusion decode.
+
+[DEKR](/docs/models/dekr) provides bottom-up multi-person pose without a separate person detector. It supports inference and validation, not training.
 
 ## Predict
 
@@ -228,6 +228,8 @@ is a permutation of `0..K-1` giving, for each keypoint, the index it takes
 after a horizontal flip, which is how a left wrist stays a left wrist. Omit it
 and horizontal flip augmentation is switched off for keypoints rather than
 applied with the wrong index order.
+
+RF-DETR multi-class pose uses `kpt_names`, keyed by class name or ID, to select the first named keypoints for each class. An empty list marks a box-only class. Multi-class datasets require `names` and at least one keypoint-bearing class. Malformed label diagnostics identify the file, line and expected `kpt_shape` layout.
 
 ## Train
 

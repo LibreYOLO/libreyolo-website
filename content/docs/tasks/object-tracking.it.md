@@ -19,7 +19,7 @@ keywords:
   - deep ocsort
   - track id yolo
   - tracking con reid
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -76,7 +76,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: f1fa7dcf60597d6b
+source_hash: 384ee3d6a05190aa
 ---
 
 ## Definizione
@@ -170,10 +170,11 @@ generano un warning invece di essere applicate in silenzio. In entrambi i casi,
 `track_conf` viene ignorato quando la chiave corrispondente è impostata
 esplicitamente.
 
-Gli argomenti restanti rispecchiano quelli della predizione: `iou`, `imgsz`,
-`classes`, `max_det`, `vid_stride`, `show`, e `save` con `output_path`. La
-sorgente è il percorso di un file video. Vedi [predizione](/docs/predict) per la
-gestione dei risultati.
+Gli altri argomenti rispecchiano la predizione: `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show` e `save` con `output_path`. La sorgente può essere un video o una sequenza ordinata di immagini. Vedi [predizione](/docs/predict) per la gestione dei risultati.
+
+Immagini, cartelle ordinate per nome file, liste, tuple e iteratori lazy di immagini possono fornire frame consecutivi. `fps=30.0` ne definisce la temporizzazione e `color_format="auto"` seleziona l'interpretazione dell'input. `vid_stride` riduce la frequenza mantenuta a `fps / vid_stride`.
+
+Passa un'istanza di tracker personalizzato tramite `tracker=`. Implementa `reset()` e `update(results, image=None)` da `libreyolo.tracking.Tracker`. Un'esecuzione lo reimposta una volta e passa il frame originale RGB PIL. Il `track_id` restituito deve essere un array o tensore monodimensionale di interi allineato ai box sullo stesso backend/dispositivo. Le istanze personalizzate usano di default `track_conf=0.25`; configura direttamente l'istanza invece di passare argomenti del tracker o `tracker_config`.
 
 ## Addestramento
 

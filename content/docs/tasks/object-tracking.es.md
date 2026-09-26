@@ -20,7 +20,7 @@ keywords:
   - deep ocsort
   - track id yolo
   - seguimiento con reid
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -76,7 +76,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: f1fa7dcf60597d6b
+source_hash: 384ee3d6a05190aa
 ---
 
 ## Definición
@@ -172,9 +172,12 @@ avisan en vez de aplicarse en silencio. En cualquiera de los dos casos,
 `track_conf` se ignora en cuanto la clave correspondiente se fija explícitamente.
 
 El resto de argumentos son los mismos que en predicción: `iou`, `imgsz`,
-`classes`, `max_det`, `vid_stride`, `show`, y `save` con `output_path`. La fuente
-es la ruta a un fichero de vídeo. Consulta [predicción](/docs/predict) para el
+`classes`, `max_det`, `vid_stride`, `show`, y `save` con `output_path`. La fuente puede ser un vídeo o una secuencia ordenada de imágenes. Consulta [predicción](/docs/predict) para el
 manejo de resultados.
+
+Las imágenes, carpetas ordenadas por nombre de archivo, listas, tuplas e iteradores de imágenes con carga diferida pueden proporcionar fotogramas consecutivos. `fps=30.0` define su temporización y `color_format="auto"` selecciona la interpretación de entrada. `vid_stride` reduce la tasa retenida a `fps / vid_stride`.
+
+Pasa una instancia de tracker personalizada mediante `tracker=`. Implementa `reset()` y `update(results, image=None)` de `libreyolo.tracking.Tracker`. Cada ejecución la reinicia una vez y le pasa el fotograma PIL RGB original. El `track_id` devuelto debe ser un array o tensor entero unidimensional alineado con las cajas, en el mismo backend y dispositivo. Las instancias personalizadas usan `track_conf=0.25` por defecto; configura la instancia directamente en lugar de pasar argumentos de tracker o `tracker_config`.
 
 ## Entrenamiento
 

@@ -20,7 +20,7 @@ keywords:
   - embeddings clip
   - embeddings dinov2
   - embeddings reid
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Clave de tarea y alias leídos de libreyolo/tasks.py. Payloads de resultado de
   las clases Embeddings e Identities en libreyolo/utils/results.py. API de
@@ -180,7 +180,7 @@ snippets:
 
         libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg
         --json
-source_hash: ffbaad5599035bc7
+source_hash: 3197bfe9a3d53756
 ---
 
 ## Definición
@@ -218,8 +218,7 @@ seleccionan exactamente lo mismo.
 
 ## Modelos
 
-Cuatro familias cubren la tarea, y se dividen con claridad según si localizan
-algo primero o no.
+Las familias de embeddings difieren en si codifican una imagen completa, un clip o una región detectada.
 
 | Familia | Forma | Dimensión | También soporta |
 |---|---|---|---|
@@ -233,8 +232,7 @@ pedir `task="embed"` de forma explícita. Su checkpoint `-cls` existente es el
 artefacto compartido de dos torres; no se publica un checkpoint `-embed`
 duplicado para los mismos pesos.
 
-`embed_text` solo existe en CLIP y SigLIP 2, las dos familias con torre de
-texto. DINOv2 no tiene ninguna. El embedding de DINOv2 se salta las cabezas
+`embed_text` está disponible en CLIP, SigLIP 2 y PE, que tienen torres de texto. DINOv2 no tiene ninguna. El embedding de DINOv2 se salta las cabezas
 semántica y de clasificación y lee el token CLS final normalizado, a 224 píxeles;
 las variantes `n`, `s`, `m` y `l` comparten todas el encoder DINOv2-S, así que
 las cuatro devuelven `D = 384`.
@@ -250,6 +248,8 @@ concatena todas las filas de todos los resultados en un único tensor float32 de
 CPU `(N_total, D)`, lanzando una excepción si las filas tienen dimensiones
 distintas. Una familia que no tenga `embed` entre sus tareas soportadas lanza
 `NotImplementedError`.
+
+[PE](/docs/models/pe) soporta embeddings de imagen, texto y vídeo finito con `clip_frames=8` por defecto. [V-JEPA 2](/docs/models/vjepa2) y [LeVJEPA](/docs/models/levjepa) producen embeddings de clips y exponen tokens de patches mediante `embed_tokens()`. Sus páginas de modelo describen el muestreo de clips y las restricciones de exportación para runtimes directos.
 
 ## Payloads de resultado
 

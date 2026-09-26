@@ -4,7 +4,7 @@ seo_title: "Object tracking in LibreYOLO"
 description: "Track objects across video frames in LibreYOLO with ByteTrack, BoT-SORT, OC-SORT or Deep OC-SORT, over any detection, segmentation or pose model."
 lead: "Tracking assigns a stable identity to each detection across video frames. LibreYOLO does not model it as a task with its own weights: it is a predict mode, model.track(), that runs a chosen tracker over the per-frame output of a detection, segmentation or pose model."
 keywords: [object tracking python, multi object tracking, bytetrack, botsort, ocsort, deep ocsort, track id, reid tracking]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -141,8 +141,11 @@ the tracker you named; unknown keys warn rather than being applied silently.
 Either way, `track_conf` is ignored once the matching key is set explicitly.
 
 The remaining arguments mirror prediction: `iou`, `imgsz`, `classes`, `max_det`,
-`vid_stride`, `show`, and `save` with `output_path`. The source is a video file
-path. See [prediction](/docs/predict) for result handling.
+`vid_stride`, `show`, and `save` with `output_path`. The source can be video or an ordered image sequence. See [prediction](/docs/predict) for result handling.
+
+Images, filename-sorted folders, lists, tuples and lazy image iterators can provide consecutive frames. `fps=30.0` supplies their timing and `color_format="auto"` selects input interpretation. `vid_stride` reduces the retained rate to `fps / vid_stride`.
+
+Pass a custom tracker instance through `tracker=`. It implements `reset()` and `update(results, image=None)` from `libreyolo.tracking.Tracker`. A run resets it once and passes the original RGB PIL frame. Returned `track_id` must be a one-dimensional integer array or tensor aligned with boxes on the same backend/device. Custom instances default to `track_conf=0.25`; configure the instance directly instead of passing tracker kwargs or `tracker_config`.
 
 ## Train
 

@@ -14,7 +14,8 @@ keywords:
   - библиотека детекции объектов mit
   - альтернатива ultralytics yolo
   - обучить детектор объектов на своём датасете
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 snippets:
   predict:
     - label: Python
@@ -116,7 +117,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: c735b6e3de78dd2b
+source_hash: 28d7cbb721e0f109
 ---
 
 ## Определение
@@ -141,16 +142,7 @@ source_hash: c735b6e3de78dd2b
 
 ## Модели
 
-Двенадцать семейств поддерживают и обучение, и предсказание: [YOLOv9](/docs/models/yolov9),
-[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
-[RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine),
-[DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr),
-[YOLO-NAS](/docs/models/yolo-nas),
-[YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7),
-[RTMDet](/docs/models/rtmdet) и [PicoDet](/docs/models/picodet). YOLOv9 и
-RF-DETR — два флагманских семейства, новые возможности появляются в них
-первыми. RF-DETR требует своего extra, `pip install "libreyolo[rfdetr]"`;
-остальные работают на базовом пакете.
+Следующие семейства поддерживают обучение и предсказание: [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet) и [PicoDet](/docs/models/picodet). YOLOv9 и RF-DETR — два флагманских семейства, и новые возможности сначала появляются в них. RF-DETR требует отдельный extra, `pip install "libreyolo[rfdetr]"`; остальные работают с базовым пакетом.
 
 Ещё одиннадцать поддерживают предсказание, валидацию и экспорт, но их
 `train()` бросает `NotImplementedError`: [LW-DETR](/docs/models/lw-detr),
@@ -179,6 +171,8 @@ RF-DETR — два флагманских семейства, новые воз�
 [SenseNova-Vision](/docs/models/sensenova-vision) и
 [LibreMODUS](/docs/models/libremodus). Они загружаются через собственную
 фабрику и свои extras; точный вызов приведён на странице каждой модели.
+
+[PP-YOLOE](/docs/models/ppyoloe) и [TinyFormer](/docs/models/tinyformer) также поддерживают обучение детекции.
 
 ## Предсказание
 
@@ -249,6 +243,8 @@ names:
 Семейство может и вовсе игнорировать аргумент — на его странице перечислено,
 какие именно. О датасетах, аугментации, обучении на нескольких GPU и логгерах
 см. [обучение](/docs/train).
+
+Используйте `classes=`, чтобы сохранить выбранные исходные ID классов датасета; `single_cls=True` сводит сохранённые метки к классу 0. Поддерживаемые семейства и наследование настроек при валидации см. в разделе [гиперпараметров](/docs/train/hyperparameters).
 
 ## Валидация
 

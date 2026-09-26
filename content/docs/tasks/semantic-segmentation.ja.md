@@ -10,7 +10,7 @@ keywords:
   - セグメンテーションモデル 学習
   - mIoU
   - MIT セグメンテーションライブラリ
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -110,7 +110,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 44b92d8ba6062f04
+source_hash: f642c33d64f6878c
 ---
 
 ## 定義
@@ -123,11 +123,13 @@ source_hash: 44b92d8ba6062f04
 
 ## モデル
 
-学習と推論の両方に対応するファミリーは3つです。[SegFormer](/docs/models/segformer)、[LingBot-Vision](/docs/models/lingbot-vision)、[DINOv2](/docs/models/dinov2)です。SegFormerとLingBot-Visionは基本パッケージで実行でき、公開済みの重みがあります。DINOv2には`pip install "libreyolo[rfdetr]"`が必要で、LibreYOLOがホストするチェックポイントはありません。アップストリームのバックボーンを読み込み、密なヘッドはランダム初期化から始まるため、すぐに使える推論器ではなく学習の出発点です。
+学習に対応するファミリーには、以下があります。[SegFormer](/docs/models/segformer)、[LingBot-Vision](/docs/models/lingbot-vision)、[DINOv2](/docs/models/dinov2)です。SegFormerとLingBot-Visionは基本パッケージで実行でき、公開済みの重みがあります。DINOv2には`pip install "libreyolo[rfdetr]"`が必要で、LibreYOLOがホストするチェックポイントはありません。アップストリームのバックボーンを読み込み、密なヘッドはランダム初期化から始まるため、すぐに使える推論器ではなく学習の出発点です。
 
 さらに4つのファミリーが推論、検証、エクスポートに対応しますが、`train()`は`NotImplementedError`を送出します。[FCN](/docs/models/fcn)、[DeepLabv3](/docs/models/deeplabv3)、[PIDNet](/docs/models/pidnet)、[EoMT](/docs/models/eomt)です。
 
 クラス集合はファミリーではなくチェックポイントごとに異なります。公開済みの重みは、ADE20Kの150クラスやCityscapesの19クラスなど、ほとんど共通点のないラベル空間を持つデータセットから得られています。何にラベルを付けられるかはチェックポイントの`names`で確認し、2つのチェックポイントを比較できるのは同じデータセットで学習した場合だけです。
+
+[PP-LiteSeg](/docs/models/ppliteseg)と[U-Net](/docs/models/unet)は、学習に対応するセマンティックセグメンテーションのファミリーです。U-Netには現在、確認済みのホストされた変換済み重みがありません。
 
 ## 推論
 
@@ -178,6 +180,8 @@ names:
 <code-tabs name="train" />
 
 ここでの`imgsz`には検出器にはない制約があります。各ファミリーはパッチグリッドまたは出力ストライドに基づく除数を宣言し、`imgsz`が割り切れない場合は、学習と検証の両方で実行前に`ValueError`を送出します。除数はSegFormerで32、LingBot-VisionとEoMTで16、DINOv2で14、FCNとPIDNetで8です。データセット、データ拡張、マルチGPU、ロガーについては[学習](/docs/train)を参照してください。
+
+セマンティックセグメンテーションのデータセットは`(height, width)`のキャンバスを受け付けます。PP-LiteSegとU-Netでは、学習用のクロップと評価用の長方形を区別します。リスケールとクロップによるサンプリングでは、不足領域を無視ラベルでパディングします。設定がある場合は、ファミリーの測光変換を適用します。
 
 ## 検証
 

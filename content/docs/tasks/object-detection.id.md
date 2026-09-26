@@ -16,7 +16,7 @@ keywords:
   - perpustakaan deteksi objek MIT
   - alternatif YOLO
   - melatih pendeteksi objek
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -118,7 +118,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: c735b6e3de78dd2b
+source_hash: 28d7cbb721e0f109
 ---
 
 ## Definisi
@@ -142,16 +142,7 @@ sebuah objek `Boxes` menghasilkan irisan satu baris, jadi `box.cls`, `box.conf` 
 
 ## Model
 
-Dua belas keluarga baik melatih maupun memprediksi: [YOLOv9](/docs/models/yolov9),
-[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
-[RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine),
-[DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr),
-[YOLO-NAS](/docs/models/yolo-nas),
-[YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7),
-[RTMDet](/docs/models/rtmdet) dan [PicoDet](/docs/models/picodet). YOLOv9 dan
-RF-DETR adalah dua keluarga unggulan, dan fitur-fitur mendarat pada mereka terlebih dahulu. RF-DETR
-membutuhkan tambahan sendiri, `pip install "libreyolo[rfdetr]"`; sisanya berjalan pada
-paket dasar.
+Family berikut mendukung pelatihan dan prediksi: [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet), dan [PicoDet](/docs/models/picodet). YOLOv9 dan RF-DETR adalah dua family unggulan, dan fitur baru hadir terlebih dahulu pada keduanya. RF-DETR memerlukan extra tersendiri, `pip install "libreyolo[rfdetr]"`; sisanya berjalan dengan paket dasar.
 
 Sebelas lagi memprediksi, memvalidasi dan mengekspor, tetapi `train()` mereka naik
 `NotImplementedError`: [LW-DETR](/docs/models/lw-detr),
@@ -179,6 +170,8 @@ ditambah keluarga vision-language
 [SenseNova-Vision](/docs/models/sensenova-vision) dan
 [LibreMODUS](/docs/models/libremodus). Ini dimuat melalui pabrikannya sendiri dan
 tambahan; setiap halaman model membawa panggilan yang tepat.
+
+[PP-YOLOE](/docs/models/ppyoloe) dan [TinyFormer](/docs/models/tinyformer) juga mendukung pelatihan deteksi.
 
 ## Prediksi
 
@@ -247,6 +240,8 @@ daripada dari contoh family lainnya. family juga dapat mengabaikan sebuah argume
 secara langsung, dan halamannya mencantumkan yang mana. Lihat [pelatihan](/docs/train) untuk set data,
 augmentasi, multi-GPU, dan pencatat.
 
+Gunakan `classes=` untuk mempertahankan ID asli dataset yang dipilih; `single_cls=True` menggabungkan label yang dipertahankan ke kelas 0. Lihat [hiperparameter](/docs/train/hyperparameters) untuk family yang didukung dan pewarisan saat validasi.
+
 ## Validasi
 
 `val()` mengembalikan kamus biasa dari kunci `metrics/`, dihitung dengan COCO
@@ -282,4 +277,3 @@ Berkas `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengembalikan h
 dihasilkan dari set yang tervalidasi daripada diketik dengan tangan. Lihat
 [ekspor dan deploy](/docs/export) untuk format, tambahannya, dan mereka]
 batasan.
-

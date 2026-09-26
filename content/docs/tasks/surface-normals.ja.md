@@ -11,7 +11,7 @@ keywords:
   - 単眼 geometry
   - 角度誤差 指標
   - dense normal prediction
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: 法線fieldを推論
@@ -80,7 +80,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.data.shape)
-source_hash: d26d26d894b436ff
+source_hash: b033fdf3a2210ce5
 ---
 
 ## 定義
@@ -91,11 +91,13 @@ source_hash: d26d26d894b436ff
 
 ## モデル
 
-2つのファミリーが `normal` を提供します。
+以下のファミリーが`normal`に対応します。
 
-[MoGe-2](/docs/models/moge-2)は専用ファミリーです。3つのencoderサイズを持つ、単一forwardの単眼geometry modelです。LibreYOLOはこれらのチェックポイントを独自のorganizationへコピーしません。読み込むと、固定されたrevisionの公式リポジトリから一致するサイズをダウンロードし、記録済みSHA-256に対して検証します。
+[MoGe-2](/docs/models/moge-2)は専用ファミリーです。3つのencoderサイズを持つ、単一forwardの単眼geometry modelです。sとlはLibreYOLOのミラーを使い、bはアップストリームを使います。
 
 [LibreMODUS](/docs/models/libremodus)はany-to-anyモデルの1つの対象として法線を生成し、RGB画像ではなく深度マップを入力することもできます。`modus` 追加パッケージと、認証済みの自身のHugging Faceアカウントが必要です。`val()` も `export()` も提供しないため、以下の検証およびエクスポートセクションには該当しません。
+
+[Marigold V2](/docs/models/marigold-v2)もサーフェス法線を推定します。デフォルトの4ビット推論にはCUDAと`marigold`追加パッケージが必要です。エクスポートには対応していません。
 
 ## 推論
 
@@ -134,7 +136,7 @@ names: {0: normal}
 
 ## 学習
 
-どちらのnormalファミリーにも学習実装はありません。両方で `train()` が `NotImplementedError` を送出します。MoGe-2のページには、推論、検証、エクスポート向けに固定された公式チェックポイントへのリンクがあります。
+これらの法線推定ファミリーには学習実装がありません。MoGe-2のページには、推論、検証、エクスポート向けに固定された公式チェックポイントへのリンクがあります。
 
 ## 検証
 

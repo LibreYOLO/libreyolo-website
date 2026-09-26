@@ -2,12 +2,11 @@
 title: Ước lượng tư thế
 seo_title: Ước lượng tư thế trong LibreYOLO
 description: >-
-  Dự đoán keypoint trên mỗi thực thể trong LibreYOLO: các family phục vụ tác vụ,
-  định dạng nhãn và các lời gọi dự đoán, huấn luyện, xác thực cùng xuất.
+  Dự đoán keypoint trên mỗi thực thể trong LibreYOLO: các family phục vụ tác vụ, định dạng nhãn và các lời gọi
+  dự đoán, huấn luyện, xác thực cùng xuất.
 lead: >-
-  Ước lượng tư thế định vị từng thực thể và trả về một tập keypoint có tên theo
-  thứ tự, vì vậy đầu ra mang cấu trúc bên trong của đối tượng thay vì chỉ phạm
-  vi của nó. Key tác vụ là pose.
+  Ước lượng tư thế định vị từng thực thể và trả về một tập keypoint có tên theo thứ tự, vì vậy đầu ra mang cấu
+  trúc bên trong của đối tượng thay vì chỉ phạm vi của nó. Key tác vụ là pose.
 keywords:
   - ước lượng tư thế python
   - phát hiện keypoint
@@ -15,7 +14,7 @@ keywords:
   - COCO keypoint
   - OKS mAP
   - huấn luyện mô hình pose
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -49,19 +48,13 @@ snippets:
             print(person[visible])
     - label: Dùng top-down
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         # HRNet dùng top-down: trước hết crop từng người. Khi không cung cấp
-
-        # nguồn người, mô hình tự ghép với detector LibreYOLO9t và ghi lựa chọn
-        vào log.
-
+        # nguồn người, mô hình tự ghép với detector LibreYOLO9t và ghi lựa chọn vào log.
         model = LibreYOLO("LibreHRNetw32-pose.pt")
-
         result = model(SAMPLE_IMAGE)
-
 
         print(result.keypoints.xy.shape)
   train:
@@ -97,22 +90,16 @@ snippets:
   val:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreECs-pose.pt")
 
-
         # val() trả về dict thuần, không phải đối tượng.
-
         metrics = model.val(data="coco8-pose.yaml", allow_download_scripts=True)
 
-
         print(metrics["metrics/keypoints_mAP50-95"])
-
-        print(metrics["metrics/keypoints_mAP50"],
-        metrics["metrics/keypoints_mAP75"])
+        print(metrics["metrics/keypoints_mAP50"], metrics["metrics/keypoints_mAP75"])
     - label: CLI
       language: bash
       code: |
@@ -141,9 +128,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 9de01d1f615bdf33
+source_hash: 1b9e7614546d8f00
 ---
-
 ## Định nghĩa
 
 Ước lượng tư thế trả về cấu trúc, không chỉ phạm vi. Mỗi thực thể vẫn nhận một
@@ -169,18 +155,7 @@ phía trước.
 
 ## Mô hình
 
-Ba family vừa huấn luyện vừa dự đoán: [RF-DETR](/docs/models/rf-detr),
-[EdgeCrafter](/docs/models/edgecrafter) và
-[YOLO-NAS](/docs/models/yolo-nas), đều là mô hình một giai đoạn. RF-DETR cần
-thành phần bổ sung riêng `pip install "libreyolo[rfdetr]"`. RF-DETR và
-EdgeCrafter cung cấp checkpoint pose đã công bố, cả hai đều tinh chỉnh trên
-dataset một lớp chỉ có người; keypoint head của EdgeCrafter được cố định khi
-dựng và từ chối dataset khai báo số lượng khác, còn RF-DETR khởi tạo lại head
-cho một số lượng mới. YOLO-NAS lấy trọng số từ CDN riêng của Deci.AI theo giấy
-phép phi thương mại, LibreYOLO không công bố tệp nào; pose head của nó cũng dựng
-lại cho số keypoint mới, và đây là family duy nhất trong ba loại có số lớp đối
-tượng không cố định ở một, vì vậy phù hợp cho skeleton nhiều lớp hoặc không
-phải con người, như tư thế động vật.
+Ba họ mô hình vừa huấn luyện vừa dự đoán: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) và [YOLO-NAS](/docs/models/yolo-nas), đều là mô hình một giai đoạn. RF-DETR cần extra riêng, `pip install "libreyolo[rfdetr]"`. RF-DETR và EdgeCrafter có checkpoint tư thế đã công bố. RF-DETR còn huấn luyện tư thế nhiều lớp đối tượng; head keypoint của EdgeCrafter cố định khi khởi tạo và từ chối dataset khai báo số lượng khác, còn RF-DETR khởi tạo lại head cho số lượng mới. YOLO-NAS lấy trọng số từ CDN riêng của Deci.AI theo giấy phép phi thương mại, và LibreYOLO không công bố tệp nào; head tư thế của nó cũng dựng lại cho số keypoint mới và hỗ trợ bộ xương nhiều lớp đối tượng hoặc không phải người.
 
 [HRNet](/docs/models/hrnet) là lựa chọn top-down. Nó dự đoán, xác thực và xuất,
 còn `train()` phát sinh `NotImplementedError`. Khi không có nguồn người, nó tự
@@ -192,6 +167,8 @@ mô hình sinh theo prompt với factory riêng `LibreVLM` và thành phần b�
 riêng; khi không đặt từ vựng, `set_task("pose")` quay về category người. Trọng số
 chỉ dùng cho mục đích phi thương mại, còn độ trễ trên mỗi ảnh cao hơn nhiều so
 với pose head chuyên dụng vì mỗi dự đoán là một lượt diffusion decode.
+
+[DEKR](/docs/models/dekr) cung cấp ước lượng tư thế nhiều người từ dưới lên mà không cần bộ phát hiện người riêng. Nó hỗ trợ inference và đánh giá, không hỗ trợ huấn luyện.
 
 ## Dự đoán
 
@@ -251,6 +228,8 @@ names:
 permutation tùy chọn của `0..K-1`, cho biết với mỗi keypoint, index của nó sau
 phép lật ngang, đây là cách cổ tay trái vẫn là cổ tay trái. Nếu bỏ key này,
 augmentation lật ngang sẽ bị tắt cho keypoint thay vì áp dụng sai thứ tự index.
+
+Tư thế nhiều lớp đối tượng của RF-DETR dùng `kpt_names`, với khóa là tên hoặc ID lớp đối tượng, để chọn các keypoint đầu tiên được đặt tên cho mỗi lớp. Danh sách rỗng đánh dấu lớp chỉ có bounding box. Dataset nhiều lớp đối tượng cần `names` và ít nhất một lớp có keypoint. Chẩn đoán nhãn sai định dạng chỉ rõ tệp, dòng và bố cục `kpt_shape` mong đợi.
 
 ## Huấn luyện
 

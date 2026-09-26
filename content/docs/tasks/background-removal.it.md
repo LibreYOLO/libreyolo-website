@@ -14,7 +14,7 @@ keywords:
   - background removal python
   - ritaglio png trasparente
   - segmentazione dicotomica immagini
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Predire un matte
@@ -96,7 +96,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: f7d88c74d9729268
+source_hash: 69fbc1d967b2d546
 ---
 
 ## Definizione
@@ -117,7 +117,7 @@ quindi `conf`, `iou` e `max_det` non hanno effetto.
 
 ## Modelli
 
-Due famiglie coprono `matte`, e condividono lo stesso forward path.
+BiRefNet e FeyNobg condividono un percorso forward.
 
 [BiRefNet](/docs/models/birefnet) è la rete a riferimento bilaterale attorno a
 cui è costruito il task, pubblicata qui come un unico checkpoint di livello
@@ -134,6 +134,8 @@ Le due famiglie hanno licenze dei pesi diverse. Entrambe sono indicate nelle
 pagine dei modelli, e la licenza sul repository Hugging Face dello specifico
 checkpoint è quella che fa fede.
 
+[BEN2](/docs/models/ben2) aggiunge la rimozione dello sfondo a risoluzione fissa 1024. [ViTMatte](/docs/models/vitmatte) riceve un'immagine e una `trimap=` a tre livelli che contrassegna i pixel di sfondo, sconosciuti e in primo piano.
+
 ## Predizione
 
 I pesi vengono scaricati da Hugging Face al primo utilizzo e restano in cache in
@@ -141,14 +143,9 @@ locale.
 
 <code-tabs name="predict" />
 
-Entrambe le famiglie lavorano su un canvas nativo fisso di 1024x1024 e riportano
-il matte alla dimensione dell'immagine originale. Una risoluzione diversa non è
-supportata, perché le tabelle di posizione relativa del backbone Swin sono
-legate a quella dimensione, e una discrepanza le interpola male invece di
-sollevare un errore. `Results.save()` è definito solo per i risultati matte e ha
-bisogno dell'immagine di partenza, che ricarica da `Results.path` a meno che tu
-non ne passi una. Vedi [predizione](/docs/predict) per sorgenti, streaming e
-gestione dei risultati.
+BiRefNet e FeyNobg lavorano su un canvas nativo fisso di 1024x1024 e ridimensionano la maschera alfa all'immagine originale. Una risoluzione diversa non è supportata, perché le tabelle di posizione relativa del backbone Swin sono legate a quella dimensione e una discrepanza le interpola male invece di generare un errore. `Results.save()` usa l'immagine sorgente per i ritagli con maschera alfa e la ricarica da `Results.path` se non ne passi una. Vedi [predizione](/docs/predict) per sorgenti, streaming e gestione dei risultati.
+
+`Results.save()` salva i ritagli con maschera alfa in RGBA. `plot()` genera un'immagine da ispezionare. BEN2 supporta la predizione nativa in batch; ViTMatte richiede una guida per una singola immagine.
 
 ## Formato del dataset
 
@@ -184,11 +181,7 @@ predizione viene ridimensionato bilinearmente per farlo combaciare. Vedi
 
 ## Addestramento
 
-Nessuna delle due famiglie matte ha un'implementazione dell'addestramento:
-`train()` solleva `NotImplementedError` su entrambe, e il supporto matte copre
-solo predizione, validazione ed esportazione. Ogni pagina di modello indica il
-progetto upstream che distribuisce il codice di addestramento e lo script di
-conversione che riporta indietro un checkpoint.
+Queste famiglie di matting non implementano l'addestramento. Il supporto all'esportazione varia per famiglia; ViTMatte non esporta. Ogni pagina del modello indica il progetto upstream che distribuisce il codice di addestramento e lo script di conversione per riportare un checkpoint in LibreYOLO.
 
 ## Validazione
 

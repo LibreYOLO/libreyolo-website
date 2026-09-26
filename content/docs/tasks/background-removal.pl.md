@@ -14,7 +14,7 @@ keywords:
   - segmentacja obrazu obiekt tło
   - wycinanie do przezroczystego png
   - miękka maska alfa
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Predykcja mapy alfa
@@ -107,7 +107,7 @@ snippets:
 
 
         print(result.matte.array.shape)
-source_hash: f7d88c74d9729268
+source_hash: 69fbc1d967b2d546
 ---
 
 ## Definicja
@@ -127,8 +127,7 @@ obraz źródłowy z tą wartością alfa w tablicę RGBA uint8 `(H, W, 4)`, a
 
 ## Modele
 
-Zadanie `matte` obsługują dwie rodziny, które korzystają ze wspólnej ścieżki
-forward.
+BiRefNet i FeyNobg współdzielą ścieżkę przebiegu w przód.
 
 [BiRefNet](/docs/models/birefnet) to sieć bilateral-reference, wokół której
 zbudowano zadanie. Jest tutaj publikowana jako jeden checkpoint poziomu Swin-L.
@@ -143,6 +142,8 @@ identycznie, natomiast wagi i tożsamość rodziny należą do FeyNobg.
 Obie rodziny mają inne licencje wag. Podano je na stronach modeli, a
 rozstrzygająca jest licencja w repozytorium Hugging Face konkretnego checkpointu.
 
+[BEN2](/docs/models/ben2) dodaje usuwanie tła przy stałym rozmiarze 1024. [ViTMatte](/docs/models/vitmatte) przyjmuje obraz i trójpoziomowe `trimap=` oznaczające piksele tła, nieznane i pierwszego planu.
+
 ## Predykcja
 
 Przy pierwszym użyciu wagi są pobierane z Hugging Face i zapisywane w lokalnej
@@ -150,14 +151,9 @@ pamięci podręcznej.
 
 <code-tabs name="predict" />
 
-Obie rodziny działają na stałym natywnym płótnie 1024x1024 i zmieniają rozmiar
-mapy alfa z powrotem do oryginalnego obrazu. Inna rozdzielczość nie jest
-obsługiwana, ponieważ tablice pozycji względnych w backbone Swin są związane z
-tym rozmiarem, a niezgodność powoduje ich błędną interpolację zamiast zgłoszenia
-wyjątku. `Results.save()` jest zdefiniowane wyłącznie dla wyników matte i wymaga
-obrazu źródłowego, który wczytuje ponownie z `Results.path`, chyba że zostanie
-przekazany bezpośrednio. Informacje o źródłach, streamingu i obsłudze wyników
-zawiera strona [predykcji](/docs/predict).
+BiRefNet i FeyNobg działają na stałym natywnym obszarze 1024x1024 i skalują maskę mattingu do oryginalnego obrazu. Inne rozdzielczości nie są obsługiwane, ponieważ tablice pozycji względnych bloku backbone Swin są związane z tym rozmiarem; niedopasowanie daje słabą interpolację zamiast błędu. `Results.save()` używa obrazu źródłowego do wycięcia obiektu z maską mattingu i wczytuje go ponownie z `Results.path`, chyba że obraz podano jawnie. Źródła, streaming i obsługę wyników opisano w sekcji [predykcji](/docs/predict).
+
+`Results.save()` zapisuje wycięty obiekt z maską mattingu jako RGBA. `plot()` renderuje obraz do kontroli. BEN2 obsługuje natywną predykcję w batchach; ViTMatte wymaga wskazówek dla pojedynczego obrazu.
 
 ## Format zbioru danych
 
@@ -193,10 +189,7 @@ zbiorów danych](/docs/reference/dataset-formats).
 
 ## Trenowanie
 
-Żadna z rodzin matte nie ma implementacji trenowania. Funkcja `train()` zgłasza
-`NotImplementedError` dla obu, a obsługa matte obejmuje tylko predykcję,
-walidację i eksport. Strona każdego modelu wskazuje projekt źródłowy zawierający
-kod trenowania oraz skrypt konwersji do ponownego wczytania checkpointu.
+Te rodziny mattingu nie mają implementacji trenowania. Obsługa eksportu zależy od rodziny; ViTMatte nie obsługuje eksportu. Każda strona modelu podaje projekt źródłowy udostępniający kod trenowania oraz skrypt konwersji pozwalający wczytać checkpoint.
 
 ## Walidacja
 

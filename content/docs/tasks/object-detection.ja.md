@@ -10,7 +10,7 @@ keywords:
   - MIT 物体検出ライブラリ
   - YOLO 代替
   - 物体検出モデル 学習
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -112,7 +112,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: c735b6e3de78dd2b
+source_hash: 28d7cbb721e0f109
 ---
 
 ## 定義
@@ -125,13 +125,15 @@ source_hash: c735b6e3de78dd2b
 
 ## モデル
 
-学習と推論の両方に対応するファミリーは12個です。[YOLOv9](/docs/models/yolov9)、[RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter)、[RT-DETR](/docs/models/rt-detr)、[D-FINE](/docs/models/d-fine)、[DEIM](/docs/models/deim)、[Dome-DETR](/docs/models/dome-detr)、[YOLO-NAS](/docs/models/yolo-nas)、[YOLOX](/docs/models/yolox)、[YOLOv7](/docs/models/yolov7)、[RTMDet](/docs/models/rtmdet)、[PicoDet](/docs/models/picodet)です。YOLOv9とRF-DETRは2つの主力ファミリーで、新機能は最初にこれらへ追加されます。RF-DETRには専用の追加パッケージ`pip install "libreyolo[rfdetr]"`が必要です。それ以外は基本パッケージで実行できます。
+以下のファミリーは学習と推論に対応します。[YOLOv9](/docs/models/yolov9)、[RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter)、[RT-DETR](/docs/models/rt-detr)、[D-FINE](/docs/models/d-fine)、[DEIM](/docs/models/deim)、[Dome-DETR](/docs/models/dome-detr)、[YOLO-NAS](/docs/models/yolo-nas)、[YOLOX](/docs/models/yolox)、[YOLOv7](/docs/models/yolov7)、[RTMDet](/docs/models/rtmdet)、[PicoDet](/docs/models/picodet)です。YOLOv9とRF-DETRは2つの主力ファミリーで、新機能は最初にこれらへ追加されます。RF-DETRには専用の追加パッケージ`pip install "libreyolo[rfdetr]"`が必要です。それ以外は基本パッケージで実行できます。
 
 さらに11個のファミリーが推論、検証、エクスポートに対応しますが、`train()`は`NotImplementedError`を送出します。[LW-DETR](/docs/models/lw-detr)、[DETR](/docs/models/detr)、[Deformable DETR](/docs/models/deformable-detr)、[DINO-DETR](/docs/models/dino-detr)、[Faster R-CNN](/docs/models/faster-rcnn)、[Mask R-CNN](/docs/models/mask-rcnn)、[FCOS](/docs/models/fcos)、[RetinaNet](/docs/models/retinanet)、[SSD](/docs/models/ssd)、[CenterNet](/docs/models/centernet)、[EfficientDet](/docs/models/efficientdet)です。
 
 Darknet系統の[YOLOv1](/docs/models/yolov1)、[YOLOv2](/docs/models/yolov2)、[YOLOv3](/docs/models/yolov3)、[YOLOv4](/docs/models/yolov4)は、固定された展示物として維持されています。推論、検証、エクスポートは機能しますが、学習はできません。
 
 別のグループはチェックポイントではなく実行時にクラスリストを受け取るため、学習時に見たことのない名前も検出できます。[Grounding DINO](/docs/models/grounding-dino)、[OWLv2](/docs/models/owlv2)、[OMDet-Turbo](/docs/models/omdet-turbo)、[OV-DEIM](/docs/models/ov-deim)に加え、Vision-Languageファミリーの[Florence-2](/docs/models/florence-2)、[Kosmos-2](/docs/models/kosmos-2)、[Qwen3-VL](/docs/models/qwen3-vl)、[SmolVLM2](/docs/models/smolvlm2)、[InternVL3](/docs/models/internvl3)、[LFM2-VL](/docs/models/lfm2-vl)、[LocateAnything](/docs/models/locate-anything)、[SenseNova-Vision](/docs/models/sensenova-vision)、[LibreMODUS](/docs/models/libremodus)です。これらは固有のファクトリと追加パッケージを通して読み込まれます。正確な呼び出しは各モデルページに記載されています。
+
+[PP-YOLOE](/docs/models/ppyoloe)と[TinyFormer](/docs/models/tinyformer)も物体検出の学習に対応します。
 
 ## 推論
 
@@ -182,6 +184,8 @@ names:
 <code-tabs name="train" />
 
 最初に調整する引数は`epochs`、`imgsz`、`batch`、`lr0`です。ファミリー間で流用できないのは`lr0`です。畳み込み検出器が許容する学習率でもTransformer検出器では発散する可能性があるため、別ファミリーの例ではなくモデルページの値を使用してください。ファミリーが引数を完全に無視する場合もあり、各ページにその対象が記載されています。データセット、データ拡張、マルチGPU、ロガーについては[学習](/docs/train)を参照してください。
+
+`classes=`で元のデータセットIDから残すものを選択します。`single_cls=True`は残したラベルをクラス0に統合します。対応ファミリーと検証時の設定継承については[ハイパーパラメータ](/docs/train/hyperparameters)を参照してください。
 
 ## 検証
 

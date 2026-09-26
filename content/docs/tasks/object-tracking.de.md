@@ -20,7 +20,7 @@ keywords:
   - deep ocsort
   - track id
   - reid tracking
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -75,7 +75,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: f1fa7dcf60597d6b
+source_hash: "384ee3d6a05190aa"
 ---
 
 ## Definition
@@ -174,10 +174,11 @@ Tracker erstellen. Bei unbekannten Schlüsseln wird eine Warnung ausgegeben,
 statt sie unbemerkt anzuwenden. In beiden Fällen wird `track_conf` ignoriert,
 sobald der entsprechende Schlüssel explizit gesetzt ist.
 
-Die übrigen Argumente entsprechen der Vorhersage: `iou`, `imgsz`, `classes`,
-`max_det`, `vid_stride`, `show` und `save` zusammen mit `output_path`. Als
-Quelle dient der Pfad zu einer Videodatei. Unter [Vorhersage](/docs/predict)
-findest du Informationen zur Ergebnisverarbeitung.
+Die übrigen Argumente entsprechen der Vorhersage: `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show` und `save` mit `output_path`. Die Quelle kann ein Video oder eine geordnete Bildsequenz sein. Siehe [Vorhersage](/docs/predict) für die Ergebnisverarbeitung.
+
+Bilder, nach Dateinamen sortierte Ordner, Listen, Tupel und verzögerte Bilditeratoren können aufeinanderfolgende Frames liefern. `fps=30.0` legt deren Zeitabstand fest und `color_format="auto"` die Interpretation der Eingabe. `vid_stride` senkt die beibehaltene Rate auf `fps / vid_stride`.
+
+Übergib eine eigene Tracker-Instanz über `tracker=`. Sie implementiert `reset()` und `update(results, image=None)` aus `libreyolo.tracking.Tracker`. Ein Lauf setzt sie einmal zurück und übergibt den ursprünglichen RGB-PIL-Frame. Das zurückgegebene `track_id` muss ein eindimensionales Integer-Array oder ein Tensor sein, ausgerichtet an den Boxen und auf demselben Backend/Gerät. Eigene Instanzen verwenden standardmäßig `track_conf=0.25`; konfiguriere die Instanz direkt, statt Tracker-Schlüsselwortargumente oder `tracker_config` zu übergeben.
 
 ## Training
 
@@ -186,4 +187,3 @@ gelernte Parameter. Das Erscheinungsnetz von Deep OC-SORT ist ein
 veröffentlichter Re-Identification-Checkpoint, der bei der ersten Verwendung
 heruntergeladen wird. Verbessere für eine höhere Tracking-Qualität den Detektor
 oder stimme die oben genannten Zuordnungsschwellenwerte ab.
-

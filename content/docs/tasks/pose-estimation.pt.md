@@ -16,7 +16,7 @@ keywords:
   - keypoints COCO
   - OKS mAP
   - treinar modelo de pose
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -142,7 +142,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 9de01d1f615bdf33
+source_hash: 1b9e7614546d8f00
 ---
 
 ## Definição
@@ -171,19 +171,7 @@ sua acurácia depende do detector que está na frente dele.
 
 ## Modelos
 
-Três famílias treinam e fazem predição:
-[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) e
-[YOLO-NAS](/docs/models/yolo-nas), todas de um estágio. O RF-DETR precisa do seu
-próprio extra, `pip install "libreyolo[rfdetr]"`. RF-DETR e EdgeCrafter trazem
-checkpoints de pose publicados e ambos fazem fine-tuning em datasets de classe
-única, apenas com pessoas; a cabeça de keypoints do EdgeCrafter é fixada na
-construção e rejeita um dataset que declare uma contagem diferente, enquanto o
-RF-DETR reinicializa sua cabeça para ela. O YOLO-NAS baixa seus pesos do CDN da
-própria Deci.AI sob uma licença não comercial, e o LibreYOLO não publica nenhum
-deles; sua cabeça de pose também é reconstruída para uma nova contagem de
-keypoints, e ela é a única das três cuja contagem de classes não é fixada em um,
-então é a família para um esqueleto multiclasse ou não humano, como pose de
-animais.
+Três famílias treinam e rodam predições: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) e [YOLO-NAS](/docs/models/yolo-nas), todas de estágio único. RF-DETR precisa do seu próprio extra, `pip install "libreyolo[rfdetr]"`. RF-DETR e EdgeCrafter têm checkpoints de pose publicados. RF-DETR também treina poses multiclasse; a cabeça de keypoints do EdgeCrafter é fixa na construção e rejeita datasets que declarem outra quantidade, enquanto RF-DETR reinicializa sua cabeça para a nova quantidade. YOLO-NAS baixa os pesos da própria CDN da Deci.AI sob licença não comercial, e o LibreYOLO não publica nenhum deles; sua cabeça de pose também é reconstruída para uma nova quantidade de keypoints e suporta esqueletos multiclasse ou não humanos.
 
 O [HRNet](/docs/models/hrnet) é a opção top-down. Ele prevê, valida e exporta, e
 seu `train()` levanta `NotImplementedError`. Sem uma fonte de pessoas, ele se
@@ -198,6 +186,8 @@ categoria pessoa.
 Seus pesos são não comerciais, e a latência por imagem é bem mais alta do que a
 de uma cabeça de pose feita para isso, porque cada predição é uma decodificação
 por difusão.
+
+[DEKR](/docs/models/dekr) fornece pose de múltiplas pessoas de baixo para cima, sem um detector separado de pessoas. Suporta inferência e validação, mas não treinamento.
 
 ## Predição
 
@@ -261,6 +251,8 @@ depois de um espelhamento horizontal, que é como um pulso esquerdo continua
 sendo um pulso esquerdo. Omita-o e o data augmentation de espelhamento
 horizontal é desligado para os keypoints, em vez de aplicado com a ordem de
 índices errada.
+
+Pose multiclasse do RF-DETR usa `kpt_names`, com o nome ou ID da classe como chave, para selecionar os primeiros keypoints nomeados de cada classe. Uma lista vazia indica uma classe só de caixas. Datasets multiclasse exigem `names` e pelo menos uma classe com keypoints. Os diagnósticos de labels malformadas identificam o arquivo, a linha e o layout `kpt_shape` esperado.
 
 ## Treinamento
 

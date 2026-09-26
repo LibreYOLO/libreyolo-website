@@ -16,7 +16,7 @@ keywords:
   - géométrie monoculaire
   - métrique erreur angulaire
   - prédiction dense normales
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Prédire un champ de normales
@@ -96,7 +96,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.data.shape)
-source_hash: d26d26d894b436ff
+source_hash: b033fdf3a2210ce5
 ---
 
 ## Définition
@@ -118,19 +118,18 @@ arguments `conf`, `iou` et `max_det` n'ont donc aucun effet, et
 
 ## Modèles
 
-Deux familles couvrent la tâche `normal`.
+Les familles suivantes couvrent la tâche `normal`.
 
 [MoGe-2](/docs/models/moge-2) est la famille dédiée. Ce modèle de géométrie
-monoculaire à propagation unique existe en trois tailles d'encodeur. LibreYOLO
-ne copie pas ces checkpoints dans sa propre organisation. Le chargement
-télécharge la taille correspondante depuis les dépôts officiels à une révision
-fixée, puis la vérifie avec une empreinte SHA-256 enregistrée.
+monoculaire à propagation unique existe en trois tailles d'encodeur. Les tailles s et l utilisent les miroirs LibreYOLO ; b reste en amont.
 
 [LibreMODUS](/docs/models/libremodus) produit des normales comme l'une des
 cibles d'un modèle universel et peut recevoir une carte de profondeur plutôt
 qu'une image RVB en entrée. Il nécessite l'extra `modus` et votre propre compte
 Hugging Face authentifié. Il ne propose ni `val()` ni `export()`, et ne
 participe donc pas aux sections de validation et d'exportation ci-dessous.
+
+[Marigold V2](/docs/models/marigold-v2) estime aussi les normales de surface. Son inférence en quatre bits par défaut exige CUDA et l'extra `marigold` ; il ne s'exporte pas.
 
 ## Prédire
 
@@ -184,9 +183,7 @@ forme `(0, 0, 0)` et ne contribuent jamais aux métriques. Consultez les
 
 ## Entraîner
 
-Aucune des deux familles de normales ne possède d'implémentation
-d'entraînement. `train()` déclenche une `NotImplementedError` dans les deux
-cas. La page de MoGe-2 renvoie vers ses checkpoints officiels fixés pour la
+Ces familles d'estimation de normales n'ont pas d'implémentation d'entraînement. La page de MoGe-2 renvoie vers ses checkpoints officiels fixés pour la
 prédiction, la validation et l'exportation.
 
 ## Valider

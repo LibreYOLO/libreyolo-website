@@ -15,7 +15,7 @@ keywords:
   - geometria monokularna
   - metryka błędu kątowego
   - dense normal prediction
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Predykcja pola normalnych
@@ -109,7 +109,7 @@ snippets:
 
 
         print(result.normal_map.data.shape)
-source_hash: d26d26d894b436ff
+source_hash: b033fdf3a2210ce5
 ---
 
 ## Definicja
@@ -131,19 +131,17 @@ a `Results.plot()` obsługuje to zadanie.
 
 ## Modele
 
-Zadanie `normal` obsługują dwie rodziny.
+Następujące rodziny obsługują `normal`.
 
-[MoGe-2](/docs/models/moge-2) jest rodziną wyspecjalizowaną. To jednoetapowy
-model geometrii monokularnej w trzech rozmiarach enkodera. LibreYOLO nie kopiuje
-tych checkpointów do własnej organizacji. Wczytanie pobiera odpowiedni rozmiar
-z oficjalnych repozytoriów w przypiętej rewizji i weryfikuje go względem
-zarejestrowanego skrótu SHA-256.
+[MoGe-2](/docs/models/moge-2) to model przeznaczony do tego zadania: monokularny model geometrii z jednym przebiegiem w przód, w trzech rozmiarach enkodera. Rozmiary s i l używają kopii w repozytoriach LibreYOLO; b pozostaje w repozytorium źródłowym.
 
 [LibreMODUS](/docs/models/libremodus) generuje normalne jako jeden z celów modelu
 przetwarzającego dowolne dane wejściowe na dowolne dane wyjściowe i może przyjąć
 mapę głębi zamiast obrazu RGB. Wymaga dodatku `modus` oraz własnego
 uwierzytelnionego konta Hugging Face. Nie oferuje ani `val()`, ani `export()`,
 dlatego nie uczestniczy w poniższych sekcjach walidacji i eksportu.
+
+[Marigold V2](/docs/models/marigold-v2) również estymuje normalne powierzchni. Jego domyślna inferencja czterobitowa wymaga CUDA i dodatku `marigold`; model nie obsługuje eksportu.
 
 ## Predykcja
 
@@ -195,9 +193,7 @@ jako `(0, 0, 0)` i nigdy nie wpływają na metrykę. Pełny kontrakt opisano w s
 
 ## Trenowanie
 
-Żadna rodzina normalnych nie ma implementacji trenowania. `train()` zgłasza
-`NotImplementedError` w obu przypadkach. Strona MoGe-2 wskazuje przypięte
-oficjalne checkpointy do predykcji, walidacji i eksportu.
+Te rodziny estymacji normalnych nie mają implementacji trenowania. Strona MoGe-2 wskazuje ustalone oficjalne checkpointy do predykcji, walidacji i eksportu.
 
 ## Walidacja
 
@@ -230,4 +226,3 @@ rozdzielczości i batchu 1. `dynamic` oraz `batch` inny niż 1 są odrzucane, a
 formatów znajduje się na stronie [MoGe-2](/docs/models/moge-2) i w
 [pełnej macierzy eksportu](/docs/reference/export-matrix).
 [Eksport](/docs/export) wymienia argumenty akceptowane przez każdy format.
-

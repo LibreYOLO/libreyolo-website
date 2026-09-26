@@ -4,7 +4,7 @@ seo_title: "Monocular depth estimation in LibreYOLO"
 description: "Predict a dense relative depth map from one image in LibreYOLO. Compare the depth families, read the depth metrics, and export a depth model."
 lead: "Depth estimation predicts how far each pixel is from the camera using a single image. LibreYOLO exposes it as the depth task, which returns a dense relative inverse-depth map on the original image canvas."
 keywords: [monocular depth estimation python, depth map from single image, relative depth model, depth anything libreyolo, dense depth prediction]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Predict a depth map
@@ -91,7 +91,7 @@ photo.
 
 ## Models
 
-Six families serve `depth`.
+The following families serve `depth`.
 
 [Depth Anything V2](/docs/models/depth-anything-v2) pairs a DINOv2 encoder with
 a DPT decoder and is the general-purpose default here. Licensing decides the
@@ -107,9 +107,7 @@ distilled from Depth Anything V2 Large, with a second checkpoint whose decoder
 avoids gather and unfold operations for NPU compilers that lack them.
 
 [MiDaS](/docs/models/midas) is the line of work that established the zero-shot
-relative-depth protocol the other families are measured with. It is the one
-depth family LibreYOLO does not republish: requesting a checkpoint downloads the
-official asset from its authors' GitHub release and checks a pinned SHA-256.
+relative-depth protocol the other families are measured with. Its s and l checkpoints download from LibreYOLO mirrors under the publisher MIT grant.
 
 [LibreMODUS](/docs/models/libremodus) reaches depth as one target of an
 any-to-any model rather than as a dedicated head. It needs the `modus` extra and
@@ -121,18 +119,20 @@ image through a diffusion decode, from the same 7B checkpoint that serves its
 six other tasks. It needs the `sensenova` extra, and its weights are restricted
 to non-commercial use; the license is on its page.
 
+[Marigold V2](/docs/models/marigold-v2) adds diffusion-based depth adapters with explicit depth encodings.
+
 ## Predict
 
-Weights download from Hugging Face on first use and are cached locally, except
-for the two families noted above.
+Weights download on first use and are cached locally. The model pages describe authentication and runtime requirements.
 
 <code-tabs name="predict" />
 
 Input resolution is constrained per family. Depth Anything V2 and Depth Anything
 3 build on a DINOv2 patch grid, so `imgsz` must divide evenly by 14, which
-LibreYOLO checks before running. `Results.plot()` does not cover this task; it
-is defined for surface normals and edges only. See [prediction](/docs/predict)
+LibreYOLO checks before running. `Results.plot()` renders depth results. See [prediction](/docs/predict)
 for sources, streaming and result handling.
+
+`DepthMap.encoding` is `inverse_depth` by default and may be `depth` or `log_depth`. Validation interprets the encoding before affine alignment. The encoding does not give relative predictions a metric scale.
 
 ## Dataset format
 
@@ -168,7 +168,7 @@ cover datasets that name their depth files or validity masks differently. See
 ## Train
 
 No depth family in LibreYOLO has a training implementation: `train()` raises
-`NotImplementedError` on all six. Each model page names the conversion script
+`NotImplementedError` on these families. Each model page names the conversion script
 that turns a checkpoint trained upstream into one LibreYOLO can load.
 
 ## Validate

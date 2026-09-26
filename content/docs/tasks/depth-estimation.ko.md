@@ -11,7 +11,7 @@ keywords:
   - 상대 깊이 모델
   - 깊이 어떤 것 libreyolo
   - 밀집 깊이 추정
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: 깊이 맵 예측
@@ -79,7 +79,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: e0612c59f9c999b4
+source_hash: "f0afab6b9b451075"
 ---
 
 ## 정의
@@ -90,7 +90,7 @@ source_hash: e0612c59f9c999b4
 
 ## 모델들
 
-여섯 가문이 `depth`를 섬깁니다.
+다음 계열이 `depth`를 지원합니다.
 
 [Depth Anything V2](/docs/models/depth-anything-v2)은 DINOv2 인코더와 DPT 디코더를 결합한 것으로, 여기서 일반적으로 사용하는 기본 모델입니다. 라이선스는 정확도만큼 모델 크기에도 영향을 미칩니다. Small 체크포인트는 Apache-2.0 라이선스를 가지며, Base와 Large는 비상업용이므로 선택하기 전에 해당 페이지의 체크포인트 표를 확인하십시오.
 
@@ -98,19 +98,23 @@ source_hash: e0612c59f9c999b4
 
 [ZipDepth](/docs/models/zipdepth)는 소형 계층입니다: Depth Anything V2 Large에서 증류된 재매개변수화 가능한 CNN으로, 두 번째 체크포인트에서는 디코더가 gather 및 unfold 연산을 피하여 해당 연산이 없는 NPU 컴파일러를 지원합니다.
 
-[MiDaS](/docs/models/midas)은 다른 계열들이 측정되는 제로-샷 상대 깊이 프로토콜을 확립한 작업 계열입니다. LibreYOLO가 재배포하지 않는 유일한 깊이 계열입니다: 체크포인트를 요청하면 공식 제작자의 GitHub 릴리스에서 자산을 다운로드하고 고정된 SHA-256을 확인합니다.
+[MiDaS](/docs/models/midas)는 다른 계열의 측정에 사용하는 제로샷 상대 깊이 프로토콜을 확립한 연구 계열입니다. s와 l 체크포인트는 배포자의 MIT 허가에 따라 LibreYOLO 미러에서 다운로드됩니다.
 
 [LibreMODUS](/docs/models/libremodus)은 전용 헤드가 아닌 any-to-any 모델의 한 타깃으로서 깊이에 도달합니다. 이는 `modus` 추가와 본인의 인증된 Hugging Face 계정을 필요로 하며, `val()`나 `export()`은 제공하지 않습니다.
 
 [SenseNova-Vision](/docs/models/sensenova-vision)은 여섯 가지 다른 작업을 수행하는 동일한 7B 체크포인트에서 디퓨전 디코드를 통해 깊이 맵을 이미지로 생성합니다. 추가적으로 `sensenova`가 필요하며, 가중치는 비상업적 사용으로 제한됩니다. 라이선스는 해당 페이지에서 확인할 수 있습니다.
 
+[Marigold V2](/docs/models/marigold-v2)는 깊이 인코딩을 명시하는 확산 기반 깊이 어댑터를 추가합니다.
+
 ## 예측
 
-가중치는 위에서 언급한 두 가지 계열을 제외하고, 처음 사용할 때 Hugging Face에서 다운로드되어 로컬에 캐시됩니다.
+가중치는 처음 사용할 때 다운로드되어 로컬에 캐시됩니다. 인증과 런타임 요구 사항은 모델 페이지에 설명되어 있습니다.
 
 <code-tabs name="predict" />
 
-입력 해상도는 계열별로 제한됩니다. Depth Anything V2와 Depth Anything 3는 DINOv2 패치 그리드를 기반으로 구축되므로, `imgsz`는 14로 정확히 나누어져야 하며, LibreYOLO는 실행 전에 이를 확인합니다. `Results.plot()`는 이 작업을 다루지 않으며, 표면 법선과 엣지 전용으로 정의되어 있습니다. 소스, 스트리밍 및 결과 처리에 대해서는 [예측](/docs/predict)을 참조하십시오.
+입력 해상도 제약은 계열마다 다릅니다. Depth Anything V2와 Depth Anything 3은 DINOv2 패치 그리드를 사용하므로 `imgsz`는 14로 나누어떨어져야 하며, LibreYOLO는 실행 전에 이를 확인합니다. `Results.plot()`은 깊이 결과를 렌더링합니다. 소스, 스트리밍, 결과 처리는 [예측](/docs/predict)을 참조하십시오.
+
+`DepthMap.encoding`의 기본값은 `inverse_depth`이며 `depth` 또는 `log_depth`일 수도 있습니다. 검증은 아핀 정렬 전에 인코딩을 해석합니다. 인코딩이 상대 예측에 미터 단위 스케일을 부여하지는 않습니다.
 
 ## 데이터셋 형식
 
@@ -137,7 +141,7 @@ names: {0: depth}
 
 ## 학습
 
-LibreYOLO에는 학습 구현이 없는 깊이 없는 계열가 있습니다: `train()`는 여섯 개 모두에 대해 `NotImplementedError`를 발생시킵니다. 각 모델 페이지에는 업스트림에서 학습된 체크포인트를 LibreYOLO에서 로드할 수 있는 것으로 변환하는 스크립트의 이름이 나와 있습니다.
+LibreYOLO의 깊이 계열에는 학습 구현이 없으며, 이 계열에서 `train()`은 `NotImplementedError`를 발생시킵니다. 각 모델 페이지는 업스트림에서 학습한 체크포인트를 LibreYOLO가 로드할 수 있는 형태로 바꾸는 변환 스크립트를 명시합니다.
 
 ## 검증
 

@@ -9,7 +9,7 @@ keywords:
   - 相对深度模型
   - depth anything libreyolo
   - 稠密深度预测
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: 预测深度图
@@ -77,7 +77,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: e0612c59f9c999b4
+source_hash: f0afab6b9b451075
 ---
 
 ## 定义
@@ -95,7 +95,7 @@ source_hash: e0612c59f9c999b4
 
 ## 模型
 
-有六个家族支持 `depth`。
+以下家族支持 `depth`。
 
 [Depth Anything V2](/docs/models/depth-anything-v2) 把 DINOv2 编码器和 DPT 解码
 器搭配在一起，是这里的通用默认选择。许可对尺寸的影响不亚于精度：Small 检查点
@@ -109,9 +109,7 @@ source_hash: e0612c59f9c999b4
 Anything V2 Large 蒸馏而来，另有一个检查点，它的解码器避开了 gather 和 unfold
 算子，以适配缺少这些算子的 NPU 编译器。
 
-[MiDaS](/docs/models/midas) 是确立了零样本相对深度评测协议的那一系工作，其他家
-族都按这套协议衡量。它是 LibreYOLO 唯一没有重新发布的深度家族：请求一个检查点
-时，会从作者的 GitHub release 下载官方文件，并校验一个固定的 SHA-256。
+[MiDaS](/docs/models/midas) 建立了其他家族用于评估的零样本相对深度协议。s 和 l 检查点依据发布者的 MIT 授权从 LibreYOLO 镜像下载。
 
 [LibreMODUS](/docs/models/libremodus) 是把深度作为一个 any-to-any 模型的目标之
 一来完成，而不是靠专门的 head。它需要 `modus` 附加依赖（extra）和你自己通过认证
@@ -121,16 +119,17 @@ Anything V2 Large 蒸馏而来，另有一个检查点，它的解码器避开�
 图像生成出来，用的是同一个服务于它另外六个任务的 7B 检查点。它需要 `sensenova`
 附加依赖，权重仅限非商用；许可证在它的页面上。
 
+[Marigold V2](/docs/models/marigold-v2) 提供基于扩散模型的深度适配器，并明确记录深度编码。
+
 ## 预测
 
-权重在首次使用时从 Hugging Face 下载并缓存在本地，上面提到的那两个家族除外。
+权重在首次使用时下载，并缓存在本地。模型页面说明了身份验证和运行时要求。
 
 <code-tabs name="predict" />
 
-输入分辨率按家族各有限制。Depth Anything V2 和 Depth Anything 3 建立在 DINOv2
-的 patch 网格之上，因此 `imgsz` 必须能被 14 整除，LibreYOLO 会在运行前检查这一
-点。`Results.plot()` 不覆盖这个任务；它只为表面法线和边缘定义。关于输入源、流和
-结果处理，见[预测](/docs/predict)。
+输入分辨率受各家族约束。Depth Anything V2 和 Depth Anything 3 基于 DINOv2 patch 网格，因此 `imgsz` 必须能被 14 整除，LibreYOLO 会在运行前检查。`Results.plot()` 渲染深度结果。数据源、流式处理和结果处理见[预测](/docs/predict)。
+
+`DepthMap.encoding` 默认为 `inverse_depth`，也可以是 `depth` 或 `log_depth`。验证先解析编码，再进行仿射对齐。编码不会赋予相对预测公制尺度。
 
 ## 数据集格式
 
@@ -162,9 +161,7 @@ names: {0: depth}
 
 ## 训练
 
-LibreYOLO 里没有任何一个深度家族带训练实现：六个家族上的 `train()` 都会抛出
-`NotImplementedError`。每个模型页面都写明了对应的转换脚本，它把上游训练好的检查
-点转成 LibreYOLO 能加载的形式。
+LibreYOLO 的深度家族都没有训练实现：调用 `train()` 会抛出 `NotImplementedError`。各模型页面列出了将上游训练检查点转换为 LibreYOLO 可加载格式的脚本。
 
 ## 验证
 

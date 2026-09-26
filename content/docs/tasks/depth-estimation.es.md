@@ -16,7 +16,7 @@ keywords:
   - modelo de profundidad relativa
   - depth anything libreyolo
   - calcular profundidad con python
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Predecir un mapa de profundidad
@@ -102,7 +102,7 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: e0612c59f9c999b4
+source_hash: f0afab6b9b451075
 ---
 
 ## Definición
@@ -122,7 +122,7 @@ lugar de una foto anotada.
 
 ## Modelos
 
-Seis familias cubren `depth`.
+Las siguientes familias cubren `depth`.
 
 [Depth Anything V2](/docs/models/depth-anything-v2) combina un encoder DINOv2 con
 un decoder DPT y es aquí la opción general por defecto. La licencia decide el
@@ -140,10 +140,7 @@ cuyo decoder evita las operaciones gather y unfold para los compiladores de NPU
 que no las tienen.
 
 [MiDaS](/docs/models/midas) es la línea de trabajo que estableció el protocolo de
-profundidad relativa zero-shot con el que se miden las demás familias. Es la
-única familia de profundidad que LibreYOLO no republica: pedir un checkpoint
-descarga el asset oficial desde la release de GitHub de sus autores y comprueba
-un SHA-256 fijado.
+profundidad relativa zero-shot con el que se miden las demás familias. Sus checkpoints s y l se descargan de los mirrors de LibreYOLO bajo la licencia MIT del editor.
 
 [LibreMODUS](/docs/models/libremodus) llega a la profundidad como uno de los
 objetivos de un modelo any-to-any, y no como una cabeza dedicada. Necesita el
@@ -155,19 +152,21 @@ como una imagen mediante un decode por difusión, desde el mismo checkpoint de 7
 que cubre sus otras seis tareas. Necesita el extra `sensenova`, y sus pesos están
 restringidos a uso no comercial; la licencia está en su página.
 
+[Marigold V2](/docs/models/marigold-v2) añade adaptadores de profundidad basados en difusión con codificaciones de profundidad explícitas.
+
 ## Predicción
 
-Los pesos se descargan de Hugging Face en el primer uso y se cachean en local,
-salvo en las dos familias señaladas arriba.
+Los pesos se descargan en el primer uso y se guardan en la caché local. Las páginas de los modelos describen los requisitos de autenticación y ejecución.
 
 <code-tabs name="predict" />
 
 La resolución de entrada está limitada por familia. Depth Anything V2 y Depth
 Anything 3 se construyen sobre una rejilla de parches DINOv2, así que `imgsz`
 debe ser divisible por 14, algo que LibreYOLO comprueba antes de ejecutar.
-`Results.plot()` no cubre esta tarea; está definido solo para normales de
-superficie y bordes. Consulta [predicción](/docs/predict) para fuentes, streaming
+`Results.plot()` renderiza los resultados de profundidad. Consulta [predicción](/docs/predict) para fuentes, streaming
 y manejo de resultados.
+
+`DepthMap.encoding` es `inverse_depth` por defecto y puede ser `depth` o `log_depth`. La validación interpreta la codificación antes de la alineación afín. La codificación no da una escala métrica a las predicciones relativas.
 
 ## Formato del dataset
 
@@ -205,7 +204,7 @@ completo.
 ## Entrenamiento
 
 Ninguna familia de profundidad en LibreYOLO tiene implementación de
-entrenamiento: `train()` lanza `NotImplementedError` en las seis. La página de
+entrenamiento: `train()` lanza `NotImplementedError` en estas familias. La página de
 cada modelo indica el script de conversión que convierte un checkpoint entrenado
 upstream en uno que LibreYOLO pueda cargar.
 

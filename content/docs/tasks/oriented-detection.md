@@ -4,7 +4,7 @@ seo_title: "Oriented detection in LibreYOLO"
 description: "Detect rotated objects in LibreYOLO: the families that serve oriented boxes, the four-corner label row, and the predict, train, validate and export calls."
 lead: "Oriented object detection locates each instance with a rotated rectangle rather than an axis-aligned one, so a tilted object is bounded tightly instead of by a box full of background. The task key is obb."
 keywords: [oriented bounding box detection, rotated object detection, OBB python, DOTA dataset, aerial object detection, rotated IoU]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -158,10 +158,9 @@ rectangles. `result.boxes` is filled as well, with the axis-aligned form.
 
 ## Models
 
-Two families serve this task, and which one to reach for depends on whether
-you need to train.
+Three families serve this task.
 
-[RF-DETR](/docs/models/rf-detr) is the one that trains. It predicts, trains,
+[RF-DETR](/docs/models/rf-detr) supports training. It predicts, trains,
 validates and exports oriented boxes, and it ships published oriented
 checkpoints in four sizes, n, s, m and l. It needs its own extra,
 `pip install "libreyolo[rfdetr]"`, and its model page carries the weights
@@ -180,8 +179,9 @@ the oriented task is inference only on that family, `train()` raises, and there
 is no transfer from its detection weights, which use a different backbone.
 Tracking and test-time augmentation are also unavailable for oriented boxes.
 
-So: DOTA categories out of the box, RT-DETRv2. Your own oriented labels,
-RF-DETR.
+Choose the checkpoint label set and training support needed for your dataset.
+
+[YOLO-NAS](/docs/models/yolo-nas) also supports OBB training and inference. Its pretrained weights retain the upstream non-commercial terms.
 
 ## Predict
 
@@ -192,7 +192,7 @@ Weights download from Hugging Face on first use and are cached locally.
 Know what RF-DETR's published checkpoints are before you run them. Despite DOTA
 being the reference benchmark for this task, those weights were not trained on
 it. All four were initialized from the RF-DETR detection weights and fine-tuned on a
-single Roboflow Universe dataset of UAV footage, with six vehicle classes: bike,
+single dataset of UAV footage, with six vehicle classes: bike,
 bus, car, other_vehicle, taxi and truck. Their model cards describe them as
 development weights, produced while validating oriented training support, and
 say they should not be read as production or benchmark-official weights.
@@ -262,13 +262,15 @@ The canonical row parser is `libreyolo.data.parse_yolo_obb_label_line`.
 
 <code-tabs name="train" />
 
-Training on this task means RF-DETR. Training continues from a published `-obb`
+RF-DETR training continues from a published `-obb`
 checkpoint by default. Starting from detection weights is a deliberate
 transfer: those weights predict no angle, and passing `task=obb` is what
 authorizes the swap. Keep `lr0` at or below `1e-4`, as with the family's other
 tasks. RT-DETRv2's oriented checkpoints cannot be fine-tuned; use them as they
 are, or train an RF-DETR model on your own labels. See [training](/docs/train) for datasets,
 augmentation, multi-GPU and loggers.
+
+YOLO-NAS OBB uses rotated assignment and losses, flip/HSV augmentation and `amp=False` by default. It selects checkpoints with `metrics/mAP50-95(OBB)`.
 
 ## Validate
 

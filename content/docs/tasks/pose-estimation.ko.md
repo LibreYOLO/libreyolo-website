@@ -14,7 +14,7 @@ keywords:
   - COCO 키포인트
   - OKS mAP
   - 포즈 모델 학습
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -134,7 +134,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 9de01d1f615bdf33
+source_hash: "1b9e7614546d8f00"
 ---
 
 ## 정의
@@ -149,11 +149,13 @@ source_hash: 9de01d1f615bdf33
 
 ## 모델들
 
-세 가지 계열 모두 학습과 예측을 수행합니다: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) 및 [YOLO-NAS](/docs/models/yolo-nas), 모두 단일 단계 모델입니다. RF-DETR은 자체적인 추가 항목 `pip install "libreyolo[rfdetr]"`가 필요합니다. RF-DETR과 EdgeCrafter는 공개된 포즈 체크포인트를 제공하며, 둘 다 단일 클래스인 사람만 포함된 데이터셋에서 파인튜닝됩니다. EdgeCrafter의 키포인트 헤드는 생성 시 고정되어 있으며, 다른 개수를 선언하는 데이터셋은 거부하지만, RF-DETR은 하나를 위해 헤드를 재초기화합니다. YOLO-NAS는 비상업적 라이선스 하에 Deci.AI 자체 CDN에서 가중치를 가져오며, LibreYOLO는 그 어느 것도 공개하지 않습니다; 또한 그 포즈 헤드는 새로운 키포인트 수에 맞게 다시 빌드되며, 세 가지 중 유일하게 클래스 수가 하나로 고정되지 않아 다중 클래스나 인간이 아닌 골격, 예를 들어 동물 포즈를 위한 계열입니다.
+세 계열이 학습과 예측을 모두 지원합니다. [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [YOLO-NAS](/docs/models/yolo-nas)는 모두 단일 단계 모델입니다. RF-DETR은 전용 추가 패키지 `pip install "libreyolo[rfdetr]"`이 필요합니다. RF-DETR과 EdgeCrafter에는 공개 자세 체크포인트가 있습니다. RF-DETR은 다중 클래스 자세도 학습합니다. EdgeCrafter의 키포인트 헤드는 생성 시 고정되므로 다른 개수를 선언한 데이터셋을 거부하지만, RF-DETR은 그 개수에 맞게 헤드를 다시 초기화합니다. YOLO-NAS는 비상업적 라이선스에 따라 Deci.AI의 CDN에서 가중치를 가져오며, LibreYOLO는 해당 가중치를 배포하지 않습니다. 자세 헤드는 새 키포인트 개수에 맞게 재구성되며, 다중 클래스 또는 사람이 아닌 골격도 지원합니다.
 
 [HRNet](/docs/models/hrnet)은 상향식 옵션입니다. 이 모델은 예측하고, 검증하며, 내보내고, 그 `train()`는 `NotImplementedError`를 발생시킵니다. 사람이 입력되지 않으면, 자동으로 LibreYOLO9t 탐지기와 페어링되며; `cropped=True`는 전체 이미지를 하나의 인스턴스로 취급하고, `person_boxes=`는 이미 가지고 있는 박스를 사용하며, `person_detector=`는 다른 탐지기를 지정합니다.
 
 [SenseNova-Vision](/docs/models/sensenova-vision) 또한 키포인트를 출력합니다. 이것은 자체 팩토리 `LibreVLM`와 자체 익스트라를 가진 프롬프트 기반 생성 모델이며, 어휘 세트가 없으면 `set_task("pose")`는 사람 카테고리로 대체됩니다. 이 모델의 가중치는 비상업적용이며, 모든 예측이 디퓨전 디코드이기 때문에 이미지당 지연 시간은 목적에 맞게 제작된 포즈 헤드보다 훨씬 깁니다.
+
+[DEKR](/docs/models/dekr)는 별도 사람 탐지기 없이 상향식 다중 인물 자세 추정을 제공합니다. 추론과 검증을 지원하며 학습은 지원하지 않습니다.
 
 ## 예측
 
@@ -199,6 +201,8 @@ names:
 ```
 
 `kpt_shape`가 필요하며, `[K, 2]` 또는 `[K, 3]`입니다. `flip_idx`는 선택 사항이며 `0..K-1`의 순열로, 각 키포인트가 수평 뒤집기 후에 가지는 인덱스를 제공합니다. 이렇게 하면 왼쪽 손목이 왼쪽 손목으로 유지됩니다. 이를 생략하면 키포인트에 대해 잘못된 인덱스 순서로 적용되는 대신 수평 뒤집기 증가가 꺼집니다.
+
+RF-DETR 다중 클래스 자세는 클래스 이름 또는 ID를 키로 하는 `kpt_names`로 각 클래스의 앞쪽 명명된 키포인트를 선택합니다. 빈 목록은 바운딩 박스만 있는 클래스를 나타냅니다. 다중 클래스 데이터셋에는 `names`와 키포인트가 있는 클래스가 하나 이상 필요합니다. 잘못된 레이블에 대한 진단은 파일, 줄, 예상 `kpt_shape` 형식을 표시합니다.
 
 ## 학습
 

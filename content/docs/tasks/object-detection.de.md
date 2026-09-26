@@ -15,7 +15,7 @@ keywords:
   - MIT Objekterkennungsbibliothek
   - YOLO Alternative
   - Objektdetektor trainieren
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -142,7 +142,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: c735b6e3de78dd2b
+source_hash: "28d7cbb721e0f109"
 ---
 
 ## Definition
@@ -155,13 +155,15 @@ Die Objekterkennung beantwortet, wo sich jedes Objekt befindet und worum es sich
 
 ## Modelle
 
-Zwölf Familien unterstützen sowohl Training als auch Vorhersage: [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet) und [PicoDet](/docs/models/picodet). YOLOv9 und RF-DETR sind die beiden führenden Familien und erhalten neue Funktionen zuerst. RF-DETR benötigt das eigene Extra `pip install "libreyolo[rfdetr]"`. Die übrigen laufen mit dem Basispaket.
+Die folgenden Familien unterstützen Training und Vorhersage: [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet) und [PicoDet](/docs/models/picodet). YOLOv9 und RF-DETR sind die beiden Flaggschiff-Familien und erhalten Funktionen zuerst. RF-DETR benötigt sein eigenes Extra, `pip install "libreyolo[rfdetr]"`; die anderen laufen mit dem Basispaket.
 
 Elf weitere Familien unterstützen Vorhersage, Validierung und Export, während `train()` `NotImplementedError` auslöst: [LW-DETR](/docs/models/lw-detr), [DETR](/docs/models/detr), [Deformable DETR](/docs/models/deformable-detr), [DINO-DETR](/docs/models/dino-detr), [Faster R-CNN](/docs/models/faster-rcnn), [Mask R-CNN](/docs/models/mask-rcnn), [FCOS](/docs/models/fcos), [RetinaNet](/docs/models/retinanet), [SSD](/docs/models/ssd), [CenterNet](/docs/models/centernet) und [EfficientDet](/docs/models/efficientdet).
 
 Die Darknet-Abstammungslinie aus [YOLOv1](/docs/models/yolov1), [YOLOv2](/docs/models/yolov2), [YOLOv3](/docs/models/yolov3) und [YOLOv4](/docs/models/yolov4) wird als eingefrorenes Exponat bewahrt. Vorhersage, Validierung und Export funktionieren, Training nicht.
 
 Eine separate Gruppe übernimmt ihre Klassenliste zur Laufzeit statt aus dem Checkpoint und erkennt dadurch Namen, die beim Training nie vorkamen: [Grounding DINO](/docs/models/grounding-dino), [OWLv2](/docs/models/owlv2), [OMDet-Turbo](/docs/models/omdet-turbo) und [OV-DEIM](/docs/models/ov-deim) sowie die Vision-Language-Familien [Florence-2](/docs/models/florence-2), [Kosmos-2](/docs/models/kosmos-2), [Qwen3-VL](/docs/models/qwen3-vl), [SmolVLM2](/docs/models/smolvlm2), [InternVL3](/docs/models/internvl3), [LFM2-VL](/docs/models/lfm2-vl), [LocateAnything](/docs/models/locate-anything), [SenseNova-Vision](/docs/models/sensenova-vision) und [LibreMODUS](/docs/models/libremodus). Diese Modelle werden über eigene Factorys und Extras geladen. Den genauen Aufruf findest du auf der jeweiligen Modellseite.
+
+[PP-YOLOE](/docs/models/ppyoloe) und [TinyFormer](/docs/models/tinyformer) unterstützen ebenfalls Erkennungstraining.
 
 ## Vorhersage
 
@@ -212,6 +214,8 @@ names:
 <code-tabs name="train" />
 
 `epochs`, `imgsz`, `batch` und `lr0` sind die zuerst anzupassenden Argumente. `lr0` lässt sich nicht zwischen Familien übertragen. Eine Lernrate, die ein konvolutionaler Detektor verträgt, kann bei einem Transformer zur Divergenz führen. Übernimm den Wert daher von der Modellseite statt aus dem Beispiel einer anderen Familie. Eine Familie kann ein Argument auch vollständig ignorieren. Die jeweilige Seite führt solche Fälle auf. Unter [Training](/docs/train) findest du Informationen zu Datensätzen, Augmentation, Multi-GPU und Loggern.
+
+Verwende `classes=`, um ausgewählte ursprüngliche Datensatz-IDs beizubehalten; `single_cls=True` fasst die beibehaltenen Labels als Klasse 0 zusammen. Siehe [Hyperparameter](/docs/train/hyperparameters) für unterstützte Familien und die Übernahme bei der Validierung.
 
 ## Validierung
 

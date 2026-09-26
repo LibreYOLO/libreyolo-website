@@ -12,7 +12,7 @@ keywords:
   - FOMO 点定位
   - 图像目标计数
   - 点定位
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: 预测点并计数
@@ -115,7 +115,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.points.xy)
-source_hash: 932153c8870d1c7c
+source_hash: 5c3cfe7a606cd7aa
 ---
 
 ## 定义
@@ -130,7 +130,7 @@ source_hash: 932153c8870d1c7c
 
 ## 模型
 
-有三个家族支持 `point`，而且它们之间不能互相替代。
+点检测模型的词汇和输出语义各不相同。
 
 [FOMO](/docs/models/fomo) 是固定词汇表的那个选项：一个网格分类器，把低分辨率网格的
 每个格子判为背景或物体中心。它是 LibreYOLO 唯一能训练的点家族，也是唯一能导出的。
@@ -145,6 +145,8 @@ source_hash: 932153c8870d1c7c
 `LibreVLM("sensenova-vision", task="point")`。它需要 `sensenova` 这个额外依赖，而且
 每次预测都是在一个 7B 模型上跑一遍生成，所以单图延迟会明显高于专门设计的检测器。它的
 权重是非商业的；许可证在它自己的页面上。
+
+[Molmo2](/docs/models/molmo2) 和 [Moondream](/docs/models/moondream) 提供以文本为条件的点。[LibreGround](/docs/reference/ground-api) 使用 ShowUI、Florence-2 或 Qwen3-VL，根据指令为每次查询选择至多一个点击位置。
 
 ## 预测
 

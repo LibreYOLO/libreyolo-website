@@ -12,7 +12,7 @@ keywords:
   - COCO 关键点
   - OKS mAP
   - 训练姿态估计模型
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -132,7 +132,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 9de01d1f615bdf33
+source_hash: 1b9e7614546d8f00
 ---
 
 ## 定义
@@ -156,15 +156,7 @@ source_hash: 9de01d1f615bdf33
 
 ## 模型
 
-有三个家族既能训练也能预测：[RF-DETR](/docs/models/rf-detr)、
-[EdgeCrafter](/docs/models/edgecrafter) 和 [YOLO-NAS](/docs/models/yolo-nas)，
-全都是单阶段的。RF-DETR 需要它自己的额外依赖，`pip install "libreyolo[rfdetr]"`。
-RF-DETR 和 EdgeCrafter 都提供已发布的姿态检查点，两者都在单类别、只含人的数据集上
-微调；EdgeCrafter 的关键点 head 在构建时就固定了，会拒绝声明了不同数量的数据集，而
-RF-DETR 会为这种数据集重新初始化它的 head。YOLO-NAS 从 Deci.AI 自己的 CDN 拉取权重，
-采用非商用许可，LibreYOLO 一个都不发布；它的姿态 head 同样会为新的关键点数量重建，
-而且它是三者中唯一类别数不固定为 1 的，所以要做多类别或非人体骨架，比如动物姿态，
-就用这个家族。
+三个家族同时支持训练和预测：[RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter) 和 [YOLO-NAS](/docs/models/yolo-nas)，都是单阶段模型。RF-DETR 需要自己的 extra，`pip install "libreyolo[rfdetr]"`。RF-DETR 和 EdgeCrafter 提供已发布的姿态检查点。RF-DETR 也支持多类别姿态训练；EdgeCrafter 的关键点 head 在构造时固定，会拒绝声明不同关键点数量的数据集，而 RF-DETR 会为新数量重新初始化 head。YOLO-NAS 从 Deci.AI 自己的 CDN 获取采用非商用许可的权重，LibreYOLO 不发布这些权重；它的姿态 head 也会针对新的关键点数量重建，并支持多类别或非人体骨架。
 
 [HRNet](/docs/models/hrnet) 是自顶向下的那个选项。它能预测、验证和导出，而它的
 `train()` 会抛出 `NotImplementedError`。在没有给定人体来源时，它会自动给自己配一个
@@ -175,6 +167,8 @@ LibreYOLO9t 检测器；`cropped=True` 把整张图像当作一个实例，`pers
 的生成式模型，有自己的工厂函数 `LibreVLM`，也有自己的额外依赖；没有设置词汇表时，
 `set_task("pose")` 会回退到 person 类别。它的权重不可商用，而且每张图像的延迟远高于
 一个专门做姿态的 head，因为每次预测都是一次扩散解码。
+
+[DEKR](/docs/models/dekr) 提供自底向上的多人姿态估计，无需单独的人体检测器。它支持推理和验证，不支持训练。
 
 ## 预测
 
@@ -229,6 +223,8 @@ names:
 `kpt_shape` 是必填的，取值为 `[K, 2]` 或 `[K, 3]`。`flip_idx` 是可选的，它是
 `0..K-1` 的一个排列，给出每个关键点在水平翻转之后所取的索引，左手腕之所以还是左手腕
 就靠它。省略它，关键点上的水平翻转增强会被关掉，而不是以错误的索引顺序照样施加。
+
+RF-DETR 多类别姿态使用以类别名称或 ID 为键的 `kpt_names`，为每个类别选择前几个已命名关键点。空列表表示只有检测框的类别。多类别数据集需要 `names`，且至少有一个含关键点的类别。标签格式错误的诊断信息会指出文件、行号和预期的 `kpt_shape` 布局。
 
 ## 训练
 

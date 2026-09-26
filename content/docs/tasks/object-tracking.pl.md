@@ -19,7 +19,7 @@ keywords:
   - deep ocsort
   - track id
   - śledzenie reid
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -79,7 +79,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: f1fa7dcf60597d6b
+source_hash: 384ee3d6a05190aa
 ---
 
 ## Definicja
@@ -172,9 +172,11 @@ będzie zbędny. Można też przekazać pola jako argumenty nazwane i pozwolić
 powodują ostrzeżenie zamiast cichego zastosowania. W obu przypadkach
 `track_conf` jest ignorowane po jawnym ustawieniu odpowiedniego klucza.
 
-Pozostałe argumenty odpowiadają predykcji: `iou`, `imgsz`, `classes`, `max_det`,
-`vid_stride`, `show` oraz `save` z `output_path`. Źródłem jest ścieżka do pliku
-wideo. Obsługę wyników opisano w sekcji [predykcja](/docs/predict).
+Pozostałe argumenty odpowiadają predykcji: `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show` i `save` z `output_path`. Źródłem może być wideo lub uporządkowana sekwencja obrazów. Obsługę wyników opisano w sekcji [predykcji](/docs/predict).
+
+Obrazy, foldery sortowane według nazw plików, listy, krotki i leniwe iteratory obrazów mogą dostarczać kolejne klatki. `fps=30.0` określa ich częstotliwość, a `color_format="auto"` wybiera interpretację wejścia. `vid_stride` zmniejsza zachowaną częstotliwość do `fps / vid_stride`.
+
+Własną instancję trackera można przekazać przez `tracker=`. Implementuje ona `reset()` i `update(results, image=None)` z `libreyolo.tracking.Tracker`. Uruchomienie resetuje ją raz i przekazuje oryginalną klatkę RGB PIL. Zwrócone `track_id` musi być jednowymiarową tablicą lub tensorem liczb całkowitych, dopasowanym do ramek na tym samym backendzie i urządzeniu. Własne instancje domyślnie używają `track_conf=0.25`; należy skonfigurować instancję bezpośrednio, zamiast przekazywać argumenty nazwane trackera lub `tracker_config`.
 
 ## Trenowanie
 
@@ -183,4 +185,3 @@ pozbawione wyuczonych parametrów, a sieć wyglądu Deep OC-SORT jest opublikowa
 checkpointem ponownej identyfikacji, pobieranym przy pierwszym użyciu. Poprawa
 jakości śledzenia wymaga poprawy detektora lub dostrojenia opisanych wyżej
 progów asocjacji.
-

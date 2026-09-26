@@ -15,7 +15,7 @@ keywords:
   - FOMO Punktlokalisierung
   - Objekte in Bildern zählen
   - Punktlokalisierung
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Punkte vorhersagen und zählen
@@ -158,7 +158,7 @@ snippets:
 
 
         print(result.points.xy)
-source_hash: 932153c8870d1c7c
+source_hash: "5c3cfe7a606cd7aa"
 ---
 
 ## Definition
@@ -169,13 +169,15 @@ Eine Vorhersage befüllt `result.points`, eine `Points`-Nutzlast um ein Array de
 
 ## Modelle
 
-Drei Familien unterstützen `point` und sind nicht austauschbar.
+Punktmodelle unterscheiden sich in Vokabular und Ausgabesemantik.
 
 [FOMO](/docs/models/fomo) ist die Option mit festem Vokabular. Ein Rasterklassifikator markiert jede Zelle eines niedrig aufgelösten Rasters als Hintergrund oder Objektmittelpunkt. Es ist die einzige Punktfamilie, die LibreYOLO trainieren und exportieren kann.
 
 [LocateAnything](/docs/models/locate-anything) verwendet Text statt eines Klassenindex. Das Vokabular entspricht daher jeder angegebenen Formulierung. Die Familie benötigt das Extra `vlm`, wird als `LibreLocateAnything` statt über die Factory `LibreYOLO()` erstellt und ihre Gewichte dürfen nur nicht kommerziell verwendet werden. Die genauen Bedingungen und zwei weiteren im Checkpoint kombinierten Lizenzen stehen auf der Modellseite.
 
 [SenseNova-Vision](/docs/models/sensenova-vision) erreicht `point` über denselben Checkpoint mit Prompt-basierter Generierung, den es für sechs weitere Aufgaben verwendet. Das Modell wird mit `LibreVLM("sensenova-vision", task="point")` geladen und benötigt das Extra `sensenova`. Jede Vorhersage ist ein Generierungsdurchlauf über ein 7B-Modell. Rechne deshalb mit einer deutlich höheren Latenz je Bild als bei einem eigens entwickelten Detektor. Die Gewichte sind nicht kommerziell nutzbar. Die Lizenz steht auf der Modellseite.
+
+[Molmo2](/docs/models/molmo2) und [Moondream](/docs/models/moondream) liefern textbedingte Punkte. [LibreGround](/docs/reference/ground-api) wählt anhand einer Anweisung mit ShowUI, Florence-2 oder Qwen3-VL höchstens einen Klick pro Anfrage aus.
 
 ## Vorhersage
 

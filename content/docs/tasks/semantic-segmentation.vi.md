@@ -2,12 +2,11 @@
 title: Phân đoạn ngữ nghĩa
 seo_title: Phân đoạn ngữ nghĩa trong LibreYOLO
 description: >-
-  Gán lớp đối tượng cho mọi pixel trong LibreYOLO: các family phục vụ tác vụ,
-  định dạng mặt nạ dày đặc và các lời gọi dự đoán, huấn luyện, xác thực cùng
-  xuất.
+  Gán lớp đối tượng cho mọi pixel trong LibreYOLO: các family phục vụ tác vụ, định dạng mặt nạ dày đặc và các
+  lời gọi dự đoán, huấn luyện, xác thực cùng xuất.
 lead: >-
-  Phân đoạn ngữ nghĩa gán một lớp đối tượng cho mỗi pixel của ảnh và không phân
-  biệt các thực thể thuộc cùng một lớp. Key tác vụ là semantic.
+  Phân đoạn ngữ nghĩa gán một lớp đối tượng cho mỗi pixel của ảnh và không phân biệt các thực thể thuộc cùng
+  một lớp. Key tác vụ là semantic.
 keywords:
   - phân đoạn ngữ nghĩa python
   - phân loại pixel
@@ -15,7 +14,7 @@ keywords:
   - huấn luyện mô hình segmentation
   - mIoU
   - thư viện segmentation MIT
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -116,9 +115,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 44b92d8ba6062f04
+source_hash: f642c33d64f6878c
 ---
-
 ## Định nghĩa
 
 Phân đoạn ngữ nghĩa gán nhãn cho pixel, không phải đối tượng. Mỗi pixel nhận một
@@ -138,7 +136,7 @@ metric, còn `.classes` không liệt kê nó.
 
 ## Mô hình
 
-Ba family vừa huấn luyện vừa dự đoán: [SegFormer](/docs/models/segformer),
+Các họ có thể huấn luyện gồm: [SegFormer](/docs/models/segformer),
 [LingBot-Vision](/docs/models/lingbot-vision) và
 [DINOv2](/docs/models/dinov2). SegFormer và LingBot-Vision chạy trên package cơ
 sở và cung cấp trọng số đã công bố. DINOv2 cần
@@ -156,6 +154,8 @@ công bố đến từ các dataset có không gian nhãn rất khác nhau, tron
 lớp của ADE20K so với 19 lớp của Cityscapes, vì vậy `names` của checkpoint cho
 biết nó có thể gán nhãn gì, còn hai checkpoint chỉ so sánh được khi huấn luyện
 trên cùng tập lớp.
+
+[PP-LiteSeg](/docs/models/ppliteseg) và [U-Net](/docs/models/unet) là các họ phân đoạn ngữ nghĩa có thể huấn luyện. U-Net hiện chưa có bản chuyển đổi được lưu trữ đã xác minh.
 
 ## Dự đoán
 
@@ -227,6 +227,8 @@ output stride, còn cả huấn luyện lẫn xác thực đều phát sinh `Val
 khi lượt chạy bắt đầu nếu `imgsz` không chia hết. Số chia là 32 cho SegFormer,
 16 cho LingBot-Vision và EoMT, 14 cho DINOv2, 8 cho FCN cùng PIDNet. Xem [huấn
 luyện](/docs/train) để biết về dataset, augmentation, multi-GPU và logger.
+
+Dataset phân đoạn ngữ nghĩa chấp nhận khung ảnh `(height, width)`. PP-LiteSeg và U-Net phân biệt ảnh cắt khi huấn luyện với hình chữ nhật khi đánh giá. Lấy mẫu đổi tỷ lệ rồi cắt đệm các vùng thiếu bằng nhãn bỏ qua; phép biến đổi quang học của họ mô hình được áp dụng khi có cấu hình.
 
 ## Xác thực
 
