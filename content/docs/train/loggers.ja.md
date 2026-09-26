@@ -17,7 +17,7 @@ keywords:
   - 学習 コールバック
   - 学習 指標 csv
   - libreyolo monitor
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   logger:
     - label: 名前で指定
@@ -84,7 +84,7 @@ snippets:
       code: |
         libreyolo monitor                     # runs/以下の最新実行
         libreyolo monitor runs/train/exp      # 指定した実行
-source_hash: de035acbaed32804
+source_hash: b5fefd12a738dcb5
 ---
 
 ## ロガーを有効化
@@ -171,6 +171,8 @@ DVCLiveは`<save_dir>/dvclive`へ書き出します。概要ツリーを`/`か�
 Neptuneは意図的に`libreyolo[all]`から除外されています。安定版クライアントは7未満のprotobufを
 必要とする一方、TFLiteのextraはprotobuf 7を必要とするためです。TFLiteのextraがない環境に
 `libreyolo[neptune]`をインストールしてください。
+
+[Hugging Face Hubロガー](/docs/reference/hugging-face)は、学習終了時に`weights/best.pt`をアップロードし、なければ`last.pt`を使います。`loggers="hf:owner/repo"`または`HuggingFaceHubLogger(repo_id, private=True)`を使ってください。学習前に書き込み権限を確認し、リポジトリがなければ作成します。ロガーのデフォルトは非公開ですが、明示的な`model.push_to_hub()`のデフォルトは公開です。既存のリポジトリの公開設定は維持します。
 
 ## コールバックの記述
 

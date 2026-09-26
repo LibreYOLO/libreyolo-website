@@ -19,7 +19,7 @@ keywords:
   - miou segmentacja
   - jakość segmentacji panoptycznej
   - top1 accuracy
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   val:
     - label: Python
@@ -62,7 +62,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: d907183492fa3f57
+source_hash: ce7d26a5cd72d988
 ---
 
 ## Uruchamianie walidacji
@@ -148,6 +148,8 @@ zawierają. Ich rodziny są wybierane według `metrics/mAP50-95`, który zwracaj
 słowniki. Estymacja pozy nie zwraca ani `fitness`, ani `metrics/mAP50-95`. Jej
 trenery ustawiają zamiast tego `best_metric_key` na
 `metrics/keypoints_mAP50-95`.
+
+Klasyfikacja ImageFolder dodaje makrośrednie `metrics/precision`, `metrics/recall` i `metrics/f1`, liczone po klasach obecnych w etykietach walidacyjnych. Top-1 pozostaje domyślną funkcją fitness. Detekcja zwraca też `metrics/best_conf`, `metrics/best_conf_f1` i `metrics/best_conf_per_class` z nazwami klas jako kluczami, wybierając progi optymalne dla mikro-F1 przy IoU 0.50. Detekcje z równym wynikiem pozostają w jednej grupie; przy remisie wybierany jest wyższy próg. Brak dodatniego F1 daje NaN. Segmentacja nie udostępnia tych kluczy progów.
 
 ## Klucze szybkości
 
@@ -266,6 +268,10 @@ segmentacja panoptyczna, głębia, normalne, krawędzie, rekonstrukcja, matting,
 OCR, OBB i point nie zapisują tam niczego. Błąd tworzenia wykresu powoduje
 ostrzeżenie i nigdy nie przerywa przebiegu.
 
+`visualize=True` zapisuje obrazy TP/FP/FN ramek z uwzględnieniem klas dla detekcji i segmentacji lub porównanie etykiety z top-1 dla klasyfikacji ImageFolder w `visualize/errors/` i `visualize/correct/`. Dopasowanie używa IoU 0.5 i pewności `max(0.25, conf)`. Wartości domyślne to `visualize=False`, `show_labels=True` i `show_conf=True`. Nieobsługiwane zadania i walidacja klipów V-JEPA 2 odrzucają wizualizację.
+
+`plot_samples=8` ogranicza osobny wykres przykładowych obrazów; 0 go wyłącza, a -1 zachowuje wszystkie obrazy. Nie zmienia to metryk ani wyników wizualizacji.
+
 ## Walidacja podczas trenowania
 
 Trenowanie wykonuje walidację co `eval_interval` epok na podziale `val` zbioru
@@ -281,3 +287,7 @@ sprawdzić, dokąd trafiają wartości.
 
 - [Zbiory danych](/docs/train/datasets) opisujące klucze podziałów i formaty
   odczytywane przez walidatory.
+
+## Metryki ramek dla poszczególnych obrazów
+
+Wyniki detekcji i segmentacji zachowują zgodność ze słownikiem i udostępniają też `results.box.image_metrics`. Każda nazwa pliku wskazuje `precision`, `recall`, `f1`, `tp`, `fp` i `fn`, obliczane według reguły dopasowania wizualizacji nawet przy wyłączonej wizualizacji. Segmentacja liczy tu ramki. Powtarzające się nazwy plików używają pełnych ścieżek od drugiego wystąpienia. Zerowe mianowniki dają 0.0. Te rekordy nie są zbierane między rozproszonymi procesami rank.

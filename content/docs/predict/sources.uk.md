@@ -19,14 +19,8 @@ keywords:
   - youtube інференс
   - vid_stride
   - stream=True
-last_verified: 1.5.0
-verification: >-
-  Класифікацію джерел перевірено за libreyolo/utils/source.py (classify_source,
-  SourceKind, StreamSource, MultiStreamSource). Прийняті типи зображень і
-  розширення каталогів взято з libreyolo/utils/image_loader.py. Розширення відео
-  та шляхи збереження взято з libreyolo/utils/video.py. Синтаксис екрана взято з
-  libreyolo/utils/screen.py. Форми повернених даних і типові значення аргументів
-  перевірено за InferenceRunner.__call__ у libreyolo/models/base/inference.py.
+last_verified: "1.6.0"
+verification: Класифікацію джерел перевірено за libreyolo/utils/source.py (classify_source, SourceKind, StreamSource, MultiStreamSource). Прийняті типи зображень і розширення каталогів взято з libreyolo/utils/image_loader.py. Розширення відео та шляхи збереження взято з libreyolo/utils/video.py. Синтаксис екрана взято з libreyolo/utils/screen.py. Форми повернених даних і типові значення аргументів перевірено за InferenceRunner.__call__ у libreyolo/models/base/inference.py.
 snippets:
   images:
     - label: Одне зображення
@@ -200,7 +194,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: 93db4d43c24b69ae
 ---
 
 ## Класифікація джерела
@@ -255,6 +249,8 @@ source_hash: c371965951dd0181
 Для віддалених шляхів потрібен окремий пакет, жоден із яких типово не
 встановлено: `requests` для `http(s)://`, `boto3` для `s3://` і `gcsfs` для `gs://`.
 
+Відстеження приймає зображення, каталоги з сортуванням за назвами файлів, списки, кортежі й ліниві ітератори зображень як послідовні кадри. Передайте `fps=30.0`, щоб задати часову шкалу послідовності, і `color_format="auto"`, щоб вибрати інтерпретацію вхідних даних. Див. [відстеження](/docs/tasks/object-tracking).
+
 ## Папки
 
 Каталог сканується рекурсивно й сортується, а кожен файл з одним із наведених
@@ -282,6 +278,8 @@ source_hash: c371965951dd0181
 спричиняють попередження з рекомендацією `stream=True`.
 
 Кожен `Results` із відео містить `frame_idx`.
+
+Якщо H.264 не відкривається, кодування відео переходить до доступного кодека. Резервний варіант записується в журнал на рівні INFO й кешується для кожної пари кодека та полотна лише після успішного використання іншого кодека.
 
 ## Вебкамери, мережеві потоки та YouTube
 

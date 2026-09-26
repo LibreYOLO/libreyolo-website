@@ -18,7 +18,7 @@ keywords:
   - вбудований nms onnx
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Параметр
     value: export(format="onnx")
@@ -35,10 +35,7 @@ meta:
     value: Типово динамічний батч у Python; винятки для завдань наведено нижче
   - label: Точність
     value: 'FP32, FP16 (half=True), INT8 (int8=True, виявлення YOLO9)'
-verification: >-
-  Перевірено за файлами libreyolo/export/onnx.py, libreyolo/export/exporter.py,
-  libreyolo/export/support.py, libreyolo/backends/onnx.py та
-  libreyolo/cli/commands/export.py у гілці dev.
+verification: Перевірено за файлами libreyolo/export/onnx.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/onnx.py та libreyolo/cli/commands/export.py у гілці dev.
 snippets:
   install:
     - label: Встановлення
@@ -152,7 +149,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cee78250fc7189a3
+source_hash: 085c6fb8cb7ec4b2
 ---
 
 ## Встановлення
@@ -162,6 +159,8 @@ source_hash: cee78250fc7189a3
 Додатковий пакет встановлює `onnx`, `onnxsim` та `onnxruntime`. Для запису файлу
 достатньо лише `onnx`; `onnxsim` виконує прохід спрощення, а `onnxruntime` запускає
 артефакт і виконує калібрування INT8.
+
+Додатковий пакет ONNX потребує `onnxruntime>=1.18.0`; LaMa використовує граф opset-21.
 
 ## Експорт
 
@@ -290,4 +289,3 @@ RF-DETR також є єдиним сімейством, вхідний тенз
 запитати безпосередньо бібліотеку:
 
 <code-tabs name="support" />
-

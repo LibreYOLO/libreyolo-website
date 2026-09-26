@@ -16,7 +16,7 @@ keywords:
   - 글로벌 배치 크기
   - nccl 글루 백엔드
   - 멀티 GPU 윈도우
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -24,8 +24,8 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        # __main__ 가드는 필요합니다: 생성된 각 워커가 이것을 다시 임포트합니다
-        # 모듈이며, 가드가 없으면 학습을 재귀적으로 다시 시작할 것입니다.
+        # 이 가드는 계속 지원하며 일반 스크립트는 가드 없이도 작동합니다.
+        # 표준 pickle 폴백이 필요한 콜백/로거 객체에는 가드를 유지합니다.
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(
@@ -71,7 +71,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # GPU 0에서 한 번 탐침되었으며, 세계 크기의 배수로 조정되었습니다.
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: 83c1563d68068cd0
+source_hash: "e339072d5d8e71ea"
 ---
 
 ## 두 개의 GPU에서 실행
@@ -80,21 +80,13 @@ source_hash: 83c1563d68068cd0
 
 <code-tabs name="train" />
 
-장치가 하나 이상 있고 torchrun 환경이 없는 경우, 모델 `train()`는 가중치를 임시 파일에 저장하고 요청된 경우 autobatch를 해결하며, `torch.multiprocessing.spawn`와 함께 GPU당 하나의 작업자 프로세스를 생성합니다. 각 작업자는 모델 클래스를 다시 가져오고 저장된 가중치로 모델을 재구성하며, 일반 단일 장치 경로를 실행합니다. 이는 생성된 작업자 내부에서는 torchrun 환경 변수가 설정되어 있기 때문입니다. 실행이 끝나면 Rank 0의 최적 체크포인트가 호출자의 모델 인스턴스로 다시 로드됩니다.
+둘 이상의 장치를 지정하고 torchrun 환경이 없으면 모델의 `train()`은 가중치를 임시 파일에 저장하고, 요청한 경우 자동 배치를 계산한 뒤, 코디네이터가 관리하는 작업자 프로세스를 GPU당 하나씩 시작합니다. 각 작업자는 모델 클래스를 다시 가져와 저장한 가중치로 재구성하고 일반 단일 장치 경로를 실행합니다. 생성된 작업자 내부에는 torchrun 환경 변수가 설정되기 때문입니다. 실행이 끝나면 랭크 0의 최적 체크포인트가 호출한 모델 인스턴스에 다시 로드됩니다.
 
 `device`는 `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"` 및 `"auto"`를 허용합니다. 두 개 이상의 CUDA 인덱스 목록만 생성이 시작됩니다.
 
-## 필수 `__main__` 가드
+## 자동 실행과 main 가드
 
-생성된 워커는 자신이 온 모듈을 다시 임포트합니다. `if __name__ == "__main__":` 가드가 없으면, 그 임포트가 학습 호출을 다시 실행하고 각 워커가 자신의 워커를 생성합니다. 라이브러리는 이 경우를 탐지하고 재귀 실행을 허용하지 않은 채 예외를 발생시킵니다:
-
-```text
-spawn_ddp_train() was called from inside a spawned subprocess. This usually
-means your script calls model.train(device=...) at the top level without a
-'if __name__ == "__main__":' guard.
-```
-
-작업자에게 전달되는 모든 것은 피클로 직렬화되므로, `callbacks=`는 피클 가능해야 합니다. 모듈 레벨 클래스는 작동하지만, 클로저나 람다는 작동하지 않으며, 오류 메시지가 이를 알려주고 내장 로거를 대안으로 가리킵니다.
+`model.train(device=[0, 1])`과 `device="0,1"`은 일반적인 가드 없는 스크립트의 최상위 코드를 다시 실행하지 않고 코디네이터가 관리하는 랭크를 사용합니다. 가드가 있는 스크립트와 명시적 `torchrun`도 계속 지원합니다. 코디네이터 작업은 cloudpickle을 사용하며, 표준 pickle 폴백이 필요한 콜백이나 로거 객체에는 여전히 `if __name__ == "__main__":` 가드가 필요합니다.
 
 ## 글로벌 배치
 

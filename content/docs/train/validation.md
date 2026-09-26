@@ -13,7 +13,7 @@ keywords:
   - miou
   - panoptic quality
   - top1 accuracy
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   val:
     - label: Python
@@ -139,6 +139,8 @@ their families are selected on `metrics/mAP50-95`, which their dicts do
 return. Pose returns neither `fitness` nor `metrics/mAP50-95`; its trainers
 set `best_metric_key` to `metrics/keypoints_mAP50-95` instead.
 
+ImageFolder classification adds macro `metrics/precision`, `metrics/recall` and `metrics/f1`, averaged over classes present in validation targets. Top-1 remains default fitness. Detection also returns `metrics/best_conf`, `metrics/best_conf_f1` and class-name-keyed `metrics/best_conf_per_class`, choosing micro-F1-optimal thresholds at IoU 0.50. Equal-score detections stay grouped; ties choose the higher threshold. No positive F1 yields NaN. Segmentation does not expose these threshold keys.
+
 ## Speed keys
 
 Every validator adds timing:
@@ -248,6 +250,10 @@ metric and curve set. The other validators do not implement plots; classificatio
 semantic, panoptic, depth, normal, edge, restore, matte, OCR, OBB and point all
 write nothing there. A plotting failure warns and never aborts the run.
 
+`visualize=True` writes class-aware box TP/FP/FN images for detection and segmentation, or label-versus-top-1 images for ImageFolder classification, into `visualize/errors/` and `visualize/correct/`. Matching uses IoU 0.5 and confidence `max(0.25, conf)`. Defaults are `visualize=False`, `show_labels=True` and `show_conf=True`. Unsupported tasks and V-JEPA 2 clip validation reject visualization.
+
+`plot_samples=8` limits the separate sample plot; 0 disables it and -1 retains all images. This does not change metrics or visualization output.
+
 ## Validation during training
 
 Training validates every `eval_interval` epochs against the dataset's `val`
@@ -262,3 +268,7 @@ where the numbers go.
 ## Related
 
 - [Datasets](/docs/train/datasets) for the split keys and formats validators read.
+
+## Per-image box metrics
+
+Detection and segmentation results stay dictionary-compatible and also expose `results.box.image_metrics`. Each filename maps to `precision`, `recall`, `f1`, `tp`, `fp` and `fn` using the visualization matching rule even when visualization is off. Segmentation counts boxes here. Duplicate basenames use full paths after the first occurrence. Zero denominators yield 0.0. These records are not gathered across distributed ranks.

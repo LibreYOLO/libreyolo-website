@@ -19,7 +19,7 @@ keywords:
   - RandAugment
   - CutMix
   - no_aug_epochs
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -74,7 +74,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 47461cd13aab580c
+source_hash: 42668148fcc79c1f
 ---
 
 ## Festlegen der Einstellungen
@@ -112,7 +112,7 @@ Die Mosaic-Pipeline im YOLOX-Stil wendet HSV-Jitter und Spiegelungen auf jedes S
 
 Die durchleitende Pipeline im DETR-Stil besitzt weder Mosaic noch eine affine Transformation. Fotometrische Verzerrung, Zoom-out und IoU-Beschnitt sind feste Rezeptwerte und keine Konfigurationseinstellungen. Nur `flip_prob` und `no_aug_epochs` sind daher aktiv. Diese Pipeline gilt für D-FINE, Dome-DETR, DEIM, DEIMv2, RT-DETRv4, EC und mit einer Änderung RF-DETR.
 
-Die ImageFolder-Pipeline für Klassifizierung ignoriert jede Erkennungseinstellung. Ihre horizontale Spiegelung verwendet einen festen Wert von 0,5, den `flip_prob` nicht erreicht. Stattdessen besitzt sie ein eigenes, weiter unten beschriebenes Einstellungspaket.
+Die ImageFolder-Pipeline für Klassifikation hat eigene Augmentierungsparameter. `flip_prob` steuert horizontales Spiegeln und hat den Standardwert 0.5; `fliplr` ist der Alias dafür.
 
 YOLO-NAS bildet eine eigene Form: kein Mosaic, eine immer aktive affine Transformation je Sample und unabhängiges statt gekoppeltes MixUp. Der Wert `mosaic_scale` wird als affiner Skalierungsbereich wiederverwendet.
 
@@ -131,8 +131,8 @@ Zusammenfassung der Basiseinstellungen nach Pipeline:
 | `mosaic_prob` | verwendet | ignoriert | ignoriert | ignoriert |
 | `mixup_prob` | an Mosaic gekoppelt | verwendet | ignoriert | ignoriert |
 | `hsv_prob` | verwendet | verwendet | ignoriert | ignoriert |
-| `flip_prob` | verwendet | verwendet | verwendet | ignoriert |
-| `flipud` | verwendet | verwendet | ignoriert | ignoriert |
+| `flip_prob` | verwendet | verwendet | verwendet | verwendet |
+| `flipud` | verwendet | verwendet | ignoriert | verwendet |
 | `degrees` | an Mosaic gekoppelt | verwendet | ignoriert | ignoriert |
 | `translate` | an Mosaic gekoppelt | verwendet | ignoriert | ignoriert |
 | `shear` | an Mosaic gekoppelt | verwendet | ignoriert | ignoriert |
@@ -148,7 +148,7 @@ Innerhalb dieser Spalten gibt es ausschließlich einschränkende Ausnahmen:
 - EC berücksichtigt `hsv_prob`, `degrees` und `translate`, aber nur für `task="pose"`, dessen Keypoint-bewusste Transformation sie liest. Die detect- und segment-Pfade verwenden feste fotometrische Rezepte.
 - DINOv2 folgt für detect und semantic der Spalte im DETR-Stil und ergänzt für `task="classify"` das Klassifizierungspaket.
 
-`no_aug_epochs` wird überall verwendet, bedeutet jedoch nicht überall dasselbe. In Mosaic-Pipelines deaktiviert es Mosaic und MixUp für die letzten Epochen. In Pipelines im DETR-Stil beendet es fotometrische, Zoom-out- und Beschnitt-Augmentationen und formt das Ende des Schedules. In Klassifizierungs- und Semantikpipelines formt es nur das Ende des Schedules.
+`no_aug_epochs` ist überall `used`, wirkt aber je nach Pipeline anders. In Mosaic-Pipelines schaltet es Mosaic und MixUp für die letzten Epochen ab. In DETR-Pipelines beendet es photometrische Augmentierung, Zoom-out und Cropping und steuert die Schlussphase des Zeitplans. Bei Klassifikation schaltet es automatische Augmentierung, Erasing, MixUp und CutMix ab; Cropping und Spiegeln bleiben aktiv.
 
 ## Klassifizierungspaket
 
@@ -160,7 +160,13 @@ Vier Einstellungen steuern ausschließlich die Klassifizierungspipeline. Erkennu
 
 Alle vier sind standardmäßig deaktiviert. Das Klassifizierungstraining bleibt unverändert, sofern du sie nicht anforderst.
 
-Ein Namenskonflikt ist wichtig: In der CLI ist `mixup` der Alias für das bei der Erkennung verwendete `mixup_prob`. Das Klassifizierungsfeld `mixup` besitzt keine eigene CLI-Schreibweise und ist nur über `model.train(mixup=...)` in Python erreichbar.
+Die CLI ordnet `mixup` nach Aufgabe zu: Klassifikation verwendet Batch-Mischung, Detektion verwendet `mixup_prob`.
+
+`scale=0.5` bedeutet einen zufälligen Ausschnittsflächenbereich von `(0.5, 1.0)`; ein explizites Paar setzt beide Grenzen. `crop_pct=None` behält das Auswertungsskalierungsverhältnis der Familie bei. Ein abweichender Wert beeinflusst die Auswertung beim Training und bei der Validierung; der Export behält die native Familienvorverarbeitung.
+
+Die CLI stellt `auto_augment`, `erasing`, `cutmix`, `fliplr` und `flipud` bereit. Bei der Klassifikation bedeutet `mixup` Batch-Mischung und ist standardmäßig 0.0. Horizontale Spiegelungen haben den Standardwert 0.5, vertikale 0.0. `mixup + cutmix` darf 1 nicht überschreiten.
+
+`no_aug_epochs` deaktiviert Auto-Augmentierung, Erasing, MixUp und CutMix für die letzten Epochen; Zuschnitt und Spiegelungen bleiben erhalten. Klassifikationsrezepte setzen diesen Endabschnitt standardmäßig auf 0.
 
 ## Familienspezifische Einstellungen
 

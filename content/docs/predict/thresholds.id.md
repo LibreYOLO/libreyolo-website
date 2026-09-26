@@ -18,7 +18,7 @@ keywords:
   - nms free detr
   - detection confidence threshold
   - class filtering inference
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Nilai default dikutip dari InferenceRunner.__call__ dalam
   libreyolo/models/base/inference.py. Perilaku NMS per family dibaca dari setiap
@@ -109,7 +109,7 @@ snippets:
         berfungsi.
 
         print(len(loose.boxes), len(tight.boxes))
-source_hash: 0b978963c356027d
+source_hash: 849650629e58c9e1
 ---
 
 ## Empat argumen
@@ -138,6 +138,8 @@ terlalu banyak atau terlalu sedikit.
 
 Default `0.25` cocok untuk melihat gambar. Sistem downstream biasanya memerlukan nilai lebih
 tinggi; pengukuran akurasi memerlukan nilai jauh lebih rendah.
+
+Validasi deteksi menyediakan `metrics/best_conf` dan ambang per kelas dari F1 pada IoU 0.50. Gunakan sebagai titik awal terukur untuk ambang deployment; lihat [validasi](/docs/train/validation). Segmentasi tidak menyediakan kunci ini.
 
 ## iou
 

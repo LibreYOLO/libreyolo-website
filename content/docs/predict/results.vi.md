@@ -2,13 +2,11 @@
 title: Làm việc với kết quả
 seo_title: Đối tượng Results của LibreYOLO
 description: >-
-  Mỗi ảnh có một đối tượng Results với một slot cho từng loại payload: box,
-  mask, keypoint, probs, độ sâu, panoptic, OCR và nhiều loại khác. Vẽ, lưu và
-  JSON.
+  Mỗi ảnh có một đối tượng Results với một slot cho từng loại payload: box, mask, keypoint, probs, độ sâu,
+  panoptic, OCR và nhiều loại khác. Vẽ, lưu và JSON.
 lead: >-
-  Mỗi dự đoán trả về một đối tượng Results cho từng ảnh. Đối tượng có một slot
-  được đặt tên cho mỗi loại payload; tất cả đều rỗng trừ các slot mô hình tạo
-  ra, và artifact đã xuất cũng có cùng các slot.
+  Mỗi dự đoán trả về một đối tượng Results cho từng ảnh. Đối tượng có một slot được đặt tên cho mỗi loại
+  payload; tất cả đều rỗng trừ các slot mô hình tạo ra, và artifact đã xuất cũng có cùng các slot.
 keywords:
   - đối tượng results yolo python
   - results.boxes xyxy
@@ -19,32 +17,24 @@ keywords:
   - kết quả bản đồ độ sâu
   - tóm tắt results
   - onnx cùng results
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  Các lớp payload, slot, ngữ nghĩa di chuyển, summary(), to_json(), plot(),
-  save() và cutout() được đọc từ libreyolo/utils/results.py. Hành vi chú thích
-  và ghi ra đĩa lấy từ InferenceRunner._save_annotated_image trong
-  libreyolo/models/base/inference.py và resolve_save_path trong
-  libreyolo/utils/general.py. Cách định tuyến theo hậu tố lấy từ LibreYOLO()
-  trong libreyolo/models/__init__.py.
+  Các lớp payload, slot, ngữ nghĩa di chuyển, summary(), to_json(), plot(), save() và cutout() được đọc từ
+  libreyolo/utils/results.py. Hành vi chú thích và ghi ra đĩa lấy từ InferenceRunner._save_annotated_image
+  trong libreyolo/models/base/inference.py và resolve_save_path trong libreyolo/utils/general.py. Cách định
+  tuyến theo hậu tố lấy từ LibreYOLO() trong libreyolo/models/__init__.py.
 snippets:
   basic:
     - label: Box
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("LibreYOLO9s.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
         print(result.orig_shape)   # (chiều cao, chiều rộng) của ảnh nguồn
-
-        print(result.path)         # đường dẫn nguồn, None cho đầu vào trong bộ
-        nhớ
-
+        print(result.path)         # đường dẫn nguồn, None cho đầu vào trong bộ nhớ
 
         for xyxy, conf, cls in zip(
             result.boxes.xyxy.tolist(),
@@ -54,22 +44,15 @@ snippets:
             print(result.names[int(cls)], round(float(conf), 3), xyxy)
     - label: Tọa độ chuẩn hóa
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("LibreYOLO9s.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
         print(result.boxes.xyxy[:1])    # pixel, x1 y1 x2 y2
-
         print(result.boxes.xywh[:1])    # pixel, tâm x, tâm y, w, h
-
-        print(result.boxes.xyxyn[:1])   # cùng box chia cho chiều rộng và chiều
-        cao
-
+        print(result.boxes.xyxyn[:1])   # cùng box chia cho chiều rộng và chiều cao
         print(result.boxes.xywhn[:1])
     - label: NumPy và thiết bị
       language: python
@@ -135,9 +118,8 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: 201eca6457cf87a4
 ---
-
 ## Một đối tượng, một slot cho mỗi payload
 
 Dự đoán trên một ảnh trả về một `Results`. Đối tượng chứa mười tám slot payload,
@@ -290,10 +272,6 @@ dạng trực quan hóa độ sâu, kết quả panoptic với các segment, mat
 RGBA nền trong suốt, còn detector dưới dạng box với mask bên dưới. Đường dẫn đã
 ghi được gắn vào kết quả dưới dạng `result.saved_path`.
 
-`Results.plot()` có phạm vi hẹp hơn tên gọi. Phương thức chỉ được định nghĩa cho
-bản đồ pháp tuyến và bản đồ cạnh, đồng thời phát sinh `NotImplementedError` với
-mọi dạng khác. Hãy dùng `save=True` cho các tác vụ khác.
-
 `Results.save(path)` cũng có phạm vi hẹp: phương thức ghi kết quả matte thành ảnh
 cắt PNG RGBA nền trong suốt và phát sinh `NotImplementedError` trong trường hợp
 khác. `Results.cutout()` trả về cùng mảng RGBA mà không ghi. Cả hai cần ảnh nguồn,
@@ -302,6 +280,10 @@ lấy từ `result.path` hoặc được truyền dưới dạng `image=`.
 Hai payload có trình ghi riêng: `result.restored.save(path)` cho ảnh đã khôi phục và `result.meshes.save_obj(path, index=0)` cho mesh.
 
 Để biết tệp được đặt ở đâu và `output_path` cùng `output_file_format` hoạt động thế nào, hãy xem [Nguồn dự đoán](/docs/predict/sources).
+
+`plot()` hỗ trợ dữ liệu của mọi tác vụ. Lớp phủ ảnh mặc định trả về BGR uint8 HxWx3 liên tục; `pil=True` yêu cầu PIL. Các đường xử lý biên và bản đồ pháp tuyến hiện có giữ mặc định PIL. `orig_img` giữ pixel BGR cho nguồn trong bộ nhớ và URL; có thể mở lại tệp cục bộ và khung hình đã thu từ video hữu hạn.
+
+Các điều khiển gồm `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` và `filename`. Ảnh phân loại đã lưu chứa năm nhãn đứng đầu. Lưu matte ghi ảnh tách nền RGBA.
 
 ## Artifact đã xuất trả về cùng đối tượng
 
@@ -314,4 +296,3 @@ ncnn và URL mô hình Triton. Mã đọc `result.boxes.xyxy` không thay đổi
 được thay bằng bản đã xuất. Xem [Xuất](/docs/export) để biết toàn bộ định dạng.
 
 Dùng API riêng của runtime đồng nghĩa bạn phải tự đảm nhiệm tiền xử lý, hậu xử lý và tên lớp.
-

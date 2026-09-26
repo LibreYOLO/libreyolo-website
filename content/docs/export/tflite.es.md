@@ -3,8 +3,7 @@ title: TFLite
 seo_title: Exportar a TFLite (LiteRT) desde LibreYOLO
 description: >-
   Exporta un modelo LibreYOLO a un FlatBuffer .tflite a través de onnx2tf:
-  formas estáticas, solo FP32, entradas NHWC y las familias que convierten sin
-  problemas.
+  formas estáticas, FP32 y rutas INT8 compatibles, entradas NHWC y metadatos de ejecución.
 lead: >-
   TFLite es el formato FlatBuffer que LiteRT ejecuta en objetivos móviles y
   embebidos. LibreYOLO exporta un grafo ONNX estático, lo convierte con onnx2tf
@@ -18,7 +17,7 @@ keywords:
   - flatbuffer tflite
   - entrada nhwc tflite
   - inferencia en el edge
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Flag
     value: export(format="tflite")
@@ -34,7 +33,7 @@ meta:
   - label: Formas
     value: Solo estáticas. dynamic=True se rechaza.
   - label: Precisión
-    value: Solo FP32. half=True e int8=True se rechazan.
+    value: FP32; INT8 para detección con YOLO9 y YOLOX. FP16 se rechaza.
   - label: Requiere
     value: >-
       Python 3.12 o superior, porque onnx2tf 2.4.x no publica wheels más
@@ -89,7 +88,8 @@ snippets:
         )
 
         # dynamic=True lanza ValueError: el conversor necesita formas estáticas.
-        # half=True e int8=True se rechazan antes del trazado.
+        # FP16 se rechaza. INT8 requiere un detector compatible y datos de calibración.
+
   run:
     - label: A través de LibreYOLO
       language: python
@@ -142,7 +142,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: fa2deaa0ef6d9978
+source_hash: 3548d74e992bb76d
 ---
 
 ## Instalación
@@ -172,6 +172,8 @@ la tarea, los nombres de clase, el tamaño de entrada y el esquema de pose; el
 FlatBuffer en sí no tiene campo de metadatos de LibreYOLO, así que los dos
 archivos viajan juntos.
 
+La detección de YOLO9 y YOLOX soporta `int8=True` con `data=...`, `fraction=1.0`, `batch=1` y `dynamic=False`. Instala `onnx2tf[tensorflow]`. Si faltan datos de calibración, se usa `coco8.yaml` con un aviso. Las salidas separadas de cajas normalizadas y puntuaciones usan escalas de cuantización independientes; conserva los metadatos `output_layout` del archivo auxiliar al desplegar. Algunos operadores internos pueden permanecer en coma flotante.
+
 ## Ejecutar el artefacto
 
 <code-tabs name="run" />
@@ -193,8 +195,7 @@ encajará.
 Solo formas estáticas. `dynamic=True` lanza `ValueError` antes del trazado, y el
 lienzo de exportación queda fijado en el valor al que se resolvió `imgsz`.
 
-Solo FP32. `half=True` e `int8=True` se rechazan ambos durante la validación, así
-que hoy por hoy el despliegue cuantizado no es alcanzable desde este exportador.
+`half=True` se rechaza. INT8 está limitado a detección con YOLO9 y YOLOX con batch 1; otras familias y tareas INT8 lanzan un error.
 
 La cobertura aquí es más estrecha que la de los formatos de grafo, y la decide la
 medición en lugar de la familia. Entre las combinaciones validadas están la

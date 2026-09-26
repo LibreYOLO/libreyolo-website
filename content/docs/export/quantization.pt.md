@@ -19,7 +19,7 @@ keywords:
   - fp8 e4m3
   - dataset de calibração
   - exportar onnx qdq
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Chamada
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -85,7 +85,7 @@ snippets:
             calib="coco128.yaml",      # caminho do data.yaml ou nome embutido; None pula a calibração
             samples=128,               # máximo de imagens de calibração
             batch=8,                   # tamanho de batch da calibração
-            algorithm="auto",          # auto e minmax são iguais; percentile é a alternativa
+            algorithm="auto",          # auto seleciona minmax; alternativas: percentile, mse, entropy
             keep_high_precision=None,  # None usa a política da família
             verbose=True,
         )
@@ -179,7 +179,7 @@ snippets:
         suporte.
 
         qmodel.export(format="tensorrt", half=True)
-source_hash: 4ffb06b87cad017e
+source_hash: 6c247a3243daf393
 ---
 
 ## Instalação
@@ -205,6 +205,8 @@ anexado, então ele recarrega com a estrutura e as escalas intactas:
 Os checkpoints escritos pelo trainer durante um treinamento QAT também carregam o
 manifesto, o que significa que o `best.pt` desse treinamento é ele mesmo um
 checkpoint quantizado.
+
+O `algorithm` de calibração aceita `auto`, `minmax`, `percentile`, `mse` e `entropy`. `auto` resulta em minmax. MSE e entropy usam varreduras de histogramas para selecionar faixas de ativação.
 
 ## Receitas
 
@@ -265,6 +267,8 @@ acompanha o suporte a destilação de cada família, o que hoje significa `yolo9
 
 Modelos quantizados com `fp16` e `bf16` são somente inferência, e o trainer os
 rejeita apontando para `amp=True`.
+
+A configuração de QAT desativa EMA e SyncBatchNorm e define `average_best=0`, registrando cada substituição. O treinamento em ponto flutuante mantém suas configurações solicitadas.
 
 ## Exportação
 

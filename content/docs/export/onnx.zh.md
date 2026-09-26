@@ -14,7 +14,7 @@ keywords:
   - onnx 内嵌 nms
   - onnx int8 量化 qdq
   - onnx metadata_props
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: 参数
     value: export(format="onnx")
@@ -148,7 +148,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cee78250fc7189a3
+source_hash: 085c6fb8cb7ec4b2
 ---
 
 ## 安装
@@ -157,6 +157,8 @@ source_hash: cee78250fc7189a3
 
 这个额外依赖会拉取 `onnx`、`onnxsim` 和 `onnxruntime`。只有 `onnx` 就足够写出文件；
 `onnxsim` 负责跑简化那一趟，`onnxruntime` 负责运行产物并完成 INT8 校准。
+
+ONNX extra 需要 `onnxruntime>=1.18.0`；LaMa 使用 opset-21 计算图。
 
 ## 导出
 

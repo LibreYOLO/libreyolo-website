@@ -18,7 +18,7 @@ keywords:
   - wbudowany nms onnx
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Flaga
     value: export(format="onnx")
@@ -154,7 +154,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cee78250fc7189a3
+source_hash: 085c6fb8cb7ec4b2
 ---
 
 ## Instalacja
@@ -164,6 +164,8 @@ source_hash: cee78250fc7189a3
 Dodatek instaluje `onnx`, `onnxsim` i `onnxruntime`. Sam `onnx` wystarczy, aby
 zapisać plik; `onnxsim` wykonuje przebieg upraszczania, a `onnxruntime` uruchamia
 artefakt i przeprowadza kalibrację INT8.
+
+Dodatek ONNX wymaga `onnxruntime>=1.18.0`; LaMa używa grafu opset-21.
 
 ## Eksport
 

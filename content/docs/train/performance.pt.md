@@ -18,7 +18,7 @@ keywords:
   - treinamento limitado pelo dataloader
   - overhead de lançamento de kernels
   - uso da gpu no treinamento
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   profile:
     - label: Perfilar e continuar treinando
@@ -68,7 +68,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: ee5bb727065b6099
+source_hash: 288ee5ee988f2fda
 ---
 
 ## Meça antes de mudar qualquer coisa
@@ -112,6 +112,8 @@ importa porque um passo limitado por lançamento é ruidoso o bastante para que
 uma única execução engane; ele grava diretórios por tentativa, `prof_1`,
 `prof_2` e assim por diante, além de um `profile_repeat.json` agregado.
 
+Os caminhos de matcher de RF-DETR e D-FINE/DEIM/RT-DETR reduzem transferências para o host; a construção elegível de Adam e AdamW em CUDA usa atualizações fundidas. SGD e parâmetros fora de CUDA usam a construção padrão. Essas mudanças de implementação não implicam aceleração universal.
+
 ## Precisão mista
 
 `amp=True` é o padrão para a maioria das famílias e roda o forward sob o
@@ -119,12 +121,7 @@ autocast do CUDA. `amp_dtype` escolhe entre `float16` e `bfloat16`.
 
 <code-tabs name="amp" />
 
-O float16 precisa de escalonamento dinâmico da loss e recebe um gradient scaler
-ativo; a faixa de expoente mais larga do bfloat16 não precisa, então o scaler
-dele fica desativado. Quatro famílias vêm com `amp=False`, D-FINE, DEIM, YOLO-NAS
-e FOMO, e a configuração do DEIM se propaga para o RT-DETRv4 por herança. O
-D-FINE explica o motivo: seu decoder limita as ativações em 65504, o maior valor
-finito de float16.
+Float16 usa um gradient scaler; bfloat16 o desativa. D-FINE, DEIM, RT-DETRv4 e detecção YOLO-NAS usam `amp=True` por padrão. Dome-DETR, PP-YOLOE e YOLO-NAS OBB mantêm os padrões FP32. Passe `amp=False` para solicitar FP32 explicitamente.
 
 A semântica dos argumentos, incluindo o que um pedido de bfloat16 faz em
 hardware sem suporte a bfloat16, está em

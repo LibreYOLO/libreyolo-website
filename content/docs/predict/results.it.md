@@ -19,7 +19,7 @@ keywords:
   - mappa di profondità results
   - results summary yolo
   - onnx stessi risultati yolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Classi dei payload, slot, semantica di spostamento, summary(), to_json(),
   plot(), save() e cutout() letti da libreyolo/utils/results.py. Comportamento
@@ -136,7 +136,7 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: 201eca6457cf87a4
 ---
 
 ## Un oggetto, uno slot per payload
@@ -310,10 +310,6 @@ della profondità, un risultato panottico con i suoi segmenti, un matte come PNG
 RGBA con sfondo trasparente, e un detector come box con le maschere sotto. Il
 percorso scritto viene attaccato al risultato come `result.saved_path`.
 
-`Results.plot()` è più ristretto di quanto suggerisca il nome. È definito solo
-per le mappe di normali e le mappe di bordi, e solleva `NotImplementedError`
-per tutto il resto. Per gli altri task usa `save=True`.
-
 `Results.save(path)` è altrettanto ristretto: scrive un risultato di matting
 come ritaglio PNG RGBA con sfondo trasparente e altrimenti solleva
 `NotImplementedError`. `Results.cutout()` restituisce lo stesso array RGBA
@@ -325,6 +321,10 @@ un'immagine restaurata, e `result.meshes.save_obj(path, index=0)` per una mesh.
 
 Per sapere dove finiscono i file e come si comportano `output_path` e
 `output_file_format`, vedi [Sorgenti di predizione](/docs/predict/sources).
+
+`plot()` copre i dati di tutti i task. Le sovrapposizioni sulle immagini restituiscono di default array BGR contigui HxWx3 uint8; `pil=True` richiede PIL. I percorsi esistenti per bordi e mappe delle normali mantengono PIL come default. `orig_img` conserva i pixel BGR per sorgenti in memoria e URL; i file locali e i frame raccolti da video finiti possono essere riaperti.
+
+I controlli includono `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` e `filename`. Le immagini di classificazione salvate includono le prime cinque etichette. Il salvataggio del matting produce un ritaglio RGBA.
 
 ## Gli artefatti esportati restituiscono lo stesso oggetto
 

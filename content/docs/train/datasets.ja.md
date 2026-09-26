@@ -15,7 +15,7 @@ keywords:
   - LibreYOLO doctor
   - クラス不均衡 チェック
   - train val データ漏洩
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -57,7 +57,7 @@ snippets:
             print(finding.severity.value, finding.check_id, finding.message)
 
         raise SystemExit(report.exit_code(strict=False))
-source_hash: 9a12a0551c8b56e9
+source_hash: 84e47ff97fb2e2f3
 ---
 
 ## 学習にデータセットを指定する
@@ -115,6 +115,8 @@ download: https://example.com/my-dataset.zip   # 任意
 
 `names`にはリストまたは整数をキーとするマッピングを指定できます。`nc`は任意です。両方が存在して一致しない場合、doctorはエラーとして報告します。
 
+RF-DETRの姿勢推定は、クラスIDまたは名前をキーとする`kpt_names`を読み取ります。クラスごとに先頭から名前付きキーポイントの行を残し、空のリストはボックスのみのクラスを表します。複数クラスの姿勢推定には`names`と、少なくとも1つのキーポイントを持つクラスが必要です。
+
 ## ディレクトリ構成とラベルファイル
 
 物体検出、セグメンテーション、姿勢推定、方向付きボックスは同じ構成を使用します。ラベルパスは、画像パス内の`images`ディレクトリ要素を`labels`へ書き換え、拡張子を`.txt`へ変更して導出されます。
@@ -134,6 +136,8 @@ my-dataset/
 ```
 
 ラベルファイルがないか空の場合は物体がない画像を意味し、例外を発生させず背景として学習します。5フィールドを超える行はポリゴンとして読み取られ、その外接範囲がボックスになります。このため、セグメンテーション用のエクスポートを物体検出の学習に使用しても問題なく読み込まれます。doctorはこの経路で処理された行数を報告します。
+
+画像境界をまたぐ有限のボックスは、学習と検証で同じようにクリップします。可視面積のないボックス、有限でない座標、不正なポリゴンは除外します。範囲外のクラスIDは、ターゲットの構築前に報告します。`train(classes=[...])`は、元のクラスIDで教師信号をフィルタリングします。[ハイパーパラメータ](/docs/train/hyperparameters)を参照してください。
 
 ## その他のタスク
 

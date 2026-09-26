@@ -2,12 +2,11 @@
 title: Hiệu năng huấn luyện
 seo_title: 'Huấn luyện nhanh hơn: CUDA graph, AMP, profiler'
 description: >-
-  Tăng tốc một lượt huấn luyện: capture bước chạy vào CUDA graph, chọn kiểu dữ
-  liệu AMP và dùng profiler tích hợp để tìm nơi thực sự chiếm thời gian.
+  Tăng tốc một lượt huấn luyện: capture bước chạy vào CUDA graph, chọn kiểu dữ liệu AMP và dùng profiler tích
+  hợp để tìm nơi thực sự chiếm thời gian.
 lead: >-
-  Ba đòn bẩy thay đổi tốc độ của một bước huấn luyện: mixed precision, capture
-  forward và backward của mạng bằng CUDA graph, cùng phương án xử lý điểm nghẽn
-  mà profiler thực sự tìm thấy.
+  Ba đòn bẩy thay đổi tốc độ của một bước huấn luyện: mixed precision, capture forward và backward của mạng
+  bằng CUDA graph, cùng phương án xử lý điểm nghẽn mà profiler thực sự tìm thấy.
 keywords:
   - cuda graph khi huấn luyện
   - tăng tốc huấn luyện
@@ -17,7 +16,7 @@ keywords:
   - dataloader bị nghẽn
   - kernel launch overhead
   - mức sử dụng gpu
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   profile:
     - label: Profile rồi tiếp tục huấn luyện
@@ -67,9 +66,8 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: ee5bb727065b6099
+source_hash: 288ee5ee988f2fda
 ---
-
 ## Đo trước khi thay đổi bất cứ thứ gì
 
 Ba đòn bẩy bên dưới giải quyết các vấn đề khác nhau, và áp dụng sai đòn bẩy sẽ
@@ -111,6 +109,8 @@ một bước bị giới hạn bởi launch có độ nhiễu đủ cao để m
 hiểu nhầm; lệnh ghi các thư mục theo thử nghiệm `prof_1`, `prof_2` và tiếp tục,
 cùng tệp tổng hợp `profile_repeat.json`.
 
+RF-DETR và đường ghép cặp D-FINE/DEIM/RT-DETR giảm truyền dữ liệu về host; khi đủ điều kiện trên CUDA, việc khởi tạo Adam và AdamW dùng cập nhật fused. SGD và tham số không thuộc CUDA dùng cách khởi tạo tiêu chuẩn. Các thay đổi triển khai này không đi kèm tuyên bố tăng tốc trong mọi trường hợp.
+
 ## Mixed precision
 
 `amp=True` là mặc định cho phần lớn family và chạy forward pass trong CUDA
@@ -118,11 +118,7 @@ autocast. `amp_dtype` chọn `float16` hoặc `bfloat16`.
 
 <code-tabs name="amp" />
 
-Float16 cần dynamic loss scaling và nhận gradient scaler hoạt động; phạm vi số
-mũ rộng hơn của bfloat16 không cần, vì vậy scaler của nó bị tắt. Bốn family được
-phân phối với `amp=False` là D-FINE, DEIM, YOLO-NAS và FOMO, còn cài đặt DEIM
-được RT-DETRv4 kế thừa. D-FINE nêu rõ lý do: decoder của nó clamp activation ở
-65504, giá trị float16 hữu hạn lớn nhất.
+Float16 dùng gradient scaler; bfloat16 tắt nó. Phát hiện D-FINE, DEIM, RT-DETRv4 và YOLO-NAS mặc định dùng `amp=True`. Dome-DETR, PP-YOLOE và YOLO-NAS OBB giữ mặc định FP32. Truyền `amp=False` để yêu cầu FP32 rõ ràng.
 
 Ngữ nghĩa đối số, gồm hành vi của yêu cầu bfloat16 trên phần cứng không hỗ trợ
 bfloat16, nằm trong [Siêu tham số](/docs/train/hyperparameters).

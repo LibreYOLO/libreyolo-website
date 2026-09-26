@@ -18,17 +18,8 @@ keywords:
   - detr без nms
   - поріг впевненості детекції
   - фільтр класів під час інференсу
-last_verified: 1.5.0
-verification: >-
-  Типові значення наведено за InferenceRunner.__call__ у
-  libreyolo/models/base/inference.py. Поведінку NMS для сімейств перевірено за
-  кожним модулем у libreyolo/postprocess/ і звірено з _is_nms_free_family у
-  libreyolo/backends/base.py. Фільтрування класів взято з
-  InferenceRunner._apply_classes_filter і _wrap_results. Стан agnostic_nms
-  перевірено за NOOP_PREDICT_KWARGS у libreyolo/utils/predict_args.py.
-  Оброблення відкритого словника взято з NMS_THRESHOLD у
-  libreyolo/models/openvocab/base.py. Типові значення валідації взято з
-  BaseModel.val.
+last_verified: "1.6.0"
+verification: Типові значення наведено за InferenceRunner.__call__ у libreyolo/models/base/inference.py. Поведінку NMS для сімейств перевірено за кожним модулем у libreyolo/postprocess/ і звірено з _is_nms_free_family у libreyolo/backends/base.py. Фільтрування класів взято з InferenceRunner._apply_classes_filter і _wrap_results. Стан agnostic_nms перевірено за NOOP_PREDICT_KWARGS у libreyolo/utils/predict_args.py. Оброблення відкритого словника взято з NMS_THRESHOLD у libreyolo/models/openvocab/base.py. Типові значення валідації взято з BaseModel.val.
 snippets:
   basic:
     - label: Чотири аргументи
@@ -113,7 +104,7 @@ snippets:
         # Кількість однакова в обох випадках. Діють лише conf і max_det.
 
         print(len(loose.boxes), len(tight.boxes))
-source_hash: 0b978963c356027d
+source_hash: 849650629e58c9e1
 ---
 
 ## Чотири аргументи
@@ -143,6 +134,8 @@ source_hash: 0b978963c356027d
 Типове значення `0.25` підходить для перегляду зображень. Для передавання в
 подальшу систему зазвичай потрібне вище значення, а для вимірювання правильності
 потрібне набагато нижче.
+
+Валідація виявлення надає `metrics/best_conf` і пороги за класами з F1 при IoU 0.50. Використовуйте їх як виміряні початкові значення порогів розгортання; див. [валідацію](/docs/train/validation). Сегментація не надає цих ключів.
 
 ## iou
 

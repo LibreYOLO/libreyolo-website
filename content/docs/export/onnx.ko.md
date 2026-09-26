@@ -17,7 +17,7 @@ keywords:
   - 임베디드 NMS ONNX
   - onnx int8 qdq
   - onnx 메타데이터_속성
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 깃발
     value: export(format="onnx")
@@ -151,7 +151,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cee78250fc7189a3
+source_hash: "085c6fb8cb7ec4b2"
 ---
 
 ## 설치
@@ -159,6 +159,8 @@ source_hash: cee78250fc7189a3
 <code-tabs name="install" />
 
 추가로 `onnx`, `onnxsim` 및 `onnxruntime`가 가져옵니다. `onnx`만으로 파일을 작성하기에 충분하며; `onnxsim`는 단순화 단계를 실행하고 `onnxruntime`는 아티팩트를 실행하고 INT8 보정을 수행합니다.
+
+ONNX 추가 패키지에는 `onnxruntime>=1.18.0`이 필요하며, LaMa는 opset-21 그래프를 사용합니다.
 
 ## 내보내기
 

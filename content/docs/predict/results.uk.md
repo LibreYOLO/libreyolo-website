@@ -19,14 +19,8 @@ keywords:
   - результати карти глибини
   - results summary
   - onnx однакові результати
-last_verified: 1.5.0
-verification: >-
-  Класи корисних даних, поля, семантику переміщення, summary(), to_json(),
-  plot(), save() і cutout() перевірено за libreyolo/utils/results.py. Поведінку
-  анотування та запису на диск взято з InferenceRunner._save_annotated_image у
-  libreyolo/models/base/inference.py і resolve_save_path у
-  libreyolo/utils/general.py. Диспетчеризацію за суфіксом взято з LibreYOLO() у
-  libreyolo/models/__init__.py.
+last_verified: "1.6.0"
+verification: Класи корисних даних, поля, семантику переміщення, summary(), to_json(), plot(), save() і cutout() перевірено за libreyolo/utils/results.py. Поведінку анотування та запису на диск взято з InferenceRunner._save_annotated_image у libreyolo/models/base/inference.py і resolve_save_path у libreyolo/utils/general.py. Диспетчеризацію за суфіксом взято з LibreYOLO() у libreyolo/models/__init__.py.
 snippets:
   basic:
     - label: Рамки
@@ -143,7 +137,7 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: 201eca6457cf87a4
 ---
 
 ## Один об'єкт і одне поле для кожного виду корисних даних
@@ -311,10 +305,6 @@ ndarray і `save(path)` для запису.
 сегментами, matte як PNG RGBA з прозорим тлом, а результат детектора як рамки
 з масками під ними. Записаний шлях додається до результату як `result.saved_path`.
 
-Назва `Results.plot()` передбачає ширшу функціональність, ніж реалізовано. Метод
-визначено лише для карт нормалей і карт країв, а для решти він спричиняє
-`NotImplementedError`. Для інших завдань використовуйте `save=True`.
-
 `Results.save(path)` так само має вузьку дію: записує результат matte як вирізаний
 PNG RGBA з прозорим тлом і спричиняє `NotImplementedError` в інших випадках.
 `Results.cutout()` повертає той самий масив RGBA без запису. Обом потрібне
@@ -325,6 +315,10 @@ PNG RGBA з прозорим тлом і спричиняє `NotImplementedError
 
 Про розташування файлів і поведінку `output_path` та `output_file_format`
 читайте в розділі [Джерела передбачення](/docs/predict/sources).
+
+`plot()` охоплює дані всіх завдань. Накладання на зображення типово повертають суцільний масив HxWx3 uint8 BGR; `pil=True` запитує PIL. Наявні шляхи країв і карт нормалей зберігають типові значення PIL. `orig_img` зберігає пікселі BGR для джерел у пам'яті та URL; локальні файли й зібрані кадри скінченного відео можна відкрити повторно.
+
+Засоби керування: `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` і `filename`. Збережені класифікаційні зображення містять п'ять найкращих міток. Збереження матування записує вирізаний об'єкт RGBA.
 
 ## Експортовані артефакти повертають той самий об'єкт
 

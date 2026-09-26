@@ -15,7 +15,7 @@ keywords:
   - detr sans nms
   - seuil confiance détection
   - filtrage classes inférence
-last_verified: 1.5.0
+last_verified: "1.6.0"
 verification: >-
   Valeurs par défaut citées depuis InferenceRunner.__call__ dans
   libreyolo/models/base/inference.py. Comportement NMS par famille lu dans
@@ -111,7 +111,7 @@ snippets:
         efficaces.
 
         print(len(loose.boxes), len(tight.boxes))
-source_hash: 0b978963c356027d
+source_hash: 849650629e58c9e1
 ---
 
 ## Les quatre arguments
@@ -142,6 +142,8 @@ nombreuses ou trop rares.
 La valeur par défaut `0.25` convient à l'examen d'images. L'alimentation d'un
 système downstream demande généralement une valeur supérieure, tandis qu'une
 mesure d'exactitude exige une valeur bien inférieure.
+
+La validation de détection expose `metrics/best_conf` et des seuils par classe fondés sur le F1 à IoU 0.50. Utilisez-les comme points de départ mesurés pour les seuils de déploiement ; consultez la [validation](/docs/train/validation). La segmentation n'expose pas ces clés.
 
 ## iou
 

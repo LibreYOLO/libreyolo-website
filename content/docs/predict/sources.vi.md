@@ -2,12 +2,11 @@
 title: Nguồn dự đoán
 seo_title: Nguồn dự đoán trong LibreYOLO
 description: >-
-  Mọi nguồn mà predict chấp nhận: ảnh, thư mục, URL, tệp video, webcam, RTSP,
-  YouTube, chụp màn hình, danh sách ảnh và tệp .streams.
+  Mọi nguồn mà predict chấp nhận: ảnh, thư mục, URL, tệp video, webcam, RTSP, YouTube, chụp màn hình, danh
+  sách ảnh và tệp .streams.
 lead: >-
-  Đối số source được phân loại trước khi mở bất kỳ thứ gì, nên một lời gọi xử lý
-  được JPEG, thư mục, MP4, chỉ số webcam, URL RTSP, vùng màn hình hoặc danh sách
-  camera.
+  Đối số source được phân loại trước khi mở bất kỳ thứ gì, nên một lời gọi xử lý được JPEG, thư mục, MP4, chỉ
+  số webcam, URL RTSP, vùng màn hình hoặc danh sách camera.
 keywords:
   - suy luận video yolo python
   - rtsp
@@ -19,14 +18,13 @@ keywords:
   - suy luận youtube
   - vid_stride
   - stream=True
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  Cách phân loại nguồn được đọc từ libreyolo/utils/source.py (classify_source,
-  SourceKind, StreamSource, MultiStreamSource). Loại ảnh và phần mở rộng thư mục
-  được chấp nhận lấy từ libreyolo/utils/image_loader.py. Phần mở rộng video và
-  đường dẫn lưu lấy từ libreyolo/utils/video.py. Cú pháp màn hình lấy từ
-  libreyolo/utils/screen.py. Shape trả về và giá trị mặc định đối số lấy từ
-  InferenceRunner.__call__ trong libreyolo/models/base/inference.py.
+  Cách phân loại nguồn được đọc từ libreyolo/utils/source.py (classify_source, SourceKind, StreamSource,
+  MultiStreamSource). Loại ảnh và phần mở rộng thư mục được chấp nhận lấy từ libreyolo/utils/image_loader.py.
+  Phần mở rộng video và đường dẫn lưu lấy từ libreyolo/utils/video.py. Cú pháp màn hình lấy từ
+  libreyolo/utils/screen.py. Shape trả về và giá trị mặc định đối số lấy từ InferenceRunner.__call__ trong
+  libreyolo/models/base/inference.py.
 snippets:
   images:
     - label: Một ảnh
@@ -103,19 +101,14 @@ snippets:
   live:
     - label: Webcam (cần camera được kết nối)
       language: python
-      code: >
+      code: |
         import itertools
-
 
         from libreyolo import LibreYOLO
 
-
         model = LibreYOLO("LibreYOLO9s.pt")
 
-
-        # Webcam chỉ số 0. Nguồn trực tiếp không kết thúc, nên hãy giới hạn vòng
-        lặp.
-
+        # Webcam chỉ số 0. Nguồn trực tiếp không kết thúc, nên hãy giới hạn vòng lặp.
         for result in itertools.islice(model(0, stream=True), 100):
             print(result.frame_idx, len(result.boxes))
     - label: RTSP (cần URL camera có thể truy cập)
@@ -133,14 +126,11 @@ snippets:
   streams:
     - label: Tệp .streams (cung cấp camera của bạn)
       language: python
-      code: >
+      code: |
         import itertools
-
         from pathlib import Path
 
-
         from libreyolo import LibreYOLO
-
 
         Path("cameras.streams").write_text(
             "# one source per line, blank lines and comments are skipped\n"
@@ -149,11 +139,8 @@ snippets:
             encoding="utf-8",
         )
 
-
         model = LibreYOLO("LibreYOLO9s.pt")
-
-        for result in itertools.islice(model("cameras.streams", stream=True),
-        100):
+        for result in itertools.islice(model("cameras.streams", stream=True), 100):
             print(result.frame_idx, len(result.boxes))
     - label: Danh sách camera
       language: python
@@ -180,24 +167,18 @@ snippets:
         print(len(result.boxes), "detections")
     - label: 'Một vùng màn hình, liên tục'
       language: python
-      code: >
+      code: |
         import itertools
-
 
         from libreyolo import LibreYOLO
 
-
         model = LibreYOLO("LibreYOLO9s.pt")
 
-
         # "screen <màn_hình> <trái> <trên> <chiều_rộng> <chiều_cao>"
-
-        for result in itertools.islice(model("screen 1 100 200 512 256",
-        stream=True), 50):
+        for result in itertools.islice(model("screen 1 100 200 512 256", stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: 93db4d43c24b69ae
 ---
-
 ## Cách phân loại nguồn
 
 `classify_source` kiểm tra giá trị trước khi mở hoặc tải bất kỳ thứ gì theo thứ tự
@@ -249,6 +230,8 @@ nhân với 255, còn giá trị cao hơn bị cắt vào `[0, 255]`. Mảng RGB
 Mỗi loại đường dẫn từ xa cần một gói riêng và không gói nào được cài mặc định:
 `requests` cho `http(s)://`, `boto3` cho `s3://` và `gcsfs` cho `gs://`.
 
+Theo dõi chấp nhận ảnh, thư mục sắp theo tên tệp, danh sách, tuple và iterator ảnh lười làm các khung hình liên tiếp. Truyền `fps=30.0` để xác định thời gian chuỗi ảnh và `color_format="auto"` để chọn cách diễn giải đầu vào. Xem [theo dõi](/docs/tasks/object-tracking).
+
 ## Thư mục
 
 Thư mục được quét đệ quy và sắp xếp; mọi tệp có một trong các hậu tố sau trở thành
@@ -275,6 +258,8 @@ toàn bộ video được giải mã vào danh sách; nếu có trên 500 frame 
 hệ thống phát cảnh báo đề xuất `stream=True`.
 
 Mỗi `Results` từ video chứa `frame_idx`.
+
+Mã hóa video chuyển sang codec sẵn có khi H.264 không mở được. Việc chuyển đổi được ghi log ở mức INFO và chỉ được lưu đệm theo codec và khung ảnh sau khi codec khác thành công.
 
 ## Webcam, luồng mạng và YouTube
 

@@ -16,7 +16,7 @@ keywords:
   - detr 无 nms
   - 目标检测 置信度阈值
   - 推理 只保留某些类别
-last_verified: 1.5.0
+last_verified: "1.6.0"
 verification: >-
   默认值取自 libreyolo/models/base/inference.py 中的 InferenceRunner.__call__。各家族的 NMS
   行为读自 libreyolo/postprocess/ 下的每个模块，并与 libreyolo/backends/base.py 中的
@@ -96,7 +96,7 @@ snippets:
 
         # 两种情况下数量相同。真正起作用的控制项是 conf 和 max_det
         print(len(loose.boxes), len(tight.boxes))
-source_hash: 0b978963c356027d
+source_hash: 849650629e58c9e1
 ---
 
 ## 四个参数
@@ -119,6 +119,8 @@ source_hash: 0b978963c356027d
 `conf` 指的是低于该分数的预测会被丢弃。它对每个家族都生效，包括那些从不跑 NMS 的家族，而且当检测结果太多或太少时，它是第一个该去调的控制项。
 
 默认的 `0.25` 适合用来看图。喂给下游系统通常需要调高一些；测量精度则需要调得低得多。
+
+检测验证通过 IoU 0.50 下的 F1 提供 `metrics/best_conf` 和各类别阈值。可将它们作为部署阈值的实测起点；见[验证](/docs/train/validation)。分割不提供这些键。
 
 ## iou
 

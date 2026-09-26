@@ -18,7 +18,7 @@ keywords:
   - global batch size
   - backend NCCL Gloo
   - multi GPU Windows
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -26,8 +26,8 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        # Guard __main__ wajib: setiap worker yang dibuat mengimpor ulang modul
-        # ini, dan tanpanya pelatihan akan diluncurkan ulang secara rekursif.
+        # Guard ini tetap didukung; skrip biasa juga berjalan tanpanya.
+        # Pertahankan untuk objek callback/logger yang memerlukan fallback pickle standar.
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(
@@ -73,7 +73,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # Diperiksa sekali pada GPU 0, lalu diskalakan ke kelipatan world-size.
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: 83c1563d68068cd0
+source_hash: e339072d5d8e71ea
 ---
 
 ## Jalankan pada dua GPU
@@ -82,32 +82,14 @@ Berikan daftar perangkat. Tidak ada hal lain yang berubah.
 
 <code-tabs name="train" />
 
-Jika lebih dari satu perangkat diberikan tanpa environment torchrun, `train()`
-menyimpan bobot ke berkas sementara, menyelesaikan autobatch jika diminta, lalu
-membuat satu proses worker per GPU dengan `torch.multiprocessing.spawn`. Setiap
-worker mengimpor ulang kelas model, membangunnya dari bobot tersimpan, dan
-menjalankan jalur satu-perangkat biasa karena variabel environment torchrun telah
-ditetapkan di dalam worker. Checkpoint terbaik rank 0 dimuat kembali ke instance
-model pemanggil setelah proses selesai.
+Jika diberi lebih dari satu perangkat tanpa lingkungan torchrun, `train()` model menyimpan bobot ke berkas sementara, menentukan autobatch jika diminta, dan memulai proses worker yang dikelola koordinator, satu per GPU. Setiap worker mengimpor ulang kelas model, membangunnya kembali dari bobot tersimpan, lalu menjalankan jalur satu perangkat biasa, karena variabel lingkungan torchrun diatur di dalam worker yang dibuat. Checkpoint terbaik rank 0 dimuat kembali ke instance model pemanggil setelah proses selesai.
 
 `device` menerima `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"`, dan
 `"auto"`. Hanya daftar lebih dari satu indeks CUDA yang memicu spawn.
 
-## Guard `__main__` wajib
+## Peluncuran otomatis dan main guard
 
-Worker mengimpor ulang modul asal. Tanpa guard `if __name__ == "__main__":`,
-import tersebut menjalankan ulang pemanggilan pelatihan dan setiap worker membuat
-worker sendiri. Library mendeteksinya dan memunculkan error:
-
-```text
-spawn_ddp_train() was called from inside a spawned subprocess. This usually
-means your script calls model.train(device=...) at the top level without a
-'if __name__ == "__main__":' guard.
-```
-
-Semua yang dikirim ke worker diserialisasi dengan pickle, sehingga `callbacks=` harus dapat
-diserialisasi dengan pickle. Kelas tingkat modul dapat digunakan; closure atau lambda tidak, dan
-error menjelaskannya serta menunjuk logger bawaan sebagai alternatif.
+`model.train(device=[0, 1])` dan `device="0,1"` memakai rank yang dikelola koordinator tanpa menjalankan ulang kode tingkat atas skrip biasa tanpa guard. Skrip dengan guard dan `torchrun` eksplisit tetap didukung. Pekerjaan koordinator memakai cloudpickle; objek callback atau logger yang memerlukan fallback pickle standar tetap membutuhkan guard `if __name__ == "__main__":`.
 
 ## batch adalah batch global
 
@@ -204,5 +186,3 @@ API model dan perintah torchrun, bukan diam-diam berlatih pada satu GPU.
 - [Hyperparameter](/docs/train/hyperparameters) untuk `batch`, `nbs`, dan resume.
 - [Logger eksperimen](/docs/train/loggers) untuk batasan picklability callback.
 - [GPU cloud](/docs/train/cloud-gpus) untuk menyewa mesin multi-GPU.
-
-

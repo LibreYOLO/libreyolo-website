@@ -20,7 +20,7 @@ keywords:
   - inferência youtube
   - vid_stride
   - stream=True
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Classificação de fontes lida de libreyolo/utils/source.py (classify_source,
   SourceKind, StreamSource, MultiStreamSource). Tipos de imagem aceitos e
@@ -206,7 +206,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: 93db4d43c24b69ae
 ---
 
 ## Como uma fonte é classificada
@@ -262,6 +262,8 @@ Caminhos remotos precisam de um pacote cada, e nenhum deles vem instalado por
 padrão: `requests` para `http(s)://`, `boto3` para `s3://` e `gcsfs` para
 `gs://`.
 
+O rastreamento aceita imagens, pastas ordenadas por nome de arquivo, listas, tuplas e iteradores preguiçosos de imagens como quadros consecutivos. Passe `fps=30.0` para definir a temporização da sequência de imagens e `color_format="auto"` para selecionar a interpretação da entrada. Veja [rastreamento](/docs/tasks/object-tracking).
+
 ## Pastas
 
 Um diretório é varrido recursivamente e ordenado, e todo arquivo com um destes
@@ -289,6 +291,8 @@ dentro de uma pasta varrida é carregado como imagem estática.
 acima de 500 quadros depois do stride emite um aviso sugerindo `stream=True`.
 
 Cada `Results` vindo de um vídeo carrega `frame_idx`.
+
+A codificação de vídeo usa um codec disponível como fallback quando H.264 não pode abrir. O fallback é registrado em INFO e armazenado em cache por codec e tela somente depois que outro codec funciona.
 
 ## Webcams, streams de rede e YouTube
 

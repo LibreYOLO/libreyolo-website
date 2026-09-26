@@ -20,7 +20,7 @@ keywords:
   - miou
   - panoptic quality
   - top1 accuracy
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   val:
     - label: Python
@@ -63,7 +63,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: d907183492fa3f57
+source_hash: "ce7d26a5cd72d988"
 ---
 
 ## Ausführen einer Validierung
@@ -154,6 +154,8 @@ anhand von `metrics/mAP50-95` ausgewählt, der in ihren Dictionaries enthalten
 ist. Pose gibt weder `fitness` noch `metrics/mAP50-95` zurück. Die zugehörigen
 Trainer setzen `best_metric_key` stattdessen auf
 `metrics/keypoints_mAP50-95`.
+
+ImageFolder-Klassifikation ergänzt die Makrometriken `metrics/precision`, `metrics/recall` und `metrics/f1`, gemittelt über die in den Validierungszielen vorhandenen Klassen. Top-1 bleibt die Standardfitness. Die Erkennung liefert außerdem `metrics/best_conf`, `metrics/best_conf_f1` und `metrics/best_conf_per_class` mit Klassennamen als Schlüssel. Sie bestimmen Micro-F1-optimale Schwellenwerte bei IoU 0.50. Erkennungen mit gleichem Score bleiben gruppiert; bei Gleichstand wird der höhere Schwellenwert gewählt. Ohne positiven F1 ergibt sich NaN. Segmentierung stellt diese Schwellenwertschlüssel nicht bereit.
 
 ## Geschwindigkeitsschlüssel
 
@@ -276,6 +278,10 @@ Normalen, Kanten, Restaurierung, Matting, OCR, OBB und Punkte schreiben dort
 nichts. Ein Fehler beim Plotten löst eine Warnung aus und bricht den Lauf nie
 ab.
 
+`visualize=True` schreibt klassenbezogene Box-TP/FP/FN-Bilder für Erkennung und Segmentierung oder Label-gegen-Top-1-Bilder für ImageFolder-Klassifikation nach `visualize/errors/` und `visualize/correct/`. Der Abgleich verwendet IoU 0.5 und Confidence `max(0.25, conf)`. Die Standardwerte sind `visualize=False`, `show_labels=True` und `show_conf=True`. Nicht unterstützte Aufgaben und die V-JEPA-2-Clip-Validierung weisen die Visualisierung zurück.
+
+`plot_samples=8` begrenzt die separate Darstellung von Beispielbildern; 0 deaktiviert sie und -1 behält alle Bilder bei. Metriken und Visualisierungsausgabe ändern sich dadurch nicht.
+
 ## Validierung während des Trainings
 
 Das Training validiert alle `eval_interval` Epochen anhand des `val`-Splits
@@ -293,3 +299,6 @@ geschrieben werden.
 - [Datensätze](/docs/train/datasets) beschreibt die Split-Schlüssel und
   Formate, die Validatoren lesen.
 
+## Box-Metriken je Bild
+
+Erkennungs- und Segmentierungsergebnisse bleiben mit Dictionaries kompatibel und bieten zusätzlich `results.box.image_metrics`. Jeder Dateiname wird `precision`, `recall`, `f1`, `tp`, `fp` und `fn` zugeordnet, nach der Abgleichregel der Visualisierung, auch wenn diese ausgeschaltet ist. Segmentierung zählt hier Boxen. Bei doppelten Basisdateinamen werden nach dem ersten Vorkommen vollständige Pfade verwendet. Nenner null ergeben 0.0. Diese Datensätze werden nicht über verteilte Ranks zusammengeführt.

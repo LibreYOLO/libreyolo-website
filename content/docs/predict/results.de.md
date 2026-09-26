@@ -20,7 +20,7 @@ keywords:
   - Tiefenkarte Results
   - Results Zusammenfassung
   - ONNX gleiche Results
-last_verified: 1.5.0
+last_verified: "1.6.0"
 verification: >-
   Nutzlastklassen, Slots, Verschiebungssemantik, summary(), to_json(), plot(),
   save() und cutout() aus libreyolo/utils/results.py gelesen. Verhalten bei
@@ -157,7 +157,7 @@ snippets:
 
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: "201eca6457cf87a4"
 ---
 
 ## Ein Objekt mit einem Slot je Nutzlast
@@ -264,13 +264,15 @@ Zwei Nutzlasten werden bewusst gekürzt. Ein Embedding-Vektor wird nur als `embe
 
 `predict(save=True)` annotiert und schreibt die Ausgabe. Die Zeichenroutine wird anhand des befüllten Slots ausgewählt. Ein semantisches Ergebnis wird als farbige Maske geschrieben, ein Tiefenergebnis als Tiefenvisualisierung, ein panoptisches Ergebnis mit seinen Segmenten, eine Matte als RGBA-PNG mit transparentem Hintergrund und eine Detektorausgabe als Boxen mit darunterliegenden Masken. Der geschriebene Pfad wird als `result.saved_path` an das Ergebnis angehängt.
 
-`Results.plot()` ist enger gefasst, als der Name vermuten lässt. Die Methode ist nur für Normalen- und Kantenkarten definiert und löst bei allen anderen Nutzlasten `NotImplementedError` aus. Verwende für andere Aufgaben `save=True`.
-
 `Results.save(path)` ist ebenfalls eng gefasst. Die Methode schreibt ein Matte-Ergebnis als RGBA-PNG-Ausschnitt mit transparentem Hintergrund und löst sonst `NotImplementedError` aus. `Results.cutout()` gibt dasselbe RGBA-Array zurück, ohne es zu schreiben. Beide benötigen das Quellbild aus `result.path` oder als Argument `image=`.
 
 Zwei Nutzlasten besitzen eigene Schreibmethoden: `result.restored.save(path)` für ein restauriertes Bild und `result.meshes.save_obj(path, index=0)` für ein Mesh.
 
 Informationen zu den Speicherorten sowie zum Verhalten von `output_path` und `output_file_format` findest du unter [Vorhersagequellen](/docs/predict/sources).
+
+`plot()` deckt die Ergebnisdaten aller Aufgaben ab. Bild-Overlays liefern standardmäßig zusammenhängende HxWx3-uint8-BGR-Arrays; `pil=True` fordert PIL an. Bestehende Kanten- und Normalenkartenpfade behalten PIL als Standard. `orig_img` bewahrt BGR-Pixel für In-Memory- und URL-Quellen; lokale Dateien und gesammelte Frames endlicher Videos lassen sich erneut öffnen.
+
+Zu den Optionen gehören `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` und `filename`. Gespeicherte Klassifikationsbilder enthalten die fünf besten Labels. Matting speichert ein freigestelltes RGBA-Bild.
 
 ## Gleiche Objekte aus exportierten Artefakten
 

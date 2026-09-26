@@ -20,7 +20,7 @@ keywords:
   - youtube inference python
   - vid_stride
   - stream=True
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Classificazione delle sorgenti letta da libreyolo/utils/source.py
   (classify_source, SourceKind, StreamSource, MultiStreamSource). Tipi di
@@ -207,7 +207,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: 93db4d43c24b69ae
 ---
 
 ## Come viene classificata una sorgente
@@ -263,6 +263,8 @@ I percorsi remoti richiedono un pacchetto ciascuno, e nessuno di questi è
 installato di default: `requests` per `http(s)://`, `boto3` per `s3://` e
 `gcsfs` per `gs://`.
 
+Il tracking accetta immagini, cartelle ordinate per nome file, liste, tuple e iteratori lazy di immagini come frame consecutivi. Passa `fps=30.0` per definire la temporizzazione della sequenza di immagini e `color_format="auto"` per selezionare l'interpretazione dell'input. Vedi [tracking](/docs/tasks/object-tracking).
+
 ## Cartelle
 
 Una directory viene scansionata ricorsivamente e ordinata, e ogni file con uno
@@ -292,6 +294,8 @@ l'intero video viene decodificato in una lista, e qualsiasi valore superiore a
 500 frame dopo lo stride genera un avviso che suggerisce `stream=True`.
 
 Ogni `Results` proveniente da un video porta con sé `frame_idx`.
+
+La codifica video ripiega su un codec disponibile quando H.264 non può essere aperto. Il fallback viene registrato a livello INFO e memorizzato in cache per codec e canvas solo dopo che un altro codec ha funzionato.
 
 ## Webcam, stream di rete e YouTube
 

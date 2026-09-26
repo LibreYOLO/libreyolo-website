@@ -15,7 +15,7 @@ keywords:
   - グローバルバッチサイズ
   - NCCL Gloo バックエンド
   - Windows マルチGPU
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -23,8 +23,8 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        # __main__ガードは必須 各ワーカーがこのモジュールを再インポートするため
-        # ガードがないと学習の起動を再帰的に繰り返す
+        # このガードも使えます。通常のスクリプトはガードなしでも動作します。
+        # 標準pickleへのフォールバックが必要なコールバックやロガーでは残してください。
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(
@@ -70,7 +70,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # GPU 0で一度調査しworld sizeの倍数に調整する
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: 83c1563d68068cd0
+source_hash: e339072d5d8e71ea
 ---
 
 ## 2台のGPUで実行
@@ -79,21 +79,13 @@ source_hash: 83c1563d68068cd0
 
 <code-tabs name="train" />
 
-複数のデバイスが指定され、torchrun環境ではない場合、モデルの`train()`は重みを一時ファイルへ保存します。要求されていればautobatchを解決し、`torch.multiprocessing.spawn`でGPUごとに1つのワーカープロセスを起動します。各ワーカーはモデルクラスを再インポートし、保存済みの重みから再構築して、通常の単一デバイス経路を実行します。起動済みワーカー内部ではtorchrunの環境変数が設定されるためです。実行が終わると、ランク0の最良チェックポイントが呼び出し元のモデルインスタンスへ読み戻されます。
+複数のデバイスが指定され、torchrun環境ではない場合、モデルの`train()`は重みを一時ファイルへ保存します。要求されていればautobatchを解決し、コーディネーターが管理するワーカープロセスをGPUごとに1つ起動します。各ワーカーはモデルクラスを再インポートし、保存済みの重みから再構築して、通常の単一デバイス経路を実行します。起動済みワーカー内部ではtorchrunの環境変数が設定されるためです。実行が終わると、ランク0の最良チェックポイントが呼び出し元のモデルインスタンスへ読み戻されます。
 
 `device`には`"0,1"`、`[0, 1]`、`0`、`"cuda:0"`、`"cpu"`、`"mps"`、`"auto"`を指定できます。複数のCUDAインデックスを含むリストだけが起動処理を開始します。
 
-## `__main__`ガードは必須
+## 自動起動とmainガード
 
-起動したワーカーは元のモジュールを再インポートします。`if __name__ == "__main__":`ガードがないと、そのインポートで学習呼び出しが再実行され、各ワーカーがさらにワーカーを起動します。ライブラリはこの状態を検出し、再帰させずに例外を送出します。
-
-```text
-spawn_ddp_train() was called from inside a spawned subprocess. This usually
-means your script calls model.train(device=...) at the top level without a
-'if __name__ == "__main__":' guard.
-```
-
-ワーカーへ渡すものはすべてpickle化されるため、`callbacks=`はpickle化可能でなければなりません。モジュール直下のクラスは使用できますが、クロージャやラムダは使用できません。エラーにはその理由と、代替となる組み込みロガーが示されます。
+`model.train(device=[0, 1])`と`device="0,1"`はコーディネーターが管理するランクを使い、通常のガードなしスクリプトのトップレベルコードを再実行しません。ガード付きのスクリプトと明示的な`torchrun`も引き続き使えます。コーディネーターのジョブはcloudpickleを使います。標準pickleへのフォールバックが必要なコールバックやロガーのオブジェクトには、引き続き`if __name__ == "__main__":`ガードが必要です。
 
 ## batchはグローバルバッチ
 

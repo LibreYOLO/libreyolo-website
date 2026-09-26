@@ -19,7 +19,7 @@ keywords:
   - randaugment
   - cutmix
   - no_aug_epochs
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -76,7 +76,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 47461cd13aab580c
+source_hash: 42668148fcc79c1f
 ---
 
 ## Ustawianie parametrów
@@ -134,9 +134,7 @@ receptury, a nie parametrami konfiguracji, dlatego aktywne są tylko `flip_prob`
 i `no_aug_epochs`. Obejmuje D-FINE, Dome-DETR, DEIM, DEIMv2, RT-DETRv4, EC oraz,
 z jedną zmianą, RF-DETR.
 
-Pipeline klasyfikacji ImageFolder ignoruje każdy parametr detekcji. Jego odbicie
-poziome ma stałe prawdopodobieństwo 0.5, na które `flip_prob` nie wpływa. Ma
-zamiast tego własny pakiet parametrów opisany poniżej.
+Pipeline klasyfikacji ImageFolder ma własne parametry augmentacji. `flip_prob` kontroluje odbicia poziome i domyślnie wynosi 0.5; `fliplr` jest jego aliasem.
 
 YOLO-NAS ma własny wariant: bez mozaiki, z zawsze aktywną transformacją
 afiniczną dla każdej próbki i z MixUp stosowanym niezależnie zamiast warunkowo.
@@ -165,8 +163,8 @@ Podsumowanie według pipeline'u dla parametrów podstawowych:
 | `mosaic_prob` | używany | ignorowany | ignorowany | ignorowany |
 | `mixup_prob` | warunkowy od mozaiki | używany | ignorowany | ignorowany |
 | `hsv_prob` | używany | używany | ignorowany | ignorowany |
-| `flip_prob` | używany | używany | używany | ignorowany |
-| `flipud` | używany | używany | ignorowany | ignorowany |
+| `flip_prob` | używany | używany | używany | używany |
+| `flipud` | używany | używany | ignorowany | używany |
 | `degrees` | warunkowy od mozaiki | używany | ignorowany | ignorowany |
 | `translate` | warunkowy od mozaiki | używany | ignorowany | ignorowany |
 | `shear` | warunkowy od mozaiki | używany | ignorowany | ignorowany |
@@ -192,8 +190,7 @@ Wyjątki wewnątrz tych kolumn, wszystkie zawężające zakres:
 `no_aug_epochs` jest `used` wszędzie, lecz nie wszędzie oznacza to samo. W
 pipeline'ach mozaikowych wyłącza mozaikę i MixUp na ostatnie epoki. W
 pipeline'ach w stylu DETR zatrzymuje augmentacje fotometryczne, pomniejszenie i
-wycinanie oraz kształtuje końcówkę harmonogramu. W pipeline'ach klasyfikacji i
-semantycznym tylko kształtuje końcówkę.
+wycinanie oraz kształtuje końcówkę harmonogramu. W pipeline'ach klasyfikacji wyłącza automatyczną augmentację, erasing, MixUp i CutMix; wycinanie i odbicia pozostają.
 
 ## Pakiet klasyfikacji
 
@@ -211,9 +208,13 @@ sumują i ich suma powinna wynosić najwyżej 1.
 Wszystkie cztery są domyślnie wyłączone, dlatego trenowanie klasyfikacji nie
 zmienia się bez jawnego żądania.
 
-Jedną kolizję nazw warto opisać wprost. W CLI `mixup` jest aliasem parametru
-detekcji `mixup_prob`. Pole klasyfikacji `mixup` nie ma własnej pisowni w CLI i
-jest dostępne wyłącznie przez `model.train(mixup=...)` w Pythonie.
+CLI kieruje `mixup` według zadania: klasyfikacja używa mieszania batchy, a detekcja `mixup_prob`.
+
+`scale=0.5` oznacza losowy zakres obszaru wycinka `(0.5, 1.0)`; jawna para ustawia obie granice. `crop_pct=None` zachowuje współczynnik zmiany rozmiaru rodziny podczas ewaluacji; nadpisanie wpływa na ewaluację podczas trenowania i walidacji, a eksport zachowuje natywne przetwarzanie wstępne rodziny.
+
+CLI udostępnia `auto_augment`, `erasing`, `cutmix`, `fliplr` i `flipud`. `mixup` w klasyfikacji oznacza mieszanie batchy i ma domyślną wartość 0.0. Odbicia poziome mają domyślnie prawdopodobieństwo 0.5, a pionowe 0.0. `mixup + cutmix` nie może przekraczać 1.
+
+`no_aug_epochs` wyłącza automatyczną augmentację, erasing, MixUp i CutMix w końcowych epokach, zachowując wycinanie i odbicia. Receptury klasyfikacji domyślnie ustawiają tę końcówkę na 0.
 
 ## Parametry specyficzne dla rodziny
 
@@ -244,4 +245,3 @@ jest zaimplementowana.
   argument harmonogramu oraz pozostałe argumenty `train()`.
 - [Zbiory danych](/docs/train/datasets) opisują formaty etykiet używane przez te
   transformacje.
-

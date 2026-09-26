@@ -2,12 +2,11 @@
 title: Xác thực và metric
 seo_title: Xác thực và metric trong LibreYOLO
 description: >-
-  Chạy val() trên mọi mô hình, đọc các key metric mà từng tác vụ trả về, chọn
-  backend đánh giá và bật validation loss bên cạnh metric độ chính xác.
+  Chạy val() trên mọi mô hình, đọc các key metric mà từng tác vụ trả về, chọn backend đánh giá và bật
+  validation loss bên cạnh metric độ chính xác.
 lead: >-
-  Xác thực chạy mô hình trên một split của dataset qua val() và trả về
-  dictionary phẳng gồm các key metric và giá trị float. Các key là chuỗi
-  literal, và tập key nhận được phụ thuộc vào tác vụ chứ không phải family.
+  Xác thực chạy mô hình trên một split của dataset qua val() và trả về dictionary phẳng gồm các key metric và
+  giá trị float. Các key là chuỗi literal, và tập key nhận được phụ thuộc vào tác vụ chứ không phải family.
 keywords:
   - map50-95
   - đánh giá coco
@@ -18,7 +17,7 @@ keywords:
   - miou
   - chất lượng panoptic
   - độ chính xác top1
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   val:
     - label: Python
@@ -61,9 +60,8 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: d907183492fa3f57
+source_hash: ce7d26a5cd72d988
 ---
-
 ## Chạy xác thực
 
 `val()` nhận dataset và trả về các metric.
@@ -143,6 +141,8 @@ tốt nhất sử dụng theo mặc định. Phát hiện, phân đoạn và OBB
 family của chúng được chọn theo `metrics/mAP50-95`, vốn có trong dictionary trả
 về. Tư thế không trả về `fitness` lẫn `metrics/mAP50-95`; thay vào đó, trainer
 của tác vụ đặt `best_metric_key` thành `metrics/keypoints_mAP50-95`.
+
+Phân loại ImageFolder bổ sung macro `metrics/precision`, `metrics/recall` và `metrics/f1`, lấy trung bình trên các lớp đối tượng có trong nhãn đích đánh giá. Top-1 vẫn là fitness mặc định. Phát hiện còn trả về `metrics/best_conf`, `metrics/best_conf_f1` và `metrics/best_conf_per_class` với khóa là tên lớp đối tượng, chọn ngưỡng tối ưu micro-F1 tại IoU 0.50. Các phát hiện cùng điểm vẫn được nhóm chung; khi hòa chọn ngưỡng cao hơn. Không có F1 dương sẽ cho NaN. Phân đoạn không cung cấp các khóa ngưỡng này.
 
 ## Key tốc độ
 
@@ -254,6 +254,10 @@ loại, ngữ nghĩa, toàn cảnh, độ sâu, pháp tuyến, cạnh, phục h�
 và point đều không ghi gì ở đó. Lỗi vẽ biểu đồ sẽ cảnh báo và không bao giờ dừng
 lượt chạy.
 
+`visualize=True` ghi ảnh TP/FP/FN của bounding box có xét lớp đối tượng cho phát hiện và phân đoạn, hoặc ảnh so sánh nhãn với top-1 cho phân loại ImageFolder, vào `visualize/errors/` và `visualize/correct/`. Ghép cặp dùng IoU 0.5 và độ tin cậy `max(0.25, conf)`. Mặc định là `visualize=False`, `show_labels=True` và `show_conf=True`. Các tác vụ không hỗ trợ và đánh giá clip V-JEPA 2 từ chối trực quan hóa.
+
+`plot_samples=8` giới hạn biểu đồ ảnh mẫu riêng; 0 tắt nó và -1 giữ mọi ảnh. Điều này không thay đổi chỉ số hay đầu ra trực quan hóa.
+
 ## Xác thực trong khi huấn luyện
 
 Quá trình huấn luyện xác thực mỗi `eval_interval` epoch trên split `val` của
@@ -269,3 +273,7 @@ các con số được đưa tới đâu.
 
 - Xem [Dataset](/docs/train/datasets) để biết các key split và định dạng mà
   validator đọc.
+
+## Chỉ số bounding box theo ảnh
+
+Kết quả phát hiện và phân đoạn vẫn tương thích dictionary và còn cung cấp `results.box.image_metrics`. Mỗi tên tệp ánh xạ đến `precision`, `recall`, `f1`, `tp`, `fp` và `fn` theo quy tắc ghép cặp của trực quan hóa, kể cả khi tắt trực quan hóa. Phân đoạn đếm bounding box ở đây. Tên tệp trùng dùng đường dẫn đầy đủ sau lần xuất hiện đầu. Mẫu số bằng 0 cho kết quả 0.0. Các bản ghi này không được tổng hợp qua các rank phân tán.

@@ -20,7 +20,7 @@ keywords:
   - miou
   - panoptic quality
   - accuracy top1
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   val:
     - label: Python
@@ -63,7 +63,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: d907183492fa3f57
+source_hash: ce7d26a5cd72d988
 ---
 
 ## Ejecutar una validación
@@ -149,6 +149,8 @@ OBB no la llevan; sus familias se seleccionan por `metrics/mAP50-95`, que sus
 diccionarios sí devuelven. Pose no devuelve ni `fitness` ni `metrics/mAP50-95`;
 en su lugar, sus entrenadores fijan `best_metric_key` a
 `metrics/keypoints_mAP50-95`.
+
+La clasificación ImageFolder añade las métricas macro `metrics/precision`, `metrics/recall` y `metrics/f1`, promediadas sobre las clases presentes en los targets de validación. Top-1 sigue siendo el criterio de selección por defecto. La detección también devuelve `metrics/best_conf`, `metrics/best_conf_f1` y `metrics/best_conf_per_class`, indexado por nombre de clase, eligiendo umbrales óptimos de micro-F1 con IoU 0.50. Las detecciones con la misma puntuación permanecen agrupadas; los empates eligen el umbral más alto. Si no hay F1 positivo, se devuelve NaN. La segmentación no expone estas claves de umbral.
 
 ## Claves de velocidad
 
@@ -266,6 +268,10 @@ Los demás validadores no implementan gráficas; classification, semantic,
 panoptic, depth, normal, edge, restore, matte, OCR, OBB y point no escriben nada
 ahí. Un fallo al generar las gráficas avisa y nunca aborta la ejecución.
 
+`visualize=True` escribe imágenes de TP/FP/FN de cajas teniendo en cuenta la clase para detección y segmentación, o imágenes que comparan la etiqueta con top-1 para clasificación ImageFolder, en `visualize/errors/` y `visualize/correct/`. El matching usa IoU 0.5 y confianza `max(0.25, conf)`. Los valores por defecto son `visualize=False`, `show_labels=True` y `show_conf=True`. Las tareas no compatibles y la validación de clips de V-JEPA 2 rechazan la visualización.
+
+`plot_samples=8` limita el gráfico de muestras separado; 0 lo desactiva y -1 conserva todas las imágenes. Esto no cambia las métricas ni la salida de visualización.
+
 ## Validación durante el entrenamiento
 
 El entrenamiento valida cada `eval_interval` épocas sobre el split `val` del
@@ -280,3 +286,7 @@ saber dónde van a parar los números.
 ## Relacionado
 
 - [Datasets](/docs/train/datasets) para las claves de split y los formatos que leen los validadores.
+
+## Métricas de cajas por imagen
+
+Los resultados de detección y segmentación mantienen la compatibilidad con diccionarios y también exponen `results.box.image_metrics`. Cada nombre de archivo se asocia con `precision`, `recall`, `f1`, `tp`, `fp` y `fn` usando la regla de matching de visualización, incluso cuando esta está desactivada. La segmentación cuenta cajas aquí. Los nombres base duplicados usan rutas completas después de la primera aparición. Los denominadores cero dan 0.0. Estos registros no se recopilan entre los ranks distribuidos.

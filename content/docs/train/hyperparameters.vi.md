@@ -2,13 +2,11 @@
 title: Siêu tham số
 seo_title: Siêu tham số huấn luyện trong LibreYOLO
 description: >-
-  Các đối số train() quan trọng: epochs, batch, lr0, optimizer, EMA, autobatch,
-  tích lũy gradient và tiếp tục huấn luyện, cùng lý do giá trị mặc định khác
-  nhau theo family.
+  Các đối số train() quan trọng: epochs, batch, lr0, optimizer, EMA, autobatch, tích lũy gradient và tiếp tục
+  huấn luyện, cùng lý do giá trị mặc định khác nhau theo family.
 lead: >-
-  Mọi đối số huấn luyện là một trường trên dataclass TrainConfig. Class cơ sở
-  định nghĩa trường và giá trị mặc định; mỗi model family tạo subclass và ghi đè
-  những giá trị mặc định mà recipe đã công bố của nó thay đổi.
+  Mọi đối số huấn luyện là một trường trên dataclass TrainConfig. Class cơ sở định nghĩa trường và giá trị mặc
+  định; mỗi model family tạo subclass và ghi đè những giá trị mặc định mà recipe đã công bố của nó thay đổi.
 keywords:
   - đối số train
   - learning rate
@@ -20,7 +18,7 @@ keywords:
   - patience early stopping
   - amp bfloat16
   - train config yaml
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -62,24 +60,18 @@ snippets:
                 print(f"{f.name}: {family_value}")
     - label: CLI
       language: bash
-      code: >
-        # In giá trị mặc định của train, val và predict, gồm cả ghi đè theo
-        family.
-
+      code: |
+        # In giá trị mặc định của train, val và predict, gồm cả ghi đè theo family.
         libreyolo cfg
   autobatch:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-
-        # batch=-1 thăm dò bộ nhớ GPU và phân giải thành một lũy thừa cụ thể của
-        hai.
-
+        # batch=-1 thăm dò bộ nhớ GPU và phân giải thành một lũy thừa cụ thể của hai.
         model.train(data="my-dataset.yaml", batch=-1, imgsz=640)
     - label: CLI
       language: bash
@@ -88,16 +80,12 @@ snippets:
   accumulate:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-
-        # 4 micro-batch gồm 16 ảnh trên mỗi bước optimizer, batch hiệu dụng là
-        64.
-
+        # 4 micro-batch gồm 16 ảnh trên mỗi bước optimizer, batch hiệu dụng là 64.
         model.train(data="my-dataset.yaml", batch=16, nbs=64)
   resume:
     - label: Python
@@ -116,19 +104,14 @@ snippets:
   cfg:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
-        # Các key trong yaml là tên trường TrainConfig. Kwarg tường minh được ưu
-        tiên.
-
+        # Các key trong yaml là tên trường TrainConfig. Kwarg tường minh được ưu tiên.
         model = LibreYOLO("LibreYOLO9s.pt")
-
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: d838d1abd45af40f
+source_hash: eac4e55fcf16ca15
 ---
-
 ## Thiết lập đối số
 
 `train()` nhận đối số keyword, còn CLI nhận cùng tên ở dạng `key=value`.
@@ -171,13 +154,9 @@ Các giá trị mặc định cơ sở là `optimizer="sgd"`, `lr0=0.01`, `momen
 | `weight_decay` | `5e-4` | `5e-4` | `1e-4` | `1e-5` |
 | `scheduler` | `yoloxwarmcos` | `linear` | `flat_cosine` | `cos` |
 | `epochs` | `300` | `300` | `132` | `300` |
-| `amp` | `True` | `True` | `False` | `False` |
+| `amp` | `True` | `True` | `True` | `True` |
 
-D-FINE và DEIM được phân phối với `amp=False` vì decoder D-FINE clamp activation
-ở 65504, giá trị float16 hữu hạn lớn nhất. YOLO-NAS và FOMO cũng mặc định tắt.
-Flag `--amp` của CLI mặc định là `True` cho mọi family, vì vậy được tính là do
-người dùng cung cấp và ghi đè mặc định family; hãy giữ nguyên trừ khi thực sự
-muốn thay đổi.
+Phát hiện D-FINE, DEIM, RT-DETRv4 và YOLO-NAS mặc định dùng `amp=True` với `amp_dtype="float16"`. Dome-DETR, PP-YOLOE và YOLO-NAS OBB giữ mặc định FP32. Truyền `amp=False` khi cần FP32.
 
 Để đọc giá trị mặc định thực của family thay vì đoán:
 
@@ -204,6 +183,8 @@ lớp decoder phụ trợ.
 
 Autobatch là tính năng CUDA. Trên CPU hoặc MPS, nó ghi một dòng log và giữ batch
 mặc định.
+
+`min_samples=0` giữ nguyên độ dài epoch. Ngưỡng dương lấy mẫu có hoàn lại từ các dataset phát hiện ngắn hơn. `class_balanced=False` bật lấy mẫu theo hệ số lặp từng ảnh khi đặt thành true; nó kết hợp với `min_samples` và DDP. Các loader chuyên biệt bỏ qua bộ lấy mẫu chung sẽ từ chối khi bật cân bằng.
 
 ## Tích lũy gradient
 
@@ -275,6 +256,10 @@ hoặc `"ram"`) hoặc dưới dạng tệp `.npy` bên cạnh nguồn (`"disk"`
 cache giống từng byte với lượt đọc mới. Khi có worker dataloader, `"disk"` là
 lựa chọn an toàn hơn.
 
+`average_best=0` tắt lấy trung bình checkpoint; N dương ghi `weights/average.pt` từ tối đa N snapshot tốt nhất. Các tensor số thực được lấy trung bình đều và buffer số nguyên lấy từ snapshot tốt nhất. Có thể bật `export_check=False` để dừng trước epoch đầu nếu xuất ONNX thất bại. Các đầu ra thô tương ứng được so sánh với `rtol=1e-3`, `atol=1e-4`; bố cục không tương thích ghi log bỏ qua so sánh.
+
+`precise_bn=0` tắt hiệu chuẩn lại BatchNorm cuối cùng. Giá trị dương giới hạn số ảnh từ loader huấn luyện trước lần đánh giá cuối; với DDP, giới hạn áp dụng cho từng rank tham gia. BatchNorm đã đóng băng vẫn đóng băng. [Callback fitness tùy chỉnh](/docs/train/fitness-callbacks) có thể chọn checkpoint tốt nhất và patience.
+
 ## Tiếp tục huấn luyện
 
 `resume=True` tiếp tục một lượt chạy bị gián đoạn. Checkpoint phải được nạp
@@ -310,3 +295,11 @@ CLI không có flag `--cfg`; đường dẫn tệp là đối số Python.
 - Xem [Đóng băng lớp](/docs/train/layer-freezing) và
   [LoRA](/docs/train/lora) để huấn luyện một tập con của trọng số.
 - Xem [Xác thực và metric](/docs/train/validation) để biết lượt chạy báo cáo gì.
+
+## Chọn lớp đối tượng và trọng số loss
+
+Với phát hiện YOLO9, RF-DETR, EdgeCrafter, RT-DETR, D-FINE, DEIM, TinyFormer và YOLO-NAS, `classes=None` giữ mọi lớp đối tượng của dataset; danh sách lọc dữ liệu giám sát nhưng giữ ID gốc, `nc` và `names`. Có thể bật `single_cls=False` để ánh xạ nhãn được giữ thành lớp đối tượng 0 có tên `object`. Tiếp tục huấn luyện và đánh giá kế thừa thiết lập đã lưu. Huấn luyện OBB của mô hình từ chối `single_cls`.
+
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 và DINOv2 hỗ trợ `cls_pw=0.0`: giá trị trong [0, 1] đặt trọng số mỗi lớp đối tượng bằng nghịch đảo tần suất lũy thừa giá trị đó, chuẩn hóa về trung bình 1. Khi bật, `class_weights=False` chọn cách đặt trọng số thay thế `N / (C * n_c)`. Không thể kết hợp nó với `cls_pw` dương; tiếp tục huấn luyện yêu cầu thiết lập trọng số khớp nhau.
+
+`plot_samples=8` đặt giới hạn số ảnh mẫu đánh giá. Dùng 0 để không có ảnh hoặc -1 để lấy tất cả; nó không giảm số ảnh được đánh giá.

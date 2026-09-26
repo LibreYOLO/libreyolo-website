@@ -15,7 +15,7 @@ keywords:
   - 深度マップ results
   - results summary
   - onnx 同じ results
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   ペイロードクラス、スロット、移動のセマンティクス、summary()、to_json()、plot()、save()、cutout()はlibreyolo/utils/results.pyで確認しました。アノテーションとディスク書き込みの動作はlibreyolo/models/base/inference.pyのInferenceRunner._save_annotated_imageとlibreyolo/utils/general.pyのresolve_save_pathで確認しました。サフィックスによる振り分けはlibreyolo/models/__init__.pyのLibreYOLO()で確認しました。
 snippets:
@@ -113,7 +113,7 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: 201eca6457cf87a4
 ---
 
 ## 1オブジェクト、ペイロードごとに1スロット
@@ -220,13 +220,15 @@ source_hash: 548dbc9c7f5552ec
 
 `predict(save=True)`がアノテーションを付けて書き出す経路です。値が設定されたスロットに応じて描画ルーチンを選択します。そのため、セマンティック結果は色付きマスク、深度結果は深度表示、パノプティック結果はセグメント付き、matteは背景が透明なRGBA PNG、検出結果は下にマスクを重ねたボックスとして書き出されます。書き込まれたパスは`result.saved_path`として結果に追加されます。
 
-`Results.plot()`は名前から想像されるより対象が限定されています。法線マップとエッジマップだけで定義され、そのほかでは`NotImplementedError`が発生します。ほかのタスクでは`save=True`を使ってください。
-
 `Results.save(path)`も同様に対象が限定されています。matte結果を背景が透明なRGBA PNGの切り抜きとして書き出し、そのほかでは`NotImplementedError`が発生します。`Results.cutout()`は書き込まずに同じRGBA配列を返します。どちらにもソース画像が必要で、`result.path`から取得するか`image=`で渡します。
 
 2つのペイロードは固有の書き込み機能を持ちます。復元画像には`result.restored.save(path)`、メッシュには`result.meshes.save_obj(path, index=0)`を使います。
 
 ファイルの保存先と`output_path`および`output_file_format`の動作については[推論ソース](/docs/predict/sources)を参照してください。
+
+`plot()`はすべてのタスクのペイロードに対応します。画像への重ね合わせは、デフォルトで連続したHxWx3のuint8 BGR配列を返します。`pil=True`でPILを要求できます。既存のエッジと法線マップの経路では、PILを返すデフォルトを維持します。`orig_img`はメモリ内とURLのソースでBGRピクセルを保持します。ローカルファイルと、収集した有限長動画のフレームは再び開けます。
+
+制御引数には`img`、`conf`、`labels`、`boxes`、`masks`、`probs`、`line_width`、`pil`、`show`、`save`、`filename`があります。保存した分類画像には上位5つのラベルが含まれます。マットの保存ではRGBAの切り抜きを書き出します。
 
 ## エクスポートした成果物も同じオブジェクトを返す
 

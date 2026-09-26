@@ -18,7 +18,7 @@ keywords:
   - entrenamiento limitado por el dataloader
   - overhead de lanzamiento de kernels
   - utilización de la gpu entrenamiento
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   profile:
     - label: Perfilar y seguir entrenando
@@ -70,7 +70,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: ee5bb727065b6099
+source_hash: 288ee5ee988f2fda
 ---
 
 ## Medir antes de tocar nada
@@ -117,6 +117,8 @@ porque un paso limitado por los lanzamientos tiene ruido suficiente como para
 que una sola ejecución induzca a error; escribe un directorio por prueba,
 `prof_1`, `prof_2` y así sucesivamente, más un `profile_repeat.json` agregado.
 
+RF-DETR y las rutas de matching de D-FINE/DEIM/RT-DETR reducen las transferencias al host; la construcción de Adam y AdamW en CUDA usa actualizaciones fusionadas cuando es compatible. SGD y los parámetros fuera de CUDA usan la construcción estándar. Estos cambios de implementación no implican una aceleración universal.
+
 ## Precisión mixta
 
 `amp=True` es el valor por defecto en la mayoría de las familias y ejecuta el
@@ -125,12 +127,7 @@ forward bajo el autocast de CUDA. `amp_dtype` elige entre `float16` y
 
 <code-tabs name="amp" />
 
-Float16 necesita escalado dinámico de la función de pérdida (loss) y recibe un
-escalador de gradientes activo; el rango de exponente más ancho de bfloat16 no
-lo necesita, así que su escalador queda desactivado. Cuatro familias vienen con
-`amp=False`, D-FINE, DEIM, YOLO-NAS y FOMO, y el ajuste de DEIM llega a
-RT-DETRv4 por herencia. D-FINE indica el motivo: su decoder limita las
-activaciones a 65504, el mayor valor finito de float16.
+Float16 usa un escalador de gradientes; bfloat16 lo desactiva. La detección con D-FINE, DEIM, RT-DETRv4 y YOLO-NAS usa `amp=True` por defecto. Dome-DETR, PP-YOLOE y YOLO-NAS OBB mantienen FP32 por defecto. Pasa `amp=False` para solicitar FP32 explícitamente.
 
 La semántica de los argumentos, incluido qué hace una petición de bfloat16 en
 hardware sin soporte de bfloat16, está en

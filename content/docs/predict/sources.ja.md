@@ -17,7 +17,7 @@ keywords:
   - youtube 推論
   - vid_stride
   - stream=True
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   ソース分類はlibreyolo/utils/source.py（classify_source、SourceKind、StreamSource、MultiStreamSource）で確認しました。受け付ける画像型とディレクトリ拡張子はlibreyolo/utils/image_loader.pyで確認しました。動画拡張子と保存先はlibreyolo/utils/video.pyで確認しました。画面構文はlibreyolo/utils/screen.pyで確認しました。返り値の形状と引数のデフォルトはlibreyolo/models/base/inference.pyのInferenceRunner.__call__で確認しました。
 snippets:
@@ -183,7 +183,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: 93db4d43c24b69ae
 ---
 
 ## ソースの分類方法
@@ -229,6 +229,8 @@ source_hash: c371965951dd0181
 
 リモートパスにはそれぞれ1つのパッケージが必要で、どれもデフォルトではインストールされません。`http(s)://`には`requests`、`s3://`には`boto3`、`gs://`には`gcsfs`が必要です。
 
+追跡は、画像、ファイル名で並べたフォルダー、リスト、タプル、遅延評価する画像イテレーターを連続フレームとして受け付けます。`fps=30.0`で画像列の時刻情報を定義し、`color_format="auto"`で入力の解釈を選択してください。[追跡](/docs/tasks/object-tracking)を参照してください。
+
 ## フォルダー
 
 ディレクトリは再帰的に走査して並べ替えられ、次のいずれかのサフィックスを持つすべてのファイルが画像になります。`.jpg`、`.jpeg`、`.png`、`.gif`、`.webp`、`.bmp`、`.tiff`、`.tif`です。フォルダー内のそのほかのものはスキップされます。空のフォルダーでは例外を発生させず、空のリストを返します。
@@ -246,6 +248,8 @@ source_hash: c371965951dd0181
 `vid_stride`はN番目ごとのフレームを処理し、デフォルトは`1`です。`stream=True`を指定しないと動画全体が1つのリストへデコードされ、間引き後に500フレームを超える場合は`stream=True`を推奨する警告が表示されます。
 
 動画から得られる各`Results`は`frame_idx`を持ちます。
+
+動画エンコードでは、H.264を開けない場合に利用可能なコーデックへフォールバックします。別のコーデックが成功した場合にだけ、フォールバックをINFOで記録し、コーデックとキャンバスごとにキャッシュします。
 
 ## Webカメラ、ネットワークストリーム、YouTube
 

@@ -19,7 +19,7 @@ keywords:
   - randaugment
   - cutmix
   - no_aug_epochs
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -74,7 +74,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 47461cd13aab580c
+source_hash: 42668148fcc79c1f
 ---
 
 ## Mengatur pengaturan
@@ -127,9 +127,7 @@ Photometric distortion, zoom-out, dan IoU crop adalah konstanta resep, sehingga
 hanya `flip_prob` serta `no_aug_epochs` yang aktif. Pipeline ini mencakup D-FINE,
 Dome-DETR, DEIM, DEIMv2, RT-DETRv4, EC, dan RF-DETR dengan satu perubahan.
 
-Pipeline ImageFolder classification mengabaikan semua pengaturan deteksi.
-Horizontal flip-nya ditetapkan ke 0,5 dan tidak dipengaruhi `flip_prob`. Pipeline
-ini memiliki paket pengaturan sendiri yang dijelaskan di bawah.
+Pipeline klasifikasi ImageFolder memiliki kontrol augmentasi sendiri. `flip_prob` mengontrol pembalikan horizontal dengan default 0.5; `fliplr` adalah aliasnya.
 
 YOLO-NAS memiliki bentuk tersendiri: tanpa mosaic, affine per sampel yang selalu
 aktif, dan MixUp yang diterapkan secara independen. Nilai `mosaic_scale` digunakan
@@ -155,8 +153,8 @@ Ringkasan per pipeline untuk pengaturan dasar:
 | `mosaic_prob` | digunakan | diabaikan | diabaikan | diabaikan |
 | `mixup_prob` | dibatasi mosaic | digunakan | diabaikan | diabaikan |
 | `hsv_prob` | digunakan | digunakan | diabaikan | diabaikan |
-| `flip_prob` | digunakan | digunakan | digunakan | diabaikan |
-| `flipud` | digunakan | digunakan | diabaikan | diabaikan |
+| `flip_prob` | dipakai | dipakai | dipakai | dipakai |
+| `flipud` | dipakai | dipakai | diabaikan | dipakai |
 | `degrees` | dibatasi mosaic | digunakan | diabaikan | diabaikan |
 | `translate` | dibatasi mosaic | digunakan | diabaikan | diabaikan |
 | `shear` | dibatasi mosaic | digunakan | diabaikan | diabaikan |
@@ -175,11 +173,7 @@ Pengecualian dalam kolom tersebut hanya mempersempit dukungan:
 - DINOv2 mengikuti kolom gaya DETR untuk task detect dan semantic, lalu menambahkan
   paket classification untuk `task="classify"`.
 
-`no_aug_epochs` digunakan di semua tempat, tetapi artinya berbeda. Pada pipeline
-mosaic, pengaturan ini menonaktifkan mosaic dan MixUp untuk epoch terakhir. Pada
-pipeline bergaya DETR, pengaturan ini menghentikan augmentasi photometric,
-zoom-out, dan crop serta membentuk ujung schedule. Pada pipeline classification
-dan semantic, pengaturan ini hanya membentuk ujung schedule.
+`no_aug_epochs` berstatus `used` di mana pun, tetapi maknanya berbeda. Pada pipeline mosaic, ini mematikan mosaic dan MixUp pada epoch terakhir. Pada pipeline gaya DETR, ini menghentikan augmentasi fotometrik, zoom-out, dan crop serta mengatur bagian akhir jadwal. Pada pipeline klasifikasi, ini menonaktifkan augmentasi otomatis, erasing, MixUp, dan CutMix; crop dan pembalikan tetap aktif.
 
 ## Paket classification
 
@@ -196,9 +190,13 @@ per batch, dengan MixUp lebih dahulu, sehingga jumlah keduanya maksimal 1.
 Keempatnya default nonaktif, sehingga pelatihan classification tidak berubah
 kecuali diminta.
 
-Ada benturan nama: pada CLI, `mixup` adalah alias untuk `mixup_prob` deteksi.
-Kolom `mixup` classification tidak memiliki ejaan CLI dan hanya dapat dicapai
-melalui `model.train(mixup=...)` di Python.
+CLI mengarahkan `mixup` berdasarkan task: klasifikasi memakai pencampuran batch, sedangkan deteksi memakai `mixup_prob`.
+
+`scale=0.5` berarti rentang area crop acak `(0.5, 1.0)`; pasangan nilai eksplisit menetapkan kedua batas. `crop_pct=None` mempertahankan rasio pengubahan ukuran evaluasi family; penggantian nilai memengaruhi evaluasi pelatihan/validasi, sedangkan ekspor mempertahankan prapemrosesan native family.
+
+CLI menyediakan `auto_augment`, `erasing`, `cutmix`, `fliplr`, dan `flipud`. `mixup` klasifikasi berarti pencampuran batch dan default-nya 0.0. Pembalikan horizontal default 0.5 dan vertikal 0.0. `mixup + cutmix` tidak boleh melebihi 1.
+
+`no_aug_epochs` menonaktifkan augmentasi otomatis, erasing, MixUp, dan CutMix pada epoch terakhir, sambil mempertahankan crop dan pembalikan. Resep klasifikasi menetapkan bagian akhir ini ke 0 secara default.
 
 ## Pengaturan khusus family
 
@@ -226,4 +224,3 @@ pengaturan karena augmentasi yang memahami sudut bounding box berotasi belum ter
 - [Hyperparameter](/docs/train/hyperparameters) untuk `no_aug_epochs` sebagai
   argumen schedule dan bagian lain `train()`.
 - [Dataset](/docs/train/datasets) untuk format label yang digunakan transform ini.
-

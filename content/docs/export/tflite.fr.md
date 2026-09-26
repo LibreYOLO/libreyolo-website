@@ -1,7 +1,7 @@
 ---
 title: TFLite
 seo_title: Exporter vers TFLite (LiteRT) depuis LibreYOLO
-description: "Exportez un modèle LibreYOLO vers un FlatBuffer .tflite via onnx2tf\_: formes statiques, FP32 uniquement, entrées NHWC, et les familles qui se convertissent proprement."
+description: "Exportez un modèle LibreYOLO vers un FlatBuffer .tflite avec onnx2tf : formes statiques, FP32 et voies INT8 prises en charge, entrées NHWC et métadonnées de runtime."
 lead: >-
   TFLite est le format FlatBuffer que LiteRT exécute sur les cibles mobiles et
   embarquées. LibreYOLO exporte un graphe ONNX statique, le convertit avec
@@ -15,7 +15,7 @@ keywords:
   - flatbuffer tflite
   - entrée nhwc tflite
   - inférence sur appareil edge
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Flag
     value: export(format="tflite")
@@ -31,7 +31,7 @@ meta:
   - label: Formes
     value: Statiques uniquement. dynamic=True est refusé.
   - label: Précision
-    value: FP32 uniquement. half=True et int8=True sont refusés.
+    value: FP32 ; INT8 pour la détection YOLO9 et YOLOX. FP16 est refusé.
   - label: Prérequis
     value: >-
       Python 3.12 ou plus récent, car onnx2tf 2.4.x ne publie pas de wheels plus
@@ -86,7 +86,7 @@ snippets:
         # dynamic=True lève ValueError, le convertisseur exige des formes
         statiques.
 
-        # half=True et int8=True sont refusés avant le tracing.
+        # FP16 est refusé. INT8 exige un détecteur pris en charge et des données de calibration.
   run:
     - label: Via LibreYOLO
       language: python
@@ -139,7 +139,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: fa2deaa0ef6d9978
+source_hash: 3548d74e992bb76d
 ---
 
 ## Installation
@@ -169,6 +169,8 @@ famille, la tâche, les noms de classe, la taille d'entrée et le schéma de pos
 le FlatBuffer lui-même n'a aucun champ de métadonnées LibreYOLO, les deux fichiers
 voyagent donc ensemble.
 
+La détection YOLO9 et YOLOX prend en charge `int8=True` avec `data=...`, `fraction=1.0`, `batch=1` et `dynamic=False`. Installez `onnx2tf[tensorflow]`. Sans données de calibration, `coco8.yaml` est utilisé avec un avertissement. Les sorties distinctes de boîtes normalisées et de scores utilisent des échelles de quantification indépendantes ; conservez les métadonnées `output_layout` du sidecar au déploiement. Certains opérateurs internes peuvent rester en virgule flottante.
+
 ## Exécuter l'artefact
 
 <code-tabs name="run" />
@@ -191,9 +193,7 @@ forme `(1, 3, 640, 640)` ne se liera donc pas.
 Formes statiques uniquement. `dynamic=True` lève une `ValueError` avant le tracing,
 et le canevas d'export est figé à la valeur résolue par `imgsz`.
 
-FP32 uniquement. `half=True` et `int8=True` sont tous deux refusés pendant la
-validation, le déploiement quantifié n'est donc pas accessible depuis cet
-exporteur aujourd'hui.
+`half=True` est refusé. INT8 est limité à la détection YOLO9 et YOLOX avec un batch de 1 ; les autres familles et tâches INT8 lèvent une erreur.
 
 La couverture est plus étroite ici que pour les formats de graphe, et elle est
 décidée par la mesure plutôt que par famille. Les combinaisons validées comprennent

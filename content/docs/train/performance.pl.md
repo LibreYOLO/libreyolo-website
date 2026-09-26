@@ -19,7 +19,7 @@ keywords:
   - wąskie gardło dataloadera
   - narzut uruchamiania kerneli
   - wykorzystanie gpu podczas trenowania
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   profile:
     - label: Profilowanie i kontynuowanie trenowania
@@ -74,7 +74,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: ee5bb727065b6099
+source_hash: 288ee5ee988f2fda
 ---
 
 ## Pomiar przed wprowadzeniem zmian
@@ -119,6 +119,8 @@ znaczenie, ponieważ krok ograniczony narzutem uruchamiania jest na tyle zmienny
 że pojedynczy pomiar wprowadza w błąd. Polecenie zapisuje katalogi kolejnych prób
 `prof_1`, `prof_2` i tak dalej oraz zbiorczy plik `profile_repeat.json`.
 
+RF-DETR i ścieżki dopasowywania D-FINE/DEIM/RT-DETR ograniczają transfery do hosta; konstrukcja Adam i AdamW na kwalifikujących się urządzeniach CUDA używa połączonych aktualizacji. SGD i parametry poza CUDA używają standardowej konstrukcji. Te zmiany implementacji nie oznaczają uniwersalnego przyspieszenia.
+
 ## Mieszana precyzja
 
 `amp=True` jest ustawieniem domyślnym dla większości rodzin i wykonuje przejście
@@ -127,12 +129,7 @@ w przód z użyciem mechanizmu autocast CUDA. `amp_dtype` wybiera `float16` albo
 
 <code-tabs name="amp" />
 
-Float16 wymaga dynamicznego skalowania funkcji straty i otrzymuje aktywny skaler
-gradientów. Szerszy zakres wykładnika bfloat16 tego nie wymaga, więc jego skaler
-jest wyłączony. Cztery rodziny są dostarczane z `amp=False`: D-FINE, DEIM,
-YOLO-NAS i FOMO. Ustawienie DEIM jest dziedziczone również przez RT-DETRv4.
-D-FINE podaje przyczynę: jego dekoder ogranicza aktywacje do 65504, największej
-skończonej wartości float16.
+Float16 używa skalera gradientów; bfloat16 go wyłącza. D-FINE, DEIM, RT-DETRv4 i detekcja YOLO-NAS domyślnie używają `amp=True`. Dome-DETR, PP-YOLOE i YOLO-NAS OBB zachowują domyślne FP32. Aby jawnie wybrać FP32, należy przekazać `amp=False`.
 
 Semantykę argumentu, w tym zachowanie żądania bfloat16 na sprzęcie bez obsługi
 bfloat16, opisano w sekcji [Hiperparametry](/docs/train/hyperparameters).

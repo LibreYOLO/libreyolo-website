@@ -1,6 +1,6 @@
 ---
 title: Hyperparamètres
-seo_title: "Hyperparamètres d'entraînement dans LibreYOLO"
+seo_title: Hyperparamètres d'entraînement dans LibreYOLO
 description: >-
   Les arguments importants de train() : epochs, batch, lr0, optimiseur, EMA,
   autobatch, accumulation de gradients et reprise, ainsi que la raison des
@@ -21,7 +21,7 @@ keywords:
   - patience early stopping
   - amp bfloat16
   - configuration entraînement yaml
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -45,7 +45,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           epochs=100 batch=16 imgsz=640 lr0=0.01
   defaults:
-    - label: "Lire les valeurs par défaut résolues d'une famille"
+    - label: Lire les valeurs par défaut résolues d'une famille
       language: python
       code: |
         from dataclasses import fields
@@ -131,7 +131,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: d838d1abd45af40f
+source_hash: eac4e55fcf16ca15
 ---
 
 ## Définir les arguments
@@ -181,14 +181,9 @@ famille par rapport à cette base :
 | `weight_decay` | `5e-4` | `5e-4` | `1e-4` | `1e-5` |
 | `scheduler` | `yoloxwarmcos` | `linear` | `flat_cosine` | `cos` |
 | `epochs` | `300` | `300` | `132` | `300` |
-| `amp` | `True` | `True` | `False` | `False` |
+| `amp` | `True` | `True` | `True` | `True` |
 
-D-FINE et DEIM sont fournis avec `amp=False`, car le décodeur D-FINE borne les
-activations à 65504, la plus grande valeur float16 finie. YOLO-NAS et FOMO la
-désactivent aussi par défaut. Le flag `--amp` de la CLI vaut `True` par défaut
-pour chaque famille. Il est donc compté comme fourni par l'utilisateur et
-remplace la valeur par défaut de la famille ; ne le modifiez que si c'est votre
-intention.
+La détection avec D-FINE, DEIM, RT-DETRv4 et YOLO-NAS utilise par défaut `amp=True` avec `amp_dtype="float16"`. Dome-DETR, PP-YOLOE et YOLO-NAS OBB conservent FP32 par défaut. Passez `amp=False` lorsque FP32 est nécessaire.
 
 Pour lire les véritables valeurs par défaut d'une famille au lieu de les
 deviner :
@@ -218,6 +213,8 @@ critère et des couches auxiliaires du décodeur.
 
 L'autobatch est une fonctionnalité CUDA. Sur CPU ou MPS, il journalise une ligne
 et conserve le batch par défaut.
+
+`min_samples=0` laisse la longueur d'une époque inchangée. Un minimum positif échantillonne avec remise les datasets de détection plus courts. `class_balanced=False`, lorsqu'il est activé, applique un échantillonnage par facteur de répétition à chaque image ; il se combine avec `min_samples` et DDP. Les chargeurs spécialisés qui contournent l'échantillonneur partagé refusent cet équilibrage lorsqu'il est activé.
 
 ## Accumulation de gradients
 
@@ -299,6 +296,10 @@ nombre d'époques sans amélioration, `0` désactivant l'early stopping.
 Les lectures depuis le cache sont identiques octet par octet aux nouvelles
 lectures. Avec des workers de dataloader, `"disk"` est le choix le plus sûr.
 
+`average_best=0` désactive le moyennage des checkpoints ; un N positif écrit `weights/average.pt` à partir des N meilleurs snapshots au maximum. Les tenseurs flottants sont moyennés uniformément et les buffers entiers viennent du meilleur snapshot. `export_check=False` peut être activé pour échouer avant la première époque si l'export ONNX échoue. Les sorties brutes correspondantes sont comparées avec `rtol=1e-3`, `atol=1e-4` ; les dispositions incompatibles entraînent la journalisation d'une comparaison ignorée.
+
+`precise_bn=0` désactive la recalibration finale de BatchNorm. Une valeur positive limite le nombre d'images du chargeur d'entraînement avant la validation finale ; sous DDP, le budget s'applique à chaque rang participant. Les BatchNorm gelées restent gelées. Des [callbacks de score de sélection personnalisés](/docs/train/fitness-callbacks) peuvent choisir les meilleurs checkpoints et la patience.
+
 ## Reprendre
 
 `resume=True` poursuit une exécution interrompue. Le checkpoint doit d'abord
@@ -340,3 +341,11 @@ est un argument Python.
   entraîner une partie des poids.
 - [Validation et mesures](/docs/train/validation) pour les résultats rapportés
   par l'exécution.
+
+## Sélection des classes et pondération de la loss
+
+Pour la détection YOLO9, RF-DETR, EdgeCrafter, RT-DETR, D-FINE, DEIM, TinyFormer et YOLO-NAS, `classes=None` conserve toutes les classes du dataset ; une liste filtre la supervision en préservant les identifiants d'origine, `nc` et `names`. `single_cls=False` peut être activé pour ramener les étiquettes conservées à la classe 0, nommée `object`. La reprise et la validation héritent des réglages enregistrés. L'entraînement OBB refuse `single_cls`.
+
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 et DINOv2 prennent en charge `cls_pw=0.0` : les valeurs dans [0, 1] pondèrent chaque classe par sa fréquence inverse élevée à cette puissance, normalisée à une moyenne de 1. `class_weights=False`, lorsqu'il est activé, sélectionne la pondération alternative `N / (C * n_c)`. Il ne se combine pas avec un `cls_pw` positif ; la reprise exige des réglages de pondération identiques.
+
+`plot_samples=8` fixe le budget d'images d'exemple de validation. Utilisez 0 pour aucune ou -1 pour toutes ; cela ne réduit pas les images évaluées.

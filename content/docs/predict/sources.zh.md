@@ -14,7 +14,7 @@ keywords:
   - youtube 推理
   - vid_stride
   - stream=True
-last_verified: 1.5.0
+last_verified: "1.6.0"
 verification: >-
   输入源分类读自
   libreyolo/utils/source.py（classify_source、SourceKind、StreamSource、MultiStreamSource）。接受的图像类型和目录扩展名来自
@@ -184,7 +184,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: 93db4d43c24b69ae
 ---
 
 ## 输入源是如何分类的
@@ -230,6 +230,8 @@ source_hash: c371965951dd0181
 
 远程路径各需要一个包，而且默认都不安装：`http(s)://` 需要 `requests`，`s3://` 需要 `boto3`，`gs://` 需要 `gcsfs`。
 
+跟踪接受图像、按文件名排序的文件夹、列表、元组和惰性图像迭代器作为连续帧。传入 `fps=30.0` 定义图像序列的时间信息，传入 `color_format="auto"` 选择输入解释方式。见[跟踪](/docs/tasks/object-tracking)。
+
 ## 文件夹
 
 目录会被递归扫描并排序，带下面这些后缀的文件都会当作图像：`.jpg`、`.jpeg`、`.png`、`.gif`、`.webp`、`.bmp`、`.tiff`、`.tif`。文件夹里的其他文件会被跳过。空文件夹返回空列表，而不是抛异常。
@@ -247,6 +249,8 @@ source_hash: c371965951dd0181
 `vid_stride` 每 N 帧处理一帧，默认为 `1`。不加 `stream=True` 时整段视频会解码成一个列表，抽帧之后超过 500 帧就会发出警告，建议改用 `stream=True`。
 
 视频产生的每个 `Results` 都带有 `frame_idx`。
+
+H.264 无法打开时，视频编码会回退到可用的编码器。回退过程记录在 INFO 日志中，只有其他编码器成功后，才按编码器和画布缓存结果。
 
 ## 摄像头、网络流和 YouTube
 

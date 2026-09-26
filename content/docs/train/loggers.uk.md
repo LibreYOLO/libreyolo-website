@@ -20,7 +20,7 @@ keywords:
   - callbacks навчання
   - метрики навчання csv
   - libreyolo monitor
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   logger:
     - label: За назвою
@@ -87,7 +87,7 @@ snippets:
       code: |
         libreyolo monitor                     # останній запуск у runs/
         libreyolo monitor runs/train/exp      # конкретний запуск
-source_hash: de035acbaed32804
+source_hash: b5fefd12a738dcb5
 ---
 
 ## Увімкнення логера
@@ -180,6 +180,8 @@ LibreYOLO також вимикає типові для DVCLive збережен
 Neptune навмисно не входить до `libreyolo[all]`: його стабільний клієнт потребує
 версію protobuf нижче 7, а доповнення TFLite потребує protobuf 7. Установлюйте
 `libreyolo[neptune]` у середовищі без доповнення TFLite.
+
+[Логер Hugging Face Hub](/docs/reference/hugging-face) вивантажує `weights/best.pt`, або резервний `last.pt`, наприкінці навчання. Використовуйте `loggers="hf:owner/repo"` або `HuggingFaceHubLogger(repo_id, private=True)`. Він перевіряє доступ на запис і створює відсутній репозиторій перед навчанням. Логер типово створює приватний репозиторій; явний `model.push_to_hub()` типово створює публічний. Видимість наявного репозиторію зберігається.
 
 ## Створення зворотного виклику
 

@@ -20,7 +20,7 @@ keywords:
   - miou
   - panoptic quality
   - top1 accuracy
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   val:
     - label: Python
@@ -63,7 +63,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: d907183492fa3f57
+source_hash: ce7d26a5cd72d988
 ---
 
 ## Eseguire una validazione
@@ -148,6 +148,8 @@ segmentazione e OBB non ne hanno una; le loro famiglie sono selezionate su
 `metrics/mAP50-95`, che i loro dizionari restituiscono. Pose non restituisce né
 `fitness` né `metrics/mAP50-95`; i suoi trainer impostano invece `best_metric_key`
 a `metrics/keypoints_mAP50-95`.
+
+La classificazione ImageFolder aggiunge le metriche macro `metrics/precision`, `metrics/recall` e `metrics/f1`, mediate sulle classi presenti nei target di validazione. Top-1 resta la fitness predefinita. Il rilevamento restituisce anche `metrics/best_conf`, `metrics/best_conf_f1` e `metrics/best_conf_per_class` con nomi di classe come chiavi, scegliendo le soglie ottimali per micro-F1 a IoU 0.50. I rilevamenti con lo stesso punteggio restano raggruppati; in caso di parità viene scelta la soglia più alta. Se nessun F1 è positivo, viene restituito NaN. La segmentazione non espone queste chiavi di soglia.
 
 ## Chiavi di velocità
 
@@ -265,6 +267,10 @@ altri validatori non implementano i plot; classificazione, semantic, panoptic,
 depth, normal, edge, restore, matte, OCR, OBB e point non scrivono nulla lì. Un
 errore nel plotting genera un avviso e non interrompe mai l'esecuzione.
 
+`visualize=True` salva immagini con box TP/FP/FN distinti per classe per rilevamento e segmentazione, oppure immagini con etichetta confrontata con top-1 per la classificazione ImageFolder, in `visualize/errors/` e `visualize/correct/`. L'abbinamento usa IoU 0.5 e confidenza `max(0.25, conf)`. I valori predefiniti sono `visualize=False`, `show_labels=True` e `show_conf=True`. I task non supportati e la validazione delle clip V-JEPA 2 rifiutano la visualizzazione.
+
+`plot_samples=8` limita il grafico separato dei campioni; 0 lo disattiva e -1 mantiene tutte le immagini. Questo non modifica le metriche né l'output di visualizzazione.
+
 ## Validazione durante l'addestramento
 
 L'addestramento valida ogni `eval_interval` epoche sullo split `val` del dataset,
@@ -279,3 +285,7 @@ i numeri.
 ## Correlati
 
 - [Dataset](/docs/train/datasets) per le chiavi degli split e i formati che i validatori leggono.
+
+## Metriche dei box per immagine
+
+I risultati di rilevamento e segmentazione restano compatibili con i dizionari ed espongono anche `results.box.image_metrics`. Ogni nome file corrisponde a `precision`, `recall`, `f1`, `tp`, `fp` e `fn`, usando la regola di abbinamento della visualizzazione anche quando è disattivata. Qui la segmentazione conta i box. Per nomi di base duplicati, dopo la prima occorrenza vengono usati i percorsi completi. I denominatori nulli producono 0.0. Questi record non vengono raccolti tra rank distribuiti.

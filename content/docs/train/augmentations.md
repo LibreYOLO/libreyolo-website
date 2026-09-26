@@ -13,7 +13,7 @@ keywords:
   - randaugment
   - cutmix
   - no_aug_epochs
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   train:
     - label: Python
@@ -121,9 +121,7 @@ photometric distortion, zoom-out and IoU crop are recipe constants rather than
 config knobs, so only `flip_prob` and `no_aug_epochs` are live. It covers D-FINE,
 Dome-DETR, DEIM, DEIMv2, RT-DETRv4, EC and, with one change, RF-DETR.
 
-The classification ImageFolder pipeline ignores every detection knob. Its
-horizontal flip is a fixed 0.5 that `flip_prob` does not reach. It has its own
-knob pack instead, described below.
+The classification ImageFolder pipeline has its own augmentation controls. `flip_prob` controls horizontal flips and defaults to 0.5; `fliplr` is its alias.
 
 YOLO-NAS is a shape of its own: no mosaic at all, an always-on per-sample affine,
 and MixUp applied independently rather than gated. Its `mosaic_scale` value is
@@ -151,8 +149,8 @@ Summarized by pipeline, for the base knobs:
 | `mosaic_prob` | used | ignored | ignored | ignored |
 | `mixup_prob` | gated by mosaic | used | ignored | ignored |
 | `hsv_prob` | used | used | ignored | ignored |
-| `flip_prob` | used | used | used | ignored |
-| `flipud` | used | used | ignored | ignored |
+| `flip_prob` | used | used | used | used |
+| `flipud` | used | used | ignored | used |
 | `degrees` | gated by mosaic | used | ignored | ignored |
 | `translate` | gated by mosaic | used | ignored | ignored |
 | `shear` | gated by mosaic | used | ignored | ignored |
@@ -176,8 +174,7 @@ Exceptions inside those columns, all of them narrowing:
 `no_aug_epochs` is `used` everywhere, but it does not mean the same thing
 everywhere. On the mosaic pipelines it turns mosaic and MixUp off for the final
 epochs. On the DETR-style pipelines it stops the photometric, zoom-out and crop
-augmentations and shapes the schedule's tail. On the classification and semantic
-pipelines it only shapes the tail.
+augmentations and shapes the schedule's tail. On classification pipelines it disables auto-augmentation, erasing, MixUp and CutMix; crop and flips remain.
 
 ## The classification pack
 
@@ -193,10 +190,13 @@ so the two are additive and should sum to at most 1.
 
 All four default off, so classification training is unchanged unless you ask.
 
-One naming collision is worth stating plainly: on the CLI, `mixup` is the alias
-for the detection `mixup_prob`. The classification `mixup` field has no CLI
-spelling of its own and is reachable only through `model.train(mixup=...)` in
-Python.
+The CLI routes `mixup` by task: classification uses batch mixing, while detection uses `mixup_prob`.
+
+`scale=0.5` means a random crop area range of `(0.5, 1.0)`; an explicit pair sets both bounds. `crop_pct=None` preserves the family evaluation resize ratio; an override affects train/validation evaluation, while export keeps native family preprocessing.
+
+The CLI exposes `auto_augment`, `erasing`, `cutmix`, `fliplr` and `flipud`. Classification `mixup` means batch mixing and defaults to 0.0. Horizontal flips default to 0.5 and vertical flips to 0.0. `mixup + cutmix` must not exceed 1.
+
+`no_aug_epochs` disables auto-augmentation, erasing, MixUp and CutMix for the final epochs, retaining crop and flips. Classification recipes default this tail to 0.
 
 ## Family-specific knobs
 

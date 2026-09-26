@@ -17,7 +17,7 @@ keywords:
   - 早期終了 patience
   - amp bfloat16
   - train config yaml
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -109,7 +109,7 @@ snippets:
         # yamlのキーはTrainConfigフィールド名。明示的なkwargsが優先
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: d838d1abd45af40f
+source_hash: eac4e55fcf16ca15
 ---
 
 ## 引数の設定
@@ -152,12 +152,9 @@ model.train(data="my-dataset.yaml", learning_rate=0.001)
 | `weight_decay` | `5e-4` | `5e-4` | `1e-4` | `1e-5` |
 | `scheduler` | `yoloxwarmcos` | `linear` | `flat_cosine` | `cos` |
 | `epochs` | `300` | `300` | `132` | `300` |
-| `amp` | `True` | `True` | `False` | `False` |
+| `amp` | `True` | `True` | `True` | `True` |
 
-D-FINEとDEIMは`amp=False`で提供されます。D-FINEデコーダーが、float16で最大の有限値である
-65504にアクティベーションをクランプするためです。YOLO-NASとFOMOもデフォルトで無効です。
-CLIの`--amp`フラグはすべてのファミリーでデフォルトが`True`なので、ユーザー指定として数えられ、
-ファミリーのデフォルト値を上書きします。変更する意図がない限り、そのままにしてください。
+D-FINE、DEIM、RT-DETRv4、YOLO-NASの物体検出は、デフォルトで`amp=True`と`amp_dtype="float16"`を使います。Dome-DETR、PP-YOLOE、YOLO-NAS OBBはFP32のデフォルトを維持します。FP32が必要な場合は`amp=False`を渡します。
 
 推測せず、ファミリーの実際のデフォルト値を確認するには次のようにします。
 
@@ -181,6 +178,8 @@ RF-DETRは目標比率を45パーセントに下げます。調査用の合成�
 デコーダー層のコストを過小評価するためです。
 
 自動バッチはCUDAの機能です。CPUまたはMPSでは1行をログに記録し、デフォルトバッチを維持します。
+
+`min_samples=0`ではエポックの長さを変更しません。正の下限を指定すると、それより短い物体検出データセットを復元抽出します。`class_balanced=False`をtrueにすると、画像ごとの反復係数によるサンプリングを有効にします。`min_samples`とDDPを併用できます。共通サンプラーを使わない専用ローダーは、バランス調整の有効化を拒否します。
 
 ## 勾配累積
 
@@ -245,6 +244,10 @@ bfloat16に対応しないCUDAデバイスで要求すると、通知なく機�
 （`"disk"`）に保持して、エポックの繰り返しを高速化します。キャッシュからの読み取りは新規の
 読み取りとバイト単位で同一です。データローダーのワーカーを使う場合は`"disk"`の方が安全です。
 
+`average_best=0`はチェックポイントの平均化を無効にします。正のNを指定すると、上位N個までのスナップショットから`weights/average.pt`を書き出します。浮動小数点テンソルは均等に平均し、整数バッファーは最良のスナップショットから取得します。`export_check=False`を有効にすると、ONNXエクスポートが失敗した場合に最初のエポックの前に停止できます。対応する生の出力を`rtol=1e-3`、`atol=1e-4`で比較し、互換性のない配置では比較をスキップしたことをログに記録します。
+
+`precise_bn=0`は最後のBatchNorm再キャリブレーションを無効にします。正の値は、最後の検証の前に使う学習ローダーの画像数を制限します。DDPでは、参加するランクごとに上限が適用されます。凍結したBatchNormは凍結されたままです。[独自の適合度コールバック](/docs/train/fitness-callbacks)で、最良チェックポイントとpatienceを選択できます。
+
 ## 再開
 
 `resume=True`は中断した実行を継続します。再開処理は別の引数ではなくモデルからチェックポイントを
@@ -276,3 +279,11 @@ CLIには`--cfg`フラグがなく、ファイルパスはPython引数です。
 - データ拡張の設定値と、それを尊重するファミリーについては[データ拡張](/docs/train/augmentations)を参照してください。
 - 重みの一部を学習する方法については[層の凍結](/docs/train/layer-freezing)と[LoRA](/docs/train/lora)を参照してください。
 - 実行が報告する内容については[検証と指標](/docs/train/validation)を参照してください。
+
+## クラスの選択と損失の重み付け
+
+YOLO9、RF-DETR、EdgeCrafter、RT-DETR、D-FINE、DEIM、TinyFormer、YOLO-NASの物体検出では、`classes=None`ですべてのデータセットクラスを残します。リストを指定すると、元のID、`nc`、`names`を維持したまま教師信号をフィルタリングします。`single_cls=False`を有効にすると、残したラベルを`object`という名前のクラス0に対応付けます。再開と検証は保存済みの設定を継承します。モデルのOBB学習は`single_cls`を拒否します。
+
+ResNet、ConvNeXt、ConvNeXt V2、MobileNetV4、EfficientNetV2、DINOv2は`cls_pw=0.0`に対応します。[0, 1]の値は、逆頻度をその値で累乗して各クラスの重みとし、平均が1になるように正規化します。`class_weights=False`を有効にすると、代わりに`N / (C * n_c)`の重み付けを選択します。正の`cls_pw`とは組み合わせられず、再開時には重み付けの設定が一致する必要があります。
+
+`plot_samples=8`は検証用サンプル画像の上限です。0で画像なし、-1ですべてを指定します。評価する画像数は減りません。

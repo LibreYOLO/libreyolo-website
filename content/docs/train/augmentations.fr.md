@@ -1,6 +1,6 @@
 ---
 title: Augmentations
-seo_title: "Augmentations d'entraînement dans LibreYOLO"
+seo_title: Augmentations d'entraînement dans LibreYOLO
 description: >-
   Les paramètres d'augmentation de TrainConfig, les quatre formes de pipeline
   qui les sous-tendent et la table par famille indiquant quels paramètres sont
@@ -19,7 +19,7 @@ keywords:
   - randaugment
   - cutmix
   - no_aug_epochs
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -45,7 +45,7 @@ snippets:
           epochs=100 mosaic=1.0 mixup=0.15 hsv_prob=1.0 \
           flip_prob=0.5 no_aug_epochs=15
   support:
-    - label: "Lire la table de prise en charge d'une famille"
+    - label: Lire la table de prise en charge d'une famille
       language: python
       code: |
         from libreyolo.data.augment.spec import AUG_KNOBS, aug_support
@@ -74,7 +74,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 47461cd13aab580c
+source_hash: 42668148fcc79c1f
 ---
 
 ## Régler les paramètres
@@ -133,10 +133,7 @@ des constantes de la recette plutôt que des paramètres de configuration. Seuls
 `flip_prob` et `no_aug_epochs` sont donc actifs. Il couvre D-FINE, Dome-DETR,
 DEIM, DEIMv2, RT-DETRv4, EC et, avec une différence, RF-DETR.
 
-Le pipeline de classification ImageFolder ignore tous les paramètres de
-détection. Son retournement horizontal possède une valeur fixe de 0.5 que
-`flip_prob` n'atteint pas. Il dispose de son propre ensemble de paramètres,
-décrit ci-dessous.
+Le pipeline ImageFolder de classification possède ses propres contrôles d'augmentation. `flip_prob` règle les retournements horizontaux et vaut 0.5 par défaut ; `fliplr` en est l'alias.
 
 YOLO-NAS constitue un cas à part : aucune mosaïque, une transformation affine
 par échantillon toujours active et MixUp appliqué indépendamment plutôt que
@@ -166,8 +163,8 @@ Résumé par pipeline pour les paramètres de base :
 | `mosaic_prob` | utilisé | ignoré | ignoré | ignoré |
 | `mixup_prob` | conditionné par la mosaïque | utilisé | ignoré | ignoré |
 | `hsv_prob` | utilisé | utilisé | ignoré | ignoré |
-| `flip_prob` | utilisé | utilisé | utilisé | ignoré |
-| `flipud` | utilisé | utilisé | ignoré | ignoré |
+| `flip_prob` | utilisé | utilisé | utilisé | utilisé |
+| `flipud` | utilisé | utilisé | ignoré | utilisé |
 | `degrees` | conditionné par la mosaïque | utilisé | ignoré | ignoré |
 | `translate` | conditionné par la mosaïque | utilisé | ignoré | ignoré |
 | `shear` | conditionné par la mosaïque | utilisé | ignoré | ignoré |
@@ -191,12 +188,7 @@ Les exceptions dans ces colonnes les restreignent toutes :
   segmentation sémantique, et ajoute l'ensemble de classification pour
   `task="classify"`.
 
-`no_aug_epochs` est `used` partout, mais sa signification varie. Dans les
-pipelines mosaïques, il désactive la mosaïque et MixUp pour les dernières
-époques. Dans les pipelines de style DETR, il arrête les augmentations
-photométriques, de zoom arrière et de recadrage, et façonne la fin du schedule.
-Dans les pipelines de classification et de segmentation sémantique, il ne fait
-que façonner cette fin.
+`no_aug_epochs` est `used` partout, mais son effet varie. Dans les pipelines avec mosaic, il désactive mosaic et MixUp pendant les dernières époques. Dans les pipelines de type DETR, il arrête les augmentations photométriques, le zoom-out et le recadrage, et règle la fin du planning. En classification, il désactive l'augmentation automatique, erasing, MixUp et CutMix ; le recadrage et les retournements restent actifs.
 
 ## L'ensemble de classification
 
@@ -214,10 +206,13 @@ leur somme ne doit pas dépasser 1.
 Les quatre sont désactivées par défaut, si bien que l'entraînement de
 classification reste inchangé tant que vous ne les demandez pas.
 
-Une collision de noms mérite d'être formulée clairement : dans la CLI, `mixup`
-est l'alias du paramètre de détection `mixup_prob`. Le champ de classification
-`mixup` n'a pas de syntaxe CLI propre et n'est accessible que par
-`model.train(mixup=...)` en Python.
+La CLI route `mixup` selon la tâche : la classification mélange les lots, tandis que la détection utilise `mixup_prob`.
+
+`scale=0.5` signifie une plage d'aire de recadrage aléatoire de `(0.5, 1.0)` ; une paire explicite fixe les deux bornes. `crop_pct=None` conserve le ratio de redimensionnement d'évaluation de la famille ; un remplacement affecte l'évaluation pendant l'entraînement et la validation, tandis que l'export conserve le prétraitement natif de la famille.
+
+La CLI expose `auto_augment`, `erasing`, `cutmix`, `fliplr` et `flipud`. En classification, `mixup` signifie un mélange de batch et vaut 0.0 par défaut. Les retournements horizontaux valent 0.5 par défaut et les verticaux 0.0. `mixup + cutmix` ne doit pas dépasser 1.
+
+`no_aug_epochs` désactive l'auto-augmentation, l'effacement, MixUp et CutMix pendant les dernières époques, en conservant le recadrage et les retournements. Les recettes de classification fixent cette fin de programme à 0 par défaut.
 
 ## Paramètres propres aux familles
 

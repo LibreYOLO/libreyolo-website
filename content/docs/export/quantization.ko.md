@@ -17,7 +17,7 @@ keywords:
   - fp8 e4m3
   - 보정 데이터셋
   - qdq onnx 내보내기
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 전화하다
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -45,31 +45,22 @@ snippets:
   quantize:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-
         # 구조 교체 및 보정. calib는 작은 레이블 없는 이미지 세트입니다,
-
         # 활성 범위와 스케일을 도출하기 위해 순방향 전용으로 읽습니다.
-
-        qmodel = model.quantize(recipe="int8", calib="coco128.yaml",
-        samples=128)
-
+        qmodel = model.quantize(recipe="int8", calib="coco128.yaml", samples=128)
 
         print(qmodel.quant_info())
-
         qmodel.val(data="coco8.yaml")          # 부동 소수점 모델과 동일한 검증기
-
         qmodel.save("LibreYOLO9s-int8.pt")     # 체크포인트가 양자 매니페스트를 포함하고 있습니다
     - label: CLI
       language: bash
-      code: >
-        libreyolo quantize --model LibreYOLO9s.pt --recipe int8 --calib
-        coco128.yaml
+      code: |
+        libreyolo quantize --model LibreYOLO9s.pt --recipe int8 --calib coco128.yaml
     - label: 논쟁
       language: python
       code: |
@@ -78,7 +69,7 @@ snippets:
             calib="coco128.yaml",      # data.yaml 경로나 내장 이름; None은 보정 건너뛰기
             samples=128,               # 최대 보정 이미지
             batch=8,                   # 보정 배치 크기
-            algorithm="auto",          # auto와 minmax는 동일하며, percentile은 대안이다
+            algorithm="auto",          # auto는 minmax를 선택하며 대안은 percentile, mse, entropy입니다
             keep_high_precision=None,  # 아무도 계열 정책을 사용하지 않는다
             verbose=True,
         )
@@ -113,9 +104,8 @@ snippets:
         )
     - label: CLI
       language: bash
-      code: >
-        libreyolo train --model LibreYOLO9s-int8.pt --data coco8.yaml --epochs 5
-        --lr0 1e-4
+      code: |
+        libreyolo train --model LibreYOLO9s-int8.pt --data coco8.yaml --epochs 5 --lr0 1e-4
   export:
     - label: 패킹된 PyTorch 체크포인트
       language: python
@@ -155,7 +145,7 @@ snippets:
 
         # 이제 어떤 부동 소수점 내보내기 도구라도 지원하는 모든 정밀도로 적용됩니다.
         qmodel.export(format="tensorrt", half=True)
-source_hash: 4ffb06b87cad017e
+source_hash: "6c247a3243daf393"
 ---
 
 ## 설치
@@ -173,6 +163,8 @@ source_hash: 4ffb06b87cad017e
 <code-tabs name="reload" />
 
 QAT 실행 중에 작성된 트레이너 체크포인트는 매니페스트도 포함하고 있어, 이는 이러한 실행에서의 `best.pt` 자체가 양자화된 체크포인트임을 의미합니다.
+
+보정 `algorithm`은 `auto`, `minmax`, `percentile`, `mse`, `entropy`를 받습니다. `auto`는 minmax로 결정됩니다. MSE와 entropy는 히스토그램 탐색으로 활성화 범위를 선택합니다.
 
 ## 레시피
 
@@ -209,6 +201,8 @@ QAT 실행 중에 작성된 트레이너 체크포인트는 매니페스트도 �
 QAT는 이미 학습된 모델의 파인튜닝입니다. 초기부터 학습하는 기본값 대신 파인튜닝 학습률을 사용하십시오. 그렇지 않으면 짧은 학습만으로도 양자화와 상관없이 사전 학습된 가중치가 손상됩니다. QAD 사용 가능 여부는 계열 증류 지원을 따르며, 오늘날로서는 `yolo9` 및 `rfdetr`를 의미합니다.
 
 `fp16`- 및 `bf16`-양자화 모델은 추론 전용이며, 트레이너는 `amp=True`를 가리키며 이를 거부합니다.
+
+QAT 설정은 EMA와 SyncBatchNorm을 비활성화하고 `average_best=0`으로 설정하며, 각 변경을 기록합니다. 부동소수점 학습은 요청한 설정을 유지합니다.
 
 ## 내보내기
 

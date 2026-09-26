@@ -19,7 +19,7 @@ keywords:
   - YouTube Inferenz
   - vid_stride
   - stream=True
-last_verified: 1.5.0
+last_verified: "1.6.0"
 verification: >-
   Quellenklassifizierung aus libreyolo/utils/source.py gelesen (classify_source,
   SourceKind, StreamSource, MultiStreamSource). Akzeptierte Bildtypen und
@@ -210,7 +210,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: "93db4d43c24b69ae"
 ---
 
 ## Klassifizierung einer Quelle
@@ -256,6 +256,8 @@ Gleitkomma-Arrays werden anhand ihres eigenen Wertebereichs skaliert. Werte bis 
 
 Entfernte Pfade benötigen jeweils ein Paket, von denen keines standardmäßig installiert ist: `requests` für `http(s)://`, `boto3` für `s3://` und `gcsfs` für `gs://`.
 
+Tracking akzeptiert Bilder, nach Dateinamen sortierte Ordner, Listen, Tupel und verzögerte Bilditeratoren als aufeinanderfolgende Frames. Übergib `fps=30.0` für die zeitliche Einordnung der Bildsequenz und `color_format="auto"` für die Interpretation der Eingabe. Siehe [Tracking](/docs/tasks/object-tracking).
+
 ## Ordner
 
 Ein Verzeichnis wird rekursiv durchsucht und sortiert. Jede Datei mit einer der folgenden Endungen wird als Bild behandelt: `.jpg`, `.jpeg`, `.png`, `.gif`, `.webp`, `.bmp`, `.tiff`, `.tif`. Alles andere wird übersprungen. Ein leerer Ordner gibt eine leere Liste zurück, statt einen Fehler auszulösen.
@@ -273,6 +275,8 @@ Ein Pfad gilt als Video, wenn seine Endung `.asf`, `.avi`, `.gif`, `.m4v`, `.mkv
 `vid_stride` verarbeitet jeden N-ten Frame und ist standardmäßig `1`. Ohne `stream=True` wird das gesamte Video in eine Liste decodiert. Bei mehr als 500 Frames nach Anwendung des Stride erscheint eine Warnung mit dem Vorschlag, `stream=True` zu verwenden.
 
 Jedes `Results`-Objekt eines Videos enthält `frame_idx`.
+
+Die Videokodierung greift auf einen verfügbaren Codec zurück, wenn H.264 nicht geöffnet werden kann. Der Fallback wird auf INFO protokolliert und erst nach erfolgreicher Verwendung eines anderen Codecs je Codec und Bildfläche zwischengespeichert.
 
 ## Webcams, Netzwerkstreams und YouTube
 

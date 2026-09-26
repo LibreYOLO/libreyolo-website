@@ -15,7 +15,7 @@ keywords:
   - randaugment
   - cutmix
   - no_aug_epochs
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   train:
     - label: Python
@@ -70,7 +70,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 47461cd13aab580c
+source_hash: 42668148fcc79c1f
 ---
 
 ## 设置这些参数
@@ -120,8 +120,7 @@ DETR 风格的直通流水线既没有 mosaic 也没有仿射变换。它的光�
 活的。它覆盖 D-FINE、Dome-DETR、DEIM、DEIMv2、RT-DETRv4、EC，以及改了一处的
 RF-DETR。
 
-分类的 ImageFolder 流水线忽略每一个检测参数。它的水平翻转是固定的 0.5，`flip_prob`
-够不着。它有自己的一套参数，见下文。
+分类 ImageFolder 流水线有自己的数据增强控制。`flip_prob` 控制水平翻转，默认为 0.5；`fliplr` 是它的别名。
 
 YOLO-NAS 自成一种形态：完全没有 mosaic，逐样本的仿射变换始终开着，MixUp 是独立应用
 的，而不是被门控的。它的 `mosaic_scale` 值被复用为仿射变换的缩放范围。
@@ -142,18 +141,18 @@ SegFormer 来说，活的参数是类属性 `semantic_scale_jitter` 和 `semanti
 
 | 参数 | YOLOX 风格 | YOLO-NAS | DETR 风格 | 分类 |
 |---|---|---|---|---|
-| `mosaic_prob` | used | ignored | ignored | ignored |
-| `mixup_prob` | 受 mosaic 门控 | used | ignored | ignored |
-| `hsv_prob` | used | used | ignored | ignored |
-| `flip_prob` | used | used | used | ignored |
-| `flipud` | used | used | ignored | ignored |
-| `degrees` | 受 mosaic 门控 | used | ignored | ignored |
-| `translate` | 受 mosaic 门控 | used | ignored | ignored |
-| `shear` | 受 mosaic 门控 | used | ignored | ignored |
-| `perspective` | 受 mosaic 门控 | used | ignored | ignored |
-| `mosaic_scale` | 受 mosaic 门控 | used | ignored | ignored |
-| `mixup_scale` | 受 mosaic 门控 | used | ignored | ignored |
-| `no_aug_epochs` | used | used | used | used |
+| `mosaic_prob` | 使用 | 忽略 | 忽略 | 忽略 |
+| `mixup_prob` | 由 mosaic 控制 | 使用 | 忽略 | 忽略 |
+| `hsv_prob` | 使用 | 使用 | 忽略 | 忽略 |
+| `flip_prob` | 使用 | 使用 | 使用 | 使用 |
+| `flipud` | 使用 | 使用 | 忽略 | 使用 |
+| `degrees` | 由 mosaic 控制 | 使用 | 忽略 | 忽略 |
+| `translate` | 由 mosaic 控制 | 使用 | 忽略 | 忽略 |
+| `shear` | 由 mosaic 控制 | 使用 | 忽略 | 忽略 |
+| `perspective` | 由 mosaic 控制 | 使用 | 忽略 | 忽略 |
+| `mosaic_scale` | 由 mosaic 控制 | 使用 | 忽略 | 忽略 |
+| `mixup_scale` | 由 mosaic 控制 | 使用 | 忽略 | 忽略 |
+| `no_aug_epochs` | 使用 | 使用 | 使用 | 使用 |
 
 这些列内部还有一些例外，全都是收窄的：
 
@@ -166,10 +165,7 @@ SegFormer 来说，活的参数是类属性 `semantic_scale_jitter` 和 `semanti
 - DINOv2 的 detect 和 semantic 任务遵循 DETR 风格那一列，并为 `task="classify"` 加
   上分类参数包。
 
-`no_aug_epochs` 在所有家族上都是 `used`，但它在各处的含义并不相同。在 mosaic 流水
-线上，它会在最后几轮关掉 mosaic 和 MixUp。在 DETR 风格的流水线上，它会停掉光度、
-zoom-out 和裁剪这几种增强，并改变调度的尾部。在分类和语义分割流水线上，它只改变尾
-部。
+`no_aug_epochs` 在所有流水线中都是 `used`，但含义并不相同。在 mosaic 流水线中，它会在最后几轮关闭 mosaic 和 MixUp。在 DETR 风格流水线中，它停止光度、缩小和裁剪数据增强，并控制学习率调度的尾段。在分类流水线中，它禁用自动增强、擦除、MixUp 和 CutMix；裁剪与翻转保留。
 
 ## 分类参数包
 
@@ -183,9 +179,13 @@ zoom-out 和裁剪这几种增强，并改变调度的尾部。在分类和语�
 
 四个默认都是关的，所以除非你主动要求，分类训练不会有任何变化。
 
-有一处命名冲突值得直说：在 CLI 上，`mixup` 是检测那个 `mixup_prob` 的别名。分类的
-`mixup` 字段没有自己的 CLI 写法，只能在 Python 里通过 `model.train(mixup=...)` 才
-够得着。
+CLI 按任务分发 `mixup`：分类使用批量混合，检测使用 `mixup_prob`。
+
+`scale=0.5` 表示随机裁剪面积范围为 `(0.5, 1.0)`；显式传入一对数值可设置两个边界。`crop_pct=None` 保留家族的评估缩放比例；覆盖它会影响训练期间和验证的评估，而导出保持家族原生预处理。
+
+CLI 提供 `auto_augment`、`erasing`、`cutmix`、`fliplr` 和 `flipud`。分类 `mixup` 表示批量混合，默认为 0.0。水平翻转默认为 0.5，垂直翻转默认为 0.0。`mixup + cutmix` 不得超过 1。
+
+`no_aug_epochs` 在最后几轮禁用自动增强、擦除、MixUp 和 CutMix，保留裁剪与翻转。分类配方默认将这个尾段设为 0。
 
 ## 家族专属参数
 

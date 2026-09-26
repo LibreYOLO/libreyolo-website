@@ -19,7 +19,7 @@ keywords:
   - nms in onnx einbetten
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Flag
     value: export(format="onnx")
@@ -153,7 +153,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cee78250fc7189a3
+source_hash: "085c6fb8cb7ec4b2"
 ---
 
 ## Installation
@@ -163,6 +163,8 @@ source_hash: cee78250fc7189a3
 Das Extra zieht `onnx`, `onnxsim` und `onnxruntime` nach. `onnx` allein genügt,
 um die Datei zu schreiben; `onnxsim` führt den Vereinfachungsdurchlauf aus und
 `onnxruntime` führt das Artefakt aus und übernimmt die INT8-Kalibrierung.
+
+Das ONNX-Extra benötigt `onnxruntime>=1.18.0`; LaMa verwendet einen Graphen mit Opset 21.
 
 ## Export
 

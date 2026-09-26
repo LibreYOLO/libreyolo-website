@@ -1,9 +1,7 @@
 ---
 title: TFLite
 seo_title: 从 LibreYOLO 导出到 TFLite (LiteRT)
-description: >-
-  通过 onnx2tf 把 LibreYOLO 模型导出为 .tflite FlatBuffer：静态形状、仅 FP32、NHWC
-  输入，以及能干净转换的那些家族。
+description: "通过 onnx2tf 将 LibreYOLO 模型导出为 .tflite FlatBuffer：静态形状、FP32 和支持的 INT8 路径、NHWC 输入及运行时元数据。"
 lead: >-
   TFLite 是 LiteRT 在移动端和嵌入式目标上执行的 FlatBuffer 格式。LibreYOLO 会导出一个静态 ONNX 图，用
   onnx2tf 的 flatbuffer-direct 模式转换它，并把模型元数据以 JSON sidecar 的形式写在产物旁边。
@@ -15,7 +13,7 @@ keywords:
   - tflite flatbuffer
   - tflite nhwc 输入
   - 边缘推理
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: 标志
     value: export(format="tflite")
@@ -31,7 +29,7 @@ meta:
   - label: 形状
     value: 仅静态。dynamic=True 会被拒绝。
   - label: 精度
-    value: 仅 FP32。half=True 和 int8=True 会被拒绝。
+    value: "FP32；YOLO9 和 YOLOX 检测支持 INT8。FP16 会被拒绝。"
   - label: 环境要求
     value: Python 3.12 或更高版本，因为 onnx2tf 2.4.x 没有发布更早的 wheel
 verification: >-
@@ -73,15 +71,15 @@ snippets:
       code: |
         model.export(
             format="tflite",
-            imgsz=640,        # int，或者 (height, width)
+            imgsz=640,        # 整数，或 (height, width)
             batch=1,
-            simplify=True,    # 对 ONNX 中间产物跑 onnxsim
-            output_path=None, # None 输出 weights/<stem>.tflite
-            verbose=False,    # True 会实时打印 onnx2tf 日志
+            simplify=True,    # 对 ONNX 中间产物运行 onnxsim
+            output_path=None, # None 写入 weights/<stem>.tflite
+            verbose=False,    # True 流式输出 onnx2tf 日志
         )
 
-        # dynamic=True 会抛出 ValueError：转换器需要静态形状
-        # half=True 和 int8=True 在 trace 之前就会被拒绝
+        # dynamic=True 抛出 ValueError：转换器需要静态形状
+        # 不支持 FP16；INT8 需要受支持的检测器和校准数据
   run:
     - label: 通过 LibreYOLO
       language: python
@@ -132,7 +130,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: fa2deaa0ef6d9978
+source_hash: 3548d74e992bb76d
 ---
 
 ## 安装
@@ -157,6 +155,8 @@ ONNX 中间产物上，以 `flatbuffer_direct` 模式对 `onnx2tf` 的一次子�
 元数据是一个 sidecar。`weights/LibreYOLO9t.tflite.json` 带着家族、任务、类别名、输入
 尺寸和姿态 schema；FlatBuffer 本身没有 LibreYOLO 的元数据字段，所以这两个文件要一起走。
 
+YOLO9 和 YOLOX 检测支持 `int8=True`，配合 `data=...`、`fraction=1.0`、`batch=1` 和 `dynamic=False`。请安装 `onnx2tf[tensorflow]`。缺少校准数据时会警告并回退到 `coco8.yaml`。分离的归一化检测框输出与分数输出使用独立的量化尺度；部署时请保留附属文件中的 `output_layout` 元数据。部分内部算子可能仍使用浮点。
+
 ## 运行产物
 
 <code-tabs name="run" />
@@ -175,8 +175,7 @@ ONNX 中间产物上，以 `flatbuffer_direct` 模式对 `onnx2tf` 的一次子�
 只支持静态形状。`dynamic=True` 会在 trace 之前抛出 `ValueError`，导出画布固定为 `imgsz`
 最终解析出来的尺寸。
 
-只支持 FP32。`half=True` 和 `int8=True` 都会在验证阶段被拒绝，所以今天还没法从这个导出
-器走到量化部署。
+`half=True` 会被拒绝。INT8 仅支持批大小为 1 的 YOLO9 和 YOLOX 检测；其他 INT8 家族和任务会报错。
 
 这里的覆盖面比图格式要窄，而且是按实测、而不是按家族来定的。已验证的组合包括 YOLO9、
 YOLOX 和 YOLO-NAS 的检测，PIDNet 的语义分割，四个 CNN 分类家族，DINOv2 和 SigLIP2 的

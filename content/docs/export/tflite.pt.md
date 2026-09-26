@@ -2,9 +2,9 @@
 title: TFLite
 seo_title: Exportar para TFLite (LiteRT) a partir do LibreYOLO
 description: >-
-  Exporte um modelo LibreYOLO para um FlatBuffer .tflite através do onnx2tf:
-  formas estáticas, somente FP32, entradas NHWC e as famílias que convertem sem
-  problema.
+  Exporte um modelo LibreYOLO para um FlatBuffer .tflite via onnx2tf: dimensões
+  estáticas, FP32 e caminhos INT8 suportados, entradas NHWC e metadados de
+  runtime.
 lead: >-
   TFLite é o formato FlatBuffer que o LiteRT executa em alvos móveis e
   embarcados. O LibreYOLO exporta um grafo ONNX estático, converte esse grafo
@@ -18,27 +18,27 @@ keywords:
   - flatbuffer tflite
   - entrada nhwc tflite
   - inferência em edge
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Flag
     value: export(format="tflite")
     mono: true
-  - label: Escreve
-    value: Um arquivo .tflite mais um sidecar de metadados .tflite.json
+  - label: Grava
+    value: Um arquivo .tflite mais um arquivo auxiliar de metadados .tflite.json
   - label: Extra
     value: 'pip install "libreyolo[tflite]"'
     mono: true
   - label: Recarrega com
     value: LibreYOLO("weights/LibreYOLO9t.tflite")
     mono: true
-  - label: Formas
+  - label: Dimensões
     value: Somente estáticas. dynamic=True é rejeitado.
   - label: Precisão
-    value: Somente FP32. half=True e int8=True são rejeitados.
+    value: FP32; INT8 para detecção YOLO9 e YOLOX. FP16 é rejeitado.
   - label: Requer
     value: >-
-      Python 3.12 ou superior, porque o onnx2tf 2.4.x não publica wheels mais
-      antigos
+      Python 3.12 ou superior, porque onnx2tf 2.4.x não publica wheels
+      anteriores
 verification: >-
   Lido de libreyolo/export/tflite.py, libreyolo/export/exporter.py,
   libreyolo/export/support.py, libreyolo/backends/tflite.py e pyproject.toml no
@@ -81,15 +81,16 @@ snippets:
             imgsz=640,        # int, ou (altura, largura)
             batch=1,
             simplify=True,    # onnxsim sobre o intermediário ONNX
-            output_path=None, # None escreve weights/<stem>.tflite
+            output_path=None, # None grava weights/<stem>.tflite
             verbose=False,    # True transmite o log do onnx2tf
         )
 
 
-        # dynamic=True levanta ValueError: o conversor precisa de formas
+        # dynamic=True gera ValueError: o conversor precisa de dimensões
         estáticas.
 
-        # half=True e int8=True são rejeitados antes do tracing.
+        # FP16 é rejeitado. INT8 exige um detector suportado e dados de
+        calibração.
   run:
     - label: Pelo LibreYOLO
       language: python
@@ -142,7 +143,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: fa2deaa0ef6d9978
+source_hash: 3548d74e992bb76d
 ---
 
 ## Instalação
@@ -172,6 +173,8 @@ família, a tarefa, os nomes das classes, o tamanho de entrada e o schema de pos
 o próprio FlatBuffer não tem campo de metadados do LibreYOLO, então os dois
 arquivos andam juntos.
 
+Detecção com YOLO9 e YOLOX suporta `int8=True` com `data=...`, `fraction=1.0`, `batch=1` e `dynamic=False`. Instale `onnx2tf[tensorflow]`. Na ausência de dados de calibração, usa `coco8.yaml` como fallback com um aviso. Saídas separadas de caixas normalizadas e pontuações usam escalas de quantização independentes; mantenha os metadados auxiliares `output_layout` no deploy. Alguns operadores internos podem permanecer em ponto flutuante.
+
 ## Rodar o artefato
 
 <code-tabs name="run" />
@@ -193,8 +196,7 @@ vai encaixar.
 Somente formas estáticas. `dynamic=True` levanta `ValueError` antes do tracing, e
 o canvas de exportação fica fixo no valor para o qual `imgsz` foi resolvido.
 
-Somente FP32. `half=True` e `int8=True` são ambos rejeitados durante a validação,
-então o deploy quantizado não é alcançável por este exportador hoje.
+`half=True` é rejeitado. INT8 se limita à detecção YOLO9 e YOLOX com batch 1; outras famílias e tarefas INT8 geram erro.
 
 A cobertura aqui é mais estreita do que a dos formatos de grafo, e é decidida por
 medição em vez de por família. As combinações validadas incluem detecção YOLO9,

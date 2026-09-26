@@ -2,12 +2,11 @@
 title: Tập dữ liệu
 seo_title: Tập dữ liệu huấn luyện trong LibreYOLO
 description: >-
-  YAML dataset mà LibreYOLO đọc, bố cục thư mục cần có, cách tự động tải xuống
-  hoạt động và lệnh doctor kiểm tra dataset trước khi huấn luyện.
+  YAML dataset mà LibreYOLO đọc, bố cục thư mục cần có, cách tự động tải xuống hoạt động và lệnh doctor kiểm
+  tra dataset trước khi huấn luyện.
 lead: >-
-  Một tập dữ liệu LibreYOLO là tệp YAML đặt tên thư mục gốc, các split và tên
-  lớp đối tượng. Mọi nội dung khác, gồm cả vị trí tệp nhãn, được suy ra từ tệp
-  đó theo quy ước.
+  Một tập dữ liệu LibreYOLO là tệp YAML đặt tên thư mục gốc, các split và tên lớp đối tượng. Mọi nội dung
+  khác, gồm cả vị trí tệp nhãn, được suy ra từ tệp đó theo quy ước.
 keywords:
   - định dạng dataset yolo
   - data.yaml
@@ -18,7 +17,7 @@ keywords:
   - libreyolo doctor
   - kiểm tra mất cân bằng lớp
   - rò rỉ dữ liệu train val
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -60,9 +59,8 @@ snippets:
             print(finding.severity.value, finding.check_id, finding.message)
 
         raise SystemExit(report.exit_code(strict=False))
-source_hash: 9a12a0551c8b56e9
+source_hash: 84e47ff97fb2e2f3
 ---
-
 ## Trỏ train tới một dataset
 
 `data=` nhận đường dẫn YAML hoặc tên cấu hình đi kèm package.
@@ -131,6 +129,8 @@ của chính tệp danh sách. Các dòng bắt đầu bằng `#` bị bỏ qua.
 `names` có thể là danh sách hoặc mapping có key số nguyên. `nc` là tùy chọn; khi
 cả hai cùng có mặt nhưng không khớp, doctor báo cáo lỗi.
 
+Tư thế RF-DETR đọc `kpt_names` với khóa là ID hoặc tên lớp đối tượng. Nó giữ những hàng keypoint đầu tiên có tên của mỗi lớp; danh sách rỗng biểu thị lớp chỉ có bounding box. Tư thế nhiều lớp đối tượng yêu cầu `names` và ít nhất một lớp có keypoint.
+
 ## Bố cục thư mục và tệp nhãn
 
 Phát hiện, phân đoạn, tư thế và hộp xoay đều dùng chung một bố cục. Đường dẫn
@@ -158,6 +158,8 @@ background thay vì phát sinh lỗi. Dòng có nhiều hơn năm trường đư
 polygon và hộp của nó trở thành phạm vi bao của polygon, vì vậy dữ liệu xuất từ
 phân đoạn dùng cho huấn luyện phát hiện sẽ được nạp mà không bị phản đối. Doctor
 báo cáo số lượng dòng đi qua đường dẫn đó.
+
+Bounding box hữu hạn vượt biên ảnh được cắt nhất quán khi huấn luyện và đánh giá. Bounding box không có diện tích nhìn thấy, tọa độ không hữu hạn và đa giác sai định dạng bị loại. ID lớp đối tượng ngoài phạm vi được báo trước khi dựng nhãn đích. `train(classes=[...])` lọc dữ liệu giám sát bằng ID lớp đối tượng gốc; xem [siêu tham số](/docs/train/hyperparameters).
 
 ## Các tác vụ khác
 

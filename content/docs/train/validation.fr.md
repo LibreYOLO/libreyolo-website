@@ -20,7 +20,7 @@ keywords:
   - miou
   - qualité panoptique
   - exactitude top1
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   val:
     - label: Python
@@ -63,7 +63,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: d907183492fa3f57
+source_hash: ce7d26a5cd72d988
 ---
 
 ## Exécuter une validation
@@ -153,6 +153,8 @@ segmentation et OBB n'en possèdent pas ; leurs familles sont sélectionnées se
 `metrics/mAP50-95`, que leurs dictionnaires renvoient. La pose ne renvoie ni
 `fitness` ni `metrics/mAP50-95` ; ses trainers définissent à la place
 `best_metric_key` sur `metrics/keypoints_mAP50-95`.
+
+La classification ImageFolder ajoute les valeurs macro `metrics/precision`, `metrics/recall` et `metrics/f1`, moyennées sur les classes présentes dans les cibles de validation. L'exactitude top-1 reste le score de sélection par défaut. La détection renvoie aussi `metrics/best_conf`, `metrics/best_conf_f1` et `metrics/best_conf_per_class` indexé par nom de classe, en choisissant les seuils optimaux du micro-F1 à IoU 0.50. Les détections de score égal restent groupées ; les égalités choisissent le seuil le plus élevé. Sans F1 positif, la valeur est NaN. La segmentation n'expose pas ces clés de seuil.
 
 ## Clés de vitesse
 
@@ -275,6 +277,10 @@ normales, contours, restauration, matting, OCR, OBB et points n'écrivent rien �
 cet emplacement. Un échec de génération de graphique émet un avertissement et
 n'interrompt jamais l'exécution.
 
+`visualize=True` écrit des images TP/FP/FN de boîtes tenant compte des classes pour la détection et la segmentation, ou des images comparant l'étiquette à la prédiction top-1 pour la classification ImageFolder, dans `visualize/errors/` et `visualize/correct/`. L'appariement utilise IoU 0.5 et la confiance `max(0.25, conf)`. Les valeurs par défaut sont `visualize=False`, `show_labels=True` et `show_conf=True`. Les tâches non prises en charge et la validation de clips V-JEPA 2 refusent la visualisation.
+
+`plot_samples=8` limite le tracé d'exemples distinct ; 0 le désactive et -1 conserve toutes les images. Cela ne modifie ni les métriques ni les sorties de visualisation.
+
 ## Validation pendant l'entraînement
 
 L'entraînement effectue une validation toutes les `eval_interval` époques sur
@@ -290,3 +296,7 @@ Consultez les [hyperparamètres](/docs/train/hyperparameters) pour
 
 - [Datasets](/docs/train/datasets) pour les clés de splits et les formats lus
   par les validateurs.
+
+## Métriques de boîtes par image
+
+Les résultats de détection et de segmentation restent compatibles avec un dictionnaire et exposent aussi `results.box.image_metrics`. Chaque nom de fichier est associé à `precision`, `recall`, `f1`, `tp`, `fp` et `fn` selon la règle d'appariement de la visualisation, même si celle-ci est désactivée. La segmentation compte ici les boîtes. Les noms de base en double utilisent des chemins complets après la première occurrence. Les dénominateurs nuls donnent 0.0. Ces enregistrements ne sont pas regroupés entre les rangs distribués.

@@ -18,7 +18,7 @@ keywords:
   - fp8 e4m3
   - калібрувальний датасет
   - експорт qdq onnx
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Виклик
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -38,53 +38,36 @@ meta:
       export(format="pt") для упакованої контрольної точки,
       export(format="onnx") для графа QDQ INT8
     mono: true
-verification: >-
-  Перевірено за файлами libreyolo/quant/api.py, libreyolo/models/base/model.py,
-  libreyolo/cli/commands/quantize.py та docs/quantization.md у гілці dev.
-  Значення розміру контрольних точок взято з вимірювань, зафіксованих у
-  docs/quantization.md.
+verification: Перевірено за файлами libreyolo/quant/api.py, libreyolo/models/base/model.py, libreyolo/cli/commands/quantize.py та docs/quantization.md у гілці dev. Значення розміру контрольних точок взято з вимірювань, зафіксованих у docs/quantization.md.
 snippets:
   quantize:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-
-        # Заміна структури та калібрування. calib є невеликим набором зображень
-        БЕЗ МІТОК,
-
-        # який читається лише у прямому проході для визначення діапазонів і
-        масштабів активацій.
-
-        qmodel = model.quantize(recipe="int8", calib="coco128.yaml",
-        samples=128)
-
+        # Заміна структури та калібрування. calib є невеликим набором зображень БЕЗ МІТОК,
+        # який читається лише у прямому проході для визначення діапазонів і масштабів активацій.
+        qmodel = model.quantize(recipe="int8", calib="coco128.yaml", samples=128)
 
         print(qmodel.quant_info())
-
-        qmodel.val(data="coco8.yaml")          # ті самі валідатори, що й для
-        моделі з рухомою комою
-
-        qmodel.save("LibreYOLO9s-int8.pt")     # контрольна точка містить
-        маніфест квантування
+        qmodel.val(data="coco8.yaml")          # ті самі валідатори, що й для моделі з рухомою комою
+        qmodel.save("LibreYOLO9s-int8.pt")     # контрольна точка містить маніфест квантування
     - label: CLI
       language: bash
-      code: >
-        libreyolo quantize --model LibreYOLO9s.pt --recipe int8 --calib
-        coco128.yaml
+      code: |
+        libreyolo quantize --model LibreYOLO9s.pt --recipe int8 --calib coco128.yaml
     - label: Аргументи
       language: python
       code: |
         model.quantize(
             recipe="int8",
-            calib="coco128.yaml",      # шлях до data.yaml або вбудована назва; None пропускає калібрування
+            calib="coco128.yaml",      # шлях data.yaml або вбудована назва; None пропускає калібрування
             samples=128,               # максимальна кількість калібрувальних зображень
             batch=8,                   # розмір калібрувального батча
-            algorithm="auto",          # auto та minmax однакові; альтернативою є percentile
+            algorithm="auto",          # auto вибирає minmax; альтернативи: percentile, mse, entropy
             keep_high_precision=None,  # None використовує політику сімейства
             verbose=True,
         )
@@ -177,7 +160,7 @@ snippets:
         підтримуваною точністю.
 
         qmodel.export(format="tensorrt", half=True)
-source_hash: 4ffb06b87cad017e
+source_hash: 6c247a3243daf393
 ---
 
 ## Встановлення
@@ -203,6 +186,8 @@ source_hash: 4ffb06b87cad017e
 
 Контрольні точки тренера, записані під час запуску QAT, також містять маніфест,
 тому `best.pt` із такого запуску сам є квантованою контрольною точкою.
+
+Калібрувальний `algorithm` приймає `auto`, `minmax`, `percentile`, `mse` і `entropy`. `auto` визначається як minmax. MSE й entropy використовують перебір гістограм для вибору діапазонів активацій.
 
 ## Рецепти
 
@@ -266,6 +251,8 @@ QAT є донавчанням уже навченої моделі. Викори
 Моделі, квантовані у `fp16` та `bf16`, призначені лише для інференсу, і тренер
 відхиляє їх із посиланням на `amp=True`.
 
+Налаштування QAT вимикає EMA та SyncBatchNorm і задає `average_best=0`, записуючи кожне перевизначення в журнал. Навчання з рухомою комою зберігає запитані налаштування.
+
 ## Експорт
 
 <code-tabs name="export" />
@@ -310,4 +297,3 @@ ONNX Runtime і TensorRT виконують за допомогою справж
 
 Під час експорту моделі `int8`, активації якої ніколи не калібрувалися, записується
 попередження та створюється граф лише з квантуванням ваг.
-

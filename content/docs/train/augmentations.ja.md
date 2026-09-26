@@ -14,7 +14,7 @@ keywords:
   - randaugment
   - cutmix
   - no_aug_epochs
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -69,7 +69,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 47461cd13aab580c
+source_hash: 42668148fcc79c1f
 ---
 
 ## 設定値の指定
@@ -119,8 +119,7 @@ DETR方式のパススルーパイプラインにはmosaicもアフィン変形�
 IoU切り抜きは設定値ではなくレシピ定数なので、有効なのは`flip_prob`と`no_aug_epochs`だけです。
 D-FINE、Dome-DETR、DEIM、DEIMv2、RT-DETRv4、ECが対象で、RF-DETRでは1点異なります。
 
-分類用ImageFolderパイプラインは、検出用の設定値をすべて無視します。水平反転は固定の0.5で、
-`flip_prob`は到達しません。代わりに、後述する独自の設定群を持ちます。
+分類用のImageFolderパイプラインには専用のデータ拡張設定があります。`flip_prob`は水平方向の反転を制御し、デフォルトは0.5です。`fliplr`はそのエイリアスです。
 
 YOLO-NASは独自の形状です。mosaicは一切なく、サンプルごとのアフィン変換が常に有効で、MixUpは
 制限されず独立して適用されます。`mosaic_scale`の値はアフィン変換のスケール範囲として再利用
@@ -145,8 +144,8 @@ SegFormerとNAFNetは、それぞれタスク固有のパイプラインを実�
 | `mosaic_prob` | 使用 | 無視 | 無視 | 無視 |
 | `mixup_prob` | mosaicにより制限 | 使用 | 無視 | 無視 |
 | `hsv_prob` | 使用 | 使用 | 無視 | 無視 |
-| `flip_prob` | 使用 | 使用 | 使用 | 無視 |
-| `flipud` | 使用 | 使用 | 無視 | 無視 |
+| `flip_prob` | 使用 | 使用 | 使用 | 使用 |
+| `flipud` | 使用 | 使用 | 無視 | 使用 |
 | `degrees` | mosaicにより制限 | 使用 | 無視 | 無視 |
 | `translate` | mosaicにより制限 | 使用 | 無視 | 無視 |
 | `shear` | mosaicにより制限 | 使用 | 無視 | 無視 |
@@ -162,10 +161,7 @@ SegFormerとNAFNetは、それぞれタスク固有のパイプラインを実�
 - ECは`hsv_prob`、`degrees`、`translate`を尊重しますが、それらを読み取るキーポイント対応変換を使う`task="pose"`の場合だけです。detectとsegmentの経路は固定の測光レシピを使います。
 - DINOv2はdetectおよびsemanticタスクでDETR方式の列に従い、`task="classify"`では分類用設定を追加します。
 
-`no_aug_epochs`はどこでも`used`ですが、意味は同じではありません。mosaicパイプラインでは最後の
-エポックでmosaicとMixUpを無効にします。DETR方式のパイプラインでは測光、ズームアウト、切り抜き
-による拡張を停止し、スケジュール終端の形状を決めます。分類およびセマンティックパイプラインでは、
-終端の形状だけを決めます。
+`no_aug_epochs`はすべてのパイプラインで`used`ですが、効果は異なります。モザイク系では最後のエポックでモザイクとMixUpを無効にします。DETR系では測光的な拡張、ズームアウト、クロップを停止し、スケジュールの終盤も制御します。分類では自動拡張、erasing、MixUp、CutMixを無効にしますが、クロップと反転は残ります。
 
 ## 分類用設定
 
@@ -180,9 +176,13 @@ SegFormerとNAFNetは、それぞれタスク固有のパイプラインを実�
 
 4つともデフォルトで無効なので、明示的に要求しない限り分類学習は変わりません。
 
-1つの名前衝突は明記する価値があります。CLIでは`mixup`が検出用`mixup_prob`の別名です。分類用の
-`mixup`フィールドには独自のCLI表記がなく、Pythonの`model.train(mixup=...)`からしか到達
-できません。
+CLIはタスクに応じて`mixup`を振り分けます。分類ではバッチの混合、物体検出では`mixup_prob`を使います。
+
+`scale=0.5`は、ランダムクロップの面積範囲`(0.5, 1.0)`を意味します。ペアを明示すると両端を設定します。`crop_pct=None`は、ファミリーの評価用リサイズ比率を維持します。上書きは学習時と検証時の評価に適用されますが、エクスポートではファミリー本来の前処理を維持します。
+
+CLIは`auto_augment`、`erasing`、`cutmix`、`fliplr`、`flipud`を公開します。分類の`mixup`はバッチの混合を意味し、デフォルトは0.0です。水平反転のデフォルトは0.5、垂直反転は0.0です。`mixup + cutmix`は1を超えてはいけません。
+
+`no_aug_epochs`は、最後のエポックで自動データ拡張、ランダム消去、MixUp、CutMixを無効にし、クロップと反転は維持します。分類レシピでは、この末尾の期間のデフォルトは0です。
 
 ## ファミリー固有の設定値
 

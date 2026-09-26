@@ -20,7 +20,7 @@ keywords:
   - LibreYOLO Doctor
   - Klassenungleichgewicht prüfen
   - Datenleck Train Val Split
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   train:
     - label: Python
@@ -69,7 +69,7 @@ snippets:
             print(finding.severity.value, finding.check_id, finding.message)
 
         raise SystemExit(report.exit_code(strict=False))
-source_hash: 9a12a0551c8b56e9
+source_hash: "84e47ff97fb2e2f3"
 ---
 
 ## Datensatz für das Training angeben
@@ -147,6 +147,8 @@ Verzeichnis der Listendatei aufgelöst. Mit `#` beginnende Zeilen werden
 `nc` ist optional. Sind beide vorhanden und stimmen nicht überein, meldet Doctor
 dies als Fehler.
 
+RF-DETR-Pose liest `kpt_names` mit Klassen-ID oder -name als Schlüssel. Es behält die ersten benannten Keypoint-Zeilen je Klasse bei; eine leere Liste bezeichnet eine Klasse nur mit Boxen. Pose mit mehreren Klassen erfordert `names` und mindestens eine Klasse mit Keypoints.
+
 ## Verzeichnisstruktur und Labeldateien
 
 Erkennung, Segmentierung, Pose und orientierte Boxen verwenden dieselbe Struktur.
@@ -175,6 +177,8 @@ Zeile mit mehr als fünf Feldern wird als Polygon gelesen, dessen Box der
 Ausdehnung des Polygons entspricht. Ein Segmentierungsexport lässt sich dadurch
 ohne Beanstandung für ein Erkennungstraining laden. Doctor meldet, wie viele
 Zeilen auf diesem Weg verarbeitet wurden.
+
+Endliche Boxen, die den Bildrand überschreiten, werden für Training und Validierung einheitlich beschnitten. Boxen ohne sichtbare Fläche, nichtendliche Koordinaten und fehlerhafte Polygone werden verworfen. Klassen-IDs außerhalb des Bereichs werden vor dem Aufbau der Ziele gemeldet. `train(classes=[...])` filtert die Trainingsziele anhand der ursprünglichen Klassen-IDs; siehe [Hyperparameter](/docs/train/hyperparameters).
 
 ## Weitere Aufgaben
 
