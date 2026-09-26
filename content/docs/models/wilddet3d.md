@@ -17,6 +17,8 @@ snippets:
       code: >
         from libreyolo import LibreWildDet3D, SAMPLE_IMAGE
 
+        from PIL import Image
+
         import numpy as np
 
 
@@ -24,10 +26,16 @@ snippets:
 
         model = LibreWildDet3D(device="cpu")
 
-        # Use measured calibration for the original image, before resizing.
+        # Approximate pinhole intrinsics for the original image size.
 
-        intrinsics = np.load(input("Camera intrinsics .npy path: "),
-        allow_pickle=False)
+        # Replace with your camera's measured 3x3 calibration for real geometry.
+
+        width, height = Image.open(SAMPLE_IMAGE).size
+
+        f = max(width, height)
+
+        intrinsics = np.array([[f, 0, width / 2], [0, f, height / 2], [0, 0, 1]],
+        dtype=np.float32)
 
         result = model.predict(SAMPLE_IMAGE, intrinsics=intrinsics,
         text="person")

@@ -25,7 +25,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt", device="cpu")
 
-        model.train(data=input("Dataset YAML: "), epochs=1, workers=0,
+        model.train(data="coco8.yaml", epochs=1, workers=0,
         device="cpu", callbacks=RecallFitness())
 ---
 
@@ -33,7 +33,7 @@ snippets:
 
 <code-tabs name="train" />
 
-Implement `fitness(metrics)` on an object passed through `callbacks=`. The input is the read-only scalar mapping used by `TrainEpochEvent.val_metrics`. Return one finite real number; higher is better. A callback list may contain only one scorer.
+Implement `fitness(metrics)` on an object passed through `callbacks=`. The input is the read-only scalar mapping used by `TrainEpochEvent.val_metrics`. Return one finite real number; higher is better. A callback list may contain only one scorer. VLM and VLA fine-tuning do not accept a fitness callback.
 
 ## Checkpoint selection
 

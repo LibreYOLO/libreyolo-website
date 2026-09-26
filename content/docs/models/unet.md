@@ -36,10 +36,10 @@ snippets:
 
         model = LibreUNet(size="s", device="cpu")
 
-        # Enter the path to your dataset YAML or classification folder.
+        # Replace with your semantic segmentation dataset YAML (image/mask pairs).
 
-        model.train(data=input("Dataset path: "), pretrained=False, epochs=1,
-        device="cpu", workers=0)
+        model.train(data="path/to/your/semantic_dataset.yaml", pretrained=False,
+        epochs=1, device="cpu", workers=0)
   val:
     - label: Python
       language: python
@@ -47,10 +47,14 @@ snippets:
         from libreyolo import LibreUNet
 
 
-        model = LibreUNet(model_path=input("Trained checkpoint path: "),
+        # Replace with a U-Net checkpoint you trained with model.train().
+
+        model = LibreUNet(model_path="path/to/your/unet_checkpoint.pt",
         device="cpu")
 
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        # Replace with your semantic segmentation dataset YAML (image/mask pairs).
+
+        metrics = model.val(data="path/to/your/semantic_dataset.yaml", workers=0)
 
         print(metrics)
 ---

@@ -28,10 +28,11 @@ snippets:
     - label: Python
       language: python
       code: |
-        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+        from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibreHVICIDNett-restore.pt", device="cpu")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        # Paired restoration dataset YAML: degraded images in inputs/, clean targets in targets/, matched by file stem.
+        metrics = model.val(data="path/to/your/restore.yaml", workers=0)
         print(metrics)
 ---
 

@@ -24,12 +24,13 @@ snippets:
     - label: Python
       language: python
       code: |
-        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+        from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibreHVICIDNett-restore.pt", device="cpu")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        # ペア画像復元データセットのYAML: inputs/に劣化画像、targets/にクリーン画像を置き、ファイル名の語幹で対応付けます。
+        metrics = model.val(data="path/to/your/restore.yaml", workers=0)
         print(metrics)
-source_hash: 1dd58d9b380af94b
+source_hash: 12d3a7b809c89c08
 ---
 
 ## インストール

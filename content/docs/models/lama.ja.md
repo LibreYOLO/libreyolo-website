@@ -39,12 +39,13 @@ snippets:
     - label: Python
       language: python
       code: |
-        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+        from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibreLaMab-restore.pt", device="cpu")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        # inputs/targets のペアフォルダと mask_dir キーを持つ復元データセット YAML
+        metrics = model.val(data="path/to/your/restore.yaml", workers=0)
         print(metrics)
-source_hash: f1bc3e47424667ad
+source_hash: 0e867e0b3f85d1bb
 ---
 
 ## インストール

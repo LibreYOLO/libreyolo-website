@@ -24,5 +24,12 @@ for (const [key, family] of Object.entries(next.families)) {
   if (fs.existsSync(upstream)) family.upstream = JSON.parse(fs.readFileSync(upstream))
   else if (prev?.upstream) family.upstream = prev.upstream
   if (!family.upstream) throw new Error(`Missing provenance: ${key}`)
+  // Optional `checkpoint_license` in upstream/<slug>.json replaces the license
+  // read from each checkpoint's HF repo tag. Use it only when the HF tag
+  // disagrees with what the upstream weights publisher declared (weights keep
+  // the upstream-declared license; LibreYOLO adds no dataset-derived terms).
+  if (family.upstream.checkpoint_license) {
+    for (const c of family.checkpoints) c.license = family.upstream.checkpoint_license
+  }
 }
 fs.writeFileSync(output, JSON.stringify(next, null, 2) + '\n')

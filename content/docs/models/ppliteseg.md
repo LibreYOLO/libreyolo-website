@@ -27,24 +27,21 @@ snippets:
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
         model = LibreYOLO("LibrePPLiteSegt50-sem.pt", device="cpu")
-
-        # Enter the path to your dataset YAML or classification folder.
-
-        model.train(data=input("Dataset path: "), epochs=1, device="cpu",
-        workers=0)
+        # Semantic segmentation dataset YAML: images plus single-channel class-ID masks.
+        model.train(data="path/to/your/semantic.yaml", epochs=1, device="cpu", workers=0)
   val:
     - label: Python
       language: python
       code: |
-        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+        from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibrePPLiteSegt50-sem.pt", device="cpu")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        # Semantic segmentation dataset YAML with 19 Cityscapes classes, like cityscapes.yaml.
+        metrics = model.val(data="path/to/your/semantic.yaml", workers=0)
         print(metrics)
   export:
     - label: Python

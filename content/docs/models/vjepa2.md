@@ -30,16 +30,12 @@ snippets:
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
         model = LibreYOLO("LibreVJEPA2l256-cls-ssv2.pt", device="cpu")
-
-        # Enter the path to your dataset YAML or classification folder.
-
-        model.train(data=input("Dataset path: "), epochs=1, device="cpu",
-        workers=0)
+        # Replace with your video dataset YAML (train/val manifests of '<video-path> <class-id>' lines).
+        model.train(data="path/to/your/video_dataset.yaml", epochs=1, device="cpu", workers=0)
   val:
     - label: Python
       language: python
@@ -47,7 +43,8 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreVJEPA2l256-cls-ssv2.pt", device="cpu")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        # Replace with your video dataset YAML; val() reads its val manifest of '<video-path> <class-id>' lines.
+        metrics = model.val(data="path/to/your/video_dataset.yaml", workers=0)
         print(metrics)
   export:
     - label: Python

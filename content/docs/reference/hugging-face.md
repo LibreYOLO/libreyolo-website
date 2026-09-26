@@ -18,7 +18,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        model = LibreYOLO("hf://LibreYOLO/LibreYOLO9s", device="cpu")
+        model = LibreYOLO("hf://LibreYOLO/LibreYOLO9s/LibreYOLO9s.pt", device="cpu")
         print(model(SAMPLE_IMAGE).boxes)
 ---
 

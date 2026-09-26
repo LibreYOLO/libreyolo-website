@@ -1,7 +1,7 @@
 ---
 title: "libreyolo fcos3d"
 seo_title: "libreyolo fcos3d: arguments and examples"
-description: "Command-line reference for fcos3d 3D detection, including calibration, runtime options and JSON output."
+description: "Command-line reference for fcos3d 3D detection, including calibration, thresholds and JSON output."
 lead: "Run fcos3d 3D detection from the command line."
 keywords: [fcos3d, CLI, LibreYOLO, 3D detection]
 last_verified: "1.6.0"
@@ -26,9 +26,9 @@ libreyolo fcos3d source=IMAGE intrinsics=camera.npy [OPTIONS]
 | `max-det` | `200` | Maximum number of detections per image |
 | `save` | `False` | Save projected cuboids |
 | `output-path` | `None` | Single-image output filename |
-| `json-output` | `False` | JSON output to stdout |
+| `json` | `false` | JSON output to stdout |
 | `quiet` | `False` | Suppress stderr |
-| `help-json` | `False` | Dump command schema as JSON |
+| `--help-json` | flag | Dump command schema as JSON |
 
 ## Examples
 
@@ -40,7 +40,6 @@ libreyolo fcos3d --help-json
 
 Predict on the shipped sample image. For commands requiring calibration,
 `camera.npy` must contain its measured original-image 3x3 intrinsic matrix.
-Install the model's runtime before prediction.
 
 ```bash
 libreyolo fcos3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg intrinsics=camera.npy
@@ -54,7 +53,7 @@ libreyolo fcos3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/re
 
 ## Notes
 
-Configuration, runtime-loading and I/O errors exit through the shared CLI
+Configuration, model-loading and I/O errors exit through the shared CLI
 error handler. `--json` writes structured results to stdout; diagnostics use
 stderr. `--quiet` suppresses stderr. See [fcos3d](/docs/models/fcos3d)
 for installation, calibration and model constraints.

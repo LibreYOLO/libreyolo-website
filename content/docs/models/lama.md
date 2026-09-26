@@ -39,10 +39,11 @@ snippets:
     - label: Python
       language: python
       code: |
-        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+        from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibreLaMab-restore.pt", device="cpu")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        # Restore dataset YAML with paired inputs/targets folders plus a mask_dir key
+        metrics = model.val(data="path/to/your/restore.yaml", workers=0)
         print(metrics)
 ---
 

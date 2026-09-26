@@ -27,7 +27,8 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreQuickSRNetm2-restore.pt", device="cpu")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        # 超解像のペアデータセットYAML: inputs/valに低解像度画像、targets/valに2倍の高解像度画像
+        metrics = model.val(data="path/to/your/restore.yaml", workers=0)
         print(metrics)
   export:
     - label: Python
@@ -37,7 +38,7 @@ snippets:
 
         model = LibreYOLO("LibreQuickSRNetm2-restore.pt", device="cpu")
         model.export(format="onnx")
-source_hash: 34a2e81450788353
+source_hash: e22cb6a37899ebdc
 ---
 
 ## インストール

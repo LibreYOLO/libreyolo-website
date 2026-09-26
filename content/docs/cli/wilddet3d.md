@@ -34,7 +34,7 @@ libreyolo wilddet3d source=IMAGE intrinsics=camera.npy [OPTIONS]
 | `iou` | `None` | 2D NMS IoU threshold |
 | `save` | `False` | Save projected cuboids |
 | `output-path` | `None` | Single-image output filename |
-| `json-output` | `False` | JSON output to stdout |
+| `json` | `false` | JSON output to stdout |
 | `quiet` | `False` | Suppress stderr |
 | `help-json` | `False` | Dump command schema as JSON |
 
@@ -48,16 +48,17 @@ libreyolo wilddet3d --help-json
 
 Predict on the shipped sample image. For commands requiring calibration,
 `camera.npy` must contain its measured original-image 3x3 intrinsic matrix.
-Install the model's runtime before prediction.
+Install the model's runtime before prediction. Pass exactly one prompt:
+`text`, `bboxes` or `points`.
 
 ```bash
-libreyolo wilddet3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg intrinsics=camera.npy
+libreyolo wilddet3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg intrinsics=camera.npy text='["person"]'
 ```
 
 Request machine-readable results:
 
 ```bash
-libreyolo wilddet3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg intrinsics=camera.npy --json --quiet
+libreyolo wilddet3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg intrinsics=camera.npy text='["person"]' --json --quiet
 ```
 
 ## Notes

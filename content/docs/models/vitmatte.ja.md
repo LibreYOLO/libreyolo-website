@@ -33,9 +33,10 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreViTMattes-matte.pt", device="cpu")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        # images/とmattes/（同じファイル名のグレースケールのアルファマット）を含むフォルダ、またはマット用YAML
+        metrics = model.val(data="path/to/your/matte_dataset", workers=0)
         print(metrics)
-source_hash: 75d9cbe93fc6f210
+source_hash: 388ba833eda3dbd5
 ---
 
 ## インストール

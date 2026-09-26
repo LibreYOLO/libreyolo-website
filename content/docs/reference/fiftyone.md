@@ -51,4 +51,4 @@ Detection writes boxes; instance segmentation attaches masks or polylines. OBB w
 
 ## Dataset conversion
 
-`to_fiftyone(data, split="val")` imports YOLO-layout or COCO-JSON dataset YAMLs. `from_fiftyone(view, output_dir, split="train", classes=...)` writes a dataset YAML and labels. Pass `classes=` to keep class IDs stable across filtered views.
+`to_fiftyone(data, split="val")` imports YOLO-layout or COCO-JSON dataset YAMLs. `from_fiftyone(view, export_dir, split="val", classes=...)` writes a dataset YAML and labels. Call it once with `split="train"` and once with `split="val"` into the same directory to get both splits in one YAML. Pass `classes=` to keep class IDs stable across filtered views.

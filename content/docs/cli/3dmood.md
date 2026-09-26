@@ -10,7 +10,7 @@ last_verified: "1.6.0"
 ## Synopsis
 
 ```bash
-libreyolo 3dmood source=IMAGE intrinsics=camera.npy [OPTIONS]
+libreyolo 3dmood source=IMAGE intrinsics=camera.npy text='["CLASS"]' [OPTIONS]
 ```
 
 ## Arguments
@@ -30,7 +30,7 @@ libreyolo 3dmood source=IMAGE intrinsics=camera.npy [OPTIONS]
 | `max-det` | `None` | Maximum detections per image |
 | `save` | `False` | Save projected cuboids |
 | `output-path` | `None` | Single-image output filename |
-| `json-output` | `False` | JSON output to stdout |
+| `json` | `false` | JSON output to stdout |
 | `quiet` | `False` | Suppress stderr |
 | `help-json` | `False` | Dump command schema as JSON |
 
@@ -47,13 +47,13 @@ Predict on the shipped sample image. For commands requiring calibration,
 Install the model's runtime before prediction.
 
 ```bash
-libreyolo 3dmood source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg intrinsics=camera.npy
+libreyolo 3dmood source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg intrinsics=camera.npy text='["person"]'
 ```
 
 Request machine-readable results:
 
 ```bash
-libreyolo 3dmood source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg intrinsics=camera.npy --json --quiet
+libreyolo 3dmood source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg intrinsics=camera.npy text='["person"]' --json --quiet
 ```
 
 ## Notes

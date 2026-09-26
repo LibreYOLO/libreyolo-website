@@ -29,18 +29,19 @@ snippets:
 
         model = LibreYOLO("LibrePPLiteSegt50-sem.pt", device="cpu")
 
-        # データセットYAMLまたは分類フォルダーのパスを入力
+        # セマンティックセグメンテーション用データセットYAML（画像と1チャンネルのクラスIDマスク）
 
-        model.train(data=input("Dataset path: "), epochs=1, device="cpu",
+        model.train(data="path/to/your/semantic.yaml", epochs=1, device="cpu",
         workers=0)
   val:
     - label: Python
       language: python
       code: |
-        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+        from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibrePPLiteSegt50-sem.pt", device="cpu")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        # cityscapes.yamlと同じ19クラスのセマンティックセグメンテーション用データセットYAML
+        metrics = model.val(data="path/to/your/semantic.yaml", workers=0)
         print(metrics)
   export:
     - label: Python
@@ -50,7 +51,7 @@ snippets:
 
         model = LibreYOLO("LibrePPLiteSegt50-sem.pt", device="cpu")
         model.export(format="onnx")
-source_hash: 5bd90ff464ca783f
+source_hash: 19f27dab573a106d
 ---
 
 ## インストール

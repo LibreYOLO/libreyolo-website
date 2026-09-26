@@ -27,7 +27,8 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreQuickSRNetm2-restore.pt", device="cpu")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        # Paired super-resolution dataset YAML: inputs/val low-res images, targets/val 2x high-res images
+        metrics = model.val(data="path/to/your/restore.yaml", workers=0)
         print(metrics)
   export:
     - label: Python

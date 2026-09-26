@@ -19,15 +19,19 @@ snippets:
 
         import numpy as np
 
+        from PIL import Image
+
 
         # Requires the separately installed upstream runtime.
 
         model = Libre3DMOOD(device="cpu")
 
-        # Use measured calibration for the original image, before resizing.
+        # Rough 3x3 pinhole guess; replace with measured calibration for the original image.
 
-        intrinsics = np.load(input("Camera intrinsics .npy path: "),
-        allow_pickle=False)
+        w, h = Image.open(SAMPLE_IMAGE).size
+
+        intrinsics = np.array([[w, 0, w / 2], [0, w, h / 2], [0, 0, 1]],
+        dtype=np.float32)
 
         result = model.predict(SAMPLE_IMAGE, intrinsics=intrinsics,
         text="person")

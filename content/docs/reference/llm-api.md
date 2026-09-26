@@ -18,8 +18,9 @@ snippets:
       code: |
         from libreyolo import LibreLLM, SAMPLE_IMAGE
 
-        # Requires provider credentials and an available remote model.
-        llm = LibreLLM(input("Provider model ID: "))
+        # Sends a request to the default hosted model, gpt-5.6-luna.
+        # Set OPENAI_API_KEY first, or pass a provider model ID and api_key=.
+        llm = LibreLLM()
         response = llm("Describe this image.", image=SAMPLE_IMAGE)
         print(response.output_text)
 ---
@@ -36,7 +37,7 @@ Configure the endpoint's credentials before sending a request. Model IDs refer t
 
 <code-tabs name="request" />
 
-`LibreLLM(model, api="responses", base_url=None, api_key=None, prompt=None)` uses Responses by default. Select `api="chat.completions"` for a Chat Completions endpoint. Pass an image through `image=`; a string in the positional source argument is text.
+`LibreLLM(model="gpt-5.6-luna", *, api="responses", base_url=None, api_key=None, prompt=None)` uses Responses by default. Without a known provider prefix, the OpenAI SDK reads the key from `OPENAI_API_KEY`. Select `api="chat.completions"` for a Chat Completions endpoint. Pass an image through `image=`; a string in the positional source argument is text.
 
 Image input accepts paths, HTTP URLs, data URIs, PIL images and NumPy BGR arrays. A constructor `prompt=` applies to each request. Native message objects pass through unchanged.
 

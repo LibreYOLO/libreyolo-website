@@ -33,7 +33,7 @@ pip install "libreyolo[molmo2]"
 
 <code-tabs name="predict" />
 
-`set_classes()` defines the pointing vocabulary. A custom pointing template must contain `{label}`. The factory also recognizes 8B and O-7B aliases; those snapshots were not verified by the release audit. Training is not supported.
+`set_classes()` defines the pointing vocabulary. A custom pointing template must contain `{label}`. The factory also accepts `molmo2-8b` and `molmo2-o-7b`. Training is not supported.
 
 ## Licensing
 

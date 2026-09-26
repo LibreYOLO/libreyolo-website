@@ -1,7 +1,7 @@
 ---
 title: "libreyolo detany3d"
 seo_title: "libreyolo detany3d: arguments and examples"
-description: "Command-line reference for detany3d 3D detection, including calibration, runtime options and JSON output."
+description: "Command-line reference for detany3d 3D detection, including prompts, runtime options and JSON output."
 lead: "Run detany3d 3D detection from the command line."
 keywords: [detany3d, CLI, LibreYOLO, 3D detection]
 last_verified: "1.6.0"
@@ -31,9 +31,9 @@ libreyolo detany3d source=IMAGE [OPTIONS]
 | `device` | `auto` | auto, cpu, or CUDA device |
 | `save` | `False` | Save projected cuboids |
 | `output-path` | `None` | Single-image output filename |
-| `json-output` | `False` | JSON output to stdout |
+| `json` | `false` | JSON output to stdout |
 | `quiet` | `False` | Suppress stderr |
-| `help-json` | `False` | Dump command schema as JSON |
+| `help-json` | `false` | Flag: dump the command schema as JSON and exit |
 
 ## Examples
 
@@ -43,18 +43,18 @@ Inspect the installed command schema:
 libreyolo detany3d --help-json
 ```
 
-Predict on the shipped sample image. For commands requiring calibration,
-`camera.npy` must contain its measured original-image 3x3 intrinsic matrix.
+Predict on the shipped sample image. DetAny3D estimates the camera
+intrinsics itself, so no calibration file is needed.
 Install the model's runtime before prediction.
 
 ```bash
-libreyolo detany3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+libreyolo detany3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg text='["person"]'
 ```
 
 Request machine-readable results:
 
 ```bash
-libreyolo detany3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg --json --quiet
+libreyolo detany3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg text='["person"]' --json --quiet
 ```
 
 ## Notes

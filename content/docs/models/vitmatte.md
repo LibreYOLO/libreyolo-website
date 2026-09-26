@@ -42,7 +42,8 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreViTMattes-matte.pt", device="cpu")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        # A folder with images/ and mattes/ (grayscale alpha mattes, same file stems), or a matte YAML.
+        metrics = model.val(data="path/to/your/matte_dataset", workers=0)
         print(metrics)
 ---
 

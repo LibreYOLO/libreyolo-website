@@ -21,25 +21,29 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        model = LibreDEKR(input("Path to upstream weights: "), device="cpu")
+        # Downloads the W32 checkpoint from the upstream CDN and checks its SHA-256
+        model = LibreYOLO("LibreDEKRw32-pose.pt", device="cpu")
         result = model(SAMPLE_IMAGE)
         print(result.keypoints)
   val:
     - label: Python
       language: python
       code: |
-        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+        from libreyolo import LibreYOLO
 
-        model = LibreDEKR(input("Path to upstream weights: "), device="cpu")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        # Downloads the W32 checkpoint from the upstream CDN and checks its SHA-256
+        model = LibreYOLO("LibreDEKRw32-pose.pt", device="cpu")
+        # coco8-pose.yaml builds a 4-image COCO keypoint split on first use
+        metrics = model.val(data="coco8-pose.yaml", allow_download_scripts=True, workers=0)
         print(metrics)
   export:
     - label: Python
       language: python
       code: |
-        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+        from libreyolo import LibreYOLO
 
-        model = LibreDEKR(input("Path to upstream weights: "), device="cpu")
+        # Downloads the W32 checkpoint from the upstream CDN and checks its SHA-256
+        model = LibreYOLO("LibreDEKRw32-pose.pt", device="cpu")
         model.export(format="onnx")
 ---
 

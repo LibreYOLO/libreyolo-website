@@ -35,7 +35,8 @@ snippets:
 
         # Requires CUDA for default four-bit inference.
         model = LibreYOLO("LibreMarigoldV2b-depth.pt", device="cuda")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        # Depth dataset YAML: images/val plus same-stem maps in depths/val.
+        metrics = model.val(data="path/to/your/depth.yaml", workers=0)
         print(metrics)
 ---
 

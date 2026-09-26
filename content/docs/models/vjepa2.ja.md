@@ -32,18 +32,25 @@ snippets:
 
         model = LibreYOLO("LibreVJEPA2l256-cls-ssv2.pt", device="cpu")
 
-        # Enter the path to your dataset YAML or classification folder.
+        # 動画データセットの YAML に置き換えてください (train/val マニフェストは '<video-path> <class-id>'
+        形式の行)
 
-        model.train(data=input("Dataset path: "), epochs=1, device="cpu",
-        workers=0)
+        model.train(data="path/to/your/video_dataset.yaml", epochs=1,
+        device="cpu", workers=0)
   val:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreVJEPA2l256-cls-ssv2.pt", device="cpu")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+
+        # 動画データセットの YAML に置き換えてください (val() は '<video-path> <class-id>' 形式の val
+        マニフェストを読み込みます)
+
+        metrics = model.val(data="path/to/your/video_dataset.yaml", workers=0)
+
         print(metrics)
   export:
     - label: Python
@@ -53,7 +60,7 @@ snippets:
 
         model = LibreYOLO("LibreVJEPA2l256-embed.pt", device="cpu")
         model.export(format="onnx")
-source_hash: f1cf0a96005e1755
+source_hash: 86cbde874e2a664a
 ---
 
 ## インストール

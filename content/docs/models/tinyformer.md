@@ -23,24 +23,22 @@ snippets:
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
         model = LibreYOLO("LibreTinyFormers.pt", device="cpu")
-
-        # Enter the path to your dataset YAML or classification folder.
-
-        model.train(data=input("Dataset path: "), epochs=1, device="cpu",
-        workers=0)
+        # coco8.yaml is a built-in 8-image detection dataset that downloads on first use.
+        # Replace it with the path to your own detection dataset YAML.
+        model.train(data="coco8.yaml", epochs=1, device="cpu", workers=0)
   val:
     - label: Python
       language: python
       code: |
-        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+        from libreyolo import LibreYOLO
 
         model = LibreYOLO("LibreTinyFormers.pt", device="cpu")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        # coco8.yaml downloads on first use; pass your own detection dataset YAML instead.
+        metrics = model.val(data="coco8.yaml", workers=0)
         print(metrics)
   export:
     - label: Python

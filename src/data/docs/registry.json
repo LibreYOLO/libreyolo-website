@@ -494,28 +494,28 @@
           "task": "semantic",
           "imgsz": null,
           "data": null,
-          "license": "other"
+          "license": "apache-2.0"
         },
         {
           "name": "LibrePPLiteSegb50-sem.pt",
           "task": "semantic",
           "imgsz": null,
           "data": null,
-          "license": "other"
+          "license": "apache-2.0"
         },
         {
           "name": "LibrePPLiteSegt75-sem.pt",
           "task": "semantic",
           "imgsz": null,
           "data": null,
-          "license": "other"
+          "license": "apache-2.0"
         },
         {
           "name": "LibrePPLiteSegb75-sem.pt",
           "task": "semantic",
           "imgsz": null,
           "data": null,
-          "license": "other"
+          "license": "apache-2.0"
         }
       ],
       "export": {
@@ -541,8 +541,9 @@
         "org": "PaddlePaddle",
         "code_url": "https://github.com/PaddlePaddle/PaddleSeg",
         "license": "Apache-2.0",
-        "license_interpretation": "The upstream implementation declares Apache-2.0. The STDC backbone also carries its original MIT attribution.",
-        "weights_license": "No separate artifact grant recorded"
+        "license_interpretation": "The upstream implementation declares Apache-2.0. The STDC backbone also carries its original MIT attribution. The released checkpoints are converted from the Deci-AI/super-gradients Cityscapes artifacts; SuperGradients is released under Apache-2.0 and grants separate weight licenses only for YOLO-NAS, so these checkpoints carry Apache-2.0.",
+        "weights_license": "Apache-2.0",
+        "checkpoint_license": "apache-2.0"
       }
     },
     "unet": {
@@ -1752,8 +1753,9 @@
         "paper_title": "Detect Anything 3D in the Wild",
         "paper_url": "https://arxiv.org/abs/2504.07958",
         "code_url": "https://github.com/OpenDriveLab/DetAny3D",
-        "license": "Apache-2.0 code; CC-BY-NC-4.0 weights",
-        "license_interpretation": "The mirrored checkpoint retains CC-BY-NC-4.0. Commercial use of those weights is excluded.",
+        "license": "Apache-2.0 code; no separate weights license declared by the publisher",
+        "license_interpretation": "OpenDriveLab releases the project under Apache-2.0 and declares no separate license for the checkpoint. LibreYOLO mirrors the checkpoint byte-for-byte and adds no terms of its own.",
+        "weights_license": "No separate license declared by the publisher",
         "bibtex": "@article{zhang2025detect,\n  title={Detect Anything 3D in the Wild},\n  author={Zhang, Hanxue and Jiang, Haoran and Yao, Qingsong and Sun, Yanan and Zhang, Renrui and Zhao, Hao and Li, Hongyang and Zhu, Hongzi and Yang, Zetong},\n  journal={arXiv preprint arXiv:2504.07958},\n  year={2025}\n}",
         "bibtex_source_url": "https://raw.githubusercontent.com/OpenDriveLab/DetAny3D/main/README.md",
         "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2504.07958. The upstream citation form is retained."

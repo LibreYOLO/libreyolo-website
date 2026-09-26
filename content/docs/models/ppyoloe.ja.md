@@ -17,40 +17,36 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        model = LibrePPYOLOE(input("Path to upstream weights: "), device="cpu")
+        model = LibreYOLO("LibrePPYOLOEs.pt", device="cpu")
         result = model(SAMPLE_IMAGE)
         print(result.boxes)
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
-        model = LibrePPYOLOE(input("Path to upstream weights: "), device="cpu")
-
-        # Enter the path to your dataset YAML or classification folder.
-
-        model.train(data=input("Dataset path: "), epochs=1, device="cpu",
-        workers=0)
+        model = LibreYOLO("LibrePPYOLOEs.pt", device="cpu")
+        # coco8は自動でダウンロードされる小さなYOLO形式の物体検出データセットです。
+        model.train(data="coco8.yaml", epochs=1, device="cpu", workers=0)
   val:
     - label: Python
       language: python
       code: |
-        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+        from libreyolo import LibreYOLO
 
-        model = LibrePPYOLOE(input("Path to upstream weights: "), device="cpu")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        model = LibreYOLO("LibrePPYOLOEs.pt", device="cpu")
+        metrics = model.val(data="coco8.yaml", workers=0)
         print(metrics)
   export:
     - label: Python
       language: python
       code: |
-        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+        from libreyolo import LibreYOLO
 
-        model = LibrePPYOLOE(input("Path to upstream weights: "), device="cpu")
+        model = LibreYOLO("LibrePPYOLOEs.pt", device="cpu")
         model.export(format="onnx")
-source_hash: fd9631d1ff31aba4
+source_hash: 1dcf261f906a55e1
 ---
 
 ## インストール

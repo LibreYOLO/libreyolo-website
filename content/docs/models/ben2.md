@@ -28,7 +28,8 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         model = LibreYOLO("LibreBEN2b-matte.pt", device="cpu")
-        metrics = model.val(data=input("Validation dataset path: "), workers=0)
+        # data: a matte dataset YAML, or a folder with images/ and mattes/ (grayscale alpha, same file stems)
+        metrics = model.val(data="path/to/your/matte_dataset.yaml", workers=0)
         print(metrics)
   export:
     - label: Python

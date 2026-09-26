@@ -22,7 +22,7 @@ snippets:
 
 ## Models
 
-[Marigold V2](/docs/models/marigold-v2) supplies the albedo adapters. Their default four-bit runtime requires CUDA and the `marigold` extra.
+[Marigold V2](/docs/models/marigold-v2) supplies the albedo checkpoint. Its default four-bit runtime requires CUDA and the `marigold` extra.
 
 ## Predict
 
@@ -32,7 +32,7 @@ snippets:
 
 ## Dataset format
 
-Validation takes paired input images and linear-RGB albedo targets through the albedo dataset loader. See [dataset formats](/docs/reference/dataset-formats).
+Validation pairs each image in `images/<split>` with a same-stem floating-point `.npy` file in `albedo/<split>`. Each target holds `(H, W, 3)` linear RGB in [0, 1] at the same size as its image. Set `input_dir` and `albedo_dir` in the dataset YAML to rename those folders. See [dataset formats](/docs/reference/dataset-formats#albedo).
 
 ## Train
 

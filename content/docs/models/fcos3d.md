@@ -17,15 +17,20 @@ snippets:
       code: >
         from libreyolo import LibreFCOS3D, SAMPLE_IMAGE
 
-        import numpy as np
+        from PIL import Image
 
 
         model = LibreFCOS3D(device="cpu")
 
-        # Use measured calibration for the original image, before resizing.
+        # Rough pinhole guess so the snippet runs. For real metric boxes, pass
 
-        intrinsics = np.load(input("Camera intrinsics .npy path: "),
-        allow_pickle=False)
+        # your camera's measured 3x3 matrix for the original image size.
+
+        w, h = Image.open(SAMPLE_IMAGE).size
+
+        f = float(max(w, h))
+
+        intrinsics = [[f, 0, w / 2], [0, f, h / 2], [0, 0, 1]]
 
         result = model.predict(SAMPLE_IMAGE, intrinsics=intrinsics)
 
