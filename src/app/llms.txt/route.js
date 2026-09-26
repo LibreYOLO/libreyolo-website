@@ -70,6 +70,7 @@ libreyolo.com is the official site of the LibreYOLO open-source library: documen
 - [Cursor Hackathon track](${SITE_URL}/cursor-hackathon): setup tutorial and working examples for the LibreYOLO track
 
 ## Documentation versions
+- [v1.6.0](${SITE_URL}/docs): current documentation tree; release preparation follows library dev until the v1.6.0 tag
 ${SITE_URL}/docs describes released features unless a page explicitly labels its
 availability as dev or an upcoming version. Check that notice before choosing an
 installation command. These single-page docs for

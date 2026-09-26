@@ -1,18 +1,14 @@
 ---
-title: PP-LiteSeg
+title: TinyFormer
 families:
-  - ppliteseg
-seo_title: 'PP-LiteSeg: prediction and training in LibreYOLO'
-description: >-
-  PP-LiteSeg assigns a semantic class to each pixel using an STDC backbone and a
-  fusion decoder.
-lead: >-
-  PP-LiteSeg assigns a semantic class to each pixel using an STDC backbone and a
-  fusion decoder.
+  - tinyformer
+seo_title: 'TinyFormer: prediction and training in LibreYOLO'
+description: TinyFormer is a trainable transformer detector with a DINOv3 backbone.
+lead: TinyFormer is a trainable transformer detector with a DINOv3 backbone.
 keywords:
-  - PP-LiteSeg
+  - TinyFormer
   - LibreYOLO
-  - semantic
+  - detect
 last_verified: 1.6.0
 snippets:
   predict:
@@ -21,9 +17,9 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        model = LibreYOLO("LibrePPLiteSegt50-sem.pt", device="cpu")
+        model = LibreYOLO("LibreTinyFormers.pt", device="cpu")
         result = model(SAMPLE_IMAGE)
-        print(result.semantic)
+        print(result)
   train:
     - label: Python
       language: python
@@ -31,7 +27,7 @@ snippets:
         from libreyolo import LibreYOLO
 
 
-        model = LibreYOLO("LibrePPLiteSegt50-sem.pt", device="cpu")
+        model = LibreYOLO("LibreTinyFormers.pt", device="cpu")
 
         # Enter the path to your dataset YAML or classification folder.
 
@@ -49,11 +45,11 @@ pip install "libreyolo"
 
 <code-tabs name="predict" />
 
-The t50 and b50 variants evaluate at `(512, 1024)`; t75 and b75 evaluate at `(768, 1536)`. Dimensions are `(height, width)`.
+Choose a published checkpoint below. The naming distinguishes the VisDrone variants and Objects365-to-COCO variants. Prediction requires a square `imgsz`; rectangular inputs raise an error.
 
 ## Train
 
-Training defaults to 800 epochs, batch 8 and `amp=False`. The default crop is `(512, 1024)` for t50/b50 and `(768, 768)` for t75/b75. Validation keeps the native rectangle. The recipe combines cross-entropy, Dice and edge losses with auxiliary heads.
+Training accepts a detection dataset YAML. Omitted `epochs`, `batch`, `imgsz`, `lr0` and `amp` use the family recipe.
 
 [Dataset setup](/docs/train/datasets) describes the required training data.
 

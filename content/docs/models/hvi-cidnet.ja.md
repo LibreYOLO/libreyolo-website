@@ -1,16 +1,44 @@
 ---
 title: HVI-CIDNet
-families: []
-architecture_only: true
-seo_title: HVI-CIDNetのアーキテクチャ
-description: LibreYOLOにおけるHVI-CIDNetのアーキテクチャ図、ブロック定義、モデルバリアントです。
-lead: LibreYOLOにおけるHVI-CIDNetのアーキテクチャ図、ブロック定義、モデルバリアントです。
-source_hash: 0de013f09ab0d04f
+families:
+  - hvi_cidnet
+seo_title: HVI-CIDNet：LibreYOLOでの推論と学習
+description: HVI-CIDNetは、色相、彩度、強度の処理によって低照度画像を復元します。
+lead: HVI-CIDNetは、色相、彩度、強度の処理によって低照度画像を復元します。
+keywords:
+  - HVI-CIDNet
+  - LibreYOLO
+  - 画像復元 python
+last_verified: 1.6.0
+snippets:
+  predict:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreHVICIDNett-restore.pt", device="cpu")
+        result = model(SAMPLE_IMAGE, gamma=1.0, saturation=1.0, intensity=1.0)
+        result.save("enhanced.png")
+source_hash: f6594164dfd0b78d
 ---
 
-## ソース
+## インストール
 
-以下の図は、LibreYOLOの[HVI-CIDNet実装](https://github.com/LibreYOLO/libreyolo/blob/a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb/libreyolo/models/hvi_cidnet/model.py)を説明しています。
-各図には、モデル設定、入力に関する前提、ソースのリビジョンを記載しています。
+```bash
+pip install "libreyolo"
+```
 
-これらはアーキテクチャの参考資料です。使用するチェックポイントのライセンスとクラス設定は、それぞれ別途確認してください。
+## 推論
+
+<code-tabs name="predict" />
+
+`gamma`、`saturation`、`intensity`のデフォルトはいずれも1.0です。検証にはペア画像データを使います。学習とエクスポートには対応していません。
+
+## チェックポイント
+
+<checkpoint-table />
+
+## ライセンス
+
+<provenance-box></provenance-box>

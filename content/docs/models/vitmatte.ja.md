@@ -1,16 +1,59 @@
 ---
 title: ViTMatte
-families: []
-architecture_only: true
-seo_title: ViTMatteアーキテクチャ
-description: LibreYOLOのViTMatteのアーキテクチャ図、ブロック定義、モデルバリアント。
-lead: LibreYOLOのViTMatteのアーキテクチャ図、ブロック定義、モデルバリアント。
-source_hash: f8e3b52e04ae7c54
+families:
+  - vitmatte
+seo_title: ViTMatte：LibreYOLOでの推論と学習
+description: ViTMatteは、画像とトライマップから前景のアルファマットを予測します。
+lead: ViTMatteは、画像とトライマップから前景のアルファマットを予測します。
+keywords:
+  - ViTMatte
+  - LibreYOLO
+  - 画像 マッティング
+last_verified: 1.6.0
+snippets:
+  predict:
+    - label: Python
+      language: python
+      code: >
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+
+        model = LibreYOLO("LibreViTMattes-matte.pt", device="cpu")
+
+        import numpy as np
+
+        from PIL import Image
+
+
+        image = Image.open(SAMPLE_IMAGE).convert("RGB")
+
+        # 入力形式を示すため全ピクセルを未確定に設定
+        # マッティングには実際のトライマップを指定
+
+        trimap = np.full((image.height, image.width), 128, dtype=np.uint8)
+
+        result = model(image, trimap=trimap)
+
+        result.save("cutout.png")
+source_hash: 2b96b61a7d57b79a
 ---
 
-## ソース
+## インストール
 
-以下の図は、LibreYOLOの[ViTMatte実装](https://github.com/LibreYOLO/libreyolo/blob/a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb/libreyolo/models/vitmatte/model.py)を説明します。
-各図には、モデル構成、入力に関する前提、ソースのリビジョンを記載しています。
+```bash
+pip install "libreyolo"
+```
 
-これらはアーキテクチャの参考資料です。使用するチェックポイントのライセンスとクラス構成は、それぞれ別途確認してください。
+## 推論
+
+<code-tabs name="predict" />
+
+トライマップでは、背景を0、未確定のピクセルを128、前景を255で表します。単一画像では`trimap=`で渡してください。検証では`trimap_dir`を指定するか、`trimap_radius`でガイドを生成します。学習とエクスポートには対応していません。
+
+## チェックポイント
+
+<checkpoint-table />
+
+## ライセンス
+
+<provenance-box></provenance-box>

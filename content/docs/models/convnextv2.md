@@ -1,18 +1,14 @@
 ---
-title: PP-LiteSeg
+title: ConvNeXt V2
 families:
-  - ppliteseg
-seo_title: 'PP-LiteSeg: prediction and training in LibreYOLO'
-description: >-
-  PP-LiteSeg assigns a semantic class to each pixel using an STDC backbone and a
-  fusion decoder.
-lead: >-
-  PP-LiteSeg assigns a semantic class to each pixel using an STDC backbone and a
-  fusion decoder.
+  - convnextv2
+seo_title: 'ConvNeXt V2: prediction and training in LibreYOLO'
+description: ConvNeXt V2 is an image classifier with global response normalization.
+lead: ConvNeXt V2 is an image classifier with global response normalization.
 keywords:
-  - PP-LiteSeg
+  - ConvNeXt V2
   - LibreYOLO
-  - semantic
+  - classify
 last_verified: 1.6.0
 snippets:
   predict:
@@ -21,9 +17,9 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        model = LibreYOLO("LibrePPLiteSegt50-sem.pt", device="cpu")
+        model = LibreYOLO("LibreConvNeXtV2atto-cls.pt", device="cpu")
         result = model(SAMPLE_IMAGE)
-        print(result.semantic)
+        print(result.probs)
   train:
     - label: Python
       language: python
@@ -31,7 +27,7 @@ snippets:
         from libreyolo import LibreYOLO
 
 
-        model = LibreYOLO("LibrePPLiteSegt50-sem.pt", device="cpu")
+        model = LibreYOLO("LibreConvNeXtV2atto-cls.pt", device="cpu")
 
         # Enter the path to your dataset YAML or classification folder.
 
@@ -49,11 +45,11 @@ pip install "libreyolo"
 
 <code-tabs name="predict" />
 
-The t50 and b50 variants evaluate at `(512, 1024)`; t75 and b75 evaluate at `(768, 1536)`. Dimensions are `(height, width)`.
+The eight sizes run classification at 224 pixels. Official pretrained weights are CC-BY-NC-4.0.
 
 ## Train
 
-Training defaults to 800 epochs, batch 8 and `amp=False`. The default crop is `(512, 1024)` for t50/b50 and `(768, 768)` for t75/b75. Validation keeps the native rectangle. The recipe combines cross-entropy, Dice and edge losses with auxiliary heads.
+Training rebuilds the classification head for an ImageFolder dataset. `cls_pw` accepts values from 0 to 1 and defaults to 0. `class_weights=True` selects the alternative sample-normalized weighting; it cannot combine with `cls_pw>0`. Weighting settings must match when resuming.
 
 [Dataset setup](/docs/train/datasets) describes the required training data.
 

@@ -1,15 +1,77 @@
 ---
-title: "V-JEPA 2"
-families: []
-architecture_only: true
-seo_title: "V-JEPA 2 architecture"
-description: "Architecture diagrams for V-JEPA 2 in LibreYOLO, with block definitions and model variants."
-lead: "Architecture diagrams for V-JEPA 2 in LibreYOLO, with block definitions and model variants."
+title: V-JEPA 2
+families:
+  - vjepa2
+seo_title: 'V-JEPA 2: prediction and training in LibreYOLO'
+description: >-
+  V-JEPA 2 produces video embeddings and supports training an attentive
+  classification probe.
+lead: >-
+  V-JEPA 2 produces video embeddings and supports training an attentive
+  classification probe.
+keywords:
+  - V-JEPA 2
+  - LibreYOLO
+  - embed
+  - classify
+last_verified: 1.6.0
+snippets:
+  predict:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreVJEPA2l256-embed.pt", device="cpu")
+        result = model(SAMPLE_IMAGE)
+        print(result.embeddings)
+        tokens = model.embed_tokens(SAMPLE_IMAGE)
+        print(tokens.shape)
+  train:
+    - label: Python
+      language: python
+      code: >
+        from libreyolo import LibreYOLO
+
+
+        model = LibreYOLO("LibreVJEPA2l256-cls-ssv2.pt", device="cpu")
+
+        # Enter the path to your dataset YAML or classification folder.
+
+        model.train(data=input("Dataset path: "), epochs=1, device="cpu",
+        workers=0)
 ---
 
-## Source
+## Install
 
-The diagrams below describe the [V-JEPA 2 implementation](https://github.com/LibreYOLO/libreyolo/blob/a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb/libreyolo/models/vjepa2/model.py) in LibreYOLO.
-Each drawing states its model configuration, input assumptions and source revision.
+```bash
+pip install "libreyolo"
+```
 
-These are architecture references. Check the license and class configuration of any checkpoint you use separately.
+## Predict
+
+<code-tabs name="predict" />
+
+A still image is promoted to a clip. `embed_tokens()` returns `(B, T, H, W, D)` tokens; the public embedding normalizes their mean. Exported clip graphs require direct five-dimensional runtime input.
+
+## Train
+
+Only the attentive probe and linear classifier train; the encoder stays frozen. Use the classification task and a video-manifest dataset. Defaults are 10 epochs, batch 2, learning rate 0.001 and workers 0. Full encoder fine-tuning and pretraining are not supported.
+
+[Dataset setup](/docs/train/datasets) describes the required training data.
+
+<code-tabs name="train" />
+
+## Export
+
+<export-matrix />
+
+[Export setup](/docs/export) lists format dependencies and loading exported artifacts.
+
+## Checkpoints
+
+<checkpoint-table />
+
+## Licensing
+
+<provenance-box></provenance-box>

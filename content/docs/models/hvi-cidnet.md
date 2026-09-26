@@ -1,15 +1,47 @@
 ---
-title: "HVI-CIDNet"
-families: []
-architecture_only: true
-seo_title: "HVI-CIDNet architecture"
-description: "Architecture diagrams for HVI-CIDNet in LibreYOLO, with block definitions and model variants."
-lead: "Architecture diagrams for HVI-CIDNet in LibreYOLO, with block definitions and model variants."
+title: HVI-CIDNet
+families:
+  - hvi_cidnet
+seo_title: 'HVI-CIDNet: prediction and training in LibreYOLO'
+description: >-
+  HVI-CIDNet restores low-light images through hue, saturation and intensity
+  processing.
+lead: >-
+  HVI-CIDNet restores low-light images through hue, saturation and intensity
+  processing.
+keywords:
+  - HVI-CIDNet
+  - LibreYOLO
+  - restore
+last_verified: 1.6.0
+snippets:
+  predict:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreHVICIDNett-restore.pt", device="cpu")
+        result = model(SAMPLE_IMAGE, gamma=1.0, saturation=1.0, intensity=1.0)
+        result.save("enhanced.png")
 ---
 
-## Source
+## Install
 
-The diagrams below describe the [HVI-CIDNet implementation](https://github.com/LibreYOLO/libreyolo/blob/a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb/libreyolo/models/hvi_cidnet/model.py) in LibreYOLO.
-Each drawing states its model configuration, input assumptions and source revision.
+```bash
+pip install "libreyolo"
+```
 
-These are architecture references. Check the license and class configuration of any checkpoint you use separately.
+## Predict
+
+<code-tabs name="predict" />
+
+`gamma`, `saturation` and `intensity` each default to 1.0. Validation uses paired image data. Training and export are not supported.
+
+## Checkpoints
+
+<checkpoint-table />
+
+## Licensing
+
+<provenance-box></provenance-box>

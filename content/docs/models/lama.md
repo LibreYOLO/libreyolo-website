@@ -1,15 +1,58 @@
 ---
-title: "LaMa"
-families: []
-architecture_only: true
-seo_title: "LaMa architecture"
-description: "Architecture diagrams for LaMa in LibreYOLO, with block definitions and model variants."
-lead: "Architecture diagrams for LaMa in LibreYOLO, with block definitions and model variants."
+title: LaMa
+families:
+  - lama
+seo_title: 'LaMa: prediction and training in LibreYOLO'
+description: LaMa fills masked regions of an image.
+lead: LaMa fills masked regions of an image.
+keywords:
+  - LaMa
+  - LibreYOLO
+  - restore
+last_verified: 1.6.0
+snippets:
+  predict:
+    - label: Python
+      language: python
+      code: >
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+
+        model = LibreYOLO("LibreLaMab-restore.pt", device="cpu")
+
+        import numpy as np
+
+        from PIL import Image
+
+
+        image = Image.open(SAMPLE_IMAGE).convert("RGB")
+
+        mask = np.zeros((image.height, image.width), dtype=np.uint8)
+
+        mask[image.height//3:2*image.height//3, image.width//3:2*image.width//3]
+        = 255
+
+        result = model(image, mask=mask)
+
+        result.save("inpainted.png")
 ---
 
-## Source
+## Install
 
-The diagrams below describe the [LaMa implementation](https://github.com/LibreYOLO/libreyolo/blob/a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb/libreyolo/models/lama/model.py) in LibreYOLO.
-Each drawing states its model configuration, input assumptions and source revision.
+```bash
+pip install "libreyolo[onnx]"
+```
 
-These are architecture references. Check the license and class configuration of any checkpoint you use separately.
+## Predict
+
+<code-tabs name="predict" />
+
+Pass `mask=` for single-image inference: nonzero pixels mark the region to fill. The checkpoint embeds an ONNX graph and requires ONNX Runtime 1.18 or later. Training and export are not supported.
+
+## Checkpoints
+
+<checkpoint-table />
+
+## Licensing
+
+<provenance-box></provenance-box>

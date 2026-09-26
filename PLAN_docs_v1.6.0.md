@@ -348,7 +348,9 @@ Update this list in the same commit as the work. It is the resume point.
   - Hub collection checks the matching asset, not just repository existence. U-Net has no verified hosted asset. PP-YOLOE and DEKR use source CDN downloads.
   - Licensing correction: ViTMatte publisher card declares Apache-2.0; dataset-derived caveats in the evidence are not copied.
   - Local Turbopack dev hits the known symlink error too; use `npm run dev -- --webpack`.
-- [ ] Phase 2: new and stub-to-full pages (count: __ / __)
+- [x] Phase 2: 30 new English pages and 12 stub-to-full pages (42 / 42), including the two existing grounding stubs. All 12 existing Japanese twins updated. Custom tracking fits the existing task page; VLM tuning has a separate workflow because its trainer and checkpoint contract differ from detector LoRA.
+  - Local HTTP render checks cover all 42 pages. PP-LiteSeg export/checkpoint tables checked at 390 px in dark mode; table and code containers scroll.
+  - Nav, sitemap and llms discovery wired in this phase so the added routes are indexed in the same change. Full plumbing audit remains Phase 5.
 - [ ] Phase 3: existing pages updated (count: __ / __)
 - [ ] Phase 4: release-level pages
 - [ ] Phase 5: nav, sitemap, llms.txt, indexes
