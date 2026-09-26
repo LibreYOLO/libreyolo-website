@@ -1,4 +1,5 @@
-import { getAllDocPages, getDocByPath } from '@/lib/docs'
+import { currentDocs, DOCS_ARCHIVES, getDocsArchive } from '@/lib/docs'
+import { SITE_URL } from '@/i18n/metadata'
 import { docToMarkdown } from '@/lib/docs-markdown'
 
 /*
@@ -18,10 +19,15 @@ import { docToMarkdown } from '@/lib/docs-markdown'
 export const dynamic = 'force-static'
 
 export function generateStaticParams() {
-  return getAllDocPages().map((page) => ({
+  const toSlug = (prefix, page) =>
     // "/docs/models/rf-detr" -> ["models", "rf-detr.md"]
-    slug: `${page.path.replace(/^\/docs\//, '')}.md`.split('/'),
-  }))
+    [...prefix, ...`${page.path.replace(/^\/docs\//, '')}.md`.split('/')]
+  return [
+    ...currentDocs.getAllDocPages().map((page) => ({ slug: toSlug([], page) })),
+    // Frozen trees: /docs/v1.5.0/models/rf-detr.md
+    ...Object.entries(DOCS_ARCHIVES).flatMap(([version, source]) =>
+      source.getAllDocPages().map((page) => ({ slug: toSlug([version], page) }))),
+  ]
 }
 
 export async function GET(_request, { params }) {
@@ -32,10 +38,19 @@ export async function GET(_request, { params }) {
     return new Response('Not found', { status: 404 })
   }
 
-  const doc = getDocByPath(`/docs/${joined.replace(/\.md$/, '')}`)
+  const archive = getDocsArchive(parts[0])
+  const source = archive ?? currentDocs
+  const logicalPath = `/docs/${(archive ? parts.slice(1) : parts).join('/').replace(/\.md$/, '')}`
+  const doc = source.getDocByPath(logicalPath)
   if (!doc) return new Response('Not found', { status: 404 })
 
-  return new Response(docToMarkdown(doc), {
+  let markdown = docToMarkdown(doc, source)
+  if (archive) {
+    const current = currentDocs.getDocByPath(logicalPath) ? logicalPath : '/docs'
+    markdown = `> This is the documentation for LibreYOLO ${archive.version}. Current version: ${SITE_URL}${current}\n\n${markdown}`
+  }
+
+  return new Response(markdown, {
     headers: {
       'Content-Type': 'text/markdown; charset=utf-8',
       'Cache-Control': 'public, max-age=0, s-maxage=3600, stale-while-revalidate=86400',

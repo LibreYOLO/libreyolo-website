@@ -313,6 +313,7 @@
     "nextRelease": "次のリリース",
     "versionIsCurrent": "v{version}は現行バージョンです",
     "latest": "最新",
+    "archivedNotice": "これは LibreYOLO {version} のドキュメントです。<link>最新版を見る</link>。",
     "onThisPage": "このページの内容",
     "docsButton": "ドキュメント",
     "openNav": "ドキュメントナビゲーションを開く",
