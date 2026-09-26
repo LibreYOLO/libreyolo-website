@@ -36,7 +36,13 @@ function dom({ node, ...rest }) {
   return rest
 }
 
-export default function DocMarkdown({ children, family, snippets = {} }) {
+/*
+ * `source` is the docs tree being rendered. For an archived tree it keeps the
+ * generated blocks on that release's registry and keeps /docs links inside the
+ * archive wherever the archive has the target page.
+ */
+export default function DocMarkdown({ children, family, snippets = {}, source }) {
+  const href = (target) => (source ? source.href(target) : target)
   const components = {
     h2: ({ children: kids }) => <SectionTitle id={slugifyHeading(textOf(kids))}>{kids}</SectionTitle>,
     h3: ({ children: kids }) => (
@@ -61,6 +67,7 @@ export default function DocMarkdown({ children, family, snippets = {} }) {
         target={props.href?.startsWith('http') ? '_blank' : undefined}
         rel={props.href?.startsWith('http') ? externalRel(props.href) : undefined}
         {...dom(props)}
+        href={href(props.href)}
       />
     ),
     ul: (props) => <ul className="mb-4 max-w-[68ch] list-disc space-y-1 pl-5 text-[15px] text-surface-600 dark:text-surface-400" {...dom(props)} />,
@@ -110,8 +117,8 @@ export default function DocMarkdown({ children, family, snippets = {} }) {
     /* Generated blocks. The author writes the tag; the registry supplies data. */
     'benchmark-table': ({ task }) => <BenchmarkTable family={family} task={task || 'detect'} />,
     'va-embed': () => <VaEmbed family={family} />,
-    'checkpoint-table': () => <CheckpointTable family={family} />,
-    'export-matrix': () => <ExportMatrix family={family} />,
+    'checkpoint-table': () => <CheckpointTable family={family} {...(source ? { source } : {})} />,
+    'export-matrix': () => <ExportMatrix family={family} {...(source ? { source } : {})} />,
     'code-tabs': ({ name }) => <CodeTabs tabs={snippets[name] || []} />,
     'provenance-box': ({ children: kids }) => <Provenance family={family}>{kids}</Provenance>,
     'citation-block': () => <Citation family={family} />,

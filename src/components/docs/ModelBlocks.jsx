@@ -22,7 +22,7 @@
 import { Fragment } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
-import { getTaskMeta, getTierMeta, getExportFormats } from '@/lib/docs'
+import { currentDocs } from '@/lib/docs'
 
 const HF_BASE = 'https://huggingface.co/LibreYOLO'
 
@@ -89,7 +89,10 @@ function Td({ children, className = '' }) {
  * 80 model pages. That fixed vocabulary is what stops a dense block of facts
  * from reading as decoration.
  */
-export function ModelHeader({ doc, family }) {
+// `source` is the docs tree the page belongs to, so an archived page reads task
+// and tier labels from its own frozen registry. Defaults to the current tree.
+export function ModelHeader({ doc, family, source = currentDocs }) {
+  const { getTaskMeta, getTierMeta } = source
   const t = useTranslations('ModelBlocks')
   const tiers = useTranslations('Tiers')
   const tier = getTierMeta(family.tier)
@@ -294,7 +297,8 @@ export function VaEmbed({ family }) {
 
 /* ── checkpoints ────────────────────────────────────────────────── */
 
-export function CheckpointTable({ family }) {
+export function CheckpointTable({ family, source = currentDocs }) {
+  const { getTaskMeta } = source
   const t = useTranslations('ModelBlocks')
   const grouped = family.tasks
     .map((task) => ({ task, rows: family.checkpoints.filter((c) => c.task === task) }))
@@ -406,7 +410,8 @@ function Mark({ state, label, reason }) {
   )
 }
 
-export function ExportMatrix({ family }) {
+export function ExportMatrix({ family, source = currentDocs }) {
+  const { getTaskMeta, getExportFormats } = source
   const t = useTranslations('ModelBlocks')
   const formats = getExportFormats()
 

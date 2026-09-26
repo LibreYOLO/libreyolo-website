@@ -80,12 +80,12 @@ function NavGroup({ group, activePath, onNavigate }) {
   )
 }
 
-function NavTree({ nav, activePath, version, onNavigate }) {
+function NavTree({ nav, activePath, version, archived, homeHref, onNavigate }) {
   const t = useTranslations('DocsChrome')
   return (
     <div>
       <div className="px-3 pb-4 mb-2 border-b border-surface-200 dark:border-white/[0.06]">
-        <Link href="/docs" onClick={onNavigate} className="block group">
+        <Link href={homeHref} onClick={onNavigate} className="block group">
           <span className="text-sm font-bold text-surface-900 dark:text-white">{t('documentation')}</span>
         </Link>
         {/*
@@ -98,7 +98,15 @@ function NavTree({ nav, activePath, version, onNavigate }) {
           and links the frozen page for the release people are actually
           running. Flip `DOCS_PRERELEASE` to false on tag day.
         */}
-        {DOCS_PRERELEASE ? (
+        {/*
+          A frozen tree names its release and nothing else: it is not the
+          latest, and the notice at the top of each page links the current one.
+        */}
+        {archived ? (
+          <span className="mt-1 block text-xs font-medium text-surface-500 dark:text-surface-500">
+            v{version}
+          </span>
+        ) : DOCS_PRERELEASE ? (
           <span className="mt-1 flex flex-col gap-0.5 text-xs font-medium">
             <span className="inline-flex items-center gap-1.5 text-surface-500 dark:text-surface-500">
               <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
@@ -177,7 +185,7 @@ function OnThisPage({ headings }) {
   )
 }
 
-export default function DocsShell({ nav, activePath, version, headings = [], breadcrumbs = [], showActions = true, children }) {
+export default function DocsShell({ nav, activePath, version, archived = false, homeHref = '/docs', headings = [], breadcrumbs = [], showActions = true, children }) {
   const t = useTranslations('DocsChrome')
   const [drawerOpen, setDrawerOpen] = useState(false)
   const closeDrawer = () => setDrawerOpen(false)
@@ -188,7 +196,7 @@ export default function DocsShell({ nav, activePath, version, headings = [], bre
         {/* Nav rail */}
         <aside className="hidden lg:block shrink-0 w-64 xl:w-72">
           <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto py-10 pr-2">
-            <NavTree nav={nav} activePath={activePath} version={version} />
+            <NavTree nav={nav} activePath={activePath} version={version} archived={archived} homeHref={homeHref} />
           </div>
         </aside>
 
@@ -266,7 +274,7 @@ export default function DocsShell({ nav, activePath, version, headings = [], bre
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              <NavTree nav={nav} activePath={activePath} version={version} onNavigate={closeDrawer} />
+              <NavTree nav={nav} activePath={activePath} version={version} archived={archived} homeHref={homeHref} onNavigate={closeDrawer} />
             </motion.aside>
           </>
         )}
