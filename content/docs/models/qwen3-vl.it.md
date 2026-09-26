@@ -21,7 +21,7 @@ keywords:
   - grounding
   - Alibaba
   - VLM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -52,7 +52,7 @@ snippets:
         vest?")
 
         print(answer)
-source_hash: ee225b6221d624d9
+source_hash: 801d97d089f1f957
 ---
 
 ## Installazione
@@ -98,13 +98,9 @@ arriva alla rete, quindi quella cifra non è una risoluzione operativa fissa com
 lo è per le altre famiglie di questo sito. LibreYOLO non ha pubblicato nessun
 benchmark che confronti l'accuratezza tra le tre dimensioni.
 
-LibreYOLO non addestra, non valida e non esporta Qwen3-VL: `train()`, `val()` e
-`export()` sollevano tutti `NotImplementedError` per ogni famiglia di questo
-livello (vedi il livello di supporto qui sopra). Fai fine-tuning di Qwen3-VL
-upstream e carica i pesi risultanti se ti serve un vocabolario personalizzato
-integrato; controlla a occhio l'output di `predict()` invece di una passata di
-validazione in stile COCO, dato che ogni rilevamento porta la stessa confidenza
-segnaposto.
+## Addestramento
+
+Installa `libreyolo[vlm-train]` per addestrare adattatori LoRA di rilevamento con `LibreVLM("qwen3-vl-2b").train(data=...)`. L'encoder visivo resta congelato; la loss di validazione seleziona la directory del checkpoint migliore. La ripresa dello stato dell'ottimizzatore e la validazione della mAP di rilevamento non sono supportate. Vedi [fine-tuning dei VLM](/docs/train/vlm-fine-tuning) per i valori predefiniti e le istruzioni di ricaricamento.
 
 ## Licenze
 

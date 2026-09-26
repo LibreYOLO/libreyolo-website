@@ -18,7 +18,7 @@ keywords:
   - VLM
   - 엣지 VLM
   - LibreVLM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -46,7 +46,7 @@ snippets:
         # 바운딩 박스 래퍼가 다루지 않는 모든 프롬프트
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 40237f0ecc0d2cd5
+source_hash: "a7f100c861adb8d0"
 ---
 
 ## 설치
@@ -81,10 +81,7 @@ COCO-80 이름을 기본값으로 사용합니다. 소스, 스트리밍, 결과 
 
 ## 변형
 
-크기는 450m와 1.6b 두 가지이며 모두 온디바이스 배포용으로 설계된 Liquid AI의
-LFM2.5-VL 릴리스에서 가져옵니다. LibreYOLO 벤치마크 하네스는 이 계열을 측정하지
-않았으므로 두 크기를 비교할 공개 정확도 수치는 없습니다. 자체 컴퓨팅 예산에 맞춰
-크기를 선택합니다.
+크기는 450m, 1.6b, 3b 세 가지이며 모두 Liquid AI의 LFM2.5-VL 릴리스에 속합니다. `lfm2-vl-3b`는 LFM2.5 3B 모델과 0–1000 바운딩 박스 파서를 선택합니다. LibreYOLO 벤치마크 하네스는 이 계열을 측정하지 않았으므로 비교할 공개 정확도 수치는 없으며, 가용 연산 자원에 맞춰 크기를 선택합니다.
 
 LibreYOLO는 이 계열에서 예측만 노출합니다. `train()`, `val()`, `export()`는
 모두 `NotImplementedError`를 일으킵니다. 업스트림에서 파인튜닝하고 결과를 대신

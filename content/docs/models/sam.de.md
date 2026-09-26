@@ -20,7 +20,7 @@ keywords:
   - punkt prompt
   - box prompt
   - meta ai
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Punkt- und Box-Prompts
@@ -79,7 +79,7 @@ snippets:
         b = model.predict(bboxes=[300, 200, 900, 700])
 
         model.reset_image()
-source_hash: f8904d241ef8a929
+source_hash: "313541a8b2c6abaf"
 ---
 
 ## Installation
@@ -132,11 +132,7 @@ Huge ist am schwersten.
 
 <provenance-box>
 
-LibreYOLO hostet keine eigene Kopie der SAM-1-Gewichte. `LibreSAM("base")`,
-`"large"` und `"huge"` laden direkt aus Metas eigenen Repositorys
-`facebook/sam-vit-base`, `facebook/sam-vit-large` und `facebook/sam-vit-huge`
-auf Hugging Face. Dort ist jedes unabhängig von LibreYOLO als Apache-2.0
-gekennzeichnet.
+`LibreSAM("base")`, `"large"` und `"huge"` verwenden LibreYOLO-Mirrors der SAM-1-Artefakte. Die Gewichte behalten Metas Apache-2.0-Lizenzdeklaration.
 
 </provenance-box>
 

@@ -22,7 +22,7 @@ keywords:
   - embedding immagini
   - estrazione di feature
   - Meta AI
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Semantica
@@ -155,7 +155,7 @@ snippets:
         # task, qui LibreDINOv2s-sem.onnx.
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
-source_hash: 4256e0a0398e5aaf
+source_hash: c89a9662d03fe6f7
 ---
 
 ## Installazione
@@ -204,14 +204,9 @@ non ha nessuna testa dipendente dalle classi da adattare e solleva
 
 <code-tabs name="train" />
 
-Gli argomenti a parola chiave principali qui sono `batch_size` e `lr`, non
-`batch` e `lr0` usati dalla maggior parte delle altre famiglie; `batch` e `lr0`
-sono ancora accettati e mappati su di essi, ma passarli entrambi solleva un
-errore di conflitto. `output_dir=` (predefinito `"runs/train"`) sostituisce
-`project=`/`name=` come modo principale per collocare un'esecuzione, anche se
-passare `project=`/`name=` direttamente continua a funzionare. Vedi
-[addestramento](/docs/train) per dataset, data augmentation, multi-GPU e
-logger.
+Gli argomenti principali qui sono `batch_size` e `lr`, invece di `batch` e `lr0` usati dalla maggior parte delle altre famiglie; `batch` e `lr0` sono comunque accettati e convertiti, ma passarli entrambi genera un errore di conflitto. `output_dir=` (default `None`) sostituisce `project=`/`name=` come metodo principale per scegliere la directory di un'esecuzione, anche se passare direttamente `project=`/`name=` funziona ancora. Vedi [addestramento](/docs/train) per dataset, augmentation, multi-GPU e logger.
+
+Le nuove esecuzioni usano una directory incrementale `runs/train/dinov2_exp` con `exist_ok=False`. `resume=True` ripristina lo stato del trainer e conserva la directory selezionata. La classificazione supporta `cls_pw` e `class_weights` come descritto negli [iperparametri](/docs/train/hyperparameters).
 
 ## Validazione
 
@@ -221,6 +216,8 @@ pixel per `task="semantic"`, accuratezza top-1 e top-5 per `task="classify"`.
 `NotImplementedError` se ci chiami `val()` sopra.
 
 <code-tabs name="val" />
+
+La calibrazione per classificazione ed embedding riutilizza la pipeline di classificazione del modello. La valutazione usa la trasformazione della famiglia.
 
 ## Esportazione
 

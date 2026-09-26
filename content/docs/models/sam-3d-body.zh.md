@@ -17,7 +17,7 @@ keywords:
   - 单图 3d 人体重建
   - 3d 人体姿态估计 python
   - sam 3d body 权重下载
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -48,7 +48,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 5f47acceaf23ab64
+source_hash: 1b63435b35c57b10
 ---
 
 ## 安装
@@ -94,6 +94,8 @@ model = LibreSAM3DBody(
 `joints2d` 是原图上的像素坐标，旋转遵循 MHR 的约定，用的是欧拉角而不是轴角。输入
 源、流式处理和结果处理见[预测](/docs/predict)。
 
+自动获取需要 `libreyolo[hf]` 和受限模型的访问权限。本地检查点必须是经过审查的快照目录，或其中未经修改的 `model.ckpt`，旁边带有匹配的 `model_config.yaml` 和 `LICENSE`。固定哈希及允许的快照清单会拒绝改名、修改、链接或额外的资源。MHR 资源也固定了版本。在上游构造器读取期间，请保持本地快照不变。
+
 ## 变体
 
 同一个 MHR 人体模型背后有两种骨干：`d3` 用的是 DINOv3 ViT-H/16+ 编码器，`h` 用的
@@ -105,12 +107,6 @@ model = LibreSAM3DBody(
 
 人体网格导出还没有实现：LibreYOLO 尚未为网格这个任务定义导出图的约定，其中也包括
 在 PyTorch 之外怎么表示 MHR 的参数布局。
-
-## 检查点
-
-这个家族已发布的全部权重文件。
-
-<checkpoint-table />
 
 ## 许可证
 

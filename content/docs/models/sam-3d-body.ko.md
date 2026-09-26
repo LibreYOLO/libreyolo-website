@@ -16,7 +16,7 @@ keywords:
   - MHR
   - Momentum Human Rig
   - 3D 자세 추정
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -47,7 +47,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 5f47acceaf23ab64
+source_hash: "1b63435b35c57b10"
 ---
 
 ## 설치
@@ -82,6 +82,8 @@ model = LibreSAM3DBody(
 
 체크포인트 다운로드에는 접근 제한이 있습니다. Hugging Face 모델 페이지에서 Meta의 라이선스에 동의하고 첫 다운로드 전에 `hf auth login`으로 인증해야 합니다. 추론 자체에는 조건 없이 CUDA 장치가 필요합니다. 업스트림 추정기가 확인 없이 배치를 GPU로 이동하므로 CPU 전용 시스템에서는 대체 경로로 전환하지 않고 예외가 발생합니다. `result.meshes`는 `result.boxes`와 행이 정렬된 `Meshes` 페이로드이며 탐지된 사람마다 행 하나가 대응합니다. `vertices`와 `joints3d`는 미터 단위이고 추정된 카메라 이동을 이미 포함합니다. `joints2d`는 원본 이미지의 픽셀 좌표이며 회전은 축각이 아닌 오일러 각을 사용하는 MHR 규칙을 따릅니다. 소스, 스트리밍, 결과 처리는 [예측](/docs/predict)을 참조합니다.
 
+자동 다운로드에는 `libreyolo[hf]`와 접근 제한 모델에 대한 접근 권한이 필요합니다. 로컬 체크포인트는 검토된 스냅샷 디렉터리이거나, 일치하는 `model_config.yaml` 및 `LICENSE` 옆에 있는 변경되지 않은 `model.ckpt`여야 합니다. 고정된 해시와 허용된 스냅샷 파일 목록에 따라 이름 변경, 수정, 링크, 추가 파일을 거부합니다. MHR 파일도 고정되어 있습니다. 업스트림 생성자가 읽는 동안 로컬 스냅샷을 변경하지 않습니다.
+
 ## 변형
 
 동일한 MHR 바디 모델에 두 백본을 사용할 수 있습니다. `d3`는 DINOv3 ViT-H/16+ 인코더를 사용하고 `h`는 원래의 ViT-H 인코더를 사용합니다.
@@ -91,12 +93,6 @@ model = LibreSAM3DBody(
 <export-matrix />
 
 바디 메시 내보내기는 구현되지 않았습니다. LibreYOLO는 MHR 매개변수 레이아웃을 PyTorch 외부에서 표현하는 방법을 포함해 메시 작업용 내보낸 그래프 계약을 아직 정의하지 않았습니다.
-
-## 체크포인트
-
-이 계열에 공개된 모든 가중치 파일입니다.
-
-<checkpoint-table />
 
 ## 라이선스
 

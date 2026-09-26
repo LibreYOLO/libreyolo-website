@@ -4,12 +4,11 @@ families:
   - moge2
 seo_title: 'MoGe-2 với Python: pháp tuyến bề mặt từ một ảnh, MIT'
 description: >-
-  Dùng MoGe-2 trong LibreYOLO để dự đoán pháp tuyến bề mặt dense. Cài đặt, dự
-  đoán, xác thực và xuất các checkpoint ViT-S, ViT-B và ViT-L chính thức.
+  Dùng MoGe-2 trong LibreYOLO để dự đoán pháp tuyến bề mặt dense. Cài đặt, dự đoán, xác thực và xuất các
+  checkpoint ViT-S, ViT-B và ViT-L chính thức.
 lead: >-
-  MoGe-2 là mô hình hình học đơn ảnh một forward pass, dự đoán trường pháp tuyến
-  bề mặt dense từ một ảnh RGB. LibreYOLO chỉ hỗ trợ mô hình để ước lượng pháp
-  tuyến qua các checkpoint ViT-S, ViT-B và ViT-L chính thức.
+  MoGe-2 là mô hình hình học đơn ảnh một forward pass, dự đoán trường pháp tuyến bề mặt dense từ một ảnh RGB.
+  LibreYOLO chỉ hỗ trợ mô hình để ước lượng pháp tuyến qua các checkpoint ViT-S, ViT-B và ViT-L chính thức.
 keywords:
   - MoGe-2
   - MoGe 2
@@ -18,7 +17,7 @@ keywords:
   - normal map
   - dự đoán dense
   - DINOv2
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -64,11 +63,9 @@ snippets:
         model.export(format="tensorrt", imgsz=518, half=True)
     - label: CLI
       language: bash
-      code: >
+      code: |
         libreyolo export model=LibreMoGe2s-normal.pt format=onnx imgsz=518
-
-        libreyolo export model=LibreMoGe2s-normal.pt format=tensorrt imgsz=518
-        half=True
+        libreyolo export model=LibreMoGe2s-normal.pt format=tensorrt imgsz=518 half=True
     - label: Dùng tệp đã xuất
       language: python
       code: |
@@ -78,9 +75,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: d96b89f18ac10a40
+source_hash: b06daf44f9a58411
 ---
-
 ## Cài đặt
 
 MoGe-2 không cần extra tùy chọn. Mọi thành phần mà mô hình import đều có trong bản cài đặt cơ sở.
@@ -91,7 +87,7 @@ pip install libreyolo
 
 ## Dự đoán
 
-Trọng số được tự động tải trong lần sử dụng đầu tiên: LibreYOLO tìm nạp kích thước tương ứng trực tiếp từ các checkpoint chính thức và lưu vào bộ nhớ đệm cục bộ.
+Trọng số tự động tải về ở lần dùng đầu tiên. Các kích thước s và l dùng bản sao của LibreYOLO; b tiếp tục dùng checkpoint upstream.
 
 <code-tabs name="predict" />
 
@@ -119,12 +115,10 @@ Việc xuất pháp tuyến dùng hợp đồng runtime batch 1, độ phân gi�
 
 <provenance-box>
 
-LibreYOLO không sao chép các checkpoint này vào tổ chức riêng. `LibreYOLO("LibreMoGe2s-normal.pt")` tải trực tiếp kích thước tương ứng từ các repo Hugging Face chính thức ở revision cố định và xác minh tệp theo checksum SHA-256 đã ghi trước khi sử dụng.
+LibreYOLO lưu bản sao checkpoint s và l; b vẫn ở upstream. Các tệp tải về giữ giấy phép của nhà phát hành.
 
 </provenance-box>
 
 ## Trích dẫn
 
 <citation-block />
-
-

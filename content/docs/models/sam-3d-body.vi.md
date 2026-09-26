@@ -4,13 +4,11 @@ families:
   - sam3dbody
 seo_title: 'SAM 3D Body với Python: lưới cơ thể 3D từ một ảnh'
 description: >-
-  Dùng SAM 3D Body trong LibreYOLO để khôi phục mesh toàn thân người. Cài đặt và
-  dự đoán; các checkpoint bị giới hạn truy cập theo SAM License của Meta và yêu
-  cầu CUDA.
+  Dùng SAM 3D Body trong LibreYOLO để khôi phục mesh toàn thân người. Cài đặt và dự đoán; các checkpoint bị
+  giới hạn truy cập theo SAM License của Meta và yêu cầu CUDA.
 lead: >-
-  SAM 3D Body là mô hình dùng prompt của Meta để khôi phục mesh 3D toàn thân,
-  gồm cả bàn tay và bàn chân, từ một ảnh và các box người. LibreYOLO bọc gói
-  thượng nguồn thay vì chuyển đổi mô hình.
+  SAM 3D Body là mô hình dùng prompt của Meta để khôi phục mesh 3D toàn thân, gồm cả bàn tay và bàn chân, từ
+  một ảnh và các box người. LibreYOLO bọc gói thượng nguồn thay vì chuyển đổi mô hình.
 keywords:
   - SAM 3D Body
   - khôi phục mesh người
@@ -18,59 +16,39 @@ keywords:
   - MHR
   - Momentum Human Rig
   - tư thế 3D
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import SAMPLE_IMAGE
-
         from libreyolo.models.sam3dbody import LibreSAM3DBody
 
-
         # Họ này không được đăng ký với factory LibreYOLO(), nên được khởi tạo
-
         # trực tiếp. model_path=None kích hoạt bản tải Hugging Face bị giới hạn;
-
         # còn một chuỗi được coi là đường dẫn checkpoint cục bộ hiện có và không
-
-        # bao giờ được tự động tải. Suy luận cần thiết bị CUDA; không có luồng
-        CPU.
-
+        # bao giờ được tự động tải. Suy luận cần thiết bị CUDA; không có luồng CPU.
         model = LibreSAM3DBody(None, size="d3", device="cuda")
-
         result = model(SAMPLE_IMAGE, person_boxes=[[34, 12, 220, 400]])
 
-
         meshes = result.meshes
-
         print(meshes.vertices.shape)    # (N, V, 3), hệ tọa độ camera, mét
-
         print(meshes.joints3d.shape)    # (N, J, 3)
     - label: Với detector người
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
-
         from libreyolo.models.sam3dbody import LibreSAM3DBody
 
-
-        # Không có lối tắt bằng chuỗi tên ở đây: hãy truyền một detector
-        LibreYOLO
-
-        # đã khởi tạo, một callable thông thường hoặc một instance
-        PersonDetector.
-
+        # Không có lối tắt bằng chuỗi tên ở đây: hãy truyền một detector LibreYOLO
+        # đã khởi tạo, một callable thông thường hoặc một instance PersonDetector.
         detector = LibreYOLO("LibreRFDETRn.pt")
-
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
-
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 5f47acceaf23ab64
+source_hash: 1b63435b35c57b10
 ---
-
 ## Cài đặt
 
 ```bash
@@ -118,6 +96,8 @@ căn theo hàng với `result.boxes` (mỗi người được phát hiện tươ
 góc Euler thay vì trục-góc. Xem [dự đoán](/docs/predict) để biết về nguồn,
 streaming và xử lý kết quả.
 
+Tự động tải cần `libreyolo[hf]` và quyền truy cập mô hình có kiểm soát. Checkpoint cục bộ phải là thư mục snapshot đã được rà soát, hoặc tệp `model.ckpt` nguyên vẹn bên cạnh `model_config.yaml` và `LICENSE` tương ứng. Hash đã ghim và danh mục snapshot được chấp nhận sẽ từ chối tài nguyên đổi tên, chỉnh sửa, liên kết hoặc bổ sung. Tài nguyên MHR cũng được ghim. Giữ nguyên snapshot cục bộ trong khi hàm khởi tạo upstream đọc nó.
+
 ## Các biến thể
 
 Có hai backbone phía sau cùng mô hình cơ thể MHR: `d3` dùng bộ mã hóa DINOv3
@@ -129,12 +109,6 @@ ViT-H/16+, còn `h` dùng bộ mã hóa ViT-H nguyên bản.
 
 Chưa triển khai xuất mesh cơ thể: LibreYOLO chưa định nghĩa giao diện đồ thị đã
 xuất cho tác vụ mesh, bao gồm cách biểu diễn bố cục tham số MHR bên ngoài PyTorch.
-
-## Checkpoint
-
-Mọi tệp trọng số đã công bố cho họ này.
-
-<checkpoint-table />
 
 ## Giấy phép
 
@@ -151,4 +125,3 @@ Apache-2.0 riêng chứ không phải SAM License.
 ## Trích dẫn
 
 <citation-block />
-

@@ -3,10 +3,7 @@ title: MiDaS
 families:
   - midas
 seo_title: 'MiDaS: монокулярне оцінювання глибини в LibreYOLO'
-description: >-
-  Використовуйте MiDaS у LibreYOLO для монокулярного оцінювання глибини.
-  Установлюйте, виконуйте передбачення, валідацію та експорт двох варіантів під
-  ліцензією MIT, завантажених з isl-org.
+description: Інференс відносної глибини MiDaS у LibreYOLO. Контрольні точки s і l використовують дзеркала LibreYOLO за дозволом MIT від видавця.
 lead: >-
   MiDaS виконує монокулярне оцінювання відносної глибини та навчається зі сталою
   до масштабу й зсуву функцією втрат на змішаних датасетах. Ця лінія досліджень
@@ -20,7 +17,7 @@ keywords:
   - відносна глибина
   - карта глибини
   - zero-shot depth
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -28,8 +25,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Якщо файлу ще немає на диску, LibreYOLO завантажує його з офіційного
-        # релізу isl-org/MiDaS на GitHub і перевіряє зафіксований SHA-256.
+        # Завантажує контрольну точку з дзеркала під час першого використання.
         model = LibreYOLO("LibreMiDaSl-depth.pt")
         result = model(SAMPLE_IMAGE, save=True)
 
@@ -37,10 +33,8 @@ snippets:
         print(depth.min, depth.max, depth.mean)
     - label: CLI
       language: bash
-      code: >
-        libreyolo predict model=LibreMiDaSl-depth.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-        save=True
+      code: |
+        libreyolo predict model=LibreMiDaSl-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
     - label: Малий варіант
       language: python
       code: |
@@ -96,37 +90,24 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: ce2fbf3ae43e9be4
+source_hash: 64537aa3ad3a6f8f
 ---
 
 ## Встановлення
 
-MiDaS не потребує додаткових залежностей. Усе, що вона імпортує, входить до
-базового встановлення.
+MiDaS потребує додаткового пакета `midas` для своїх енкодерів timm.
 
 ```bash
-pip install libreyolo
+pip install "libreyolo[midas]"
 ```
 
 ## Передбачення
 
-MiDaS є єдиним сімейством глибини, яке LibreYOLO не перевидає у власній
-організації Hugging Face. Запит контрольної точки за назвою файлу LibreYOLO
-завантажує відповідний офіційний ресурс безпосередньо з релізів
-`isl-org/MiDaS` на GitHub, перевіряє за зафіксованим SHA-256 і перед першим
-використанням обгортає метаданими контрольної точки LibreYOLO. Наступні
-запуски повторно використовують кешований локальний файл. Причину пояснено в
-розділі «Ліцензування».
+Контрольні точки s і l завантажуються з дзеркал LibreYOLO за дозволом MIT від видавця й кешуються локально.
 
 <code-tabs name="predict" />
 
-`result.depth_map` містить щільну карту відносної оберненої глибини: більші
-значення означають ближче до камери, а значення не мають метричної одиниці чи
-спільного масштабу між зображеннями. `save=True` записує на диск візуалізацію
-цієї карти з кольоровою шкалою; `Results.plot()` не охоплює це сімейство,
-оскільки визначений лише для нормалей поверхні та країв. Типи джерел, потокове
-передбачення та обробку результатів описано в розділі
-[передбачення](/docs/predict).
+`result.depth_map` містить щільну карту відносної оберненої глибини: більші значення означають ближче до камери, а значення не мають метричної одиниці чи спільного масштабу між зображеннями. `save=True` записує на диск візуалізацію цієї карти з кольоровою шкалою; `Results.plot()` відображає карту глибини. Типи джерел, потокове передбачення та обробку результатів описано в розділі [передбачення](/docs/predict).
 
 ## Варіанти
 

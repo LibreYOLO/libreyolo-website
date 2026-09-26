@@ -16,7 +16,7 @@ keywords:
   - 点プロンプト
   - ボックスプロンプト
   - Meta AI
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: 点とボックスのプロンプト
@@ -52,7 +52,7 @@ snippets:
         a = model.predict(points=[640, 420], labels=[1])
         b = model.predict(bboxes=[300, 200, 900, 700])
         model.reset_image()
-source_hash: f8904d241ef8a929
+source_hash: 313541a8b2c6abaf
 ---
 
 ## インストール
@@ -98,10 +98,7 @@ hugeが最も重いモデルです。
 
 <provenance-box>
 
-LibreYOLOはSAM-1の重みの独自コピーをホストしません。`LibreSAM("base")`、`"large"`、
-`"huge"`は、Meta自身のHugging Faceリポジトリ`facebook/sam-vit-base`、
-`facebook/sam-vit-large`、`facebook/sam-vit-huge`から直接ダウンロードします。それぞれが
-LibreYOLOとは独立してApache-2.0と明記されています。
+`LibreSAM("base")`、`"large"`、`"huge"`は、LibreYOLOがミラーしたSAM-1のファイルを使います。重みはMetaのApache-2.0の宣言を維持します。
 
 </provenance-box>
 

@@ -3,10 +3,9 @@ title: MiDaS
 families:
   - midas
 seo_title: 'MiDaS: монокулярная оценка глубины в LibreYOLO'
-description: >-
-  Используйте MiDaS в LibreYOLO для монокулярной оценки глубины. Установка,
-  предсказание, валидация и экспорт двух вариантов под лицензией MIT, которые
-  скачиваются из isl-org.
+description: Инференс относительной глубины MiDaS в LibreYOLO. Чекпойнты s и l используют зеркала LibreYOLO по лицензии MIT
+  издателя.
+
 lead: >-
   MiDaS — монокулярная оценка относительной глубины, обученная на смеси
   датасетов с функцией потерь, инвариантной к масштабу и сдвигу; именно эта
@@ -21,123 +20,93 @@ keywords:
   - DPT
   - относительная глубина
   - zero-shot глубина
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 snippets:
   predict:
-    - label: Python
-      language: python
-      code: >
-        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+  - label: Python
+    language: python
+    code: |
+      from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+      # При первом использовании скачивает чекпойнт с зеркала.
+      model = LibreYOLO("LibreMiDaSl-depth.pt")
+      result = model(SAMPLE_IMAGE, save=True)
 
-        # Файла ещё нет на диске: LibreYOLO скачивает его из официального релиза
+      depth = result.depth_map
+      print(depth.min, depth.max, depth.mean)
+  - label: CLI
+    language: bash
+    code: |
+      libreyolo predict model=LibreMiDaSl-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+  - label: Вариант Small
+    language: python
+    code: |
+      from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # isl-org/MiDaS на GitHub и перед использованием сверяет с
-        зафиксированным SHA-256.
-
-        model = LibreYOLO("LibreMiDaSl-depth.pt")
-
-        result = model(SAMPLE_IMAGE, save=True)
-
-
-        depth = result.depth_map
-
-        print(depth.min, depth.max, depth.mean)
-    - label: CLI
-      language: bash
-      code: >
-        libreyolo predict model=LibreMiDaSl-depth.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-        save=True
-    - label: Вариант Small
-      language: python
-      code: >
-        from libreyolo import LibreYOLO, SAMPLE_IMAGE
-
-
-        # Энкодер EfficientNet-Lite3, меньше и быстрее, чем размер l на
-        DPT-Large.
-
-        model = LibreYOLO("LibreMiDaSs-depth.pt")
-
-        result = model(SAMPLE_IMAGE, save=True)
+      # Энкодер EfficientNet-Lite3, меньше и быстрее, чем размер l на DPT-Large.
+      model = LibreYOLO("LibreMiDaSs-depth.pt")
+      result = model(SAMPLE_IMAGE, save=True)
   val:
-    - label: Python
-      language: python
-      code: |
-        from libreyolo import LibreYOLO
+  - label: Python
+    language: python
+    code: |
+      from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreMiDaSl-depth.pt")
-        metrics = model.val(data="my-dataset.yaml")
+      model = LibreYOLO("LibreMiDaSl-depth.pt")
+      metrics = model.val(data="my-dataset.yaml")
 
-        print(metrics["metrics/abs_rel"])
-        print(metrics["metrics/rmse"])
-        print(metrics["metrics/delta1"])
-    - label: CLI
-      language: bash
-      code: |
-        libreyolo val model=LibreMiDaSl-depth.pt data=my-dataset.yaml
+      print(metrics["metrics/abs_rel"])
+      print(metrics["metrics/rmse"])
+      print(metrics["metrics/delta1"])
+  - label: CLI
+    language: bash
+    code: |
+      libreyolo val model=LibreMiDaSl-depth.pt data=my-dataset.yaml
   export:
-    - label: Python
-      language: python
-      code: |
-        from libreyolo import LibreYOLO
+  - label: Python
+    language: python
+    code: |
+      from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreMiDaSl-depth.pt")
-        model.export(format="onnx")
-        model.export(format="tensorrt", half=True)
-    - label: CLI
-      language: bash
-      code: |
-        libreyolo export model=LibreMiDaSl-depth.pt format=onnx
-        libreyolo export model=LibreMiDaSl-depth.pt format=tensorrt half=True
-    - label: Использование экспортированного файла
-      language: python
-      code: >
-        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+      model = LibreYOLO("LibreMiDaSl-depth.pt")
+      model.export(format="onnx")
+      model.export(format="tensorrt", half=True)
+  - label: CLI
+    language: bash
+    code: |
+      libreyolo export model=LibreMiDaSl-depth.pt format=onnx
+      libreyolo export model=LibreMiDaSl-depth.pt format=tensorrt half=True
+  - label: Использование экспортированного файла
+    language: python
+    code: |
+      from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+      # Фабрика выбирает загрузчик по суффиксу файла, поэтому экспортированный
+      # артефакт загружается как любой чекпойнт и возвращает тот же объект Results.
+      model = LibreYOLO("LibreMiDaSl-depth.onnx")
+      result = model(SAMPLE_IMAGE)
 
-        # Фабрика выбирает загрузчик по суффиксу файла, поэтому экспортированный
+      print(result.depth_map.data.shape)
 
-        # артефакт загружается как любой чекпойнт и возвращает тот же объект
-        Results.
-
-        model = LibreYOLO("LibreMiDaSl-depth.onnx")
-
-        result = model(SAMPLE_IMAGE)
-
-
-        print(result.depth_map.data.shape)
-source_hash: ce2fbf3ae43e9be4
+source_hash: 64537aa3ad3a6f8f
 ---
 
 ## Установка
 
-MiDaS не требует установки дополнительных extra-пакетов. Всё, что он импортирует, входит в базовую установку.
+Для энкодеров timm в MiDaS требуется дополнение `midas`.
 
 ```bash
-pip install libreyolo
+pip install "libreyolo[midas]"
 ```
 
 ## Предсказание
 
-MiDaS — единственное семейство для глубины, которое LibreYOLO не перепубликует в
-своей организации на Hugging Face. Запрос чекпойнта по его имени файла в
-LibreYOLO скачивает соответствующий официальный файл напрямую из релизов
-`isl-org/MiDaS` на GitHub, сверяет его с зафиксированным SHA-256 и перед первым
-использованием оборачивает метаданными чекпойнта LibreYOLO; при последующих
-запусках берётся закэшированный локальный файл. Почему так — см. раздел
-«Лицензирование».
+Чекпойнты s и l скачиваются с зеркал LibreYOLO по лицензии MIT издателя и кэшируются локально.
 
 <code-tabs name="predict" />
 
-`result.depth_map` содержит плотную карту относительной обратной глубины:
-большие значения означают, что точка ближе к камере, а у самих значений нет ни
-метрических единиц, ни общего масштаба между изображениями. `save=True`
-записывает на диск раскрашенную визуализацию этой карты; `Results.plot()` это
-семейство не покрывает, поскольку определён только для карт нормалей и краёв.
-Об источниках, стриминге и обработке результатов — в разделе
-[предсказание](/docs/predict).
+`result.depth_map` содержит плотную карту относительной обратной глубины: большие значения означают меньшую дистанцию до камеры, а значения не имеют метрической единицы или общего масштаба между изображениями. `save=True` записывает на диск цветовую визуализацию карты; `Results.plot()` визуализирует карту глубины. Источники, стриминг и обработка результатов описаны в разделе [предсказания](/docs/predict).
 
 ## Варианты
 

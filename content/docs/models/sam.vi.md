@@ -4,13 +4,12 @@ families:
   - sam
 seo_title: 'SAM (Segment Anything): dự đoán mask trong LibreYOLO'
 description: >-
-  Dùng SAM trong LibreYOLO để phân đoạn bằng prompt điểm và box. Cài đặt và dự
-  đoán với các checkpoint base, large và huge theo Apache-2.0.
+  Dùng SAM trong LibreYOLO để phân đoạn bằng prompt điểm và box. Cài đặt và dự đoán với các checkpoint base,
+  large và huge theo Apache-2.0.
 lead: >-
-  SAM (Segment Anything) biến một lần nhấp vào điểm hoặc box thành mask đối
-  tượng. LibreYOLO tải mô hình qua factory LibreSAM chuyên dụng, tách biệt với
-  factory detector LibreYOLO(), vì mô hình dùng prompt cần một dạng lời gọi
-  khác.
+  SAM (Segment Anything) biến một lần nhấp vào điểm hoặc box thành mask đối tượng. LibreYOLO tải mô hình qua
+  factory LibreSAM chuyên dụng, tách biệt với factory detector LibreYOLO(), vì mô hình dùng prompt cần một
+  dạng lời gọi khác.
 keywords:
   - SAM
   - Segment Anything
@@ -19,7 +18,7 @@ keywords:
   - prompt điểm
   - prompt box
   - Meta AI
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Prompt bằng điểm và box
@@ -44,28 +43,19 @@ snippets:
         result = model.predict(SAMPLE_IMAGE)
     - label: 'Mã hóa một lần, dùng nhiều prompt'
       language: python
-      code: >
+      code: |
         from libreyolo import LibreSAM, SAMPLE_IMAGE
-
 
         model = LibreSAM("base")
 
-
         # Bộ mã hóa ảnh là phần tốn kém. set_image() chạy nó một lần;
-
-        # mỗi lời gọi predict() sau đó dùng lại embedding đã lưu trong bộ nhớ
-        đệm.
-
+        # mỗi lời gọi predict() sau đó dùng lại embedding đã lưu trong bộ nhớ đệm.
         model.set_image(SAMPLE_IMAGE)
-
         a = model.predict(points=[640, 420], labels=[1])
-
         b = model.predict(bboxes=[300, 200, 900, 700])
-
         model.reset_image()
-source_hash: f8904d241ef8a929
+source_hash: 313541a8b2c6abaf
 ---
-
 ## Cài đặt
 
 SAM cần extra `sam`, extra này sẽ cài thêm `transformers` và `timm`.
@@ -111,14 +101,10 @@ lượng mask: base mã hóa nhanh nhất, huge nặng nhất.
 
 <provenance-box>
 
-LibreYOLO không lưu trữ bản sao riêng của trọng số SAM-1. `LibreSAM("base")`,
-`"large"` và `"huge"` tải trực tiếp từ các repo `facebook/sam-vit-base`,
-`facebook/sam-vit-large` và `facebook/sam-vit-huge` của Meta trên Hugging Face;
-mỗi repo được gắn giấy phép Apache-2.0 tại đó, độc lập với LibreYOLO.
+`LibreSAM("base")`, `"large"` và `"huge"` dùng bản sao các tệp SAM-1 của LibreYOLO. Trọng số giữ giấy phép Apache-2.0 do Meta công bố.
 
 </provenance-box>
 
 ## Trích dẫn
 
 <citation-block />
-

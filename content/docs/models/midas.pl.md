@@ -4,8 +4,8 @@ families:
   - midas
 seo_title: 'MiDaS: estymacja głębi monokularnej w LibreYOLO'
 description: >-
-  Używaj MiDaS w LibreYOLO do estymacji głębi monokularnej. Instaluj, przewiduj,
-  waliduj i eksportuj dwa warianty na licencji MIT pobierane z isl-org.
+  Inferencja względnej głębi MiDaS w LibreYOLO. Checkpointy s i l używają kopii
+  LibreYOLO na licencji MIT wydawcy.
 lead: >-
   MiDaS estymuje monokularną głębię względną i jest trenowany z funkcją straty
   niezmienną względem skali i przesunięcia na mieszanych zbiorach danych. To
@@ -19,28 +19,19 @@ keywords:
   - głębia względna
   - mapa głębi
   - głębia zero-shot
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Jeśli pliku nie ma jeszcze na dysku, LibreYOLO pobiera go z
-        oficjalnego wydania
-
-        # isl-org/MiDaS na GitHubie i przed użyciem sprawdza względem
-        przypiętego SHA-256.
-
+        # Przy pierwszym użyciu pobiera kopię checkpointu.
         model = LibreYOLO("LibreMiDaSl-depth.pt")
-
         result = model(SAMPLE_IMAGE, save=True)
 
-
         depth = result.depth_map
-
         print(depth.min, depth.max, depth.mean)
     - label: CLI
       language: bash
@@ -107,37 +98,24 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: ce2fbf3ae43e9be4
+source_hash: 64537aa3ad3a6f8f
 ---
 
 ## Instalacja
 
-MiDaS nie wymaga żadnego opcjonalnego dodatku. Wszystkie importowane elementy
-znajdują się w instalacji podstawowej.
+MiDaS wymaga dodatku `midas` dla enkoderów timm.
 
 ```bash
-pip install libreyolo
+pip install "libreyolo[midas]"
 ```
 
 ## Predykcja
 
-MiDaS jest jedyną rodziną głębi, której LibreYOLO nie publikuje ponownie we
-własnej organizacji Hugging Face. Żądanie checkpointu przez nazwę pliku
-LibreYOLO pobiera odpowiedni oficjalny artefakt bezpośrednio z wydań
-`isl-org/MiDaS` na GitHubie, sprawdza go względem przypiętego SHA-256 i przed
-pierwszym użyciem opakowuje metadanymi checkpointu LibreYOLO. Późniejsze
-uruchomienia ponownie używają lokalnego pliku z pamięci podręcznej. Przyczynę
-wyjaśnia sekcja Licencja.
+Checkpointy s i l są pobierane z kopii w repozytoriach LibreYOLO na licencji MIT wydawcy i przechowywane w lokalnej pamięci podręcznej.
 
 <code-tabs name="predict" />
 
-`result.depth_map` zawiera gęstą mapę względnej odwrotności głębi: wyższe
-wartości oznaczają mniejszą odległość od kamery, a wartości nie mają jednostki
-metrycznej ani skali wspólnej dla obrazów. Ustawienie `save=True` zapisuje na
-dysku wizualizację tej mapy z nałożoną paletą kolorów. `Results.plot()` nie
-obsługuje tej rodziny, ponieważ zdefiniowano go tylko dla normalnych powierzchni
-i krawędzi. Więcej informacji o źródłach, streamingu i obsłudze wyników zawiera
-strona [predykcji](/docs/predict).
+`result.depth_map` zawiera gęstą mapę względnej odwrotności głębi: większe wartości oznaczają mniejszą odległość od kamery, a wartości nie mają jednostki metrycznej ani wspólnej skali między obrazami. `save=True` zapisuje na dysku wizualizację mapy z nałożonymi kolorami; `Results.plot()` renderuje mapę głębi. Źródła, streaming i obsługę wyników opisano w sekcji [predykcji](/docs/predict).
 
 ## Warianty
 

@@ -22,7 +22,7 @@ keywords:
   - extracción de características
   - modelo de visión preentrenado
   - Meta AI
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Semántica
@@ -155,7 +155,7 @@ snippets:
         # tarea, aquí LibreDINOv2s-sem.onnx.
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
-source_hash: 4256e0a0398e5aaf
+source_hash: c89a9662d03fe6f7
 ---
 
 ## Instalación
@@ -207,11 +207,13 @@ ninguna cabeza dependiente de las clases que ajustar y lanza
 Los argumentos de palabra clave principales aquí son `batch_size` y `lr`, no
 `batch` y `lr0`, que son los que usa la mayoría de las demás familias; `batch` y
 `lr0` se siguen aceptando y se mapean sobre ellos, pero pasar ambos lanza un
-error de conflicto. `output_dir=` (por defecto `"runs/train"`) sustituye a
+error de conflicto. `output_dir=` (por defecto `None`) sustituye a
 `project=`/`name=` como forma principal de ubicar una ejecución, aunque pasar
 `project=`/`name=` directamente sigue funcionando. Consulta
 [entrenamiento](/docs/train) para datasets, aumento de datos, multi-GPU y
 loggers.
+
+Las ejecuciones nuevas se resuelven a un directorio `runs/train/dinov2_exp` incrementado con `exist_ok=False`. `resume=True` restaura el estado del trainer y conserva el directorio seleccionado. La clasificación soporta `cls_pw` y `class_weights` como se describe en [hiperparámetros](/docs/train/hyperparameters).
 
 ## Validación
 
@@ -221,6 +223,8 @@ para `task="semantic"`, y precisión top-1 y top-5 para `task="classify"`.
 `NotImplementedError` si llamas a `val()` sobre él.
 
 <code-tabs name="val" />
+
+La calibración de clasificación y embeddings reutiliza el pipeline de clasificación del modelo. La evaluación usa la transformación de la familia.
 
 ## Exportación
 

@@ -14,7 +14,7 @@ keywords:
   - grounding
   - Alibaba
   - VLM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -45,7 +45,7 @@ snippets:
         vest?")
 
         print(answer)
-source_hash: ee225b6221d624d9
+source_hash: 801d97d089f1f957
 ---
 
 ## インストール
@@ -68,7 +68,9 @@ pip install "libreyolo[vlm]"
 
 サイズはQwen3-VL-2B-Instruct、Qwen3-VL-4B-Instruct、Qwen3-VL-8B-Instructの3つで、`LibreVLM("qwen3-vl-2b")`、`LibreVLM("qwen3-vl-4b")`、`LibreVLM("qwen3-vl-8b")` で読み込みます。3つとも公称入力は1024 pxですが、ネットワークに渡す実際のキャンバスはQwenのプロセッサー独自のスマートリサイズが決定します。そのため、この値はサイト内の他のファミリーのような固定動作解像度ではありません。LibreYOLOは3つのサイズの精度を比較するベンチマークを公開していません。
 
-LibreYOLOはQwen3-VLの学習、検証、エクスポートを行いません。この階層のすべてのファミリーで、`train()`、`val()`、`export()` は `NotImplementedError` を発生させます（上のサポート階層を参照）。組み込みのカスタムボキャブラリが必要な場合は、アップストリームでQwen3-VLをファインチューニングし、得られた重みを読み込んでください。すべての検出結果が同じ仮信頼度を持つため、COCO形式の検証を行う代わりに、`predict()` の出力を目視で確認してください。
+## 学習
+
+`libreyolo[vlm-train]`をインストールすると、`LibreVLM("qwen3-vl-2b").train(data=...)`で検出用LoRAアダプターを学習できます。視覚エンコーダーは凍結したままで、検証損失により最良のチェックポイントディレクトリを選択します。オプティマイザーの状態を復元する再開と、検出mAPによる検証には対応していません。デフォルトと再読み込みの手順は[VLMのファインチューニング](/docs/train/vlm-fine-tuning)を参照してください。
 
 ## ライセンス
 

@@ -21,7 +21,7 @@ keywords:
   - VLM
   - VLM na urządzeniu
   - LibreVLM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -57,7 +57,7 @@ snippets:
         # zliczanie lub dowolny prompt nieobsługiwany przez wrapper ramek.
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 40237f0ecc0d2cd5
+source_hash: a7f100c861adb8d0
 ---
 
 ## Instalacja
@@ -94,10 +94,7 @@ Więcej informacji o źródłach, streamingu i obsłudze wyników zawiera strona
 
 ## Warianty
 
-Dostępne są dwa rozmiary, 450m i 1.6b, oba z wydania LFM2.5-VL firmy Liquid AI,
-zbudowane do wdrażania na urządzeniu. Zestaw testowy LibreYOLO nie wykonał
-pomiarów tej rodziny, dlatego nie ma opublikowanych wyników dokładności do ich
-porównania. Rozmiar należy dobrać do własnego budżetu obliczeniowego.
+Trzy rozmiary: 450m, 1.6b i 3b, wszystkie z wydania LFM2.5-VL firmy Liquid AI. `lfm2-vl-3b` wybiera model LFM2.5 3B i jego parser ramek 0–1000. Zestaw benchmarków LibreYOLO nie mierzył tej rodziny, więc nie ma opublikowanych wyników dokładności do porównania rozmiarów; rozmiar należy dobrać do dostępnego budżetu obliczeniowego.
 
 LibreYOLO udostępnia tę rodzinę wyłącznie do predykcji. `train()`, `val()` i
 `export()` zawsze zgłaszają `NotImplementedError`. Model należy dostroić w

@@ -20,7 +20,8 @@ keywords:
   - segment anything python
   - сегментация объекта по клику
   - выделить объект на фото python
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 snippets:
   predict:
     - label: Промпты точкой и рамкой
@@ -71,7 +72,7 @@ snippets:
         a = model.predict(points=[640, 420], labels=[1])
         b = model.predict(bboxes=[300, 200, 900, 700])
         model.reset_image()
-source_hash: f8904d241ef8a929
+source_hash: 313541a8b2c6abaf
 ---
 
 ## Установка
@@ -122,11 +123,7 @@ pip install "libreyolo[sam]"
 
 <provenance-box>
 
-LibreYOLO не размещает собственную копию весов SAM-1. `LibreSAM("base")`,
-`"large"` и `"huge"` скачивают их напрямую из репозиториев самой Meta
-`facebook/sam-vit-base`, `facebook/sam-vit-large` и `facebook/sam-vit-huge` на
-Hugging Face, каждый из которых помечен там лицензией Apache-2.0 независимо от
-LibreYOLO.
+`LibreSAM("base")`, `"large"` и `"huge"` используют зеркала артефактов SAM-1 в LibreYOLO. Веса сохраняют заявленную Meta лицензию Apache-2.0.
 
 </provenance-box>
 

@@ -20,7 +20,7 @@ keywords:
   - prompt de punto
   - prompt de caja
   - Meta AI
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Prompts de punto y de caja
@@ -70,7 +70,7 @@ snippets:
         a = model.predict(points=[640, 420], labels=[1])
         b = model.predict(bboxes=[300, 200, 900, 700])
         model.reset_image()
-source_hash: f8904d241ef8a929
+source_hash: 313541a8b2c6abaf
 ---
 
 ## Instalación
@@ -122,11 +122,7 @@ huge el más pesado.
 
 <provenance-box>
 
-LibreYOLO no aloja su propia copia de los pesos de SAM-1. `LibreSAM("base")`,
-`"large"` y `"huge"` descargan directamente de los repositorios
-`facebook/sam-vit-base`, `facebook/sam-vit-large` y `facebook/sam-vit-huge` de
-la propia Meta en Hugging Face, cada uno etiquetado allí como Apache-2.0 de
-forma independiente a LibreYOLO.
+`LibreSAM("base")`, `"large"` y `"huge"` usan mirrors de LibreYOLO de los artefactos SAM-1. Los pesos conservan la declaración Apache-2.0 de Meta.
 
 </provenance-box>
 

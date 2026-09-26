@@ -5,8 +5,7 @@ families:
 seo_title: 'MiDaS: estimación de profundidad monocular en LibreYOLO'
 description: >-
   Usa MiDaS en LibreYOLO para estimación de profundidad monocular. Instala,
-  predice, valida y exporta dos variantes con licencia MIT, descargadas desde
-  isl-org.
+  predice, valida y exporta dos variantes replicadas bajo la licencia MIT del editor.
 lead: >-
   MiDaS es estimación de profundidad relativa monocular entrenada con una loss
   invariante a escala y desplazamiento sobre datasets mezclados, la línea de
@@ -20,7 +19,7 @@ keywords:
   - mapa de profundidad python
   - profundidad relativa
   - profundidad zero-shot
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -29,10 +28,7 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
 
-        # Aún no está en disco: LibreYOLO lo descarga de la release oficial de
-
-        # isl-org/MiDaS en GitHub y lo comprueba contra un SHA-256 fijado antes
-        de usarlo.
+        # Descarga el checkpoint replicado en el primer uso.
 
         model = LibreYOLO("LibreMiDaSl-depth.pt")
 
@@ -108,34 +104,27 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: ce2fbf3ae43e9be4
+source_hash: 64537aa3ad3a6f8f
 ---
 
 ## Instalación
 
-MiDaS no necesita ningún extra opcional. Todo lo que importa está en la instalación base.
+MiDaS necesita el extra `midas` para sus encoders de timm.
 
 ```bash
-pip install libreyolo
+pip install "libreyolo[midas]"
 ```
 
 ## Predicción
 
-MiDaS es la única familia de profundidad que LibreYOLO no republica en su propia
-organización de Hugging Face. Pedir un checkpoint por su nombre de archivo de
-LibreYOLO descarga el asset oficial correspondiente directamente de las releases
-de GitHub de `isl-org/MiDaS`, lo comprueba contra un SHA-256 fijado y lo envuelve
-con los metadatos de checkpoint de LibreYOLO antes del primer uso; las
-ejecuciones posteriores reutilizan el archivo local en caché. Consulta Licencia
-para saber por qué.
+Los checkpoints s y l se descargan de los mirrors de LibreYOLO bajo la licencia MIT del editor y se guardan en la caché local.
 
 <code-tabs name="predict" />
 
 `result.depth_map` lleva un mapa denso de profundidad inversa relativa: los
 valores más altos significan más cerca de la cámara, y los valores no tienen
 unidad métrica ni escala común entre imágenes. `save=True` escribe en disco una
-visualización de ese mapa con un mapa de color; `Results.plot()` no cubre esta
-familia, ya que está definido solo para normales de superficie y bordes.
+visualización de ese mapa con un mapa de color; `Results.plot()` renderiza el mapa de profundidad.
 Consulta [predicción](/docs/predict) para fuentes, streaming y manejo de
 resultados.
 

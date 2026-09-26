@@ -21,7 +21,7 @@ keywords:
   - bild embeddings
   - feature extraktion
   - meta ai dinov2
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Semantisch
@@ -159,7 +159,7 @@ snippets:
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
 
         result = model(SAMPLE_IMAGE)
-source_hash: 4256e0a0398e5aaf
+source_hash: "c89a9662d03fe6f7"
 ---
 
 ## Installation
@@ -209,14 +209,9 @@ aus.
 
 <code-tabs name="train" />
 
-Die wichtigsten Schlüsselwortargumente sind hier `batch_size` und `lr`, nicht
-`batch` und `lr0` wie bei den meisten anderen Familien. `batch` und `lr0`
-werden weiterhin akzeptiert und darauf abgebildet. Die Übergabe beider Formen
-löst jedoch einen Konfliktfehler aus. `output_dir=` (standardmäßig
-`"runs/train"`) ersetzt `project=`/`name=` als bevorzugte Methode zur Ablage
-eines Laufs, auch wenn die direkte Übergabe von `project=`/`name=` weiterhin
-funktioniert. Unter [Training](/docs/train) findest du Datensätze,
-Datenaugmentierung, Multi-GPU und Logger.
+Die primären Schlüsselwortargumente sind hier `batch_size` und `lr`, nicht `batch` und `lr0` wie bei den meisten anderen Familien. `batch` und `lr0` werden weiterhin akzeptiert und zugeordnet, aber die Übergabe beider Formen führt zu einem Konfliktfehler. `output_dir=` (Standard `None`) ersetzt `project=`/`name=` als primären Weg zur Ablage eines Laufs; die direkte Übergabe von `project=`/`name=` funktioniert weiterhin. Siehe [Training](/docs/train) für Datensätze, Augmentierung, Multi-GPU und Logger.
+
+Neue Läufe verwenden ein hochgezähltes `runs/train/dinov2_exp` mit `exist_ok=False`. `resume=True` stellt den Trainer-Zustand wieder her und behält das ausgewählte Laufverzeichnis bei. Die Klassifikation unterstützt `cls_pw` und `class_weights` wie unter [Hyperparameter](/docs/train/hyperparameters) beschrieben.
 
 ## Validierung
 
@@ -227,6 +222,8 @@ Bewertung und löst beim Aufruf von `val()` den Fehler `NotImplementedError`
 aus.
 
 <code-tabs name="val" />
+
+Die Kalibrierung für Klassifikation und Embeddings verwendet die Klassifikationspipeline des Modells. Die Auswertung verwendet die Transformation der Familie.
 
 ## Export
 

@@ -5,7 +5,7 @@ seo_title: "SAM (Segment Anything): predict masks in LibreYOLO"
 description: "Use SAM in LibreYOLO for promptable point and box segmentation. Install and predict with the base, large and huge checkpoints under Apache-2.0."
 lead: "SAM (Segment Anything) turns a point or box click into an object mask. LibreYOLO loads it through a dedicated LibreSAM factory, separate from the LibreYOLO() detector factory, because a promptable model needs a different call shape."
 keywords: [SAM, Segment Anything, promptable segmentation, interactive segmentation, point prompt, box prompt, Meta AI]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Point and box prompts
@@ -89,11 +89,7 @@ fastest to encode, huge the heaviest.
 
 <provenance-box>
 
-LibreYOLO does not host its own copy of the SAM-1 weights. `LibreSAM("base")`,
-`"large"` and `"huge"` download straight from Meta's own
-`facebook/sam-vit-base`, `facebook/sam-vit-large` and `facebook/sam-vit-huge`
-repositories on Hugging Face, each tagged Apache-2.0 there independently of
-LibreYOLO.
+`LibreSAM("base")`, `"large"` and `"huge"` use LibreYOLO mirrors of the SAM-1 artifacts. The weights retain Meta's Apache-2.0 declaration.
 
 </provenance-box>
 

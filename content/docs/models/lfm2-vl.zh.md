@@ -16,7 +16,7 @@ keywords:
   - VLM
   - 端侧 vlm
   - LibreVLM
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -44,7 +44,7 @@ snippets:
         # 封装覆盖不到的提示词
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 40237f0ecc0d2cd5
+source_hash: a7f100c861adb8d0
 ---
 
 ## 安装
@@ -75,9 +75,7 @@ LFM2-VL 不输出逐框分数，所以每个检测结果拿到的都是同一个
 
 ## 变体
 
-两个尺寸：450m 和 1.6b，都来自 Liquid AI 的 LFM2.5-VL 发布版，为端侧部署而造。
-LibreYOLO 的基准测试工具还没有测过这个家族，所以没有公开的精度数字可以拿来比较
-它们；按你自己的算力预算挑一个尺寸。
+三个尺寸：450m、1.6b 和 3b，都来自 Liquid AI 的 LFM2.5-VL 版本，其中 `lfm2-vl-3b` 选择 LFM2.5 3B 模型及其 0–1000 检测框解析器。LibreYOLO 的基准测试工具尚未测量这个家族，因此没有已发布的精度数据可供比较；请按自己的计算预算选择尺寸。
 
 LibreYOLO 只把这个家族开放给预测。`train()`、`val()` 和 `export()` 全都抛出
 `NotImplementedError`：要微调就在上游做，然后把结果加载进来；数据集验证被跳过，

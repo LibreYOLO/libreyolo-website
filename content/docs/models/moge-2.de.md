@@ -19,7 +19,7 @@ keywords:
   - normalenkarte
   - dichte vorhersage
   - dinov2
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -79,7 +79,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: d96b89f18ac10a40
+source_hash: "b06daf44f9a58411"
 ---
 
 ## Installation
@@ -92,9 +92,7 @@ pip install libreyolo
 
 ## Vorhersage
 
-Die Gewichte werden bei der ersten Verwendung automatisch heruntergeladen.
-LibreYOLO ruft die passende Größe direkt aus den offiziellen Checkpoints ab
-und speichert sie lokal zwischen.
+Gewichte werden bei der ersten Verwendung automatisch heruntergeladen. Die Größen s und l verwenden LibreYOLO-Mirrors; b verwendet weiterhin den Upstream-Checkpoint.
 
 <code-tabs name="predict" />
 
@@ -143,11 +141,7 @@ daher wie ein Checkpoint und gibt dasselbe `Results`-Objekt zurück.
 
 <provenance-box>
 
-LibreYOLO kopiert diese Checkpoints nicht in seine eigene Organisation.
-`LibreYOLO("LibreMoGe2s-normal.pt")` lädt die passende Größe bei einer
-festgeschriebenen Revision direkt aus den offiziellen Hugging-Face-Repositorys
-und prüft die Datei vor der Verwendung anhand einer aufgezeichneten
-SHA-256-Prüfsumme.
+LibreYOLO spiegelt die Checkpoints s und l; b bleibt bei Upstream. Heruntergeladene Artefakte behalten die Lizenz ihres Herausgebers.
 
 </provenance-box>
 

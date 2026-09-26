@@ -21,7 +21,7 @@ keywords:
   - image embedding
   - ekstraksi fitur
   - Meta AI
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Semantik
@@ -177,7 +177,7 @@ snippets:
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
 
         result = model(SAMPLE_IMAGE)
-source_hash: 4256e0a0398e5aaf
+source_hash: c89a9662d03fe6f7
 ---
 
 ## Instalasi
@@ -225,13 +225,9 @@ memiliki head yang bergantung pada kelas untuk di-fit dan memunculkan
 
 <code-tabs name="train" />
 
-Argumen kata kunci utama di sini adalah `batch_size` dan `lr`, bukan `batch`
-dan `lr0` yang digunakan sebagian besar family lain. `batch` dan `lr0` tetap
-diterima dan dipetakan ke argumen tersebut, tetapi meneruskan keduanya
-memunculkan error konflik. `output_dir=` (default `"runs/train"`) menggantikan
-`project=`/`name=` sebagai cara utama untuk menempatkan sebuah run, meskipun
-`project=`/`name=` tetap dapat diteruskan secara langsung. Lihat
-[pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
+Argumen kata kunci utama di sini adalah `batch_size` dan `lr`, bukan `batch` dan `lr0` yang dipakai kebanyakan family lain; `batch` dan `lr0` masih diterima dan dipetakan ke keduanya, tetapi memberikan keduanya sekaligus menimbulkan galat konflik. `output_dir=` (default `None`) menggantikan `project=`/`name=` sebagai cara utama menentukan lokasi proses, meskipun memberikan `project=`/`name=` secara langsung masih berfungsi. Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
+
+Proses baru memakai direktori `runs/train/dinov2_exp` bernomor dengan `exist_ok=False`. `resume=True` memulihkan status trainer dan mempertahankan direktori proses yang dipilih. Klasifikasi mendukung `cls_pw` dan `class_weights` seperti dijelaskan dalam [hiperparameter](/docs/train/hyperparameters).
 
 ## Validasi
 
@@ -241,6 +237,8 @@ memunculkan error konflik. `output_dir=` (default `"runs/train"`) menggantikan
 memunculkan `NotImplementedError` jika `val()` dipanggil padanya.
 
 <code-tabs name="val" />
+
+Kalibrasi klasifikasi dan embedding memakai kembali pipeline klasifikasi model. Evaluasi memakai transformasi family.
 
 ## Ekspor
 

@@ -15,7 +15,7 @@ keywords:
   - 单目几何
   - 稠密预测
   - DINOv2
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -75,7 +75,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: d96b89f18ac10a40
+source_hash: b06daf44f9a58411
 ---
 
 ## 安装
@@ -88,7 +88,7 @@ pip install libreyolo
 
 ## 预测
 
-权重在首次使用时自动下载：LibreYOLO 直接从官方检查点获取对应的尺寸，并缓存在本地。
+权重在首次使用时自动下载。s 和 l 尺寸使用 LibreYOLO 镜像；b 继续使用上游检查点。
 
 <code-tabs name="predict" />
 
@@ -128,9 +128,7 @@ PNG，还可以带一个可选的有效性掩码，让填充像素和无效像�
 
 <provenance-box>
 
-LibreYOLO 不会把这些检查点复制到自己的组织下。`LibreYOLO("LibreMoGe2s-normal.pt")`
-会按固定的修订版本（revision）直接从官方 Hugging Face 仓库下载对应的尺寸，并在
-使用前对照记录的 SHA-256 校验和验证该文件。
+s 和 l 检查点由 LibreYOLO 镜像；b 保留在上游。下载的产物保留发布者的许可证。
 
 </provenance-box>
 

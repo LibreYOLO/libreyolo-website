@@ -20,7 +20,7 @@ keywords:
   - prompt punktowy
   - prompt ramką
   - Meta AI
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Prompty punktowe i ramkowe
@@ -78,7 +78,7 @@ snippets:
         b = model.predict(bboxes=[300, 200, 900, 700])
 
         model.reset_image()
-source_hash: f8904d241ef8a929
+source_hash: 313541a8b2c6abaf
 ---
 
 ## Instalacja
@@ -130,11 +130,7 @@ enkodera na jakość maski. Base koduje najszybciej, a huge jest najcięższy.
 
 <provenance-box>
 
-LibreYOLO nie hostuje własnej kopii wag SAM-1. `LibreSAM("base")`, `"large"` i
-`"huge"` pobierają je bezpośrednio z własnych repozytoriów Meta
-`facebook/sam-vit-base`, `facebook/sam-vit-large` i `facebook/sam-vit-huge` na
-Hugging Face. Każde z nich jest tam oznaczone licencją Apache-2.0 niezależnie od
-LibreYOLO.
+`LibreSAM("base")`, `"large"` i `"huge"` używają kopii artefaktów SAM-1 w repozytoriach LibreYOLO. Wagi zachowują zadeklarowaną przez Meta licencję Apache-2.0.
 
 </provenance-box>
 
