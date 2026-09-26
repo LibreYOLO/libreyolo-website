@@ -51,7 +51,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: c3aa0ff92444b10c
+source_hash: 177904564cf0a488
 ---
 
 ## Schema v1.0
@@ -221,7 +221,7 @@ Trainer-Checkpoints verwenden denselben erforderlichen Metadatenkern und dürfen
 
 Aus Kompatibilitätsgründen akzeptieren Leser die veralteten Aliasse `best_mAP50_95`, `best_mAP50`, `best_metric` und `best_metric_name` für die beste Metrik.
 
-Eine eigene Auswahl speichert `fitness_source="callback"` und `fitness/custom`. Callback-Code und -Zustand werden nicht gespeichert; diese Läufe lassen sich nicht fortsetzen. Starte mit ihren Gewichten einen neuen Lauf.
+Eine eigene Auswahl speichert `fitness_source="callback"` und `best_metric_key="fitness/custom"`. Callback-Code und -Zustand werden nicht gespeichert; diese Läufe lassen sich nicht fortsetzen. Starte mit ihren Gewichten einen neuen Lauf.
 
 ## Externe Snapshots
 

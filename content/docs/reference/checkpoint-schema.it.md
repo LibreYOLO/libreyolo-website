@@ -48,7 +48,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: c3aa0ff92444b10c
+source_hash: 177904564cf0a488
 ---
 
 ## Schema v1.0
@@ -299,7 +299,7 @@ addestramento.
 Per compatibilità tra release, i lettori accettano i vecchi alias della metrica
 migliore `best_mAP50_95`, `best_mAP50`, `best_metric` e `best_metric_name`.
 
-La selezione personalizzata registra `fitness_source="callback"` e `fitness/custom`. Il codice e lo stato della callback non vengono salvati; queste esecuzioni non possono essere riprese. Avvia una nuova esecuzione dai loro pesi.
+La selezione personalizzata registra `fitness_source="callback"` e `best_metric_key="fitness/custom"`. Il codice e lo stato della callback non vengono salvati; queste esecuzioni non possono essere riprese. Avvia una nuova esecuzione dai loro pesi.
 
 ## Snapshot esterni
 

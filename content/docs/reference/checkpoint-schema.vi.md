@@ -37,7 +37,7 @@ snippets:
         print(metadata["schema_version"], metadata["model_family"])
         print(metadata["size"], metadata["task"], metadata["nc"], metadata["imgsz"])
         print(len(state_dict), "tensors")
-source_hash: c3aa0ff92444b10c
+source_hash: 177904564cf0a488
 ---
 ## Lược đồ v1.0
 
@@ -278,7 +278,7 @@ chủ ý phân phối dưới dạng checkpoint huấn luyện.
 Để tương thích với bản phát hành, trình đọc chấp nhận các bí danh metric tốt nhất cũ
 `best_mAP50_95`, `best_mAP50`, `best_metric` và `best_metric_name`.
 
-Chọn tùy chỉnh ghi `fitness_source="callback"` và `fitness/custom`. Mã/trạng thái callback không được lưu; không thể tiếp tục các lần chạy này. Bắt đầu lần chạy mới từ trọng số của chúng.
+Chọn tùy chỉnh ghi `fitness_source="callback"` và `best_metric_key="fitness/custom"`. Mã/trạng thái callback không được lưu; không thể tiếp tục các lần chạy này. Bắt đầu lần chạy mới từ trọng số của chúng.
 
 ## Snapshot bên ngoài
 

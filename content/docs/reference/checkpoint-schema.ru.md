@@ -50,7 +50,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: c3aa0ff92444b10c
+source_hash: 177904564cf0a488
 ---
 
 ## Схема v1.0
@@ -307,7 +307,7 @@ FP8 могут дополнительно нести `fp8_tensorwise_weights` �
 лучшей метрики: `best_mAP50_95`, `best_mAP50`, `best_metric` и
 `best_metric_name`.
 
-Собственный выбор записывает `fitness_source="callback"` и `fitness/custom`. Код и состояние колбэка не сохраняются; эти запуски нельзя возобновить. Начните новый запуск с их весов.
+Собственный выбор записывает `fitness_source="callback"` и `best_metric_key="fitness/custom"`. Код и состояние колбэка не сохраняются; эти запуски нельзя возобновить. Начните новый запуск с их весов.
 
 ## Внешние снапшоты
 

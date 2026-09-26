@@ -47,7 +47,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: c3aa0ff92444b10c
+source_hash: 177904564cf0a488
 ---
 
 ## Skema v1.0
@@ -289,7 +289,7 @@ sengaja didistribusikan sebagai checkpoint pelatihan.
 Untuk kompatibilitas rilis, reader menerima alias metrik terbaik lama
 `best_mAP50_95`, `best_mAP50`, `best_metric`, dan `best_metric_name`.
 
-Pemilihan kustom mencatat `fitness_source="callback"` dan `fitness/custom`. Kode/status callback tidak disimpan; proses ini tidak dapat dilanjutkan. Mulai proses baru dari bobotnya.
+Pemilihan kustom mencatat `fitness_source="callback"` dan `best_metric_key="fitness/custom"`. Kode/status callback tidak disimpan; proses ini tidak dapat dilanjutkan. Mulai proses baru dari bobotnya.
 
 ## Snapshot eksternal
 

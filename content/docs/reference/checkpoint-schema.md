@@ -272,7 +272,7 @@ distributed as training checkpoints.
 For release compatibility, readers accept the legacy best-metric aliases
 `best_mAP50_95`, `best_mAP50`, `best_metric` and `best_metric_name`.
 
-Custom selection records `fitness_source="callback"` and `fitness/custom`. Callback code/state are not saved; these runs cannot resume. Start a new run from their weights.
+Custom selection records `fitness_source="callback"` and `best_metric_key="fitness/custom"`. Callback code/state are not saved; these runs cannot resume. Start a new run from their weights.
 
 ## External snapshots
 

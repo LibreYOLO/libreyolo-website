@@ -46,7 +46,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: c3aa0ff92444b10c
+source_hash: 177904564cf0a488
 ---
 
 ## スキーマv1.0
@@ -216,7 +216,7 @@ int8では活性化範囲バッファ`_q_act_lo`、`_q_act_hi`、`_q_calibrated`
 
 リリース互換性のため、リーダーはレガシーの最良メトリクス別名`best_mAP50_95`、`best_mAP50`、`best_metric`、`best_metric_name`を受け付けます。
 
-独自の選択では`fitness_source="callback"`と`fitness/custom`を記録します。コールバックのコードと状態は保存しないため、これらの実行は再開できません。その重みから新しい実行を始めてください。
+独自の選択では`fitness_source="callback"`と`best_metric_key="fitness/custom"`を記録します。コールバックのコードと状態は保存しないため、これらの実行は再開できません。その重みから新しい実行を始めてください。
 
 ## 外部スナップショット
 

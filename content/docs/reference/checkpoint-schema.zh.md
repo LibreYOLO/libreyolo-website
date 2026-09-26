@@ -43,7 +43,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: c3aa0ff92444b10c
+source_hash: 177904564cf0a488
 ---
 
 ## 结构 v1.0
@@ -259,7 +259,7 @@ int8 会保留激活范围缓冲区 `_q_act_lo`、`_q_act_hi` 和 `_q_calibrated
 为了发布兼容性，读取方接受旧版的最佳指标别名 `best_mAP50_95`、`best_mAP50`、
 `best_metric` 和 `best_metric_name`。
 
-自定义选择记录 `fitness_source="callback"` 和 `fitness/custom`。回调代码/状态不会保存；这些训练无法续训。请从其权重开始新的训练。
+自定义选择记录 `fitness_source="callback"` 和 `best_metric_key="fitness/custom"`。回调代码/状态不会保存；这些训练无法续训。请从其权重开始新的训练。
 
 ## 外部快照
 

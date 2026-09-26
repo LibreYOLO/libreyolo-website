@@ -44,7 +44,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: c3aa0ff92444b10c
+source_hash: 177904564cf0a488
 ---
 
 ## Schéma v1.0
@@ -303,7 +303,7 @@ Pour assurer la compatibilité entre versions, les lecteurs acceptent les
 anciens alias de meilleure métrique `best_mAP50_95`, `best_mAP50`,
 `best_metric` et `best_metric_name`.
 
-La sélection personnalisée enregistre `fitness_source="callback"` et `fitness/custom`. Le code et l'état du callback ne sont pas enregistrés ; ces exécutions ne peuvent pas reprendre. Démarrez une nouvelle exécution depuis leurs poids.
+La sélection personnalisée enregistre `fitness_source="callback"` et `best_metric_key="fitness/custom"`. Le code et l'état du callback ne sont pas enregistrés ; ces exécutions ne peuvent pas reprendre. Démarrez une nouvelle exécution depuis leurs poids.
 
 ## Snapshots externes
 

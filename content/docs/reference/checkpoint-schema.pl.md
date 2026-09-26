@@ -52,7 +52,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: c3aa0ff92444b10c
+source_hash: 177904564cf0a488
 ---
 
 ## Schemat v1.0
@@ -304,7 +304,7 @@ trenowania.
 Dla zgodności między wydaniami czytniki przyjmują starsze aliasy najlepszej
 metryki: `best_mAP50_95`, `best_mAP50`, `best_metric` i `best_metric_name`.
 
-Własny wybór zapisuje `fitness_source="callback"` i `fitness/custom`. Kod i stan callbacku nie są zapisywane; tych uruchomień nie można wznowić. Należy rozpocząć nowe uruchomienie z ich wag.
+Własny wybór zapisuje `fitness_source="callback"` i `best_metric_key="fitness/custom"`. Kod i stan callbacku nie są zapisywane; tych uruchomień nie można wznowić. Należy rozpocząć nowe uruchomienie z ich wag.
 
 ## Zewnętrzne migawki
 

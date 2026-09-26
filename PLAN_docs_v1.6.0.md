@@ -389,3 +389,5 @@ Update this list in the same commit as the work. It is the resume point.
 - Additional source corrections found during review: MiDaS needs the `midas` extra, PE needs `clip` tokenizer dependencies, and automatic 3D checkpoint acquisition needs `hf`. ConvNeXt V1 no longer claims V2 is excluded.
 
 - Final render audit passes 42 / 42 new or expanded English pages, including each declared checkpoint, export, licensing and citation block plus canonical URL. All 13 locale validators pass (174 each; Japanese 187).
+
+- Checkpoint schema QA names both stored fields explicitly: `fitness_source="callback"` and `best_metric_key="fitness/custom"`; all locale twins carry the same keys.

@@ -45,7 +45,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: "c3aa0ff92444b10c"
+source_hash: 177904564cf0a488
 ---
 
 ## 스키마 v1.0
@@ -215,7 +215,7 @@ MNN 내보내기는 평면 메타데이터를 필수 `<model>.mnn.json` 사이�
 
 릴리스 호환성을 위해, 독자들은 레거시 베스트 메트릭 별칭 `best_mAP50_95`, `best_mAP50`, `best_metric` 및 `best_metric_name`를 수용합니다.
 
-사용자 정의 선택은 `fitness_source="callback"`과 `fitness/custom`을 기록합니다. 콜백 코드/상태는 저장되지 않으므로 이 실행은 재개할 수 없습니다. 해당 가중치에서 새 실행을 시작합니다.
+사용자 정의 선택은 `fitness_source="callback"`과 `best_metric_key="fitness/custom"`을 기록합니다. 콜백 코드/상태는 저장되지 않으므로 이 실행은 재개할 수 없습니다. 해당 가중치에서 새 실행을 시작합니다.
 
 ## 외부 스냅샷
 
