@@ -1,0 +1,9 @@
+{
+  "name": "LaMa",
+  "org": "Samsung Research",
+  "paper_title": "LaMa",
+  "paper_url": "https://github.com/advimman/lama",
+  "code_url": "https://github.com/advimman/lama",
+  "license": "Apache-2.0",
+  "license_interpretation": "The mirrored ONNX artifact carries the OpenCV publisher's Apache-2.0 declaration."
+}

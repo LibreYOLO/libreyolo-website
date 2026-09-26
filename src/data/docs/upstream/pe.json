@@ -1,0 +1,9 @@
+{
+  "name": "Perception Encoder",
+  "org": "Meta AI",
+  "paper_title": "Perception Encoder",
+  "paper_url": "https://github.com/facebookresearch/perception_models",
+  "code_url": "https://github.com/facebookresearch/perception_models",
+  "license": "Apache-2.0",
+  "license_interpretation": "The publisher declares Apache-2.0 for the encoder weights."
+}

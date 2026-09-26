@@ -1,0 +1,9 @@
+{
+  "name": "WildDet3D",
+  "org": "Allen Institute for AI",
+  "paper_title": "WildDet3D",
+  "paper_url": "https://github.com/allenai/WildDet3D",
+  "code_url": "https://github.com/allenai/WildDet3D",
+  "license": "SAM License",
+  "license_interpretation": "The upstream runtime and checkpoint retain the custom SAM License, including its field-of-use restrictions."
+}

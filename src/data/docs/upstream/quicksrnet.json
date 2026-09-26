@@ -1,0 +1,9 @@
+{
+  "name": "QuickSRNet",
+  "org": "Qualcomm",
+  "paper_title": "QuickSRNet",
+  "paper_url": "https://github.com/quic/aimet-model-zoo",
+  "code_url": "https://github.com/quic/aimet-model-zoo",
+  "license": "BSD-3-Clause",
+  "license_interpretation": "The source and released weights retain the publisher's BSD-3-Clause terms."
+}

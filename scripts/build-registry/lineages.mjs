@@ -11,6 +11,37 @@
  * two differ (`ec` is EdgeCrafter, `ppocr` is PP-OCRv5).
  */
 export const LINEAGES = [
+  // Added or newly indexed for the 1.6.0 documentation.
+  { slug: 'ppyoloe', display: 'PP-YOLOE', keys: ['ppyoloe'] },
+  { slug: 'tinyformer', display: 'TinyFormer', keys: ['tinyformer'] },
+  { slug: 'dekr', display: 'DEKR', keys: ['dekr'] },
+  { slug: 'ppliteseg', display: 'PP-LiteSeg', keys: ['ppliteseg'] },
+  { slug: 'unet', display: 'U-Net', keys: ['unet'] },
+  { slug: 'convnextv2', display: 'ConvNeXt V2', keys: ['convnextv2'] },
+  { slug: 'pe', display: 'Perception Encoder', keys: ['pe'] },
+  { slug: 'vjepa2', display: 'V-JEPA 2', keys: ['vjepa2'] },
+  { slug: 'levjepa', display: 'LeVJEPA', keys: ['levjepa'] },
+  { slug: 'ben2', display: 'BEN2', keys: ['ben2'] },
+  { slug: 'quicksrnet', display: 'QuickSRNet', keys: ['quicksrnet'] },
+  { slug: 'ddcolor', display: 'DDColor', keys: ['ddcolor'] },
+  { slug: 'hvi-cidnet', display: 'HVI-CIDNet', keys: ['hvi_cidnet'] },
+  { slug: 'lama', display: 'LaMa', keys: ['lama'] },
+  { slug: 'vitmatte', display: 'ViTMatte', keys: ['vitmatte'] },
+  { slug: 'wilddet3d', display: 'WildDet3D', keys: ['wilddet3d'] },
+  { slug: '3d-mood', display: '3D-MOOD', keys: ['3dmood'] },
+  { slug: 'fcos3d', display: 'FCOS3D', keys: ['fcos3d'] },
+  { slug: 'detany3d', display: 'DetAny3D', keys: ['detany3d'] },
+  { slug: 'marigold-v2', display: 'Marigold V2', keys: ['marigold_v2'] },
+  { slug: 'librevla', display: 'LibreVLA', keys: ['smolvla', 'act_policy', 'diffusion_policy'] },
+  { slug: 'molmo2', display: 'Molmo2', keys: ['molmo2'] },
+  { slug: 'gemma-4', display: 'Gemma 4', keys: ['gemma4'] },
+  { slug: 'moondream', display: 'Moondream', keys: ['moondream'] },
+  { slug: 'northmicrovision', display: 'North Micro Vision', keys: ['northmicrovision'] },
+  { slug: 'showui', display: 'ShowUI', keys: ['showui'] },
+  { slug: 'ground-florence2', display: 'Florence-2 grounding', keys: ['ground_florence2'] },
+  { slug: 'ground-qwen3vl', display: 'Qwen3-VL grounding', keys: ['ground_qwen3vl'] },
+  { slug: 'dome-detr', display: 'Dome-DETR', keys: ['domedetr'] },
+
   // g0, flagships
   { slug: 'yolov9', display: 'YOLOv9', keys: ['yolo9', 'yolo9_e2e', 'yolo9_p2'] },
   { slug: 'rf-detr', display: 'RF-DETR', keys: ['rfdetr'] },

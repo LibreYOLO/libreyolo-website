@@ -1,0 +1,9 @@
+{
+  "name": "FCOS3D",
+  "org": "OpenMMLab",
+  "paper_title": "FCOS3D",
+  "paper_url": "https://github.com/open-mmlab/mmdetection3d",
+  "code_url": "https://github.com/open-mmlab/mmdetection3d",
+  "license": "Apache-2.0 code",
+  "license_interpretation": "The upstream repository declares Apache-2.0. A distinct per-artifact checkpoint license is not recorded in the library source."
+}

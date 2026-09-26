@@ -1,0 +1,9 @@
+{
+  "name": "V-JEPA 2",
+  "org": "Meta AI",
+  "paper_title": "V-JEPA 2",
+  "paper_url": "https://github.com/facebookresearch/vjepa2",
+  "code_url": "https://github.com/facebookresearch/vjepa2",
+  "license": "MIT; Apache-2.0 for giant encoder artifacts",
+  "license_interpretation": "Licenses differ by artifact: the two giant encoder artifacts are Apache-2.0; the other mirrored encoders and classification probes are MIT."
+}

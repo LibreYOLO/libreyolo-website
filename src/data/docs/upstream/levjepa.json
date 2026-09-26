@@ -1,0 +1,9 @@
+{
+  "name": "LeVJEPA",
+  "org": "MLO Lab",
+  "paper_title": "LeVJEPA",
+  "paper_url": "https://github.com/MLO-lab/LeVJEPA",
+  "code_url": "https://github.com/MLO-lab/LeVJEPA",
+  "license": "MIT code; CC-BY-NC-4.0 weights",
+  "license_interpretation": "The repository declares an explicit CC-BY-NC-4.0 exception for pretrained weights. Commercial use of those weights is excluded."
+}

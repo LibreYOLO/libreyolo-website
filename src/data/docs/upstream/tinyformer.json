@@ -1,0 +1,9 @@
+{
+  "name": "TinyFormer",
+  "org": "TinyFormer authors",
+  "paper_title": "TinyFormer",
+  "paper_url": "https://github.com/mmpmmpmmpjosh/TinyFormer",
+  "code_url": "https://github.com/mmpmmpmmpjosh/TinyFormer",
+  "license": "Apache-2.0; DINOv3 terms",
+  "license_interpretation": "The detector uses Apache-2.0 source and a DINOv3 backbone with its own terms. Check the publisher declarations for the chosen checkpoint."
+}

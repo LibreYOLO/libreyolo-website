@@ -1,0 +1,9 @@
+{
+  "name": "Qwen3-VL",
+  "org": "Qwen",
+  "paper_title": "Qwen3-VL",
+  "paper_url": "https://huggingface.co/Qwen",
+  "code_url": "https://huggingface.co/Qwen",
+  "license": "Apache-2.0",
+  "license_interpretation": "The model publisher declares Apache-2.0."
+}

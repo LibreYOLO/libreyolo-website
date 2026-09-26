@@ -1,0 +1,9 @@
+{
+  "name": "DetAny3D",
+  "org": "OpenDriveLab",
+  "paper_title": "DetAny3D",
+  "paper_url": "https://github.com/OpenDriveLab/DetAny3D",
+  "code_url": "https://github.com/OpenDriveLab/DetAny3D",
+  "license": "Apache-2.0 code; CC-BY-NC-4.0 weights",
+  "license_interpretation": "The mirrored checkpoint retains CC-BY-NC-4.0. Commercial use of those weights is excluded."
+}

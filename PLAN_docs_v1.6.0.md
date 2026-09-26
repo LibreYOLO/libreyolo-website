@@ -342,7 +342,12 @@ command, per the skill.
 
 Update this list in the same commit as the work. It is the resume point.
 
-- [ ] Phase 1: registry rebuilt against dev SHA `________`, upstream JSON for new families
+- [x] Phase 1: registry rebuilt against dev SHA `4da12d005eb41a8e694a86124c97ea5faaee9b7c`; 110 lineages / 117 families / 20 tasks; upstream JSON for all new lineages. Citation sections remain omitted unless BibTeX is verified.
+  - Rebuild command: `sh scripts/build-registry/rebuild.sh <detached-library-checkout> <vision-analysis/generated/verified-results.v1.json>`.
+  - Existing capability changes: YOLO-NAS (OBB), FeyNobg and YOLOv2 (exports), LFM2-VL and RT-DETR (sizes); refreshed checkpoint inventories across 40 families.
+  - Hub collection checks the matching asset, not just repository existence. U-Net has no verified hosted asset. PP-YOLOE and DEKR use source CDN downloads.
+  - Licensing correction: ViTMatte publisher card declares Apache-2.0; dataset-derived caveats in the evidence are not copied.
+  - Local Turbopack dev hits the known symlink error too; use `npm run dev -- --webpack`.
 - [ ] Phase 2: new and stub-to-full pages (count: __ / __)
 - [ ] Phase 3: existing pages updated (count: __ / __)
 - [ ] Phase 4: release-level pages

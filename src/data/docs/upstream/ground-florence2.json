@@ -1,0 +1,9 @@
+{
+  "name": "Florence-2",
+  "org": "Microsoft",
+  "paper_title": "Florence-2",
+  "paper_url": "https://huggingface.co/microsoft/Florence-2-base",
+  "code_url": "https://huggingface.co/microsoft/Florence-2-base",
+  "license": "MIT",
+  "license_interpretation": "The model publisher declares MIT."
+}

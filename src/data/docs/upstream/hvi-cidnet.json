@@ -1,0 +1,9 @@
+{
+  "name": "HVI-CIDNet",
+  "org": "HVI-CIDNet authors",
+  "paper_title": "HVI-CIDNet",
+  "paper_url": "https://github.com/Fediory/HVI-CIDNet",
+  "code_url": "https://github.com/Fediory/HVI-CIDNet",
+  "license": "MIT",
+  "license_interpretation": "The publisher declares MIT for the model and generalization checkpoint."
+}

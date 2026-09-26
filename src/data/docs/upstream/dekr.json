@@ -1,0 +1,9 @@
+{
+  "name": "DEKR",
+  "org": "HRNet authors",
+  "paper_title": "DEKR",
+  "paper_url": "https://github.com/HRNet/DEKR",
+  "code_url": "https://github.com/HRNet/DEKR",
+  "license": "MIT",
+  "license_interpretation": "The upstream implementation is MIT. The adapter retrieves the released checkpoint from its source CDN."
+}

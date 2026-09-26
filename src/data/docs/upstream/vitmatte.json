@@ -1,0 +1,9 @@
+{
+  "name": "ViTMatte",
+  "org": "HUST Vision Lab",
+  "paper_title": "ViTMatte",
+  "paper_url": "https://github.com/hustvl/ViTMatte",
+  "code_url": "https://github.com/hustvl/ViTMatte",
+  "license": "MIT code; Apache-2.0 weights",
+  "license_interpretation": "The original code is MIT. The publisher card for hustvl/vitmatte-small-composition-1k declares Apache-2.0 for the weights."
+}

@@ -1,0 +1,9 @@
+{
+  "name": "3D-MOOD",
+  "org": "ETH Zurich, Computer Vision and Geometry Lab",
+  "paper_title": "3D-MOOD",
+  "paper_url": "https://github.com/cvg/3D-MOOD",
+  "code_url": "https://github.com/cvg/3D-MOOD",
+  "license": "Apache-2.0",
+  "license_interpretation": "The source and model publisher declare Apache-2.0."
+}
