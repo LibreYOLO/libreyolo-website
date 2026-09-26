@@ -37,3 +37,7 @@ Use `prompt=` or `query=` for one call, or `set_query()` for a persistent instru
 ## Licensing
 
 <provenance-box></provenance-box>
+
+## Citation
+
+<citation-block />

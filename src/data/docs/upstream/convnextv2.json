@@ -1,9 +1,12 @@
 {
   "name": "ConvNeXt V2",
   "org": "Meta AI",
-  "paper_title": "ConvNeXt V2",
-  "paper_url": "https://github.com/facebookresearch/ConvNeXt-V2",
+  "paper_title": "ConvNeXt V2: Co-designing and Scaling ConvNets with Masked Autoencoders",
+  "paper_url": "https://arxiv.org/abs/2301.00808",
   "code_url": "https://github.com/facebookresearch/ConvNeXt-V2",
   "license": "MIT code; CC-BY-NC-4.0 weights",
-  "license_interpretation": "The source code is MIT. Official pretrained weights are CC-BY-NC-4.0 and exclude commercial use."
+  "license_interpretation": "The source code is MIT. Official pretrained weights are CC-BY-NC-4.0 and exclude commercial use.",
+  "bibtex": "@article{Woo2023ConvNeXtV2,\n  title={ConvNeXt V2: Co-designing and Scaling ConvNets with Masked Autoencoders},\n  author={Sanghyun Woo, Shoubhik Debnath, Ronghang Hu, Xinlei Chen, Zhuang Liu, In So Kweon and Saining Xie},\n  year={2023},\n  journal={arXiv preprint arXiv:2301.00808},\n}",
+  "bibtex_source_url": "https://raw.githubusercontent.com/facebookresearch/ConvNeXt-V2/main/README.md",
+  "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2301.00808. The upstream citation form is retained."
 }

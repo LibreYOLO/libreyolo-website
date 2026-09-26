@@ -107,7 +107,7 @@ export function ModelHeader({ doc, family }) {
 
       <dl className="mt-5 flex flex-col gap-y-1 border-t border-surface-200 pt-4 text-[13.5px] dark:border-white/[0.09]">
         <Meta label={t('tasks')}>{taskNames}</Meta>
-        <Meta label={t('sizes')}>{family.sizes_label}</Meta>
+        {family.sizes_label && <Meta label={t('sizes')}>{family.sizes_label}</Meta>}
         <Meta label={t('install')}>
           {/* Most families need no extra; only quote the bracket form when
               there is actually one, or the row reads pip install "libreyolo[]". */}

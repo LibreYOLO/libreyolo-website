@@ -51,3 +51,7 @@ The adapter uses the W32 no-deformable-convolution graph and 17 COCO person keyp
 ## Licensing
 
 <provenance-box></provenance-box>
+
+## Citation
+
+<citation-block />

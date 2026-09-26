@@ -19,8 +19,8 @@ snippets:
 
         model = LibreYOLO("LibreHVICIDNett-restore.pt", device="cpu")
         result = model(SAMPLE_IMAGE, gamma=1.0, saturation=1.0, intensity=1.0)
-        result.save("enhanced.png")
-source_hash: f6594164dfd0b78d
+        result.restored.save("enhanced.png")
+source_hash: 443c3e4bbaf05712
 ---
 
 ## インストール

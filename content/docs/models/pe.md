@@ -53,3 +53,7 @@ Set classes before zero-shot classification. Select `task="embed"` when loading 
 ## Licensing
 
 <provenance-box></provenance-box>
+
+## Citation
+
+<citation-block />

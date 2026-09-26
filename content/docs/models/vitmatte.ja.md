@@ -35,7 +35,7 @@ snippets:
         result = model(image, trimap=trimap)
 
         result.save("cutout.png")
-source_hash: 2b96b61a7d57b79a
+source_hash: 8814ce2f0e3882c2
 ---
 
 ## インストール
@@ -57,3 +57,7 @@ pip install "libreyolo"
 ## ライセンス
 
 <provenance-box></provenance-box>
+
+## 引用
+
+<citation-block />

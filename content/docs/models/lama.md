@@ -34,7 +34,7 @@ snippets:
 
         result = model(image, mask=mask)
 
-        result.save("inpainted.png")
+        result.restored.save("inpainted.png")
 ---
 
 ## Install
@@ -56,3 +56,7 @@ Pass `mask=` for single-image inference: nonzero pixels mark the region to fill.
 ## Licensing
 
 <provenance-box></provenance-box>
+
+## Citation
+
+<citation-block />

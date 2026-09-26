@@ -1,9 +1,12 @@
 {
   "name": "DDColor",
   "org": "DDColor authors",
-  "paper_title": "DDColor",
-  "paper_url": "https://github.com/piddnad/DDColor",
+  "paper_title": "DDColor: Towards Photo-Realistic Image Colorization via Dual Decoders",
+  "paper_url": "https://arxiv.org/abs/2212.11613",
   "code_url": "https://github.com/piddnad/DDColor",
   "license": "Apache-2.0",
-  "license_interpretation": "The publisher declares Apache-2.0 for the mirrored artifacts."
+  "license_interpretation": "The publisher declares Apache-2.0 for the mirrored artifacts.",
+  "bibtex": "@inproceedings{kang2023ddcolor,\n  title={DDColor: Towards Photo-Realistic Image Colorization via Dual Decoders},\n  author={Kang, Xiaoyang and Yang, Tao and Ouyang, Wenqi and Ren, Peiran and Li, Lingzhi and Xie, Xuansong},\n  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},\n  pages={328--338},\n  year={2023}\n}",
+  "bibtex_source_url": "https://raw.githubusercontent.com/piddnad/DDColor/master/README.md",
+  "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2212.11613. The upstream citation form is retained; conference/journal entries were also checked against the publisher."
 }

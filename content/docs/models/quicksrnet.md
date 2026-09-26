@@ -19,7 +19,7 @@ snippets:
 
         model = LibreYOLO("LibreQuickSRNetm2-restore.pt", device="cpu")
         result = model(SAMPLE_IMAGE)
-        result.save("upscaled.png")
+        result.restored.save("upscaled.png")
 ---
 
 ## Install

@@ -34,8 +34,8 @@ snippets:
 
         result = model(image, mask=mask)
 
-        result.save("inpainted.png")
-source_hash: bb80b8a884dc11a2
+        result.restored.save("inpainted.png")
+source_hash: cfe513537b64b0bc
 ---
 
 ## インストール
@@ -57,3 +57,7 @@ pip install "libreyolo[onnx]"
 ## ライセンス
 
 <provenance-box></provenance-box>
+
+## 引用
+
+<citation-block />

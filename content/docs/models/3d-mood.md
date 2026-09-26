@@ -52,3 +52,7 @@ pip install "libreyolo[hf]"
 ## Licensing
 
 <provenance-box></provenance-box>
+
+## Citation
+
+<citation-block />

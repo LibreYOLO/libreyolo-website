@@ -19,8 +19,8 @@ snippets:
 
         model = LibreYOLO("LibreQuickSRNetm2-restore.pt", device="cpu")
         result = model(SAMPLE_IMAGE)
-        result.save("upscaled.png")
-source_hash: 5451bb234ac635a4
+        result.restored.save("upscaled.png")
+source_hash: 2361116da119efe7
 ---
 
 ## インストール

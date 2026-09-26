@@ -19,7 +19,7 @@ snippets:
 
         model = LibreYOLO("LibreDDColort-restore.pt", device="cpu")
         result = model(SAMPLE_IMAGE)
-        result.save("colorized.png")
+        result.restored.save("colorized.png")
 ---
 
 ## Install
@@ -41,3 +41,7 @@ The tiny and large variants return restored color images. Validation uses paired
 ## Licensing
 
 <provenance-box></provenance-box>
+
+## Citation
+
+<citation-block />

@@ -20,7 +20,7 @@ snippets:
         model = LibreGround("showui-2b", device="cpu")
         result = model(SAMPLE_IMAGE, prompt="the person")
         print(result.points.xy)
-source_hash: ebad7b5f408e26cd
+source_hash: 871fb2b2c9e0e91d
 ---
 
 ## インストール
@@ -38,3 +38,7 @@ pip install "libreyolo[ground]"
 ## ライセンス
 
 <provenance-box></provenance-box>
+
+## 引用
+
+<citation-block />

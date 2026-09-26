@@ -68,3 +68,7 @@ Training rebuilds the classification head for an ImageFolder dataset. `cls_pw` a
 ## Licensing
 
 <provenance-box></provenance-box>
+
+## Citation
+
+<citation-block />

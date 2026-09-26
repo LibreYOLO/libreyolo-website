@@ -52,3 +52,7 @@ WildDet3D accepts text, box or point prompts and requires original-image camera 
 ## Licensing
 
 <provenance-box></provenance-box>
+
+## Citation
+
+<citation-block />

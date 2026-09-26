@@ -56,3 +56,7 @@ A trimap marks background as 0, unknown pixels as 128 and foreground as 255. Pas
 ## Licensing
 
 <provenance-box></provenance-box>
+
+## Citation
+
+<citation-block />

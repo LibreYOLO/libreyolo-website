@@ -48,3 +48,7 @@ The encoder uses 16 frames at 224 pixels. Finite videos use a centered window sa
 ## Licensing
 
 <provenance-box></provenance-box>
+
+## Citation
+
+<citation-block />

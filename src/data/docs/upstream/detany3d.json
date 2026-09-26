@@ -1,9 +1,12 @@
 {
   "name": "DetAny3D",
   "org": "OpenDriveLab",
-  "paper_title": "DetAny3D",
-  "paper_url": "https://github.com/OpenDriveLab/DetAny3D",
+  "paper_title": "Detect Anything 3D in the Wild",
+  "paper_url": "https://arxiv.org/abs/2504.07958",
   "code_url": "https://github.com/OpenDriveLab/DetAny3D",
   "license": "Apache-2.0 code; CC-BY-NC-4.0 weights",
-  "license_interpretation": "The mirrored checkpoint retains CC-BY-NC-4.0. Commercial use of those weights is excluded."
+  "license_interpretation": "The mirrored checkpoint retains CC-BY-NC-4.0. Commercial use of those weights is excluded.",
+  "bibtex": "@article{zhang2025detect,\n  title={Detect Anything 3D in the Wild},\n  author={Zhang, Hanxue and Jiang, Haoran and Yao, Qingsong and Sun, Yanan and Zhang, Renrui and Zhao, Hao and Li, Hongyang and Zhu, Hongzi and Yang, Zetong},\n  journal={arXiv preprint arXiv:2504.07958},\n  year={2025}\n}",
+  "bibtex_source_url": "https://raw.githubusercontent.com/OpenDriveLab/DetAny3D/main/README.md",
+  "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2504.07958. The upstream citation form is retained."
 }

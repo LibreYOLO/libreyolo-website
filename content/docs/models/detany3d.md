@@ -40,3 +40,7 @@ DetAny3D estimates camera intrinsics internally and accepts text, box or point p
 ## Licensing
 
 <provenance-box></provenance-box>
+
+## Citation
+
+<citation-block />

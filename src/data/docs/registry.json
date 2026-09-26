@@ -442,11 +442,14 @@
       "upstream": {
         "name": "DEKR",
         "org": "HRNet authors",
-        "paper_title": "DEKR",
-        "paper_url": "https://github.com/HRNet/DEKR",
+        "paper_title": "Bottom-Up Human Pose Estimation Via Disentangled Keypoint Regression",
+        "paper_url": "https://arxiv.org/abs/2104.02300",
         "code_url": "https://github.com/HRNet/DEKR",
         "license": "MIT",
-        "license_interpretation": "The upstream implementation is MIT. The adapter retrieves the released checkpoint from its source CDN."
+        "license_interpretation": "The upstream implementation is MIT. The adapter retrieves the released checkpoint from its source CDN.",
+        "bibtex": "@inproceedings{GengSXZW21,\n  title={Bottom-Up Human Pose Estimation Via Disentangled Keypoint Regression},\n  author={Zigang Geng, Ke Sun, Bin Xiao, Zhaoxiang Zhang, Jingdong Wang},\n  booktitle={CVPR},\n  year={2021}\n}",
+        "bibtex_source_url": "https://raw.githubusercontent.com/HRNet/DEKR/main/README.md",
+        "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2104.02300. The upstream citation form is retained; conference/journal entries were also checked against the publisher."
       }
     },
     "ppliteseg": {
@@ -714,11 +717,14 @@
       "upstream": {
         "name": "ConvNeXt V2",
         "org": "Meta AI",
-        "paper_title": "ConvNeXt V2",
-        "paper_url": "https://github.com/facebookresearch/ConvNeXt-V2",
+        "paper_title": "ConvNeXt V2: Co-designing and Scaling ConvNets with Masked Autoencoders",
+        "paper_url": "https://arxiv.org/abs/2301.00808",
         "code_url": "https://github.com/facebookresearch/ConvNeXt-V2",
         "license": "MIT code; CC-BY-NC-4.0 weights",
-        "license_interpretation": "The source code is MIT. Official pretrained weights are CC-BY-NC-4.0 and exclude commercial use."
+        "license_interpretation": "The source code is MIT. Official pretrained weights are CC-BY-NC-4.0 and exclude commercial use.",
+        "bibtex": "@article{Woo2023ConvNeXtV2,\n  title={ConvNeXt V2: Co-designing and Scaling ConvNets with Masked Autoencoders},\n  author={Sanghyun Woo, Shoubhik Debnath, Ronghang Hu, Xinlei Chen, Zhuang Liu, In So Kweon and Saining Xie},\n  year={2023},\n  journal={arXiv preprint arXiv:2301.00808},\n}",
+        "bibtex_source_url": "https://raw.githubusercontent.com/facebookresearch/ConvNeXt-V2/main/README.md",
+        "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2301.00808. The upstream citation form is retained."
       }
     },
     "pe": {
@@ -827,11 +833,14 @@
       "upstream": {
         "name": "Perception Encoder",
         "org": "Meta AI",
-        "paper_title": "Perception Encoder",
-        "paper_url": "https://github.com/facebookresearch/perception_models",
+        "paper_title": "Perception Encoder: The best visual embeddings are not at the output of the network",
+        "paper_url": "https://arxiv.org/abs/2504.13181",
         "code_url": "https://github.com/facebookresearch/perception_models",
         "license": "Apache-2.0",
-        "license_interpretation": "The publisher declares Apache-2.0 for the encoder weights."
+        "license_interpretation": "The publisher declares Apache-2.0 for the encoder weights.",
+        "bibtex": "@article{bolya2025PerceptionEncoder,\n  title={Perception Encoder: The best visual embeddings are not at the output of the network},\n  author={Daniel Bolya and Po-Yao Huang and Peize Sun and Jang Hyun Cho and Andrea Madotto and Chen Wei and Tengyu Ma and Jiale Zhi and Jathushan Rajasegaran and Hanoona Rasheed and Junke Wang and Marco Monteiro and Hu Xu and Shiyu Dong and Nikhila Ravi and Daniel Li and Piotr Doll{\\'a}r and Christoph Feichtenhofer},\n  journal={arXiv:2504.13181},\n  year={2025}\n}",
+        "bibtex_source_url": "https://raw.githubusercontent.com/facebookresearch/perception_models/main/README.md",
+        "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2504.13181. The upstream citation form is retained."
       }
     },
     "vjepa2": {
@@ -1031,11 +1040,14 @@
       "upstream": {
         "name": "LeVJEPA",
         "org": "MLO Lab",
-        "paper_title": "LeVJEPA",
-        "paper_url": "https://github.com/MLO-lab/LeVJEPA",
+        "paper_title": "LeVJEPA: Efficient & Scalable Video Pretraining without the Heuristics",
+        "paper_url": "https://arxiv.org/abs/2608.27395",
         "code_url": "https://github.com/MLO-lab/LeVJEPA",
         "license": "MIT code; CC-BY-NC-4.0 weights",
-        "license_interpretation": "The repository declares an explicit CC-BY-NC-4.0 exception for pretrained weights. Commercial use of those weights is excluded."
+        "license_interpretation": "The repository declares an explicit CC-BY-NC-4.0 exception for pretrained weights. Commercial use of those weights is excluded.",
+        "bibtex": "@misc{kuhn2026levjepaefficientscalable,\n      title={LeVJEPA: Efficient & Scalable Video Pretraining without the Heuristics}, \n      author={Lukas Kuhn and Lucas Maes and Giuseppe Serra and Quentin Le Lidec and Yann LeCun and Randall Balestriero and Florian Buettner},\n      year={2026},\n      eprint={2608.27395},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2608.27395}, \n}",
+        "bibtex_source_url": "https://raw.githubusercontent.com/MLO-lab/LeVJEPA/main/README.md",
+        "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2608.27395. The upstream citation form is retained."
       }
     },
     "ben2": {
@@ -1248,11 +1260,14 @@
       "upstream": {
         "name": "DDColor",
         "org": "DDColor authors",
-        "paper_title": "DDColor",
-        "paper_url": "https://github.com/piddnad/DDColor",
+        "paper_title": "DDColor: Towards Photo-Realistic Image Colorization via Dual Decoders",
+        "paper_url": "https://arxiv.org/abs/2212.11613",
         "code_url": "https://github.com/piddnad/DDColor",
         "license": "Apache-2.0",
-        "license_interpretation": "The publisher declares Apache-2.0 for the mirrored artifacts."
+        "license_interpretation": "The publisher declares Apache-2.0 for the mirrored artifacts.",
+        "bibtex": "@inproceedings{kang2023ddcolor,\n  title={DDColor: Towards Photo-Realistic Image Colorization via Dual Decoders},\n  author={Kang, Xiaoyang and Yang, Tao and Ouyang, Wenqi and Ren, Peiran and Li, Lingzhi and Xie, Xuansong},\n  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},\n  pages={328--338},\n  year={2023}\n}",
+        "bibtex_source_url": "https://raw.githubusercontent.com/piddnad/DDColor/master/README.md",
+        "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2212.11613. The upstream citation form is retained; conference/journal entries were also checked against the publisher."
       }
     },
     "hvi_cidnet": {
@@ -1346,7 +1361,7 @@
         "lama": "1.6.0"
       },
       "weights_hosted": true,
-      "extra": null,
+      "extra": "onnx",
       "trainable": false,
       "unsupported_train_params": {
         "lama": []
@@ -1388,11 +1403,14 @@
       "upstream": {
         "name": "LaMa",
         "org": "Samsung Research",
-        "paper_title": "LaMa",
-        "paper_url": "https://github.com/advimman/lama",
+        "paper_title": "Resolution-robust Large Mask Inpainting with Fourier Convolutions",
+        "paper_url": "https://arxiv.org/abs/2109.07161",
         "code_url": "https://github.com/advimman/lama",
         "license": "Apache-2.0",
-        "license_interpretation": "The mirrored ONNX artifact carries the OpenCV publisher's Apache-2.0 declaration."
+        "license_interpretation": "The mirrored ONNX artifact carries the OpenCV publisher's Apache-2.0 declaration.",
+        "bibtex": "@article{suvorov2021resolution,\n  title={Resolution-robust Large Mask Inpainting with Fourier Convolutions},\n  author={Suvorov, Roman and Logacheva, Elizaveta and Mashikhin, Anton and Remizova, Anastasia and Ashukha, Arsenii and Silvestrov, Aleksei and Kong, Naejin and Goka, Harshith and Park, Kiwoong and Lempitsky, Victor},\n  journal={arXiv preprint arXiv:2109.07161},\n  year={2021}\n}",
+        "bibtex_source_url": "https://raw.githubusercontent.com/advimman/lama/main/README.md",
+        "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2109.07161. The upstream citation form is retained."
       }
     },
     "vitmatte": {
@@ -1458,11 +1476,14 @@
       "upstream": {
         "name": "ViTMatte",
         "org": "HUST Vision Lab",
-        "paper_title": "ViTMatte",
-        "paper_url": "https://github.com/hustvl/ViTMatte",
+        "paper_title": "ViTMatte: Boosting Image Matting with Pretrained Plain Vision Transformers",
+        "paper_url": "https://arxiv.org/abs/2305.15272",
         "code_url": "https://github.com/hustvl/ViTMatte",
         "license": "MIT code; Apache-2.0 weights",
-        "license_interpretation": "The original code is MIT. The publisher card for hustvl/vitmatte-small-composition-1k declares Apache-2.0 for the weights."
+        "license_interpretation": "The original code is MIT. The publisher card for hustvl/vitmatte-small-composition-1k declares Apache-2.0 for the weights.",
+        "bibtex": "@article{yao2024vitmatte,\n  title={ViTMatte: Boosting image matting with pre-trained plain vision transformers},\n  author={Yao, Jingfeng and Wang, Xinggang and Yang, Shusheng and Wang, Baoyuan},\n  journal={Information Fusion},\n  volume={103},\n  pages={102091},\n  year={2024},\n  publisher={Elsevier}\n}",
+        "bibtex_source_url": "https://raw.githubusercontent.com/hustvl/ViTMatte/main/README.md",
+        "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2305.15272. The upstream citation form is retained; conference/journal entries were also checked against the publisher. Publisher: https://www.sciencedirect.com/science/article/pii/S1566253523004074 (Information Fusion 103, 2024, 102091)."
       }
     },
     "wilddet3d": {
@@ -1485,7 +1506,7 @@
       "task_added_in": {
         "wilddet3d": "1.6.0"
       },
-      "weights_hosted": false,
+      "weights_hosted": true,
       "extra": null,
       "trainable": false,
       "unsupported_train_params": {
@@ -1496,7 +1517,7 @@
       },
       "capabilities": {
         "train": false,
-        "val": true
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -1520,11 +1541,14 @@
       "upstream": {
         "name": "WildDet3D",
         "org": "Allen Institute for AI",
-        "paper_title": "WildDet3D",
-        "paper_url": "https://github.com/allenai/WildDet3D",
+        "paper_title": "WildDet3D: Scaling Promptable 3D Detection in the Wild",
+        "paper_url": "https://arxiv.org/abs/2604.08626",
         "code_url": "https://github.com/allenai/WildDet3D",
         "license": "SAM License",
-        "license_interpretation": "The upstream runtime and checkpoint retain the custom SAM License, including its field-of-use restrictions."
+        "license_interpretation": "The upstream runtime and checkpoint retain the custom SAM License, including its field-of-use restrictions.",
+        "bibtex": "@misc{huang2026wilddet3dscalingpromptable3d,\n      title={WildDet3D: Scaling Promptable 3D Detection in the Wild}, \n      author={Weikai Huang and Jieyu Zhang and Sijun Li and Taoyang Jia and Jiafei Duan and Yunqian Cheng and Jaemin Cho and Matthew Wallingford and Rustin Soraki and Chris Dongjoo Kim and Shuo Liu and Donovan Clay and Taira Anderson and Winson Han and Ali Farhadi and Bharath Hariharan and Zhongzheng Ren and Ranjay Krishna},\n      year={2026},\n      eprint={2604.08626},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2604.08626}, \n}",
+        "bibtex_source_url": "https://raw.githubusercontent.com/allenai/WildDet3D/main/README.md",
+        "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2604.08626. The upstream citation form is retained."
       }
     },
     "3dmood": {
@@ -1558,7 +1582,7 @@
       },
       "capabilities": {
         "train": false,
-        "val": true
+        "val": false
       },
       "checkpoints": [
         {
@@ -1597,11 +1621,14 @@
       "upstream": {
         "name": "3D-MOOD",
         "org": "ETH Zurich, Computer Vision and Geometry Lab",
-        "paper_title": "3D-MOOD",
-        "paper_url": "https://github.com/cvg/3D-MOOD",
+        "paper_title": "3D-MOOD: Lifting 2D to 3D for Monocular Open-Set Object Detection",
+        "paper_url": "https://arxiv.org/abs/2507.23567",
         "code_url": "https://github.com/cvg/3D-MOOD",
         "license": "Apache-2.0",
-        "license_interpretation": "The source and model publisher declare Apache-2.0."
+        "license_interpretation": "The source and model publisher declare Apache-2.0.",
+        "bibtex": "@InProceedings{Yang_2025_ICCV,\n    author    = {Yang, Yung-Hsu and Piccinelli, Luigi and Segu, Mattia and Li, Siyuan and Huang, Rui and Fu, Yuqian and Pollefeys, Marc and Blum, Hermann and Bauer, Zuria},\n    title     = {3D-MOOD: Lifting 2D to 3D for Monocular Open-Set Object Detection},\n    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},\n    month     = {October},\n    year      = {2025},\n    pages     = {7429-7439}\n}",
+        "bibtex_source_url": "https://raw.githubusercontent.com/cvg/3D-MOOD/main/README.md",
+        "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2507.23567. The upstream citation form is retained; conference/journal entries were also checked against the publisher."
       }
     },
     "fcos3d": {
@@ -1624,7 +1651,7 @@
       "task_added_in": {
         "fcos3d": "1.6.0"
       },
-      "weights_hosted": false,
+      "weights_hosted": true,
       "extra": null,
       "trainable": false,
       "unsupported_train_params": {
@@ -1635,7 +1662,7 @@
       },
       "capabilities": {
         "train": false,
-        "val": true
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -1686,7 +1713,7 @@
       "task_added_in": {
         "detany3d": "1.6.0"
       },
-      "weights_hosted": false,
+      "weights_hosted": true,
       "extra": null,
       "trainable": false,
       "unsupported_train_params": {
@@ -1697,7 +1724,7 @@
       },
       "capabilities": {
         "train": false,
-        "val": true
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -1721,11 +1748,14 @@
       "upstream": {
         "name": "DetAny3D",
         "org": "OpenDriveLab",
-        "paper_title": "DetAny3D",
-        "paper_url": "https://github.com/OpenDriveLab/DetAny3D",
+        "paper_title": "Detect Anything 3D in the Wild",
+        "paper_url": "https://arxiv.org/abs/2504.07958",
         "code_url": "https://github.com/OpenDriveLab/DetAny3D",
         "license": "Apache-2.0 code; CC-BY-NC-4.0 weights",
-        "license_interpretation": "The mirrored checkpoint retains CC-BY-NC-4.0. Commercial use of those weights is excluded."
+        "license_interpretation": "The mirrored checkpoint retains CC-BY-NC-4.0. Commercial use of those weights is excluded.",
+        "bibtex": "@article{zhang2025detect,\n  title={Detect Anything 3D in the Wild},\n  author={Zhang, Hanxue and Jiang, Haoran and Yao, Qingsong and Sun, Yanan and Zhang, Renrui and Zhao, Hao and Li, Hongyang and Zhu, Hongzi and Yang, Zetong},\n  journal={arXiv preprint arXiv:2504.07958},\n  year={2025}\n}",
+        "bibtex_source_url": "https://raw.githubusercontent.com/OpenDriveLab/DetAny3D/main/README.md",
+        "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2504.07958. The upstream citation form is retained."
       }
     },
     "marigold_v2": {
@@ -1751,7 +1781,7 @@
         "marigold_v2": "1.6.0"
       },
       "weights_hosted": true,
-      "extra": null,
+      "extra": "marigold",
       "trainable": false,
       "unsupported_train_params": {
         "marigold_v2": []
@@ -1911,17 +1941,17 @@
         "diffusion_policy": "1.6.0"
       },
       "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "extra": "vla",
+      "trainable": true,
       "unsupported_train_params": {
         "smolvla": [],
         "act_policy": [],
         "diffusion_policy": []
       },
       "trainable_per_key": {
-        "smolvla": null,
-        "act_policy": null,
-        "diffusion_policy": null
+        "smolvla": true,
+        "act_policy": true,
+        "diffusion_policy": true
       },
       "capabilities": {
         "train": true,
@@ -1976,18 +2006,18 @@
       "task_added_in": {
         "molmo2": "1.6.0"
       },
-      "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "weights_hosted": true,
+      "extra": "molmo2",
+      "trainable": false,
       "unsupported_train_params": {
         "molmo2": []
       },
       "trainable_per_key": {
-        "molmo2": null
+        "molmo2": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -2038,18 +2068,18 @@
       "task_added_in": {
         "gemma4": "1.6.0"
       },
-      "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "weights_hosted": true,
+      "extra": "vlm",
+      "trainable": false,
       "unsupported_train_params": {
         "gemma4": []
       },
       "trainable_per_key": {
-        "gemma4": null
+        "gemma4": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -2101,18 +2131,18 @@
       "task_added_in": {
         "moondream": "1.6.0"
       },
-      "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "weights_hosted": true,
+      "extra": "vlm",
+      "trainable": false,
       "unsupported_train_params": {
         "moondream": []
       },
       "trainable_per_key": {
-        "moondream": null
+        "moondream": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -2178,17 +2208,17 @@
         "northmicrovision": "1.6.0"
       },
       "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "extra": "vlm",
+      "trainable": false,
       "unsupported_train_params": {
         "northmicrovision": []
       },
       "trainable_per_key": {
-        "northmicrovision": null
+        "northmicrovision": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -2240,17 +2270,17 @@
         "showui": "1.6.0"
       },
       "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "extra": "vlm",
+      "trainable": false,
       "unsupported_train_params": {
         "showui": []
       },
       "trainable_per_key": {
-        "showui": null
+        "showui": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -2274,11 +2304,14 @@
       "upstream": {
         "name": "ShowUI",
         "org": "ShowUI authors",
-        "paper_title": "ShowUI",
-        "paper_url": "https://github.com/showlab/ShowUI",
+        "paper_title": "ShowUI: One Vision-Language-Action Model for GUI Visual Agent",
+        "paper_url": "https://arxiv.org/abs/2411.17465",
         "code_url": "https://github.com/showlab/ShowUI",
         "license": "MIT",
-        "license_interpretation": "The model publisher declares MIT."
+        "license_interpretation": "The model publisher declares MIT.",
+        "bibtex": "@misc{lin2024showui,\n      title={ShowUI: One Vision-Language-Action Model for GUI Visual Agent}, \n      author={Kevin Qinghong Lin and Linjie Li and Difei Gao and Zhengyuan Yang and Shiwei Wu and Zechen Bai and Weixian Lei and Lijuan Wang and Mike Zheng Shou},\n      year={2024},\n      eprint={2411.17465},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2411.17465}, \n}",
+        "bibtex_source_url": "https://raw.githubusercontent.com/showlab/ShowUI/main/README.md",
+        "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2411.17465. The upstream citation form is retained."
       }
     },
     "ground_florence2": {
@@ -2301,18 +2334,18 @@
       "task_added_in": {
         "ground_florence2": "1.6.0"
       },
-      "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "weights_hosted": true,
+      "extra": "vlm",
+      "trainable": false,
       "unsupported_train_params": {
         "ground_florence2": []
       },
       "trainable_per_key": {
-        "ground_florence2": null
+        "ground_florence2": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -2363,18 +2396,18 @@
       "task_added_in": {
         "ground_qwen3vl": "1.6.0"
       },
-      "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "weights_hosted": true,
+      "extra": "vlm",
+      "trainable": false,
       "unsupported_train_params": {
         "ground_qwen3vl": []
       },
       "trainable_per_key": {
-        "ground_qwen3vl": null
+        "ground_qwen3vl": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -2506,9 +2539,9 @@
         "paper_title": "Dome-DETR: DETR with Density-Oriented Feature-Query Manipulation for Efficient Tiny Object Detection",
         "paper_url": "https://arxiv.org/abs/2505.05741",
         "code_url": "https://github.com/RicePasteM/Dome-DETR",
-        "license": "unclear, not redistributed",
+        "license": "Apache-2.0 code; academic-research-only weights",
         "code_license": "Apache-2.0",
-        "license_interpretation": "The code and the weights part company here. The upstream repository is Apache-2.0, permissive and safe for commercial and closed-source use, and LibreYOLO's own port is MIT, so nothing restricts the architecture or the training code. The weights are the unresolved part: the upstream model card carries no license field in its metadata, and its prose states that the project is Apache-2.0 while also restricting the material to academic research purposes only. Those two readings do not agree, and the stricter one is not a grant to redistribute, so LibreYOLO mirrors nothing for this family and hosts no checkpoint. Download the six upstream checkpoints yourself and convert them with weights/convert_domedetr_weights.py, and read the upstream terms before using them for anything commercial. Weights you train yourself on your own data derive from no upstream checkpoint and are yours.",
+        "license_interpretation": "The upstream source is Apache-2.0. Six mirrored checkpoints retain the publisher academic-research-only restriction.",
         "bibtex": null,
         "bibtex_source_url": null,
         "bibtex_verified": "No BibTeX block is published by the authors. The upstream repository README at github.com/RicePasteM/Dome-DETR carries no citation section, and no @inproceedings or @article entry for Dome-DETR exists anywhere in the LibreYOLO source tree. The paper is 'Dome-DETR: DETR with Density-Oriented Feature-Query Manipulation for Efficient Tiny Object Detection', ACM Multimedia 2025, arXiv 2505.05741. bibtex is left null rather than assembled by hand; do not invent one. If the authors publish an entry, copy it verbatim and record the check here."
@@ -2551,7 +2584,7 @@
       "trainable_per_key": {
         "yolo9": true,
         "yolo9_e2e": true,
-        "yolo9_p2": null
+        "yolo9_p2": true
       },
       "capabilities": {
         "train": true,
@@ -2744,11 +2777,7 @@
       },
       "capabilities": {
         "train": true,
-        "val": true,
-        "lora": true,
-        "cuda_graph": true,
-        "distill": false,
-        "track": true
+        "val": true
       },
       "checkpoints": [
         {
@@ -3342,9 +3371,9 @@
         "paper_title": "EdgeCrafter: Compact ViTs for Edge Dense Prediction via Task-Specialized Distillation",
         "paper_url": "https://arxiv.org/abs/2603.18739",
         "code_url": "https://github.com/Intellindust-AI-Lab/EdgeCrafter",
-        "license": "Apache-2.0",
+        "license": "Apache-2.0 original COCO weights; restricted obj2coco weights",
         "code_license": "Apache-2.0",
-        "license_interpretation": "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. One license covers all three upstream models, so the detection, pose and segmentation weights carry identical terms, and weights you train yourself on your own data are yours.",
+        "license_interpretation": "Original COCO checkpoints retain their recorded Apache-2.0 grant. The obj2coco detection, segmentation and pose variants require explicit opt-in and retain non-commercial upstream terms. The library code license does not replace those weight terms.",
         "bibtex": "@article{liu2026edgecrafter,\n  title={EdgeCrafter: Compact ViTs for Edge Dense Prediction via Task-Specialized Distillation},\n  author={Liu, Longfei and Hou, Yongjie and Li, Yang and Wang, Qirui and Sha, Youyang and Yu, Yongjun and Wang, Yinzhi and Ru, Peizhe and Yu, Xuanlong and Shen, Xi},\n  journal={arXiv},\n  year={2026}\n}",
         "bibtex_source_url": "https://github.com/Intellindust-AI-Lab/EdgeCrafter#-citation",
         "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README on branch main. Cross-checked against the arXiv API for 2603.18739: ten authors in the same order, identical title, latest version v3 dated 2026-03-27 with no journal reference, so journal={arXiv} and year 2026 still match the record. Do not hand-edit; a wrong citation misattributes someone's work."
@@ -3378,7 +3407,7 @@
         "rtdetrv4": "1.2.0"
       },
       "weights_hosted": true,
-      "extra": "rtdetr",
+      "extra": null,
       "trainable": true,
       "unsupported_train_params": {
         "rtdetr": [],
@@ -5157,7 +5186,7 @@
         "dinov2": null
       },
       "weights_hosted": false,
-      "extra": null,
+      "extra": "rfdetr",
       "trainable": true,
       "unsupported_train_params": {
         "dinov2": []
@@ -7287,7 +7316,7 @@
         "eomt": null
       },
       "weights_hosted": true,
-      "extra": null,
+      "extra": "eomt",
       "trainable": false,
       "unsupported_train_params": {
         "eomt": []
@@ -7513,7 +7542,7 @@
       },
       "capabilities": {
         "train": false,
-        "val": true
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -7810,7 +7839,7 @@
         "midas": null
       },
       "weights_hosted": true,
-      "extra": null,
+      "extra": "midas",
       "trainable": false,
       "unsupported_train_params": {
         "midas": []
@@ -7863,7 +7892,7 @@
         "paper_url": "https://arxiv.org/abs/1907.01341",
         "code_url": "https://github.com/isl-org/MiDaS",
         "license": "MIT",
-        "license_interpretation": "The isl-org/MiDaS repository, code and released checkpoints included, is MIT. LibreYOLO's own port code is MIT as well. LibreYOLO does not republish the checkpoints on its own Hugging Face organization, though: the family downloads the two official release assets directly from GitHub and checks them against a pinned SHA-256 before wrapping them, because an internal LibreYOLO policy (ADR 0006) requires the training-dataset mixture's commercial-redistribution terms to be cleared before LibreYOLO hosts a depth checkpoint itself, and that clearance has not happened for MiDaS. The bytes you get are upstream's own MIT-licensed release either way.",
+        "license_interpretation": "The upstream repository and released weights declare MIT. LibreYOLO mirrors the s and l checkpoints under that publisher grant.",
         "bibtex": "@ARTICLE {Ranftl2022,\n    author  = \"Ren\\'{e} Ranftl and Katrin Lasinger and David Hafner and Konrad Schindler and Vladlen Koltun\",\n    title   = \"Towards Robust Monocular Depth Estimation: Mixing Datasets for Zero-Shot Cross-Dataset Transfer\",\n    journal = \"IEEE Transactions on Pattern Analysis and Machine Intelligence\",\n    year    = \"2022\",\n    volume  = \"44\",\n    number  = \"3\"\n}\n\n@article{Ranftl2021,\n\tauthor    = {Ren\\'{e} Ranftl and Alexey Bochkovskiy and Vladlen Koltun},\n\ttitle     = {Vision Transformers for Dense Prediction},\n\tjournal   = {ICCV},\n\tyear      = {2021},\n}",
         "bibtex_source_url": "https://github.com/isl-org/MiDaS#citation",
         "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README on branch master. Two entries apply to LibreYOLO's port: Ranftl2022 (\"cite our paper if you use this code or any of the models\") and Ranftl2021, which the README asks for specifically \"if you use a DPT-based model\", true here for the l size (DPT-Large). The README's third entry, the MiDaS v3.1 technical report, is asked for only when using MiDaS 3.1 models; LibreYOLO's l checkpoint is the earlier v3 dpt_large_384 release, so that entry is left out. Cross-checked against the arXiv API: 1907.01341 lists the same five authors in the same order, published 2019-07-02, matching Ranftl2022's author list; 2103.13413 lists the same three authors in the same order, published 2021-03-24, matching Ranftl2021. The Ranftl2021 entry is copied as the authors wrote it even though its venue field holds a bare conference name (\"ICCV\") in an @article type rather than @inproceedings. Do not hand-edit; a wrong citation misattributes someone's work."
@@ -7943,7 +7972,7 @@
         "paper_url": "https://arxiv.org/abs/2507.02546",
         "code_url": "https://github.com/microsoft/MoGe",
         "license": "MIT",
-        "license_interpretation": "MIT is a permissive license: the code and the official ViT-S, ViT-B and ViT-L checkpoints can be used in commercial and closed-source products. It asks that you keep the license text and copyright notice with any copy you redistribute, and it places no obligation on your own application code. LibreYOLO downloads these checkpoints directly from the official Hugging Face repositories at a pinned revision rather than copying them into its own organization, and verifies each file against a recorded SHA-256 checksum before use. The DINOv2 encoder MoGe-2 builds on is separately licensed Apache-2.0 by Meta AI; LibreYOLO reuses the DINOv2 implementation already bundled for its Depth Anything V2 family rather than copying it again here.",
+        "license_interpretation": "The publisher declares MIT for the model and checkpoints. LibreYOLO mirrors s and l; b remains an upstream download. The DINOv2 encoder retains its separate Apache-2.0 attribution.",
         "bibtex": "@inproceedings{wang2025moge,\n  title={Moge: Unlocking accurate monocular geometry estimation for open-domain images with optimal training supervision},\n  author={Wang, Ruicheng and Xu, Sicheng and Dai, Cassie and Xiang, Jianfeng and Deng, Yu and Tong, Xin and Yang, Jiaolong},\n  booktitle={Proceedings of the Computer Vision and Pattern Recognition Conference},\n  pages={5261--5271},\n  year={2025}\n}\n\n@misc{wang2025moge2,\n      title={MoGe-2: Accurate Monocular Geometry with Metric Scale and Sharp Details}, \n      author={Ruicheng Wang and Sicheng Xu and Yue Dong and Yu Deng and Jianfeng Xiang and Zelong Lv and Guangzhong Sun and Xin Tong and Jiaolong Yang},\n      year={2025},\n      eprint={2507.02546},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2507.02546}, \n}",
         "bibtex_source_url": "https://github.com/microsoft/MoGe#-citation",
         "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README at microsoft/MoGe on branch main, which publishes both the original MoGe entry and the MoGe-2 entry as one block. Cross-checked against the arXiv API: 2410.19115 (MoGe) matches on title and all seven authors in order (Wang, Xu, Dai, Xiang, Deng, Tong, Yang); the paper's v3 update records CVPR 2025, matching the @inproceedings form the authors publish. 2507.02546 (MoGe-2) matches on title and all nine authors in order, still an arXiv-only preprint at check time, matching the @misc form. LibreYOLO ports only the MoGe-2 normal head, not the point-map, mask or metric-scale heads. Do not hand-edit; a wrong citation misattributes someone's work."
@@ -8527,7 +8556,7 @@
       },
       "capabilities": {
         "train": false,
-        "val": true
+        "val": false
       },
       "checkpoints": [],
       "export": {},
@@ -8566,7 +8595,7 @@
       "task_added_in": {
         "sam3dbody": null
       },
-      "weights_hosted": false,
+      "weights_hosted": true,
       "extra": null,
       "trainable": false,
       "unsupported_train_params": {
@@ -8577,7 +8606,7 @@
       },
       "capabilities": {
         "train": false,
-        "val": true
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -8633,15 +8662,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": null,
+      "trainable": false,
       "unsupported_train_params": {
         "yolo1": []
       },
       "trainable_per_key": {
-        "yolo1": null
+        "yolo1": false
       },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -8706,15 +8735,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": null,
+      "trainable": false,
       "unsupported_train_params": {
         "yolo2": []
       },
       "trainable_per_key": {
-        "yolo2": null
+        "yolo2": false
       },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -8786,15 +8815,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": null,
+      "trainable": false,
       "unsupported_train_params": {
         "yolo3": []
       },
       "trainable_per_key": {
-        "yolo3": null
+        "yolo3": false
       },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -8873,15 +8902,15 @@
       },
       "weights_hosted": true,
       "extra": null,
-      "trainable": null,
+      "trainable": false,
       "unsupported_train_params": {
         "yolo4": []
       },
       "trainable_per_key": {
-        "yolo4": null
+        "yolo4": false
       },
       "capabilities": {
-        "train": true,
+        "train": false,
         "val": true
       },
       "checkpoints": [
@@ -9039,18 +9068,18 @@
       "task_added_in": {
         "sam": null
       },
-      "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "weights_hosted": true,
+      "extra": "sam",
+      "trainable": false,
       "unsupported_train_params": {
         "sam": []
       },
       "trainable_per_key": {
-        "sam": null
+        "sam": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -9078,7 +9107,7 @@
         "paper_url": "https://arxiv.org/abs/2304.02643",
         "code_url": "https://github.com/facebookresearch/segment-anything",
         "license": "Apache-2.0",
-        "license_interpretation": "Apache-2.0 is a permissive license, so this code and these weights can be used in commercial and closed-source products. It asks you to keep the license text and attribution notices with any copy you redistribute, and it grants a patent license. LibreYOLO does not mirror SAM-1 weights on its own Hugging Face org: LibreSAM downloads the base, large and huge checkpoints directly from Meta's own facebook/sam-vit-base, facebook/sam-vit-large and facebook/sam-vit-huge repositories, each tagged Apache-2.0 there as well.",
+        "license_interpretation": "SAM-1 base, large and huge use LibreYOLO mirrors of the publisher artifacts under Apache-2.0.",
         "bibtex": "@article{kirillov2023segany,\n  title={Segment Anything},\n  author={Kirillov, Alexander and Mintun, Eric and Ravi, Nikhila and Mao, Hanzi and Rolland, Chloe and Gustafson, Laura and Xiao, Tete and Whitehead, Spencer and Berg, Alexander C. and Lo, Wan-Yen and Doll{\\'a}r, Piotr and Girshick, Ross},\n  journal={arXiv:2304.02643},\n  year={2023}\n}",
         "bibtex_source_url": "https://github.com/facebookresearch/segment-anything#citing-segment-anything",
         "bibtex_verified": "2026-08-08, copied verbatim from the Citing Segment Anything section of the upstream README on branch main. Cross-checked against the arXiv API for 2304.02643: twelve authors in the same order, identical title. The upstream README still cites it as an arXiv entry, so this page does too rather than asserting a venue upstream has not."
@@ -9104,18 +9133,18 @@
       "task_added_in": {
         "sam2": null
       },
-      "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "weights_hosted": true,
+      "extra": "sam",
+      "trainable": false,
       "unsupported_train_params": {
         "sam2": []
       },
       "trainable_per_key": {
-        "sam2": null
+        "sam2": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -9169,18 +9198,18 @@
       "task_added_in": {
         "sam3": null
       },
-      "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "weights_hosted": true,
+      "extra": "sam",
+      "trainable": false,
       "unsupported_train_params": {
         "sam3": []
       },
       "trainable_per_key": {
-        "sam3": null
+        "sam3": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -9235,17 +9264,17 @@
         "mobilesam": null
       },
       "weights_hosted": true,
-      "extra": null,
-      "trainable": null,
+      "extra": "sam",
+      "trainable": false,
       "unsupported_train_params": {
         "mobilesam": []
       },
       "trainable_per_key": {
-        "mobilesam": null
+        "mobilesam": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [
         {
@@ -9308,18 +9337,18 @@
       "task_added_in": {
         "edgetam": null
       },
-      "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "weights_hosted": true,
+      "extra": "sam",
+      "trainable": false,
       "unsupported_train_params": {
         "edgetam": []
       },
       "trainable_per_key": {
-        "edgetam": null
+        "edgetam": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -9373,18 +9402,18 @@
       "task_added_in": {
         "picosam3": null
       },
-      "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "weights_hosted": true,
+      "extra": "sam",
+      "trainable": false,
       "unsupported_train_params": {
         "picosam3": []
       },
       "trainable_per_key": {
-        "picosam3": null
+        "picosam3": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -9439,18 +9468,18 @@
       "task_added_in": {
         "grounding_dino": null
       },
-      "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "weights_hosted": true,
+      "extra": "openvocab",
+      "trainable": false,
       "unsupported_train_params": {
         "grounding_dino": []
       },
       "trainable_per_key": {
-        "grounding_dino": null
+        "grounding_dino": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -9504,18 +9533,18 @@
       "task_added_in": {
         "owlv2": null
       },
-      "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "weights_hosted": true,
+      "extra": "openvocab",
+      "trainable": false,
       "unsupported_train_params": {
         "owlv2": []
       },
       "trainable_per_key": {
-        "owlv2": null
+        "owlv2": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -9569,18 +9598,18 @@
       "task_added_in": {
         "omdet_turbo": null
       },
-      "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "weights_hosted": true,
+      "extra": "openvocab",
+      "trainable": false,
       "unsupported_train_params": {
         "omdet_turbo": []
       },
       "trainable_per_key": {
-        "omdet_turbo": null
+        "omdet_turbo": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -9634,18 +9663,18 @@
       "task_added_in": {
         "ov_deim": null
       },
-      "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "weights_hosted": true,
+      "extra": "openvocab",
+      "trainable": false,
       "unsupported_train_params": {
         "ov_deim": []
       },
       "trainable_per_key": {
-        "ov_deim": null
+        "ov_deim": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -9701,17 +9730,17 @@
         "florence2": null
       },
       "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "extra": "vlm",
+      "trainable": false,
       "unsupported_train_params": {
         "florence2": []
       },
       "trainable_per_key": {
-        "florence2": null
+        "florence2": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -9766,17 +9795,17 @@
         "kosmos2": null
       },
       "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "extra": "vlm",
+      "trainable": false,
       "unsupported_train_params": {
         "kosmos2": []
       },
       "trainable_per_key": {
-        "kosmos2": null
+        "kosmos2": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -9831,17 +9860,17 @@
         "qwen3vl": null
       },
       "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "extra": "vlm",
+      "trainable": true,
       "unsupported_train_params": {
         "qwen3vl": []
       },
       "trainable_per_key": {
-        "qwen3vl": null
+        "qwen3vl": true
       },
       "capabilities": {
         "train": true,
-        "val": true
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -9896,17 +9925,17 @@
         "smolvlm2": null
       },
       "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "extra": "vlm",
+      "trainable": false,
       "unsupported_train_params": {
         "smolvlm2": []
       },
       "trainable_per_key": {
-        "smolvlm2": null
+        "smolvlm2": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -9961,17 +9990,17 @@
         "internvl3": null
       },
       "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "extra": "vlm",
+      "trainable": false,
       "unsupported_train_params": {
         "internvl3": []
       },
       "trainable_per_key": {
-        "internvl3": null
+        "internvl3": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -10026,17 +10055,17 @@
         "lfm2vl": null
       },
       "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "extra": "vlm",
+      "trainable": false,
       "unsupported_train_params": {
         "lfm2vl": []
       },
       "trainable_per_key": {
-        "lfm2vl": null
+        "lfm2vl": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -10092,17 +10121,17 @@
         "locateanything": null
       },
       "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "extra": "vlm",
+      "trainable": false,
       "unsupported_train_params": {
         "locateanything": []
       },
       "trainable_per_key": {
-        "locateanything": null
+        "locateanything": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {
@@ -10172,7 +10201,7 @@
         "clip": null
       },
       "weights_hosted": true,
-      "extra": null,
+      "extra": "clip",
       "trainable": false,
       "unsupported_train_params": {
         "clip": []
@@ -10267,7 +10296,7 @@
         "siglip2": null
       },
       "weights_hosted": true,
-      "extra": null,
+      "extra": "siglip2",
       "trainable": false,
       "unsupported_train_params": {
         "siglip2": []
@@ -10366,18 +10395,18 @@
       "task_added_in": {
         "sensenovavision": null
       },
-      "weights_hosted": false,
-      "extra": null,
-      "trainable": null,
+      "weights_hosted": true,
+      "extra": "sensenova",
+      "trainable": false,
       "unsupported_train_params": {
         "sensenovavision": []
       },
       "trainable_per_key": {
-        "sensenovavision": null
+        "sensenovavision": false
       },
       "capabilities": {
-        "train": true,
-        "val": true
+        "train": false,
+        "val": false
       },
       "checkpoints": [],
       "export": {},
@@ -10421,7 +10450,7 @@
         "libremodus": null
       },
       "weights_hosted": false,
-      "extra": null,
+      "extra": "modus",
       "trainable": false,
       "unsupported_train_params": {
         "libremodus": []
@@ -10431,7 +10460,7 @@
       },
       "capabilities": {
         "train": false,
-        "val": true
+        "val": false
       },
       "checkpoints": [],
       "export": {},

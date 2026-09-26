@@ -22,7 +22,7 @@ snippets:
         model.set_classes(["person", "building"])
         result = model(SAMPLE_IMAGE)
         print(result.probs)
-source_hash: 5ac4a4a19a379bb8
+source_hash: 6cf7a6142312f63a
 ---
 
 ## インストール
@@ -50,3 +50,7 @@ pip install "libreyolo"
 ## ライセンス
 
 <provenance-box></provenance-box>
+
+## 引用
+
+<citation-block />
