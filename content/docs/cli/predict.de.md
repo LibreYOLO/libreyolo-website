@@ -16,7 +16,7 @@ keywords:
   - libreyolo predict befehl
   - libreyolo predict argumente
   - yolo json ausgabe terminal
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Befehl
     value: libreyolo predict
@@ -50,7 +50,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 7e46c7ed7dd9e6c4
+source_hash: "56d898992f1b129c"
 ---
 
 ## Synopsis
@@ -102,6 +102,11 @@ Task-Wort wird vor dem Parsen entfernt.
 | `quiet` | `false` | stderr unterdrücken |
 | `verbose` | `false` | Ausführliche Ausgabe auf stderr |
 | `help_json` | `false` | Befehlsschema als JSON ausgeben und beenden |
+
+| Argument | Standard | Bedeutung |
+| --- | --- | --- |
+| `mask` | `None` | Binäre Inpainting-Maske für ein einzelnes Bild bei Modellen, die sie benötigen |
+| `trimap` | `None` | Dreistufige Trimap für ein einzelnes Bild bei geführten Matting-Modellen |
 
 ## Beispiele
 

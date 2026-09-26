@@ -17,7 +17,7 @@ keywords:
   - image classification python
   - classificazione immagini python
   - rete neurale convoluzionale
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -81,7 +81,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 68c09f080c74bb87
+source_hash: c996d557da01e4d4
 ---
 
 ## Installazione
@@ -121,6 +121,8 @@ mentre il fine-tuning non è implementato.
 top-5.
 
 <code-tabs name="val" />
+
+La validazione e la calibrazione INT8 usano la trasformazione di valutazione della famiglia. I metadati di esportazione registrano `norm_mean`, `norm_std` e `resize_mode`; gli artefatti più vecchi usano i valori della famiglia. I preprocessori di calibrazione restituiscono l'array CHW e il rapporto richiesti.
 
 ## Esportazione
 

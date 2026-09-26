@@ -20,7 +20,7 @@ keywords:
   - early stopping patience
   - amp bfloat16
   - train config yaml
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -126,7 +126,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: d838d1abd45af40f
+source_hash: eac4e55fcf16ca15
 ---
 
 ## Definindo argumentos
@@ -171,13 +171,9 @@ Os padrões base são `optimizer="sgd"`, `lr0=0.01`, `momentum=0.937`,
 | `weight_decay` | `5e-4` | `5e-4` | `1e-4` | `1e-5` |
 | `scheduler` | `yoloxwarmcos` | `linear` | `flat_cosine` | `cos` |
 | `epochs` | `300` | `300` | `132` | `300` |
-| `amp` | `True` | `True` | `False` | `False` |
+| `amp` | `True` | `True` | `True` | `True` |
 
-D-FINE e DEIM vêm com `amp=False` porque o decoder do D-FINE limita as ativações
-a 65504, o maior valor finito de float16. YOLO-NAS e FOMO também deixam isso
-desligado por padrão. A flag `--amp` da CLI tem `True` como padrão para todas as
-famílias, então ela conta como fornecida pelo usuário e sobrescreve o padrão da
-família; não mexa nela a menos que você queira mesmo mudá-la.
+D-FINE, DEIM, RT-DETRv4 e detecção YOLO-NAS usam `amp=True` com `amp_dtype="float16"` por padrão. Dome-DETR, PP-YOLOE e YOLO-NAS OBB mantêm os padrões FP32. Passe `amp=False` quando FP32 for necessário.
 
 Para ler os padrões reais de uma família em vez de adivinhar:
 
@@ -206,6 +202,8 @@ ainda subestima o custo do seu critério e das camadas auxiliares do decoder.
 
 O autobatch é um recurso de CUDA. Em CPU ou MPS ele registra uma linha no log e
 mantém o batch padrão.
+
+`min_samples=0` mantém a duração da época. Um mínimo positivo faz amostragem com reposição em datasets de detecção menores. `class_balanced=False`, quando definido como true, ativa a amostragem por fator de repetição por imagem; combina com `min_samples` e DDP. Loaders especializados que não passam pelo sampler compartilhado rejeitam o balanceamento ativado.
 
 ## Acumulação de gradiente
 
@@ -282,6 +280,10 @@ desativando o early stopping.
 leituras em cache são byte a byte idênticas às leituras novas. Com workers no
 dataloader, `"disk"` é a mais segura das duas.
 
+`average_best=0` desativa a média de checkpoints; um N positivo grava `weights/average.pt` a partir dos até N melhores snapshots. Tensores de ponto flutuante são promediados uniformemente e buffers inteiros vêm do melhor snapshot. `export_check=False` pode ser ativado para interromper antes da primeira época se a exportação ONNX falhar. Saídas brutas compatíveis são comparadas com `rtol=1e-3`, `atol=1e-4`; layouts incompatíveis registram que a comparação foi ignorada.
+
+`precise_bn=0` desativa a recalibração final de BatchNorm. Um valor positivo limita as imagens do loader de treinamento antes da validação final; em DDP, o limite se aplica a cada rank participante. BatchNorm congelada permanece congelada. [Callbacks de fitness personalizados](/docs/train/fitness-callbacks) podem selecionar os melhores checkpoints e controlar a paciência.
+
 ## Resume
 
 `resume=True` continua uma execução interrompida. O checkpoint precisa ser
@@ -319,3 +321,11 @@ Python.
 - [Congelamento de camadas](/docs/train/layer-freezing) e [LoRA](/docs/train/lora)
   para treinar um subconjunto dos pesos.
 - [Validação e métricas](/docs/train/validation) para o que a execução reporta.
+
+## Seleção de classes e ponderação da loss
+
+Para detecção com YOLO9, RF-DETR, EdgeCrafter, RT-DETR, D-FINE, DEIM, TinyFormer e YOLO-NAS, `classes=None` mantém todas as classes do dataset; uma lista filtra a supervisão preservando os IDs originais, `nc` e `names`. `single_cls=False` pode ser ativado para mapear as labels mantidas para a classe 0, chamada `object`. Retomada e validação herdam as configurações salvas. O treinamento OBB do modelo rejeita `single_cls`.
+
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 e DINOv2 suportam `cls_pw=0.0`: valores em [0, 1] ponderam cada classe pela frequência inversa elevada a essa potência, normalizada para média 1. `class_weights=False`, quando ativado, seleciona a ponderação alternativa `N / (C * n_c)`. Não pode ser combinado com `cls_pw` positivo; a retomada exige configurações de ponderação iguais.
+
+`plot_samples=8` define o limite de imagens de amostra da validação. Use 0 para nenhuma ou -1 para todas; isso não reduz as imagens avaliadas.

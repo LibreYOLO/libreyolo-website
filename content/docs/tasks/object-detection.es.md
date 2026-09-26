@@ -16,7 +16,7 @@ keywords:
   - librería detección de objetos licencia MIT
   - alternativa a YOLO
   - entrenar detector de objetos dataset propio
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -131,7 +131,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: c735b6e3de78dd2b
+source_hash: 28d7cbb721e0f109
 ---
 
 ## Definición
@@ -156,7 +156,7 @@ acoplado. Iterar un objeto `Boxes` produce slices de una fila, así que
 
 ## Modelos
 
-Doce familias entrenan y predicen: [YOLOv9](/docs/models/yolov9),
+Las siguientes familias entrenan y predicen: [YOLOv9](/docs/models/yolov9),
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
 [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine),
 [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr),
@@ -194,6 +194,8 @@ más las familias de visión y lenguaje
 [SenseNova-Vision](/docs/models/sensenova-vision) y
 [LibreMODUS](/docs/models/libremodus). Estas se cargan a través de su propia
 factory y sus extras; cada página de modelo lleva la llamada exacta.
+
+[PP-YOLOE](/docs/models/ppyoloe) y [TinyFormer](/docs/models/tinyformer) también soportan entrenamiento de detección.
 
 ## Predicción
 
@@ -265,6 +267,8 @@ la página del modelo y no del ejemplo de otra familia. Una familia también
 puede ignorar un argumento por completo, y su página lista cuáles. Consulta el
 [entrenamiento](/docs/train) para los datasets, el aumento de datos, el
 multi-GPU y los loggers.
+
+Usa `classes=` para conservar los ID originales seleccionados del dataset; `single_cls=True` agrupa las etiquetas conservadas en la clase 0. Consulta [hiperparámetros](/docs/train/hyperparameters) para las familias compatibles y la herencia en validación.
 
 ## Validación
 

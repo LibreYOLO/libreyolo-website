@@ -14,7 +14,7 @@ keywords:
   - geometri monokular
   - metrik angular error
   - prediksi normal padat
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Prediksi kolom normal
@@ -83,7 +83,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.data.shape)
-source_hash: d26d26d894b436ff
+source_hash: b033fdf3a2210ce5
 ---
 
 ## Definisi
@@ -104,18 +104,17 @@ berpengaruh, serta `Results.plot()` mencakup task ini.
 
 ## Model
 
-Dua family melayani `normal`.
+Family berikut mendukung `normal`.
 
-[MoGe-2](/docs/models/moge-2) adalah model khusus: model geometri monokular
-satu-forward dalam tiga ukuran encoder. LibreYOLO tidak menyalin checkpoint ini
-ke organisasinya; pemuatan mengunduh ukuran cocok dari repositori resmi pada
-revisi yang dikunci versinya dan memverifikasinya terhadap SHA-256 tercatat.
+[MoGe-2](/docs/models/moge-2) khusus untuk task ini: model geometri monokular dengan satu forward pass dalam tiga ukuran encoder. Ukuran s dan l memakai mirror LibreYOLO; b tetap di upstream.
 
 [LibreMODUS](/docs/models/libremodus) menghasilkan normal sebagai salah satu
 target model any-to-any dan dapat menerima depth map, bukan gambar RGB, sebagai
 input. Model memerlukan ekstra `modus` dan akun Hugging Face terautentikasi,
 serta tidak menawarkan `val()` maupun `export()`, sehingga tidak termasuk bagian
 validasi dan ekspor di bawah.
+
+[Marigold V2](/docs/models/marigold-v2) juga mengestimasi normal permukaan. Inferensi empat-bit default memerlukan CUDA dan extra `marigold`; ekspor tidak didukung.
 
 ## Prediksi
 
@@ -165,9 +164,7 @@ lengkap.
 
 ## Pelatihan
 
-Kedua family normal tidak memiliki implementasi pelatihan: `train()` memunculkan
-`NotImplementedError`. Halaman MoGe-2 menunjuk ke checkpoint resmi yang dikunci versinya
-untuk predict, validate, dan ekspor.
+Family estimasi normal ini tidak memiliki implementasi pelatihan. Halaman MoGe-2 menunjuk ke checkpoint resmi yang dipatok untuk prediksi, validasi, dan ekspor.
 
 ## Validasi
 
@@ -197,5 +194,3 @@ dan `batch` selain 1 ditolak, serta `imgsz` harus dapat dibagi patch size
 encoder. Cakupan per format tersedia pada [halaman MoGe-2](/docs/models/moge-2)
 dan [matriks ekspor lengkap](/docs/reference/export-matrix).
 [Ekspor](/docs/export) mencantumkan argumen setiap format.
-
-

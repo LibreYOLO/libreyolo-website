@@ -17,7 +17,7 @@ keywords:
   - accuratezza top-1
   - zero-shot classification
   - libreria di classificazione MIT
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -134,7 +134,7 @@ snippets:
 
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 836bea76cd2cdf92
+source_hash: 90aed355e0ddf5e3
 ---
 
 ## Definizione
@@ -157,14 +157,7 @@ all'immagine e non a una singola riga.
 
 ## Modelli
 
-Cinque famiglie addestrano e predicono: [ResNet](/docs/models/resnet),
-[ConvNeXt](/docs/models/convnext), [MobileNetV4](/docs/models/mobilenetv4),
-[EfficientNetV2](/docs/models/efficientnetv2) e
-[DINOv2](/docs/models/dinov2). Le prime quattro girano con il pacchetto base e
-hanno pesi pubblicati. DINOv2 richiede `pip install "libreyolo[rfdetr]"` e non ha
-un checkpoint ospitato da LibreYOLO: carica il backbone originale con una testa
-lineare inizializzata in modo casuale, quindi è un punto di partenza per il
-fine-tuning più che un predittore pronto all'uso.
+I classificatori di immagini addestrabili includono: [ResNet](/docs/models/resnet), [ConvNeXt](/docs/models/convnext), [MobileNetV4](/docs/models/mobilenetv4), [EfficientNetV2](/docs/models/efficientnetv2) e [DINOv2](/docs/models/dinov2). I primi quattro funzionano con il pacchetto base e distribuiscono pesi pubblicati. DINOv2 richiede `pip install "libreyolo[rfdetr]"` e non ha checkpoint ospitati da LibreYOLO: carica il backbone upstream con una testa lineare inizializzata casualmente, quindi è un punto di partenza per il fine-tuning, non un predittore pronto.
 
 Altre cinque predicono, validano ed esportano, ma il loro `train()` solleva
 `NotImplementedError`: [ViT](/docs/models/vit), [Swin](/docs/models/swin),
@@ -176,6 +169,8 @@ insieme fisso di etichette. Confrontano l'immagine con dei prompt testuali,
 quindi `set_classes()` definisce le classi al momento della chiamata e per un
 nuovo insieme di etichette non c'è alcun passaggio di addestramento. Entrambe
 coprono anche il task `embed`.
+
+[ConvNeXt V2](/docs/models/convnextv2) aggiunge la classificazione supervisionata con pesi preaddestrati CC-BY-NC-4.0. [PE](/docs/models/pe) supporta la classificazione zero-shot; [V-JEPA 2](/docs/models/vjepa2) addestra probe di classificazione video.
 
 ## Predizione
 
@@ -227,6 +222,8 @@ cartelle sotto `train/`, e il layer lineare finale viene ricostruito per
 adattarsi a quel numero, mentre il backbone viene trasferito invariato. Vedi
 [addestramento](/docs/train) per dataset, augmentation, multi-GPU e logger.
 
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 e DINOv2 supportano la ponderazione della loss con `cls_pw` o `class_weights`. Per la classificazione, `scale` controlla l'area del ritaglio e `crop_pct` il ritaglio di valutazione. Vedi [augmentation](/docs/train/augmentations).
+
 ## Validazione
 
 `val()` restituisce un semplice dizionario di chiavi `metrics/`, calcolate sullo
@@ -240,6 +237,8 @@ per scegliere l'epoca migliore. `metrics/accuracy_top5` è la quota di immagini 
 cui classe vera compare in una qualsiasi delle cinque classi con il punteggio più
 alto, e diventa tanto meno informativa quante meno classi ha il dataset. Il
 dizionario contiene anche `fitness`, una copia del valore top-1.
+
+La validazione ImageFolder restituisce anche le metriche macro `metrics/precision`, `metrics/recall` e `metrics/f1`, calcolate come media sulle classi presenti nei target di validazione. Le classi mai predette contribuiscono con precisione zero. La fitness predefinita resta l'accuratezza top-1. Validazione e calibrazione usano la trasformazione di valutazione del modello.
 
 ## Esportazione
 

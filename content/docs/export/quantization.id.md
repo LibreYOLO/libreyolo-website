@@ -19,7 +19,7 @@ keywords:
   - fp8 e4m3
   - dataset kalibrasi int8
   - export yolo ke onnx int8
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Panggilan
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -85,7 +85,7 @@ snippets:
             calib="coco128.yaml",      # path data.yaml atau nama bawaan; None melewati kalibrasi
             samples=128,               # jumlah maksimum gambar kalibrasi
             batch=8,                   # ukuran batch kalibrasi
-            algorithm="auto",          # auto dan minmax sama; percentile adalah alternatifnya
+            algorithm="auto",          # auto memilih minmax; alternatif: percentile, mse, entropy
             keep_high_precision=None,  # None memakai kebijakan family
             verbose=True,
         )
@@ -167,7 +167,7 @@ snippets:
         didukungnya.
 
         qmodel.export(format="tensorrt", half=True)
-source_hash: 4ffb06b87cad017e
+source_hash: 6c247a3243daf393
 ---
 
 ## Instalasi
@@ -193,6 +193,8 @@ Checkpoint yang dihasilkan adalah checkpoint LibreYOLO biasa dengan manifest
 Checkpoint trainer yang ditulis selama pelatihan QAT juga membawa manifest
 tersebut, yang berarti `best.pt` dari pelatihan semacam itu sudah merupakan
 checkpoint terkuantisasi.
+
+`algorithm` kalibrasi menerima `auto`, `minmax`, `percentile`, `mse`, dan `entropy`. `auto` memilih minmax. MSE dan entropy memakai penyapuan histogram untuk memilih rentang aktivasi.
 
 ## Resep
 
@@ -255,6 +257,8 @@ distilasi per family, yang saat ini berarti `yolo9` dan `rfdetr`.
 
 Model yang dikuantisasi dengan `fp16` dan `bf16` hanya untuk inferensi, dan trainer
 menolaknya sambil mengarahkan ke `amp=True`.
+
+Penyiapan QAT menonaktifkan EMA dan SyncBatchNorm serta menetapkan `average_best=0`, dengan mencatat setiap penggantian. Pelatihan floating-point mempertahankan pengaturan yang diminta.
 
 ## Ekspor
 

@@ -10,7 +10,7 @@ keywords:
   - yolo 評価 cli
   - mAP50-95 コマンドライン
   - libreyolo val 引数
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: コマンド
     value: libreyolo val
@@ -36,7 +36,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: f6507840568c3725
+source_hash: 8e858639e96672a0
 ---
 
 ## 構文
@@ -77,6 +77,15 @@ libreyolo val model=<name|path> data=<dataset.yaml> [key=value ...]
 | `quiet` | `false` | stderrを抑制 |
 | `verbose` | `true` | 詳細出力 |
 | `help_json` | `false` | コマンドスキーマをJSONで出力して終了 |
+
+| 引数 | デフォルト | 意味 |
+| --- | --- | --- |
+| `classes` | `None` | カンマ区切りの元のデータセットクラスIDのみを評価（例：'0,3,5'）。それ以外のクラスのボックスは正解と予測から除外。デフォルトは、あればチェックポイントの学習時のclasses=を継承 |
+| `crop_pct` | `None` | 分類の評価で中央クロップの前に使うリサイズ比率（デフォルトはモデルファミリー本来の値） |
+| `plot_samples` | `8` | 検証のサンプル描画の画像数。0でなし、-1ですべての検証画像（指標は変化しない） |
+| `visualize` | `False` | 検証した各画像のTP、FP、FNをvisualize/errors/（誤りあり）とvisualize/correct/に描画（detect、segment。classifyはラベルとtop-1を描画） |
+| `show_labels` | `True` | --visualize画像にクラス名を表示 |
+| `show_conf` | `True` | --visualize画像に信頼度スコアを表示 |
 
 ## 使用例
 

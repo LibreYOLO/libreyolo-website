@@ -18,7 +18,7 @@ keywords:
   - owlv2
   - omdet turbo
   - text prompt objekterkennung
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -67,7 +67,7 @@ snippets:
         # decodierten Phrase. Ohne Angabe sind beide 0.25. Nur Grounding DINO
         # akzeptiert text_threshold, die anderen lösen einen Fehler aus.
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 17197cf4d80f3d6f
+source_hash: "10f41b40f357b037"
 ---
 
 ## Definition
@@ -146,6 +146,8 @@ liegt in der Erzeugung der Boxen. Die Familien dieser Seite sind
 diskriminative Detektoren, die Scores direkt ausgeben. Die VLM-Stufe generiert
 die Boxen dagegen.
 
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) und [North Micro Vision](/docs/models/northmicrovision) erweitern die Erkennungsmodelle von `LibreVLM`. [Molmo2](/docs/models/molmo2) liefert Punkte. Verwende [LibreGround](/docs/reference/ground-api) für Anweisung-zu-Klick-Anfragen statt eines Erkennungsvokabulars.
+
 ## Vorhersage
 
 <code-tabs name="predict" />
@@ -182,6 +184,8 @@ löst einen Fehler aus. Führe das Fine-Tuning im Upstream-Projekt durch und lad
 die resultierenden Gewichte. Das an `set_classes()` übergebene Vokabular ist
 die einzige Einstellung, die beeinflusst, was ein geladenes Modell erkennt.
 
+Qwen3-VL hat einen separaten Pfad für [VLM-Fine-Tuning](/docs/train/vlm-fine-tuning). Dies ergänzt keine Trainingsunterstützung für die vier `LibreOpenVocab`-Adapter.
+
 ## Validierung
 
 Für diese Stufe gibt es keinen Validator und `val()` löst einen Fehler aus.
@@ -194,4 +198,3 @@ diese Familien parallel dazu erstellte textkonditionierte Eingaben benötigen.
 Der Export liegt außerhalb des Funktionsumfangs dieser Stufe und `export()`
 löst einen Fehler aus. Diese Modelle werden mit `predict()` in PyTorch
 ausgeführt.
-

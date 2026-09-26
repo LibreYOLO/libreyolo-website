@@ -18,7 +18,7 @@ keywords:
   - ImageNet
   - deit 预训练模型
   - vision transformer 图像分类
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -76,7 +76,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 9c67c8554b2af5c6
+source_hash: 4dad5f1aa0943dd9
 ---
 
 ## 安装
@@ -107,6 +107,8 @@ ImageNet-1k 的 1,000 个类别，`top1conf` 是排在第一的那个预测的 s
 `val/<class>/` 文件夹结构组织的数据集上测得。
 
 <code-tabs name="val" />
+
+验证和 INT8 校准使用家族的评估变换。导出元数据记录 `norm_mean`、`norm_std` 和 `resize_mode`；旧产物回退到家族值。校准预处理器返回所需的 CHW 数组和比例。
 
 ## 导出
 

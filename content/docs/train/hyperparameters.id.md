@@ -19,7 +19,7 @@ keywords:
   - early stopping patience
   - amp bfloat16
   - konfigurasi train yaml
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -123,7 +123,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: d838d1abd45af40f
+source_hash: eac4e55fcf16ca15
 ---
 
 ## Mengatur argumen
@@ -168,13 +168,9 @@ Default dasar adalah `optimizer="sgd"`, `lr0=0.01`, `momentum=0.937`,
 | `weight_decay` | `5e-4` | `5e-4` | `1e-4` | `1e-5` |
 | `scheduler` | `yoloxwarmcos` | `linear` | `flat_cosine` | `cos` |
 | `epochs` | `300` | `300` | `132` | `300` |
-| `amp` | `True` | `True` | `False` | `False` |
+| `amp` | `True` | `True` | `True` | `True` |
 
-D-FINE dan DEIM dikirim bersama `amp=False` karena decoder D-FINE membatasi
-aktivasi pada 65504, nilai float16 terbesar yang terbatas. YOLO-NAS dan FOMO juga
-secara default mematikannya. `--amp` flag di CLI defaultnya ke `True` untuk setiap family, jadi itu
-dihitung sebagai disediakan pengguna dan menimpa default family; biarkan saja kecuali
-Anda bermaksud untuk mengubahnya.
+Deteksi D-FINE, DEIM, RT-DETRv4, dan YOLO-NAS memakai `amp=True` dengan `amp_dtype="float16"` secara default. Dome-DETR, PP-YOLOE, dan YOLO-NAS OBB mempertahankan default FP32. Berikan `amp=False` jika memerlukan FP32.
 
 Untuk membaca default nyata family daripada menebak:
 
@@ -202,6 +198,8 @@ kriteria probe dan lapisan decoder tambahan.
 
 Autobatch adalah fitur CUDA. Pada CPU atau MPS ia mencatat satu baris dan mempertahankan
 batch default.
+
+`min_samples=0` mempertahankan panjang epoch. Nilai minimum positif mengambil sampel dengan pengembalian dari dataset deteksi yang lebih pendek. `class_balanced=False` mengaktifkan pengambilan sampel repeat-factor per gambar jika diatur ke true; pengaturan ini dapat digabung dengan `min_samples` dan DDP. Loader khusus yang melewati sampler bersama menolak penyeimbangan yang diaktifkan.
 
 ## Akumulasi gradien
 
@@ -273,6 +271,10 @@ early stopping.
 identik byte dengan yang baru. Dengan pekerja dataloader, `"disk"` adalah yang lebih aman dari
 keduanya.
 
+`average_best=0` menonaktifkan perataan checkpoint; N positif menulis `weights/average.pt` dari maksimal N snapshot terbaik. Tensor floating-point dirata-ratakan secara seragam dan buffer integer berasal dari snapshot terbaik. `export_check=False` dapat diaktifkan untuk menghentikan proses sebelum epoch pertama jika ekspor ONNX gagal. Keluaran mentah yang cocok dibandingkan dengan `rtol=1e-3`, `atol=1e-4`; susunan yang tidak kompatibel mencatat bahwa perbandingan dilewati.
+
+`precise_bn=0` menonaktifkan kalibrasi ulang BatchNorm akhir. Nilai positif membatasi jumlah gambar loader pelatihan sebelum validasi akhir; dalam DDP anggaran berlaku per rank yang berpartisipasi. BatchNorm yang dibekukan tetap beku. [Callback fitness kustom](/docs/train/fitness-callbacks) dapat memilih checkpoint terbaik dan patience.
+
 ## Ringkasan
 
 `resume=True` melanjutkan perjalanan yang terhenti. checkpoint harus dimuat
@@ -310,6 +312,10 @@ argumen.
   melatih sebagian dari bobot.
 - [Validasi dan metrik](/docs/train/validation) untuk apa yang dilaporkan oleh jalannya.
 
+## Pemilihan kelas dan pembobotan loss
 
+Untuk deteksi YOLO9, RF-DETR, EdgeCrafter, RT-DETR, D-FINE, DEIM, TinyFormer, dan YOLO-NAS, `classes=None` mempertahankan semua kelas dataset; daftar memfilter supervisi sambil mempertahankan ID asli, `nc`, dan `names`. `single_cls=False` dapat diaktifkan untuk memetakan label yang dipertahankan ke kelas 0, bernama `object`. Kelanjutan pelatihan dan validasi mewarisi pengaturan tersimpan. Pelatihan OBB model menolak `single_cls`.
 
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2, dan DINOv2 mendukung `cls_pw=0.0`: nilai dalam [0, 1] membobot setiap kelas dengan invers frekuensi berpangkat nilai tersebut, dinormalisasi ke rata-rata 1. `class_weights=False` memilih pembobotan alternatif `N / (C * n_c)` saat diaktifkan. Ini tidak dapat digabung dengan `cls_pw` positif; kelanjutan pelatihan memerlukan pengaturan pembobotan yang sama.
 
+`plot_samples=8` menetapkan anggaran gambar sampel validasi. Gunakan 0 untuk tanpa sampel atau -1 untuk semuanya; ini tidak mengurangi gambar yang dievaluasi.

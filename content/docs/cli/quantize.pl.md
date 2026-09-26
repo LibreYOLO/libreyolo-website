@@ -15,7 +15,7 @@ keywords:
   - kwantyzacja fp8
   - kwantyzacja po trenowaniu
   - libreyolo quantize argumenty
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Polecenie
     value: libreyolo quantize
@@ -49,7 +49,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 7ae663e9f117826e
+source_hash: 663390776f2f2c15
 ---
 
 ## Składnia
@@ -142,3 +142,5 @@ pozostałych błędach wykonania.
 
 Powiązane: [`libreyolo export`](/docs/cli/export), polecenie, które opuszcza
 PyTorch i zapisuje zamiast tego artefakt do wdrożenia.
+
+`algorithm` ma domyślną wartość `auto` (minmax) i przyjmuje też `minmax`, `percentile`, `mse` i `entropy`. MSE i entropy wybierają zakresy przez przeszukiwanie histogramów aktywacji.

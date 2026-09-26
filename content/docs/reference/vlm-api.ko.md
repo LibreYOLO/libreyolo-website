@@ -16,11 +16,8 @@ keywords:
   - 스몰VLM2
   - 플로렌스-2
   - 리브리욜로 채팅
-last_verified: 1.5.0
-verification: >-
-  별칭은 libreyolo/models/vlm/__init__.py에서 읽고; 저장소, 크기 및 작업 목록은
-  libreyolo/models/vlm/ 아래의 계열 모듈과 libreyolo/models/sensenova/model.py에서 가져오며;
-  호출 규칙과 예외는 libreyolo/models/vlm/base.py에서 가져오며, 모두 v1.5.0 버전입니다.
+last_verified: 1.6.0
+verification: '별칭은 libreyolo/models/vlm/__init__.py에서 읽고; 저장소, 크기 및 작업 목록은 libreyolo/models/vlm/ 아래의 계열 모듈과 libreyolo/models/sensenova/model.py에서 가져오며; 호출 규칙과 예외는 libreyolo/models/vlm/base.py에서 가져오며, 모두 v1.6.0 버전입니다.'
 snippets:
   install:
     - label: 배시
@@ -46,7 +43,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 57ddac08bc4d4e05
+source_hash: "77a04856cfe4f88c"
 ---
 
 ## 설치
@@ -83,9 +80,11 @@ LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 
 `LibreVLM`, `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` 및 `LibreMODUS`(또한 `LibreModus`라고 표기됨)는 패키지 수준에서 내보내집니다.
 
+탐지에는 `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3`, `lfm2-vl-3b`도 포함됩니다. 크기가 없는 `gemma-4` 별칭은 E4B를 선택합니다. Molmo2 별칭은 `molmo2-4b`, `molmo2-8b`, `molmo2-o-7b`이며 기본값은 4B입니다. 별칭은 라우팅을 정의하며, 모든 원격 스냅샷을 다운로드하고 테스트했다는 의미는 아닙니다.
+
 ## 작업
 
-대부분의 계열은 `detect`만 제공합니다. 두 계열은 더 많이 제공합니다:
+작업 지원은 계열마다 다릅니다. 다음 어댑터는 여러 작업을 지원합니다.
 
 | 계열 | 지원되는 작업 |
 |---|---|
@@ -99,6 +98,8 @@ model.set_task(task: str) -> LibreVLMModel
 ```
 
 작업은 계열의 지원 목록에 대해 검증되며, 이후 `predict()` 및 `track()` 호출에서도 지속되며, 호출이 연쇄될 수 있도록 모델이 반환됩니다.
+
+Molmo2는 점을 반환하며 사용자 정의 포인팅 템플릿에는 `{label}`이 필요합니다. Moondream은 탐지, 점, 기본 채팅을 지원합니다. 지시문으로 클릭 위치를 찾는 쿼리에는 [LibreGround](/docs/reference/ground-api)를 사용합니다.
 
 ## 클래스 설정
 
@@ -126,10 +127,14 @@ model.chat(image, prompt, max_new_tokens=None, color_format="auto") -> str
 
 ## 지원되지 않음
 
-`train()`, `val()` 및 `export()`는 `NotImplementedError`를 발생시킵니다. 업스트림을 파인튜닝하고 결과 가중치를 로드하십시오.
+내보내기와 탐지 mAP 검증은 지원하지 않습니다. 학습 지원은 아래 Qwen3-VL 워크플로로 제한됩니다.
 
 ## 원격 코드
 
 모든 배송된 계열는 네이티브 모델 클래스를 통해 로드되므로, LibreYOLO는 기본적으로 타사 저장소 코드를 실행하지 않습니다. 실제로 필요로 하는 계열는 명시적으로 선택하고 스냅샷 리비전을 고정해야 합니다; LocateAnything이 바로 그것이며, 커밋 `c32291ca5e996f5a7a485845b4f57a233936bba0`에 고정되어 있습니다.
 
 LibreMODUS는 체크포인트 스키마에 대한 명시적인 예외입니다: 그것의 별칭은 LibreYOLO `.pt`가 아닌 고정된 업스트림 파일들의 디렉토리로 해석되며, LibreYOLO는 이에 v1.0 메타데이터를 추가하지도 않고 재배포하지도 않습니다.
+
+## 학습
+
+Qwen3-VL은 `libreyolo[vlm-train]`을 설치한 뒤 `train(data=...)`로 탐지 LoRA를 지원합니다. 비전 타워를 고정하고 검증 손실로 최적 체크포인트를 선택하며 체크포인트 디렉터리를 저장합니다. [VLM 파인튜닝](/docs/train/vlm-fine-tuning)을 참조하십시오.

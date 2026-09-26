@@ -15,7 +15,7 @@ keywords:
   - geometria monocular
   - métrica de erro angular
   - normal map python
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Prever um campo de normais
@@ -103,7 +103,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.data.shape)
-source_hash: d26d26d894b436ff
+source_hash: b033fdf3a2210ce5
 ---
 
 ## Definição
@@ -124,19 +124,17 @@ efeito, e `Results.plot()` cobre esta tarefa.
 
 ## Modelos
 
-Duas famílias atendem `normal`.
+As seguintes famílias atendem a `normal`.
 
-[MoGe-2](/docs/models/moge-2) é a família dedicada: um modelo de geometria monocular de
-uma única passagem em três tamanhos de encoder. O LibreYOLO não copia esses
-checkpoints para a sua própria organização; carregar um baixa o tamanho
-correspondente dos repositórios oficiais em uma revisão fixada e o confere contra
-um SHA-256 registrado.
+[MoGe-2](/docs/models/moge-2) é a família dedicada: um modelo de geometria monocular com um único forward e três tamanhos de encoder. Os tamanhos s e l usam espelhos do LibreYOLO; b permanece upstream.
 
 [LibreMODUS](/docs/models/libremodus) produz normais como um dos alvos de um
 modelo any-to-any, e pode receber um mapa de profundidade em vez de uma imagem
 RGB como entrada. Precisa do extra `modus` e da sua própria conta autenticada no
 Hugging Face, e não oferece nem `val()` nem `export()`, então não participa das
 seções de validação e exportação abaixo.
+
+[Marigold V2](/docs/models/marigold-v2) também estima normais de superfície. Sua inferência padrão de quatro bits exige CUDA e o extra `marigold`; não exporta.
 
 ## Predição
 
@@ -187,9 +185,7 @@ zero; sem arquivo de máscara, todo vetor decodificado finito e diferente de zer
 
 ## Treinamento
 
-Nenhuma das duas famílias de normais tem implementação de treinamento: `train()`
-levanta `NotImplementedError` nas duas. A página do MoGe-2 indica seus
-checkpoints oficiais fixados para predição, validação e exportação.
+Essas famílias de estimativa de normais não têm implementação de treinamento. A página do MoGe-2 aponta para seus checkpoints oficiais fixados para predição, validação e exportação.
 
 ## Validação
 

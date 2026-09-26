@@ -313,6 +313,7 @@
     "nextRelease": "Następne wydanie",
     "versionIsCurrent": "v{version} jest aktualna",
     "latest": "najnowsza",
+    "archivedNotice": "To jest dokumentacja LibreYOLO {version}. <link>Zobacz aktualną wersję</link>.",
     "onThisPage": "Na tej stronie",
     "docsButton": "Dokumentacja",
     "openNav": "Otwórz nawigację dokumentacji",

@@ -13,7 +13,7 @@ keywords:
   - 实例分割
   - 姿态估计
   - 旋转框检测
-last_verified: 1.5.0
+last_verified: "1.6.0"
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -173,7 +173,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 8c464aa759131694
+source_hash: c360784eb62a7df5
 ---
 
 ## 安装
@@ -193,6 +193,8 @@ pip install "libreyolo[rfdetr]"
 返回的 `Results` 对象和每个家族返回的都是同一个，所以换成另一个检测器只是一行的
 改动。`conf` 和 `max_det` 过滤的是 query 的选择；没有 NMS 步骤需要调。数据源、
 流式处理和结果处理见[预测](/docs/predict)。
+
+检测、分割和旋转框路径使用浮点 OpenCV 双线性缩放，不做抗锯齿；姿态路径保留抗锯齿缩放。矩形 `imgsz=(height, width)` 必须满足任务的 patch/窗口网格要求。检查点列表包含 UI 检测器。[事件直方图](/docs/train/event-histograms)使用记录的输入配置。
 
 ## 变体
 
@@ -217,6 +219,8 @@ head，所以接受的参数完全一样。这些尺寸的参数量相近，主�
 训练开始前检查这一点，并给出最接近的合法尺寸。
 
 数据集、数据增强、多卡训练和日志记录器见[训练](/docs/train)。
+
+新训练默认使用 `output_dir=None`，解析为自动递增的 `runs/train/rfdetr_exp`，并设置 `exist_ok=False`。多类别姿态数据集使用以类别索引或名称为键的 `kpt_names`；空列表表示只有检测框的类别。预测将关键点填充到 `kpt_shape`；关键点 mAP 的适应度不计入只有检测框的类别。
 
 ## 验证
 

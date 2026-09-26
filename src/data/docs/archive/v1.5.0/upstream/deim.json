@@ -1,0 +1,13 @@
+{
+  "name": "DEIM and DEIMv2",
+  "org": "Intellindust AI Lab",
+  "paper_title": "DEIM: DETR with Improved Matching for Fast Convergence",
+  "paper_url": "https://arxiv.org/abs/2412.04234",
+  "code_url": "https://github.com/Intellindust-AI-Lab/DEIM",
+  "license": "Apache-2.0; the DEIMv2 DINOv3 backbone adds Meta's DINOv3 License",
+  "code_license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. It places no obligation on your own application code, and weights you train yourself on your own data are yours. DEIM is Apache-2.0 throughout, and so are the DEIMv2 sizes below S, which use an HGNetv2 backbone. The DEIMv2 S, M, L and X sizes take their backbone from DINOv3, so both their weights and the backbone source vendored in LibreYOLO are additionally governed by Meta's DINOv3 License Agreement, which is not an OSI license: redistribution has to carry the agreement with it, and it forbids use for military or warfare purposes, weapons development, espionage, nuclear industries and anything subject to ITAR. Their Hugging Face repositories declare both licenses, and DEIMv2 is also cited separately (arXiv 2509.20787).",
+  "bibtex": "@misc{huang2024deim,\n      title={DEIM: DETR with Improved Matching for Fast Convergence},\n      author={Shihua, Huang and Zhichao, Lu and Xiaodong, Cun and Yongjun, Yu and Xiao, Zhou and Xi, Shen},\n      booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},\n      year={2025},\n}",
+  "bibtex_source_url": "https://github.com/Intellindust-AI-Lab/DEIM#5-citation",
+  "bibtex_verified": "2026-08-08, copied verbatim from section 5 of the upstream README at Intellindust-AI-Lab/DEIM. Cross-checked against the arXiv API for 2412.04234: the title matches and all six authors appear in the same order (Shihua Huang, Zhichao Lu, Xiaodong Cun, Yongjun Yu, Xiao Zhou, Xi Shen), and the arXiv comment records CVPR 2025, the venue and year the entry carries. Two quirks are upstream's own and are reproduced unchanged: the entry is a @misc that carries a booktitle, and each author is written first name first with a comma. DEIMv2 has its own citation block at github.com/Intellindust-AI-Lab/DEIMv2, checked against arXiv 2509.20787 (Real-Time Object Detection Meets DINOv3; five authors in order: Shihua Huang, Yongjie Hou, Longfei Liu, Xuanlong Yu, Xi Shen). Do not hand-edit; a wrong citation misattributes someone's work."
+}

@@ -17,7 +17,7 @@ keywords:
   - 点一下分割物体
   - sam 分割一切
   - Meta AI
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: 点提示与框提示
@@ -53,7 +53,7 @@ snippets:
         a = model.predict(points=[640, 420], labels=[1])
         b = model.predict(bboxes=[300, 200, 900, 700])
         model.reset_image()
-source_hash: f8904d241ef8a929
+source_hash: 313541a8b2c6abaf
 ---
 
 ## 安装
@@ -95,10 +95,7 @@ SAM 在 LibreYOLO 里只支持预测，视频跟踪不在范围内。输入源�
 
 <provenance-box>
 
-LibreYOLO 不会自己托管一份 SAM-1 权重的副本。`LibreSAM("base")`、`"large"` 和
-`"huge"` 直接从 Meta 自己在 Hugging Face 上的 `facebook/sam-vit-base`、
-`facebook/sam-vit-large` 和 `facebook/sam-vit-huge` 仓库下载，这几个仓库各自
-独立于 LibreYOLO 标注为 Apache-2.0。
+`LibreSAM("base")`、`"large"` 和 `"huge"` 使用 SAM-1 产物的 LibreYOLO 镜像。权重保留 Meta 的 Apache-2.0 声明。
 
 </provenance-box>
 

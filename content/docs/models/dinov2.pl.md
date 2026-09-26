@@ -20,7 +20,7 @@ keywords:
   - osadzanie obrazu
   - ekstrakcja cech
   - Meta AI
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Semantyczny
@@ -174,8 +174,9 @@ snippets:
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
 
         result = model(SAMPLE_IMAGE)
-source_hash: 4256e0a0398e5aaf
+source_hash: c89a9662d03fe6f7
 ---
+
 ## Instalacja
 
 LibreDINOv2 jest rejestrowany tylko wtedy, gdy zainstalowano pakiet
@@ -216,13 +217,17 @@ dla niego `train()` zgłasza `NotImplementedError`.
 
 <code-tabs name="train" />
 
-Główne argumenty kluczowe tutaj to `batch_size` i `lr`, a nie `batch` i `lr0` używane przez większość innych rodzin; `batch` i `lr0` są nadal akceptowane i mapowane na nie, ale podanie obu powoduje błąd konfliktu. `output_dir=` (domyślnie `"runs/train"`) zastępuje `project=`/`name=` jako główny sposób umieszczania biegu, chociaż bezpośrednie podanie `project=`/`name=` nadal działa. Zobacz [trenowanie](/docs/train) dotyczące zbiorów danych, augmentacji, wielu GPU i loggerów.
+Główne argumenty kluczowe tutaj to `batch_size` i `lr`, a nie `batch` i `lr0` używane przez większość innych rodzin; `batch` i `lr0` są nadal akceptowane i mapowane na nie, ale podanie obu powoduje błąd konfliktu. `output_dir=` (domyślnie `None`) zastępuje `project=`/`name=` jako główny sposób umieszczania biegu, chociaż bezpośrednie podanie `project=`/`name=` nadal działa. Zobacz [trenowanie](/docs/train) dotyczące zbiorów danych, augmentacji, wielu GPU i loggerów.
+
+Nowe uruchomienia tworzą katalog `runs/train/dinov2_exp` z kolejnym numerem i `exist_ok=False`. `resume=True` przywraca stan trenera i zachowuje wybrany katalog uruchomienia. Klasyfikacja obsługuje `cls_pw` i `class_weights`, opisane w sekcji [hiperparametrów](/docs/train/hyperparameters).
 
 ## Walidacja
 
 `val()` zwraca słownik kluczy `metrics/`: mIoU i dokładność pikseli dla `task="semantic"`, dokładność top-1 i top-5 dla `task="classify"`. `task="embed"` nie ma prawdziwej wartości do oceny i zgłasza `NotImplementedError`, jeśli wywołasz `val()` na nim.
 
 <code-tabs name="val" />
+
+Kalibracja klasyfikacji i embeddingów korzysta z pipeline'u klasyfikacji modelu. Ewaluacja używa transformacji danej rodziny.
 
 ## Eksport
 
@@ -246,4 +251,4 @@ własnego checkpointu LibreDINOv2. Wywołanie
 
 ## Cytowanie
 
-<citation-block /> 
+<citation-block />

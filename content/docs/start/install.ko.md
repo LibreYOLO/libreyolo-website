@@ -14,7 +14,7 @@ keywords:
   - 리브리욜로 쿠다
   - 리브리욜로 GPU
   - libreyolo 요구 사항
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 패키지
     value: libreyolo
@@ -66,7 +66,7 @@ snippets:
         # 결의안. 여분이 없는 계열은 다음과 같이 나열됩니다
         # 그들을 가능하게 하는 pip 명령어.
         libreyolo models
-source_hash: 34fc6d3e24d03fb4
+source_hash: "531023c2092fd751"
 ---
 
 ## 설치
@@ -85,6 +85,11 @@ Python 3.10 이상이 필요합니다. 기본 설치는 PyTorch, torchvision, Nu
 
 | 추가 | 추가함 |
 |---|---|
+| `ground` | 지시문을 점으로 연결하는 그라운딩용 VLM 의존성 |
+| `vlm-train` | VLM 구성과 Qwen3-VL 튜닝용 `peft>=0.17.0` |
+| `vla` | `lerobot[smolvla,diffusion,dataset]>=0.6.1`, Python 3.12 이상 |
+| `marigold` | 버전이 고정된 확산, 가속, Transformers 의존성 |
+| `molmo2` | `transformers==4.57.1`, `einops`, `accelerate` |
 | `rfdetr` | RF-DETR 백본을 공급하는 `transformers` |
 | `eomt` | `transformers` |
 | `midas` | `timm` 1.0.x, MiDaS의 ViT-L/16 및 EfficientNet-Lite3 인코더를 제공하는 |
@@ -100,9 +105,9 @@ Python 3.10 이상이 필요합니다. 기본 설치는 PyTorch, torchvision, Nu
 
 ### 내보내기 및 런타임
 
-| 추가 | 추가합니다 |
+| 추가 | 추가함 |
 |---|---|
-| `onnx` | `onnx`, `onnxsim`, `onnxruntime` |
+| `onnx` | `onnx`, `onnxsim`, `onnxruntime>=1.18.0` |
 | `tensorrt` | `tensorrt-cu12` 10.16.1.11 및 `pycuda`, macOS 종료 |
 | `openvino` | `openvino` |
 | `coreml` | `coremltools` |
@@ -135,6 +140,9 @@ Python 3.10 이상이 필요합니다. 기본 설치는 PyTorch, torchvision, Nu
 
 | 추가 | 추가함 |
 |---|---|
+| `hf` | 로드, 게시, Hub 로거용 `huggingface_hub>=1.0.0` |
+| `llm` | 호환 API 엔드포인트용 `openai>=1.66.0` |
+| `fiftyone` | 데이터셋 정리용 `fiftyone>=1.0.0` |
 | `stream` | `yt-dlp`, YouTube 페이지 URL을 해결하는 데만 필요 |
 | `tracking` | 없습니다. 모든 추적 의존성은 이미 핵심 의존성입니다 |
 | `label` | `libreyolo[sam]`, `libreyolo label`에서 클릭으로 마스크 지원을 가능하게 합니다 |
@@ -146,7 +154,11 @@ Python 3.10 이상이 필요합니다. 기본 설치는 PyTorch, torchvision, Nu
 
 ### 총 추가
 
-`libreyolo[all]`는 모델, 내보내기, 추적 및 로깅 추가 기능을 한 명령으로 설치합니다. 일부는 의도적으로 제외되어 있습니다. `neptune`는 안정적인 `neptune-scale`가 protobuf를 7 미만으로 요구하는 반면 TFLite 경로는 protobuf 7을 요구하기 때문에 제외됩니다. `executorch`는 ExecuTorch가 함께 사용할 PyTorch 버전을 제한하기 때문에 제외되며, `coreai`는 `coreai-torch`가 PyTorch를 2.11.x로 고정하며 전체 환경을 해당 버전으로 끌어올리기 때문에 제외됩니다. `fast-eval`, `hub-kernels`, `clip-convert` 및 `siglip2-convert`도 제외됩니다. 이름으로 설치할 수 있습니다.
+`libreyolo[all]`은 모델, 내보내기, 추적, 로깅 추가 패키지를 한 명령으로 설치합니다. 일부는 의도적으로 제외합니다. 안정 버전 `neptune-scale`은 protobuf 7 미만을 요구하지만 TFLite 경로는 protobuf 7을 요구하므로 `neptune`은 제외합니다. ExecuTorch는 함께 사용할 PyTorch 버전을 제한하므로 `executorch`를 제외하며, `coreai-torch`는 PyTorch를 2.11.x로 고정하여 전체 환경을 해당 버전으로 바꾸므로 `coreai`도 제외합니다. `fast-eval`, `hub-kernels`, `clip-convert`, `siglip2-convert`도 제외합니다. 필요하면 이름으로 따로 설치합니다. `all`에는 `hf`와 `llm`이 포함되며, `fiftyone`, `vla`, `marigold`, `molmo2`는 별도로 유지합니다. FiftyOne은 기본 `cv2` 패키지와 겹치는 headless OpenCV를 설치합니다.
+
+기본 설치에는 Python 3.10 이상이 필요하며, 코디네이터가 관리하는 DDP용 `cloudpickle>=3.0.0`을 추가합니다.
+
+Molmo2는 별도 환경을 사용합니다. Transformers 4.57.1 고정 버전이 더 새로운 VLM, Hub, Marigold 구성과 충돌합니다. Marigold는 diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0, Transformers 5.4.0을 고정하며 Linux/Windows에서는 bitsandbytes 0.49.2도 고정합니다. 기본 4비트 Marigold 추론에는 CUDA가 필요합니다. North Micro Vision에는 Transformers 5.16 이상이, Gemma 4에는 5.10 이상이 필요하며, 둘 다 공통 VLM 최저 버전보다 높습니다.
 
 ## 플랫폼 제약
 

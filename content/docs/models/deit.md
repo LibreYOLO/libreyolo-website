@@ -5,7 +5,7 @@ seo_title: "DeiT image classifier: predict, validate, export"
 description: "Run DeiT image classifiers in LibreYOLO: a frozen, inference-only museum family in tiny, small and base sizes, under Apache-2.0."
 lead: "DeiT (Data-efficient image Transformer) is a plain Vision Transformer classifier trained on ImageNet-1k alone, with no extra pretraining data. LibreYOLO carries the tiny, small and base patch-16 sizes as a frozen, inference-only exhibit."
 keywords: [DeiT, Vision Transformer, ViT, image classification, ImageNet, data-efficient training, museum family]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -95,6 +95,8 @@ dataset laid out in the conventional `train/<class>/` and `val/<class>/`
 folder structure.
 
 <code-tabs name="val" />
+
+Validation and INT8 calibration use the family evaluation transform. Export metadata records `norm_mean`, `norm_std` and `resize_mode`; older artifacts fall back to family values. Calibration preprocessors return the required CHW array and ratio.
 
 ## Export
 

@@ -21,7 +21,7 @@ keywords:
   - detecção de objetos
   - detecção de objetos em tempo real
   - detecção de objetos python
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -142,7 +142,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 6edaac5f05abaabe
+source_hash: 8dc052b83d5f1ac0
 ---
 
 ## Instalação
@@ -173,6 +173,8 @@ por outro detector é uma mudança de uma linha. `conf` e `max_det` filtram uma
 decodificação top-k sobre queries e classes; não há um passo de NMS para
 ajustar, e `iou` é aceito mas não usado. Veja [predição](/docs/predict) para
 fontes, streaming e tratamento de resultados.
+
+DEIM aceita `imgsz=(height, width)` retangular para predição. DEIMv2 rejeita explicitamente solicitações de predição/validação retangulares. Isso não implica suporte a treinamento ou exportação retangulares.
 
 ## Variantes
 
@@ -221,6 +223,8 @@ caso contrário.
 
 Veja [treinamento](/docs/train) para datasets, data augmentation, multi-GPU e
 loggers.
+
+DEIM ativa AMP por padrão com `amp_dtype="float16"`. Passe `amp=False` para treinamento em FP32.
 
 ## Validação
 

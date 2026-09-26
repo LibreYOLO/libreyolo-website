@@ -19,7 +19,7 @@ keywords:
   - libreyolo doctor
   - controllo sbilanciamento classi
   - data leakage train val
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -69,7 +69,7 @@ snippets:
             print(finding.severity.value, finding.check_id, finding.message)
 
         raise SystemExit(report.exit_code(strict=False))
-source_hash: 9a12a0551c8b56e9
+source_hash: 84e47ff97fb2e2f3
 ---
 
 ## Indicare a train quale dataset usare
@@ -143,6 +143,8 @@ iniziano con `#` vengono saltate.
 `names` può essere una lista o una mappa con chiavi intere. `nc` è opzionale;
 quando sono presenti entrambi e non concordano, il doctor lo segnala come errore.
 
+La posa RF-DETR legge `kpt_names` con ID o nome di classe come chiave. Mantiene le prime righe di keypoint nominati per ogni classe; una lista vuota indica una classe con soli box. La posa multiclasse richiede `names` e almeno una classe con keypoint.
+
 ## Struttura delle directory e file delle etichette
 
 Rilevamento, segmentazione, posa e box orientati condividono tutti la stessa
@@ -172,6 +174,8 @@ cinque campi viene letta come un poligono e il suo box diventa l'estensione del
 poligono, così un'esportazione di segmentazione usata per addestrare al
 rilevamento si carica senza errori. Il doctor segnala quante righe hanno seguito
 questo percorso.
+
+I box finiti che oltrepassano il bordo dell'immagine vengono ritagliati in modo coerente per addestramento e validazione. I box senza area visibile, le coordinate non finite e i poligoni malformati vengono scartati. Gli ID di classe fuori intervallo vengono segnalati prima della costruzione dei target. `train(classes=[...])` filtra la supervisione usando gli ID di classe originali; vedi [iperparametri](/docs/train/hyperparameters).
 
 ## Altri task
 

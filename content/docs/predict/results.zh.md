@@ -17,7 +17,7 @@ keywords:
   - yolo 深度图输出
   - libreyolo results summary
   - onnx 推理结果一致
-last_verified: 1.5.0
+last_verified: "1.6.0"
 verification: >-
   载荷类、槽位、搬移语义、summary()、to_json()、plot()、save() 和 cutout() 读自
   libreyolo/utils/results.py。标注和写盘行为读自 libreyolo/models/base/inference.py 里的
@@ -118,7 +118,7 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: 201eca6457cf87a4
 ---
 
 ## 一个对象，每种载荷一个槽位
@@ -267,9 +267,6 @@ source_hash: 548dbc9c7f5552ec
 图，全景结果带上它的分段，matte 写成透明背景的 RGBA PNG，检测器写成检测框、掩码
 画在框下面。写出的路径会作为 `result.saved_path` 挂在结果上。
 
-`Results.plot()` 比它的名字听上去要窄。它只为法线图和边缘图定义，其他任何情况都
-抛 `NotImplementedError`。别的任务请用 `save=True`。
-
 `Results.save(path)` 同样窄：它把 matte 结果写成透明背景的 RGBA PNG 抠图，其他
 情况一律抛 `NotImplementedError`。`Results.cutout()` 返回同一个 RGBA 数组，但
 不写盘。两者都需要源图像，从 `result.path` 取，或者用 `image=` 传进来。
@@ -279,6 +276,10 @@ source_hash: 548dbc9c7f5552ec
 
 文件最终落在哪里，以及 `output_path` 和 `output_file_format` 的行为，见
 [预测数据源](/docs/predict/sources)。
+
+`plot()` 覆盖所有任务载荷。图像叠加默认返回连续的 HxWx3 uint8 BGR；`pil=True` 请求 PIL。已有的边缘和法线图路径保留 PIL 默认值。`orig_img` 为内存和 URL 数据源保留 BGR 像素；本地文件和已收集的有限时长视频帧可以重新打开。
+
+控制项包括 `img`、`conf`、`labels`、`boxes`、`masks`、`probs`、`line_width`、`pil`、`show`、`save` 和 `filename`。保存的分类图像包含前五个标签。透明度图保存为 RGBA 抠图。
 
 ## 导出产物返回同样的对象
 

@@ -4,7 +4,7 @@ seo_title: "Open-vocabulary detection in LibreYOLO"
 description: "Detect objects from a text vocabulary in LibreYOLO. Load Grounding DINO, OWLv2, OMDet-Turbo or OV-DEIM through LibreOpenVocab and set classes at runtime."
 lead: "Open-vocabulary detection replaces a checkpoint's fixed class list with words you choose at call time. In LibreYOLO it is not a separate task: it is the detect task served by a separate model tier, loaded through the LibreOpenVocab factory instead of LibreYOLO."
 keywords: [open vocabulary detection, zero shot object detection, open set detection, grounding dino python, owlv2, omdet turbo, text prompt detection]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -114,6 +114,8 @@ vision-language models, such as [Qwen3-VL](/docs/models/qwen3-vl) and
 produces the boxes: the families on this page are discriminative detectors that
 emit scores directly, while the VLM tier generates them.
 
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) and [North Micro Vision](/docs/models/northmicrovision) extend the `LibreVLM` detection choices. [Molmo2](/docs/models/molmo2) returns points. Use [LibreGround](/docs/reference/ground-api) for instruction-to-click queries rather than a detection vocabulary.
+
 ## Predict
 
 <code-tabs name="predict" />
@@ -143,6 +145,8 @@ it explicitly when comparing two families on the same image.
 No family in this tier trains inside LibreYOLO. `train()` raises: fine-tune
 upstream and load the resulting weights. The vocabulary passed to
 `set_classes()` is the only setting that changes what a loaded model detects.
+
+Qwen3-VL has a separate [VLM fine-tuning](/docs/train/vlm-fine-tuning) path. This does not add training to the four `LibreOpenVocab` adapters.
 
 ## Validate
 

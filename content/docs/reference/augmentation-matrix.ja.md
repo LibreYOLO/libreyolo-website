@@ -13,9 +13,9 @@ keywords:
   - no_aug_epochs
   - データ拡張 対応マトリクス
   - TrainConfig ノブ
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  ノブ一覧、状態、構成、ファミリーごとの差異、ヘルパー関数はv1.5.0のlibreyolo/data/augment/spec.pyで確認しました。この表と実際のパイプラインとの一致はtests/unit/test_augment_spec.pyで固定されています。
+  ノブ一覧、状態、構成、ファミリーごとの差異、ヘルパー関数はv1.6.0のlibreyolo/data/augment/spec.pyで確認しました。この表と実際のパイプラインとの一致はtests/unit/test_augment_spec.pyで固定されています。
 snippets:
   usage:
     - label: 仕様を直接照会
@@ -35,7 +35,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: d2e1b9f5c81072e1
+source_hash: f3cba41ceadf131f
 ---
 
 ## ノブ
@@ -61,7 +61,7 @@ source_hash: d2e1b9f5c81072e1
 | `mixup` | ソフトラベルを使う分類用バッチMixUpの確率 |
 | `cutmix` | ソフトラベルを使う分類用バッチCutMixの確率 |
 
-最後の4つが分類パックです。検出ファミリーはこれらを無視します。`mixup`はAPI専用ノブです。CLIの`--mixup`は検出用`mixup_prob`の別名です。
+最後の4つは分類専用の設定です。物体検出のファミリーはこれらを無視します。CLIは分類モデルの`mixup`をバッチの混合に、検出モデルでは`mixup_prob`に振り分けます。
 
 <code-tabs name="usage" />
 
@@ -84,14 +84,14 @@ source_hash: d2e1b9f5c81072e1
 | `mosaic_prob` | 使用 | 無視 | 無視 | 無視 | 無視 | 無視 |
 | `mixup_prob` | mosaic依存 | 使用 | 無視 | 無視 | 無視 | 無視 |
 | `hsv_prob` | 使用 | 使用 | 無視 | 無視 | 無視 | 無視 |
-| `flip_prob` | 使用 | 使用 | 使用 | 無視 | 無視 | 無視 |
+| `flip_prob` | 使用 | 使用 | 使用 | 使用 | 無視 | 無視 |
 | `degrees` | mosaic依存 | 使用 | 無視 | 無視 | 無視 | 無視 |
 | `translate` | mosaic依存 | 使用 | 無視 | 無視 | 無視 | 無視 |
 | `mosaic_scale` | mosaic依存 | 使用 | 無視 | 無視 | 無視 | 無視 |
 | `mixup_scale` | mosaic依存 | 使用 | 無視 | 無視 | 無視 | 無視 |
 | `shear` | mosaic依存 | 使用 | 無視 | 無視 | 無視 | 無視 |
 | `perspective` | mosaic依存 | 使用 | 無視 | 無視 | 無視 | 無視 |
-| `flipud` | 使用 | 使用 | 無視 | 無視 | 無視 | 無視 |
+| `flipud` | 使用 | 使用 | 無視 | 使用 | 無視 | 無視 |
 | `no_aug_epochs` | 使用 | 使用 | 使用 | 使用 | 使用 | 使用 |
 | `auto_augment` | 無視 | 無視 | 無視 | 使用 | 無視 | 無視 |
 | `erasing` | 無視 | 無視 | 無視 | 使用 | 無視 | 無視 |
@@ -100,9 +100,9 @@ source_hash: d2e1b9f5c81072e1
 
 YOLOX形式のパイプラインでは、サンプルごとの前処理がHSVジッターと反転を適用し、アフィン変換とMixUpはmosaic分岐の中だけで実行されます。一方、YOLO-NASは常に有効なサンプルごとのアフィン変換を実行し、mosaicを無視し、MixUpを独立して適用します。`mosaic_scale`はアフィン変換のスケール範囲として再利用されます。
 
-DETR形式のパイプラインはmosaicなしの通過型変換です。測光変形、zoom-out、IoU-cropは設定可能なノブではなくレシピ定数なので、`hsv_prob`と幾何学ノブは一切届きません。分類パイプラインは`flip_prob`ではなく固定値0.5の水平反転を持つImageFolder変換を使います。セマンティックのスケールジッターとHSVは設定ノブではなくファミリーのクラス属性に由来し、復元の反転は入力とターゲットを連動させる固定確率0.5の処理です。
+DETR系パイプラインはモザイクを使わない変換です。測光的な歪み、ズームアウト、IoUクロップは変更可能な設定ではなくレシピの定数なので、`hsv_prob`と幾何変換の設定は作用しません。分類は水平反転に`flip_prob`、垂直反転に`flipud`を使います。セマンティックセグメンテーションのスケール変動とHSVはモデルクラスの属性から決まり、復元では入力と正解を固定確率0.5で一緒に反転します。
 
-`no_aug_epochs`はすべての場所で反映されますが、無効にするものは異なります。YOLOX形式ではmosaicとMixUp、YOLO-NASではアフィン変換とMixUp、DETR形式では強い測光拡張とcrop拡張および学習率の末尾、そのほかではスケジューラーの末尾です。
+`no_aug_epochs`はすべてのパイプラインで反映されますが、無効にする処理は異なります。YOLOX系ではモザイクとMixUp、YOLO-NASではアフィン変換とMixUp、DETR系では強い測光的な拡張とクロップに加えて学習率スケジュールの終盤、分類では自動拡張、erasing、MixUp、CutMixが対象です。分類のクロップと反転は有効なままです。
 
 ## 構成別のファミリー
 
@@ -167,4 +167,3 @@ Dome-DETRはD-FINEの変換を変更せずに継承します。利用できな�
 ## mosaicゲート
 
 YOLOX形式のファミリーでは、`mosaic_prob=0`で`mixup_prob=0.5`を指定するとMixUpが完全に無効になります。MixUpはmosaicサンプルだけに適用されるためです。この組み合わせは学習後半でmosaicを無効にすると簡単に発生します。トレーナーはファミリー名を示す警告をログに記録し、その背後にある純粋関数が`mixup_gating_warning`です。
-

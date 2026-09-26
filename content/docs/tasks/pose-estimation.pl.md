@@ -16,7 +16,7 @@ keywords:
   - COCO keypoints
   - OKS mAP
   - trenowanie modelu pose
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -154,7 +154,7 @@ snippets:
 
 
         print(result.keypoints.xy)
-source_hash: 9de01d1f615bdf33
+source_hash: 1b9e7614546d8f00
 ---
 
 ## Definicja
@@ -185,19 +185,7 @@ detektora.
 
 ## Modele
 
-Trzy rodziny zarówno trenują, jak i przewidują:
-[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) oraz
-[YOLO-NAS](/docs/models/yolo-nas). Wszystkie są jednoetapowe. RF-DETR wymaga
-własnego dodatku `pip install "libreyolo[rfdetr]"`. RF-DETR i EdgeCrafter
-udostępniają opublikowane checkpointy pozy i oba można dostrajać na zbiorach
-danych z jedną klasą zawierającą wyłącznie osoby. Głowica punktów kluczowych
-EdgeCrafter jest ustalana podczas tworzenia i odrzuca zbiór danych deklarujący
-inną liczbę, natomiast RF-DETR ponownie inicjalizuje dla niego głowicę. YOLO-NAS
-pobiera wagi z własnej sieci CDN Deci.AI na licencji niekomercyjnej, a LibreYOLO
-nie publikuje żadnych z nich. Jego głowica pozy również jest przebudowywana dla
-nowej liczby punktów kluczowych. Jako jedyna z tych trzech rodzin nie ma stałej
-liczby klas równej jeden, dlatego nadaje się do szkieletu wieloklasowego lub
-innego niż ludzki, na przykład do pozy zwierząt.
+Trzy rodziny zarówno trenują, jak i przewidują: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) i [YOLO-NAS](/docs/models/yolo-nas), wszystkie jednoetapowe. RF-DETR wymaga własnego dodatku, `pip install "libreyolo[rfdetr]"`. RF-DETR i EdgeCrafter udostępniają opublikowane checkpointy pozy. RF-DETR trenuje też pozy wieloklasowe; głowica punktów kluczowych EdgeCrafter jest ustalana podczas tworzenia i odrzuca zbiór deklarujący inną liczbę, a RF-DETR ponownie inicjalizuje dla niego głowicę. YOLO-NAS pobiera wagi z własnej sieci CDN Deci.AI na licencji niekomercyjnej, a LibreYOLO nie publikuje żadnych z nich; jego głowica pozy też przebudowuje się dla nowej liczby punktów kluczowych i obsługuje szkielety wieloklasowe lub inne niż ludzkie.
 
 [HRNet](/docs/models/hrnet) jest opcją top-down. Przewiduje, waliduje i
 eksportuje, a jego `train()` zgłasza `NotImplementedError`. Jeśli nie podano
@@ -212,6 +200,8 @@ wraca do kategorii osoby. Jego wagi są przeznaczone do użytku niekomercyjnego,
 a opóźnienie dla pojedynczego obrazu jest znacznie większe niż w
 wyspecjalizowanej głowicy pozy, ponieważ każda predykcja jest dekodowaniem
 dyfuzyjnym.
+
+[DEKR](/docs/models/dekr) zapewnia estymację pozy wielu osób metodą bottom-up bez osobnego detektora osób. Obsługuje inferencję i walidację, ale nie trenowanie.
 
 ## Predykcja
 
@@ -275,6 +265,8 @@ indeks przyjmowany po odbiciu poziomym. Dzięki temu lewy nadgarstek pozostaje
 lewym nadgarstkiem. Pominięcie tego pola wyłącza augmentację odbicia poziomego
 dla punktów kluczowych zamiast zastosować ją z błędną kolejnością indeksów.
 
+Wieloklasowa estymacja pozy RF-DETR używa `kpt_names`, z nazwą lub identyfikatorem klasy jako kluczem, aby wybrać pierwsze nazwane punkty kluczowe dla każdej klasy. Pusta lista oznacza klasę z samymi ramkami. Wieloklasowe zbiory wymagają `names` i co najmniej jednej klasy z punktami kluczowymi. Diagnostyka błędnych etykiet wskazuje plik, wiersz i oczekiwany układ `kpt_shape`.
+
 ## Trenowanie
 
 <code-tabs name="train" />
@@ -319,4 +311,3 @@ zwraca ten sam obiekt `Results`. Zakres formatów różni się zależnie od rodz
 Macierz na stronie każdego modelu jest generowana ze zweryfikowanego zestawu, a
 nie wpisywana ręcznie. Formaty, ich dodatki i ograniczenia opisano w sekcji
 [eksport i wdrożenie](/docs/export).
-

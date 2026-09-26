@@ -1,0 +1,12 @@
+{
+  "name": "Kosmos-2",
+  "org": "Microsoft",
+  "paper_title": "Kosmos-2: Grounding Multimodal Large Language Models to the World",
+  "paper_url": "https://arxiv.org/abs/2306.14824",
+  "code_url": "https://github.com/microsoft/unilm/tree/master/kosmos-2",
+  "license": "MIT",
+  "license_interpretation": "MIT is a permissive license, so these weights can be used in commercial and closed-source products, provided the copyright notice and license text travel with any copy you redistribute. LibreYOLO downloads Microsoft's own microsoft/kosmos-2-patch14-224 repository directly; unlike Florence-2, no community re-upload is needed for it to load on current transformers.",
+  "bibtex": "@article{kosmos-2,\n  title={Kosmos-2: Grounding Multimodal Large Language Models to the World},\n  author={Zhiliang Peng and Wenhui Wang and Li Dong and Yaru Hao and Shaohan Huang and Shuming Ma and Furu Wei},\n  journal={ArXiv},\n  year={2023},\n  volume={abs/2306}\n}",
+  "bibtex_source_url": "https://github.com/microsoft/unilm/blob/master/kosmos-2/README.md#citation",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the microsoft/unilm README on branch master (one of three entries there; the other two cite Kosmos-1 and MetaLM, prior work from the same lab, and are not reproduced here). Cross-checked against the arXiv API for 2306.14824: the same seven authors in the same order, matching title, dated 2023-06-26, no journal-ref, so the @article form still matches the record. The README's own volume field (abs/2306) is truncated at the source and reproduced as written, not corrected by hand."
+}

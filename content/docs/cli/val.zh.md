@@ -9,7 +9,7 @@ keywords:
   - yolo 命令行评估
   - mAP50-95 计算
   - libreyolo val 参数
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: 命令
     value: libreyolo val
@@ -35,7 +35,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: f6507840568c3725
+source_hash: 8e858639e96672a0
 ---
 
 ## 概要
@@ -76,6 +76,15 @@ libreyolo val model=<name|path> data=<dataset.yaml> [key=value ...]
 | `quiet` | `false` | 屏蔽 stderr |
 | `verbose` | `true` | 详细输出 |
 | `help_json` | `false` | 把命令 schema 以 JSON 打印出来并退出 |
+
+| 参数 | 默认值 | 含义 |
+| --- | --- | --- |
+| `classes` | `None` | 仅评估指定的原始数据集类别 ID，以逗号分隔（如 '0,3,5'）；其他类别的检测框从真值和预测中移除。若检查点训练时设置过 classes=，则默认继承 |
+| `crop_pct` | `None` | 分类评估中心裁剪前的缩放比例（默认模型家族原生值） |
+| `plot_samples` | `8` | 验证样例图中的图像数：0 为不绘制，-1 为全部验证图像（不改变指标） |
+| `visualize` | `False` | 绘制每张验证图像的真阳性、假阳性和假阴性，保存到 visualize/errors/（存在错误）和 visualize/correct/（detect、segment；classify 绘制标签与 top-1 对照） |
+| `show_labels` | `True` | 在 --visualize 图像上显示类别名称 |
+| `show_conf` | `True` | 在 --visualize 图像上显示置信度分数 |
 
 ## 示例
 

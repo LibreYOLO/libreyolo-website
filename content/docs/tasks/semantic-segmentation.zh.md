@@ -10,7 +10,7 @@ keywords:
   - 训练语义分割模型
   - mIoU
   - MIT 许可 语义分割库
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -110,7 +110,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 44b92d8ba6062f04
+source_hash: f642c33d64f6878c
 ---
 
 ## 定义
@@ -129,12 +129,7 @@ source_hash: 44b92d8ba6062f04
 
 ## 模型
 
-有三个家族既能训练也能预测：[SegFormer](/docs/models/segformer)、
-[LingBot-Vision](/docs/models/lingbot-vision) 和
-[DINOv2](/docs/models/dinov2)。SegFormer 和 LingBot-Vision 在基础包上就能运行，
-并提供已发布的权重。DINOv2 需要 `pip install "libreyolo[rfdetr]"`，而且没有
-LibreYOLO 托管的检查点：它加载上游骨干，稠密 head 从随机初始化开始，所以它是训练的
-起点，而不是一个开箱即用的预测器。
+可训练的家族包括：[SegFormer](/docs/models/segformer)、[LingBot-Vision](/docs/models/lingbot-vision) 和 [DINOv2](/docs/models/dinov2)。SegFormer 和 LingBot-Vision 使用基础包运行，并提供已发布权重。DINOv2 需要 `pip install "libreyolo[rfdetr]"`，没有 LibreYOLO 托管的检查点：它加载上游骨干，稠密 head 从随机初始化开始，因此是训练起点，而不是可直接使用的预测器。
 
 另有四个能预测、验证和导出，但它们的 `train()` 会抛出
 `NotImplementedError`：[FCN](/docs/models/fcn)、
@@ -144,6 +139,8 @@ LibreYOLO 托管的检查点：它加载上游骨干，稠密 head 从随机初�
 类别集合因检查点而异，不因家族而异。已发布的权重来自标签空间几乎没有共同点的数据集，
 其中就有 ADE20K 的 150 个类别对上 Cityscapes 的 19 个，所以告诉你一个检查点能标注
 什么的是它的 `names`，而两个检查点只有在同一个标签空间上训练过时才可比。
+
+[PP-LiteSeg](/docs/models/ppliteseg) 和 [U-Net](/docs/models/unet) 是可训练的语义分割家族。U-Net 目前没有经过验证的托管转换权重。
 
 ## 预测
 
@@ -209,6 +206,8 @@ names:
 运行开始前抛出 `ValueError`。SegFormer 的除数是 32，LingBot-Vision 和 EoMT 是 16，
 DINOv2 是 14，FCN 和 PIDNet 是 8。数据集、数据增强、多卡训练和日志记录器见
 [训练](/docs/train)。
+
+语义分割数据集接受 `(height, width)` 画布。PP-LiteSeg 和 U-Net 区分训练裁剪与评估矩形。缩放再裁剪的采样过程使用忽略标签填充缺失区域；配置了家族光度变换时也会应用。
 
 ## 验证
 

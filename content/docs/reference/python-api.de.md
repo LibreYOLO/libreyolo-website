@@ -2,13 +2,14 @@
 title: Python-API
 seo_title: LibreYOLO-Python-API-Referenz
 description: >-
-  Die von LibreYOLO auf Paketebene exportierten Namen: fünf Factories,
+  Die von LibreYOLO auf Paketebene exportierten Namen: Factories,
   Familienklassen, Results-Payloads, Backends, Validatoren, Tracker und
   Datenhilfsfunktionen.
 lead: >-
   Die öffentliche Python-Oberfläche von LibreYOLO ist die __all__-Liste in
-  libreyolo/__init__.py. Alles auf dieser Seite kann als from libreyolo import
-  <name> importiert werden. Alles andere ist intern.
+  libreyolo/__init__.py. Paketexporte verwenden from libreyolo import <name>;
+  die folgenden Tracking- und Trainingsprotokolle verwenden ihre benannten
+  Untermodule.
 keywords:
   - libreyolo python api
   - libreyolo import
@@ -18,13 +19,13 @@ keywords:
   - LibreOpenVocab
   - LibreEnsemble
   - libreyolo __all__
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Namen und Signaturen aus libreyolo/__init__.py, libreyolo/models/__init__.py,
   libreyolo/models/base/model.py, libreyolo/models/base/inference.py,
   libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py,
   libreyolo/models/openvocab/__init__.py und libreyolo/ensemble/model.py für
-  v1.5.0.
+  v1.6.0.
 snippets:
   usage:
     - label: Beliebiges Modell über eine Factory laden
@@ -50,7 +51,7 @@ snippets:
 
         print(len(result))
   factories:
-    - label: Die fünf Einstiegspunkte
+    - label: Einstiegspunkte
       language: python
       code: >
         from libreyolo import LibreYOLO, LibreEnsemble
@@ -78,13 +79,12 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 66e34e78b2e0fb2d
+source_hash: 02fbec762b1ffced
 ---
 
 ## Einstiegspunkte
 
-Fünf Callables laden ein Modell. Sie sind nach Aufrufvertrag und nicht nach
-Architektur getrennt.
+Factories laden Modelle oder konfigurieren API-Clients. Sie sind nach Aufrufvertrag und nicht nach Architektur getrennt.
 
 | Factory | Lädt | Prompt beim Aufruf | Erforderliches Extra |
 |---|---|---|---|
@@ -96,9 +96,7 @@ Architektur getrennt.
 
 <code-tabs name="factories" />
 
-Nur `LibreYOLO` liest eine Datei. Die anderen drei nehmen einen Stringalias
-entgegen und lösen ihn zu einem Hugging-Face-Repository auf. Das Argument ist
-daher ein Modellname und kein Pfad.
+`LibreYOLO` akzeptiert Checkpoint-Dateien und exportierte Artefakte. Die verwandten Factories akzeptieren Modell-Aliasse; `LibreVLM` und `LibreVLA` laden außerdem ihre eigenen gespeicherten Checkpoint-Verzeichnisse.
 
 ```python
 LibreYOLO(
@@ -123,6 +121,10 @@ Checkpoint gelesen. `compute_units` wird nur beim Laden eines CoreML-
 
 <code-tabs name="usage" />
 
+`LibreGround` bildet Anweisungen auf Bildpunkte ab; `LibreVLA` sagt Roboteraktionsblöcke vorher; `LibreLLM` ruft einen kompatiblen entfernten Sprachmodell-Endpunkt auf. Siehe die [Grounding-API](/docs/reference/ground-api), [Policy-API](/docs/reference/vla-api) und den [Sprachmodell-Client](/docs/reference/llm-api).
+
+`LibreYOLO("hf://owner/repo@revision/filename")` lädt Hub-Checkpoints. `model.push_to_hub(repo_id, private=False)` veröffentlicht einen Checkpoint und eine Modellkarte. Die [Hub-Referenz](/docs/reference/hugging-face) beschreibt Auflösung und Authentifizierung.
+
 ## Familienklassen
 
 Jede von der Factory zurückgebbare Familie wird auch unter ihrem Namen
@@ -133,9 +135,7 @@ direkt erstellt werden. Die Konstruktoren folgen `BaseModel.__init__`:
 Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 ```
 
-Bei einer Familienklasse besitzt `size` keinen Standardwert. Dies unterscheidet
-sie von der Factory. YOLO9 und seine Varianten fügen nach `size` den Parameter
-`reg_max: int = 16` ein.
+Die Standardwerte des Konstruktors hängen von der Modellfamilie ab. Vor einem direkten Aufruf sollte seine Signatur geprüft werden. YOLO9 und seine Varianten fügen `reg_max: int = 16` nach `size` ein.
 
 Erkennungs- und Multi-Task-Familien: `LibreYOLO9`, `LibreYOLO9E2E`,
 `LibreYOLO9P2`, `LibreYOLONAS`, `LibreYOLOX`, `LibreYOLO7`, `LibreYOLO4`,
@@ -204,11 +204,13 @@ anderen Methoden des Modellobjekts werden auf der
 
 ## Results-Payloads
 
-`Results` und seine 18 Payload-Klassen werden auf Paketebene exportiert:
+`Results` und seine Payload-Klassen werden auf Paketebene exportiert:
 `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`,
 `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`,
 `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`.
 Alle werden unter [Results-Typen](/docs/reference/results-types) beschrieben.
+
+`Boxes3D`, `AlbedoMap` und `Actions` ergänzen 3D-Quader, intrinsische Albedo und Aktionsblöcke. Siehe [Ergebnistypen](/docs/reference/results-types).
 
 ## Backends
 
@@ -234,6 +236,8 @@ ihre Konfigurations-Dataclasses werden ebenfalls exportiert: `ByteTracker` mit
 `TrackConfig`, `BoTSortTracker` mit `BoTSortConfig` und `OCSortTracker` mit
 `OCSortConfig`.
 
+`libreyolo.tracking.Tracker` definiert `reset()` und `update(results, image=None)` für eigene Tracker-Instanzen.
+
 ## Datenhilfsfunktionen
 
 `DATASETS_DIR` ist der aufgelöste Datensatzstamm. `load_data_config` liest eine
@@ -247,6 +251,8 @@ Paketebene.
 `Gallery` und `FaceGallery` halten registrierte Identitätsvektoren für die
 Aufgabe `embed` und erzeugen die Payload `Identities`. `Distiller` und
 `get_distill_config` steuern das Teacher-Student-Training.
+
+`libreyolo.training.TrainFitnessCallback` definiert `fitness(metrics)` für die eigene Checkpoint-Auswahl. Siehe [Fitness-Callbacks](/docs/train/fitness-callbacks).
 
 ## Assets
 
@@ -265,4 +271,3 @@ einer verständlichen Meldung.
 Zwei Klassennamen wurden umbenannt. Die alte Schreibweise wird weiterhin mit
 einem `DeprecationWarning` aufgelöst: `LibreYOLORTDETR` heißt jetzt
 `LibreRTDETR`, und `LibreYOLORFDETR` heißt jetzt `LibreRFDETR`.
-

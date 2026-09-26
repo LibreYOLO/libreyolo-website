@@ -2,9 +2,8 @@
 title: libreyolo train
 seo_title: referência do comando libreyolo train
 description: >-
-  Treina um modelo pela linha de comando: os 59 argumentos com seus valores
-  padrão, como os padrões de cada família os sobrescrevem e quais argumentos uma
-  família ignora.
+  Treine um modelo pela linha de comando: argumentos e seus padrões, como os
+  padrões da família os substituem e quais argumentos uma família ignora.
 lead: >-
   Treina um modelo em um dataset e escreve checkpoints, métricas e logs em um
   diretório de execução. Cada argumento abaixo tem um valor padrão vindo da
@@ -17,7 +16,7 @@ keywords:
   - argumentos libreyolo train
   - treinar yolo com dataset próprio
   - congelar camadas yolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Comando
     value: libreyolo train
@@ -52,7 +51,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 3aad4298310d3081
+source_hash: 525a8e4366e4c0be
 ---
 
 ## Sinopse
@@ -175,6 +174,26 @@ Os argumentos são pares `key=value`, e a forma POSIX também funciona, então
 | `quiet` | `false` | Silencia o stderr |
 | `dry_run` | `false` | Resolve e imprime a config sem executar |
 | `help_json` | `false` | Despeja o schema do comando como JSON e sai |
+
+| Argumento | Padrão | Significado |
+| --- | --- | --- |
+| `min_samples` | `0` | Duração mínima da época para datasets pequenos: quando o dataset tem menos imagens, sorteia essa quantidade de amostras por época com reposição (0 = desativado) |
+| `class_balanced` | `False` | Amostragem por fator de repetição no estilo LVIS para datasets de cauda longa (padrão: desativado) |
+| `cls_pw` | `0.0` | Potência de ponderação por frequência inversa na classificação: 0 desativa, 1 completa (pesos de classe com média um; não pode combinar com class_weights=True) |
+| `class_weights` | `False` | Pesos legados da loss de classificação normalizados por amostra (padrão: desativado) |
+| `single_cls` | `False` | Treina um detector suportado com todas as labels remapeadas para a classe 0 |
+| `classes` | `None` | Treina um detector suportado apenas com estes IDs originais de classe do dataset, separados por vírgulas (ex.: '0,3,5'); todas as demais classes são descartadas como se não tivessem labels. Os IDs são mantidos, sem compactação |
+| `average_best` | `0` | Calcula a média uniforme dos N melhores checkpoints pela métrica monitorada em weights/average.pt ao final do treinamento (0 = desativado) |
+| `export_check` | `False` | Exporta ONNX antes da época 1 e interrompe a execução se a exportação falhar (padrão: desativado) |
+| `precise_bn` | `0` | Recalcula estatísticas móveis de BatchNorm com esta quantidade de imagens de treinamento após a última época (0 = desativado) |
+| `fliplr` | `None` | Probabilidade de espelhamento horizontal (alias de flip_prob do ecossistema) |
+| `flipud` | `0.0` | Probabilidade de espelhamento vertical |
+| `auto_augment` | `None` | Política de auto-augment de classificação: randaugment, autoaugment, augmix (padrão: nenhuma) |
+| `erasing` | `0.0` | Probabilidade de RandomErasing na classificação, 0 <= erasing < 1 |
+| `cutmix` | `0.0` | Probabilidade de CutMix na classificação (labels suaves) |
+| `scale` | `0.5` | Faixa de área de RandomResizedCrop na classificação: um limite inferior float ou um (min,max) explícito |
+| `crop_pct` | `None` | Razão de redimensionamento de avaliação na classificação antes do recorte central (padrão: valor nativo da família do modelo) |
+| `plot_samples` | `8` | Imagens de amostra no gráfico de amostras de validação: 0 para nenhuma, -1 para cada imagem validada (não muda as métricas) |
 
 ## Exemplos
 

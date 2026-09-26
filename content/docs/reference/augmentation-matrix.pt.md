@@ -18,10 +18,10 @@ keywords:
   - no_aug_epochs
   - matriz de suporte a data augmentation
   - parâmetros do TrainConfig
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   A lista de parâmetros, os status, os arquétipos, os desvios por família e as
-  funções helper foram lidos de libreyolo/data/augment/spec.py na v1.5.0. Essa
+  funções helper foram lidos de libreyolo/data/augment/spec.py na v1.6.0. Essa
   tabela está ancorada nos pipelines reais por tests/unit/test_augment_spec.py.
 snippets:
   usage:
@@ -42,7 +42,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: d2e1b9f5c81072e1
+source_hash: f3cba41ceadf131f
 ---
 
 ## Os parâmetros
@@ -69,9 +69,7 @@ seus próprios aliases sobre eles, então `--mosaic` define `mosaic_prob`.
 | `mixup` | Probabilidade de MixUp por batch na classificação, com soft labels |
 | `cutmix` | Probabilidade de CutMix por batch na classificação, com soft labels |
 
-Os quatro últimos formam o pacote de classificação. As famílias de detecção os
-ignoram. `mixup` é um parâmetro exclusivo da API: na CLI, `--mixup` é o alias do
-`mixup_prob` de detecção.
+Os quatro últimos formam os controles de classificação. As famílias de detecção os ignoram. A CLI direciona `mixup` para a mistura de lotes nos classificadores e para `mixup_prob` nos detectores.
 
 <code-tabs name="usage" />
 
@@ -98,14 +96,14 @@ família listados abaixo.
 | `mosaic_prob` | used | ignored | ignored | ignored | ignored | ignored |
 | `mixup_prob` | gated | used | ignored | ignored | ignored | ignored |
 | `hsv_prob` | used | used | ignored | ignored | ignored | ignored |
-| `flip_prob` | used | used | used | ignored | ignored | ignored |
+| `flip_prob` | used | used | used | used | ignored | ignored |
 | `degrees` | gated | used | ignored | ignored | ignored | ignored |
 | `translate` | gated | used | ignored | ignored | ignored | ignored |
 | `mosaic_scale` | gated | used | ignored | ignored | ignored | ignored |
 | `mixup_scale` | gated | used | ignored | ignored | ignored | ignored |
 | `shear` | gated | used | ignored | ignored | ignored | ignored |
 | `perspective` | gated | used | ignored | ignored | ignored | ignored |
-| `flipud` | used | used | ignored | ignored | ignored | ignored |
+| `flipud` | used | used | ignored | used | ignored | ignored |
 | `no_aug_epochs` | used | used | used | used | used | used |
 | `auto_augment` | ignored | ignored | ignored | used | ignored | ignored |
 | `erasing` | ignored | ignored | ignored | used | ignored | ignored |
@@ -118,19 +116,9 @@ mosaico. Já o YOLO-NAS roda um afim por amostra que está sempre ligado, ignora
 mosaico e aplica o MixUp de forma independente, reaproveitando `mosaic_scale`
 como faixa de escala do afim.
 
-O pipeline no estilo DETR é um transform de passagem, sem mosaico. Sua distorção
-fotométrica, o zoom-out e o crop por IoU são constantes da receita, e não
-parâmetros configuráveis, e é por isso que `hsv_prob` e os parâmetros de
-geometria nunca chegam até ele. O pipeline de classificação usa um transform de
-ImageFolder cujo flip horizontal é um 0.5 fixo, e não `flip_prob`. O jitter de
-escala e o HSV da semântica vêm de atributos de classe da família, e não de
-parâmetros de configuração, e os flips da restauração são operações acopladas de
-entrada e alvo, com probabilidade fixa de 0.5.
+O pipeline do tipo DETR usa uma transformação sem mosaic. Distorção fotométrica, zoom-out e recorte por IoU são constantes da receita, não parâmetros configuráveis; por isso, `hsv_prob` e os controles geométricos não os alteram. A classificação usa `flip_prob` para inversões horizontais e `flipud` para verticais. A variação de escala e HSV da segmentação semântica vem de atributos da classe do modelo; na restauração, entrada e alvo são invertidos juntos com probabilidade fixa de 0.5.
 
-`no_aug_epochs` é respeitado em todo lugar, embora o que ele desliga varie:
-mosaico e MixUp no estilo YOLOX, o afim e o MixUp no YOLO-NAS, as augmentations
-fotométricas e de crop fortes mais a cauda do learning rate no estilo DETR, e a
-cauda do scheduler no resto.
+`no_aug_epochs` é respeitado em todos os pipelines, mas desativa operações diferentes: mosaic e MixUp nos pipelines do tipo YOLOX; transformação afim e MixUp no YOLO-NAS; aumentos fotométricos fortes e recorte, com a parte final do cronograma da taxa de aprendizado, no DETR; aumento automático, erasing, MixUp e CutMix na classificação. Os recortes e as inversões da classificação continuam ativos.
 
 ## Famílias por arquétipo
 

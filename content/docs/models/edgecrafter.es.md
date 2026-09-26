@@ -21,7 +21,7 @@ keywords:
   - estimación de pose
   - segmentación de instancias
   - inferencia en dispositivos edge
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -188,7 +188,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 39c6975fc16b3ff1
+source_hash: 521fde8f10ac8c57
 ---
 
 ## Instalación
@@ -227,6 +227,8 @@ keypoint es una constante en lugar de una puntuación por punto.
 de API pero no tiene efecto, porque las tres cabezas decodifican un conjunto de
 queries sin paso de NMS. Consulta [predicción](/docs/predict) para fuentes,
 streaming y manejo de resultados.
+
+La predicción de detección acepta un `imgsz=(height, width)` rectangular; el entrenamiento y la exportación mantienen sus propias restricciones de forma.
 
 ## Variantes
 
@@ -309,6 +311,8 @@ acepta cada formato y los extras que añaden unos pocos.
 Todos los archivos de pesos publicados de esta familia.
 
 <checkpoint-table />
+
+Las variantes `obj2coco` cubren detección, segmentación y pose. Su descarga requiere aceptación explícita y sus términos upstream restringen el uso comercial. Los checkpoints COCO originales conservan su licencia Apache-2.0 registrada.
 
 ## Licencia
 

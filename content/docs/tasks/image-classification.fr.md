@@ -15,7 +15,7 @@ keywords:
   - précision top 1
   - classification zero shot
   - bibliothèque classification MIT
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -136,7 +136,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 836bea76cd2cdf92
+source_hash: 90aed355e0ddf5e3
 ---
 
 ## Définition
@@ -160,7 +160,7 @@ vecteur appartient à l'image et non à une ligne.
 
 ## Modèles
 
-Cinq familles peuvent être entraînées et effectuer des prédictions :
+Les classificateurs d'images entraînables comprennent :
 [ResNet](/docs/models/resnet), [ConvNeXt](/docs/models/convnext),
 [MobileNetV4](/docs/models/mobilenetv4),
 [EfficientNetV2](/docs/models/efficientnetv2) et
@@ -181,6 +181,8 @@ ensemble fixe d'étiquettes. Ils comparent l'image à des prompts textuels.
 `set_classes()` définit donc les classes au moment de l'appel, sans aucune étape
 d'entraînement pour un nouvel ensemble d'étiquettes. Tous deux couvrent
 également la tâche `embed`.
+
+[ConvNeXt V2](/docs/models/convnextv2) ajoute la classification supervisée avec des poids pré-entraînés sous CC-BY-NC-4.0. [PE](/docs/models/pe) prend en charge la classification zero-shot ; [V-JEPA 2](/docs/models/vjepa2) entraîne des sondes de classification vidéo.
 
 ## Prédire
 
@@ -236,6 +238,8 @@ correspondre tandis que le backbone est transféré sans modification. Consultez
 la page [entraînement](/docs/train) pour les datasets, les augmentations, le
 multi-GPU et les systèmes de journalisation.
 
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 et DINOv2 prennent en charge la pondération de la loss par `cls_pw` ou `class_weights`. En classification, `scale` contrôle l'aire de recadrage et `crop_pct` contrôle le recadrage d'évaluation. Consultez les [augmentations](/docs/train/augmentations).
+
 ## Valider
 
 `val()` renvoie un dictionnaire ordinaire de clés `metrics/`, calculées sur la
@@ -250,6 +254,8 @@ par l'entraînement pour choisir la meilleure époque.
 parmi les cinq scores les plus élevés. Cette valeur est d'autant moins
 significative que le dataset contient peu de classes. Le dictionnaire contient
 aussi `fitness`, une copie de la valeur top-1.
+
+La validation ImageFolder renvoie aussi les valeurs macro `metrics/precision`, `metrics/recall` et `metrics/f1`, moyennées sur les classes présentes dans les cibles de validation. Les classes non prédites contribuent une précision nulle. Le score de sélection par défaut reste l'exactitude top-1. La validation et la calibration utilisent la transformation d'évaluation du modèle.
 
 ## Exporter
 

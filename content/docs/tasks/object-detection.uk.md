@@ -15,7 +15,7 @@ keywords:
   - MIT бібліотека детекції
   - альтернатива YOLO
   - навчити детектор об'єктів
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -122,7 +122,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: c735b6e3de78dd2b
+source_hash: 28d7cbb721e0f109
 ---
 
 ## Визначення
@@ -147,7 +147,7 @@ source_hash: c735b6e3de78dd2b
 
 ## Моделі
 
-Дванадцять сімейств підтримують і навчання, і передбачення:
+Наведені нижче сімейства підтримують і навчання, і передбачення:
 [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr),
 [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr),
 [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim),
@@ -186,6 +186,8 @@ RF-DETR потребує власного набору залежностей
 [SenseNova-Vision](/docs/models/sensenova-vision) і
 [LibreMODUS](/docs/models/libremodus). Вони завантажуються через власну фабрику
 та набори залежностей; точний виклик наведено на сторінці кожної моделі.
+
+[PP-YOLOE](/docs/models/ppyoloe) і [TinyFormer](/docs/models/tinyformer) також підтримують навчання виявлення.
 
 ## Передбачення
 
@@ -256,6 +258,8 @@ names:
 а не з прикладу іншого сімейства. Сімейство також може повністю ігнорувати
 аргумент, і його сторінка містить відповідний список. Датасети, аугментацію,
 кілька GPU й засоби журналювання описано в розділі [навчання](/docs/train).
+
+Використовуйте `classes=`, щоб зберегти вибрані початкові ID датасету; `single_cls=True` зводить збережені мітки до класу 0. Підтримувані сімейства й успадкування під час валідації описано в розділі [гіперпараметрів](/docs/train/hyperparameters).
 
 ## Валідація
 

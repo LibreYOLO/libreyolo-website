@@ -9,7 +9,7 @@ keywords:
   - yolo 导出 onnx
   - tensorrt 导出命令
   - libreyolo export 参数
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: 命令
     value: libreyolo export
@@ -40,7 +40,7 @@ snippets:
         # 工厂按文件后缀路由，所以导出产物会像检查点一样加载
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: ef2ca20af3814109
+source_hash: 0cc60dd7c5c9f864
 ---
 
 ## 概要
@@ -140,3 +140,5 @@ stdout 上是结果，进度走 stderr。退出码：成功是 `0`，用法或�
 
 相关：[`libreyolo quantize`](/docs/cli/quantize)，它留在 PyTorch 里，写出的是检查点
 而不是部署产物。
+
+TFLite INT8 对 YOLO9 或 YOLOX 检测使用 `int8=True`，配合 `data=...`、`fraction=1.0`、`batch=1` 和 `dynamic=False`。不支持 FP16；同时指定两个精度标志时，CLI 丢弃 `half`，选择 INT8。JSON 导出输出报告实际解析的画布，包括从矩形训练检查点重新加载原生正方形家族时回退到正方形的情况。

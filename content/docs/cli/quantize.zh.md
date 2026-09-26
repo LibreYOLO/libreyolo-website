@@ -9,7 +9,7 @@ keywords:
   - fp8 量化
   - 训练后量化 yolo
   - libreyolo quantize 参数
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: 命令
     value: libreyolo quantize
@@ -42,7 +42,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 7ae663e9f117826e
+source_hash: 663390776f2f2c15
 ---
 
 ## 概要
@@ -123,3 +123,5 @@ YOLOv9 上的 DFL 卷积——它是一个固定的积分期望算子，不能�
 
 相关：[`libreyolo export`](/docs/cli/export)，它会离开 PyTorch，转而写出一个部署
 产物。
+
+`algorithm` 默认为 `auto`（minmax），也接受 `minmax`、`percentile`、`mse` 和 `entropy`。MSE 和 entropy 通过激活直方图扫描选择范围。

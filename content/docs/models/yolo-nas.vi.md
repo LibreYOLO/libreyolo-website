@@ -4,14 +4,12 @@ families:
   - yolonas
 seo_title: 'YOLO-NAS: dự đoán, huấn luyện và xuất trong LibreYOLO'
 description: >-
-  Dùng YOLO-NAS trong LibreYOLO để phát hiện và ước lượng tư thế. Trọng số của
-  Deci.AI là độc quyền và chỉ dùng phi thương mại; LibreYOLO không công bố trọng
-  số nào.
+  Phát hiện, tư thế và hộp xoay YOLO-NAS trong LibreYOLO. Trọng số được huấn luyện sẵn upstream chỉ dùng phi
+  thương mại.
 lead: >-
-  Một detector tích chập có backbone và neck được tạo ra từ quá trình tìm kiếm
-  kiến trúc của Deci.AI, xây dựng bằng các block RepVGG nhận biết lượng tử hóa.
-  Trọng số thuộc Deci.AI, chỉ được cấp phép cho mục đích phi thương mại và
-  LibreYOLO không công bố trọng số nào.
+  Một detector tích chập có backbone và neck được tạo ra từ quá trình tìm kiếm kiến trúc của Deci.AI, xây dựng
+  bằng các block RepVGG nhận biết lượng tử hóa. Trọng số thuộc Deci.AI, chỉ được cấp phép cho mục đích phi
+  thương mại và LibreYOLO không công bố trọng số nào.
 keywords:
   - YOLO-NAS
   - YOLONAS
@@ -21,24 +19,18 @@ keywords:
   - ước lượng tư thế
   - detector nhận biết lượng tử hóa
   - AutoNAC
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         # Tên chưa có trên đĩa được lấy từ CDN của Deci. Trước tiên, bản tải
-
-        # in các điều khoản giấy phép của Deci; nhận tệp đồng nghĩa chấp nhận
-        chúng.
-
+        # in các điều khoản giấy phép của Deci; nhận tệp đồng nghĩa chấp nhận chúng.
         model = LibreYOLO("LibreYOLONASs.pt")
-
         result = model(SAMPLE_IMAGE, save=True)
-
 
         for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
@@ -72,17 +64,12 @@ snippets:
           epochs=100 imgsz=640 batch=16
     - label: Huấn luyện từ đầu
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLONAS
 
-
-        # Không dùng checkpoint Deci nào: mô hình bắt đầu từ trọng số ngẫu
-        nhiên,
-
+        # Không dùng checkpoint Deci nào: mô hình bắt đầu từ trọng số ngẫu nhiên,
         # nên kết quả của lượt chạy chỉ bắt nguồn từ dữ liệu của bạn.
-
         model = LibreYOLONAS(None, size="s")
-
         model.train(data="my-dataset.yaml", imgsz=640, batch=16)
   val:
     - label: Python
@@ -101,12 +88,9 @@ snippets:
         libreyolo val model=LibreYOLONASs.pt data=my-dataset.yaml
     - label: Trên COCO
       language: bash
-      code: >
-        # YAML COCO đi kèm chứa script tải xuống nhúng sẵn, nên cần quyền rõ
-        ràng
-
+      code: |
+        # YAML COCO đi kèm chứa script tải xuống nhúng sẵn, nên cần quyền rõ ràng
         # trừ khi tập dữ liệu đã có cục bộ.
-
         libreyolo val model=LibreYOLONASl.pt data=coco.yaml imgsz=640 \
           allow_download_scripts=True
   export:
@@ -132,9 +116,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 47c30d6e44024ce7
+source_hash: 483562cad2c02696
 ---
-
 ## Cài đặt
 
 YOLO-NAS không cần extra ngoài gói cơ sở.
@@ -157,6 +140,8 @@ ghim. Những gì các điều khoản cho phép được nêu trong [giấy ph�
 detector khác chỉ cần sửa một dòng. `conf` đặt ngưỡng độ tin cậy và `iou` đặt
 ngưỡng NMS. Xem [dự đoán](/docs/predict) để biết về nguồn, streaming và xử lý
 kết quả.
+
+Tác vụ hộp xoay trả về `result.obb`. Đồ thị OBB đã công bố dùng khung ảnh 1024 pixel và bộ nhãn 18 lớp đối tượng đã ghi.
 
 ## Các biến thể
 
@@ -185,6 +170,8 @@ bao quát. Huấn luyện từ mô hình khởi tạo ngẫu nhiên hoàn toàn 
 đến checkpoint Deci, và đó là snippet thứ ba ở trên.
 
 Xem [huấn luyện](/docs/train) để biết về tập dữ liệu, tăng cường dữ liệu, multi-GPU và logger.
+
+Phát hiện mặc định dùng `amp=True` với `amp_dtype="float16"`; huấn luyện hộp xoay vẫn dùng `amp=False`. Head OBB hỗ trợ huấn luyện, dự đoán và đánh giá, dùng augmentation lật/HSV và chọn checkpoint theo `metrics/mAP50-95(OBB)`. `load_detect_weights_for_obb()` khởi tạo nó từ trọng số phát hiện.
 
 ## Đánh giá
 
@@ -242,4 +229,3 @@ YOLO-NAS được phát hành mà không có bài báo. Mục bên dưới là t
 giả yêu cầu, bao quát SuperGradients, thư viện phân phối mô hình.
 
 <citation-block />
-

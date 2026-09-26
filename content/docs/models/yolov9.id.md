@@ -19,7 +19,7 @@ keywords:
   - small object detection
   - programmable gradient information
   - GELAN
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -141,7 +141,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: eaa6023a4a0b9e71
+source_hash: 624f3e70d2937683
 ---
 
 ## Instalasi
@@ -201,6 +201,10 @@ gantinya.
 
 Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
 
+Fine-tuning deteksi standar yang baru mengaktifkan cabang PGI khusus pelatihan dengan `aux_weight=0.25`. `max_labels=300`; momentum SGD naik dari 0.8 ke 0.937 selama warmup tiga epoch. Checkpoint lama dengan satu head melanjutkan pelatihan dengan graf tersebut. Prediksi dan ekspor memakai head utama. `letterbox_pad=None` mewarisi penanda checkpoint: bobot tanpa penanda memakai `topleft`, sedangkan konversi resmi baru mencatat `center`.
+
+Mosaic YOLO9 dan YOLOX mengutamakan gambar pasangan beranotasi dengan maksimal 20 pengambilan sampel; MixUp YOLO9 memakai kebijakan yang sama. Lihat [histogram peristiwa](/docs/train/event-histograms) untuk profil input non-RGB.
+
 ## Validasi
 
 `val()` mengembalikan dictionary dengan key `metrics/` yang mencakup presisi, recall,
@@ -232,6 +236,8 @@ Keduanya dijelaskan pada halaman format tersebut.
 
 <code-tabs name="export" />
 
+[TFLite INT8](/docs/export/tflite) memakai `int8=True` dengan data kalibrasi.
+
 ## Checkpoint
 
 Setiap berkas bobot yang dipublikasikan untuk family ini.
@@ -242,11 +248,7 @@ Setiap berkas bobot yang dipublikasikan untuk family ini.
 
 <provenance-box>
 
-Satu checkpoint di sini tidak berlisensi MIT. Model stride-4 yang dilatih pada
-VisDrone2019-DET mewarisi ketentuan CC BY-NC-SA 3.0 dataset tersebut: hanya untuk penggunaan
-nonkomersial, share-alike pada semua turunannya, dan berada di luar lisensi permisif yang
-dipakai family lainnya. Model ini memprediksi kelas udara VisDrone, bukan kelas COCO.
-Library mencetak semua informasi ini sebelum mengunduh berkas.
+Checkpoint aerial stride-4 memprediksi kelas VisDrone. Gunakan lisensi yang dinyatakan penerbit dan tercatat di repositori bobotnya.
 
 </provenance-box>
 

@@ -14,7 +14,7 @@ keywords:
   - comando predict libreyolo
   - argumentos libreyolo predict
   - yolo saída json terminal
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Comando
     value: libreyolo predict
@@ -49,7 +49,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 7e46c7ed7dd9e6c4
+source_hash: 56d898992f1b129c
 ---
 
 ## Sinopse
@@ -100,6 +100,11 @@ palavra da tarefa é descartada antes da análise.
 | `quiet` | `false` | Silencia o stderr |
 | `verbose` | `false` | Saída detalhada no stderr |
 | `help_json` | `false` | Despeja o schema do comando como JSON e sai |
+
+| Argumento | Padrão | Significado |
+| --- | --- | --- |
+| `mask` | `None` | Máscara binária de inpainting para uma única imagem em modelos que a exigem |
+| `trimap` | `None` | Trimap de três níveis para uma única imagem em modelos de matting guiado |
 
 ## Exemplos
 

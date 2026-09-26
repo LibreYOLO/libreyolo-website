@@ -14,7 +14,7 @@ keywords:
   - fp8 e4m3 pytorch
   - 量子化 キャリブレーション データセット
   - qdq onnx エクスポート
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 呼び出し
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -73,7 +73,7 @@ snippets:
             calib="coco128.yaml",      # data.yamlのパスまたは組み込み名。Noneはキャリブレーションを省略
             samples=128,               # キャリブレーション画像の最大数
             batch=8,                   # キャリブレーションのバッチサイズ
-            algorithm="auto",          # autoとminmaxは同じ。代替はpercentile
+            algorithm="auto",          # autoはminmaxを選択 代替はpercentile、mse、entropy
             keep_high_precision=None,  # Noneはファミリーのポリシーを使用
             verbose=True,
         )
@@ -149,7 +149,7 @@ snippets:
 
         # 任意の浮動小数点エクスポーターを対応する精度で利用可能
         qmodel.export(format="tensorrt", half=True)
-source_hash: 4ffb06b87cad017e
+source_hash: 6c247a3243daf393
 ---
 
 ## インストール
@@ -172,6 +172,8 @@ source_hash: 4ffb06b87cad017e
 
 QAT実行中に書き出されるtrainerチェックポイントにもmanifestが含まれます。したがって、その実行で
 生成された`best.pt`自体が量子化チェックポイントです。
+
+キャリブレーションの`algorithm`は、`auto`、`minmax`、`percentile`、`mse`、`entropy`を受け付けます。`auto`はminmaxに解決されます。MSEとentropyは、ヒストグラムの走査で活性化の範囲を選択します。
 
 ## レシピ
 
@@ -225,6 +227,8 @@ QATは学習済みモデルのファインチューニングです。ゼロか�
 `yolo9`と`rfdetr`です。
 
 `fp16`および`bf16`量子化モデルは推論専用です。trainerは`amp=True`を案内してこれらを拒否します。
+
+QATの設定ではEMAとSyncBatchNormを無効にし、`average_best=0`に設定して、それぞれの上書きをログに記録します。浮動小数点の学習では、要求された設定を維持します。
 
 ## エクスポート
 

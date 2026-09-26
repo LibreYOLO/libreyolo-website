@@ -17,7 +17,7 @@ keywords:
   - dataloader bottleneck
   - kernel launch overhead
   - utilisasi GPU
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   profile:
     - label: Profiling lalu lanjutkan pelatihan
@@ -67,7 +67,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: ee5bb727065b6099
+source_hash: 288ee5ee988f2fda
 ---
 
 ## Ukur sebelum mengubah apa pun
@@ -110,6 +110,8 @@ melaporkan mean dan standard deviation karena langkah yang dibatasi launch cukup
 berisik untuk menyesatkan jika hanya diukur sekali; perintah menulis direktori
 `prof_1`, `prof_2`, dan seterusnya, serta agregat `profile_repeat.json`.
 
+Jalur matcher RF-DETR dan D-FINE/DEIM/RT-DETR mengurangi transfer host; konstruksi CUDA Adam dan AdamW yang memenuhi syarat memakai pembaruan fused. SGD dan parameter non-CUDA memakai konstruksi standar. Perubahan implementasi ini tidak menyatakan peningkatan kecepatan yang berlaku umum.
+
 ## Mixed presisi
 
 `amp=True` adalah default untuk sebagian besar family dan menjalankan forward pass
@@ -117,11 +119,7 @@ di bawah CUDA autocast. `amp_dtype` memilih `float16` atau `bfloat16`.
 
 <code-tabs name="amp" />
 
-Float16 memerlukan dynamic loss scaling dan gradient scaler aktif; rentang
-eksponen bfloat16 lebih lebar sehingga scaler-nya dinonaktifkan. Empat family
-memiliki `amp=False`: D-FINE, DEIM, YOLO-NAS, dan FOMO, dengan pengaturan DEIM
-diwariskan ke RT-DETRv4. D-FINE menyebut alasannya: decoder membatasi aktivasi
-pada 65504, nilai float16 hingga terbesar.
+Float16 memakai gradient scaler; bfloat16 menonaktifkannya. Deteksi D-FINE, DEIM, RT-DETRv4, dan YOLO-NAS memakai `amp=True` secara default. Dome-DETR, PP-YOLOE, dan YOLO-NAS OBB mempertahankan default FP32. Berikan `amp=False` untuk meminta FP32 secara eksplisit.
 
 Semantik argumen, termasuk perilaku permintaan bfloat16 pada hardware tanpa
 dukungan bfloat16, tersedia di [Hyperparameter](/docs/train/hyperparameters).

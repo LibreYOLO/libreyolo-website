@@ -17,7 +17,7 @@ keywords:
   - 画像埋め込み
   - 特徴抽出
   - Meta AI
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: セマンティック
@@ -148,7 +148,7 @@ snippets:
         # エクスポート時はタスクからファイル名を付ける ここではLibreDINOv2s-sem.onnx
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
-source_hash: 4256e0a0398e5aaf
+source_hash: c89a9662d03fe6f7
 ---
 
 ## インストール
@@ -177,13 +177,17 @@ LibreYOLOはLibreDINOv2のチェックポイントを公開していません。
 
 <code-tabs name="train" />
 
-ここで主に使用するキーワード引数は、多くの他ファミリーで使う`batch`と`lr0`ではなく、`batch_size`と`lr`です。`batch`と`lr0`も引き続き受け付け、対応する引数にマッピングされますが、両方を渡すと競合エラーになります。実行結果を配置する主な方法として、`project=`と`name=`の代わりに`output_dir=`（デフォルトは`"runs/train"`）を使用します。ただし、`project=`と`name=`を直接渡す方法も引き続き機能します。データセット、データ拡張、マルチGPU、ロガーについては[学習](/docs/train)を参照してください。
+ここで主に使用するキーワード引数は、多くの他ファミリーで使う`batch`と`lr0`ではなく、`batch_size`と`lr`です。`batch`と`lr0`も引き続き受け付け、対応する引数にマッピングされますが、両方を渡すと競合エラーになります。実行結果を配置する主な方法として、`project=`と`name=`の代わりに`output_dir=`（デフォルトは`None`）を使用します。ただし、`project=`と`name=`を直接渡す方法も引き続き機能します。データセット、データ拡張、マルチGPU、ロガーについては[学習](/docs/train)を参照してください。
+
+新規実行は、`exist_ok=False`により連番付きの`runs/train/dinov2_exp`に解決されます。`resume=True`はトレーナーの状態を復元し、選択した実行ディレクトリを維持します。分類は[ハイパーパラメータ](/docs/train/hyperparameters)で説明する`cls_pw`と`class_weights`に対応します。
 
 ## 検証
 
 `val()`は`metrics/`キーを持つ辞書を返します。`task="semantic"`ではmIoUとピクセル精度、`task="classify"`ではtop-1精度とtop-5精度が含まれます。`task="embed"`には評価対象となる正解データがないため、`val()`を呼び出すと`NotImplementedError`を送出します。
 
 <code-tabs name="val" />
+
+分類と埋め込みベクトルのキャリブレーションは、モデルの分類パイプラインを再利用します。評価ではファミリーの変換を使います。
 
 ## エクスポート
 

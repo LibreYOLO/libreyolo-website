@@ -12,7 +12,7 @@ keywords:
   - top-1 정확도
   - 제로샷 분류
   - MIT 분류 라이브러리
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -122,7 +122,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 836bea76cd2cdf92
+source_hash: "90aed355e0ddf5e3"
 ---
 
 ## 정의
@@ -135,11 +135,13 @@ source_hash: 836bea76cd2cdf92
 
 ## 모델들
 
-다섯 가지 모델 계열 모두 학습과 예측을 수행합니다: [ResNet](/docs/models/resnet), [ConvNeXt](/docs/models/convnext), [MobileNetV4](/docs/models/mobilenetv4), [EfficientNetV2](/docs/models/efficientnetv2) 및 [DINOv2](/docs/models/dinov2). 처음 네 가지는 기본 패키지에서 실행되며 공개된 가중치를 제공합니다. DINOv2는 `pip install "libreyolo[rfdetr]"`가 필요하며 LibreYOLO에 호스팅된 체크포인트가 없습니다. 이 모델은 상위(backbone)는 로드하지만 선형 헤드는 무작위 초기화되며, 따라서 바로 사용할 수 있는 예측기가 아니라 파인튜닝 시작점입니다.
+학습 가능한 이미지 분류 모델은 [ResNet](/docs/models/resnet), [ConvNeXt](/docs/models/convnext), [MobileNetV4](/docs/models/mobilenetv4), [EfficientNetV2](/docs/models/efficientnetv2), [DINOv2](/docs/models/dinov2)입니다. 앞의 네 계열은 기본 패키지에서 실행되며 공개 가중치를 제공합니다. DINOv2는 `pip install "libreyolo[rfdetr]"`이 필요하며 LibreYOLO에서 호스팅하는 체크포인트는 없습니다. 업스트림 백본과 무작위로 초기화한 선형 헤드를 로드하므로 바로 예측할 수 있는 모델이 아니라 파인튜닝 시작점입니다.
 
 다섯 가지가 더 예측, 검증 및 내보내기를 수행하지만, 그들의 `train()`는 `NotImplementedError`를 발생시킵니다: [ViT](/docs/models/vit), [Swin](/docs/models/swin), [VGG](/docs/models/vgg), [AlexNet](/docs/models/alexnet) 및 [DeiT](/docs/models/deit).
 
 [CLIP](/docs/models/clip)과 [SigLIP2](/docs/models/siglip2)는 고정된 레이블 집합 없이 분류합니다. 이들은 이미지를 텍스트 프롬프트와 비교하여 점수를 매기기 때문에 `set_classes()`는 호출 시 클래스들을 정의하며, 새로운 레이블 집합에 대한 학습 단계가 전혀 없습니다. 두 모델 모두 `embed` 작업에도 사용됩니다.
+
+[ConvNeXt V2](/docs/models/convnextv2)는 CC-BY-NC-4.0 사전 학습 가중치로 지도 분류를 추가합니다. [PE](/docs/models/pe)는 제로샷 분류를 지원하며, [V-JEPA 2](/docs/models/vjepa2)는 비디오 분류 프로브를 학습합니다.
 
 ## 예측
 
@@ -175,6 +177,8 @@ dataset/
 
 선언할 `nc`가 없습니다: 클래스 수는 `train/` 아래 폴더 이름에서 가져오며, 최종 선형 레이어는 이를 맞추기 위해 재구성되지만 백본은 변경 없이 전이됩니다. 데이터셋, 증강, 멀티 GPU 및 로거에 대한 내용은 [training](/docs/train)을 참조하십시오.
 
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2, DINOv2는 `cls_pw` 또는 `class_weights` 손실 가중치를 지원합니다. 분류의 `scale`은 크롭 면적을 제어하며 `crop_pct`는 평가 크롭을 제어합니다. [데이터 증강](/docs/train/augmentations)을 참조하십시오.
+
 ## 검증
 
 `val()`는 데이터셋 루트의 `val/` 분할에 대해 계산된 `metrics/` 키의 일반 사전을 반환합니다.
@@ -182,6 +186,8 @@ dataset/
 <code-tabs name="val" />
 
 `metrics/accuracy_top1`는 가장 높은 점수를 받은 클래스가 실제 클래스인 이미지의 비율이며, 이는 주요 수치로, 학습에서 최적의 에포크를 선택할 때 사용됩니다. `metrics/accuracy_top5`는 상위 5개의 점수 높은 클래스 중 어느 곳에든 실제 클래스가 나타나는 이미지의 비율로, 데이터셋의 클래스 수가 적을수록 의미가 줄어듭니다. 사전에는 또한 `fitness`가 포함되어 있으며, 이는 top-1 값을 복사한 것입니다.
+
+ImageFolder 검증은 검증 정답에 있는 클래스의 평균을 구한 매크로 `metrics/precision`, `metrics/recall`, `metrics/f1`도 반환합니다. 예측되지 않은 클래스의 정밀도는 0으로 계산합니다. 기본 적합도는 top-1 정확도를 유지합니다. 검증과 보정은 모델의 평가 변환을 사용합니다.
 
 ## 내보내기
 

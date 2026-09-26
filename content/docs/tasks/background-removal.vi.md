@@ -2,36 +2,30 @@
 title: Xóa nền
 seo_title: Xóa nền trong LibreYOLO
 description: >-
-  Tách chủ thể khỏi nền trong LibreYOLO. Dự đoán alpha matte mềm, ghi PNG trong
-  suốt và xác thực bằng MAE cùng S-measure.
+  Tách chủ thể khỏi nền trong LibreYOLO. Dự đoán alpha matte mềm, ghi PNG trong suốt và xác thực bằng MAE cùng
+  S-measure.
 lead: >-
-  Xóa nền tách chủ thể khỏi mọi thứ phía sau. LibreYOLO cung cấp dưới dạng tác
-  vụ matte, trả về giá trị alpha mềm trên mỗi pixel thay vì mặt nạ foreground
-  cứng.
+  Xóa nền tách chủ thể khỏi mọi thứ phía sau. LibreYOLO cung cấp dưới dạng tác vụ matte, trả về giá trị alpha
+  mềm trên mỗi pixel thay vì mặt nạ foreground cứng.
 keywords:
   - xóa nền bằng python
   - mô hình alpha matting
   - phân đoạn ảnh nhị phân
   - tách nền png trong suốt
   - soft alpha matte
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Dự đoán matte
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
         matte = result.matte
-
-        print(matte.array.shape, matte.array.dtype)   # (H, W) float32 trong [0,
-        1]
+        print(matte.array.shape, matte.array.dtype)   # (H, W) float32 trong [0, 1]
     - label: Ghi PNG trong suốt
       language: python
       code: |
@@ -47,26 +41,17 @@ snippets:
         print(rgba.shape)
     - label: Ghép lên nền mới
       language: python
-      code: >
+      code: |
         import numpy as np
-
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
         rgba = result.cutout()
-
         alpha = rgba[..., 3:4].astype(np.float32) / 255.0
-
         backdrop = np.full_like(rgba[..., :3], 255)          # trắng
-
-        composited = (rgba[..., :3] * alpha + backdrop * (1 -
-        alpha)).astype(np.uint8)
-
+        composited = (rgba[..., :3] * alpha + backdrop * (1 - alpha)).astype(np.uint8)
         print(composited.shape)
   val:
     - label: Xác thực và đọc các key metric
@@ -101,9 +86,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: f7d88c74d9729268
+source_hash: 69fbc1d967b2d546
 ---
-
 ## Định nghĩa
 
 Tác vụ `matte` dự đoán một giá trị alpha trên mỗi pixel từ một ảnh RGB: `1` là
@@ -120,7 +104,7 @@ suốt. `result.boxes` luôn rỗng, nên `conf`, `iou` và `max_det` không có
 
 ## Mô hình
 
-Hai family phục vụ `matte` và dùng chung forward path.
+BiRefNet và FeyNobg dùng chung đường truyền xuôi.
 
 [BiRefNet](/docs/models/birefnet) là bilateral-reference network làm nền tảng
 cho tác vụ, được công bố tại đây dưới dạng một checkpoint tầng Swin-L.
@@ -135,6 +119,8 @@ Hai family dùng giấy phép trọng số khác nhau. Cả hai được nêu tr
 và giấy phép trong repo Hugging Face của checkpoint cụ thể là nguồn có thẩm
 quyền.
 
+[BEN2](/docs/models/ben2) bổ sung xóa nền với kích thước cố định 1024. [ViTMatte](/docs/models/vitmatte) nhận ảnh và `trimap=` ba mức đánh dấu pixel nền, chưa xác định và tiền cảnh.
+
 ## Dự đoán
 
 Trọng số được tải từ Hugging Face trong lần sử dụng đầu tiên và lưu vào cache
@@ -142,12 +128,13 @@ cục bộ.
 
 <code-tabs name="predict" />
 
-Cả hai family chạy trên canvas gốc cố định 1024x1024 và đổi kích thước matte về
+BiRefNet và FeyNobg chạy trên canvas gốc cố định 1024x1024 và đổi kích thước matte về
 ảnh gốc. Không hỗ trợ độ phân giải khác vì bảng relative-position của backbone
 Swin gắn với kích thước đó, còn khi không khớp, việc nội suy làm hỏng bảng thay
-vì phát sinh lỗi. `Results.save()` chỉ được định nghĩa cho kết quả matte và cần
-ảnh nguồn, được nạp lại từ `Results.path` trừ khi bạn truyền một ảnh. Xem [dự
+vì phát sinh lỗi. `Results.save()` dùng ảnh nguồn để tạo ảnh tách nền bằng matte, được nạp lại từ `Results.path` trừ khi bạn truyền một ảnh. Xem [dự
 đoán](/docs/predict) để biết về nguồn, stream và cách xử lý kết quả.
+
+`Results.save()` ghi ảnh tách nền bằng matte dưới dạng RGBA. `plot()` dựng ảnh để kiểm tra. BEN2 hỗ trợ dự đoán gốc theo batch; ViTMatte cần bản hướng dẫn cho một ảnh.
 
 ## Định dạng dataset
 
@@ -183,10 +170,7 @@ dataset](/docs/reference/dataset-formats) để biết hợp đồng đầy đ�
 
 ## Huấn luyện
 
-Không family matte nào có implementation huấn luyện: `train()` phát sinh
-`NotImplementedError` trên cả hai, còn hỗ trợ matte chỉ bao gồm dự đoán, xác
-thực và xuất. Mỗi trang mô hình nêu tên dự án upstream có mã huấn luyện và
-script chuyển checkpoint trở lại.
+Các họ tạo matte này chưa triển khai huấn luyện. Khả năng xuất khác nhau theo họ mô hình; ViTMatte không xuất. Mỗi trang mô hình nêu dự án upstream cung cấp mã huấn luyện và script chuyển đổi checkpoint trở lại.
 
 ## Xác thực
 

@@ -4,14 +4,12 @@ families:
   - lfm2vl
 seo_title: 'LFM2-VL: phát hiện với từ vựng mở trong LibreYOLO'
 description: >-
-  Dùng LFM2-VL trong LibreYOLO để phát hiện đối tượng với từ vựng mở trên thiết
-  bị. Dự đoán bằng bất kỳ nhãn văn bản nào; không hỗ trợ huấn luyện, xác thực và
-  xuất.
+  Dùng LFM2-VL trong LibreYOLO để phát hiện đối tượng với từ vựng mở trên thiết bị. Dự đoán bằng bất kỳ nhãn
+  văn bản nào; không hỗ trợ huấn luyện, xác thực và xuất.
 lead: >-
-  LFM2-VL là vision-language model nhỏ gọn chạy trên thiết bị do Liquid AI phát
-  hành. LibreYOLO bọc mô hình thành detector với từ vựng mở: mọi danh sách nhãn
-  văn bản đều trở thành tập lớp đối tượng, không có head cố định và không cần
-  tinh chỉnh.
+  LFM2-VL là vision-language model nhỏ gọn chạy trên thiết bị do Liquid AI phát hành. LibreYOLO bọc mô hình
+  thành detector với từ vựng mở: mọi danh sách nhãn văn bản đều trở thành tập lớp đối tượng, không có head cố
+  định và không cần tinh chỉnh.
 keywords:
   - LFM2-VL
   - LFM2
@@ -21,27 +19,20 @@ keywords:
   - VLM
   - VLM thiết bị biên
   - LibreVLM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreLFM2VL, SAMPLE_IMAGE
-
 
         model = LibreLFM2VL(size="450m")
 
-
         # Từ vựng mở: dùng được mọi từ, không phải class head cố định. Thiết lập
-
-        # được giữ qua mọi lệnh gọi predict()/track() sau đó cho đến khi đặt
-        lại.
-
+        # được giữ qua mọi lệnh gọi predict()/track() sau đó cho đến khi đặt lại.
         model.set_classes(["person", "bicycle", "dog"])
-
         result = model(SAMPLE_IMAGE, save=True)
-
 
         for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
@@ -56,9 +47,8 @@ snippets:
         # đếm hoặc mọi prompt mà wrapper box không bao quát.
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 40237f0ecc0d2cd5
+source_hash: a7f100c861adb8d0
 ---
-
 ## Cài đặt
 
 LFM2-VL cần extra `vlm`, extra này kéo về `transformers` cho backbone dùng chat template.
@@ -77,7 +67,7 @@ pip install "libreyolo[vlm]"
 
 ## Biến thể
 
-Có hai kích thước 450m và 1.6b, cả hai đến từ bản phát hành LFM2.5-VL của Liquid AI và được xây dựng để triển khai trên thiết bị. Bộ công cụ benchmark của LibreYOLO chưa đo họ mô hình này, vì vậy không có số liệu độ chính xác đã công bố để so sánh; hãy chọn kích thước theo ngân sách tính toán của bạn.
+Ba kích thước: 450m, 1.6b và 3b, đều thuộc bản phát hành LFM2.5-VL của Liquid AI; `lfm2-vl-3b` chọn mô hình LFM2.5 3B cùng bộ phân tích bounding box 0–1000. Bộ benchmark của LibreYOLO chưa đo họ mô hình này nên chưa có số liệu độ chính xác công bố để so sánh; hãy chọn kích thước theo ngân sách tính toán của bạn.
 
 LibreYOLO chỉ cung cấp họ mô hình này để dự đoán. `train()`, `val()` và `export()` đều phát sinh `NotImplementedError`: thay vào đó hãy tinh chỉnh ở upstream rồi tải kết quả, việc xác thực tập dữ liệu (dataset) bị bỏ qua vì độ tin cậy placeholder sẽ khiến COCO mAP gây hiểu nhầm, còn xuất nằm ngoài phạm vi của mô hình sinh không có state dict để trace.
 
@@ -92,5 +82,3 @@ LFM Open License v1.0 cho phép sử dụng thương mại, sao chép và sửa 
 ## Trích dẫn
 
 <citation-block />
-
-

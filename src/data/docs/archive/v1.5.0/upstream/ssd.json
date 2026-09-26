@@ -1,0 +1,13 @@
+{
+  "name": "SSD",
+  "org": "UNC Chapel Hill, Zoox, Google and University of Michigan",
+  "paper_title": "SSD: Single Shot MultiBox Detector",
+  "paper_url": "https://arxiv.org/abs/1512.02325",
+  "code_url": "https://github.com/pytorch/vision",
+  "license": "BSD-3-Clause",
+  "code_license": "BSD-3-Clause",
+  "license_interpretation": "BSD-3-Clause is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its copyright notice and disclaimer with any copy you redistribute, and it places no obligation on your own application code. The official SSD300 COCO checkpoint carries no separate, checkpoint-specific license: LibreYOLO's mirror applies BSD-3-Clause on an explicitly disclosed implied basis, the same basis torchvision states for its own pretrained SSD300 weights. The VGG16 backbone the graph is built on traces back to Oxford's fully convolutional reduced VGGNet, released under CC BY 4.0 by Karen Simonyan and Andrew Zisserman.",
+  "bibtex": "@inproceedings{liu2016ssd,\n  title = {{SSD}: Single Shot MultiBox Detector},\n  author = {Liu, Wei and Anguelov, Dragomir and Erhan, Dumitru and Szegedy, Christian and Reed, Scott and Fu, Cheng-Yang and Berg, Alexander C.},\n  booktitle = {ECCV},\n  year = {2016}\n}",
+  "bibtex_source_url": "https://github.com/weiliu89/caffe/tree/ssd#citing-ssd",
+  "bibtex_verified": "2026-08-08, copied verbatim from the 'Citing SSD' section of the README on the ssd branch of weiliu89/caffe, the paper authors' own repository (LibreYOLO's own code derives from torchvision's SSD300 port instead, not this repository; see Licensing). Cross-checked against the arXiv API for 1512.02325: all seven authors match in order (Liu, Anguelov, Erhan, Szegedy, Reed, Fu, Berg), and the record links a DOI to the ECCV 2016 proceedings (10.1007/978-3-319-46448-0_2), confirming the booktitle. Author affiliations (UNC Chapel Hill, Zoox Inc., Google Inc., University of Michigan Ann Arbor) are read from the paper's own LaTeX institutetext via the ar5iv rendering of 1512.02325. Do not hand-edit; a wrong citation misattributes someone's work."
+}

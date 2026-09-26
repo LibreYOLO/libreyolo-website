@@ -2,10 +2,10 @@
 title: Python API
 seo_title: LibreYOLO Python APIリファレンス
 description: >-
-  LibreYOLOがパッケージレベルで公開する名前：5つのファクトリー、ファミリークラス、Resultsペイロード、バックエンド、バリデーター、トラッカー、データヘルパー。
+  LibreYOLOがパッケージレベルで公開する名前：ファクトリー、ファミリークラス、Resultsペイロード、バックエンド、バリデーター、トラッカー、データヘルパー。
 lead: >-
-  LibreYOLOの公開Pythonインターフェースは、libreyolo/__init__.pyの__all__リストです。このページにあるすべての名前はfrom
-  libreyolo import <name>としてインポートできます。そのリストにないものは内部用です。
+  LibreYOLOの公開Pythonインターフェースは、libreyolo/__init__.pyの__all__リストです。パッケージレベルで公開する名前はfrom
+  libreyolo import <name>でインポートします。以下の追跡と学習のプロトコルは、指定したサブモジュールを使います。
 keywords:
   - libreyolo python api
   - libreyolo import
@@ -15,9 +15,9 @@ keywords:
   - LibreOpenVocab
   - LibreEnsemble
   - libreyolo __all__
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  v1.5.0のlibreyolo/__init__.py、libreyolo/models/__init__.py、libreyolo/models/base/model.py、libreyolo/models/base/inference.py、libreyolo/models/sam/model.py、libreyolo/models/vlm/__init__.py、libreyolo/models/openvocab/__init__.py、libreyolo/ensemble/model.pyから名前とシグネチャを確認しました。
+  v1.6.0のlibreyolo/__init__.py、libreyolo/models/__init__.py、libreyolo/models/base/model.py、libreyolo/models/base/inference.py、libreyolo/models/sam/model.py、libreyolo/models/vlm/__init__.py、libreyolo/models/openvocab/__init__.py、libreyolo/ensemble/model.pyから名前とシグネチャを確認しました。
 snippets:
   usage:
     - label: 1つのファクトリーで任意のモデルを読み込む
@@ -43,7 +43,7 @@ snippets:
 
         print(len(result))
   factories:
-    - label: 5つのエントリーポイント
+    - label: エントリーポイント
       language: python
       code: >
         from libreyolo import LibreYOLO, LibreEnsemble
@@ -71,12 +71,12 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 66e34e78b2e0fb2d
+source_hash: 02fbec762b1ffced
 ---
 
 ## エントリーポイント
 
-5つの呼び出し可能オブジェクトがモデルを読み込みます。これらはアーキテクチャではなく、
+ファクトリーはモデルを読み込むか、APIクライアントを設定します。これらはアーキテクチャではなく、
 呼び出し規約によって分かれています。
 
 | ファクトリー | 読み込むもの | 呼び出し時のプロンプト | 必要なextra |
@@ -89,8 +89,7 @@ source_hash: 66e34e78b2e0fb2d
 
 <code-tabs name="factories" />
 
-ファイルを読み取るのは`LibreYOLO`だけです。他の3つは文字列の別名を受け取り、それを
-Hugging Faceリポジトリへ解決するため、引数はパスではなくモデル名です。
+`LibreYOLO`はチェックポイントファイルとエクスポート済みファイルを受け取ります。関連するファクトリーはモデルのエイリアスを受け取り、`LibreVLM`と`LibreVLA`はそれぞれが保存したチェックポイントディレクトリも再読み込みできます。
 
 ```python
 LibreYOLO(
@@ -113,6 +112,10 @@ TritonのHTTPかHTTPSモデルURLを受け取ります。`size`と`nb_classes`�
 
 <code-tabs name="usage" />
 
+`LibreGround`は指示を画像上の点に変換し、`LibreVLA`はロボットのアクションチャンクを予測し、`LibreLLM`は互換性のあるリモート言語モデルのエンドポイントを呼び出します。[グラウンディングAPI](/docs/reference/ground-api)、[ポリシーAPI](/docs/reference/vla-api)、[言語モデルクライアント](/docs/reference/llm-api)を参照してください。
+
+`LibreYOLO("hf://owner/repo@revision/filename")`はHubのチェックポイントを読み込みます。`model.push_to_hub(repo_id, private=False)`はチェックポイントとカードを公開します。解決と認証については[Hubリファレンス](/docs/reference/hugging-face)を参照してください。
+
 ## ファミリークラス
 
 ファクトリーが返せる各ファミリーは名前でも公開されているため、チェックポイントが事前に
@@ -123,8 +126,7 @@ TritonのHTTPかHTTPSモデルURLを受け取ります。`size`と`nb_classes`�
 Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 ```
 
-ファミリークラスでは`size`にデフォルト値がない点が、ファクトリーとの違いです。YOLO9と
-そのバリアントでは、`size`の後に`reg_max: int = 16`が入ります。
+コンストラクターのデフォルト値はファミリーごとに異なるため、直接生成する前にシグネチャを確認してください。YOLO9とそのバリアントは`size`の後に`reg_max: int = 16`を挿入します。
 
 検出およびマルチタスクファミリー：`LibreYOLO9`、`LibreYOLO9E2E`、
 `LibreYOLO9P2`、`LibreYOLONAS`、`LibreYOLOX`、`LibreYOLO7`、`LibreYOLO4`、
@@ -192,11 +194,13 @@ model(
 
 ## Resultsペイロード
 
-`Results`と18個のペイロードクラスはパッケージレベルで公開されます：
+`Results`とペイロードクラスはパッケージレベルで公開されます：
 `Results`、`Boxes`、`Masks`、`Keypoints`、`Points`、`Probs`、`OBB`、`Gaze`、
 `SemanticMask`、`PanopticSegmentation`、`DepthMap`、`EdgeMap`、`NormalMap`、
 `RestoredImage`、`Matte`、`Meshes`、`OCRRegions`、`Embeddings`、`Identities`。
 それぞれの説明は[Resultsの型](/docs/reference/results-types)にあります。
+
+`Boxes3D`、`AlbedoMap`、`Actions`は、3D直方体、固有のアルベド、アクションチャンクを追加します。[結果の型](/docs/reference/results-types)を参照してください。
 
 ## バックエンド
 
@@ -220,6 +224,8 @@ model(
 公開されます：`TrackConfig`を使う`ByteTracker`、`BoTSortConfig`を使う`BoTSortTracker`、
 `OCSortConfig`を使う`OCSortTracker`です。
 
+`libreyolo.tracking.Tracker`は、独自のトラッカーインスタンス向けに`reset()`と`update(results, image=None)`を定義します。
+
 ## データヘルパー
 
 `DATASETS_DIR`は解決済みのデータセットルートです。`load_data_config`はデータセットYAMLを
@@ -231,6 +237,8 @@ model(
 `Gallery`と`FaceGallery`は`embed`タスクに登録された人物識別ベクトルを保持し、
 `Identities`ペイロードを生成します。`Distiller`と`get_distill_config`は教師・生徒学習を
 駆動します。
+
+`libreyolo.training.TrainFitnessCallback`は、独自のチェックポイント選択向けに`fitness(metrics)`を定義します。[適合度コールバック](/docs/train/fitness-callbacks)を参照してください。
 
 ## アセット
 

@@ -1,10 +1,8 @@
 ---
 title: Results 类型
 seo_title: LibreYOLO Results 对象参考
-description: >-
-  LibreYOLO Results
-  对象能携带的每一种载荷，每种任务形态一个槽位：boxes、masks、keypoints、probs、obb、depth、ocr、embeddings，以及另外十个。
-lead: Results 是每个 LibreYOLO 模型统一的单图返回类型。它带有十八个可选的载荷槽位，每种任务形态一个，并且只填充模型真正产出的那些。
+description: "LibreYOLO 结果载荷：检测框、掩码、关键点、分类、深度、反照率、3D 长方体和机器人动作块。"
+lead: "Results 是每个 LibreYOLO 模型统一的逐图像返回类型。它包含可选的载荷槽位，每个任务形状对应一个，只填入模型实际生成的载荷。"
 keywords:
   - libreyolo results 对象
   - Results.boxes
@@ -13,8 +11,8 @@ keywords:
   - Results.depth_map
   - Results.summary
   - libreyolo results 转 json
-last_verified: 1.5.0
-verification: 槽位名称、形状、属性与默认值读取自 v1.5.0 的 libreyolo/utils/results.py。语义引自各载荷类的文档字符串。
+last_verified: "1.6.0"
+verification: "槽位名称、形状、属性与默认值读取自 v1.6.0 的 libreyolo/utils/results.py。语义引自各载荷类的文档字符串。"
 snippets:
   usage:
     - label: Python
@@ -44,7 +42,7 @@ snippets:
         # 行数据，先是普通 dict，再是 JSON
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 16f654364ae6448a
+source_hash: d74276d805c22c92
 ---
 
 ## Results 对象
@@ -178,6 +176,8 @@ thing 与 stuff 的区分是类别的属性，不是分段的属性。载荷可�
 相机越近。这些值是相对的，不是以米为单位的度量值。`min`、`max` 和 `mean` 只在
 有限值上计算，`normalized()` 把整张图重新缩放到 `[0, 1]`。
 
+`DepthMap(data, orig_shape=None, encoding="inverse_depth")` 也接受 `encoding="depth"` 和 `encoding="log_depth"`。验证器在对齐前解析编码。相对深度值仍不保证公制尺度。
+
 ## NormalMap
 
 稠密的表面法线场，原始图像画布上的 float32 `(H, W, 3)`，采用 OpenCV 相机坐标
@@ -273,5 +273,16 @@ blendshape 系数。骨架尺度、手部姿态和面部表情放在 `extras` �
 列表，按被填充的槽位，每个检测、分段、点或区域对应一行。`to_json(**kwargs)` 把
 自己的参数转给 `summary`，返回 JSON 字符串。
 
-`plot()` 把稠密的法线或边缘结果渲染成它们各自约定的可视化形式；对其他类型的
-结果它会抛异常。其他任务的标注图像来自 `predict(save=True)`。
+`plot()` 渲染每种任务载荷。图像叠加默认返回 BGR 数组；`pil=True` 请求 PIL。边缘和法线图结果保留 PIL 默认值。
+
+## Boxes3D
+
+`Boxes3D(data, orig_shape=None, intrinsics=None)` 包含 `(N, 14)` 行：中心 xyz、尺寸 wlh、四元数 wxyz、排序分数、类别 ID、2D 置信度和 3D 置信度。坐标以相机坐标系中的米为单位，x 向右、y 向下、z 向前；不代表世界坐标系。3x3 内参对应原始画布。各行与 `Results.boxes` 对齐。
+
+## AlbedoMap
+
+`AlbedoMap(data, orig_shape=None)` 保存线性 RGB。显示转换生成 sRGB；定量反照率验证使用原始线性值。
+
+## Actions
+
+`Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` 表示 float32 动作块 `(T, D)`。`first` 返回第一行；切片选择时间步。数值保持策略数据集的单位。`names` 描述动作维度，`fps` 描述控制频率，`instruction` 描述条件文本。

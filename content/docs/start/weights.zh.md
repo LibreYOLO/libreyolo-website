@@ -12,7 +12,7 @@ keywords:
   - libreyolo hugging face
   - yolo 预训练权重
   - 检查点 元数据
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: 托管位置
     value: 每个检查点一个 Hugging Face 仓库：
@@ -73,7 +73,7 @@ snippets:
 
         print(loaded["model_family"], loaded["size"], loaded["task"],
         loaded["nc"])
-source_hash: 210a12baa1417cfb
+source_hash: 1d76b60f3992a781
 ---
 
 ## 检查点在哪里被查找
@@ -183,3 +183,9 @@ LibreYOLO 检查点是一个字典，它的 `model` 键放着 PyTorch 的 state 
 
 `libreyolo metadata` 从不构建模型，因此它对家族没有安装的文件、以及你拿不准的文件都
 能用。
+
+## 镜像和快照模型
+
+MiDaS s/l、MoGe-2 s/l 和 SAM-1 base/large/huge 使用 LibreYOLO 镜像；MoGe-2 b 保留在上游。Dome-DETR 镜像保留仅限学术研究的条款。EdgeCrafter `obj2coco` 变体需要主动选择，并保留上游限制性许可。请查看各模型页面生成的检查点表。
+
+[Hub 引用](/docs/reference/hugging-face)通过仓库 ID 加载带有结构标记的检查点。SAM 3D Body 需要经过审查、固定版本的快照资源及受限访问权限。机器人策略使用带有 `libreyolo_vla.json` 的检查点目录；见 [LibreVLA](/docs/reference/vla-api)。

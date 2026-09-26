@@ -11,7 +11,7 @@ keywords:
   - Python 超解像
   - 画像ぼけ除去 モデル
   - PSNR SSIM 検証
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: 画像をアップスケール
@@ -97,7 +97,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         result.restored.save("denoised.png")
-source_hash: 9dc81cadb3ebf18b
+source_hash: c1c1270071053132
 ---
 
 ## 定義
@@ -108,7 +108,7 @@ source_hash: 9dc81cadb3ebf18b
 
 ## モデル
 
-`restore`には、取り除く劣化の種類で分かれた3つのファミリーが対応します。
+復元ファミリーは、異なる画像の劣化を対象とします。
 
 [NAFNet](/docs/models/nafnet)はノイズ除去器であり、LibreYOLOで学習できる唯一の復元ファミリーです。そのアーキテクチャはUNetブロックの非線形活性化を要素ごとの乗算へ置き換えます。公開済みチェックポイントはSIDDの実画像ノイズで学習され、出力は入力解像度を維持します。
 
@@ -116,13 +116,17 @@ source_hash: 9dc81cadb3ebf18b
 
 [SwinIR](/docs/models/swinir)はSwin Transformerバックボーンを使って4倍にアップスケールします。公式の軽量生成器と2つの実環境向け生成器を含む3サイズがあります。
 
+[QuickSRNet](/docs/models/quicksrnet)は2倍の拡大、[DDColor](/docs/models/ddcolor)はカラー化、[HVI-CIDNet](/docs/models/hvi-cidnet)は低照度画像の補正、[LaMa](/docs/models/lama)は画像補完を提供します。この4つは学習に対応していません。
+
 ## 推論
 
 重みは初回使用時にHugging Faceからダウンロードされ、ローカルにキャッシュされます。
 
 <code-tabs name="predict" />
 
-画像復元は固定されたネットワークキャンバスではなくソース画像本来の解像度で実行し、ネットワークのダウンサンプリング係数に合わせるためのパディングだけを行います。そのため、時間とメモリは入力のピクセル数に応じて増えます。`tile`は順伝播を重なり合うタイルへ分割し、境界を再び混合します。`tile_pad`は各タイルへ追加し、後で切り取る周辺領域です。どちらもPythonのキーワード引数です。入力ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
+NAFNet、Real-ESRGAN、SwinIRは固定されたネットワークキャンバスではなくソース画像本来の解像度で実行し、ネットワークのダウンサンプリング係数に合わせるためのパディングだけを行います。そのため、時間とメモリは入力のピクセル数に応じて増えます。`tile`は順伝播を重なり合うタイルへ分割し、境界を再び混合します。`tile_pad`は各タイルへ追加し、後で切り取る周辺領域です。どちらもPythonのキーワード引数です。入力ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
+
+LaMaには単一画像の`mask=`が必要です。HVI-CIDNetは`gamma`、`saturation`、`intensity`を公開し、デフォルトはいずれも1.0です。モデル固有のキャンバスとエクスポートの制約は各ページに記載されています。
 
 ## データセット形式
 

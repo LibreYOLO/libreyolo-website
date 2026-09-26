@@ -17,10 +17,10 @@ keywords:
   - variables de entorno libreyolo
   - directorio de pesos libreyolo
   - caché de libreyolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Variables localizadas buscando os.environ y os.getenv en libreyolo/**/*.py en
-  la v1.5.0; semántica leída en cada punto de uso. Convenciones de directorios
+  la v1.6.0; semántica leída en cada punto de uso. Convenciones de directorios
   leídas de libreyolo/data/utils.py, libreyolo/utils/download.py,
   libreyolo/export/exporter.py, libreyolo/models/base/model.py y
   libreyolo/models/sam3dbody/mhr_body.py.
@@ -41,7 +41,7 @@ snippets:
         importar.
 
         print(DATASETS_DIR)
-source_hash: 462f1288582225ce
+source_hash: 82fbf9f3b1540603
 ---
 
 ## Variables de entorno
@@ -73,6 +73,8 @@ La selección de kernels también cortocircuita los imports: cuando
 incluidos en el árbol no se importan en absoluto. El registro que controlan
 estas tres variables está documentado en
 [kernels](/docs/reference/kernels).
+
+`LIBREYOLO_TRITON_MSDA=0` desactiva el proveedor Triton de atención deformable incluido. `LIBREYOLO_HUB_KERNELS=0` desactiva los kernels del Hub y su sugerencia de instalación. Ambos conservan la alternativa portable.
 
 ## Variables que define la biblioteca
 
@@ -113,6 +115,8 @@ Solo hace falta un token para repositorios restringidos. SAM 3 es el ejemplo
 que viene de serie: sus pesos se descargan de un repositorio restringido bajo
 una licencia propia, así que hay que aceptar los términos en la página del
 repositorio y la sesión tiene que estar autenticada.
+
+`HF_TOKEN` autentica la carga de checkpoints del Hub, la publicación y el logger del Hub. `OPENAI_API_KEY` y `OPENROUTER_API_KEY` proporcionan credenciales para las correspondientes [rutas de proveedor de LibreLLM](/docs/reference/llm-api).
 
 ## Directorios
 

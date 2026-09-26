@@ -1,0 +1,12 @@
+{
+  "name": "SmolVLM2",
+  "org": "Hugging Face (HuggingFaceTB)",
+  "paper_title": "SmolVLM: Redefining small and efficient multimodal models",
+  "paper_url": "https://arxiv.org/abs/2504.05299",
+  "code_url": "https://github.com/huggingface/smollm/tree/main/vision",
+  "license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. Both sizes LibreYOLO downloads, SmolVLM2-500M-Video-Instruct and SmolVLM2-2.2B-Instruct, carry this license on their Hugging Face repository.",
+  "bibtex": "@article{marafioti2025smolvlm,\n  title={SmolVLM: Redefining small and efficient multimodal models}, \n  author={Andrés Marafioti and Orr Zohar and Miquel Farré and Merve Noyan and Elie Bakouch and Pedro Cuenca and Cyril Zakka and Loubna Ben Allal and Anton Lozhkov and Nouamane Tazi and Vaibhav Srivastav and Joshua Lochner and Hugo Larcher and Mathieu Morlon and Lewis Tunstall and Leandro von Werra and Thomas Wolf},\n  journal={arXiv preprint arXiv:2504.05299},\n  year={2025}\n}",
+  "bibtex_source_url": "https://huggingface.co/blog/smolvlm2",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the huggingface.co/blog/smolvlm2 announcement post. HuggingFaceTB has not published a separate SmolVLM2 paper: the blog post cites the original SmolVLM technical report for both generations. Cross-checked against the arXiv API for 2504.05299: the same seventeen authors in the same order, matching title, dated 2025-04-07, no journal-ref, so the @article form still matches the record."
+}

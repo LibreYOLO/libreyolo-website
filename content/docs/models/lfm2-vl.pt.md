@@ -22,7 +22,7 @@ keywords:
   - VLM python
   - VLM no dispositivo
   - LibreVLM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -50,7 +50,7 @@ snippets:
         # livres, contagem ou qualquer prompt que o wrapper de caixas não cobre.
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 40237f0ecc0d2cd5
+source_hash: a7f100c861adb8d0
 ---
 
 ## Instalação
@@ -87,10 +87,7 @@ resultados.
 
 ## Variantes
 
-Dois tamanhos: 450m e 1.6b, ambos da versão LFM2.5-VL da Liquid AI, feitos para
-deploy no dispositivo. O harness de benchmark do LibreYOLO não mediu esta
-família, então não há números de acurácia publicados para compará-los; escolha
-um tamanho de acordo com o seu próprio orçamento de computação.
+Três tamanhos: 450m, 1.6b e 3b, todos do release LFM2.5-VL da Liquid AI; `lfm2-vl-3b` seleciona o modelo LFM2.5 3B e seu parser de caixas de 0–1000. O sistema de benchmarks do LibreYOLO não mediu essa família, então não há números de acurácia publicados para compará-los; escolha um tamanho de acordo com seu orçamento computacional.
 
 O LibreYOLO expõe esta família apenas para predição. `train()`, `val()` e
 `export()` lançam `NotImplementedError`: faça fine-tuning upstream e carregue o

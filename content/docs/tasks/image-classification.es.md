@@ -15,7 +15,7 @@ keywords:
   - accuracy top-1
   - clasificación zero-shot
   - librería clasificación de imágenes licencia MIT
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -137,7 +137,7 @@ snippets:
 
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 836bea76cd2cdf92
+source_hash: 90aed355e0ddf5e3
 ---
 
 ## Definición
@@ -160,7 +160,7 @@ pertenece a la imagen y no a una fila.
 
 ## Modelos
 
-Cinco familias entrenan y predicen: [ResNet](/docs/models/resnet),
+Los clasificadores de imágenes entrenables incluyen: [ResNet](/docs/models/resnet),
 [ConvNeXt](/docs/models/convnext), [MobileNetV4](/docs/models/mobilenetv4),
 [EfficientNetV2](/docs/models/efficientnetv2) y
 [DINOv2](/docs/models/dinov2). Las cuatro primeras funcionan con el paquete base
@@ -179,6 +179,8 @@ conjunto fijo de etiquetas. Puntúan la imagen frente a prompts de texto, así q
 `set_classes()` define las clases en el momento de la llamada y no hay ningún
 paso de entrenamiento para un nuevo conjunto de etiquetas. Ambas sirven también
 la tarea `embed`.
+
+[ConvNeXt V2](/docs/models/convnextv2) añade clasificación supervisada con pesos preentrenados CC-BY-NC-4.0. [PE](/docs/models/pe) soporta clasificación zero-shot; [V-JEPA 2](/docs/models/vjepa2) entrena cabezas de clasificación de vídeo.
 
 ## Predicción
 
@@ -232,6 +234,8 @@ ajustarse a él mientras el backbone se transfiere sin cambios. Consulta el
 [entrenamiento](/docs/train) para los datasets, el aumento de datos, el
 multi-GPU y los loggers.
 
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 y DINOv2 soportan ponderación de la función de pérdida mediante `cls_pw` o `class_weights`. En clasificación, `scale` controla el área del recorte y `crop_pct` controla el recorte de evaluación. Consulta [aumentos de datos](/docs/train/augmentations).
+
 ## Validación
 
 `val()` devuelve un diccionario plano de claves `metrics/`, calculadas sobre el
@@ -245,6 +249,8 @@ elegir la mejor época. `metrics/accuracy_top5` es la proporción cuya clase
 verdadera aparece en alguna de las cinco clases mejor puntuadas, que dice menos
 cuantas menos clases tiene el dataset. El diccionario también lleva `fitness`,
 una copia del valor de top-1.
+
+La validación ImageFolder también devuelve las métricas macro `metrics/precision`, `metrics/recall` y `metrics/f1`, promediadas sobre las clases presentes en los targets de validación. Las clases no predichas aportan precisión cero. El criterio de selección por defecto sigue siendo la precisión top-1. La validación y la calibración usan la transformación de evaluación del modelo.
 
 ## Exportación
 

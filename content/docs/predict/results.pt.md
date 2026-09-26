@@ -19,7 +19,7 @@ keywords:
   - mapa de profundidade results
   - results summary yolo
   - onnx mesmos resultados yolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Classes de payload, slots, semântica de movimentação, summary(), to_json(),
   plot(), save() e cutout() lidos de libreyolo/utils/results.py. Comportamento
@@ -135,7 +135,7 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: 201eca6457cf87a4
 ---
 
 ## Um objeto, um slot por payload
@@ -310,10 +310,6 @@ matte como um PNG RGBA de fundo transparente, e um detector como boxes com as
 máscaras por baixo. O caminho gravado fica anexado ao resultado como
 `result.saved_path`.
 
-`Results.plot()` é mais estreito do que o nome sugere. Ele está definido apenas
-para mapas de normais e mapas de bordas, e levanta `NotImplementedError` para
-qualquer outra coisa. Use `save=True` nas demais tarefas.
-
 `Results.save(path)` é igualmente estreito: grava um resultado de matte como um
 recorte PNG RGBA de fundo transparente e levanta `NotImplementedError` no resto
 dos casos. `Results.cutout()` retorna esse mesmo array RGBA sem gravá-lo. Os
@@ -327,6 +323,10 @@ malha.
 Para saber onde os arquivos vão parar e como `output_path` e
 `output_file_format` se comportam, veja
 [Fontes de predição](/docs/predict/sources).
+
+`plot()` cobre os payloads de todas as tarefas. Sobreposições de imagem retornam HxWx3 uint8 BGR contíguo por padrão; `pil=True` solicita PIL. Os caminhos existentes de bordas e mapas de normais mantêm seus padrões PIL. `orig_img` mantém pixels BGR para fontes em memória e URLs; arquivos locais e quadros coletados de vídeos finitos podem ser reabertos.
+
+Os controles incluem `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` e `filename`. Imagens de classificação salvas incluem as cinco primeiras labels. O salvamento de matte grava um recorte RGBA.
 
 ## Artefatos exportados retornam o mesmo objeto
 

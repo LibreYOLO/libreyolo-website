@@ -22,7 +22,7 @@ keywords:
   - entrenar yolov9
   - programmable gradient information
   - GELAN
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -145,7 +145,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: eaa6023a4a0b9e71
+source_hash: 624f3e70d2937683
 ---
 
 ## Instalación
@@ -213,6 +213,10 @@ lugar un checkpoint de detección base.
 Consulta [entrenamiento](/docs/train) para datasets, aumento de datos,
 multi-GPU y loggers.
 
+Los nuevos fine-tunings de detección estándar activan una rama PGI exclusiva del entrenamiento con `aux_weight=0.25`. `max_labels=300`; el momentum de SGD aumenta de 0.8 a 0.937 durante tres épocas de calentamiento. Los checkpoints antiguos de una sola cabeza se reanudan con ese grafo. La predicción y la exportación usan la cabeza principal. `letterbox_pad=None` hereda la marca del checkpoint: los pesos sin marca usan `topleft`, mientras que las nuevas conversiones oficiales registran `center`.
+
+El mosaic de YOLO9 y YOLOX prefiere imágenes acompañantes con anotaciones y realiza un máximo de 20 intentos; MixUp de YOLO9 usa la misma política. Consulta [histogramas de eventos](/docs/train/event-histograms) para perfiles de entrada que no sean RGB.
+
 ## Validación
 
 `val()` devuelve un diccionario de claves `metrics/` que cubren precisión,
@@ -246,6 +250,8 @@ Ambas cosas están en la página de ese formato.
 
 <code-tabs name="export" />
 
+[TFLite INT8](/docs/export/tflite) usa `int8=True` con datos de calibración.
+
 ## Checkpoints
 
 Todos los archivos de pesos publicados de esta familia.
@@ -256,12 +262,7 @@ Todos los archivos de pesos publicados de esta familia.
 
 <provenance-box>
 
-Un checkpoint de aquí no es MIT. El modelo de stride 4 entrenado con
-VisDrone2019-DET hereda los términos CC BY-NC-SA 3.0 de ese dataset: solo uso
-no comercial, share-alike sobre todo lo derivado de él, y fuera de la licencia
-permisiva con la que se distribuye el resto de esta familia. Predice las clases
-aéreas de VisDrone en lugar de las de COCO. La librería imprime todo esto antes
-de descargar el archivo.
+El checkpoint aéreo de stride 4 predice las clases de VisDrone. Usa la licencia declarada por el editor y registrada en el repositorio de sus pesos.
 
 </provenance-box>
 

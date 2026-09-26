@@ -12,7 +12,7 @@ keywords:
   - évaluer un modèle yolo en ligne de commande
   - calculer mAP50-95 yolo
   - arguments libreyolo val
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Commande
     value: libreyolo val
@@ -38,7 +38,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: f6507840568c3725
+source_hash: 8e858639e96672a0
 ---
 
 ## Synopsis
@@ -79,6 +79,15 @@ Les arguments sont des paires `key=value`, et la forme POSIX fonctionne aussi :
 | `quiet` | `false` | Supprime stderr |
 | `verbose` | `true` | Sortie verbeuse |
 | `help_json` | `false` | Affiche le schéma de la commande en JSON et quitte |
+
+| Argument | Valeur par défaut | Signification |
+| --- | --- | --- |
+| `classes` | `None` | Évalue uniquement ces identifiants de classe d'origine du dataset, séparés par des virgules (ex. '0,3,5') ; les boîtes des autres classes sont écartées de la vérité terrain et des prédictions. Reprend par défaut le classes= utilisé pour entraîner le checkpoint, s'il existe |
+| `crop_pct` | `None` | Ratio de redimensionnement d'évaluation de classification avant le recadrage central (valeur native de la famille par défaut) |
+| `plot_samples` | `8` | Images d'exemple dans le tracé de validation : 0 pour aucune, -1 pour chaque image validée (ne change pas les métriques) |
+| `visualize` | `False` | Dessine chaque image validée avec ses vrais positifs, faux positifs et faux négatifs dans visualize/errors/ (toute erreur) et visualize/correct/ (detect, segment ; classify compare l'étiquette au top-1) |
+| `show_labels` | `True` | Noms de classes sur les images --visualize |
+| `show_conf` | `True` | Scores de confiance sur les images --visualize |
 
 ## Exemples
 

@@ -12,7 +12,7 @@ keywords:
   - dataloader bound
   - kernel launch overhead
   - gpu utilization
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   profile:
     - label: Profile and keep training
@@ -105,6 +105,8 @@ deviation, which matters because a launch-bound step is noisy enough that a
 single run misleads; it writes per-trial directories `prof_1`, `prof_2` and so
 on, plus an aggregate `profile_repeat.json`.
 
+RF-DETR and the D-FINE/DEIM/RT-DETR matcher paths reduce host transfers; eligible CUDA Adam and AdamW construction uses fused updates. SGD and non-CUDA parameters use stock construction. These implementation changes carry no universal speedup claim.
+
 ## Mixed precision
 
 `amp=True` is the default for most families and runs the forward pass under CUDA
@@ -112,11 +114,7 @@ autocast. `amp_dtype` chooses `float16` or `bfloat16`.
 
 <code-tabs name="amp" />
 
-Float16 needs dynamic loss scaling and gets a live gradient scaler; bfloat16's
-wider exponent range does not, so its scaler is disabled. Four families ship with
-`amp=False`, D-FINE, DEIM, YOLO-NAS and FOMO, and the DEIM setting carries
-through to RT-DETRv4 by inheritance. D-FINE states the reason: its decoder clamps
-activations at 65504, the largest finite float16 value.
+Float16 uses a gradient scaler; bfloat16 disables it. D-FINE, DEIM, RT-DETRv4 and YOLO-NAS detection default to `amp=True`. Dome-DETR, PP-YOLOE and YOLO-NAS OBB retain FP32 defaults. Pass `amp=False` to request FP32 explicitly.
 
 The argument semantics, including what a bfloat16 request does on hardware
 without bfloat16 support, are on

@@ -1,16 +1,44 @@
 ---
 title: Qwen3-VLグラウンディング
-families: []
-architecture_only: true
-seo_title: Qwen3-VLグラウンディングのアーキテクチャ
-description: LibreYOLOにおけるQwen3-VLグラウンディングのアーキテクチャ図、ブロック定義、モデルバリアントです。
-lead: LibreYOLOにおけるQwen3-VLグラウンディングのアーキテクチャ図、ブロック定義、モデルバリアントです。
-source_hash: aa6a367f08f58ef1
+families:
+  - ground_qwen3vl
+seo_title: LibreYOLOのQwen3-VLグラウンディング
+description: Qwen3-VLグラウンディングは、指示の対象を画像上の点として特定します。
+lead: Qwen3-VLグラウンディングは、指示の対象を画像上の点として特定します。
+keywords:
+  - Qwen3-VL grounding
+  - LibreYOLO
+  - 画像 グラウンディング
+last_verified: 1.6.0
+snippets:
+  predict:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreGround, SAMPLE_IMAGE
+
+        model = LibreGround("qwen3-vl-2b", device="cpu")
+        result = model(SAMPLE_IMAGE, prompt="the person")
+        print(result.points.xy)
+source_hash: c0e411fb5fdba6cc
 ---
 
-## ソース
+## インストール
 
-以下の図は、LibreYOLOの[Qwen3-VLグラウンディング実装](https://github.com/LibreYOLO/libreyolo/blob/a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb/libreyolo/models/ground/qwen3vl.py)を示しています。
-各図には、モデル設定、入力の前提条件、ソースのリビジョンが記載されています。
+```bash
+pip install "libreyolo[ground]"
+```
 
-これらはアーキテクチャの参考資料です。使用するチェックポイントのライセンスとクラス設定は、それぞれ個別に確認してください。
+## 推論
+
+<code-tabs name="predict" />
+
+1回の呼び出しには`prompt=`または`query=`を使い、指示を保持するには`set_query()`を使ってください。1枚の画像に複数の指示を渡すと、クエリごとに最大1つのクリック位置を返します。画像リストやフォルダーを対象に複数のクエリを渡すと、エラーになります。座標は元の画像を基準とします。学習、検証、エクスポートには対応していません。[グラウンディングAPI](/docs/reference/ground-api)を参照してください。
+
+## ライセンス
+
+<provenance-box></provenance-box>
+
+## 引用
+
+<citation-block />

@@ -20,7 +20,7 @@ keywords:
   - miou
   - kualitas panoptic
   - akurasi top1
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   val:
     - label: Python
@@ -63,7 +63,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: d907183492fa3f57
+source_hash: ce7d26a5cd72d988
 ---
 
 ## Jalankan validasi
@@ -146,6 +146,8 @@ seleksi digunakan secara default. Deteksi, segmentasi, dan OBB tidak membawa sat
 keluarga mereka dipilih pada `metrics/mAP50-95`, yang dilakukan oleh kamus mereka
 kembali. Pose tidak mengembalikan `fitness` maupun `metrics/mAP50-95`; pelatihnya
 atur `best_metric_key` ke `metrics/keypoints_mAP50-95` sebagai gantinya.
+
+Klasifikasi ImageFolder menambahkan makro `metrics/precision`, `metrics/recall`, dan `metrics/f1`, dirata-ratakan atas kelas yang ada dalam target validasi. Top-1 tetap menjadi fitness default. Deteksi juga mengembalikan `metrics/best_conf`, `metrics/best_conf_f1`, dan `metrics/best_conf_per_class` dengan nama kelas sebagai kunci, memilih ambang optimal micro-F1 pada IoU 0.50. Deteksi dengan skor sama tetap dikelompokkan; hasil seri memilih ambang yang lebih tinggi. Jika tidak ada F1 positif, hasilnya NaN. Segmentasi tidak menyediakan kunci ambang ini.
 
 ## Tombol pintas
 
@@ -256,6 +258,10 @@ terpasang. Segmentasi menambahkan salinan sisi mask dari masing-masing, dan pose
 semantik, panoptik, kedalaman, normal, tepi, pemulihan, matte, OCR, OBB, dan poin semuanya
 tidak menulis apa pun di sana. Kegagalan plot akan memberi peringatan dan tidak pernah menghentikan jalannya.
 
+`visualize=True` menulis gambar kotak TP/FP/FN dengan memperhitungkan kelas untuk deteksi dan segmentasi, atau gambar label-versus-top-1 untuk klasifikasi ImageFolder, ke `visualize/errors/` dan `visualize/correct/`. Pencocokan memakai IoU 0.5 dan skor keyakinan `max(0.25, conf)`. Nilai default adalah `visualize=False`, `show_labels=True`, dan `show_conf=True`. Task yang tidak didukung dan validasi klip V-JEPA 2 menolak visualisasi.
+
+`plot_samples=8` membatasi plot sampel terpisah; 0 menonaktifkannya dan -1 mempertahankan semua gambar. Ini tidak mengubah metrik atau keluaran visualisasi.
+
 ## Validasi selama pelatihan
 
 Pelatihan memvalidasi setiap `eval_interval` epoch terhadap dataset's `val`
@@ -271,5 +277,6 @@ di mana angkanya pergi.
 
 - [Dataset](/docs/train/datasets) untuk kunci split dan validator format dibaca.
 
+## Metrik kotak per gambar
 
-
+Hasil deteksi dan segmentasi tetap kompatibel dengan dictionary dan juga menyediakan `results.box.image_metrics`. Setiap nama berkas dipetakan ke `precision`, `recall`, `f1`, `tp`, `fp`, dan `fn` dengan aturan pencocokan visualisasi, bahkan saat visualisasi mati. Segmentasi menghitung kotak di sini. Nama dasar yang duplikat memakai path lengkap setelah kemunculan pertama. Penyebut nol menghasilkan 0.0. Catatan ini tidak dikumpulkan antar rank terdistribusi.

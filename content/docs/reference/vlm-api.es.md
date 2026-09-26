@@ -19,12 +19,12 @@ keywords:
   - SmolVLM2
   - Florence-2
   - libreyolo chat
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Alias leídos de libreyolo/models/vlm/__init__.py; repositorios, tamaños y
   listas de tareas de los módulos de familia bajo libreyolo/models/vlm/ más
   libreyolo/models/sensenova/model.py; reglas de llamada y excepciones de
-  libreyolo/models/vlm/base.py, todo en la v1.5.0.
+  libreyolo/models/vlm/base.py, todo en la v1.6.0.
 snippets:
   install:
     - label: bash
@@ -50,7 +50,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 57ddac08bc4d4e05
+source_hash: 77a04856cfe4f88c
 ---
 
 ## Instalación
@@ -95,9 +95,11 @@ familia son los que aparecen primero: `qwen3-vl` resuelve a `4b`, `lfm2-vl` a
 `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` y `LibreMODUS`
 (también escrito `LibreModus`) se exportan a nivel de paquete.
 
+La detección también incluye `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` y `lfm2-vl-3b`. El alias `gemma-4` sin sufijo selecciona E4B. Los alias de Molmo2 son `molmo2-4b`, `molmo2-8b` y `molmo2-o-7b`; su valor por defecto es 4B. Los alias establecen el enrutamiento, no que todos los snapshots remotos se hayan descargado y probado.
+
 ## Tareas
 
-La mayoría de familias sirven solo `detect`. Dos sirven más:
+Las tareas admitidas dependen de la familia. Estos adaptadores admiten varias tareas:
 
 | Familia | Tareas soportadas |
 |---|---|
@@ -114,6 +116,8 @@ model.set_task(task: str) -> LibreVLMModel
 La tarea se valida contra la lista de tareas soportadas de la familia, es
 persistente en las llamadas posteriores a `predict()` y `track()`, y se devuelve
 el modelo para que las llamadas se puedan encadenar.
+
+Molmo2 devuelve puntos y requiere `{label}` en las plantillas de apuntado personalizadas. Moondream soporta detección, puntos y chat nativo. Usa [LibreGround](/docs/reference/ground-api) para consultas que convierten instrucciones en clics.
 
 ## set_classes
 
@@ -163,8 +167,7 @@ codificación de texto e imagen en lugar de un tensor de imagen apilable.
 
 ## No soportado
 
-`train()`, `val()` y `export()` lanzan `NotImplementedError`. Haz el fine-tuning
-upstream y carga los pesos resultantes.
+La exportación y la validación de mAP de detección no están soportadas. El soporte de entrenamiento se limita al flujo de Qwen3-VL descrito más abajo.
 
 ## Código remoto
 
@@ -177,3 +180,7 @@ hace, fijada al commit `c32291ca5e996f5a7a485845b4f57a233936bba0`.
 LibreMODUS es una excepción explícita al esquema de checkpoints: su alias
 resuelve a un directorio de archivos upstream fijados en lugar de a un `.pt` de
 LibreYOLO, y LibreYOLO ni le añade metadatos v1.0 ni lo republica.
+
+## Entrenamiento
+
+Qwen3-VL soporta LoRA de detección mediante `train(data=...)` tras instalar `libreyolo[vlm-train]`. Congela la torre de visión, elige los mejores checkpoints por la función de pérdida de validación y guarda directorios de checkpoints. Consulta [fine-tuning de VLM](/docs/train/vlm-fine-tuning).

@@ -4,7 +4,7 @@ seo_title: "libreyolo predict command reference"
 description: "Run inference from the command line: every argument, its default read from the CLI definition, and the flags that change what lands on stdout."
 lead: "Runs a loaded model over one source and prints the predictions. The source may be an image, a directory, a video, a URL or a live stream; the model may be a checkpoint or an exported artifact."
 keywords: [libreyolo predict cli, libreyolo inference command, yolo cli prediction, libreyolo predict arguments, libreyolo json output]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 meta:
   - label: Command
     value: libreyolo predict
@@ -84,6 +84,11 @@ word is stripped before parsing.
 | `quiet` | `false` | Suppress stderr |
 | `verbose` | `false` | Verbose stderr output |
 | `help_json` | `false` | Dump command schema as JSON and exit |
+
+| Argument | Default | Meaning |
+| --- | --- | --- |
+| `mask` | `None` | Single-image binary inpainting mask for models that require it |
+| `trimap` | `None` | Single-image three-level trimap for guided matting models |
 
 ## Examples
 

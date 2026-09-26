@@ -16,7 +16,7 @@ keywords:
   - 데이터로더 바운드
   - 커널 실행 오버헤드
   - GPU 사용률
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   profile:
     - label: 프로필을 살펴보고 계속 학습하십시오
@@ -66,7 +66,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: ee5bb727065b6099
+source_hash: "288ee5ee988f2fda"
 ---
 
 ## 변경 전 측정
@@ -92,13 +92,15 @@ source_hash: ee5bb727065b6099
 
 `profile run`에 대해 알아둘 만한 두 가지가 있습니다. 이것은 `no_aug_epochs=0`를 설정하는데, 그 이유는 프로파일러가 0 에폭을 측정하고 기본 `no_aug_epochs`로 짧게 실행하면 실제로 학습에서 사용하는 것보다는 가벼운 데이터로더를 프로파일링하기 때문입니다. 그리고 `--repeat N`는 평균과 표준편차를 보고하는데, 이는 실행 경계 단계가 충분히 노이즈가 많아서 단일 실행만으로는 오해를 일으킬 수 있기 때문입니다; 각 시도 디렉터리 `prof_1`, `prof_2` 등을 기록하고, 또한 전체 집계 `profile_repeat.json`도 기록합니다.
 
+RF-DETR과 D-FINE/DEIM/RT-DETR 매처 경로는 호스트 전송을 줄이며, 조건에 맞는 CUDA Adam과 AdamW 생성은 융합 업데이트를 사용합니다. SGD와 CUDA 이외 파라미터는 기본 생성 방식을 사용합니다. 이 구현 변경이 모든 경우의 속도 향상을 보장하지는 않습니다.
+
 ## 혼합 정밀도
 
 `amp=True`는 대부분의 계열에 대한 기본값이며 CUDA 자동 캐스트에서 순방향 패스를 실행합니다. `amp_dtype`는 `float16` 또는 `bfloat16`를 선택합니다.
 
 <code-tabs name="amp" />
 
-Float16는 동적 손실 스케일링이 필요하며 라이브 그래디언트 스케일러를 사용합니다; bfloat16은 더 넓은 지수 범위를 가지고 있어 필요하지 않으므로 스케일러가 비활성화됩니다. `amp=False`, D-FINE, DEIM, YOLO-NAS, FOMO와 함께 네 가지 계열이 제공되며, DEIM 설정은 상속을 통해 RT-DETRv4로 전달됩니다. D-FINE은 이유를 명시합니다: 디코더가 활성화를 65504에서 클램핑하는데, 이는 가장 큰 유한 float16 값입니다.
+Float16은 그래디언트 스케일러를 사용하며 bfloat16은 비활성화합니다. D-FINE, DEIM, RT-DETRv4, YOLO-NAS 탐지는 `amp=True`가 기본값입니다. Dome-DETR, PP-YOLOE, YOLO-NAS OBB는 FP32 기본값을 유지합니다. FP32를 명시적으로 요청하려면 `amp=False`를 전달합니다.
 
 bfloat16 요청이 bfloat16을 지원하지 않는 하드웨어에서 수행하는 작업을 포함한 인수 의미론은 [Hyperparameters](/docs/train/hyperparameters)에 있습니다.
 

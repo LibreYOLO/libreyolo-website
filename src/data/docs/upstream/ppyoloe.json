@@ -1,0 +1,8 @@
+{
+  "name": "PP-YOLOE",
+  "org": "PaddlePaddle",
+  "code_url": "https://github.com/PaddlePaddle/PaddleDetection",
+  "license": "Apache-2.0",
+  "license_interpretation": "The upstream source is Apache-2.0. Pretrained artifacts download from the source CDN; a separate checkpoint license grant has not been recorded.",
+  "weights_license": "No separate artifact grant recorded"
+}

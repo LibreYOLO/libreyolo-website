@@ -16,7 +16,7 @@ keywords:
   - modello di profondità relativa
   - depth anything libreyolo
   - stima della profondità python
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Predire una mappa di profondità
@@ -102,7 +102,7 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: e0612c59f9c999b4
+source_hash: f0afab6b9b451075
 ---
 
 ## Definizione
@@ -122,7 +122,7 @@ di una foto annotata.
 
 ## Modelli
 
-Sei famiglie coprono `depth`.
+Le seguenti famiglie supportano `depth`.
 
 [Depth Anything V2](/docs/models/depth-anything-v2) abbina un encoder DINOv2 a un
 decoder DPT ed è qui l'opzione predefinita per l'uso generico. La licenza decide la
@@ -138,10 +138,7 @@ profondità.
 distillata da Depth Anything V2 Large, con un secondo checkpoint il cui decoder
 evita le operazioni gather e unfold per i compilatori NPU che non le supportano.
 
-[MiDaS](/docs/models/midas) è il filone di ricerca che ha stabilito il protocollo
-zero-shot di profondità relativa con cui vengono misurate le altre famiglie. È
-l'unica famiglia depth che LibreYOLO non ripubblica: richiedere un checkpoint scarica
-l'asset ufficiale dalla release GitHub dei suoi autori e ne verifica lo SHA-256 fissato.
+[MiDaS](/docs/models/midas) è il filone di ricerca che ha stabilito il protocollo di profondità relativa zero-shot con cui vengono misurate le altre famiglie. I checkpoint s e l vengono scaricati dai mirror di LibreYOLO con la licenza MIT del distributore.
 
 [LibreMODUS](/docs/models/libremodus) copre la profondità come uno dei target di
 un modello any-to-any, non con una testa dedicata. Richiede l'extra `modus` e
@@ -152,18 +149,17 @@ immagine tramite una decodifica per diffusione, dallo stesso checkpoint da 7B ch
 copre gli altri sei task. Richiede l'extra `sensenova`, e i suoi pesi sono limitati a un
 uso non commerciale; la licenza è nella sua pagina.
 
+[Marigold V2](/docs/models/marigold-v2) aggiunge adattatori di profondità basati sulla diffusione con codifiche esplicite della profondità.
+
 ## Predizione
 
-I pesi si scaricano da Hugging Face al primo uso e restano in cache in locale, tranne
-per le due famiglie appena citate.
+I pesi vengono scaricati al primo utilizzo e memorizzati nella cache locale. Le pagine dei modelli descrivono i requisiti di autenticazione e runtime.
 
 <code-tabs name="predict" />
 
-La risoluzione di input è vincolata in modo diverso per ogni famiglia. Depth Anything
-V2 e Depth Anything 3 si basano su una griglia di patch DINOv2, quindi `imgsz` deve
-essere divisibile per 14, cosa che LibreYOLO controlla prima di eseguire. `Results.plot()` non copre questo
-task; è definito solo per le normali di superficie e i bordi. Vedi
-[predizione](/docs/predict) per sorgenti, streaming e gestione dei risultati.
+La risoluzione di input ha vincoli specifici per famiglia. Depth Anything V2 e Depth Anything 3 si basano su una griglia di patch DINOv2, quindi `imgsz` deve essere divisibile per 14, condizione che LibreYOLO verifica prima dell'esecuzione. `Results.plot()` visualizza i risultati di profondità. Vedi [predizione](/docs/predict) per sorgenti, streaming e gestione dei risultati.
+
+`DepthMap.encoding` è `inverse_depth` di default e può essere `depth` o `log_depth`. La validazione interpreta la codifica prima dell'allineamento affine. La codifica non attribuisce una scala metrica alle predizioni relative.
 
 ## Formato del dataset
 
@@ -199,10 +195,7 @@ profondità o le maschere di validità. Vedi
 
 ## Addestramento
 
-Nessuna famiglia depth in LibreYOLO ha un'implementazione dell'addestramento:
-`train()` solleva `NotImplementedError` su tutte e sei. Ogni pagina di modello indica
-lo script di conversione che trasforma un checkpoint addestrato a monte in uno che
-LibreYOLO può caricare.
+Nessuna famiglia di profondità in LibreYOLO implementa l'addestramento: `train()` genera `NotImplementedError` per queste famiglie. Ogni pagina del modello indica lo script di conversione che trasforma un checkpoint addestrato upstream in uno caricabile da LibreYOLO.
 
 ## Validazione
 

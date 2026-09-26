@@ -15,14 +15,13 @@ keywords:
   - libreyolo formats команда
   - порог паритета при экспорте
   - NotImplementedError экспорт
-last_verified: 1.5.0
-verification: >-
-  Форматы, уровни, порядок отката, блокировки по задачам и семействам и
-  блокировки для NCNN прочитаны из libreyolo/export/support.py; алиасы и общие
-  аргументы — из libreyolo/export/exporter.py; определения уровней — из
-  docs/adr/0011-export-support-tiers.md; пороги паритета — из
-  docs/export_support.md, всё на версии 1.5.0. Ячейки для отдельных комбинаций
-  здесь не переписаны; запрашивайте их сниппетом ниже.
+last_verified: 1.6.0
+
+verification: Форматы, уровни, порядок отката, блокировки по задачам и семействам и блокировки для NCNN прочитаны из libreyolo/export/support.py;
+  алиасы и общие аргументы — из libreyolo/export/exporter.py; определения уровней — из docs/adr/0011-export-support-tiers.md;
+  пороги паритета — из docs/export_support.md, всё на версии 1.6.0. Ячейки для отдельных комбинаций здесь не переписаны; запрашивайте
+  их сниппетом ниже.
+
 snippets:
   usage:
     - label: 'Запрос к матрице, модель не нужна'
@@ -61,7 +60,7 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
-source_hash: 83de3289634888c6
+source_hash: 70b9541fb8949352
 ---
 
 ## Устройство матрицы
@@ -83,6 +82,8 @@ source_hash: 83de3289634888c6
 каждым релизом. Она генерируется, а не пишется вручную, и лежит в
 `docs/export_support.md` в репозитории библиотеки. Запрашивайте матрицу из
 Python или CLI, а не читайте копию.
+
+Сгенерированный реестр включает PP-YOLOE, TinyFormer, DEKR, PP-LiteSeg, ConvNeXt V2, PE, V-JEPA 2 и LeVJEPA. Ограничения формы и задач см. на страницах моделей. U-Net, четыре 3D-адаптера, Marigold V2 и политики роботов не предоставляют экспорт.
 
 ## Три уровня
 

@@ -16,7 +16,7 @@ keywords:
   - biblioteka detekcji obiektów mit
   - alternatywa yolo
   - trenowanie detektora obiektów
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -142,7 +142,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: c735b6e3de78dd2b
+source_hash: 28d7cbb721e0f109
 ---
 
 ## Definicja
@@ -166,7 +166,7 @@ i `box.xyxy` działają osobno dla każdej detekcji.
 
 ## Modele
 
-Dwanaście rodzin obsługuje zarówno trenowanie, jak i predykcję:
+Następujące rodziny obsługują zarówno trenowanie, jak i predykcję:
 [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr),
 [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr),
 [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim),
@@ -203,6 +203,8 @@ także rodziny wizualno-językowe [Florence-2](/docs/models/florence-2),
 [LibreMODUS](/docs/models/libremodus). Modele te są wczytywane przez własne
 funkcje fabrykujące i zestawy zależności, a ich strony zawierają dokładne
 wywołania.
+
+[PP-YOLOE](/docs/models/ppyoloe) i [TinyFormer](/docs/models/tinyformer) również obsługują trenowanie detekcji.
 
 ## Predykcja
 
@@ -275,6 +277,8 @@ nie z przykładu innej rodziny. Rodzina może również całkowicie ignorować
 argument, co jest wskazane na jej stronie. Informacje o zbiorach danych,
 augmentacji, wielu GPU i modułach rejestrujących zawiera strona
 [trenowania](/docs/train).
+
+`classes=` zachowuje wybrane oryginalne identyfikatory klas zbioru danych; `single_cls=True` mapuje zachowane etykiety na klasę 0. Obsługiwane rodziny i dziedziczenie ustawień walidacji opisano w sekcji [hiperparametrów](/docs/train/hyperparameters).
 
 ## Walidacja
 

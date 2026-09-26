@@ -9,8 +9,8 @@ keywords:
   - libreyolo cuda 显存不足
   - libreyolo notimplementederror
   - libreyolo 问题排查
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: "1.6.0"
+source_hash: 30b68976a4ac01d1
 ---
 
 报错按你看到的文字分组。如果你的报错信息不在这里，[FAQ](/docs/faq) 回答的是那些
@@ -147,3 +147,7 @@ if report.errors:
 ```
 
 检查目录见 [doctor 命令](/docs/cli/doctor)。
+
+## 持久 worker 无法看到数据集变更
+
+启用的 `close_mosaic` 或 `set_epoch` 钩子必须作用于 worker 使用的数据集副本。如果自定义多 worker 加载器保留了不兼容的持久副本，请使用 `persistent_workers=False`，或在修改后重建 worker。默认的非持久路径不受影响。

@@ -19,7 +19,7 @@ keywords:
   - hasil depth map
   - results summary
   - onnx hasil sama
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Kelas payload, slot, semantik pemindahan, summary(), to_json(), plot(),
   save(), dan cutout() dibaca dari libreyolo/utils/results.py. Perilaku anotasi
@@ -127,7 +127,7 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: 201eca6457cf87a4
 ---
 
 ## Satu objek, satu slot per payload
@@ -283,10 +283,6 @@ berwarna, hasil kedalaman sebagai visualisasi kedalaman, hasil panoptik dengan s
 matte sebagai PNG RGBA berlatar transparan, dan detektor sebagai kotak dengan mask di bawahnya.
 Path yang ditulis dilampirkan ke hasil sebagai `result.saved_path`.
 
-`Results.plot()` lebih sempit daripada namanya. Metode ini hanya didefinisikan untuk peta
-normal dan peta tepi, serta memunculkan `NotImplementedError` untuk lainnya. Gunakan
-`save=True` untuk task lain.
-
 `Results.save(path)` juga sempit: metode ini menulis hasil matte sebagai cutout PNG RGBA
 berlatar transparan dan memunculkan `NotImplementedError` untuk lainnya. `Results.cutout()`
 mengembalikan array RGBA yang sama tanpa menulis. Keduanya memerlukan gambar sumber, yang
@@ -297,6 +293,10 @@ dan `result.meshes.save_obj(path, index=0)` untuk mesh.
 
 Untuk lokasi berkas serta perilaku `output_path` dan `output_file_format`, lihat
 [Sumber prediksi](/docs/predict/sources).
+
+`plot()` mencakup payload semua task. Overlay gambar mengembalikan BGR uint8 HxWx3 kontigu secara default; `pil=True` meminta PIL. Jalur edge dan peta normal yang sudah ada mempertahankan default PIL. `orig_img` menyimpan piksel BGR untuk sumber dalam memori dan URL; berkas lokal dan frame video berdurasi terbatas yang dikumpulkan dapat dibuka ulang.
+
+Kontrol meliputi `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save`, dan `filename`. Gambar klasifikasi yang disimpan memuat lima label teratas. Penyimpanan matte menulis potongan RGBA.
 
 ## Artefak hasil ekspor mengembalikan objek yang sama
 

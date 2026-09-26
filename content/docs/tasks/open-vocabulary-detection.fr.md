@@ -19,7 +19,7 @@ keywords:
   - owlv2
   - omdet turbo
   - détection prompt texte
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -68,7 +68,7 @@ snippets:
         # des tokens de la phrase décodée. Tous deux valent 0.25 par défaut
         # lorsqu'ils sont omis. Seul Grounding DINO accepte text_threshold.
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 17197cf4d80f3d6f
+source_hash: 10f41b40f357b037
 ---
 
 ## Définition
@@ -144,6 +144,8 @@ convertit leur sortie dans les mêmes `Results`. Il partage l'interface
 de cette page sont des détecteurs discriminatifs qui émettent directement des
 scores, tandis que le niveau VLM les génère.
 
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) et [North Micro Vision](/docs/models/northmicrovision) élargissent les choix de détection `LibreVLM`. [Molmo2](/docs/models/molmo2) renvoie des points. Utilisez [LibreGround](/docs/reference/ground-api) pour les requêtes transformant une instruction en clic plutôt qu'un vocabulaire de détection.
+
 ## Prédire
 
 <code-tabs name="predict" />
@@ -179,6 +181,8 @@ Aucune famille de ce niveau ne s'entraîne dans LibreYOLO. `train()` déclenche
 une erreur. Effectuez le fine-tuning dans le projet amont, puis chargez les
 poids obtenus. Le vocabulaire transmis à `set_classes()` est le seul réglage
 qui change ce qu'un modèle chargé détecte.
+
+Qwen3-VL dispose d'un parcours de [fine-tuning VLM](/docs/train/vlm-fine-tuning) distinct. Cela n'ajoute pas l'entraînement aux quatre adaptateurs `LibreOpenVocab`.
 
 ## Valider
 

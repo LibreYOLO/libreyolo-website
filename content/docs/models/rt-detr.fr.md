@@ -22,7 +22,7 @@ keywords:
   - détection de boîtes orientées
   - OBB
   - DOTA
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -209,7 +209,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 8022a5a591922a90
+source_hash: 75454e612d7e2247
 ---
 
 ## Installer
@@ -321,6 +321,8 @@ pour le mauvais rapport de forme.
 
 Consultez l'[entraînement](/docs/train) pour les datasets, l'augmentation, le
 multi-GPU et les loggers.
+
+RT-DETRv4 active `amp=True` avec `amp_dtype="float16"` par défaut. Passez `amp=False` pour FP32.
 
 ## Valider
 

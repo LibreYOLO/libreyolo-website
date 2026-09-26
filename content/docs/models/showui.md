@@ -1,15 +1,43 @@
 ---
-title: "ShowUI"
-families: []
-architecture_only: true
-seo_title: "ShowUI architecture"
-description: "Architecture diagrams for ShowUI in LibreYOLO, with block definitions and model variants."
-lead: "Architecture diagrams for ShowUI in LibreYOLO, with block definitions and model variants."
+title: ShowUI
+families:
+  - showui
+seo_title: ShowUI in LibreYOLO
+description: ShowUI locates the target of an instruction as an image point.
+lead: ShowUI locates the target of an instruction as an image point.
+keywords:
+  - ShowUI
+  - LibreYOLO
+  - point
+last_verified: 1.6.0
+snippets:
+  predict:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreGround, SAMPLE_IMAGE
+
+        model = LibreGround("showui-2b", device="cpu")
+        result = model(SAMPLE_IMAGE, prompt="the person")
+        print(result.points.xy)
 ---
 
-## Source
+## Install
 
-The diagrams below describe the [ShowUI implementation](https://github.com/LibreYOLO/libreyolo/blob/a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb/libreyolo/models/ground/showui.py) in LibreYOLO.
-Each drawing states its model configuration, input assumptions and source revision.
+```bash
+pip install "libreyolo[ground]"
+```
 
-These are architecture references. Check the license and class configuration of any checkpoint you use separately.
+## Predict
+
+<code-tabs name="predict" />
+
+Use `prompt=` or `query=` for one call, or `set_query()` for a persistent instruction. A list of instructions on one image returns at most one click per query. Multi-query calls on image lists or folders raise an error. Coordinates refer to the original image. Training, validation and export are not supported. See the [grounding API](/docs/reference/ground-api).
+
+## Licensing
+
+<provenance-box></provenance-box>
+
+## Citation
+
+<citation-block />

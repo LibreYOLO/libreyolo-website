@@ -14,7 +14,7 @@ keywords:
   - インスタンスセグメンテーション
   - fine-grained distribution refinement
   - DETR
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -138,7 +138,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 0216631a26185524
+source_hash: afc2a4900f773c9d
 ---
 
 ## インストール
@@ -179,7 +179,7 @@ pip install "libreyolo[lora]"
 
 <code-tabs name="train" />
 
-設定を変更しなければ、トレーナーは`lr0=2e-4`、`amp=False`、バッチサイズ16で132エポック実行し、改善がない状態が50エポック続くと早期終了します。検出重みはセグメンテーション学習の有効な開始点ですが、明示的な転移としてのみ使用できます。マスクヘッドは未学習で始まり、そのままでは意味のないマスクを返すためです。CLIに`task=segment`を渡すことで転移を許可します。Python経由の手順にはさらに制限があります。`LibreYOLO()`ファクトリーは該当する引数を受け取らないため、`allow_detect_to_segment_transfer=True`を指定して`LibreDFINE`を直接構築する必要があります。また、直接構築ではダウンロードされないため、重みファイルがすでにディスク上になければなりません。
+設定を変更しなければ、トレーナーは`lr0=2e-4`、`amp=True`と`amp_dtype="float16"`、バッチサイズ16で132エポック実行し、改善がない状態が50エポック続くと早期終了します。検出重みはセグメンテーション学習の有効な開始点ですが、明示的な転移としてのみ使用できます。マスクヘッドは未学習で始まり、そのままでは意味のないマスクを返すためです。CLIに`task=segment`を渡すことで転移を許可します。Python経由の手順にはさらに制限があります。`LibreYOLO()`ファクトリーは該当する引数を受け取らないため、`allow_detect_to_segment_transfer=True`を指定して`LibreDFINE`を直接構築する必要があります。また、直接構築ではダウンロードされないため、重みファイルがすでにディスク上になければなりません。
 
 `lora=True`は検出に適用されます。セグメンテーション学習では拒否され、代わりに`freeze='backbone'`を案内します。マスクヘッドがアダプターでテストされていないためです。Apple siliconでは、トレーナーが実行全体をCPUに移します。Integralのビン分割行列乗算の逆伝播でMetalのコンパイルエラーが発生するためです。MPSでの推論には影響しません。
 

@@ -22,7 +22,7 @@
 import { Fragment } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
-import { getTaskMeta, getTierMeta, getExportFormats } from '@/lib/docs'
+import { currentDocs } from '@/lib/docs'
 
 const HF_BASE = 'https://huggingface.co/LibreYOLO'
 
@@ -55,7 +55,7 @@ function ExtLink({ href, children }) {
    Hairline row rules only, and its own horizontal scroll container. */
 function Table({ children, className = '' }) {
   return (
-    <div className="-mx-1 overflow-x-auto px-1">
+    <div className="relative -mx-1 overflow-x-auto px-1">
       <table className={`w-full border-collapse text-[13.5px] ${className}`}>{children}</table>
     </div>
   )
@@ -89,7 +89,10 @@ function Td({ children, className = '' }) {
  * 80 model pages. That fixed vocabulary is what stops a dense block of facts
  * from reading as decoration.
  */
-export function ModelHeader({ doc, family }) {
+// `source` is the docs tree the page belongs to, so an archived page reads task
+// and tier labels from its own frozen registry. Defaults to the current tree.
+export function ModelHeader({ doc, family, source = currentDocs }) {
+  const { getTaskMeta, getTierMeta } = source
   const t = useTranslations('ModelBlocks')
   const tiers = useTranslations('Tiers')
   const tier = getTierMeta(family.tier)
@@ -107,7 +110,7 @@ export function ModelHeader({ doc, family }) {
 
       <dl className="mt-5 flex flex-col gap-y-1 border-t border-surface-200 pt-4 text-[13.5px] dark:border-white/[0.09]">
         <Meta label={t('tasks')}>{taskNames}</Meta>
-        <Meta label={t('sizes')}>{family.sizes_label}</Meta>
+        {family.sizes_label && <Meta label={t('sizes')}>{family.sizes_label}</Meta>}
         <Meta label={t('install')}>
           {/* Most families need no extra; only quote the bracket form when
               there is actually one, or the row reads pip install "libreyolo[]". */}
@@ -122,6 +125,7 @@ export function ModelHeader({ doc, family }) {
             blurb: tier ? tiers(`${family.tier}.blurb`) : '',
           })}
         </Meta>
+        {u.paper_url && (
         <Meta label={t('upstream')}>
           {t.rich('upstreamValue', {
             name: u.name,
@@ -131,13 +135,14 @@ export function ModelHeader({ doc, family }) {
             source: (chunks) => <ExtLink href={u.code_url}>{chunks}</ExtLink>,
           })}
         </Meta>
+        )}
         <Meta label={t('licenses')}>
           {/* LibreYOLO's own code is MIT, but a vendored port keeps its
               upstream license, so the header cannot assert MIT for every
               family. `code_license` overrides where they differ. */}
           {t.rich('licensesValue', {
             codeLicense: u.code_license ?? 'MIT',
-            weightsLicense: u.license,
+            weightsLicense: u.weights_license ?? u.license,
             link: (chunks) => <Link href="#licensing" className="text-libre-700 underline-offset-2 hover:underline dark:text-libre-400">{chunks}</Link>,
           })}
         </Meta>
@@ -294,11 +299,15 @@ export function VaEmbed({ family }) {
 
 /* ── checkpoints ────────────────────────────────────────────────── */
 
-export function CheckpointTable({ family }) {
+export function CheckpointTable({ family, source = currentDocs }) {
+  const { getTaskMeta } = source
   const t = useTranslations('ModelBlocks')
   const grouped = family.tasks
     .map((task) => ({ task, rows: family.checkpoints.filter((c) => c.task === task) }))
     .filter((g) => g.rows.length)
+
+  const recordedInputs = family.checkpoints.filter((row) => row.imgsz != null).length
+  const showInput = recordedInputs > 0 && recordedInputs >= family.checkpoints.length / 2
 
   return (
     <div>
@@ -317,7 +326,7 @@ export function CheckpointTable({ family }) {
               which is what the licensing note already tells the reader.
             */}
             <Th>{t('file')}</Th>
-            <Th align="right">{t('inputPx')}</Th>
+            {showInput && <Th align="right">{t('inputPx')}</Th>}
             <Th>{t('weightsLicense')}</Th>
           </tr>
         </thead>
@@ -325,7 +334,7 @@ export function CheckpointTable({ family }) {
           {grouped.map(({ task, rows }) => (
             <Fragment key={task}>
               <tr>
-                <td colSpan={3} className="border-b border-surface-200/70 px-3 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wider text-surface-500 dark:border-white/[0.07] dark:text-surface-500">
+                <td colSpan={showInput ? 3 : 2} className="border-b border-surface-200/70 px-3 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wider text-surface-500 dark:border-white/[0.07] dark:text-surface-500">
                   {getTaskMeta(task).label}
                 </td>
               </tr>
@@ -341,7 +350,7 @@ export function CheckpointTable({ family }) {
                       {row.name}
                     </a>
                   </Td>
-                  <Td className="text-right tabular-nums">{row.imgsz}</Td>
+                  {showInput && <Td className="text-right tabular-nums">{row.imgsz}</Td>}
 
                   <Td>{row.license}</Td>
                 </tr>
@@ -406,13 +415,14 @@ function Mark({ state, label, reason }) {
   )
 }
 
-export function ExportMatrix({ family }) {
+export function ExportMatrix({ family, source = currentDocs }) {
+  const { getTaskMeta, getExportFormats } = source
   const t = useTranslations('ModelBlocks')
   const formats = getExportFormats()
 
   return (
     <div>
-      <div className="-mx-1 overflow-x-auto px-1">
+      <div className="relative -mx-1 overflow-x-auto px-1">
         <table className="w-full min-w-[640px] border-collapse text-[13.5px]">
           <thead>
             <tr>
@@ -520,10 +530,10 @@ export function Provenance({ family, children }) {
         */}
         <Meta label={t('weights')}>
           {family.weights_hosted === false ? (
-            t('weightsNotHosted', { license: u.license })
+            t('weightsNotHosted', { license: u.weights_license ?? u.license })
           ) : (
             t.rich('weightsHosted', {
-              license: u.license,
+              license: u.weights_license ?? u.license,
               link: (chunks) => <ExtLink href={HF_BASE}>{chunks}</ExtLink>,
             })
           )}

@@ -18,7 +18,7 @@ keywords:
   - inferencja mobilna
   - klasyfikator na urządzenie brzegowe
   - klasyfikator ImageNet
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -34,7 +34,8 @@ snippets:
     - label: CLI
       language: bash
       code: >
-        libreyolo predict model=LibreMobileNetV4s-cls.pt source=cat.jpg
+        libreyolo predict model=LibreMobileNetV4s-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
         save=True
   train:
     - label: Python
@@ -102,7 +103,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: 4a9a1b392ffb136d
+source_hash: 6fe498d802f87c62
 ---
 
 ## Instalacja
@@ -160,12 +161,16 @@ rodziny.
 Informacje o zbiorach danych, augmentacji, wielu GPU i loggerach zawiera strona
 [trenowania](/docs/train).
 
+`cls_pw=0` wyłącza ważenie funkcji straty; wartości do 1 używają odwrotności częstości, normalizowanych do średniej 1. `class_weights=True` używa zamiast tego odwrotności częstości normalizowanych względem próbek i nie można go łączyć z `cls_pw>0`. Przy wznowieniu te ustawienia muszą być zgodne. Zobacz [klasyfikację](/docs/tasks/image-classification).
+
 ## Walidacja
 
 `val()` zwraca słownik kluczy `metrics/`. Dla klasyfikacji są to metryki
 accuracy top-1 i top-5 dla podzbioru walidacyjnego.
 
 <code-tabs name="val" />
+
+Walidacja i kalibracja INT8 używają transformacji ewaluacyjnej danej rodziny. Metadane eksportu zapisują `norm_mean`, `norm_std` i `resize_mode`; starsze artefakty używają wartości rodziny. Preprocesory kalibracji zwracają wymaganą tablicę CHW i współczynnik skali.
 
 ## Eksport
 

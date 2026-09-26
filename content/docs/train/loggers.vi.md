@@ -2,13 +2,11 @@
 title: Logger thí nghiệm
 seo_title: Logger thí nghiệm và callback trong LibreYOLO
 description: >-
-  Gửi metric huấn luyện tới TensorBoard, MLflow, Weights & Biases, Comet,
-  ClearML, Neptune hoặc DVCLive, và viết callback riêng trên bốn hook huấn
-  luyện.
+  Gửi metric huấn luyện tới TensorBoard, MLflow, Weights & Biases, Comet, ClearML, Neptune hoặc DVCLive, và
+  viết callback riêng trên bốn hook huấn luyện.
 lead: >-
-  Mọi family có thể huấn luyện đều phát ra bốn sự kiện huấn luyện. Các logger
-  tích hợp là đối tượng callback lắng nghe cùng các sự kiện đó, vì vậy tích hợp
-  backend và hook tùy chỉnh dùng chung một interface.
+  Mọi family có thể huấn luyện đều phát ra bốn sự kiện huấn luyện. Các logger tích hợp là đối tượng callback
+  lắng nghe cùng các sự kiện đó, vì vậy tích hợp backend và hook tùy chỉnh dùng chung một interface.
 keywords:
   - tensorboard huấn luyện
   - mlflow tracking
@@ -20,7 +18,7 @@ keywords:
   - callback huấn luyện
   - csv metric huấn luyện
   - libreyolo monitor
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   logger:
     - label: Theo tên
@@ -58,12 +56,9 @@ snippets:
         model.train(data="coco8.yaml", epochs=10, callbacks=on_epoch)
     - label: Đối tượng có nhiều hook
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
-        from libreyolo.training import TrainEndEvent, TrainEpochEvent,
-        TrainStartEvent
-
+        from libreyolo.training import TrainEndEvent, TrainEpochEvent, TrainStartEvent
 
 
         class RunLog:
@@ -79,7 +74,6 @@ snippets:
 
 
         model = LibreYOLO("LibreYOLO9s.pt")
-
         model.train(data="coco8.yaml", epochs=10, callbacks=RunLog())
   monitor:
     - label: Theo dõi lượt chạy trong trình duyệt
@@ -87,9 +81,8 @@ snippets:
       code: |
         libreyolo monitor                     # lượt chạy gần nhất trong runs/
         libreyolo monitor runs/train/exp      # một lượt chạy cụ thể
-source_hash: de035acbaed32804
+source_hash: b5fefd12a738dcb5
 ---
-
 ## Bật logger
 
 `loggers=` nhận tên đã đăng ký, instance đã cấu hình hoặc iterable trộn cả hai.
@@ -178,6 +171,8 @@ phiên bản bên ngoài thư mục lượt chạy; truyền `save_dvc_exp=True`
 Neptune được chủ ý loại khỏi `libreyolo[all]`: client ổn định của nó cần protobuf
 dưới phiên bản 7, trong khi thành phần bổ sung TFLite cần protobuf 7. Hãy cài
 `libreyolo[neptune]` trong môi trường không có thành phần bổ sung TFLite.
+
+[Logger Hugging Face Hub](/docs/reference/hugging-face) tải `weights/best.pt` lên khi huấn luyện kết thúc, dùng `last.pt` nếu không có. Dùng `loggers="hf:owner/repo"` hoặc `HuggingFaceHubLogger(repo_id, private=True)`. Nó kiểm tra quyền ghi và tạo repo còn thiếu trước khi huấn luyện. Logger mặc định dùng riêng tư; `model.push_to_hub()` tường minh mặc định dùng công khai. Chế độ hiển thị của repo hiện có được giữ nguyên.
 
 ## Viết callback
 

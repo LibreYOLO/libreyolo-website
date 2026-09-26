@@ -16,7 +16,7 @@ keywords:
   - 开放词汇检测
   - 阿里巴巴
   - VLM
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -47,7 +47,7 @@ snippets:
         vest?")
 
         print(answer)
-source_hash: ee225b6221d624d9
+source_hash: 801d97d089f1f957
 ---
 
 ## 安装
@@ -86,11 +86,9 @@ pip install "libreyolo[vlm]"
 画布由 Qwen 处理器自己的 smart-resize 决定，所以这个数字并不像本站其他家族那样是
 一个固定的工作分辨率。LibreYOLO 还没有发布过比较这三种尺寸精度的基准测试。
 
-LibreYOLO 不训练、不验证、也不导出 Qwen3-VL：`train()`、`val()` 和 `export()`
-对这一层里的每个家族都抛出 `NotImplementedError`（见上面的支持层级）。如果你需要
-把一份自定义词汇表固化进模型，就在上游微调 Qwen3-VL，再加载得到的权重；用肉眼
-检查 `predict()` 的输出，而不是跑一遍 COCO 式的验证，因为每个检测结果带的都是同
-一个占位置信度。
+## 训练
+
+安装 `libreyolo[vlm-train]`，即可通过 `LibreVLM("qwen3-vl-2b").train(data=...)` 训练检测 LoRA 适配器。视觉塔保持冻结；验证损失用于选择最佳检查点目录。不支持恢复优化器状态续训，也不支持检测 mAP 验证。默认值和重新加载说明见 [VLM 微调](/docs/train/vlm-fine-tuning)。
 
 ## 许可证
 

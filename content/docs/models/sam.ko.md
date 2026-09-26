@@ -17,7 +17,7 @@ keywords:
   - 포인트 프롬프트
   - 바운딩 박스 프롬프트
   - Meta AI
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: 포인트 및 바운딩 박스 프롬프트
@@ -53,7 +53,7 @@ snippets:
         a = model.predict(points=[640, 420], labels=[1])
         b = model.predict(bboxes=[300, 200, 900, 700])
         model.reset_image()
-source_hash: f8904d241ef8a929
+source_hash: "313541a8b2c6abaf"
 ---
 
 ## 설치
@@ -100,11 +100,7 @@ ViT 이미지 인코더 크기는 base, large, huge 세 가지이며 모두 고�
 
 <provenance-box>
 
-LibreYOLO는 SAM-1 가중치 사본을 호스팅하지 않습니다. `LibreSAM("base")`,
-`"large"`, `"huge"`는 Meta 자체 Hugging Face 저장소인
-`facebook/sam-vit-base`, `facebook/sam-vit-large`, `facebook/sam-vit-huge`에서
-직접 내려받으며, 각 저장소에는 LibreYOLO와 독립적으로 Apache-2.0 태그가 지정되어
-있습니다.
+`LibreSAM("base")`, `"large"`, `"huge"`는 SAM-1 파일의 LibreYOLO 미러를 사용합니다. 가중치는 Meta의 Apache-2.0 선언을 유지합니다.
 
 </provenance-box>
 

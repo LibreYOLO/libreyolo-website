@@ -19,16 +19,21 @@ keywords:
   - globale batch-größe
   - nccl gloo backend
   - multi gpu windows
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # Der __main__-Guard ist nötig: Jeder gestartete Worker importiert
-        # dieses Modul erneut und würde sonst rekursiv das Training starten.
+
+        # Dieser Guard bleibt unterstützt; normale Skripte funktionieren auch
+        ohne ihn.
+
+        # Für Callbacks oder Logger mit Standard-Pickle-Fallback muss er
+        bleiben.
+
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(
@@ -74,7 +79,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # Einmal auf GPU 0 testen und auf ein Vielfaches der Weltgröße skalieren.
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: 83c1563d68068cd0
+source_hash: e339072d5d8e71ea
 ---
 
 ## Ausführung auf zwei GPUs
@@ -83,37 +88,15 @@ source_hash: 83c1563d68068cd0
 
 <code-tabs name="train" />
 
-Wenn mehr als ein Gerät und keine torchrun-Umgebung vorhanden sind, speichert
-`train()` des Modells die Gewichte in einer temporären Datei, ermittelt bei
-Bedarf die Autobatch-Größe und startet mit `torch.multiprocessing.spawn` einen
-Worker-Prozess pro GPU. Jeder Worker importiert die Modellklasse erneut, baut
-sie aus den gespeicherten Gewichten auf und führt den normalen Pfad für ein
-einzelnes Gerät aus. Innerhalb eines gestarteten Workers sind die
-torchrun-Umgebungsvariablen gesetzt. Nach Abschluss des Laufs wird der beste
-Checkpoint von Rang 0 wieder in die Modellinstanz des aufrufenden Prozesses
-geladen.
+Bei mehr als einem Gerät und ohne torchrun-Umgebung speichert `train()` des Modells die Gewichte in einer temporären Datei, bestimmt bei Bedarf Autobatch und startet vom Koordinator verwaltete Worker-Prozesse, einen pro GPU. Jeder Worker importiert die Modellklasse erneut, baut sie aus den gespeicherten Gewichten auf und verwendet den normalen Einzelgerätepfad, weil innerhalb eines gestarteten Workers die torchrun-Umgebungsvariablen gesetzt sind. Nach dem Lauf wird der beste Checkpoint von Rank 0 in die Modellinstanz des Aufrufers geladen.
 
 `device` akzeptiert `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"`
 und `"auto"`. Nur eine Liste mit mehr als einem CUDA-Index startet mehrere
 Prozesse.
 
-## Obligatorischer `__main__`-Guard
+## Automatischer Start und Main-Guard
 
-Gestartete Worker importieren das Modul erneut, aus dem sie stammen. Ohne den
-Guard `if __name__ == "__main__":` führt dieser Import den Trainingsaufruf
-erneut aus und jeder Worker startet eigene Worker. Die Bibliothek erkennt
-diesen Fall und löst einen Fehler aus, statt die Rekursion zuzulassen:
-
-```text
-spawn_ddp_train() was called from inside a spawned subprocess. This usually
-means your script calls model.train(device=...) at the top level without a
-'if __name__ == "__main__":' guard.
-```
-
-Alle Daten, die an einen Worker übergeben werden, werden serialisiert. Daher
-muss `callbacks=` pickle-kompatibel sein. Eine Klasse auf Modulebene
-funktioniert, ein Closure oder Lambda dagegen nicht. Die Fehlermeldung weist
-darauf hin und nennt die integrierten Logger als Alternative.
+`model.train(device=[0, 1])` und `device="0,1"` verwenden vom Koordinator verwaltete Ranks, ohne den Top-Level-Code eines gewöhnlichen ungeschützten Skripts erneut auszuführen. Skripte mit Main-Guard und explizites `torchrun` bleiben unterstützt. Koordinatorjobs verwenden cloudpickle; Callback- oder Logger-Objekte, die den Standard-pickle-Fallback benötigen, erfordern weiterhin einen Guard `if __name__ == "__main__":`.
 
 ## `batch` als globale Batch-Größe
 
@@ -227,4 +210,3 @@ den torchrun-Befehl nennt, statt unbemerkt nur auf einer GPU zu trainieren.
   Pickle-Kompatibilität von Callbacks.
 - [Cloud-GPUs](/docs/train/cloud-gpus) beschreibt das Mieten eines
   Multi-GPU-Rechners.
-

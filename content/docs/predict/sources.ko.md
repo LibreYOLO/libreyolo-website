@@ -18,7 +18,7 @@ keywords:
   - 유튜브 추론
   - 비디오 스트라이드
   - stream=True
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   libreyolo/utils/source.py에서 소스 분류 읽기 (classify_source, SourceKind,
   StreamSource, MultiStreamSource). libreyolo/utils/image_loader.py.에서 허용되는 이미지
@@ -188,7 +188,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: "93db4d43c24b69ae"
 ---
 
 ## 출처가 분류되는 방법
@@ -234,6 +234,8 @@ source_hash: c371965951dd0181
 
 원격 경로는 각각 하나의 패키지가 필요하며, 그 중 어느 것도 기본적으로 설치되어 있지 않습니다: `http(s)://`용 `requests`, `s3://`용 `boto3`, `gs://`용 `gcsfs`.
 
+추적은 이미지, 파일 이름순으로 정렬된 폴더, 리스트, 튜플, 지연 이미지 이터레이터를 연속 프레임으로 받습니다. `fps=30.0`으로 이미지 시퀀스의 시간 간격을 지정하고 `color_format="auto"`로 입력 해석 방식을 선택합니다. [추적](/docs/tasks/object-tracking)을 참조하십시오.
+
 ## 폴더
 
 디렉토리는 재귀적으로 스캔되고 정렬되며, 다음 접미사 중 하나를 가진 모든 파일은 이미지가 됩니다: `.jpg`, `.jpeg`, `.png`, `.gif`, `.webp`, `.bmp`, `.tiff`, `.tif`. 폴더 내의 다른 모든 항목은 건너뜁니다. 빈 폴더는 예외를 발생시키는 대신 빈 목록을 반환합니다.
@@ -251,6 +253,8 @@ source_hash: c371965951dd0181
 `vid_stride`는 매 N번째 프레임을 처리하며 기본값은 `1`입니다. `stream=True`가 없으면 전체 비디오가 목록으로 디코딩되며, 스트라이딩 후 500프레임을 초과하는 경우 `stream=True`를 권장하는 경고가 발생합니다.
 
 비디오의 각 `Results`는 `frame_idx`를 전달합니다.
+
+비디오 인코딩에서 H.264를 열 수 없으면 사용 가능한 코덱으로 대체합니다. 대체 사실은 INFO로 기록하며 다른 코덱이 성공한 뒤에만 코덱과 캔버스별로 캐시합니다.
 
 ## 웹캠, 네트워크 스트림 및 유튜브
 

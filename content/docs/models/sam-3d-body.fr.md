@@ -16,7 +16,7 @@ keywords:
   - MHR
   - Momentum Human Rig
   - pose 3D
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -68,7 +68,7 @@ snippets:
 
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 5f47acceaf23ab64
+source_hash: 1b63435b35c57b10
 ---
 
 ## Installer
@@ -123,6 +123,8 @@ de MHR, avec des angles d'Euler plutôt qu'un format axe-angle. Consultez la
 [prédiction](/docs/predict) pour les sources, le streaming et la gestion des
 résultats.
 
+L'acquisition automatique nécessite `libreyolo[hf]` et l'accès au modèle à accès restreint. Les checkpoints locaux doivent être le répertoire de snapshot vérifié, ou son fichier `model.ckpt` inchangé accompagné des fichiers correspondants `model_config.yaml` et `LICENSE`. Les hashes épinglés et les inventaires de snapshots acceptés rejettent les ressources renommées, modifiées, liées ou supplémentaires. Les ressources MHR sont également épinglées. Gardez le snapshot local inchangé pendant sa lecture par le constructeur d'amont.
+
 ## Variantes
 
 Deux backbones utilisent le même modèle corporel MHR\u00a0: `d3` emploie un encodeur
@@ -135,12 +137,6 @@ DINOv3 ViT-H/16+, tandis que `h` emploie l'encodeur ViT-H d'origine.
 L'export du maillage corporel n'est pas implémenté\u00a0: LibreYOLO n'a pas encore
 défini de contrat de graphe exporté pour la tâche de maillage, notamment pour
 représenter la disposition des paramètres MHR hors de PyTorch.
-
-## Checkpoints
-
-Tous les fichiers de poids publiés pour cette famille.
-
-<checkpoint-table />
 
 ## Licence
 

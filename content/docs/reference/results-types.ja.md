@@ -1,10 +1,9 @@
 ---
 title: Resultsの型
 seo_title: LibreYOLO Resultsオブジェクトリファレンス
-description: >-
-  LibreYOLOのResultsオブジェクトが保持できる全ペイロードを、タスク形状ごとに1スロットずつ説明します：ボックス、マスク、キーポイント、probs、obb、深度、OCR、埋め込みベクトル、その他10種。
+description: "LibreYOLOの結果ペイロード：ボックス、マスク、キーポイント、分類、深度、アルベド、3D直方体、ロボットのアクションチャンク。"
 lead: >-
-  Resultsは、すべてのLibreYOLOモデルが画像ごとに返す単一の型です。タスク形状ごとに1つ、合計18個のオプションのペイロードスロットを持ち、モデルが生成したものだけを格納します。
+  Resultsは、すべてのLibreYOLOモデルが画像ごとに返す単一の型です。タスク形状ごとに1つ、オプションのペイロードスロットを持ち、モデルが生成したものだけを格納します。
 keywords:
   - libreyolo results オブジェクト
   - Results.boxes
@@ -13,9 +12,9 @@ keywords:
   - Results.depth_map
   - Results.summary
   - libreyolo results json 変換
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  v1.5.0のlibreyolo/utils/results.pyからスロット名、形状、プロパティ、デフォルト値を確認しました。意味はペイロードクラスのdocstringから引用しました。
+  v1.6.0のlibreyolo/utils/results.pyからスロット名、形状、プロパティ、デフォルト値を確認しました。意味はペイロードクラスのdocstringから引用しました。
 snippets:
   usage:
     - label: Python
@@ -45,7 +44,7 @@ snippets:
         # 行を通常のdictで取得し、次にJSONへ変換
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 16f654364ae6448a
+source_hash: d74276d805c22c92
 ---
 
 ## Resultsオブジェクト
@@ -185,6 +184,8 @@ thingとstuffの区別はセグメントではなくカテゴリーのプロパ�
 ありません。`min`、`max`、`mean`は有限値に対して計算され、`normalized()`はマップを
 `[0, 1]`に再スケーリングします。
 
+`DepthMap(data, orig_shape=None, encoding="inverse_depth")`は、`encoding="depth"`と`encoding="log_depth"`も受け付けます。バリデーターは整合の前にこれを解釈します。相対深度の値に実距離の尺度が保証されるわけではありません。
+
 ## NormalMap
 
 元画像のキャンバス上にある、float32の密な表面法線フィールドです。形状は`(H, W, 3)`で、
@@ -282,6 +283,16 @@ dictを返し、`save_obj(path, index=0)`は1つのメッシュを書き出し�
 どのスロットが設定されているかに応じて、検出、セグメント、点、または領域ごとに1行です。
 `to_json(**kwargs)`は引数を`summary`へ渡し、JSON文字列を返します。
 
-`plot()`は密な法線またはエッジの結果を標準の可視化形式でレンダリングします。他の結果型では
-例外を発生させます。その他のタスクのアノテーション付き画像は`predict(save=True)`で
-生成されます。
+`plot()`はすべてのタスクのペイロードを描画します。画像への重ね合わせはデフォルトでBGR配列を返し、`pil=True`でPILを要求できます。エッジと法線マップの結果は、PILを返すデフォルトを維持します。
+
+## Boxes3D
+
+`Boxes3D(data, orig_shape=None, intrinsics=None)`は`(N, 14)`の行を保持します。内容は中心xyz、寸法wlh、クォータニオンwxyz、順位付けスコア、クラスID、2D信頼度、3D信頼度です。座標はカメラ座標系のメートル単位で、xは右、yは下、zは前方です。世界座標系を意味しません。3x3の内部パラメータは元のキャンバスを基準とします。行は`Results.boxes`と対応します。
+
+## AlbedoMap
+
+`AlbedoMap(data, orig_shape=None)`は線形RGBを保持します。表示用の変換ではsRGBを生成し、アルベドの定量的な検証では元の線形値を使います。
+
+## Actions
+
+`Actions(data, orig_shape=None, names=None, fps=None, instruction=None)`は、float32のアクションチャンク`(T, D)`を表します。`first`は最初の行を返し、スライスでタイムステップを選択します。値はポリシーのデータセットの単位を維持します。`names`はアクションの各次元、`fps`は制御レート、`instruction`は条件付けのテキストを表します。

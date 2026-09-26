@@ -1,0 +1,12 @@
+{
+  "name": "3D-MOOD",
+  "org": "ETH Zurich, Computer Vision and Geometry Lab",
+  "paper_title": "3D-MOOD: Lifting 2D to 3D for Monocular Open-Set Object Detection",
+  "paper_url": "https://arxiv.org/abs/2507.23567",
+  "code_url": "https://github.com/cvg/3D-MOOD",
+  "license": "Apache-2.0",
+  "license_interpretation": "The source and model publisher declare Apache-2.0.",
+  "bibtex": "@InProceedings{Yang_2025_ICCV,\n    author    = {Yang, Yung-Hsu and Piccinelli, Luigi and Segu, Mattia and Li, Siyuan and Huang, Rui and Fu, Yuqian and Pollefeys, Marc and Blum, Hermann and Bauer, Zuria},\n    title     = {3D-MOOD: Lifting 2D to 3D for Monocular Open-Set Object Detection},\n    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},\n    month     = {October},\n    year      = {2025},\n    pages     = {7429-7439}\n}",
+  "bibtex_source_url": "https://raw.githubusercontent.com/cvg/3D-MOOD/main/README.md",
+  "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2507.23567. The upstream citation form is retained; conference/journal entries were also checked against the publisher."
+}

@@ -2,20 +2,18 @@
 title: libreyolo quantize
 seo_title: tham chiếu lệnh libreyolo quantize
 description: >-
-  Lượng tử hóa (quantization) một checkpoint trong PyTorch từ dòng lệnh: các
-  recipe, tham số hiệu chuẩn, giá trị mặc định và những họ mô hình mà mỗi recipe
-  chấp nhận.
+  Lượng tử hóa (quantization) một checkpoint trong PyTorch từ dòng lệnh: các recipe, tham số hiệu chuẩn, giá
+  trị mặc định và những họ mô hình mà mỗi recipe chấp nhận.
 lead: >-
-  Thay các module float của mô hình bằng module đã lượng tử hóa, hiệu chuẩn
-  chúng trên ảnh không nhãn khi recipe cần thống kê, rồi lưu kết quả thành một
-  checkpoint PyTorch.
+  Thay các module float của mô hình bằng module đã lượng tử hóa, hiệu chuẩn chúng trên ảnh không nhãn khi
+  recipe cần thống kê, rồi lưu kết quả thành một checkpoint PyTorch.
 keywords:
   - libreyolo quantize cli
   - lệnh lượng tử hóa int8
   - lượng tử hóa fp8
   - lượng tử hóa sau huấn luyện yolo
   - tham số libreyolo quantize
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Lệnh
     value: libreyolo quantize
@@ -24,9 +22,7 @@ meta:
     value: model
     mono: true
   - label: Đầu ra
-    value: >-
-      Đường dẫn nguồn kèm -<recipe> trước phần mở rộng, ví dụ
-      LibreYOLO9s-int8.pt
+    value: 'Đường dẫn nguồn kèm -<recipe> trước phần mở rộng, ví dụ LibreYOLO9s-int8.pt'
     mono: true
 snippets:
   examples:
@@ -42,18 +38,14 @@ snippets:
           out=weights/LibreYOLO9s-fp16.pt
     - label: 'Hiệu chuẩn rộng hơn, rồi khôi phục'
       language: bash
-      code: >
+      code: |
         libreyolo quantize model=LibreYOLO9s.pt recipe=int8 \
           calib=coco128.yaml samples=256 batch=16 algorithm=minmax
 
-        # Quantization-aware training trên checkpoint đã lượng tử hóa giúp lấy
-        lại độ chính xác
-
-        libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
-        lr0=0.001
-source_hash: 7ae663e9f117826e
+        # Quantization-aware training trên checkpoint đã lượng tử hóa giúp lấy lại độ chính xác
+        libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10 lr0=0.001
+source_hash: 663390776f2f2c15
 ---
-
 ## Cú pháp
 
 ```bash
@@ -140,3 +132,5 @@ bại, và `1` cho các lỗi runtime khác.
 
 Liên quan: [`libreyolo export`](/docs/cli/export), lệnh rời khỏi PyTorch và thay
 vào đó ghi ra một artifact để triển khai.
+
+`algorithm` mặc định là `auto` (minmax) và còn chấp nhận `minmax`, `percentile`, `mse` và `entropy`. MSE và entropy chọn phạm vi bằng cách quét histogram activation.

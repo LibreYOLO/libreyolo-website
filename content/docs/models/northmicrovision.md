@@ -1,15 +1,40 @@
 ---
-title: "North Micro Vision"
-families: []
-architecture_only: true
-seo_title: "North Micro Vision architecture"
-description: "Architecture diagrams for North Micro Vision in LibreYOLO, with block definitions and model variants."
-lead: "Architecture diagrams for North Micro Vision in LibreYOLO, with block definitions and model variants."
+title: North Micro Vision
+families:
+  - northmicrovision
+seo_title: North Micro Vision in LibreYOLO
+description: North Micro Vision detects objects through a text vocabulary.
+lead: North Micro Vision detects objects through a text vocabulary.
+keywords:
+  - North Micro Vision
+  - LibreYOLO
+  - detect
+last_verified: 1.6.0
+snippets:
+  predict:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreVLM, SAMPLE_IMAGE
+
+        model = LibreVLM("north-micro-vision", device="cpu")
+        model.set_classes(["person", "building"])
+        result = model(SAMPLE_IMAGE)
+        print(result.boxes)
 ---
 
-## Source
+## Install
 
-The diagrams below describe the [North Micro Vision implementation](https://github.com/LibreYOLO/libreyolo/blob/a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb/libreyolo/models/vlm/northmicro.py) in LibreYOLO.
-Each drawing states its model configuration, input assumptions and source revision.
+```bash
+pip install "libreyolo[vlm]" "transformers>=5.16.0"
+```
 
-These are architecture references. Check the license and class configuration of any checkpoint you use separately.
+## Predict
+
+<code-tabs name="predict" />
+
+The adapter runs one detection query per vocabulary class. It requires Transformers 5.16 or later, above the shared VLM extra floor. Training is not supported.
+
+## Licensing
+
+<provenance-box></provenance-box>

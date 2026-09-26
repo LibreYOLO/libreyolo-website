@@ -3,10 +3,8 @@ title: MiDaS
 families:
   - midas
 seo_title: 'MiDaS: estimasi kedalaman monokular di LibreYOLO'
-description: >-
-  Gunakan MiDaS di LibreYOLO untuk estimasi kedalaman monokular. Instal,
-  prediksi, validasi, dan ekspor dua varian berlisensi MIT yang diunduh dari
-  isl-org.
+description: Jalankan inferensi kedalaman relatif MiDaS di LibreYOLO. Checkpoint s dan l memakai
+  mirror LibreYOLO dengan izin MIT dari penerbit.
 lead: >-
   MiDaS adalah estimasi kedalaman relatif monokular yang dilatih dengan loss
   invarian skala dan pergeseran pada campuran dataset. Rangkaian pekerjaan ini
@@ -20,7 +18,7 @@ keywords:
   - relative depth
   - depth map
   - zero-shot depth
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -29,10 +27,7 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
 
-        # Belum tersedia di disk: LibreYOLO mengunduhnya dari rilis GitHub resmi
-
-        # isl-org/MiDaS dan memeriksanya terhadap SHA-256 yang dipatok sebelum
-        digunakan.
+        # Mengunduh checkpoint dari mirror saat pertama kali dipakai.
 
         model = LibreYOLO("LibreMiDaSl-depth.pt")
 
@@ -107,36 +102,24 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: ce2fbf3ae43e9be4
+source_hash: 64537aa3ad3a6f8f
 ---
 
 ## Instalasi
 
-MiDaS tidak memerlukan extra opsional. Semua yang diimpornya tersedia dalam
-instalasi dasar.
+MiDaS memerlukan extra `midas` untuk encoder timm-nya.
 
 ```bash
-pip install libreyolo
+pip install "libreyolo[midas]"
 ```
 
 ## Prediksi
 
-MiDaS adalah satu-satunya family kedalaman yang tidak dipublikasikan ulang
-LibreYOLO di organisasi Hugging Face miliknya. Meminta checkpoint berdasarkan
-nama berkas LibreYOLO akan mengunduh aset resmi yang cocok langsung dari rilis
-GitHub `isl-org/MiDaS`, memeriksanya terhadap SHA-256 yang dipatok, lalu
-membungkusnya dengan metadata checkpoint LibreYOLO sebelum penggunaan pertama.
-Run berikutnya menggunakan kembali berkas lokal dalam cache. Lihat Lisensi
-untuk alasannya.
+Checkpoint s dan l diunduh dari mirror LibreYOLO dengan izin MIT dari penerbit dan disimpan dalam cache lokal.
 
 <code-tabs name="predict" />
 
-`result.depth_map` memuat peta inverse-depth relatif yang padat. Nilai lebih
-tinggi berarti lebih dekat ke kamera, dan nilainya tidak memiliki satuan metrik
-atau skala lintas gambar. `save=True` menulis visualisasi berpeta warna dari peta
-tersebut ke disk. `Results.plot()` tidak mencakup family ini karena hanya
-didefinisikan untuk surface normal dan edge. Lihat [prediksi](/docs/predict)
-untuk sumber, streaming, dan penanganan hasil.
+`result.depth_map` berisi peta kedalaman invers relatif yang rapat: nilai lebih besar berarti lebih dekat ke kamera, tanpa satuan metrik atau skala yang berlaku antar gambar. `save=True` menulis visualisasi peta berwarna ke disk; `Results.plot()` merender peta kedalaman. Lihat [prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
 
 ## Varian
 

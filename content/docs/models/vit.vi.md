@@ -4,20 +4,19 @@ families:
   - vit
 seo_title: 'ViT: chạy bộ phân loại Vision Transformer kinh điển trong LibreYOLO'
 description: >-
-  Dự đoán, xác thực và xuất bộ phân loại ViT bằng LibreYOLO. Trọng số AugReg
-  Apache-2.0; chưa hỗ trợ tinh chỉnh.
+  Dự đoán, xác thực và xuất bộ phân loại ViT bằng LibreYOLO. Trọng số AugReg Apache-2.0; chưa hỗ trợ tinh
+  chỉnh.
 lead: >-
-  Vision Transformer kinh điển: transformer thuần túy áp dụng lên các patch ảnh
-  kích thước cố định, có class token được học và không dùng phép tích chập.
-  LibreYOLO cung cấp bốn kích thước được huấn luyện sẵn bằng AugReg để phân loại
-  ảnh.
+  Vision Transformer kinh điển: transformer thuần túy áp dụng lên các patch ảnh kích thước cố định, có class
+  token được học và không dùng phép tích chập. LibreYOLO cung cấp bốn kích thước được huấn luyện sẵn bằng
+  AugReg để phân loại ảnh.
 keywords:
   - ViT
   - Vision Transformer
   - AugReg
   - phân loại ảnh
   - bộ phân loại transformer
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -40,23 +39,16 @@ snippets:
   val:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreViTti-cls.pt")
 
-
-        # data là thư mục gốc có các phần tách thư mục lớp đối tượng train/ và
-        val/
-
+        # data là thư mục gốc có các phần tách thư mục lớp đối tượng train/ và val/
         # (bố cục ImageFolder), không phải YAML dataset.
-
         metrics = model.val(data="imagenet-1k/")
 
-
         print(metrics["metrics/accuracy_top1"])
-
         print(metrics["metrics/accuracy_top5"])
     - label: CLI
       language: bash
@@ -87,9 +79,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: f63e98454913765a
+source_hash: 1141331e796933f6
 ---
-
 ## Cài đặt
 
 ViT không cần extra tùy chọn. Mọi thành phần mà mô hình import đều có trong bản cài đặt cơ sở.
@@ -116,6 +107,8 @@ Có bốn kích thước từ tiny đến large, dùng chung graph patch-16 cố
 
 <code-tabs name="val" />
 
+Đánh giá và hiệu chuẩn INT8 dùng phép biến đổi đánh giá của họ mô hình. Metadata xuất ghi `norm_mean`, `norm_std` và `resize_mode`; các tệp cũ dùng giá trị của họ mô hình khi thiếu metadata. Bộ tiền xử lý hiệu chuẩn trả về mảng CHW và tỷ lệ cần thiết.
+
 ## Xuất
 
 <export-matrix />
@@ -137,5 +130,3 @@ Mọi tệp trọng số đã phát hành cho họ mô hình này.
 ## Trích dẫn
 
 <citation-block />
-
-

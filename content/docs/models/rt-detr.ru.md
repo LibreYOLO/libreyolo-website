@@ -22,7 +22,8 @@ keywords:
   - детекция повёрнутых рамок
   - OBB
   - DOTA
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 snippets:
   predict:
     - label: Python
@@ -187,7 +188,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 8022a5a591922a90
+source_hash: 75454e612d7e2247
 ---
 
 ## Установка
@@ -287,6 +288,8 @@ CLI подставляет то же значение, когда `lr0` не п�
 переиспользует эмбеддинг, построенный для другого соотношения сторон.
 
 Про датасеты, аугментацию, multi-GPU и логгеры см. [обучение](/docs/train).
+
+RT-DETRv4 по умолчанию включает `amp=True` с `amp_dtype="float16"`. Для FP32 передайте `amp=False`.
 
 ## Валидация
 

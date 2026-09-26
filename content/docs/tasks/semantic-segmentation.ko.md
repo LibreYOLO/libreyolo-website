@@ -12,7 +12,7 @@ keywords:
   - 세분화 모델 학습
   - 평균 교차 엔트로피 지수
   - MIT 분할 라이브러리
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -113,7 +113,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 44b92d8ba6062f04
+source_hash: "f642c33d64f6878c"
 ---
 
 ## 정의
@@ -126,11 +126,13 @@ source_hash: 44b92d8ba6062f04
 
 ## 모델들
 
-세 가지 계열은 모두 학습과 예측을 수행합니다: [SegFormer](/docs/models/segformer), [LingBot-Vision](/docs/models/lingbot-vision), [DINOv2](/docs/models/dinov2). SegFormer과 LingBot-Vision은 기본 패키지에서 실행되며 공개된 가중치를 제공합니다. DINOv2는 `pip install "libreyolo[rfdetr]"`가 필요하며 LibreYOLO에 호스팅된 체크포인트가 없습니다: 업스트림(backbone)를 불러오고 그 밀집 헤드는 무작위 초기화에서 시작하므로, 이는 바로 예측할 수 있는 모델이라기보다는 학습을 시작하기 위한 출발점입니다.
+학습 가능한 계열은 [SegFormer](/docs/models/segformer), [LingBot-Vision](/docs/models/lingbot-vision), [DINOv2](/docs/models/dinov2)입니다. SegFormer와 LingBot-Vision은 기본 패키지에서 실행되며 공개 가중치를 제공합니다. DINOv2는 `pip install "libreyolo[rfdetr]"`이 필요하며 LibreYOLO에서 호스팅하는 체크포인트는 없습니다. 업스트림 백본을 로드하고 밀집 헤드는 무작위로 초기화하므로 바로 예측할 수 있는 모델이 아니라 학습 시작점입니다.
 
 네 가지를 더 예측, 검증 및 내보내지만, 그들의 `train()`는 `NotImplementedError`를 높입니다: [FCN](/docs/models/fcn), [DeepLabv3](/docs/models/deeplabv3), [PIDNet](/docs/models/pidnet) 및 [EoMT](/docs/models/eomt).
 
 클래스 세트는 계열별로가 아니라 체크포인트별로 다릅니다. 공개된 가중치는 레이블 공간이 거의 공통점이 없는 데이터셋에서 나온 것이며, 예를 들어 ADE20K의 150개 클래스와 Cityscapes의 19개 클래스가 있습니다. 따라서 체크포인트의 `names`가 무엇을 레이블링할 수 있는지를 알려주며, 두 체크포인트는 동일한 데이터셋에서 학습된 경우에만 비교할 수 있습니다.
+
+[PP-LiteSeg](/docs/models/ppliteseg)와 [U-Net](/docs/models/unet)은 학습 가능한 시맨틱 분할 계열입니다. U-Net에는 현재 검증된 호스팅 변환 가중치가 없습니다.
 
 ## 예측
 
@@ -181,6 +183,8 @@ names:
 <code-tabs name="train" />
 
 `imgsz`는 탐지기에서는 그렇지 않은 방식으로 여기에서 제한됩니다. 각 계열는 그 입력이 배수여야 하는 나눗수를 선언하며, 이는 패치 그리드나 출력 보폭에 의해 설정되고, 학습과 검증 모두 `imgsz`가 정확히 나누어떨어지지 않을 때 실행 시작 전에 `ValueError`를 올립니다. 나눗수는 SegFormer의 경우 32, LingBot-Vision과 EoMT의 경우 16, DINOv2의 경우 14, FCN과 PIDNet의 경우 8입니다. 데이터셋, 증강, 다중 GPU 및 로거에 대해서는 [training](/docs/train)을 참조하십시오.
+
+시맨틱 데이터셋은 `(height, width)` 캔버스를 받습니다. PP-LiteSeg와 U-Net은 학습 크롭과 평가 직사각형을 구분합니다. 크기 조정 후 크롭하는 샘플링은 부족한 영역을 무시 레이블로 패딩하며, 설정된 경우 계열별 광도 변환을 적용합니다.
 
 ## 검증
 

@@ -22,7 +22,7 @@ keywords:
   - estymacja pozy
   - segmentacja instancji
   - inferencja brzegowe
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -200,8 +200,9 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 39c6975fc16b3ff1
+source_hash: 521fde8f10ac8c57
 ---
+
 ## Instalacja
 
 EdgeCrafter nie potrzebuje żadnych dodatkowych opcji. Wszystko, co importuje, znajduje się w instalacji bazowej.
@@ -228,6 +229,8 @@ Argumenty `conf` i `max_det` filtrują wybór zapytań. Argument `iou` jest
 akceptowany dla zgodności API, ale nie ma wpływu na wynik, ponieważ wszystkie
 trzy głowice dekodują zbiór zapytań bez etapu NMS. Zobacz stronę
 [predykcji](/docs/predict), aby poznać źródła, streaming i obsługę wyników.
+
+Predykcja detekcji przyjmuje prostokątny `imgsz=(height, width)`; trenowanie i eksport zachowują własne ograniczenia kształtu.
 
 ## Warianty
 
@@ -288,6 +291,8 @@ Eksportowany artefakt ładuje się z powrotem przez `LibreYOLO()` na podstawie j
 Każdy opublikowany plik wag dla tej rodziny.
 
 <checkpoint-table />
+
+Warianty `obj2coco` obejmują detekcję, segmentację i estymację pozy. Ich pobieranie wymaga jawnej zgody, a warunki projektu źródłowego ograniczają użytek komercyjny. Oryginalne checkpointy COCO zachowują zapisaną licencję Apache-2.0.
 
 ## Licencjonowanie
 

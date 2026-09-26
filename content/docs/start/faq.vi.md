@@ -2,11 +2,11 @@
 title: Câu hỏi thường gặp
 seo_title: Câu hỏi thường gặp về LibreYOLO
 description: >-
-  Câu trả lời ngắn cho những câu hỏi áp dụng trên mọi mô hình LibreYOLO: phần
-  cứng, giấy phép, trọng số, thiết bị, huấn luyện, phạm vi xuất và CLI.
+  Câu trả lời ngắn cho những câu hỏi áp dụng trên mọi mô hình LibreYOLO: phần cứng, giấy phép, trọng số, thiết
+  bị, huấn luyện, phạm vi xuất và CLI.
 lead: >-
-  Câu trả lời cho những vấn đề không riêng một họ mô hình. Nội dung dành riêng
-  cho từng họ nằm trên trang của họ đó.
+  Câu trả lời cho những vấn đề không riêng một họ mô hình. Nội dung dành riêng cho từng họ nằm trên trang của
+  họ đó.
 keywords:
   - câu hỏi thường gặp libreyolo
   - libreyolo có cần gpu không
@@ -14,10 +14,9 @@ keywords:
   - trọng số libreyolo ở đâu
   - cli libreyolo
   - dùng libreyolo offline
-last_verified: 1.5.0
-source_hash: a729b43a6642f2a0
+last_verified: 1.6.0
+source_hash: d0d1f00bab2cee6e
 ---
-
 ## Tôi nên bắt đầu với mô hình nào?
 
 YOLOv9 nếu bạn cần detector CNN và RF-DETR nếu cần detector transformer. Cả
@@ -154,3 +153,7 @@ Hai tên lớp được đổi để nhất quán: `LibreYOLORTDETR` thành `Lib
 `LibreYOLORFDETR` thành `LibreRFDETR`. Tên cũ vẫn phân giải được và phát
 `DeprecationWarning` trỏ đến tên mới, nên mã hiện có vẫn chạy trong lúc bạn cập
 nhật.
+
+## Vì sao tên checkpoint không tải được?
+
+Dùng đúng tên tệp trong bảng checkpoint trên trang mô hình. Các tên FCN và Mask R-CNN có hậu tố tác vụ không được lưu trữ; lỗi loader liệt kê các dạng được hỗ trợ. LingBot-Vision g chưa có checkpoint công bố: dùng s, b, l hoặc checkpoint cục bộ.

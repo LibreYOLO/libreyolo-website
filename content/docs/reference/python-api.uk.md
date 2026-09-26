@@ -1,14 +1,8 @@
 ---
 title: Python API
 seo_title: Довідник Python API LibreYOLO
-description: >-
-  Назви, які LibreYOLO експортує на рівні пакета: п'ять фабрик, класи сімейств,
-  корисні дані Results, бекенди, валідатори, трекери та допоміжні засоби для
-  даних.
-lead: >-
-  Публічна поверхня Python у LibreYOLO визначається списком __all__ у
-  libreyolo/__init__.py. Усе на цій сторінці можна імпортувати як from libreyolo
-  import <name>; усе, чого немає в списку, є внутрішнім.
+description: 'Імена, які LibreYOLO експортує на рівні пакета: фабрики, класи сімейств, дані Results, бекенди, валідатори, трекери й засоби роботи з даними.'
+lead: Публічний Python API LibreYOLO визначає список __all__ у libreyolo/__init__.py. Експорт на рівні пакета використовує from libreyolo import <name>; протоколи відстеження й навчання нижче використовують свої іменовані підмодулі.
 keywords:
   - libreyolo python api
   - libreyolo import
@@ -18,13 +12,8 @@ keywords:
   - LibreOpenVocab
   - LibreEnsemble
   - libreyolo __all__
-last_verified: 1.5.0
-verification: >-
-  Назви й сигнатури взято з libreyolo/__init__.py, libreyolo/models/__init__.py,
-  libreyolo/models/base/model.py, libreyolo/models/base/inference.py,
-  libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py,
-  libreyolo/models/openvocab/__init__.py та libreyolo/ensemble/model.py у
-  v1.5.0.
+last_verified: "1.6.0"
+verification: Назви й сигнатури взято з libreyolo/__init__.py, libreyolo/models/__init__.py, libreyolo/models/base/model.py, libreyolo/models/base/inference.py, libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py та libreyolo/ensemble/model.py у v1.6.0.
 snippets:
   usage:
     - label: Завантаження будь-чого через одну фабрику
@@ -52,39 +41,26 @@ snippets:
   factories:
     - label: П'ять точок входу
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, LibreEnsemble
 
-
-        # Фабрика з аналізом ваг для сімейств без підказок.
-
+        # Фабрика визначає сімейство без підказок за вагами.
         detector = LibreYOLO("LibreYOLO9t.pt")
 
-
         # Два або більше детекторів за однією поверхнею передбачення.
-
         ens = LibreEnsemble(["LibreYOLO9t.pt", "LibreYOLO9s.pt"])
 
-
         # Для інших трьох фабрик потрібно встановити додатковий пакет:
-
-        #   pip install 'libreyolo[sam]'        -> from libreyolo import
-        LibreSAM
-
-        #   pip install 'libreyolo[vlm]'        -> from libreyolo import
-        LibreVLM
-
-        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import
-        LibreOpenVocab
-
+        #   pip install 'libreyolo[sam]'        -> from libreyolo import LibreSAM
+        #   pip install 'libreyolo[vlm]'        -> from libreyolo import LibreVLM
+        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import LibreOpenVocab
         print(type(detector).__name__, ens.fusion)
-source_hash: 66e34e78b2e0fb2d
+source_hash: 02fbec762b1ffced
 ---
 
 ## Точки входу
 
-Модель завантажують п'ять викликаних об'єктів. Їх розділено за контрактом
-виклику, а не за архітектурою.
+Фабрики завантажують моделі або налаштовують клієнти API. Вони розділені за контрактом виклику, а не за архітектурою.
 
 | Фабрика | Завантажує | Підказка під час виклику | Потрібний додатковий пакет |
 |---|---|---|---|
@@ -96,8 +72,7 @@ source_hash: 66e34e78b2e0fb2d
 
 <code-tabs name="factories" />
 
-Лише `LibreYOLO` читає файл. Інші три приймають рядковий псевдонім і визначають
-за ним репозиторій Hugging Face, тому аргумент є назвою моделі, а не шляхом.
+`LibreYOLO` приймає файли контрольних точок і експортовані артефакти. Споріднені фабрики приймають псевдоніми моделей; `LibreVLM` і `LibreVLA` також повторно завантажують власні збережені каталоги контрольних точок.
 
 ```python
 LibreYOLO(
@@ -121,6 +96,10 @@ URL моделі Triton HTTP чи HTTPS. Якщо `size` і `nb_classes` не з
 
 <code-tabs name="usage" />
 
+`LibreGround` відображає інструкції на точки зображення; `LibreVLA` передбачає фрагменти дій робота; `LibreLLM` викликає сумісну віддалену кінцеву точку мовної моделі. Див. [API прив'язки](/docs/reference/ground-api), [API політик](/docs/reference/vla-api) і [клієнт мовної моделі](/docs/reference/llm-api).
+
+`LibreYOLO("hf://owner/repo@revision/filename")` завантажує контрольні точки Hub. `model.push_to_hub(repo_id, private=False)` публікує контрольну точку й картку. [Довідка Hub](/docs/reference/hugging-face) визначає пошук і автентифікацію.
+
 ## Класи сімейств
 
 Кожне сімейство, яке може повернути фабрика, також експортується за назвою,
@@ -131,8 +110,7 @@ URL моделі Triton HTTP чи HTTPS. Якщо `size` і `nb_classes` не з
 Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 ```
 
-У класі сімейства `size` не має типового значення, що відрізняє його від
-фабрики. YOLO9 та його варіанти вставляють `reg_max: int = 16` після `size`.
+Типові значення конструктора залежать від сімейства; перевірте його сигнатуру перед безпосереднім створенням. YOLO9 та її варіанти вставляють `reg_max: int = 16` після `size`.
 
 Сімейства виявлення та багатозадачні сімейства: `LibreYOLO9`, `LibreYOLO9E2E`,
 `LibreYOLO9P2`, `LibreYOLONAS`, `LibreYOLOX`, `LibreYOLO7`, `LibreYOLO4`,
@@ -201,12 +179,14 @@ model(
 
 ## Корисні дані Results
 
-`Results` та його вісімнадцять класів корисних даних експортуються на рівні
+`Results` та його класи корисних даних експортуються на рівні
 пакета: `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`,
 `Gaze`, `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`,
 `NormalMap`, `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`,
 `Identities`. Кожен описано в розділі
 [Типи Results](/docs/reference/results-types).
+
+`Boxes3D`, `AlbedoMap` і `Actions` додають кубоїди 3D, власне альбедо й фрагменти дій. Див. [типи результатів](/docs/reference/results-types).
 
 ## Бекенди
 
@@ -231,6 +211,8 @@ model(
 конфігурації також експортуються: `ByteTracker` із `TrackConfig`,
 `BoTSortTracker` із `BoTSortConfig` та `OCSortTracker` із `OCSortConfig`.
 
+`libreyolo.tracking.Tracker` визначає `reset()` і `update(results, image=None)` для власних екземплярів трекерів.
+
 ## Допоміжні засоби для даних
 
 `DATASETS_DIR` є визначеним коренем датасетів, `load_data_config` зчитує YAML
@@ -243,6 +225,8 @@ model(
 `Gallery` і `FaceGallery` зберігають зареєстровані вектори ідентичностей для
 завдання `embed` і створюють корисні дані `Identities`. `Distiller` і
 `get_distill_config` керують навчанням учитель-учень.
+
+`libreyolo.training.TrainFitnessCallback` визначає `fitness(metrics)` для власного вибору контрольних точок. Див. [колбеки оцінки якості](/docs/train/fitness-callbacks).
 
 ## Ресурси
 

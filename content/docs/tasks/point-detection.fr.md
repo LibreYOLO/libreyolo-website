@@ -16,7 +16,7 @@ keywords:
   - localisation points FOMO
   - compter objets images
   - localisation par points
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Prédire les points et les compter
@@ -137,7 +137,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.points.xy)
-source_hash: 932153c8870d1c7c
+source_hash: 5c3cfe7a606cd7aa
 ---
 
 ## Définition
@@ -156,7 +156,7 @@ arguments `iou` et `max_det` n'ont donc aucun élément sur lequel agir.
 
 ## Modèles
 
-Trois familles couvrent `point` et ne sont pas interchangeables.
+Les modèles de points diffèrent par leur vocabulaire et la sémantique de leurs sorties.
 
 [FOMO](/docs/models/fomo) constitue l'option à vocabulaire fixe. Ce
 classificateur de grille étiquette chaque cellule d'une grille de basse
@@ -177,6 +177,8 @@ avec `LibreVLM("sensenova-vision", task="point")`. Il nécessite l'extra
 La latence par image est donc nettement plus élevée que celle d'un détecteur
 spécialisé. Ses poids sont réservés à un usage non commercial. Leur licence
 figure sur sa page.
+
+[Molmo2](/docs/models/molmo2) et [Moondream](/docs/models/moondream) fournissent des points conditionnés par du texte. [LibreGround](/docs/reference/ground-api) utilise une instruction pour sélectionner au plus un clic par requête avec ShowUI, Florence-2 ou Qwen3-VL.
 
 ## Prédire
 

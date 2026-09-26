@@ -14,7 +14,7 @@ keywords:
   - owlv2
   - omdet turbo
   - テキストプロンプト 検出
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -55,7 +55,7 @@ snippets:
         # トークンスコアで絞り込む。未設定時はどちらもデフォルトで0.25
         # text_thresholdを受け付けるのはGrounding DINOだけで、ほかは例外を送出
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 17197cf4d80f3d6f
+source_hash: 10f41b40f357b037
 ---
 
 ## 定義
@@ -90,6 +90,8 @@ pip install "libreyolo[openvocab]"
 
 別の階層もテキスト語彙を受け取ります。`LibreVLM()` は[Qwen3-VL](/docs/models/qwen3-vl)や[Florence-2](/docs/models/florence-2)などの生成型視覚言語モデルを読み込み、その出力を同じ `Results` に変換します。`set_classes()` という同じインターフェースを共有します。異なるのはボックスを生成するものです。このページのファミリーはスコアを直接出力する識別的検出器ですが、VLM階層はボックスを生成します。
 
+[Gemma 4](/docs/models/gemma-4)、[Moondream](/docs/models/moondream)、[North Micro Vision](/docs/models/northmicrovision)は、`LibreVLM`の物体検出の選択肢を増やします。[Molmo2](/docs/models/molmo2)は点を返します。検出する語彙ではなく、指示からクリック位置を得るクエリには[LibreGround](/docs/reference/ground-api)を使ってください。
+
 ## 推論
 
 <code-tabs name="predict" />
@@ -105,6 +107,8 @@ pip install "libreyolo[openvocab]"
 ## 学習
 
 この階層のどのファミリーもLibreYOLO内では学習できません。`train()` から例外が送出されます。アップストリームでファインチューニングし、得られた重みを読み込んでください。読み込んだモデルが検出するものを変更する設定は、`set_classes()` に渡す語彙だけです。
+
+Qwen3-VLには、別の[VLMファインチューニング](/docs/train/vlm-fine-tuning)経路があります。これにより4つの`LibreOpenVocab`アダプターに学習が追加されるわけではありません。
 
 ## 検証
 

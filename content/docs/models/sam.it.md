@@ -21,7 +21,7 @@ keywords:
   - point prompt
   - box prompt
   - Meta AI
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Prompt di punto e di box
@@ -79,7 +79,7 @@ snippets:
         b = model.predict(bboxes=[300, 200, 900, 700])
 
         model.reset_image()
-source_hash: f8904d241ef8a929
+source_hash: 313541a8b2c6abaf
 ---
 
 ## Installazione
@@ -131,11 +131,7 @@ da codificare, huge il più pesante.
 
 <provenance-box>
 
-LibreYOLO non ospita una propria copia dei pesi di SAM-1. `LibreSAM("base")`,
-`"large"` e `"huge"` scaricano direttamente dai repository
-`facebook/sam-vit-base`, `facebook/sam-vit-large` e `facebook/sam-vit-huge` di
-Meta su Hugging Face, ognuno dei quali è etichettato lì come Apache-2.0
-indipendentemente da LibreYOLO.
+`LibreSAM("base")`, `"large"` e `"huge"` usano i mirror LibreYOLO degli artefatti SAM-1. I pesi mantengono la dichiarazione Apache-2.0 di Meta.
 
 </provenance-box>
 

@@ -19,7 +19,7 @@ keywords:
   - SimOTA
   - treinar yolox dataset próprio
   - exportar yolox onnx
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -103,7 +103,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: f5ab735a29f85a95
+source_hash: ddba5fb10bb88ad2
 ---
 
 ## Instalação
@@ -156,6 +156,8 @@ foi publicado.
 Veja [treinamento](/docs/train) para datasets, data augmentation, multi-GPU e
 loggers.
 
+O mosaic sorteia até 20 candidatos a imagens parceiras para dar preferência a imagens com anotações; se nenhuma atender ao critério, mantém o último sorteio.
+
 ## Validação
 
 `val()` retorna um dicionário de chaves `metrics/` cobrindo precisão, recall,
@@ -177,6 +179,8 @@ ficam por sua conta. Uma exportação para CoreML pode embutir o NMS no grafo co
 atualmente.
 
 <code-tabs name="export" />
+
+[TFLite INT8](/docs/export/tflite) aceita `int8=True` e um dataset de calibração.
 
 ## Checkpoints
 

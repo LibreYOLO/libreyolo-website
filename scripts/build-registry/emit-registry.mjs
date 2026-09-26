@@ -10,6 +10,23 @@ const TASK_LABELS = {
   segment: { label: 'Instance segmentation', slug: 'instance-segmentation' },
   pose: { label: 'Pose', slug: 'pose-estimation' },
   obb: { label: 'Oriented boxes', slug: 'oriented-detection' },
+  semantic: { label: 'Semantic segmentation', slug: 'semantic-segmentation' },
+  panoptic: { label: 'Panoptic segmentation', slug: 'panoptic-segmentation' },
+  classify: { label: 'Classification', slug: 'image-classification' },
+  point: { label: 'Point detection', slug: 'point-detection' },
+  depth: { label: 'Depth', slug: 'depth-estimation' },
+  normal: { label: 'Surface normals', slug: 'surface-normals' },
+  albedo: { label: 'Albedo', slug: 'albedo-estimation' },
+  restore: { label: 'Restoration', slug: 'image-restoration' },
+  matte: { label: 'Background removal', slug: 'background-removal' },
+  embed: { label: 'Embeddings', slug: 'embeddings' },
+  detect3d: { label: '3D detection', slug: '3d-object-detection' },
+  act: { label: 'Robot policies', slug: 'robot-policies' },
+  ocr: { label: 'OCR', slug: 'ocr' },
+  mesh: { label: 'Body mesh', slug: 'body-mesh' },
+  gaze: { label: 'Gaze', slug: 'gaze-estimation' },
+  edge: { label: 'Edges', slug: 'edge-detection' },
+
 }
 const EXTRAS = { rfdetr: 'rfdetr', rtdetr: 'rtdetr' } // families needing a pip extra
 /*

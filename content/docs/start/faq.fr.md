@@ -12,8 +12,8 @@ keywords:
   - emplacement poids libreyolo
   - cli libreyolo
   - libreyolo hors ligne
-last_verified: 1.5.0
-source_hash: a729b43a6642f2a0
+last_verified: "1.6.0"
+source_hash: d0d1f00bab2cee6e
 ---
 
 ## Par quel modèle commencer\u00a0?
@@ -166,3 +166,7 @@ Deux classes ont été renommées par cohérence\u00a0: `LibreYOLORTDETR` est de
 se résolvent toujours et émettent un `DeprecationWarning` qui indique le
 nouveau. Le code existant continue ainsi de fonctionner pendant sa mise à jour.
 
+
+## Pourquoi un nom de checkpoint ne se télécharge-t-il pas ?
+
+Utilisez le nom de fichier exact du tableau des checkpoints sur la page du modèle. Les noms FCN et Mask R-CNN suffixés par la tâche ne sont pas hébergés ; l'erreur du chargeur indique les formes prises en charge. LingBot-Vision g n'a pas de checkpoint publié : utilisez s, b, l ou un checkpoint local.

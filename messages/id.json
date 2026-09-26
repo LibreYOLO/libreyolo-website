@@ -313,6 +313,7 @@
     "nextRelease": "Rilis berikutnya",
     "versionIsCurrent": "v{version} adalah versi saat ini",
     "latest": "terbaru",
+    "archivedNotice": "Ini adalah dokumentasi LibreYOLO {version}. <link>Lihat versi terbaru</link>.",
     "onThisPage": "Di halaman ini",
     "docsButton": "Dokumentasi",
     "openNav": "Buka navigasi dokumentasi",

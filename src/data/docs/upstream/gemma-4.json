@@ -1,0 +1,7 @@
+{
+  "name": "Gemma 4",
+  "org": "Google",
+  "code_url": "https://huggingface.co/google",
+  "license": "Apache-2.0",
+  "license_interpretation": "The Gemma 4 adapters reference Apache-2.0 snapshots; this declaration does not apply to other Gemma generations."
+}

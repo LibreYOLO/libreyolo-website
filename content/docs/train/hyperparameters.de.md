@@ -21,7 +21,7 @@ keywords:
   - Early Stopping Geduld
   - AMP bfloat16
   - Trainingskonfiguration YAML
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -131,7 +131,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: d838d1abd45af40f
+source_hash: eac4e55fcf16ca15
 ---
 
 ## Argumente festlegen
@@ -181,14 +181,9 @@ abweichen kann:
 | `weight_decay` | `5e-4` | `5e-4` | `1e-4` | `1e-5` |
 | `scheduler` | `yoloxwarmcos` | `linear` | `flat_cosine` | `cos` |
 | `epochs` | `300` | `300` | `132` | `300` |
-| `amp` | `True` | `True` | `False` | `False` |
+| `amp` | `True` | `True` | `True` | `True` |
 
-D-FINE und DEIM werden mit `amp=False` ausgeliefert, weil der D-FINE-Decoder
-Aktivierungen bei 65504 begrenzt, dem größten endlichen float16-Wert. Bei YOLO-NAS
-und FOMO ist die Option ebenfalls standardmäßig deaktiviert. Die CLI-Option
-`--amp` hat für jede Familie den Standardwert `True`. Sie gilt deshalb als vom
-Benutzer angegeben und überschreibt den familienspezifischen Standardwert. Lass
-sie unverändert, sofern du den Wert nicht bewusst ändern möchtest.
+D-FINE, DEIM, RT-DETRv4 und YOLO-NAS verwenden für Detektion standardmäßig `amp=True` mit `amp_dtype="float16"`. Dome-DETR, PP-YOLOE und YOLO-NAS OBB behalten FP32 als Standard. Wenn FP32 benötigt wird, ist `amp=False` zu setzen.
 
 So liest du die tatsächlichen Standardwerte einer Familie aus, statt zu raten:
 
@@ -217,6 +212,8 @@ Decoder-Schichten weiterhin unterschätzt.
 
 Autobatch ist eine CUDA-Funktion. Auf CPU oder MPS protokolliert der Trainer eine
 Zeile und behält den Standard-Batch bei.
+
+`min_samples=0` lässt die Epochenlänge unverändert. Ein positiver Mindestwert zieht Stichproben mit Zurücklegen aus kürzeren Erkennungsdatensätzen. `class_balanced=False` aktiviert bei `True` bildweises Repeat-Factor-Sampling; es lässt sich mit `min_samples` und DDP kombinieren. Spezialisierte Loader, die den gemeinsamen Sampler umgehen, weisen aktiviertes Balancing zurück.
 
 ## Gradientenakkumulation
 
@@ -299,6 +296,10 @@ oder `"ram"`) oder als `.npy`-Dateien neben den Quellen (`"disk"`) vorgehalten
 werden. Gecachte Lesevorgänge sind bytegenau identisch mit frischen. Bei
 Dataloader-Workern ist `"disk"` die sicherere Wahl.
 
+`average_best=0` deaktiviert die Checkpoint-Mittelung; ein positives N schreibt `weights/average.pt` aus bis zu N besten Snapshots. Gleitkommatensoren werden gleichgewichtet gemittelt; Integer-Puffer stammen aus dem besten Snapshot. `export_check=False` lässt sich aktivieren, um bei fehlgeschlagenem ONNX-Export vor Epoche eins abzubrechen. Passende Rohausgaben werden mit `rtol=1e-3`, `atol=1e-4` verglichen; bei inkompatiblen Layouts wird das Überspringen des Vergleichs protokolliert.
+
+`precise_bn=0` deaktiviert die abschließende BatchNorm-Neukalibrierung. Ein positiver Wert begrenzt die Bilder aus dem Trainingsloader vor der abschließenden Validierung; unter DDP gilt das Budget je teilnehmendem Rank. Eingefrorene BatchNorm bleibt eingefroren. [Eigene Fitness-Callbacks](/docs/train/fitness-callbacks) können die besten Checkpoints und die Patience bestimmen.
+
 ## Fortsetzung
 
 `resume=True` setzt einen unterbrochenen Lauf fort. Der Checkpoint muss zuerst
@@ -340,3 +341,11 @@ ein Python-Argument.
   erklären das Training einer Teilmenge der Gewichte.
 - [Validierung und Metriken](/docs/train/validation) beschreibt die vom Lauf
   ausgegebenen Werte.
+
+## Klassenauswahl und Loss-Gewichtung
+
+Bei der Erkennung mit YOLO9, RF-DETR, EdgeCrafter, RT-DETR, D-FINE, DEIM, TinyFormer und YOLO-NAS behält `classes=None` alle Datensatzklassen bei. Eine Liste filtert die Trainingsziele unter Beibehaltung der ursprünglichen IDs, `nc` und `names`. `single_cls=False` lässt sich aktivieren, um beibehaltene Labels der Klasse 0 namens `object` zuzuordnen. Fortsetzen und Validierung übernehmen gespeicherte Einstellungen. Das OBB-Modelltraining weist `single_cls` zurück.
+
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 und DINOv2 unterstützen `cls_pw=0.0`: Werte in [0, 1] gewichten jede Klasse mit ihrer inversen Häufigkeit hoch diesem Wert, normiert auf Mittelwert 1. `class_weights=False` wählt bei Aktivierung die alternative Gewichtung `N / (C * n_c)`. Sie lässt sich nicht mit positivem `cls_pw` kombinieren; das Fortsetzen erfordert übereinstimmende Gewichtungseinstellungen.
+
+`plot_samples=8` legt das Budget für Validierungsbeispielbilder fest. Verwende 0 für keine oder -1 für alle; die Anzahl ausgewerteter Bilder wird dadurch nicht reduziert.

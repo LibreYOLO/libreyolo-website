@@ -42,6 +42,9 @@ const TASK_ORDER = [
 // Body, which also needs Meta's own package). Running them is use, which both
 // licences permit; redistributing the weights is what LibreYOLO does not do.
 const TASK_META = {
+  detect3d: { label: '3D detection', blurb: 'Camera-frame cuboids from a single image.' },
+  albedo: { label: 'Albedo', blurb: 'Intrinsic surface color in linear RGB.' },
+  act: { label: 'Robot policies', blurb: 'Action chunks from camera observations and robot state.' },
   detect: {
     label: 'Detection',
     blurb: 'Boxes around objects. The task most of the library is built for.',
@@ -160,7 +163,7 @@ const WEIGHTS_SOURCE = {
   },
   midas: {
     url: 'https://huggingface.co/LibreYOLO?search_models=LibreMiDaS',
-    note: 'MIT. Mirrored on the LibreYOLO org. MiDaS trained on a twelve-dataset mixture whose terms are not all permissive, so check those before commercial use.',
+    note: 'MIT weights, mirrored on the LibreYOLO org under the publisher grant.',
   },
   sam: {
     url: 'https://huggingface.co/LibreYOLO?search_models=LibreSAM',

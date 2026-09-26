@@ -15,7 +15,7 @@ keywords:
   - model kedalaman relatif
   - depth anything libreyolo
   - prediksi kedalaman padat
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Memprediksi peta kedalaman
@@ -83,7 +83,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: e0612c59f9c999b4
+source_hash: f0afab6b9b451075
 ---
 
 ## Definisi
@@ -103,7 +103,7 @@ foto.
 
 ## Model
 
-Enam keluarga melayani `depth`.
+Family berikut mendukung `depth`.
 
 [Depth Anything V2](/docs/models/depth-anything-v2) memadukan encoder DINOv2 dengan
 adalah decoder DPT dan merupakan default serba guna di sini. Lisensi menentukan
@@ -118,10 +118,7 @@ checkpoint, sebuah transformer biasa tanpa spesialisasi arsitektur untuk kedalam
 yang didistilasi dari Depth Anything V2 Large, dengan checkpoint kedua yang decodernya
 menghindari operasi gather dan unfold untuk compiler NPU yang tidak memilikinya.
 
-[MiDaS](/docs/models/midas) adalah lini kerja yang menetapkan zero-shot
-yang digunakan untuk mengukur keluarga lain. Ini adalah satu
-kedalaman family LibreYOLO tidak memublikasikan ulang: permintaan checkpoint mengunduh
-aset resmi dari rilis GitHub penulisnya dan memeriksa SHA-256 yang dipin.
+[MiDaS](/docs/models/midas) adalah lini penelitian yang menetapkan protokol kedalaman relatif zero-shot untuk mengukur family lain. Checkpoint s dan l diunduh dari mirror LibreYOLO dengan izin MIT dari penerbit.
 
 [LibreMODUS](/docs/models/libremodus) mencapai kedalaman sebagai satu target dari
 model apa pun ke apa pun daripada sebagai head khusus. Ini membutuhkan `modus` tambahan dan
@@ -133,18 +130,17 @@ gambar melalui dekode difusi, dari checkpoint 7B yang sama yang melayani
 enam tugas lainnya. Ini membutuhkan `sensenova` tambahan, dan bobotnya dibatasi
 untuk penggunaan non-komersial; lisensinya ada di halamannya.
 
+[Marigold V2](/docs/models/marigold-v2) menambahkan adaptor kedalaman berbasis difusi dengan encoding kedalaman eksplisit.
+
 ## Prediksi
 
-Bobot diunduh dari Hugging Face pada penggunaan pertama dan disimpan secara lokal dalam cache, kecuali
-untuk dua keluarga yang disebutkan di atas.
+Bobot diunduh saat pertama kali dipakai dan disimpan dalam cache lokal. Halaman model menjelaskan persyaratan autentikasi dan runtime.
 
 <code-tabs name="predict" />
 
-Resolusi input dibatasi sesuai family. Depth Anything V2 dan Depth Anything
-3 dibangun di atas grid patch DINOv2, jadi `imgsz` harus dapat dibagi habis dengan 14, yang
-LibreYOLO periksa sebelum dijalankan. `Results.plot()` tidak mencakup task ini; ini
-didefinisikan hanya untuk normal permukaan dan tepi. Lihat [prediksi](/docs/predict)
-untuk sumber, streaming, dan penanganan hasil.
+Resolusi input dibatasi menurut family. Depth Anything V2 dan Depth Anything 3 memakai grid patch DINOv2, sehingga `imgsz` harus habis dibagi 14, yang diperiksa LibreYOLO sebelum berjalan. `Results.plot()` merender hasil kedalaman. Lihat [prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
+
+`DepthMap.encoding` secara default adalah `inverse_depth` dan dapat berupa `depth` atau `log_depth`. Validasi menafsirkan encoding sebelum penyelarasan affine. Encoding tidak memberikan skala metrik pada prediksi relatif.
 
 ## Format dataset
 
@@ -179,9 +175,7 @@ menutupi dataset yang menamai berkas kedalaman atau mask validitas mereka dengan
 
 ## Latih
 
-Tidak ada kedalaman family di LibreYOLO yang memiliki implementasi pelatihan: `train()` meningkatkan
-`NotImplementedError` pada keenamnya. Setiap halaman model menamai skrip konversi
-yang mengubah checkpoint yang dilatih di hulu menjadi satu LibreYOLO dapat memuat.
+Tidak ada family kedalaman di LibreYOLO yang memiliki implementasi pelatihan: `train()` menimbulkan `NotImplementedError` pada family ini. Setiap halaman model menyebut skrip konversi untuk mengubah checkpoint yang dilatih upstream menjadi format yang dapat dimuat LibreYOLO.
 
 ## Validasi
 
@@ -215,5 +209,3 @@ set yang divalidasi alih-alih mencoba konversi yang tidak divalidasi. Periksa ha
 dan [matriks ekspor penuh ](/docs/reference/export-matrix) sebelum
 berkomitmen ke target. LibreMODUS dan SenseNova-Vision tidak mengekspor sama sekali.
 [Ekspor ](/docs/export) mencantumkan argumen yang diterima setiap format.
-
-

@@ -12,7 +12,7 @@ keywords:
   - global batch size
   - nccl gloo backend
   - multi gpu windows
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   train:
     - label: Python
@@ -20,8 +20,8 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        # The __main__ guard is required: each spawned worker re-imports this
-        # module, and without the guard it would relaunch training recursively.
+        # This guard remains supported; ordinary scripts also work without it.
+        # Keep it for callback/logger objects needing the standard-pickle fallback.
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(
@@ -77,7 +77,7 @@ Pass a device list. Nothing else changes.
 
 Given more than one device and no torchrun environment, the model's `train()`
 saves the weights to a temporary file, resolves autobatch if requested, and
-spawns one worker process per GPU with `torch.multiprocessing.spawn`. Each worker
+starts coordinator-managed worker processes, one per GPU. Each worker
 re-imports the model class, rebuilds it from the saved weights, and runs the
 ordinary single-device path, because from inside a spawned worker the torchrun
 environment variables are set. Rank 0's best checkpoint is loaded back into the
@@ -86,22 +86,13 @@ caller's model instance when the run finishes.
 `device` accepts `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"` and
 `"auto"`. Only a list of more than one CUDA index triggers the spawn.
 
-## The `__main__` guard is mandatory
+## Automatic launch and the main guard
 
-Spawned workers re-import the module they came from. Without a
-`if __name__ == "__main__":` guard, that import re-executes the training call and
-each worker spawns its own workers. The library detects the case and raises
-rather than letting it recurse:
-
-```text
-spawn_ddp_train() was called from inside a spawned subprocess. This usually
-means your script calls model.train(device=...) at the top level without a
-'if __name__ == "__main__":' guard.
-```
-
-Everything crossing into a worker is pickled, so `callbacks=` has to be
-picklable. A module-level class works; a closure or a lambda does not, and the
-error says so and points at the built-in loggers as the alternative.
+`model.train(device=[0, 1])` and `device="0,1"` use coordinator-managed
+ranks without replaying an ordinary unguarded script's top-level code.
+Guarded scripts and explicit `torchrun` remain supported. Coordinator jobs
+use cloudpickle; callback or logger objects that require the standard-pickle
+fallback still need an `if __name__ == "__main__":` guard.
 
 ## batch is the global batch
 

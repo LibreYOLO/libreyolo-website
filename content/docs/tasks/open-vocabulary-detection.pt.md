@@ -18,7 +18,7 @@ keywords:
   - owlv2
   - omdet turbo
   - detectar objetos por texto
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -59,7 +59,7 @@ snippets:
         # da frase decodificada. Ambos assumem 0.25 quando não são definidos.
         # Só o Grounding DINO aceita text_threshold; os outros levantam erro.
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 17197cf4d80f3d6f
+source_hash: 10f41b40f357b037
 ---
 
 ## Definição
@@ -133,6 +133,8 @@ superfície `set_classes()`. A diferença está no que produz as caixas: as
 famílias desta página são detectores discriminativos que emitem scores
 diretamente, enquanto o tier de VLMs as gera.
 
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) e [North Micro Vision](/docs/models/northmicrovision) ampliam as opções de detecção do `LibreVLM`. [Molmo2](/docs/models/molmo2) retorna pontos. Use [LibreGround](/docs/reference/ground-api) para consultas de instrução para clique em vez de um vocabulário de detecção.
+
 ## Predição
 
 <code-tabs name="predict" />
@@ -165,6 +167,8 @@ Nenhuma família deste tier treina dentro do LibreYOLO. `train()` levanta erro:
 faça fine-tuning upstream e carregue os pesos resultantes. O vocabulário passado
 para `set_classes()` é a única configuração que muda o que um modelo carregado
 detecta.
+
+Qwen3-VL tem um caminho separado de [fine-tuning de VLM](/docs/train/vlm-fine-tuning). Isso não adiciona treinamento aos quatro adaptadores `LibreOpenVocab`.
 
 ## Validação
 

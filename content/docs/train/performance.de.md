@@ -18,7 +18,7 @@ keywords:
   - dataloader engpass
   - kernel launch overhead
   - gpu-auslastung
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   profile:
     - label: Profilieren und Training fortsetzen
@@ -68,7 +68,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: ee5bb727065b6099
+source_hash: 288ee5ee988f2fda
 ---
 
 ## Messung vor jeder Änderung
@@ -115,6 +115,8 @@ weil ein durch Starts begrenzter Schritt so stark schwankt, dass ein einzelner
 Lauf irreführt. Der Befehl schreibt Versuchsverzeichnisse `prof_1`, `prof_2`
 und so weiter sowie eine zusammengefasste Datei `profile_repeat.json`.
 
+RF-DETR und die Matcher-Pfade von D-FINE/DEIM/RT-DETR reduzieren Host-Übertragungen; geeignete CUDA-Adam- und AdamW-Instanzen verwenden fusionierte Updates. SGD und Nicht-CUDA-Parameter verwenden die Standarderstellung. Diese Implementierungsänderungen beanspruchen keine allgemeingültige Beschleunigung.
+
 ## Mixed Precision
 
 `amp=True` ist für die meisten Familien der Standard und führt den Forward Pass
@@ -122,12 +124,7 @@ unter CUDA Autocast aus. `amp_dtype` wählt `float16` oder `bfloat16`.
 
 <code-tabs name="amp" />
 
-Float16 benötigt dynamische Loss-Skalierung und erhält einen aktiven
-Gradient-Scaler. Der größere Exponentenbereich von bfloat16 benötigt ihn nicht,
-weshalb der Scaler deaktiviert ist. Vier Familien werden mit `amp=False`
-ausgeliefert: D-FINE, DEIM, YOLO-NAS und FOMO. Die DEIM-Einstellung wird durch
-Vererbung auf RT-DETRv4 übertragen. D-FINE nennt den Grund: Sein Decoder
-begrenzt Aktivierungen auf 65504, den größten endlichen float16-Wert.
+Float16 verwendet einen Gradient Scaler; bei bfloat16 ist er deaktiviert. D-FINE, DEIM, RT-DETRv4 und YOLO-NAS verwenden für Detektion standardmäßig `amp=True`. Dome-DETR, PP-YOLOE und YOLO-NAS OBB behalten FP32 als Standard. Mit `amp=False` wird FP32 ausdrücklich gewählt.
 
 Die Argumentsemantik einschließlich des Verhaltens einer bfloat16-Anfrage auf
 Hardware ohne bfloat16-Unterstützung wird unter
@@ -278,4 +275,3 @@ den Batch oder deaktiviere das Flag.
 - [CUDA Graphs](/docs/reference/cuda-graphs) enthält die kombinierte
   Support-Matrix für Inferenz und Training, die Aufteilungspunkte und den
   Numerikvertrag.
-

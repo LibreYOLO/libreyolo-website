@@ -18,7 +18,7 @@ keywords:
   - owlv2
   - omdet turbo
   - deteksi prompt teks
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -67,7 +67,7 @@ snippets:
         # DINO yang menerima text_threshold; lainnya memunculkan error.
 
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 17197cf4d80f3d6f
+source_hash: 10f41b40f357b037
 ---
 
 ## Definisi
@@ -138,6 +138,8 @@ Perbedaannya adalah penghasil bounding box: family halaman ini berupa detektor
 diskriminatif yang langsung menghasilkan skor, sedangkan tier VLM melakukan
 generasi.
 
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), dan [North Micro Vision](/docs/models/northmicrovision) memperluas pilihan deteksi `LibreVLM`. [Molmo2](/docs/models/molmo2) mengembalikan titik. Gunakan [LibreGround](/docs/reference/ground-api) untuk kueri instruksi-ke-klik, bukan kosakata deteksi.
+
 ## Prediksi
 
 <code-tabs name="predict" />
@@ -169,6 +171,8 @@ error: lakukan fine-tuning di upstream dan muat bobot hasilnya. Vocabulary pada
 `set_classes()` adalah satu-satunya pengaturan yang mengubah yang dideteksi
 model termuat.
 
+Qwen3-VL memiliki jalur [fine-tuning VLM](/docs/train/vlm-fine-tuning) tersendiri. Ini tidak menambahkan pelatihan pada keempat adaptor `LibreOpenVocab`.
+
 ## Validasi
 
 Tidak ada validator untuk tier ini dan `val()` memunculkan error. Validasi
@@ -180,6 +184,3 @@ input yang dikondisikan teks.
 
 Ekspor berada di luar cakupan tier dan `export()` memunculkan error. Model
 berjalan melalui `predict()` di PyTorch.
-
-
-

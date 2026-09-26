@@ -16,7 +16,7 @@ keywords:
   - libreyolo cuda
   - libreyolo gpu
   - системні вимоги libreyolo
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Пакет
     value: libreyolo
@@ -70,7 +70,7 @@ snippets:
         # роздільною здатністю входу. Для сімейств без потрібного набору
         # залежностей наведено команду pip, яка їх вмикає.
         libreyolo models
-source_hash: 34fc6d3e24d03fb4
+source_hash: 531023c2092fd751
 ---
 
 ## Встановлення
@@ -95,6 +95,11 @@ typer, click, safetensors і SciPy, тому YOLOv9 та інші сімейст
 
 | Набір | Додає |
 |---|---|
+| `ground` | Залежності VLM для прив'язки інструкції до точки |
+| `vlm-train` | Стек VLM разом із `peft>=0.17.0` для донавчання Qwen3-VL |
+| `vla` | `lerobot[smolvla,diffusion,dataset]>=0.6.1`, Python 3.12 або новіша |
+| `marigold` | Зафіксовані залежності дифузії, прискорення й Transformers |
+| `molmo2` | `transformers==4.57.1`, `einops` і `accelerate` |
 | `rfdetr` | `transformers`, що надає бекбон RF-DETR |
 | `eomt` | `transformers` |
 | `midas` | `timm` 1.0.x, що надає кодувальники ViT-L/16 і EfficientNet-Lite3 для MiDaS |
@@ -112,7 +117,7 @@ typer, click, safetensors і SciPy, тому YOLOv9 та інші сімейст
 
 | Набір | Додає |
 |---|---|
-| `onnx` | `onnx`, `onnxsim`, `onnxruntime` |
+| `onnx` | `onnx`, `onnxsim`, `onnxruntime>=1.18.0` |
 | `tensorrt` | `tensorrt-cu12` 10.16.1.11 і `pycuda` поза macOS |
 | `openvino` | `openvino` |
 | `coreml` | `coremltools` |
@@ -148,6 +153,9 @@ typer, click, safetensors і SciPy, тому YOLOv9 та інші сімейст
 
 | Набір | Додає |
 |---|---|
+| `hf` | `huggingface_hub>=1.0.0` для завантаження, публікації й логера Hub |
+| `llm` | `openai>=1.66.0` для сумісних кінцевих точок API |
+| `fiftyone` | `fiftyone>=1.0.0` для підготовки датасетів |
 | `stream` | `yt-dlp`, потрібний лише для визначення URL-адрес сторінок YouTube |
 | `tracking` | Нічого. Усі залежності відстеження вже є основними залежностями |
 | `label` | `libreyolo[sam]`, що вмикає допоміжне створення масок клацанням у `libreyolo label` |
@@ -167,7 +175,11 @@ typer, click, safetensors і SciPy, тому YOLOv9 та інші сімейст
 оскільки ExecuTorch обмежує сумісну версію PyTorch, а `coreai` тому, що
 `coreai-torch` фіксує PyTorch на версії 2.11.x і перевів би на неї все
 середовище. `fast-eval`, `hub-kernels`, `clip-convert` і `siglip2-convert`
-також не включено. Установлюйте будь-який із них за назвою.
+також не включено. Установлюйте будь-який із них за назвою. `all` містить `hf` і `llm`; `fiftyone`, `vla`, `marigold` і `molmo2` залишаються окремими. FiftyOne додає OpenCV без графічного інтерфейсу, який перетинається з основним пакетом `cv2`.
+
+Базове встановлення потребує Python 3.10 або новішої й додає `cloudpickle>=3.0.0` для DDP під керуванням координатора.
+
+Використовуйте окреме середовище для Molmo2: його зафіксована версія Transformers 4.57.1 конфліктує з новішими стеками VLM, Hub і Marigold. Marigold фіксує diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 і Transformers 5.4.0, а також bitsandbytes 0.49.2 на Linux/Windows. Типовий чотирибітний інференс Marigold потребує CUDA. North Micro Vision потребує Transformers 5.16 або новішої; Gemma 4 потребує 5.10 або новішої, вище спільного мінімуму VLM.
 
 ## Обмеження платформ
 

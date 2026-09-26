@@ -12,7 +12,7 @@ keywords:
   - embedded nms onnx
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 meta:
   - label: Flag
     value: 'export(format="onnx")'
@@ -141,6 +141,8 @@ snippets:
 The extra pulls `onnx`, `onnxsim` and `onnxruntime`. `onnx` alone is enough to
 write the file; `onnxsim` runs the simplification pass and `onnxruntime` runs the
 artifact and performs INT8 calibration.
+
+The ONNX extra requires `onnxruntime>=1.18.0`; LaMa uses an opset-21 graph.
 
 ## Export
 

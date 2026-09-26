@@ -15,7 +15,7 @@ keywords:
   - contagem de objetos visão computacional
   - localização de pontos FOMO
   - localizar objetos por ponto python
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Prever pontos e contá-los
@@ -135,7 +135,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.points.xy)
-source_hash: 932153c8870d1c7c
+source_hash: 5c3cfe7a606cd7aa
 ---
 
 ## Definição
@@ -155,7 +155,7 @@ agir.
 
 ## Modelos
 
-Três famílias atendem `point`, e elas não são intercambiáveis.
+Os modelos de pontos diferem no vocabulário e na semântica da saída.
 
 [FOMO](/docs/models/fomo) é a opção de vocabulário fixo: um classificador de
 grade que rotula cada célula de uma grade de baixa resolução como fundo ou centro
@@ -174,6 +174,8 @@ checkpoint de geração por prompt que usa para outras seis tarefas, carregado c
 cada predição é uma passagem de geração sobre um modelo de 7B, então espere uma
 latência por imagem bem mais alta que a de um detector feito sob medida. Seus
 pesos são não comerciais; a licença está na página dele.
+
+[Molmo2](/docs/models/molmo2) e [Moondream](/docs/models/moondream) fornecem pontos condicionados por texto. [LibreGround](/docs/reference/ground-api) usa uma instrução para selecionar no máximo um clique por consulta com ShowUI, Florence-2 ou Qwen3-VL.
 
 ## Predição
 

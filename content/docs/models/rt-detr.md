@@ -5,7 +5,7 @@ seo_title: "RT-DETR, RT-DETRv2 and RT-DETRv4 in LibreYOLO"
 description: "Use RT-DETR, RT-DETRv2 and RT-DETRv4 in LibreYOLO for object detection, plus oriented boxes on RT-DETRv2. Install, predict, train, validate and export, with Apache-2.0 weights."
 lead: "A detection transformer built for real-time inference: it decodes a fixed set of queries rather than a dense grid, so it runs no NMS. LibreYOLO carries three versions of it, told apart by the checkpoint you load, and version 2 also serves oriented boxes."
 keywords: [RT-DETR, RT-DETRv2, RT-DETRv4, real-time detection transformer, DETR, object detection, oriented bounding box detection, OBB, DOTA]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -254,6 +254,8 @@ rectangular size whose token count matches the native size still reuses an
 embedding built for the wrong aspect ratio.
 
 See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
+
+RT-DETRv4 enables `amp=True` with `amp_dtype="float16"` by default. Pass `amp=False` for FP32.
 
 ## Validate
 

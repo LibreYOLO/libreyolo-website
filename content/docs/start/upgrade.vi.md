@@ -1,13 +1,12 @@
 ---
-title: Nâng cấp lên 1.5.0
-seo_title: Nâng cấp LibreYOLO 1.4.0 lên 1.5.0
+title: Nâng cấp lên 1.6.0
+seo_title: Nâng cấp LibreYOLO 1.5.0 lên 1.6.0
 description: >-
-  Bốn thay đổi mã mà 1.5.0 yêu cầu, ba thay đổi làm dịch chuyển metric và những
-  thay đổi hành vi nhỏ cần biết trước khi so sánh các lần chạy.
+  Các bước chuyển đổi tiền xử lý, mặc định huấn luyện, thư mục chạy, tài nguyên đã ghim, QAT và loader dữ liệu
+  trong LibreYOLO 1.6.0.
 lead: >-
-  Không có gì bị xóa khỏi model API công khai: mọi lớp và hàm hoạt động trong
-  1.4.0 vẫn import được. Bốn đối số đổi dạng và ba giá trị mặc định làm thay đổi
-  con số bạn có thể đang so sánh.
+  Phiên bản 1.6.0 thay đổi tiền xử lý, mặc định huấn luyện và xử lý checkpoint. Đánh giá lại kết quả chuẩn đã
+  lưu và đặt rõ giá trị mặc định trước đây khi tái tạo lần chạy cũ.
 keywords:
   - nâng cấp libreyolo
   - chuyển sang libreyolo 1.5.0
@@ -15,18 +14,32 @@ keywords:
   - thay đổi không tương thích libreyolo
   - yolox bn eps
   - faster coco eval mặc định
-last_verified: 1.5.0
-meta:
-  - label: Áp dụng cho
-    value: 1.4.0 đến 1.5.0
-  - label: Thay đổi mã bắt buộc
-    value: 'Bốn thay đổi, đều có phạm vi hẹp'
-  - label: Kết quả thay đổi
-    value: 'Backend COCO, BN eps YOLOX, multi-scale D-FINE'
-  - label: Thành phần API công khai bị xóa
-    value: Không có
-source_hash: ab38d8ef7b53f596
+last_verified: 1.6.0
+source_hash: f4fda6ef286113ab
 ---
+## 1.5.0 lên 1.6.0
+
+- Nâng môi trường đang ghim dưới ONNX Runtime 1.18 lên `onnxruntime>=1.18.0` trước khi cài extra ONNX.
+
+- SAM 3D Body chấp nhận bộ tài nguyên snapshot đã được rà soát. Cài `libreyolo[hf]`, xin quyền truy cập và dùng tải tự động, hoặc cung cấp thư mục snapshot nguyên vẹn và tài nguyên MHR đã ghim trên hệ thống tệp cục bộ đáng tin cậy.
+
+- Chạy lại đánh giá sau các sửa đổi đổi kích thước RF-DETR ngoài tác vụ tư thế và chuẩn hóa bộ phân loại. Kiểm tra lại ngưỡng độ tin cậy đã triển khai trước khi so sánh với kết quả 1.5.0; không có cờ tiền xử lý cũ.
+
+- Phát hiện D-FINE, DEIM, RT-DETRv4 và YOLO-NAS mặc định bật FP16 AMP. Truyền `amp=False` để giữ FP32.
+
+- Để dùng các lựa chọn tinh chỉnh YOLO9 trước đây, đặt `aux_weight=0`, `max_labels=100` và `warmup_momentum=0.937`. Đặt `letterbox_pad="topleft"` khi bản chuyển đổi mới có dấu center phải tái tạo hình học cũ. Checkpoint một head cũ tiếp tục với đồ thị gốc.
+
+- RF-DETR và DINOv2 tạo thư mục chạy mang tên họ mô hình với hậu tố tăng dần. Cập nhật nơi sử dụng đường dẫn tệp đầu ra, hoặc đặt `output_dir="runs/train", exist_ok=True` để giữ vị trí và hành vi tái sử dụng cũ.
+
+- Giữ `mixup + cutmix <= 1` khi phân loại; tổ hợp không hợp lệ nay phát sinh lỗi trong thiết lập.
+
+- QAT tắt EMA, SyncBatchNorm và lấy trung bình checkpoint. Dùng checkpoint best/last của QAT mà không dựa vào các trạng thái đó.
+
+- Loader tùy chỉnh có hook thay đổi dataset phải dùng `persistent_workers=False` hoặc dựng lại worker sau thay đổi. Các bản sao nhiều worker duy trì liên tục không tương thích nay phát sinh lỗi.
+
+Xem [nhật ký thay đổi](/docs/changelog) để biết toàn bộ bản phát hành và [nhập trọng số](/docs/migrate) để chuyển đổi checkpoint.
+
+## 1.4.0 lên 1.5.0
 
 Trang này nói về nâng cấp chính LibreYOLO. Nếu bạn đang tìm cách nạp checkpoint
 từ một dự án upstream, hãy xem [nhập trọng số có sẵn](/docs/migrate), đây là
@@ -35,9 +48,9 @@ chủ đề khác.
 Nội dung phát hành đầy đủ nằm trong [changelog](/docs/changelog). Phần sau chỉ
 trình bày những thay đổi đòi hỏi bạn thực hiện thao tác.
 
-## Những thay đổi mã bạn phải thực hiện
+### Những thay đổi mã bạn phải thực hiện
 
-### `allow_experimental=True` không còn tồn tại
+#### `allow_experimental=True` không còn tồn tại
 
 Cổng xác nhận đã bị xóa cùng cơ chế `ddp_aware(experimental_key=...)` đứng sau.
 Trước đây, huấn luyện và xuất EC, RTMDet, PicoDet và FOMO cần đối số này, nên
@@ -59,7 +72,7 @@ override.
 Các mức hỗ trợ vẫn được công bố, chúng chỉ không còn là một đối số: xem [cấp
 ổn định](/docs/reference/stability-tiers).
 
-### Cấp xuất `"experimental"` không còn tồn tại
+#### Cấp xuất `"experimental"` không còn tồn tại
 
 ```python
 from libreyolo.export.support import Tier
@@ -73,7 +86,7 @@ Mã rẽ nhánh theo chuỗi cấp phải đọc `"available"` tại nơi trư�
 dạng này. Trạng thái theo từng định dạng được liệt kê trong [ma trận
 xuất](/docs/reference/export-matrix).
 
-### `pretrained=False` cùng `resume` giờ bị từ chối
+#### `pretrained=False` cùng `resume` giờ bị từ chối
 
 Trước đây tổ hợp này tiếp tục trong trạng thái không nhất quán. Giờ nó phát:
 
@@ -86,7 +99,7 @@ hoạt động với mọi họ có thể huấn luyện thay vì chỉ ba họ,
 lần chạy bị gián đoạn từ checkpoint. Cả hai được ghi lại trong phần [huấn
 luyện](/docs/train).
 
-### `--imgsz` của CLI là chuỗi, không phải số nguyên
+#### `--imgsz` của CLI là chuỗi, không phải số nguyên
 
 Phạm vi ảnh hưởng hẹp hơn vẻ ngoài. Hai cách sau không bị ảnh hưởng:
 
@@ -112,13 +125,13 @@ predict_cmd(..., imgsz="640")    # 1.5.0, và "480x640" giờ cũng hoạt độ
 Giá trị mặc định của `train` giờ là chuỗi `"640"`. `export --imgsz` vốn đã là
 chuỗi và `profile` không đổi.
 
-## Các con số thay đổi
+### Các con số thay đổi
 
 Ba thay đổi làm dịch chuyển metric ở thiết lập mặc định. Nếu bạn theo dõi kết
 quả qua nhiều phiên bản, hãy đọc phần này trước khi so sánh lần chạy 1.5.0 với
 1.4.0.
 
-### faster-coco-eval là backend metric COCO mặc định
+#### faster-coco-eval là backend metric COCO mặc định
 
 `val()` và xác thực huấn luyện theo epoch giờ tính metric COCO bằng backend C++
 faster-coco-eval thay vì pycocotools.
@@ -147,7 +160,7 @@ sự được dùng được log ở mức INFO, xuất hiện dưới `model.la
 [CLI](/docs/cli/val). Cài pipeline nhanh bằng `pip install
 libreyolo[fast-eval]`.
 
-### Checkpoint YOLOX huấn luyện trước 1.5.0 cần override eps
+#### Checkpoint YOLOX huấn luyện trước 1.5.0 cần override eps
 
 Đây là điểm dễ mắc lỗi trong bản phát hành. Hãy đọc nếu bạn đã tinh chỉnh
 [YOLOX](/docs/models/yolox).
@@ -182,7 +195,7 @@ model.val(data="data.yaml")
 Hoặc gộp `sqrt((var + 1e-3) / (var + 1e-5))` vào trọng số BN một lần rồi lưu
 kết quả. Checkpoint huấn luyện trên 1.5.0 trở lên không cần cả hai cách này.
 
-### Huấn luyện multi-scale D-FINE dùng công thức theo kích thước từ upstream
+#### Huấn luyện multi-scale D-FINE dùng công thức theo kích thước từ upstream
 
 `base_size_repeat` từng được cố định là 3 cho mọi kích thước. Giờ nó phân giải
 theo kích thước như upstream chỉ định: **n** huấn luyện ở kích thước cố định và
@@ -200,7 +213,7 @@ config = DFINEConfig(base_size_repeat=3)
 DEIM vẫn dùng giá trị cố định 3. Chi tiết về họ nằm tại
 [D-FINE](/docs/models/d-fine).
 
-## Những điều nên biết, không cần hành động
+### Những điều nên biết, không cần hành động
 
 - **Kết quả `imgsz` chữ nhật thay đổi vì trước đây chúng bị sai.** Tọa độ box,
   đổi kích thước mask RTMDet, rescale YOLO-NAS và scale ground truth của
@@ -246,7 +259,7 @@ DEIM vẫn dùng giá trị cố định 3. Chi tiết về họ nằm tại
 - **Pytest marker `experimental_backend` giờ là `extended_backend`.** Chỉ liên
   quan nếu bạn chạy bộ kiểm thử với `-m`.
 
-## Checkpoint và dataset
+### Checkpoint và dataset
 
 Checkpoint được ghi bởi 1.4.0 vẫn nạp không thay đổi.
 [Schema](/docs/reference/checkpoint-schema) có thêm `imgsz_h` và `imgsz_w` cho

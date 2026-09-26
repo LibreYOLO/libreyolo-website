@@ -1,16 +1,41 @@
 ---
 title: North Micro Vision
-families: []
-architecture_only: true
-seo_title: North Micro Visionのアーキテクチャ
-description: LibreYOLOにおけるNorth Micro Visionのアーキテクチャ図、ブロック定義、モデルバリアント。
-lead: LibreYOLOにおけるNorth Micro Visionのアーキテクチャ図、ブロック定義、モデルバリアント。
-source_hash: 16dabb881c654e9c
+families:
+  - northmicrovision
+seo_title: LibreYOLOのNorth Micro Vision
+description: North Micro Visionは、テキストの語彙を使って物体を検出します。
+lead: North Micro Visionは、テキストの語彙を使って物体を検出します。
+keywords:
+  - North Micro Vision
+  - LibreYOLO
+  - 物体検出 python
+last_verified: 1.6.0
+snippets:
+  predict:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreVLM, SAMPLE_IMAGE
+
+        model = LibreVLM("north-micro-vision", device="cpu")
+        model.set_classes(["person", "building"])
+        result = model(SAMPLE_IMAGE)
+        print(result.boxes)
+source_hash: 9a0fe9b366c4232f
 ---
 
-## ソース
+## インストール
 
-以下の図は、LibreYOLOにおける[North Micro Visionの実装](https://github.com/LibreYOLO/libreyolo/blob/a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb/libreyolo/models/vlm/northmicro.py)を説明します。
-各図にはモデル設定、入力に関する前提、ソースリビジョンが記載されています。
+```bash
+pip install "libreyolo[vlm]" "transformers>=5.16.0"
+```
 
-これらはアーキテクチャの参考資料です。使用するチェックポイントのライセンスとクラス設定は、それぞれ個別に確認してください。
+## 推論
+
+<code-tabs name="predict" />
+
+アダプターは語彙のクラスごとに1つの検出クエリを実行します。共通のVLM追加パッケージの最低要件より新しいTransformers 5.16以降が必要です。学習には対応していません。
+
+## ライセンス
+
+<provenance-box></provenance-box>

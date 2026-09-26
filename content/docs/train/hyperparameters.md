@@ -14,7 +14,7 @@ keywords:
   - early stopping patience
   - amp bfloat16
   - train config yaml
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   train:
     - label: Python
@@ -150,13 +150,9 @@ The base defaults are `optimizer="sgd"`, `lr0=0.01`, `momentum=0.937`,
 | `weight_decay` | `5e-4` | `5e-4` | `1e-4` | `1e-5` |
 | `scheduler` | `yoloxwarmcos` | `linear` | `flat_cosine` | `cos` |
 | `epochs` | `300` | `300` | `132` | `300` |
-| `amp` | `True` | `True` | `False` | `False` |
+| `amp` | `True` | `True` | `True` | `True` |
 
-D-FINE and DEIM ship with `amp=False` because the D-FINE decoder clamps
-activations at 65504, the largest finite float16 value. YOLO-NAS and FOMO also
-default it off. The CLI's `--amp` flag defaults to `True` for every family, so it
-counts as user-provided and overrides the family default; leave it alone unless
-you mean to change it.
+D-FINE, DEIM, RT-DETRv4 and YOLO-NAS detection default to `amp=True` with `amp_dtype="float16"`. Dome-DETR, PP-YOLOE and YOLO-NAS OBB retain FP32 defaults. Pass `amp=False` when FP32 is required.
 
 To read a family's real defaults rather than guessing:
 
@@ -184,6 +180,8 @@ criterion and auxiliary decoder layers cost.
 
 Autobatch is a CUDA feature. On CPU or MPS it logs one line and keeps the
 default batch.
+
+`min_samples=0` leaves epoch length unchanged. A positive floor samples shorter detection datasets with replacement. `class_balanced=False` enables per-image repeat-factor sampling when set to true; it combines with `min_samples` and DDP. Specialized loaders that bypass the shared sampler reject enabled balancing.
 
 ## Gradient accumulation
 
@@ -255,6 +253,10 @@ early stopping.
 byte-identical to fresh ones. With dataloader workers, `"disk"` is the safer of
 the two.
 
+`average_best=0` disables checkpoint averaging; a positive N writes `weights/average.pt` from up to N best snapshots. Floating tensors are averaged uniformly and integer buffers come from the best snapshot. `export_check=False` can be enabled to fail before epoch one if ONNX export fails. Matching raw outputs are compared at `rtol=1e-3`, `atol=1e-4`; incompatible layouts log a skipped comparison.
+
+`precise_bn=0` disables final BatchNorm recalibration. A positive value bounds training-loader images before final validation; under DDP the budget applies per participating rank. Frozen BatchNorm stays frozen. [Custom fitness callbacks](/docs/train/fitness-callbacks) can choose best checkpoints and patience.
+
 ## Resume
 
 `resume=True` continues an interrupted run. The checkpoint has to be loaded
@@ -291,3 +293,11 @@ argument.
 - [Layer freezing](/docs/train/layer-freezing) and [LoRA](/docs/train/lora) for
   training a subset of the weights.
 - [Validation and metrics](/docs/train/validation) for what the run reports.
+
+## Class selection and loss weighting
+
+For YOLO9, RF-DETR, EdgeCrafter, RT-DETR, D-FINE, DEIM, TinyFormer and YOLO-NAS detection, `classes=None` keeps every dataset class; a list filters supervision while preserving original IDs, `nc` and `names`. `single_cls=False` can be enabled to map retained labels to class 0, named `object`. Resume and validation inherit saved settings. Model OBB training rejects `single_cls`.
+
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 and DINOv2 support `cls_pw=0.0`: values in [0, 1] weight each class by inverse frequency to that power, normalized to mean 1. `class_weights=False` selects the alternative `N / (C * n_c)` weighting when enabled. It cannot combine with positive `cls_pw`; resume requires matching weighting settings.
+
+`plot_samples=8` sets the validation sample-image budget. Use 0 for none or -1 for all; it does not reduce the images evaluated.

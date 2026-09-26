@@ -3,10 +3,7 @@ title: YOLO-NAS
 families:
   - yolonas
 seo_title: 'YOLO-NAS: predizioni, addestramento ed esportazione in LibreYOLO'
-description: >-
-  Usa YOLO-NAS in LibreYOLO per il rilevamento e la stima della posa. I pesi di
-  Deci.AI sono proprietari e non commerciali, e LibreYOLO non ne pubblica
-  nessuno.
+description: "Rilevamento, pose e box orientati YOLO-NAS in LibreYOLO. I pesi preaddestrati upstream sono riservati all’uso non commerciale."
 lead: >-
   Un detector convoluzionale il cui backbone e il cui neck sono usciti dalla
   ricerca architetturale di Deci.AI, costruito con blocchi RepVGG pensati per la
@@ -23,7 +20,7 @@ keywords:
   - stima della posa python
   - licenza YOLO-NAS uso commerciale
   - AutoNAC
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -134,7 +131,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 47c30d6e44024ce7
+source_hash: 483562cad2c02696
 ---
 
 ## Installazione
@@ -160,6 +157,8 @@ L'oggetto `Results` restituito è lo stesso che restituisce ogni famiglia, quind
 passare a un detector diverso è una modifica di una riga. `conf` imposta la
 soglia di confidenza e `iou` la soglia della NMS. Vedi
 [predizione](/docs/predict) per sorgenti, streaming e gestione dei risultati.
+
+Il task con box orientati restituisce `result.obb`. Il grafo OBB pubblicato usa un canvas di 1024 pixel e il suo insieme registrato di 18 etichette di classe.
 
 ## Varianti
 
@@ -189,6 +188,8 @@ Addestrare da un modello inizializzato a caso non coinvolge nessun checkpoint di
 Deci, ed è il terzo snippet qui sopra.
 
 Vedi [addestramento](/docs/train) per dataset, augmentation, multi-GPU e logger.
+
+Il rilevamento usa di default `amp=True` con `amp_dtype="float16"`; l'addestramento con box orientati mantiene `amp=False`. La testa OBB supporta addestramento, predizione e validazione, usa augmentation con ribaltamenti/HSV e seleziona i checkpoint con `metrics/mAP50-95(OBB)`. `load_detect_weights_for_obb()` la inizializza dai pesi di rilevamento.
 
 ## Validazione
 

@@ -17,7 +17,7 @@ keywords:
   - 미우
   - 전면적 품질
   - Top1 정확도
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   val:
     - label: Python
@@ -60,7 +60,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: d907183492fa3f57
+source_hash: "ce7d26a5cd72d988"
 ---
 
 ## 검증을 실행
@@ -116,6 +116,8 @@ OBB의 `metrics/precision`와 `metrics/recall`는 별칭이 아닙니다: 이들
 점 작업의 스윕 키는 거리 임계값으로 작성되므로, 기본값으로는 `metrics/mAP@[0.01:0.10]`를 읽고 단일 임계값 키는 `metrics/mAP@0.01`를 읽습니다. `dist_thresholds`를 전달하면 두 문자열이 모두 변경됩니다.
 
 대부분의 작업은 또한 `fitness` 키를 반환하며, 단일 숫자 최적 체크포인트 선택에서 기본적으로 사용됩니다. 탐지, 분할 및 OBB는 이를 포함하지 않으며; 그들의 계열는 `metrics/mAP50-95`에서 선택되며, 해당 딕셔너리는 반환합니다. 포즈는 `fitness`나 `metrics/mAP50-95`를 반환하지 않으며; 트레이너는 대신 `best_metric_key`를 `metrics/keypoints_mAP50-95`로 설정합니다.
+
+ImageFolder 분류는 검증 정답에 있는 클래스의 평균을 구한 매크로 `metrics/precision`, `metrics/recall`, `metrics/f1`을 추가합니다. 기본 적합도는 top-1을 유지합니다. 탐지는 IoU 0.50에서 micro-F1을 최대화하는 임계값을 선택하여 `metrics/best_conf`, `metrics/best_conf_f1`, 클래스 이름을 키로 하는 `metrics/best_conf_per_class`도 반환합니다. 점수가 같은 탐지는 함께 처리하며, 동률이면 더 높은 임계값을 선택합니다. 양수 F1이 없으면 NaN을 반환합니다. 분할은 이 임계값 키를 제공하지 않습니다.
 
 ## 속도 키
 
@@ -192,6 +194,10 @@ FOMO는 아무것도 바꾸지 않는 예외입니다: 그 검증자는 항상 �
 
 `save_plots=True`는 `plots/` 하위 디렉토리에 작성합니다. 탐지에서는 OpenCV가 설치된 경우 `box_metrics.png`, 클래스별 AP 및 리콜 차트, 정밀도-재현율 및 신뢰도 곡선, 혼동 행렬, 주석이 달린 샘플 이미지를 가져옵니다. 분할(segmentation)은 각 항목의 마스크 측 사본을 추가하며, 포즈(pose)는 자체 메트릭 및 곡선 세트를 가져옵니다. 다른 검증기는 플롯을 구현하지 않습니다. 분류, 의미론적, 파노라마, 깊이, 노멀, 엣지, 복원, 매트, OCR, OBB 및 포인트는 모두 해당 위치에 아무것도 작성하지 않습니다. 플로팅 실패는 경고만 하며 실행을 절대 중단하지 않습니다.
 
+`visualize=True`는 탐지와 분할에서 클래스를 고려한 바운딩 박스 TP/FP/FN 이미지를, ImageFolder 분류에서는 레이블과 top-1을 비교하는 이미지를 `visualize/errors/`와 `visualize/correct/`에 저장합니다. 매칭은 IoU 0.5와 신뢰도 `max(0.25, conf)`를 사용합니다. 기본값은 `visualize=False`, `show_labels=True`, `show_conf=True`입니다. 지원하지 않는 작업과 V-JEPA 2 클립 검증은 시각화를 거부합니다.
+
+`plot_samples=8`은 별도의 샘플 플롯을 제한하며, 0은 비활성화하고 -1은 모든 이미지를 유지합니다. 지표나 시각화 출력에는 영향을 주지 않습니다.
+
 ## 학습 중 검증
 
 학습은 데이터셋의 `val` 분할에 대해 매 `eval_interval` 에폭마다 검증을 수행하며, 생성되는 지표는 `best.pt` 선택, `patience` 조기 종료, 그리고 모든 로거의 `val/` 키를 결정하는 데 사용됩니다. EMA가 켜져 있을 때 검증은 EMA 가중치로 실행됩니다.
@@ -201,3 +207,7 @@ FOMO는 아무것도 바꾸지 않는 예외입니다: 그 검증자는 항상 �
 ## 관련된
 
 - [데이터셋](/docs/train/datasets)은 분할 키와 포맷 검증기를 읽습니다.
+
+## 이미지별 바운딩 박스 지표
+
+탐지 및 분할 결과는 딕셔너리 호환성을 유지하며 `results.box.image_metrics`도 제공합니다. 각 파일 이름은 시각화를 끈 경우에도 시각화 매칭 규칙으로 계산한 `precision`, `recall`, `f1`, `tp`, `fp`, `fn`에 매핑됩니다. 분할도 여기서는 바운딩 박스를 셉니다. 기본 파일 이름이 중복되면 첫 번째 이후부터 전체 경로를 사용합니다. 분모가 0이면 0.0을 반환합니다. 이 기록은 분산 랭크 사이에서 수집하지 않습니다.

@@ -18,7 +18,7 @@ keywords:
   - 早停 patience
   - amp bfloat16 混合精度
   - 训练配置 yaml
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   train:
     - label: Python
@@ -110,7 +110,7 @@ snippets:
         # yaml 里的键就是 TrainConfig 的字段名，显式传入的 kwargs 优先
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: d838d1abd45af40f
+source_hash: eac4e55fcf16ca15
 ---
 
 ## 设置参数
@@ -145,9 +145,9 @@ model.train(data="my-dataset.yaml", learning_rate=0.001)
 | `weight_decay` | `5e-4` | `5e-4` | `1e-4` | `1e-5` |
 | `scheduler` | `yoloxwarmcos` | `linear` | `flat_cosine` | `cos` |
 | `epochs` | `300` | `300` | `132` | `300` |
-| `amp` | `True` | `True` | `False` | `False` |
+| `amp` | `True` | `True` | `True` | `True` |
 
-D-FINE 和 DEIM 出厂就带着 `amp=False`，因为 D-FINE 的解码器会把激活值钳在 65504，也就是 float16 能表示的最大有限值。YOLO-NAS 和 FOMO 同样默认关掉它。CLI 的 `--amp` 标志对每个家族都默认为 `True`，所以它算作用户提供的值，会覆盖家族默认值；除非你真要改，否则别动它。
+D-FINE、DEIM、RT-DETRv4 和 YOLO-NAS 检测默认使用 `amp=True` 和 `amp_dtype="float16"`。Dome-DETR、PP-YOLOE 和 YOLO-NAS OBB 保留 FP32 默认值。需要 FP32 时传入 `amp=False`。
 
 要读到某个家族真实的默认值，而不是靠猜：
 
@@ -164,6 +164,8 @@ D-FINE 和 DEIM 出厂就带着 `amp=False`，因为 D-FINE 的解码器会把�
 在训练模式下带反向传播地探测，正是关键：推理模式的探测会漏掉保留下来的激活值和梯度张量，对一个深层 CNN 来说，它们是推理占用的好几倍。RF-DETR 把目标比例降到 45%，因为探测用的合成反向传播仍然低估了它的损失函数（criterion）和辅助解码器层的开销。
 
 autobatch 是 CUDA 上的功能。在 CPU 或 MPS 上，它只记一行日志，然后保持默认的批大小。
+
+`min_samples=0` 保持每轮长度不变。正值下限会对较短的检测数据集进行有放回采样。`class_balanced=False` 改为 true 时启用按图像的重复因子采样；它可以与 `min_samples` 和 DDP 一起使用。绕过共用采样器的专用加载器会拒绝启用类别平衡。
 
 ## 梯度累积
 
@@ -203,6 +205,10 @@ Float16 需要动态损失缩放，会拿到一个真正在工作的 `GradScaler
 
 `cache` 把解码后的图片留在内存里（`True` 或 `"ram"`），或者作为 `.npy` 文件放在源文件旁边（`"disk"`），以此加快重复的轮次。缓存读到的内容与重新读取逐位一致。用了 dataloader worker 时，`"disk"` 是两者中更稳妥的那个。
 
+`average_best=0` 禁用检查点平均；正整数 N 会从至多 N 个最佳快照生成 `weights/average.pt`。浮点张量均匀平均，整数缓冲区取自最佳快照。可以启用默认关闭的 `export_check=False`，在 ONNX 导出失败时于第一轮前终止。匹配的原始输出按 `rtol=1e-3`、`atol=1e-4` 比较；布局不兼容时会记录跳过比较。
+
+`precise_bn=0` 禁用最终的 BatchNorm 重新校准。正值限制最终验证前从训练加载器读取的图像数；DDP 下该预算分别应用于每个参与的 rank。冻结的 BatchNorm 保持冻结。[自定义适应度回调](/docs/train/fitness-callbacks)可以决定最佳检查点和耐心值。
+
 ## 断点续训
 
 `resume=True` 会接着一次被中断的运行往下跑。检查点必须先加载好，因为 resume 是从模型上读它，而不是从一个单独的参数读。
@@ -227,3 +233,11 @@ Float16 需要动态损失缩放，会拿到一个真正在工作的 `GradScaler
 - [数据增强](/docs/train/augmentations)，讲数据增强的旋钮以及哪些家族会遵守它们。
 - [层冻结](/docs/train/layer-freezing)和 [LoRA](/docs/train/lora)，讲只训练一部分权重。
 - [验证与指标](/docs/train/validation)，讲这次运行会报告什么。
+
+## 类别选择和损失加权
+
+对于 YOLO9、RF-DETR、EdgeCrafter、RT-DETR、D-FINE、DEIM、TinyFormer 和 YOLO-NAS 检测，`classes=None` 保留全部数据集类别；传入列表会过滤监督标签，同时保留原始 ID、`nc` 和 `names`。可以将 `single_cls=False` 改为启用，把保留的标签映射到名为 `object` 的类别 0。续训和验证继承保存的设置。模型的 OBB 训练拒绝 `single_cls`。
+
+ResNet、ConvNeXt、ConvNeXt V2、MobileNetV4、EfficientNetV2 和 DINOv2 支持 `cls_pw=0.0`：[0, 1] 范围内的值将每个类别的逆频率提升到该幂次后作为权重，并将均值归一化为 1。`class_weights=False` 启用后改用 `N / (C * n_c)` 加权。它不能与正的 `cls_pw` 一起使用；续训要求加权设置匹配。
+
+`plot_samples=8` 设置验证样例图像数量。0 表示不绘制，-1 表示全部；它不会减少实际评估的图像数。

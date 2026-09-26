@@ -17,10 +17,8 @@ keywords:
   - coco panoptic format
   - dataset depth estimation
   - pose kpt_shape
-last_verified: 1.5.0
-verification: >-
-  Rispecchia docs/dataset_schema.md nel repository libreyolo alla v1.5.0, con i
-  nomi dei loader verificati su libreyolo/data/.
+last_verified: 1.6.0
+verification: Rispecchia docs/dataset_schema.md nel repository libreyolo alla v1.6.0, con i nomi dei loader verificati su libreyolo/data/.
 snippets:
   usage:
     - label: Leggere una riga di etichetta detect
@@ -38,7 +36,7 @@ snippets:
         # (class_id, x1, y1, x2, y2, area) in pixel
 
         print(row)
-source_hash: a8282c079624044d
+source_hash: 5f4bc7d17822a85d
 ---
 
 ## YAML comune
@@ -130,6 +128,8 @@ l'opzionale `flip_idx`, una permutazione intera di `0..K-1`.
 Il numero di campi è esattamente `5 + K * D`, dove `D` è il secondo valore di
 `kpt_shape`. Le coordinate dei keypoint sono normalizzate. La visibilità `v`,
 quando è presente, vale `0`, `1` o `2`.
+
+I dataset multiclasse RF-DETR richiedono `names` e possono definire `kpt_names` per classe. Liste vuote di nomi di keypoint indicano classi con soli box. Almeno una classe deve avere keypoint.
 
 ## obb
 
@@ -480,3 +480,15 @@ addestramento o validazione.
 dataset. Le famiglie point possono adattare internamente etichette esistenti,
 per esempio derivando i centri degli oggetti dalle righe dei box, ma non è
 definito un formato di etichette testuali solo per i punti.
+
+## Istogrammi di eventi
+
+Il rilevamento YOLO9 e RF-DETR accetta array `.npy` HWC con due piani di conteggi finiti non negativi, prima positivi e poi negativi. `input_profile` richiede `format: event_histogram`, `layout: HWC`, `polarity: positive_negative`, `encoding: counts`, `scale` positivo e `window_us` intero positivo. Le etichette usano normali file di testo di rilevamento. Vedi [preparazione dell'input](/docs/train/event-histograms).
+
+## Policy robotiche
+
+Il task `act` usa una directory di dataset LeRobot v3 o un ID di dataset Hub, con caratteristiche di episodi, camere, stato e azioni. Non usa YAML di rilevamento. Vedi [policy robotiche](/docs/tasks/robot-policies).
+
+## albedo
+
+Associa `images/<split>/<name>.<image extension>` a `albedo/<split>/<name>.npy`. I target sono valori RGB lineari `(H, W, 3)` finiti in virgola mobile in [0, 1], con le stesse dimensioni dell'immagine. Se necessario, imposta `input_dir` e `albedo_dir` a nomi di cartella costituiti da un solo componente. I PNG destinati alla visualizzazione e i valori sRGB non sono target quantitativi di albedo.

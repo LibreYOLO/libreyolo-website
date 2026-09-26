@@ -17,13 +17,13 @@ keywords:
   - comando libreyolo formats
   - umbral de paridad exportación
   - NotImplementedError exportar
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Formatos, niveles, orden de respaldo, bloqueos por tarea y por familia y
   bloqueos de NCNN leídos de libreyolo/export/support.py; alias y argumentos
   compartidos de libreyolo/export/exporter.py; definiciones de niveles de
   docs/adr/0011-export-support-tiers.md; umbrales de paridad de
-  docs/export_support.md, todo en la v1.5.0. Las celdas de cada combinación no
+  docs/export_support.md, todo en la v1.6.0. Las celdas de cada combinación no
   se transcriben aquí; consúltalas con el snippet de abajo.
 snippets:
   usage:
@@ -63,7 +63,7 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
-source_hash: 83de3289634888c6
+source_hash: 70b9541fb8949352
 ---
 
 ## Forma de la matriz
@@ -85,6 +85,8 @@ Como una celda es función de tres claves, la rejilla completa es grande y cambi
 en cada versión. Se genera en lugar de escribirse a mano, y vive en
 `docs/export_support.md` en el repositorio de la biblioteca. Consulta la matriz
 desde Python o desde la CLI en vez de leer una copia.
+
+El registro generado incluye PP-YOLOE, TinyFormer, DEKR, PP-LiteSeg, ConvNeXt V2, PE, V-JEPA 2 y LeVJEPA. Consulta las restricciones de forma y tarea en la página de cada modelo. U-Net, los cuatro adaptadores 3D, Marigold V2 y las políticas robóticas no proporcionan exportación.
 
 ## Los tres niveles
 

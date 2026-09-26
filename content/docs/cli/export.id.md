@@ -14,7 +14,7 @@ keywords:
   - export yolo ke onnx
   - cara export yolo tensorrt
   - argumen libreyolo export
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Perintah
     value: libreyolo export
@@ -48,7 +48,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: ef2ca20af3814109
+source_hash: 0cc60dd7c5c9f864
 ---
 
 ## Sinopsis
@@ -155,3 +155,5 @@ untuk kegagalan runtime lainnya.
 
 Terkait: [`libreyolo quantize`](/docs/cli/quantize), yang tetap berada di PyTorch
 dan menulis checkpoint alih-alih artefak deployment.
+
+TFLite INT8 memakai `int8=True` untuk deteksi YOLO9 atau YOLOX dengan `data=...`, `fraction=1.0`, `batch=1`, dan `dynamic=False`. FP16 tidak didukung; jika kedua flag presisi diberikan, CLI membuang `half` dan memilih INT8. Keluaran ekspor JSON melaporkan kanvas aktual yang dipakai, termasuk fallback persegi untuk family native persegi yang dimuat ulang dari checkpoint pelatihan persegi panjang.

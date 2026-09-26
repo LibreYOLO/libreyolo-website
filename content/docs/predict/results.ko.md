@@ -17,7 +17,7 @@ keywords:
   - 깊이 지도 결과
   - 결과 요약
   - onnx 동일한 결과
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   페이로드 클래스, 슬롯, 무브 시맨틱, summary(), to_json(), plot(), save() 및 cutout()는
   libreyolo/utils/results.py.의 Annotation에서 읽고, 디스크 쓰기 동작은
@@ -119,7 +119,7 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: "201eca6457cf87a4"
 ---
 
 ## 하나의 객체, 페이로드당 하나의 슬롯
@@ -226,13 +226,15 @@ source_hash: 548dbc9c7f5552ec
 
 `predict(save=True)`는 주석을 달고 기록하는 경로입니다. 이 경로는 채워진 슬롯에서 그리기 루틴을 선택하므로, 의미론적 결과는 색상 마스크로 기록되고, 깊이 결과는 깊이 시각화로, 파노프틱 결과는 해당 세그먼트와 함께, 매트는 투명 배경 RGBA PNG로, 디텍터는 그 아래에 마스크가 있는 박스로 기록됩니다. 기록된 경로는 결과에 `result.saved_path`로 첨부됩니다.
 
-`Results.plot()`는 이름이 시사하는 것보다 더 좁습니다. 이것은 일반 지도와 가장자리 지도에만 정의되며, 다른 것은 `NotImplementedError`를 발생시킵니다. 다른 작업에는 `save=True`를 사용하십시오.
-
 `Results.save(path)` 또한 좁습니다: 투명 배경의 RGBA PNG 컷아웃으로 무광 결과를 기록하고 그렇지 않으면 `NotImplementedError`를 발생시킵니다. `Results.cutout()`는 그것을 기록하지 않고 동일한 RGBA 배열을 반환합니다. 두 함수 모두 원본 이미지가 필요하며, 이는 `result.path`에서 가져오거나 `image=`로 전달됩니다.
 
 두 개의 페이로드는 각각 자체 작성기를 가지고 있습니다: 복원된 이미지를 위한 `result.restored.save(path)`와 메시를 위한 `result.meshes.save_obj(path, index=0)`.
 
 파일이 어디에 위치하는지와 `output_path` 및 `output_file_format`가 어떻게 작동하는지에 대해서는 [예측 소스](/docs/predict/sources)를 참조하십시오.
+
+`plot()`은 모든 작업 페이로드를 처리합니다. 이미지 오버레이는 기본적으로 연속된 HxWx3 uint8 BGR을 반환하며, `pil=True`로 PIL을 요청합니다. 기존 엣지 및 법선 맵 경로는 PIL 기본값을 유지합니다. `orig_img`는 메모리 및 URL 소스의 BGR 픽셀을 보관하며, 로컬 파일과 수집한 유한 길이 비디오 프레임은 다시 열 수 있습니다.
+
+설정에는 `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save`, `filename`이 있습니다. 저장된 분류 이미지는 상위 5개 레이블을 포함합니다. 매트 저장은 RGBA로 잘라낸 이미지를 만듭니다.
 
 ## 내보낸 아티팩트는 동일한 객체를 반환
 

@@ -1,12 +1,8 @@
 ---
-title: 1.5.0으로 업그레이드
-seo_title: LibreYOLO 1.4.0을 1.5.0으로 업그레이드
-description: >-
-  버전 1.5.0에서 필요한 네 가지 코드 변경 사항, 메트릭을 이동하는 세 가지 변경 사항, 그리고 실행을 비교하기 전에 알아두면 좋은 작은
-  행동 변화들.
-lead: >-
-  공개 모델 API에서 아무것도 제거되지 않았습니다: 1.4.0에서 작동하던 모든 클래스와 함수는 여전히 임포트됩니다. 네 개의 인자는 형태가
-  변경되었고, 세 개의 기본값은 비교하고 있을 수 있는 숫자를 이동했습니다.
+title: 1.6.0으로 업그레이드
+seo_title: LibreYOLO 1.5.0에서 1.6.0으로 업그레이드
+description: 'LibreYOLO 1.6.0의 전처리, 학습 기본값, 실행 디렉터리, 고정 파일, QAT, 데이터 로더 마이그레이션 절차입니다.'
+lead: '1.6.0은 전처리, 학습 기본값, 체크포인트 처리를 변경합니다. 저장한 베이스라인을 다시 검증하고 이전 실행을 재현할 때는 이전 기본값을 명시적으로 설정합니다.'
 keywords:
   - libreyolo 업그레이드
   - libreyolo 1.5.0 마이그레이션
@@ -14,26 +10,41 @@ keywords:
   - libreyolo 주요 변경 사항
   - yolox bn eps
   - faster-coco-eval 기본값
-last_verified: 1.5.0
-meta:
-  - label: 적용 대상
-    value: 1.4.0에서 1.5.0으로
-  - label: 코드 변경 필요
-    value: '넷, 모두 좁다'
-  - label: 결과를 만드는
-    value: 'COCO 백엔드, YOLOX BN eps, D-FINE 다중 스케일'
-  - label: 공개 API 제거
-    value: None
-source_hash: ab38d8ef7b53f596
+last_verified: 1.6.0
+source_hash: "f4fda6ef286113ab"
 ---
+
+## 1.5.0에서 1.6.0으로
+
+- ONNX 추가 패키지를 설치하기 전에 ONNX Runtime 1.18 미만으로 고정된 환경을 `onnxruntime>=1.18.0`으로 업그레이드합니다.
+
+- SAM 3D Body는 검토된 스냅샷 파일 집합을 받습니다. `libreyolo[hf]`를 설치하고 접근 권한을 얻어 자동 다운로드를 사용하거나, 신뢰할 수 있는 로컬 파일시스템에서 변경되지 않은 스냅샷 디렉터리와 고정된 MHR 파일을 제공합니다.
+
+- RF-DETR의 자세 이외 작업 크기 조정과 분류 모델 정규화 수정 이후 검증을 다시 실행합니다. 1.5.0 결과와 비교하기 전에 배포된 신뢰도 임계값을 다시 확인하며, 기존 전처리 플래그는 없습니다.
+
+- D-FINE, DEIM, RT-DETRv4, YOLO-NAS 탐지는 기본적으로 FP16 AMP를 활성화합니다. FP32를 유지하려면 `amp=False`를 전달합니다.
+
+- 이전 YOLO9 파인튜닝 설정을 사용하려면 `aux_weight=0`, `max_labels=100`, `warmup_momentum=0.937`을 설정합니다. center가 새로 기록된 변환에서 기존 기하를 재현해야 하면 `letterbox_pad="topleft"`를 설정합니다. 기존 단일 헤드 체크포인트는 원래 그래프로 학습을 재개합니다.
+
+- RF-DETR과 DINOv2는 계열 이름에 번호가 증가하는 실행 디렉터리를 생성합니다. 산출물 경로를 사용하는 코드를 갱신하거나, 기존 위치와 재사용 동작을 유지하려면 `output_dir="runs/train", exist_ok=True`를 설정합니다.
+
+- 분류의 `mixup + cutmix <= 1`을 유지합니다. 잘못된 조합은 이제 설정 중 오류를 발생시킵니다.
+
+- QAT는 EMA, SyncBatchNorm, 체크포인트 평균을 비활성화합니다. 이 상태에 의존하지 않고 QAT의 best/last 체크포인트를 사용합니다.
+
+- 데이터셋 변경 훅이 있는 사용자 정의 로더는 `persistent_workers=False`를 사용하거나 변경 후 작업자를 다시 생성해야 합니다. 호환되지 않는 영구 다중 작업자 사본은 이제 오류를 발생시킵니다.
+
+전체 릴리스는 [변경 기록](/docs/changelog)을, 체크포인트 변환은 [가중치 가져오기](/docs/migrate)를 참조하십시오.
+
+## 1.4.0에서 1.5.0으로
 
 이 페이지는 LibreYOLO 자체를 업그레이드하는 것에 관한 것입니다. 업스트림 프로젝트에서 체크포인트를 로드하는 방법을 찾고 있다면, 이는 [기존 가중치 가져오기](/docs/migrate)로, 다른 주제입니다.
 
 릴리스의 전체 변경 사항은 [변경 로그](/docs/changelog)에 있습니다. 아래에는 조치가 필요한 항목만 나옵니다.
 
-## 해야 하는 코드 변경
+### 해야 하는 코드 변경
 
-### `allow_experimental=True` 제거
+#### `allow_experimental=True` 제거
 
 승인 게이트와 그 뒤에 있는 `ddp_aware(experimental_key=...)` 메커니즘이 사라졌습니다. 이전에는 EC, RTMDet, PicoDet 및 FOMO 학습 및 내보내기에 해당 인수가 필요했기 때문에, 이러한 계열 중 하나를 학습하는 모든 스크립트에 영향을 미칩니다.
 
@@ -49,7 +60,7 @@ model.train(data="data.yaml", epochs=100)
 
 지원 수준은 여전히 게시되지만 더 이상 인수가 아닙니다: [안정성 등급](/docs/reference/stability-tiers)을 참조하십시오.
 
-### 내보내기 계층 `"experimental"` 제거
+#### 내보내기 계층 `"experimental"` 제거
 
 ```python
 from libreyolo.export.support import Tier
@@ -60,7 +71,7 @@ from libreyolo.export.support import Tier
 
 티어 문자열에서 코드 분기는 `"experimental"`로 읽히던 곳을 `"available"`로 읽어야 합니다. `BaseExporter`는 더 이상 해당 형식에 대해 `RuntimeWarning`를 방출하지 않습니다. 형식별 상태는 [export matrix](/docs/reference/export-matrix)에 나와 있습니다.
 
-### `pretrained=False`와 `resume` 조합 거부
+#### `pretrained=False`와 `resume` 조합 거부
 
 이전에 결합은 일관성 없이 진행되었습니다. 이제 다음을 제기합니다:
 
@@ -70,7 +81,7 @@ ValueError: pretrained=False cannot be combined with resume.
 
 하나를 선택하십시오. `pretrained=False`는 새로 초기화된 시드에서 시작하며, 1.5.0에서는 세 가지가 아니라 모든 학습 가능한 계열에 대해 작동합니다. `resume`는 체크포인트에서 중단된 실행을 계속합니다. 두 가지 모두 [학습](/docs/train) 아래에 문서화되어 있습니다.
 
-### CLI `--imgsz`는 문자열이지 정수가 아닙니다
+#### CLI `--imgsz`는 문자열이지 정수가 아닙니다
 
 말하는 것보다 좁습니다. 이 두 가지는 영향을 받지 않습니다:
 
@@ -93,11 +104,11 @@ predict_cmd(..., imgsz="640")    # 1.5.0 및 "480x640"도 이제 작동합니다
 
 `train`의 기본값은 이제 문자열 `"640"`입니다. `export --imgsz`는 이미 문자열이었고, `profile`는 변경되지 않았습니다.
 
-## 변하는 숫자들
+### 변하는 숫자들
 
 세 가지 변경 사항이 기본 설정에서 지표를 움직입니다. 버전별 결과를 추적하는 경우, 1.5.0 실행과 1.4.0 실행을 비교하기 전에 이것들을 읽으십시오.
 
-### 기본 COCO 지표 백엔드 faster-coco-eval
+#### 기본 COCO 지표 백엔드 faster-coco-eval
 
 `val()`와 에포크별 학습 검증은 이제 pycocotools 대신 faster-coco-eval C++ 백엔드를 사용하여 COCO 지표를 계산합니다.
 
@@ -115,7 +126,7 @@ model.val(data="coco.yaml", faster_coco_eval=False)
 
 `LIBREYOLO_FASTER_COCO_EVAL=0`는 전 세계적으로 동일한 작업을 수행합니다. 실제로 사용되는 백엔드는 INFO에 기록되며, `val()` 후에는 `model.last_eval_backend`로 노출되고, [CLI](/docs/cli/val) JSON 페이로드에 `eval_backend`로 포함됩니다. `pip install libreyolo[fast-eval]`로 빠른 경로를 설치하십시오.
 
-### YOLOX 1.5.0 이전에 학습된 체크포인트는 eps 재정의가 필요
+#### YOLOX 1.5.0 이전에 학습된 체크포인트는 eps 재정의가 필요
 
 이것은 릴리스의 함정입니다. [YOLOX](/docs/models/yolox)를 파인튜닝한 경우 읽어보십시오.
 
@@ -139,7 +150,7 @@ model.val(data="data.yaml")
 
 또는 `sqrt((var + 1e-3) / (var + 1e-5))`를 BN 가중치에 한 번 접어 결과를 저장하십시오. 1.5.0 이후에 학습된 체크포인트는 필요하지 않습니다.
 
-### D-FINE 다중 스케일 학습은 업스트림 크기별 레시피를 사용
+#### D-FINE 다중 스케일 학습은 업스트림 크기별 레시피를 사용
 
 `base_size_repeat`는 모든 크기에 대해 3으로 하드코딩되어 있었습니다. 이제 업스트림에서 지정한 대로 크기별로 해결됩니다: **n**은 멀티 스케일이 꺼진 상태에서 고정 크기로 학습, **s** 20, **m** 6, **l** 4, **x** 3. 이전에는 x만 일치했기 때문에, n, s, m, l은 다른 스케일 분포를 보게 되며 다른 지표로 수렴합니다.
 
@@ -153,7 +164,7 @@ config = DFINEConfig(base_size_repeat=3)
 
 DEIM은 여전히 하드코딩된 3을 사용합니다. 계열 세부 사항은 [D-FINE](/docs/models/d-fine)에 있습니다.
 
-## 알아둘 만함, 조치 필요 없음
+### 알아둘 만함, 조치 필요 없음
 
 - **직사각형 `imgsz` 결과가 이전에 잘못되어 변경되었습니다.** 박스 좌표, RTMDet 마스크 크기 조정, YOLO-NAS 재스케일링 및 검증기 실제 값 스케일링은 이제 하나의 스칼라 대신 축별 높이와 너비를 사용합니다. 정사각형 `imgsz`는 거의 변경되지 않았습니다. 1.4.0에서의 직사각형 추론 또는 검증 실행은 잘못 스케일링되었습니다. YOLO-NAS는 이제 잘못된 출력을 조용히 생성하는 대신 직사각형 `imgsz`를 아예 거부합니다.
 - **측정 지표 사전이 키를 얻었습니다.** COCO 평가기에서는 `max_det`, `ar_max_det` 및 `AR_max_det`를, FOMO에서는 `metrics/loss`와 `metrics/loss/ce`를 추가했습니다. 기본값의 값은 변경되지 않았지만, 사용자 정의 [로거](/docs/train/loggers)와 CSV 헤더를 포함하여 측정 지표 키를 반복하는 모든 항목은 새로운 열을 확인합니다.
@@ -167,6 +178,6 @@ DEIM은 여전히 하드코딩된 3을 사용합니다. 계열 세부 사항은 
 - **작업 접미사가 있는 계열의 가중치 파일 이름이 다르게 해석됩니다.** `segformer-b0`는 이제 `LibreSegformerb0-sem.pt`로 해석됩니다. 이는 자동 다운로드 404 오류를 수정하고, 이전에 접미사가 없는 파일 이름을 하드코딩한 모든 스크립트를 깨뜨립니다.
 - **pytest 마커 `experimental_backend`는 이제 `extended_backend`입니다.** `-m`로 테스트 스위트를 실행할 때만 관련이 있습니다.
 
-## 체크포인트와 데이터셋
+### 체크포인트와 데이터셋
 
 1.4.0으로 작성된 체크포인트는 변경 없이 로드됩니다. [스키마](/docs/reference/checkpoint-schema)는 직사각형 모델을 위해 `imgsz_h`와 `imgsz_w`를 추가했으며, 이전 리더를 위해 여전히 스칼라 `imgsz = max(h, w)`를 작성합니다. [ExecuTorch](/docs/export/executorch)와 [MNN](/docs/export/mnn) 내보내기는 이제 각각 사이드카 `<program>.pte.json`와 `<model>.mnn.json`가 필요하며, HRNet 내보내기는 `pose_input: "person_crop"`를 포함합니다. 데이터셋 형식은 변경되지 않았습니다.

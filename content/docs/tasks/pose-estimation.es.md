@@ -16,7 +16,7 @@ keywords:
   - keypoints COCO
   - OKS mAP
   - entrenar modelo de pose
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -155,7 +155,7 @@ snippets:
 
 
         print(result.keypoints.xy)
-source_hash: 9de01d1f615bdf33
+source_hash: 1b9e7614546d8f00
 ---
 
 ## Definición
@@ -189,15 +189,12 @@ Tres familias entrenan y predicen:
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) y
 [YOLO-NAS](/docs/models/yolo-nas), todas de una etapa. RF-DETR necesita su
 propio extra, `pip install "libreyolo[rfdetr]"`. RF-DETR y EdgeCrafter traen
-checkpoints de pose publicados y ambas hacen fine-tuning sobre datasets de una
-sola clase, solo de personas; la cabeza de keypoints de EdgeCrafter queda fijada
+checkpoints de pose publicados. RF-DETR también entrena poses multiclase; la cabeza de keypoints de EdgeCrafter queda fijada
 en la construcción y rechaza un dataset que declare un número distinto, mientras
 que RF-DETR reinicializa la suya para ese número. YOLO-NAS descarga sus pesos del
 CDN propio de Deci.AI bajo una licencia no comercial, y LibreYOLO no publica
 ninguno de ellos; su cabeza de pose también se reconstruye para un número nuevo
-de keypoints, y es la única de las tres cuyo número de clases no está fijado en
-uno, así que es la familia para un esqueleto multiclase o no humano, como la
-pose de animales.
+de keypoints, y soporta esqueletos multiclase o no humanos.
 
 [HRNet](/docs/models/hrnet) es la opción top-down. Predice, valida y exporta, y
 su `train()` lanza `NotImplementedError`. Si no se le da una fuente de personas,
@@ -211,6 +208,8 @@ propio extra; si no se fija ningún vocabulario, `set_task("pose")` recurre a la
 categoría de personas. Sus pesos son no comerciales, y la latencia por imagen es
 mucho mayor que la de una cabeza de pose diseñada para ello, porque cada
 predicción es una decodificación por difusión.
+
+[DEKR](/docs/models/dekr) proporciona pose bottom-up de varias personas sin un detector de personas separado. Soporta inferencia y validación, pero no entrenamiento.
 
 ## Predicción
 
@@ -275,6 +274,8 @@ tras un volteo horizontal, que es como una muñeca izquierda sigue siendo una
 muñeca izquierda. Si lo omites, el aumento de datos por volteo horizontal se
 desactiva para los keypoints en lugar de aplicarse con el orden de índices
 equivocado.
+
+La pose multiclase de RF-DETR usa `kpt_names`, indexado por nombre o ID de clase, para seleccionar los primeros keypoints con nombre de cada clase. Una lista vacía indica una clase solo con cajas. Los datasets multiclase requieren `names` y al menos una clase con keypoints. Los diagnósticos de etiquetas malformadas identifican el archivo, la línea y el formato `kpt_shape` esperado.
 
 ## Entrenamiento
 

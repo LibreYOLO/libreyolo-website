@@ -3,10 +3,7 @@ title: MiDaS
 families:
   - midas
 seo_title: 'MiDaS: stima della profondità monoculare in LibreYOLO'
-description: >-
-  Usa MiDaS in LibreYOLO per la stima della profondità monoculare. Installa, fai
-  predizioni, valida ed esporta due varianti con licenza MIT, scaricate da
-  isl-org.
+description: Esegui l'inferenza di profondità relativa MiDaS in LibreYOLO. I checkpoint s e l usano i mirror di LibreYOLO con la licenza MIT del distributore.
 lead: >-
   MiDaS è la stima della profondità relativa monoculare addestrata con una loss
   invariante a scala e shift su dataset misti, la linea di lavoro che ha
@@ -21,7 +18,7 @@ keywords:
   - mappa di profondità relativa
   - depth map python
   - zero-shot depth
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -29,8 +26,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Non ancora su disco: LibreYOLO lo scarica dalla release GitHub
-        # ufficiale isl-org/MiDaS e lo verifica contro uno SHA-256 fissato.
+        # Scarica il checkpoint dal mirror al primo utilizzo.
         model = LibreYOLO("LibreMiDaSl-depth.pt")
         result = model(SAMPLE_IMAGE, save=True)
 
@@ -54,6 +50,7 @@ snippets:
         model = LibreYOLO("LibreMiDaSs-depth.pt")
 
         result = model(SAMPLE_IMAGE, save=True)
+
   val:
     - label: Python
       language: python
@@ -70,6 +67,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreMiDaSl-depth.pt data=my-dataset.yaml
+
   export:
     - label: Python
       language: python
@@ -96,35 +94,24 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: ce2fbf3ae43e9be4
+source_hash: 64537aa3ad3a6f8f
 ---
 
 ## Installazione
 
-MiDaS non richiede nessun extra opzionale. Tutto ciò che importa è già nell'installazione base.
+MiDaS richiede l'extra `midas` per i suoi encoder timm.
 
 ```bash
-pip install libreyolo
+pip install "libreyolo[midas]"
 ```
 
 ## Predizione
 
-MiDaS è l'unica famiglia depth che LibreYOLO non ripubblica sulla propria
-organizzazione Hugging Face. Richiedere un checkpoint con il suo nome file
-LibreYOLO scarica l'asset ufficiale corrispondente direttamente dalle release
-GitHub di `isl-org/MiDaS`, lo verifica contro uno SHA-256 fissato e lo avvolge
-nei metadati di checkpoint di LibreYOLO prima del primo utilizzo; le esecuzioni
-successive riusano il file locale in cache. Vedi Licenze per il motivo.
+I checkpoint s e l vengono scaricati dai mirror di LibreYOLO con la licenza MIT del distributore e memorizzati nella cache locale.
 
 <code-tabs name="predict" />
 
-`result.depth_map` contiene una mappa densa di profondità inversa relativa:
-valori più alti indicano una maggiore vicinanza alla camera, e i valori non
-hanno unità metrica né scala confrontabile fra immagini. `save=True` scrive su
-disco una visualizzazione della mappa con una colormap; `Results.plot()` non
-copre questa famiglia, perché è definito solo per le normali di superficie e i
-contorni. Vedi [predizione](/docs/predict) per sorgenti, streaming e gestione
-dei risultati.
+`result.depth_map` contiene una mappa densa di profondità inversa relativa: valori più alti indicano una maggiore vicinanza alla camera e non hanno unità metriche né una scala comune tra immagini. `save=True` salva su disco una visualizzazione della mappa con una scala di colori; `Results.plot()` visualizza la mappa di profondità. Vedi [predizione](/docs/predict) per sorgenti, streaming e gestione dei risultati.
 
 ## Varianti
 

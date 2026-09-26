@@ -1,0 +1,12 @@
+{
+    "name": "NAFNet",
+    "org": "Megvii",
+    "paper_title": "Simple Baselines for Image Restoration",
+    "paper_url": "https://arxiv.org/abs/2204.04676",
+    "code_url": "https://github.com/megvii-research/NAFNet",
+    "license": "MIT",
+    "license_interpretation": "MIT is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep the copyright notice and license text with any copy you redistribute, and places no other obligation on your own application code. Part of the training pipeline is ported from BasicSR under Apache-2.0, which additionally grants a patent license. The published checkpoint is trained on the Smartphone Image Denoising Dataset (SIDD), itself MIT-licensed.",
+    "bibtex": "@article{chen2022simple,\n  title={Simple Baselines for Image Restoration},\n  author={Chen, Liangyu and Chu, Xiaojie and Zhang, Xiangyu and Sun, Jian},\n  journal={arXiv preprint arXiv:2204.04676},\n  year={2022}\n}",
+    "bibtex_source_url": "https://github.com/megvii-research/NAFNet#citations",
+    "bibtex_verified": "2026-08-08, copied verbatim from the Citations section of the upstream readme.md on branch main. Cross-checked against the arXiv API for 2204.04676: four authors in the same order (Chen, Chu, Zhang, Sun), identical title, single arXiv record. The record's own comment field notes acceptance to ECCV 2022, but the authors' own citation block still cites the arXiv preprint rather than the proceedings, so it is kept verbatim as published. Do not hand-edit; a wrong citation misattributes someone's work."
+}

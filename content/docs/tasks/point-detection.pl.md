@@ -15,7 +15,7 @@ keywords:
   - lokalizacja punktów FOMO
   - liczenie obiektów na zdjęciu
   - point localization
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Predykcja punktów i ich zliczanie
@@ -155,7 +155,7 @@ snippets:
 
 
         print(result.points.xy)
-source_hash: 932153c8870d1c7c
+source_hash: 5c3cfe7a606cd7aa
 ---
 
 ## Definicja
@@ -174,7 +174,7 @@ mają na co działać.
 
 ## Modele
 
-Zadanie `point` obsługują trzy rodziny, których nie można stosować zamiennie.
+Modele punktowe różnią się słownikiem i semantyką wyników.
 
 [FOMO](/docs/models/fomo) jest opcją ze stałym słownikiem. To klasyfikator
 siatkowy, który oznacza każdą komórkę siatki o niskiej rozdzielczości jako tło
@@ -195,6 +195,8 @@ predykcja jest przebiegiem generowania na modelu 7B, dlatego należy oczekiwać
 wyraźnie większego opóźnienia na obraz niż w wyspecjalizowanym detektorze. Jego
 wagi są przeznaczone do użytku niekomercyjnego. Informacje o licencji znajdują
 się na stronie modelu.
+
+[Molmo2](/docs/models/molmo2) i [Moondream](/docs/models/moondream) zwracają punkty uwarunkowane tekstem. [LibreGround](/docs/reference/ground-api) używa instrukcji, aby wybrać najwyżej jedno kliknięcie na zapytanie za pomocą ShowUI, Florence-2 lub Qwen3-VL.
 
 ## Predykcja
 
@@ -306,4 +308,3 @@ Zakres poszczególnych formatów znajduje się na stronie
 LocateAnything i SenseNova-Vision nie obsługują eksportu. `export()` zgłasza
 błąd w obu przypadkach, ponieważ model generatywny nie ma możliwego do
 prześledzenia grafu detekcji.
-

@@ -4,7 +4,7 @@ seo_title: "Image restoration and upscaling in LibreYOLO"
 description: "Denoise, deblur and upscale images in LibreYOLO. Predict a restored RGB image, train NAFNet on paired data, and read the PSNR and SSIM keys."
 lead: "Image restoration takes a degraded image and returns a clean one. LibreYOLO exposes it as the restore task, which covers denoising, deblurring and super-resolution behind a single output contract: one RGB image in, one RGB image out."
 keywords: [image restoration python, image denoising model, image super resolution python, deblurring model, PSNR SSIM validation]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Upscale an image
@@ -106,7 +106,7 @@ directly rather than an annotated photo.
 
 ## Models
 
-Three families serve `restore`, split by the degradation they undo.
+Restoration families target different image degradations.
 
 [NAFNet](/docs/models/nafnet) is the denoiser, and the only restore family
 LibreYOLO can train. Its architecture replaces the nonlinear activations of a
@@ -122,19 +122,23 @@ latency.
 three sizes covering the official lightweight generator and two real-world
 generators.
 
+[QuickSRNet](/docs/models/quicksrnet) provides 2x upscaling, [DDColor](/docs/models/ddcolor) colorization, [HVI-CIDNet](/docs/models/hvi-cidnet) low-light enhancement and [LaMa](/docs/models/lama) inpainting. These four do not support training.
+
 ## Predict
 
 Weights download from Hugging Face on first use and are cached locally.
 
 <code-tabs name="predict" />
 
-Restoration runs at the source image's own resolution rather than a fixed
+NAFNet, Real-ESRGAN and SwinIR run at the source image's own resolution rather than a fixed
 network canvas, padding only to the network's downsample factor, so both time
 and memory scale with the pixel count of your input. `tile` splits the forward
 pass into overlapping tiles and blends the seams back together, and `tile_pad`
 is the halo added around each tile before it is cropped back out; both are
 Python keyword arguments. See [prediction](/docs/predict) for sources, streaming
 and result handling.
+
+LaMa requires a single-image `mask=`. HVI-CIDNet exposes `gamma`, `saturation` and `intensity`, each defaulting to 1.0. Model-specific canvas and export constraints are on their pages.
 
 ## Dataset format
 

@@ -17,10 +17,8 @@ keywords:
   - COCO Panoptic Format
   - Tiefendatensatz
   - Pose kpt_shape
-last_verified: 1.5.0
-verification: >-
-  Entspricht docs/dataset_schema.md im LibreYOLO-Repository in v1.5.0.
-  Loader-Namen wurden mit libreyolo/data/ abgeglichen.
+last_verified: "1.6.0"
+verification: "Entspricht docs/dataset_schema.md im LibreYOLO-Repository in v1.6.0. Loader-Namen wurden mit libreyolo/data/ abgeglichen."
 snippets:
   usage:
     - label: Eine Erkennungs-Labelzeile analysieren
@@ -38,7 +36,7 @@ snippets:
         # (class_id, x1, y1, x2, y2, area) in Pixeln
 
         print(row)
-source_hash: a8282c079624044d
+source_hash: "5f4bc7d17822a85d"
 ---
 
 ## Gemeinsame YAML-Struktur
@@ -117,6 +115,8 @@ Die YAML-Datei ergänzt das erforderliche `kpt_shape` als `[K, 2]` oder `[K, 3]`
 ```
 
 Die Feldanzahl beträgt exakt `5 + K * D`, wobei `D` der zweite Wert von `kpt_shape` ist. Keypoint-Koordinaten sind normalisiert. Der optionale Sichtbarkeitswert `v` lautet `0`, `1` oder `2`.
+
+RF-DETR-Datensätze mit mehreren Klassen benötigen `names` und können `kpt_names` je Klasse definieren. Leere Keypoint-Namenslisten kennzeichnen Klassen nur mit Boxen. Mindestens eine Klasse muss Keypoints haben.
 
 ## obb
 
@@ -355,3 +355,15 @@ dataset_root/
 Für `gaze` ist kein Datensatzdateivertrag für Training oder Validierung implementiert.
 
 `point` ist eine Modellausgabeaufgabe und kein Datensatzlabelschema. Punktfamilien dürfen vorhandene Labels intern anpassen, beispielsweise Objektmittelpunkte aus Boxzeilen ableiten. Ein reines Textlabelformat für Punkte ist jedoch nicht definiert.
+
+## Ereignishistogramme
+
+YOLO9- und RF-DETR-Erkennung akzeptieren `.npy`-HWC-Arrays mit zwei nichtnegativen endlichen Zählebenen, zuerst positiv, dann negativ. `input_profile` benötigt `format: event_histogram`, `layout: HWC`, `polarity: positive_negative`, `encoding: counts`, positives `scale` und eine positive ganze Zahl für `window_us`. Labels verwenden normale Erkennungstextdateien. Siehe [Eingabevorbereitung](/docs/train/event-histograms).
+
+## Roboter-Policies
+
+Die Aufgabe `act` verwendet ein LeRobot-v3-Datensatzverzeichnis oder eine Hub-Datensatz-ID mit Episoden-, Kamera-, Zustands- und Aktionsfeatures. Sie verwendet kein Erkennungs-YAML. Siehe [Roboter-Policies](/docs/tasks/robot-policies).
+
+## albedo
+
+Ordne `images/<split>/<name>.<image extension>` jeweils `albedo/<split>/<name>.npy` zu. Ziele sind endliche lineare RGB-Gleitkommawerte der Form `(H, W, 3)` in [0, 1] mit denselben Abmessungen wie das Bild. Setze bei Bedarf `input_dir` und `albedo_dir` auf Ordnernamen mit einer einzelnen Pfadkomponente. Anzeige-PNGs und sRGB-Werte sind keine quantitativen Albedo-Ziele.

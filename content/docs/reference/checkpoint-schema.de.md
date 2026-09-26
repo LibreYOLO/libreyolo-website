@@ -17,9 +17,9 @@ keywords:
   - LibreYOLO Checkpoint Metadaten
   - Quantisierungsmanifest
   - wrap_libreyolo_checkpoint
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  Entspricht docs/checkpoint_schema.md im LibreYOLO-Repository in v1.5.0,
+  Entspricht docs/checkpoint_schema.md im LibreYOLO-Repository in v1.6.0,
   abgeglichen mit libreyolo/utils/serialization.py und BaseModel.save.
 snippets:
   usage:
@@ -51,7 +51,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: ce760f1bed97bfd0
+source_hash: 177904564cf0a488
 ---
 
 ## Schema v1.0
@@ -96,7 +96,7 @@ Das Schema ist bewusst flach und `model` bewusst ein State-Dictionary.
 
 ## Ergänzungen für Posenschätzung
 
-Posenschätzung ist üblicherweise einklassig mit `nc: 1` und `person`. Der Pose-Kopf von YOLO-NAS unterstützt jedoch auch mehrklassige Posenschätzung mit einem gemeinsamen Keypoint-Skelett. In diesem Fall beschreiben `nc` und `names` die Klassen wie bei der Objekterkennung. Pose-Exporte für Laufzeitumgebungen geben `scores` mit der Form `[batch, anchors, nc]` aus.
+Pose-Checkpoints speichern ihr Klassen- und Keypoint-Schema. YOLO-NAS unterstützt mehrere Klassen mit einem gemeinsamen Skelett; RF-DETR unterstützt auch eine eigene Keypoint-Anzahl je Klasse. `nc` und `names` beschreiben die Klassen. Pose-Exporte geben `scores` mit der Form `[batch, anchors, nc]` aus.
 
 | Schlüssel | Bedeutung |
 |---|---|
@@ -104,6 +104,8 @@ Posenschätzung ist üblicherweise einklassig mit `nc: 1` und `person`. Der Pose
 | `keypoint_dim` | `2` für Labels aus `x,y` oder `3` für Labels aus `x,y,visibility`; Modellausgaben stellen immer `x,y,visibility` bereit |
 | `oks_sigmas` | Optionale OKS-Sigmas je Keypoint; bei Auslassung wird der Aufgabenstandard für `num_keypoints` verwendet |
 | `num_keypoints_per_class` | Optionale Keypoint-Anzahl je Klasse für GroupPose-artige Köpfe mit nach Klasse aufgefülltem Keypoint-Tensor; `0` für Klassen ohne Keypoints |
+
+RF-DETR kann `num_keypoints_per_class` neben `kpt_names` speichern. Die Anzahlen sind an den Datensatzklassen ausgerichtet; null kennzeichnet eine Klasse nur mit Boxen, und Vorhersagen füllen bis zur maximalen Keypoint-Form auf.
 
 ## Ergänzungen für Meshes
 
@@ -171,6 +173,8 @@ MNN-Exporte schreiben die flachen Metadaten in die erforderliche Nebendatei `<mo
 
 Eine `.pte`- oder `.mnn`-Datei ist ein Backend-spezifisches Artefakt und kein PyTorch-Checkpoint.
 
+Klassifikatoren speichern `norm_mean`, `norm_std` und `resize_mode`. Rechteckige Bildflächen behalten `imgsz_h` und `imgsz_w`. YOLO9s `letterbox_pad` ist `topleft` oder `center`; fehlende Metadaten behalten die bisherige Geometrie oben links bei.
+
 ## Quantisierte Checkpoints
 
 Ein quantisiertes Modell ergänzt den optionalen flachen Schlüssel `quant`. Er enthält ein Manifest-Dictionary mit `schema`, `recipe`, `keep_high_precision`, `execution`, Kalibrierungsherkunft, `module_count` und `state`. FP8-Manifeste dürfen außerdem `fp8_tensorwise_weights` enthalten, die genaue Liste der `QuantLinear`-Modulnamen, deren Gewichtsskalierung tensorweise statt je Ausgabekanal erfolgt. Ein Loader, der `quant` vorfindet, baut die quantisierte Modulstruktur und Skalierungsrichtlinie vor `load_state_dict` neu auf.
@@ -217,6 +221,8 @@ Trainer-Checkpoints verwenden denselben erforderlichen Metadatenkern und dürfen
 
 Aus Kompatibilitätsgründen akzeptieren Leser die veralteten Aliasse `best_mAP50_95`, `best_mAP50`, `best_metric` und `best_metric_name` für die beste Metrik.
 
+Eine eigene Auswahl speichert `fitness_source="callback"` und `best_metric_key="fitness/custom"`. Callback-Code und -Zustand werden nicht gespeichert; diese Läufe lassen sich nicht fortsetzen. Starte mit ihren Gewichten einen neuen Lauf.
+
 ## Externe Snapshots
 
 Das Schema gilt für von LibreYOLO erstellte `.pt`-Dateien. Es benennt mehrteilige Upstream-Snapshots der separaten Modellstufen weder um noch bindet es sie ein.
@@ -252,3 +258,7 @@ unwrap_libreyolo_checkpoint(loaded, *, strict=False) -> tuple[dict, dict]
 ```
 
 `validate_checkpoint_metadata` verändert nichts und gibt eine Fehlerliste zurück. Mit `strict=True` löst es stattdessen `CheckpointMetadataError` aus. `model.save(path)` ist der unterstützte Weg zum Schreiben eines konformen Checkpoints.
+
+## Eingabeprofile
+
+Checkpoints für Histogramme mit zwei Polaritäten bewahren das vollständige `input_profile` mit Format, Layout, Polarität, Kodierung, Skalierung und Fensterdauer sowie `input_initialization`. Zum erneuten Laden für die Vorhersage ist kein Datensatz-YAML nötig; Training und Validierung weisen abweichende Profile zurück. Siehe [Ereignishistogramme](/docs/train/event-histograms).

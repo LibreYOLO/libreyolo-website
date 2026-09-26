@@ -20,7 +20,7 @@ keywords:
   - geometría monocular
   - predicción densa python
   - DINOv2
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -80,7 +80,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: d96b89f18ac10a40
+source_hash: b06daf44f9a58411
 ---
 
 ## Instalación
@@ -93,9 +93,7 @@ pip install libreyolo
 
 ## Predicción
 
-Los pesos se descargan automáticamente en el primer uso: LibreYOLO obtiene el
-tamaño correspondiente directamente de los checkpoints oficiales y lo guarda en
-la caché local.
+Los pesos se descargan automáticamente en el primer uso. Los tamaños s y l usan mirrors de LibreYOLO; b sigue usando el checkpoint upstream.
 
 <code-tabs name="predict" />
 
@@ -144,11 +142,7 @@ cargar con `LibreYOLO()` según su extensión de archivo, así que un archivo
 
 <provenance-box>
 
-LibreYOLO no copia estos checkpoints a su propia organización.
-`LibreYOLO("LibreMoGe2s-normal.pt")` descarga el tamaño correspondiente
-directamente de los repositorios oficiales de Hugging Face en una revisión
-fijada, y verifica el archivo contra un checksum SHA-256 registrado antes de
-usarlo.
+Los checkpoints s y l están replicados por LibreYOLO; b permanece upstream. Los artefactos descargados conservan la licencia de su editor.
 
 </provenance-box>
 

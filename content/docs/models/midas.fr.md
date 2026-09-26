@@ -5,8 +5,8 @@ families:
 seo_title: 'MiDaS : estimation de profondeur monoculaire dans LibreYOLO'
 description: >-
   Utilisez MiDaS dans LibreYOLO pour l'estimation de profondeur monoculaire.
-  Installation, prédiction, validation et export de deux variantes sous licence
-  MIT, téléchargées depuis isl-org.
+  Installez, prédisez, validez et exportez deux variantes sous licence MIT,
+  depuis les miroirs LibreYOLO.
 lead: >-
   MiDaS est un modèle d'estimation de profondeur relative monoculaire entraîné
   avec une loss invariante à l'échelle et au décalage sur des datasets mélangés,
@@ -22,7 +22,7 @@ keywords:
   - profondeur relative
   - carte de profondeur
   - profondeur zero-shot
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -30,8 +30,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Pas encore sur le disque : LibreYOLO le télécharge depuis la release
-        # GitHub officielle isl-org/MiDaS et vérifie son SHA-256 épinglé.
+        # Télécharge le checkpoint en miroir au premier usage.
         model = LibreYOLO("LibreMiDaSl-depth.pt")
         result = model(SAMPLE_IMAGE, save=True)
 
@@ -96,27 +95,20 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: ce2fbf3ae43e9be4
+source_hash: 64537aa3ad3a6f8f
 ---
 
 ## Installation
 
-MiDaS ne demande aucun extra optionnel. Tout ce qu'il importe fait partie de
-l'installation de base.
+MiDaS nécessite l'extra `midas` pour ses encodeurs timm.
 
 ```bash
-pip install libreyolo
+pip install "libreyolo[midas]"
 ```
 
 ## Prédire
 
-MiDaS est la seule famille de profondeur que LibreYOLO ne republie pas sur sa
-propre organisation Hugging Face. Demander un checkpoint par son nom de fichier
-LibreYOLO télécharge le fichier officiel correspondant directement depuis les
-releases GitHub `isl-org/MiDaS`, le vérifie contre un SHA-256 épinglé et
-l'enrichit des métadonnées de checkpoint de LibreYOLO avant le premier usage ;
-les exécutions suivantes réutilisent le fichier local mis en cache. Voir Licence
-pour savoir pourquoi.
+Les checkpoints s et l se téléchargent depuis les miroirs de LibreYOLO sous la licence MIT de l'éditeur et sont mis en cache localement.
 
 <code-tabs name="predict" />
 
@@ -124,8 +116,7 @@ pour savoir pourquoi.
 valeurs élevées correspondent aux points les plus proches de la caméra, et ces
 valeurs n'ont ni unité métrique ni échelle commune d'une image à l'autre.
 `save=True` écrit sur le disque une visualisation colorisée de cette carte ;
-`Results.plot()` ne couvre pas cette famille, puisqu'il n'est défini que pour
-les normales de surface et les contours. Voir [la prédiction](/docs/predict)
+`Results.plot()` affiche la carte de profondeur. Voir [la prédiction](/docs/predict)
 pour les sources, le streaming et le traitement des résultats.
 
 ## Variantes

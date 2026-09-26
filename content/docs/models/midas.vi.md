@@ -4,14 +4,13 @@ families:
   - midas
 seo_title: 'MiDaS: ước lượng độ sâu đơn ảnh trong LibreYOLO'
 description: >-
-  Dùng MiDaS trong LibreYOLO để ước lượng độ sâu đơn ảnh. Cài đặt, dự đoán, xác
-  thực và xuất hai biến thể dùng giấy phép MIT, được tải từ isl-org.
+  Chạy inference độ sâu tương đối MiDaS trong LibreYOLO. Checkpoint s và l dùng bản sao của LibreYOLO theo
+  giấy phép MIT của nhà phát hành.
 lead: >-
-  MiDaS là mô hình ước lượng độ sâu tương đối đơn ảnh được huấn luyện bằng loss
-  bất biến theo scale và shift trên các dataset hỗn hợp, hướng nghiên cứu đã
-  thiết lập giao thức transfer độ sâu zero-shot mà các họ sau này dùng lại.
-  LibreYOLO hỗ trợ mô hình cho tác vụ độ sâu: dự đoán và xác thực zero-shot,
-  không có tuyến huấn luyện.
+  MiDaS là mô hình ước lượng độ sâu tương đối đơn ảnh được huấn luyện bằng loss bất biến theo scale và shift
+  trên các dataset hỗn hợp, hướng nghiên cứu đã thiết lập giao thức transfer độ sâu zero-shot mà các họ sau
+  này dùng lại. LibreYOLO hỗ trợ mô hình cho tác vụ độ sâu: dự đoán và xác thực zero-shot, không có tuyến huấn
+  luyện.
 keywords:
   - MiDaS
   - ước lượng độ sâu đơn ảnh
@@ -19,7 +18,7 @@ keywords:
   - độ sâu tương đối
   - depth map
   - độ sâu zero-shot
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -27,8 +26,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Khi chưa có trên đĩa: LibreYOLO tải từ bản phát hành GitHub chính thức
-        # của isl-org/MiDaS và kiểm tra theo SHA-256 cố định trước khi sử dụng.
+        # Tải bản sao checkpoint ở lần dùng đầu tiên
         model = LibreYOLO("LibreMiDaSl-depth.pt")
         result = model(SAMPLE_IMAGE, save=True)
 
@@ -89,24 +87,23 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: ce2fbf3ae43e9be4
+source_hash: 64537aa3ad3a6f8f
 ---
-
 ## Cài đặt
 
-MiDaS không cần extra tùy chọn. Mọi thành phần mà mô hình import đều có trong bản cài đặt cơ sở.
+MiDaS cần extra `midas` cho các bộ mã hóa timm.
 
 ```bash
-pip install libreyolo
+pip install "libreyolo[midas]"
 ```
 
 ## Dự đoán
 
-MiDaS là họ độ sâu duy nhất mà LibreYOLO không phát hành lại trên tổ chức Hugging Face riêng. Yêu cầu checkpoint bằng tên tệp LibreYOLO sẽ tải trực tiếp artifact chính thức tương ứng từ các bản phát hành GitHub `isl-org/MiDaS`, kiểm tra theo SHA-256 cố định và bọc bằng metadata checkpoint của LibreYOLO trước lần sử dụng đầu tiên; các lượt sau dùng lại tệp cục bộ trong bộ nhớ đệm. Xem phần Giấy phép để biết lý do.
+Checkpoint s và l được tải từ các bản sao của LibreYOLO theo giấy phép MIT của nhà phát hành và được lưu vào bộ nhớ đệm cục bộ.
 
 <code-tabs name="predict" />
 
-`result.depth_map` chứa depth map nghịch đảo tương đối dense: giá trị cao hơn nghĩa là gần camera hơn, các giá trị không có đơn vị mét hoặc tỷ lệ xuyên ảnh. `save=True` ghi bản trực quan hóa áp colormap của map đó ra đĩa; `Results.plot()` không hỗ trợ họ mô hình này vì hàm chỉ được định nghĩa cho pháp tuyến bề mặt và cạnh. Xem [dự đoán](/docs/predict) để biết về nguồn, xử lý luồng và kết quả.
+`result.depth_map` chứa bản đồ độ sâu nghịch đảo tương đối dày đặc: giá trị cao hơn nghĩa là gần camera hơn, và các giá trị không có đơn vị đo lường hay thang đo chung giữa các ảnh. `save=True` ghi bản trực quan hóa tô màu của bản đồ này ra đĩa; `Results.plot()` dựng bản đồ độ sâu. Xem [dự đoán](/docs/predict) để biết nguồn đầu vào, streaming và cách xử lý kết quả.
 
 ## Biến thể
 
@@ -135,5 +132,3 @@ Artifact đã xuất được tải lại qua `LibreYOLO()` dựa trên hậu t�
 ## Trích dẫn
 
 <citation-block />
-
-

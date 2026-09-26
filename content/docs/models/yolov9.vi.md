@@ -4,12 +4,11 @@ families:
   - yolo9
 seo_title: 'YOLOv9: dự đoán, huấn luyện và xuất theo MIT'
 description: >-
-  Chạy YOLOv9 trong LibreYOLO, gồm head đầu cuối không NMS và head stride-4 cho
-  đối tượng nhỏ. Cài đặt, dự đoán, huấn luyện, đánh giá và xuất.
+  Chạy YOLOv9 trong LibreYOLO, gồm head đầu cuối không NMS và head stride-4 cho đối tượng nhỏ. Cài đặt, dự
+  đoán, huấn luyện, đánh giá và xuất.
 lead: >-
-  Một detector tích chập một giai đoạn: một lượt chấm điểm lưới box dày đặc và
-  NMS loại các bản trùng lặp. LibreYOLO cung cấp ba biến thể, trong đó một biến
-  thể không có bước NMS.
+  Một detector tích chập một giai đoạn: một lượt chấm điểm lưới box dày đặc và NMS loại các bản trùng lặp.
+  LibreYOLO cung cấp ba biến thể, trong đó một biến thể không có bước NMS.
 keywords:
   - YOLOv9
   - YOLO9
@@ -19,7 +18,7 @@ keywords:
   - phát hiện vật thể nhỏ
   - thông tin gradient có thể lập trình
   - GELAN
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -63,20 +62,14 @@ snippets:
           epochs=100 imgsz=640 batch=16
     - label: Đối tượng nhỏ
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO9P2
 
-
         # Biến thể stride-4 không có checkpoint COCO riêng, nên hãy chỉ định một
-
         # checkpoint phát hiện cơ sở: backbone và neck được tải không đổi, còn
-
         # tower của head stride-4 bắt đầu từ khởi tạo ngẫu nhiên.
-
         model = LibreYOLO9P2(None, size="s")
-
-        model.train(data="my-dataset.yaml", epochs=100,
-        pretrained="LibreYOLO9s.pt")
+        model.train(data="my-dataset.yaml", epochs=100, pretrained="LibreYOLO9s.pt")
   val:
     - label: Python
       language: python
@@ -94,12 +87,9 @@ snippets:
         libreyolo val model=LibreYOLO9s.pt data=my-dataset.yaml
     - label: Trên COCO
       language: bash
-      code: >
-        # YAML COCO đi kèm chứa script tải xuống nhúng sẵn, nên cần quyền rõ
-        ràng
-
+      code: |
+        # YAML COCO đi kèm chứa script tải xuống nhúng sẵn, nên cần quyền rõ ràng
         # trừ khi tập dữ liệu đã có cục bộ.
-
         libreyolo val model=LibreYOLO9c.pt data=coco.yaml imgsz=640 \
           allow_download_scripts=True
   export:
@@ -130,9 +120,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: eaa6023a4a0b9e71
+source_hash: 624f3e70d2937683
 ---
-
 ## Cài đặt
 
 YOLOv9 không cần extra ngoài gói cơ sở.
@@ -190,6 +179,10 @@ hiện cơ sở thay thế.
 
 Xem [huấn luyện](/docs/train) để biết về tập dữ liệu, tăng cường dữ liệu, multi-GPU và logger.
 
+Các lần tinh chỉnh phát hiện tiêu chuẩn mới bật nhánh PGI chỉ dùng khi huấn luyện với `aux_weight=0.25`. `max_labels=300`; momentum SGD tăng từ 0.8 lên 0.937 trong ba epoch. Checkpoint cũ có một head tiếp tục với đồ thị đó. Dự đoán và xuất dùng head chính. `letterbox_pad=None` kế thừa dấu ghi trong checkpoint: trọng số không có dấu dùng `topleft`, còn các bản chuyển đổi chính thức mới ghi `center`.
+
+Mosaic của YOLO9 và YOLOX ưu tiên ảnh ghép có nhãn với tối đa 20 lần lấy mẫu; MixUp của YOLO9 dùng cùng chính sách. Xem [histogram sự kiện](/docs/train/event-histograms) để biết hồ sơ đầu vào không phải RGB.
+
 ## Đánh giá
 
 `val()` trả về từ điển các khóa `metrics/` bao gồm precision, recall, mAP 50 và
@@ -218,6 +211,8 @@ Mỗi định dạng cài một extra khác nhau và nhận một số đối s�
 
 <code-tabs name="export" />
 
+[TFLite INT8](/docs/export/tflite) dùng `int8=True` cùng dữ liệu hiệu chuẩn.
+
 ## Checkpoint
 
 Mọi tệp trọng số đã công bố cho họ này.
@@ -228,16 +223,10 @@ Mọi tệp trọng số đã công bố cho họ này.
 
 <provenance-box>
 
-Một checkpoint ở đây không theo MIT. Mô hình stride-4 được huấn luyện trên
-VisDrone2019-DET kế thừa các điều khoản CC BY-NC-SA 3.0 của tập dữ liệu: chỉ dùng
-phi thương mại, mọi sản phẩm phái sinh phải chia sẻ cùng giấy phép, và nằm ngoài
-giấy phép dễ dãi áp dụng cho phần còn lại của họ này. Mô hình dự đoán các lớp ảnh
-trên không VisDrone thay vì các lớp COCO. Thư viện in toàn bộ thông tin này trước
-khi tải tệp.
+Checkpoint ảnh trên không có stride 4 dự đoán các lớp đối tượng VisDrone. Dùng giấy phép do nhà phát hành công bố và ghi trong repo trọng số.
 
 </provenance-box>
 
 ## Trích dẫn
 
 <citation-block />
-

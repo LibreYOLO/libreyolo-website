@@ -21,7 +21,7 @@ keywords:
   - object detection
   - deteksi objek python
   - real-time detection
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -142,7 +142,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 6edaac5f05abaabe
+source_hash: 8dc052b83d5f1ac0
 ---
 
 ## Instalasi
@@ -173,6 +173,8 @@ jadi mengganti detektor dengan yang lain hanya butuh perubahan satu baris.
 `conf` dan `max_det` menyaring decode top-k atas query dan kelas; tidak ada
 langkah NMS yang perlu disetel, dan `iou` tetap diterima tetapi tidak dipakai.
 Lihat [prediksi](/docs/predict) untuk source, streaming dan penanganan hasil.
+
+DEIM menerima `imgsz=(height, width)` persegi panjang untuk prediksi. DEIMv2 secara eksplisit menolak permintaan prediksi/validasi persegi panjang. Ini tidak berarti pelatihan atau ekspor persegi panjang didukung.
 
 ## Varian
 
@@ -222,6 +224,8 @@ kelipatan positif dari 32, dan jika tidak, versi 2 memunculkan error sebelum
 run dimulai.
 
 Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU dan logger.
+
+DEIM mengaktifkan AMP secara default dengan `amp_dtype="float16"`. Berikan `amp=False` untuk pelatihan FP32.
 
 ## Validasi
 

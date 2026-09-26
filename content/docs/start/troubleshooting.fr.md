@@ -12,8 +12,8 @@ keywords:
   - mémoire cuda insuffisante libreyolo
   - notimplementederror libreyolo
   - dépannage libreyolo
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: "1.6.0"
+source_hash: 30b68976a4ac01d1
 ---
 
 Les erreurs sont regroupées selon le texte affiché. Si votre message n'est pas
@@ -175,3 +175,7 @@ if report.errors:
 
 Consultez la [commande doctor](/docs/cli/doctor) pour le catalogue des
 contrôles.
+
+## Les workers persistants ne peuvent pas observer les modifications du dataset
+
+Les hooks actifs `close_mosaic` ou `set_epoch` doivent atteindre les copies du dataset utilisées par les workers. Si un chargeur personnalisé à plusieurs workers conserve des copies persistantes incompatibles, utilisez `persistent_workers=False` ou recréez les workers après la mutation. Le parcours non persistant par défaut n'est pas affecté.

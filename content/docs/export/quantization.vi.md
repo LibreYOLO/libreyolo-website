@@ -2,15 +2,13 @@
 title: Lượng tử hóa
 seo_title: Lượng tử hóa một mô hình LibreYOLO trong PyTorch
 description: >-
-  API lượng tử hóa (quantization) trong PyTorch của LibreYOLO: chín recipe, dữ
-  liệu hiệu chuẩn tách riêng khỏi dữ liệu huấn luyện, QAT và QAD, cùng hai
-  artifact triển khai.
+  API lượng tử hóa (quantization) trong PyTorch của LibreYOLO: chín recipe, dữ liệu hiệu chuẩn tách riêng khỏi
+  dữ liệu huấn luyện, QAT và QAD, cùng hai artifact triển khai.
 lead: >-
-  Quantization trong LibreYOLO chạy hoàn toàn trong PyTorch: model.quantize()
-  thay các module Conv2d và Linear của mô hình bằng những module đã lượng tử hóa
-  tương đương rồi hiệu chuẩn chúng. Kết quả vẫn giữ nguyên hợp đồng predict,
-  val, train và save thông thường, nên một mô hình đã lượng tử hóa được chấm
-  bằng đúng các validator dùng cho mô hình float.
+  Quantization trong LibreYOLO chạy hoàn toàn trong PyTorch: model.quantize() thay các module Conv2d và Linear
+  của mô hình bằng những module đã lượng tử hóa tương đương rồi hiệu chuẩn chúng. Kết quả vẫn giữ nguyên hợp
+  đồng predict, val, train và save thông thường, nên một mô hình đã lượng tử hóa được chấm bằng đúng các
+  validator dùng cho mô hình float.
 keywords:
   - lượng tử hóa libreyolo
   - lượng tử hóa int8 pytorch
@@ -20,7 +18,7 @@ keywords:
   - fp8 e4m3
   - dữ liệu hiệu chuẩn quantization
   - xuất onnx qdq int8
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Lệnh gọi
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -36,47 +34,32 @@ meta:
     value: 'fp16, bf16, fp8, int8, w4a16, w4a8, nvfp4, mxfp4, int2'
     mono: true
   - label: Artifact triển khai
-    value: >-
-      export(format="pt") cho một checkpoint đã đóng gói, export(format="onnx")
-      cho một đồ thị QDQ INT8
+    value: 'export(format="pt") cho một checkpoint đã đóng gói, export(format="onnx") cho một đồ thị QDQ INT8'
     mono: true
 verification: >-
-  Đọc từ libreyolo/quant/api.py, libreyolo/models/base/model.py,
-  libreyolo/cli/commands/quantize.py và docs/quantization.md trên nhánh dev. Các
-  con số về kích thước checkpoint là giá trị đo được ghi lại trong
+  Đọc từ libreyolo/quant/api.py, libreyolo/models/base/model.py, libreyolo/cli/commands/quantize.py và
+  docs/quantization.md trên nhánh dev. Các con số về kích thước checkpoint là giá trị đo được ghi lại trong
   docs/quantization.md.
 snippets:
   quantize:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-
         # Thay cấu trúc rồi hiệu chuẩn. calib là một tập ảnh nhỏ KHÔNG NHÃN,
-
-        # chỉ đọc theo chiều forward để suy ra dải giá trị và scale của
-        activation
-
-        qmodel = model.quantize(recipe="int8", calib="coco128.yaml",
-        samples=128)
-
+        # chỉ đọc theo chiều forward để suy ra dải giá trị và scale của activation
+        qmodel = model.quantize(recipe="int8", calib="coco128.yaml", samples=128)
 
         print(qmodel.quant_info())
-
-        qmodel.val(data="coco8.yaml")          # cùng các validator như một mô
-        hình float
-
-        qmodel.save("LibreYOLO9s-int8.pt")     # checkpoint mang theo một
-        manifest quant
+        qmodel.val(data="coco8.yaml")          # cùng các validator như một mô hình float
+        qmodel.save("LibreYOLO9s-int8.pt")     # checkpoint mang theo một manifest quant
     - label: CLI
       language: bash
-      code: >
-        libreyolo quantize --model LibreYOLO9s.pt --recipe int8 --calib
-        coco128.yaml
+      code: |
+        libreyolo quantize --model LibreYOLO9s.pt --recipe int8 --calib coco128.yaml
     - label: Tham số
       language: python
       code: |
@@ -85,7 +68,7 @@ snippets:
             calib="coco128.yaml",      # đường dẫn data.yaml hoặc tên có sẵn; None bỏ qua hiệu chuẩn
             samples=128,               # số ảnh hiệu chuẩn tối đa
             batch=8,                   # kích thước batch khi hiệu chuẩn
-            algorithm="auto",          # auto và minmax là như nhau; percentile là lựa chọn còn lại
+            algorithm="auto",          # auto chọn minmax; lựa chọn khác: percentile, mse, entropy
             keep_high_precision=None,  # None dùng chính sách của họ mô hình
             verbose=True,
         )
@@ -102,16 +85,12 @@ snippets:
   train:
     - label: QAT chỉ là train() bình thường trên một mô hình đã lượng tử hóa
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         qmodel = LibreYOLO("LibreYOLO9s-int8.pt")
 
-
-        # Đây là một lượt tinh chỉnh, không phải chạy từ đầu: dùng learning rate
-        của tinh chỉnh
-
+        # Đây là một lượt tinh chỉnh, không phải chạy từ đầu: dùng learning rate của tinh chỉnh
         qmodel.train(data="coco8.yaml", epochs=5, lr0=1e-4)
     - label: QAD thêm vào các tham số distillation sẵn có
       language: python
@@ -124,30 +103,21 @@ snippets:
         )
     - label: CLI
       language: bash
-      code: >
-        libreyolo train --model LibreYOLO9s-int8.pt --data coco8.yaml --epochs 5
-        --lr0 1e-4
+      code: |
+        libreyolo train --model LibreYOLO9s-int8.pt --data coco8.yaml --epochs 5 --lr0 1e-4
   export:
     - label: Checkpoint PyTorch đã đóng gói
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         qmodel = LibreYOLO("LibreYOLO9s-int8.pt")
 
-
-        # Ghi ra LibreYOLO9s-int8-final.pt: trọng số và scale ít bit đã đóng
-        gói,
-
-        # các master fp32 bị loại bỏ, phần chưa lượng tử hóa còn lại được ép về
-        fp16
-
+        # Ghi ra LibreYOLO9s-int8-final.pt: trọng số và scale ít bit đã đóng gói,
+        # các master fp32 bị loại bỏ, phần chưa lượng tử hóa còn lại được ép về fp16
         qmodel.export(format="pt")
 
-
         # remainder="fp32" giữ nguyên chính xác các tensor chưa lượng tử hóa
-
         qmodel.export(format="pt", remainder="fp32")
     - label: QDQ INT8 ONNX
       language: python
@@ -174,9 +144,8 @@ snippets:
 
         # Giờ mọi bộ xuất float đều dùng được, ở bất kỳ precision nào nó hỗ trợ
         qmodel.export(format="tensorrt", half=True)
-source_hash: 4ffb06b87cad017e
+source_hash: 6c247a3243daf393
 ---
-
 ## Cài đặt
 
 Quantization không cần gói phụ thuộc thêm nào. Việc thay module, lượt hiệu chuẩn
@@ -200,6 +169,8 @@ manifest `quant`, nên nó tải lại với cấu trúc và các scale còn ngu
 Các checkpoint mà trainer ghi ra trong một lượt QAT cũng mang manifest đó, nghĩa
 là `best.pt` của một lượt chạy như vậy bản thân nó đã là một checkpoint đã lượng
 tử hóa.
+
+`algorithm` hiệu chuẩn chấp nhận `auto`, `minmax`, `percentile`, `mse` và `entropy`. `auto` được chuyển thành minmax. MSE và entropy quét histogram để chọn phạm vi activation.
 
 ## Các recipe
 
@@ -263,6 +234,8 @@ không thì đi theo mức hỗ trợ distillation của từng họ mô hình, 
 
 Các mô hình đã lượng tử hóa bằng `fp16` và `bf16` chỉ dùng cho inference, và
 trainer từ chối chúng kèm một chỉ dẫn tới `amp=True`.
+
+Thiết lập QAT tắt EMA và SyncBatchNorm, đặt `average_best=0` và ghi log mỗi giá trị ghi đè. Huấn luyện số thực giữ các thiết lập được yêu cầu.
 
 ## Xuất
 

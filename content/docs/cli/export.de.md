@@ -15,7 +15,7 @@ keywords:
   - yolo nach onnx exportieren
   - tensorrt export befehl
   - libreyolo export argumente
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Befehl
     value: libreyolo export
@@ -49,7 +49,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: ef2ca20af3814109
+source_hash: 0cc60dd7c5c9f864
 ---
 
 ## Syntax
@@ -161,3 +161,5 @@ Laufzeitfehlern.
 
 Verwandt: [`libreyolo quantize`](/docs/cli/quantize), das in PyTorch bleibt und
 einen Checkpoint statt eines Deployment-Artefakts schreibt.
+
+TFLite INT8 verwendet `int8=True` für YOLO9- oder YOLOX-Detektion mit `data=...`, `fraction=1.0`, `batch=1` und `dynamic=False`. FP16 wird nicht unterstützt. Sind beide Präzisionsoptionen gesetzt, verwirft die CLI `half` zugunsten von INT8. Die JSON-Ausgabe meldet die tatsächlich gewählte Eingabefläche, einschließlich des quadratischen Fallbacks für nativ quadratische Familien, die aus rechteckig trainierten Checkpoints geladen werden.

@@ -19,7 +19,7 @@ keywords:
   - deep ocsort
   - track id
   - reid tracking
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -75,7 +75,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: f1fa7dcf60597d6b
+source_hash: 384ee3d6a05190aa
 ---
 
 ## Definisi
@@ -162,9 +162,11 @@ konfigurasi untuk tracker terpilih; kunci tidak dikenal menghasilkan peringatan.
 Dalam kedua cara, `track_conf` diabaikan setelah kunci pencocokan ditetapkan
 eksplisit.
 
-Argumen lain mencerminkan prediksi: `iou`, `imgsz`, `classes`, `max_det`,
-`vid_stride`, `show`, dan `save` bersama `output_path`. Sumber adalah path berkas
-video. Lihat [prediksi](/docs/predict) untuk penanganan hasil.
+Argumen lainnya sama dengan prediksi: `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show`, dan `save` dengan `output_path`. Sumber dapat berupa video atau urutan gambar. Lihat [prediksi](/docs/predict) untuk penanganan hasil.
+
+Gambar, folder yang diurutkan berdasarkan nama berkas, daftar, tuple, dan iterator gambar lazy dapat menyediakan frame berurutan. `fps=30.0` menentukan waktunya dan `color_format="auto"` memilih interpretasi input. `vid_stride` mengurangi laju frame yang dipertahankan menjadi `fps / vid_stride`.
+
+Berikan instance tracker kustom melalui `tracker=`. Instance tersebut mengimplementasikan `reset()` dan `update(results, image=None)` dari `libreyolo.tracking.Tracker`. Satu proses meresetnya sekali dan meneruskan frame PIL RGB asli. `track_id` yang dikembalikan harus berupa array atau tensor integer satu dimensi yang sejajar dengan kotak pada backend/perangkat yang sama. Instance kustom memakai `track_conf=0.25` secara default; konfigurasikan instance secara langsung, bukan melalui argumen kata kunci tracker atau `tracker_config`.
 
 ## Pelatihan
 
@@ -173,6 +175,3 @@ tanpa parameter terpelajari, sedangkan jaringan appearance Deep OC-SORT adalah
 checkpoint re-identification terbitan yang diunduh saat penggunaan pertama.
 Peningkatan kualitas tracking berarti memperbaiki detektor atau menyesuaikan
 ambang batas asosiasi di atas.
-
-
-

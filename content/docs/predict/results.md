@@ -13,7 +13,7 @@ keywords:
   - depth map results
   - results summary
   - onnx same results
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 verification: "Payload classes, slots, move semantics, summary(), to_json(), plot(), save() and cutout() read from libreyolo/utils/results.py. Annotation and disk-writing behavior from InferenceRunner._save_annotated_image in libreyolo/models/base/inference.py and resolve_save_path in libreyolo/utils/general.py. Suffix dispatch from LibreYOLO() in libreyolo/models/__init__.py."
 snippets:
   basic:
@@ -275,10 +275,6 @@ with its segments, a matte as a transparent-background RGBA PNG, and a detector
 as boxes with masks underneath them. The written path is attached to the result
 as `result.saved_path`.
 
-`Results.plot()` is narrower than its name suggests. It is defined for normal
-maps and edge maps only, and raises `NotImplementedError` for anything else.
-Use `save=True` for the other tasks.
-
 `Results.save(path)` is likewise narrow: it writes a matte result as a
 transparent-background RGBA PNG cutout and raises `NotImplementedError`
 otherwise. `Results.cutout()` returns that same RGBA array without writing it.
@@ -289,6 +285,10 @@ restored image, and `result.meshes.save_obj(path, index=0)` for a mesh.
 
 For where files land and how `output_path` and `output_file_format` behave, see
 [Prediction sources](/docs/predict/sources).
+
+`plot()` covers all task payloads. Image overlays return contiguous HxWx3 uint8 BGR by default; `pil=True` requests PIL. Existing edge and normal-map paths keep their PIL defaults. `orig_img` retains BGR pixels for in-memory and URL sources; local files and collected finite-video frames can be reopened.
+
+Controls include `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` and `filename`. Saved classification images include the top five labels. Matte saving writes an RGBA cutout.
 
 ## Exported artifacts return the same object
 

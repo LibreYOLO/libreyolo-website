@@ -1,10 +1,7 @@
 ---
 title: libreyolo train
 seo_title: riferimento del comando libreyolo train
-description: >-
-  Addestra un modello dalla riga di comando: tutti i 59 argomenti con i loro
-  valori predefiniti, come i valori predefiniti di ogni famiglia li
-  sostituiscono e quali argomenti una famiglia ignora.
+description: 'Addestra un modello dalla riga di comando: gli argomenti con i loro valori predefiniti, come i valori predefiniti di ogni famiglia li sostituiscono e quali argomenti una famiglia ignora.'
 lead: >-
   Addestra un modello su un dataset e scrive checkpoint, metriche e log in una
   directory di esecuzione. Ogni argomento qui sotto ha un valore predefinito
@@ -17,7 +14,7 @@ keywords:
   - argomenti libreyolo train
   - addestrare yolo dataset personalizzato
   - congelare layer yolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Comando
     value: libreyolo train
@@ -53,7 +50,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 3aad4298310d3081
+source_hash: 525a8e4366e4c0be
 ---
 
 ## Sinossi
@@ -177,6 +174,26 @@ negativa.
 | `quiet` | `false` | Sopprime stderr |
 | `dry_run` | `false` | Risolve e stampa la configurazione senza eseguire |
 | `help_json` | `false` | Stampa lo schema del comando in JSON ed esce |
+
+| Argomento | Default | Significato |
+| --- | --- | --- |
+| `min_samples` | `0` | Lunghezza minima dell'epoca per dataset piccoli: quando il dataset ha meno immagini, estrae questo numero di campioni per epoca con reinserimento (0 = disattivato) |
+| `class_balanced` | `False` | Campionamento con fattore di ripetizione in stile LVIS per dataset a coda lunga (default: disattivato) |
+| `cls_pw` | `0.0` | Esponente della ponderazione inversa alla frequenza per la classificazione: 0 disattivata, 1 completa (pesi di classe a media uno; non combinabile con class_weights=True) |
+| `class_weights` | `False` | Pesi della loss di classificazione precedenti, normalizzati sui campioni (default: disattivati) |
+| `single_cls` | `False` | Addestra un rilevatore supportato rimappando ogni etichetta alla classe 0 |
+| `classes` | `None` | Addestra un rilevatore supportato solo su questi ID originali di classe del dataset, separati da virgole (es. '0,3,5'); ogni altra classe viene scartata come se non fosse etichettata. Gli ID restano invariati, senza essere compattati |
+| `average_best` | `0` | Calcola la media uniforme degli N checkpoint migliori secondo la metrica monitorata in weights/average.pt al termine dell'addestramento (0 = disattivato) |
+| `export_check` | `False` | Esporta ONNX prima dell'epoca 1 e interrompe l'esecuzione se l'esportazione fallisce (default: disattivato) |
+| `precise_bn` | `0` | Ricalcola le statistiche correnti di BatchNorm da questo numero di immagini di addestramento dopo l'ultima epoca (0 = disattivato) |
+| `fliplr` | `None` | Probabilità di ribaltamento orizzontale (alias di ecosistema di flip_prob) |
+| `flipud` | `0.0` | Probabilità di ribaltamento verticale |
+| `auto_augment` | `None` | Regola di auto-augmentation per classificazione: randaugment, autoaugment, augmix (default: nessuna) |
+| `erasing` | `0.0` | Probabilità RandomErasing per classificazione, 0 <= erasing < 1 |
+| `cutmix` | `0.0` | Probabilità CutMix per classificazione (etichette soft) |
+| `scale` | `0.5` | Intervallo di area RandomResizedCrop per classificazione: limite inferiore float o coppia esplicita (min,max) |
+| `crop_pct` | `None` | Rapporto di ridimensionamento nella valutazione della classificazione prima del ritaglio centrale (default: valore nativo della famiglia del modello) |
+| `plot_samples` | `8` | Immagini nel grafico dei campioni di validazione: 0 per nessuna, -1 per ogni immagine validata (non modifica le metriche) |
 
 ## Esempi
 

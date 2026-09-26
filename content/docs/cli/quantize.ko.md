@@ -11,7 +11,7 @@ keywords:
   - fp8 양자화
   - 학습 후 양자화 yolo
   - libreyolo quantize 인자
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 명령
     value: libreyolo quantize
@@ -44,7 +44,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 7ae663e9f117826e
+source_hash: "663390776f2f2c15"
 ---
 
 ## 개요
@@ -131,3 +131,5 @@ DFL 합성곱입니다.
 
 관련 항목: PyTorch를 벗어나 배포용 산출물을 대신 쓰는
 [`libreyolo export`](/docs/cli/export).
+
+`algorithm`의 기본값은 `auto`(minmax)이며 `minmax`, `percentile`, `mse`, `entropy`도 받습니다. MSE와 entropy는 활성화 히스토그램 탐색으로 범위를 선택합니다.

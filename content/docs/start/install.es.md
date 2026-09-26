@@ -16,7 +16,7 @@ keywords:
   - libreyolo cuda
   - libreyolo gpu
   - requisitos libreyolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Paquete
     value: libreyolo
@@ -68,7 +68,7 @@ snippets:
         # de entrada. Las familias cuyo extra falta se listan con el
         # comando pip que las habilita.
         libreyolo models
-source_hash: 34fc6d3e24d03fb4
+source_hash: 531023c2092fd751
 ---
 
 ## Instalación
@@ -94,6 +94,11 @@ la misma con o sin el extra.
 
 | Extra | Añade |
 |---|---|
+| `ground` | Las dependencias de VLM para convertir instrucciones en puntos |
+| `vlm-train` | El stack de VLM más `peft>=0.17.0` para ajustar Qwen3-VL |
+| `vla` | `lerobot[smolvla,diffusion,dataset]>=0.6.1`, Python 3.12 o posterior |
+| `marigold` | Dependencias fijadas de difusión, aceleración y Transformers |
+| `molmo2` | `transformers==4.57.1`, `einops` y `accelerate` |
 | `rfdetr` | `transformers`, que proporciona el backbone de RF-DETR |
 | `eomt` | `transformers` |
 | `midas` | `timm` 1.0.x, que proporciona los encoders ViT-L/16 y EfficientNet-Lite3 de MiDaS |
@@ -111,7 +116,7 @@ la misma con o sin el extra.
 
 | Extra | Añade |
 |---|---|
-| `onnx` | `onnx`, `onnxsim`, `onnxruntime` |
+| `onnx` | `onnx`, `onnxsim`, `onnxruntime>=1.18.0` |
 | `tensorrt` | `tensorrt-cu12` 10.16.1.11 y `pycuda`, fuera de macOS |
 | `openvino` | `openvino` |
 | `coreml` | `coremltools` |
@@ -147,6 +152,9 @@ ejecución continúa.
 
 | Extra | Añade |
 |---|---|
+| `hf` | `huggingface_hub>=1.0.0` para carga, publicación y el logger del Hub |
+| `llm` | `openai>=1.66.0` para endpoints de API compatibles |
+| `fiftyone` | `fiftyone>=1.0.0` para la curación de datasets |
 | `stream` | `yt-dlp`, necesario solo para resolver URLs de páginas de YouTube |
 | `tracking` | Nada. Todas las dependencias de tracking ya son dependencias del núcleo |
 | `label` | `libreyolo[sam]`, que habilita la asistencia de clic a máscara en `libreyolo label` |
@@ -166,7 +174,11 @@ mientras que la ruta de TFLite requiere protobuf 7. `executorch` se excluye
 porque ExecuTorch restringe con qué versión de PyTorch se empareja, y `coreai`
 porque `coreai-torch` fija PyTorch en 2.11.x y arrastraría todo el entorno a esa
 versión. `fast-eval`, `hub-kernels`, `clip-convert` y `siglip2-convert` también
-quedan fuera. Instala cualquiera de ellos por su nombre.
+quedan fuera. Instala cualquiera de ellos por su nombre. `all` incluye `hf` y `llm`; `fiftyone`, `vla`, `marigold` y `molmo2` se mantienen separados. FiftyOne incluye OpenCV sin interfaz gráfica, que se solapa con el paquete `cv2` del núcleo.
+
+La instalación básica requiere Python 3.10 o posterior y añade `cloudpickle>=3.0.0` para DDP gestionado por un coordinador.
+
+Usa un entorno separado para Molmo2: su versión fijada de Transformers 4.57.1 entra en conflicto con los stacks más recientes de VLM, Hub y Marigold. Marigold fija diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 y Transformers 5.4.0, además de bitsandbytes 0.49.2 en Linux/Windows. La inferencia Marigold a cuatro bits por defecto requiere CUDA. North Micro Vision requiere Transformers 5.16 o posterior; Gemma 4 requiere 5.10 o posterior, por encima del mínimo compartido de VLM.
 
 ## Restricciones de plataforma
 

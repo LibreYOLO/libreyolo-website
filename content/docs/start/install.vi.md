@@ -2,12 +2,11 @@
 title: Cài đặt
 seo_title: Cài đặt LibreYOLO
 description: >-
-  Cài LibreYOLO từ PyPI, chọn các gói bổ sung mà họ mô hình hoặc đích xuất cần,
-  rồi xác nhận PyTorch nhận diện GPU.
+  Cài LibreYOLO từ PyPI, chọn các gói bổ sung mà họ mô hình hoặc đích xuất cần, rồi xác nhận PyTorch nhận diện
+  GPU.
 lead: >-
-  LibreYOLO được phát hành trên PyPI với tên libreyolo. Package cơ sở hỗ trợ dự
-  đoán, huấn luyện, xác thực và các họ mô hình không cần gì ngoài PyTorch; các
-  gói bổ sung cung cấp phần còn lại.
+  LibreYOLO được phát hành trên PyPI với tên libreyolo. Package cơ sở hỗ trợ dự đoán, huấn luyện, xác thực và
+  các họ mô hình không cần gì ngoài PyTorch; các gói bổ sung cung cấp phần còn lại.
 keywords:
   - cài libreyolo
   - pip install libreyolo
@@ -15,7 +14,7 @@ keywords:
   - libreyolo cuda
   - libreyolo gpu
   - yêu cầu libreyolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Package
     value: libreyolo
@@ -67,9 +66,8 @@ snippets:
         # đầu vào. Họ còn thiếu gói bổ sung được liệt kê kèm lệnh pip
         # để kích hoạt.
         libreyolo models
-source_hash: 34fc6d3e24d03fb4
+source_hash: 531023c2092fd751
 ---
-
 ## Cài đặt
 
 <code-tabs name="install" />
@@ -92,6 +90,11 @@ một đích xuất cần. Không có gì khác thay đổi: API giống nhau d�
 
 | Gói bổ sung | Thành phần thêm vào |
 |---|---|
+| `ground` | Các phụ thuộc VLM để chuyển chỉ dẫn thành điểm |
+| `vlm-train` | Bộ VLM cùng `peft>=0.17.0` để tinh chỉnh Qwen3-VL |
+| `vla` | `lerobot[smolvla,diffusion,dataset]>=0.6.1`, Python 3.12 trở lên |
+| `marigold` | Các phụ thuộc diffusion, tăng tốc và Transformers được ghim |
+| `molmo2` | `transformers==4.57.1`, `einops` và `accelerate` |
 | `rfdetr` | `transformers`, cung cấp backbone RF-DETR |
 | `eomt` | `transformers` |
 | `midas` | `timm` 1.0.x, cung cấp encoder ViT-L/16 và EfficientNet-Lite3 của MiDaS |
@@ -109,7 +112,7 @@ một đích xuất cần. Không có gì khác thay đổi: API giống nhau d�
 
 | Gói bổ sung | Thành phần thêm vào |
 |---|---|
-| `onnx` | `onnx`, `onnxsim`, `onnxruntime` |
+| `onnx` | `onnx`, `onnxsim`, `onnxruntime>=1.18.0` |
 | `tensorrt` | `tensorrt-cu12` 10.16.1.11 và `pycuda`, ngoài macOS |
 | `openvino` | `openvino` |
 | `coreml` | `coremltools` |
@@ -144,6 +147,9 @@ về pycocotools và quá trình chạy tiếp tục.
 
 | Gói bổ sung | Thành phần thêm vào |
 |---|---|
+| `hf` | `huggingface_hub>=1.0.0` để tải, công bố và dùng logger Hub |
+| `llm` | `openai>=1.66.0` cho endpoint API tương thích |
+| `fiftyone` | `fiftyone>=1.0.0` để tuyển chọn dataset |
 | `stream` | `yt-dlp`, chỉ cần để phân giải URL trang YouTube |
 | `tracking` | Không có. Mọi dependency tracking đã là dependency cốt lõi |
 | `label` | `libreyolo[sam]`, kích hoạt hỗ trợ click-to-mask trong `libreyolo label` |
@@ -162,7 +168,11 @@ trong một lệnh. Một số gói được cố ý để ngoài. `neptune` b�
 protobuf 7. `executorch` bị loại vì ExecuTorch giới hạn phiên bản PyTorch đi
 kèm, còn `coreai` vì `coreai-torch` cố định PyTorch ở 2.11.x và sẽ kéo toàn bộ
 môi trường sang phiên bản đó. `fast-eval`, `hub-kernels`, `clip-convert` và
-`siglip2-convert` cũng không được đưa vào. Hãy cài riêng theo tên nếu cần.
+`siglip2-convert` cũng không được đưa vào. Hãy cài riêng theo tên nếu cần. `all` bao gồm `hf` và `llm`; `fiftyone`, `vla`, `marigold` và `molmo2` vẫn riêng biệt. FiftyOne mang theo OpenCV headless, trùng lặp với package `cv2` lõi.
+
+Cài đặt lõi yêu cầu Python 3.10 trở lên và bổ sung `cloudpickle>=3.0.0` cho DDP do bộ điều phối quản lý.
+
+Dùng môi trường riêng cho Molmo2: phiên bản Transformers 4.57.1 được ghim xung đột với các bộ thư viện VLM, Hub và Marigold mới hơn. Marigold ghim diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 và Transformers 5.4.0, cùng bitsandbytes 0.49.2 trên Linux/Windows. Inference Marigold bốn bit mặc định cần CUDA. North Micro Vision cần Transformers 5.16 trở lên; Gemma 4 cần 5.10 trở lên, cao hơn mức tối thiểu chung của VLM.
 
 ## Ràng buộc nền tảng
 

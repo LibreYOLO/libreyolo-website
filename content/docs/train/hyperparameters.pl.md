@@ -21,7 +21,7 @@ keywords:
   - early stopping patience
   - amp bfloat16
   - train config yaml
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -127,7 +127,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: d838d1abd45af40f
+source_hash: eac4e55fcf16ca15
 ---
 
 ## Ustawianie argumentów
@@ -176,13 +176,9 @@ wartości:
 | `weight_decay` | `5e-4` | `5e-4` | `1e-4` | `1e-5` |
 | `scheduler` | `yoloxwarmcos` | `linear` | `flat_cosine` | `cos` |
 | `epochs` | `300` | `300` | `132` | `300` |
-| `amp` | `True` | `True` | `False` | `False` |
+| `amp` | `True` | `True` | `True` | `True` |
 
-D-FINE i DEIM są dostarczane z `amp=False`, ponieważ dekoder D-FINE ogranicza
-aktywacje do 65504, największej skończonej wartości float16. YOLO-NAS i FOMO
-również domyślnie wyłączają tę opcję. Flaga `--amp` w CLI ma wartość domyślną
-`True` dla każdej rodziny, dlatego jest uznawana za podaną przez użytkownika i
-zastępuje wartość domyślną rodziny. Nie należy jej zmieniać bez świadomego celu.
+D-FINE, DEIM, RT-DETRv4 i detekcja YOLO-NAS domyślnie używają `amp=True` z `amp_dtype="float16"`. Dome-DETR, PP-YOLOE i YOLO-NAS OBB zachowują domyślne FP32. Gdy wymagane jest FP32, należy przekazać `amp=False`.
 
 Aby odczytać rzeczywiste wartości domyślne rodziny zamiast zgadywać:
 
@@ -210,6 +206,8 @@ teście nadal zaniża koszt kryterium i pomocniczych warstw dekodera.
 
 Autobatch jest funkcją CUDA. Na CPU lub MPS zapisuje jeden wiersz w logu i
 pozostawia domyślny batch.
+
+`min_samples=0` pozostawia długość epoki bez zmian. Dodatnia wartość minimalna powoduje próbkowanie ze zwracaniem w krótszych zbiorach detekcji. `class_balanced=False`, po ustawieniu na true, włącza próbkowanie obrazów ze współczynnikiem powtórzeń; współpracuje z `min_samples` i DDP. Wyspecjalizowane loadery pomijające wspólny sampler odrzucają włączone równoważenie.
 
 ## Akumulacja gradientów
 
@@ -288,6 +286,10 @@ w RAM (`True` lub `"ram"`) albo jako pliki `.npy` obok źródeł (`"disk"`). Odc
 z pamięci podręcznej są identyczne bajt po bajcie ze świeżymi odczytami. Przy
 workerach modułu wczytującego dane bezpieczniejszą opcją jest `"disk"`.
 
+`average_best=0` wyłącza uśrednianie checkpointów; dodatnie N zapisuje `weights/average.pt` na podstawie najwyżej N najlepszych snapshotów. Tensory zmiennoprzecinkowe są uśredniane równomiernie, a bufory całkowitoliczbowe pochodzą z najlepszego snapshotu. Można włączyć `export_check=False`, aby przerwać trenowanie przed pierwszą epoką, jeśli eksport ONNX się nie powiedzie. Pasujące surowe wyjścia są porównywane przy `rtol=1e-3`, `atol=1e-4`; przy niezgodnych układach zapisywana jest informacja o pominięciu porównania.
+
+`precise_bn=0` wyłącza końcową rekalibrację BatchNorm. Dodatnia wartość ogranicza liczbę obrazów z loadera treningowego przed końcową walidacją; w DDP limit obowiązuje osobno dla każdego uczestniczącego procesu rank. Zamrożone BatchNorm pozostaje zamrożone. [Własne callbacki fitness](/docs/train/fitness-callbacks) mogą wybierać najlepsze checkpointy i sterować patience.
+
 ## Wznawianie
 
 `resume=True` kontynuuje przerwany przebieg. Najpierw trzeba wczytać checkpoint,
@@ -327,3 +329,10 @@ zarządza. CLI nie ma flagi `--cfg`. Ścieżka pliku jest argumentem Pythona.
 - [Walidacja i metryki](/docs/train/validation) opisują raportowane wyniki
   przebiegu.
 
+## Wybór klas i ważenie funkcji straty
+
+W detekcji YOLO9, RF-DETR, EdgeCrafter, RT-DETR, D-FINE, DEIM, TinyFormer i YOLO-NAS `classes=None` zachowuje wszystkie klasy zbioru; lista filtruje etykiety nadzorujące z zachowaniem oryginalnych identyfikatorów, `nc` i `names`. `single_cls=False` można włączyć, aby mapować zachowane etykiety na klasę 0 o nazwie `object`. Wznowienie i walidacja dziedziczą zapisane ustawienia. Trenowanie OBB odrzuca `single_cls`.
+
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 i DINOv2 obsługują `cls_pw=0.0`: wartości z [0, 1] ważą każdą klasę odwrotnością częstości podniesioną do tej potęgi, z normalizacją do średniej 1. `class_weights=False`, po włączeniu, wybiera alternatywne ważenie `N / (C * n_c)`. Nie można go łączyć z dodatnim `cls_pw`; wznowienie wymaga zgodnych ustawień ważenia.
+
+`plot_samples=8` określa limit przykładowych obrazów walidacyjnych. 0 wyłącza je, a -1 wybiera wszystkie; nie zmniejsza to liczby ocenianych obrazów.

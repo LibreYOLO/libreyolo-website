@@ -19,7 +19,7 @@ keywords:
   - fp8 e4m3
   - kalibrierungsdaten quantisierung
   - qdq onnx export
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Aufruf
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -83,7 +83,7 @@ snippets:
             calib="coco128.yaml",      # data.yaml-Pfad oder eingebauter Name; None überspringt sie
             samples=128,               # maximale Anzahl Kalibrierungsbilder
             batch=8,                   # Batch-Größe der Kalibrierung
-            algorithm="auto",          # auto und minmax sind gleich; percentile ist die Alternative
+            algorithm="auto",          # auto wählt minmax; Alternativen: percentile, mse, entropy
             keep_high_precision=None,  # None nutzt die Regel der Familie
             verbose=True,
         )
@@ -167,7 +167,7 @@ snippets:
 
         # Jeder Float-Exporter greift jetzt, in jeder Präzision, die er kann.
         qmodel.export(format="tensorrt", half=True)
-source_hash: 4ffb06b87cad017e
+source_hash: "6c247a3243daf393"
 ---
 
 ## Installation
@@ -193,6 +193,8 @@ Der entstehende Checkpoint ist ein normaler LibreYOLO-Checkpoint mit angehängte
 Die Trainer-Checkpoints, die während eines QAT-Laufs geschrieben werden, tragen
 das Manifest ebenfalls, `best.pt` aus so einem Lauf ist also selbst ein
 quantisierter Checkpoint.
+
+Der Kalibrierungsparameter `algorithm` akzeptiert `auto`, `minmax`, `percentile`, `mse` und `entropy`. `auto` wird zu minmax aufgelöst. MSE und Entropie verwenden Histogrammdurchläufe zur Auswahl der Aktivierungsbereiche.
 
 ## Rezepte
 
@@ -255,6 +257,8 @@ heißt heute `yolo9` und `rfdetr`.
 
 Mit `fp16` und `bf16` quantisierte Modelle sind nur für die Inferenz, und der
 Trainer lehnt sie mit einem Hinweis auf `amp=True` ab.
+
+Die QAT-Einrichtung deaktiviert EMA und SyncBatchNorm, setzt `average_best=0` und protokolliert jede Überschreibung. Gleitkommatraining behält seine angeforderten Einstellungen.
 
 ## Export
 

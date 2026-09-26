@@ -17,14 +17,8 @@ keywords:
   - comando libreyolo formats
   - soglia parità esportazione
   - NotImplementedError export
-last_verified: 1.5.0
-verification: >-
-  Formati, livelli, ordine di fallback, blocchi per task e per famiglia e
-  blocchi NCNN letti da libreyolo/export/support.py; alias e argomenti condivisi
-  da libreyolo/export/exporter.py; definizioni dei livelli da
-  docs/adr/0011-export-support-tiers.md; soglie di parità da
-  docs/export_support.md, tutto alla v1.5.0. Le celle delle singole combinazioni
-  non sono trascritte qui; interrogale con lo snippet qui sotto.
+last_verified: 1.6.0
+verification: Formati, livelli, ordine di fallback, blocchi per task e per famiglia e blocchi NCNN letti da libreyolo/export/support.py; alias e argomenti condivisi da libreyolo/export/exporter.py; definizioni dei livelli da docs/adr/0011-export-support-tiers.md; soglie di parità da docs/export_support.md, tutto alla v1.6.0. Le celle delle singole combinazioni non sono trascritte qui; interrogale con lo snippet qui sotto.
 snippets:
   usage:
     - label: 'Consultare la matrice, senza bisogno di un modello'
@@ -72,7 +66,7 @@ snippets:
         print(blocked.tier)
 
         print(blocked.reason)
-source_hash: 83de3289634888c6
+source_hash: 70b9541fb8949352
 ---
 
 ## Forma della matrice
@@ -94,6 +88,8 @@ Poiché una cella è funzione di tre chiavi, la griglia completa è grande e cam
 a ogni release. È generata invece che scritta a mano, e si trova in
 `docs/export_support.md` nel repository della libreria. Interroga la matrice da
 Python o dalla CLI invece di leggerne una copia.
+
+Il registro generato include PP-YOLOE, TinyFormer, DEKR, PP-LiteSeg, ConvNeXt V2, PE, V-JEPA 2 e LeVJEPA. Consulta ogni pagina del modello per i vincoli di dimensioni e task. U-Net, i quattro adattatori 3D, Marigold V2 e le policy robotiche non supportano l'esportazione.
 
 ## I tre livelli
 

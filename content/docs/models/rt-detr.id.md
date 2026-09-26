@@ -22,7 +22,7 @@ keywords:
   - oriented bounding box detection
   - OBB
   - DOTA
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -219,7 +219,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 8022a5a591922a90
+source_hash: 75454e612d7e2247
 ---
 
 ## Instalasi
@@ -315,6 +315,8 @@ panjang yang jumlah tokennya cocok dengan ukuran native tetap menggunakan embedd
 dibuat untuk rasio aspek yang salah.
 
 Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
+
+RT-DETRv4 mengaktifkan `amp=True` dengan `amp_dtype="float16"` secara default. Berikan `amp=False` untuk FP32.
 
 ## Validasi
 

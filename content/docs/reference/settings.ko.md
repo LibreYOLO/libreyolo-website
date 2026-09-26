@@ -12,12 +12,8 @@ keywords:
   - HF_토큰
   - libreyolo 가중치 디렉토리
   - libreyolo 캐시
-last_verified: 1.5.0
-verification: >-
-  v1.5.0에서 libreyolo/**/*.py를 검색하여 os.environ 및 os.getenv로 위치한 변수; 각 사용 지점에서 의미
-  읽기. 디렉토리 규칙은 libreyolo/data/utils.py, libreyolo/utils/download.py,
-  libreyolo/export/exporter.py, libreyolo/models/base/model.py 및
-  libreyolo/models/sam3dbody/mhr_body.py.에서 읽기
+last_verified: 1.6.0
+verification: 'v1.6.0에서 libreyolo/**/*.py를 검색하여 os.environ 및 os.getenv로 위치한 변수; 각 사용 지점에서 의미 읽기. 디렉토리 규칙은 libreyolo/data/utils.py, libreyolo/utils/download.py, libreyolo/export/exporter.py, libreyolo/models/base/model.py 및 libreyolo/models/sam3dbody/mhr_body.py.에서 읽기'
 snippets:
   usage:
     - label: 데이터셋 루트를 다른 곳으로 지정하십시오
@@ -32,7 +28,7 @@ snippets:
 
         # 기본값은 ~/datasets이며; LIBREYOLO_DATASETS_DIR가 가져오기 시점에 이를 덮어씁니다.
         print(DATASETS_DIR)
-source_hash: 462f1288582225ce
+source_hash: "82fbf9f3b1540603"
 ---
 
 ## 환경 변수
@@ -56,6 +52,8 @@ source_hash: 462f1288582225ce
 허브 커널은 두 부분으로 구성된 선택적 참여(opt-in)입니다. 런타임 가져오기(fetch)는 선택적 `kernels` 패키지가 설치될 때만 발생하며, 따라서 `libreyolo[hub-kernels]` 설치가 선택적 참여이며 `LIBREYOLO_HUB_KERNELS=0`가 선택적 제외(opt-out)입니다. 추가 패키지 없이 설치하는 경우에는 어떠한 방식으로도 영향을 받지 않습니다.
 
 커널 선택은 또한 가져오기를 단축시킵니다: `LIBREYOLO_KERNELS`가 `off` 또는 `reference`를 강제로 사용할 때, 트리 내 가속 제공자는 전혀 가져오지 않습니다. 이 세 변수로 제어되는 레지스트리는 [kernels](/docs/reference/kernels)에 문서화되어 있습니다.
+
+`LIBREYOLO_TRITON_MSDA=0`은 내장 Triton 변형 가능 어텐션 제공자를 비활성화합니다. `LIBREYOLO_HUB_KERNELS=0`은 Hub 커널과 설치 안내를 비활성화합니다. 두 설정 모두 이식 가능한 폴백을 유지합니다.
 
 ## 라이브러리가 설정하는 변수
 
@@ -86,6 +84,8 @@ source_hash: 462f1288582225ce
 `HF_TOKEN`는 Hugging Face 액세스 토큰입니다. 설정되지 않은 경우, 토큰은 Hugging Face CLI 로그인이 기록하는 `~/.cache/huggingface/token`에서 읽습니다. 어느 경로든 작동합니다.
 
 토큰은 제한된 저장소에만 필요합니다. SAM 3이 제공된 예시입니다: 그 가중치는 사용자 지정 라이선스가 적용된 제한된 저장소에서 다운로드되므로, 저장소 페이지에서 조건을 수락하고 세션을 인증해야 합니다.
+
+`HF_TOKEN`은 Hub 체크포인트 로드, 게시, Hub 로거를 인증합니다. `OPENAI_API_KEY`와 `OPENROUTER_API_KEY`는 해당 [LibreLLM 제공자 경로](/docs/reference/llm-api)의 인증 정보를 제공합니다.
 
 ## 디렉토리
 

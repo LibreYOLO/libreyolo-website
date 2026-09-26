@@ -19,7 +19,7 @@ keywords:
   - segmentasi instance
   - estimasi pose
   - bounding box berorientasi
-last_verified: 1.5.0
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -220,7 +220,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 8c464aa759131694
+source_hash: c360784eb62a7df5
 ---
 
 ## Instalasi
@@ -241,6 +241,8 @@ Objek `Results` yang dikembalikan sama dengan yang dikembalikan setiap family, j
 detektor hanya memerlukan perubahan satu baris. `conf` dan `max_det` memfilter pemilihan
 query; tidak ada tahap NMS yang perlu disetel. Lihat [prediksi](/docs/predict) untuk sumber,
 streaming, dan penanganan hasil.
+
+Jalur deteksi, segmentasi, dan kotak berorientasi memakai pengubahan ukuran bilinear OpenCV floating-point tanpa antialiasing; pose tetap memakai pengubahan ukuran dengan antialiasing. `imgsz=(height, width)` persegi panjang harus sesuai dengan grid patch/window task. Daftar checkpoint mencakup detektor UI. [Histogram peristiwa](/docs/train/event-histograms) memakai profil input yang tercatat.
 
 ## Varian
 
@@ -268,6 +270,8 @@ ada alasan untuk mengubahnya. Input harus habis dibagi ukuran patch backbone dik
 window; LibreYOLO memeriksanya sebelum proses dimulai dan menyebutkan ukuran valid terdekat.
 
 Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
+
+Proses baru memakai `output_dir=None` secara default, yang menghasilkan direktori `runs/train/rfdetr_exp` bernomor dengan `exist_ok=False`. Dataset pose multikelas memakai `kpt_names` dengan indeks atau nama kelas sebagai kunci; daftar kosong menandai kelas yang hanya memiliki kotak. Prediksi mengisi keypoint hingga `kpt_shape`; fitness mAP keypoint tidak menilai kelas yang hanya memiliki kotak.
 
 ## Validasi
 

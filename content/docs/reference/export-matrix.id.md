@@ -16,14 +16,11 @@ keywords:
   - perintah formats libreyolo
   - ambang batas paritas ekspor
   - NotImplementedError ekspor
-last_verified: 1.5.0
-verification: >-
-  Format, tier, urutan fallback, block task dan family, serta block NCNN dibaca
-  dari libreyolo/export/support.py; alias dan argumen bersama dari
-  libreyolo/export/exporter.py; definisi tier dari
-  docs/adr/0011-export-support-tiers.md; ambang batas paritas dari
-  docs/export_support.md, semuanya pada v1.5.0. Cell per kombinasi tidak disalin
-  di sini; lakukan query dengan snippet di bawah.
+last_verified: 1.6.0
+verification: Format, tingkat, urutan fallback, blok task dan family, serta blok NCNN dibaca dari
+  libreyolo/export/support.py; alias dan argumen bersama dari libreyolo/export/exporter.py; definisi
+  tingkat dari docs/adr/0011-export-support-tiers.md; ambang paritas dari docs/export_support.md,
+  semuanya pada v1.6.0. Sel per kombinasi tidak disalin di sini; kueri dengan snippet di bawah.
 snippets:
   usage:
     - label: Lakukan query pada matriks tanpa model
@@ -62,7 +59,7 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
-source_hash: 83de3289634888c6
+source_hash: 70b9541fb8949352
 ---
 
 ## Bentuk matriks
@@ -84,6 +81,8 @@ Karena sebuah cell merupakan fungsi dari tiga kunci, grid lengkap berukuran besa
 dan berubah pada setiap rilis. Grid dihasilkan, bukan ditulis manual, dan
 berada di `docs/export_support.md` dalam repositori library. Lakukan query pada
 matriks dari Python atau CLI alih-alih membaca salinannya.
+
+Registry yang dihasilkan mencakup PP-YOLOE, TinyFormer, DEKR, PP-LiteSeg, ConvNeXt V2, PE, V-JEPA 2, dan LeVJEPA. Lihat halaman tiap model untuk batasan bentuk dan task. U-Net, keempat adaptor 3D, Marigold V2, dan policy robot tidak menyediakan ekspor.
 
 ## Tiga tier
 

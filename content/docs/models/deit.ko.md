@@ -18,7 +18,7 @@ keywords:
   - ImageNet
   - 데이터 효율 학습
   - 이전 이미지 분류 모델
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -76,7 +76,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 9c67c8554b2af5c6
+source_hash: "4dad5f1aa0943dd9"
 ---
 
 ## 설치
@@ -110,6 +110,8 @@ softmax 점수입니다. 각 크기는 위치 임베딩에 따른 고정 입력 
 
 <code-tabs name="val" />
 
+검증과 INT8 보정은 해당 계열의 평가 변환을 사용합니다. 내보내기 메타데이터는 `norm_mean`, `norm_std`, `resize_mode`를 기록하며, 이전 파일은 계열의 기본값을 사용합니다. 보정 전처리기는 필요한 CHW 배열과 비율을 반환합니다.
+
 ## 내보내기
 
 <export-matrix />
@@ -134,4 +136,3 @@ LibreYOLO를 설치하지 않고 런타임에서 그래프를 직접 실행할 �
 ## 인용
 
 <citation-block />
-

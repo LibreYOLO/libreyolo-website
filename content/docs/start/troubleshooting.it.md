@@ -15,8 +15,8 @@ keywords:
   - libreyolo cuda out of memory
   - libreyolo notimplementederror
   - risolvere errori libreyolo
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: 1.6.0
+source_hash: 30b68976a4ac01d1
 ---
 
 Gli errori sono raggruppati per il testo che vedi. Se il tuo messaggio non è
@@ -181,3 +181,7 @@ if report.errors:
 ```
 
 Vedi il [comando doctor](/docs/cli/doctor) per il catalogo dei controlli.
+
+## I worker persistenti non possono osservare le modifiche al dataset
+
+Gli hook attivi `close_mosaic` o `set_epoch` devono raggiungere le copie del dataset usate dai worker. Se un loader personalizzato con più worker mantiene copie persistenti incompatibili, usa `persistent_workers=False` o ricrea i worker dopo la modifica. Il percorso predefinito non persistente resta invariato.

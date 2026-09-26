@@ -14,8 +14,8 @@ keywords:
   - lokasi bobot libreyolo
   - cli libreyolo
   - libreyolo offline
-last_verified: 1.5.0
-source_hash: a729b43a6642f2a0
+last_verified: 1.6.0
+source_hash: d0d1f00bab2cee6e
 ---
 
 ## Model mana yang sebaiknya digunakan pertama kali?
@@ -158,5 +158,6 @@ dan `LibreYOLORFDETR` menjadi `LibreRFDETR`. Nama lama tetap diselesaikan dan
 menghasilkan `DeprecationWarning` yang menunjuk ke nama baru, sehingga kode lama
 tetap berjalan selama diperbarui.
 
+## Mengapa nama checkpoint tertentu gagal diunduh?
 
-
+Gunakan nama berkas persis seperti dalam tabel checkpoint halaman model. Nama FCN dan Mask R-CNN dengan akhiran task tidak dihosting; galat loader mencantumkan bentuk yang didukung. LingBot-Vision g tidak memiliki checkpoint yang dipublikasikan: gunakan s, b, l, atau checkpoint lokal.

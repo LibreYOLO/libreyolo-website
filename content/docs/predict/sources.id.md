@@ -19,7 +19,7 @@ keywords:
   - youtube inference
   - vid_stride
   - stream=True
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Klasifikasi sumber dibaca dari libreyolo/utils/source.py (classify_source,
   SourceKind, StreamSource, MultiStreamSource). Jenis gambar dan ekstensi
@@ -201,7 +201,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: 93db4d43c24b69ae
 ---
 
 ## Cara sumber diklasifikasikan
@@ -254,6 +254,8 @@ sedangkan nilai lebih tinggi dipotong ke `[0, 255]`. Array RGBA membuang channel
 Path remote memerlukan satu paket per jenis dan tidak ada yang dipasang secara default:
 `requests` untuk `http(s)://`, `boto3` untuk `s3://`, dan `gcsfs` untuk `gs://`.
 
+Pelacakan menerima gambar, folder yang diurutkan berdasarkan nama berkas, daftar, tuple, dan iterator gambar lazy sebagai frame berurutan. Berikan `fps=30.0` untuk menentukan waktu urutan gambar dan `color_format="auto"` untuk memilih interpretasi input. Lihat [pelacakan](/docs/tasks/object-tracking).
+
 ## Folder
 
 Direktori dipindai secara rekursif dan diurutkan, lalu setiap berkas dengan salah satu sufiks
@@ -280,6 +282,8 @@ video didekode menjadi daftar, dan hasil lebih dari 500 frame setelah striding m
 peringatan yang menyarankan `stream=True`.
 
 Setiap `Results` dari video membawa `frame_idx`.
+
+Encoding video memakai codec yang tersedia sebagai fallback jika H.264 tidak dapat dibuka. Fallback dicatat pada tingkat INFO dan disimpan dalam cache per codec dan kanvas hanya setelah codec lain berhasil.
 
 ## Webcam, stream jaringan, dan YouTube
 

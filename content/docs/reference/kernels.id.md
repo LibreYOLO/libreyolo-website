@@ -19,15 +19,12 @@ keywords:
   - kernel ms_deform_attn
   - set_fused_attention
   - kernel triton libreyolo
-last_verified: 1.5.0
-verification: >-
-  API registry dibaca dari libreyolo/kernels/__init__.py pada v1.5.0, API
-  attention dari libreyolo/kernels/attention/__init__.py dan sdpa.py, provider
-  Hub dari libreyolo/kernels/attention/ms_deform_attn.py termasuk revisi yang
-  dikunci versinya dan predicate kelayakannya. Tata letak direktori dicantumkan dari
-  libreyolo/kernels/. Definisi ekstra dari pyproject.toml. Catatan perilaku dan
-  angka benchmark dari docs/kernels.md. Riwayat gating v1.4.0 dari commit
-  penghubungan slot RF-DETR dan entri CHANGELOG 1.5.0.
+last_verified: 1.6.0
+verification: API registry dibaca dari libreyolo/kernels/__init__.py pada v1.6.0, API attention dari
+  libreyolo/kernels/attention/__init__.py dan sdpa.py, penyedia Hub dari libreyolo/kernels/attention/ms_deform_attn.py
+  termasuk revisi yang dipatok dan predikat kelayakannya. Struktur direktori diambil dari libreyolo/kernels/.
+  Definisi extra dari pyproject.toml. Catatan perilaku dan angka benchmark dari docs/kernels.md.
+  Riwayat pembatasan v1.4.0 dari commit penghubungan slot RF-DETR dan entri CHANGELOG 1.5.0.
 meta:
   - label: Paket
     value: libreyolo.kernels
@@ -78,7 +75,7 @@ snippets:
             name="mybackend",
             predicate=my_check,
         )
-source_hash: 23d504e88b7959f8
+source_hash: 2cdb2d344ab3faf5
 ---
 
 ## Registry
@@ -190,6 +187,8 @@ bergeser dalam toleransi float. Instalasi standar tanpa ekstra tidak terpengaruh
 Saat membandingkan metrik lintas upgrade, pertahankan ekstra yang sama atau
 tetapkan `LIBREYOLO_HUB_KERNELS=0` pada kedua sisi.
 
+MSDA Hub menerima FP16 dan BF16 dengan mengonversi input kernel ke FP32, memulihkan dtype keluaran, dan mempertahankan gradien melalui konversi. Pemanggilan CUDA eager tanpa penyedia akselerasi yang diterima menampilkan satu petunjuk pemasangan `libreyolo[hub-kernels]`. `ms_deform_attn_available(value=None)` dapat memeriksa jalur khusus tensor.
+
 ## Fused attention
 
 Fused scaled dot-product attention tidak memerlukan dependency opsional, hanya
@@ -240,5 +239,6 @@ Pemilihan kernel berinteraksi dengan [CUDA graph](/docs/reference/cuda-graphs):
 matriks paritas inferensi dijalankan tanpa paket `kernels` terinstal, sehingga
 keamanan capture dengan kernel terkompilasi aktif tidak dicakup olehnya.
 
+## Deformable attention Triton
 
-
+Penyedia MSDA Triton bawaan mendukung inferensi CUDA yang memenuhi syarat dengan FP32, FP16, dan BF16. Penyedia ini menolak input yang memerlukan gradien dan memakai attention portabel sebagai fallback jika tidak tersedia. Hub tetap diutamakan. `LIBREYOLO_TRITON_MSDA=0` menonaktifkan Triton; `LIBREYOLO_HUB_KERNELS=0` menonaktifkan penyedia Hub dan petunjuk pemasangannya.

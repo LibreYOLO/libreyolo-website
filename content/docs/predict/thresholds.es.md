@@ -19,7 +19,7 @@ keywords:
   - agnostic nms
   - detr sin nms
   - filtrado por clases inferencia
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Valores por defecto tomados de InferenceRunner.__call__ en
   libreyolo/models/base/inference.py. Comportamiento de NMS por familia leído de
@@ -109,7 +109,7 @@ snippets:
         funcionan.
 
         print(len(loose.boxes), len(tight.boxes))
-source_hash: 0b978963c356027d
+source_hash: 849650629e58c9e1
 ---
 
 ## Los cuatro argumentos
@@ -138,6 +138,8 @@ control al que recurrir cuando hay demasiadas o demasiado pocas detecciones.
 
 El valor por defecto de `0.25` sirve para mirar imágenes. Alimentar a un sistema
 posterior suele pedirlo más alto; medir la precisión lo pide mucho más bajo.
+
+La validación de detección expone `metrics/best_conf` y umbrales por clase a partir de F1 con IoU 0.50. Úsalos como puntos de partida medidos para los umbrales de despliegue; consulta [validación](/docs/train/validation). La segmentación no expone estas claves.
 
 ## iou
 

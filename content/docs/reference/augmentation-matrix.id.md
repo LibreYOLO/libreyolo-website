@@ -17,11 +17,9 @@ keywords:
   - no_aug_epochs
   - matriks dukungan augmentasi
   - knob TrainConfig
-last_verified: 1.5.0
-verification: >-
-  List knob, status, arketipe, deviasi per family, dan fungsi helper dibaca dari
-  libreyolo/data/augment/spec.py pada v1.5.0. Tabel tersebut dikaitkan ke
-  pipeline nyata oleh tests/unit/test_augment_spec.py.
+last_verified: 1.6.0
+verification: Daftar pengaturan, status, arketipe, perbedaan per family, dan fungsi helper dibaca
+  dari libreyolo/data/augment/spec.py pada v1.6.0. Tabel itu dikunci ke pipeline aktual oleh tests/unit/test_augment_spec.py.
 snippets:
   usage:
     - label: Tanyakan langsung kepada spec
@@ -41,7 +39,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: d2e1b9f5c81072e1
+source_hash: f3cba41ceadf131f
 ---
 
 ## Knob
@@ -68,9 +66,7 @@ sendiri ke field tersebut, sehingga `--mosaic` menetapkan `mosaic_prob`.
 | `mixup` | Probabilitas batch-MixUp classification, dengan soft label |
 | `cutmix` | Probabilitas batch-CutMix classification, dengan soft label |
 
-Empat knob terakhir adalah paket classification. Family deteksi mengabaikannya.
-`mixup` adalah knob khusus API: `--mixup` pada CLI merupakan alias untuk
-`mixup_prob` milik deteksi.
+Empat yang terakhir adalah paket klasifikasi. Family deteksi mengabaikannya. CLI mengarahkan `mixup` ke pencampuran batch klasifikasi untuk pengklasifikasi dan ke `mixup_prob` untuk detektor.
 
 <code-tabs name="usage" />
 
@@ -98,14 +94,14 @@ beberapa deviasi per family yang tercantum di bawah.
 | `mosaic_prob` | used | ignored | ignored | ignored | ignored | ignored |
 | `mixup_prob` | gated | used | ignored | ignored | ignored | ignored |
 | `hsv_prob` | used | used | ignored | ignored | ignored | ignored |
-| `flip_prob` | used | used | used | ignored | ignored | ignored |
+| `flip_prob` | dipakai | dipakai | dipakai | dipakai | diabaikan | diabaikan |
 | `degrees` | gated | used | ignored | ignored | ignored | ignored |
 | `translate` | gated | used | ignored | ignored | ignored | ignored |
 | `mosaic_scale` | gated | used | ignored | ignored | ignored | ignored |
 | `mixup_scale` | gated | used | ignored | ignored | ignored | ignored |
 | `shear` | gated | used | ignored | ignored | ignored | ignored |
 | `perspective` | gated | used | ignored | ignored | ignored | ignored |
-| `flipud` | used | used | ignored | ignored | ignored | ignored |
+| `flipud` | dipakai | dipakai | diabaikan | dipakai | diabaikan | diabaikan |
 | `no_aug_epochs` | used | used | used | used | used | used |
 | `auto_augment` | ignored | ignored | ignored | used | ignored | ignored |
 | `erasing` | ignored | ignored | ignored | used | ignored | ignored |
@@ -118,19 +114,9 @@ YOLO-NAS menjalankan affine per sampel yang selalu aktif, mengabaikan mosaic,
 dan menerapkan MixUp secara independen dengan menggunakan kembali
 `mosaic_scale` sebagai rentang skala affine.
 
-Pipeline bergaya DETR adalah transform pass-through tanpa mosaic. Distorsi
-fotometrik, zoom-out, dan IoU-crop merupakan konstanta resep, bukan knob yang
-dapat dikonfigurasi. Karena itu, `hsv_prob` dan knob geometri tidak pernah
-mencapainya. Pipeline classification menggunakan transform ImageFolder dengan
-flip horizontal tetap sebesar 0.5, bukan `flip_prob`. Jitter skala semantic dan
-HSV berasal dari atribut kelas family, bukan knob konfigurasi, sedangkan flip
-restoration merupakan operasi input-dan-target berpasangan dengan probabilitas
-tetap 0.5.
+Pipeline gaya DETR adalah transformasi pass-through tanpa mosaic. Distorsi fotometrik, zoom-out, dan crop IoU merupakan konstanta resep, bukan pengaturan yang dapat dikonfigurasi, sehingga `hsv_prob` dan pengaturan geometri tidak memengaruhinya. Klasifikasi memakai `flip_prob` untuk pembalikan horizontal dan `flipud` untuk pembalikan vertikal. Jitter skala semantik dan HSV berasal dari atribut kelas family, bukan pengaturan konfigurasi, sedangkan pembalikan restorasi memasangkan operasi input dan target dengan probabilitas tetap 0.5.
 
-`no_aug_epochs` dipatuhi di semua tempat, meskipun yang dinonaktifkan berbeda:
-mosaic dan MixUp untuk gaya YOLOX, affine dan MixUp untuk YOLO-NAS, augmentasi
-fotometrik dan crop kuat beserta bagian akhir learning rate untuk gaya DETR,
-serta bagian akhir scheduler untuk yang lain.
+`no_aug_epochs` dipatuhi di semua pipeline, tetapi yang dinonaktifkan berbeda: mosaic dan MixUp untuk gaya YOLOX, affine dan MixUp untuk YOLO-NAS, augmentasi fotometrik kuat dan crop serta bagian akhir learning rate untuk gaya DETR, dan augmentasi otomatis, erasing, MixUp, serta CutMix untuk klasifikasi. Crop dan pembalikan klasifikasi tetap aktif.
 
 ## Family menurut arketipe
 

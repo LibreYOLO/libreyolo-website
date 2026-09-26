@@ -18,7 +18,7 @@ keywords:
   - 图像 embedding 提取
   - 以图搜图 特征向量
   - Meta AI
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: 语义分割
@@ -146,7 +146,7 @@ snippets:
         # LibreDINOv2s-sem.onnx
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
-source_hash: 4256e0a0398e5aaf
+source_hash: c89a9662d03fe6f7
 ---
 
 ## 安装
@@ -186,11 +186,9 @@ Apache-2.0 许可的 `facebook/dinov2-with-registers-small` 骨干。`task=` 选
 
 <code-tabs name="train" />
 
-这里的主要关键字参数是 `batch_size` 和 `lr`，不是大多数其他家族用的 `batch` 和
-`lr0`；`batch` 和 `lr0` 仍然接受，并会映射到前者上，但两个一起传会报冲突错误。
-`output_dir=`（默认 `"runs/train"`）取代 `project=`/`name=`，成为安放一次运行结果的
-主要方式，不过直接传 `project=`/`name=` 也仍然有效。数据集、数据增强、多卡训练和
-日志器见[训练](/docs/train)。
+这里的主要关键字参数是 `batch_size` 和 `lr`，而不是大多数其他家族使用的 `batch` 和 `lr0`；后两者仍然接受并映射到前两者，但同时传入会引发冲突错误。`output_dir=`（默认 `None`）取代 `project=`/`name=`，成为指定训练目录的主要方式，不过直接传入 `project=`/`name=` 仍然有效。数据集、数据增强、多卡训练和日志记录器见[训练](/docs/train)。
+
+新训练使用自动递增的 `runs/train/dinov2_exp`，并设置 `exist_ok=False`。`resume=True` 恢复训练器状态，并保留所选训练目录。分类支持 `cls_pw` 和 `class_weights`，详见[超参数](/docs/train/hyperparameters)。
 
 ## 验证
 
@@ -199,6 +197,8 @@ Apache-2.0 许可的 `facebook/dinov2-with-registers-small` 骨干。`task=` 选
 （ground truth），你在它上面调用 `val()` 会抛出 `NotImplementedError`。
 
 <code-tabs name="val" />
+
+分类和嵌入向量校准复用模型的分类流水线。评估使用家族对应的变换。
 
 ## 导出
 

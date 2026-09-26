@@ -22,7 +22,7 @@ keywords:
   - estimativa de pose keypoints
   - segmentação de instâncias
   - inferência em dispositivo de borda
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -182,7 +182,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 39c6975fc16b3ff1
+source_hash: 521fde8f10ac8c57
 ---
 
 ## Instalação
@@ -221,6 +221,8 @@ pontuação por ponto.
 API mas não tem efeito, porque as três cabeças decodificam um conjunto de
 queries sem etapa de NMS. Veja [predição](/docs/predict) para fontes, streaming
 e tratamento de resultados.
+
+A predição de detecção aceita `imgsz=(height, width)` retangular; treinamento e exportação mantêm suas próprias restrições de dimensões.
 
 ## Variantes
 
@@ -303,6 +305,8 @@ extras que alguns deles acrescentam.
 Todos os arquivos de pesos publicados desta família.
 
 <checkpoint-table />
+
+As variantes `obj2coco` cobrem detecção, segmentação e pose. Seu download exige adesão explícita e seus termos upstream restringem o uso comercial. Os checkpoints COCO originais mantêm a licença Apache-2.0 registrada.
 
 ## Licenciamento
 

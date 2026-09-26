@@ -13,10 +13,8 @@ keywords:
   - no_aug_epochs
   - 数据增强支持矩阵
   - TrainConfig 参数
-last_verified: 1.5.0
-verification: >-
-  参数列表、状态、原型、各家族的差异以及辅助函数，均读自 v1.5.0 的 libreyolo/data/augment/spec.py。那张表格由
-  tests/unit/test_augment_spec.py 锁定到真实的流水线上。
+last_verified: "1.6.0"
+verification: "参数列表、状态、原型、各家族的差异以及辅助函数，均读自 v1.6.0 的 libreyolo/data/augment/spec.py。那张表格由 tests/unit/test_augment_spec.py 锁定到真实的流水线上。"
 snippets:
   usage:
     - label: 直接查询 spec
@@ -36,7 +34,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: d2e1b9f5c81072e1
+source_hash: f3cba41ceadf131f
 ---
 
 ## 参数一览
@@ -63,8 +61,7 @@ source_hash: d2e1b9f5c81072e1
 | `mixup` | 分类的 batch-MixUp 概率，带软标签 |
 | `cutmix` | 分类的 batch-CutMix 概率，带软标签 |
 
-最后四个是分类那一组。检测家族会忽略它们。`mixup` 是只在 API 上存在的参数：CLI 的
-`--mixup` 是检测端 `mixup_prob` 的别名。
+最后四项属于分类参数组。检测家族忽略它们。CLI 将分类器的 `mixup` 分发到分类批量混合，将检测器的 `mixup` 分发到 `mixup_prob`。
 
 <code-tabs name="usage" />
 
@@ -84,38 +81,32 @@ MixUp 门控在 mosaic 上、而 `mosaic_prob` 为零而无法触发时，训练
 
 本页覆盖的每个家族都遵循六种流水线之一，个别家族另有偏差，列在下面。
 
-| 参数 | YOLOX 式 | YOLO-NAS | DETR 式 | 分类 | 语义分割 | 复原 |
+| 参数 | YOLOX 风格 | YOLO-NAS | DETR 风格 | 分类 | 语义分割 | 图像恢复 |
 |---|---|---|---|---|---|---|
-| `mosaic_prob` | used | ignored | ignored | ignored | ignored | ignored |
-| `mixup_prob` | gated | used | ignored | ignored | ignored | ignored |
-| `hsv_prob` | used | used | ignored | ignored | ignored | ignored |
-| `flip_prob` | used | used | used | ignored | ignored | ignored |
-| `degrees` | gated | used | ignored | ignored | ignored | ignored |
-| `translate` | gated | used | ignored | ignored | ignored | ignored |
-| `mosaic_scale` | gated | used | ignored | ignored | ignored | ignored |
-| `mixup_scale` | gated | used | ignored | ignored | ignored | ignored |
-| `shear` | gated | used | ignored | ignored | ignored | ignored |
-| `perspective` | gated | used | ignored | ignored | ignored | ignored |
-| `flipud` | used | used | ignored | ignored | ignored | ignored |
-| `no_aug_epochs` | used | used | used | used | used | used |
-| `auto_augment` | ignored | ignored | ignored | used | ignored | ignored |
-| `erasing` | ignored | ignored | ignored | used | ignored | ignored |
-| `mixup` | ignored | ignored | ignored | used | ignored | ignored |
-| `cutmix` | ignored | ignored | ignored | used | ignored | ignored |
+| `mosaic_prob` | 使用 | 忽略 | 忽略 | 忽略 | 忽略 | 忽略 |
+| `mixup_prob` | 受门控 | 使用 | 忽略 | 忽略 | 忽略 | 忽略 |
+| `hsv_prob` | 使用 | 使用 | 忽略 | 忽略 | 忽略 | 忽略 |
+| `flip_prob` | 使用 | 使用 | 使用 | 使用 | 忽略 | 忽略 |
+| `degrees` | 受门控 | 使用 | 忽略 | 忽略 | 忽略 | 忽略 |
+| `translate` | 受门控 | 使用 | 忽略 | 忽略 | 忽略 | 忽略 |
+| `mosaic_scale` | 受门控 | 使用 | 忽略 | 忽略 | 忽略 | 忽略 |
+| `mixup_scale` | 受门控 | 使用 | 忽略 | 忽略 | 忽略 | 忽略 |
+| `shear` | 受门控 | 使用 | 忽略 | 忽略 | 忽略 | 忽略 |
+| `perspective` | 受门控 | 使用 | 忽略 | 忽略 | 忽略 | 忽略 |
+| `flipud` | 使用 | 使用 | 忽略 | 使用 | 忽略 | 忽略 |
+| `no_aug_epochs` | 使用 | 使用 | 使用 | 使用 | 使用 | 使用 |
+| `auto_augment` | 忽略 | 忽略 | 忽略 | 使用 | 忽略 | 忽略 |
+| `erasing` | 忽略 | 忽略 | 忽略 | 使用 | 忽略 | 忽略 |
+| `mixup` | 忽略 | 忽略 | 忽略 | 使用 | 忽略 | 忽略 |
+| `cutmix` | 忽略 | 忽略 | 忽略 | 使用 | 忽略 | 忽略 |
 
 在 YOLOX 式流水线里，逐样本的预处理会施加 HSV 抖动和翻转，而仿射变换和 MixUp 只在
 mosaic 分支内部运行。YOLO-NAS 则是跑一个始终开启的逐样本仿射，忽略 mosaic，并独立
 施加 MixUp，把 `mosaic_scale` 复用为仿射的缩放范围。
 
-DETR 式流水线是一个直通变换，没有 mosaic。它的光度扰动、zoom-out 和 IoU 裁剪是配方
-里的常量，而不是可配置的参数，这就是 `hsv_prob` 和那些几何参数永远到不了它那里的
-原因。分类流水线用的是 ImageFolder 变换，它的水平翻转是固定的 0.5，而不是
-`flip_prob`。语义分割的尺度抖动和 HSV 来自家族的类属性，而不是配置参数；复原的翻转
-则是输入和目标耦合在一起的操作，概率固定为 0.5。
+DETR 风格流水线是没有 mosaic 的直通变换。光度畸变、缩小和 IoU 裁剪是配方常量，不是可配置参数，因此 `hsv_prob` 和几何参数不会传入这条流水线。分类使用 `flip_prob` 控制水平翻转，使用 `flipud` 控制垂直翻转。语义分割的尺度扰动和 HSV 来自家族类属性，而不是配置参数；图像恢复的翻转同时作用于输入与目标，概率固定为 0.5。
 
-`no_aug_epochs` 在所有地方都被遵守，只是它关掉的东西各不相同：YOLOX 式关掉 mosaic
-和 MixUp，YOLO-NAS 关掉仿射和 MixUp，DETR 式关掉强光度增强和裁剪增强以及学习率的
-尾段，其余的则关掉调度器的尾段。
+`no_aug_epochs` 在各处都生效，但关闭的内容不同：YOLOX 风格关闭 mosaic 和 MixUp，YOLO-NAS 关闭仿射和 MixUp，DETR 风格关闭强光度与裁剪增强并调整学习率尾段，分类关闭自动增强、擦除、MixUp 和 CutMix。分类的裁剪和翻转保持启用。
 
 ## 各原型下的家族
 

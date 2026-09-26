@@ -5,7 +5,7 @@ seo_title: "MoGe-2 in Python: surface normals from one image, MIT"
 description: "Use MoGe-2 in LibreYOLO for dense surface-normal prediction. Install, predict, validate and export the official ViT-S, ViT-B and ViT-L checkpoints."
 lead: "MoGe-2 is a single-forward monocular geometry model that predicts a dense surface-normal field from one RGB image. LibreYOLO supports it for normal estimation only, through the official ViT-S, ViT-B and ViT-L checkpoints."
 keywords: [MoGe-2, MoGe 2, surface normal estimation, monocular geometry, normal map, dense prediction, DINOv2]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -73,8 +73,7 @@ pip install libreyolo
 
 ## Predict
 
-Weights download automatically on first use: LibreYOLO fetches the matching
-size directly from the official checkpoints and caches it locally.
+Weights download automatically on first use. Sizes s and l use LibreYOLO mirrors; b continues to use the upstream checkpoint.
 
 <code-tabs name="predict" />
 
@@ -119,10 +118,7 @@ exported artifact loads back through `LibreYOLO()` on its file suffix, so a
 
 <provenance-box>
 
-LibreYOLO does not copy these checkpoints into its own organization.
-`LibreYOLO("LibreMoGe2s-normal.pt")` downloads the matching size directly from
-the official Hugging Face repositories at a pinned revision, and verifies the
-file against a recorded SHA-256 checksum before use.
+The s and l checkpoints are mirrored by LibreYOLO; b stays upstream. Downloaded artifacts retain their publisher's license.
 
 </provenance-box>
 

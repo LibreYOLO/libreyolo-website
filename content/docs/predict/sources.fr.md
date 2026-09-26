@@ -17,7 +17,7 @@ keywords:
   - inférence youtube
   - vid_stride
   - stream=True
-last_verified: 1.5.0
+last_verified: "1.6.0"
 verification: >-
   Classification des sources lue dans libreyolo/utils/source.py
   (classify_source, SourceKind, StreamSource, MultiStreamSource). Types d'images
@@ -205,7 +205,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: 93db4d43c24b69ae
 ---
 
 ## Méthode de classification d'une source
@@ -262,6 +262,8 @@ Chaque type de chemin distant nécessite un package, dont aucun n'est installé
 par défaut\u00a0: `requests` pour `http(s)://`, `boto3` pour `s3://` et `gcsfs`
 pour `gs://`.
 
+Le suivi accepte des images, dossiers triés par nom de fichier, listes, tuples et itérateurs d'images paresseux comme images consécutives. Passez `fps=30.0` pour définir la cadence de la séquence et `color_format="auto"` pour sélectionner l'interprétation de l'entrée. Consultez le [suivi](/docs/tasks/object-tracking).
+
 ## Dossiers
 
 Un répertoire est parcouru récursivement et trié. Chaque fichier portant l'un
@@ -291,6 +293,8 @@ la vidéo entière est décodée dans une liste. Au-delà de 500 images après
 l'application du stride, un avertissement recommande d'utiliser `stream=True`.
 
 Chaque objet `Results` provenant d'une vidéo contient `frame_idx`.
+
+L'encodage vidéo utilise un codec disponible si H.264 ne peut pas s'ouvrir. Ce repli est journalisé au niveau INFO et mis en cache par codec et canevas uniquement après la réussite d'un autre codec.
 
 ## Webcams, flux réseau et YouTube
 

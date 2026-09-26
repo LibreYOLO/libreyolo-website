@@ -17,10 +17,10 @@ keywords:
   - metadane checkpointu LibreYOLO
   - manifest kwantyzacji
   - wrap_libreyolo_checkpoint
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Odpowiada plikowi docs/checkpoint_schema.md w repozytorium libreyolo w wersji
-  1.5.0 i została sprawdzona z libreyolo/utils/serialization.py oraz
+  1.6.0 i została sprawdzona z libreyolo/utils/serialization.py oraz
   BaseModel.save.
 snippets:
   usage:
@@ -52,7 +52,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: ce760f1bed97bfd0
+source_hash: 177904564cf0a488
 ---
 
 ## Schemat v1.0
@@ -106,11 +106,7 @@ Schemat jest celowo płaski, a `model` celowo jest słownikiem stanu.
 
 ## Dodatki dla pozy
 
-Poza jest zwykle jednoklasowa, z `nc: 1` i `person`, ale głowica pozy YOLO-NAS
-obsługuje także wieloklasową pozę z jednym wspólnym szkieletem punktów
-kluczowych. W takim przypadku `nc` i `names` opisują klasy tak jak w detekcji.
-Eksporty pozy dla środowiska uruchomieniowego emitują `scores` o kształcie
-`[batch, anchors, nc]`.
+Checkpointy pozy zapisują schemat klas i punktów kluczowych. YOLO-NAS obsługuje wiele klas ze wspólnym szkieletem; RF-DETR obsługuje też osobne liczby punktów kluczowych dla klas. `nc` i `names` opisują klasy. Eksporty pozy do środowisk uruchomieniowych zwracają `scores` o kształcie `[batch, anchors, nc]`.
 
 | Klucz | Znaczenie |
 |---|---|
@@ -118,6 +114,8 @@ Eksporty pozy dla środowiska uruchomieniowego emitują `scores` o kształcie
 | `keypoint_dim` | `2` dla etykiet `x,y` lub `3` dla etykiet `x,y,visibility`; wyniki modelu zawsze udostępniają `x,y,visibility` |
 | `oks_sigmas` | Opcjonalne wartości sigma OKS dla poszczególnych punktów kluczowych; w razie braku używana jest wartość domyślna zadania dla `num_keypoints` |
 | `num_keypoints_per_class` | Opcjonalna liczba punktów kluczowych dla poszczególnych klas w głowicach w stylu GroupPose, których tensor punktów kluczowych jest dopełniany według klasy; `0` dla klas bez punktów kluczowych |
+
+RF-DETR może zapisywać `num_keypoints_per_class` obok `kpt_names`. Liczby odpowiadają klasom zbioru danych; zero oznacza klasę z samymi ramkami, a predykcje są uzupełniane do maksymalnego kształtu punktów kluczowych.
 
 ## Dodatki dla siatki
 
@@ -236,6 +234,8 @@ FP32, zadania inne niż detekcja, nieobsługiwane rodziny i niespójne kształty
 Pliki `.pte` i `.mnn` są artefaktami właściwymi dla backendu, a nie
 checkpointami PyTorch.
 
+Klasyfikatory zapisują `norm_mean`, `norm_std` i `resize_mode`. Prostokątne obszary zachowują `imgsz_h` i `imgsz_w`. `letterbox_pad` w YOLO9 ma wartość `topleft` lub `center`; brak metadanych zachowuje dawną geometrię z wyrównaniem do lewego górnego rogu.
+
 ## Checkpointy skwantyzowane
 
 Skwantyzowany model dodaje jeden opcjonalny płaski klucz `quant`, zawierający
@@ -304,6 +304,8 @@ trenowania.
 Dla zgodności między wydaniami czytniki przyjmują starsze aliasy najlepszej
 metryki: `best_mAP50_95`, `best_mAP50`, `best_metric` i `best_metric_name`.
 
+Własny wybór zapisuje `fitness_source="callback"` i `best_metric_key="fitness/custom"`. Kod i stan callbacku nie są zapisywane; tych uruchomień nie można wznowić. Należy rozpocząć nowe uruchomienie z ich wag.
+
 ## Zewnętrzne migawki
 
 Schemat dotyczy plików `.pt` utworzonych przez LibreYOLO. Nie zmienia nazw ani
@@ -351,3 +353,7 @@ unwrap_libreyolo_checkpoint(loaded, *, strict=False) -> tuple[dict, dict]
 `validate_checkpoint_metadata` nie modyfikuje danych i zwraca listę błędów.
 Przy `strict=True` zamiast tego zgłasza `CheckpointMetadataError`.
 `model.save(path)` jest obsługiwanym sposobem zapisu zgodnego checkpointu.
+
+## Profile wejścia
+
+Checkpointy histogramów o dwóch polaryzacjach zachowują kompletny `input_profile`, obejmujący format, układ, polaryzację, kodowanie, skalę i czas okna, oraz `input_initialization`. Ponowne wczytanie do predykcji nie wymaga YAML zbioru danych; trenowanie i walidacja odrzucają niezgodne profile. Zobacz [histogramy zdarzeń](/docs/train/event-histograms).

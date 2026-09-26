@@ -15,7 +15,7 @@ keywords:
   - libreyolo doctor
   - 类别不均衡检查
   - 训练集验证集泄漏
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   train:
     - label: Python
@@ -57,7 +57,7 @@ snippets:
             print(finding.severity.value, finding.check_id, finding.message)
 
         raise SystemExit(report.exit_code(strict=False))
-source_hash: 9a12a0551c8b56e9
+source_hash: 84e47ff97fb2e2f3
 ---
 
 ## 把 train 指向一个数据集
@@ -123,6 +123,8 @@ download: https://example.com/my-dataset.zip   # 可选
 `names` 可以是列表，也可以是整数键的映射。`nc` 是可选的；两者都给出且对不上时，
 doctor 会把它报成错误。
 
+RF-DETR 姿态读取以类别 ID 或名称为键的 `kpt_names`。它为每个类别保留前几个已命名的关键点行；空列表表示只有检测框的类别。多类别姿态需要 `names`，且至少有一个含关键点的类别。
+
 ## 目录结构与标注文件
 
 检测、分割、姿态和旋转框共用同一套结构。标注路径由图像路径推导：把路径里的
@@ -145,6 +147,8 @@ my-dataset/
 标注文件缺失或为空，表示这张图像没有目标，它会作为背景参与训练，而不是抛错。超过
 五个字段的行会被当成多边形读取，它的框取多边形的外接范围，因此一份拿来做检测训练
 的分割导出也能顺利加载。doctor 会报告有多少行走了这条路径。
+
+越过图像边界且坐标有限的检测框，在训练和验证中采用一致的裁剪方式。没有可见面积的框、非有限坐标和格式错误的多边形会被丢弃。超出范围的类别 ID 会在构造目标之前报告。`train(classes=[...])` 使用原始类别 ID 过滤监督标签；见[超参数](/docs/train/hyperparameters)。
 
 ## 其他任务
 

@@ -14,7 +14,7 @@ keywords:
   - youtube inference
   - vid_stride
   - stream=True
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 verification: "Source classification read from libreyolo/utils/source.py (classify_source, SourceKind, StreamSource, MultiStreamSource). Accepted image types and directory extensions from libreyolo/utils/image_loader.py. Video extensions and save paths from libreyolo/utils/video.py. Screen syntax from libreyolo/utils/screen.py. Return shapes and argument defaults from InferenceRunner.__call__ in libreyolo/models/base/inference.py."
 snippets:
   images:
@@ -222,6 +222,8 @@ drops its alpha channel.
 Remote paths need one package each, and none of them is installed by default:
 `requests` for `http(s)://`, `boto3` for `s3://`, and `gcsfs` for `gs://`.
 
+Tracking accepts images, filename-sorted folders, lists, tuples and lazy image iterators as consecutive frames. Pass `fps=30.0` to define image-sequence timing and `color_format="auto"` to select input interpretation. See [tracking](/docs/tasks/object-tracking).
+
 ## Folders
 
 A directory is scanned recursively and sorted, and every file with one of these
@@ -249,6 +251,8 @@ scanned folder is loaded as a still image.
 frames after striding emits a warning suggesting `stream=True`.
 
 Each `Results` from a video carries `frame_idx`.
+
+Successful video encoding falls back to an available codec when H.264 cannot open. The fallback is logged at INFO and cached per codec and canvas only after another codec succeeds.
 
 ## Webcams, network streams and YouTube
 

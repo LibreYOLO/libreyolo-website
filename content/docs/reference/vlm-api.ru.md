@@ -17,12 +17,12 @@ keywords:
   - SmolVLM2
   - Florence-2
   - libreyolo chat
-last_verified: 1.5.0
-verification: >-
-  Алиасы прочитаны из libreyolo/models/vlm/__init__.py; репозитории, размеры и
-  списки задач — из модулей семейств в libreyolo/models/vlm/ и из
-  libreyolo/models/sensenova/model.py; правила вызова и выбрасываемые исключения
-  — из libreyolo/models/vlm/base.py, всё на версии v1.5.0.
+last_verified: 1.6.0
+
+verification: Алиасы прочитаны из libreyolo/models/vlm/__init__.py; репозитории, размеры и списки задач — из модулей семейств
+  в libreyolo/models/vlm/ и из libreyolo/models/sensenova/model.py; правила вызова и выбрасываемые исключения — из libreyolo/models/vlm/base.py,
+  всё на версии v1.6.0.
+
 snippets:
   install:
     - label: bash
@@ -48,7 +48,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 57ddac08bc4d4e05
+source_hash: 77a04856cfe4f88c
 ---
 
 ## Установка
@@ -92,9 +92,11 @@ LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` и `LibreMODUS`
 (также пишется `LibreModus`) экспортируются на уровне пакета.
 
+Детекция также включает `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` и `lfm2-vl-3b`. Псевдоним `gemma-4` без суффикса выбирает E4B. Псевдонимы Molmo2: `molmo2-4b`, `molmo2-8b` и `molmo2-o-7b`; по умолчанию выбран 4B. Псевдонимы задают маршрутизацию, но не означают, что каждый удалённый снимок был скачан и проверен.
+
 ## Задачи
 
-Большинство семейств поддерживают только `detect`. Два умеют больше:
+Поддержка задач зависит от семейства. Эти адаптеры поддерживают несколько задач:
 
 | Семейство | Поддерживаемые задачи |
 |---|---|
@@ -111,6 +113,8 @@ model.set_task(task: str) -> LibreVLMModel
 Задача проверяется по списку поддерживаемых семейством задач, запоминается для
 последующих вызовов `predict()` и `track()`, а модель возвращается, чтобы вызовы
 можно было соединять в цепочку.
+
+Molmo2 возвращает точки и требует `{label}` в собственных шаблонах указания точек. Moondream поддерживает детекцию, точки и нативный чат. Для запросов клика по инструкции используйте [LibreGround](/docs/reference/ground-api).
 
 ## set_classes
 
@@ -159,8 +163,7 @@ predict выключен, потому что генерация авторег�
 
 ## Что не поддерживается
 
-`train()`, `val()` и `export()` выбрасывают `NotImplementedError`. Дообучайте в
-апстриме и загружайте полученные веса.
+Экспорт и валидация mAP детекции не поддерживаются. Обучение ограничено описанным ниже процессом Qwen3-VL.
 
 ## Удалённый код
 
@@ -173,3 +176,7 @@ LibreYOLO по умолчанию не выполняет код из сторо
 LibreMODUS — явное исключение из схемы чекпойнтов: его алиас разрешается в
 каталог зафиксированных файлов апстрима, а не в `.pt` от LibreYOLO, и LibreYOLO
 не добавляет к нему метаданные v1.0 и не публикует его заново.
+
+## Обучение
+
+Qwen3-VL поддерживает LoRA для детекции через `train(data=...)` после установки `libreyolo[vlm-train]`. Визуальный энкодер замораживается, лучшие чекпойнты выбираются по функции потерь на валидации и сохраняются в каталогах. См. [дообучение VLM](/docs/train/vlm-fine-tuning).

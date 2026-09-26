@@ -17,7 +17,7 @@ keywords:
   - 인스턴스 분할
   - 자세 추정
   - 회전 바운딩 박스
-last_verified: 1.5.0
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -177,7 +177,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 8c464aa759131694
+source_hash: "c360784eb62a7df5"
 ---
 
 ## 설치
@@ -196,6 +196,8 @@ pip install "libreyolo[rfdetr]"
 
 반환되는 `Results` 객체는 모든 계열이 반환하는 것과 같으므로 탐지기를 바꾸려면 한 줄만 변경하면 됩니다. `conf`와 `max_det`은 쿼리 선택을 필터링하며 조정할 NMS 단계가 없습니다. 소스, 스트리밍, 결과 처리는 [예측](/docs/predict)을 참조합니다.
 
+탐지, 분할, 회전 바운딩 박스 경로는 안티앨리어싱 없이 부동소수점 OpenCV 이중 선형 크기 조정을 사용하며, 자세 추정은 안티앨리어싱 크기 조정을 유지합니다. 직사각형 `imgsz=(height, width)`는 작업의 패치/윈도 그리드 조건을 충족해야 합니다. 체크포인트 목록에는 UI 탐지기도 포함됩니다. [이벤트 히스토그램](/docs/train/event-histograms)은 기록된 입력 프로파일을 사용합니다.
+
 ## 변형
 
 네 가지 크기와 하나의 구조를 공유하는 네 가지 작업이 있습니다. 분할, 자세 추정, 회전 박스는 다른 헤드와 함께 탐지 디코더를 재사용하므로 같은 인수를 받습니다. 크기별 매개변수 수는 비슷하며 주로 입력 해상도가 다릅니다.
@@ -213,6 +215,8 @@ pip install "libreyolo[rfdetr]"
 두 인수는 CNN 탐지기보다 더 중요합니다. transformer 탐지기는 YOLO 모델이 견디는 학습률에서 발산하므로 `lr0`를 `1e-4` 이하로 유지합니다. 변경할 이유가 없다면 `imgsz`를 체크포인트 기본 해상도로 유지합니다. 입력 크기는 백본 패치 크기와 창 개수의 곱으로 나누어떨어져야 합니다. LibreYOLO는 실행 전에 이를 검사하고 가장 가까운 유효 크기를 알려줍니다.
 
 데이터셋, 증강, 다중 GPU, 로거는 [학습](/docs/train)을 참조합니다.
+
+새 실행의 기본값은 `output_dir=None`이며, `exist_ok=False`에 따라 번호가 증가하는 `runs/train/rfdetr_exp`로 결정됩니다. 다중 클래스 자세 데이터셋은 클래스 인덱스 또는 이름을 키로 하는 `kpt_names`를 사용하며, 빈 목록은 바운딩 박스만 있는 클래스를 나타냅니다. 예측은 키포인트를 `kpt_shape`에 맞게 패딩하며, 키포인트 mAP 적합도는 바운딩 박스만 있는 클래스를 평가하지 않습니다.
 
 ## 검증
 

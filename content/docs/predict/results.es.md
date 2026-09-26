@@ -19,7 +19,7 @@ keywords:
   - mapa de profundidad results
   - results summary yolo
   - onnx mismos resultados yolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Payload classes, slots, move semantics, summary(), to_json(), plot(), save()
   and cutout() read from libreyolo/utils/results.py. Annotation and disk-writing
@@ -135,7 +135,7 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: 201eca6457cf87a4
 ---
 
 ## Un objeto, un slot por payload
@@ -308,9 +308,7 @@ profundidad, un resultado panóptico con sus segmentos, un matte como PNG RGBA
 con fondo transparente, y un detector como boxes con las máscaras debajo. La
 ruta escrita se adjunta al resultado como `result.saved_path`.
 
-`Results.plot()` es más estrecho de lo que su nombre sugiere. Está definido
-solo para mapas de normales y mapas de bordes, y lanza `NotImplementedError`
-para cualquier otra cosa. Usa `save=True` para el resto de tareas.
+
 
 `Results.save(path)` es igual de estrecho: escribe un resultado de matte como
 recorte PNG RGBA con fondo transparente y lanza `NotImplementedError` en los
@@ -324,6 +322,10 @@ malla.
 
 Para saber dónde acaban los archivos y cómo se comportan `output_path` y
 `output_file_format`, mira [Fuentes de predicción](/docs/predict/sources).
+
+`plot()` cubre los payloads de todas las tareas. Las superposiciones sobre imágenes devuelven arrays contiguos HxWx3 uint8 BGR por defecto; `pil=True` solicita PIL. Las rutas existentes de bordes y mapas de normales conservan PIL por defecto. `orig_img` conserva los píxeles BGR de fuentes en memoria y URL; los archivos locales y los fotogramas recopilados de vídeos finitos pueden reabrirse.
+
+Los controles incluyen `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` y `filename`. Las imágenes de clasificación guardadas incluyen las cinco etiquetas principales. El guardado de matte escribe un recorte RGBA.
 
 ## Los artefactos exportados devuelven el mismo objeto
 

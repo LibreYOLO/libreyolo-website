@@ -9,8 +9,8 @@ keywords:
   - 模型权重 非商用
   - 检查点许可证
   - apache-2.0 目标检测
-last_verified: 1.5.0
-source_hash: 83536fea4dc4eaec
+last_verified: "1.6.0"
+source_hash: 03e83b82bd2da258
 ---
 
 ## LibreYOLO 自己的代码
@@ -70,11 +70,8 @@ MIT 覆盖的是更小的一组，包括旷视（Megvii）的 NAFNet、Xingyi Zh
 
 许可证在不同家族之间不一样，在同一个家族内部的不同文件之间也不一样。后者的两个例子：
 
-- YOLO9 的 COCO 检查点采用 MIT 许可。在 VisDrone2019-DET 上训练的
-  `LibreYOLO9P2s-visdrone.pt` 采用 CC BY-NC-SA 3.0，那是非商用的。
-- RF-DETR 的检测检查点采用 Apache-2.0。旋转框检查点采用 CC BY 4.0，因为它们是在一个以
-  CC BY 4.0 发布的 Roboflow Universe 数据集上微调出来的，权重把那个数据集的署名要求
-  一路带了下来。
+- YOLO9 COCO 检查点采用 MIT。`LibreYOLO9P2s-visdrone.pt` 在 VisDrone2019-DET 上训练，采用非商用的 CC BY-NC-SA 3.0。
+- RF-DETR 检测检查点采用 Apache-2.0。旋转框检查点仓库声明采用 CC BY 4.0。
 
 跨家族来看，范围还要更宽，有几个已发布的检查点不能用在商业产品里：
 
@@ -88,16 +85,15 @@ MIT 覆盖的是更小的一组，包括旷视（Megvii）的 NAFNet、Xingyi Zh
 - SenseNova-Vision 的代码采用 Apache-2.0，权重采用 CC BY-NC 4.0。加载器会在每次自动下载
   之前打印那条非商用提示。
 
-有些家族在 LibreYOLO 这边根本没有托管任何检查点，它们的页面会在 Weights 那一行里说明这一
-点。SAM 3 在 Hugging Face 上按 Meta 自定义的 SAM License 做了访问限制，直接从 Meta 下载。
-MiDaS 的发布资源是从官方 URL 获取并做哈希校验的，而不是转托管。Dome-DETR 给的是上游链接，
-因为它的模型卡在元数据里没有写许可证，而正文一边声称 Apache-2.0，一边又把使用限制在学术
-研究，两者对不上。TEED 和 DexiNed 的架构采用 MIT 许可，但作者发布的检查点是在 BIPED 上
-训练的，那个数据集的条款是非商用的，所以 LibreYOLO 既不打包也不自动下载它们。
+SAM 3 使用 Meta 自定义 SAM License 下的受限上游快照。MiDaS s/l 和六个 Dome-DETR 检查点现在使用 LibreYOLO 镜像；MiDaS 保留 MIT，Dome-DETR 保留仅限学术研究的条款。其他家族可能需要本地上游产物。各模型页面分别说明获取方式和发布者声明的许可证。
 
 有几个 torchvision 检查点自己没有许可证文件。LibreYOLO 按发布项目所用的许可证来对应它们，
 在每张模型卡上说明这个依据是推定出来的、而不是逐个检查点授予的，并重复 torchvision 自己的
 提醒：预训练模型的条款可能来自训练数据。
+
+ConvNeXt V2 和 LeVJEPA 预训练权重采用 CC-BY-NC-4.0。Moondream 3 使用 BSL 1.1，Dome-DETR 镜像仅限学术研究，EdgeCrafter `obj2coco` 变体和 DetAny3D 的权重带有限制性条款。各模型页面在代码许可旁列出这些声明。原始 EdgeCrafter COCO 检查点保留记录的 Apache-2.0 授权。MiDaS 镜像保留发布者的 MIT 授权。
+
+权重摘要以检查点发布者声明的许可证为准。训练数据集名称不能确定额外的检查点许可。
 
 ## 查清某一个模型的条款
 

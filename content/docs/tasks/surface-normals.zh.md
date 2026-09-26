@@ -9,7 +9,7 @@ keywords:
   - 单目几何 moge-2
   - 法线角误差指标
   - 稠密法线预测
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: 预测法线场
@@ -78,7 +78,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.data.shape)
-source_hash: d26d26d894b436ff
+source_hash: b033fdf3a2210ce5
 ---
 
 ## 定义
@@ -95,17 +95,16 @@ source_hash: d26d26d894b436ff
 
 ## 模型
 
-有两个家族支持 `normal`。
+以下家族支持 `normal`。
 
-[MoGe-2](/docs/models/moge-2) 是专用的那个：一个单次前向的单目几何模型，有三种编
-码器尺寸。LibreYOLO 没有把这些检查点（checkpoint）复制到自己的组织下；加载其中一
-个时，会按固定的修订版本（revision）从官方仓库下载对应的尺寸，并对照记录在案的
-SHA-256 做校验。
+[MoGe-2](/docs/models/moge-2) 专门用于这个任务：它是单次前向计算的单目几何模型，有三种编码器尺寸。s 和 l 使用 LibreYOLO 镜像；b 保留在上游。
 
 [LibreMODUS](/docs/models/libremodus) 是把法线作为一个 any-to-any 模型的目标之一
 产出，而且可以接受深度图而不是 RGB 图像作为输入。它需要 `modus` 附加依赖
 （extra）和你自己通过认证的 Hugging Face 账号，并且既不提供 `val()` 也不提供
 `export()`，所以它不参与下面的验证和导出两节。
+
+[Marigold V2](/docs/models/marigold-v2) 也能估计表面法线。默认四位推理需要 CUDA 和 `marigold` extra；它不支持导出。
 
 ## 预测
 
@@ -151,8 +150,7 @@ names: {0: normal}
 
 ## 训练
 
-两个法线家族都没有训练实现：`train()` 在它们上面都会抛出 `NotImplementedError`。
-MoGe-2 的页面指向它那些固定住的官方检查点，用于预测、验证和导出。
+这些法线估计家族没有训练实现。MoGe-2 页面指向用于预测、验证和导出的固定官方检查点。
 
 ## 验证
 

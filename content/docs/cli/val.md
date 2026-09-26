@@ -4,7 +4,7 @@ seo_title: "libreyolo val command reference"
 description: "Evaluate a checkpoint on a dataset split from the command line: every argument with its default, and the metric keys each task returns."
 lead: "Evaluates one model against one dataset split and prints the metrics. The metric set depends on the model's task, and the numbers are the ones a benchmark row is built from."
 keywords: [libreyolo val cli, libreyolo validation command, yolo cli evaluation, mAP50-95 command line, libreyolo val arguments]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 meta:
   - label: Command
     value: libreyolo val
@@ -70,6 +70,15 @@ Arguments are `key=value` pairs, and POSIX form works too, so `batch=8` and
 | `quiet` | `false` | Suppress stderr |
 | `verbose` | `true` | Verbose output |
 | `help_json` | `false` | Dump command schema as JSON and exit |
+
+| Argument | Default | Meaning |
+| --- | --- | --- |
+| `classes` | `None` | Evaluate on only these original dataset class ids, comma-separated (e.g. '0,3,5'); every other class's boxes are dropped from ground truth and predictions. Defaults to the classes= the checkpoint was trained with, if any |
+| `crop_pct` | `None` | Classification eval resize ratio before the center crop (default: the model family's native value) |
+| `plot_samples` | `8` | Sample images in the validation sample plot: 0 for none, -1 for every validated image (does not change the metrics) |
+| `visualize` | `False` | Draw every validated image with its true positives, false positives and false negatives to visualize/errors/ (any mistake) and visualize/correct/ (detect, segment; classify draws label vs top-1) |
+| `show_labels` | `True` | Class names on the --visualize images |
+| `show_conf` | `True` | Confidence scores on the --visualize images |
 
 ## Examples
 

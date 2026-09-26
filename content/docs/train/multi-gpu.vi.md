@@ -2,13 +2,12 @@
 title: Huấn luyện multi-GPU
 seo_title: Huấn luyện multi-GPU trong LibreYOLO
 description: >-
-  Huấn luyện trên nhiều GPU với device="0,1". Cách thư viện khởi tạo worker DDP,
-  lý do batch là batch toàn cục, khi nào cần đặt sync_bn và cách dùng torchrun.
+  Huấn luyện trên nhiều GPU với device="0,1". Cách thư viện khởi tạo worker DDP, lý do batch là batch toàn
+  cục, khi nào cần đặt sync_bn và cách dùng torchrun.
 lead: >-
-  Huấn luyện multi-GPU trong LibreYOLO dùng DistributedDataParallel của PyTorch:
-  mỗi GPU có một process, mỗi process giữ một bản sao đầy đủ của mô hình và một
-  shard của từng batch, với gradient được lấy trung bình trên các rank ở mỗi
-  bước.
+  Huấn luyện multi-GPU trong LibreYOLO dùng DistributedDataParallel của PyTorch: mỗi GPU có một process, mỗi
+  process giữ một bản sao đầy đủ của mô hình và một shard của từng batch, với gradient được lấy trung bình
+  trên các rank ở mỗi bước.
 keywords:
   - huấn luyện pytorch ddp
   - huấn luyện multi gpu
@@ -18,20 +17,16 @@ keywords:
   - kích thước batch toàn cục
   - nccl gloo backend
   - multi gpu trên windows
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
-        # Bắt buộc phải có guard __main__: mỗi worker được tạo sẽ import lại
-
-        # module này, và nếu không có guard, nó sẽ khởi chạy lại huấn luyện đệ
-        quy.
-
+        # Điều kiện bảo vệ này vẫn được hỗ trợ; script thường cũng chạy được khi không có nó
+        # Giữ nó cho đối tượng callback/logger cần dùng standard-pickle dự phòng
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(
@@ -77,43 +72,23 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # Chỉ thăm dò một lần trên GPU 0, rồi điều chỉnh thành bội số của world size.
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: 83c1563d68068cd0
+source_hash: e339072d5d8e71ea
 ---
-
 ## Chạy trên hai GPU
 
 Truyền một danh sách thiết bị. Không có gì khác thay đổi.
 
 <code-tabs name="train" />
 
-Khi nhận nhiều hơn một thiết bị và không có môi trường torchrun, `train()` của
-mô hình lưu trọng số vào tệp tạm thời, phân giải autobatch nếu được yêu cầu, rồi
-tạo một process worker cho mỗi GPU bằng `torch.multiprocessing.spawn`. Mỗi
-worker import lại class mô hình, dựng lại mô hình từ trọng số đã lưu và chạy
-đường dẫn một thiết bị thông thường, vì các biến môi trường torchrun được đặt
-khi nhìn từ bên trong worker đã tạo. Checkpoint tốt nhất của rank 0 được nạp lại
-vào instance mô hình của bên gọi khi lượt chạy kết thúc.
+Khi có nhiều hơn một thiết bị và không có môi trường torchrun, `train()` của mô hình lưu trọng số vào tệp tạm, xử lý autobatch nếu được yêu cầu và khởi động các tiến trình worker do bộ điều phối quản lý, mỗi GPU một tiến trình. Mỗi worker nhập lại lớp mô hình, dựng lại từ trọng số đã lưu và chạy đường xử lý một thiết bị thông thường vì các biến môi trường torchrun được đặt bên trong worker đã sinh. Checkpoint tốt nhất của rank 0 được tải lại vào đối tượng mô hình của bên gọi khi lần chạy kết thúc.
 
 `device` chấp nhận `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"` và
 `"auto"`. Chỉ danh sách gồm nhiều hơn một index CUDA mới kích hoạt việc tạo
 process.
 
-## Bắt buộc phải có guard `__main__`
+## Khởi chạy tự động và điều kiện main
 
-Các worker được tạo sẽ import lại module nguồn. Nếu không có guard
-`if __name__ == "__main__":`, thao tác import đó thực thi lại lời gọi huấn luyện
-và mỗi worker lại tạo các worker riêng. Thư viện phát hiện trường hợp này và
-phát sinh lỗi thay vì cho phép đệ quy:
-
-```text
-spawn_ddp_train() was called from inside a spawned subprocess. This usually
-means your script calls model.train(device=...) at the top level without a
-'if __name__ == "__main__":' guard.
-```
-
-Mọi thứ được truyền vào worker đều được pickle, vì vậy `callbacks=` phải có thể
-pickle. Class ở cấp module hoạt động; closure hoặc lambda thì không, và lỗi sẽ
-nêu rõ điều đó rồi chỉ tới các logger tích hợp làm phương án thay thế.
+`model.train(device=[0, 1])` và `device="0,1"` dùng các rank do bộ điều phối quản lý mà không chạy lại mã cấp cao nhất của script thông thường không có điều kiện bảo vệ. Script có điều kiện bảo vệ và `torchrun` tường minh vẫn được hỗ trợ. Tác vụ điều phối dùng cloudpickle; đối tượng callback hoặc logger cần chuyển sang standard-pickle vẫn cần điều kiện `if __name__ == "__main__":`.
 
 ## batch là batch toàn cục
 

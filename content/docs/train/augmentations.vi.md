@@ -2,13 +2,11 @@
 title: Tăng cường dữ liệu
 seo_title: Tăng cường dữ liệu khi huấn luyện trong LibreYOLO
 description: >-
-  Các nút điều chỉnh augmentation trên TrainConfig, bốn dạng pipeline phía sau
-  chúng và bảng theo từng family cho biết nút nào được dùng, bị ràng buộc hoặc
-  bị bỏ qua.
+  Các nút điều chỉnh augmentation trên TrainConfig, bốn dạng pipeline phía sau chúng và bảng theo từng family
+  cho biết nút nào được dùng, bị ràng buộc hoặc bị bỏ qua.
 lead: >-
-  Augmentation được cấu hình bằng các nút điều chỉnh trên TrainConfig, nhưng mỗi
-  model family chạy pipeline huấn luyện riêng, và pipeline không có nhánh mosaic
-  sẽ bỏ qua mosaic_prob thay vì mô phỏng gần đúng.
+  Augmentation được cấu hình bằng các nút điều chỉnh trên TrainConfig, nhưng mỗi model family chạy pipeline
+  huấn luyện riêng, và pipeline không có nhánh mosaic sẽ bỏ qua mosaic_prob thay vì mô phỏng gần đúng.
 keywords:
   - data augmentation yolo
   - mosaic augmentation
@@ -19,7 +17,7 @@ keywords:
   - randaugment
   - cutmix
   - no_aug_epochs
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -74,9 +72,8 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 47461cd13aab580c
+source_hash: 42668148fcc79c1f
 ---
-
 ## Thiết lập các nút điều chỉnh
 
 Các nút điều chỉnh tăng cường dữ liệu (augmentation) là đối số `train()` thông
@@ -130,9 +127,7 @@ nút cấu hình, nên chỉ `flip_prob` và `no_aug_epochs` có tác dụng. Pi
 bao gồm D-FINE, Dome-DETR, DEIM, DEIMv2, RT-DETRv4, EC và RF-DETR với một thay
 đổi.
 
-Pipeline ImageFolder cho phân loại bỏ qua mọi nút của phát hiện. Phép lật ngang
-là hằng số 0.5 mà `flip_prob` không tác động tới. Thay vào đó, pipeline có bộ
-nút riêng được mô tả bên dưới.
+Pipeline phân loại ImageFolder có các điều khiển augmentation riêng. `flip_prob` điều khiển lật ngang và mặc định là 0.5; `fliplr` là tên thay thế của nó.
 
 YOLO-NAS có dạng riêng: hoàn toàn không có mosaic, affine theo từng sample luôn
 bật, và MixUp được áp dụng độc lập thay vì bị ràng buộc. Giá trị `mosaic_scale`
@@ -159,8 +154,8 @@ Tóm tắt theo pipeline cho các nút cơ sở:
 | `mosaic_prob` | được dùng | bị bỏ qua | bị bỏ qua | bị bỏ qua |
 | `mixup_prob` | bị ràng buộc bởi mosaic | được dùng | bị bỏ qua | bị bỏ qua |
 | `hsv_prob` | được dùng | được dùng | bị bỏ qua | bị bỏ qua |
-| `flip_prob` | được dùng | được dùng | được dùng | bị bỏ qua |
-| `flipud` | được dùng | được dùng | bị bỏ qua | bị bỏ qua |
+| `flip_prob` | được dùng | được dùng | được dùng | được dùng |
+| `flipud` | được dùng | được dùng | bị bỏ qua | được dùng |
 | `degrees` | bị ràng buộc bởi mosaic | được dùng | bị bỏ qua | bị bỏ qua |
 | `translate` | bị ràng buộc bởi mosaic | được dùng | bị bỏ qua | bị bỏ qua |
 | `shear` | bị ràng buộc bởi mosaic | được dùng | bị bỏ qua | bị bỏ qua |
@@ -182,11 +177,7 @@ Các ngoại lệ trong những cột đó đều thu hẹp phạm vi:
 - DINOv2 tuân theo cột kiểu DETR cho tác vụ detect và semantic, đồng thời bổ
   sung bộ tùy chọn phân loại cho `task="classify"`.
 
-`no_aug_epochs` được `used` ở mọi nơi nhưng không mang cùng ý nghĩa ở mọi nơi.
-Trên pipeline mosaic, nó tắt mosaic và MixUp trong các epoch cuối. Trên pipeline
-kiểu DETR, nó dừng augmentation photometric, zoom-out và crop, đồng thời định
-hình phần đuôi của lịch. Trên pipeline phân loại và ngữ nghĩa, nó chỉ định hình
-phần đuôi.
+`no_aug_epochs` có trạng thái `used` ở mọi nơi nhưng không mang cùng ý nghĩa. Trên pipeline mosaic, nó tắt mosaic và MixUp trong các epoch cuối. Trên pipeline kiểu DETR, nó dừng augmentation quang học, zoom-out và cắt ảnh, đồng thời định hình phần cuối lịch trình. Trên pipeline phân loại, nó tắt auto-augmentation, erasing, MixUp và CutMix; cắt và lật ảnh vẫn hoạt động.
 
 ## Bộ tùy chọn phân loại
 
@@ -203,9 +194,13 @@ giá trị được cộng lại và tổng không nên vượt quá 1.
 Cả bốn đều mặc định tắt, vì vậy quá trình huấn luyện phân loại không thay đổi
 nếu bạn không yêu cầu.
 
-Cần nêu rõ một xung đột tên: trên CLI, `mixup` là alias của `mixup_prob` dành
-cho phát hiện. Trường `mixup` dành cho phân loại không có cách viết CLI riêng và
-chỉ truy cập được qua `model.train(mixup=...)` trong Python.
+CLI định tuyến `mixup` theo tác vụ: phân loại dùng trộn batch, còn phát hiện dùng `mixup_prob`.
+
+`scale=0.5` nghĩa là khoảng diện tích cắt ngẫu nhiên `(0.5, 1.0)`; một cặp rõ ràng đặt cả hai giới hạn. `crop_pct=None` giữ tỷ lệ đổi kích thước đánh giá của họ mô hình; giá trị ghi đè ảnh hưởng đánh giá trong huấn luyện và đánh giá riêng, còn xuất giữ tiền xử lý gốc của họ mô hình.
+
+CLI cung cấp `auto_augment`, `erasing`, `cutmix`, `fliplr` và `flipud`. `mixup` trong phân loại nghĩa là trộn batch và mặc định là 0.0. Lật ngang mặc định là 0.5 và lật dọc là 0.0. `mixup + cutmix` không được vượt quá 1.
+
+`no_aug_epochs` tắt auto-augmentation, erasing, MixUp và CutMix trong các epoch cuối, giữ cắt và lật ảnh. Công thức phân loại mặc định đặt phần cuối này là 0.
 
 ## Nút riêng theo family
 

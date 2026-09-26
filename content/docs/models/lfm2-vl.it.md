@@ -21,7 +21,7 @@ keywords:
   - rilevare oggetti con il testo
   - VLM on-device
   - LibreVLM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -56,7 +56,7 @@ snippets:
         # conteggi o qualsiasi prompt che il wrapper dei box non copre.
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 40237f0ecc0d2cd5
+source_hash: a7f100c861adb8d0
 ---
 
 ## Installazione
@@ -93,11 +93,7 @@ gestione dei risultati.
 
 ## Varianti
 
-Due dimensioni: 450m e 1.6b, entrambe dalla release LFM2.5-VL di Liquid AI,
-costruite per il deployment on-device. L'harness di benchmark di LibreYOLO non
-ha misurato questa famiglia, quindi non ci sono numeri di accuratezza
-pubblicati con cui confrontarle; scegli una dimensione in base al tuo budget di
-calcolo.
+Tre dimensioni: 450m, 1.6b e 3b, tutte dalla release LFM2.5-VL di Liquid AI; `lfm2-vl-3b` seleziona il modello LFM2.5 3B e il suo parser dei box 0–1000. Il sistema di benchmark di LibreYOLO non ha misurato questa famiglia, quindi non ci sono dati di accuratezza pubblicati per confrontarle; scegli una dimensione in base al tuo budget di calcolo.
 
 LibreYOLO espone questa famiglia solo per la predizione. `train()`, `val()` ed
 `export()` sollevano tutti `NotImplementedError`: fai fine-tuning upstream e

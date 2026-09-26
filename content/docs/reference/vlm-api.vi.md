@@ -2,12 +2,11 @@
 title: API thị giác-ngôn ngữ
 seo_title: 'API LibreVLM: bí danh, set_classes và chat'
 description: >-
-  Factory LibreVLM, mọi bí danh mô hình, từ vựng set_classes có tính duy trì,
-  set_task, lối truy cập chat và lý do độ tin cậy chỉ là giá trị giữ chỗ.
+  Factory LibreVLM, mọi bí danh mô hình, từ vựng set_classes có tính duy trì, set_task, lối truy cập chat và
+  lý do độ tin cậy chỉ là giá trị giữ chỗ.
 lead: >-
-  LibreVLM tải mô hình thị giác-ngôn ngữ sinh và vận hành như detector đối
-  tượng. Danh sách lớp là prompt thay vì head cố định, và mô hình trả về cùng
-  Results như mọi họ khác.
+  LibreVLM tải mô hình thị giác-ngôn ngữ sinh và vận hành như detector đối tượng. Danh sách lớp là prompt thay
+  vì head cố định, và mô hình trả về cùng Results như mọi họ khác.
 keywords:
   - LibreVLM
   - phát hiện bằng mô hình thị giác ngôn ngữ
@@ -17,12 +16,11 @@ keywords:
   - SmolVLM2
   - Florence-2
   - trò chuyện libreyolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  Bí danh được đọc từ libreyolo/models/vlm/__init__.py; repo, kích thước và danh
-  sách tác vụ lấy từ các module họ trong libreyolo/models/vlm/ cùng
-  libreyolo/models/sensenova/model.py; quy tắc lời gọi và lỗi phát sinh lấy từ
-  libreyolo/models/vlm/base.py, tất cả ở v1.5.0.
+  Bí danh được đọc từ libreyolo/models/vlm/__init__.py; repo, kích thước và danh sách tác vụ lấy từ các module
+  họ trong libreyolo/models/vlm/ cùng libreyolo/models/sensenova/model.py; quy tắc lời gọi và lỗi phát sinh
+  lấy từ libreyolo/models/vlm/base.py, tất cả ở v1.6.0.
 snippets:
   install:
     - label: bash
@@ -48,9 +46,8 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 57ddac08bc4d4e05
+source_hash: 77a04856cfe4f88c
 ---
-
 ## Cài đặt
 
 Tầng này cần extra `vlm`.
@@ -92,9 +89,11 @@ là mục được liệt kê đầu tiên: `qwen3-vl` phân giải thành `4b`,
 `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` và `LibreMODUS` (cũng
 được viết là `LibreModus`) được xuất ở cấp gói.
 
+Phát hiện còn gồm `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` và `lfm2-vl-3b`. Tên thay thế `gemma-4` không có hậu tố chọn E4B. Tên thay thế của Molmo2 là `molmo2-4b`, `molmo2-8b` và `molmo2-o-7b`; mặc định là 4B. Tên thay thế xác định định tuyến, không có nghĩa mọi snapshot từ xa đã được tải và kiểm thử.
+
 ## Tác vụ
 
-Hầu hết các họ chỉ phục vụ `detect`. Hai họ phục vụ nhiều tác vụ hơn:
+Khả năng hỗ trợ tác vụ tùy thuộc họ mô hình. Các adapter này hỗ trợ nhiều tác vụ:
 
 | Họ | Tác vụ được hỗ trợ |
 |---|---|
@@ -110,6 +109,8 @@ model.set_task(task: str) -> LibreVLMModel
 
 Tác vụ được kiểm tra với danh sách hỗ trợ của họ, được duy trì qua các lời gọi
 `predict()` và `track()` sau đó, còn mô hình được trả về để có thể nối chuỗi lời gọi.
+
+Molmo2 trả về điểm và yêu cầu `{label}` trong mẫu chỉ điểm tùy chỉnh. Moondream hỗ trợ phát hiện, điểm và chat gốc. Dùng [LibreGround](/docs/reference/ground-api) cho truy vấn chỉ dẫn thành vị trí nhấp.
 
 ## set_classes
 
@@ -153,8 +154,7 @@ tensor ảnh có thể xếp chồng.
 
 ## Không được hỗ trợ
 
-`train()`, `val()` và `export()` phát sinh `NotImplementedError`. Hãy tinh chỉnh
-ở thượng nguồn rồi tải trọng số kết quả.
+Chưa hỗ trợ xuất và đánh giá mAP phát hiện. Khả năng huấn luyện giới hạn ở quy trình Qwen3-VL dưới đây.
 
 ## Mã từ xa
 
@@ -167,3 +167,6 @@ LibreMODUS là ngoại lệ rõ ràng đối với schema checkpoint: bí danh p
 thư mục các tệp thượng nguồn đã ghim thay vì `.pt` LibreYOLO, và LibreYOLO không
 thêm metadata v1.0 hay tái công bố thư mục đó.
 
+## Huấn luyện
+
+Qwen3-VL hỗ trợ LoRA phát hiện qua `train(data=...)` sau khi cài `libreyolo[vlm-train]`. Nó đóng băng nhánh thị giác, chọn checkpoint tốt nhất theo loss đánh giá và lưu các thư mục checkpoint. Xem [tinh chỉnh VLM](/docs/train/vlm-fine-tuning).

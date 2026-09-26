@@ -1,15 +1,8 @@
 ---
-title: Upgrade auf 1.5.0
-seo_title: LibreYOLO 1.4.0 auf 1.5.0 aktualisieren
-description: >-
-  Die vier erforderlichen Codeänderungen in 1.5.0, drei Änderungen mit
-  Auswirkungen auf Metriken und kleinere Verhaltensänderungen, die du vor dem
-  Vergleich von Läufen kennen solltest.
-lead: >-
-  Aus der öffentlichen Modell-API wurde nichts entfernt: Jede Klasse und
-  Funktion, die in 1.4.0 funktionierte, kann weiterhin importiert werden. Vier
-  Argumente haben ihre Form geändert, und drei Standardwerte beeinflussen
-  möglicherweise deine Vergleichswerte.
+title: "Upgrade auf 1.6.0"
+seo_title: "LibreYOLO von 1.5.0 auf 1.6.0 aktualisieren"
+description: "Migrationsschritte für Vorverarbeitung, Trainingsstandardwerte, Laufverzeichnisse, festgelegte Dateien, QAT und Datenloader in LibreYOLO 1.6.0."
+lead: "Version 1.6.0 ändert Vorverarbeitung, Trainingsstandardwerte und Checkpoint-Verarbeitung. Validiere gespeicherte Referenzergebnisse erneut und setze bisherige Standardwerte explizit, um einen älteren Lauf zu reproduzieren."
 keywords:
   - libreyolo upgrade
   - libreyolo 1.5.0 migration
@@ -17,18 +10,34 @@ keywords:
   - libreyolo breaking changes
   - yolox bn eps
   - faster-coco-eval standard
-last_verified: 1.5.0
-meta:
-  - label: Gilt für
-    value: 1.4.0 bis 1.5.0
-  - label: Erforderliche Codeänderungen
-    value: 'Vier, alle eng begrenzt'
-  - label: Veränderte Ergebnisse
-    value: 'COCO-Backend, YOLOX-BN-eps, D-FINE-Multi-Scale'
-  - label: Entfernte öffentliche APIs
-    value: Keine
-source_hash: ab38d8ef7b53f596
+last_verified: "1.6.0"
+
+source_hash: "f4fda6ef286113ab"
 ---
+
+## 1.5.0 auf 1.6.0
+
+- Aktualisiere Umgebungen mit einer festgelegten ONNX-Runtime-Version unter 1.18 auf `onnxruntime>=1.18.0`, bevor du das ONNX-Extra installierst.
+
+- SAM 3D Body akzeptiert den geprüften Snapshot-Dateisatz. Installiere `libreyolo[hf]`, beschaffe den erforderlichen Zugang und verwende den automatischen Bezug oder übergib das unveränderte Snapshot-Verzeichnis und die festgelegte MHR-Datei auf einem vertrauenswürdigen lokalen Dateisystem.
+
+- Wiederhole die Validierung nach den Skalierungskorrekturen für RF-DETR ohne Pose und den Normalisierungskorrekturen für Klassifikatoren. Prüfe die verwendeten Confidence-Schwellenwerte erneut, bevor du mit Ergebnissen aus 1.5.0 vergleichst; es gibt keinen Schalter für die bisherige Vorverarbeitung.
+
+- D-FINE, DEIM, RT-DETRv4 und YOLO-NAS-Erkennung aktivieren FP16-AMP standardmäßig. Übergib `amp=False`, um FP32 beizubehalten.
+
+- Für bisherige YOLO9-Fine-Tuning-Einstellungen setze `aux_weight=0`, `max_labels=100` und `warmup_momentum=0.937`. Setze `letterbox_pad="topleft"`, wenn eine neue Konvertierung mit Center-Eintrag die alte Geometrie reproduzieren muss. Alte Checkpoints mit einem Head werden mit ihrem ursprünglichen Graphen fortgesetzt.
+
+- RF-DETR und DINOv2 erstellen hochgezählte Laufverzeichnisse mit Familiennamen. Aktualisiere Programme, die Artefaktpfade verwenden, oder setze `output_dir="runs/train", exist_ok=True`, um den bisherigen Ort und das Wiederverwendungsverhalten beizubehalten.
+
+- Halte bei der Klassifikation `mixup + cutmix <= 1` ein; ungültige Kombinationen lösen jetzt bei der Einrichtung einen Fehler aus.
+
+- QAT deaktiviert EMA, SyncBatchNorm und Checkpoint-Mittelung. Verwende QAT-Best-/Last-Checkpoints, ohne dich auf diese Zustände zu verlassen.
+
+- Eigene Loader mit Hooks für Datensatzänderungen müssen `persistent_workers=False` verwenden oder Worker nach einer Änderung neu erstellen. Inkompatible persistente Multi-Worker-Kopien lösen jetzt einen Fehler aus.
+
+Siehe das [Changelog](/docs/changelog) für das vollständige Release und [Gewichte importieren](/docs/migrate) für die Checkpoint-Konvertierung.
+
+## 1.4.0 auf 1.5.0
 
 Diese Seite behandelt das Upgrade von LibreYOLO selbst. Informationen zum
 Laden eines Checkpoints aus einem Upstream-Projekt findest du unter
@@ -38,9 +47,9 @@ Der vollständige Eintrag zum Release steht im [Changelog](/docs/changelog).
 Nachfolgend werden nur die Änderungen beschrieben, die eine Anpassung durch
 dich erfordern.
 
-## Erforderliche Codeänderungen
+### Erforderliche Codeänderungen
 
-### `allow_experimental=True` ist nicht mehr vorhanden
+#### `allow_experimental=True` ist nicht mehr vorhanden
 
 Die Bestätigungssperre und der dahinterliegende Mechanismus
 `ddp_aware(experimental_key=...)` wurden entfernt. Training und Export von EC,
@@ -64,7 +73,7 @@ SegFormer und YOLO9-P2 überschrieben.
 Support-Stufen werden weiterhin veröffentlicht, sind aber kein Argument mehr.
 Siehe [Stabilitätsstufen](/docs/reference/stability-tiers).
 
-### Die Exportstufe `"experimental"` ist nicht mehr vorhanden
+#### Die Exportstufe `"experimental"` ist nicht mehr vorhanden
 
 ```python
 from libreyolo.export.support import Tier
@@ -78,7 +87,7 @@ wo zuvor `"experimental"` stand. `BaseExporter` gibt für diese Formate keinen
 `RuntimeWarning` mehr aus. Der Zustand pro Format ist in der
 [Exportmatrix](/docs/reference/export-matrix) aufgeführt.
 
-### `pretrained=False` zusammen mit `resume` wird jetzt abgelehnt
+#### `pretrained=False` zusammen mit `resume` wird jetzt abgelehnt
 
 Die Kombination wurde zuvor in einem widersprüchlichen Zustand fortgesetzt.
 Jetzt löst sie einen Fehler aus:
@@ -93,7 +102,7 @@ jede trainierbare Familie statt nur für drei. `resume` setzt einen
 unterbrochenen Lauf aus seinem Checkpoint fort. Beide werden unter
 [Training](/docs/train) beschrieben.
 
-### CLI-`--imgsz` ist ein String und kein int
+#### CLI-`--imgsz` ist ein String und kein int
 
 Die Änderung ist enger begrenzt, als sie klingt. Diese beiden Formen bleiben
 unverändert:
@@ -120,12 +129,12 @@ predict_cmd(..., imgsz="640")    # 1.5.0, auch "480x640" funktioniert jetzt
 Der Standardwert von `train` ist jetzt der String `"640"`. `export --imgsz`
 war bereits ein String. `profile` bleibt unverändert.
 
-## Veränderte Zahlen
+### Veränderte Zahlen
 
 Drei Änderungen beeinflussen Metriken mit Standardeinstellungen. Lies diesen
 Abschnitt, bevor du einen Lauf unter 1.5.0 mit einem Lauf unter 1.4.0 vergleichst.
 
-### faster-coco-eval ist das Standard-Backend für COCO-Metriken
+#### faster-coco-eval ist das Standard-Backend für COCO-Metriken
 
 `val()` und die Validierung pro Trainingsepoche berechnen COCO-Metriken jetzt
 mit dem C++-Backend faster-coco-eval statt mit pycocotools.
@@ -155,7 +164,7 @@ verwendete Backend wird auf INFO-Ebene protokolliert, steht nach `val()` als
 JSON-Payload der [CLI](/docs/cli/val) enthalten. Installiere den schnellen Pfad
 mit `pip install libreyolo[fast-eval]`.
 
-### Vor 1.5.0 trainierte YOLOX-Checkpoints benötigen einen eps-Override
+#### Vor 1.5.0 trainierte YOLOX-Checkpoints benötigen einen eps-Override
 
 Dies ist der wichtigste Fallstrick des Releases. Lies ihn, wenn du
 [YOLOX](/docs/models/yolox) nachtrainiert hast.
@@ -193,7 +202,7 @@ oder einmal `sqrt((var + 1e-3) / (var + 1e-5))` in die BN-Gewichte einrechnen
 und das Ergebnis speichern. Checkpoints, die mit 1.5.0 oder neuer trainiert
 wurden, benötigen keine der beiden Maßnahmen.
 
-### D-FINE-Multi-Scale-Training verwendet das Upstream-Rezept pro Größe
+#### D-FINE-Multi-Scale-Training verwendet das Upstream-Rezept pro Größe
 
 `base_size_repeat` war für jede Größe fest auf 3 gesetzt. Jetzt wird der Wert
 wie im Upstream-Projekt pro Größe bestimmt: **n** trainiert bei fester Größe
@@ -212,7 +221,7 @@ config = DFINEConfig(base_size_repeat=3)
 DEIM verwendet weiterhin den festen Wert 3. Familiendetails findest du unter
 [D-FINE](/docs/models/d-fine).
 
-## Wissenswertes ohne Handlungsbedarf
+### Wissenswertes ohne Handlungsbedarf
 
 - **Ergebnisse mit rechteckigem `imgsz` haben sich geändert, weil sie zuvor
   falsch waren.** Boxkoordinaten, die Größenänderung von RTMDet-Masken, die
@@ -270,7 +279,7 @@ DEIM verwendet weiterhin den festen Wert 3. Familiendetails findest du unter
 - **Der pytest-Marker `experimental_backend` heißt jetzt `extended_backend`.**
   Dies ist nur relevant, wenn du die Testsuite mit `-m` ausführst.
 
-## Checkpoints und Datensätze
+### Checkpoints und Datensätze
 
 Mit 1.4.0 geschriebene Checkpoints werden unverändert geladen. Das
 [Schema](/docs/reference/checkpoint-schema) ergänzt `imgsz_h` und `imgsz_w` für
@@ -279,4 +288,3 @@ rechteckige Modelle und schreibt für ältere Reader weiterhin den Skalar
 [MNN](/docs/export/mnn) benötigen jetzt jeweils eine Sidecar-Datei namens
 `<program>.pte.json` beziehungsweise `<model>.mnn.json`. Exporte von HRNet
 enthalten `pose_input: "person_crop"`. Datensatzformate bleiben unverändert.
-

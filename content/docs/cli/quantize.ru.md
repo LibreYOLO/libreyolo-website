@@ -15,7 +15,8 @@ keywords:
   - квантизация fp8
   - квантизация после обучения yolo
   - аргументы libreyolo quantize
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 meta:
   - label: Команда
     value: libreyolo quantize
@@ -51,7 +52,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 7ae663e9f117826e
+source_hash: 663390776f2f2c15
 ---
 
 ## Синтаксис
@@ -143,3 +144,5 @@ libreyolo quantize model=<name|path> [recipe=<recipe>] [key=value ...]
 
 Смотрите также [`libreyolo export`](/docs/cli/export) — эта команда выходит за
 пределы PyTorch и вместо этого записывает артефакт для развёртывания.
+
+`algorithm` по умолчанию равен `auto` (minmax) и также принимает `minmax`, `percentile`, `mse` и `entropy`. MSE и entropy выбирают диапазоны перебором гистограмм активаций.

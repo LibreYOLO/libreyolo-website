@@ -20,7 +20,7 @@ keywords:
   - запит точкою
   - запит рамкою
   - Meta AI
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Запити точками та рамками
@@ -79,7 +79,7 @@ snippets:
         b = model.predict(bboxes=[300, 200, 900, 700])
 
         model.reset_image()
-source_hash: f8904d241ef8a929
+source_hash: 313541a8b2c6abaf
 ---
 
 ## Встановлення
@@ -131,11 +131,7 @@ pip install "libreyolo[sam]"
 
 <provenance-box>
 
-LibreYOLO не розміщує власної копії ваг SAM-1. `LibreSAM("base")`,
-`"large"` і `"huge"` завантажуються безпосередньо з власних репозиторіїв
-Meta `facebook/sam-vit-base`, `facebook/sam-vit-large` і
-`facebook/sam-vit-huge` на Hugging Face. Кожен із них позначено там
-ліцензією Apache-2.0 незалежно від LibreYOLO.
+`LibreSAM("base")`, `"large"` і `"huge"` використовують дзеркала артефактів SAM-1 у LibreYOLO. Ваги зберігають заявлену Meta ліцензію Apache-2.0.
 
 </provenance-box>
 

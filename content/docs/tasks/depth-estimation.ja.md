@@ -10,7 +10,7 @@ keywords:
   - 相対深度モデル
   - Depth Anything LibreYOLO
   - 密な深度予測
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: 深度マップを推論
@@ -78,7 +78,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: e0612c59f9c999b4
+source_hash: f0afab6b9b451075
 ---
 
 ## 定義
@@ -89,7 +89,7 @@ source_hash: e0612c59f9c999b4
 
 ## モデル
 
-`depth`には6つのファミリーが対応します。
+以下のファミリーが`depth`に対応します。
 
 [Depth Anything V2](/docs/models/depth-anything-v2)はDINOv2エンコーダーとDPTデコーダーを組み合わせ、ここでの汎用的なデフォルトです。精度と同様にライセンスもサイズ選択を左右します。SmallチェックポイントはApache-2.0ですが、BaseとLargeは非商用です。選択前にモデルページのチェックポイント表を確認してください。
 
@@ -97,19 +97,23 @@ source_hash: e0612c59f9c999b4
 
 [ZipDepth](/docs/models/zipdepth)は小型ティアです。Depth Anything V2 Largeから蒸留した再パラメーター化可能なCNNで、gatherやunfold演算に対応しないNPUコンパイラー向けに、これらの演算をデコーダーで回避する第2のチェックポイントもあります。
 
-[MiDaS](/docs/models/midas)は、他のファミリーの測定にも使われるゼロショット相対深度の手法を確立した一連の研究です。LibreYOLOが再公開しない唯一の深度ファミリーで、チェックポイントを要求すると著者の公式GitHubリリースからアーティファクトをダウンロードし、固定済みのSHA-256を確認します。
+[MiDaS](/docs/models/midas)は、他のファミリーの測定にも使われるゼロショット相対深度の手法を確立した一連の研究です。sとlのチェックポイントは、公開元のMITの許諾の下でLibreYOLOのミラーからダウンロードされます。
 
 [LibreMODUS](/docs/models/libremodus)は専用ヘッドではなく、任意入力から任意出力へのモデルにある1つの対象として深度を生成します。`modus`追加パッケージと認証済みのHugging Faceアカウントが必要で、`val()`と`export()`には対応しません。
 
 [SenseNova-Vision](/docs/models/sensenova-vision)は、7つのタスクに対応する同じ7Bチェックポイントを使い、拡散デコードを通して深度マップを画像として生成します。`sensenova`追加パッケージが必要で、重みの利用は非商用に制限されます。ライセンスはモデルページに記載されています。
 
+[Marigold V2](/docs/models/marigold-v2)は、明示的な深度エンコーディングを持つ拡散ベースの深度アダプターを追加します。
+
 ## 推論
 
-前述の2ファミリーを除き、重みは初回使用時にHugging Faceからダウンロードされ、ローカルにキャッシュされます。
+重みは初回使用時にダウンロードされ、ローカルにキャッシュされます。認証とランタイムの要件はモデルページに記載されています。
 
 <code-tabs name="predict" />
 
-入力解像度はファミリーごとに制約されます。Depth Anything V2とDepth Anything 3はDINOv2のパッチグリッドを基にするため、`imgsz`は14で割り切れる必要があり、LibreYOLOは実行前に確認します。`Results.plot()`はこのタスクには対応せず、サーフェス法線とエッジだけに定義されています。入力ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
+入力解像度はファミリーごとに制約されます。Depth Anything V2とDepth Anything 3はDINOv2のパッチグリッドを基にするため、`imgsz`は14で割り切れる必要があり、LibreYOLOは実行前に確認します。`Results.plot()`は深度の結果を描画します。入力ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
+
+`DepthMap.encoding`のデフォルトは`inverse_depth`で、`depth`または`log_depth`も使えます。検証ではアフィン整合の前にエンコーディングを解釈します。エンコーディングによって相対的な予測が実距離の尺度を持つようになるわけではありません。
 
 ## データセット形式
 
@@ -136,7 +140,7 @@ names: {0: depth}
 
 ## 学習
 
-LibreYOLOの深度ファミリーには学習実装がありません。6つすべてで`train()`が`NotImplementedError`を送出します。各モデルページには、アップストリームで学習したチェックポイントをLibreYOLOで読み込める形式へ変換するスクリプトが記載されています。
+LibreYOLOの深度ファミリーには学習実装がありません。これらのファミリーでは`train()`が`NotImplementedError`を送出します。各モデルページには、アップストリームで学習したチェックポイントをLibreYOLOで読み込める形式へ変換するスクリプトが記載されています。
 
 ## 検証
 

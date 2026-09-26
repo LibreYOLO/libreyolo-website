@@ -17,7 +17,7 @@ keywords:
   - VLM
   - エッジ VLM
   - LibreVLM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -45,7 +45,7 @@ snippets:
         # ボックスラッパーが扱わない任意のプロンプトに対応
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 40237f0ecc0d2cd5
+source_hash: a7f100c861adb8d0
 ---
 
 ## インストール
@@ -66,7 +66,7 @@ pip install "libreyolo[vlm]"
 
 ## バリアント
 
-サイズは450mと1.6bの2つで、どちらもオンデバイスデプロイ用に構築されたLiquid AIのLFM2.5-VLリリースです。LibreYOLOのベンチマークハーネスはこのファミリーを測定していないため、比較できる公開精度値はありません。利用可能な計算資源に合わせてサイズを選択してください。
+450m、1.6b、3bの3サイズがあり、いずれもLiquid AIのLFM2.5-VLリリースに由来します。`lfm2-vl-3b`は、LFM2.5の3Bモデルと0〜1000のボックスパーサーを選択します。LibreYOLOのベンチマークハーネスはこのファミリーを測定していないため、比較に使える精度の公開値はありません。自身の計算資源に合わせてサイズを選んでください。
 
 LibreYOLOはこのファミリーを推論専用として公開します。`train()`、`val()`、`export()` はすべて `NotImplementedError` を発生させます。代わりにアップストリームでファインチューニングし、その結果を読み込んでください。仮信頼度ではCOCO mAPが誤解を招くため、データセット検証は省略されています。また、トレースする状態辞書を持たない生成モデルのエクスポートは対象外です。
 

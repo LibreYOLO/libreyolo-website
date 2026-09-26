@@ -19,7 +19,7 @@ keywords:
   - wyniki mapy głębi
   - podsumowanie Results
   - ONNX ten sam Results
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Klasy danych wynikowych, pola, semantykę przenoszenia, summary(), to_json(),
   plot(), save() i cutout() odczytano z libreyolo/utils/results.py. Zachowanie
@@ -135,7 +135,7 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: 201eca6457cf87a4
 ---
 
 ## Jeden obiekt i jedno pole na typ danych
@@ -301,10 +301,6 @@ maska, wynik głębi jako wizualizacja głębi, wynik panoptyczny z segmentami, 
 jako plik PNG RGBA z przezroczystym tłem, a wynik detektora jako ramki z maskami
 pod nimi. Zapisana ścieżka jest dołączana do wyniku jako `result.saved_path`.
 
-`Results.plot()` ma węższy zakres, niż sugeruje nazwa. Jest zdefiniowane wyłącznie
-dla map normalnych i krawędzi, a dla pozostałych danych zgłasza `NotImplementedError`.
-Dla innych zadań używaj `save=True`.
-
 `Results.save(path)` również ma wąski zakres. Zapisuje wynik matte jako wycięcie
 PNG RGBA z przezroczystym tłem, a w innych przypadkach zgłasza `NotImplementedError`.
 `Results.cutout()` zwraca tę samą tablicę RGBA bez zapisywania. Obie metody
@@ -315,6 +311,10 @@ zrekonstruowanego obrazu oraz `result.meshes.save_obj(path, index=0)` dla siatki
 
 Informacje o lokalizacji plików oraz zachowaniu `output_path` i
 `output_file_format` znajdziesz w sekcji [źródła predykcji](/docs/predict/sources).
+
+`plot()` obsługuje dane wszystkich zadań. Nakładki na obrazy domyślnie zwracają ciągłe tablice HxWx3 uint8 BGR; `pil=True` żąda PIL. Dotychczasowe ścieżki krawędzi i map normalnych zachowują domyślne PIL. `orig_img` przechowuje piksele BGR dla źródeł w pamięci i adresów URL; pliki lokalne i zebrane klatki skończonych nagrań wideo można otworzyć ponownie.
+
+Dostępne opcje to `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` i `filename`. Zapisane obrazy klasyfikacji zawierają pięć najlepszych etykiet. Zapis mattingu tworzy wycięty obiekt RGBA.
 
 ## Wyeksportowane artefakty zwracają ten sam obiekt
 
@@ -330,4 +330,3 @@ wersją. Pełny zestaw formatów znajduje się w sekcji [eksport](/docs/export).
 
 Użycie własnego API środowiska uruchomieniowego oznacza samodzielną odpowiedzialność
 za przetwarzanie wstępne, końcowe i nazwy klas.
-

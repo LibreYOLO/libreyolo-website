@@ -3,9 +3,7 @@ title: YOLO-NAS
 families:
   - yolonas
 seo_title: 'YOLO-NAS: LibreYOLO의 예측, 학습 및 내보내기'
-description: >-
-  LibreYOLO에서 YOLO-NAS로 탐지와 자세 추정을 수행합니다. Deci.AI 가중치는 독점적이고 비상업적이며 LibreYOLO는
-  이를 게시하지 않습니다.
+description: "LibreYOLO에서 YOLO-NAS 객체 탐지, 자세 추정, 회전 박스를 사용합니다. 업스트림 사전 학습 가중치는 비상업용입니다."
 lead: >-
   Deci.AI의 아키텍처 검색에서 나온 백본과 넥을 사용하고 양자화 인식 RepVGG 블록으로 구축된 합성곱 탐지기입니다. 가중치는
   Deci.AI 소유이며 비상업적 사용만 허용되고 LibreYOLO는 이를 게시하지 않습니다.
@@ -18,7 +16,7 @@ keywords:
   - 자세 추정
   - 양자화 인식 탐지기
   - AutoNAC
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -115,7 +113,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 47c30d6e44024ce7
+source_hash: 483562cad2c02696
 ---
 
 ## 설치
@@ -134,6 +132,8 @@ pip install libreyolo
 
 반환되는 `Results` 객체는 모든 계열이 반환하는 것과 같으므로 탐지기를 바꾸려면 한 줄만 변경하면 됩니다. `conf`는 신뢰도 임곗값을, `iou`는 NMS 임곗값을 설정합니다. 소스, 스트리밍, 결과 처리는 [예측](/docs/predict)을 참조합니다.
 
+회전 바운딩 박스 작업은 `result.obb`를 반환합니다. 공개 OBB 그래프는 1024 픽셀 캔버스와 기록된 18개 클래스 레이블 집합을 사용합니다.
+
 ## 변형
 
 탐지와 자세 추정은 서로 다른 헤드 아래에서 같은 구조를 사용하며 같은 인수를 받습니다. 아래 표의 크기는 탐지용입니다. 자세 모델도 해당 크기들과 더 작은 크기 하나로 공개됩니다. 자세 헤드는 COCO 키포인트 집합을 예측합니다.
@@ -151,6 +151,8 @@ pip install libreyolo
 파인튜닝은 Deci의 가중치에서 시작하며 여기에 Deci 라이선스가 적용됩니다. 무작위로 초기화한 모델의 학습은 Deci 체크포인트를 전혀 사용하지 않으며 위의 세 번째 스니펫이 이 경로입니다.
 
 데이터셋, 증강, 다중 GPU, 로거는 [학습](/docs/train)을 참조합니다.
+
+탐지는 `amp=True`와 `amp_dtype="float16"`이 기본값이며, 회전 바운딩 박스 학습은 `amp=False`를 유지합니다. OBB 헤드는 학습, 예측, 검증을 지원하고, 뒤집기/HSV 증강을 사용하며, `metrics/mAP50-95(OBB)`로 체크포인트를 선택합니다. `load_detect_weights_for_obb()`는 탐지 가중치로 OBB 헤드를 초기화합니다.
 
 ## 검증
 

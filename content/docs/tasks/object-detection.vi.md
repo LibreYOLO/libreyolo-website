@@ -2,12 +2,11 @@
 title: Phát hiện đối tượng
 seo_title: Phát hiện đối tượng trong LibreYOLO
 description: >-
-  Phát hiện đối tượng dưới dạng hộp thẳng trục trong LibreYOLO: các family phục
-  vụ tác vụ, định dạng nhãn và các lời gọi dự đoán, huấn luyện, xác thực cùng
-  xuất.
+  Phát hiện đối tượng dưới dạng hộp thẳng trục trong LibreYOLO: các family phục vụ tác vụ, định dạng nhãn và
+  các lời gọi dự đoán, huấn luyện, xác thực cùng xuất.
 lead: >-
-  Phát hiện đối tượng định vị từng thực thể trong ảnh và trả về hình chữ nhật
-  thẳng trục, nhãn lớp cùng điểm số cho mỗi thực thể. Key tác vụ là detect.
+  Phát hiện đối tượng định vị từng thực thể trong ảnh và trả về hình chữ nhật thẳng trục, nhãn lớp cùng điểm
+  số cho mỗi thực thể. Key tác vụ là detect.
 keywords:
   - phát hiện đối tượng python
   - nhận diện vật thể trong ảnh
@@ -15,7 +14,7 @@ keywords:
   - thư viện object detection MIT
   - lựa chọn thay YOLO
   - huấn luyện object detector
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -117,9 +116,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: c735b6e3de78dd2b
+source_hash: 28d7cbb721e0f109
 ---
-
 ## Định nghĩa
 
 Phát hiện đối tượng trả lời mỗi đối tượng ở đâu và là gì. Một ảnh đi vào, mỗi
@@ -139,7 +137,7 @@ khi gắn tracker. Lặp qua đối tượng `Boxes` yield các slice một dòn
 
 ## Mô hình
 
-Mười hai family vừa huấn luyện vừa dự đoán: [YOLOv9](/docs/models/yolov9),
+Các họ sau huấn luyện và dự đoán: [YOLOv9](/docs/models/yolov9),
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
 [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine),
 [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr),
@@ -173,6 +171,8 @@ cùng các vision-language family [Florence-2](/docs/models/florence-2),
 [SenseNova-Vision](/docs/models/sensenova-vision) và
 [LibreMODUS](/docs/models/libremodus). Chúng được nạp qua factory và thành phần
 bổ sung riêng; từng trang mô hình chứa lời gọi chính xác.
+
+[PP-YOLOE](/docs/models/ppyoloe) và [TinyFormer](/docs/models/tinyformer) cũng hỗ trợ huấn luyện phát hiện.
 
 ## Dự đoán
 
@@ -240,6 +240,8 @@ chịu được sẽ làm transformer diverge, vì vậy hãy lấy giá trị t
 thay vì ví dụ của family khác. Family cũng có thể hoàn toàn bỏ qua một đối số,
 và trang của nó liệt kê cụ thể. Xem [huấn luyện](/docs/train) để biết về dataset,
 augmentation, multi-GPU và logger.
+
+Dùng `classes=` để giữ các ID gốc đã chọn của dataset; `single_cls=True` gộp nhãn được giữ thành lớp đối tượng 0. Xem [siêu tham số](/docs/train/hyperparameters) để biết các họ mô hình hỗ trợ và cách kế thừa khi đánh giá.
 
 ## Xác thực
 

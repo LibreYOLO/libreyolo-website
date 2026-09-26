@@ -16,7 +16,7 @@ keywords:
   - sieć konwolucyjna
   - klasyfikacja obrazów python
   - wstępnie wytrenowany klasyfikator obrazów
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -80,7 +80,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 68c09f080c74bb87
+source_hash: c996d557da01e4d4
 ---
 
 ## Instalacja
@@ -119,6 +119,8 @@ a dostrajanie nie zostało zaimplementowane.
 `train/` i `val/`, po jednym folderze na klasę) i zwraca dokładność top-1 i top-5.
 
 <code-tabs name="val" />
+
+Walidacja i kalibracja INT8 używają transformacji ewaluacyjnej danej rodziny. Metadane eksportu zapisują `norm_mean`, `norm_std` i `resize_mode`; starsze artefakty używają wartości rodziny. Preprocesory kalibracji zwracają wymaganą tablicę CHW i współczynnik skali.
 
 ## Eksport
 

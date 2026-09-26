@@ -12,10 +12,8 @@ keywords:
   - libreyolo 检查点元数据
   - 量化 quant 清单
   - wrap_libreyolo_checkpoint
-last_verified: 1.5.0
-verification: >-
-  对应 libreyolo 仓库 v1.5.0 的 docs/checkpoint_schema.md，并与
-  libreyolo/utils/serialization.py 和 BaseModel.save 交叉核对。
+last_verified: "1.6.0"
+verification: "对应 libreyolo 仓库 v1.6.0 的 docs/checkpoint_schema.md，并与 libreyolo/utils/serialization.py 和 BaseModel.save 交叉核对。"
 snippets:
   usage:
     - label: 读出检查点里的元数据
@@ -45,7 +43,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: ce760f1bed97bfd0
+source_hash: 177904564cf0a488
 ---
 
 ## 结构 v1.0
@@ -95,9 +93,7 @@ source_hash: ce760f1bed97bfd0
 
 ## 姿态附加字段
 
-姿态通常是单类别的，`nc: 1`，名称为 `person`，但 YOLO-NAS 的姿态 head 也支持多
-类别姿态，共用一套关键点骨架，这时 `nc` 和 `names` 像检测那样描述类别。运行时的
-姿态导出会给出形状为 `[batch, anchors, nc]` 的 `scores`。
+姿态检查点记录类别和关键点结构。YOLO-NAS 支持共用一个骨架的多个类别；RF-DETR 还支持每个类别各自的关键点数量。`nc` 和 `names` 描述类别。运行时姿态导出生成形状为 `[batch, anchors, nc]` 的 `scores`。
 
 | 键 | 含义 |
 |---|---|
@@ -105,6 +101,8 @@ source_hash: ce760f1bed97bfd0
 | `keypoint_dim` | `2` 表示 `x,y` 标注，`3` 表示 `x,y,visibility` 标注；模型输出始终暴露 `x,y,visibility` |
 | `oks_sigmas` | 可选的每关键点 OKS sigma；缺失时使用 `num_keypoints` 对应的任务默认值 |
 | `num_keypoints_per_class` | 可选的每类别关键点数量，用于 GroupPose 风格的 head——它们的关键点张量按类别做了填充；没有关键点的类别为 `0` |
+
+RF-DETR 可在 `kpt_names` 旁记录 `num_keypoints_per_class`。数量与数据集类别对齐；零表示只有检测框的类别，预测会填充到最大的关键点形状。
 
 ## 网格附加字段
 
@@ -201,6 +199,8 @@ MNN 导出把扁平元数据写进必需的 `<model>.mnn.json` 附属文件。v1
 
 `.pte` 和 `.mnn` 是特定后端的产物，不是 PyTorch 检查点。
 
+分类器记录 `norm_mean`、`norm_std` 和 `resize_mode`。矩形画布保留 `imgsz_h` 和 `imgsz_w`。YOLO9 的 `letterbox_pad` 为 `topleft` 或 `center`；缺少元数据时保留旧的左上对齐几何。
+
 ## 量化检查点
 
 量化模型会加上一个可选的扁平键 `quant`，里面是一个清单字典，包含 `schema`、
@@ -259,6 +259,8 @@ int8 会保留激活范围缓冲区 `_q_act_lo`、`_q_act_hi` 和 `_q_calibrated
 为了发布兼容性，读取方接受旧版的最佳指标别名 `best_mAP50_95`、`best_mAP50`、
 `best_metric` 和 `best_metric_name`。
 
+自定义选择记录 `fitness_source="callback"` 和 `best_metric_key="fitness/custom"`。回调代码/状态不会保存；这些训练无法续训。请从其权重开始新的训练。
+
 ## 外部快照
 
 这个结构管辖的是由 LibreYOLO 生成的 `.pt` 文件。它不会重命名或包装那些由独立模型
@@ -301,3 +303,7 @@ unwrap_libreyolo_checkpoint(loaded, *, strict=False) -> tuple[dict, dict]
 `validate_checkpoint_metadata` 不修改输入，返回错误列表；设为 `strict=True` 时它
 改为抛出 `CheckpointMetadataError`。`model.save(path)` 是写出符合本结构的检查点的
 受支持方式。
+
+## 输入配置
+
+双极性直方图检查点保留完整的 `input_profile`，包括格式、布局、极性、编码、尺度和窗口时长，以及 `input_initialization`。预测重新加载无需数据集 YAML；训练/验证会拒绝不匹配的配置。见[事件直方图](/docs/train/event-histograms)。

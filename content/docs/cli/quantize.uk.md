@@ -14,7 +14,7 @@ keywords:
   - квантування fp8
   - квантування після навчання
   - libreyolo quantize аргументи
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Команда
     value: libreyolo quantize
@@ -48,7 +48,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 7ae663e9f117826e
+source_hash: 663390776f2f2c15
 ---
 
 ## Синтаксис
@@ -140,3 +140,5 @@ training); додавання `distill_model=<teacher>` перетворює й�
 
 Пов'язане: [`libreyolo export`](/docs/cli/export), команда, яка натомість
 виходить за межі PyTorch і записує артефакт для розгортання.
+
+`algorithm` типово має значення `auto` (minmax) і також приймає `minmax`, `percentile`, `mse` та `entropy`. MSE й entropy вибирають діапазони перебором гістограм активацій.

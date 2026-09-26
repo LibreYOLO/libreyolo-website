@@ -19,7 +19,7 @@ keywords:
   - instanzsegmentierung
   - pose schätzung
   - orientierte bounding boxes
-last_verified: 1.5.0
+last_verified: "1.6.0"
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -225,7 +225,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 8c464aa759131694
+source_hash: "c360784eb62a7df5"
 ---
 
 ## Installation
@@ -248,6 +248,8 @@ Wechsel zu einem anderen Detektor erfordert daher nur eine Änderung in einer
 Zeile. `conf` und `max_det` filtern die Auswahl der Queries. Es gibt keinen
 NMS-Schritt zum Abstimmen. Unter [Vorhersage](/docs/predict) findest du Quellen,
 Streaming und die Verarbeitung von Ergebnissen.
+
+Erkennung, Segmentierung und orientierte Boxen verwenden bilineare OpenCV-Skalierung mit Gleitkommazahlen ohne Antialiasing; Pose behält die Skalierung mit Antialiasing bei. Rechteckiges `imgsz=(height, width)` muss dem Patch-/Fensterraster der Aufgabe entsprechen. Das Checkpoint-Verzeichnis enthält den UI-Detektor. [Ereignishistogramme](/docs/train/event-histograms) verwenden das gespeicherte Eingabeprofil.
 
 ## Varianten
 
@@ -280,6 +282,8 @@ gültigen Größen.
 
 Unter [Training](/docs/train) findest du Datensätze, Datenaugmentierung,
 Multi-GPU und Logger.
+
+Neue Läufe verwenden standardmäßig `output_dir=None` und damit ein hochgezähltes `runs/train/rfdetr_exp` mit `exist_ok=False`. Pose-Datensätze mit mehreren Klassen verwenden `kpt_names` mit Klassenindex oder -name als Schlüssel; eine leere Liste kennzeichnet eine Klasse nur mit Boxen. Vorhersagen füllen Keypoints bis `kpt_shape` auf; die Keypoint-mAP-Fitness bewertet Klassen nur mit Boxen nicht.
 
 ## Validierung
 

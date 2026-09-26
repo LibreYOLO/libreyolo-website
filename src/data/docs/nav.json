@@ -1,6 +1,6 @@
 {
   "_comment": "Docs sidebar manifest. In production this is generated from the content tree at build time; pages with built:false are planned but not yet written, and render as dimmed placeholders so the shape of the docs is visible while it fills in.",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "groups": [
     {
       "id": "start",
@@ -43,7 +43,7 @@
         },
         {
           "slug": "/docs/upgrade",
-          "label": "Upgrading to 1.5.0",
+          "label": "Upgrading to 1.6.0",
           "built": true
         },
         {
@@ -54,6 +54,26 @@
         {
           "label": "Troubleshooting",
           "slug": "/docs/troubleshooting",
+          "built": true
+        },
+        {
+          "slug": "/docs/changelog",
+          "label": "Changelog",
+          "built": true
+        },
+        {
+          "slug": "/docs/citation",
+          "label": "Citation",
+          "built": true
+        },
+        {
+          "slug": "/docs/licensing",
+          "label": "Licensing",
+          "built": true
+        },
+        {
+          "slug": "/docs/versions",
+          "label": "Versions",
           "built": true
         }
       ]
@@ -170,6 +190,21 @@
         {
           "slug": "/docs/tasks/promptable-segmentation",
           "label": "Promptable segmentation",
+          "built": true
+        },
+        {
+          "slug": "/docs/tasks/3d-object-detection",
+          "label": "3D object detection",
+          "built": true
+        },
+        {
+          "slug": "/docs/tasks/albedo-estimation",
+          "label": "Albedo estimation",
+          "built": true
+        },
+        {
+          "slug": "/docs/tasks/robot-policies",
+          "label": "Robot policies",
           "built": true
         }
       ]
@@ -733,6 +768,86 @@
           "label": "ViTMatte",
           "slug": "/docs/models/vitmatte",
           "built": true
+        },
+        {
+          "slug": "/docs/models/3d-mood",
+          "label": "3D-MOOD",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/ben2",
+          "label": "BEN2",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/convnextv2",
+          "label": "ConvNeXt V2",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/ddcolor",
+          "label": "DDColor",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/dekr",
+          "label": "DEKR",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/detany3d",
+          "label": "DetAny3D",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/fcos3d",
+          "label": "FCOS3D",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/gemma-4",
+          "label": "Gemma 4",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/levjepa",
+          "label": "LeVJEPA",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/librevla",
+          "label": "LibreVLA",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/marigold-v2",
+          "label": "Marigold V2",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/molmo2",
+          "label": "Molmo2",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/moondream",
+          "label": "Moondream",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/tinyformer",
+          "label": "TinyFormer",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/unet",
+          "label": "U-Net",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/wilddet3d",
+          "label": "WildDet3D",
+          "built": true
         }
       ]
     },
@@ -803,6 +918,16 @@
         {
           "slug": "/docs/train/cloud-gpus",
           "label": "Train on a rented GPU",
+          "built": true
+        },
+        {
+          "slug": "/docs/train/fitness-callbacks",
+          "label": "Custom training fitness",
+          "built": true
+        },
+        {
+          "slug": "/docs/train/vlm-fine-tuning",
+          "label": "VLM detection fine-tuning",
           "built": true
         }
       ]
@@ -1002,6 +1127,26 @@
           "slug": "/docs/cli/utilities",
           "label": "Utilities",
           "built": true
+        },
+        {
+          "slug": "/docs/cli/3dmood",
+          "label": "libreyolo 3dmood",
+          "built": true
+        },
+        {
+          "slug": "/docs/cli/detany3d",
+          "label": "libreyolo detany3d",
+          "built": true
+        },
+        {
+          "slug": "/docs/cli/fcos3d",
+          "label": "libreyolo fcos3d",
+          "built": true
+        },
+        {
+          "slug": "/docs/cli/wilddet3d",
+          "label": "libreyolo wilddet3d",
+          "built": true
         }
       ]
     },
@@ -1092,6 +1237,31 @@
         {
           "slug": "/docs/reference/upstream-checkpoints",
           "label": "Upstream checkpoints",
+          "built": true
+        },
+        {
+          "slug": "/docs/reference/fiftyone",
+          "label": "FiftyOne integration",
+          "built": true
+        },
+        {
+          "slug": "/docs/reference/ground-api",
+          "label": "LibreGround API",
+          "built": true
+        },
+        {
+          "slug": "/docs/reference/hugging-face",
+          "label": "Hugging Face Hub",
+          "built": true
+        },
+        {
+          "slug": "/docs/reference/llm-api",
+          "label": "LibreLLM API",
+          "built": true
+        },
+        {
+          "slug": "/docs/reference/vla-api",
+          "label": "LibreVLA API",
           "built": true
         }
       ]

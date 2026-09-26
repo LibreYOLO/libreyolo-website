@@ -18,7 +18,7 @@ keywords:
   - clasificación de imágenes python
   - clasificador transformer
   - vision transformer preentrenado
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -90,7 +90,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: f63e98454913765a
+source_hash: 1141331e796933f6
 ---
 
 ## Instalación
@@ -131,6 +131,8 @@ subcarpetas `train/` y `val/`, una carpeta por clase) y devuelve la precisión
 top-1 y top-5.
 
 <code-tabs name="val" />
+
+La validación y la calibración INT8 usan la transformación de evaluación de la familia. Los metadatos de exportación registran `norm_mean`, `norm_std` y `resize_mode`; los artefactos anteriores recurren a los valores de la familia. Los preprocesadores de calibración devuelven el array CHW y la proporción requeridos.
 
 ## Exportación
 

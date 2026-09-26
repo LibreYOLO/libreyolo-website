@@ -12,7 +12,7 @@ keywords:
   - MIT 许可 目标检测库
   - yolo 替代方案
   - 训练自己的目标检测模型
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -114,7 +114,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: c735b6e3de78dd2b
+source_hash: 28d7cbb721e0f109
 ---
 
 ## 定义
@@ -135,15 +135,7 @@ source_hash: c735b6e3de78dd2b
 
 ## 模型
 
-有十二个家族既能训练也能预测：[YOLOv9](/docs/models/yolov9)、
-[RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter)、
-[RT-DETR](/docs/models/rt-detr)、[D-FINE](/docs/models/d-fine)、
-[DEIM](/docs/models/deim)、[Dome-DETR](/docs/models/dome-detr)、
-[YOLO-NAS](/docs/models/yolo-nas)、
-[YOLOX](/docs/models/yolox)、[YOLOv7](/docs/models/yolov7)、
-[RTMDet](/docs/models/rtmdet) 和 [PicoDet](/docs/models/picodet)。YOLOv9 和
-RF-DETR 是两个旗舰家族，新特性会先落到它们上面。RF-DETR 需要自己的 extra，
-`pip install "libreyolo[rfdetr]"`；其余的在基础包上就能跑。
+以下家族支持训练和预测：[YOLOv9](/docs/models/yolov9)、[RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter)、[RT-DETR](/docs/models/rt-detr)、[D-FINE](/docs/models/d-fine)、[DEIM](/docs/models/deim)、[Dome-DETR](/docs/models/dome-detr)、[YOLO-NAS](/docs/models/yolo-nas)、[YOLOX](/docs/models/yolox)、[YOLOv7](/docs/models/yolov7)、[RTMDet](/docs/models/rtmdet) 和 [PicoDet](/docs/models/picodet)。YOLOv9 和 RF-DETR 是两个旗舰家族，新功能优先在它们上面落地。RF-DETR 需要自己的 extra，`pip install "libreyolo[rfdetr]"`；其余家族使用基础包即可运行。
 
 另有十一个家族可以预测、验证和导出，但它们的 `train()` 会抛出
 `NotImplementedError`：[LW-DETR](/docs/models/lw-detr)、
@@ -171,6 +163,8 @@ Darknet 一脉的 [YOLOv1](/docs/models/yolov1)、
 [SenseNova-Vision](/docs/models/sensenova-vision) 和
 [LibreMODUS](/docs/models/libremodus)。这些通过它们自己的工厂函数和 extra 加载；
 每个模型页上都写着确切的调用方式。
+
+[PP-YOLOE](/docs/models/ppyoloe) 和 [TinyFormer](/docs/models/tinyformer) 也支持检测训练。
 
 ## 预测
 
@@ -231,6 +225,8 @@ names:
 一个卷积检测器能接受的学习率会让 transformer 检测器发散，所以要从模型页上取这个值，
 而不是从另一个家族的例子里取。一个家族也可能干脆忽略某个参数，它的页面上列出了是
 哪些。数据集、数据增强、多卡训练和日志记录见[训练](/docs/train)。
+
+使用 `classes=` 保留指定的原始数据集 ID；`single_cls=True` 将保留的标签合并到类别 0。支持的家族和验证继承规则见[超参数](/docs/train/hyperparameters)。
 
 ## 验证
 

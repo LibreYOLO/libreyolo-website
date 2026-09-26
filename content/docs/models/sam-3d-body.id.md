@@ -18,7 +18,7 @@ keywords:
   - MHR
   - Momentum Human Rig
   - pose 3D
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -63,7 +63,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 5f47acceaf23ab64
+source_hash: 1b63435b35c57b10
 ---
 
 ## Instalasi
@@ -112,6 +112,8 @@ bersifat metrik serta sudah menyertakan estimasi translasi kamera, `joints2d` be
 piksel pada gambar asli, dan rotasinya mengikuti konvensi MHR, yaitu sudut Euler, bukan
 axis-angle. Lihat [prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
 
+Pengambilan otomatis memerlukan `libreyolo[hf]` dan akses ke model terbatas. Checkpoint lokal harus berupa direktori snapshot yang sudah ditinjau, atau `model.ckpt` tanpa perubahan di samping `model_config.yaml` dan `LICENSE` yang sesuai. Hash yang dipatok dan daftar aset snapshot yang diterima menolak aset yang diganti nama, diubah, ditautkan, atau ditambahkan. Aset MHR juga dipatok. Pertahankan snapshot lokal tanpa perubahan saat konstruktor upstream membacanya.
+
 ## Varian
 
 Dua backbone di balik model tubuh MHR yang sama: `d3` memakai encoder DINOv3 ViT-H/16+,
@@ -124,12 +126,6 @@ sedangkan `h` memakai encoder ViT-H asli.
 Ekspor mesh tubuh belum diimplementasikan: LibreYOLO belum menentukan kontrak graph hasil
 ekspor untuk task mesh, termasuk cara merepresentasikan tata letak parameter MHR di luar
 PyTorch.
-
-## Checkpoint
-
-Setiap berkas bobot yang dipublikasikan untuk family ini.
-
-<checkpoint-table />
 
 ## Lisensi
 

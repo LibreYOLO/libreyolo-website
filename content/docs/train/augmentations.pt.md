@@ -20,7 +20,7 @@ keywords:
   - randaugment
   - cutmix
   - no_aug_epochs
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -75,7 +75,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 47461cd13aab580c
+source_hash: 42668148fcc79c1f
 ---
 
 ## Definir os parâmetros
@@ -134,9 +134,7 @@ da receita e não parâmetros de configuração, então só `flip_prob` e
 `no_aug_epochs` ficam ativos. Ele cobre D-FINE, Dome-DETR, DEIM, DEIMv2,
 RT-DETRv4, EC e, com uma mudança, RF-DETR.
 
-O pipeline de classificação com ImageFolder ignora todos os parâmetros de
-detecção. O flip horizontal dele é um 0.5 fixo que `flip_prob` não alcança. Em
-vez disso, ele tem seu próprio pacote de parâmetros, descrito abaixo.
+O pipeline de classificação com ImageFolder tem seus próprios controles de data augmentation. `flip_prob` controla o espelhamento horizontal e tem padrão 0.5; `fliplr` é seu alias.
 
 O YOLO-NAS é um formato à parte: nada de mosaico, uma transformação afim por
 amostra sempre ligada e o MixUp aplicado de forma independente em vez de
@@ -166,8 +164,8 @@ Resumido por pipeline, para os parâmetros base:
 | `mosaic_prob` | used | ignored | ignored | ignored |
 | `mixup_prob` | condicionado pelo mosaico | used | ignored | ignored |
 | `hsv_prob` | used | used | ignored | ignored |
-| `flip_prob` | used | used | used | ignored |
-| `flipud` | used | used | ignored | ignored |
+| `flip_prob` | used | used | used | used |
+| `flipud` | used | used | ignored | used |
 | `degrees` | condicionado pelo mosaico | used | ignored | ignored |
 | `translate` | condicionado pelo mosaico | used | ignored | ignored |
 | `shear` | condicionado pelo mosaico | used | ignored | ignored |
@@ -192,8 +190,7 @@ Exceções dentro dessas colunas, todas elas restritivas:
 `no_aug_epochs` é `used` em todo lugar, mas não significa a mesma coisa em todo
 lugar. Nos pipelines de mosaico ele desliga o mosaico e o MixUp nas épocas
 finais. Nos pipelines no estilo DETR ele interrompe o data augmentation
-fotométrico, o zoom-out e o recorte, e molda a cauda do schedule. Nos pipelines
-de classificação e de segmentação semântica ele só molda a cauda.
+fotométrico, o zoom-out e o recorte, e molda a cauda do schedule. Nos pipelines de classificação, desativa auto-augmentation, erasing, MixUp e CutMix; recortes e espelhamentos permanecem.
 
 ## O pacote de classificação
 
@@ -211,9 +208,13 @@ passar de 1.
 Os quatro vêm desligados por padrão, então o treinamento de classificação não
 muda a menos que você peça.
 
-Vale dizer com todas as letras que existe uma colisão de nomes: na CLI, `mixup` é
-o alias do `mixup_prob` de detecção. O campo `mixup` de classificação não tem
-grafia própria na CLI e só é alcançável por `model.train(mixup=...)` no Python.
+A CLI direciona `mixup` por tarefa: classificação usa mistura de batches, enquanto detecção usa `mixup_prob`.
+
+`scale=0.5` significa uma faixa de área de recorte aleatório de `(0.5, 1.0)`; um par explícito define ambos os limites. `crop_pct=None` preserva a razão de redimensionamento de avaliação da família; uma substituição afeta a avaliação de treinamento/validação, enquanto a exportação mantém o pré-processamento nativo da família.
+
+A CLI expõe `auto_augment`, `erasing`, `cutmix`, `fliplr` e `flipud`. Na classificação, `mixup` significa mistura de batches e tem padrão 0.0. Espelhamento horizontal tem padrão 0.5 e vertical, 0.0. `mixup + cutmix` não pode exceder 1.
+
+`no_aug_epochs` desativa auto-augmentation, erasing, MixUp e CutMix nas épocas finais, mantendo recortes e espelhamentos. As receitas de classificação usam 0 por padrão para esse período final.
 
 ## Parâmetros específicos de cada família
 

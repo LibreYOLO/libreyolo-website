@@ -19,7 +19,7 @@ keywords:
   - mhr
   - momentum human rig
   - 3d pose
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -70,7 +70,7 @@ snippets:
 
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 5f47acceaf23ab64
+source_hash: "1b63435b35c57b10"
 ---
 
 ## Installation
@@ -124,6 +124,8 @@ Rotationen folgen der MHR-Konvention und verwenden Euler-Winkel statt
 Achse-Winkel. Unter [Vorhersage](/docs/predict) findest du Quellen, Streaming
 und die Verarbeitung von Ergebnissen.
 
+Der automatische Bezug erfordert `libreyolo[hf]` und Zugang zum zugangsbeschränkten Modell. Lokale Checkpoints müssen das geprüfte Snapshot-Verzeichnis oder dessen unveränderte `model.ckpt` neben der passenden `model_config.yaml` und `LICENSE` sein. Festgelegte Hashes und akzeptierte Snapshot-Inventare weisen umbenannte, veränderte, verlinkte oder zusätzliche Dateien zurück. Auch die MHR-Dateien sind festgelegt. Halte den lokalen Snapshot unverändert, während der Upstream-Konstruktor ihn liest.
+
 ## Varianten
 
 Es gibt zwei Backbones hinter demselben MHR-Körpermodell: `d3` verwendet einen
@@ -136,12 +138,6 @@ DINOv3-ViT-H/16+-Encoder, `h` den ursprünglichen ViT-H-Encoder.
 Der Export von Körper-Meshes ist nicht implementiert. LibreYOLO hat noch
 keinen Vertrag für einen exportierten Graphen der Mesh-Aufgabe definiert,
 einschließlich der Darstellung des MHR-Parameteraufbaus außerhalb PyTorchs.
-
-## Checkpoints
-
-Alle veröffentlichten Gewichtsdateien dieser Familie.
-
-<checkpoint-table />
 
 ## Lizenzierung
 

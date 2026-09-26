@@ -17,12 +17,10 @@ keywords:
   - SmolVLM2
   - Florence-2
   - libreyolo chat
-last_verified: 1.5.0
-verification: >-
-  Alias dibaca dari libreyolo/models/vlm/__init__.py; repositori, ukuran, dan
-  daftar task dari modul family di bawah libreyolo/models/vlm/ ditambah
-  libreyolo/models/sensenova/model.py; aturan panggilan dan raise dari
-  libreyolo/models/vlm/base.py, semuanya di v1.5.0.
+last_verified: 1.6.0
+verification: Alias dibaca dari libreyolo/models/vlm/__init__.py; repositori, ukuran, dan daftar
+  task dari modul family di libreyolo/models/vlm/ serta libreyolo/models/sensenova/model.py; aturan
+  pemanggilan dan galat dari libreyolo/models/vlm/base.py, semuanya pada v1.6.0.
 snippets:
   install:
     - label: bash
@@ -48,7 +46,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 57ddac08bc4d4e05
+source_hash: 77a04856cfe4f88c
 ---
 
 ## Instal
@@ -92,9 +90,11 @@ adalah yang tercantum pertama: `qwen3-vl` mengarah ke `4b`, `lfm2-vl` ke `450m`,
 `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` dan `LibreMODUS`
 (juga dieja `LibreModus`) diekspor pada tingkat paket.
 
+Deteksi juga mencakup `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3`, dan `lfm2-vl-3b`. Alias `gemma-4` tanpa akhiran memilih E4B. Alias Molmo2 adalah `molmo2-4b`, `molmo2-8b`, dan `molmo2-o-7b`; default-nya 4B. Alias menentukan routing, bukan menandakan bahwa setiap snapshot jarak jauh sudah diunduh dan diuji.
+
 ## Tugas
 
-Sebagian besar keluarga hanya melayani `detect`. Dua melayani lebih banyak:
+Dukungan task bergantung pada family. Adaptor berikut mendukung beberapa task:
 
 | Family | Tugas yang didukung |
 |---|---|
@@ -111,6 +111,8 @@ model.set_task(task: str) -> LibreVLMModel
 task divalidasi terhadap daftar yang didukung oleh family, tetap lengket di seluruh
 panggilan `predict()` dan `track()` berikutnya, dan model dikembalikan sehingga panggilan dapat
 berantai.
+
+Molmo2 mengembalikan titik dan memerlukan `{label}` dalam template penunjukan kustom. Moondream mendukung deteksi, titik, dan chat native. Gunakan [LibreGround](/docs/reference/ground-api) untuk kueri instruksi-ke-klik.
 
 ## set_classes
 
@@ -156,8 +158,7 @@ tensor gambar.
 
 ## Tidak didukung
 
-`train()`, `val()` dan `export()` menimbulkan `NotImplementedError`. Lakukan pelatihan ulang
-hulu dan muat bobot yang dihasilkan.
+Ekspor dan validasi mAP deteksi tidak didukung. Dukungan pelatihan terbatas pada alur kerja Qwen3-VL di bawah.
 
 ## Kode jarak jauh
 
@@ -170,4 +171,6 @@ LibreMODUS adalah pengecualian eksplisit terhadap skema checkpoint: aliasnya
 merujuk ke direktori berkas upstream yang disematkan daripada LibreYOLO
 , dan LibreYOLO tidak menambahkan metadata v1.0 ke dalamnya maupun memublikasikannya kembali.
 
+## Melatih
 
+Qwen3-VL mendukung LoRA deteksi melalui `train(data=...)` setelah memasang `libreyolo[vlm-train]`. Model membekukan tower visual, memilih checkpoint terbaik berdasarkan loss validasi, dan menyimpan direktori checkpoint. Lihat [fine-tuning VLM](/docs/train/vlm-fine-tuning).

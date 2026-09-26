@@ -16,7 +16,7 @@ keywords:
   - 이미지 그라운딩
   - Alibaba
   - VLM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -47,7 +47,7 @@ snippets:
         vest?")
 
         print(answer)
-source_hash: ee225b6221d624d9
+source_hash: "801d97d089f1f957"
 ---
 
 ## 설치
@@ -90,12 +90,9 @@ Qwen3-VL-8B-Instruct 세 가지이며 각각 `LibreVLM("qwen3-vl-2b")`,
 계열처럼 고정 동작 해상도가 아닙니다. LibreYOLO는 세 크기의 정확도를 비교하는
 벤치마크를 게시하지 않았습니다.
 
-LibreYOLO는 Qwen3-VL을 학습, 검증, 내보내기하지 않습니다. 이 계층의 모든
-계열에서 `train()`, `val()`, `export()`는 모두 `NotImplementedError`를
-일으킵니다(위의 지원 계층 참조). 사용자 지정 보캐뷸러리를 가중치에 포함해야 하면
-업스트림에서 Qwen3-VL을 파인튜닝하고 생성된 가중치를 불러옵니다. 모든 탐지에
-동일한 자리표시자 신뢰도가 있으므로 COCO 방식의 검증 과정 대신 `predict()` 출력을
-직접 확인합니다.
+## 학습
+
+`libreyolo[vlm-train]`을 설치하면 `LibreVLM("qwen3-vl-2b").train(data=...)`로 탐지 LoRA 어댑터를 학습할 수 있습니다. 비전 타워는 고정된 상태를 유지하며, 검증 손실로 최적 체크포인트 디렉터리를 선택합니다. 옵티마이저 상태를 복원하는 학습 재개와 탐지 mAP 검증은 지원하지 않습니다. 기본값과 다시 로드하는 방법은 [VLM 파인튜닝](/docs/train/vlm-fine-tuning)을 참조하십시오.
 
 ## 라이선스
 

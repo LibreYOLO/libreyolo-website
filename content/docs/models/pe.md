@@ -1,15 +1,69 @@
 ---
-title: "PE Core"
-families: []
-architecture_only: true
-seo_title: "PE Core architecture"
-description: "Architecture diagrams for PE Core in LibreYOLO, with block definitions and model variants."
-lead: "Architecture diagrams for PE Core in LibreYOLO, with block definitions and model variants."
+title: Perception Encoder
+families:
+  - pe
+seo_title: Perception Encoder in LibreYOLO
+description: >-
+  Perception Encoder maps images, text and finite video clips into a shared
+  embedding space.
+lead: >-
+  Perception Encoder maps images, text and finite video clips into a shared
+  embedding space.
+keywords:
+  - Perception Encoder
+  - LibreYOLO
+  - classify
+  - embed
+last_verified: 1.6.0
+snippets:
+  predict:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibrePEt16-cls.pt", device="cpu")
+        model.set_classes(["person", "building"])
+        result = model(SAMPLE_IMAGE)
+        print(result.probs)
+  export:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibrePEt16-cls.pt", device="cpu")
+        model.export(format="onnx")
 ---
 
-## Source
+## Install
 
-The diagrams below describe the [PE Core implementation](https://github.com/LibreYOLO/libreyolo/blob/a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb/libreyolo/models/pe/model.py) in LibreYOLO.
-Each drawing states its model configuration, input assumptions and source revision.
+```bash
+pip install "libreyolo[clip]"
+```
 
-These are architecture references. Check the license and class configuration of any checkpoint you use separately.
+## Predict
+
+<code-tabs name="predict" />
+
+Set classes before zero-shot classification. Select `task="embed"` when loading for embeddings. Video embedding samples `clip_frames=8` frames by default, averages their vectors and L2-normalizes the result. Training is not supported. Exported video graphs take direct runtime input.
+
+## Export
+
+<export-matrix />
+
+<code-tabs name="export" />
+
+[Export setup](/docs/export) lists format dependencies and loading exported artifacts.
+
+## Checkpoints
+
+<checkpoint-table />
+
+## Licensing
+
+<provenance-box></provenance-box>
+
+## Citation
+
+<citation-block />

@@ -19,7 +19,7 @@ keywords:
   - libreyolo doctor
   - verificar desbalanceamento de classes
   - vazamento entre train e val
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -61,7 +61,7 @@ snippets:
             print(finding.severity.value, finding.check_id, finding.message)
 
         raise SystemExit(report.exit_code(strict=False))
-source_hash: 9a12a0551c8b56e9
+source_hash: 84e47ff97fb2e2f3
 ---
 
 ## Aponte o train para um dataset
@@ -137,6 +137,8 @@ são puladas.
 opcional; quando os dois estão presentes e discordam, o doctor reporta isso como
 erro.
 
+Pose do RF-DETR lê `kpt_names` com o ID ou nome da classe como chave. Mantém as primeiras linhas de keypoints nomeados por classe; uma lista vazia indica uma classe só de caixas. Pose multiclasse exige `names` e pelo menos uma classe com keypoints.
+
 ## Layout de diretórios e arquivos de rótulos
 
 Detecção, segmentação, pose e caixas orientadas compartilham o mesmo layout. O
@@ -164,6 +166,8 @@ ela treina como background em vez de levantar erro. Uma linha com mais de cinco
 campos é lida como um polígono e seu bounding box vira a extensão do polígono,
 então uma exportação de segmentação usada para treinamento de detecção carrega
 sem reclamar. O doctor informa quantas linhas seguiram esse caminho.
+
+Caixas finitas que cruzam a borda da imagem são recortadas de forma consistente no treinamento e na validação. Caixas sem área visível, coordenadas não finitas e polígonos malformados são descartados. IDs de classes fora da faixa são reportados antes da construção dos alvos. `train(classes=[...])` filtra a supervisão usando os IDs originais das classes; veja [hiperparâmetros](/docs/train/hyperparameters).
 
 ## Outras tarefas
 

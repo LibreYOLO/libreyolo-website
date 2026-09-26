@@ -15,7 +15,7 @@ keywords:
   - libreyolo cuda
   - libreyolo gpu
   - dependency libreyolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Paket
     value: libreyolo
@@ -69,7 +69,7 @@ snippets:
         # Family yang ekstra-nya belum ada dicantumkan bersama perintah pip
         # yang mengaktifkannya.
         libreyolo models
-source_hash: 34fc6d3e24d03fb4
+source_hash: 531023c2092fd751
 ---
 
 ## Instalasi
@@ -96,6 +96,11 @@ baik ekstra tersedia maupun tidak.
 
 | Ekstra | Menambahkan |
 |---|---|
+| `ground` | Dependensi VLM untuk grounding instruksi-ke-titik |
+| `vlm-train` | Stack VLM beserta `peft>=0.17.0` untuk fine-tuning Qwen3-VL |
+| `vla` | `lerobot[smolvla,diffusion,dataset]>=0.6.1`, Python 3.12 atau lebih baru |
+| `marigold` | Dependensi difusi, akselerasi, dan Transformers yang dipatok |
+| `molmo2` | `transformers==4.57.1`, `einops` dan `accelerate` |
 | `rfdetr` | `transformers`, yang menyediakan backbone RF-DETR |
 | `eomt` | `transformers` |
 | `midas` | `timm` 1.0.x, yang menyediakan encoder ViT-L/16 dan EfficientNet-Lite3 milik MiDaS |
@@ -113,7 +118,7 @@ baik ekstra tersedia maupun tidak.
 
 | Ekstra | Menambahkan |
 |---|---|
-| `onnx` | `onnx`, `onnxsim`, `onnxruntime` |
+| `onnx` | `onnx`, `onnxsim`, `onnxruntime>=1.18.0` |
 | `tensorrt` | `tensorrt-cu12` 10.16.1.11 dan `pycuda`, kecuali macOS |
 | `openvino` | `openvino` |
 | `coreml` | `coremltools` |
@@ -148,6 +153,9 @@ COCO kembali ke pycocotools dan run berlanjut.
 
 | Ekstra | Menambahkan |
 |---|---|
+| `hf` | `huggingface_hub>=1.0.0` untuk pemuatan, publikasi, dan logger Hub |
+| `llm` | `openai>=1.66.0` untuk endpoint API yang kompatibel |
+| `fiftyone` | `fiftyone>=1.0.0` untuk kurasi dataset |
 | `stream` | `yt-dlp`, hanya diperlukan untuk me-resolve URL halaman YouTube |
 | `tracking` | Tidak ada. Setiap dependency tracking sudah menjadi dependency inti |
 | `label` | `libreyolo[sam]`, yang mengaktifkan bantuan click-to-mask dalam `libreyolo label` |
@@ -160,14 +168,11 @@ ekstra. Hanya URL halaman YouTube yang memerlukannya.
 
 ### Ekstra agregat
 
-`libreyolo[all]` menginstal ekstra model, ekspor, tracking, dan logging dalam
-satu perintah. Beberapa sengaja tidak disertakan. `neptune` dikecualikan karena
-`neptune-scale` stabil memerlukan protobuf di bawah 7, sedangkan jalur TFLite
-memerlukan protobuf 7. `executorch` dikecualikan karena ExecuTorch membatasi
-versi PyTorch pasangannya, dan `coreai` karena `coreai-torch` mengunci PyTorch
-ke 2.11.x serta akan memindahkan seluruh environment ke versi tersebut.
-`fast-eval`, `hub-kernels`, `clip-convert`, dan `siglip2-convert` juga tidak
-disertakan. Instal ekstra tersebut berdasarkan nama.
+`libreyolo[all]` memasang extra model, ekspor, pelacakan, dan logging dalam satu perintah. Beberapa sengaja tidak disertakan. `neptune` dikecualikan karena `neptune-scale` stabil memerlukan protobuf di bawah 7, sedangkan jalur TFLite memerlukan protobuf 7. `executorch` dikecualikan karena ExecuTorch membatasi versi PyTorch yang kompatibel, dan `coreai` karena `coreai-torch` mematok PyTorch ke 2.11.x dan akan memindahkan seluruh lingkungan ke versi itu. `fast-eval`, `hub-kernels`, `clip-convert`, dan `siglip2-convert` juga tidak disertakan. Pasang masing-masing dengan namanya. `all` mencakup `hf` dan `llm`; `fiftyone`, `vla`, `marigold`, dan `molmo2` tetap terpisah. FiftyOne membawa OpenCV headless, yang bertumpang tindih dengan paket inti `cv2`.
+
+Instalasi inti memerlukan Python 3.10 atau lebih baru dan menambahkan `cloudpickle>=3.0.0` untuk DDP yang dikelola koordinator.
+
+Gunakan lingkungan terpisah untuk Molmo2: pin Transformers 4.57.1 bertentangan dengan stack VLM, Hub, dan Marigold yang lebih baru. Marigold mematok diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0, dan Transformers 5.4.0, serta bitsandbytes 0.49.2 pada Linux/Windows. Inferensi Marigold empat-bit default memerlukan CUDA. North Micro Vision memerlukan Transformers 5.16 atau lebih baru; Gemma 4 memerlukan 5.10 atau lebih baru, di atas batas minimum VLM bersama.
 
 ## Constraint platform
 
@@ -225,5 +230,3 @@ unduhan PyTorch tidak menerbitkan build Darwin.
 family dengan dependency yang hilang dicetak bersama perintah pip persis yang
 mengaktifkannya. Kedua perintah juga menerima `--json`, yang mencetak data sama
 sebagai objek machine-readable ke stdout.
-
-

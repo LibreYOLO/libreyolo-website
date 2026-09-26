@@ -2,13 +2,12 @@
 title: TFLite
 seo_title: Xuất sang TFLite (LiteRT) từ LibreYOLO
 description: >-
-  Xuất một mô hình LibreYOLO sang FlatBuffer .tflite thông qua onnx2tf: shape
-  tĩnh, chỉ FP32, đầu vào NHWC, và những họ mô hình chuyển đổi trót lọt.
+  Xuất mô hình LibreYOLO thành FlatBuffer .tflite qua onnx2tf: hình dạng tĩnh, FP32 và các đường INT8 được hỗ
+  trợ, đầu vào NHWC và metadata runtime.
 lead: >-
-  TFLite là định dạng FlatBuffer mà LiteRT thực thi trên các đích di động và
-  nhúng. LibreYOLO xuất ra một đồ thị ONNX tĩnh, chuyển đổi nó bằng onnx2tf ở
-  chế độ flatbuffer-direct, rồi ghi metadata của mô hình bên cạnh artifact dưới
-  dạng một tệp JSON sidecar.
+  TFLite là định dạng FlatBuffer mà LiteRT thực thi trên các đích di động và nhúng. LibreYOLO xuất ra một đồ
+  thị ONNX tĩnh, chuyển đổi nó bằng onnx2tf ở chế độ flatbuffer-direct, rồi ghi metadata của mô hình bên cạnh
+  artifact dưới dạng một tệp JSON sidecar.
 keywords:
   - xuất yolo sang tflite
   - litert
@@ -17,7 +16,7 @@ keywords:
   - tflite flatbuffer
   - đầu vào nhwc tflite
   - suy luận trên thiết bị biên
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Cờ
     value: export(format="tflite")
@@ -33,15 +32,12 @@ meta:
   - label: Shape
     value: Chỉ shape tĩnh. dynamic=True bị từ chối.
   - label: Precision
-    value: Chỉ FP32. half=True và int8=True bị từ chối.
+    value: FP32; INT8 cho phát hiện YOLO9 và YOLOX. FP16 bị từ chối.
   - label: Yêu cầu
-    value: >-
-      Python 3.12 trở lên, vì onnx2tf 2.4.x không phát hành wheel nào cho phiên
-      bản cũ hơn
+    value: 'Python 3.12 trở lên, vì onnx2tf 2.4.x không phát hành wheel nào cho phiên bản cũ hơn'
 verification: >-
-  Đọc từ libreyolo/export/tflite.py, libreyolo/export/exporter.py,
-  libreyolo/export/support.py, libreyolo/backends/tflite.py và pyproject.toml
-  trên nhánh dev.
+  Đọc từ libreyolo/export/tflite.py, libreyolo/export/exporter.py, libreyolo/export/support.py,
+  libreyolo/backends/tflite.py và pyproject.toml trên nhánh dev.
 snippets:
   install:
     - label: Cài đặt
@@ -85,7 +81,7 @@ snippets:
         )
 
         # dynamic=True ném ValueError: bộ chuyển đổi cần shape tĩnh
-        # half=True và int8=True bị từ chối trước khi trace
+        # FP16 bị từ chối. INT8 cần bộ phát hiện được hỗ trợ và dữ liệu hiệu chuẩn
   run:
     - label: Qua LibreYOLO
       language: python
@@ -97,39 +93,25 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: LiteRT thuần
       language: python
-      code: >
+      code: |
         import json
 
-
         import numpy as np
-
         from ai_edge_litert.interpreter import Interpreter
 
-
         interpreter = Interpreter(model_path="weights/LibreYOLO9t.tflite")
-
         interpreter.allocate_tensors()
-
         detail = interpreter.get_input_details()[0]
-
         print(detail["shape"], detail["dtype"])   # NHWC, không phải NCHW
 
-
-        interpreter.set_tensor(detail["index"], np.zeros(detail["shape"],
-        np.float32))
-
+        interpreter.set_tensor(detail["index"], np.zeros(detail["shape"], np.float32))
         interpreter.invoke()
-
         for output in interpreter.get_output_details():
             print(output["name"], interpreter.get_tensor(output["index"]).shape)
 
-        # Tên các lớp đối tượng, tác vụ và kích thước đầu vào nằm trong tệp
-        sidecar
-
+        # Tên các lớp đối tượng, tác vụ và kích thước đầu vào nằm trong tệp sidecar
         meta = json.load(open("weights/LibreYOLO9t.tflite.json"))
-
         print(meta["model_family"], meta["task"], meta["names"])
-
 
         # Tiền xử lý, phép chuyển vị NCHW sang NHWC và hậu xử lý là việc của bạn
   support:
@@ -137,9 +119,8 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: fa2deaa0ef6d9978
+source_hash: 3548d74e992bb76d
 ---
-
 ## Cài đặt
 
 <code-tabs name="install" />
@@ -167,6 +148,8 @@ hình, tác vụ, tên các lớp đối tượng, kích thước đầu vào v�
 FlatBuffer không có trường metadata nào của LibreYOLO, nên hai tệp luôn đi cùng
 nhau.
 
+Phát hiện YOLO9 và YOLOX hỗ trợ `int8=True` với `data=...`, `fraction=1.0`, `batch=1` và `dynamic=False`. Cài `onnx2tf[tensorflow]`. Khi thiếu dữ liệu hiệu chuẩn, thư viện dùng `coco8.yaml` kèm cảnh báo. Đầu ra bounding box chuẩn hóa và điểm số riêng dùng thang quantization độc lập; giữ metadata `output_layout` đi kèm khi triển khai. Một số toán tử nội bộ có thể vẫn dùng số thực.
+
 ## Chạy artifact
 
 <code-tabs name="run" />
@@ -187,8 +170,7 @@ nên một blob có shape `(1, 3, 640, 640)` sẽ không gắn được.
 Chỉ shape tĩnh. `dynamic=True` ném `ValueError` trước khi trace, và khung xuất
 (canvas) bị cố định ở đúng giá trị mà `imgsz` phân giải ra.
 
-Chỉ FP32. `half=True` và `int8=True` đều bị từ chối trong bước kiểm tra, nên việc
-triển khai ở dạng đã lượng tử hóa hiện chưa thể đạt tới từ exporter này.
+`half=True` bị từ chối. INT8 giới hạn ở phát hiện YOLO9 và YOLOX với batch 1; các họ và tác vụ INT8 khác phát sinh lỗi.
 
 Phạm vi hỗ trợ ở đây hẹp hơn so với các định dạng đồ thị, và nó được quyết định
 bằng đo đạc chứ không phải theo họ mô hình. Các tổ hợp đã được kiểm chứng gồm phát

@@ -19,7 +19,7 @@ keywords:
   - classificazione immagini python
   - rete convoluzionale pura
   - classificatore ImageNet
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -35,7 +35,8 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreConvNeXtt-cls.pt source=cat.jpg save=True
+        libreyolo predict model=LibreConvNeXtt-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+
   train:
     - label: Python
       language: python
@@ -60,6 +61,7 @@ snippets:
       code: |
         libreyolo train model=LibreConvNeXtt-cls.pt data=imagenette160 \
           epochs=50 device=0,1 batch=-1
+
   val:
     - label: Python
       language: python
@@ -75,6 +77,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreConvNeXtt-cls.pt data=imagenette160
+
   export:
     - label: Python
       language: python
@@ -101,7 +104,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 1682cc69cf2925e6
+source_hash: 8f33a40e4d3a8f29
 ---
 
 ## Installazione
@@ -163,12 +166,16 @@ di fare fine-tuning dell'intero backbone.
 Vedi [addestramento](/docs/train) per dataset, data augmentation, multi-GPU e
 logger.
 
+`cls_pw=0` disattiva la ponderazione della loss; valori fino a 1 usano pesi inversamente proporzionali alla frequenza, normalizzati a media 1. `class_weights=True` usa invece frequenze inverse normalizzate sui campioni e non è combinabile con `cls_pw>0`. Queste impostazioni devono coincidere alla ripresa. Vedi [classificazione](/docs/tasks/image-classification).
+
 ## Validazione
 
 `val()` restituisce un dizionario di chiavi `metrics/`. Per la classificazione
 sono l'accuratezza top-1 e top-5 sullo split di validazione.
 
 <code-tabs name="val" />
+
+La validazione e la calibrazione INT8 usano la trasformazione di valutazione della famiglia. I metadati di esportazione registrano `norm_mean`, `norm_std` e `resize_mode`; gli artefatti più vecchi usano i valori della famiglia. I preprocessori di calibrazione restituiscono l'array CHW e il rapporto richiesti.
 
 ## Esportazione
 
@@ -191,10 +198,7 @@ Tutti i file di pesi pubblicati per questa famiglia.
 
 <provenance-box>
 
-In questa famiglia viene distribuito solo ConvNeXt V1. I checkpoint
-preaddestrati piccoli di ConvNeXt-V2 sono CC-BY-NC 4.0 e sono esclusi
-deliberatamente, dato che dei pesi non commerciali non possono essere
-ridistribuiti dentro una libreria MIT/commerciale.
+Questa pagina riguarda ConvNeXt V1. [ConvNeXt V2](/docs/models/convnextv2) è una famiglia separata i cui pesi preaddestrati ufficiali mantengono la licenza CC-BY-NC-4.0.
 
 </provenance-box>
 

@@ -4,7 +4,7 @@ seo_title: "libreyolo export command reference"
 description: "Export a checkpoint to a deployment format: every argument with its default, where the artifact lands, and the combinations the command refuses."
 lead: "Converts one checkpoint into one deployment format and writes the artifact under weights/. The format decides which of the arguments below apply."
 keywords: [libreyolo export cli, libreyolo export command, yolo onnx export cli, tensorrt export command, libreyolo export arguments]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 meta:
   - label: Command
     value: libreyolo export
@@ -140,3 +140,5 @@ failures.
 
 Related: [`libreyolo quantize`](/docs/cli/quantize), which stays in PyTorch and
 writes a checkpoint rather than a deployment artifact.
+
+TFLite INT8 uses `int8=True` for YOLO9 or YOLOX detection with `data=...`, `fraction=1.0`, `batch=1` and `dynamic=False`. FP16 is unsupported; when both precision flags are given, the CLI drops `half` in favor of INT8. JSON export output reports the actual resolved canvas, including square fallback for square-native families reloaded from rectangular training checkpoints.

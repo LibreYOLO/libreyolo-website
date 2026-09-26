@@ -20,7 +20,7 @@ keywords:
   - randaugment
   - cutmix
   - no_aug_epochs
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -75,7 +75,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 47461cd13aab580c
+source_hash: 42668148fcc79c1f
 ---
 
 ## Definir los parámetros
@@ -134,9 +134,7 @@ de la receta y no parámetros de configuración, así que solo `flip_prob` y
 `no_aug_epochs` están activos. Cubre D-FINE, Dome-DETR, DEIM, DEIMv2, RT-DETRv4,
 EC y, con un cambio, RF-DETR.
 
-El pipeline de clasificación con ImageFolder ignora todos los parámetros de
-detección. Su volteo horizontal es un 0.5 fijo al que `flip_prob` no llega. En su
-lugar tiene su propio pack de parámetros, descrito más abajo.
+El pipeline ImageFolder de clasificación tiene sus propios controles de aumento. `flip_prob` controla los volteos horizontales y vale 0.5 por defecto; `fliplr` es su alias.
 
 YOLO-NAS es una forma en sí misma: nada de mosaico, una transformación afín por
 muestra siempre activa y MixUp aplicado de forma independiente en lugar de
@@ -166,8 +164,8 @@ Resumida por pipeline, para los parámetros base:
 | `mosaic_prob` | used | ignored | ignored | ignored |
 | `mixup_prob` | condicionado por el mosaico | used | ignored | ignored |
 | `hsv_prob` | used | used | ignored | ignored |
-| `flip_prob` | used | used | used | ignored |
-| `flipud` | used | used | ignored | ignored |
+| `flip_prob` | used | used | used | used |
+| `flipud` | used | used | ignored | used |
 | `degrees` | condicionado por el mosaico | used | ignored | ignored |
 | `translate` | condicionado por el mosaico | used | ignored | ignored |
 | `shear` | condicionado por el mosaico | used | ignored | ignored |
@@ -189,11 +187,7 @@ Excepciones dentro de esas columnas, todas ellas restrictivas:
 - DINOv2 sigue la columna de estilo DETR para sus tareas detect y semantic, y
   añade el pack de clasificación para `task="classify"`.
 
-`no_aug_epochs` está en `used` en todas partes, pero no significa lo mismo en
-todas. En los pipelines de mosaico apaga el mosaico y MixUp durante las épocas
-finales. En los pipelines de estilo DETR detiene los aumentos fotométricos, de
-zoom-out y de recorte, y da forma a la cola del schedule. En los pipelines de
-clasificación y de semántica solo da forma a la cola.
+`no_aug_epochs` es `used` en todos los pipelines, pero su efecto varía. En los pipelines con mosaic desactiva mosaic y MixUp durante las últimas épocas. En los de estilo DETR detiene los aumentos fotométricos, de zoom-out y de recorte, y configura el tramo final del planificador. En clasificación desactiva el aumento automático, erasing, MixUp y CutMix; conserva el recorte y los volteos.
 
 ## El pack de clasificación
 
@@ -211,10 +205,13 @@ de 1.
 Los cuatro vienen desactivados por defecto, así que el entrenamiento de
 clasificación no cambia a menos que lo pidas.
 
-Hay una colisión de nombres que conviene decir con claridad: en la CLI, `mixup`
-es el alias del `mixup_prob` de detección. El campo `mixup` de clasificación no
-tiene forma propia en la CLI y solo se alcanza a través de
-`model.train(mixup=...)` en Python.
+La CLI dirige `mixup` según la tarea: la clasificación usa mezcla de lotes y la detección usa `mixup_prob`.
+
+`scale=0.5` significa un rango de área de recorte aleatorio de `(0.5, 1.0)`; un par explícito fija ambos límites. `crop_pct=None` conserva la proporción de redimensionado de evaluación de la familia; un valor explícito afecta a la evaluación durante entrenamiento y validación, mientras que la exportación conserva el preprocesamiento nativo de la familia.
+
+La CLI expone `auto_augment`, `erasing`, `cutmix`, `fliplr` y `flipud`. En clasificación, `mixup` significa mezcla de batches y vale 0.0 por defecto. Los volteos horizontales tienen un valor por defecto de 0.5 y los verticales de 0.0. `mixup + cutmix` no debe superar 1.
+
+`no_aug_epochs` desactiva el autoaumento, el borrado, MixUp y CutMix durante las últimas épocas, conservando el recorte y los volteos. En las recetas de clasificación, este tramo final vale 0 por defecto.
 
 ## Parámetros específicos de cada familia
 

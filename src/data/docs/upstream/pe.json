@@ -1,0 +1,12 @@
+{
+  "name": "Perception Encoder",
+  "org": "Meta AI",
+  "paper_title": "Perception Encoder: The best visual embeddings are not at the output of the network",
+  "paper_url": "https://arxiv.org/abs/2504.13181",
+  "code_url": "https://github.com/facebookresearch/perception_models",
+  "license": "Apache-2.0",
+  "license_interpretation": "The publisher declares Apache-2.0 for the encoder weights.",
+  "bibtex": "@article{bolya2025PerceptionEncoder,\n  title={Perception Encoder: The best visual embeddings are not at the output of the network},\n  author={Daniel Bolya and Po-Yao Huang and Peize Sun and Jang Hyun Cho and Andrea Madotto and Chen Wei and Tengyu Ma and Jiale Zhi and Jathushan Rajasegaran and Hanoona Rasheed and Junke Wang and Marco Monteiro and Hu Xu and Shiyu Dong and Nikhila Ravi and Daniel Li and Piotr Doll{\\'a}r and Christoph Feichtenhofer},\n  journal={arXiv:2504.13181},\n  year={2025}\n}",
+  "bibtex_source_url": "https://raw.githubusercontent.com/facebookresearch/perception_models/main/README.md",
+  "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2504.13181. The upstream citation form is retained."
+}

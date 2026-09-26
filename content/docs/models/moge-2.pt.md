@@ -22,7 +22,7 @@ keywords:
   - surface normal estimation
   - predição densa
   - DINOv2
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -82,7 +82,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: d96b89f18ac10a40
+source_hash: b06daf44f9a58411
 ---
 
 ## Instalação
@@ -95,8 +95,7 @@ pip install libreyolo
 
 ## Predição
 
-Os pesos são baixados automaticamente no primeiro uso: o LibreYOLO busca o
-tamanho correspondente direto dos checkpoints oficiais e guarda em cache local.
+Os pesos são baixados automaticamente no primeiro uso. Os tamanhos s e l usam espelhos do LibreYOLO; b continua usando o checkpoint upstream.
 
 <code-tabs name="predict" />
 
@@ -144,10 +143,7 @@ um checkpoint e devolve o mesmo `Results`.
 
 <provenance-box>
 
-O LibreYOLO não copia esses checkpoints para a sua própria organização.
-`LibreYOLO("LibreMoGe2s-normal.pt")` baixa o tamanho correspondente direto dos
-repositórios oficiais no Hugging Face em uma revisão fixada, e verifica o
-arquivo contra um checksum SHA-256 registrado antes de usar.
+O LibreYOLO espelha os checkpoints s e l; b permanece upstream. Os artefatos baixados mantêm a licença de seu publicador.
 
 </provenance-box>
 

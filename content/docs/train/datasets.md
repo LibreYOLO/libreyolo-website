@@ -13,7 +13,7 @@ keywords:
   - libreyolo doctor
   - class imbalance check
   - train val split leakage
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   train:
     - label: Python
@@ -126,6 +126,8 @@ lines starting with `#` are skipped.
 `names` may be a list or an integer-keyed mapping. `nc` is optional; when both
 are present and disagree, the doctor reports it as an error.
 
+RF-DETR pose reads `kpt_names` keyed by class ID or name. It keeps the first named keypoint rows per class; an empty list denotes a box-only class. Multi-class pose requires `names` and at least one keypoint-bearing class.
+
 ## Directory layout and label files
 
 Detection, segmentation, pose and oriented boxes all share one layout. The label
@@ -153,6 +155,8 @@ background rather than raising. A row with more than five fields is read as a
 polygon and its box becomes the polygon's extent, so a segmentation export used
 for detection training loads without complaint. The doctor reports how many rows
 took that path.
+
+Finite boxes crossing the image border are clipped consistently for training and validation. Boxes with no visible area, non-finite coordinates and malformed polygons are dropped. Out-of-range class IDs are reported before target construction. `train(classes=[...])` filters supervision using original class IDs; see [hyperparameters](/docs/train/hyperparameters).
 
 ## Other tasks
 

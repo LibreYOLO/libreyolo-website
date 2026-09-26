@@ -19,16 +19,14 @@ keywords:
   - ядро ms_deform_attn
   - set_fused_attention
   - triton ядра libreyolo cuda
-last_verified: 1.5.0
-verification: >-
-  API реестра прочитан из libreyolo/kernels/__init__.py на v1.5.0, API внимания
-  — из libreyolo/kernels/attention/__init__.py и sdpa.py, провайдер Hub — из
-  libreyolo/kernels/attention/ms_deform_attn.py, включая зафиксированную ревизию
-  и предикат применимости. Структура каталогов перечислена по
-  libreyolo/kernels/. Определение extra — из pyproject.toml. Замечания о
-  поведении и цифры бенчмарков — из docs/kernels.md. История ограничения в
-  v1.4.0 — из коммита, подключившего слот в RF-DETR, и записи в CHANGELOG для
-  1.5.0.
+last_verified: 1.6.0
+
+verification: API реестра прочитан из libreyolo/kernels/__init__.py на v1.6.0, API внимания — из libreyolo/kernels/attention/__init__.py
+  и sdpa.py, провайдер Hub — из libreyolo/kernels/attention/ms_deform_attn.py, включая зафиксированную ревизию и предикат
+  применимости. Структура каталогов перечислена по libreyolo/kernels/. Определение extra — из pyproject.toml. Замечания о
+  поведении и цифры бенчмарков — из docs/kernels.md. История ограничения в v1.4.0 — из коммита, подключившего слот в RF-DETR,
+  и записи в CHANGELOG для 1.5.0.
+
 meta:
   - label: Пакет
     value: libreyolo.kernels
@@ -79,7 +77,7 @@ snippets:
             name="mybackend",
             predicate=my_check,
         )
-source_hash: 23d504e88b7959f8
+source_hash: 2cdb2d344ab3faf5
 ---
 
 ## Реестр
@@ -194,6 +192,8 @@ DEIM, DEIMv2, EC и OV-DEIM. Поскольку обратный проход т
 обновления, оставьте extra неизменным или выставьте `LIBREYOLO_HUB_KERNELS=0` с
 обеих сторон.
 
+Hub MSDA принимает FP16 и BF16, приводя входы ядра к FP32, восстанавливая тип выхода и сохраняя градиенты при приведениях. Вызовы eager CUDA без подходящего ускоренного провайдера один раз выводят подсказку об установке `libreyolo[hub-kernels]`. `ms_deform_attn_available(value=None)` позволяет проверить путь для конкретного тензора.
+
 ## Слитое внимание
 
 Слитому вниманию scaled dot-product не нужны необязательные зависимости —
@@ -244,3 +244,7 @@ straight-through-оценки, на всём наборе форм, которы
 матрица соответствия для инференса прогонялась без установленного пакета
 `kernels`, поэтому безопасность захвата при активном скомпилированном ядре ею не
 покрыта.
+
+## Деформируемое внимание Triton
+
+Встроенный провайдер Triton MSDA поддерживает подходящий инференс CUDA с FP32, FP16 и BF16. Он отклоняет входы, требующие градиентов, и при недоступности переключается на переносимую реализацию внимания. Hub остаётся приоритетным. `LIBREYOLO_TRITON_MSDA=0` отключает Triton; `LIBREYOLO_HUB_KERNELS=0` отключает провайдер Hub и его подсказку об установке.

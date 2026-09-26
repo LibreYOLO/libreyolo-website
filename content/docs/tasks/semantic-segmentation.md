@@ -4,7 +4,7 @@ seo_title: "Semantic segmentation in LibreYOLO"
 description: "Label every pixel with a class in LibreYOLO: the families that serve the task, the dense mask format, and the predict, train, validate and export calls."
 lead: "Semantic segmentation assigns a class to every pixel of an image and draws no distinction between instances of the same class. The task key is semantic."
 keywords: [semantic segmentation python, pixel classification, dense prediction, train segmentation model, mIoU, MIT segmentation library]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -127,7 +127,7 @@ excluded from loss and metrics, and `.classes` leaves it out.
 
 ## Models
 
-Three families both train and predict:
+Trainable families include:
 [SegFormer](/docs/models/segformer),
 [LingBot-Vision](/docs/models/lingbot-vision) and
 [DINOv2](/docs/models/dinov2). SegFormer and LingBot-Vision run on the base
@@ -147,6 +147,8 @@ datasets whose label spaces have little in common, ADE20K's 150 classes against
 Cityscapes' 19 among them, so a checkpoint's `names` is what tells you what it
 can label, and two checkpoints are only comparable when they were trained on
 the same one.
+
+[PP-LiteSeg](/docs/models/ppliteseg) and [U-Net](/docs/models/unet) are trainable semantic families. U-Net currently has no verified hosted conversion.
 
 ## Predict
 
@@ -217,6 +219,8 @@ output stride, and both training and validation raise a `ValueError` before the
 run starts when `imgsz` does not divide evenly. The divisor is 32 for SegFormer,
 16 for LingBot-Vision and EoMT, 14 for DINOv2, and 8 for FCN and PIDNet. See
 [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
+
+Semantic datasets accept `(height, width)` canvases. PP-LiteSeg and U-Net distinguish training crops from evaluation rectangles. Rescale-and-crop sampling pads missing regions with the ignore label; family photometric transforms apply where configured.
 
 ## Validate
 

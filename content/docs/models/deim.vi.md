@@ -4,12 +4,12 @@ families:
   - deim
 seo_title: DEIM và DEIMv2 trong LibreYOLO
 description: >-
-  Dùng DEIM và DEIMv2 trong LibreYOLO để phát hiện đối tượng. Cài đặt, dự đoán,
-  huấn luyện, xác thực và xuất, từ kích thước nửa triệu tham số trở lên.
+  Dùng DEIM và DEIMv2 trong LibreYOLO để phát hiện đối tượng. Cài đặt, dự đoán, huấn luyện, xác thực và xuất,
+  từ kích thước nửa triệu tham số trở lên.
 lead: >-
-  Một detection transformer được huấn luyện bằng phép ghép one-to-one dense, hội
-  tụ trong số epoch ít hơn nhiều so với các công thức DETR làm nền tảng cho nó.
-  LibreYOLO có hai phiên bản, được phân biệt bằng checkpoint bạn tải.
+  Một detection transformer được huấn luyện bằng phép ghép one-to-one dense, hội tụ trong số epoch ít hơn
+  nhiều so với các công thức DETR làm nền tảng cho nó. LibreYOLO có hai phiên bản, được phân biệt bằng
+  checkpoint bạn tải.
 keywords:
   - DEIM
   - DEIMv2
@@ -18,7 +18,7 @@ keywords:
   - DETR
   - phát hiện đối tượng
   - phát hiện thời gian thực
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -38,39 +38,27 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Video
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
         # Phiên bản là một phần của tên tệp và factory định tuyến theo
-
         # checkpoint, vì vậy cả hai đều tải theo cùng một cách.
-
         model = LibreYOLO("LibreDEIMv2pico.pt")
 
-
-        # Bất kỳ nguồn nào thư viện chấp nhận: tệp, thư mục, URL, chỉ mục
-        webcam,
-
+        # Bất kỳ nguồn nào thư viện chấp nhận: tệp, thư mục, URL, chỉ mục webcam,
         # luồng RTSP hoặc danh sách .streams
-
         for result in model.predict("clip.mp4", stream=True, save=True):
             print(len(result.boxes))
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreDEIMn.pt")
 
-
-        # coco128.yaml tải mẫu 128 ảnh trong lần sử dụng đầu tiên. Hãy trỏ
-        `data`
-
+        # coco128.yaml tải mẫu 128 ảnh trong lần sử dụng đầu tiên. Hãy trỏ `data`
         # đến YAML dataset của bạn cho một lượt chạy thực tế.
-
         model.train(data="coco128.yaml", epochs=50, batch=8, lr0=1e-4)
     - label: CLI
       language: bash
@@ -79,17 +67,12 @@ snippets:
           epochs=50 batch=8 lr0=1e-4
     - label: DEIMv2
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
-        # Khi không đặt, epochs, batch, imgsz và lr0 lấy từ công thức đã phát
-        hành
-
+        # Khi không đặt, epochs, batch, imgsz và lr0 lấy từ công thức đã phát hành
         # cho kích thước được tải.
-
         model = LibreYOLO("LibreDEIMv2pico.pt")
-
         model.train(data="coco128.yaml", epochs=50)
     - label: LoRA
       language: python
@@ -155,9 +138,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 6edaac5f05abaabe
+source_hash: 8dc052b83d5f1ac0
 ---
-
 ## Cài đặt
 
 Cả hai phiên bản đều không cần extra tùy chọn. Mọi thành phần mà chúng import đều có trong bản cài đặt cơ sở.
@@ -180,6 +162,8 @@ Trọng số được tải về từ Hugging Face trong lần sử dụng đầ
 
 Đối tượng `Results` trả về cũng là đối tượng mà mọi họ mô hình đều trả về, vì vậy việc chuyển sang detector khác chỉ cần thay đổi một dòng. `conf` và `max_det` lọc phép giải mã top-k trên các query và lớp đối tượng; không có bước NMS để điều chỉnh, còn `iou` được chấp nhận nhưng không được dùng. Xem [dự đoán](/docs/predict) để biết về nguồn, xử lý luồng và kết quả.
 
+DEIM chấp nhận `imgsz=(height, width)` hình chữ nhật khi dự đoán. DEIMv2 từ chối rõ ràng yêu cầu dự đoán/đánh giá hình chữ nhật. Điều này không có nghĩa là hỗ trợ huấn luyện hoặc xuất hình chữ nhật.
+
 ## Biến thể
 
 Phiên bản 1 cung cấp năm kích thước, tất cả ở cùng kích thước đầu vào. Phiên bản 2 giữ lại năm tên đó và bổ sung ba kích thước nhỏ hơn là `atto`, `femto` và `pico`, trong đó hai kích thước đầu chạy nguyên bản ở kích thước đầu vào thấp hơn phần còn lại. Do đó năm mã kích thước tồn tại ở cả hai phiên bản và đặt tên cho các mô hình khác nhau; phiên bản được ghi trong tên tệp checkpoint.
@@ -201,6 +185,8 @@ Hãy tự truyền `lr0` trên phiên bản 1. Chữ ký `train()` Python mặc 
 Phiên bản 2 tự phân giải các giá trị mặc định đó. Để trống `epochs`, `batch`, `imgsz` và `lr0` khiến mô hình đọc từng giá trị từ công thức đã phát hành cho kích thước được tải, nhờ đó các kích thước nhỏ huấn luyện ở độ phân giải đầu vào riêng mà không cần chỉ định, còn giá trị bạn truyền sẽ ghi đè công thức. `imgsz` là đối số bị ràng buộc: giá trị phải là bội số dương của 32, nếu không phiên bản 2 sẽ phát sinh lỗi trước khi bắt đầu lượt chạy.
 
 Xem [huấn luyện](/docs/train) để biết về dataset, tăng cường dữ liệu (data augmentation), multi-GPU và logger.
+
+DEIM mặc định bật AMP với `amp_dtype="float16"`. Truyền `amp=False` để huấn luyện FP32.
 
 ## Xác thực
 

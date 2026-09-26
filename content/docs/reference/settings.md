@@ -10,8 +10,8 @@ keywords:
   - HF_TOKEN
   - libreyolo weights directory
   - libreyolo cache
-last_verified: "1.5.0"
-verification: "Variables located by searching libreyolo/**/*.py for os.environ and os.getenv at v1.5.0; semantics read at each use site. Directory conventions read from libreyolo/data/utils.py, libreyolo/utils/download.py, libreyolo/export/exporter.py, libreyolo/models/base/model.py and libreyolo/models/sam3dbody/mhr_body.py."
+last_verified: "1.6.0"
+verification: "Variables located by searching libreyolo/**/*.py for os.environ and os.getenv at v1.6.0; semantics read at each use site. Directory conventions read from libreyolo/data/utils.py, libreyolo/utils/download.py, libreyolo/export/exporter.py, libreyolo/models/base/model.py and libreyolo/models/sam3dbody/mhr_body.py."
 snippets:
   usage:
     - label: Point the dataset root somewhere else
@@ -57,6 +57,8 @@ Kernel selection also short-circuits imports: when `LIBREYOLO_KERNELS` forces
 all. The registry these three variables control is documented on
 [kernels](/docs/reference/kernels).
 
+`LIBREYOLO_TRITON_MSDA=0` disables the in-tree Triton deformable-attention provider. `LIBREYOLO_HUB_KERNELS=0` disables Hub kernels and their installation hint. Both retain the portable fallback.
+
 ## Variables the library sets
 
 These are written rather than read, so setting them by hand is not the
@@ -94,6 +96,8 @@ A token is needed only for gated repositories. SAM 3 is the shipped example:
 its weights download from a gated repository under a custom license, so the
 terms have to be accepted on the repository page and the session has to be
 authenticated.
+
+`HF_TOKEN` authenticates Hub checkpoint loading, publishing and the Hub logger. `OPENAI_API_KEY` and `OPENROUTER_API_KEY` provide credentials for the corresponding [LibreLLM provider routes](/docs/reference/llm-api).
 
 ## Directories
 

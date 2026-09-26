@@ -17,7 +17,7 @@ keywords:
   - 神经架构搜索
   - MBConv
   - imagenet 分类模型
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -32,9 +32,8 @@ snippets:
         print(result.probs.top5)
     - label: CLI
       language: bash
-      code: >
-        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=cat.jpg
-        save=True
+      code: |
+        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python
       language: python
@@ -95,7 +94,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: ad3ff140aad824bd
+source_hash: 23b7d651fb4eae89
 ---
 
 ## 安装
@@ -128,11 +127,15 @@ pip install libreyolo
 
 关于数据集、数据增强、多卡训练和 logger，见[训练](/docs/train)。
 
+`cls_pw=0` 禁用损失加权；不超过 1 的值使用逆频率权重，并将均值归一化为 1。`class_weights=True` 改用按样本数归一化的逆频率，不能与 `cls_pw>0` 同时使用。续训时这些设置必须匹配。见[分类](/docs/tasks/image-classification)。
+
 ## 验证
 
 `val()` 返回一个由 `metrics/` 键组成的字典。对分类来说就是验证集上的 top-1 和 top-5 精度。
 
 <code-tabs name="val" />
+
+验证和 INT8 校准使用家族的评估变换。导出元数据记录 `norm_mean`、`norm_std` 和 `resize_mode`；旧产物回退到家族值。校准预处理器返回所需的 CHW 数组和比例。
 
 ## 导出
 

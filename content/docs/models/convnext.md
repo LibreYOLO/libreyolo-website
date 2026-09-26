@@ -5,7 +5,7 @@ seo_title: "ConvNeXt: train, validate and export under Apache-2.0"
 description: "Use ConvNeXt in LibreYOLO for image classification. Install, predict, fine-tune with LoRA, validate and export LibreConvNeXt tiny/small/base."
 lead: "ConvNeXt is an image classifier built entirely from standard convolutions, modernized block by block from a ResNet toward the design choices of a vision transformer. LibreYOLO supports it for one task: classification."
 keywords: [ConvNeXt, ConvNeXt tiny, image classification, pure convolutional network, ImageNet classifier]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -21,7 +21,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreConvNeXtt-cls.pt source=cat.jpg save=True
+        libreyolo predict model=LibreConvNeXtt-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python
       language: python
@@ -143,12 +143,16 @@ adapters into the block MLPs rather than fine-tuning the full backbone.
 See [training](/docs/train) for datasets, augmentation, multi-GPU and
 loggers.
 
+`cls_pw=0` disables loss weighting; values up to 1 use inverse-frequency weights normalized to mean 1. `class_weights=True` instead uses sample-normalized inverse frequencies and cannot combine with `cls_pw>0`. These settings must match when resuming. See [classification](/docs/tasks/image-classification).
+
 ## Validate
 
 `val()` returns a dictionary of `metrics/` keys. For classification that is
 top-1 and top-5 accuracy over the validation split.
 
 <code-tabs name="val" />
+
+Validation and INT8 calibration use the family evaluation transform. Export metadata records `norm_mean`, `norm_std` and `resize_mode`; older artifacts fall back to family values. Calibration preprocessors return the required CHW array and ratio.
 
 ## Export
 
@@ -171,10 +175,7 @@ Every published weight file for this family.
 
 <provenance-box>
 
-Only ConvNeXt V1 is shipped in this family. ConvNeXt-V2's small pretrained
-checkpoints are CC-BY-NC 4.0 and are deliberately excluded, since a
-non-commercial weight cannot be redistributed inside an MIT/commercial
-library.
+This page covers ConvNeXt V1. [ConvNeXt V2](/docs/models/convnextv2) is a separate family whose official pretrained weights retain CC-BY-NC-4.0.
 
 </provenance-box>
 

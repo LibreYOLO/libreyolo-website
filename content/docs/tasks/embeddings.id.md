@@ -20,7 +20,7 @@ keywords:
   - embedding clip
   - embedding dinov2
   - embedding reid
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Task kunci dan alias dibaca dari libreyolo/tasks.py. Payload hasil dari kelas
   Embeddings dan Identities di libreyolo/utils/results.py. API Gallery dari
@@ -169,7 +169,7 @@ snippets:
 
         # verify adalah perintah yang sama dengan nama kedua.
         libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg --json
-source_hash: ffbaad5599035bc7
+source_hash: 3197bfe9a3d53756
 ---
 
 ## Definisi
@@ -203,11 +203,9 @@ Kunci task kanonik adalah `embed`. `embedding`, `embeddings`,
 `face-recognition`, `facial-recognition`, `recognition`, `face`, `faceid` dan
 `reid` semuanya dinormalisasi menjadi itu, sehingga `task="reid"` dan `task="embed"` memilih hal yang sama persis.
 
-
 ## Model
 
-Empat keluarga melayani task, dan mereka terbagi dengan jelas berdasarkan apakah mereka memproses lokal terlebih dahulu
-apa pun terlebih dahulu.
+Family embedding berbeda dalam hal yang dikodekan: gambar utuh, klip, atau wilayah hasil deteksi.
 
 | Family | Bentuk | Dimensi | Juga mendukung |
 |---|---|---|---|
@@ -220,11 +218,7 @@ CLIP dan SigLIP 2 tetap menggunakan `classify` sebagai task default mereka, sehi
 yang perlu ditanyakan. `-cls` checkpoint yang ada adalah artefak
 dua-menara yang dibagikan; tidak ada `-embed` checkpoint duplikat yang diterbitkan untuk bobot yang identik.
 
-`embed_text` hanya ada pada CLIP dan SigLIP 2, dua keluarga dengan menara teks
-. DINOv2 tidak memiliki sama sekali. DINOv2 embedding melewati kepala semantik dan klasifikasi
-dan membaca token CLS final yang ternormalisasi pada 224 piksel;
-`n`, `s`, `m` dan `l` varian semuanya menggunakan encoder DINOv2-S yang sama, sehingga keempat
-mengembalikan `D = 384`.
+`embed_text` tersedia pada CLIP, SigLIP 2, dan PE, yang memiliki tower teks. DINOv2 tidak memilikinya. Embedding DINOv2 melewati head semantik dan klasifikasi lalu membaca token CLS akhir yang dinormalisasi pada 224 piksel; varian `n`, `s`, `m`, dan `l` semuanya memakai encoder DINOv2-S yang sama, sehingga semuanya mengembalikan `D = 384`.
 
 Backbone yang hanya untuk klasifikasi yang ditambahkan dalam rilis ini, [ViT](/docs/models/vit),
 [Swin](/docs/models/swin) dan [DeiT](/docs/models/deit), nyatakan `classify` saja
@@ -236,6 +230,8 @@ dan jangan menyajikan task ini.
 menggabungkan setiap baris dari setiap hasil menjadi satu `(N_total, D)` CPU float32
 tensor, meningkatkan jika baris memiliki dimensi campuran. Sebuah family tanpa `embed` di
 tugas yang didukungnya meningkatkan `NotImplementedError`.
+
+[PE](/docs/models/pe) mendukung embedding gambar, teks, dan video berdurasi terbatas dengan `clip_frames=8` secara default. [V-JEPA 2](/docs/models/vjepa2) dan [LeVJEPA](/docs/models/levjepa) menghasilkan embedding klip dan menyediakan token patch melalui `embed_tokens()`. Halaman model menjelaskan pengambilan sampel klip dan batasan ekspor untuk runtime langsung.
 
 ## Muatan hasil
 
@@ -378,4 +374,3 @@ Tidak ada validator pengambilan. Ukur akurasi verifikasi pada pasangan yang dibe
 dengan menyapu `threshold`, dan akurasi identifikasi dengan mendaftarkan galeri dan
 membaca `identities.name` dan `identities.score` pada gambar yang disimpan, menghitung
 nama `None` sebagai penolakan.
-

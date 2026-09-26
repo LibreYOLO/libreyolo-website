@@ -12,7 +12,7 @@ keywords:
   - nms free detr
   - detection confidence threshold
   - class filtering inference
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 verification: "Defaults quoted from InferenceRunner.__call__ in libreyolo/models/base/inference.py. Per-family NMS behavior read from every module in libreyolo/postprocess/ and cross-checked against _is_nms_free_family in libreyolo/backends/base.py. Class filtering from InferenceRunner._apply_classes_filter and _wrap_results. agnostic_nms status from NOOP_PREDICT_KWARGS in libreyolo/utils/predict_args.py. Open-vocabulary handling from NMS_THRESHOLD in libreyolo/models/openvocab/base.py. Validation defaults from BaseModel.val."
 snippets:
   basic:
@@ -114,6 +114,8 @@ reach for when there are too many or too few detections.
 
 The default of `0.25` suits looking at pictures. Feeding a downstream system
 usually wants it higher; measuring accuracy wants it far lower.
+
+Detection validation exposes `metrics/best_conf` and per-class thresholds from F1 at IoU 0.50. Use them as measured starting points for deployment thresholds; see [validation](/docs/train/validation). Segmentation does not expose these keys.
 
 ## iou
 

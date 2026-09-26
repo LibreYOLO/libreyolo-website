@@ -1,0 +1,12 @@
+{
+  "name": "LeVJEPA",
+  "org": "MLO Lab",
+  "paper_title": "LeVJEPA: Efficient & Scalable Video Pretraining without the Heuristics",
+  "paper_url": "https://arxiv.org/abs/2608.27395",
+  "code_url": "https://github.com/MLO-lab/LeVJEPA",
+  "license": "MIT code; CC-BY-NC-4.0 weights",
+  "license_interpretation": "The repository declares an explicit CC-BY-NC-4.0 exception for pretrained weights. Commercial use of those weights is excluded.",
+  "bibtex": "@misc{kuhn2026levjepaefficientscalable,\n      title={LeVJEPA: Efficient & Scalable Video Pretraining without the Heuristics}, \n      author={Lukas Kuhn and Lucas Maes and Giuseppe Serra and Quentin Le Lidec and Yann LeCun and Randall Balestriero and Florian Buettner},\n      year={2026},\n      eprint={2608.27395},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2608.27395}, \n}",
+  "bibtex_source_url": "https://raw.githubusercontent.com/MLO-lab/LeVJEPA/main/README.md",
+  "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2608.27395. The upstream citation form is retained."
+}

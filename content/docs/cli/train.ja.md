@@ -1,7 +1,7 @@
 ---
 title: libreyolo train
 seo_title: libreyolo train コマンドリファレンス
-description: コマンドラインからのモデル学習：59個すべての引数とそのデフォルト値、モデルファミリーのデフォルト値による上書きの仕組み、そしてファミリーが無視する引数。
+description: コマンドラインからのモデル学習：すべての引数とそのデフォルト値、モデルファミリーのデフォルト値による上書きの仕組み、そしてファミリーが無視する引数。
 lead: >-
   1つのデータセットで1つのモデルを学習し、チェックポイント・指標・ログを実行ディレクトリに書き出します。以下の各引数にはコマンド定義由来のデフォルト値があり、モデルファミリー自身の学習設定がそれを置き換えることがあります。
 keywords:
@@ -11,7 +11,7 @@ keywords:
   - libreyolo train 引数
   - libreyolo dry_run 確認
   - yolo 層 freeze 学習
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: コマンド
     value: libreyolo train
@@ -45,7 +45,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 3aad4298310d3081
+source_hash: 525a8e4366e4c0be
 ---
 
 ## 書式
@@ -168,6 +168,26 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | `quiet` | `false` | 標準エラー出力を抑制 |
 | `dry_run` | `false` | 実行せずに設定を解決して表示 |
 | `help_json` | `false` | コマンドスキーマをJSONで出力して終了 |
+
+| 引数 | デフォルト | 意味 |
+| --- | --- | --- |
+| `min_samples` | `0` | 小規模データセットのエポック長の下限。画像が少ない場合は、エポックごとにこの数を復元抽出（0で無効） |
+| `class_balanced` | `False` | 裾の長いクラス分布のデータセット向けのLVIS形式の反復係数サンプリング（デフォルトは無効） |
+| `cls_pw` | `0.0` | 分類の逆頻度重み付けの指数。0で無効、1で完全適用（クラス重みの平均は1。class_weights=Trueとの併用は不可） |
+| `class_weights` | `False` | 従来のサンプル数で正規化した分類損失の重み（デフォルトは無効） |
+| `single_cls` | `False` | 対応する検出器で、すべてのラベルをクラス0に対応付けて学習 |
+| `classes` | `None` | 対応する検出器で、カンマ区切りの元のデータセットクラスIDのみを使って学習（例：'0,3,5'）。それ以外のクラスはラベルがないものとして除外。IDは詰め直さず維持 |
+| `average_best` | `0` | 監視する指標で上位N個のチェックポイントを均等に平均し、学習終了時にweights/average.ptへ保存（0で無効） |
+| `export_check` | `False` | エポック1の前にONNXへエクスポートし、失敗した場合は実行を停止（デフォルトは無効） |
+| `precise_bn` | `0` | 最後のエポック後に、この数の学習画像からBatchNormの移動統計を再計算（0で無効） |
+| `fliplr` | `None` | 水平反転の確率（flip_probの別名） |
+| `flipud` | `0.0` | 垂直反転の確率 |
+| `auto_augment` | `None` | 分類の自動データ拡張方針：randaugment、autoaugment、augmix（デフォルトはなし） |
+| `erasing` | `0.0` | 分類のRandomErasingの確率。0 <= erasing < 1 |
+| `cutmix` | `0.0` | 分類のCutMixの確率（ソフトラベル） |
+| `scale` | `0.5` | 分類のRandomResizedCropの面積範囲。浮動小数点数の下限または明示的な(min,max) |
+| `crop_pct` | `None` | 分類の評価で中央クロップの前に使うリサイズ比率（デフォルトはモデルファミリー本来の値） |
+| `plot_samples` | `8` | 検証のサンプル描画の画像数。0でなし、-1ですべての検証画像（指標は変化しない） |
 
 ## 使用例
 

@@ -4,19 +4,19 @@ families:
   - vgg
 seo_title: 'VGG: chạy bộ phân loại ảnh VGG-16/19 trong LibreYOLO'
 description: >-
-  Dự đoán, xác thực và xuất bộ phân loại VGG bằng LibreYOLO. Trọng số
-  torchvision BSD-3-Clause; chưa hỗ trợ tinh chỉnh.
+  Dự đoán, xác thực và xuất bộ phân loại VGG bằng LibreYOLO. Trọng số torchvision BSD-3-Clause; chưa hỗ trợ
+  tinh chỉnh.
 lead: >-
-  VGG là bộ phân loại ảnh tích chập được xây dựng từ các stack đồng nhất gồm
-  phép tích chập nhỏ 3x3 thay vì filter lớn hơn. LibreYOLO cung cấp kích thước
-  16 và 19 lớp, dạng thuần túy và có batch normalization, để phân loại ảnh.
+  VGG là bộ phân loại ảnh tích chập được xây dựng từ các stack đồng nhất gồm phép tích chập nhỏ 3x3 thay vì
+  filter lớn hơn. LibreYOLO cung cấp kích thước 16 và 19 lớp, dạng thuần túy và có batch normalization, để
+  phân loại ảnh.
 keywords:
   - VGG
   - VGG-16
   - VGG-19
   - mạng neural tích chập
   - phân loại ảnh
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -39,23 +39,16 @@ snippets:
   val:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
-
 
         model = LibreYOLO("LibreVGG16-cls.pt")
 
-
-        # data là thư mục gốc có các phần tách thư mục lớp đối tượng train/ và
-        val/
-
+        # data là thư mục gốc có các phần tách thư mục lớp đối tượng train/ và val/
         # (bố cục ImageFolder), không phải YAML dataset.
-
         metrics = model.val(data="imagenet-1k/")
 
-
         print(metrics["metrics/accuracy_top1"])
-
         print(metrics["metrics/accuracy_top5"])
     - label: CLI
       language: bash
@@ -86,9 +79,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 26eb6ff5811533fd
+source_hash: 7e22e5bf59ca038a
 ---
-
 ## Cài đặt
 
 VGG không cần extra tùy chọn. Mọi thành phần mà mô hình import đều có trong bản cài đặt cơ sở.
@@ -115,6 +107,8 @@ Có bốn kích thước: 16 và 19 lớp tích chập, mỗi kích thước có
 
 <code-tabs name="val" />
 
+Đánh giá và hiệu chuẩn INT8 dùng phép biến đổi đánh giá của họ mô hình. Metadata xuất ghi `norm_mean`, `norm_std` và `resize_mode`; các tệp cũ dùng giá trị của họ mô hình khi thiếu metadata. Bộ tiền xử lý hiệu chuẩn trả về mảng CHW và tỷ lệ cần thiết.
+
 ## Xuất
 
 <export-matrix />
@@ -132,5 +126,3 @@ Mọi tệp trọng số đã phát hành cho họ mô hình này.
 ## Giấy phép
 
 <provenance-box></provenance-box>
-
-

@@ -2,9 +2,8 @@
 title: TFLite
 seo_title: Eksport do TFLite (LiteRT) z LibreYOLO
 description: >-
-  Eksportuj model LibreYOLO do bufora FlatBuffer .tflite za pomocą onnx2tf:
-  statyczne kształty, tylko FP32, wejścia NHWC i rodziny, które konwertują się
-  bez problemów.
+  Eksport modelu LibreYOLO do FlatBuffer .tflite przez onnx2tf: stałe kształty,
+  FP32 i obsługiwane ścieżki INT8, wejścia NHWC i metadane.
 lead: >-
   TFLite to format FlatBuffer wykonywany przez LiteRT na urządzeniach mobilnych
   i wbudowanych. LibreYOLO eksportuje statyczny graf ONNX, konwertuje go za
@@ -18,7 +17,7 @@ keywords:
   - tflite flatbuffer
   - wejście nhwc tflite
   - inferencja na urządzeniach brzegowych
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Flaga
     value: export(format="tflite")
@@ -34,7 +33,7 @@ meta:
   - label: Kształty
     value: Tylko statyczne. Ustawienie dynamic=True jest odrzucane.
   - label: Precyzja
-    value: Tylko FP32. Ustawienia half=True i int8=True są odrzucane.
+    value: FP32; INT8 do detekcji YOLO9 i YOLOX. FP16 jest odrzucane.
   - label: Wymagania
     value: >-
       Python 3.12 lub nowszy, ponieważ onnx2tf 2.4.x nie udostępnia pakietów
@@ -82,18 +81,18 @@ snippets:
       code: >
         model.export(
             format="tflite",
-            imgsz=640,        # int lub (wysokość, szerokość)
+            imgsz=640,        # int lub (height, width)
             batch=1,
             simplify=True,    # onnxsim na pośrednim pliku ONNX
             output_path=None, # None zapisuje weights/<stem>.tflite
-            verbose=False,    # True przesyła dziennik onnx2tf na bieżąco
+            verbose=False,    # True przesyła log onnx2tf
         )
 
 
-        # dynamic=True zgłasza ValueError: konwerter wymaga statycznych
-        kształtów.
+        # dynamic=True zgłasza ValueError: konwerter wymaga stałych kształtów.
 
-        # half=True i int8=True są odrzucane przed śledzeniem grafu.
+        # FP16 jest odrzucane. INT8 wymaga obsługiwanego detektora i danych
+        kalibracyjnych.
   run:
     - label: Przez LibreYOLO
       language: python
@@ -146,7 +145,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: fa2deaa0ef6d9978
+source_hash: 3548d74e992bb76d
 ---
 
 ## Instalacja
@@ -176,6 +175,8 @@ Metadane znajdują się w pliku pomocniczym. Plik
 wejścia i schemat pozy. Sam FlatBuffer nie ma pola metadanych LibreYOLO, dlatego
 oba pliki należy przenosić razem.
 
+Detekcja YOLO9 i YOLOX obsługuje `int8=True` z `data=...`, `fraction=1.0`, `batch=1` i `dynamic=False`. Zainstaluj `onnx2tf[tensorflow]`. Przy braku danych kalibracyjnych używane jest `coco8.yaml` z ostrzeżeniem. Osobne wyjścia znormalizowanych ramek i wyników pewności używają niezależnych skal kwantyzacji; podczas wdrożenia należy zachować metadane `output_layout` w pliku towarzyszącym. Część operatorów wewnętrznych może pozostać zmiennoprzecinkowa.
+
 ## Uruchamianie artefaktu
 
 <code-tabs name="run" />
@@ -199,9 +200,7 @@ Obsługiwane są tylko statyczne kształty. Ustawienie `dynamic=True` zgłasza
 `ValueError` przed śledzeniem grafu, a obszar eksportu jest ustalony na wartość,
 do której zostało przeliczone `imgsz`.
 
-Obsługiwane jest tylko FP32. Ustawienia `half=True` i `int8=True` są odrzucane
-podczas walidacji, więc ten eksporter nie pozwala obecnie na wdrożenie
-skwantyzowanego modelu.
+`half=True` jest odrzucane. INT8 jest ograniczone do detekcji YOLO9 i YOLOX przy batchu 1; inne rodziny i zadania INT8 zgłaszają błąd.
 
 Zakres obsługi jest tu węższy niż w przypadku formatów grafu i wynika z pomiarów,
 a nie z samej rodziny. Zweryfikowane kombinacje obejmują detekcję w modelach

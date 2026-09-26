@@ -14,7 +14,7 @@ keywords:
   - mIoU
   - Panoptic Quality
   - Top-1 Accuracy
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   val:
     - label: Python
@@ -57,7 +57,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: d907183492fa3f57
+source_hash: ce7d26a5cd72d988
 ---
 
 ## 検証の実行
@@ -113,6 +113,8 @@ OBBの`metrics/precision`と`metrics/recall`はエイリアスではありませ
 pointタスクのsweepキーは距離しきい値から構築されます。デフォルトでは`metrics/mAP@[0.01:0.10]`となり、単一しきい値のキーは`metrics/mAP@0.01`です。`dist_thresholds`を渡すと両方の文字列が変わります。
 
 ほとんどのタスクは、最良チェックポイント選択でデフォルト使用する単一値の`fitness`キーも返します。物体検出、セグメンテーション、OBBはこのキーを持ちません。それらのファミリーでは辞書が返す`metrics/mAP50-95`を使って選択します。姿勢推定は`fitness`も`metrics/mAP50-95`も返さず、代わりにトレーナーが`best_metric_key`を`metrics/keypoints_mAP50-95`へ設定します。
+
+ImageFolder分類は、検証対象に存在するクラスで平均したマクロ平均の`metrics/precision`、`metrics/recall`、`metrics/f1`を追加します。デフォルトの適合度は引き続きtop-1です。物体検出は`metrics/best_conf`、`metrics/best_conf_f1`、クラス名をキーとする`metrics/best_conf_per_class`も返し、IoU 0.50でマイクロF1が最良となるしきい値を選択します。同じスコアの検出はまとめて扱い、同点の場合は高いしきい値を選びます。正のF1がない場合はNaNを返します。セグメンテーションはこれらのしきい値キーを公開しません。
 
 ## 速度キー
 
@@ -189,6 +191,10 @@ FOMOは動作が変わらない例外です。バリデーターが常にこのl
 
 `save_plots=True`は`plots/`サブディレクトリへ書き込みます。OpenCVがインストールされている場合、物体検出では`box_metrics.png`、クラスごとのAPとrecallのチャート、precision-recallと信頼度の曲線、confusion matrix、アノテーション付きサンプル画像を生成します。セグメンテーションは各項目のマスク版を追加し、姿勢推定には独自の指標と曲線一式があります。その他のバリデーターはプロットを実装していません。画像分類、セマンティック、panoptic、深度、法線、エッジ、復元、matte、OCR、OBB、pointはいずれも何も書き込みません。プロットの失敗は警告され、実行を中止しません。
 
+`visualize=True`は、物体検出とセグメンテーションではクラスを考慮したボックスのTP/FP/FN画像を、ImageFolder分類ではラベルとtop-1の比較画像を、`visualize/errors/`と`visualize/correct/`に書き出します。照合にはIoU 0.5と信頼度`max(0.25, conf)`を使います。デフォルトは`visualize=False`、`show_labels=True`、`show_conf=True`です。未対応タスクとV-JEPA 2のクリップ検証は可視化を拒否します。
+
+`plot_samples=8`は、別のサンプル描画の上限です。0で無効にし、-1ですべての画像を残します。指標や可視化の出力には影響しません。
+
 ## 学習中の検証
 
 学習は`eval_interval`エポックごとにデータセットの`val`分割で検証し、生成された指標が`best.pt`の選択、`patience`による早期停止、すべてのロガーの`val/`キーを駆動します。EMAが有効な場合、検証はEMA重み上で実行されます。
@@ -198,3 +204,7 @@ FOMOは動作が変わらない例外です。バリデーターが常にこのl
 ## 関連項目
 
 - バリデーターが読み取る分割キーと形式については[データセット](/docs/train/datasets)を参照してください。
+
+## 画像ごとのボックス指標
+
+物体検出とセグメンテーションの結果は辞書との互換性を維持し、`results.box.image_metrics`も公開します。可視化が無効でも、可視化の照合規則を使って、各ファイル名に`precision`、`recall`、`f1`、`tp`、`fp`、`fn`を対応付けます。セグメンテーションでも、ここではボックスを数えます。同じベース名が重複する場合、2つ目以降は完全なパスを使います。分母が0の場合は0.0を返します。これらの記録は分散ランク間では集約しません。

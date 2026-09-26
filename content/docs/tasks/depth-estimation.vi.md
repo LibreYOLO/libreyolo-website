@@ -2,19 +2,18 @@
 title: Ước lượng độ sâu
 seo_title: Ước lượng độ sâu monocular trong LibreYOLO
 description: >-
-  Dự đoán depth map tương đối dày đặc từ một ảnh trong LibreYOLO. So sánh các
-  depth family, đọc metric độ sâu và xuất mô hình độ sâu.
+  Dự đoán depth map tương đối dày đặc từ một ảnh trong LibreYOLO. So sánh các depth family, đọc metric độ sâu
+  và xuất mô hình độ sâu.
 lead: >-
-  Ước lượng độ sâu dự đoán khoảng cách từ mỗi pixel đến camera chỉ bằng một ảnh.
-  LibreYOLO cung cấp dưới dạng tác vụ depth, trả về inverse-depth map tương đối
-  dày đặc trên canvas ảnh gốc.
+  Ước lượng độ sâu dự đoán khoảng cách từ mỗi pixel đến camera chỉ bằng một ảnh. LibreYOLO cung cấp dưới dạng
+  tác vụ depth, trả về inverse-depth map tương đối dày đặc trên canvas ảnh gốc.
 keywords:
   - ước lượng độ sâu monocular python
   - tạo depth map từ một ảnh
   - mô hình độ sâu tương đối
   - depth anything libreyolo
   - dự đoán độ sâu dày đặc
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Dự đoán depth map
@@ -30,22 +29,15 @@ snippets:
         print(depth.min, depth.max, depth.mean)
     - label: Làm việc với các giá trị
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
         depth = result.depth_map
-
-        raw = depth.data          # cao hơn là gần hơn; không đơn vị thực, không
-        tỷ lệ
-
+        raw = depth.data          # cao hơn là gần hơn; không đơn vị thực, không tỷ lệ
         gray = depth.normalized() # đổi tỷ lệ về [0, 1] để trực quan hóa
-
         print(raw.shape, float(gray.max()))
     - label: Lựa chọn nhỏ gọn
       language: python
@@ -89,9 +81,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: e0612c59f9c999b4
+source_hash: f0afab6b9b451075
 ---
-
 ## Định nghĩa
 
 Tác vụ `depth` dự đoán một giá trị trên mỗi pixel từ một ảnh RGB. LibreYOLO định
@@ -108,7 +99,7 @@ vì vậy `conf`, `iou` và `max_det` không có tác dụng, còn `save=True` g
 
 ## Mô hình
 
-Sáu family phục vụ `depth`.
+Các họ sau phục vụ `depth`.
 
 [Depth Anything V2](/docs/models/depth-anything-v2) ghép encoder DINOv2 với
 decoder DPT và là lựa chọn mặc định đa dụng tại đây. Giấy phép ảnh hưởng tới
@@ -123,10 +114,7 @@ một transformer thuần không có chuyên biệt kiến trúc cho độ sâu.
 được chưng cất từ Depth Anything V2 Large, với checkpoint thứ hai có decoder
 tránh phép toán gather và unfold cho NPU compiler không hỗ trợ chúng.
 
-[MiDaS](/docs/models/midas) là dòng công trình đã thiết lập giao thức độ sâu
-tương đối zero-shot dùng để đo các family khác. Đây là depth family duy nhất mà
-LibreYOLO không công bố lại: yêu cầu checkpoint sẽ tải asset chính thức từ bản
-phát hành GitHub của tác giả và kiểm tra SHA-256 cố định.
+[MiDaS](/docs/models/midas) là hướng nghiên cứu thiết lập quy trình độ sâu tương đối zero-shot dùng để đo các họ khác. Checkpoint s và l tải từ bản sao của LibreYOLO theo giấy phép MIT của nhà phát hành.
 
 [LibreMODUS](/docs/models/libremodus) thực hiện độ sâu như một target của mô hình
 any-to-any thay vì head chuyên dụng. Nó cần thành phần bổ sung `modus` và tài
@@ -138,18 +126,17 @@ diffusion decode, từ cùng checkpoint 7B phục vụ sáu tác vụ khác. Nó
 phần bổ sung `sensenova`, còn trọng số bị giới hạn cho mục đích phi thương mại;
 giấy phép nằm trên trang của mô hình.
 
+[Marigold V2](/docs/models/marigold-v2) bổ sung adapter độ sâu dựa trên diffusion với cách mã hóa độ sâu rõ ràng.
+
 ## Dự đoán
 
-Trọng số được tải từ Hugging Face trong lần sử dụng đầu tiên và lưu vào cache
-cục bộ, trừ hai family đã nêu ở trên.
+Trọng số tải về ở lần dùng đầu tiên và được lưu vào bộ nhớ đệm cục bộ. Trang mô hình mô tả yêu cầu xác thực và runtime.
 
 <code-tabs name="predict" />
 
-Độ phân giải đầu vào bị ràng buộc theo từng family. Depth Anything V2 và Depth
-Anything 3 dựa trên patch grid DINOv2, vì vậy `imgsz` phải chia hết cho 14, điều
-LibreYOLO kiểm tra trước khi chạy. `Results.plot()` không hỗ trợ tác vụ này;
-phương thức chỉ được định nghĩa cho pháp tuyến bề mặt và cạnh. Xem [dự
-đoán](/docs/predict) để biết về nguồn, stream và cách xử lý kết quả.
+Độ phân giải đầu vào bị ràng buộc theo từng họ. Depth Anything V2 và Depth Anything 3 dựa trên lưới patch DINOv2 nên `imgsz` phải chia hết cho 14; LibreYOLO kiểm tra điều này trước khi chạy. `Results.plot()` dựng kết quả độ sâu. Xem [dự đoán](/docs/predict) để biết nguồn đầu vào, streaming và cách xử lý kết quả.
+
+`DepthMap.encoding` mặc định là `inverse_depth` và có thể là `depth` hoặc `log_depth`. Đánh giá diễn giải cách mã hóa trước khi căn chỉnh affine. Cách mã hóa không tạo thang đo theo đơn vị thực cho dự đoán tương đối.
 
 ## Định dạng dataset
 
@@ -183,9 +170,7 @@ dataset](/docs/reference/dataset-formats) để biết hợp đồng đầy đ�
 
 ## Huấn luyện
 
-Không depth family nào trong LibreYOLO có implementation huấn luyện: `train()`
-phát sinh `NotImplementedError` trên cả sáu. Mỗi trang mô hình nêu tên script
-chuyển đổi checkpoint được huấn luyện ở upstream thành dạng LibreYOLO có thể nạp.
+Không họ độ sâu nào trong LibreYOLO triển khai huấn luyện: `train()` phát sinh `NotImplementedError` trên các họ này. Mỗi trang mô hình nêu script chuyển checkpoint được huấn luyện upstream thành định dạng LibreYOLO có thể tải.
 
 ## Xác thực
 

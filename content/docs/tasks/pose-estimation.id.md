@@ -15,7 +15,7 @@ keywords:
   - COCO keypoints
   - OKS mAP
   - melatih model pose
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -129,7 +129,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 9de01d1f615bdf33
+source_hash: 1b9e7614546d8f00
 ---
 
 ## Definisi
@@ -158,18 +158,7 @@ bergantung pada detector di depannya.
 
 ## Model
 
-Tiga family dapat berlatih dan memprediksi:
-[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), dan
-[YOLO-NAS](/docs/models/yolo-nas), seluruhnya one-stage. RF-DETR memerlukan extra
-sendiri, `pip install "libreyolo[rfdetr]"`. RF-DETR dan EdgeCrafter menyertakan
-checkpoint pose terbitan dan keduanya mendapat fine-tuning pada dataset satu kelas yang
-hanya berisi orang; keypoint head EdgeCrafter ditetapkan saat konstruksi dan
-menolak dataset dengan jumlah berbeda, sedangkan RF-DETR menginisialisasi ulang
-head-nya. YOLO-NAS mengambil bobot dari CDN milik Deci.AI berdasarkan lisensi
-nonkomersial, dan LibreYOLO tidak menerbitkannya; pose head-nya juga dibangun
-ulang untuk jumlah keypoint baru, dan hanya family ini dari ketiganya yang jumlah
-kelas-nya tidak ditetapkan ke satu. Karena itu, family ini cocok untuk skeleton
-multi-kelas atau nonmanusia, seperti pose hewan.
+Tiga family mendukung pelatihan dan prediksi: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), dan [YOLO-NAS](/docs/models/yolo-nas), semuanya satu tahap. RF-DETR memerlukan extra tersendiri, `pip install "libreyolo[rfdetr]"`. RF-DETR dan EdgeCrafter memiliki checkpoint pose yang dipublikasikan. RF-DETR juga melatih pose multikelas; head keypoint EdgeCrafter ditetapkan saat konstruksi dan menolak dataset dengan jumlah berbeda, sedangkan RF-DETR menginisialisasi ulang head-nya. YOLO-NAS mengambil bobot dari CDN Deci.AI dengan lisensi nonkomersial, dan LibreYOLO tidak memublikasikannya; head pose-nya juga dibangun ulang untuk jumlah keypoint baru dan mendukung multikelas atau kerangka nonmanusia.
 
 [HRNet](/docs/models/hrnet) adalah pilihan top-down. Model ini memprediksi,
 memvalidasi, dan mengekspor, sedangkan `train()`-nya memunculkan
@@ -183,6 +172,8 @@ Model generatif berbasis prompt ini memiliki factory sendiri, `LibreVLM`, dan
 extra sendiri; tanpa vocabulary, `set_task("pose")` kembali ke kategori orang.
 Bobotnya nonkomersial dan latensi per gambar jauh lebih tinggi daripada pose head
 khusus karena setiap prediksi merupakan diffusion decode.
+
+[DEKR](/docs/models/dekr) menyediakan pose beberapa orang secara bottom-up tanpa detektor orang terpisah. Model ini mendukung inferensi dan validasi, bukan pelatihan.
 
 ## Prediksi
 
@@ -245,6 +236,8 @@ setelah horizontal flip, sehingga pergelangan kiri tetap menjadi pergelangan
 kiri. Jika dihilangkan, augmentasi horizontal flip dinonaktifkan untuk keypoint,
 bukan diterapkan dengan urutan indeks yang salah.
 
+Pose multikelas RF-DETR memakai `kpt_names`, dengan nama atau ID kelas sebagai kunci, untuk memilih keypoint bernama pertama bagi setiap kelas. Daftar kosong menandai kelas yang hanya memiliki kotak. Dataset multikelas memerlukan `names` dan setidaknya satu kelas dengan keypoint. Diagnostik label yang salah menunjukkan berkas, baris, dan susunan `kpt_shape` yang diharapkan.
+
 ## Pelatihan
 
 <code-tabs name="train" />
@@ -287,5 +280,3 @@ filenya, sehingga berkas `.onnx` atau `.engine` berperilaku seperti checkpoint d
 mengembalikan `Results` yang sama. Cakupan format berbeda per family; matriks pada
 setiap halaman model dibuat dari kumpulan tervalidasi, bukan diketik manual.
 Lihat [ekspor dan deployment](/docs/export) untuk format, extra, dan batasannya.
-
-

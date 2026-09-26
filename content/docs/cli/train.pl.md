@@ -2,9 +2,8 @@
 title: libreyolo train
 seo_title: dokumentacja polecenia libreyolo train
 description: >-
-  Trenowanie modelu z wiersza poleceń: wszystkie 59 argumentów wraz z
-  wartościami domyślnymi, sposób, w jaki zastępują je ustawienia rodziny modeli,
-  oraz argumenty, które rodzina ignoruje.
+  Trenowanie modelu z wiersza poleceń: argumenty i ich wartości domyślne,
+  nadpisywanie przez ustawienia rodzin oraz ignorowane argumenty.
 lead: >-
   Trenuje jeden model na jednym zbiorze danych i zapisuje checkpointy, metryki
   oraz logi w katalogu uruchomienia. Każdy argument poniżej ma wartość domyślną
@@ -17,7 +16,7 @@ keywords:
   - argumenty libreyolo train
   - trenowanie yolo na własnych danych
   - zamrażanie warstw yolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Polecenie
     value: libreyolo train
@@ -54,7 +53,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 3aad4298310d3081
+source_hash: 525a8e4366e4c0be
 ---
 
 ## Składnia
@@ -177,6 +176,26 @@ Argumenty to pary `key=value`, działa też forma POSIX, więc `epochs=50` i
 | `quiet` | `false` | Wyciszenie stderr |
 | `dry_run` | `false` | Ustalenie i wypisanie konfiguracji bez jej wykonania |
 | `help_json` | `false` | Zrzut schematu polecenia jako JSON i zakończenie |
+
+| Argument | Domyślnie | Znaczenie |
+| --- | --- | --- |
+| `min_samples` | `0` | Minimalna długość epoki dla małych zbiorów: jeśli zbiór ma mniej obrazów, losuje tyle próbek na epokę ze zwracaniem (0 = wyłączone) |
+| `class_balanced` | `False` | Próbkowanie ze współczynnikiem powtórzeń w stylu LVIS dla zbiorów z długim ogonem (domyślnie wyłączone) |
+| `cls_pw` | `0.0` | Potęga ważenia odwrotnością częstości w klasyfikacji: 0 wyłącza, 1 daje pełne ważenie (wagi klas ze średnią 1; nie można łączyć z class_weights=True) |
+| `class_weights` | `False` | Starsze wagi funkcji straty klasyfikacji normalizowane względem próbek (domyślnie wyłączone) |
+| `single_cls` | `False` | Trenowanie obsługiwanego detektora ze wszystkimi etykietami mapowanymi na klasę 0 |
+| `classes` | `None` | Trenowanie obsługiwanego detektora tylko na podanych oryginalnych identyfikatorach klas zbioru, oddzielonych przecinkami (np. '0,3,5'); pozostałe klasy są odrzucane jak nieoznaczone. Identyfikatory pozostają bez zmian, bez zagęszczania |
+| `average_best` | `0` | Równomierne uśrednienie N najlepszych checkpointów według obserwowanej metryki do weights/average.pt na końcu trenowania (0 = wyłączone) |
+| `export_check` | `False` | Eksport ONNX przed epoką 1 i przerwanie uruchomienia, jeśli eksport się nie powiedzie (domyślnie wyłączone) |
+| `precise_bn` | `0` | Ponowne obliczenie bieżących statystyk BatchNorm z tylu obrazów treningowych po ostatniej epoce (0 = wyłączone) |
+| `fliplr` | `None` | Prawdopodobieństwo odbicia poziomego (alias flip_prob używany w ekosystemie) |
+| `flipud` | `0.0` | Prawdopodobieństwo odbicia pionowego |
+| `auto_augment` | `None` | Polityka automatycznej augmentacji klasyfikacji: randaugment, autoaugment, augmix (domyślnie brak) |
+| `erasing` | `0.0` | Prawdopodobieństwo RandomErasing w klasyfikacji, 0 <= erasing < 1 |
+| `cutmix` | `0.0` | Prawdopodobieństwo CutMix w klasyfikacji (miękkie etykiety) |
+| `scale` | `0.5` | Zakres obszaru RandomResizedCrop w klasyfikacji: dolna granica zmiennoprzecinkowa lub jawne (min,max) |
+| `crop_pct` | `None` | Współczynnik zmiany rozmiaru przed centralnym wycięciem podczas ewaluacji klasyfikacji (domyślnie natywna wartość rodziny modelu) |
+| `plot_samples` | `8` | Przykładowe obrazy na wykresie walidacji: 0 wyłącza, -1 wybiera każdy walidowany obraz (nie zmienia metryk) |
 
 ## Przykłady
 

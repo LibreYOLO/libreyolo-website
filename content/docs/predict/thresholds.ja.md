@@ -14,7 +14,7 @@ keywords:
   - NMSなし DETR
   - 物体検出 信頼度しきい値
   - 推論 クラスフィルタ
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   libreyolo/models/base/inference.pyのInferenceRunner.__call__からデフォルト値を引用しました。ファミリーごとのNMS動作はlibreyolo/postprocess/内の全モジュールから確認し、libreyolo/backends/base.pyの_is_nms_free_familyと照合しました。クラスのフィルタリングはInferenceRunner._apply_classes_filterと_wrap_results、agnostic_nmsの状態はlibreyolo/utils/predict_args.pyのNOOP_PREDICT_KWARGS、オープンボキャブラリーの処理はlibreyolo/models/openvocab/base.pyのNMS_THRESHOLD、検証のデフォルト値はBaseModel.valから確認しました。
 snippets:
@@ -89,7 +89,7 @@ snippets:
 
         # どちらも同じ件数となる 有効な制御はconfとmax_det
         print(len(loose.boxes), len(tight.boxes))
-source_hash: 0b978963c356027d
+source_hash: 849650629e58c9e1
 ---
 
 ## 4つの引数
@@ -112,6 +112,8 @@ source_hash: 0b978963c356027d
 `conf`は、それを下回るスコアの予測を破棄するしきい値です。NMSをまったく実行しないものも含め、すべてのファミリーに適用されます。検出数が多すぎる、または少なすぎる場合に最初に調整する項目です。
 
 デフォルトの`0.25`は画像を目視する用途に適しています。下流システムへ渡す場合は通常より高い値が必要で、精度測定にははるかに低い値が必要です。
+
+物体検出の検証は、IoU 0.50でのF1に基づく`metrics/best_conf`とクラス別のしきい値を公開します。デプロイ時のしきい値を決めるための、測定に基づく出発点として使ってください。[検証](/docs/train/validation)を参照してください。セグメンテーションはこれらのキーを公開しません。
 
 ## iou
 

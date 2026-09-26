@@ -15,8 +15,8 @@ keywords:
   - libreyolo cuda kehabisan memori
   - libreyolo notimplementederror
   - troubleshooting libreyolo
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: 1.6.0
+source_hash: 30b68976a4ac01d1
 ---
 
 Error dikelompokkan berdasarkan teks yang terlihat. Jika pesan tidak tersedia di
@@ -176,4 +176,6 @@ if report.errors:
 
 Lihat [perintah doctor](/docs/cli/doctor) untuk katalog pemeriksaan.
 
+## Worker persisten tidak dapat melihat perubahan dataset
 
+Hook `close_mosaic` atau `set_epoch` yang aktif harus menjangkau salinan dataset yang dipakai worker. Jika loader multi-worker kustom menyimpan salinan persisten yang tidak kompatibel, gunakan `persistent_workers=False` atau bangun ulang worker setelah mutasi. Jalur nonpersisten default tidak terpengaruh.

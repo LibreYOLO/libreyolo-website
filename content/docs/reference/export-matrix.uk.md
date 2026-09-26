@@ -16,14 +16,8 @@ keywords:
   - команда libreyolo formats
   - поріг відповідності експорту
   - NotImplementedError export
-last_verified: 1.5.0
-verification: >-
-  Формати, рівні, порядок резервних правил, блокування завдань і сімейств та
-  блокування NCNN взято з libreyolo/export/support.py; псевдоніми й спільні
-  аргументи взято з libreyolo/export/exporter.py; визначення рівнів взято з
-  docs/adr/0011-export-support-tiers.md; пороги відповідності взято з
-  docs/export_support.md, усе для v1.5.0. Комірки окремих поєднань тут не
-  переписано; запитуйте їх за допомогою фрагмента нижче.
+last_verified: "1.6.0"
+verification: Формати, рівні, порядок резервних правил, блокування завдань і сімейств та блокування NCNN взято з libreyolo/export/support.py; псевдоніми й спільні аргументи взято з libreyolo/export/exporter.py; визначення рівнів взято з docs/adr/0011-export-support-tiers.md; пороги відповідності взято з docs/export_support.md, усе для v1.6.0. Комірки окремих поєднань тут не переписано; запитуйте їх за допомогою фрагмента нижче.
 snippets:
   usage:
     - label: Запит матриці без моделі
@@ -71,7 +65,7 @@ snippets:
         print(blocked.tier)
 
         print(blocked.reason)
-source_hash: 83de3289634888c6
+source_hash: 70b9541fb8949352
 ---
 
 ## Структура матриці
@@ -93,6 +87,8 @@ source_hash: 83de3289634888c6
 кожному випуску. Вона генерується, а не пишеться вручну, і розташована в
 `docs/export_support.md` у репозиторії бібліотеки. Запитуйте матрицю через
 Python або CLI замість читання копії.
+
+Згенерований реєстр містить PP-YOLOE, TinyFormer, DEKR, PP-LiteSeg, ConvNeXt V2, PE, V-JEPA 2 і LeVJEPA. Обмеження форми й завдань наведено на сторінках моделей. U-Net, чотири адаптери 3D, Marigold V2 і політики роботів не надають експорту.
 
 ## Три рівні
 

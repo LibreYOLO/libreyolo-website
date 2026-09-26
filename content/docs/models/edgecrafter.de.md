@@ -22,7 +22,7 @@ keywords:
   - pose schätzung
   - instanzsegmentierung
   - edge inference
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -188,7 +188,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 39c6975fc16b3ff1
+source_hash: "521fde8f10ac8c57"
 ---
 
 ## Installation
@@ -228,6 +228,8 @@ der API-Parität akzeptiert, hat aber keine Wirkung, weil alle drei Heads eine
 Menge von Queries ohne NMS-Schritt dekodieren. Unter
 [Vorhersage](/docs/predict) findest du Quellen, Streaming und die Verarbeitung
 von Ergebnissen.
+
+Die Erkennungsvorhersage akzeptiert rechteckiges `imgsz=(height, width)`; Training und Export behalten ihre eigenen Formbeschränkungen bei.
 
 ## Varianten
 
@@ -312,6 +314,8 @@ davon benötigen.
 Alle veröffentlichten Gewichtsdateien dieser Familie.
 
 <checkpoint-table />
+
+Die `obj2coco`-Varianten decken Erkennung, Segmentierung und Pose ab. Ihr Download erfordert eine ausdrückliche Zustimmung, und ihre Upstream-Bedingungen beschränken die kommerzielle Nutzung. Die ursprünglichen COCO-Checkpoints behalten ihre gespeicherte Apache-2.0-Lizenz.
 
 ## Lizenzierung
 

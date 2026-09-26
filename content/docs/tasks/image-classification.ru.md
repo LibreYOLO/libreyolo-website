@@ -15,7 +15,8 @@ keywords:
   - top-1 accuracy
   - zero-shot классификация
   - библиотека классификации изображений mit
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 snippets:
   predict:
     - label: Python
@@ -131,7 +132,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 836bea76cd2cdf92
+source_hash: 90aed355e0ddf5e3
 ---
 
 ## Определение
@@ -155,14 +156,7 @@ source_hash: 836bea76cd2cdf92
 
 ## Модели
 
-Пять семейств поддерживают и обучение, и предсказание: [ResNet](/docs/models/resnet),
-[ConvNeXt](/docs/models/convnext), [MobileNetV4](/docs/models/mobilenetv4),
-[EfficientNetV2](/docs/models/efficientnetv2) и
-[DINOv2](/docs/models/dinov2). Первым четырём достаточно базового пакета, и для
-них опубликованы веса. Для DINOv2 нужен `pip install "libreyolo[rfdetr]"`, и
-чекпойнта, размещённого LibreYOLO, для него нет: он загружает исходный бэкбон со
-случайно инициализированной линейной головой, поэтому это отправная точка для
-дообучения, а не готовая для предсказаний модель.
+Обучаемые классификаторы изображений: [ResNet](/docs/models/resnet), [ConvNeXt](/docs/models/convnext), [MobileNetV4](/docs/models/mobilenetv4), [EfficientNetV2](/docs/models/efficientnetv2) и [DINOv2](/docs/models/dinov2). Первые четыре работают с базовым пакетом и имеют опубликованные веса. DINOv2 требует `pip install "libreyolo[rfdetr]"` и не имеет чекпойнта, размещённого LibreYOLO: он загружает исходный бэкбон со случайно инициализированной линейной головой, поэтому это отправная точка для дообучения, а не готовая модель предсказания.
 
 Ещё пять поддерживают предсказание, валидацию и экспорт, но их `train()`
 выбрасывает `NotImplementedError`: [ViT](/docs/models/vit),
@@ -173,6 +167,8 @@ source_hash: 836bea76cd2cdf92
 фиксированного набора меток. Они сопоставляют изображение с текстовыми
 промптами, поэтому классы задаёт `set_classes()` в момент вызова, и для нового
 набора меток обучение не нужно вообще. Оба также закрывают задачу `embed`.
+
+[ConvNeXt V2](/docs/models/convnextv2) добавляет классификацию с учителем и предобученными весами под CC-BY-NC-4.0. [PE](/docs/models/pe) поддерживает классификацию без дообучения; [V-JEPA 2](/docs/models/vjepa2) обучает классификационные головы для видео.
 
 ## Предсказание
 
@@ -223,6 +219,8 @@ dataset/
 переносится без изменений. Датасеты, аугментация, обучение на нескольких GPU и
 логгеры описаны в разделе [обучение](/docs/train).
 
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 и DINOv2 поддерживают взвешивание функции потерь через `cls_pw` или `class_weights`. Для классификации `scale` управляет площадью обрезки, а `crop_pct` управляет обрезкой при оценке. См. [аугментации](/docs/train/augmentations).
+
 ## Валидация
 
 `val()` возвращает обычный словарь с ключами `metrics/`, посчитанный по сплиту
@@ -236,6 +234,8 @@ dataset/
 хоть куда-то в пятёрку классов с наибольшими оценками, и чем меньше классов в
 датасете, тем меньше смысла в этой метрике. В словаре есть и `fitness` — копия
 значения top-1.
+
+Валидация ImageFolder также возвращает макрометрики `metrics/precision`, `metrics/recall` и `metrics/f1`, усреднённые по классам, присутствующим в эталонной разметке валидации. Классы без предсказаний дают нулевую точность. Fitness по умолчанию остаётся top-1 accuracy. Валидация и калибровка используют преобразование модели для оценки.
 
 ## Экспорт
 

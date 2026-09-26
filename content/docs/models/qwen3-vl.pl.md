@@ -18,7 +18,7 @@ keywords:
   - grounding obrazu
   - Alibaba
   - VLM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -49,7 +49,7 @@ snippets:
         vest?")
 
         print(answer)
-source_hash: ee225b6221d624d9
+source_hash: 801d97d089f1f957
 ---
 
 ## Instalacja
@@ -97,13 +97,9 @@ ustala rzeczywisty obszar przekazywany do sieci. Ta wartość nie jest więc sta
 rozdzielczością działania, tak jak w innych rodzinach na tej stronie. LibreYOLO
 nie opublikowało benchmarku porównującego dokładność tych trzech rozmiarów.
 
-LibreYOLO nie trenuje, nie waliduje ani nie eksportuje Qwen3-VL. Wywołania
-`train()`, `val()` i `export()` zgłaszają `NotImplementedError` dla każdej
-rodziny na tym poziomie (zobacz poziom obsługi powyżej). Jeśli potrzebny jest
-niestandardowy słownik zapisany w wagach, należy dostroić Qwen3-VL w projekcie
-źródłowym i wczytać powstałe wagi. Wynik `predict()` trzeba sprawdzić wzrokowo
-zamiast uruchamiać walidację w stylu COCO, ponieważ każda detekcja ma ten sam
-zastępczy wskaźnik pewności.
+## Trenowanie
+
+Po zainstalowaniu `libreyolo[vlm-train]` można trenować adaptery LoRA do detekcji przez `LibreVLM("qwen3-vl-2b").train(data=...)`. Enkoder wizyjny pozostaje zamrożony; funkcja straty na walidacji wybiera najlepszy katalog checkpointu. Wznawianie stanu optymalizatora i walidacja mAP detekcji nie są obsługiwane. Wartości domyślne i instrukcje ponownego wczytywania opisano w sekcji [dostrajania VLM](/docs/train/vlm-fine-tuning).
 
 ## Licencja
 

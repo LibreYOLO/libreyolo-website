@@ -4,12 +4,12 @@ families:
   - ec
 seo_title: 'EdgeCrafter: phát hiện, ước lượng tư thế và phân đoạn trong LibreYOLO'
 description: >-
-  Dùng EdgeCrafter trong LibreYOLO để phát hiện, ước lượng tư thế và phân đoạn
-  thực thể. Cài đặt, dự đoán, xác thực và xuất với mã nguồn dùng giấy phép MIT.
+  Dùng EdgeCrafter trong LibreYOLO để phát hiện, ước lượng tư thế và phân đoạn thực thể. Cài đặt, dự đoán, xác
+  thực và xuất với mã nguồn dùng giấy phép MIT.
 lead: >-
-  Một vision transformer nhỏ gọn cho dự đoán dày đặc trên phần cứng biên, được
-  upstream công bố dưới dạng ba mô hình cùng họ: ECDet, ECPose và ECSeg.
-  LibreYOLO nạp cả ba thành một family, với tác vụ được xác định bởi checkpoint.
+  Một vision transformer nhỏ gọn cho dự đoán dày đặc trên phần cứng biên, được upstream công bố dưới dạng ba
+  mô hình cùng họ: ECDet, ECPose và ECSeg. LibreYOLO nạp cả ba thành một family, với tác vụ được xác định bởi
+  checkpoint.
 keywords:
   - EdgeCrafter
   - ECDet
@@ -20,7 +20,7 @@ keywords:
   - ước lượng tư thế
   - phân đoạn thực thể
   - inference trên thiết bị biên
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -76,9 +76,8 @@ snippets:
         )
     - label: CLI
       language: bash
-      code: >
-        libreyolo train model=LibreECs.pt data=my-dataset.yaml epochs=50
-        imgsz=640 batch=8 lr0=5e-4
+      code: |
+        libreyolo train model=LibreECs.pt data=my-dataset.yaml epochs=50 imgsz=640 batch=8 lr0=5e-4
     - label: Tư thế
       language: python
       code: |
@@ -176,9 +175,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 39c6975fc16b3ff1
+source_hash: 521fde8f10ac8c57
 ---
-
 ## Cài đặt
 
 EdgeCrafter không cần thành phần tùy chọn nào. Mọi nội dung mà mô hình import đều
@@ -213,6 +211,8 @@ là một hằng số thay vì điểm số theo từng điểm.
 tương thích API nhưng không có tác dụng, vì cả ba head đều decode một tập query
 không có bước NMS. Xem [dự đoán](/docs/predict) để biết về nguồn, stream và cách
 xử lý kết quả.
+
+Dự đoán phát hiện chấp nhận `imgsz=(height, width)` hình chữ nhật; huấn luyện và xuất vẫn có các ràng buộc hình dạng riêng.
 
 ## Biến thể
 
@@ -292,6 +292,8 @@ MNN, ExecuTorch và Core AI. Phần [Xuất](/docs/export) liệt kê các đố
 Tất cả tệp trọng số đã công bố cho family này.
 
 <checkpoint-table />
+
+Các biến thể `obj2coco` bao gồm phát hiện, phân đoạn và tư thế. Bạn phải chủ động đồng ý tải chúng và các điều khoản upstream hạn chế sử dụng thương mại. Checkpoint COCO gốc giữ giấy phép Apache-2.0 đã ghi.
 
 ## Giấy phép
 

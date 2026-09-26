@@ -19,7 +19,8 @@ keywords:
   - встроенный nms onnx
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 meta:
   - label: Флаг
     value: export(format="onnx")
@@ -153,7 +154,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cee78250fc7189a3
+source_hash: 085c6fb8cb7ec4b2
 ---
 
 ## Установка
@@ -163,6 +164,8 @@ source_hash: cee78250fc7189a3
 Этот extra подтягивает `onnx`, `onnxsim` и `onnxruntime`. Для записи файла
 достаточно одного `onnx`; `onnxsim` выполняет проход упрощения, а `onnxruntime`
 запускает артефакт и проводит калибровку INT8.
+
+Extra ONNX требует `onnxruntime>=1.18.0`; LaMa использует граф opset-21.
 
 ## Экспорт
 

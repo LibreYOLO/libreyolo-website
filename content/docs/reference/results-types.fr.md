@@ -1,10 +1,10 @@
 ---
 title: Types de résultats
 seo_title: Référence de l'objet Results de LibreYOLO
-description: "Toutes les charges utiles que peut contenir un objet Results LibreYOLO, avec un emplacement par forme de tâche\_: bounding boxes, masques, points clés, probabilités, OBB, profondeur, OCR, embeddings et dix autres."
+description: "Résultats LibreYOLO : boîtes, masques, points clés, classification, profondeur, albédo, cuboïdes 3D et séquences d'actions robotiques."
 lead: >-
   Results est l'unique type de retour par image de tous les modèles LibreYOLO.
-  Il contient dix-huit emplacements de charges utiles facultatifs, un par forme
+  Il contient des emplacements de charges utiles facultatifs, un par forme
   de tâche, et ne remplit que ceux produits par le modèle.
 keywords:
   - objet results libreyolo
@@ -14,10 +14,10 @@ keywords:
   - Results.depth_map
   - Results.summary
   - libreyolo results to_json
-last_verified: 1.5.0
+last_verified: "1.6.0"
 verification: >-
   Noms des emplacements, formes, propriétés et valeurs par défaut lus dans
-  libreyolo/utils/results.py en v1.5.0. Sémantique citée depuis les docstrings
+  libreyolo/utils/results.py en v1.6.0. Sémantique citée depuis les docstrings
   des classes de charges utiles.
 snippets:
   usage:
@@ -48,7 +48,7 @@ snippets:
         # Lignes sous forme de dictionnaires simples, puis en JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 16f654364ae6448a
+source_hash: d74276d805c22c92
 ---
 
 ## Objet Results
@@ -201,6 +201,8 @@ une plus grande proximité avec la caméra. Les valeurs sont relatives et ne
 représentent pas des mètres. `min`, `max` et `mean` sont calculés sur les
 valeurs finies, et `normalized()` remet la carte à l'échelle dans `[0, 1]`.
 
+`DepthMap(data, orig_shape=None, encoding="inverse_depth")` accepte aussi `encoding="depth"` et `encoding="log_depth"`. Les validateurs interprètent cet encodage avant l'alignement. Les valeurs de profondeur relative n'offrent toujours aucune garantie d'échelle métrique.
+
 ## NormalMap
 
 Champ dense de normales de surface, float32 `(H, W, 3)`, sur le canevas de
@@ -315,6 +317,16 @@ dictionnaires simples, une ligne par détection, segment, point ou région selon
 les emplacements définis. `to_json(**kwargs)` transmet ses arguments à
 `summary` et renvoie la chaîne JSON.
 
-`plot()` rend un résultat dense de normales ou de contours dans sa
-visualisation canonique et lève une erreur pour les autres types. Les images
-annotées des autres tâches sont produites par `predict(save=True)`.
+`plot()` affiche toutes les charges utiles de tâche. Les superpositions d'image utilisent des tableaux BGR par défaut ; `pil=True` demande une image PIL. Les résultats de contours et de normales conservent PIL par défaut.
+
+## Boxes3D
+
+`Boxes3D(data, orig_shape=None, intrinsics=None)` contient des lignes `(N, 14)` : centre xyz, dimensions wlh, quaternion wxyz, score de classement, identifiant de classe, confiance 2D et confiance 3D. Les coordonnées sont en mètres dans le repère caméra, avec x vers la droite, y vers le bas et z vers l'avant ; aucun repère monde n'est implicite. Les paramètres intrinsèques 3x3 correspondent au canevas d'origine. Les lignes sont alignées avec `Results.boxes`.
+
+## AlbedoMap
+
+`AlbedoMap(data, orig_shape=None)` contient du RGB linéaire. La conversion d'affichage produit du sRGB ; la validation quantitative de l'albédo utilise les valeurs linéaires d'origine.
+
+## Actions
+
+`Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` représente une séquence d'actions float32 `(T, D)`. `first` renvoie la première ligne ; le découpage sélectionne les pas de temps. Les valeurs restent dans les unités du dataset de la politique. `names` décrit les dimensions des actions, `fps` la cadence de contrôle et `instruction` le texte de conditionnement.

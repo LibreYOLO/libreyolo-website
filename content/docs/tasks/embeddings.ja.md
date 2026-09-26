@@ -15,7 +15,7 @@ keywords:
   - clip エンベディング
   - dinov2 エンベディング
   - reid エンベディング
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   libreyolo/tasks.pyからタスクキーと別名を確認しました。libreyolo/utils/results.pyのEmbeddingsクラスとIdentitiesクラスから結果ペイロードを確認しました。libreyolo/utils/gallery.pyからGallery
   APIを確認しました。libreyolo/models/base/model.pyからembedと_postprocess_embeddingsを確認しました。libreyolo/models/**/model.pyのSUPPORTED_TASKSにあるembedを検索して、対応ファミリーを特定しました。libreyolo/cli/__init__.py、libreyolo/cli/commands/special.py、libreyolo/cli/commands/predict.pyからCLIインターフェースを確認しました。docs/adr/0015-embed-generalization.mdから設計意図を確認しました。
@@ -162,7 +162,7 @@ snippets:
 
         libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg
         --json
-source_hash: ffbaad5599035bc7
+source_hash: 3197bfe9a3d53756
 ---
 
 ## 定義
@@ -194,7 +194,7 @@ source_hash: ffbaad5599035bc7
 
 ## モデル
 
-4つのファミリーがこのタスクを提供し、最初に何かを位置特定するかどうかで明確に分かれます。
+埋め込みベクトルのファミリーは、画像全体、クリップ、検出領域のどれをエンコードするかが異なります。
 
 | ファミリー | 形状 | 次元 | その他の対応タスク |
 |---|---|---|---|
@@ -207,7 +207,7 @@ CLIPとSigLIP 2は`classify`をデフォルトタスクとして維持するた�
 必要があります。既存の`-cls`チェックポイントは共有の2タワー成果物です。同一の重みに対して
 重複する`-embed`チェックポイントは公開されません。
 
-`embed_text`があるのは、テキストタワーを持つ2ファミリーのCLIPとSigLIP 2だけです。
+`embed_text`は、テキストタワーを持つCLIP、SigLIP 2、PEで使えます。
 DINOv2にはありません。DINOv2の埋め込み処理は、セマンティックおよび分類ヘッドを迂回し、
 224ピクセルで最終正規化済みCLSトークンを読み取ります。`n`、`s`、`m`、`l`の各バリアントは
 すべてDINOv2-Sエンコーダーを共有するため、4つとも`D = 384`を返します。
@@ -222,6 +222,8 @@ DINOv2にはありません。DINOv2の埋め込み処理は、セマンティ�
 全結果のすべての行を1つの`(N_total, D)` CPU float32テンソルへ連結します。行の次元が混在する
 場合は例外を発生させます。対応タスクに`embed`がないファミリーは`NotImplementedError`を
 発生させます。
+
+[PE](/docs/models/pe)は画像、テキスト、有限長の動画の埋め込みベクトルに対応し、デフォルトは`clip_frames=8`です。[V-JEPA 2](/docs/models/vjepa2)と[LeVJEPA](/docs/models/levjepa)はクリップの埋め込みベクトルを生成し、`embed_tokens()`でパッチトークンを公開します。クリップのサンプリングと、ランタイムに直接入力するエクスポートの制約については各モデルページを参照してください。
 
 ## 結果ペイロード
 

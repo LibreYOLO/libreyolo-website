@@ -19,7 +19,7 @@ keywords:
   - libreyolo doctor
   - vérifier déséquilibre classes
   - fuite entre splits train val
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   train:
     - label: Python
@@ -69,7 +69,7 @@ snippets:
             print(finding.severity.value, finding.check_id, finding.message)
 
         raise SystemExit(report.exit_code(strict=False))
-source_hash: 9a12a0551c8b56e9
+source_hash: 84e47ff97fb2e2f3
 ---
 
 ## Pointer l'entraînement vers un dataset
@@ -147,6 +147,8 @@ par `#` sont ignorées.
 facultatif ; lorsque les deux sont présents et ne concordent pas, doctor le
 signale comme une erreur.
 
+La pose RF-DETR lit `kpt_names` indexé par identifiant ou nom de classe. Elle conserve les premières lignes de points clés nommés par classe ; une liste vide indique une classe avec uniquement des boîtes. La pose multiclasse exige `names` et au moins une classe avec des points clés.
+
 ## Disposition des répertoires et fichiers d'étiquettes
 
 La détection, la segmentation, la pose et les boîtes orientées partagent la
@@ -176,6 +178,8 @@ ligne de plus de cinq champs est lue comme un polygone et sa boîte correspond �
 l'étendue de ce polygone, si bien qu'un export de segmentation utilisé pour un
 entraînement de détection se charge sans plainte. Doctor indique combien de
 lignes ont suivi ce chemin.
+
+Les boîtes aux coordonnées finies qui dépassent l'image sont tronquées de manière cohérente pour l'entraînement et la validation. Les boîtes sans aire visible, les coordonnées non finies et les polygones mal formés sont écartés. Les identifiants de classe hors plage sont signalés avant la construction des cibles. `train(classes=[...])` filtre la supervision en utilisant les identifiants de classe d'origine ; consultez les [hyperparamètres](/docs/train/hyperparameters).
 
 ## Autres tâches
 

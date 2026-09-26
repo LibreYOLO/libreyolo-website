@@ -1,10 +1,20 @@
 ---
 title: FAQ
-seo_title: "LibreYOLO FAQ"
-description: "Short answers to the questions that cut across every LibreYOLO model: hardware, licensing, weights, devices, training, export coverage and the CLI."
-lead: "Answers to questions that are not specific to one model family. Anything family-specific lives on that family's page."
-keywords: [libreyolo faq, libreyolo gpu required, libreyolo license, libreyolo weights location, libreyolo cli, libreyolo offline]
-last_verified: "1.5.0"
+seo_title: LibreYOLO FAQ
+description: >-
+  Short answers to the questions that cut across every LibreYOLO model:
+  hardware, licensing, weights, devices, training, export coverage and the CLI.
+lead: >-
+  Answers to questions that are not specific to one model family. Anything
+  family-specific lives on that family's page.
+keywords:
+  - libreyolo faq
+  - libreyolo gpu required
+  - libreyolo license
+  - libreyolo weights location
+  - libreyolo cli
+  - libreyolo offline
+last_verified: 1.6.0
 ---
 
 ## Which model should I start with?
@@ -143,3 +153,7 @@ Two class names were renamed for consistency: `LibreYOLORTDETR` became
 `LibreRTDETR` and `LibreYOLORFDETR` became `LibreRFDETR`. The old names still
 resolve and emit a `DeprecationWarning` pointing at the new one, so existing
 code keeps running while you update it.
+
+## Why does a checkpoint spelling fail to download?
+
+Use the exact filename in the model page checkpoint table. FCN and Mask R-CNN task-suffixed spellings are not hosted; their loader error lists the supported forms. LingBot-Vision g has no published checkpoint: use s, b, l or a local checkpoint.

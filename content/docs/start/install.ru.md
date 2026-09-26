@@ -15,7 +15,8 @@ keywords:
   - libreyolo cuda
   - libreyolo не видит gpu
   - требования libreyolo
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 meta:
   - label: Пакет
     value: libreyolo
@@ -67,7 +68,7 @@ snippets:
         # входными разрешениями. Семейства, у которых не хватает extra,
         # выводятся вместе с командой pip, которая их включает.
         libreyolo models
-source_hash: 34fc6d3e24d03fb4
+source_hash: 531023c2092fd751
 ---
 
 ## Установка
@@ -93,6 +94,11 @@ Extra — это имя в квадратных скобках, которое �
 
 | Extra | Что добавляет |
 |---|---|
+| `ground` | Зависимости VLM для привязки инструкции к точке |
+| `vlm-train` | Стек VLM и `peft>=0.17.0` для дообучения Qwen3-VL |
+| `vla` | `lerobot[smolvla,diffusion,dataset]>=0.6.1`, Python 3.12 или новее |
+| `marigold` | Зафиксированные зависимости диффузии, ускорения и Transformers |
+| `molmo2` | `transformers==4.57.1`, `einops` и `accelerate` |
 | `rfdetr` | `transformers`, откуда берётся бэкбон RF-DETR |
 | `eomt` | `transformers` |
 | `midas` | `timm` 1.0.x, откуда берутся энкодеры ViT-L/16 и EfficientNet-Lite3 для MiDaS |
@@ -110,7 +116,7 @@ Extra — это имя в квадратных скобках, которое �
 
 | Extra | Что добавляет |
 |---|---|
-| `onnx` | `onnx`, `onnxsim`, `onnxruntime` |
+| `onnx` | `onnx`, `onnxsim`, `onnxruntime>=1.18.0` |
 | `tensorrt` | `tensorrt-cu12` 10.16.1.11 и `pycuda`, вне macOS |
 | `openvino` | `openvino` |
 | `coreml` | `coremltools` |
@@ -145,6 +151,9 @@ COCO откатывается на pycocotools и запуск продолжа�
 
 | Extra | Что добавляет |
 |---|---|
+| `hf` | `huggingface_hub>=1.0.0` для загрузки, публикации и логгера Hub |
+| `llm` | `openai>=1.66.0` для совместимых API |
+| `fiftyone` | `fiftyone>=1.0.0` для подготовки датасетов |
 | `stream` | `yt-dlp`, нужен только для разбора URL страниц YouTube |
 | `tracking` | Ничего. Все зависимости трекинга уже входят в основные |
 | `label` | `libreyolo[sam]`, который включает режим «клик — маска» в `libreyolo label` |
@@ -164,7 +173,11 @@ COCO откатывается на pycocotools и запуск продолжа�
 какой версией PyTorch он сочетается, а `coreai` — потому что `coreai-torch`
 фиксирует PyTorch на 2.11.x и утянул бы на эту версию всё окружение.
 `fast-eval`, `hub-kernels`, `clip-convert` и `siglip2-convert` тоже оставлены за
-бортом. Любой из них ставится по имени.
+бортом. Любой из них ставится по имени. `all` включает `hf` и `llm`; `fiftyone`, `vla`, `marigold` и `molmo2` остаются отдельными. FiftyOne устанавливает headless OpenCV, который пересекается с базовым пакетом `cv2`.
+
+Базовая установка требует Python 3.10 или новее и добавляет `cloudpickle>=3.0.0` для DDP под управлением координатора.
+
+Используйте отдельное окружение для Molmo2: его фиксация Transformers 4.57.1 конфликтует с более новыми стеками VLM, Hub и Marigold. Marigold фиксирует diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 и Transformers 5.4.0, а также bitsandbytes 0.49.2 в Linux/Windows. Четырёхбитный инференс Marigold по умолчанию требует CUDA. North Micro Vision требует Transformers 5.16 или новее; Gemma 4 требует 5.10 или новее, что выше общего минимума VLM.
 
 ## Ограничения платформ
 

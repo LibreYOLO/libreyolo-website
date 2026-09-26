@@ -17,7 +17,7 @@ keywords:
   - 回転バウンディングボックス 検出
   - OBB
   - DOTA
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -171,7 +171,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 8022a5a591922a90
+source_hash: 75454e612d7e2247
 ---
 
 ## インストール
@@ -223,6 +223,8 @@ pip install "libreyolo[lora]"
 変更する理由がない限り、`imgsz`はチェックポイントのネイティブサイズのままにしてください。別のサイズでの検証と推論も動作しますが、1つ問題が残ります。トークン数がネイティブサイズと一致する長方形サイズでは、誤ったアスペクト比用に構築された埋め込みベクトルが再利用されます。
 
 データセット、データ拡張、マルチGPU、ロガーについては[学習](/docs/train)を参照してください。
+
+RT-DETRv4はデフォルトで`amp=True`を有効にし、`amp_dtype="float16"`を使います。FP32を使うには`amp=False`を渡してください。
 
 ## 検証
 

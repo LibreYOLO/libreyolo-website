@@ -2,13 +2,12 @@
 title: ONNX
 seo_title: Xuất sang ONNX từ LibreYOLO
 description: >-
-  Xuất một mô hình LibreYOLO sang ONNX: opset mà LibreYOLO chọn cho từng họ mô
-  hình, dynamic axes, NMS nhúng sẵn, INT8, và cách graph được tải lại.
+  Xuất một mô hình LibreYOLO sang ONNX: opset mà LibreYOLO chọn cho từng họ mô hình, dynamic axes, NMS nhúng
+  sẵn, INT8, và cách graph được tải lại.
 lead: >-
-  ONNX là một định dạng đồ thị (graph) di động. LibreYOLO trace mô hình bằng
-  torch.onnx.export, tùy chọn đơn giản hóa graph, rồi ghi họ mô hình, tác vụ,
-  tên các lớp đối tượng và kích thước đầu vào vào chính metadata của tệp, để mọi
-  backend LibreYOLO đều có thể dựng lại phần hậu xử lý.
+  ONNX là một định dạng đồ thị (graph) di động. LibreYOLO trace mô hình bằng torch.onnx.export, tùy chọn đơn
+  giản hóa graph, rồi ghi họ mô hình, tác vụ, tên các lớp đối tượng và kích thước đầu vào vào chính metadata
+  của tệp, để mọi backend LibreYOLO đều có thể dựng lại phần hậu xử lý.
 keywords:
   - xuất yolo sang onnx
   - onnxruntime python
@@ -18,7 +17,7 @@ keywords:
   - nhúng nms vào onnx
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Flag
     value: export(format="onnx")
@@ -32,15 +31,12 @@ meta:
     value: LibreYOLO("weights/LibreYOLO9t.onnx")
     mono: true
   - label: Hình dạng
-    value: >-
-      Batch động theo mặc định trong Python; các ngoại lệ theo từng tác vụ ở bên
-      dưới
+    value: Batch động theo mặc định trong Python; các ngoại lệ theo từng tác vụ ở bên dưới
   - label: Precision
     value: 'FP32, FP16 (half=True), INT8 (int8=True, phát hiện đối tượng YOLO9)'
 verification: >-
-  Đọc từ libreyolo/export/onnx.py, libreyolo/export/exporter.py,
-  libreyolo/export/support.py, libreyolo/backends/onnx.py và
-  libreyolo/cli/commands/export.py trên nhánh dev.
+  Đọc từ libreyolo/export/onnx.py, libreyolo/export/exporter.py, libreyolo/export/support.py,
+  libreyolo/backends/onnx.py và libreyolo/cli/commands/export.py trên nhánh dev.
 snippets:
   install:
     - label: Cài đặt
@@ -120,44 +116,31 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: ONNX Runtime thuần
       language: python
-      code: >
+      code: |
         import numpy as np
-
         import onnx
-
         import onnxruntime as ort
-
 
         session = ort.InferenceSession(
             "weights/LibreYOLO9t.onnx",
             providers=["CPUExecutionProvider"],
         )
 
-
         # Trên đường này, tiền xử lý và hậu xử lý là việc của bạn
-
         batch = np.zeros((1, 3, 640, 640), dtype=np.float32)
-
         outputs = session.run(None, {session.get_inputs()[0].name: batch})
-
         print([out.shape for out in outputs])
 
-
-        # Graph mang theo họ mô hình, tác vụ, tên các lớp đối tượng và kích
-        thước đầu vào
-
-        meta = {p.key: p.value for p in
-        onnx.load("weights/LibreYOLO9t.onnx").metadata_props}
-
+        # Graph mang theo họ mô hình, tác vụ, tên các lớp đối tượng và kích thước đầu vào
+        meta = {p.key: p.value for p in onnx.load("weights/LibreYOLO9t.onnx").metadata_props}
         print(meta["model_family"], meta["task"], meta["imgsz"])
   support:
     - label: Kiểm tra một họ mô hình và tác vụ trước khi xuất
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cee78250fc7189a3
+source_hash: 085c6fb8cb7ec4b2
 ---
-
 ## Cài đặt
 
 <code-tabs name="install" />
@@ -165,6 +148,8 @@ source_hash: cee78250fc7189a3
 Phụ thuộc thêm này kéo về `onnx`, `onnxsim` và `onnxruntime`. Chỉ riêng `onnx` là
 đủ để ghi tệp; `onnxsim` chạy bước đơn giản hóa còn `onnxruntime` chạy artifact và
 thực hiện việc hiệu chỉnh (calibration) INT8.
+
+Extra ONNX yêu cầu `onnxruntime>=1.18.0`; LaMa dùng đồ thị opset-21.
 
 ## Xuất mô hình
 

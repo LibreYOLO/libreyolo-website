@@ -12,7 +12,7 @@ keywords:
   - SimOTA
   - 实时目标检测
   - yolox 训练自己的数据集
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -89,7 +89,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: f5ab735a29f85a95
+source_hash: ddba5fb10bb88ad2
 ---
 
 ## 安装
@@ -134,6 +134,8 @@ pip install libreyolo
 
 数据集、数据增强、多卡训练和日志记录器见[训练](/docs/train)。
 
+Mosaic 最多抽取 20 个候选搭配图像，优先选择有标注的图像；如果都不符合要求，就保留最后一次抽取的结果。
+
 ## 验证
 
 `val()` 返回一个由 `metrics/` 键组成的字典，涵盖查准率、查全率、mAP 50 和
@@ -151,6 +153,8 @@ mAP 50-95，在任何采用你训练时所用格式的数据集上测量。
 把 NMS 内嵌进计算图；YOLOX 和 YOLOv9 是目前这个参数唯一接受的两个家族。
 
 <code-tabs name="export" />
+
+[TFLite INT8](/docs/export/tflite) 接受 `int8=True` 和校准数据集。
 
 ## 检查点
 

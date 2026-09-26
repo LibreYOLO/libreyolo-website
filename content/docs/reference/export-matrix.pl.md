@@ -16,13 +16,13 @@ keywords:
   - polecenie libreyolo formats
   - próg zgodności eksportu
   - NotImplementedError eksport
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Formaty, poziomy, kolejność reguł awaryjnych, blokady zadań i rodzin oraz
   blokady NCNN odczytano z libreyolo/export/support.py; aliasy i wspólne
   argumenty z libreyolo/export/exporter.py; definicje poziomów z
   docs/adr/0011-export-support-tiers.md; progi zgodności z
-  docs/export_support.md, wszystko w wersji 1.5.0. Nie przepisano tu komórek
+  docs/export_support.md, wszystko w wersji 1.6.0. Nie przepisano tu komórek
   poszczególnych kombinacji. Należy odpytać je za pomocą poniższego fragmentu.
 snippets:
   usage:
@@ -71,7 +71,7 @@ snippets:
         print(blocked.tier)
 
         print(blocked.reason)
-source_hash: 83de3289634888c6
+source_hash: 70b9541fb8949352
 ---
 
 ## Kształt macierzy
@@ -93,6 +93,8 @@ Ponieważ komórka jest funkcją trzech kluczy, pełna siatka jest duża i zmien
 się w każdym wydaniu. Jest generowana, a nie pisana ręcznie, i znajduje się
 w `docs/export_support.md` w repozytorium biblioteki. Zamiast czytać kopię,
 należy odpytać macierz z Pythona lub CLI.
+
+Wygenerowany rejestr obejmuje PP-YOLOE, TinyFormer, DEKR, PP-LiteSeg, ConvNeXt V2, PE, V-JEPA 2 i LeVJEPA. Ograniczenia kształtu i zadania podano na stronach modeli. U-Net, cztery adaptery 3D, Marigold V2 i polityki robotów nie obsługują eksportu.
 
 ## Trzy poziomy
 

@@ -14,7 +14,7 @@ keywords:
   - 卷积神经网络
   - 图像分类 python
   - vgg16 预训练模型
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -77,7 +77,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 26eb6ff5811533fd
+source_hash: 7e22e5bf59ca038a
 ---
 
 ## 安装
@@ -111,6 +111,8 @@ pip install libreyolo
 目录，每个类别一个文件夹），返回 top-1 和 top-5 精度。
 
 <code-tabs name="val" />
+
+验证和 INT8 校准使用家族的评估变换。导出元数据记录 `norm_mean`、`norm_std` 和 `resize_mode`；旧产物回退到家族值。校准预处理器返回所需的 CHW 数组和比例。
 
 ## 导出
 

@@ -12,7 +12,7 @@ keywords:
   - fp8 e4m3
   - calibration dataset
   - qdq onnx export
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 meta:
   - label: Call
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -59,7 +59,7 @@ snippets:
             calib="coco128.yaml",      # data.yaml path or built-in name; None skips calibration
             samples=128,               # maximum calibration images
             batch=8,                   # calibration batch size
-            algorithm="auto",          # auto and minmax are the same; percentile is the alternative
+            algorithm="auto",          # auto selects minmax; alternatives: percentile, mse, entropy
             keep_high_precision=None,  # None uses the family policy
             verbose=True,
         )
@@ -160,6 +160,8 @@ manifest attached, so it reloads with its structure and scales intact:
 Trainer checkpoints written during a QAT run carry the manifest too, which means
 `best.pt` from such a run is itself a quantized checkpoint.
 
+Calibration `algorithm` accepts `auto`, `minmax`, `percentile`, `mse` and `entropy`. `auto` resolves to minmax. MSE and entropy use histogram sweeps to select activation ranges.
+
 ## Recipes
 
 Four families are supported: `yolo9`, `rfdetr`, `birefnet` and `feynobg`.
@@ -217,6 +219,8 @@ which today means `yolo9` and `rfdetr`.
 
 `fp16`- and `bf16`-quantized models are inference only, and the trainer rejects
 them with a pointer to `amp=True`.
+
+QAT setup disables EMA and SyncBatchNorm and sets `average_best=0`, logging each override. Floating-point training keeps its requested settings.
 
 ## Export
 

@@ -3,7 +3,7 @@ title: MiDaS
 families:
   - midas
 seo_title: MiDaS：LibreYOLO 里的单目深度估计
-description: 在 LibreYOLO 里用 MiDaS 做单目深度估计。安装、预测、验证并导出两个采用 MIT 许可的变体，权重从 isl-org 下载。
+description: "在 LibreYOLO 中运行 MiDaS 相对深度推理。s 和 l 检查点使用 LibreYOLO 镜像，保留发布者的 MIT 授权。"
 lead: >-
   MiDaS 是单目相对深度估计，在混合数据集上用尺度和偏移不变的损失函数训练，正是这条工作线确立了后来各家族沿用的零样本深度迁移流程。LibreYOLO
   支持它的 depth 任务：预测和零样本验证，没有训练这一步。
@@ -14,7 +14,7 @@ keywords:
   - 相对深度
   - 深度图 python
   - 零样本深度估计
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -22,8 +22,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # 本地还没有这个文件：LibreYOLO 会从官方的 isl-org/MiDaS GitHub release
-        # 下载，并在使用前校验固定的 SHA-256
+        # 首次使用时下载镜像检查点
         model = LibreYOLO("LibreMiDaSl-depth.pt")
         result = model(SAMPLE_IMAGE, save=True)
 
@@ -84,30 +83,24 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: ce2fbf3ae43e9be4
+source_hash: 64537aa3ad3a6f8f
 ---
 
 ## 安装
 
-MiDaS 不需要任何可选 extra。它导入的一切都在基础安装里。
+MiDaS 需要 `midas` extra 来提供 timm 编码器。
 
 ```bash
-pip install libreyolo
+pip install "libreyolo[midas]"
 ```
 
 ## 预测
 
-MiDaS 是唯一一个 LibreYOLO 没有在自己的 Hugging Face 组织下重新发布的深度家
-族。按 LibreYOLO 的文件名请求一个检查点（checkpoint），会直接从 `isl-org/MiDaS`
-的 GitHub releases 下载对应的官方文件，校验固定的 SHA-256，并在首次使用前给它加
-上 LibreYOLO 的检查点元数据；之后的运行会复用缓存的本地文件。原因见许可证一节。
+s 和 l 检查点依据发布者的 MIT 授权从 LibreYOLO 镜像下载，并缓存在本地。
 
 <code-tabs name="predict" />
 
-`result.depth_map` 带的是一张稠密的相对逆深度图：值越大表示离相机越近，而且这些
-值没有度量单位，也没有跨图像的统一尺度。`save=True` 会把这张图经过色彩映射的可
-视化结果写入磁盘；`Results.plot()` 不覆盖这个家族，因为它只为表面法线和边缘定
-义。数据源、流式处理和结果处理见[预测](/docs/predict)。
+`result.depth_map` 包含稠密的相对逆深度图：数值越大表示越靠近相机，数值没有公制单位，也没有跨图像统一的尺度。`save=True` 将色彩映射后的可视化写入磁盘；`Results.plot()` 渲染深度图。数据源、流式处理和结果处理见[预测](/docs/predict)。
 
 ## 变体
 

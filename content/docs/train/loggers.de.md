@@ -21,7 +21,7 @@ keywords:
   - Trainings Callbacks
   - Trainingsmetriken CSV
   - LibreYOLO Monitor
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   logger:
     - label: Nach Name
@@ -88,7 +88,7 @@ snippets:
       code: |
         libreyolo monitor                     # jüngster Lauf unter runs/
         libreyolo monitor runs/train/exp      # bestimmter Lauf
-source_hash: de035acbaed32804
+source_hash: "b5fefd12a738dcb5"
 ---
 
 ## Aktivieren eines Loggers
@@ -148,6 +148,8 @@ Weights & Biases greift auf die Umgebungsvariable `WANDB_PROJECT` und anschließ
 DVCLive schreibt nach `<save_dir>/dvclive`. Sein Zusammenfassungsbaum wird aus `/` aufgebaut. An einem Pfad, der zugleich übergeordnetes Element ist, kann kein Gleitkommawert liegen. Deshalb wird `train/loss/box` als `train/loss.box` geschrieben, während `train/loss` seinen Namen behält. LibreYOLO deaktiviert außerdem die DVCLive-Standardwerte zum Speichern eines DVC-Experiments und Schreiben einer `dvc.yaml` im Stammverzeichnis. Ein optional aktivierter Logger erzeugt dadurch außerhalb des Laufverzeichnisses keinen Zustand für die Versionsverwaltung. Mit `save_dvc_exp=True` oder einem ausdrücklichen `dvcyaml=` aktivierst du sie wieder.
 
 Neptune ist bewusst von `libreyolo[all]` ausgeschlossen. Sein stabiler Client benötigt protobuf unter Version 7, während das TFLite-Extra protobuf 7 benötigt. Installiere `libreyolo[neptune]` in einer Umgebung ohne TFLite-Extra.
+
+Der [Hugging-Face-Hub-Logger](/docs/reference/hugging-face) lädt am Trainingsende `weights/best.pt` hoch, ersatzweise `last.pt`. Verwende `loggers="hf:owner/repo"` oder `HuggingFaceHubLogger(repo_id, private=True)`. Er prüft den Schreibzugriff und erstellt ein fehlendes Repository vor dem Training. Der Logger verwendet standardmäßig privat; explizites `model.push_to_hub()` standardmäßig öffentlich. Die Sichtbarkeit bestehender Repositories bleibt erhalten.
 
 ## Schreiben eines Callbacks
 

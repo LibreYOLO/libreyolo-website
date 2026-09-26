@@ -18,12 +18,11 @@ keywords:
   - no_aug_epochs
   - какие аугментации поддерживает семейство
   - параметры TrainConfig
-last_verified: 1.5.0
-verification: >-
-  Список параметров, статусы, архетипы, отклонения по семействам и
-  вспомогательные функции прочитаны из libreyolo/data/augment/spec.py на версии
-  1.5.0. Эта таблица привязана к реальным пайплайнам тестами
-  tests/unit/test_augment_spec.py.
+last_verified: 1.6.0
+
+verification: Список параметров, статусы, архетипы, отклонения по семействам и вспомогательные функции прочитаны из libreyolo/data/augment/spec.py
+  на версии 1.6.0. Эта таблица привязана к реальным пайплайнам тестами tests/unit/test_augment_spec.py.
+
 snippets:
   usage:
     - label: Прямой запрос к спецификации
@@ -43,7 +42,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: d2e1b9f5c81072e1
+source_hash: f3cba41ceadf131f
 ---
 
 ## Параметры
@@ -70,9 +69,7 @@ source_hash: d2e1b9f5c81072e1
 | `mixup` | Вероятность батчевого MixUp в классификации, с мягкими метками |
 | `cutmix` | Вероятность батчевого CutMix в классификации, с мягкими метками |
 
-Последние четыре — набор для классификации. Семейства детекции их игнорируют.
-`mixup` — параметр только для API: в CLI `--mixup` служит алиасом для
-`mixup_prob` из детекции.
+Последние четыре составляют набор для классификации. Семейства детекции их игнорируют. CLI направляет `mixup` на смешивание батчей у классификаторов и на `mixup_prob` у детекторов.
 
 <code-tabs name="usage" />
 
@@ -100,14 +97,14 @@ source_hash: d2e1b9f5c81072e1
 | `mosaic_prob` | used | ignored | ignored | ignored | ignored | ignored |
 | `mixup_prob` | gated | used | ignored | ignored | ignored | ignored |
 | `hsv_prob` | used | used | ignored | ignored | ignored | ignored |
-| `flip_prob` | used | used | used | ignored | ignored | ignored |
+| `flip_prob` | used | used | used | used | ignored | ignored |
 | `degrees` | gated | used | ignored | ignored | ignored | ignored |
 | `translate` | gated | used | ignored | ignored | ignored | ignored |
 | `mosaic_scale` | gated | used | ignored | ignored | ignored | ignored |
 | `mixup_scale` | gated | used | ignored | ignored | ignored | ignored |
 | `shear` | gated | used | ignored | ignored | ignored | ignored |
 | `perspective` | gated | used | ignored | ignored | ignored | ignored |
-| `flipud` | used | used | ignored | ignored | ignored | ignored |
+| `flipud` | used | used | ignored | used | ignored | ignored |
 | `no_aug_epochs` | used | used | used | used | used | used |
 | `auto_augment` | ignored | ignored | ignored | used | ignored | ignored |
 | `erasing` | ignored | ignored | ignored | used | ignored | ignored |
@@ -121,19 +118,9 @@ source_hash: d2e1b9f5c81072e1
 независимо, переиспользуя `mosaic_scale` как диапазон масштаба аффинного
 преобразования.
 
-Пайплайн в стиле DETR — сквозное преобразование без мозаики. Фотометрическое
-искажение, zoom-out и обрезка по IoU заданы в нём константами рецепта, а не
-настраиваемыми параметрами, и поэтому `hsv_prob` и геометрические параметры до
-него не доходят. Пайплайн классификации использует преобразование ImageFolder, у
-которого горизонтальное отражение зафиксировано на 0.5, а не берётся из
-`flip_prob`. Джиттер масштаба и HSV в семантике приходят из атрибутов класса
-семейства, а не из параметров конфигурации, а отражения в восстановлении —
-связанные операции над входом и целью с фиксированной вероятностью 0.5.
+Пайплайн в стиле DETR использует сквозное преобразование без мозаики. Фотометрическое искажение, zoom-out и обрезка по IoU заданы в нём константами рецепта, а не настраиваемыми параметрами, поэтому `hsv_prob` и геометрические параметры до него не доходят. Классификация использует `flip_prob` для горизонтальных отражений и `flipud` для вертикальных. Джиттер масштаба и HSV в семантике приходят из атрибутов класса семейства, а не из параметров конфигурации, а отражения в восстановлении представляют собой связанные операции над входом и целью с фиксированной вероятностью 0.5.
 
-`no_aug_epochs` учитывается везде, хотя отключает он разное: мозаику и MixUp в
-стиле YOLOX, аффинное преобразование и MixUp в YOLO-NAS, сильные фотометрические
-аугментации и обрезки плюс хвост скорости обучения в стиле DETR, и хвост
-планировщика во всех остальных.
+`no_aug_epochs` учитывается везде, хотя отключает разное: мозаику и MixUp в стиле YOLOX, аффинное преобразование и MixUp в YOLO-NAS, сильные фотометрические аугментации и обрезки плюс хвост скорости обучения в стиле DETR, а для классификации автоаугментацию, стирание, MixUp и CutMix. Обрезка и отражения классификации остаются включёнными.
 
 ## Семейства по архетипам
 

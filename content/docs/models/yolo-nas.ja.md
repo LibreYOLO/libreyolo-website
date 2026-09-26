@@ -3,8 +3,7 @@ title: YOLO-NAS
 families:
   - yolonas
 seo_title: YOLO-NAS：LibreYOLOで推論、学習、エクスポート
-description: >-
-  LibreYOLOでYOLO-NASを使い、検出と姿勢推定を行います。Deci.AIの重みはプロプライエタリで非商用に限定され、LibreYOLOはその重みを一切公開していません。
+description: "LibreYOLOでYOLO-NASの物体検出、姿勢推定、有向ボックスを使います。アップストリームの学習済み重みは非商用です。"
 lead: >-
   Deci.AIのアーキテクチャ探索から生まれたバックボーンとネックを持ち、量子化を考慮したRepVGGブロックで構築された畳み込み検出器です。重みはDeci.AIのもので、非商用利用だけが許可されており、LibreYOLOはその重みを一切公開していません。
 keywords:
@@ -16,7 +15,7 @@ keywords:
   - 姿勢推定
   - 量子化対応 物体検出
   - AutoNAC
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -113,7 +112,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 47c30d6e44024ce7
+source_hash: 483562cad2c02696
 ---
 
 ## インストール
@@ -132,6 +131,8 @@ pip install libreyolo
 
 返される`Results`オブジェクトはすべてのファミリーに共通するため、別の検出器への切り替えは1行の変更で済みます。`conf`は信頼度のしきい値、`iou`はNMSのしきい値を設定します。ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
 
+回転ボックスタスクは`result.obb`を返します。公開済みのOBBグラフは1024ピクセルのキャンバスと、記録された18クラスのラベル集合を使います。
+
 ## バリアント
 
 検出と姿勢推定は異なるヘッドの下で同じアーキテクチャを使い、同じ引数を受け取ります。下の表にあるサイズは検出用です。姿勢推定はその各サイズと、さらに小さい1サイズで公開されています。姿勢推定ヘッドはCOCOのキーポイント集合を予測します。
@@ -149,6 +150,8 @@ pip install libreyolo
 ファインチューニングはDeciの重みから開始し、これがDeciのライセンスの対象です。ランダムに初期化したモデルからの学習ではDeciのチェックポイントを一切使用しません。その手順が上の3番目のスニペットです。
 
 データセット、データ拡張、マルチGPU、ロガーについては[学習](/docs/train)を参照してください。
+
+物体検出のデフォルトは`amp=True`と`amp_dtype="float16"`で、回転ボックスの学習では`amp=False`を維持します。OBBヘッドは学習、推論、検証に対応し、反転とHSVのデータ拡張を使い、`metrics/mAP50-95(OBB)`でチェックポイントを選択します。`load_detect_weights_for_obb()`で検出重みから初期化できます。
 
 ## 検証
 

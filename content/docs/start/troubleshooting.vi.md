@@ -2,21 +2,20 @@
 title: Khắc phục sự cố
 seo_title: Sửa các lỗi LibreYOLO thường gặp
 description: >-
-  Những lỗi LibreYOLO thường phát nhất, ý nghĩa và cách sửa. Bao gồm hai lỗi tạo
-  đầu ra sai thay vì phát ngoại lệ.
+  Những lỗi LibreYOLO thường phát nhất, ý nghĩa và cách sửa. Bao gồm hai lỗi tạo đầu ra sai thay vì phát ngoại
+  lệ.
 lead: >-
-  Các lỗi được nhóm theo thông báo bạn nhìn thấy. Hai mục cuối đề cập vấn đề
-  ngược lại: mã chạy, trả về kết quả có vẻ hợp lý nhưng lại sai.
+  Các lỗi được nhóm theo thông báo bạn nhìn thấy. Hai mục cuối đề cập vấn đề ngược lại: mã chạy, trả về kết
+  quả có vẻ hợp lý nhưng lại sai.
 keywords:
   - lỗi libreyolo
   - modulenotfounderror libreyolo
   - libreyolo cuda hết bộ nhớ
   - libreyolo notimplementederror
   - khắc phục sự cố libreyolo
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: 1.6.0
+source_hash: 30b68976a4ac01d1
 ---
-
 Các lỗi được nhóm theo nội dung bạn nhìn thấy. Nếu thông báo của bạn không có ở
 đây, [FAQ](/docs/faq) trả lời những câu hỏi không phải lỗi, còn `libreyolo
 models` báo những gì bản cài thực sự có thể nạp.
@@ -163,3 +162,7 @@ if report.errors:
 ```
 
 Xem [lệnh doctor](/docs/cli/doctor) để biết danh mục kiểm tra.
+
+## Worker duy trì liên tục không thấy thay đổi dataset
+
+Hook `close_mosaic` hoặc `set_epoch` đang hoạt động phải tác động đến bản sao dataset mà worker dùng. Nếu loader nhiều worker tùy chỉnh giữ các bản sao liên tục không tương thích, dùng `persistent_workers=False` hoặc dựng lại worker sau thay đổi. Đường mặc định không duy trì worker liên tục không bị ảnh hưởng.

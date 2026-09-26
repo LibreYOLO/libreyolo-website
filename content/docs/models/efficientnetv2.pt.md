@@ -18,7 +18,7 @@ keywords:
   - neural architecture search
   - MBConv
   - classificador ImageNet
-last_verified: '1.5.0'
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -33,8 +33,10 @@ snippets:
         print(result.probs.top5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=cat.jpg save=True
+      code: >
+        libreyolo predict model=LibreEfficientNetV2b0-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   train:
     - label: Python
       language: python
@@ -45,8 +47,9 @@ snippets:
         model.train(data="imagenette160", epochs=5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo train model=LibreEfficientNetV2b0-cls.pt data=imagenette160 epochs=5
+      code: >
+        libreyolo train model=LibreEfficientNetV2b0-cls.pt data=imagenette160
+        epochs=5
     - label: Multi-GPU
       language: bash
       code: |
@@ -78,9 +81,11 @@ snippets:
         model.export(format="tensorrt", half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreEfficientNetV2b0-cls.pt format=onnx
-        libreyolo export model=LibreEfficientNetV2b0-cls.pt format=tensorrt half=True
+
+        libreyolo export model=LibreEfficientNetV2b0-cls.pt format=tensorrt
+        half=True
     - label: Usar o arquivo exportado
       language: python
       code: |
@@ -92,7 +97,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: ad3ff140aad824bd
+source_hash: 23b7d651fb4eae89
 ---
 
 ## Instalação
@@ -148,12 +153,16 @@ nenhuma.
 Veja [treinamento](/docs/train) para datasets, data augmentation, multi-GPU e
 loggers.
 
+`cls_pw=0` desativa a ponderação da loss; valores até 1 usam pesos de frequência inversa normalizados para média 1. Já `class_weights=True` usa frequências inversas normalizadas por amostra e não pode ser combinado com `cls_pw>0`. Essas configurações devem coincidir ao retomar. Veja [classificação](/docs/tasks/image-classification).
+
 ## Validação
 
 `val()` devolve um dicionário de chaves `metrics/`. Para classificação, são a
 acurácia top-1 e top-5 sobre o split de validação.
 
 <code-tabs name="val" />
+
+Validação e calibração INT8 usam a transformação de avaliação da família. Os metadados de exportação registram `norm_mean`, `norm_std` e `resize_mode`; artefatos antigos usam os valores da família como fallback. Os pré-processadores de calibração retornam o array CHW e a razão exigidos.
 
 ## Exportação
 

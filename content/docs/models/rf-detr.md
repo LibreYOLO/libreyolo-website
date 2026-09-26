@@ -5,7 +5,7 @@ seo_title: "RF-DETR: train, fine-tune and export under MIT"
 description: "Use RF-DETR in LibreYOLO for detection, instance segmentation, pose and oriented boxes. Install, predict, train, validate and export, all MIT-licensed."
 lead: "A detection transformer that predicts a fixed set of objects instead of a dense grid, so it needs no NMS at inference. LibreYOLO supports it for four tasks."
 keywords: [RF-DETR, real-time detection transformer, DETR, object detection, instance segmentation, pose estimation, oriented bounding boxes]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -172,6 +172,8 @@ different detector is a one line change. `conf` and `max_det` filter the query
 selection; there is no NMS step to tune. See
 [prediction](/docs/predict) for sources, streaming and result handling.
 
+Detection, segmentation and oriented-box paths use floating-point OpenCV bilinear resizing without antialiasing; pose keeps its antialiased resize. Rectangular `imgsz=(height, width)` must satisfy the task patch/window grid. The checkpoint inventory includes the UI detector. [Event histograms](/docs/train/event-histograms) use the recorded input profile.
+
 ## Variants
 
 Four sizes, and four tasks that share one architecture: segmentation, pose and
@@ -199,6 +201,8 @@ times the window count; LibreYOLO checks this before the run starts and names
 the nearest valid sizes.
 
 See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
+
+Fresh runs default to `output_dir=None`, resolving to an incremented `runs/train/rfdetr_exp` with `exist_ok=False`. Multi-class pose datasets use `kpt_names` keyed by class index or name; an empty list marks a box-only class. Predictions pad keypoints to `kpt_shape`; keypoint-mAP fitness does not score box-only classes.
 
 ## Validate
 

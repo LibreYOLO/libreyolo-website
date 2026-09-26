@@ -1,15 +1,76 @@
 ---
-title: "QuickSRNet"
-families: []
-architecture_only: true
-seo_title: "QuickSRNet architecture"
-description: "Architecture diagrams for QuickSRNet in LibreYOLO, with block definitions and model variants."
-lead: "Architecture diagrams for QuickSRNet in LibreYOLO, with block definitions and model variants."
+title: QuickSRNet
+families:
+  - quicksrnet
+seo_title: QuickSRNet in LibreYOLO
+description: QuickSRNet upsamples an image by a factor of two.
+lead: QuickSRNet upsamples an image by a factor of two.
+keywords:
+  - QuickSRNet
+  - LibreYOLO
+  - restore
+last_verified: 1.6.0
+snippets:
+  predict:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreQuickSRNetm2-restore.pt", device="cpu")
+        result = model(SAMPLE_IMAGE)
+        result.restored.save("upscaled.png")
+  val:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreQuickSRNetm2-restore.pt", device="cpu")
+        # Paired super-resolution dataset YAML: inputs/val low-res images, targets/val 2x high-res images
+        metrics = model.val(data="path/to/your/restore.yaml", workers=0)
+        print(metrics)
+  export:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreQuickSRNetm2-restore.pt", device="cpu")
+        model.export(format="onnx")
 ---
 
-## Source
+## Install
 
-The diagrams below describe the [QuickSRNet implementation](https://github.com/LibreYOLO/libreyolo/blob/a4d0ecc9e17f29a459ace07ff0c6df037b07dbdb/libreyolo/models/quicksrnet/model.py) in LibreYOLO.
-Each drawing states its model configuration, input assumptions and source revision.
+```bash
+pip install "libreyolo"
+```
 
-These are architecture references. Check the license and class configuration of any checkpoint you use separately.
+## Predict
+
+<code-tabs name="predict" />
+
+The Medium 2x model preserves native input resolution and doubles each spatial dimension. Validation uses paired low/high-resolution images and reports PSNR and SSIM. ONNX supports dynamic spatial shapes; TorchScript uses a fixed canvas. Training is not supported.
+
+
+## Validate
+
+<code-tabs name="val" />
+
+Use the dataset format for this task. [Validation](/docs/train/validation) explains the dataset requirements and returned metrics.
+
+## Export
+
+<export-matrix />
+
+<code-tabs name="export" />
+
+[Export setup](/docs/export) lists format dependencies and loading exported artifacts.
+
+## Checkpoints
+
+<checkpoint-table />
+
+## Licensing
+
+<provenance-box></provenance-box>

@@ -18,7 +18,7 @@ keywords:
   - fp8 e4m3
   - dane kalibracyjne kwantyzacja
   - eksport qdq onnx
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Wywołanie
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -81,11 +81,11 @@ snippets:
       code: |
         model.quantize(
             recipe="int8",
-            calib="coco128.yaml",      # ścieżka do data.yaml lub nazwa wbudowana; None pomija kalibrację
+            calib="coco128.yaml",      # ścieżka data.yaml lub wbudowana nazwa; None pomija kalibrację
             samples=128,               # maksymalna liczba obrazów kalibracyjnych
-            batch=8,                   # rozmiar batcha przy kalibracji
-            algorithm="auto",          # auto i minmax to to samo; percentile to alternatywa
-            keep_high_precision=None,  # None używa polityki rodziny
+            batch=8,                   # rozmiar batcha kalibracji
+            algorithm="auto",          # auto wybiera minmax; alternatywy: percentile, mse, entropy
+            keep_high_precision=None,  # None używa reguły rodziny
             verbose=True,
         )
   reload:
@@ -178,7 +178,7 @@ snippets:
         niego precyzji.
 
         qmodel.export(format="tensorrt", half=True)
-source_hash: 4ffb06b87cad017e
+source_hash: 6c247a3243daf393
 ---
 
 ## Instalacja
@@ -204,6 +204,8 @@ Powstały checkpoint to zwykły checkpoint LibreYOLO z dołączonym manifestem
 Checkpointy zapisywane przez moduł trenowania podczas przebiegu QAT również
 niosą ten manifest, co oznacza, że `best.pt` z takiego przebiegu sam jest
 skwantyzowanym checkpointem.
+
+Kalibracyjne `algorithm` przyjmuje `auto`, `minmax`, `percentile`, `mse` i `entropy`. `auto` oznacza minmax. MSE i entropy przeszukują histogramy, aby wybrać zakresy aktywacji.
 
 ## Przepisy
 
@@ -268,6 +270,8 @@ rodzinie, co dziś oznacza `yolo9` i `rfdetr`.
 
 Modele skwantyzowane przepisami `fp16` i `bf16` służą wyłącznie do inferencji,
 a moduł trenowania odrzuca je, wskazując na `amp=True`.
+
+Konfiguracja QAT wyłącza EMA i SyncBatchNorm oraz ustawia `average_best=0`, zapisując każdą zmianę w logu. Trenowanie zmiennoprzecinkowe zachowuje żądane ustawienia.
 
 ## Eksport
 

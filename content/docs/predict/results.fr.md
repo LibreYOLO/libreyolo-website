@@ -16,7 +16,7 @@ keywords:
   - résultats carte profondeur
   - results summary
   - mêmes résultats onnx
-last_verified: 1.5.0
+last_verified: "1.6.0"
 verification: >-
   Classes de charges utiles, emplacements, sémantique des déplacements,
   summary(), to_json(), plot(), save() et cutout() lus dans
@@ -146,7 +146,7 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: 201eca6457cf87a4
 ---
 
 ## Un objet, un emplacement par charge utile
@@ -329,11 +329,6 @@ matte sous forme de PNG RGBA à arrière-plan transparent et une détection sous
 forme de bounding boxes avec les masques en dessous. Le chemin écrit est joint
 au résultat sous la forme `result.saved_path`.
 
-`Results.plot()` est plus limité que son nom ne le suggère. Il est défini
-uniquement pour les cartes de normales et de contours, et lève
-`NotImplementedError` pour tout le reste. Utilisez `save=True` pour les autres
-tâches.
-
 `Results.save(path)` est tout aussi limité\u00a0: il écrit un résultat de matting
 sous forme de découpe PNG RGBA à arrière-plan transparent et lève
 `NotImplementedError` dans les autres cas. `Results.cutout()` renvoie ce même
@@ -347,6 +342,10 @@ Deux charges utiles disposent de leur propre méthode d'écriture\u00a0:
 Pour connaître l'emplacement des fichiers et le comportement de `output_path`
 et `output_file_format`, consultez les
 [sources de prédiction](/docs/predict/sources).
+
+`plot()` couvre toutes les charges utiles de tâche. Les superpositions d'image renvoient par défaut un tableau BGR uint8 HxWx3 contigu ; `pil=True` demande une image PIL. Les parcours existants de contours et de normales conservent PIL par défaut. `orig_img` conserve les pixels BGR pour les sources en mémoire et les URL ; les fichiers locaux et les images collectées de vidéos finies peuvent être rouverts.
+
+Les contrôles comprennent `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` et `filename`. Les images de classification enregistrées incluent les cinq premières étiquettes. L'enregistrement de matting écrit une découpe RGBA.
 
 ## Les artefacts exportés renvoient le même objet
 

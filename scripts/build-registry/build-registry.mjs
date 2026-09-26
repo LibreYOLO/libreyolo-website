@@ -101,12 +101,12 @@ const CLASS_BASE = {}
 for (const file of (() => { try { return fs.readdirSync(path.join(SRC, 'models')) } catch { return [] } })()) {
   let text
   try { text = read(path.join('models', file)) } catch { continue }
-  for (const m of text.matchAll(/^class\s+(\w+)\(([^)]*)\)/gm)) {
+  for (const m of text.matchAll(/^class\s+(\w+)(?:\(([^)]*)\))?:/gm)) {
     const [, cls, bases] = m
-    CLASS_BASE[cls] ??= (bases.split(',')[0] || '').trim().split('.').pop()
+    CLASS_BASE[cls] ??= ((bases || '').split(',')[0] || '').trim().split('.').pop()
     const after = text.slice(m.index, text.indexOf('\nclass ', m.index + 1) === -1 ? undefined : text.indexOf('\nclass ', m.index + 1))
     const t = after.match(/SUPPORTED_TASKS[^=]*=\s*\(([^)]*)\)/)?.[1]
-    if (t) CLASS_TASKS[cls] ??= [...t.matchAll(/"([a-z]+)"/g)].map((x) => x[1])
+    if (t) CLASS_TASKS[cls] ??= [...t.matchAll(/"([a-z0-9]+)"/g)].map((x) => x[1])
   }
 }
 
@@ -144,7 +144,7 @@ function parseFamily(key) {
   const tasksRaw = text.match(/SUPPORTED_TASKS[^=]*=\s*\(([^)]*)\)/)?.[1]
   let tasks
   if (tasksRaw !== undefined) {
-    tasks = [...tasksRaw.matchAll(/"([a-z]+)"/g)].map((m) => m[1])
+    tasks = [...tasksRaw.matchAll(/"([a-z0-9]+)"/g)].map((m) => m[1])
   } else {
     const base = text.match(/^class\s+\w+\(([\w.]+)/m)?.[1] ?? ''
     tasks = inheritedTasks(base)
@@ -168,7 +168,7 @@ function parseFamily(key) {
 
   const taskBlock = text.match(/TASK_INPUT_SIZES[^=]*=\s*\{([\s\S]*?)\n    \}/)?.[1] ?? ''
   const taskSizes = {}
-  for (const m of taskBlock.matchAll(/"([a-z]+)"\s*:\s*([A-Z][A-Z0-9_]*|\{[^}]*\})/g)) {
+  for (const m of taskBlock.matchAll(/"([a-z0-9]+)"\s*:\s*([A-Z][A-Z0-9_]*|\{[^}]*\})/g)) {
     const [, task, ref] = m
     const table = ref.startsWith('{')
       ? Object.fromEntries([...ref.matchAll(/"([a-z0-9]+)"\s*:\s*(\d+)/g)].map((x) => [x[1], +x[2]]))
@@ -208,6 +208,7 @@ const TASK_SUFFIX = {
   cls: 'classify', gaze: 'gaze', obb: 'obb', point: 'point', depth: 'depth',
   edge: 'edge', normal: 'normal', restore: 'restore', matte: 'matte',
   ocr: 'ocr', embed: 'embed', mesh: 'mesh', gazetarget: 'gaze',
+  albedo: 'albedo', detect3d: 'detect3d', act: 'act',
 }
 
 // Dataset tokens that can appear in a checkpoint name. A checkpoint trained on
@@ -349,7 +350,7 @@ report.export_formats = formats
  */
 const tasksText = (() => { try { return read('tasks.py') } catch { return '' } })()
 const taskList = [...(tasksText.match(/^TASKS[^=]*=\s*\(([\s\S]*?)\)/m)?.[1] ?? '')
-  .matchAll(/"([a-z]+)"/g)].map((m) => m[1])
+  .matchAll(/"([a-z0-9]+)"/g)].map((m) => m[1])
 report.library = {
   families: Object.keys(tiers).length,
   tasks: taskList.length,

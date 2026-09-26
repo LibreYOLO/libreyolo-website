@@ -14,7 +14,7 @@ keywords:
   - cara evaluasi model yolo di terminal
   - hitung mAP50-95 command line
   - argumen libreyolo val
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Perintah
     value: libreyolo val
@@ -40,7 +40,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: f6507840568c3725
+source_hash: 8e858639e96672a0
 ---
 
 ## Sinopsis
@@ -81,6 +81,15 @@ Argumen berupa pasangan `key=value`, dan bentuk POSIX juga berlaku, jadi
 | `quiet` | `false` | Membungkam stderr |
 | `verbose` | `true` | Keluaran verbose |
 | `help_json` | `false` | Mencetak skema perintah sebagai JSON lalu keluar |
+
+| Argumen | Default | Arti |
+| --- | --- | --- |
+| `classes` | `None` | Evaluasi hanya ID kelas asli dataset ini, dipisahkan koma (misalnya '0,3,5'); kotak kelas lain dibuang dari ground truth dan prediksi. Default mengikuti classes= saat checkpoint dilatih, jika ada |
+| `crop_pct` | `None` | Rasio pengubahan ukuran evaluasi klasifikasi sebelum crop tengah (default: nilai native family model) |
+| `plot_samples` | `8` | Gambar sampel dalam plot sampel validasi: 0 untuk tanpa sampel, -1 untuk setiap gambar yang divalidasi (tidak mengubah metrik) |
+| `visualize` | `False` | Gambar setiap gambar validasi dengan true positive, false positive, dan false negative ke visualize/errors/ (ada kesalahan) dan visualize/correct/ (detect, segment; classify menggambar label vs top-1) |
+| `show_labels` | `True` | Nama kelas pada gambar --visualize |
+| `show_conf` | `True` | Skor keyakinan pada gambar --visualize |
 
 ## Contoh
 

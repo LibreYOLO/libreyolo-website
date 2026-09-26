@@ -9,8 +9,8 @@ keywords:
   - libreyolo cuda out of memory
   - libreyolo notimplementederror
   - libreyolo トラブルシューティング
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: 1.6.0
+source_hash: 30b68976a4ac01d1
 ---
 
 表示されるテキスト別にエラーをまとめています。該当するメッセージがない場合は、[FAQ](/docs/faq)で障害以外の疑問を確認できます。また、`libreyolo models` で現在のインストールが実際に読み込めるものを確認できます。
@@ -125,3 +125,7 @@ if report.errors:
 
 チェック項目の一覧については[doctorコマンド](/docs/cli/doctor)を参照してください。
 
+
+## 永続ワーカーがデータセットの変更を認識できない
+
+有効な`close_mosaic`または`set_epoch`フックは、ワーカーが使うデータセットのコピーに届く必要があります。独自の複数ワーカーローダーが互換性のない永続コピーを保持する場合は、`persistent_workers=False`を使うか、変更後にワーカーを再構築してください。デフォルトの非永続経路には影響しません。

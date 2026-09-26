@@ -9,7 +9,7 @@ keywords:
   - yolo 命令行预测
   - libreyolo predict 参数
   - libreyolo json 输出
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: 命令
     value: libreyolo predict
@@ -41,7 +41,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 7e46c7ed7dd9e6c4
+source_hash: 56d898992f1b129c
 ---
 
 ## 用法概要
@@ -91,6 +91,11 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 | `quiet` | `false` | 抑制 stderr |
 | `verbose` | `false` | stderr 输出更详细的信息 |
 | `help_json` | `false` | 以 JSON 形式输出命令的 schema 并退出 |
+
+| 参数 | 默认值 | 含义 |
+| --- | --- | --- |
+| `mask` | `None` | 需要掩码的模型所用的单图二值修复掩码 |
+| `trimap` | `None` | 引导抠图模型所用的单图三级 trimap |
 
 ## 示例
 

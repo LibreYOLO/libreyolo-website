@@ -16,7 +16,7 @@ keywords:
   - COCO Keypoints
   - OKS mAP
   - Pose-Modell trainieren
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -155,7 +155,7 @@ snippets:
 
 
         print(result.keypoints.xy)
-source_hash: 9de01d1f615bdf33
+source_hash: "1b9e7614546d8f00"
 ---
 
 ## Definition
@@ -170,11 +170,13 @@ Zwei Architekturarten führen zu dieser Ausgabe. Ein einstufiges Modell sagt Box
 
 ## Modelle
 
-Drei einstufige Familien unterstützen Training und Vorhersage: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) und [YOLO-NAS](/docs/models/yolo-nas). RF-DETR benötigt das eigene Extra `pip install "libreyolo[rfdetr]"`. RF-DETR und EdgeCrafter stellen veröffentlichte Pose-Checkpoints bereit und beide lassen sich auf einklassigen Datensätzen mit ausschließlich Personen feinabstimmen. Der Keypoint-Kopf von EdgeCrafter wird bei der Erstellung festgelegt und lehnt Datensätze mit einer anderen Anzahl ab. RF-DETR initialisiert seinen Kopf dafür neu. YOLO-NAS lädt seine Gewichte aus Deci.AIs eigenem CDN unter einer nicht kommerziellen Lizenz. LibreYOLO veröffentlicht keine davon. Sein Pose-Kopf wird ebenfalls für eine neue Keypoint-Anzahl umgebaut. Als einzige der drei Familien ist seine Klassenanzahl nicht auf eins beschränkt. Verwende es daher für ein mehrklassiges oder nicht menschliches Skelett, beispielsweise Tierposen.
+Drei Familien unterstützen Training und Vorhersage: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) und [YOLO-NAS](/docs/models/yolo-nas), alle einstufig. RF-DETR benötigt sein eigenes Extra, `pip install "libreyolo[rfdetr]"`. RF-DETR und EdgeCrafter bieten veröffentlichte Pose-Checkpoints. RF-DETR trainiert auch Posen mit mehreren Klassen. Der Keypoint-Head von EdgeCrafter wird bei der Erstellung festgelegt und weist einen Datensatz mit abweichender Anzahl zurück; RF-DETR initialisiert seinen Head dafür neu. YOLO-NAS lädt seine Gewichte von Deci.AIs eigenem CDN unter einer nichtkommerziellen Lizenz; LibreYOLO veröffentlicht keines davon. Sein Pose-Head wird ebenfalls für eine neue Keypoint-Anzahl neu aufgebaut und unterstützt mehrere Klassen oder nichtmenschliche Skelette.
 
 [HRNet](/docs/models/hrnet) ist die Top-down-Option. Es unterstützt Vorhersage, Validierung und Export, während `train()` `NotImplementedError` auslöst. Ohne Personenquelle koppelt es sich automatisch an einen LibreYOLO9t-Detektor. `cropped=True` behandelt das gesamte Bild als eine Instanz, `person_boxes=` übernimmt bereits vorhandene Boxen und `person_detector=` benennt einen anderen Detektor.
 
 [SenseNova-Vision](/docs/models/sensenova-vision) gibt ebenfalls Keypoints aus. Es ist ein generatives Modell mit Prompts, eigener Factory `LibreVLM` und eigenem Extra. Ohne festgelegtes Vokabular fällt `set_task("pose")` auf die Kategorie Person zurück. Seine Gewichte dürfen nicht kommerziell verwendet werden. Die Latenz je Bild ist deutlich höher als bei einem eigens entwickelten Pose-Kopf, da jede Vorhersage eine Diffusionsdecodierung ausführt.
+
+[DEKR](/docs/models/dekr) bietet Bottom-up-Pose-Schätzung für mehrere Personen ohne separaten Personendetektor. Es unterstützt Inferenz und Validierung, aber kein Training.
 
 ## Vorhersage
 
@@ -220,6 +222,8 @@ names:
 ```
 
 `kpt_shape` ist erforderlich und lautet `[K, 2]` oder `[K, 3]`. `flip_idx` ist optional und eine Permutation von `0..K-1`. Sie gibt für jeden Keypoint den Index nach horizontaler Spiegelung an, damit ein linkes Handgelenk ein linkes Handgelenk bleibt. Wenn du den Wert auslässt, wird die horizontale Spiegelungsaugmentation für Keypoints deaktiviert, statt sie mit falscher Indexreihenfolge anzuwenden.
+
+RF-DETR verwendet bei Posen mit mehreren Klassen `kpt_names` mit Klassenname oder -ID als Schlüssel, um die ersten benannten Keypoints jeder Klasse auszuwählen. Eine leere Liste kennzeichnet eine Klasse nur mit Boxen. Datensätze mit mehreren Klassen benötigen `names` und mindestens eine Klasse mit Keypoints. Diagnosen fehlerhafter Labels nennen Datei, Zeile und das erwartete `kpt_shape`-Layout.
 
 ## Training
 

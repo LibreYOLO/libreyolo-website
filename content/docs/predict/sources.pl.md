@@ -20,7 +20,7 @@ keywords:
   - wnioskowanie YouTube
   - vid_stride
   - stream=True
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Klasyfikację źródeł odczytano z libreyolo/utils/source.py (classify_source,
   SourceKind, StreamSource, MultiStreamSource). Akceptowane typy obrazów i
@@ -207,7 +207,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: 93db4d43c24b69ae
 ---
 
 ## Sposób klasyfikowania źródła
@@ -262,6 +262,8 @@ W tablicy RGBA kanał alfa jest usuwany.
 Ścieżki zdalne wymagają po jednym pakiecie, z których żaden nie jest instalowany
 domyślnie: `requests` dla `http(s)://`, `boto3` dla `s3://` oraz `gcsfs` dla `gs://`.
 
+Śledzenie przyjmuje obrazy, foldery sortowane według nazw plików, listy, krotki i leniwe iteratory obrazów jako kolejne klatki. `fps=30.0` określa częstotliwość sekwencji obrazów, a `color_format="auto"` wybiera interpretację wejścia. Zobacz [śledzenie](/docs/tasks/object-tracking).
+
 ## Foldery
 
 Katalog jest skanowany rekurencyjnie i sortowany, a każdy plik z jednym z
@@ -289,6 +291,8 @@ pierwsza. Plik `.gif` wewnątrz skanowanego folderu jest ładowany jako obraz st
 uwzględnieniu kroku powoduje ostrzeżenie sugerujące `stream=True`.
 
 Każdy obiekt `Results` z wideo zawiera `frame_idx`.
+
+Gdy nie można otworzyć H.264, kodowanie wideo przechodzi na dostępny kodek. Informacja o zastąpieniu jest zapisywana na poziomie INFO i w pamięci podręcznej dla kodeka i obszaru obrazu dopiero po powodzeniu innego kodeka.
 
 ## Kamery internetowe, strumienie sieciowe i YouTube
 

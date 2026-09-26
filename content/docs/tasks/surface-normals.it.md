@@ -16,7 +16,7 @@ keywords:
   - geometria monoculare
   - metrica errore angolare
   - predizione densa di normali
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Predire un campo di normali
@@ -106,7 +106,7 @@ snippets:
 
 
         print(result.normal_map.data.shape)
-source_hash: d26d26d894b436ff
+source_hash: b033fdf3a2210ce5
 ---
 
 ## Definizione
@@ -127,18 +127,17 @@ lunghezza unitaria entro una tolleranza. `result.boxes` resta vuoto, quindi `con
 
 ## Modelli
 
-Due famiglie servono `normal`.
+Le seguenti famiglie supportano `normal`.
 
-[MoGe-2](/docs/models/moge-2) è quella dedicata: un modello di geometria monoculare a
-singolo forward in tre taglie di encoder. LibreYOLO non copia questi checkpoint nella
-propria organizzazione; caricarne uno scarica la taglia corrispondente dai repository
-ufficiali a una revisione fissata e la verifica contro uno SHA-256 registrato.
+[MoGe-2](/docs/models/moge-2) è la famiglia dedicata: un modello di geometria monoculare con un singolo passaggio forward e tre dimensioni di encoder. Le dimensioni s e l usano i mirror di LibreYOLO; b resta upstream.
 
 [LibreMODUS](/docs/models/libremodus) produce le normali come uno dei target di un
 modello any-to-any, e può prendere in input una mappa di profondità invece di
 un'immagine RGB. Richiede l'extra `modus` e un tuo account Hugging Face autenticato, e
 non offre né `val()` né `export()`, quindi non partecipa alle sezioni di validazione
 ed esportazione qui sotto.
+
+Anche [Marigold V2](/docs/models/marigold-v2) stima le normali di superficie. L'inferenza predefinita a quattro bit richiede CUDA e l'extra `marigold`; non supporta l'esportazione.
 
 ## Predizione
 
@@ -190,9 +189,7 @@ internamente da `(0, 0, 0)` e non contribuiscono mai a una metrica. Vedi
 
 ## Addestramento
 
-Nessuna delle due famiglie normal ha un'implementazione dell'addestramento: `train()`
-solleva `NotImplementedError` su entrambe. La pagina di MoGe-2 indica i suoi
-checkpoint ufficiali fissati per predizione, validazione ed esportazione.
+Queste famiglie di stima delle normali non implementano l'addestramento. La pagina di MoGe-2 rimanda ai checkpoint ufficiali fissati per predizione, validazione ed esportazione.
 
 ## Validazione
 

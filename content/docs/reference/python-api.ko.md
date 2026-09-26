@@ -1,12 +1,8 @@
 ---
 title: 파이썬 API
 seo_title: LibreYOLO Python API 참조
-description: >-
-  LibreYOLO가 패키지 수준에서 내보내는 이름: 다섯 개의 팩토리, 계열 클래스, Results 페이로드, 백엔드, 검증기, 트래커 및
-  데이터 도우미.
-lead: >-
-  LibreYOLO의 공용 Python 표면은 libreyolo/__init__.py.에 있는 __all__ 목록입니다. 이 페이지의 모든
-  항목은 from libreyolo import <name>; 와 같이 가져올 수 있으며, 그 목록에 없는 것은 내부용입니다.
+description: 'LibreYOLO가 패키지 수준에서 내보내는 이름을 설명합니다. 팩토리, 계열 클래스, Results 페이로드, 백엔드, 검증기, 추적기, 데이터 헬퍼를 다룹니다.'
+lead: 'LibreYOLO의 공개 Python 인터페이스는 libreyolo/__init__.py의 __all__ 목록입니다. 패키지 수준 내보내기는 from libreyolo import <name>을 사용하며, 아래 추적 및 학습 프로토콜은 명시된 하위 모듈을 사용합니다.'
 keywords:
   - libreyolo 파이썬 API
   - libreyolo 가져오기
@@ -16,13 +12,8 @@ keywords:
   - 리브레오픈보캡
   - 리브르앙상블
   - libreyolo __all__
-last_verified: 1.5.0
-verification: >-
-  v1.5.0에서 libreyolo/__init__.py, libreyolo/models/__init__.py,
-  libreyolo/models/base/model.py, libreyolo/models/base/inference.py,
-  libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py,
-  libreyolo/models/openvocab/__init__.py 및 libreyolo/ensemble/model.py에서 이름과 서명
-  읽기.
+last_verified: 1.6.0
+verification: 'v1.6.0에서 libreyolo/__init__.py, libreyolo/models/__init__.py, libreyolo/models/base/model.py, libreyolo/models/base/inference.py, libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py 및 libreyolo/ensemble/model.py에서 이름과 서명 읽기.'
 snippets:
   usage:
     - label: 하나의 팩토리를 통해 아무 것이나 적재하십시오
@@ -48,40 +39,28 @@ snippets:
 
         print(len(result))
   factories:
-    - label: 다섯 개의 진입점
+    - label: 진입점
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, LibreEnsemble
 
-
         # 무게를 맡는 팩토리가 무자극 계열들 위에 있습니다.
-
         detector = LibreYOLO("LibreYOLO9t.pt")
 
-
         # 하나의 예측 표면 뒤에 두 개 이상의 탐지기.
-
         ens = LibreEnsemble(["LibreYOLO9t.pt", "LibreYOLO9s.pt"])
 
-
         # 나머지 세 팩토리에는 추가 설치가 필요합니다:
-
-        #   pip install 'libreyolo[sam]'        -> from libreyolo import
-        LibreSAM
-
-        #   pip install 'libreyolo[vlm]'        -> from libreyolo import
-        LibreVLM
-
-        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import
-        LibreOpenVocab
-
+        #   pip install 'libreyolo[sam]'        -> from libreyolo import LibreSAM
+        #   pip install 'libreyolo[vlm]'        -> from libreyolo import LibreVLM
+        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import LibreOpenVocab
         print(type(detector).__name__, ens.fusion)
-source_hash: 66e34e78b2e0fb2d
+source_hash: "02fbec762b1ffced"
 ---
 
 ## 진입점
 
-다섯 개의 호출 가능 객체가 모델을 로드합니다. 이들은 아키텍처가 아니라 호출 계약에 따라 구분됩니다.
+팩토리는 모델을 로드하거나 API 클라이언트를 설정합니다. 아키텍처가 아니라 호출 규약에 따라 구분합니다.
 
 | 팩토리 | 많음 | 호출 시 프롬프트 | 추가 필요 |
 |---|---|---|---|
@@ -93,7 +72,7 @@ source_hash: 66e34e78b2e0fb2d
 
 <code-tabs name="factories" />
 
-`LibreYOLO`는 파일을 읽는 유일한 것입니다. 나머지 세 가지는 문자열 별칭을 받아 그것을 Hugging Face 저장소로 해석하므로, 인수는 경로가 아니라 모델 이름입니다.
+`LibreYOLO`는 체크포인트 파일과 내보낸 파일을 받습니다. 다른 팩토리는 모델 별칭을 받으며, `LibreVLM`과 `LibreVLA`는 자체 저장 체크포인트 디렉터리도 다시 로드합니다.
 
 ```python
 LibreYOLO(
@@ -111,6 +90,10 @@ LibreYOLO(
 
 <code-tabs name="usage" />
 
+`LibreGround`는 지시문을 이미지 점에 매핑하고, `LibreVLA`는 로봇 동작 청크를 예측하며, `LibreLLM`은 호환되는 원격 언어 모델 엔드포인트를 호출합니다. [그라운딩 API](/docs/reference/ground-api), [정책 API](/docs/reference/vla-api), [언어 모델 클라이언트](/docs/reference/llm-api)를 참조하십시오.
+
+`LibreYOLO("hf://owner/repo@revision/filename")`는 Hub 체크포인트를 로드합니다. `model.push_to_hub(repo_id, private=False)`는 체크포인트와 카드를 게시합니다. [Hub 참조](/docs/reference/hugging-face)는 파일 선택과 인증 방식을 정의합니다.
+
 ## 계열 수업
 
 팩토리가 반환할 수 있는 모든 클래스는 이름으로도 내보내지므로, 체크포인트를 미리 알고 있다면 클래스를 직접 구성할 수 있습니다. 생성자는 `BaseModel.__init__`를 따릅니다:
@@ -119,7 +102,7 @@ LibreYOLO(
 Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 ```
 
-`size`는 계열 클래스에 기본값이 없으며, 이것이 팩토리과의 차이점입니다. YOLO9와 그 변형들은 `size` 뒤에 `reg_max: int = 16`를 삽입합니다.
+생성자 기본값은 계열마다 다르므로 직접 생성하기 전에 시그니처를 확인합니다. YOLO9과 그 변형은 `size` 뒤에 `reg_max: int = 16`을 삽입합니다.
 
 검출 및 다중 작업 계열: `LibreYOLO9`, `LibreYOLO9E2E`, `LibreYOLO9P2`, `LibreYOLONAS`, `LibreYOLOX`, `LibreYOLO7`, `LibreYOLO4`, `LibreYOLO3`, `LibreYOLO2`, `LibreYOLO1`, `LibreRTDETR`, `LibreRTDETRv2`, `LibreRTDETRv4`, `LibreRFDETR`, `LibreDFINE`, `LibreDOMEDETR`, `LibreDEIM`, `LibreDEIMv2`, `LibreDETR`, `LibreDeformableDETR`, `LibreDINODETR`, `LibreLWDETR`, `LibreMaskRCNN`, `LibreFCOS`, `LibreFasterRCNN`, `LibreRetinaNet`, `LibreSSD`, `LibreCenterNet`, `LibreEfficientDet`, `LibreEC`, `LibrePICODET`, `LibreRTMDet`, `LibreFOMO`.
 
@@ -166,7 +149,9 @@ model(
 
 ## 결과 페이로드
 
-`Results`과 그 18개의 페이로드 클래스는 패키지 수준에서 내보내집니다: `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`, `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`, `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`. 각각은 [결과 유형](/docs/reference/results-types)에서 설명됩니다.
+`Results`와 페이로드 클래스는 패키지 수준에서 내보냅니다. `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`, `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`, `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`입니다. 각각은 [Results 타입](/docs/reference/results-types)에 설명되어 있습니다.
+
+`Boxes3D`, `AlbedoMap`, `Actions`는 3D 직육면체, 고유 알베도, 동작 청크를 추가합니다. [결과 타입](/docs/reference/results-types)을 참조하십시오.
 
 ## 백엔드
 
@@ -180,6 +165,8 @@ model(
 
 `model.track()`는 이름으로 트래커를 선택합니다. 트래커 클래스와 그 구성 데이터 클래스도 내보내집니다: `ByteTracker`와 `TrackConfig`, `BoTSortTracker`와 `BoTSortConfig`, 그리고 `OCSortTracker`와 `OCSortConfig`.
 
+`libreyolo.tracking.Tracker`는 사용자 정의 추적기 인스턴스용 `reset()`과 `update(results, image=None)`을 정의합니다.
+
 ## 데이터 도우미
 
 `DATASETS_DIR`는 해결된 데이터셋 루트이며, `load_data_config`는 데이터셋 YAML을 읽고, `check_dataset`는 이를 검증합니다. [데이터셋 형식](/docs/reference/dataset-formats)에 명시된 작업별 로더들은 패키지 수준이 아닌 `libreyolo.data`에 위치합니다.
@@ -187,6 +174,8 @@ model(
 ## 갤러리와 증류
 
 `Gallery`와 `FaceGallery`는 `embed` 작업을 위해 등록된 정체 벡터를 보유하고 `Identities` 페이로드를 생성합니다. `Distiller`와 `get_distill_config`는 교사-학생 학습을 진행합니다.
+
+`libreyolo.training.TrainFitnessCallback`은 사용자 정의 체크포인트 선택용 `fitness(metrics)`를 정의합니다. [적합도 콜백](/docs/train/fitness-callbacks)을 참조하십시오.
 
 ## 자산
 

@@ -2,13 +2,12 @@
 title: Typy Results
 seo_title: Dokumentacja obiektu Results w LibreYOLO
 description: >-
-  Wszystkie dane, które może zawierać obiekt Results LibreYOLO, po jednym polu
-  na kształt zadania: ramki, maski, punkty kluczowe, probs, obb, głębia, ocr,
-  embeddingi i dziesięć kolejnych.
+  Dane wynikowe LibreYOLO: ramki, maski, punkty kluczowe, klasyfikacja, głębia,
+  albedo, prostopadłościany 3D i fragmenty akcji robotów.
 lead: >-
-  Results jest pojedynczym typem zwracanym dla każdego obrazu przez każdy model
-  LibreYOLO. Zawiera osiemnaście opcjonalnych pól danych, po jednym na kształt
-  zadania, i wypełnia tylko te, które utworzył model.
+  Results to wspólny typ wyniku dla pojedynczego obrazu we wszystkich modelach
+  LibreYOLO. Zawiera opcjonalne pola danych dla poszczególnych zadań i wypełnia
+  tylko te, które model wygenerował.
 keywords:
   - obiekt Results LibreYOLO
   - Results.boxes
@@ -17,10 +16,10 @@ keywords:
   - Results.depth_map
   - Results.summary
   - LibreYOLO Results to_json
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Nazwy pól, kształty, właściwości i wartości domyślne odczytano z
-  libreyolo/utils/results.py w wersji 1.5.0. Semantyka pochodzi z docstringów
+  libreyolo/utils/results.py w wersji 1.6.0. Semantyka pochodzi z docstringów
   klas danych.
 snippets:
   usage:
@@ -51,7 +50,7 @@ snippets:
         # Wiersze jako zwykłe słowniki, a następnie jako JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 16f654364ae6448a
+source_hash: d74276d805c22c92
 ---
 
 ## Obiekt Results
@@ -200,6 +199,8 @@ bliżej kamery. Wartości są względne, a nie metryczne w metrach. `min`, `max`
 i `mean` są obliczane dla wartości skończonych, a `normalized()` skaluje mapę
 do `[0, 1]`.
 
+`DepthMap(data, orig_shape=None, encoding="inverse_depth")` przyjmuje też `encoding="depth"` i `encoding="log_depth"`. Walidatory interpretują to przed dopasowaniem. Wartości względnej głębi nadal nie gwarantują skali metrycznej.
+
 ## NormalMap
 
 Gęste pole normalnych powierzchni, float32 `(H, W, 3)` na pierwotnym obszarze
@@ -309,6 +310,16 @@ słowników, po jednym wierszu na detekcję, segment, punkt lub region, zależni
 ustawionych pól. `to_json(**kwargs)` przekazuje argumenty do `summary` i zwraca
 ciąg JSON.
 
-`plot()` renderuje gęsty wynik normalnych lub krawędzi w jego kanonicznej
-wizualizacji, a dla innych typów wyników zgłasza błąd. Obrazy z adnotacjami dla
-pozostałych zadań pochodzą z `predict(save=True)`.
+`plot()` renderuje dane każdego zadania. Nakładki na obrazy domyślnie zwracają tablice BGR; `pil=True` żąda PIL. Wyniki krawędzi i map normalnych zachowują domyślne PIL.
+
+## Boxes3D
+
+`Boxes3D(data, orig_shape=None, intrinsics=None)` przechowuje wiersze `(N, 14)`: środek xyz, wymiary wlh, kwaternion wxyz, wynik rankingowy, identyfikator klasy, pewność 2D i pewność 3D. Współrzędne są wyrażone w metrach w układzie kamery: x w prawo, y w dół, z do przodu; nie zakłada się układu świata. Parametry wewnętrzne 3x3 odnoszą się do oryginalnego obszaru obrazu. Wiersze odpowiadają `Results.boxes`.
+
+## AlbedoMap
+
+`AlbedoMap(data, orig_shape=None)` przechowuje liniowe RGB. Konwersja do wyświetlania tworzy sRGB; ilościowa walidacja albedo używa oryginalnych wartości liniowych.
+
+## Actions
+
+`Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` reprezentuje fragment akcji float32 `(T, D)`. `first` zwraca pierwszy wiersz; wycinanie wybiera kroki czasowe. Wartości pozostają w jednostkach zbioru danych polityki. `names` opisuje wymiary akcji, `fps` częstotliwość sterowania, a `instruction` tekst warunkujący.

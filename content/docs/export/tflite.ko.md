@@ -1,9 +1,7 @@
 ---
 title: TFLite
 seo_title: LibreYOLO에서 TFLite(LiteRT)로 내보내기
-description: >-
-  onnx2tf를 거쳐 LibreYOLO 모델을 .tflite FlatBuffer로 내보냅니다. 정적 형상, FP32 전용, NHWC 입력,
-  정상적으로 변환되는 계열을 설명합니다.
+description: 'onnx2tf로 LibreYOLO 모델을 .tflite FlatBuffer로 내보냅니다. 정적 형태, FP32 및 지원되는 INT8 경로, NHWC 입력, 런타임 메타데이터를 다룹니다.'
 lead: >-
   TFLite는 LiteRT가 모바일 및 임베디드 대상에서 실행하는 FlatBuffer 형식입니다. LibreYOLO는 정적 ONNX 그래프를
   내보내고 flatbuffer-direct 모드의 onnx2tf로 변환하며, 모델 메타데이터를 JSON 사이드카로 아티팩트 옆에 작성합니다.
@@ -15,7 +13,7 @@ keywords:
   - tflite flatbuffer
   - tflite nhwc 입력
   - 엣지 추론
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 플래그
     value: export(format="tflite")
@@ -31,7 +29,7 @@ meta:
   - label: 형상
     value: 정적 형상만 지원합니다. dynamic=True는 거부됩니다.
   - label: 정밀도
-    value: FP32만 지원합니다. half=True와 int8=True는 거부됩니다.
+    value: FP32 및 YOLO9/YOLOX 탐지용 INT8. FP16은 거부합니다.
   - label: 요구 사항
     value: onnx2tf 2.4.x가 이전 버전용 휠을 제공하지 않으므로 Python 3.12 이상이 필요합니다.
 verification: >-
@@ -81,7 +79,7 @@ snippets:
         )
 
         # dynamic=True는 ValueError를 일으킵니다. 변환기에는 정적 형상이 필요합니다.
-        # half=True와 int8=True는 추적 전에 거부됩니다.
+        # FP16은 거부합니다. INT8에는 지원되는 탐지기와 보정 데이터가 필요합니다.
   run:
     - label: LibreYOLO로 실행
       language: python
@@ -93,38 +91,25 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: LiteRT 직접 사용
       language: python
-      code: >
+      code: |
         import json
 
-
         import numpy as np
-
         from ai_edge_litert.interpreter import Interpreter
 
-
         interpreter = Interpreter(model_path="weights/LibreYOLO9t.tflite")
-
         interpreter.allocate_tensors()
-
         detail = interpreter.get_input_details()[0]
-
         print(detail["shape"], detail["dtype"])   # NCHW가 아니라 NHWC입니다
 
-
-        interpreter.set_tensor(detail["index"], np.zeros(detail["shape"],
-        np.float32))
-
+        interpreter.set_tensor(detail["index"], np.zeros(detail["shape"], np.float32))
         interpreter.invoke()
-
         for output in interpreter.get_output_details():
             print(output["name"], interpreter.get_tensor(output["index"]).shape)
 
         # 클래스 이름, 작업, 입력 크기는 사이드카에 있습니다.
-
         meta = json.load(open("weights/LibreYOLO9t.tflite.json"))
-
         print(meta["model_family"], meta["task"], meta["names"])
-
 
         # 전처리, NCHW-NHWC 전치, 후처리를 직접 담당합니다.
   support:
@@ -132,7 +117,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: fa2deaa0ef6d9978
+source_hash: "3548d74e992bb76d"
 ---
 
 ## 설치
@@ -159,6 +144,8 @@ extra는 변환용 `onnx2tf`와 결과 실행용 `ai-edge-litert`를 가져오�
 클래스 이름, 입력 크기, 자세 스키마가 들어 있습니다. FlatBuffer 자체에는
 LibreYOLO 메타데이터 필드가 없으므로 두 파일을 함께 이동해야 합니다.
 
+YOLO9과 YOLOX 탐지는 `data=...`, `fraction=1.0`, `batch=1`, `dynamic=False`와 함께 `int8=True`를 지원합니다. `onnx2tf[tensorflow]`를 설치합니다. 보정 데이터가 없으면 경고와 함께 `coco8.yaml`을 사용합니다. 별도의 정규화 바운딩 박스 출력과 점수 출력은 독립적인 양자화 스케일을 사용하므로, 배포 시 사이드카의 `output_layout` 메타데이터를 유지합니다. 일부 내부 연산자는 부동소수점으로 남을 수 있습니다.
+
 ## 아티팩트 실행
 
 <code-tabs name="run" />
@@ -179,8 +166,7 @@ LibreYOLO 메타데이터 필드가 없으므로 두 파일을 함께 이동해�
 정적 형상만 지원합니다. `dynamic=True`는 추적 전에 `ValueError`를 일으키며,
 내보내기 캔버스는 `imgsz`가 해석된 값으로 고정됩니다.
 
-FP32만 지원합니다. `half=True`와 `int8=True`는 모두 검증 중 거부되므로 현재 이
-내보내기에서는 양자화 배포를 사용할 수 없습니다.
+`half=True`는 거부합니다. INT8은 배치 1의 YOLO9 및 YOLOX 탐지로 제한하며, 다른 INT8 계열과 작업은 오류를 발생시킵니다.
 
 여기서 적용 범위는 그래프 형식보다 좁으며 계열이 아니라 측정으로 결정됩니다.
 검증된 조합에는 YOLO9, YOLOX, YOLO-NAS 탐지, PIDNet 시맨틱 분할, CNN 분류기

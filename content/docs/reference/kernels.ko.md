@@ -16,14 +16,8 @@ keywords:
   - ms_deform_attn 커널
   - 융합 주의 설정
   - 리브레욜로 트라이톤 커널
-last_verified: 1.5.0
-verification: >-
-  v1.5.0에서 libreyolo/kernels/__init__.py로부터 읽은 레지스트리 API,
-  libreyolo/kernels/attention/__init__.py 및 sdpa.py로부터의 어텐션 API, 고정된 리비전과 적격성
-  조건을 포함한 libreyolo/kernels/attention/ms_deform_attn.py로부터의 허브 프로바이더.
-  libreyolo/kernels/.로부터 나열된 디렉터리 레이아웃, pyproject.toml로부터의 추가 정의.
-  docs/kernels.md.로부터의 동작 노트와 벤치마크 수치. RF-DETR 슬롯 배선 커밋에서의 v1.4.0 게이팅 히스토리와
-  1.5.0 CHANGELOG 항목.
+last_verified: 1.6.0
+verification: 'v1.6.0에서 libreyolo/kernels/__init__.py로부터 읽은 레지스트리 API, libreyolo/kernels/attention/__init__.py 및 sdpa.py로부터의 어텐션 API, 고정된 리비전과 적격성 조건을 포함한 libreyolo/kernels/attention/ms_deform_attn.py로부터의 허브 프로바이더. libreyolo/kernels/.로부터 나열된 디렉터리 레이아웃, pyproject.toml로부터의 추가 정의. docs/kernels.md.로부터의 동작 노트와 벤치마크 수치. RF-DETR 슬롯 배선 커밋에서의 v1.4.0 게이팅 히스토리와 1.5.0 CHANGELOG 항목.'
 meta:
   - label: 패키지
     value: libreyolo.kernels
@@ -74,7 +68,7 @@ snippets:
             name="mybackend",
             predicate=my_check,
         )
-source_hash: 23d504e88b7959f8
+source_hash: "2cdb2d344ab3faf5"
 ---
 
 ## 등록부
@@ -137,6 +131,8 @@ v1.4.0에서는 슬롯이 헬퍼 내부에서 참조되었고, 공간-모양 쌍
 
 실질적인 결과는 v1.5.0으로 업그레이드하고 CUDA에 `libreyolo[hub-kernels]`를 설치하면 RF-DETR과 그 계열이 처음으로 컴파일된 바이너리에서 순방향을 수행한다는 것입니다. 그 결과 예측과 지표가 부동 소수점 허용 오차 범위에서 변동할 수 있습니다. 추가 설치 없이 기본 설치만 있는 경우에는 영향을 받지 않습니다. 업그레이드 전후로 지표를 비교할 때는 추가 설치를 고정하거나 양쪽에 `LIBREYOLO_HUB_KERNELS=0`를 설정하십시오.
 
+Hub MSDA는 커널 입력을 FP32로 변환하고 출력 dtype을 복원하며 변환을 통한 그래디언트를 유지하여 FP16과 BF16을 받습니다. 허용되는 가속 제공자 없이 즉시 실행하는 CUDA 호출은 `libreyolo[hub-kernels]` 설치 안내를 한 번 표시합니다. `ms_deform_attn_available(value=None)`은 텐서별 경로를 확인할 수 있습니다.
+
 ## 융합 주의
 
 융합된 스케일드 닷-프로덕트 어텐션은 선택적 종속성이 필요 없고, 기본 PyTorch만 필요하므로 가용성이 아니라 정책에 따라 적용됩니다. 두 가지 규칙이 적용됩니다.
@@ -162,3 +158,7 @@ v1.4.0에서는 슬롯이 헬퍼 내부에서 참조되었고, 공간-모양 쌍
 패리티는 트리 내 어떤 것에 대한 관문입니다: 참조에 대한 정확한 정방향 일치와 테스트 스위트가 가진 형태 집합에 대해 스트레이트 스루 추정기와 1e-6 이내의 그래디언트입니다.
 
 커널 선택은 [CUDA 그래프](/docs/reference/cuda-graphs)와 상호작용합니다: 추론 파리티 매트릭스는 `kernels` 패키지가 설치되지 않은 상태에서 실행되었으므로, 컴파일된 커널이 활성화된 상태에서의 캡처 안전성은 이에 의해 보장되지 않습니다.
+
+## Triton 변형 가능 어텐션
+
+내장 Triton MSDA 제공자는 조건에 맞는 CUDA 추론에서 FP32, FP16, BF16을 지원합니다. 그래디언트가 필요한 입력은 거부하며, 사용할 수 없으면 이식 가능한 어텐션으로 대체합니다. Hub를 계속 우선합니다. `LIBREYOLO_TRITON_MSDA=0`은 Triton을 비활성화하며, `LIBREYOLO_HUB_KERNELS=0`은 Hub 제공자와 설치 안내를 비활성화합니다.

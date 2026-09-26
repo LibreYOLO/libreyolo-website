@@ -16,7 +16,7 @@ keywords:
   - libreyolo cuda
   - libreyolo gpu
   - requisiti libreyolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Pacchetto
     value: libreyolo
@@ -68,7 +68,7 @@ snippets:
         # risoluzioni di input. Le famiglie a cui manca l'extra sono
         # elencate con il comando pip che le abilita.
         libreyolo models
-source_hash: 34fc6d3e24d03fb4
+source_hash: 531023c2092fd751
 ---
 
 ## Installazione
@@ -94,25 +94,30 @@ l'API è la stessa con o senza l'extra.
 
 | Extra | Aggiunge |
 |---|---|
-| `rfdetr` | `transformers`, che fornisce il backbone di RF-DETR |
+| `ground` | Le dipendenze VLM per il grounding da istruzioni a punti |
+| `vlm-train` | Lo stack VLM più `peft>=0.17.0` per il fine-tuning Qwen3-VL |
+| `vla` | `lerobot[smolvla,diffusion,dataset]>=0.6.1`, Python 3.12 o superiore |
+| `marigold` | Dipendenze di diffusione, accelerazione e Transformers a versioni fissate |
+| `molmo2` | `transformers==4.57.1`, `einops` e `accelerate` |
+| `rfdetr` | `transformers`, che fornisce il backbone RF-DETR |
 | `eomt` | `transformers` |
-| `midas` | `timm` 1.0.x, che fornisce gli encoder ViT-L/16 e EfficientNet-Lite3 di MiDaS |
+| `midas` | `timm` 1.0.x, che fornisce gli encoder ViT-L/16 ed EfficientNet-Lite3 di MiDaS |
 | `vlm` | `transformers`, `num2words`, `decord`, `lmdb`, `peft` |
 | `sam` | `transformers`, `timm` |
 | `openvocab` | `transformers`, `timm`, `regex`, `ftfy` |
-| `sensenova` | `transformers`, `accelerate` e `bitsandbytes` tranne su macOS |
+| `sensenova` | `transformers`, `accelerate` e `bitsandbytes` fuori da macOS |
 | `modus` | `transformers`, `accelerate` |
-| `clip` | `regex` e `ftfy`, necessari al tokenizer di testo CLIP incluso nella libreria |
-| `siglip2` | `sentencepiece`, necessario al tokenizer multilingue di SigLIP 2 |
-| `gaze` | `gdown`, che attiva il download automatico del checkpoint L2CS |
-| `rtdetr` | Niente. RT-DETR non ha bisogno di dipendenze extra; il nome viene mantenuto per stabilità |
+| `clip` | `regex` e `ftfy`, necessari al tokenizer testuale CLIP incluso nel codice |
+| `siglip2` | `sentencepiece`, necessario al tokenizer multilingue SigLIP 2 |
+| `gaze` | `gdown`, che abilita il download automatico del checkpoint L2CS |
+| `rtdetr` | Nulla. RT-DETR non richiede dipendenze extra; il nome viene mantenuto stabile |
 
 ### Esportazione e runtime
 
 | Extra | Aggiunge |
 |---|---|
-| `onnx` | `onnx`, `onnxsim`, `onnxruntime` |
-| `tensorrt` | `tensorrt-cu12` 10.16.1.11 e `pycuda`, tranne su macOS |
+| `onnx` | `onnx`, `onnxsim`, `onnxruntime>=1.18.0` |
+| `tensorrt` | `tensorrt-cu12` 10.16.1.11 e `pycuda`, fuori da macOS |
 | `openvino` | `openvino` |
 | `coreml` | `coremltools` |
 | `coreai` | `coreai-torch`, solo macOS |
@@ -121,7 +126,7 @@ l'API è la stessa con o senza l'extra.
 | `ncnn` | `pnnx` e `ncnn` |
 | `paddle` | `libreyolo[onnx]` più `paddlepaddle` 2.6.2 e `x2paddle` 1.6.0 |
 | `executorch` | `executorch` |
-| `triton` | `tritonclient[http]` per l'inferenza V2 su HTTP e HTTPS |
+| `triton` | `tritonclient[http]` per inferenza HTTP e HTTPS V2 |
 
 ### Addestramento, valutazione e logging
 
@@ -147,11 +152,14 @@ l'esecuzione continua.
 
 | Extra | Aggiunge |
 |---|---|
-| `stream` | `yt-dlp`, necessario solo per risolvere gli URL delle pagine di YouTube |
-| `tracking` | Niente. Ogni dipendenza del tracking è già una dipendenza principale |
-| `label` | `libreyolo[sam]`, che abilita l'assistenza click-to-mask in `libreyolo label` |
-| `hub-kernels` | `kernels`, il loader opzionale per i kernel compilati dell'Hub. Vedi [kernels](/docs/reference/kernels), dove si segnala che installarlo può spostare le predizioni di RF-DETR entro la tolleranza float |
-| `clip-convert` | `libreyolo[clip]` più `open_clip_torch`, per la conversione dei pesi e i controlli di parità |
+| `hf` | `huggingface_hub>=1.0.0` per caricamento, pubblicazione e logger Hub |
+| `llm` | `openai>=1.66.0` per endpoint API compatibili |
+| `fiftyone` | `fiftyone>=1.0.0` per la cura dei dataset |
+| `stream` | `yt-dlp`, necessario solo per risolvere URL di pagine YouTube |
+| `tracking` | Nulla. Ogni dipendenza del tracking è già una dipendenza del core |
+| `label` | `libreyolo[sam]`, che abilita l'assistenza da clic a maschera in `libreyolo label` |
+| `hub-kernels` | `kernels`, il loader opzionale per i kernel Hub compilati. Vedi [kernel](/docs/reference/kernels), che spiega come l'installazione possa cambiare le predizioni RF-DETR entro la tolleranza floating-point |
+| `clip-convert` | `libreyolo[clip]` più `open_clip_torch`, per conversione dei pesi e verifiche di parità |
 | `siglip2-convert` | `libreyolo[siglip2]` più `transformers`, per lo stesso motivo |
 
 Le webcam, RTSP, RTMP, TCP, UDP, HLS e le liste multi-stream locali non
@@ -159,15 +167,11 @@ richiedono alcun extra. Solo gli URL delle pagine di YouTube ne hanno bisogno.
 
 ### L'extra aggregato
 
-`libreyolo[all]` installa in un solo comando gli extra dei modelli,
-dell'esportazione, del tracking e del logging. Alcuni ne restano deliberatamente
-fuori. `neptune` è escluso perché la versione stabile di `neptune-scale`
-richiede protobuf sotto la 7 mentre il percorso TFLite richiede protobuf 7.
-`executorch` è escluso perché ExecuTorch vincola la versione di PyTorch con cui
-si accoppia, e `coreai` perché `coreai-torch` fissa PyTorch a 2.11.x e
-trascinerebbe l'intero ambiente su quella versione. Anche `fast-eval`,
-`hub-kernels`, `clip-convert` e `siglip2-convert` restano fuori. Installa uno
-qualsiasi di questi indicandolo per nome.
+`libreyolo[all]` installa gli extra per modelli, esportazione, tracking e logging con un solo comando. Alcuni sono volutamente esclusi. `neptune` è escluso perché la versione stabile di `neptune-scale` richiede protobuf inferiore a 7, mentre il percorso TFLite richiede protobuf 7. `executorch` è escluso perché ExecuTorch vincola la versione di PyTorch con cui si abbina e `coreai` perché `coreai-torch` fissa PyTorch a 2.11.x e porterebbe l'intero ambiente a quella versione. Sono esclusi anche `fast-eval`, `hub-kernels`, `clip-convert` e `siglip2-convert`. Installali per nome. `all` include `hf` e `llm`; `fiftyone`, `vla`, `marigold` e `molmo2` restano separati. FiftyOne include OpenCV headless, che si sovrappone al pacchetto `cv2` del core.
+
+L'installazione del core richiede Python 3.10 o superiore e aggiunge `cloudpickle>=3.0.0` per DDP gestito da un coordinatore.
+
+Usa un ambiente separato per Molmo2: il vincolo a Transformers 4.57.1 è in conflitto con gli stack VLM, Hub e Marigold più recenti. Marigold fissa diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 e Transformers 5.4.0, oltre a bitsandbytes 0.49.2 su Linux/Windows. L'inferenza predefinita Marigold a quattro bit richiede CUDA. North Micro Vision richiede Transformers 5.16 o superiore; Gemma 4 richiede 5.10 o superiore, oltre il minimo condiviso dei VLM.
 
 ## Vincoli di piattaforma
 

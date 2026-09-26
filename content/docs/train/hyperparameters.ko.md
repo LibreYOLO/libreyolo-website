@@ -18,7 +18,7 @@ keywords:
   - 얼리 스토핑 인내
   - 앰프 bfloat16
   - 학습 구성 YAML
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -110,7 +110,7 @@ snippets:
         # yaml의 키는 TrainConfig 필드 이름입니다. 명시적인 kwargs가 우선합니다.
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: d838d1abd45af40f
+source_hash: "eac4e55fcf16ca15"
 ---
 
 ## 인수 설정
@@ -138,16 +138,16 @@ model.train(data="my-dataset.yaml", learning_rate=0.001)
 
 기본 기본값은 `optimizer="sgd"`, `lr0=0.01`, `momentum=0.937`, `weight_decay=5e-4`, `scheduler="yoloxwarmcos"`, `epochs=300`, `batch=16`, `imgsz=640` 및 `amp=True`입니다. 계열이 그 기준에서 얼마나 멀리 이동하는지에 대한 세 가지 예는 다음과 같습니다:
 
-| 필드 | 기초 | YOLOv9 | 디-파인 | YOLO-NAS |
+| 필드 | 기본 | YOLOv9 | D-FINE | YOLO-NAS |
 |---|---|---|---|---|
 | `optimizer` | `sgd` | `sgd` | `adamw` | `adamw` |
 | `lr0` | `0.01` | `0.01` | `2e-4` | `5e-4` |
 | `weight_decay` | `5e-4` | `5e-4` | `1e-4` | `1e-5` |
 | `scheduler` | `yoloxwarmcos` | `linear` | `flat_cosine` | `cos` |
 | `epochs` | `300` | `300` | `132` | `300` |
-| `amp` | `True` | `True` | `False` | `False` |
+| `amp` | `True` | `True` | `True` | `True` |
 
-D-FINE과 DEIM은 D-FINE 디코더가 활성화를 가장 큰 유한 float16 값인 65504로 제한하기 때문에 `amp=False`와 함께 제공됩니다. YOLO-NAS와 FOMO 또한 기본적으로 이를 끕니다. CLI의 `--amp` 플래그는 모든 계열에 대해 기본적으로 `True`로 설정되므로, 사용자 제공으로 간주되어 계열 기본값을 덮어씁니다; 변경하려는 의도가 아니라면 그대로 두십시오.
+D-FINE, DEIM, RT-DETRv4, YOLO-NAS 탐지는 `amp=True`와 `amp_dtype="float16"`이 기본값입니다. Dome-DETR, PP-YOLOE, YOLO-NAS OBB는 FP32 기본값을 유지합니다. FP32가 필요하면 `amp=False`를 전달합니다.
 
 추측하기보다는 계열의 실제 채무 불이행을 읽기 위해:
 
@@ -164,6 +164,8 @@ D-FINE과 DEIM은 D-FINE 디코더가 활성화를 가장 큰 유한 float16 값
 역전파와 함께 학습 모드에서 프로빙하는 것이 핵심입니다: 추론 모드의 프로브는 보존된 활성화와 그래디언트 텐서를 놓치는데, 깊은 CNN의 경우 이들은 추론 시 점유량보다 몇 배 더 많습니다. RF-DETR은 목표 비율을 45%로 낮추는데, 이는 프로브의 합성 역전파가 여전히 기준과 보조 디코더 층이 소모하는 비용을 과소평가하기 때문입니다.
 
 Autobatch는 CUDA 기능입니다. CPU나 MPS에서는 한 줄을 기록하고 기본 배치를 유지합니다.
+
+`min_samples=0`은 에폭 길이를 변경하지 않습니다. 양수 최솟값은 더 작은 탐지 데이터셋에서 복원 추출합니다. `class_balanced=False`를 true로 설정하면 이미지별 반복 계수 샘플링을 활성화하며, `min_samples` 및 DDP와 함께 사용할 수 있습니다. 공통 샘플러를 거치지 않는 전용 로더는 균형 샘플링 활성화를 거부합니다.
 
 ## 그래디언트 누적
 
@@ -203,6 +205,10 @@ Float16는 동적 손실 스케일링이 필요하며 라이브 `GradScaler`를 
 
 `cache`는 디코딩된 이미지를 RAM(`True` 또는 `"ram"`)에 보관하거나 소스(`"disk"`) 옆에 `.npy` 파일로 저장하여 반복 에폭 속도를 높입니다. 캐시된 읽기는 새로 읽은 것과 바이트 단위로 동일합니다. 데이터로더 작업자와 함께, `"disk"`가 두 가지 중 더 안전합니다.
 
+`average_best=0`은 체크포인트 평균을 비활성화하며, 양수 N은 최적 스냅샷 최대 N개로 `weights/average.pt`를 만듭니다. 부동소수점 텐서는 동일한 비중으로 평균하고, 정수 버퍼는 최적 스냅샷에서 가져옵니다. `export_check=False`를 활성화하면 ONNX 내보내기 실패 시 첫 에폭 전에 실행을 실패 처리할 수 있습니다. 일치하는 원시 출력을 `rtol=1e-3`, `atol=1e-4`로 비교하며, 호환되지 않는 레이아웃은 비교를 건너뛴 사실을 기록합니다.
+
+`precise_bn=0`은 최종 BatchNorm 재보정을 비활성화합니다. 양수 값은 최종 검증 전에 사용할 학습 로더 이미지 수를 제한하며, DDP에서는 참여하는 각 랭크에 이 한도를 적용합니다. 고정된 BatchNorm은 고정 상태를 유지합니다. [사용자 정의 적합도 콜백](/docs/train/fitness-callbacks)은 최적 체크포인트와 조기 종료 대기 판단 기준을 선택할 수 있습니다.
+
 ## 이력서
 
 `resume=True`는 중단된 실행을 계속합니다. 먼저 체크포인트를 로드해야 합니다. 왜냐하면 재개는 별도의 인수가 아니라 모델에서 그것을 읽기 때문입니다.
@@ -227,3 +233,11 @@ Resume는 학습된 가중치, 옵티마이저 상태, EMA 가중치 및 업데�
 - 증강 조절기용 [증강](/docs/train/augmentations)과 어떤 계열이 이를 지원하는지.
 - [레이어 동결](/docs/train/layer-freezing)과 [LoRA](/docs/train/lora)를 사용하여 일부 가중치를 학습합니다.
 - [실행 보고서의 검증 및 지표](/docs/train/validation)
+
+## 클래스 선택과 손실 가중치
+
+YOLO9, RF-DETR, EdgeCrafter, RT-DETR, D-FINE, DEIM, TinyFormer, YOLO-NAS 탐지에서 `classes=None`은 모든 데이터셋 클래스를 유지하며, 리스트는 원본 ID, `nc`, `names`를 유지하면서 학습 대상을 필터링합니다. `single_cls=False`를 활성화하면 유지된 레이블을 이름이 `object`인 클래스 0으로 매핑합니다. 학습 재개와 검증은 저장된 설정을 상속합니다. 모델의 OBB 학습은 `single_cls`를 거부합니다.
+
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2, DINOv2는 `cls_pw=0.0`을 지원합니다. [0, 1] 범위의 값은 클래스별 역빈도를 해당 지수만큼 거듭제곱하고 평균 1로 정규화한 가중치를 적용합니다. `class_weights=False`를 활성화하면 대안인 `N / (C * n_c)` 가중치를 선택합니다. 양수 `cls_pw`와 함께 사용할 수 없으며, 학습을 재개하려면 가중치 설정이 일치해야 합니다.
+
+`plot_samples=8`은 검증 샘플 이미지 수를 설정합니다. 0은 표시하지 않고 -1은 모두 표시하며, 평가할 이미지 수는 줄이지 않습니다.
