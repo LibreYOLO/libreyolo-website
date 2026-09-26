@@ -391,3 +391,5 @@ Update this list in the same commit as the work. It is the resume point.
 - Final render audit passes 42 / 42 new or expanded English pages, including each declared checkpoint, export, licensing and citation block plus canonical URL. All 13 locale validators pass (174 each; Japanese 187).
 
 - Checkpoint schema QA names both stored fields explicitly: `fitness_source="callback"` and `best_metric_key="fitness/custom"`; all locale twins carry the same keys.
+
+- Provenance distinguishes source-code licenses from weights: PP-YOLOE, DEKR, PP-LiteSeg and FCOS3D do not acquire a separate artifact grant from a code-license label. The summary records that gap without adding dataset-derived restrictions.

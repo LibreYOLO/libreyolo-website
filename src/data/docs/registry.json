@@ -242,7 +242,8 @@
         "org": "PaddlePaddle",
         "code_url": "https://github.com/PaddlePaddle/PaddleDetection",
         "license": "Apache-2.0",
-        "license_interpretation": "The upstream source is Apache-2.0. Pretrained artifacts download from the source CDN; a separate checkpoint license grant has not been recorded."
+        "license_interpretation": "The upstream source is Apache-2.0. Pretrained artifacts download from the source CDN; a separate checkpoint license grant has not been recorded.",
+        "weights_license": "No separate artifact grant recorded"
       }
     },
     "tinyformer": {
@@ -450,7 +451,8 @@
         "license_interpretation": "The upstream implementation is MIT. The adapter retrieves the released checkpoint from its source CDN.",
         "bibtex": "@inproceedings{GengSXZW21,\n  title={Bottom-Up Human Pose Estimation Via Disentangled Keypoint Regression},\n  author={Zigang Geng, Ke Sun, Bin Xiao, Zhaoxiang Zhang, Jingdong Wang},\n  booktitle={CVPR},\n  year={2021}\n}",
         "bibtex_source_url": "https://raw.githubusercontent.com/HRNet/DEKR/main/README.md",
-        "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2104.02300. The upstream citation form is retained; conference/journal entries were also checked against the publisher."
+        "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2104.02300. The upstream citation form is retained; conference/journal entries were also checked against the publisher.",
+        "weights_license": "No separate artifact grant recorded"
       }
     },
     "ppliteseg": {
@@ -539,7 +541,8 @@
         "org": "PaddlePaddle",
         "code_url": "https://github.com/PaddlePaddle/PaddleSeg",
         "license": "Apache-2.0",
-        "license_interpretation": "The upstream implementation declares Apache-2.0. The STDC backbone also carries its original MIT attribution."
+        "license_interpretation": "The upstream implementation declares Apache-2.0. The STDC backbone also carries its original MIT attribution.",
+        "weights_license": "No separate artifact grant recorded"
       }
     },
     "unet": {
@@ -1687,7 +1690,8 @@
         "license_interpretation": "The upstream repository declares Apache-2.0. A distinct per-artifact checkpoint license is not recorded in the library source.",
         "bibtex": "@inproceedings{wang2021fcos3d,\n\ttitle={{FCOS3D: Fully} Convolutional One-Stage Monocular 3D Object Detection},\n\tauthor={Wang, Tai and Zhu, Xinge and Pang, Jiangmiao and Lin, Dahua},\n\tbooktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV) Workshops},\n\tyear={2021}\n}",
         "bibtex_source_url": "https://raw.githubusercontent.com/open-mmlab/mmdetection3d/main/configs/fcos3d/README.md",
-        "bibtex_verified": "2026-09-26: copied verbatim from the authors' upstream README. Cross-checked title and every author in order against the arXiv API for 2104.10956. ICCV Workshops 2021 confirmed by the CVF publisher."
+        "bibtex_verified": "2026-09-26: copied verbatim from the authors' upstream README. Cross-checked title and every author in order against the arXiv API for 2104.10956. ICCV Workshops 2021 confirmed by the CVF publisher.",
+        "weights_license": "No separate artifact grant recorded"
       }
     },
     "detany3d": {

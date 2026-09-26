@@ -139,7 +139,7 @@ export function ModelHeader({ doc, family }) {
               family. `code_license` overrides where they differ. */}
           {t.rich('licensesValue', {
             codeLicense: u.code_license ?? 'MIT',
-            weightsLicense: u.license,
+            weightsLicense: u.weights_license ?? u.license,
             link: (chunks) => <Link href="#licensing" className="text-libre-700 underline-offset-2 hover:underline dark:text-libre-400">{chunks}</Link>,
           })}
         </Meta>
@@ -525,10 +525,10 @@ export function Provenance({ family, children }) {
         */}
         <Meta label={t('weights')}>
           {family.weights_hosted === false ? (
-            t('weightsNotHosted', { license: u.license })
+            t('weightsNotHosted', { license: u.weights_license ?? u.license })
           ) : (
             t.rich('weightsHosted', {
-              license: u.license,
+              license: u.weights_license ?? u.license,
               link: (chunks) => <ExtLink href={HF_BASE}>{chunks}</ExtLink>,
             })
           )}
