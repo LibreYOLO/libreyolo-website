@@ -20,7 +20,7 @@ keywords:
   - segmentazione di istanze
   - stima della posa
   - box orientati
-last_verified: 1.5.0
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -188,7 +188,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 8c464aa759131694
+source_hash: c360784eb62a7df5
 ---
 
 ## Installazione
@@ -212,6 +212,8 @@ passare a un rilevatore diverso è una modifica di una riga. `conf` e `max_det`
 filtrano la selezione delle query; non c'è nessun passaggio di NMS da regolare.
 Vedi [predizione](/docs/predict) per sorgenti, streaming e gestione dei
 risultati.
+
+I percorsi di rilevamento, segmentazione e box orientati usano il ridimensionamento bilineare OpenCV in virgola mobile senza antialiasing; la posa mantiene il ridimensionamento con antialiasing. Il valore rettangolare `imgsz=(height, width)` deve rispettare la griglia di patch/finestre del task. L'inventario dei checkpoint include il rilevatore di interfacce utente. Gli [istogrammi di eventi](/docs/train/event-histograms) usano il profilo di input registrato.
 
 ## Varianti
 
@@ -243,6 +245,8 @@ le dimensioni valide più vicine.
 
 Vedi [addestramento](/docs/train) per dataset, data augmentation, multi-GPU e
 logger.
+
+Le nuove esecuzioni usano di default `output_dir=None`, che risolve a una directory incrementale `runs/train/rfdetr_exp` con `exist_ok=False`. I dataset di posa multiclasse usano `kpt_names` con l'indice o il nome della classe come chiave; una lista vuota indica una classe con soli box. Le predizioni aggiungono padding ai keypoint fino a `kpt_shape`; la fitness basata sulla mAP dei keypoint non valuta le classi con soli box.
 
 ## Validazione
 

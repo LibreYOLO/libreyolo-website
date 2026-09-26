@@ -13,7 +13,7 @@ keywords:
   - decoupled head
   - SimOTA
   - リアルタイム 物体検出
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -97,7 +97,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: f5ab735a29f85a95
+source_hash: ddba5fb10bb88ad2
 ---
 
 ## インストール
@@ -134,6 +134,8 @@ pip install libreyolo
 
 データセット、データ拡張、マルチGPU、loggerについては[学習](/docs/train)を参照してください。
 
+Mosaicは候補画像を最大20回抽出し、アノテーション付きの画像を優先します。該当する画像がなければ、最後に抽出した画像を使います。
+
 ## 検証
 
 `val()` は、学習に使った形式の任意のデータセットに対して測定した適合率、再現率、mAP 50、mAP 50-95を含む `metrics/` キーの辞書を返します。
@@ -147,6 +149,8 @@ pip install libreyolo
 エクスポート済み成果物はファイル接尾辞に基づいて `LibreYOLO()` から再度読み込めます。そのため、`.onnx` または `.engine` ファイルはチェックポイントと同様に動作し、同じ `Results` を返します。LibreYOLOをインストールしていない単独のランタイムでグラフを実行することもできますが、その場合は前処理と後処理を自身で記述する必要があります。CoreMLエクスポートでは、`nms=True` によりNMSをグラフへ埋め込めます。現在、このフラグを受け付けるファミリーはYOLOXとYOLOv9だけです。
 
 <code-tabs name="export" />
+
+[TFLite INT8](/docs/export/tflite)は、`int8=True`とキャリブレーション用データセットを受け付けます。
 
 ## チェックポイント
 

@@ -3,10 +3,7 @@ title: YOLO-NAS
 families:
   - yolonas
 seo_title: 'YOLO-NAS: Vorhersage, Training und Export in LibreYOLO'
-description: >-
-  Verwende YOLO-NAS in LibreYOLO für Objekterkennung und Posenschätzung. Die
-  Gewichte von Deci.AI sind proprietär und nicht kommerziell nutzbar. LibreYOLO
-  veröffentlicht keine davon.
+description: "Detektion, Pose und orientierte Boxen mit YOLO-NAS in LibreYOLO. Die vortrainierten Upstream-Gewichte sind nicht kommerziell nutzbar."
 lead: >-
   Ein konvolutionaler Detektor, dessen Backbone und Neck aus der
   Architektursuche von Deci.AI hervorgingen und auf quantisierungsbewussten
@@ -21,7 +18,7 @@ keywords:
   - Posenschätzung
   - quantisierungsbewusster Detektor
   - AutoNAC
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -145,7 +142,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 47c30d6e44024ce7
+source_hash: 483562cad2c02696
 ---
 
 ## Installation
@@ -164,6 +161,8 @@ Ein Checkpoint-Name, der noch nicht lokal vorliegt, wird von Decis öffentlichem
 
 Das zurückgegebene `Results`-Objekt entspricht dem jeder anderen Familie, sodass der Wechsel zu einem anderen Detektor nur eine einzige Codezeile erfordert. `conf` legt den Konfidenzschwellenwert und `iou` den NMS-Schwellenwert fest. Unter [Vorhersage](/docs/predict) findest du Informationen zu Quellen, Streaming und Ergebnisverarbeitung.
 
+Die Aufgabe für orientierte Boxen liefert `result.obb`. Der veröffentlichte OBB-Graph verwendet eine Bildfläche von 1024 Pixeln und seinen gespeicherten Satz von 18 Klassenlabels.
+
 ## Varianten
 
 Objekterkennung und Posenschätzung verwenden dieselbe Architektur mit unterschiedlichen Köpfen und akzeptieren dieselben Argumente. Die Größen in der folgenden Tabelle gehören zur Objekterkennung. Für die Posenschätzung ist zusätzlich eine kleinere Größe verfügbar. Der Pose-Kopf sagt den COCO-Keypoint-Satz vorher.
@@ -181,6 +180,8 @@ Wenn du `epochs`, `lr0` und `amp` auslässt, werden sie aufgabenspezifisch besti
 Das Fine-Tuning beginnt mit Decis Gewichten, die Decis Lizenz unterliegen. Beim Training eines zufällig initialisierten Modells wird dagegen keinerlei Deci-Checkpoint verwendet. Dies zeigt das dritte Snippet oben.
 
 Unter [Training](/docs/train) findest du Informationen zu Datensätzen, Augmentation, Multi-GPU und Loggern.
+
+Die Erkennung verwendet standardmäßig `amp=True` mit `amp_dtype="float16"`; das Training orientierter Boxen behält `amp=False` bei. Der OBB-Head unterstützt Training, Vorhersage und Validierung, verwendet Spiegelungs-/HSV-Augmentierung und wählt Checkpoints anhand von `metrics/mAP50-95(OBB)`. `load_detect_weights_for_obb()` initialisiert ihn mit Erkennungsgewichten.
 
 ## Validierung
 

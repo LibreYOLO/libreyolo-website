@@ -3,7 +3,7 @@ title: YOLO-NAS
 families:
   - yolonas
 seo_title: YOLO-NAS：在 LibreYOLO 里预测、训练与导出
-description: 在 LibreYOLO 里用 YOLO-NAS 做检测和姿态。Deci.AI 的权重是专有的、仅限非商业用途，LibreYOLO 一个都不发布。
+description: "在 LibreYOLO 中使用 YOLO-NAS 检测、姿态和旋转框。上游预训练权重仅限非商用。"
 lead: >-
   一个卷积检测器，它的骨干和 neck 出自 Deci.AI 的架构搜索，由量化感知的 RepVGG 模块搭成。它的权重属于
   Deci.AI，许可仅限非商业用途，LibreYOLO 一个都不发布。
@@ -16,7 +16,7 @@ keywords:
   - 姿态估计
   - yolo-nas 训练自己的数据集
   - AutoNAC
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -113,7 +113,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 47c30d6e44024ce7
+source_hash: 483562cad2c02696
 ---
 
 ## 安装
@@ -136,6 +136,8 @@ LibreYOLO 组织拉取，那里不托管这些权重中的任何一个。传输�
 返回的 `Results` 对象和每个家族返回的都是同一个，所以换成另一个检测器只是一行的
 改动。`conf` 设置置信度阈值，`iou` 设置 NMS 阈值。数据源、流式处理和结果处理见
 [预测](/docs/predict)。
+
+旋转框任务返回 `result.obb`。已发布的 OBB 计算图使用 1024 像素画布及其记录的 18 类标签集。
 
 ## 变体
 
@@ -160,6 +162,8 @@ LibreYOLO 组织拉取，那里不托管这些权重中的任何一个。传输�
 开始训练则完全不涉及任何 Deci 检查点，上面第三个代码片段就是这条路。
 
 数据集、数据增强、多卡训练和日志记录器见[训练](/docs/train)。
+
+检测默认使用 `amp=True` 和 `amp_dtype="float16"`；旋转框训练保留 `amp=False`。OBB head 支持训练、预测和验证，使用翻转/HSV 数据增强，并通过 `metrics/mAP50-95(OBB)` 选择检查点。`load_detect_weights_for_obb()` 用检测权重初始化它。
 
 ## 验证
 

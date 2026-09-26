@@ -20,7 +20,7 @@ keywords:
   - end-to-end detection
   - small object detection
   - GELAN
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -143,7 +143,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: eaa6023a4a0b9e71
+source_hash: 624f3e70d2937683
 ---
 
 ## Installazione
@@ -212,6 +212,10 @@ invece un checkpoint di rilevamento base.
 Vedi [addestramento](/docs/train) per dataset, data augmentation, multi-GPU e
 logger.
 
+I nuovi fine-tuning di rilevamento standard attivano un ramo PGI usato solo nell'addestramento con `aux_weight=0.25`. `max_labels=300`; il momentum SGD sale da 0.8 a 0.937 durante le prime tre epoche. I vecchi checkpoint a testa singola riprendono con quel grafo. Predizione ed esportazione usano la testa principale. `letterbox_pad=None` eredita il valore registrato nel checkpoint: i pesi senza indicazione usano `topleft`, mentre le nuove conversioni ufficiali registrano `center`.
+
+Il mosaic di YOLO9 e YOLOX preferisce immagini associate con annotazioni, con un massimo di 20 estrazioni; MixUp di YOLO9 usa la stessa regola. Vedi gli [istogrammi di eventi](/docs/train/event-histograms) per i profili di input non RGB.
+
 ## Validazione
 
 `val()` restituisce un dizionario di chiavi `metrics/` che coprono precisione,
@@ -245,6 +249,8 @@ le cose stanno nella pagina di quel formato.
 
 <code-tabs name="export" />
 
+[TFLite INT8](/docs/export/tflite) usa `int8=True` con dati di calibrazione.
+
 ## Checkpoint
 
 Tutti i file di pesi pubblicati per questa famiglia.
@@ -255,12 +261,7 @@ Tutti i file di pesi pubblicati per questa famiglia.
 
 <provenance-box>
 
-Un checkpoint qui non è MIT. Il modello stride 4 addestrato su VisDrone2019-DET
-eredita i termini CC BY-NC-SA 3.0 di quel dataset: solo uso non commerciale,
-share-alike su tutto ciò che ne deriva, e fuori dalla licenza permissiva con cui
-viene distribuito il resto di questa famiglia. Predice le classi aeree di
-VisDrone invece di quelle di COCO. La libreria stampa tutto questo prima di
-scaricare il file.
+Il checkpoint aereo con stride 4 predice le classi VisDrone. Usa la licenza dichiarata dal distributore e registrata nel repository dei pesi.
 
 </provenance-box>
 

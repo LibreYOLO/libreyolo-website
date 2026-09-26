@@ -3,7 +3,7 @@ title: YOLO-NAS
 families:
   - yolonas
 seo_title: "YOLO-NAS\_: prédire, entraîner et exporter dans LibreYOLO"
-description: "Utilisez YOLO-NAS dans LibreYOLO pour la détection et la pose. Les poids de Deci.AI sont propriétaires et réservés à un usage non commercial\_; LibreYOLO n'en publie aucun."
+description: "Détection, pose et boîtes orientées avec YOLO-NAS dans LibreYOLO. Les poids pré-entraînés amont sont non commerciaux."
 lead: >-
   YOLO-NAS est un détecteur convolutionnel dont le backbone et le neck sont
   issus de la recherche d'architecture de Deci.AI, construit à partir de blocs
@@ -18,7 +18,7 @@ keywords:
   - estimation de pose
   - détecteur compatible quantification
   - AutoNAC
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -142,7 +142,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 47c30d6e44024ce7
+source_hash: 483562cad2c02696
 ---
 
 ## Installer
@@ -170,6 +170,8 @@ détecteur ne demande donc de modifier qu'une ligne. `conf` définit le seuil de
 confiance et `iou` le seuil de NMS. Consultez la
 [prédiction](/docs/predict) pour les sources, le streaming et la gestion des
 résultats.
+
+La tâche de boîtes orientées renvoie `result.obb`. Le graphe OBB publié utilise un canevas de 1024 pixels et son ensemble enregistré de 18 classes.
 
 ## Variantes
 
@@ -201,6 +203,8 @@ checkpoint Deci\u00a0; il correspond au troisième extrait ci-dessus.
 
 Consultez l'[entraînement](/docs/train) pour les datasets, l'augmentation, le
 multi-GPU et les loggers.
+
+La détection utilise par défaut `amp=True` avec `amp_dtype="float16"` ; l'entraînement des boîtes orientées conserve `amp=False`. La tête OBB prend en charge l'entraînement, la prédiction et la validation, utilise des augmentations par retournement/HSV et sélectionne les checkpoints avec `metrics/mAP50-95(OBB)`. `load_detect_weights_for_obb()` l'initialise à partir de poids de détection.
 
 ## Valider
 

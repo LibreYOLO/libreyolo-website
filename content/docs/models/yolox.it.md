@@ -18,7 +18,7 @@ keywords:
   - decoupled head
   - SimOTA
   - real-time object detection
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -103,7 +103,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: f5ab735a29f85a95
+source_hash: ddba5fb10bb88ad2
 ---
 
 ## Installazione
@@ -157,6 +157,8 @@ che alla dimensione più piccola con cui è stato pubblicato.
 
 Vedi [addestramento](/docs/train) per dataset, augmentation, multi-GPU e logger.
 
+Mosaic estrae fino a 20 possibili immagini associate per preferire quelle con annotazioni; se nessuna soddisfa il criterio, mantiene l'ultima estratta.
+
 ## Validazione
 
 `val()` restituisce un dizionario di chiavi `metrics/` che coprono precisione,
@@ -178,6 +180,8 @@ con `nms=True`; YOLOX e YOLOv9 sono le uniche due famiglie per cui quel flag al
 momento è accettato.
 
 <code-tabs name="export" />
+
+[TFLite INT8](/docs/export/tflite) accetta `int8=True` e un dataset di calibrazione.
 
 ## Checkpoint
 

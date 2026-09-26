@@ -19,7 +19,7 @@ keywords:
   - segmentación de instancias
   - estimación de pose
   - bounding boxes orientados
-last_verified: 1.5.0
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -185,7 +185,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 8c464aa759131694
+source_hash: c360784eb62a7df5
 ---
 
 ## Instalación
@@ -207,6 +207,8 @@ El objeto `Results` devuelto es el mismo que devuelven todas las familias, así
 que cambiar a otro detector es un cambio de una línea. `conf` y `max_det`
 filtran la selección de queries; no hay un paso de NMS que ajustar. Consulta
 [predicción](/docs/predict) para fuentes, streaming y manejo de resultados.
+
+Las rutas de detección, segmentación y cajas orientadas usan redimensionado bilineal de OpenCV en coma flotante sin antialiasing; pose conserva el redimensionado con antialiasing. Un `imgsz=(height, width)` rectangular debe respetar la cuadrícula de patches y ventanas de la tarea. El inventario de checkpoints incluye el detector de interfaces de usuario. Los [histogramas de eventos](/docs/train/event-histograms) usan el perfil de entrada registrado.
 
 ## Variantes
 
@@ -239,6 +241,8 @@ válidos más cercanos.
 
 Consulta [entrenamiento](/docs/train) para datasets, aumento de datos
 (data augmentation), multi-GPU y loggers.
+
+Las ejecuciones nuevas usan `output_dir=None` por defecto, que se resuelve a un directorio `runs/train/rfdetr_exp` incrementado con `exist_ok=False`. Los datasets de pose multiclase usan `kpt_names` indexado por índice o nombre de clase; una lista vacía indica una clase solo con cajas. Las predicciones rellenan los keypoints hasta `kpt_shape`; el criterio de selección por mAP de keypoints no puntúa las clases solo con cajas.
 
 ## Validación
 

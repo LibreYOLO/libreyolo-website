@@ -4,12 +4,11 @@ families:
   - yolox
 seo_title: 'YOLOX: dự đoán, huấn luyện và xuất theo Apache-2.0'
 description: >-
-  Dùng YOLOX trong LibreYOLO để phát hiện đối tượng: cài đặt, dự đoán, huấn
-  luyện, đánh giá và xuất theo Apache-2.0.
+  Dùng YOLOX trong LibreYOLO để phát hiện đối tượng: cài đặt, dự đoán, huấn luyện, đánh giá và xuất theo
+  Apache-2.0.
 lead: >-
-  YOLOX là detector một giai đoạn không anchor, có head phân loại-hồi quy tách
-  rời và được huấn luyện bằng phép gán nhãn SimOTA. LibreYOLO hỗ trợ mô hình cho
-  tác vụ phát hiện.
+  YOLOX là detector một giai đoạn không anchor, có head phân loại-hồi quy tách rời và được huấn luyện bằng
+  phép gán nhãn SimOTA. LibreYOLO hỗ trợ mô hình cho tác vụ phát hiện.
 keywords:
   - YOLOX
   - phát hiện đối tượng
@@ -17,7 +16,7 @@ keywords:
   - head tách rời
   - SimOTA
   - phát hiện đối tượng thời gian thực
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -39,14 +38,11 @@ snippets:
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
         model = LibreYOLO("LibreYOLOXs.pt")
-
-        model.train(data="my-dataset.yaml", epochs=300, imgsz=640, batch=16,
-        lr0=0.01)
+        model.train(data="my-dataset.yaml", epochs=300, imgsz=640, batch=16, lr0=0.01)
     - label: CLI
       language: bash
       code: |
@@ -69,12 +65,9 @@ snippets:
         libreyolo val model=LibreYOLOXs.pt data=my-dataset.yaml
     - label: Trên COCO
       language: bash
-      code: >
-        # YAML COCO đi kèm chứa script tải xuống nhúng sẵn, nên cần quyền rõ
-        ràng
-
+      code: |
+        # YAML COCO đi kèm chứa script tải xuống nhúng sẵn, nên cần quyền rõ ràng
         # trừ khi tập dữ liệu đã có cục bộ.
-
         libreyolo val model=LibreYOLOXn.pt data=coco.yaml imgsz=416 \
           allow_download_scripts=True
   export:
@@ -88,11 +81,9 @@ snippets:
         model.export(format="tensorrt", imgsz=640, half=True)
     - label: CLI
       language: bash
-      code: >
+      code: |
         libreyolo export model=LibreYOLOXs.pt format=onnx imgsz=640
-
-        libreyolo export model=LibreYOLOXs.pt format=tensorrt imgsz=640
-        half=True
+        libreyolo export model=LibreYOLOXs.pt format=tensorrt imgsz=640 half=True
     - label: Dùng tệp đã xuất
       language: python
       code: |
@@ -104,9 +95,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: f5ab735a29f85a95
+source_hash: ddba5fb10bb88ad2
 ---
-
 ## Cài đặt
 
 YOLOX không cần extra ngoài gói cơ sở.
@@ -153,6 +143,8 @@ sẽ chuyển lên giá trị mặc định lớn hơn thay vì kích thước n
 
 Xem [huấn luyện](/docs/train) để biết về tập dữ liệu, tăng cường dữ liệu, multi-GPU và logger.
 
+Mosaic lấy tối đa 20 ảnh ghép ứng viên để ưu tiên ảnh có nhãn; nếu không ảnh nào đạt yêu cầu, nó giữ lần lấy mẫu cuối.
+
 ## Đánh giá
 
 `val()` trả về từ điển các khóa `metrics/` bao gồm precision, recall, mAP 50 và
@@ -172,6 +164,8 @@ phải tự viết bước tiền xử lý và hậu xử lý. Bản xuất Core
 
 <code-tabs name="export" />
 
+[TFLite INT8](/docs/export/tflite) chấp nhận `int8=True` và dataset hiệu chuẩn.
+
 ## Checkpoint
 
 Mọi tệp trọng số đã công bố cho họ này.
@@ -185,4 +179,3 @@ Mọi tệp trọng số đã công bố cho họ này.
 ## Trích dẫn
 
 <citation-block />
-

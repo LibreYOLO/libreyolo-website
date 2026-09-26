@@ -3,9 +3,7 @@ title: YOLO-NAS
 families:
   - yolonas
 seo_title: 'YOLO-NAS: prediksi, latih, dan ekspor di LibreYOLO'
-description: >-
-  Gunakan YOLO-NAS di LibreYOLO untuk deteksi dan pose. Bobot Deci.AI bersifat
-  proprietary dan nonkomersial, serta tidak ada yang diterbitkan LibreYOLO.
+description: "Deteksi, pose, dan kotak berorientasi YOLO-NAS di LibreYOLO. Bobot pralatih upstream hanya untuk penggunaan nonkomersial."
 lead: >-
   Detektor konvolusional yang backbone dan neck-nya dihasilkan oleh pencarian
   arsitektur Deci.AI, dibuat dari block RepVGG yang menyadari kuantisasi.
@@ -20,7 +18,7 @@ keywords:
   - estimasi pose
   - quantization aware detector
   - AutoNAC
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -135,7 +133,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 47c30d6e44024ce7
+source_hash: 483562cad2c02696
 ---
 
 ## Instalasi
@@ -160,6 +158,8 @@ Objek `Results` yang dikembalikan sama dengan yang dikembalikan setiap family, j
 detektor hanya memerlukan perubahan satu baris. `conf` menetapkan ambang batas confidence
 dan `iou` menetapkan ambang NMS. Lihat [prediksi](/docs/predict) untuk sumber, streaming,
 dan penanganan hasil.
+
+Task kotak berorientasi mengembalikan `result.obb`. Graf OBB yang dipublikasikan memakai kanvas 1024 piksel dan kumpulan 18 kelas yang tercatat.
 
 ## Varian
 
@@ -186,6 +186,8 @@ yang diinisialisasi secara acak sama sekali tidak melibatkan checkpoint Deci, da
 snippet ketiga di atas.
 
 Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
+
+Deteksi memakai `amp=True` dengan `amp_dtype="float16"` secara default; pelatihan kotak berorientasi tetap memakai `amp=False`. Head OBB mendukung pelatihan, prediksi, dan validasi, memakai augmentasi pembalikan/HSV, serta memilih checkpoint dengan `metrics/mAP50-95(OBB)`. `load_detect_weights_for_obb()` menginisialisasinya dari bobot deteksi.
 
 ## Validasi
 

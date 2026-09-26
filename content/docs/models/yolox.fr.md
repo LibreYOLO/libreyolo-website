@@ -15,7 +15,7 @@ keywords:
   - tête découplée
   - SimOTA
   - détection d'objets temps réel
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -109,7 +109,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: f5ab735a29f85a95
+source_hash: ddba5fb10bb88ad2
 ---
 
 ## Installer
@@ -165,6 +165,8 @@ taille inférieure avec laquelle il a été publié.
 Consultez l'[entraînement](/docs/train) pour les datasets, l'augmentation, le
 multi-GPU et les loggers.
 
+Mosaic tire jusqu'à 20 partenaires candidats pour privilégier les images annotées ; si aucun ne convient, il conserve le dernier tirage.
+
 ## Valider
 
 `val()` renvoie un dictionnaire de clés `metrics/` couvrant la précision, le
@@ -186,6 +188,8 @@ au graphe avec `nms=True`\u00a0; YOLOX et YOLOv9 sont les deux seules familles p
 lesquelles ce paramètre est actuellement accepté.
 
 <code-tabs name="export" />
+
+[TFLite INT8](/docs/export/tflite) accepte `int8=True` et un dataset de calibration.
 
 ## Checkpoints
 

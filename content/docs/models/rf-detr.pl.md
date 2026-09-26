@@ -19,7 +19,7 @@ keywords:
   - segmentacja instancji
   - estymacja pozy
   - zorientowane ramki ograniczające
-last_verified: 1.5.0
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -226,7 +226,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 8c464aa759131694
+source_hash: c360784eb62a7df5
 ---
 
 ## Instalacja
@@ -247,6 +247,8 @@ Zwracany obiekt `Results` jest taki sam dla każdej rodziny, więc zamiana na
 inny detektor wymaga zmiany jednego wiersza. Parametry `conf` i `max_det`
 filtrują wybór zapytań. Nie ma etapu NMS do dostrojenia. Informacje o źródłach,
 strumieniowaniu i obsłudze wyników znajdziesz w sekcji [predykcja](/docs/predict).
+
+Ścieżki detekcji, segmentacji i obróconych ramek używają zmiany rozmiaru metodą dwuliniową OpenCV w arytmetyce zmiennoprzecinkowej, bez antyaliasingu; estymacja pozy zachowuje antyaliasing. Prostokątny `imgsz=(height, width)` musi pasować do siatki patchy/okien zadania. Lista checkpointów obejmuje detektor elementów interfejsu. [Histogramy zdarzeń](/docs/train/event-histograms) używają zapisanego profilu wejścia.
 
 ## Warianty
 
@@ -277,6 +279,8 @@ okien. LibreYOLO sprawdza to przed rozpoczęciem przebiegu i wskazuje najbliższ
 prawidłowe rozmiary.
 
 Informacje o zbiorach danych, augmentacji, wielu GPU i loggerach znajdziesz w sekcji [trenowanie](/docs/train).
+
+Nowe uruchomienia domyślnie używają `output_dir=None`, co tworzy katalog `runs/train/rfdetr_exp` z kolejnym numerem i `exist_ok=False`. Wieloklasowe zbiory pozy używają `kpt_names` z indeksem lub nazwą klasy jako kluczem; pusta lista oznacza klasę z samymi ramkami. Predykcje uzupełniają punkty kluczowe do `kpt_shape`; funkcja fitness oparta na mAP punktów kluczowych nie ocenia klas z samymi ramkami.
 
 ## Walidacja
 
@@ -310,4 +314,3 @@ Wszystkie opublikowane pliki wag dla tej rodziny.
 ## Cytowanie
 
 <citation-block />
-

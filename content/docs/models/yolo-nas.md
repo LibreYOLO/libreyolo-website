@@ -2,10 +2,10 @@
 title: YOLO-NAS
 families: [yolonas]
 seo_title: "YOLO-NAS: predict, train and export in LibreYOLO"
-description: "Use YOLO-NAS in LibreYOLO for detection and pose. Deci.AI's weights are proprietary and non-commercial, and LibreYOLO publishes none of them."
+description: "YOLO-NAS detection, pose and oriented boxes in LibreYOLO. Upstream pretrained weights are non-commercial."
 lead: "A convolutional detector whose backbone and neck came out of Deci.AI's architecture search, built from quantization-aware RepVGG blocks. Its weights are Deci.AI's, licensed for non-commercial use only, and LibreYOLO publishes none of them."
 keywords: [YOLO-NAS, YOLONAS, Deci AI, SuperGradients, object detection, pose estimation, quantization aware detector, AutoNAC]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -127,6 +127,8 @@ different detector is a one line change. `conf` sets the confidence threshold
 and `iou` the NMS threshold. See [prediction](/docs/predict) for sources,
 streaming and result handling.
 
+The oriented-box task returns `result.obb`. The published OBB graph uses a 1024-pixel canvas and its recorded 18-class label set.
+
 ## Variants
 
 Detection and pose are the same architecture under different heads, and they
@@ -154,6 +156,8 @@ Training from a randomly initialized model involves no Deci checkpoint at all,
 and that is the third snippet above.
 
 See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
+
+Detection defaults to `amp=True` with `amp_dtype="float16"`; oriented-box training retains `amp=False`. The OBB head supports training, prediction and validation, uses flipped/HSV augmentation and selects checkpoints with `metrics/mAP50-95(OBB)`. `load_detect_weights_for_obb()` initializes it from detection weights.
 
 ## Validate
 
