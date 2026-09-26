@@ -3,9 +3,7 @@ title: Dome-DETR
 families:
   - domedetr
 seo_title: 'Dome-DETR: LibreYOLO의 초소형 객체 탐지'
-description: >-
-  LibreYOLO에서 Dome-DETR로 항공 및 드론 이미지의 초소형 객체를 탐지합니다. 업스트림 가중치를 변환하고 MIT 라이선스 코드로
-  예측, 파인튜닝, 검증합니다.
+description: 'Dome-DETR로 작은 객체 탐지, 학습, 검증을 수행합니다. 미러링된 사전 학습 체크포인트는 학술 연구 전용 약관을 유지합니다.'
 lead: >-
   D-FINE 기반 초소형 객체 전문 모델입니다. 밀도 헤드가 객체 위치를 결정하고 인코더 어텐션은 객체가 있는 창으로 제한되며 쿼리 수는
   고정되지 않고 해당 밀도에서 결정됩니다. LibreYOLO는 객체 탐지를 지원합니다.
@@ -20,59 +18,25 @@ keywords:
   - AI-TOD
   - DETR
   - 밀도 적응 쿼리
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
-    - label: 변환 후 예측
-      language: bash
-      code: |
-        # LibreYOLO는 Dome-DETR 가중치를 호스팅하지 않으므로 업스트림 저장소에서
-        # 체크포인트를 가져와 한 번 변환합니다.
-        hf download RicePasteM/Dome-DETR --include 'best_ckpts_dome_2026/*' \
-          --local-dir dome-ckpts
-
-        python weights/convert_domedetr_weights.py \
-          dome-ckpts/best_ckpts_dome_2026/dome-s-visdrone_converted.pth \
-          LibreDOMEDETRs-visdrone.pt --size s --variant visdrone
     - label: Python
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # 로컬 경로이며 단순 이름이 아닙니다. 이 계열은 아무것도 다운로드하지 않습니다.
-        model = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-        result = model("drone-frame.jpg", save=True)
-
-        for box in result.boxes:
-            print(result.names[int(box.cls)], box.conf, box.xyxy)
-    - label: CLI
-      language: bash
-      code: >
-        libreyolo predict model=LibreDOMEDETRs-visdrone.pt
-        source=drone-frame.jpg save=True
-    - label: 클래스 이름
-      language: python
-      code: |
-        from libreyolo import LibreYOLO
-
-        # COCO 체크포인트가 없으므로 클래스는 가중치를 학습한 데이터셋에서 가져오고
-        # 체크포인트 메타데이터에서 읽습니다.
-        aitod = LibreYOLO("LibreDOMEDETRs-aitod.pt")
-        print(aitod.model.names)     # AI-TOD-V2 클래스 9개
-
-        visdrone = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-        print(visdrone.model.names)  # VisDrone 클래스 12개
+        # 사전 학습 가중치는 학술 연구로 사용이 제한됩니다.
+        model = LibreYOLO("LibreDOMEDETRs-visdrone.pt", device="cpu")
+        print(model(SAMPLE_IMAGE).boxes)
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
         model = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-
-        model.train(data="my-dataset.yaml", epochs=160, imgsz=800, batch=4,
-        lr0=2e-4)
+        model.train(data="my-dataset.yaml", epochs=160, imgsz=800, batch=4, lr0=2e-4)
     - label: CLI
       language: bash
       code: |
@@ -98,7 +62,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreDOMEDETRs-visdrone.pt data=my-dataset.yaml
-source_hash: 381f01d769e7c420
+source_hash: 8482301790a9b8d9
 ---
 
 ## 설치
@@ -111,7 +75,7 @@ pip install libreyolo
 
 ## 예측
 
-자동으로 다운로드할 항목은 없습니다. LibreYOLO는 이러한 가중치를 호스팅하지 않으므로 업스트림 체크포인트를 가져와 한 번 변환한 다음 변환된 파일을 경로로 불러옵니다. 그 이유는 [라이선스](#licensing)에 나와 있습니다.
+변환된 6개 체크포인트는 LibreYOLO 미러에서 자동으로 다운로드됩니다. 업스트림 약관은 사용을 학술 연구로 제한합니다.
 
 <code-tabs name="predict" />
 
@@ -125,7 +89,7 @@ s, m, l의 세 크기는 모두 800x800에서 실행됩니다. 크기는 백본�
 
 Dome-DETR은 D-FINE에 세 기능을 추가합니다. DeFE는 밀도 맵을 예측합니다. MWAS는 어디든 어텐션하는 대신 해당 맵을 사용해 실제로 객체가 있는 창으로 인코더 어텐션을 제한합니다. PAQI는 고정된 300개를 디코딩하는 대신 같은 밀도에서 쿼리 집합 크기를 정합니다. 이점은 객체가 가장 작을 때 집중되고 크기가 커지면 줄어듭니다. 업스트림 자체 ablation에서 매우 작은 객체의 AP는 14.0에서 17.8로 높아지지만 중간 객체 AP는 45.4에서 46.4로만 높아집니다. 이를 D-FINE의 대체품이 아니라 항공, 드론, 원격 탐사 이미지용 [D-FINE](/docs/models/d-fine) 동반 모델로 취급합니다.
 
-LibreYOLO는 이 계열의 체크포인트를 게시하지 않아 벤치마크할 체크포인트도 없으므로 벤치마크 행을 게시하지 않습니다.
+이 계열에는 기록된 Vision Analysis 벤치마크 행이 없습니다.
 
 ## 학습
 
@@ -155,32 +119,12 @@ Dome-DETR은 학습할 수 있습니다. 학습은 D-FINE 손실에 DeFE 밀도 
 
 ## 체크포인트
 
-나열할 체크포인트가 없습니다. LibreYOLO는 Dome-DETR 가중치를 게시하지 않으며 `LibreDOMEDETR<size>-<dataset>.pt` 형식의 어떤 이름도 다운로드로 해석되지 않습니다.
-
-업스트림은 AI-TOD-V2와 VisDrone의 두 데이터셋마다 s, m, l의 체크포인트를 제공하여 총 여섯 개입니다. AI-TOD-V2는 클래스 9개, VisDrone은 12개입니다. COCO 체크포인트가 없으므로 표준 파일명에는 항상 데이터셋 접미사가 들어가고 클래스 이름은 계열 상수가 아니라 체크포인트 메타데이터에 담깁니다. 단순 `LibreDOMEDETRs.pt`를 요청하면 404가 발생할 다운로드를 시도하지 않고 실제 두 파일명과 변환 명령을 알려주는 메시지와 함께 즉시 예외를 발생시킵니다.
-
-`weights/convert_domedetr_weights.py`가 변환을 수행합니다. LibreYOLO 그래프를 다시 구축하고 업스트림 텐서를 불러온 뒤 누락되거나 예상 밖이거나 형태가 잘못된 키가 하나라도 있으면 파일 쓰기를 거부하므로 변환 파일은 정확히 일치하거나 아예 존재하지 않습니다. 업스트림 `.pth`와 크기 및 변형을 전달합니다.
-
-```bash
-python weights/convert_domedetr_weights.py \
-    dome-ckpts/best_ckpts_dome_2026/aitod-s-best.pth \
-    LibreDOMEDETRs-aitod.pt --size s --variant aitod
-```
-
-수치 충실도의 경우 `weights/parity_domedetr.py`는 여섯 체크포인트 모두에서 이 이식과 업스트림 구현을 비교합니다. 먼저 MWAS 창 마스크를 비트 단위로 검사한 뒤 `pred_logits`와 `pred_boxes`에서 모두 `max_abs_diff == 0.0`을 보고하고 모든 손실 항을 업스트림 criterion과 별도로 비교합니다. 이는 업스트림 체크아웃과 공개 체크포인트가 디스크에 있어야 하고 수동으로 실행하는 스크립트입니다. 지속적 통합의 일부가 아니며 어떤 CI 작업도 이를 재현하지 않습니다.
+<checkpoint-table />
 
 ## 라이선스
 
 <provenance-box>
 
-이 계열을 미러링하지 않는 이유는 가중치입니다. 업스트림 모델 카드 메타데이터에는 라이선스 필드가 없고 본문은 프로젝트가 Apache-2.0이라고 하면서 자료를 학술 연구 용도로만 제한합니다. 두 해석은 일치하지 않으며 더 엄격한 쪽은 재배포 허가가 아닙니다. 따라서 LibreYOLO는 명확해질 때까지 파일을 복사하지 않고 업스트림 저장소를 연결합니다. 여기서 [YOLO-NAS](/docs/models/yolo-nas)에 적용하는 것과 같은 논리입니다.
-
-코드는 별도이며 더 명확합니다. 업스트림 저장소는 Apache-2.0이고 LibreYOLO 이식은 MIT이며 자체 데이터로 직접 학습한 가중치는 소유자에게 귀속됩니다.
+6개 미러는 업스트림의 학술 연구 전용 제한을 유지합니다. 코드에는 별도의 라이선스가 적용됩니다. 업스트림 저장소는 Apache-2.0이고, LibreYOLO 포트는 MIT이며, 자체 데이터로 직접 학습한 가중치는 학습한 사람의 소유입니다.
 
 </provenance-box>
-
-## 인용
-
-Dome-DETR은 ACM Multimedia 2025에서 "Dome-DETR: DETR with Density-Oriented Feature-Query Manipulation for Efficient Tiny Object Detection"이라는 제목으로 발표되었습니다. 프리프린트는 [arxiv.org/abs/2505.05741](https://arxiv.org/abs/2505.05741)에 있습니다. 저자는 저장소에 BibTeX 블록을 게시하지 않았으므로 직접 조합하지 않고 여기에도 재현하지 않습니다.
-
-<citation-block />

@@ -15,7 +15,7 @@ keywords:
   - DETR
   - 目标检测 python
   - 实时目标检测
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -135,7 +135,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 6edaac5f05abaabe
+source_hash: 8dc052b83d5f1ac0
 ---
 
 ## 安装
@@ -162,6 +162,8 @@ pip install "libreyolo[lora]"
 行的事。`conf` 和 `max_det` 过滤的是在 query 和类别上做的 top-k 解码；没有 NMS
 步骤需要调，`iou` 会被接受但不会用到。数据源、流式处理和结果处理见
 [预测](/docs/predict)。
+
+DEIM 预测接受矩形 `imgsz=(height, width)`。DEIMv2 会明确拒绝矩形预测/验证请求。这不代表支持矩形训练或导出。
 
 ## 变体
 
@@ -198,6 +200,8 @@ matchability-aware 损失函数，所以这两个家族几乎共享全部 state 
 正整数倍，否则版本 2 会在运行开始前抛错。
 
 数据集、数据增强、多卡训练和日志记录器见[训练](/docs/train)。
+
+DEIM 默认启用 AMP，使用 `amp_dtype="float16"`。传入 `amp=False` 可使用 FP32 训练。
 
 ## 验证
 

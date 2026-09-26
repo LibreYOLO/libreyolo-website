@@ -4,14 +4,12 @@ families:
   - domedetr
 seo_title: 'Dome-DETR: phát hiện vật thể siêu nhỏ trong LibreYOLO'
 description: >-
-  Dùng Dome-DETR trong LibreYOLO để phát hiện vật thể siêu nhỏ trên ảnh hàng
-  không và ảnh drone. Chuyển đổi trọng số upstream, dự đoán, tinh chỉnh và xác
-  thực với mã nguồn dùng giấy phép MIT.
+  Dùng Dome-DETR để phát hiện đối tượng nhỏ, huấn luyện và đánh giá. Bản sao checkpoint được huấn luyện sẵn
+  giữ điều khoản chỉ dùng cho nghiên cứu học thuật.
 lead: >-
-  Một mô hình chuyên xử lý vật thể siêu nhỏ được xây dựng trên D-FINE: density
-  head xác định vị trí vật thể, attention của encoder bị giới hạn trong các cửa
-  sổ chứa chúng, còn số lượng query được tính từ mật độ đó thay vì cố định.
-  LibreYOLO hỗ trợ mô hình này cho tác vụ phát hiện.
+  Một mô hình chuyên xử lý vật thể siêu nhỏ được xây dựng trên D-FINE: density head xác định vị trí vật thể,
+  attention của encoder bị giới hạn trong các cửa sổ chứa chúng, còn số lượng query được tính từ mật độ đó
+  thay vì cố định. LibreYOLO hỗ trợ mô hình này cho tác vụ phát hiện.
 keywords:
   - Dome-DETR
   - phát hiện vật thể siêu nhỏ
@@ -23,64 +21,25 @@ keywords:
   - AI-TOD
   - DETR
   - query thích ứng theo mật độ
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
-    - label: Chuyển đổi rồi dự đoán
-      language: bash
-      code: |
-        # LibreYOLO không lưu trữ trọng số Dome-DETR, vì vậy checkpoint được
-        # tải từ repo upstream rồi chuyển đổi một lần.
-        hf download RicePasteM/Dome-DETR --include 'best_ckpts_dome_2026/*' \
-          --local-dir dome-ckpts
-
-        python weights/convert_domedetr_weights.py \
-          dome-ckpts/best_ckpts_dome_2026/dome-s-visdrone_converted.pth \
-          LibreDOMEDETRs-visdrone.pt --size s --variant visdrone
     - label: Python
       language: python
-      code: >
-        from libreyolo import LibreYOLO
-
-
-        # Đây là đường dẫn cục bộ, không phải tên rút gọn: family này không tải
-        gì về.
-
-        model = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-
-        result = model("drone-frame.jpg", save=True)
-
-
-        for box in result.boxes:
-            print(result.names[int(box.cls)], box.conf, box.xyxy)
-    - label: CLI
-      language: bash
-      code: >
-        libreyolo predict model=LibreDOMEDETRs-visdrone.pt
-        source=drone-frame.jpg save=True
-    - label: Tên lớp đối tượng
-      language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Không có checkpoint COCO, vì vậy các lớp đến từ dataset dùng để
-        # huấn luyện trọng số và được đọc từ metadata của checkpoint.
-        aitod = LibreYOLO("LibreDOMEDETRs-aitod.pt")
-        print(aitod.model.names)     # 9 lớp AI-TOD-V2
-
-        visdrone = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-        print(visdrone.model.names)  # 12 lớp VisDrone
+        # Trọng số được huấn luyện sẵn chỉ dùng cho nghiên cứu học thuật
+        model = LibreYOLO("LibreDOMEDETRs-visdrone.pt", device="cpu")
+        print(model(SAMPLE_IMAGE).boxes)
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
         model = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-
-        model.train(data="my-dataset.yaml", epochs=160, imgsz=800, batch=4,
-        lr0=2e-4)
+        model.train(data="my-dataset.yaml", epochs=160, imgsz=800, batch=4, lr0=2e-4)
     - label: CLI
       language: bash
       code: |
@@ -106,9 +65,8 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreDOMEDETRs-visdrone.pt data=my-dataset.yaml
-source_hash: 381f01d769e7c420
+source_hash: 8482301790a9b8d9
 ---
-
 ## Cài đặt
 
 Dome-DETR không cần thành phần tùy chọn nào. Mọi nội dung mà mô hình import đều
@@ -120,9 +78,7 @@ pip install libreyolo
 
 ## Dự đoán
 
-Không có gì để tự động tải xuống. LibreYOLO không lưu trữ các trọng số này, vì
-vậy quy trình là: tải checkpoint upstream, chuyển đổi một lần, sau đó nạp tệp
-đã chuyển đổi bằng đường dẫn. Phần [Giấy phép](#licensing) giải thích lý do.
+Sáu checkpoint đã chuyển đổi tự động tải từ các bản sao của LibreYOLO. Các điều khoản upstream giới hạn việc sử dụng cho nghiên cứu học thuật.
 
 <code-tabs name="predict" />
 
@@ -156,8 +112,7 @@ chỉ tăng từ 45.4 lên 46.4. Hãy dùng mô hình này như phần bổ tr�
 [D-FINE](/docs/models/d-fine) trên ảnh hàng không, drone và viễn thám, không phải
 để thay thế D-FINE.
 
-LibreYOLO không công bố dòng benchmark nào cho family này vì không công bố
-checkpoint để benchmark.
+Chưa ghi nhận hàng benchmark Vision Analysis nào cho họ mô hình này.
 
 ## Huấn luyện
 
@@ -213,62 +168,12 @@ family này tồn tại. Nếu cần detection transformer có thể xuất, hã
 
 ## Checkpoint
 
-Không có checkpoint nào để liệt kê. LibreYOLO không công bố trọng số Dome-DETR,
-và không tên nào có dạng `LibreDOMEDETR<size>-<dataset>.pt` được phân giải thành
-một lượt tải xuống.
-
-Upstream công bố sáu checkpoint với kích thước s, m và l cho mỗi một trong hai
-dataset: AI-TOD-V2 có 9 lớp đối tượng và VisDrone có 12. Không có checkpoint
-COCO, vì vậy tên tệp chuẩn luôn có hậu tố dataset, còn tên lớp đối tượng được
-lưu trong metadata của checkpoint thay vì lấy từ hằng số family. Yêu cầu tên
-rút gọn `LibreDOMEDETRs.pt` sẽ phát sinh lỗi ngay với thông báo nêu tên hai tệp
-thực và lệnh chuyển đổi, thay vì cố tải một địa chỉ sẽ trả về 404.
-
-`weights/convert_domedetr_weights.py` thực hiện việc chuyển đổi. Script dựng lại
-graph LibreYOLO, nạp các tensor upstream vào đó và từ chối ghi bất kỳ thứ gì nếu
-có dù chỉ một key bị thiếu, ngoài dự kiến hoặc sai shape, vì vậy tệp đã chuyển
-đổi hoặc khớp chính xác, hoặc không tồn tại. Trỏ script tới một tệp `.pth`
-upstream rồi truyền kích thước và biến thể:
-
-```bash
-python weights/convert_domedetr_weights.py \
-    dome-ckpts/best_ckpts_dome_2026/aitod-s-best.pth \
-    LibreDOMEDETRs-aitod.pt --size s --variant aitod
-```
-
-Về độ tương đồng số học, `weights/parity_domedetr.py` so sánh bản port này với
-implementation upstream trên cả sáu checkpoint và báo cáo `max_abs_diff ==
-0.0` cho cả `pred_logits` lẫn `pred_boxes`, sau khi kiểm tra từng bit của window
-mask MWAS, đồng thời so sánh riêng từng thành phần loss với criterion của
-upstream. Cần hiểu rõ đây là gì: một script thủ công cần checkout upstream và
-các checkpoint đã công bố trên ổ đĩa, được chạy bằng tay. Nó không thuộc quy
-trình tích hợp liên tục và không có job CI nào tái lập kiểm tra này.
+<checkpoint-table />
 
 ## Giấy phép
 
 <provenance-box>
 
-Trọng số là lý do family này không được mirror. Model card upstream không có
-trường giấy phép trong metadata, còn phần văn bản nói rằng dự án dùng Apache-2.0
-nhưng đồng thời giới hạn tài liệu chỉ cho mục đích nghiên cứu học thuật. Hai
-cách hiểu đó không thống nhất, và cách hiểu nghiêm ngặt hơn không cấp quyền phân
-phối lại, vì vậy LibreYOLO liên kết tới repo upstream thay vì sao chép các tệp
-trong khi chờ làm rõ. Cùng lập luận này cũng được áp dụng cho
-[YOLO-NAS](/docs/models/yolo-nas) tại đây.
-
-Mã nguồn là một vấn đề riêng và rõ ràng hơn. Repo upstream dùng Apache-2.0, bản
-port của LibreYOLO dùng MIT, còn trọng số bạn tự huấn luyện trên dữ liệu của
-mình thuộc về bạn.
+Sáu bản sao giữ hạn chế chỉ dùng cho nghiên cứu học thuật của upstream. Mã nguồn có giấy phép riêng. Repo upstream dùng Apache-2.0, bản chuyển của LibreYOLO dùng MIT, và trọng số bạn tự huấn luyện trên dữ liệu riêng thuộc về bạn.
 
 </provenance-box>
-
-## Trích dẫn
-
-Dome-DETR được công bố tại ACM Multimedia 2025 với tên "Dome-DETR: DETR with
-Density-Oriented Feature-Query Manipulation for Efficient Tiny Object
-Detection". Bản preprint có tại
-[arxiv.org/abs/2505.05741](https://arxiv.org/abs/2505.05741). Các tác giả không
-công bố khối BibTeX trong repo, vì vậy tài liệu này không dựng lại một khối thủ
-công để đưa vào đây.
-
-<citation-block />

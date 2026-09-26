@@ -22,7 +22,7 @@ keywords:
   - виявлення орієнтованих обмежувальних рамок
   - OBB
   - DOTA
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -210,7 +210,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 8022a5a591922a90
+source_hash: 75454e612d7e2247
 ---
 
 ## Встановлення
@@ -315,6 +315,8 @@ m, l та x, із 1024 px, а розмір вхідних даних визна�
 Датасети, аугментацію, кілька GPU та системи журналювання описано на сторінці
 [навчання](/docs/train).
 
+RT-DETRv4 типово вмикає `amp=True` з `amp_dtype="float16"`. Передайте `amp=False` для FP32.
+
 ## Валідація
 
 Метод `val()` повертає словник ключів `metrics/` із точністю, повнотою, mAP 50
@@ -381,4 +383,3 @@ RiO-DETR за ліцензією Apache-2.0 на
 на сторінці
 [github.com/RT-DETRs/RT-DETRv4](https://github.com/RT-DETRs/RT-DETRv4#4-citation);
 цитуйте його, якщо використовували контрольну точку версії 4.
-

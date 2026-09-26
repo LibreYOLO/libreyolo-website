@@ -19,7 +19,7 @@ keywords:
   - instanzsegmentierung python
   - DETR
   - d-fine fine-tuning
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -145,7 +145,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 0216631a26185524
+source_hash: "afc2a4900f773c9d"
 ---
 
 ## Installation
@@ -202,15 +202,7 @@ Das Training startet für beide Aufgaben von einem publizierten Checkpoint.
 
 <code-tabs name="train" />
 
-Ohne Eingriff läuft der Trainer 132 Epochen mit `lr0=2e-4` und `amp=False`,
-einem Batch von 16 und Early Stopping nach 50 Epochen ohne Verbesserung.
-Detect-Gewichte sind ein legitimer Startpunkt für ein Segmentierungstraining,
-aber nur als expliziter Transfer, denn der Mask-Head beginnt untrainiert und
-würde sonst bedeutungslose Masken liefern. Autorisiert wird das dadurch, dass du
-`task=segment` an die CLI übergibst. Der Python-Weg ist enger: `LibreDFINE` muss
-direkt mit `allow_detect_to_segment_transfer=True` konstruiert werden, weil die
-Factory `LibreYOLO()` kein solches Argument nimmt, und die direkte Konstruktion
-lädt nichts herunter, die Gewichtsdatei muss also schon auf der Platte liegen.
+Ohne weitere Angaben trainiert der Trainer 132 Epochen mit `lr0=2e-4`, `amp=True` und `amp_dtype="float16"`, einer Batch-Größe von 16 und Early Stopping nach 50 Epochen ohne Verbesserung. Erkennungsgewichte sind ein zulässiger Ausgangspunkt für das Segmentierungstraining, aber nur als ausdrücklicher Transfer: Der Masken-Head beginnt untrainiert und würde sonst bedeutungslose Masken zurückgeben. `task=segment` in der CLI erlaubt diesen Transfer. Der Python-Weg ist enger: `LibreDFINE` muss direkt mit `allow_detect_to_segment_transfer=True` erstellt werden, weil die Factory `LibreYOLO()` dieses Argument nicht annimmt. Die direkte Erstellung lädt nichts herunter, daher muss die Gewichtsdatei bereits lokal vorliegen.
 
 `lora=True` gilt für die Detektion. Das Segment-Training lehnt es ab und
 verweist stattdessen auf `freeze='backbone'`, weil der Mask-Head nicht mit

@@ -18,7 +18,7 @@ keywords:
   - segmentacja instancji
   - fine-grained distribution refinement
   - DETR
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -154,7 +154,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 0216631a26185524
+source_hash: afc2a4900f773c9d
 ---
 
 ## Instalacja
@@ -210,7 +210,7 @@ Dla obu zadań trenowanie rozpoczyna się od opublikowanego checkpointu.
 <code-tabs name="train" />
 
 Przy ustawieniach domyślnych moduł trenujący wykonuje 132 epoki z `lr0=2e-4`,
-`amp=False`, batchem 16 i early stopping po 50 epokach bez poprawy. Wagi detekcji
+`amp=True` i `amp_dtype="float16"`, batchem 16 i early stopping po 50 epokach bez poprawy. Wagi detekcji
 są prawidłowym punktem wyjścia do trenowania segmentacji, ale wyłącznie jako
 jawny transfer. Głowica masek zaczyna bez wytrenowania i w przeciwnym razie
 zwracałaby bezwartościowe maski. Podanie `task=segment` w CLI autoryzuje ten

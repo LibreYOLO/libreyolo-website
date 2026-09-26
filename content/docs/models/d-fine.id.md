@@ -18,7 +18,7 @@ keywords:
   - real-time object detection
   - instance segmentation
   - DETR
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -144,7 +144,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 0216631a26185524
+source_hash: afc2a4900f773c9d
 ---
 
 ## Instalasi
@@ -199,16 +199,7 @@ Pelatihan dimulai dari checkpoint yang dipublikasikan, untuk kedua task.
 
 <code-tabs name="train" />
 
-Jika dibiarkan dengan nilai bawaan, trainer menjalankan 132 epoch pada
-`lr0=2e-4` dengan `amp=False`, batch 16 dan early stopping setelah 50 epoch
-tanpa perbaikan. Bobot detect adalah titik awal yang sah untuk pelatihan
-segmentasi, tetapi hanya sebagai transfer eksplisit, karena mask head-nya mulai
-tanpa pelatihan dan kalau tidak akan mengembalikan mask yang tidak bermakna.
-Memberikan `task=segment` ke CLI itulah yang mengizinkannya. Jalur Python lebih
-sempit: `LibreDFINE` harus dikonstruksi langsung dengan
-`allow_detect_to_segment_transfer=True`, karena factory `LibreYOLO()` tidak
-menerima argumen semacam itu, dan konstruksi langsung tidak melakukan
-pengunduhan, jadi berkas bobotnya harus sudah ada di disk.
+Secara default, trainer berjalan selama 132 epoch dengan `lr0=2e-4`, `amp=True` dan `amp_dtype="float16"`, batch 16, serta early stopping setelah 50 epoch tanpa peningkatan. Bobot deteksi dapat menjadi titik awal pelatihan segmentasi, tetapi hanya melalui transfer eksplisit, karena head mask belum dilatih dan akan menghasilkan mask yang tidak bermakna. Memberikan `task=segment` ke CLI mengizinkan transfer ini. Jalur Python lebih terbatas: `LibreDFINE` harus dibuat langsung dengan `allow_detect_to_segment_transfer=True`, karena factory `LibreYOLO()` tidak menerima argumen tersebut. Konstruksi langsung tidak mengunduh bobot, sehingga berkas bobot harus sudah ada di disk.
 
 `lora=True` berlaku untuk deteksi. Pelatihan segment menolaknya dan mengarahkan
 ke `freeze='backbone'`, karena mask head belum diuji dengan adapter. Di Apple

@@ -22,7 +22,7 @@ keywords:
   - pose estimation
   - instance segmentation
   - inference di perangkat edge
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -179,7 +179,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 39c6975fc16b3ff1
+source_hash: 521fde8f10ac8c57
 ---
 
 ## Instalasi
@@ -218,6 +218,8 @@ titik.
 keseragaman API tetapi tidak berpengaruh, karena ketiga head melakukan decode
 atas sekumpulan query tanpa langkah NMS. Lihat [prediksi](/docs/predict) untuk
 source, streaming dan penanganan hasil.
+
+Prediksi deteksi menerima `imgsz=(height, width)` persegi panjang; pelatihan dan ekspor tetap memiliki batasan bentuk masing-masing.
 
 ## Varian
 
@@ -297,6 +299,8 @@ tambahan yang disediakan sebagian di antaranya.
 Semua berkas bobot yang dipublikasikan untuk family ini.
 
 <checkpoint-table />
+
+Varian `obj2coco` mencakup deteksi, segmentasi, dan pose. Pengunduhannya memerlukan persetujuan eksplisit dan ketentuan upstream membatasi penggunaan komersial. Checkpoint COCO asli mempertahankan izin Apache-2.0 yang tercatat.
 
 ## Lisensi
 

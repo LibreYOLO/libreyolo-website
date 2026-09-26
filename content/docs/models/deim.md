@@ -5,7 +5,7 @@ seo_title: "DEIM and DEIMv2 in LibreYOLO"
 description: "Use DEIM and DEIMv2 in LibreYOLO for object detection. Install, predict, train, validate and export, from a half-million-parameter size upward."
 lead: "A detection transformer trained with dense one-to-one matching, which converges in far fewer epochs than the DETR recipes it builds on. LibreYOLO carries two versions of it, told apart by the checkpoint you load."
 keywords: [DEIM, DEIMv2, DINOv3, detection transformer, DETR, object detection, real-time detection]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -155,6 +155,8 @@ decode over queries and classes; there is no NMS step to tune, and `iou` is
 accepted but unused. See [prediction](/docs/predict) for sources, streaming and
 result handling.
 
+DEIM accepts rectangular `imgsz=(height, width)` for prediction. DEIMv2 rejects rectangular predict/validation requests explicitly. This does not imply rectangular training or export support.
+
 ## Variants
 
 Version 1 ships five sizes, all at the same input size. Version 2 keeps those
@@ -198,6 +200,8 @@ it constrains: it has to be a positive multiple of 32, and version 2 raises
 before the run starts otherwise.
 
 See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
+
+DEIM enables AMP by default with `amp_dtype="float16"`. Pass `amp=False` for FP32 training.
 
 ## Validate
 

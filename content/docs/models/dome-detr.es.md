@@ -4,9 +4,9 @@ families:
   - domedetr
 seo_title: 'Dome-DETR: detección de objetos diminutos en LibreYOLO'
 description: >-
-  Usa Dome-DETR en LibreYOLO para detección de objetos diminutos en imágenes
-  aéreas y de dron. Convierte los pesos de upstream, predice, haz fine-tuning y
-  valida con código bajo licencia MIT.
+  Usa Dome-DETR para detección de objetos diminutos, entrenamiento y validación.
+  Los checkpoints preentrenados replicados conservan los términos de uso exclusivo
+  para investigación académica.
 lead: >-
   Un especialista en objetos diminutos construido sobre D-FINE: una cabeza de
   densidad decide dónde hay objetos, la atención del encoder se restringe a las
@@ -23,60 +23,17 @@ keywords:
   - AI-TOD
   - DETR
   - queries adaptativas a la densidad
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
-    - label: Convertir y luego predecir
-      language: bash
-      code: |
-        # LibreYOLO no aloja pesos de Dome-DETR, así que el checkpoint se
-        # descarga del repositorio upstream y se convierte una sola vez.
-        hf download RicePasteM/Dome-DETR --include 'best_ckpts_dome_2026/*' \
-          --local-dir dome-ckpts
-
-        python weights/convert_domedetr_weights.py \
-          dome-ckpts/best_ckpts_dome_2026/dome-s-visdrone_converted.pth \
-          LibreDOMEDETRs-visdrone.pt --size s --variant visdrone
     - label: Python
       language: python
-      code: >
-        from libreyolo import LibreYOLO
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Una ruta local, no un nombre a secas: en esta familia no se descarga
-        nada.
-
-        model = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-
-        result = model("drone-frame.jpg", save=True)
-
-
-        for box in result.boxes:
-            print(result.names[int(box.cls)], box.conf, box.xyxy)
-    - label: CLI
-      language: bash
-      code: >
-        libreyolo predict model=LibreDOMEDETRs-visdrone.pt
-        source=drone-frame.jpg save=True
-    - label: Nombres de clase
-      language: python
-      code: >
-        from libreyolo import LibreYOLO
-
-
-        # No hay checkpoint de COCO, así que las clases vienen del dataset con
-        el
-
-        # que se entrenaron los pesos y se leen de los metadatos del checkpoint.
-
-        aitod = LibreYOLO("LibreDOMEDETRs-aitod.pt")
-
-        print(aitod.model.names)     # 9 clases de AI-TOD-V2
-
-
-        visdrone = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-
-        print(visdrone.model.names)  # 12 clases de VisDrone
+        # Los pesos preentrenados se restringen a investigación académica.
+        model = LibreYOLO("LibreDOMEDETRs-visdrone.pt", device="cpu")
+        print(model(SAMPLE_IMAGE).boxes)
   train:
     - label: Python
       language: python
@@ -113,7 +70,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreDOMEDETRs-visdrone.pt data=my-dataset.yaml
-source_hash: 381f01d769e7c420
+source_hash: 8482301790a9b8d9
 ---
 
 ## Instalación
@@ -127,10 +84,7 @@ pip install libreyolo
 
 ## Predicción
 
-No hay nada que se descargue automáticamente. LibreYOLO no aloja estos pesos,
-así que el flujo es: descargar el checkpoint de upstream, convertirlo una vez y
-luego cargar por ruta el archivo convertido. [Licencia](#licensing) explica por
-qué.
+Los seis checkpoints convertidos se descargan automáticamente de los mirrors de LibreYOLO. Sus términos upstream restringen el uso a investigación académica.
 
 <code-tabs name="predict" />
 
@@ -168,8 +122,7 @@ diminutos de 14.0 a 17.8, mientras que el AP en objetos medianos solo pasa de
 [D-FINE](/docs/models/d-fine) para imágenes aéreas, de dron y de teledetección,
 no como un reemplazo.
 
-LibreYOLO no publica filas de benchmark para esta familia, porque no publica
-checkpoints que medir.
+No hay filas de benchmark de Vision Analysis registradas para esta familia.
 
 ## Entrenamiento
 
@@ -230,64 +183,14 @@ detección exportable, el indicado es [D-FINE](/docs/models/d-fine).
 
 ## Checkpoints
 
-No hay ninguno que listar. LibreYOLO no publica pesos de Dome-DETR, y ningún
-nombre de la forma `LibreDOMEDETR<size>-<dataset>.pt` corresponde a una descarga.
-
-Upstream publica seis checkpoints, s, m y l para cada uno de dos datasets:
-AI-TOD-V2 con 9 clases y VisDrone con 12. No hay checkpoint de COCO, así que un
-nombre de archivo canónico siempre lleva el sufijo del dataset, y los nombres de
-clase viajan en los metadatos del checkpoint en vez de venir de una constante de
-la familia. Pedir un `LibreDOMEDETRs.pt` a secas lanza un error de inmediato,
-con un mensaje que nombra los dos archivos reales y el comando de conversión, en
-vez de intentar una descarga que daría 404.
-
-`weights/convert_domedetr_weights.py` se encarga de la conversión. Reconstruye
-el grafo de LibreYOLO, carga en él los tensores de upstream y se niega a
-escribir nada si una sola clave falta, sobra o tiene la forma equivocada, así
-que un archivo convertido o coincide exactamente o no existe. Apúntalo a un
-`.pth` de upstream y pasa el tamaño y la variante:
-
-```bash
-python weights/convert_domedetr_weights.py \
-    dome-ckpts/best_ckpts_dome_2026/aitod-s-best.pth \
-    LibreDOMEDETRs-aitod.pt --size s --variant aitod
-```
-
-Sobre la fidelidad numérica, `weights/parity_domedetr.py` compara este port con
-la implementación de upstream en los seis checkpoints y reporta
-`max_abs_diff == 0.0` tanto en `pred_logits` como en `pred_boxes`, tras
-comprobar primero la máscara de ventanas de MWAS bit a bit, y aparte compara cada
-término de la loss con el criterion de upstream. Que quede claro qué es eso: un
-script manual que necesita el checkout de upstream y los checkpoints publicados
-en disco, ejecutado a mano. No forma parte de la integración continua, y ningún
-job de CI lo reproduce.
+<checkpoint-table />
 
 ## Licencia
 
 <provenance-box>
 
-Los pesos son la razón por la que esta familia no está replicada. La model card
-de upstream no lleva campo de licencia en sus metadatos, y su texto afirma que
-el proyecto es Apache-2.0 mientras a la vez restringe el material a fines
-exclusivamente de investigación académica. Esas dos lecturas no concuerdan, y la
-más estricta no es una autorización de redistribución, así que LibreYOLO enlaza
-el repositorio upstream en vez de copiar los archivos, a la espera de una
-aclaración. Ese mismo razonamiento es el que rige aquí para
-[YOLO-NAS](/docs/models/yolo-nas).
-
-El código es una cuestión aparte, y más clara. El repositorio upstream es
+Los seis mirrors conservan la restricción upstream de uso exclusivo para investigación académica. El código tiene su propia licencia. El repositorio upstream es
 Apache-2.0, el port de LibreYOLO es MIT, y los pesos que entrenes tú con tus
 propios datos son tuyos.
 
 </provenance-box>
-
-## Cita
-
-Dome-DETR se publicó en ACM Multimedia 2025 con el título «Dome-DETR: DETR with
-Density-Oriented Feature-Query Manipulation for Efficient Tiny Object
-Detection». El preprint está en
-[arxiv.org/abs/2505.05741](https://arxiv.org/abs/2505.05741). Los autores no
-publican ningún bloque BibTeX en su repositorio, así que aquí no se reproduce
-ninguno en vez de montar uno a mano.
-
-<citation-block />
