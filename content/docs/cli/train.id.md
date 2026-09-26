@@ -1,10 +1,8 @@
 ---
 title: libreyolo train
 seo_title: referensi perintah libreyolo train
-description: >-
-  Melatih model dari baris perintah: seluruh 59 argumen beserta nilai
-  default-nya, cara default tiap family menimpanya, dan argumen mana saja yang
-  diabaikan sebuah family.
+description: 'Latih model dari baris perintah: argumen beserta nilai default-nya, cara default family
+  menggantikannya, dan argumen yang diabaikan family.'
 lead: >-
   Melatih satu model pada satu dataset, lalu menulis checkpoint, metrik dan log
   ke sebuah direktori run. Setiap argumen di bawah punya nilai default dari
@@ -17,7 +15,7 @@ keywords:
   - argumen libreyolo train
   - cara training yolo dengan dataset sendiri
   - freeze layer yolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Perintah
     value: libreyolo train
@@ -53,7 +51,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 3aad4298310d3081
+source_hash: 525a8e4366e4c0be
 ---
 
 ## Sinopsis
@@ -176,6 +174,26 @@ dan `false`: `amp=false` menjadi `--no-amp` pada flag yang punya bentuk negatif.
 | `quiet` | `false` | Redam stderr |
 | `dry_run` | `false` | Resolusi lalu cetak config tanpa menjalankannya |
 | `help_json` | `false` | Cetak skema perintah sebagai JSON lalu keluar |
+
+| Argumen | Default | Arti |
+| --- | --- | --- |
+| `min_samples` | `0` | Batas minimum panjang epoch untuk dataset kecil: jika gambar lebih sedikit, ambil sebanyak ini sampel per epoch dengan pengembalian (0 = nonaktif) |
+| `class_balanced` | `False` | Pengambilan sampel repeat-factor gaya LVIS untuk dataset long-tail (default: nonaktif) |
+| `cls_pw` | `0.0` | Pangkat pembobotan invers frekuensi klasifikasi: 0 nonaktif, 1 penuh (bobot kelas rata-rata satu; tidak dapat digabung dengan class_weights=True) |
+| `class_weights` | `False` | Bobot loss klasifikasi lama yang dinormalisasi berdasarkan sampel (default: nonaktif) |
+| `single_cls` | `False` | Latih detektor yang didukung dengan semua label dipetakan ulang ke kelas 0 |
+| `classes` | `None` | Latih detektor yang didukung hanya pada ID kelas asli dataset ini, dipisahkan koma (misalnya '0,3,5'); kelas lain dibuang seolah tidak berlabel. ID dipertahankan, tidak dipadatkan |
+| `average_best` | `0` | Rata-ratakan N checkpoint terbaik secara seragam berdasarkan metrik yang dipantau ke weights/average.pt pada akhir pelatihan (0 = nonaktif) |
+| `export_check` | `False` | Ekspor ONNX sebelum epoch 1 dan hentikan proses jika ekspor gagal (default: nonaktif) |
+| `precise_bn` | `0` | Hitung ulang statistik berjalan BatchNorm dari sebanyak ini gambar pelatihan setelah epoch terakhir (0 = nonaktif) |
+| `fliplr` | `None` | Probabilitas pembalikan horizontal (alias ekosistem untuk flip_prob) |
+| `flipud` | `0.0` | Probabilitas pembalikan vertikal |
+| `auto_augment` | `None` | Kebijakan augmentasi otomatis klasifikasi: randaugment, autoaugment, augmix (default: tidak ada) |
+| `erasing` | `0.0` | Probabilitas RandomErasing klasifikasi, 0 <= erasing < 1 |
+| `cutmix` | `0.0` | Probabilitas CutMix klasifikasi (soft label) |
+| `scale` | `0.5` | Rentang area RandomResizedCrop klasifikasi: batas bawah float atau (min,max) eksplisit |
+| `crop_pct` | `None` | Rasio pengubahan ukuran evaluasi klasifikasi sebelum crop tengah (default: nilai native family model) |
+| `plot_samples` | `8` | Gambar sampel dalam plot sampel validasi: 0 untuk tanpa sampel, -1 untuk setiap gambar yang divalidasi (tidak mengubah metrik) |
 
 ## Contoh
 

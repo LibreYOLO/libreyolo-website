@@ -1,10 +1,7 @@
 ---
 title: libreyolo train
 seo_title: Befehlsreferenz für libreyolo train
-description: >-
-  Ein Modell von der Kommandozeile aus trainieren: alle 59 Argumente mit ihren
-  Defaults, wie die Defaults einer Modellfamilie sie überschreiben und welche
-  Argumente eine Familie ignoriert.
+description: "Trainiere ein Modell über die Kommandozeile: Argumente mit Standardwerten, Überschreibungen durch Familien und von einer Familie ignorierte Argumente."
 lead: >-
   Trainiert ein Modell auf einem Datensatz und schreibt Checkpoints, Metriken
   und Logs in ein Run-Verzeichnis. Jedes Argument unten hat einen Default aus
@@ -17,7 +14,7 @@ keywords:
   - libreyolo train argumente
   - libreyolo dry run
   - yolo layer einfrieren
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Befehl
     value: libreyolo train
@@ -52,7 +49,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 3aad4298310d3081
+source_hash: "525a8e4366e4c0be"
 ---
 
 ## Synopsis
@@ -176,6 +173,26 @@ Form hat.
 | `quiet` | `false` | stderr unterdrücken |
 | `dry_run` | `false` | Konfiguration auflösen und ausgeben, ohne sie auszuführen |
 | `help_json` | `false` | Befehlsschema als JSON ausgeben und beenden |
+
+| Argument | Standard | Bedeutung |
+| --- | --- | --- |
+| `min_samples` | `0` | Mindestlänge einer Epoche für kleine Datensätze: Hat der Datensatz weniger Bilder, werden je Epoche so viele Stichproben mit Zurücklegen gezogen (0 = aus) |
+| `class_balanced` | `False` | Repeat-Factor-Sampling im LVIS-Stil für ungleich verteilte Datensätze (Standard: aus) |
+| `cls_pw` | `0.0` | Exponent der inversen Häufigkeitsgewichtung für Klassifikation: 0 aus, 1 vollständig (Klassengewichte mit Mittelwert 1; nicht mit class_weights=True kombinierbar) |
+| `class_weights` | `False` | Bisherige stichprobennormierte Loss-Gewichte für Klassifikation (Standard: aus) |
+| `single_cls` | `False` | Einen unterstützten Detektor mit allen Labels auf Klasse 0 trainieren |
+| `classes` | `None` | Einen unterstützten Detektor nur auf diesen ursprünglichen Datensatz-Klassen-IDs trainieren, kommagetrennt (z. B. '0,3,5'); andere Klassen werden wie unbeschriftet verworfen. IDs bleiben unverändert und werden nicht verdichtet |
+| `average_best` | `0` | Die N besten Checkpoints nach der überwachten Metrik am Trainingsende gleichgewichtet zu weights/average.pt mitteln (0 = aus) |
+| `export_check` | `False` | ONNX vor Epoche 1 exportieren und den Lauf bei Exportfehler abbrechen (Standard: aus) |
+| `precise_bn` | `0` | Laufende BatchNorm-Statistiken nach der letzten Epoche aus so vielen Trainingsbildern neu berechnen (0 = aus) |
+| `fliplr` | `None` | Wahrscheinlichkeit horizontaler Spiegelung (Ökosystem-Alias für flip_prob) |
+| `flipud` | `0.0` | Wahrscheinlichkeit vertikaler Spiegelung |
+| `auto_augment` | `None` | Auto-Augmentierungsregel für Klassifikation: randaugment, autoaugment, augmix (Standard: keine) |
+| `erasing` | `0.0` | RandomErasing-Wahrscheinlichkeit für Klassifikation, 0 <= erasing < 1 |
+| `cutmix` | `0.0` | CutMix-Wahrscheinlichkeit für Klassifikation (weiche Labels) |
+| `scale` | `0.5` | RandomResizedCrop-Flächenbereich für Klassifikation: Gleitkomma-Untergrenze oder explizites (min,max) |
+| `crop_pct` | `None` | Skalierungsverhältnis vor dem mittigen Ausschnitt bei der Klassifikationsauswertung (Standard: nativer Wert der Modellfamilie) |
+| `plot_samples` | `8` | Bilder in der Validierungsbeispieldarstellung: 0 für keine, -1 für jedes validierte Bild (ändert die Metriken nicht) |
 
 ## Beispiele
 

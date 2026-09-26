@@ -2,7 +2,7 @@
 title: libreyolo train
 seo_title: referencia del comando libreyolo train
 description: >-
-  Entrena un modelo desde la línea de comandos: los 59 argumentos con sus
+  Entrena un modelo desde la línea de comandos: los argumentos con sus
   valores por defecto, cómo los sustituyen los valores por defecto de cada
   familia y qué argumentos ignora cada familia.
 lead: >-
@@ -17,7 +17,7 @@ keywords:
   - argumentos libreyolo train
   - entrenar yolo dataset propio
   - congelar capas yolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Comando
     value: libreyolo train
@@ -53,7 +53,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 3aad4298310d3081
+source_hash: 525a8e4366e4c0be
 ---
 
 ## Sinopsis
@@ -177,6 +177,26 @@ forma negativa.
 | `quiet` | `false` | Silenciar stderr |
 | `dry_run` | `false` | Resolver e imprimir la configuración sin ejecutar |
 | `help_json` | `false` | Volcar el esquema del comando como JSON y salir |
+
+| Argumento | Por defecto | Significado |
+| --- | --- | --- |
+| `min_samples` | `0` | Mínimo de longitud de época para datasets pequeños: si el dataset tiene menos imágenes, extrae este número de muestras por época con reemplazo (0 = desactivado) |
+| `class_balanced` | `False` | Muestreo con factor de repetición al estilo LVIS para datasets de cola larga (por defecto: desactivado) |
+| `cls_pw` | `0.0` | Exponente de ponderación por frecuencia inversa en clasificación: 0 desactivado, 1 completo (pesos de clase con media 1; no puede combinarse con class_weights=True) |
+| `class_weights` | `False` | Pesos heredados de la función de pérdida de clasificación, normalizados por muestra (por defecto: desactivado) |
+| `single_cls` | `False` | Entrena un detector compatible reasignando todas las etiquetas a la clase 0 |
+| `classes` | `None` | Entrena un detector compatible solo con estos ID originales de clase del dataset, separados por comas (p. ej. '0,3,5'); las demás clases se descartan como si no estuvieran etiquetadas. Los ID se conservan, no se compactan |
+| `average_best` | `0` | Promedia uniformemente los N mejores checkpoints según la métrica observada en weights/average.pt al terminar el entrenamiento (0 = desactivado) |
+| `export_check` | `False` | Exporta ONNX antes de la época 1 y hace fallar la ejecución si la exportación falla (por defecto: desactivado) |
+| `precise_bn` | `0` | Recalcula las estadísticas acumuladas de BatchNorm con este número de imágenes de entrenamiento tras la última época (0 = desactivado) |
+| `fliplr` | `None` | Probabilidad de volteo horizontal (alias de flip_prob usado en el ecosistema) |
+| `flipud` | `0.0` | Probabilidad de volteo vertical |
+| `auto_augment` | `None` | Política de autoaumento para clasificación: randaugment, autoaugment, augmix (por defecto: ninguna) |
+| `erasing` | `0.0` | Probabilidad de RandomErasing en clasificación, 0 <= erasing < 1 |
+| `cutmix` | `0.0` | Probabilidad de CutMix en clasificación (etiquetas suaves) |
+| `scale` | `0.5` | Rango de área de RandomResizedCrop en clasificación: un límite inferior float o un par explícito (min,max) |
+| `crop_pct` | `None` | Proporción de redimensionado de evaluación en clasificación antes del recorte central (por defecto: el valor nativo de la familia del modelo) |
+| `plot_samples` | `8` | Imágenes de muestra en el gráfico de validación: 0 para ninguna, -1 para todas las imágenes validadas (no cambia las métricas) |
 
 ## Ejemplos
 

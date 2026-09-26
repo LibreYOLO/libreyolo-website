@@ -14,7 +14,7 @@ keywords:
   - оцінювання yolo з командного рядка
   - як порахувати mAP50-95
   - аргументи libreyolo val
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Команда
     value: libreyolo val
@@ -40,7 +40,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: f6507840568c3725
+source_hash: 8e858639e96672a0
 ---
 
 ## Синтаксис
@@ -81,6 +81,15 @@ libreyolo val model=<name|path> data=<dataset.yaml> [key=value ...]
 | `quiet` | `false` | Придушення stderr |
 | `verbose` | `true` | Докладний вивід |
 | `help_json` | `false` | Вивести схему команди як JSON і завершити роботу |
+
+| Аргумент | Типове значення | Значення |
+| --- | --- | --- |
+| `classes` | `None` | Оцінювати лише ці початкові ID класів датасету, розділені комами (наприклад, '0,3,5'); рамки решти класів відкидаються з еталонної розмітки й передбачень. Типово використовує classes= навчання контрольної точки, якщо задано |
+| `crop_pct` | `None` | Коефіцієнт масштабування під час оцінювання класифікації перед центральним обрізанням (типово нативне значення сімейства) |
+| `plot_samples` | `8` | Приклади зображень на графіку валідації: 0 для жодного, -1 для кожного оціненого зображення (метрики не змінюються) |
+| `visualize` | `False` | Зображати кожне оцінене зображення з істиннопозитивними, хибнопозитивними й хибнонегативними результатами у visualize/errors/ (будь-яка помилка) і visualize/correct/ (detect, segment; classify зображає мітку проти top-1) |
+| `show_labels` | `True` | Назви класів на зображеннях --visualize |
+| `show_conf` | `True` | Оцінки впевненості на зображеннях --visualize |
 
 ## Приклади
 

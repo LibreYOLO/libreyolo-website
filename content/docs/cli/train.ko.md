@@ -1,7 +1,7 @@
 ---
 title: libreyolo train
 seo_title: libreyolo train 명령 참조
-description: '명령줄에서 모델을 학습합니다: 59개 인자 전체와 각각의 기본값, 모델 계열 기본값이 이를 덮어쓰는 방식, 그리고 계열이 무시하는 인자.'
+description: '명령줄에서 모델을 학습합니다. 인수와 기본값, 계열 기본값이 이를 재정의하는 방식, 계열에서 무시하는 인수를 설명합니다.'
 lead: >-
   하나의 데이터셋에서 하나의 모델을 학습하고 체크포인트, 지표, 로그를 실행 디렉터리에 기록합니다. 아래의 모든 인자에는 명령 정의에서 온
   기본값이 있으며, 모델 계열 자체의 학습 설정이 이를 대체할 수 있습니다.
@@ -12,7 +12,7 @@ keywords:
   - yolo 커스텀 데이터셋 학습
   - libreyolo dry run
   - yolo 레이어 고정
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 명령
     value: libreyolo train
@@ -46,7 +46,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 3aad4298310d3081
+source_hash: "525a8e4366e4c0be"
 ---
 
 ## 사용법
@@ -169,6 +169,26 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | `quiet` | `false` | stderr 억제 |
 | `dry_run` | `false` | 실행하지 않고 설정을 해석해 출력 |
 | `help_json` | `false` | 명령 스키마를 JSON으로 덤프하고 종료 |
+
+| 인자 | 기본값 | 의미 |
+| --- | --- | --- |
+| `min_samples` | `0` | 작은 데이터셋의 에폭 길이 최솟값: 이미지가 이보다 적으면 에폭마다 이 수만큼 복원 추출(0은 비활성화) |
+| `class_balanced` | `False` | 긴 꼬리 데이터셋용 LVIS 방식 반복 계수 샘플링(기본값: 비활성화) |
+| `cls_pw` | `0.0` | 분류 역빈도 가중치 지수: 0은 비활성화, 1은 전체 적용(평균 1의 클래스 가중치이며 class_weights=True와 함께 사용할 수 없음) |
+| `class_weights` | `False` | 기존 샘플 정규화 분류 손실 가중치(기본값: 비활성화) |
+| `single_cls` | `False` | 지원되는 탐지기의 모든 레이블을 클래스 0으로 매핑하여 학습 |
+| `classes` | `None` | 지원되는 탐지기를 쉼표로 구분한 원본 데이터셋 클래스 ID만으로 학습(예: '0,3,5'); 나머지 클래스는 레이블이 없는 것처럼 제거하며 ID를 재번호화하지 않고 그대로 유지 |
+| `average_best` | `0` | 학습 종료 시 관찰 지표 기준 최적 N개 체크포인트를 동일 비중으로 평균하여 weights/average.pt에 저장(0은 비활성화) |
+| `export_check` | `False` | 에폭 1 전에 ONNX로 내보내고 실패하면 실행을 실패 처리(기본값: 비활성화) |
+| `precise_bn` | `0` | 마지막 에폭 뒤 이 수만큼의 학습 이미지로 BatchNorm 이동 통계 재계산(0은 비활성화) |
+| `fliplr` | `None` | 수평 뒤집기 확률(flip_prob의 생태계 별칭) |
+| `flipud` | `0.0` | 수직 뒤집기 확률 |
+| `auto_augment` | `None` | 분류 자동 증강 정책: randaugment, autoaugment, augmix(기본값: 없음) |
+| `erasing` | `0.0` | 분류 RandomErasing 확률, 0 <= erasing < 1 |
+| `cutmix` | `0.0` | 분류 CutMix 확률(소프트 레이블) |
+| `scale` | `0.5` | 분류 RandomResizedCrop 면적 범위: 부동소수점 하한 또는 명시적 (min,max) |
+| `crop_pct` | `None` | 중앙 크롭 전 분류 평가 크기 조정 비율(기본값: 모델 계열의 기본값) |
+| `plot_samples` | `8` | 검증 샘플 플롯의 이미지 수: 0은 없음, -1은 검증한 모든 이미지(지표에는 영향 없음) |
 
 ## 예제
 

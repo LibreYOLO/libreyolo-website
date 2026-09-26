@@ -2,19 +2,18 @@
 title: libreyolo predict
 seo_title: Tham chiếu lệnh libreyolo predict
 description: >-
-  Chạy suy luận (inference) từ dòng lệnh: mọi tham số, giá trị mặc định đọc
-  thẳng từ định nghĩa CLI, và các cờ quyết định những gì được in ra stdout.
+  Chạy suy luận (inference) từ dòng lệnh: mọi tham số, giá trị mặc định đọc thẳng từ định nghĩa CLI, và các cờ
+  quyết định những gì được in ra stdout.
 lead: >-
-  Chạy một mô hình đã tải trên một nguồn và in ra các dự đoán. Nguồn có thể là
-  ảnh, thư mục, video, URL hoặc luồng (stream) trực tiếp; mô hình có thể là
-  checkpoint hoặc một artifact đã xuất.
+  Chạy một mô hình đã tải trên một nguồn và in ra các dự đoán. Nguồn có thể là ảnh, thư mục, video, URL hoặc
+  luồng (stream) trực tiếp; mô hình có thể là checkpoint hoặc một artifact đã xuất.
 keywords:
   - libreyolo predict cli
   - lệnh inference libreyolo
   - dự đoán yolo bằng dòng lệnh
   - tham số libreyolo predict
   - xuất json từ libreyolo predict
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Lệnh
     value: libreyolo predict
@@ -23,9 +22,7 @@ meta:
     value: source
     mono: true
   - label: Đầu ra
-    value: >-
-      Dự đoán in ra stdout. Với save=true, các tệp đã vẽ chú thích nằm trong
-      runs/detect/predict
+    value: 'Dự đoán in ra stdout. Với save=true, các tệp đã vẽ chú thích nằm trong runs/detect/predict'
 snippets:
   examples:
     - label: Cơ bản
@@ -41,16 +38,13 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: 'Lọc lớp đối tượng, JSON trên stdout'
       language: bash
-      code: >
+      code: |
         # lớp đối tượng 0 là person trong danh sách lớp COCO đi kèm checkpoint
-
-        libreyolo predict model=LibreYOLO9s.pt classes="[0]" conf=0.4 max_det=50
-        \
+        libreyolo predict model=LibreYOLO9s.pt classes="[0]" conf=0.4 max_det=50 \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 7e46c7ed7dd9e6c4
+source_hash: 56d898992f1b129c
 ---
-
 ## Cú pháp
 
 ```bash
@@ -99,6 +93,11 @@ tác vụ được loại bỏ trước khi phân tích cú pháp.
 | `quiet` | `false` | Tắt stderr |
 | `verbose` | `false` | Xuất stderr chi tiết |
 | `help_json` | `false` | In schema của lệnh dưới dạng JSON rồi thoát |
+
+| Tham số | Mặc định | Ý nghĩa |
+| --- | --- | --- |
+| `mask` | `None` | Mặt nạ nhị phân điền vùng ảnh cho một ảnh, dùng với mô hình yêu cầu nó |
+| `trimap` | `None` | Trimap ba mức cho một ảnh, dùng với mô hình matting có hướng dẫn |
 
 ## Ví dụ
 

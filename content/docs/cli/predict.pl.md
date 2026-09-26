@@ -15,7 +15,7 @@ keywords:
   - polecenie libreyolo predict
   - argumenty libreyolo predict
   - yolo json na stdout
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Polecenie
     value: libreyolo predict
@@ -49,7 +49,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 7e46c7ed7dd9e6c4
+source_hash: 56d898992f1b129c
 ---
 
 ## Składnia
@@ -100,6 +100,11 @@ zadania jest usuwane przed parsowaniem.
 | `quiet` | `false` | Wyciszenie stderr |
 | `verbose` | `false` | Szczegółowe wyjście na stderr |
 | `help_json` | `false` | Zrzut schematu polecenia w formacie JSON i zakończenie |
+
+| Argument | Domyślnie | Znaczenie |
+| --- | --- | --- |
+| `mask` | `None` | Binarna maska uzupełniania dla pojedynczego obrazu w modelach, które jej wymagają |
+| `trimap` | `None` | Trójpoziomowa trimapa pojedynczego obrazu dla modeli mattingu ze wskazówkami |
 
 ## Przykłady
 

@@ -9,7 +9,7 @@ keywords:
   - prédiction yolo en ligne de commande
   - arguments libreyolo predict
   - sortie json libreyolo
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Commande
     value: libreyolo predict
@@ -43,7 +43,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 7e46c7ed7dd9e6c4
+source_hash: 56d898992f1b129c
 ---
 
 ## Synopsis
@@ -95,6 +95,11 @@ le mot de tâche est retiré avant l'analyse.
 | `quiet` | `false` | Supprimer stderr |
 | `verbose` | `false` | Sortie stderr détaillée |
 | `help_json` | `false` | Afficher le schéma de la commande en JSON et quitter |
+
+| Argument | Valeur par défaut | Signification |
+| --- | --- | --- |
+| `mask` | `None` | Masque binaire d'inpainting pour une image unique, pour les modèles qui l'exigent |
+| `trimap` | `None` | Trimap à trois niveaux pour une image unique, pour les modèles de matting guidé |
 
 ## Exemples
 

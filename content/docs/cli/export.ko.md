@@ -11,7 +11,7 @@ keywords:
   - yolo onnx 변환 cli
   - tensorrt 내보내기 명령어
   - libreyolo export 인자
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 명령
     value: libreyolo export
@@ -42,7 +42,7 @@ snippets:
         # 팩토리는 파일 접미사를 보고 분기하므로 내보낸 파일이 체크포인트처럼 로드됩니다.
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: ef2ca20af3814109
+source_hash: "0cc60dd7c5c9f864"
 ---
 
 ## 요약
@@ -146,3 +146,5 @@ FP16으로 ONNX로 내보내면 `weights/LibreYOLO9s_fp16.onnx`가 됩니다. JS
 
 관련 문서: [`libreyolo quantize`](/docs/cli/quantize)는 PyTorch에 머물면서 배포
 결과물이 아니라 체크포인트를 씁니다.
+
+TFLite INT8은 YOLO9 또는 YOLOX 탐지에서 `data=...`, `fraction=1.0`, `batch=1`, `dynamic=False`와 함께 `int8=True`를 사용합니다. FP16은 지원하지 않으며, 두 정밀도 플래그를 모두 지정하면 CLI는 INT8을 우선하고 `half`를 제외합니다. JSON 내보내기 출력은 직사각형 학습 체크포인트에서 다시 로드한 정사각형 전용 계열의 정사각형 폴백을 포함하여 실제 결정된 캔버스를 보고합니다.

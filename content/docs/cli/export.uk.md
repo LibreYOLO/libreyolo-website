@@ -14,7 +14,7 @@ keywords:
   - команда libreyolo export
   - експорт yolo в tensorrt
   - аргументи libreyolo export
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Команда
     value: libreyolo export
@@ -48,7 +48,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: ef2ca20af3814109
+source_hash: 0cc60dd7c5c9f864
 ---
 
 ## Синтаксис
@@ -158,3 +158,5 @@ stdout несе результат; перебіг виконання надхо
 
 Пов'язане: [`libreyolo quantize`](/docs/cli/quantize), яка залишається в
 PyTorch і записує контрольну точку, а не артефакт для розгортання.
+
+TFLite INT8 використовує `int8=True` для виявлення YOLO9 або YOLOX із `data=...`, `fraction=1.0`, `batch=1` і `dynamic=False`. FP16 не підтримується; якщо задано обидва прапорці точності, CLI відкидає `half` на користь INT8. Вихід експорту JSON повідомляє фактично визначене полотно, включно з резервним квадратом для сімейств із нативним квадратом, повторно завантажених із прямокутних навчальних контрольних точок.

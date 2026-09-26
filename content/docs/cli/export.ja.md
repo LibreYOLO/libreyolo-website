@@ -9,7 +9,7 @@ keywords:
   - yolo onnx エクスポート
   - tensorrt エクスポート コマンド
   - libreyolo export 引数
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: コマンド
     value: libreyolo export
@@ -40,7 +40,7 @@ snippets:
         # ファクトリーはファイル拡張子で振り分けるので、エクスポート結果もチェックポイントと同じように読み込まれる
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: ef2ca20af3814109
+source_hash: 0cc60dd7c5c9f864
 ---
 
 ## 概要
@@ -116,3 +116,5 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 結果はstdoutに、進捗はstderrに出ます。終了コードは、成功が`0`、使い方や設定の誤りが`2`、モデルを読み込めない場合が`4`、未知の形式・エクスポート依存関係の不足・非対応の精度・拒否された埋め込みNMSの要求が`5`、その他のランタイム障害が`1`です。
 
 関連：[`libreyolo quantize`](/docs/cli/quantize)は、PyTorchの中にとどまり、デプロイ用の成果物ではなくチェックポイントを書き出します。
+
+TFLite INT8は、YOLO9またはYOLOXの物体検出で`int8=True`と`data=...`、`fraction=1.0`、`batch=1`、`dynamic=False`を使います。FP16には対応しません。両方の精度フラグを指定すると、CLIは`half`を破棄してINT8を優先します。エクスポートのJSON出力は、実際に決定した入力サイズを報告します。長方形で学習したチェックポイントから、正方形を前提とするファミリーを読み込んだ場合の正方形へのフォールバックも含みます。

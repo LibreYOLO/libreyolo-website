@@ -15,7 +15,7 @@ keywords:
   - fp8 quantisierung
   - post training quantization yolo
   - libreyolo quantize argumente
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Befehl
     value: libreyolo quantize
@@ -48,7 +48,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 7ae663e9f117826e
+source_hash: "663390776f2f2c15"
 ---
 
 ## Synopsis
@@ -140,3 +140,5 @@ sonstigen Laufzeitfehlern.
 
 Verwandt: [`libreyolo export`](/docs/cli/export), das PyTorch verlässt und
 stattdessen ein Deployment-Artefakt schreibt.
+
+`algorithm` ist standardmäßig `auto` (minmax) und akzeptiert außerdem `minmax`, `percentile`, `mse` und `entropy`. MSE und Entropie wählen Bereiche durch Aktivierungshistogrammdurchläufe.

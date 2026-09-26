@@ -2,18 +2,18 @@
 title: libreyolo export
 seo_title: Tham chiếu lệnh libreyolo export
 description: >-
-  Xuất một checkpoint sang định dạng triển khai: từng tham số kèm giá trị mặc
-  định, nơi tệp kết quả được ghi ra, và những tổ hợp mà lệnh từ chối.
+  Xuất một checkpoint sang định dạng triển khai: từng tham số kèm giá trị mặc định, nơi tệp kết quả được ghi
+  ra, và những tổ hợp mà lệnh từ chối.
 lead: >-
-  Chuyển một checkpoint thành một định dạng triển khai và ghi tệp kết quả vào
-  weights/. Định dạng quyết định những tham số nào bên dưới được áp dụng.
+  Chuyển một checkpoint thành một định dạng triển khai và ghi tệp kết quả vào weights/. Định dạng quyết định
+  những tham số nào bên dưới được áp dụng.
 keywords:
   - xuất mô hình libreyolo
   - lệnh libreyolo export
   - xuất yolo sang onnx bằng cli
   - lệnh xuất tensorrt
   - tham số libreyolo export
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Lệnh
     value: libreyolo export
@@ -38,18 +38,14 @@ snippets:
           nms=true conf=0.25 iou=0.45 max_det=300
     - label: Chạy tệp đã xuất
       language: bash
-      code: >
+      code: |
         libreyolo export model=LibreYOLO9s.pt format=onnx imgsz=640
 
-
-        # Factory định tuyến theo phần mở rộng tệp, nên tệp xuất ra được tải như
-        một checkpoint
-
+        # Factory định tuyến theo phần mở rộng tệp, nên tệp xuất ra được tải như một checkpoint
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: ef2ca20af3814109
+source_hash: 0cc60dd7c5c9f864
 ---
-
 ## Cú pháp
 
 ```bash
@@ -153,3 +149,5 @@ hoặc yêu cầu nhúng NMS bị từ chối, và `1` cho các lỗi runtime kh
 
 Liên quan: [`libreyolo quantize`](/docs/cli/quantize), lệnh ở lại trong PyTorch
 và ghi ra một checkpoint thay vì một tệp triển khai.
+
+TFLite INT8 dùng `int8=True` cho phát hiện YOLO9 hoặc YOLOX với `data=...`, `fraction=1.0`, `batch=1` và `dynamic=False`. FP16 không được hỗ trợ; khi có cả hai cờ độ chính xác, CLI bỏ `half` để ưu tiên INT8. Đầu ra xuất JSON báo khung ảnh thực tế được phân giải, gồm chuyển về hình vuông cho các họ vốn dùng hình vuông khi tải lại từ checkpoint huấn luyện hình chữ nhật.

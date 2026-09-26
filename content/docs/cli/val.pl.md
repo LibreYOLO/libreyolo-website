@@ -14,7 +14,7 @@ keywords:
   - ewaluacja yolo z wiersza poleceń
   - jak policzyć mAP50-95
   - argumenty libreyolo val
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Polecenie
     value: libreyolo val
@@ -42,7 +42,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: f6507840568c3725
+source_hash: 8e858639e96672a0
 ---
 
 ## Składnia
@@ -83,6 +83,15 @@ Argumenty to pary `key=value`, działa też forma POSIX, więc `batch=8` i
 | `quiet` | `false` | Wyciszenie stderr |
 | `verbose` | `true` | Szczegółowe wyjście |
 | `help_json` | `false` | Wypisanie schematu polecenia jako JSON i zakończenie |
+
+| Argument | Domyślnie | Znaczenie |
+| --- | --- | --- |
+| `classes` | `None` | Ewaluacja tylko na podanych oryginalnych identyfikatorach klas zbioru, oddzielonych przecinkami (np. '0,3,5'); ramki pozostałych klas są usuwane z etykiet referencyjnych i predykcji. Domyślnie classes= użyte podczas trenowania checkpointu, jeśli je zapisano |
+| `crop_pct` | `None` | Współczynnik zmiany rozmiaru przed centralnym wycięciem podczas ewaluacji klasyfikacji (domyślnie natywna wartość rodziny modelu) |
+| `plot_samples` | `8` | Przykładowe obrazy na wykresie walidacji: 0 wyłącza, -1 wybiera każdy walidowany obraz (nie zmienia metryk) |
+| `visualize` | `False` | Rysowanie każdego walidowanego obrazu z wynikami true positive, false positive i false negative do visualize/errors/ (dowolny błąd) i visualize/correct/ (detect, segment; classify rysuje etykietę i top-1) |
+| `show_labels` | `True` | Nazwy klas na obrazach --visualize |
+| `show_conf` | `True` | Wyniki pewności na obrazach --visualize |
 
 ## Przykłady
 

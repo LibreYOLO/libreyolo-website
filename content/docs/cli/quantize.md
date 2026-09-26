@@ -4,7 +4,7 @@ seo_title: "libreyolo quantize command reference"
 description: "Quantize a checkpoint in PyTorch from the command line: recipes, calibration arguments, defaults, and the families each recipe accepts."
 lead: "Replaces a model's float modules with quantized ones, calibrates them on unlabeled images where the recipe needs statistics, and saves the result as a PyTorch checkpoint."
 keywords: [libreyolo quantize cli, int8 quantization command, fp8 quantization, post training quantization cli, libreyolo quantize arguments]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 meta:
   - label: Command
     value: libreyolo quantize
@@ -123,3 +123,5 @@ the save fails, and `1` for other runtime failures.
 
 Related: [`libreyolo export`](/docs/cli/export), which leaves PyTorch and writes
 a deployment artifact instead.
+
+`algorithm` defaults to `auto` (minmax) and also accepts `minmax`, `percentile`, `mse` and `entropy`. MSE and entropy select ranges with activation-histogram sweeps.

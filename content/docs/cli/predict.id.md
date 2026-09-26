@@ -15,7 +15,7 @@ keywords:
   - cara prediksi yolo di terminal
   - argumen libreyolo predict
   - output json deteksi objek
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Perintah
     value: libreyolo predict
@@ -50,7 +50,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 7e46c7ed7dd9e6c4
+source_hash: 56d898992f1b129c
 ---
 
 ## Sinopsis
@@ -101,6 +101,11 @@ task-nya dibuang sebelum parsing.
 | `quiet` | `false` | Menyembunyikan keluaran stderr |
 | `verbose` | `false` | Keluaran stderr yang detail |
 | `help_json` | `false` | Mencetak skema perintah sebagai JSON lalu keluar |
+
+| Argumen | Default | Arti |
+| --- | --- | --- |
+| `mask` | `None` | Mask inpainting biner untuk satu gambar bagi model yang memerlukannya |
+| `trimap` | `None` | Trimap tiga tingkat untuk satu gambar bagi model matting terpandu |
 
 ## Contoh
 

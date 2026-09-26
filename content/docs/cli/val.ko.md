@@ -11,7 +11,7 @@ keywords:
   - yolo 모델 성능 평가 명령어
   - mAP50-95 측정
   - libreyolo val 옵션
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 명령
     value: libreyolo val
@@ -37,7 +37,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: f6507840568c3725
+source_hash: "8e858639e96672a0"
 ---
 
 ## 개요
@@ -78,6 +78,15 @@ libreyolo val model=<name|path> data=<dataset.yaml> [key=value ...]
 | `quiet` | `false` | stderr 출력 억제 |
 | `verbose` | `true` | 상세 출력 |
 | `help_json` | `false` | 명령 스키마를 JSON으로 출력하고 종료 |
+
+| 인자 | 기본값 | 의미 |
+| --- | --- | --- |
+| `classes` | `None` | 쉼표로 구분한 원본 데이터셋 클래스 ID만 평가(예: '0,3,5'); 나머지 클래스의 박스는 정답과 예측에서 제거하며, 체크포인트 학습에 classes=를 사용했다면 기본적으로 그 설정을 상속 |
+| `crop_pct` | `None` | 중앙 크롭 전 분류 평가 크기 조정 비율(기본값: 모델 계열의 기본값) |
+| `plot_samples` | `8` | 검증 샘플 플롯의 이미지 수: 0은 없음, -1은 검증한 모든 이미지(지표에는 영향 없음) |
+| `visualize` | `False` | 검증한 모든 이미지의 참 양성, 거짓 양성, 거짓 음성을 visualize/errors/(오류가 있는 경우)와 visualize/correct/에 표시(detect, segment; classify는 레이블과 top-1을 비교) |
+| `show_labels` | `True` | --visualize 이미지의 클래스 이름 |
+| `show_conf` | `True` | --visualize 이미지의 신뢰도 점수 |
 
 ## 예제
 

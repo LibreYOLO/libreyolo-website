@@ -15,7 +15,7 @@ keywords:
   - cuantizacion fp8
   - cuantizacion post entrenamiento yolo
   - argumentos libreyolo quantize
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Comando
     value: libreyolo quantize
@@ -51,7 +51,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 7ae663e9f117826e
+source_hash: 663390776f2f2c15
 ---
 
 ## Sinopsis
@@ -142,3 +142,5 @@ ejecución.
 
 Relacionado: [`libreyolo export`](/docs/cli/export), que sale de PyTorch y
 escribe en su lugar un artefacto de despliegue.
+
+`algorithm` vale `auto` (minmax) por defecto y también acepta `minmax`, `percentile`, `mse` y `entropy`. MSE y entropy seleccionan rangos mediante barridos de histogramas de activación.

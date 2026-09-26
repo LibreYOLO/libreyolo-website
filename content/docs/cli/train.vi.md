@@ -2,14 +2,12 @@
 title: libreyolo train
 seo_title: Tham chiếu lệnh libreyolo train
 description: >-
-  Huấn luyện một mô hình từ dòng lệnh: toàn bộ 59 tham số cùng giá trị mặc định,
-  cách mặc định của từng dòng mô hình ghi đè chúng, và những tham số mà một dòng
-  mô hình bỏ qua.
+  Huấn luyện mô hình từ dòng lệnh: tham số cùng giá trị mặc định, cách giá trị mặc định của họ mô hình ghi đè
+  chúng và tham số mà họ mô hình bỏ qua.
 lead: >-
-  Huấn luyện một mô hình trên một tập dữ liệu (dataset) và ghi checkpoint, chỉ
-  số cùng log vào một thư mục chạy. Mọi tham số bên dưới đều có giá trị mặc định
-  lấy từ định nghĩa lệnh, và cấu hình huấn luyện riêng của từng dòng mô hình có
-  thể thay thế giá trị đó.
+  Huấn luyện một mô hình trên một tập dữ liệu (dataset) và ghi checkpoint, chỉ số cùng log vào một thư mục
+  chạy. Mọi tham số bên dưới đều có giá trị mặc định lấy từ định nghĩa lệnh, và cấu hình huấn luyện riêng của
+  từng dòng mô hình có thể thay thế giá trị đó.
 keywords:
   - libreyolo train cli
   - lệnh huấn luyện libreyolo
@@ -17,7 +15,7 @@ keywords:
   - tham số libreyolo train
   - libreyolo dry run
   - đóng băng lớp libreyolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Lệnh
     value: libreyolo train
@@ -31,30 +29,23 @@ snippets:
   examples:
     - label: Cơ bản
       language: bash
-      code: >
+      code: |
         # coco8.yaml có sẵn trong gói và tự tải 8 ảnh của nó ở lần chạy đầu tiên
-
-        libreyolo train model=LibreYOLO9s.pt data=coco8.yaml epochs=10 imgsz=640
-        batch=8
+        libreyolo train model=LibreYOLO9s.pt data=coco8.yaml epochs=10 imgsz=640 batch=8
     - label: Kiểm tra cấu hình đã phân giải trước
       language: bash
-      code: >
-        # In ra cấu hình mà lần chạy sẽ dùng, gồm cả mặc định của family, rồi
-        thoát
-
+      code: |
+        # In ra cấu hình mà lần chạy sẽ dùng, gồm cả mặc định của family, rồi thoát
         # mà không huấn luyện hay nạp dữ liệu
-
-        libreyolo train model=LibreDFINEn.pt data=coco8.yaml epochs=10
-        dry_run=true
+        libreyolo train model=LibreDFINEn.pt data=coco8.yaml epochs=10 dry_run=true
     - label: Lần chạy có tên với công thức chỉ định rõ
       language: bash
       code: |
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 3aad4298310d3081
+source_hash: 525a8e4366e4c0be
 ---
-
 ## Cú pháp
 
 ```bash
@@ -175,6 +166,26 @@ Tham số là các cặp `key=value`, và dạng POSIX cũng dùng được, nê
 | `quiet` | `false` | Chặn stderr |
 | `dry_run` | `false` | Phân giải và in cấu hình mà không thực thi |
 | `help_json` | `false` | Xuất schema của lệnh dưới dạng JSON rồi thoát |
+
+| Tham số | Mặc định | Ý nghĩa |
+| --- | --- | --- |
+| `min_samples` | `0` | Độ dài epoch tối thiểu cho dataset nhỏ: khi dataset có ít ảnh hơn, lấy số mẫu này mỗi epoch có hoàn lại (0 = tắt) |
+| `class_balanced` | `False` | Lấy mẫu theo hệ số lặp kiểu LVIS cho dataset đuôi dài (mặc định: tắt) |
+| `cls_pw` | `0.0` | Số mũ trọng số nghịch đảo tần suất phân loại: 0 tắt, 1 đầy đủ (trọng số lớp đối tượng trung bình 1; không kết hợp với class_weights=True) |
+| `class_weights` | `False` | Trọng số loss phân loại chuẩn hóa theo mẫu kiểu cũ (mặc định: tắt) |
+| `single_cls` | `False` | Huấn luyện bộ phát hiện được hỗ trợ với mọi nhãn ánh xạ về lớp đối tượng 0 |
+| `classes` | `None` | Huấn luyện bộ phát hiện được hỗ trợ chỉ trên các ID lớp đối tượng gốc này, phân cách bằng dấu phẩy (ví dụ '0,3,5'); mọi lớp khác bị bỏ như không có nhãn. ID được giữ nguyên, không nén lại |
+| `average_best` | `0` | Lấy trung bình đều N checkpoint tốt nhất theo chỉ số theo dõi vào weights/average.pt khi kết thúc huấn luyện (0 = tắt) |
+| `export_check` | `False` | Xuất ONNX trước epoch 1 và dừng lần chạy nếu xuất lỗi (mặc định: tắt) |
+| `precise_bn` | `0` | Tính lại thống kê chạy BatchNorm từ số ảnh huấn luyện này sau epoch cuối (0 = tắt) |
+| `fliplr` | `None` | Xác suất lật ngang (tên thay thế của flip_prob trong hệ sinh thái) |
+| `flipud` | `0.0` | Xác suất lật dọc |
+| `auto_augment` | `None` | Chính sách auto-augment phân loại: randaugment, autoaugment, augmix (mặc định: không có) |
+| `erasing` | `0.0` | Xác suất RandomErasing phân loại, 0 <= erasing < 1 |
+| `cutmix` | `0.0` | Xác suất CutMix phân loại (nhãn mềm) |
+| `scale` | `0.5` | Khoảng diện tích RandomResizedCrop phân loại: giới hạn dưới số thực hoặc cặp (min,max) rõ ràng |
+| `crop_pct` | `None` | Tỷ lệ đổi kích thước đánh giá phân loại trước cắt giữa (mặc định: giá trị gốc của họ mô hình) |
+| `plot_samples` | `8` | Ảnh mẫu trong biểu đồ mẫu đánh giá: 0 để không có, -1 để lấy mọi ảnh được đánh giá (không đổi chỉ số) |
 
 ## Ví dụ
 

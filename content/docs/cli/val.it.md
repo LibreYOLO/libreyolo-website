@@ -15,7 +15,7 @@ keywords:
   - valutare modello yolo riga di comando
   - calcolare mAP50-95 terminale
   - argomenti libreyolo val
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Comando
     value: libreyolo val
@@ -41,7 +41,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: f6507840568c3725
+source_hash: 8e858639e96672a0
 ---
 
 ## Sinossi
@@ -82,6 +82,15 @@ Gli argomenti sono coppie `key=value`, e funziona anche la forma POSIX, quindi
 | `quiet` | `false` | Silenzia stderr |
 | `verbose` | `true` | Output verboso |
 | `help_json` | `false` | Stampa lo schema del comando come JSON ed esce |
+
+| Argomento | Default | Significato |
+| --- | --- | --- |
+| `classes` | `None` | Valuta solo questi ID originali di classe del dataset, separati da virgole (es. '0,3,5'); i box di ogni altra classe vengono scartati da ground truth e predizioni. Di default usa classes= dell'addestramento del checkpoint, se presente |
+| `crop_pct` | `None` | Rapporto di ridimensionamento nella valutazione della classificazione prima del ritaglio centrale (default: valore nativo della famiglia del modello) |
+| `plot_samples` | `8` | Immagini nel grafico dei campioni di validazione: 0 per nessuna, -1 per ogni immagine validata (non modifica le metriche) |
+| `visualize` | `False` | Disegna ogni immagine validata con veri positivi, falsi positivi e falsi negativi in visualize/errors/ (qualsiasi errore) e visualize/correct/ (detect, segment; classify disegna etichetta rispetto a top-1) |
+| `show_labels` | `True` | Nomi delle classi nelle immagini --visualize |
+| `show_conf` | `True` | Punteggi di confidenza nelle immagini --visualize |
 
 ## Esempi
 

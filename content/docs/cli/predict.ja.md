@@ -10,7 +10,7 @@ keywords:
   - yolo コマンドライン 推論
   - libreyolo predict 引数
   - libreyolo json 出力
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: コマンド
     value: libreyolo predict
@@ -42,7 +42,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 7e46c7ed7dd9e6c4
+source_hash: 56d898992f1b129c
 ---
 
 ## 書式
@@ -93,6 +93,11 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 | `quiet` | `false` | stderrの抑制 |
 | `verbose` | `false` | stderrへの詳細出力 |
 | `help_json` | `false` | コマンドのスキーマをJSONで出力して終了 |
+
+| 引数 | デフォルト | 意味 |
+| --- | --- | --- |
+| `mask` | `None` | マスクを必要とするモデル向けの、単一画像の2値インペインティングマスク |
+| `trimap` | `None` | ガイド付きマッティングモデル向けの、単一画像の3段階トライマップ |
 
 ## 使用例
 

@@ -11,7 +11,7 @@ keywords:
   - yolo cli 예측
   - libreyolo predict 인자
   - libreyolo json 출력
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 명령
     value: libreyolo predict
@@ -43,7 +43,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 7e46c7ed7dd9e6c4
+source_hash: "56d898992f1b129c"
 ---
 
 ## 개요
@@ -94,6 +94,11 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 | `quiet` | `false` | stderr 억제 |
 | `verbose` | `false` | 상세한 stderr 출력 |
 | `help_json` | `false` | 명령 스키마를 JSON으로 출력하고 종료 |
+
+| 인수 | 기본값 | 의미 |
+| --- | --- | --- |
+| `mask` | `None` | 필요한 모델에 전달하는 단일 이미지용 이진 인페인팅 마스크 |
+| `trimap` | `None` | 가이드 매팅 모델에 전달하는 단일 이미지용 3단계 트라이맵 |
 
 ## 예제
 

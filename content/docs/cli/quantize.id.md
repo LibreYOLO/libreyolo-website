@@ -14,7 +14,7 @@ keywords:
   - kuantisasi model fp8
   - post training quantization
   - argumen libreyolo quantize
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Perintah
     value: libreyolo quantize
@@ -48,7 +48,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 7ae663e9f117826e
+source_hash: 663390776f2f2c15
 ---
 
 ## Sinopsis
@@ -139,3 +139,5 @@ penyimpanan gagal, dan `1` untuk kegagalan runtime lainnya.
 
 Terkait: [`libreyolo export`](/docs/cli/export), yang keluar dari PyTorch dan
 justru menulis artefak deployment.
+
+`algorithm` default-nya `auto` (minmax) dan juga menerima `minmax`, `percentile`, `mse`, serta `entropy`. MSE dan entropy memilih rentang dengan penyapuan histogram aktivasi.

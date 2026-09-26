@@ -10,7 +10,7 @@ keywords:
   - fp8 量子化
   - 学習後量子化 yolo
   - libreyolo quantize 引数
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: コマンド
     value: libreyolo quantize
@@ -43,7 +43,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 7ae663e9f117826e
+source_hash: 663390776f2f2c15
 ---
 
 ## 概要
@@ -133,3 +133,5 @@ transformer系のファミリーが対象です。`yolo9`でこれらのいず�
 
 関連：[`libreyolo export`](/docs/cli/export)は、PyTorchを離れ、代わりにデプロイ
 用の成果物を書き出します。
+
+`algorithm`のデフォルトは`auto`（minmax）で、`minmax`、`percentile`、`mse`、`entropy`も受け付けます。MSEとentropyは、活性化ヒストグラムの走査で範囲を選択します。

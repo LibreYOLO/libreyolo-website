@@ -1,7 +1,7 @@
 ---
 title: libreyolo train
 seo_title: référence de la commande libreyolo train
-description: "Entraînez un modèle depuis la ligne de commande\_: les 59 arguments avec leurs valeurs par défaut, comment les valeurs par défaut d'une famille les remplacent, et quels arguments une famille ignore."
+description: "Entraînez un modèle depuis la ligne de commande\_: les arguments avec leurs valeurs par défaut, comment les valeurs par défaut d'une famille les remplacent, et quels arguments une famille ignore."
 lead: >-
   Entraîne un modèle sur un dataset et écrit les checkpoints, les métriques et
   les logs dans un répertoire de run. Chaque argument ci-dessous a une valeur
@@ -14,7 +14,7 @@ keywords:
   - arguments libreyolo train
   - entrainer yolo sur son propre dataset
   - geler des couches yolo
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Commande
     value: libreyolo train
@@ -49,7 +49,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 3aad4298310d3081
+source_hash: 525a8e4366e4c0be
 ---
 
 ## Synopsis
@@ -173,6 +173,26 @@ forme négative.
 | `quiet` | `false` | Supprimer stderr |
 | `dry_run` | `false` | Résoudre et afficher la config sans exécuter |
 | `help_json` | `false` | Dumper le schéma de la commande en JSON et quitter |
+
+| Argument | Valeur par défaut | Signification |
+| --- | --- | --- |
+| `min_samples` | `0` | Longueur minimale d'époque pour les petits datasets : si le dataset contient moins d'images, tire ce nombre d'échantillons par époque avec remise (0 = désactivé) |
+| `class_balanced` | `False` | Échantillonnage par facteur de répétition de type LVIS pour les datasets à longue traîne (désactivé par défaut) |
+| `cls_pw` | `0.0` | Puissance de pondération inverse des fréquences en classification : 0 désactivée, 1 complète (poids de classe de moyenne 1 ; incompatible avec class_weights=True) |
+| `class_weights` | `False` | Anciens poids de loss de classification normalisés par échantillon (désactivé par défaut) |
+| `single_cls` | `False` | Entraîne un détecteur pris en charge en ramenant toutes les étiquettes à la classe 0 |
+| `classes` | `None` | Entraîne un détecteur pris en charge uniquement sur ces identifiants de classe d'origine du dataset, séparés par des virgules (ex. '0,3,5') ; toute autre classe est écartée comme si elle n'était pas annotée. Les identifiants restent inchangés, sans renumérotation |
+| `average_best` | `0` | Moyenne uniformément les N meilleurs checkpoints selon la métrique suivie dans weights/average.pt à la fin de l'entraînement (0 = désactivé) |
+| `export_check` | `False` | Exporte en ONNX avant l'époque 1 et fait échouer l'exécution si l'export échoue (désactivé par défaut) |
+| `precise_bn` | `0` | Recalcule les statistiques courantes de BatchNorm sur ce nombre d'images d'entraînement après la dernière époque (0 = désactivé) |
+| `fliplr` | `None` | Probabilité de retournement horizontal (alias de flip_prob dans l'écosystème) |
+| `flipud` | `0.0` | Probabilité de retournement vertical |
+| `auto_augment` | `None` | Politique d'auto-augmentation de classification : randaugment, autoaugment, augmix (aucune par défaut) |
+| `erasing` | `0.0` | Probabilité RandomErasing de classification, 0 <= erasing < 1 |
+| `cutmix` | `0.0` | Probabilité CutMix de classification (étiquettes souples) |
+| `scale` | `0.5` | Plage d'aire RandomResizedCrop de classification : borne inférieure flottante ou (min,max) explicite |
+| `crop_pct` | `None` | Ratio de redimensionnement d'évaluation de classification avant le recadrage central (valeur native de la famille par défaut) |
+| `plot_samples` | `8` | Images d'exemple dans le tracé de validation : 0 pour aucune, -1 pour chaque image validée (ne change pas les métriques) |
 
 ## Exemples
 

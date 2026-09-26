@@ -15,7 +15,7 @@ keywords:
   - детекція об'єктів yolo cli
   - аргументи команди libreyolo predict
   - yolo json вивід результатів
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Команда
     value: libreyolo predict
@@ -48,7 +48,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 7e46c7ed7dd9e6c4
+source_hash: 56d898992f1b129c
 ---
 
 ## Синтаксис
@@ -99,6 +99,11 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 | `quiet` | `false` | Придушити stderr |
 | `verbose` | `false` | Докладний вивід у stderr |
 | `help_json` | `false` | Вивести схему команди як JSON і вийти |
+
+| Аргумент | Типове значення | Значення |
+| --- | --- | --- |
+| `mask` | `None` | Бінарна маска заповнення для одного зображення для моделей, які її потребують |
+| `trimap` | `None` | Трирівнева trimap одного зображення для моделей керованого матування |
 
 ## Приклади
 

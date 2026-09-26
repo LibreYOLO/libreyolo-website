@@ -1,7 +1,7 @@
 ---
 title: libreyolo train
 seo_title: libreyolo train 命令参考
-description: 从命令行训练模型：全部 59 个参数及其默认值、家族默认值如何覆盖它们，以及哪些参数会被某个家族忽略。
+description: "从命令行训练模型：参数及默认值、家族默认值如何覆盖它们，以及各家族忽略的参数。"
 lead: >-
   在一个数据集上训练一个模型，并把检查点（checkpoint）、指标和日志写进运行目录。下面每个参数都有一个来自命令定义的默认值，而模型家族自己的训练配置可能会替换它。
 keywords:
@@ -11,7 +11,7 @@ keywords:
   - yolo 训练自己的数据集
   - libreyolo dry_run
   - yolo 冻结层
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: 命令
     value: libreyolo train
@@ -45,7 +45,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 3aad4298310d3081
+source_hash: 525a8e4366e4c0be
 ---
 
 ## 概要
@@ -168,6 +168,26 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | `quiet` | `false` | 抑制 stderr |
 | `dry_run` | `false` | 解析并打印配置，但不执行 |
 | `help_json` | `false` | 把命令 schema 以 JSON 形式打印出来并退出 |
+
+| 参数 | 默认值 | 含义 |
+| --- | --- | --- |
+| `min_samples` | `0` | 小数据集的每轮长度下限：当数据集图像较少时，每轮有放回地抽取此数量的样本（0 = 关闭） |
+| `class_balanced` | `False` | 对长尾数据集使用 LVIS 风格的重复因子采样（默认关闭） |
+| `cls_pw` | `0.0` | 分类逆频率加权的幂次：0 关闭，1 完全启用（类别权重均值为 1；不能与 class_weights=True 合用） |
+| `class_weights` | `False` | 旧的按样本数归一化的分类损失权重（默认关闭） |
+| `single_cls` | `False` | 对支持的检测器训练，将全部标签重新映射到类别 0 |
+| `classes` | `None` | 对支持的检测器仅使用指定的原始数据集类别 ID 训练，以逗号分隔（如 '0,3,5'）；其他类别均作为未标注丢弃。ID 保持原值，不压缩编号 |
+| `average_best` | `0` | 训练结束时，对监控指标最好的 N 个检查点均匀平均，写入 weights/average.pt（0 = 关闭） |
+| `export_check` | `False` | 在第 1 轮之前导出 ONNX，导出失败则终止训练（默认关闭） |
+| `precise_bn` | `0` | 最后一轮后，用此数量的训练图像重新计算 BatchNorm 运行统计量（0 = 关闭） |
+| `fliplr` | `None` | 水平翻转概率（flip_prob 的生态别名） |
+| `flipud` | `0.0` | 垂直翻转概率 |
+| `auto_augment` | `None` | 分类自动增强策略：randaugment、autoaugment、augmix（默认无） |
+| `erasing` | `0.0` | 分类 RandomErasing 概率，0 <= erasing < 1 |
+| `cutmix` | `0.0` | 分类 CutMix 概率（软标签） |
+| `scale` | `0.5` | 分类 RandomResizedCrop 面积范围：浮点下限或显式 (min,max) |
+| `crop_pct` | `None` | 分类评估中心裁剪前的缩放比例（默认模型家族原生值） |
+| `plot_samples` | `8` | 验证样例图中的图像数：0 为不绘制，-1 为全部验证图像（不改变指标） |
 
 ## 示例
 

@@ -1,10 +1,10 @@
 ---
 title: libreyolo train
 seo_title: "libreyolo train command reference"
-description: "Train a model from the command line: all 59 arguments with their defaults, how family defaults override them, and which arguments a family ignores."
+description: "Train a model from the command line: arguments with their defaults, how family defaults override them, and which arguments a family ignores."
 lead: "Trains one model on one dataset and writes checkpoints, metrics and logs into a run directory. Every argument below has a default from the command definition, which a model family's own training config may replace."
 keywords: [libreyolo train cli, libreyolo training command, yolo cli training, libreyolo train arguments, libreyolo dry run, libreyolo freeze layers]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 meta:
   - label: Command
     value: libreyolo train
@@ -155,6 +155,26 @@ Arguments are `key=value` pairs, and POSIX form works too, so `epochs=50` and
 | `quiet` | `false` | Suppress stderr |
 | `dry_run` | `false` | Resolve and print the config without executing |
 | `help_json` | `false` | Dump command schema as JSON and exit |
+
+| Argument | Default | Meaning |
+| --- | --- | --- |
+| `min_samples` | `0` | Epoch-length floor for tiny datasets: when the dataset has fewer images, draw this many samples per epoch with replacement (0 = off) |
+| `class_balanced` | `False` | LVIS-style repeat-factor sampling for long-tailed datasets (default: off) |
+| `cls_pw` | `0.0` | Classification inverse-frequency weighting power: 0 off, 1 full (mean-one class weights; cannot combine with class_weights=True) |
+| `class_weights` | `False` | Legacy sample-normalized classification loss weights (default: off) |
+| `single_cls` | `False` | Train a supported detector with every label remapped to class 0 |
+| `classes` | `None` | Train a supported detector on only these original dataset class ids, comma-separated (e.g. '0,3,5'); every other class is dropped as if unlabeled. Ids are kept as-is, not compacted |
+| `average_best` | `0` | Uniform-average the N best checkpoints by the watched metric into weights/average.pt at the end of training (0 = off) |
+| `export_check` | `False` | Export ONNX before epoch 1 and fail the run if export breaks (default: off) |
+| `precise_bn` | `0` | Recompute BatchNorm running stats from this many train images after the last epoch (0 = off) |
+| `fliplr` | `None` | Horizontal flip probability (ecosystem alias of flip_prob) |
+| `flipud` | `0.0` | Vertical flip probability |
+| `auto_augment` | `None` | Classification auto-augment policy: randaugment, autoaugment, augmix (default: none) |
+| `erasing` | `0.0` | Classification RandomErasing probability, 0 <= erasing < 1 |
+| `cutmix` | `0.0` | Classification CutMix probability (soft labels) |
+| `scale` | `0.5` | Classification RandomResizedCrop area range: a float lower bound or an explicit (min,max) |
+| `crop_pct` | `None` | Classification eval resize ratio before the center crop (default: the model family's native value) |
+| `plot_samples` | `8` | Sample images in the validation sample plot: 0 for none, -1 for every validated image (does not change the metrics) |
 
 ## Examples
 

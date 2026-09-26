@@ -15,7 +15,8 @@ keywords:
   - команда libreyolo predict
   - аргументы libreyolo predict
   - yolo json вывод в stdout
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 meta:
   - label: Команда
     value: libreyolo predict
@@ -50,7 +51,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 7e46c7ed7dd9e6c4
+source_hash: 56d898992f1b129c
 ---
 
 ## Синопсис
@@ -101,6 +102,11 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 | `quiet` | `false` | Подавить stderr |
 | `verbose` | `false` | Подробный вывод в stderr |
 | `help_json` | `false` | Вывести схему команды в JSON и выйти |
+
+| Аргумент | По умолчанию | Значение |
+| --- | --- | --- |
+| `mask` | `None` | Бинарная маска восстановления для одного изображения для моделей, которым она нужна |
+| `trimap` | `None` | Трёхуровневая trimap для одного изображения для моделей маттинга с направляющей маской |
 
 ## Примеры
 
