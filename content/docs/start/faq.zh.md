@@ -10,8 +10,8 @@ keywords:
   - libreyolo 权重放在哪
   - libreyolo 命令行
   - libreyolo 离线使用
-last_verified: 1.5.0
-source_hash: a729b43a6642f2a0
+last_verified: "1.6.0"
+source_hash: d0d1f00bab2cee6e
 ---
 
 ## 我该从哪个模型开始？
@@ -96,3 +96,7 @@ libreyolo train model=yolo9-t data=coco8.yaml epochs=50 imgsz=640
 
 有两个类名为了保持一致做了重命名：`LibreYOLORTDETR` 变成了
 `LibreRTDETR`，`LibreYOLORFDETR` 变成了 `LibreRFDETR`。旧名称仍然能解析，并会发出一个指向新名称的 `DeprecationWarning`，所以已有代码在你更新它的这段时间里还能继续运行。
+
+## 为什么某个检查点名称无法下载？
+
+请使用模型页面检查点表中的准确文件名。带任务后缀的 FCN 和 Mask R-CNN 名称没有托管文件；加载器错误会列出支持的形式。LingBot-Vision g 没有已发布检查点：请使用 s、b、l 或本地检查点。

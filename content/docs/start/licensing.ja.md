@@ -10,8 +10,8 @@ keywords:
   - 非商用 モデル 重み
   - model checkpoint license
   - apache-2.0 物体検出
-last_verified: 1.5.0
-source_hash: 83536fea4dc4eaec
+last_verified: 1.6.0
+source_hash: 03e83b82bd2da258
 ---
 
 ## LibreYOLO独自のコード
@@ -45,7 +45,7 @@ MITは、MegviiのNAFNet、Xingyi ZhouのCenterNet、作者のKin-Yiu WongとHao
 ライセンスはファミリー間で異なり、1つのファミリー内のファイル間でも異なります。後者の例を2つ示します。
 
 - YOLO9のCOCOチェックポイントはMITです。VisDrone2019-DETで学習された `LibreYOLO9P2s-visdrone.pt` は、非商用のCC BY-NC-SA 3.0です。
-- RF-DETRの検出チェックポイントはApache-2.0です。回転ボックスのチェックポイントはCC BY 4.0です。CC BY 4.0で公開されたRoboflow Universeデータセットでファインチューニングされ、そのデータセットの帰属要件が重みに引き継がれるためです。
+- RF-DETRの検出チェックポイントはApache-2.0です。回転ボックスのチェックポイントリポジトリはCC BY 4.0を宣言しています。
 
 ファミリー間ではさらに広い範囲に及び、複数の公開済みチェックポイントは商用製品で利用できません。
 
@@ -53,9 +53,13 @@ MITは、MegviiのNAFNet、Xingyi ZhouのCenterNet、作者のKin-Yiu WongとHao
 - OV-DEIMチェックポイントはCC BY-NC 4.0であり、アップストリームの作者によって確認されています。推論のたびにAppleのMobileCLIP-B(LT)テキストタワーも読み込まれ、そのライセンスは利用を研究に制限します。これはチェックポイント独自の条件より厳しい制限です。
 - SenseNova-VisionのコードはApache-2.0で、重みはCC BY-NC 4.0です。loaderは自動ダウンロードの前に毎回、非商用である旨を表示します。
 
-LibreYOLOがチェックポイントをまったくホストしないファミリーもあり、そのページの「重み」行に明記されています。SAM 3はHugging Face上でMeta独自のSAM Licenseによって制限され、Metaから直接ダウンロードされます。MiDaSのrelease assetは再ホストされず、公式URLから取得されてhash検証されます。Dome-DETRはアップストリームへリンクされます。model cardのメタデータにライセンスが記載されていない一方、本文ではApache-2.0を主張すると同時に利用を学術研究へ制限しており、それらが一致しないためです。TEEDとDexiNedのアーキテクチャはMITですが、作者の公開済みチェックポイントは条件が非商用であるBIPEDで学習されているため、LibreYOLOは同梱も自動ダウンロードもしません。
+SAM 3は、Meta独自のSAM Licenseに基づくアクセス制限付きのアップストリームスナップショットを使います。MiDaSのs/lとDome-DETRの6つのチェックポイントは、LibreYOLOのミラーを使うようになりました。MiDaSはMIT、Dome-DETRは学術研究目的のみの条件を維持します。他のファミリーでは、ローカルのアップストリームファイルが必要な場合があります。各モデルページでは、取得方法と公開元が宣言したライセンスを分けて説明しています。
 
 複数のtorchvisionチェックポイントには独自のライセンスファイルがありません。LibreYOLOは、リリース元プロジェクトが使うライセンスに基づいてmirroringし、各model cardにその根拠がチェックポイントごとの明示的許諾ではなく推定であると記載し、学習済みモデルの条件が学習データに由来する可能性があるというtorchvision独自の警告を繰り返します。
+
+ConvNeXt V2とLeVJEPAの学習済み重みにはCC-BY-NC-4.0が適用されます。Moondream 3はBSL 1.1を使い、Dome-DETRのミラーは学術研究に限定され、EdgeCrafterの`obj2coco`バリアントとDetAny3Dの重みには制限付きの条件が適用されます。各モデルページでは、コードのライセンスとともにこれらの宣言を記載しています。元のEdgeCrafterのCOCOチェックポイントは、記録されたApache-2.0の許諾を維持します。MiDaSのミラーは、公開元のMITの許諾を維持します。
+
+重みの概要は、チェックポイントの公開元が宣言したライセンスに従います。学習データセットの名前だけで、追加のチェックポイントライセンスが成立するわけではありません。
 
 ## 1つのモデルの条件を確認する
 

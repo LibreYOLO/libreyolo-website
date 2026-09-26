@@ -14,8 +14,8 @@ keywords:
   - libreyolo gewichte speicherort
   - libreyolo cli
   - libreyolo offline
-last_verified: 1.5.0
-source_hash: a729b43a6642f2a0
+last_verified: "1.6.0"
+source_hash: "d0d1f00bab2cee6e"
 ---
 
 ## Mit welchem Modell sollte ich beginnen?
@@ -172,3 +172,6 @@ werden weiterhin aufgelöst und geben einen `DeprecationWarning` mit einem
 Verweis auf den neuen Namen aus. Bestehender Code läuft daher weiter, während
 du ihn aktualisierst.
 
+## Warum scheitert der Download eines Checkpoint-Namens?
+
+Verwende den exakten Dateinamen aus der Checkpoint-Tabelle der Modellseite. FCN- und Mask-R-CNN-Schreibweisen mit Aufgabensuffix werden nicht gehostet; der Loader-Fehler nennt die unterstützten Formen. LingBot-Vision g hat keinen veröffentlichten Checkpoint: Verwende s, b, l oder einen lokalen Checkpoint.

@@ -12,7 +12,7 @@ keywords:
   - libreyolo cuda
   - libreyolo gpu
   - libreyolo 环境要求
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: 包名
     value: libreyolo
@@ -64,7 +64,7 @@ snippets:
         # 缺少对应 extra 的家族会连同启用它们的那条 pip
         # 命令一起列出
         libreyolo models
-source_hash: 34fc6d3e24d03fb4
+source_hash: 531023c2092fd751
 ---
 
 ## 安装
@@ -86,36 +86,41 @@ extra 是写在方括号里的一个名字，用来补上某个模型家族或�
 
 ### 模型家族
 
-| Extra | 新增 |
+| Extra | 新增依赖 |
 |---|---|
-| `rfdetr` | `transformers`，它提供 RF-DETR 的骨干 |
+| `ground` | 指令到点定位所需的 VLM 依赖 |
+| `vlm-train` | VLM 技术栈及用于 Qwen3-VL 微调的 `peft>=0.17.0` |
+| `vla` | `lerobot[smolvla,diffusion,dataset]>=0.6.1`，Python 3.12 或更高版本 |
+| `marigold` | 固定版本的扩散、加速和 Transformers 依赖 |
+| `molmo2` | `transformers==4.57.1`、`einops` 和 `accelerate` |
+| `rfdetr` | `transformers`，提供 RF-DETR 骨干 |
 | `eomt` | `transformers` |
-| `midas` | `timm` 1.0.x，它提供 MiDaS 的 ViT-L/16 和 EfficientNet-Lite3 编码器 |
+| `midas` | `timm` 1.0.x，提供 MiDaS 的 ViT-L/16 和 EfficientNet-Lite3 编码器 |
 | `vlm` | `transformers`、`num2words`、`decord`、`lmdb`、`peft` |
 | `sam` | `transformers`、`timm` |
 | `openvocab` | `transformers`、`timm`、`regex`、`ftfy` |
-| `sensenova` | `transformers`、`accelerate`，以及非 macOS 上的 `bitsandbytes` |
+| `sensenova` | `transformers`、`accelerate`，以及非 macOS 平台上的 `bitsandbytes` |
 | `modus` | `transformers`、`accelerate` |
-| `clip` | `regex` 和 `ftfy`，自带的 CLIP 文本分词器需要它们 |
-| `siglip2` | `sentencepiece`，多语言 SigLIP 2 分词器需要它 |
-| `gaze` | `gdown`，它会开启 L2CS 检查点（checkpoint）的自动下载 |
-| `rtdetr` | 无。RT-DETR 不需要额外的依赖；保留这个名字是为了让它保持稳定 |
+| `clip` | 内置 CLIP 文本分词器所需的 `regex` 和 `ftfy` |
+| `siglip2` | 多语言 SigLIP 2 分词器所需的 `sentencepiece` |
+| `gaze` | `gdown`，启用 L2CS 检查点自动下载 |
+| `rtdetr` | 无新增依赖。RT-DETR 不需要额外依赖；保留名称以保持兼容 |
 
 ### 导出与运行时
 
-| Extra | 新增 |
+| Extra | 新增依赖 |
 |---|---|
-| `onnx` | `onnx`、`onnxsim`、`onnxruntime` |
-| `tensorrt` | `tensorrt-cu12` 10.16.1.11 和 `pycuda`，macOS 上除外 |
+| `onnx` | `onnx`、`onnxsim`、`onnxruntime>=1.18.0` |
+| `tensorrt` | 非 macOS 平台上的 `tensorrt-cu12` 10.16.1.11 和 `pycuda` |
 | `openvino` | `openvino` |
 | `coreml` | `coremltools` |
 | `coreai` | `coreai-torch`，仅限 macOS |
-| `tflite`，别名 `litert` | `libreyolo[onnx]` 再加上 `onnx2tf`、`ai-edge-litert`、`onnx-graphsurgeon` 和 `onnx-simplifier` |
-| `mnn` | `libreyolo[onnx]` 再加上 `MNN` |
+| `tflite`，别名 `litert` | `libreyolo[onnx]` 加 `onnx2tf`、`ai-edge-litert`、`onnx-graphsurgeon` 和 `onnx-simplifier` |
+| `mnn` | `libreyolo[onnx]` 加 `MNN` |
 | `ncnn` | `pnnx` 和 `ncnn` |
-| `paddle` | `libreyolo[onnx]` 再加上 `paddlepaddle` 2.6.2 和 `x2paddle` 1.6.0 |
+| `paddle` | `libreyolo[onnx]` 加 `paddlepaddle` 2.6.2 和 `x2paddle` 1.6.0 |
 | `executorch` | `executorch` |
-| `triton` | `tritonclient[http]`，用于 HTTP 和 HTTPS 的 V2 推理 |
+| `triton` | 用于 HTTP 和 HTTPS V2 推理的 `tritonclient[http]` |
 
 ### 训练、评估与日志
 
@@ -137,26 +142,28 @@ extra 是写在方括号里的一个名字，用来补上某个模型家族或�
 
 ### 工具
 
-| Extra | 新增 |
+| Extra | 新增依赖 |
 |---|---|
-| `stream` | `yt-dlp`，只有解析 YouTube 页面 URL 时才需要 |
-| `tracking` | 无。跟踪用到的依赖全都已经是核心依赖 |
-| `label` | `libreyolo[sam]`，它让 `libreyolo label` 里的点击生成掩码辅助可用 |
-| `hub-kernels` | `kernels`，编译好的 Hub kernel 的可选加载器。参见 [kernels](/docs/reference/kernels)，那里说明了装上它可能让 RF-DETR 的预测在浮点容差范围内发生变化 |
-| `clip-convert` | `libreyolo[clip]` 再加上 `open_clip_torch`，用于权重转换和一致性核对 |
-| `siglip2-convert` | `libreyolo[siglip2]` 再加上 `transformers`，出于同样的理由 |
+| `hf` | 用于加载、发布和 Hub 日志记录器的 `huggingface_hub>=1.0.0` |
+| `llm` | 用于兼容 API 端点的 `openai>=1.66.0` |
+| `fiftyone` | 用于数据集整理的 `fiftyone>=1.0.0` |
+| `stream` | `yt-dlp`，仅用于解析 YouTube 页面 URL |
+| `tracking` | 无新增依赖。跟踪的全部依赖已属于核心依赖 |
+| `label` | `libreyolo[sam]`，为 `libreyolo label` 启用点击生成掩码的辅助功能 |
+| `hub-kernels` | `kernels`，编译后 Hub 内核的可选加载器。见[内核](/docs/reference/kernels)，其中说明安装后可能在浮点容差范围内改变 RF-DETR 预测 |
+| `clip-convert` | `libreyolo[clip]` 加 `open_clip_torch`，用于权重转换和一致性检查 |
+| `siglip2-convert` | `libreyolo[siglip2]` 加 `transformers`，用途相同 |
 
 摄像头、RTSP、RTMP、TCP、UDP、HLS 以及本地的多路流列表都不需要 extra。只有 YouTube
 页面 URL 需要。
 
 ### 聚合 extra
 
-`libreyolo[all]` 一条命令就装上模型、导出、跟踪和日志这几类 extra。有一些是特意留在
-外面的。`neptune` 被排除，是因为稳定版 `neptune-scale` 要求 protobuf 低于 7，而
-TFLite 那条路要求 protobuf 7。`executorch` 被排除，是因为 ExecuTorch 会限定它能搭配
-的 PyTorch 版本；`coreai` 被排除，是因为 `coreai-torch` 把 PyTorch 锁在 2.11.x，会把
-整个环境拖到那个版本上。`fast-eval`、`hub-kernels`、`clip-convert` 和
-`siglip2-convert` 同样被留在外面。要用哪个就按名字单独装。
+`libreyolo[all]` 用一条命令安装模型、导出、跟踪和日志 extra。有些依赖明确排除在外。`neptune` 被排除，因为稳定版 `neptune-scale` 要求 protobuf 低于 7，而 TFLite 路径要求 protobuf 7。`executorch` 被排除，因为 ExecuTorch 限制了配套的 PyTorch 版本；`coreai` 被排除，因为 `coreai-torch` 将 PyTorch 固定在 2.11.x，会把整个环境切换到这个版本。`fast-eval`、`hub-kernels`、`clip-convert` 和 `siglip2-convert` 也不包含在内。请按名称单独安装。`all` 包含 `hf` 和 `llm`；`fiftyone`、`vla`、`marigold` 和 `molmo2` 仍需单独安装。FiftyOne 引入 headless OpenCV，与核心 `cv2` 包重叠。
+
+核心安装需要 Python 3.10 或更高版本，并新增 `cloudpickle>=3.0.0`，用于协调器管理的 DDP。
+
+请为 Molmo2 使用独立环境：它固定的 Transformers 4.57.1 与较新的 VLM、Hub 和 Marigold 技术栈冲突。Marigold 固定使用 diffusers 0.38.0、peft 0.18.1、accelerate 1.13.0 和 Transformers 5.4.0，在 Linux/Windows 上还使用 bitsandbytes 0.49.2。Marigold 默认四位推理需要 CUDA。North Micro Vision 需要 Transformers 5.16 或更高版本；Gemma 4 需要 5.10 或更高版本，高于共用 VLM 的最低要求。
 
 ## 平台约束
 

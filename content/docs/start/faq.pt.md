@@ -16,8 +16,8 @@ keywords:
   - onde ficam os pesos do libreyolo
   - libreyolo cli
   - libreyolo sem internet
-last_verified: 1.5.0
-source_hash: a729b43a6642f2a0
+last_verified: 1.6.0
+source_hash: d0d1f00bab2cee6e
 ---
 
 ## Por qual modelo devo começar?
@@ -165,3 +165,7 @@ Dois nomes de classe foram renomeados por consistência: `LibreYOLORTDETR` virou
 `LibreRTDETR` e `LibreYOLORFDETR` virou `LibreRFDETR`. Os nomes antigos
 continuam funcionando e emitem um `DeprecationWarning` apontando para o novo,
 então o código existente continua rodando enquanto você o atualiza.
+
+## Por que um nome de checkpoint não permite o download?
+
+Use o nome exato do arquivo na tabela de checkpoints da página do modelo. Nomes de FCN e Mask R-CNN com sufixo de tarefa não estão hospedados; o erro do loader lista as formas suportadas. LingBot-Vision g não tem checkpoint publicado: use s, b, l ou um checkpoint local.

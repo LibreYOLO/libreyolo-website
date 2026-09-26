@@ -1,20 +1,46 @@
 ---
-title: Upgrading to 1.5.0
-seo_title: "Upgrade LibreYOLO 1.4.0 to 1.5.0"
-description: "The four code changes 1.5.0 requires, the three changes that move metrics, and the smaller behavior shifts worth knowing before you compare runs."
-lead: "Nothing was removed from the public model API: every class and function that worked in 1.4.0 still imports. Four arguments changed shape, and three defaults move numbers you may be comparing against."
-keywords: [libreyolo upgrade, libreyolo 1.5.0 migration, allow_experimental removed, libreyolo breaking changes, yolox bn eps, faster-coco-eval default]
-last_verified: "1.5.0"
-meta:
-  - label: Applies to
-    value: 1.4.0 to 1.5.0
-  - label: Code changes required
-    value: Four, all narrow
-  - label: Results that move
-    value: COCO backend, YOLOX BN eps, D-FINE multi-scale
-  - label: Public API removals
-    value: None
+title: Upgrading to 1.6.0
+seo_title: Upgrade LibreYOLO 1.5.0 to 1.6.0
+description: >-
+  Migration steps for preprocessing, training defaults, run directories, pinned
+  assets, QAT and data loaders in LibreYOLO 1.6.0.
+lead: >-
+  Version 1.6.0 changes preprocessing, training defaults and checkpoint
+  handling. Revalidate saved baselines and set previous defaults explicitly when
+  reproducing an older run.
+keywords:
+  - libreyolo upgrade
+  - libreyolo 1.5.0 migration
+  - allow_experimental removed
+  - libreyolo breaking changes
+  - yolox bn eps
+  - faster-coco-eval default
+last_verified: 1.6.0
 ---
+
+## 1.5.0 to 1.6.0
+
+- Upgrade environments pinned below ONNX Runtime 1.18 to `onnxruntime>=1.18.0` before installing the ONNX extra.
+
+- SAM 3D Body accepts the reviewed snapshot asset set. Install `libreyolo[hf]`, obtain gated access and use automatic acquisition, or supply the unchanged snapshot directory and pinned MHR asset on a trusted local filesystem.
+
+- Re-run validation after RF-DETR non-pose resize and classifier-normalization corrections. Recheck deployed confidence thresholds before comparing with 1.5.0 results; there is no legacy-preprocessing flag.
+
+- D-FINE, DEIM, RT-DETRv4 and YOLO-NAS detection enable FP16 AMP by default. Pass `amp=False` to retain FP32.
+
+- For former YOLO9 fine-tune choices, set `aux_weight=0`, `max_labels=100` and `warmup_momentum=0.937`. Set `letterbox_pad="topleft"` when a new center-stamped conversion must reproduce the old geometry. Old single-head checkpoints resume with their original graph.
+
+- RF-DETR and DINOv2 create incremented family-named run directories. Update artifact-path consumers, or set `output_dir="runs/train", exist_ok=True` to retain the old location and reuse behavior.
+
+- Keep classification `mixup + cutmix <= 1`; invalid combinations now raise during setup.
+
+- QAT disables EMA, SyncBatchNorm and checkpoint averaging. Use QAT best/last checkpoints without relying on those states.
+
+- Custom loaders with dataset-mutation hooks must use `persistent_workers=False` or rebuild workers after mutation. Incompatible persistent multi-worker copies now raise.
+
+See the [changelog](/docs/changelog) for the full release and [importing weights](/docs/migrate) for checkpoint conversion.
+
+## 1.4.0 to 1.5.0
 
 This page is about upgrading LibreYOLO itself. If you are looking for how to
 load a checkpoint from an upstream project, that is
@@ -23,9 +49,9 @@ load a checkpoint from an upstream project, that is
 The full entry for the release is the [changelog](/docs/changelog). What
 follows is only the part that asks something of you.
 
-## Code changes you must make
+### Code changes you must make
 
-### `allow_experimental=True` no longer exists
+#### `allow_experimental=True` no longer exists
 
 The acknowledgement gate is gone, along with the
 `ddp_aware(experimental_key=...)` mechanism behind it. EC, RTMDet, PicoDet and
@@ -48,7 +74,7 @@ SegFormer and YOLO9-P2.
 Support levels are still published, they are just no longer an argument: see
 [stability tiers](/docs/reference/stability-tiers).
 
-### The export tier `"experimental"` no longer exists
+#### The export tier `"experimental"` no longer exists
 
 ```python
 from libreyolo.export.support import Tier
@@ -62,7 +88,7 @@ Code branching on the tier string should read `"available"` where it read
 formats. The per-format state is listed in the
 [export matrix](/docs/reference/export-matrix).
 
-### `pretrained=False` with `resume` is now rejected
+#### `pretrained=False` with `resume` is now rejected
 
 The combination previously proceeded incoherently. It now raises:
 
@@ -75,7 +101,7 @@ in 1.5.0 works for every trainable family rather than three of them, and
 `resume` continues an interrupted run from its checkpoint. Both are documented
 under [training](/docs/train).
 
-### CLI `--imgsz` is a string, not an int
+#### CLI `--imgsz` is a string, not an int
 
 Narrower than it sounds. Both of these are unaffected:
 
@@ -101,12 +127,12 @@ predict_cmd(..., imgsz="640")    # 1.5.0, and "480x640" now works too
 `train`'s default is now the string `"640"`. `export --imgsz` was already a
 string, and `profile` is unchanged.
 
-## Numbers that change
+### Numbers that change
 
 Three changes move metrics at default settings. If you track results across
 versions, read these before you compare a 1.5.0 run against a 1.4.0 one.
 
-### faster-coco-eval is the default COCO metrics backend
+#### faster-coco-eval is the default COCO metrics backend
 
 `val()` and per-epoch training validation now compute COCO metrics with the
 faster-coco-eval C++ backend instead of pycocotools.
@@ -134,7 +160,7 @@ actually used is logged at INFO, exposed as `model.last_eval_backend` after
 [CLI](/docs/cli/val) JSON payload. Install the fast path with
 `pip install libreyolo[fast-eval]`.
 
-### YOLOX checkpoints trained before 1.5.0 need an eps override
+#### YOLOX checkpoints trained before 1.5.0 need an eps override
 
 This is the trap in the release. Read it if you have fine-tuned
 [YOLOX](/docs/models/yolox).
@@ -169,7 +195,7 @@ model.val(data="data.yaml")
 or fold `sqrt((var + 1e-3) / (var + 1e-5))` into the BN weights once and save
 the result. Checkpoints trained on 1.5.0 and later need neither.
 
-### D-FINE multi-scale training uses the upstream per-size recipe
+#### D-FINE multi-scale training uses the upstream per-size recipe
 
 `base_size_repeat` was hardcoded to 3 for every size. It now resolves per size
 as upstream specifies: **n** trains at fixed size with multi-scale off, **s**
@@ -187,7 +213,7 @@ config = DFINEConfig(base_size_repeat=3)
 DEIM still uses the hardcoded 3. Family details are on
 [D-FINE](/docs/models/d-fine).
 
-## Worth knowing, no action needed
+### Worth knowing, no action needed
 
 - **Rectangular `imgsz` results changed because they were wrong before.** Box
   coordinates, RTMDet mask resizing, YOLO-NAS rescaling and validator
@@ -239,7 +265,7 @@ DEIM still uses the hardcoded 3. Family details are on
 - **The pytest marker `experimental_backend` is now `extended_backend`.** Only
   relevant if you run the test suite with `-m`.
 
-## Checkpoints and datasets
+### Checkpoints and datasets
 
 Checkpoints written by 1.4.0 load unchanged. The
 [schema](/docs/reference/checkpoint-schema) gained `imgsz_h` and `imgsz_w` for

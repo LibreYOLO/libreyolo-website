@@ -15,8 +15,8 @@ keywords:
   - libreyolo notimplementederror
   - solucionar errores libreyolo
   - libreyolo no descarga pesos
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: 1.6.0
+source_hash: 30b68976a4ac01d1
 ---
 
 Los errores están agrupados por el texto que ves. Si tu mensaje no está aquí,
@@ -179,3 +179,7 @@ if report.errors:
 
 Consulta el [comando doctor](/docs/cli/doctor) para ver el catálogo de
 comprobaciones.
+
+## Los workers persistentes no pueden observar los cambios del dataset
+
+Los hooks activos `close_mosaic` o `set_epoch` deben llegar a las copias del dataset que usan los workers. Si un cargador personalizado con varios workers mantiene copias persistentes incompatibles, usa `persistent_workers=False` o reconstruye los workers tras la modificación. La ruta no persistente por defecto no se ve afectada.

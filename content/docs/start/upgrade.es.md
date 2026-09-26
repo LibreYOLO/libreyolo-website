@@ -1,15 +1,13 @@
 ---
-title: Actualizar a 1.5.0
-seo_title: Actualizar LibreYOLO de 1.4.0 a 1.5.0
+title: Actualizar a 1.6.0
+seo_title: Actualizar LibreYOLO de 1.5.0 a 1.6.0
 description: >-
-  Los cuatro cambios de código que exige 1.5.0, los tres cambios que mueven las
-  métricas y los ajustes de comportamiento menores que conviene conocer antes de
-  comparar ejecuciones.
+  Pasos de migración para preprocesamiento, valores por defecto de entrenamiento,
+  directorios de ejecución, archivos fijados, QAT y cargadores de datos en LibreYOLO 1.6.0.
 lead: >-
-  No se ha eliminado nada de la API pública de modelos: todas las clases y
-  funciones que funcionaban en 1.4.0 se siguen importando. Cuatro argumentos han
-  cambiado de forma, y tres valores por defecto mueven números con los que quizá
-  estés comparando.
+  La versión 1.6.0 cambia el preprocesamiento, los valores por defecto de entrenamiento
+  y el manejo de checkpoints. Vuelve a validar las referencias guardadas y fija
+  explícitamente los valores anteriores para reproducir una ejecución antigua.
 keywords:
   - actualizar libreyolo
   - migrar libreyolo 1.5.0
@@ -17,18 +15,33 @@ keywords:
   - allow_experimental eliminado
   - yolox bn eps
   - faster-coco-eval por defecto
-last_verified: 1.5.0
-meta:
-  - label: Se aplica a
-    value: De 1.4.0 a 1.5.0
-  - label: Cambios de código necesarios
-    value: 'Cuatro, todos acotados'
-  - label: Resultados que cambian
-    value: 'Backend de COCO, eps de BN en YOLOX, multiescala de D-FINE'
-  - label: Eliminaciones de la API pública
-    value: Ninguna
-source_hash: ab38d8ef7b53f596
+last_verified: 1.6.0
+source_hash: f4fda6ef286113ab
 ---
+
+## De 1.5.0 a 1.6.0
+
+- Actualiza los entornos fijados a una versión de ONNX Runtime anterior a 1.18 a `onnxruntime>=1.18.0` antes de instalar el extra ONNX.
+
+- SAM 3D Body acepta el conjunto de archivos del snapshot revisado. Instala `libreyolo[hf]`, consigue acceso al repositorio restringido y usa la descarga automática, o proporciona el directorio del snapshot sin cambios y el archivo MHR fijado en un sistema de archivos local de confianza.
+
+- Vuelve a ejecutar la validación tras las correcciones de redimensionado de RF-DETR para tareas distintas de pose y de normalización de clasificadores. Revisa los umbrales de confianza desplegados antes de comparar con resultados de 1.5.0; no hay un flag para el preprocesamiento anterior.
+
+- D-FINE, DEIM, RT-DETRv4 y la detección de YOLO-NAS activan AMP FP16 por defecto. Pasa `amp=False` para conservar FP32.
+
+- Para recuperar los ajustes anteriores de fine-tuning de YOLO9, fija `aux_weight=0`, `max_labels=100` y `warmup_momentum=0.937`. Fija `letterbox_pad="topleft"` cuando una nueva conversión marcada como centrada deba reproducir la geometría anterior. Los checkpoints antiguos de una sola cabeza se reanudan con su grafo original.
+
+- RF-DETR y DINOv2 crean directorios de ejecución incrementados con el nombre de la familia. Actualiza los consumidores de rutas de artefactos, o fija `output_dir="runs/train", exist_ok=True` para conservar la ubicación y la reutilización anteriores.
+
+- Mantén `mixup + cutmix <= 1` en clasificación; las combinaciones inválidas ahora lanzan un error durante la configuración.
+
+- QAT desactiva EMA, SyncBatchNorm y el promedio de checkpoints. Usa los checkpoints best/last de QAT sin depender de esos estados.
+
+- Los cargadores personalizados con hooks que modifican el dataset deben usar `persistent_workers=False` o reconstruir los workers tras la modificación. Las copias persistentes incompatibles con varios workers ahora lanzan un error.
+
+Consulta el [changelog](/docs/changelog) para la versión completa e [importar pesos](/docs/migrate) para la conversión de checkpoints.
+
+## De 1.4.0 a 1.5.0
 
 Esta página trata sobre actualizar LibreYOLO en sí. Si lo que buscas es cómo
 cargar un checkpoint de un proyecto upstream, eso es
@@ -37,9 +50,9 @@ cargar un checkpoint de un proyecto upstream, eso es
 La entrada completa de la versión está en el [changelog](/docs/changelog). Lo
 que sigue es solo la parte que te pide algo a ti.
 
-## Cambios de código que debes hacer
+### Cambios de código que debes hacer
 
-### `allow_experimental=True` ya no existe
+#### `allow_experimental=True` ya no existe
 
 La barrera de reconocimiento ha desaparecido, junto con el mecanismo
 `ddp_aware(experimental_key=...)` que había detrás. El entrenamiento y la
@@ -62,7 +75,7 @@ SegFormer y YOLO9-P2.
 Los niveles de soporte se siguen publicando, simplemente ya no son un
 argumento: consulta [niveles de estabilidad](/docs/reference/stability-tiers).
 
-### El nivel de exportación `"experimental"` ya no existe
+#### El nivel de exportación `"experimental"` ya no existe
 
 ```python
 from libreyolo.export.support import Tier
@@ -76,7 +89,7 @@ donde leía `"experimental"`. `BaseExporter` ya no emite un `RuntimeWarning`
 para esos formatos. El estado de cada formato está en la
 [matriz de exportación](/docs/reference/export-matrix).
 
-### `pretrained=False` junto con `resume` ahora se rechaza
+#### `pretrained=False` junto con `resume` ahora se rechaza
 
 La combinación seguía adelante de forma incoherente. Ahora lanza:
 
@@ -89,7 +102,7 @@ que en 1.5.0 funciona para todas las familias entrenables en lugar de para
 tres de ellas, y `resume` continúa una ejecución interrumpida desde su
 checkpoint. Ambas están documentadas en [entrenamiento](/docs/train).
 
-### En la CLI, `--imgsz` es un string, no un int
+#### En la CLI, `--imgsz` es un string, no un int
 
 Es más acotado de lo que parece. Estos dos casos no se ven afectados:
 
@@ -116,13 +129,13 @@ predict_cmd(..., imgsz="640")    # 1.5.0, y ahora "480x640" también funciona
 El valor por defecto de `train` es ahora el string `"640"`. `export --imgsz` ya
 era un string, y `profile` no cambia.
 
-## Números que cambian
+### Números que cambian
 
 Tres cambios mueven las métricas con la configuración por defecto. Si sigues
 los resultados entre versiones, léelos antes de comparar una ejecución de 1.5.0
 con una de 1.4.0.
 
-### faster-coco-eval es el backend de métricas COCO por defecto
+#### faster-coco-eval es el backend de métricas COCO por defecto
 
 `val()` y la validación por época durante el entrenamiento calculan ahora las
 métricas COCO con el backend en C++ faster-coco-eval en lugar de pycocotools.
@@ -151,7 +164,7 @@ usa realmente se registra a nivel INFO, se expone como
 en el payload JSON de la [CLI](/docs/cli/val). Instala la vía rápida con
 `pip install libreyolo[fast-eval]`.
 
-### Los checkpoints de YOLOX entrenados antes de 1.5.0 necesitan un override de eps
+#### Los checkpoints de YOLOX entrenados antes de 1.5.0 necesitan un override de eps
 
 Esta es la trampa de la versión. Léela si has hecho fine-tuning de
 [YOLOX](/docs/models/yolox).
@@ -189,7 +202,7 @@ o incorporas `sqrt((var + 1e-3) / (var + 1e-5))` a los pesos de BN una sola vez
 y guardas el resultado. Los checkpoints entrenados en 1.5.0 y posteriores no
 necesitan ninguna de las dos cosas.
 
-### El entrenamiento multiescala de D-FINE usa la receta por tamaño de upstream
+#### El entrenamiento multiescala de D-FINE usa la receta por tamaño de upstream
 
 `base_size_repeat` estaba fijado a 3 para todos los tamaños. Ahora se resuelve
 por tamaño tal como especifica upstream: **n** entrena a tamaño fijo con la
@@ -208,7 +221,7 @@ config = DFINEConfig(base_size_repeat=3)
 DEIM sigue usando el 3 fijo. Los detalles de la familia están en
 [D-FINE](/docs/models/d-fine).
 
-## Conviene saberlo, no requiere acción
+### Conviene saberlo, no requiere acción
 
 - **Los resultados con `imgsz` rectangular han cambiado porque antes estaban
   mal.** Las coordenadas de los bounding boxes, el redimensionado de máscaras
@@ -268,7 +281,7 @@ DEIM sigue usando el 3 fijo. Los detalles de la familia están en
 - **El marcador de pytest `experimental_backend` ahora es `extended_backend`.**
   Solo importa si ejecutas la suite de tests con `-m`.
 
-## Checkpoints y datasets
+### Checkpoints y datasets
 
 Los checkpoints escritos por 1.4.0 se cargan sin cambios. El
 [esquema](/docs/reference/checkpoint-schema) ha ganado `imgsz_h` e `imgsz_w`

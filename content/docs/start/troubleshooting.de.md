@@ -15,8 +15,8 @@ keywords:
   - libreyolo cuda out of memory
   - libreyolo notimplementederror
   - libreyolo fehlerbehebung
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: "1.6.0"
+source_hash: "30b68976a4ac01d1"
 ---
 
 Die Fehler sind nach dem angezeigten Text gruppiert. Wenn deine Meldung hier
@@ -184,3 +184,6 @@ if report.errors:
 
 Den Prüfkatalog findest du beim [doctor-Befehl](/docs/cli/doctor).
 
+## Persistente Worker erkennen Datensatzänderungen nicht
+
+Aktive `close_mosaic`- oder `set_epoch`-Hooks müssen die von Workern verwendeten Datensatzkopien erreichen. Wenn ein eigener Multi-Worker-Loader inkompatible persistente Kopien behält, verwende `persistent_workers=False` oder erstelle Worker nach der Änderung neu. Der standardmäßige nichtpersistente Pfad bleibt unberührt.

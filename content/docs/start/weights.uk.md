@@ -16,7 +16,7 @@ keywords:
   - libreyolo офлайн
   - libreyolo hugging face
   - метадані контрольної точки
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Розміщення
     value: 'Один репозиторій Hugging Face для кожної контрольної точки:'
@@ -78,7 +78,7 @@ snippets:
 
         print(loaded["model_family"], loaded["size"], loaded["task"],
         loaded["nc"])
-source_hash: 210a12baa1417cfb
+source_hash: 1d76b60f3992a781
 ---
 
 ## Де шукається контрольна точка
@@ -221,3 +221,9 @@ https://huggingface.co/LibreYOLO/<name>/resolve/main/<name>.pt
 
 `libreyolo metadata` ніколи не створює модель, тому працює з файлом, сімейство
 якого не встановлено, і з файлом, щодо якого ви не впевнені.
+
+## Дзеркала й моделі зі знімків
+
+MiDaS s/l, MoGe-2 s/l і SAM-1 base/large/huge використовують дзеркала LibreYOLO; MoGe-2 b залишається у вихідному репозиторії. Дзеркала Dome-DETR зберігають умови використання лише для академічних досліджень. Варіанти EdgeCrafter `obj2coco` потребують явної згоди й зберігають обмежувальну вихідну ліцензію. Перевіряйте згенеровану таблицю контрольних точок на сторінці кожної моделі.
+
+[Посилання Hub](/docs/reference/hugging-face) завантажують контрольні точки з позначкою схеми за ID репозиторію. SAM 3D Body потребує перевірених зафіксованих ресурсів знімка й дозволу доступу. Політики роботів використовують каталоги контрольних точок із `libreyolo_vla.json`; див. [LibreVLA](/docs/reference/vla-api).

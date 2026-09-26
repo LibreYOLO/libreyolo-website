@@ -1,10 +1,19 @@
 ---
 title: Troubleshooting
-seo_title: "Fix common LibreYOLO errors"
-description: "The errors LibreYOLO raises most often, what each one means, and the fix. Includes two failures that produce wrong output instead of raising."
-lead: "Errors grouped by the message you see. Two entries at the end cover the opposite problem: code that runs, returns something plausible, and is wrong."
-keywords: [libreyolo error, modulenotfounderror libreyolo, libreyolo cuda out of memory, libreyolo notimplementederror, libreyolo troubleshooting]
-last_verified: "1.5.0"
+seo_title: Fix common LibreYOLO errors
+description: >-
+  The errors LibreYOLO raises most often, what each one means, and the fix.
+  Includes two failures that produce wrong output instead of raising.
+lead: >-
+  Errors grouped by the message you see. Two entries at the end cover the
+  opposite problem: code that runs, returns something plausible, and is wrong.
+keywords:
+  - libreyolo error
+  - modulenotfounderror libreyolo
+  - libreyolo cuda out of memory
+  - libreyolo notimplementederror
+  - libreyolo troubleshooting
+last_verified: 1.6.0
 ---
 
 Errors are grouped by the text you see. If your message is not here, the
@@ -152,3 +161,7 @@ if report.errors:
 ```
 
 See the [doctor command](/docs/cli/doctor) for the check catalog.
+
+## Persistent workers cannot observe dataset changes
+
+Active `close_mosaic` or `set_epoch` hooks must reach the dataset copies used by workers. If a custom multi-worker loader keeps incompatible persistent copies, use `persistent_workers=False` or rebuild workers after the mutation. The default nonpersistent path is unaffected.

@@ -14,7 +14,7 @@ keywords:
   - libreyolo 오프라인
   - 리브레욜로 허깅 페이스
   - 체크포인트 메타데이터
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 호스팅됨
     value: '체크포인트당 하나의 Hugging Face 저장소:'
@@ -75,7 +75,7 @@ snippets:
 
         print(loaded["model_family"], loaded["size"], loaded["task"],
         loaded["nc"])
-source_hash: 210a12baa1417cfb
+source_hash: "1d76b60f3992a781"
 ---
 
 ## 체크포인트를 찾는 곳
@@ -147,3 +147,9 @@ LibreYOLO 체크포인트는 `model` 키가 PyTorch 상태 딕셔너리를 갖�
 <code-tabs name="inspect" />
 
 `libreyolo metadata`는 모델을 절대 생성하지 않으므로, 설치되지 않은 계열의 파일이나 확실하지 않은 파일에서도 작동합니다.
+
+## 미러와 스냅샷 모델
+
+MiDaS s/l, MoGe-2 s/l, SAM-1 base/large/huge는 LibreYOLO 미러를 사용하며 MoGe-2 b는 업스트림에 유지됩니다. Dome-DETR 미러는 학술 연구 전용 약관을 유지합니다. EdgeCrafter `obj2coco` 변형은 명시적인 동의가 필요하며 업스트림의 제한적 라이선스를 유지합니다. 각 모델 페이지에서 생성된 체크포인트 표를 확인하십시오.
+
+[Hub 참조](/docs/reference/hugging-face)는 저장소 ID로 스키마가 표시된 체크포인트를 로드합니다. SAM 3D Body에는 검토 후 고정된 스냅샷 파일과 접근 권한이 필요합니다. 로봇 정책은 `libreyolo_vla.json`이 있는 체크포인트 디렉터리를 사용하며, [LibreVLA](/docs/reference/vla-api)를 참조하십시오.

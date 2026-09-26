@@ -14,8 +14,8 @@ keywords:
   - gdzie są wagi LibreYOLO
   - LibreYOLO CLI
   - LibreYOLO offline
-last_verified: 1.5.0
-source_hash: a729b43a6642f2a0
+last_verified: 1.6.0
+source_hash: d0d1f00bab2cee6e
 ---
 
 ## Od którego modelu zacząć?
@@ -160,3 +160,7 @@ Dla spójności zmieniono nazwy dwóch klas: `LibreYOLORTDETR` zmieniło się na
 `LibreRTDETR`, a `LibreYOLORFDETR` na `LibreRFDETR`. Stare nazwy nadal są
 rozwiązywane i emitują `DeprecationWarning` wskazujące nową nazwę, więc
 istniejący kod działa podczas aktualizowania.
+
+## Dlaczego dana nazwa checkpointu nie pozwala go pobrać?
+
+Należy użyć dokładnej nazwy pliku z tabeli checkpointów na stronie modelu. Nazwy FCN i Mask R-CNN z sufiksami zadań nie są dostępne do pobrania; błąd loadera wymienia obsługiwane formy. LingBot-Vision g nie ma opublikowanego checkpointu: należy użyć s, b, l lub checkpointu lokalnego.

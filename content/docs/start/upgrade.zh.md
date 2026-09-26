@@ -1,10 +1,8 @@
 ---
-title: 升级到 1.5.0
-seo_title: 把 LibreYOLO 1.4.0 升级到 1.5.0
-description: 1.5.0 要求你改的四处代码、会让指标变化的三处改动，以及在对比运行结果之前值得知道的几个较小的行为变化。
-lead: >-
-  公开的模型 API 没有删除任何东西：在 1.4.0
-  里能用的每一个类和函数现在依然可以导入。有四个参数换了形态，还有三个默认值会让你可能正在对比的数字发生变化。
+title: "升级到 1.6.0"
+seo_title: "LibreYOLO 从 1.5.0 升级到 1.6.0"
+description: "LibreYOLO 1.6.0 的迁移步骤：预处理、训练默认值、训练目录、固定资源、QAT 和数据加载器。"
+lead: "1.6.0 更改了预处理、训练默认值和检查点处理。请重新验证已保存的基线，复现旧训练时显式设置以前的默认值。"
 keywords:
   - libreyolo 升级
   - libreyolo 1.5.0 迁移
@@ -12,27 +10,42 @@ keywords:
   - libreyolo 破坏性变更
   - yolox bn eps
   - faster-coco-eval 默认
-last_verified: 1.5.0
-meta:
-  - label: 适用范围
-    value: 1.4.0 到 1.5.0
-  - label: 必须改的代码
-    value: 四处，都很局部
-  - label: 会变化的结果
-    value: COCO 后端、YOLOX BN eps、D-FINE 多尺度
-  - label: 公开 API 的删除项
-    value: 没有
-source_hash: ab38d8ef7b53f596
+last_verified: "1.6.0"
+source_hash: f4fda6ef286113ab
 ---
+
+## 从 1.5.0 升级到 1.6.0
+
+- 如果环境将 ONNX Runtime 固定在 1.18 以下，安装 ONNX extra 前请升级到 `onnxruntime>=1.18.0`。
+
+- SAM 3D Body 接受经过审查的快照资源集。安装 `libreyolo[hf]`，获得受限访问权限并使用自动获取，或在可信本地文件系统上提供未经修改的快照目录和固定的 MHR 资源。
+
+- RF-DETR 非姿态缩放和分类器归一化修正后，请重新运行验证。与 1.5.0 结果比较前，请重新检查部署的置信度阈值；没有保留旧预处理的标志。
+
+- D-FINE、DEIM、RT-DETRv4 和 YOLO-NAS 检测默认启用 FP16 AMP。传入 `amp=False` 可保留 FP32。
+
+- 要使用以前的 YOLO9 微调设置，请设置 `aux_weight=0`、`max_labels=100` 和 `warmup_momentum=0.937`。新的中心对齐转换权重需要复现旧几何时，设置 `letterbox_pad="topleft"`。旧单 head 检查点继续使用原计算图续训。
+
+- RF-DETR 和 DINOv2 创建以家族命名、自动递增的训练目录。请更新使用产物路径的程序，或设置 `output_dir="runs/train", exist_ok=True`，保留原位置和复用行为。
+
+- 保持分类 `mixup + cutmix <= 1`；无效组合现在会在初始化时报错。
+
+- QAT 禁用 EMA、SyncBatchNorm 和检查点平均。请使用 QAT 的 best/last 检查点，不要依赖这些状态。
+
+- 带数据集修改钩子的自定义加载器必须使用 `persistent_workers=False`，或在修改后重建 worker。不兼容的持久多 worker 副本现在会报错。
+
+完整版本说明见[更新日志](/docs/changelog)，检查点转换见[导入权重](/docs/migrate)。
+
+## 从 1.4.0 升级到 1.5.0
 
 本页讲的是升级 LibreYOLO 本身。如果你要找的是如何加载上游项目的检查点
 （checkpoint），那是[导入已有权重](/docs/migrate)，属于另一个话题。
 
 这次发布的完整条目在[更新日志](/docs/changelog)里。下面只写需要你动手的那部分。
 
-## 你必须做的代码改动
+### 必须修改的代码
 
-### `allow_experimental=True` 不再存在
+#### `allow_experimental=True` 已移除
 
 那道确认关卡没有了，它背后的 `ddp_aware(experimental_key=...)` 机制也一并移除。
 EC、RTMDet、PicoDet 和 FOMO 的训练与导出此前都要求传这个参数，所以任何训练这些
@@ -52,7 +65,7 @@ model.train(data="data.yaml", epochs=100)
 
 支持级别照常公布，只是不再是一个参数：见[稳定性层级](/docs/reference/stability-tiers)。
 
-### 导出层级 `"experimental"` 不再存在
+#### 导出等级 `"experimental"` 已移除
 
 ```python
 from libreyolo.export.support import Tier
@@ -65,7 +78,7 @@ from libreyolo.export.support import Tier
 `BaseExporter` 不再为这些格式发出 `RuntimeWarning`。每种格式的状态列在
 [导出矩阵](/docs/reference/export-matrix)里。
 
-### `pretrained=False` 与 `resume` 同用现在会被拒绝
+#### `pretrained=False` 与 `resume` 同时使用现在会被拒绝
 
 这个组合此前会以自相矛盾的方式继续跑下去。现在它会抛出：
 
@@ -77,7 +90,7 @@ ValueError: pretrained=False cannot be combined with resume.
 的家族都有效，而不再只对其中三个有效；`resume` 则从检查点接着跑一次被中断的训练。
 两者都记录在[训练](/docs/train)里。
 
-### CLI 的 `--imgsz` 是字符串，不是整数
+#### CLI `--imgsz` 是字符串，不是整数
 
 影响面比听上去要窄。下面这两种写法都不受影响：
 
@@ -102,12 +115,12 @@ predict_cmd(..., imgsz="640")    # 1.5.0，而且 "480x640" 现在也能用了
 `train` 的默认值现在是字符串 `"640"`。`export --imgsz` 本来就是字符串，`profile`
 没有变化。
 
-## 会变化的数字
+### 会变化的数值
 
 有三处改动会在默认设置下改变指标。如果你跨版本跟踪结果，在拿 1.5.0 的运行结果和
 1.4.0 的对比之前，先读这几条。
 
-### faster-coco-eval 成为默认的 COCO 指标后端
+#### faster-coco-eval 是默认 COCO 指标后端
 
 `val()` 和训练中每轮的验证，现在用 faster-coco-eval 的 C++ 后端计算 COCO 指标，
 而不是 pycocotools。
@@ -132,7 +145,7 @@ model.val(data="coco.yaml", faster_coco_eval=False)
 包含在 [CLI](/docs/cli/val) 的 JSON 输出里。用
 `pip install libreyolo[fast-eval]` 安装这条快路径。
 
-### 在 1.5.0 之前训练的 YOLOX 检查点需要覆盖 eps
+#### 1.5.0 之前训练的 YOLOX 检查点需要覆盖 eps
 
 这是这次发布里的坑。如果你微调过 [YOLOX](/docs/models/yolox)，就读一下这段。
 
@@ -164,7 +177,7 @@ model.val(data="data.yaml")
 要么把 `sqrt((var + 1e-3) / (var + 1e-5))` 一次性折叠进 BN 权重并保存结果。在 1.5.0
 及以后训练的检查点两者都不需要。
 
-### D-FINE 多尺度训练改用上游的逐尺寸配方
+#### D-FINE 多尺度训练使用上游各尺寸配方
 
 `base_size_repeat` 此前对每个尺寸都硬编码为 3。现在它按上游的规定逐尺寸取值：
 **n** 关闭多尺度、按固定尺寸训练，**s** 为 20，**m** 为 6，**l** 为 4，**x** 为 3。
@@ -180,7 +193,7 @@ config = DFINEConfig(base_size_repeat=3)
 
 DEIM 仍然使用硬编码的 3。家族细节见 [D-FINE](/docs/models/d-fine)。
 
-## 值得知道，但不需要动手
+### 需要了解但无需操作的变化
 
 - **矩形 `imgsz` 的结果变了，因为它们之前是错的。** 检测框坐标、RTMDet 的掩码缩放、
   YOLO-NAS 的重新缩放，以及验证器对真值（ground truth）的缩放，现在都按高和宽分轴
@@ -219,7 +232,7 @@ DEIM 仍然使用硬编码的 3。家族细节见 [D-FINE](/docs/models/d-fine)�
 - **pytest 标记 `experimental_backend` 现在叫 `extended_backend`。** 只有当你用 `-m`
   跑测试套件时才有关系。
 
-## 检查点与数据集
+### 检查点和数据集
 
 1.4.0 写出的检查点照常加载。[结构定义](/docs/reference/checkpoint-schema)为矩形模型
 新增了 `imgsz_h` 和 `imgsz_w`，同时仍然为较旧的读取方写入标量 `imgsz = max(h, w)`。

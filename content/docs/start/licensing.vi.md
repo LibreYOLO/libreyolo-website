@@ -2,22 +2,20 @@
 title: Giấy phép
 seo_title: 'Giấy phép LibreYOLO: mã nguồn và trọng số'
 description: >-
-  Mã nguồn riêng của LibreYOLO dùng MIT. Mã upstream được đưa vào và checkpoint
-  đã công bố có giấy phép riêng, trong đó một số chỉ cho phép phi thương mại.
+  Mã nguồn riêng của LibreYOLO dùng MIT. Mã upstream được đưa vào và checkpoint đã công bố có giấy phép riêng,
+  trong đó một số chỉ cho phép phi thương mại.
 lead: >-
-  LibreYOLO chứa ba thành phần được cấp phép riêng: mã nguồn của chính nó, mã
-  upstream được đưa vào một họ mô hình và checkpoint huấn luyện sẵn. Chúng
-  thường không dùng cùng giấy phép.
+  LibreYOLO chứa ba thành phần được cấp phép riêng: mã nguồn của chính nó, mã upstream được đưa vào một họ mô
+  hình và checkpoint huấn luyện sẵn. Chúng thường không dùng cùng giấy phép.
 keywords:
   - giấy phép libreyolo
   - thư viện thị giác máy tính mit
   - trọng số mô hình phi thương mại
   - giấy phép checkpoint mô hình
   - apache 2.0 detection
-last_verified: 1.5.0
-source_hash: 83536fea4dc4eaec
+last_verified: 1.6.0
+source_hash: 03e83b82bd2da258
 ---
-
 ## Mã nguồn riêng của LibreYOLO
 
 Thư viện dùng MIT. Giấy phép này bao gồm Python API, CLI, trainer, validator và
@@ -87,12 +85,8 @@ số](/docs/weights) để biết cách đặt tên file và nơi tải.
 Giấy phép khác nhau giữa các họ và giữa các file trong cùng một họ. Hai ví dụ
 cho trường hợp thứ hai:
 
-- Các checkpoint YOLO9 COCO dùng MIT. `LibreYOLO9P2s-visdrone.pt`, được huấn
-  luyện trên VisDrone2019-DET, dùng CC BY-NC-SA 3.0 và chỉ cho phép phi thương
-  mại.
-- Checkpoint detection RF-DETR dùng Apache-2.0. Checkpoint oriented-box dùng
-  CC BY 4.0 vì được tinh chỉnh trên dataset Roboflow Universe công bố theo CC
-  BY 4.0, và trọng số tiếp tục mang yêu cầu ghi công của dataset đó.
+- Checkpoint YOLO9 COCO dùng MIT. `LibreYOLO9P2s-visdrone.pt`, được huấn luyện trên VisDrone2019-DET, dùng CC BY-NC-SA 3.0, là giấy phép phi thương mại.
+- Checkpoint phát hiện RF-DETR dùng Apache-2.0. Repo checkpoint hộp xoay công bố CC BY 4.0.
 
 Giữa các họ, phạm vi còn rộng hơn và một số checkpoint công bố không thể dùng
 trong sản phẩm thương mại:
@@ -109,21 +103,17 @@ trong sản phẩm thương mại:
 - Mã SenseNova-Vision dùng Apache-2.0 và trọng số dùng CC BY-NC 4.0. Loader in
   thông báo phi thương mại trước mỗi lần tự động tải.
 
-Một số họ hoàn toàn không có checkpoint do LibreYOLO lưu trữ, và trang của họ
-nói rõ ở hàng Trọng số. SAM 3 bị giới hạn truy cập trên Hugging Face theo SAM
-License tùy chỉnh của Meta và được tải trực tiếp từ Meta. Asset phát hành MiDaS
-được lấy từ URL chính thức và xác minh hash thay vì lưu trữ lại. Dome-DETR được
-liên kết về upstream vì metadata model card không nêu giấy phép, trong khi nội
-dung lại tuyên bố Apache-2.0 đồng thời giới hạn dùng cho nghiên cứu học thuật,
-hai điều này không nhất quán. Kiến trúc TEED và DexiNed dùng MIT, nhưng
-checkpoint của tác giả được huấn luyện trên BIPED có điều khoản dataset phi
-thương mại, nên LibreYOLO không bundle hoặc tự động tải chúng.
+SAM 3 dùng snapshot upstream có kiểm soát truy cập theo SAM License riêng của Meta. MiDaS s/l và sáu checkpoint Dome-DETR nay dùng bản sao của LibreYOLO; MiDaS giữ MIT và Dome-DETR giữ điều khoản chỉ dùng cho nghiên cứu học thuật. Các họ khác có thể cần tệp upstream cục bộ. Trang mô hình mô tả cách lấy tệp riêng với giấy phép do nhà phát hành công bố.
 
 Một số checkpoint torchvision không có file giấy phép riêng. LibreYOLO mirror
 chúng theo giấy phép mà dự án phát hành sử dụng, nêu trên từng model card rằng
 căn cứ này là ngụ ý chứ không phải được cấp riêng cho checkpoint, và lặp lại
 cảnh báo của torchvision rằng điều khoản mô hình huấn luyện sẵn có thể bắt
 nguồn từ dữ liệu huấn luyện.
+
+Trọng số được huấn luyện sẵn của ConvNeXt V2 và LeVJEPA dùng CC-BY-NC-4.0. Moondream 3 dùng BSL 1.1, bản sao Dome-DETR giới hạn ở nghiên cứu học thuật, còn biến thể `obj2coco` của EdgeCrafter và DetAny3D có điều khoản trọng số hạn chế. Trang mô hình ghi các công bố bên cạnh giấy phép mã nguồn. Checkpoint COCO gốc của EdgeCrafter giữ giấy phép Apache-2.0 đã ghi. Bản sao MiDaS giữ giấy phép MIT của nhà phát hành.
+
+Tóm tắt trọng số tuân theo giấy phép do nhà phát hành checkpoint công bố. Tên dataset huấn luyện không xác lập thêm giấy phép cho checkpoint.
 
 ## Tìm điều khoản cho một mô hình
 

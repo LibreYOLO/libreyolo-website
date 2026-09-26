@@ -16,7 +16,7 @@ keywords:
   - libreyolo offline
   - libreyolo hugging face
   - metadata checkpoint
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Lokasi hosting
     value: 'Satu repositori Hugging Face per checkpoint:'
@@ -82,7 +82,7 @@ snippets:
 
         print(loaded["model_family"], loaded["size"], loaded["task"],
         loaded["nc"])
-source_hash: 210a12baa1417cfb
+source_hash: 1d76b60f3992a781
 ---
 
 ## Lokasi pencarian checkpoint
@@ -219,3 +219,8 @@ jalur kompatibilitas dengan peringatan yang menyebutkan kekurangan.
 `libreyolo metadata` tidak pernah membuat model, sehingga dapat digunakan pada
 berkas yang family-nya belum diinstal dan pada berkas yang belum diyakini.
 
+## Mirror dan model snapshot
+
+MiDaS s/l, MoGe-2 s/l, dan SAM-1 base/large/huge memakai mirror LibreYOLO; MoGe-2 b tetap di upstream. Mirror Dome-DETR mempertahankan ketentuan untuk riset akademik saja. Varian EdgeCrafter `obj2coco` memerlukan persetujuan eksplisit dan mempertahankan lisensi upstream yang membatasi penggunaan. Periksa tabel checkpoint yang dihasilkan pada setiap halaman model.
+
+[Referensi Hub](/docs/reference/hugging-face) memuat checkpoint bertanda skema dari ID repositori. SAM 3D Body memerlukan aset snapshot yang sudah ditinjau dan dipatok serta akses terbatas. Policy robot memakai direktori checkpoint dengan `libreyolo_vla.json`; lihat [LibreVLA](/docs/reference/vla-api).

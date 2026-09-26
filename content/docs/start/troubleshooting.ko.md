@@ -11,8 +11,8 @@ keywords:
   - libreyolo CUDA 메모리 부족
   - libreyolo 미구현 오류
   - libreyolo 문제 해결
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: 1.6.0
+source_hash: "30b68976a4ac01d1"
 ---
 
 오류는 보는 텍스트별로 그룹화됩니다. 메시지가 여기에 없다면, [FAQ](/docs/faq)는 실패가 아닌 질문에 답변하며, `libreyolo models`는 설치한 프로그램이 실제로 로드할 수 있는 내용을 보고합니다.
@@ -126,3 +126,7 @@ if report.errors:
 ```
 
 검사 카탈로그는 [doctor command](/docs/cli/doctor)를 참조하십시오.
+
+## 영구 작업자가 데이터셋 변경을 관찰할 수 없는 경우
+
+활성 `close_mosaic` 또는 `set_epoch` 훅은 작업자가 사용하는 데이터셋 사본에 전달되어야 합니다. 사용자 정의 다중 작업자 로더가 호환되지 않는 영구 사본을 유지하면 `persistent_workers=False`를 사용하거나 변경 후 작업자를 다시 생성합니다. 기본 비영구 경로는 영향을 받지 않습니다.

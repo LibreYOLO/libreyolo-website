@@ -15,8 +15,8 @@ keywords:
   - poids modèle usage non commercial
   - licence checkpoint modèle
   - détection objets apache 2
-last_verified: 1.5.0
-source_hash: 83536fea4dc4eaec
+last_verified: "1.6.0"
+source_hash: 03e83b82bd2da258
 ---
 
 ## Code propre à LibreYOLO
@@ -101,10 +101,7 @@ d'une même famille. Voici deux exemples de ce second cas :
 - Les checkpoints COCO de YOLO9 sont sous licence MIT.
   `LibreYOLO9P2s-visdrone.pt`, entraîné sur VisDrone2019-DET, est sous licence
   CC BY-NC-SA 3.0, qui interdit l'usage commercial.
-- Les checkpoints de détection RF-DETR sont sous licence Apache-2.0. Les
-  checkpoints de boîtes orientées sont sous licence CC BY 4.0, car ils ont été
-  affinés sur un dataset Roboflow Universe publié sous CC BY 4.0 et les poids
-  conservent l'exigence d'attribution de ce dataset.
+- Les checkpoints de détection RF-DETR sont sous Apache-2.0. Les dépôts des checkpoints de boîtes orientées déclarent CC BY 4.0.
 
 L'éventail est plus large encore entre les familles, et plusieurs checkpoints
 publiés ne peuvent pas être utilisés dans un produit commercial :
@@ -124,18 +121,7 @@ publiés ne peuvent pas être utilisés dans un produit commercial :
   licence CC BY-NC 4.0. Le chargeur affiche l'avis d'utilisation non commerciale
   avant chaque téléchargement automatique.
 
-Certaines familles ne possèdent aucun checkpoint hébergé par LibreYOLO, ce que
-leur ligne Poids indique. SAM 3 est soumis à autorisation sur Hugging Face selon
-la licence SAM personnalisée de Meta et se télécharge directement depuis Meta.
-Les ressources publiées par MiDaS sont récupérées depuis les URL officielles et
-leur hachage est vérifié, au lieu d'être réhébergées. Dome-DETR renvoie vers la
-source amont, car les métadonnées de sa fiche de modèle ne précisent aucune
-licence, tandis que son texte revendique Apache-2.0 tout en réservant
-l'utilisation à la recherche universitaire. Ces affirmations sont
-contradictoires. Les architectures TEED et DexiNed sont sous licence MIT, mais
-les checkpoints publiés par leurs auteurs ont été entraînés sur BIPED, dont les
-conditions interdisent l'usage commercial. LibreYOLO ne les inclut donc pas et
-ne les télécharge pas automatiquement.
+SAM 3 utilise des snapshots amont à accès restreint sous la licence SAM de Meta. MiDaS s/l et les six checkpoints Dome-DETR utilisent des miroirs LibreYOLO ; MiDaS conserve MIT et Dome-DETR reste réservé à la recherche académique. D'autres familles peuvent nécessiter des fichiers amont locaux. Leurs pages décrivent l'acquisition séparément de la licence déclarée par l'éditeur.
 
 Plusieurs checkpoints torchvision n'ont pas de fichier de licence propre.
 LibreYOLO les reproduit sous la licence employée par le projet qui les publie,
@@ -143,6 +129,10 @@ précise sur chaque fiche de modèle que ce fondement est implicite plutôt
 qu'accordé par checkpoint, et reprend l'avertissement de torchvision selon
 lequel les conditions des modèles pré-entraînés peuvent découler des données
 d'entraînement.
+
+Les poids pré-entraînés ConvNeXt V2 et LeVJEPA sont sous CC-BY-NC-4.0. Moondream 3 utilise BSL 1.1, les miroirs Dome-DETR sont réservés à la recherche académique, et les variantes EdgeCrafter `obj2coco` et DetAny3D ont des conditions de poids restrictives. Leurs pages indiquent ces déclarations à côté de la licence du code. Les checkpoints EdgeCrafter COCO originaux conservent leur licence Apache-2.0 enregistrée. Les miroirs MiDaS conservent la licence MIT de l'éditeur.
+
+Les résumés de licences de poids suivent la licence déclarée par l'éditeur du checkpoint. Le nom d'un dataset d'entraînement n'établit pas de licence supplémentaire pour le checkpoint.
 
 ## Trouver les conditions d'un modèle
 

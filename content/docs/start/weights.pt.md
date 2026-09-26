@@ -16,7 +16,7 @@ keywords:
   - libreyolo offline
   - libreyolo hugging face
   - metadados de checkpoint
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Hospedados em
     value: 'Um repositório do Hugging Face por checkpoint:'
@@ -72,7 +72,7 @@ snippets:
         # Retorna uma lista de problemas. Vazia significa que o arquivo cumpre a v1.0.
         print(validate_checkpoint_metadata(loaded))
         print(loaded["model_family"], loaded["size"], loaded["task"], loaded["nc"])
-source_hash: 210a12baa1417cfb
+source_hash: 1d76b60f3992a781
 ---
 
 ## Onde um checkpoint é procurado
@@ -217,3 +217,9 @@ pelo caminho de compatibilidade com um aviso que diz o que está faltando.
 
 `libreyolo metadata` nunca constrói um modelo, então funciona em um arquivo cuja
 família não está instalada e em um arquivo sobre o qual você não tem certeza.
+
+## Espelhos e modelos de snapshot
+
+MiDaS s/l, MoGe-2 s/l e SAM-1 base/large/huge usam espelhos do LibreYOLO; MoGe-2 b permanece upstream. Os espelhos Dome-DETR mantêm os termos de uso exclusivo em pesquisa acadêmica. As variantes EdgeCrafter `obj2coco` exigem adesão explícita e mantêm sua licença upstream restritiva. Confira a tabela gerada de checkpoints na página de cada modelo.
+
+[Referências do Hub](/docs/reference/hugging-face) carregam checkpoints com esquema registrado a partir de IDs de repositórios. SAM 3D Body exige seus artefatos de snapshot revisados e fixados e acesso restrito. Políticas de robôs usam diretórios de checkpoint com `libreyolo_vla.json`; veja [LibreVLA](/docs/reference/vla-api).

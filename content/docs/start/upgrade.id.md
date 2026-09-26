@@ -1,14 +1,10 @@
 ---
-title: Upgrade ke 1.5.0
-seo_title: Upgrade LibreYOLO 1.4.0 ke 1.5.0
-description: >-
-  Empat perubahan kode yang diwajibkan 1.5.0, tiga perubahan yang menggeser
-  metrik, dan perubahan perilaku kecil yang perlu diketahui sebelum
-  membandingkan run.
-lead: >-
-  Tidak ada yang dihapus dari API model publik: setiap kelas dan fungsi yang
-  bekerja pada 1.4.0 tetap dapat diimpor. Empat argumen berubah bentuk, dan tiga
-  default menggeser angka yang mungkin dibandingkan.
+title: Meningkatkan ke 1.6.0
+seo_title: Tingkatkan LibreYOLO 1.5.0 ke 1.6.0
+description: Langkah migrasi prapemrosesan, default pelatihan, direktori proses, aset yang dipatok,
+  QAT, dan loader data di LibreYOLO 1.6.0.
+lead: Versi 1.6.0 mengubah prapemrosesan, default pelatihan, dan penanganan checkpoint. Validasi
+  ulang baseline tersimpan dan atur default lama secara eksplisit saat mereproduksi proses sebelumnya.
 keywords:
   - upgrade libreyolo
   - migrasi libreyolo 1.5.0
@@ -16,18 +12,33 @@ keywords:
   - breaking change libreyolo
   - yolox bn eps
   - default faster-coco-eval
-last_verified: 1.5.0
-meta:
-  - label: Berlaku untuk
-    value: 1.4.0 ke 1.5.0
-  - label: Perubahan kode wajib
-    value: 'Empat, semuanya sempit'
-  - label: Hasil yang berubah
-    value: 'Backend COCO, eps BN YOLOX, multi-scale D-FINE'
-  - label: Penghapusan API publik
-    value: Tidak ada
-source_hash: ab38d8ef7b53f596
+last_verified: 1.6.0
+source_hash: f4fda6ef286113ab
 ---
+
+## 1.5.0 ke 1.6.0
+
+- Tingkatkan lingkungan yang dipatok di bawah ONNX Runtime 1.18 ke `onnxruntime>=1.18.0` sebelum memasang extra ONNX.
+
+- SAM 3D Body menerima kumpulan aset snapshot yang sudah ditinjau. Pasang `libreyolo[hf]`, dapatkan akses terbatas, lalu gunakan pengambilan otomatis, atau sediakan direktori snapshot tanpa perubahan dan aset MHR yang dipatok pada sistem berkas lokal tepercaya.
+
+- Jalankan ulang validasi setelah koreksi pengubahan ukuran RF-DETR non-pose dan normalisasi pengklasifikasi. Periksa ulang ambang skor keyakinan yang diterapkan sebelum membandingkan hasil dengan 1.5.0; tidak ada flag prapemrosesan lama.
+
+- Deteksi D-FINE, DEIM, RT-DETRv4, dan YOLO-NAS mengaktifkan FP16 AMP secara default. Berikan `amp=False` untuk mempertahankan FP32.
+
+- Untuk pilihan fine-tuning YOLO9 sebelumnya, atur `aux_weight=0`, `max_labels=100`, dan `warmup_momentum=0.937`. Atur `letterbox_pad="topleft"` jika konversi baru bertanda center harus mereproduksi geometri lama. Checkpoint lama dengan satu head melanjutkan pelatihan dengan graf aslinya.
+
+- RF-DETR dan DINOv2 membuat direktori proses bernomor dengan nama family. Perbarui pengguna path artefak, atau atur `output_dir="runs/train", exist_ok=True` untuk mempertahankan lokasi lama dan perilaku penggunaan ulang.
+
+- Pertahankan `mixup + cutmix <= 1` untuk klasifikasi; kombinasi tidak valid kini menimbulkan galat saat penyiapan.
+
+- QAT menonaktifkan EMA, SyncBatchNorm, dan perataan checkpoint. Gunakan checkpoint best/last QAT tanpa bergantung pada status tersebut.
+
+- Loader kustom dengan hook mutasi dataset harus memakai `persistent_workers=False` atau membangun ulang worker setelah mutasi. Salinan persisten multi-worker yang tidak kompatibel kini menimbulkan galat.
+
+Lihat [changelog](/docs/changelog) untuk rilis lengkap dan [mengimpor bobot](/docs/migrate) untuk konversi checkpoint.
+
+## 1.4.0 ke 1.5.0
 
 Halaman ini membahas upgrade LibreYOLO. Untuk memuat checkpoint dari project
 upstream, lihat [impor bobot yang ada](/docs/migrate), yang merupakan topik lain.
@@ -35,9 +46,9 @@ upstream, lihat [impor bobot yang ada](/docs/migrate), yang merupakan topik lain
 Entri rilis lengkap tersedia pada [changelog](/docs/changelog). Bagian berikut
 hanya membahas tindakan yang diperlukan.
 
-## Perubahan kode yang wajib dilakukan
+### Perubahan kode yang wajib dilakukan
 
-### `allow_experimental=True` tidak lagi ada
+#### `allow_experimental=True` tidak lagi ada
 
 Gate konfirmasi telah dihapus beserta mekanisme
 `ddp_aware(experimental_key=...)` di baliknya. Pelatihan dan ekspor EC, RTMDet,
@@ -60,7 +71,7 @@ dan YOLO9-P2.
 Tingkat dukungan tetap dipublikasikan, tetapi bukan lagi argumen: lihat
 [tier stabilitas](/docs/reference/stability-tiers).
 
-### Tier ekspor `"experimental"` tidak lagi ada
+#### Tier ekspor `"experimental"` tidak lagi ada
 
 ```python
 from libreyolo.export.support import Tier
@@ -74,7 +85,7 @@ tempat yang sebelumnya membaca `"experimental"`. `BaseExporter` tidak lagi
 menghasilkan `RuntimeWarning` untuk format tersebut. Status per format tersedia
 dalam [matriks ekspor](/docs/reference/export-matrix).
 
-### `pretrained=False` bersama `resume` kini ditolak
+#### `pretrained=False` bersama `resume` kini ditolak
 
 Kombinasi ini sebelumnya berjalan secara tidak koheren. Kini muncul error:
 
@@ -87,7 +98,7 @@ seed, yang pada 1.5.0 berfungsi bagi setiap family yang dapat dilatih, bukan
 hanya tiga. `resume` melanjutkan run yang terputus dari checkpoint. Keduanya
 didokumentasikan dalam [pelatihan](/docs/train).
 
-### `--imgsz` CLI berupa string, bukan int
+#### `--imgsz` CLI berupa string, bukan int
 
 Perubahannya lebih sempit daripada kedengarannya. Kedua contoh ini tidak
 terpengaruh:
@@ -114,12 +125,12 @@ predict_cmd(..., imgsz="640")    # 1.5.0, dan "480x640" kini juga berfungsi
 Default `train` kini string `"640"`. `export --imgsz` sudah berupa string, dan
 `profile` tidak berubah.
 
-## Angka yang berubah
+### Angka yang berubah
 
 Tiga perubahan menggeser metrik pada pengaturan default. Jika melacak hasil
 lintas versi, baca bagian ini sebelum membandingkan run 1.5.0 dengan 1.4.0.
 
-### faster-coco-eval menjadi backend metrik COCO default
+#### faster-coco-eval menjadi backend metrik COCO default
 
 `val()` dan validasi pelatihan per epoch kini menghitung metrik COCO dengan
 backend C++ faster-coco-eval, bukan pycocotools.
@@ -147,7 +158,7 @@ yang benar-benar digunakan dicatat pada INFO, tersedia sebagai
 dalam payload JSON [CLI](/docs/cli/val). Instal jalur cepat dengan
 `pip install libreyolo[fast-eval]`.
 
-### Checkpoint YOLOX sebelum 1.5.0 memerlukan override eps
+#### Checkpoint YOLOX sebelum 1.5.0 memerlukan override eps
 
 Ini adalah jebakan dalam rilis. Baca jika memiliki hasil fine-tuning
 [YOLOX](/docs/models/yolox).
@@ -183,7 +194,7 @@ Alternatifnya, lipat `sqrt((var + 1e-3) / (var + 1e-5))` ke bobot BN sekali dan
 simpan hasilnya. Checkpoint yang dilatih pada 1.5.0 dan setelahnya tidak
 memerlukan keduanya.
 
-### Pelatihan multi-scale D-FINE memakai resep upstream per ukuran
+#### Pelatihan multi-scale D-FINE memakai resep upstream per ukuran
 
 `base_size_repeat` sebelumnya ditetapkan langsung ke 3 untuk setiap ukuran. Kini nilai
 diselesaikan per ukuran sesuai upstream: **n** berlatih pada ukuran tetap dengan
@@ -202,7 +213,7 @@ config = DFINEConfig(base_size_repeat=3)
 DEIM tetap memakai nilai 3 yang ditetapkan langsung. Detail family tersedia pada
 [D-FINE](/docs/models/d-fine).
 
-## Perlu diketahui, tanpa tindakan
+### Perlu diketahui, tanpa tindakan
 
 - **Hasil `imgsz` rectangle berubah karena sebelumnya salah.** Koordinat bounding box, pengubahan ukuran mask RTMDet, rescaling YOLO-NAS, dan scaling ground truth validator kini menggunakan tinggi dan lebar per sumbu, bukan satu skalar. `imgsz` persegi tidak berubah secara bit. Inferensi atau validasi rectangle pada 1.4.0 salah skala. YOLO-NAS kini menolak `imgsz` rectangle alih-alih diam-diam menghasilkan output salah.
 - **Dictionary metrik mendapatkan kunci baru.** `max_det`, `ar_max_det`, dan `AR_max_det` dari evaluator COCO, serta `metrics/loss` dan `metrics/loss/ce` dari FOMO. Nilai default tidak berubah, tetapi semua proses yang mengiterasi kunci metrik, termasuk [logger](/docs/train/loggers) kustom dan header CSV, melihat kolom baru.
@@ -216,7 +227,7 @@ DEIM tetap memakai nilai 3 yang ditetapkan langsung. Detail family tersedia pada
 - **Nama berkas bobot untuk family dengan suffix task diselesaikan secara berbeda.** `segformer-b0` kini diselesaikan menjadi `LibreSegformerb0-sem.pt`. Ini memperbaiki 404 pengunduhan otomatis dan merusak script yang melakukan hard-code nama tanpa suffix lama.
 - **Marker pytest `experimental_backend` kini menjadi `extended_backend`.** Hanya relevan jika menjalankan test suite dengan `-m`.
 
-## Checkpoint dan dataset
+### Checkpoint dan dataset
 
 Checkpoint yang ditulis oleh 1.4.0 dimuat tanpa perubahan.
 [Skema](/docs/reference/checkpoint-schema) mendapatkan `imgsz_h` dan `imgsz_w`
@@ -225,5 +236,3 @@ lama. Ekspor [ExecuTorch](/docs/export/executorch) dan [MNN](/docs/export/mnn)
 kini memerlukan sidecar, masing-masing `<program>.pte.json` dan
 `<model>.mnn.json`, sedangkan ekspor HRNet memuat
 `pose_input: "person_crop"`. Format dataset tidak berubah.
-
-

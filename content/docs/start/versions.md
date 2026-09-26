@@ -1,10 +1,19 @@
 ---
 title: Versions
-seo_title: "LibreYOLO versions and older documentation"
-description: "Which release these pages describe, where the documentation for 1.1.0 through 1.4.0 lives, and how to check the version you have installed."
-lead: "These pages describe one release of LibreYOLO on unversioned URLs. Documentation for earlier releases stays online at its own versioned path."
-keywords: [libreyolo versions, libreyolo docs archive, libreyolo 1.4.0 docs, check libreyolo version, pin libreyolo version]
-last_verified: "1.5.0"
+seo_title: LibreYOLO versions and older documentation
+description: >-
+  Which release these pages describe, where the documentation for 1.1.0 through
+  1.4.0 lives, and how to check the version you have installed.
+lead: >-
+  These pages describe one release of LibreYOLO on unversioned URLs.
+  Documentation for earlier releases stays online at its own versioned path.
+keywords:
+  - libreyolo versions
+  - libreyolo docs archive
+  - libreyolo 1.4.0 docs
+  - check libreyolo version
+  - pin libreyolo version
+last_verified: 1.6.0
 snippets:
   version:
     - label: CLI
@@ -21,7 +30,7 @@ snippets:
 
 ## The release these pages describe
 
-These pages describe LibreYOLO 1.5.0. The version sits at the top of the docs
+These pages describe LibreYOLO 1.6.0. The version sits at the top of the docs
 sidebar, and every page ends with a line naming the release it was verified
 against.
 
@@ -46,7 +55,8 @@ its own path.
 
 | Release | Documentation |
 | --- | --- |
-| 1.5.0 | [/docs](/docs), these pages, released 2026-08-09 |
+| 1.6.0 | [/docs](/docs), current documentation |
+<!-- TODO(owner): Decide whether to freeze the 1.5.0 v2 tree at /docs/v1.5.0. No archive route is built in this change. -->
 | 1.4.0 | [/docs/v1.4.0](/docs/v1.4.0) |
 | 1.3.1 | [/docs/v1.3.1](/docs/v1.3.1) |
 | 1.3.0 | [/docs/v1.3.0](/docs/v1.3.0) |

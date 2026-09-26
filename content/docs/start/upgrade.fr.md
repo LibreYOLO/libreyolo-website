@@ -1,15 +1,15 @@
 ---
-title: Mettre à niveau vers la version 1.5.0
-seo_title: Mettre à niveau LibreYOLO 1.4.0 vers 1.5.0
+title: Mettre à niveau vers la version 1.6.0
+seo_title: Mettre à niveau LibreYOLO 1.5.0 vers 1.6.0
 description: >-
-  Les quatre modifications de code exigées par la version 1.5.0, les trois
-  changements qui modifient les métriques et les évolutions de comportement à
-  connaître avant de comparer les exécutions.
+  Étapes de migration du prétraitement, des valeurs d'entraînement par défaut,
+  des répertoires d'exécution, des ressources épinglées, de QAT et des chargeurs
+  de données dans LibreYOLO 1.6.0.
 lead: >-
-  Aucun élément n'a été retiré de l'API publique des modèles : toutes les
-  classes et fonctions utilisables avec la version 1.4.0 s'importent encore.
-  Quatre arguments ont changé de forme et trois valeurs par défaut modifient les
-  nombres que vous pourriez comparer.
+  La version 1.6.0 modifie le prétraitement, les valeurs d'entraînement par défaut
+  et la gestion des checkpoints. Revalidez les références enregistrées et
+  définissez explicitement les anciennes valeurs par défaut pour reproduire
+  une exécution antérieure.
 keywords:
   - mise à niveau libreyolo
   - migration libreyolo 1.5.0
@@ -17,18 +17,33 @@ keywords:
   - changements incompatibles libreyolo
   - yolox bn eps
   - faster coco eval défaut
-last_verified: 1.5.0
-meta:
-  - label: S'applique à
-    value: 1.4.0 vers 1.5.0
-  - label: Modifications de code requises
-    value: 'Quatre, toutes ciblées'
-  - label: Résultats modifiés
-    value: 'Backend COCO, eps BN de YOLOX, multi-échelle de D-FINE'
-  - label: Suppressions de l'API publique
-    value: Aucune
-source_hash: ab38d8ef7b53f596
+last_verified: "1.6.0"
+source_hash: f4fda6ef286113ab
 ---
+
+## De 1.5.0 à 1.6.0
+
+- Mettez à niveau les environnements limités à une version d'ONNX Runtime inférieure à 1.18 vers `onnxruntime>=1.18.0` avant d'installer l'extra ONNX.
+
+- SAM 3D Body accepte l'ensemble vérifié de ressources du snapshot. Installez `libreyolo[hf]`, obtenez l'accès restreint et utilisez l'acquisition automatique, ou fournissez le répertoire de snapshot inchangé et la ressource MHR épinglée sur un système de fichiers local de confiance.
+
+- Relancez la validation après les corrections de redimensionnement RF-DETR hors pose et de normalisation des classificateurs. Revérifiez les seuils de confiance déployés avant de comparer les résultats à ceux de la version 1.5.0 ; aucune option ne restaure l'ancien prétraitement.
+
+- D-FINE, DEIM, RT-DETRv4 et la détection YOLO-NAS activent FP16 AMP par défaut. Passez `amp=False` pour conserver FP32.
+
+- Pour retrouver les anciens choix de fine-tuning YOLO9, définissez `aux_weight=0`, `max_labels=100` et `warmup_momentum=0.937`. Définissez `letterbox_pad="topleft"` lorsqu'une nouvelle conversion marquée center doit reproduire l'ancienne géométrie. Les anciens checkpoints à une seule tête reprennent avec leur graphe d'origine.
+
+- RF-DETR et DINOv2 créent des répertoires d'exécution incrémentés portant le nom de la famille. Mettez à jour les consommateurs des chemins d'artefacts, ou définissez `output_dir="runs/train", exist_ok=True` pour conserver l'ancien emplacement et son comportement de réutilisation.
+
+- Gardez `mixup + cutmix <= 1` pour la classification ; les combinaisons invalides lèvent désormais une erreur pendant la configuration.
+
+- QAT désactive EMA, SyncBatchNorm et le moyennage des checkpoints. Utilisez les checkpoints best/last de QAT sans dépendre de ces états.
+
+- Les chargeurs personnalisés avec des hooks de mutation du dataset doivent utiliser `persistent_workers=False` ou recréer les workers après la mutation. Les copies persistantes incompatibles de plusieurs workers lèvent désormais une erreur.
+
+Consultez le [changelog](/docs/changelog) pour la version complète et l'[importation de poids](/docs/migrate) pour la conversion de checkpoints.
+
+## De 1.4.0 à 1.5.0
 
 Cette page concerne la mise à niveau de LibreYOLO lui-même. Si vous cherchez à
 charger un checkpoint issu d'un projet amont, consultez plutôt la page
@@ -38,9 +53,9 @@ L'entrée complète de cette version figure dans le
 [journal des modifications](/docs/changelog). La suite présente uniquement ce
 qui demande une intervention de votre part.
 
-## Modifications de code obligatoires
+### Modifications de code obligatoires
 
-### `allow_experimental=True` n'existe plus
+#### `allow_experimental=True` n'existe plus
 
 Le mécanisme d'acceptation a disparu, ainsi que le mécanisme
 `ddp_aware(experimental_key=...)` sur lequel il reposait. L'entraînement et
@@ -64,7 +79,7 @@ YOLO9-P2.
 Les niveaux de prise en charge sont toujours publiés, mais ne constituent plus
 un argument. Consultez les [niveaux de stabilité](/docs/reference/stability-tiers).
 
-### Le niveau d'exportation `"experimental"` n'existe plus
+#### Le niveau d'exportation `"experimental"` n'existe plus
 
 ```python
 from libreyolo.export.support import Tier
@@ -78,7 +93,7 @@ Le code qui bifurque en fonction de la chaîne du niveau doit lire
 `RuntimeWarning` pour ces formats. L'état de chaque format figure dans la
 [matrice d'exportation](/docs/reference/export-matrix).
 
-### `pretrained=False` avec `resume` est désormais refusé
+#### `pretrained=False` avec `resume` est désormais refusé
 
 Cette combinaison produisait auparavant un comportement incohérent. Elle
 déclenche maintenant :
@@ -93,7 +108,7 @@ les familles entraînables au lieu de trois seulement. `resume` reprend une
 exécution interrompue depuis son checkpoint. Les deux options sont documentées
 dans la section [entraînement](/docs/train).
 
-### `--imgsz` de la CLI est une chaîne et non un entier
+#### `--imgsz` de la CLI est une chaîne et non un entier
 
 Le changement est plus limité qu'il n'y paraît. Ces deux formes restent
 inchangées :
@@ -120,13 +135,13 @@ predict_cmd(..., imgsz="640")    # 1.5.0, et "480x640" fonctionne désormais aus
 La valeur par défaut de `train` est désormais la chaîne `"640"`.
 `export --imgsz` était déjà une chaîne et `profile` ne change pas.
 
-## Nombres qui changent
+### Nombres qui changent
 
 Trois modifications influent sur les métriques avec les réglages par défaut. Si
 vous suivez les résultats entre les versions, lisez cette section avant de
 comparer une exécution 1.5.0 à une exécution 1.4.0.
 
-### faster-coco-eval devient le backend par défaut des métriques COCO
+#### faster-coco-eval devient le backend par défaut des métriques COCO
 
 `val()` et la validation effectuée à chaque époque pendant l'entraînement
 calculent désormais les métriques COCO avec le backend C++ faster-coco-eval au
@@ -157,7 +172,7 @@ réellement utilisé est journalisé au niveau INFO, exposé dans
 charge utile JSON de la [CLI](/docs/cli/val). Installez le parcours rapide avec
 `pip install libreyolo[fast-eval]`.
 
-### Les checkpoints YOLOX entraînés avant la version 1.5.0 nécessitent de redéfinir eps
+#### Les checkpoints YOLOX entraînés avant la version 1.5.0 nécessitent de redéfinir eps
 
 C'est le piège de cette version. Lisez cette section si vous avez affiné
 [YOLOX](/docs/models/yolox).
@@ -196,7 +211,7 @@ Vous pouvez aussi intégrer une fois
 résultat. Les checkpoints entraînés avec la version 1.5.0 ou une version
 ultérieure ne nécessitent aucune de ces opérations.
 
-### L'entraînement multi-échelle de D-FINE emploie la recette amont propre à chaque taille
+#### L'entraînement multi-échelle de D-FINE emploie la recette amont propre à chaque taille
 
 `base_size_repeat` était fixé à 3 pour toutes les tailles. Il est désormais
 résolu par taille, conformément à la spécification amont : **n** s'entraîne à
@@ -215,7 +230,7 @@ config = DFINEConfig(base_size_repeat=3)
 DEIM conserve la valeur 3 codée en dur. Les détails de la famille figurent sur
 la page [D-FINE](/docs/models/d-fine).
 
-## À connaître, sans intervention nécessaire
+### À connaître, sans intervention nécessaire
 
 - **Les résultats avec un `imgsz` rectangulaire ont changé parce qu'ils étaient
   auparavant incorrects.** Les coordonnées des boîtes, le redimensionnement des
@@ -279,7 +294,7 @@ la page [D-FINE](/docs/models/d-fine).
   `extended_backend`.** Ce point ne vous concerne que si vous exécutez la suite
   de tests avec `-m`.
 
-## Checkpoints et datasets
+### Checkpoints et datasets
 
 Les checkpoints écrits par la version 1.4.0 se chargent sans modification. Le
 [schéma](/docs/reference/checkpoint-schema) contient désormais `imgsz_h` et

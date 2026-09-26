@@ -15,8 +15,8 @@ keywords:
   - libreyolo cuda brak pamięci
   - libreyolo notimplementederror
   - rozwiązywanie problemów libreyolo
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: 1.6.0
+source_hash: 30b68976a4ac01d1
 ---
 
 Błędy są pogrupowane według wyświetlanego tekstu. Jeśli danego komunikatu nie
@@ -182,3 +182,7 @@ if report.errors:
 ```
 
 Katalog kontroli zawiera strona [polecenia doctor](/docs/cli/doctor).
+
+## Trwałe procesy robocze nie widzą zmian zbioru danych
+
+Aktywne hooki `close_mosaic` lub `set_epoch` muszą docierać do kopii zbioru danych używanych przez procesy robocze. Jeśli własny loader z wieloma procesami roboczymi zachowuje niezgodne trwałe kopie, należy użyć `persistent_workers=False` lub odtworzyć procesy po zmianie. Domyślna ścieżka bez trwałych procesów pozostaje bez zmian.

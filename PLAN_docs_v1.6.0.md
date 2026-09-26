@@ -352,7 +352,7 @@ Update this list in the same commit as the work. It is the resume point.
   - Local HTTP render checks cover all 42 pages. PP-LiteSeg export/checkpoint tables checked at 390 px in dark mode; table and code containers scroll.
   - Nav, sitemap and llms discovery wired in this phase so the added routes are indexed in the same change. Full plumbing audit remains Phase 5.
 - [x] Phase 3: existing English pages and every existing locale twin committed (66 / 66). All structural and freshness checks pass.
-- [ ] Phase 4: 8 English release-level pages drafted; 103 changelog entries covered after excluding A90. Versions keeps the 1.5.0 TODO(owner), no archive route. Existing twins in progress.
+- [x] Phase 4: all 8 release-level pages complete, including 103 changelog entries (A90 excluded), migration guidance and all existing twins. Versions retains TODO(owner); no archive route.
 - [x] Phase 5: nav, sitemap, llms.txt and generated indexes verified. Task count is generated (20); added labels for the three tasks and guarded missing artwork, without changing homepage layout.
 - [x] Phase 6: 936 existing locale twins updated (Japanese 84; each other locale 71). All 13 locale validators pass, and `sync-check` passes 2,275 / 2,275. Final `--stamp` changes zero already-current hashes. Brand-new pages remain English-only.
 - [x] Initial Vercel preview build passes (4,189 generated routes): https://libreyolo-website-gkdbjoexh-xubanceccons-projects.vercel.app . Its production sitemap has 3,040 unique canonical URLs and excludes untranslated fallbacks. A final preview will follow the complete translation set.

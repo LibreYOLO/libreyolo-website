@@ -1,14 +1,14 @@
 ---
-title: Aktualizacja do 1.5.0
-seo_title: Aktualizacja LibreYOLO z 1.4.0 do 1.5.0
+title: Aktualizacja do 1.6.0
+seo_title: Aktualizacja LibreYOLO z 1.5.0 do 1.6.0
 description: >-
-  Cztery wymagane zmiany w kodzie dla wersji 1.5.0, trzy zmiany wpływające na
-  metryki i mniejsze różnice w zachowaniu, które warto znać przed porównaniem
-  uruchomień.
+  Migracja przetwarzania wstępnego, ustawień trenowania, katalogów uruchomień,
+  ustalonych zasobów, QAT i loaderów danych w LibreYOLO 1.6.0.
 lead: >-
-  Z publicznego API modeli niczego nie usunięto: każdą klasę i funkcję
-  działającą w 1.4.0 nadal można zaimportować. Zmieniła się postać czterech
-  argumentów, a trzy wartości domyślne wpływają na porównywane wyniki.
+  Wersja 1.6.0 zmienia przetwarzanie wstępne, domyślne ustawienia trenowania i
+  obsługę checkpointów. Należy ponownie zweryfikować zapisane wyniki odniesienia
+  i jawnie ustawić poprzednie wartości domyślne przy odtwarzaniu starszego
+  uruchomienia.
 keywords:
   - aktualizacja libreyolo
   - migracja libreyolo 1.5.0
@@ -16,18 +16,33 @@ keywords:
   - libreyolo zmiany niezgodne wstecznie
   - yolox bn eps
   - faster-coco-eval domyślnie
-last_verified: 1.5.0
-meta:
-  - label: Dotyczy
-    value: Od 1.4.0 do 1.5.0
-  - label: Wymagane zmiany w kodzie
-    value: 'Cztery, wszystkie niewielkie'
-  - label: 'Wyniki, które się zmieniają'
-    value: 'Backend COCO, eps BN w YOLOX, wieloskalowość D-FINE'
-  - label: Usunięcia z publicznego API
-    value: Brak
-source_hash: ab38d8ef7b53f596
+last_verified: 1.6.0
+source_hash: f4fda6ef286113ab
 ---
+
+## Z 1.5.0 do 1.6.0
+
+- Przed instalacją dodatku ONNX należy zaktualizować środowiska z ONNX Runtime poniżej 1.18 do `onnxruntime>=1.18.0`.
+
+- SAM 3D Body przyjmuje sprawdzony zestaw zasobów snapshotu. Należy zainstalować `libreyolo[hf]`, uzyskać dostęp do modelu i użyć automatycznego pobierania albo podać niezmieniony katalog snapshotu i ustalony zasób MHR w zaufanym lokalnym systemie plików.
+
+- Po poprawkach zmiany rozmiaru RF-DETR dla zadań innych niż estymacja pozy oraz normalizacji klasyfikatorów należy ponownie uruchomić walidację. Przed porównaniem z wynikami 1.5.0 należy sprawdzić wdrożone progi pewności; nie ma flagi dawnego przetwarzania wstępnego.
+
+- D-FINE, DEIM, RT-DETRv4 i detekcja YOLO-NAS domyślnie włączają FP16 AMP. Aby zachować FP32, należy przekazać `amp=False`.
+
+- Aby odtworzyć dawne ustawienia dostrajania YOLO9, należy ustawić `aux_weight=0`, `max_labels=100` i `warmup_momentum=0.937`. `letterbox_pad="topleft"` jest potrzebne, gdy nowa konwersja ze znacznikiem wyśrodkowania ma odtworzyć starą geometrię. Stare checkpointy z jedną głowicą wznawiają trenowanie z oryginalnym grafem.
+
+- RF-DETR i DINOv2 tworzą katalogi uruchomień z nazwą rodziny i kolejnym numerem. Należy zaktualizować kod korzystający ze ścieżek artefaktów lub ustawić `output_dir="runs/train", exist_ok=True`, aby zachować dawną lokalizację i ponowne używanie katalogu.
+
+- W klasyfikacji należy zachować `mixup + cutmix <= 1`; nieprawidłowe kombinacje zgłaszają teraz błąd podczas konfiguracji.
+
+- QAT wyłącza EMA, SyncBatchNorm i uśrednianie checkpointów. Należy używać checkpointów QAT best/last bez polegania na tych stanach.
+
+- Własne loadery z hookami zmieniającymi zbiór danych muszą używać `persistent_workers=False` lub odtwarzać procesy robocze po zmianie. Niezgodne trwałe kopie przy wielu procesach roboczych zgłaszają teraz błąd.
+
+Pełny opis wydania zawiera [lista zmian](/docs/changelog), a konwersję checkpointów opisano w sekcji [importowania wag](/docs/migrate).
+
+## Z 1.4.0 do 1.5.0
 
 Ta strona dotyczy aktualizacji samego LibreYOLO. Instrukcje wczytywania
 checkpointu z projektu źródłowego znajdują się na osobnej stronie [import
@@ -36,9 +51,9 @@ istniejących wag](/docs/migrate).
 Pełny wpis dotyczący wydania znajduje się w [dzienniku zmian](/docs/changelog).
 Poniżej opisano wyłącznie część wymagającą działania.
 
-## Wymagane zmiany w kodzie
+### Wymagane zmiany w kodzie
 
-### `allow_experimental=True` już nie istnieje
+#### `allow_experimental=True` już nie istnieje
 
 Usunięto bramkę potwierdzenia wraz ze stojącym za nią mechanizmem
 `ddp_aware(experimental_key=...)`. Trenowanie i eksport rodzin EC, RTMDet,
@@ -61,7 +76,7 @@ i nadal jest zastępowany przez MiDaS, SegFormer oraz YOLO9-P2.
 Poziomy wsparcia są nadal publikowane, ale nie stanowią już argumentu. Zobacz
 [poziomy stabilności](/docs/reference/stability-tiers).
 
-### Poziom eksportu `"experimental"` już nie istnieje
+#### Poziom eksportu `"experimental"` już nie istnieje
 
 ```python
 from libreyolo.export.support import Tier
@@ -76,7 +91,7 @@ odczytywać `"available"` w miejscu, w którym wcześniej odczytywał
 formatów. Stan poszczególnych formatów zawiera [macierz
 eksportu](/docs/reference/export-matrix).
 
-### Połączenie `pretrained=False` z `resume` jest teraz odrzucane
+#### Połączenie `pretrained=False` z `resume` jest teraz odrzucane
 
 Wcześniej ta kombinacja prowadziła do niespójnego działania. Teraz zgłasza:
 
@@ -90,7 +105,7 @@ rodziny obsługującej trenowanie, a nie tylko dla trzech z nich. `resume`
 kontynuuje przerwane uruchomienie od jego checkpointu. Obie opcje opisano w
 sekcji [trenowanie](/docs/train).
 
-### `--imgsz` w CLI jest ciągiem znaków, a nie liczbą całkowitą
+#### `--imgsz` w CLI jest ciągiem znaków, a nie liczbą całkowitą
 
 Zmiana ma węższy zakres, niż może się wydawać. Oba poniższe przypadki pozostają
 bez zmian:
@@ -117,12 +132,12 @@ predict_cmd(..., imgsz="640")    # 1.5.0, teraz działa też "480x640"
 Wartością domyślną `train` jest teraz ciąg `"640"`. Argument `export --imgsz`
 był już ciągiem znaków, a `profile` pozostaje bez zmian.
 
-## Zmieniające się wartości
+### Zmieniające się wartości
 
 Trzy zmiany wpływają na metryki przy ustawieniach domyślnych. Przed porównaniem
 uruchomienia 1.5.0 z uruchomieniem 1.4.0 należy zapoznać się z tymi informacjami.
 
-### faster-coco-eval jest domyślnym backendem metryk COCO
+#### faster-coco-eval jest domyślnym backendem metryk COCO
 
 Funkcja `val()` i walidacja w każdej epoce trenowania obliczają teraz metryki
 COCO za pomocą backendu C++ faster-coco-eval zamiast pycocotools.
@@ -151,7 +166,7 @@ Faktycznie użyty backend jest zapisywany w logu na poziomie INFO, dostępny jak
 danych JSON [CLI](/docs/cli/val). Szybką ścieżkę można zainstalować poleceniem
 `pip install libreyolo[fast-eval]`.
 
-### Checkpointy YOLOX wytrenowane przed 1.5.0 wymagają nadpisania eps
+#### Checkpointy YOLOX wytrenowane przed 1.5.0 wymagają nadpisania eps
 
 To pułapka tego wydania. Należy ją uwzględnić w przypadku dostrojonego modelu
 [YOLOX](/docs/models/yolox).
@@ -189,7 +204,7 @@ Można też jednorazowo włączyć `sqrt((var + 1e-3) / (var + 1e-5))` do wag BN
 zapisać wynik. Checkpointy wytrenowane w wersji 1.5.0 lub nowszej nie wymagają
 żadnej z tych czynności.
 
-### Trenowanie wieloskalowe D-FINE korzysta z procedury projektu źródłowego dla każdego rozmiaru
+#### Trenowanie wieloskalowe D-FINE korzysta z procedury projektu źródłowego dla każdego rozmiaru
 
 Wartość `base_size_repeat` była ustawiona na stałe na 3 dla każdego rozmiaru.
 Teraz jest wyznaczana dla poszczególnych rozmiarów zgodnie z projektem
@@ -209,7 +224,7 @@ config = DFINEConfig(base_size_repeat=3)
 DEIM nadal używa stałej wartości 3. Szczegóły rodziny znajdują się na stronie
 [D-FINE](/docs/models/d-fine).
 
-## Warto wiedzieć, działanie nie jest wymagane
+### Warto wiedzieć, działanie nie jest wymagane
 
 - **Wyniki prostokątnego `imgsz` zmieniły się, ponieważ wcześniej były
   błędne.** Współrzędne ramek, zmiana rozmiaru masek RTMDet, przeskalowanie
@@ -266,7 +281,7 @@ DEIM nadal używa stałej wartości 3. Szczegóły rodziny znajdują się na str
   `extended_backend`.** Ma to znaczenie tylko w przypadku uruchamiania zestawu
   testów z opcją `-m`.
 
-## Checkpointy i zbiory danych
+### Checkpointy i zbiory danych
 
 Checkpointy zapisane przez wersję 1.4.0 wczytują się bez zmian.
 [Schemat](/docs/reference/checkpoint-schema) otrzymał pola `imgsz_h` i `imgsz_w`

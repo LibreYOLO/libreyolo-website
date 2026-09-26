@@ -13,7 +13,7 @@ keywords:
   - LibreYOLO オフライン
   - LibreYOLO Hugging Face
   - チェックポイント メタデータ
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: ホスト先
     value: 'チェックポイントごとに1つのHugging Faceリポジトリ:'
@@ -74,7 +74,7 @@ snippets:
 
         print(loaded["model_family"], loaded["size"], loaded["task"],
         loaded["nc"])
-source_hash: 210a12baa1417cfb
+source_hash: 1d76b60f3992a781
 ---
 
 ## チェックポイントの検索場所
@@ -146,3 +146,9 @@ LibreYOLOのチェックポイントは、`model`キーにPyTorchのstate dict�
 <code-tabs name="inspect" />
 
 `libreyolo metadata`はモデルを構築しないため、ファミリーがインストールされていないファイルや、安全性をまだ確認していないファイルにも使用できます。
+
+## ミラーとスナップショットモデル
+
+MiDaSのs/l、MoGe-2のs/l、SAM-1のbase/large/hugeはLibreYOLOのミラーを使い、MoGe-2のbはアップストリームを使います。Dome-DETRのミラーには、学術研究目的のみの条件が引き続き適用されます。EdgeCrafterの`obj2coco`バリアントには明示的な同意が必要で、アップストリームの制限付きライセンスが引き続き適用されます。各モデルページの生成されたチェックポイント表を確認してください。
+
+[Hub参照](/docs/reference/hugging-face)は、リポジトリIDからスキーマタグ付きのチェックポイントを読み込みます。SAM 3D Bodyには、確認済みの固定されたスナップショットアセットと、アクセス制限付きモデルへの権限が必要です。ロボットポリシーは`libreyolo_vla.json`を持つチェックポイントディレクトリを使います。[LibreVLA](/docs/reference/vla-api)を参照してください。
