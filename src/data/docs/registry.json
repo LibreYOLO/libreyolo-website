@@ -601,9 +601,10 @@
       "upstream": {
         "name": "U-Net",
         "org": "U-Net authors",
-        "code_url": "https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/",
-        "license": "Apache-2.0 implementation",
-        "license_interpretation": "The adapter uses an Apache-2.0 implementation of the U-Net architecture. No converted checkpoint was verified in the LibreYOLO Hub inventory."
+        "code_url": "https://github.com/open-mmlab/mmsegmentation",
+        "license": "Apache-2.0",
+        "weights_license": "Apache-2.0",
+        "license_interpretation": "Apache-2.0 is a permissive license, so this code and these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy you redistribute, and it grants a patent license. LibreYOLO's port follows mmsegmentation's Apache-2.0 UNet-S5-D16 implementation with an FCN head, and LibreUNets-sem.pt is a conversion of mmsegmentation's Cityscapes checkpoint, which upstream releases under Apache-2.0."
       }
     },
     "convnextv2": {

@@ -19,12 +19,14 @@ snippets:
     - label: Python
       language: python
       code: |
-        from libreyolo import LibreUNet, SAMPLE_IMAGE
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Random initialization: train before using predictions.
-        model = LibreUNet(size="s", device="cpu")
+        model = LibreYOLO("LibreUNets-sem.pt", device="cpu")
         result = model(SAMPLE_IMAGE)
-        print(result.semantic_mask)
+
+        mask = result.semantic_mask
+        print(mask.data.shape)   # (H, W) class ids
+        print(mask.classes)      # sorted class ids present in the image
   train:
     - label: Python
       language: python
@@ -32,7 +34,7 @@ snippets:
         from libreyolo import LibreUNet
 
 
-        # Random initialization: train before using predictions.
+        # Random initialization: this trains from scratch.
 
         model = LibreUNet(size="s", device="cpu")
 
@@ -44,13 +46,12 @@ snippets:
     - label: Python
       language: python
       code: >
-        from libreyolo import LibreUNet
+        from libreyolo import LibreYOLO
 
 
-        # Replace with a U-Net checkpoint you trained with model.train().
+        # Or a U-Net checkpoint you trained with model.train().
 
-        model = LibreUNet(model_path="path/to/your/unet_checkpoint.pt",
-        device="cpu")
+        model = LibreYOLO("LibreUNets-sem.pt", device="cpu")
 
         # Replace with your semantic segmentation dataset YAML (image/mask pairs).
 
@@ -69,7 +70,7 @@ pip install "libreyolo"
 
 <code-tabs name="predict" />
 
-The implementation uses the same-padded S5-D16 graph and an FCN head. No pretrained conversion was verified in the hosted inventory. Construct the class directly to train from scratch.
+Weights download from Hugging Face on first use and are cached locally. `LibreUNets-sem.pt` is a conversion of the Cityscapes UNet-S5-D16 checkpoint from mmsegmentation: the same-padded S5-D16 graph with an FCN head, predicting the 19 Cityscapes classes. Prediction runs the whole frame on the 1024x2048 evaluation canvas.
 
 ## Train
 
@@ -85,6 +86,10 @@ Use a semantic dataset with image/mask pairs. Training defaults to 160 epochs, b
 <code-tabs name="val" />
 
 Use the dataset format for this task. [Validation](/docs/train/validation) explains the dataset requirements and returned metrics.
+
+## Checkpoints
+
+<checkpoint-table />
 
 ## Licensing
 
