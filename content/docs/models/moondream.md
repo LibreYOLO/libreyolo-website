@@ -34,7 +34,7 @@ pip install "libreyolo[vlm]"
 
 <code-tabs name="predict" />
 
-The default selects Moondream 2; `moondream-3` selects the BSL 1.1 model. Use `task="point"` for points and `chat()` for native text responses. Training is not supported.
+The default selects Moondream 2. `moondream-3` names the BSL 1.1 Moondream 3 model, but it does not load in 1.6.0: the `LibreYOLO/LibreMoondream3` mirror is missing weight shards. Use `task="point"` for points and `chat()` for native text responses. Training is not supported.
 
 ## Licensing
 
