@@ -1,15 +1,15 @@
 ---
 title: Changelog
 seo_title: "LibreYOLO changelog: recent releases"
-description: "What landed in LibreYOLO 1.5.0 and what 1.4.0 contained: 28 new model families, four new tasks, five export formats, torch-free ONNX inference and faster COCO metrics."
-lead: "A summary of the repository changelog: what 1.5.0 shipped, and what 1.4.0 shipped before it."
-keywords: [libreyolo changelog, libreyolo release notes, libreyolo 1.5.0, libreyolo 1.4.0, libreyolo new models]
+description: "What landed in LibreYOLO 1.6.0 and what 1.5.0 contained: three new tasks, six-task GTR, video embeddings, Qwen3-VL fine-tuning and opt-in torch.compile."
+lead: "A summary of the repository changelog: what 1.6.0 adds, and what 1.5.0 and 1.4.0 shipped before it."
+keywords: [libreyolo changelog, libreyolo release notes, libreyolo 1.6.0, libreyolo 1.5.0, libreyolo 1.4.0, libreyolo new models]
 last_verified: "1.6.0"
 ---
 
 ## 1.6.0, release preparation
 
-These notes describe library dev at `4da12d005eb41a8e694a86124c97ea5faaee9b7c`. The v1.6.0 tag and release date are pending. See [upgrading](/docs/upgrade) for migrations.
+These notes describe library dev at `c21e4ae8fc8f03aed0f0200d177965ee5d1e4de8`. The v1.6.0 tag and release date are pending. See [upgrading](/docs/upgrade) for migrations.
 
 ### Highlights
 
@@ -18,8 +18,8 @@ These notes describe library dev at `4da12d005eb41a8e694a86124c97ea5faaee9b7c`. 
   3D boxes, albedo and robot action chunks join the existing result contracts.
 
 <!-- H02 -->
-- **More detection, pose, semantic and classification models. (#752, #759, #750, #745, #751, #836, #868)**
-  PP-YOLOE, TinyFormer, DEKR, YOLO-NAS oriented boxes, PP-LiteSeg, U-Net and ConvNeXt V2 expand the model choices.
+- **More detection, pose, semantic and classification models. (#752, #759, #750, #745, #751, #836, #868, #894)**
+  PP-YOLOE, TinyFormer, DEKR, YOLO-NAS oriented boxes, PP-LiteSeg, U-Net, ConvNeXt V2 and six-task GTR expand the model choices.
 
 <!-- H03 -->
 - **Video representations. (#746, #747, #748, #832)**
@@ -38,12 +38,16 @@ These notes describe library dev at `4da12d005eb41a8e694a86124c97ea5faaee9b7c`. 
   Error images, per-image box counts, classification macro metrics and detection confidence estimates expose distinct evaluation views.
 
 <!-- H07 -->
-- **Training control. (#812, #875, #900, #782, #819)**
-  Class filtering, custom fitness, opt-in training helpers and guardless local DDP extend existing training paths.
+- **Training control. (#812, #875, #900, #782, #819, #905)**
+  Class filtering, custom fitness, opt-in training helpers, opt-in `torch.compile` and guardless local DDP extend existing training paths.
 
 <!-- H08 -->
 - **Data and deployment workflows. (#789, #780, #865, #893, #897)**
   Hub and FiftyOne integration, event histograms, TFLite INT8 I/O and expanded result plotting are available.
+
+<!-- H09 -->
+- **Release QA fixes. (#907)**
+  GPU runs and API, CLI and docs audits against 1.5.0 fixed 22 user-visible bugs; resume, NumPy input channel order, batched inputs, validation scheduling and CLI exit codes change behavior (see Changed and Breaking changes).
 
 ### Added
 
@@ -65,19 +69,23 @@ These notes describe library dev at `4da12d005eb41a8e694a86124c97ea5faaee9b7c`. 
 
 <!-- M04 -->
 - **DEKR bottom-up pose. (#750)**
-  the corresponding family checkpoint adds inference-only COCO-17 multi-person pose without a separate person detector, using the released `no_dc` graph at 640. `Results.boxes` are fitted to confident decoded joints. ONNX, TorchScript, TensorRT and OpenVINO export paths emit heatmaps and offsets for decoding. Weights remain linked to the source CDN.
+  DEKR with the HRNet-W32 backbone (`size="w32"`) adds inference-only COCO-17 multi-person pose without a separate person detector, using the released `no_dc` graph at 640. `Results.boxes` are fitted to confident decoded joints. ONNX, TorchScript, TensorRT and OpenVINO export paths emit heatmaps and offsets for decoding. Weights are fetched from the source CDN.
 
 <!-- M05 -->
-- **YOLO-NAS gains oriented-box training and inference. (#745)**
-  the corresponding family checkpoint uses a 1024 canvas and 18 DOTA2 classes, returning the existing `Results.obb` payload. Training uses rotated assignment/losses and `metrics/mAP50-95(OBB)` for checkpoint selection; `load_detect_weights_for_obb()` initializes from detection weights. ONNX, TorchScript, TensorRT and OpenVINO paths are available. Augmentation is flips and HSV. Pretrained weights remain non-commercial and non-redistributable, downloaded from the source CDN.
+- **YOLO-NAS gains oriented-box training and inference. (#745, #907)**
+  The oriented-box models come in sizes `s`, `m` and `l`, use a 1024 canvas and 18 DOTA2 classes, and return the existing `Results.obb` payload. Training uses rotated assignment/losses and `metrics/mAP50-95(OBB)` for checkpoint selection; `load_detect_weights_for_obb()` initializes from detection weights. ONNX, TorchScript, TensorRT and OpenVINO paths are available. Augmentation is flips and HSV. Pretrained weights remain non-commercial and non-redistributable, downloaded from the source CDN. `libreyolo train` uses the OBB recipe unless options are set (#907, d6b5d27b).
+
+<!-- G1 -->
+- **GTR detection, segmentation, pose, oriented boxes, depth and semantic segmentation. (#894, 3e136716; #907)**
+  `LibreGTR` adds 22 hosted weights: `LibreGTR{s,m,l,x}.pt` for COCO detection, `-seg`, `-pose` (17 COCO keypoints), `-depth` and `-sem` (19 Cityscapes classes) in the same four sizes, and `LibreGTR{s,x}-obb.pt` for the 15 DOTA v1.0 classes. Inputs are square, a multiple of 32 and at least 160 pixels, default 640; OBB uses a fixed 1024 canvas, and semantic segmentation slides 1024-pixel windows over a 1024×2048 canvas. Postprocessing is NMS-free. Depth returns relative inverse depth, so `1 / depth_map` gives upstream's meters. CPU and MPS run a portable PyTorch recurrence; CUDA uses `flash-linear-attention` when it is installed separately. All six tasks train, in FP32 by default. Detection defaults to 30 epochs, batch 4, AdamW and the flat-cosine schedule (other optimizers and schedulers raise), with upstream Mosaic and MixUp in the first 6 epochs. `lora=True` covers detection, segmentation, pose and OBB. Pose training requires a single-class 17-keypoint dataset at 640. ONNX and TorchScript export fixed-shape FP32 graphs; other formats are rejected. Resume continues the checkpoint's run with the call's device, `exist_ok=False` opens a new run, and `pretrained=` accepts only `True` or `False` (#907, a30759d4, 1777942b, 30decab6, 59019f1b). Code is MIT with retained Apache-2.0 notices; weights are MIT, as the upstream weight repository declares.
 
 <!-- M06 -->
-- **PP-LiteSeg semantic segmentation. (#751)**
-  the corresponding family checkpoint adds trainable Cityscapes segmentation. Evaluation uses 512×1024 for `t50`/`b50` and 768×1536 for `t75`/`b75`; default training crops are 512×1024 and 768×768 respectively. The recipe includes auxiliary heads, Dice/cross-entropy/edge loss, polynomial learning-rate decay and EMA. ONNX, TorchScript, TensorRT and OpenVINO support the native rectangles.
+- **PP-LiteSeg semantic segmentation. (#751, #907)**
+  `LibrePPLiteSeg{t50,b50,t75,b75}-sem.pt` adds trainable Cityscapes segmentation. Evaluation uses 512×1024 for `t50`/`b50` and 768×1536 for `t75`/`b75`; default training crops are 512×1024 and 768×768 respectively. The recipe includes auxiliary heads, Dice/cross-entropy/edge loss, polynomial learning-rate decay and EMA. ONNX, TorchScript, TensorRT and OpenVINO support the native rectangles. `resume=True` resumes the loaded checkpoint and keeps writing into its run, a path resumes that file, and `libreyolo train` keeps the size-aware recipe unless options are set (#907, ad52e7f5, 878464cd).
 
 <!-- M07 -->
 - **U-Net semantic segmentation. (#836)**
-  the corresponding family checkpoint identifies the trainable same-padded UNet-S5-D16 graph with FCN head: 19 Cityscapes classes, 1024×2048 evaluation and 512×1024 training crops, with cross-entropy plus auxiliary loss. Export is unsupported.
+  `LibreUNets-sem.pt` is the trainable same-padded UNet-S5-D16 graph with an FCN head, converted from mmsegmentation: 19 Cityscapes classes, 1024×2048 evaluation and 512×1024 training crops, with cross-entropy plus auxiliary loss. Export is unsupported. Weights are Apache-2.0, as mmsegmentation declares.
 
 <!-- M08 -->
 - **ConvNeXt V2 classification. (#868)**
@@ -105,7 +113,7 @@ These notes describe library dev at `4da12d005eb41a8e694a86124c97ea5faaee9b7c`. 
 
 <!-- M14 -->
 - **Colorization, low-light enhancement, inpainting and guided matting. (#803)**
-  the corresponding family checkpoint colorizes images; `LibreHVICIDNett-restore.pt` enhances low light with `gamma=1.0`, `saturation=1.0` and `intensity=1.0`; `LibreLaMab-restore.pt` requires `mask=` for inpainting; `LibreViTMattes-matte.pt` requires `trimap=` for matting. Python and predict CLI accept the single-image guides. All four support paired validation and reject training/export. LaMa runs an embedded ONNX graph.
+  `LibreDDColor{t,l}-restore.pt` colorizes images; `LibreHVICIDNett-restore.pt` enhances low light with `gamma=1.0`, `saturation=1.0` and `intensity=1.0`; `LibreLaMab-restore.pt` requires `mask=` for inpainting; `LibreViTMattes-matte.pt` requires `trimap=` for matting. Python and predict CLI accept the single-image guides. All four support paired validation and reject training/export. LaMa runs an embedded ONNX graph.
 
 <!-- M15 -->
 - **Four 3D detection APIs. (#845, #846, #847, #848, #851)**
@@ -124,8 +132,8 @@ These notes describe library dev at `4da12d005eb41a8e694a86124c97ea5faaee9b7c`. 
   Gemma 4 E2B/E4B adds detection, with `gemma-4` selecting E4B; Moondream 2/3 adds detection, points and native chat; North Micro Vision runs one detection query per vocabulary class; `lfm2-vl-3b` adds LFM2.5's 3B size and 0–1000 box parsing. Molmo2 4B/8B/O-7B returns points, and custom pointing templates must include `{label}`. These additions are inference-only. Moondream 3 retains BSL 1.1 restrictions, and LFM retains its Open License; the other listed snapshots are Apache-2.0.
 
 <!-- M19 -->
-- **Qwen3-VL detection fine-tuning. (#767, #834)**
-  `LibreVLM("qwen3-vl-2b").train(data=...)` adds LoRA by default, optional full language-model fine-tuning with the vision tower frozen, checkpoint-directory reload, callbacks/loggers and validation-loss checkpoint selection. Defaults include `epochs=10`, `batch=1`, `accumulate=8`, `workers=0`, `hflip=0.5` and gradient checkpointing. `lr0=None` resolves to `1e-4` for LoRA or `2e-5` for full language-model tuning. Runs default to `runs/vlm/train` with `exist_ok=False`. Optimizer-state resume, COCO-JSON training and detection-mAP validation are unsupported.
+- **Qwen3-VL detection fine-tuning. (#767, #834, #907)**
+  `LibreVLM("qwen3-vl-2b").train(data=...)` adds LoRA by default, optional full language-model fine-tuning with the vision tower frozen, checkpoint-directory reload, callbacks/loggers and validation-loss checkpoint selection. Defaults include `epochs=10`, `batch=1`, `accumulate=8`, `workers=0`, `hflip=0.5` and gradient checkpointing. `lr0=None` resolves to `1e-4` for LoRA or `2e-5` for full language-model tuning. Runs default to `runs/vlm/train` with `exist_ok=False`. Optimizer-state resume, COCO-JSON training and detection-mAP validation are unsupported. `resume=True` on a model loaded from `<run>/weights/<best|last>` continues and writes into that run, and a resumed LoRA adapter is applied to the base weights once (#907, ce888888).
 
 <!-- M20 -->
 - **LibreVLA robot-policy API. (#857, #858)**
@@ -152,28 +160,40 @@ These notes describe library dev at `4da12d005eb41a8e694a86124c97ea5faaee9b7c`. 
   ImageFolder validation adds `metrics/precision`, `metrics/recall` and `metrics/f1`, averaging over classes present in validation targets, with zero precision for unpredicted classes. Top-1/top-5 keys remain, and default fitness remains top-1. CLI text and JSON include the new values. Targets outside the classifier head's range raise a mismatch error.
 
 <!-- A04 -->
-- **F1-optimal detection confidence thresholds. (#778)**
-  Detection validation adds `metrics/best_conf` and `metrics/best_conf_f1`, computed at IoU `0.50`, and `results.box.best_conf_per_class`. Global selection uses micro F1; per-class thresholds are keyed by class name. Equal-score detections are grouped, and F1 ties choose the higher threshold. No positive F1 yields `0.0`. Segmentation's separate metrics implementation does not expose these values.
+- **F1-optimal detection confidence thresholds. (#778, #907)**
+  Detection validation adds `metrics/best_conf` and `metrics/best_conf_f1`, computed at IoU `0.50` with micro F1 over classes; per-class thresholds, keyed by class name, are on `results.box.best_conf_per_class`. Equal-score detections are grouped, and F1 ties choose the higher threshold. When no threshold reaches F1 > 0 the threshold and F1 are `0.0`, so the returned metrics stay a flat dict of finite numbers (#907, 9831fa94). Segmentation's separate metrics implementation does not expose these values.
 
 <!-- A05 -->
 - **Configurable validation sample plots. (#880)**
   `plot_samples=8` sets the retained sample-image budget on validation, training configuration and both CLI commands. `0` disables sample images and `-1` retains all. It does not limit evaluated images or the separate `visualize=True` output.
+
+<!-- P19 -->
+- **`val()` without `data=` reuses the training dataset. (#907, 625cfbe0, a725680d, 4bee7b7a)**
+  Native `model.val()` with no `data`, `data_dir` or `keypoints_json` validates on the dataset path saved in the loaded checkpoint's training configuration, or on the dataset of a `train()` that finished in the same session. Released weights carry none and raise `ValueError` asking for `data=`.
+
+<!-- P20 -->
+- **`val(project=, name=, exist_ok=)`. (#907, 6595f5e8)**
+  Native and exported-backend `val()` write to `project/name` (defaults `runs/val` and `exp`), incremented unless `exist_ok=True`; combining them with `save_dir` raises. Without either, output keeps the timestamped `runs/val/` directory.
 
 <!-- A06 -->
 - **Two-channel event-histogram detection. (#865)**
   YOLO9 and RF-DETR detection accept prepared `(H, W, 2)` `.npy` arrays containing finite, nonnegative positive/negative counts. Dataset `input_profile` declares `format="event_histogram"`, `layout="HWC"`, `polarity="positive_negative"`, `encoding="counts"`, positive `scale` and positive integer `window_us`. Preprocessing clips to `scale`, divides by it and resizes without RGB normalization. RGB-weight initialization sets both input channels to `1.5 * mean(R,G,B)`; checkpoints preserve profile and initialization metadata. Native train/val/predict and FP32 ONNX without embedded NMS are supported. This path requires fixed-batch, single-device training and excludes live event decoding, video, TTA, tiling, LoRA, distillation and quantization.
 
 <!-- A07 -->
-- **Custom tracker instances. (#869)**
-  `track(tracker=instance)` accepts the exported `libreyolo.tracking.Tracker` protocol: `reset()` and `update(results, image=None)`. Each run resets once and passes the original RGB PIL frame. Returned `track_id` must be a one-dimensional integer array/tensor aligned with boxes and on the matching backend/device. Custom instances use `track_conf=0.25` by default; configure them directly instead of passing `tracker_config` or tracker kwargs.
+- **Custom tracker instances. (#869, #907)**
+  `track(tracker=instance)` accepts the exported `libreyolo.tracking.Tracker` protocol: `reset()` and `update(results, image=None)`. Each run resets the instance once, unless `persist=True` continues it from the previous `persist=True` call on the same model and stream (#907, 48542ae9), and passes the original RGB PIL frame. Returned `track_id` must be a one-dimensional integer array/tensor aligned with boxes and on the matching backend/device. Custom instances use `track_conf=0.25` by default; configure them directly instead of passing `tracker_config` or tracker kwargs.
 
 <!-- A08 -->
-- **Tracking across image sequences. (#825)**
-  `track()` accepts individual images, filename-sorted folders, lists, tuples and lazy image iterators as consecutive frames. New `fps=30.0` and `color_format="auto"` control timing and input interpretation. `vid_stride` reduces the output rate to `fps / vid_stride`; ByteTrack and BoT-SORT use that retained rate unless explicitly configured.
+- **Tracking across image sequences. (#825, #907)**
+  `track()` accepts individual images, filename-sorted folders, lists, tuples and lazy image iterators as consecutive frames. New `fps=30.0` and `color_format="auto"` control timing and the channel order of NumPy frames: `"auto"` reads them as BGR, like `cv2` frames, and `"rgb"` as RGB (#907, d80e1627). `vid_stride` reduces the output rate to `fps / vid_stride`; ByteTrack and BoT-SORT use that retained rate unless explicitly configured.
+
+<!-- P21 -->
+- **`track(..., persist=True)` keeps the tracker across calls. (#907, 48542ae9)**
+  A call with `persist=True` continues the tracker and track IDs of the previous `persist=True` call on the same model, for per-frame loops such as `model.track(frame, persist=True)`. A different tracker or configuration, or another video file or directory, starts a fresh tracker; the default `persist=False` always does.
 
 <!-- A09 -->
-- **Hub checkpoint loading and publishing. (#789)**
-  `LibreYOLO("owner/repo")` or `LibreYOLO("hf://owner/repo@revision/path/model.pt")` loads schema-tagged checkpoints through the Hub cache; existing local paths take precedence. `model.push_to_hub("owner/repo", private=False)` publishes `model.pt` and a model card. `HuggingFaceHubLogger` or `loggers="hf:owner/repo"` uploads `weights/best.pt`, falling back to `last.pt`, at training end; the logger defaults to `private=True`. Ambiguous repositories require an explicit filename; a sole `.pt` takes precedence over `.safetensors` candidates.
+- **Hub checkpoint loading and publishing. (#789, #907)**
+  `LibreYOLO("owner/repo")` or `LibreYOLO("hf://owner/repo@revision/path/model.pt")` loads schema-tagged checkpoints through the Hub cache; existing local paths take precedence. `model.push_to_hub("owner/repo", private=False)` publishes `model.pt` and a model card. `HuggingFaceHubLogger` or `loggers="hf:owner/repo"` uploads `weights/best.pt`, falling back to `last.pt`, at training end; the logger defaults to `private=True`. Ambiguous repositories require an explicit filename; a sole `.pt` takes precedence over `.safetensors` candidates. A bare `owner/name` whose last segment has a file extension (`weights/model.pt`, `ckpts/best.pth.tar`) or starts with `librefacerec-` is treated as a local path (#907, 5c8a9acb).
 
 <!-- A10 -->
 - **FiftyOne model application and dataset exchange. (#780)**
@@ -184,12 +204,12 @@ These notes describe library dev at `4da12d005eb41a8e694a86124c97ea5faaee9b7c`. 
   `export(format="tflite", int8=True, data=..., fraction=1.0, batch=1)` creates separate normalized-box and score outputs with independent quantization scales. The backend uses sidecar `output_layout` metadata to reconstruct predictions. Missing `data` falls back to `coco8.yaml` with a warning. Requires `onnx2tf[tensorflow]`; `half=True`, `dynamic=True`, other INT8 families/tasks and batch sizes other than 1 are rejected. Some internal operators may remain floating point.
 
 <!-- A13 -->
-- **Expanded `Results.plot()` rendering. (#897)**
-  Detection, masks, pose, OBB, classification top-5, points, OCR, semantic/panoptic results and other image-overlay payloads use a shared renderer. Overlay output is contiguous `HxWx3` uint8 BGR; `pil=True` requests PIL. The existing edge/normal map paths keep PIL defaults. New controls include `img`, `conf=True`, `labels=True`, `boxes=True`, `masks=True`, `probs=True`, `line_width=None`, `pil=None`, `show=False`, `save=False` and `filename=None`. `orig_img` retains BGR pixels for in-memory/URL sources; local files and collected local finite-video/GIF frames can be reopened on demand.
+- **Expanded `Results.plot()` rendering. (#897, #907)**
+  Detection, masks, pose, OBB, classification top-5, points, OCR, semantic/panoptic results and other image-overlay payloads use a shared renderer. Overlay output is contiguous `HxWx3` uint8 BGR; `pil=True` requests PIL. Dense maps (depth, normal, edge and albedo), 3D cuboids and action chunks return a PIL image by default. New controls include `img`, `conf=True`, `labels=True`, `boxes=True`, `masks=True`, `probs=True`, `line_width=None`, `pil=None`, `show=False`, `save=False` and `filename=None`. `orig_img` is an `HxWx3` uint8 BGR array: in-memory and URL sources keep their decoded pixels, and local image or video files are read back from `path` on first access (#907, f4da8e89).
 
 <!-- T01 -->
-- **Class-subset and single-class detection training. (#812, #875, #838)**
-  `train(classes=[...])` filters supervision while preserving original class IDs and dataset `nc`/`names`; `single_cls=True` collapses retained labels to class 0, named `object`. Defaults are `classes=None`, `single_cls=False`. Both options support supported detector detection, including YOLO9 and RF-DETR; resume and validation inherit saved settings. CLI train/val expose class subsets. The public OBB dataset loader can collapse classes, but model OBB training rejects `single_cls`.
+- **Class-subset and single-class detection training. (#812, #875, #838, #907)**
+  `train(classes=[...])` filters supervision while preserving original class IDs and dataset `nc`/`names`; `single_cls=True` collapses retained labels to class 0, named `object`. Defaults are `classes=None`, `single_cls=False`. Both options cover detection with YOLO9 (including YOLO9-E2E and YOLO9-P2), RF-DETR, RT-DETR, RT-DETRv2, RT-DETRv4, D-FINE, DEIM, DEIMv2, EdgeCrafter, GTR, TinyFormer and YOLO-NAS; resuming or validating a subset-trained checkpoint inherits its saved settings, while a new run validates with its own `classes`/`single_cls` (#907, 3ce36e24). CLI train/val expose class subsets, and `libreyolo val --single-cls` evaluates the same detectors with classes merged (#907, 9d77b56b). The public OBB dataset loader can collapse classes, but model OBB training rejects `single_cls`.
 
 <!-- T02 -->
 - **Minimum epoch sample count. (#777)**
@@ -224,8 +244,12 @@ These notes describe library dev at `4da12d005eb41a8e694a86124c97ea5faaee9b7c`. 
   `scale=(0.5,1.0)` accepts a lower-bound float or explicit crop-area pair; `crop_pct=None` preserves the family's evaluation ratio. Python and CLI accept the new crop controls; CLI adds `auto_augment`, `erasing`, `cutmix`, `fliplr` and `flipud`. Classification CLI `mixup` now routes to batch mixing, default `0.0`, rather than detection `mixup_prob`. `flip_prob=0.5` and `flipud=0.0` control flips. A `crop_pct` override affects train/val evaluation; export retains native family preprocessing.
 
 <!-- T10 -->
-- **Guardless automatic local DDP. (#819)**
-  `model.train(device=[0,1])` and `device="0,1"` use coordinator-managed ranks without replaying an ordinary unguarded training script's top-level code. Guarded scripts and explicit `torchrun` remain supported. Callback/logger objects requiring the documented standard-pickle fallback still need a main guard.
+- **Guardless automatic local DDP. (#819, #907)**
+  `model.train(device=[0,1])` and `device="0,1"` use coordinator-managed ranks without replaying an ordinary unguarded training script's top-level code. Guarded scripts and explicit `torchrun` remain supported. Callback/logger objects requiring the documented standard-pickle fallback still need a main guard. This includes the default DataLoader `workers>0`: rank worker processes do not re-run the script (#907, b034110d).
+
+<!-- G7 -->
+- **Opt-in `torch.compile` training. (#905, 0ce0d51c, bfad4596, 7b39ffe5; #907, 5e63bbe5)**
+  `train(compile=...)` accepts `False` (default), `True` or `"default"`, `"reduce-overhead"`, `"max-autotune"` and `"max-autotune-no-cudagraphs"`; other values raise `ValueError`, and `libreyolo train compile=` exits `config_type_error` for them. The network forward and backward are compiled at the boundary CUDA-graph capture uses, including YOLO9's default PGI branch and RF-DETR detection; the loss, optimizer, EMA, validation, checkpoints and export stay eager, and checkpoints load without compilation. Only single-GPU CUDA runs compile. CPU, MPS, distributed and distillation runs, tasks without a capture boundary (including RF-DETR segmentation, pose, OBB and classification) and compiler failures train eager after a warning. `"reduce-overhead"`, `"max-autotune"` or `cuda_graph=True` replay CUDA graphs, except under gradient accumulation, which RF-DETR's defaults (`batch=4`, `nbs=16`) use. With RF-DETR's default multi-scale training, dynamic-shape compilation failed in release GPU testing and the run continued eager; the warning suggests `multi_scale=False`, which compiled (#907, 5e63bbe5). On an RTX 4090, RF-DETR nano at batch 4 trained 1.44x faster and YOLO9-t at batch 16 did not speed up; compilation takes several minutes.
 
 <!-- T11 -->
 - **RF-DETR multi-class pose. (#888)**
@@ -236,6 +260,90 @@ These notes describe library dev at `4da12d005eb41a8e694a86124c97ea5faaee9b7c`. 
   `SemanticDataset` accepts `(height, width)`, adds `rescale_crop` sampling with ignore padding and supports a family-provided `photometric` transform. The shared `PolyLRScheduler` supports the semantic recipes.
 
 ### Changed
+
+<!-- P1 -->
+- **Output change: NumPy image inputs are read as BGR by default. (#907, d80e1627)**
+  `predict()`, `track()`, exported backends, `LibreEnsemble` and `ImageLoader.load()` treat 3-channel NumPy arrays as BGR when `color_format` is `"auto"` (the default) or `"bgr"`, matching `cv2.imread()` and OpenCV frames; `color_format="rgb"` reads RGB arrays. In 1.5.0 `"auto"` meant RGB, so `model(cv2.imread(path))` saw swapped channels. PIL images, tensors, files, bytes and video files are unchanged.
+
+<!-- P2 -->
+- **Output change: batched arrays and tensors return one `Results` per image. (#907, 1df8cec2)**
+  A 4-D NumPy array (NHWC or NCHW) or 4-D tensor is split into its images and returns a list with one `Results` each, also for a batch of one. 1.5.0 used only the first image and returned a single `Results`. `ImageLoader.load()` raises `ValueError` for a batch larger than one.
+
+<!-- P12 -->
+- **Output change: RF-DETR fine-tunes keep pretrained class logits when dataset class names match the checkpoint. (#907, 020f8eaf)**
+  When every dataset class name matches a checkpoint class, the classification head is rebuilt from the matching rows; the released 91-column COCO head maps class names to COCO category-id columns. 1.5.0 truncated the head to `nc + 1` columns, which shifted every label on COCO-named data (coco8 fine-tune mAP 0.053 before, 0.642 after). Other datasets keep the truncate/tile resize, with a warning that the rows do not correspond to the dataset classes.
+
+<!-- P13 -->
+- **Output change: ONNX INT8 export keeps each family's float layers. (#907, e9743d71)**
+  Unless `nodes_to_exclude` is given, the layers `model.quantize()` keeps in float stay float in ONNX INT8 export: YOLO9 `head.` and `backbone.conv0.`, RF-DETR class, box, angle, keypoint and segmentation heads, embeddings and reference points, and the listed BiRefNet/FeyNobg modules. YOLO9 INT8 scores no longer saturate at 0.5: coco8 mAP rises from 0.322 to 0.471 (FP32 0.527). Re-export INT8 models to pick this up.
+
+<!-- P14 -->
+- **Output change: exported MiDaS and Depth Anything V2 resize inputs bicubically. (#907, 6a33162d)**
+  Their exported backends resize the `[0, 1]` float image with bicubic interpolation, as native prediction does, instead of bilinear on uint8, so their depth maps change (MiDaS ONNX had differed about 9% from `.pt`). Other depth families are unchanged.
+
+<!-- DC22 -->
+- **Output change: EdgeCrafter pose keypoints match upstream. (#894)**
+  At inference the keypoint position embedding also reaches the attention value, residual, gate input and the previous decoder layer's refinement features, as in upstream EdgeCrafter; 1.5.0 added it to queries and keys only. Released checkpoints reproduce the upstream decoder to float rounding (logits had moved by up to 2.1), and coco8-pose keypoint mAP50-95 rises from 0.186 to 0.813 (S) and from 0.438 to 0.818 (M). EC pose predictions and exports made with 1.5.0 differ from 1.6.0. Training keeps the query/key-only form.
+
+<!-- G12 -->
+- **Output change: YOLO-format detection and segmentation validation no longer counts a duplicate detection as a true positive. (#906, d1948c44)**
+  The first prediction of each evaluation had id 0, which COCO evaluation reads as "unmatched", so the ground truth it matched stayed free and a lower-scoring duplicate of that object also counted as a true positive. Prediction ids now start at 1, as in pycocotools. At most one ground truth per evaluation was affected, so box and mask mAP and AR can fall slightly, most on small validation sets. COCO-JSON datasets and `faster_coco_eval=True` were not affected.
+
+<!-- P5 -->
+- **The final training epoch always validates, and `val=False` turns validation off. (#907, b9faf668, 6f038fcf, 0cc2598d)**
+  With validation on, training validates every `eval_interval` epochs and after the final epoch, so runs shorter than `eval_interval` (10 for YOLO9, YOLOX, YOLOv7, D-FINE, DEIM, DEIMv2, RT-DETRv4, TinyFormer, EC detect/segment, YOLO-NAS detect, PP-YOLOE, PicoDet, RTMDet and Dome-DETR; 5 for EC pose) report metrics and write `best.pt`, and `best.pt` can come from the final epoch. Python `train(val=False)` sets `eval_interval=0` and skips all validation, including final plots and precise-BN metrics; 1.5.0 warned about `val` as an unknown key and validated anyway. `libreyolo train val=false` is honored for RF-DETR too.
+
+<!-- P3 -->
+- **Resume continues the saved run: its arguments, directory and checkpoint. (#907, 606144f4, a5816bc4)**
+  For YOLO9 (incl. E2E and P2), YOLOX, YOLOv7, D-FINE, DEIM, DEIMv2, RT-DETR, RT-DETRv2, RT-DETRv4, EC, YOLO-NAS, PP-YOLOE, PicoDet, RTMDet, Dome-DETR, TinyFormer, FOMO, ConvNeXt, ConvNeXt V2, ResNet, MobileNetV4, EfficientNetV2, U-Net and NAFNet, `train(resume=True)` resumes the checkpoint the model was loaded from and `train(resume="path/to/last.pt")` resumes that file. Saved arguments such as `data`, `epochs`, `imgsz`, `batch`, `lr0` and `amp` are restored unless passed; `device` follows the call. A `<run>/weights/*.pt` checkpoint keeps writing into `<run>`, and `exist_ok=False` opens a new numbered run beside it. Released weights raise `ValueError` ("holds no training state") instead of `KeyError: 'epoch'`, and a finished run raises `ValueError` instead of training on. The CLI forwards only the options you set when resuming, so `libreyolo train model=<run>/weights/last.pt resume=true` works for YOLO9, and a missing checkpoint exits `checkpoint_not_found`. In 1.5.0 resume took the call's defaults (for YOLO9, a new 300-epoch run in a new directory) and resumed the loaded weights even when a path was given.
+
+<!-- P4 -->
+- **RF-DETR resume restores the run's settings. (#907, 46bbff45, d19bb608, 59a347eb, 9f70b876)**
+  `LibreRFDETR.train(resume=True|path)` takes the dataset, epochs, batch, lr0 and the other saved settings from the checkpoint unless passed, and continues that run's directory; the CLI does the same and forwards only the options you set. 1.5.0 resumed with the signature defaults (100 epochs, batch 4, lr 1e-4), and the CLI opened a new run directory.
+
+<!-- P6 -->
+- **Validation during training writes to `<run>/val`. (#907, 654a17b3)**
+  Every family's in-training validation writes `config.yaml`, plots and JSON inside the run folder. 1.5.0 created a `runs/val/<tag>_<time>/` directory in the working directory for each validation when plots were off.
+
+<!-- P7 -->
+- **Python `train()` honors `mosaic`, `fliplr` and detection `mixup`. (#907, baa54963, 073aeaab, 7a15208f)**
+  `mosaic` sets `mosaic_prob`, `fliplr` sets `flip_prob`, and on non-classification models `mixup` sets `mixup_prob`, as the CLI does; on classification `mixup` stays batch MixUp. 1.5.0 ignored `mosaic` and `fliplr` with an unknown-key warning and routed detection `mixup` to the unused classification field. A call's value overrides the same setting from `cfg=`; an alias and its field with different values in one source raise `ValueError`.
+
+<!-- P9 -->
+- **`export(quantize=16|8|32)` selects precision. (#907, f8e12af1, 7c6d0119)**
+  `16` exports FP16 (`half=True`), `8` INT8 (`int8=True`) and `32` FP32, in Python and with `libreyolo export quantize=`; other values or a conflicting `half`/`int8` raise. 1.5.0 accepted `quantize=16` silently and wrote FP32.
+
+<!-- P10 -->
+- **Unused export options are warned about. (#907, f8e12af1)**
+  `export()` warns `Unknown <format> export arguments (ignored)` for keyword options the format's exporter does not take; 1.5.0 accepted them silently.
+
+<!-- P11 -->
+- **`track(conf=...)` sets the detection threshold. (#907, 220d9a72)**
+  Detections below `conf` no longer reach the tracker, as with `predict(conf=)`. Without `conf` the detector keeps running at the tracker's low threshold. 1.5.0 warned about `conf` as an unknown tracker key and ignored it.
+
+<!-- P15 -->
+- **CLI YOLO-NAS pose training uses the pose recipe. (#907, d6b5d27b)**
+  `libreyolo train` for YOLO-NAS and PP-LiteSeg forwards only the options you set, so YOLO-NAS pose uses its Python recipe (lr0 2e-3, weight decay 1e-6, 10 warmup epochs, 1000 epochs, AMP). 1.5.0 applied the detection recipe to pose (lr0 5e-4, weight decay 1e-5, 1 warmup epoch, 300 epochs, FP32).
+
+<!-- P16 -->
+- **CLI exit codes follow the failure type. (#907, b5b9d406, d2c56c84, 7861400f)**
+  Training failures from bad values or arguments exit 2 with `config_type_error`, `config_unknown_key` or `config_unsupported`; CUDA out-of-memory exits `cuda_oom` and missing device operators `device_not_available`; other failures stay `io_error` (exit 1). An unavailable CUDA/MPS device exits `device_not_available` instead of `model_load_failed`, an `imgsz` the model cannot run exits `invalid_imgsz`, a missing resume checkpoint exits `checkpoint_not_found` instead of `data_not_found`, and `libreyolo metadata` on an unreadable file exits `model_load_failed` instead of a traceback. 1.5.0 reported every training failure as `io_error`.
+
+<!-- P17 -->
+- **The CLI rejects out-of-range values. (#907, ebd26372)**
+  `conf` and `iou` outside [0, 1], and `max_det`, `batch` or `epochs` below 1, exit `config_range_error` (exit 2) in predict, val, export and train; `batch=-1` still requests AutoBatch.
+
+<!-- P18 -->
+- **Unpublished weights fail fast, and `libreyolo models` lists only routable names. (#907, 9546891f, acef0fb1, 926d740a)**
+  A weight URL answering 401, 403, 404 or 410 raises `WeightsNotPublishedError` ("No weights are published at ...") without retries. Names known to be unpublished, such as CLIP `l14`, Depth Anything V2 `g`, DINOv2 heads, EoMT `s`/`b` seg/sem and YOLOv1 `t`, explain why instead of downloading. `libreyolo models` drops names without a download route, lists known-unpublished names separately, and adds `cli_command`, `unpublished_names` and `python_class` to `--json`. It does not probe the network, so names whose repository is missing are still listed.
+
+<!-- P8 -->
+- **Unknown training keys suggest the close key. (#907, 6f2938e1)**
+  `train(epoch=1)` warns `Unknown training config keys (ignored): ['epoch'] (did you mean 'epochs'?)` and still trains the default epochs; nothing is auto-corrected. Keys that are ecosystem arguments LibreYOLO lacks, such as `lrf`, get no suggestion.
+
+<!-- DC23 -->
+- **Auto-converted upstream downloads use a new cache name. (#752)**
+  An upstream checkpoint downloaded under its canonical name converts to `<canonical>-converted.pt` instead of `<canonical>-<canonical>.pt`. Existing 1.5.0 caches convert once more on first load, and the old file stays until deleted. Other sources keep `<source stem>-<canonical>.pt`.
 
 <!-- C01 -->
 - **Expected optional-runtime fallbacks are quieter. (#811, #867)**
@@ -263,27 +371,27 @@ These notes describe library dev at `4da12d005eb41a8e694a86124c97ea5faaee9b7c`. 
 
 <!-- C07 -->
 - **Saved classification predictions include the top five labels. (#897)**
-  `predict(save=True)` and exported-backend saving use the shared result renderer, including tracking IDs. Matte saving still produces an RGBA cutout, while `plot()` provides a preview.
+  `predict(save=True)` and exported-backend saving use the shared result renderer, including tracking IDs. Matte saving still produces an RGBA cutout, while `plot()` composites the cutout over a checkerboard.
 
 <!-- C08 -->
 - **Classification augmentation can close for the final epochs. (#881)**
   `no_aug_epochs` disables `auto_augment`, `erasing`, `mixup` and `cutmix` in the final training tail while retaining crop and flips. Classification family configurations default that tail to `0`. Existing classifier helper imports remain re-exported from `data.classify_dataset` after the implementation moves to `data.augment.classify`.
 
 <!-- C09 -->
-- **Four detector recipes enable AMP by default. (#754)**
-  D-FINE, DEIM, RT-DETRv4 and YOLO-NAS detection now use `amp=True`; `amp_dtype="float16"` is unchanged. Dome-DETR, PP-YOLOE and YOLO-NAS OBB retain FP32 defaults.
+- **Four detector recipes enable AMP by default. (#754, #907)**
+  D-FINE, DEIM, RT-DETRv4 and YOLO-NAS detection now use `amp=True`; `amp_dtype="float16"` is unchanged. Dome-DETR, PP-YOLOE and YOLO-NAS OBB retain FP32 defaults. Resume restores a run's saved `amp` (#907, 606144f4), so a 1.5.0 FP32 run resumes in FP32.
 
 <!-- C10 -->
-- **YOLO9 training recipe and checkpoint geometry. (#796)**
-  New stock detection fine-tunes use a training-only PGI branch with `aux_weight=0.25`; `max_labels` rises from 100 to 300 and SGD momentum warms from `0.8` to `0.937` over three epochs. Old single-head checkpoints resume as single-head. Unmarked checkpoints keep `letterbox_pad="topleft"`; new official conversions stamp `"center"`, and `letterbox_pad=None` inherits the checkpoint setting. Inference/export use the main head.
+- **YOLO9 training recipe and checkpoint geometry. (#796, #907)**
+  New stock detection fine-tunes use a training-only PGI branch with `aux_weight=0.25`; `aux_weight=0` trains the main head only (Python, or `libreyolo train aux_weight=0` for YOLO9; #907, 3ce36e24). `max_labels` rises from 100 to 300 and SGD momentum warms from `0.8` to `0.937` over three epochs, for YOLO9, YOLO9-E2E and YOLO9-P2. Measured on YOLO9-s (coco128, batch 16, RTX 3090), peak training VRAM rises from 5.47 GB to 9.05 GB and training time by 37% compared with 1.5.0, so batch sizes that fit in 1.5.0 can run out of memory. Old single-head checkpoints resume as single-head. Unmarked checkpoints keep `letterbox_pad="topleft"`; new official conversions stamp `"center"`, and `letterbox_pad=None` inherits the checkpoint setting. Exports record `letterbox_pad`, and all exported backends, backend validation, INT8 calibration and DeepStream sidecars (`symmetric-padding=1` for center) use it; artifacts without the key stay top-left (#907, 0380a2d9, 9cc6e46b). Inference/export use the main head.
 
 <!-- C11 -->
-- **RF-DETR and DINOv2 use incremented training directories. (#834)**
-  Their Python `output_dir` default changes from `"runs/train"` to `None`, resolving to `runs/train/rfdetr_exp` and `runs/train/dinov2_exp`, with `exist_ok=False`. DINOv2's CLI default name is `dinov2_exp`; `resume=True` preserves the selected run directory.
+- **RF-DETR and DINOv2 use incremented training directories. (#834, #907)**
+  Their Python `output_dir` default changes from `"runs/train"` to `None`, resolving to `runs/train/rfdetr_exp` and `runs/train/dinov2_exp`, with `exist_ok=False`. DINOv2's CLI default name is `dinov2_exp`. `resume=True` on a model loaded from `<run>/weights/*.pt`, or `resume="<run>/weights/last.pt"`, continues writing into that run in Python and the CLI; `exist_ok=False` opens a new numbered run beside it (#907, 3ce36e24, d19bb608, 30decab6, 59a347eb).
 
 <!-- C12 -->
 - **Mosaic and MixUp prefer annotated partners. (#776)**
-  YOLO9 and YOLOX mosaic use bounded partner sampling; YOLO9 MixUp does too. Up to 20 candidates are drawn, retaining the final draw if none have annotations. This changes the augmentation distribution for datasets containing empty images.
+  Mosaic partners are drawn with bounded retries in the shared YOLOX-style mosaic dataset (YOLOX, RTMDet, PicoDet, FOMO) and the YOLO9-style one (YOLO9 and its E2E/P2 variants, YOLOv7, RT-DETR); YOLO9-style MixUp does too. This applies where a family's recipe enables mosaic or MixUp. Up to 20 candidates are drawn, retaining the final draw if none have annotations. This changes the augmentation distribution for datasets containing empty images.
 
 <!-- C13 -->
 - **QAT disables incompatible training state. (#794, #782)**
@@ -298,6 +406,21 @@ These notes describe library dev at `4da12d005eb41a8e694a86124c97ea5faaee9b7c`. 
   Eager CUDA calls without an accepted accelerated provider emit one hint for `libreyolo[hub-kernels]`. `ms_deform_attn_available(value=None)` can inspect the actual tensor. `LIBREYOLO_HUB_KERNELS=0` disables Hub and its hint; Triton has a separate opt-out.
 
 ### Breaking changes
+
+<!-- P1 (breaking) -->
+- **RGB NumPy arrays passed without `color_format` are read as BGR. (#907)**
+  Code that passes `np.asarray(pil_image)` or other RGB arrays gets swapped channels.
+  Migration: Pass `color_format="rgb"` for RGB arrays, or pass the PIL image; `cv2.imread()` output needs no change.
+
+<!-- P2 (breaking) -->
+- **4-D array and tensor inputs return a list. (#907)**
+  `model(batch)` returns one `Results` per image in a list, also for a batch of one.
+  Migration: Index the list (`results[0]`) or pass a 3-D image.
+
+<!-- P3 (breaking) -->
+- **Resume restores the run instead of starting from the call's defaults. (#907)**
+  Resumed runs take their saved arguments and keep writing into the checkpoint's run directory; resuming released weights or a finished run raises.
+  Migration: Pass the arguments you want to change (for example a larger `epochs=` to extend a finished run), pass `exist_ok=False` for a new run directory, and train without `resume` when starting from released weights.
 
 <!-- B01 -->
 - **Environments pinning ONNX Runtime below 1.18 no longer satisfy the ONNX extra. (#803)**
@@ -320,13 +443,13 @@ These notes describe library dev at `4da12d005eb41a8e694a86124c97ea5faaee9b7c`. 
   Migration: Pass `amp=False` to retain FP32 training.
 
 <!-- B05 -->
-- **New stock YOLO9 fine-tunes use different training defaults. (#796)**
+- **New stock YOLO9 fine-tunes use different training defaults. (#796, #907)**
   PGI, the ground-truth cap and momentum warmup change new-run behavior.
-  Migration: Use `aux_weight=0`, `max_labels=100` and `warmup_momentum=0.937` for the former choices. Set `letterbox_pad="topleft"` when starting from a new center-stamped conversion if the old geometry is required.
+  Migration: Use `aux_weight=0` (also `libreyolo train aux_weight=0`), `max_labels=100` and `warmup_momentum=0.937` for the former choices; the last two also apply to YOLO9-E2E and YOLO9-P2. Lower `batch` if a 1.5.0 batch size runs out of memory. Set `letterbox_pad="topleft"` when starting from a new center-stamped conversion if the old geometry is required.
 
 <!-- B06 -->
-- **Default RF-DETR and DINOv2 artifact paths change. (#834)**
-  Fresh Python runs use family-named, incremented directories.
+- **Default RF-DETR and DINOv2 artifact paths change. (#834, #907)**
+  Fresh Python runs use family-named, incremented directories; resumed runs keep writing into the checkpoint's own directory (#907).
   Migration: Update artifact-path consumers, or pass `output_dir="runs/train", exist_ok=True` to retain the old location and reuse behavior.
 
 <!-- B07 -->
@@ -343,6 +466,11 @@ These notes describe library dev at `4da12d005eb41a8e694a86124c97ea5faaee9b7c`. 
 - **Custom persistent-worker loaders may now fail at mutation hooks. (#775, #881)**
   Loaders whose worker copies cannot observe scheduled dataset changes are rejected.
   Migration: Use `persistent_workers=False` for these loaders, or rebuild workers after dataset mutation.
+
+<!-- P16 (breaking) -->
+- **CLI training errors use new codes. (#907)**
+  Configuration errors exit 2 with `config_*` codes instead of `io_error` (exit 1); device, `imgsz` and missing-checkpoint failures have their own codes.
+  Migration: Match the documented codes in scripts that parse `--json` errors or exit statuses.
 
 ### Deprecated
 
@@ -363,8 +491,8 @@ None identified relative to v1.5.0.
   `status.json` no longer adds one to the completed-epoch count, and the monitor no longer adds one to `current_epoch`, `best_epoch` or `metrics.jsonl` chart coordinates. ETA therefore includes the remaining final epoch.
 
 <!-- F03 -->
-- **RT-DETR filename detection no longer captures unrelated checkpoints. (#871)**
-  Single-character `l` and `x` size codes require proper delimiters instead of matching names such as `last.pt` or `model_xlnet.pt`. Canonical RT-DETR filenames and the multi-character backbone-size prefix fallback remain accepted.
+- **RT-DETR filename matching no longer captures unrelated checkpoints. (#871, #850)**
+  Local-checkpoint size detection requires a delimiter around single-character `l` and `x` codes instead of matching names such as `last.pt` or `model_xlnet.pt`. Auto-download accepts only canonical names such as `LibreRTDETRl.pt`, `LibreRTDETRx.pt` and `LibreRTDETRr50.pt`.
 
 <!-- F04 -->
 - **Custom RF-DETR pose checkpoints retain their names and device. (#884)**
@@ -379,8 +507,8 @@ None identified relative to v1.5.0.
   Auto-download rejects task-suffixed FCN and Mask R-CNN names and names the hosted forms `LibreFCNr50.pt`, `LibreFCNr101.pt` and `LibreMaskRCNNr50.pt`. `lingbotvision-g` explains that no checkpoint is published and points to `s`, `b`, `l` or a local checkpoint.
 
 <!-- F07 -->
-- **Classifier preprocessors supply calibration arrays. (#892)**
-  AlexNet, VGG, ResNet, EfficientNetV2, ConvNeXt, MobileNetV4, DeiT, Swin and ViT now satisfy the calibration `(CHW array, ratio)` contract instead of dropping calibration images. DINOv2 classifier/embed calibration uses its classification pipeline instead of semantic preprocessing.
+- **Classifier preprocessors supply calibration arrays. (#892, #907)**
+  AlexNet, VGG, ResNet, EfficientNetV2, ConvNeXt, MobileNetV4, DeiT, Swin and ViT satisfy the calibration `(CHW array, ratio)` contract, and their evaluation transforms accept the `(height, width)` size that export passes (#907, 12a2d321), so INT8 calibration no longer drops the images; non-square classification sizes raise `NotImplementedError`. DINOv2 classifier/embed calibration uses its classification pipeline instead of semantic preprocessing.
 
 <!-- F08 -->
 - **Rectangular fine-tunes restore their saved input canvas. (#901)**
@@ -398,9 +526,117 @@ None identified relative to v1.5.0.
 - **Raw checkpoints retain the correct class metadata. (#897, #745)**
   RF-DETR's one-output class head converts as `nc=1` instead of receiving an 80-class record. YOLO-NAS detect/pose conversion reads `processing_params.class_names` when ordinary argument metadata is absent.
 
+<!-- G13 -->
+- **Converted RF-DETR checkpoints with empty `names` keep their class labels. (#906, 45d62c26, caef122d)**
+  Auto-conversion of a raw RF-DETR checkpoint whose top-level `names` is empty takes labels from `args.class_names` or `hyper_parameters.class_names` when their count matches the resolved class count, and a checkpoint whose metadata identifies COCO gets the COCO-80 names. 1.5.0 labeled both `class_0`, `class_1` and so on.
+
 <!-- F12 -->
-- **DINOv2 resume restores training state. (#834)**
-  `resume=` now calls the trainer's resume path before continuing instead of only carrying the value in configuration.
+- **DINOv2 resume restores training state. (#834, #907)**
+  `resume=` calls the trainer's resume path before continuing instead of only carrying the value in configuration, keeps the task's best score (`metrics/accuracy_top1` or `metrics/mIoU`) so the first resumed epoch no longer overwrites `best.pt`, continues the checkpoint's run directory, and trains on the dataset saved in the checkpoint when `data=` is omitted (#907, a0222aaa, 59a347eb, 9f70b876).
+
+<!-- G6 -->
+- **OBB validation works with DataLoader workers on macOS and Windows. (#894, a5177119)**
+  The OBB validation preprocessor recursed without end when unpickled, so spawned worker processes (the default on macOS and Windows) failed with `RecursionError` whenever `workers` was above 0, as it is by default (4). In 1.5.0 this affected RF-DETR and RT-DETRv2 OBB validation.
+
+<!-- G8 -->
+- **`cuda_graph=True` with gradient accumulation sums gradients correctly. (#905, 0ce0d51c)**
+  Autograd adopted a replayed graph's gradient buffers as `.grad` and the next replay overwrote them, so an accumulation window stepped with twice the last micro-batch's gradient instead of the sum. Live gradients now get their own storage before each replay when accumulating. This affected every `cuda_graph=True` run with `nbs` above `batch`, including RF-DETR's defaults (`batch=4`, `nbs=16`); runs without accumulation are unchanged.
+
+<!-- G10 -->
+- **Loading models no longer changes `torch.compile` settings for the whole process. (#905, 0ce0d51c)**
+  In 1.5.0, importing `libreyolo.models`, which every model load does, set `torch._dynamo.config.automatic_dynamic_shapes=False` and `accumulated_cache_size_limit=1024` through the vendored DINOv3 backbone, affecting any model compiled in the same process.
+
+<!-- G11 -->
+- **RF-DETR no longer prints a Transformers deprecation notice. (#905, 0ce0d51c)**
+  The DINOv2 backbone reads `config.return_dict` instead of `config.use_return_dict`, which recent Transformers releases report as deprecated on the first prediction.
+
+<!-- P24 -->
+- **`track(tracker="bytetrack.yaml")` works. (#907, 462f2910)**
+  The `.yaml`/`.yml` spellings of the built-in tracker names select that tracker instead of raising "Unknown tracker"; a local file with that name raises, because tracker yaml files are not read.
+
+<!-- P25 -->
+- **Resuming a non-SGD run without `optimizer=` works. (#907, 3ce36e24)**
+  Resume uses the checkpoint's optimizer, so an AdamW run no longer rebuilds SGD and fails with `KeyError: 'momentum'`.
+
+<!-- P26 -->
+- **DINOv2 `train(batch=...)` is honored. (#907, 43da519b)**
+  Every DINOv2 run trained at batch 4 regardless of the requested batch.
+
+<!-- P27 -->
+- **An ecosystem `cls` train key no longer crashes. (#907, de7807f5)**
+  `train(cls=0.5)` and `cfg=` files with the `cls` loss gain are warned about as unknown keys instead of raising `TypeError: got multiple values for argument 'cls'`.
+
+<!-- P28 -->
+- **YOLO9 rounds `imgsz` up to a multiple of 32. (#907, eda9b46d)**
+  Predict, val, export and train warn and round, for example 333 to 352, instead of failing with "Sizes of tensors must match".
+
+<!-- P29 -->
+- **`predict(classes=0)` and YOLO9 `imgsz=[h, w]` lists work. (#907, e72f3396, 5a40955a)**
+  Native, exported-backend and ensemble predict accept a single int class id; YOLO9 predict and export accept list sizes.
+
+<!-- P30 -->
+- **`classes=` is applied before `max_det`. (#907, 6cef64d2)**
+  In predict, TTA and exported backends, `classes=[16], max_det=1` returns the best class-16 box instead of nothing.
+
+<!-- P31 -->
+- **Tiling rejects `overlap_ratio` outside [0, 1). (#907, bd3be61a)**
+  Values of 1 or more raise `ValueError` instead of never finishing.
+
+<!-- P32 -->
+- **FP16 ONNX and TorchScript exports load and predict. (#907, 321a9f93, 3be89e20)**
+  YOLO9 and RF-DETR `half=True` ONNX files load in ONNX Runtime, backends cast inputs to the graph dtype, and the in-memory model is restored exactly after a half export.
+
+<!-- P33 -->
+- **ONNX INT8 export works with the default `dynamic=True`. (#907, 16e26385)**
+  ONNX Runtime symbolic shape inference, which failed on dynamic-batch graphs, is skipped.
+
+<!-- P34 -->
+- **`val(device=...)` moves the model. (#907, 4a071ed1)**
+  As `predict(device=...)` does, instead of failing with a mixed-device error; YOLO9 rebuilds its anchor cache after a device or dtype switch, including MPS to CPU.
+
+<!-- P35 -->
+- **TorchScript exports load on Apple Silicon. (#907, 32c0c4ff)**
+  `device="auto"` picks CPU instead of MPS, which cannot load the traced float64 constants.
+
+<!-- P36 -->
+- **Quantization and QAT run on Apple Silicon. (#907, 7861400f)**
+  Fake-quantized models move to CPU with a warning instead of failing on MPS.
+
+<!-- P37 -->
+- **Finalized fp16-remainder checkpoints return to float32 cleanly. (#907, 32a3e933)**
+  Their half-width I/O hooks are removed, so export, QAT and dequantize work.
+
+<!-- P38 -->
+- **EfficientNetV2 and EfficientDet ONNX exports match PyTorch. (#907, 31a04e9b, 0124a09f)**
+  SAME padding is baked as constants when tracing, so onnxsim no longer folds it into wrong pads; re-export existing ONNX files.
+
+<!-- P39 -->
+- **YOLO9 CoreML export works and letterboxes like `.pt`. (#907, 7d0869cf, 9cc6e46b)**
+  Export no longer fails with `IndexError` (empty frozen anchor grid), and the CoreML backend letterboxes with the exported pad instead of stretching; a non-square coco8 image matches `.pt` with IoU 1.0.
+
+<!-- P40 -->
+- **Fixed-shape exports name the expected size. (#907, 01ac6b3d, ef43f7a0)**
+  ONNX, TensorRT, OpenVINO and CoreML exports run at another `imgsz` raise `ValueError` with both sizes; the CLI exits `invalid_imgsz` and suggests the exported size.
+
+<!-- P41 -->
+- **`val(split=...)` with an empty dataset entry names the split. (#907, e5dc0225)**
+  Detection, segmentation and OBB validation raise `FileNotFoundError` instead of `TypeError: PosixPath / NoneType`.
+
+<!-- P42 -->
+- **RF-DETR `batch=-1` fits in memory. (#907, 43ad8560)**
+  Losses compute paired IoU/GIoU instead of an N x N matrix (same values), and AutoBatch probes the real loss at the largest multi-scale size, so it picks a smaller batch; on a 24 GB GPU it had estimated 10.6 GiB for a step that used more than 21 GiB.
+
+<!-- P43 -->
+- **Failed training setup leaves no `status.json` in the working directory. (#907, 544b44c4)**
+  Failures after setup still record `state=failed` in the run folder.
+
+<!-- P44 -->
+- **CLI `--json` output is one JSON document. (#907, e4750317, 67b1f91e, e4afc028)**
+  Third-party output (pycocotools tables, torch ONNX logs) goes to stderr, and predict failures and usage errors print JSON errors with documented codes instead of tracebacks.
+
+<!-- P45 -->
+- **CLI `--key value` values are not rewritten. (#907, 4e5fc889)**
+  `--name show` names the run `show` instead of `--show`.
 
 ### Performance
 
@@ -419,6 +655,10 @@ None identified relative to v1.5.0.
 <!-- P04 -->
 - **In-tree Triton MSDA for eligible CUDA inference. (#784, #787, #790)**
   The provider supports FP32/FP16/BF16 when Triton is installed, rejects gradient-requiring inputs and falls back to portable attention. Hub remains preferred; `LIBREYOLO_TRITON_MSDA=0` disables Triton. EC pose adapts its split values to the shared slot. Provider fallback, device selection, capture handling and disable-after-failure behavior are included.
+
+<!-- G9 -->
+- **Training keeps PyTorch's CPU threads within the process's CPU allowance. (#905, 0ce0d51c, 888e810a, 7b39ffe5)**
+  During `train()`, unless `OMP_NUM_THREADS` is set, the PyTorch thread count is lowered to the smaller of the cgroup CPU quota and the CPU affinity count, divided among local ranks, and restored afterwards; it is never raised. This stops CPU-limited containers from throttling every step. It applies to all families on the shared trainer, not to LibreVLM or LibreVLA fine-tuning.
 
 ### Security/Licensing
 
@@ -455,8 +695,6 @@ None identified relative to v1.5.0.
 <!-- D05 -->
 - **Some VLM families require newer Transformers than the common VLM extra floor. (#764, #788)**
   North Micro Vision checks for `transformers>=5.16.0`, and Gemma 4 for `>=5.10.0`, before loading; the shared `vlm` extra still declares `>=5.1.0`.
-
-
 
 ## 1.5.0, released 2026-08-09
 
