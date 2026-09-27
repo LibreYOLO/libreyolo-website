@@ -50,10 +50,10 @@ snippets:
       code: |
         # 변환된 파일은 게시된 파일과 동일한 스키마를 만족합니다.
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: bf9d7c7d168fd2c0
+source_hash: 517b0462e83295f1
 ---
 
-이 페이지는 다른 프로젝트의 체크포인트에 관한 것입니다. 만약 이전 버전의 LibreYOLO에서 자신의 코드를 옮기고 있다면, [1.5.0으로 업그레이드](/docs/upgrade)를 참조하십시오.
+이 페이지는 다른 프로젝트의 체크포인트에 관한 것입니다. 만약 이전 버전의 LibreYOLO에서 자신의 코드를 옮기고 있다면, [1.6.0으로 업그레이드](/docs/upgrade)를 참조하십시오.
 
 ## 외부 파일을 로드하면 무슨 일이 일어나는가
 

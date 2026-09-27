@@ -53,12 +53,12 @@ snippets:
       code: |
         # O arquivo convertido cumpre o mesmo esquema que um publicado.
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: bf9d7c7d168fd2c0
+source_hash: 517b0462e83295f1
 ---
 
 Esta página trata de checkpoints de outros projetos. Se o que você está movendo é
 o seu próprio código a partir de um LibreYOLO mais antigo, veja
-[atualizar para 1.5.0](/docs/upgrade).
+[atualizar para 1.6.0](/docs/upgrade).
 
 ## O que acontece quando você carrega um arquivo alheio
 

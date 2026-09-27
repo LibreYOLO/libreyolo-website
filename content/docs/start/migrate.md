@@ -44,7 +44,7 @@ snippets:
 ---
 
 This page is about checkpoints from other projects. If you are moving your own
-code from an older LibreYOLO, see [upgrading to 1.5.0](/docs/upgrade).
+code from an older LibreYOLO, see [upgrading to 1.6.0](/docs/upgrade).
 
 ## What happens when you load a foreign file
 

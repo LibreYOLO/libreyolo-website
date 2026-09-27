@@ -47,10 +47,10 @@ snippets:
       code: |
         # 変換後のファイルは公開済みファイルと同じスキーマを満たす
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: bf9d7c7d168fd2c0
+source_hash: 517b0462e83295f1
 ---
 
-このページでは、ほかのプロジェクトのチェックポイントを扱います。独自のコードを古いLibreYOLOから移行する場合は、[1.5.0へのアップグレード](/docs/upgrade)を参照してください。
+このページでは、ほかのプロジェクトのチェックポイントを扱います。独自のコードを古いLibreYOLOから移行する場合は、[1.6.0へのアップグレード](/docs/upgrade)を参照してください。
 
 ## 外部ファイルを読み込むときの動作
 

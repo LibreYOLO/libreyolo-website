@@ -50,11 +50,11 @@ snippets:
       code: |
         # File đã chuyển đổi đáp ứng cùng schema như file được công bố.
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: bf9d7c7d168fd2c0
+source_hash: 517b0462e83295f1
 ---
 
 Trang này nói về checkpoint từ dự án khác. Nếu bạn đang chuyển mã của mình từ
-LibreYOLO cũ, xem [nâng cấp lên 1.5.0](/docs/upgrade).
+LibreYOLO cũ, xem [nâng cấp lên 1.6.0](/docs/upgrade).
 
 ## Điều gì xảy ra khi bạn nạp một file bên ngoài
 

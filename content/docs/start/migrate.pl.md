@@ -60,12 +60,12 @@ snippets:
       code: |
         # Przekonwertowany plik spełnia ten sam schemat co plik opublikowany.
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: bf9d7c7d168fd2c0
+source_hash: 517b0462e83295f1
 ---
 
 Ta strona dotyczy checkpointów z innych projektów. W przypadku przenoszenia
 własnego kodu ze starszej wersji LibreYOLO zobacz [aktualizację do
-1.5.0](/docs/upgrade).
+1.6.0](/docs/upgrade).
 
 ## Co się dzieje podczas wczytywania obcego pliku
 
