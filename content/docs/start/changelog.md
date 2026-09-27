@@ -7,9 +7,9 @@ keywords: [libreyolo changelog, libreyolo release notes, libreyolo 1.6.0, librey
 last_verified: "1.6.0"
 ---
 
-## 1.6.0, release preparation
+## 1.6.0, released 2026-09-27
 
-These notes describe library dev at `c21e4ae8fc8f03aed0f0200d177965ee5d1e4de8`. The v1.6.0 tag and release date are pending. See [upgrading](/docs/upgrade) for migrations.
+See [upgrading](/docs/upgrade) for migrations.
 
 ### Highlights
 
@@ -129,7 +129,7 @@ These notes describe library dev at `c21e4ae8fc8f03aed0f0200d177965ee5d1e4de8`. 
 
 <!-- M18 -->
 - **Additional LibreVLM model choices. (#764, #788, #861)**
-  Gemma 4 E2B/E4B adds detection, with `gemma-4` selecting E4B; Moondream 2/3 adds detection, points and native chat; North Micro Vision runs one detection query per vocabulary class; `lfm2-vl-3b` adds LFM2.5's 3B size and 0–1000 box parsing. Molmo2 4B/8B/O-7B returns points, and custom pointing templates must include `{label}`. These additions are inference-only. Moondream 3 retains BSL 1.1 restrictions, and LFM retains its Open License; the other listed snapshots are Apache-2.0.
+  Gemma 4 E2B/E4B adds detection, with `gemma-4` selecting E4B; Moondream 2 adds detection, points and native chat (Moondream 3 does not load yet); North Micro Vision runs one detection query per vocabulary class; `lfm2-vl-3b` adds LFM2.5's 3B size and 0–1000 box parsing. Molmo2 4B/8B/O-7B returns points, and custom pointing templates must include `{label}`. These additions are inference-only. LFM retains its Open License; the other listed snapshots are Apache-2.0.
 
 <!-- M19 -->
 - **Qwen3-VL detection fine-tuning. (#767, #834, #907)**
@@ -197,7 +197,7 @@ These notes describe library dev at `c21e4ae8fc8f03aed0f0200d177965ee5d1e4de8`. 
 
 <!-- A10 -->
 - **FiftyOne model application and dataset exchange. (#780)**
-  `libreyolo.integrations.fiftyone` exports `apply_model`, `to_fiftyone_model`, `to_fiftyone` and `from_fiftyone`. Model application supports detect, segment, pose, OBB and classify. Dataset exchange covers detection/segmentation YOLO layouts and native COCO annotations, with curated views exportable to training YAML. `apply_model` defaults to `label_field="predictions"`, `conf=0.25`, `iou=0.45`, `max_det=300`, `mask_format="mask"` and `skip_failures=True`.
+  `libreyolo.integrations.fiftyone` exports `apply_model`, `to_fiftyone_model`, `to_fiftyone` and `from_fiftyone`. Model application supports detect, segment, pose, OBB and classify. Dataset exchange covers detection/segmentation YOLO layouts and native COCO annotations, with curated views exportable to training YAML. Export writes boxes only: instance masks on FiftyOne detections are not written. `apply_model` defaults to `label_field="predictions"`, `conf=0.25`, `iou=0.45`, `max_det=300`, `mask_format="mask"` and `skip_failures=True`.
 
 <!-- A12 -->
 - **TFLite INT8 inputs and outputs for YOLOX and YOLO9 detection. (#893)**
@@ -295,7 +295,7 @@ These notes describe library dev at `c21e4ae8fc8f03aed0f0200d177965ee5d1e4de8`. 
 
 <!-- P3 -->
 - **Resume continues the saved run: its arguments, directory and checkpoint. (#907, 606144f4, a5816bc4)**
-  For YOLO9 (incl. E2E and P2), YOLOX, YOLOv7, D-FINE, DEIM, DEIMv2, RT-DETR, RT-DETRv2, RT-DETRv4, EC, YOLO-NAS, PP-YOLOE, PicoDet, RTMDet, Dome-DETR, TinyFormer, FOMO, ConvNeXt, ConvNeXt V2, ResNet, MobileNetV4, EfficientNetV2, U-Net and NAFNet, `train(resume=True)` resumes the checkpoint the model was loaded from and `train(resume="path/to/last.pt")` resumes that file. Saved arguments such as `data`, `epochs`, `imgsz`, `batch`, `lr0` and `amp` are restored unless passed; `device` follows the call. A `<run>/weights/*.pt` checkpoint keeps writing into `<run>`, and `exist_ok=False` opens a new numbered run beside it. Released weights raise `ValueError` ("holds no training state") instead of `KeyError: 'epoch'`, and a finished run raises `ValueError` instead of training on. The CLI forwards only the options you set when resuming, so `libreyolo train model=<run>/weights/last.pt resume=true` works for YOLO9, and a missing checkpoint exits `checkpoint_not_found`. In 1.5.0 resume took the call's defaults (for YOLO9, a new 300-epoch run in a new directory) and resumed the loaded weights even when a path was given.
+  For YOLO9 (incl. E2E and P2), YOLOX, YOLOv7, D-FINE, DEIM, DEIMv2, RT-DETR, RT-DETRv2, RT-DETRv4, EC, YOLO-NAS, PP-YOLOE, PicoDet, RTMDet, Dome-DETR, TinyFormer, FOMO, ConvNeXt, ConvNeXt V2, ResNet, MobileNetV4, EfficientNetV2, U-Net and NAFNet, `train(resume=True)` resumes the checkpoint the model was loaded from and `train(resume="path/to/last.pt")` resumes that file. Saved arguments such as `data`, `epochs`, `imgsz`, `batch`, `lr0` and `amp` are restored unless passed; `device` follows the call. A `<run>/weights/*.pt` checkpoint keeps writing into `<run>`, and `exist_ok=False` opens a new numbered run beside it. Released weights raise `ValueError` ("holds no training state") instead of `KeyError: 'epoch'`, and a finished run raises `ValueError` instead of training on. The CLI forwards only the options you set when resuming, so `libreyolo train model=<run>/weights/last.pt resume=true` works for YOLO9, and a missing checkpoint exits `checkpoint_not_found`. An explicit `val=True` turns validation back on for a run saved with `val=False` (#909). In 1.5.0 resume took the call's defaults (for YOLO9, a new 300-epoch run in a new directory) and resumed the loaded weights even when a path was given.
 
 <!-- P4 -->
 - **RF-DETR resume restores the run's settings. (#907, 46bbff45, d19bb608, 59a347eb, 9f70b876)**
@@ -387,7 +387,7 @@ These notes describe library dev at `c21e4ae8fc8f03aed0f0200d177965ee5d1e4de8`. 
 
 <!-- C11 -->
 - **RF-DETR and DINOv2 use incremented training directories. (#834, #907)**
-  Their Python `output_dir` default changes from `"runs/train"` to `None`, resolving to `runs/train/rfdetr_exp` and `runs/train/dinov2_exp`, with `exist_ok=False`. DINOv2's CLI default name is `dinov2_exp`. `resume=True` on a model loaded from `<run>/weights/*.pt`, or `resume="<run>/weights/last.pt"`, continues writing into that run in Python and the CLI; `exist_ok=False` opens a new numbered run beside it (#907, 3ce36e24, d19bb608, 30decab6, 59a347eb).
+  Their Python `output_dir` default changes from `"runs/train"` to `None`, resolving to `runs/train/rfdetr_exp` and `runs/train/dinov2_exp`, with `exist_ok=False`. DINOv2's CLI default name is `dinov2_exp`. `resume=True` on a model loaded from `<run>/weights/*.pt`, or `resume="<run>/weights/last.pt"`, continues writing into that run in Python and the CLI; `exist_ok=False` opens a new numbered run beside it (#907).
 
 <!-- C12 -->
 - **Mosaic and MixUp prefer annotated partners. (#776)**
@@ -491,8 +491,8 @@ None identified relative to v1.5.0.
   `status.json` no longer adds one to the completed-epoch count, and the monitor no longer adds one to `current_epoch`, `best_epoch` or `metrics.jsonl` chart coordinates. ETA therefore includes the remaining final epoch.
 
 <!-- F03 -->
-- **RT-DETR filename matching no longer captures unrelated checkpoints. (#871, #850)**
-  Local-checkpoint size detection requires a delimiter around single-character `l` and `x` codes instead of matching names such as `last.pt` or `model_xlnet.pt`. Auto-download accepts only canonical names such as `LibreRTDETRl.pt`, `LibreRTDETRx.pt` and `LibreRTDETRr50.pt`.
+- **RT-DETR weight names resolve to the right checkpoint. (#871, #850, #908, #909)**
+  Local-checkpoint size detection requires a delimiter around single-character `l` and `x` codes, so a missing `last.pt` or `model_xlnet.pt` no longer downloads `LibreRTDETRl.pt` or `LibreRTDETRx.pt`. `rtdetr-<size>.pt` and `LibreRTDETR-<size>.pt` download the canonical `LibreRTDETR<size>.pt`, and `rtdetr-r50.pt`, `dinodetr-r50.pt` and `deformable_detr-r50.pt` no longer download the DETR checkpoint.
 
 <!-- F04 -->
 - **Custom RF-DETR pose checkpoints retain their names and device. (#884)**
@@ -532,7 +532,7 @@ None identified relative to v1.5.0.
 
 <!-- F12 -->
 - **DINOv2 resume restores training state. (#834, #907)**
-  `resume=` calls the trainer's resume path before continuing instead of only carrying the value in configuration, keeps the task's best score (`metrics/accuracy_top1` or `metrics/mIoU`) so the first resumed epoch no longer overwrites `best.pt`, continues the checkpoint's run directory, and trains on the dataset saved in the checkpoint when `data=` is omitted (#907, a0222aaa, 59a347eb, 9f70b876).
+  `resume=` calls the trainer's resume path before continuing instead of only carrying the value in configuration, keeps the task's best score (`metrics/accuracy_top1` or `metrics/mIoU`) so the first resumed epoch no longer overwrites `best.pt`, continues the checkpoint's run directory, trains on the dataset saved in the checkpoint when `data=` is omitted, and restores the run's saved epochs, batch, learning rate and input size unless passed, in Python and the CLI (#907, #908).
 
 <!-- G6 -->
 - **OBB validation works with DataLoader workers on macOS and Windows. (#894, a5177119)**

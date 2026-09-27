@@ -2,7 +2,7 @@
   "_comment": "GENERATED FILE. Rebuild with scripts/build-registry/rebuild.sh; reviewed provenance lives in upstream/*.json.",
   "libreyolo_version": "1.6.0",
   "source": {
-    "library_commit": "c21e4ae8fc8f03aed0f0200d177965ee5d1e4de8",
+    "library_commit": "809009bc294daa6e75e0976ab7cfdd0057d17d79",
     "hf_org": "https://huggingface.co/LibreYOLO",
     "benchmarks": "vision-analysis generated/verified-results.v1.json",
     "hf_repositories": 387,
