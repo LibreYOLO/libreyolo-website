@@ -2,11 +2,11 @@
   "_comment": "GENERATED FILE. Rebuild with scripts/build-registry/rebuild.sh; reviewed provenance lives in upstream/*.json.",
   "libreyolo_version": "1.6.0",
   "source": {
-    "library_commit": "4da12d005eb41a8e694a86124c97ea5faaee9b7c",
+    "library_commit": "c21e4ae8fc8f03aed0f0200d177965ee5d1e4de8",
     "hf_org": "https://huggingface.co/LibreYOLO",
     "benchmarks": "vision-analysis generated/verified-results.v1.json",
-    "hf_repositories": 386,
-    "hf_verified_assets": 348
+    "hf_repositories": 387,
+    "hf_verified_assets": 349
   },
   "tiers": {
     "g0": {
@@ -566,7 +566,7 @@
       "task_added_in": {
         "unet": "1.6.0"
       },
-      "weights_hosted": false,
+      "weights_hosted": true,
       "extra": null,
       "trainable": true,
       "unsupported_train_params": {
@@ -579,7 +579,15 @@
         "train": true,
         "val": true
       },
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "name": "LibreUNets-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": null,
+          "license": "apache-2.0"
+        }
+      ],
       "export": {
         "semantic": {
           "onnx": "blocked",
@@ -2543,6 +2551,303 @@
         "bibtex": null,
         "bibtex_source_url": null,
         "bibtex_verified": "No BibTeX block is published by the authors. The upstream repository README at github.com/RicePasteM/Dome-DETR carries no citation section, and no @inproceedings or @article entry for Dome-DETR exists anywhere in the LibreYOLO source tree. The paper is 'Dome-DETR: DETR with Density-Oriented Feature-Query Manipulation for Efficient Tiny Object Detection', ACM Multimedia 2025, arXiv 2505.05741. bibtex is left null rather than assembled by hand; do not invent one. If the authors publish an entry, copy it verbatim and record the check here."
+      }
+    },
+    "gtr": {
+      "key": "gtr",
+      "slug": "gtr",
+      "registry_keys": [
+        "gtr"
+      ],
+      "display": "GTR",
+      "prefix": "LibreGTR",
+      "prefixes": {
+        "gtr": "LibreGTR"
+      },
+      "tier": "g1",
+      "tasks": [
+        "detect",
+        "segment",
+        "pose",
+        "obb",
+        "depth",
+        "semantic"
+      ],
+      "sizes_label": null,
+      "added_in": "1.6.0",
+      "task_added_in": {
+        "gtr": "1.6.0"
+      },
+      "weights_hosted": true,
+      "extra": null,
+      "trainable": true,
+      "unsupported_train_params": {
+        "gtr": []
+      },
+      "trainable_per_key": {
+        "gtr": true
+      },
+      "capabilities": {
+        "train": true,
+        "val": true
+      },
+      "checkpoints": [
+        {
+          "name": "LibreGTRs.pt",
+          "task": "detect",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRm.pt",
+          "task": "detect",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRl.pt",
+          "task": "detect",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRx.pt",
+          "task": "detect",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRs-depth.pt",
+          "task": "depth",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRm-depth.pt",
+          "task": "depth",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRl-depth.pt",
+          "task": "depth",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRx-depth.pt",
+          "task": "depth",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRs-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRm-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRl-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRx-sem.pt",
+          "task": "semantic",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRs-seg.pt",
+          "task": "segment",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRm-seg.pt",
+          "task": "segment",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRl-seg.pt",
+          "task": "segment",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRx-seg.pt",
+          "task": "segment",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRs-pose.pt",
+          "task": "pose",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRm-pose.pt",
+          "task": "pose",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRl-pose.pt",
+          "task": "pose",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRx-pose.pt",
+          "task": "pose",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRs-obb.pt",
+          "task": "obb",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        },
+        {
+          "name": "LibreGTRx-obb.pt",
+          "task": "obb",
+          "imgsz": null,
+          "data": null,
+          "license": "mit"
+        }
+      ],
+      "export": {
+        "detect": {
+          "onnx": "available",
+          "torchscript": "available",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "segment": {
+          "onnx": "available",
+          "torchscript": "available",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "pose": {
+          "onnx": "available",
+          "torchscript": "available",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "obb": {
+          "onnx": "available",
+          "torchscript": "available",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "depth": {
+          "onnx": "available",
+          "torchscript": "available",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "semantic": {
+          "onnx": "available",
+          "torchscript": "available",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": {
+        "name": "GTR",
+        "org": "Intellindust AI Lab",
+        "paper_title": "GTR: Gated Token Recurrence for Efficient Dense Prediction",
+        "paper_url": "https://arxiv.org/abs/2609.26590",
+        "code_url": "https://github.com/Intellindust-AI-Lab/GTR",
+        "license": "MIT",
+        "code_license": "MIT and Apache-2.0",
+        "weights_license": "MIT",
+        "license_interpretation": "MIT is a permissive license, so this code and these weights can be used in commercial and closed-source products. It asks only that you keep the copyright and license notice with any copy you redistribute. The upstream GTR source is MIT, and the publisher's weight repository on Hugging Face declares MIT for the detection, instance segmentation, pose, oriented-box, depth and semantic segmentation checkpoints that LibreYOLO converts. Parts of the LibreYOLO port are derived from Apache-2.0 projects and keep that license; their notices are retained in libreyolo/models/gtr/NOTICE. Apache-2.0 is also permissive: redistributing that code means keeping its license text and notices, and it grants a patent license.",
+        "bibtex": "@article{gtr2026feng,\n  title   = {GTR: Gated Token Recurrence for Efficient Dense Prediction},\n  author  = {Feng, Zhe and Liu, Longfei and Liu, Wei and Chen, Kai and Kong, Jiangang and Zhou, Wei and Qian, Yifeng and Chen, Dexiong and Yu, Xuanlong and Shen, Xi},\n  journal = {arXiv preprint arXiv:2609.26590},\n  year    = {2026}\n}",
+        "bibtex_source_url": "https://github.com/Intellindust-AI-Lab/GTR#citation",
+        "bibtex_verified": "2026-09-27, copied verbatim from the Citation section of the upstream README on branch main; the block is identical at the pinned source revision 782e737efe2e6437ac537fbdcee089673d3376c1. Cross-checked against the arXiv API for 2609.26590 (v2, updated 2026-09-23): identical title and all ten authors in the same order (Zhe Feng, Longfei Liu, Wei Liu, Kai Chen, Jiangang Kong, Wei Zhou, Yifeng Qian, Dexiong Chen, Xuanlong Yu, Xi Shen). arXiv records no journal reference, so the preprint form with year 2026 still matches the record. Do not hand-edit; a wrong citation misattributes someone's work."
       }
     },
     "yolo9": {
@@ -10555,7 +10860,7 @@
   ],
   "_generated_by": "scripts/build-registry (prototype). Mechanical fields are extracted from docs/export_support.md, each family model.py, models/registry.py, the LibreYOLO HF org listing and the vision-analysis results. Upstream metadata is merged from src/data/docs/upstream/<slug>.json after per-family human verification.",
   "library": {
-    "families": 117,
+    "families": 118,
     "tasks": 20,
     "task_names": [
       "detect",

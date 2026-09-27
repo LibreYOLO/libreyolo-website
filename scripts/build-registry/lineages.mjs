@@ -41,6 +41,7 @@ export const LINEAGES = [
   { slug: 'ground-florence2', display: 'Florence-2 grounding', keys: ['ground_florence2'] },
   { slug: 'ground-qwen3vl', display: 'Qwen3-VL grounding', keys: ['ground_qwen3vl'] },
   { slug: 'dome-detr', display: 'Dome-DETR', keys: ['domedetr'] },
+  { slug: 'gtr', display: 'GTR', keys: ['gtr'] },
 
   // g0, flagships
   { slug: 'yolov9', display: 'YOLOv9', keys: ['yolo9', 'yolo9_e2e', 'yolo9_p2'] },
