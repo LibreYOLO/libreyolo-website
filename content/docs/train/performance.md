@@ -12,7 +12,7 @@ keywords:
   - dataloader bound
   - kernel launch overhead
   - gpu utilization
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   profile:
     - label: Profile and keep training
@@ -105,6 +105,8 @@ deviation, which matters because a launch-bound step is noisy enough that a
 single run misleads; it writes per-trial directories `prof_1`, `prof_2` and so
 on, plus an aggregate `profile_repeat.json`.
 
+RF-DETR and the D-FINE/DEIM/RT-DETR matcher paths reduce host transfers; eligible CUDA Adam and AdamW construction uses fused updates. SGD and non-CUDA parameters use stock construction. These implementation changes carry no universal speedup claim.
+
 ## Mixed precision
 
 `amp=True` is the default for most families and runs the forward pass under CUDA
@@ -112,11 +114,7 @@ autocast. `amp_dtype` chooses `float16` or `bfloat16`.
 
 <code-tabs name="amp" />
 
-Float16 needs dynamic loss scaling and gets a live gradient scaler; bfloat16's
-wider exponent range does not, so its scaler is disabled. Four families ship with
-`amp=False`, D-FINE, DEIM, YOLO-NAS and FOMO, and the DEIM setting carries
-through to RT-DETRv4 by inheritance. D-FINE states the reason: its decoder clamps
-activations at 65504, the largest finite float16 value.
+Float16 uses a gradient scaler; bfloat16 disables it. D-FINE, DEIM, RT-DETRv4 and YOLO-NAS detection default to `amp=True`. Dome-DETR, PP-YOLOE and YOLO-NAS OBB retain FP32 defaults. Pass `amp=False` to request FP32 explicitly.
 
 The argument semantics, including what a bfloat16 request does on hardware
 without bfloat16 support, are on
@@ -242,6 +240,21 @@ allocation moved between -5 and +19 percent. The relative cost is largest for th
 small classification models, whose activations are small to begin with: ResNet-18
 at 224 px, batch 16, went from 0.48 GB eager to 0.57 GB graphed. If it pushes a
 run over the limit, lower the batch or leave the flag off.
+
+## torch.compile
+
+`train(compile=True)` compiles the network forward and backward with
+`torch.compile`. It also accepts the modes `"default"`, `"reduce-overhead"`,
+`"max-autotune"` and `"max-autotune-no-cudagraphs"`; the default is `False`.
+The loss, optimizer, EMA, validation, checkpoints and export stay eager, and the
+checkpoints load without compilation. Only single-GPU CUDA runs compile. CPU,
+MPS, distributed and distillation runs, and compiler failures, train eager after
+a warning. Compilation takes several minutes and needs a C compiler and Python
+headers on the training host.
+
+During `train()`, unless `OMP_NUM_THREADS` is set, LibreYOLO lowers the PyTorch
+CPU thread count to the process's CPU allowance, so CPU-limited containers do
+not throttle every step.
 
 ## Related
 

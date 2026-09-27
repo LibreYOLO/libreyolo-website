@@ -1,8 +1,8 @@
 ---
 title: Python API
 seo_title: "LibreYOLO Python API reference"
-description: "The names LibreYOLO exports at package level: the five factories, the family classes, the Results payloads, backends, validators, trackers and data helpers."
-lead: "The public Python surface of LibreYOLO is the __all__ list in libreyolo/__init__.py. Everything on this page is importable as from libreyolo import <name>; anything not on that list is internal."
+description: "The names LibreYOLO exports at package level: the factories, the family classes, the Results payloads, backends, validators, trackers and data helpers."
+lead: "The public Python surface of LibreYOLO is the __all__ list in libreyolo/__init__.py. Package-level exports use from libreyolo import <name>; tracking and training protocols below use their named submodules."
 keywords:
   - libreyolo python api
   - libreyolo import
@@ -12,8 +12,8 @@ keywords:
   - LibreOpenVocab
   - LibreEnsemble
   - libreyolo __all__
-last_verified: "1.5.0"
-verification: "Names and signatures read from libreyolo/__init__.py, libreyolo/models/__init__.py, libreyolo/models/base/model.py, libreyolo/models/base/inference.py, libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py and libreyolo/ensemble/model.py at v1.5.0."
+last_verified: "1.6.0"
+verification: "Names and signatures read from libreyolo/__init__.py, libreyolo/models/__init__.py, libreyolo/models/base/model.py, libreyolo/models/base/inference.py, libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py and libreyolo/ensemble/model.py at v1.6.0."
 snippets:
   usage:
     - label: Load anything through one factory
@@ -39,7 +39,7 @@ snippets:
 
         print(len(result))
   factories:
-    - label: The five entry points
+    - label: Entry points
       language: python
       code: |
         from libreyolo import LibreYOLO, LibreEnsemble
@@ -59,7 +59,7 @@ snippets:
 
 ## Entry points
 
-Five callables load a model. They are separated by call contract, not by
+Factories load models or configure API clients. They are separated by call contract, not by
 architecture.
 
 | Factory | Loads | Prompt at call time | Extra required |
@@ -72,9 +72,7 @@ architecture.
 
 <code-tabs name="factories" />
 
-`LibreYOLO` is the only one that reads a file. The other three take a string
-alias and resolve it to a Hugging Face repository, so the argument is a model
-name and not a path.
+`LibreYOLO` accepts checkpoint files and exported artifacts. Sibling factories accept model aliases; `LibreVLM` and `LibreVLA` also reload their own saved checkpoint directories.
 
 ```python
 LibreYOLO(
@@ -97,6 +95,10 @@ CoreML `.mlpackage` loads and is one of `all`, `cpu_only`, `cpu_and_gpu`,
 
 <code-tabs name="usage" />
 
+`LibreGround` maps instructions to image points; `LibreVLA` predicts robot action chunks; `LibreLLM` calls a compatible remote language-model endpoint. See the [grounding API](/docs/reference/ground-api), [policy API](/docs/reference/vla-api) and [language-model client](/docs/reference/llm-api).
+
+`LibreYOLO("hf://owner/repo@revision/filename")` loads Hub checkpoints. `model.push_to_hub(repo_id, private=False)` publishes a checkpoint and card. The [Hub reference](/docs/reference/hugging-face) defines resolution and authentication.
+
 ## Family classes
 
 Every family the factory can return is also exported by name, so a class can be
@@ -107,8 +109,7 @@ follow `BaseModel.__init__`:
 Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 ```
 
-`size` has no default on a family class, which is the difference from the
-factory. YOLO9 and its variants insert `reg_max: int = 16` after `size`.
+Constructor defaults vary by family; check its signature before constructing it directly. YOLO9 and its variants insert `reg_max: int = 16` after `size`.
 
 Detection and multi-task families: `LibreYOLO9`, `LibreYOLO9E2E`,
 `LibreYOLO9P2`, `LibreYOLONAS`, `LibreYOLOX`, `LibreYOLO7`, `LibreYOLO4`,
@@ -117,27 +118,35 @@ Detection and multi-task families: `LibreYOLO9`, `LibreYOLO9E2E`,
 `LibreDEIMv2`, `LibreDETR`, `LibreDeformableDETR`, `LibreDINODETR`,
 `LibreLWDETR`, `LibreMaskRCNN`, `LibreFCOS`, `LibreFasterRCNN`,
 `LibreRetinaNet`, `LibreSSD`, `LibreCenterNet`, `LibreEfficientDet`,
-`LibreEC`, `LibrePICODET`, `LibreRTMDet`, `LibreFOMO`.
+`LibreEC`, `LibreGTR`, `LibreTinyFormer`, `LibrePICODET`, `LibrePPYOLOE`,
+`LibreRTMDet`, `LibreFOMO`.
 
 Dense-prediction families: `LibreMiDaS`, `LibreDepthAnythingV2`,
 `LibreDepthAnything3`, `LibreZipDepth`, `LibreMoGe2`, `LibreTEED`,
 `LibreDexiNed`, `LibreNAFNet`, `LibreRealESRGAN`, `LibreSwinIR`,
 `LibreBiRefNet`, `LibreFeyNobg`, `LibreFCN`, `LibreEoMT`, `LibreDeepLabv3`,
-`LibrePIDNet`, `LibreSegformer`, `LibreLingBotVision`.
+`LibrePIDNet`, `LibrePPLiteSeg`, `LibreUNet`, `LibreSegformer`,
+`LibreLingBotVision`, `LibreMarigoldV2`, `LibreDDColor`, `LibreHVICIDNet`,
+`LibreLaMa`, `LibreQuickSRNet`, `LibreBEN2`, `LibreViTMatte`.
 
 Classification and embedding families: `LibreViT`, `LibreMobileNetV4`,
 `LibreConvNeXt`, `LibreDeiT`, `LibreSwin`, `LibreEfficientNetV2`, `LibreVGG`,
-`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`.
+`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`,
+`LibreConvNeXtV2`, `LibrePE`, `LibreVJEPA2`, `LibreLeVJEPA`.
 
-Other tasks: `LibreHRNet` (pose), `LibreL2CS` (gaze), `LibrePPOCR` (ocr),
-`LibreFaceEmbedder` (embed).
+Other tasks: `LibreHRNet` and `LibreDEKR` (pose), `LibreL2CS` (gaze),
+`LibrePPOCR` (ocr), `LibreFaceEmbedder` (embed), and the 3D detectors
+`LibreFCOS3D`, `LibreDetAny3D`, `LibreWildDet3D` and `Libre3DMOOD` (detect3d).
 
 The sibling tiers export their family classes too: `LibreSAM1`, `LibreSAM2`,
 `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`;
 `LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo`; `LibreLFM2VL`,
 `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`,
-`LibreKosmos2`, `LibreLocateAnything`, `LibreMODUS` (also spelled
-`LibreModus`).
+`LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`,
+`LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (also spelled
+`LibreModus`); `LibreShowUI`, `LibreGroundFlorence2` and `LibreGroundQwen3VL`
+behind `LibreGround`; `LibreSmolVLA`, `LibreACT` and `LibreDiffusionPolicy`
+behind `LibreVLA`.
 
 ## Prediction surface
 
@@ -178,11 +187,13 @@ methods on the model object are documented on the
 
 ## Results payloads
 
-`Results` and its eighteen payload classes are exported at package level:
+`Results` and its payload classes are exported at package level:
 `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`,
 `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`,
 `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`.
 Each one is described in [Results types](/docs/reference/results-types).
+
+`Boxes3D`, `AlbedoMap` and `Actions` add 3D cuboids, intrinsic albedo and action chunks. See [result types](/docs/reference/results-types).
 
 ## Backends
 
@@ -208,6 +219,8 @@ configuration dataclasses are also exported: `ByteTracker` with `TrackConfig`,
 `BoTSortTracker` with `BoTSortConfig`, and `OCSortTracker` with
 `OCSortConfig`.
 
+`libreyolo.tracking.Tracker` defines `reset()` and `update(results, image=None)` for custom tracker instances.
+
 ## Data helpers
 
 `DATASETS_DIR` is the resolved dataset root, `load_data_config` reads a
@@ -220,6 +233,8 @@ named in [Dataset formats](/docs/reference/dataset-formats) live in
 `Gallery` and `FaceGallery` hold enrolled identity vectors for the `embed`
 task and produce the `Identities` payload. `Distiller` and
 `get_distill_config` drive teacher-student training.
+
+`libreyolo.training.TrainFitnessCallback` defines `fitness(metrics)` for custom checkpoint selection. See [fitness callbacks](/docs/train/fitness-callbacks).
 
 ## Assets
 

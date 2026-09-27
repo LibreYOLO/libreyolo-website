@@ -19,7 +19,7 @@ keywords:
   - встроенный nms onnx
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Флаг
     value: export(format="onnx")
@@ -153,7 +153,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cee78250fc7189a3
+source_hash: a407e1142b8aa57e
 ---
 
 ## Установка
@@ -163,6 +163,8 @@ source_hash: cee78250fc7189a3
 Этот extra подтягивает `onnx`, `onnxsim` и `onnxruntime`. Для записи файла
 достаточно одного `onnx`; `onnxsim` выполняет проход упрощения, а `onnxruntime`
 запускает артефакт и проводит калибровку INT8.
+
+Extra ONNX требует `onnxruntime>=1.18.0`; LaMa использует граф opset-21.
 
 ## Экспорт
 
@@ -179,12 +181,12 @@ Real-ESRGAN открывает пространственные оси, а дв�
 происходит внутри графа.
 
 `opset` при его отсутствии выбирается для каждого семейства. Семейства в стиле
-DETR (`detr`, `deformable_detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`,
-`lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`), а также `deit`, `midas` и
-`moge2` получают opset 17 — именно там понижается `aten::scaled_dot_product`.
-Всё остальное получает 13. Маттинг в любом случае поднимается до 19, потому что
-декодеру BiRefNet нужен оператор `DeformConv`, который ONNX определяет начиная с
-opset 19.
+DETR (`detr`, `deformable_detr`, `dinodetr`, `dfine`, `gtr`, `deim`, `deimv2`,
+`tinyformer`, `ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`), а
+также `deit`, `midas`, `moge2` и `vjepa2` получают opset 17 — именно там
+понижается `aten::scaled_dot_product`. Всё остальное получает 13. BiRefNet и
+FeyNobg в любом случае поднимаются до 19, потому что их декодеру нужен оператор
+`DeformConv`, который ONNX определяет начиная с opset 19.
 
 `simplify=True` запускает `onnxsim` и сохраняет исходный граф, если проход не
 удался, поэтому ошибка упрощения — это предупреждение, а не сбой экспорта. На
@@ -221,7 +223,9 @@ DeepStream выполняет подавление на собственной �
 
 `int8=True` запускает статическую квантизацию ONNX Runtime и записывает
 QDQ-граф с входами и выходами в float32. Квантизуются только узлы `Conv` и
-`Gemm`. Декодирование головы детекции оставлено в float32 намеренно: эта
+`Gemm`, а первая свёртка и голова детекции YOLO9 остаются в float32, как и в
+`model.quantize()`, чтобы оценки классов не упирались в границу калиброванного
+диапазона. Декодирование головы детекции оставлено в float32 намеренно: эта
 конкатенация смешивает координаты рамок в масштабе пикселей с оценками классов в
 диапазоне от 0 до 1, и единый потензорный масштаб активаций, определяемый
 величиной рамок, обнулил бы все оценки.
@@ -273,14 +277,15 @@ RF-DETR — ещё и единственное семейство, у котор
 принудительно ставят `dynamic=False`. Маттинг принудительно ставит родной
 квадрат 1024, потому что таблицы относительных позиций в Swin у BiRefNet
 привязаны к своему разрешению. Восстановление принудительно ставит фиксированный
-холст для всех семейств, кроме Real-ESRGAN, генератор которого полностью
-свёрточный.
+холст для всех семейств, кроме Real-ESRGAN и QuickSRNet, сети которых полностью
+свёрточные.
 
-Прямоугольный `imgsz` работает для семейств YOLO9, HRNet, NAFNet и Real-ESRGAN.
+Прямоугольный `imgsz` работает для семейств YOLO9, HRNet, NAFNet, PP-LiteSeg,
+Real-ESRGAN, QuickSRNet и семантической сегментации GTR.
 Семейства с фиксированным квадратным контрактом (`clip`, `deformable_detr`,
-`detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`, `moge2`,
-`rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`, `ssd`) отклоняют его
-сразу.
+`detr`, `dinodetr`, `dfine`, `gtr` кроме семантической сегментации, `deim`,
+`deimv2`, `tinyformer`, `ec`, `lwdetr`, `moge2`, `rtdetr`, `rtdetrv2`,
+`rtdetrv4`, `rfdetr`, `siglip2`, `ssd`) отклоняют его сразу.
 
 Две комбинации отклоняются до трассировки: сегментация YOLO9, потому что YOLO9 в
 LibreYOLO работает только на детекцию, и сегментация RTMDet-Ins, у которой

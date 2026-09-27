@@ -22,7 +22,7 @@ keywords:
   - pose estimation python
   - segmentazione di istanze python
   - inferenza edge
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -183,7 +183,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 39c6975fc16b3ff1
+source_hash: 521fde8f10ac8c57
 ---
 
 ## Installazione
@@ -222,6 +222,8 @@ terzo canale del keypoint è una costante invece che un punteggio per punto.
 parità di API ma non ha effetto, perché tutte e tre le teste decodificano un
 insieme di query senza passaggio di NMS. Vedi [predizione](/docs/predict) per
 sorgenti, streaming e gestione dei risultati.
+
+La predizione di rilevamento accetta `imgsz=(height, width)` rettangolare; addestramento ed esportazione mantengono i propri vincoli sulle dimensioni.
 
 ## Varianti
 
@@ -305,6 +307,8 @@ accetta e gli extra che qualcuno di essi aggiunge.
 Tutti i file di pesi pubblicati per questa famiglia.
 
 <checkpoint-table />
+
+Le varianti `obj2coco` coprono rilevamento, segmentazione e posa. Il download richiede un consenso esplicito e i termini upstream limitano l'uso commerciale. I checkpoint COCO originali mantengono la licenza Apache-2.0 registrata.
 
 ## Licenze
 

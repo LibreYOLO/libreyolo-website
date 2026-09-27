@@ -5,8 +5,7 @@ families:
 seo_title: 'RF-DETR: addestra, fai fine-tuning ed esporta con licenza MIT'
 description: >-
   Usa RF-DETR in LibreYOLO per rilevamento, segmentazione di istanze, posa e box
-  orientati. Installa, fai predizioni, addestra, valida ed esporta, tutto con
-  licenza MIT.
+  orientati. Installa, fai predizioni, addestra, valida ed esporta.
 lead: >-
   Un detection transformer che predice un insieme fisso di oggetti invece di una
   griglia densa, quindi non richiede NMS durante l'inferenza. LibreYOLO lo
@@ -20,7 +19,7 @@ keywords:
   - segmentazione di istanze
   - stima della posa
   - box orientati
-last_verified: 1.5.0
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -95,7 +94,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -155,7 +154,7 @@ snippets:
     - label: Usare il file esportato
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # La factory smista in base al suffisso del file, quindi un artefatto
         # esportato si carica come qualsiasi checkpoint e restituisce lo stesso
@@ -178,7 +177,7 @@ snippets:
 
         # collegare qualsiasi cosa.
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -188,7 +187,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 8c464aa759131694
+source_hash: 3238696a4e1ab6c2
 ---
 
 ## Installazione
@@ -213,11 +212,15 @@ filtrano la selezione delle query; non c'è nessun passaggio di NMS da regolare.
 Vedi [predizione](/docs/predict) per sorgenti, streaming e gestione dei
 risultati.
 
+I percorsi di rilevamento, segmentazione e box orientati usano il ridimensionamento bilineare OpenCV in virgola mobile senza antialiasing; la posa mantiene il ridimensionamento con antialiasing. Il valore rettangolare `imgsz=(height, width)` deve rispettare la griglia di patch/finestre del task. L'inventario dei checkpoint include il rilevatore di interfacce utente. Gli [istogrammi di eventi](/docs/train/event-histograms) usano il profilo di input registrato.
+
 ## Varianti
 
-Quattro dimensioni, e quattro task che condividono una sola architettura:
-segmentazione, posa e box orientati riutilizzano il decoder di rilevamento con
-una testa diversa, quindi accettano gli stessi argomenti. Le dimensioni hanno un
+Quattro dimensioni per il rilevamento, da `n` a `l`, e quattro task che
+condividono una sola architettura: segmentazione, posa e box orientati
+riutilizzano il decoder di rilevamento con una testa diversa, quindi accettano
+gli stessi argomenti. La segmentazione aggiunge `x` e `xx`, e la posa esiste
+solo in `x`. Le dimensioni hanno un
 numero di parametri simile e differiscono soprattutto per la risoluzione di
 input.
 
@@ -228,8 +231,8 @@ input.
 ## Addestramento
 
 L'addestramento parte da un checkpoint pubblicato, per tutti e quattro i task.
-RF-DETR elenca `pretrained` tra gli argomenti che il suo trainer nativo ignora,
-quindi passare `pretrained=False` qui non ti dà un modello inizializzato a caso.
+`pretrained=False` invece reinizializza l'intera rete, backbone incluso, e
+addestra da zero.
 
 <code-tabs name="train" />
 
@@ -244,10 +247,12 @@ le dimensioni valide più vicine.
 Vedi [addestramento](/docs/train) per dataset, data augmentation, multi-GPU e
 logger.
 
+Le nuove esecuzioni usano di default `output_dir=None`, che risolve a una directory incrementale `runs/train/rfdetr_exp` con `exist_ok=False`. Un'esecuzione ripresa continua a scrivere nella directory di run del suo checkpoint. I dataset di posa multiclasse usano `kpt_names` con l'indice o il nome della classe come chiave; una lista vuota indica una classe con soli box. Le predizioni aggiungono padding ai keypoint fino a `kpt_shape`; la fitness basata sulla mAP dei keypoint non valuta le classi con soli box.
+
 ## Validazione
 
-`val()` restituisce un dizionario di chiavi `metrics/` che coprono precisione,
-recall, mAP 50 e mAP 50-95, misurati su qualsiasi dataset nel formato su cui hai
+`val()` restituisce un dizionario di chiavi `metrics/` che coprono mAP 50,
+mAP 50-95, mAP 75 e il recall medio COCO, misurati su qualsiasi dataset nel formato su cui hai
 addestrato.
 
 <code-tabs name="val" />

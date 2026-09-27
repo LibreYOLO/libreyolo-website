@@ -82,7 +82,7 @@ snippets:
         yaw_logits, pitch_logits = session.run(
             None, {name: np.zeros((1, 3, 448, 448), dtype=np.float32)}
         )
-source_hash: 4ec43f4673b4be3e
+source_hash: 1f61c1a61e033bbc
 ---
 
 ## Instalação
@@ -104,7 +104,8 @@ pip install "libreyolo[gaze]"
 ```
 
 Sem ele, o LibreYOLO imprime instruções de download manual em vez de falhar
-silenciosamente.
+silenciosamente. Na 1.6.0, o download upstream do Google Drive retorna 404, então
+coloque uma cópia local do checkpoint no caminho que você carrega.
 
 ## Predição
 

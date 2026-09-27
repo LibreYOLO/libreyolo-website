@@ -15,14 +15,14 @@ keywords:
   - nhóm phạm vi libreyolo
   - g0 g1 g2 g3 g4
   - cấp mô hình
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Cấp xuất lấy từ docs/adr/0011-export-support-tiers.md và
   libreyolo/export/support.py; nhóm phạm vi và số lượng theo họ từ MODEL_GROUPS
   trong libreyolo/models/registry.py; cổng huấn luyện từ đầu từ
   libreyolo/models/base/model.py và libreyolo/cli/commands/train.py; danh mục
   CLI từ libreyolo/models/inventory.py; cấp API từ docstring package và contract
-  base.py trong libreyolo/models/sam/, openvocab/ và vlm/, tất cả ở v1.5.0. Nhãn
+  base.py trong libreyolo/models/sam/, openvocab/ và vlm/, tất cả ở v1.6.0. Nhãn
   nhóm cho người đọc (Flagship, Core, Supported, Chỉ inference, Museum, Cấp
   sibling) là từ vựng riêng của website cho cùng các nhóm, từ
   src/data/docs/registry.json.
@@ -41,7 +41,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: de545894b0d125e4
+source_hash: 6d8f3ec671e6cb02
 ---
 
 ## Cấp hỗ trợ xuất
@@ -82,15 +82,18 @@ theo call contract chứ không theo kiến trúc.
 | Promptable segmentation | `LibreSAM` | Forward vô nghĩa nếu thiếu prompt không gian hoặc khái niệm theo ảnh tại lúc gọi. Tương tác và có trạng thái: encode một lần, prompt nhiều lần |
 | Open-vocabulary detection | `LibreOpenVocab` | Detector phân biệt có điều kiện văn bản. Danh sách lớp là prompt được đặt bằng `set_classes` |
 | Vision-language | `LibreVLM` | Mô hình sinh được điều khiển như detector. Danh sách lớp là prompt và độ tin cậy là placeholder |
+| Grounding | `LibreGround` | Ảnh và một chỉ dẫn tham chiếu ánh xạ thành tối đa một điểm cho mỗi truy vấn |
+| Robot policy | `LibreVLA` | Frame camera và trạng thái robot ánh xạ thành một đoạn hành động tương lai |
 
-Ba cấp sibling cố ý không đăng ký vào detector factory, vì vậy
+Các cấp sibling cố ý không đăng ký vào detector factory, vì vậy
 `LibreYOLO("some-alias")` không truy cập chúng. Chúng nạp theo alias kích thước
 và tự động tải thay vì dò checkpoint.
 
-Cả bốn trả về cùng `Results`, nên mã downstream không đổi giữa chúng. Khác biệt
-là phương thức nào hoạt động: cấp sibling phát `NotImplementedError` với
-`train()`, `val()` và `export()`, còn cấp SAM cùng open-vocabulary cũng phát lỗi
-với `track()`. Mỗi trang cấp liệt kê các phần loại trừ riêng.
+Tất cả đều trả về cùng `Results`, nên mã downstream không đổi giữa chúng. Khác
+biệt là phương thức nào hoạt động: cấp sibling phát `NotImplementedError` với
+`train()`, `val()` và `export()`, trừ hai ngoại lệ. `LibreVLM` tinh chỉnh
+Qwen3-VL như một detector, còn `LibreVLA` huấn luyện và đánh giá SmolVLA, ACT và
+Diffusion Policy. Cấp SAM và open-vocabulary còn phát lỗi với `track()`. Mỗi trang cấp liệt kê các phần loại trừ riêng.
 
 ## Nhóm phạm vi
 
@@ -104,15 +107,14 @@ Cột Nhãn là tên ngắn mà website dùng cho cùng nhóm ở đầu trang m
 | Nhóm | Nhãn | Số họ | Ý nghĩa |
 |---|---|---|---|
 | `g0` | Flagship | 2 | Mỏ neo flagship bắt buộc trong phạm vi tính năng dùng chung |
-| `g1` | Core | 10 | Tập phạm vi detector có thể huấn luyện |
-| `g2` | Supported | 14 | Tập phạm vi họ có thể huấn luyện bổ sung |
-| `g3` | Chỉ inference | 35 | Các họ không có bản triển khai huấn luyện |
+| `g1` | Core | 12 | Tập phạm vi detector có thể huấn luyện |
+| `g2` | Supported | 19 | Tập phạm vi họ có thể huấn luyện bổ sung |
+| `g3` | Chỉ inference | 44 | Các họ không có bản triển khai huấn luyện |
 | `g4` | Museum | 5 | Họ lịch sử có phạm vi inference |
-| `s` | Cấp sibling | 21 | API sibling (SAM, open-vocab, VLM, zero-shot) được kiểm tra riêng |
+| `s` | Cấp sibling | 36 | API sibling (SAM, open-vocab, VLM, grounding, zero-shot) được kiểm tra riêng |
 
-Tổng cộng 87 họ trong sáu nhóm. Chỉ `g3` đã chứa nhiều họ hơn tất cả nhóm còn
-lại cộng lại, vì phần lớn registry là dòng chỉ inference và phạm vi museum thay
-vì detector đang được huấn luyện tích cực.
+Tổng cộng 118 họ trong sáu nhóm. `g3` là nhóm lớn nhất, vì một phần lớn
+registry là dòng chỉ inference thay vì detector đang được huấn luyện tích cực.
 
 Với người đọc chọn mô hình, nhóm cho biết nơi kỳ vọng ưu tiên kỹ thuật, không
 phải độ chính xác của họ. `g0` và `g1` là nơi tính năng mới được thiết kế và
@@ -129,18 +131,23 @@ Nhóm không tự cấp hoặc hạn chế khả năng hướng đến người 
 từ thành viên nhóm. Nhóm phân loại họ chứ không phân loại tác vụ, nên lần chạy
 phạm vi theo tác vụ sẽ nêu tác vụ tường minh, như "g1 detect".
 
-Hai nơi đọc nhóm ở runtime thay vì chỉ trong kiểm thử.
+Ba nơi đọc nhóm ở runtime thay vì chỉ trong kiểm thử.
 `collect_model_inventory()` trong `libreyolo/models/inventory.py` gắn nhóm vào
-mọi mục danh mục CLI in ra, còn `pretrained=False` chỉ kích hoạt pipeline khởi
-tạo lại đặc biệt từ đầu cho họ trong `g0` và `g1`. Ngoài hai nhóm này, phép kiểm
-tra trong `libreyolo/models/base/model.py` bị bỏ qua hoàn toàn, nên
-`pretrained=False` đến `train()` riêng của họ như keyword thông thường.
+mọi mục danh mục CLI in ra. `pretrained=False` chỉ kích hoạt pipeline khởi tạo
+lại đặc biệt từ đầu cho họ trong `g0`, `g1` và `g2`. Ngoài các nhóm này, phép
+kiểm tra trong `libreyolo/models/base/model.py` bị bỏ qua hoàn toàn, nên
+`pretrained=False` đến `train()` riêng của họ như keyword thông thường. Huấn
+luyện với `classes=` hoặc `single_cls=True` chỉ được chấp nhận cho phát hiện đối
+tượng ở `g0` và `g1`, và phát `ValueError` ở nơi khác.
 
 ## Huấn luyện
 
 Họ trong `g3` hoặc `g4` không có bản triển khai huấn luyện và gọi `train()` sẽ
 báo lỗi. Đây là thuộc tính mã của họ, không phải do nhóm gây ra; nhóm ghi nhận
 sự thật đó.
+
+Trong 118 họ, 37 họ có thể huấn luyện: mọi họ `g0`, `g1` và `g2`, cộng thêm
+Qwen3-VL qua `LibreVLM` và SmolVLA, ACT và Diffusion Policy qua `LibreVLA`.
 
 Với họ có thể huấn luyện, việc một nút augmentation có đến pipeline hay không
 là câu hỏi riêng với từ vựng ba giá trị `used`, `gated_by_mosaic` và `ignored`.

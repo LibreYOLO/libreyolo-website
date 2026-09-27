@@ -21,7 +21,8 @@ keywords:
   - surface normal estimation
   - плотное предсказание
   - DINOv2
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 snippets:
   predict:
     - label: Python
@@ -81,7 +82,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: d96b89f18ac10a40
+source_hash: b06daf44f9a58411
 ---
 
 ## Установка
@@ -94,8 +95,7 @@ pip install libreyolo
 
 ## Предсказание
 
-Веса скачиваются автоматически при первом запуске: LibreYOLO берёт нужный
-размер напрямую из официальных чекпойнтов и кэширует его локально.
+Веса скачиваются автоматически при первом использовании. Размеры s и l используют зеркала LibreYOLO; b по-прежнему использует исходный чекпойнт.
 
 <code-tabs name="predict" />
 
@@ -142,10 +142,7 @@ MoGe-2 возвращает плотное поле, а не набор дете
 
 <provenance-box>
 
-LibreYOLO не копирует эти чекпойнты в свою организацию.
-`LibreYOLO("LibreMoGe2s-normal.pt")` скачивает нужный размер напрямую из
-официальных репозиториев на Hugging Face на зафиксированной ревизии и перед
-использованием сверяет файл с записанной контрольной суммой SHA-256.
+Чекпойнты s и l размещены на зеркалах LibreYOLO; b остаётся в исходном репозитории. Скачанные артефакты сохраняют лицензию издателя.
 
 </provenance-box>
 

@@ -15,7 +15,7 @@ keywords:
   - trenowanie modelu segmentacji
   - mIoU
   - biblioteka segmentacji MIT
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -131,7 +131,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: 44b92d8ba6062f04
+source_hash: e13acb1e813da7c4
 ---
 
 ## Definicja
@@ -156,7 +156,7 @@ straty i metryk, a `.classes` ją pomija.
 
 ## Modele
 
-Trzy rodziny zarówno trenują, jak i przewidują:
+Rodziny z obsługą trenowania obejmują:
 [SegFormer](/docs/models/segformer),
 [LingBot-Vision](/docs/models/lingbot-vision) oraz
 [DINOv2](/docs/models/dinov2). SegFormer i LingBot-Vision działają z pakietem
@@ -176,6 +176,8 @@ wagi pochodzą ze zbiorów danych o bardzo odmiennych przestrzeniach etykiet, na
 przykład 150 klas ADE20K wobec 19 klas Cityscapes. Pole `names` checkpointu
 określa więc, co może on etykietować, a dwa checkpointy są porównywalne tylko
 wtedy, gdy wytrenowano je na tym samym zbiorze.
+
+[PP-LiteSeg](/docs/models/ppliteseg), [U-Net](/docs/models/unet) i [GTR](/docs/models/gtr) to rodziny segmentacji semantycznej z obsługą trenowania. Wagi U-Net dla Cityscapes są opublikowane jako `LibreUNets-sem.pt`.
 
 ## Predykcja
 
@@ -226,8 +228,7 @@ names:
   1: sidewalk
 ```
 
-`masks_dir` jest nazwą katalogu zastępującego `images` i domyślnie przyjmuje
-wartość `masks`. `label_mapping` jest opcjonalnym mapowaniem
+`masks_dir` jest nazwą katalogu zastępującego `images`. `label_mapping` jest opcjonalnym mapowaniem
 `{source_id: train_id}`, stosowanym do wartości pikseli maski podczas
 wczytywania. W ten sposób zbiór danych numerowany od 1 do 150 zmienia się w
 zakres od 0 do 149. Każda niezmapowana wartość źródłowa staje się etykietą
@@ -252,6 +253,8 @@ dzieli się bez reszty. Dzielnik wynosi 32 dla SegFormer, 16 dla LingBot-Vision 
 EoMT, 14 dla DINOv2 oraz 8 dla FCN i PIDNet. Informacje o zbiorach danych,
 augmentacji, wielu GPU i loggerach znajdują się w sekcji
 [trenowanie](/docs/train).
+
+Semantyczne zbiory danych przyjmują obszary `(height, width)`. PP-LiteSeg i U-Net rozróżniają wycinki treningowe i prostokąty ewaluacyjne. Skalowanie i wycinanie uzupełnia brakujące obszary etykietą ignorowania; transformacje fotometryczne rodziny są stosowane tam, gdzie je skonfigurowano.
 
 ## Walidacja
 
@@ -278,4 +281,3 @@ zwraca ten sam obiekt `Results`. Zakres formatów różni się zależnie od rodz
 Macierz na stronie każdego modelu jest generowana ze zweryfikowanego zestawu, a
 nie wpisywana ręcznie. Formaty, ich dodatki i ograniczenia opisano w sekcji
 [eksport i wdrożenie](/docs/export).
-

@@ -14,7 +14,7 @@ keywords:
   - миграция весов на libreyolo
   - конвертировать pth в libreyolo
   - автоконвертация чекпойнта
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Точка входа
     value: LibreYOLO("path/to/upstream.pth")
@@ -54,11 +54,11 @@ snippets:
         опубликованный.
 
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: bf9d7c7d168fd2c0
+source_hash: b19fedcf10862990
 ---
 
 Эта страница — о чекпойнтах из других проектов. Если вы переносите собственный
-код со старой версии LibreYOLO, см. [переход на 1.5.0](/docs/upgrade).
+код со старой версии LibreYOLO, см. [переход на 1.6.0](/docs/upgrade).
 
 ## Что происходит при загрузке чужого файла
 

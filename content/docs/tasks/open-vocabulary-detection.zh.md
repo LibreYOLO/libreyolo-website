@@ -15,7 +15,7 @@ keywords:
   - owlv2
   - omdet turbo
   - 文本提示词检测
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -56,7 +56,7 @@ snippets:
         # token 分数过滤，两者不设置时都默认为 0.25，只有 Grounding
         # DINO 接受 text_threshold，其他家族会报错
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 17197cf4d80f3d6f
+source_hash: 10f41b40f357b037
 ---
 
 ## 定义
@@ -116,6 +116,8 @@ pip install "libreyolo[openvocab]"
 区别在于检测框由什么产生：本页上的这些家族是直接给出分数的判别式检测器，
 而 VLM 那一层是生成出来的。
 
+[Gemma 4](/docs/models/gemma-4)、[Moondream](/docs/models/moondream) 和 [North Micro Vision](/docs/models/northmicrovision) 扩展了 `LibreVLM` 的检测选择。[Molmo2](/docs/models/molmo2) 返回点。根据指令查询点击位置时，请使用 [LibreGround](/docs/reference/ground-api)，而不是检测词汇表。
+
 ## 预测
 
 <code-tabs name="predict" />
@@ -140,6 +142,8 @@ pip install "libreyolo[openvocab]"
 
 这一层里没有哪个家族能在 LibreYOLO 内部训练。`train()` 会报错：在上游微调，
 再加载得到的权重。传给 `set_classes()` 的词汇表是唯一能改变已加载模型检测内容的设置。
+
+Qwen3-VL 有单独的 [VLM 微调](/docs/train/vlm-fine-tuning)路径。这不会为四个 `LibreOpenVocab` 适配器增加训练支持。
 
 ## 验证
 

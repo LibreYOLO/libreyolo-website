@@ -18,7 +18,7 @@ keywords:
   - 소형 객체 탐지
   - programmable gradient information
   - GELAN
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -124,7 +124,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: eaa6023a4a0b9e71
+source_hash: "624f3e70d2937683"
 ---
 
 ## 설치
@@ -167,6 +167,10 @@ stride-4 모델에는 자체 공개 COCO 체크포인트가 없으므로 여기�
 
 데이터셋, 증강, 다중 GPU, 로거는 [학습](/docs/train)을 참조합니다.
 
+기본 탐지 모델의 새 파인튜닝은 `aux_weight=0.25`로 학습 전용 PGI 분기를 활성화합니다. `max_labels=300`이며, SGD 모멘텀은 세 에폭 동안 0.8에서 0.937까지 워밍업합니다. 기존 단일 헤드 체크포인트는 원래 그래프로 학습을 재개합니다. 예측과 내보내기는 기본 헤드를 사용합니다. `letterbox_pad=None`은 체크포인트에 기록된 값을 따릅니다. 기록이 없는 가중치는 `topleft`를 사용하고, 새로운 공식 변환은 `center`를 기록합니다.
+
+YOLO9과 YOLOX 모자이크는 최대 20번 추출하여 어노테이션이 있는 짝 이미지를 우선하며, YOLO9 MixUp도 같은 방식을 사용합니다. RGB 이외 입력 프로파일은 [이벤트 히스토그램](/docs/train/event-histograms)을 참조하십시오.
+
 ## 검증
 
 `val()`은 학습에 사용한 형식의 데이터셋을 대상으로 측정한 정밀도, 재현율, mAP 50, mAP 50-95를 포함하는 `metrics/` 키 사전을 반환합니다.
@@ -187,6 +191,8 @@ stride-4 모델에는 자체 공개 COCO 체크포인트가 없으므로 여기�
 
 <code-tabs name="export" />
 
+[TFLite INT8](/docs/export/tflite)는 보정 데이터와 `int8=True`를 사용합니다.
+
 ## 체크포인트
 
 이 계열에 공개된 모든 가중치 파일입니다.
@@ -197,7 +203,7 @@ stride-4 모델에는 자체 공개 COCO 체크포인트가 없으므로 여기�
 
 <provenance-box>
 
-여기 체크포인트 중 하나는 MIT가 아닙니다. VisDrone2019-DET에서 학습한 stride-4 모델은 해당 데이터셋의 CC BY-NC-SA 3.0 약관을 상속합니다. 비상업적 사용만 허용하고 파생물에 동일 조건을 적용해야 하며 나머지 계열의 허용적 라이선스 범위 밖입니다. COCO 클래스가 아닌 VisDrone 항공 클래스를 예측합니다. 라이브러리는 파일을 다운로드하기 전에 이 내용을 모두 출력합니다.
+스트라이드 4 항공 체크포인트는 VisDrone 클래스를 예측합니다. 가중치 저장소에 기록된 배포자 선언 라이선스를 따릅니다.
 
 </provenance-box>
 

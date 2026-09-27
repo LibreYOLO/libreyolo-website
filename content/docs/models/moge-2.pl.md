@@ -20,7 +20,7 @@ keywords:
   - mapa normalnych
   - gęsta predykcja
   - DINOv2
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -80,7 +80,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: d96b89f18ac10a40
+source_hash: b06daf44f9a58411
 ---
 
 ## Instalacja
@@ -94,9 +94,7 @@ pip install libreyolo
 
 ## Predykcja
 
-Przy pierwszym użyciu wagi są pobierane automatycznie. LibreYOLO pobiera
-odpowiedni rozmiar bezpośrednio z oficjalnych checkpointów i zapisuje go w
-lokalnej pamięci podręcznej.
+Wagi są pobierane automatycznie przy pierwszym użyciu. Rozmiary s i l używają kopii w repozytoriach LibreYOLO; b nadal używa checkpointu projektu źródłowego.
 
 <code-tabs name="predict" />
 
@@ -144,10 +142,7 @@ plik `.onnx` zachowuje się jak checkpoint i zwraca ten sam obiekt `Results`.
 
 <provenance-box>
 
-LibreYOLO nie kopiuje tych checkpointów do własnej organizacji.
-`LibreYOLO("LibreMoGe2s-normal.pt")` pobiera odpowiedni rozmiar bezpośrednio z
-oficjalnych repozytoriów Hugging Face przy przypiętej rewizji i przed użyciem
-weryfikuje plik względem zapisanego skrótu SHA-256.
+Checkpointy s i l mają kopie w repozytoriach LibreYOLO; b pozostaje w repozytorium źródłowym. Pobrane artefakty zachowują licencję wydawcy.
 
 </provenance-box>
 

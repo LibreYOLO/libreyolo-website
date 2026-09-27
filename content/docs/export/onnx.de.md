@@ -19,7 +19,7 @@ keywords:
   - nms in onnx einbetten
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Flag
     value: export(format="onnx")
@@ -153,7 +153,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cee78250fc7189a3
+source_hash: a407e1142b8aa57e
 ---
 
 ## Installation
@@ -163,6 +163,8 @@ source_hash: cee78250fc7189a3
 Das Extra zieht `onnx`, `onnxsim` und `onnxruntime` nach. `onnx` allein genügt,
 um die Datei zu schreiben; `onnxsim` führt den Vereinfachungsdurchlauf aus und
 `onnxruntime` führt das Artefakt aus und übernimmt die INT8-Kalibrierung.
+
+Das ONNX-Extra benötigt `onnxruntime>=1.18.0`; LaMa verwendet einen Graphen mit Opset 21.
 
 ## Export
 
@@ -180,12 +182,12 @@ zweistufigen Detektoren halten Höhe und Breite der Quelle dynamisch, weil ihre
 Skalierung innerhalb des Graphen passiert.
 
 `opset` wird pro Familie gewählt, wenn es weggelassen wird. Die Familien im
-DETR-Stil (`detr`, `deformable_detr`, `dinodetr`, `dfine`, `deim`, `deimv2`,
-`ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) sowie `deit`,
-`midas` und `moge2` bekommen Opset 17, denn dort wird
-`aten::scaled_dot_product` abgesenkt. Alles andere bekommt 13. Matting wird
-unabhängig davon auf 19 angehoben, weil der Decoder von BiRefNet den Operator
-`DeformConv` braucht, den ONNX ab Opset 19 definiert.
+DETR-Stil (`detr`, `deformable_detr`, `dinodetr`, `dfine`, `gtr`, `deim`,
+`deimv2`, `tinyformer`, `ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`,
+`rtdetrv4`) sowie `deit`, `midas`, `moge2` und `vjepa2` bekommen Opset 17, denn
+dort wird `aten::scaled_dot_product` abgesenkt. Alles andere bekommt 13.
+BiRefNet und FeyNobg werden unabhängig davon auf 19 angehoben, weil ihr Decoder
+den Operator `DeformConv` braucht, den ONNX ab Opset 19 definiert.
 
 `simplify=True` führt `onnxsim` aus und behält den ursprünglichen Graphen, wenn
 der Durchlauf fehlschlägt, ein Vereinfachungsfehler ist also eine Warnung und
@@ -225,8 +227,10 @@ und Aufgabe und den Bau des Parsers zeigt
 
 `int8=True` führt die statische Quantisierung der ONNX Runtime aus und schreibt
 einen QDQ-Graphen mit Float32-Eingaben und -Ausgaben. Quantisiert werden nur
-`Conv`- und `Gemm`-Knoten. Das Decoding im Detektions-Head in Float32 zu
-belassen, ist Absicht: diese Konkatenation mischt Box-Koordinaten im
+`Conv`- und `Gemm`-Knoten, und die erste Faltung sowie der Detektions-Head von
+YOLO9 bleiben in Float32, wie auch in `model.quantize()`, damit Klassen-Scores
+nicht am kalibrierten Bereich sättigen. Das Decoding im Detektions-Head in
+Float32 zu belassen, ist Absicht: diese Konkatenation mischt Box-Koordinaten im
 Pixelmaßstab mit Klassen-Scores im Bereich 0 bis 1, und eine einzelne
 Aktivierungsskala pro Tensor, dominiert von der Größenordnung der Box, würde
 jeden Score auf null drücken.
@@ -280,13 +284,14 @@ Auflösung. Tiefe, Oberflächennormale und Kanten lehnen `batch != 1` ab und
 erzwingen `dynamic=False`. Matting erzwingt das native Quadrat mit 1024, weil
 die Tabellen für relative Positionen im Swin von BiRefNet an ihre Auflösung
 gebunden sind. Die Restauration erzwingt eine feste Leinwand für jede Familie
-außer Real-ESRGAN, dessen Generator vollständig faltend ist.
+außer Real-ESRGAN und QuickSRNet, deren Netze vollständig faltend sind.
 
-Ein rechteckiges `imgsz` funktioniert für die YOLO9-Familien, HRNet, NAFNet und
-Real-ESRGAN. Familien mit festem quadratischem Vertrag (`clip`,
-`deformable_detr`, `detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`,
-`lwdetr`, `moge2`, `rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`,
-`ssd`) lehnen es rundweg ab.
+Ein rechteckiges `imgsz` funktioniert für die YOLO9-Familien, HRNet, NAFNet,
+PP-LiteSeg, Real-ESRGAN, QuickSRNet und die semantische Segmentierung von GTR.
+Familien mit festem quadratischem Vertrag (`clip`, `deformable_detr`, `detr`,
+`dinodetr`, `dfine`, `gtr` außer bei der semantischen Segmentierung, `deim`,
+`deimv2`, `tinyformer`, `ec`, `lwdetr`, `moge2`, `rtdetr`, `rtdetrv2`,
+`rtdetrv4`, `rfdetr`, `siglip2`, `ssd`) lehnen es rundweg ab.
 
 Zwei Kombinationen werden schon vor dem Tracing verweigert: die
 YOLO9-Segmentierung, weil YOLO9 in LibreYOLO nur Objekterkennung kann, und die

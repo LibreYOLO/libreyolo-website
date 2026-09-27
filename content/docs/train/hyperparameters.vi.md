@@ -20,7 +20,7 @@ keywords:
   - patience early stopping
   - amp bfloat16
   - train config yaml
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -106,13 +106,13 @@ snippets:
         from libreyolo import LibreYOLO
 
         # Nạp checkpoint của lượt chạy bị gián đoạn rồi yêu cầu tiếp tục.
-        model = LibreYOLO("runs/train/exp/weights/last.pt")
-        model.train(data="my-dataset.yaml", epochs=100, resume=True)
+        model = LibreYOLO("runs/train/yolo9_exp/weights/last.pt")
+        model.train(data="my-dataset.yaml", resume=True)
     - label: CLI
       language: bash
       code: |
-        libreyolo train model=runs/train/exp/weights/last.pt \
-          data=my-dataset.yaml epochs=100 resume=true
+        libreyolo train model=runs/train/yolo9_exp/weights/last.pt \
+          data=my-dataset.yaml resume=true
   cfg:
     - label: Python
       language: python
@@ -126,9 +126,8 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: d838d1abd45af40f
+source_hash: ca1259a10e05a51d
 ---
-
 ## Thiết lập đối số
 
 `train()` nhận đối số keyword, còn CLI nhận cùng tên ở dạng `key=value`.
@@ -171,13 +170,9 @@ Các giá trị mặc định cơ sở là `optimizer="sgd"`, `lr0=0.01`, `momen
 | `weight_decay` | `5e-4` | `5e-4` | `1e-4` | `1e-5` |
 | `scheduler` | `yoloxwarmcos` | `linear` | `flat_cosine` | `cos` |
 | `epochs` | `300` | `300` | `132` | `300` |
-| `amp` | `True` | `True` | `False` | `False` |
+| `amp` | `True` | `True` | `True` | `True` |
 
-D-FINE và DEIM được phân phối với `amp=False` vì decoder D-FINE clamp activation
-ở 65504, giá trị float16 hữu hạn lớn nhất. YOLO-NAS và FOMO cũng mặc định tắt.
-Flag `--amp` của CLI mặc định là `True` cho mọi family, vì vậy được tính là do
-người dùng cung cấp và ghi đè mặc định family; hãy giữ nguyên trừ khi thực sự
-muốn thay đổi.
+Phát hiện D-FINE, DEIM, RT-DETRv4 và YOLO-NAS mặc định dùng `amp=True` với `amp_dtype="float16"`. Dome-DETR, PP-YOLOE và YOLO-NAS OBB giữ mặc định FP32. Truyền `amp=False` khi cần FP32.
 
 Để đọc giá trị mặc định thực của family thay vì đoán:
 
@@ -204,6 +199,8 @@ lớp decoder phụ trợ.
 
 Autobatch là tính năng CUDA. Trên CPU hoặc MPS, nó ghi một dòng log và giữ batch
 mặc định.
+
+`min_samples=0` giữ nguyên độ dài epoch. Ngưỡng dương lấy mẫu có hoàn lại từ các dataset phát hiện ngắn hơn. `class_balanced=False` bật lấy mẫu theo hệ số lặp từng ảnh khi đặt thành true; nó kết hợp với `min_samples` và DDP. Các loader chuyên biệt bỏ qua bộ lấy mẫu chung sẽ từ chối khi bật cân bằng.
 
 ## Tích lũy gradient
 
@@ -267,28 +264,38 @@ thay vì bị ghi đè.
 
 `save_period` ghi thêm `weights/epoch_<N>.pt` sau mỗi N epoch, bên cạnh
 `weights/last.pt` sau từng epoch và `weights/best.pt` mỗi khi metric được theo
-dõi cải thiện. `eval_interval` đặt tần suất xác thực, còn `patience` dừng lượt
-chạy sau số epoch đó mà không cải thiện; `0` tắt early stopping.
+dõi cải thiện. `eval_interval` đặt tần suất xác thực, và epoch cuối cùng luôn
+được xác thực; `val=False` tắt xác thực, và lượt chạy như vậy không ghi ra
+`best.pt`. `patience` dừng lượt chạy sau số epoch đó mà không cải thiện; `0` tắt
+early stopping.
 
 `cache` tăng tốc các epoch lặp lại bằng cách giữ ảnh đã decode trong RAM (`True`
 hoặc `"ram"`) hoặc dưới dạng tệp `.npy` bên cạnh nguồn (`"disk"`). Lượt đọc từ
 cache giống từng byte với lượt đọc mới. Khi có worker dataloader, `"disk"` là
 lựa chọn an toàn hơn.
 
+`average_best=0` tắt lấy trung bình checkpoint; N dương ghi `weights/average.pt` từ tối đa N snapshot tốt nhất. Các tensor số thực được lấy trung bình đều và buffer số nguyên lấy từ snapshot tốt nhất. Có thể bật `export_check=False` để dừng trước epoch đầu nếu xuất ONNX thất bại. Các đầu ra thô tương ứng được so sánh với `rtol=1e-3`, `atol=1e-4`; bố cục không tương thích ghi log bỏ qua so sánh.
+
+`precise_bn=0` tắt hiệu chuẩn lại BatchNorm cuối cùng. Giá trị dương giới hạn số ảnh từ loader huấn luyện trước lần đánh giá cuối; với DDP, giới hạn áp dụng cho từng rank tham gia. BatchNorm đã đóng băng vẫn đóng băng. [Callback fitness tùy chỉnh](/docs/train/fitness-callbacks) có thể chọn checkpoint tốt nhất và patience.
+
 ## Tiếp tục huấn luyện
 
-`resume=True` tiếp tục một lượt chạy bị gián đoạn. Checkpoint phải được nạp
-trước vì thao tác tiếp tục đọc nó từ mô hình, không phải từ đối số riêng.
+`resume=True` tiếp tục một lượt chạy bị gián đoạn từ checkpoint đã nạp;
+`resume="path/to/last.pt"` thì tiếp tục từ tệp đó.
 
 <code-tabs name="resume" />
 
-Thao tác tiếp tục khôi phục trọng số đã huấn luyện, trạng thái optimizer, trọng
+Thao tác tiếp tục khôi phục các đối số huấn luyện đã lưu của lượt chạy, và đối số
+được truyền tường minh sẽ ghi đè đối số đã lưu. Nó tiếp tục ghi vào thư mục chạy
+của checkpoint. Nó khôi phục trọng số đã huấn luyện, trạng thái optimizer, trọng
 số EMA và số lần cập nhật, thông tin theo dõi metric tốt nhất, scale của
 `GradScaler`, cùng trạng thái ngẫu nhiên PyTorch, CUDA và NumPy. Nó bắt đầu ở
 epoch sau epoch trong checkpoint và tua nhanh lịch tới vị trí đó.
 
-Có hai điều nó không thực hiện. Không thể kết hợp `resume=True` với `pretrained`,
-và yêu cầu như vậy sẽ phát sinh lỗi. Khi key metric tốt nhất của checkpoint khác
+Có ba điều nó không thực hiện. Không thể kết hợp `resume=True` với `pretrained`,
+và yêu cầu như vậy sẽ phát sinh lỗi. Trọng số đã phát hành và một lượt chạy đã
+đạt đủ `epochs` không có gì để tiếp tục, và sẽ phát sinh `ValueError` nêu rõ điều
+đó. Khi key metric tốt nhất của checkpoint khác
 lượt chạy hiện tại, thông tin theo dõi metric tốt nhất được đặt lại về 0 kèm
 cảnh báo thay vì so sánh các giá trị không cùng ý nghĩa.
 
@@ -310,3 +317,11 @@ CLI không có flag `--cfg`; đường dẫn tệp là đối số Python.
 - Xem [Đóng băng lớp](/docs/train/layer-freezing) và
   [LoRA](/docs/train/lora) để huấn luyện một tập con của trọng số.
 - Xem [Xác thực và metric](/docs/train/validation) để biết lượt chạy báo cáo gì.
+
+## Chọn lớp đối tượng và trọng số loss
+
+Với phát hiện YOLO9, RF-DETR, EdgeCrafter, RT-DETR, D-FINE, DEIM, TinyFormer và YOLO-NAS, `classes=None` giữ mọi lớp đối tượng của dataset; danh sách lọc dữ liệu giám sát nhưng giữ ID gốc, `nc` và `names`. Có thể bật `single_cls=False` để ánh xạ nhãn được giữ thành lớp đối tượng 0 có tên `object`. Tiếp tục huấn luyện và đánh giá kế thừa thiết lập đã lưu. Huấn luyện OBB của mô hình từ chối `single_cls`.
+
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 và DINOv2 hỗ trợ `cls_pw=0.0`: giá trị trong [0, 1] đặt trọng số mỗi lớp đối tượng bằng nghịch đảo tần suất lũy thừa giá trị đó, chuẩn hóa về trung bình 1. Khi bật, `class_weights=False` chọn cách đặt trọng số thay thế `N / (C * n_c)`. Không thể kết hợp nó với `cls_pw` dương; tiếp tục huấn luyện yêu cầu thiết lập trọng số khớp nhau.
+
+`plot_samples=8` đặt giới hạn số ảnh mẫu đánh giá. Dùng 0 để không có ảnh hoặc -1 để lấy tất cả; nó không giảm số ảnh được đánh giá.

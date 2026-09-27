@@ -39,7 +39,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
-source_hash: 7b5b53c46df00c06
+source_hash: 95935c1f8ca2d6db
 ---
 
 ## 書式
@@ -82,7 +82,7 @@ libreyolo checks
 
 ## models
 
-すべてのモデルファミリーを、そのタスク、サイズ、チェックポイントに解決されるCLI名、および各サイズの入力解像度とともに一覧表示します。
+すべてのモデルファミリーを、そのタスク、サイズ、チェックポイントに解決されるCLI名、および各サイズの入力解像度とともに一覧表示します。一覧に載るのは`model=`で読み込める名前だけです。公開された重みのない名前は別の`No published weights (local checkpoints only)`行に表示され、CLI名を持たないファミリーは代わりにPythonクラスまたは専用のコマンドを表示します。
 
 ```bash
 libreyolo models

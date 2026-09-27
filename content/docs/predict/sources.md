@@ -14,7 +14,7 @@ keywords:
   - youtube inference
   - vid_stride
   - stream=True
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 verification: "Source classification read from libreyolo/utils/source.py (classify_source, SourceKind, StreamSource, MultiStreamSource). Accepted image types and directory extensions from libreyolo/utils/image_loader.py. Video extensions and save paths from libreyolo/utils/video.py. Screen syntax from libreyolo/utils/screen.py. Return shapes and argument defaults from InferenceRunner.__call__ in libreyolo/models/base/inference.py."
 snippets:
   images:
@@ -42,7 +42,11 @@ snippets:
         array = np.asarray(pil_image)
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+        # NumPy arrays are read as BGR unless told otherwise; this one is RGB.
+        result = model(array, color_format="rgb")
+        print(type(array).__name__, len(result.boxes))
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: A folder
@@ -205,22 +209,27 @@ A single image source accepts seven types.
 |---|---|
 | `str` or `pathlib.Path` | Local file, `http(s)://`, `s3://` or `gs://` |
 | `PIL.Image.Image` | Converted to RGB |
-| `numpy.ndarray` | 2D grayscale, or 3D HWC or CHW; a 4D array uses its first image |
-| `torch.Tensor` | CHW or NCHW, read as RGB; a batched tensor uses its first image |
+| `numpy.ndarray` | 2D grayscale, or 3D HWC or CHW in BGR order; a 4D array is a batch |
+| `torch.Tensor` | CHW or NCHW, read as RGB; a 4D tensor is a batch |
 | `bytes` | Encoded image data |
 | `io.BytesIO` | Encoded image data |
 
+A 4D array or tensor returns a list with one `Results` per image.
+
 Everything is converted to RGB before preprocessing. NumPy arrays are the one
 case where channel order is ambiguous, so `color_format` controls it:
-`"auto"` (the default) leaves the array as-is, `"bgr"` reverses the channels,
-which is what a frame read with OpenCV needs.
+`"auto"` (the default) and `"bgr"` read the array as BGR, the order OpenCV
+returns, and `"rgb"` leaves it as-is, which is what an array made from a PIL
+image needs.
 
 Float arrays are rescaled by their own range: values at or below `1.0` are
 multiplied by 255, higher values are clipped into `[0, 255]`. An RGBA array
 drops its alpha channel.
 
-Remote paths need one package each, and none of them is installed by default:
-`requests` for `http(s)://`, `boto3` for `s3://`, and `gcsfs` for `gs://`.
+Remote paths need one package each. `requests`, for `http(s)://`, comes with the
+base install; `boto3` for `s3://` and `gcsfs` for `gs://` do not.
+
+Tracking accepts images, filename-sorted folders, lists, tuples and lazy image iterators as consecutive frames. Pass `fps=30.0` to define image-sequence timing and `color_format="auto"` to select input interpretation. See [tracking](/docs/tasks/object-tracking).
 
 ## Folders
 
@@ -237,8 +246,10 @@ stacked forward pass per chunk on families that support it. See
 
 <code-tabs name="video" />
 
-A path counts as video when its suffix is one of `.asf`, `.avi`, `.gif`,
-`.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.ts`, `.wmv`, `.webm`.
+A path counts as video when its suffix is one of `.3g2`, `.3gp`, `.asf`,
+`.avi`, `.dav`, `.f4v`, `.flv`, `.gif`, `.h264`, `.h265`, `.hevc`, `.m2ts`,
+`.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.mts`, `.mxf`, `.ogv`, `.ts`,
+`.vob`, `.wmv`, `.webm`.
 
 `.gif` appears in both lists. A `.gif` path passed directly to `predict` is
 opened as video, because the video check runs first; a `.gif` sitting inside a
@@ -249,6 +260,8 @@ scanned folder is loaded as a still image.
 frames after striding emits a warning suggesting `stream=True`.
 
 Each `Results` from a video carries `frame_idx`.
+
+Successful video encoding falls back to an available codec when H.264 cannot open. The fallback is logged at INFO and cached per codec and canvas only after another codec succeeds.
 
 ## Webcams, network streams and YouTube
 
@@ -349,8 +362,9 @@ returning it.
 Images go to an auto-incrementing `runs/detect/predict`, `runs/detect/predict2`
 and so on, keeping the source filename. Every image in one process lands in the
 same directory, so two input folders holding the same filename overwrite each
-other. In-memory images have no filename to reuse and are numbered `image0`,
-`image1` and so on.
+other. In-memory images have no filename to reuse. A single one is saved as
+`inference`, so repeated calls overwrite it; a list or batch is numbered
+`image0`, `image1` and so on.
 
 Video and live sources are written as a single `.mp4` named after the source.
 
@@ -358,5 +372,5 @@ Video and live sources are written as a single `.mp4` named after the source.
 file, a path without one as a directory. `output_file_format` selects the
 still-image encoding and accepts `jpg`, `png` or `webp`.
 
-After a save, the written path is also attached to the result as
+After an image is saved, the written path is also attached to the result as
 `result.saved_path`.

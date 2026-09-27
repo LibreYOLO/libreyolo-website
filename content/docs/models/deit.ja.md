@@ -17,7 +17,7 @@ keywords:
   - ImageNet
   - data-efficient training
   - museum model
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -75,7 +75,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 9c67c8554b2af5c6
+source_hash: 4dad5f1aa0943dd9
 ---
 
 ## インストール
@@ -107,6 +107,8 @@ Hugging Faceからダウンロードされ、ローカルにキャッシュさ�
 データセットに対して測定したtop-1精度とtop-5精度の辞書を返します。
 
 <code-tabs name="val" />
+
+検証とINT8キャリブレーションでは、ファミリーの評価用変換を使います。エクスポートのメタデータには`norm_mean`、`norm_std`、`resize_mode`が記録されます。古いファイルでは、ファミリーの値にフォールバックします。キャリブレーションの前処理は、必要なCHW配列と比率を返します。
 
 ## エクスポート
 

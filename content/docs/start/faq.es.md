@@ -16,8 +16,8 @@ keywords:
   - donde se guardan los pesos libreyolo
   - libreyolo cli
   - libreyolo sin internet
-last_verified: 1.5.0
-source_hash: a729b43a6642f2a0
+last_verified: 1.6.0
+source_hash: 13810bf9ea01c459
 ---
 
 ## ¿Con qué modelo debería empezar?
@@ -88,9 +88,10 @@ cabecera de la página de cada modelo te lo dice antes de intentarlo. Consulta
 
 ## ¿Qué devuelve val?
 
-Un diccionario plano, no un objeto. Las claves de detección incluyen
+Un diccionario indexado por nombre de métrica. Las claves de detección incluyen
 `metrics/precision`, `metrics/recall`, `metrics/mAP50` y
-`metrics/mAP50-95`. Las demás tareas devuelven las claves que tienen sentido
+`metrics/mAP50-95`, y los resultados de detección y segmentación llevan además
+resultados por imagen en `metrics.box`. Las demás tareas devuelven las claves que tienen sentido
 para ellas, como `metrics/accuracy_top1` para clasificación o `metrics/PQ`,
 `metrics/SQ` y `metrics/RQ` para segmentación panóptica.
 
@@ -163,3 +164,7 @@ Se renombraron dos clases por consistencia: `LibreYOLORTDETR` pasó a ser
 `LibreRTDETR` y `LibreYOLORFDETR` pasó a ser `LibreRFDETR`. Los nombres antiguos
 siguen resolviéndose y emiten un `DeprecationWarning` que apunta al nuevo, así
 que el código existente sigue funcionando mientras lo actualizas.
+
+## ¿Por qué falla la descarga con un nombre de checkpoint?
+
+Usa el nombre de archivo exacto de la tabla de checkpoints en la página del modelo. Las variantes de nombre de FCN y Mask R-CNN con sufijo de tarea no están alojadas; el error del cargador enumera las formas compatibles. LingBot-Vision g no tiene checkpoint publicado: usa s, b, l o un checkpoint local.

@@ -21,7 +21,7 @@ keywords:
   - embedding de imagem
   - extração de características de imagem
   - Meta AI
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Semântica
@@ -152,7 +152,7 @@ snippets:
         # exportação nomeia o arquivo pela tarefa, aqui LibreDINOv2s-sem.onnx.
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
-source_hash: 4256e0a0398e5aaf
+source_hash: c89a9662d03fe6f7
 ---
 
 ## Instalação
@@ -199,13 +199,9 @@ chamar `train()` nele.
 
 <code-tabs name="train" />
 
-Os argumentos nomeados principais aqui são `batch_size` e `lr`, não `batch` e
-`lr0` usados pela maioria das outras famílias; `batch` e `lr0` continuam sendo
-aceitos e mapeados para eles, mas passar os dois levanta um erro de conflito.
-`output_dir=` (padrão `"runs/train"`) substitui `project=`/`name=` como forma
-principal de posicionar uma execução, embora passar `project=`/`name=`
-diretamente ainda funcione. Veja [treinamento](/docs/train) para datasets, data
-augmentation, multi-GPU e loggers.
+Os argumentos nomeados principais aqui são `batch_size` e `lr`, não `batch` e `lr0` usados pela maioria das outras famílias; `batch` e `lr0` ainda são aceitos e mapeados para eles, mas passar ambos gera um erro de conflito. `output_dir=` (padrão `None`) substitui `project=`/`name=` como forma principal de definir o local de uma execução, embora passar `project=`/`name=` diretamente ainda funcione. Veja [treinamento](/docs/train) para datasets, data augmentation, multi-GPU e loggers.
+
+Novas execuções usam um `runs/train/dinov2_exp` incrementado com `exist_ok=False`. `resume=True` restaura o estado do trainer e preserva o diretório de execução selecionado. Classificação suporta `cls_pw` e `class_weights`, conforme descrito em [hiperparâmetros](/docs/train/hyperparameters).
 
 ## Validação
 
@@ -215,6 +211,8 @@ para `task="semantic"`, acurácia top-1 e top-5 para `task="classify"`.
 `NotImplementedError` se você chamar `val()` nele.
 
 <code-tabs name="val" />
+
+A calibração de classificação e embeddings reutiliza o pipeline de classificação do modelo. A avaliação usa a transformação da família.
 
 ## Exportação
 

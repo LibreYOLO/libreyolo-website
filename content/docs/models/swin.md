@@ -5,7 +5,7 @@ seo_title: "Swin Transformer: classify images with LibreYOLO's LibreSwin"
 description: "Predict, validate and export Swin Transformer classifiers with LibreYOLO. MIT weights; fine-tuning is not yet supported."
 lead: "Swin Transformer V1: a hierarchical vision transformer that computes attention inside shifted local windows instead of over the whole image. LibreYOLO ships four sizes for image classification."
 keywords: [Swin Transformer, hierarchical vision transformer, shifted window attention, image classification]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -104,6 +104,8 @@ upstream ImageNet training recipe is not implemented.
 `val/` subfolders, one folder per class) and returns top-1 and top-5 accuracy.
 
 <code-tabs name="val" />
+
+Validation and INT8 calibration use the family evaluation transform. Export metadata records `norm_mean`, `norm_std` and `resize_mode`; older artifacts fall back to family values. Calibration preprocessors return the required CHW array and ratio.
 
 ## Export
 

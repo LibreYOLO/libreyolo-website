@@ -16,7 +16,7 @@ keywords:
   - atención por ventanas desplazadas
   - clasificación de imágenes python
   - clasificador de imágenes preentrenado
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -88,7 +88,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: faa6bbacae62d88e
+source_hash: 7020bd102e5ba1d6
 ---
 
 ## Instalación
@@ -132,6 +132,8 @@ subcarpetas `train/` y `val/`, una carpeta por clase) y devuelve la precisión
 top-1 y top-5.
 
 <code-tabs name="val" />
+
+La validación y la calibración INT8 usan la transformación de evaluación de la familia. Los metadatos de exportación registran `norm_mean`, `norm_std` y `resize_mode`; los artefactos anteriores recurren a los valores de la familia. Los preprocesadores de calibración devuelven el array CHW y la proporción requeridos.
 
 ## Exportación
 

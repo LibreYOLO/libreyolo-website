@@ -13,10 +13,9 @@ keywords:
   - libreyolo cuda hết bộ nhớ
   - libreyolo notimplementederror
   - khắc phục sự cố libreyolo
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: 1.6.0
+source_hash: f2faaab56a2f0415
 ---
-
 Các lỗi được nhóm theo nội dung bạn nhìn thấy. Nếu thông báo của bạn không có ở
 đây, [FAQ](/docs/faq) trả lời những câu hỏi không phải lỗi, còn `libreyolo
 models` báo những gì bản cài thực sự có thể nạp.
@@ -97,10 +96,10 @@ tên đó, gồm cả hậu tố tác vụ, nên tên không khớp checkpoint �
 URL không tồn tại. Bảng checkpoint trên mỗi trang mô hình liệt kê chính xác các
 tên file đã công bố.
 
-## Huấn luyện bị treo hoặc khởi động lại trên Windows
+## Huấn luyện bị treo hoặc khởi động lại trên Windows hoặc macOS
 
-Windows không có `fork`, nên worker dataloader bắt đầu bằng cách import lại
-script của bạn. Nếu thiếu guard `if __name__ == "__main__":`, mỗi worker chạy
+Windows không có `fork`, và Python trên macOS mặc định không dùng nó, nên worker
+dataloader bắt đầu bằng cách import lại script của bạn. Nếu thiếu guard `if __name__ == "__main__":`, mỗi worker chạy
 lại lệnh huấn luyện, dẫn đến deadlock hoặc sinh tiến trình vô hạn.
 
 ```python
@@ -136,8 +135,9 @@ bạn biết chắc đó là danh sách.
 
 ### Đọc metric như thuộc tính
 
-`val()` trả về dictionary thuần túy với khóa là tên metric, không phải object
-có truy cập thuộc tính:
+`val()` trả về dictionary với khóa là tên metric. Thuộc tính duy nhất của nó,
+`box`, chứa kết quả theo từng ảnh và ngưỡng theo từng lớp đối tượng, không phải
+giá trị metric:
 
 ```python
 metrics = model.val(data="coco8.yaml")
@@ -163,3 +163,7 @@ if report.errors:
 ```
 
 Xem [lệnh doctor](/docs/cli/doctor) để biết danh mục kiểm tra.
+
+## Worker duy trì liên tục không thấy thay đổi dataset
+
+Hook `close_mosaic` hoặc `set_epoch` đang hoạt động phải tác động đến bản sao dataset mà worker dùng. Nếu loader nhiều worker tùy chỉnh giữ các bản sao liên tục không tương thích, dùng `persistent_workers=False` hoặc dựng lại worker sau thay đổi. Đường mặc định không duy trì worker liên tục không bị ảnh hưởng.

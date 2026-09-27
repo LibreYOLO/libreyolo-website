@@ -16,7 +16,7 @@ keywords:
   - libreria object detection MIT
   - alternativa a YOLO
   - addestrare un object detector
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -120,7 +120,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: c735b6e3de78dd2b
+source_hash: 01ee5ee9eea3b569
 ---
 
 ## Definizione
@@ -145,16 +145,7 @@ un oggetto `Boxes` produce slice di una sola riga, quindi `box.cls`, `box.conf` 
 
 ## Modelli
 
-Dodici famiglie addestrano e predicono: [YOLOv9](/docs/models/yolov9),
-[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
-[RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine),
-[DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr),
-[YOLO-NAS](/docs/models/yolo-nas),
-[YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7),
-[RTMDet](/docs/models/rtmdet) e [PicoDet](/docs/models/picodet). YOLOv9 e
-RF-DETR sono le due famiglie di punta, e le nuove funzionalità arrivano prima su
-di loro. RF-DETR richiede il suo extra, `pip install "libreyolo[rfdetr]"`; le
-altre funzionano con il pacchetto base.
+Le seguenti famiglie supportano addestramento e predizione: [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [GTR](/docs/models/gtr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet) e [PicoDet](/docs/models/picodet). YOLOv9 e RF-DETR sono le due famiglie principali e ricevono per prime le nuove funzionalità. RF-DETR richiede il proprio extra, `pip install "libreyolo[rfdetr]"`; le altre funzionano con il pacchetto base.
 
 Altre undici predicono, validano ed esportano, ma il loro `train()` solleva
 `NotImplementedError`: [LW-DETR](/docs/models/lw-detr),
@@ -178,10 +169,14 @@ più le famiglie vision-language
 [Florence-2](/docs/models/florence-2), [Kosmos-2](/docs/models/kosmos-2),
 [Qwen3-VL](/docs/models/qwen3-vl), [SmolVLM2](/docs/models/smolvlm2),
 [InternVL3](/docs/models/internvl3), [LFM2-VL](/docs/models/lfm2-vl),
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream),
+[North Micro Vision](/docs/models/northmicrovision),
 [LocateAnything](/docs/models/locate-anything),
 [SenseNova-Vision](/docs/models/sensenova-vision) e
 [LibreMODUS](/docs/models/libremodus). Queste si caricano attraverso una factory
 e degli extra propri; ogni pagina di modello riporta la chiamata esatta.
+
+Anche [PP-YOLOE](/docs/models/ppyoloe) e [TinyFormer](/docs/models/tinyformer) supportano l'addestramento del rilevamento.
 
 ## Predizione
 
@@ -254,6 +249,8 @@ quindi prendilo dalla pagina del modello e non dall'esempio di un'altra
 famiglia. Una famiglia può anche ignorare del tutto un argomento, e la sua
 pagina elenca quali. Vedi [addestramento](/docs/train) per dataset, data augmentation,
 multi-GPU e logger.
+
+Usa `classes=` per mantenere gli ID originali selezionati del dataset; `single_cls=True` riunisce le etichette mantenute nella classe 0. Vedi [iperparametri](/docs/train/hyperparameters) per le famiglie supportate e l'ereditarietà delle impostazioni in validazione.
 
 ## Validazione
 

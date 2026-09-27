@@ -17,7 +17,7 @@ keywords:
   - 노멀 맵
   - 조밀 예측
   - DINOv2
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -77,7 +77,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: d96b89f18ac10a40
+source_hash: "b06daf44f9a58411"
 ---
 
 ## 설치
@@ -90,7 +90,7 @@ pip install libreyolo
 
 ## 예측
 
-처음 사용할 때 가중치를 자동으로 다운로드합니다. LibreYOLO는 공식 체크포인트에서 일치하는 크기를 직접 가져와 로컬에 캐시합니다.
+가중치는 처음 사용할 때 자동으로 다운로드됩니다. s와 l 크기는 LibreYOLO 미러를 사용하며, b는 계속 업스트림 체크포인트를 사용합니다.
 
 <code-tabs name="predict" />
 
@@ -118,7 +118,7 @@ ViT-S, ViT-B, ViT-L의 세 인코더 크기가 별도 체크포인트로 제공�
 
 <provenance-box>
 
-LibreYOLO는 이러한 체크포인트를 자체 조직으로 복사하지 않습니다. `LibreYOLO("LibreMoGe2s-normal.pt")`는 고정된 리비전의 공식 Hugging Face 저장소에서 일치하는 크기를 직접 다운로드하고 사용 전에 기록된 SHA-256 체크섬으로 파일을 검증합니다.
+s와 l 체크포인트는 LibreYOLO에서 미러링하며, b는 업스트림에 유지됩니다. 다운로드한 파일에는 배포자의 라이선스가 그대로 적용됩니다.
 
 </provenance-box>
 

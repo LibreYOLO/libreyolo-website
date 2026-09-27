@@ -12,12 +12,8 @@ keywords:
   - libreyolo formats 命令
   - 导出一致性阈值
   - 导出 NotImplementedError
-last_verified: 1.5.0
-verification: >-
-  格式、等级、兜底顺序、任务和家族的屏蔽以及 NCNN 屏蔽名单读自 libreyolo/export/support.py；别名和共享参数读自
-  libreyolo/export/exporter.py；等级定义读自
-  docs/adr/0011-export-support-tiers.md；一致性阈值读自 docs/export_support.md，全部基于
-  v1.5.0。逐个组合的单元格没有抄录在这里；用下面的代码片段去查。
+last_verified: "1.6.0"
+verification: "格式、等级、兜底顺序、任务和家族的屏蔽以及 NCNN 屏蔽名单读自 libreyolo/export/support.py；别名和共享参数读自 libreyolo/export/exporter.py；等级定义读自 docs/adr/0011-export-support-tiers.md；一致性阈值读自 docs/export_support.md，全部基于 v1.6.0。逐个组合的单元格没有抄录在这里；用下面的代码片段去查。"
 snippets:
   usage:
     - label: 查询矩阵，不需要模型
@@ -56,7 +52,7 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
-source_hash: 83de3289634888c6
+source_hash: 70b9541fb8949352
 ---
 
 ## 矩阵的形状
@@ -75,6 +71,8 @@ source_hash: 83de3289634888c6
 因为一个单元格是三个键的函数，完整表格很大，而且每个版本都会变。它是生成出来的，
 不是手写的，放在库仓库的 `docs/export_support.md` 里。查这个矩阵请用 Python 或 CLI，
 而不是去读某一份副本。
+
+生成的注册表包含 PP-YOLOE、TinyFormer、DEKR、PP-LiteSeg、ConvNeXt V2、PE、V-JEPA 2 和 LeVJEPA。形状和任务约束请查阅各模型页面。U-Net、四个 3D 适配器、Marigold V2 和机器人策略不提供导出。
 
 ## 三个等级
 

@@ -1,7 +1,7 @@
 ---
 title: libreyolo train
 seo_title: libreyolo train 명령 참조
-description: '명령줄에서 모델을 학습합니다: 59개 인자 전체와 각각의 기본값, 모델 계열 기본값이 이를 덮어쓰는 방식, 그리고 계열이 무시하는 인자.'
+description: '명령줄에서 모델을 학습합니다. 인수와 기본값, 계열 기본값이 이를 재정의하는 방식, 계열에서 무시하는 인수를 설명합니다.'
 lead: >-
   하나의 데이터셋에서 하나의 모델을 학습하고 체크포인트, 지표, 로그를 실행 디렉터리에 기록합니다. 아래의 모든 인자에는 명령 정의에서 온
   기본값이 있으며, 모델 계열 자체의 학습 설정이 이를 대체할 수 있습니다.
@@ -12,7 +12,7 @@ keywords:
   - yolo 커스텀 데이터셋 학습
   - libreyolo dry run
   - yolo 레이어 고정
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 명령
     value: libreyolo train
@@ -21,7 +21,7 @@ meta:
     value: data
     mono: true
   - label: 출력
-    value: 'runs/train/exp 아래의 체크포인트, 지표, 로그'
+    value: 'runs/train/<name> 아래의 체크포인트, 지표, 로그. YOLO9은 yolo9_exp를 사용합니다'
 snippets:
   examples:
     - label: 기본
@@ -46,7 +46,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 3aad4298310d3081
+source_hash: 30b2c16d339f5f50
 ---
 
 ## 사용법
@@ -86,6 +86,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | `amp` | `true` | 자동 혼합 정밀도(Automatic Mixed Precision) |
 | `amp_dtype` | `float16` | CUDA AMP dtype: `float16` 또는 `bfloat16` |
 | `cuda_graph` | `false` | 학습의 순전파와 역전파를 CUDA 그래프로 캡처합니다. 단일 GPU와 지원되는 계열에서만 동작하며, 나머지는 eager 모드로 실행됩니다 |
+| `compile` | `false` | 학습 네트워크에 `torch.compile`을 적용합니다: `true`, `false`, `default`, `reduce-overhead`, `max-autotune`, `max-autotune-no-cudagraphs`. 단일 CUDA GPU에서만 동작하며, 그 외의 실행은 경고와 함께 eager 모드로 학습합니다 |
 | `lora` | `false` | LoRA 파인튜닝. 참고에 나열된 트랜스포머 계열에 적용됩니다 |
 | `freeze` | | 레이어 고정: 정수 개수, 인덱스 목록 또는 모듈 이름 |
 
@@ -144,7 +145,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | 인자 | 기본값 | 의미 |
 |---|---|---|
 | `val` | `true` | 학습 중에 검증합니다 |
-| `eval_interval` | `10` | N 에폭마다 검증합니다 |
+| `eval_interval` | `10` | N 에폭마다, 그리고 마지막 에폭 뒤에 검증합니다 |
 | `max_det` | `300` | 검증 NMS 이후 이미지당 최대 예측 수 |
 | `eval_max_det` | | COCO 평가기 상한. 설정하지 않으면 pycocotools의 AP@100 관례를 따릅니다 |
 | `faster_coco_eval` | `true` | 설치되어 있으면 COCO 지표에 faster-coco-eval C++ 백엔드를 사용하고, 없으면 pycocotools로 되돌아갑니다 |
@@ -169,6 +170,27 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | `quiet` | `false` | stderr 억제 |
 | `dry_run` | `false` | 실행하지 않고 설정을 해석해 출력 |
 | `help_json` | `false` | 명령 스키마를 JSON으로 덤프하고 종료 |
+
+| 인자 | 기본값 | 의미 |
+| --- | --- | --- |
+| `min_samples` | `0` | 작은 데이터셋의 에폭 길이 최솟값: 이미지가 이보다 적으면 에폭마다 이 수만큼 복원 추출(0은 비활성화) |
+| `class_balanced` | `False` | 긴 꼬리 데이터셋용 LVIS 방식 반복 계수 샘플링(기본값: 비활성화) |
+| `cls_pw` | `0.0` | 분류 역빈도 가중치 지수: 0은 비활성화, 1은 전체 적용(평균 1의 클래스 가중치이며 class_weights=True와 함께 사용할 수 없음) |
+| `class_weights` | `False` | 기존 샘플 정규화 분류 손실 가중치(기본값: 비활성화) |
+| `single_cls` | `False` | 지원되는 탐지기의 모든 레이블을 클래스 0으로 매핑하여 학습 |
+| `classes` | `None` | 지원되는 탐지기를 쉼표로 구분한 원본 데이터셋 클래스 ID만으로 학습(예: '0,3,5'); 나머지 클래스는 레이블이 없는 것처럼 제거하며 ID를 재번호화하지 않고 그대로 유지 |
+| `average_best` | `0` | 학습 종료 시 관찰 지표 기준 최적 N개 체크포인트를 동일 비중으로 평균하여 weights/average.pt에 저장(0은 비활성화) |
+| `export_check` | `False` | 에폭 1 전에 ONNX로 내보내고 실패하면 실행을 실패 처리(기본값: 비활성화) |
+| `precise_bn` | `0` | 마지막 에폭 뒤 이 수만큼의 학습 이미지로 BatchNorm 이동 통계 재계산(0은 비활성화) |
+| `aux_weight` | | YOLO9 전용: 파인튜닝용 PGI 보조 분기 손실 가중치. 설정하지 않으면 `0.25`이며, `0`은 기본 헤드만 학습합니다 |
+| `fliplr` | `None` | 수평 뒤집기 확률(flip_prob의 생태계 별칭) |
+| `flipud` | `0.0` | 수직 뒤집기 확률 |
+| `auto_augment` | `None` | 분류 자동 증강 정책: randaugment, autoaugment, augmix(기본값: 없음) |
+| `erasing` | `0.0` | 분류 RandomErasing 확률, 0 <= erasing < 1 |
+| `cutmix` | `0.0` | 분류 CutMix 확률(소프트 레이블) |
+| `scale` | `0.5` | 분류 RandomResizedCrop 면적 범위: 부동소수점 하한 또는 명시적 (min,max) |
+| `crop_pct` | `None` | 중앙 크롭 전 분류 평가 크기 조정 비율(기본값: 모델 계열의 기본값) |
+| `plot_samples` | `8` | 검증 샘플 플롯의 이미지 수: 0은 없음, -1은 검증한 모든 이미지(지표에는 영향 없음) |
 
 ## 예제
 
@@ -201,8 +223,9 @@ RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETRv4, DINOv2는 모자이크도 믹스업도
 워프도 없는 패스스루 파이프라인으로 학습하므로 `mosaic`, `mixup`, `hsv_prob`,
 `degrees`, `translate`, `shear`, `mosaic_scale`, `mixup_scale`은 그곳에서 아무
 효과도 내지 않습니다. EC는 같은 파이프라인을 사용하지만, 작업이 pose일 때는
-`hsv_prob`, `degrees`, `translate`를 읽습니다. 분류 계열과 SegFormer, NAFNet은
-그 집합 전체를 무시하고 `flip_prob`도 함께 무시하는데, 이들의 반전이 설정 가능한
+`hsv_prob`, `degrees`, `translate`를 읽습니다. 분류 계열은 `mixup`을 제외한 그
+집합을 무시하고(이들에게 `mixup`은 배치 MixUp입니다) `flip_prob`을 읽습니다.
+SegFormer와 NAFNet은 그 집합 전체를 무시하고 `flip_prob`도 함께 무시하는데, 이들의 반전이 설정 가능한
 확률이 아니라 고정된 확률로 동작하기 때문입니다. YOLO-NAS는 `mosaic`만
 무시하는데, 대신 항상 켜져 있는 샘플별 어파인으로 증강하기 때문입니다. RF-DETR
 계열은 그 목록에 더해 세 가지를 더 무시합니다: `optimizer`, `momentum`,
@@ -213,20 +236,20 @@ RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETRv4, DINOv2는 모자이크도 믹스업도
 목록입니다. 또한 그것이 유일한 신호이므로, `quiet=true`로 스크립트에서 실행하면
 stderr의 다른 모든 출력과 함께 그 경고도 억제됩니다.
 
-`val=false`는 이와 관련된 경우입니다. 대부분의 계열에서는 `eval_interval`을
-`0`으로 설정합니다; RF-DETR 계열은 그 방식으로 검증을 비활성화할 수 없어 요청을
-무시했다고 기록합니다.
+`val=false`는 이와 관련된 경우입니다. `eval_interval`을 `0`으로 설정하여 마지막
+에폭을 포함해 학습 중 검증을 끄며, 실행은 `best.pt`를 기록하지 않습니다.
 
 ### 그 밖에 알아둘 동작
 
 `lora=true`는 RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2, v4, EC,
-ConvNeXt에서 받아들여집니다. 그 밖의 계열은 LoRA 없이 학습하는 대신
+GTR, ConvNeXt에서 받아들여집니다. 그 밖의 계열은 LoRA 없이 학습하는 대신
 `config_unsupported`로 종료합니다.
 
 `pretrained=false`와 `resume`을 함께 쓰는 것은 처음부터 학습을 지원하는
 계열에서는 거부되는데, 둘이 서로 반대되는 것을 요구하기 때문입니다.
 
-`mosaic`와 `mixup`은 설정 필드 `mosaic_prob`과 `mixup_prob`의 명령줄 표기입니다.
+`mosaic`와 `mixup`은 설정 필드 `mosaic_prob`과 `mixup_prob`의 명령줄 표기이며,
+분류 모델에서는 `mixup`이 대신 배치 MixUp을 뜻합니다.
 믹스업이 모자이크 샘플에만 적용되는 계열에서는 `mosaic`가 0인 상태에서 `mixup`을
 0보다 크게 두어도 전혀 동작하지 않으며, 실행이 그 사실을 알려줍니다.
 

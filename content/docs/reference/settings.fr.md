@@ -16,8 +16,8 @@ keywords:
   - HF_TOKEN
   - dossier poids libreyolo
   - cache libreyolo
-last_verified: 1.5.0
-verification: "Variables trouvées en recherchant os.environ et os.getenv dans libreyolo/**/*.py en v1.5.0\_; sémantique lue à chaque site d'utilisation. Conventions de répertoires lues dans libreyolo/data/utils.py, libreyolo/utils/download.py, libreyolo/export/exporter.py, libreyolo/models/base/model.py et libreyolo/models/sam3dbody/mhr_body.py."
+last_verified: "1.6.0"
+verification: "Variables trouvées en recherchant os.environ et os.getenv dans libreyolo/**/*.py en v1.6.0\_; sémantique lue à chaque site d'utilisation. Conventions de répertoires lues dans libreyolo/data/utils.py, libreyolo/utils/download.py, libreyolo/export/exporter.py, libreyolo/models/base/model.py et libreyolo/models/sam3dbody/mhr_body.py."
 snippets:
   usage:
     - label: Déplacer la racine des datasets
@@ -35,7 +35,7 @@ snippets:
         moment de l'import.
 
         print(DATASETS_DIR)
-source_hash: 462f1288582225ce
+source_hash: 82fbf9f3b1540603
 ---
 
 ## Variables d'environnement
@@ -44,7 +44,7 @@ source_hash: 462f1288582225ce
 |---|---|---|
 | `LIBREYOLO_DATASETS_DIR` | `~/datasets` | Racine des datasets. Lue une fois lors de l'import dans `libreyolo.data.DATASETS_DIR` |
 | `LIBREYOLO_FASTER_COCO_EVAL` | non définie | Remplace le paramètre de validation `faster_coco_eval`. `1`, `true`, `yes` ou `on` impose le backend rapide, toute autre valeur le désactive et l'absence de valeur s'en remet au paramètre de configuration |
-| `LIBREYOLO_KERNELS` | non définie | Sélection des kernels. `off` ou `reference` impose les implémentations de référence\u00a0; toute autre valeur ne sélectionne que les implémentations enregistrées sous ce nom |
+| `LIBREYOLO_KERNELS` | non définie | Sélection des kernels. `off` ou `reference` impose les implémentations de référence ; toute autre valeur ne sélectionne que les implémentations enregistrées sous ce nom |
 | `LIBREYOLO_QUANT_KERNELS` | non définie | Ancien alias de `LIBREYOLO_KERNELS`, lu uniquement lorsque ce dernier n'est pas défini |
 | `LIBREYOLO_HUB_KERNELS` | non définie | `0`, `false`, `off` ou `no` désactive le chargement de kernels depuis Hugging Face Hub. Toute autre valeur, y compris l'absence de valeur, le laisse activé |
 | `LIBREYOLO_MHR_PATH` | `~/.cache/libreyolo/mhr/mhr_model.pt` | Emplacement du modèle corporel MHR utilisé par la tâche `mesh` |
@@ -69,6 +69,8 @@ inclus dans l'arborescence ne sont jamais importés. Le registre contrôlé par
 ces trois variables est documenté dans la page sur les
 [kernels](/docs/reference/kernels).
 
+`LIBREYOLO_TRITON_MSDA=0` désactive le fournisseur intégré d'attention déformable Triton. `LIBREYOLO_HUB_KERNELS=0` désactive les kernels du Hub et leur suggestion d'installation. Les deux conservent la solution de repli portable.
+
 ## Variables définies par la bibliothèque
 
 Ces variables sont écrites et non lues. Leur définition manuelle n'est donc
@@ -81,7 +83,7 @@ pas une méthode prise en charge.
 | `PYTORCH_ENABLE_MPS_FALLBACK` | Définie à `1` par les trainers EC avec `setdefault`, une valeur existante l'emporte donc |
 | `MOMENTUM_ENABLED` | Définie avec `setdefault` par le chargeur de la famille de maillage |
 
-`LOCAL_RANK` sert également de signal de mode distribué\u00a0: sa présence dans
+`LOCAL_RANK` sert également de signal de mode distribué : sa présence dans
 l'environnement indique au code d'entraînement qu'il s'exécute sous DDP.
 
 ## Variables des loggers
@@ -104,9 +106,11 @@ token est lu dans `~/.cache/huggingface/token`, où une connexion avec le CLI
 Hugging Face l'écrit. Les deux méthodes fonctionnent.
 
 Un token n'est requis que pour les dépôts protégés. SAM 3 est l'exemple
-fourni\u00a0: ses poids sont téléchargés depuis un dépôt protégé par une licence
+fourni : ses poids sont téléchargés depuis un dépôt protégé par une licence
 personnalisée, vous devez donc accepter les conditions sur la page du dépôt et
 authentifier la session.
+
+`HF_TOKEN` authentifie le chargement et la publication de checkpoints Hub ainsi que le logger Hub. `OPENAI_API_KEY` et `OPENROUTER_API_KEY` fournissent les identifiants des [routes de fournisseurs LibreLLM](/docs/reference/llm-api) correspondantes.
 
 ## Répertoires
 

@@ -18,7 +18,7 @@ keywords:
   - residual learning
   - deep residual network
   - classifier ImageNet
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -34,7 +34,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreResNet50-cls.pt source=cat.jpg save=True
+        libreyolo predict model=LibreResNet50-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python
       language: python
@@ -99,7 +99,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: e2f46c73716af1b7
+source_hash: 2442e8c325bbe791
 ---
 
 ## Instalasi
@@ -148,12 +148,16 @@ memunculkan error karena LoRA di LibreYOLO menargetkan komponen transformer deng
 
 Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
 
+`cls_pw=0` menonaktifkan pembobotan loss; nilai hingga 1 memakai bobot invers frekuensi yang dinormalisasi ke rata-rata 1. `class_weights=True` memakai invers frekuensi yang dinormalisasi berdasarkan sampel dan tidak dapat digabung dengan `cls_pw>0`. Pengaturan ini harus sama saat melanjutkan pelatihan. Lihat [klasifikasi](/docs/tasks/image-classification).
+
 ## Validasi
 
 `val()` mengembalikan dictionary dengan key `metrics/`. Untuk klasifikasi, key tersebut
 mencakup akurasi top-1 dan top-5 pada split validasi.
 
 <code-tabs name="val" />
+
+Validasi dan kalibrasi INT8 memakai transformasi evaluasi family. Metadata ekspor mencatat `norm_mean`, `norm_std`, dan `resize_mode`; artefak lama memakai nilai family sebagai fallback. Prapemroses kalibrasi mengembalikan array CHW dan rasio yang diperlukan.
 
 ## Ekspor
 

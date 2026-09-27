@@ -9,8 +9,8 @@ keywords:
   - libreyolo cuda out of memory
   - libreyolo notimplementederror
   - libreyolo トラブルシューティング
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: 1.6.0
+source_hash: f2faaab56a2f0415
 ---
 
 表示されるテキスト別にエラーをまとめています。該当するメッセージがない場合は、[FAQ](/docs/faq)で障害以外の疑問を確認できます。また、`libreyolo models` で現在のインストールが実際に読み込めるものを確認できます。
@@ -69,9 +69,9 @@ Windowsでは、ディスプレイ用GPUにメモリ不足とは別の障害モ�
 
 ダウンロードで404が発生した場合は、渡したファイル名を確認してください。URLはタスク接尾辞を含むファイル名から生成されるため、公開済みチェックポイントと一致しない名前を使うと、存在しないURLが生成されます。各モデルページのチェックポイント表には、公開されている正確なファイル名が記載されています。
 
-## Windowsで学習が停止または再起動する
+## WindowsやmacOSで学習が停止または再起動する
 
-Windowsには `fork` がないため、dataloaderのworkerはスクリプトを再インポートして起動します。`if __name__ == "__main__":` ガードがないと、各workerが学習呼び出しを再実行し、デッドロックするか、プロセスを際限なく生成します。
+Windowsには `fork` がなく、macOSのPythonもデフォルトでは使わないため、dataloaderのworkerはスクリプトを再インポートして起動します。`if __name__ == "__main__":` ガードがないと、各workerが学習呼び出しを再実行し、デッドロックするか、プロセスを際限なく生成します。
 
 ```python
 def main():
@@ -101,7 +101,7 @@ result[0].boxes                       # 1件だけの検出結果、通知なし
 
 ### 指標を属性として読み取る
 
-`val()` は属性アクセスを持つオブジェクトではなく、指標名をキーとする通常の辞書を返します。
+`val()` は指標名をキーとする辞書を返します。唯一の属性である `box` は、指標の値ではなく、画像ごとの結果とクラスごとのしきい値を保持します。
 
 ```python
 metrics = model.val(data="coco8.yaml")
@@ -125,3 +125,7 @@ if report.errors:
 
 チェック項目の一覧については[doctorコマンド](/docs/cli/doctor)を参照してください。
 
+
+## 永続ワーカーがデータセットの変更を認識できない
+
+有効な`close_mosaic`または`set_epoch`フックは、ワーカーが使うデータセットのコピーに届く必要があります。独自の複数ワーカーローダーが互換性のない永続コピーを保持する場合は、`persistent_workers=False`を使うか、変更後にワーカーを再構築してください。デフォルトの非永続経路には影響しません。

@@ -4,9 +4,8 @@ families:
   - yolonas
 seo_title: 'YOLO-NAS: predykcja, trenowanie i eksport w LibreYOLO'
 description: >-
-  Używaj modelu YOLO-NAS w LibreYOLO do detekcji i estymacji pozy. Wagi Deci.AI
-  są własnościowe i przeznaczone do użytku niekomercyjnego, a LibreYOLO nie
-  publikuje żadnej z nich.
+  Detekcja, estymacja pozy i obrócone ramki YOLO-NAS w LibreYOLO. Wstępnie
+  wytrenowane wagi projektu źródłowego są niekomercyjne.
 lead: >-
   Detektor konwolucyjny, którego backbone i moduł neck powstały w wyniku
   wyszukiwania architektury przez Deci.AI, zbudowany z bloków RepVGG świadomych
@@ -21,7 +20,7 @@ keywords:
   - estymacja pozy
   - detektor świadomy kwantyzacji
   - AutoNAC
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -134,7 +133,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 47c30d6e44024ce7
+source_hash: 52050c4046781a6e
 ---
 
 ## Instalacja
@@ -160,6 +159,8 @@ Zwracany obiekt `Results` jest taki sam dla każdej rodziny, więc zamiana na
 inny detektor wymaga zmiany jednego wiersza. Parametr `conf` ustawia próg
 pewności, a `iou` próg NMS. Informacje o źródłach, strumieniowaniu i obsłudze
 wyników znajdziesz w sekcji [predykcja](/docs/predict).
+
+Zadanie obróconych ramek zwraca `result.obb`. Opublikowany graf OBB używa obszaru 1024 pikseli i zapisanego zestawu etykiet 18 klas.
 
 ## Warianty
 
@@ -189,6 +190,8 @@ jak pokazuje trzeci fragment powyżej.
 
 Informacje o zbiorach danych, augmentacji, wielu GPU i loggerach znajdziesz w sekcji [trenowanie](/docs/train).
 
+Detekcja domyślnie używa `amp=True` z `amp_dtype="float16"`; trenowanie obróconych ramek zachowuje `amp=False`. Głowica OBB obsługuje trenowanie, predykcję i walidację, stosuje augmentację odbiciami i HSV oraz wybiera checkpointy według `metrics/mAP50-95(OBB)`. `load_detect_weights_for_obb()` inicjalizuje ją wagami detekcji.
+
 ## Walidacja
 
 Metoda `val()` zwraca słownik kluczy `metrics/` obejmujących precyzję, czułość,
@@ -217,9 +220,10 @@ punktu kontrolnego Deci nie zmienia ani pochodzenia wag, ani obejmującej je lic
 
 Nie ma żadnych do wyświetlenia. Licencja Deci zabrania redystrybucji, dlatego
 organizacja LibreYOLO nie publikuje żadnych wag YOLO-NAS, a pobieranie jest
-kierowane gdzie indziej. Nazwa w postaci `LibreYOLONAS<size>.pt` albo
-`LibreYOLONAS<size>-pose.pt` dla estymacji pozy jest mapowana na odpowiedni
-obiekt w publicznym CDN Deci.
+kierowane gdzie indziej. Nazwa w postaci `LibreYOLONAS<size>.pt`,
+`LibreYOLONAS<size>-pose.pt` dla estymacji pozy albo
+`LibreYOLONAS<size>-obb.pt` (s, m, l) dla obróconych ramek jest mapowana na
+odpowiedni obiekt w publicznym CDN Deci.
 
 W ten sposób można pobierać tylko punkty kontrolne, których SHA-256 jest
 przypięte w bibliotece. Każdy inny przypadek jest bezpiecznie odrzucany zamiast
@@ -251,4 +255,3 @@ o której cytowanie proszą jego autorzy, i dotyczy SuperGradients, biblioteki,
 w której model został wydany.
 
 <citation-block />
-

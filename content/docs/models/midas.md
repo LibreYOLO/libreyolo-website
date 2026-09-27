@@ -2,10 +2,10 @@
 title: MiDaS
 families: [midas]
 seo_title: "MiDaS: monocular depth estimation in LibreYOLO"
-description: "Use MiDaS in LibreYOLO for monocular depth estimation. Install, predict, validate and export two MIT-licensed variants, downloaded from isl-org."
+description: "Run MiDaS relative-depth inference in LibreYOLO. The s and l checkpoints use LibreYOLO mirrors under the publisher MIT grant."
 lead: "MiDaS is monocular relative depth estimation trained with scale-and-shift invariant loss across mixed datasets, the line of work that established the zero-shot depth transfer protocol later families reuse. LibreYOLO supports it for the depth task: predict and zero-shot validation, with no training path."
 keywords: [MiDaS, monocular depth estimation, DPT, relative depth, depth map, zero-shot depth]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -13,8 +13,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Not on disk yet: LibreYOLO downloads it from the official isl-org/MiDaS
-        # GitHub release and checks it against a pinned SHA-256 before use.
+        # Downloads the mirrored checkpoint on first use.
         model = LibreYOLO("LibreMiDaSl-depth.pt")
         result = model(SAMPLE_IMAGE, save=True)
 
@@ -77,28 +76,22 @@ snippets:
 
 ## Install
 
-MiDaS needs no optional extra. Everything it imports is in the base install.
+MiDaS needs the `midas` extra for its timm encoders.
 
 ```bash
-pip install libreyolo
+pip install "libreyolo[midas]"
 ```
 
 ## Predict
 
-MiDaS is the one depth family LibreYOLO does not republish on its own Hugging
-Face organization. Requesting a checkpoint by its LibreYOLO filename downloads
-the matching official asset directly from the `isl-org/MiDaS` GitHub releases,
-checks it against a pinned SHA-256, and wraps it with LibreYOLO's checkpoint
-metadata before first use; later runs reuse the cached local file. See
-Licensing for why.
+The s and l checkpoints download from LibreYOLO's mirrors under the publisher's MIT grant and are cached locally.
 
 <code-tabs name="predict" />
 
 `result.depth_map` carries a dense relative inverse-depth map: higher
 values mean closer to the camera, and the values have no metric unit or
 cross-image scale. `save=True` writes a colormapped visualization of that map
-to disk; `Results.plot()` does not cover this family, since it is defined for
-surface normals and edges only. See [prediction](/docs/predict) for sources,
+to disk; `Results.plot()` renders the depth map. See [prediction](/docs/predict) for sources,
 streaming and result handling.
 
 ## Variants

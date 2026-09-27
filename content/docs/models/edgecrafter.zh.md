@@ -17,7 +17,7 @@ keywords:
   - 姿态估计
   - 实例分割
   - 边缘设备 推理
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -173,7 +173,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 39c6975fc16b3ff1
+source_hash: 521fde8f10ac8c57
 ---
 
 ## 安装
@@ -205,6 +205,8 @@ pip install "libreyolo[lora]"
 `conf` 和 `max_det` 过滤 query 的选择；`iou` 为了 API 一致性会被接受，但没有任何
 作用，因为三个 head 解码的都是一组 query，没有 NMS 步骤。数据源、流式处理和结果
 处理见[预测](/docs/predict)。
+
+检测预测接受矩形 `imgsz=(height, width)`；训练和导出各自保留原有的形状约束。
 
 ## 变体
 
@@ -271,6 +273,8 @@ MNN、ExecuTorch 和 Core AI。[导出](/docs/export)列出了每种格式接受
 这个家族已发布的全部权重文件。
 
 <checkpoint-table />
+
+`obj2coco` 变体覆盖检测、分割和姿态。下载需要主动选择，其上游条款限制商用。原始 COCO 检查点保留记录的 Apache-2.0 授权。
 
 ## 许可证
 

@@ -10,12 +10,8 @@ keywords:
   - HF_TOKEN
   - libreyolo 权重目录
   - libreyolo 环境变量
-last_verified: 1.5.0
-verification: >-
-  变量通过在 v1.5.0 的 libreyolo/**/*.py 中搜索 os.environ 和 os.getenv
-  定位，语义在每个使用点读取。目录约定读取自
-  libreyolo/data/utils.py、libreyolo/utils/download.py、libreyolo/export/exporter.py、libreyolo/models/base/model.py
-  和 libreyolo/models/sam3dbody/mhr_body.py。
+last_verified: "1.6.0"
+verification: "变量通过在 v1.6.0 的 libreyolo/**/*.py 中搜索 os.environ 和 os.getenv 定位，语义在每个使用点读取。目录约定读取自 libreyolo/data/utils.py、libreyolo/utils/download.py、libreyolo/export/exporter.py、libreyolo/models/base/model.py 和 libreyolo/models/sam3dbody/mhr_body.py。"
 snippets:
   usage:
     - label: 把数据集根目录指向别处
@@ -30,7 +26,7 @@ snippets:
 
         # 默认为 ~/datasets，LIBREYOLO_DATASETS_DIR 在导入时覆盖它
         print(DATASETS_DIR)
-source_hash: 462f1288582225ce
+source_hash: 82fbf9f3b1540603
 ---
 
 ## 环境变量
@@ -59,6 +55,8 @@ Hub 内核的启用分两部分。只有装了可选的 `kernels` 包，运行�
 内核选择还会短路导入：当 `LIBREYOLO_KERNELS` 强制为 `off` 或 `reference` 时，源码
 树内的加速实现根本不会被导入。这三个变量控制的注册表（registry）记录在
 [kernels](/docs/reference/kernels)。
+
+`LIBREYOLO_TRITON_MSDA=0` 禁用内置 Triton 可变形注意力提供方。`LIBREYOLO_HUB_KERNELS=0` 禁用 Hub 内核及其安装提示。两者都保留可移植回退实现。
 
 ## 库自己设置的变量
 
@@ -93,6 +91,8 @@ Hub 内核的启用分两部分。只有装了可选的 `kernels` 包，运行�
 
 只有受限仓库才需要令牌。SAM 3 是随库附带的例子：它的权重从一个采用自定义许可的
 受限仓库下载，所以必须在仓库页面上接受条款，会话也必须通过认证。
+
+`HF_TOKEN` 用于 Hub 检查点加载、发布和 Hub 日志记录器的身份验证。`OPENAI_API_KEY` 和 `OPENROUTER_API_KEY` 为对应的 [LibreLLM 提供方路由](/docs/reference/llm-api)提供凭据。
 
 ## 目录
 

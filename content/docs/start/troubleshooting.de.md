@@ -15,8 +15,8 @@ keywords:
   - libreyolo cuda out of memory
   - libreyolo notimplementederror
   - libreyolo fehlerbehebung
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: 1.6.0
+source_hash: f2faaab56a2f0415
 ---
 
 Die Fehler sind nach dem angezeigten Text gruppiert. Wenn deine Meldung hier
@@ -110,10 +110,11 @@ veröffentlichten Checkpoint entspricht, erzeugt eine nicht vorhandene URL. Die
 Checkpoint-Tabelle jeder Modellseite führt die genauen veröffentlichten
 Dateinamen auf.
 
-## Training hängt oder startet unter Windows neu
+## Training hängt oder startet unter Windows oder macOS neu
 
-Windows unterstützt kein `fork`. Dataloader-Worker starten daher, indem sie
-dein Skript erneut importieren. Ohne einen Guard
+Windows unterstützt kein `fork`, und Python unter macOS verwendet es
+standardmäßig nicht. Dataloader-Worker starten daher, indem sie dein Skript
+erneut importieren. Ohne einen Guard
 `if __name__ == "__main__":` führt jeder Worker deinen Trainingsaufruf erneut
 aus. Dadurch entsteht entweder ein Deadlock oder es werden endlos neue Prozesse
 gestartet.
@@ -154,8 +155,9 @@ nur Werte, von denen du weißt, dass sie Listen sind.
 
 ### Metriken als Attribute lesen
 
-`val()` gibt ein einfaches Dictionary mit Metriknamen als Schlüsseln zurück und
-kein Objekt mit Attributzugriff:
+`val()` gibt ein Dictionary mit Metriknamen als Schlüsseln zurück. Sein einziges
+Attribut, `box`, trägt Ergebnisse pro Bild und Schwellenwerte pro Klasse, nicht
+die Metrikwerte:
 
 ```python
 metrics = model.val(data="coco8.yaml")
@@ -184,3 +186,6 @@ if report.errors:
 
 Den Prüfkatalog findest du beim [doctor-Befehl](/docs/cli/doctor).
 
+## Persistente Worker erkennen Datensatzänderungen nicht
+
+Aktive `close_mosaic`- oder `set_epoch`-Hooks müssen die von Workern verwendeten Datensatzkopien erreichen. Wenn ein eigener Multi-Worker-Loader inkompatible persistente Kopien behält, verwende `persistent_workers=False` oder erstelle Worker nach der Änderung neu. Der standardmäßige nichtpersistente Pfad bleibt unberührt.

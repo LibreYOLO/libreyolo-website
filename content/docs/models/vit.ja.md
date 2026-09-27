@@ -14,7 +14,7 @@ keywords:
   - AugReg
   - 画像分類
   - transformer 分類器
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -77,7 +77,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: f63e98454913765a
+source_hash: 1141331e796933f6
 ---
 
 ## インストール
@@ -112,6 +112,8 @@ ImageNet形式のtop-1・top-5検証、エクスポートに対応し、AugReg�
 フォルダーがあるディレクトリ）に対して実行し、top-1とtop-5の精度を返します。
 
 <code-tabs name="val" />
+
+検証とINT8キャリブレーションでは、ファミリーの評価用変換を使います。エクスポートのメタデータには`norm_mean`、`norm_std`、`resize_mode`が記録されます。古いファイルでは、ファミリーの値にフォールバックします。キャリブレーションの前処理は、必要なCHW配列と比率を返します。
 
 ## エクスポート
 

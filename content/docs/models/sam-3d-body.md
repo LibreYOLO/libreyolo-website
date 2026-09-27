@@ -5,7 +5,7 @@ seo_title: "SAM 3D Body in Python: 3D human mesh from one image"
 description: "Use SAM 3D Body in LibreYOLO for full-body human mesh recovery. Install and predict; Meta's SAM License gates the checkpoints, CUDA required."
 lead: "SAM 3D Body is Meta's promptable model for recovering a full-body 3D mesh, including hands and feet, from a single image and person boxes. LibreYOLO wraps the upstream package rather than porting it."
 keywords: [SAM 3D Body, human mesh recovery, body mesh, MHR, Momentum Human Rig, 3D pose]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -87,6 +87,8 @@ estimated camera translation, `joints2d` is in pixels on the original image,
 and rotations follow MHR's convention, Euler angles rather than axis-angle.
 See [prediction](/docs/predict) for sources, streaming and result handling.
 
+Automatic acquisition requires `libreyolo[hf]` and access to the gated model. Local checkpoints must be the reviewed snapshot directory, or its unchanged `model.ckpt` beside matching `model_config.yaml` and `LICENSE`. Pinned hashes and accepted snapshot inventories reject renamed, modified, linked or extra assets. MHR assets are also pinned. Keep the local snapshot unchanged while the upstream constructor reads it.
+
 ## Variants
 
 Two backbones behind the same MHR body model: `d3` uses a DINOv3 ViT-H/16+
@@ -99,12 +101,6 @@ encoder, and `h` uses the original ViT-H encoder.
 Body-mesh export is not implemented: LibreYOLO has not yet defined an
 exported-graph contract for the mesh task, including how to represent the MHR
 parameter layout outside PyTorch.
-
-## Checkpoints
-
-Every published weight file for this family.
-
-<checkpoint-table />
 
 ## Licensing
 

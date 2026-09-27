@@ -5,7 +5,7 @@ seo_title: "Qwen3-VL in LibreYOLO: open-vocabulary detection"
 description: "Qwen3-VL in LibreYOLO: install, set an open vocabulary and predict or chat with Alibaba's Apache-2.0 vision-language model."
 lead: "Qwen3-VL is Alibaba's vision-language model with native 2D grounding. LibreYOLO wraps it as an open-vocabulary object detector and exposes its free-form chat directly: supply a class list to detect, or ask it a question."
 keywords: [Qwen3-VL, vision-language model, open-vocabulary detection, grounding, Alibaba, VLM]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -74,12 +74,9 @@ network, so that figure is not a fixed operating resolution the way it is for
 the other families on this site. LibreYOLO has not published a benchmark
 comparing accuracy across the three sizes.
 
-LibreYOLO does not train, validate or export Qwen3-VL: `train()`, `val()` and
-`export()` all raise `NotImplementedError` for every family in this tier (see
-the support tier above). Fine-tune Qwen3-VL upstream and load the resulting
-weights if you need a custom vocabulary baked in; check `predict()` output by
-eye instead of a COCO-style validation pass, since every detection carries the
-same placeholder confidence.
+## Train
+
+Install `libreyolo[vlm-train]` to train detection LoRA adapters through `LibreVLM("qwen3-vl-2b").train(data=...)`. The vision tower stays frozen; validation loss selects the best checkpoint directory. Optimizer-state resume and detection-mAP validation are unsupported. See [VLM fine-tuning](/docs/train/vlm-fine-tuning) for defaults and reload instructions.
 
 ## Licensing
 

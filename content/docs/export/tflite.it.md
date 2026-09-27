@@ -1,10 +1,7 @@
 ---
 title: TFLite
 seo_title: Esportare in TFLite (LiteRT) da LibreYOLO
-description: >-
-  Esporta un modello LibreYOLO in un FlatBuffer .tflite passando per onnx2tf:
-  forme statiche, solo FP32, input NHWC e le famiglie che si convertono senza
-  problemi.
+description: 'Esporta un modello LibreYOLO in un FlatBuffer .tflite con onnx2tf: dimensioni statiche, FP32 e percorsi INT8 supportati, input NHWC e metadati di runtime.'
 lead: >-
   TFLite è il formato FlatBuffer che LiteRT esegue su target mobile ed embedded.
   LibreYOLO esporta un grafo ONNX statico, lo converte con onnx2tf in modalità
@@ -18,27 +15,25 @@ keywords:
   - tflite flatbuffer
   - input nhwc tflite
   - inferenza su edge
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
-  - label: Flag
-    value: export(format="tflite")
-    mono: true
-  - label: Scrive
-    value: Un file .tflite più un sidecar di metadati .tflite.json
-  - label: Extra
-    value: 'pip install "libreyolo[tflite]"'
-    mono: true
-  - label: Si ricarica con
-    value: LibreYOLO("weights/LibreYOLO9t.tflite")
-    mono: true
-  - label: Forme
-    value: Solo statiche. dynamic=True viene rifiutato.
-  - label: Precisione
-    value: Solo FP32. half=True e int8=True vengono rifiutati.
-  - label: Richiede
-    value: >-
-      Python 3.12 o superiore, perché onnx2tf 2.4.x non pubblica wheel per
-      versioni precedenti
+- label: Flag
+  value: export(format="tflite")
+  mono: true
+- label: Scrive
+  value: Un file .tflite più un sidecar di metadati .tflite.json
+- label: Extra
+  value: pip install "libreyolo[tflite]"
+  mono: true
+- label: Si ricarica con
+  value: LibreYOLO("weights/LibreYOLO9t.tflite")
+  mono: true
+- label: Forme
+  value: Solo statiche. dynamic=True viene rifiutato.
+- label: Precisione
+  value: FP32; INT8 per rilevamento YOLO9 e YOLOX. FP16 viene rifiutato.
+- label: Richiede
+  value: Python 3.12 o superiore, perché onnx2tf 2.4.x non pubblica wheel per versioni precedenti
 verification: >-
   Letto da libreyolo/export/tflite.py, libreyolo/export/exporter.py,
   libreyolo/export/support.py, libreyolo/backends/tflite.py e pyproject.toml sul
@@ -58,6 +53,7 @@ snippets:
       language: bash
       code: |
         python -c "import sys; print(sys.version_info >= (3, 12))"
+
   export:
     - label: Python
       language: python
@@ -78,21 +74,19 @@ snippets:
         libreyolo export --model LibreYOLO9t.pt --format litert --imgsz 640
     - label: Argomenti
       language: python
-      code: >
+      code: |
         model.export(
             format="tflite",
-            imgsz=640,        # int, oppure (altezza, larghezza)
+            imgsz=640,        # int, oppure (height, width)
             batch=1,
-            simplify=True,    # onnxsim sull'intermedio ONNX
+            simplify=True,    # onnxsim sul grafo ONNX intermedio
             output_path=None, # None scrive weights/<stem>.tflite
-            verbose=False,    # True mostra in streaming il log di onnx2tf
+            verbose=False,    # True mostra il log di onnx2tf in streaming
         )
 
+        # dynamic=True genera ValueError: il convertitore richiede dimensioni statiche.
+        # FP16 viene rifiutato. INT8 richiede un rilevatore supportato e dati di calibrazione.
 
-        # dynamic=True solleva ValueError: il convertitore richiede forme
-        statiche.
-
-        # half=True e int8=True vengono rifiutati prima del tracing.
   run:
     - label: Tramite LibreYOLO
       language: python
@@ -140,12 +134,13 @@ snippets:
 
         # Il preprocessing, la trasposizione da NCHW a NHWC e il postprocessing
         sono a tuo carico.
+
   support:
     - label: Controllare una famiglia e un task prima di esportare
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: fa2deaa0ef6d9978
+source_hash: 3548d74e992bb76d
 ---
 
 ## Installazione
@@ -174,6 +169,8 @@ I metadati stanno in un sidecar. `weights/LibreYOLO9t.tflite.json` contiene la f
 il task, i nomi delle classi, la dimensione di input e lo schema della posa; il FlatBuffer
 in sé non ha un campo di metadati LibreYOLO, quindi i due file viaggiano insieme.
 
+Il rilevamento YOLO9 e YOLOX supporta `int8=True` con `data=...`, `fraction=1.0`, `batch=1` e `dynamic=False`. Installa `onnx2tf[tensorflow]`. Se mancano i dati di calibrazione, viene usato `coco8.yaml` con un avviso. Gli output separati di box normalizzati e punteggi usano scale di quantizzazione indipendenti; conserva i metadati `output_layout` del file associato durante il deployment. Alcuni operatori interni possono restare in virgola mobile.
+
 ## Eseguire l'artefatto
 
 <code-tabs name="run" />
@@ -194,8 +191,7 @@ channels-last, quindi un blob di forma `(1, 3, 640, 640)` non verrà accettato.
 Solo forme statiche. `dynamic=True` solleva `ValueError` prima del tracing, e il canvas
 di esportazione resta fissato al valore a cui si è risolto `imgsz`.
 
-Solo FP32. `half=True` e `int8=True` vengono entrambi rifiutati durante la validazione,
-quindi oggi da questo exporter non si arriva a un deployment quantizzato.
+`half=True` viene rifiutato. INT8 è limitato al rilevamento YOLO9 e YOLOX con batch 1; altre famiglie e task INT8 generano un errore.
 
 Qui la copertura è più ristretta che per i formati a grafo, ed è decisa dalla misurazione
 più che dalla famiglia. Tra le combinazioni validate ci sono il rilevamento con YOLO9,

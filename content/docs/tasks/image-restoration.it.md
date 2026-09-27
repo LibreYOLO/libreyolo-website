@@ -17,7 +17,7 @@ keywords:
   - ingrandire immagine senza perdere qualità
   - deblurring immagine
   - validazione PSNR SSIM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Ingrandire un'immagine
@@ -112,7 +112,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         result.restored.save("denoised.png")
-source_hash: 9dc81cadb3ebf18b
+source_hash: c1c1270071053132
 ---
 
 ## Definizione
@@ -133,7 +133,7 @@ scrive direttamente l'immagine restaurata invece di una foto annotata.
 
 ## Modelli
 
-Tre famiglie coprono il task `restore`, divise per la degradazione che annullano.
+Le famiglie di restauro trattano diversi tipi di degrado delle immagini.
 
 [NAFNet](/docs/models/nafnet) è il denoiser, e l'unica famiglia di restore che
 LibreYOLO può addestrare. La sua architettura sostituisce le attivazioni non
@@ -150,6 +150,8 @@ latenza più bassa.
 Transformer, in tre dimensioni che coprono il generatore lightweight ufficiale e
 due generatori per immagini reali.
 
+[QuickSRNet](/docs/models/quicksrnet) fornisce ingrandimento 2x, [DDColor](/docs/models/ddcolor) colorizzazione, [HVI-CIDNet](/docs/models/hvi-cidnet) miglioramento delle immagini con poca luce e [LaMa](/docs/models/lama) inpainting. Nessuna di queste quattro supporta l'addestramento.
+
 ## Predizione
 
 I pesi vengono scaricati da Hugging Face al primo utilizzo e restano in cache in
@@ -157,13 +159,9 @@ locale.
 
 <code-tabs name="predict" />
 
-Il restauro gira alla risoluzione propria dell'immagine di partenza invece che
-su una tela di rete fissa, aggiungendo padding solo fino al fattore di
-downsample della rete, quindi sia il tempo sia la memoria crescono con il numero
-di pixel del tuo input. `tile` divide il forward pass in tasselli sovrapposti e
-ne sfuma le giunzioni, e `tile_pad` è l'alone aggiunto attorno a ogni tassello
-prima che venga ritagliato via; entrambi sono argomenti keyword di Python. Vedi
-[predizione](/docs/predict) per sorgenti, streaming e gestione dei risultati.
+NAFNet, Real-ESRGAN e SwinIR lavorano alla risoluzione dell'immagine sorgente invece che su un canvas fisso della rete, aggiungendo padding solo per il fattore di sottocampionamento della rete; tempo e memoria crescono quindi con il numero di pixel dell'input. `tile` divide il passaggio forward in tasselli sovrapposti e ne fonde i bordi, mentre `tile_pad` è il margine aggiunto attorno a ogni tassello prima di rimuoverlo con il ritaglio; entrambi sono argomenti Python. Vedi [predizione](/docs/predict) per sorgenti, streaming e gestione dei risultati.
+
+LaMa richiede `mask=` per una singola immagine. HVI-CIDNet espone `gamma`, `saturation` e `intensity`, tutti con valore predefinito 1.0. I vincoli di canvas ed esportazione specifici del modello sono descritti nelle rispettive pagine.
 
 ## Formato del dataset
 

@@ -16,8 +16,8 @@ keywords:
   - dove si salvano i pesi libreyolo
   - libreyolo cli
   - libreyolo senza internet
-last_verified: 1.5.0
-source_hash: a729b43a6642f2a0
+last_verified: 1.6.0
+source_hash: 13810bf9ea01c459
 ---
 
 ## Con quale modello conviene iniziare?
@@ -91,9 +91,10 @@ te lo dice prima ancora che tu ci provi. Vedi [concetti fondamentali](/docs/conc
 
 ## Cosa restituisce val?
 
-Un semplice dizionario, non un oggetto. Per il rilevamento le chiavi includono
-`metrics/precision`, `metrics/recall`, `metrics/mAP50` e `metrics/mAP50-95`. Gli
-altri task restituiscono le chiavi che hanno senso per loro, come
+Un dizionario con i nomi delle metriche come chiavi. Per il rilevamento le chiavi
+includono `metrics/precision`, `metrics/recall`, `metrics/mAP50` e
+`metrics/mAP50-95`, e i risultati di rilevamento e segmentazione portano anche i
+risultati per immagine su `metrics.box`. Gli altri task restituiscono le chiavi che hanno senso per loro, come
 `metrics/accuracy_top1` per la classificazione o `metrics/PQ`, `metrics/SQ` e
 `metrics/RQ` per la segmentazione panottica.
 
@@ -166,3 +167,7 @@ Due nomi di classe sono stati rinominati per coerenza: `LibreYOLORTDETR` è
 diventato `LibreRTDETR` e `LibreYOLORFDETR` è diventato `LibreRFDETR`. I vecchi
 nomi si risolvono ancora ed emettono un `DeprecationWarning` che punta a quello
 nuovo, così il codice esistente continua a funzionare mentre lo aggiorni.
+
+## Perché il download fallisce con un certo nome di checkpoint?
+
+Usa il nome file esatto riportato nella tabella dei checkpoint della pagina del modello. I nomi FCN e Mask R-CNN con suffisso del task non sono ospitati; l'errore del loader elenca le forme supportate. LingBot-Vision g non ha un checkpoint pubblicato: usa s, b, l o un checkpoint locale.

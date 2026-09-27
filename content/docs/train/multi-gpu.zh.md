@@ -16,7 +16,7 @@ keywords:
   - 全局批大小
   - nccl gloo 后端
   - windows 多卡训练
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   train:
     - label: Python
@@ -24,14 +24,14 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        # __main__ 保护是必须的：每个派生出来的 worker 都会重新导入这个
-        # 模块，没有这层保护它就会递归地重新启动训练
+        # 仍支持 main 保护；普通脚本不加保护也能运行
+        # 回调或日志记录器对象需要回退到标准 pickle 时请保留
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(
                 data="my-dataset.yaml",
                 epochs=100,
-                batch=32,     # 全局批大小：两张 GPU 上每张 16 张图
+                batch=32,     # 全局批大小：两个 GPU 时，每个 GPU 16 张图像
                 device="0,1",
             )
   torchrun:
@@ -71,7 +71,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # 在 GPU 0 上探测一次，再放大到 world size 的整数倍
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: 83c1563d68068cd0
+source_hash: e339072d5d8e71ea
 ---
 
 ## 在两张 GPU 上训练
@@ -80,30 +80,14 @@ source_hash: 83c1563d68068cd0
 
 <code-tabs name="train" />
 
-拿到多于一个设备、而且没有 torchrun 环境时，模型的 `train()` 会把权重存到一个临时
-文件，按需要解析 autobatch，然后用 `torch.multiprocessing.spawn` 为每张 GPU 派生一
-个 worker 进程。每个 worker 重新导入模型类，从存下来的权重把它重建出来，再走普通的
-单设备路径，因为在派生出来的 worker 内部，torchrun 的那些环境变量是设好的。运行结
-束时，rank 0 的最佳检查点（checkpoint）会被加载回调用方的模型实例。
+指定多个设备且没有 torchrun 环境时，模型的 `train()` 会将权重保存到临时文件，按需解析 autobatch，然后启动由协调器管理的 worker 进程，每个 GPU 一个。每个 worker 重新导入模型类，从保存的权重重建模型，并运行普通单设备路径，因为启动后的 worker 内部已经设置了 torchrun 环境变量。训练结束后，rank 0 的最佳检查点会加载回调用者的模型实例。
 
 `device` 接受 `"0,1"`、`[0, 1]`、`0`、`"cuda:0"`、`"cpu"`、`"mps"` 和 `"auto"`。
 只有超过一个 CUDA 索引的列表才会触发派生。
 
-## `__main__` 保护是必须的
+## 自动启动和 main 保护
 
-派生出来的 worker 会重新导入它们所来自的那个模块。没有 `if __name__ == "__main__":`
-这层保护，这次导入就会把训练调用重跑一遍，每个 worker 又派生出自己的 worker。库会
-检测到这种情况并抛错，而不是任由它递归下去：
-
-```text
-spawn_ddp_train() was called from inside a spawned subprocess. This usually
-means your script calls model.train(device=...) at the top level without a
-'if __name__ == "__main__":' guard.
-```
-
-所有进入 worker 的东西都会被 pickle，所以 `callbacks=` 必须是可 pickle 的。模块级
-别的类可以；闭包或者 lambda 不行，错误信息会这么说，并指向内置的那些 logger 作为
-替代。
+`model.train(device=[0, 1])` 和 `device="0,1"` 使用由协调器管理的 rank，不会重复执行普通无保护脚本的顶层代码。带 main 保护的脚本和显式 `torchrun` 仍然受支持。协调器任务使用 cloudpickle；需要回退到标准 pickle 的回调或日志记录器对象，仍然需要 `if __name__ == "__main__":` 保护。
 
 ## batch 是全局批大小
 

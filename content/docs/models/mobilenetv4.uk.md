@@ -19,7 +19,7 @@ keywords:
   - мобільний інференс
   - edge-класифікатор
   - класифікатор ImageNet
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -34,9 +34,8 @@ snippets:
         print(result.probs.top5)
     - label: CLI
       language: bash
-      code: >
-        libreyolo predict model=LibreMobileNetV4s-cls.pt source=cat.jpg
-        save=True
+      code: |
+        libreyolo predict model=LibreMobileNetV4s-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python
       language: python
@@ -103,7 +102,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: 4a9a1b392ffb136d
+source_hash: 6fe498d802f87c62
 ---
 
 ## Встановлення
@@ -159,12 +158,16 @@ pip install libreyolo
 Датасети, аугментацію, кілька GPU та логери описано в розділі
 [навчання](/docs/train).
 
+`cls_pw=0` вимикає зважування втрат; значення до 1 використовують ваги, обернені до частот і нормалізовані до середнього 1. `class_weights=True` натомість використовує обернені частоти, нормалізовані за зразками, і не поєднується з `cls_pw>0`. Під час відновлення ці налаштування мають збігатися. Див. [класифікацію](/docs/tasks/image-classification).
+
 ## Валідація
 
 `val()` повертає словник ключів `metrics/`. Для класифікації це правильність
 top-1 і top-5 на валідаційному поділі.
 
 <code-tabs name="val" />
+
+Валідація й калібрування INT8 використовують перетворення оцінювання сімейства. Метадані експорту записують `norm_mean`, `norm_std` і `resize_mode`; старіші артефакти використовують резервні значення сімейства. Калібрувальні препроцесори повертають потрібний масив CHW і коефіцієнт масштабу.
 
 ## Експорт
 

@@ -17,7 +17,7 @@ keywords:
   - VGG-19
   - convolutional neural network
   - klasifikasi gambar
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -87,7 +87,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: 26eb6ff5811533fd
+source_hash: 7e22e5bf59ca038a
 ---
 
 ## Instalasi
@@ -123,6 +123,8 @@ bergaya ImageNet, dan ekspor didukung, sedangkan fine-tuning tidak diimplementas
 dan `val/`, satu folder per kelas) dan mengembalikan akurasi top-1 dan top-5.
 
 <code-tabs name="val" />
+
+Validasi dan kalibrasi INT8 memakai transformasi evaluasi family. Metadata ekspor mencatat `norm_mean`, `norm_std`, dan `resize_mode`; artefak lama memakai nilai family sebagai fallback. Prapemroses kalibrasi mengembalikan array CHW dan rasio yang diperlukan.
 
 ## Ekspor
 

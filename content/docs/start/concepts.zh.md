@@ -15,7 +15,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: 标准任务名
-    value: 17
+    value: 20
   - label: 支持层级
     value: 'Flagship, Core, Supported, Inference only, Museum, Sibling tier'
 snippets:
@@ -44,12 +44,12 @@ snippets:
         # "pose"，"det" 解析为 "detect"，"semantic-segmentation" 解析为 "semantic"
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
         print(model.task)
-source_hash: 23d045463a6a8411
+source_hash: c745a3c602db00ea
 ---
 
 ## 任务
 
-任务就是模型返回的东西。LibreYOLO 有十七个标准任务名，每一个都对应 `Results`
+任务就是模型返回的东西。LibreYOLO 有二十个标准任务名，每一个都对应 `Results`
 对象上承载其输出的那个字段。
 
 | 任务 | 返回内容 |
@@ -65,12 +65,15 @@ source_hash: 23d045463a6a8411
 | `depth` | 一张稠密的相对逆深度图 |
 | `normal` | 一个稠密的单位向量表面法线场 |
 | `edge` | 一张稠密的边缘概率图 |
+| `albedo` | 一张稠密的线性 RGB 反照率图，即不含光照的表面颜色 |
 | `restore` | 一张复原后的 RGB 图像，用于去模糊、去噪或超分辨率 |
 | `matte` | 一张从 0 到 1 的软前景图，用于去除背景 |
 | `ocr` | 带转写文本的文字四边形，按阅读顺序排列 |
 | `embed` | 一个 L2 归一化向量，它的点积衡量吻合程度 |
 | `gaze` | 每张检测到的人脸一个视线方向 |
 | `mesh` | 每个检测到的人一个带姿态的 3D 人体 |
+| `detect3d` | 相机坐标系下的 3D 框，带类别和置信度 |
+| `act` | 根据相机帧和机器人状态预测出的一段机器人动作块 |
 
 这些就是出现在检查点（checkpoint）元数据和文件名里的名字。在任何可以传入任务的
 地方，也接受大家熟悉的别名，并且在其他一切发生之前先做归一化：`detection` 和

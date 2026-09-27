@@ -4,7 +4,7 @@ seo_title: "Object tracking in LibreYOLO"
 description: "Track objects across video frames in LibreYOLO with ByteTrack, BoT-SORT, OC-SORT or Deep OC-SORT, over any detection, segmentation or pose model."
 lead: "Tracking assigns a stable identity to each detection across video frames. LibreYOLO does not model it as a task with its own weights: it is a predict mode, model.track(), that runs a chosen tracker over the per-frame output of a detection, segmentation or pose model."
 keywords: [object tracking python, multi object tracking, bytetrack, botsort, ocsort, deep ocsort, track id, reid tracking]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -97,7 +97,10 @@ Tracking runs on native PyTorch models. An exported artifact loaded through
 `LibreYOLO("model.onnx")` returns a runtime backend object, which carries
 `predict()` but not `track()`.
 
-Four trackers ship with the library, selected by the `tracker` argument:
+Four trackers ship with the library, selected by the `tracker` argument. The
+`.yaml` spellings, such as `"bytetrack.yaml"`, select the same built-in
+trackers; LibreYOLO does not read tracker YAML files, and raises if a file of
+that name exists in the working directory.
 
 `"bytetrack"` is the default. It is motion only, with a Kalman filter and a
 three-stage association: high-confidence detections first, then a second pass
@@ -134,6 +137,9 @@ stay available for the recovery pass. Deep OC-SORT runs the detector at
 `det_thresh` itself. For ByteTrack and BoT-SORT, `track_conf` must be at or
 above `track_low_thresh`, which defaults to 0.1.
 
+`conf`, when given, is `predict()`'s detection threshold: detections below it
+never reach the tracker. Without it the detector runs at the thresholds above.
+
 Tracker settings arrive in one of two ways. Pass a config instance to
 `tracker_config=`, and its type selects the tracker, making `tracker=` redundant.
 Or pass the fields as keyword arguments and let `track()` build the config for
@@ -141,8 +147,13 @@ the tracker you named; unknown keys warn rather than being applied silently.
 Either way, `track_conf` is ignored once the matching key is set explicitly.
 
 The remaining arguments mirror prediction: `iou`, `imgsz`, `classes`, `max_det`,
-`vid_stride`, `show`, and `save` with `output_path`. The source is a video file
-path. See [prediction](/docs/predict) for result handling.
+`vid_stride`, `show`, and `save` with `output_path`. `persist=True` keeps the
+tracker and its IDs from the previous `track()` call on the same model, for a
+loop that passes one frame per call, such as `model.track(frame, persist=True)`. The source can be video or an ordered image sequence. See [prediction](/docs/predict) for result handling.
+
+Images, filename-sorted folders, lists, tuples and lazy image iterators can provide consecutive frames. `fps=30.0` supplies their timing and `color_format="auto"` selects input interpretation. `vid_stride` reduces the retained rate to `fps / vid_stride`.
+
+Pass a custom tracker instance through `tracker=`. It implements `reset()` and `update(results, image=None)` from `libreyolo.tracking.Tracker`. A run resets it once and passes the original RGB PIL frame. Returned `track_id` must be a one-dimensional integer array or tensor aligned with boxes on the same backend/device. Custom instances default to `track_conf=0.25`; configure the instance directly instead of passing tracker kwargs or `tracker_config`.
 
 ## Train
 

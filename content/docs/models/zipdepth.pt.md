@@ -94,7 +94,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: 891eaa1a42795a4c
+source_hash: ee5867f8671d1aac
 ---
 
 ## Instalação
@@ -115,8 +115,8 @@ Os pesos são baixados do Hugging Face no primeiro uso e ficam em cache local.
 `result.depth_map` carrega um mapa denso de profundidade inversa relativa:
 valores maiores significam mais perto da câmera, e os valores não têm unidade
 métrica nem escala entre imagens. `save=True` grava em disco uma visualização
-desse mapa com mapa de cores; `Results.plot()` não cobre esta família, já que
-está definido apenas para normais de superfície e bordas. Veja
+desse mapa com mapa de cores; `Results.plot()` renderiza o mapa de profundidade
+como uma imagem PIL, e `pil=False` retorna o array. Veja
 [predição](/docs/predict) para fontes, streaming e tratamento de resultados.
 
 ## Variantes

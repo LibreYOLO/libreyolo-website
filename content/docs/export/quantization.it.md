@@ -20,7 +20,7 @@ keywords:
   - fp8 e4m3
   - dataset di calibrazione
   - export onnx qdq int8
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Chiamata
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -83,11 +83,11 @@ snippets:
       code: |
         model.quantize(
             recipe="int8",
-            calib="coco128.yaml",      # percorso di un data.yaml o nome integrato; None salta la calibrazione
+            calib="coco128.yaml",      # percorso data.yaml o nome integrato; None salta la calibrazione
             samples=128,               # numero massimo di immagini di calibrazione
             batch=8,                   # dimensione del batch di calibrazione
-            algorithm="auto",          # auto e minmax sono la stessa cosa; percentile è l'alternativa
-            keep_high_precision=None,  # None usa la policy della famiglia
+            algorithm="auto",          # auto seleziona minmax; alternative: percentile, mse, entropy
+            keep_high_precision=None,  # None usa la regola della famiglia
             verbose=True,
         )
   reload:
@@ -174,7 +174,7 @@ snippets:
 
         # Ora vale qualsiasi esportatore float, a qualunque precisione supporti.
         qmodel.export(format="tensorrt", half=True)
-source_hash: 4ffb06b87cad017e
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## Installazione
@@ -201,6 +201,8 @@ Il checkpoint risultante è un normale checkpoint LibreYOLO con allegato un mani
 Anche i checkpoint scritti dal trainer durante una sessione di QAT portano con sé il
 manifest, il che significa che il `best.pt` di una sessione simile è a sua volta un
 checkpoint quantizzato.
+
+L'argomento di calibrazione `algorithm` accetta `auto`, `minmax`, `percentile`, `mse` ed `entropy`. `auto` risolve a minmax. MSE ed entropy analizzano gli istogrammi per selezionare gli intervalli delle attivazioni.
 
 ## Ricette
 
@@ -263,6 +265,8 @@ significa `yolo9` e `rfdetr`.
 I modelli quantizzati con `fp16` e `bf16` sono solo di inferenza, e il trainer li
 rifiuta rimandando ad `amp=True`.
 
+La configurazione QAT disattiva EMA e SyncBatchNorm e imposta `average_best=0`, registrando ogni modifica. L'addestramento in virgola mobile mantiene le impostazioni richieste.
+
 ## Esportazione
 
 <code-tabs name="export" />
@@ -292,6 +296,9 @@ L'aritmetica quantizzata viene eseguita in simulazione, cioè fake quantization
 calcolata in isole di float32 anche sotto AMP. La simulazione è fedele nei numeri,
 quindi un punteggio di `val()` su qualsiasi dispositivo è un'affermazione reale
 sull'aritmetica quantizzata. Non è un'affermazione sulla velocità.
+
+Apple MPS non implementa né le operazioni di fake quantization né float8, quindi
+su un Mac ogni ricetta tranne `fp16` e `bf16` gira su CPU, con un avviso.
 
 Due eccezioni vengono eseguite in modo nativo. `fp16` e `bf16` sono normali cast. I
 moduli `fp8` finalizzati eseguono la loro GEMM direttamente su pesi E4M3

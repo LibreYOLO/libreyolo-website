@@ -18,7 +18,7 @@ keywords:
   - localisation d'objets
   - Alibaba
   - VLM
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -49,7 +49,7 @@ snippets:
         vest?")
 
         print(answer)
-source_hash: ee225b6221d624d9
+source_hash: 801d97d089f1f957
 ---
 
 ## Installer
@@ -98,13 +98,9 @@ du canevas réellement transmis au réseau. Cette valeur n'est donc pas une
 résolution de fonctionnement fixe comme pour les autres familles de ce site.
 LibreYOLO n'a publié aucun benchmark comparant l'exactitude des trois tailles.
 
-LibreYOLO n'entraîne, ne valide et n'exporte pas Qwen3-VL : `train()`, `val()`
-et `export()` lèvent tous `NotImplementedError` pour chaque famille de cette
-catégorie (consultez le niveau de prise en charge ci-dessus). Effectuez le
-fine-tuning de Qwen3-VL en amont et chargez les poids obtenus si vous avez besoin
-d'un vocabulaire personnalisé intégré. Vérifiez visuellement la sortie de
-`predict()` au lieu d'effectuer une passe de validation de style COCO, puisque
-chaque détection porte la même confiance de substitution.
+## Entraîner
+
+Installez `libreyolo[vlm-train]` pour entraîner des adaptateurs LoRA de détection avec `LibreVLM("qwen3-vl-2b").train(data=...)`. La tour de vision reste gelée ; la loss de validation sélectionne le meilleur répertoire de checkpoint. La reprise de l'état de l'optimiseur et la validation par mAP de détection ne sont pas prises en charge. Consultez le [fine-tuning VLM](/docs/train/vlm-fine-tuning) pour les valeurs par défaut et les instructions de rechargement.
 
 ## Licence
 

@@ -4,13 +4,12 @@ families:
   - qwen3vl
 seo_title: 'Qwen3-VL trong LibreYOLO: phát hiện với từ vựng mở'
 description: >-
-  Qwen3-VL trong LibreYOLO: cài đặt, thiết lập từ vựng mở, dự đoán hoặc chat
-  bằng vision-language model Apache-2.0 của Alibaba.
+  Qwen3-VL trong LibreYOLO: cài đặt, thiết lập từ vựng mở, dự đoán hoặc chat bằng vision-language model
+  Apache-2.0 của Alibaba.
 lead: >-
-  Qwen3-VL là vision-language model của Alibaba có grounding 2D nguyên bản.
-  LibreYOLO bọc mô hình thành detector đối tượng với từ vựng mở và cung cấp trực
-  tiếp tính năng chat tự do: cung cấp danh sách lớp đối tượng để phát hiện hoặc
-  đặt câu hỏi.
+  Qwen3-VL là vision-language model của Alibaba có grounding 2D nguyên bản. LibreYOLO bọc mô hình thành
+  detector đối tượng với từ vựng mở và cung cấp trực tiếp tính năng chat tự do: cung cấp danh sách lớp đối
+  tượng để phát hiện hoặc đặt câu hỏi.
 keywords:
   - Qwen3-VL
   - vision-language model
@@ -18,7 +17,7 @@ keywords:
   - grounding
   - Alibaba
   - VLM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -34,24 +33,17 @@ snippets:
             print(box.cls, box.conf, box.xyxy)
     - label: Chat
       language: python
-      code: >
+      code: |
         from libreyolo import LibreVLM, SAMPLE_IMAGE
-
 
         model = LibreVLM("qwen3-vl-4b")
 
-
         # Lối truy cập mức thấp bên dưới tiện ích phát hiện: mọi câu hỏi,
-
         # không chỉ truy vấn bounding box.
-
-        answer = model.chat(SAMPLE_IMAGE, "How many people are wearing a safety
-        vest?")
-
+        answer = model.chat(SAMPLE_IMAGE, "How many people are wearing a safety vest?")
         print(answer)
-source_hash: ee225b6221d624d9
+source_hash: 801d97d089f1f957
 ---
-
 ## Cài đặt
 
 Qwen3-VL thuộc cấp VLM-as-detector của LibreYOLO, một bề mặt sản phẩm tách biệt với các họ dựa trên checkpoint và có factory riêng. Mô hình cần extra `vlm`.
@@ -72,7 +64,9 @@ Họ mô hình này tải qua factory `LibreVLM()`, không phải `LibreYOLO()`:
 
 Có ba kích thước Qwen3-VL-2B-Instruct, Qwen3-VL-4B-Instruct và Qwen3-VL-8B-Instruct, được tải dưới dạng `LibreVLM("qwen3-vl-2b")`, `LibreVLM("qwen3-vl-4b")` và `LibreVLM("qwen3-vl-8b")`. Cả ba khai báo đầu vào danh nghĩa 1024 px, nhưng cơ chế smart-resize riêng của processor Qwen quyết định canvas thực sự được truyền vào mạng, vì vậy số liệu này không phải độ phân giải vận hành cố định như ở các họ khác trên trang. LibreYOLO chưa công bố benchmark so sánh độ chính xác giữa ba kích thước.
 
-LibreYOLO không huấn luyện, xác thực hoặc xuất Qwen3-VL: `train()`, `val()` và `export()` đều phát sinh `NotImplementedError` cho mọi họ trong cấp này (xem cấp hỗ trợ bên trên). Hãy tinh chỉnh Qwen3-VL ở upstream rồi tải trọng số thu được nếu bạn cần đóng cố định từ vựng tùy chỉnh; kiểm tra trực quan đầu ra `predict()` thay vì lượt xác thực kiểu COCO vì mọi detection mang cùng độ tin cậy placeholder.
+## Huấn luyện
+
+Cài `libreyolo[vlm-train]` để huấn luyện adapter LoRA phát hiện qua `LibreVLM("qwen3-vl-2b").train(data=...)`. Nhánh thị giác được giữ đóng băng; loss đánh giá chọn thư mục checkpoint tốt nhất. Chưa hỗ trợ tiếp tục từ trạng thái optimizer và đánh giá mAP phát hiện. Xem [tinh chỉnh VLM](/docs/train/vlm-fine-tuning) để biết các giá trị mặc định và hướng dẫn tải lại.
 
 ## Giấy phép
 
@@ -81,5 +75,3 @@ LibreYOLO không huấn luyện, xác thực hoặc xuất Qwen3-VL: `train()`, 
 ## Trích dẫn
 
 <citation-block />
-
-

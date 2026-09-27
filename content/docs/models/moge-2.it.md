@@ -22,7 +22,7 @@ keywords:
   - mappa delle normali
   - dense prediction
   - DINOv2
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -82,7 +82,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: d96b89f18ac10a40
+source_hash: b06daf44f9a58411
 ---
 
 ## Installazione
@@ -95,9 +95,7 @@ pip install libreyolo
 
 ## Predizione
 
-I pesi vengono scaricati automaticamente al primo utilizzo: LibreYOLO preleva la
-dimensione corrispondente direttamente dai checkpoint ufficiali e la mette in
-cache in locale.
+I pesi vengono scaricati automaticamente al primo utilizzo. Le dimensioni s e l usano i mirror di LibreYOLO; b continua a usare il checkpoint upstream.
 
 <code-tabs name="predict" />
 
@@ -145,10 +143,7 @@ si comporta come un checkpoint e restituisce lo stesso `Results`.
 
 <provenance-box>
 
-LibreYOLO non copia questi checkpoint nella propria organizzazione.
-`LibreYOLO("LibreMoGe2s-normal.pt")` scarica la dimensione corrispondente
-direttamente dai repository ufficiali su Hugging Face a una revisione fissata, e
-verifica il file rispetto a un checksum SHA-256 registrato prima dell'uso.
+I checkpoint s e l sono replicati da LibreYOLO; b resta upstream. Gli artefatti scaricati mantengono la licenza del distributore.
 
 </provenance-box>
 

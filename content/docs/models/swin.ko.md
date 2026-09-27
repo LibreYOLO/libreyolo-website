@@ -14,7 +14,7 @@ keywords:
   - 계층적 비전 트랜스포머
   - 이동 윈도우 어텐션
   - 이미지 분류
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -77,7 +77,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: faa6bbacae62d88e
+source_hash: "7020bd102e5ba1d6"
 ---
 
 ## 설치
@@ -115,6 +115,8 @@ tiny부터 large까지 크기 4개가 있으며 같은 이동 윈도우 타워�
 있는 디렉터리)을 대상으로 실행하고 top-1 및 top-5 정확도를 반환합니다.
 
 <code-tabs name="val" />
+
+검증과 INT8 보정은 해당 계열의 평가 변환을 사용합니다. 내보내기 메타데이터는 `norm_mean`, `norm_std`, `resize_mode`를 기록하며, 이전 파일은 계열의 기본값을 사용합니다. 보정 전처리기는 필요한 CHW 배열과 비율을 반환합니다.
 
 ## 내보내기
 

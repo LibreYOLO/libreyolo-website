@@ -1,0 +1,12 @@
+{
+  "name": "SAM 3D Body",
+  "org": "Meta Platforms, Inc.",
+  "paper_title": "SAM 3D Body: Robust Full-Body Human Mesh Recovery",
+  "paper_url": "https://arxiv.org/abs/2602.15989",
+  "code_url": "https://github.com/facebookresearch/sam-3d-body",
+  "license": "SAM License (not OSI-approved)",
+  "license_interpretation": "The SAM License is not one OSI recognizes as open source. Meta can amend its terms unilaterally, disclaims all warranty and liability, forbids reverse engineering the SAM Materials, and forbids any use touching military or warfare purposes, nuclear applications, espionage, weapons, or other export-controlled ends. It does not forbid commercial use outright, but a litigation clause ends your license the moment you sue Meta over the SAM Materials, so read it yourself before shipping a product on it. LibreYOLO wraps Meta's package rather than porting its code: none of it is vendored, it is an optional dependency the user installs themselves, and a user who never touches the mesh task never encounters these terms. The checkpoints are mirrored byte-identically behind the same Hugging Face access gate Meta uses, so accepting the license happens on Meta's own model page. LibreYOLO's own adapter code is MIT. The body model the checkpoints drive, MHR (Momentum Human Rig), is Meta's separate Apache-2.0 release and is fetched at runtime from its own public repository rather than mirrored.",
+  "bibtex": "@article{yang2026sam3dbody,\n  title={SAM 3D Body: Robust Full-Body Human Mesh Recovery},\n  author={Yang, Xitong and Kukreja, Devansh and Pinkus, Don and Sagar, Anushka and Fan, Taosha and Park, Jinhyung and Shin, Soyong and Cao, Jinkun and Liu, Jiawei and Ugrinovic, Nicolas and Feiszli, Matt and Malik, Jitendra and Dollar, Piotr and Kitani, Kris},\n  journal={arXiv preprint arXiv:2602.15989},\n  year={2026}\n}",
+  "bibtex_source_url": "https://github.com/facebookresearch/sam-3d-body#citing-sam-3d-body",
+  "bibtex_verified": "2026-08-08, copied verbatim from the 'Citing SAM 3D Body' section of the upstream README on branch main. Cross-checked against the arXiv API for 2602.15989: fourteen authors in the same order, identical title, one version dated 2026-02-17, arXiv comment pointing at this same GitHub repository, primary class cs.CV, no journal-ref, so the @article/arXiv-preprint form the authors publish still matches the record. Do not hand-edit; a wrong citation misattributes someone's work."
+}

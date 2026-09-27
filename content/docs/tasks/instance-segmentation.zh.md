@@ -10,7 +10,7 @@ keywords:
   - 多边形标注
   - MIT 分割库
   - 掩码 mAP
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -117,7 +117,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 33e331eac0f9b0af
+source_hash: 577cd3c8c2d5d6fe
 ---
 
 ## 定义
@@ -138,11 +138,12 @@ source_hash: 33e331eac0f9b0af
 
 有四个家族既能训练也能预测掩码：[RF-DETR](/docs/models/rf-detr)、
 [EdgeCrafter](/docs/models/edgecrafter)、[D-FINE](/docs/models/d-fine) 和
-[RTMDet](/docs/models/rtmdet)。RF-DETR 需要自己的 extra，
+[GTR](/docs/models/gtr)。RF-DETR 需要自己的 extra，
 `pip install "libreyolo[rfdetr]"`；其余三个在基础包上就能跑。
 
 [Mask R-CNN](/docs/models/mask-rcnn) 能预测、验证和导出掩码，但它的 `train()`
-会抛出 `NotImplementedError`。
+会抛出 `NotImplementedError`。[RTMDet](/docs/models/rtmdet) 能预测和验证掩码，但
+训练分割会抛出 `NotImplementedError`；它只能作为检测器训练。
 
 [EoMT](/docs/models/eomt) 能预测和验证掩码，同样不能训练，而且它的导出范围更窄：
 `export()` 只接受语义分割任务，对 `segment` 和 `panoptic` 会抛出

@@ -4,7 +4,7 @@ seo_title: "libreyolo predict command reference"
 description: "Run inference from the command line: every argument, its default read from the CLI definition, and the flags that change what lands on stdout."
 lead: "Runs a loaded model over one source and prints the predictions. The source may be an image, a directory, a video, a URL or a live stream; the model may be a checkpoint or an exported artifact."
 keywords: [libreyolo predict cli, libreyolo inference command, yolo cli prediction, libreyolo predict arguments, libreyolo json output]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 meta:
   - label: Command
     value: libreyolo predict
@@ -85,6 +85,11 @@ word is stripped before parsing.
 | `verbose` | `false` | Verbose stderr output |
 | `help_json` | `false` | Dump command schema as JSON and exit |
 
+| Argument | Default | Meaning |
+| --- | --- | --- |
+| `mask` | `None` | Single-image binary inpainting mask for models that require it |
+| `trimap` | `None` | Single-image three-level trimap for guided matting models |
+
 ## Examples
 
 <code-tabs name="examples" />
@@ -97,8 +102,9 @@ valid values for `model`. Three options are refused on those runtimes rather
 than ignored: `tiling`, `overlap_ratio` and `output_file_format` exit with
 `config_unsupported` when a runtime backend cannot honor them.
 
-`half` goes the other way. Exported runtimes receive it and run in FP16; native
-PyTorch inference logs that it was ignored and continues in FP32.
+`half` goes the other way: it is accepted and ignored. Native PyTorch inference
+logs that it was ignored and continues in FP32, and an exported runtime keeps the
+precision it was exported with, so FP16 inference means exporting with `half=true`.
 
 Gaze models are two stage and have no detector of their own, so
 `face_detector` is required for them. `gallery` applies only to models whose

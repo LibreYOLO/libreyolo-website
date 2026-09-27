@@ -1,0 +1,14 @@
+{
+  "name": "GTR",
+  "org": "Intellindust AI Lab",
+  "paper_title": "GTR: Gated Token Recurrence for Efficient Dense Prediction",
+  "paper_url": "https://arxiv.org/abs/2609.26590",
+  "code_url": "https://github.com/Intellindust-AI-Lab/GTR",
+  "license": "MIT",
+  "code_license": "MIT and Apache-2.0",
+  "weights_license": "MIT",
+  "license_interpretation": "MIT is a permissive license, so this code and these weights can be used in commercial and closed-source products. It asks only that you keep the copyright and license notice with any copy you redistribute. The upstream GTR source is MIT, and the publisher's weight repository on Hugging Face declares MIT for the detection, instance segmentation, pose, oriented-box, depth and semantic segmentation checkpoints that LibreYOLO converts. Parts of the LibreYOLO port are derived from Apache-2.0 projects and keep that license; their notices are retained in libreyolo/models/gtr/NOTICE. Apache-2.0 is also permissive: redistributing that code means keeping its license text and notices, and it grants a patent license.",
+  "bibtex": "@article{gtr2026feng,\n  title   = {GTR: Gated Token Recurrence for Efficient Dense Prediction},\n  author  = {Feng, Zhe and Liu, Longfei and Liu, Wei and Chen, Kai and Kong, Jiangang and Zhou, Wei and Qian, Yifeng and Chen, Dexiong and Yu, Xuanlong and Shen, Xi},\n  journal = {arXiv preprint arXiv:2609.26590},\n  year    = {2026}\n}",
+  "bibtex_source_url": "https://github.com/Intellindust-AI-Lab/GTR#citation",
+  "bibtex_verified": "2026-09-27, copied verbatim from the Citation section of the upstream README on branch main; the block is identical at the pinned source revision 782e737efe2e6437ac537fbdcee089673d3376c1. Cross-checked against the arXiv API for 2609.26590 (v2, updated 2026-09-23): identical title and all ten authors in the same order (Zhe Feng, Longfei Liu, Wei Liu, Kai Chen, Jiangang Kong, Wei Zhou, Yifeng Qian, Dexiong Chen, Xuanlong Yu, Xi Shen). arXiv records no journal reference, so the preprint form with year 2026 still matches the record. Do not hand-edit; a wrong citation misattributes someone's work."
+}

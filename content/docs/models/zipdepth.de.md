@@ -100,7 +100,7 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: 891eaa1a42795a4c
+source_hash: ee5867f8671d1aac
 ---
 
 ## Installation
@@ -117,7 +117,7 @@ Die Gewichte werden bei der ersten Verwendung von Hugging Face heruntergeladen u
 
 <code-tabs name="predict" />
 
-`result.depth_map` enthält eine dichte relative inverse Tiefenkarte. Höhere Werte bedeuten eine geringere Entfernung zur Kamera. Die Werte besitzen weder eine metrische Einheit noch eine bildübergreifende Skala. `save=True` schreibt eine farbcodierte Visualisierung dieser Karte auf den Datenträger. `Results.plot()` unterstützt diese Familie nicht, da die Methode nur für Oberflächennormalen und Kanten definiert ist. Unter [Vorhersage](/docs/predict) findest du Informationen zu Quellen, Streaming und Ergebnisverarbeitung.
+`result.depth_map` enthält eine dichte relative inverse Tiefenkarte. Höhere Werte bedeuten eine geringere Entfernung zur Kamera. Die Werte besitzen weder eine metrische Einheit noch eine bildübergreifende Skala. `save=True` schreibt eine farbcodierte Visualisierung dieser Karte auf den Datenträger. `Results.plot()` rendert die Tiefenkarte als PIL-Bild, und `pil=False` gibt stattdessen das Array zurück. Unter [Vorhersage](/docs/predict) findest du Informationen zu Quellen, Streaming und Ergebnisverarbeitung.
 
 ## Varianten
 

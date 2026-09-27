@@ -22,7 +22,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Task canonici
-    value: 17
+    value: 20
   - label: Livelli di supporto
     value: 'Flagship, Core, Supported, Inference only, Museum, Sibling tier'
 snippets:
@@ -56,12 +56,12 @@ snippets:
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
 
         print(model.task)
-source_hash: 23d045463a6a8411
+source_hash: c745a3c602db00ea
 ---
 
 ## Task
 
-Un task è ciò che un modello restituisce. LibreYOLO ha diciassette nomi di task
+Un task è ciò che un modello restituisce. LibreYOLO ha venti nomi di task
 canonici, e ognuno dà il nome al campo dell'oggetto `Results` che ne contiene
 l'output.
 
@@ -78,12 +78,15 @@ l'output.
 | `depth` | Una mappa densa di profondità inversa relativa |
 | `normal` | Un campo denso di normali alla superficie a vettori unitari |
 | `edge` | Una mappa densa di probabilità dei bordi |
+| `albedo` | Una mappa densa di albedo in RGB lineare, il colore della superficie senza illuminazione |
 | `restore` | Un'immagine RGB ripristinata, per deblurring, denoising o super-risoluzione |
 | `matte` | Una mappa sfumata del primo piano da 0 a 1, per rimuovere lo sfondo |
 | `ocr` | Quadrilateri di testo con le trascrizioni, in ordine di lettura |
 | `embed` | Un vettore normalizzato L2 il cui prodotto scalare misura la concordanza |
 | `gaze` | Una direzione dello sguardo per ogni volto rilevato |
 | `mesh` | Un corpo 3D in posa per ogni persona rilevata |
+| `detect3d` | Box 3D in coordinate della camera, con una classe e una confidenza |
+| `act` | Un chunk di azioni del robot, predetto dai frame della camera e dallo stato del robot |
 
 Sono questi i nomi che compaiono nei metadati dei checkpoint e nei nomi dei
 file. Gli alias più familiari sono accettati ovunque si passi un task e vengono

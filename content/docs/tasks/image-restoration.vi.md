@@ -2,20 +2,19 @@
 title: Phục hồi ảnh
 seo_title: Phục hồi và nâng độ phân giải ảnh trong LibreYOLO
 description: >-
-  Khử nhiễu, khử nhòe và nâng độ phân giải ảnh trong LibreYOLO. Dự đoán ảnh RGB
-  đã phục hồi, huấn luyện NAFNet trên dữ liệu ghép cặp và đọc các key PSNR cùng
-  SSIM.
+  Khử nhiễu, khử nhòe và nâng độ phân giải ảnh trong LibreYOLO. Dự đoán ảnh RGB đã phục hồi, huấn luyện NAFNet
+  trên dữ liệu ghép cặp và đọc các key PSNR cùng SSIM.
 lead: >-
-  Phục hồi ảnh nhận ảnh bị suy giảm và trả về ảnh sạch. LibreYOLO cung cấp dưới
-  dạng tác vụ restore, bao gồm khử nhiễu, khử nhòe và super-resolution phía sau
-  một hợp đồng đầu ra duy nhất: một ảnh RGB đi vào, một ảnh RGB đi ra.
+  Phục hồi ảnh nhận ảnh bị suy giảm và trả về ảnh sạch. LibreYOLO cung cấp dưới dạng tác vụ restore, bao gồm
+  khử nhiễu, khử nhòe và super-resolution phía sau một hợp đồng đầu ra duy nhất: một ảnh RGB đi vào, một ảnh
+  RGB đi ra.
 keywords:
   - phục hồi ảnh python
   - mô hình khử nhiễu ảnh
   - super resolution python
   - mô hình khử nhòe
   - xác thực PSNR SSIM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Nâng độ phân giải ảnh
@@ -31,33 +30,23 @@ snippets:
         print(result.restored.array.shape)   # gấp 4x đầu vào trên mỗi trục
     - label: Khử nhiễu ảnh
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
-        # Được huấn luyện trên nhiễu ảnh thực SIDD; đầu ra giữ kích thước đầu
-        vào.
-
+        # Được huấn luyện trên nhiễu ảnh thực SIDD; đầu ra giữ kích thước đầu vào.
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
         result.restored.save("denoised.png")
-
-        print(result.restore_scale)   # 1: checkpoint này không nâng độ phân
-        giải
+        print(result.restore_scale)   # 1: checkpoint này không nâng độ phân giải
   train:
     - label: Tinh chỉnh NAFNet trên các cặp ảnh
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
         model = LibreYOLO("LibreNAFNetl-restore-sidd.pt")
-
-        model.train(data="my-dataset.yaml", epochs=100, imgsz=256, batch=16,
-        lr0=1e-3)
+        model.train(data="my-dataset.yaml", epochs=100, imgsz=256, batch=16, lr0=1e-3)
     - label: Ghi nguồn gốc vào checkpoint
       language: python
       code: |
@@ -108,9 +97,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         result.restored.save("denoised.png")
-source_hash: 9dc81cadb3ebf18b
+source_hash: c1c1270071053132
 ---
-
 ## Định nghĩa
 
 Tác vụ `restore` ánh xạ một ảnh sang ảnh khác. Khử nhiễu, khử nhòe và
@@ -128,7 +116,7 @@ chú thích.
 
 ## Mô hình
 
-Ba family phục vụ `restore`, được chia theo loại suy giảm mà chúng khắc phục.
+Các họ phục hồi ảnh xử lý những dạng suy giảm ảnh khác nhau.
 
 [NAFNet](/docs/models/nafnet) là mô hình khử nhiễu và là restore family duy nhất
 LibreYOLO có thể huấn luyện. Kiến trúc thay activation phi tuyến của block UNet
@@ -143,6 +131,8 @@ bicubic, ở mức 4x, 2x và một generator 4x nhỏ hơn, nhanh hơn dành ch
 với ba kích thước bao gồm generator nhẹ chính thức và hai generator cho ảnh
 thực tế.
 
+[QuickSRNet](/docs/models/quicksrnet) tăng độ phân giải 2x, [DDColor](/docs/models/ddcolor) tô màu, [HVI-CIDNet](/docs/models/hvi-cidnet) tăng cường ảnh thiếu sáng và [LaMa](/docs/models/lama) điền vùng ảnh bị thiếu. Cả bốn không hỗ trợ huấn luyện.
+
 ## Dự đoán
 
 Trọng số được tải từ Hugging Face trong lần sử dụng đầu tiên và lưu vào cache
@@ -150,12 +140,14 @@ cục bộ.
 
 <code-tabs name="predict" />
 
-Phục hồi chạy ở độ phân giải riêng của ảnh nguồn thay vì canvas mạng cố định,
+NAFNet, Real-ESRGAN và SwinIR chạy ở độ phân giải riêng của ảnh nguồn thay vì canvas mạng cố định,
 chỉ padding theo hệ số downsample của mạng, vì vậy thời gian và bộ nhớ đều tăng
 theo số pixel đầu vào. `tile` tách forward pass thành các tile chồng lấn rồi
 blend seam lại với nhau, còn `tile_pad` là halo được thêm quanh mỗi tile trước
 khi crop lại; cả hai là đối số keyword Python. Xem [dự đoán](/docs/predict) để
 biết về nguồn, stream và cách xử lý kết quả.
+
+LaMa cần `mask=` cho một ảnh. HVI-CIDNet cung cấp `gamma`, `saturation` và `intensity`, mỗi giá trị mặc định là 1.0. Các ràng buộc khung ảnh và xuất riêng của mô hình nằm trên trang tương ứng.
 
 ## Định dạng dataset
 

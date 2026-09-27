@@ -42,7 +42,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
-source_hash: 7b5b53c46df00c06
+source_hash: 95935c1f8ca2d6db
 ---
 
 ## Sinopsis
@@ -96,7 +96,10 @@ dilacak ke dependensi yang hilang hanya dari satu perintah ini.
 ## models
 
 Menampilkan setiap family model beserta task, ukuran, nama CLI yang mengarah ke
-checkpoint-nya, dan resolusi input tiap ukuran.
+checkpoint-nya, dan resolusi input tiap ukuran. Hanya nama yang bisa dimuat oleh
+`model=` yang ditampilkan. Nama tanpa bobot yang dipublikasikan muncul di baris
+terpisah `No published weights (local checkpoints only)`, dan family tanpa nama
+CLI menampilkan kelas Python-nya atau perintahnya sendiri.
 
 ```bash
 libreyolo models

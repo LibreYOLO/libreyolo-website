@@ -3,9 +3,7 @@ title: YOLO-NAS
 families:
   - yolonas
 seo_title: 'YOLO-NAS: LibreYOLO의 예측, 학습 및 내보내기'
-description: >-
-  LibreYOLO에서 YOLO-NAS로 탐지와 자세 추정을 수행합니다. Deci.AI 가중치는 독점적이고 비상업적이며 LibreYOLO는
-  이를 게시하지 않습니다.
+description: 'LibreYOLO에서 YOLO-NAS 객체 탐지, 자세 추정, 회전 박스를 사용합니다. 업스트림 사전 학습 가중치는 비상업용입니다.'
 lead: >-
   Deci.AI의 아키텍처 검색에서 나온 백본과 넥을 사용하고 양자화 인식 RepVGG 블록으로 구축된 합성곱 탐지기입니다. 가중치는
   Deci.AI 소유이며 비상업적 사용만 허용되고 LibreYOLO는 이를 게시하지 않습니다.
@@ -18,7 +16,7 @@ keywords:
   - 자세 추정
   - 양자화 인식 탐지기
   - AutoNAC
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -115,7 +113,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 47c30d6e44024ce7
+source_hash: 52050c4046781a6e
 ---
 
 ## 설치
@@ -133,6 +131,8 @@ pip install libreyolo
 <code-tabs name="predict" />
 
 반환되는 `Results` 객체는 모든 계열이 반환하는 것과 같으므로 탐지기를 바꾸려면 한 줄만 변경하면 됩니다. `conf`는 신뢰도 임곗값을, `iou`는 NMS 임곗값을 설정합니다. 소스, 스트리밍, 결과 처리는 [예측](/docs/predict)을 참조합니다.
+
+회전 바운딩 박스 작업은 `result.obb`를 반환합니다. 공개 OBB 그래프는 1024 픽셀 캔버스와 기록된 18개 클래스 레이블 집합을 사용합니다.
 
 ## 변형
 
@@ -152,6 +152,8 @@ pip install libreyolo
 
 데이터셋, 증강, 다중 GPU, 로거는 [학습](/docs/train)을 참조합니다.
 
+탐지는 `amp=True`와 `amp_dtype="float16"`이 기본값이며, 회전 바운딩 박스 학습은 `amp=False`를 유지합니다. OBB 헤드는 학습, 예측, 검증을 지원하고, 뒤집기/HSV 증강을 사용하며, `metrics/mAP50-95(OBB)`로 체크포인트를 선택합니다. `load_detect_weights_for_obb()`는 탐지 가중치로 OBB 헤드를 초기화합니다.
+
 ## 검증
 
 `val()`은 학습에 사용한 형식의 데이터셋을 대상으로 측정한 정밀도, 재현율, mAP 50, mAP 50-95를 포함하는 `metrics/` 키 사전을 반환합니다.
@@ -170,7 +172,7 @@ pip install libreyolo
 
 ## 체크포인트
 
-나열할 체크포인트가 없습니다. Deci 라이선스는 재배포를 금지하므로 LibreYOLO 조직은 YOLO-NAS 가중치를 게시하지 않으며 다운로드는 다른 위치에서 처리됩니다. `LibreYOLONAS<size>.pt` 형식의 이름 또는 자세용 `LibreYOLONAS<size>-pose.pt`가 Deci 공개 CDN의 해당 객체에 매핑됩니다.
+나열할 체크포인트가 없습니다. Deci 라이선스는 재배포를 금지하므로 LibreYOLO 조직은 YOLO-NAS 가중치를 게시하지 않으며 다운로드는 다른 위치에서 처리됩니다. `LibreYOLONAS<size>.pt` 형식의 이름, 자세용 `LibreYOLONAS<size>-pose.pt`, 또는 회전 박스용 `LibreYOLONAS<size>-obb.pt`(s, m, l)가 Deci 공개 CDN의 해당 객체에 매핑됩니다.
 
 라이브러리가 SHA-256을 고정한 체크포인트만 이 방식으로 가져올 수 있습니다. 그 외 항목은 검증되지 않은 서드파티 pickle을 열지 않고 실패하며 직접 다운로드해 경로로 전달해야 합니다. 디스크에 이미 있는 파일은 다운로드나 체크섬 게이트 없이 해당 경로에서 불러옵니다. 로더가 인식하는 원래 이름의 Deci `.pth`도 여기에 포함됩니다.
 

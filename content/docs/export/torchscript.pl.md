@@ -115,7 +115,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 286a082969ccd604
+source_hash: 6be59826c2dc9978
 ---
 
 ## Instalacja
@@ -152,8 +152,9 @@ Metadane nie znajdują się w pliku sidecar. `torch.jit.save` zapisuje
 
 `LibreYOLO()` rozpoznaje ścieżkę po sufiksie `.torchscript` i zwraca ten sam
 obiekt `Results` co checkpoint, z którego powstało archiwum. Przy
-`device="auto"` moduł jest mapowany na CUDA, jeśli jest dostępna, następnie na
-MPS, a na końcu na CPU.
+`device="auto"` moduł jest mapowany na CUDA, jeśli jest dostępna, a w przeciwnym
+razie na CPU. Na Apple Silicon działa on na CPU, ponieważ MPS nie potrafi
+wczytać stałych float64, które zawiera śledzony graf.
 
 Drugi snippet to ścieżka dla czytelnika, który nie ma zainstalowanego
 LibreYOLO, oraz dla wdrożenia w C++ przez libtorch, gdzie to samo archiwum

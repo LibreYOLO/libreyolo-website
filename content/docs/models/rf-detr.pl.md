@@ -6,7 +6,7 @@ seo_title: 'RF-DETR: trenowanie, dostrajanie i eksport na licencji MIT'
 description: >-
   Używaj modelu RF-DETR w LibreYOLO do detekcji, segmentacji instancji,
   estymacji pozy i ramek zorientowanych. Instalacja, predykcja, trenowanie,
-  walidacja i eksport, wszystko na licencji MIT.
+  walidacja i eksport.
 lead: >-
   Transformer detekcyjny, który przewiduje stały zestaw obiektów zamiast gęstej
   siatki, dlatego podczas wnioskowania nie wymaga NMS. LibreYOLO obsługuje go w
@@ -19,7 +19,7 @@ keywords:
   - segmentacja instancji
   - estymacja pozy
   - zorientowane ramki ograniczające
-last_verified: 1.5.0
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -99,7 +99,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -189,7 +189,7 @@ snippets:
     - label: Użycie wyeksportowanego pliku
       language: python
       code: >
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
 
         # Fabryka wybiera ścieżkę na podstawie rozszerzenia pliku, dlatego
@@ -216,7 +216,7 @@ snippets:
 
         # i końcowego. Przed integracją sprawdź sygnaturę.
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -226,7 +226,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 8c464aa759131694
+source_hash: 3238696a4e1ab6c2
 ---
 
 ## Instalacja
@@ -248,11 +248,15 @@ inny detektor wymaga zmiany jednego wiersza. Parametry `conf` i `max_det`
 filtrują wybór zapytań. Nie ma etapu NMS do dostrojenia. Informacje o źródłach,
 strumieniowaniu i obsłudze wyników znajdziesz w sekcji [predykcja](/docs/predict).
 
+Ścieżki detekcji, segmentacji i obróconych ramek używają zmiany rozmiaru metodą dwuliniową OpenCV w arytmetyce zmiennoprzecinkowej, bez antyaliasingu; estymacja pozy zachowuje antyaliasing. Prostokątny `imgsz=(height, width)` musi pasować do siatki patchy/okien zadania. Lista checkpointów obejmuje detektor elementów interfejsu. [Histogramy zdarzeń](/docs/train/event-histograms) używają zapisanego profilu wejścia.
+
 ## Warianty
 
-Dostępne są cztery rozmiary oraz cztery zadania korzystające ze wspólnej
-architektury. Segmentacja, estymacja pozy i ramki zorientowane ponownie używają
-dekodera detekcji z inną głowicą, dlatego przyjmują te same argumenty. Rozmiary
+Dostępne są cztery rozmiary detekcji, od `n` do `l`, oraz cztery zadania
+korzystające ze wspólnej architektury. Segmentacja, estymacja pozy i ramki
+zorientowane ponownie używają dekodera detekcji z inną głowicą, dlatego
+przyjmują te same argumenty. Segmentacja dodaje `x` i `xx`, a estymacja pozy
+jest dostępna tylko w rozmiarze `x`. Rozmiary
 mają podobną liczbę parametrów i różnią się głównie rozdzielczością wejściową.
 
 <benchmark-table task="detect" />
@@ -262,9 +266,8 @@ mają podobną liczbę parametrów i różnią się głównie rozdzielczością 
 ## Trenowanie
 
 Trenowanie dla wszystkich czterech zadań zaczyna się od opublikowanego punktu
-kontrolnego. RF-DETR umieszcza `pretrained` wśród argumentów ignorowanych przez
-natywny trener, więc przekazanie `pretrained=False` nie daje tutaj losowo
-zainicjalizowanego modelu.
+kontrolnego. `pretrained=False` zamiast tego ponownie inicjalizuje całą sieć,
+łącznie z backbone, i trenuje od zera.
 
 <code-tabs name="train" />
 
@@ -278,10 +281,12 @@ prawidłowe rozmiary.
 
 Informacje o zbiorach danych, augmentacji, wielu GPU i loggerach znajdziesz w sekcji [trenowanie](/docs/train).
 
+Nowe uruchomienia domyślnie używają `output_dir=None`, co tworzy katalog `runs/train/rfdetr_exp` z kolejnym numerem i `exist_ok=False`. Wznowione uruchomienie nadal zapisuje do katalogu uruchomienia swojego punktu kontrolnego. Wieloklasowe zbiory pozy używają `kpt_names` z indeksem lub nazwą klasy jako kluczem; pusta lista oznacza klasę z samymi ramkami. Predykcje uzupełniają punkty kluczowe do `kpt_shape`; funkcja fitness oparta na mAP punktów kluczowych nie ocenia klas z samymi ramkami.
+
 ## Walidacja
 
-Metoda `val()` zwraca słownik kluczy `metrics/` obejmujących precyzję, czułość,
-mAP 50 i mAP 50-95, mierzone na dowolnym zbiorze danych w formacie użytym do trenowania.
+Metoda `val()` zwraca słownik kluczy `metrics/` obejmujących mAP 50, mAP 50-95,
+mAP 75 i średni recall COCO, mierzone na dowolnym zbiorze danych w formacie użytym do trenowania.
 
 <code-tabs name="val" />
 
@@ -310,4 +315,3 @@ Wszystkie opublikowane pliki wag dla tej rodziny.
 ## Cytowanie
 
 <citation-block />
-

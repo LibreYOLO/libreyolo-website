@@ -16,7 +16,7 @@ keywords:
   - addestrare modello di segmentazione
   - etichette a poligoni yolo
   - mask mAP
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -146,7 +146,7 @@ snippets:
 
 
         print(result.masks.data.shape)
-source_hash: 33e331eac0f9b0af
+source_hash: 577cd3c8c2d5d6fe
 ---
 
 ## Definizione
@@ -173,11 +173,13 @@ restituisce lo stesso contorno normalizzato.
 
 Quattro famiglie addestrano e predicono maschere: [RF-DETR](/docs/models/rf-detr),
 [EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine) e
-[RTMDet](/docs/models/rtmdet). RF-DETR richiede il suo extra dedicato,
+[GTR](/docs/models/gtr). RF-DETR richiede il suo extra dedicato,
 `pip install "libreyolo[rfdetr]"`; le altre tre funzionano con il pacchetto base.
 
 [Mask R-CNN](/docs/models/mask-rcnn) predice, valida ed esporta maschere, ma il
-suo `train()` solleva `NotImplementedError`.
+suo `train()` solleva `NotImplementedError`. [RTMDet](/docs/models/rtmdet)
+predice e valida maschere, ma l'addestramento della segmentazione solleva
+`NotImplementedError`; si addestra solo come detector.
 
 [EoMT](/docs/models/eomt) predice e valida maschere e nemmeno lui può
 addestrare, e la sua esportazione è ancora più ristretta: `export()` accetta

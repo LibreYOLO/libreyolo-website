@@ -14,7 +14,7 @@ keywords:
   - migrar pesos a libreyolo
   - convertir pth a libreyolo
   - autoconversion checkpoint
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Punto de entrada
     value: LibreYOLO("path/to/upstream.pth")
@@ -52,12 +52,12 @@ snippets:
       code: |
         # El archivo convertido cumple el mismo esquema que uno publicado.
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: bf9d7c7d168fd2c0
+source_hash: b19fedcf10862990
 ---
 
 Esta página trata sobre checkpoints de otros proyectos. Si lo que estás moviendo
 es tu propio código desde un LibreYOLO más antiguo, consulta
-[actualizar a 1.5.0](/docs/upgrade).
+[actualizar a 1.6.0](/docs/upgrade).
 
 ## Qué ocurre al cargar un archivo ajeno
 

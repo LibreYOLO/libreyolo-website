@@ -126,18 +126,18 @@ model.predict(
 
 | Argument | Valeur par défaut | Signification |
 |---|---|---|
-| `source` | `None` | Image à segmenter\u00a0; `None` réutilise l'image mise en cache par `set_image()` |
+| `source` | `None` | Image à segmenter ; `None` réutilise l'image mise en cache par `set_image()` |
 | `points` | `None` | Prompt par point en coordonnées de pixels |
 | `bboxes` | `None` | Prompt par bounding box sous la forme `[x1, y1, x2, y2]`, ou liste de bounding boxes avec un masque par bounding box |
-| `labels` | `None` | Étiquettes des points, `1` positif et `0` négatif, dont la forme correspond à `points`\u00a0; toutes positives si elles sont omises |
-| `masks` | `None` | Réservé\u00a0; transmettre une valeur lève `NotImplementedError` |
-| `text` | `None` | Prompt conceptuel\u00a0; SAM 3 uniquement |
+| `labels` | `None` | Étiquettes des points, `1` positif et `0` négatif, dont la forme correspond à `points` ; toutes positives si elles sont omises |
+| `masks` | `None` | Réservé ; transmettre une valeur lève `NotImplementedError` |
+| `text` | `None` | Prompt conceptuel ; SAM 3 uniquement |
 | `conf` | `None` | Seuil minimal de l'IoU prédite du masque |
-| `multimask` | `None` | Renvoyer tous les masques d'ambiguïté par prompt\u00a0; utilise par défaut le réglage de construction |
+| `multimask` | `None` | Renvoyer tous les masques d'ambiguïté par prompt ; utilise par défaut le réglage de construction |
 | `max_det` | `300` | Limite du nombre de masques renvoyés |
 | `device` | `None` | Déplacer le modèle pour cet appel et les suivants, en invalidant les embeddings en cache |
 | `color_format` | `"auto"` | Indication de format des couleurs pour les tableaux en mémoire |
-| `points_per_side` | `None` | Densité de la grille du mode tout segmenter\u00a0; valeur par défaut 32 |
+| `points_per_side` | `None` | Densité de la grille du mode tout segmenter ; valeur par défaut 32 |
 
 La valeur renvoyée est un objet `Results` ordinaire qui contient `masks`,
 ainsi que des `boxes` ajustées dérivées de ces masques, avec la classe `0`
@@ -154,7 +154,7 @@ Omettre tous les prompts spatiaux exécute le mode tout segmenter, un générate
 automatique de masques sur grille doté d'un seuil d'IoU prédite et d'une
 déduplication par IoU des bounding boxes. La valeur par défaut 32 de
 `points_per_side` exécute environ 1024 passes de décodeur, ce qui est lent sur
-CPU\u00a0; réduisez-la pour un usage interactif. Le générateur omet le filtrage par
+CPU ; réduisez-la pour un usage interactif. Le générateur omet le filtrage par
 score de stabilité, le multi-crop et la déduplication par IoU des masques. Il
 s'agit donc d'une approximation du chemin guidé et non d'un équivalent exact.
 
@@ -171,7 +171,7 @@ Promptable Concept Segmentation. `None` y signifie le seuil standard 0.3 et
 
 ## Prompts textuels
 
-`text=` est propre à SAM 3\u00a0; toutes les familles à prompts spatiaux lèvent
+`text=` est propre à SAM 3 ; toutes les familles à prompts spatiaux lèvent
 `NotImplementedError` pour ce paramètre. Le texte est mutuellement exclusif
 avec les points et les bounding boxes. Le dictionnaire `names` renvoyé associe
 la classe `0` au concept demandé. Un appel textuel avec `source=None` réencode
@@ -198,7 +198,7 @@ cache.
 
 PicoSAM3 accepte uniquement `bboxes=`. Les prompts par point, texte, masque,
 multimask et tout segmenter lèvent une erreur. La bounding box est agrandie de
-10\u00a0% et traverse un réseau ROI de 96 pixels. PicoSAM3 est l'unique famille du
+10 % et traverse un réseau ROI de 96 pixels. PicoSAM3 est l'unique famille du
 niveau qui s'exporte, uniquement vers ONNX.
 
 ## Fonctionnalités non prises en charge

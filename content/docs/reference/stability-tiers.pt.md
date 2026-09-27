@@ -17,7 +17,7 @@ keywords:
   - grupos de cobertura libreyolo
   - g0 g1 g2 g3 g4
   - níveis de modelos libreyolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Níveis de exportação de docs/adr/0011-export-support-tiers.md e
   libreyolo/export/support.py; grupos de cobertura e contagens por família de
@@ -25,7 +25,7 @@ verification: >-
   zero de libreyolo/models/base/model.py e libreyolo/cli/commands/train.py; o
   inventário da CLI lido de libreyolo/models/inventory.py; níveis de API dos
   docstrings dos pacotes libreyolo/models/sam/, openvocab/ e vlm/ e dos
-  contratos de base.py, tudo na v1.5.0. Os rótulos de grupo que o leitor vê
+  contratos de base.py, tudo na v1.6.0. Os rótulos de grupo que o leitor vê
   (Flagship, Core, Supported, Inference only, Museum, Sibling tier) são o
   vocabulário próprio do site para esses mesmos grupos, de
   src/data/docs/registry.json.
@@ -44,7 +44,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: de545894b0d125e4
+source_hash: 6d8f3ec671e6cb02
 ---
 
 ## Níveis de suporte a exportação
@@ -88,16 +88,20 @@ exatamente um deles, escolhido pelo contrato de chamada e não pela arquitetura.
 | Segmentação com prompt | `LibreSAM` | Um forward não significa nada sem um prompt espacial ou de conceito por imagem, fornecido na hora da chamada. Interativo e com estado: codifique uma vez, faça prompts muitas vezes |
 | Detecção de vocabulário aberto | `LibreOpenVocab` | Detectores discriminativos condicionados por texto. A lista de classes é um prompt, definida com `set_classes` |
 | Visão-linguagem | `LibreVLM` | Um modelo generativo conduzido como detector. A lista de classes é um prompt e a confiança é um valor de preenchimento |
+| Grounding | `LibreGround` | Uma imagem e uma instrução referencial são mapeadas para no máximo um ponto por consulta |
+| Política de robô | `LibreVLA` | Quadros de câmera e o estado do robô são mapeados para um bloco de ações futuras |
 
-Os três níveis irmãos deliberadamente não se registram na factory de
+Os níveis irmãos deliberadamente não se registram na factory de
 detectores, e é por isso que `LibreYOLO("some-alias")` não chega até eles. Eles
 carregam por alias de tamanho e download automático, e não por inspeção do
 checkpoint.
 
-Os quatro devolvem o mesmo `Results`, então o código que vem depois não muda
+Todos eles devolvem o mesmo `Results`, então o código que vem depois não muda
 entre eles. O que difere é quais métodos funcionam: os níveis irmãos levantam
-`NotImplementedError` em `train()`, `val()` e `export()`, e os níveis do SAM e
-de vocabulário aberto levantam em `track()` também. A página de cada nível
+`NotImplementedError` em `train()`, `val()` e `export()`, com duas exceções.
+`LibreVLM` faz fine-tuning do Qwen3-VL como detector, e `LibreVLA` treina e
+valida SmolVLA, ACT e Diffusion Policy. Os níveis do SAM e de vocabulário aberto
+levantam em `track()` também. A página de cada nível
 lista as próprias exclusões.
 
 ## Grupos de cobertura
@@ -114,15 +118,14 @@ site usa para o mesmo grupo no cabeçalho de uma página de modelo.
 | Grupo | Rótulo | Famílias | Significado |
 |---|---|---|---|
 | `g0` | Flagship | 2 | Âncoras principais obrigatórias na cobertura de recursos compartilhados |
-| `g1` | Core | 10 | Conjunto de cobertura de detectores treináveis |
-| `g2` | Supported | 14 | Conjunto adicional de cobertura de famílias treináveis |
-| `g3` | Inference only | 35 | Famílias sem implementação de treinamento |
+| `g1` | Core | 12 | Conjunto de cobertura de detectores treináveis |
+| `g2` | Supported | 19 | Conjunto adicional de cobertura de famílias treináveis |
+| `g3` | Inference only | 44 | Famílias sem implementação de treinamento |
 | `g4` | Museum | 5 | Famílias históricas com cobertura de inferência |
-| `s` | Sibling tier | 21 | APIs irmãs (SAM, vocabulário aberto, VLM, zero-shot) cobertas separadamente |
+| `s` | Sibling tier | 36 | APIs irmãs (SAM, vocabulário aberto, VLM, grounding, zero-shot) cobertas separadamente |
 
-São 87 famílias em seis grupos. Só o `g3` reúne mais famílias do que todos os
-outros grupos juntos, porque a maior parte do registro é linhagem só de
-inferência e cobertura de museu, e não detectores treinados ativamente.
+São 118 famílias em seis grupos. O `g3` é o maior grupo, porque boa parte do
+registro é linhagem só de inferência, e não detectores treinados ativamente.
 
 Para um leitor escolhendo um modelo, o grupo diz onde esperar atenção de
 engenharia, não o quão acurada uma família é. `g0` e `g1` são onde um recurso
@@ -144,20 +147,24 @@ grupo. Os grupos classificam famílias, não tarefas, então uma execução de
 cobertura limitada a uma tarefa nomeia a tarefa explicitamente, como em
 "g1 detect".
 
-Dois lugares leem o grupo em tempo de execução, e não só nos testes.
+Três lugares leem o grupo em tempo de execução, e não só nos testes.
 `collect_model_inventory()`, em `libreyolo/models/inventory.py`, anexa o grupo a
-cada entrada que o inventário da CLI imprime, e `pretrained=False` dispara o
-caminho especial de reinicialização do zero apenas para famílias em `g0` e
-`g1`. Fora desses dois grupos, a verificação em
+cada entrada que o inventário da CLI imprime. `pretrained=False` dispara o
+caminho especial de reinicialização do zero apenas para famílias em `g0`, `g1`
+e `g2`. Fora desses grupos, a verificação em
 `libreyolo/models/base/model.py` é pulada por completo, então
 `pretrained=False` chega ao `train()` da própria família como um argumento
-nomeado comum.
+nomeado comum. Treinar com `classes=` ou `single_cls=True` só é aceito para
+detecção em `g0` e `g1` e levanta `ValueError` nos demais casos.
 
 ## Treinamento
 
 Uma família em `g3` ou `g4` não tem implementação de treinamento, e chamar
 `train()` em uma delas levanta erro. Isso é uma propriedade do código da
 família, não do grupo dela: o grupo registra o fato, não o causa.
+
+Das 118 famílias, 37 treinam: todas as famílias de `g0`, `g1` e `g2`, mais o
+Qwen3-VL via `LibreVLM` e SmolVLA, ACT e Diffusion Policy via `LibreVLA`.
 
 Para uma família que treina, se um botão individual de data augmentation chega
 ou não ao pipeline é uma questão separada, com o próprio vocabulário de três

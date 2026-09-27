@@ -124,7 +124,7 @@ snippets:
       code: |
         huggingface-cli upload my-org/my-run \
           /root/runs/run1/weights/best.pt best.pt
-source_hash: 75d314de06aca3b6
+source_hash: 2f4a8ac1df103962
 ---
 
 ## Avant toute location
@@ -178,8 +178,9 @@ après vingt minutes. Consultez les
 [hyperparamètres](/docs/train/hyperparameters).
 
 Sur une machine multi-GPU, `device="0,1,2,3"` lance automatiquement un worker
-par GPU, et `batch` reste le batch global partagé entre eux. La protection
-`__main__` est obligatoire, car chaque worker réimporte le script. Ce point et
+par GPU, et `batch` reste le batch global partagé entre eux. Les workers ne
+rejouent pas le code de premier niveau d'un script non protégé, donc la
+protection `__main__` est facultative. Ce point et
 le reste du comportement distribué figurent dans la page sur
 l'[entraînement multi-GPU](/docs/train/multi-gpu).
 

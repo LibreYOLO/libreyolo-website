@@ -5,7 +5,7 @@ seo_title: "YOLOv9: predict, train and export under MIT"
 description: "Run YOLOv9 in LibreYOLO, including the NMS-free end-to-end head and the stride-4 small-object head. Install, predict, train, validate and export."
 lead: "A single-stage convolutional detector: one pass scores a dense grid of boxes and NMS drops the duplicates. LibreYOLO carries three variants of it, one of which has no NMS step."
 keywords: [YOLOv9, YOLO9, object detection, NMS-free detection, end-to-end detection, small object detection, programmable gradient information, GELAN]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -170,6 +170,10 @@ base detection checkpoint instead.
 
 See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
 
+New stock detection fine-tunes enable a training-only PGI branch with `aux_weight=0.25`. `max_labels=300`; SGD momentum warms from 0.8 to 0.937 over three epochs. Old single-head checkpoints resume with that graph. Prediction and export use the main head. `letterbox_pad=None` inherits the checkpoint stamp: unmarked weights use `topleft`, while new official conversions record `center`.
+
+YOLO9 and YOLOX mosaic prefer annotated partners with at most 20 draws; YOLO9 MixUp uses the same policy. See [event histograms](/docs/train/event-histograms) for non-RGB input profiles.
+
 ## Validate
 
 `val()` returns a dictionary of `metrics/` keys covering precision, recall,
@@ -201,6 +205,8 @@ Both are on that format's page.
 
 <code-tabs name="export" />
 
+[TFLite INT8](/docs/export/tflite) uses `int8=True` with calibration data.
+
 ## Checkpoints
 
 Every published weight file for this family.
@@ -211,11 +217,7 @@ Every published weight file for this family.
 
 <provenance-box>
 
-One checkpoint here is not MIT. The stride-4 model trained on VisDrone2019-DET
-inherits that dataset's CC BY-NC-SA 3.0 terms: non-commercial use only,
-share-alike on anything derived from it, and outside the permissive license the
-rest of this family ships under. It predicts the VisDrone aerial classes rather
-than the COCO ones. The library prints all of this before it downloads the file.
+The stride-4 aerial checkpoint predicts the VisDrone classes. Use the publisher-declared license recorded on its weight repository.
 
 </provenance-box>
 

@@ -2,12 +2,11 @@
 title: Ma trận xuất đầy đủ
 seo_title: Ma trận hỗ trợ xuất LibreYOLO và các quy tắc
 description: >-
-  Cách LibreYOLO quyết định một tổ hợp họ, tác vụ và định dạng có xuất được
-  không: mười hai định dạng, ba tầng, quy tắc dự phòng và ngưỡng tương đương.
+  Cách LibreYOLO quyết định một tổ hợp họ, tác vụ và định dạng có xuất được không: mười hai định dạng, ba
+  tầng, quy tắc dự phòng và ngưỡng tương đương.
 lead: >-
-  Hỗ trợ xuất là phép tra cứu trên bộ ba (họ, tác vụ, định dạng). Trang này mô
-  tả hình dạng ma trận, các quy tắc điền những ô không có mục rõ ràng và cách
-  truy vấn tổ hợp bạn quan tâm.
+  Hỗ trợ xuất là phép tra cứu trên bộ ba (họ, tác vụ, định dạng). Trang này mô tả hình dạng ma trận, các quy
+  tắc điền những ô không có mục rõ ràng và cách truy vấn tổ hợp bạn quan tâm.
 keywords:
   - hỗ trợ xuất libreyolo
   - ma trận xuất
@@ -15,14 +14,12 @@ keywords:
   - libreyolo formats command
   - ngưỡng tương đương khi xuất
   - lỗi NotImplementedError khi xuất
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  Định dạng, tầng, thứ tự dự phòng, block tác vụ, họ và NCNN được đọc từ
-  libreyolo/export/support.py; bí danh và đối số dùng chung lấy từ
-  libreyolo/export/exporter.py; định nghĩa tầng lấy từ
-  docs/adr/0011-export-support-tiers.md; ngưỡng tương đương lấy từ
-  docs/export_support.md, tất cả ở v1.5.0. Các ô theo tổ hợp không được chép lại
-  tại đây; hãy truy vấn bằng snippet bên dưới.
+  Định dạng, tầng, thứ tự dự phòng, block tác vụ, họ và NCNN được đọc từ libreyolo/export/support.py; bí danh
+  và đối số dùng chung lấy từ libreyolo/export/exporter.py; định nghĩa tầng lấy từ
+  docs/adr/0011-export-support-tiers.md; ngưỡng tương đương lấy từ docs/export_support.md, tất cả ở v1.6.0.
+  Các ô theo tổ hợp không được chép lại tại đây; hãy truy vấn bằng snippet bên dưới.
 snippets:
   usage:
     - label: 'Truy vấn ma trận, không cần mô hình'
@@ -61,9 +58,8 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
-source_hash: 83de3289634888c6
+source_hash: 70b9541fb8949352
 ---
-
 ## Hình dạng ma trận
 
 Ma trận được lập khóa bằng `(family, task, format)`. Khóa họ là tên chuẩn từ
@@ -82,6 +78,8 @@ Vì một ô là hàm của ba khóa, lưới đầy đủ rất lớn và thay 
 hành. Ma trận được tạo tự động thay vì viết thủ công và nằm trong
 `docs/export_support.md` của repo thư viện. Hãy truy vấn ma trận từ Python hoặc
 CLI thay vì đọc một bản sao.
+
+Registry được tạo bao gồm PP-YOLOE, TinyFormer, DEKR, PP-LiteSeg, ConvNeXt V2, PE, V-JEPA 2 và LeVJEPA. Xem từng trang mô hình để biết ràng buộc hình dạng và tác vụ. U-Net, bốn adapter 3D, Marigold V2 và chính sách robot không cung cấp xuất.
 
 ## Ba tầng
 
@@ -196,4 +194,3 @@ trên trang của từng định dạng.
 Chuỗi ràng buộc như `FP32, batch 1, fixed 520x520 input` nghĩa là mức tương đương
 được ghi ở shape và độ chính xác số đó. Xuất ở độ phân giải hoặc kích thước batch
 khác vẫn tạo artifact; đó chỉ không phải cấu hình tạo ra số liệu.
-

@@ -4,7 +4,7 @@ seo_title: "libreyolo export command reference"
 description: "Export a checkpoint to a deployment format: every argument with its default, where the artifact lands, and the combinations the command refuses."
 lead: "Converts one checkpoint into one deployment format and writes the artifact under weights/. The format decides which of the arguments below apply."
 keywords: [libreyolo export cli, libreyolo export command, yolo onnx export cli, tensorrt export command, libreyolo export arguments]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 meta:
   - label: Command
     value: libreyolo export
@@ -57,6 +57,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `format=onnx` and
 | `batch` | `1` | Export batch size |
 | `half` | `false` | FP16 precision |
 | `int8` | `false` | INT8 quantization |
+| `quantize` | | Precision as `16` (FP16), `8` (INT8) or `32` (FP32); replaces `half` and `int8` |
 | `dynamic` | `false` | Dynamic input shapes (ONNX) |
 | `simplify` | `true` | ONNX graph simplification |
 | `nms` | `false` | Embed NMS in the model. ONNX and CoreML only |
@@ -102,7 +103,8 @@ embedded graph is fixed at batch 1, and says so on stderr. On CoreML it takes
 `format=coreml nms=true` exits with `config_unsupported`.
 
 `half=true` together with `int8=true` is not an error. INT8 wins, `half` is
-dropped, and a warning goes to stderr.
+dropped, and a warning goes to stderr. `quantize` that disagrees with `half` or
+`int8` exits with `config_conflict`.
 
 `name` and `verify` are RKNN options today. Passing either with another format
 exits with `config_unsupported` rather than being ignored.
@@ -140,3 +142,5 @@ failures.
 
 Related: [`libreyolo quantize`](/docs/cli/quantize), which stays in PyTorch and
 writes a checkpoint rather than a deployment artifact.
+
+TFLite INT8 uses `int8=True` for YOLO9 or YOLOX detection with `data=...`, `fraction=1.0`, `batch=1` and `dynamic=False`. FP16 is unsupported; when both precision flags are given, the CLI drops `half` in favor of INT8. JSON export output reports the actual resolved canvas, including square fallback for square-native families reloaded from rectangular training checkpoints.

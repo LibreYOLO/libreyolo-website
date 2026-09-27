@@ -5,7 +5,7 @@ seo_title: "DINOv2 in LibreYOLO: semantic, classify and embed"
 description: "Use DINOv2 in LibreYOLO for semantic segmentation, classification and whole-image embedding on the DINOv2-with-Registers backbone. Apache-2.0 throughout."
 lead: "DINOv2 is a self-supervised vision transformer trained by Meta AI to produce general-purpose image features without labels. LibreYOLO wraps its DINOv2-with-Registers backbone for three tasks: semantic segmentation, classification and whole-image embedding."
 keywords: [DINOv2, DINOv2 with registers, self-supervised learning, vision transformer, semantic segmentation, image embedding, feature extraction, Meta AI]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Semantic
@@ -184,9 +184,11 @@ class-dependent head to fit and raises `NotImplementedError` if you call
 The primary keyword arguments here are `batch_size` and `lr`, not `batch` and
 `lr0` used by most other families; `batch` and `lr0` are still accepted and
 mapped onto them, but passing both raises a conflict error. `output_dir=`
-(default `"runs/train"`) replaces `project=`/`name=` as the primary way to
+(default `None`) replaces `project=`/`name=` as the primary way to
 place a run, though passing `project=`/`name=` directly still works. See
 [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
+
+Fresh runs resolve to an incremented `runs/train/dinov2_exp` with `exist_ok=False`. `resume=True` restores trainer state and preserves the selected run directory. Classification supports `cls_pw` and `class_weights` as described in [hyperparameters](/docs/train/hyperparameters).
 
 ## Validate
 
@@ -196,6 +198,8 @@ place a run, though passing `project=`/`name=` directly still works. See
 `NotImplementedError` if you call `val()` on it.
 
 <code-tabs name="val" />
+
+Classification and embedding calibration reuse the model classification pipeline. Evaluation uses the family transform.
 
 ## Export
 

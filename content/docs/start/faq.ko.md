@@ -10,8 +10,8 @@ keywords:
   - libreyolo 가중치 위치
   - libreyolo 커맨드 라인 인터페이스
   - libreyolo 오프라인
-last_verified: 1.5.0
-source_hash: a729b43a6642f2a0
+last_verified: 1.6.0
+source_hash: 13810bf9ea01c459
 ---
 
 ## 어떤 모델부터 시작해야 하나요?
@@ -50,7 +50,7 @@ CNN 검출기용 YOLOv9와 트랜스포머용 RF-DETR. 두 모델 모두 플래�
 
 ## val은 무엇을 반환합니까?
 
-객체가 아닌 일반 사전입니다. 탐지 키에는 `metrics/precision`, `metrics/recall`, `metrics/mAP50` 및 `metrics/mAP50-95`가 포함됩니다. 다른 작업은 분류의 경우 `metrics/accuracy_top1`와 같이 해당 작업에 맞는 키를 반환하거나 전경-배경 분할을 위한 `metrics/PQ`, `metrics/SQ` 및 `metrics/RQ`와 같은 키를 반환합니다.
+지표 이름을 키로 하는 사전입니다. 탐지 키에는 `metrics/precision`, `metrics/recall`, `metrics/mAP50` 및 `metrics/mAP50-95`가 포함되며, 탐지와 분할 결과는 `metrics.box`에 이미지별 결과도 담습니다. 다른 작업은 분류의 경우 `metrics/accuracy_top1`와 같이 해당 작업에 맞는 키를 반환하거나 전경-배경 분할을 위한 `metrics/PQ`, `metrics/SQ` 및 `metrics/RQ`와 같은 키를 반환합니다.
 
 ## 폴더, 비디오 또는 웹캠에서 어떻게 실행하나요?
 
@@ -90,3 +90,7 @@ libreyolo train model=yolo9-t data=coco8.yaml epochs=50 imgsz=640
 ## 업그레이드 후에 가져오기(import)가 작동하지 않게 되었습니다. 무엇이 바뀌었나요?
 
 일관성을 위해 두 개의 클래스 이름이 변경되었습니다: `LibreYOLORTDETR`는 `LibreRTDETR`로, `LibreYOLORFDETR`는 `LibreRFDETR`로 변경되었습니다. 이전 이름은 여전히 해결되며 새로운 클래스를 가리키는 `DeprecationWarning`를 내보내므로 기존 코드는 업데이트하는 동안 계속 실행됩니다.
+
+## 체크포인트 파일 이름으로 다운로드할 수 없는 이유
+
+모델 페이지의 체크포인트 표에 있는 정확한 파일 이름을 사용합니다. FCN과 Mask R-CNN의 작업 접미사가 붙은 이름은 호스팅하지 않으며, 로더 오류에 지원하는 형태가 표시됩니다. LingBot-Vision g에는 공개 체크포인트가 없으므로 s, b, l 또는 로컬 체크포인트를 사용합니다.

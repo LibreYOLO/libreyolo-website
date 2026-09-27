@@ -15,7 +15,7 @@ keywords:
   - miou
   - 全景质量 pq
   - top1 准确率
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   val:
     - label: Python
@@ -58,7 +58,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: d907183492fa3f57
+source_hash: da1e3ccfd1efba73
 ---
 
 ## 运行一次验证
@@ -67,14 +67,15 @@ source_hash: d907183492fa3f57
 
 <code-tabs name="val" />
 
-返回值是一个普通的 `dict[str, float]`。每个键都是字面量，所以按名字读，而不是按
+返回值是一个 `dict[str, float]`。每个键都是字面量，所以按名字读，而不是按
 位置读。
 
 主要参数是 `data`、`split`、`batch`、`imgsz`、`conf`、`iou`、`workers`、`device`、
 `augment`、`save_json` 和 `verbose`。`conf` 默认是 `0.001`，`iou` 默认是 `0.6`，
 两个都比预测的默认值宽松得多，因为一次 mAP 扫描需要低置信度的那条长尾。`imgsz`
 默认取模型自身的输入尺寸，而不是一个固定数字。`split` 只接受 `val`、`test` 或
-`train`，别的都不行。
+`train`，别的都不行。不传 `data` 时，训练过的检查点会在它训练所用的数据集上验证；
+已发布的权重不携带数据集，需要传 `data=`。
 
 验证配置里的其他字段都会作为关键字参数透传，包括 `save_dir`、`max_det`、
 `eval_max_det`、`half`、`amp_dtype`、`cache` 和 `save_plots`。
@@ -136,6 +137,8 @@ point 任务的扫描键是按距离阈值拼出来的，所以用默认值时�
 来选，而这个键它们的字典确实会返回。姿态既不返回 `fitness` 也不返回
 `metrics/mAP50-95`；它的训练器改把 `best_metric_key` 设成
 `metrics/keypoints_mAP50-95`。
+
+ImageFolder 分类新增宏平均 `metrics/precision`、`metrics/recall` 和 `metrics/f1`，对验证目标中出现的类别取平均。top-1 仍是默认适应度。检测还返回 `metrics/best_conf` 和 `metrics/best_conf_f1`，在 IoU 0.50 下选择 micro-F1 最优阈值，并把以类别名称为键的阈值放在 `metrics.box.best_conf_per_class` 上。同分检测保持分组；并列时选择更高的阈值。没有正 F1 时返回 0.0。分割不提供这些阈值键。
 
 ## 速度键
 
@@ -222,7 +225,8 @@ FOMO 是那个什么都不改变的例外：它的验证器一直都在算这个
 ## 一次验证会写出的文件
 
 `val()` 总会把 `config.yaml` 写进它的保存目录，没给 `save_dir` 时这个目录默认是
-`runs/val/<model>_<size>_<timestamp>`。
+`runs/val/<model>_<size>_<timestamp>`。`project`、`name` 和 `exist_ok` 按训练的方式选择这个
+目录：`project/name`，除非 `exist_ok=True`，否则加上递增后缀。
 
 <code-tabs name="json" />
 
@@ -236,11 +240,16 @@ OpenCV 时还有标注过的样本图像。分割会加上每一项在掩码那�
 边缘检测、图像复原、抠图、OCR、OBB 和点检测在那里什么都不写。画图失败只会警告，
 绝不会中止这次运行。
 
+`visualize=True` 为检测和分割写出考虑类别的检测框 TP/FP/FN 图像，为 ImageFolder 分类写出标签与 top-1 的对照图像，分别放入 `visualize/errors/` 和 `visualize/correct/`。匹配使用 IoU 0.5 和置信度 `max(0.25, conf)`。默认值为 `visualize=False`、`show_labels=True` 和 `show_conf=True`。不支持的任务以及 V-JEPA 2 视频片段验证会拒绝可视化。
+
+`plot_samples=8` 限制单独的样例图数量；0 禁用，-1 保留全部图像。这不会改变指标或可视化输出。
+
 ## 训练过程中的验证
 
-训练每隔 `eval_interval` 轮就在数据集的 `val` 划分上验证一次，它产生的指标就是
-驱动 `best.pt` 选择、`patience` 提前停止以及每个 logger 里 `val/` 各键的东西。
-EMA 打开时，验证跑在 EMA 权重上。
+训练每隔 `eval_interval` 轮，并且总在最后一轮之后，在数据集的 `val` 划分上验证一次，
+它产生的指标就是驱动 `best.pt` 选择、`patience` 提前停止以及每个 logger 里 `val/`
+各键的东西。EMA 打开时，验证跑在 EMA 权重上。它的文件写入运行目录里的 `val/` 目录。
+`val=False` 会关闭训练中的验证，最后一轮也包括在内。
 
 `eval_interval`、`patience` 和 `save_plots` 见 [超参数](/docs/train/hyperparameters)，
 数字最后去了哪里见 [实验 logger](/docs/train/loggers)。
@@ -248,3 +257,7 @@ EMA 打开时，验证跑在 EMA 权重上。
 ## 相关
 
 - [数据集](/docs/train/datasets)，验证器读取的划分键和格式都在那里。
+
+## 逐图像检测框指标
+
+检测和分割的结果保持字典兼容，同时提供 `results.box.image_metrics`。每个文件名对应 `precision`、`recall`、`f1`、`tp`、`fp` 和 `fn`，即使关闭可视化，也使用可视化的匹配规则。这里分割统计的是检测框。文件基名重复时，第一次出现后改用完整路径。分母为零时返回 0.0。这些记录不会在分布式 rank 之间汇总。

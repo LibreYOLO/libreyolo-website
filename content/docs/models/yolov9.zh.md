@@ -14,7 +14,7 @@ keywords:
   - 小目标检测
   - yolov9 导出 onnx
   - GELAN
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -122,7 +122,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: eaa6023a4a0b9e71
+source_hash: 624f3e70d2937683
 ---
 
 ## 安装
@@ -175,6 +175,10 @@ stride-4 模型没有自己已发布的 COCO 检查点，所以 `True` 在这里
 
 数据集、数据增强、多卡训练和日志记录器见[训练](/docs/train)。
 
+新的标准检测微调会启用仅用于训练的 PGI 分支，`aux_weight=0.25`。`max_labels=300`；SGD 动量在三轮内从 0.8 预热到 0.937。旧的单 head 检查点继续使用原计算图续训。预测和导出使用主 head。`letterbox_pad=None` 继承检查点记录：未标记的权重使用 `topleft`，新的官方转换权重记录为 `center`。
+
+YOLO9 和 YOLOX 的 mosaic 最多抽取 20 次，优先选择有标注的搭配图像；YOLO9 MixUp 使用相同策略。非 RGB 输入配置见[事件直方图](/docs/train/event-histograms)。
+
 ## 验证
 
 `val()` 返回一个由 `metrics/` 键组成的字典，涵盖查准率、查全率、mAP 50 和
@@ -201,6 +205,8 @@ mAP 50-95，在任何采用你训练时所用格式的数据集上测量。
 
 <code-tabs name="export" />
 
+[TFLite INT8](/docs/export/tflite) 使用 `int8=True` 并提供校准数据。
+
 ## 检查点
 
 这个家族已发布的全部权重文件。
@@ -211,10 +217,7 @@ mAP 50-95，在任何采用你训练时所用格式的数据集上测量。
 
 <provenance-box>
 
-这里有一个检查点不是 MIT 许可。在 VisDrone2019-DET 上训练的 stride-4 模型继承了那个
-数据集的 CC BY-NC-SA 3.0 条款：只允许非商业使用，任何由它衍生出来的东西都要以相同
-方式共享，这也在这个家族其余部分所采用的宽松许可之外。它预测的是 VisDrone 的航拍
-类别，而不是 COCO 的类别。库在下载这个文件之前会把这些全部打印出来。
+步幅为 4 的航拍检查点预测 VisDrone 类别。请遵循权重仓库记录的发布者许可声明。
 
 </provenance-box>
 

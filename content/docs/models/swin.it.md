@@ -17,7 +17,7 @@ keywords:
   - shifted window attention
   - image classification python
   - classificazione immagini python
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -81,7 +81,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: faa6bbacae62d88e
+source_hash: 7020bd102e5ba1d6
 ---
 
 ## Installazione
@@ -126,6 +126,8 @@ sottocartelle `train/` e `val/`, una cartella per classe) e restituisce
 l'accuratezza top-1 e top-5.
 
 <code-tabs name="val" />
+
+La validazione e la calibrazione INT8 usano la trasformazione di valutazione della famiglia. I metadati di esportazione registrano `norm_mean`, `norm_std` e `resize_mode`; gli artefatti più vecchi usano i valori della famiglia. I preprocessori di calibrazione restituiscono l'array CHW e il rapporto richiesti.
 
 ## Esportazione
 

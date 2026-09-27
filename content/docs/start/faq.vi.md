@@ -14,10 +14,9 @@ keywords:
   - trọng số libreyolo ở đâu
   - cli libreyolo
   - dùng libreyolo offline
-last_verified: 1.5.0
-source_hash: a729b43a6642f2a0
+last_verified: 1.6.0
+source_hash: 13810bf9ea01c459
 ---
-
 ## Tôi nên bắt đầu với mô hình nào?
 
 YOLOv9 nếu bạn cần detector CNN và RF-DETR nếu cần detector transformer. Cả
@@ -85,9 +84,10 @@ khi thử. Xem [khái niệm cốt lõi](/docs/concepts).
 
 ## val trả về gì?
 
-Một dictionary thuần túy, không phải object. Các khóa detection gồm
+Một dictionary có khóa là tên metric. Các khóa detection gồm
 `metrics/precision`, `metrics/recall`, `metrics/mAP50` và
-`metrics/mAP50-95`. Những tác vụ khác trả về các khóa phù hợp, chẳng hạn
+`metrics/mAP50-95`, đồng thời kết quả detection và segmentation còn chứa kết quả
+theo từng ảnh trên `metrics.box`. Những tác vụ khác trả về các khóa phù hợp, chẳng hạn
 `metrics/accuracy_top1` cho classification hoặc `metrics/PQ`, `metrics/SQ` và
 `metrics/RQ` cho panoptic segmentation.
 
@@ -154,3 +154,7 @@ Hai tên lớp được đổi để nhất quán: `LibreYOLORTDETR` thành `Lib
 `LibreYOLORFDETR` thành `LibreRFDETR`. Tên cũ vẫn phân giải được và phát
 `DeprecationWarning` trỏ đến tên mới, nên mã hiện có vẫn chạy trong lúc bạn cập
 nhật.
+
+## Vì sao tên checkpoint không tải được?
+
+Dùng đúng tên tệp trong bảng checkpoint trên trang mô hình. Các tên FCN và Mask R-CNN có hậu tố tác vụ không được lưu trữ; lỗi loader liệt kê các dạng được hỗ trợ. LingBot-Vision g chưa có checkpoint công bố: dùng s, b, l hoặc checkpoint cục bộ.

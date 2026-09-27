@@ -42,7 +42,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
-source_hash: 7b5b53c46df00c06
+source_hash: 95935c1f8ca2d6db
 ---
 
 ## Синопсис
@@ -98,7 +98,10 @@ libreyolo checks
 
 Перелічує кожне сімейство моделей із його задачами, розмірами, назвами CLI, що
 розв'язуються в його контрольні точки, і вхідною роздільною здатністю кожного
-розміру.
+розміру. Перелічено лише назви, які може завантажити `model=`. Назви без
+опублікованих ваг з'являються в окремому рядку
+`No published weights (local checkpoints only)`, а сімейство без назв CLI
+натомість показує свій клас Python або власну команду.
 
 ```bash
 libreyolo models

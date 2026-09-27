@@ -1,5 +1,5 @@
 import { getModelDiagram } from '@/lib/model-diagrams'
-import registry, { getFamilies, getTaskMeta, getExportFormats, expandSelfClosingTags } from '@/lib/docs'
+import registry, { currentDocs, expandSelfClosingTags } from '@/lib/docs'
 
 /*
  * Render a docs page as plain markdown, for the `.md` twin and for
@@ -30,7 +30,7 @@ function benchmarkTable(family, task = 'detect') {
   return `${table(['Checkpoint', 'Input (px)', bench.metric, 'Params (M)'], rows)}\n\n${bench.dataset}. Published on ${bench.source_url}`
 }
 
-function checkpointTable(family) {
+function checkpointTable(family, { getTaskMeta }) {
   if (!family?.checkpoints?.length) return ''
   const rows = family.checkpoints.map((c) => [
     `\`${c.name}\``, c.imgsz ?? '', getTaskMeta(c.task).label, c.license ?? '',
@@ -38,7 +38,7 @@ function checkpointTable(family) {
   return table(['File', 'Input (px)', 'Task', 'Weights license'], rows)
 }
 
-function exportMatrix(family) {
+function exportMatrix(family, { getTaskMeta, getExportFormats }) {
   if (!family?.export) return ''
   const formats = getExportFormats()
   const rows = family.tasks.map((t) => [
@@ -87,7 +87,13 @@ function codeTabs(snippets, name) {
     .join('\n\n')
 }
 
-export function docToMarkdown(doc) {
+/*
+ * `source` is the docs tree the page belongs to. An archived page expands its
+ * blocks from its own frozen registry, and its /docs links stay inside the
+ * archive wherever the archive has the target.
+ */
+export function docToMarkdown(doc, source = currentDocs) {
+  const { getFamilies, getTaskMeta } = source
   const [family] = getFamilies(doc.families || [])
   const snippets = doc.snippets || {}
 
@@ -98,8 +104,8 @@ export function docToMarkdown(doc) {
   }
 
   replace('benchmark-table', (a) => benchmarkTable(family, /task="(\w+)"/.exec(a)?.[1] || 'detect'))
-  replace('checkpoint-table', () => checkpointTable(family))
-  replace('export-matrix', () => exportMatrix(family))
+  replace('checkpoint-table', () => checkpointTable(family, source))
+  replace('export-matrix', () => exportMatrix(family, source))
   replace('citation-block', () => citation(family))
   replace('code-tabs', (a) => codeTabs(snippets, /name="([\w-]+)"/.exec(a)?.[1]))
   replace('task-support', () => '')
@@ -125,6 +131,9 @@ export function docToMarkdown(doc) {
   if (diagram) {
     const views = diagram.views.map(view => `- ${view.label}: [SVG](${view.svg}), [interactive diagram](${view.html})`).join('\n')
     body += `\n\n## ${diagram.title} architecture\n\n${views}`
+  }
+  if (source.archived) {
+    body = body.replace(/\]\((\/docs[^)\s]*)\)/g, (_m, target) => `](${source.href(target)})`)
   }
   return `${header}\n\n${body.trim()}\n`
 }

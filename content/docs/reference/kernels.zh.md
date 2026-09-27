@@ -15,13 +15,8 @@ keywords:
   - ms_deform_attn 内核
   - set_fused_attention
   - libreyolo triton 内核 cuda
-last_verified: 1.5.0
-verification: >-
-  注册表 API 读取自 v1.5.0 的 libreyolo/kernels/__init__.py，注意力 API 读取自
-  libreyolo/kernels/attention/__init__.py 和 sdpa.py，Hub 提供方读取自
-  libreyolo/kernels/attention/ms_deform_attn.py，包括它固定的 commit 版本和适用性谓词。目录结构列自
-  libreyolo/kernels/。可选依赖的定义来自 pyproject.toml。行为说明与基准测试数据来自
-  docs/kernels.md。v1.4.0 的门控历史来自给 RF-DETR 接上槽位的那次提交，以及 1.5.0 的 CHANGELOG 条目。
+last_verified: "1.6.0"
+verification: "注册表 API 读取自 v1.6.0 的 libreyolo/kernels/__init__.py，注意力 API 读取自 libreyolo/kernels/attention/__init__.py 和 sdpa.py，Hub 提供方读取自 libreyolo/kernels/attention/ms_deform_attn.py，包括它固定的 commit 版本和适用性谓词。目录结构列自 libreyolo/kernels/。可选依赖的定义来自 pyproject.toml。行为说明与基准测试数据来自 docs/kernels.md。v1.4.0 的门控历史来自给 RF-DETR 接上槽位的那次提交，以及 1.5.0 的 CHANGELOG 条目。"
 meta:
   - label: 包
     value: libreyolo.kernels
@@ -72,7 +67,7 @@ snippets:
             name="mybackend",
             predicate=my_check,
         )
-source_hash: 23d504e88b7959f8
+source_hash: 2cdb2d344ab3faf5
 ---
 
 ## 注册表
@@ -163,6 +158,8 @@ eager 前向里都没有执行过。这次查询在 v1.5.0 挪了位置，现在
 变化。不带这个可选依赖的默认安装不受影响。如果你要跨这次升级比较指标，就把这个可选依赖
 保持不变，或者两边都设 `LIBREYOLO_HUB_KERNELS=0`。
 
+Hub MSDA 接受 FP16 和 BF16：先将内核输入转换为 FP32，再恢复输出 dtype，并在类型转换中保留梯度。Eager CUDA 调用没有可用的加速提供方时，会显示一次 `libreyolo[hub-kernels]` 安装提示。`ms_deform_attn_available(value=None)` 可以检查特定张量的路径。
+
 ## 融合注意力
 
 融合的缩放点积注意力不需要任何可选依赖，只要原版 PyTorch，所以管着它的是策略而不是
@@ -204,3 +201,7 @@ ViT 和 DeiT 带的是同一个开关，但跟随上游默认打开，所以同�
 内核的选择会和 [CUDA graphs](/docs/reference/cuda-graphs) 相互影响：推理一致性矩阵是在
 没有安装 `kernels` 包的情况下跑的，所以编译内核处于启用状态时的捕获安全性并不在它的
 覆盖范围内。
+
+## Triton 可变形注意力
+
+内置 Triton MSDA 提供方支持符合条件的 FP32、FP16 和 BF16 CUDA 推理。它拒绝需要梯度的输入，不可用时回退到可移植注意力实现。Hub 仍然优先。`LIBREYOLO_TRITON_MSDA=0` 禁用 Triton；`LIBREYOLO_HUB_KERNELS=0` 禁用 Hub 提供方及其安装提示。

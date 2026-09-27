@@ -120,7 +120,7 @@ snippets:
       code: |
         huggingface-cli upload my-org/my-run \
           /root/runs/run1/weights/best.pt best.pt
-source_hash: 75d314de06aca3b6
+source_hash: 2f4a8ac1df103962
 ---
 
 ## Prima di noleggiare qualsiasi cosa
@@ -170,9 +170,9 @@ il che è più rapido che scoprire il limite con un errore di memoria esaurita d
 venti minuti. Vedi [Iperparametri](/docs/train/hyperparameters).
 
 Su una macchina multi-GPU, `device="0,1,2,3"` avvia da sé un worker per GPU, e
-`batch` resta il batch globale su tutte quante. Il guard `__main__` è
-obbligatorio, perché ogni worker reimporta lo script. Questo, e il resto del
-comportamento distribuito, si trova in
+`batch` resta il batch globale su tutte quante. I worker non rieseguono il
+codice di primo livello di uno script senza guard, quindi il guard `__main__` è
+facoltativo. Questo, e il resto del comportamento distribuito, si trova in
 [Addestramento multi-GPU](/docs/train/multi-gpu).
 
 ## Seguirlo da fuori

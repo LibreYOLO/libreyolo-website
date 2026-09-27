@@ -105,7 +105,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 286a082969ccd604
+source_hash: 6be59826c2dc9978
 ---
 
 ## 설치
@@ -138,7 +138,8 @@ source_hash: 286a082969ccd604
 
 `LibreYOLO()`는 `.torchscript` 접미사를 기준으로 라우팅하고 원본 체크포인트와
 동일한 `Results` 객체를 반환합니다. `device="auto"`를 사용하면 가능할 때 CUDA,
-그다음 MPS, 마지막으로 CPU에 모듈을 매핑합니다.
+그렇지 않으면 CPU에 모듈을 매핑합니다. 추적된 그래프가 담고 있는 float64 상수를
+MPS가 불러올 수 없기 때문에 Apple Silicon에서는 CPU에서 실행됩니다.
 
 두 번째 스니펫은 LibreYOLO가 설치되지 않은 경우와 `torch::jit::load`로 같은
 아카이브를 불러오는 libtorch C++ 배포를 위한 경로입니다. 이 경로에서는 전처리,

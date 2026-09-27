@@ -19,7 +19,7 @@ keywords:
   - suy luận youtube
   - vid_stride
   - stream=True
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Cách phân loại nguồn được đọc từ libreyolo/utils/source.py (classify_source,
   SourceKind, StreamSource, MultiStreamSource). Loại ảnh và phần mở rộng thư mục
@@ -41,19 +41,34 @@ snippets:
         print(len(result.boxes), "detections")
     - label: Ảnh trong bộ nhớ
       language: python
-      code: |
+      code: >
         import numpy as np
+
         from PIL import Image
+
 
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
 
+
         pil_image = Image.open(SAMPLE_IMAGE)
+
         array = np.asarray(pil_image)
+
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+
+        # Mảng NumPy được đọc là BGR trừ khi được chỉ định khác; mảng này là
+        RGB.
+
+        result = model(array, color_format="rgb")
+
+        print(type(array).__name__, len(result.boxes))
+
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: Một thư mục
@@ -195,9 +210,8 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: 81a0c947dbfe48b5
 ---
-
 ## Cách phân loại nguồn
 
 `classify_source` kiểm tra giá trị trước khi mở hoặc tải bất kỳ thứ gì theo thứ tự
@@ -233,21 +247,25 @@ Nguồn một ảnh chấp nhận bảy loại.
 |---|---|
 | `str` hoặc `pathlib.Path` | Tệp cục bộ, `http(s)://`, `s3://` hoặc `gs://` |
 | `PIL.Image.Image` | Chuyển sang RGB |
-| `numpy.ndarray` | Ảnh xám 2D hoặc HWC/CHW 3D; mảng 4D dùng ảnh đầu tiên |
-| `torch.Tensor` | CHW hoặc NCHW, đọc dưới dạng RGB; tensor theo batch dùng ảnh đầu tiên |
+| `numpy.ndarray` | Ảnh xám 2D hoặc HWC/CHW 3D theo thứ tự BGR; mảng 4D là một batch |
+| `torch.Tensor` | CHW hoặc NCHW, đọc dưới dạng RGB; tensor 4D là một batch |
 | `bytes` | Dữ liệu ảnh đã mã hóa |
 | `io.BytesIO` | Dữ liệu ảnh đã mã hóa |
 
+Mảng hoặc tensor 4D trả về một danh sách gồm một `Results` cho mỗi ảnh.
+
 Mọi thứ được chuyển sang RGB trước khi tiền xử lý. Mảng NumPy là trường hợp duy
 nhất có thứ tự kênh nhập nhằng, nên `color_format` điều khiển thứ tự: `"auto"`
-(mặc định) giữ nguyên mảng, còn `"bgr"` đảo các kênh, đúng với yêu cầu của frame
-đọc bằng OpenCV.
+(mặc định) và `"bgr"` đọc mảng dưới dạng BGR, thứ tự mà OpenCV trả về, còn `"rgb"`
+giữ nguyên mảng, đúng với yêu cầu của mảng tạo từ ảnh PIL.
 
 Mảng số thực được scale lại theo phạm vi riêng: giá trị bằng hoặc dưới `1.0` được
 nhân với 255, còn giá trị cao hơn bị cắt vào `[0, 255]`. Mảng RGBA bỏ kênh alpha.
 
-Mỗi loại đường dẫn từ xa cần một gói riêng và không gói nào được cài mặc định:
-`requests` cho `http(s)://`, `boto3` cho `s3://` và `gcsfs` cho `gs://`.
+Mỗi loại đường dẫn từ xa cần một gói riêng. `requests`, cho `http(s)://`, đi kèm
+bản cài cơ sở; `boto3` cho `s3://` và `gcsfs` cho `gs://` thì không.
+
+Theo dõi chấp nhận ảnh, thư mục sắp theo tên tệp, danh sách, tuple và iterator ảnh lười làm các khung hình liên tiếp. Truyền `fps=30.0` để xác định thời gian chuỗi ảnh và `color_format="auto"` để chọn cách diễn giải đầu vào. Xem [theo dõi](/docs/tasks/object-tracking).
 
 ## Thư mục
 
@@ -263,8 +281,10 @@ chồng cho mỗi nhóm trên các họ hỗ trợ. Xem
 
 <code-tabs name="video" />
 
-Đường dẫn được tính là video khi hậu tố thuộc một trong các dạng `.asf`, `.avi`,
-`.gif`, `.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.ts`, `.wmv`, `.webm`.
+Đường dẫn được tính là video khi hậu tố thuộc một trong các dạng `.3g2`, `.3gp`,
+`.asf`, `.avi`, `.dav`, `.f4v`, `.flv`, `.gif`, `.h264`, `.h265`, `.hevc`, `.m2ts`,
+`.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.mts`, `.mxf`, `.ogv`, `.ts`,
+`.vob`, `.wmv`, `.webm`.
 
 `.gif` xuất hiện trong cả hai danh sách. Đường dẫn `.gif` truyền trực tiếp vào
 `predict` được mở dưới dạng video vì bước kiểm tra video chạy trước; tệp `.gif`
@@ -275,6 +295,8 @@ toàn bộ video được giải mã vào danh sách; nếu có trên 500 frame 
 hệ thống phát cảnh báo đề xuất `stream=True`.
 
 Mỗi `Results` từ video chứa `frame_idx`.
+
+Mã hóa video chuyển sang codec sẵn có khi H.264 không mở được. Việc chuyển đổi được ghi log ở mức INFO và chỉ được lưu đệm theo codec và khung ảnh sau khi codec khác thành công.
 
 ## Webcam, luồng mạng và YouTube
 
@@ -370,7 +392,9 @@ không phải ảnh, nên `result[0]` trên dự đoán một ảnh là box đ�
 Ảnh được đưa vào `runs/detect/predict`, `runs/detect/predict2` và tiếp tục tự tăng,
 đồng thời giữ tên tệp nguồn. Mọi ảnh trong một tiến trình nằm trong cùng thư mục,
 nên hai thư mục đầu vào có cùng tên tệp sẽ ghi đè lẫn nhau. Ảnh trong bộ nhớ không
-có tên tệp để dùng lại và được đánh số `image0`, `image1` rồi tiếp tục.
+có tên tệp để dùng lại. Một ảnh đơn lẻ được lưu với tên `inference`, nên các lần
+gọi lặp lại sẽ ghi đè nó; một danh sách hoặc batch được đánh số `image0`, `image1`
+rồi tiếp tục.
 
 Video và nguồn trực tiếp được ghi thành một tệp `.mp4` duy nhất đặt theo tên nguồn.
 
@@ -378,4 +402,4 @@ Video và nguồn trực tiếp được ghi thành một tệp `.mp4` duy nhấ
 không có hậu tố được coi là thư mục. `output_file_format` chọn kiểu mã hóa ảnh
 tĩnh và chấp nhận `jpg`, `png` hoặc `webp`.
 
-Sau khi lưu, đường dẫn đã ghi cũng được gắn vào kết quả dưới dạng `result.saved_path`.
+Sau khi một ảnh được lưu, đường dẫn đã ghi cũng được gắn vào kết quả dưới dạng `result.saved_path`.

@@ -20,7 +20,7 @@ keywords:
   - callbacks de treinamento
   - métricas de treinamento csv
   - libreyolo monitor
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   logger:
     - label: Por nome
@@ -87,7 +87,7 @@ snippets:
       code: |
         libreyolo monitor                     # a execução mais recente em runs/
         libreyolo monitor runs/train/exp      # uma execução específica
-source_hash: de035acbaed32804
+source_hash: b5fefd12a738dcb5
 ---
 
 ## Ative um logger
@@ -184,6 +184,8 @@ passe `save_dvc_exp=True` ou um `dvcyaml=` explícito para tê-los de volta.
 O Neptune é deliberadamente excluído de `libreyolo[all]`: seu cliente estável
 exige protobuf abaixo de 7, enquanto o extra do TFLite exige protobuf 7. Instale
 `libreyolo[neptune]` em um ambiente sem o extra do TFLite.
+
+O [logger do Hugging Face Hub](/docs/reference/hugging-face) envia `weights/best.pt`, com fallback para `last.pt`, ao final do treinamento. Use `loggers="hf:owner/repo"` ou `HuggingFaceHubLogger(repo_id, private=True)`. Ele verifica o acesso de escrita e cria o repositório caso não exista antes do treinamento. O logger usa privado por padrão; `model.push_to_hub()` explícito usa público por padrão. A visibilidade de repositórios existentes é preservada.
 
 ## Escrevendo um callback
 

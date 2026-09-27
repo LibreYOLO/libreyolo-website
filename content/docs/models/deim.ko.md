@@ -17,7 +17,7 @@ keywords:
   - DETR
   - 객체 탐지
   - 실시간 탐지
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -135,7 +135,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 6edaac5f05abaabe
+source_hash: "8dc052b83d5f1ac0"
 ---
 
 ## 설치
@@ -160,6 +160,8 @@ pip install "libreyolo[lora]"
 
 반환되는 `Results` 객체는 모든 제품군이 반환하는 것과 같으므로 탐지기를 바꾸려면 한 줄만 변경하면 됩니다. `conf`와 `max_det`은 쿼리와 클래스의 top-k 디코딩을 필터링합니다. 조정할 NMS 단계가 없으며 `iou`는 허용되지만 사용되지 않습니다. 소스, 스트리밍, 결과 처리는 [예측](/docs/predict)을 참조합니다.
 
+DEIM은 예측에 직사각형 `imgsz=(height, width)`를 받습니다. DEIMv2는 직사각형 예측/검증 요청을 명시적으로 거부합니다. 이것이 직사각형 학습이나 내보내기 지원을 의미하지는 않습니다.
+
 ## 변형
 
 버전 1은 같은 입력 크기의 다섯 가지 크기를 제공합니다. 버전 2는 이 다섯 이름을 유지하고 더 작은 `atto`, `femto`, `pico` 세 가지를 추가합니다. 앞의 두 크기는 나머지보다 낮은 기본 입력 크기를 사용합니다. 따라서 다섯 크기 코드는 두 버전에 모두 존재하지만 서로 다른 모델을 나타내며 버전은 체크포인트 파일명에 기록됩니다.
@@ -181,6 +183,8 @@ pip install "libreyolo[lora]"
 버전 2는 기본값을 자체적으로 결정합니다. `epochs`, `batch`, `imgsz`, `lr0`를 설정하지 않으면 불러온 크기의 공개 레시피에서 각각 읽으므로 작은 크기는 별도 설정 없이 자체 입력 해상도에서 학습하며 전달한 값은 레시피를 재정의합니다. `imgsz`에는 제약이 있습니다. 양의 32 배수여야 하며 그렇지 않으면 실행 전에 예외가 발생합니다.
 
 데이터셋, 증강, 다중 GPU, 로거는 [학습](/docs/train)을 참조합니다.
+
+DEIM은 기본적으로 `amp_dtype="float16"`으로 AMP를 활성화합니다. FP32 학습에는 `amp=False`를 전달합니다.
 
 ## 검증
 

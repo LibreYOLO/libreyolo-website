@@ -18,7 +18,8 @@ keywords:
   - owlv2
   - omdet turbo
   - детекция по текстовому запросу
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 snippets:
   predict:
     - label: Python
@@ -59,7 +60,7 @@ snippets:
         # декодированной фразы. Если не задать, оба равны 0.25. Только Grounding
         # DINO принимает text_threshold, остальные вызывают ошибку.
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 17197cf4d80f3d6f
+source_hash: 10f41b40f357b037
 ---
 
 ## Определение
@@ -133,6 +134,8 @@ OV-DEIM как нативному порту.
 семейства на этой странице — дискриминативные детекторы, которые выдают оценки
 напрямую, а группа VLM их генерирует.
 
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) и [North Micro Vision](/docs/models/northmicrovision) расширяют выбор детекторов `LibreVLM`. [Molmo2](/docs/models/molmo2) возвращает точки. Для запросов клика по инструкции используйте [LibreGround](/docs/reference/ground-api), а не словарь детекции.
+
 ## Предсказание
 
 <code-tabs name="predict" />
@@ -165,6 +168,8 @@ OV-DEIM как нативному порту.
 вызывает ошибку: дообучайте модель в исходном проекте и загружайте полученные
 веса. Словарь, переданный в `set_classes()`, — единственная настройка, которая
 меняет то, что детектирует загруженная модель.
+
+У Qwen3-VL есть отдельный путь [дообучения VLM](/docs/train/vlm-fine-tuning). Это не добавляет обучение четырём адаптерам `LibreOpenVocab`.
 
 ## Валидация
 

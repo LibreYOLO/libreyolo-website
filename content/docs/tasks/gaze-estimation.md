@@ -82,7 +82,8 @@ The weights carry a license restriction. They are trained on Gaze360, whose
 license permits research and non-commercial use only and forbids
 redistribution, so LibreYOLO mirrors nothing for this family. The one checkpoint
 the library can fetch automatically comes straight from the authors' own Google
-Drive distribution, over `gdown`, after printing the license terms. Read
+Drive distribution, over `gdown`, after printing the license terms. In 1.6.0
+that download returns 404, so pass a local checkpoint. Read
 [L2CS-Net](/docs/models/l2cs) before deploying it.
 
 That download path needs the `gaze` extra:

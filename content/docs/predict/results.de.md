@@ -20,7 +20,7 @@ keywords:
   - Tiefenkarte Results
   - Results Zusammenfassung
   - ONNX gleiche Results
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Nutzlastklassen, Slots, Verschiebungssemantik, summary(), to_json(), plot(),
   save() und cutout() aus libreyolo/utils/results.py gelesen. Verhalten bei
@@ -157,12 +157,12 @@ snippets:
 
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: cebaac95f0a28b5f
 ---
 
 ## Ein Objekt mit einem Slot je Nutzlast
 
-Eine Vorhersage für ein Bild gibt ein `Results`-Objekt zurück. Es enthält achtzehn Nutzlast-Slots. Ein Modell füllt nur die Slots, die seine Aufgabe erzeugt. Jeder andere Slot ist `None`. `result.masks` bei einem Detektor ergibt daher `None` statt eines Fehlers.
+Eine Vorhersage für ein Bild gibt ein `Results`-Objekt zurück. Es enthält einundzwanzig Nutzlast-Slots. Ein Modell füllt nur die Slots, die seine Aufgabe erzeugt. Jeder andere Slot ist `None`. `result.masks` bei einem Detektor ergibt daher `None` statt eines Fehlers.
 
 | Slot | Klasse | Form | Erzeugt von |
 |---|---|---|---|
@@ -184,6 +184,9 @@ Eine Vorhersage für ein Bild gibt ein `Results`-Objekt zurück. Es enthält ach
 | `embeddings` | `Embeddings` | `(N, D)` L2-normalisierte Zeilen | Aufgabe `embed` |
 | `identities` | `Identities` | N Namen und Bewertungen | Aufgabe `embed` mit einer Galerie |
 | `meshes` | `Meshes` | Körperparameter und optionale Eckpunkte | Rekonstruktion eines Körper-Meshes |
+| `albedo` | `AlbedoMap` | `(H, W, 3)` lineares RGB | Albedo-Schätzung |
+| `boxes3d` | `Boxes3D` | `(N, 14)` Quader im Kamerakoordinatensystem, zeilenweise an `boxes` ausgerichtet | Monokulare 3D-Objekterkennung |
+| `actions` | `Actions` | `(T, D)` Aktionsblock | Roboter-Policies |
 
 Daneben stehen Felder, die jedes Ergebnis besitzt: `orig_shape` als `(height, width)`, `path` als Quellpfad oder `None` bei einer Eingabe im Arbeitsspeicher, `names` als Zuordnung von Klassen-ID zu Klassenname, `frame_idx` für Video- und Live-Frames, `track_id` beim Tracking sowie `restore_scale`, der ganzzahlige Hochskalierungsfaktor eines Restaurationsergebnisses.
 
@@ -264,18 +267,20 @@ Zwei Nutzlasten werden bewusst gekürzt. Ein Embedding-Vektor wird nur als `embe
 
 `predict(save=True)` annotiert und schreibt die Ausgabe. Die Zeichenroutine wird anhand des befüllten Slots ausgewählt. Ein semantisches Ergebnis wird als farbige Maske geschrieben, ein Tiefenergebnis als Tiefenvisualisierung, ein panoptisches Ergebnis mit seinen Segmenten, eine Matte als RGBA-PNG mit transparentem Hintergrund und eine Detektorausgabe als Boxen mit darunterliegenden Masken. Der geschriebene Pfad wird als `result.saved_path` an das Ergebnis angehängt.
 
-`Results.plot()` ist enger gefasst, als der Name vermuten lässt. Die Methode ist nur für Normalen- und Kantenkarten definiert und löst bei allen anderen Nutzlasten `NotImplementedError` aus. Verwende für andere Aufgaben `save=True`.
-
 `Results.save(path)` ist ebenfalls eng gefasst. Die Methode schreibt ein Matte-Ergebnis als RGBA-PNG-Ausschnitt mit transparentem Hintergrund und löst sonst `NotImplementedError` aus. `Results.cutout()` gibt dasselbe RGBA-Array zurück, ohne es zu schreiben. Beide benötigen das Quellbild aus `result.path` oder als Argument `image=`.
 
 Zwei Nutzlasten besitzen eigene Schreibmethoden: `result.restored.save(path)` für ein restauriertes Bild und `result.meshes.save_obj(path, index=0)` für ein Mesh.
 
 Informationen zu den Speicherorten sowie zum Verhalten von `output_path` und `output_file_format` findest du unter [Vorhersagequellen](/docs/predict/sources).
 
+`plot()` deckt die Ergebnisdaten aller Aufgaben ab. Bild-Overlays liefern standardmäßig zusammenhängende HxWx3-uint8-BGR-Arrays; `pil=True` fordert PIL an. Tiefen-, Normalen-, Kanten- und Albedokarten, 3D-Quader und Aktionsblöcke liefern standardmäßig ein PIL-Bild; `pil=False` gibt das Array zurück. `orig_img` bewahrt BGR-Pixel für In-Memory- und URL-Quellen; lokale Dateien und gesammelte Frames endlicher Videos lassen sich erneut öffnen.
+
+Zu den Optionen gehören `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` und `filename`. Gespeicherte Klassifikationsbilder enthalten die fünf besten Labels. Matting speichert ein freigestelltes RGBA-Bild.
+
 ## Gleiche Objekte aus exportierten Artefakten
 
 <code-tabs name="exported" />
 
-`LibreYOLO()` leitet anhand der Dateiendung weiter. Ein exportiertes Artefakt wird daher mit demselben Aufruf wie ein `.pt`-Checkpoint geladen und gibt dasselbe `Results`-Objekt zurück. `.onnx`-, `.engine`-, `.pte`- und `.mnn`-Dateien werden anhand ihrer Endung erkannt. Gleiches gilt für OpenVINO-, Paddle- und ncnn-Verzeichnisse sowie eine Triton-Modell-URL. Code, der `result.boxes.xyxy` liest, ändert sich beim Austausch eines Modells gegen seine exportierte Variante nicht. Unter [Export](/docs/export) findest du alle Formate.
+`LibreYOLO()` leitet anhand der Dateiendung weiter. Ein exportiertes Artefakt wird daher mit demselben Aufruf wie ein `.pt`-Checkpoint geladen und gibt dasselbe `Results`-Objekt zurück. `.onnx`-, `.torchscript`-, `.engine`-, `.pte`-, `.tflite`- und `.mnn`-Dateien werden anhand ihrer Endung erkannt. Gleiches gilt für OpenVINO-, Paddle- und ncnn-Verzeichnisse, `.mlpackage`-Verzeichnisse von Core ML sowie eine Triton-Modell-URL. Code, der `result.boxes.xyxy` liest, ändert sich beim Austausch eines Modells gegen seine exportierte Variante nicht. Unter [Export](/docs/export) findest du alle Formate.
 
 Wenn du stattdessen direkt die API der Laufzeitumgebung verwendest, bist du selbst für Vorverarbeitung, Nachverarbeitung und Klassennamen verantwortlich.

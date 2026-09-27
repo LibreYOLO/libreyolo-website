@@ -5,7 +5,7 @@ seo_title: "EdgeCrafter: detect, pose and segment in LibreYOLO"
 description: "Use EdgeCrafter in LibreYOLO for detection, pose and instance segmentation. Install, predict, validate and export, with MIT-licensed code."
 lead: "A compact vision transformer for dense prediction on edge hardware, published upstream as three sibling models: ECDet, ECPose and ECSeg. LibreYOLO loads all three as one family, with the task carried by the checkpoint."
 keywords: [EdgeCrafter, ECDet, ECPose, ECSeg, compact vision transformer, object detection, pose estimation, instance segmentation, edge inference]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -195,6 +195,8 @@ parity but has no effect, because all three heads decode a set of queries with n
 NMS step. See [prediction](/docs/predict) for sources, streaming and result
 handling.
 
+Detection prediction accepts rectangular `imgsz=(height, width)`; training and export retain their own shape constraints.
+
 ## Variants
 
 Four sizes. They all run at the same input resolution, so the table separates
@@ -271,6 +273,8 @@ arguments every format accepts and the extras a few of them add.
 Every published weight file for this family.
 
 <checkpoint-table />
+
+The `obj2coco` variants cover detection, segmentation and pose. Their download is opt-in and their upstream terms restrict commercial use. Original COCO checkpoints keep their recorded Apache-2.0 grant.
 
 ## Licensing
 

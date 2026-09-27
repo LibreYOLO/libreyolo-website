@@ -93,7 +93,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: 891eaa1a42795a4c
+source_hash: ee5867f8671d1aac
 ---
 
 ## Cài đặt
@@ -114,8 +114,8 @@ Trọng số được tải từ Hugging Face ở lần dùng đầu tiên và l
 `result.depth_map` chứa bản đồ nghịch đảo độ sâu tương đối dày đặc: giá trị cao
 hơn nghĩa là gần camera hơn, và các giá trị không có đơn vị mét hay tỉ lệ chung
 giữa các ảnh. `save=True` ghi ảnh trực quan hóa theo bản đồ màu của bản đồ này
-ra đĩa; `Results.plot()` không bao quát họ này vì chỉ được định nghĩa cho pháp
-tuyến bề mặt và cạnh. Xem [dự đoán](/docs/predict) để biết về nguồn, streaming
+ra đĩa; `Results.plot()` render bản đồ độ sâu thành ảnh PIL, còn `pil=False` sẽ
+trả về mảng thay vì ảnh. Xem [dự đoán](/docs/predict) để biết về nguồn, streaming
 và xử lý kết quả.
 
 ## Các biến thể

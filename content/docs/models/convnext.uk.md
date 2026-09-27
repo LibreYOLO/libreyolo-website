@@ -18,7 +18,7 @@ keywords:
   - класифікація зображень
   - повністю згорткова мережа
   - класифікатор ImageNet
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -34,7 +34,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreConvNeXtt-cls.pt source=cat.jpg save=True
+        libreyolo predict model=LibreConvNeXtt-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python
       language: python
@@ -106,7 +106,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: 1682cc69cf2925e6
+source_hash: 8f33a40e4d3a8f29
 ---
 
 ## Встановлення
@@ -167,12 +167,16 @@ pip install "libreyolo[lora]"
 Датасети, аугментацію, кілька GPU та системи журналювання описано на сторінці
 [навчання](/docs/train).
 
+`cls_pw=0` вимикає зважування втрат; значення до 1 використовують ваги, обернені до частот і нормалізовані до середнього 1. `class_weights=True` натомість використовує обернені частоти, нормалізовані за зразками, і не поєднується з `cls_pw>0`. Під час відновлення ці налаштування мають збігатися. Див. [класифікацію](/docs/tasks/image-classification).
+
 ## Валідація
 
 Метод `val()` повертає словник ключів `metrics/`. Для класифікації це правильність
 top-1 і top-5 на валідаційній вибірці.
 
 <code-tabs name="val" />
+
+Валідація й калібрування INT8 використовують перетворення оцінювання сімейства. Метадані експорту записують `norm_mean`, `norm_std` і `resize_mode`; старіші артефакти використовують резервні значення сімейства. Калібрувальні препроцесори повертають потрібний масив CHW і коефіцієнт масштабу.
 
 ## Експорт
 
@@ -194,15 +198,9 @@ top-1 і top-5 на валідаційній вибірці.
 ## Ліцензування
 
 <provenance-box>
-
-У цьому сімействі постачається лише ConvNeXt V1. Малі попередньо навчені
-контрольні точки ConvNeXt-V2 мають ліцензію CC-BY-NC 4.0 і свідомо виключені,
-оскільки некомерційні ваги не можна розповсюджувати в бібліотеці з ліцензією
-MIT і комерційним використанням.
-
+Ця сторінка описує ConvNeXt V1. [ConvNeXt V2](/docs/models/convnextv2) є окремим сімейством, офіційні попередньо навчені ваги якого зберігають CC-BY-NC-4.0.
 </provenance-box>
 
 ## Цитування
 
 <citation-block />
-

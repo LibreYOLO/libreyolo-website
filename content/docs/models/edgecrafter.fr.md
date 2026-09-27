@@ -18,7 +18,7 @@ keywords:
   - estimation de pose python
   - segmentation d'instances
   - inférence sur appareil edge
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -184,7 +184,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 39c6975fc16b3ff1
+source_hash: 521fde8f10ac8c57
 ---
 
 ## Installation
@@ -223,6 +223,8 @@ canal de point clé est une constante plutôt qu'un score par point.
 parité d'API mais n'a aucun effet, car les trois têtes décodent un ensemble de
 queries sans étape de NMS. Voir [la prédiction](/docs/predict) pour les sources,
 le streaming et le traitement des résultats.
+
+La prédiction de détection accepte une valeur rectangulaire `imgsz=(height, width)` ; l'entraînement et l'export conservent leurs propres contraintes de forme.
 
 ## Variantes
 
@@ -307,6 +309,8 @@ format accepte, ainsi que les extras que quelques-uns ajoutent.
 Tous les fichiers de poids publiés de cette famille.
 
 <checkpoint-table />
+
+Les variantes `obj2coco` couvrent la détection, la segmentation et la pose. Leur téléchargement exige votre accord et leurs conditions d'amont restreignent l'utilisation commerciale. Les checkpoints COCO originaux conservent leur licence Apache-2.0 enregistrée.
 
 ## Licence
 

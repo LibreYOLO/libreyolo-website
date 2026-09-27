@@ -16,7 +16,7 @@ keywords:
   - nms 무료 detR
   - 탐지 신뢰도 임계값
   - 클래스 필터링 추론
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   libreyolo/models/base/inference.py.의 InferenceRunner.__call__에서 따온 기본값,
   libreyolo/postprocess/의 모든 모듈에서 읽은 계열별 NMS 동작 및 libreyolo/backends/base.py.의
@@ -96,7 +96,7 @@ snippets:
 
         # 어느 쪽이든 동일한 수치입니다. conf와 max_det가 작동하는 제어값입니다.
         print(len(loose.boxes), len(tight.boxes))
-source_hash: 0b978963c356027d
+source_hash: "849650629e58c9e1"
 ---
 
 ## 네 가지 논점
@@ -119,6 +119,8 @@ source_hash: 0b978963c356027d
 `conf`은 예측이 폐기되는 점수입니다. 이는 NMS를 실행하지 않는 계열를 포함한 모든 계열에 적용되며, 탐지가 너무 많거나 너무 적을 때 가장 먼저 조정하는 기준입니다.
 
 `0.25`의 기본값은 사진을 보는 데 적합합니다. 하류 시스템에 공급할 때는 보통 더 높게 설정하기를 원하며, 정확도를 측정할 때는 훨씬 낮게 설정하기를 원합니다.
+
+탐지 검증은 IoU 0.50에서 F1을 기준으로 `metrics/best_conf`와 클래스별 임계값을 제공합니다. 이를 배포 임계값의 측정된 시작점으로 사용하며, [검증](/docs/train/validation)을 참조하십시오. 분할은 이 키를 제공하지 않습니다.
 
 ## IOU
 

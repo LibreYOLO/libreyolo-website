@@ -9,7 +9,7 @@ keywords:
   - yolo 导出 onnx
   - tensorrt 导出命令
   - libreyolo export 参数
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 命令
     value: libreyolo export
@@ -40,7 +40,7 @@ snippets:
         # 工厂按文件后缀路由，所以导出产物会像检查点一样加载
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: ef2ca20af3814109
+source_hash: 290b778a1060a760
 ---
 
 ## 概要
@@ -63,6 +63,7 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 | `batch` | `1` | 导出批大小 |
 | `half` | `false` | FP16 精度 |
 | `int8` | `false` | INT8 量化 |
+| `quantize` | | 精度：`16`（FP16）、`8`（INT8）或 `32`（FP32）；取代 `half` 和 `int8` |
 | `dynamic` | `false` | 动态输入形状（ONNX） |
 | `simplify` | `true` | ONNX 图简化 |
 | `nms` | `false` | 把 NMS 内嵌进模型。仅 ONNX 和 CoreML |
@@ -106,7 +107,7 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 `config_unsupported` 退出。
 
 `half=true` 和 `int8=true` 同时传不是错误。INT8 胜出，`half` 被丢弃，并向 stderr
-发一条警告。
+发一条警告。`quantize` 与 `half` 或 `int8` 不一致时会以 `config_conflict` 退出。
 
 `name` 和 `verify` 目前是 RKNN 的选项。把其中任何一个和别的格式一起传会以
 `config_unsupported` 退出，而不是被忽略。
@@ -140,3 +141,5 @@ stdout 上是结果，进度走 stderr。退出码：成功是 `0`，用法或�
 
 相关：[`libreyolo quantize`](/docs/cli/quantize)，它留在 PyTorch 里，写出的是检查点
 而不是部署产物。
+
+TFLite INT8 对 YOLO9 或 YOLOX 检测使用 `int8=True`，配合 `data=...`、`fraction=1.0`、`batch=1` 和 `dynamic=False`。不支持 FP16；同时指定两个精度标志时，CLI 丢弃 `half`，选择 INT8。JSON 导出输出报告实际解析的画布，包括从矩形训练检查点重新加载原生正方形家族时回退到正方形的情况。

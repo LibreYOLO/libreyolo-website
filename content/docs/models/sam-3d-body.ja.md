@@ -16,7 +16,7 @@ keywords:
   - MHR
   - Momentum Human Rig
   - 3D 姿勢推定
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -47,7 +47,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 5f47acceaf23ab64
+source_hash: 1b63435b35c57b10
 ---
 
 ## インストール
@@ -94,6 +94,8 @@ Hugging FaceのモデルページでMetaのライセンスに同意し、`hf aut
 ピクセル単位で、回転はaxis-angleではなくEuler角を使うMHRの規則に従います。入力ソース、
 ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
 
+自動取得には`libreyolo[hf]`とアクセス制限付きモデルへのアクセス権が必要です。ローカルチェックポイントは、確認済みのスナップショットディレクトリ、または対応する`model_config.yaml`と`LICENSE`に隣接する未変更の`model.ckpt`である必要があります。固定ハッシュと許可されたスナップショット内のファイル一覧により、名前変更、改変、リンク、追加アセットを拒否します。MHRアセットも固定されています。アップストリームのコンストラクターが読み込む間、ローカルのスナップショットを変更しないでください。
+
 ## バリアント
 
 同じMHR body modelのバックボーンは2種類です。`d3`はDINOv3 ViT-H/16+エンコーダー、
@@ -105,12 +107,6 @@ Hugging FaceのモデルページでMetaのライセンスに同意し、`hf aut
 
 body meshのエクスポートは未実装です。MHRパラメータのレイアウトをPyTorch外で表現する方法を含め、
 LibreYOLOはメッシュタスクのエクスポート済みグラフ契約をまだ定義していません。
-
-## チェックポイント
-
-このファミリーで公開されているすべての重みファイルです。
-
-<checkpoint-table />
 
 ## ライセンス
 

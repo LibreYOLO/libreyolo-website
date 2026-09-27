@@ -3,7 +3,7 @@ title: Dome-DETR
 families:
   - domedetr
 seo_title: Dome-DETR：在 LibreYOLO 里做微小目标检测
-description: 在 LibreYOLO 里用 Dome-DETR 对航拍和无人机图像做微小目标检测。转换上游权重，然后在采用 MIT 许可的代码下预测、微调和验证。
+description: "使用 Dome-DETR 进行微小目标检测、训练和验证。镜像中的预训练检查点保留仅限学术研究的条款。"
 lead: >-
   一个建立在 D-FINE 之上的微小目标专家：一个密度 head 决定目标在哪里，编码器注意力被限制在装着目标的那些窗口内，query
   数量也由这份密度来定，而不是固定不变。LibreYOLO 支持它做检测。
@@ -18,48 +18,17 @@ keywords:
   - AI-TOD
   - DETR
   - 密度自适应 query
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
-    - label: 先转换，再预测
-      language: bash
+    - label: "Python"
+      language: "python"
       code: |
-        # LibreYOLO 不托管任何 Dome-DETR 权重，所以检查点要从上游仓库拉取，
-        # 再转换一次
-        hf download RicePasteM/Dome-DETR --include 'best_ckpts_dome_2026/*' \
-          --local-dir dome-ckpts
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        python weights/convert_domedetr_weights.py \
-          dome-ckpts/best_ckpts_dome_2026/dome-s-visdrone_converted.pth \
-          LibreDOMEDETRs-visdrone.pt --size s --variant visdrone
-    - label: Python
-      language: python
-      code: |
-        from libreyolo import LibreYOLO
-
-        # 这里是本地路径，不是裸名称：这个家族不会下载任何东西
-        model = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-        result = model("drone-frame.jpg", save=True)
-
-        for box in result.boxes:
-            print(result.names[int(box.cls)], box.conf, box.xyxy)
-    - label: CLI
-      language: bash
-      code: >
-        libreyolo predict model=LibreDOMEDETRs-visdrone.pt
-        source=drone-frame.jpg save=True
-    - label: 类别名称
-      language: python
-      code: |
-        from libreyolo import LibreYOLO
-
-        # 没有 COCO 检查点，所以类别来自权重训练时用的那个数据集，
-        # 从检查点元数据里读出来
-        aitod = LibreYOLO("LibreDOMEDETRs-aitod.pt")
-        print(aitod.model.names)     # 9 个 AI-TOD-V2 类别
-
-        visdrone = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-        print(visdrone.model.names)  # 12 个 VisDrone 类别
+        # 预训练权重仅限学术研究
+        model = LibreYOLO("LibreDOMEDETRs-visdrone.pt", device="cpu")
+        print(model(SAMPLE_IMAGE).boxes)
   train:
     - label: Python
       language: python
@@ -96,7 +65,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreDOMEDETRs-visdrone.pt data=my-dataset.yaml
-source_hash: 381f01d769e7c420
+source_hash: 8482301790a9b8d9
 ---
 
 ## 安装
@@ -109,9 +78,7 @@ pip install libreyolo
 
 ## 预测
 
-没有任何东西会自动下载。LibreYOLO 不托管这些权重，所以流程是：拉取上游的检查点
-（checkpoint），转换一次，再按路径加载转换后的文件。[许可证](#licensing)解释了
-为什么。
+六个转换后的检查点自动从 LibreYOLO 镜像下载。其上游条款将用途限制为学术研究。
 
 <code-tabs name="predict" />
 
@@ -138,8 +105,7 @@ query 集合的大小，而不是固定解码 300 个。收益集中在目标最
 AP 只从 45.4 动到 46.4。把它当作 [D-FINE](/docs/models/d-fine) 在航拍、无人机和
 遥感图像上的搭档，而不是它的替代品。
 
-LibreYOLO 没有为这个家族发布任何基准测试数据行，因为它根本没有发布可供测试的
-检查点。
+这个家族没有记录 Vision Analysis 基准测试数据。
 
 ## 训练
 
@@ -186,52 +152,12 @@ DeFE 的密度与计数监督，其中填充出来的 query 会从分类项里�
 
 ## 检查点
 
-这里没有可列的。LibreYOLO 不发布任何 Dome-DETR 权重，形如
-`LibreDOMEDETR<size>-<dataset>.pt` 的名称也没有一个能解析到下载。
-
-上游发布了六个检查点，两个数据集各有 s、m 和 l：AI-TOD-V2 有 9 个类别，VisDrone
-有 12 个。没有 COCO 检查点，所以规范的文件名总是带着数据集后缀，类别名称随检查点
-元数据一起走，而不是来自家族里的某个常量。直接要一个裸的 `LibreDOMEDETRs.pt` 会
-立刻抛出异常，消息里点名两个真实的文件名和转换命令，而不是去尝试一次必然 404 的
-下载。
-
-转换由 `weights/convert_domedetr_weights.py` 完成。它会重建 LibreYOLO 的计算图，
-把上游的张量加载进去，只要有一个键缺失、多余或者形状不对就拒绝写出任何东西，所以
-转换出来的文件要么完全一致，要么根本不存在。把它指向一个上游的 `.pth`，再传入
-尺寸和变体：
-
-```bash
-python weights/convert_domedetr_weights.py \
-    dome-ckpts/best_ckpts_dome_2026/aitod-s-best.pth \
-    LibreDOMEDETRs-aitod.pt --size s --variant aitod
-```
-
-关于数值保真度，`weights/parity_domedetr.py` 会在全部六个检查点上把这份移植和
-上游实现做对比，先逐位检查 MWAS 的窗口掩码，然后在 `pred_logits` 和 `pred_boxes`
-上都报告 `max_abs_diff == 0.0`，并单独把每一项损失函数与上游的 criterion 做差。
-把这件事说清楚：那是一个手动脚本，需要上游的代码检出和已发布的检查点在磁盘上，
-靠人工运行。它不属于持续集成，也没有任何 CI 任务复现它。
+<checkpoint-table />
 
 ## 许可证
 
 <provenance-box>
 
-这个家族没有被镜像，原因出在权重上。上游的模型卡在元数据里没有 license 字段，
-正文里既说项目采用 Apache-2.0 许可，又把材料限制为仅供学术研究使用。这两种读法
-对不上，而更严格的那一种并不构成再分发许可，所以在澄清之前，LibreYOLO 链接到
-上游仓库，而不是复制那些文件。这里 [YOLO-NAS](/docs/models/yolo-nas) 适用的也是
-同一套理由。
-
-代码是另一个问题，而且清楚得多。上游仓库采用 Apache-2.0 许可，LibreYOLO 的移植
-采用 MIT 许可，你用自己的数据训练出来的权重是你自己的。
+六个镜像保留上游仅限学术研究的限制。代码的许可独立于权重。上游仓库采用 Apache-2.0，LibreYOLO 移植采用 MIT，用自己的数据训练出的权重归你所有。
 
 </provenance-box>
-
-## 引用
-
-Dome-DETR 发表于 ACM Multimedia 2025，标题是「Dome-DETR: DETR with
-Density-Oriented Feature-Query Manipulation for Efficient Tiny Object
-Detection」。预印本在 [arxiv.org/abs/2505.05741](https://arxiv.org/abs/2505.05741)。
-作者没有在仓库里给出 BibTeX 块，所以这里也不再手工拼一个出来。
-
-<citation-block />

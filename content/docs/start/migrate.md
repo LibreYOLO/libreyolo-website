@@ -4,7 +4,7 @@ seo_title: "Load upstream weights in LibreYOLO"
 description: "Point LibreYOLO at a checkpoint from an upstream project. Autoconversion rewraps it at load time, keeping its class count and names."
 lead: "LibreYOLO ports its model families from upstream projects, so their released checkpoints are almost loadable already. What they lack is metadata. Autoconversion supplies it at load time."
 keywords: [libreyolo convert weights, load upstream checkpoint, libreyolo migration, convert pth to libreyolo, autoconversion]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 meta:
   - label: Entry point
     value: LibreYOLO("path/to/upstream.pth")
@@ -44,7 +44,7 @@ snippets:
 ---
 
 This page is about checkpoints from other projects. If you are moving your own
-code from an older LibreYOLO, see [upgrading to 1.5.0](/docs/upgrade).
+code from an older LibreYOLO, see [upgrading to 1.6.0](/docs/upgrade).
 
 ## What happens when you load a foreign file
 

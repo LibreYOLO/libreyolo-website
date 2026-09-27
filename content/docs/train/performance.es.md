@@ -18,7 +18,7 @@ keywords:
   - entrenamiento limitado por el dataloader
   - overhead de lanzamiento de kernels
   - utilización de la gpu entrenamiento
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   profile:
     - label: Perfilar y seguir entrenando
@@ -70,7 +70,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: ee5bb727065b6099
+source_hash: c8d7adb6aabcbc80
 ---
 
 ## Medir antes de tocar nada
@@ -117,6 +117,8 @@ porque un paso limitado por los lanzamientos tiene ruido suficiente como para
 que una sola ejecución induzca a error; escribe un directorio por prueba,
 `prof_1`, `prof_2` y así sucesivamente, más un `profile_repeat.json` agregado.
 
+RF-DETR y las rutas de matching de D-FINE/DEIM/RT-DETR reducen las transferencias al host; la construcción de Adam y AdamW en CUDA usa actualizaciones fusionadas cuando es compatible. SGD y los parámetros fuera de CUDA usan la construcción estándar. Estos cambios de implementación no implican una aceleración universal.
+
 ## Precisión mixta
 
 `amp=True` es el valor por defecto en la mayoría de las familias y ejecuta el
@@ -125,12 +127,7 @@ forward bajo el autocast de CUDA. `amp_dtype` elige entre `float16` y
 
 <code-tabs name="amp" />
 
-Float16 necesita escalado dinámico de la función de pérdida (loss) y recibe un
-escalador de gradientes activo; el rango de exponente más ancho de bfloat16 no
-lo necesita, así que su escalador queda desactivado. Cuatro familias vienen con
-`amp=False`, D-FINE, DEIM, YOLO-NAS y FOMO, y el ajuste de DEIM llega a
-RT-DETRv4 por herencia. D-FINE indica el motivo: su decoder limita las
-activaciones a 65504, el mayor valor finito de float16.
+Float16 usa un escalador de gradientes; bfloat16 lo desactiva. La detección con D-FINE, DEIM, RT-DETRv4 y YOLO-NAS usa `amp=True` por defecto. Dome-DETR, PP-YOLOE y YOLO-NAS OBB mantienen FP32 por defecto. Pasa `amp=False` para solicitar FP32 explícitamente.
 
 La semántica de los argumentos, incluido qué hace una petición de bfloat16 en
 hardware sin soporte de bfloat16, está en
@@ -267,6 +264,22 @@ ciento. El coste relativo es mayor en los modelos de clasificación pequeños,
 cuyas activaciones ya son pequeñas de partida: ResNet-18 a 224 px, batch 16,
 pasó de 0,48 GB en eager a 0,57 GB con grafo. Si eso empuja una ejecución por
 encima del límite, baja el batch o deja el flag apagado.
+
+## torch.compile
+
+`train(compile=True)` compila el forward y el backward de la red con
+`torch.compile`. También acepta los modos `"default"`, `"reduce-overhead"`,
+`"max-autotune"` y `"max-autotune-no-cudagraphs"`; el valor por defecto es
+`False`. La loss, el optimizador, la EMA, la validación, los checkpoints y la
+exportación siguen en eager, y los checkpoints se cargan sin compilación. Solo
+compilan las ejecuciones CUDA de una sola GPU. Las ejecuciones en CPU, MPS,
+distribuidas y de destilación, y los fallos del compilador, entrenan en eager
+tras un aviso. La compilación tarda varios minutos y necesita un compilador de C
+y las cabeceras de Python en la máquina de entrenamiento.
+
+Durante `train()`, salvo que `OMP_NUM_THREADS` esté definido, LibreYOLO reduce
+el número de hilos de CPU de PyTorch a la asignación de CPU del proceso, para
+que los contenedores con CPU limitada no ralenticen cada paso.
 
 ## Relacionado
 

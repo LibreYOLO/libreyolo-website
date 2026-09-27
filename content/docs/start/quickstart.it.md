@@ -15,7 +15,7 @@ keywords:
   - addestrare yolo python
   - esportare yolo onnx
   - esempio yolo python
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Installazione
     value: pip install libreyolo
@@ -71,30 +71,26 @@ snippets:
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
+        # I worker dei dati reimportano questo file su macOS e Windows, quindi
+        # uno script tiene l'addestramento sotto una guardia main.
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+            # coco8 è un dataset di 8 immagini incluso nella libreria. Al primo
+            # utilizzo viene scaricato da un URL, quindi non c'è nessuno script da eseguire.
+            results = model.train(
+                data="coco8.yaml",
+                epochs=1,
+                imgsz=640,
+                batch=4,
+                device="cpu",
+            )
 
-
-        # coco8 è un dataset di 8 immagini incluso nella libreria. Al primo
-
-        # utilizzo viene scaricato da un URL, quindi non c'è nessuno script da
-        eseguire.
-
-        results = model.train(
-            data="coco8.yaml",
-            epochs=1,
-            imgsz=640,
-            batch=4,
-            device="cpu",
-        )
-
-
-        print(results["save_dir"])
-
-        print(results["best_checkpoint"])
+            print(results["save_dir"])
+            print(results["best_checkpoint"])
     - label: CLI
       language: bash
       code: |
@@ -105,14 +101,15 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() restituisce un semplice dict, non un oggetto.
-        metrics = model.val(data="coco8.yaml", device="cpu")
+            # val() restituisce un semplice dict, non un oggetto.
+            metrics = model.val(data="coco8.yaml", device="cpu")
 
-        print(metrics["metrics/mAP50-95"])
-        print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+            print(metrics["metrics/mAP50-95"])
+            print(metrics["metrics/mAP50"])
+            print(metrics["metrics/mAP75"])
   export:
     - label: TorchScript
       language: python
@@ -135,7 +132,7 @@ snippets:
       code: |
         pip install "libreyolo[onnx]"
         libreyolo export model=yolo9-t format=onnx imgsz=640
-source_hash: c11b6bdbf0b6fdf1
+source_hash: eb6b18dedf1c5f4b
 ---
 
 ## Installazione
@@ -172,7 +169,9 @@ di `Results`.
 
 `data` è uno YAML di dataset. `coco8.yaml` è incluso nella libreria, ed è per
 questo che lo snippet gira così com'è; un nome non incluso viene letto come un
-percorso. I dataset vengono risolti sotto `~/datasets`, oppure sotto
+percorso. La guardia `__main__` c'è perché i worker dei dati reimportano lo
+script su macOS e Windows; vedi [risoluzione dei problemi](/docs/troubleshooting).
+I dataset vengono risolti sotto `~/datasets`, oppure sotto
 `LIBREYOLO_DATASETS_DIR` quando quella variabile è impostata.
 
 Un'esecuzione scrive in `project/name`, che per default è una directory sotto

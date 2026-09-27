@@ -17,7 +17,7 @@ keywords:
   - clasificación de imágenes python
   - red convolucional pura
   - clasificador ImageNet
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -33,7 +33,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreConvNeXtt-cls.pt source=cat.jpg save=True
+        libreyolo predict model=LibreConvNeXtt-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python
       language: python
@@ -105,7 +105,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: 1682cc69cf2925e6
+source_hash: 8f33a40e4d3a8f29
 ---
 
 ## Instalación
@@ -167,12 +167,16 @@ hacer fine-tuning del backbone completo.
 Consulta [entrenamiento](/docs/train) para datasets, aumento de datos
 (data augmentation), multi-GPU y loggers.
 
+`cls_pw=0` desactiva la ponderación de la función de pérdida; los valores hasta 1 usan pesos de frecuencia inversa normalizados a una media de 1. En cambio, `class_weights=True` usa frecuencias inversas normalizadas por muestra y no se puede combinar con `cls_pw>0`. Estos ajustes deben coincidir al reanudar. Consulta [clasificación](/docs/tasks/image-classification).
+
 ## Validación
 
 `val()` devuelve un diccionario de claves `metrics/`. En clasificación son la
 precisión top-1 y top-5 sobre el split de validación.
 
 <code-tabs name="val" />
+
+La validación y la calibración INT8 usan la transformación de evaluación de la familia. Los metadatos de exportación registran `norm_mean`, `norm_std` y `resize_mode`; los artefactos anteriores recurren a los valores de la familia. Los preprocesadores de calibración devuelven el array CHW y la proporción requeridos.
 
 ## Exportación
 
@@ -195,10 +199,7 @@ Todos los archivos de pesos publicados de esta familia.
 
 <provenance-box>
 
-En esta familia solo se distribuye ConvNeXt V1. Los checkpoints preentrenados
-pequeños de ConvNeXt-V2 son CC-BY-NC 4.0 y se excluyen deliberadamente, porque
-unos pesos no comerciales no pueden redistribuirse dentro de una biblioteca
-MIT/comercial.
+Esta página trata ConvNeXt V1. [ConvNeXt V2](/docs/models/convnextv2) es una familia separada cuyos pesos preentrenados oficiales conservan CC-BY-NC-4.0.
 
 </provenance-box>
 

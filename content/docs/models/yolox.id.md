@@ -17,7 +17,7 @@ keywords:
   - decoupled head
   - SimOTA
   - real-time object detection
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -108,7 +108,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: f5ab735a29f85a95
+source_hash: ddba5fb10bb88ad2
 ---
 
 ## Instalasi
@@ -157,6 +157,8 @@ ke nilai default yang lebih besar, bukan ukuran lebih kecil tempat model dipubli
 
 Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
 
+Mosaic mengambil hingga 20 calon pasangan untuk mengutamakan gambar beranotasi; jika tidak ada yang memenuhi syarat, sampel terakhir dipakai.
+
 ## Validasi
 
 `val()` mengembalikan dictionary dengan key `metrics/` yang mencakup presisi, recall,
@@ -177,6 +179,8 @@ dapat menanam NMS ke dalam graph dengan `nms=True`; YOLOX dan YOLOv9 adalah dua 
 yang saat ini menerima flag tersebut.
 
 <code-tabs name="export" />
+
+[TFLite INT8](/docs/export/tflite) menerima `int8=True` dan dataset kalibrasi.
 
 ## Checkpoint
 

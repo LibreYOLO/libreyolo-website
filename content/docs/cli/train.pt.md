@@ -2,9 +2,8 @@
 title: libreyolo train
 seo_title: referência do comando libreyolo train
 description: >-
-  Treina um modelo pela linha de comando: os 59 argumentos com seus valores
-  padrão, como os padrões de cada família os sobrescrevem e quais argumentos uma
-  família ignora.
+  Treine um modelo pela linha de comando: argumentos e seus padrões, como os
+  padrões da família os substituem e quais argumentos uma família ignora.
 lead: >-
   Treina um modelo em um dataset e escreve checkpoints, métricas e logs em um
   diretório de execução. Cada argumento abaixo tem um valor padrão vindo da
@@ -17,7 +16,7 @@ keywords:
   - argumentos libreyolo train
   - treinar yolo com dataset próprio
   - congelar camadas yolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Comando
     value: libreyolo train
@@ -26,7 +25,7 @@ meta:
     value: data
     mono: true
   - label: Saída
-    value: 'Checkpoints, métricas e logs em runs/train/exp'
+    value: 'Checkpoints, métricas e logs em runs/train/<name>; YOLO9 usa yolo9_exp'
 snippets:
   examples:
     - label: Básico
@@ -52,7 +51,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 3aad4298310d3081
+source_hash: 30b2c16d339f5f50
 ---
 
 ## Sinopse
@@ -92,6 +91,7 @@ Os argumentos são pares `key=value`, e a forma POSIX também funciona, então
 | `amp` | `true` | Precisão mista automática (AMP) |
 | `amp_dtype` | `float16` | dtype do AMP em CUDA: `float16` ou `bfloat16` |
 | `cuda_graph` | `false` | Captura o forward e o backward do treinamento em CUDA graphs. Só uma GPU e só famílias suportadas; as demais rodam em modo eager |
+| `compile` | `false` | Aplica `torch.compile` à rede de treinamento: `true`, `false`, `default`, `reduce-overhead`, `max-autotune`, `max-autotune-no-cudagraphs`. Só uma GPU CUDA; as demais execuções treinam em modo eager com um aviso |
 | `lora` | `false` | Fine-tuning com LoRA, para as famílias transformer listadas em Notas |
 | `freeze` | | Congela camadas: um número inteiro, uma lista de índices ou nomes de módulos |
 
@@ -150,7 +150,7 @@ Os argumentos são pares `key=value`, e a forma POSIX também funciona, então
 | Argumento | Padrão | Significado |
 |---|---|---|
 | `val` | `true` | Valida durante o treinamento |
-| `eval_interval` | `10` | Valida a cada N épocas |
+| `eval_interval` | `10` | Valida a cada N épocas e após a época final |
 | `max_det` | `300` | Máximo de predições por imagem depois do NMS de validação |
 | `eval_max_det` | | Teto do avaliador COCO. Quando não definido, a convenção AP@100 do pycocotools |
 | `faster_coco_eval` | `true` | Usa o backend C++ faster-coco-eval para as métricas COCO quando instalado; se não, recorre ao pycocotools |
@@ -175,6 +175,27 @@ Os argumentos são pares `key=value`, e a forma POSIX também funciona, então
 | `quiet` | `false` | Silencia o stderr |
 | `dry_run` | `false` | Resolve e imprime a config sem executar |
 | `help_json` | `false` | Despeja o schema do comando como JSON e sai |
+
+| Argumento | Padrão | Significado |
+| --- | --- | --- |
+| `min_samples` | `0` | Duração mínima da época para datasets pequenos: quando o dataset tem menos imagens, sorteia essa quantidade de amostras por época com reposição (0 = desativado) |
+| `class_balanced` | `False` | Amostragem por fator de repetição no estilo LVIS para datasets de cauda longa (padrão: desativado) |
+| `cls_pw` | `0.0` | Potência de ponderação por frequência inversa na classificação: 0 desativa, 1 completa (pesos de classe com média um; não pode combinar com class_weights=True) |
+| `class_weights` | `False` | Pesos legados da loss de classificação normalizados por amostra (padrão: desativado) |
+| `single_cls` | `False` | Treina um detector suportado com todas as labels remapeadas para a classe 0 |
+| `classes` | `None` | Treina um detector suportado apenas com estes IDs originais de classe do dataset, separados por vírgulas (ex.: '0,3,5'); todas as demais classes são descartadas como se não tivessem labels. Os IDs são mantidos, sem compactação |
+| `average_best` | `0` | Calcula a média uniforme dos N melhores checkpoints pela métrica monitorada em weights/average.pt ao final do treinamento (0 = desativado) |
+| `export_check` | `False` | Exporta ONNX antes da época 1 e interrompe a execução se a exportação falhar (padrão: desativado) |
+| `precise_bn` | `0` | Recalcula estatísticas móveis de BatchNorm com esta quantidade de imagens de treinamento após a última época (0 = desativado) |
+| `aux_weight` | | Só YOLO9: peso da loss do ramo auxiliar PGI para fine-tuning. `0.25` quando não definido; `0` treina só a cabeça principal |
+| `fliplr` | `None` | Probabilidade de espelhamento horizontal (alias de flip_prob do ecossistema) |
+| `flipud` | `0.0` | Probabilidade de espelhamento vertical |
+| `auto_augment` | `None` | Política de auto-augment de classificação: randaugment, autoaugment, augmix (padrão: nenhuma) |
+| `erasing` | `0.0` | Probabilidade de RandomErasing na classificação, 0 <= erasing < 1 |
+| `cutmix` | `0.0` | Probabilidade de CutMix na classificação (labels suaves) |
+| `scale` | `0.5` | Faixa de área de RandomResizedCrop na classificação: um limite inferior float ou um (min,max) explícito |
+| `crop_pct` | `None` | Razão de redimensionamento de avaliação na classificação antes do recorte central (padrão: valor nativo da família do modelo) |
+| `plot_samples` | `8` | Imagens de amostra no gráfico de amostras de validação: 0 para nenhuma, -1 para cada imagem validada (não muda as métricas) |
 
 ## Exemplos
 
@@ -210,8 +231,9 @@ de passagem direta, sem mosaic, sem mixup e sem warp afim, então `mosaic`,
 `mixup`, `hsv_prob`, `degrees`, `translate`, `shear`, `mosaic_scale` e
 `mixup_scale` não chegam a nada ali. A EC compartilha esse pipeline, mas lê sim
 `hsv_prob`, `degrees` e `translate` quando sua tarefa é pose. As famílias de
-classificação, SegFormer e NAFNet ignoram esse conjunto inteiro e `flip_prob`
-junto, porque o flip delas roda com uma probabilidade fixa em vez de
+classificação ignoram esse conjunto exceto `mixup`, que para elas é MixUp por
+batch, e leem `flip_prob`. SegFormer e NAFNet ignoram esse conjunto inteiro e
+`flip_prob` junto, porque o flip delas roda com uma probabilidade fixa em vez de
 configurável. A YOLO-NAS ignora só `mosaic`, já que faz augmentation com uma
 transformação afim por amostra sempre ligada. O RF-DETR ignora mais três além
 dessa lista: `optimizer`, `momentum` e `nesterov`.
@@ -222,21 +244,22 @@ lista autoritativa para a versão instalada. Ela também é o único sinal, ent�
 execução em script com `quiet=true` suprime o aviso junto com todo o resto do
 stderr.
 
-`val=false` é um caso relacionado. Ele define `eval_interval` como `0` para a
-maioria das famílias; o RF-DETR não consegue desativar a validação desse jeito e
-registra que ignorou o pedido.
+`val=false` é um caso relacionado. Ele define `eval_interval` como `0`, o que
+desliga a validação durante o treinamento, incluindo a época final, e a execução
+não grava nenhum `best.pt`.
 
 ### Outros comportamentos que vale conhecer
 
-`lora=true` é aceito por RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 e v4, EC e
-ConvNeXt. Qualquer outra família sai com `config_unsupported` em vez de treinar
+`lora=true` é aceito por RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 e v4, EC,
+GTR e ConvNeXt. Qualquer outra família sai com `config_unsupported` em vez de treinar
 sem isso.
 
 `pretrained=false` combinado com `resume` é recusado para as famílias que
 suportam treinamento do zero, já que os dois pedem coisas opostas.
 
 `mosaic` e `mixup` são as grafias de linha de comando dos campos de config
-`mosaic_prob` e `mixup_prob`. Nas famílias cujo mixup só se aplica a amostras de
+`mosaic_prob` e `mixup_prob`; em um modelo de classificação, `mixup` é MixUp por
+batch. Nas famílias cujo mixup só se aplica a amostras de
 mosaic, `mixup` acima de zero com `mosaic` em zero nunca dispara, e a execução
 diz isso.
 

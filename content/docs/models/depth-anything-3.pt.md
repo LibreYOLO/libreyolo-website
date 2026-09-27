@@ -101,7 +101,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: 0ac96180165c4891
+source_hash: d22a5fc355bbebd2
 ---
 
 ## Instalação
@@ -125,8 +125,8 @@ métrica nem escala entre imagens. O checkpoint original emite profundidade
 relativa positiva; o wrapper de rede do LibreYOLO a inverte e reproduz o
 tratamento oficial de céu, para que a saída siga o contrato de profundidade
 compartilhado do LibreYOLO. `save=True` grava em disco uma visualização com
-mapa de cores desse mapa; `Results.plot()` não cobre esta família, já que está
-definido apenas para normais de superfície e bordas. Veja
+mapa de cores desse mapa; `Results.plot()` renderiza o mapa de profundidade como
+uma imagem PIL, e `pil=False` retorna o array. Veja
 [predição](/docs/predict) para fontes, streaming e tratamento de resultados.
 
 ## Variantes

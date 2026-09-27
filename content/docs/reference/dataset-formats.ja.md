@@ -13,9 +13,9 @@ keywords:
   - coco panoptic 形式
   - 深度 データセット
   - pose kpt_shape
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  libreyoloリポジトリv1.5.0のdocs/dataset_schema.mdに対応し、ローダー名はlibreyolo/data/に照らして確認しました。
+  libreyoloリポジトリv1.6.0のdocs/dataset_schema.mdに対応し、ローダー名はlibreyolo/data/に照らして確認しました。
 snippets:
   usage:
     - label: 検出ラベルの1行を解析
@@ -33,7 +33,7 @@ snippets:
         # ピクセル単位の (class_id, x1, y1, x2, y2, area)
 
         print(row)
-source_hash: a8282c079624044d
+source_hash: 5f4bc7d17822a85d
 ---
 
 ## 共通YAML
@@ -112,6 +112,8 @@ YAMLには必須の`kpt_shape`を追加します。値は`[K, 2]`または`[K, 3
 ```
 
 フィールド数は正確に`5 + K * D`で、`D`は`kpt_shape`の2番目の値です。キーポイント座標は正規化されます。存在する場合、可視性`v`は`0`、`1`、`2`のいずれかです。
+
+RF-DETRの複数クラスのデータセットには`names`が必要で、クラスごとに`kpt_names`を定義できます。キーポイント名の空のリストは、ボックスのみのクラスを表します。少なくとも1つのクラスにキーポイントが必要です。
 
 ## obb
 
@@ -351,3 +353,14 @@ dataset_root/
 
 `point`はデータセットラベルスキーマではなくモデル出力タスクです。pointファミリーは、ボックス行から物体中心を導出するなど、既存ラベルを内部で適応させることがありますが、point専用のテキストラベル形式は定義されていません。
 
+## イベントヒストグラム
+
+YOLO9とRF-DETRの物体検出は、正、負の順に並んだ、非負かつ有限のカウント平面を2つ持つ`.npy`のHWC配列を受け付けます。`input_profile`には`format: event_histogram`、`layout: HWC`、`polarity: positive_negative`、`encoding: counts`、正の`scale`、正の整数の`window_us`が必要です。ラベルは通常の物体検出のテキストファイルを使います。[入力の準備](/docs/train/event-histograms)を参照してください。
+
+## ロボットポリシー
+
+`act`タスクは、エピソード、カメラ、状態、アクションの特徴量を含むLeRobot v3のデータセットディレクトリまたはHubデータセットIDを使います。物体検出用のYAMLは使いません。[ロボットポリシー](/docs/tasks/robot-policies)を参照してください。
+
+## albedo
+
+`images/<split>/<name>.<image extension>`と`albedo/<split>/<name>.npy`を対応付けます。ターゲットは、画像と同じ寸法の`(H, W, 3)`で、[0, 1]の範囲にある有限の浮動小数点の線形RGB値です。必要に応じて、`input_dir`と`albedo_dir`に単一要素のフォルダー名を指定します。表示用PNGとsRGB値は、定量的なアルベドのターゲットではありません。

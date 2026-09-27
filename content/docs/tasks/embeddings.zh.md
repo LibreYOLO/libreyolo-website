@@ -17,7 +17,7 @@ keywords:
   - clip 图像特征
   - dinov2 特征提取
   - 行人重识别特征
-last_verified: 1.5.0
+last_verified: "1.6.0"
 verification: >-
   任务键与别名读自 libreyolo/tasks.py。结果载荷来自 libreyolo/utils/results.py 中的 Embeddings 与
   Identities 类。Gallery API 来自 libreyolo/utils/gallery.py。embed 与
@@ -169,7 +169,7 @@ snippets:
 
         libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg
         --json
-source_hash: ffbaad5599035bc7
+source_hash: 3197bfe9a3d53756
 ---
 
 ## 定义
@@ -200,7 +200,7 @@ float32 向量。因为每一行都是单位向量，比较两行就是一次点
 
 ## 模型
 
-有四个家族服务于这个任务，它们按是否先做定位干净地分成两类。
+嵌入向量家族的区别在于编码整张图像、视频片段还是检测区域。
 
 | 家族 | 形状 | 维度 | 还支持 |
 |---|---|---|---|
@@ -213,9 +213,7 @@ CLIP 和 SigLIP 2 仍以 `classify` 为默认任务，所以 `task="embed"` 必�
 现有的 `-cls` 检查点（checkpoint）就是共享的双塔产物；相同的权重不会再发布一份重复
 的 `-embed` 检查点。
 
-`embed_text` 只存在于 CLIP 和 SigLIP 2 上，这两个家族带文本塔。DINOv2 没有。DINOv2
-的嵌入向量绕过语义 head 和分类 head，在 224 像素下读取最后归一化的 CLS token；`n`、
-`s`、`m` 和 `l` 变体共用同一个 DINOv2-S 编码器，所以四者返回的都是 `D = 384`。
+`embed_text` 可用于带有文本塔的 CLIP、SigLIP 2 和 PE。DINOv2 没有文本塔。DINOv2 嵌入向量绕过语义分割和分类 head，读取 224 像素下最终归一化的 CLS token；`n`、`s`、`m`、`l` 变体都共用 DINOv2-S 编码器，因此四者都返回 `D = 384`。
 
 本次发布新增的仅分类骨干 [ViT](/docs/models/vit)、[Swin](/docs/models/swin) 和
 [DeiT](/docs/models/deit) 只声明 `classify`，不服务于这个任务。
@@ -225,6 +223,8 @@ CLIP 和 SigLIP 2 仍以 `classify` 为默认任务，所以 `task="embed"` 必�
 `model.embed(source, **kwargs)` 是批量的快捷方式：它跑一次 `predict`，把每个结果的每
 一行拼进同一个 `(N_total, D)` 的 CPU float32 张量，各行维度不一致就抛错。支持任务里
 没有 `embed` 的家族会抛 `NotImplementedError`。
+
+[PE](/docs/models/pe) 支持图像、文本和有限时长视频的嵌入向量，默认 `clip_frames=8`。[V-JEPA 2](/docs/models/vjepa2) 和 [LeVJEPA](/docs/models/levjepa) 生成视频片段嵌入向量，并通过 `embed_tokens()` 提供 patch token。各自模型页面说明了片段采样和直接运行时导出的约束。
 
 ## 结果载荷
 

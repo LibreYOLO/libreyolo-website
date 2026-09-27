@@ -15,7 +15,7 @@ keywords:
   - top-1 accuracy
   - klasyfikacja zero-shot
   - biblioteka klasyfikacji mit
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -143,7 +143,7 @@ snippets:
 
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 836bea76cd2cdf92
+source_hash: 90aed355e0ddf5e3
 ---
 
 ## Definicja
@@ -167,7 +167,7 @@ wektor należy do obrazu, a nie do pojedynczego wiersza.
 
 ## Modele
 
-Pięć rodzin obsługuje zarówno trenowanie, jak i predykcję:
+Klasyfikatory obrazów z obsługą trenowania obejmują:
 [ResNet](/docs/models/resnet), [ConvNeXt](/docs/models/convnext),
 [MobileNetV4](/docs/models/mobilenetv4),
 [EfficientNetV2](/docs/models/efficientnetv2) oraz
@@ -187,6 +187,8 @@ stałego zestawu etykiet. Oceniają obraz względem promptów tekstowych, dlateg
 `set_classes()` definiuje klasy podczas wywołania i w ogóle nie ma etapu
 trenowania dla nowego zestawu etykiet. Obie rodziny obsługują również zadanie
 `embed`.
+
+[ConvNeXt V2](/docs/models/convnextv2) dodaje klasyfikację nadzorowaną ze wstępnie wytrenowanymi wagami CC-BY-NC-4.0. [PE](/docs/models/pe) obsługuje klasyfikację zero-shot; [V-JEPA 2](/docs/models/vjepa2) trenuje sondy klasyfikacji wideo.
 
 ## Predykcja
 
@@ -241,6 +243,8 @@ gdy backbone jest przenoszony bez zmian. Informacje o zbiorach danych,
 augmentacji, wielu GPU i modułach rejestrujących zawiera strona
 [trenowania](/docs/train).
 
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 i DINOv2 obsługują ważenie funkcji straty przez `cls_pw` lub `class_weights`. `scale` w klasyfikacji kontroluje obszar wycinka, a `crop_pct` wycinanie podczas ewaluacji. Zobacz [augmentacje](/docs/train/augmentations).
+
 ## Walidacja
 
 Funkcja `val()` zwraca zwykły słownik kluczy `metrics/`, obliczany na podziale
@@ -254,6 +258,8 @@ wyboru najlepszej epoki. `metrics/accuracy_top5` jest udziałem obrazów, dla
 których prawdziwa klasa znajduje się wśród pięciu klas o największym wskaźniku.
 Metryka mówi tym mniej, im mniej klas zawiera zbiór danych. Słownik obejmuje
 również `fitness`, kopię wartości top-1.
+
+Walidacja ImageFolder zwraca też makrośrednie `metrics/precision`, `metrics/recall` i `metrics/f1`, liczone po klasach obecnych w etykietach walidacyjnych. Klasy bez predykcji wnoszą zerową precyzję. Domyślną funkcją fitness pozostaje dokładność top-1. Walidacja i kalibracja używają transformacji ewaluacyjnej modelu.
 
 ## Eksport
 

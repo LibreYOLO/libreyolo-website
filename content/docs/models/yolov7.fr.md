@@ -150,7 +150,7 @@ YOLOv7, vous n'avez donc aucune taille à choisir.
 <code-tabs name="train" />
 
 `pretrained` est pris en compte, contrairement au paramètre homonyme sans
-effet de certaines autres familles présentées ici\u00a0: transmettez `True` pour
+effet de certaines autres familles présentées ici : transmettez `True` pour
 démarrer à chaud depuis le checkpoint `LibreYOLO7b.pt` publié (téléchargé
 automatiquement), ou un chemin ou un nom pour tout autre fichier. Ce
 checkpoint publié utilise les 80 classes COCO. Si vous le demandez sur un
@@ -165,7 +165,7 @@ poids n'a été chargé.
 Sans autre réglage, le trainer exécute 300 époques avec `lr0=0.01`, un momentum
 SGD de 0.937, un warmup de 3 époques, ainsi que la même affectation SimOTA et
 la même phase finale sans augmentation de 15 époques que YOLOX, adaptées à la
-tête avec ancres. Une différence subsiste\u00a0: YOLOX ajoute durant ces dernières
+tête avec ancres. Une différence subsiste : YOLOX ajoute durant ces dernières
 époques un raffinement L1 de la régression des bounding boxes, que v7 omet, car
 sa loss SimOTA ne possède aucune branche L1 de décalage brut à affiner.
 

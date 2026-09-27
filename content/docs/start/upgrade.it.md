@@ -1,15 +1,14 @@
 ---
-title: Aggiornare alla 1.5.0
-seo_title: Aggiornare LibreYOLO dalla 1.4.0 alla 1.5.0
+title: Aggiornamento a 1.6.0
+seo_title: Aggiornare LibreYOLO da 1.5.0 a 1.6.0
 description: >-
-  Le quattro modifiche al codice richieste dalla 1.5.0, le tre modifiche che
-  spostano le metriche e i cambiamenti di comportamento minori da conoscere
-  prima di confrontare le esecuzioni.
+  Passi di migrazione per preprocessing, valori predefiniti di addestramento,
+  directory di esecuzione, risorse fissate, QAT e loader di dati in LibreYOLO
+  1.6.0.
 lead: >-
-  Non è stato rimosso nulla dall'API pubblica dei modelli: ogni classe e
-  funzione che funzionava nella 1.4.0 si importa ancora. Quattro argomenti hanno
-  cambiato forma e tre valori predefiniti spostano numeri con cui potresti fare
-  confronti.
+  La versione 1.6.0 modifica preprocessing, valori predefiniti di addestramento
+  e gestione dei checkpoint. Rivalida i riferimenti salvati e imposta
+  esplicitamente i valori precedenti per riprodurre una vecchia esecuzione.
 keywords:
   - aggiornare libreyolo
   - migrazione libreyolo 1.5.0
@@ -17,18 +16,43 @@ keywords:
   - libreyolo breaking changes
   - yolox bn eps
   - faster-coco-eval default
-last_verified: 1.5.0
-meta:
-  - label: Si applica a
-    value: Dalla 1.4.0 alla 1.5.0
-  - label: Modifiche al codice richieste
-    value: 'Quattro, tutte circoscritte'
-  - label: Risultati che cambiano
-    value: 'Backend COCO, eps di BN in YOLOX, multi-scala di D-FINE'
-  - label: Rimozioni dall'API pubblica
-    value: Nessuna
-source_hash: ab38d8ef7b53f596
+last_verified: 1.6.0
+source_hash: e9c7cb5271aa4a81
 ---
+
+## Da 1.5.0 a 1.6.0
+
+- Aggiorna gli ambienti vincolati a versioni precedenti a ONNX Runtime 1.18 a `onnxruntime>=1.18.0` prima di installare l'extra ONNX.
+
+- SAM 3D Body accetta l'insieme verificato di risorse dello snapshot. Installa `libreyolo[hf]`, ottieni l'accesso controllato e usa l'acquisizione automatica, oppure fornisci la directory invariata dello snapshot e la risorsa MHR fissata su un filesystem locale affidabile.
+
+- Riesegui la validazione dopo le correzioni al ridimensionamento RF-DETR per i task diversi dalla posa e alla normalizzazione dei classificatori. Ricontrolla le soglie di confidenza in produzione prima di confrontare i risultati con 1.5.0; non esiste un flag per il preprocessing precedente.
+
+- D-FINE, DEIM, RT-DETRv4 e il rilevamento YOLO-NAS attivano FP16 AMP di default. Passa `amp=False` per mantenere FP32.
+
+- Per le precedenti impostazioni di fine-tuning YOLO9, imposta `aux_weight=0`, `max_labels=100` e `warmup_momentum=0.937`. Imposta `letterbox_pad="topleft"` quando una nuova conversione contrassegnata come centrata deve riprodurre la vecchia geometria. I vecchi checkpoint a testa singola riprendono con il grafo originale. Le nuove run YOLO9 usano più memoria GPU, quindi riduci `batch` se una dimensione del batch della 1.5.0 esaurisce la memoria.
+
+- RF-DETR e DINOv2 creano directory di esecuzione incrementali con il nome della famiglia. Aggiorna i sistemi che usano i percorsi degli artefatti, oppure imposta `output_dir="runs/train", exist_ok=True` per mantenere il vecchio percorso e il comportamento di riutilizzo.
+
+- Mantieni `mixup + cutmix <= 1` nella classificazione; le combinazioni non valide ora generano un errore durante la configurazione.
+
+- QAT disattiva EMA, SyncBatchNorm e la media dei checkpoint. Usa i checkpoint best/last di QAT senza fare affidamento su questi stati.
+
+- I loader personalizzati con hook che modificano il dataset devono usare `persistent_workers=False` o ricreare i worker dopo la modifica. Le copie persistenti incompatibili con più worker ora generano un errore.
+
+- Gli array di immagini NumPy vengono letti come BGR, l'ordine di OpenCV. Passa `color_format="rgb"` dove passi un array RGB come `np.asarray(pil_image)`; l'output di `cv2.imread()` e i frame video non richiedono modifiche.
+
+- Un array NumPy o un tensore 4D è un batch: `predict()` restituisce una lista con un `Results` per immagine invece di usare solo la prima immagine.
+
+- `train(resume=True)` e `train(resume="path/to/last.pt")` ripristinano gli argomenti di addestramento salvati dell'esecuzione e continuano a scrivere nella sua directory di esecuzione; gli argomenti che passi esplicitamente hanno la precedenza. Riprendere pesi pubblicati, o un'esecuzione che ha già raggiunto le sue `epochs`, solleva `ValueError`.
+
+- Con la validazione attiva, l'ultima epoca viene sempre validata, quindi le esecuzioni più brevi di `eval_interval` ora riportano le metriche e scrivono `best.pt`. `val=False` disattiva la validazione, ultima epoca inclusa. La validazione durante l'addestramento scrive in `<run>/val` invece che in `runs/val/`.
+
+- Gli errori di `train` nella CLI riportano il proprio tipo di errore, quindi gli errori di configurazione escono con codice 2 invece che con 1 e `io_error`.
+
+Vedi il [changelog](/docs/changelog) per la release completa e [importazione dei pesi](/docs/migrate) per la conversione dei checkpoint.
+
+## Da 1.4.0 a 1.5.0
 
 Questa pagina parla dell'aggiornamento di LibreYOLO stesso. Se cerchi come
 caricare un checkpoint da un progetto upstream, quello è
@@ -37,9 +61,9 @@ caricare un checkpoint da un progetto upstream, quello è
 La voce completa della release è il [changelog](/docs/changelog). Quello che
 segue è solo la parte che richiede qualcosa da te.
 
-## Modifiche al codice che devi fare
+### Modifiche al codice che devi fare
 
-### `allow_experimental=True` non esiste più
+#### `allow_experimental=True` non esiste più
 
 Il gate di conferma non c'è più, insieme al meccanismo
 `ddp_aware(experimental_key=...)` che lo implementava. L'addestramento e
@@ -56,14 +80,15 @@ model.train(data="data.yaml", epochs=100)
 ```
 
 Non esiste nessuno shim di deprecazione. Una chiamata che lo passa ancora
-solleva `TypeError`. Insieme a esso è stato rimosso
+riceve un avviso `Unknown training config keys (ignored)`, e l'argomento non ha
+alcun effetto. Insieme a esso è stato rimosso
 `BaseModel.EXPERIMENTAL_WEIGHT_FILENAMES`. L'hook `get_download_notice()`
 sopravvive, ed è ancora sovrascritto da MiDaS, SegFormer e YOLO9-P2.
 
 I livelli di supporto vengono ancora pubblicati, semplicemente non sono più un
 argomento: vedi [livelli di stabilità](/docs/reference/stability-tiers).
 
-### Il livello di esportazione `"experimental"` non esiste più
+#### Il livello di esportazione `"experimental"` non esiste più
 
 ```python
 from libreyolo.export.support import Tier
@@ -77,7 +102,7 @@ Il codice che si dirama in base alla stringa del livello dovrebbe leggere
 `RuntimeWarning` per quei formati. Lo stato di ogni singolo formato è elencato
 nella [matrice di esportazione](/docs/reference/export-matrix).
 
-### `pretrained=False` insieme a `resume` ora viene rifiutato
+#### `pretrained=False` insieme a `resume` ora viene rifiutato
 
 Prima la combinazione proseguiva in modo incoerente. Ora solleva:
 
@@ -90,7 +115,7 @@ che nella 1.5.0 funziona per ogni famiglia addestrabile invece che per tre
 soltanto, mentre `resume` riprende un'esecuzione interrotta a partire dal suo
 checkpoint. Entrambi sono documentati in [addestramento](/docs/train).
 
-### `--imgsz` della CLI è una stringa, non un int
+#### `--imgsz` della CLI è una stringa, non un int
 
 È più circoscritto di quanto sembri. Nessuno di questi due casi è interessato:
 
@@ -117,13 +142,13 @@ predict_cmd(..., imgsz="640")    # 1.5.0, e ora funziona anche "480x640"
 Il valore predefinito di `train` ora è la stringa `"640"`. `export --imgsz` era
 già una stringa e `profile` non cambia.
 
-## Numeri che cambiano
+### Numeri che cambiano
 
 Tre modifiche spostano le metriche con le impostazioni predefinite. Se segui i
 risultati da una versione all'altra, leggile prima di confrontare
 un'esecuzione della 1.5.0 con una della 1.4.0.
 
-### faster-coco-eval è il backend predefinito per le metriche COCO
+#### faster-coco-eval è il backend predefinito per le metriche COCO
 
 `val()` e la validazione per epoca durante l'addestramento ora calcolano le
 metriche COCO con il backend C++ faster-coco-eval invece che con pycocotools.
@@ -152,7 +177,7 @@ effettivamente usato viene registrato a livello INFO, esposto come
 payload JSON della [CLI](/docs/cli/val). Installa il backend veloce con
 `pip install libreyolo[fast-eval]`.
 
-### I checkpoint YOLOX addestrati prima della 1.5.0 richiedono un override di eps
+#### I checkpoint YOLOX addestrati prima della 1.5.0 richiedono un override di eps
 
 Questa è la trappola della release. Leggila se hai fatto fine-tuning di
 [YOLOX](/docs/models/yolox).
@@ -177,9 +202,9 @@ Per riportare numeri fedeli, puoi valutarlo forzando l'eps di BN a 1e-5:
 
 ```python
 import torch
-from libreyolo import LibreYOLOX
+from libreyolo import LibreYOLO
 
-model = LibreYOLOX("my-yolox-finetune.pt")
+model = LibreYOLO("my-yolox-finetune.pt")
 for module in model.model.modules():
     if isinstance(module, torch.nn.BatchNorm2d):
         module.eps = 1e-5
@@ -191,7 +216,7 @@ oppure incorporare una volta per tutte `sqrt((var + 1e-3) / (var + 1e-5))` nei
 pesi di BN e salvare il risultato. I checkpoint addestrati con la 1.5.0 e
 successive non richiedono né l'una né l'altra cosa.
 
-### L'addestramento multi-scala di D-FINE usa la ricetta upstream per ogni taglia
+#### L'addestramento multi-scala di D-FINE usa la ricetta upstream per ogni taglia
 
 `base_size_repeat` era fissato nel codice a 3 per ogni taglia. Ora viene
 risolto per taglia come specifica l'upstream: la **n** si addestra a dimensione
@@ -210,7 +235,7 @@ config = DFINEConfig(base_size_repeat=3)
 DEIM usa ancora il 3 fissato nel codice. I dettagli della famiglia sono su
 [D-FINE](/docs/models/d-fine).
 
-## Da sapere, senza azioni da fare
+### Da sapere, senza azioni da fare
 
 - **I risultati con `imgsz` rettangolare sono cambiati perché prima erano
   sbagliati.** Le coordinate dei box, il ridimensionamento delle maschere di
@@ -240,8 +265,8 @@ DEIM usa ancora il 3 fissato nel codice. I dettagli della famiglia sono su
 - **`libreyolo predict` scarta le opzioni non supportate invece di sollevare un
   errore.** La CLI filtra i kwargs rispetto alla firma di `__call__` del
   modello, quindi un'opzione che una famiglia non accetta viene ignorata invece
-  di sollevare `TypeError`. Un errore di battitura nel nome di un flag ora
-  viene ignorato in silenzio.
+  di sollevare `TypeError`. Un nome di flag sconosciuto viene comunque
+  rifiutato con `No such option`.
 - **Le sorgenti live cambiano la forma dell'output JSON.** Le webcam, gli
   stream RTSP e la cattura dello schermo attivano implicitamente lo streaming,
   che emette un record per frame invece di uno per chiamata. Queste
@@ -271,7 +296,7 @@ DEIM usa ancora il 3 fissato nel codice. I dettagli della famiglia sono su
 - **Il marker pytest `experimental_backend` ora è `extended_backend`.**
   Rilevante solo se esegui la suite di test con `-m`.
 
-## Checkpoint e dataset
+### Checkpoint e dataset
 
 I checkpoint scritti dalla 1.4.0 si caricano senza modifiche. Lo
 [schema](/docs/reference/checkpoint-schema) ha aggiunto `imgsz_h` e

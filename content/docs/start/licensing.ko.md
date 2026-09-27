@@ -13,8 +13,8 @@ keywords:
   - 비상업용 모델 가중치
   - 모델 체크포인트 라이선스
   - apache-2.0 객체 탐지
-last_verified: 1.5.0
-source_hash: 83536fea4dc4eaec
+last_verified: 1.6.0
+source_hash: "03e83b82bd2da258"
 ---
 
 ## LibreYOLO 자체 코드
@@ -49,8 +49,8 @@ MIT는 Megvii의 NAFNet, Xingyi Zhou의 CenterNet, 그리고 MultimediaTechLab�
 
 라이선스는 계열마다 다르며, 한 계열 안의 파일들 사이에서도 다릅니다. 두 번째 경우의 예시 두 가지:
 
-- YOLO9 COCO 체크포인트는 MIT 라이선스입니다. VisDrone2019-DET에서 학습된 `LibreYOLO9P2s-visdrone.pt`는 CC BY-NC-SA 3.0 라이선스로, 이는 비상업적입니다.
-- RF-DETR 검출 체크포인트는 Apache-2.0입니다. 오리엔티드 박스 체크포인트는 CC BY 4.0입니다. 이는 Roboflow Universe 데이터셋에서 파인튜닝되었으며, 해당 데이터셋은 CC BY 4.0으로 공개되었고, 가중치에는 해당 데이터셋의 저작자 표시 요구 사항이 그대로 적용되기 때문입니다.
+- YOLO9 COCO 체크포인트는 MIT입니다. VisDrone2019-DET로 학습한 `LibreYOLO9P2s-visdrone.pt`는 비상업적 라이선스인 CC BY-NC-SA 3.0입니다.
+- RF-DETR 탐지 체크포인트는 Apache-2.0입니다. 회전 바운딩 박스 체크포인트 저장소는 CC BY 4.0을 선언합니다.
 
 계열 간에는 범위가 더 넓게 나타나며, 여러 공개된 체크포인트는 상업 제품에서 사용할 수 없습니다:
 
@@ -58,9 +58,13 @@ MIT는 Megvii의 NAFNet, Xingyi Zhou의 CenterNet, 그리고 MultimediaTechLab�
 - OV-DEIM 체크포인트는 업스트림 저자가 확인한 CC BY-NC 4.0입니다. 모든 예측은 또한 Apple의 MobileCLIP-B(LT) 텍스트 타워를 로드하며, 이 라이선스는 사용을 연구 목적으로 제한하며, 이는 체크포인트 자체 라이선스보다 더 엄격한 조건입니다.
 - SenseNova-Vision 코드는 Apache-2.0이며, 그 가중치는 CC BY-NC 4.0입니다. 로더는 모든 자동 다운로드 전에 비상업적 고지를 출력합니다.
 
-일부 계열는 LibreYOLO에서 호스팅되는 체크포인트가 전혀 없으며, 해당 페이지의 Weights 행에 그렇게 표시되어 있습니다. SAM 3는 Meta의 맞춤형 SAM 라이선스 하에서 Hugging Face에서 제한적으로 제공되며, Meta에서 직접 다운로드됩니다. MiDaS 릴리스 파일은 공식 URL에서 가져오고 해시 검증을 수행하며, 재호스팅되지 않습니다. Dome-DETR는 업스트림에서 링크되어 있는데, 이는 모델 카드에는 메타데이터에 라이선스가 없다고 나와 있지만 설명 문서에서는 Apache-2.0을 주장하고 사용을 학술 연구로 제한하고 있어 서로 일치하지 않기 때문입니다. TEED와 DexiNed 아키텍처는 MIT 라이선스이지만, 저자가 공개한 체크포인트는 BIPED에서 학습되었으며, BIPED 데이터셋의 이용 약관은 비상업적용으로 제한되어 있어 LibreYOLO는 이를 포함하거나 자동 다운로드하지 않습니다.
+SAM 3은 Meta의 사용자 정의 SAM License에 따라 접근이 제한된 업스트림 스냅샷을 사용합니다. MiDaS s/l과 6개 Dome-DETR 체크포인트는 이제 LibreYOLO 미러를 사용하며, MiDaS는 MIT를, Dome-DETR은 학술 연구 전용 약관을 유지합니다. 다른 계열은 로컬 업스트림 파일이 필요할 수 있습니다. 모델 페이지는 다운로드 방법과 배포자 선언 라이선스를 별도로 설명합니다.
 
 여러 torchvision 체크포인트는 자체 라이선스 파일을 포함하지 않습니다. LibreYOLO는 이를 공개 프로젝트에서 사용하는 라이선스를 따라 미러링하며, 각 모델 카드에 기초가 체크포인트별로 부여되는 것이 아니라 암시된 것임을 명시하고, pretrained 모델의 조건이 학습 데이터에서 유래할 수 있다는 torchvision의 경고를 반복합니다.
+
+ConvNeXt V2와 LeVJEPA 사전 학습 가중치에는 CC-BY-NC-4.0이 적용됩니다. Moondream 3은 BSL 1.1을 사용하고, Dome-DETR 미러는 학술 연구로 제한되며, EdgeCrafter `obj2coco` 변형과 DetAny3D에는 제한적인 가중치 약관이 적용됩니다. 모델 페이지는 코드 라이선스 옆에 이러한 선언을 명시합니다. 원본 EdgeCrafter COCO 체크포인트는 기록된 Apache-2.0 허가를 유지합니다. MiDaS 미러는 배포자의 MIT 허가를 유지합니다.
+
+가중치 요약은 체크포인트 배포자가 선언한 라이선스를 따릅니다. 학습 데이터셋 이름만으로 체크포인트에 추가 라이선스가 적용된다고 판단할 수 없습니다.
 
 ## 한 모델에 대한 용어 찾기
 

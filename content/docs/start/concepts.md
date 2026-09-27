@@ -10,7 +10,7 @@ meta:
     value: "Libre<FAMILY><size>[-<task>].pt"
     mono: true
   - label: Canonical tasks
-    value: 17
+    value: 20
   - label: Support tiers
     value: Flagship, Core, Supported, Inference only, Museum, Sibling tier
 snippets:
@@ -43,7 +43,7 @@ snippets:
 
 ## Tasks
 
-A task is what a model returns. LibreYOLO has seventeen canonical task names,
+A task is what a model returns. LibreYOLO has twenty canonical task names,
 and each one names the field on the `Results` object that carries its output.
 
 | Task | Returns |
@@ -59,12 +59,15 @@ and each one names the field on the `Results` object that carries its output.
 | `depth` | A dense relative inverse-depth map |
 | `normal` | A dense unit-vector surface-normal field |
 | `edge` | A dense edge-probability map |
+| `albedo` | A dense linear-RGB albedo map, the surface color without lighting |
 | `restore` | A restored RGB image, for deblurring, denoising or super-resolution |
 | `matte` | A soft foreground map from 0 to 1, for background removal |
 | `ocr` | Text quads with transcripts, in reading order |
 | `embed` | An L2-normalized vector whose dot product measures agreement |
 | `gaze` | A gaze direction per detected face |
 | `mesh` | A posed 3D body per detected person |
+| `detect3d` | 3D boxes in camera coordinates, with a class and a confidence |
+| `act` | A chunk of robot actions predicted from camera frames and robot state |
 
 Those are the names that appear in checkpoint metadata and in filenames.
 Familiar aliases are accepted wherever a task is passed and normalized before

@@ -17,10 +17,10 @@ keywords:
   - format COCO panoptic
   - zbiór danych głębi
   - pose kpt_shape
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Odpowiada plikowi docs/dataset_schema.md w repozytorium libreyolo w wersji
-  1.5.0, a nazwy loaderów sprawdzono z libreyolo/data/.
+  1.6.0, a nazwy loaderów sprawdzono z libreyolo/data/.
 snippets:
   usage:
     - label: Parsowanie jednego wiersza etykiety detekcji
@@ -38,7 +38,7 @@ snippets:
         # (class_id, x1, y1, x2, y2, area) w pikselach
 
         print(row)
-source_hash: a8282c079624044d
+source_hash: 5f4bc7d17822a85d
 ---
 
 ## Wspólna konfiguracja YAML
@@ -130,6 +130,8 @@ opcjonalne `flip_idx`, czyli całkowitoliczbową permutację zakresu `0..K-1`.
 Liczba pól wynosi dokładnie `5 + K * D`, gdzie `D` jest drugą wartością
 `kpt_shape`. Współrzędne punktów kluczowych są znormalizowane. Widoczność `v`,
 jeśli występuje, ma wartość `0`, `1` lub `2`.
+
+Wieloklasowe zbiory RF-DETR wymagają `names` i mogą definiować `kpt_names` dla każdej klasy. Puste listy nazw punktów kluczowych oznaczają klasy z samymi ramkami. Co najmniej jedna klasa musi mieć punkty kluczowe.
 
 ## obb
 
@@ -480,3 +482,15 @@ ani walidacji.
 Rodziny point mogą wewnętrznie dostosowywać istniejące etykiety, na przykład
 wyznaczając środki obiektów z wierszy ramek, ale nie zdefiniowano tekstowego
 formatu etykiet przeznaczonego wyłącznie dla point.
+
+## Histogramy zdarzeń
+
+Detekcja YOLO9 i RF-DETR przyjmuje tablice `.npy` HWC z dwiema płaszczyznami skończonych nieujemnych zliczeń: dodatnią, a następnie ujemną. `input_profile` wymaga `format: event_histogram`, `layout: HWC`, `polarity: positive_negative`, `encoding: counts`, dodatniego `scale` i dodatniej liczby całkowitej `window_us`. Etykiety używają zwykłych plików tekstowych detekcji. Zobacz [przygotowanie wejścia](/docs/train/event-histograms).
+
+## Polityki robotów
+
+Zadanie `act` używa katalogu zbioru danych LeRobot v3 lub identyfikatora zbioru w Hub, zawierającego cechy epizodu, kamery, stanu i akcji. Nie używa YAML detekcji. Zobacz [polityki robotów](/docs/tasks/robot-policies).
+
+## albedo
+
+Połącz `images/<split>/<name>.<image extension>` z `albedo/<split>/<name>.npy`. Dane docelowe to skończone zmiennoprzecinkowe wartości liniowego RGB `(H, W, 3)` w [0, 1], o tych samych wymiarach co obraz. W razie potrzeby ustaw `input_dir` i `albedo_dir` na jednoczłonowe nazwy folderów. Pliki PNG do wyświetlania i wartości sRGB nie są ilościowymi danymi docelowymi albedo.

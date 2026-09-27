@@ -1,16 +1,27 @@
 ---
 title: Checkpoints and weights
-seo_title: "LibreYOLO checkpoints and weights"
-description: "How LibreYOLO finds, downloads and verifies model weights, where they are hosted, how to run with no network, and what makes a checkpoint load safely."
-lead: "A LibreYOLO checkpoint is a torch.save dictionary holding a state dict plus the metadata needed to identify it. This page covers where those files come from, where they land, and how they are loaded."
-keywords: [libreyolo weights, libreyolo checkpoints, libreyolo download weights, libreyolo offline, libreyolo hugging face, checkpoint metadata]
-last_verified: "1.5.0"
+seo_title: LibreYOLO checkpoints and weights
+description: >-
+  How LibreYOLO finds, downloads and verifies model weights, where they are
+  hosted, how to run with no network, and what makes a checkpoint load safely.
+lead: >-
+  A LibreYOLO checkpoint is a torch.save dictionary holding a state dict plus
+  the metadata needed to identify it. This page covers where those files come
+  from, where they land, and how they are loaded.
+keywords:
+  - libreyolo weights
+  - libreyolo checkpoints
+  - libreyolo download weights
+  - libreyolo offline
+  - libreyolo hugging face
+  - checkpoint metadata
+last_verified: 1.6.0
 meta:
   - label: Hosted at
-    value: "One Hugging Face repository per checkpoint:"
+    value: 'One Hugging Face repository per checkpoint:'
     links:
       - label: huggingface.co/LibreYOLO
-        href: https://huggingface.co/LibreYOLO
+        href: 'https://huggingface.co/LibreYOLO'
   - label: Local cache
     value: weights/ under the working directory
     mono: true
@@ -49,17 +60,22 @@ snippets:
         libreyolo metadata path=weights/LibreYOLO9t.pt --json
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo.utils.serialization import (
             load_untrusted_torch_file,
             validate_checkpoint_metadata,
         )
 
+
         loaded = load_untrusted_torch_file("weights/LibreYOLO9t.pt")
 
+
         # Returns a list of problems. Empty means the file satisfies v1.0.
+
         print(validate_checkpoint_metadata(loaded))
-        print(loaded["model_family"], loaded["size"], loaded["task"], loaded["nc"])
+
+        print(loaded["model_family"], loaded["size"], loaded["task"],
+        loaded["nc"])
 ---
 
 ## Where a checkpoint is looked for
@@ -192,3 +208,9 @@ through the compatibility path with a warning naming what is missing.
 
 `libreyolo metadata` never constructs a model, so it works on a file whose
 family is not installed and on a file you are not sure about.
+
+## Mirrors and snapshot models
+
+MiDaS s/l, MoGe-2 s/l and SAM-1 base/large/huge use LibreYOLO mirrors; MoGe-2 b remains upstream. Dome-DETR mirrors retain academic-research-only terms. EdgeCrafter `obj2coco` variants require opt-in and retain their restrictive upstream license. Check the generated checkpoint table on each model page.
+
+[Hub references](/docs/reference/hugging-face) load schema-tagged checkpoints from repository IDs. SAM 3D Body requires its reviewed, pinned snapshot assets and gated access. Robot policies use checkpoint directories with `libreyolo_vla.json`; see [LibreVLA](/docs/reference/vla-api).

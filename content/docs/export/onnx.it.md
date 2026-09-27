@@ -19,7 +19,7 @@ keywords:
   - nms integrato onnx
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Flag
     value: export(format="onnx")
@@ -155,7 +155,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cee78250fc7189a3
+source_hash: a407e1142b8aa57e
 ---
 
 ## Installazione
@@ -165,6 +165,8 @@ source_hash: cee78250fc7189a3
 L'extra tira dentro `onnx`, `onnxsim` e `onnxruntime`. `onnx` da solo basta per
 scrivere il file; `onnxsim` esegue il passaggio di semplificazione e
 `onnxruntime` esegue l'artefatto e si occupa della calibrazione INT8.
+
+L'extra ONNX richiede `onnxruntime>=1.18.0`; LaMa usa un grafo opset-21.
 
 ## Esportazione
 
@@ -181,12 +183,12 @@ dinamiche l'altezza e la larghezza sorgente perché il loro ridimensionamento
 avviene dentro il grafo.
 
 `opset` viene scelto per famiglia quando lo ometti. Le famiglie in stile DETR
-(`detr`, `deformable_detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`,
-`lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) più `deit`, `midas` e
-`moge2` ricevono l'opset 17, che è dove viene abbassato
-`aten::scaled_dot_product`. Tutto il resto riceve il 13. Il matting sale a 19 in
-ogni caso, perché il decoder di BiRefNet ha bisogno dell'operatore `DeformConv`,
-che ONNX definisce a partire dall'opset 19.
+(`detr`, `deformable_detr`, `dinodetr`, `dfine`, `gtr`, `deim`, `deimv2`,
+`tinyformer`, `ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) più
+`deit`, `midas`, `moge2` e `vjepa2` ricevono l'opset 17, che è dove viene
+abbassato `aten::scaled_dot_product`. Tutto il resto riceve il 13. BiRefNet e
+FeyNobg salgono a 19 in ogni caso, perché il loro decoder ha bisogno
+dell'operatore `DeformConv`, che ONNX definisce a partire dall'opset 19.
 
 `simplify=True` esegue `onnxsim` e tiene il grafo originale se il passaggio
 fallisce, così un errore di semplificazione è un avviso e non un fallimento
@@ -222,7 +224,10 @@ supportati e per la compilazione del parser.
 <code-tabs name="int8" />
 
 `int8=True` esegue la quantizzazione statica di ONNX Runtime e scrive un grafo QDQ
-con input e output in float32. Vengono quantizzati solo i nodi `Conv` e `Gemm`.
+con input e output in float32. Vengono quantizzati solo i nodi `Conv` e `Gemm`,
+e la prima convoluzione e la testa di rilevamento di YOLO9 restano in float32,
+come in `model.quantize()`, così i punteggi di classe non saturano
+all'intervallo calibrato.
 Lasciare in float32 il decode della testa di rilevamento è una scelta voluta:
 quella concatenazione mescola coordinate dei box in scala di pixel con punteggi
 di classe nell'intervallo da 0 a 1, e un'unica scala di attivazione per tensore
@@ -276,13 +281,14 @@ risoluzione fissa. Profondità, normali di superficie e contorni rifiutano
 `batch != 1` e forzano `dynamic=False`. Il matting forza il quadrato nativo da
 1024, perché le tabelle di posizione relativa dello Swin di BiRefNet sono legate
 alla loro risoluzione. Il restauro forza una tela fissa per ogni famiglia tranne
-Real-ESRGAN, il cui generatore è completamente convoluzionale.
+Real-ESRGAN e QuickSRNet, le cui reti sono completamente convoluzionali.
 
-Un `imgsz` rettangolare funziona per le famiglie YOLO9, HRNet, NAFNet e
-Real-ESRGAN. Le famiglie con un contratto di quadrato fisso (`clip`,
-`deformable_detr`, `detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`,
-`moge2`, `rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`, `ssd`) lo
-rifiutano del tutto.
+Un `imgsz` rettangolare funziona per le famiglie YOLO9, HRNet, NAFNet,
+PP-LiteSeg, Real-ESRGAN, QuickSRNet e per la segmentazione semantica di GTR. Le
+famiglie con un contratto di quadrato fisso (`clip`, `deformable_detr`, `detr`,
+`dinodetr`, `dfine`, `gtr` tranne che per la segmentazione semantica, `deim`,
+`deimv2`, `tinyformer`, `ec`, `lwdetr`, `moge2`, `rtdetr`, `rtdetrv2`,
+`rtdetrv4`, `rfdetr`, `siglip2`, `ssd`) lo rifiutano del tutto.
 
 Due combinazioni vengono rifiutate prima del tracing: la segmentazione YOLO9,
 perché in LibreYOLO YOLO9 è solo rilevamento, e la segmentazione RTMDet-Ins, il

@@ -20,7 +20,7 @@ keywords:
   - ImageNet
   - ефективне навчання на даних
   - музейне сімейство моделей
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -84,7 +84,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: 9c67c8554b2af5c6
+source_hash: 4dad5f1aa0943dd9
 ---
 
 ## Встановлення
@@ -120,6 +120,8 @@ pip install libreyolo
 зі звичайною структурою папок `train/<class>/` і `val/<class>/`.
 
 <code-tabs name="val" />
+
+Валідація й калібрування INT8 використовують перетворення оцінювання сімейства. Метадані експорту записують `norm_mean`, `norm_std` і `resize_mode`; старіші артефакти використовують резервні значення сімейства. Калібрувальні препроцесори повертають потрібний масив CHW і коефіцієнт масштабу.
 
 ## Експорт
 

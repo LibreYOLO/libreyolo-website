@@ -19,7 +19,7 @@ keywords:
   - reconstrução 3d de pessoas
   - human mesh recovery
   - pose 3d python
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -51,7 +51,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 5f47acceaf23ab64
+source_hash: 1b63435b35c57b10
 ---
 
 ## Instalação
@@ -103,6 +103,8 @@ sobre a imagem original, e as rotações seguem a convenção do MHR, ângulos d
 Euler em vez de axis-angle. Veja [predição](/docs/predict) para fontes,
 streaming e tratamento de resultados.
 
+A aquisição automática exige `libreyolo[hf]` e acesso ao modelo restrito. Checkpoints locais devem ser o diretório do snapshot revisado ou seu `model.ckpt` inalterado ao lado dos arquivos correspondentes `model_config.yaml` e `LICENSE`. Hashes fixados e inventários de snapshots aceitos rejeitam artefatos renomeados, modificados, vinculados ou extras. Os artefatos MHR também são fixados. Mantenha o snapshot local inalterado enquanto o construtor upstream o lê.
+
 ## Variantes
 
 Dois backbones por trás do mesmo modelo corporal MHR: `d3` usa um encoder
@@ -115,12 +117,6 @@ DINOv3 ViT-H/16+ e `h` usa o encoder ViT-H original.
 A exportação de malha corporal não está implementada: o LibreYOLO ainda não
 definiu um contrato de grafo exportado para a tarefa de malha, incluindo como
 representar o layout de parâmetros do MHR fora do PyTorch.
-
-## Checkpoints
-
-Todos os arquivos de pesos publicados desta família.
-
-<checkpoint-table />
 
 ## Licenciamento
 

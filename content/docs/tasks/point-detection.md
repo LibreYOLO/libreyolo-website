@@ -4,7 +4,7 @@ seo_title: "Point detection and counting in LibreYOLO"
 description: "Locate objects as single points instead of boxes in LibreYOLO. Predict centroids, count objects, train FOMO, and read the point metrics."
 lead: "Point detection returns one x, y location per object instead of a bounding box. LibreYOLO exposes it as the point task, and a prediction carries one row of x, y, class and confidence per object."
 keywords: [point detection python, object counting python, centroid detection, FOMO point localization, counting objects in images, point localization]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Predict points and count them
@@ -116,7 +116,7 @@ the class indices and `.conf` the scores; `len()` returns the number of points.
 
 ## Models
 
-Three families serve `point`, and they are not interchangeable.
+Point models differ in vocabulary and output semantics.
 
 [FOMO](/docs/models/fomo) is the fixed-vocabulary option: a grid classifier that
 labels each cell of a low-resolution grid as background or an object center. It
@@ -134,6 +134,8 @@ same prompted-generation checkpoint it uses for six other tasks, loaded with
 and every prediction is a generation pass over a 7B model, so expect noticeably
 higher per-image latency than a purpose-built detector. Its weights are
 non-commercial; the license is on its page.
+
+[Molmo2](/docs/models/molmo2) and [Moondream](/docs/models/moondream) provide text-conditioned points. [LibreGround](/docs/reference/ground-api) uses an instruction to select at most one click per query with ShowUI, Florence-2 or Qwen3-VL.
 
 ## Predict
 

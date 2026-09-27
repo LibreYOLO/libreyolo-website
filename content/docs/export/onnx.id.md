@@ -18,7 +18,7 @@ keywords:
   - embedded nms onnx
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Flag
     value: export(format="onnx")
@@ -153,7 +153,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cee78250fc7189a3
+source_hash: a407e1142b8aa57e
 ---
 
 ## Instalasi
@@ -163,6 +163,8 @@ source_hash: cee78250fc7189a3
 Paket tambahan ini menarik `onnx`, `onnxsim` dan `onnxruntime`. `onnx` saja sudah
 cukup untuk menulis berkasnya; `onnxsim` menjalankan tahap penyederhanaan dan
 `onnxruntime` menjalankan artefak sekaligus melakukan kalibrasi INT8.
+
+Extra ONNX memerlukan `onnxruntime>=1.18.0`; LaMa memakai graf opset-21.
 
 ## Ekspor
 
@@ -178,11 +180,12 @@ spasial, dan detektor dua tahap menjaga tinggi dan lebar sumber tetap dinamis
 karena resize dilakukan di dalam graph.
 
 `opset` dipilih per family kalau tidak disebutkan. Family bergaya DETR (`detr`,
-`deformable_detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`,
-`rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) ditambah `deit`, `midas` dan `moge2`
-memakai opset 17, karena di sanalah `aten::scaled_dot_product` diturunkan. Sisanya
-memakai 13. Matting selalu dinaikkan ke 19, karena decoder BiRefNet membutuhkan
-operator `DeformConv`, yang didefinisikan ONNX mulai opset 19.
+`deformable_detr`, `dinodetr`, `dfine`, `gtr`, `deim`, `deimv2`, `tinyformer`,
+`ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) ditambah `deit`,
+`midas`, `moge2` dan `vjepa2` memakai opset 17, karena di sanalah
+`aten::scaled_dot_product` diturunkan. Sisanya memakai 13. BiRefNet dan FeyNobg
+selalu dinaikkan ke 19, karena decoder keduanya membutuhkan operator
+`DeformConv`, yang didefinisikan ONNX mulai opset 19.
 
 `simplify=True` menjalankan `onnxsim` dan mempertahankan graph asli kalau tahap itu
 gagal, jadi kesalahan penyederhanaan hanya menjadi peringatan, bukan kegagalan
@@ -218,7 +221,9 @@ serta cara membangun parsernya.
 <code-tabs name="int8" />
 
 `int8=True` menjalankan kuantisasi statis ONNX Runtime dan menulis graph QDQ dengan
-input dan output float32. Hanya node `Conv` dan `Gemm` yang dikuantisasi.
+input dan output float32. Hanya node `Conv` dan `Gemm` yang dikuantisasi, dan
+konvolusi pertama serta head deteksi YOLO9 tetap float32, sama seperti pada
+`model.quantize()`, sehingga skor kelas tidak jenuh pada rentang hasil kalibrasi.
 Membiarkan decoding pada head deteksi tetap di float32 adalah keputusan yang
 disengaja: konkatenasi itu mencampur koordinat box berskala piksel dengan skor
 kelas pada rentang 0 sampai 1, dan satu skala aktivasi per tensor yang didominasi
@@ -270,12 +275,15 @@ Beberapa task membawa kontrak runtime beresolusi tetap di versi ini. Kedalaman,
 normal permukaan dan tepi menolak `batch != 1` dan memaksa `dynamic=False`. Matting
 memaksa ukuran persegi 1024 bawaannya, karena tabel posisi relatif Swin milik
 BiRefNet terikat pada resolusi tersebut. Restorasi memaksa kanvas tetap untuk semua
-family kecuali Real-ESRGAN, yang generatornya sepenuhnya konvolusional.
+family kecuali Real-ESRGAN dan QuickSRNet, yang jaringannya sepenuhnya
+konvolusional.
 
-`imgsz` berbentuk persegi panjang bisa dipakai family YOLO9, HRNet, NAFNet dan
-Real-ESRGAN. Family dengan kontrak persegi tetap (`clip`, `deformable_detr`,
-`detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`, `moge2`, `rtdetr`,
-`rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`, `ssd`) menolaknya langsung.
+`imgsz` berbentuk persegi panjang bisa dipakai family YOLO9, HRNet, NAFNet,
+PP-LiteSeg, Real-ESRGAN, QuickSRNet dan segmentasi semantik GTR. Family dengan
+kontrak persegi tetap (`clip`, `deformable_detr`, `detr`, `dinodetr`, `dfine`,
+`gtr` kecuali untuk segmentasi semantik, `deim`, `deimv2`, `tinyformer`, `ec`,
+`lwdetr`, `moge2`, `rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`, `ssd`)
+menolaknya langsung.
 
 Dua kombinasi ditolak sebelum tracing: segmentasi YOLO9, karena YOLO9 hanya untuk
 deteksi di LibreYOLO, dan segmentasi RTMDet-Ins, yang decoding mask kernel

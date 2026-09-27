@@ -16,7 +16,8 @@ keywords:
   - внимание в сдвинутых окнах
   - классификация изображений python
   - классификатор ImageNet
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 snippets:
   predict:
     - label: Python
@@ -79,7 +80,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: faa6bbacae62d88e
+source_hash: 7020bd102e5ba1d6
 ---
 
 ## Установка
@@ -121,6 +122,8 @@ large предобучен на ImageNet-22k и дообучен на ImageNet-1
 accuracy.
 
 <code-tabs name="val" />
+
+Валидация и калибровка INT8 используют преобразование семейства для оценки. Метаданные экспорта записывают `norm_mean`, `norm_std` и `resize_mode`; старые артефакты используют значения семейства. Предобработчики калибровки возвращают требуемые массив CHW и коэффициент масштаба.
 
 ## Экспорт
 

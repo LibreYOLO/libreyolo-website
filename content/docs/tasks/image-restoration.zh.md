@@ -11,7 +11,7 @@ keywords:
   - 图像超分辨率 python
   - 图像去模糊模型
   - PSNR SSIM 评价指标
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: 放大一张图像
@@ -97,7 +97,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         result.restored.save("denoised.png")
-source_hash: 9dc81cadb3ebf18b
+source_hash: c1c1270071053132
 ---
 
 ## 定义
@@ -114,7 +114,7 @@ source_hash: 9dc81cadb3ebf18b
 
 ## 模型
 
-有三个家族服务于 `restore`，按它们消除的退化类型划分。
+图像恢复家族针对不同的图像退化。
 
 [NAFNet](/docs/models/nafnet) 是去噪模型，也是 LibreYOLO 唯一能训练的修复家族。它的
 架构把 UNet 块里的非线性激活换成了逐元素相乘，公开的检查点在 SIDD 真实图像噪声上
@@ -127,16 +127,17 @@ source_hash: 9dc81cadb3ebf18b
 [SwinIR](/docs/models/swinir) 用 Swin Transformer 骨干做 4x 放大，提供三种尺寸，
 覆盖官方的轻量生成器和两个面向真实场景的生成器。
 
+[QuickSRNet](/docs/models/quicksrnet) 提供 2 倍放大，[DDColor](/docs/models/ddcolor) 提供图像着色，[HVI-CIDNet](/docs/models/hvi-cidnet) 提供低光增强，[LaMa](/docs/models/lama) 提供图像修复。这四个家族不支持训练。
+
 ## 预测
 
 权重在首次使用时从 Hugging Face 下载，并缓存到本地。
 
 <code-tabs name="predict" />
 
-修复是在源图像自身的分辨率上运行的，而不是固定的网络画布，只补齐到网络的下采样
-倍数，所以时间和内存都随输入的像素数增长。`tile` 把前向过程拆成互相重叠的小块，
-再把接缝混合回去，`tile_pad` 是每个小块被裁回之前在四周加上的余量；两者都是 Python
-关键字参数。关于输入源、流式处理和结果处理，见[预测](/docs/predict)。
+NAFNet、Real-ESRGAN 和 SwinIR 使用源图像本身的分辨率，而不是固定网络画布，只按网络的下采样倍数填充，因此运行时间和内存都会随输入像素数增加。`tile` 将前向计算分成重叠的图块并融合接缝，`tile_pad` 是裁回图块之前在周围添加的边缘区域；两者都是 Python 关键字参数。数据源、流式处理和结果处理见[预测](/docs/predict)。
+
+LaMa 需要单张图像的 `mask=`。HVI-CIDNet 提供 `gamma`、`saturation` 和 `intensity`，默认值均为 1.0。各模型页面列出了画布和导出约束。
 
 ## 数据集格式
 

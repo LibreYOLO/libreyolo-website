@@ -1,0 +1,12 @@
+{
+  "name": "Grounding DINO",
+  "org": "IDEA Research",
+  "paper_title": "Grounding DINO: Marrying DINO with Grounded Pre-Training for Open-Set Object Detection",
+  "paper_url": "https://arxiv.org/abs/2303.05499",
+  "code_url": "https://github.com/IDEA-Research/GroundingDINO",
+  "license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so this checkpoint can be used in commercial and closed-source products. It asks you to keep the license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. LibreYOLO vendors no Grounding DINO model source of its own: LibreGroundingDINO calls the Apache-2.0 `transformers` implementation, `GroundingDinoForObjectDetection`, directly, and downloads the official checkpoint into a LibreYOLO-hosted mirror repository that preserves the upstream snapshot files.",
+  "bibtex": "@article{liu2023grounding,\n  title={Grounding dino: Marrying dino with grounded pre-training for open-set object detection},\n  author={Liu, Shilong and Zeng, Zhaoyang and Ren, Tianhe and Li, Feng and Zhang, Hao and Yang, Jie and Li, Chunyuan and Yang, Jianwei and Su, Hang and Zhu, Jun and others},\n  journal={arXiv preprint arXiv:2303.05499},\n  year={2023}\n}",
+  "bibtex_source_url": "https://github.com/IDEA-Research/GroundingDINO#black_nib-citation",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README on branch main. Cross-checked against the arXiv API for 2303.05499: the paper lists twelve authors (Liu, Zeng, Ren, Li, Zhang, Yang J., Jiang, Li C., Yang J., Su, Zhu, Zhang L.); the README's own BibTeX shortens the last two, Qing Jiang and Lei Zhang, to 'and others', a choice made by the authors themselves rather than a transcription error. Still an @article arXiv preprint at check time, matching the form the README gives. Do not hand-edit; a wrong citation misattributes someone's work."
+}

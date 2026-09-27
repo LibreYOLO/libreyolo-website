@@ -105,7 +105,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 286a082969ccd604
+source_hash: 6be59826c2dc9978
 ---
 
 ## 安装
@@ -135,7 +135,8 @@ TorchScript 不需要基础安装之外的任何东西，因为 `torch.jit` 随 
 <code-tabs name="run" />
 
 `LibreYOLO()` 按 `.torchscript` 后缀分派，返回和它来源的检查点一样的 `Results` 对象。
-用 `device="auto"` 时，module 会在 CUDA 可用时映射到 CUDA，然后是 MPS，最后是 CPU。
+用 `device="auto"` 时，module 会在 CUDA 可用时映射到 CUDA，否则映射到 CPU。Apple Silicon
+会在 CPU 上运行它，因为 MPS 无法加载 trace 出来的图所携带的 float64 常量。
 
 第二个代码片段是给没装 LibreYOLO 的读者准备的路径，也用于通过 libtorch 做 C++ 部署
 ——同一个归档在那边用 `torch::jit::load` 就能加载。预处理、解码、NMS 和坐标缩放在那里

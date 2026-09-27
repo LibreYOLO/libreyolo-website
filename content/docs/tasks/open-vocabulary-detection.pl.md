@@ -18,7 +18,7 @@ keywords:
   - owlv2
   - omdet turbo
   - detekcja z promptem tekstowym
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -74,7 +74,7 @@ snippets:
         # DINO akceptuje text_threshold; pozostałe modele zgłaszają błąd.
 
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 17197cf4d80f3d6f
+source_hash: 10f41b40f357b037
 ---
 
 ## Definicja
@@ -148,6 +148,8 @@ sam interfejs `set_classes()`. Różnica polega na sposobie tworzenia ramek:
 rodziny na tej stronie są detektorami dyskryminacyjnymi, które bezpośrednio
 zwracają wyniki, natomiast warstwa VLM je generuje.
 
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) i [North Micro Vision](/docs/models/northmicrovision) rozszerzają wybór modeli detekcji `LibreVLM`. [Molmo2](/docs/models/molmo2) zwraca punkty. Do zapytań przekształcających instrukcję w kliknięcie należy użyć [LibreGround](/docs/reference/ground-api), zamiast słownika detekcji.
+
 ## Predykcja
 
 <code-tabs name="predict" />
@@ -182,6 +184,8 @@ zgłasza błąd. Należy dostroić model w projekcie nadrzędnym i wczytać wyni
 wagi. Słownik przekazywany do `set_classes()` jest jedynym ustawieniem, które
 zmienia obiekty wykrywane przez wczytany model.
 
+Qwen3-VL ma osobną ścieżkę [dostrajania VLM](/docs/train/vlm-fine-tuning). Nie dodaje ona trenowania do czterech adapterów `LibreOpenVocab`.
+
 ## Walidacja
 
 Dla tej warstwy nie ma walidatora, a `val()` zgłasza błąd. Walidacja detekcji z
@@ -193,4 +197,3 @@ rodziny wymagają równolegle zbudowanych wejść uwarunkowanych tekstem.
 
 Eksport nie wchodzi w zakres tej warstwy, a `export()` zgłasza błąd. Modele te
 działają przez `predict()` w środowisku PyTorch.
-

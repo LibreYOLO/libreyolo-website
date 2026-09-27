@@ -10,8 +10,8 @@ keywords:
   - libreyolo formats command
   - export parity threshold
   - NotImplementedError export
-last_verified: "1.5.0"
-verification: "Formats, tiers, fallback order, task and family blocks and NCNN blocks read from libreyolo/export/support.py; aliases and shared arguments from libreyolo/export/exporter.py; tier definitions from docs/adr/0011-export-support-tiers.md; parity thresholds from docs/export_support.md, all at v1.5.0. Per-combination cells are not transcribed here; query them with the snippet below."
+last_verified: "1.6.0"
+verification: "Formats, tiers, fallback order, task and family blocks and NCNN blocks read from libreyolo/export/support.py; aliases and shared arguments from libreyolo/export/exporter.py; tier definitions from docs/adr/0011-export-support-tiers.md; parity thresholds from docs/export_support.md, all at v1.6.0. Per-combination cells are not transcribed here; query them with the snippet below."
 snippets:
   usage:
     - label: Query the matrix, no model needed
@@ -71,6 +71,8 @@ Because a cell is a function of three keys, the full grid is large and changes
 every release. It is generated rather than written by hand, and lives in
 `docs/export_support.md` in the library repository. Query the matrix from
 Python or the CLI rather than reading a copy.
+
+The generated registry includes PP-YOLOE, TinyFormer, DEKR, PP-LiteSeg, ConvNeXt V2, PE, V-JEPA 2 and LeVJEPA. Consult each model page for its shape and task constraints. U-Net, the four 3D adapters, Marigold V2 and robot policies do not provide export.
 
 ## The three tiers
 

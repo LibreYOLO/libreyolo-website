@@ -93,7 +93,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: e1043aba1b70b65c
+source_hash: de71e994a0b6d8b4
 ---
 
 ## Installation
@@ -116,8 +116,8 @@ cache localement.
 valeurs élevées correspondent aux points les plus proches de la caméra, et ces
 valeurs n'ont ni unité métrique ni échelle commune d'une image à l'autre.
 `save=True` écrit sur le disque une visualisation colorisée de cette carte ;
-`Results.plot()` ne couvre pas cette famille, puisqu'il n'est défini que pour
-les normales de surface et les contours. La résolution d'entrée doit être
+`Results.plot()` rend la carte de profondeur sous forme d'image PIL, et
+`pil=False` renvoie le tableau à la place. La résolution d'entrée doit être
 divisible par 14, la grille de patchs DINOv2 sur laquelle s'appuie la tête
 DPT ; LibreYOLO le vérifie avant l'exécution et lève une erreur si ce n'est pas
 le cas. Voir [la prédiction](/docs/predict) pour les sources, le streaming et

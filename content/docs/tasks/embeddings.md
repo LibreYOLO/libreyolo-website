@@ -4,7 +4,7 @@ seo_title: "Image and region embeddings in LibreYOLO"
 description: "The embed task returns L2-normalized float32 vectors for a whole image, for each detected region, or for text. Enroll a gallery, match by cosine similarity, and search from Python or the CLI."
 lead: "One task covers every vector LibreYOLO produces. embed returns unit-length float32 rows whose dot product is a similarity score, whether the row describes a whole image, a single detected face, or a line of text, and the same Gallery matches all of them."
 keywords: [image embeddings python, l2 normalized embedding, cosine similarity search, libreyolo embed task, image retrieval, gallery enroll, clip embeddings, dinov2 embeddings, reid embeddings]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 verification: "Task key and aliases read from libreyolo/tasks.py. Result payloads from the Embeddings and Identities classes in libreyolo/utils/results.py. Gallery API from libreyolo/utils/gallery.py. embed and _postprocess_embeddings from libreyolo/models/base/model.py. Supported families located by searching libreyolo/models/**/model.py for embed in SUPPORTED_TASKS. CLI surface from libreyolo/cli/__init__.py, libreyolo/cli/commands/special.py and libreyolo/cli/commands/predict.py. Design intent from docs/adr/0015-embed-generalization.md."
 meta:
   - label: Task key
@@ -181,8 +181,7 @@ the same thing.
 
 ## Models
 
-Four families serve the task, and they split cleanly by whether they localize
-anything first.
+Embedding families differ in whether they encode a whole image, a clip or a detected region.
 
 | Family | Shape | Dimension | Also supports |
 |---|---|---|---|
@@ -195,8 +194,7 @@ CLIP and SigLIP 2 keep `classify` as their default task, so `task="embed"` has
 to be asked for. Their existing `-cls` checkpoint is the shared two-tower
 artifact; no duplicate `-embed` checkpoint is published for identical weights.
 
-`embed_text` exists only on CLIP and SigLIP 2, the two families with a text
-tower. DINOv2 has none. DINOv2 embedding bypasses the semantic and
+`embed_text` is available on CLIP, SigLIP 2 and PE, which have text towers. DINOv2 has none. DINOv2 embedding bypasses the semantic and
 classification heads and reads the final normalized CLS token at 224 pixels; the
 `n`, `s`, `m` and `l` variants all share the DINOv2-S encoder, so all four
 return `D = 384`.
@@ -211,6 +209,8 @@ and do not serve this task.
 concatenates every row from every result into one `(N_total, D)` CPU float32
 tensor, raising if the rows have mixed dimensions. A family without `embed` in
 its supported tasks raises `NotImplementedError`.
+
+[PE](/docs/models/pe) supports image, text and finite-video embeddings with `clip_frames=8` by default. [V-JEPA 2](/docs/models/vjepa2) and [LeVJEPA](/docs/models/levjepa) produce clip embeddings and expose patch tokens through `embed_tokens()`. Their model pages describe clip sampling and direct-runtime export constraints.
 
 ## Result payloads
 

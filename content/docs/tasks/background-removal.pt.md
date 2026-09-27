@@ -14,7 +14,7 @@ keywords:
   - segmentação dicotômica de imagens
   - recorte png com fundo transparente
   - matte alfa suave
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Prever um matte
@@ -96,7 +96,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: f7d88c74d9729268
+source_hash: 69fbc1d967b2d546
 ---
 
 ## Definição
@@ -117,7 +117,7 @@ um PNG de fundo transparente. `result.boxes` fica vazio, então `conf`, `iou` e
 
 ## Modelos
 
-Duas famílias atendem `matte`, e elas compartilham o mesmo forward path.
+BiRefNet e FeyNobg compartilham um caminho de forward.
 
 [BiRefNet](/docs/models/birefnet) é a rede de referência bilateral em torno da
 qual a tarefa foi construída, publicada aqui como um checkpoint do nível Swin-L.
@@ -133,6 +133,8 @@ As duas têm licenças de pesos diferentes. Ambas estão indicadas nas páginas 
 modelos, e a licença do repositório do checkpoint específico no Hugging Face é a
 que vale.
 
+[BEN2](/docs/models/ben2) adiciona remoção de fundo com resolução fixa de 1024. [ViTMatte](/docs/models/vitmatte) recebe uma imagem e um `trimap=` de três níveis que marca pixels de fundo, desconhecidos e de primeiro plano.
+
 ## Predição
 
 Os pesos são baixados do Hugging Face no primeiro uso e ficam em cache
@@ -140,13 +142,9 @@ localmente.
 
 <code-tabs name="predict" />
 
-Ambas as famílias rodam em um canvas nativo fixo de 1024x1024 e redimensionam o
-matte de volta para a imagem original. Outra resolução não é suportada, porque as
-tabelas de posição relativa do backbone Swin estão presas a esse tamanho, e um
-descompasso as interpola mal em vez de levantar um erro. `Results.save()` é
-definido apenas para resultados de matte e precisa da imagem original, que ele
-recarrega de `Results.path` a menos que você passe uma. Veja
-[predição](/docs/predict) para fontes, streaming e tratamento de resultados.
+BiRefNet e FeyNobg rodam em uma tela nativa fixa de 1024x1024 e redimensionam o matte de volta à imagem original. Outra resolução não é suportada, porque as tabelas de posição relativa do backbone Swin estão ligadas a esse tamanho, e uma incompatibilidade gera interpolação ruim em vez de um erro. `Results.save()` usa a imagem de origem para recortes com matte, recarregando-a de `Results.path` a menos que você forneça uma. Veja [predição](/docs/predict) para fontes, streaming e tratamento de resultados.
+
+`Results.save()` grava recortes com matte como RGBA. `plot()` renderiza uma imagem para inspeção. BEN2 suporta predição nativa em batches; ViTMatte exige uma guia para uma única imagem.
 
 ## Formato do dataset
 
@@ -182,11 +180,7 @@ redimensionado bilinearmente para coincidir. Veja
 
 ## Treinamento
 
-Nenhuma das duas famílias de matte tem implementação de treinamento: `train()`
-levanta `NotImplementedError` em ambas, e o suporte a matte cobre apenas
-predição, validação e exportação. Cada página de modelo nomeia o projeto upstream
-que publica o código de treinamento e o script de conversão que traz um
-checkpoint de volta.
+Essas famílias de matte não têm implementação de treinamento. O suporte a exportação varia por família; ViTMatte não exporta. Cada página de modelo indica o projeto upstream que fornece o código de treinamento e o script de conversão que traz um checkpoint de volta.
 
 ## Validação
 

@@ -18,8 +18,8 @@ keywords:
   - SmolVLM2
   - Florence-2
   - libreyolo chat
-last_verified: 1.5.0
-verification: "Alias lus dans libreyolo/models/vlm/__init__.py\_; dépôts, tailles et listes de tâches lus dans les modules de familles sous libreyolo/models/vlm/ ainsi que dans libreyolo/models/sensenova/model.py\_; règles d'appel et erreurs lues dans libreyolo/models/vlm/base.py, le tout en v1.5.0."
+last_verified: 1.6.0
+verification: "Alias lus dans libreyolo/models/vlm/__init__.py\_; dépôts, tailles et listes de tâches lus dans les modules de familles sous libreyolo/models/vlm/ ainsi que dans libreyolo/models/sensenova/model.py\_; règles d'appel et erreurs lues dans libreyolo/models/vlm/base.py, le tout en v1.6.0."
 snippets:
   install:
     - label: bash
@@ -45,7 +45,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 57ddac08bc4d4e05
+source_hash: a9e0d635a6645d2c
 ---
 
 ## Installer
@@ -83,7 +83,7 @@ en énumérant tous les alias.
 | LibreMODUS | `libremodus`, `libremodus-14b-a7b`, `modus`, `modus-14b-a7b` | `14b-a7b` | Snapshot upstream épinglé |
 
 L'alias par défaut est `qwen3-vl-4b`. Les tailles des alias par défaut de
-chaque famille sont celles qui apparaissent en premier\u00a0: `qwen3-vl` se résout
+chaque famille sont celles qui apparaissent en premier : `qwen3-vl` se résout
 en `4b`, `lfm2-vl` en `450m`, `internvl3` en `2b`, `smolvlm2` en `2.2b` et
 `florence-2` en `base`.
 
@@ -91,10 +91,11 @@ en `4b`, `lfm2-vl` en `450m`, `internvl3` en `2b`, `smolvlm2` en `2.2b` et
 `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` et `LibreMODUS`
 (également orthographié `LibreModus`) sont exportés au niveau du package.
 
+La détection comprend aussi `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` et `lfm2-vl-3b`. L'alias nu `gemma-4` sélectionne E4B. Les alias Molmo2 sont `molmo2-4b`, `molmo2-8b` et `molmo2-o-7b` ; la valeur par défaut est 4B. Les alias définissent le routage, sans garantir que chaque snapshot distant a été téléchargé et testé. `moondream-3` ne se charge pas en 1.6.0 : il manque des shards de poids sur son miroir.
+
 ## Tâches
 
-La plupart des familles proposent uniquement `detect`. Deux en proposent
-davantage\u00a0:
+Les tâches prises en charge dépendent de la famille. Ces adaptateurs prennent en charge plusieurs tâches :
 
 | Famille | Tâches prises en charge |
 |---|---|
@@ -102,7 +103,7 @@ davantage\u00a0:
 | SenseNova-Vision | `detect`, `segment`, `panoptic`, `pose`, `point`, `depth`, `ocr` |
 
 Comme la tâche est déterminée par le prompt et non intégrée à un checkpoint,
-elle peut être modifiée sur un modèle déjà chargé\u00a0:
+elle peut être modifiée sur un modèle déjà chargé :
 
 ```python
 model.set_task(task: str) -> LibreVLMModel
@@ -111,6 +112,8 @@ model.set_task(task: str) -> LibreVLMModel
 La tâche est validée par rapport à la liste prise en charge par la famille,
 reste appliquée aux appels `predict()` et `track()` ultérieurs, et le modèle
 est renvoyé afin de pouvoir chaîner les appels.
+
+Molmo2 renvoie des points et exige `{label}` dans les templates de pointage personnalisés. Moondream prend en charge la détection, les points et le chat natif. Utilisez [LibreGround](/docs/reference/ground-api) pour les requêtes transformant une instruction en clic.
 
 ## set_classes
 
@@ -122,7 +125,7 @@ Définit le vocabulaire ouvert. Tous les mots fonctionnent, car ils sont
 transmis au modèle sous forme de prompt au lieu d'être limités à une tête fixe.
 La liste ne doit pas être vide et ses entrées doivent être uniques sans tenir
 compte de la casse. Une chaîne seule lève `TypeError`, car elle serait
-décomposée en classes d'un caractère. Le vocabulaire est persistant\u00a0:
+décomposée en classes d'un caractère. Le vocabulaire est persistant :
 définissez-le une fois après le chargement, il reste actif jusqu'à sa prochaine
 définition.
 
@@ -132,7 +135,7 @@ définition.
 model.chat(image, prompt, max_new_tokens=None, color_format="auto") -> str
 ```
 
-Génération multimodale brute\u00a0: une image et un prompt en entrée, le texte
+Génération multimodale brute : une image et un prompt en entrée, le texte
 décodé verbatim en sortie. C'est la porte de sortie sous l'outil pratique de
 détection, destinée aux questions libres, au comptage ou à un format de sortie
 non couvert par le wrapper de détection. `max_new_tokens` utilise par défaut
@@ -145,14 +148,14 @@ La sortie générée ne possède aucune confiance calibrée par bounding box. Ce
 version attribue une valeur factice constante afin que `predict`, le dessin et
 `track` fonctionnent. Le filtrage `conf=` et la mAP deviennent donc
 approximatifs plutôt que significatifs. C'est également la raison pour laquelle
-`val()` lève une erreur\u00a0: une mAP COCO calculée sur des scores factices serait
+`val()` lève une erreur : une mAP COCO calculée sur des scores factices serait
 trompeuse.
 
 ## Prédire et suivre
 
 L'interface de prédiction standard s'applique et `track()` fonctionne. Un
 détecteur VLM s'intègre donc au même pipeline que toute autre famille. Deux
-politiques de classe diffèrent d'un détecteur convolutionnel\u00a0: l'augmentation
+politiques de classe diffèrent d'un détecteur convolutionnel : l'augmentation
 à l'inférence est désactivée, car une augmentation multi-échelle n'a aucun sens
 pour un générateur à résolution fixe, et la prédiction par batch est
 désactivée, car la génération est autorégressive et le prétraitement renvoie
@@ -160,8 +163,7 @@ un encodage texte-image plutôt qu'un tenseur d'images empilable.
 
 ## Fonctionnalités non prises en charge
 
-`train()`, `val()` et `export()` lèvent `NotImplementedError`. Effectuez le
-fine-tuning upstream et chargez les poids obtenus.
+L'export et la validation par mAP de détection ne sont pas pris en charge. L'entraînement est limité au parcours Qwen3-VL ci-dessous.
 
 ## Code distant
 
@@ -171,8 +173,11 @@ famille qui en a réellement besoin doit l'activer explicitement et épingler la
 révision d'un snapshot. LocateAnything est la seule à le faire, avec le commit
 `c32291ca5e996f5a7a485845b4f57a233936bba0`.
 
-LibreMODUS constitue une exception explicite au schéma de checkpoint\u00a0: son
+LibreMODUS constitue une exception explicite au schéma de checkpoint : son
 alias se résout en un répertoire de fichiers upstream épinglés plutôt qu'en un
 fichier `.pt` LibreYOLO. LibreYOLO ne lui ajoute pas de métadonnées v1.0 et ne
 le republie pas.
 
+## Entraîner
+
+Qwen3-VL prend en charge LoRA pour la détection via `train(data=...)` après installation de `libreyolo[vlm-train]`. Il gèle la tour de vision, choisit les meilleurs checkpoints selon la loss de validation et enregistre des répertoires de checkpoints. Consultez le [fine-tuning VLM](/docs/train/vlm-fine-tuning).

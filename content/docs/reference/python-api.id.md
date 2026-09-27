@@ -2,13 +2,12 @@
 title: API Python
 seo_title: Referensi API Python LibreYOLO
 description: >-
-  Nama yang diekspor LibreYOLO pada level paket: lima factory, kelas family,
+  Nama yang diekspor LibreYOLO pada tingkat paket: factory, kelas family,
   payload Results, backend, validator, tracker, dan helper data.
 lead: >-
-  Antarmuka Python publik LibreYOLO adalah list __all__ dalam
-  libreyolo/__init__.py. Semua yang ada di halaman ini dapat diimpor dengan from
-  libreyolo import <name>; semua yang tidak ada dalam list tersebut bersifat
-  internal.
+  API Python publik LibreYOLO adalah daftar __all__ di libreyolo/__init__.py.
+  Ekspor tingkat paket memakai from libreyolo import <name>; protokol pelacakan
+  dan pelatihan di bawah memakai submodul masing-masing.
 keywords:
   - api python libreyolo
   - import libreyolo
@@ -18,13 +17,13 @@ keywords:
   - LibreOpenVocab
   - LibreEnsemble
   - libreyolo __all__
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Nama dan signature dibaca dari libreyolo/__init__.py,
   libreyolo/models/__init__.py, libreyolo/models/base/model.py,
   libreyolo/models/base/inference.py, libreyolo/models/sam/model.py,
   libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py, dan
-  libreyolo/ensemble/model.py pada v1.5.0.
+  libreyolo/ensemble/model.py pada v1.6.0.
 snippets:
   usage:
     - label: Muat apa pun melalui satu factory
@@ -50,7 +49,7 @@ snippets:
 
         print(len(result))
   factories:
-    - label: Lima entry point
+    - label: Titik masuk
       language: python
       code: >
         from libreyolo import LibreYOLO, LibreEnsemble
@@ -78,13 +77,12 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 66e34e78b2e0fb2d
+source_hash: 7dc6a5ef1b3ba9ea
 ---
 
 ## Entry point
 
-Lima callable memuat model. Pemisahannya berdasarkan kontrak pemanggilan, bukan
-arsitektur.
+Factory memuat model atau mengonfigurasi klien API. Pemisahannya berdasarkan kontrak pemanggilan, bukan arsitektur.
 
 | Factory | Memuat | Prompt saat pemanggilan | Ekstra yang diperlukan |
 |---|---|---|---|
@@ -96,9 +94,7 @@ arsitektur.
 
 <code-tabs name="factories" />
 
-`LibreYOLO` adalah satu-satunya yang membaca berkas. Tiga factory lain menerima
-alias string dan me-resolve-nya ke repositori Hugging Face, sehingga argumennya
-berupa nama model, bukan path.
+`LibreYOLO` menerima berkas checkpoint dan artefak ekspor. Factory lain menerima alias model; `LibreVLM` dan `LibreVLA` juga memuat ulang direktori checkpoint yang disimpannya sendiri.
 
 ```python
 LibreYOLO(
@@ -121,6 +117,10 @@ CoreML dan nilainya salah satu dari `all`, `cpu_only`, `cpu_and_gpu`,
 
 <code-tabs name="usage" />
 
+`LibreGround` memetakan instruksi ke titik gambar; `LibreVLA` memprediksi potongan aksi robot; `LibreLLM` memanggil endpoint model bahasa jarak jauh yang kompatibel. Lihat [API grounding](/docs/reference/ground-api), [API policy](/docs/reference/vla-api), dan [klien model bahasa](/docs/reference/llm-api).
+
+`LibreYOLO("hf://owner/repo@revision/filename")` memuat checkpoint Hub. `model.push_to_hub(repo_id, private=False)` memublikasikan checkpoint dan kartu model. [Referensi Hub](/docs/reference/hugging-face) menjelaskan resolusi dan autentikasi.
+
 ## Kelas family
 
 Setiap family yang dapat dikembalikan factory juga diekspor berdasarkan nama,
@@ -131,8 +131,7 @@ Constructor mengikuti `BaseModel.__init__`:
 Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 ```
 
-`size` tidak memiliki default pada kelas family, yang membedakannya dari
-factory. YOLO9 dan variannya menyisipkan `reg_max: int = 16` setelah `size`.
+Nilai default konstruktor berbeda menurut family; periksa signature-nya sebelum membuat instance secara langsung. YOLO9 dan variannya menyisipkan `reg_max: int = 16` setelah `size`.
 
 Family deteksi dan multi-task: `LibreYOLO9`, `LibreYOLO9E2E`,
 `LibreYOLO9P2`, `LibreYOLONAS`, `LibreYOLOX`, `LibreYOLO7`, `LibreYOLO4`,
@@ -141,27 +140,35 @@ Family deteksi dan multi-task: `LibreYOLO9`, `LibreYOLO9E2E`,
 `LibreDEIMv2`, `LibreDETR`, `LibreDeformableDETR`, `LibreDINODETR`,
 `LibreLWDETR`, `LibreMaskRCNN`, `LibreFCOS`, `LibreFasterRCNN`,
 `LibreRetinaNet`, `LibreSSD`, `LibreCenterNet`, `LibreEfficientDet`,
-`LibreEC`, `LibrePICODET`, `LibreRTMDet`, `LibreFOMO`.
+`LibreEC`, `LibreGTR`, `LibreTinyFormer`, `LibrePICODET`, `LibrePPYOLOE`,
+`LibreRTMDet`, `LibreFOMO`.
 
 Family dense prediksi: `LibreMiDaS`, `LibreDepthAnythingV2`,
 `LibreDepthAnything3`, `LibreZipDepth`, `LibreMoGe2`, `LibreTEED`,
 `LibreDexiNed`, `LibreNAFNet`, `LibreRealESRGAN`, `LibreSwinIR`,
 `LibreBiRefNet`, `LibreFeyNobg`, `LibreFCN`, `LibreEoMT`, `LibreDeepLabv3`,
-`LibrePIDNet`, `LibreSegformer`, `LibreLingBotVision`.
+`LibrePIDNet`, `LibrePPLiteSeg`, `LibreUNet`, `LibreSegformer`,
+`LibreLingBotVision`, `LibreMarigoldV2`, `LibreDDColor`, `LibreHVICIDNet`,
+`LibreLaMa`, `LibreQuickSRNet`, `LibreBEN2`, `LibreViTMatte`.
 
 Family classification dan embedding: `LibreViT`, `LibreMobileNetV4`,
 `LibreConvNeXt`, `LibreDeiT`, `LibreSwin`, `LibreEfficientNetV2`, `LibreVGG`,
-`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`.
+`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`,
+`LibreConvNeXtV2`, `LibrePE`, `LibreVJEPA2`, `LibreLeVJEPA`.
 
-Task lain: `LibreHRNet` (pose), `LibreL2CS` (gaze), `LibrePPOCR` (ocr),
-`LibreFaceEmbedder` (embed).
+Task lain: `LibreHRNet` dan `LibreDEKR` (pose), `LibreL2CS` (gaze),
+`LibrePPOCR` (ocr), `LibreFaceEmbedder` (embed), serta detektor 3D
+`LibreFCOS3D`, `LibreDetAny3D`, `LibreWildDet3D` dan `Libre3DMOOD` (detect3d).
 
 Tingkat saudara juga mengekspor kelas family-nya: `LibreSAM1`, `LibreSAM2`,
 `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`;
 `LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo`; `LibreLFM2VL`,
 `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`,
-`LibreKosmos2`, `LibreLocateAnything`, `LibreMODUS` (juga ditulis
-`LibreModus`).
+`LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`,
+`LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (juga ditulis
+`LibreModus`); `LibreShowUI`, `LibreGroundFlorence2` dan `LibreGroundQwen3VL`
+di balik `LibreGround`; `LibreSmolVLA`, `LibreACT` dan `LibreDiffusionPolicy`
+di balik `LibreVLA`.
 
 ## Antarmuka prediksi
 
@@ -202,11 +209,9 @@ Metode lain pada objek model didokumentasikan di
 
 ## Muatan Results
 
-`Results` dan delapan belas kelas payload-nya diekspor pada level paket:
-`Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`,
-`SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`,
-`RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`.
-Setiap kelas dijelaskan dalam [Jenis Results](/docs/reference/results-types).
+`Results` dan kelas payload-nya diekspor pada tingkat paket: `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`, `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`, `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`. Masing-masing dijelaskan dalam [tipe Results](/docs/reference/results-types).
+
+`Boxes3D`, `AlbedoMap`, dan `Actions` menambahkan kuboid 3D, albedo intrinsik, dan potongan aksi. Lihat [tipe hasil](/docs/reference/results-types).
 
 ## Backend
 
@@ -232,6 +237,8 @@ konfigurasinya juga diekspor: `ByteTracker` dengan `TrackConfig`,
 `BoTSortTracker` dengan `BoTSortConfig`, serta `OCSortTracker` dengan
 `OCSortConfig`.
 
+`libreyolo.tracking.Tracker` mendefinisikan `reset()` dan `update(results, image=None)` untuk instance tracker kustom.
+
 ## Helper data
 
 `DATASETS_DIR` adalah root dataset hasil resolve, `load_data_config` membaca YAML
@@ -244,6 +251,8 @@ dalam [Format dataset](/docs/reference/dataset-formats) berada di
 `Gallery` dan `FaceGallery` menyimpan vektor identitas terdaftar untuk task
 `embed` dan menghasilkan payload `Identities`. `Distiller` dan
 `get_distill_config` menjalankan pelatihan teacher-student.
+
+`libreyolo.training.TrainFitnessCallback` mendefinisikan `fitness(metrics)` untuk pemilihan checkpoint kustom. Lihat [callback fitness](/docs/train/fitness-callbacks).
 
 ## Aset
 
@@ -261,6 +270,3 @@ yang diperlukan tidak ada.
 Dua nama kelas telah diubah dan ejaan lama masih diselesaikan, disertai
 `DeprecationWarning`: `LibreYOLORTDETR` kini menjadi `LibreRTDETR`, dan
 `LibreYOLORFDETR` kini menjadi `LibreRFDETR`.
-
-
-

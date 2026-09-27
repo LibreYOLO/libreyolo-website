@@ -19,16 +19,8 @@ keywords:
   - ms_deform_attn Kernel
   - set_fused_attention
   - LibreYOLO Triton Kernel
-last_verified: 1.5.0
-verification: >-
-  Registry-API aus libreyolo/kernels/__init__.py in v1.5.0 gelesen,
-  Attention-API aus libreyolo/kernels/attention/__init__.py und sdpa.py,
-  Hub-Provider aus libreyolo/kernels/attention/ms_deform_attn.py einschließlich
-  festgeschriebener Revision und Eignungsprädikat. Verzeichnisstruktur aus
-  libreyolo/kernels/ aufgelistet. Extra-Definition aus pyproject.toml.
-  Verhaltenshinweise und Benchmark-Werte aus docs/kernels.md. Entwicklung der
-  Aktivierungsbedingung in v1.4.0 aus dem Commit zur RF-DETR-Slot-Verdrahtung
-  und dem CHANGELOG-Eintrag für 1.5.0.
+last_verified: "1.6.0"
+verification: "Registry-API aus libreyolo/kernels/__init__.py in v1.6.0 gelesen, Attention-API aus libreyolo/kernels/attention/__init__.py und sdpa.py, Hub-Provider aus libreyolo/kernels/attention/ms_deform_attn.py einschließlich festgeschriebener Revision und Eignungsprädikat. Verzeichnisstruktur aus libreyolo/kernels/ aufgelistet. Extra-Definition aus pyproject.toml. Verhaltenshinweise und Benchmark-Werte aus docs/kernels.md. Entwicklung der Aktivierungsbedingung in v1.4.0 aus dem Commit zur RF-DETR-Slot-Verdrahtung und dem CHANGELOG-Eintrag für 1.5.0."
 meta:
   - label: Paket
     value: libreyolo.kernels
@@ -82,7 +74,7 @@ snippets:
             name="mybackend",
             predicate=my_check,
         )
-source_hash: 23d504e88b7959f8
+source_hash: "2cdb2d344ab3faf5"
 ---
 
 ## Registry
@@ -145,6 +137,8 @@ In v1.4.0 wurde der Slot innerhalb einer Hilfsfunktion hinter einer Bedingung ab
 
 Die praktische Folge: Wenn du auf v1.5.0 aktualisierst und `libreyolo[hub-kernels]` unter CUDA installierst, verwenden RF-DETR und seine Abstammungslinie erstmals ein kompiliertes Binärprogramm für ihren Vorwärtsdurchlauf. Vorhersagen und Metriken können sich dadurch innerhalb der Gleitkommatoleranz verschieben. Eine Standardinstallation ohne das Extra ist nicht betroffen. Halte beim Vergleich von Metriken vor und nach dem Upgrade das Extra konstant oder setze auf beiden Seiten `LIBREYOLO_HUB_KERNELS=0`.
 
+Hub-MSDA akzeptiert FP16 und BF16, indem es Kernel-Eingaben in FP32 umwandelt, den Ausgabedatentyp wiederherstellt und Gradienten durch die Umwandlungen erhält. Eager-CUDA-Aufrufe ohne akzeptierten beschleunigten Provider geben einmal einen Installationshinweis für `libreyolo[hub-kernels]` aus. `ms_deform_attn_available(value=None)` kann einen tensorspezifischen Pfad prüfen.
+
 ## Fusionierte Attention
 
 Fusionierte Scaled Dot-Product Attention benötigt keine optionale Abhängigkeit, sondern nur unverändertes PyTorch. Ihre Verwendung wird deshalb durch eine Richtlinie statt durch Verfügbarkeit bestimmt. Es gelten zwei Regeln.
@@ -170,3 +164,7 @@ Rufe `register()` mit einem Namen und einem Prädikat auf. Externe kompilierte K
 Parität ist die Voraussetzung für jede integrierte Implementierung: exakte Übereinstimmung des Vorwärtsdurchlaufs mit der Referenz sowie Gradienten innerhalb von 1e-6 gegenüber dem Straight-Through-Estimator für die in der Testsuite enthaltenen Formen.
 
 Die Kernelauswahl interagiert mit [CUDA-Graphen](/docs/reference/cuda-graphs). Die Inferenz-Paritätsmatrix wurde ohne installiertes Paket `kernels` ausgeführt. Die Aufzeichnungssicherheit bei aktivem kompiliertem Kernel wird davon nicht abgedeckt.
+
+## Deformable Attention mit Triton
+
+Der integrierte Triton-MSDA-Provider unterstützt geeignete CUDA-Inferenz mit FP32, FP16 und BF16. Er weist Eingaben zurück, die Gradienten erfordern, und fällt bei Nichtverfügbarkeit auf portable Attention zurück. Hub bleibt bevorzugt. `LIBREYOLO_TRITON_MSDA=0` deaktiviert Triton; `LIBREYOLO_HUB_KERNELS=0` deaktiviert den Hub-Provider und seinen Installationshinweis.

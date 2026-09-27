@@ -19,7 +19,7 @@ keywords:
   - apprentissage résiduel
   - réseaux résiduels profonds
   - classifieur ImageNet
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -35,7 +35,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreResNet50-cls.pt source=cat.jpg save=True
+        libreyolo predict model=LibreResNet50-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python
       language: python
@@ -99,7 +99,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: e2f46c73716af1b7
+source_hash: 2442e8c325bbe791
 ---
 
 ## Installer
@@ -154,12 +154,16 @@ absentes de ResNet.
 Consultez l'[entraînement](/docs/train) pour les datasets, l'augmentation, le
 multi-GPU et les loggers.
 
+`cls_pw=0` désactive la pondération de la loss ; les valeurs jusqu'à 1 utilisent des poids inverses des fréquences, normalisés à une moyenne de 1. `class_weights=True` utilise plutôt les fréquences inverses normalisées par échantillon et ne peut pas être combiné avec `cls_pw>0`. Ces réglages doivent correspondre lors d'une reprise. Consultez la [classification](/docs/tasks/image-classification).
+
 ## Valider
 
 `val()` renvoie un dictionnaire de clés `metrics/`. Pour la classification, il
 s'agit de l'exactitude top-1 et top-5 sur la partition de validation.
 
 <code-tabs name="val" />
+
+La validation et la calibration INT8 utilisent la transformation d'évaluation de la famille. Les métadonnées d'export enregistrent `norm_mean`, `norm_std` et `resize_mode` ; les anciens artefacts utilisent les valeurs de la famille par défaut. Les préprocesseurs de calibration renvoient le tableau CHW et le ratio requis.
 
 ## Exporter
 

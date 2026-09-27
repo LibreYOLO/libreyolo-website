@@ -134,7 +134,7 @@ export default function TaskExplorer({ tasks }) {
                 poster={selected.poster}
                 label={`${selected.label} recorded example`}
               />
-            ) : (
+            ) : selected.image ? (
               <img
                 key={selected.task}
                 src={selected.image}
@@ -143,7 +143,7 @@ export default function TaskExplorer({ tasks }) {
                 width="1280"
                 height="720"
               />
-            )}
+            ) : null}
           </div>
           <div className={styles.taskInfo}>
             <div className={styles.taskTitle} aria-live="polite">

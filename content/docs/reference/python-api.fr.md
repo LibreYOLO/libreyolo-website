@@ -1,8 +1,8 @@
 ---
 title: API Python
 seo_title: Référence de l'API Python LibreYOLO
-description: "Noms exportés par LibreYOLO au niveau du package\_: cinq fabriques, classes de familles, charges utiles Results, backends, validateurs, trackers et assistants de données."
-lead: "L'interface Python publique de LibreYOLO est la liste __all__ de libreyolo/__init__.py. Tout ce qui figure sur cette page est importable avec from libreyolo import <name>\_; tout nom absent de cette liste est interne."
+description: "Noms exportés par LibreYOLO au niveau du package\_: fabriques, classes de familles, charges utiles Results, backends, validateurs, trackers et assistants de données."
+lead: "L'interface Python publique de LibreYOLO est la liste __all__ de libreyolo/__init__.py. Les exports du package utilisent from libreyolo import <name>\_; les protocoles de suivi et d'entraînement ci-dessous utilisent leurs sous-modules nommés."
 keywords:
   - api python libreyolo
   - import libreyolo
@@ -12,13 +12,13 @@ keywords:
   - LibreOpenVocab
   - LibreEnsemble
   - libreyolo __all__
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Noms et signatures lus dans libreyolo/__init__.py,
   libreyolo/models/__init__.py, libreyolo/models/base/model.py,
   libreyolo/models/base/inference.py, libreyolo/models/sam/model.py,
   libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py et
-  libreyolo/ensemble/model.py en v1.5.0.
+  libreyolo/ensemble/model.py en v1.6.0.
 snippets:
   usage:
     - label: Tout charger avec une seule fabrique
@@ -51,7 +51,7 @@ snippets:
 
         print(len(result))
   factories:
-    - label: Les cinq points d'entrée
+    - label: Points d'entrée
       language: python
       code: >
         from libreyolo import LibreYOLO, LibreEnsemble
@@ -79,12 +79,12 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 66e34e78b2e0fb2d
+source_hash: 7dc6a5ef1b3ba9ea
 ---
 
 ## Points d'entrée
 
-Cinq callables chargent un modèle. Ils sont séparés selon leur contrat d'appel
+Les fabriques chargent des modèles ou configurent des clients API. Ils sont séparés selon leur contrat d'appel
 et non leur architecture.
 
 | Fabrique | Charge | Prompt au moment de l'appel | Extra requis |
@@ -97,9 +97,7 @@ et non leur architecture.
 
 <code-tabs name="factories" />
 
-`LibreYOLO` est la seule fabrique qui lit un fichier. Les trois autres
-acceptent un alias textuel et le résolvent en dépôt Hugging Face. L'argument
-est donc un nom de modèle et non un chemin.
+`LibreYOLO` accepte des fichiers de checkpoint et des artefacts exportés. Les fabriques associées acceptent des alias de modèles ; `LibreVLM` et `LibreVLA` rechargent aussi leurs propres répertoires de checkpoints sauvegardés.
 
 ```python
 LibreYOLO(
@@ -123,48 +121,58 @@ tâche canonique de `libreyolo.tasks.TASKS`.
 
 <code-tabs name="usage" />
 
+`LibreGround` associe des instructions à des points dans l'image ; `LibreVLA` prédit des séquences d'actions robotiques ; `LibreLLM` appelle un endpoint distant compatible de modèle de langage. Consultez l'[API de grounding](/docs/reference/ground-api), l'[API de politiques](/docs/reference/vla-api) et le [client de modèle de langage](/docs/reference/llm-api).
+
+`LibreYOLO("hf://owner/repo@revision/filename")` charge des checkpoints Hub. `model.push_to_hub(repo_id, private=False)` publie un checkpoint et sa fiche. La [référence Hub](/docs/reference/hugging-face) définit la résolution et l'authentification.
+
 ## Classes de familles
 
 Chaque famille que la fabrique peut renvoyer est également exportée par nom.
 Vous pouvez ainsi construire directement une classe lorsque le checkpoint est
-connu à l'avance. Les constructeurs suivent `BaseModel.__init__`\u00a0:
+connu à l'avance. Les constructeurs suivent `BaseModel.__init__` :
 
 ```python
 Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 ```
 
-`size` ne possède aucune valeur par défaut sur une classe de famille, ce qui
-la distingue de la fabrique. YOLO9 et ses variantes insèrent
-`reg_max: int = 16` après `size`.
+Les valeurs par défaut du constructeur varient selon la famille ; consultez sa signature avant de l'appeler directement. YOLO9 et ses variantes insèrent `reg_max: int = 16` après `size`.
 
-Familles de détection et multitâches\u00a0: `LibreYOLO9`, `LibreYOLO9E2E`,
+Familles de détection et multitâches : `LibreYOLO9`, `LibreYOLO9E2E`,
 `LibreYOLO9P2`, `LibreYOLONAS`, `LibreYOLOX`, `LibreYOLO7`, `LibreYOLO4`,
 `LibreYOLO3`, `LibreYOLO2`, `LibreYOLO1`, `LibreRTDETR`, `LibreRTDETRv2`,
 `LibreRTDETRv4`, `LibreRFDETR`, `LibreDFINE`, `LibreDOMEDETR`, `LibreDEIM`,
 `LibreDEIMv2`, `LibreDETR`, `LibreDeformableDETR`, `LibreDINODETR`,
 `LibreLWDETR`, `LibreMaskRCNN`, `LibreFCOS`, `LibreFasterRCNN`,
 `LibreRetinaNet`, `LibreSSD`, `LibreCenterNet`, `LibreEfficientDet`,
-`LibreEC`, `LibrePICODET`, `LibreRTMDet`, `LibreFOMO`.
+`LibreEC`, `LibreGTR`, `LibreTinyFormer`, `LibrePICODET`, `LibrePPYOLOE`,
+`LibreRTMDet`, `LibreFOMO`.
 
-Familles de prédiction dense\u00a0: `LibreMiDaS`, `LibreDepthAnythingV2`,
+Familles de prédiction dense : `LibreMiDaS`, `LibreDepthAnythingV2`,
 `LibreDepthAnything3`, `LibreZipDepth`, `LibreMoGe2`, `LibreTEED`,
 `LibreDexiNed`, `LibreNAFNet`, `LibreRealESRGAN`, `LibreSwinIR`,
 `LibreBiRefNet`, `LibreFeyNobg`, `LibreFCN`, `LibreEoMT`, `LibreDeepLabv3`,
-`LibrePIDNet`, `LibreSegformer`, `LibreLingBotVision`.
+`LibrePIDNet`, `LibrePPLiteSeg`, `LibreUNet`, `LibreSegformer`,
+`LibreLingBotVision`, `LibreMarigoldV2`, `LibreDDColor`, `LibreHVICIDNet`,
+`LibreLaMa`, `LibreQuickSRNet`, `LibreBEN2`, `LibreViTMatte`.
 
-Familles de classification et d'embeddings\u00a0: `LibreViT`, `LibreMobileNetV4`,
+Familles de classification et d'embeddings : `LibreViT`, `LibreMobileNetV4`,
 `LibreConvNeXt`, `LibreDeiT`, `LibreSwin`, `LibreEfficientNetV2`, `LibreVGG`,
-`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`.
+`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`,
+`LibreConvNeXtV2`, `LibrePE`, `LibreVJEPA2`, `LibreLeVJEPA`.
 
-Autres tâches\u00a0: `LibreHRNet` (pose), `LibreL2CS` (gaze), `LibrePPOCR` (ocr),
-`LibreFaceEmbedder` (embed).
+Autres tâches : `LibreHRNet` et `LibreDEKR` (pose), `LibreL2CS` (gaze),
+`LibrePPOCR` (ocr), `LibreFaceEmbedder` (embed), ainsi que les détecteurs 3D
+`LibreFCOS3D`, `LibreDetAny3D`, `LibreWildDet3D` et `Libre3DMOOD` (detect3d).
 
-Les niveaux frères exportent également leurs classes de familles\u00a0: `LibreSAM1`,
-`LibreSAM2`, `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`\u00a0;
-`LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo`\u00a0; `LibreLFM2VL`,
+Les niveaux frères exportent également leurs classes de familles : `LibreSAM1`,
+`LibreSAM2`, `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3` ;
+`LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo` ; `LibreLFM2VL`,
 `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`,
-`LibreKosmos2`, `LibreLocateAnything`, `LibreMODUS` (également orthographié
-`LibreModus`).
+`LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`,
+`LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (également orthographié
+`LibreModus`) ; `LibreShowUI`, `LibreGroundFlorence2` et `LibreGroundQwen3VL`
+derrière `LibreGround` ; `LibreSmolVLA`, `LibreACT` et `LibreDiffusionPolicy`
+derrière `LibreVLA`.
 
 ## Interface de prédiction
 
@@ -205,18 +213,20 @@ de l'[API du modèle](/docs/reference/model-api).
 
 ## Charges utiles Results
 
-`Results` et ses dix-huit classes de charges utiles sont exportés au niveau du
-package\u00a0: `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`,
+`Results` et ses classes de charges utiles sont exportés au niveau du
+package : `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`,
 `Gaze`, `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`,
 `NormalMap`, `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`,
 `Identities`. Chacune est décrite dans les
 [types de résultats](/docs/reference/results-types).
 
+`Boxes3D`, `AlbedoMap` et `Actions` ajoutent les cuboïdes 3D, l'albédo intrinsèque et les séquences d'actions. Consultez les [types de résultats](/docs/reference/results-types).
+
 ## Backends
 
 Les artefacts exportés se chargent dans `LibreYOLO()` selon le suffixe du
 fichier, les classes de backends sont donc rarement construites manuellement.
-Elles sont exportées pour les cas où un backend doit être choisi explicitement\u00a0:
+Elles sont exportées pour les cas où un backend doit être choisi explicitement :
 `OnnxBackend`, `OpenVINOBackend`, `PaddleBackend`, `TensorRTBackend`,
 `TritonBackend`, `NcnnBackend`, `CoreMLBackend`, ainsi que
 `create_triton_config`. `BaseExporter` est le registre d'exporteurs utilisé
@@ -226,16 +236,18 @@ par `model.export()`.
 
 `model.val()` sélectionne le validateur adapté à la tâche. Les éléments
 suivants sont donc exportés pour un usage direct et pour la création de
-sous-classes\u00a0: `DetectionValidator`, `SegmentationValidator`, `PoseValidator`,
+sous-classes : `DetectionValidator`, `SegmentationValidator`, `PoseValidator`,
 `SemanticValidator`, `PanopticValidator`, `DepthValidator`, `NormalValidator`,
 `EdgeValidator` et le `ValidationConfig` partagé.
 
 ## Suivi
 
 `model.track()` sélectionne un tracker par nom. Les classes de trackers et
-leurs dataclasses de configuration sont également exportées\u00a0: `ByteTracker`
+leurs dataclasses de configuration sont également exportées : `ByteTracker`
 avec `TrackConfig`, `BoTSortTracker` avec `BoTSortConfig` et `OCSortTracker`
 avec `OCSortConfig`.
+
+`libreyolo.tracking.Tracker` définit `reset()` et `update(results, image=None)` pour les instances de tracker personnalisées.
 
 ## Assistants de données
 
@@ -249,6 +261,8 @@ se trouvent dans `libreyolo.data` plutôt qu'au niveau du package.
 `Gallery` et `FaceGallery` contiennent les vecteurs d'identités inscrites pour
 la tâche `embed` et produisent la charge utile `Identities`. `Distiller` et
 `get_distill_config` pilotent l'entraînement professeur-élève.
+
+`libreyolo.training.TrainFitnessCallback` définit `fitness(metrics)` pour la sélection personnalisée de checkpoints. Consultez les [callbacks de score de sélection](/docs/train/fitness-callbacks).
 
 ## Assets
 
@@ -264,5 +278,5 @@ Importer `libreyolo` n'importe donc pas leurs dépendances. L'import échoue
 tout de même avec un message explicite lorsque l'extra requis manque.
 
 Deux classes ont été renommées et leur ancienne orthographe continue de se
-résoudre avec un `DeprecationWarning`\u00a0: `LibreYOLORTDETR` s'appelle désormais
+résoudre avec un `DeprecationWarning` : `LibreYOLORTDETR` s'appelle désormais
 `LibreRTDETR` et `LibreYOLORFDETR` s'appelle désormais `LibreRFDETR`.

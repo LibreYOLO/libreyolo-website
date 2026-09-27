@@ -4,7 +4,7 @@ families:
   - domedetr
 seo_title: Dome-DETR：LibreYOLOでの微小物体検出
 description: >-
-  LibreYOLOでDome-DETRを使い、航空画像やドローン画像の微小物体を検出します。アップストリームの重みを変換し、MITライセンスのコードで推論、ファインチューニング、検証を行います。
+  Dome-DETRで微小物体の検出、学習、検証を行います。ミラーされた学習済みチェックポイントには、学術研究目的のみの条件が引き続き適用されます。
 lead: >-
   D-FINEを基盤とする微小物体専用モデルです。密度ヘッドが物体の位置を判断し、エンコーダーのアテンションを物体のあるウィンドウに限定し、固定数ではなく密度に応じてクエリ数を決めます。LibreYOLOは物体検出でDome-DETRをサポートします。
 keywords:
@@ -18,48 +18,17 @@ keywords:
   - AI-TOD
   - DETR
   - density adaptive queries
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
-    - label: 変換してから推論
-      language: bash
-      code: |
-        # LibreYOLO は Dome-DETR の重みをホストしないためチェックポイントを
-        # アップストリームのリポジトリから取得して一度だけ変換
-        hf download RicePasteM/Dome-DETR --include 'best_ckpts_dome_2026/*' \
-          --local-dir dome-ckpts
-
-        python weights/convert_domedetr_weights.py \
-          dome-ckpts/best_ckpts_dome_2026/dome-s-visdrone_converted.pth \
-          LibreDOMEDETRs-visdrone.pt --size s --variant visdrone
     - label: Python
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # 単なる名前ではなくローカルパスを指定 このファミリーではダウンロードなし
-        model = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-        result = model("drone-frame.jpg", save=True)
-
-        for box in result.boxes:
-            print(result.names[int(box.cls)], box.conf, box.xyxy)
-    - label: CLI
-      language: bash
-      code: >
-        libreyolo predict model=LibreDOMEDETRs-visdrone.pt
-        source=drone-frame.jpg save=True
-    - label: クラス名
-      language: python
-      code: |
-        from libreyolo import LibreYOLO
-
-        # COCO チェックポイントはないためクラスは重みの学習に使った
-        # データセットに由来しチェックポイントのメタデータから読み取る
-        aitod = LibreYOLO("LibreDOMEDETRs-aitod.pt")
-        print(aitod.model.names)     # 9個の AI-TOD-V2 クラス
-
-        visdrone = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-        print(visdrone.model.names)  # 12個の VisDrone クラス
+        # 学習済み重みは学術研究目的に限定
+        model = LibreYOLO("LibreDOMEDETRs-visdrone.pt", device="cpu")
+        print(model(SAMPLE_IMAGE).boxes)
   train:
     - label: Python
       language: python
@@ -96,7 +65,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreDOMEDETRs-visdrone.pt data=my-dataset.yaml
-source_hash: 381f01d769e7c420
+source_hash: 8482301790a9b8d9
 ---
 
 ## インストール
@@ -109,7 +78,7 @@ pip install libreyolo
 
 ## 推論
 
-自動ダウンロードされるものはありません。LibreYOLOはこれらの重みをホストしていないため、アップストリームのチェックポイントを取得し、一度変換してから、変換済みファイルをパスで読み込みます。理由については[ライセンス](#licensing)で説明します。
+変換済みの6つのチェックポイントは、LibreYOLOのミラーから自動的にダウンロードされます。アップストリームの条件により、利用は学術研究に限定されます。
 
 <code-tabs name="predict" />
 
@@ -123,7 +92,7 @@ s、m、lの3サイズがあり、すべて800 x 800で動作します。サイ�
 
 Dome-DETRはD-FINEに3つの要素を追加したものです。DeFEは密度マップを予測します。MWASはそのマップを使い、すべての場所にアテンションを適用する代わりに、実際に物体があるウィンドウへエンコーダーのアテンションを限定します。PAQIは固定の300件をデコードする代わりに、同じ密度からクエリ集合のサイズを決めます。効果は物体が最小の領域に集中し、物体が大きくなるほど小さくなります。アップストリーム独自のアブレーションでは、非常に小さい物体のAPが14.0から17.8へ上昇する一方、中サイズの物体のAPは45.4から46.4への上昇にとどまります。航空画像、ドローン画像、リモートセンシング画像では[D-FINE](/docs/models/d-fine)と併用してください。D-FINEの代替ではありません。
 
-LibreYOLOはベンチマーク対象となるチェックポイントを公開していないため、このファミリーのベンチマーク行も公開していません。
+このファミリーにはVision Analysisのベンチマーク行が記録されていません。
 
 ## 学習
 
@@ -153,33 +122,12 @@ Dome-DETRは学習できます。学習ではアップストリームの完全�
 
 ## チェックポイント
 
-一覧にするものはありません。LibreYOLOはDome-DETRの重みを公開しておらず、`LibreDOMEDETR<size>-<dataset>.pt`形式の名前からダウンロードが解決されることもありません。
-
-アップストリームは2つのデータセットそれぞれについてs、m、lの6チェックポイントを公開しています。AI-TOD-V2は9クラス、VisDroneは12クラスです。COCOチェックポイントはないため、正規ファイル名には常にデータセットのサフィックスが含まれ、クラス名はファミリー定数ではなくチェックポイントのメタデータに格納されます。単独の`LibreDOMEDETRs.pt`を要求すると、存在する2つのファイル名と変換コマンドを示すメッセージとともに直ちに例外が発生します。404になるダウンロードは試みません。
-
-`weights/convert_domedetr_weights.py`が変換を行います。LibreYOLOのグラフを再構築してアップストリームのテンソルを読み込みます。キーが1つでも欠けている、予期しない、または形状が誤っている場合は何も書き出しません。そのため、変換済みファイルは完全に一致するか、存在しないかのどちらかです。アップストリームの`.pth`を指定し、サイズとバリアントを渡してください。
-
-```bash
-python weights/convert_domedetr_weights.py \
-    dome-ckpts/best_ckpts_dome_2026/aitod-s-best.pth \
-    LibreDOMEDETRs-aitod.pt --size s --variant aitod
-```
-
-数値的忠実度について、`weights/parity_domedetr.py`は6つのチェックポイントすべてでこの移植版とアップストリーム実装を比較します。最初にMWASのウィンドウマスクをビット単位で確認し、`pred_logits`と`pred_boxes`の両方で`max_abs_diff == 0.0`を報告します。さらに、すべての損失項をアップストリームのcriterionと個別に比較します。この検証の位置付けを明確にしておきます。アップストリームのチェックアウトと公開済みチェックポイントがディスク上に必要で、手動で実行するスクリプトです。継続的インテグレーションには含まれず、これを再現するCIジョブもありません。
+<checkpoint-table />
 
 ## ライセンス
 
 <provenance-box>
 
-このファミリーがミラーされない理由は重みにあります。アップストリームのモデルカードではメタデータにライセンス項目がなく、本文ではプロジェクトがApache-2.0だとしつつ、素材を学術研究目的だけに制限しています。この2つの解釈は一致せず、より厳格な方も再配布を許諾していません。そのため、LibreYOLOは明確化されるまでファイルをコピーせず、アップストリームのリポジトリにリンクします。ここでの[YOLO-NAS](/docs/models/yolo-nas)にも同じ考え方が適用されます。
-
-コードは別の問題であり、より明確です。アップストリームのリポジトリはApache-2.0、LibreYOLOへの移植版はMITで、独自データを使って自分で学習した重みは自分のものです。
+6つのミラーには、アップストリームの学術研究目的のみという制限が引き続き適用されます。コードには別のライセンスが適用されます。アップストリームのリポジトリはApache-2.0、LibreYOLOへの移植版はMITで、独自データを使って自分で学習した重みは自分のものです。
 
 </provenance-box>
-
-## 引用
-
-Dome-DETRはACM Multimedia 2025で「Dome-DETR: DETR with Density-Oriented Feature-Query Manipulation for Efficient Tiny Object Detection」として発表されました。プレプリントは[arxiv.org/abs/2505.05741](https://arxiv.org/abs/2505.05741)にあります。著者はリポジトリでBibTeXブロックを公開していないため、ここでは手作業で組み立てたものを掲載していません。
-
-<citation-block />
-

@@ -1,0 +1,7 @@
+{
+  "name": "SmolVLA, ACT and Diffusion Policy",
+  "org": "Hugging Face and policy authors",
+  "code_url": "https://github.com/huggingface/lerobot",
+  "license": "Apache-2.0",
+  "license_interpretation": "The upstream policy runtime and SmolVLA base declare Apache-2.0. ACT and Diffusion Policy training do not load pretrained policy weights."
+}

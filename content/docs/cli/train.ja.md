@@ -1,7 +1,7 @@
 ---
 title: libreyolo train
 seo_title: libreyolo train コマンドリファレンス
-description: コマンドラインからのモデル学習：59個すべての引数とそのデフォルト値、モデルファミリーのデフォルト値による上書きの仕組み、そしてファミリーが無視する引数。
+description: コマンドラインからのモデル学習：すべての引数とそのデフォルト値、モデルファミリーのデフォルト値による上書きの仕組み、そしてファミリーが無視する引数。
 lead: >-
   1つのデータセットで1つのモデルを学習し、チェックポイント・指標・ログを実行ディレクトリに書き出します。以下の各引数にはコマンド定義由来のデフォルト値があり、モデルファミリー自身の学習設定がそれを置き換えることがあります。
 keywords:
@@ -11,7 +11,7 @@ keywords:
   - libreyolo train 引数
   - libreyolo dry_run 確認
   - yolo 層 freeze 学習
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: コマンド
     value: libreyolo train
@@ -20,7 +20,7 @@ meta:
     value: data
     mono: true
   - label: 出力
-    value: runs/train/exp配下のチェックポイント・指標・ログ
+    value: runs/train/<name>配下のチェックポイント・指標・ログ。YOLO9はyolo9_expを使用
 snippets:
   examples:
     - label: 基本
@@ -45,7 +45,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 3aad4298310d3081
+source_hash: 30b2c16d339f5f50
 ---
 
 ## 書式
@@ -85,6 +85,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | `amp` | `true` | 自動混合精度 |
 | `amp_dtype` | `float16` | CUDA AMPのdtype：`float16`または`bfloat16` |
 | `cuda_graph` | `false` | 学習の順伝播と逆伝播をCUDAグラフにキャプチャします。シングルGPUかつ対応ファミリーのみで、それ以外はeager実行のままです |
+| `compile` | `false` | 学習ネットワークを`torch.compile`でコンパイルします：`true`、`false`、`default`、`reduce-overhead`、`max-autotune`、`max-autotune-no-cudagraphs`。シングルCUDA GPUのみで、それ以外の実行は警告を出してeagerで学習します |
 | `lora` | `false` | LoRAファインチューニング。補足に挙げたTransformerファミリー向け |
 | `freeze` | | 層を凍結：整数の個数、インデックスのリスト、またはモジュール名 |
 
@@ -143,7 +144,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | 引数 | デフォルト値 | 意味 |
 |---|---|---|
 | `val` | `true` | 学習中に検証 |
-| `eval_interval` | `10` | Nエポックごとに検証 |
+| `eval_interval` | `10` | Nエポックごと、および最終エポックの後に検証 |
 | `max_det` | `300` | 検証時のNMS後の画像1枚あたりの最大検出数 |
 | `eval_max_det` | | COCO評価器の上限。未設定の場合はpycocotoolsのAP@100の慣例 |
 | `faster_coco_eval` | `true` | インストール済みならCOCO指標にfaster-coco-evalのC++バックエンドを使用し、なければpycocotoolsにフォールバック |
@@ -168,6 +169,27 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | `quiet` | `false` | 標準エラー出力を抑制 |
 | `dry_run` | `false` | 実行せずに設定を解決して表示 |
 | `help_json` | `false` | コマンドスキーマをJSONで出力して終了 |
+
+| 引数 | デフォルト | 意味 |
+| --- | --- | --- |
+| `min_samples` | `0` | 小規模データセットのエポック長の下限。画像が少ない場合は、エポックごとにこの数を復元抽出（0で無効） |
+| `class_balanced` | `False` | 裾の長いクラス分布のデータセット向けのLVIS形式の反復係数サンプリング（デフォルトは無効） |
+| `cls_pw` | `0.0` | 分類の逆頻度重み付けの指数。0で無効、1で完全適用（クラス重みの平均は1。class_weights=Trueとの併用は不可） |
+| `class_weights` | `False` | 従来のサンプル数で正規化した分類損失の重み（デフォルトは無効） |
+| `single_cls` | `False` | 対応する検出器で、すべてのラベルをクラス0に対応付けて学習 |
+| `classes` | `None` | 対応する検出器で、カンマ区切りの元のデータセットクラスIDのみを使って学習（例：'0,3,5'）。それ以外のクラスはラベルがないものとして除外。IDは詰め直さず維持 |
+| `average_best` | `0` | 監視する指標で上位N個のチェックポイントを均等に平均し、学習終了時にweights/average.ptへ保存（0で無効） |
+| `export_check` | `False` | エポック1の前にONNXへエクスポートし、失敗した場合は実行を停止（デフォルトは無効） |
+| `precise_bn` | `0` | 最後のエポック後に、この数の学習画像からBatchNormの移動統計を再計算（0で無効） |
+| `aux_weight` | | YOLO9のみ：ファインチューニング時のPGI補助分岐の損失の重み。未設定の場合は`0.25`、`0`で主ヘッドのみを学習 |
+| `fliplr` | `None` | 水平反転の確率（flip_probの別名） |
+| `flipud` | `0.0` | 垂直反転の確率 |
+| `auto_augment` | `None` | 分類の自動データ拡張方針：randaugment、autoaugment、augmix（デフォルトはなし） |
+| `erasing` | `0.0` | 分類のRandomErasingの確率。0 <= erasing < 1 |
+| `cutmix` | `0.0` | 分類のCutMixの確率（ソフトラベル） |
+| `scale` | `0.5` | 分類のRandomResizedCropの面積範囲。浮動小数点数の下限または明示的な(min,max) |
+| `crop_pct` | `None` | 分類の評価で中央クロップの前に使うリサイズ比率（デフォルトはモデルファミリー本来の値） |
+| `plot_samples` | `8` | 検証のサンプル描画の画像数。0でなし、-1ですべての検証画像（指標は変化しない） |
 
 ## 使用例
 
@@ -201,11 +223,12 @@ RF-DETRとDEIMv2は`imgsz`が明示的に設定されたときだけ値を渡す
 アフィン変換も行わないパススルーのパイプラインで学習するため、`mosaic`、`mixup`、
 `hsv_prob`、`degrees`、`translate`、`shear`、`mosaic_scale`、`mixup_scale`は
 そこでは何にも届きません。ECは同じパイプラインを使いますが、タスクが姿勢推定の
-ときは`hsv_prob`、`degrees`、`translate`を読みます。分類系のファミリーとSegFormer、
-NAFNetは、反転が設定可能な確率ではなく固定の確率で行われるため、その一式に加えて
-`flip_prob`も無視します。YOLO-NASは代わりに常時有効なサンプルごとのアフィン変換で
-データ拡張するため、`mosaic`だけを無視します。RF-DETRはそのリストに加えてさらに
-3つ、`optimizer`、`momentum`、`nesterov`を無視します。
+ときは`hsv_prob`、`degrees`、`translate`を読みます。分類系のファミリーは、分類系
+ではバッチMixUpとなる`mixup`を除いてその一式を無視し、`flip_prob`は読みます。
+SegFormerとNAFNetは、反転が設定可能な確率ではなく固定の確率で行われるため、その
+一式全体に加えて`flip_prob`も無視します。YOLO-NASは代わりに常時有効なサンプルごとの
+アフィン変換でデータ拡張するため、`mosaic`だけを無視します。RF-DETRはそのリストに
+加えてさらに3つ、`optimizer`、`momentum`、`nesterov`を無視します。
 
 これらを設定してもエラーにはなりません。実行時にはファミリー名と無視する引数を
 挙げた行が標準エラー出力に記録されてから学習が始まり、その行がインストールされて
@@ -213,21 +236,21 @@ NAFNetは、反転が設定可能な確率ではなく固定の確率で行わ�
 ため、`quiet=true`を指定したスクリプト実行では、標準エラー出力のほかの内容と
 ともにこの警告も抑制されます。
 
-`val=false`も関連するケースです。ほとんどのファミリーでは`eval_interval`を`0`に
-設定しますが、RF-DETRはその方法で検証を無効にできず、要求を無視したことをログに
-出力します。
+`val=false`も関連するケースです。`eval_interval`を`0`に設定し、これにより最終
+エポックも含めて学習中の検証が無効になり、実行では`best.pt`が書き出されません。
 
 ### 知っておくとよいその他の挙動
 
 `lora=true`を受け付けるのはRF-DETR、D-FINE、DEIM、DEIMv2、RT-DETRのv1、v2、v4、
-EC、ConvNeXtです。ほかのファミリーはLoRAなしで学習するのではなく、
+EC、GTR、ConvNeXtです。ほかのファミリーはLoRAなしで学習するのではなく、
 `config_unsupported`で終了します。
 
 `pretrained=false`と`resume`の併用は、両者が正反対のことを求めているため、ゼロ
 からの学習に対応するファミリーでは拒否されます。
 
 `mosaic`と`mixup`は、設定フィールド`mosaic_prob`と`mixup_prob`のコマンドライン上
-の書き方です。MixupがMosaicのサンプルにしか適用されないファミリーでは、`mosaic`が
+の書き方で、分類モデルでは代わりに`mixup`がバッチMixUpになります。Mixupが
+Mosaicのサンプルにしか適用されないファミリーでは、`mosaic`が
 0のまま`mixup`を0より大きくしても一度も発火せず、実行時にその旨が示されます。
 
 `dry_run=true`はモデル参照を解決し、ファミリーのデフォルト値を適用して、学習に

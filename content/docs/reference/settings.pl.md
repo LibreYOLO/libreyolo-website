@@ -15,10 +15,10 @@ keywords:
   - HF_TOKEN
   - katalog wag LibreYOLO
   - pamięć podręczna LibreYOLO
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Zmienne znaleziono przez wyszukanie os.environ i os.getenv w libreyolo/**/*.py
-  w wersji v1.5.0; semantykę odczytano w każdym miejscu użycia. Konwencje
+  w wersji v1.6.0; semantykę odczytano w każdym miejscu użycia. Konwencje
   katalogów odczytano z libreyolo/data/utils.py, libreyolo/utils/download.py,
   libreyolo/export/exporter.py, libreyolo/models/base/model.py i
   libreyolo/models/sam3dbody/mhr_body.py.
@@ -39,7 +39,7 @@ snippets:
         importu.
 
         print(DATASETS_DIR)
-source_hash: 462f1288582225ce
+source_hash: 82fbf9f3b1540603
 ---
 
 ## Zmienne środowiskowe
@@ -70,6 +70,8 @@ Wybór kerneli przerywa również importy: gdy `LIBREYOLO_KERNELS` wymusza `off`
 albo `reference`, wbudowani przyspieszeni dostawcy w ogóle nie są importowani.
 Rejestr sterowany przez te trzy zmienne opisano w sekcji
 [kernele](/docs/reference/kernels).
+
+`LIBREYOLO_TRITON_MSDA=0` wyłącza zawartego w kodzie dostawcę deformowalnej uwagi Triton. `LIBREYOLO_HUB_KERNELS=0` wyłącza kernele Hub i ich wskazówkę instalacji. Oba ustawienia zachowują przenośną implementację zastępczą.
 
 ## Zmienne ustawiane przez bibliotekę
 
@@ -107,6 +109,8 @@ Token jest potrzebny tylko dla repozytoriów ograniczonych. Dostarczanym przykł
 jest SAM 3: jego wagi są pobierane z ograniczonego repozytorium na licencji
 niestandardowej, dlatego warunki trzeba zaakceptować na stronie repozytorium,
 a sesja musi być uwierzytelniona.
+
+`HF_TOKEN` uwierzytelnia wczytywanie i publikowanie checkpointów Hub oraz logger Hub. `OPENAI_API_KEY` i `OPENROUTER_API_KEY` dostarczają dane uwierzytelniające dla odpowiednich [tras dostawców LibreLLM](/docs/reference/llm-api).
 
 ## Katalogi
 
@@ -148,4 +152,3 @@ każdego przebiegu. Rzeczywiście użyty backend jest raportowany w
 Plik YAML zbioru danych może zawierać pole `download` z kodem Python. Nie jest ono
 wykonywane bez przekazania `allow_download_scripts=True` do wywołania, które je
 odczytuje. Jest to argument funkcji `val()` i `export()`, a nie zmienna środowiskowa.
-

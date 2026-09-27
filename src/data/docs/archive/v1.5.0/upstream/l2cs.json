@@ -1,0 +1,12 @@
+{
+  "name": "L2CS-Net",
+  "org": "Ahmed A. Abdelrahman et al.",
+  "paper_title": "L2CS-Net: Fine-Grained Gaze Estimation in Unconstrained Environments",
+  "paper_url": "https://arxiv.org/abs/2203.03339",
+  "code_url": "https://github.com/Ahmednull/L2CS-Net",
+  "license": "Gaze360 dataset terms: research and non-commercial use only, no redistribution",
+  "license_interpretation": "The L2CS-Net source is MIT and may be used, modified and redistributed, including commercially. The one checkpoint LibreYOLO can fetch automatically, a ResNet-50 trained on Gaze360, is not covered by that grant: the Gaze360 dataset license restricts use of models trained on it to research and non-commercial purposes and forbids redistribution. LibreYOLO does not mirror or host that checkpoint. It downloads it, on request, directly from the author's own distribution and prints the Gaze360 terms once before the transfer starts. A model trained on data you hold the rights to, using this MIT architecture, carries none of those restrictions.",
+  "bibtex": null,
+  "bibtex_source_url": null,
+  "bibtex_verified": "2026-08-08: no Citation section, CITATION.cff, or any BibTeX block exists in the Ahmednull/L2CS-Net repository (checked README.md and the repository root file listing on branch main). The arXiv record for 2203.03339 lists four authors (Ahmed A. Abdelrahman, Thorsten Hempel, Aly Khalifa, Ayoub Al-Hamadi), submitted to ICIP 2022 with no listed acceptance. A citation for this paper circulates in LibreYOLO's own THIRD_PARTY_NOTICES.txt with a fifth author, 'Dinges, L.', who does not appear in the arXiv author list; that entry was not copied from an authors' citation block and is not used here. Per the citation procedure, bibtex is left null rather than assembled by hand."
+}

@@ -20,7 +20,7 @@ keywords:
   - miou
   - panoptic quality
   - accuracy top1
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   val:
     - label: Python
@@ -63,7 +63,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: d907183492fa3f57
+source_hash: da1e3ccfd1efba73
 ---
 
 ## Ejecutar una validación
@@ -72,7 +72,7 @@ source_hash: d907183492fa3f57
 
 <code-tabs name="val" />
 
-El valor devuelto es un `dict[str, float]` simple. Todas las claves son
+El valor devuelto es un `dict[str, float]`. Todas las claves son
 literales, así que léelas por nombre y no por posición.
 
 Los argumentos principales son `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
@@ -80,7 +80,9 @@ Los argumentos principales son `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
 defecto e `iou` `0.6`, ambos mucho más permisivos que los valores por defecto de
 predicción, porque un barrido de mAP necesita la cola de baja confianza. `imgsz`
 toma por defecto el tamaño de entrada del propio modelo en lugar de un número
-fijo. `split` acepta `val`, `test` o `train` y nada más.
+fijo. `split` acepta `val`, `test` o `train` y nada más. Sin `data`, un
+checkpoint entrenado se valida con el dataset con el que se entrenó; los pesos
+publicados no llevan ninguno y necesitan `data=`.
 
 Cualquier otro campo de la configuración de validación se pasa como argumento
 con nombre, incluidos `save_dir`, `max_det`, `eval_max_det`, `half`,
@@ -149,6 +151,8 @@ OBB no la llevan; sus familias se seleccionan por `metrics/mAP50-95`, que sus
 diccionarios sí devuelven. Pose no devuelve ni `fitness` ni `metrics/mAP50-95`;
 en su lugar, sus entrenadores fijan `best_metric_key` a
 `metrics/keypoints_mAP50-95`.
+
+La clasificación ImageFolder añade las métricas macro `metrics/precision`, `metrics/recall` y `metrics/f1`, promediadas sobre las clases presentes en los targets de validación. Top-1 sigue siendo el criterio de selección por defecto. La detección también devuelve `metrics/best_conf` y `metrics/best_conf_f1`, eligiendo el umbral óptimo de micro-F1 con IoU 0.50, y deja los umbrales indexados por nombre de clase en `metrics.box.best_conf_per_class`. Las detecciones con la misma puntuación permanecen agrupadas; los empates eligen el umbral más alto. Si no hay F1 positivo, se devuelve 0.0. La segmentación no expone estas claves de umbral.
 
 ## Claves de velocidad
 
@@ -250,6 +254,8 @@ combinar, y pedir ambas lanza un error.
 
 `val()` siempre escribe `config.yaml` en su directorio de guardado, que por
 defecto es `runs/val/<model>_<size>_<timestamp>` cuando no se pasa `save_dir`.
+`project`, `name` y `exist_ok` lo eligen igual que en el entrenamiento:
+`project/name`, con un sufijo incremental salvo que `exist_ok=True`.
 
 <code-tabs name="json" />
 
@@ -266,12 +272,19 @@ Los demás validadores no implementan gráficas; classification, semantic,
 panoptic, depth, normal, edge, restore, matte, OCR, OBB y point no escriben nada
 ahí. Un fallo al generar las gráficas avisa y nunca aborta la ejecución.
 
+`visualize=True` escribe imágenes de TP/FP/FN de cajas teniendo en cuenta la clase para detección y segmentación, o imágenes que comparan la etiqueta con top-1 para clasificación ImageFolder, en `visualize/errors/` y `visualize/correct/`. El matching usa IoU 0.5 y confianza `max(0.25, conf)`. Los valores por defecto son `visualize=False`, `show_labels=True` y `show_conf=True`. Las tareas no compatibles y la validación de clips de V-JEPA 2 rechazan la visualización.
+
+`plot_samples=8` limita el gráfico de muestras separado; 0 lo desactiva y -1 conserva todas las imágenes. Esto no cambia las métricas ni la salida de visualización.
+
 ## Validación durante el entrenamiento
 
-El entrenamiento valida cada `eval_interval` épocas sobre el split `val` del
-dataset, y las métricas que produce son las que gobiernan la selección de
-`best.pt`, la parada temprana por `patience` y las claves `val/` de todos los
-loggers. La validación se ejecuta sobre los pesos EMA cuando EMA está activado.
+El entrenamiento valida cada `eval_interval` épocas, y siempre tras la última
+época, sobre el split `val` del dataset, y las métricas que produce son las que
+gobiernan la selección de `best.pt`, la parada temprana por `patience` y las
+claves `val/` de todos los loggers. La validación se ejecuta sobre los pesos EMA
+cuando EMA está activado. Sus archivos van a un directorio `val/` dentro de la
+ejecución. `val=False` desactiva la validación durante el entrenamiento, última
+época incluida.
 
 Consulta [Hiperparámetros](/docs/train/hyperparameters) para `eval_interval`,
 `patience` y `save_plots`, y [Loggers de experimentos](/docs/train/loggers) para
@@ -280,3 +293,7 @@ saber dónde van a parar los números.
 ## Relacionado
 
 - [Datasets](/docs/train/datasets) para las claves de split y los formatos que leen los validadores.
+
+## Métricas de cajas por imagen
+
+Los resultados de detección y segmentación mantienen la compatibilidad con diccionarios y también exponen `results.box.image_metrics`. Cada nombre de archivo se asocia con `precision`, `recall`, `f1`, `tp`, `fp` y `fn` usando la regla de matching de visualización, incluso cuando esta está desactivada. La segmentación cuenta cajas aquí. Los nombres base duplicados usan rutas completas después de la primera aparición. Los denominadores cero dan 0.0. Estos registros no se recopilan entre los ranks distribuidos.

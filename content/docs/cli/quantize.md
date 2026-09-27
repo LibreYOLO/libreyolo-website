@@ -4,7 +4,7 @@ seo_title: "libreyolo quantize command reference"
 description: "Quantize a checkpoint in PyTorch from the command line: recipes, calibration arguments, defaults, and the families each recipe accepts."
 lead: "Replaces a model's float modules with quantized ones, calibrates them on unlabeled images where the recipe needs statistics, and saves the result as a PyTorch checkpoint."
 keywords: [libreyolo quantize cli, int8 quantization command, fp8 quantization, post training quantization cli, libreyolo quantize arguments]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 meta:
   - label: Command
     value: libreyolo quantize
@@ -55,7 +55,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `recipe=int8` and
 | `calib` | `coco128.yaml` | Calibration images: a data YAML or a built-in dataset name. Unlabeled, forward only. `none` skips calibration |
 | `samples` | `128` | Maximum calibration images |
 | `batch` | `8` | Calibration batch size |
-| `algorithm` | `auto` | Activation range estimation: `auto`, which selects minmax, or `minmax`, or `percentile` |
+| `algorithm` | `auto` | Activation range estimation: `auto` (minmax), `minmax`, `percentile`, `mse` or `entropy` |
 | `out` | | Output checkpoint path. Defaults to the source path with `-<recipe>` before the suffix |
 | `device` | `auto` | Device |
 | `allow_download_scripts` | `false` | Allow embedded Python in dataset YAML download blocks |
@@ -123,3 +123,5 @@ the save fails, and `1` for other runtime failures.
 
 Related: [`libreyolo export`](/docs/cli/export), which leaves PyTorch and writes
 a deployment artifact instead.
+
+`algorithm` defaults to `auto` (minmax) and also accepts `minmax`, `percentile`, `mse` and `entropy`. MSE and entropy select ranges with activation-histogram sweeps.

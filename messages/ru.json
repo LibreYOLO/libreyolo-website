@@ -313,6 +313,7 @@
     "nextRelease": "Следующий релиз",
     "versionIsCurrent": "v{version} — текущая версия",
     "latest": "последняя",
+    "archivedNotice": "Это документация LibreYOLO {version}. <link>Открыть актуальную версию</link>.",
     "onThisPage": "На этой странице",
     "docsButton": "Документация",
     "openNav": "Открыть навигацию по документации",

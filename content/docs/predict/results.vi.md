@@ -19,7 +19,7 @@ keywords:
   - kết quả bản đồ độ sâu
   - tóm tắt results
   - onnx cùng results
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Các lớp payload, slot, ngữ nghĩa di chuyển, summary(), to_json(), plot(),
   save() và cutout() được đọc từ libreyolo/utils/results.py. Hành vi chú thích
@@ -135,12 +135,11 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: cebaac95f0a28b5f
 ---
-
 ## Một đối tượng, một slot cho mỗi payload
 
-Dự đoán trên một ảnh trả về một `Results`. Đối tượng chứa mười tám slot payload,
+Dự đoán trên một ảnh trả về một `Results`. Đối tượng chứa hai mươi mốt slot payload,
 và mô hình chỉ điền các slot do tác vụ tạo ra. Mọi slot khác là `None`, nên đọc
 `result.masks` trên detector sẽ nhận `None` thay vì lỗi.
 
@@ -164,6 +163,9 @@ và mô hình chỉ điền các slot do tác vụ tạo ra. Mọi slot khác l�
 | `embeddings` | `Embeddings` | `(N, D)` các hàng chuẩn hóa L2 | Tác vụ `embed` |
 | `identities` | `Identities` | N tên và điểm | Tác vụ `embed` với gallery |
 | `meshes` | `Meshes` | Tham số cơ thể và vertex tùy chọn | Khôi phục mesh cơ thể |
+| `albedo` | `AlbedoMap` | `(H, W, 3)` RGB tuyến tính | Ước lượng albedo |
+| `boxes3d` | `Boxes3D` | `(N, 14)` khối hộp trong hệ camera, căn theo hàng với `boxes` | Phát hiện 3D đơn mắt |
+| `actions` | `Actions` | `(T, D)` đoạn hành động | Chính sách robot |
 
 Bên cạnh đó là các trường có trong mọi kết quả: `orig_shape` dưới dạng
 `(height, width)`, `path` (đường dẫn nguồn hoặc `None` cho đầu vào trong bộ nhớ),
@@ -290,10 +292,6 @@ dạng trực quan hóa độ sâu, kết quả panoptic với các segment, mat
 RGBA nền trong suốt, còn detector dưới dạng box với mask bên dưới. Đường dẫn đã
 ghi được gắn vào kết quả dưới dạng `result.saved_path`.
 
-`Results.plot()` có phạm vi hẹp hơn tên gọi. Phương thức chỉ được định nghĩa cho
-bản đồ pháp tuyến và bản đồ cạnh, đồng thời phát sinh `NotImplementedError` với
-mọi dạng khác. Hãy dùng `save=True` cho các tác vụ khác.
-
 `Results.save(path)` cũng có phạm vi hẹp: phương thức ghi kết quả matte thành ảnh
 cắt PNG RGBA nền trong suốt và phát sinh `NotImplementedError` trong trường hợp
 khác. `Results.cutout()` trả về cùng mảng RGBA mà không ghi. Cả hai cần ảnh nguồn,
@@ -303,15 +301,19 @@ Hai payload có trình ghi riêng: `result.restored.save(path)` cho ảnh đã k
 
 Để biết tệp được đặt ở đâu và `output_path` cùng `output_file_format` hoạt động thế nào, hãy xem [Nguồn dự đoán](/docs/predict/sources).
 
+`plot()` hỗ trợ dữ liệu của mọi tác vụ. Lớp phủ ảnh mặc định trả về BGR uint8 HxWx3 liên tục; `pil=True` yêu cầu PIL. Bản đồ độ sâu, pháp tuyến, biên và albedo, khối hộp 3D và đoạn hành động mặc định trả về ảnh PIL; `pil=False` trả về mảng. `orig_img` giữ pixel BGR cho nguồn trong bộ nhớ và URL; có thể mở lại tệp cục bộ và khung hình đã thu từ video hữu hạn.
+
+Các điều khiển gồm `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` và `filename`. Ảnh phân loại đã lưu chứa năm nhãn đứng đầu. Lưu matte ghi ảnh tách nền RGBA.
+
 ## Artifact đã xuất trả về cùng đối tượng
 
 <code-tabs name="exported" />
 
 `LibreYOLO()` định tuyến theo hậu tố tệp, nên artifact đã xuất được tải qua cùng
-lời gọi như checkpoint `.pt` và trả về cùng `Results`. Các tệp `.onnx`, `.engine`,
-`.pte` và `.mnn` được nhận diện theo hậu tố, tương tự các thư mục OpenVINO, Paddle,
-ncnn và URL mô hình Triton. Mã đọc `result.boxes.xyxy` không thay đổi khi mô hình
+lời gọi như checkpoint `.pt` và trả về cùng `Results`. Các tệp `.onnx`,
+`.torchscript`, `.engine`, `.pte`, `.tflite` và `.mnn` được nhận diện theo hậu tố,
+tương tự các thư mục OpenVINO, Paddle, ncnn, Core ML `.mlpackage` và URL mô hình
+Triton. Mã đọc `result.boxes.xyxy` không thay đổi khi mô hình
 được thay bằng bản đã xuất. Xem [Xuất](/docs/export) để biết toàn bộ định dạng.
 
 Dùng API riêng của runtime đồng nghĩa bạn phải tự đảm nhiệm tiền xử lý, hậu xử lý và tên lớp.
-

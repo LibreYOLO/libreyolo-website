@@ -20,7 +20,7 @@ keywords:
   - Erkennung kleiner Objekte
   - Programmable Gradient Information
   - GELAN
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -147,7 +147,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: eaa6023a4a0b9e71
+source_hash: "624f3e70d2937683"
 ---
 
 ## Installation
@@ -190,6 +190,10 @@ Das Stride-4-Modell besitzt keinen eigenen veröffentlichten COCO-Checkpoint. `T
 
 Unter [Training](/docs/train) findest du Informationen zu Datensätzen, Augmentation, Multi-GPU und Loggern.
 
+Neue Fine-Tunings der Standarderkennung aktivieren einen nur beim Training verwendeten PGI-Zweig mit `aux_weight=0.25`. `max_labels=300`; das SGD-Momentum steigt während drei Warmup-Epochen von 0.8 auf 0.937. Alte Checkpoints mit einem Head werden mit diesem Graphen fortgesetzt. Vorhersage und Export verwenden den Haupt-Head. `letterbox_pad=None` übernimmt den Checkpoint-Eintrag: Nicht markierte Gewichte verwenden `topleft`, neue offizielle Konvertierungen speichern `center`.
+
+Mosaic in YOLO9 und YOLOX bevorzugt annotierte Partnerbilder bei höchstens 20 Ziehungen; YOLO9-MixUp verwendet dieselbe Regel. Siehe [Ereignishistogramme](/docs/train/event-histograms) für Eingabeprofile ohne RGB.
+
 ## Validierung
 
 `val()` gibt ein Dictionary mit `metrics/`-Schlüsseln für Precision, Recall, mAP 50 und mAP 50-95 zurück, gemessen anhand jedes Datensatzes im Format, das du für das Training verwendet hast.
@@ -210,6 +214,8 @@ Jedes Format installiert ein anderes Extra und besitzt eigene Argumente. Beides 
 
 <code-tabs name="export" />
 
+[TFLite INT8](/docs/export/tflite) verwendet `int8=True` mit Kalibrierungsdaten.
+
 ## Checkpoints
 
 Alle für diese Familie veröffentlichten Gewichtsdateien.
@@ -220,7 +226,7 @@ Alle für diese Familie veröffentlichten Gewichtsdateien.
 
 <provenance-box>
 
-Ein Checkpoint steht hier nicht unter MIT. Das auf VisDrone2019-DET trainierte Stride-4-Modell übernimmt die Bedingungen des Datensatzes unter CC BY-NC-SA 3.0. Es darf nur nicht kommerziell verwendet werden, für abgeleitete Werke gilt ShareAlike und es fällt nicht unter die freizügige Lizenz des übrigen Teils dieser Familie. Es sagt die VisDrone-Klassen für Luftbilder statt der COCO-Klassen vorher. Die Bibliothek zeigt all diese Informationen an, bevor sie die Datei herunterlädt.
+Der Luftbild-Checkpoint mit Stride 4 sagt die VisDrone-Klassen vorher. Verwende die vom Herausgeber im Gewichtsrepository deklarierte Lizenz.
 
 </provenance-box>
 

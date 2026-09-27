@@ -15,7 +15,7 @@ keywords:
   - normal map
   - dense prediction
   - DINOv2
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -75,7 +75,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: d96b89f18ac10a40
+source_hash: b06daf44f9a58411
 ---
 
 ## インストール
@@ -88,8 +88,7 @@ pip install libreyolo
 
 ## 推論
 
-重みは初回使用時に自動的にダウンロードされます。LibreYOLOは一致するサイズを公式チェックポイントから
-直接取得し、ローカルにキャッシュします。
+重みは初回使用時に自動的にダウンロードされます。sとlはLibreYOLOのミラーを使い、bは引き続きアップストリームのチェックポイントを使います。
 
 <code-tabs name="predict" />
 
@@ -130,9 +129,7 @@ MoGe-2は検出結果の集合ではなく密な場を返すため、`result.box
 
 <provenance-box>
 
-LibreYOLOはこれらのチェックポイントを自身の組織へコピーしません。
-`LibreYOLO("LibreMoGe2s-normal.pt")`は固定されたrevisionの公式Hugging Faceリポジトリから
-一致するサイズを直接ダウンロードし、使用前に記録済みのSHA-256 checksumと照合します。
+sとlのチェックポイントはLibreYOLOがミラーし、bはアップストリームを使います。ダウンロードしたファイルには、公開元のライセンスが引き続き適用されます。
 
 </provenance-box>
 

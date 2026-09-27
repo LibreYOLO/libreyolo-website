@@ -20,7 +20,7 @@ keywords:
   - miou
   - panoptic quality
   - top1 accuracy
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   val:
     - label: Python
@@ -63,7 +63,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: d907183492fa3f57
+source_hash: da1e3ccfd1efba73
 ---
 
 ## Eseguire una validazione
@@ -72,7 +72,7 @@ source_hash: d907183492fa3f57
 
 <code-tabs name="val" />
 
-Il valore restituito è un semplice `dict[str, float]`. Ogni chiave è letterale,
+Il valore restituito è un `dict[str, float]`. Ogni chiave è letterale,
 quindi leggila per nome e non per posizione.
 
 Gli argomenti principali sono `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
@@ -80,7 +80,9 @@ Gli argomenti principali sono `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
 default e `iou` vale `0.6`, entrambi molto più permissivi dei default della
 predizione, perché uno sweep di mAP ha bisogno della coda a bassa confidenza.
 `imgsz` di default vale la dimensione di input del modello stesso invece di un
-numero fisso. `split` accetta `val`, `test` o `train` e nient'altro.
+numero fisso. `split` accetta `val`, `test` o `train` e nient'altro. Senza
+`data`, un checkpoint addestrato viene validato sul dataset su cui è stato
+addestrato; i pesi pubblicati non ne portano nessuno e richiedono `data=`.
 
 Qualsiasi altro campo della configurazione di validazione passa come argomento
 keyword, inclusi `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`,
@@ -148,6 +150,8 @@ segmentazione e OBB non ne hanno una; le loro famiglie sono selezionate su
 `metrics/mAP50-95`, che i loro dizionari restituiscono. Pose non restituisce né
 `fitness` né `metrics/mAP50-95`; i suoi trainer impostano invece `best_metric_key`
 a `metrics/keypoints_mAP50-95`.
+
+La classificazione ImageFolder aggiunge le metriche macro `metrics/precision`, `metrics/recall` e `metrics/f1`, mediate sulle classi presenti nei target di validazione. Top-1 resta la fitness predefinita. Il rilevamento restituisce anche `metrics/best_conf` e `metrics/best_conf_f1`, scegliendo la soglia ottimale per micro-F1 a IoU 0.50, e mette le soglie con nomi di classe come chiavi su `metrics.box.best_conf_per_class`. I rilevamenti con lo stesso punteggio restano raggruppati; in caso di parità viene scelta la soglia più alta. Se nessun F1 è positivo, viene restituito 0.0. La segmentazione non espone queste chiavi di soglia.
 
 ## Chiavi di velocità
 
@@ -248,7 +252,8 @@ combinare, e chiederle entrambe solleva un errore.
 
 `val()` scrive sempre `config.yaml` nella propria directory di salvataggio, che
 di default è `runs/val/<model>_<size>_<timestamp>` quando `save_dir` non è
-indicato.
+indicato. `project`, `name` e `exist_ok` la scelgono come fa l'addestramento:
+`project/name`, con un suffisso incrementale a meno che `exist_ok=True`.
 
 <code-tabs name="json" />
 
@@ -265,12 +270,19 @@ altri validatori non implementano i plot; classificazione, semantic, panoptic,
 depth, normal, edge, restore, matte, OCR, OBB e point non scrivono nulla lì. Un
 errore nel plotting genera un avviso e non interrompe mai l'esecuzione.
 
+`visualize=True` salva immagini con box TP/FP/FN distinti per classe per rilevamento e segmentazione, oppure immagini con etichetta confrontata con top-1 per la classificazione ImageFolder, in `visualize/errors/` e `visualize/correct/`. L'abbinamento usa IoU 0.5 e confidenza `max(0.25, conf)`. I valori predefiniti sono `visualize=False`, `show_labels=True` e `show_conf=True`. I task non supportati e la validazione delle clip V-JEPA 2 rifiutano la visualizzazione.
+
+`plot_samples=8` limita il grafico separato dei campioni; 0 lo disattiva e -1 mantiene tutte le immagini. Questo non modifica le metriche né l'output di visualizzazione.
+
 ## Validazione durante l'addestramento
 
-L'addestramento valida ogni `eval_interval` epoche sullo split `val` del dataset,
-e le metriche che produce sono ciò che guida la selezione di `best.pt`, l'early
-stop di `patience` e le chiavi `val/` in ogni logger. La validazione viene
-eseguita sui pesi EMA quando l'EMA è attiva.
+L'addestramento valida ogni `eval_interval` epoche, e sempre dopo l'ultima
+epoca, sullo split `val` del dataset, e le metriche che produce sono ciò che
+guida la selezione di `best.pt`, l'early stop di `patience` e le chiavi `val/`
+in ogni logger. La validazione viene eseguita sui pesi EMA quando l'EMA è
+attiva. I suoi file vanno in una directory `val/` dentro l'esecuzione.
+`val=False` disattiva la validazione durante l'addestramento, ultima epoca
+inclusa.
 
 Vedi [Iperparametri](/docs/train/hyperparameters) per `eval_interval`, `patience`
 e `save_plots`, e [Logger degli esperimenti](/docs/train/loggers) per dove finiscono
@@ -279,3 +291,7 @@ i numeri.
 ## Correlati
 
 - [Dataset](/docs/train/datasets) per le chiavi degli split e i formati che i validatori leggono.
+
+## Metriche dei box per immagine
+
+I risultati di rilevamento e segmentazione restano compatibili con i dizionari ed espongono anche `results.box.image_metrics`. Ogni nome file corrisponde a `precision`, `recall`, `f1`, `tp`, `fp` e `fn`, usando la regola di abbinamento della visualizzazione anche quando è disattivata. Qui la segmentazione conta i box. Per nomi di base duplicati, dopo la prima occorrenza vengono usati i percorsi completi. I denominatori nulli producono 0.0. Questi record non vengono raccolti tra rank distribuiti.

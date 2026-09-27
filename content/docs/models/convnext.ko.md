@@ -15,7 +15,7 @@ keywords:
   - 이미지 분류
   - 순수 컨볼루션 네트워크
   - ImageNet 분류기
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -31,7 +31,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreConvNeXtt-cls.pt source=cat.jpg save=True
+        libreyolo predict model=LibreConvNeXtt-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python
       language: python
@@ -96,7 +96,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 1682cc69cf2925e6
+source_hash: 8f33a40e4d3a8f29
 ---
 
 ## 설치
@@ -150,12 +150,16 @@ tiny, small, base 크기 3개가 있으며 모두 같은 방식으로 학습하�
 
 데이터셋, 증강, 다중 GPU, 로거는 [학습](/docs/train)을 참조합니다.
 
+`cls_pw=0`은 손실 가중치를 비활성화하며, 1까지의 값은 평균 1로 정규화한 역빈도 가중치를 사용합니다. 대신 `class_weights=True`는 샘플 기준으로 정규화한 역빈도를 사용하며 `cls_pw>0`과 함께 사용할 수 없습니다. 학습을 재개할 때는 이 설정이 일치해야 합니다. [분류](/docs/tasks/image-classification)를 참조하십시오.
+
 ## 검증
 
 `val()`은 `metrics/` 키 딕셔너리를 반환합니다. 분류에서는 검증 분할의 top-1 및
 top-5 정확도입니다.
 
 <code-tabs name="val" />
+
+검증과 INT8 보정은 해당 계열의 평가 변환을 사용합니다. 내보내기 메타데이터는 `norm_mean`, `norm_std`, `resize_mode`를 기록하며, 이전 파일은 계열의 기본값을 사용합니다. 보정 전처리기는 필요한 CHW 배열과 비율을 반환합니다.
 
 ## 내보내기
 
@@ -178,9 +182,7 @@ top-5 정확도입니다.
 
 <provenance-box>
 
-이 계열에는 ConvNeXt V1만 제공됩니다. ConvNeXt-V2의 작은 사전 학습 체크포인트에는
-CC-BY-NC 4.0이 적용되며, 비상업용 가중치를 MIT 및 상업용 라이브러리 안에서
-재배포할 수 없으므로 의도적으로 제외했습니다.
+이 페이지는 ConvNeXt V1을 다룹니다. [ConvNeXt V2](/docs/models/convnextv2)는 별도 계열이며 공식 사전 학습 가중치는 CC-BY-NC-4.0 라이선스를 유지합니다.
 
 </provenance-box>
 

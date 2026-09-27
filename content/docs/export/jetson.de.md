@@ -192,7 +192,7 @@ snippets:
 
         tegrastats            # Live-Last; nvidia-smi ist auf Tegra
         eingeschränkt
-source_hash: c07ff908503e89b5
+source_hash: 42f4131b1a842bfd
 ---
 
 ## Was diese Seite festhält
@@ -210,13 +210,10 @@ nicht getestet. Das Rezept unten ist das, was auf dieser Kombination
 funktioniert hat.
 
 Dieser Lauf fand am 2026-07-27 gegen LibreYOLO 1.4.0 statt und wurde auf
-1.5.0-Hardware nicht wiederholt: Dies ist die eine Seite im 1.5.0-Baum, die
-noch eine 1.4.0-Verifikation trägt, weshalb im Front Matter
-`last_verified: "1.4.0"` steht. Nichts an den 1.5.0-Änderungen berührt den
-Installationspfad, die vier fehlenden Bibliotheken oder die hier beschriebenen
-Export-Flags, die Befehle sollten also weiter gelten. Die Versionsnummern in
-den Ausgaben unten sind aber das, was 1.4.0 ausgegeben hat, keine
-1.5.0-Messung.
+1.5.0- oder 1.6.0-Hardware nicht wiederholt, weshalb im Front Matter
+`last_verified: "1.4.0"` steht. Die Befehle sollten weiter gelten, die
+Versionsnummern in den Ausgaben unten sind aber das, was 1.4.0 ausgegeben hat,
+keine 1.6.0-Messung.
 
 Zwei Dinge daran widersprechen dem, was die meisten Jetson-Anleitungen sagen.
 Die Wheels sind die gewöhnlichen aarch64-Builds für CUDA 13, ein

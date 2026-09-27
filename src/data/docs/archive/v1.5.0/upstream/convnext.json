@@ -1,0 +1,12 @@
+{
+  "name": "ConvNeXt",
+  "org": "Meta AI (FAIR)",
+  "paper_title": "A ConvNet for the 2020s",
+  "paper_url": "https://arxiv.org/abs/2201.03545",
+  "code_url": "https://github.com/huggingface/pytorch-image-models",
+  "license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. It places no obligation on your own application code, and weights you train yourself on your own data are yours. The architecture is Meta AI's original design, released under MIT at facebookresearch/ConvNeXt; the block definitions, layer-scale parameter and module naming that LibreYOLO's implementation follows come from timm, whose convnext_{tiny,small,base}.fb_in1k ImageNet-1k weights are licensed Apache-2.0 and are what LibreYOLO ships. Only ConvNeXt V1 is shipped here: ConvNeXt-V2's small pretrained checkpoints are CC-BY-NC 4.0 and are deliberately excluded as not redistributable in a commercial library.",
+  "bibtex": "@Article{liu2022convnet,\n  author  = {Zhuang Liu and Hanzi Mao and Chao-Yuan Wu and Christoph Feichtenhofer and Trevor Darrell and Saining Xie},\n  title   = {A ConvNet for the 2020s},\n  journal = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},\n  year    = {2022},\n}",
+  "bibtex_source_url": "https://github.com/facebookresearch/ConvNeXt#citation",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README on branch main. Cross-checked against the arXiv API for 2201.03545: six authors in the same order, identical title, and the arXiv comment field itself records \"CVPR 2022\", matching the journal and year the authors cite. Do not hand-edit; a wrong citation misattributes someone's work."
+}

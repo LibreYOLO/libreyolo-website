@@ -16,7 +16,7 @@ keywords:
   - libreyolo hors ligne
   - libreyolo hugging face
   - métadonnées checkpoint
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
   - label: Hébergement
     value: 'Un dépôt Hugging Face par checkpoint :'
@@ -78,7 +78,7 @@ snippets:
 
         print(loaded["model_family"], loaded["size"], loaded["task"],
         loaded["nc"])
-source_hash: 210a12baa1417cfb
+source_hash: 1d76b60f3992a781
 ---
 
 ## Emplacements de recherche d'un checkpoint
@@ -229,3 +229,9 @@ qui nomme les éléments manquants.
 `libreyolo metadata` ne construit jamais de modèle. Il fonctionne donc sur un
 fichier dont la famille n'est pas installée et sur un fichier qui vous inspire
 des doutes.
+
+## Miroirs et modèles par snapshot
+
+MiDaS s/l, MoGe-2 s/l et SAM-1 base/large/huge utilisent les miroirs LibreYOLO ; MoGe-2 b reste en amont. Les miroirs Dome-DETR restent réservés à la recherche académique. Les variantes EdgeCrafter `obj2coco` exigent votre accord et conservent leur licence d'amont restrictive. Consultez le tableau généré des checkpoints sur chaque page de modèle.
+
+Les [références Hub](/docs/reference/hugging-face) chargent des checkpoints munis d'un schéma depuis des identifiants de dépôt. SAM 3D Body exige ses ressources de snapshot vérifiées et épinglées ainsi qu'un accès autorisé. Les politiques robotiques utilisent des répertoires de checkpoints avec `libreyolo_vla.json` ; consultez [LibreVLA](/docs/reference/vla-api).

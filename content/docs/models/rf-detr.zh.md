@@ -3,7 +3,7 @@ title: RF-DETR
 families:
   - rfdetr
 seo_title: RF-DETR：在 MIT 许可下训练、微调并导出
-description: 在 LibreYOLO 里用 RF-DETR 做目标检测、实例分割、姿态和旋转框。安装、预测、训练、验证、导出，全部采用 MIT 许可。
+description: 在 LibreYOLO 里用 RF-DETR 做目标检测、实例分割、姿态和旋转框。安装、预测、训练、验证、导出。
 lead: 一个检测 transformer，它预测的是一组固定数量的目标，而不是一张稠密网格，所以推理时不需要 NMS。LibreYOLO 支持它做四种任务。
 keywords:
   - RF-DETR
@@ -13,7 +13,7 @@ keywords:
   - 实例分割
   - 姿态估计
   - 旋转框检测
-last_verified: 1.5.0
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -88,7 +88,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -143,7 +143,7 @@ snippets:
     - label: 使用导出的文件
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # 工厂按文件后缀分发，所以导出的产物加载方式和任何检查点一样，
         # 返回的也是同一个 Results 对象
@@ -163,7 +163,7 @@ snippets:
 
         # 接线之前先看清楚签名
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -173,7 +173,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 8c464aa759131694
+source_hash: 3238696a4e1ab6c2
 ---
 
 ## 安装
@@ -194,10 +194,13 @@ pip install "libreyolo[rfdetr]"
 改动。`conf` 和 `max_det` 过滤的是 query 的选择；没有 NMS 步骤需要调。数据源、
 流式处理和结果处理见[预测](/docs/predict)。
 
+检测、分割和旋转框路径使用浮点 OpenCV 双线性缩放，不做抗锯齿；姿态路径保留抗锯齿缩放。矩形 `imgsz=(height, width)` 必须满足任务的 patch/窗口网格要求。检查点列表包含 UI 检测器。[事件直方图](/docs/train/event-histograms)使用记录的输入配置。
+
 ## 变体
 
-四种尺寸，四种任务共用一套架构：分割、姿态和旋转框复用检测的解码器，只是换了一个
-head，所以接受的参数完全一样。这些尺寸的参数量相近，主要差别在输入分辨率。
+检测有从 `n` 到 `l` 的四种尺寸，而四种任务共用一套架构：分割、姿态和旋转框复用
+检测的解码器，只是换了一个 head，所以接受的参数完全一样。分割另外多出 `x` 和 `xx`，姿态
+只有 `x`。这些尺寸的参数量相近，主要差别在输入分辨率。
 
 <benchmark-table task="detect" />
 
@@ -205,9 +208,8 @@ head，所以接受的参数完全一样。这些尺寸的参数量相近，主�
 
 ## 训练
 
-四种任务的训练都从已发布的检查点（checkpoint）开始。RF-DETR 把 `pretrained` 列在
-它原生训练器会忽略的参数里，所以在这里传 `pretrained=False` 并不会给你一个随机
-初始化的模型。
+四种任务的训练都从已发布的检查点（checkpoint）开始。
+`pretrained=False` 则会重新初始化整个网络，包括骨干，并从头训练。
 
 <code-tabs name="train" />
 
@@ -218,10 +220,12 @@ head，所以接受的参数完全一样。这些尺寸的参数量相近，主�
 
 数据集、数据增强、多卡训练和日志记录器见[训练](/docs/train)。
 
+新训练默认使用 `output_dir=None`，解析为自动递增的 `runs/train/rfdetr_exp`，并设置 `exist_ok=False`。断点续训的运行会继续写入其检查点所在的运行目录。多类别姿态数据集使用以类别索引或名称为键的 `kpt_names`；空列表表示只有检测框的类别。预测将关键点填充到 `kpt_shape`；关键点 mAP 的适应度不计入只有检测框的类别。
+
 ## 验证
 
-`val()` 返回一个由 `metrics/` 键组成的字典，涵盖查准率、查全率、mAP 50 和
-mAP 50-95，在任何与你训练时所用格式相同的数据集上测得。
+`val()` 返回一个由 `metrics/` 键组成的字典，涵盖 mAP 50、mAP 50-95、mAP 75 和
+COCO 平均查全率，在任何与你训练时所用格式相同的数据集上测得。
 
 <code-tabs name="val" />
 

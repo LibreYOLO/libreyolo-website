@@ -17,7 +17,7 @@ keywords:
   - 깊이 지도 결과
   - 결과 요약
   - onnx 동일한 결과
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   페이로드 클래스, 슬롯, 무브 시맨틱, summary(), to_json(), plot(), save() 및 cutout()는
   libreyolo/utils/results.py.의 Annotation에서 읽고, 디스크 쓰기 동작은
@@ -119,12 +119,12 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: cebaac95f0a28b5f
 ---
 
 ## 하나의 객체, 페이로드당 하나의 슬롯
 
-한 이미지에 대한 예측은 하나의 `Results`를 반환합니다. 이는 18개의 페이로드 슬롯을 가지고 있으며, 모델은 자신의 작업이 생성하는 슬롯만 채웁니다. 나머지 모든 슬롯은 `None`이므로, 탐지기에서 `result.masks`를 읽는 것은 오류가 아니라 `None`입니다.
+한 이미지에 대한 예측은 하나의 `Results`를 반환합니다. 이는 21개의 페이로드 슬롯을 가지고 있으며, 모델은 자신의 작업이 생성하는 슬롯만 채웁니다. 나머지 모든 슬롯은 `None`이므로, 탐지기에서 `result.masks`를 읽는 것은 오류가 아니라 `None`입니다.
 
 | 슬롯 | 수업 | 모양 | 제작 |
 |---|---|---|---|
@@ -146,6 +146,9 @@ source_hash: 548dbc9c7f5552ec
 | `embeddings` | `Embeddings` | `(N, D)` L2-정규화된 행 | `embed` 작업 |
 | `identities` | `Identities` | N개의 이름과 점수 | 갤러리가 있는 `embed` 작업 |
 | `meshes` | `Meshes` | 바디 매개변수 및 선택적 정점 | 바디 메시 복구 |
+| `albedo` | `AlbedoMap` | `(H, W, 3)` 선형 RGB | 알베도 추정 |
+| `boxes3d` | `Boxes3D` | `(N, 14)` 카메라 좌표계 직육면체, `boxes`와 행 정렬 | 단안 3D 탐지 |
+| `actions` | `Actions` | `(T, D)` 동작 청크 | 로봇 정책 |
 
 그들 옆에는 모든 결과가 갖는 필드가 있습니다: `orig_shape`는 `(height, width)`로, `path`(원본 경로 또는 메모리 입력의 경우 `None`), `names`는 클래스 ID를 클래스 이름에 매핑, `frame_idx`는 비디오 및 실시간 프레임용, `track_id`는 추적 시, 그리고 `restore_scale`는 복원 결과의 정수 업스케일 계수입니다.
 
@@ -226,18 +229,20 @@ source_hash: 548dbc9c7f5552ec
 
 `predict(save=True)`는 주석을 달고 기록하는 경로입니다. 이 경로는 채워진 슬롯에서 그리기 루틴을 선택하므로, 의미론적 결과는 색상 마스크로 기록되고, 깊이 결과는 깊이 시각화로, 파노프틱 결과는 해당 세그먼트와 함께, 매트는 투명 배경 RGBA PNG로, 디텍터는 그 아래에 마스크가 있는 박스로 기록됩니다. 기록된 경로는 결과에 `result.saved_path`로 첨부됩니다.
 
-`Results.plot()`는 이름이 시사하는 것보다 더 좁습니다. 이것은 일반 지도와 가장자리 지도에만 정의되며, 다른 것은 `NotImplementedError`를 발생시킵니다. 다른 작업에는 `save=True`를 사용하십시오.
-
 `Results.save(path)` 또한 좁습니다: 투명 배경의 RGBA PNG 컷아웃으로 무광 결과를 기록하고 그렇지 않으면 `NotImplementedError`를 발생시킵니다. `Results.cutout()`는 그것을 기록하지 않고 동일한 RGBA 배열을 반환합니다. 두 함수 모두 원본 이미지가 필요하며, 이는 `result.path`에서 가져오거나 `image=`로 전달됩니다.
 
 두 개의 페이로드는 각각 자체 작성기를 가지고 있습니다: 복원된 이미지를 위한 `result.restored.save(path)`와 메시를 위한 `result.meshes.save_obj(path, index=0)`.
 
 파일이 어디에 위치하는지와 `output_path` 및 `output_file_format`가 어떻게 작동하는지에 대해서는 [예측 소스](/docs/predict/sources)를 참조하십시오.
 
+`plot()`은 모든 작업 페이로드를 처리합니다. 이미지 오버레이는 기본적으로 연속된 HxWx3 uint8 BGR을 반환하며, `pil=True`로 PIL을 요청합니다. 깊이, 법선, 엣지, 알베도 맵과 3D 직육면체, 동작 청크는 기본적으로 PIL 이미지를 반환하며, `pil=False`를 지정하면 배열을 반환합니다. `orig_img`는 메모리 및 URL 소스의 BGR 픽셀을 보관하며, 로컬 파일과 수집한 유한 길이 비디오 프레임은 다시 열 수 있습니다.
+
+설정에는 `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save`, `filename`이 있습니다. 저장된 분류 이미지는 상위 5개 레이블을 포함합니다. 매트 저장은 RGBA로 잘라낸 이미지를 만듭니다.
+
 ## 내보낸 아티팩트는 동일한 객체를 반환
 
 <code-tabs name="exported" />
 
-`LibreYOLO()`는 파일 확장자에 따라 디스패치되므로, 내보낸 아티팩트도 `.pt` 체크포인트와 동일한 호출을 통해 로드되며 동일한 `Results`를 반환합니다. `.onnx`, `.engine`, `.pte` 및 `.mnn` 파일은 확장자에 따라 인식되며, OpenVINO, Paddle 및 ncnn 디렉터리와 Triton 모델 URL도 마찬가지입니다. `result.boxes.xyxy`를 읽는 코드는 모델을 내보낸 빌드로 교체해도 바뀌지 않습니다. 전체 형식 집합은 [Export](/docs/export)를 참조하십시오.
+`LibreYOLO()`는 파일 확장자에 따라 디스패치되므로, 내보낸 아티팩트도 `.pt` 체크포인트와 동일한 호출을 통해 로드되며 동일한 `Results`를 반환합니다. `.onnx`, `.torchscript`, `.engine`, `.pte`, `.tflite` 및 `.mnn` 파일은 확장자에 따라 인식되며, OpenVINO, Paddle, ncnn 및 Core ML `.mlpackage` 디렉터리와 Triton 모델 URL도 마찬가지입니다. `result.boxes.xyxy`를 읽는 코드는 모델을 내보낸 빌드로 교체해도 바뀌지 않습니다. 전체 형식 집합은 [Export](/docs/export)를 참조하십시오.
 
 대신 런타임 자체의 API를 사용한다는 것은 전처리, 후처리 및 클래스 이름을 스스로 관리한다는 것을 의미합니다.

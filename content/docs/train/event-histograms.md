@@ -1,7 +1,7 @@
 ---
 title: Prophesee event histograms
 seo_title: Prophesee event histograms with LibreYOLO
-description: 'Development guide for LibreYOLO v1.6: convert Prophesee SDK histograms, prepare labels, train YOLO9 or RF-DETR, and run ONNX inference.'
+description: 'LibreYOLO 1.6.0 guide: convert Prophesee SDK histograms, prepare labels, train YOLO9 or RF-DETR, and run ONNX inference.'
 lead: Use numerical positive and negative event-count planes as detector inputs, with Prophesee handling event acquisition and LibreYOLO handling training and inference.
 keywords:
 - Prophesee
@@ -10,13 +10,13 @@ keywords:
 - event histogram
 - event camera object detection
 - LibreYOLO v1.6
-verification: Input workflow checked against the v1.6 development implementation. SDK API checked against Metavision 5.3.1; SDK runtime validation is pending.
+last_verified: "1.6.0"
 snippets:
   install:
-  - label: Install the development implementation
+  - label: Install
     language: bash
     code: |
-      python -m pip install "libreyolo[rfdetr,onnx] @ git+https://github.com/LibreYOLO/libreyolo.git@event-histogram-input"
+      python -m pip install "libreyolo[rfdetr,onnx]"
   pack:
   - label: Convert an existing numerical histogram
     language: python
@@ -192,20 +192,11 @@ snippets:
       result = runtime.predict("histogram.npy", save=True)
 ---
 
-**Availability: development documentation for `dev`, scheduled for release in
-LibreYOLO v1.6.** The histogram implementation is currently in
-[PR #865](https://github.com/LibreYOLO/libreyolo/pull/865), awaiting merge into
-`dev`. Use the feature-branch install below until it merges. This functionality
-is not part of the current PyPI release.
-
-## Install the development version
+## Install
 
 Run this in the Python environment that will run the detector:
 
 <code-tabs name="install" />
-
-Once PR #865 is merged, replace `@event-histogram-input` with `@dev` in that
-command. After v1.6 is released, install the corresponding PyPI version instead.
 
 If your application already uses the Prophesee Metavision SDK, keep its event
 acquisition and decoding setup. LibreYOLO does not need the SDK when it receives
@@ -379,6 +370,8 @@ was randomly initialized or adapted from RGB.
 Training currently requires one device and a fixed positive batch size.
 Auto-batch, CUDA graph training, RF-DETR multi-scale training, LoRA,
 distillation and quantized histogram models are outside this workflow.
+
+Both YOLO9 and RF-DETR detection support this profile. RGB initialization assigns each polarity channel `1.5 * mean(R,G,B)` from the original input kernel. Checkpoints preserve the complete `input_profile` and `input_initialization`. Use fixed positive batches on one device; raw event decoding, live video, TTA, tiling, LoRA, distillation and quantization are not supported.
 
 ## Reload, predict and validate
 

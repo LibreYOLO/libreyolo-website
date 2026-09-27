@@ -17,7 +17,7 @@ keywords:
   - nms embarqué onnx
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Flag
     value: export(format="onnx")
@@ -151,7 +151,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cee78250fc7189a3
+source_hash: a407e1142b8aa57e
 ---
 
 ## Installation
@@ -161,6 +161,8 @@ source_hash: cee78250fc7189a3
 L'extra installe `onnx`, `onnxsim` et `onnxruntime`. `onnx` seul suffit à écrire
 le fichier ; `onnxsim` exécute la passe de simplification, et `onnxruntime`
 exécute l'artefact et réalise la calibration INT8.
+
+L'extra ONNX exige `onnxruntime>=1.18.0` ; LaMa utilise un graphe opset-21.
 
 ## Export
 
@@ -177,12 +179,12 @@ restauration Real-ESRGAN ouvre les axes spatiaux, et les détecteurs à deux
 redimensionnement se fait à l'intérieur du graphe.
 
 `opset` est choisi selon la famille quand il est omis. Les familles de type DETR
-(`detr`, `deformable_detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`,
-`lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) plus `deit`, `midas` et
-`moge2` reçoivent l'opset 17, celui où `aten::scaled_dot_product` s'abaisse.
-Tout le reste reçoit 13. Le matting passe à 19 quoi qu'il arrive, parce que le
-décodeur de BiRefNet a besoin de l'opérateur `DeformConv`, qu'ONNX définit à
-partir de l'opset 19.
+(`detr`, `deformable_detr`, `dinodetr`, `dfine`, `gtr`, `deim`, `deimv2`,
+`tinyformer`, `ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) plus
+`deit`, `midas`, `moge2` et `vjepa2` reçoivent l'opset 17, celui où
+`aten::scaled_dot_product` s'abaisse. Tout le reste reçoit 13. BiRefNet et
+FeyNobg passent à 19 quoi qu'il arrive, parce que leur décodeur a besoin de
+l'opérateur `DeformConv`, qu'ONNX définit à partir de l'opset 19.
 
 `simplify=True` exécute `onnxsim` et conserve le graphe d'origine si la passe
 échoue, si bien qu'une erreur de simplification est un avertissement plutôt
@@ -219,7 +221,9 @@ prises en charge et pour la compilation du parser.
 
 `int8=True` exécute la quantification statique d'ONNX Runtime et écrit un graphe
 QDQ dont les entrées et les sorties sont en float32. Seuls les nœuds `Conv` et
-`Gemm` sont quantifiés. Laisser le décodage de la tête de détection en float32
+`Gemm` sont quantifiés, et la première convolution et la tête de détection de
+YOLO9 restent en float32, comme dans `model.quantize()`, afin que les scores de
+classe ne saturent pas à la plage calibrée. Laisser le décodage de la tête de détection en float32
 est délibéré : cette concaténation mélange des coordonnées de boîtes à l'échelle
 du pixel avec des scores de classe dans la plage 0 à 1, et une unique échelle
 d'activation par tenseur dominée par la magnitude des boîtes ramènerait tous les
@@ -273,13 +277,15 @@ version. La profondeur, les normales de surface et les contours refusent
 `batch != 1` et forcent `dynamic=False`. Le matting force le carré natif de
 1024, parce que les tables de positions relatives du Swin de BiRefNet sont liées
 à leur résolution. La restauration force un canevas fixe pour toutes les
-familles sauf Real-ESRGAN, dont le générateur est entièrement convolutif.
+familles sauf Real-ESRGAN et QuickSRNet, dont les réseaux sont entièrement
+convolutifs.
 
-Un `imgsz` rectangulaire fonctionne pour les familles YOLO9, HRNet, NAFNet et
-Real-ESRGAN. Les familles au contrat carré fixe (`clip`, `deformable_detr`,
-`detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`, `moge2`,
-`rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`, `ssd`) le refusent
-purement et simplement.
+Un `imgsz` rectangulaire fonctionne pour les familles YOLO9, HRNet, NAFNet,
+PP-LiteSeg, Real-ESRGAN, QuickSRNet et pour la segmentation sémantique GTR. Les
+familles au contrat carré fixe (`clip`, `deformable_detr`, `detr`, `dinodetr`,
+`dfine`, `gtr` hors segmentation sémantique, `deim`, `deimv2`, `tinyformer`,
+`ec`, `lwdetr`, `moge2`, `rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`,
+`ssd`) le refusent purement et simplement.
 
 Deux combinaisons sont refusées avant le tracing : la segmentation YOLO9, parce
 que YOLO9 ne fait que de la détection dans LibreYOLO, et la segmentation

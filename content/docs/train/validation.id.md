@@ -20,7 +20,7 @@ keywords:
   - miou
   - kualitas panoptic
   - akurasi top1
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   val:
     - label: Python
@@ -63,7 +63,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: d907183492fa3f57
+source_hash: da1e3ccfd1efba73
 ---
 
 ## Jalankan validasi
@@ -72,7 +72,7 @@ source_hash: d907183492fa3f57
 
 <code-tabs name="val" />
 
-Nilai kembaliannya adalah `dict[str, float]` biasa. Setiap kunci bersifat literal, jadi bacalah
+Nilai kembaliannya adalah `dict[str, float]`. Setiap kunci bersifat literal, jadi bacalah
 berdasarkan nama daripada posisi.
 
 Argumen utama adalah `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
@@ -80,7 +80,8 @@ Argumen utama adalah `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
 `0.001` dan `iou` ke `0.6`, keduanya jauh lebih longgar daripada default prediksi, karena
 pencarian mAP membutuhkan ekor dengan kepercayaan rendah. `imgsz` secara default adalah ukuran input model itu sendiri
 daripada angka tetap. `split` menerima `val`, `test` atau `train`
-dan tidak ada lainnya.
+dan tidak ada lainnya. Tanpa `data`, checkpoint hasil pelatihan divalidasi pada
+dataset tempat ia dilatih; bobot rilis tidak membawa dataset dan memerlukan `data=`.
 
 Setiap bidang lain dari konfigurasi validasi diteruskan sebagai argumen kata kunci,
 termasuk `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`, `cache`
@@ -146,6 +147,8 @@ seleksi digunakan secara default. Deteksi, segmentasi, dan OBB tidak membawa sat
 keluarga mereka dipilih pada `metrics/mAP50-95`, yang dilakukan oleh kamus mereka
 kembali. Pose tidak mengembalikan `fitness` maupun `metrics/mAP50-95`; pelatihnya
 atur `best_metric_key` ke `metrics/keypoints_mAP50-95` sebagai gantinya.
+
+Klasifikasi ImageFolder menambahkan makro `metrics/precision`, `metrics/recall`, dan `metrics/f1`, dirata-ratakan atas kelas yang ada dalam target validasi. Top-1 tetap menjadi fitness default. Deteksi juga mengembalikan `metrics/best_conf` dan `metrics/best_conf_f1`, memilih ambang optimal micro-F1 pada IoU 0.50, dan menaruh ambang dengan nama kelas sebagai kunci di `metrics.box.best_conf_per_class`. Deteksi dengan skor sama tetap dikelompokkan; hasil seri memilih ambang yang lebih tinggi. Jika tidak ada F1 positif, hasilnya 0.0. Segmentasi tidak menyediakan kunci ambang ini.
 
 ## Tombol pintas
 
@@ -240,7 +243,9 @@ meningkatkan.
 ## Berkas menulis validasi
 
 `val()` selalu menulis `config.yaml` ke direktori simpanannya, secara default ke
-`runs/val/<model>_<size>_<timestamp>` ketika `save_dir` tidak diberikan.
+`runs/val/<model>_<size>_<timestamp>` ketika `save_dir` tidak diberikan. `project`,
+`name` dan `exist_ok` menentukannya dengan cara yang sama seperti pelatihan:
+`project/name`, dengan sufiks bernomor kecuali `exist_ok=True`.
 
 <code-tabs name="json" />
 
@@ -256,12 +261,17 @@ terpasang. Segmentasi menambahkan salinan sisi mask dari masing-masing, dan pose
 semantik, panoptik, kedalaman, normal, tepi, pemulihan, matte, OCR, OBB, dan poin semuanya
 tidak menulis apa pun di sana. Kegagalan plot akan memberi peringatan dan tidak pernah menghentikan jalannya.
 
+`visualize=True` menulis gambar kotak TP/FP/FN dengan memperhitungkan kelas untuk deteksi dan segmentasi, atau gambar label-versus-top-1 untuk klasifikasi ImageFolder, ke `visualize/errors/` dan `visualize/correct/`. Pencocokan memakai IoU 0.5 dan skor keyakinan `max(0.25, conf)`. Nilai default adalah `visualize=False`, `show_labels=True`, dan `show_conf=True`. Task yang tidak didukung dan validasi klip V-JEPA 2 menolak visualisasi.
+
+`plot_samples=8` membatasi plot sampel terpisah; 0 menonaktifkannya dan -1 mempertahankan semua gambar. Ini tidak mengubah metrik atau keluaran visualisasi.
+
 ## Validasi selama pelatihan
 
-Pelatihan memvalidasi setiap `eval_interval` epoch terhadap dataset's `val`
-split, dan metrik yang dihasilkannya adalah yang menjadi penggerak pemilihan `best.pt`,
+Pelatihan memvalidasi setiap `eval_interval` epoch, dan selalu setelah epoch
+terakhir, terhadap dataset's `val` split, dan metrik yang dihasilkannya adalah yang menjadi penggerak pemilihan `best.pt`,
 `patience` early stop, dan `val/` kunci di setiap logger. Validasi dijalankan
-pada bobot EMA ketika EMA aktif.
+pada bobot EMA ketika EMA aktif. Berkasnya masuk ke direktori `val/` di dalam run.
+`val=False` mematikan validasi selama pelatihan, termasuk pada epoch terakhir.
 
 Lihat [Hyperparameters](/docs/train/hyperparameters) untuk `eval_interval`,
 `patience` dan `save_plots`, serta [Experiment loggers](/docs/train/loggers) untuk
@@ -271,5 +281,6 @@ di mana angkanya pergi.
 
 - [Dataset](/docs/train/datasets) untuk kunci split dan validator format dibaca.
 
+## Metrik kotak per gambar
 
-
+Hasil deteksi dan segmentasi tetap kompatibel dengan dictionary dan juga menyediakan `results.box.image_metrics`. Setiap nama berkas dipetakan ke `precision`, `recall`, `f1`, `tp`, `fp`, dan `fn` dengan aturan pencocokan visualisasi, bahkan saat visualisasi mati. Segmentasi menghitung kotak di sini. Nama dasar yang duplikat memakai path lengkap setelah kemunculan pertama. Penyebut nol menghasilkan 0.0. Catatan ini tidak dikumpulkan antar rank terdistribusi.

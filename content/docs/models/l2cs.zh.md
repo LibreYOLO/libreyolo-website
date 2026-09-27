@@ -75,7 +75,7 @@ snippets:
         yaw_logits, pitch_logits = session.run(
             None, {name: np.zeros((1, 3, 448, 448), dtype=np.float32)}
         )
-source_hash: 4ec43f4673b4be3e
+source_hash: 1f61c1a61e033bbc
 ---
 
 ## 安装
@@ -95,7 +95,8 @@ LibreYOLO 唯一能自动获取的检查点是一个在 Gaze360 上训练的 Res
 pip install "libreyolo[gaze]"
 ```
 
-没有它的话，LibreYOLO 会打印手动下载说明，而不是悄无声息地失败。
+没有它的话，LibreYOLO 会打印手动下载说明，而不是悄无声息地失败。在 1.6.0 中，上游的
+Google Drive 下载会返回 404，所以请在你加载的路径上放一份检查点的本地副本。
 
 ## 预测
 

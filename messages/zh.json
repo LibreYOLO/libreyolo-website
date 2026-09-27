@@ -313,6 +313,7 @@
     "nextRelease": "下个版本",
     "versionIsCurrent": "v{version} 是当前版本",
     "latest": "最新",
+    "archivedNotice": "这是 LibreYOLO {version} 的文档。<link>查看当前版本</link>。",
     "onThisPage": "本页内容",
     "docsButton": "文档",
     "openNav": "打开文档导航",

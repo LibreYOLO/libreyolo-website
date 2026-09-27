@@ -19,7 +19,7 @@ keywords:
   - deep ocsort
   - track id
   - śledzenie reid
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -79,7 +79,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: f1fa7dcf60597d6b
+source_hash: b24043e73b35092d
 ---
 
 ## Definicja
@@ -126,7 +126,10 @@ przez `LibreSAM` są segmentatorami obrazów, a modele wczytane przez
 przez `LibreYOLO("model.onnx")` zwraca obiekt backendu środowiska
 uruchomieniowego, który udostępnia `predict()`, ale nie `track()`.
 
-Biblioteka zawiera cztery trackery wybierane argumentem `tracker`:
+Biblioteka zawiera cztery trackery wybierane argumentem `tracker`. Zapisy
+z `.yaml`, takie jak `"bytetrack.yaml"`, wybierają te same wbudowane trackery;
+LibreYOLO nie czyta plików YAML trackerów i zgłasza błąd, jeśli plik o takiej
+nazwie istnieje w katalogu roboczym.
 
 `"bytetrack"` jest domyślny. Korzysta wyłącznie z ruchu, filtru Kalmana i
 trójetapowej asocjacji. Najpierw dopasowuje detekcje o wysokiej pewności,
@@ -165,6 +168,10 @@ odzyskiwania. Deep OC-SORT uruchamia detektor bezpośrednio z `det_thresh`. Dla
 ByteTrack i BoT-SORT wartość `track_conf` musi być równa lub wyższa niż
 `track_low_thresh`, którego wartość domyślna to 0.1.
 
+`conf`, jeśli podano, jest progiem detekcji z `predict()`: detekcje poniżej
+niego nigdy nie trafiają do trackera. Bez niego detektor działa z powyższymi
+progami.
+
 Ustawienia trackera można przekazać na dwa sposoby. Instancję konfiguracji można
 przekazać do `tracker_config=`, a jej typ wybierze tracker, przez co `tracker=`
 będzie zbędny. Można też przekazać pola jako argumenty nazwane i pozwolić
@@ -172,9 +179,11 @@ będzie zbędny. Można też przekazać pola jako argumenty nazwane i pozwolić
 powodują ostrzeżenie zamiast cichego zastosowania. W obu przypadkach
 `track_conf` jest ignorowane po jawnym ustawieniu odpowiedniego klucza.
 
-Pozostałe argumenty odpowiadają predykcji: `iou`, `imgsz`, `classes`, `max_det`,
-`vid_stride`, `show` oraz `save` z `output_path`. Źródłem jest ścieżka do pliku
-wideo. Obsługę wyników opisano w sekcji [predykcja](/docs/predict).
+Pozostałe argumenty odpowiadają predykcji: `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show` i `save` z `output_path`. `persist=True` zachowuje tracker i jego identyfikatory z poprzedniego wywołania `track()` na tym samym modelu, dla pętli przekazującej jedną klatkę na wywołanie, takiej jak `model.track(frame, persist=True)`. Źródłem może być wideo lub uporządkowana sekwencja obrazów. Obsługę wyników opisano w sekcji [predykcji](/docs/predict).
+
+Obrazy, foldery sortowane według nazw plików, listy, krotki i leniwe iteratory obrazów mogą dostarczać kolejne klatki. `fps=30.0` określa ich częstotliwość, a `color_format="auto"` wybiera interpretację wejścia. `vid_stride` zmniejsza zachowaną częstotliwość do `fps / vid_stride`.
+
+Własną instancję trackera można przekazać przez `tracker=`. Implementuje ona `reset()` i `update(results, image=None)` z `libreyolo.tracking.Tracker`. Uruchomienie resetuje ją raz i przekazuje oryginalną klatkę RGB PIL. Zwrócone `track_id` musi być jednowymiarową tablicą lub tensorem liczb całkowitych, dopasowanym do ramek na tym samym backendzie i urządzeniu. Własne instancje domyślnie używają `track_conf=0.25`; należy skonfigurować instancję bezpośrednio, zamiast przekazywać argumenty nazwane trackera lub `tracker_config`.
 
 ## Trenowanie
 
@@ -183,4 +192,3 @@ pozbawione wyuczonych parametrów, a sieć wyglądu Deep OC-SORT jest opublikowa
 checkpointem ponownej identyfikacji, pobieranym przy pierwszym użyciu. Poprawa
 jakości śledzenia wymaga poprawy detektora lub dostrojenia opisanych wyżej
 progów asocjacji.
-

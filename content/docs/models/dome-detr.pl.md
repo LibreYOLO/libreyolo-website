@@ -4,9 +4,8 @@ families:
   - domedetr
 seo_title: 'Dome-DETR: wykrywanie małych obiektów w LibreYOLO'
 description: >-
-  Użyj Dome-DETR w LibreYOLO do wykrywania małych obiektów na zdjęciach
-  lotniczych i z dronów. Konwertuj wagi upstream, przewiduj, dopracowuj i
-  waliduj w ramach kodu MIT-licensed.
+  Dome-DETR do detekcji małych obiektów, trenowania i walidacji. Kopie wstępnie
+  wytrenowanych checkpointów służą tylko badaniom akademickim.
 lead: >-
   Specjalista od bardzo małych obiektów zbudowany na D-FINE: głowica gęstości
   decyduje, gdzie znajdują się obiekty, uwaga enkodera jest ograniczona do
@@ -23,56 +22,17 @@ keywords:
   - AI-TOD
   - DETR
   - zapytania adaptacyjne do gęstości
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
-    - label: 'Konwertuj, a następnie przewiduj'
-      language: bash
-      code: >
-        # Żadne wagi Dome-DETR nie są hostowane przez LibreYOLO, więc checkpoint
-        to
-
-        # pobrano z repozytorium upstream i przetworzono raz.
-
-        hf download RicePasteM/Dome-DETR --include 'best_ckpts_dome_2026/*' \
-          --local-dir dome-ckpts
-
-        python weights/convert_domedetr_weights.py \
-          dome-ckpts/best_ckpts_dome_2026/dome-s-visdrone_converted.pth \
-          LibreDOMEDETRs-visdrone.pt --size s --variant visdrone
     - label: Python
       language: python
-      code: >
-        from libreyolo import LibreYOLO
-
-
-        # Lokalna ścieżka, nie sama nazwa: nic nie jest pobierane dla tej
-        rodziny.
-
-        model = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-
-        result = model("drone-frame.jpg", save=True)
-
-
-        for box in result.boxes:
-            print(result.names[int(box.cls)], box.conf, box.xyxy)
-    - label: CLI
-      language: bash
-      code: >
-        libreyolo predict model=LibreDOMEDETRs-visdrone.pt
-        source=drone-frame.jpg save=True
-    - label: Nazwy klas
-      language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Nie ma checkpointu COCO, więc klasy pochodzą z zbioru danych
-        # Wagi były trenowane i są odczytywane z metadanych checkpointu.
-        aitod = LibreYOLO("LibreDOMEDETRs-aitod.pt")
-        print(aitod.model.names)     # 9 klas AI-TOD-V2
-
-        visdrone = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-        print(visdrone.model.names)  # 12 klas VisDrone
+        # Wstępnie wytrenowane wagi są ograniczone do badań akademickich.
+        model = LibreYOLO("LibreDOMEDETRs-visdrone.pt", device="cpu")
+        print(model(SAMPLE_IMAGE).boxes)
   train:
     - label: Python
       language: python
@@ -109,8 +69,9 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreDOMEDETRs-visdrone.pt data=my-dataset.yaml
-source_hash: 381f01d769e7c420
+source_hash: 8482301790a9b8d9
 ---
+
 ## Instalacja
 
 Dome-DETR nie potrzebuje żadnych dodatkowych opcji. Wszystko, co importuje, znajduje się w instalacji bazowej.
@@ -121,7 +82,7 @@ pip install libreyolo
 
 ## Predykcja
 
-Nie ma nic do automatycznego pobrania. LibreYOLO nie udostępnia tych wag, więc przebieg jest następujący: pobierz checkpoint upstream, przekonwertuj go raz, a następnie załaduj przekonwertowany plik za pomocą ścieżki. [Licencja](#licensing) wyjaśnia dlaczego.
+Sześć przekonwertowanych checkpointów pobiera się automatycznie z kopii w repozytoriach LibreYOLO. Warunki projektu źródłowego ograniczają ich użycie do badań akademickich.
 
 <code-tabs name="predict" />
 
@@ -135,7 +96,7 @@ Trzy rozmiary, s, m i l, wszystkie w wymiarach 800 na 800. Rozmiar wybiera backb
 
 Dome-DETR to D-FINE z trzema dodatkami. DeFE przewiduje mapę gęstości. MWAS używa tej mapy, aby ograniczyć uwagę enkodera do okien, które faktycznie zawierają obiekty, zamiast zwracać uwagę wszędzie. PAQI dobiera rozmiar zestawu zapytań z tej samej gęstości zamiast dekodować stałe 300. Zysk koncentruje się tam, gdzie obiekty są najmniejsze, i zawęża się w miarę ich wzrostu: własna ablacja upstream przesuwa AP na bardzo małych obiektach z 14,0 do 17,8, podczas gdy AP na średnich obiektach przesuwa się tylko z 45,4 do 46,4. Traktuj to jako uzupełnienie do [D-FINE](/docs/models/d-fine) dla obrazów lotniczych, z dronów i zdalnego wykrywania, a nie jako jego zamiennik.
 
-LibreYOLO nie publikuje żadnych wierszy referencyjnych dla tej rodziny, ponieważ nie publikuje żadnych checkpointów do porównania.
+Dla tej rodziny nie zapisano wyników benchmarków Vision Analysis.
 
 ## Trenowanie
 
@@ -165,32 +126,12 @@ Powodem jest PAQI. Decyduje on o liczbie zapytań na obraz, na podstawie propozy
 
 ## Checkpointy
 
-Nie ma żadnych do wymienienia. LibreYOLO nie publikuje żadnych wag Dome-DETR, a żadna nazwa w formie `LibreDOMEDETR<size>-<dataset>.pt` nie prowadzi do pobrania.
-
-Upstream publikuje sześć checkpointów, s, m i l dla każdego z dwóch zbiorów danych: AI-TOD-V2 z 9 klasami i VisDrone z 12. Nie ma checkpointu COCO, więc kanoniczna nazwa pliku zawsze zawiera sufiks zbioru danych, a nazwy klas znajdują się w metadanych checkpointu, zamiast pochodzić z stałej rodziny. Próba użycia samego `LibreDOMEDETRs.pt` powoduje natychmiastowy błąd z komunikatem podającym dwie rzeczywiste nazwy plików i polecenie konwersji, zamiast próby pobrania, która skutkowałaby błędem 404.
-
-`weights/convert_domedetr_weights.py` wykonuje konwersję. Odbudowuje graf LibreYOLO, ładuje do niego tensory upstream i odmawia zapisania czegokolwiek, jeśli brakuje choćby jednego klucza, jest on nieoczekiwany lub ma niewłaściwy kształt, więc przekonwertowany plik jest albo dokładnie taki sam, albo nie istnieje. Wskaż go na upstream `.pth` i przekaż rozmiar oraz wariant:
-
-```bash
-python weights/convert_domedetr_weights.py \
-    dome-ckpts/best_ckpts_dome_2026/aitod-s-best.pth \
-    LibreDOMEDETRs-aitod.pt --size s --variant aitod
-```
-
-Pod kątem wierności numerycznej, `weights/parity_domedetr.py` porównuje ten port z implementacją upstream we wszystkich sześciu punktach kontrolnych i raportuje `max_abs_diff == 0.0` zarówno na `pred_logits`, jak i `pred_boxes`, po uprzednim sprawdzeniu bit po bicie maski okna MWAS, a osobno porównuje każdy termin straty z kryterium upstream. Bądźmy jasni: jest to ręczny skrypt, który wymaga upstream checkout i opublikowanych checkpointów na dysku, uruchamiany ręcznie. Nie jest częścią ciągłej integracji i żaden job CI go nie odtwarza.
+<checkpoint-table />
 
 ## Licencjonowanie
 
 <provenance-box>
 
-Wagi są powodem, dla którego ta rodzina nie jest lustrzana. Karta modelu upstream nie zawiera pola licencji w swojej metadanej, a jej opis stwierdza, że projekt to Apache-2.0, jednocześnie ograniczając materiały wyłącznie do celów badań akademickich. Te dwa odczyty się nie zgadzają, a ten bardziej restrykcyjny nie jest przyznaniem prawa do redystrybucji, więc LibreYOLO linkuje repozytorium upstream zamiast kopiować pliki, oczekując na wyjaśnienie. Ta sama logika obowiązuje w przypadku [YOLO-NAS](/docs/models/yolo-nas) tutaj.
-
-Kod to osobne pytanie i jaśniejsze. Repozytorium upstream to Apache-2.0, port LibreYOLO to MIT, a wagi, które trenujesz samodzielnie na swoich danych, należą do ciebie.
+Sześć kopii zachowuje ograniczenie projektu źródłowego do badań akademickich. Kod podlega osobnej licencji. Repozytorium źródłowe ma licencję Apache-2.0, port LibreYOLO ma licencję MIT, a wagi wytrenowane samodzielnie na własnych danych należą do ich autora.
 
 </provenance-box>
-
-## Cytowanie
-
-Dome-DETR został opublikowany w ACM Multimedia 2025 jako „Dome-DETR: DETR z manipulacją cechowej kwerendy zorientowanej na gęstość dla efektywnego wykrywania małych obiektów”. Preprint jest dostępny na [arxiv.org/abs/2505.05741](https://arxiv.org/abs/2505.05741). Autorzy nie publikują żadnego bloku BibTeX w swoim repozytorium, więc żaden z nich nie jest tu odtworzony, a raczej złożony ręcznie.
-
-<citation-block />

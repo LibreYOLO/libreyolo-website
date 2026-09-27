@@ -2,12 +2,11 @@
 title: Checkpoint và trọng số
 seo_title: Checkpoint và trọng số LibreYOLO
 description: >-
-  Cách LibreYOLO tìm, tải và xác minh trọng số mô hình, nơi lưu trữ, cách chạy
-  không cần mạng và yếu tố giúp checkpoint được nạp an toàn.
+  Cách LibreYOLO tìm, tải và xác minh trọng số mô hình, nơi lưu trữ, cách chạy không cần mạng và yếu tố giúp
+  checkpoint được nạp an toàn.
 lead: >-
-  Checkpoint LibreYOLO là dictionary torch.save chứa state dict cùng metadata
-  cần để nhận diện. Trang này trình bày nguồn gốc, vị trí lưu và cách các file
-  đó được nạp.
+  Checkpoint LibreYOLO là dictionary torch.save chứa state dict cùng metadata cần để nhận diện. Trang này
+  trình bày nguồn gốc, vị trí lưu và cách các file đó được nạp.
 keywords:
   - trọng số libreyolo
   - checkpoint libreyolo
@@ -15,7 +14,7 @@ keywords:
   - dùng libreyolo offline
   - libreyolo hugging face
   - metadata checkpoint
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Lưu trữ tại
     value: 'Mỗi checkpoint có một repo Hugging Face:'
@@ -60,25 +59,19 @@ snippets:
         libreyolo metadata path=weights/LibreYOLO9t.pt --json
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo.utils.serialization import (
             load_untrusted_torch_file,
             validate_checkpoint_metadata,
         )
 
-
         loaded = load_untrusted_torch_file("weights/LibreYOLO9t.pt")
 
-
         # Trả về danh sách vấn đề. Danh sách rỗng nghĩa là file đáp ứng v1.0.
-
         print(validate_checkpoint_metadata(loaded))
-
-        print(loaded["model_family"], loaded["size"], loaded["task"],
-        loaded["nc"])
-source_hash: 210a12baa1417cfb
+        print(loaded["model_family"], loaded["size"], loaded["task"], loaded["nc"])
+source_hash: 1d76b60f3992a781
 ---
-
 ## Nơi tìm checkpoint
 
 Tham chiếu mô hình không có thành phần thư mục, như `LibreYOLO9t.pt`, được phân
@@ -207,3 +200,9 @@ thích với cảnh báo nêu những gì còn thiếu.
 
 `libreyolo metadata` không bao giờ dựng mô hình, nên hoạt động trên file có họ
 chưa được cài đặt và trên file bạn chưa chắc chắn.
+
+## Bản sao và mô hình snapshot
+
+MiDaS s/l, MoGe-2 s/l và SAM-1 base/large/huge dùng bản sao của LibreYOLO; MoGe-2 b vẫn ở upstream. Bản sao Dome-DETR giữ điều khoản chỉ dùng cho nghiên cứu học thuật. Biến thể `obj2coco` của EdgeCrafter yêu cầu chủ động đồng ý và giữ giấy phép upstream hạn chế. Kiểm tra bảng checkpoint được tạo trên từng trang mô hình.
+
+[Tham chiếu Hub](/docs/reference/hugging-face) tải checkpoint có gắn schema từ ID repo. SAM 3D Body cần tài nguyên snapshot đã rà soát, ghim cố định và quyền truy cập. Chính sách robot dùng thư mục checkpoint chứa `libreyolo_vla.json`; xem [LibreVLA](/docs/reference/vla-api).

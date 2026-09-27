@@ -20,7 +20,7 @@ keywords:
   - callback pelatihan
   - metrik pelatihan csv
   - pemantau libreyolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   logger:
     - label: Berdasarkan nama
@@ -83,7 +83,7 @@ snippets:
       code: |
         libreyolo monitor                     # run terbaru di bawah runs/
         libreyolo monitor runs/train/exp      # sebuah run tertentu
-source_hash: de035acbaed32804
+source_hash: b5fefd12a738dcb5
 ---
 
 ## Nyalakan logger
@@ -175,6 +175,8 @@ direktori; lewati `save_dvc_exp=True` atau `dvcyaml=` yang eksplisit untuk menda
 Neptune sengaja dikecualikan dari `libreyolo[all]`: kliennya yang stabil
 membutuhkan protobuf di bawah 7 sementara tambahan TFLite membutuhkan protobuf 7. Pasang
 `libreyolo[neptune]` dalam lingkungan tanpa tambahan TFLite.
+
+[Logger Hugging Face Hub](/docs/reference/hugging-face) mengunggah `weights/best.pt`, dengan fallback ke `last.pt`, saat pelatihan berakhir. Gunakan `loggers="hf:owner/repo"` atau `HuggingFaceHubLogger(repo_id, private=True)`. Logger memverifikasi akses tulis dan membuat repositori yang belum ada sebelum pelatihan. Logger bersifat privat secara default; `model.push_to_hub()` eksplisit bersifat publik secara default. Visibilitas repositori yang sudah ada dipertahankan.
 
 ## Menulis callback
 

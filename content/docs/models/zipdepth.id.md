@@ -100,7 +100,7 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: 891eaa1a42795a4c
+source_hash: ee5867f8671d1aac
 ---
 
 ## Instalasi
@@ -120,7 +120,7 @@ Bobot diunduh dari Hugging Face saat pertama kali digunakan dan disimpan dalam c
 `result.depth_map` menyimpan peta inverse-depth relatif yang padat: nilai lebih tinggi berarti
 lebih dekat ke kamera, dan nilainya tidak memiliki satuan metrik atau skala lintas gambar.
 `save=True` menulis visualisasi dengan colormap dari peta tersebut ke disk; `Results.plot()`
-tidak mencakup family ini karena didefinisikan hanya untuk surface normal dan tepi. Lihat
+merender peta kedalaman sebagai gambar PIL, dan `pil=False` mengembalikan array-nya. Lihat
 [prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
 
 ## Varian

@@ -5,7 +5,7 @@ seo_title: "EfficientNetV2: train, validate and export under Apache-2.0"
 description: "Use EfficientNetV2 in LibreYOLO for image classification. Install, predict, fine-tune, validate and export LibreEfficientNetV2 b0 to b3."
 lead: "EfficientNetV2 is an image classifier whose depth, width and per-stage block choices were found by neural architecture search, jointly optimizing for accuracy and training speed rather than accuracy alone. LibreYOLO supports it for one task: classification."
 keywords: [EfficientNetV2, EfficientNetV2-b0, image classification, neural architecture search, MBConv, ImageNet classifier]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -21,7 +21,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=cat.jpg save=True
+        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python
       language: python
@@ -132,12 +132,16 @@ with `nn.Linear` layers and this family's MBConv blocks have none.
 See [training](/docs/train) for datasets, augmentation, multi-GPU and
 loggers.
 
+`cls_pw=0` disables loss weighting; values up to 1 use inverse-frequency weights normalized to mean 1. `class_weights=True` instead uses sample-normalized inverse frequencies and cannot combine with `cls_pw>0`. These settings must match when resuming. See [classification](/docs/tasks/image-classification).
+
 ## Validate
 
 `val()` returns a dictionary of `metrics/` keys. For classification that is
 top-1 and top-5 accuracy over the validation split.
 
 <code-tabs name="val" />
+
+Validation and INT8 calibration use the family evaluation transform. Export metadata records `norm_mean`, `norm_std` and `resize_mode`; older artifacts fall back to family values. Calibration preprocessors return the required CHW array and ratio.
 
 ## Export
 

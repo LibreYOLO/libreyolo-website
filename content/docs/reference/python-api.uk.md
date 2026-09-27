@@ -2,13 +2,13 @@
 title: Python API
 seo_title: Довідник Python API LibreYOLO
 description: >-
-  Назви, які LibreYOLO експортує на рівні пакета: п'ять фабрик, класи сімейств,
-  корисні дані Results, бекенди, валідатори, трекери та допоміжні засоби для
-  даних.
+  Імена, які LibreYOLO експортує на рівні пакета: фабрики, класи сімейств, дані
+  Results, бекенди, валідатори, трекери й засоби роботи з даними.
 lead: >-
-  Публічна поверхня Python у LibreYOLO визначається списком __all__ у
-  libreyolo/__init__.py. Усе на цій сторінці можна імпортувати як from libreyolo
-  import <name>; усе, чого немає в списку, є внутрішнім.
+  Публічний Python API LibreYOLO визначає список __all__ у
+  libreyolo/__init__.py. Експорт на рівні пакета використовує from libreyolo
+  import <name>; протоколи відстеження й навчання нижче використовують свої
+  іменовані підмодулі.
 keywords:
   - libreyolo python api
   - libreyolo import
@@ -18,13 +18,13 @@ keywords:
   - LibreOpenVocab
   - LibreEnsemble
   - libreyolo __all__
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Назви й сигнатури взято з libreyolo/__init__.py, libreyolo/models/__init__.py,
   libreyolo/models/base/model.py, libreyolo/models/base/inference.py,
   libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py,
   libreyolo/models/openvocab/__init__.py та libreyolo/ensemble/model.py у
-  v1.5.0.
+  v1.6.0.
 snippets:
   usage:
     - label: Завантаження будь-чого через одну фабрику
@@ -56,7 +56,7 @@ snippets:
         from libreyolo import LibreYOLO, LibreEnsemble
 
 
-        # Фабрика з аналізом ваг для сімейств без підказок.
+        # Фабрика визначає сімейство без підказок за вагами.
 
         detector = LibreYOLO("LibreYOLO9t.pt")
 
@@ -78,13 +78,12 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 66e34e78b2e0fb2d
+source_hash: 7dc6a5ef1b3ba9ea
 ---
 
 ## Точки входу
 
-Модель завантажують п'ять викликаних об'єктів. Їх розділено за контрактом
-виклику, а не за архітектурою.
+Фабрики завантажують моделі або налаштовують клієнти API. Вони розділені за контрактом виклику, а не за архітектурою.
 
 | Фабрика | Завантажує | Підказка під час виклику | Потрібний додатковий пакет |
 |---|---|---|---|
@@ -96,8 +95,7 @@ source_hash: 66e34e78b2e0fb2d
 
 <code-tabs name="factories" />
 
-Лише `LibreYOLO` читає файл. Інші три приймають рядковий псевдонім і визначають
-за ним репозиторій Hugging Face, тому аргумент є назвою моделі, а не шляхом.
+`LibreYOLO` приймає файли контрольних точок і експортовані артефакти. Споріднені фабрики приймають псевдоніми моделей; `LibreVLM` і `LibreVLA` також повторно завантажують власні збережені каталоги контрольних точок.
 
 ```python
 LibreYOLO(
@@ -121,6 +119,10 @@ URL моделі Triton HTTP чи HTTPS. Якщо `size` і `nb_classes` не з
 
 <code-tabs name="usage" />
 
+`LibreGround` відображає інструкції на точки зображення; `LibreVLA` передбачає фрагменти дій робота; `LibreLLM` викликає сумісну віддалену кінцеву точку мовної моделі. Див. [API прив'язки](/docs/reference/ground-api), [API політик](/docs/reference/vla-api) і [клієнт мовної моделі](/docs/reference/llm-api).
+
+`LibreYOLO("hf://owner/repo@revision/filename")` завантажує контрольні точки Hub. `model.push_to_hub(repo_id, private=False)` публікує контрольну точку й картку. [Довідка Hub](/docs/reference/hugging-face) визначає пошук і автентифікацію.
+
 ## Класи сімейств
 
 Кожне сімейство, яке може повернути фабрика, також експортується за назвою,
@@ -131,8 +133,7 @@ URL моделі Triton HTTP чи HTTPS. Якщо `size` і `nb_classes` не з
 Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 ```
 
-У класі сімейства `size` не має типового значення, що відрізняє його від
-фабрики. YOLO9 та його варіанти вставляють `reg_max: int = 16` після `size`.
+Типові значення конструктора залежать від сімейства; перевірте його сигнатуру перед безпосереднім створенням. YOLO9 та її варіанти вставляють `reg_max: int = 16` після `size`.
 
 Сімейства виявлення та багатозадачні сімейства: `LibreYOLO9`, `LibreYOLO9E2E`,
 `LibreYOLO9P2`, `LibreYOLONAS`, `LibreYOLOX`, `LibreYOLO7`, `LibreYOLO4`,
@@ -141,27 +142,35 @@ Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 `LibreDEIMv2`, `LibreDETR`, `LibreDeformableDETR`, `LibreDINODETR`,
 `LibreLWDETR`, `LibreMaskRCNN`, `LibreFCOS`, `LibreFasterRCNN`,
 `LibreRetinaNet`, `LibreSSD`, `LibreCenterNet`, `LibreEfficientDet`,
-`LibreEC`, `LibrePICODET`, `LibreRTMDet`, `LibreFOMO`.
+`LibreEC`, `LibreGTR`, `LibreTinyFormer`, `LibrePICODET`, `LibrePPYOLOE`,
+`LibreRTMDet`, `LibreFOMO`.
 
 Сімейства щільного передбачення: `LibreMiDaS`, `LibreDepthAnythingV2`,
 `LibreDepthAnything3`, `LibreZipDepth`, `LibreMoGe2`, `LibreTEED`,
 `LibreDexiNed`, `LibreNAFNet`, `LibreRealESRGAN`, `LibreSwinIR`,
 `LibreBiRefNet`, `LibreFeyNobg`, `LibreFCN`, `LibreEoMT`, `LibreDeepLabv3`,
-`LibrePIDNet`, `LibreSegformer`, `LibreLingBotVision`.
+`LibrePIDNet`, `LibrePPLiteSeg`, `LibreUNet`, `LibreSegformer`,
+`LibreLingBotVision`, `LibreMarigoldV2`, `LibreDDColor`, `LibreHVICIDNet`,
+`LibreLaMa`, `LibreQuickSRNet`, `LibreBEN2`, `LibreViTMatte`.
 
 Сімейства класифікації та ембедінгів: `LibreViT`, `LibreMobileNetV4`,
 `LibreConvNeXt`, `LibreDeiT`, `LibreSwin`, `LibreEfficientNetV2`, `LibreVGG`,
-`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`.
+`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`,
+`LibreConvNeXtV2`, `LibrePE`, `LibreVJEPA2`, `LibreLeVJEPA`.
 
-Інші завдання: `LibreHRNet` (поза), `LibreL2CS` (погляд), `LibrePPOCR` (ocr),
-`LibreFaceEmbedder` (embed).
+Інші завдання: `LibreHRNet` і `LibreDEKR` (поза), `LibreL2CS` (погляд),
+`LibrePPOCR` (ocr), `LibreFaceEmbedder` (embed), а також 3D-детектори
+`LibreFCOS3D`, `LibreDetAny3D`, `LibreWildDet3D` і `Libre3DMOOD` (detect3d).
 
 Суміжні рівні також експортують свої класи сімейств: `LibreSAM1`, `LibreSAM2`,
 `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`;
 `LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo`; `LibreLFM2VL`,
 `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`,
-`LibreKosmos2`, `LibreLocateAnything`, `LibreMODUS` (також пишеться
-`LibreModus`).
+`LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`,
+`LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (також пишеться
+`LibreModus`); `LibreShowUI`, `LibreGroundFlorence2` і `LibreGroundQwen3VL`
+через `LibreGround`; `LibreSmolVLA`, `LibreACT` і `LibreDiffusionPolicy` через
+`LibreVLA`.
 
 ## Поверхня передбачення
 
@@ -201,12 +210,14 @@ model(
 
 ## Корисні дані Results
 
-`Results` та його вісімнадцять класів корисних даних експортуються на рівні
+`Results` та його класи корисних даних експортуються на рівні
 пакета: `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`,
 `Gaze`, `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`,
 `NormalMap`, `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`,
 `Identities`. Кожен описано в розділі
 [Типи Results](/docs/reference/results-types).
+
+`Boxes3D`, `AlbedoMap` і `Actions` додають кубоїди 3D, власне альбедо й фрагменти дій. Див. [типи результатів](/docs/reference/results-types).
 
 ## Бекенди
 
@@ -231,6 +242,8 @@ model(
 конфігурації також експортуються: `ByteTracker` із `TrackConfig`,
 `BoTSortTracker` із `BoTSortConfig` та `OCSortTracker` із `OCSortConfig`.
 
+`libreyolo.tracking.Tracker` визначає `reset()` і `update(results, image=None)` для власних екземплярів трекерів.
+
 ## Допоміжні засоби для даних
 
 `DATASETS_DIR` є визначеним коренем датасетів, `load_data_config` зчитує YAML
@@ -243,6 +256,8 @@ model(
 `Gallery` і `FaceGallery` зберігають зареєстровані вектори ідентичностей для
 завдання `embed` і створюють корисні дані `Identities`. `Distiller` і
 `get_distill_config` керують навчанням учитель-учень.
+
+`libreyolo.training.TrainFitnessCallback` визначає `fitness(metrics)` для власного вибору контрольних точок. Див. [колбеки оцінки якості](/docs/train/fitness-callbacks).
 
 ## Ресурси
 

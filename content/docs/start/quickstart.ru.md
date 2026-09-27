@@ -16,7 +16,7 @@ keywords:
   - обучить libreyolo на своём датасете
   - экспорт libreyolo в onnx
   - пример yolo на python
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Установка
     value: pip install libreyolo
@@ -68,20 +68,23 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+        # На macOS и Windows воркеры данных заново импортируют этот файл,
+        # поэтому скрипт держит обучение под защитой main.
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        # coco8 — датасет из 8 изображений в комплекте с библиотекой. Он
-        # скачивается по URL при первом запуске — запускать ничего не нужно.
-        results = model.train(
-            data="coco8.yaml",
-            epochs=1,
-            imgsz=640,
-            batch=4,
-            device="cpu",
-        )
+            # coco8 — датасет из 8 изображений в комплекте с библиотекой. Он
+            # скачивается по URL при первом запуске — запускать ничего не нужно.
+            results = model.train(
+                data="coco8.yaml",
+                epochs=1,
+                imgsz=640,
+                batch=4,
+                device="cpu",
+            )
 
-        print(results["save_dir"])
-        print(results["best_checkpoint"])
+            print(results["save_dir"])
+            print(results["best_checkpoint"])
     - label: CLI
       language: bash
       code: |
@@ -92,14 +95,15 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() возвращает обычный dict, а не объект.
-        metrics = model.val(data="coco8.yaml", device="cpu")
+            # val() возвращает обычный dict, а не объект.
+            metrics = model.val(data="coco8.yaml", device="cpu")
 
-        print(metrics["metrics/mAP50-95"])
-        print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+            print(metrics["metrics/mAP50-95"])
+            print(metrics["metrics/mAP50"])
+            print(metrics["metrics/mAP75"])
   export:
     - label: TorchScript
       language: python
@@ -122,7 +126,7 @@ snippets:
       code: |
         pip install "libreyolo[onnx]"
         libreyolo export model=yolo9-t format=onnx imgsz=640
-source_hash: c11b6bdbf0b6fdf1
+source_hash: eb6b18dedf1c5f4b
 ---
 
 ## Установка
@@ -158,7 +162,8 @@ ONNX добавляется одна дополнительная зависим
 
 `data` — YAML датасета. `coco8.yaml` идёт вместе с библиотекой, поэтому сниппет
 работает сразу после вставки; имя, которого нет в комплекте, читается как путь.
-Датасеты ищутся в `~/datasets` или в `LIBREYOLO_DATASETS_DIR`, когда эта
+Защита `__main__` нужна потому, что на macOS и Windows воркеры данных заново
+импортируют скрипт; см. [устранение неполадок](/docs/troubleshooting). Датасеты ищутся в `~/datasets` или в `LIBREYOLO_DATASETS_DIR`, когда эта
 переменная задана.
 
 Запуск пишет в `project/name`, по умолчанию — в каталог внутри `runs/train`, а

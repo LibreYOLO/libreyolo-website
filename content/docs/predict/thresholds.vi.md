@@ -2,12 +2,11 @@
 title: Ngưỡng và lọc
 seo_title: 'conf, iou và max_det trong LibreYOLO'
 description: >-
-  conf, iou, max_det và classes thực sự làm gì khi dự đoán, những họ nào bỏ qua
-  iou vì không chạy NMS và vì sao agnostic_nms không có tác dụng.
+  conf, iou, max_det và classes thực sự làm gì khi dự đoán, những họ nào bỏ qua iou vì không chạy NMS và vì
+  sao agnostic_nms không có tác dụng.
 lead: >-
-  Bốn đối số quyết định dự đoán nào được giữ lại: conf, iou, max_det và classes.
-  Chỉ hai trong số đó áp dụng cho mọi họ vì set predictor giải mã tập query cố
-  định và không bao giờ chạy NMS.
+  Bốn đối số quyết định dự đoán nào được giữ lại: conf, iou, max_det và classes. Chỉ hai trong số đó áp dụng
+  cho mọi họ vì set predictor giải mã tập query cố định và không bao giờ chạy NMS.
 keywords:
   - ngưỡng conf yolo
   - ngưỡng iou nms
@@ -17,17 +16,14 @@ keywords:
   - detr không nms
   - ngưỡng độ tin cậy phát hiện
   - lọc lớp khi suy luận
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  Giá trị mặc định được trích từ InferenceRunner.__call__ trong
-  libreyolo/models/base/inference.py. Hành vi NMS theo họ được đọc từ mọi module
-  trong libreyolo/postprocess/ và đối chiếu với _is_nms_free_family trong
-  libreyolo/backends/base.py. Cách lọc lớp lấy từ
-  InferenceRunner._apply_classes_filter và _wrap_results. Trạng thái
-  agnostic_nms lấy từ NOOP_PREDICT_KWARGS trong libreyolo/utils/predict_args.py.
-  Cách xử lý open-vocabulary lấy từ NMS_THRESHOLD trong
-  libreyolo/models/openvocab/base.py. Giá trị mặc định khi đánh giá lấy từ
-  BaseModel.val.
+  Giá trị mặc định được trích từ InferenceRunner.__call__ trong libreyolo/models/base/inference.py. Hành vi
+  NMS theo họ được đọc từ mọi module trong libreyolo/postprocess/ và đối chiếu với _is_nms_free_family trong
+  libreyolo/backends/base.py. Cách lọc lớp lấy từ InferenceRunner._apply_classes_filter và _wrap_results.
+  Trạng thái agnostic_nms lấy từ NOOP_PREDICT_KWARGS trong libreyolo/utils/predict_args.py. Cách xử lý
+  open-vocabulary lấy từ NMS_THRESHOLD trong libreyolo/models/openvocab/base.py. Giá trị mặc định khi đánh giá
+  lấy từ BaseModel.val.
 snippets:
   basic:
     - label: Bốn đối số
@@ -89,27 +85,19 @@ snippets:
   nmsfree:
     - label: iou trên họ không chạy NMS
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         # RF-DETR giải mã tập query cố định, nên iou không thay đổi gì ở đây.
-
         model = LibreYOLO("LibreRFDETRs.pt")
 
-
         loose = model(SAMPLE_IMAGE, iou=0.9)
-
         tight = model(SAMPLE_IMAGE, iou=0.1)
 
-
-        # Số lượng giống nhau trong cả hai trường hợp. conf và max_det là các
-        điều khiển có tác dụng.
-
+        # Số lượng giống nhau trong cả hai trường hợp. conf và max_det là các điều khiển có tác dụng.
         print(len(loose.boxes), len(tight.boxes))
-source_hash: 0b978963c356027d
+source_hash: 849650629e58c9e1
 ---
-
 ## Bốn đối số
 
 | Đối số | Mặc định | Áp dụng cho |
@@ -136,6 +124,8 @@ nhiều hoặc quá ít phát hiện.
 
 Giá trị mặc định `0.25` phù hợp để xem ảnh. Khi cung cấp dữ liệu cho hệ thống hạ
 nguồn, bạn thường cần giá trị cao hơn; khi đo độ chính xác, cần giá trị thấp hơn nhiều.
+
+Đánh giá phát hiện cung cấp `metrics/best_conf` và ngưỡng theo lớp đối tượng từ F1 tại IoU 0.50. Dùng chúng làm điểm bắt đầu đã đo cho ngưỡng triển khai; xem [đánh giá](/docs/train/validation). Phân đoạn không cung cấp các khóa này.
 
 ## iou
 
@@ -237,4 +227,3 @@ chọn được hỗ trợ, nên lỗi chính tả thất bại ngay thay vì b�
 Các tùy chọn sau được chấp nhận, cảnh báo rồi loại bỏ: `agnostic_nms`, `boxes`,
 `dnn`, `half`, `line_width`, `retina_masks`, `show_conf`, `show_labels` và
 `verbose`.
-

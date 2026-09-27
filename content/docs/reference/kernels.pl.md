@@ -19,9 +19,9 @@ keywords:
   - kernel ms_deform_attn
   - set_fused_attention
   - kernele Triton LibreYOLO
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  API rejestru odczytano z libreyolo/kernels/__init__.py w wersji 1.5.0, API
+  API rejestru odczytano z libreyolo/kernels/__init__.py w wersji 1.6.0, API
   attention z libreyolo/kernels/attention/__init__.py i sdpa.py, a dostawcę Hub
   z libreyolo/kernels/attention/ms_deform_attn.py wraz z przypiętą rewizją i
   predykatem kwalifikacji. Układ katalogów spisano z libreyolo/kernels/.
@@ -81,7 +81,7 @@ snippets:
             name="mybackend",
             predicate=my_check,
         )
-source_hash: 23d504e88b7959f8
+source_hash: 2cdb2d344ab3faf5
 ---
 
 ## Rejestr
@@ -197,6 +197,8 @@ zmiennoprzecinkowej. Standardowa instalacja bez dodatku pozostaje bez zmian.
 Podczas porównywania metryk między wersjami należy zachować ten sam stan dodatku
 lub ustawić `LIBREYOLO_HUB_KERNELS=0` po obu stronach.
 
+Hub MSDA przyjmuje FP16 i BF16, rzutując wejścia kernela na FP32, przywracając typ wyjścia i zachowując gradienty przez rzutowania. Wywołania eager CUDA bez zaakceptowanego dostawcy przyspieszenia wyświetlają jedną wskazówkę instalacji `libreyolo[hub-kernels]`. `ms_deform_attn_available(value=None)` pozwala sprawdzić ścieżkę dla konkretnego tensora.
+
 ## Scalone attention
 
 Scalone attention iloczynu skalarnego ze skalowaniem nie wymaga opcjonalnej
@@ -248,3 +250,7 @@ zawartego w testach.
 Wybór kernela współdziała z [grafami CUDA](/docs/reference/cuda-graphs): macierz
 zgodności inferencji działała bez zainstalowanego pakietu `kernels`, dlatego nie
 obejmuje bezpieczeństwa przechwytywania przy aktywnym skompilowanym kernelu.
+
+## Deformowalna uwaga Triton
+
+Dostawca Triton MSDA zawarty w kodzie obsługuje kwalifikującą się inferencję CUDA w FP32, FP16 i BF16. Odrzuca wejścia wymagające gradientów, a gdy jest niedostępny, używa przenośnej implementacji uwagi. Hub pozostaje preferowany. `LIBREYOLO_TRITON_MSDA=0` wyłącza Triton; `LIBREYOLO_HUB_KERNELS=0` wyłącza dostawcę Hub i jego wskazówkę instalacji.

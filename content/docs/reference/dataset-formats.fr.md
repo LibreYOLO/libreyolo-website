@@ -14,9 +14,9 @@ keywords:
   - format coco panoptic
   - dataset profondeur
   - pose kpt_shape
-last_verified: 1.5.0
+last_verified: "1.6.0"
 verification: >-
-  Reproduit docs/dataset_schema.md du dépôt libreyolo en v1.5.0, avec les noms
+  Reproduit docs/dataset_schema.md du dépôt libreyolo en v1.6.0, avec les noms
   des chargeurs recoupés dans libreyolo/data/.
 snippets:
   usage:
@@ -35,7 +35,7 @@ snippets:
         # (class_id, x1, y1, x2, y2, area) en pixels
 
         print(row)
-source_hash: a8282c079624044d
+source_hash: 5f4bc7d17822a85d
 ---
 
 ## YAML commun
@@ -49,20 +49,20 @@ S'applique à `detect`, `segment`, `pose` et `obb`.
 | `val` | Pour la validation | Images de validation |
 | `test` | | Images de test |
 | `names` | Oui | Liste de classes ou table indexée par des entiers |
-| `nc` | | Nombre de classes\u00a0; doit correspondre à `names` si présent |
-| `download` | | Instructions de téléchargement\u00a0; les scripts Python exigent une activation explicite |
+| `nc` | | Nombre de classes ; doit correspondre à `names` si présent |
+| `download` | | Instructions de téléchargement ; les scripts Python exigent une activation explicite |
 | `annotations` | | Association des sous-ensembles à des fichiers JSON COCO natifs, pour detect, segment et obb |
 
 `train`, `val` et `test` peuvent être des répertoires d'images, des fichiers
 `.txt` qui énumèrent des images ou des listes de ces éléments. Les chemins des
-étiquettes suivent une substitution\u00a0:
+étiquettes suivent une substitution :
 
 ```text
 images/.../image.jpg -> labels/.../image.txt
 ```
 
 Pour un dataset JSON COCO natif, `annotations` associe chaque sous-ensemble à
-son fichier JSON et le chemin du sous-ensemble indique la racine des images\u00a0:
+son fichier JSON et le chemin du sous-ensemble indique la racine des images :
 
 ```yaml
 path: dataset
@@ -81,20 +81,20 @@ triés et remappés de façon dense vers `0..N-1`.
 Un YAML de dataset ne contient aucune clé `task`. La sélection explicite du
 modèle et de la tâche l'emporte.
 
-Règles communes à tous les fichiers d'étiquettes textuels\u00a0:
+Règles communes à tous les fichiers d'étiquettes textuels :
 
-- un fichier d'étiquettes `.txt` par image\u00a0;
-- un fichier d'étiquettes absent ou vide signifie qu'il n'y a aucun objet\u00a0;
-- `class_id` est un entier dans `0..nc-1`\u00a0;
-- les coordonnées sont des flottants finis normalisés dans `[0, 1]`\u00a0;
-- les coordonnées sont relatives à la largeur et à la hauteur de l'image d'origine\u00a0;
+- un fichier d'étiquettes `.txt` par image ;
+- un fichier d'étiquettes absent ou vide signifie qu'il n'y a aucun objet ;
+- `class_id` est un entier dans `0..nc-1` ;
+- les coordonnées sont des flottants finis normalisés dans `[0, 1]` ;
+- les coordonnées sont relatives à la largeur et à la hauteur de l'image d'origine ;
 - les lignes ne contiennent ni confiance ni identifiant de suivi.
 
 <code-tabs name="usage" />
 
 ## detect
 
-Exactement cinq champs par ligne\u00a0:
+Exactement cinq champs par ligne :
 
 ```text
 <class_id> <cx> <cy> <w> <h>
@@ -105,7 +105,7 @@ Exactement cinq champs par ligne\u00a0:
 
 ## segment
 
-Une ligne de polygone\u00a0:
+Une ligne de polygone :
 
 ```text
 <class_id> <x1> <y1> ... <xN> <yN>
@@ -128,9 +128,11 @@ Le nombre de champs vaut exactement `5 + K * D`, où `D` est la seconde valeur
 de `kpt_shape`. Les coordonnées des points clés sont normalisées. La visibilité
 `v`, lorsqu'elle est présente, vaut `0`, `1` ou `2`.
 
+Les datasets multiclasses RF-DETR exigent `names` et peuvent définir `kpt_names` par classe. Une liste vide de noms de points clés indique une classe avec uniquement des boîtes. Au moins une classe doit avoir des points clés.
+
 ## obb
 
-Exactement neuf champs\u00a0:
+Exactement neuf champs :
 
 ```text
 <class_id> <x1> <y1> <x2> <y2> <x3> <y3> <x4> <y4>
@@ -144,7 +146,7 @@ Le parseur canonique est strict par défaut et refuse les coordonnées hors
 plage. L'ingestion des datasets et de la validation peut écrêter les
 coordonnées dans `[0, 1]` pour des étiquettes de bord de recadrage par ailleurs
 valides, puis refuse toujours les bounding boxes dégénérées. Le parsing tient
-compte de la tâche\u00a0: neuf champs signifient `obb` uniquement en mode `obb`,
+compte de la tâche : neuf champs signifient `obb` uniquement en mode `obb`,
 tandis qu'en mode `segment` ils peuvent former un polygone à quatre points.
 
 En interne, les coins normalisés sont convertis en `xywhr` canonique, dont
@@ -153,9 +155,9 @@ la bounding box. Les résultats publics exposent les détections OBB sous forme
 de lignes `xywhr, conf, cls`.
 
 Le chargement OBB depuis un JSON COCO natif accepte les annotations dans
-l'ordre de priorité suivant\u00a0: `obb` comme huit coins en pixels\u00a0; `obb` comme
-`[cx, cy, w, h, angle]` avec l'angle en radians\u00a0; un polygone ou RLE COCO
-`segmentation`, ajusté en rectangle de surface minimale\u00a0; puis un `bbox` COCO,
+l'ordre de priorité suivant : `obb` comme huit coins en pixels ; `obb` comme
+`[cx, cy, w, h, angle]` avec l'angle en radians ; un polygone ou RLE COCO
+`segmentation`, ajusté en rectangle de surface minimale ; puis un `bbox` COCO,
 lu comme aligné sur les axes et canonisé.
 
 Mosaic et mixup sont désactivés pour l'entraînement OBB tant qu'une
@@ -167,7 +169,7 @@ Le parseur de lignes canonique est
 ## semantic
 
 Chaque image est associée à un masque dense mono-canal dans un format sans
-perte, généralement PNG, au lieu d'un fichier `.txt`\u00a0:
+perte, généralement PNG, au lieu d'un fichier `.txt` :
 
 ```text
 images/.../image.jpg -> <masks_dir>/.../image.png
@@ -190,7 +192,7 @@ les étiquettes polygonales `segment` résolues par la convention `images` vers
 `labels`, et une classe `background` est ajoutée après les classes d'objets.
 `nc` augmente donc d'une unité.
 
-Chargeur canonique\u00a0: `libreyolo.data.SemanticDataset`.
+Chargeur canonique : `libreyolo.data.SemanticDataset`.
 
 ## panoptic
 
@@ -198,14 +200,14 @@ LibreYOLO adopte le format COCO-panoptic tel quel (Kirillov et al., CVPR 2019).
 Il n'existe aucun format panoptique propre à LibreYOLO.
 
 Un PNG RGB par image, à la résolution de l'image, encode l'identifiant de
-segment de chaque pixel dans sa couleur\u00a0:
+segment de chaque pixel dans sa couleur :
 
 ```text
 segment_id = R + 256 * G + 256 * 256 * B
 ```
 
 Chaque pixel appartient à exactement un segment et les segments ne se
-chevauchent jamais. L'identifiant de segment `0`, noir RGB, représente le vide\u00a0:
+chevauchent jamais. L'identifiant de segment `0`, noir RGB, représente le vide :
 les pixels sans étiquette exclus de la métrique.
 
 ```json
@@ -221,7 +223,7 @@ les pixels sans étiquette exclus de la métrique.
 
 `annotations[].file_name` nomme le PNG des identifiants de segments dans
 `panoptic_dir`, et `segments_info[].id` correspond à une valeur de ce PNG.
-`iscrowd` signale les régions de groupes\u00a0: elles ne sont jamais des faux
+`iscrowd` signale les régions de groupes : elles ne sont jamais des faux
 négatifs et une prédiction qui en couvre majoritairement une n'est pas un faux
 positif.
 
@@ -251,15 +253,15 @@ sous-ensemble.
 
 La validation rapporte la Panoptic Quality, calculée à la résolution de la
 vérité terrain et moyennée sur les catégories présentes, puis divisée entre
-`PQ_things` et `PQ_stuff`. L'appariement est unique\u00a0: un segment prédit et un
+`PQ_things` et `PQ_stuff`. L'appariement est unique : un segment prédit et un
 segment de vérité terrain de même catégorie correspondent lorsque leur IoU
 dépasse 0.5.
 
-Chargeur canonique\u00a0: `libreyolo.data.PanopticDataset`.
+Chargeur canonique : `libreyolo.data.PanopticDataset`.
 
 ## depth
 
-Chaque image est associée à une carte de profondeur dense mono-canal\u00a0:
+Chaque image est associée à une carte de profondeur dense mono-canal :
 
 ```text
 images/.../image.jpg -> <depths_dir>/.../image.png
@@ -273,19 +275,19 @@ signalent les pixels invalides et sont exclues de la loss et des métriques.
 | Clé | Valeur par défaut | Signification |
 |---|---|---|
 | `depths_dir` | `depths` | Répertoire de profondeur qui remplace `images` |
-| `depth_stem_suffix` | | Suffixe ajouté au nom de base de l'image\u00a0; s'il est omis, le même nom et un suffixe `_depth` sont essayés |
-| `depth_mask_suffix` | `_mask` | Suffixe d'un masque de validité\u00a0; les valeurs du masque nulles ou négatives, NaN et infinies invalident le pixel de profondeur |
+| `depth_stem_suffix` | | Suffixe ajouté au nom de base de l'image ; s'il est omis, le même nom et un suffixe `_depth` sont essayés |
+| `depth_mask_suffix` | `_mask` | Suffixe d'un masque de validité ; les valeurs du masque nulles ou négatives, NaN et infinies invalident le pixel de profondeur |
 | `depth_scale` | `256.0` | Diviseur des cartes de profondeur à type entier, convention courante des PNG 16 bits |
 
 Les cartes `.npy` flottantes sont utilisées telles quelles et n'appliquent pas
 `depth_scale`.
 
-Chargeur canonique\u00a0: `libreyolo.data.DepthDataset`.
+Chargeur canonique : `libreyolo.data.DepthDataset`.
 
 ## edge
 
 Chaque image RGB est associée à une carte mono-canal sans perte de même nom de
-base et à un masque de validité facultatif\u00a0:
+base et à un masque de validité facultatif :
 
 ```text
 images/val/scene.jpg -> edges/val/scene.png
@@ -326,13 +328,13 @@ terrain sont appariés un-à-un dans la limite de
 `edge_max_dist * image_diagonal`, avec une tolérance normalisée par défaut de
 `0.0075`.
 
-Chargeur canonique\u00a0: `libreyolo.data.EdgeDataset`. Le chargeur ne s'occupe que
+Chargeur canonique : `libreyolo.data.EdgeDataset`. Le chargeur ne s'occupe que
 du format, il ne télécharge ni ne redistribue les données de benchmark.
 
 ## normal
 
 Chaque image est associée à un PNG 16 bits à trois canaux de même nom de base,
-ainsi qu'à un masque de validité facultatif de même nom\u00a0:
+ainsi qu'à un masque de validité facultatif de même nom :
 
 ```text
 images/val/room.jpg -> normals/val/room.png
@@ -359,11 +361,11 @@ aussi la composante x.
 La validation rapporte l'erreur angulaire moyenne et médiane en degrés et le
 pourcentage de pixels valides à moins de 11.25, 22.5 et 30 degrés.
 
-Chargeur canonique\u00a0: `libreyolo.data.NormalDataset`.
+Chargeur canonique : `libreyolo.data.NormalDataset`.
 
 ## restore
 
-Chaque image d'entrée dégradée est associée à une cible RGB propre\u00a0:
+Chaque image d'entrée dégradée est associée à une cible RGB propre :
 
 ```text
 inputs/.../image.jpg -> targets/.../image.jpg
@@ -385,16 +387,16 @@ la paire entrée-cible.
 | `degradation` | | Étiquette de métadonnées comme `deblur` ou `denoise` |
 | `dataset` | | Étiquette de dataset ou de provenance |
 
-Les champs YAML de type classe sont des valeurs factices du schéma\u00a0: utilisez
+Les champs YAML de type classe sont des valeurs factices du schéma : utilisez
 `nc: 1` et `names: {0: image}`. Les modèles de restauration exposent
 `Results.restored`, et non des détections.
 
-Chargeur canonique\u00a0: `libreyolo.data.RestoreDataset`.
+Chargeur canonique : `libreyolo.data.RestoreDataset`.
 
 ## matte
 
 Chaque image RGB est associée à un matte de vérité terrain mono-canal de même
-nom de base, où 0 représente l'arrière-plan et 255 le premier plan\u00a0:
+nom de base, où 0 représente l'arrière-plan et 255 le premier plan :
 
 ```text
 images/subject.jpg -> mattes/subject.png
@@ -413,17 +415,17 @@ diffèrent. Les métriques sont la MAE et la S-measure (Fan et al., ICCV 2017)
 sur le canevas de l'image d'origine. La S-measure sert de fitness pour le
 meilleur checkpoint.
 
-Les champs YAML de type classe sont des valeurs factices du schéma\u00a0: utilisez
+Les champs YAML de type classe sont des valeurs factices du schéma : utilisez
 `nc: 1` et `names: {0: matte}`. Les modèles de matting exposent
 `Results.matte`.
 
 La validation est réservée à l'inférence dans cette version. Résolveur de
-paires canonique\u00a0: `libreyolo.data.matte_dataset.resolve_matte_pairs`.
+paires canonique : `libreyolo.data.matte_dataset.resolve_matte_pairs`.
 
 ## ocr
 
 Les étiquettes sont un fichier JSONL par sous-ensemble, avec un objet JSON par
-image\u00a0:
+image :
 
 ```text
 images/val/receipt.jpg -> labels/val.jsonl
@@ -446,20 +448,20 @@ suppression des espaces, en tenant compte de la casse, ainsi que 1-NED sur les
 paires appariées. Le F1 de bout en bout sert de fitness pour le meilleur
 checkpoint.
 
-Deux organisations sont acceptées\u00a0: une racine contenant
+Deux organisations sont acceptées : une racine contenant
 `images/<split>/` et `labels/<split>.jsonl`, transmise dans `data=`, ou un YAML
 avec `path` et les noms facultatifs des répertoires `images` et `labels`.
 
-Les champs YAML de type classe sont des valeurs factices du schéma\u00a0: utilisez
+Les champs YAML de type classe sont des valeurs factices du schéma : utilisez
 `nc: 1` et `names: {0: text}`. Les modèles OCR exposent `Results.ocr`.
 
 La validation est réservée à l'inférence dans cette version. Résolveur
-d'échantillons canonique\u00a0: `libreyolo.data.ocr_dataset.resolve_ocr_samples`.
+d'échantillons canonique : `libreyolo.data.ocr_dataset.resolve_ocr_samples`.
 
 ## classify
 
 Une arborescence de répertoires de type ImageFolder, et non des fichiers
-d'étiquettes\u00a0:
+d'étiquettes :
 
 ```text
 dataset_root/
@@ -489,3 +491,15 @@ dataset. Les familles de points peuvent adapter des étiquettes existantes en
 interne, par exemple en déduisant le centre des objets depuis des lignes de
 bounding boxes, mais aucun format d'étiquettes textuel réservé aux points
 n'est défini.
+
+## Histogrammes d'événements
+
+La détection YOLO9 et RF-DETR accepte des tableaux HWC `.npy` avec deux plans de comptages finis non négatifs, positif puis négatif. `input_profile` exige `format: event_histogram`, `layout: HWC`, `polarity: positive_negative`, `encoding: counts`, un `scale` positif et un entier `window_us` positif. Les étiquettes utilisent les fichiers texte de détection ordinaires. Consultez la [préparation des entrées](/docs/train/event-histograms).
+
+## Politiques robotiques
+
+La tâche `act` utilise un répertoire de dataset LeRobot v3 ou un identifiant de dataset Hub, contenant des caractéristiques d'épisodes, de caméras, d'état et d'action. Elle n'utilise pas de YAML de détection. Consultez les [politiques robotiques](/docs/tasks/robot-policies).
+
+## albedo
+
+Associez `images/<split>/<name>.<image extension>` à `albedo/<split>/<name>.npy`. Les cibles sont des valeurs RGB linéaires flottantes finies `(H, W, 3)` dans [0, 1], de mêmes dimensions que l'image. Si nécessaire, définissez `input_dir` et `albedo_dir` comme des noms de dossiers à un seul composant. Les PNG d'affichage et les valeurs sRGB ne sont pas des cibles quantitatives d'albédo.

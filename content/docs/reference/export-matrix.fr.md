@@ -14,8 +14,8 @@ keywords:
   - commande libreyolo formats
   - seuil parité export
   - NotImplementedError export
-last_verified: 1.5.0
-verification: "Formats, niveaux, ordre de repli, blocages de tâches et familles et blocages NCNN lus dans libreyolo/export/support.py\_; alias et arguments partagés lus dans libreyolo/export/exporter.py\_; définitions des niveaux lues dans docs/adr/0011-export-support-tiers.md\_; seuils de parité lus dans docs/export_support.md, le tout en v1.5.0. Les cellules par combinaison ne sont pas retranscrites ici\_; interrogez-les avec l'extrait ci-dessous."
+last_verified: "1.6.0"
+verification: "Formats, niveaux, ordre de repli, blocages de tâches et familles et blocages NCNN lus dans libreyolo/export/support.py\_; alias et arguments partagés lus dans libreyolo/export/exporter.py\_; définitions des niveaux lues dans docs/adr/0011-export-support-tiers.md\_; seuils de parité lus dans docs/export_support.md, le tout en v1.6.0. Les cellules par combinaison ne sont pas retranscrites ici\_; interrogez-les avec l'extrait ci-dessous."
 snippets:
   usage:
     - label: Interroger la matrice sans modèle
@@ -63,19 +63,19 @@ snippets:
         print(blocked.tier)
 
         print(blocked.reason)
-source_hash: 83de3289634888c6
+source_hash: 70b9541fb8949352
 ---
 
 ## Structure de la matrice
 
 La matrice utilise les clés `(family, task, format)`. Les clés de familles sont
 les noms canoniques du registre de modèles, celles des tâches proviennent de
-`libreyolo.tasks.TASKS`, et douze formats existent\u00a0:
+`libreyolo.tasks.TASKS`, et douze formats existent :
 
 `onnx`, `torchscript`, `executorch`, `tensorrt`, `openvino`, `paddle`, `mnn`,
 `rknn`, `ncnn`, `tflite`, `coreml`, `coreai`.
 
-`model.export(format=...)` accepte en outre deux alias\u00a0: `engine` pour
+`model.export(format=...)` accepte en outre deux alias : `engine` pour
 `tensorrt` et `litert` pour `tflite`, qui est le nom actuel de TensorFlow Lite.
 Le format et le suffixe `.tflite` restent inchangés.
 
@@ -85,6 +85,8 @@ Comme une cellule dépend de trois clés, la grille complète est volumineuse et
 change à chaque version. Elle est générée plutôt qu'écrite à la main et se
 trouve dans `docs/export_support.md` dans le dépôt de la bibliothèque.
 Interrogez la matrice depuis Python ou le CLI au lieu d'en lire une copie.
+
+Le registre généré comprend PP-YOLOE, TinyFormer, DEKR, PP-LiteSeg, ConvNeXt V2, PE, V-JEPA 2 et LeVJEPA. Consultez chaque page de modèle pour ses contraintes de forme et de tâche. U-Net, les quatre adaptateurs 3D, Marigold V2 et les politiques robotiques ne fournissent pas d'export.
 
 ## Trois niveaux
 
@@ -102,9 +104,9 @@ calibration, le traçage ou la création de l'artefact.
 
 L'ajout d'une entrée validated nécessite un test de parité et un champ `since`.
 
-Un objet `SupportEntry` contient quatre champs\u00a0: `tier`, une chaîne `reason`,
+Un objet `SupportEntry` contient quatre champs : `tier`, une chaîne `reason`,
 la version `since` et une chaîne `constraint`. Cette contrainte est essentielle
-lors de l'intégration\u00a0: une coche ne s'applique que dans les conditions qu'elle
+lors de l'intégration : une coche ne s'applique que dans les conditions qu'elle
 nomme, généralement un canevas d'entrée fixe, un batch de 1, le FP32 et une
 version précise du runtime.
 
@@ -118,11 +120,11 @@ correspondante gagne.
 3. Un blocage portant sur toute la famille renvoie `blocked` avec la raison de cette famille.
 4. Un blocage portant sur toute la tâche renvoie `blocked` avec la raison de cette tâche.
 5. Pour `ncnn`, une famille de la liste de blocage NCNN renvoie `blocked`.
-6. `mnn` renvoie `blocked`\u00a0: aucun contrat de runtime n'existe pour cette famille et cette tâche.
-7. `rknn` renvoie `blocked`. Dans cette version, RKNN se limite aux variantes de détection exactes testées dans le simulateur\u00a0: YOLO9-t, YOLO9-E2E-t, YOLO-NAS-s et PicoDet-s sur RK3588.
-8. `tensorrt` et `openvino` renvoient `available`\u00a0: le chemin de conversion existe, mais la parité du runtime n'a pas été consignée pour cette famille et cette tâche.
+6. `mnn` renvoie `blocked` : aucun contrat de runtime n'existe pour cette famille et cette tâche.
+7. `rknn` renvoie `blocked`. Dans cette version, RKNN se limite aux variantes de détection exactes testées dans le simulateur : YOLO9-t, YOLO9-E2E-t, YOLO-NAS-s et PicoDet-s sur RK3588.
+8. `tensorrt` et `openvino` renvoient `available` : le chemin de conversion existe, mais la parité du runtime n'a pas été consignée pour cette famille et cette tâche.
 9. `tflite`, `paddle`, `coreai` et `coreml` renvoient `blocked`, chacun avec sa propre raison.
-10. Tout le reste renvoie `available`\u00a0: la conversion est implémentée, mais la parité numérique du runtime n'est pas consignée.
+10. Tout le reste renvoie `available` : la conversion est implémentée, mais la parité numérique du runtime n'est pas consignée.
 
 L'asymétrie des étapes 8 à 10 est délibérée. TensorRT et OpenVINO convertissent
 de manière générique depuis ONNX, une combinaison non répertoriée mérite donc
@@ -151,23 +153,23 @@ reliée au contrat peut tout de même être exportée.
 
 | Famille | Blocage |
 |---|---|
-| `depth_anything3` | Tous les formats\u00a0; son graphe de profondeur ne fait pas partie du contrat de runtime exporté |
+| `depth_anything3` | Tous les formats ; son graphe de profondeur ne fait pas partie du contrat de runtime exporté |
 | `domedetr` | Tous les formats. PAQI définit le nombre de requêtes par image, un graphe tracé n'est donc valide que pour l'image du traçage. Utilisez D-FINE comme DETR exportable |
 | `eomt` | Export d'instances et panoptique, qui ne possède aucun parsing dans le runtime |
 | `l2cs` | Tout format autre que ONNX, TorchScript, ExecuTorch, TensorRT et OpenVINO |
 | `hrnet` | Tout format autre que ONNX, TorchScript, OpenVINO et TensorRT |
-| `sam`, `sam2`, `sam3`, `edgetam`, `mobilesam` | Tous les formats\u00a0; l'export de modèles guidables est hors périmètre du contrat de runtime v1 |
-| `grounding_dino`, `owlv2`, `omdet_turbo`, `ov_deim` | Tous les formats\u00a0; l'export du runtime à vocabulaire ouvert est hors périmètre de la v1 |
-| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything` | Tous les formats\u00a0; l'export de VLM génératifs est hors périmètre de la v1 |
+| `sam`, `sam2`, `sam3`, `edgetam`, `mobilesam` | Tous les formats ; l'export de modèles guidables est hors périmètre du contrat de runtime v1 |
+| `grounding_dino`, `owlv2`, `omdet_turbo`, `ov_deim` | Tous les formats ; l'export du runtime à vocabulaire ouvert est hors périmètre de la v1 |
+| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything` | Tous les formats ; l'export de VLM génératifs est hors périmètre de la v1 |
 
-PicoSAM3 est l'exception du niveau guidable\u00a0: il exporte son réseau ROI brut de
+PicoSAM3 est l'exception du niveau guidable : il exporte son réseau ROI brut de
 96 pixels vers ONNX.
 
 ## Blocages pour NCNN
 
 Les décodeurs de style DETR nécessitent des opérations d'échantillonnage que
 NCNN n'implémente pas. Les familles suivantes sont donc bloquées pour `ncnn`,
-sauf si une entrée explicite indique le contraire\u00a0: Deformable DETR, DETR,
+sauf si une entrée explicite indique le contraire : Deformable DETR, DETR,
 DINO-DETR, D-FINE, LW-DETR, DEIM, DEIMv2, RT-DETR, RT-DETRv2, RT-DETRv4,
 RF-DETR et EC. Le message de refus cite ONNX, OpenVINO, TorchScript et TensorRT
 comme solutions de remplacement.
@@ -175,7 +177,7 @@ comme solutions de remplacement.
 ## Seuils de parité
 
 Une cellule validated signifie que l'artefact exporté a reproduit le modèle
-natif dans les limites suivantes\u00a0:
+natif dans les limites suivantes :
 
 | Groupe de tâches | Seuil |
 |---|---|
@@ -183,7 +185,7 @@ natif dans les limites suivantes\u00a0:
 | Segmentation et panoptique | IoU des masques supérieure à 0.95 |
 | Pose | L2 des points clés inférieure à 2 pixels à la résolution native |
 | Classification | Cosinus des logits supérieur à 0.999 et même classe top-1 |
-| Profondeur et restauration | PSNR supérieur à 40\u00a0dB par rapport à la sortie native |
+| Profondeur et restauration | PSNR supérieur à 40 dB par rapport à la sortie native |
 | Normales de surface | Erreur angulaire moyenne inférieure à 0.1 degré |
 | Point | Emplacements des pics égaux à une cellule de sortie près |
 

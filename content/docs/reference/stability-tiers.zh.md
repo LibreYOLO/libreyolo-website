@@ -12,14 +12,14 @@ keywords:
   - libreyolo 覆盖分组
   - g0 g1 g2 g3 g4
   - 模型分层
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   导出层级读自 docs/adr/0011-export-support-tiers.md 与
   libreyolo/export/support.py；覆盖分组与各家族数量读自 libreyolo/models/registry.py 里的
   MODEL_GROUPS；从零训练的判断读自 libreyolo/models/base/model.py 与
   libreyolo/cli/commands/train.py；CLI 清单读自 libreyolo/models/inventory.py；API
   层级读自 libreyolo/models/sam/、openvocab/ 与 vlm/ 的包 docstring 以及 base.py 里的契约，全部基于
-  v1.5.0。面向读者的分组名称（旗舰、核心、已支持、仅推理、博物馆、兄弟层级）是本站为同一批分组使用的说法，来自
+  v1.6.0。面向读者的分组名称（旗舰、核心、已支持、仅推理、博物馆、兄弟层级）是本站为同一批分组使用的说法，来自
   src/data/docs/registry.json。
 snippets:
   usage:
@@ -36,7 +36,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: de545894b0d125e4
+source_hash: 6d8f3ec671e6cb02
 ---
 
 ## 导出支持层级
@@ -75,13 +75,16 @@ blocked 的组合会在依赖检查、校准数据加载、tracing 和产物生�
 | 可提示分割 | `LibreSAM` | 如果调用时不为每张图像提供空间提示或概念提示，一次前向传播没有意义。交互式且有状态：编码一次，可以提示很多次 |
 | 开放词汇检测 | `LibreOpenVocab` | 文本条件的判别式检测器。类别列表是一种提示，由 `set_classes` 设置 |
 | 视觉语言 | `LibreVLM` | 当作检测器来驱动的生成式模型。类别列表是一种提示，置信度只是占位符 |
+| 定位 | `LibreGround` | 一张图像和一条指代式指令，每个查询最多映射到一个点 |
+| 机器人策略 | `LibreVLA` | 相机帧和机器人状态映射为一段未来动作块 |
 
-这三个兄弟层级刻意不注册进检测器工厂，所以 `LibreYOLO("some-alias")` 到不了
+这些兄弟层级刻意不注册进检测器工厂，所以 `LibreYOLO("some-alias")` 到不了
 它们。它们靠尺寸别名和自动下载来加载，而不是靠嗅探检查点。
 
-四者都返回同样的 `Results`，所以下游代码在它们之间不用改。差别在于哪些方法能
+它们都返回同样的 `Results`，所以下游代码在它们之间不用改。差别在于哪些方法能
 用：兄弟层级的 `train()`、`val()` 和 `export()` 会抛出 `NotImplementedError`，
-SAM 和开放词汇层级的 `track()` 也会抛。每个层级的页面都会列出自己排除了哪些。
+但有两个例外。`LibreVLM` 把 Qwen3-VL 当作检测器来微调，`LibreVLA` 训练并验证
+SmolVLA、ACT 和 Diffusion Policy。SAM 和开放词汇层级的 `track()` 也会抛。每个层级的页面都会列出自己排除了哪些。
 
 ## 覆盖分组
 
@@ -94,15 +97,14 @@ SAM 和开放词汇层级的 `track()` 也会抛。每个层级的页面都会�
 | 分组 | 名称 | 家族数 | 含义 |
 |---|---|---|---|
 | `g0` | 旗舰 | 2 | 共享特性覆盖中必须包含的旗舰标杆 |
-| `g1` | 核心 | 10 | 可训练检测器的覆盖集合 |
-| `g2` | 已支持 | 14 | 额外的可训练家族覆盖集合 |
-| `g3` | 仅推理 | 35 | 没有训练实现的家族 |
+| `g1` | 核心 | 12 | 可训练检测器的覆盖集合 |
+| `g2` | 已支持 | 19 | 额外的可训练家族覆盖集合 |
+| `g3` | 仅推理 | 44 | 没有训练实现的家族 |
 | `g4` | 博物馆 | 5 | 有推理覆盖的历史家族 |
-| `s` | 兄弟层级 | 21 | 单独覆盖的兄弟 API（SAM、开放词汇、VLM、零样本） |
+| `s` | 兄弟层级 | 36 | 单独覆盖的兄弟 API（SAM、开放词汇、VLM、定位、零样本） |
 
-一共是六个分组、87 个家族。光 `g3` 一个分组的家族数就超过其他所有分组之和，
-因为注册表（registry）里大部分是仅推理的谱系和博物馆式的覆盖，而不是持续训练
-的检测器。
+一共是六个分组、118 个家族。`g3` 是最大的分组，因为注册表（registry）里很大一
+部分是仅推理的谱系，而不是持续训练的检测器。
 
 对正在挑模型的读者来说，分组说明的是工程投入落在哪里，而不是一个家族有多精
 确。`g0` 和 `g1` 是新特性设计出来、并且最先落地的地方；`g2` 在 CI 里保持绿
@@ -116,16 +118,22 @@ SAM 和开放词汇层级的 `track()` 也会抛。每个层级的页面都会�
 具体格式的能力检查，绝不会只凭分组归属。分组划分的是家族而不是任务，所以限定
 了任务的覆盖运行会显式写出任务名，比如「g1 detect」。
 
-有两个地方会在运行时读分组，而不只是在测试里读。`libreyolo/models/inventory.py`
-里的 `collect_model_inventory()` 会把分组附到 CLI 清单打印的每一条记录上；而
-`pretrained=False` 只对 `g0` 和 `g1` 里的家族触发那条特殊的从零重新初始化路
-径。在这两个分组之外，`libreyolo/models/base/model.py` 里的检查会被整个跳过，
-于是 `pretrained=False` 会作为一个普通关键字参数传到家族自己的 `train()` 里。
+有三个地方会在运行时读分组，而不只是在测试里读。`libreyolo/models/inventory.py`
+里的 `collect_model_inventory()` 会把分组附到 CLI 清单打印的每一条记录上。
+`pretrained=False` 只对 `g0`、`g1` 和 `g2` 里的家族触发那条特殊的从零重新初始化
+路径。在这些分组之外，`libreyolo/models/base/model.py` 里的检查会被整个跳过，
+于是 `pretrained=False` 会作为一个普通关键字参数传到家族自己的 `train()` 里。带
+`classes=` 或 `single_cls=True` 的训练只在 `g0` 和 `g1` 的检测上被接受，在其他
+地方会抛出 `ValueError`。
 
 ## 训练
 
 `g3` 或 `g4` 里的家族没有训练实现，对它们调用 `train()` 会抛异常。这是家族代
 码的性质，不是分组的性质：分组只是记录这个事实，而不是造成它。
+
+在 118 个家族中，有 37 个能训练：`g0`、`g1` 和 `g2` 的每个家族，外加通过
+`LibreVLM` 训练的 Qwen3-VL，以及通过 `LibreVLA` 训练的 SmolVLA、ACT 和
+Diffusion Policy。
 
 对于确实能训练的家族，某个数据增强参数会不会真的到达流水线是另一个问题，它有
 自己的一套三值词汇：`used`、`gated_by_mosaic` 和 `ignored`。见[数据增强矩阵](/docs/reference/augmentation-matrix)。

@@ -16,7 +16,7 @@ keywords:
   - bild hochskalieren python
   - deblurring modell
   - PSNR SSIM validierung
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Ein Bild hochskalieren
@@ -102,7 +102,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         result.restored.save("denoised.png")
-source_hash: 9dc81cadb3ebf18b
+source_hash: "c1c1270071053132"
 ---
 
 ## Definition
@@ -123,8 +123,7 @@ Auflösung erhält. `result.boxes` bleibt leer, deshalb werden `conf`, `iou` und
 
 ## Modelle
 
-Drei Familien bedienen `restore`, aufgeteilt nach der Degradation, die sie
-rückgängig machen.
+Restaurierungsfamilien behandeln unterschiedliche Bildbeeinträchtigungen.
 
 [NAFNet](/docs/models/nafnet) ist der Entrauscher und die einzige
 Restore-Familie, die LibreYOLO trainieren kann. Ihre Architektur ersetzt die
@@ -141,6 +140,8 @@ bikubisches Herunterskalieren, mit 4x, 2x und einem kleineren, schnelleren
 Swin-Transformer-Backbone, in drei Größen, die den offiziellen
 Lightweight-Generator und zwei Real-World-Generatoren abdecken.
 
+[QuickSRNet](/docs/models/quicksrnet) bietet zweifache Hochskalierung, [DDColor](/docs/models/ddcolor) Kolorierung, [HVI-CIDNet](/docs/models/hvi-cidnet) Verbesserung bei schwachem Licht und [LaMa](/docs/models/lama) Inpainting. Diese vier unterstützen kein Training.
+
 ## Vorhersage
 
 Die Gewichte werden beim ersten Aufruf von Hugging Face geladen und lokal
@@ -148,14 +149,9 @@ zwischengespeichert.
 
 <code-tabs name="predict" />
 
-Die Restaurierung läuft auf der eigenen Auflösung des Quellbildes statt auf
-einer festen Netzfläche und paddet nur auf den Downsample-Faktor des Netzes,
-deshalb skalieren sowohl Zeit als auch Speicher mit der Pixelzahl deiner
-Eingabe. `tile` teilt den Forward-Pass in überlappende Kacheln und blendet die
-Nähte wieder zusammen, und `tile_pad` ist der Rand, der um jede Kachel gelegt
-wird, bevor sie wieder herausgeschnitten wird; beides sind
-Python-Schlüsselwortargumente. Siehe [Vorhersage](/docs/predict) für Quellen,
-Streaming und den Umgang mit Ergebnissen.
+NAFNet, Real-ESRGAN und SwinIR arbeiten mit der Auflösung des Quellbilds statt mit einer festen Netzwerkbildfläche und füllen nur bis zum Downsampling-Faktor des Netzwerks auf. Zeit- und Speicherbedarf wachsen daher mit der Pixelzahl der Eingabe. `tile` teilt den Forward-Pass in überlappende Kacheln und blendet deren Übergänge zusammen; `tile_pad` ist der zusätzliche Rand jeder Kachel, der danach wieder abgeschnitten wird. Beide sind Python-Schlüsselwortargumente. Siehe [Vorhersage](/docs/predict) für Quellen, Streaming und Ergebnisverarbeitung.
+
+LaMa benötigt `mask=` für ein einzelnes Bild. HVI-CIDNet bietet `gamma`, `saturation` und `intensity`, jeweils mit Standardwert 1.0. Modellspezifische Bildflächen- und Exportbeschränkungen stehen auf den Modellseiten.
 
 ## Datensatzformat
 

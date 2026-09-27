@@ -14,7 +14,7 @@ keywords:
   - libreyolo 학습
   - libreyolo 내보내기
   - yolo 파이썬 예제
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 설치
     value: pip install libreyolo
@@ -61,20 +61,23 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+        # macOS와 Windows에서는 데이터 작업자가 이 파일을 다시 가져오므로,
+        # 스크립트는 main 가드 안에서 학습합니다.
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        # coco8는 라이브러리와 함께 제공되는 8-이미지 데이터셋입니다. 다운로드합니다
-        # 첫 사용 시 URL에서 가져오므로 스크립트를 실행할 필요가 없습니다.
-        results = model.train(
-            data="coco8.yaml",
-            epochs=1,
-            imgsz=640,
-            batch=4,
-            device="cpu",
-        )
+            # coco8는 라이브러리와 함께 제공되는 8-이미지 데이터셋입니다. 다운로드합니다
+            # 첫 사용 시 URL에서 가져오므로 스크립트를 실행할 필요가 없습니다.
+            results = model.train(
+                data="coco8.yaml",
+                epochs=1,
+                imgsz=640,
+                batch=4,
+                device="cpu",
+            )
 
-        print(results["save_dir"])
-        print(results["best_checkpoint"])
+            print(results["save_dir"])
+            print(results["best_checkpoint"])
     - label: CLI
       language: bash
       code: |
@@ -85,14 +88,15 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val()은 객체가 아니라 일반 딕셔너리를 반환합니다.
-        metrics = model.val(data="coco8.yaml", device="cpu")
+            # val()은 객체가 아니라 일반 딕셔너리를 반환합니다.
+            metrics = model.val(data="coco8.yaml", device="cpu")
 
-        print(metrics["metrics/mAP50-95"])
-        print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+            print(metrics["metrics/mAP50-95"])
+            print(metrics["metrics/mAP50"])
+            print(metrics["metrics/mAP75"])
   export:
     - label: TorchScript
       language: python
@@ -115,7 +119,7 @@ snippets:
       code: |
         pip install "libreyolo[onnx]"
         libreyolo export model=yolo9-t format=onnx imgsz=640
-source_hash: c11b6bdbf0b6fdf1
+source_hash: eb6b18dedf1c5f4b
 ---
 
 ## 설치
@@ -138,7 +142,7 @@ pip install libreyolo
 
 <code-tabs name="train" />
 
-`data`는 데이터셋 YAML입니다. `coco8.yaml`는 라이브러리와 함께 제공되므로, 해당 스니펫이 붙여넣기한 그대로 실행됩니다. 번들되지 않은 이름은 경로로 읽힙니다. 데이터셋은 `~/datasets` 아래에서 해결되거나, 해당 변수가 설정된 경우 `LIBREYOLO_DATASETS_DIR` 아래에서 해결됩니다.
+`data`는 데이터셋 YAML입니다. `coco8.yaml`는 라이브러리와 함께 제공되므로, 해당 스니펫이 붙여넣기한 그대로 실행됩니다. 번들되지 않은 이름은 경로로 읽힙니다. `__main__` 가드는 macOS와 Windows에서 데이터 작업자가 스크립트를 다시 가져오기 때문에 들어 있습니다([문제 해결](/docs/troubleshooting) 참조). 데이터셋은 `~/datasets` 아래에서 해결되거나, 해당 변수가 설정된 경우 `LIBREYOLO_DATASETS_DIR` 아래에서 해결됩니다.
 
 실행은 `project/name`에 기록하며, 기본적으로 `runs/train` 아래의 디렉토리에 기록되고, 그 안에는 `weights/best.pt`와 `weights/last.pt`가 있습니다. `train()`는 `save_dir`, `best_checkpoint`, `last_checkpoint`, 에폭별 손실 및 에폭별 검증 지표를 포함하는 사전을 반환합니다. 학습된 체크포인트는 사전 학습된 것과 정확히 동일하게 `LibreYOLO()`를 통해 불러옵니다.
 

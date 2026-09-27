@@ -14,7 +14,7 @@ keywords:
   - model względnej głębi
   - depth anything libreyolo
   - gęsta predykcja głębi
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Predykcja mapy głębi
@@ -101,7 +101,7 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: e0612c59f9c999b4
+source_hash: 23e295da8ac303cf
 ---
 
 ## Definicja
@@ -122,7 +122,7 @@ skalą kolorów zamiast zdjęcia z adnotacjami.
 
 ## Modele
 
-Zadanie `depth` obsługuje sześć rodzin.
+Następujące rodziny obsługują `depth`.
 
 [Depth Anything V2](/docs/models/depth-anything-v2) łączy enkoder DINOv2 z
 dekoderem DPT i jest tutaj domyślnym rozwiązaniem ogólnego przeznaczenia.
@@ -139,10 +139,7 @@ reparametryzowalna sieć CNN destylowana z Depth Anything V2 Large, z drugim
 checkpointem, którego dekoder unika operacji gather i unfold dla kompilatorów
 NPU, które ich nie obsługują.
 
-[MiDaS](/docs/models/midas) to linia prac, która ustanowiła protokół względnej
-głębi zero-shot używany do oceny pozostałych rodzin. Jest to jedyna rodzina
-głębi, której LibreYOLO nie publikuje ponownie. Żądanie checkpointu pobiera
-oficjalny zasób z wydania GitHub autorów i sprawdza ustalony skrót SHA-256.
+[MiDaS](/docs/models/midas) to linia badań, która ustanowiła protokół względnej głębi zero-shot używany do oceny pozostałych rodzin. Checkpointy s i l są pobierane z kopii w repozytoriach LibreYOLO na licencji MIT wydawcy.
 
 [LibreMODUS](/docs/models/libremodus) obsługuje głębię jako jeden z celów modelu
 any-to-any zamiast dedykowanej głowicy. Wymaga zestawu zależności `modus` i
@@ -155,19 +152,22 @@ obsługuje sześć pozostałych zadań tej rodziny. Wymaga zestawu zależności
 `sensenova`, a jego wagi są ograniczone do użytku niekomercyjnego. Licencję
 podano na stronie modelu.
 
+[Marigold V2](/docs/models/marigold-v2) dodaje adaptery głębi oparte na dyfuzji z jawnymi kodowaniami głębi.
+
+[GTR](/docs/models/gtr) przewiduje głębię metryczną i zwraca ją jako względną
+odwrotność głębi, dzięki czemu `1 / result.depth_map.data` daje wartości w
+metrach dla scen podobnych do jego danych treningowych. Działa z pakietem
+bazowym, obsługuje trenowanie i eksport do ONNX i TorchScript.
+
 ## Predykcja
 
-Przy pierwszym użyciu wagi są pobierane z Hugging Face i zapisywane w lokalnej
-pamięci podręcznej, z wyjątkiem dwóch rodzin opisanych powyżej.
+Wagi są pobierane przy pierwszym użyciu i przechowywane w lokalnej pamięci podręcznej. Strony modeli opisują uwierzytelnianie i wymagania środowiska uruchomieniowego.
 
 <code-tabs name="predict" />
 
-Rozdzielczość wejściowa podlega ograniczeniom zależnym od rodziny. Depth
-Anything V2 i Depth Anything 3 opierają się na siatce fragmentów DINOv2,
-dlatego `imgsz` musi dzielić się bez reszty przez 14, co LibreYOLO sprawdza przed
-uruchomieniem. `Results.plot()` nie obsługuje tego zadania. Jest zdefiniowane
-wyłącznie dla normalnych powierzchni i krawędzi. Informacje o źródłach,
-streamingu i obsłudze wyników zawiera strona [predykcji](/docs/predict).
+Ograniczenia rozdzielczości wejścia zależą od rodziny. Depth Anything V2 i Depth Anything 3 opierają się na siatce patchy DINOv2, więc `imgsz` musi być podzielne przez 14, co LibreYOLO sprawdza przed uruchomieniem. `Results.plot()` renderuje wyniki głębi. Źródła, streaming i obsługę wyników opisano w sekcji [predykcji](/docs/predict).
+
+`DepthMap.encoding` ma domyślną wartość `inverse_depth` i może przyjmować `depth` lub `log_depth`. Walidacja interpretuje kodowanie przed dopasowaniem afinicznym. Kodowanie nie nadaje względnym predykcjom skali metrycznej.
 
 ## Format zbioru danych
 
@@ -203,10 +203,7 @@ zbiorów danych](/docs/reference/dataset-formats).
 
 ## Trenowanie
 
-Żadna rodzina głębi w LibreYOLO nie ma implementacji trenowania. Funkcja
-`train()` zgłasza `NotImplementedError` dla wszystkich sześciu. Strona każdego
-modelu wskazuje skrypt konwersji, który zmienia checkpoint wytrenowany w
-projekcie źródłowym na plik możliwy do wczytania przez LibreYOLO.
+[GTR](/docs/models/gtr) to jedyna rodzina głębi z obsługą trenowania: `train()` wywołane dla checkpointu `-depth` uruchamia przepis trenowania z projektu źródłowego, opisany na stronie modelu. W pozostałych rodzinach `train()` zgłasza `NotImplementedError`. Każda strona modelu podaje skrypt konwersji checkpointu wytrenowanego w projekcie źródłowym do postaci wczytywanej przez LibreYOLO.
 
 ## Walidacja
 

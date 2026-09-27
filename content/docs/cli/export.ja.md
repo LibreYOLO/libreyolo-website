@@ -9,7 +9,7 @@ keywords:
   - yolo onnx エクスポート
   - tensorrt エクスポート コマンド
   - libreyolo export 引数
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: コマンド
     value: libreyolo export
@@ -40,7 +40,7 @@ snippets:
         # ファクトリーはファイル拡張子で振り分けるので、エクスポート結果もチェックポイントと同じように読み込まれる
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: ef2ca20af3814109
+source_hash: 290b778a1060a760
 ---
 
 ## 概要
@@ -62,6 +62,7 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 | `batch` | `1` | エクスポート時のバッチサイズ |
 | `half` | `false` | FP16精度 |
 | `int8` | `false` | INT8量子化 |
+| `quantize` | | 精度を`16`（FP16）、`8`（INT8）、`32`（FP32）で指定。`half`と`int8`の代わりになります |
 | `dynamic` | `false` | 動的な入力形状（ONNX） |
 | `simplify` | `true` | ONNXグラフの簡略化 |
 | `nms` | `false` | NMSをモデルに埋め込みます。ONNXとCoreMLのみ |
@@ -95,7 +96,7 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 
 `nms=true`はONNXとCoreMLでは受け付けられ、それ以外のすべての形式では`nms_unsupported_format`で拒否されます。ONNXでは、埋め込まれたグラフがバッチ1に固定されるため`dynamic`を強制的にオフにし、そのことをstderrに出力します。CoreMLでは`conf`と`iou`は受け付けますが`max_det`は受け付けないので、デフォルト以外の`max_det`を`format=coreml nms=true`と一緒に渡すと`config_unsupported`で終了します。
 
-`half=true`と`int8=true`を同時に指定してもエラーにはなりません。INT8が優先され、`half`は破棄され、警告がstderrに出ます。
+`half=true`と`int8=true`を同時に指定してもエラーにはなりません。INT8が優先され、`half`は破棄され、警告がstderrに出ます。`half`または`int8`と食い違う`quantize`は`config_conflict`で終了します。
 
 `name`と`verify`は現時点ではRKNN用のオプションです。どちらかを別の形式と一緒に渡すと、無視されるのではなく`config_unsupported`で終了します。
 
@@ -116,3 +117,5 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 結果はstdoutに、進捗はstderrに出ます。終了コードは、成功が`0`、使い方や設定の誤りが`2`、モデルを読み込めない場合が`4`、未知の形式・エクスポート依存関係の不足・非対応の精度・拒否された埋め込みNMSの要求が`5`、その他のランタイム障害が`1`です。
 
 関連：[`libreyolo quantize`](/docs/cli/quantize)は、PyTorchの中にとどまり、デプロイ用の成果物ではなくチェックポイントを書き出します。
+
+TFLite INT8は、YOLO9またはYOLOXの物体検出で`int8=True`と`data=...`、`fraction=1.0`、`batch=1`、`dynamic=False`を使います。FP16には対応しません。両方の精度フラグを指定すると、CLIは`half`を破棄してINT8を優先します。エクスポートのJSON出力は、実際に決定した入力サイズを報告します。長方形で学習したチェックポイントから、正方形を前提とするファミリーを読み込んだ場合の正方形へのフォールバックも含みます。

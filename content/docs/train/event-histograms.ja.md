@@ -2,7 +2,7 @@
 title: Propheseeイベントヒストグラム
 seo_title: LibreYOLOでPropheseeイベントヒストグラムを使う
 description: >-
-  LibreYOLO v1.6の開発ガイド：Prophesee
+  LibreYOLO 1.6.0ガイド：Prophesee
   SDKのヒストグラム変換、ラベルの準備、YOLO9またはRF-DETRの学習、ONNX推論の実行方法を説明します。
 lead: 正負のイベント数を数値平面として検出器に入力し、イベント取得はProphesee、学習と推論はLibreYOLOで行います。
 keywords:
@@ -12,14 +12,13 @@ keywords:
   - イベントヒストグラム
   - イベントカメラ 物体検出
   - LibreYOLO v1.6
-verification: 入力ワークフローはv1.6開発実装と照合済みです。SDK APIはMetavision 5.3.1と照合済みです。SDKランタイム検証は保留中です。
+last_verified: 1.6.0
 snippets:
   install:
-    - label: 開発版をインストール
+    - label: インストール
       language: bash
       code: >
-        python -m pip install "libreyolo[rfdetr,onnx] @
-        git+https://github.com/LibreYOLO/libreyolo.git@event-histogram-input"
+        python -m pip install "libreyolo[rfdetr,onnx]"
   pack:
     - label: 既存の数値ヒストグラムを変換
       language: python
@@ -203,18 +202,14 @@ snippets:
         )
         runtime = LibreYOLO(onnx_path, device="cpu")
         result = runtime.predict("histogram.npy", save=True)
-source_hash: 02ffe9df882336f4
+source_hash: b2c42d4a6f43160f
 ---
 
-**利用可能性：`dev`向けの開発ドキュメントで、LibreYOLO v1.6でのリリースを予定しています。** ヒストグラム実装は、`dev`へのマージ待ちの[PR #865](https://github.com/LibreYOLO/libreyolo/pull/865)にあります。マージされるまでは、以下の機能ブランチ版をインストールしてください。この機能は現在のPyPIリリースには含まれていません。
-
-## 開発版をインストール
+## インストール
 
 検出器を実行するPython環境で、次を実行してください。
 
 <code-tabs name="install" />
-
-PR #865がマージされたら、このコマンドの`@event-histogram-input`を`@dev`に置き換えてください。v1.6のリリース後は、対応するPyPIバージョンをインストールしてください。
 
 アプリケーションですでにProphesee Metavision SDKを使っている場合は、イベント取得とデコードの設定をそのまま使ってください。準備済みの配列またはファイルを受け取る場合、LibreYOLOにSDKは必要ありません。SDKの生成側と検出器は別々の環境で実行し、`.npy`ファイルを受け渡せます。配列を直接渡すには、同じインタープリターに両方のパッケージが必要です。新規にSDKをインストールする場合は、提供元の[OpenEBインストールガイド](https://docs.prophesee.ai/stable/installation/index.html)に従ってください。
 
@@ -314,6 +309,8 @@ YOLO9はアスペクト比を維持し、ゼロでパディングします。RF-
 転移学習では、互換性のあるRGBチェックポイントを読み込み、`pretrained=False`を省略してヒストグラムデータセットで`train()`を呼び出してください。LibreYOLOは入力畳み込み層を2チャンネルに適応し、互換性のある重みを保持します。それらの重みでもイベントデータによる学習が必要です。チェックポイントには、入力層がランダムに初期化されたか、RGBから適応されたかが記録されます。
 
 現在の学習で必要なのは、1つのデバイスと固定の正のバッチサイズです。自動バッチ、CUDAグラフ学習、RF-DETRのマルチスケール学習、LoRA、蒸留、量子化ヒストグラムモデルは、このワークフローの対象外です。
+
+YOLO9とRF-DETRの物体検出は、どちらもこのプロファイルに対応します。RGBからの初期化では、元の入力カーネルの`1.5 * mean(R,G,B)`を各極性チャンネルに割り当てます。チェックポイントは完全な`input_profile`と`input_initialization`を保持します。単一デバイスで正の固定バッチサイズを使ってください。生イベントのデコード、ライブ動画、TTA、タイル分割、LoRA、蒸留、量子化には対応していません。
 
 ## 再読み込み、推論、検証
 

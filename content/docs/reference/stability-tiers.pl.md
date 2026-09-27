@@ -17,7 +17,7 @@ keywords:
   - grupy pokrycia LibreYOLO
   - g0 g1 g2 g3 g4
   - poziomy modeli
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Poziomy eksportu pochodzą z docs/adr/0011-export-support-tiers.md i
   libreyolo/export/support.py; grupy pokrycia i liczby rodzin z MODEL_GROUPS w
@@ -25,7 +25,7 @@ verification: >-
   libreyolo/models/base/model.py i libreyolo/cli/commands/train.py; inwentarz
   CLI z libreyolo/models/inventory.py; poziomy API z docstringów pakietów
   libreyolo/models/sam/, openvocab/ i vlm/ oraz kontraktów base.py, wszystko w
-  wersji 1.5.0. Etykiety grup widoczne dla czytelnika (Flagship, Core,
+  wersji 1.6.0. Etykiety grup widoczne dla czytelnika (Flagship, Core,
   Supported, Inference only, Museum, Sibling tier) są słownictwem tej witryny
   dla tych samych grup, pochodzącym z src/data/docs/registry.json.
 snippets:
@@ -43,7 +43,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: de545894b0d125e4
+source_hash: 6d8f3ec671e6cb02
 ---
 
 ## Poziomy obsługi eksportu
@@ -87,16 +87,20 @@ poziomu wybranego według kontraktu wywołania, a nie architektury.
 | Segmentacja sterowana podpowiedziami | `LibreSAM` | Przebieg w przód nie ma znaczenia bez przestrzennej podpowiedzi dla obrazu lub podpowiedzi koncepcji przekazanej podczas wywołania. Interaktywny i stanowy: jedno kodowanie, wiele podpowiedzi |
 | Detekcja z otwartym słownikiem | `LibreOpenVocab` | Detektory dyskryminacyjne warunkowane tekstem. Lista klas jest podpowiedzią ustawianą przez `set_classes` |
 | Wizyjno-językowy | `LibreVLM` | Model generatywny sterowany jak detektor. Lista klas jest podpowiedzią, a pewność polem zastępczym |
+| Wskazywanie | `LibreGround` | Obraz i instrukcja wskazująca są mapowane na co najwyżej jeden punkt na zapytanie |
+| Polityka robota | `LibreVLA` | Klatki z kamery i stan robota są mapowane na fragment przyszłych akcji |
 
-Trzy sąsiednie poziomy celowo nie rejestrują się w fabryce detektorów, dlatego
+Sąsiednie poziomy celowo nie rejestrują się w fabryce detektorów, dlatego
 `LibreYOLO("some-alias")` do nich nie prowadzi. Są wczytywane według aliasu
 rozmiaru i pobierane automatycznie, a nie rozpoznawane na podstawie checkpointu.
 
-Wszystkie cztery zwracają ten sam `Results`, więc kod dalszego przetwarzania
+Wszystkie zwracają ten sam `Results`, więc kod dalszego przetwarzania
 pozostaje bez zmian. Różnią się działającymi metodami: sąsiednie poziomy
-zgłaszają `NotImplementedError` dla `train()`, `val()` i `export()`, a poziomy
-SAM oraz otwartego słownika również dla `track()`. Strona każdego poziomu
-wymienia jego wykluczenia.
+zgłaszają `NotImplementedError` dla `train()`, `val()` i `export()`, z dwoma
+wyjątkami. `LibreVLM` dostraja model Qwen3-VL jako detektor, a `LibreVLA`
+trenuje i waliduje modele SmolVLA, ACT i Diffusion Policy. Poziomy SAM oraz
+otwartego słownika zgłaszają ten błąd również dla `track()`. Strona każdego
+poziomu wymienia jego wykluczenia.
 
 ## Grupy pokrycia
 
@@ -112,15 +116,15 @@ przez witrynę dla tej samej grupy w nagłówku strony modelu.
 | Grupa | Etykieta | Rodziny | Znaczenie |
 |---|---|---|---|
 | `g0` | Flagowa | 2 | Flagowe punkty odniesienia wymagane w pokryciu wspólnych funkcji |
-| `g1` | Rdzeń | 10 | Zbiór pokrycia detektorów obsługujących trenowanie |
-| `g2` | Obsługiwana | 14 | Dodatkowy zbiór pokrycia rodzin obsługujących trenowanie |
-| `g3` | Tylko inferencja | 35 | Rodziny bez implementacji trenowania |
+| `g1` | Rdzeń | 12 | Zbiór pokrycia detektorów obsługujących trenowanie |
+| `g2` | Obsługiwana | 19 | Dodatkowy zbiór pokrycia rodzin obsługujących trenowanie |
+| `g3` | Tylko inferencja | 44 | Rodziny bez implementacji trenowania |
 | `g4` | Muzeum | 5 | Historyczne rodziny objęte inferencją |
-| `s` | Sąsiedni poziom | 21 | Sąsiednie API (SAM, otwarty słownik, VLM, zero-shot) objęte osobno |
+| `s` | Sąsiedni poziom | 36 | Sąsiednie API (SAM, otwarty słownik, VLM, wskazywanie, zero-shot) objęte osobno |
 
-Łącznie jest to 87 rodzin w sześciu grupach. Samo `g3` zawiera więcej rodzin
-niż wszystkie pozostałe grupy razem, ponieważ większość rejestru stanowią linie
-tylko do inferencji i pokrycie muzealne, a nie aktywnie trenowane detektory.
+Łącznie jest to 118 rodzin w sześciu grupach. `g3` jest największą grupą,
+ponieważ znaczną część rejestru stanowią linie tylko do inferencji, a nie
+aktywnie trenowane detektory.
 
 Dla osoby wybierającej model grupa wskazuje, gdzie można oczekiwać uwagi
 inżynieryjnej, a nie dokładność rodziny. `g0` i `g1` są miejscami projektowania
@@ -140,19 +144,25 @@ możliwości właściwych dla formatu, nigdy wyłącznie z członkostwa w grupie
 Grupy klasyfikują rodziny, a nie zadania, dlatego przebieg pokrycia ograniczony
 do zadania jawnie podaje jego nazwę, na przykład „g1 detect”.
 
-Dwa miejsca odczytują grupę podczas działania, a nie tylko w testach.
+Trzy miejsca odczytują grupę podczas działania, a nie tylko w testach.
 `collect_model_inventory()` w `libreyolo/models/inventory.py` dołącza grupę do
-każdego wpisu wyświetlanego przez inwentarz CLI, a `pretrained=False` uruchamia
-specjalną ścieżkę ponownej inicjalizacji od zera tylko dla rodzin w `g0` i `g1`.
-Poza tymi dwiema grupami kontrola w `libreyolo/models/base/model.py` jest
+każdego wpisu wyświetlanego przez inwentarz CLI. `pretrained=False` uruchamia
+specjalną ścieżkę ponownej inicjalizacji od zera tylko dla rodzin w `g0`, `g1`
+i `g2`. Poza tymi grupami kontrola w `libreyolo/models/base/model.py` jest
 całkowicie pomijana, więc `pretrained=False` trafia do własnego `train()`
-rodziny jako zwykłe słowo kluczowe.
+rodziny jako zwykłe słowo kluczowe. Trenowanie z `classes=` lub
+`single_cls=True` jest przyjmowane tylko dla detekcji w `g0` i `g1`, a w
+pozostałych przypadkach zgłasza `ValueError`.
 
 ## Trenowanie
 
 Rodzina w `g3` lub `g4` nie ma implementacji trenowania, a wywołanie jej
 `train()` zgłasza błąd. Jest to właściwość kodu rodziny, a nie jej grupy. Grupa
 zapisuje ten fakt, zamiast go powodować.
+
+Spośród 118 rodzin trenowanie obsługuje 37: każda rodzina z `g0`, `g1` i `g2`
+oraz Qwen3-VL przez `LibreVLM`, a także SmolVLA, ACT i Diffusion Policy przez
+`LibreVLA`.
 
 Dla rodziny obsługującej trenowanie to, czy pojedynczy parametr augmentacji
 trafia do pipeline'u, jest osobną kwestią z własnym słownictwem trzech wartości:

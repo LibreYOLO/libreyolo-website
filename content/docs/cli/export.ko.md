@@ -11,7 +11,7 @@ keywords:
   - yolo onnx 변환 cli
   - tensorrt 내보내기 명령어
   - libreyolo export 인자
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 명령
     value: libreyolo export
@@ -42,7 +42,7 @@ snippets:
         # 팩토리는 파일 접미사를 보고 분기하므로 내보낸 파일이 체크포인트처럼 로드됩니다.
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: ef2ca20af3814109
+source_hash: 290b778a1060a760
 ---
 
 ## 요약
@@ -65,6 +65,7 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 | `batch` | `1` | 내보내기 배치 크기 |
 | `half` | `false` | FP16 정밀도 |
 | `int8` | `false` | INT8 양자화 |
+| `quantize` | | 정밀도를 `16` (FP16), `8` (INT8) 또는 `32` (FP32)로 지정합니다. `half`와 `int8`을 대체합니다 |
 | `dynamic` | `false` | 동적 입력 형상 (ONNX) |
 | `simplify` | `true` | ONNX 그래프 단순화 |
 | `nms` | `false` | 모델에 NMS를 내장합니다. ONNX와 CoreML만 해당 |
@@ -110,7 +111,8 @@ FP16으로 ONNX로 내보내면 `weights/LibreYOLO9s_fp16.onnx`가 됩니다. JS
 기본값이 아닌 `max_det`을 넘기면 `config_unsupported`로 종료합니다.
 
 `half=true`와 `int8=true`를 함께 쓰는 것은 오류가 아닙니다. INT8이 우선하고
-`half`는 무시되며 경고가 stderr로 나갑니다.
+`half`는 무시되며 경고가 stderr로 나갑니다. `half` 또는 `int8`과 일치하지 않는
+`quantize`는 `config_conflict`로 종료합니다.
 
 `name`과 `verify`는 현재 RKNN 옵션입니다. 둘 중 하나를 다른 형식과 함께 넘기면
 무시되지 않고 `config_unsupported`로 종료합니다.
@@ -146,3 +148,5 @@ FP16으로 ONNX로 내보내면 `weights/LibreYOLO9s_fp16.onnx`가 됩니다. JS
 
 관련 문서: [`libreyolo quantize`](/docs/cli/quantize)는 PyTorch에 머물면서 배포
 결과물이 아니라 체크포인트를 씁니다.
+
+TFLite INT8은 YOLO9 또는 YOLOX 탐지에서 `data=...`, `fraction=1.0`, `batch=1`, `dynamic=False`와 함께 `int8=True`를 사용합니다. FP16은 지원하지 않으며, 두 정밀도 플래그를 모두 지정하면 CLI는 INT8을 우선하고 `half`를 제외합니다. JSON 내보내기 출력은 직사각형 학습 체크포인트에서 다시 로드한 정사각형 전용 계열의 정사각형 폴백을 포함하여 실제 결정된 캔버스를 보고합니다.

@@ -1,9 +1,7 @@
 ---
 title: TFLite
 seo_title: Експорт до TFLite (LiteRT) з LibreYOLO
-description: >-
-  Експортуйте модель LibreYOLO до FlatBuffer .tflite через onnx2tf: статичні
-  форми, лише FP32, входи NHWC і сімейства, що перетворюються без помилок.
+description: 'Експорт моделі LibreYOLO у .tflite FlatBuffer через onnx2tf: статичні форми, FP32 і підтримувані шляхи INT8, входи NHWC і метадані виконання.'
 lead: >-
   TFLite є форматом FlatBuffer, який LiteRT виконує на мобільних і вбудованих
   цільових платформах. LibreYOLO експортує статичний граф ONNX, перетворює його
@@ -17,31 +15,26 @@ keywords:
   - tflite flatbuffer
   - вхід nhwc tflite
   - інференс на периферії
-last_verified: 1.5.0
+last_verified: "1.6.0"
 meta:
-  - label: Прапорець
-    value: export(format="tflite")
-    mono: true
-  - label: Створює
-    value: Один файл .tflite і супровідний файл метаданих .tflite.json
-  - label: Додатково
-    value: 'pip install "libreyolo[tflite]"'
-    mono: true
-  - label: Повторне завантаження
-    value: LibreYOLO("weights/LibreYOLO9t.tflite")
-    mono: true
-  - label: Форми
-    value: Лише статичні. dynamic=True відхиляється.
-  - label: Точність
-    value: Лише FP32. half=True та int8=True відхиляються.
-  - label: Потрібно
-    value: >-
-      Python 3.12 або новіша, оскільки onnx2tf 2.4.x не публікує пакунків для
-      старіших версій
-verification: >-
-  Перевірено за файлами libreyolo/export/tflite.py,
-  libreyolo/export/exporter.py, libreyolo/export/support.py,
-  libreyolo/backends/tflite.py і pyproject.toml у гілці dev.
+- label: Прапорець
+  value: export(format="tflite")
+  mono: true
+- label: Створює
+  value: Один файл .tflite і супровідний файл метаданих .tflite.json
+- label: Додатково
+  value: pip install "libreyolo[tflite]"
+  mono: true
+- label: Повторне завантаження
+  value: LibreYOLO("weights/LibreYOLO9t.tflite")
+  mono: true
+- label: Форми
+  value: Лише статичні. dynamic=True відхиляється.
+- label: Точність
+  value: FP32; INT8 для виявлення YOLO9 і YOLOX. FP16 відхиляється.
+- label: Потрібно
+  value: Python 3.12 або новіша, оскільки onnx2tf 2.4.x не публікує пакунків для старіших версій
+verification: Перевірено за файлами libreyolo/export/tflite.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/tflite.py і pyproject.toml у гілці dev.
 snippets:
   install:
     - label: Встановлення
@@ -82,13 +75,13 @@ snippets:
             format="tflite",
             imgsz=640,        # ціле число або (висота, ширина)
             batch=1,
-            simplify=True,    # onnxsim для проміжного файлу ONNX
-            output_path=None, # None створює weights/<stem>.tflite
-            verbose=False,    # True транслює журнал onnx2tf
+            simplify=True,    # onnxsim для проміжного ONNX
+            output_path=None, # None записує weights/<stem>.tflite
+            verbose=False,    # True виводить журнал onnx2tf
         )
 
-        # dynamic=True спричиняє ValueError: конвертеру потрібні статичні форми.
-        # half=True та int8=True відхиляються перед трасуванням.
+        # dynamic=True викликає ValueError: конвертер потребує статичних форм.
+        # FP16 відхиляється. INT8 потребує підтримуваного детектора й калібрувальних даних.
   run:
     - label: Через LibreYOLO
       language: python
@@ -141,7 +134,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: fa2deaa0ef6d9978
+source_hash: 3548d74e992bb76d
 ---
 
 ## Встановлення
@@ -170,6 +163,8 @@ source_hash: fa2deaa0ef6d9978
 містить сімейство, завдання, назви класів, розмір входу та схему пози. Сам
 FlatBuffer не має поля метаданих LibreYOLO, тому два файли переміщуються разом.
 
+Виявлення YOLO9 і YOLOX підтримує `int8=True` з `data=...`, `fraction=1.0`, `batch=1` і `dynamic=False`. Встановіть `onnx2tf[tensorflow]`. За відсутності калібрувальних даних використовується `coco8.yaml` із попередженням. Окремі виходи нормалізованих рамок і оцінок використовують незалежні масштаби квантування; під час розгортання зберігайте супровідні метадані `output_layout`. Деякі внутрішні оператори можуть залишатися з рухомою комою.
+
 ## Запуск артефакту
 
 <code-tabs name="run" />
@@ -191,8 +186,7 @@ NCHW у NHWC, коли інтерпретатор очікує вхід із к�
 Лише статичні форми. `dynamic=True` спричиняє `ValueError` перед трасуванням, а
 полотно експорту фіксується на значенні, до якого обчислено `imgsz`.
 
-Лише FP32. `half=True` та `int8=True` відхиляються під час валідації, тому цей
-експортер наразі не дає змоги розгорнути квантовану модель.
+`half=True` відхиляється. INT8 обмежено виявленням YOLO9 і YOLOX із батчем 1; інші сімейства й завдання INT8 викликають помилку.
 
 Тут охоплення вужче, ніж у форматах графів, і визначається вимірюваннями, а не
 сімейством. До валідованих комбінацій належать виявлення YOLO9, YOLOX і YOLO-NAS,

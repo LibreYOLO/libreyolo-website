@@ -16,7 +16,7 @@ keywords:
   - MHR
   - Momentum Human Rig
   - pose 3D
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -68,7 +68,7 @@ snippets:
 
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 5f47acceaf23ab64
+source_hash: 1b63435b35c57b10
 ---
 
 ## Installer
@@ -79,7 +79,7 @@ pip install libreyolo
 
 Cette commande installe uniquement l'adaptateur de LibreYOLO. SAM 3D Body
 lui-même n'est pas inclus, car sa licence n'autorise pas le code propre à
-LibreYOLO à en être dérivé\u00a0: clonez le dépôt upstream et installez vous-même
+LibreYOLO à en être dérivé : clonez le dépôt upstream et installez vous-même
 ses dépendances, puis indiquez à LibreYOLO le chemin du clone.
 
 ```bash
@@ -102,45 +102,41 @@ Vous pouvez aussi définir la variable d'environnement `SAM_3D_BODY_PATH` au
 lieu de transmettre `sam_3d_body_path` à chaque appel. Un utilisateur qui ne
 construit jamais cette famille ne déclenche jamais l'import et ne rencontre
 jamais la SAM License. Cette famille n'est intégrée ni à la fabrique
-`LibreYOLO()` ni à la commande CLI `libreyolo predict`\u00a0; `LibreSAM3DBody` est
+`LibreYOLO()` ni à la commande CLI `libreyolo predict` ; `LibreSAM3DBody` est
 le seul point d'entrée.
 
 ## Prédire
 
 <code-tabs name="predict" />
 
-Le téléchargement du checkpoint est protégé\u00a0: vous devez accepter la licence
+Le téléchargement du checkpoint est protégé : vous devez accepter la licence
 de Meta sur la page du modèle Hugging Face et vous authentifier avec
 `hf auth login` pour que le premier téléchargement aboutisse. L'inférence
-elle-même exige toujours un appareil CUDA\u00a0: l'estimateur upstream déplace son
+elle-même exige toujours un appareil CUDA : l'estimateur upstream déplace son
 batch vers le GPU sans effectuer de vérification, si bien qu'une machine sans
 GPU lève une erreur au lieu de se rabattre sur le CPU. `result.meshes` est une
 charge utile `Meshes`, alignée ligne par ligne avec `result.boxes` (une ligne
-par personne détectée)\u00a0: `vertices` et `joints3d` sont exprimés dans le système
+par personne détectée) : `vertices` et `joints3d` sont exprimés dans le système
 métrique et incluent déjà la translation estimée de la caméra, `joints2d` est
 exprimé en pixels sur l'image d'origine, et les rotations suivent la convention
 de MHR, avec des angles d'Euler plutôt qu'un format axe-angle. Consultez la
 [prédiction](/docs/predict) pour les sources, le streaming et la gestion des
 résultats.
 
+L'acquisition automatique nécessite `libreyolo[hf]` et l'accès au modèle à accès restreint. Les checkpoints locaux doivent être le répertoire de snapshot vérifié, ou son fichier `model.ckpt` inchangé accompagné des fichiers correspondants `model_config.yaml` et `LICENSE`. Les hashes épinglés et les inventaires de snapshots acceptés rejettent les ressources renommées, modifiées, liées ou supplémentaires. Les ressources MHR sont également épinglées. Gardez le snapshot local inchangé pendant sa lecture par le constructeur d'amont.
+
 ## Variantes
 
-Deux backbones utilisent le même modèle corporel MHR\u00a0: `d3` emploie un encodeur
+Deux backbones utilisent le même modèle corporel MHR : `d3` emploie un encodeur
 DINOv3 ViT-H/16+, tandis que `h` emploie l'encodeur ViT-H d'origine.
 
 ## Export
 
 <export-matrix />
 
-L'export du maillage corporel n'est pas implémenté\u00a0: LibreYOLO n'a pas encore
+L'export du maillage corporel n'est pas implémenté : LibreYOLO n'a pas encore
 défini de contrat de graphe exporté pour la tâche de maillage, notamment pour
 représenter la disposition des paramètres MHR hors de PyTorch.
-
-## Checkpoints
-
-Tous les fichiers de poids publiés pour cette famille.
-
-<checkpoint-table />
 
 ## Licence
 
@@ -149,7 +145,7 @@ Tous les fichiers de poids publiés pour cette famille.
 Le modèle corporel piloté par les checkpoints, MHR (Momentum Human Rig), est
 une version Meta distincte sous licence Apache-2.0. À l'exécution, LibreYOLO
 récupère son asset TorchScript depuis la version publique de MHR et le met en
-cache localement\u00a0; ce fichier n'est pas hébergé par LibreYOLO et relève de ses
+cache localement ; ce fichier n'est pas hébergé par LibreYOLO et relève de ses
 propres conditions Apache-2.0, pas de la SAM License.
 
 </provenance-box>

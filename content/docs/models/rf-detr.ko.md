@@ -4,8 +4,8 @@ families:
   - rfdetr
 seo_title: 'RF-DETR: MIT 기반 학습, 파인튜닝 및 내보내기'
 description: >-
-  LibreYOLO에서 RF-DETR로 탐지, 인스턴스 분할, 자세 추정, 회전 박스를 수행합니다. 모두 MIT 라이선스로 설치, 예측,
-  학습, 검증, 내보내기합니다.
+  LibreYOLO에서 RF-DETR로 탐지, 인스턴스 분할, 자세 추정, 회전 박스를 수행합니다. 설치, 예측, 학습, 검증, 내보내기를
+  다룹니다.
 lead: >-
   조밀 그리드 대신 고정된 객체 집합을 예측하는 detection transformer이므로 추론 시 NMS가 필요하지 않습니다.
   LibreYOLO는 네 가지 작업을 지원합니다.
@@ -17,7 +17,7 @@ keywords:
   - 인스턴스 분할
   - 자세 추정
   - 회전 바운딩 박스
-last_verified: 1.5.0
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -92,7 +92,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -147,7 +147,7 @@ snippets:
     - label: 내보낸 파일 사용
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # 팩토리는 파일 접미사에 따라 라우팅하므로 내보낸 아티팩트도
         # 다른 체크포인트처럼 불러와 동일한 Results 객체를 반환합니다.
@@ -167,7 +167,7 @@ snippets:
 
         # 연결하기 전에 시그니처를 확인합니다.
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -177,7 +177,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 8c464aa759131694
+source_hash: 3238696a4e1ab6c2
 ---
 
 ## 설치
@@ -196,9 +196,11 @@ pip install "libreyolo[rfdetr]"
 
 반환되는 `Results` 객체는 모든 계열이 반환하는 것과 같으므로 탐지기를 바꾸려면 한 줄만 변경하면 됩니다. `conf`와 `max_det`은 쿼리 선택을 필터링하며 조정할 NMS 단계가 없습니다. 소스, 스트리밍, 결과 처리는 [예측](/docs/predict)을 참조합니다.
 
+탐지, 분할, 회전 바운딩 박스 경로는 안티앨리어싱 없이 부동소수점 OpenCV 이중 선형 크기 조정을 사용하며, 자세 추정은 안티앨리어싱 크기 조정을 유지합니다. 직사각형 `imgsz=(height, width)`는 작업의 패치/윈도 그리드 조건을 충족해야 합니다. 체크포인트 목록에는 UI 탐지기도 포함됩니다. [이벤트 히스토그램](/docs/train/event-histograms)은 기록된 입력 프로파일을 사용합니다.
+
 ## 변형
 
-네 가지 크기와 하나의 구조를 공유하는 네 가지 작업이 있습니다. 분할, 자세 추정, 회전 박스는 다른 헤드와 함께 탐지 디코더를 재사용하므로 같은 인수를 받습니다. 크기별 매개변수 수는 비슷하며 주로 입력 해상도가 다릅니다.
+`n`부터 `l`까지 네 가지 탐지 크기와 하나의 구조를 공유하는 네 가지 작업이 있습니다. 분할, 자세 추정, 회전 박스는 다른 헤드와 함께 탐지 디코더를 재사용하므로 같은 인수를 받습니다. 분할에는 `x`와 `xx`가 추가되고, 자세 추정은 `x` 크기로만 제공됩니다. 크기별 매개변수 수는 비슷하며 주로 입력 해상도가 다릅니다.
 
 <benchmark-table task="detect" />
 
@@ -206,7 +208,7 @@ pip install "libreyolo[rfdetr]"
 
 ## 학습
 
-네 작업 모두 공개된 체크포인트에서 학습을 시작합니다. RF-DETR의 네이티브 학습기가 무시하는 인수에 `pretrained`가 포함되므로 여기서 `pretrained=False`를 전달해도 무작위로 초기화된 모델을 얻지 못합니다.
+네 작업 모두 공개된 체크포인트에서 학습을 시작합니다. `pretrained=False`는 대신 백본을 포함한 전체 네트워크를 다시 초기화하고 처음부터 학습합니다.
 
 <code-tabs name="train" />
 
@@ -214,9 +216,11 @@ pip install "libreyolo[rfdetr]"
 
 데이터셋, 증강, 다중 GPU, 로거는 [학습](/docs/train)을 참조합니다.
 
+새 실행의 기본값은 `output_dir=None`이며, `exist_ok=False`에 따라 번호가 증가하는 `runs/train/rfdetr_exp`로 결정됩니다. 재개된 실행은 체크포인트의 실행 디렉터리에 계속 기록합니다. 다중 클래스 자세 데이터셋은 클래스 인덱스 또는 이름을 키로 하는 `kpt_names`를 사용하며, 빈 목록은 바운딩 박스만 있는 클래스를 나타냅니다. 예측은 키포인트를 `kpt_shape`에 맞게 패딩하며, 키포인트 mAP 적합도는 바운딩 박스만 있는 클래스를 평가하지 않습니다.
+
 ## 검증
 
-`val()`은 학습에 사용한 형식의 데이터셋을 대상으로 측정한 정밀도, 재현율, mAP 50, mAP 50-95를 포함하는 `metrics/` 키 사전을 반환합니다.
+`val()`은 학습에 사용한 형식의 데이터셋을 대상으로 측정한 mAP 50, mAP 50-95, mAP 75, COCO 평균 재현율을 포함하는 `metrics/` 키 사전을 반환합니다.
 
 <code-tabs name="val" />
 

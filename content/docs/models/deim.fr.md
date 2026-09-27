@@ -20,7 +20,7 @@ keywords:
   - DETR
   - détection d'objets temps réel
   - détection d'objets python
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -141,7 +141,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 6edaac5f05abaabe
+source_hash: 8dc052b83d5f1ac0
 ---
 
 ## Installation
@@ -173,6 +173,8 @@ remplacer le détecteur par un autre tient en une seule ligne. `conf` et
 pas d'étape de NMS à régler, et `iou` est accepté mais inutilisé. Voir
 [la prédiction](/docs/predict) pour les sources, le streaming et le traitement
 des résultats.
+
+DEIM accepte une valeur rectangulaire `imgsz=(height, width)` pour la prédiction. DEIMv2 rejette explicitement les demandes de prédiction/validation rectangulaires. Cela n'implique pas la prise en charge de l'entraînement ou de l'export rectangulaires.
 
 ## Variantes
 
@@ -224,6 +226,8 @@ démarrage du run.
 
 Voir [l'entraînement](/docs/train) pour les datasets, l'augmentation, le
 multi-GPU et les loggers.
+
+DEIM active AMP par défaut avec `amp_dtype="float16"`. Passez `amp=False` pour un entraînement FP32.
 
 ## Valider
 

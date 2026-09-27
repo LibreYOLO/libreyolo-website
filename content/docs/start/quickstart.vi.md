@@ -14,7 +14,7 @@ keywords:
   - huấn luyện libreyolo
   - xuất mô hình libreyolo
   - ví dụ yolo python
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Cài đặt
     value: pip install libreyolo
@@ -63,23 +63,30 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO9t.pt")
 
-        # coco8 là dataset 8 ảnh đi kèm thư viện. Nó được tải
-        # từ URL ở lần dùng đầu tiên nên không cần chạy script nào.
-        results = model.train(
-            data="coco8.yaml",
-            epochs=1,
-            imgsz=640,
-            batch=4,
-            device="cpu",
-        )
+        # Worker nạp dữ liệu import lại tệp này trên macOS và Windows, nên
+        script
 
-        print(results["save_dir"])
-        print(results["best_checkpoint"])
+        # đặt phần huấn luyện dưới main guard.
+
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
+
+            # coco8 là dataset 8 ảnh đi kèm thư viện. Nó được tải
+            # từ URL ở lần dùng đầu tiên nên không cần chạy script nào.
+            results = model.train(
+                data="coco8.yaml",
+                epochs=1,
+                imgsz=640,
+                batch=4,
+                device="cpu",
+            )
+
+            print(results["save_dir"])
+            print(results["best_checkpoint"])
     - label: CLI
       language: bash
       code: |
@@ -90,14 +97,15 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() trả về dict thuần túy, không phải object.
-        metrics = model.val(data="coco8.yaml", device="cpu")
+            # val() trả về dict thuần túy, không phải object.
+            metrics = model.val(data="coco8.yaml", device="cpu")
 
-        print(metrics["metrics/mAP50-95"])
-        print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+            print(metrics["metrics/mAP50-95"])
+            print(metrics["metrics/mAP50"])
+            print(metrics["metrics/mAP75"])
   export:
     - label: TorchScript
       language: python
@@ -120,7 +128,7 @@ snippets:
       code: |
         pip install "libreyolo[onnx]"
         libreyolo export model=yolo9-t format=onnx imgsz=640
-source_hash: c11b6bdbf0b6fdf1
+source_hash: eb6b18dedf1c5f4b
 ---
 
 ## Cài đặt
@@ -153,7 +161,9 @@ sách ảnh hoặc `stream=True` trả về danh sách hoặc generator của ch
 <code-tabs name="train" />
 
 `data` là YAML dataset. `coco8.yaml` đi kèm thư viện nên snippet chạy nguyên
-như đã dán; tên không được bundle sẽ được đọc như một đường dẫn. Dataset được
+như đã dán; tên không được bundle sẽ được đọc như một đường dẫn. Guard
+`__main__` có mặt vì worker nạp dữ liệu import lại script trên macOS và Windows;
+xem [khắc phục sự cố](/docs/troubleshooting). Dataset được
 phân giải dưới `~/datasets` hoặc dưới `LIBREYOLO_DATASETS_DIR` khi biến này
 được đặt.
 

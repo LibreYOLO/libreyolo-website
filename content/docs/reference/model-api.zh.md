@@ -46,7 +46,7 @@ snippets:
         # stream=True 返回一个生成器，每帧或每张图像一个 Results
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: da0776970ded8716
+source_hash: ccecee93e9744550
 ---
 
 ## 构造
@@ -138,6 +138,7 @@ model.track(
     source,
     *,
     track_conf=0.25,
+    conf=None,
     iou=0.45,
     imgsz=None,
     classes=None,
@@ -145,15 +146,18 @@ model.track(
     save=False,
     show=False,
     vid_stride=1,
+    fps=30.0,
+    color_format="auto",
     output_path=None,
     tracker="bytetrack",
     tracker_config=None,
     augment=False,
+    persist=False,
     **tracker_kwargs,
 ) -> Generator[Results, None, None]
 ```
 
-每帧产出一个设置了 `track_id` 的 `Results`。`tracker` 取 `"bytetrack"`、`"botsort"`、`"ocsort"` 或 `"deepocsort"`，给了 `tracker_config` 时它会被忽略，因为配置类型决定用哪个跟踪器。`track_conf` 对 ByteTrack 和 BoT-SORT 映射到 `track_high_thresh`，对 OC-SORT 和 Deep OC-SORT 映射到 `det_thresh`。`output_path` 默认是 `runs/track/<video_stem>.mp4`。
+每帧产出一个设置了 `track_id` 的 `Results`。`tracker` 取 `"bytetrack"`、`"botsort"`、`"ocsort"` 或 `"deepocsort"`（可以带 `.yaml` 后缀），或者一个自定义跟踪器实例，给了 `tracker_config` 时它会被忽略，因为配置类型决定用哪个跟踪器。`track_conf` 对 ByteTrack 和 BoT-SORT 映射到 `track_high_thresh`，对 OC-SORT 和 Deep OC-SORT 映射到 `det_thresh`。传入 `conf` 时，它就是检测阈值，和 `predict()` 中一样。`persist=True` 会保留上一次调用的跟踪器，用于逐帧循环。`output_path` 默认是 `runs/track/<video_stem>.mp4`。
 
 ## val
 
@@ -173,11 +177,14 @@ model.val(
     verbose=True,
     *,
     plots=None,
+    project=None,
+    name=None,
+    exist_ok=False,
     **kwargs,
 ) -> Dict
 ```
 
-返回一个指标字典，键取决于任务；检测返回 `metrics/precision`、`metrics/recall`、`metrics/mAP50` 和 `metrics/mAP50-95`。`imgsz` 接受表示正方形的整数或一个 `(height, width)` 元组，默认使用模型的原生输入尺寸。`plots` 是 `save_plots` 的别名。`allow_download_scripts` 控制数据集 YAML 可能在 `download` 字段里携带的内嵌 Python。
+返回一个指标字典，键取决于任务；检测返回 `metrics/precision`、`metrics/recall`、`metrics/mAP50` 和 `metrics/mAP50-95`。`imgsz` 接受表示正方形的整数或一个 `(height, width)` 元组，默认使用模型的原生输入尺寸。`data=None` 时在检查点训练配置里保存的数据集上验证，没有保存数据集时抛错，已发布的权重就是这种情况。`project`、`name` 和 `exist_ok` 把输出目录设为 `project/name`，除非 `exist_ok=True`，否则自动递增。`plots` 是 `save_plots` 的别名。`allow_download_scripts` 控制数据集 YAML 可能在 `download` 字段里携带的内嵌 Python。
 
 `faster_coco_eval` 通过 `**kwargs` 接受，默认为 `True`，包没安装时回退到 pycocotools。实际运行的后端记录在 `model.last_eval_backend` 上。
 
@@ -209,6 +216,7 @@ model.export(format="onnx", **kwargs) -> str
 | `dynamic` | `True` | 启用动态轴 |
 | `half` | `False` | FP16 精度 |
 | `int8` | `False` | INT8 精度 |
+| `quantize` | `None` | 精度：`16`、`8` 或 `32`，用来替代 `half` 或 `int8` |
 | `batch` | `1` | 固化进产物的批大小 |
 | `device` | `None` | 用于 trace 的设备 |
 | `data` | `None` | 用于 INT8 校准的 data.yaml |
@@ -216,7 +224,7 @@ model.export(format="onnx", **kwargs) -> str
 | `allow_download_scripts` | `False` | 允许数据集 YAML 下载中的内嵌 Python |
 | `verbose` | `False` | 导出器的详细日志 |
 
-被禁止的组合会在 trace 之前的预检里抛出 `NotImplementedError`。覆盖情况及其规则见[导出矩阵](/docs/reference/export-matrix)页面。存在活跃的 LoRA 适配器时，它们会被折叠进稠密权重，而这个合并只在所有请求拒绝之后才发生。
+被禁止的组合会在 trace 之前的预检里抛出 `NotImplementedError`。格式用不到的选项会发出 `Unknown <format> export arguments (ignored)` 警告，导出继续进行。覆盖情况及其规则见[导出矩阵](/docs/reference/export-matrix)页面。存在活跃的 LoRA 适配器时，它们会被折叠进稠密权重，而这个合并只在所有请求拒绝之后才发生。
 
 ## save
 

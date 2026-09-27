@@ -4,7 +4,7 @@ seo_title: "Object detection in LibreYOLO"
 description: "Detect objects as axis-aligned boxes in LibreYOLO: the families that serve the task, the label format, and the predict, train, validate and export calls."
 lead: "Object detection locates every object instance in an image and returns an axis-aligned rectangle, a class label and a score for each one. The task key is detect."
 keywords: [object detection python, detect objects in image, bounding box detection, MIT object detection library, YOLO alternative, train object detector]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -129,11 +129,11 @@ a `Boxes` object yields one-row slices, so `box.cls`, `box.conf` and
 
 ## Models
 
-Twelve families both train and predict: [YOLOv9](/docs/models/yolov9),
+The following families train and predict: [YOLOv9](/docs/models/yolov9),
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
 [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine),
 [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr),
-[YOLO-NAS](/docs/models/yolo-nas),
+[GTR](/docs/models/gtr), [YOLO-NAS](/docs/models/yolo-nas),
 [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7),
 [RTMDet](/docs/models/rtmdet) and [PicoDet](/docs/models/picodet). YOLOv9 and
 RF-DETR are the two flagship families, and features land on them first. RF-DETR
@@ -162,10 +162,14 @@ plus the vision-language families
 [Florence-2](/docs/models/florence-2), [Kosmos-2](/docs/models/kosmos-2),
 [Qwen3-VL](/docs/models/qwen3-vl), [SmolVLM2](/docs/models/smolvlm2),
 [InternVL3](/docs/models/internvl3), [LFM2-VL](/docs/models/lfm2-vl),
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream),
+[North Micro Vision](/docs/models/northmicrovision),
 [LocateAnything](/docs/models/locate-anything),
 [SenseNova-Vision](/docs/models/sensenova-vision) and
 [LibreMODUS](/docs/models/libremodus). These load through their own factory and
 extras; each model page carries the exact call.
+
+[PP-YOLOE](/docs/models/ppyoloe) and [TinyFormer](/docs/models/tinyformer) also support detection training.
 
 ## Predict
 
@@ -233,6 +237,8 @@ tolerates will diverge a transformer one, so take the value from the model page
 rather than from another family's example. A family can also ignore an argument
 outright, and its page lists which. See [training](/docs/train) for datasets,
 augmentation, multi-GPU and loggers.
+
+Use `classes=` to retain selected original dataset IDs; `single_cls=True` collapses retained labels to class 0. See [hyperparameters](/docs/train/hyperparameters) for supported families and validation inheritance.
 
 ## Validate
 

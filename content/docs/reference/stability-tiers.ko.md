@@ -14,13 +14,13 @@ keywords:
   - libreyolo 커버리지 그룹
   - g0 g1 g2 g3 g4
   - 모델 등급
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   docs/adr/0011-export-support-tiers.md 및 libreyolo/export/support.py에서 계층 내보내기;
   libreyolo/models/registry.py MODEL_GROUPS에서 커버리지 그룹 및 계열별 개수;
   libreyolo/models/base/model.py 및 libreyolo/cli/commands/train.py에서 처음부터 만드는
   게이트; libreyolo/models/inventory.py에서 CLI 인벤토리 읽기; libreyolo/models/sam/,
-  openvocab/ 및 vlm/ 패키지 도큐스트링과 base.py 계약에서 API 계층, 모두 v1.5.0 기준. 사용자용 그룹
+  openvocab/ 및 vlm/ 패키지 도큐스트링과 base.py 계약에서 API 계층, 모두 v1.6.0 기준. 사용자용 그룹
   레이블(Flagship, Core, Supported, Inference only, Museum, Sibling tier)은 동일한 그룹에
   대한 사이트 자체 용어로, src/data/docs/registry.json.에서 가져옴
 snippets:
@@ -38,7 +38,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: de545894b0d125e4
+source_hash: 6d8f3ec671e6cb02
 ---
 
 ## 내보내기 지원 등급
@@ -69,10 +69,12 @@ source_hash: de545894b0d125e4
 | 프롬프트 가능 분할 | `LibreSAM` | 전방 전달은 호출 시 제공되는 이미지별 공간 또는 개념 프롬프트 없이는 의미가 없습니다. 대화형 및 상태 유지: 한 번 인코딩하고 여러 번 프롬프트 사용 |
 | 오픈 보캐뷸러리 탐지 | `LibreOpenVocab` | 텍스트 조건 차별 탐지기. 클래스 목록은 `set_classes`에 의해 설정된 프롬프트입니다. |
 | 비전-언어 | `LibreVLM` | 검출기로 작동하는 생성 모델. 클래스 목록은 프롬프트이고 신뢰도는 자리 표시자입니다. |
+| 그라운딩 | `LibreGround` | 이미지와 참조 지시문이 쿼리당 최대 한 개의 점으로 매핑됩니다. |
+| 로봇 정책 | `LibreVLA` | 카메라 프레임과 로봇 상태가 미래 동작의 청크로 매핑됩니다. |
 
-세 형제 계층은 고의로 탐지기 팩토리에 등록하지 않기 때문에 `LibreYOLO("some-alias")`가 그들에게 도달하지 않습니다. 그들은 체크포인트 스니핑이 아니라 크기 별칭과 자동 다운로드로 로드합니다.
+형제 계층은 고의로 탐지기 팩토리에 등록하지 않기 때문에 `LibreYOLO("some-alias")`가 그들에게 도달하지 않습니다. 그들은 체크포인트 스니핑이 아니라 크기 별칭과 자동 다운로드로 로드합니다.
 
-네 가지 모두 동일하게 `Results`를 반환하므로, 이후 코드에는 변화가 없습니다. 차이점은 어떤 메서드가 작동하는지인데, 형제 계층에서는 `train()`, `val()` 및 `export()`에 대해 `NotImplementedError`를 발생시키고, SAM 및 오픈 보캐뷸러리 계층에서는 `track()`에 대해서도 발생시킵니다. 각 계층 페이지에는 자체 제외 항목이 나열되어 있습니다.
+모든 계층이 동일하게 `Results`를 반환하므로, 이후 코드에는 변화가 없습니다. 차이점은 어떤 메서드가 작동하는지인데, 형제 계층에서는 `train()`, `val()` 및 `export()`에 대해 `NotImplementedError`를 발생시키며, 예외는 두 가지입니다. `LibreVLM`은 Qwen3-VL을 검출기로 파인튜닝하고, `LibreVLA`는 SmolVLA, ACT, Diffusion Policy를 학습하고 검증합니다. SAM 및 오픈 보캐뷸러리 계층에서는 `track()`에 대해서도 발생시킵니다. 각 계층 페이지에는 자체 제외 항목이 나열되어 있습니다.
 
 ## 보장 그룹
 
@@ -81,23 +83,25 @@ source_hash: de545894b0d125e4
 | 그룹 | 레이블 | 계열들 | 의미 |
 |---|---|---|---|
 | `g0` | 주력 | 2 | 공유 기능 범위에서 필요한 주력 앵커 |
-| `g1` | 핵심 | 10 | 학습 가능한 검출기 커버리지 세트 |
-| `g2` | 지원됨 | 14 | 추가로 학습 가능한 계열 보장 설정 |
-| `g3` | 추론만 | 35 | 학습 실행이 없는 계열 |
+| `g1` | 핵심 | 12 | 학습 가능한 검출기 커버리지 세트 |
+| `g2` | 지원됨 | 19 | 추가로 학습 가능한 계열 보장 설정 |
+| `g3` | 추론만 | 44 | 학습 실행이 없는 계열 |
 | `g4` | 박물관 | 5 | 추론 범위를 가진 역사적 계열 |
-| `s` | 형제 자매 등급 | 21 | 형제 APIs(SAM, 오픈 보캡, VLM, 제로샷)를 별도로 다룸 |
+| `s` | 형제 자매 등급 | 36 | 형제 APIs(SAM, 오픈 보캡, VLM, 그라운딩, 제로샷)를 별도로 다룸 |
 
-그것은 여섯 그룹에 걸쳐 87가구입니다. `g3` 혼자만으로도 다른 모든 그룹을 합친 것보다 더 많은 가구를 보유하고 있습니다. 이는 대부분의 등록부가 적극적으로 학습된 탐지기보다는 추론 전용 계통과 박물관 소장 정보를 포함하기 때문입니다.
+여섯 그룹에 걸쳐 모두 118개 계열입니다. `g3`가 가장 큰 그룹인데, 등록부의 상당 부분이 적극적으로 학습되는 탐지기가 아니라 추론 전용 계통이기 때문입니다.
 
 모델을 선택하는 독자를 위해, 그룹은 어떤 곳에 엔지니어링의 주의를 기대할 수 있는지를 알려주지, 계열의 정확도가 어떤지에 대해서는 말하지 않습니다. `g0`와 `g1`는 새로운 기능이 설계되고 처음 적용되는 곳이며, `g2`는 CI에서 녹색으로 유지되지만 같은 릴리스 주기에서가 아니라 기회가 있을 때 기능이 적용됩니다. `g3`는 한계를 나타내는 것이 아니라 부재를 나타냅니다: 예측, 검증, 그리고 계열가 지원하는 경우에는 내보내기가 모두 여전히 작동하며, `train()`는 `g3` 또는 `g4` 계열에서 `NotImplementedError`에 이유를 명시하고 무언가를 조용히 부분적으로 수행하지 않습니다. `s` 계열는 전혀 이러한 절충 조건에 놓이지 않습니다. 왜냐하면 `LibreYOLO()` 대신 자체 팩토리를 통해 로드되기 때문입니다. 체크포인트 파일 이름을 읽을 때 그룹이 작업, 계열 및 크기와 함께 어떻게 맞는지에 대해서는 [핵심 개념](/docs/concepts)을 참조하십시오.
 
 그룹 자체만으로 사용자 대상 기능을 허용하거나 제한하지 않습니다. 지원은 계열이 구현한 API와 형식별 기능 검사에서 제공되며, 그룹 구성원 여부만으로 제공되지 않습니다. 그룹은 작업이 아니라 계열을 분류하므로 작업 범위의 커버리지 실행은 'g1 detect'와 같이 작업을 명시적으로 이름 짓습니다.
 
-두 곳은 테스트에서만 아니라 런타임에 그룹을 읽습니다. `collect_model_inventory()`에서 `libreyolo/models/inventory.py`는 CLI 인벤토리가 출력하는 모든 항목에 그룹을 연결하고, `pretrained=False`는 `g0` 및 `g1`의 계열에 대해서만 처음부터 특수 재초기화 경로를 트리거합니다. 이 두 그룹 외부에서는 `libreyolo/models/base/model.py`의 검사가 완전히 건너뛰어지므로 `pretrained=False`는 계열 고유의 `train()`에 일반 키워드로 도달합니다.
+세 곳은 테스트에서만 아니라 런타임에 그룹을 읽습니다. `libreyolo/models/inventory.py`의 `collect_model_inventory()`는 CLI 인벤토리가 출력하는 모든 항목에 그룹을 연결합니다. `pretrained=False`는 `g0`, `g1`, `g2`의 계열에 대해서만 처음부터 특수 재초기화 경로를 트리거합니다. 이 그룹들 외부에서는 `libreyolo/models/base/model.py`의 검사가 완전히 건너뛰어지므로 `pretrained=False`는 계열 고유의 `train()`에 일반 키워드로 도달합니다. `classes=` 또는 `single_cls=True`를 사용한 학습은 `g0` 및 `g1` 탐지에서만 허용되며 그 외에는 `ValueError`를 발생시킵니다.
 
 ## 학습
 
 `g3` 또는 `g4`의 계열은 학습 구현이 없으며, 그 중 하나에서 `train()`를 호출하면 발생합니다. 이는 계열 코드의 속성이며, 그룹의 속성이 아닙니다. 그룹은 이를 발생시키는 것이 아니라 사실을 기록합니다.
+
+118개 계열 중 37개가 학습을 지원합니다: 모든 `g0`, `g1`, `g2` 계열, 그리고 `LibreVLM`을 통한 Qwen3-VL과 `LibreVLA`를 통한 SmolVLA, ACT, Diffusion Policy입니다.
 
 학습을 하는 계열의 경우, 개별 증강 노브가 파이프라인에 도달하는지는 그 자체의 세 가지 값 어휘, `used`, `gated_by_mosaic` 및 `ignored`를 가진 별도의 질문입니다. [증강 매트릭스](/docs/reference/augmentation-matrix)를 참조하십시오.
 

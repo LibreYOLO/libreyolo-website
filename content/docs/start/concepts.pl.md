@@ -20,7 +20,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Zadania kanoniczne
-    value: 17
+    value: 20
   - label: Poziomy obsługi
     value: 'Flagowy, Rdzeń, Obsługiwany, Tylko inferencja, Muzeum, Sąsiedni poziom'
 snippets:
@@ -51,12 +51,12 @@ snippets:
         # "pose", "det" do "detect", a "semantic-segmentation" do "semantic".
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
         print(model.task)
-source_hash: 23d045463a6a8411
+source_hash: c745a3c602db00ea
 ---
 
 ## Zadania
 
-Zadanie określa, co zwraca model. LibreYOLO ma siedemnaście kanonicznych nazw
+Zadanie określa, co zwraca model. LibreYOLO ma dwadzieścia kanonicznych nazw
 zadań, a każda odpowiada polu obiektu `Results`, które zawiera wynik.
 
 | Zadanie | Zwraca |
@@ -72,12 +72,15 @@ zadań, a każda odpowiada polu obiektu `Results`, które zawiera wynik.
 | `depth` | Gęstą mapę względnej odwrotności głębi |
 | `normal` | Gęste pole jednostkowych wektorów normalnych powierzchni |
 | `edge` | Gęstą mapę prawdopodobieństwa krawędzi |
+| `albedo` | Gęstą mapę albedo w liniowym RGB, czyli kolor powierzchni bez oświetlenia |
 | `restore` | Przywrócony obraz RGB po usunięciu rozmycia, odszumieniu lub zwiększeniu rozdzielczości |
 | `matte` | Miękką mapę pierwszego planu od 0 do 1 do usuwania tła |
 | `ocr` | Czworokąty tekstu z transkrypcjami w kolejności czytania |
 | `embed` | Wektor znormalizowany normą L2, którego iloczyn skalarny mierzy zgodność |
 | `gaze` | Kierunek spojrzenia dla każdej wykrytej twarzy |
 | `mesh` | Ustawione w pozie ciało 3D każdej wykrytej osoby |
+| `detect3d` | Ramki 3D we współrzędnych kamery wraz z klasą i pewnością |
+| `act` | Fragment akcji robota przewidziany na podstawie klatek z kamery i stanu robota |
 
 Są to nazwy występujące w metadanych checkpointów i nazwach plików. Znane
 aliasy są akceptowane wszędzie tam, gdzie przekazuje się zadanie, i

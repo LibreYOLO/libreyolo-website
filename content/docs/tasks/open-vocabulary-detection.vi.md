@@ -2,14 +2,12 @@
 title: Phát hiện với từ vựng mở
 seo_title: Phát hiện với từ vựng mở trong LibreYOLO
 description: >-
-  Phát hiện đối tượng từ từ vựng văn bản trong LibreYOLO. Nạp Grounding DINO,
-  OWLv2, OMDet-Turbo hoặc OV-DEIM qua LibreOpenVocab và đặt lớp đối tượng tại
-  runtime.
+  Phát hiện đối tượng từ từ vựng văn bản trong LibreYOLO. Nạp Grounding DINO, OWLv2, OMDet-Turbo hoặc OV-DEIM
+  qua LibreOpenVocab và đặt lớp đối tượng tại runtime.
 lead: >-
-  Phát hiện với từ vựng mở thay danh sách lớp cố định của checkpoint bằng các từ
-  bạn chọn tại thời điểm gọi. Trong LibreYOLO, đây không phải tác vụ riêng: đó
-  là tác vụ detect do một tầng mô hình riêng phục vụ, được nạp qua factory
-  LibreOpenVocab thay vì LibreYOLO.
+  Phát hiện với từ vựng mở thay danh sách lớp cố định của checkpoint bằng các từ bạn chọn tại thời điểm gọi.
+  Trong LibreYOLO, đây không phải tác vụ riêng: đó là tác vụ detect do một tầng mô hình riêng phục vụ, được
+  nạp qua factory LibreOpenVocab thay vì LibreYOLO.
 keywords:
   - phát hiện từ vựng mở
   - zero shot object detection
@@ -18,7 +16,7 @@ keywords:
   - owlv2
   - omdet turbo
   - phát hiện bằng text prompt
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -59,9 +57,8 @@ snippets:
         # decode. Cả hai mặc định là 0.25 khi không đặt. Chỉ Grounding DINO
         # chấp nhận text_threshold; các mô hình khác phát sinh lỗi.
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 17197cf4d80f3d6f
+source_hash: 10f41b40f357b037
 ---
-
 ## Định nghĩa
 
 Phát hiện với từ vựng mở trả về `Results` phát hiện thông thường: hộp, độ tin
@@ -126,6 +123,8 @@ Nó dùng chung bề mặt `set_classes()`. Điểm khác biệt nằm ở ngu�
 family trên trang này là detector phân biệt phát điểm trực tiếp, còn tầng VLM
 tạo ra chúng.
 
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) và [North Micro Vision](/docs/models/northmicrovision) mở rộng lựa chọn phát hiện của `LibreVLM`. [Molmo2](/docs/models/molmo2) trả về điểm. Dùng [LibreGround](/docs/reference/ground-api) cho truy vấn chỉ dẫn thành vị trí nhấp thay vì từ vựng phát hiện.
+
 ## Dự đoán
 
 <code-tabs name="predict" />
@@ -157,6 +156,8 @@ Không family nào trong tầng này huấn luyện bên trong LibreYOLO. `train
 sinh lỗi: hãy tinh chỉnh ở upstream rồi nạp trọng số kết quả. Từ vựng được
 truyền cho `set_classes()` là cài đặt duy nhất thay đổi nội dung mô hình đã nạp
 phát hiện.
+
+Qwen3-VL có đường [tinh chỉnh VLM](/docs/train/vlm-fine-tuning) riêng. Điều này không bổ sung huấn luyện cho bốn adapter `LibreOpenVocab`.
 
 ## Xác thực
 

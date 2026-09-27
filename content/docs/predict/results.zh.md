@@ -17,7 +17,7 @@ keywords:
   - yolo 深度图输出
   - libreyolo results summary
   - onnx 推理结果一致
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   载荷类、槽位、搬移语义、summary()、to_json()、plot()、save() 和 cutout() 读自
   libreyolo/utils/results.py。标注和写盘行为读自 libreyolo/models/base/inference.py 里的
@@ -118,12 +118,12 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: cebaac95f0a28b5f
 ---
 
 ## 一个对象，每种载荷一个槽位
 
-对一张图像做一次预测返回一个 `Results`。它带着十八个载荷槽位，模型只填充自己
+对一张图像做一次预测返回一个 `Results`。它带着二十一个载荷槽位，模型只填充自己
 这个任务会产出的那些。其余每个槽位都是 `None`，所以在检测器上读 `result.masks`
 得到的是 `None`，而不是报错。
 
@@ -147,6 +147,9 @@ source_hash: 548dbc9c7f5552ec
 | `embeddings` | `Embeddings` | `(N, D)`，行已做 L2 归一化 | `embed` 任务 |
 | `identities` | `Identities` | N 个名字和分数 | 带图库的 `embed` 任务 |
 | `meshes` | `Meshes` | 人体参数，以及可选的顶点 | 人体网格恢复 |
+| `albedo` | `AlbedoMap` | `(H, W, 3)` 线性 RGB | 反照率估计 |
+| `boxes3d` | `Boxes3D` | `(N, 14)`，相机坐标系下的长方体，与 `boxes` 逐行对齐 | 单目 3D 检测 |
+| `actions` | `Actions` | `(T, D)` 动作块 | 机器人策略 |
 
 和它们并列的，是每个结果都有的那些字段：`orig_shape` 是 `(height, width)`，
 `path` 是源路径（内存输入时为 `None`），`names` 把类别 id 映射到类别名，
@@ -267,9 +270,6 @@ source_hash: 548dbc9c7f5552ec
 图，全景结果带上它的分段，matte 写成透明背景的 RGBA PNG，检测器写成检测框、掩码
 画在框下面。写出的路径会作为 `result.saved_path` 挂在结果上。
 
-`Results.plot()` 比它的名字听上去要窄。它只为法线图和边缘图定义，其他任何情况都
-抛 `NotImplementedError`。别的任务请用 `save=True`。
-
 `Results.save(path)` 同样窄：它把 matte 结果写成透明背景的 RGBA PNG 抠图，其他
 情况一律抛 `NotImplementedError`。`Results.cutout()` 返回同一个 RGBA 数组，但
 不写盘。两者都需要源图像，从 `result.path` 取，或者用 `image=` 传进来。
@@ -280,13 +280,18 @@ source_hash: 548dbc9c7f5552ec
 文件最终落在哪里，以及 `output_path` 和 `output_file_format` 的行为，见
 [预测数据源](/docs/predict/sources)。
 
+`plot()` 覆盖所有任务载荷。图像叠加默认返回连续的 HxWx3 uint8 BGR；`pil=True` 请求 PIL。深度、法线、边缘和反照率图，以及 3D 长方体和动作块，默认返回 PIL 图像；`pil=False` 返回数组。`orig_img` 为内存和 URL 数据源保留 BGR 像素；本地文件和已收集的有限时长视频帧可以重新打开。
+
+控制项包括 `img`、`conf`、`labels`、`boxes`、`masks`、`probs`、`line_width`、`pil`、`show`、`save` 和 `filename`。保存的分类图像包含前五个标签。透明度图保存为 RGBA 抠图。
+
 ## 导出产物返回同样的对象
 
 <code-tabs name="exported" />
 
 `LibreYOLO()` 按文件后缀分派，所以一个导出产物和一个 `.pt` 检查点（checkpoint）
-走同一个调用加载，返回同样的 `Results`。`.onnx`、`.engine`、`.pte` 和 `.mnn`
-文件按后缀识别，OpenVINO、Paddle 和 ncnn 目录以及 Triton 模型 URL 也一样。把一个
+走同一个调用加载，返回同样的 `Results`。`.onnx`、`.torchscript`、`.engine`、`.pte`、
+`.tflite` 和 `.mnn` 文件按后缀识别，OpenVINO、Paddle、ncnn 和 Core ML `.mlpackage`
+目录以及 Triton 模型 URL 也一样。把一个
 模型换成它的导出版本时，读 `result.boxes.xyxy` 的代码不用改。完整的格式清单见
 [导出](/docs/export)。
 

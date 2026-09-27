@@ -1,0 +1,13 @@
+{
+  "name": "DEKR",
+  "org": "HRNet authors",
+  "paper_title": "Bottom-Up Human Pose Estimation Via Disentangled Keypoint Regression",
+  "paper_url": "https://arxiv.org/abs/2104.02300",
+  "code_url": "https://github.com/HRNet/DEKR",
+  "license": "MIT",
+  "license_interpretation": "The upstream implementation is MIT. The adapter retrieves the released checkpoint from its source CDN.",
+  "bibtex": "@inproceedings{GengSXZW21,\n  title={Bottom-Up Human Pose Estimation Via Disentangled Keypoint Regression},\n  author={Zigang Geng, Ke Sun, Bin Xiao, Zhaoxiang Zhang, Jingdong Wang},\n  booktitle={CVPR},\n  year={2021}\n}",
+  "bibtex_source_url": "https://raw.githubusercontent.com/HRNet/DEKR/main/README.md",
+  "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2104.02300. The upstream citation form is retained; conference/journal entries were also checked against the publisher.",
+  "weights_license": "No separate artifact grant recorded"
+}

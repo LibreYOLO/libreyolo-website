@@ -18,7 +18,7 @@ keywords:
   - сегментація екземплярів
   - fine-grained distribution refinement
   - DETR
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -155,7 +155,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 0216631a26185524
+source_hash: afc2a4900f773c9d
 ---
 
 ## Встановлення
@@ -210,7 +210,7 @@ pip install "libreyolo[lora]"
 
 <code-tabs name="train" />
 
-Без додаткових параметрів тренер виконує 132 епохи з `lr0=2e-4`, `amp=False`,
+Без додаткових параметрів тренер виконує 132 епохи з `lr0=2e-4`, `amp=True` і `amp_dtype="float16"`,
 батчем 16 і ранньою зупинкою після 50 епох без покращення. Ваги виявлення можна
 використати як початкову точку для навчання сегментації, але лише як явне
 перенесення, оскільки голова масок починає без навчання й інакше повертала б
@@ -272,4 +272,3 @@ Python має суворіші обмеження: потрібно безпос
 ## Цитування
 
 <citation-block />
-

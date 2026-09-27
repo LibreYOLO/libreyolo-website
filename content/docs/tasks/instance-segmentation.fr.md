@@ -16,7 +16,7 @@ keywords:
   - annotations polygones
   - bibliothèque segmentation MIT
   - mAP masques
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -130,7 +130,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 33e331eac0f9b0af
+source_hash: 577cd3c8c2d5d6fe
 ---
 
 ## Définition
@@ -155,14 +155,17 @@ pixels `(P, 2)`, et `.xyn` fournit le même contour normalisé.
 
 ## Modèles
 
-Quatre familles peuvent être entraînées et prédire des masques :
+Quatre familles peuvent être entraînées et prédire des masques :
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
-[D-FINE](/docs/models/d-fine) et [RTMDet](/docs/models/rtmdet). RF-DETR
-nécessite son propre extra, `pip install "libreyolo[rfdetr]"`. Les trois autres
-s'exécutent avec le paquet de base.
+[D-FINE](/docs/models/d-fine) et [GTR](/docs/models/gtr). RF-DETR nécessite son
+propre extra, `pip install "libreyolo[rfdetr]"`. Les trois autres s'exécutent
+avec le paquet de base.
 
 [Mask R-CNN](/docs/models/mask-rcnn) prédit, valide et exporte des masques, mais
 sa méthode `train()` déclenche une `NotImplementedError`.
+[RTMDet](/docs/models/rtmdet) prédit et valide des masques, mais l'entraînement
+en segmentation déclenche une `NotImplementedError` ; il ne s'entraîne qu'en
+tant que détecteur.
 
 [EoMT](/docs/models/eomt) prédit et valide des masques sans pouvoir non plus
 s'entraîner. Son exportation est plus limitée encore : `export()` accepte

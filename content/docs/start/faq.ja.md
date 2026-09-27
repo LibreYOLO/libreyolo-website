@@ -10,8 +10,8 @@ keywords:
   - libreyolo 重み 保存場所
   - libreyolo cli
   - libreyolo オフライン
-last_verified: 1.5.0
-source_hash: a729b43a6642f2a0
+last_verified: 1.6.0
+source_hash: 13810bf9ea01c459
 ---
 
 ## 最初にどのモデルを使えばよいですか。
@@ -50,7 +50,7 @@ CNN検出器にはYOLOv9、Transformer検出器にはRF-DETRを使用します�
 
 ## valは何を返しますか。
 
-オブジェクトではなく通常の辞書を返します。検出のキーには `metrics/precision`、`metrics/recall`、`metrics/mAP50`、`metrics/mAP50-95` が含まれます。その他のタスクは、分類の `metrics/accuracy_top1`、パノプティックセグメンテーションの `metrics/PQ`、`metrics/SQ`、`metrics/RQ` など、それぞれに適したキーを返します。
+指標名をキーとする辞書を返します。検出のキーには `metrics/precision`、`metrics/recall`、`metrics/mAP50`、`metrics/mAP50-95` が含まれ、検出とセグメンテーションの結果は `metrics.box` に画像ごとの結果も保持します。その他のタスクは、分類の `metrics/accuracy_top1`、パノプティックセグメンテーションの `metrics/PQ`、`metrics/SQ`、`metrics/RQ` など、それぞれに適したキーを返します。
 
 ## フォルダー、動画、Webカメラで実行するにはどうすればよいですか。
 
@@ -90,3 +90,7 @@ libreyolo train model=yolo9-t data=coco8.yaml epochs=50 imgsz=640
 ## アップグレード後にインポートが動作しなくなりました。何が変わりましたか。
 
 一貫性のため、2つのクラス名が変更されました。`LibreYOLORTDETR` は `LibreRTDETR`、`LibreYOLORFDETR` は `LibreRFDETR` になりました。古い名前も引き続き解決され、新しい名前を示す `DeprecationWarning` を発生させます。そのため、更新作業中も既存のコードは動作します。
+
+## チェックポイント名を指定してもダウンロードできないのはなぜですか？
+
+モデルページのチェックポイント表にある正確なファイル名を使ってください。FCNとMask R-CNNのタスクサフィックス付きの名前はホストされていません。ローダーのエラーに、対応する形式が表示されます。LingBot-Visionのgには公開済みのチェックポイントがありません。s、b、l、またはローカルのチェックポイントを使ってください。

@@ -20,7 +20,7 @@ keywords:
   - inferência youtube
   - vid_stride
   - stream=True
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Classificação de fontes lida de libreyolo/utils/source.py (classify_source,
   SourceKind, StreamSource, MultiStreamSource). Tipos de imagem aceitos e
@@ -42,19 +42,34 @@ snippets:
         print(len(result.boxes), "detections")
     - label: Imagens em memória
       language: python
-      code: |
+      code: >
         import numpy as np
+
         from PIL import Image
+
 
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
 
+
         pil_image = Image.open(SAMPLE_IMAGE)
+
         array = np.asarray(pil_image)
+
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+
+        # Arrays NumPy são lidos como BGR, a menos que se indique o contrário;
+        este é RGB.
+
+        result = model(array, color_format="rgb")
+
+        print(type(array).__name__, len(result.boxes))
+
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: Uma pasta
@@ -206,7 +221,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: 81a0c947dbfe48b5
 ---
 
 ## Como uma fonte é classificada
@@ -244,23 +259,27 @@ Uma fonte de imagem única aceita sete tipos.
 |---|---|
 | `str` ou `pathlib.Path` | Arquivo local, `http(s)://`, `s3://` ou `gs://` |
 | `PIL.Image.Image` | Convertido para RGB |
-| `numpy.ndarray` | Escala de cinza 2D, ou HWC ou CHW 3D; um array 4D usa sua primeira imagem |
-| `torch.Tensor` | CHW ou NCHW, lido como RGB; um tensor em batch usa sua primeira imagem |
+| `numpy.ndarray` | Escala de cinza 2D, ou HWC ou CHW 3D em ordem BGR; um array 4D é um batch |
+| `torch.Tensor` | CHW ou NCHW, lido como RGB; um tensor 4D é um batch |
 | `bytes` | Dados de imagem codificados |
 | `io.BytesIO` | Dados de imagem codificados |
 
+Um array ou tensor 4D retorna uma lista com um `Results` por imagem.
+
 Tudo é convertido para RGB antes do pré-processamento. Os arrays NumPy são o
 único caso em que a ordem dos canais é ambígua, então `color_format` controla
-isso: `"auto"` (o padrão) deixa o array como está, `"bgr"` inverte os canais,
-que é o que um quadro lido com OpenCV precisa.
+isso: `"auto"` (o padrão) e `"bgr"` leem o array como BGR, a ordem que o OpenCV
+retorna, e `"rgb"` o deixa como está, que é o que um array criado a partir de uma
+imagem PIL precisa.
 
 Arrays de ponto flutuante são reescalados pela própria faixa: valores iguais ou
 abaixo de `1.0` são multiplicados por 255, valores maiores são recortados para
 `[0, 255]`. Um array RGBA descarta seu canal alfa.
 
-Caminhos remotos precisam de um pacote cada, e nenhum deles vem instalado por
-padrão: `requests` para `http(s)://`, `boto3` para `s3://` e `gcsfs` para
-`gs://`.
+Caminhos remotos precisam de um pacote cada. `requests`, para `http(s)://`, vem
+com a instalação base; `boto3` para `s3://` e `gcsfs` para `gs://` não vêm.
+
+O rastreamento aceita imagens, pastas ordenadas por nome de arquivo, listas, tuplas e iteradores preguiçosos de imagens como quadros consecutivos. Passe `fps=30.0` para definir a temporização da sequência de imagens e `color_format="auto"` para selecionar a interpretação da entrada. Veja [rastreamento](/docs/tasks/object-tracking).
 
 ## Pastas
 
@@ -277,8 +296,10 @@ empilhado por bloco nas famílias que suportam isso. Veja
 
 <code-tabs name="video" />
 
-Um caminho conta como vídeo quando seu sufixo é um de `.asf`, `.avi`, `.gif`,
-`.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.ts`, `.wmv`, `.webm`.
+Um caminho conta como vídeo quando seu sufixo é um de `.3g2`, `.3gp`, `.asf`,
+`.avi`, `.dav`, `.f4v`, `.flv`, `.gif`, `.h264`, `.h265`, `.hevc`, `.m2ts`,
+`.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.mts`, `.mxf`, `.ogv`, `.ts`,
+`.vob`, `.wmv`, `.webm`.
 
 `.gif` aparece nas duas listas. Um caminho `.gif` passado direto para `predict` é
 aberto como vídeo, porque a checagem de vídeo roda primeiro; um `.gif` que está
@@ -289,6 +310,8 @@ dentro de uma pasta varrida é carregado como imagem estática.
 acima de 500 quadros depois do stride emite um aviso sugerindo `stream=True`.
 
 Cada `Results` vindo de um vídeo carrega `frame_idx`.
+
+A codificação de vídeo usa um codec disponível como fallback quando H.264 não pode abrir. O fallback é registrado em INFO e armazenado em cache por codec e tela somente depois que outro codec funciona.
 
 ## Webcams, streams de rede e YouTube
 
@@ -390,8 +413,9 @@ As imagens vão para um `runs/detect/predict`, `runs/detect/predict2` e assim po
 diante, com incremento automático, mantendo o nome do arquivo de origem. Toda
 imagem de um mesmo processo cai no mesmo diretório, então duas pastas de entrada
 com um mesmo nome de arquivo sobrescrevem uma à outra. Imagens em memória não têm
-nome de arquivo para reaproveitar e são numeradas `image0`, `image1` e assim por
-diante.
+nome de arquivo para reaproveitar. Uma imagem única é gravada como `inference`,
+então chamadas repetidas a sobrescrevem; uma lista ou um batch é numerado
+`image0`, `image1` e assim por diante.
 
 Fontes de vídeo e ao vivo são gravadas como um único `.mp4` nomeado a partir da
 fonte.
@@ -400,5 +424,5 @@ fonte.
 arquivo, um caminho sem sufixo como diretório. `output_file_format` seleciona a
 codificação da imagem estática e aceita `jpg`, `png` ou `webp`.
 
-Depois de salvar, o caminho gravado também é anexado ao resultado como
+Depois que uma imagem é salva, o caminho gravado também é anexado ao resultado como
 `result.saved_path`.

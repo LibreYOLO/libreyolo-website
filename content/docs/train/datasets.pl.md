@@ -19,7 +19,7 @@ keywords:
   - libreyolo doctor
   - sprawdzanie nierównowagi klas
   - wyciek między train val
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -68,7 +68,7 @@ snippets:
             print(finding.severity.value, finding.check_id, finding.message)
 
         raise SystemExit(report.exit_code(strict=False))
-source_hash: 9a12a0551c8b56e9
+source_hash: 84e47ff97fb2e2f3
 ---
 
 ## Wskazywanie zbioru danych do trenowania
@@ -141,6 +141,8 @@ listy. Wiersze zaczynające się od `#` są pomijane.
 `names` może być listą lub mapowaniem z kluczami całkowitoliczbowymi. `nc` jest
 opcjonalne. Gdy oba pola są obecne i niezgodne, doctor zgłasza błąd.
 
+Estymacja pozy RF-DETR odczytuje `kpt_names` z identyfikatorem lub nazwą klasy jako kluczem. Zachowuje pierwsze nazwane wiersze punktów kluczowych dla każdej klasy; pusta lista oznacza klasę z samymi ramkami. Wieloklasowa estymacja pozy wymaga `names` i co najmniej jednej klasy z punktami kluczowymi.
+
 ## Układ katalogów i pliki etykiet
 
 Detekcja, segmentacja, estymacja pozy i obrócone ramki używają wspólnego układu.
@@ -168,6 +170,8 @@ trenowany jako tło zamiast powodować błąd. Wiersz z więcej niż pięcioma p
 jest odczytywany jako wielokąt, a jego ramką staje się zewnętrzny obrys
 wielokąta. Dzięki temu eksport segmentacji użyty do trenowania detekcji wczytuje
 się bez ostrzeżeń. Doctor raportuje, ile wierszy przeszło tą ścieżką.
+
+Ramki o skończonych współrzędnych wychodzące poza obraz są przycinane jednakowo podczas trenowania i walidacji. Ramki bez widocznego obszaru, nieskończone lub nieokreślone współrzędne i błędne wielokąty są odrzucane. Identyfikatory klas poza zakresem są zgłaszane przed budową etykiet docelowych. `train(classes=[...])` filtruje etykiety nadzorujące według oryginalnych identyfikatorów klas; zobacz [hiperparametry](/docs/train/hyperparameters).
 
 ## Inne zadania
 
@@ -276,4 +280,3 @@ niewłaściwego kontraktu.
   przez `train()` po przygotowaniu danych.
 - [Walidacja i metryki](/docs/train/validation) opisują ewaluację na podziale
   `val` lub `test`.
-

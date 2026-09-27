@@ -5,8 +5,7 @@ families:
 seo_title: 'RF-DETR: latih, lakukan fine-tuning, dan ekspor di bawah MIT'
 description: >-
   Gunakan RF-DETR di LibreYOLO untuk deteksi, segmentasi instance, pose, dan
-  kotak berorientasi. Instal, prediksi, latih, validasi, dan ekspor, semuanya
-  berlisensi MIT.
+  kotak berorientasi. Instal, prediksi, latih, validasi, dan ekspor.
 lead: >-
   Detection transformer yang memprediksi sekumpulan objek tetap, bukan grid
   padat, sehingga tidak memerlukan NMS saat inferensi. LibreYOLO mendukungnya
@@ -19,7 +18,7 @@ keywords:
   - segmentasi instance
   - estimasi pose
   - bounding box berorientasi
-last_verified: 1.5.0
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -99,7 +98,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -183,7 +182,7 @@ snippets:
     - label: Gunakan berkas hasil ekspor
       language: python
       code: >
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
 
         # Factory merutekan berdasarkan sufiks berkas, sehingga artefak hasil
@@ -210,7 +209,7 @@ snippets:
 
         # pascapemrosesan sendiri. Periksa signature sebelum menghubungkannya.
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -220,7 +219,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 8c464aa759131694
+source_hash: 3238696a4e1ab6c2
 ---
 
 ## Instalasi
@@ -242,12 +241,15 @@ detektor hanya memerlukan perubahan satu baris. `conf` dan `max_det` memfilter p
 query; tidak ada tahap NMS yang perlu disetel. Lihat [prediksi](/docs/predict) untuk sumber,
 streaming, dan penanganan hasil.
 
+Jalur deteksi, segmentasi, dan kotak berorientasi memakai pengubahan ukuran bilinear OpenCV floating-point tanpa antialiasing; pose tetap memakai pengubahan ukuran dengan antialiasing. `imgsz=(height, width)` persegi panjang harus sesuai dengan grid patch/window task. Daftar checkpoint mencakup detektor UI. [Histogram peristiwa](/docs/train/event-histograms) memakai profil input yang tercatat.
+
 ## Varian
 
-Empat ukuran dan empat task yang memakai satu arsitektur: segmentasi, pose, dan kotak
-berorientasi menggunakan kembali decoder deteksi dengan head berbeda, sehingga semuanya
-menerima argumen yang sama. Setiap ukuran memiliki jumlah parameter yang mirip dan terutama
-berbeda dalam resolusi input.
+Empat ukuran deteksi, `n` sampai `l`, dan empat task yang memakai satu arsitektur:
+segmentasi, pose, dan kotak berorientasi menggunakan kembali decoder deteksi dengan head
+berbeda, sehingga semuanya menerima argumen yang sama. Segmentasi menambahkan `x` dan
+`xx`, dan pose hanya tersedia dalam `x`. Setiap ukuran memiliki jumlah parameter yang mirip
+dan terutama berbeda dalam resolusi input.
 
 <benchmark-table task="detect" />
 
@@ -255,9 +257,9 @@ berbeda dalam resolusi input.
 
 ## Pelatihan
 
-Pelatihan dimulai dari checkpoint yang dipublikasikan untuk keempat task. RF-DETR
-mencantumkan `pretrained` di antara argumen yang diabaikan pelatih native-nya, sehingga
-`pretrained=False` tidak menghasilkan model yang diinisialisasi secara acak di sini.
+Pelatihan dimulai dari checkpoint yang dipublikasikan untuk keempat task.
+`pretrained=False` justru menginisialisasi ulang seluruh jaringan, termasuk backbone,
+lalu melatih dari nol.
 
 <code-tabs name="train" />
 
@@ -269,10 +271,12 @@ window; LibreYOLO memeriksanya sebelum proses dimulai dan menyebutkan ukuran val
 
 Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
 
+Proses baru memakai `output_dir=None` secara default, yang menghasilkan direktori `runs/train/rfdetr_exp` bernomor dengan `exist_ok=False`. Proses yang dilanjutkan tetap menulis ke direktori run milik checkpoint-nya. Dataset pose multikelas memakai `kpt_names` dengan indeks atau nama kelas sebagai kunci; daftar kosong menandai kelas yang hanya memiliki kotak. Prediksi mengisi keypoint hingga `kpt_shape`; fitness mAP keypoint tidak menilai kelas yang hanya memiliki kotak.
+
 ## Validasi
 
-`val()` mengembalikan dictionary dengan key `metrics/` yang mencakup presisi, recall,
-mAP 50, dan mAP 50-95, yang diukur terhadap dataset apa pun dalam format yang digunakan
+`val()` mengembalikan dictionary dengan key `metrics/` yang mencakup mAP 50, mAP 50-95,
+mAP 75, dan average recall COCO, yang diukur terhadap dataset apa pun dalam format yang digunakan
 untuk pelatihan.
 
 <code-tabs name="val" />

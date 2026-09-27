@@ -89,7 +89,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: e1043aba1b70b65c
+source_hash: de71e994a0b6d8b4
 ---
 
 ## インストール
@@ -106,7 +106,7 @@ pip install libreyolo
 
 <code-tabs name="predict" />
 
-`result.depth_map` は密な相対逆深度マップを保持します。大きい値ほどカメラに近いことを示し、値にはメートル単位も画像をまたぐ共通スケールもありません。`save=True` はそのマップをカラーマップで可視化してディスクへ書き出します。`Results.plot()` は表面法線とエッジだけに定義されているため、このファミリーには対応しません。入力解像度は、DPTヘッドの基になるDINOv2パッチグリッドの14で割り切れる必要があります。LibreYOLOは実行前に確認し、割り切れなければエラーになります。ソース、ストリーミング、結果の処理については、[推論](/docs/predict)を参照してください。
+`result.depth_map` は密な相対逆深度マップを保持します。大きい値ほどカメラに近いことを示し、値にはメートル単位も画像をまたぐ共通スケールもありません。`save=True` はそのマップをカラーマップで可視化してディスクへ書き出します。`Results.plot()` は深度マップをPIL画像として描画し、`pil=False` を指定すると代わりに配列を返します。入力解像度は、DPTヘッドの基になるDINOv2パッチグリッドの14で割り切れる必要があります。LibreYOLOは実行前に確認し、割り切れなければエラーになります。ソース、ストリーミング、結果の処理については、[推論](/docs/predict)を参照してください。
 
 ## バリアント
 

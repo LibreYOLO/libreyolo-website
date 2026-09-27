@@ -14,32 +14,46 @@ keywords:
   - geometri monokular
   - metrik angular error
   - prediksi normal padat
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Prediksi kolom normal
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreMoGe2s-normal.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         normals = result.normal_map
+
         print(normals.data.shape)      # vektor satuan float32 (H, W, 3)
-        normals.assert_normalized()    # error jika ada piksel yang panjangnya bukan satu
+
+        normals.assert_normalized()    # error jika ada piksel yang panjangnya
+        bukan satu
     - label: Baca satu piksel
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreMoGe2s-normal.pt")
+
         result = model(SAMPLE_IMAGE)
 
-        # Frame kamera OpenCV: +x ke kanan, +y ke bawah, +z masuk ke scene. Permukaan
+
+        # Frame kamera OpenCV: +x ke kanan, +y ke bawah, +z masuk ke scene.
+        Permukaan
+
         # yang menghadap kamera terbaca mendekati (0, 0, -1).
+
         field = result.normals.data
+
         h, w = field.shape[:2]
+
         print(field[h // 2, w // 2, w // 2])
     - label: Simpan visualisasi
       language: python
@@ -49,7 +63,7 @@ snippets:
         model = LibreYOLO("LibreMoGe2s-normal.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot() merender kolom; tersedia untuk hasil normal dan edge.
+        # plot() mengembalikan kolom yang telah dirender sebagai gambar PIL.
         result.plot().save("normals.png")
   val:
     - label: Validasi dan baca kunci metrik
@@ -74,16 +88,22 @@ snippets:
         model.export(format="onnx", imgsz=518)
     - label: Jalankan berkas hasil ekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Factory mengarahkan berdasarkan suffix berkas, sehingga artefak hasil ekspor dimuat
+
+        # Factory mengarahkan berdasarkan suffix berkas, sehingga artefak hasil
+        ekspor dimuat
+
         # seperti checkpoint dan mengembalikan objek Results yang sama.
+
         model = LibreYOLO("LibreMoGe2s-normal.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.normal_map.data.shape)
-source_hash: d26d26d894b436ff
+source_hash: dd8de1b1ecd208bf
 ---
 
 ## Definisi
@@ -104,18 +124,17 @@ berpengaruh, serta `Results.plot()` mencakup task ini.
 
 ## Model
 
-Dua family melayani `normal`.
+Family berikut mendukung `normal`.
 
-[MoGe-2](/docs/models/moge-2) adalah model khusus: model geometri monokular
-satu-forward dalam tiga ukuran encoder. LibreYOLO tidak menyalin checkpoint ini
-ke organisasinya; pemuatan mengunduh ukuran cocok dari repositori resmi pada
-revisi yang dikunci versinya dan memverifikasinya terhadap SHA-256 tercatat.
+[MoGe-2](/docs/models/moge-2) khusus untuk task ini: model geometri monokular dengan satu forward pass dalam tiga ukuran encoder. Ukuran s dan l memakai mirror LibreYOLO; b tetap di upstream.
 
 [LibreMODUS](/docs/models/libremodus) menghasilkan normal sebagai salah satu
 target model any-to-any dan dapat menerima depth map, bukan gambar RGB, sebagai
 input. Model memerlukan ekstra `modus` dan akun Hugging Face terautentikasi,
 serta tidak menawarkan `val()` maupun `export()`, sehingga tidak termasuk bagian
 validasi dan ekspor di bawah.
+
+[Marigold V2](/docs/models/marigold-v2) juga mengestimasi normal permukaan. Inferensi empat-bit default memerlukan CUDA dan extra `marigold`; ekspor tidak didukung.
 
 ## Prediksi
 
@@ -165,9 +184,7 @@ lengkap.
 
 ## Pelatihan
 
-Kedua family normal tidak memiliki implementasi pelatihan: `train()` memunculkan
-`NotImplementedError`. Halaman MoGe-2 menunjuk ke checkpoint resmi yang dikunci versinya
-untuk predict, validate, dan ekspor.
+Family estimasi normal ini tidak memiliki implementasi pelatihan. Halaman MoGe-2 menunjuk ke checkpoint resmi yang dipatok untuk prediksi, validasi, dan ekspor.
 
 ## Validasi
 
@@ -197,5 +214,3 @@ dan `batch` selain 1 ditolak, serta `imgsz` harus dapat dibagi patch size
 encoder. Cakupan per format tersedia pada [halaman MoGe-2](/docs/models/moge-2)
 dan [matriks ekspor lengkap](/docs/reference/export-matrix).
 [Ekspor](/docs/export) mencantumkan argumen setiap format.
-
-

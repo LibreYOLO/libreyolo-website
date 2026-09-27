@@ -20,7 +20,7 @@ keywords:
   - vision transformer erklärt
   - imagenet klassifikator python
   - vortrainierter bildklassifikator
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -78,7 +78,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 9c67c8554b2af5c6
+source_hash: "4dad5f1aa0943dd9"
 ---
 
 ## Installation
@@ -115,6 +115,8 @@ einen Datensatz in der üblichen Ordnerstruktur aus `train/<class>/` und
 `val/<class>/`.
 
 <code-tabs name="val" />
+
+Validierung und INT8-Kalibrierung verwenden die Auswertungstransformation der Familie. Die Exportmetadaten speichern `norm_mean`, `norm_std` und `resize_mode`; ältere Artefakte greifen auf die Familienwerte zurück. Kalibrierungsvorverarbeiter geben das erforderliche CHW-Array und das Verhältnis zurück.
 
 ## Export
 

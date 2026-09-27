@@ -15,7 +15,7 @@ keywords:
   - hierarchischer Vision Transformer
   - Shifted-Window-Attention
   - Bildklassifizierung
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -91,7 +91,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: faa6bbacae62d88e
+source_hash: "7020bd102e5ba1d6"
 ---
 
 ## Installation
@@ -119,6 +119,8 @@ Die vier Größen von Tiny bis Large basieren auf demselben Shifted-Window-Tower
 `val()` arbeitet mit einem Split im ImageFolder-Stil, also einem Verzeichnis mit den Unterordnern `train/` und `val/` und je einem Ordner pro Klasse. Die Methode gibt die Genauigkeit für Top-1 und Top-5 zurück.
 
 <code-tabs name="val" />
+
+Validierung und INT8-Kalibrierung verwenden die Auswertungstransformation der Familie. Die Exportmetadaten speichern `norm_mean`, `norm_std` und `resize_mode`; ältere Artefakte greifen auf die Familienwerte zurück. Kalibrierungsvorverarbeiter geben das erforderliche CHW-Array und das Verhältnis zurück.
 
 ## Export
 

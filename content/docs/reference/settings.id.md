@@ -15,13 +15,11 @@ keywords:
   - HF_TOKEN
   - direktori bobot libreyolo
   - cache libreyolo
-last_verified: 1.5.0
-verification: >-
-  Variabel ditemukan dengan mencari os.environ dan os.getenv dalam
-  libreyolo/**/*.py pada v1.5.0; semantik dibaca di setiap lokasi penggunaan.
-  Konvensi direktori dibaca dari libreyolo/data/utils.py,
-  libreyolo/utils/download.py, libreyolo/export/exporter.py,
-  libreyolo/models/base/model.py, dan libreyolo/models/sam3dbody/mhr_body.py.
+last_verified: 1.6.0
+verification: Variabel ditemukan dengan mencari os.environ dan os.getenv di libreyolo/**/*.py pada
+  v1.6.0; maknanya dibaca pada setiap lokasi penggunaan. Konvensi direktori dibaca dari libreyolo/data/utils.py,
+  libreyolo/utils/download.py, libreyolo/export/exporter.py, libreyolo/models/base/model.py, dan
+  libreyolo/models/sam3dbody/mhr_body.py.
 snippets:
   usage:
     - label: Arahkan root dataset ke lokasi lain
@@ -36,7 +34,7 @@ snippets:
 
         # Default-nya ~/datasets; LIBREYOLO_DATASETS_DIR menimpanya saat import.
         print(DATASETS_DIR)
-source_hash: 462f1288582225ce
+source_hash: 82fbf9f3b1540603
 ---
 
 ## Variabel environment
@@ -67,6 +65,8 @@ Pemilihan kernel juga menghentikan import lebih awal: ketika
 `LIBREYOLO_KERNELS` memaksa `off` atau `reference`, provider terakselerasi di
 dalam source tree sama sekali tidak diimpor. Registry yang dikendalikan ketiga
 variabel ini didokumentasikan pada [kernel](/docs/reference/kernels).
+
+`LIBREYOLO_TRITON_MSDA=0` menonaktifkan penyedia deformable attention Triton bawaan. `LIBREYOLO_HUB_KERNELS=0` menonaktifkan kernel Hub dan petunjuk pemasangannya. Keduanya mempertahankan fallback portabel.
 
 ## Variabel yang ditetapkan library
 
@@ -106,6 +106,8 @@ Hugging Face. Kedua jalur dapat digunakan.
 Token hanya diperlukan untuk repository gated. SAM 3 adalah contoh bawaan:
 bobotnya diunduh dari repository gated dengan lisensi khusus, sehingga
 persyaratan harus diterima pada halaman repository dan sesi harus diautentikasi.
+
+`HF_TOKEN` mengautentikasi pemuatan checkpoint Hub, publikasi, dan logger Hub. `OPENAI_API_KEY` dan `OPENROUTER_API_KEY` menyediakan kredensial untuk [jalur penyedia LibreLLM](/docs/reference/llm-api) yang sesuai.
 
 ## Direktori
 

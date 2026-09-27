@@ -24,13 +24,14 @@
 export const DOCS_PRERELEASE = false
 
 // The version a reader gets from `pip install libreyolo` today.
-export const DOCS_CURRENT_VERSION = '1.5.0'
+export const DOCS_CURRENT_VERSION = '1.6.0'
 
-export const CURRENT_DOCS_VERSION = 'v1.5.0'
+export const CURRENT_DOCS_VERSION = 'v1.6.0'
 
 export const docsVersions = [
-  { version: 'v1.5.0', label: DOCS_PRERELEASE ? 'Next release' : 'Latest', href: '/docs' },
-  { version: 'v1.4.0', label: DOCS_PRERELEASE ? 'Current' : 'Frozen', href: '/docs/v1.4.0' },
+  { version: 'v1.6.0', label: DOCS_PRERELEASE ? 'Next release' : 'Latest', href: '/docs' },
+  { version: 'v1.5.0', label: DOCS_PRERELEASE ? 'Current' : 'Frozen', href: '/docs/v1.5.0' },
+  { version: 'v1.4.0', label: 'Frozen', href: '/docs/v1.4.0' },
   { version: 'v1.3.1', label: 'Frozen', href: '/docs/v1.3.1' },
   { version: 'v1.3.0', label: 'Frozen', href: '/docs/v1.3.0' },
   { version: 'v1.2.0', label: 'Frozen', href: '/docs/v1.2.0' },

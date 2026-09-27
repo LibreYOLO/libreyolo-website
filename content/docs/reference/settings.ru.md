@@ -17,13 +17,12 @@ keywords:
   - libreyolo переменные окружения
   - libreyolo папка с весами
   - libreyolo кэш
-last_verified: 1.5.0
-verification: >-
-  Переменные найдены поиском os.environ и os.getenv по libreyolo/**/*.py на
-  версии 1.5.0; семантика прочитана в каждом месте использования. Соглашения о
-  каталогах прочитаны из libreyolo/data/utils.py, libreyolo/utils/download.py,
-  libreyolo/export/exporter.py, libreyolo/models/base/model.py и
-  libreyolo/models/sam3dbody/mhr_body.py.
+last_verified: 1.6.0
+
+verification: Переменные найдены поиском os.environ и os.getenv по libreyolo/**/*.py на версии 1.6.0; семантика прочитана
+  в каждом месте использования. Соглашения о каталогах прочитаны из libreyolo/data/utils.py, libreyolo/utils/download.py,
+  libreyolo/export/exporter.py, libreyolo/models/base/model.py и libreyolo/models/sam3dbody/mhr_body.py.
+
 snippets:
   usage:
     - label: Смена корня датасетов
@@ -41,7 +40,7 @@ snippets:
         импорте.
 
         print(DATASETS_DIR)
-source_hash: 462f1288582225ce
+source_hash: 82fbf9f3b1540603
 ---
 
 ## Переменные окружения
@@ -72,6 +71,8 @@ source_hash: 462f1288582225ce
 задаёт `off` или `reference`, встроенные ускоренные провайдеры не
 импортируются вовсе. Реестр, которым управляют эти три переменные, описан на
 странице [ядра](/docs/reference/kernels).
+
+`LIBREYOLO_TRITON_MSDA=0` отключает встроенный провайдер деформируемого внимания Triton. `LIBREYOLO_HUB_KERNELS=0` отключает ядра Hub и подсказку об их установке. Оба сохраняют переносимый запасной путь.
 
 ## Переменные, которые задаёт библиотека
 
@@ -111,6 +112,8 @@ Face CLI. Работают оба варианта.
 SAM 3: его веса скачиваются из такого репозитория под собственной лицензией,
 поэтому условия нужно принять на странице репозитория, а сессия должна быть
 аутентифицирована.
+
+`HF_TOKEN` обеспечивает аутентификацию для загрузки и публикации чекпойнтов Hub и логгера Hub. `OPENAI_API_KEY` и `OPENROUTER_API_KEY` предоставляют учётные данные для соответствующих [маршрутов провайдеров LibreLLM](/docs/reference/llm-api).
 
 ## Каталоги
 

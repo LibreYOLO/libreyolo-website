@@ -21,7 +21,7 @@ keywords:
   - VLM
   - edge VLM
   - LibreVLM
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -49,7 +49,7 @@ snippets:
         # Zählaufgaben oder Prompts, die der Boxen-Wrapper nicht abdeckt.
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 40237f0ecc0d2cd5
+source_hash: "a7f100c861adb8d0"
 ---
 
 ## Installation
@@ -88,11 +88,7 @@ Ergebnisverarbeitung.
 
 ## Varianten
 
-Es gibt zwei Größen: 450m und 1.6b. Beide stammen aus dem LFM2.5-VL-Release von
-Liquid AI und wurden für das Deployment auf dem Gerät entwickelt. Der
-Benchmark-Harness von LibreYOLO hat diese Familie noch nicht vermessen. Daher
-gibt es keine veröffentlichten Accuracy-Werte für einen Vergleich. Wähle eine
-Größe passend zu deinem eigenen Rechenbudget.
+Drei Größen: 450m, 1.6b und 3b, alle aus Liquid AIs LFM2.5-VL-Release. `lfm2-vl-3b` wählt das Modell LFM2.5 3B mit seinem Box-Parser für 0–1000. Die Benchmark-Infrastruktur von LibreYOLO hat diese Familie nicht vermessen, daher gibt es keine veröffentlichten Accuracy-Werte zum Vergleich. Wähle die Größe nach deinem Rechenbudget.
 
 LibreYOLO stellt diese Familie ausschließlich für Vorhersagen bereit.
 `train()`, `val()` und `export()` lösen jeweils `NotImplementedError` aus:
@@ -124,4 +120,3 @@ einmalig einen Hinweis.
 ## Zitieren
 
 <citation-block />
-

@@ -20,7 +20,7 @@ keywords:
   - detección de objetos en tiempo real
   - yolox python
   - entrenar yolox
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -110,7 +110,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: f5ab735a29f85a95
+source_hash: ddba5fb10bb88ad2
 ---
 
 ## Instalación
@@ -164,6 +164,8 @@ del tamaño menor con el que se publicó.
 Consulta [entrenamiento](/docs/train) para datasets, aumento de datos, multi-GPU
 y loggers.
 
+Mosaic muestrea hasta 20 candidatos para dar preferencia a imágenes con anotaciones; si ninguno cumple, conserva el último.
+
 ## Validación
 
 `val()` devuelve un diccionario de claves `metrics/` que cubren precisión,
@@ -185,6 +187,8 @@ CoreML puede meter NMS dentro del grafo con `nms=True`; YOLOX y YOLOv9 son las
 dos únicas familias que ese flag acepta actualmente.
 
 <code-tabs name="export" />
+
+[TFLite INT8](/docs/export/tflite) acepta `int8=True` y un dataset de calibración.
 
 ## Checkpoints
 

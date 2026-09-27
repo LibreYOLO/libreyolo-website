@@ -19,7 +19,7 @@ keywords:
   - 자세 추정
   - 인스턴스 분할
   - 엣지 추론
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -175,7 +175,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 39c6975fc16b3ff1
+source_hash: "521fde8f10ac8c57"
 ---
 
 ## 설치
@@ -201,6 +201,8 @@ pip install "libreyolo[lora]"
 작업은 파일명에서 가져오므로 `-pose` 또는 `-seg` 체크포인트가 자체 헤드를 선택하며 task 인수를 받지 않습니다. 셋 모두 각 제품군이 반환하는 `Results` 객체를 반환하고 자세 추정에는 `result.keypoints`, 분할에는 `result.masks`가 추가됩니다. 자세 추정은 COCO 키포인트 17개를 가진 사람 클래스 하나를 다루며 모델을 구축할 때 개수가 고정됩니다. 박스 헤드가 없으므로 각 자세 박스는 자체 키포인트의 경계 범위이고 세 번째 키포인트 채널은 점별 점수가 아닌 상수입니다.
 
 `conf`와 `max_det`은 쿼리 선택을 필터링합니다. 세 헤드 모두 NMS 단계 없이 쿼리 집합을 디코딩하므로 `iou`는 API 일관성을 위해 허용되지만 효과가 없습니다. 소스, 스트리밍, 결과 처리는 [예측](/docs/predict)을 참조합니다.
+
+탐지 예측은 직사각형 `imgsz=(height, width)`를 받으며, 학습과 내보내기는 각각의 형태 제약을 유지합니다.
 
 ## 변형
 
@@ -247,6 +249,8 @@ pip install "libreyolo[lora]"
 이 제품군에 공개된 모든 가중치 파일입니다.
 
 <checkpoint-table />
+
+`obj2coco` 변형은 탐지, 분할, 자세 추정을 포함합니다. 다운로드에는 명시적인 동의가 필요하며 업스트림 약관은 상업적 사용을 제한합니다. 원본 COCO 체크포인트는 기록된 Apache-2.0 허가를 유지합니다.
 
 ## 라이선스
 

@@ -22,7 +22,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Tarefas canônicas
-    value: 17
+    value: 20
   - label: Níveis de suporte
     value: 'Flagship, Core, Supported, Inference only, Museum, Sibling tier'
 snippets:
@@ -51,12 +51,12 @@ snippets:
         # "pose", "det" vira "detect", "semantic-segmentation" vira "semantic".
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
         print(model.task)
-source_hash: 23d045463a6a8411
+source_hash: c745a3c602db00ea
 ---
 
 ## Tarefas
 
-Uma tarefa é o que um modelo retorna. O LibreYOLO tem dezessete nomes canônicos
+Uma tarefa é o que um modelo retorna. O LibreYOLO tem vinte nomes canônicos
 de tarefa, e cada um deles dá nome ao campo do objeto `Results` que carrega sua
 saída.
 
@@ -73,12 +73,15 @@ saída.
 | `depth` | Um mapa denso de profundidade inversa relativa |
 | `normal` | Um campo denso de normais de superfície em vetores unitários |
 | `edge` | Um mapa denso de probabilidade de bordas |
+| `albedo` | Um mapa denso de albedo em RGB linear, a cor da superfície sem iluminação |
 | `restore` | Uma imagem RGB restaurada, para deblurring, remoção de ruído ou super-resolução |
 | `matte` | Um mapa suave de primeiro plano de 0 a 1, para remoção de fundo |
 | `ocr` | Quadriláteros de texto com transcrições, na ordem de leitura |
 | `embed` | Um vetor normalizado em L2 cujo produto escalar mede a concordância |
 | `gaze` | Uma direção do olhar por rosto detectado |
 | `mesh` | Um corpo 3D com pose por pessoa detectada |
+| `detect3d` | Caixas 3D em coordenadas da câmera, com uma classe e uma confiança |
+| `act` | Um bloco de ações de robô previstas a partir de quadros da câmera e do estado do robô |
 
 Esses são os nomes que aparecem nos metadados do checkpoint e nos nomes de
 arquivo. Aliases conhecidos são aceitos em qualquer lugar onde uma tarefa é

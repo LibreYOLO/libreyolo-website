@@ -16,7 +16,7 @@ keywords:
   - libreyolo abdeckungsgruppen
   - g0 g1 g2 g3 g4
   - modellstufen
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Exportstufen aus docs/adr/0011-export-support-tiers.md und
   libreyolo/export/support.py; Abdeckungsgruppen und Familienanzahlen aus
@@ -24,7 +24,7 @@ verification: >-
   libreyolo/models/base/model.py und libreyolo/cli/commands/train.py;
   CLI-Inventar aus libreyolo/models/inventory.py; API-Stufen aus
   Paket-Docstrings und base.py-Verträgen unter libreyolo/models/sam/, openvocab/
-  und vlm/, jeweils für v1.5.0. Leserorientierte Gruppenlabels (Flagship, Core,
+  und vlm/, jeweils für v1.6.0. Leserorientierte Gruppenlabels (Flagship, Core,
   Supported, Inference only, Museum, Sibling tier) sind die eigene
   Website-Terminologie für dieselben Gruppen aus src/data/docs/registry.json.
 snippets:
@@ -42,7 +42,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: de545894b0d125e4
+source_hash: 6d8f3ec671e6cb02
 ---
 
 ## Export-Support-Stufen
@@ -86,17 +86,21 @@ Stufe an, die anhand des Aufrufvertrags und nicht der Architektur gewählt wird.
 | Promptbasierte Segmentierung | `LibreSAM` | Ein Forward Pass ist ohne einen beim Aufruf bereitgestellten räumlichen oder Konzept-Prompt pro Bild bedeutungslos. Interaktiv und zustandsbehaftet: einmal encodieren, mehrfach prompten |
 | Open-Vocabulary-Erkennung | `LibreOpenVocab` | Textkonditionierte diskriminative Detektoren. Die Klassenliste ist ein mit `set_classes` festgelegter Prompt |
 | Vision-Language | `LibreVLM` | Ein generatives Modell, das als Detektor gesteuert wird. Die Klassenliste ist ein Prompt, die Confidence ein Platzhalter |
+| Grounding | `LibreGround` | Ein Bild und eine verweisende Anweisung werden auf höchstens einen Punkt pro Anfrage abgebildet |
+| Roboter-Policy | `LibreVLA` | Kamera-Frames und Roboterzustand werden auf einen Block zukünftiger Aktionen abgebildet |
 
-Die drei benachbarten Stufen registrieren sich bewusst nicht in der
+Die benachbarten Stufen registrieren sich bewusst nicht in der
 Detektor-Factory. Deshalb kann `LibreYOLO("some-alias")` sie nicht erreichen.
 Sie werden über Größenaliasse geladen und automatisch heruntergeladen, statt
 durch Untersuchung eines Checkpoints.
 
-Alle vier geben denselben Typ `Results` zurück. Nachgelagerter Code bleibt
+Alle Stufen geben denselben Typ `Results` zurück. Nachgelagerter Code bleibt
 daher über die Stufen hinweg unverändert. Die verfügbaren Methoden unterscheiden
 sich. Die benachbarten Stufen lösen für `train()`, `val()` und `export()` einen
-`NotImplementedError` aus. Die SAM- und Open-Vocabulary-Stufen tun dies auch
-für `track()`. Jede Stufenseite führt ihre eigenen Ausschlüsse auf.
+`NotImplementedError` aus, mit zwei Ausnahmen. `LibreVLM` führt ein Fine-Tuning
+von Qwen3-VL als Detektor durch, und `LibreVLA` trainiert und validiert SmolVLA,
+ACT und Diffusion Policy. Die SAM- und Open-Vocabulary-Stufen lösen den Fehler
+auch für `track()` aus. Jede Stufenseite führt ihre eigenen Ausschlüsse auf.
 
 ## Abdeckungsgruppen
 
@@ -113,15 +117,15 @@ verwendet.
 | Gruppe | Label | Familien | Bedeutung |
 |---|---|---:|---|
 | `g0` | Flagship | 2 | Flagship-Anker, die in der Abdeckung gemeinsamer Funktionen erforderlich sind |
-| `g1` | Core | 10 | Abdeckungssatz trainierbarer Detektoren |
-| `g2` | Supported | 14 | Zusätzlicher Abdeckungssatz trainierbarer Familien |
-| `g3` | Inference only | 35 | Familien ohne Trainingsimplementierung |
+| `g1` | Core | 12 | Abdeckungssatz trainierbarer Detektoren |
+| `g2` | Supported | 19 | Zusätzlicher Abdeckungssatz trainierbarer Familien |
+| `g3` | Inference only | 44 | Familien ohne Trainingsimplementierung |
 | `g4` | Museum | 5 | Historische Familien mit Inferenzabdeckung |
-| `s` | Sibling tier | 21 | Benachbarte APIs (SAM, Open-Vocabulary, VLM, Zero-Shot), getrennt abgedeckt |
+| `s` | Sibling tier | 36 | Benachbarte APIs (SAM, Open-Vocabulary, VLM, Grounding, Zero-Shot), getrennt abgedeckt |
 
-Das sind 87 Familien in sechs Gruppen. Allein `g3` enthält mehr Familien als
-alle anderen Gruppen zusammen, weil der Großteil des Registers aus
-Inferenzlinien und Museum-Abdeckung statt aktiv trainierten Detektoren besteht.
+Das sind 118 Familien in sechs Gruppen. `g3` ist die größte Gruppe, weil ein
+großer Teil des Registers aus Inferenzlinien statt aktiv trainierten Detektoren
+besteht.
 
 Bei der Modellauswahl beschreibt die Gruppe die zu erwartende technische
 Betreuung und nicht die Accuracy einer Familie. In `g0` und `g1` wird eine neue
@@ -143,13 +147,15 @@ Funktionsprüfungen, nie allein aus der Gruppenzugehörigkeit. Gruppen
 klassifizieren Familien und keine Aufgaben. Ein aufgabenbezogener
 Abdeckungslauf nennt die Aufgabe daher ausdrücklich, zum Beispiel „g1 detect“.
 
-An zwei Stellen wird die Gruppe zur Laufzeit und nicht nur in Tests gelesen.
+An drei Stellen wird die Gruppe zur Laufzeit und nicht nur in Tests gelesen.
 `collect_model_inventory()` in `libreyolo/models/inventory.py` ergänzt jeden
 vom CLI-Inventar ausgegebenen Eintrag um die Gruppe. `pretrained=False` löst
 den besonderen Pfad zur Neuinitialisierung von Grund auf nur für Familien aus
-`g0` und `g1` aus. Außerhalb dieser beiden Gruppen wird die Prüfung in
+`g0`, `g1` und `g2` aus. Außerhalb dieser Gruppen wird die Prüfung in
 `libreyolo/models/base/model.py` vollständig übersprungen. `pretrained=False`
 erreicht dort die familieneigene Methode `train()` als gewöhnliches Keyword.
+Training mit `classes=` oder `single_cls=True` wird nur für die Objekterkennung
+in `g0` und `g1` akzeptiert und löst anderswo einen `ValueError` aus.
 
 ## Training
 
@@ -157,6 +163,9 @@ Eine Familie in `g3` oder `g4` besitzt keine Trainingsimplementierung. Ein
 Aufruf von `train()` löst einen Fehler aus. Dies ist eine Eigenschaft des
 Familiencodes und keine Wirkung der Gruppe. Die Gruppe dokumentiert den
 Umstand lediglich.
+
+Von den 118 Familien trainieren 37: jede Familie aus `g0`, `g1` und `g2` sowie
+Qwen3-VL über `LibreVLM` und SmolVLA, ACT und Diffusion Policy über `LibreVLA`.
 
 Bei einer trainierbaren Familie ist es eine getrennte Frage, ob ein bestimmter
 Augmentierungsparameter die Pipeline erreicht. Dafür gilt ein eigenes

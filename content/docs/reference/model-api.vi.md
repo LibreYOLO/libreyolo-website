@@ -48,7 +48,7 @@ snippets:
         # stream=True trả về generator, mỗi frame hoặc ảnh một Results.
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: da0776970ded8716
+source_hash: ccecee93e9744550
 ---
 
 ## Khởi tạo
@@ -151,6 +151,7 @@ model.track(
     source,
     *,
     track_conf=0.25,
+    conf=None,
     iou=0.45,
     imgsz=None,
     classes=None,
@@ -158,19 +159,25 @@ model.track(
     save=False,
     show=False,
     vid_stride=1,
+    fps=30.0,
+    color_format="auto",
     output_path=None,
     tracker="bytetrack",
     tracker_config=None,
     augment=False,
+    persist=False,
     **tracker_kwargs,
 ) -> Generator[Results, None, None]
 ```
 
 Tạo một `Results` mỗi frame với `track_id` được đặt. `tracker` là
-`"bytetrack"`, `"botsort"`, `"ocsort"` hoặc `"deepocsort"`, và bị bỏ qua khi
-có `tracker_config` vì kiểu cấu hình chọn tracker. `track_conf` ánh xạ sang
+`"bytetrack"`, `"botsort"`, `"ocsort"` hoặc `"deepocsort"`, có thể kèm hậu tố
+`.yaml`, hoặc một instance tracker tùy chỉnh, và bị bỏ qua khi có
+`tracker_config` vì kiểu cấu hình chọn tracker. `track_conf` ánh xạ sang
 `track_high_thresh` cho ByteTrack và BoT-SORT, sang `det_thresh` cho OC-SORT và
-Deep OC-SORT. `output_path` mặc định là `runs/track/<video_stem>.mp4`.
+Deep OC-SORT. `conf`, khi được truyền, là ngưỡng phát hiện, như trong
+`predict()`. `persist=True` giữ tracker từ lần gọi trước cho các vòng lặp theo
+từng frame. `output_path` mặc định là `runs/track/<video_stem>.mp4`.
 
 ## val
 
@@ -190,6 +197,9 @@ model.val(
     verbose=True,
     *,
     plots=None,
+    project=None,
+    name=None,
+    exist_ok=False,
     **kwargs,
 ) -> Dict
 ```
@@ -197,8 +207,11 @@ model.val(
 Trả về dictionary metric có khóa tùy tác vụ; detection trả về
 `metrics/precision`, `metrics/recall`, `metrics/mAP50` và
 `metrics/mAP50-95`. `imgsz` nhận số nguyên cho hình vuông hoặc tuple `(height,
-width)` và mặc định theo kích thước đầu vào native của mô hình. `plots` là alias
-của `save_plots`. `allow_download_scripts` kiểm soát Python nhúng mà YAML
+width)` và mặc định theo kích thước đầu vào native của mô hình. `data=None` đánh
+giá trên dataset được lưu trong cấu hình huấn luyện của checkpoint và báo lỗi khi
+không có, như với trọng số đã phát hành. `project`, `name` và `exist_ok` đặt thư
+mục đầu ra là `project/name`, với hậu tố tăng dần trừ khi `exist_ok=True`. `plots`
+là alias của `save_plots`. `allow_download_scripts` kiểm soát Python nhúng mà YAML
 dataset có thể chứa trong trường `download`.
 
 `faster_coco_eval` được nhận qua `**kwargs`, mặc định `True`, và quay về
@@ -239,6 +252,7 @@ Các đối số dùng chung cho mọi exporter:
 | `dynamic` | `True` | Bật trục dynamic |
 | `half` | `False` | Độ chính xác FP16 |
 | `int8` | `False` | Độ chính xác INT8 |
+| `quantize` | `None` | Độ chính xác dạng `16`, `8` hoặc `32`, thay cho `half` hoặc `int8` |
 | `batch` | `1` | Batch size được cố định trong artifact |
 | `device` | `None` | Thiết bị dùng để trace |
 | `data` | `None` | data.yaml cho hiệu chuẩn INT8 |
@@ -246,7 +260,9 @@ Các đối số dùng chung cho mọi exporter:
 | `allow_download_scripts` | `False` | Cho phép Python nhúng trong phần tải YAML dataset |
 | `verbose` | `False` | Logging exporter chi tiết |
 
-Tổ hợp blocked phát `NotImplementedError` trong preflight trước tracing. Phạm
+Tổ hợp blocked phát `NotImplementedError` trong preflight trước tracing. Một
+tùy chọn mà định dạng không dùng sẽ phát cảnh báo `Unknown <format> export arguments (ignored)`
+và quá trình xuất vẫn tiếp tục. Phạm
 vi và quy tắc nằm trên trang [ma trận xuất](/docs/reference/export-matrix).
 Khi có adapter LoRA trực tiếp, chúng được gộp vào trọng số dense, và phép gộp
 chỉ diễn ra sau khi mọi bước từ chối yêu cầu đã hoàn tất.

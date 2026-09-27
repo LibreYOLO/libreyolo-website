@@ -77,7 +77,7 @@ snippets:
       language: bash
       code: |
         libreyolo export model=LibreL2CSr50.pt format=onnx
-source_hash: 22aa3c3d87b0c730
+source_hash: fd43893dc6df0493
 ---
 
 ## Định nghĩa
@@ -108,7 +108,8 @@ Trọng số có hạn chế về giấy phép. Chúng được huấn luyện t
 phép chỉ cho phép sử dụng nghiên cứu và phi thương mại, đồng thời cấm phân phối
 lại, vì vậy LibreYOLO không mirror gì cho family này. Checkpoint duy nhất thư
 viện có thể tự động tải đến thẳng từ bản phân phối Google Drive riêng của tác
-giả qua `gdown`, sau khi in điều khoản giấy phép. Hãy đọc
+giả qua `gdown`, sau khi in điều khoản giấy phép. Trong 1.6.0 bản tải đó trả về
+404, nên hãy truyền một checkpoint cục bộ. Hãy đọc
 [L2CS-Net](/docs/models/l2cs) trước khi triển khai.
 
 Đường dẫn tải đó cần thành phần bổ sung `gaze`:

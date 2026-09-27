@@ -21,7 +21,7 @@ keywords:
   - objekterkennung python
   - echtzeit objekterkennung
   - deim mit eigenem datensatz trainieren
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -141,7 +141,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 6edaac5f05abaabe
+source_hash: "8dc052b83d5f1ac0"
 ---
 
 ## Installation
@@ -173,6 +173,8 @@ filtern eine Top-k-Dekodierung über Queries und Klassen; es gibt keinen
 NMS-Schritt zum Einstellen, und `iou` wird akzeptiert, aber nicht genutzt.
 Siehe [Vorhersage](/docs/predict) für Quellen, Streaming und den Umgang mit
 Ergebnissen.
+
+DEIM akzeptiert rechteckiges `imgsz=(height, width)` für die Vorhersage. DEIMv2 weist rechteckige Vorhersage- und Validierungsanfragen ausdrücklich zurück. Daraus folgt keine Unterstützung für rechteckiges Training oder rechteckigen Export.
 
 ## Varianten
 
@@ -223,6 +225,8 @@ Version 2 einen Fehler, bevor der Lauf startet.
 
 Siehe [Training](/docs/train) für Datensätze, Augmentierung, Multi-GPU und
 Logger.
+
+DEIM aktiviert AMP standardmäßig mit `amp_dtype="float16"`. Übergib `amp=False` für FP32-Training.
 
 ## Validierung
 

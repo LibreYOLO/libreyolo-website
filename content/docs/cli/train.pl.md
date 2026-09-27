@@ -2,9 +2,8 @@
 title: libreyolo train
 seo_title: dokumentacja polecenia libreyolo train
 description: >-
-  Trenowanie modelu z wiersza poleceń: wszystkie 59 argumentów wraz z
-  wartościami domyślnymi, sposób, w jaki zastępują je ustawienia rodziny modeli,
-  oraz argumenty, które rodzina ignoruje.
+  Trenowanie modelu z wiersza poleceń: argumenty i ich wartości domyślne,
+  nadpisywanie przez ustawienia rodzin oraz ignorowane argumenty.
 lead: >-
   Trenuje jeden model na jednym zbiorze danych i zapisuje checkpointy, metryki
   oraz logi w katalogu uruchomienia. Każdy argument poniżej ma wartość domyślną
@@ -17,7 +16,7 @@ keywords:
   - argumenty libreyolo train
   - trenowanie yolo na własnych danych
   - zamrażanie warstw yolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Polecenie
     value: libreyolo train
@@ -26,7 +25,7 @@ meta:
     value: data
     mono: true
   - label: Wynik
-    value: 'Checkpointy, metryki i logi w runs/train/exp'
+    value: 'Checkpointy, metryki i logi w runs/train/<name>; YOLO9 używa yolo9_exp'
 snippets:
   examples:
     - label: Podstawowy
@@ -54,7 +53,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 3aad4298310d3081
+source_hash: 30b2c16d339f5f50
 ---
 
 ## Składnia
@@ -94,6 +93,7 @@ Argumenty to pary `key=value`, działa też forma POSIX, więc `epochs=50` i
 | `amp` | `true` | Automatyczna mieszana precyzja |
 | `amp_dtype` | `float16` | Typ danych AMP na CUDA: `float16` lub `bfloat16` |
 | `cuda_graph` | `false` | Przechwycenie przejścia w przód i wstecz do grafów CUDA. Tylko pojedyncze GPU i tylko obsługiwane rodziny; pozostałe działają w trybie eager |
+| `compile` | `false` | Kompilacja trenowanej sieci przez `torch.compile`: `true`, `false`, `default`, `reduce-overhead`, `max-autotune`, `max-autotune-no-cudagraphs`. Tylko pojedyncze GPU z CUDA; pozostałe uruchomienia trenują w trybie eager z ostrzeżeniem |
 | `lora` | `false` | Dostrajanie LoRA, dla rodzin transformerowych wymienionych w sekcji Uwagi |
 | `freeze` | | Zamrożenie warstw: liczba całkowita, lista indeksów lub nazwy modułów |
 
@@ -152,7 +152,7 @@ Argumenty to pary `key=value`, działa też forma POSIX, więc `epochs=50` i
 | Argument | Domyślnie | Znaczenie |
 |---|---|---|
 | `val` | `true` | Walidacja w trakcie trenowania |
-| `eval_interval` | `10` | Walidacja co N epok |
+| `eval_interval` | `10` | Walidacja co N epok oraz po ostatniej epoce |
 | `max_det` | `300` | Maksymalna liczba predykcji na obraz po NMS walidacji |
 | `eval_max_det` | | Limit ewaluatora COCO. Gdy nieustawione, konwencja AP@100 z pycocotools |
 | `faster_coco_eval` | `true` | Użycie backendu C++ faster-coco-eval do metryk COCO, gdy jest zainstalowany; w przeciwnym razie powrót do pycocotools |
@@ -177,6 +177,27 @@ Argumenty to pary `key=value`, działa też forma POSIX, więc `epochs=50` i
 | `quiet` | `false` | Wyciszenie stderr |
 | `dry_run` | `false` | Ustalenie i wypisanie konfiguracji bez jej wykonania |
 | `help_json` | `false` | Zrzut schematu polecenia jako JSON i zakończenie |
+
+| Argument | Domyślnie | Znaczenie |
+| --- | --- | --- |
+| `min_samples` | `0` | Minimalna długość epoki dla małych zbiorów: jeśli zbiór ma mniej obrazów, losuje tyle próbek na epokę ze zwracaniem (0 = wyłączone) |
+| `class_balanced` | `False` | Próbkowanie ze współczynnikiem powtórzeń w stylu LVIS dla zbiorów z długim ogonem (domyślnie wyłączone) |
+| `cls_pw` | `0.0` | Potęga ważenia odwrotnością częstości w klasyfikacji: 0 wyłącza, 1 daje pełne ważenie (wagi klas ze średnią 1; nie można łączyć z class_weights=True) |
+| `class_weights` | `False` | Starsze wagi funkcji straty klasyfikacji normalizowane względem próbek (domyślnie wyłączone) |
+| `single_cls` | `False` | Trenowanie obsługiwanego detektora ze wszystkimi etykietami mapowanymi na klasę 0 |
+| `classes` | `None` | Trenowanie obsługiwanego detektora tylko na podanych oryginalnych identyfikatorach klas zbioru, oddzielonych przecinkami (np. '0,3,5'); pozostałe klasy są odrzucane jak nieoznaczone. Identyfikatory pozostają bez zmian, bez zagęszczania |
+| `average_best` | `0` | Równomierne uśrednienie N najlepszych checkpointów według obserwowanej metryki do weights/average.pt na końcu trenowania (0 = wyłączone) |
+| `export_check` | `False` | Eksport ONNX przed epoką 1 i przerwanie uruchomienia, jeśli eksport się nie powiedzie (domyślnie wyłączone) |
+| `precise_bn` | `0` | Ponowne obliczenie bieżących statystyk BatchNorm z tylu obrazów treningowych po ostatniej epoce (0 = wyłączone) |
+| `aux_weight` | | Tylko YOLO9: waga funkcji straty gałęzi pomocniczej PGI przy dostrajaniu. `0.25`, gdy nieustawione; `0` trenuje tylko główną głowicę |
+| `fliplr` | `None` | Prawdopodobieństwo odbicia poziomego (alias flip_prob używany w ekosystemie) |
+| `flipud` | `0.0` | Prawdopodobieństwo odbicia pionowego |
+| `auto_augment` | `None` | Polityka automatycznej augmentacji klasyfikacji: randaugment, autoaugment, augmix (domyślnie brak) |
+| `erasing` | `0.0` | Prawdopodobieństwo RandomErasing w klasyfikacji, 0 <= erasing < 1 |
+| `cutmix` | `0.0` | Prawdopodobieństwo CutMix w klasyfikacji (miękkie etykiety) |
+| `scale` | `0.5` | Zakres obszaru RandomResizedCrop w klasyfikacji: dolna granica zmiennoprzecinkowa lub jawne (min,max) |
+| `crop_pct` | `None` | Współczynnik zmiany rozmiaru przed centralnym wycięciem podczas ewaluacji klasyfikacji (domyślnie natywna wartość rodziny modelu) |
+| `plot_samples` | `8` | Przykładowe obrazy na wykresie walidacji: 0 wyłącza, -1 wybiera każdy walidowany obraz (nie zmienia metryk) |
 
 ## Przykłady
 
@@ -213,9 +234,11 @@ pipeline'y typu pass-through, bez mosaic, bez mixup i bez przekształcenia
 afinicznego, więc `mosaic`, `mixup`, `hsv_prob`, `degrees`, `translate`,
 `shear`, `mosaic_scale` i `mixup_scale` nic tam nie zmieniają. EC korzysta
 z tego samego pipeline'u, ale czyta `hsv_prob`, `degrees` i `translate`, gdy
-jego zadaniem jest estymacja pozy. Rodziny klasyfikacyjne, SegFormer i NAFNet
-ignorują cały ten zestaw, a wraz z nim `flip_prob`, ponieważ ich odbicie działa
-ze stałym prawdopodobieństwem, a nie konfigurowalnym. YOLO-NAS ignoruje sam
+jego zadaniem jest estymacja pozy. Rodziny klasyfikacyjne ignorują ten zestaw
+z wyjątkiem `mixup`, który oznacza dla nich batch-MixUp, i czytają `flip_prob`.
+SegFormer i NAFNet ignorują cały ten zestaw, a wraz z nim `flip_prob`, ponieważ
+ich odbicie działa ze stałym prawdopodobieństwem, a nie konfigurowalnym.
+YOLO-NAS ignoruje sam
 `mosaic`, ponieważ zamiast tego stosuje stale włączone przekształcenie
 afiniczne na każdej próbce. RF-DETR ignoruje dodatkowo trzy kolejne argumenty
 spoza tej listy: `optimizer`, `momentum` i `nesterov`.
@@ -226,14 +249,14 @@ trenuje, i ten wiersz jest miarodajną listą dla zainstalowanej wersji. Jest to
 również jedyny sygnał, więc skryptowe uruchomienie z `quiet=true` wycisza to
 ostrzeżenie razem ze wszystkim innym na stderr.
 
-`val=false` to powiązany przypadek. Dla większości rodzin ustawia
-`eval_interval` na `0`; RF-DETR nie potrafi w ten sposób wyłączyć walidacji
-i zapisuje w logu, że zignorował to żądanie.
+`val=false` to powiązany przypadek. Ustawia `eval_interval` na `0`, co wyłącza
+walidację w trakcie trenowania, łącznie z ostatnią epoką, a uruchomienie nie
+zapisuje `best.pt`.
 
 ### Inne zachowania, które warto znać
 
 `lora=true` jest przyjmowane przez RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1,
-v2 i v4, EC oraz ConvNeXt. Każda inna rodzina kończy działanie z
+v2 i v4, EC, GTR oraz ConvNeXt. Każda inna rodzina kończy działanie z
 `config_unsupported`, zamiast trenować bez tego.
 
 `pretrained=false` w połączeniu z `resume` jest odrzucane w rodzinach, które
@@ -241,7 +264,8 @@ obsługują trenowanie od zera, ponieważ oba te ustawienia żądają przeciwnyc
 rzeczy.
 
 `mosaic` i `mixup` to zapis w wierszu poleceń pól konfiguracyjnych
-`mosaic_prob` i `mixup_prob`. W rodzinach, w których mixup działa tylko na
+`mosaic_prob` i `mixup_prob`; w modelu klasyfikacyjnym `mixup` oznacza zamiast
+tego batch-MixUp. W rodzinach, w których mixup działa tylko na
 próbkach mosaic, `mixup` powyżej zera przy `mosaic` równym zero nigdy się nie
 uruchomi, o czym uruchomienie informuje.
 

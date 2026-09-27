@@ -19,7 +19,7 @@ keywords:
   - segmentação de instâncias
   - fine-tuning D-FINE
   - DETR
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -149,7 +149,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 0216631a26185524
+source_hash: afc2a4900f773c9d
 ---
 
 ## Instalação
@@ -205,15 +205,7 @@ O treinamento parte de um checkpoint publicado, para as duas tarefas.
 
 <code-tabs name="train" />
 
-Sem mexer em nada, o trainer roda 132 épocas com `lr0=2e-4` e `amp=False`, um
-batch de 16 e early stopping após 50 épocas sem melhora. Os pesos de detecção são
-um ponto de partida válido para treinar segmentação, mas só como transferência
-explícita, já que a cabeça de máscaras começa sem treinamento e de outro modo
-devolveria máscaras sem sentido. Passar `task=segment` para o CLI é o que
-autoriza isso. O caminho pelo Python é mais estreito: `LibreDFINE` precisa ser
-construído diretamente com `allow_detect_to_segment_transfer=True`, porque a
-factory `LibreYOLO()` não aceita esse argumento, e a construção direta não baixa
-nada, então o arquivo de pesos já precisa estar em disco.
+Por padrão, o trainer roda 132 épocas com `lr0=2e-4`, `amp=True` e `amp_dtype="float16"`, batch de 16 e early stopping após 50 épocas sem melhora. Pesos de detecção são um ponto de partida válido para treinamento de segmentação, mas só como transferência explícita, pois a cabeça de máscaras começa sem treinamento e, de outro modo, retornaria máscaras sem sentido. Passar `task=segment` na CLI autoriza a transferência. Em Python, o caminho é mais restrito: é preciso construir `LibreDFINE` diretamente com `allow_detect_to_segment_transfer=True`, porque a factory `LibreYOLO()` não aceita esse argumento, e a construção direta não faz download, então o arquivo de pesos já deve estar no disco.
 
 `lora=True` vale para detecção. O treinamento de segmentação o rejeita e aponta
 para `freeze='backbone'` no lugar, porque a cabeça de máscaras não foi testada

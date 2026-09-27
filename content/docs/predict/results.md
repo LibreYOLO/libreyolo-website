@@ -13,7 +13,7 @@ keywords:
   - depth map results
   - results summary
   - onnx same results
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 verification: "Payload classes, slots, move semantics, summary(), to_json(), plot(), save() and cutout() read from libreyolo/utils/results.py. Annotation and disk-writing behavior from InferenceRunner._save_annotated_image in libreyolo/models/base/inference.py and resolve_save_path in libreyolo/utils/general.py. Suffix dispatch from LibreYOLO() in libreyolo/models/__init__.py."
 snippets:
   basic:
@@ -114,7 +114,7 @@ snippets:
 
 ## One object, one slot per payload
 
-A prediction on one image returns one `Results`. It carries eighteen payload
+A prediction on one image returns one `Results`. It carries twenty-one payload
 slots, and a model fills only the ones its task produces. Every other slot is
 `None`, so reading `result.masks` on a detector is `None` rather than an error.
 
@@ -138,6 +138,9 @@ slots, and a model fills only the ones its task produces. Every other slot is
 | `embeddings` | `Embeddings` | `(N, D)` L2-normalized rows | The `embed` task |
 | `identities` | `Identities` | N names and scores | The `embed` task with a gallery |
 | `meshes` | `Meshes` | Body parameters and optional vertices | Body mesh recovery |
+| `albedo` | `AlbedoMap` | `(H, W, 3)` linear RGB | Albedo estimation |
+| `boxes3d` | `Boxes3D` | `(N, 14)` camera-frame cuboids, row-aligned with `boxes` | Monocular 3D detection |
+| `actions` | `Actions` | `(T, D)` action chunk | Robot policies |
 
 Alongside them sit the fields every result has: `orig_shape` as
 `(height, width)`, `path` (the source path, or `None` for in-memory input),
@@ -275,10 +278,6 @@ with its segments, a matte as a transparent-background RGBA PNG, and a detector
 as boxes with masks underneath them. The written path is attached to the result
 as `result.saved_path`.
 
-`Results.plot()` is narrower than its name suggests. It is defined for normal
-maps and edge maps only, and raises `NotImplementedError` for anything else.
-Use `save=True` for the other tasks.
-
 `Results.save(path)` is likewise narrow: it writes a matte result as a
 transparent-background RGBA PNG cutout and raises `NotImplementedError`
 otherwise. `Results.cutout()` returns that same RGBA array without writing it.
@@ -290,14 +289,19 @@ restored image, and `result.meshes.save_obj(path, index=0)` for a mesh.
 For where files land and how `output_path` and `output_file_format` behave, see
 [Prediction sources](/docs/predict/sources).
 
+`plot()` covers all task payloads. Image overlays return contiguous HxWx3 uint8 BGR by default; `pil=True` requests PIL. Depth, normal, edge and albedo maps, 3D cuboids and action chunks return a PIL image by default; `pil=False` returns the array. `orig_img` retains BGR pixels for in-memory and URL sources; local files and collected finite-video frames can be reopened.
+
+Controls include `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` and `filename`. Saved classification images include the top five labels. Matte saving writes an RGBA cutout.
+
 ## Exported artifacts return the same object
 
 <code-tabs name="exported" />
 
 `LibreYOLO()` dispatches on the file suffix, so an exported artifact loads
 through the same call as a `.pt` checkpoint and returns the same `Results`.
-`.onnx`, `.engine`, `.pte` and `.mnn` files are recognized by suffix, as are
-OpenVINO, Paddle and ncnn directories and a Triton model URL. Code that reads
+`.onnx`, `.torchscript`, `.engine`, `.pte`, `.tflite` and `.mnn` files are
+recognized by suffix, as are OpenVINO, Paddle, ncnn and Core ML `.mlpackage`
+directories and a Triton model URL. Code that reads
 `result.boxes.xyxy` does not change when a model is swapped for its exported
 build. See [Export](/docs/export) for the full set of formats.
 

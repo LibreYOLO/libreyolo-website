@@ -16,7 +16,7 @@ keywords:
   - addestrare modello di segmentazione
   - mIoU
   - libreria segmentazione MIT
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -118,7 +118,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 44b92d8ba6062f04
+source_hash: e13acb1e813da7c4
 ---
 
 ## Definizione
@@ -142,15 +142,7 @@ mai una classe, è escluso da loss e metriche, e `.classes` lo lascia fuori.
 
 ## Modelli
 
-Tre famiglie sia addestrano sia predicono:
-[SegFormer](/docs/models/segformer),
-[LingBot-Vision](/docs/models/lingbot-vision) e
-[DINOv2](/docs/models/dinov2). SegFormer e LingBot-Vision funzionano con il
-pacchetto base e hanno pesi pubblicati. DINOv2 richiede
-`pip install "libreyolo[rfdetr]"` e non ha un checkpoint ospitato da
-LibreYOLO: carica il backbone originale e la sua testa densa parte da
-un'inizializzazione casuale, quindi è un punto di partenza per l'addestramento
-più che un predittore pronto all'uso.
+Le famiglie addestrabili includono: [SegFormer](/docs/models/segformer), [LingBot-Vision](/docs/models/lingbot-vision) e [DINOv2](/docs/models/dinov2). SegFormer e LingBot-Vision funzionano con il pacchetto base e distribuiscono pesi pubblicati. DINOv2 richiede `pip install "libreyolo[rfdetr]"` e non ha checkpoint ospitati da LibreYOLO: carica il backbone upstream e inizializza casualmente la testa densa, quindi è un punto di partenza per l'addestramento, non un predittore pronto.
 
 Altre quattro fanno predizione, validazione ed esportazione, ma il loro
 `train()` solleva `NotImplementedError`: [FCN](/docs/models/fcn),
@@ -163,6 +155,8 @@ poco in comune, tra cui le 150 classi di ADE20K contro le 19 di Cityscapes,
 quindi il campo `names` di un checkpoint è ciò che ti dice che cosa sa
 etichettare, e due checkpoint sono confrontabili solo se sono stati addestrati
 sullo stesso dataset.
+
+[PP-LiteSeg](/docs/models/ppliteseg), [U-Net](/docs/models/unet) e [GTR](/docs/models/gtr) sono famiglie di segmentazione semantica addestrabili. I pesi Cityscapes di U-Net sono pubblicati come `LibreUNets-sem.pt`.
 
 ## Predizione
 
@@ -213,8 +207,7 @@ names:
   1: sidewalk
 ```
 
-`masks_dir` è il nome della directory sostituito a `images`, con valore
-predefinito `masks`. `label_mapping` è un rimappaggio opzionale
+`masks_dir` è il nome della directory sostituito a `images`. `label_mapping` è un rimappaggio opzionale
 `{source_id: train_id}` applicato ai valori dei pixel della maschera al
 caricamento, ed è così che un dataset numerato da 1 a 150 diventa da 0 a 149;
 qualsiasi valore di origine non mappato diventa ignore, e ogni train id deve
@@ -239,6 +232,8 @@ validazione sollevano un `ValueError` prima che l'esecuzione inizi quando
 `imgsz` non è divisibile esattamente. Il divisore è 32 per SegFormer, 16 per
 LingBot-Vision ed EoMT, 14 per DINOv2 e 8 per FCN e PIDNet. Vedi
 [addestramento](/docs/train) per dataset, augmentation, multi-GPU e logger.
+
+I dataset semantici accettano canvas `(height, width)`. PP-LiteSeg e U-Net distinguono i ritagli di addestramento dai rettangoli di valutazione. Il campionamento con ridimensionamento e ritaglio riempie le regioni mancanti con l'etichetta da ignorare; le trasformazioni fotometriche della famiglia si applicano dove configurate.
 
 ## Validazione
 

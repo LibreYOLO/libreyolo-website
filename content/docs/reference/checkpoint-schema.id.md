@@ -15,10 +15,9 @@ keywords:
   - metadata checkpoint libreyolo
   - manifest quant
   - wrap_libreyolo_checkpoint
-last_verified: 1.5.0
-verification: >-
-  Mencerminkan docs/checkpoint_schema.md dalam repositori libreyolo pada v1.5.0,
-  diperiksa silang terhadap libreyolo/utils/serialization.py dan BaseModel.save.
+last_verified: 1.6.0
+verification: Mengikuti docs/checkpoint_schema.md dalam repositori libreyolo pada v1.6.0, diperiksa
+  silang dengan libreyolo/utils/serialization.py dan BaseModel.save.
 snippets:
   usage:
     - label: Baca metadata dari checkpoint
@@ -48,7 +47,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: ce760f1bed97bfd0
+source_hash: 177904564cf0a488
 ---
 
 ## Skema v1.0
@@ -101,10 +100,7 @@ Skema sengaja dibuat flat, dan `model` sengaja berupa state dict.
 
 ## Tambahan pose
 
-Pose biasanya satu kelas, `nc: 1` dengan `person`, tetapi head pose YOLO-NAS
-juga mendukung pose multi-kelas dengan satu skeleton keypoint bersama. Dalam
-kasus itu, `nc` dan `names` menjelaskan kelas seperti dalam deteksi. Ekspor pose
-runtime menghasilkan `scores` berbentuk `[batch, anchors, nc]`.
+Checkpoint pose mencatat skema kelas dan keypoint-nya. YOLO-NAS mendukung beberapa kelas dengan satu kerangka bersama; RF-DETR juga mendukung jumlah keypoint per kelas. `nc` dan `names` menjelaskan kelas. Ekspor pose runtime menghasilkan `scores` dengan bentuk `[batch, anchors, nc]`.
 
 | Kunci | Arti |
 |---|---|
@@ -112,6 +108,8 @@ runtime menghasilkan `scores` berbentuk `[batch, anchors, nc]`.
 | `keypoint_dim` | `2` untuk label `x,y` atau `3` untuk label `x,y,visibility`; output model selalu menyediakan `x,y,visibility` |
 | `oks_sigmas` | Sigma OKS opsional per keypoint; default task untuk `num_keypoints` digunakan jika tidak ada |
 | `num_keypoints_per_class` | Jumlah keypoint opsional per kelas untuk head bergaya GroupPose yang tensor keypoint-nya diberi padding menurut kelas; `0` untuk kelas tanpa keypoint |
+
+RF-DETR dapat mencatat `num_keypoints_per_class` bersama `kpt_names`. Jumlahnya sejajar dengan kelas dataset; nol menandai kelas yang hanya memiliki kotak dan prediksi diisi hingga bentuk keypoint maksimum.
 
 ## Tambahan mesh
 
@@ -223,6 +221,8 @@ selain FP32, selain deteksi, family tidak didukung, atau bentuk tidak konsisten.
 Berkas `.pte` dan `.mnn` merupakan artefak khusus backend, bukan checkpoint
 PyTorch.
 
+Pengklasifikasi mencatat `norm_mean`, `norm_std`, dan `resize_mode`. Kanvas persegi panjang mempertahankan `imgsz_h` dan `imgsz_w`. `letterbox_pad` YOLO9 adalah `topleft` atau `center`; tanpa metadata, geometri kiri atas lama dipertahankan.
+
 ## Checkpoint terkuantisasi
 
 Model terkuantisasi menambahkan satu kunci flat opsional, `quant`, yang menyimpan
@@ -289,6 +289,8 @@ sengaja didistribusikan sebagai checkpoint pelatihan.
 Untuk kompatibilitas rilis, reader menerima alias metrik terbaik lama
 `best_mAP50_95`, `best_mAP50`, `best_metric`, dan `best_metric_name`.
 
+Pemilihan kustom mencatat `fitness_source="callback"` dan `best_metric_key="fitness/custom"`. Kode/status callback tidak disimpan; proses ini tidak dapat dilanjutkan. Mulai proses baru dari bobotnya.
+
 ## Snapshot eksternal
 
 Skema mengatur berkas `.pt` yang dibuat LibreYOLO. Skema tidak mengganti nama atau
@@ -335,3 +337,6 @@ error; dengan `strict=True`, metode ini memunculkan `CheckpointMetadataError`.
 `model.save(path)` adalah cara yang didukung untuk menulis checkpoint yang
 sesuai.
 
+## Profil input
+
+Checkpoint histogram dua polaritas mempertahankan `input_profile` lengkap, termasuk format, susunan, polaritas, encoding, skala, dan durasi jendela, serta `input_initialization`. Pemuatan ulang untuk prediksi tidak memerlukan YAML dataset; pelatihan/validasi menolak profil yang tidak cocok. Lihat [histogram peristiwa](/docs/train/event-histograms).

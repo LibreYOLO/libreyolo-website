@@ -4,8 +4,8 @@ families:
   - yolonas
 seo_title: 'YOLO-NAS: prediksi, latih, dan ekspor di LibreYOLO'
 description: >-
-  Gunakan YOLO-NAS di LibreYOLO untuk deteksi dan pose. Bobot Deci.AI bersifat
-  proprietary dan nonkomersial, serta tidak ada yang diterbitkan LibreYOLO.
+  Deteksi, pose, dan kotak berorientasi YOLO-NAS di LibreYOLO. Bobot pralatih
+  upstream hanya untuk penggunaan nonkomersial.
 lead: >-
   Detektor konvolusional yang backbone dan neck-nya dihasilkan oleh pencarian
   arsitektur Deci.AI, dibuat dari block RepVGG yang menyadari kuantisasi.
@@ -20,7 +20,7 @@ keywords:
   - estimasi pose
   - quantization aware detector
   - AutoNAC
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -135,7 +135,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 47c30d6e44024ce7
+source_hash: 52050c4046781a6e
 ---
 
 ## Instalasi
@@ -160,6 +160,8 @@ Objek `Results` yang dikembalikan sama dengan yang dikembalikan setiap family, j
 detektor hanya memerlukan perubahan satu baris. `conf` menetapkan ambang batas confidence
 dan `iou` menetapkan ambang NMS. Lihat [prediksi](/docs/predict) untuk sumber, streaming,
 dan penanganan hasil.
+
+Task kotak berorientasi mengembalikan `result.obb`. Graf OBB yang dipublikasikan memakai kanvas 1024 piksel dan kumpulan 18 kelas yang tercatat.
 
 ## Varian
 
@@ -186,6 +188,8 @@ yang diinisialisasi secara acak sama sekali tidak melibatkan checkpoint Deci, da
 snippet ketiga di atas.
 
 Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
+
+Deteksi memakai `amp=True` dengan `amp_dtype="float16"` secara default; pelatihan kotak berorientasi tetap memakai `amp=False`. Head OBB mendukung pelatihan, prediksi, dan validasi, memakai augmentasi pembalikan/HSV, serta memilih checkpoint dengan `metrics/mAP50-95(OBB)`. `load_detect_weights_for_obb()` menginisialisasinya dari bobot deteksi.
 
 ## Validasi
 
@@ -215,8 +219,9 @@ checkpoint Deci tidak mengubah asal bobot maupun lisensi yang mencakupnya.
 
 Tidak ada yang dapat dicantumkan. Lisensi Deci melarang distribusi ulang, sehingga organisasi
 LibreYOLO tidak menerbitkan bobot YOLO-NAS dan unduhan diselesaikan di tempat lain: nama
-berbentuk `LibreYOLONAS<size>.pt`, atau `LibreYOLONAS<size>-pose.pt` untuk pose, dipetakan
-ke objek yang sesuai pada CDN publik Deci.
+berbentuk `LibreYOLONAS<size>.pt`, `LibreYOLONAS<size>-pose.pt` untuk pose, atau
+`LibreYOLONAS<size>-obb.pt` (s, m, l) untuk kotak berorientasi, dipetakan ke objek yang
+sesuai pada CDN publik Deci.
 
 Hanya checkpoint dengan SHA-256 yang ditetapkan library yang dapat diambil dengan cara itu.
 Semua yang lain gagal dalam kondisi tertutup, bukan membuka pickle pihak ketiga yang belum

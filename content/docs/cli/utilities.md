@@ -82,7 +82,10 @@ dependency from this one command.
 ## models
 
 Lists every model family with its tasks, sizes, the CLI names that resolve to
-its checkpoints, and each size's input resolution.
+its checkpoints, and each size's input resolution. Only names that `model=` can
+load are listed. Names without published weights appear on a separate
+`No published weights (local checkpoints only)` line, and a family with no CLI
+names shows its Python class or its own command instead.
 
 ```bash
 libreyolo models

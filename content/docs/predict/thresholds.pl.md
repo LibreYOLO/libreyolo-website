@@ -18,7 +18,7 @@ keywords:
   - DETR bez NMS
   - próg pewności detekcji
   - filtrowanie klas podczas wnioskowania
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Wartości domyślne pochodzą z InferenceRunner.__call__ w
   libreyolo/models/base/inference.py. Zachowanie NMS dla poszczególnych rodzin
@@ -109,7 +109,7 @@ snippets:
         max_det.
 
         print(len(loose.boxes), len(tight.boxes))
-source_hash: 0b978963c356027d
+source_hash: 849650629e58c9e1
 ---
 
 ## Cztery argumenty
@@ -138,6 +138,8 @@ gdy detekcji jest zbyt wiele lub zbyt mało.
 
 Wartość domyślna `0.25` nadaje się do oglądania obrazów. System przekazujący
 wyniki dalej zwykle wymaga wartości wyższej, a pomiar dokładności znacznie niższej.
+
+Walidacja detekcji udostępnia `metrics/best_conf` i progi poszczególnych klas na podstawie F1 przy IoU 0.50. Można ich użyć jako zmierzonych punktów wyjścia dla progów wdrożenia; zobacz [walidację](/docs/train/validation). Segmentacja nie udostępnia tych kluczy.
 
 ## iou
 
@@ -246,4 +248,3 @@ więc literówka powoduje natychmiastowy błąd, zamiast zostać po cichu zignor
 Następujące argumenty są przyjmowane, powodują ostrzeżenie i są odrzucane:
 `agnostic_nms`, `boxes`, `dnn`, `half`, `line_width`, `retina_masks`, `show_conf`,
 `show_labels` i `verbose`.
-

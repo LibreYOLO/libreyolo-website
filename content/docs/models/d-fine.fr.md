@@ -19,7 +19,7 @@ keywords:
   - segmentation d'instances python
   - DETR
   - fine-tuning D-FINE
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -151,7 +151,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 0216631a26185524
+source_hash: afc2a4900f773c9d
 ---
 
 ## Installation
@@ -209,7 +209,7 @@ L'entraînement démarre depuis un checkpoint publié, pour les deux tâches.
 <code-tabs name="train" />
 
 Laissé à ses réglages par défaut, l'entraîneur fait 132 époques à `lr0=2e-4`
-avec `amp=False`, un batch de 16 et un early stopping après 50 époques sans
+avec `amp=True` et `amp_dtype="float16"`, un batch de 16 et un early stopping après 50 époques sans
 amélioration. Les poids de détection sont un point de départ légitime pour un
 entraînement de segmentation, mais seulement comme transfert explicite, puisque
 la tête de masques démarre non entraînée et renverrait sinon des masques sans

@@ -20,7 +20,7 @@ keywords:
   - carte de normales
   - prédiction dense
   - DINOv2
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -80,7 +80,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: d96b89f18ac10a40
+source_hash: b06daf44f9a58411
 ---
 
 ## Installer
@@ -94,9 +94,7 @@ pip install libreyolo
 
 ## Prédire
 
-Les poids sont téléchargés automatiquement à la première utilisation :
-LibreYOLO récupère la taille correspondante directement depuis les checkpoints
-officiels et la met en cache localement.
+Les poids se téléchargent automatiquement au premier usage. Les tailles s et l utilisent les miroirs de LibreYOLO ; b continue d'utiliser le checkpoint d'amont.
 
 <code-tabs name="predict" />
 
@@ -146,11 +144,7 @@ comporte donc comme un checkpoint et renvoie le même objet `Results`.
 
 <provenance-box>
 
-LibreYOLO ne copie pas ces checkpoints dans sa propre organisation.
-`LibreYOLO("LibreMoGe2s-normal.pt")` télécharge la taille correspondante
-directement depuis les dépôts Hugging Face officiels à une révision figée et
-vérifie le fichier par rapport à une somme de contrôle SHA-256 enregistrée avant
-de l'utiliser.
+Les checkpoints s et l sont mis en miroir par LibreYOLO ; b reste en amont. Les artefacts téléchargés conservent la licence de leur éditeur.
 
 </provenance-box>
 

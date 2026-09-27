@@ -14,7 +14,7 @@ keywords:
   - dự đoán yolo bằng dòng lệnh
   - tham số libreyolo predict
   - xuất json từ libreyolo predict
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Lệnh
     value: libreyolo predict
@@ -48,9 +48,8 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 7e46c7ed7dd9e6c4
+source_hash: 21374ebc0e6cf4d3
 ---
-
 ## Cú pháp
 
 ```bash
@@ -100,6 +99,11 @@ tác vụ được loại bỏ trước khi phân tích cú pháp.
 | `verbose` | `false` | Xuất stderr chi tiết |
 | `help_json` | `false` | In schema của lệnh dưới dạng JSON rồi thoát |
 
+| Tham số | Mặc định | Ý nghĩa |
+| --- | --- | --- |
+| `mask` | `None` | Mặt nạ nhị phân điền vùng ảnh cho một ảnh, dùng với mô hình yêu cầu nó |
+| `trimap` | `None` | Trimap ba mức cho một ảnh, dùng với mô hình matting có hướng dẫn |
+
 ## Ví dụ
 
 <code-tabs name="examples" />
@@ -112,8 +116,10 @@ giá trị hợp lệ cho `model`. Có ba tùy chọn bị từ chối trên cá
 vì bị bỏ qua: `tiling`, `overlap_ratio` và `output_file_format` sẽ thoát với
 `config_unsupported` khi một backend runtime không thể đáp ứng chúng.
 
-`half` thì ngược lại. Các runtime đã xuất nhận tham số này và chạy ở FP16;
-inference PyTorch gốc ghi log rằng nó bị bỏ qua và tiếp tục chạy ở FP32.
+`half` thì ngược lại: tham số này được chấp nhận và bị bỏ qua. Inference PyTorch
+gốc ghi log rằng nó bị bỏ qua và tiếp tục chạy ở FP32, còn runtime đã xuất giữ
+nguyên precision đã dùng lúc xuất, nên muốn inference FP16 thì phải xuất với
+`half=true`.
 
 Các mô hình gaze gồm hai giai đoạn và không có bộ phát hiện của riêng chúng,
 nên `face_detector` là bắt buộc với chúng. `gallery` chỉ áp dụng cho các mô

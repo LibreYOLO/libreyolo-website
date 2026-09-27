@@ -5,8 +5,7 @@ families:
 seo_title: 'RF-DETR: entrena, haz fine-tuning y exporta bajo MIT'
 description: >-
   Usa RF-DETR en LibreYOLO para detección, segmentación de instancias, pose y
-  cajas orientadas. Instala, predice, entrena, valida y exporta, todo con
-  licencia MIT.
+  cajas orientadas. Instala, predice, entrena, valida y exporta.
 lead: >-
   Un transformer de detección que predice un conjunto fijo de objetos en lugar
   de una rejilla densa, por lo que no necesita NMS en inferencia. LibreYOLO lo
@@ -19,7 +18,7 @@ keywords:
   - segmentación de instancias
   - estimación de pose
   - bounding boxes orientados
-last_verified: 1.5.0
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -94,7 +93,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -154,7 +153,7 @@ snippets:
     - label: Usar el archivo exportado
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # La factoría enruta según la extensión del archivo, así que un
         # artefacto exportado se carga como cualquier checkpoint y devuelve
@@ -175,7 +174,7 @@ snippets:
 
         # y postprocesado. Inspecciona la firma antes de conectar nada.
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -185,7 +184,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 8c464aa759131694
+source_hash: 3238696a4e1ab6c2
 ---
 
 ## Instalación
@@ -208,12 +207,15 @@ que cambiar a otro detector es un cambio de una línea. `conf` y `max_det`
 filtran la selección de queries; no hay un paso de NMS que ajustar. Consulta
 [predicción](/docs/predict) para fuentes, streaming y manejo de resultados.
 
+Las rutas de detección, segmentación y cajas orientadas usan redimensionado bilineal de OpenCV en coma flotante sin antialiasing; pose conserva el redimensionado con antialiasing. Un `imgsz=(height, width)` rectangular debe respetar la cuadrícula de patches y ventanas de la tarea. El inventario de checkpoints incluye el detector de interfaces de usuario. Los [histogramas de eventos](/docs/train/event-histograms) usan el perfil de entrada registrado.
+
 ## Variantes
 
-Cuatro tamaños, y cuatro tareas que comparten una misma arquitectura: la
-segmentación, la pose y las cajas orientadas reutilizan el decoder de detección
-con una cabeza distinta, así que aceptan los mismos argumentos. Los tamaños
-tienen un número de parámetros similar y se diferencian sobre todo en la
+Cuatro tamaños de detección, de `n` a `l`, y cuatro tareas que comparten una
+misma arquitectura: la segmentación, la pose y las cajas orientadas reutilizan
+el decoder de detección con una cabeza distinta, así que aceptan los mismos
+argumentos. La segmentación añade `x` y `xx`, y la pose solo existe en `x`. Los
+tamaños tienen un número de parámetros similar y se diferencian sobre todo en la
 resolución de entrada.
 
 <benchmark-table task="detect" />
@@ -223,9 +225,8 @@ resolución de entrada.
 ## Entrenamiento
 
 El entrenamiento parte de un checkpoint publicado, para las cuatro tareas.
-RF-DETR incluye `pretrained` entre los argumentos que su trainer nativo ignora,
-así que pasar `pretrained=False` no te da aquí un modelo inicializado
-aleatoriamente.
+`pretrained=False`, en cambio, reinicializa toda la red, backbone incluido, y
+entrena desde cero.
 
 <code-tabs name="train" />
 
@@ -240,11 +241,13 @@ válidos más cercanos.
 Consulta [entrenamiento](/docs/train) para datasets, aumento de datos
 (data augmentation), multi-GPU y loggers.
 
+Las ejecuciones nuevas usan `output_dir=None` por defecto, que se resuelve a un directorio `runs/train/rfdetr_exp` incrementado con `exist_ok=False`. Una ejecución reanudada sigue escribiendo en el directorio de ejecución de su checkpoint. Los datasets de pose multiclase usan `kpt_names` indexado por índice o nombre de clase; una lista vacía indica una clase solo con cajas. Las predicciones rellenan los keypoints hasta `kpt_shape`; el criterio de selección por mAP de keypoints no puntúa las clases solo con cajas.
+
 ## Validación
 
-`val()` devuelve un diccionario de claves `metrics/` que cubren precisión,
-recall, mAP 50 y mAP 50-95, medidas contra cualquier dataset en el formato con
-el que entrenaste.
+`val()` devuelve un diccionario de claves `metrics/` que cubren mAP 50,
+mAP 50-95, mAP 75 y el recall promedio de COCO, medidas contra cualquier dataset
+en el formato con el que entrenaste.
 
 <code-tabs name="val" />
 

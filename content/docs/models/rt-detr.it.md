@@ -24,7 +24,7 @@ keywords:
   - DOTA
   - rilevamento oggetti python
   - box orientati
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -182,7 +182,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 8022a5a591922a90
+source_hash: 75454e612d7e2247
 ---
 
 ## Installazione
@@ -293,6 +293,8 @@ costruito per un rapporto d'aspetto sbagliato.
 
 Vedi [addestramento](/docs/train) per dataset, data augmentation, multi-GPU e
 logger.
+
+RT-DETRv4 attiva di default `amp=True` con `amp_dtype="float16"`. Passa `amp=False` per FP32.
 
 ## Validazione
 

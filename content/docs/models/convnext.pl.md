@@ -18,7 +18,7 @@ keywords:
   - klasyfikacja obrazów
   - konwolucyjna sieć neuronowa
   - klasyfikator ImageNet
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -33,8 +33,10 @@ snippets:
         print(result.probs.top5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreConvNeXtt-cls.pt source=cat.jpg save=True
+      code: >
+        libreyolo predict model=LibreConvNeXtt-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   train:
     - label: Python
       language: python
@@ -106,7 +108,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: 1682cc69cf2925e6
+source_hash: 8f33a40e4d3a8f29
 ---
 
 ## Instalacja
@@ -168,12 +170,16 @@ adaptery do warstw MLP bloków zamiast dostrajać cały backbone.
 Zobacz stronę [trenowania](/docs/train), aby poznać zbiory danych, augmentację,
 obsługę wielu GPU i loggery.
 
+`cls_pw=0` wyłącza ważenie funkcji straty; wartości do 1 używają odwrotności częstości, normalizowanych do średniej 1. `class_weights=True` używa zamiast tego odwrotności częstości normalizowanych względem próbek i nie można go łączyć z `cls_pw>0`. Przy wznowieniu te ustawienia muszą być zgodne. Zobacz [klasyfikację](/docs/tasks/image-classification).
+
 ## Walidacja
 
 Metoda `val()` zwraca słownik kluczy `metrics/`. Dla klasyfikacji są to
 accuracy top-1 i top-5 w podziale walidacyjnym.
 
 <code-tabs name="val" />
+
+Walidacja i kalibracja INT8 używają transformacji ewaluacyjnej danej rodziny. Metadane eksportu zapisują `norm_mean`, `norm_std` i `resize_mode`; starsze artefakty używają wartości rodziny. Preprocesory kalibracji zwracają wymaganą tablicę CHW i współczynnik skali.
 
 ## Eksport
 
@@ -197,10 +203,7 @@ Wszystkie opublikowane pliki wag dla tej rodziny.
 
 <provenance-box>
 
-Ta rodzina udostępnia tylko ConvNeXt V1. Małe, wstępnie wytrenowane checkpointy
-ConvNeXt-V2 są objęte licencją CC-BY-NC 4.0 i celowo je wykluczono, ponieważ wag
-na licencji niekomercyjnej nie można rozpowszechniać w bibliotece przeznaczonej
-do zastosowań komercyjnych i objętej licencją MIT.
+Ta strona opisuje ConvNeXt V1. [ConvNeXt V2](/docs/models/convnextv2) to osobna rodzina, której oficjalne wstępnie wytrenowane wagi zachowują licencję CC-BY-NC-4.0.
 
 </provenance-box>
 

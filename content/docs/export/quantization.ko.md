@@ -17,7 +17,7 @@ keywords:
   - fp8 e4m3
   - 보정 데이터셋
   - qdq onnx 내보내기
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 전화하다
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -78,7 +78,7 @@ snippets:
             calib="coco128.yaml",      # data.yaml 경로나 내장 이름; None은 보정 건너뛰기
             samples=128,               # 최대 보정 이미지
             batch=8,                   # 보정 배치 크기
-            algorithm="auto",          # auto와 minmax는 동일하며, percentile은 대안이다
+            algorithm="auto",          # auto는 minmax를 선택하며 대안은 percentile, mse, entropy입니다
             keep_high_precision=None,  # 아무도 계열 정책을 사용하지 않는다
             verbose=True,
         )
@@ -155,7 +155,7 @@ snippets:
 
         # 이제 어떤 부동 소수점 내보내기 도구라도 지원하는 모든 정밀도로 적용됩니다.
         qmodel.export(format="tensorrt", half=True)
-source_hash: 4ffb06b87cad017e
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## 설치
@@ -173,6 +173,8 @@ source_hash: 4ffb06b87cad017e
 <code-tabs name="reload" />
 
 QAT 실행 중에 작성된 트레이너 체크포인트는 매니페스트도 포함하고 있어, 이는 이러한 실행에서의 `best.pt` 자체가 양자화된 체크포인트임을 의미합니다.
+
+보정 `algorithm`은 `auto`, `minmax`, `percentile`, `mse`, `entropy`를 받습니다. `auto`는 minmax로 결정됩니다. MSE와 entropy는 히스토그램 탐색으로 활성화 범위를 선택합니다.
 
 ## 레시피
 
@@ -210,6 +212,8 @@ QAT는 이미 학습된 모델의 파인튜닝입니다. 초기부터 학습하�
 
 `fp16`- 및 `bf16`-양자화 모델은 추론 전용이며, 트레이너는 `amp=True`를 가리키며 이를 거부합니다.
 
+QAT 설정은 EMA와 SyncBatchNorm을 비활성화하고 `average_best=0`으로 설정하며, 각 변경을 기록합니다. 부동소수점 학습은 요청한 설정을 유지합니다.
+
 ## 내보내기
 
 <code-tabs name="export" />
@@ -225,6 +229,8 @@ QAT는 이미 학습된 모델의 파인튜닝입니다. 초기부터 학습하�
 ## 제약
 
 양자화 산술은 시뮬레이션에서 실행되며, 이는 AMP 하에서도 float32 영역에서 계산된 가짜 양자화입니다. 시뮬레이션은 수치적으로 정확하므로, 어떤 장치에서든 `val()` 점수는 양자화 산술에 대한 실제 주장입니다. 이는 속도와 관련된 주장이 아닙니다.
+
+Apple MPS는 가짜 양자화 연산도 float8도 구현하지 않으므로, Mac에서는 `fp16`과 `bf16`을 제외한 모든 레시피가 경고와 함께 CPU에서 실행됩니다.
 
 두 가지 예외가 네이티브로 실행됩니다. `fp16`와 `bf16`는 일반적인 캐스트입니다. 최종화된 `fp8` 모듈은 Ada, Hopper 및 Blackwell 클래스 하드웨어에서 `torch._scaled_mm`를 통해 패킹된 E4M3 가중치로 직접 GEMM을 실행하며, 시뮬레이션과 동일하게 보정된 활성화 스케일을 사용합니다; `LIBREYOLO_KERNELS=off`를 설정하면 모든 곳에서 정확히 시뮬레이션된 경로가 복원됩니다.
 

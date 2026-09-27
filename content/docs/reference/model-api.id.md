@@ -52,7 +52,7 @@ snippets:
 
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: da0776970ded8716
+source_hash: ccecee93e9744550
 ---
 
 ## Konstruksi
@@ -158,6 +158,7 @@ model.track(
     source,
     *,
     track_conf=0.25,
+    conf=None,
     iou=0.45,
     imgsz=None,
     classes=None,
@@ -165,20 +166,26 @@ model.track(
     save=False,
     show=False,
     vid_stride=1,
+    fps=30.0,
+    color_format="auto",
     output_path=None,
     tracker="bytetrack",
     tracker_config=None,
     augment=False,
+    persist=False,
     **tracker_kwargs,
 ) -> Generator[Results, None, None]
 ```
 
 Menghasilkan satu `Results` per frame dengan `track_id` yang telah ditetapkan.
 `tracker` adalah `"bytetrack"`, `"botsort"`, `"ocsort"`, atau
-`"deepocsort"`, dan diabaikan ketika `tracker_config` diberikan karena jenis
+`"deepocsort"`, opsional dengan sufiks `.yaml`, atau instance tracker kustom,
+dan diabaikan ketika `tracker_config` diberikan karena jenis
 konfigurasi memilih tracker. `track_conf` dipetakan ke `track_high_thresh` untuk
 ByteTrack dan BoT-SORT, serta ke `det_thresh` untuk OC-SORT dan Deep OC-SORT.
-Default `output_path` adalah `runs/track/<video_stem>.mp4`.
+`conf`, bila diberikan, adalah ambang deteksi, sama seperti pada `predict()`.
+`persist=True` mempertahankan tracker dari pemanggilan sebelumnya untuk loop per
+frame. Default `output_path` adalah `runs/track/<video_stem>.mp4`.
 
 ## val
 
@@ -198,6 +205,9 @@ model.val(
     verbose=True,
     *,
     plots=None,
+    project=None,
+    name=None,
+    exist_ok=False,
     **kwargs,
 ) -> Dict
 ```
@@ -205,8 +215,11 @@ model.val(
 Mengembalikan dictionary metrik yang kunci-nya bergantung pada task; deteksi
 mengembalikan `metrics/precision`, `metrics/recall`, `metrics/mAP50`, dan
 `metrics/mAP50-95`. `imgsz` menerima int persegi atau tuple `(height, width)`
-dan default-nya menggunakan ukuran input native model. `plots` adalah alias
-untuk `save_plots`. `allow_download_scripts` mengendalikan Python tertanam yang
+dan default-nya menggunakan ukuran input native model. `data=None` memvalidasi
+pada dataset yang tersimpan di config pelatihan checkpoint dan memunculkan error
+bila tidak ada, seperti pada bobot rilis. `project`, `name`, dan `exist_ok`
+menentukan direktori keluaran sebagai `project/name`, bernomor kecuali
+`exist_ok=True`. `plots` adalah alias untuk `save_plots`. `allow_download_scripts` mengendalikan Python tertanam yang
 dapat dibawa YAML dataset dalam kolom `download`.
 
 `faster_coco_eval` diterima melalui `**kwargs` dengan default `True`, lalu
@@ -245,6 +258,7 @@ exporter, dengan `engine` sebagai alias `tensorrt` dan `litert` sebagai alias
 | `dynamic` | `True` | Mengaktifkan dynamic axis |
 | `half` | `False` | Presisi FP16 |
 | `int8` | `False` | Presisi INT8 |
+| `quantize` | `None` | Presisi sebagai `16`, `8`, atau `32`, sebagai pengganti `half` atau `int8` |
 | `batch` | `1` | Ukuran batch yang ditanam ke artefak |
 | `device` | `None` | Device untuk tracing |
 | `data` | `None` | data.yaml untuk kalibrasi INT8 |
@@ -253,7 +267,8 @@ exporter, dengan `engine` sebagai alias `tensorrt` dan `litert` sebagai alias
 | `verbose` | `False` | Logging exporter mendetail |
 
 Kombinasi blocked memunculkan `NotImplementedError` saat preflight, sebelum
-tracing. Cakupan dan aturannya tersedia pada halaman
+tracing. Opsi yang tidak dipakai format tersebut memunculkan peringatan
+`Unknown <format> export arguments (ignored)` dan ekspor tetap berlanjut. Cakupan dan aturannya tersedia pada halaman
 [matriks ekspor](/docs/reference/export-matrix). Jika terdapat adapter LoRA
 aktif, adapter dilipat ke bobot padat, dan penggabungan ini hanya dilakukan
 setelah semua penolakan permintaan.

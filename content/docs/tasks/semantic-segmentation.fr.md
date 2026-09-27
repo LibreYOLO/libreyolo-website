@@ -15,7 +15,7 @@ keywords:
   - entraîner modèle segmentation
   - mIoU
   - bibliothèque segmentation MIT
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -128,7 +128,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 44b92d8ba6062f04
+source_hash: e13acb1e813da7c4
 ---
 
 ## Définition
@@ -153,7 +153,7 @@ métriques, et n'apparaît pas dans `.classes`.
 
 ## Modèles
 
-Trois familles peuvent être entraînées et effectuer des prédictions :
+Les familles entraînables comprennent :
 [SegFormer](/docs/models/segformer),
 [LingBot-Vision](/docs/models/lingbot-vision) et
 [DINOv2](/docs/models/dinov2). SegFormer et LingBot-Vision s'exécutent avec le
@@ -174,6 +174,8 @@ d'étiquettes ont peu en commun, notamment les 150 classes d'ADE20K contre les
 19 de Cityscapes. Le champ `names` d'un checkpoint indique donc ce qu'il peut
 étiqueter, et deux checkpoints ne sont comparables que s'ils ont été entraînés
 sur le même dataset.
+
+[PP-LiteSeg](/docs/models/ppliteseg), [U-Net](/docs/models/unet) et [GTR](/docs/models/gtr) sont des familles de segmentation sémantique entraînables. Les poids Cityscapes de U-Net sont publiés sous le nom `LibreUNets-sem.pt`.
 
 ## Prédire
 
@@ -224,8 +226,8 @@ names:
   1: sidewalk
 ```
 
-`masks_dir` est le nom du répertoire substitué à `images`. Il vaut `masks` par
-défaut. `label_mapping` est une association facultative
+`masks_dir` est le nom du répertoire substitué à `images`. `label_mapping` est
+une association facultative
 `{source_id: train_id}` appliquée aux valeurs de pixels du masque au chargement.
 Elle permet par exemple de faire passer un dataset numéroté de 1 à 150 à une
 plage de 0 à 149. Toute valeur source sans correspondance devient une valeur à
@@ -251,6 +253,8 @@ Ce diviseur vaut 32 pour SegFormer, 16 pour LingBot-Vision et EoMT, 14 pour
 DINOv2, et 8 pour FCN et PIDNet. Consultez la page
 [entraînement](/docs/train) pour les datasets, les augmentations, le multi-GPU
 et les systèmes de journalisation.
+
+Les datasets sémantiques acceptent des canevas `(height, width)`. PP-LiteSeg et U-Net distinguent les recadrages d'entraînement des rectangles d'évaluation. L'échantillonnage par redimensionnement et recadrage remplit les régions manquantes avec l'étiquette à ignorer ; les transformations photométriques de la famille s'appliquent lorsqu'elles sont configurées.
 
 ## Valider
 

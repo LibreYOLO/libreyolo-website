@@ -14,7 +14,7 @@ keywords:
   - FOMO 포인트 현지화
   - 이미지 속 물체 세기
   - 점 위치 지정
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: 점을 예측하고 계산하십시오
@@ -117,7 +117,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.points.xy)
-source_hash: 932153c8870d1c7c
+source_hash: "5c3cfe7a606cd7aa"
 ---
 
 ## 정의
@@ -128,13 +128,15 @@ source_hash: 932153c8870d1c7c
 
 ## 모델들
 
-세 계열이 `point`를 사용하며, 서로 교환할 수 없습니다.
+점 모델은 어휘와 출력 의미가 서로 다릅니다.
 
 [FOMO](/docs/models/fomo)은 고정 어휘 옵션입니다: 저해상도 그리드의 각 셀을 배경 또는 객체 중심으로 표시하는 그리드 분류기입니다. 이것은 LibreYOLO가 학습할 수 있는 유일한 포인트 계열이며, 내보낼 수 있는 유일한 계열이기도 합니다.
 
 [LocateAnything](/docs/models/locate-anything)은 클래스 인덱스 대신 텍스트를 사용하므로, 어휘는 작성하는 문구에 따라 달라집니다. `vlm`가 추가로 필요하며, `LibreYOLO()` 팩토리를 통해서가 아니라 `LibreLocateAnything`로 구성되며, 가중치는 비상업적 사용으로 제한됩니다. 정확한 조건과 체크포인트가 구성하는 두 가지 추가 라이선스는 해당 페이지에 나와 있습니다.
 
 [SenseNova-Vision](/docs/models/sensenova-vision)은 여섯 가지 다른 작업에 사용하는 동일한 프롬프트 생성 체크포인트를 통해 `point`에 도달하며, `LibreVLM("sensenova-vision", task="point")`로 로드됩니다. `sensenova` 추가가 필요하며, 모든 예측은 7B 모델에 대한 생성 패스이므로, 목적에 맞게 제작된 탐지기보다 이미지당 지연 시간이 눈에 띄게 높을 것으로 예상됩니다. 그 가중치는 비상업적이며, 라이선스는 해당 페이지에 있습니다.
+
+[Molmo2](/docs/models/molmo2)와 [Moondream](/docs/models/moondream)은 텍스트 조건부 점을 제공합니다. [LibreGround](/docs/reference/ground-api)는 ShowUI, Florence-2 또는 Qwen3-VL로 지시문을 해석하여 쿼리당 최대 한 개의 클릭 위치를 선택합니다.
 
 ## 예측
 

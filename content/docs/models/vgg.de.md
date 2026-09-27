@@ -18,7 +18,7 @@ keywords:
   - VGG-19
   - konvolutionales neuronales Netzwerk
   - Bildklassifizierung
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -94,7 +94,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: 26eb6ff5811533fd
+source_hash: "7e22e5bf59ca038a"
 ---
 
 ## Installation
@@ -122,6 +122,8 @@ Es gibt vier Größen: 16 und 19 konvolutionale Schichten, jeweils als einfache 
 `val()` arbeitet mit einem Split im ImageFolder-Stil, also einem Verzeichnis mit den Unterordnern `train/` und `val/` und je einem Ordner pro Klasse. Die Methode gibt die Genauigkeit für Top-1 und Top-5 zurück.
 
 <code-tabs name="val" />
+
+Validierung und INT8-Kalibrierung verwenden die Auswertungstransformation der Familie. Die Exportmetadaten speichern `norm_mean`, `norm_std` und `resize_mode`; ältere Artefakte greifen auf die Familienwerte zurück. Kalibrierungsvorverarbeiter geben das erforderliche CHW-Array und das Verhältnis zurück.
 
 ## Export
 

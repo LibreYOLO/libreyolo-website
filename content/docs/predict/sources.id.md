@@ -19,7 +19,7 @@ keywords:
   - youtube inference
   - vid_stride
   - stream=True
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Klasifikasi sumber dibaca dari libreyolo/utils/source.py (classify_source,
   SourceKind, StreamSource, MultiStreamSource). Jenis gambar dan ekstensi
@@ -54,7 +54,11 @@ snippets:
         array = np.asarray(pil_image)
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+        # Array NumPy dibaca sebagai BGR kecuali diberi tahu lain; yang ini RGB.
+        result = model(array, color_format="rgb")
+        print(type(array).__name__, len(result.boxes))
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: Folder
@@ -201,7 +205,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: 81a0c947dbfe48b5
 ---
 
 ## Cara sumber diklasifikasikan
@@ -239,20 +243,25 @@ Sumber satu gambar menerima tujuh tipe.
 |---|---|
 | `str` atau `pathlib.Path` | Berkas lokal, `http(s)://`, `s3://`, atau `gs://` |
 | `PIL.Image.Image` | Dikonversi ke RGB |
-| `numpy.ndarray` | Grayscale 2D, atau HWC maupun CHW 3D; array 4D memakai gambar pertama |
-| `torch.Tensor` | CHW atau NCHW, dibaca sebagai RGB; tensor batch memakai gambar pertama |
+| `numpy.ndarray` | Grayscale 2D, atau HWC maupun CHW 3D dalam urutan BGR; array 4D adalah batch |
+| `torch.Tensor` | CHW atau NCHW, dibaca sebagai RGB; tensor 4D adalah batch |
 | `bytes` | Data gambar terenkode |
 | `io.BytesIO` | Data gambar terenkode |
 
+Array atau tensor 4D mengembalikan daftar berisi satu `Results` per gambar.
+
 Semuanya dikonversi ke RGB sebelum prapemrosesan. Array NumPy adalah satu-satunya kasus dengan
-urutan channel ambigu, sehingga `color_format` mengontrolnya: `"auto"` (default) membiarkan
-array apa adanya, sedangkan `"bgr"` membalik channel, seperti yang dibutuhkan frame OpenCV.
+urutan channel ambigu, sehingga `color_format` mengontrolnya: `"auto"` (default) dan `"bgr"`
+membaca array sebagai BGR, urutan yang dikembalikan OpenCV, sedangkan `"rgb"` membiarkannya
+apa adanya, seperti yang dibutuhkan array yang dibuat dari gambar PIL.
 
 Array float diskalakan ulang berdasarkan rentangnya sendiri: nilai hingga `1.0` dikalikan 255,
 sedangkan nilai lebih tinggi dipotong ke `[0, 255]`. Array RGBA membuang channel alfa.
 
-Path remote memerlukan satu paket per jenis dan tidak ada yang dipasang secara default:
-`requests` untuk `http(s)://`, `boto3` untuk `s3://`, dan `gcsfs` untuk `gs://`.
+Path remote memerlukan satu paket per jenis. `requests`, untuk `http(s)://`, sudah ikut
+dalam instalasi dasar; `boto3` untuk `s3://` dan `gcsfs` untuk `gs://` tidak.
+
+Pelacakan menerima gambar, folder yang diurutkan berdasarkan nama berkas, daftar, tuple, dan iterator gambar lazy sebagai frame berurutan. Berikan `fps=30.0` untuk menentukan waktu urutan gambar dan `color_format="auto"` untuk memilih interpretasi input. Lihat [pelacakan](/docs/tasks/object-tracking).
 
 ## Folder
 
@@ -268,8 +277,10 @@ bertumpuk per bagian pada family yang mendukungnya. Lihat
 
 <code-tabs name="video" />
 
-Path dihitung sebagai video jika sufiksnya salah satu dari `.asf`, `.avi`, `.gif`, `.m4v`,
-`.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.ts`, `.wmv`, `.webm`.
+Path dihitung sebagai video jika sufiksnya salah satu dari `.3g2`, `.3gp`, `.asf`,
+`.avi`, `.dav`, `.f4v`, `.flv`, `.gif`, `.h264`, `.h265`, `.hevc`, `.m2ts`,
+`.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.mts`, `.mxf`, `.ogv`, `.ts`,
+`.vob`, `.wmv`, `.webm`.
 
 `.gif` muncul di kedua daftar. Path `.gif` yang diteruskan langsung ke `predict` dibuka sebagai
 video karena pemeriksaan video berjalan lebih dulu; `.gif` dalam folder yang dipindai dimuat
@@ -280,6 +291,8 @@ video didekode menjadi daftar, dan hasil lebih dari 500 frame setelah striding m
 peringatan yang menyarankan `stream=True`.
 
 Setiap `Results` dari video membawa `frame_idx`.
+
+Encoding video memakai codec yang tersedia sebagai fallback jika H.264 tidak dapat dibuka. Fallback dicatat pada tingkat INFO dan disimpan dalam cache per codec dan kanvas hanya setelah codec lain berhasil.
 
 ## Webcam, stream jaringan, dan YouTube
 
@@ -374,7 +387,9 @@ pertama. Untuk isinya, lihat [Bekerja dengan hasil](/docs/predict/results).
 Gambar masuk ke `runs/detect/predict`, `runs/detect/predict2`, dan seterusnya yang bertambah
 otomatis, dengan nama berkas sumber dipertahankan. Setiap gambar dalam satu proses masuk ke
 direktori yang sama, sehingga dua folder input dengan nama berkas sama saling menimpa.
-Gambar dalam memori tidak memiliki nama berkas dan diberi nomor `image0`, `image1`, dan seterusnya.
+Gambar dalam memori tidak memiliki nama berkas untuk dipakai ulang. Satu gambar tunggal disimpan
+sebagai `inference`, sehingga pemanggilan berulang menimpanya; list atau batch diberi nomor
+`image0`, `image1`, dan seterusnya.
 
 Video dan sumber live ditulis sebagai satu `.mp4` yang dinamai berdasarkan sumber.
 
@@ -382,4 +397,4 @@ Video dan sumber live ditulis sebagai satu `.mp4` yang dinamai berdasarkan sumbe
 tanpa sufiks dianggap sebagai direktori. `output_file_format` memilih encoding gambar diam
 dan menerima `jpg`, `png`, atau `webp`.
 
-Setelah penyimpanan, path yang ditulis juga dilampirkan ke hasil sebagai `result.saved_path`.
+Setelah gambar disimpan, path yang ditulis juga dilampirkan ke hasil sebagai `result.saved_path`.

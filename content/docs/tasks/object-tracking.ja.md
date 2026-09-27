@@ -16,7 +16,7 @@ keywords:
   - deep ocsort
   - track id
   - reid tracking
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -71,7 +71,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: f1fa7dcf60597d6b
+source_hash: b24043e73b35092d
 ---
 
 ## 定義
@@ -92,7 +92,7 @@ LibreYOLOの2つのモデル階層も追跡に対応しません。`LibreSAM` �
 
 追跡はネイティブPyTorchモデルで実行されます。`LibreYOLO("model.onnx")` で読み込んだエクスポート済み成果物はランタイムバックエンドオブジェクトを返します。このオブジェクトは `predict()` を提供しますが、`track()` は提供しません。
 
-ライブラリには4つのトラッカーが含まれ、`tracker` 引数で選択します。
+ライブラリには4つのトラッカーが含まれ、`tracker` 引数で選択します。`"bytetrack.yaml"` のような `.yaml` 付きの表記も同じ組み込みトラッカーを選択します。LibreYOLOはトラッカーのYAMLファイルを読み込まず、作業ディレクトリにその名前のファイルが存在すると例外を送出します。
 
 `"bytetrack"` がデフォルトです。動きだけを使い、Kalman filterと3段階の関連付けを備えます。まず信頼度の高い検出結果、次に破棄前の信頼度の低い検出結果を既存トラックと一致させる第2パス、最後に未確認トラックを処理します。`TrackConfig` で設定します。
 
@@ -108,9 +108,15 @@ LibreYOLOの2つのモデル階層も追跡に対応しません。`LibreSAM` �
 
 `track_conf` は最初の関連付け段階のしきい値を設定します。ByteTrackとBoT-SORTでは `track_high_thresh`、OC-SORTとDeep OC-SORTでは `det_thresh` に対応します。これは `predict()` の `conf` ではありません。またByteTrack、BoT-SORT、OC-SORTでは、弱い検出結果を回復パスで利用できるよう、内部で検出器をより低いしきい値で実行します。Deep OC-SORTでは、検出器自体を `det_thresh` で実行します。ByteTrackとBoT-SORTでは、`track_conf` を `track_low_thresh` 以上にする必要があり、後者のデフォルトは0.1です。
 
+`conf` を指定した場合は `predict()` の検出しきい値となり、それを下回る検出結果はトラッカーに届きません。指定しない場合、検出器は上記のしきい値で実行されます。
+
 トラッカー設定は2つの方法で渡せます。設定インスタンスを `tracker_config=` に渡すと、その型でトラッカーが選ばれるため、`tracker=` は重複指定になります。または、フィールドをキーワード引数として渡し、`track()` で指定したトラッカーの設定を構築できます。不明なキーは黙って適用されず、警告が表示されます。どちらの方法でも、対応するキーを明示的に設定すると `track_conf` は無視されます。
 
-残りの引数は推論と同じです。`iou`、`imgsz`、`classes`、`max_det`、`vid_stride`、`show`、および `output_path` と組み合わせる `save` を指定できます。ソースは動画ファイルのパスです。結果の処理については[推論](/docs/predict)を参照してください。
+残りの引数は推論と同じです。`iou`、`imgsz`、`classes`、`max_det`、`vid_stride`、`show`、および `output_path` と組み合わせる `save` を指定できます。`persist=True` は、`model.track(frame, persist=True)` のように1回の呼び出しで1フレームを渡すループ向けに、同じモデルに対する前回の `track()` 呼び出しのトラッカーとそのIDを保持します。ソースには動画または順序付きの画像列を使えます。結果の処理については[推論](/docs/predict)を参照してください。
+
+画像、ファイル名で並べたフォルダー、リスト、タプル、遅延評価する画像イテレーターを連続フレームとして使えます。`fps=30.0`で時刻情報を与え、`color_format="auto"`で入力の解釈を選択します。`vid_stride`を指定すると、保持するレートは`fps / vid_stride`になります。
+
+独自のトラッカーインスタンスを`tracker=`に渡せます。これは`libreyolo.tracking.Tracker`の`reset()`と`update(results, image=None)`を実装します。1回の実行で一度リセットされ、元のRGBのPILフレームを受け取ります。返す`track_id`は、ボックスと同じバックエンドとデバイス上にある、行の対応した1次元の整数配列またはテンソルである必要があります。独自インスタンスのデフォルトは`track_conf=0.25`です。トラッカー用キーワード引数や`tracker_config`を渡さず、インスタンスを直接設定してください。
 
 ## 学習
 

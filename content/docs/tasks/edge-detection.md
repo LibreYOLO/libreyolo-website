@@ -38,7 +38,7 @@ snippets:
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot() renders the map; it is defined for edge and normal results.
+        # plot() returns the rendered map as a PIL image.
         result.plot().save("edges.png")
   val:
     - label: Validate and read the metric keys

@@ -4,8 +4,8 @@ families:
   - yolonas
 seo_title: 'YOLO-NAS: predice, entrena y exporta en LibreYOLO'
 description: >-
-  Usa YOLO-NAS en LibreYOLO para detección y pose. Los pesos de Deci.AI son
-  propietarios y de uso no comercial, y LibreYOLO no publica ninguno.
+  Detección, pose y cajas orientadas con YOLO-NAS en LibreYOLO. Los pesos
+  preentrenados upstream son no comerciales.
 lead: >-
   Un detector convolucional cuyo backbone y cuello salieron de la búsqueda de
   arquitecturas de Deci.AI, construido con bloques RepVGG preparados para la
@@ -20,7 +20,7 @@ keywords:
   - estimación de pose
   - detector cuantizable
   - AutoNAC
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -134,7 +134,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 47c30d6e44024ce7
+source_hash: 52050c4046781a6e
 ---
 
 ## Instalación
@@ -160,6 +160,8 @@ El objeto `Results` devuelto es el mismo que devuelven todas las familias, así
 que cambiar a otro detector es un cambio de una línea. `conf` fija el umbral de
 confianza e `iou` el umbral de NMS. Consulta [predicción](/docs/predict) para
 fuentes, streaming y manejo de resultados.
+
+La tarea de cajas orientadas devuelve `result.obb`. El grafo OBB publicado usa un lienzo de 1024 píxeles y su conjunto registrado de 18 clases.
 
 ## Variantes
 
@@ -189,6 +191,8 @@ checkpoint de Deci, y eso es el tercer snippet de arriba.
 
 Consulta [entrenamiento](/docs/train) para datasets, aumento de datos
 (data augmentation), multi-GPU y loggers.
+
+La detección usa por defecto `amp=True` con `amp_dtype="float16"`; el entrenamiento de cajas orientadas conserva `amp=False`. La cabeza OBB soporta entrenamiento, predicción y validación, usa aumentos con volteos y HSV, y selecciona checkpoints con `metrics/mAP50-95(OBB)`. `load_detect_weights_for_obb()` la inicializa a partir de pesos de detección.
 
 ## Validación
 
@@ -220,9 +224,10 @@ licencia que los cubre.
 
 No hay ninguno que listar. La licencia de Deci prohíbe la redistribución, así
 que la organización de LibreYOLO no publica pesos de YOLO-NAS y la descarga se
-resuelve en otro sitio: un nombre de la forma `LibreYOLONAS<size>.pt`, o
-`LibreYOLONAS<size>-pose.pt` para pose, se corresponde con el objeto equivalente
-en la CDN pública de Deci.
+resuelve en otro sitio: un nombre de la forma `LibreYOLONAS<size>.pt`,
+`LibreYOLONAS<size>-pose.pt` para pose, o `LibreYOLONAS<size>-obb.pt` (s, m, l)
+para cajas orientadas, se corresponde con el objeto equivalente en la CDN pública
+de Deci.
 
 Solo se pueden descargar así los checkpoints cuyo SHA-256 tiene fijado la
 biblioteca. Cualquier otra cosa falla en cerrado en lugar de abrir un pickle de

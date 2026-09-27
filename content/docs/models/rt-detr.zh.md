@@ -19,7 +19,7 @@ keywords:
   - 旋转框检测
   - OBB
   - DOTA
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -173,7 +173,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 8022a5a591922a90
+source_hash: 75454e612d7e2247
 ---
 
 ## 安装
@@ -255,6 +255,8 @@ Python 的 `train()` 签名从该版本的训练配置里读它，不传 `lr0` �
 按错误宽高比构建的嵌入向量。
 
 数据集、数据增强、多卡训练和日志记录器见[训练](/docs/train)。
+
+RT-DETRv4 默认启用 `amp=True`，使用 `amp_dtype="float16"`。传入 `amp=False` 可使用 FP32。
 
 ## 验证
 

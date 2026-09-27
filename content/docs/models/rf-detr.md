@@ -2,10 +2,10 @@
 title: RF-DETR
 families: [rfdetr]
 seo_title: "RF-DETR: train, fine-tune and export under MIT"
-description: "Use RF-DETR in LibreYOLO for detection, instance segmentation, pose and oriented boxes. Install, predict, train, validate and export, all MIT-licensed."
+description: "Use RF-DETR in LibreYOLO for detection, instance segmentation, pose and oriented boxes. Install, predict, train, validate and export."
 lead: "A detection transformer that predicts a fixed set of objects instead of a dense grid, so it needs no NMS at inference. LibreYOLO supports it for four tasks."
 keywords: [RF-DETR, real-time detection transformer, DETR, object detection, instance segmentation, pose estimation, oriented bounding boxes]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -75,7 +75,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -129,7 +129,7 @@ snippets:
     - label: Use the exported file
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
@@ -145,7 +145,7 @@ snippets:
 
         # Running the graph directly means doing your own preprocessing and
         # postprocessing. Inspect the signature before wiring anything up.
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
         name = session.get_inputs()[0].name
         outputs = session.run(None, {name: np.zeros((1, 3, 512, 512), dtype=np.float32)})
 
@@ -172,11 +172,14 @@ different detector is a one line change. `conf` and `max_det` filter the query
 selection; there is no NMS step to tune. See
 [prediction](/docs/predict) for sources, streaming and result handling.
 
+Detection, segmentation and oriented-box paths use floating-point OpenCV bilinear resizing without antialiasing; pose keeps its antialiased resize. Rectangular `imgsz=(height, width)` must satisfy the task patch/window grid. The checkpoint inventory includes the UI detector. [Event histograms](/docs/train/event-histograms) use the recorded input profile.
+
 ## Variants
 
-Four sizes, and four tasks that share one architecture: segmentation, pose and
-oriented boxes reuse the detection decoder with a different head, so they take
-the same arguments. The sizes carry similar parameter counts and differ mainly
+Four detection sizes, `n` to `l`, and four tasks that share one architecture:
+segmentation, pose and oriented boxes reuse the detection decoder with a
+different head, so they take the same arguments. Segmentation adds `x` and
+`xx`, and pose comes only in `x`. The sizes carry similar parameter counts and differ mainly
 in input resolution.
 
 <benchmark-table task="detect" />
@@ -185,9 +188,9 @@ in input resolution.
 
 ## Train
 
-Training starts from a published checkpoint, for all four tasks. RF-DETR lists
-`pretrained` among the arguments its native trainer ignores, so passing
-`pretrained=False` does not give you a randomly initialized model here.
+Training starts from a published checkpoint, for all four tasks.
+`pretrained=False` instead reinitializes the whole network, backbone included,
+and trains from scratch.
 
 <code-tabs name="train" />
 
@@ -200,10 +203,12 @@ the nearest valid sizes.
 
 See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
 
+Fresh runs default to `output_dir=None`, resolving to an incremented `runs/train/rfdetr_exp` with `exist_ok=False`. A resumed run keeps writing into its checkpoint's run directory. Multi-class pose datasets use `kpt_names` keyed by class index or name; an empty list marks a box-only class. Predictions pad keypoints to `kpt_shape`; keypoint-mAP fitness does not score box-only classes.
+
 ## Validate
 
-`val()` returns a dictionary of `metrics/` keys covering precision, recall,
-mAP 50 and mAP 50-95, measured against any dataset in the format you trained on.
+`val()` returns a dictionary of `metrics/` keys covering mAP 50, mAP 50-95,
+mAP 75 and COCO average recall, measured against any dataset in the format you trained on.
 
 <code-tabs name="val" />
 

@@ -5,7 +5,7 @@ seo_title: "YOLOX: predict, train and export under Apache-2.0"
 description: "Use YOLOX in LibreYOLO for object detection: install, predict, train, validate and export under Apache-2.0."
 lead: "YOLOX is an anchor-free, single-stage detector with a decoupled classification-regression head, trained with SimOTA label assignment. LibreYOLO supports it for detection."
 keywords: [YOLOX, object detection, anchor-free detection, decoupled head, SimOTA, real-time object detection]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -133,6 +133,8 @@ smaller size it was published at.
 
 See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
 
+Mosaic samples up to 20 candidate partners to prefer images with annotations; if none qualify, it keeps the last draw.
+
 ## Validate
 
 `val()` returns a dictionary of `metrics/` keys covering precision, recall,
@@ -152,6 +154,8 @@ A CoreML export can bake NMS into the graph with `nms=True`; YOLOX and YOLOv9
 are the only two families that flag currently accepts.
 
 <code-tabs name="export" />
+
+[TFLite INT8](/docs/export/tflite) accepts `int8=True` and a calibration dataset.
 
 ## Checkpoints
 

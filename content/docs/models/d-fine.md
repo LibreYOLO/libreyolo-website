@@ -5,7 +5,7 @@ seo_title: "D-FINE: fine-tune, validate and export under MIT"
 description: "Use D-FINE in LibreYOLO for object detection and instance segmentation. Install, predict, fine-tune, validate and export, with MIT-licensed code."
 lead: "A detection transformer that reformulates box regression as a probability distribution over each box edge, refined across decoder layers. LibreYOLO supports it for detection and instance segmentation."
 keywords: [D-FINE, detection transformer, real-time object detection, instance segmentation, fine-grained distribution refinement, DETR]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -174,7 +174,7 @@ Training starts from a published checkpoint, for both tasks.
 
 <code-tabs name="train" />
 
-Left alone, the trainer runs 132 epochs at `lr0=2e-4` with `amp=False`, a batch
+Left alone, the trainer runs 132 epochs at `lr0=2e-4` with `amp=True` and `amp_dtype="float16"`, a batch
 of 16 and early stopping after 50 epochs without improvement. Detect weights are
 a legal starting point for segmentation training, but only as an explicit
 transfer, since the mask head begins untrained and would otherwise return

@@ -6,7 +6,7 @@ seo_title: 'RF-DETR: Training, Fine-Tuning und Export unter MIT'
 description: >-
   Nutze RF-DETR in LibreYOLO für Erkennung, Instanzsegmentierung, Pose und
   orientierte Boxen. Installiere, sage vorher, trainiere, validiere und
-  exportiere, vollständig MIT-lizenziert.
+  exportiere.
 lead: >-
   Ein Detection Transformer, der statt eines dichten Rasters eine feste Menge
   von Objekten vorhersagt und daher bei der Inferenz keine NMS benötigt.
@@ -19,7 +19,7 @@ keywords:
   - instanzsegmentierung
   - pose schätzung
   - orientierte bounding boxes
-last_verified: 1.5.0
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -99,7 +99,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -188,7 +188,7 @@ snippets:
     - label: Exportierte Datei verwenden
       language: python
       code: >
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
 
         # Die Factory entscheidet anhand der Dateiendung, daher wird ein
@@ -215,7 +215,7 @@ snippets:
 
         # Prüfe die Signatur, bevor du etwas anschließt.
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -225,7 +225,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 8c464aa759131694
+source_hash: 3238696a4e1ab6c2
 ---
 
 ## Installation
@@ -249,11 +249,15 @@ Zeile. `conf` und `max_det` filtern die Auswahl der Queries. Es gibt keinen
 NMS-Schritt zum Abstimmen. Unter [Vorhersage](/docs/predict) findest du Quellen,
 Streaming und die Verarbeitung von Ergebnissen.
 
+Erkennung, Segmentierung und orientierte Boxen verwenden bilineare OpenCV-Skalierung mit Gleitkommazahlen ohne Antialiasing; Pose behält die Skalierung mit Antialiasing bei. Rechteckiges `imgsz=(height, width)` muss dem Patch-/Fensterraster der Aufgabe entsprechen. Das Checkpoint-Verzeichnis enthält den UI-Detektor. [Ereignishistogramme](/docs/train/event-histograms) verwenden das gespeicherte Eingabeprofil.
+
 ## Varianten
 
-Es gibt vier Größen und vier Aufgaben mit einer gemeinsamen Architektur.
-Segmentierung, Pose und orientierte Boxen verwenden den Erkennungsdecoder mit
-einem anderen Head und akzeptieren daher dieselben Argumente. Die Größen haben
+Es gibt vier Erkennungsgrößen, `n` bis `l`, und vier Aufgaben mit einer
+gemeinsamen Architektur. Segmentierung, Pose und orientierte Boxen verwenden
+den Erkennungsdecoder mit einem anderen Head und akzeptieren daher dieselben
+Argumente. Die Segmentierung ergänzt `x` und `xx`, Pose gibt es nur in `x`.
+Die Größen haben
 ähnliche Parameteranzahlen und unterscheiden sich vor allem in der
 Eingabeauflösung.
 
@@ -264,9 +268,8 @@ Eingabeauflösung.
 ## Training
 
 Das Training beginnt bei allen vier Aufgaben mit einem veröffentlichten
-Checkpoint. RF-DETR führt `pretrained` unter den von seinem nativen Trainer
-ignorierten Argumenten auf. `pretrained=False` erzeugt daher kein zufällig
-initialisiertes Modell.
+Checkpoint. `pretrained=False` initialisiert dagegen das ganze Netz neu, das
+Backbone eingeschlossen, und trainiert von Grund auf neu.
 
 <code-tabs name="train" />
 
@@ -281,10 +284,12 @@ gültigen Größen.
 Unter [Training](/docs/train) findest du Datensätze, Datenaugmentierung,
 Multi-GPU und Logger.
 
+Neue Läufe verwenden standardmäßig `output_dir=None` und damit ein hochgezähltes `runs/train/rfdetr_exp` mit `exist_ok=False`. Ein fortgesetzter Lauf schreibt weiter in das Laufverzeichnis seines Checkpoints. Pose-Datensätze mit mehreren Klassen verwenden `kpt_names` mit Klassenindex oder -name als Schlüssel; eine leere Liste kennzeichnet eine Klasse nur mit Boxen. Vorhersagen füllen Keypoints bis `kpt_shape` auf; die Keypoint-mAP-Fitness bewertet Klassen nur mit Boxen nicht.
+
 ## Validierung
 
-`val()` gibt ein Dictionary mit `metrics/`-Schlüsseln für Precision, Recall,
-mAP 50 und mAP 50-95 zurück. Diese werden auf einem beliebigen Datensatz in
+`val()` gibt ein Dictionary mit `metrics/`-Schlüsseln für mAP 50, mAP 50-95,
+mAP 75 und den COCO-Average-Recall zurück. Diese werden auf einem beliebigen Datensatz in
 dem Format gemessen, das du für das Training verwendet hast.
 
 <code-tabs name="val" />

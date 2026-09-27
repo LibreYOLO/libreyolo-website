@@ -18,7 +18,7 @@ keywords:
   - normal map
   - dense prediction
   - DINOv2
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -78,7 +78,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: d96b89f18ac10a40
+source_hash: b06daf44f9a58411
 ---
 
 ## Instalasi
@@ -92,8 +92,7 @@ pip install libreyolo
 
 ## Prediksi
 
-Bobot diunduh otomatis saat pertama kali digunakan. LibreYOLO mengambil ukuran
-yang cocok langsung dari checkpoint resmi dan menyimpannya dalam cache lokal.
+Bobot diunduh otomatis saat pertama kali dipakai. Ukuran s dan l memakai mirror LibreYOLO; b tetap memakai checkpoint upstream.
 
 <code-tabs name="predict" />
 
@@ -140,10 +139,7 @@ sehingga berkas `.onnx` berperilaku seperti checkpoint dan mengembalikan
 
 <provenance-box>
 
-LibreYOLO tidak menyalin checkpoint ini ke organisasinya sendiri.
-`LibreYOLO("LibreMoGe2s-normal.pt")` mengunduh ukuran yang cocok langsung dari
-repository Hugging Face resmi pada revisi yang dipatok dan memverifikasi berkas
-terhadap checksum SHA-256 yang direkam sebelum digunakan.
+Checkpoint s dan l tersedia di mirror LibreYOLO; b tetap di upstream. Artefak yang diunduh mempertahankan lisensi penerbitnya.
 
 </provenance-box>
 

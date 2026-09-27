@@ -15,7 +15,7 @@ keywords:
   - polecenie libreyolo predict
   - argumenty libreyolo predict
   - yolo json na stdout
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Polecenie
     value: libreyolo predict
@@ -49,7 +49,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 7e46c7ed7dd9e6c4
+source_hash: 21374ebc0e6cf4d3
 ---
 
 ## Składnia
@@ -101,6 +101,11 @@ zadania jest usuwane przed parsowaniem.
 | `verbose` | `false` | Szczegółowe wyjście na stderr |
 | `help_json` | `false` | Zrzut schematu polecenia w formacie JSON i zakończenie |
 
+| Argument | Domyślnie | Znaczenie |
+| --- | --- | --- |
+| `mask` | `None` | Binarna maska uzupełniania dla pojedynczego obrazu w modelach, które jej wymagają |
+| `trimap` | `None` | Trójpoziomowa trimapa pojedynczego obrazu dla modeli mattingu ze wskazówkami |
+
 ## Przykłady
 
 <code-tabs name="examples" />
@@ -114,9 +119,10 @@ uruchomieniowych odrzucane, a nie ignorowane: `tiling`, `overlap_ratio` i
 `output_file_format` kończą działanie z `config_unsupported`, gdy backend
 środowiska uruchomieniowego nie może ich obsłużyć.
 
-`half` działa odwrotnie. Wyeksportowane środowiska uruchomieniowe przyjmują tę
-opcję i działają w FP16; natywna inferencja w PyTorch zapisuje w logach, że
-została zignorowana, i kontynuuje w FP32.
+`half` działa odwrotnie: jest przyjmowane i ignorowane. Natywna inferencja w
+PyTorch zapisuje w logach, że opcja została zignorowana, i kontynuuje w FP32, a
+wyeksportowane środowisko uruchomieniowe zachowuje precyzję, z jaką je
+wyeksportowano, więc inferencja w FP16 oznacza eksport z `half=true`.
 
 Modele estymacji spojrzenia są dwuetapowe i nie mają własnego detektora,
 dlatego `face_detector` jest dla nich wymagany. `gallery` dotyczy tylko modeli,

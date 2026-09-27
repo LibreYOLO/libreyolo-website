@@ -13,7 +13,7 @@ keywords:
   - polecenie libreyolo export
   - eksport yolo do tensorrt
   - argumenty libreyolo export
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Polecenie
     value: libreyolo export
@@ -47,7 +47,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: ef2ca20af3814109
+source_hash: 290b778a1060a760
 ---
 
 ## Składnia
@@ -70,6 +70,7 @@ Argumenty to pary `key=value`, działa też forma POSIX, więc `format=onnx` i
 | `batch` | `1` | Rozmiar batcha przy eksporcie |
 | `half` | `false` | Precyzja FP16 |
 | `int8` | `false` | Kwantyzacja INT8 |
+| `quantize` | | Precyzja jako `16` (FP16), `8` (INT8) lub `32` (FP32); zastępuje `half` i `int8` |
 | `dynamic` | `false` | Dynamiczne kształty wejścia (ONNX) |
 | `simplify` | `true` | Upraszczanie grafu ONNX |
 | `nms` | `false` | Osadzenie NMS w modelu. Tylko ONNX i CoreML |
@@ -117,7 +118,8 @@ W CoreML przyjmuje `conf` i `iou`, ale nie `max_det`, więc niedomyślna wartoś
 `config_unsupported`.
 
 `half=true` razem z `int8=true` nie jest błędem. INT8 wygrywa, `half` zostaje
-pominięte, a ostrzeżenie trafia na stderr.
+pominięte, a ostrzeżenie trafia na stderr. `quantize` niezgodne z `half` lub
+`int8` kończy się wyjściem z `config_conflict`.
 
 `name` i `verify` są dziś opcjami RKNN. Przekazanie którejkolwiek z nich z innym
 formatem kończy się wyjściem z `config_unsupported`, zamiast zostać
@@ -157,3 +159,5 @@ w trakcie działania.
 
 Powiązane: [`libreyolo quantize`](/docs/cli/quantize), które pozostaje w
 środowisku PyTorch i zapisuje checkpoint, a nie artefakt do wdrożenia.
+
+TFLite INT8 używa `int8=True` do detekcji YOLO9 lub YOLOX z `data=...`, `fraction=1.0`, `batch=1` i `dynamic=False`. FP16 nie jest obsługiwane; jeśli podano obie flagi precyzji, CLI pomija `half` na rzecz INT8. Wynik eksportu JSON podaje rzeczywisty rozstrzygnięty obszar obrazu, w tym kwadratowy obszar zastępczy dla rodzin o natywnym kwadratowym wejściu wczytanych z checkpointów trenowanych na prostokątach.

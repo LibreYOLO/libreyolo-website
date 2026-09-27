@@ -17,7 +17,7 @@ keywords:
   - 小物体検出
   - programmable gradient information
   - GELAN
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -125,7 +125,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: eaa6023a4a0b9e71
+source_hash: 624f3e70d2937683
 ---
 
 ## インストール
@@ -168,6 +168,10 @@ stride 4モデルには固有の公開済みCOCOチェックポイントがな�
 
 データセット、データ拡張、マルチGPU、ロガーについては[学習](/docs/train)を参照してください。
 
+標準の検出モデルを新たにファインチューニングする場合、`aux_weight=0.25`の学習専用PGI分岐が有効になります。`max_labels=300`です。SGDのモーメンタムは3エポックで0.8から0.937にウォームアップします。従来の単一ヘッドチェックポイントを再開すると、そのグラフを使います。推論とエクスポートでは主ヘッドを使います。`letterbox_pad=None`はチェックポイントに記録された設定を継承します。記録のない重みは`topleft`を使い、新しい公式変換には`center`が記録されます。
+
+YOLO9とYOLOXのMosaicは、最大20回の抽出でアノテーション付きの画像を優先します。YOLO9のMixUpも同じ方針を使います。RGB以外の入力プロファイルについては[イベントヒストグラム](/docs/train/event-histograms)を参照してください。
+
 ## 検証
 
 `val()`は、学習に使用した形式の任意のデータセットで測定した適合率、再現率、mAP 50、mAP 50-95を含む`metrics/`キーの辞書を返します。
@@ -188,6 +192,8 @@ stride 4モデルには固有の公開済みCOCOチェックポイントがな�
 
 <code-tabs name="export" />
 
+[TFLite INT8](/docs/export/tflite)では、キャリブレーションデータと`int8=True`を使います。
+
 ## チェックポイント
 
 このファミリーで公開されているすべての重みファイルです。
@@ -198,7 +204,7 @@ stride 4モデルには固有の公開済みCOCOチェックポイントがな�
 
 <provenance-box>
 
-ここにある1つのチェックポイントはMITではありません。VisDrone2019-DETで学習したstride 4モデルは、そのデータセットのCC BY-NC-SA 3.0条件を継承します。非商用利用に限定され、派生物には継承条件が適用され、このファミリーの残りが提供される寛容なライセンスの範囲外です。COCOクラスではなくVisDroneの航空クラスを予測します。ライブラリはファイルをダウンロードする前にこれらすべてを表示します。
+stride 4の航空画像用チェックポイントはVisDroneのクラスを予測します。重みのリポジトリに記録された、公開元のライセンス宣言を確認してください。
 
 </provenance-box>
 

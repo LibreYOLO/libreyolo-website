@@ -14,7 +14,7 @@ keywords:
   - mô hình độ sâu tương đối
   - depth anything libreyolo
   - dự đoán độ sâu dày đặc
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Dự đoán depth map
@@ -89,9 +89,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: e0612c59f9c999b4
+source_hash: 23e295da8ac303cf
 ---
-
 ## Định nghĩa
 
 Tác vụ `depth` dự đoán một giá trị trên mỗi pixel từ một ảnh RGB. LibreYOLO định
@@ -108,7 +107,7 @@ vì vậy `conf`, `iou` và `max_det` không có tác dụng, còn `save=True` g
 
 ## Mô hình
 
-Sáu family phục vụ `depth`.
+Các họ sau phục vụ `depth`.
 
 [Depth Anything V2](/docs/models/depth-anything-v2) ghép encoder DINOv2 với
 decoder DPT và là lựa chọn mặc định đa dụng tại đây. Giấy phép ảnh hưởng tới
@@ -123,10 +122,7 @@ một transformer thuần không có chuyên biệt kiến trúc cho độ sâu.
 được chưng cất từ Depth Anything V2 Large, với checkpoint thứ hai có decoder
 tránh phép toán gather và unfold cho NPU compiler không hỗ trợ chúng.
 
-[MiDaS](/docs/models/midas) là dòng công trình đã thiết lập giao thức độ sâu
-tương đối zero-shot dùng để đo các family khác. Đây là depth family duy nhất mà
-LibreYOLO không công bố lại: yêu cầu checkpoint sẽ tải asset chính thức từ bản
-phát hành GitHub của tác giả và kiểm tra SHA-256 cố định.
+[MiDaS](/docs/models/midas) là hướng nghiên cứu thiết lập quy trình độ sâu tương đối zero-shot dùng để đo các họ khác. Checkpoint s và l tải từ bản sao của LibreYOLO theo giấy phép MIT của nhà phát hành.
 
 [LibreMODUS](/docs/models/libremodus) thực hiện độ sâu như một target của mô hình
 any-to-any thay vì head chuyên dụng. Nó cần thành phần bổ sung `modus` và tài
@@ -138,18 +134,22 @@ diffusion decode, từ cùng checkpoint 7B phục vụ sáu tác vụ khác. Nó
 phần bổ sung `sensenova`, còn trọng số bị giới hạn cho mục đích phi thương mại;
 giấy phép nằm trên trang của mô hình.
 
+[Marigold V2](/docs/models/marigold-v2) bổ sung adapter độ sâu dựa trên diffusion với cách mã hóa độ sâu rõ ràng.
+
+[GTR](/docs/models/gtr) dự đoán độ sâu theo đơn vị thực (metric depth) và trả về
+kết quả dưới dạng inverse depth tương đối, vì vậy `1 / result.depth_map.data`
+khôi phục độ sâu theo mét cho các cảnh giống dữ liệu huấn luyện của nó. Nó chạy
+trên package cơ sở, huấn luyện được và xuất sang ONNX cùng TorchScript.
+
 ## Dự đoán
 
-Trọng số được tải từ Hugging Face trong lần sử dụng đầu tiên và lưu vào cache
-cục bộ, trừ hai family đã nêu ở trên.
+Trọng số tải về ở lần dùng đầu tiên và được lưu vào bộ nhớ đệm cục bộ. Trang mô hình mô tả yêu cầu xác thực và runtime.
 
 <code-tabs name="predict" />
 
-Độ phân giải đầu vào bị ràng buộc theo từng family. Depth Anything V2 và Depth
-Anything 3 dựa trên patch grid DINOv2, vì vậy `imgsz` phải chia hết cho 14, điều
-LibreYOLO kiểm tra trước khi chạy. `Results.plot()` không hỗ trợ tác vụ này;
-phương thức chỉ được định nghĩa cho pháp tuyến bề mặt và cạnh. Xem [dự
-đoán](/docs/predict) để biết về nguồn, stream và cách xử lý kết quả.
+Độ phân giải đầu vào bị ràng buộc theo từng họ. Depth Anything V2 và Depth Anything 3 dựa trên lưới patch DINOv2 nên `imgsz` phải chia hết cho 14; LibreYOLO kiểm tra điều này trước khi chạy. `Results.plot()` dựng kết quả độ sâu. Xem [dự đoán](/docs/predict) để biết nguồn đầu vào, streaming và cách xử lý kết quả.
+
+`DepthMap.encoding` mặc định là `inverse_depth` và có thể là `depth` hoặc `log_depth`. Đánh giá diễn giải cách mã hóa trước khi căn chỉnh affine. Cách mã hóa không tạo thang đo theo đơn vị thực cho dự đoán tương đối.
 
 ## Định dạng dataset
 
@@ -183,9 +183,7 @@ dataset](/docs/reference/dataset-formats) để biết hợp đồng đầy đ�
 
 ## Huấn luyện
 
-Không depth family nào trong LibreYOLO có implementation huấn luyện: `train()`
-phát sinh `NotImplementedError` trên cả sáu. Mỗi trang mô hình nêu tên script
-chuyển đổi checkpoint được huấn luyện ở upstream thành dạng LibreYOLO có thể nạp.
+[GTR](/docs/models/gtr) là họ độ sâu duy nhất có thể huấn luyện: `train()` trên một checkpoint `-depth` chạy quy trình huấn luyện upstream của nó, được mô tả trên trang mô hình. Trên các họ còn lại, `train()` phát sinh `NotImplementedError`. Mỗi trang mô hình nêu script chuyển checkpoint được huấn luyện upstream thành định dạng LibreYOLO có thể tải.
 
 ## Xác thực
 

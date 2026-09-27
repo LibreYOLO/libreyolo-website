@@ -90,7 +90,7 @@ model.set_classes(classes: list[str]) -> LibreOpenVocabDetector
 Définit le vocabulaire de tous les appels `predict()` ultérieurs et renvoie le
 modèle afin de pouvoir chaîner les appels. La liste ne doit pas être vide, ne
 doit contenir que des chaînes et ses entrées doivent être uniques sans tenir
-compte de la casse\u00a0; les étiquettes vides sont refusées. Une chaîne seule lève
+compte de la casse ; les étiquettes vides sont refusées. Une chaîne seule lève
 `TypeError`, car elle serait décomposée en classes d'un caractère.
 
 Après l'appel, `model.names` associe `0..N-1` aux étiquettes dans l'ordre donné,
@@ -101,7 +101,7 @@ et `model.nb_classes` vaut `N`.
 Ce niveau réutilise l'interface de prédiction standard avec trois différences.
 
 La valeur par défaut de `conf` est celle de la famille et non la valeur
-partagée de 0.25\u00a0:
+partagée de 0.25 :
 
 | Famille | conf par défaut | Suppression |
 |---|---|---|
@@ -119,20 +119,20 @@ transmettre `iou=` produit donc un avertissement et sa valeur est ignorée.
 0.25. Vous pouvez le transmettre au constructeur pour rendre la valeur
 persistante, ou à chaque appel. Une valeur par appel ne peut pas être associée
 à `stream=True`, car les résultats du streaming sont produits de façon
-différée\u00a0; définissez-la plutôt sur le constructeur. Toutes les autres
+différée ; définissez-la plutôt sur le constructeur. Toutes les autres
 familles lèvent `TypeError` pour ce paramètre.
 
-`imgsz=` lève `ValueError`\u00a0: le pipeline de prétraitement contrôle le
+`imgsz=` lève `ValueError` : le pipeline de prétraitement contrôle le
 redimensionnement de ce niveau. `augment=True` lève également une erreur,
 l'augmentation à l'inférence étant hors périmètre ici. Les tailles d'entrée
-sont consignées par famille uniquement comme référence\u00a0: Grounding DINO 800,
+sont consignées par famille uniquement comme référence : Grounding DINO 800,
 OWLv2 960 et 1008, OMDet-Turbo 640, OV-DEIM 640.
 
 ## Fonctionnalités non prises en charge
 
 `train()`, `val()`, `track()` et `export()` lèvent tous
 `NotImplementedError`. Effectuez le fine-tuning upstream et chargez les poids
-obtenus\u00a0; exécutez `predict()` sur chaque image à la place du suivi. La
+obtenus ; exécutez `predict()` sur chaque image à la place du suivi. La
 validation demanderait un validateur dédié, car le validateur de détection
 partagé appelle le modèle avec des tenseurs d'images alors que ce niveau exige
 des entrées conditionnées par du texte.

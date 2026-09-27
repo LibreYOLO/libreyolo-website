@@ -15,7 +15,7 @@ keywords:
   - top-1 accuracy
   - zero-shot klassifikation
   - MIT lizenz klassifikation bibliothek
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -125,7 +125,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 836bea76cd2cdf92
+source_hash: "90aed355e0ddf5e3"
 ---
 
 ## Definition
@@ -148,15 +148,7 @@ einzelnen Zeile.
 
 ## Modelle
 
-Fünf Familien trainieren und sagen vorher: [ResNet](/docs/models/resnet),
-[ConvNeXt](/docs/models/convnext), [MobileNetV4](/docs/models/mobilenetv4),
-[EfficientNetV2](/docs/models/efficientnetv2) und
-[DINOv2](/docs/models/dinov2). Die ersten vier laufen mit dem Basispaket und
-bringen veröffentlichte Gewichte mit. DINOv2 braucht
-`pip install "libreyolo[rfdetr]"` und hat keinen von LibreYOLO gehosteten
-Checkpoint: Es lädt das Upstream-Backbone mit einem zufällig initialisierten
-linearen Head, ist also ein Ausgangspunkt für Fine-Tuning und kein fertiger
-Vorhersager.
+Trainierbare Bildklassifikatoren sind [ResNet](/docs/models/resnet), [ConvNeXt](/docs/models/convnext), [MobileNetV4](/docs/models/mobilenetv4), [EfficientNetV2](/docs/models/efficientnetv2) und [DINOv2](/docs/models/dinov2). Die ersten vier laufen mit dem Basispaket und bieten veröffentlichte Gewichte. DINOv2 benötigt `pip install "libreyolo[rfdetr]"` und hat keinen von LibreYOLO gehosteten Checkpoint: Es lädt das Upstream-Backbone mit einem zufällig initialisierten linearen Head und ist damit ein Ausgangspunkt für Fine-Tuning, kein fertiges Vorhersagemodell.
 
 Fünf weitere sagen vorher, validieren und exportieren, aber ihr `train()` löst
 `NotImplementedError` aus: [ViT](/docs/models/vit), [Swin](/docs/models/swin),
@@ -168,6 +160,8 @@ ohne feste Labelmenge. Sie bewerten das Bild gegen Text-Prompts, deshalb
 definiert `set_classes()` die Klassen zur Aufrufzeit, und für eine neue
 Labelmenge gibt es überhaupt keinen Trainingsschritt. Beide bedienen auch den
 `embed`-Task.
+
+[ConvNeXt V2](/docs/models/convnextv2) ergänzt überwachte Klassifikation mit vortrainierten Gewichten unter CC-BY-NC-4.0. [PE](/docs/models/pe) unterstützt Zero-Shot-Klassifikation; [V-JEPA 2](/docs/models/vjepa2) trainiert Probes für die Videoklassifikation.
 
 ## Vorhersage
 
@@ -222,6 +216,8 @@ während das Backbone unverändert übernommen wird. Siehe
 [Training](/docs/train) für Datensätze, Datenaugmentierung, Multi-GPU und
 Logger.
 
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 und DINOv2 unterstützen Loss-Gewichtung über `cls_pw` oder `class_weights`. Bei der Klassifikation steuert `scale` die Ausschnittsfläche und `crop_pct` den Auswertungsausschnitt. Siehe [Augmentierungen](/docs/train/augmentations).
+
 ## Validierung
 
 `val()` liefert ein schlichtes Dictionary von `metrics/`-Keys, berechnet über
@@ -235,6 +231,8 @@ zu wählen. `metrics/accuracy_top5` ist der Anteil, dessen richtige Klasse
 irgendwo unter den fünf höchstbewerteten Klassen auftaucht, was umso weniger
 aussagt, je weniger Klassen der Datensatz hat. Das Dictionary trägt außerdem
 `fitness`, eine Kopie des Top-1-Werts.
+
+Die ImageFolder-Validierung liefert auch die Makrometriken `metrics/precision`, `metrics/recall` und `metrics/f1`, gemittelt über die in den Validierungszielen vorhandenen Klassen. Nicht vorhergesagte Klassen tragen mit Precision null bei. Die Standardfitness bleibt Top-1-Accuracy. Validierung und Kalibrierung verwenden die Auswertungstransformation des Modells.
 
 ## Export
 

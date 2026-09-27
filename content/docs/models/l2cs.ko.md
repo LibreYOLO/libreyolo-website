@@ -77,7 +77,7 @@ snippets:
         yaw_logits, pitch_logits = session.run(
             None, {name: np.zeros((1, 3, 448, 448), dtype=np.float32)}
         )
-source_hash: 4ec43f4673b4be3e
+source_hash: 1f61c1a61e033bbc
 ---
 
 ## 설치
@@ -97,7 +97,7 @@ ResNet-50입니다. LibreYOLO 조직이 아니라 저자의 Google Drive에 있�
 pip install "libreyolo[gaze]"
 ```
 
-이 extra가 없으면 조용히 실패하는 대신 LibreYOLO가 수동 내려받기 지침을 출력합니다.
+이 extra가 없으면 조용히 실패하는 대신 LibreYOLO가 수동 내려받기 지침을 출력합니다. 1.6.0에서는 업스트림 Google Drive 다운로드가 404를 반환하므로, 불러오는 경로에 체크포인트의 로컬 사본을 두어야 합니다.
 
 ## 예측
 

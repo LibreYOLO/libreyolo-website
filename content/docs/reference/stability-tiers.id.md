@@ -16,7 +16,7 @@ keywords:
   - kelompok cakupan libreyolo
   - g0 g1 g2 g3 g4
   - tier model
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Tier ekspor dari docs/adr/0011-export-support-tiers.md dan
   libreyolo/export/support.py; kelompok cakupan dan jumlah per family dari
@@ -24,7 +24,7 @@ verification: >-
   libreyolo/models/base/model.py dan libreyolo/cli/commands/train.py; inventaris
   CLI dibaca dari libreyolo/models/inventory.py; tier API dari docstring package
   dan kontrak base.py di libreyolo/models/sam/, openvocab/, dan vlm/, semuanya
-  pada v1.5.0. Label kelompok untuk pembaca (Flagship, Core, Supported,
+  pada v1.6.0. Label kelompok untuk pembaca (Flagship, Core, Supported,
   Inference only, Museum, Sibling tier) adalah vocabulary situs sendiri untuk
   kelompok yang sama, dari src/data/docs/registry.json.
 snippets:
@@ -42,7 +42,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: de545894b0d125e4
+source_hash: 6d8f3ec671e6cb02
 ---
 
 ## Tier dukungan ekspor
@@ -84,17 +84,21 @@ satu tier, yang dipilih berdasarkan kontrak pemanggilan, bukan arsitektur.
 | Promptable segmentation | `LibreSAM` | Forward tidak bermakna tanpa prompt spasial atau konsep per gambar yang diberikan saat pemanggilan. Interaktif dan stateful: encode sekali, prompt berkali-kali |
 | Deteksi open-vocabulary | `LibreOpenVocab` | Detektor diskriminatif yang dikondisikan oleh teks. List kelas adalah prompt yang ditetapkan oleh `set_classes` |
 | Vision-language | `LibreVLM` | Model generatif yang dijalankan sebagai detektor. List kelas adalah prompt dan confidence merupakan placeholder |
+| Grounding | `LibreGround` | Gambar dan instruksi rujukan dipetakan ke paling banyak satu titik per query |
+| Policy robot | `LibreVLA` | Frame kamera dan status robot dipetakan ke potongan aksi mendatang |
 
-Ketiga sibling tier sengaja tidak mendaftar ke factory detektor, sehingga
+Sibling tier sengaja tidak mendaftar ke factory detektor, sehingga
 `LibreYOLO("some-alias")` tidak dapat menjangkaunya. Tier tersebut dimuat
 berdasarkan alias ukuran dan mengunduh secara otomatis, bukan melalui sniffing
 checkpoint.
 
-Keempatnya mengembalikan `Results` yang sama, sehingga kode downstream tidak
+Semuanya mengembalikan `Results` yang sama, sehingga kode downstream tidak
 berubah. Perbedaannya adalah metode mana yang bekerja: sibling tier memunculkan
-`NotImplementedError` untuk `train()`, `val()`, dan `export()`, sementara tier
-SAM dan open-vocabulary juga memunculkannya untuk `track()`. Setiap halaman tier
-mencantumkan pengecualiannya sendiri.
+`NotImplementedError` untuk `train()`, `val()`, dan `export()`, dengan dua
+pengecualian. `LibreVLM` melakukan fine-tuning Qwen3-VL sebagai detektor, dan
+`LibreVLA` melatih serta memvalidasi SmolVLA, ACT, dan Diffusion Policy. Tier
+SAM dan open-vocabulary juga memunculkan error itu untuk `track()`. Setiap
+halaman tier mencantumkan pengecualiannya sendiri.
 
 ## Kelompok cakupan
 
@@ -110,15 +114,15 @@ sama pada header halaman model.
 | Kelompok | Label | Family | Arti |
 |---|---|---|---|
 | `g0` | Flagship | 2 | Anchor flagship yang diwajibkan dalam cakupan fitur bersama |
-| `g1` | Core | 10 | Kelompok cakupan detektor yang dapat dilatih |
-| `g2` | Supported | 14 | Kelompok cakupan tambahan untuk family yang dapat dilatih |
-| `g3` | Inference only | 35 | Family tanpa implementasi pelatihan |
+| `g1` | Core | 12 | Kelompok cakupan detektor yang dapat dilatih |
+| `g2` | Supported | 19 | Kelompok cakupan tambahan untuk family yang dapat dilatih |
+| `g3` | Inference only | 44 | Family tanpa implementasi pelatihan |
 | `g4` | Museum | 5 | Family historis dengan cakupan inferensi |
-| `s` | Sibling tier | 21 | API sibling (SAM, open-vocab, VLM, zero-shot) yang dicakup secara terpisah |
+| `s` | Sibling tier | 36 | API sibling (SAM, open-vocab, VLM, grounding, zero-shot) yang dicakup secara terpisah |
 
-Jumlahnya 87 family dalam enam kelompok. `g3` sendiri memuat lebih banyak family
-daripada gabungan semua kelompok lain karena sebagian besar registry merupakan
-lineage inference-only dan cakupan museum, bukan detektor yang aktif dilatih.
+Jumlahnya 118 family dalam enam kelompok. `g3` adalah kelompok terbesar karena
+banyak isi registry merupakan lineage inference-only, bukan detektor yang aktif
+dilatih.
 
 Bagi pembaca yang memilih model, kelompok menunjukkan tempat perhatian
 engineering diharapkan, bukan tingkat akurasi family. `g0` dan `g1` adalah
@@ -138,19 +142,25 @@ kapabilitas khusus format, bukan dari keanggotaan kelompok. Kelompok
 mengklasifikasikan family, bukan task, sehingga run cakupan yang dibatasi task
 menyebut task secara eksplisit, seperti "g1 detect".
 
-Dua tempat membaca kelompok saat runtime, bukan hanya dalam pengujian.
+Tiga tempat membaca kelompok saat runtime, bukan hanya dalam pengujian.
 `collect_model_inventory()` dalam `libreyolo/models/inventory.py` melampirkan
-kelompok ke setiap entri yang dicetak inventaris CLI, dan `pretrained=False`
-memicu jalur reinitialization from-scratch khusus hanya untuk family dalam `g0`
-dan `g1`. Di luar kedua kelompok tersebut, pemeriksaan di
+kelompok ke setiap entri yang dicetak inventaris CLI. `pretrained=False`
+memicu jalur reinitialization from-scratch khusus hanya untuk family dalam `g0`,
+`g1`, dan `g2`. Di luar kelompok tersebut, pemeriksaan di
 `libreyolo/models/base/model.py` dilewati sepenuhnya, sehingga
 `pretrained=False` mencapai `train()` milik family sebagai keyword biasa.
+Pelatihan dengan `classes=` atau `single_cls=True` hanya diterima untuk deteksi
+`g0` dan `g1`, dan memunculkan `ValueError` di tempat lain.
 
 ## Pelatihan
 
 Family dalam `g3` atau `g4` tidak memiliki implementasi pelatihan, dan
 memanggil `train()` akan memunculkan error. Hal itu merupakan properti kode
 family, bukan kelompoknya: kelompok mencatat fakta tersebut, bukan menyebabkannya.
+
+Dari 118 family, 37 dapat dilatih: setiap family `g0`, `g1`, dan `g2`, ditambah
+Qwen3-VL melalui `LibreVLM` serta SmolVLA, ACT, dan Diffusion Policy melalui
+`LibreVLA`.
 
 Untuk family yang dapat dilatih, apakah suatu knob augmentasi mencapai pipeline
 adalah pertanyaan terpisah dengan vocabulary tiga nilai sendiri, yaitu `used`,

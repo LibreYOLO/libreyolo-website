@@ -12,8 +12,8 @@ keywords:
   - mémoire cuda insuffisante libreyolo
   - notimplementederror libreyolo
   - dépannage libreyolo
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: 1.6.0
+source_hash: f2faaab56a2f0415
 ---
 
 Les erreurs sont regroupées selon le texte affiché. Si votre message n'est pas
@@ -50,7 +50,7 @@ FileNotFoundError: ONNX model not found: <path>
 ```
 
 Le chemin est résolu par rapport au répertoire de travail et non au script.
-Ce message apparaît aussi lorsqu'un export a silencieusement écrit ailleurs\u00a0:
+Ce message apparaît aussi lorsqu'un export a silencieusement écrit ailleurs :
 `export()` renvoie le chemin écrit. Récupérez cette valeur au lieu de supposer
 un nom.
 
@@ -66,7 +66,7 @@ d'écrire un script d'entraînement, consultez sa page de modèle.
 ## NotImplementedError depuis export()
 
 Une famille peut prendre en charge une tâche sans pouvoir l'exporter. EoMT est
-un cas fréquent\u00a0: `export()` accepte la tâche semantic et lève une erreur pour
+un cas fréquent : `export()` accepte la tâche semantic et lève une erreur pour
 `segment` et `panoptic`, car le contrat de runtime de masques de requêtes dont
 elles ont besoin n'est pas défini.
 
@@ -87,7 +87,7 @@ Si l'échec se produit pendant la validation plutôt que pendant l'entraînement
 celle-ci utilise sa propre taille de batch. Réduisez-la également.
 
 Sous Windows, un GPU d'affichage possède un second mode d'échec qui ressemble
-à une erreur CUDA aléatoire plutôt qu'à un manque de mémoire\u00a0: le pilote
+à une erreur CUDA aléatoire plutôt qu'à un manque de mémoire : le pilote
 réinitialise un GPU qui ne répond pas pendant un délai trop long et interrompt
 son travail. Les kernels longs sur la carte qui pilote votre écran peuvent le
 déclencher.
@@ -103,10 +103,10 @@ transmis. L'URL en est dérivée, suffixe de tâche compris. Un nom qui ne
 correspond à aucun checkpoint publié produit donc une URL inexistante. Le
 tableau des checkpoints de chaque page de modèle énumère les noms exacts.
 
-## L'entraînement se fige ou redémarre sous Windows
+## L'entraînement se fige ou redémarre sous Windows ou macOS
 
-Windows ne possède pas `fork`. Les workers du dataloader démarrent donc en
-réimportant votre script. Sans garde `if __name__ == "__main__":`, chaque
+Windows ne possède pas `fork`, et Python sur macOS ne l'utilise pas par défaut.
+Les workers du dataloader démarrent donc en réimportant votre script. Sans garde `if __name__ == "__main__":`, chaque
 worker relance votre appel d'entraînement, ce qui provoque un deadlock ou crée
 des processus sans fin.
 
@@ -130,7 +130,7 @@ code s'exécute et renvoie un élément d'apparence correcte.
 
 `predict()` renvoie un objet `Results` pour une image et une liste pour
 plusieurs. Indexer le retour mono-image sélectionne une *détection*, et non une
-image\u00a0:
+image :
 
 ```python
 result = model.predict("image.jpg")   # a Results
@@ -145,8 +145,9 @@ valeurs dont vous savez qu'elles sont des listes.
 
 ### Lire les métriques comme des attributs
 
-`val()` renvoie un dictionnaire simple indexé par nom de métrique et non un
-objet à accès par attribut\u00a0:
+`val()` renvoie un dictionnaire indexé par nom de métrique. Son seul attribut,
+`box`, porte les résultats par image et les seuils par classe, et non les
+valeurs des métriques :
 
 ```python
 metrics = model.val(data="coco8.yaml")
@@ -175,3 +176,7 @@ if report.errors:
 
 Consultez la [commande doctor](/docs/cli/doctor) pour le catalogue des
 contrôles.
+
+## Les workers persistants ne peuvent pas observer les modifications du dataset
+
+Les hooks actifs `close_mosaic` ou `set_epoch` doivent atteindre les copies du dataset utilisées par les workers. Si un chargeur personnalisé à plusieurs workers conserve des copies persistantes incompatibles, utilisez `persistent_workers=False` ou recréez les workers après la mutation. Le parcours non persistant par défaut n'est pas affecté.

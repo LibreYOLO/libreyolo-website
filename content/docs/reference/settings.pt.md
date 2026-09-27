@@ -16,10 +16,10 @@ keywords:
   - HF_TOKEN
   - diretório de pesos libreyolo
   - cache do libreyolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Variáveis localizadas buscando os.environ e os.getenv em libreyolo/**/*.py na
-  v1.5.0; semântica lida em cada ponto de uso. Convenções de diretório lidas em
+  v1.6.0; semântica lida em cada ponto de uso. Convenções de diretórios lidas de
   libreyolo/data/utils.py, libreyolo/utils/download.py,
   libreyolo/export/exporter.py, libreyolo/models/base/model.py e
   libreyolo/models/sam3dbody/mhr_body.py.
@@ -40,7 +40,7 @@ snippets:
         do import.
 
         print(DATASETS_DIR)
-source_hash: 462f1288582225ce
+source_hash: 82fbf9f3b1540603
 ---
 
 ## Variáveis de ambiente
@@ -71,6 +71,8 @@ A seleção de kernels também encurta os imports: quando `LIBREYOLO_KERNELS`
 força `off` ou `reference`, os provedores acelerados internos nunca chegam a ser
 importados. O registro que essas três variáveis controlam está documentado em
 [kernels](/docs/reference/kernels).
+
+`LIBREYOLO_TRITON_MSDA=0` desativa o provedor Triton de atenção deformável incluído no código. `LIBREYOLO_HUB_KERNELS=0` desativa kernels Hub e sua dica de instalação. Ambos mantêm o fallback portátil.
 
 ## Variáveis que a biblioteca define
 
@@ -109,6 +111,8 @@ Um token só é necessário para repositórios restritos. O SAM 3 é o exemplo q
 vem na biblioteca: os pesos dele baixam de um repositório restrito sob uma
 licença própria, então os termos precisam ser aceitos na página do repositório e
 a sessão precisa estar autenticada.
+
+`HF_TOKEN` autentica o carregamento de checkpoints do Hub, a publicação e o logger do Hub. `OPENAI_API_KEY` e `OPENROUTER_API_KEY` fornecem credenciais para as [rotas de provedores LibreLLM](/docs/reference/llm-api) correspondentes.
 
 ## Diretórios
 

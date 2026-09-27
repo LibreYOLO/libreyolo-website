@@ -16,7 +16,7 @@ keywords:
   - DataLoader ボトルネック
   - カーネル起動 オーバーヘッド
   - GPU 使用率
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   profile:
     - label: プロファイル後も学習を継続
@@ -66,7 +66,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: ee5bb727065b6099
+source_hash: c8d7adb6aabcbc80
 ---
 
 ## 変更する前に測定する
@@ -92,13 +92,15 @@ source_hash: ee5bb727065b6099
 
 `profile run`について知っておくべき点が2つあります。1つ目は`no_aug_epochs=0`を設定することです。プロファイラーはエポック0を測定するため、デフォルトの`no_aug_epochs`を使った短い実行では、実際の学習に使うデータローダーではなく、軽いデータ拡張なしのデータローダーを測定してしまうためです。2つ目は、`--repeat N`で平均と標準偏差を報告することです。起動時間が支配的なstepはノイズが大きく、1回の実行では誤解を招くため重要です。試行ごとのディレクトリ`prof_1`、`prof_2`などと、集計した`profile_repeat.json`を書き込みます。
 
+RF-DETRとD-FINE、DEIM、RT-DETRのマッチャー経路は、ホストへの転送を減らします。対応するCUDAのAdamとAdamWは融合更新を使って構築されます。SGDとCUDA以外のパラメータでは通常の構築を使います。これらの実装変更が、あらゆる場合の高速化を保証するものではありません。
+
 ## 混合精度
 
 `amp=True`はほとんどのファミリーでデフォルトとなり、CUDA autocast下で順伝播を実行します。`amp_dtype`は`float16`または`bfloat16`を選びます。
 
 <code-tabs name="amp" />
 
-Float16には動的loss scalingが必要で、有効なgradient scalerが作成されます。bfloat16は指数範囲が広いため不要で、scalerは無効になります。D-FINE、DEIM、YOLO-NAS、FOMOの4ファミリーは`amp=False`で提供され、DEIMの設定は継承によってRT-DETRv4にも引き継がれます。D-FINEは理由を明記しています。デコーダーが、float16で表現できる最大の有限値65504に活性値を制限するためです。
+Float16では勾配スケーラーを使い、bfloat16では無効にします。D-FINE、DEIM、RT-DETRv4、YOLO-NASの物体検出は、デフォルトで`amp=True`です。Dome-DETR、PP-YOLOE、YOLO-NAS OBBはFP32のデフォルトを維持します。FP32を明示的に使うには`amp=False`を渡します。
 
 bfloat16非対応ハードウェアで要求した場合の動作を含む引数の意味は、[ハイパーパラメーター](/docs/train/hyperparameters)にあります。
 
@@ -167,6 +169,12 @@ YOLOXは実行の途中でキャプチャ領域の計算内容を変更し、`no
 `amp=False`では、キャプチャの有無にかかわらず、このハードウェアでビット単位の同一性は得られません。同一シードのYOLOv9-t eager実行を2回行うと20stepで相対36%、YOLOX-tでは2.6%ずれます。cuDNNが一部のfp32畳み込み形状に対して非決定的な重み勾配アルゴリズムを選ぶためです。
 
 キャプチャしたグラフは静的な入力、出力、ワークスペースのバッファーを固定するため、ピークVRAMはおよそ活性値1組分だけ増えます。上記のファミリーでは、ピーク割り当て量の変化は-5%から+19%でした。相対コストが最も大きいのは、もともとの活性値が小さい小規模な画像分類モデルです。224 px、バッチ16のResNet-18では、eagerの0.48 GBからGraphの0.57 GBへ増えました。上限を超える場合は、バッチを下げるかフラグを無効にしてください。
+
+## torch.compile
+
+`train(compile=True)`は、ネットワークの順伝播と逆伝播を`torch.compile`でコンパイルします。モードとして`"default"`、`"reduce-overhead"`、`"max-autotune"`、`"max-autotune-no-cudagraphs"`も受け付けます。デフォルトは`False`です。loss、オプティマイザー、EMA、検証、チェックポイント、エクスポートはeagerのままで、チェックポイントはコンパイルなしで読み込めます。コンパイルされるのは単一GPUのCUDA実行だけです。CPU、MPS、分散、蒸留の実行、およびコンパイラーが失敗した場合は、警告を出したうえでeagerで学習します。コンパイルには数分かかり、学習ホストにCコンパイラーとPythonのヘッダーが必要です。
+
+`train()`の実行中は、`OMP_NUM_THREADS`が設定されていない限り、LibreYOLOはPyTorchのCPUスレッド数をプロセスに割り当てられたCPU数まで下げます。そのため、CPUが制限されたコンテナーでも各stepが遅くなりません。
 
 ## 関連項目
 

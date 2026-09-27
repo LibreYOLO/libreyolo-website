@@ -10,8 +10,8 @@ keywords:
   - libreyolo coverage groups
   - g0 g1 g2 g3 g4
   - model tiers
-last_verified: "1.5.0"
-verification: "Export tiers from docs/adr/0011-export-support-tiers.md and libreyolo/export/support.py; coverage groups and per-family counts from libreyolo/models/registry.py MODEL_GROUPS; the from-scratch gate from libreyolo/models/base/model.py and libreyolo/cli/commands/train.py; the CLI inventory read from libreyolo/models/inventory.py; API tiers from libreyolo/models/sam/, openvocab/ and vlm/ package docstrings and base.py contracts, all at v1.5.0. The reader-facing group labels (Flagship, Core, Supported, Inference only, Museum, Sibling tier) are the site's own vocabulary for the same groups, from src/data/docs/registry.json."
+last_verified: "1.6.0"
+verification: "Export tiers from docs/adr/0011-export-support-tiers.md and libreyolo/export/support.py; coverage groups and per-family counts from libreyolo/models/registry.py MODEL_GROUPS; the from-scratch gate from libreyolo/models/base/model.py and libreyolo/cli/commands/train.py; the CLI inventory read from libreyolo/models/inventory.py; API tiers from libreyolo/models/sam/, openvocab/ and vlm/ package docstrings and base.py contracts, all at v1.6.0. The reader-facing group labels (Flagship, Core, Supported, Inference only, Museum, Sibling tier) are the site's own vocabulary for the same groups, from src/data/docs/registry.json."
 snippets:
   usage:
     - label: Read both classifications for one family
@@ -68,14 +68,18 @@ chosen by call contract rather than by architecture.
 | Promptable segmentation | `LibreSAM` | A forward is meaningless without a per-image spatial or concept prompt supplied at call time. Interactive and stateful: encode once, prompt many times |
 | Open-vocabulary detection | `LibreOpenVocab` | Text-conditioned discriminative detectors. The class list is a prompt, set by `set_classes` |
 | Vision-language | `LibreVLM` | A generative model driven as a detector. The class list is a prompt and the confidence is a placeholder |
+| Grounding | `LibreGround` | An image and a referring instruction map to at most one point per query |
+| Robot policy | `LibreVLA` | Camera frames and robot state map to a chunk of future actions |
 
-The three sibling tiers deliberately do not register into the detector
+The sibling tiers deliberately do not register into the detector
 factory, which is why `LibreYOLO("some-alias")` does not reach them. They load
 by size alias and autodownload rather than by checkpoint sniffing.
 
-All four return the same `Results`, so downstream code is unchanged across
+All of them return the same `Results`, so downstream code is unchanged across
 them. What differs is which methods work: the sibling tiers raise
-`NotImplementedError` for `train()`, `val()` and `export()`, and the SAM and
+`NotImplementedError` for `train()`, `val()` and `export()`, with two
+exceptions. `LibreVLM` fine-tunes Qwen3-VL as a detector, and `LibreVLA`
+trains and validates SmolVLA, ACT and Diffusion Policy. The SAM and
 open-vocabulary tiers raise for `track()` as well. Each tier page lists its
 own exclusions.
 
@@ -93,15 +97,15 @@ site uses for the same group on a model page header.
 | Group | Label | Families | Meaning |
 |---|---|---|---|
 | `g0` | Flagship | 2 | Flagship anchors required in shared-feature coverage |
-| `g1` | Core | 10 | Trainable detector coverage set |
-| `g2` | Supported | 14 | Additional trainable-family coverage set |
-| `g3` | Inference only | 35 | Families without a training implementation |
+| `g1` | Core | 12 | Trainable detector coverage set |
+| `g2` | Supported | 19 | Additional trainable-family coverage set |
+| `g3` | Inference only | 44 | Families without a training implementation |
 | `g4` | Museum | 5 | Historical families with inference coverage |
-| `s` | Sibling tier | 21 | Sibling APIs (SAM, open-vocab, VLM, zero-shot) covered separately |
+| `s` | Sibling tier | 36 | Sibling APIs (SAM, open-vocab, VLM, grounding, zero-shot) covered separately |
 
-That is 87 families across six groups. `g3` alone holds more families than
-every other group combined, because most of the registry is inference-only
-lineage and museum coverage rather than actively trained detectors.
+That is 118 families across six groups. `g3` is the largest group, because
+much of the registry is inference-only lineage rather than actively trained
+detectors.
 
 For a reader choosing a model, the group says where to expect engineering
 attention, not how accurate a family is. `g0` and `g1` are where a new
@@ -121,19 +125,24 @@ capability checks, never from group membership alone. Groups classify
 families, not tasks, so a task-scoped coverage run names the task explicitly,
 as in "g1 detect".
 
-Two places read the group at runtime rather than only in tests.
+Three places read the group at runtime rather than only in tests.
 `collect_model_inventory()` in `libreyolo/models/inventory.py` attaches the
-group to every entry the CLI inventory prints, and `pretrained=False`
-triggers the special from-scratch reinitialization path only for families in
-`g0` and `g1`. Outside those two groups the check in
+group to every entry the CLI inventory prints. `pretrained=False` triggers
+the special from-scratch reinitialization path only for families in `g0`,
+`g1` and `g2`. Outside those groups the check in
 `libreyolo/models/base/model.py` is skipped entirely, so `pretrained=False`
-reaches the family's own `train()` as an ordinary keyword instead.
+reaches the family's own `train()` as an ordinary keyword instead. Training
+with `classes=` or `single_cls=True` is accepted only for `g0` and `g1`
+detection and raises `ValueError` elsewhere.
 
 ## Training
 
 A family in `g3` or `g4` has no training implementation, and calling `train()`
 on one raises. That is a property of the family's code, not of its group: the
 group records the fact rather than causing it.
+
+Of the 118 families, 37 train: every `g0`, `g1` and `g2` family, plus Qwen3-VL
+through `LibreVLM` and SmolVLA, ACT and Diffusion Policy through `LibreVLA`.
 
 For a family that does train, whether an individual augmentation knob reaches
 the pipeline is a separate question with its own three-value vocabulary,

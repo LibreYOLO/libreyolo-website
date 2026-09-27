@@ -11,7 +11,7 @@ keywords:
   - FOMO 点位置推定
   - 画像 物体数 カウント
   - 点位置推定
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: 点を推論して数える
@@ -114,7 +114,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.points.xy)
-source_hash: 932153c8870d1c7c
+source_hash: 5c3cfe7a606cd7aa
 ---
 
 ## 定義
@@ -125,13 +125,15 @@ source_hash: 932153c8870d1c7c
 
 ## モデル
 
-`point`には3つのファミリーが対応し、相互に置き換えられるものではありません。
+点検出モデルは、語彙と出力の意味が異なります。
 
 [FOMO](/docs/models/fomo)は固定ボキャブラリーの選択肢です。低解像度グリッドの各セルを背景または物体中心として分類するグリッド分類器です。LibreYOLOで学習できる唯一の点検出ファミリーであり、エクスポートできる唯一のファミリーでもあります。
 
 [LocateAnything](/docs/models/locate-anything)はクラスインデックスの代わりにテキストを受け取るため、ボキャブラリーは入力した任意のフレーズになります。`vlm`追加パッケージが必要で、`LibreYOLO()`ファクトリではなく`LibreLocateAnything`として構築します。重みは非商用利用に制限されています。正確な条件と、チェックポイントが組み合わせるさらに2つのライセンスはモデルページに記載されています。
 
 [SenseNova-Vision](/docs/models/sensenova-vision)は、他の6タスクでも使う同じプロンプト生成チェックポイントを通して`point`に対応し、`LibreVLM("sensenova-vision", task="point")`で読み込みます。`sensenova`追加パッケージが必要です。推論ごとに7Bモデルの生成処理を実行するため、専用検出器より画像ごとのレイテンシが明らかに長くなります。重みは非商用で、ライセンスはモデルページに記載されています。
+
+[Molmo2](/docs/models/molmo2)と[Moondream](/docs/models/moondream)は、テキストを条件とする点を出力します。[LibreGround](/docs/reference/ground-api)は、ShowUI、Florence-2、Qwen3-VLを使い、指示に基づいてクエリごとに最大1つのクリック位置を選択します。
 
 ## 推論
 

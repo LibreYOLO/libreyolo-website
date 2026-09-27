@@ -13,7 +13,7 @@ keywords:
   - comando libreyolo export
   - exportar yolo tensorrt
   - argumentos libreyolo export
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Comando
     value: libreyolo export
@@ -47,7 +47,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: ef2ca20af3814109
+source_hash: 290b778a1060a760
 ---
 
 ## Sinopse
@@ -70,6 +70,7 @@ Os argumentos são pares `key=value`, e a forma POSIX também funciona, então
 | `batch` | `1` | Tamanho de batch da exportação |
 | `half` | `false` | Precisão FP16 |
 | `int8` | `false` | Quantização INT8 |
+| `quantize` | | Precisão como `16` (FP16), `8` (INT8) ou `32` (FP32); substitui `half` e `int8` |
 | `dynamic` | `false` | Formas de entrada dinâmicas (ONNX) |
 | `simplify` | `true` | Simplificação do grafo ONNX |
 | `nms` | `false` | Embute o NMS no modelo. Apenas ONNX e CoreML |
@@ -115,7 +116,8 @@ grafo embutido é fixo em batch 1, e avisa isso no stderr. No CoreML ele aceita
 com `format=coreml nms=true` sai com `config_unsupported`.
 
 `half=true` junto com `int8=true` não é erro. INT8 ganha, `half` é descartado e
-um aviso vai para o stderr.
+um aviso vai para o stderr. Um `quantize` que discorda de `half` ou `int8` sai
+com `config_conflict`.
 
 `name` e `verify` são opções do RKNN hoje. Passar qualquer uma delas com outro
 formato sai com `config_unsupported` em vez de ser ignorada.
@@ -154,3 +156,5 @@ recusado, e `1` para outras falhas em tempo de execução.
 
 Relacionado: [`libreyolo quantize`](/docs/cli/quantize), que fica no PyTorch e
 grava um checkpoint em vez de um artefato de deploy.
+
+TFLite INT8 usa `int8=True` para detecção YOLO9 ou YOLOX com `data=...`, `fraction=1.0`, `batch=1` e `dynamic=False`. FP16 não é suportado; quando ambas as flags de precisão são fornecidas, a CLI descarta `half` em favor de INT8. A saída JSON de exportação informa a tela realmente resolvida, incluindo o fallback quadrado para famílias nativamente quadradas recarregadas de checkpoints de treinamento retangular.

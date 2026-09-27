@@ -38,7 +38,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
-source_hash: 7b5b53c46df00c06
+source_hash: 95935c1f8ca2d6db
 ---
 
 ## 概要
@@ -88,7 +88,9 @@ libreyolo checks
 ## models
 
 列出每个模型家族及其任务、尺寸、能解析到它的检查点的 CLI 名称，以及每种尺寸的输入
-分辨率。
+分辨率。只列出 `model=` 能加载的名称。没有已发布权重的名称单独列在
+`No published weights (local checkpoints only)` 一行，没有 CLI 名称的家族则改为显示
+它的 Python 类或它自己的命令。
 
 ```bash
 libreyolo models

@@ -16,7 +16,7 @@ keywords:
   - klasifikasi gambar python
   - image classification
   - convolutional neural network
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -80,7 +80,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 68c09f080c74bb87
+source_hash: c996d557da01e4d4
 ---
 
 ## Instalasi
@@ -120,6 +120,8 @@ diimplementasikan.
 top-5.
 
 <code-tabs name="val" />
+
+Validasi dan kalibrasi INT8 memakai transformasi evaluasi family. Metadata ekspor mencatat `norm_mean`, `norm_std`, dan `resize_mode`; artefak lama memakai nilai family sebagai fallback. Prapemroses kalibrasi mengembalikan array CHW dan rasio yang diperlukan.
 
 ## Ekspor
 

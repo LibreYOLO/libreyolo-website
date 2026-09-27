@@ -15,7 +15,7 @@ keywords:
   - melatih model segmentasi
   - mIoU
   - library segmentasi MIT
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -107,16 +107,22 @@ snippets:
         libreyolo export model=LibreSegformerb0-sem.pt format=onnx imgsz=512
     - label: Gunakan berkas hasil ekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Factory merutekan berdasarkan akhiran berkas, sehingga artefak hasil
-        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang sama.
+
+        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang
+        sama.
+
         model = LibreYOLO("LibreSegformerb0-sem.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.semantic_mask.data.shape)
-source_hash: 44b92d8ba6062f04
+source_hash: e13acb1e813da7c4
 ---
 
 ## Definisi
@@ -139,13 +145,7 @@ dikecualikan dari loss dan metrik, serta tidak disertakan dalam `.classes`.
 
 ## Model
 
-Tiga family dapat berlatih dan memprediksi:
-[SegFormer](/docs/models/segformer), [LingBot-Vision](/docs/models/lingbot-vision),
-dan [DINOv2](/docs/models/dinov2). SegFormer serta LingBot-Vision berjalan dengan
-paket dasar dan menyertakan bobot terbitan. DINOv2 memerlukan
-`pip install "libreyolo[rfdetr]"` dan tidak memiliki checkpoint yang disediakan oleh
-LibreYOLO: model ini memuat backbone upstream dan dense head-nya dimulai dengan
-inisialisasi acak, sehingga menjadi titik awal pelatihan, bukan predictor siap pakai.
+Family yang dapat dilatih meliputi [SegFormer](/docs/models/segformer), [LingBot-Vision](/docs/models/lingbot-vision), dan [DINOv2](/docs/models/dinov2). SegFormer dan LingBot-Vision berjalan dengan paket dasar dan memiliki bobot yang dipublikasikan. DINOv2 memerlukan `pip install "libreyolo[rfdetr]"` dan tidak memiliki checkpoint yang dihosting LibreYOLO: model ini memuat backbone upstream dengan head padat yang diinisialisasi secara acak, sehingga menjadi titik awal pelatihan, bukan model siap prediksi.
 
 Empat lainnya dapat memprediksi, memvalidasi, dan mengekspor, tetapi `train()`-nya
 memunculkan `NotImplementedError`: [FCN](/docs/models/fcn),
@@ -157,6 +157,8 @@ berasal dari dataset dengan ruang label yang sangat berbeda, termasuk 150 kelas
 ADE20K dibanding 19 kelas Cityscapes, sehingga `names` milik checkpoint
 menentukan apa yang dapat diberi label. Dua checkpoint hanya dapat dibandingkan
 jika dilatih pada kumpulan yang sama.
+
+[PP-LiteSeg](/docs/models/ppliteseg), [U-Net](/docs/models/unet), dan [GTR](/docs/models/gtr) adalah family segmentasi semantik yang dapat dilatih. Bobot Cityscapes untuk U-Net dipublikasikan sebagai `LibreUNets-sem.pt`.
 
 ## Prediksi
 
@@ -206,7 +208,7 @@ names:
   1: sidewalk
 ```
 
-`masks_dir` adalah nama direktori pengganti `images`, dengan default `masks`.
+`masks_dir` adalah nama direktori pengganti `images`.
 `label_mapping` adalah pemetaan opsional `{source_id: train_id}` yang diterapkan
 pada nilai piksel mask saat pemuatan. Dengan cara ini, dataset bernomor 1 hingga
 150 menjadi 0 hingga 149; nilai sumber yang tidak dipetakan menjadi ignore, dan
@@ -230,6 +232,8 @@ sebelum proses dimulai jika `imgsz` tidak habis dibagi. Pembaginya adalah 32 unt
 SegFormer, 16 untuk LingBot-Vision dan EoMT, 14 untuk DINOv2, serta 8 untuk FCN
 dan PIDNet. Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU,
 dan logger.
+
+Dataset semantik menerima kanvas `(height, width)`. PP-LiteSeg dan U-Net membedakan crop pelatihan dari persegi panjang evaluasi. Pengambilan sampel dengan penskalaan dan crop mengisi area kosong dengan label abaikan; transformasi fotometrik family berlaku jika dikonfigurasi.
 
 ## Validasi
 
@@ -255,4 +259,3 @@ filenya, sehingga berkas `.onnx` atau `.engine` berperilaku seperti checkpoint d
 mengembalikan `Results` yang sama. Cakupan format berbeda per family; matriks pada
 setiap halaman model dibuat dari kumpulan tervalidasi, bukan diketik manual.
 Lihat [ekspor dan deployment](/docs/export) untuk format, extra, dan batasannya.
-

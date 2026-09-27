@@ -3,10 +3,9 @@ title: Dome-DETR
 families:
   - domedetr
 seo_title: 'Dome-DETR: детекция мелких объектов в LibreYOLO'
-description: >-
-  Использование Dome-DETR в LibreYOLO для детекции мелких объектов на
-  аэроснимках и съёмке с дронов. Конвертация оригинальных весов, предсказание,
-  дообучение и валидация с кодом под лицензией MIT.
+description: Dome-DETR для детекции мелких объектов, обучения и валидации. Зеркала предобученных чекпойнтов сохраняют условия
+  только для академических исследований.
+
 lead: >-
   Специалист по мелким объектам на базе D-FINE: голова плотности решает, где
   находятся объекты, внимание энкодера ограничивается окнами, в которых они
@@ -23,85 +22,53 @@ keywords:
   - AI-TOD
   - DETR
   - tiny object detection
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 snippets:
   predict:
-    - label: 'Конвертация, затем предсказание'
-      language: bash
-      code: |
-        # LibreYOLO не размещает веса Dome-DETR, поэтому чекпойнт скачивается
-        # из оригинального репозитория и конвертируется один раз.
-        hf download RicePasteM/Dome-DETR --include 'best_ckpts_dome_2026/*' \
-          --local-dir dome-ckpts
+  - label: Python
+    language: python
+    code: |
+      from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        python weights/convert_domedetr_weights.py \
-          dome-ckpts/best_ckpts_dome_2026/dome-s-visdrone_converted.pth \
-          LibreDOMEDETRs-visdrone.pt --size s --variant visdrone
-    - label: Python
-      language: python
-      code: |
-        from libreyolo import LibreYOLO
-
-        # Локальный путь, а не имя: для этого семейства ничего не скачивается.
-        model = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-        result = model("drone-frame.jpg", save=True)
-
-        for box in result.boxes:
-            print(result.names[int(box.cls)], box.conf, box.xyxy)
-    - label: CLI
-      language: bash
-      code: >
-        libreyolo predict model=LibreDOMEDETRs-visdrone.pt
-        source=drone-frame.jpg save=True
-    - label: Имена классов
-      language: python
-      code: |
-        from libreyolo import LibreYOLO
-
-        # Чекпойнта на COCO нет, поэтому классы берутся из датасета, на котором
-        # обучались веса, и читаются из метаданных чекпойнта.
-        aitod = LibreYOLO("LibreDOMEDETRs-aitod.pt")
-        print(aitod.model.names)     # 9 классов AI-TOD-V2
-
-        visdrone = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-        print(visdrone.model.names)  # 12 классов VisDrone
+      # Предобученные веса разрешены только для академических исследований.
+      model = LibreYOLO("LibreDOMEDETRs-visdrone.pt", device="cpu")
+      print(model(SAMPLE_IMAGE).boxes)
   train:
-    - label: Python
-      language: python
-      code: >
-        from libreyolo import LibreYOLO
+  - label: Python
+    language: python
+    code: |
+      from libreyolo import LibreYOLO
 
-
-        model = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-
-        model.train(data="my-dataset.yaml", epochs=160, imgsz=800, batch=4,
-        lr0=2e-4)
-    - label: CLI
-      language: bash
-      code: |
-        libreyolo train model=LibreDOMEDETRs-visdrone.pt data=my-dataset.yaml \
-          epochs=160 imgsz=800 batch=4 lr0=2e-4
-    - label: Multi-GPU
-      language: bash
-      code: |
-        libreyolo train model=LibreDOMEDETRs-visdrone.pt data=my-dataset.yaml \
-          epochs=160 device=0,1 batch=4
+      model = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
+      model.train(data="my-dataset.yaml", epochs=160, imgsz=800, batch=4, lr0=2e-4)
+  - label: CLI
+    language: bash
+    code: |
+      libreyolo train model=LibreDOMEDETRs-visdrone.pt data=my-dataset.yaml \
+        epochs=160 imgsz=800 batch=4 lr0=2e-4
+  - label: Multi-GPU
+    language: bash
+    code: |
+      libreyolo train model=LibreDOMEDETRs-visdrone.pt data=my-dataset.yaml \
+        epochs=160 device=0,1 batch=4
   val:
-    - label: Python
-      language: python
-      code: |
-        from libreyolo import LibreYOLO
+  - label: Python
+    language: python
+    code: |
+      from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
-        metrics = model.val(data="my-dataset.yaml")
+      model = LibreYOLO("LibreDOMEDETRs-visdrone.pt")
+      metrics = model.val(data="my-dataset.yaml")
 
-        print(metrics["metrics/mAP50-95"])
-        print(metrics["metrics/mAP50"])
-    - label: CLI
-      language: bash
-      code: |
-        libreyolo val model=LibreDOMEDETRs-visdrone.pt data=my-dataset.yaml
-source_hash: 381f01d769e7c420
+      print(metrics["metrics/mAP50-95"])
+      print(metrics["metrics/mAP50"])
+  - label: CLI
+    language: bash
+    code: |
+      libreyolo val model=LibreDOMEDETRs-visdrone.pt data=my-dataset.yaml
+
+source_hash: 8482301790a9b8d9
 ---
 
 ## Установка
@@ -115,10 +82,7 @@ pip install libreyolo
 
 ## Предсказание
 
-Автоматически скачивать нечего. LibreYOLO не размещает эти веса, поэтому
-порядок такой: получить оригинальный чекпойнт, один раз его сконвертировать, а
-затем загрузить сконвертированный файл по пути. Почему так —
-[лицензирование](#licensing).
+Шесть конвертированных чекпойнтов скачиваются автоматически с зеркал LibreYOLO. Условия исходного проекта разрешают использование только в академических исследованиях.
 
 <code-tabs name="predict" />
 
@@ -156,8 +120,7 @@ Dome-DETR — это D-FINE с тремя добавлениями. DeFE пре�
 [D-FINE](/docs/models/d-fine) для аэроснимков, съёмки с дронов и дистанционного
 зондирования, а не как замену.
 
-LibreYOLO не публикует для этого семейства строк бенчмарков, потому что не
-публикует и чекпойнтов, которые можно было бы измерить.
+Для этого семейства нет записей бенчмарков Vision Analysis.
 
 ## Обучение
 
@@ -217,63 +180,12 @@ denoising, отдельными на каждое изображение, что
 
 ## Чекпойнты
 
-Перечислять нечего. LibreYOLO не публикует веса Dome-DETR, и ни одно имя вида
-`LibreDOMEDETR<size>-<dataset>.pt` не ведёт к загрузке.
-
-Авторы публикуют шесть чекпойнтов — s, m и l для каждого из двух датасетов:
-AI-TOD-V2 с 9 классами и VisDrone с 12. Чекпойнта на COCO нет, поэтому
-каноническое имя файла всегда несёт суффикс датасета, а имена классов едут в
-метаданных чекпойнта, а не берутся из константы семейства. Запрос голого
-`LibreDOMEDETRs.pt` сразу выбрасывает ошибку с сообщением, где названы два
-настоящих имени файлов и команда конвертации, вместо попытки скачивания,
-которая вернула бы 404.
-
-Конвертацию делает `weights/convert_domedetr_weights.py`. Он заново собирает
-граф LibreYOLO, загружает в него оригинальные тензоры и отказывается что-либо
-записывать, если хоть один ключ отсутствует, лишний или не той формы, так что
-сконвертированный файл либо в точности совпадает, либо его нет вовсе. Укажите
-ему оригинальный `.pth` и передайте размер и вариант:
-
-```bash
-python weights/convert_domedetr_weights.py \
-    dome-ckpts/best_ckpts_dome_2026/aitod-s-best.pth \
-    LibreDOMEDETRs-aitod.pt --size s --variant aitod
-```
-
-Про численную точность: `weights/parity_domedetr.py` сравнивает этот порт с
-оригинальной реализацией на всех шести чекпойнтах и показывает
-`max_abs_diff == 0.0` и по `pred_logits`, и по `pred_boxes`, предварительно
-сверив бит в бит маску окон MWAS, и отдельно сравнивает каждое слагаемое
-функции потерь с оригинальным критерием. Стоит прямо сказать, что это такое:
-ручной скрипт, которому нужны оригинальный checkout и опубликованные чекпойнты
-на диске, и запускают его руками. В непрерывную интеграцию он не входит, и ни
-одна CI-задача его не воспроизводит.
+<checkpoint-table />
 
 ## Лицензирование
 
 <provenance-box>
 
-Причина, по которой это семейство не зеркалируется, — веса. В метаданных
-оригинальной карточки модели нет поля лицензии, а в её тексте сказано, что
-проект под Apache-2.0, и одновременно материал ограничен только академическими
-исследованиями. Эти два прочтения не сходятся, а более строгое из них
-разрешения на распространение не даёт, поэтому LibreYOLO ссылается на
-оригинальный репозиторий, а не копирует файлы, до прояснения. Ровно те же
-соображения действуют здесь и для [YOLO-NAS](/docs/models/yolo-nas).
-
-Код — вопрос отдельный и более ясный. Оригинальный репозиторий под Apache-2.0,
-порт в LibreYOLO — под MIT, а веса, которые вы обучили сами на своих данных,
-принадлежат вам.
+Шесть зеркал сохраняют ограничение исходного проекта на использование только в академических исследованиях. Код лицензируется отдельно. Исходный репозиторий использует Apache-2.0, порт LibreYOLO использует MIT, а веса, которые вы обучаете на собственных данных, принадлежат вам.
 
 </provenance-box>
-
-## Цитирование
-
-Dome-DETR опубликован на ACM Multimedia 2025 под названием «Dome-DETR: DETR
-with Density-Oriented Feature-Query Manipulation for Efficient Tiny Object
-Detection». Препринт —
-[arxiv.org/abs/2505.05741](https://arxiv.org/abs/2505.05741). Авторы не
-публикуют в своём репозитории блок BibTeX, поэтому он здесь не воспроизводится,
-а не собирается вручную.
-
-<citation-block />

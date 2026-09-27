@@ -191,7 +191,7 @@ snippets:
 
         tegrastats            # tải theo thời gian thực; nvidia-smi bị hạn chế
         trên Tegra
-source_hash: c07ff908503e89b5
+source_hash: 42f4131b1a842bfd
 ---
 
 ## Trang này ghi lại điều gì
@@ -207,12 +207,10 @@ Các bản JetPack khác, các bo mạch Jetson khác và các phiên bản CUDA
 chưa được kiểm thử. Công thức bên dưới là công thức đã chạy được trên tổ hợp đó.
 
 Lần chạy đó diễn ra ngày 2026-07-27 với LibreYOLO 1.4.0, và chưa được lặp lại
-trên phần cứng chạy 1.5.0: đây là trang duy nhất trong nhánh 1.5.0 vẫn mang một
-kết quả kiểm chứng của 1.4.0, nên front matter của nó ghi `last_verified: "1.4.0"`.
-Không có thay đổi nào trong 1.5.0 động tới đường cài đặt, bốn thư viện còn thiếu
-hay các cờ xuất mô hình mô tả ở đây, nên các lệnh được kỳ vọng là vẫn đúng,
-nhưng số phiên bản trong phần kết quả bên dưới là những gì 1.4.0 in ra, không
-phải một phép đo trên 1.5.0.
+trên phần cứng chạy 1.5.0 hoặc 1.6.0, nên front matter của nó ghi
+`last_verified: "1.4.0"`. Các lệnh được kỳ vọng là vẫn đúng, nhưng số phiên bản
+trong phần kết quả bên dưới là những gì 1.4.0 in ra, không phải một phép đo trên
+1.6.0.
 
 Có hai điểm ở đây đi ngược lại những gì phần lớn hướng dẫn về Jetson nói. Các
 wheel là bản build aarch64 thông thường phát hành cho CUDA 13, nên không cần bản

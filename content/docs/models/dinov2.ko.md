@@ -18,7 +18,7 @@ keywords:
   - 이미지 임베딩
   - 특징 추출
   - Meta AI
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: 의미 분할
@@ -147,7 +147,7 @@ snippets:
         # 내보내기는 작업을 기준으로 파일명을 정하며 여기서는 LibreDINOv2s-sem.onnx입니다.
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
-source_hash: 4256e0a0398e5aaf
+source_hash: "c89a9662d03fe6f7"
 ---
 
 ## 설치
@@ -176,13 +176,17 @@ LibreYOLO는 LibreDINOv2 체크포인트를 게시하지 않습니다. 파일을
 
 <code-tabs name="train" />
 
-여기서 주요 키워드 인수는 대부분 계열이 사용하는 `batch`와 `lr0`가 아니라 `batch_size`와 `lr`입니다. `batch`와 `lr0`도 허용되어 각각 매핑되지만 두 형식을 함께 전달하면 충돌 오류가 발생합니다. 실행 위치를 지정하는 기본 방법은 `project=`/`name=` 대신 기본값이 `"runs/train"`인 `output_dir=`이지만 `project=`/`name=`도 직접 전달할 수 있습니다. 데이터셋, 증강, 다중 GPU, 로거는 [학습](/docs/train)을 참조합니다.
+여기서 기본 키워드 인수는 대부분의 다른 계열에서 사용하는 `batch`와 `lr0`가 아니라 `batch_size`와 `lr`입니다. `batch`와 `lr0`도 받아 해당 인수로 매핑하지만 둘 다 전달하면 충돌 오류가 발생합니다. 실행 위치를 지정하는 기본 방법은 `project=`/`name=` 대신 `output_dir=`(기본값 `None`)이며, `project=`/`name=`를 직접 전달하는 방법도 계속 작동합니다. 데이터셋, 증강, 다중 GPU, 로거는 [학습](/docs/train)을 참조하십시오.
+
+새 실행은 `exist_ok=False`에 따라 번호가 증가하는 `runs/train/dinov2_exp`를 사용합니다. `resume=True`는 트레이너 상태를 복원하고 선택한 실행 디렉터리를 유지합니다. 분류는 [하이퍼파라미터](/docs/train/hyperparameters)에 설명된 `cls_pw`와 `class_weights`를 지원합니다.
 
 ## 검증
 
 `val()`은 `task="semantic"`에서 mIoU와 픽셀 정확도, `task="classify"`에서 top-1과 top-5 정확도의 `metrics/` 키 사전을 반환합니다. `task="embed"`에는 점수를 매길 정답이 없으므로 여기서 `val()`을 호출하면 `NotImplementedError`가 발생합니다.
 
 <code-tabs name="val" />
+
+분류와 임베딩 보정은 모델의 분류 파이프라인을 재사용합니다. 평가는 해당 계열의 변환을 사용합니다.
 
 ## 내보내기
 

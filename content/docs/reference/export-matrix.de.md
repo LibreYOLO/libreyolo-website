@@ -16,14 +16,8 @@ keywords:
   - libreyolo formats Befehl
   - Export Parität Schwellenwert
   - NotImplementedError Export
-last_verified: 1.5.0
-verification: >-
-  Formate, Stufen, Fallback-Reihenfolge, Aufgaben- und Familienblöcke sowie
-  NCNN-Blöcke aus libreyolo/export/support.py gelesen; Aliasse und gemeinsame
-  Argumente aus libreyolo/export/exporter.py; Stufendefinitionen aus
-  docs/adr/0011-export-support-tiers.md; Paritätsschwellenwerte aus
-  docs/export_support.md, jeweils in v1.5.0. Einzelne Kombinationszellen werden
-  hier nicht wiedergegeben; frage sie mit dem folgenden Snippet ab.
+last_verified: "1.6.0"
+verification: "Formate, Stufen, Fallback-Reihenfolge, Aufgaben- und Familienblöcke sowie NCNN-Blöcke aus libreyolo/export/support.py gelesen; Aliasse und gemeinsame Argumente aus libreyolo/export/exporter.py; Stufendefinitionen aus docs/adr/0011-export-support-tiers.md; Paritätsschwellenwerte aus docs/export_support.md, jeweils in v1.6.0. Einzelne Kombinationszellen werden hier nicht wiedergegeben; frage sie mit dem folgenden Snippet ab."
 snippets:
   usage:
     - label: Matrix ohne Modell abfragen
@@ -71,7 +65,7 @@ snippets:
         print(blocked.tier)
 
         print(blocked.reason)
-source_hash: 83de3289634888c6
+source_hash: "70b9541fb8949352"
 ---
 
 ## Aufbau der Matrix
@@ -85,6 +79,8 @@ Die Matrix wird durch `(family, task, format)` indiziert. Familienschlüssel sin
 <code-tabs name="usage" />
 
 Da eine Zelle von drei Schlüsseln abhängt, ist das vollständige Raster groß und ändert sich mit jeder Veröffentlichung. Es wird generiert statt manuell geschrieben und befindet sich im Bibliotheks-Repository unter `docs/export_support.md`. Frage die Matrix aus Python oder der CLI ab, statt eine Kopie zu lesen.
+
+Die generierte Registry enthält PP-YOLOE, TinyFormer, DEKR, PP-LiteSeg, ConvNeXt V2, PE, V-JEPA 2 und LeVJEPA. Die Modellseiten nennen die jeweiligen Form- und Aufgabenbeschränkungen. U-Net, die vier 3D-Adapter, Marigold V2 und Roboter-Policies bieten keinen Export.
 
 ## Drei Stufen
 

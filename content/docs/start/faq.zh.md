@@ -10,8 +10,8 @@ keywords:
   - libreyolo 权重放在哪
   - libreyolo 命令行
   - libreyolo 离线使用
-last_verified: 1.5.0
-source_hash: a729b43a6642f2a0
+last_verified: 1.6.0
+source_hash: 13810bf9ea01c459
 ---
 
 ## 我该从哪个模型开始？
@@ -51,9 +51,9 @@ CNN 检测器选 YOLOv9，transformer 检测器选 RF-DETR。两者都在旗舰�
 
 ## val 返回什么？
 
-一个普通字典，不是对象。检测任务的键包括
+一个以指标名为键的字典。检测任务的键包括
 `metrics/precision`、`metrics/recall`、`metrics/mAP50` 和
-`metrics/mAP50-95`。其他任务返回对它们有意义的键，比如分类的 `metrics/accuracy_top1`，或者全景分割的 `metrics/PQ`、`metrics/SQ` 和 `metrics/RQ`。
+`metrics/mAP50-95`，检测和分割的结果还会在 `metrics.box` 上携带逐图像结果。其他任务返回对它们有意义的键，比如分类的 `metrics/accuracy_top1`，或者全景分割的 `metrics/PQ`、`metrics/SQ` 和 `metrics/RQ`。
 
 ## 怎么对文件夹、视频或摄像头运行？
 
@@ -96,3 +96,7 @@ libreyolo train model=yolo9-t data=coco8.yaml epochs=50 imgsz=640
 
 有两个类名为了保持一致做了重命名：`LibreYOLORTDETR` 变成了
 `LibreRTDETR`，`LibreYOLORFDETR` 变成了 `LibreRFDETR`。旧名称仍然能解析，并会发出一个指向新名称的 `DeprecationWarning`，所以已有代码在你更新它的这段时间里还能继续运行。
+
+## 为什么某个检查点名称无法下载？
+
+请使用模型页面检查点表中的准确文件名。带任务后缀的 FCN 和 Mask R-CNN 名称没有托管文件；加载器错误会列出支持的形式。LingBot-Vision g 没有已发布检查点：请使用 s、b、l 或本地检查点。

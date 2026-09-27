@@ -111,7 +111,7 @@ snippets:
       code: |
         huggingface-cli upload my-org/my-run \
           /root/runs/run1/weights/best.pt best.pt
-source_hash: 75d314de06aca3b6
+source_hash: 2f4a8ac1df103962
 ---
 
 ## レンタル前の準備
@@ -157,8 +157,8 @@ GPU時間として課金されます。
 ください。
 
 マルチGPUマシンでは、`device="0,1,2,3"`がGPUごとに1つのワーカーを自動生成し、`batch`は
-全GPU合計のグローバルバッチのままです。各ワーカーがスクリプトを再インポートするため、
-`__main__`ガードは必須です。これとその他の分散動作については
+全GPU合計のグローバルバッチのままです。ワーカーはガードのないスクリプトのトップレベルの
+コードを再実行しないため、`__main__`ガードは任意です。これとその他の分散動作については
 [マルチGPU学習](/docs/train/multi-gpu)を参照してください。
 
 ## 外部から監視

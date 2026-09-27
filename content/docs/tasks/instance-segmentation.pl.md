@@ -16,7 +16,7 @@ keywords:
   - etykiety wielokątów
   - biblioteka segmentacji mit
   - mask mAP
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -138,7 +138,7 @@ snippets:
 
 
         print(result.masks.data.shape)
-source_hash: 33e331eac0f9b0af
+source_hash: 577cd3c8c2d5d6fe
 ---
 
 ## Definicja
@@ -164,12 +164,15 @@ ten sam znormalizowany kontur.
 
 Cztery rodziny obsługują zarówno trenowanie, jak i predykcję masek:
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
-[D-FINE](/docs/models/d-fine) oraz [RTMDet](/docs/models/rtmdet). RF-DETR wymaga
+[D-FINE](/docs/models/d-fine) oraz [GTR](/docs/models/gtr). RF-DETR wymaga
 własnego zestawu zależności `pip install "libreyolo[rfdetr]"`, a pozostałe trzy
 działają z pakietem bazowym.
 
 [Mask R-CNN](/docs/models/mask-rcnn) przewiduje, waliduje i eksportuje maski,
 ale jego funkcja `train()` zgłasza `NotImplementedError`.
+[RTMDet](/docs/models/rtmdet) przewiduje i waliduje maski, ale trenowanie
+segmentacji zgłasza `NotImplementedError`; model trenuje się wyłącznie jako
+detektor.
 
 [EoMT](/docs/models/eomt) przewiduje i waliduje maski, ale również nie obsługuje
 trenowania, a zakres jego eksportu jest jeszcze węższy. `export()` przyjmuje

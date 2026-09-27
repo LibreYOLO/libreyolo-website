@@ -1,0 +1,12 @@
+{
+  "name": "LocateAnything",
+  "org": "NVIDIA",
+  "paper_title": "LocateAnything: Fast and High-Quality Vision-Language Grounding with Parallel Box Decoding",
+  "paper_url": "https://arxiv.org/abs/2605.27365",
+  "code_url": "https://github.com/NVlabs/Eagle/tree/main/Embodied",
+  "license": "NVIDIA License (non-commercial)",
+  "license_interpretation": "The NVIDIA License permits use, reproduction and modification, but Section 3.3 restricts the Work and any derivative to non-commercial use, research or evaluation only, for anyone other than NVIDIA and its affiliates: there is no revenue threshold or paid exception. Redistribution must keep a complete copy of the license and every attribution notice. LocateAnything-3B also composes two other licensed components: a Qwen2.5-3B-Instruct language backbone under the Qwen Research License, and a MoonViT-SO-400M vision encoder under MIT. Because loading this model requires trusting NVIDIA's own Hugging Face remote code, LibreYOLO pins the exact commit revision it downloads rather than the mutable main branch, and logs a one-time notice before that download. LibreYOLO does not host, mirror or redistribute any of it.",
+  "bibtex": "@article{wang2025locateanything,\n  title   = {LocateAnything: Fast and High-Quality Vision-Language Grounding with Parallel Box Decoding},\n  author  = {Shihao Wang and Shilong Liu and Yuanguo Kuang and Xinyu Wei and\n             Yangzhou Liu and Zhiqi Li and Yunze Man and Guo Chen and\n             Andrew Tao and Guilin Liu and Jan Kautz and Lei Zhang and Zhiding Yu},\n  journal = {arXiv:2605.27365},\n  year    = {2026},\n}",
+  "bibtex_source_url": "https://github.com/NVlabs/Eagle/blob/main/Embodied/README.md#-citation",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the NVlabs/Eagle README (Embodied subdirectory, branch main), linked from the model's Hugging Face card as its GitHub code release; the HF card itself carries no citation block, only an unrelated References list of prior work. Cross-checked against the arXiv API for 2605.27365: identical title and all 13 authors in the same order (Wang, Liu, Kuang, Wei, Liu, Li, Man, Chen, Tao, Liu, Kautz, Zhang, Yu). Do not hand-edit; a wrong citation misattributes someone's work."
+}

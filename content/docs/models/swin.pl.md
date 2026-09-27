@@ -15,7 +15,7 @@ keywords:
   - hierarchiczny transformer wizyjny
   - uwaga w przesuniętych oknach
   - klasyfikacja obrazów
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -84,7 +84,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: faa6bbacae62d88e
+source_hash: 7020bd102e5ba1d6
 ---
 
 ## Instalacja
@@ -126,6 +126,8 @@ trenowania ImageNet nie jest zaimplementowana.
 i `val/`, po jednym folderze na klasę) i zwraca metryki accuracy top-1 i top-5.
 
 <code-tabs name="val" />
+
+Walidacja i kalibracja INT8 używają transformacji ewaluacyjnej danej rodziny. Metadane eksportu zapisują `norm_mean`, `norm_std` i `resize_mode`; starsze artefakty używają wartości rodziny. Preprocesory kalibracji zwracają wymaganą tablicę CHW i współczynnik skali.
 
 ## Eksport
 

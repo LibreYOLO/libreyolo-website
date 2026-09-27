@@ -19,7 +19,7 @@ keywords:
   - mappa di profondità results
   - results summary yolo
   - onnx stessi risultati yolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Classi dei payload, slot, semantica di spostamento, summary(), to_json(),
   plot(), save() e cutout() letti da libreyolo/utils/results.py. Comportamento
@@ -136,13 +136,13 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: cebaac95f0a28b5f
 ---
 
 ## Un oggetto, uno slot per payload
 
 Una predizione su una singola immagine restituisce un `Results`. Porta con sé
-diciotto slot di payload, e un modello riempie solo quelli che il suo task
+ventuno slot di payload, e un modello riempie solo quelli che il suo task
 produce. Ogni altro slot è `None`, quindi leggere `result.masks` su un detector
 dà `None` invece di un errore.
 
@@ -166,6 +166,9 @@ dà `None` invece di un errore.
 | `embeddings` | `Embeddings` | `(N, D)` righe normalizzate L2 | Il task `embed` |
 | `identities` | `Identities` | N nomi e punteggi | Il task `embed` con una galleria |
 | `meshes` | `Meshes` | Parametri del corpo e vertici opzionali | Ricostruzione della mesh corporea |
+| `albedo` | `AlbedoMap` | `(H, W, 3)` RGB lineare | Stima dell'albedo |
+| `boxes3d` | `Boxes3D` | `(N, 14)` cuboidi nel sistema della camera, allineati per riga con `boxes` | Rilevamento 3D monoculare |
+| `actions` | `Actions` | `(T, D)` blocco di azioni | Policy robotiche |
 
 Accanto a loro stanno i campi che ogni risultato ha: `orig_shape` come
 `(altezza, larghezza)`, `path` (il percorso di origine, o `None` per input in
@@ -310,10 +313,6 @@ della profondità, un risultato panottico con i suoi segmenti, un matte come PNG
 RGBA con sfondo trasparente, e un detector come box con le maschere sotto. Il
 percorso scritto viene attaccato al risultato come `result.saved_path`.
 
-`Results.plot()` è più ristretto di quanto suggerisca il nome. È definito solo
-per le mappe di normali e le mappe di bordi, e solleva `NotImplementedError`
-per tutto il resto. Per gli altri task usa `save=True`.
-
 `Results.save(path)` è altrettanto ristretto: scrive un risultato di matting
 come ritaglio PNG RGBA con sfondo trasparente e altrimenti solleva
 `NotImplementedError`. `Results.cutout()` restituisce lo stesso array RGBA
@@ -326,15 +325,19 @@ un'immagine restaurata, e `result.meshes.save_obj(path, index=0)` per una mesh.
 Per sapere dove finiscono i file e come si comportano `output_path` e
 `output_file_format`, vedi [Sorgenti di predizione](/docs/predict/sources).
 
+`plot()` copre i dati di tutti i task. Le sovrapposizioni sulle immagini restituiscono di default array BGR contigui HxWx3 uint8; `pil=True` richiede PIL. Le mappe di profondità, delle normali, dei bordi e di albedo, i cuboidi 3D e i blocchi di azioni restituiscono di default un'immagine PIL; `pil=False` restituisce l'array. `orig_img` conserva i pixel BGR per sorgenti in memoria e URL; i file locali e i frame raccolti da video finiti possono essere riaperti.
+
+I controlli includono `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` e `filename`. Le immagini di classificazione salvate includono le prime cinque etichette. Il salvataggio del matting produce un ritaglio RGBA.
+
 ## Gli artefatti esportati restituiscono lo stesso oggetto
 
 <code-tabs name="exported" />
 
 `LibreYOLO()` fa dispatch sul suffisso del file, quindi un artefatto esportato
 si carica con la stessa chiamata di un checkpoint `.pt` e restituisce lo stesso
-`Results`. I file `.onnx`, `.engine`, `.pte` e `.mnn` vengono riconosciuti dal
-suffisso, così come le directory OpenVINO, Paddle e ncnn e un URL di modello
-Triton. Il codice che legge `result.boxes.xyxy` non cambia quando un modello
+`Results`. I file `.onnx`, `.torchscript`, `.engine`, `.pte`, `.tflite` e `.mnn`
+vengono riconosciuti dal suffisso, così come le directory OpenVINO, Paddle, ncnn
+e Core ML `.mlpackage` e un URL di modello Triton. Il codice che legge `result.boxes.xyxy` non cambia quando un modello
 viene sostituito con la sua build esportata. Vedi
 [Esportazione](/docs/export) per l'insieme completo dei formati.
 

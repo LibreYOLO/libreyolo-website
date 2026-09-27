@@ -16,13 +16,8 @@ keywords:
   - HF_TOKEN
   - libreyolo gewichte verzeichnis
   - libreyolo cache
-last_verified: 1.5.0
-verification: >-
-  Variablen durch Suche nach os.environ und os.getenv in libreyolo/**/*.py für
-  v1.5.0 ermittelt; Semantik an jeder Verwendungsstelle gelesen.
-  Verzeichniskonventionen aus libreyolo/data/utils.py,
-  libreyolo/utils/download.py, libreyolo/export/exporter.py,
-  libreyolo/models/base/model.py und libreyolo/models/sam3dbody/mhr_body.py.
+last_verified: "1.6.0"
+verification: "Variablen durch Suche nach os.environ und os.getenv in libreyolo/**/*.py für v1.6.0 ermittelt; Semantik an jeder Verwendungsstelle gelesen. Verzeichniskonventionen aus libreyolo/data/utils.py, libreyolo/utils/download.py, libreyolo/export/exporter.py, libreyolo/models/base/model.py und libreyolo/models/sam3dbody/mhr_body.py."
 snippets:
   usage:
     - label: Datensatzstamm an einen anderen Ort legen
@@ -40,7 +35,7 @@ snippets:
         Import.
 
         print(DATASETS_DIR)
-source_hash: 462f1288582225ce
+source_hash: "82fbf9f3b1540603"
 ---
 
 ## Umgebungsvariablen
@@ -72,6 +67,8 @@ Die Kernel-Auswahl beendet auch Importe vorzeitig. Wenn `LIBREYOLO_KERNELS`
 `off` oder `reference` erzwingt, werden die beschleunigten, im Quellbaum
 enthaltenen Provider überhaupt nicht importiert. Das von diesen drei Variablen
 gesteuerte Register wird unter [Kernel](/docs/reference/kernels) beschrieben.
+
+`LIBREYOLO_TRITON_MSDA=0` deaktiviert den integrierten Triton-Provider für Deformable Attention. `LIBREYOLO_HUB_KERNELS=0` deaktiviert Hub-Kernel und deren Installationshinweis. Beide behalten den portablen Fallback bei.
 
 ## Von der Bibliothek gesetzte Variablen
 
@@ -112,6 +109,8 @@ das enthaltene Beispiel. Seine Gewichte werden unter einer benutzerdefinierten
 Lizenz aus einem zugangsbeschränkten Repository heruntergeladen. Du musst die
 Bedingungen auf der Repository-Seite akzeptieren und die Sitzung
 authentifizieren.
+
+`HF_TOKEN` authentifiziert das Laden und Veröffentlichen von Hub-Checkpoints sowie den Hub-Logger. `OPENAI_API_KEY` und `OPENROUTER_API_KEY` liefern Zugangsdaten für die entsprechenden [LibreLLM-Provider-Pfade](/docs/reference/llm-api).
 
 ## Verzeichnisse
 
@@ -157,4 +156,3 @@ Eine Datensatz-YAML kann ein Feld `download` mit Python-Code enthalten. Es wird
 nur ausgeführt, wenn an den lesenden Aufruf `allow_download_scripts=True`
 übergeben wird. Dies ist ein Funktionsargument von `val()` und `export()` und
 keine Umgebungsvariable.
-

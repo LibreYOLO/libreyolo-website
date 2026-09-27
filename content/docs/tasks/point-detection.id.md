@@ -15,7 +15,7 @@ keywords:
   - lokalisasi point FOMO
   - object counting gambar
   - point localization
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Prediksi titik dan hitung objek
@@ -111,7 +111,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.points.xy)
-source_hash: 932153c8870d1c7c
+source_hash: 5c3cfe7a606cd7aa
 ---
 
 ## Definisi
@@ -129,7 +129,7 @@ dan `max_det` tidak memiliki apa pun untuk diproses.
 
 ## Model
 
-Tiga family melayani `point`, dan ketiganya tidak dapat saling dipertukarkan.
+Model titik berbeda dalam kosakata dan makna keluarannya.
 
 [FOMO](/docs/models/fomo) adalah pilihan vocabulary tetap: grid classifier yang
 memberi label setiap sel grid beresolusi rendah sebagai background atau pusat
@@ -148,6 +148,8 @@ checkpoint prompted-generation yang sama untuk enam task lainnya, dimuat dengan
 `sensenova`, dan setiap prediksi merupakan generation pass pada model 7B, sehingga
 latensi per gambar jauh lebih tinggi daripada detector khusus. Bobotnya
 nonkomersial; lisensinya tersedia pada halaman model.
+
+[Molmo2](/docs/models/molmo2) dan [Moondream](/docs/models/moondream) menyediakan titik yang dikondisikan oleh teks. [LibreGround](/docs/reference/ground-api) memakai instruksi untuk memilih maksimal satu klik per kueri dengan ShowUI, Florence-2, atau Qwen3-VL.
 
 ## Prediksi
 
@@ -253,5 +255,3 @@ Cakupan per format tersedia di [halaman FOMO](/docs/models/fomo) dan
 [matriks ekspor lengkap](/docs/reference/export-matrix). LocateAnything dan
 SenseNova-Vision tidak dapat diekspor: `export()` memunculkan error pada keduanya
 karena model generatif tidak memiliki graph deteksi yang dapat diproses dengan tracing.
-
-

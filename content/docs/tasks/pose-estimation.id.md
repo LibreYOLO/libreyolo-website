@@ -15,7 +15,7 @@ keywords:
   - COCO keypoints
   - OKS mAP
   - melatih model pose
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -49,13 +49,20 @@ snippets:
             print(person[visible])
     - label: Gunakan top-down
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # HRNet bersifat top-down: model memotong setiap orang lebih dahulu. Tanpa
-        # sumber orang, model memasangkan dirinya dengan detector LibreYOLO9t dan mencatat pilihannya.
+
+        # HRNet bersifat top-down: model memotong setiap orang lebih dahulu.
+        Tanpa
+
+        # sumber orang, model memasangkan dirinya dengan detector LibreYOLO9t
+        dan mencatat pilihannya.
+
         model = LibreYOLO("LibreHRNetw32-pose.pt")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.keypoints.xy.shape)
   train:
@@ -91,16 +98,22 @@ snippets:
   val:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreECs-pose.pt")
 
+
         # val() mengembalikan dict biasa, bukan objek.
+
         metrics = model.val(data="coco8-pose.yaml", allow_download_scripts=True)
 
+
         print(metrics["metrics/keypoints_mAP50-95"])
-        print(metrics["metrics/keypoints_mAP50"], metrics["metrics/keypoints_mAP75"])
+
+        print(metrics["metrics/keypoints_mAP50"],
+        metrics["metrics/keypoints_mAP75"])
     - label: CLI
       language: bash
       code: |
@@ -120,16 +133,22 @@ snippets:
         libreyolo export model=LibreECs-pose.pt format=onnx imgsz=640
     - label: Gunakan berkas hasil ekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Factory merutekan berdasarkan akhiran berkas, sehingga artefak hasil
-        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang sama.
+
+        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang
+        sama.
+
         model = LibreYOLO("LibreECs-pose.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.keypoints.xy)
-source_hash: 9de01d1f615bdf33
+source_hash: 3650786b0a858958
 ---
 
 ## Definisi
@@ -158,18 +177,7 @@ bergantung pada detector di depannya.
 
 ## Model
 
-Tiga family dapat berlatih dan memprediksi:
-[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), dan
-[YOLO-NAS](/docs/models/yolo-nas), seluruhnya one-stage. RF-DETR memerlukan extra
-sendiri, `pip install "libreyolo[rfdetr]"`. RF-DETR dan EdgeCrafter menyertakan
-checkpoint pose terbitan dan keduanya mendapat fine-tuning pada dataset satu kelas yang
-hanya berisi orang; keypoint head EdgeCrafter ditetapkan saat konstruksi dan
-menolak dataset dengan jumlah berbeda, sedangkan RF-DETR menginisialisasi ulang
-head-nya. YOLO-NAS mengambil bobot dari CDN milik Deci.AI berdasarkan lisensi
-nonkomersial, dan LibreYOLO tidak menerbitkannya; pose head-nya juga dibangun
-ulang untuk jumlah keypoint baru, dan hanya family ini dari ketiganya yang jumlah
-kelas-nya tidak ditetapkan ke satu. Karena itu, family ini cocok untuk skeleton
-multi-kelas atau nonmanusia, seperti pose hewan.
+Empat family mendukung pelatihan dan prediksi: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [GTR](/docs/models/gtr), dan [YOLO-NAS](/docs/models/yolo-nas), semuanya satu tahap. RF-DETR memerlukan extra tersendiri, `pip install "libreyolo[rfdetr]"`. RF-DETR, EdgeCrafter, dan GTR memiliki checkpoint pose yang dipublikasikan. RF-DETR juga melatih pose multikelas; head keypoint EdgeCrafter ditetapkan saat konstruksi dan menolak dataset dengan jumlah berbeda, sedangkan RF-DETR menginisialisasi ulang head-nya. YOLO-NAS mengambil bobot dari CDN Deci.AI dengan lisensi nonkomersial, dan LibreYOLO tidak memublikasikannya; head pose-nya juga dibangun ulang untuk jumlah keypoint baru dan mendukung multikelas atau kerangka nonmanusia. GTR hanya dapat dilatih pada dataset satu kelas dengan 17 keypoint pada `imgsz=640`.
 
 [HRNet](/docs/models/hrnet) adalah pilihan top-down. Model ini memprediksi,
 memvalidasi, dan mengekspor, sedangkan `train()`-nya memunculkan
@@ -183,6 +191,8 @@ Model generatif berbasis prompt ini memiliki factory sendiri, `LibreVLM`, dan
 extra sendiri; tanpa vocabulary, `set_task("pose")` kembali ke kategori orang.
 Bobotnya nonkomersial dan latensi per gambar jauh lebih tinggi daripada pose head
 khusus karena setiap prediksi merupakan diffusion decode.
+
+[DEKR](/docs/models/dekr) menyediakan pose beberapa orang secara bottom-up tanpa detektor orang terpisah. Model ini mendukung inferensi dan validasi, bukan pelatihan.
 
 ## Prediksi
 
@@ -245,6 +255,8 @@ setelah horizontal flip, sehingga pergelangan kiri tetap menjadi pergelangan
 kiri. Jika dihilangkan, augmentasi horizontal flip dinonaktifkan untuk keypoint,
 bukan diterapkan dengan urutan indeks yang salah.
 
+Pose multikelas RF-DETR memakai `kpt_names`, dengan nama atau ID kelas sebagai kunci, untuk memilih keypoint bernama pertama bagi setiap kelas. Daftar kosong menandai kelas yang hanya memiliki kotak. Dataset multikelas memerlukan `names` dan setidaknya satu kelas dengan keypoint. Diagnostik label yang salah menunjukkan berkas, baris, dan susunan `kpt_shape` yang diharapkan.
+
 ## Pelatihan
 
 <code-tabs name="train" />
@@ -287,5 +299,3 @@ filenya, sehingga berkas `.onnx` atau `.engine` berperilaku seperti checkpoint d
 mengembalikan `Results` yang sama. Cakupan format berbeda per family; matriks pada
 setiap halaman model dibuat dari kumpulan tervalidasi, bukan diketik manual.
 Lihat [ekspor dan deployment](/docs/export) untuk format, extra, dan batasannya.
-
-

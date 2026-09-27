@@ -79,7 +79,7 @@ snippets:
       language: bash
       code: |
         libreyolo export model=LibreL2CSr50.pt format=onnx
-source_hash: 22aa3c3d87b0c730
+source_hash: fd43893dc6df0493
 ---
 
 ## Definition
@@ -113,7 +113,8 @@ dessen Lizenz nur Forschung und nicht kommerzielle Nutzung erlaubt und die
 Weitergabe verbietet, deshalb spiegelt LibreYOLO für diese Familie nichts. Der
 eine Checkpoint, den die Bibliothek automatisch holen kann, kommt direkt aus der
 Google-Drive-Distribution der Autoren, über `gdown`, nachdem die Lizenzbedingungen
-ausgegeben wurden. Lies [L2CS-Net](/docs/models/l2cs), bevor du sie ausrollst.
+ausgegeben wurden. In 1.6.0 liefert dieser Download 404, übergib also einen
+lokalen Checkpoint. Lies [L2CS-Net](/docs/models/l2cs), bevor du sie ausrollst.
 
 Dieser Downloadpfad braucht das Extra `gaze`:
 

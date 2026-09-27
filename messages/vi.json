@@ -313,6 +313,7 @@
     "nextRelease": "Bản phát hành tiếp theo",
     "versionIsCurrent": "v{version} là bản hiện tại",
     "latest": "mới nhất",
+    "archivedNotice": "Đây là tài liệu của LibreYOLO {version}. <link>Xem phiên bản hiện tại</link>.",
     "onThisPage": "Trên trang này",
     "docsButton": "Tài liệu",
     "openNav": "Mở điều hướng tài liệu",

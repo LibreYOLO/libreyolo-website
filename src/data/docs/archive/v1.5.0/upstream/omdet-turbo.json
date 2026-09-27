@@ -1,0 +1,12 @@
+{
+  "name": "OMDet-Turbo",
+  "org": "Om AI Lab",
+  "paper_title": "Real-time Transformer-based Open-Vocabulary Detection with Efficient Fusion Head",
+  "paper_url": "https://arxiv.org/abs/2403.06892",
+  "code_url": "https://github.com/om-ai-lab/OmDet",
+  "license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so this checkpoint can be used in commercial and closed-source products. It asks you to keep the license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. LibreYOLO vendors no OMDet-Turbo model source of its own: LibreOMDetTurbo calls the Apache-2.0 `transformers` implementation, `OmDetTurboForObjectDetection`, directly. The mirrored checkpoint is a byte-identical copy of `omlab/omdet-turbo-swin-tiny-hf` at a pinned upstream revision, verified against a recorded SHA-256 checksum before it is used.",
+  "bibtex": "@article{zhao2024real,\n  title={Real-time Transformer-based Open-Vocabulary Detection with Efficient Fusion Head},\n  author={Zhao, Tiancheng and Liu, Peng and He, Xuan and Zhang, Lu and Lee, Kyusong},\n  journal={arXiv preprint arXiv:2403.06892},\n  year={2024}\n}",
+  "bibtex_source_url": "https://github.com/om-ai-lab/OmDet#citation",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README on branch main, which lists this OMDet-Turbo entry (zhao2024real) beside a separate entry for the team's earlier, non-turbo OmDet model (zhao2024omdet, IET Computer Vision); only the OMDet-Turbo entry applies to this family. Cross-checked against the arXiv API for 2403.06892: five authors, same order, same title, arxiv:comment records 'Preprint', matching the @article arXiv form the README gives. Do not hand-edit; a wrong citation misattributes someone's work."
+}

@@ -18,7 +18,7 @@ keywords:
   - grounding objek
   - Alibaba
   - VLM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -49,7 +49,7 @@ snippets:
         vest?")
 
         print(answer)
-source_hash: ee225b6221d624d9
+source_hash: 801d97d089f1f957
 ---
 
 ## Instalasi
@@ -94,12 +94,9 @@ jaringan, sehingga angka tersebut bukan resolusi operasi tetap seperti pada fami
 lain di situs ini. LibreYOLO belum menerbitkan benchmark yang membandingkan akurasi
 ketiga ukuran tersebut.
 
-LibreYOLO tidak melatih, memvalidasi, atau mengekspor Qwen3-VL: `train()`, `val()`, dan
-`export()` semuanya memunculkan `NotImplementedError` untuk setiap family dalam tier ini
-(lihat tier dukungan di atas). Lakukan fine-tuning Qwen3-VL melalui upstream dan muat
-bobot hasilnya jika memerlukan kosakata khusus yang tertanam; periksa output `predict()`
-secara visual alih-alih memakai tahap validasi bergaya COCO karena setiap deteksi membawa
-confidence placeholder yang sama.
+## Melatih
+
+Pasang `libreyolo[vlm-train]` untuk melatih adaptor LoRA deteksi melalui `LibreVLM("qwen3-vl-2b").train(data=...)`. Tower visual tetap dibekukan; loss validasi memilih direktori checkpoint terbaik. Melanjutkan status optimizer dan validasi mAP deteksi tidak didukung. Lihat [fine-tuning VLM](/docs/train/vlm-fine-tuning) untuk nilai default dan petunjuk memuat ulang.
 
 ## Lisensi
 

@@ -17,7 +17,8 @@ keywords:
   - VGG-19
   - свёрточная нейросеть
   - классификация изображений python
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 snippets:
   predict:
     - label: Python
@@ -81,7 +82,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 26eb6ff5811533fd
+source_hash: 7e22e5bf59ca038a
 ---
 
 ## Установка
@@ -120,6 +121,8 @@ pip install libreyolo
 и `val/`, по одной папке на класс) и возвращает точность top-1 и top-5.
 
 <code-tabs name="val" />
+
+Валидация и калибровка INT8 используют преобразование семейства для оценки. Метаданные экспорта записывают `norm_mean`, `norm_std` и `resize_mode`; старые артефакты используют значения семейства. Предобработчики калибровки возвращают требуемые массив CHW и коэффициент масштаба.
 
 ## Экспорт
 

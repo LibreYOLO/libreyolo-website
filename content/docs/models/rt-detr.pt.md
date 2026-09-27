@@ -22,7 +22,7 @@ keywords:
   - detecção de caixas orientadas
   - OBB
   - DOTA
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -195,7 +195,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 8022a5a591922a90
+source_hash: 75454e612d7e2247
 ---
 
 ## Instalação
@@ -299,6 +299,8 @@ reaproveita um embedding construído para a proporção errada.
 
 Veja [treinamento](/docs/train) para datasets, data augmentation, multi-GPU e
 loggers.
+
+RT-DETRv4 ativa `amp=True` com `amp_dtype="float16"` por padrão. Passe `amp=False` para FP32.
 
 ## Validação
 

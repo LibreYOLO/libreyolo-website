@@ -3,9 +3,7 @@ title: MiDaS
 families:
   - midas
 seo_title: 'MiDaS: LibreYOLO의 단안 깊이 추정'
-description: >-
-  LibreYOLO에서 MiDaS로 단안 깊이를 추정합니다. isl-org에서 다운로드하는 MIT 라이선스의 두 변형을 설치하고 예측, 검증,
-  내보내기합니다.
+description: LibreYOLO에서 MiDaS 상대 깊이 추론을 실행합니다. s와 l 체크포인트는 배포자의 MIT 허가에 따라 LibreYOLO 미러를 사용합니다.
 lead: >-
   MiDaS는 여러 데이터셋에서 스케일 및 시프트 불변 손실로 학습한 단안 상대 깊이 추정 모델입니다. 이후 계열이 재사용하는 제로샷 깊이
   전이 프로토콜을 확립한 연구 계열입니다. LibreYOLO는 깊이 작업의 예측과 제로샷 검증을 지원하지만 학습 경로는 제공하지 않습니다.
@@ -16,7 +14,7 @@ keywords:
   - 상대 깊이
   - 깊이 맵
   - 제로샷 깊이 추정
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -24,8 +22,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # 디스크에 아직 없으면 LibreYOLO가 공식 isl-org/MiDaS GitHub 릴리스에서
-        # 다운로드하고 사용 전에 고정된 SHA-256과 대조합니다.
+        # 처음 사용할 때 미러 체크포인트를 다운로드합니다.
         model = LibreYOLO("LibreMiDaSl-depth.pt")
         result = model(SAMPLE_IMAGE, save=True)
 
@@ -33,10 +30,8 @@ snippets:
         print(depth.min, depth.max, depth.mean)
     - label: CLI
       language: bash
-      code: >
-        libreyolo predict model=LibreMiDaSl-depth.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-        save=True
+      code: |
+        libreyolo predict model=LibreMiDaSl-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
     - label: 작은 변형
       language: python
       code: |
@@ -86,24 +81,24 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: ce2fbf3ae43e9be4
+source_hash: 64537aa3ad3a6f8f
 ---
 
 ## 설치
 
-MiDaS에는 선택적 extra가 필요하지 않습니다. 가져오는 모든 항목이 기본 설치에 포함됩니다.
+MiDaS의 timm 인코더에는 `midas` extra가 필요합니다.
 
 ```bash
-pip install libreyolo
+pip install "libreyolo[midas]"
 ```
 
 ## 예측
 
-MiDaS는 LibreYOLO가 자체 Hugging Face 조직에 다시 게시하지 않는 유일한 깊이 계열입니다. LibreYOLO 파일명으로 체크포인트를 요청하면 `isl-org/MiDaS` GitHub 릴리스에서 일치하는 공식 자산을 직접 다운로드하고 고정된 SHA-256과 대조한 뒤 처음 사용하기 전에 LibreYOLO 체크포인트 메타데이터로 래핑합니다. 이후 실행에서는 캐시된 로컬 파일을 재사용합니다. 그 이유는 라이선스를 참조합니다.
+s와 l 체크포인트는 배포자의 MIT 허가에 따라 LibreYOLO 미러에서 다운로드되어 로컬에 캐시됩니다.
 
 <code-tabs name="predict" />
 
-`result.depth_map`은 조밀한 상대 역깊이 맵을 담습니다. 값이 높을수록 카메라에 가깝고 값에는 미터법 단위나 이미지 간 공통 스케일이 없습니다. `save=True`는 해당 맵의 컬러맵 시각화를 디스크에 기록합니다. `Results.plot()`은 표면 노멀과 엣지만을 위해 정의되어 있어 이 계열을 지원하지 않습니다. 소스, 스트리밍, 결과 처리는 [예측](/docs/predict)을 참조합니다.
+`result.depth_map`에는 조밀한 상대 역깊이 맵이 들어 있습니다. 값이 클수록 카메라에 가깝고, 값에는 미터 단위나 이미지 간 공통 스케일이 없습니다. `save=True`는 이 맵에 컬러맵을 적용한 시각화를 디스크에 저장하며, `Results.plot()`은 깊이 맵을 렌더링합니다. 소스, 스트리밍, 결과 처리는 [예측](/docs/predict)을 참조하십시오.
 
 ## 변형
 

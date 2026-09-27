@@ -4,14 +4,12 @@ families:
   - rtdetr
 seo_title: 'RT-DETR, RT-DETRv2 và RT-DETRv4 trong LibreYOLO'
 description: >-
-  Dùng RT-DETR, RT-DETRv2 và RT-DETRv4 trong LibreYOLO để phát hiện đối tượng,
-  cùng box định hướng trên RT-DETRv2. Cài đặt, dự đoán, huấn luyện, đánh giá và
-  xuất với trọng số Apache-2.0.
+  Dùng RT-DETR, RT-DETRv2 và RT-DETRv4 trong LibreYOLO để phát hiện đối tượng, cùng box định hướng trên
+  RT-DETRv2. Cài đặt, dự đoán, huấn luyện, đánh giá và xuất với trọng số Apache-2.0.
 lead: >-
-  Một detection transformer được xây dựng cho suy luận thời gian thực: mô hình
-  giải mã tập query cố định thay vì lưới dày đặc, nên không chạy NMS. LibreYOLO
-  cung cấp ba phiên bản được phân biệt bằng checkpoint bạn tải, và phiên bản 2
-  còn hỗ trợ box định hướng.
+  Một detection transformer được xây dựng cho suy luận thời gian thực: mô hình giải mã tập query cố định thay
+  vì lưới dày đặc, nên không chạy NMS. LibreYOLO cung cấp ba phiên bản được phân biệt bằng checkpoint bạn tải,
+  và phiên bản 2 còn hỗ trợ box định hướng.
 keywords:
   - RT-DETR
   - RT-DETRv2
@@ -22,7 +20,7 @@ keywords:
   - phát hiện bounding box định hướng
   - OBB
   - DOTA
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -55,34 +53,23 @@ snippets:
             print(len(result.boxes))
     - label: Box định hướng
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
         # Chỉ phiên bản 2. Hậu tố -obb chọn tác vụ và checkpoint được nhận diện
-
-        # là định hướng từ các tensor riêng, nên không cần đối số task. Các
-        trọng
-
+        # là định hướng từ các tensor riêng, nên không cần đối số task. Các trọng
         # số này dùng DOTA v1.0, gồm 15 lớp ảnh trên không ở 1024 px.
-
         model = LibreYOLO("LibreRTDETRv2n-obb.pt")
-
         result = model("aerial.png", save=True)
 
-
         obb = result.obb
-
         print(obb.xywhr)     # (N, 5): cx, cy, w, h, radian
-
         print(obb.xyxyxyxy)  # cùng các hàng dưới dạng bốn điểm góc
-
         print(result.boxes.xyxy)  # các box thẳng trục bao quanh
     - label: 'Box định hướng, CLI'
       language: bash
-      code: >
-        libreyolo predict model=LibreRTDETRv2n-obb.pt source=aerial.png
-        save=True
+      code: |
+        libreyolo predict model=LibreRTDETRv2n-obb.pt source=aerial.png save=True
   train:
     - label: Python
       language: python
@@ -166,16 +153,11 @@ snippets:
         libreyolo export model=LibreRTDETRr18.pt format=onnx
     - label: Oriented boxes
       language: bash
-      code: >
-        # ONNX và TorchScript là các đích đã được đánh giá cho tác vụ định
-        hướng,
-
+      code: |
+        # ONNX và TorchScript là các đích đã được đánh giá cho tác vụ định hướng,
         # ở FP32, batch 1, trên canvas cố định 1024 x 1024.
-
         libreyolo export model=LibreRTDETRv2n-obb.pt format=onnx imgsz=1024
-
-        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript
-        imgsz=1024
+        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript imgsz=1024
     - label: Dùng tệp đã xuất
       language: python
       code: |
@@ -187,9 +169,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 8022a5a591922a90
+source_hash: 75454e612d7e2247
 ---
-
 ## Cài đặt
 
 RT-DETR không cần extra tùy chọn. Mọi thành phần được import đều có trong bản
@@ -285,6 +266,8 @@ sai tỉ lệ khung hình.
 
 Xem [huấn luyện](/docs/train) để biết về tập dữ liệu, tăng cường dữ liệu, multi-GPU và logger.
 
+RT-DETRv4 mặc định bật `amp=True` với `amp_dtype="float16"`. Truyền `amp=False` để dùng FP32.
+
 ## Đánh giá
 
 `val()` trả về từ điển các khóa `metrics/` bao gồm precision, recall, mAP 50 và
@@ -345,4 +328,3 @@ cung cấp các checkpoint DOTA; hãy trích dẫn dự án đó nếu bạn dù
 Phiên bản 4 là bài báo riêng của một nhóm khác và có block trích dẫn riêng tại
 [github.com/RT-DETRs/RT-DETRv4](https://github.com/RT-DETRs/RT-DETRv4#4-citation);
 hãy trích dẫn bài đó nếu bạn dùng checkpoint phiên bản 4.
-

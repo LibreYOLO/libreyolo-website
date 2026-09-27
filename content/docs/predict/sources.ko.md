@@ -18,7 +18,7 @@ keywords:
   - 유튜브 추론
   - 비디오 스트라이드
   - stream=True
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   libreyolo/utils/source.py에서 소스 분류 읽기 (classify_source, SourceKind,
   StreamSource, MultiStreamSource). libreyolo/utils/image_loader.py.에서 허용되는 이미지
@@ -51,7 +51,11 @@ snippets:
         array = np.asarray(pil_image)
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+        # NumPy 배열은 따로 지정하지 않으면 BGR로 읽히며, 이 배열은 RGB입니다.
+        result = model(array, color_format="rgb")
+        print(type(array).__name__, len(result.boxes))
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: 폴더
@@ -188,7 +192,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: 81a0c947dbfe48b5
 ---
 
 ## 출처가 분류되는 방법
@@ -223,16 +227,20 @@ source_hash: c371965951dd0181
 |---|---|
 | `str` 또는 `pathlib.Path` | 로컬 파일, `http(s)://`, `s3://` 또는 `gs://` |
 | `PIL.Image.Image` | RGB로 변환됨 |
-| `numpy.ndarray` | 2D 그레이스케일, 또는 3D HWC 또는 CHW; 4D 배열은 첫 번째 이미지를 사용합니다 |
-| `torch.Tensor` | CHW 또는 NCHW, RGB로 읽음; 배치된 텐서는 첫 번째 이미지를 사용함 |
+| `numpy.ndarray` | 2D 그레이스케일, 또는 BGR 순서의 3D HWC 또는 CHW; 4D 배열은 배치입니다 |
+| `torch.Tensor` | CHW 또는 NCHW, RGB로 읽음; 4D 텐서는 배치로 처리됨 |
 | `bytes` | 인코딩된 이미지 데이터 |
 | `io.BytesIO` | 인코딩된 이미지 데이터 |
 
-모든 것은 전처리 전에 RGB로 변환됩니다. 채널 순서가 모호한 NumPy 배열의 경우 `color_format`가 이를 제어합니다: `"auto"`(기본값)는 배열을 그대로 두고, `"bgr"`는 채널을 역순으로 바꾸며, 이는 OpenCV로 읽은 프레임이 필요로 하는 것입니다.
+4D 배열이나 텐서는 이미지마다 `Results` 하나씩을 담은 리스트를 반환합니다.
+
+모든 것은 전처리 전에 RGB로 변환됩니다. 채널 순서가 모호한 NumPy 배열의 경우 `color_format`가 이를 제어합니다: `"auto"`(기본값)와 `"bgr"`는 배열을 OpenCV가 반환하는 순서인 BGR로 읽고, `"rgb"`는 배열을 그대로 두며, 이는 PIL 이미지로 만든 배열이 필요로 하는 것입니다.
 
 부동 소수점 배열은 자체 범위로 다시 스케일됩니다: `1.0` 이하의 값은 255와 곱해지고, 더 높은 값은 `[0, 255]`로 잘립니다. RGBA 배열은 알파 채널을 제거합니다.
 
-원격 경로는 각각 하나의 패키지가 필요하며, 그 중 어느 것도 기본적으로 설치되어 있지 않습니다: `http(s)://`용 `requests`, `s3://`용 `boto3`, `gs://`용 `gcsfs`.
+원격 경로는 각각 하나의 패키지가 필요합니다. `http(s)://`용 `requests`는 기본 설치에 포함되지만, `s3://`용 `boto3`와 `gs://`용 `gcsfs`는 포함되지 않습니다.
+
+추적은 이미지, 파일 이름순으로 정렬된 폴더, 리스트, 튜플, 지연 이미지 이터레이터를 연속 프레임으로 받습니다. `fps=30.0`으로 이미지 시퀀스의 시간 간격을 지정하고 `color_format="auto"`로 입력 해석 방식을 선택합니다. [추적](/docs/tasks/object-tracking)을 참조하십시오.
 
 ## 폴더
 
@@ -244,13 +252,15 @@ source_hash: c371965951dd0181
 
 <code-tabs name="video" />
 
-경로의 접미사가 `.asf`, `.avi`, `.gif`, `.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.ts`, `.wmv`, `.webm` 중 하나일 때 해당 경로는 비디오로 간주됩니다.
+경로의 접미사가 `.3g2`, `.3gp`, `.asf`, `.avi`, `.dav`, `.f4v`, `.flv`, `.gif`, `.h264`, `.h265`, `.hevc`, `.m2ts`, `.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.mts`, `.mxf`, `.ogv`, `.ts`, `.vob`, `.wmv`, `.webm` 중 하나일 때 해당 경로는 비디오로 간주됩니다.
 
 `.gif`는 두 목록 모두에 나타납니다. `.gif` 경로가 `predict`로 직접 전달되면 비디오로 열리는데, 비디오 확인이 먼저 실행되기 때문입니다. 스캔된 폴더 안에 있는 `.gif`는 정지 이미지로 로드됩니다.
 
 `vid_stride`는 매 N번째 프레임을 처리하며 기본값은 `1`입니다. `stream=True`가 없으면 전체 비디오가 목록으로 디코딩되며, 스트라이딩 후 500프레임을 초과하는 경우 `stream=True`를 권장하는 경고가 발생합니다.
 
 비디오의 각 `Results`는 `frame_idx`를 전달합니다.
+
+비디오 인코딩에서 H.264를 열 수 없으면 사용 가능한 코덱으로 대체합니다. 대체 사실은 INFO로 기록하며 다른 코덱이 성공한 뒤에만 코덱과 캔버스별로 캐시합니다.
 
 ## 웹캠, 네트워크 스트림 및 유튜브
 
@@ -320,10 +330,10 @@ pip install mss
 
 `save=True`는 결과를 반환하는 대신 실행 디렉토리 옆에 주석이 달린 출력을 작성합니다.
 
-이미지는 자동 증가하는 `runs/detect/predict`, `runs/detect/predict2` 등으로 이동하며 원본 파일 이름을 유지합니다. 하나의 프로세스 내의 모든 이미지는 같은 디렉토리에 저장되므로, 동일한 파일 이름을 가진 두 입력 폴더는 서로 덮어쓰게 됩니다. 메모리 내 이미지는 재사용할 파일 이름이 없으며 `image0`, `image1` 등으로 번호가 매겨집니다.
+이미지는 자동 증가하는 `runs/detect/predict`, `runs/detect/predict2` 등으로 이동하며 원본 파일 이름을 유지합니다. 하나의 프로세스 내의 모든 이미지는 같은 디렉토리에 저장되므로, 동일한 파일 이름을 가진 두 입력 폴더는 서로 덮어쓰게 됩니다. 메모리 내 이미지는 재사용할 파일 이름이 없습니다. 이미지 하나는 `inference`로 저장되므로 반복 호출하면 덮어쓰게 되고, 목록이나 배치는 `image0`, `image1` 등으로 번호가 매겨집니다.
 
 비디오 및 라이브 소스는 소스의 이름을 따서 지어진 단일 `.mp4`로 작성됩니다.
 
 `output_path`는 디렉토리를 덮어씁니다. 접미사가 있는 경로는 파일로 처리되고, 접미사가 없는 경로는 디렉토리로 처리됩니다. `output_file_format`는 정지 이미지 인코딩을 선택하며 `jpg`, `png` 또는 `webp`를 허용합니다.
 
-저장 후, 작성된 경로는 결과에도 `result.saved_path`로 첨부됩니다.
+이미지가 저장된 후, 작성된 경로는 결과에도 `result.saved_path`로 첨부됩니다.

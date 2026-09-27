@@ -11,7 +11,7 @@ keywords:
   - top-1精度
   - ゼロショット分類
   - MIT 画像分類ライブラリ
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -120,7 +120,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 836bea76cd2cdf92
+source_hash: 90aed355e0ddf5e3
 ---
 
 ## 定義
@@ -133,11 +133,13 @@ source_hash: 836bea76cd2cdf92
 
 ## モデル
 
-学習と推論の両方に対応するファミリーは5つです。[ResNet](/docs/models/resnet)、[ConvNeXt](/docs/models/convnext)、[MobileNetV4](/docs/models/mobilenetv4)、[EfficientNetV2](/docs/models/efficientnetv2)、[DINOv2](/docs/models/dinov2)です。最初の4つは基本パッケージで実行でき、公開済みの重みがあります。DINOv2には`pip install "libreyolo[rfdetr]"`が必要で、LibreYOLOがホストするチェックポイントはありません。ランダムに初期化された線形ヘッドを持つアップストリームのバックボーンを読み込むため、すぐに使える推論器ではなくファインチューニングの出発点です。
+学習に対応する画像分類器には、以下があります。[ResNet](/docs/models/resnet)、[ConvNeXt](/docs/models/convnext)、[MobileNetV4](/docs/models/mobilenetv4)、[EfficientNetV2](/docs/models/efficientnetv2)、[DINOv2](/docs/models/dinov2)です。最初の4つは基本パッケージで実行でき、公開済みの重みがあります。DINOv2には`pip install "libreyolo[rfdetr]"`が必要で、LibreYOLOがホストするチェックポイントはありません。ランダムに初期化された線形ヘッドを持つアップストリームのバックボーンを読み込むため、すぐに使える推論器ではなくファインチューニングの出発点です。
 
 さらに5つのファミリーが推論、検証、エクスポートに対応しますが、`train()`は`NotImplementedError`を送出します。[ViT](/docs/models/vit)、[Swin](/docs/models/swin)、[VGG](/docs/models/vgg)、[AlexNet](/docs/models/alexnet)、[DeiT](/docs/models/deit)です。
 
 [CLIP](/docs/models/clip)と[SigLIP2](/docs/models/siglip2)は固定ラベル集合なしで分類します。画像をテキストプロンプトと比較するため、`set_classes()`で呼び出し時にクラスを定義でき、新しいラベル集合のための学習手順はありません。どちらも`embed`タスクに対応します。
+
+[ConvNeXt V2](/docs/models/convnextv2)は、CC-BY-NC-4.0の学習済み重みを使う教師あり分類を追加します。[PE](/docs/models/pe)はゼロショット分類に対応し、[V-JEPA 2](/docs/models/vjepa2)は動画分類プローブを学習します。
 
 ## 推論
 
@@ -173,6 +175,8 @@ dataset/
 
 `nc`を宣言する必要はありません。クラス数は`train/`下のフォルダー名から取得され、最終線形レイヤーがその数に合わせて再構築される一方、バックボーンは変更せず転用されます。データセット、データ拡張、マルチGPU、ロガーについては[学習](/docs/train)を参照してください。
 
+ResNet、ConvNeXt、ConvNeXt V2、MobileNetV4、EfficientNetV2、DINOv2は、`cls_pw`または`class_weights`による損失の重み付けに対応します。分類の`scale`はクロップ面積、`crop_pct`は評価時のクロップを制御します。[データ拡張](/docs/train/augmentations)を参照してください。
+
 ## 検証
 
 `val()`はデータセットルートの`val/`分割に対して計算した`metrics/`キーを持つ通常の辞書を返します。
@@ -180,6 +184,8 @@ dataset/
 <code-tabs name="val" />
 
 `metrics/accuracy_top1`は、最高スコアのクラスが正解だった画像の割合です。主要な数値であり、学習でも最良エポックの選択に使用します。`metrics/accuracy_top5`は、正解クラスが上位5クラスのどこかに含まれた画像の割合です。データセットのクラス数が少ないほど情報量も少なくなります。辞書にはtop-1値のコピーである`fitness`も含まれます。
+
+ImageFolderの検証では、マクロ平均の`metrics/precision`、`metrics/recall`、`metrics/f1`も返します。検証対象に存在するクラスで平均し、一度も予測されなかったクラスの適合率は0として計算します。デフォルトの適合度は引き続きtop-1精度です。検証とキャリブレーションではモデルの評価用変換を使います。
 
 ## エクスポート
 

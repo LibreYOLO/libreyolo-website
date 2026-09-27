@@ -9,7 +9,7 @@ keywords:
   - libreyolo 迁移权重
   - pth 转 libreyolo
   - 权重自动转换
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 入口
     value: LibreYOLO("path/to/upstream.pth")
@@ -45,11 +45,11 @@ snippets:
       code: |
         # 转换出来的文件满足和官方发布文件相同的 schema
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: bf9d7c7d168fd2c0
+source_hash: b19fedcf10862990
 ---
 
 本页讲的是来自其他项目的检查点（checkpoint）。如果你是把自己的代码从旧版
-LibreYOLO 迁过来，见[升级到 1.5.0](/docs/upgrade)。
+LibreYOLO 迁过来，见[升级到 1.6.0](/docs/upgrade)。
 
 ## 加载外来文件时会发生什么
 

@@ -1,9 +1,7 @@
 ---
 title: TFLite
 seo_title: LibreYOLOからTFLite（LiteRT）へエクスポート
-description: >-
-  LibreYOLOモデルをonnx2tf経由で.tflite
-  FlatBufferへエクスポートします。静的形状、FP32のみ、NHWC入力、正常に変換できるファミリーについて説明します。
+description: onnx2tfでLibreYOLOモデルを.tflite FlatBufferへエクスポートします。静的形状、FP32と対応するINT8経路、NHWC入力、ランタイムのメタデータを説明します。
 lead: >-
   TFLiteは、LiteRTがモバイルおよび組み込みターゲットで実行するFlatBuffer形式です。LibreYOLOは静的ONNXグラフをエクスポートし、flatbuffer-directモードのonnx2tfで変換して、モデルメタデータをJSONサイドカーとして成果物の隣に書き出します。
 keywords:
@@ -14,7 +12,7 @@ keywords:
   - tflite flatbuffer
   - tflite nhwc 入力
   - エッジ 推論
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: フラグ
     value: export(format="tflite")
@@ -30,7 +28,7 @@ meta:
   - label: 形状
     value: 静的のみ。dynamic=Trueは拒否されます。
   - label: 精度
-    value: FP32のみ。half=Trueとint8=Trueは拒否されます。
+    value: FP32。YOLO9とYOLOXの物体検出ではINT8に対応します。FP16は拒否されます。
   - label: 要件
     value: Python 3.12以降。onnx2tf 2.4.xは古いバージョン向けのwheelを公開していないためです。
 verification: >-
@@ -78,7 +76,7 @@ snippets:
         )
 
         # dynamic=TrueではValueErrorが発生 コンバーターには静的形状が必要
-        # half=Trueとint8=Trueはトレース前に拒否
+        # FP16は拒否 INT8には対応検出器とキャリブレーションデータが必要
   run:
     - label: LibreYOLO経由
       language: python
@@ -129,7 +127,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: fa2deaa0ef6d9978
+source_hash: 3548d74e992bb76d
 ---
 
 ## インストール
@@ -148,6 +146,8 @@ source_hash: fa2deaa0ef6d9978
 
 メタデータはサイドカーです。`weights/LibreYOLO9t.tflite.json` にはファミリー、タスク、クラス名、入力サイズ、姿勢スキーマが含まれます。FlatBuffer自体にLibreYOLOのメタデータフィールドはないため、2つのファイルを一緒に扱います。
 
+YOLO9とYOLOXの物体検出は、`data=...`、`fraction=1.0`、`batch=1`、`dynamic=False`を指定した`int8=True`に対応します。`onnx2tf[tensorflow]`をインストールしてください。キャリブレーションデータがない場合は警告を表示し、`coco8.yaml`にフォールバックします。正規化されたボックスとスコアの個別出力は、それぞれ独立した量子化スケールを使います。デプロイ時にはサイドカーの`output_layout`メタデータを保持してください。内部演算子の一部は浮動小数点のまま残る場合があります。
+
 ## 成果物の実行
 
 <code-tabs name="run" />
@@ -160,7 +160,7 @@ source_hash: fa2deaa0ef6d9978
 
 静的形状のみです。`dynamic=True` はトレース前に `ValueError` を発生させ、エクスポートのキャンバスは `imgsz` の解決結果に固定されます。
 
-FP32のみです。`half=True` と `int8=True` はどちらも検証時に拒否されるため、現在はこのエクスポーターから量子化デプロイへ進めません。
+`half=True`は拒否されます。INT8は、バッチサイズ1のYOLO9とYOLOXの物体検出に限定されます。それ以外のINT8ファミリーとタスクでは例外が発生します。
 
 ここでの対応範囲はグラフ形式より狭く、ファミリーではなく測定結果によって決まります。検証済みの組み合わせには、YOLO9、YOLOX、YOLO-NASによる検出、PIDNetによるセマンティックセグメンテーション、4つのCNN分類ファミリー、DINOv2とSigLIP2による埋め込みベクトル、SigLIP2による分類、TEEDとDexiNedによるエッジ検出、Real-ESRGANとSwinIRによる復元が含まれます。SwinIRには追加の注意点があります。元画像の寸法がエクスポート時のキャンバスに正確に一致すれば同等性が保たれますが、小さい元画像はTransformerで処理する前にキャンバスまでパディングされるため、ネイティブな可変サイズ推論とは異なる場合があります。
 

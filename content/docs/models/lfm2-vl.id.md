@@ -21,7 +21,7 @@ keywords:
   - VLM
   - edge VLM
   - LibreVLM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -57,7 +57,7 @@ snippets:
         # penghitungan, atau prompt apa pun yang tidak dicakup wrapper box.
         text = model.chat(SAMPLE_IMAGE, "Describe the scene in one sentence.")
         print(text)
-source_hash: 40237f0ecc0d2cd5
+source_hash: a7f100c861adb8d0
 ---
 
 ## Instalasi
@@ -95,10 +95,7 @@ dan penanganan hasil.
 
 ## Varian
 
-Ada dua ukuran, 450m dan 1.6b, keduanya berasal dari rilis LFM2.5-VL Liquid AI
-yang dibuat untuk deployment pada perangkat. Harness benchmark LibreYOLO belum
-mengukur family ini, sehingga belum ada angka akurasi yang dipublikasikan
-sebagai pembanding. Pilih ukuran sesuai anggaran komputasi Anda.
+Tiga ukuran: 450m, 1.6b, dan 3b, semuanya dari rilis LFM2.5-VL Liquid AI. `lfm2-vl-3b` memilih model LFM2.5 3B dan parser kotak 0 sampai 1000. Harness benchmark LibreYOLO belum mengukur family ini, sehingga belum ada angka akurasi yang dipublikasikan untuk perbandingan; pilih ukuran sesuai anggaran komputasi.
 
 LibreYOLO menyediakan family ini hanya untuk prediksi. `train()`, `val()`, dan
 `export()` semuanya memunculkan `NotImplementedError`. Lakukan fine-tuning di

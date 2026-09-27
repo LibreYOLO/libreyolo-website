@@ -15,8 +15,8 @@ keywords:
   - libreyolo cuda brak pamięci
   - libreyolo notimplementederror
   - rozwiązywanie problemów libreyolo
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: 1.6.0
+source_hash: f2faaab56a2f0415
 ---
 
 Błędy są pogrupowane według wyświetlanego tekstu. Jeśli danego komunikatu nie
@@ -111,10 +111,11 @@ opublikowanym checkpointem prowadzi do nieistniejącego adresu URL. Tabela
 checkpointów na stronie każdego modelu zawiera dokładne nazwy opublikowanych
 plików.
 
-## Trenowanie zawiesza się lub uruchamia ponownie w systemie Windows
+## Trenowanie zawiesza się lub uruchamia ponownie w systemie Windows lub macOS
 
-System Windows nie ma mechanizmu `fork`, dlatego procesy robocze modułu
-wczytującego dane rozpoczynają pracę od ponownego importu skryptu. Bez warunku
+System Windows nie ma mechanizmu `fork`, a Python w systemie macOS domyślnie go
+nie używa, dlatego procesy robocze modułu wczytującego dane rozpoczynają pracę
+od ponownego importu skryptu. Bez warunku
 `if __name__ == "__main__":` każdy proces roboczy ponownie wykonuje wywołanie
 trenowania, co powoduje zakleszczenie albo tworzenie procesów bez końca.
 
@@ -153,8 +154,9 @@ wiadomo, że jest listą.
 
 ### Odczytywanie metryk jako atrybutów
 
-Funkcja `val()` zwraca zwykły słownik z kluczami będącymi nazwami metryk, a nie
-obiekt z dostępem przez atrybuty:
+Funkcja `val()` zwraca słownik z kluczami będącymi nazwami metryk. Jego jedyny
+atrybut, `box`, zawiera wyniki dla poszczególnych obrazów i progi dla
+poszczególnych klas, a nie wartości metryk:
 
 ```python
 metrics = model.val(data="coco8.yaml")
@@ -182,3 +184,7 @@ if report.errors:
 ```
 
 Katalog kontroli zawiera strona [polecenia doctor](/docs/cli/doctor).
+
+## Trwałe procesy robocze nie widzą zmian zbioru danych
+
+Aktywne hooki `close_mosaic` lub `set_epoch` muszą docierać do kopii zbioru danych używanych przez procesy robocze. Jeśli własny loader z wieloma procesami roboczymi zachowuje niezgodne trwałe kopie, należy użyć `persistent_workers=False` lub odtworzyć procesy po zmianie. Domyślna ścieżka bez trwałych procesów pozostaje bez zmian.

@@ -22,25 +22,39 @@ snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Tanpa face_detector yang diberikan, prediksi kembali menggunakan detektor bawaan OpenCV
+
+        # Tanpa face_detector yang diberikan, prediksi kembali menggunakan
+        detektor bawaan OpenCV
+
         # sehingga tidak ada yang diunduh selain checkpoint.
+
         model = LibreYOLO("LibreL2CSr50.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         gaze = result.gaze
+
         print(gaze.pitch, gaze.yaw)              # radian, satu baris per wajah
+
         print(gaze.pitch_deg, gaze.yaw_deg)      # sudut yang sama dalam derajat
+
         print(gaze.direction_3d)                 # (N, 3) vektor satuan
     - label: CLI
       language: bash
-      code: |
-        # Tidak seperti jalur Python, CLI tidak memiliki cadangan otomatis: pandangan
+      code: >
+        # Tidak seperti jalur Python, CLI tidak memiliki cadangan otomatis:
+        pandangan
+
         # model memerlukan detektor wajah yang eksplisit, dan itu harus
+
         # LibreYOLO detektor yang kotaknya adalah wajah.
-        libreyolo predict model=LibreL2CSr50.pt source=photo.jpg face_detector=face-detector.pt save=True
+
+        libreyolo predict model=LibreL2CSr50.pt source=photo.jpg
+        face_detector=face-detector.pt save=True
     - label: Pilih sumber wajah
       language: python
       code: |
@@ -65,7 +79,7 @@ snippets:
       language: bash
       code: |
         libreyolo export model=LibreL2CSr50.pt format=onnx
-source_hash: 22aa3c3d87b0c730
+source_hash: fd43893dc6df0493
 ---
 
 ## Definisi
@@ -94,9 +108,10 @@ Secara arsitektural, dan salah satunya, ResNet-50, memiliki checkpoint yang dipu
 
 Bobot tersebut memiliki batasan lisensi. Mereka dilatih pada Gaze360, yang
 lisensi hanya mengizinkan penelitian dan penggunaan non-komersial serta melarang
-redistribusi, jadi LibreYOLO tidak mencerminkan apa pun untuk family ini. Satu checkpoint
-perpustakaan dapat mengambil secara otomatis langsung dari Google milik penulis
-Distribusikan drive, melalui `gdown`, setelah mencetak syarat lisensi. Baca
+redistribusi, jadi LibreYOLO tidak mencerminkan apa pun untuk family ini. Satu-satunya
+checkpoint yang dapat diambil library secara otomatis berasal langsung dari distribusi
+Google Drive milik penulis, melalui `gdown`, setelah mencetak syarat lisensi. Di 1.6.0
+unduhan itu mengembalikan 404, jadi berikan checkpoint lokal. Baca
 [L2CS-Net](/docs/models/l2cs) sebelum menyebarkannya.
 
 Jalur unduhan itu memerlukan tambahan `gaze`:

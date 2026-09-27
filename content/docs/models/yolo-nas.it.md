@@ -4,9 +4,8 @@ families:
   - yolonas
 seo_title: 'YOLO-NAS: predizioni, addestramento ed esportazione in LibreYOLO'
 description: >-
-  Usa YOLO-NAS in LibreYOLO per il rilevamento e la stima della posa. I pesi di
-  Deci.AI sono proprietari e non commerciali, e LibreYOLO non ne pubblica
-  nessuno.
+  Rilevamento, pose e box orientati YOLO-NAS in LibreYOLO. I pesi preaddestrati
+  upstream sono riservati all’uso non commerciale.
 lead: >-
   Un detector convoluzionale il cui backbone e il cui neck sono usciti dalla
   ricerca architetturale di Deci.AI, costruito con blocchi RepVGG pensati per la
@@ -23,7 +22,7 @@ keywords:
   - stima della posa python
   - licenza YOLO-NAS uso commerciale
   - AutoNAC
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -134,7 +133,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 47c30d6e44024ce7
+source_hash: 52050c4046781a6e
 ---
 
 ## Installazione
@@ -160,6 +159,8 @@ L'oggetto `Results` restituito è lo stesso che restituisce ogni famiglia, quind
 passare a un detector diverso è una modifica di una riga. `conf` imposta la
 soglia di confidenza e `iou` la soglia della NMS. Vedi
 [predizione](/docs/predict) per sorgenti, streaming e gestione dei risultati.
+
+Il task con box orientati restituisce `result.obb`. Il grafo OBB pubblicato usa un canvas di 1024 pixel e il suo insieme registrato di 18 etichette di classe.
 
 ## Varianti
 
@@ -190,6 +191,8 @@ Deci, ed è il terzo snippet qui sopra.
 
 Vedi [addestramento](/docs/train) per dataset, augmentation, multi-GPU e logger.
 
+Il rilevamento usa di default `amp=True` con `amp_dtype="float16"`; l'addestramento con box orientati mantiene `amp=False`. La testa OBB supporta addestramento, predizione e validazione, usa augmentation con ribaltamenti/HSV e seleziona i checkpoint con `metrics/mAP50-95(OBB)`. `load_detect_weights_for_obb()` la inizializza dai pesi di rilevamento.
+
 ## Validazione
 
 `val()` restituisce un dizionario di chiavi `metrics/` che coprono precisione,
@@ -219,9 +222,9 @@ licenza che li copre.
 
 Non ce ne sono da elencare. La licenza di Deci vieta la ridistribuzione, quindi
 l'org LibreYOLO non pubblica nessun peso di YOLO-NAS e il download si risolve
-altrove: un nome della forma `LibreYOLONAS<size>.pt`, o
-`LibreYOLONAS<size>-pose.pt` per la posa, corrisponde all'oggetto omologo sulla
-CDN pubblica di Deci.
+altrove: un nome della forma `LibreYOLONAS<size>.pt`,
+`LibreYOLONAS<size>-pose.pt` per la posa, o `LibreYOLONAS<size>-obb.pt` (s, m, l)
+per i box orientati, corrisponde all'oggetto omologo sulla CDN pubblica di Deci.
 
 Solo i checkpoint di cui la libreria fissa lo SHA-256 possono essere scaricati
 così. Tutto il resto fallisce invece di aprire un pickle di terze parti non

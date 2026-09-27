@@ -18,7 +18,7 @@ keywords:
   - 학습 콜백
   - 학습 지표 CSV
   - 리브리욜로 모니터
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   logger:
     - label: 이름으로
@@ -85,7 +85,7 @@ snippets:
       code: |
         libreyolo monitor                     # runs/에서 가장 최근 실행
         libreyolo monitor runs/train/exp      # 특정 실행
-source_hash: de035acbaed32804
+source_hash: "b5fefd12a738dcb5"
 ---
 
 ## 로거를 켜다
@@ -145,6 +145,8 @@ Weights & Biases는 `WANDB_PROJECT` 환경 변수로 대체되고 그 다음 `li
 DVCLive는 `<save_dir>/dvclive`에 씁니다. 그것은 `/`에서 요약 트리를 구성하며, 부모이기도 한 경로에는 부동 소수를 저장할 수 없으므로 `train/loss/box`는 `train/loss.box`로 작성되고 `train/loss`는 이름을 유지합니다. LibreYOLO는 또한 DVCLive의 일반 기본값인 DVC 실험 저장 및 루트 `dvc.yaml` 작성 기능을 끄므로, 선택적 로거는 실행 디렉터리 외부에 버전 관리 상태를 생성하지 않습니다; `save_dvc_exp=True` 또는 명시적인 `dvcyaml=`를 전달하면 다시 가져올 수 있습니다.
 
 해왕성은 `libreyolo[all]`에서 의도적으로 제외되었습니다: 안정적인 클라이언트는 7 미만의 protobuf를 요구하는 반면, TFLite 추가 기능은 protobuf 7을 요구합니다. TFLite 추가 기능이 없는 환경에 `libreyolo[neptune]`를 설치하십시오.
+
+[Hugging Face Hub 로거](/docs/reference/hugging-face)는 학습이 끝나면 `weights/best.pt`를 업로드하며, 없으면 `last.pt`를 사용합니다. `loggers="hf:owner/repo"` 또는 `HuggingFaceHubLogger(repo_id, private=True)`를 사용합니다. 학습 전에 쓰기 권한을 확인하고 저장소가 없으면 생성합니다. 로거는 기본적으로 비공개이며, 명시적 `model.push_to_hub()`는 기본적으로 공개입니다. 기존 저장소의 공개 여부는 유지합니다.
 
 ## 콜백 작성
 

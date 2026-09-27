@@ -77,7 +77,7 @@ snippets:
       language: bash
       code: |
         libreyolo export model=LibreL2CSr50.pt format=onnx
-source_hash: 22aa3c3d87b0c730
+source_hash: fd43893dc6df0493
 ---
 
 ## Définition
@@ -112,7 +112,9 @@ Gaze360, dont la licence autorise uniquement la recherche et l'usage non
 commercial et interdit la redistribution. LibreYOLO ne reproduit donc aucun
 fichier de cette famille. Le seul checkpoint que la bibliothèque peut récupérer
 automatiquement provient directement de la distribution Google Drive des
-auteurs, par `gdown`, après affichage des conditions de licence. Lisez la page
+auteurs, par `gdown`, après affichage des conditions de licence. En 1.6.0,
+ce téléchargement renvoie une erreur 404 ; transmettez donc un checkpoint local.
+Lisez la page
 [L2CS-Net](/docs/models/l2cs) avant tout déploiement.
 
 Ce parcours de téléchargement nécessite l'extra `gaze` :

@@ -99,7 +99,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: 0ac96180165c4891
+source_hash: d22a5fc355bbebd2
 ---
 
 ## Installation
@@ -125,8 +125,8 @@ positive relative Tiefe aus; LibreYOLOs Netzwerk-Wrapper invertiert sie und
 reproduziert die offizielle Himmelsbehandlung, damit die Ausgabe dem
 gemeinsamen Tiefen-Kontrakt von LibreYOLO folgt. `save=True` schreibt eine
 farbcodierte Visualisierung dieser Karte auf die Festplatte; `Results.plot()`
-deckt diese Familie nicht ab, da es nur für Oberflächennormalen und Kanten
-definiert ist. Siehe [Vorhersage](/docs/predict) für Quellen, Streaming und
+rendert die Tiefenkarte als PIL-Bild, und `pil=False` gibt stattdessen das
+Array zurück. Siehe [Vorhersage](/docs/predict) für Quellen, Streaming und
 den Umgang mit Ergebnissen.
 
 ## Varianten

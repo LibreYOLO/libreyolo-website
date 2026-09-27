@@ -13,7 +13,7 @@ keywords:
   - xuất yolo sang onnx bằng cli
   - lệnh xuất tensorrt
   - tham số libreyolo export
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Lệnh
     value: libreyolo export
@@ -47,9 +47,8 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: ef2ca20af3814109
+source_hash: 290b778a1060a760
 ---
-
 ## Cú pháp
 
 ```bash
@@ -70,6 +69,7 @@ và `--format onnx` là cùng một tham số.
 | `batch` | `1` | Kích thước batch khi xuất |
 | `half` | `false` | Độ chính xác FP16 |
 | `int8` | `false` | Lượng tử hóa (quantization) INT8 |
+| `quantize` | | Độ chính xác dạng `16` (FP16), `8` (INT8) hoặc `32` (FP32); thay thế `half` và `int8` |
 | `dynamic` | `false` | Hình dạng đầu vào động (ONNX) |
 | `simplify` | `true` | Đơn giản hóa graph ONNX |
 | `nms` | `false` | Nhúng NMS vào mô hình. Chỉ ONNX và CoreML |
@@ -116,7 +116,8 @@ và `iou` nhưng không nhận `max_det`, nên một giá trị `max_det` khác 
 cùng `format=coreml nms=true` sẽ thoát với `config_unsupported`.
 
 `half=true` đi cùng `int8=true` không phải là lỗi. INT8 thắng, `half` bị bỏ, và
-một cảnh báo được đưa ra stderr.
+một cảnh báo được đưa ra stderr. `quantize` mâu thuẫn với `half` hoặc `int8` sẽ
+thoát với `config_conflict`.
 
 `name` và `verify` hiện là các tùy chọn của RKNN. Truyền một trong hai cùng với
 định dạng khác sẽ thoát với `config_unsupported` thay vì bị bỏ qua.
@@ -153,3 +154,5 @@ hoặc yêu cầu nhúng NMS bị từ chối, và `1` cho các lỗi runtime kh
 
 Liên quan: [`libreyolo quantize`](/docs/cli/quantize), lệnh ở lại trong PyTorch
 và ghi ra một checkpoint thay vì một tệp triển khai.
+
+TFLite INT8 dùng `int8=True` cho phát hiện YOLO9 hoặc YOLOX với `data=...`, `fraction=1.0`, `batch=1` và `dynamic=False`. FP16 không được hỗ trợ; khi có cả hai cờ độ chính xác, CLI bỏ `half` để ưu tiên INT8. Đầu ra xuất JSON báo khung ảnh thực tế được phân giải, gồm chuyển về hình vuông cho các họ vốn dùng hình vuông khi tải lại từ checkpoint huấn luyện hình chữ nhật.

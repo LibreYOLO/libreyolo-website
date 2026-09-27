@@ -16,7 +16,7 @@ keywords:
   - deep ocsort
   - yolo 视频跟踪
   - reid 跟踪
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -71,7 +71,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: f1fa7dcf60597d6b
+source_hash: b24043e73b35092d
 ---
 
 ## 定义
@@ -107,7 +107,9 @@ LibreYOLO 还有两个模型层级同样不接受它。通过 `LibreSAM` 加载�
 跟踪跑在原生 PyTorch 模型上。通过 `LibreYOLO("model.onnx")` 加载的导出产物返回的是一
 个运行时后端对象，它带有 `predict()`，但没有 `track()`。
 
-库里自带四个跟踪器，用 `tracker` 参数选择：
+库里自带四个跟踪器，用 `tracker` 参数选择。带 `.yaml` 的写法，例如 `"bytetrack.yaml"`，
+选择的是同样的内置跟踪器；LibreYOLO 不会读取跟踪器 YAML 文件，如果工作目录里存在同名
+文件，则会抛错。
 
 `"bytetrack"` 是默认值。它只用运动信息，配一个卡尔曼滤波器和三阶段关联：先是高置信度
 检测，然后是第二轮，让低置信度检测在被丢弃前有机会匹配上已有的轨迹，最后是未确认的
@@ -136,13 +138,19 @@ ByteTrack、BoT-SORT 和 OC-SORT 来说，检测器在内部会以更低的阈�
 恢复那一轮用。Deep OC-SORT 则直接以 `det_thresh` 运行检测器。对 ByteTrack 和
 BoT-SORT 来说，`track_conf` 必须大于或等于 `track_low_thresh`，后者默认是 0.1。
 
+传入 `conf` 时，它就是 `predict()` 的检测阈值：低于它的检测永远不会到达跟踪器。不传时，
+检测器按上面那些阈值运行。
+
 跟踪器设置有两种传法。把一个配置实例传给 `tracker_config=`，它的类型就选定了跟踪器，
 `tracker=` 因此变得多余。或者把这些字段作为关键字参数传进去，让 `track()` 为你指定的
 跟踪器构建配置；不认识的键会告警，而不是被悄悄应用。无论哪种方式，一旦对应的键被显式
 设置，`track_conf` 就会被忽略。
 
-其余参数和预测保持一致：`iou`、`imgsz`、`classes`、`max_det`、`vid_stride`、`show`，
-以及 `save` 配 `output_path`。源是一个视频文件路径。结果处理见[预测](/docs/predict)。
+其余参数与预测一致：`iou`、`imgsz`、`classes`、`max_det`、`vid_stride`、`show`，以及带 `output_path` 的 `save`。`persist=True` 会保留同一模型上一次 `track()` 调用的跟踪器及其 ID，适用于每次调用只传一帧的循环，例如 `model.track(frame, persist=True)`。数据源可以是视频或有序图像序列。结果处理见[预测](/docs/predict)。
+
+图像、按文件名排序的文件夹、列表、元组和惰性图像迭代器都可以提供连续帧。`fps=30.0` 提供时间信息，`color_format="auto"` 选择输入解释方式。`vid_stride` 将保留帧率降为 `fps / vid_stride`。
+
+通过 `tracker=` 传入自定义跟踪器实例。它实现 `libreyolo.tracking.Tracker` 的 `reset()` 和 `update(results, image=None)`。一次运行会将它重置一次，并传入原始 RGB PIL 帧。返回的 `track_id` 必须是在相同后端/设备上、与检测框对齐的一维整数数组或张量。自定义实例默认使用 `track_conf=0.25`；请直接配置实例，不要传入跟踪器关键字参数或 `tracker_config`。
 
 ## 训练
 

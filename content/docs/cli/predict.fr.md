@@ -9,7 +9,7 @@ keywords:
   - prédiction yolo en ligne de commande
   - arguments libreyolo predict
   - sortie json libreyolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Commande
     value: libreyolo predict
@@ -43,7 +43,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 7e46c7ed7dd9e6c4
+source_hash: 21374ebc0e6cf4d3
 ---
 
 ## Synopsis
@@ -96,6 +96,11 @@ le mot de tâche est retiré avant l'analyse.
 | `verbose` | `false` | Sortie stderr détaillée |
 | `help_json` | `false` | Afficher le schéma de la commande en JSON et quitter |
 
+| Argument | Valeur par défaut | Signification |
+| --- | --- | --- |
+| `mask` | `None` | Masque binaire d'inpainting pour une image unique, pour les modèles qui l'exigent |
+| `trimap` | `None` | Trimap à trois niveaux pour une image unique, pour les modèles de matting guidé |
+
 ## Exemples
 
 <code-tabs name="examples" />
@@ -108,9 +113,10 @@ valeurs valides pour `model`. Trois options sont refusées sur ces runtimes
 plutôt qu'ignorées : `tiling`, `overlap_ratio` et `output_file_format` quittent
 avec `config_unsupported` quand un backend de runtime ne peut pas les honorer.
 
-`half` fonctionne à l'inverse. Les runtimes exportés le reçoivent et s'exécutent
-en FP16 ; l'inférence PyTorch native indique dans les logs qu'il a été ignoré et
-continue en FP32.
+`half` fonctionne à l'inverse : il est accepté puis ignoré. L'inférence PyTorch
+native indique dans les logs qu'il a été ignoré et continue en FP32, et un runtime
+exporté conserve la précision avec laquelle il a été exporté, si bien qu'une
+inférence en FP16 suppose un export avec `half=true`.
 
 Les modèles d'estimation du regard fonctionnent en deux étapes et n'ont pas de
 détecteur propre, donc `face_detector` est requis pour eux. `gallery` ne

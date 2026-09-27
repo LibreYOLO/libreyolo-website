@@ -20,7 +20,7 @@ keywords:
   - rilevamento oggetti in tempo reale
   - segmentazione di istanze python
   - DETR
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -148,7 +148,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 0216631a26185524
+source_hash: afc2a4900f773c9d
 ---
 
 ## Installazione
@@ -204,16 +204,7 @@ L'addestramento parte da un checkpoint pubblicato, per entrambi i task.
 
 <code-tabs name="train" />
 
-Se non tocchi niente, il trainer esegue 132 epoche con `lr0=2e-4` e `amp=False`,
-un batch di 16 ed early stopping dopo 50 epoche senza miglioramenti. I pesi di
-rilevamento sono un punto di partenza lecito per l'addestramento di
-segmentazione, ma solo come trasferimento esplicito, dato che la testa delle
-maschere parte non addestrata e altrimenti restituirebbe maschere prive di
-senso. Passare `task=segment` alla CLI è ciò che lo autorizza. La via Python è
-più stretta: `LibreDFINE` va costruito direttamente con
-`allow_detect_to_segment_transfer=True`, perché la factory `LibreYOLO()` non
-accetta un argomento del genere, e la costruzione diretta non scarica niente,
-quindi il file dei pesi deve già essere su disco.
+Senza modifiche, il trainer esegue 132 epoche con `lr0=2e-4`, `amp=True` e `amp_dtype="float16"`, un batch di 16 e early stopping dopo 50 epoche senza miglioramenti. I pesi di rilevamento sono un punto di partenza valido per l'addestramento della segmentazione, ma solo con un trasferimento esplicito: la testa delle maschere parte senza addestramento e altrimenti restituirebbe maschere prive di significato. Passare `task=segment` alla CLI autorizza il trasferimento. Il percorso Python è più limitato: occorre costruire direttamente `LibreDFINE` con `allow_detect_to_segment_transfer=True`, perché la factory `LibreYOLO()` non accetta questo argomento; la costruzione diretta non scarica i pesi, quindi il file deve essere già sul disco.
 
 `lora=True` si applica al rilevamento. L'addestramento di segmentazione lo
 rifiuta e rimanda invece a `freeze='backbone'`, perché la testa delle maschere

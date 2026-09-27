@@ -2,9 +2,8 @@
 title: libreyolo train
 seo_title: referensi perintah libreyolo train
 description: >-
-  Melatih model dari baris perintah: seluruh 59 argumen beserta nilai
-  default-nya, cara default tiap family menimpanya, dan argumen mana saja yang
-  diabaikan sebuah family.
+  Latih model dari baris perintah: argumen beserta nilai default-nya, cara
+  default family menggantikannya, dan argumen yang diabaikan family.
 lead: >-
   Melatih satu model pada satu dataset, lalu menulis checkpoint, metrik dan log
   ke sebuah direktori run. Setiap argumen di bawah punya nilai default dari
@@ -17,7 +16,7 @@ keywords:
   - argumen libreyolo train
   - cara training yolo dengan dataset sendiri
   - freeze layer yolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Perintah
     value: libreyolo train
@@ -26,7 +25,9 @@ meta:
     value: data
     mono: true
   - label: Keluaran
-    value: 'Checkpoint, metrik dan log di dalam runs/train/exp'
+    value: >-
+      Checkpoint, metrik dan log di dalam runs/train/<name>; YOLO9 memakai
+      yolo9_exp
 snippets:
   examples:
     - label: Dasar
@@ -53,7 +54,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 3aad4298310d3081
+source_hash: 30b2c16d339f5f50
 ---
 
 ## Sinopsis
@@ -93,6 +94,7 @@ dan `false`: `amp=false` menjadi `--no-amp` pada flag yang punya bentuk negatif.
 | `amp` | `true` | Automatic Mixed Precision |
 | `amp_dtype` | `float16` | Dtype AMP CUDA: `float16` atau `bfloat16` |
 | `cuda_graph` | `false` | Tangkap forward dan backward pelatihan ke dalam CUDA graph. Hanya GPU tunggal dan family yang didukung; sisanya berjalan eager |
+| `compile` | `false` | `torch.compile` jaringan pelatihan: `true`, `false`, `default`, `reduce-overhead`, `max-autotune`, `max-autotune-no-cudagraphs`. Hanya GPU CUDA tunggal; run lain dilatih eager disertai peringatan |
 | `lora` | `false` | Fine-tuning LoRA, untuk family transformer yang terdaftar di bagian Catatan |
 | `freeze` | | Bekukan layer: jumlah berupa integer, daftar indeks, atau nama modul |
 
@@ -151,7 +153,7 @@ dan `false`: `amp=false` menjadi `--no-amp` pada flag yang punya bentuk negatif.
 | Argumen | Default | Arti |
 |---|---|---|
 | `val` | `true` | Jalankan validasi selama pelatihan |
-| `eval_interval` | `10` | Validasi setiap N epoch |
+| `eval_interval` | `10` | Validasi setiap N epoch, dan setelah epoch terakhir |
 | `max_det` | `300` | Prediksi maksimum per gambar setelah NMS validasi |
 | `eval_max_det` | | Batas evaluator COCO. Konvensi AP@100 pycocotools bila tidak diatur |
 | `faster_coco_eval` | `true` | Pakai backend C++ faster-coco-eval untuk metrik COCO bila terpasang; kalau tidak, kembali ke pycocotools |
@@ -176,6 +178,27 @@ dan `false`: `amp=false` menjadi `--no-amp` pada flag yang punya bentuk negatif.
 | `quiet` | `false` | Redam stderr |
 | `dry_run` | `false` | Resolusi lalu cetak config tanpa menjalankannya |
 | `help_json` | `false` | Cetak skema perintah sebagai JSON lalu keluar |
+
+| Argumen | Default | Arti |
+| --- | --- | --- |
+| `min_samples` | `0` | Batas minimum panjang epoch untuk dataset kecil: jika gambar lebih sedikit, ambil sebanyak ini sampel per epoch dengan pengembalian (0 = nonaktif) |
+| `class_balanced` | `False` | Pengambilan sampel repeat-factor gaya LVIS untuk dataset long-tail (default: nonaktif) |
+| `cls_pw` | `0.0` | Pangkat pembobotan invers frekuensi klasifikasi: 0 nonaktif, 1 penuh (bobot kelas rata-rata satu; tidak dapat digabung dengan class_weights=True) |
+| `class_weights` | `False` | Bobot loss klasifikasi lama yang dinormalisasi berdasarkan sampel (default: nonaktif) |
+| `single_cls` | `False` | Latih detektor yang didukung dengan semua label dipetakan ulang ke kelas 0 |
+| `classes` | `None` | Latih detektor yang didukung hanya pada ID kelas asli dataset ini, dipisahkan koma (misalnya '0,3,5'); kelas lain dibuang seolah tidak berlabel. ID dipertahankan, tidak dipadatkan |
+| `average_best` | `0` | Rata-ratakan N checkpoint terbaik secara seragam berdasarkan metrik yang dipantau ke weights/average.pt pada akhir pelatihan (0 = nonaktif) |
+| `export_check` | `False` | Ekspor ONNX sebelum epoch 1 dan hentikan proses jika ekspor gagal (default: nonaktif) |
+| `precise_bn` | `0` | Hitung ulang statistik berjalan BatchNorm dari sebanyak ini gambar pelatihan setelah epoch terakhir (0 = nonaktif) |
+| `aux_weight` | | Khusus YOLO9: bobot loss cabang auxiliary PGI untuk fine-tuning. `0.25` bila tidak diatur; `0` hanya melatih head utama |
+| `fliplr` | `None` | Probabilitas pembalikan horizontal (alias ekosistem untuk flip_prob) |
+| `flipud` | `0.0` | Probabilitas pembalikan vertikal |
+| `auto_augment` | `None` | Kebijakan augmentasi otomatis klasifikasi: randaugment, autoaugment, augmix (default: tidak ada) |
+| `erasing` | `0.0` | Probabilitas RandomErasing klasifikasi, 0 <= erasing < 1 |
+| `cutmix` | `0.0` | Probabilitas CutMix klasifikasi (soft label) |
+| `scale` | `0.5` | Rentang area RandomResizedCrop klasifikasi: batas bawah float atau (min,max) eksplisit |
+| `crop_pct` | `None` | Rasio pengubahan ukuran evaluasi klasifikasi sebelum crop tengah (default: nilai native family model) |
+| `plot_samples` | `8` | Gambar sampel dalam plot sampel validasi: 0 untuk tanpa sampel, -1 untuk setiap gambar yang divalidasi (tidak mengubah metrik) |
 
 ## Contoh
 
@@ -212,9 +235,11 @@ DINOv2 dilatih lewat pipeline pass-through tanpa mosaic, tanpa mixup dan tanpa
 affine warp, jadi `mosaic`, `mixup`, `hsv_prob`, `degrees`, `translate`,
 `shear`, `mosaic_scale` dan `mixup_scale` tidak mengenai apa pun di sana. EC
 memakai pipeline yang sama tapi tetap membaca `hsv_prob`, `degrees` dan
-`translate` ketika task-nya pose. Family klasifikasi, SegFormer dan NAFNet
-mengabaikan seluruh kumpulan itu berikut `flip_prob`, karena flip mereka
-berjalan pada probabilitas tetap, bukan probabilitas yang bisa diatur. YOLO-NAS
+`translate` ketika task-nya pose. Family klasifikasi mengabaikan kumpulan itu
+kecuali `mixup`, yang bagi mereka berarti MixUp batch, dan mereka membaca
+`flip_prob`. SegFormer dan NAFNet mengabaikan seluruh kumpulan itu berikut
+`flip_prob`, karena flip mereka berjalan pada probabilitas tetap, bukan
+probabilitas yang bisa diatur. YOLO-NAS
 hanya mengabaikan `mosaic`, sebab ia justru melakukan augmentasi dengan affine
 per sampel yang selalu aktif. RF-DETR mengabaikan tiga argumen lagi di luar
 daftar itu: `optimizer`, `momentum` dan `nesterov`.
@@ -225,21 +250,22 @@ adalah daftar otoritatif untuk versi yang terpasang. Baris itu juga satu-satunya
 sinyal, jadi run terskrip dengan `quiet=true` ikut meredam peringatan tersebut
 bersama semua keluaran stderr lainnya.
 
-`val=false` adalah kasus serupa. Nilai itu menetapkan `eval_interval` ke `0`
-untuk sebagian besar family; RF-DETR tidak bisa mematikan validasi lewat cara
-itu dan mencatat bahwa permintaan tersebut diabaikan.
+`val=false` adalah kasus serupa. Nilai itu menetapkan `eval_interval` ke `0`,
+yang mematikan validasi selama pelatihan, termasuk pada epoch terakhir, dan run
+tidak menulis `best.pt`.
 
 ### Perilaku lain yang perlu diketahui
 
 `lora=true` diterima oleh RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 dan v4,
-EC serta ConvNeXt. Family lain akan keluar dengan `config_unsupported`
+EC, GTR serta ConvNeXt. Family lain akan keluar dengan `config_unsupported`
 alih-alih melatih tanpa LoRA.
 
 `pretrained=false` yang digabung dengan `resume` ditolak pada family yang
 mendukung pelatihan dari nol, karena keduanya meminta hal yang berlawanan.
 
 `mosaic` dan `mixup` adalah penulisan versi baris perintah dari field config
-`mosaic_prob` dan `mixup_prob`. Pada family yang mixup-nya hanya berlaku untuk
+`mosaic_prob` dan `mixup_prob`; pada model klasifikasi, `mixup` justru berarti
+MixUp batch. Pada family yang mixup-nya hanya berlaku untuk
 sampel mosaic, `mixup` di atas nol dengan `mosaic` bernilai nol tidak pernah
 aktif, dan run akan memberi tahu hal itu.
 

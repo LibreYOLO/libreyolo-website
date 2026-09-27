@@ -16,10 +16,9 @@ keywords:
   - format coco panoptic
   - dataset depth
   - pose kpt_shape
-last_verified: 1.5.0
-verification: >-
-  Mencerminkan docs/dataset_schema.md dalam repositori libreyolo pada v1.5.0,
-  dengan nama loader diperiksa silang terhadap libreyolo/data/.
+last_verified: 1.6.0
+verification: Mengikuti docs/dataset_schema.md dalam repositori libreyolo pada v1.6.0, dengan nama
+  loader diperiksa silang terhadap libreyolo/data/.
 snippets:
   usage:
     - label: Parse satu baris label deteksi
@@ -37,7 +36,7 @@ snippets:
         # (class_id, x1, y1, x2, y2, area) dalam piksel
 
         print(row)
-source_hash: a8282c079624044d
+source_hash: 5f4bc7d17822a85d
 ---
 
 ## YAML umum
@@ -127,6 +126,8 @@ YAML menambahkan `kpt_shape`, yang wajib berupa `[K, 2]` atau `[K, 3]`, serta
 Jumlah kolom tepat `5 + K * D`, dengan `D` adalah nilai kedua `kpt_shape`.
 Koordinat keypoint dinormalisasi. Visibility `v`, jika ada, bernilai `0`, `1`,
 atau `2`.
+
+Dataset multikelas RF-DETR memerlukan `names` dan dapat mendefinisikan `kpt_names` per kelas. Daftar nama keypoint kosong menandai kelas yang hanya memiliki kotak. Setidaknya satu kelas harus memiliki keypoint.
 
 ## obb
 
@@ -467,3 +468,14 @@ untuk `gaze`.
 mengadaptasi label yang ada secara internal, misalnya dengan menurunkan pusat
 objek dari baris bounding box, tetapi format label teks khusus point tidak didefinisikan.
 
+## Histogram peristiwa
+
+Deteksi YOLO9 dan RF-DETR menerima array HWC `.npy` dengan dua bidang hitungan terhingga nonnegatif, positif lalu negatif. `input_profile` memerlukan `format: event_histogram`, `layout: HWC`, `polarity: positive_negative`, `encoding: counts`, `scale` positif, dan `window_us` integer positif. Label memakai berkas teks deteksi biasa. Lihat [penyiapan input](/docs/train/event-histograms).
+
+## Policy robot
+
+Task `act` memakai direktori dataset LeRobot v3 atau ID dataset Hub yang memuat fitur episode, kamera, status, dan aksi. Task ini tidak memakai YAML deteksi. Lihat [policy robot](/docs/tasks/robot-policies).
+
+## albedo
+
+Pasangkan `images/<split>/<name>.<image extension>` dengan `albedo/<split>/<name>.npy`. Target berupa nilai RGB linear floating-point terhingga `(H, W, 3)` dalam [0, 1] dengan dimensi yang sama dengan gambar. Atur `input_dir` dan `albedo_dir` ke nama folder satu komponen jika diperlukan. PNG tampilan dan nilai sRGB bukan target albedo kuantitatif.

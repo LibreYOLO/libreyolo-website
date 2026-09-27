@@ -19,7 +19,7 @@ keywords:
   - DETR
   - detekcja obiektów
   - wykrywanie w czasie rzeczywistym
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -162,8 +162,9 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 6edaac5f05abaabe
+source_hash: 8dc052b83d5f1ac0
 ---
+
 ## Instalacja
 
 Żadna z wersji nie potrzebuje opcjonalnego dodatku. Wszystko, co importują, jest w podstawowej instalacji.
@@ -185,6 +186,8 @@ Wagi są pobierane z Hugging Face przy pierwszym użyciu i są przechowywane w p
 <code-tabs name="predict" />
 
 Zwrócony obiekt `Results` jest tym, który zwraca każda rodzina, więc wymiana na inny detektor to zmiana w jednej linii. `conf` i `max_det` filtrują dekodowanie top-k dla zapytań i klas; nie ma kroku NMS do regulacji, a `iou` jest akceptowany, ale nieużywany. Zobacz [prediction](/docs/predict) dla źródeł, streaming i obsługi wyników.
+
+DEIM przyjmuje prostokątny `imgsz=(height, width)` do predykcji. DEIMv2 jawnie odrzuca prostokątne wejścia predykcji i walidacji. Nie oznacza to obsługi prostokątnego wejścia podczas trenowania lub eksportu.
 
 ## Warianty
 
@@ -221,6 +224,8 @@ współczynnik z przepisu COCO wyraźnie pogarszał transfer.
 Wersja 2 sama rozwiązuje te ustawienia domyślne. Pozostawienie `epochs`, `batch`, `imgsz` i `lr0` nieustawionych powoduje, że program odczytuje każdy z nich z opublikowanego przepisu dla wczytanego rozmiaru, dzięki czemu małe rozmiary trenują w swojej własnej rozdzielczości wejściowej bez konieczności jej podawania, a wartość, którą podasz, nadpisuje przepis. `imgsz` to argument, który ogranicza: musi być dodatnią wielokrotnością 32, a wersja 2 zgłasza błąd przed rozpoczęciem działania w przeciwnym razie.
 
 Zobacz [trenowanie](/docs/train) dotyczące zbiorów danych, augmentacji, multi-GPU i loggerów.
+
+DEIM domyślnie włącza AMP z `amp_dtype="float16"`. Aby trenować w FP32, należy przekazać `amp=False`.
 
 ## Walidacja
 

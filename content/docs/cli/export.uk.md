@@ -14,7 +14,7 @@ keywords:
   - команда libreyolo export
   - експорт yolo в tensorrt
   - аргументи libreyolo export
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Команда
     value: libreyolo export
@@ -48,7 +48,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: ef2ca20af3814109
+source_hash: 290b778a1060a760
 ---
 
 ## Синтаксис
@@ -71,6 +71,7 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 | `batch` | `1` | Розмір батча для експорту |
 | `half` | `false` | Точність FP16 |
 | `int8` | `false` | Квантування INT8 |
+| `quantize` | | Точність як `16` (FP16), `8` (INT8) або `32` (FP32); замінює `half` і `int8` |
 | `dynamic` | `false` | Динамічні форми входу (ONNX) |
 | `simplify` | `true` | Спрощення графа ONNX |
 | `nms` | `false` | Вбудувати NMS у модель. Лише ONNX і CoreML |
@@ -117,7 +118,8 @@ JSON містить визначений `output_path`, розмір файлу 
 `config_unsupported`.
 
 `half=true` разом із `int8=true` не є помилкою. Перемагає INT8, `half`
-відкидається, а попередження надходить у stderr.
+відкидається, а попередження надходить у stderr. Якщо `quantize` суперечить
+`half` або `int8`, команда завершує роботу з `config_conflict`.
 
 `name` і `verify` наразі є опціями RKNN. Передавання будь-якої з них з іншим
 форматом завершує роботу з `config_unsupported`, а не ігнорується.
@@ -158,3 +160,5 @@ stdout несе результат; перебіг виконання надхо
 
 Пов'язане: [`libreyolo quantize`](/docs/cli/quantize), яка залишається в
 PyTorch і записує контрольну точку, а не артефакт для розгортання.
+
+TFLite INT8 використовує `int8=True` для виявлення YOLO9 або YOLOX із `data=...`, `fraction=1.0`, `batch=1` і `dynamic=False`. FP16 не підтримується; якщо задано обидва прапорці точності, CLI відкидає `half` на користь INT8. Вихід експорту JSON повідомляє фактично визначене полотно, включно з резервним квадратом для сімейств із нативним квадратом, повторно завантажених із прямокутних навчальних контрольних точок.

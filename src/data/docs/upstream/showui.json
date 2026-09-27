@@ -1,0 +1,12 @@
+{
+  "name": "ShowUI",
+  "org": "ShowUI authors",
+  "paper_title": "ShowUI: One Vision-Language-Action Model for GUI Visual Agent",
+  "paper_url": "https://arxiv.org/abs/2411.17465",
+  "code_url": "https://github.com/showlab/ShowUI",
+  "license": "MIT",
+  "license_interpretation": "The model publisher declares MIT.",
+  "bibtex": "@misc{lin2024showui,\n      title={ShowUI: One Vision-Language-Action Model for GUI Visual Agent}, \n      author={Kevin Qinghong Lin and Linjie Li and Difei Gao and Zhengyuan Yang and Shiwei Wu and Zechen Bai and Weixian Lei and Lijuan Wang and Mike Zheng Shou},\n      year={2024},\n      eprint={2411.17465},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2411.17465}, \n}",
+  "bibtex_source_url": "https://raw.githubusercontent.com/showlab/ShowUI/main/README.md",
+  "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2411.17465. The upstream citation form is retained."
+}

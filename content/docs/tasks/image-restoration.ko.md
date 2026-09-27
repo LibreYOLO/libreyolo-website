@@ -13,7 +13,7 @@ keywords:
   - 이미지 초해상도 파이썬
   - 디블러링 모델
   - PSNR SSIM 검증
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: 이미지 확대
@@ -99,7 +99,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         result.restored.save("denoised.png")
-source_hash: 9dc81cadb3ebf18b
+source_hash: "c1c1270071053132"
 ---
 
 ## 정의
@@ -110,7 +110,7 @@ source_hash: 9dc81cadb3ebf18b
 
 ## 모델들
 
-세 계열이 `restore`를 섬기며, 그들이 되돌리는 손상에 따라 나뉩니다.
+복원 계열은 서로 다른 이미지 열화 유형을 대상으로 합니다.
 
 [NAFNet](/docs/models/nafnet)은 디노이저이며, LibreYOLO가 학습할 수 있는 유일한 복원 계열입니다. 그 아키텍처는 UNet 블록의 비선형 활성화를 요소별 곱셈으로 대체하며, 공개된 체크포인트는 SIDD 실제 이미지 노이즈로 학습되었습니다. 출력은 입력 해상도를 유지합니다.
 
@@ -118,13 +118,17 @@ source_hash: 9dc81cadb3ebf18b
 
 [SwinIR](/docs/models/swinir)은 Swin Transformer 백본을 사용하여 4배 업스케일하며, 공식 경량 생성기와 두 개의 실제 생성기를 포함하는 세 가지 크기로 제공됩니다.
 
+[QuickSRNet](/docs/models/quicksrnet)은 2배 확대, [DDColor](/docs/models/ddcolor)는 컬러화, [HVI-CIDNet](/docs/models/hvi-cidnet)은 저조도 개선, [LaMa](/docs/models/lama)는 인페인팅을 제공합니다. 이 네 계열은 학습을 지원하지 않습니다.
+
 ## 예측
 
 가중치는 처음 사용할 때 Hugging Face에서 다운로드되며 로컬에 캐시됩니다.
 
 <code-tabs name="predict" />
 
-복원은 고정된 네트워크 캔버스가 아닌 원본 이미지의 해상도로 실행되며, 네트워크의 다운샘플링 비율에 맞춰 패딩만 적용되므로 시간과 메모리는 입력 이미지의 픽셀 수에 따라 결정됩니다. `tile`는 순방향 계산을 겹치는 타일로 나누고 이음새를 다시 합치며, `tile_pad`는 각 타일을 다시 잘라내기 전에 추가되는 가장자리 영역입니다. 두 가지 모두 Python 키워드 인자입니다. 소스 코드, 스트리밍 및 결과 처리에 대해서는 [prediction](/docs/predict)를 참조하십시오.
+NAFNet, Real-ESRGAN, SwinIR은 고정된 네트워크 캔버스 대신 원본 이미지 해상도에서 실행하며, 네트워크 다운샘플링 배수에만 맞춰 패딩하므로 시간과 메모리가 입력 픽셀 수에 비례합니다. `tile`은 순전파를 겹치는 타일로 나누고 경계를 다시 혼합하며, `tile_pad`는 다시 잘라내기 전에 각 타일 주변에 추가하는 여백입니다. 둘 다 Python 키워드 인수입니다. 소스, 스트리밍, 결과 처리는 [예측](/docs/predict)을 참조하십시오.
+
+LaMa에는 단일 이미지용 `mask=`가 필요합니다. HVI-CIDNet은 `gamma`, `saturation`, `intensity`를 제공하며 각각의 기본값은 1.0입니다. 모델별 캔버스와 내보내기 제약은 각 모델 페이지에 있습니다.
 
 ## 데이터셋 형식
 

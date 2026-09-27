@@ -4,7 +4,7 @@ seo_title: "Background removal in LibreYOLO"
 description: "Cut a subject out of its background in LibreYOLO. Predict a soft alpha matte, write a transparent PNG, and validate with MAE and S-measure."
 lead: "Background removal separates a subject from everything behind it. LibreYOLO exposes it as the matte task, which returns a soft alpha value per pixel rather than a hard foreground mask."
 keywords: [background removal python, alpha matting model, dichotomous image segmentation, transparent png cutout, soft alpha matte]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Predict a matte
@@ -96,7 +96,7 @@ so `conf`, `iou` and `max_det` have no effect.
 
 ## Models
 
-Two families serve `matte`, and they share a forward path.
+BiRefNet and FeyNobg share a forward path.
 
 [BiRefNet](/docs/models/birefnet) is the bilateral-reference network the task is
 built around, published here as one Swin-L tier checkpoint.
@@ -111,19 +111,22 @@ The two carry different weight licenses. Both are stated on the model pages, and
 the license on the Hugging Face repository of the specific checkpoint is the
 authoritative one.
 
+[BEN2](/docs/models/ben2) adds fixed-1024 background removal. [ViTMatte](/docs/models/vitmatte) takes an image and a three-level `trimap=` marking background, unknown and foreground pixels.
+
 ## Predict
 
 Weights download from Hugging Face on first use and are cached locally.
 
 <code-tabs name="predict" />
 
-Both families run at a fixed native 1024x1024 canvas and resize the matte back
+BiRefNet and FeyNobg run at a fixed native 1024x1024 canvas and resize the matte back
 to the original image. A different resolution is not supported, because the Swin
 backbone's relative-position tables are tied to that size, and a mismatch
-interpolates them badly rather than raising. `Results.save()` is defined for
-matte results only and needs the source image, which it reloads from
+interpolates them badly rather than raising. `Results.save()` uses the source image for matte cutouts, which it reloads from
 `Results.path` unless you pass one. See [prediction](/docs/predict) for sources,
 streaming and result handling.
+
+`Results.save()` writes matte cutouts as RGBA. `plot()` renders an image for inspection. BEN2 supports batched native prediction; ViTMatte requires a single-image guide.
 
 ## Dataset format
 
@@ -159,9 +162,7 @@ contract.
 
 ## Train
 
-Neither matte family has a training implementation: `train()` raises
-`NotImplementedError` on both, and matte support covers prediction, validation
-and export only. Each model page names the upstream project that ships training
+These matte families have no training implementation. Export support differs by family; ViTMatte does not export. Each model page names the upstream project that ships training
 code and the conversion script that brings a checkpoint back.
 
 ## Validate

@@ -19,21 +19,16 @@ keywords:
   - globalny rozmiar batcha
   - backend nccl gloo
   - wiele gpu windows
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
-
-        # Osłona __main__ jest wymagana: każdy uruchomiony proces roboczy
-        ponownie importuje ten
-
-        # moduł, a bez osłony trenowanie zostałoby ponownie uruchomione
-        rekurencyjnie.
-
+        # Ten blok pozostaje obsługiwany; zwykłe skrypty działają też bez niego.
+        # Zachowaj go dla callbacków i loggerów wymagających standard-pickle.
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(
@@ -79,7 +74,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # Pomiar wykonywany raz na GPU 0, wynik skalowany do wielokrotności liczby procesów.
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: 83c1563d68068cd0
+source_hash: e339072d5d8e71ea
 ---
 
 ## Uruchamianie na dwóch GPU
@@ -88,36 +83,15 @@ Przekaż listę urządzeń. Nic więcej się nie zmienia.
 
 <code-tabs name="train" />
 
-Gdy podano więcej niż jedno urządzenie i nie ma środowiska torchrun, metoda
-`train()` modelu zapisuje wagi do pliku tymczasowego, w razie potrzeby ustala
-autobatch i uruchamia po jednym procesie roboczym na każdy GPU za pomocą
-`torch.multiprocessing.spawn`. Każdy proces roboczy ponownie importuje klasę
-modelu, odtwarza go z zapisanych wag i wykonuje zwykłą ścieżkę dla jednego
-urządzenia, ponieważ wewnątrz uruchomionego procesu ustawione są zmienne
-środowiskowe torchrun. Po zakończeniu trenowania najlepszy checkpoint z rangi 0
-jest wczytywany z powrotem do instancji modelu wywołującej metodę.
+Przy więcej niż jednym urządzeniu i bez środowiska torchrun metoda `train()` modelu zapisuje wagi do pliku tymczasowego, ustala autobatch, jeśli go zażądano, i uruchamia procesy robocze zarządzane przez koordynator, po jednym na GPU. Każdy proces ponownie importuje klasę modelu, odtwarza ją z zapisanych wag i wykonuje zwykłą ścieżkę jednego urządzenia, ponieważ wewnątrz uruchomionego procesu zmienne środowiskowe torchrun są ustawione. Po zakończeniu najlepszy checkpoint procesu rank 0 jest wczytywany z powrotem do instancji modelu wywołującego.
 
 `device` przyjmuje wartości `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"`
 i `"auto"`. Tylko lista zawierająca więcej niż jeden indeks CUDA uruchamia
 procesy.
 
-## Osłona `__main__` jest obowiązkowa
+## Automatyczne uruchamianie i blok main
 
-Uruchomione procesy robocze ponownie importują moduł, z którego pochodzą. Bez
-osłony `if __name__ == "__main__":` import ponownie wykonuje wywołanie
-trenowania, a każdy proces roboczy uruchamia własne procesy. Biblioteka wykrywa
-tę sytuację i zgłasza błąd, zamiast dopuścić do rekurencji:
-
-```text
-spawn_ddp_train() was called from inside a spawned subprocess. This usually
-means your script calls model.train(device=...) at the top level without a
-'if __name__ == "__main__":' guard.
-```
-
-Wszystko przekazywane do procesu roboczego jest serializowane przez pickle,
-dlatego `callbacks=` musi nadawać się do takiej serializacji. Klasa zdefiniowana
-na poziomie modułu działa, ale domknięcie ani lambda nie. Komunikat błędu to
-wyjaśnia i wskazuje wbudowane loggery jako rozwiązanie alternatywne.
+`model.train(device=[0, 1])` i `device="0,1"` używają procesów rank zarządzanych przez koordynator, bez ponownego wykonywania kodu najwyższego poziomu zwykłego skryptu bez bloku ochronnego. Skrypty z blokiem ochronnym i jawne `torchrun` pozostają obsługiwane. Zadania koordynatora używają cloudpickle; obiekty callbacków lub loggerów wymagające zastępczej ścieżki standard-pickle nadal potrzebują bloku `if __name__ == "__main__":`.
 
 ## `batch` jest globalnym batchem
 

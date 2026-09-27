@@ -17,7 +17,7 @@ keywords:
   - inférence youtube
   - vid_stride
   - stream=True
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Classification des sources lue dans libreyolo/utils/source.py
   (classify_source, SourceKind, StreamSource, MultiStreamSource). Types d'images
@@ -53,7 +53,11 @@ snippets:
         array = np.asarray(pil_image)
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+        # Un tableau NumPy est lu en BGR par défaut. Celui-ci est en RGB.
+        result = model(array, color_format="rgb")
+        print(type(array).__name__, len(result.boxes))
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: Un dossier
@@ -205,7 +209,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: 81a0c947dbfe48b5
 ---
 
 ## Méthode de classification d'une source
@@ -243,29 +247,34 @@ Une source image unique accepte sept types.
 |---|---|
 | `str` ou `pathlib.Path` | Fichier local, `http(s)://`, `s3://` ou `gs://` |
 | `PIL.Image.Image` | Convertie en RGB |
-| `numpy.ndarray` | Nuances de gris 2D, ou HWC ou CHW 3D\u00a0; un tableau 4D utilise sa première image |
-| `torch.Tensor` | CHW ou NCHW, lu comme RGB\u00a0; un tenseur par batch utilise sa première image |
+| `numpy.ndarray` | Nuances de gris 2D, ou HWC ou CHW 3D dans l'ordre BGR ; un tableau 4D est un batch |
+| `torch.Tensor` | CHW ou NCHW, lu comme RGB ; un tenseur 4D est un batch |
 | `bytes` | Données d'image encodées |
 | `io.BytesIO` | Données d'image encodées |
 
-Tout est converti en RGB avant le prétraitement. Les tableaux NumPy sont le
-seul cas où l'ordre des canaux est ambigu, `color_format` le contrôle donc\u00a0:
-`"auto"` (valeur par défaut) conserve le tableau tel quel, tandis que `"bgr"`
-inverse les canaux, comme l'exige une image lue avec OpenCV.
+Un tableau ou un tenseur 4D renvoie une liste avec un `Results` par image.
 
-Les tableaux de flottants sont remis à l'échelle selon leur propre plage\u00a0: les
+Tout est converti en RGB avant le prétraitement. Les tableaux NumPy sont le
+seul cas où l'ordre des canaux est ambigu, `color_format` le contrôle donc :
+`"auto"` (valeur par défaut) et `"bgr"` lisent le tableau comme BGR, l'ordre que
+renvoie OpenCV, tandis que `"rgb"` le conserve tel quel, comme l'exige un
+tableau créé à partir d'une image PIL.
+
+Les tableaux de flottants sont remis à l'échelle selon leur propre plage : les
 valeurs inférieures ou égales à `1.0` sont multipliées par 255, tandis que les
 valeurs supérieures sont écrêtées dans `[0, 255]`. Un tableau RGBA perd son
 canal alpha.
 
-Chaque type de chemin distant nécessite un package, dont aucun n'est installé
-par défaut\u00a0: `requests` pour `http(s)://`, `boto3` pour `s3://` et `gcsfs`
-pour `gs://`.
+Chaque type de chemin distant nécessite un package. `requests`, pour
+`http(s)://`, fait partie de l'installation de base ; ce n'est pas le cas de
+`boto3` pour `s3://` ni de `gcsfs` pour `gs://`.
+
+Le suivi accepte des images, dossiers triés par nom de fichier, listes, tuples et itérateurs d'images paresseux comme images consécutives. Passez `fps=30.0` pour définir la cadence de la séquence et `color_format="auto"` pour sélectionner l'interprétation de l'entrée. Consultez le [suivi](/docs/tasks/object-tracking).
 
 ## Dossiers
 
 Un répertoire est parcouru récursivement et trié. Chaque fichier portant l'un
-des suffixes suivants devient une image\u00a0: `.jpg`, `.jpeg`, `.png`, `.gif`,
+des suffixes suivants devient une image : `.jpg`, `.jpeg`, `.png`, `.gif`,
 `.webp`, `.bmp`, `.tiff`, `.tif`. Tout autre fichier du dossier est ignoré. Un
 dossier vide renvoie une liste vide au lieu de lever une erreur.
 
@@ -277,9 +286,10 @@ Consultez les [performances d'inférence](/docs/predict/performance).
 
 <code-tabs name="video" />
 
-Un chemin est considéré comme une vidéo lorsque son suffixe est `.asf`, `.avi`,
-`.gif`, `.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.ts`, `.wmv` ou
-`.webm`.
+Un chemin est considéré comme une vidéo lorsque son suffixe est `.3g2`, `.3gp`,
+`.asf`, `.avi`, `.dav`, `.f4v`, `.flv`, `.gif`, `.h264`, `.h265`, `.hevc`,
+`.m2ts`, `.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.mts`, `.mxf`,
+`.ogv`, `.ts`, `.vob`, `.wmv` ou `.webm`.
 
 `.gif` figure dans les deux listes. Un chemin `.gif` transmis directement à
 `predict` est ouvert comme une vidéo, car la vérification vidéo intervient en
@@ -291,6 +301,8 @@ la vidéo entière est décodée dans une liste. Au-delà de 500 images après
 l'application du stride, un avertissement recommande d'utiliser `stream=True`.
 
 Chaque objet `Results` provenant d'une vidéo contient `frame_idx`.
+
+L'encodage vidéo utilise un codec disponible si H.264 ne peut pas s'ouvrir. Ce repli est journalisé au niveau INFO et mis en cache par codec et canevas uniquement après la réussite d'un autre codec.
 
 ## Webcams, flux réseau et YouTube
 
@@ -311,7 +323,7 @@ capture est d'abord ouverte avec le backend DirectShow, puis se rabat sur le
 backend par défaut en cas d'échec.
 
 Les URL de pages YouTube sont résolues en URL de média directe sans télécharger
-la vidéo, ce qui nécessite `yt-dlp`\u00a0:
+la vidéo, ce qui nécessite `yt-dlp` :
 
 ```bash
 pip install "libreyolo[stream]"
@@ -360,7 +372,7 @@ entiers. Tout autre nombre lève `ValueError`.
 Les coordonnées de la zone sont `left top width height`, par rapport au coin
 supérieur gauche de l'écran choisi. Une source écran indique une cadence égale
 à 30 divisé par `vid_stride`, utilisée pour écrire une vidéo enregistrée. La
-capture nécessite le package `mss`\u00a0:
+capture nécessite le package `mss` :
 
 ```bash
 pip install mss
@@ -400,7 +412,9 @@ Les images sont placées dans les répertoires auto-incrémentés
 le nom du fichier source. Toutes les images d'un même processus sont placées
 dans le même répertoire, deux dossiers d'entrée contenant un fichier de même
 nom s'écrasent donc mutuellement. Les images en mémoire ne possèdent aucun nom
-de fichier à réutiliser et sont numérotées `image0`, `image1` et ainsi de suite.
+de fichier à réutiliser. Une image seule est enregistrée sous `inference`, si
+bien que des appels répétés l'écrasent ; une liste ou un batch est numéroté
+`image0`, `image1` et ainsi de suite.
 
 Les sources vidéo et en direct sont écrites dans un seul fichier `.mp4` nommé
 d'après la source.
@@ -410,5 +424,5 @@ comme un fichier, un chemin sans suffixe comme un répertoire.
 `output_file_format` sélectionne l'encodage des images fixes et accepte `jpg`,
 `png` ou `webp`.
 
-Après un enregistrement, le chemin écrit est aussi joint au résultat sous la
-forme `result.saved_path`.
+Après l'enregistrement d'une image, le chemin écrit est aussi joint au résultat
+sous la forme `result.saved_path`.

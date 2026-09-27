@@ -21,7 +21,7 @@ keywords:
   - early stopping patience
   - amp bfloat16
   - train config yaml
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -103,13 +103,13 @@ snippets:
         from libreyolo import LibreYOLO
 
         # Carica il checkpoint della run interrotta, poi chiedi di riprendere.
-        model = LibreYOLO("runs/train/exp/weights/last.pt")
-        model.train(data="my-dataset.yaml", epochs=100, resume=True)
+        model = LibreYOLO("runs/train/yolo9_exp/weights/last.pt")
+        model.train(data="my-dataset.yaml", resume=True)
     - label: CLI
       language: bash
       code: |
-        libreyolo train model=runs/train/exp/weights/last.pt \
-          data=my-dataset.yaml epochs=100 resume=true
+        libreyolo train model=runs/train/yolo9_exp/weights/last.pt \
+          data=my-dataset.yaml resume=true
   cfg:
     - label: Python
       language: python
@@ -123,7 +123,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: d838d1abd45af40f
+source_hash: ca1259a10e05a51d
 ---
 
 ## Impostare gli argomenti
@@ -171,13 +171,9 @@ quei valori:
 | `weight_decay` | `5e-4` | `5e-4` | `1e-4` | `1e-5` |
 | `scheduler` | `yoloxwarmcos` | `linear` | `flat_cosine` | `cos` |
 | `epochs` | `300` | `300` | `132` | `300` |
-| `amp` | `True` | `True` | `False` | `False` |
+| `amp` | `True` | `True` | `True` | `True` |
 
-D-FINE e DEIM arrivano con `amp=False` perché il decoder di D-FINE limita le
-attivazioni a 65504, il più grande valore finito rappresentabile in float16. Anche
-YOLO-NAS e FOMO lo tengono disattivato per default. Il flag `--amp` della CLI vale `True` per default in
-ogni famiglia, quindi conta come fornito dall'utente e sovrascrive il default della
-famiglia; lascialo stare a meno che tu non voglia davvero cambiarlo.
+D-FINE, DEIM, RT-DETRv4 e il rilevamento YOLO-NAS usano `amp=True` con `amp_dtype="float16"` di default. Dome-DETR, PP-YOLOE e YOLO-NAS OBB mantengono FP32 come default. Passa `amp=False` quando è necessario FP32.
 
 Per leggere i default reali di una famiglia invece di tirare a indovinare:
 
@@ -206,6 +202,8 @@ layer del decoder ausiliario.
 
 L'autobatch è una funzionalità CUDA. Su CPU o MPS scrive una riga di log e mantiene il
 batch predefinito.
+
+`min_samples=0` lascia invariata la lunghezza dell'epoca. Un minimo positivo campiona con reinserimento i dataset di rilevamento più piccoli. `class_balanced=False`, se impostato a true, attiva il campionamento con fattore di ripetizione per immagine; si combina con `min_samples` e DDP. I loader specializzati che non usano il campionatore condiviso rifiutano il bilanciamento attivo.
 
 ## Accumulo dei gradienti
 
@@ -272,29 +270,37 @@ sovrascritta.
 
 `save_period` scrive un `weights/epoch_<N>.pt` extra ogni N epoche, in aggiunta a
 `weights/last.pt` dopo ogni epoca e a `weights/best.pt` ogni volta che la metrica
-tracciata migliora. `eval_interval` stabilisce ogni quanto gira la validazione e
-`patience` ferma la run dopo quel numero di epoche senza miglioramenti, con `0` che
-disattiva l'early stopping.
+tracciata migliora. `eval_interval` stabilisce ogni quanto gira la validazione, e
+l'ultima epoca viene sempre validata; `val=False` disattiva la validazione, e una run
+così non scrive `best.pt`. `patience` ferma la run dopo quel numero di epoche senza
+miglioramenti, con `0` che disattiva l'early stopping.
 
 `cache` accelera le epoche ripetute tenendo le immagini decodificate in RAM (`True` o
 `"ram"`) o come file `.npy` accanto alle sorgenti (`"disk"`). Le letture dalla cache
 sono identiche byte per byte a quelle lette direttamente dalle sorgenti. Con i worker
 del dataloader, `"disk"` è la più sicura delle due.
 
+`average_best=0` disattiva la media dei checkpoint; un N positivo scrive `weights/average.pt` usando fino a N snapshot migliori. I tensori in virgola mobile vengono mediati uniformemente e i buffer interi provengono dallo snapshot migliore. `export_check=False` può essere attivato per interrompere l'esecuzione prima della prima epoca se l'esportazione ONNX fallisce. Gli output grezzi corrispondenti vengono confrontati con `rtol=1e-3`, `atol=1e-4`; strutture incompatibili vengono registrate come confronto saltato.
+
+`precise_bn=0` disattiva la ricalibrazione finale di BatchNorm. Un valore positivo limita il numero di immagini del loader di addestramento prima della validazione finale; con DDP il budget si applica a ogni rank partecipante. BatchNorm congelata resta congelata. Le [callback di fitness personalizzate](/docs/train/fitness-callbacks) possono scegliere i checkpoint migliori e la patience.
+
 ## Resume
 
-`resume=True` continua una run interrotta. Il checkpoint va caricato prima, perché
-resume lo legge dal modello, non da un argomento separato.
+`resume=True` continua una run interrotta dal checkpoint caricato;
+`resume="path/to/last.pt"` continua invece da quel file.
 
 <code-tabs name="resume" />
 
-Resume ripristina i pesi addestrati, lo stato dell'optimizer, i pesi EMA e il conteggio
-degli aggiornamenti, il tracciamento della metrica migliore, la scala del `GradScaler` e
+Resume ripristina gli argomenti di addestramento salvati della run, e un argomento
+passato esplicitamente ha la precedenza su quello salvato. Continua a scrivere nella
+directory di run del checkpoint. Ripristina i pesi addestrati, lo stato dell'optimizer,
+i pesi EMA e il conteggio degli aggiornamenti, il tracciamento della metrica migliore, la scala del `GradScaler` e
 gli stati random di PyTorch, CUDA e NumPy. Riparte dall'epoca del checkpoint più uno e
 manda avanti lo schedule fino a quella posizione.
 
-Ci sono due cose che non fa. `resume=True` non si può combinare con `pretrained`, e
-provarci solleva un errore. E quando la chiave della metrica migliore del checkpoint è
+Ci sono tre cose che non fa. `resume=True` non si può combinare con `pretrained`, e
+provarci solleva un errore. I pesi pubblicati e una run che ha già raggiunto le sue
+`epochs` non hanno nulla da riprendere, e sollevano un `ValueError` che lo dice. E quando la chiave della metrica migliore del checkpoint è
 diversa da quella della run corrente, il tracciamento della metrica migliore si azzera con un
 warning invece di confrontare valori che non significano la stessa cosa.
 
@@ -317,3 +323,11 @@ Python.
 - [Congelamento dei layer](/docs/train/layer-freezing) e [LoRA](/docs/train/lora) per
   addestrare un sottoinsieme dei pesi.
 - [Validazione e metriche](/docs/train/validation) per cosa riporta la run.
+
+## Selezione delle classi e ponderazione della loss
+
+Per il rilevamento YOLO9, RF-DETR, EdgeCrafter, RT-DETR, D-FINE, DEIM, TinyFormer e YOLO-NAS, `classes=None` mantiene tutte le classi del dataset; una lista filtra la supervisione conservando gli ID originali, `nc` e `names`. `single_cls=False` può essere attivato per mappare le etichette mantenute sulla classe 0, chiamata `object`. Ripresa e validazione ereditano le impostazioni salvate. L'addestramento OBB del modello rifiuta `single_cls`.
+
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 e DINOv2 supportano `cls_pw=0.0`: i valori in [0, 1] pesano ogni classe con l'inverso della frequenza elevato a quella potenza, normalizzato a media 1. `class_weights=False`, se attivato, seleziona la ponderazione alternativa `N / (C * n_c)`. Non è combinabile con `cls_pw` positivo; la ripresa richiede impostazioni di ponderazione corrispondenti.
+
+`plot_samples=8` imposta il numero massimo di immagini nel grafico dei campioni di validazione. Usa 0 per nessuna o -1 per tutte; non riduce le immagini valutate.

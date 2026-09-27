@@ -86,7 +86,8 @@ pip install "libreyolo[gaze]"
 ```
 
 Without it, LibreYOLO prints manual download instructions instead of failing
-silently.
+silently. In 1.6.0 the upstream Google Drive download returns 404, so place a
+local copy of the checkpoint at the path you load.
 
 ## Predict
 

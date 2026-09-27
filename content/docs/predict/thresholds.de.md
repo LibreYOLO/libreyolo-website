@@ -18,7 +18,7 @@ keywords:
   - NMS-freies DETR
   - Konfidenzschwellenwert Objekterkennung
   - Klassenfilter Inferenz
-last_verified: 1.5.0
+last_verified: "1.6.0"
 verification: >-
   Standardwerte aus InferenceRunner.__call__ in
   libreyolo/models/base/inference.py. Familienspezifisches NMS-Verhalten aus
@@ -109,7 +109,7 @@ snippets:
         conf und max_det.
 
         print(len(loose.boxes), len(tight.boxes))
-source_hash: 0b978963c356027d
+source_hash: "849650629e58c9e1"
 ---
 
 ## Die vier Argumente
@@ -132,6 +132,8 @@ Die Validierung verwendet bewusst andere Standardwerte: `val()` wird mit `conf=0
 `conf` ist der Schwellenwert, unter dem eine Vorhersage verworfen wird. Er gilt für jede Familie, einschließlich derjenigen ohne NMS. Verwende ihn zuerst, wenn es zu viele oder zu wenige Erkennungen gibt.
 
 Der Standardwert `0.25` eignet sich zum Betrachten von Bildern. Ein nachgelagertes System benötigt meist einen höheren Wert, während eine Genauigkeitsmessung einen deutlich niedrigeren benötigt.
+
+Die Erkennungsvalidierung liefert `metrics/best_conf` und klassenweise Schwellenwerte aus F1 bei IoU 0.50. Verwende sie als gemessene Ausgangspunkte für Deployment-Schwellenwerte; siehe [Validierung](/docs/train/validation). Segmentierung stellt diese Schlüssel nicht bereit.
 
 ## iou
 

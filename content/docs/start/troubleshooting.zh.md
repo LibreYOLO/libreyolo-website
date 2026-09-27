@@ -9,8 +9,8 @@ keywords:
   - libreyolo cuda 显存不足
   - libreyolo notimplementederror
   - libreyolo 问题排查
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: 1.6.0
+source_hash: f2faaab56a2f0415
 ---
 
 报错按你看到的文字分组。如果你的报错信息不在这里，[FAQ](/docs/faq) 回答的是那些
@@ -86,9 +86,10 @@ NotImplementedError: LibreEoMT instance and panoptic export need query-mask runt
 所以一个跟已发布检查点（checkpoint）对不上的名字，会生成一个并不存在的 URL。每个
 模型页面上的检查点表格列出了已发布的确切文件名。
 
-## Windows 上训练卡住或反复重启
+## Windows 或 macOS 上训练卡住或反复重启
 
-Windows 没有 `fork`，所以 dataloader 的 worker 是靠重新导入你的脚本来启动的。没有
+Windows 没有 `fork`，macOS 上的 Python 默认也不使用它，所以 dataloader 的 worker
+是靠重新导入你的脚本来启动的。没有
 `if __name__ == "__main__":` 这层保护，每个 worker 都会把你的训练调用重跑一遍，
 结果要么死锁，要么无休止地派生进程。
 
@@ -122,7 +123,8 @@ result[0].boxes                       # 只有一个检测结果，而且悄无�
 
 ### 把指标当属性读
 
-`val()` 返回的是一个以指标名为键的普通字典，而不是一个支持属性访问的对象：
+`val()` 返回的是一个以指标名为键的字典。它唯一的属性 `box` 携带逐图像结果和逐类别阈值，
+而不是指标值：
 
 ```python
 metrics = model.val(data="coco8.yaml")
@@ -147,3 +149,7 @@ if report.errors:
 ```
 
 检查目录见 [doctor 命令](/docs/cli/doctor)。
+
+## 持久 worker 无法看到数据集变更
+
+启用的 `close_mosaic` 或 `set_epoch` 钩子必须作用于 worker 使用的数据集副本。如果自定义多 worker 加载器保留了不兼容的持久副本，请使用 `persistent_workers=False`，或在修改后重建 worker。默认的非持久路径不受影响。

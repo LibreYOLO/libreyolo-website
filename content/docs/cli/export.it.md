@@ -14,7 +14,7 @@ keywords:
   - comando libreyolo export
   - esportare yolo tensorrt
   - argomenti libreyolo export
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Comando
     value: libreyolo export
@@ -48,7 +48,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: ef2ca20af3814109
+source_hash: 290b778a1060a760
 ---
 
 ## Sinossi
@@ -71,6 +71,7 @@ Gli argomenti sono coppie `key=value`, e funziona anche la forma POSIX, quindi
 | `batch` | `1` | Dimensione del batch dell'esportazione |
 | `half` | `false` | Precisione FP16 |
 | `int8` | `false` | Quantizzazione INT8 |
+| `quantize` | | Precisione come `16` (FP16), `8` (INT8) o `32` (FP32); sostituisce `half` e `int8` |
 | `dynamic` | `false` | Forme di input dinamiche (ONNX) |
 | `simplify` | `true` | Semplificazione del grafo ONNX |
 | `nms` | `false` | Incorpora l'NMS nel modello. Solo ONNX e CoreML |
@@ -117,7 +118,8 @@ incorporato è fissato a batch 1, e lo segnala su stderr. Su CoreML accetta
 predefinito insieme a `format=coreml nms=true` esce con `config_unsupported`.
 
 `half=true` insieme a `int8=true` non è un errore. Vince INT8, `half` viene
-scartato e un avviso va su stderr.
+scartato e un avviso va su stderr. Un `quantize` in disaccordo con `half` o
+`int8` esce con `config_conflict`.
 
 `name` e `verify` oggi sono opzioni di RKNN. Passarne una qualsiasi con un altro
 formato esce con `config_unsupported` invece di essere ignorata.
@@ -157,3 +159,5 @@ incorporato rifiutata, e `1` per altri errori a runtime.
 
 Correlato: [`libreyolo quantize`](/docs/cli/quantize), che resta in PyTorch e
 scrive un checkpoint invece di un artefatto di deployment.
+
+TFLite INT8 usa `int8=True` per il rilevamento YOLO9 o YOLOX con `data=...`, `fraction=1.0`, `batch=1` e `dynamic=False`. FP16 non è supportato; quando vengono forniti entrambi i flag di precisione, la CLI scarta `half` a favore di INT8. L'output JSON dell'esportazione riporta il canvas effettivamente risolto, incluso il fallback quadrato per le famiglie native quadrate ricaricate da checkpoint addestrati con dimensioni rettangolari.

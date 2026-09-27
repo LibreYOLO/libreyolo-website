@@ -22,7 +22,7 @@ keywords:
   - detekcja zorientowanych ramek ograniczających
   - OBB
   - DOTA
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -203,7 +203,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 8022a5a591922a90
+source_hash: 75454e612d7e2247
 ---
 
 ## Instalacja
@@ -304,6 +304,8 @@ natywnemu, nadal używa osadzenia zbudowanego dla niewłaściwych proporcji.
 
 Informacje o zbiorach danych, augmentacji, wielu GPU i loggerach znajdziesz w sekcji [trenowanie](/docs/train).
 
+RT-DETRv4 domyślnie włącza `amp=True` z `amp_dtype="float16"`. Aby używać FP32, należy przekazać `amp=False`.
+
 ## Walidacja
 
 Metoda `val()` zwraca słownik kluczy `metrics/` obejmujących precyzję, czułość,
@@ -369,4 +371,3 @@ zacytować ten projekt. Wersja 4 jest osobną publikacją innej grupy i ma włas
 blok cytowania pod adresem
 [github.com/RT-DETRs/RT-DETRv4](https://github.com/RT-DETRs/RT-DETRv4#4-citation).
 Jeśli użyto punktu kontrolnego wersji 4, należy zacytować tę publikację.
-

@@ -18,7 +18,7 @@ keywords:
   - вбудований nms onnx
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Параметр
     value: export(format="onnx")
@@ -152,7 +152,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cee78250fc7189a3
+source_hash: a407e1142b8aa57e
 ---
 
 ## Встановлення
@@ -162,6 +162,8 @@ source_hash: cee78250fc7189a3
 Додатковий пакет встановлює `onnx`, `onnxsim` та `onnxruntime`. Для запису файлу
 достатньо лише `onnx`; `onnxsim` виконує прохід спрощення, а `onnxruntime` запускає
 артефакт і виконує калібрування INT8.
+
+Додатковий пакет ONNX потребує `onnxruntime>=1.18.0`; LaMa використовує граф opset-21.
 
 ## Експорт
 
@@ -178,12 +180,12 @@ source_hash: cee78250fc7189a3
 розмір усередині графа.
 
 Якщо `opset` не зазначено, його вибирають для кожного сімейства окремо. Сімейства
-у стилі DETR (`detr`, `deformable_detr`, `dinodetr`, `dfine`, `deim`, `deimv2`,
-`ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`), а також `deit`,
-`midas` і `moge2` отримують opset 17, де знижується `aten::scaled_dot_product`.
-Усі інші отримують 13. Для matting незалежно від налаштувань вибирається 19,
-оскільки декодеру BiRefNet потрібен оператор `DeformConv`, визначений у ONNX
-починаючи з opset 19.
+у стилі DETR (`detr`, `deformable_detr`, `dinodetr`, `dfine`, `gtr`, `deim`,
+`deimv2`, `tinyformer`, `ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`,
+`rtdetrv4`), а також `deit`, `midas`, `moge2` і `vjepa2` отримують opset 17, де
+знижується `aten::scaled_dot_product`. Усі інші отримують 13. Для BiRefNet і
+FeyNobg незалежно від налаштувань вибирається 19, оскільки їхньому декодеру
+потрібен оператор `DeformConv`, визначений у ONNX починаючи з opset 19.
 
 Параметр `simplify=True` запускає `onnxsim` і в разі невдачі зберігає початковий
 граф, тому помилка спрощення створює попередження, а не зупиняє експорт. У macOS
@@ -219,7 +221,9 @@ DeepStream виконує пригнічення на власному етап�
 <code-tabs name="int8" />
 
 Параметр `int8=True` запускає статичне квантування ONNX Runtime та записує граф
-QDQ із вхідними й вихідними даними float32. Квантуються лише вузли `Conv` і `Gemm`.
+QDQ із вхідними й вихідними даними float32. Квантуються лише вузли `Conv` і `Gemm`,
+а перша згортка й голова детектора моделі YOLO9 залишаються у float32, як і в
+`model.quantize()`, щоб оцінки класів не насичувалися на межі каліброваного діапазону.
 Декодування голови детектора навмисно залишається у float32: ця конкатенація
 поєднує координати рамок у масштабі пікселів з оцінками класів у діапазоні від
 0 до 1, а єдиний масштаб активації для тензора, у якому переважає величина
@@ -273,13 +277,15 @@ RF-DETR також є єдиним сімейством, вхідний тенз
 `batch != 1` і примусово встановлюють `dynamic=False`. Matting вимагає початкового
 квадратного розміру 1024, оскільки таблиці відносних позицій Swin у BiRefNet
 прив'язані до своєї роздільної здатності. Відновлення вимагає фіксованого полотна
-для всіх сімейств, крім Real-ESRGAN, генератор якого є повністю згортковим.
+для всіх сімейств, крім Real-ESRGAN і QuickSRNet, мережі яких є повністю
+згортковими.
 
-Прямокутний `imgsz` працює для сімейств YOLO9, HRNet, NAFNet та Real-ESRGAN.
-Сімейства з контрактом фіксованої квадратної форми (`clip`, `deformable_detr`,
-`detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`, `moge2`,
-`rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`, `ssd`) одразу його
-відхиляють.
+Прямокутний `imgsz` працює для сімейств YOLO9, HRNet, NAFNet, PP-LiteSeg,
+Real-ESRGAN, QuickSRNet і семантичної сегментації GTR. Сімейства з контрактом
+фіксованої квадратної форми (`clip`, `deformable_detr`, `detr`, `dinodetr`,
+`dfine`, `gtr`, крім семантичної сегментації, `deim`, `deimv2`, `tinyformer`,
+`ec`, `lwdetr`, `moge2`, `rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`,
+`ssd`) одразу його відхиляють.
 
 Два поєднання відхиляються ще до трасування: сегментація YOLO9, оскільки YOLO9
 підтримує в LibreYOLO лише виявлення, і сегментація RTMDet-Ins, декодування масок
@@ -290,4 +296,3 @@ RF-DETR також є єдиним сімейством, вхідний тенз
 запитати безпосередньо бібліотеку:
 
 <code-tabs name="support" />
-

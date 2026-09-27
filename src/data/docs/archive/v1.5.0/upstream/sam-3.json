@@ -1,0 +1,12 @@
+{
+  "name": "SAM 3",
+  "org": "Meta FAIR",
+  "paper_title": "SAM 3: Segment Anything with Concepts",
+  "paper_url": "https://arxiv.org/abs/2511.16719",
+  "code_url": "https://github.com/facebookresearch/sam3",
+  "license": "SAM License (Meta custom, gated)",
+  "license_interpretation": "The SAM License is Meta's own agreement, not an OSI-approved license like MIT or Apache-2.0. It grants a worldwide, royalty-free license to use, reproduce, distribute and create derivative works, and does not itself say the weights are non-commercial. It does add terms Apache and MIT do not: publications that use the results must acknowledge SAM Materials, reverse engineering is prohibited, use is subject to export-control and sanctions compliance, filing IP litigation against Meta over the materials terminates your license, and Meta may amend the agreement. Weights are gated on facebook/sam3 on Hugging Face: you must accept the terms there and authenticate before downloading. LibreYOLO calls SAM 3 through the Apache-2.0 Transformers implementation and vendors none of Meta's model source, but does not redistribute the weights themselves; read the license yourself before relying on it commercially.",
+  "bibtex": "@misc{carion2025sam3segmentconcepts,\n      title={SAM 3: Segment Anything with Concepts},\n      author={Nicolas Carion and Laura Gustafson and Yuan-Ting Hu and Shoubhik Debnath and Ronghang Hu and Didac Suris and Chaitanya Ryali and Kalyan Vasudev Alwala and Haitham Khedr and Andrew Huang and Jie Lei and Tengyu Ma and Baishan Guo and Arpit Kalla and Markus Marks and Joseph Greer and Meng Wang and Peize Sun and Roman Rädle and Triantafyllos Afouras and Effrosyni Mavroudi and Katherine Xu and Tsung-Han Wu and Yu Zhou and Liliane Momeni and Rishi Hazra and Shuangrui Ding and Sagar Vaze and Francois Porcher and Feng Li and Siyuan Li and Aishwarya Kamath and Ho Kei Cheng and Piotr Dollár and Nikhila Ravi and Kate Saenko and Pengchuan Zhang and Christoph Feichtenhofer},\n      year={2025},\n      eprint={2511.16719},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2511.16719},\n}",
+  "bibtex_source_url": "https://github.com/facebookresearch/sam3#citing-sam-3",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citing SAM 3 section of the upstream README on branch main. Cross-checked against the arXiv API for 2511.16719: thirty-six authors in the same order, identical title, cs.CV primary class matches."
+}

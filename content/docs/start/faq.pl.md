@@ -14,8 +14,8 @@ keywords:
   - gdzie są wagi LibreYOLO
   - LibreYOLO CLI
   - LibreYOLO offline
-last_verified: 1.5.0
-source_hash: a729b43a6642f2a0
+last_verified: 1.6.0
+source_hash: 13810bf9ea01c459
 ---
 
 ## Od którego modelu zacząć?
@@ -88,8 +88,10 @@ modelu informuje o tym przed próbą. Zobacz
 
 ## Co zwraca val?
 
-Zwykły słownik, a nie obiekt. Klucze detekcji obejmują `metrics/precision`,
-`metrics/recall`, `metrics/mAP50` i `metrics/mAP50-95`. Inne zadania zwracają
+Słownik z nazwami metryk jako kluczami. Klucze detekcji obejmują
+`metrics/precision`, `metrics/recall`, `metrics/mAP50` i `metrics/mAP50-95`,
+a wyniki detekcji i segmentacji zawierają też wyniki dla poszczególnych obrazów
+w `metrics.box`. Inne zadania zwracają
 odpowiednie dla nich klucze, takie jak `metrics/accuracy_top1` dla klasyfikacji
 albo `metrics/PQ`, `metrics/SQ` i `metrics/RQ` dla segmentacji panoptycznej.
 
@@ -160,3 +162,7 @@ Dla spójności zmieniono nazwy dwóch klas: `LibreYOLORTDETR` zmieniło się na
 `LibreRTDETR`, a `LibreYOLORFDETR` na `LibreRFDETR`. Stare nazwy nadal są
 rozwiązywane i emitują `DeprecationWarning` wskazujące nową nazwę, więc
 istniejący kod działa podczas aktualizowania.
+
+## Dlaczego dana nazwa checkpointu nie pozwala go pobrać?
+
+Należy użyć dokładnej nazwy pliku z tabeli checkpointów na stronie modelu. Nazwy FCN i Mask R-CNN z sufiksami zadań nie są dostępne do pobrania; błąd loadera wymienia obsługiwane formy. LingBot-Vision g nie ma opublikowanego checkpointu: należy użyć s, b, l lub checkpointu lokalnego.

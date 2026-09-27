@@ -15,7 +15,7 @@ keywords:
   - детекція об'єктів yolo cli
   - аргументи команди libreyolo predict
   - yolo json вивід результатів
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Команда
     value: libreyolo predict
@@ -48,7 +48,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 7e46c7ed7dd9e6c4
+source_hash: 21374ebc0e6cf4d3
 ---
 
 ## Синтаксис
@@ -100,6 +100,11 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 | `verbose` | `false` | Докладний вивід у stderr |
 | `help_json` | `false` | Вивести схему команди як JSON і вийти |
 
+| Аргумент | Типове значення | Значення |
+| --- | --- | --- |
+| `mask` | `None` | Бінарна маска заповнення для одного зображення для моделей, які її потребують |
+| `trimap` | `None` | Трирівнева trimap одного зображення для моделей керованого матування |
+
 ## Приклади
 
 <code-tabs name="examples" />
@@ -113,9 +118,10 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 `output_file_format` завершують роботу з `config_unsupported`, якщо бекенд
 середовища виконання не може їх виконати.
 
-`half` працює навпаки. Експортовані середовища виконання отримують його і
-працюють у FP16; нативний інференс PyTorch записує в лог, що параметр
-проігноровано, і продовжує у FP32.
+`half` працює навпаки: його приймають і ігнорують. Нативний інференс PyTorch
+записує в лог, що параметр проігноровано, і продовжує у FP32, а експортоване
+середовище виконання зберігає точність, з якою його експортовано, тож для
+інференсу у FP16 потрібно експортувати з `half=true`.
 
 Моделі оцінювання погляду двостадійні і не мають власного детектора, тому для
 них потрібен `face_detector`. `gallery` стосується лише моделей із задачею

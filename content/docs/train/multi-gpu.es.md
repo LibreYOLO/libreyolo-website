@@ -18,7 +18,7 @@ keywords:
   - tamaño de batch global
   - backend nccl gloo
   - multi gpu windows
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -27,10 +27,11 @@ snippets:
         from libreyolo import LibreYOLO
 
 
-        # El guard de __main__ es obligatorio: cada worker lanzado reimporta
-        este
+        # La guarda sigue siendo válida; los scripts normales también funcionan
+        sin ella.
 
-        # módulo, y sin el guard relanzaría el entrenamiento de forma recursiva.
+        # Consérvala para callbacks o loggers que necesiten el fallback de
+        pickle estándar.
 
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
@@ -77,7 +78,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # Se sondea una vez en la GPU 0 y se escala a un múltiplo del world size.
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: 83c1563d68068cd0
+source_hash: e339072d5d8e71ea
 ---
 
 ## Entrenar en dos GPU
@@ -88,7 +89,7 @@ Pasa una lista de dispositivos. No cambia nada más.
 
 Cuando recibe más de un dispositivo y no hay entorno de torchrun, el `train()` del
 modelo guarda los pesos en un archivo temporal, resuelve el autobatch si se ha
-pedido y lanza un proceso worker por GPU con `torch.multiprocessing.spawn`. Cada
+pedido y inicia procesos worker gestionados por un coordinador, uno por GPU. Cada
 worker reimporta la clase del modelo, lo reconstruye a partir de los pesos
 guardados y ejecuta la vía normal de un solo dispositivo, porque desde dentro de
 un worker lanzado las variables de entorno de torchrun están definidas. Cuando la
@@ -98,23 +99,9 @@ instancia del modelo que hizo la llamada.
 `device` acepta `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"` y
 `"auto"`. Solo una lista de más de un índice CUDA dispara el spawn.
 
-## El guard de `__main__` es obligatorio
+## Lanzamiento automático y el guard de main
 
-Los workers lanzados reimportan el módulo del que salieron. Sin un guard
-`if __name__ == "__main__":`, esa importación vuelve a ejecutar la llamada de
-entrenamiento y cada worker lanza sus propios workers. La biblioteca detecta el
-caso y lanza un error en lugar de dejar que se repita en cascada:
-
-```text
-spawn_ddp_train() was called from inside a spawned subprocess. This usually
-means your script calls model.train(device=...) at the top level without a
-'if __name__ == "__main__":' guard.
-```
-
-Todo lo que cruza hacia un worker se serializa con pickle, así que `callbacks=`
-tiene que ser picklable. Una clase a nivel de módulo funciona; un closure o una
-lambda no, y el error lo dice y apunta a los loggers integrados como
-alternativa.
+`model.train(device=[0, 1])` y `device="0,1"` usan ranks gestionados por un coordinador sin volver a ejecutar el código de nivel superior de un script ordinario sin guard. Los scripts con guard y el uso explícito de `torchrun` siguen soportados. Los jobs del coordinador usan cloudpickle; los objetos callback o logger que requieren la alternativa con pickle estándar siguen necesitando un guard `if __name__ == "__main__":`.
 
 ## batch es el batch global
 

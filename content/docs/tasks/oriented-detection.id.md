@@ -8,8 +8,8 @@ description: >-
 lead: >-
   Deteksi objek berorientasi melokalisasi setiap instance dengan persegi panjang
   berotasi, bukan persegi panjang sejajar sumbu, sehingga objek miring dibatasi
-  dengan rapat alih-alih oleh bounding box yang penuh background. Kunci task-nya adalah
-  obb.
+  dengan rapat alih-alih oleh bounding box yang penuh background. Kunci task-nya
+  adalah obb.
 keywords:
   - deteksi oriented bounding box
   - deteksi objek berotasi
@@ -17,7 +17,7 @@ keywords:
   - dataset DOTA
   - deteksi objek aerial
   - rotated IoU
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -41,15 +41,21 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Sudut sebagai pengganti angle
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         result = LibreYOLO("LibreRFDETRs-obb.pt")(SAMPLE_IMAGE)
+
         obb = result.obb
 
+
         print(obb.xyxyxyxy.shape)    # (N, 4, 2) titik sudut dalam piksel
+
         print(obb.xyxyxyxyn.shape)   # hal yang sama, ternormalisasi
-        print(obb.xyxy.shape)        # (N, 4) bounding box sejajar sumbu yang melingkupi
+
+        print(obb.xyxy.shape)        # (N, 4) bounding box sejajar sumbu yang
+        melingkupi
     - label: Checkpoint lebih kecil
       language: python
       code: |
@@ -75,13 +81,18 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         # Melanjutkan dari bobot berorientasi terbitan. data harus menunjuk ke
+
         # dataset yang baris labelnya memuat empat sudut.
+
         model = LibreYOLO("LibreRFDETRs-obb.pt")
-        model.train(data="my-obb-dataset.yaml", epochs=50, imgsz=512, batch=8, lr0=1e-4)
+
+        model.train(data="my-obb-dataset.yaml", epochs=50, imgsz=512, batch=8,
+        lr0=1e-4)
     - label: CLI
       language: bash
       code: |
@@ -130,23 +141,33 @@ snippets:
         libreyolo export model=LibreRFDETRs-obb.pt format=onnx imgsz=512
     - label: RT-DETRv2
       language: bash
-      code: |
+      code: >
         # ONNX dan TorchScript adalah target tervalidasi di sini, pada FP32,
+
         # batch 1, di kanvas tetap 1024 kali 1024.
+
         libreyolo export model=LibreRTDETRv2n-obb.pt format=onnx imgsz=1024
-        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript imgsz=1024
+
+        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript
+        imgsz=1024
     - label: Gunakan berkas hasil ekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Factory merutekan berdasarkan akhiran berkas, sehingga artefak hasil
-        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang sama.
+
+        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang
+        sama.
+
         model = LibreYOLO("LibreRFDETRs-obb.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.obb.xywhr)
-source_hash: 0d605d956f3ea025
+source_hash: 8af4d1647609e5e6
 ---
 
 ## Definisi
@@ -173,13 +194,9 @@ persegi panjang. `result.boxes` juga diisi dengan bentuk sejajar sumbu.
 
 ## Model
 
-Dua family melayani task ini, dan pilihan bergantung pada kebutuhan pelatihan.
+Empat family mendukung task ini.
 
-[RF-DETR](/docs/models/rf-detr) adalah family yang dapat dilatih. Model ini
-memprediksi, melatih, memvalidasi, dan mengekspor bounding box berorientasi, serta
-menyertakan checkpoint berorientasi terbitan dalam empat ukuran, n, s, m, dan l.
-Model ini memerlukan extra sendiri, `pip install "libreyolo[rfdetr]"`, dan halaman
-modelnya memuat lisensi serta asal-usul bobot.
+[RF-DETR](/docs/models/rf-detr) mendukung pelatihan. Model ini memprediksi, melatih, memvalidasi, dan mengekspor kotak berorientasi, serta memiliki checkpoint berorientasi dalam empat ukuran: n, s, m, dan l. Model ini memerlukan extra tersendiri, `pip install "libreyolo[rfdetr]"`, dan halaman model mencantumkan lisensi serta asal bobotnya.
 
 Baca bagian di bawah tentang hal yang sebenarnya diprediksi checkpoint tersebut
 sebelum mengandalkannya.
@@ -195,8 +212,14 @@ error, dan tidak ada transfer dari bobot deteksinya yang menggunakan backbone
 berbeda. Tracking dan test-time augmentation juga tidak tersedia untuk bounding box
 berorientasi.
 
-Ringkasnya: untuk kategori DOTA siap pakai, gunakan RT-DETRv2. Untuk label
-berorientasi Anda sendiri, gunakan RF-DETR.
+Pilih kumpulan label checkpoint dan dukungan pelatihan yang sesuai dengan dataset.
+
+[YOLO-NAS](/docs/models/yolo-nas) juga mendukung pelatihan dan inferensi OBB. Bobot pretrained-nya mempertahankan ketentuan nonkomersial upstream.
+
+[GTR](/docs/models/gtr) menerbitkan `LibreGTRs-obb.pt` dan `LibreGTRx-obb.pt`,
+yang memprediksi 15 kelas DOTA v1.0 pada input tetap 1024. Model ini berjalan
+dengan paket dasar dan mendukung prediksi, pelatihan, validasi, serta ekspor
+ONNX dan TorchScript.
 
 ## Prediksi
 
@@ -205,13 +228,7 @@ cache lokal.
 
 <code-tabs name="predict" />
 
-Pahami checkpoint terbitan RF-DETR sebelum menjalankannya. Meskipun DOTA menjadi
-benchmark referensi task ini, bobot tersebut tidak dilatih padanya. Keempatnya
-diinisialisasi dari bobot deteksi RF-DETR dan mendapat fine-tuning pada satu dataset
-Roboflow Universe berisi rekaman UAV, dengan enam kelas kendaraan: bike, bus,
-car, other_vehicle, taxi, dan truck. Model card mendeskripsikannya sebagai bobot
-pengembangan yang dihasilkan saat memvalidasi dukungan pelatihan berorientasi,
-serta menyatakan bahwa bobot tersebut bukan bobot production atau benchmark resmi.
+Pahami checkpoint RF-DETR yang dipublikasikan sebelum menjalankannya. Meskipun DOTA menjadi benchmark acuan task ini, bobot tersebut tidak dilatih pada DOTA. Keempatnya diinisialisasi dari bobot deteksi RF-DETR dan menjalani fine-tuning pada satu dataset rekaman UAV dengan enam kelas kendaraan: bike, bus, car, other_vehicle, taxi, dan truck. Kartu model menyebutnya bobot pengembangan yang dibuat saat memvalidasi dukungan pelatihan berorientasi, dan menyatakan bahwa bobot tersebut bukan untuk produksi atau benchmark resmi.
 
 Dalam praktiknya, bobot tersebut menjadi titik awal yang berfungsi untuk bounding box
 berorientasi pada kendaraan yang terlihat dari atas dan untuk memverifikasi bahwa
@@ -279,13 +296,9 @@ Parser baris kanonis adalah `libreyolo.data.parse_yolo_obb_label_line`.
 
 <code-tabs name="train" />
 
-Pelatihan pada task ini berarti RF-DETR. Secara default, pelatihan dilanjutkan
-dari checkpoint `-obb` terbitan. Memulai dari bobot deteksi merupakan transfer
-yang disengaja: bobot tersebut tidak memprediksi angle, dan memberikan `task=obb`
-mengotorisasi penggantian tersebut. Pertahankan `lr0` pada atau di bawah `1e-4`,
-seperti task lain dalam family. Checkpoint berorientasi RT-DETRv2 tidak dapat
-mendapat fine-tuning; gunakan apa adanya atau latih model RF-DETR pada label Anda sendiri.
-Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
+Pelatihan RF-DETR secara default berlanjut dari checkpoint `-obb` yang dipublikasikan. Memulai dari bobot deteksi merupakan transfer eksplisit: bobot tersebut tidak memprediksi sudut, dan `task=obb` mengizinkan penggantian head. Pertahankan `lr0` pada atau di bawah `1e-4`, seperti task lain dalam family ini. Checkpoint berorientasi RT-DETRv2 tidak dapat menjalani fine-tuning; gunakan apa adanya, atau latih model RF-DETR dengan label sendiri. Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
+
+YOLO-NAS OBB memakai assignment dan loss berotasi, augmentasi pembalikan/HSV, dan `amp=False` secara default. Model ini memilih checkpoint dengan `metrics/mAP50-95(OBB)`.
 
 ## Validasi
 
@@ -325,5 +338,3 @@ mengembalikan `Results` yang sama. Cakupan format berbeda berdasarkan task pada
 family yang sama, dan matriks halaman model dibuat dari kumpulan tervalidasi serta
 menyebutkan alasan target tidak tersedia. Lihat
 [ekspor dan deployment](/docs/export) untuk format, extra, dan batasannya.
-
-

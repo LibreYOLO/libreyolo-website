@@ -113,7 +113,7 @@ snippets:
       code: |
         huggingface-cli upload my-org/my-run \
           /root/runs/run1/weights/best.pt best.pt
-source_hash: 75d314de06aca3b6
+source_hash: 2f4a8ac1df103962
 ---
 
 ## 무언가를 빌리기 전에
@@ -142,7 +142,7 @@ source_hash: 75d314de06aca3b6
 
 `batch=-1`은 여기서 사용하기에 특히 가치가 있습니다. 왜냐하면 보통 이전에 학습하지 않은 카드에서 작업하기 때문입니다. 이 방법은 실제 역전파와 함께 모델을 학습 모드에서 탐색하고, 맞는 가장 큰 2의 거듭제곱을 선택합니다. 이는 20분 후에 메모리 부족 오류로 상한을 발견하는 것보다 빠릅니다. [하이퍼파라미터](/docs/train/hyperparameters)를 참조하십시오.
 
-멀티 GPU 장치에서, `device="0,1,2,3"`는 각 GPU마다 하나의 워커를 자동으로 생성하고, `batch`는 모든 GPU 전체에서 글로벌 배치를 유지합니다. `__main__` 가드는 필수적이며, 각 워커가 스크립트를 다시 가져오기 때문입니다. 그것과 나머지 분산 동작은 [멀티 GPU 학습](/docs/train/multi-gpu)에서 다룹니다.
+멀티 GPU 장치에서, `device="0,1,2,3"`는 각 GPU마다 하나의 워커를 자동으로 생성하고, `batch`는 모든 GPU 전체에서 글로벌 배치를 유지합니다. 워커는 가드가 없는 스크립트의 최상위 코드를 다시 실행하지 않으므로 `__main__` 가드는 선택 사항입니다. 그것과 나머지 분산 동작은 [멀티 GPU 학습](/docs/train/multi-gpu)에서 다룹니다.
 
 ## 밖에서 지켜봐
 

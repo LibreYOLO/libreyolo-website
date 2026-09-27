@@ -4,7 +4,7 @@ families:
   - midas
 seo_title: MiDaS：LibreYOLOでの単眼深度推定
 description: >-
-  LibreYOLOのMiDaSで単眼深度推定を行います。isl-orgからダウンロードされるMITライセンスの2つのバリアントをインストールし、推論、検証、エクスポートします。
+  LibreYOLOのMiDaSで単眼深度推定を行います。LibreYOLOのミラーからダウンロードされるMITライセンスの2つのバリアントをインストールし、推論、検証、エクスポートします。
 lead: >-
   MiDaSは混合データセット上でスケール・シフト不変損失を使って学習した単眼相対深度推定モデルです。後のファミリーも再利用するゼロショット深度転移プロトコルを確立した研究系列です。LibreYOLOは深度タスク向けに、学習経路なしで推論とゼロショット検証に対応します。
 keywords:
@@ -14,7 +14,7 @@ keywords:
   - 相対深度
   - depth map
   - ゼロショット 深度推定
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -22,8 +22,7 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # ディスクにない場合は公式isl-org/MiDaS GitHubリリースから取得し
-        # 使用前に固定されたSHA-256と照合
+        # 初回使用時にミラーのチェックポイントをダウンロード
         model = LibreYOLO("LibreMiDaSl-depth.pt")
         result = model(SAMPLE_IMAGE, save=True)
 
@@ -84,24 +83,24 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: ce2fbf3ae43e9be4
+source_hash: 64537aa3ad3a6f8f
 ---
 
 ## インストール
 
-MiDaSにオプションの追加パッケージは不要です。インポートするものはすべて基本インストールに含まれます。
+MiDaSのtimmエンコーダーには`midas` extraが必要です。
 
 ```bash
-pip install libreyolo
+pip install "libreyolo[midas]"
 ```
 
 ## 推論
 
-MiDaSは、LibreYOLOが独自のHugging Face組織で再公開しない唯一の深度ファミリーです。LibreYOLOのファイル名でチェックポイントを要求すると、`isl-org/MiDaS` のGitHubリリースから対応する公式成果物を直接ダウンロードし、固定されたSHA-256と照合した後、最初の使用前にLibreYOLOのチェックポイントメタデータでラップします。その後の実行では、キャッシュ済みのローカルファイルを再利用します。理由は「ライセンス」を参照してください。
+sとlのチェックポイントは、公開元のMITの許諾の下でLibreYOLOのミラーからダウンロードされ、ローカルにキャッシュされます。
 
 <code-tabs name="predict" />
 
-`result.depth_map` は密な相対逆深度マップを保持します。大きい値ほどカメラに近いことを示し、値にはメートル単位も画像をまたぐ共通スケールもありません。`save=True` はそのマップをカラーマップで可視化してディスクへ書き出します。`Results.plot()` は表面法線とエッジだけに定義されているため、このファミリーには対応しません。ソース、ストリーミング、結果の処理については、[推論](/docs/predict)を参照してください。
+`result.depth_map` は密な相対逆深度マップを保持します。大きい値ほどカメラに近いことを示し、値にはメートル単位も画像をまたぐ共通スケールもありません。`save=True` はそのマップをカラーマップで可視化してディスクへ書き出します。`Results.plot()`は深度マップを描画します。ソース、ストリーミング、結果の処理については、[推論](/docs/predict)を参照してください。
 
 ## バリアント
 

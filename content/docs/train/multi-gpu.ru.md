@@ -18,62 +18,64 @@ keywords:
   - глобальный размер батча
   - nccl gloo backend
   - multi gpu windows
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 snippets:
   train:
-    - label: Python
-      language: python
-      code: |
-        from libreyolo import LibreYOLO
+  - label: Python
+    language: python
+    code: |
+      from libreyolo import LibreYOLO
 
-        # Защита __main__ обязательна: каждый порождённый воркер заново
-        # импортирует этот модуль, и без неё обучение запустилось бы рекурсивно.
-        if __name__ == "__main__":
-            model = LibreYOLO("LibreYOLO9s.pt")
-            model.train(
-                data="my-dataset.yaml",
-                epochs=100,
-                batch=32,     # глобальный батч: 16 изображений на GPU при двух GPU
-                device="0,1",
-            )
+      # Эта защита поддерживается; обычные скрипты работают и без неё.
+      # Сохраните её для колбэков и логгеров, которым нужен стандартный pickle.
+      if __name__ == "__main__":
+          model = LibreYOLO("LibreYOLO9s.pt")
+          model.train(
+              data="my-dataset.yaml",
+              epochs=100,
+              batch=32,     # глобальный батч: 16 изображений на GPU при двух GPU
+              device="0,1",
+          )
   torchrun:
-    - label: train.py
-      language: python
-      code: |
-        from libreyolo import LibreYOLO
+  - label: train.py
+    language: python
+    code: |
+      from libreyolo import LibreYOLO
 
-        if __name__ == "__main__":
-            model = LibreYOLO("LibreYOLO9s.pt")
-            model.train(data="my-dataset.yaml", epochs=100, batch=32)
-    - label: Запуск
-      language: bash
-      code: |
-        torchrun --nproc_per_node=2 train.py
+      if __name__ == "__main__":
+          model = LibreYOLO("LibreYOLO9s.pt")
+          model.train(data="my-dataset.yaml", epochs=100, batch=32)
+  - label: Запуск
+    language: bash
+    code: |
+      torchrun --nproc_per_node=2 train.py
   syncbn:
-    - label: Python
-      language: python
-      code: |
-        from libreyolo import LibreYOLO
+  - label: Python
+    language: python
+    code: |
+      from libreyolo import LibreYOLO
 
-        if __name__ == "__main__":
-            model = LibreYOLO("LibreRTDETRr18.pt")
-            model.train(
-                data="my-dataset.yaml",
-                batch=32,
-                device="0,1",
-                sync_bn=True,
-            )
+      if __name__ == "__main__":
+          model = LibreYOLO("LibreRTDETRr18.pt")
+          model.train(
+              data="my-dataset.yaml",
+              batch=32,
+              device="0,1",
+              sync_bn=True,
+          )
   autobatch:
-    - label: Python
-      language: python
-      code: |
-        from libreyolo import LibreYOLO
+  - label: Python
+    language: python
+    code: |
+      from libreyolo import LibreYOLO
 
-        if __name__ == "__main__":
-            model = LibreYOLO("LibreYOLO9s.pt")
-            # Замеряется один раз на GPU 0, результат кратен world size.
-            model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: 83c1563d68068cd0
+      if __name__ == "__main__":
+          model = LibreYOLO("LibreYOLO9s.pt")
+          # Замеряется один раз на GPU 0, результат кратен world size.
+          model.train(data="my-dataset.yaml", batch=-1, device="0,1")
+
+source_hash: e339072d5d8e71ea
 ---
 
 ## Запуск на двух GPU
@@ -82,36 +84,15 @@ source_hash: 83c1563d68068cd0
 
 <code-tabs name="train" />
 
-Если устройств больше одного, а окружения torchrun нет, `train()` модели
-сохраняет веса во временный файл, вычисляет autobatch, если он запрошен, и
-порождает по одному процессу-воркеру на GPU через `torch.multiprocessing.spawn`.
-Каждый воркер заново импортирует класс модели, пересобирает её из сохранённых
-весов и идёт обычным путём для одного устройства, потому что внутри порождённого
-воркера переменные окружения torchrun уже выставлены. Когда запуск завершается,
-лучший чекпойнт ранга 0 загружается обратно в экземпляр модели у вызывающей
-стороны.
+Если указано больше одного устройства и окружение torchrun отсутствует, `train()` модели сохраняет веса во временный файл, разрешает autobatch, если он запрошен, и запускает рабочие процессы под управлением координатора, по одному на GPU. Каждый процесс заново импортирует класс модели, восстанавливает её из сохранённых весов и выполняет обычный путь для одного устройства, поскольку внутри запущенного процесса выставлены переменные окружения torchrun. Когда запуск завершается, лучший чекпойнт ранга 0 загружается обратно в экземпляр модели вызывающего кода.
 
 `device` принимает `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"` и
 `"auto"`. Порождение процессов запускается только для списка из нескольких
 индексов CUDA.
 
-## Защита `__main__` обязательна
+## Автоматический запуск и защита main
 
-Порождённые воркеры заново импортируют модуль, из которого их породили. Без
-защиты `if __name__ == "__main__":` этот импорт заново выполняет вызов обучения,
-и каждый воркер порождает собственных воркеров. Библиотека распознаёт этот
-случай и выбрасывает ошибку, вместо того чтобы дать рекурсии продолжиться:
-
-```text
-spawn_ddp_train() was called from inside a spawned subprocess. This usually
-means your script calls model.train(device=...) at the top level without a
-'if __name__ == "__main__":' guard.
-```
-
-Всё, что попадает в воркер, проходит через pickle, поэтому `callbacks=` должен
-быть picklable. Класс уровня модуля подойдёт, замыкание или лямбда — нет, и
-ошибка прямо об этом говорит и указывает на встроенные логгеры как на
-альтернативу.
+`model.train(device=[0, 1])` и `device="0,1"` используют ранги под управлением координатора без повторного выполнения кода верхнего уровня обычного скрипта без защиты main. Скрипты с защитой и явный `torchrun` по-прежнему поддерживаются. Задачи координатора используют cloudpickle; объекты колбэков или логгеров, которым нужен запасной путь через стандартный pickle, всё ещё требуют защиты `if __name__ == "__main__":`.
 
 ## batch — это глобальный батч
 

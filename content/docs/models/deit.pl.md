@@ -5,8 +5,8 @@ families:
 seo_title: 'Klasyfikator obrazów DeiT: przewiduj, waliduj, eksportuj'
 description: >-
   Uruchamiaj klasyfikatory obrazów DeiT w LibreYOLO. Ta historyczna rodzina,
-  przeznaczona wyłącznie do inferencji, obejmuje rozmiary tiny, small i base
-  na licencji Apache-2.0.
+  przeznaczona wyłącznie do inferencji, obejmuje rozmiary tiny, small i base na
+  licencji Apache-2.0.
 lead: >-
   DeiT (Data-efficient image Transformer) jest zwykłym klasyfikatorem Vision
   Transformer trenowanym wyłącznie na ImageNet-1k, bez dodatkowych danych do
@@ -20,7 +20,7 @@ keywords:
   - ImageNet
   - trenowanie efektywne pod względem danych
   - historyczne modele klasyfikacyjne
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -84,8 +84,9 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: 9c67c8554b2af5c6
+source_hash: 4dad5f1aa0943dd9
 ---
+
 ## Instalacja
 
 DeiT nie potrzebuje niczego dodatkowego poza podstawowym pakietem.
@@ -118,6 +119,8 @@ i wykonuje kadrowanie centralne do tej rozdzielczości, natomiast podanie innego
 
 <code-tabs name="val" />
 
+Walidacja i kalibracja INT8 używają transformacji ewaluacyjnej danej rodziny. Metadane eksportu zapisują `norm_mean`, `norm_std` i `resize_mode`; starsze artefakty używają wartości rodziny. Preprocesory kalibracji zwracają wymaganą tablicę CHW i współczynnik skali.
+
 ## Eksport
 
 <export-matrix />
@@ -138,4 +141,4 @@ Wszystkie opublikowane pliki wag dla tej rodziny.
 
 ## Cytowanie
 
-<citation-block /> 
+<citation-block />

@@ -21,7 +21,7 @@ keywords:
   - orientierte bounding boxes
   - obb
   - dota
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -214,7 +214,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 8022a5a591922a90
+source_hash: "75454e612d7e2247"
 ---
 
 ## Installation
@@ -324,6 +324,8 @@ Seitenverhältnis.
 
 Unter [Training](/docs/train) findest du Datensätze, Datenaugmentierung,
 Multi-GPU und Logger.
+
+RT-DETRv4 aktiviert standardmäßig `amp=True` mit `amp_dtype="float16"`. Übergib `amp=False` für FP32.
 
 ## Validierung
 

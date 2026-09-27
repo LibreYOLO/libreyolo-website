@@ -14,7 +14,7 @@ keywords:
   - early stopping patience
   - amp bfloat16
   - train config yaml
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   train:
     - label: Python
@@ -90,13 +90,13 @@ snippets:
         from libreyolo import LibreYOLO
 
         # Load the interrupted run's checkpoint, then ask to resume.
-        model = LibreYOLO("runs/train/exp/weights/last.pt")
-        model.train(data="my-dataset.yaml", epochs=100, resume=True)
+        model = LibreYOLO("runs/train/yolo9_exp/weights/last.pt")
+        model.train(data="my-dataset.yaml", resume=True)
     - label: CLI
       language: bash
       code: |
-        libreyolo train model=runs/train/exp/weights/last.pt \
-          data=my-dataset.yaml epochs=100 resume=true
+        libreyolo train model=runs/train/yolo9_exp/weights/last.pt \
+          data=my-dataset.yaml resume=true
   cfg:
     - label: Python
       language: python
@@ -150,13 +150,9 @@ The base defaults are `optimizer="sgd"`, `lr0=0.01`, `momentum=0.937`,
 | `weight_decay` | `5e-4` | `5e-4` | `1e-4` | `1e-5` |
 | `scheduler` | `yoloxwarmcos` | `linear` | `flat_cosine` | `cos` |
 | `epochs` | `300` | `300` | `132` | `300` |
-| `amp` | `True` | `True` | `False` | `False` |
+| `amp` | `True` | `True` | `True` | `True` |
 
-D-FINE and DEIM ship with `amp=False` because the D-FINE decoder clamps
-activations at 65504, the largest finite float16 value. YOLO-NAS and FOMO also
-default it off. The CLI's `--amp` flag defaults to `True` for every family, so it
-counts as user-provided and overrides the family default; leave it alone unless
-you mean to change it.
+D-FINE, DEIM, RT-DETRv4 and YOLO-NAS detection default to `amp=True` with `amp_dtype="float16"`. Dome-DETR, PP-YOLOE and YOLO-NAS OBB retain FP32 defaults. Pass `amp=False` when FP32 is required.
 
 To read a family's real defaults rather than guessing:
 
@@ -184,6 +180,8 @@ criterion and auxiliary decoder layers cost.
 
 Autobatch is a CUDA feature. On CPU or MPS it logs one line and keeps the
 default batch.
+
+`min_samples=0` leaves epoch length unchanged. A positive floor samples shorter detection datasets with replacement. `class_balanced=False` enables per-image repeat-factor sampling when set to true; it combines with `min_samples` and DDP. Specialized loaders that bypass the shared sampler reject enabled balancing.
 
 ## Gradient accumulation
 
@@ -246,31 +244,40 @@ instead of being overwritten.
 
 `save_period` writes an extra `weights/epoch_<N>.pt` every N epochs, on top of
 `weights/last.pt` after each epoch and `weights/best.pt` whenever the tracked
-metric improves. `eval_interval` sets how often validation runs, and `patience`
-stops the run after that many epochs without improvement, with `0` disabling
-early stopping.
+metric improves. `eval_interval` sets how often validation runs, and the final
+epoch always validates; `val=False` turns validation off, and such a run writes
+no `best.pt`. `patience` stops the run after that many epochs without
+improvement, with `0` disabling early stopping.
 
 `cache` speeds up repeated epochs by holding decoded images in RAM (`True` or
 `"ram"`) or as `.npy` files beside the sources (`"disk"`). Cached reads are
 byte-identical to fresh ones. With dataloader workers, `"disk"` is the safer of
 the two.
 
+`average_best=0` disables checkpoint averaging; a positive N writes `weights/average.pt` from up to N best snapshots. Floating tensors are averaged uniformly and integer buffers come from the best snapshot. `export_check=False` can be enabled to fail before epoch one if ONNX export fails. Matching raw outputs are compared at `rtol=1e-3`, `atol=1e-4`; incompatible layouts log a skipped comparison.
+
+`precise_bn=0` disables final BatchNorm recalibration. A positive value bounds training-loader images before final validation; under DDP the budget applies per participating rank. Frozen BatchNorm stays frozen. [Custom fitness callbacks](/docs/train/fitness-callbacks) can choose best checkpoints and patience.
+
 ## Resume
 
-`resume=True` continues an interrupted run. The checkpoint has to be loaded
-first, because resume reads it from the model, not from a separate argument.
+`resume=True` continues an interrupted run from the loaded checkpoint;
+`resume="path/to/last.pt"` continues from that file instead.
 
 <code-tabs name="resume" />
 
-Resume restores the trained weights, the optimizer state, the EMA weights and
-update count, the best-metric tracking, the `GradScaler` scale, and the PyTorch,
-CUDA and NumPy random states. It starts at the checkpoint's epoch plus one and
-fast-forwards the schedule to that position.
+Resume restores the run's saved training arguments, and an argument passed
+explicitly overrides the saved one. It keeps writing into the checkpoint's run
+directory. It restores the trained weights, the optimizer state, the EMA weights
+and update count, the best-metric tracking, the `GradScaler` scale, and the
+PyTorch, CUDA and NumPy random states. It starts at the checkpoint's epoch plus
+one and fast-forwards the schedule to that position.
 
-Two things it will not do. `resume=True` cannot be combined with `pretrained`,
-which raises. And when the checkpoint's best-metric key differs from the current
-run's, best-metric tracking resets to zero with a warning rather than comparing
-values that do not mean the same thing.
+Three things it will not do. `resume=True` cannot be combined with `pretrained`,
+which raises. Released weights and a run that already reached its `epochs` hold
+nothing to resume, and raise a `ValueError` that says so. And when the
+checkpoint's best-metric key differs from the current run's, best-metric
+tracking resets to zero with a warning rather than comparing values that do not
+mean the same thing.
 
 ## Recipes in a file
 
@@ -291,3 +298,11 @@ argument.
 - [Layer freezing](/docs/train/layer-freezing) and [LoRA](/docs/train/lora) for
   training a subset of the weights.
 - [Validation and metrics](/docs/train/validation) for what the run reports.
+
+## Class selection and loss weighting
+
+For YOLO9, RF-DETR, EdgeCrafter, RT-DETR, D-FINE, DEIM, TinyFormer and YOLO-NAS detection, `classes=None` keeps every dataset class; a list filters supervision while preserving original IDs, `nc` and `names`. `single_cls=False` can be enabled to map retained labels to class 0, named `object`. Resume and validation inherit saved settings. Model OBB training rejects `single_cls`.
+
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 and DINOv2 support `cls_pw=0.0`: values in [0, 1] weight each class by inverse frequency to that power, normalized to mean 1. `class_weights=False` selects the alternative `N / (C * n_c)` weighting when enabled. It cannot combine with positive `cls_pw`; resume requires matching weighting settings.
+
+`plot_samples=8` sets the validation sample-image budget. Use 0 for none or -1 for all; it does not reduce the images evaluated.

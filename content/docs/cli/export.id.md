@@ -14,7 +14,7 @@ keywords:
   - export yolo ke onnx
   - cara export yolo tensorrt
   - argumen libreyolo export
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Perintah
     value: libreyolo export
@@ -48,7 +48,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: ef2ca20af3814109
+source_hash: 290b778a1060a760
 ---
 
 ## Sinopsis
@@ -71,6 +71,7 @@ Argumen berupa pasangan `key=value`, dan bentuk POSIX juga berlaku, jadi
 | `batch` | `1` | Ukuran batch ekspor |
 | `half` | `false` | Presisi FP16 |
 | `int8` | `false` | Kuantisasi INT8 |
+| `quantize` | | Presisi sebagai `16` (FP16), `8` (INT8) atau `32` (FP32); menggantikan `half` dan `int8` |
 | `dynamic` | `false` | Bentuk masukan dinamis (ONNX) |
 | `simplify` | `true` | Penyederhanaan graph ONNX |
 | `nms` | `false` | Menyematkan NMS di dalam model. Hanya ONNX dan CoreML |
@@ -117,7 +118,8 @@ Pada CoreML, flag ini menerima `conf` dan `iou` tetapi tidak `max_det`, jadi
 `config_unsupported`.
 
 `half=true` bersamaan dengan `int8=true` bukan error. INT8 menang, `half`
-diabaikan, dan peringatan dikirim ke stderr.
+diabaikan, dan peringatan dikirim ke stderr. `quantize` yang tidak sesuai dengan
+`half` atau `int8` akan keluar dengan `config_conflict`.
 
 `name` dan `verify` saat ini adalah opsi RKNN. Memberikan salah satunya dengan
 format lain akan keluar dengan `config_unsupported`, bukan diabaikan.
@@ -155,3 +157,5 @@ untuk kegagalan runtime lainnya.
 
 Terkait: [`libreyolo quantize`](/docs/cli/quantize), yang tetap berada di PyTorch
 dan menulis checkpoint alih-alih artefak deployment.
+
+TFLite INT8 memakai `int8=True` untuk deteksi YOLO9 atau YOLOX dengan `data=...`, `fraction=1.0`, `batch=1`, dan `dynamic=False`. FP16 tidak didukung; jika kedua flag presisi diberikan, CLI membuang `half` dan memilih INT8. Keluaran ekspor JSON melaporkan kanvas aktual yang dipakai, termasuk fallback persegi untuk family native persegi yang dimuat ulang dari checkpoint pelatihan persegi panjang.

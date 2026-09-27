@@ -85,7 +85,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: 891eaa1a42795a4c
+source_hash: ee5867f8671d1aac
 ---
 
 ## 설치
@@ -102,7 +102,7 @@ pip install libreyolo
 
 <code-tabs name="predict" />
 
-`result.depth_map`은 조밀한 상대 역깊이 맵을 담습니다. 값이 높을수록 카메라에 가깝고 값에는 미터법 단위나 이미지 간 공통 스케일이 없습니다. `save=True`는 해당 맵의 컬러맵 시각화를 디스크에 기록합니다. `Results.plot()`은 표면 노멀과 엣지만을 위해 정의되어 있어 이 계열을 지원하지 않습니다. 소스, 스트리밍, 결과 처리는 [예측](/docs/predict)을 참조합니다.
+`result.depth_map`은 조밀한 상대 역깊이 맵을 담습니다. 값이 높을수록 카메라에 가깝고 값에는 미터법 단위나 이미지 간 공통 스케일이 없습니다. `save=True`는 해당 맵의 컬러맵 시각화를 디스크에 기록합니다. `Results.plot()`은 깊이 맵을 PIL 이미지로 렌더링하며, `pil=False`를 지정하면 대신 배열을 반환합니다. 소스, 스트리밍, 결과 처리는 [예측](/docs/predict)을 참조합니다.
 
 ## 변형
 

@@ -4,20 +4,19 @@ families:
   - convnext
 seo_title: 'ConvNeXt: huấn luyện, xác thực và xuất theo Apache-2.0'
 description: >-
-  Dùng ConvNeXt trong LibreYOLO để phân loại ảnh. Cài đặt, dự đoán, tinh chỉnh
-  bằng LoRA, xác thực và xuất LibreConvNeXt tiny/small/base.
+  Dùng ConvNeXt trong LibreYOLO để phân loại ảnh. Cài đặt, dự đoán, tinh chỉnh bằng LoRA, xác thực và xuất
+  LibreConvNeXt tiny/small/base.
 lead: >-
-  ConvNeXt là bộ phân loại ảnh được xây dựng hoàn toàn từ các phép tích chập
-  tiêu chuẩn, được hiện đại hóa theo từng block từ ResNet theo các lựa chọn
-  thiết kế của vision transformer. LibreYOLO hỗ trợ mô hình này cho một tác vụ:
-  phân loại.
+  ConvNeXt là bộ phân loại ảnh được xây dựng hoàn toàn từ các phép tích chập tiêu chuẩn, được hiện đại hóa
+  theo từng block từ ResNet theo các lựa chọn thiết kế của vision transformer. LibreYOLO hỗ trợ mô hình này
+  cho một tác vụ: phân loại.
 keywords:
   - ConvNeXt
   - ConvNeXt tiny
   - phân loại ảnh
   - mạng tích chập thuần túy
   - bộ phân loại ImageNet
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -32,8 +31,10 @@ snippets:
         print(result.probs.top5)
     - label: CLI
       language: bash
-      code: |
-        libreyolo predict model=LibreConvNeXtt-cls.pt source=cat.jpg save=True
+      code: >
+        libreyolo predict model=LibreConvNeXtt-cls.pt
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        save=True
   train:
     - label: Python
       language: python
@@ -98,9 +99,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 1682cc69cf2925e6
+source_hash: 8f33a40e4d3a8f29
 ---
-
 ## Cài đặt
 
 ConvNeXt không cần extra tùy chọn. Mọi thành phần mà mô hình import đều có trong bản cài đặt cơ sở.
@@ -137,11 +137,15 @@ Khi giữ nguyên thiết lập, trainer chạy 100 epoch ở `lr0=1e-3` với A
 
 Xem [huấn luyện](/docs/train) để biết về dataset, tăng cường dữ liệu (data augmentation), multi-GPU và logger.
 
+`cls_pw=0` tắt trọng số loss; các giá trị đến 1 dùng trọng số nghịch đảo tần suất được chuẩn hóa về trung bình 1. `class_weights=True` dùng nghịch đảo tần suất chuẩn hóa theo mẫu và không thể kết hợp với `cls_pw>0`. Các thiết lập này phải khớp khi tiếp tục huấn luyện. Xem [phân loại](/docs/tasks/image-classification).
+
 ## Xác thực
 
 `val()` trả về dictionary gồm các key `metrics/`. Với tác vụ phân loại, đó là độ chính xác top-1 và top-5 trên phần tách xác thực.
 
 <code-tabs name="val" />
+
+Đánh giá và hiệu chuẩn INT8 dùng phép biến đổi đánh giá của họ mô hình. Metadata xuất ghi `norm_mean`, `norm_std` và `resize_mode`; các tệp cũ dùng giá trị của họ mô hình khi thiếu metadata. Bộ tiền xử lý hiệu chuẩn trả về mảng CHW và tỷ lệ cần thiết.
 
 ## Xuất
 
@@ -161,7 +165,7 @@ Mọi tệp trọng số đã phát hành cho họ mô hình này.
 
 <provenance-box>
 
-Chỉ ConvNeXt V1 được cung cấp trong họ mô hình này. Các checkpoint nhỏ được huấn luyện sẵn (pretrained) của ConvNeXt-V2 dùng giấy phép CC-BY-NC 4.0 và được chủ ý loại trừ, vì không thể phân phối lại trọng số phi thương mại trong một thư viện MIT/thương mại.
+Trang này trình bày ConvNeXt V1. [ConvNeXt V2](/docs/models/convnextv2) là họ mô hình riêng với trọng số được huấn luyện sẵn chính thức giữ giấy phép CC-BY-NC-4.0.
 
 </provenance-box>
 

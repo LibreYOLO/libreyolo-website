@@ -4,7 +4,7 @@ seo_title: "Instance segmentation in LibreYOLO"
 description: "Segment individual objects in LibreYOLO: the families that serve the task, the polygon label format, and the predict, train, validate and export calls."
 lead: "Instance segmentation locates every object instance and returns a per-pixel mask for each one, alongside the box, class and score a detector returns. The task key is segment."
 keywords: [instance segmentation python, object mask prediction, segmentation model training, polygon labels, MIT segmentation library, mask mAP]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -130,11 +130,13 @@ normalized.
 
 Four families both train and predict masks: [RF-DETR](/docs/models/rf-detr),
 [EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine) and
-[RTMDet](/docs/models/rtmdet). RF-DETR needs its own extra,
+[GTR](/docs/models/gtr). RF-DETR needs its own extra,
 `pip install "libreyolo[rfdetr]"`; the other three run on the base package.
 
 [Mask R-CNN](/docs/models/mask-rcnn) predicts, validates and exports masks, but
-its `train()` raises `NotImplementedError`.
+its `train()` raises `NotImplementedError`. [RTMDet](/docs/models/rtmdet)
+predicts and validates masks, but training segmentation raises
+`NotImplementedError`; it trains as a detector only.
 
 [EoMT](/docs/models/eomt) predicts and validates masks and also cannot train,
 and its export is narrower still: `export()` only accepts the semantic task, and

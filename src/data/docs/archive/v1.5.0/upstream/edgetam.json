@@ -1,0 +1,12 @@
+{
+  "name": "EdgeTAM",
+  "org": "Meta Reality Labs",
+  "paper_title": "EdgeTAM: On-Device Track Anything Model",
+  "paper_url": "https://arxiv.org/abs/2501.07256",
+  "code_url": "https://github.com/facebookresearch/EdgeTAM",
+  "license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so this code and these weights can be used in commercial and closed-source products. It asks you to keep the license text and attribution notices with any copy you redistribute, and it grants a patent license. LibreYOLO does not vendor EdgeTAM's model source: it calls the Apache-2.0 Transformers adapter and reproduces the pinned upstream image and prompt-coordinate transforms from facebookresearch/EdgeTAM commit 7711e012a30a2402c4eaab637bdb00a521302c91. The republished LibreYOLO/LibreEdgeTAM snapshot is converted from facebook/EdgeTAM revision 14d7ecc48c656b94e5184519f698cd5386c5a2bf, checked tensor-by-tensor against a Transformers-format reference before publication, and tagged Apache-2.0 on the LibreYOLO Hugging Face org. LibreYOLO ships image inference only; EdgeTAM's video tracking is out of scope for this family.",
+  "bibtex": "@article{zhou2025edgetam,\n  title={EdgeTAM: On-Device Track Anything Model},\n  author={Zhou, Chong and Zhu, Chenchen and Xiong, Yunyang and Suri, Saksham and Xiao, Fanyi and Wu, Lemeng and Krishnamoorthi, Raghuraman and Dai, Bo and Loy, Chen Change and Chandra, Vikas and Soran, Bilge},\n  journal={arXiv preprint arXiv:2501.07256},\n  year={2025}\n}",
+  "bibtex_source_url": "https://github.com/facebookresearch/EdgeTAM#citing-edgetam",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citing EdgeTAM section of the upstream README on branch main. Cross-checked against the arXiv API for 2501.07256: eleven authors in the same order, identical title. The upstream README still cites it as an arXiv preprint, so this page does too rather than asserting a venue upstream has not."
+}

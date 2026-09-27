@@ -4,9 +4,8 @@ families:
   - yolonas
 seo_title: 'YOLO-NAS: Vorhersage, Training und Export in LibreYOLO'
 description: >-
-  Verwende YOLO-NAS in LibreYOLO für Objekterkennung und Posenschätzung. Die
-  Gewichte von Deci.AI sind proprietär und nicht kommerziell nutzbar. LibreYOLO
-  veröffentlicht keine davon.
+  Detektion, Pose und orientierte Boxen mit YOLO-NAS in LibreYOLO. Die
+  vortrainierten Upstream-Gewichte sind nicht kommerziell nutzbar.
 lead: >-
   Ein konvolutionaler Detektor, dessen Backbone und Neck aus der
   Architektursuche von Deci.AI hervorgingen und auf quantisierungsbewussten
@@ -21,7 +20,7 @@ keywords:
   - Posenschätzung
   - quantisierungsbewusster Detektor
   - AutoNAC
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -145,7 +144,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 47c30d6e44024ce7
+source_hash: 52050c4046781a6e
 ---
 
 ## Installation
@@ -163,6 +162,8 @@ Ein Checkpoint-Name, der noch nicht lokal vorliegt, wird von Decis öffentlichem
 <code-tabs name="predict" />
 
 Das zurückgegebene `Results`-Objekt entspricht dem jeder anderen Familie, sodass der Wechsel zu einem anderen Detektor nur eine einzige Codezeile erfordert. `conf` legt den Konfidenzschwellenwert und `iou` den NMS-Schwellenwert fest. Unter [Vorhersage](/docs/predict) findest du Informationen zu Quellen, Streaming und Ergebnisverarbeitung.
+
+Die Aufgabe für orientierte Boxen liefert `result.obb`. Der veröffentlichte OBB-Graph verwendet eine Bildfläche von 1024 Pixeln und seinen gespeicherten Satz von 18 Klassenlabels.
 
 ## Varianten
 
@@ -182,6 +183,8 @@ Das Fine-Tuning beginnt mit Decis Gewichten, die Decis Lizenz unterliegen. Beim 
 
 Unter [Training](/docs/train) findest du Informationen zu Datensätzen, Augmentation, Multi-GPU und Loggern.
 
+Die Erkennung verwendet standardmäßig `amp=True` mit `amp_dtype="float16"`; das Training orientierter Boxen behält `amp=False` bei. Der OBB-Head unterstützt Training, Vorhersage und Validierung, verwendet Spiegelungs-/HSV-Augmentierung und wählt Checkpoints anhand von `metrics/mAP50-95(OBB)`. `load_detect_weights_for_obb()` initialisiert ihn mit Erkennungsgewichten.
+
 ## Validierung
 
 `val()` gibt ein Dictionary mit `metrics/`-Schlüsseln für Precision, Recall, mAP 50 und mAP 50-95 zurück, gemessen anhand jedes Datensatzes im Format, das du für das Training verwendet hast.
@@ -200,7 +203,7 @@ Ein Export ist eine weitere Kopie derselben Gewichte in einem anderen Container.
 
 ## Checkpoints
 
-Es gibt keine aufzulisten. Decis Lizenz verbietet die Weiterverteilung, daher veröffentlicht die LibreYOLO-Organisation keine YOLO-NAS-Gewichte und der Download wird an anderer Stelle aufgelöst. Ein Name der Form `LibreYOLONAS<size>.pt` oder für die Posenschätzung `LibreYOLONAS<size>-pose.pt` wird dem passenden Objekt auf Decis öffentlichem CDN zugeordnet.
+Es gibt keine aufzulisten. Decis Lizenz verbietet die Weiterverteilung, daher veröffentlicht die LibreYOLO-Organisation keine YOLO-NAS-Gewichte und der Download wird an anderer Stelle aufgelöst. Ein Name der Form `LibreYOLONAS<size>.pt`, für die Posenschätzung `LibreYOLONAS<size>-pose.pt` oder für orientierte Boxen `LibreYOLONAS<size>-obb.pt` (s, m, l) wird dem passenden Objekt auf Decis öffentlichem CDN zugeordnet.
 
 Auf diese Weise lassen sich nur Checkpoints abrufen, deren SHA-256 die Bibliothek fest hinterlegt hat. Alle anderen werden sicher abgelehnt, statt ein ungeprüftes Pickle eines Drittanbieters zu öffnen. Du musst sie manuell herunterladen und als Pfad übergeben. Eine bereits lokal vorhandene Datei wird ohne Download und Prüfsummenprüfung von ihrem Pfad geladen. Das gilt auch für eine Deci-Datei mit der ursprünglichen Endung `.pth`, die der Loader erkennt.
 

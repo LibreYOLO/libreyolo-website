@@ -14,7 +14,7 @@ keywords:
   - 画像分類
   - 畳み込みニューラルネットワーク
   - ImageNet分類モデル
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -30,7 +30,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreConvNeXtt-cls.pt source=cat.jpg save=True
+        libreyolo predict model=LibreConvNeXtt-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python
       language: python
@@ -95,7 +95,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 1682cc69cf2925e6
+source_hash: 8f33a40e4d3a8f29
 ---
 
 ## インストール
@@ -134,11 +134,15 @@ tiny、small、baseの3サイズがあり、すべて同じ方法で学習、評
 
 データセット、データ拡張、マルチGPU、ロガーについては[学習](/docs/train)を参照してください。
 
+`cls_pw=0`は損失の重み付けを無効にします。1以下の値では、平均が1になるよう正規化した逆頻度の重みを使います。一方、`class_weights=True`はサンプル数で正規化した逆頻度を使い、`cls_pw>0`と組み合わせることはできません。再開時にはこれらの設定が一致している必要があります。[画像分類](/docs/tasks/image-classification)を参照してください。
+
 ## 検証
 
 `val()`は`metrics/`キーを持つ辞書を返します。画像分類では、検証分割に対するtop-1精度とtop-5精度が含まれます。
 
 <code-tabs name="val" />
+
+検証とINT8キャリブレーションでは、ファミリーの評価用変換を使います。エクスポートのメタデータには`norm_mean`、`norm_std`、`resize_mode`が記録されます。古いファイルでは、ファミリーの値にフォールバックします。キャリブレーションの前処理は、必要なCHW配列と比率を返します。
 
 ## エクスポート
 
@@ -158,7 +162,7 @@ tiny、small、baseの3サイズがあり、すべて同じ方法で学習、評
 
 <provenance-box>
 
-このファミリーではConvNeXt V1だけを提供しています。ConvNeXt-V2の小型事前学習済みチェックポイントはCC-BY-NC 4.0のため、意図的に除外されています。非商用の重みをMITライセンスで商用利用可能なライブラリ内で再配布できないためです。
+このページはConvNeXt V1を扱います。[ConvNeXt V2](/docs/models/convnextv2)は別のファミリーで、公式の学習済み重みにはCC-BY-NC-4.0が適用されます。
 
 </provenance-box>
 

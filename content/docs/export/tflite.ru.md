@@ -1,10 +1,9 @@
 ---
 title: TFLite
 seo_title: Экспорт в TFLite (LiteRT) из LibreYOLO
-description: >-
-  Экспорт модели LibreYOLO в FlatBuffer .tflite через onnx2tf: статические
-  формы, только FP32, входы NHWC и семейства, которые конвертируются без
-  проблем.
+description: 'Экспорт модели LibreYOLO в FlatBuffer .tflite через onnx2tf: статические формы, FP32 и поддерживаемые пути INT8,
+  входы NHWC и метаданные среды выполнения.'
+
 lead: >-
   TFLite — это формат FlatBuffer, который LiteRT исполняет на мобильных и
   встраиваемых устройствах. LibreYOLO экспортирует статический граф ONNX,
@@ -18,131 +17,114 @@ keywords:
   - tflite flatbuffer
   - вход nhwc tflite
   - инференс на edge-устройствах
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 meta:
-  - label: Флаг
-    value: export(format="tflite")
-    mono: true
-  - label: Записывает
-    value: Один файл .tflite плюс сопроводительный файл метаданных .tflite.json
-  - label: Дополнительно
-    value: 'pip install "libreyolo[tflite]"'
-    mono: true
-  - label: Загружается обратно
-    value: LibreYOLO("weights/LibreYOLO9t.tflite")
-    mono: true
-  - label: Формы
-    value: Только статические. dynamic=True отклоняется.
-  - label: Точность
-    value: Только FP32. half=True и int8=True отклоняются.
-  - label: Требуется
-    value: >-
-      Python 3.12 или новее, потому что onnx2tf 2.4.x не публикует wheel-пакеты
-      под более старые версии
+- label: Флаг
+  value: export(format="tflite")
+  mono: true
+- label: Записывает
+  value: Один файл .tflite плюс сопроводительный файл метаданных .tflite.json
+- label: Дополнительно
+  value: pip install "libreyolo[tflite]"
+  mono: true
+- label: Загружается обратно
+  value: LibreYOLO("weights/LibreYOLO9t.tflite")
+  mono: true
+- label: Формы
+  value: Только статические. dynamic=True отклоняется.
+- label: Точность
+  value: FP32; INT8 для детекции YOLO9 и YOLOX. FP16 отклоняется.
+- label: Требуется
+  value: Python 3.12 или новее, потому что onnx2tf 2.4.x не публикует wheel-пакеты под более старые версии
+
 verification: >-
   Прочитано из libreyolo/export/tflite.py, libreyolo/export/exporter.py,
   libreyolo/export/support.py, libreyolo/backends/tflite.py и pyproject.toml в
   ветке dev.
 snippets:
   install:
-    - label: Установка
-      language: bash
-      code: |
-        # LiteRT — текущее название TensorFlow Lite у Google. Оба extra ставят
-        # один и тот же тулчейн и дают на выходе один и тот же .tflite.
-        pip install "libreyolo[tflite]"
-    - label: Проверка версии Python
-      language: bash
-      code: |
-        python -c "import sys; print(sys.version_info >= (3, 12))"
+  - label: Установка
+    language: bash
+    code: |
+      # LiteRT — текущее название TensorFlow Lite у Google. Оба extra ставят
+      # один и тот же тулчейн и дают на выходе один и тот же .tflite.
+      pip install "libreyolo[tflite]"
+  - label: Проверка версии Python
+    language: bash
+    code: |
+      python -c "import sys; print(sys.version_info >= (3, 12))"
   export:
-    - label: Python
-      language: python
-      code: >
-        from libreyolo import LibreYOLO
+  - label: Python
+    language: python
+    code: |
+      from libreyolo import LibreYOLO
 
+      model = LibreYOLO("LibreYOLO9t.pt")
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+      # Записывает weights/LibreYOLO9t.tflite и weights/LibreYOLO9t.tflite.json
+      path = model.export(format="tflite", imgsz=640)
+      print(path)
+  - label: CLI
+    language: bash
+    code: |
+      libreyolo export --model LibreYOLO9t.pt --format tflite --imgsz 640
 
+      # "litert" принимается как псевдоним и ведёт к тому же экспортёру.
+      libreyolo export --model LibreYOLO9t.pt --format litert --imgsz 640
+  - label: Аргументы
+    language: python
+    code: |
+      model.export(
+          format="tflite",
+          imgsz=640,        # int или (высота, ширина)
+          batch=1,
+          simplify=True,    # onnxsim поверх промежуточного ONNX
+          output_path=None, # None пишет в weights/<stem>.tflite
+          verbose=False,    # True выводит лог onnx2tf
+      )
 
-        # Записывает weights/LibreYOLO9t.tflite и
-        weights/LibreYOLO9t.tflite.json
-
-        path = model.export(format="tflite", imgsz=640)
-
-        print(path)
-    - label: CLI
-      language: bash
-      code: |
-        libreyolo export --model LibreYOLO9t.pt --format tflite --imgsz 640
-
-        # "litert" принимается как псевдоним и ведёт к тому же экспортёру.
-        libreyolo export --model LibreYOLO9t.pt --format litert --imgsz 640
-    - label: Аргументы
-      language: python
-      code: |
-        model.export(
-            format="tflite",
-            imgsz=640,        # int или (высота, ширина)
-            batch=1,
-            simplify=True,    # onnxsim поверх промежуточного ONNX
-            output_path=None, # None пишет в weights/<stem>.tflite
-            verbose=False,    # True выводит лог onnx2tf
-        )
-
-        # dynamic=True вызывает ValueError: конвертеру нужны статические формы.
-        # half=True и int8=True отклоняются ещё до трассировки.
+      # dynamic=True вызывает ValueError: конвертеру нужны статические формы.
+      # FP16 отклоняется. INT8 требует поддерживаемый детектор и калибровочные данные.
   run:
-    - label: Через LibreYOLO
-      language: python
-      code: |
-        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+  - label: Через LibreYOLO
+    language: python
+    code: |
+      from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        model = LibreYOLO("weights/LibreYOLO9t.tflite")
-        result = model.predict(SAMPLE_IMAGE)
-        print(result.boxes.xyxy[:3])
-    - label: Чистый LiteRT
-      language: python
-      code: >
-        import json
+      model = LibreYOLO("weights/LibreYOLO9t.tflite")
+      result = model.predict(SAMPLE_IMAGE)
+      print(result.boxes.xyxy[:3])
+  - label: Чистый LiteRT
+    language: python
+    code: |
+      import json
 
+      import numpy as np
+      from ai_edge_litert.interpreter import Interpreter
 
-        import numpy as np
+      interpreter = Interpreter(model_path="weights/LibreYOLO9t.tflite")
+      interpreter.allocate_tensors()
+      detail = interpreter.get_input_details()[0]
+      print(detail["shape"], detail["dtype"])   # NHWC, а не NCHW
 
-        from ai_edge_litert.interpreter import Interpreter
+      interpreter.set_tensor(detail["index"], np.zeros(detail["shape"], np.float32))
+      interpreter.invoke()
+      for output in interpreter.get_output_details():
+          print(output["name"], interpreter.get_tensor(output["index"]).shape)
 
+      # Имена классов, задача и размер входа лежат в сопроводительном файле.
+      meta = json.load(open("weights/LibreYOLO9t.tflite.json"))
+      print(meta["model_family"], meta["task"], meta["names"])
 
-        interpreter = Interpreter(model_path="weights/LibreYOLO9t.tflite")
-
-        interpreter.allocate_tensors()
-
-        detail = interpreter.get_input_details()[0]
-
-        print(detail["shape"], detail["dtype"])   # NHWC, а не NCHW
-
-
-        interpreter.set_tensor(detail["index"], np.zeros(detail["shape"],
-        np.float32))
-
-        interpreter.invoke()
-
-        for output in interpreter.get_output_details():
-            print(output["name"], interpreter.get_tensor(output["index"]).shape)
-
-        # Имена классов, задача и размер входа лежат в сопроводительном файле.
-
-        meta = json.load(open("weights/LibreYOLO9t.tflite.json"))
-
-        print(meta["model_family"], meta["task"], meta["names"])
-
-
-        # Предобработка, транспонирование NCHW в NHWC и постобработка — на вас.
+      # Предобработка, транспонирование NCHW в NHWC и постобработка — на вас.
   support:
-    - label: Проверка одного семейства и задачи перед экспортом
-      language: bash
-      code: |
-        libreyolo formats --family yolo9 --task detect
-source_hash: fa2deaa0ef6d9978
+  - label: Проверка одного семейства и задачи перед экспортом
+    language: bash
+    code: |
+      libreyolo formats --family yolo9 --task detect
+
+source_hash: 3548d74e992bb76d
 ---
 
 ## Установка
@@ -171,6 +153,8 @@ source_hash: fa2deaa0ef6d9978
 несёт семейство, задачу, имена классов, размер входа и схему позы; в самом
 FlatBuffer поля метаданных LibreYOLO нет, поэтому два файла ходят вместе.
 
+Детекция YOLO9 и YOLOX поддерживает `int8=True` с `data=...`, `fraction=1.0`, `batch=1` и `dynamic=False`. Установите `onnx2tf[tensorflow]`. При отсутствии калибровочных данных используется `coco8.yaml` с предупреждением. Раздельные выходы нормализованных рамок и оценок используют независимые масштабы квантизации; при развёртывании сохраняйте метаданные `output_layout` из сопутствующего файла. Некоторые внутренние операторы могут оставаться с плавающей точкой.
+
 ## Запуск артефакта
 
 <code-tabs name="run" />
@@ -193,8 +177,7 @@ LibreYOLO.
 трассировки, а холст экспорта фиксируется на том значении, в которое разрешился
 `imgsz`.
 
-Только FP32. `half=True` и `int8=True` отклоняются на валидации, поэтому
-развёртывание с квантизацией через этот экспортёр сегодня недоступно.
+`half=True` отклоняется. INT8 ограничен детекцией YOLO9 и YOLOX с батчем 1; другие семейства и задачи INT8 вызывают ошибку.
 
 Покрытие здесь уже, чем у графовых форматов, и определяется измерениями, а не
 семейством. Среди проверенных комбинаций — детекция на YOLO9, YOLOX и YOLO-NAS,

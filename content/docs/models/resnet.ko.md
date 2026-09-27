@@ -16,7 +16,7 @@ keywords:
   - 잔차 학습
   - 심층 잔차 네트워크
   - ImageNet 분류기
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -32,7 +32,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreResNet50-cls.pt source=cat.jpg save=True
+        libreyolo predict model=LibreResNet50-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python
       language: python
@@ -90,7 +90,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: e2f46c73716af1b7
+source_hash: "2442e8c325bbe791"
 ---
 
 ## 설치
@@ -138,12 +138,16 @@ pip install libreyolo
 
 데이터셋, 증강, 다중 GPU, 로거는 [학습](/docs/train)을 참조합니다.
 
+`cls_pw=0`은 손실 가중치를 비활성화하며, 1까지의 값은 평균 1로 정규화한 역빈도 가중치를 사용합니다. 대신 `class_weights=True`는 샘플 기준으로 정규화한 역빈도를 사용하며 `cls_pw>0`과 함께 사용할 수 없습니다. 학습을 재개할 때는 이 설정이 일치해야 합니다. [분류](/docs/tasks/image-classification)를 참조하십시오.
+
 ## 검증
 
 `val()`은 `metrics/` 키 딕셔너리를 반환합니다. 분류에서는 검증 분할의 top-1 및
 top-5 정확도입니다.
 
 <code-tabs name="val" />
+
+검증과 INT8 보정은 해당 계열의 평가 변환을 사용합니다. 내보내기 메타데이터는 `norm_mean`, `norm_std`, `resize_mode`를 기록하며, 이전 파일은 계열의 기본값을 사용합니다. 보정 전처리기는 필요한 CHW 배열과 비율을 반환합니다.
 
 ## 내보내기
 

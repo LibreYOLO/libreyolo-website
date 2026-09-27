@@ -17,7 +17,7 @@ keywords:
   - détection petits objets
   - programmable gradient information
   - GELAN
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -145,7 +145,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: eaa6023a4a0b9e71
+source_hash: 624f3e70d2937683
 ---
 
 ## Installer
@@ -166,7 +166,7 @@ mis en cache localement.
 L'objet `Results` renvoyé est celui de toutes les familles, le remplacement du
 détecteur ne demande donc de modifier qu'une ligne. Sur les modèles de base et
 de stride 4, `conf` définit le seuil de confiance et `iou` le seuil de NMS. Le
-modèle de bout en bout n'exécute aucune NMS et ignore `iou`\u00a0; `conf` et
+modèle de bout en bout n'exécute aucune NMS et ignore `iou` ; `conf` et
 `max_det` déterminent donc sa sortie. Consultez la
 [prédiction](/docs/predict) pour les sources, le streaming et la gestion des
 résultats.
@@ -186,9 +186,9 @@ Choisissez-le lorsque le runtime de déploiement ne possède pas d'opérateur NM
 
 Le modèle de stride 4 expose un niveau plus haut dans le backbone, prolonge le
 neck jusqu'à celui-ci et prédit sur quatre échelles au lieu de trois. L'échelle
-supplémentaire cible les objets qui couvrent peu de pixels\u00a0; l'unique checkpoint
+supplémentaire cible les objets qui couvrent peu de pixels ; l'unique checkpoint
 publié pour ce modèle est entraîné sur des images aériennes. Les checkpoints
-de détection de base peuvent y être transférés\u00a0: le backbone et le neck sont
+de détection de base peuvent y être transférés : le backbone et le neck sont
 chargés sans modification, les trois tours de tête pré-entraînées sont
 décalées d'un emplacement et la tour de stride 4 part d'une initialisation
 aléatoire.
@@ -216,6 +216,10 @@ base.
 Consultez l'[entraînement](/docs/train) pour les datasets, l'augmentation, le
 multi-GPU et les loggers.
 
+Les nouveaux fine-tunings de détection standard activent une branche PGI réservée à l'entraînement avec `aux_weight=0.25`. `max_labels=300` ; le momentum SGD passe de 0.8 à 0.937 pendant trois époques de warmup. Les anciens checkpoints à une seule tête reprennent avec ce graphe. La prédiction et l'export utilisent la tête principale. `letterbox_pad=None` hérite de l'indication du checkpoint : les poids non marqués utilisent `topleft`, tandis que les nouvelles conversions officielles enregistrent `center`.
+
+Les mosaïques YOLO9 et YOLOX privilégient les partenaires annotés, avec au plus 20 tirages ; MixUp dans YOLO9 utilise la même politique. Consultez les [histogrammes d'événements](/docs/train/event-histograms) pour les profils d'entrée non RGB.
+
 ## Valider
 
 `val()` renvoie un dictionnaire de clés `metrics/` couvrant la précision, le
@@ -228,7 +232,7 @@ pour l'entraînement.
 
 <export-matrix />
 
-Une coche s'applique aux trois variantes\u00a0; lorsqu'elles diffèrent, la matrice
+Une coche s'applique aux trois variantes ; lorsqu'elles diffèrent, la matrice
 indique la prise en charge la plus faible des trois.
 
 Un artefact exporté se recharge dans `LibreYOLO()` grâce au suffixe de son
@@ -250,6 +254,8 @@ lui sont propres. Ces deux aspects sont décrits sur la page du format concerné
 
 <code-tabs name="export" />
 
+[TFLite INT8](/docs/export/tflite) utilise `int8=True` avec des données de calibration.
+
 ## Checkpoints
 
 Tous les fichiers de poids publiés pour cette famille.
@@ -260,13 +266,7 @@ Tous les fichiers de poids publiés pour cette famille.
 
 <provenance-box>
 
-Un checkpoint présenté ici n'est pas sous licence MIT. Le modèle de stride 4
-entraîné sur VisDrone2019-DET hérite des conditions CC BY-NC-SA 3.0 de ce
-dataset\u00a0: usage non commercial uniquement, partage dans les mêmes conditions
-de tout élément qui en dérive, hors de la licence permissive utilisée par le
-reste de cette famille. Il prédit les classes aériennes VisDrone plutôt que
-celles de COCO. La bibliothèque affiche toutes ces informations avant de
-télécharger le fichier.
+Le checkpoint aérien de stride 4 prédit les classes VisDrone. Utilisez la licence déclarée par l'éditeur dans le dépôt de ses poids.
 
 </provenance-box>
 

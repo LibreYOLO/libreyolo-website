@@ -15,7 +15,7 @@ keywords:
   - dataset DOTA
   - phát hiện vật thể hàng không
   - rotated IoU
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -161,9 +161,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.obb.xywhr)
-source_hash: 0d605d956f3ea025
+source_hash: 8af4d1647609e5e6
 ---
-
 ## Định nghĩa
 
 Phát hiện hộp xoay thêm một số vào kết quả phát hiện: góc. Mỗi thực thể nhận
@@ -186,14 +185,9 @@ thẳng trục bao ngoài, là dạng cần dùng khi mã downstream chỉ hiể
 
 ## Mô hình
 
-Hai family phục vụ tác vụ này, và lựa chọn phụ thuộc vào việc có cần huấn luyện
-hay không.
+Bốn họ mô hình phục vụ tác vụ này.
 
-[RF-DETR](/docs/models/rf-detr) là family có thể huấn luyện. Nó dự đoán, huấn
-luyện, xác thực và xuất hộp xoay, đồng thời cung cấp checkpoint hộp xoay đã công
-bố ở bốn kích thước n, s, m và l. Nó cần thành phần bổ sung riêng,
-`pip install "libreyolo[rfdetr]"`, còn trang mô hình trình bày giấy phép và nguồn
-gốc trọng số.
+[RF-DETR](/docs/models/rf-detr) hỗ trợ huấn luyện. Nó dự đoán, huấn luyện, đánh giá và xuất hộp xoay, đồng thời có checkpoint hộp xoay đã công bố với bốn kích thước n, s, m và l. Nó cần extra riêng, `pip install "libreyolo[rfdetr]"`, và trang mô hình ghi giấy phép cùng nguồn gốc trọng số.
 
 Hãy đọc phần bên dưới về nội dung thực sự được các checkpoint này dự đoán trước
 khi lập kế hoạch dựa vào chúng.
@@ -208,8 +202,14 @@ dành cho inference trên family này, `train()` phát sinh lỗi, và không c�
 transfer từ trọng số phát hiện vốn dùng backbone khác. Theo dõi và test-time
 augmentation cũng không khả dụng cho hộp xoay.
 
-Tóm lại: dùng RT-DETRv2 cho category DOTA có sẵn, dùng RF-DETR cho nhãn hộp xoay
-riêng.
+Chọn bộ nhãn checkpoint và khả năng huấn luyện phù hợp với dataset của bạn.
+
+[YOLO-NAS](/docs/models/yolo-nas) cũng hỗ trợ huấn luyện và inference OBB. Trọng số được huấn luyện sẵn giữ các điều khoản phi thương mại của upstream.
+
+[GTR](/docs/models/gtr) công bố `LibreGTRs-obb.pt` và `LibreGTRx-obb.pt`,
+dự đoán 15 lớp đối tượng của DOTA v1.0 với đầu vào cố định 1024. Nó chạy trên
+package cơ sở và hỗ trợ dự đoán, huấn luyện, xác thực, cùng xuất ONNX và
+TorchScript.
 
 ## Dự đoán
 
@@ -221,7 +221,7 @@ cục bộ.
 Cần biết checkpoint RF-DETR đã công bố là gì trước khi chạy. Dù DOTA là
 benchmark tham chiếu cho tác vụ này, các trọng số đó không được huấn luyện trên
 DOTA. Cả bốn được khởi tạo từ trọng số phát hiện RF-DETR và tinh chỉnh trên một
-dataset Roboflow Universe duy nhất gồm cảnh quay UAV, với sáu lớp phương tiện:
+dataset duy nhất gồm cảnh quay UAV, với sáu lớp phương tiện:
 bike, bus, car, other_vehicle, taxi và truck. Model card mô tả chúng là trọng số
 phát triển, được tạo trong khi xác thực hỗ trợ huấn luyện hộp xoay, và nêu rằng
 không nên xem chúng là trọng số chính thức cho production hoặc benchmark.
@@ -288,13 +288,14 @@ Parser dòng chuẩn là `libreyolo.data.parse_yolo_obb_label_line`.
 
 <code-tabs name="train" />
 
-Huấn luyện tác vụ này nghĩa là dùng RF-DETR. Theo mặc định, quá trình huấn luyện
-tiếp tục từ checkpoint `-obb` đã công bố. Bắt đầu từ trọng số phát hiện là
+Theo mặc định, huấn luyện RF-DETR tiếp tục từ checkpoint `-obb` đã công bố. Bắt đầu từ trọng số phát hiện là
 transfer có chủ ý: các trọng số đó không dự đoán góc, còn truyền `task=obb` là
 điều cho phép thay đổi. Giữ `lr0` ở hoặc dưới `1e-4`, giống các tác vụ khác của
 family. Không thể tinh chỉnh checkpoint hộp xoay RT-DETRv2; hãy dùng nguyên
 trạng hoặc huấn luyện RF-DETR trên nhãn riêng. Xem [huấn luyện](/docs/train) để
 biết về dataset, augmentation, multi-GPU và logger.
+
+YOLO-NAS OBB mặc định dùng phép gán và loss xoay, augmentation lật/HSV và `amp=False`. Nó chọn checkpoint theo `metrics/mAP50-95(OBB)`.
 
 ## Xác thực
 

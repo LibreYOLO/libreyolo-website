@@ -4,7 +4,7 @@ seo_title: "LibreYOLO quickstart"
 description: "Run a detector on an image, fine-tune it on a small dataset and export it to TorchScript or ONNX, all on CPU, in about ten lines of Python."
 lead: "The shortest path through LibreYOLO: predict on one image, train on a small dataset, then export the result. Every command here runs on CPU."
 keywords: [libreyolo quickstart, libreyolo tutorial, libreyolo predict, libreyolo train, libreyolo export, yolo python example]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 meta:
   - label: Install
     value: pip install libreyolo
@@ -51,20 +51,23 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+        # Data workers re-import this file on macOS and Windows, so a script
+        # keeps training under a main guard.
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        # coco8 is an 8-image dataset bundled with the library. It downloads
-        # from a URL on first use, so no script has to be executed.
-        results = model.train(
-            data="coco8.yaml",
-            epochs=1,
-            imgsz=640,
-            batch=4,
-            device="cpu",
-        )
+            # coco8 is an 8-image dataset bundled with the library. It downloads
+            # from a URL on first use, so no script has to be executed.
+            results = model.train(
+                data="coco8.yaml",
+                epochs=1,
+                imgsz=640,
+                batch=4,
+                device="cpu",
+            )
 
-        print(results["save_dir"])
-        print(results["best_checkpoint"])
+            print(results["save_dir"])
+            print(results["best_checkpoint"])
     - label: CLI
       language: bash
       code: |
@@ -75,14 +78,15 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() returns a plain dict, not an object.
-        metrics = model.val(data="coco8.yaml", device="cpu")
+            # val() returns a plain dict, not an object.
+            metrics = model.val(data="coco8.yaml", device="cpu")
 
-        print(metrics["metrics/mAP50-95"])
-        print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+            print(metrics["metrics/mAP50-95"])
+            print(metrics["metrics/mAP50"])
+            print(metrics["metrics/mAP75"])
   export:
     - label: TorchScript
       language: python
@@ -138,7 +142,9 @@ generator of them.
 <code-tabs name="train" />
 
 `data` is a dataset YAML. `coco8.yaml` ships with the library, which is why the
-snippet runs as pasted; a name that is not bundled is read as a path. Datasets
+snippet runs as pasted; a name that is not bundled is read as a path. The
+`__main__` guard is there because data workers re-import the script on macOS
+and Windows; see [troubleshooting](/docs/troubleshooting). Datasets
 resolve under `~/datasets`, or under `LIBREYOLO_DATASETS_DIR` when that variable
 is set.
 

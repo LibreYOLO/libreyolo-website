@@ -5,7 +5,7 @@ seo_title: "ViT: run classic Vision Transformer classifiers in LibreYOLO"
 description: "Predict, validate and export ViT classifiers with LibreYOLO. Apache-2.0 AugReg weights; fine-tuning is not yet supported."
 lead: "The classic Vision Transformer: a pure transformer applied to fixed-size image patches, with a learned class token and no convolutions. LibreYOLO ships four AugReg-pretrained sizes for image classification."
 keywords: [ViT, Vision Transformer, AugReg, image classification, transformer classifier]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -102,6 +102,8 @@ export are supported, and the AugReg fine-tuning recipe is not implemented.
 `val/` subfolders, one folder per class) and returns top-1 and top-5 accuracy.
 
 <code-tabs name="val" />
+
+Validation and INT8 calibration use the family evaluation transform. Export metadata records `norm_mean`, `norm_std` and `resize_mode`; older artifacts fall back to family values. Calibration preprocessors return the required CHW array and ratio.
 
 ## Export
 

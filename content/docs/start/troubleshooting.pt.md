@@ -14,8 +14,8 @@ keywords:
   - libreyolo cuda out of memory
   - libreyolo notimplementederror
   - resolver erros libreyolo
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: 1.6.0
+source_hash: f2faaab56a2f0415
 ---
 
 Os erros estão agrupados pelo texto que você vê. Se a sua mensagem não estiver
@@ -105,10 +105,10 @@ derivada dele, incluindo o sufixo da tarefa, então um nome que não corresponde
 um checkpoint publicado produz uma URL que não existe. A tabela de checkpoints
 em cada página de modelo lista os nomes de arquivo publicados exatos.
 
-## O treinamento trava ou reinicia no Windows
+## O treinamento trava ou reinicia no Windows ou no macOS
 
-O Windows não tem `fork`, então os workers do dataloader começam reimportando o
-seu script. Sem uma guarda `if __name__ == "__main__":`, cada worker roda de
+O Windows não tem `fork`, e o Python no macOS não o usa por padrão, então os
+workers do dataloader começam reimportando o seu script. Sem uma guarda `if __name__ == "__main__":`, cada worker roda de
 novo a sua chamada de treinamento, o que trava em deadlock ou gera processos sem
 parar.
 
@@ -145,8 +145,9 @@ bounding box por imagem. Indexe apenas o que você sabe que é uma lista.
 
 ### Ler as métricas como atributos
 
-`val()` devolve um dicionário simples com chaves de nome de métrica, não um
-objeto com acesso por atributo:
+`val()` devolve um dicionário com chaves de nome de métrica. Seu único atributo,
+`box`, traz resultados por imagem e limiares por classe, não os valores das
+métricas:
 
 ```python
 metrics = model.val(data="coco8.yaml")
@@ -175,3 +176,7 @@ if report.errors:
 Veja o [comando doctor](/docs/cli/doctor) para o catálogo de verificações.
 </content>
 </invoke>
+
+## Workers persistentes não conseguem observar mudanças no dataset
+
+Hooks ativos de `close_mosaic` ou `set_epoch` devem alcançar as cópias do dataset usadas pelos workers. Se um loader personalizado com múltiplos workers mantém cópias persistentes incompatíveis, use `persistent_workers=False` ou reconstrua os workers após a alteração. O caminho padrão sem persistência não é afetado.

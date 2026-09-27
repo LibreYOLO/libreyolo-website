@@ -20,7 +20,7 @@ keywords:
   - callbacki trenowania
   - metryki trenowania csv
   - libreyolo monitor
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   logger:
     - label: Według nazwy
@@ -87,7 +87,7 @@ snippets:
       code: |
         libreyolo monitor                     # najnowszy przebieg w runs/
         libreyolo monitor runs/train/exp      # konkretny przebieg
-source_hash: de035acbaed32804
+source_hash: b5fefd12a738dcb5
 ---
 
 ## Włączanie loggera
@@ -186,6 +186,8 @@ Neptune jest celowo wyłączony z `libreyolo[all]`. Jego stabilny klient wymaga
 protobuf w wersji niższej niż 7, podczas gdy dodatek TFLite wymaga protobuf 7.
 `libreyolo[neptune]` należy zainstalować w środowisku bez dodatku TFLite.
 
+[Logger Hugging Face Hub](/docs/reference/hugging-face) przesyła `weights/best.pt`, a przy jego braku `last.pt`, po zakończeniu trenowania. Można użyć `loggers="hf:owner/repo"` lub `HuggingFaceHubLogger(repo_id, private=True)`. Przed trenowaniem sprawdza prawo zapisu i tworzy brakujące repozytorium. Logger domyślnie tworzy repozytorium prywatne; jawne `model.push_to_hub()` domyślnie tworzy publiczne. Widoczność istniejącego repozytorium pozostaje bez zmian.
+
 ## Tworzenie callbacku
 
 Wszystkimi funkcjami sterują te same cztery zdarzenia.
@@ -260,4 +262,3 @@ przebieg zakończony awarią.
   oraz sposób dodawania funkcji straty walidacji.
 - [Wydajność trenowania](/docs/train/performance) opisuje profiler, który jest
   innym narzędziem odpowiadającym na inne pytanie.
-

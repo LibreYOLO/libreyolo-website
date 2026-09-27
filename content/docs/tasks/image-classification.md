@@ -4,7 +4,7 @@ seo_title: "Image classification in LibreYOLO"
 description: "Label a whole image in LibreYOLO: the families that serve the task, the ImageFolder dataset layout, and the predict, train, validate and export calls."
 lead: "Image classification assigns one label distribution to a whole image and locates nothing inside it. The task key is classify."
 keywords: [image classification python, train image classifier, ImageFolder dataset, top-1 accuracy, zero-shot classification, MIT classification library]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -129,7 +129,7 @@ one row.
 
 ## Models
 
-Five families both train and predict: [ResNet](/docs/models/resnet),
+Trainable image classifiers include: [ResNet](/docs/models/resnet),
 [ConvNeXt](/docs/models/convnext), [MobileNetV4](/docs/models/mobilenetv4),
 [EfficientNetV2](/docs/models/efficientnetv2) and
 [DINOv2](/docs/models/dinov2). The first four run on the base package and ship
@@ -147,6 +147,8 @@ Five more predict, validate and export, but their `train()` raises
 a fixed label set. They score the image against text prompts, so
 `set_classes()` defines the classes at call time and there is no training step
 for a new label set at all. Both also serve the `embed` task.
+
+[ConvNeXt V2](/docs/models/convnextv2) adds supervised classification with CC-BY-NC-4.0 pretrained weights. [PE](/docs/models/pe) supports zero-shot classification; [V-JEPA 2](/docs/models/vjepa2) trains video classification probes.
 
 ## Predict
 
@@ -197,6 +199,8 @@ There is no `nc` to declare: the class count comes from the folder names under
 transfers unchanged. See [training](/docs/train) for datasets, augmentation,
 multi-GPU and loggers.
 
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 and DINOv2 support `cls_pw` or `class_weights` loss weighting. Classification `scale` controls crop area, and `crop_pct` controls evaluation cropping. See [augmentations](/docs/train/augmentations).
+
 ## Validate
 
 `val()` returns a plain dictionary of `metrics/` keys, computed over the `val/`
@@ -210,6 +214,8 @@ best epoch. `metrics/accuracy_top5` is the share whose true class appears
 anywhere in the five highest-scoring classes, which says less the fewer classes
 the dataset has. The dictionary also carries `fitness`, a copy of the top-1
 value.
+
+ImageFolder validation also returns macro `metrics/precision`, `metrics/recall` and `metrics/f1`, averaging over classes present in the validation targets. Unpredicted classes contribute zero precision. Default fitness remains top-1 accuracy. Validation and calibration use the model evaluation transform.
 
 ## Export
 

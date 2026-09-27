@@ -11,8 +11,8 @@ keywords:
   - ms_deform_attn kernel
   - set_fused_attention
   - libreyolo triton kernels
-last_verified: "1.5.0"
-verification: "Registry API read from libreyolo/kernels/__init__.py at v1.5.0, attention API from libreyolo/kernels/attention/__init__.py and sdpa.py, Hub provider from libreyolo/kernels/attention/ms_deform_attn.py including its pinned revision and eligibility predicate. Directory layout listed from libreyolo/kernels/. Extra definition from pyproject.toml. Behavior notes and benchmark figures from docs/kernels.md. The v1.4.0 gating history from the RF-DETR slot-wiring commit and the 1.5.0 CHANGELOG entry."
+last_verified: "1.6.0"
+verification: "Registry API read from libreyolo/kernels/__init__.py at v1.6.0, attention API from libreyolo/kernels/attention/__init__.py and sdpa.py, Hub provider from libreyolo/kernels/attention/ms_deform_attn.py including its pinned revision and eligibility predicate. Directory layout listed from libreyolo/kernels/. Extra definition from pyproject.toml. Behavior notes and benchmark figures from docs/kernels.md. The v1.4.0 gating history from the RF-DETR slot-wiring commit and the 1.5.0 CHANGELOG entry."
 meta:
   - label: Package
     value: libreyolo.kernels
@@ -170,6 +170,8 @@ shift at float tolerance as a result. A stock install, without the extra, is
 unaffected. If you are comparing metrics across the upgrade, hold the extra
 fixed or set `LIBREYOLO_HUB_KERNELS=0` on both sides.
 
+Hub MSDA accepts FP16 and BF16 by casting kernel inputs to FP32, restoring the output dtype and preserving gradients through the casts. Eager CUDA calls without an accepted accelerated provider emit one `libreyolo[hub-kernels]` install hint. `ms_deform_attn_available(value=None)` can inspect a tensor-specific path.
+
 ## Fused attention
 
 Fused scaled dot-product attention needs no optional dependency, only stock
@@ -216,3 +218,7 @@ shape set the test suite carries.
 Kernel selection interacts with [CUDA graphs](/docs/reference/cuda-graphs): the
 inference parity matrix ran without the `kernels` package installed, so capture
 safety with a compiled kernel active is not covered by it.
+
+## Triton deformable attention
+
+The in-tree Triton MSDA provider supports eligible CUDA inference with FP32, FP16 and BF16. It rejects gradient-requiring inputs and falls back to portable attention when unavailable. Hub remains preferred. `LIBREYOLO_TRITON_MSDA=0` disables Triton; `LIBREYOLO_HUB_KERNELS=0` disables the Hub provider and its install hint.

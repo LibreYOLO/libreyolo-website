@@ -18,7 +18,7 @@ keywords:
   - miou
   - chất lượng panoptic
   - độ chính xác top1
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   val:
     - label: Python
@@ -61,16 +61,15 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: d907183492fa3f57
+source_hash: da1e3ccfd1efba73
 ---
-
 ## Chạy xác thực
 
 `val()` nhận dataset và trả về các metric.
 
 <code-tabs name="val" />
 
-Giá trị trả về là `dict[str, float]` thuần. Mọi key đều là literal, vì vậy hãy
+Giá trị trả về là `dict[str, float]`. Mọi key đều là literal, vì vậy hãy
 đọc theo tên thay vì vị trí.
 
 Các đối số chính là `data`, `split`, `batch`, `imgsz`, `conf`, `iou`, `workers`,
@@ -78,7 +77,9 @@ Các đối số chính là `data`, `split`, `batch`, `imgsz`, `conf`, `iou`, `w
 `iou` là `0.6`, đều lỏng hơn nhiều so với giá trị mặc định khi dự đoán vì một
 lượt quét mAP cần phần đuôi có độ tin cậy thấp. `imgsz` mặc định theo kích thước
 đầu vào riêng của mô hình thay vì một số cố định. `split` nhận `val`, `test`
-hoặc `train` và không nhận giá trị nào khác.
+hoặc `train` và không nhận giá trị nào khác. Khi không có `data`, một checkpoint
+đã huấn luyện được xác thực trên dataset mà nó đã được huấn luyện; trọng số đã
+phát hành không mang dataset nào và cần `data=`.
 
 Mọi trường khác của cấu hình xác thực được truyền qua dưới dạng đối số keyword,
 gồm `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`, `cache` và
@@ -143,6 +144,8 @@ tốt nhất sử dụng theo mặc định. Phát hiện, phân đoạn và OBB
 family của chúng được chọn theo `metrics/mAP50-95`, vốn có trong dictionary trả
 về. Tư thế không trả về `fitness` lẫn `metrics/mAP50-95`; thay vào đó, trainer
 của tác vụ đặt `best_metric_key` thành `metrics/keypoints_mAP50-95`.
+
+Phân loại ImageFolder bổ sung macro `metrics/precision`, `metrics/recall` và `metrics/f1`, lấy trung bình trên các lớp đối tượng có trong nhãn đích đánh giá. Top-1 vẫn là fitness mặc định. Phát hiện còn trả về `metrics/best_conf` và `metrics/best_conf_f1`, chọn ngưỡng tối ưu micro-F1 tại IoU 0.50, và đặt các ngưỡng với khóa là tên lớp đối tượng trên `metrics.box.best_conf_per_class`. Các phát hiện cùng điểm vẫn được nhóm chung; khi hòa chọn ngưỡng cao hơn. Không có F1 dương sẽ cho 0.0. Phân đoạn không cung cấp các khóa ngưỡng này.
 
 ## Key tốc độ
 
@@ -237,7 +240,9 @@ sẽ phát sinh lỗi.
 ## Các tệp được ghi khi xác thực
 
 `val()` luôn ghi `config.yaml` vào thư mục lưu, mặc định là
-`runs/val/<model>_<size>_<timestamp>` khi không cung cấp `save_dir`.
+`runs/val/<model>_<size>_<timestamp>` khi không cung cấp `save_dir`. `project`,
+`name` và `exist_ok` chọn thư mục này theo cách huấn luyện vẫn làm: `project/name`,
+với hậu tố tăng dần trừ khi `exist_ok=True`.
 
 <code-tabs name="json" />
 
@@ -254,12 +259,18 @@ loại, ngữ nghĩa, toàn cảnh, độ sâu, pháp tuyến, cạnh, phục h�
 và point đều không ghi gì ở đó. Lỗi vẽ biểu đồ sẽ cảnh báo và không bao giờ dừng
 lượt chạy.
 
+`visualize=True` ghi ảnh TP/FP/FN của bounding box có xét lớp đối tượng cho phát hiện và phân đoạn, hoặc ảnh so sánh nhãn với top-1 cho phân loại ImageFolder, vào `visualize/errors/` và `visualize/correct/`. Ghép cặp dùng IoU 0.5 và độ tin cậy `max(0.25, conf)`. Mặc định là `visualize=False`, `show_labels=True` và `show_conf=True`. Các tác vụ không hỗ trợ và đánh giá clip V-JEPA 2 từ chối trực quan hóa.
+
+`plot_samples=8` giới hạn biểu đồ ảnh mẫu riêng; 0 tắt nó và -1 giữ mọi ảnh. Điều này không thay đổi chỉ số hay đầu ra trực quan hóa.
+
 ## Xác thực trong khi huấn luyện
 
-Quá trình huấn luyện xác thực mỗi `eval_interval` epoch trên split `val` của
-dataset, và các metric tạo ra điều khiển việc chọn `best.pt`, early stop theo
-`patience` và các key `val/` trong mọi logger. Việc xác thực chạy trên trọng số
-EMA khi bật EMA.
+Quá trình huấn luyện xác thực mỗi `eval_interval` epoch, và luôn xác thực sau
+epoch cuối cùng, trên split `val` của dataset, và các metric tạo ra điều khiển
+việc chọn `best.pt`, early stop theo `patience` và các key `val/` trong mọi
+logger. Việc xác thực chạy trên trọng số EMA khi bật EMA. Các tệp của nó được ghi
+vào thư mục `val/` bên trong lượt chạy. `val=False` tắt xác thực trong khi huấn
+luyện, kể cả ở epoch cuối.
 
 Xem [Siêu tham số](/docs/train/hyperparameters) để biết `eval_interval`,
 `patience` và `save_plots`, và [Logger thí nghiệm](/docs/train/loggers) để biết
@@ -269,3 +280,7 @@ các con số được đưa tới đâu.
 
 - Xem [Dataset](/docs/train/datasets) để biết các key split và định dạng mà
   validator đọc.
+
+## Chỉ số bounding box theo ảnh
+
+Kết quả phát hiện và phân đoạn vẫn tương thích dictionary và còn cung cấp `results.box.image_metrics`. Mỗi tên tệp ánh xạ đến `precision`, `recall`, `f1`, `tp`, `fp` và `fn` theo quy tắc ghép cặp của trực quan hóa, kể cả khi tắt trực quan hóa. Phân đoạn đếm bounding box ở đây. Tên tệp trùng dùng đường dẫn đầy đủ sau lần xuất hiện đầu. Mẫu số bằng 0 cho kết quả 0.0. Các bản ghi này không được tổng hợp qua các rank phân tán.

@@ -1,10 +1,10 @@
 ---
 title: libreyolo train
 seo_title: "libreyolo train command reference"
-description: "Train a model from the command line: all 59 arguments with their defaults, how family defaults override them, and which arguments a family ignores."
+description: "Train a model from the command line: arguments with their defaults, how family defaults override them, and which arguments a family ignores."
 lead: "Trains one model on one dataset and writes checkpoints, metrics and logs into a run directory. Every argument below has a default from the command definition, which a model family's own training config may replace."
 keywords: [libreyolo train cli, libreyolo training command, yolo cli training, libreyolo train arguments, libreyolo dry run, libreyolo freeze layers]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 meta:
   - label: Command
     value: libreyolo train
@@ -13,7 +13,7 @@ meta:
     value: data
     mono: true
   - label: Output
-    value: "Checkpoints, metrics and logs under runs/train/exp"
+    value: "Checkpoints, metrics and logs under runs/train/<name>; YOLO9 uses yolo9_exp"
 snippets:
   examples:
     - label: Basic
@@ -72,6 +72,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `epochs=50` and
 | `amp` | `true` | Automatic Mixed Precision |
 | `amp_dtype` | `float16` | CUDA AMP dtype: `float16` or `bfloat16` |
 | `cuda_graph` | `false` | Capture the training forward and backward into CUDA graphs. Single GPU, supported families only; the rest run eager |
+| `compile` | `false` | `torch.compile` the training network: `true`, `false`, `default`, `reduce-overhead`, `max-autotune`, `max-autotune-no-cudagraphs`. Single CUDA GPU; other runs train eager with a warning |
 | `lora` | `false` | LoRA fine-tuning, for the transformer families listed under Notes |
 | `freeze` | | Freeze layers: an integer count, a list of indices, or module names |
 
@@ -130,7 +131,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `epochs=50` and
 | Argument | Default | Meaning |
 |---|---|---|
 | `val` | `true` | Validate during training |
-| `eval_interval` | `10` | Validate every N epochs |
+| `eval_interval` | `10` | Validate every N epochs, and after the final epoch |
 | `max_det` | `300` | Maximum predictions per image after validation NMS |
 | `eval_max_det` | | COCO evaluator cap. The pycocotools AP@100 convention when unset |
 | `faster_coco_eval` | `true` | Use the faster-coco-eval C++ backend for COCO metrics when installed; falls back to pycocotools |
@@ -155,6 +156,27 @@ Arguments are `key=value` pairs, and POSIX form works too, so `epochs=50` and
 | `quiet` | `false` | Suppress stderr |
 | `dry_run` | `false` | Resolve and print the config without executing |
 | `help_json` | `false` | Dump command schema as JSON and exit |
+
+| Argument | Default | Meaning |
+| --- | --- | --- |
+| `min_samples` | `0` | Epoch-length floor for tiny datasets: when the dataset has fewer images, draw this many samples per epoch with replacement (0 = off) |
+| `class_balanced` | `False` | LVIS-style repeat-factor sampling for long-tailed datasets (default: off) |
+| `cls_pw` | `0.0` | Classification inverse-frequency weighting power: 0 off, 1 full (mean-one class weights; cannot combine with class_weights=True) |
+| `class_weights` | `False` | Legacy sample-normalized classification loss weights (default: off) |
+| `single_cls` | `False` | Train a supported detector with every label remapped to class 0 |
+| `classes` | `None` | Train a supported detector on only these original dataset class ids, comma-separated (e.g. '0,3,5'); every other class is dropped as if unlabeled. Ids are kept as-is, not compacted |
+| `average_best` | `0` | Uniform-average the N best checkpoints by the watched metric into weights/average.pt at the end of training (0 = off) |
+| `export_check` | `False` | Export ONNX before epoch 1 and fail the run if export breaks (default: off) |
+| `precise_bn` | `0` | Recompute BatchNorm running stats from this many train images after the last epoch (0 = off) |
+| `aux_weight` | | YOLO9 only: PGI auxiliary-branch loss weight for fine-tuning. `0.25` when unset; `0` trains the main head only |
+| `fliplr` | `None` | Horizontal flip probability (ecosystem alias of flip_prob) |
+| `flipud` | `0.0` | Vertical flip probability |
+| `auto_augment` | `None` | Classification auto-augment policy: randaugment, autoaugment, augmix (default: none) |
+| `erasing` | `0.0` | Classification RandomErasing probability, 0 <= erasing < 1 |
+| `cutmix` | `0.0` | Classification CutMix probability (soft labels) |
+| `scale` | `0.5` | Classification RandomResizedCrop area range: a float lower bound or an explicit (min,max) |
+| `crop_pct` | `None` | Classification eval resize ratio before the center crop (default: the model family's native value) |
+| `plot_samples` | `8` | Sample images in the validation sample plot: 0 for none, -1 for every validated image (does not change the metrics) |
 
 ## Examples
 
@@ -189,9 +211,10 @@ pass-through pipelines with no mosaic, no mixup and no affine warp, so
 `mosaic`, `mixup`, `hsv_prob`, `degrees`, `translate`, `shear`, `mosaic_scale`
 and `mixup_scale` reach nothing there. EC shares that pipeline but does read
 `hsv_prob`, `degrees` and `translate` when its task is pose. The
-classification families, SegFormer and NAFNet ignore that whole set and
-`flip_prob` with it, because their flip runs at a fixed probability rather than
-a configurable one. YOLO-NAS ignores `mosaic` alone, since it augments with an
+classification families ignore that set except `mixup`, which is batch MixUp
+for them, and they read `flip_prob`. SegFormer and NAFNet ignore the whole set
+and `flip_prob` with it, because their flip runs at a fixed probability rather
+than a configurable one. YOLO-NAS ignores `mosaic` alone, since it augments with an
 always-on per-sample affine instead. RF-DETR ignores three more on top of that
 list: `optimizer`, `momentum` and `nesterov`.
 
@@ -201,21 +224,22 @@ authoritative list for the version installed. It is also the only signal, so a
 scripted run with `quiet=true` suppresses the warning along with everything
 else on stderr.
 
-`val=false` is a related case. It sets `eval_interval` to `0` for most
-families; RF-DETR cannot disable validation that way and logs that it ignored
-the request.
+`val=false` is a related case. It sets `eval_interval` to `0`, which turns
+validation during training off, final epoch included, and the run writes no
+`best.pt`.
 
 ### Other behavior worth knowing
 
 `lora=true` is accepted by RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 and
-v4, EC and ConvNeXt. Any other family exits with `config_unsupported` rather
+v4, EC, GTR and ConvNeXt. Any other family exits with `config_unsupported` rather
 than training without it.
 
 `pretrained=false` combined with `resume` is refused for the families that
 support scratch training, since the two ask for opposite things.
 
 `mosaic` and `mixup` are the command-line spellings of the `mosaic_prob` and
-`mixup_prob` config fields. On families whose mixup only applies to mosaic
+`mixup_prob` config fields; on a classification model `mixup` is batch MixUp
+instead. On families whose mixup only applies to mosaic
 samples, `mixup` above zero with `mosaic` at zero never fires, and the run says
 so.
 

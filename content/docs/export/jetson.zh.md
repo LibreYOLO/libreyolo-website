@@ -180,7 +180,7 @@ snippets:
         sudo jetson_clocks
 
         tegrastats            # 实时负载，nvidia-smi 在 Tegra 上功能有限
-source_hash: c07ff908503e89b5
+source_hash: 42f4131b1a842bfd
 ---
 
 ## 这个页面记录了什么
@@ -194,11 +194,9 @@ CUDA 13、Python 3.12.3），在它上面跑起来的技术栈是 `libreyolo 1.4
 其他 JetPack 版本、其他 Jetson 板子和其他 CUDA 版本都没有测试。下面这套步骤就是
 在那个组合上跑通的那一套。
 
-那次运行是 2026-07-27 针对 LibreYOLO 1.4.0 做的，还没有在 1.5.0 的硬件上重跑：
-这是 1.5.0 文档树里唯一一个仍然带着 1.4.0 验证的页面，所以它的 front matter 写的
-是 `last_verified: "1.4.0"`。1.5.0 的改动没有一处涉及这里描述的安装路径、四个缺失
-的库或导出参数，所以这些命令预计仍然成立，但下面输出里的版本号是 1.4.0 打印出来
-的，不是 1.5.0 的实测。
+那次运行是 2026-07-27 针对 LibreYOLO 1.4.0 做的，还没有在 1.5.0 或 1.6.0 的硬件
+上重跑，所以它的 front matter 写的是 `last_verified: "1.4.0"`。这些命令预计仍然
+成立，但下面输出里的版本号是 1.4.0 打印出来的，不是 1.6.0 的实测。
 
 其中有两点和大多数 Jetson 教程说的相反。这些 wheel 就是为 CUDA 13 发布的普通
 aarch64 构建，所以不需要任何 Jetson 专用的 torch 构建。而 JetPack 没有附带那些

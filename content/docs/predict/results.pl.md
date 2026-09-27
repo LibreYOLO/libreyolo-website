@@ -19,7 +19,7 @@ keywords:
   - wyniki mapy głębi
   - podsumowanie Results
   - ONNX ten sam Results
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Klasy danych wynikowych, pola, semantykę przenoszenia, summary(), to_json(),
   plot(), save() i cutout() odczytano z libreyolo/utils/results.py. Zachowanie
@@ -135,12 +135,12 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: cebaac95f0a28b5f
 ---
 
 ## Jeden obiekt i jedno pole na typ danych
 
-Predykcja na jednym obrazie zwraca jeden obiekt `Results`. Zawiera on osiemnaście
+Predykcja na jednym obrazie zwraca jeden obiekt `Results`. Zawiera on dwadzieścia jeden
 pól danych wynikowych, a model wypełnia tylko te, które tworzy jego zadanie.
 Każde pozostałe pole ma wartość `None`, więc odczytanie `result.masks` dla
 detektora zwraca `None`, a nie błąd.
@@ -165,6 +165,9 @@ detektora zwraca `None`, a nie błąd.
 | `embeddings` | `Embeddings` | `(N, D)` wiersze znormalizowane L2 | Zadanie `embed` |
 | `identities` | `Identities` | N nazw i wyników | Zadanie `embed` z galerią |
 | `meshes` | `Meshes` | Parametry ciała i opcjonalne wierzchołki | Rekonstrukcja siatki ciała |
+| `albedo` | `AlbedoMap` | `(H, W, 3)` liniowe RGB | Estymacja albedo |
+| `boxes3d` | `Boxes3D` | `(N, 14)` prostopadłościany w układzie kamery, wyrównane wierszami z `boxes` | Monokularna detekcja 3D |
+| `actions` | `Actions` | `(T, D)` fragment akcji | Polityki robotów |
 
 Obok nich znajdują się pola obecne w każdym wyniku: `orig_shape` jako
 `(height, width)`, `path` (ścieżka źródłowa albo `None` dla wejścia w pamięci),
@@ -301,10 +304,6 @@ maska, wynik głębi jako wizualizacja głębi, wynik panoptyczny z segmentami, 
 jako plik PNG RGBA z przezroczystym tłem, a wynik detektora jako ramki z maskami
 pod nimi. Zapisana ścieżka jest dołączana do wyniku jako `result.saved_path`.
 
-`Results.plot()` ma węższy zakres, niż sugeruje nazwa. Jest zdefiniowane wyłącznie
-dla map normalnych i krawędzi, a dla pozostałych danych zgłasza `NotImplementedError`.
-Dla innych zadań używaj `save=True`.
-
 `Results.save(path)` również ma wąski zakres. Zapisuje wynik matte jako wycięcie
 PNG RGBA z przezroczystym tłem, a w innych przypadkach zgłasza `NotImplementedError`.
 `Results.cutout()` zwraca tę samą tablicę RGBA bez zapisywania. Obie metody
@@ -316,18 +315,22 @@ zrekonstruowanego obrazu oraz `result.meshes.save_obj(path, index=0)` dla siatki
 Informacje o lokalizacji plików oraz zachowaniu `output_path` i
 `output_file_format` znajdziesz w sekcji [źródła predykcji](/docs/predict/sources).
 
+`plot()` obsługuje dane wszystkich zadań. Nakładki na obrazy domyślnie zwracają ciągłe tablice HxWx3 uint8 BGR; `pil=True` żąda PIL. Mapy głębi, normalnych, krawędzi i albedo, prostopadłościany 3D oraz fragmenty akcji domyślnie zwracają obraz PIL; `pil=False` zwraca tablicę. `orig_img` przechowuje piksele BGR dla źródeł w pamięci i adresów URL; pliki lokalne i zebrane klatki skończonych nagrań wideo można otworzyć ponownie.
+
+Dostępne opcje to `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` i `filename`. Zapisane obrazy klasyfikacji zawierają pięć najlepszych etykiet. Zapis mattingu tworzy wycięty obiekt RGBA.
+
 ## Wyeksportowane artefakty zwracają ten sam obiekt
 
 <code-tabs name="exported" />
 
 `LibreYOLO()` wybiera ścieżkę na podstawie rozszerzenia pliku, dlatego
 wyeksportowany artefakt ładuje się za pomocą tego samego wywołania co punkt
-kontrolny `.pt` i zwraca ten sam obiekt `Results`. Pliki `.onnx`, `.engine`,
-`.pte` i `.mnn` są rozpoznawane według rozszerzenia, podobnie jak katalogi
-OpenVINO, Paddle i ncnn oraz adres URL modelu Triton. Kod odczytujący
+kontrolny `.pt` i zwraca ten sam obiekt `Results`. Pliki `.onnx`,
+`.torchscript`, `.engine`, `.pte`, `.tflite` i `.mnn` są rozpoznawane według
+rozszerzenia, podobnie jak katalogi OpenVINO, Paddle, ncnn i Core ML
+`.mlpackage` oraz adres URL modelu Triton. Kod odczytujący
 `result.boxes.xyxy` nie zmienia się po zastąpieniu modelu jego wyeksportowaną
 wersją. Pełny zestaw formatów znajduje się w sekcji [eksport](/docs/export).
 
 Użycie własnego API środowiska uruchomieniowego oznacza samodzielną odpowiedzialność
 za przetwarzanie wstępne, końcowe i nazwy klas.
-

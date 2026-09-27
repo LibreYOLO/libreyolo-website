@@ -20,7 +20,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Task kanonis
-    value: 17
+    value: 20
   - label: Tier dukungan
     value: 'Unggulan, Inti, Didukung, Hanya inferensi, Museum, Tingkat saudara'
 snippets:
@@ -54,12 +54,12 @@ snippets:
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
 
         print(model.task)
-source_hash: 23d045463a6a8411
+source_hash: c745a3c602db00ea
 ---
 
 ## Task
 
-Task adalah yang dikembalikan model. LibreYOLO memiliki tujuh belas nama task
+Task adalah yang dikembalikan model. LibreYOLO memiliki dua puluh nama task
 kanonis, dan setiap nama menunjuk kolom pada objek `Results` yang membawa
 output-nya.
 
@@ -76,12 +76,15 @@ output-nya.
 | `depth` | Map inverse-depth relatif padat |
 | `normal` | Kolom surface-normal vektor satuan padat |
 | `edge` | Map probabilitas edge padat |
+| `albedo` | Map albedo RGB linear padat, yaitu warna permukaan tanpa pencahayaan |
 | `restore` | Gambar RGB hasil restorasi untuk deblurring, denoising, atau super-resolution |
 | `matte` | Map foreground lunak dari 0 hingga 1 untuk penghapusan latar belakang |
 | `ocr` | Quad teks beserta transkrip dalam urutan baca |
 | `embed` | Vektor ternormalisasi L2 yang dot product-nya mengukur kecocokan |
 | `gaze` | Arah pandang per wajah terdeteksi |
 | `mesh` | Tubuh 3D berpose per orang terdeteksi |
+| `detect3d` | Kotak 3D dalam koordinat kamera, dengan kelas dan confidence |
+| `act` | Potongan aksi robot yang diprediksi dari frame kamera dan status robot |
 
 Nama tersebut muncul dalam metadata checkpoint dan nama berkas. Alias yang umum
 diterima di semua tempat yang menerima task dan dinormalisasi sebelum proses

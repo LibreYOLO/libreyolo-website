@@ -17,7 +17,7 @@ keywords:
   - embedding d'images
   - extraction de caractéristiques
   - Meta AI
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Sémantique
@@ -160,7 +160,7 @@ snippets:
         # LibreDINOv2s-sem.onnx.
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
-source_hash: 4256e0a0398e5aaf
+source_hash: c89a9662d03fe6f7
 ---
 
 ## Installation
@@ -213,10 +213,12 @@ linear probe.
 Les arguments nommés principaux sont ici `batch_size` et `lr`, pas `batch` et
 `lr0` utilisés par la plupart des autres familles ; `batch` et `lr0` restent
 acceptés et sont redirigés vers eux, mais passer les deux lève une erreur de
-conflit. `output_dir=` (par défaut `"runs/train"`) remplace `project=`/`name=`
+conflit. `output_dir=` (par défaut `None`) remplace `project=`/`name=`
 comme moyen principal de placer un run, même si passer directement
 `project=`/`name=` fonctionne toujours. Voir [l'entraînement](/docs/train)
 pour les datasets, l'augmentation de données, le multi-GPU et les loggers.
+
+Les nouveaux entraînements utilisent un répertoire `runs/train/dinov2_exp` incrémenté avec `exist_ok=False`. `resume=True` restaure l'état de l'entraîneur et préserve le répertoire choisi. La classification prend en charge `cls_pw` et `class_weights`, décrits dans les [hyperparamètres](/docs/train/hyperparameters).
 
 ## Valider
 
@@ -226,6 +228,8 @@ pixel pour `task="semantic"`, exactitude top-1 et top-5 pour
 mesurer et lève `NotImplementedError` si vous appelez `val()` dessus.
 
 <code-tabs name="val" />
+
+La calibration pour la classification et les embeddings réutilise le pipeline de classification du modèle. L'évaluation utilise la transformation de la famille.
 
 ## Exporter
 

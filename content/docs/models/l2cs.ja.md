@@ -76,7 +76,7 @@ snippets:
         yaw_logits, pitch_logits = session.run(
             None, {name: np.zeros((1, 3, 448, 448), dtype=np.float32)}
         )
-source_hash: 4ec43f4673b4be3e
+source_hash: 1f61c1a61e033bbc
 ---
 
 ## インストール
@@ -96,7 +96,7 @@ LibreYOLOが自動取得できる唯一のチェックポイントは、Gaze360�
 pip install "libreyolo[gaze]"
 ```
 
-追加パッケージがない場合、LibreYOLOは黙って失敗せず、手動ダウンロードの手順を表示します。
+追加パッケージがない場合、LibreYOLOは黙って失敗せず、手動ダウンロードの手順を表示します。1.6.0ではアップストリームのGoogle Driveからのダウンロードが404を返すため、読み込むパスにチェックポイントのローカルコピーを置いてください。
 
 ## 推論
 

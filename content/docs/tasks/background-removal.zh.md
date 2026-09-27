@@ -9,7 +9,7 @@ keywords:
   - 二分图像分割
   - 透明背景 png 抠图
   - alpha matte
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: 预测一张 matte
@@ -96,7 +96,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: f7d88c74d9729268
+source_hash: 69fbc1d967b2d546
 ---
 
 ## 定义
@@ -114,7 +114,7 @@ source_hash: f7d88c74d9729268
 
 ## 模型
 
-有两个家族支持 `matte`，而且它们共用一条前向路径。
+BiRefNet 和 FeyNobg 共用前向路径。
 
 [BiRefNet](/docs/models/birefnet) 是这个任务据以构建的双边参考（bilateral-reference）
 网络，这里发布为一个 Swin-L 档的检查点（checkpoint）。
@@ -127,17 +127,17 @@ BiRefNet 的前向路径、预处理和单 logit 输出，所以预测、验证�
 两者的权重许可不同。两个许可都写在各自的模型页上，而具体那个检查点在 Hugging Face
 仓库上标注的许可才是权威的。
 
+[BEN2](/docs/models/ben2) 提供固定 1024 分辨率的背景移除。[ViTMatte](/docs/models/vitmatte) 接受图像和三级 `trimap=`，分别标记背景、未知和前景像素。
+
 ## 预测
 
 权重会在首次使用时从 Hugging Face 下载，并缓存到本地。
 
 <code-tabs name="predict" />
 
-两个家族都固定在原生的 1024x1024 画布上运行，再把 matte 缩放回原图。不支持其他
-分辨率，因为 Swin 骨干的相对位置表和这个尺寸绑在一起，尺寸对不上时它会把这些表
-插值得很糟，而不是直接报错。`Results.save()` 只为 matte 结果定义，并且需要源图；
-除非你自己传一张进去，否则它会从 `Results.path` 重新加载。输入源、流式处理和结果
-处理见[预测](/docs/predict)。
+BiRefNet 和 FeyNobg 使用固定的原生 1024x1024 画布，再将透明度图缩放回原图大小。不支持其他分辨率，因为 Swin 骨干的相对位置表与这个尺寸绑定，尺寸不匹配会导致错误插值，而不是报错。`Results.save()` 使用源图像生成抠图；除非你传入图像，否则会从 `Results.path` 重新加载。数据源、流式处理和结果处理见[预测](/docs/predict)。
+
+`Results.save()` 将抠图写为 RGBA。`plot()` 渲染图像供检查。BEN2 支持批量原生预测；ViTMatte 需要单张图像的引导图。
 
 ## 数据集格式
 
@@ -170,9 +170,7 @@ names: {0: matte}
 
 ## 训练
 
-两个 matte 家族都没有训练实现：在它们上面调用 `train()` 都会抛出
-`NotImplementedError`，matte 支持只覆盖预测、验证和导出。每个模型页都会指明提供训练
-代码的上游项目，以及把检查点转回来的转换脚本。
+这些透明度图家族没有训练实现。导出支持因家族而异；ViTMatte 不支持导出。各模型页面列出了提供训练代码的上游项目，以及将检查点转换回来的脚本。
 
 ## 验证
 

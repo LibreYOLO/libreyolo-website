@@ -18,7 +18,8 @@ keywords:
   - разделённая голова
   - SimOTA
   - детекция объектов в реальном времени
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 snippets:
   predict:
     - label: Python
@@ -102,7 +103,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: f5ab735a29f85a95
+source_hash: ddba5fb10bb88ad2
 ---
 
 ## Установка
@@ -155,6 +156,8 @@ pip install libreyolo
 Про датасеты, аугментацию, обучение на нескольких GPU и логгеры — в разделе
 [обучение](/docs/train).
 
+Mosaic выбирает до 20 кандидатов, отдавая предпочтение изображениям с разметкой; если ни одно не подходит, остаётся последний вариант.
+
 ## Валидация
 
 `val()` возвращает словарь с ключами `metrics/`, покрывающими точность, полноту,
@@ -176,6 +179,8 @@ YOLOX и YOLOv9 — единственные два семейства, для �
 принимается.
 
 <code-tabs name="export" />
+
+[TFLite INT8](/docs/export/tflite) принимает `int8=True` и калибровочный датасет.
 
 ## Чекпойнты
 

@@ -17,7 +17,7 @@ keywords:
   - 리브리욜로 의사
   - 클래스 불균형 확인
   - 학습 검증 분할 누수
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -59,7 +59,7 @@ snippets:
             print(finding.severity.value, finding.check_id, finding.message)
 
         raise SystemExit(report.exit_code(strict=False))
-source_hash: 9a12a0551c8b56e9
+source_hash: "84e47ff97fb2e2f3"
 ---
 
 ## 데이터셋에서 포인트를 학습시키다
@@ -117,6 +117,8 @@ download: https://example.com/my-dataset.zip   # 선택 사항
 
 `names`는 목록이거나 정수 키 맵일 수 있습니다. `nc`는 선택 사항입니다. 두 개가 모두 존재하고 불일치할 경우 의사는 이를 오류로 보고합니다.
 
+RF-DETR 자세 추정은 클래스 ID 또는 이름을 키로 하는 `kpt_names`를 읽습니다. 클래스별로 앞쪽의 명명된 키포인트 행을 유지하며, 빈 목록은 바운딩 박스만 있는 클래스를 나타냅니다. 다중 클래스 자세에는 `names`와 키포인트가 있는 클래스가 하나 이상 필요합니다.
+
 ## 디렉토리 구조 및 레이블 파일
 
 탐지, 분할, 포즈 및 방향이 지정된 상자는 모두 하나의 레이아웃을 공유합니다. 레이블 경로는 이미지 경로에서 `images` 디렉토리 구성 요소를 `labels`로 바꾸고 확장자를 `.txt`로 변경하여 파생됩니다:
@@ -136,6 +138,8 @@ my-dataset/
 ```
 
 레이블 파일이 없거나 비어 있으면 이미지에 객체가 없다는 의미이며, 이는 객체를 올리는 대신 배경으로 학습됩니다. 필드가 다섯 개 이상인 행은 폴리곤으로 읽히며, 그 박스는 폴리곤의 범위가 됩니다. 따라서 탐지 학습을 위한 세분화 내보내기가 문제 없이 로드됩니다. 의사는 몇 개의 행이 해당 경로를 거쳤는지 보고합니다.
+
+이미지 경계를 넘는 유한한 바운딩 박스는 학습과 검증에서 일관되게 잘라냅니다. 보이는 면적이 없는 박스, 유한하지 않은 좌표, 잘못된 폴리곤은 제거합니다. 범위를 벗어난 클래스 ID는 타깃 구성 전에 보고합니다. `train(classes=[...])`는 원본 클래스 ID로 학습 대상을 필터링하며, [하이퍼파라미터](/docs/train/hyperparameters)를 참조하십시오.
 
 ## 기타 작업
 

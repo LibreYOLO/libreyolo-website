@@ -17,7 +17,7 @@ keywords:
   - youtube 推論
   - vid_stride
   - stream=True
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   ソース分類はlibreyolo/utils/source.py（classify_source、SourceKind、StreamSource、MultiStreamSource）で確認しました。受け付ける画像型とディレクトリ拡張子はlibreyolo/utils/image_loader.pyで確認しました。動画拡張子と保存先はlibreyolo/utils/video.pyで確認しました。画面構文はlibreyolo/utils/screen.pyで確認しました。返り値の形状と引数のデフォルトはlibreyolo/models/base/inference.pyのInferenceRunner.__call__で確認しました。
 snippets:
@@ -46,7 +46,11 @@ snippets:
         array = np.asarray(pil_image)
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+        # NumPy配列は指定がない限りBGRとして読み取られるが、この配列はRGB
+        result = model(array, color_format="rgb")
+        print(type(array).__name__, len(result.boxes))
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: フォルダー
@@ -183,7 +187,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: 81a0c947dbfe48b5
 ---
 
 ## ソースの分類方法
@@ -218,16 +222,20 @@ source_hash: c371965951dd0181
 |---|---|
 | `str`または`pathlib.Path` | ローカルファイル、`http(s)://`、`s3://`、`gs://` |
 | `PIL.Image.Image` | RGBへ変換 |
-| `numpy.ndarray` | 2Dグレースケール、または3DのHWCかCHW。4D配列では最初の画像を使用 |
-| `torch.Tensor` | CHWまたはNCHWをRGBとして読み取り。バッチテンソルでは最初の画像を使用 |
+| `numpy.ndarray` | 2Dグレースケール、またはBGR順の3DのHWCかCHW。4D配列はバッチとして扱う |
+| `torch.Tensor` | CHWまたはNCHWをRGBとして読み取り。4Dテンソルはバッチとして扱う |
 | `bytes` | エンコードされた画像データ |
 | `io.BytesIO` | エンコードされた画像データ |
 
-前処理の前にすべてRGBへ変換されます。チャンネル順序が曖昧なのはNumPy配列だけなので、`color_format`で制御します。デフォルトの`"auto"`は配列をそのまま維持し、`"bgr"`はチャンネルを反転します。OpenCVで読み取ったフレームには後者が必要です。
+4Dの配列またはテンソルは、画像ごとに1つの`Results`を含むリストを返します。
+
+前処理の前にすべてRGBへ変換されます。チャンネル順序が曖昧なのはNumPy配列だけなので、`color_format`で制御します。デフォルトの`"auto"`と`"bgr"`は配列をOpenCVが返す順序であるBGRとして読み取り、`"rgb"`は配列をそのまま維持します。PIL画像から作った配列には後者が必要です。
 
 浮動小数点配列は自身の範囲に基づいて再スケーリングされます。`1.0`以下の値は255倍され、それより大きい値は`[0, 255]`内にクリップされます。RGBA配列ではアルファチャンネルを削除します。
 
-リモートパスにはそれぞれ1つのパッケージが必要で、どれもデフォルトではインストールされません。`http(s)://`には`requests`、`s3://`には`boto3`、`gs://`には`gcsfs`が必要です。
+リモートパスにはそれぞれ1つのパッケージが必要です。`http(s)://`用の`requests`は基本インストールに含まれますが、`s3://`用の`boto3`と`gs://`用の`gcsfs`は含まれません。
+
+追跡は、画像、ファイル名で並べたフォルダー、リスト、タプル、遅延評価する画像イテレーターを連続フレームとして受け付けます。`fps=30.0`で画像列の時刻情報を定義し、`color_format="auto"`で入力の解釈を選択してください。[追跡](/docs/tasks/object-tracking)を参照してください。
 
 ## フォルダー
 
@@ -239,13 +247,15 @@ source_hash: c371965951dd0181
 
 <code-tabs name="video" />
 
-パスのサフィックスが`.asf`、`.avi`、`.gif`、`.m4v`、`.mkv`、`.mov`、`.mp4`、`.mpeg`、`.mpg`、`.ts`、`.wmv`、`.webm`のいずれかなら、動画として扱われます。
+パスのサフィックスが`.3g2`、`.3gp`、`.asf`、`.avi`、`.dav`、`.f4v`、`.flv`、`.gif`、`.h264`、`.h265`、`.hevc`、`.m2ts`、`.m4v`、`.mkv`、`.mov`、`.mp4`、`.mpeg`、`.mpg`、`.mts`、`.mxf`、`.ogv`、`.ts`、`.vob`、`.wmv`、`.webm`のいずれかなら、動画として扱われます。
 
 `.gif`は両方の一覧に含まれます。動画の確認が先に行われるため、`.gif`パスを直接`predict`に渡すと動画として開かれます。走査対象フォルダー内の`.gif`は静止画像として読み込まれます。
 
 `vid_stride`はN番目ごとのフレームを処理し、デフォルトは`1`です。`stream=True`を指定しないと動画全体が1つのリストへデコードされ、間引き後に500フレームを超える場合は`stream=True`を推奨する警告が表示されます。
 
 動画から得られる各`Results`は`frame_idx`を持ちます。
+
+動画エンコードでは、H.264を開けない場合に利用可能なコーデックへフォールバックします。別のコーデックが成功した場合にだけ、フォールバックをINFOで記録し、コーデックとキャンバスごとにキャッシュします。
 
 ## Webカメラ、ネットワークストリーム、YouTube
 
@@ -315,11 +325,11 @@ pip install mss
 
 `save=True`はアノテーション済み出力を返さず、runディレクトリの下に書き込みます。
 
-画像は自動的に番号が増える`runs/detect/predict`、`runs/detect/predict2`などへ、ソースのファイル名を維持して保存されます。1つのプロセス内の画像はすべて同じディレクトリに入るため、2つの入力フォルダーに同じファイル名があると互いに上書きします。メモリ内画像には再利用できるファイル名がないため、`image0`、`image1`のように番号が付きます。
+画像は自動的に番号が増える`runs/detect/predict`、`runs/detect/predict2`などへ、ソースのファイル名を維持して保存されます。1つのプロセス内の画像はすべて同じディレクトリに入るため、2つの入力フォルダーに同じファイル名があると互いに上書きします。メモリ内画像には再利用できるファイル名がありません。1枚だけの場合は`inference`として保存されるため、呼び出しを繰り返すと上書きされます。リストやバッチの場合は`image0`、`image1`のように番号が付きます。
 
 動画とライブソースは、ソースに基づく名前を持つ1つの`.mp4`として書き込まれます。
 
 `output_path`はディレクトリを上書きします。サフィックスを持つパスはファイル、持たないパスはディレクトリとして扱われます。`output_file_format`は静止画像のエンコードを選択し、`jpg`、`png`、`webp`を受け付けます。
 
-保存後、書き込まれたパスは`result.saved_path`として結果にも追加されます。
+画像を保存した後、書き込まれたパスは`result.saved_path`として結果にも追加されます。
 

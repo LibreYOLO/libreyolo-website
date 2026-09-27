@@ -18,7 +18,7 @@ keywords:
   - nhúng nms vào onnx
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Flag
     value: export(format="onnx")
@@ -155,9 +155,8 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cee78250fc7189a3
+source_hash: a407e1142b8aa57e
 ---
-
 ## Cài đặt
 
 <code-tabs name="install" />
@@ -165,6 +164,8 @@ source_hash: cee78250fc7189a3
 Phụ thuộc thêm này kéo về `onnx`, `onnxsim` và `onnxruntime`. Chỉ riêng `onnx` là
 đủ để ghi tệp; `onnxsim` chạy bước đơn giản hóa còn `onnxruntime` chạy artifact và
 thực hiện việc hiệu chỉnh (calibration) INT8.
+
+Extra ONNX yêu cầu `onnxruntime>=1.18.0`; LaMa dùng đồ thị opset-21.
 
 ## Xuất mô hình
 
@@ -181,11 +182,12 @@ chiều cao và chiều rộng của ảnh gốc ở dạng động vì bước 
 bên trong graph.
 
 `opset` được chọn theo từng họ mô hình khi bị bỏ trống. Các họ theo kiểu DETR
-(`detr`, `deformable_detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`,
-`rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) cùng với `deit`, `midas` và `moge2`
-nhận opset 17, vì đó là nơi `aten::scaled_dot_product` được hạ xuống. Mọi thứ còn
-lại nhận 13. Matting luôn được nâng lên 19 bất kể thế nào, vì decoder của BiRefNet
-cần toán tử `DeformConv`, thứ mà ONNX chỉ định nghĩa từ opset 19.
+(`detr`, `deformable_detr`, `dinodetr`, `dfine`, `gtr`, `deim`, `deimv2`,
+`tinyformer`, `ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) cùng
+với `deit`, `midas`, `moge2` và `vjepa2` nhận opset 17, vì đó là nơi
+`aten::scaled_dot_product` được hạ xuống. Mọi thứ còn lại nhận 13. BiRefNet và
+FeyNobg luôn được nâng lên 19 bất kể thế nào, vì decoder của chúng cần toán tử
+`DeformConv`, thứ mà ONNX chỉ định nghĩa từ opset 19.
 
 `simplify=True` chạy `onnxsim` và giữ lại graph gốc nếu bước này thất bại, nên một
 lỗi đơn giản hóa chỉ là cảnh báo chứ không phải là một lần xuất mô hình thất bại.
@@ -221,7 +223,9 @@ trợ cùng cách build parser.
 
 `int8=True` chạy lượng tử hóa (quantization) tĩnh của ONNX Runtime và ghi ra một
 graph QDQ với đầu vào và đầu ra ở float32. Chỉ các node `Conv` và `Gemm` được lượng
-tử hóa. Việc để phần giải mã của detection head ở float32 là có chủ đích: phép nối
+tử hóa, và lớp tích chập đầu tiên cùng detection head của YOLO9 vẫn ở float32, như
+trong `model.quantize()`, để điểm số lớp đối tượng không bị bão hòa ở dải đã hiệu
+chuẩn. Việc để phần giải mã của detection head ở float32 là có chủ đích: phép nối
 đó trộn tọa độ hộp theo thang pixel với điểm số lớp đối tượng trong khoảng 0 đến 1,
 và một activation scale duy nhất trên mỗi tensor, bị chi phối bởi độ lớn của hộp,
 sẽ đẩy mọi điểm số về không.
@@ -272,12 +276,13 @@ Một vài tác vụ mang theo hợp đồng runtime với độ phân giải c�
 này. Độ sâu, pháp tuyến bề mặt và biên từ chối `batch != 1` và ép `dynamic=False`.
 Matting ép về khung vuông 1024 gốc, vì các bảng relative-position của Swin trong
 BiRefNet gắn chặt với độ phân giải của chúng. Phục hồi ảnh ép một khung cố định cho
-mọi họ mô hình trừ Real-ESRGAN, vốn có generator hoàn toàn tích chập.
+mọi họ mô hình trừ Real-ESRGAN và QuickSRNet, vốn có mạng hoàn toàn tích chập.
 
-`imgsz` hình chữ nhật dùng được với các họ YOLO9, HRNet, NAFNet và Real-ESRGAN. Các
-họ mô hình có hợp đồng vuông cố định (`clip`, `deformable_detr`, `detr`,
-`dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`, `moge2`, `rtdetr`,
-`rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`, `ssd`) từ chối thẳng.
+`imgsz` hình chữ nhật dùng được với các họ YOLO9, HRNet, NAFNet, PP-LiteSeg,
+Real-ESRGAN, QuickSRNet và phân đoạn ngữ nghĩa GTR. Các họ mô hình có hợp đồng
+vuông cố định (`clip`, `deformable_detr`, `detr`, `dinodetr`, `dfine`, `gtr` trừ
+phân đoạn ngữ nghĩa, `deim`, `deimv2`, `tinyformer`, `ec`, `lwdetr`, `moge2`,
+`rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`, `ssd`) từ chối thẳng.
 
 Hai tổ hợp bị từ chối trước khi trace: phân đoạn với YOLO9, vì trong LibreYOLO
 YOLO9 chỉ làm phát hiện đối tượng, và phân đoạn với RTMDet-Ins, vốn có phần giải mã

@@ -83,7 +83,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: 891eaa1a42795a4c
+source_hash: ee5867f8671d1aac
 ---
 
 ## 安装
@@ -102,8 +102,8 @@ pip install libreyolo
 
 `result.depth_map` 带的是一张稠密的相对逆深度图：值越大表示离相机越近，而且这些
 值没有度量单位，也没有跨图像的统一尺度。`save=True` 会把这张图经过色彩映射的可
-视化结果写入磁盘；`Results.plot()` 不覆盖这个家族，因为它只为表面法线和边缘定
-义。数据源、流式处理和结果处理见[预测](/docs/predict)。
+视化结果写入磁盘；`Results.plot()` 会把深度图渲染成一张 PIL 图像，传 `pil=False`
+则改为返回数组。数据源、流式处理和结果处理见[预测](/docs/predict)。
 
 ## 变体
 

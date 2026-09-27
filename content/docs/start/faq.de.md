@@ -14,8 +14,8 @@ keywords:
   - libreyolo gewichte speicherort
   - libreyolo cli
   - libreyolo offline
-last_verified: 1.5.0
-source_hash: a729b43a6642f2a0
+last_verified: 1.6.0
+source_hash: 13810bf9ea01c459
 ---
 
 ## Mit welchem Modell sollte ich beginnen?
@@ -92,9 +92,10 @@ du es versuchst. Siehe [Grundkonzepte](/docs/concepts).
 
 ## Was gibt val zurück?
 
-Ein einfaches Dictionary und kein Objekt. Zu den Erkennungsschlüsseln gehören
-`metrics/precision`, `metrics/recall`, `metrics/mAP50` und
-`metrics/mAP50-95`. Andere Aufgaben geben die für sie relevanten Schlüssel
+Ein Dictionary mit Metriknamen als Schlüsseln. Zu den Erkennungsschlüsseln
+gehören `metrics/precision`, `metrics/recall`, `metrics/mAP50` und
+`metrics/mAP50-95`, und Ergebnisse von Erkennung und Segmentierung tragen
+außerdem Ergebnisse pro Bild in `metrics.box`. Andere Aufgaben geben die für sie relevanten Schlüssel
 zurück, etwa `metrics/accuracy_top1` für Klassifikation oder `metrics/PQ`,
 `metrics/SQ` und `metrics/RQ` für panoptische Segmentierung.
 
@@ -172,3 +173,6 @@ werden weiterhin aufgelöst und geben einen `DeprecationWarning` mit einem
 Verweis auf den neuen Namen aus. Bestehender Code läuft daher weiter, während
 du ihn aktualisierst.
 
+## Warum scheitert der Download eines Checkpoint-Namens?
+
+Verwende den exakten Dateinamen aus der Checkpoint-Tabelle der Modellseite. FCN- und Mask-R-CNN-Schreibweisen mit Aufgabensuffix werden nicht gehostet; der Loader-Fehler nennt die unterstützten Formen. LingBot-Vision g hat keinen veröffentlichten Checkpoint: Verwende s, b, l oder einen lokalen Checkpoint.

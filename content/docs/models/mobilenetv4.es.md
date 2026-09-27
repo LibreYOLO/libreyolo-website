@@ -18,7 +18,7 @@ keywords:
   - inferencia en móvil
   - clasificador edge
   - clasificador ImageNet
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -34,7 +34,7 @@ snippets:
     - label: CLI
       language: bash
       code: >
-        libreyolo predict model=LibreMobileNetV4s-cls.pt source=cat.jpg
+        libreyolo predict model=LibreMobileNetV4s-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
         save=True
   train:
     - label: Python
@@ -103,7 +103,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: 4a9a1b392ffb136d
+source_hash: 6fe498d802f87c62
 ---
 
 ## Instalación
@@ -158,12 +158,16 @@ esta familia no tienen ninguna.
 Consulta [entrenamiento](/docs/train) para datasets, aumento de datos
 (data augmentation), multi-GPU y loggers.
 
+`cls_pw=0` desactiva la ponderación de la función de pérdida; los valores hasta 1 usan pesos de frecuencia inversa normalizados a una media de 1. En cambio, `class_weights=True` usa frecuencias inversas normalizadas por muestra y no se puede combinar con `cls_pw>0`. Estos ajustes deben coincidir al reanudar. Consulta [clasificación](/docs/tasks/image-classification).
+
 ## Validación
 
 `val()` devuelve un diccionario de claves `metrics/`. En clasificación son la
 precisión top-1 y top-5 sobre el split de validación.
 
 <code-tabs name="val" />
+
+La validación y la calibración INT8 usan la transformación de evaluación de la familia. Los metadatos de exportación registran `norm_mean`, `norm_std` y `resize_mode`; los artefactos anteriores recurren a los valores de la familia. Los preprocesadores de calibración devuelven el array CHW y la proporción requeridos.
 
 ## Exportación
 

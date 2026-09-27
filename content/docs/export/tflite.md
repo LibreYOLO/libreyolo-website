@@ -1,7 +1,7 @@
 ---
 title: TFLite
 seo_title: "Export to TFLite (LiteRT) from LibreYOLO"
-description: "Export a LibreYOLO model to a .tflite FlatBuffer through onnx2tf: static shapes, FP32 only, NHWC inputs, and the families that convert cleanly."
+description: "Export a LibreYOLO model to a .tflite FlatBuffer through onnx2tf: static shapes, FP32 and supported INT8 paths, NHWC inputs and runtime metadata."
 lead: "TFLite is the FlatBuffer format LiteRT executes on mobile and embedded targets. LibreYOLO exports a static ONNX graph, converts it with onnx2tf in flatbuffer-direct mode, and writes the model metadata beside the artifact as a JSON sidecar."
 keywords:
   - yolo tflite export
@@ -11,7 +11,7 @@ keywords:
   - tflite flatbuffer
   - nhwc input tflite
   - edge inference
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 meta:
   - label: Flag
     value: 'export(format="tflite")'
@@ -27,7 +27,7 @@ meta:
   - label: Shapes
     value: "Static only. dynamic=True is rejected."
   - label: Precision
-    value: "FP32 only. half=True and int8=True are rejected."
+    value: "FP32; INT8 for YOLO9 and YOLOX detection. FP16 is rejected."
   - label: Requires
     value: "Python 3.12 or newer, because onnx2tf 2.4.x publishes no older wheels"
 verification: "Read from libreyolo/export/tflite.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/tflite.py and pyproject.toml on the dev branch."
@@ -74,7 +74,7 @@ snippets:
         )
 
         # dynamic=True raises ValueError: the converter needs static shapes.
-        # half=True and int8=True are rejected before tracing.
+        # FP16 is rejected. INT8 requires a supported detector and calibration data.
   run:
     - label: Through LibreYOLO
       language: python
@@ -139,6 +139,8 @@ Metadata is a sidecar. `weights/LibreYOLO9t.tflite.json` carries the family, tas
 class names, input size and pose schema; the FlatBuffer itself has no LibreYOLO
 metadata field, so the two files travel together.
 
+YOLO9 and YOLOX detection support `int8=True` with `data=...`, `fraction=1.0`, `batch=1` and `dynamic=False`. Install `onnx2tf[tensorflow]`. Missing calibration data falls back to `coco8.yaml` with a warning. Separate normalized-box and score outputs use independent quantization scales; retain the sidecar `output_layout` metadata when deploying. Some internal operators can remain floating point.
+
 ## Run the artifact
 
 <code-tabs name="run" />
@@ -159,8 +161,7 @@ so a blob shaped `(1, 3, 640, 640)` will not bind.
 Static shapes only. `dynamic=True` raises `ValueError` before tracing, and the
 export canvas is fixed at whatever `imgsz` resolved to.
 
-FP32 only. `half=True` and `int8=True` are both rejected during validation, so
-quantized deployment is not reachable from this exporter today.
+`half=True` is rejected. INT8 is limited to YOLO9 and YOLOX detection at batch 1; other INT8 families and tasks raise.
 
 Coverage is narrower here than for the graph formats, and it is decided by
 measurement rather than by family. Validated combinations include YOLO9, YOLOX

@@ -15,8 +15,8 @@ keywords:
   - libreyolo cuda kehabisan memori
   - libreyolo notimplementederror
   - troubleshooting libreyolo
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: 1.6.0
+source_hash: f2faaab56a2f0415
 ---
 
 Error dikelompokkan berdasarkan teks yang terlihat. Jika pesan tidak tersedia di
@@ -105,10 +105,10 @@ diturunkan dari nama tersebut, termasuk suffix task, sehingga nama yang tidak
 cocok dengan checkpoint terbitan menghasilkan URL yang tidak ada. Tabel
 checkpoint pada setiap halaman model mencantumkan nama berkas terbitan persis.
 
-## Pelatihan macet atau dimulai ulang di Windows
+## Pelatihan macet atau dimulai ulang di Windows atau macOS
 
-Windows tidak memiliki `fork`, sehingga worker dataloader dimulai dengan
-mengimpor ulang script. Tanpa guard `if __name__ == "__main__":`, setiap worker
+Windows tidak memiliki `fork`, dan Python di macOS tidak memakainya secara
+default, sehingga worker dataloader dimulai dengan mengimpor ulang script. Tanpa guard `if __name__ == "__main__":`, setiap worker
 menjalankan ulang pemanggilan pelatihan, yang menyebabkan deadlock atau spawn
 process tanpa akhir.
 
@@ -147,8 +147,9 @@ berupa list.
 
 ### Membaca metrik sebagai atribut
 
-`val()` mengembalikan dictionary biasa dengan kunci nama metrik, bukan objek
-dengan akses atribut:
+`val()` mengembalikan dictionary dengan kunci nama metrik. Satu-satunya
+atributnya, `box`, membawa hasil per gambar dan ambang per kelas, bukan nilai
+metrik:
 
 ```python
 metrics = model.val(data="coco8.yaml")
@@ -176,4 +177,6 @@ if report.errors:
 
 Lihat [perintah doctor](/docs/cli/doctor) untuk katalog pemeriksaan.
 
+## Worker persisten tidak dapat melihat perubahan dataset
 
+Hook `close_mosaic` atau `set_epoch` yang aktif harus menjangkau salinan dataset yang dipakai worker. Jika loader multi-worker kustom menyimpan salinan persisten yang tidak kompatibel, gunakan `persistent_workers=False` atau bangun ulang worker setelah mutasi. Jalur nonpersisten default tidak terpengaruh.

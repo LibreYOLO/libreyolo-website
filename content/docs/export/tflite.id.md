@@ -1,9 +1,8 @@
 ---
 title: TFLite
 seo_title: Ekspor ke TFLite (LiteRT) dari LibreYOLO
-description: >-
-  Mengekspor model LibreYOLO ke FlatBuffer .tflite lewat onnx2tf: bentuk statis,
-  hanya FP32, input NHWC, dan family yang terkonversi bersih.
+description: 'Ekspor model LibreYOLO ke FlatBuffer .tflite melalui onnx2tf: bentuk statis, FP32 dan
+  jalur INT8 yang didukung, input NHWC, serta metadata runtime.'
 lead: >-
   TFLite adalah format FlatBuffer yang dijalankan LiteRT di target mobile dan
   embedded. LibreYOLO mengekspor graph ONNX statis, mengonversinya dengan
@@ -17,27 +16,25 @@ keywords:
   - tflite flatbuffer
   - input nhwc tflite
   - inference edge device
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
-  - label: Flag
-    value: export(format="tflite")
-    mono: true
-  - label: Menulis
-    value: Satu berkas .tflite plus sidecar metadata .tflite.json
-  - label: Tambahan
-    value: 'pip install "libreyolo[tflite]"'
-    mono: true
-  - label: Dimuat kembali
-    value: LibreYOLO("weights/LibreYOLO9t.tflite")
-    mono: true
-  - label: Bentuk
-    value: Hanya statis. dynamic=True ditolak.
-  - label: Presisi
-    value: Hanya FP32. half=True dan int8=True ditolak.
-  - label: Membutuhkan
-    value: >-
-      Python 3.12 atau lebih baru, karena onnx2tf 2.4.x tidak menerbitkan wheel
-      yang lebih lama
+- label: Flag
+  value: export(format="tflite")
+  mono: true
+- label: Menghasilkan
+  value: Satu berkas .tflite beserta sidecar metadata .tflite.json
+- label: Extra
+  value: pip install "libreyolo[tflite]"
+  mono: true
+- label: Dimuat kembali
+  value: LibreYOLO("weights/LibreYOLO9t.tflite")
+  mono: true
+- label: Bentuk
+  value: Hanya statis. dynamic=True ditolak.
+- label: Presisi
+  value: FP32; INT8 untuk deteksi YOLO9 dan YOLOX. FP16 ditolak.
+- label: Memerlukan
+  value: Python 3.12 atau lebih baru, karena onnx2tf 2.4.x tidak menyediakan wheel untuk versi lama
 verification: >-
   Dibaca dari libreyolo/export/tflite.py, libreyolo/export/exporter.py,
   libreyolo/export/support.py, libreyolo/backends/tflite.py dan pyproject.toml
@@ -88,7 +85,7 @@ snippets:
         )
 
         # dynamic=True memunculkan ValueError: converter butuh bentuk statis.
-        # half=True dan int8=True ditolak sebelum tracing.
+        # FP16 ditolak. INT8 memerlukan detektor yang didukung dan data kalibrasi.
   run:
     - label: Lewat LibreYOLO
       language: python
@@ -140,7 +137,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: fa2deaa0ef6d9978
+source_hash: 3548d74e992bb76d
 ---
 
 ## Instalasi
@@ -168,6 +165,8 @@ Metadata ditulis sebagai sidecar. `weights/LibreYOLO9t.tflite.json` memuat famil
 task, nama kelas, ukuran input dan skema pose; FlatBuffer sendiri tidak punya field
 metadata LibreYOLO, jadi kedua berkas itu harus selalu berpasangan.
 
+Deteksi YOLO9 dan YOLOX mendukung `int8=True` dengan `data=...`, `fraction=1.0`, `batch=1`, dan `dynamic=False`. Pasang `onnx2tf[tensorflow]`. Jika data kalibrasi tidak tersedia, `coco8.yaml` dipakai sebagai fallback dengan peringatan. Keluaran kotak ternormalisasi dan skor terpisah memakai skala kuantisasi tersendiri; pertahankan metadata sidecar `output_layout` saat deployment. Beberapa operator internal dapat tetap floating-point.
+
 ## Menjalankan artefaknya
 
 <code-tabs name="run" />
@@ -188,8 +187,7 @@ input channels-last, jadi blob berbentuk `(1, 3, 640, 640)` tidak akan terikat.
 Hanya bentuk statis. `dynamic=True` memunculkan `ValueError` sebelum tracing, dan
 kanvas ekspor terkunci pada nilai yang dihasilkan `imgsz`.
 
-Hanya FP32. `half=True` dan `int8=True` sama-sama ditolak saat validasi, sehingga
-deployment terkuantisasi belum bisa dicapai dari exporter ini hari ini.
+`half=True` ditolak. INT8 terbatas pada deteksi YOLO9 dan YOLOX dengan batch 1; family dan task INT8 lain menimbulkan galat.
 
 Cakupan di sini lebih sempit dibanding format graph, dan ditentukan oleh pengukuran,
 bukan oleh family. Kombinasi yang sudah tervalidasi mencakup deteksi YOLO9, YOLOX

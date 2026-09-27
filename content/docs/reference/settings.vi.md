@@ -2,12 +2,11 @@
 title: Thiết lập
 seo_title: Biến môi trường và thư mục LibreYOLO
 description: >-
-  Mọi biến môi trường LibreYOLO đọc, các thư mục nó ghi, token cần thiết và công
-  tắc thay đổi code path được chạy.
+  Mọi biến môi trường LibreYOLO đọc, các thư mục nó ghi, token cần thiết và công tắc thay đổi code path được
+  chạy.
 lead: >-
-  LibreYOLO không có file cấu hình. Hành vi không phải đối số hàm được điều
-  khiển bằng biến môi trường và một số ít thư mục quy ước, tất cả được liệt kê
-  tại đây.
+  LibreYOLO không có file cấu hình. Hành vi không phải đối số hàm được điều khiển bằng biến môi trường và một
+  số ít thư mục quy ước, tất cả được liệt kê tại đây.
 keywords:
   - LIBREYOLO_DATASETS_DIR
   - LIBREYOLO_KERNELS
@@ -15,13 +14,11 @@ keywords:
   - HF_TOKEN
   - thư mục trọng số libreyolo
   - cache libreyolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  Các biến được tìm bằng cách tra libreyolo/**/*.py cho os.environ và os.getenv
-  ở v1.5.0; ngữ nghĩa được đọc tại từng nơi sử dụng. Quy ước thư mục được đọc từ
-  libreyolo/data/utils.py, libreyolo/utils/download.py,
-  libreyolo/export/exporter.py, libreyolo/models/base/model.py và
-  libreyolo/models/sam3dbody/mhr_body.py.
+  Các biến được tìm bằng cách tra libreyolo/**/*.py cho os.environ và os.getenv ở v1.6.0; ngữ nghĩa được đọc
+  tại từng nơi sử dụng. Quy ước thư mục được đọc từ libreyolo/data/utils.py, libreyolo/utils/download.py,
+  libreyolo/export/exporter.py, libreyolo/models/base/model.py và libreyolo/models/sam3dbody/mhr_body.py.
 snippets:
   usage:
     - label: Trỏ thư mục gốc dataset sang vị trí khác
@@ -36,9 +33,8 @@ snippets:
 
         # Mặc định là ~/datasets; LIBREYOLO_DATASETS_DIR override lúc import.
         print(DATASETS_DIR)
-source_hash: 462f1288582225ce
+source_hash: 82fbf9f3b1540603
 ---
-
 ## Biến môi trường
 
 | Biến | Mặc định | Tác dụng |
@@ -66,6 +62,8 @@ hưởng theo cả hai hướng.
 Lựa chọn kernel còn short-circuit import: khi `LIBREYOLO_KERNELS` ép `off` hoặc
 `reference`, provider tăng tốc trong cây mã không được import. Registry do ba
 biến này điều khiển được mô tả tại [kernel](/docs/reference/kernels).
+
+`LIBREYOLO_TRITON_MSDA=0` tắt bộ cung cấp deformable attention Triton trong cây mã nguồn. `LIBREYOLO_HUB_KERNELS=0` tắt kernel Hub và gợi ý cài đặt. Cả hai vẫn giữ phương án dự phòng khả chuyển.
 
 ## Các biến do thư viện đặt
 
@@ -101,6 +99,8 @@ Cả hai cách đều hoạt động.
 Token chỉ cần cho repo giới hạn truy cập. SAM 3 là ví dụ đi kèm: trọng số được
 tải từ repo giới hạn theo giấy phép tùy chỉnh, nên bạn phải chấp nhận điều khoản
 trên trang repo và phiên làm việc phải được xác thực.
+
+`HF_TOKEN` xác thực tải checkpoint Hub, công bố và logger Hub. `OPENAI_API_KEY` và `OPENROUTER_API_KEY` cung cấp thông tin xác thực cho [các tuyến nhà cung cấp LibreLLM](/docs/reference/llm-api) tương ứng.
 
 ## Thư mục
 

@@ -3,10 +3,7 @@ title: MiDaS
 families:
   - midas
 seo_title: 'MiDaS: monokulare Tiefenschätzung in LibreYOLO'
-description: >-
-  Nutze MiDaS in LibreYOLO für die monokulare Tiefenschätzung. Installiere, sage
-  vorher, validiere und exportiere zwei MIT-lizenzierte Varianten, die von
-  isl-org geladen werden.
+description: "Führe relative Tiefeninferenz mit MiDaS in LibreYOLO aus. Die Checkpoints s und l verwenden LibreYOLO-Mirrors unter der MIT-Lizenz des Herausgebers."
 lead: >-
   MiDaS ist eine monokulare relative Tiefenschätzung, die mit einem skalierungs-
   und verschiebungsinvarianten Loss auf gemischten Datensätzen trainiert wurde.
@@ -20,7 +17,7 @@ keywords:
   - relative tiefe
   - depth map python
   - zero-shot tiefenschätzung
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -29,10 +26,7 @@ snippets:
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
 
-        # Noch nicht auf dem Datenträger: LibreYOLO lädt ihn aus dem offiziellen
-        GitHub-
-
-        # Release isl-org/MiDaS und prüft vor der Verwendung die feste SHA-256.
+        # Lädt den gespiegelten Checkpoint bei der ersten Verwendung.
 
         model = LibreYOLO("LibreMiDaSl-depth.pt")
 
@@ -107,38 +101,24 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: ce2fbf3ae43e9be4
+source_hash: 64537aa3ad3a6f8f
 ---
 
 ## Installation
 
-MiDaS benötigt kein optionales Zusatzpaket. Alle Importe sind in der
-Basisinstallation enthalten.
+MiDaS benötigt das Extra `midas` für seine timm-Encoder.
 
 ```bash
-pip install libreyolo
+pip install "libreyolo[midas]"
 ```
 
 ## Vorhersage
 
-MiDaS ist die einzige Tiefenfamilie, die LibreYOLO nicht in seiner eigenen
-Hugging-Face-Organisation erneut veröffentlicht. Wenn du einen Checkpoint über
-seinen LibreYOLO-Dateinamen anforderst, wird das passende offizielle Artefakt
-direkt aus den GitHub-Releases von `isl-org/MiDaS` geladen, anhand einer
-festgeschriebenen SHA-256 geprüft und vor der ersten Verwendung mit den
-Checkpoint-Metadaten von LibreYOLO versehen. Spätere Läufe nutzen die lokal
-zwischengespeicherte Datei. Den Grund findest du unter Lizenzierung.
+Die Checkpoints s und l werden von LibreYOLO-Mirrors unter der MIT-Lizenz des Herausgebers heruntergeladen und lokal zwischengespeichert.
 
 <code-tabs name="predict" />
 
-`result.depth_map` enthält eine dichte Karte der relativen inversen Tiefe:
-Höhere Werte bedeuten eine geringere Entfernung zur Kamera. Die Werte haben
-weder eine metrische Einheit noch eine bildübergreifende Skala. `save=True`
-schreibt eine farbkodierte Visualisierung dieser Karte auf den Datenträger.
-`Results.plot()` unterstützt diese Familie nicht, weil es nur für
-Oberflächennormalen und Kanten definiert ist. Unter
-[Vorhersage](/docs/predict) findest du Quellen, Streaming und die Verarbeitung
-von Ergebnissen.
+`result.depth_map` enthält eine dichte Karte der relativen inversen Tiefe: Höhere Werte bedeuten näher an der Kamera; die Werte haben weder eine metrische Einheit noch eine bildübergreifende Skala. `save=True` speichert eine farbcodierte Visualisierung der Karte; `Results.plot()` stellt die Tiefenkarte dar. Siehe [Vorhersage](/docs/predict) für Quellen, Streaming und Ergebnisverarbeitung.
 
 ## Varianten
 

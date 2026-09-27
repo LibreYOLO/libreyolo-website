@@ -12,7 +12,7 @@ keywords:
   - nvfp4 mxfp4
   - dataset de calibration
   - export onnx qdq int8
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Appel
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -76,7 +76,7 @@ snippets:
             calib="coco128.yaml",      # chemin data.yaml ou nom intégré, None saute la calibration
             samples=128,               # nombre maximal d'images de calibration
             batch=8,                   # taille de batch de calibration
-            algorithm="auto",          # auto et minmax sont identiques, percentile est l'alternative
+            algorithm="auto",          # auto/minmax, percentile, mse ou entropy
             keep_high_precision=None,  # None applique la politique de la famille
             verbose=True,
         )
@@ -166,7 +166,7 @@ snippets:
         gérée.
 
         qmodel.export(format="tensorrt", half=True)
-source_hash: 4ffb06b87cad017e
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## Installation
@@ -192,6 +192,8 @@ manifeste `quant`, il se recharge donc avec sa structure et ses scales intacts 
 Les checkpoints écrits par l'entraîneur pendant un run QAT portent eux aussi le
 manifeste, ce qui veut dire que le `best.pt` d'un tel run est lui-même un
 checkpoint quantifié.
+
+L'argument `algorithm` de calibration accepte `auto`, `minmax`, `percentile`, `mse` et `entropy`. `auto` se résout en minmax. MSE et entropy parcourent les histogrammes pour sélectionner les plages d'activation.
 
 ## Recettes
 
@@ -259,6 +261,8 @@ famille, ce qui veut dire aujourd'hui `yolo9` et `rfdetr`.
 Les modèles quantifiés en `fp16` et `bf16` sont réservés à l'inférence, et
 l'entraîneur les rejette en renvoyant vers `amp=True`.
 
+La configuration QAT désactive EMA et SyncBatchNorm et fixe `average_best=0`, en journalisant chaque remplacement. L'entraînement en virgule flottante conserve les réglages demandés.
+
 ## Export
 
 <code-tabs name="export" />
@@ -290,6 +294,10 @@ quantification calculée dans des îlots float32, même sous AMP. La simulation 
 fidèle numériquement, donc un score `val()` sur n'importe quel appareil est une
 affirmation réelle sur l'arithmétique quantifiée. Ce n'est pas une affirmation de
 vitesse.
+
+Apple MPS n'implémente ni les opérations de fausse quantification ni le float8,
+donc sur un Mac toutes les recettes sauf `fp16` et `bf16` s'exécutent sur CPU,
+avec un avertissement.
 
 Deux exceptions s'exécutent nativement. `fp16` et `bf16` sont de simples
 conversions. Les modules `fp8` finalisés exécutent leur GEMM directement sur des

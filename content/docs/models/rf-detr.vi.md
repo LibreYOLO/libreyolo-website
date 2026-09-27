@@ -5,8 +5,7 @@ families:
 seo_title: 'RF-DETR: huấn luyện, tinh chỉnh và xuất theo MIT'
 description: >-
   Dùng RF-DETR trong LibreYOLO để phát hiện, phân đoạn instance, tư thế và box
-  định hướng. Cài đặt, dự đoán, huấn luyện, đánh giá và xuất, tất cả theo giấy
-  phép MIT.
+  định hướng. Cài đặt, dự đoán, huấn luyện, đánh giá và xuất.
 lead: >-
   Một detection transformer dự đoán tập đối tượng cố định thay vì lưới dày đặc,
   nên không cần NMS khi suy luận. LibreYOLO hỗ trợ mô hình cho bốn tác vụ.
@@ -18,7 +17,7 @@ keywords:
   - phân đoạn instance
   - ước lượng tư thế
   - bounding box định hướng
-last_verified: 1.5.0
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -93,7 +92,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -180,7 +179,7 @@ snippets:
     - label: Dùng tệp đã xuất
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # Factory định tuyến theo hậu tố tệp, nên artifact đã xuất được tải
         # như mọi checkpoint và trả về cùng đối tượng Results.
@@ -201,7 +200,7 @@ snippets:
 
         # Hãy kiểm tra chữ ký trước khi kết nối.
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -211,9 +210,8 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 8c464aa759131694
+source_hash: 3238696a4e1ab6c2
 ---
-
 ## Cài đặt
 
 RF-DETR cần extra riêng, extra này cài thêm `transformers` cho backbone.
@@ -233,10 +231,13 @@ detector khác chỉ cần sửa một dòng. `conf` và `max_det` lọc lựa c
 không có bước NMS cần điều chỉnh. Xem [dự đoán](/docs/predict) để biết về nguồn,
 streaming và xử lý kết quả.
 
+Các đường xử lý phát hiện, phân đoạn và hộp xoay dùng phép đổi kích thước song tuyến tính OpenCV với số thực, không khử răng cưa; tác vụ tư thế vẫn dùng phép đổi kích thước có khử răng cưa. `imgsz=(height, width)` hình chữ nhật phải khớp lưới patch/window của tác vụ. Danh mục checkpoint có cả bộ phát hiện UI. [Histogram sự kiện](/docs/train/event-histograms) dùng hồ sơ đầu vào đã ghi.
+
 ## Các biến thể
 
-Bốn kích thước và bốn tác vụ dùng chung một kiến trúc: phân đoạn, tư thế và box
-định hướng dùng lại decoder phát hiện với head khác, nên nhận cùng các đối số.
+Bốn kích thước phát hiện, từ `n` đến `l`, và bốn tác vụ dùng chung một kiến trúc:
+phân đoạn, tư thế và box định hướng dùng lại decoder phát hiện với head khác, nên
+nhận cùng các đối số. Phân đoạn có thêm `x` và `xx`, còn tư thế chỉ có bản `x`.
 Các kích thước có số tham số tương tự và chủ yếu khác nhau ở độ phân giải đầu vào.
 
 <benchmark-table task="detect" />
@@ -245,9 +246,9 @@ Các kích thước có số tham số tương tự và chủ yếu khác nhau �
 
 ## Huấn luyện
 
-Huấn luyện bắt đầu từ checkpoint đã công bố cho cả bốn tác vụ. RF-DETR liệt kê
-`pretrained` trong các đối số mà trình huấn luyện native bỏ qua, nên truyền
-`pretrained=False` không tạo mô hình khởi tạo ngẫu nhiên ở đây.
+Huấn luyện bắt đầu từ checkpoint đã công bố cho cả bốn tác vụ.
+`pretrained=False` thay vào đó khởi tạo lại toàn bộ mạng, kể cả backbone, và
+huấn luyện từ đầu.
 
 <code-tabs name="train" />
 
@@ -259,10 +260,12 @@ kiểm tra điều này trước khi chạy và nêu các kích thước hợp l
 
 Xem [huấn luyện](/docs/train) để biết về tập dữ liệu, tăng cường dữ liệu, multi-GPU và logger.
 
+Lần chạy mới mặc định dùng `output_dir=None`, được chuyển thành `runs/train/rfdetr_exp` với hậu tố tăng dần và `exist_ok=False`. Lần chạy được tiếp tục sẽ ghi tiếp vào thư mục chạy của checkpoint đó. Dataset tư thế nhiều lớp đối tượng dùng `kpt_names` với khóa là chỉ số hoặc tên lớp đối tượng; danh sách rỗng đánh dấu lớp chỉ có bounding box. Dự đoán đệm keypoint đến `kpt_shape`; fitness keypoint-mAP không chấm điểm các lớp chỉ có bounding box.
+
 ## Đánh giá
 
-`val()` trả về từ điển các khóa `metrics/` bao gồm precision, recall, mAP 50 và
-mAP 50-95, được đo trên bất kỳ tập dữ liệu nào theo định dạng bạn đã huấn luyện.
+`val()` trả về từ điển các khóa `metrics/` bao gồm mAP 50, mAP 50-95, mAP 75 và
+average recall theo chuẩn COCO, được đo trên bất kỳ tập dữ liệu nào theo định dạng bạn đã huấn luyện.
 
 <code-tabs name="val" />
 

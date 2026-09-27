@@ -19,7 +19,7 @@ keywords:
   - segmentación de instancias
   - fine-tuning D-FINE
   - DETR
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -157,7 +157,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 0216631a26185524
+source_hash: afc2a4900f773c9d
 ---
 
 ## Instalación
@@ -214,7 +214,7 @@ El entrenamiento parte de un checkpoint publicado, para ambas tareas.
 
 <code-tabs name="train" />
 
-Si no se toca nada, el trainer ejecuta 132 épocas con `lr0=2e-4` y `amp=False`,
+Si no se toca nada, el trainer ejecuta 132 épocas con `lr0=2e-4` y `amp=True` y `amp_dtype="float16"`,
 un batch de 16 y early stopping tras 50 épocas sin mejora. Los pesos de
 detección son un punto de partida válido para entrenar segmentación, pero solo
 como transferencia explícita, ya que la cabeza de máscaras empieza sin entrenar

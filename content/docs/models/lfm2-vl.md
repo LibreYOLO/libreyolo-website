@@ -5,7 +5,7 @@ seo_title: "LFM2-VL: open-vocabulary detection in LibreYOLO"
 description: "Use LFM2-VL in LibreYOLO for open-vocabulary object detection on-device. Predict with any text label; training, validation and export are not supported."
 lead: "LFM2-VL is a compact, on-device vision-language model released by Liquid AI. LibreYOLO wraps it as an open-vocabulary object detector: any list of text labels becomes the class set, with no fixed head and no fine-tuning required."
 keywords: [LFM2-VL, LFM2, Liquid AI, vision-language model, open-vocabulary detection, VLM, edge VLM, LibreVLM]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -67,8 +67,7 @@ decoding repeating an object; it is not a class-wise NMS pass. Skip
 
 ## Variants
 
-Two sizes: 450m and 1.6b, both from Liquid AI's LFM2.5-VL release, built for
-on-device deployment. LibreYOLO's benchmark harness has not measured this
+Three sizes: 450m, 1.6b and 3b, all from Liquid AI's LFM2.5-VL release, with `lfm2-vl-3b` selecting the LFM2.5 3B model and its 0–1000 box parser. LibreYOLO's benchmark harness has not measured this
 family, so there are no published accuracy numbers to compare them by; pick a
 size against your own compute budget.
 

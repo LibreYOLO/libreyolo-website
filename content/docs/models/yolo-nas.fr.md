@@ -3,7 +3,9 @@ title: YOLO-NAS
 families:
   - yolonas
 seo_title: "YOLO-NAS\_: prédire, entraîner et exporter dans LibreYOLO"
-description: "Utilisez YOLO-NAS dans LibreYOLO pour la détection et la pose. Les poids de Deci.AI sont propriétaires et réservés à un usage non commercial\_; LibreYOLO n'en publie aucun."
+description: >-
+  Détection, pose et boîtes orientées avec YOLO-NAS dans LibreYOLO. Les poids
+  pré-entraînés amont sont non commerciaux.
 lead: >-
   YOLO-NAS est un détecteur convolutionnel dont le backbone et le neck sont
   issus de la recherche d'architecture de Deci.AI, construit à partir de blocs
@@ -18,7 +20,7 @@ keywords:
   - estimation de pose
   - détecteur compatible quantification
   - AutoNAC
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -142,7 +144,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 47c30d6e44024ce7
+source_hash: 52050c4046781a6e
 ---
 
 ## Installer
@@ -171,11 +173,13 @@ confiance et `iou` le seuil de NMS. Consultez la
 [prédiction](/docs/predict) pour les sources, le streaming et la gestion des
 résultats.
 
+La tâche de boîtes orientées renvoie `result.obb`. Le graphe OBB publié utilise un canevas de 1024 pixels et son ensemble enregistré de 18 classes.
+
 ## Variantes
 
 La détection et la pose utilisent la même architecture avec des têtes
 différentes, et acceptent les mêmes arguments. Les tailles du tableau
-ci-dessous concernent la détection\u00a0; la pose est publiée dans ces tailles ainsi
+ci-dessous concernent la détection ; la pose est publiée dans ces tailles ainsi
 que dans une taille plus petite. La tête de pose prédit l'ensemble de points
 clés COCO.
 
@@ -197,10 +201,12 @@ d'un checkpoint de pose COCO sur un squelette de taille différente.
 
 Le fine-tuning part des poids de Deci, qui sont couverts par la licence de
 Deci. L'entraînement d'un modèle initialisé aléatoirement n'emploie aucun
-checkpoint Deci\u00a0; il correspond au troisième extrait ci-dessus.
+checkpoint Deci ; il correspond au troisième extrait ci-dessus.
 
 Consultez l'[entraînement](/docs/train) pour les datasets, l'augmentation, le
 multi-GPU et les loggers.
+
+La détection utilise par défaut `amp=True` avec `amp_dtype="float16"` ; l'entraînement des boîtes orientées conserve `amp=False`. La tête OBB prend en charge l'entraînement, la prédiction et la validation, utilise des augmentations par retournement/HSV et sélectionne les checkpoints avec `metrics/mAP50-95(OBB)`. `load_detect_weights_for_obb()` l'initialise à partir de poids de détection.
 
 ## Valider
 
@@ -232,13 +238,14 @@ qui les couvre.
 
 Il n'y en a aucun à énumérer. La licence de Deci interdit la redistribution,
 l'organisation LibreYOLO ne publie donc aucun poids YOLO-NAS et le
-téléchargement est résolu ailleurs\u00a0: un nom de la forme
-`LibreYOLONAS<size>.pt`, ou `LibreYOLONAS<size>-pose.pt` pour la pose, est
-associé à l'objet correspondant sur le CDN public de Deci.
+téléchargement est résolu ailleurs : un nom de la forme
+`LibreYOLONAS<size>.pt`, `LibreYOLONAS<size>-pose.pt` pour la pose, ou
+`LibreYOLONAS<size>-obb.pt` (s, m, l) pour les boîtes orientées, est associé à
+l'objet correspondant sur le CDN public de Deci.
 
 Seuls les checkpoints dont la bibliothèque épingle le SHA-256 peuvent être
 récupérés de cette manière. Toute autre tentative échoue de façon sécurisée
-au lieu d'ouvrir un pickle tiers non vérifié\u00a0; vous devez télécharger le
+au lieu d'ouvrir un pickle tiers non vérifié ; vous devez télécharger le
 fichier manuellement et transmettre son chemin. Un fichier déjà présent sur
 le disque est chargé depuis son chemin, sans téléchargement ni contrôle par
 somme de vérification. Cela inclut un fichier Deci `.pth` sous son nom
@@ -248,7 +255,7 @@ d'origine, que le chargeur reconnaît.
 
 <provenance-box>
 
-LibreYOLO n'héberge ni ne réplique ces poids\u00a0: cette famille n'a aucun fichier
+LibreYOLO n'héberge ni ne réplique ces poids : cette famille n'a aucun fichier
 dans l'organisation LibreYOLO sur Hugging Face. Chaque téléchargement
 automatique pointe plutôt vers le CDN public de Deci, affiche les conditions
 de Deci une fois par processus avant de démarrer et vérifie le fichier à

@@ -15,7 +15,7 @@ keywords:
   - geometría monocular python
   - métrica de error angular
   - predicción densa de normales
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Predecir un campo de normales
@@ -58,18 +58,13 @@ snippets:
         print(field[h // 2, w // 2])
     - label: Guardar la visualización
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("LibreMoGe2s-normal.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
-        # plot() dibuja el campo; está definido para resultados de normales y de
-        bordes.
-
+        # plot() devuelve el campo renderizado como imagen PIL.
         result.plot().save("normals.png")
   val:
     - label: Validar y leer las claves de las métricas
@@ -109,7 +104,7 @@ snippets:
 
 
         print(result.normal_map.data.shape)
-source_hash: d26d26d894b436ff
+source_hash: dd8de1b1ecd208bf
 ---
 
 ## Definición
@@ -130,19 +125,18 @@ longitud unitaria dentro de una tolerancia. `result.boxes` queda vacío, así qu
 
 ## Modelos
 
-Dos familias cubren `normal`.
+Las siguientes familias cubren `normal`.
 
 [MoGe-2](/docs/models/moge-2) es la dedicada: un modelo de geometría monocular de
-un solo forward, en tres tamaños de encoder. LibreYOLO no copia estos checkpoints
-a su propia organización; cargar uno descarga el tamaño correspondiente desde los
-repositorios oficiales en una revisión fijada y lo verifica contra un SHA-256
-registrado.
+un solo forward, en tres tamaños de encoder. Los tamaños s y l usan mirrors de LibreYOLO; b permanece upstream.
 
 [LibreMODUS](/docs/models/libremodus) produce normales como uno de los objetivos
 de un modelo any-to-any, y puede tomar como entrada un mapa de profundidad en
 lugar de una imagen RGB. Necesita el extra `modus` y tu propia cuenta autenticada
 de Hugging Face, y no ofrece ni `val()` ni `export()`, así que no participa en las
 secciones de validación y exportación de más abajo.
+
+[Marigold V2](/docs/models/marigold-v2) también estima normales de superficie. Su inferencia por defecto a cuatro bits requiere CUDA y el extra `marigold`; no exporta.
 
 ## Predicción
 
@@ -195,8 +189,7 @@ contrato completo.
 
 ## Entrenamiento
 
-Ninguna de las dos familias de normales tiene implementación de entrenamiento:
-`train()` lanza `NotImplementedError` en ambas. La página de MoGe-2 señala sus
+Estas familias de estimación de normales no tienen implementación de entrenamiento. La página de MoGe-2 señala sus
 checkpoints oficiales fijados para predecir, validar y exportar.
 
 ## Validación

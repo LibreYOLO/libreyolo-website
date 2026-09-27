@@ -20,7 +20,7 @@ keywords:
   - point prompt
   - box prompt
   - Meta AI
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Prompt titik dan kotak
@@ -79,7 +79,7 @@ snippets:
         b = model.predict(bboxes=[300, 200, 900, 700])
 
         model.reset_image()
-source_hash: f8904d241ef8a929
+source_hash: 313541a8b2c6abaf
 ---
 
 ## Instalasi
@@ -127,10 +127,7 @@ cepat untuk enkode, sedangkan huge paling berat.
 
 <provenance-box>
 
-LibreYOLO tidak meng-host salinan bobot SAM-1 sendiri. `LibreSAM("base")`, `"large"`, dan
-`"huge"` mengunduh langsung dari repositori `facebook/sam-vit-base`,
-`facebook/sam-vit-large`, dan `facebook/sam-vit-huge` milik Meta di Hugging Face, yang
-masing-masing diberi tag Apache-2.0 secara independen dari LibreYOLO.
+`LibreSAM("base")`, `"large"`, dan `"huge"` memakai mirror LibreYOLO untuk artefak SAM-1. Bobot mempertahankan deklarasi Apache-2.0 dari Meta.
 
 </provenance-box>
 

@@ -20,7 +20,7 @@ keywords:
   - nms embutido onnx
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Flag
     value: export(format="onnx")
@@ -156,7 +156,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cee78250fc7189a3
+source_hash: a407e1142b8aa57e
 ---
 
 ## Instalação
@@ -166,6 +166,8 @@ source_hash: cee78250fc7189a3
 O extra puxa `onnx`, `onnxsim` e `onnxruntime`. Só o `onnx` já basta para
 escrever o arquivo; o `onnxsim` roda o passo de simplificação e o `onnxruntime`
 executa o artefato e faz a calibração INT8.
+
+O extra ONNX exige `onnxruntime>=1.18.0`; LaMa usa um grafo com opset 21.
 
 ## Exportação
 
@@ -183,12 +185,12 @@ altura e a largura de origem dinâmicas porque o redimensionamento deles acontec
 dentro do grafo.
 
 O `opset` é escolhido por família quando você omite. As famílias estilo DETR
-(`detr`, `deformable_detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`,
-`lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) mais `deit`, `midas` e
-`moge2` recebem o opset 17, que é onde o `aten::scaled_dot_product` é rebaixado.
-Todo o resto recebe 13. O matting sobe para 19 de qualquer jeito, porque o
-decodificador do BiRefNet precisa do operador `DeformConv`, que o ONNX define a
-partir do opset 19.
+(`detr`, `deformable_detr`, `dinodetr`, `dfine`, `gtr`, `deim`, `deimv2`,
+`tinyformer`, `ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) mais
+`deit`, `midas`, `moge2` e `vjepa2` recebem o opset 17, que é onde o
+`aten::scaled_dot_product` é rebaixado. Todo o resto recebe 13. BiRefNet e
+FeyNobg sobem para 19 de qualquer jeito, porque o decodificador deles precisa do
+operador `DeformConv`, que o ONNX define a partir do opset 19.
 
 `simplify=True` roda o `onnxsim` e mantém o grafo original se o passo falhar,
 então um erro de simplificação é um aviso, e não uma falha de exportação. No
@@ -223,7 +225,9 @@ suportadas e para a compilação do parser.
 <code-tabs name="int8" />
 
 `int8=True` roda a quantização estática do ONNX Runtime e escreve um grafo QDQ
-com entradas e saídas em float32. Só os nós `Conv` e `Gemm` são quantizados.
+com entradas e saídas em float32. Só os nós `Conv` e `Gemm` são quantizados, e
+a primeira convolução e a cabeça de detecção do YOLO9 ficam em float32, como no
+`model.quantize()`, para que os scores de classe não saturem na faixa calibrada.
 Deixar a decodificação da cabeça de detecção em float32 é proposital: essa
 concatenação mistura coordenadas de caixa na escala de pixels com scores de
 classe na faixa de 0 a 1, e uma única escala de ativação por tensor dominada pela
@@ -275,14 +279,15 @@ Várias tarefas carregam nesta versão um contrato de resolução fixa em runtim
 Profundidade, normal de superfície e bordas rejeitam `batch != 1` e forçam
 `dynamic=False`. O matting força o quadrado nativo de 1024, porque as tabelas de
 posição relativa do Swin do BiRefNet estão presas à resolução delas. A
-restauração força uma tela fixa para todas as famílias, exceto a Real-ESRGAN,
-cujo gerador é totalmente convolucional.
+restauração força uma tela fixa para todas as famílias, exceto Real-ESRGAN e
+QuickSRNet, cujas redes são totalmente convolucionais.
 
-Um `imgsz` retangular funciona para as famílias YOLO9, HRNet, NAFNet e
-Real-ESRGAN. As famílias com contrato de quadrado fixo (`clip`,
-`deformable_detr`, `detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`,
-`lwdetr`, `moge2`, `rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`, `ssd`)
-o rejeitam de saída.
+Um `imgsz` retangular funciona para as famílias YOLO9, HRNet, NAFNet,
+PP-LiteSeg, Real-ESRGAN, QuickSRNet e a segmentação semântica do GTR. As famílias
+com contrato de quadrado fixo (`clip`, `deformable_detr`, `detr`, `dinodetr`,
+`dfine`, `gtr` exceto na segmentação semântica, `deim`, `deimv2`, `tinyformer`,
+`ec`, `lwdetr`, `moge2`, `rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`,
+`ssd`) o rejeitam de saída.
 
 Duas combinações são recusadas antes do trace: segmentação YOLO9, porque o YOLO9
 é só detecção no LibreYOLO, e segmentação RTMDet-Ins, cuja decodificação de

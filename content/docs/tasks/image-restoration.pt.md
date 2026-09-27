@@ -17,7 +17,7 @@ keywords:
   - aumentar resolução de imagem ia
   - modelo para tirar desfoque de foto
   - validação PSNR SSIM
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Aumentar a escala de uma imagem
@@ -115,7 +115,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         result.restored.save("denoised.png")
-source_hash: 9dc81cadb3ebf18b
+source_hash: c1c1270071053132
 ---
 
 ## Definição
@@ -136,7 +136,7 @@ imagem restaurada diretamente em vez de uma foto anotada.
 
 ## Modelos
 
-Três famílias atendem `restore`, separadas pela degradação que desfazem.
+As famílias de restauração tratam diferentes degradações de imagem.
 
 [NAFNet](/docs/models/nafnet) é o modelo de remoção de ruído, e a única família
 de restauração que o LibreYOLO consegue treinar. Sua arquitetura troca as
@@ -153,6 +153,8 @@ contra redução de escala bicúbica, em
 Transformer, em três tamanhos que cobrem o gerador leve oficial e dois geradores
 para imagens reais.
 
+[QuickSRNet](/docs/models/quicksrnet) fornece upscaling 2x, [DDColor](/docs/models/ddcolor) colorização, [HVI-CIDNet](/docs/models/hvi-cidnet) melhoria de imagens com pouca luz e [LaMa](/docs/models/lama) inpainting. Esses quatro não suportam treinamento.
+
 ## Predição
 
 Os pesos são baixados do Hugging Face no primeiro uso e ficam em cache
@@ -160,13 +162,9 @@ localmente.
 
 <code-tabs name="predict" />
 
-A restauração roda na resolução da própria imagem de origem, e não em um canvas
-fixo da rede, aplicando padding apenas até o fator de subamostragem da rede, então
-tanto o tempo quanto a memória escalam com a quantidade de pixels da sua entrada.
-`tile` divide o forward pass em tiles sobrepostos e mistura as emendas de volta,
-e `tile_pad` é o halo adicionado em volta de cada tile antes de ele ser recortado
-de novo; os dois são argumentos nomeados do Python. Veja
-[predição](/docs/predict) para fontes, streaming e tratamento de resultados.
+NAFNet, Real-ESRGAN e SwinIR rodam na resolução da imagem de origem em vez de uma tela de rede fixa, preenchendo apenas até o fator de redução da rede, então tanto o tempo quanto a memória escalam com a quantidade de pixels da entrada. `tile` divide o forward em blocos sobrepostos e combina suas bordas, e `tile_pad` é a margem adicionada ao redor de cada bloco antes de removê-la com um recorte; ambos são argumentos nomeados Python. Veja [predição](/docs/predict) para fontes, streaming e tratamento de resultados.
+
+LaMa exige `mask=` para uma única imagem. HVI-CIDNet expõe `gamma`, `saturation` e `intensity`, todos com padrão 1.0. As restrições de tela e exportação específicas de cada modelo estão em suas páginas.
 
 ## Formato do dataset
 

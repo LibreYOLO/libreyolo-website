@@ -16,7 +16,7 @@ keywords:
   - biblioteca de detecção de objetos licença MIT
   - alternativa ao YOLO
   - treinar detector de objetos dataset próprio
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -118,7 +118,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: c735b6e3de78dd2b
+source_hash: 01ee5ee9eea3b569
 ---
 
 ## Definição
@@ -142,16 +142,7 @@ um objeto `Boxes` produz fatias de uma linha, então `box.cls`, `box.conf` e
 
 ## Modelos
 
-Doze famílias treinam e fazem predição: [YOLOv9](/docs/models/yolov9),
-[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
-[RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine),
-[DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr),
-[YOLO-NAS](/docs/models/yolo-nas),
-[YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7),
-[RTMDet](/docs/models/rtmdet) e [PicoDet](/docs/models/picodet). YOLOv9 e
-RF-DETR são as duas famílias principais, e as novidades chegam nelas primeiro.
-O RF-DETR precisa do seu próprio extra, `pip install "libreyolo[rfdetr]"`; o
-resto roda no pacote base.
+As seguintes famílias treinam e rodam predições: [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [GTR](/docs/models/gtr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet) e [PicoDet](/docs/models/picodet). YOLOv9 e RF-DETR são as duas famílias principais, e os recursos chegam primeiro nelas. RF-DETR precisa do seu próprio extra, `pip install "libreyolo[rfdetr]"`; as demais rodam com o pacote base.
 
 Outras onze fazem predição, validação e exportação, mas o `train()` delas
 lança `NotImplementedError`: [LW-DETR](/docs/models/lw-detr),
@@ -175,10 +166,14 @@ além das famílias de visão-linguagem
 [Florence-2](/docs/models/florence-2), [Kosmos-2](/docs/models/kosmos-2),
 [Qwen3-VL](/docs/models/qwen3-vl), [SmolVLM2](/docs/models/smolvlm2),
 [InternVL3](/docs/models/internvl3), [LFM2-VL](/docs/models/lfm2-vl),
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream),
+[North Micro Vision](/docs/models/northmicrovision),
 [LocateAnything](/docs/models/locate-anything),
 [SenseNova-Vision](/docs/models/sensenova-vision) e
 [LibreMODUS](/docs/models/libremodus). Esses carregam pela sua própria factory
 e pelos seus extras; cada página de modelo traz a chamada exata.
+
+[PP-YOLOE](/docs/models/ppyoloe) e [TinyFormer](/docs/models/tinyformer) também suportam treinamento de detecção.
 
 ## Predição
 
@@ -250,6 +245,8 @@ do modelo em vez do exemplo de outra família. Uma família também pode ignorar
 um argumento por completo, e a página dela lista quais. Veja
 [treinamento](/docs/train) para datasets, data augmentation, multi-GPU e
 loggers.
+
+Use `classes=` para manter IDs originais selecionados do dataset; `single_cls=True` reúne as labels mantidas na classe 0. Veja [hiperparâmetros](/docs/train/hyperparameters) para famílias suportadas e herança na validação.
 
 ## Validação
 

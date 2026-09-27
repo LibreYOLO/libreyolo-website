@@ -1,0 +1,12 @@
+{
+  "name": "SAM (Segment Anything)",
+  "org": "Meta AI Research (FAIR)",
+  "paper_title": "Segment Anything",
+  "paper_url": "https://arxiv.org/abs/2304.02643",
+  "code_url": "https://github.com/facebookresearch/segment-anything",
+  "license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so this code and these weights can be used in commercial and closed-source products. It asks you to keep the license text and attribution notices with any copy you redistribute, and it grants a patent license. LibreYOLO does not mirror SAM-1 weights on its own Hugging Face org: LibreSAM downloads the base, large and huge checkpoints directly from Meta's own facebook/sam-vit-base, facebook/sam-vit-large and facebook/sam-vit-huge repositories, each tagged Apache-2.0 there as well.",
+  "bibtex": "@article{kirillov2023segany,\n  title={Segment Anything},\n  author={Kirillov, Alexander and Mintun, Eric and Ravi, Nikhila and Mao, Hanzi and Rolland, Chloe and Gustafson, Laura and Xiao, Tete and Whitehead, Spencer and Berg, Alexander C. and Lo, Wan-Yen and Doll{\\'a}r, Piotr and Girshick, Ross},\n  journal={arXiv:2304.02643},\n  year={2023}\n}",
+  "bibtex_source_url": "https://github.com/facebookresearch/segment-anything#citing-segment-anything",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citing Segment Anything section of the upstream README on branch main. Cross-checked against the arXiv API for 2304.02643: twelve authors in the same order, identical title. The upstream README still cites it as an arXiv entry, so this page does too rather than asserting a venue upstream has not."
+}

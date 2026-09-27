@@ -19,7 +19,8 @@ keywords:
   - колбэки обучения
   - метрики обучения csv
   - libreyolo monitor
-last_verified: 1.5.0
+last_verified: 1.6.0
+
 snippets:
   logger:
     - label: По имени
@@ -86,7 +87,7 @@ snippets:
       code: |
         libreyolo monitor                     # последний запуск в runs/
         libreyolo monitor runs/train/exp      # конкретный запуск
-source_hash: de035acbaed32804
+source_hash: b5fefd12a738dcb5
 ---
 
 ## Включение логгера
@@ -182,6 +183,8 @@ DVCLive — сохранение DVC-эксперимента и запись к
 Neptune намеренно не входит в `libreyolo[all]`: его стабильному клиенту нужен
 protobuf ниже 7, а extra для TFLite требует protobuf 7. Ставьте
 `libreyolo[neptune]` в окружении без extra для TFLite.
+
+[Логгер Hugging Face Hub](/docs/reference/hugging-face) загружает `weights/best.pt` в конце обучения, используя `last.pt`, если лучшего нет. Используйте `loggers="hf:owner/repo"` или `HuggingFaceHubLogger(repo_id, private=True)`. Он проверяет доступ на запись и создаёт отсутствующий репозиторий перед обучением. Логгер по умолчанию создаёт закрытый репозиторий; явный `model.push_to_hub()` по умолчанию создаёт открытый. Видимость существующего репозитория сохраняется.
 
 ## Написание колбэка
 

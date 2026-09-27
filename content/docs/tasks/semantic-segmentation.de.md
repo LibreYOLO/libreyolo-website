@@ -16,7 +16,7 @@ keywords:
   - segmentierungsmodell trainieren
   - mIoU
   - MIT segmentation bibliothek
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -120,7 +120,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 44b92d8ba6062f04
+source_hash: e13acb1e813da7c4
 ---
 
 ## Definition
@@ -146,15 +146,7 @@ ausgeschlossen und von `.classes` nicht aufgeführt.
 
 ## Modelle
 
-Drei Familien unterstützen sowohl Training als auch Vorhersage:
-[SegFormer](/docs/models/segformer),
-[LingBot-Vision](/docs/models/lingbot-vision) und
-[DINOv2](/docs/models/dinov2). SegFormer und LingBot-Vision laufen mit dem
-Basispaket und stellen veröffentlichte Gewichte bereit. DINOv2 benötigt
-`pip install "libreyolo[rfdetr]"` und besitzt keinen von LibreYOLO gehosteten
-Checkpoint. Es lädt das Upstream-Backbone, während sein dichter Head zufällig
-initialisiert wird. Daher ist es ein Ausgangspunkt für das Training und kein
-direkt einsetzbarer Prädiktor.
+Trainierbare Familien sind [SegFormer](/docs/models/segformer), [LingBot-Vision](/docs/models/lingbot-vision) und [DINOv2](/docs/models/dinov2). SegFormer und LingBot-Vision laufen mit dem Basispaket und bieten veröffentlichte Gewichte. DINOv2 benötigt `pip install "libreyolo[rfdetr]"` und hat keinen von LibreYOLO gehosteten Checkpoint: Es lädt das Upstream-Backbone, und sein dichter Head beginnt mit zufälliger Initialisierung. Es ist daher ein Ausgangspunkt für das Training, kein fertiges Vorhersagemodell.
 
 Vier weitere Familien unterstützen Vorhersage, Validierung und Export, aber
 ihre Methode `train()` löst `NotImplementedError` aus:
@@ -167,6 +159,8 @@ unterschiedlichen Labelräumen, darunter die 150 Klassen von ADE20K und die 19
 Klassen von Cityscapes. Anhand von `names` des Checkpoints erkennst du, welche
 Labels er vorhersagen kann. Zwei Checkpoints sind nur vergleichbar, wenn sie
 auf demselben Datensatz trainiert wurden.
+
+[PP-LiteSeg](/docs/models/ppliteseg), [U-Net](/docs/models/unet) und [GTR](/docs/models/gtr) sind trainierbare Familien für semantische Segmentierung. Die Cityscapes-Gewichte von U-Net sind als `LibreUNets-sem.pt` veröffentlicht.
 
 ## Vorhersage
 
@@ -218,8 +212,7 @@ names:
   1: sidewalk
 ```
 
-`masks_dir` bezeichnet den Verzeichnisnamen, der `images` ersetzt. Der
-Standardwert lautet `masks`. `label_mapping` ist eine optionale Zuordnung
+`masks_dir` bezeichnet den Verzeichnisnamen, der `images` ersetzt. `label_mapping` ist eine optionale Zuordnung
 `{source_id: train_id}`, die beim Laden auf die Pixelwerte der Maske angewendet
 wird. So kann ein von 1 bis 150 nummerierter Datensatz in den Bereich 0 bis 149
 überführt werden. Jeder nicht zugeordnete Quellwert wird zum Ignore-Label. Jede
@@ -244,6 +237,8 @@ des Laufs einen `ValueError` aus. Der Teiler ist 32 für SegFormer, 16 für
 LingBot-Vision und EoMT, 14 für DINOv2 sowie 8 für FCN und PIDNet. Unter
 [Training](/docs/train) findest du Informationen zu Datensätzen,
 Augmentierung, Multi-GPU und Loggern.
+
+Semantische Datensätze akzeptieren Bildflächen als `(height, width)`. PP-LiteSeg und U-Net unterscheiden Trainingsausschnitte von Auswertungsrechtecken. Das Skalieren und Zuschneiden füllt fehlende Bereiche mit dem Ignore-Label auf; konfigurierte photometrische Familientransformationen werden angewendet.
 
 ## Validierung
 
@@ -274,4 +269,3 @@ unterscheidet sich je nach Familie. Die Matrix auf jeder Modellseite wird aus
 dem validierten Satz generiert und nicht von Hand geschrieben. Unter
 [Export und Deployment](/docs/export) findest du die Formate, ihre Extras und
 ihre Einschränkungen.
-

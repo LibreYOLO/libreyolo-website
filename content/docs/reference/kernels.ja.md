@@ -14,9 +14,9 @@ keywords:
   - ms_deform_attn カーネル
   - set_fused_attention
   - libreyolo triton カーネル
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  v1.5.0のlibreyolo/kernels/__init__.pyからレジストリAPI、libreyolo/kernels/attention/__init__.pyとsdpa.pyからアテンションAPI、固定されたリビジョンと適格性の述語を含むlibreyolo/kernels/attention/ms_deform_attn.pyからHubプロバイダーを確認しました。libreyolo/kernels/からディレクトリ構成を一覧化しました。pyproject.tomlからextraの定義を確認しました。docs/kernels.mdから動作上の注意事項とベンチマーク値を確認しました。RF-DETRスロット配線コミットと1.5.0のCHANGELOG項目からv1.4.0のゲート処理履歴を確認しました。
+  v1.6.0のlibreyolo/kernels/__init__.pyからレジストリAPI、libreyolo/kernels/attention/__init__.pyとsdpa.pyからアテンションAPI、固定されたリビジョンと適格性の述語を含むlibreyolo/kernels/attention/ms_deform_attn.pyからHubプロバイダーを確認しました。libreyolo/kernels/からディレクトリ構成を一覧化しました。pyproject.tomlからextraの定義を確認しました。docs/kernels.mdから動作上の注意事項とベンチマーク値を確認しました。RF-DETRスロット配線コミットと1.5.0のCHANGELOG項目からv1.4.0のゲート処理履歴を確認しました。
 meta:
   - label: パッケージ
     value: libreyolo.kernels
@@ -67,7 +67,7 @@ snippets:
             name="mybackend",
             predicate=my_check,
         )
-source_hash: 23d504e88b7959f8
+source_hash: 2cdb2d344ab3faf5
 ---
 
 ## レジストリ
@@ -171,6 +171,8 @@ v1.4.0では、空間形状のペアが存在しないことを要求する条�
 インストールは影響を受けません。アップグレードの前後で指標を比較する場合は、extraの状態を
 固定するか、両方で`LIBREYOLO_HUB_KERNELS=0`を設定してください。
 
+HubのMSDAはカーネルへの入力をFP32に変換してFP16とBF16を受け付け、出力のデータ型を戻します。変換を通じて勾配も維持します。対応する高速化プロバイダーのないeager CUDA呼び出しでは、`libreyolo[hub-kernels]`のインストール案内を1回表示します。`ms_deform_attn_available(value=None)`でテンソル固有の経路を確認できます。
+
 ## 融合アテンション
 
 融合スケールド・ドット積アテンションには、標準のPyTorch以外のオプション依存関係は
@@ -215,3 +217,7 @@ ZipDepth、MobileSAMです。ViTとDeiTも同じフラグを持ちますが、�
 カーネル選択は[CUDAグラフ](/docs/reference/cuda-graphs)と相互作用します。推論同等性
 マトリックスは`kernels`パッケージをインストールせずに実行されたため、コンパイル済み
 カーネルが有効な状態でのキャプチャ安全性は対象外です。
+
+## Tritonによる変形可能アテンション
+
+組み込みのTriton MSDAプロバイダーは、条件を満たすCUDA推論でFP32、FP16、BF16に対応します。勾配が必要な入力は拒否し、利用できない場合は移植性のあるアテンションにフォールバックします。Hubが引き続き優先されます。`LIBREYOLO_TRITON_MSDA=0`でTritonを無効にし、`LIBREYOLO_HUB_KERNELS=0`でHubプロバイダーとそのインストール案内を無効にします。

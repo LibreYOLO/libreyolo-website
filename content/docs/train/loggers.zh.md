@@ -16,7 +16,7 @@ keywords:
   - 训练回调函数
   - 训练指标 csv
   - libreyolo monitor
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   logger:
     - label: 用名字
@@ -83,7 +83,7 @@ snippets:
       code: |
         libreyolo monitor                     # runs/ 下最近的那次 run
         libreyolo monitor runs/train/exp      # 指定某一次 run
-source_hash: de035acbaed32804
+source_hash: b5fefd12a738dcb5
 ---
 
 ## 打开一个 logger
@@ -168,6 +168,8 @@ DVCLive 写到 `<save_dir>/dvclive`。它按 `/` 构建自己的汇总树，没�
 Neptune 被特意排除在 `libreyolo[all]` 之外：它的稳定版客户端要求 protobuf 低于 7，
 而 TFLite extra 要求 protobuf 7。在没有 TFLite extra 的环境里安装
 `libreyolo[neptune]`。
+
+[Hugging Face Hub 日志记录器](/docs/reference/hugging-face)在训练结束时上传 `weights/best.pt`，缺失时回退到 `last.pt`。使用 `loggers="hf:owner/repo"` 或 `HuggingFaceHubLogger(repo_id, private=True)`。它会在训练前验证写入权限，并创建尚不存在的仓库。日志记录器默认使用私有仓库；显式 `model.push_to_hub()` 默认公开。已有仓库的可见性保持不变。
 
 ## 写一个回调
 

@@ -107,7 +107,7 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: 0ac96180165c4891
+source_hash: d22a5fc355bbebd2
 ---
 
 ## Instalasi
@@ -132,8 +132,8 @@ metrik maupun skala lintas gambar. Checkpoint upstream menghasilkan kedalaman
 relatif positif; wrapper jaringan LibreYOLO membalikkannya dan mereproduksi
 penanganan langit resmi sehingga keluarannya mengikuti kontrak kedalaman
 bersama milik LibreYOLO. `save=True` menulis visualisasi peta itu dalam
-colormap ke disk; `Results.plot()` tidak mencakup family ini, karena metode
-tersebut hanya didefinisikan untuk surface normal dan edge. Lihat
+colormap ke disk; `Results.plot()` merender peta kedalaman sebagai gambar PIL,
+dan `pil=False` mengembalikan array-nya. Lihat
 [prediksi](/docs/predict) untuk source, streaming dan penanganan hasil.
 
 ## Varian

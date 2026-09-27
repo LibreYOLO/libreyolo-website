@@ -15,8 +15,8 @@ keywords:
   - bobot model nonkomersial
   - lisensi checkpoint model
   - deteksi objek apache-2.0
-last_verified: 1.5.0
-source_hash: 83536fea4dc4eaec
+last_verified: 1.6.0
+source_hash: 03e83b82bd2da258
 ---
 
 ## Kode LibreYOLO sendiri
@@ -93,8 +93,8 @@ pengunduhannya.
 Lisensi berbeda antar-family dan antar-berkas dalam satu family. Dua contoh kasus
 kedua:
 
-- Checkpoint COCO YOLO9 berlisensi MIT. `LibreYOLO9P2s-visdrone.pt`, yang dilatih pada VisDrone2019-DET, berlisensi CC BY-NC-SA 3.0 dan bersifat nonkomersial.
-- Checkpoint deteksi RF-DETR berlisensi Apache-2.0. Checkpoint oriented-bounding box berlisensi CC BY 4.0 karena mendapat fine-tuning pada dataset Roboflow Universe yang berlisensi CC BY 4.0, dan bobot meneruskan kewajiban atribusi dataset tersebut.
+- Checkpoint YOLO9 COCO berlisensi MIT. `LibreYOLO9P2s-visdrone.pt`, yang dilatih pada VisDrone2019-DET, berlisensi CC BY-NC-SA 3.0, yang bersifat nonkomersial.
+- Checkpoint deteksi RF-DETR berlisensi Apache-2.0. Repositori checkpoint kotak berorientasi menyatakan CC BY 4.0.
 
 Rentang antar-family lebih luas, dan beberapa checkpoint terbitan tidak dapat
 digunakan dalam produk komersial:
@@ -103,22 +103,17 @@ digunakan dalam produk komersial:
 - Checkpoint OV-DEIM berlisensi CC BY-NC 4.0, yang dikonfirmasi penulis upstream. Setiap prediksi juga memuat text tower MobileCLIP-B(LT) milik Apple, yang lisensinya membatasi penggunaan pada penelitian, lebih ketat daripada lisensi checkpoint.
 - Kode SenseNova-Vision berlisensi Apache-2.0 dan bobotnya CC BY-NC 4.0. Loader mencetak pemberitahuan nonkomersial sebelum setiap pengunduhan otomatis.
 
-Beberapa family sama sekali tidak memiliki checkpoint yang disediakan oleh LibreYOLO,
-dan halamannya menyatakan demikian pada baris Bobot. SAM 3 bersifat gated di
-Hugging Face berdasarkan SAM License khusus Meta dan diunduh langsung dari Meta.
-Aset rilis MiDaS diambil dari URL resmi serta diverifikasi hash-nya, bukan
-dihosting ulang. Dome-DETR ditautkan ke upstream karena metadata model card-nya
-tidak menyatakan lisensi, sementara prosanya mengklaim Apache-2.0 sekaligus
-membatasi penggunaan ke penelitian akademik, dan kedua pernyataan tidak cocok.
-Arsitektur TEED dan DexiNed berlisensi MIT, tetapi checkpoint penulis dilatih
-pada BIPED dengan ketentuan dataset nonkomersial, sehingga LibreYOLO tidak
-menyertakan atau mengunduhnya otomatis.
+SAM 3 memakai snapshot upstream terbatas dengan SAM License khusus Meta. MiDaS s/l dan enam checkpoint Dome-DETR kini memakai mirror LibreYOLO; MiDaS mempertahankan MIT dan Dome-DETR mempertahankan ketentuan untuk riset akademik saja. Family lain mungkin memerlukan artefak upstream lokal. Halaman model menjelaskan pengambilannya secara terpisah dari lisensi yang dinyatakan penerbit.
 
 Beberapa checkpoint torchvision tidak memiliki berkas lisensi sendiri. LibreYOLO
 mencerminkannya dengan lisensi yang digunakan project penerbit, menyatakan pada
 setiap model card bahwa dasarnya tersirat, bukan diberikan per checkpoint, dan
 mengulangi peringatan torchvision bahwa ketentuan model pretrained dapat berasal
 dari data pelatihan.
+
+Bobot pretrained ConvNeXt V2 dan LeVJEPA berlisensi CC-BY-NC-4.0. Moondream 3 memakai BSL 1.1, mirror Dome-DETR terbatas untuk riset akademik, dan varian EdgeCrafter `obj2coco` serta DetAny3D memiliki ketentuan bobot yang membatasi penggunaan. Halaman model menyatakan deklarasi tersebut di samping lisensi kode. Checkpoint COCO EdgeCrafter asli mempertahankan izin Apache-2.0 yang tercatat. Mirror MiDaS mempertahankan izin MIT dari penerbit.
+
+Ringkasan bobot mengikuti lisensi yang dinyatakan penerbit checkpoint. Nama dataset pelatihan tidak menetapkan lisensi checkpoint tambahan.
 
 ## Menemukan ketentuan untuk satu model
 
@@ -174,6 +169,3 @@ permisif dapat memiliki checkpoint terbatas di sampingnya.
 Halaman ini menjelaskan lisensi yang terlibat. Penjelasan ini bukan nasihat
 hukum dan tidak menciptakan jaminan apa pun. Jika jawabannya penting secara
 komersial, baca lisensi sendiri dan minta nasihat hukum.
-
-
-

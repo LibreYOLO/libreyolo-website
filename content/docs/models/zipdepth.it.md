@@ -90,7 +90,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: 891eaa1a42795a4c
+source_hash: ee5867f8671d1aac
 ---
 
 ## Installazione
@@ -113,8 +113,8 @@ in locale.
 valori più alti indicano una maggiore vicinanza alla camera, e i valori non
 hanno unità metrica né scala confrontabile fra immagini. `save=True` scrive su
 disco una visualizzazione di quella mappa con una colormap; `Results.plot()`
-non copre questa famiglia, perché è definito solo per le normali di superficie
-e i contorni. Vedi [predizione](/docs/predict) per sorgenti, streaming e
+disegna la mappa di profondità come immagine PIL, e con `pil=False` restituisce
+invece l'array. Vedi [predizione](/docs/predict) per sorgenti, streaming e
 gestione dei risultati.
 
 ## Varianti

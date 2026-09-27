@@ -17,7 +17,7 @@ keywords:
   - rozdzielona głowica
   - SimOTA
   - detekcja obiektów w czasie rzeczywistym
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -110,7 +110,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: f5ab735a29f85a95
+source_hash: ddba5fb10bb88ad2
 ---
 
 ## Instalacja
@@ -163,6 +163,8 @@ rozmiaru, w którym został opublikowany.
 Informacje o zbiorach danych, augmentacji, wielu GPU i loggerach zawiera strona
 [trenowania](/docs/train).
 
+Mosaic losuje do 20 kandydatów, preferując obrazy z adnotacjami; jeśli żaden nie spełnia warunku, zachowuje ostatni wylosowany obraz.
+
 ## Walidacja
 
 `val()` zwraca słownik kluczy `metrics/`, który obejmuje precision, recall,
@@ -184,6 +186,8 @@ wbudować NMS w graf za pomocą `nms=True`. YOLOX i YOLOv9 są jedynymi dwiema
 rodzinami, które obecnie przyjmują tę flagę.
 
 <code-tabs name="export" />
+
+[TFLite INT8](/docs/export/tflite) przyjmuje `int8=True` i zbiór danych kalibracyjnych.
 
 ## Checkpointy
 

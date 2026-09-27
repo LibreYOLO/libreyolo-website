@@ -42,11 +42,11 @@ source_hash: c6022771a2a207a1
 ## Comportement au chargement
 
 Lorsque `LibreYOLO()` rencontre un fichier `.pt` qui n'est pas déjà un
-checkpoint v1.0 complet, il appelle le convertisseur automatique, qui\u00a0:
+checkpoint v1.0 complet, il appelle le convertisseur automatique, qui :
 
-1. extrait le dictionnaire de tenseurs des structures upstream courantes\u00a0;
-2. demande à chaque famille enregistrée si elle reconnaît la structure, en remappant les clés lorsque les noms upstream diffèrent du portage natif\u00a0;
-3. encapsule la famille gagnante dans un checkpoint strict avec métadonnées v1.0, en lisant la taille, la tâche et le nombre de classes dans les tenseurs eux-mêmes afin de convertir correctement les checkpoints affinés\u00a0;
+1. extrait le dictionnaire de tenseurs des structures upstream courantes ;
+2. demande à chaque famille enregistrée si elle reconnaît la structure, en remappant les clés lorsque les noms upstream diffèrent du portage natif ;
+3. encapsule la famille gagnante dans un checkpoint strict avec métadonnées v1.0, en lisant la taille, la tâche et le nombre de classes dans les tenseurs eux-mêmes afin de convertir correctement les checkpoints affinés ;
 4. l'écrit à côté de la source sous le nom `<source>-<Prefix><size>[-task].pt` et renvoie ce chemin, que la fabrique charge normalement.
 
 Aucune intervention n'est demandée à l'appelant. Si aucune famille ne
@@ -76,7 +76,7 @@ ne masque donc pas des poids valides placés en dessous.
 | Le fichier lui-même | Un state dict simple |
 
 Chaque candidat est ensuite réduit à ses entrées contenant des tenseurs et
-normalisé\u00a0: tout préfixe initial `module.` ou `_orig_mod.` est retiré, et un
+normalisé : tout préfixe initial `module.` ou `_orig_mod.` est retiré, et un
 dictionnaire dont toutes les clés commencent par `model.model.` perd ce
 préfixe.
 
@@ -88,12 +88,12 @@ correspondent déjà au portage natif. Une famille dont les noms de clés upstre
 diffèrent la remplace par un remappage et ne renvoie rien pour les structures
 qu'elle ne reconnaît pas.
 
-Familles qui fournissent un mécanisme de reconnaissance avec remappage\u00a0:
+Familles qui fournissent un mécanisme de reconnaissance avec remappage :
 `centernet`, `deeplabv3`, `deformable_detr`, `dexined`, `moge2`, `picodet`,
 `rtdetr`, `rtdetrv2`, `rtdetrv4`, `rtmdet`, `segformer`, `swin`, `teed`,
 `yolo7`, `yolo9`, `yolo9_e2e`, `yolo9_p2`.
 
-Familles qui refusent entièrement la conversion automatique\u00a0: `efficientdet`,
+Familles qui refusent entièrement la conversion automatique : `efficientdet`,
 `eomt` et `pidnet` ne renvoient rien depuis leur mécanisme de reconnaissance.
 Leurs fichiers upstream doivent donc passer par un script de conversion.
 `l2cs` est exclu du mécanisme générique, car cette famille est réservée à
@@ -104,7 +104,7 @@ checkpoint entier et non du seul dictionnaire de tenseurs pour détecter la
 taille et remapper les classes COCO. Il n'est enregistré que lorsque ses
 dépendances facultatives sont installées.
 
-Toutes les autres familles enregistrées utilisent l'implémentation par défaut\u00a0:
+Toutes les autres familles enregistrées utilisent l'implémentation par défaut :
 elles revendiquent le fichier lorsque leur propre chargeur reconnaît déjà ces
 clés.
 
@@ -118,7 +118,7 @@ L'ordre d'enregistrement suit la création des classes. Une famille dérivée es
 donc enregistrée après la base qu'elle affine et ses marqueurs positifs ne
 doivent pas perdre face au passage plus large de la base.
 
-L'ordre du registre décide ensuite, car il encode la spécificité\u00a0: la première
+L'ordre du registre décide ensuite, car il encode la spécificité : la première
 revendication est la correspondance la plus précise.
 
 Le seul cas que l'ordre du registre ne peut pas départager oppose DEIM à
@@ -139,7 +139,7 @@ remplacement qui satisfait l'unpickler sans rien exécuter. Le nom capturé sert
 uniquement d'étiquette textuelle, il n'est jamais importé, évalué ni appelé.
 
 Les noms de modules sensibles sont refusés sans condition et ne sont jamais
-remplacés\u00a0: `builtins`, `os`, `sys`, `posix`, `nt` et `subprocess`. La boucle
+remplacés : `builtins`, `os`, `sys`, `posix`, `nt` et `subprocess`. La boucle
 est limitée à 32 tentatives. Un fichier conçu pour introduire une série sans
 fin de globals distincts échoue donc de façon sécurisée au lieu de boucler.
 Seuls les tenseurs survivent dans le checkpoint converti.
@@ -197,7 +197,7 @@ le remappage lors du post-traitement.
 Un checkpoint est considéré comme COCO s'il contient exactement 80 noms,
 déclare un nombre de classes égal à 80, porte un indice de dataset `coco`, ou
 ne contient aucune métadonnée de classe ou de dataset. Ce dernier cas est
-important\u00a0: un state dict upstream brut est le checkpoint pré-entraîné COCO
+important : un state dict upstream brut est le checkpoint pré-entraîné COCO
 canonique et le seul RF-DETR à 91 sorties sans métadonnées distribué.
 
 Un véritable RF-DETR personnalisé à 90 classes est conservé avec 90 classes.

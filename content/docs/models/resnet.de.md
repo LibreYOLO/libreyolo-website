@@ -19,7 +19,7 @@ keywords:
   - residual learning
   - deep residual networks
   - imagenet klassifikator
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -35,7 +35,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreResNet50-cls.pt source=cat.jpg save=True
+        libreyolo predict model=LibreResNet50-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
   train:
     - label: Python
       language: python
@@ -99,7 +99,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: e2f46c73716af1b7
+source_hash: "2442e8c325bbe791"
 ---
 
 ## Installation
@@ -153,12 +153,16 @@ ResNet nicht vorkommen.
 Unter [Training](/docs/train) findest du Datensätze, Datenaugmentierung,
 Multi-GPU und Logger.
 
+`cls_pw=0` deaktiviert die Loss-Gewichtung; Werte bis 1 verwenden inverse Häufigkeitsgewichte, die auf den Mittelwert 1 normiert sind. `class_weights=True` verwendet stattdessen anhand der Stichproben normierte inverse Häufigkeiten und lässt sich nicht mit `cls_pw>0` kombinieren. Diese Einstellungen müssen beim Fortsetzen übereinstimmen. Siehe [Klassifikation](/docs/tasks/image-classification).
+
 ## Validierung
 
 `val()` gibt ein Dictionary mit `metrics/`-Schlüsseln zurück. Bei der
 Klassifizierung sind dies Top-1- und Top-5-Accuracy auf dem Validierungssplit.
 
 <code-tabs name="val" />
+
+Validierung und INT8-Kalibrierung verwenden die Auswertungstransformation der Familie. Die Exportmetadaten speichern `norm_mean`, `norm_std` und `resize_mode`; ältere Artefakte greifen auf die Familienwerte zurück. Kalibrierungsvorverarbeiter geben das erforderliche CHW-Array und das Verhältnis zurück.
 
 ## Export
 

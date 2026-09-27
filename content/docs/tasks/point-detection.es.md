@@ -15,7 +15,7 @@ keywords:
   - FOMO localización de puntos
   - contar objetos en imágenes
   - conteo de objetos en visión artificial
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Predecir puntos y contarlos
@@ -150,7 +150,7 @@ snippets:
 
 
         print(result.points.xy)
-source_hash: 932153c8870d1c7c
+source_hash: 5c3cfe7a606cd7aa
 ---
 
 ## Definición
@@ -169,7 +169,7 @@ vacío, así que `iou` y `max_det` no tienen sobre qué actuar.
 
 ## Modelos
 
-Tres familias cubren `point`, y no son intercambiables.
+Los modelos de puntos difieren en vocabulario y semántica de salida.
 
 [FOMO](/docs/models/fomo) es la opción de vocabulario fijo: un clasificador de
 rejilla que etiqueta cada celda de una rejilla de baja resolución como fondo o
@@ -190,6 +190,8 @@ cargado con `LibreVLM("sensenova-vision", task="point")`. Necesita el extra
 7B, así que cuenta con una latencia por imagen bastante más alta que la de un
 detector específico. Sus pesos son no comerciales; la licencia está en su
 página.
+
+[Molmo2](/docs/models/molmo2) y [Moondream](/docs/models/moondream) proporcionan puntos condicionados por texto. [LibreGround](/docs/reference/ground-api) usa una instrucción para seleccionar como máximo un clic por consulta con ShowUI, Florence-2 o Qwen3-VL.
 
 ## Predicción
 

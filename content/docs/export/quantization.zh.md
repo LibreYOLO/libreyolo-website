@@ -14,7 +14,7 @@ keywords:
   - fp8 e4m3
   - 量化校准数据集
   - qdq onnx 导出
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 调用
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -72,11 +72,11 @@ snippets:
       code: |
         model.quantize(
             recipe="int8",
-            calib="coco128.yaml",      # data.yaml 路径或内置名称；None 表示跳过校准
-            samples=128,               # 校准图像数量上限
+            calib="coco128.yaml",      # data.yaml 路径或内置名称；None 跳过校准
+            samples=128,               # 最多使用的校准图像数
             batch=8,                   # 校准批大小
-            algorithm="auto",          # auto 和 minmax 等价；另一个选项是 percentile
-            keep_high_precision=None,  # None 表示采用家族默认策略
+            algorithm="auto",          # auto 选择 minmax；其他选项为 percentile、mse、entropy
+            keep_high_precision=None,  # None 使用家族策略
             verbose=True,
         )
   reload:
@@ -152,7 +152,7 @@ snippets:
 
         # 现在任何浮点导出器都可用，精度也随它支持的来
         qmodel.export(format="tensorrt", half=True)
-source_hash: 4ffb06b87cad017e
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## 安装
@@ -175,6 +175,8 @@ source_hash: 4ffb06b87cad017e
 
 QAT 过程中训练器写出的检查点同样带着这份清单，也就是说这种训练跑出来的 `best.pt`
 本身就是一个量化检查点。
+
+校准 `algorithm` 接受 `auto`、`minmax`、`percentile`、`mse` 和 `entropy`。`auto` 解析为 minmax。MSE 和 entropy 通过直方图扫描选择激活范围。
 
 ## 配方
 
@@ -226,6 +228,8 @@ QAT 是对一个已经训练好的模型做微调。用微调的学习率，而�
 
 用 `fp16` 和 `bf16` 量化出来的模型仅供推理，训练器会拒绝它们，并指向 `amp=True`。
 
+QAT 初始化会禁用 EMA 和 SyncBatchNorm，并设置 `average_best=0`，逐项记录覆盖行为。浮点训练保留请求的设置。
+
 ## 导出
 
 <code-tabs name="export" />
@@ -250,6 +254,9 @@ YOLO9-s int8 从 29.5 MB 降到 9.6 MB，RF-DETR-n nvfp4 从 122 MB 降到 26 MB
 量化运算是在模拟中执行的，也就是即便在 AMP 下也在 float32 孤岛里算出来的伪量化。模拟
 在数值上是真实的，所以在任何设备上跑出的 `val()` 分数都是关于量化运算的真实结论。它不
 是速度上的结论。
+
+Apple MPS 既没有实现伪量化算子，也不支持 float8，所以在 Mac 上，除 `fp16` 和 `bf16`
+以外的每种配方都会在 CPU 上运行，并给出警告。
 
 有两个例外是原生执行的。`fp16` 和 `bf16` 就是普通的类型转换。固化后的 `fp8` 模块在
 Ada、Hopper 和 Blackwell 级别的硬件上，通过 `torch._scaled_mm` 直接在打包的 E4M3 权重

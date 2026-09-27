@@ -16,7 +16,7 @@ keywords:
   - libreyolo trenowanie
   - libreyolo eksport
   - yolo przykład python
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Instalacja
     value: pip install libreyolo
@@ -72,31 +72,26 @@ snippets:
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
+        # Procesy robocze wczytujące dane ponownie importują ten plik w macOS
+        # i Windows, dlatego skrypt trzyma trenowanie pod strażnikiem main.
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+            # coco8 to dołączony do biblioteki zbiór danych z 8 obrazami. Przy pierwszym
+            # użyciu jest pobierany z adresu URL, więc nie trzeba uruchamiać żadnego skryptu.
+            results = model.train(
+                data="coco8.yaml",
+                epochs=1,
+                imgsz=640,
+                batch=4,
+                device="cpu",
+            )
 
-
-        # coco8 to dołączony do biblioteki zbiór danych z 8 obrazami. Przy
-        pierwszym
-
-        # użyciu jest pobierany z adresu URL, więc nie trzeba uruchamiać żadnego
-        skryptu.
-
-        results = model.train(
-            data="coco8.yaml",
-            epochs=1,
-            imgsz=640,
-            batch=4,
-            device="cpu",
-        )
-
-
-        print(results["save_dir"])
-
-        print(results["best_checkpoint"])
+            print(results["save_dir"])
+            print(results["best_checkpoint"])
     - label: CLI
       language: bash
       code: |
@@ -107,14 +102,15 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() zwraca zwykły słownik, a nie obiekt.
-        metrics = model.val(data="coco8.yaml", device="cpu")
+            # val() zwraca zwykły słownik, a nie obiekt.
+            metrics = model.val(data="coco8.yaml", device="cpu")
 
-        print(metrics["metrics/mAP50-95"])
-        print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+            print(metrics["metrics/mAP50-95"])
+            print(metrics["metrics/mAP50"])
+            print(metrics["metrics/mAP75"])
   export:
     - label: TorchScript
       language: python
@@ -147,7 +143,7 @@ snippets:
       code: |
         pip install "libreyolo[onnx]"
         libreyolo export model=yolo9-t format=onnx imgsz=640
-source_hash: c11b6bdbf0b6fdf1
+source_hash: eb6b18dedf1c5f4b
 ---
 
 ## Instalacja
@@ -184,7 +180,10 @@ obiektów.
 
 `data` oznacza plik YAML zbioru danych. Plik `coco8.yaml` jest dołączony do
 biblioteki, dlatego fragment kodu działa bez zmian. Nazwa niedołączonego pliku
-jest interpretowana jako ścieżka. Zbiory danych są wyszukiwane w `~/datasets`
+jest interpretowana jako ścieżka. Strażnik `__main__` jest potrzebny, ponieważ
+procesy robocze wczytujące dane ponownie importują skrypt w systemach macOS
+i Windows; zobacz [rozwiązywanie problemów](/docs/troubleshooting). Zbiory
+danych są wyszukiwane w `~/datasets`
 lub w katalogu wskazanym przez `LIBREYOLO_DATASETS_DIR`, jeśli ustawiono tę
 zmienną.
 

@@ -21,7 +21,7 @@ keywords:
   - neural architecture search
   - MBConv
   - classificatore ImageNet
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -36,9 +36,9 @@ snippets:
         print(result.probs.top5)
     - label: CLI
       language: bash
-      code: >
-        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=cat.jpg
-        save=True
+      code: |
+        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+
   train:
     - label: Python
       language: python
@@ -57,6 +57,7 @@ snippets:
       code: |
         libreyolo train model=LibreEfficientNetV2b0-cls.pt data=imagenette160 \
           epochs=50 device=0,1 batch=-1
+
   val:
     - label: Python
       language: python
@@ -72,6 +73,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreEfficientNetV2b0-cls.pt data=imagenette160
+
   export:
     - label: Python
       language: python
@@ -100,7 +102,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: ad3ff140aad824bd
+source_hash: 23b7d651fb4eae89
 ---
 
 ## Installazione
@@ -157,12 +159,16 @@ famiglia non ne hanno.
 Vedi [addestramento](/docs/train) per dataset, data augmentation, multi-GPU e
 logger.
 
+`cls_pw=0` disattiva la ponderazione della loss; valori fino a 1 usano pesi inversamente proporzionali alla frequenza, normalizzati a media 1. `class_weights=True` usa invece frequenze inverse normalizzate sui campioni e non è combinabile con `cls_pw>0`. Queste impostazioni devono coincidere alla ripresa. Vedi [classificazione](/docs/tasks/image-classification).
+
 ## Validazione
 
 `val()` restituisce un dizionario di chiavi `metrics/`. Per la classificazione
 sono l'accuratezza top-1 e top-5 sullo split di validazione.
 
 <code-tabs name="val" />
+
+La validazione e la calibrazione INT8 usano la trasformazione di valutazione della famiglia. I metadati di esportazione registrano `norm_mean`, `norm_std` e `resize_mode`; gli artefatti più vecchi usano i valori della famiglia. I preprocessori di calibrazione restituiscono l'array CHW e il rapporto richiesti.
 
 ## Esportazione
 

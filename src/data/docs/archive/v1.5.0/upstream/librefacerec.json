@@ -1,0 +1,12 @@
+{
+  "name": "AuraFace-v1",
+  "org": "fal.ai",
+  "paper_title": "ArcFace: Additive Angular Margin Loss for Deep Face Recognition",
+  "paper_url": "https://arxiv.org/abs/1801.07698",
+  "code_url": "https://huggingface.co/fal/AuraFace-v1",
+  "license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 covers the embedding weights (AuraFace-v1's glintr100 recognition head), so they may be used, modified and redistributed, including commercially, provided the license text and attribution notices travel with any copy. LibreYOLO's default face detector is a separate artifact under a separate license, MIT (OpenCV Zoo's YuNet, copyright Shiqi Yu). No code is ported from either project: both graphs are consumed opaquely through onnxruntime, so LibreYOLO's own wrapper code, which carries no third-party architecture, is MIT throughout. Any other ArcFace-convention ONNX recognition model can be substituted by passing its file path, and that file's own license then applies instead of AuraFace-v1's.",
+  "bibtex": "@inproceedings{deng2019arcface,\n  title={Arcface: Additive angular margin loss for deep face recognition},\n  author={Deng, Jiankang and Guo, Jia and Xue, Niannan and Zafeiriou, Stefanos},\n  booktitle={CVPR},\n  year={2019}\n}",
+  "bibtex_source_url": "https://github.com/deepinsight/insightface/tree/master/recognition/arcface_torch#citations",
+  "bibtex_verified": "2026-08-08: AuraFace-v1's own Hugging Face model card carries no citation block; it names ArcFace as its 'theoretical foundation' and links the paper. The verbatim BibTeX entry above is copied from the Citations section of deepinsight/insightface's arcface_torch README on branch master (the first of three entries there; the other two cover partial-FC training and the WebFace260M dataset, which this model card does not reference), since InsightFace is the group that trained the glintr100 checkpoint AuraFace-v1 redistributes. Cross-checked against the arXiv API for 1801.07698: the current record (v4) is titled identically but lists an expanded six-author, TPAMI-published version (adding Jing Yang and Irene Kotsia, DOI 10.1109/TPAMI.2021.3087709) rather than the original four-author CVPR 2019 paper the entry above cites. The entry above matches the original CVPR publication and is what the authors' own repository still asks readers to cite; the TPAMI expansion is noted here in case a future page should prefer it."
+}

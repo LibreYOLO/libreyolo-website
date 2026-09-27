@@ -14,7 +14,7 @@ keywords:
   - segmentation image dichotomique
   - détourage png transparent
   - cache alpha progressif
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Prédire un cache
@@ -108,7 +108,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: f7d88c74d9729268
+source_hash: 69fbc1d967b2d546
 ---
 
 ## Définition
@@ -130,7 +130,7 @@ transparent. `result.boxes` reste vide. Les arguments `conf`, `iou` et
 
 ## Modèles
 
-Deux familles couvrent `matte` et partagent le même parcours de propagation.
+BiRefNet et FeyNobg partagent le même parcours de propagation.
 
 [BiRefNet](/docs/models/birefnet) est le réseau à référence bilatérale autour
 duquel la tâche est construite. Il est publié ici sous la forme d'un checkpoint
@@ -147,6 +147,8 @@ Les deux familles possèdent des licences de poids différentes. Elles sont
 indiquées sur les pages des modèles. La licence du dépôt Hugging Face du
 checkpoint précis fait autorité.
 
+[BEN2](/docs/models/ben2) ajoute la suppression d'arrière-plan à une résolution fixe de 1024. [ViTMatte](/docs/models/vitmatte) reçoit une image et un `trimap=` à trois niveaux indiquant les pixels d'arrière-plan, inconnus et de premier plan.
+
 ## Prédire
 
 Les poids sont téléchargés depuis Hugging Face à la première utilisation et mis
@@ -154,14 +156,15 @@ en cache localement.
 
 <code-tabs name="predict" />
 
-Les deux familles s'exécutent sur un canevas natif fixe de 1 024 x 1 024, puis
+BiRefNet et FeyNobg s'exécutent sur un canevas natif fixe de 1 024 x 1 024, puis
 redimensionnent le cache vers l'image d'origine. Aucune autre résolution n'est
 prise en charge, car les tables de position relative du backbone Swin sont
 liées à cette taille. Une incompatibilité les interpole mal au lieu de
-déclencher une erreur. `Results.save()` n'est défini que pour les résultats de
-cache et nécessite l'image source, qu'il recharge depuis `Results.path` sauf si
+déclencher une erreur. `Results.save()` utilise l'image source pour les découpes de matting, qu'il recharge depuis `Results.path` sauf si
 vous en fournissez une. Consultez la page [prédiction](/docs/predict) pour les
 sources, le streaming et la gestion des résultats.
+
+`Results.save()` enregistre les découpes de matting en RGBA. `plot()` génère une image pour inspection. BEN2 prend en charge la prédiction native par batch ; ViTMatte exige un guide pour une image unique.
 
 ## Format du dataset
 
@@ -200,11 +203,7 @@ complet.
 
 ## Entraîner
 
-Aucune des deux familles de cache ne possède d'implémentation d'entraînement.
-`train()` déclenche une `NotImplementedError` pour chacune, et la prise en
-charge couvre seulement la prédiction, la validation et l'exportation. Chaque
-page de modèle nomme le projet amont qui fournit le code d'entraînement et le
-script de conversion qui réimporte un checkpoint.
+Ces familles de matting n'ont pas d'implémentation d'entraînement. La prise en charge de l'export varie selon la famille ; ViTMatte ne s'exporte pas. Chaque page de modèle nomme le projet d'amont qui fournit le code d'entraînement et le script de conversion qui réimporte un checkpoint.
 
 ## Valider
 

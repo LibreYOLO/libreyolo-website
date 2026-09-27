@@ -15,10 +15,10 @@ keywords:
   - no_aug_epochs
   - matrice support augmentation
   - réglages TrainConfig
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Liste des réglages, états, archétypes, écarts par famille et fonctions
-  d'assistance lus dans libreyolo/data/augment/spec.py en v1.5.0. Cette table
+  d'assistance lus dans libreyolo/data/augment/spec.py en v1.6.0. Cette table
   est reliée aux véritables pipelines par tests/unit/test_augment_spec.py.
 snippets:
   usage:
@@ -39,14 +39,14 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: d2e1b9f5c81072e1
+source_hash: f0d31511715e3cc4
 ---
 
 ## Réglages
 
 Il s'agit de noms de champs `TrainConfig`, et non de leurs formes dans le CLI.
-Le CLI associe ses propres alias à ces champs, `--mosaic` définit donc
-`mosaic_prob`.
+`train()` et le CLI associent les formes courtes à ces champs, `mosaic`
+définit donc `mosaic_prob`.
 
 | Réglage | Signification |
 |---|---|
@@ -62,14 +62,12 @@ Le CLI associe ses propres alias à ces champs, `--mosaic` définit donc
 | `perspective` | Amplitude de la transformation projective de la transformation affine |
 | `flipud` | Probabilité de retournement vertical |
 | `no_aug_epochs` | Dernières époques entraînées sans augmentation forte |
-| `auto_augment` | Politique AutoAugment de classification\u00a0: randaugment, autoaugment ou augmix |
+| `auto_augment` | Politique AutoAugment de classification : randaugment, autoaugment ou augmix |
 | `erasing` | Probabilité RandomErasing de classification |
 | `mixup` | Probabilité de batch-MixUp de classification, avec étiquettes souples |
 | `cutmix` | Probabilité de batch-CutMix de classification, avec étiquettes souples |
 
-Les quatre derniers constituent le groupe de classification. Les familles de
-détection les ignorent. `mixup` est un réglage réservé à l'API\u00a0: l'option
-`--mixup` du CLI est l'alias du réglage de détection `mixup_prob`.
+Les quatre derniers forment les contrôles de classification. Les familles de détection les ignorent. `train()` et la CLI routent `mixup` vers le mélange de lots pour les classifieurs et vers `mixup_prob` pour les détecteurs.
 
 <code-tabs name="usage" />
 
@@ -79,7 +77,7 @@ détection les ignorent. `mixup` est un réglage réservé à l'API\u00a0: l'opt
 |---|---|
 | `used` | Le réglage atteint le pipeline d'entraînement de la famille et modifie les échantillons |
 | `gated_by_mosaic` | Le réglage s'applique uniquement aux échantillons qui empruntent la branche mosaic, il ne se déclenche donc jamais avec `mosaic_prob == 0` |
-| `ignored` | Le réglage n'atteint jamais le pipeline\u00a0; le définir ne fait rien |
+| `ignored` | Le réglage n'atteint jamais le pipeline ; le définir ne fait rien |
 
 `ignored` est l'état à vérifier avant une exécution, car aucune erreur ne se
 produit. Le CLI avertit lorsqu'un paramètre d'entraînement explicitement
@@ -97,14 +95,14 @@ famille énumérés ci-dessous.
 | `mosaic_prob` | used | ignored | ignored | ignored | ignored | ignored |
 | `mixup_prob` | gated | used | ignored | ignored | ignored | ignored |
 | `hsv_prob` | used | used | ignored | ignored | ignored | ignored |
-| `flip_prob` | used | used | used | ignored | ignored | ignored |
+| `flip_prob` | used | used | used | used | ignored | ignored |
 | `degrees` | gated | used | ignored | ignored | ignored | ignored |
 | `translate` | gated | used | ignored | ignored | ignored | ignored |
 | `mosaic_scale` | gated | used | ignored | ignored | ignored | ignored |
 | `mixup_scale` | gated | used | ignored | ignored | ignored | ignored |
 | `shear` | gated | used | ignored | ignored | ignored | ignored |
 | `perspective` | gated | used | ignored | ignored | ignored | ignored |
-| `flipud` | used | used | ignored | ignored | ignored | ignored |
+| `flipud` | used | used | ignored | used | ignored | ignored |
 | `no_aug_epochs` | used | used | used | used | used | used |
 | `auto_augment` | ignored | ignored | ignored | used | ignored | ignored |
 | `erasing` | ignored | ignored | ignored | used | ignored | ignored |
@@ -118,21 +116,9 @@ une transformation affine par échantillon toujours active, ignore mosaic et
 applique MixUp indépendamment, en réutilisant `mosaic_scale` comme plage
 d'échelle affine.
 
-Le pipeline de style DETR utilise une transformation directe sans mosaic. Sa
-distorsion photométrique, son zoom arrière et son recadrage IoU sont des
-constantes de la recette plutôt que des réglages configurables. `hsv_prob` et
-les réglages géométriques ne l'atteignent donc jamais. Le pipeline de
-classification utilise une transformation ImageFolder dont le retournement
-horizontal est fixé à 0.5 plutôt que défini par `flip_prob`. La variation
-d'échelle sémantique et le HSV proviennent d'attributs de classe des familles,
-et non des réglages de configuration. Les retournements de restauration sont
-des opérations couplées sur l'entrée et la cible, avec une probabilité fixe de
-0.5.
+Le pipeline de type DETR est une transformation sans mosaic. La distorsion photométrique, le zoom-out et le recadrage par IoU sont des constantes de recette, pas des paramètres configurables : `hsv_prob` et les contrôles géométriques ne les pilotent donc pas. La classification utilise `flip_prob` pour les retournements horizontaux et `flipud` pour les verticaux. Les variations d'échelle et HSV de segmentation sémantique viennent d'attributs de la classe du modèle ; les retournements de restauration s'appliquent conjointement à l'entrée et à la cible avec une probabilité fixe de 0.5.
 
-`no_aug_epochs` est respecté partout, mais les éléments désactivés diffèrent\u00a0:
-mosaic et MixUp pour le style YOLOX, la transformation affine et MixUp pour
-YOLO-NAS, les fortes augmentations photométriques et de recadrage ainsi que la
-fin du learning rate pour le style DETR, et la fin du scheduler pour les autres.
+`no_aug_epochs` est pris en compte partout, mais désactive des opérations différentes : mosaic et MixUp pour les pipelines de type YOLOX ; la transformation affine et MixUp pour YOLO-NAS ; les augmentations photométriques fortes et le recadrage, avec la fin du planning du taux d'apprentissage, pour DETR ; l'augmentation automatique, erasing, MixUp et CutMix pour la classification. Le recadrage et les retournements de classification restent actifs.
 
 ## Familles par archétype
 
@@ -152,12 +138,12 @@ un ensemble ignored vide, aucun avertissement n'est donc émis à son sujet.
 
 | Famille | Différence par rapport à son archétype |
 |---|---|
-| `rtmdet` | `flipud` ignoré\u00a0: sa transformation ne comporte aucun retournement vertical |
+| `rtmdet` | `flipud` ignoré : sa transformation ne comporte aucun retournement vertical |
 | `picodet` | `flipud` ignoré |
 | `rtdetr` | `flipud` ignoré |
 | `rtdetrv2` | `flipud` ignoré |
 | `fomo` | `perspective` et `flipud` ignorés |
-| `ec` | `hsv_prob`, `degrees` et `translate` utilisés pour `task="pose"` uniquement\u00a0; detect et segment utilisent des recettes photométriques fixes |
+| `ec` | `hsv_prob`, `degrees` et `translate` utilisés pour `task="pose"` uniquement ; detect et segment utilisent des recettes photométriques fixes |
 | `dinov2` | Le groupe de classification est utilisé pour `task="classify"` uniquement |
 
 `ec` et `dinov2` sont des familles multitâches. Un réglage n'est donc marqué
@@ -173,12 +159,12 @@ que sa configuration désactive plutôt que la spécification d'augmentation.
 
 Certaines familles portent des réglages d'augmentation dans leur propre
 sous-classe `TrainConfig` plutôt que dans la classe de base. Le CLI ne les
-expose pas\u00a0; définissez-les par l'API Python.
+expose pas ; définissez-les par l'API Python.
 
 | Famille | Réglage | Signification |
 |---|---|---|
 | `yolo9`, `yolo9_e2e`, `yolo9_p2` | `copy_paste` | Probabilité d'augmentation copy-paste des instances, `task="segment"` uniquement |
-| `yolo9`, `yolo9_e2e`, `yolo9_p2` | `copy_paste_mode` | Source du copy-paste\u00a0: `flip` reflète le même échantillon, `mixup` utilise un second échantillon |
+| `yolo9`, `yolo9_e2e`, `yolo9_p2` | `copy_paste_mode` | Source du copy-paste : `flip` reflète le même échantillon, `mixup` utilise un second échantillon |
 | `yolo9`, `yolo9_e2e`, `yolo9_p2` | `rot90` | Probabilité de rotation aléatoire de 90 degrés |
 | `rfdetr` | `copy_paste` | Probabilité de copy-paste pour `task="segment"`, mode `flip` uniquement |
 | `rfdetr` | `copy_paste_mode` | Mode de source copy-paste pour `task="segment"` |
@@ -195,7 +181,7 @@ expose pas\u00a0; définissez-les par l'API Python.
 | Assistant | Valeur renvoyée |
 |---|---|
 | `aug_support(family)` | Table qui associe les réglages à `Support`, ou `None` pour une famille inconnue |
-| `ignored_aug_params(family)` | Ensemble des noms de réglages ignorés par la famille\u00a0; vide pour une famille inconnue |
+| `ignored_aug_params(family)` | Ensemble des noms de réglages ignorés par la famille ; vide pour une famille inconnue |
 | `uses_mosaic_gating(family)` | Indique si le MixUp de la famille se déclenche uniquement sur les échantillons mosaic |
 | `display_name(family)` | Nom de famille destiné au lecteur et utilisé dans les avertissements |
 | `mixup_gating_warning(family, mosaic_prob, mixup_prob)` | Texte de l'avertissement lorsque MixUp ne peut jamais se déclencher, sinon `None` |
@@ -211,4 +197,3 @@ désactive entièrement MixUp, car celui-ci ne s'applique qu'aux échantillons
 mosaic. Cette combinaison survient facilement lorsque mosaic est désactivé en
 fin d'entraînement. Le trainer consigne un avertissement qui nomme la famille,
 et `mixup_gating_warning` est la fonction pure qui le produit.
-

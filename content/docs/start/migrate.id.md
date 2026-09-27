@@ -14,7 +14,7 @@ keywords:
   - migrasi libreyolo
   - konversi pth ke libreyolo
   - autoconversion
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Entry point
     value: LibreYOLO("path/to/upstream.pth")
@@ -33,7 +33,8 @@ snippets:
         from libreyolo import LibreYOLO
 
 
-        # Ganti dengan path checkpoint yang sudah tersedia. Tata letak upstream yang
+        # Ganti dengan path checkpoint yang sudah tersedia. Tata letak upstream
+        yang
 
         # dikenali dikonversi saat pemuatan, ditulis di samping sumber,
 
@@ -42,7 +43,8 @@ snippets:
         model = LibreYOLO("path/to/upstream-checkpoint.pth")
 
 
-        # Jumlah dan nama kelas berasal dari tensor serta metadata berkas sendiri,
+        # Jumlah dan nama kelas berasal dari tensor serta metadata berkas
+        sendiri,
 
         # sehingga hasil fine-tuning mempertahankan kumpulan labelnya, bukan
         COCO.
@@ -57,14 +59,16 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Periksa hasil
       language: bash
-      code: |
-        # Berkas hasil konversi memenuhi skema yang sama seperti berkas terbitan.
+      code: >
+        # Berkas hasil konversi memenuhi skema yang sama seperti berkas
+        terbitan.
+
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: bf9d7c7d168fd2c0
+source_hash: b19fedcf10862990
 ---
 
 Halaman ini membahas checkpoint dari project lain. Jika memindahkan kode sendiri
-dari LibreYOLO lama, lihat [upgrade ke 1.5.0](/docs/upgrade).
+dari LibreYOLO lama, lihat [upgrade ke 1.6.0](/docs/upgrade).
 
 ## Yang terjadi ketika berkas asing dimuat
 

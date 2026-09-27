@@ -19,7 +19,7 @@ keywords:
   - libreyolo doctor
   - desbalanceo de clases dataset
   - fuga de datos train val
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -68,7 +68,7 @@ snippets:
             print(finding.severity.value, finding.check_id, finding.message)
 
         raise SystemExit(report.exit_code(strict=False))
-source_hash: 9a12a0551c8b56e9
+source_hash: 84e47ff97fb2e2f3
 ---
 
 ## Apunta el entrenamiento a un dataset
@@ -143,6 +143,8 @@ omiten.
 `names` puede ser una lista o un mapping con claves enteras. `nc` es opcional;
 cuando ambos están presentes y no coinciden, el doctor lo reporta como error.
 
+La pose de RF-DETR lee `kpt_names` indexado por ID o nombre de clase. Conserva las primeras filas de keypoints con nombre de cada clase; una lista vacía indica una clase solo con cajas. La pose multiclase requiere `names` y al menos una clase con keypoints.
+
 ## Estructura de directorios y archivos de etiquetas
 
 La detección, la segmentación, la pose y los boxes orientados comparten una misma
@@ -171,6 +173,8 @@ y se entrena como fondo en lugar de lanzar un error. Una fila con más de cinco
 campos se lee como un polígono y su box pasa a ser la extensión del polígono, de
 modo que una exportación de segmentación usada para entrenamiento de detección
 carga sin quejarse. El doctor reporta cuántas filas tomaron ese camino.
+
+Las cajas finitas que cruzan el borde de la imagen se recortan de forma coherente en entrenamiento y validación. Se descartan las cajas sin área visible, las coordenadas no finitas y los polígonos malformados. Los ID de clase fuera de rango se notifican antes de construir los targets. `train(classes=[...])` filtra la supervisión usando los ID de clase originales; consulta [hiperparámetros](/docs/train/hyperparameters).
 
 ## Otras tareas
 

@@ -15,7 +15,7 @@ keywords:
   - detr sans nms
   - seuil confiance détection
   - filtrage classes inférence
-last_verified: 1.5.0
+last_verified: "1.6.0"
 verification: >-
   Valeurs par défaut citées depuis InferenceRunner.__call__ dans
   libreyolo/models/base/inference.py. Comportement NMS par famille lu dans
@@ -111,7 +111,7 @@ snippets:
         efficaces.
 
         print(len(loose.boxes), len(tight.boxes))
-source_hash: 0b978963c356027d
+source_hash: 849650629e58c9e1
 ---
 
 ## Les quatre arguments
@@ -128,7 +128,7 @@ source_hash: 0b978963c356027d
 Deux de ces arguments sont universels et deux ne le sont pas. C'est
 l'information essentielle à connaître avant de régler quoi que ce soit.
 
-La validation utilise délibérément d'autres valeurs par défaut\u00a0: `val()`
+La validation utilise délibérément d'autres valeurs par défaut : `val()`
 s'exécute avec `conf=0.001` et `iou=0.6`, car la précision moyenne est calculée
 sur une courbe précision-rappel complète et un seuil de 0.25 la tronquerait.
 
@@ -143,6 +143,8 @@ La valeur par défaut `0.25` convient à l'examen d'images. L'alimentation d'un
 système downstream demande généralement une valeur supérieure, tandis qu'une
 mesure d'exactitude exige une valeur bien inférieure.
 
+La validation de détection expose `metrics/best_conf` et des seuils par classe fondés sur le F1 à IoU 0.50. Utilisez-les comme points de départ mesurés pour les seuils de déploiement ; consultez la [validation](/docs/train/validation). La segmentation n'expose pas ces clés.
+
 ## iou
 
 `iou` est le chevauchement au-delà duquel la suppression non maximale retire
@@ -153,7 +155,7 @@ Un prédicteur d'ensembles décode un nombre fixe de requêtes et conserve celle
 dont le score est le plus élevé. Les doublons sont supprimés dans l'architecture
 pendant l'entraînement et non lors d'une étape de post-traitement, aucun seuil
 ne peut donc être réglé. Les familles suivantes acceptent `iou` pour assurer
-la parité de l'API, mais l'ignorent\u00a0:
+la parité de l'API, mais l'ignorent :
 
 CenterNet, DEIM, DETR, Deformable DETR, D-FINE, DINO-DETR, EdgeCrafter,
 Faster R-CNN, LW-DETR, Mask R-CNN, RF-DETR, RT-DETR et la tête de bout en bout
@@ -165,16 +167,16 @@ comportement.
 La plupart l'indiquent dans les docstrings de leur post-traitement, mais aucun
 avertissement n'est levé à l'exécution. Un balayage de `iou` sur RF-DETR produit
 donc une ligne plate plutôt qu'une erreur. Faster R-CNN et Mask R-CNN sont un
-cas légèrement différent\u00a0: tous deux ont déjà exécuté une NMS dans le modèle,
+cas légèrement différent : tous deux ont déjà exécuté une NMS dans le modèle,
 à un seuil upstream fixe que `iou` ne peut pas modifier par une méthode prise
 en charge.
 
-Les familles suivantes utilisent bien ce paramètre\u00a0: YOLOv1 à YOLOv4, YOLOv7,
+Les familles suivantes utilisent bien ce paramètre : YOLOv1 à YOLOv4, YOLOv7,
 YOLOv9, YOLOX, YOLO-NAS, RTMDet, PicoDet, EfficientDet, FCOS, RetinaNet et SSD.
 
 Deux options de prédiction rendent `iou` pertinent même pour un prédicteur
 d'ensembles, car elles fusionnent toutes deux des bounding boxes après la fin
-du modèle\u00a0:
+du modèle :
 
 - `tiling=True` réconcilie les tuiles qui se chevauchent avec une NMS par classe au seuil `iou`
 - `augment=True` fusionne les vues retournées avec une NMS par classe au seuil `iou`
@@ -192,7 +194,7 @@ bibliothèque.
 ## max_det
 
 `max_det` limite le nombre de prédictions renvoyées pour une image. Il
-s'applique partout, mais avec des mécanismes différents\u00a0: une famille avec NMS
+s'applique partout, mais avec des mécanismes différents : une famille avec NMS
 tronque après la suppression, tandis qu'un prédicteur d'ensembles l'utilise
 comme taille de sa sélection top-k.
 
@@ -222,7 +224,7 @@ sur les bounding boxes. Les masques, points clés et bounding boxes orientées
 sont donc réduits avec elles au lieu de rester désalignés.
 
 Sur la ligne de commande, `classes` accepte un entier seul, une liste ou une
-chaîne séparée par des virgules\u00a0:
+chaîne séparée par des virgules :
 
 ```bash
 libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
@@ -250,7 +252,7 @@ quelle que soit la valeur de `iou`. Si cela pose problème, filtrez d'abord avec
 
 ## Arguments refusés par predict
 
-Deux arguments lèvent une erreur au lieu d'un avertissement\u00a0: `visualize` et
+Deux arguments lèvent une erreur au lieu d'un avertissement : `visualize` et
 `embed` lèvent tous deux `NotImplementedError`. Pour obtenir des embeddings,
 chargez le modèle avec `task="embed"`, puis appelez normalement `predict` ou
 `embed`.
@@ -260,5 +262,5 @@ charge. Une faute de frappe échoue donc immédiatement au lieu d'être ignorée
 silencieusement.
 
 Les arguments suivants sont acceptés, accompagnés d'un avertissement, puis
-supprimés\u00a0: `agnostic_nms`, `boxes`, `dnn`, `half`, `line_width`,
+supprimés : `agnostic_nms`, `boxes`, `dnn`, `half`, `line_width`,
 `retina_masks`, `show_conf`, `show_labels` et `verbose`.

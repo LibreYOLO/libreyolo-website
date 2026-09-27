@@ -12,7 +12,7 @@ keywords:
   - top-1 准确率
   - 零样本图像分类
   - MIT 许可 图像分类库
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -122,7 +122,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 836bea76cd2cdf92
+source_hash: 90aed355e0ddf5e3
 ---
 
 ## 定义
@@ -141,13 +141,7 @@ source_hash: 836bea76cd2cdf92
 
 ## 模型
 
-有五个家族既能训练也能预测：[ResNet](/docs/models/resnet)、
-[ConvNeXt](/docs/models/convnext)、[MobileNetV4](/docs/models/mobilenetv4)、
-[EfficientNetV2](/docs/models/efficientnetv2) 和
-[DINOv2](/docs/models/dinov2)。前四个在基础包上就能运行，并提供已发布的权重。
-DINOv2 需要 `pip install "libreyolo[rfdetr]"`，而且没有 LibreYOLO 托管的检查点：
-它加载上游骨干，配一个随机初始化的线性 head，所以它是微调的起点，而不是一个
-开箱即用的预测器。
+可训练的图像分类器包括：[ResNet](/docs/models/resnet)、[ConvNeXt](/docs/models/convnext)、[MobileNetV4](/docs/models/mobilenetv4)、[EfficientNetV2](/docs/models/efficientnetv2) 和 [DINOv2](/docs/models/dinov2)。前四个使用基础包运行，并提供已发布权重。DINOv2 需要 `pip install "libreyolo[rfdetr]"`，没有 LibreYOLO 托管的检查点：它加载上游骨干和随机初始化的线性 head，因此是微调起点，而不是可直接使用的预测器。
 
 另有五个能预测、验证和导出，但它们的 `train()` 会抛出
 `NotImplementedError`：[ViT](/docs/models/vit)、[Swin](/docs/models/swin)、
@@ -157,6 +151,8 @@ DINOv2 需要 `pip install "libreyolo[rfdetr]"`，而且没有 LibreYOLO 托管�
 [CLIP](/docs/models/clip) 和 [SigLIP2](/docs/models/siglip2) 在没有固定标签集的
 情况下分类。它们拿图像和文本提示打分，所以 `set_classes()` 在调用时定义类别，
 换一套新的标签集根本不存在训练这一步。两者也服务于 `embed` 任务。
+
+[ConvNeXt V2](/docs/models/convnextv2) 提供监督分类，预训练权重采用 CC-BY-NC-4.0。[PE](/docs/models/pe) 支持零样本分类；[V-JEPA 2](/docs/models/vjepa2) 可训练视频分类探针。
 
 ## 预测
 
@@ -199,6 +195,8 @@ dataset/
 不需要声明 `nc`：类别数来自 `train/` 下的文件夹名，最后的线性层会被重建以匹配它，
 而骨干原样迁移过来。数据集、数据增强、多卡训练和日志记录器见[训练](/docs/train)。
 
+ResNet、ConvNeXt、ConvNeXt V2、MobileNetV4、EfficientNetV2 和 DINOv2 支持 `cls_pw` 或 `class_weights` 损失加权。分类中的 `scale` 控制裁剪面积，`crop_pct` 控制评估裁剪。见[数据增强](/docs/train/augmentations)。
+
 ## 验证
 
 `val()` 返回一个由 `metrics/` 键组成的普通字典，在数据集根目录的 `val/` 划分上
@@ -210,6 +208,8 @@ dataset/
 用它来挑选最佳轮次。`metrics/accuracy_top5` 是真实类别出现在得分最高的五个类别中
 任意位置的图像占比，数据集的类别越少，它说明的问题就越少。字典里还带有
 `fitness`，它是 top-1 值的一份副本。
+
+ImageFolder 验证还返回宏平均 `metrics/precision`、`metrics/recall` 和 `metrics/f1`，对验证目标中出现的类别取平均。未被预测到的类别查准率计为零。默认适应度仍为 top-1 精度。验证和校准使用模型的评估变换。
 
 ## 导出
 

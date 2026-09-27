@@ -313,6 +313,7 @@
     "nextRelease": "다음 릴리스",
     "versionIsCurrent": "현재 버전: v{version}",
     "latest": "최신",
+    "archivedNotice": "이 문서는 LibreYOLO {version} 문서입니다. <link>최신 버전 보기</link>.",
     "onThisPage": "이 페이지에서",
     "docsButton": "문서",
     "openNav": "문서 탐색 메뉴 열기",

@@ -13,7 +13,7 @@ keywords:
   - miou
   - panoptic quality
   - top1 accuracy
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 snippets:
   val:
     - label: Python
@@ -64,7 +64,7 @@ snippets:
 
 <code-tabs name="val" />
 
-The return value is a plain `dict[str, float]`. Every key is literal, so read it
+The return value is a `dict[str, float]`. Every key is literal, so read it
 by name rather than by position.
 
 The main arguments are `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
@@ -72,7 +72,8 @@ The main arguments are `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
 `0.001` and `iou` to `0.6`, both far looser than prediction defaults, because a
 mAP sweep needs the low-confidence tail. `imgsz` defaults to the model's own
 input size rather than a fixed number. `split` accepts `val`, `test` or `train`
-and nothing else.
+and nothing else. Without `data`, a trained checkpoint validates on the dataset
+it was trained on; released weights carry none and need `data=`.
 
 Any other field of the validation config passes through as a keyword argument,
 including `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`, `cache`
@@ -138,6 +139,8 @@ selection uses by default. Detection, segmentation and OBB do not carry one;
 their families are selected on `metrics/mAP50-95`, which their dicts do
 return. Pose returns neither `fitness` nor `metrics/mAP50-95`; its trainers
 set `best_metric_key` to `metrics/keypoints_mAP50-95` instead.
+
+ImageFolder classification adds macro `metrics/precision`, `metrics/recall` and `metrics/f1`, averaged over classes present in validation targets. Top-1 remains default fitness. Detection also returns `metrics/best_conf` and `metrics/best_conf_f1`, choosing the micro-F1-optimal threshold at IoU 0.50, and puts class-name-keyed thresholds on `metrics.box.best_conf_per_class`. Equal-score detections stay grouped; ties choose the higher threshold. No positive F1 yields 0.0. Segmentation does not expose these threshold keys.
 
 ## Speed keys
 
@@ -232,7 +235,9 @@ raises.
 ## Files a validation writes
 
 `val()` always writes `config.yaml` into its save directory, defaulting to
-`runs/val/<model>_<size>_<timestamp>` when `save_dir` is not given.
+`runs/val/<model>_<size>_<timestamp>` when `save_dir` is not given. `project`,
+`name` and `exist_ok` choose it the way training does: `project/name`, with an
+incremented suffix unless `exist_ok=True`.
 
 <code-tabs name="json" />
 
@@ -248,12 +253,18 @@ metric and curve set. The other validators do not implement plots; classificatio
 semantic, panoptic, depth, normal, edge, restore, matte, OCR, OBB and point all
 write nothing there. A plotting failure warns and never aborts the run.
 
+`visualize=True` writes class-aware box TP/FP/FN images for detection and segmentation, or label-versus-top-1 images for ImageFolder classification, into `visualize/errors/` and `visualize/correct/`. Matching uses IoU 0.5 and confidence `max(0.25, conf)`. Defaults are `visualize=False`, `show_labels=True` and `show_conf=True`. Unsupported tasks and V-JEPA 2 clip validation reject visualization.
+
+`plot_samples=8` limits the separate sample plot; 0 disables it and -1 retains all images. This does not change metrics or visualization output.
+
 ## Validation during training
 
-Training validates every `eval_interval` epochs against the dataset's `val`
-split, and the metrics it produces are what drives `best.pt` selection, the
-`patience` early stop, and the `val/` keys in every logger. The validation runs
-on the EMA weights when EMA is on.
+Training validates every `eval_interval` epochs, and always after the final
+epoch, against the dataset's `val` split, and the metrics it produces are what
+drives `best.pt` selection, the `patience` early stop, and the `val/` keys in
+every logger. The validation runs on the EMA weights when EMA is on. Its files
+go to a `val/` directory inside the run. `val=False` turns validation during
+training off, final epoch included.
 
 See [Hyperparameters](/docs/train/hyperparameters) for `eval_interval`,
 `patience` and `save_plots`, and [Experiment loggers](/docs/train/loggers) for
@@ -262,3 +273,7 @@ where the numbers go.
 ## Related
 
 - [Datasets](/docs/train/datasets) for the split keys and formats validators read.
+
+## Per-image box metrics
+
+Detection and segmentation results stay dictionary-compatible and also expose `results.box.image_metrics`. Each filename maps to `precision`, `recall`, `f1`, `tp`, `fp` and `fn` using the visualization matching rule even when visualization is off. Segmentation counts boxes here. Duplicate basenames use full paths after the first occurrence. Zero denominators yield 0.0. These records are not gathered across distributed ranks.

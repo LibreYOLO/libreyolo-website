@@ -12,9 +12,9 @@ keywords:
   - LibreYOLO formats コマンド
   - エクスポート 一致度 しきい値
   - NotImplementedError export
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  形式、ティア、フォールバック順、タスクとファミリーのブロック、NCNNのブロックはlibreyolo/export/support.py、別名と共通引数はlibreyolo/export/exporter.py、ティア定義はdocs/adr/0011-export-support-tiers.md、一致度しきい値はdocs/export_support.mdから確認しました。すべてv1.5.0時点です。組み合わせごとのセルはここへ転記していません。以下のスニペットで問い合わせてください。
+  形式、ティア、フォールバック順、タスクとファミリーのブロック、NCNNのブロックはlibreyolo/export/support.py、別名と共通引数はlibreyolo/export/exporter.py、ティア定義はdocs/adr/0011-export-support-tiers.md、一致度しきい値はdocs/export_support.mdから確認しました。すべてv1.6.0時点です。組み合わせごとのセルはここへ転記していません。以下のスニペットで問い合わせてください。
 snippets:
   usage:
     - label: モデルなしでマトリックスを問い合わせ
@@ -53,7 +53,7 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
-source_hash: 83de3289634888c6
+source_hash: 70b9541fb8949352
 ---
 
 ## マトリックスの構造
@@ -67,6 +67,8 @@ source_hash: 83de3289634888c6
 <code-tabs name="usage" />
 
 1つのセルが3つのキーから決まるため、完全なグリッドは大きく、リリースごとに変化します。手作業で記述せず生成され、ライブラリリポジトリの`docs/export_support.md`にあります。コピーを読むのではなく、PythonまたはCLIでマトリックスへ問い合わせてください。
+
+生成されたレジストリには、PP-YOLOE、TinyFormer、DEKR、PP-LiteSeg、ConvNeXt V2、PE、V-JEPA 2、LeVJEPAが含まれます。形状とタスクの制約は各モデルページを確認してください。U-Net、4つの3Dアダプター、Marigold V2、ロボットポリシーはエクスポートを提供しません。
 
 ## 3つのティア
 

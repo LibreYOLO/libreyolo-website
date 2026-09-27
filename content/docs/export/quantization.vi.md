@@ -20,7 +20,7 @@ keywords:
   - fp8 e4m3
   - dữ liệu hiệu chuẩn quantization
   - xuất onnx qdq int8
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Lệnh gọi
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -85,7 +85,7 @@ snippets:
             calib="coco128.yaml",      # đường dẫn data.yaml hoặc tên có sẵn; None bỏ qua hiệu chuẩn
             samples=128,               # số ảnh hiệu chuẩn tối đa
             batch=8,                   # kích thước batch khi hiệu chuẩn
-            algorithm="auto",          # auto và minmax là như nhau; percentile là lựa chọn còn lại
+            algorithm="auto",          # auto chọn minmax; lựa chọn khác: percentile, mse, entropy
             keep_high_precision=None,  # None dùng chính sách của họ mô hình
             verbose=True,
         )
@@ -174,9 +174,8 @@ snippets:
 
         # Giờ mọi bộ xuất float đều dùng được, ở bất kỳ precision nào nó hỗ trợ
         qmodel.export(format="tensorrt", half=True)
-source_hash: 4ffb06b87cad017e
+source_hash: 8d41f13e6ee33ff2
 ---
-
 ## Cài đặt
 
 Quantization không cần gói phụ thuộc thêm nào. Việc thay module, lượt hiệu chuẩn
@@ -200,6 +199,8 @@ manifest `quant`, nên nó tải lại với cấu trúc và các scale còn ngu
 Các checkpoint mà trainer ghi ra trong một lượt QAT cũng mang manifest đó, nghĩa
 là `best.pt` của một lượt chạy như vậy bản thân nó đã là một checkpoint đã lượng
 tử hóa.
+
+`algorithm` hiệu chuẩn chấp nhận `auto`, `minmax`, `percentile`, `mse` và `entropy`. `auto` được chuyển thành minmax. MSE và entropy quét histogram để chọn phạm vi activation.
 
 ## Các recipe
 
@@ -264,6 +265,8 @@ không thì đi theo mức hỗ trợ distillation của từng họ mô hình, 
 Các mô hình đã lượng tử hóa bằng `fp16` và `bf16` chỉ dùng cho inference, và
 trainer từ chối chúng kèm một chỉ dẫn tới `amp=True`.
 
+Thiết lập QAT tắt EMA và SyncBatchNorm, đặt `average_best=0` và ghi log mỗi giá trị ghi đè. Huấn luyện số thực giữ các thiết lập được yêu cầu.
+
 ## Xuất
 
 <code-tabs name="export" />
@@ -294,6 +297,9 @@ Phép tính đã lượng tử hóa được thực thi ở dạng mô phỏng, 
 tính trong các ốc đảo float32 ngay cả khi có AMP. Mô phỏng đúng về mặt số học,
 nên một điểm `val()` trên bất kỳ thiết bị nào cũng là một khẳng định thật về phép
 tính đã lượng tử hóa. Nó không phải một khẳng định về tốc độ.
+
+Apple MPS không hỗ trợ các phép fake-quantize, cũng không hỗ trợ float8, nên trên
+Mac mọi recipe ngoại trừ `fp16` và `bf16` đều chạy trên CPU, kèm một cảnh báo.
 
 Hai ngoại lệ được thực thi natively. `fp16` và `bf16` là các phép ép kiểu thông
 thường. Các module `fp8` đã hoàn thiện chạy GEMM của chúng trực tiếp trên trọng

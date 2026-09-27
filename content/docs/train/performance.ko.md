@@ -16,7 +16,7 @@ keywords:
   - 데이터로더 바운드
   - 커널 실행 오버헤드
   - GPU 사용률
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   profile:
     - label: 프로필을 살펴보고 계속 학습하십시오
@@ -66,7 +66,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: ee5bb727065b6099
+source_hash: c8d7adb6aabcbc80
 ---
 
 ## 변경 전 측정
@@ -92,13 +92,15 @@ source_hash: ee5bb727065b6099
 
 `profile run`에 대해 알아둘 만한 두 가지가 있습니다. 이것은 `no_aug_epochs=0`를 설정하는데, 그 이유는 프로파일러가 0 에폭을 측정하고 기본 `no_aug_epochs`로 짧게 실행하면 실제로 학습에서 사용하는 것보다는 가벼운 데이터로더를 프로파일링하기 때문입니다. 그리고 `--repeat N`는 평균과 표준편차를 보고하는데, 이는 실행 경계 단계가 충분히 노이즈가 많아서 단일 실행만으로는 오해를 일으킬 수 있기 때문입니다; 각 시도 디렉터리 `prof_1`, `prof_2` 등을 기록하고, 또한 전체 집계 `profile_repeat.json`도 기록합니다.
 
+RF-DETR과 D-FINE/DEIM/RT-DETR 매처 경로는 호스트 전송을 줄이며, 조건에 맞는 CUDA Adam과 AdamW 생성은 융합 업데이트를 사용합니다. SGD와 CUDA 이외 파라미터는 기본 생성 방식을 사용합니다. 이 구현 변경이 모든 경우의 속도 향상을 보장하지는 않습니다.
+
 ## 혼합 정밀도
 
 `amp=True`는 대부분의 계열에 대한 기본값이며 CUDA 자동 캐스트에서 순방향 패스를 실행합니다. `amp_dtype`는 `float16` 또는 `bfloat16`를 선택합니다.
 
 <code-tabs name="amp" />
 
-Float16는 동적 손실 스케일링이 필요하며 라이브 그래디언트 스케일러를 사용합니다; bfloat16은 더 넓은 지수 범위를 가지고 있어 필요하지 않으므로 스케일러가 비활성화됩니다. `amp=False`, D-FINE, DEIM, YOLO-NAS, FOMO와 함께 네 가지 계열이 제공되며, DEIM 설정은 상속을 통해 RT-DETRv4로 전달됩니다. D-FINE은 이유를 명시합니다: 디코더가 활성화를 65504에서 클램핑하는데, 이는 가장 큰 유한 float16 값입니다.
+Float16은 그래디언트 스케일러를 사용하며 bfloat16은 비활성화합니다. D-FINE, DEIM, RT-DETRv4, YOLO-NAS 탐지는 `amp=True`가 기본값입니다. Dome-DETR, PP-YOLOE, YOLO-NAS OBB는 FP32 기본값을 유지합니다. FP32를 명시적으로 요청하려면 `amp=False`를 전달합니다.
 
 bfloat16 요청이 bfloat16을 지원하지 않는 하드웨어에서 수행하는 작업을 포함한 인수 의미론은 [Hyperparameters](/docs/train/hyperparameters)에 있습니다.
 
@@ -167,6 +169,12 @@ YOLOX는 실행 도중 캡처된 영역이 계산하는 내용을 변경하며, 
 `amp=False`에서 비트 동일성(bit-identical)은 캡처 여부와 관계없이 이 하드웨어의 어떤 것에서도 사용할 수 없습니다. 동일한 시드로 초기화된 두 개의 즉시 실행(eager) YOLOv9-t 실행은 20단계 동안 상대적으로 36퍼센트 차이가 나며, YOLOX-t는 2.6퍼센트 차이를 보입니다. 이는 cuDNN이 일부 fp32 컨볼루션 형태에 대해 비결정적(non-deterministic) 가중치-기울기 알고리즘을 선택하기 때문입니다.
 
 캡처된 그래프는 정적 입력, 출력 및 워크스페이스 버퍼를 고정하므로, VRAM 피크가 대략 한 세트의 추가 활성화만큼 상승합니다. 위의 다양한 모델 계열에서, 피크 할당량은 -5%에서 +19% 사이로 이동했습니다. 상대적인 비용은 처음부터 활성화가 작은 소형 분류 모델에서 가장 큽니다: 224px의 ResNet-18, 배치 16, eager 모드에서 0.48GB였던 것이 graphed 모드에서 0.57GB로 증가했습니다. 실행이 한도를 초과한다면, 배치를 줄이거나 해당 플래그를 끄십시오.
+
+## torch.compile
+
+`train(compile=True)`는 `torch.compile`로 네트워크의 순전파와 역전파를 컴파일합니다. `"default"`, `"reduce-overhead"`, `"max-autotune"`, `"max-autotune-no-cudagraphs"` 모드도 받으며, 기본값은 `False`입니다. 손실, 옵티마이저, EMA, 검증, 체크포인트, 내보내기는 즉시 실행 모드로 유지되며, 체크포인트는 컴파일 없이 로드됩니다. 단일 GPU CUDA 실행만 컴파일됩니다. CPU, MPS, 분산, 증류 실행과 컴파일러 실패 시에는 경고를 출력한 뒤 즉시 실행 모드로 학습합니다. 컴파일에는 몇 분이 걸리며 학습 호스트에 C 컴파일러와 Python 헤더가 필요합니다.
+
+`train()` 중에 `OMP_NUM_THREADS`가 설정되어 있지 않으면 LibreYOLO는 PyTorch CPU 스레드 수를 프로세스의 CPU 할당량으로 낮추므로, CPU가 제한된 컨테이너에서 매 스텝이 스로틀링되지 않습니다.
 
 ## 관련된
 

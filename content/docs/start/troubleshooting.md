@@ -1,10 +1,19 @@
 ---
 title: Troubleshooting
-seo_title: "Fix common LibreYOLO errors"
-description: "The errors LibreYOLO raises most often, what each one means, and the fix. Includes two failures that produce wrong output instead of raising."
-lead: "Errors grouped by the message you see. Two entries at the end cover the opposite problem: code that runs, returns something plausible, and is wrong."
-keywords: [libreyolo error, modulenotfounderror libreyolo, libreyolo cuda out of memory, libreyolo notimplementederror, libreyolo troubleshooting]
-last_verified: "1.5.0"
+seo_title: Fix common LibreYOLO errors
+description: >-
+  The errors LibreYOLO raises most often, what each one means, and the fix.
+  Includes two failures that produce wrong output instead of raising.
+lead: >-
+  Errors grouped by the message you see. Two entries at the end cover the
+  opposite problem: code that runs, returns something plausible, and is wrong.
+keywords:
+  - libreyolo error
+  - modulenotfounderror libreyolo
+  - libreyolo cuda out of memory
+  - libreyolo notimplementederror
+  - libreyolo troubleshooting
+last_verified: 1.6.0
 ---
 
 Errors are grouped by the text you see. If your message is not here, the
@@ -86,9 +95,10 @@ including the task suffix, so a name that does not match a published checkpoint
 produces a URL that does not exist. The checkpoint table on each model page
 lists the exact published filenames.
 
-## Training hangs or restarts on Windows
+## Training hangs or restarts on Windows or macOS
 
-Windows has no `fork`, so dataloader workers start by re-importing your script.
+Windows has no `fork`, and Python on macOS does not use it by default, so
+dataloader workers start by re-importing your script.
 Without a `if __name__ == "__main__":` guard, each worker re-runs your training
 call, which either deadlocks or spawns processes without end.
 
@@ -125,8 +135,8 @@ Index only what you know is a list.
 
 ### Reading metrics as attributes
 
-`val()` returns a plain dictionary keyed by metric name, not an object with
-attribute access:
+`val()` returns a dictionary keyed by metric name. Its one attribute, `box`,
+carries per-image results and per-class thresholds, not the metric values:
 
 ```python
 metrics = model.val(data="coco8.yaml")
@@ -152,3 +162,7 @@ if report.errors:
 ```
 
 See the [doctor command](/docs/cli/doctor) for the check catalog.
+
+## Persistent workers cannot observe dataset changes
+
+Active `close_mosaic` or `set_epoch` hooks must reach the dataset copies used by workers. If a custom multi-worker loader keeps incompatible persistent copies, use `persistent_workers=False` or rebuild workers after the mutation. The default nonpersistent path is unaffected.

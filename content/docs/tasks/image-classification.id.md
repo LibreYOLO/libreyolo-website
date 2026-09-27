@@ -15,7 +15,7 @@ keywords:
   - akurasi top-1
   - klasifikasi zero-shot
   - perpustakaan klasifikasi MIT
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -118,7 +118,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 836bea76cd2cdf92
+source_hash: 90aed355e0ddf5e3
 ---
 
 ## Definisi
@@ -141,14 +141,7 @@ satu baris.
 
 ## Model
 
-Lima keluarga baik melatih maupun memprediksi: [ResNet](/docs/models/resnet),
-[ConvNeXt](/docs/models/convnext), [MobileNetV4](/docs/models/mobilenetv4),
-[EfficientNetV2](/docs/models/efficientnetv2) dan
-[DINOv2](/docs/models/dinov2). Empat pertama berjalan pada paket dasar dan dikirim
-bobot yang diterbitkan. DINOv2 membutuhkan `pip install "libreyolo[rfdetr]"` dan tidak memiliki
-LibreYOLO-menghosting checkpoint: ini memuat backbone hulu secara acak
-menginisisialisasi head linier, jadi itu adalah titik awal fine-tuning daripada
-prediktor siap.
+Pengklasifikasi gambar yang dapat dilatih meliputi [ResNet](/docs/models/resnet), [ConvNeXt](/docs/models/convnext), [MobileNetV4](/docs/models/mobilenetv4), [EfficientNetV2](/docs/models/efficientnetv2), dan [DINOv2](/docs/models/dinov2). Empat yang pertama berjalan dengan paket dasar dan memiliki bobot yang dipublikasikan. DINOv2 memerlukan `pip install "libreyolo[rfdetr]"` dan tidak memiliki checkpoint yang dihosting LibreYOLO: model ini memuat backbone upstream dengan head linear yang diinisialisasi secara acak, sehingga menjadi titik awal fine-tuning, bukan model siap prediksi.
 
 Lima lagi memprediksi, memvalidasi, dan mengekspor, tetapi `train()` mereka meningkat
 `NotImplementedError`: [ViT](/docs/models/vit), [Swin](/docs/models/swin),
@@ -159,6 +152,8 @@ Lima lagi memprediksi, memvalidasi, dan mengekspor, tetapi `train()` mereka meni
 set label tetap. Mereka menilai gambar terhadap teks prompt, sehingga
 `set_classes()` mendefinisikan kelas pada saat pemanggilan dan tidak ada langkah pelatihan
 untuk set label baru sama sekali. Keduanya juga melayani `embed` task.
+
+[ConvNeXt V2](/docs/models/convnextv2) menambahkan klasifikasi terawasi dengan bobot pretrained CC-BY-NC-4.0. [PE](/docs/models/pe) mendukung klasifikasi zero-shot; [V-JEPA 2](/docs/models/vjepa2) melatih probe klasifikasi video.
 
 ## Prediksi
 
@@ -209,6 +204,8 @@ Tidak ada `nc` yang perlu dideklarasikan: jumlah kelas berasal dari nama folder 
 dipindahkan tanpa perubahan. Lihat [pelatihan](/docs/train) untuk dataset, augmentasi,
 multi-GPU dan logger.
 
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2, dan DINOv2 mendukung pembobotan loss `cls_pw` atau `class_weights`. `scale` klasifikasi mengontrol area crop, dan `crop_pct` mengontrol crop evaluasi. Lihat [augmentasi](/docs/train/augmentations).
+
 ## Validasi
 
 `val()` mengembalikan kamus sederhana dari kunci `metrics/`, dihitung di atas `val/`
@@ -222,6 +219,7 @@ epoch terbaik. `metrics/accuracy_top5` adalah bagian yang kelas aslinya muncul
 di mana saja dalam lima kelas dengan skor tertinggi, yang berarti lebih sedikit sebanyak kelas
 yang dimiliki dataset. Kamus juga memuat `fitness`, salinan dari nilai top-1.
 
+Validasi ImageFolder juga mengembalikan makro `metrics/precision`, `metrics/recall`, dan `metrics/f1`, dengan rata-rata atas kelas yang ada dalam target validasi. Kelas tanpa prediksi menyumbang presisi nol. Fitness default tetap akurasi top-1. Validasi dan kalibrasi memakai transformasi evaluasi model.
 
 ## Ekspor
 
@@ -233,4 +231,3 @@ berkas `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengembalikan
 dihasilkan dari set yang tervalidasi daripada diketik secara manual. Lihat
 [ekspor dan deploy](/docs/export) untuk format, tambahan mereka dan
 batasannya.
-

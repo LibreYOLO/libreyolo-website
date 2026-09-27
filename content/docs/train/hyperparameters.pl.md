@@ -21,7 +21,7 @@ keywords:
   - early stopping patience
   - amp bfloat16
   - train config yaml
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -106,14 +106,14 @@ snippets:
         # Wczytaj checkpoint przerwanego przebiegu, a następnie zażądaj
         wznowienia.
 
-        model = LibreYOLO("runs/train/exp/weights/last.pt")
+        model = LibreYOLO("runs/train/yolo9_exp/weights/last.pt")
 
-        model.train(data="my-dataset.yaml", epochs=100, resume=True)
+        model.train(data="my-dataset.yaml", resume=True)
     - label: CLI
       language: bash
       code: |
-        libreyolo train model=runs/train/exp/weights/last.pt \
-          data=my-dataset.yaml epochs=100 resume=true
+        libreyolo train model=runs/train/yolo9_exp/weights/last.pt \
+          data=my-dataset.yaml resume=true
   cfg:
     - label: Python
       language: python
@@ -127,7 +127,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: d838d1abd45af40f
+source_hash: ca1259a10e05a51d
 ---
 
 ## Ustawianie argumentów
@@ -176,13 +176,9 @@ wartości:
 | `weight_decay` | `5e-4` | `5e-4` | `1e-4` | `1e-5` |
 | `scheduler` | `yoloxwarmcos` | `linear` | `flat_cosine` | `cos` |
 | `epochs` | `300` | `300` | `132` | `300` |
-| `amp` | `True` | `True` | `False` | `False` |
+| `amp` | `True` | `True` | `True` | `True` |
 
-D-FINE i DEIM są dostarczane z `amp=False`, ponieważ dekoder D-FINE ogranicza
-aktywacje do 65504, największej skończonej wartości float16. YOLO-NAS i FOMO
-również domyślnie wyłączają tę opcję. Flaga `--amp` w CLI ma wartość domyślną
-`True` dla każdej rodziny, dlatego jest uznawana za podaną przez użytkownika i
-zastępuje wartość domyślną rodziny. Nie należy jej zmieniać bez świadomego celu.
+D-FINE, DEIM, RT-DETRv4 i detekcja YOLO-NAS domyślnie używają `amp=True` z `amp_dtype="float16"`. Dome-DETR, PP-YOLOE i YOLO-NAS OBB zachowują domyślne FP32. Gdy wymagane jest FP32, należy przekazać `amp=False`.
 
 Aby odczytać rzeczywiste wartości domyślne rodziny zamiast zgadywać:
 
@@ -210,6 +206,8 @@ teście nadal zaniża koszt kryterium i pomocniczych warstw dekodera.
 
 Autobatch jest funkcją CUDA. Na CPU lub MPS zapisuje jeden wiersz w logu i
 pozostawia domyślny batch.
+
+`min_samples=0` pozostawia długość epoki bez zmian. Dodatnia wartość minimalna powoduje próbkowanie ze zwracaniem w krótszych zbiorach detekcji. `class_balanced=False`, po ustawieniu na true, włącza próbkowanie obrazów ze współczynnikiem powtórzeń; współpracuje z `min_samples` i DDP. Wyspecjalizowane loadery pomijające wspólny sampler odrzucają włączone równoważenie.
 
 ## Akumulacja gradientów
 
@@ -279,29 +277,38 @@ katalog otrzymuje zwiększony sufiks zamiast zostać nadpisany.
 
 `save_period` zapisuje dodatkowy plik `weights/epoch_<N>.pt` co N epok, oprócz
 `weights/last.pt` po każdej epoce i `weights/best.pt` przy każdej poprawie
-śledzonej metryki. `eval_interval` ustawia częstotliwość walidacji, a `patience`
-zatrzymuje przebieg po tylu epokach bez poprawy. Wartość `0` wyłącza early
-stopping.
+śledzonej metryki. `eval_interval` ustawia częstotliwość walidacji, a ostatnia
+epoka jest zawsze walidowana; `val=False` wyłącza walidację, a taki przebieg nie
+zapisuje `best.pt`. `patience` zatrzymuje przebieg po tylu epokach bez poprawy.
+Wartość `0` wyłącza early stopping.
 
 `cache` przyspiesza powtarzane epoki przez przechowywanie zdekodowanych obrazów
 w RAM (`True` lub `"ram"`) albo jako pliki `.npy` obok źródeł (`"disk"`). Odczyty
 z pamięci podręcznej są identyczne bajt po bajcie ze świeżymi odczytami. Przy
 workerach modułu wczytującego dane bezpieczniejszą opcją jest `"disk"`.
 
+`average_best=0` wyłącza uśrednianie checkpointów; dodatnie N zapisuje `weights/average.pt` na podstawie najwyżej N najlepszych snapshotów. Tensory zmiennoprzecinkowe są uśredniane równomiernie, a bufory całkowitoliczbowe pochodzą z najlepszego snapshotu. Można włączyć `export_check=False`, aby przerwać trenowanie przed pierwszą epoką, jeśli eksport ONNX się nie powiedzie. Pasujące surowe wyjścia są porównywane przy `rtol=1e-3`, `atol=1e-4`; przy niezgodnych układach zapisywana jest informacja o pominięciu porównania.
+
+`precise_bn=0` wyłącza końcową rekalibrację BatchNorm. Dodatnia wartość ogranicza liczbę obrazów z loadera treningowego przed końcową walidacją; w DDP limit obowiązuje osobno dla każdego uczestniczącego procesu rank. Zamrożone BatchNorm pozostaje zamrożone. [Własne callbacki fitness](/docs/train/fitness-callbacks) mogą wybierać najlepsze checkpointy i sterować patience.
+
 ## Wznawianie
 
-`resume=True` kontynuuje przerwany przebieg. Najpierw trzeba wczytać checkpoint,
-ponieważ wznowienie odczytuje go z modelu, a nie z osobnego argumentu.
+`resume=True` kontynuuje przerwany przebieg od wczytanego checkpointu;
+`resume="path/to/last.pt"` kontynuuje zamiast tego od tego pliku.
 
 <code-tabs name="resume" />
 
-Wznowienie przywraca wytrenowane wagi, stan optymalizatora, wagi EMA i liczbę
+Wznowienie przywraca zapisane argumenty trenowania przebiegu, a argument
+przekazany jawnie zastępuje zapisany. Nadal zapisuje dane do katalogu przebiegu
+checkpointu. Przywraca wytrenowane wagi, stan optymalizatora, wagi EMA i liczbę
 aktualizacji, śledzenie najlepszej metryki, skalę `GradScaler` oraz stany losowe
 PyTorch, CUDA i NumPy. Rozpoczyna od epoki następującej po epoce checkpointu i
 przewija harmonogram do tej pozycji.
 
-Nie wykona dwóch czynności. `resume=True` nie można łączyć z `pretrained`, gdyż
-powoduje to błąd. Jeśli klucz najlepszej metryki checkpointu różni się od klucza
+Nie wykona trzech czynności. `resume=True` nie można łączyć z `pretrained`, gdyż
+powoduje to błąd. Opublikowane wagi i przebieg, który osiągnął już swoją wartość
+`epochs`, nie zawierają niczego do wznowienia i zgłaszają informujący o tym
+`ValueError`. Jeśli klucz najlepszej metryki checkpointu różni się od klucza
 bieżącego przebiegu, śledzenie najlepszej metryki jest zerowane z ostrzeżeniem,
 zamiast porównywać wartości o różnych znaczeniach.
 
@@ -327,3 +334,10 @@ zarządza. CLI nie ma flagi `--cfg`. Ścieżka pliku jest argumentem Pythona.
 - [Walidacja i metryki](/docs/train/validation) opisują raportowane wyniki
   przebiegu.
 
+## Wybór klas i ważenie funkcji straty
+
+W detekcji YOLO9, RF-DETR, EdgeCrafter, RT-DETR, D-FINE, DEIM, TinyFormer i YOLO-NAS `classes=None` zachowuje wszystkie klasy zbioru; lista filtruje etykiety nadzorujące z zachowaniem oryginalnych identyfikatorów, `nc` i `names`. `single_cls=False` można włączyć, aby mapować zachowane etykiety na klasę 0 o nazwie `object`. Wznowienie i walidacja dziedziczą zapisane ustawienia. Trenowanie OBB odrzuca `single_cls`.
+
+ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 i DINOv2 obsługują `cls_pw=0.0`: wartości z [0, 1] ważą każdą klasę odwrotnością częstości podniesioną do tej potęgi, z normalizacją do średniej 1. `class_weights=False`, po włączeniu, wybiera alternatywne ważenie `N / (C * n_c)`. Nie można go łączyć z dodatnim `cls_pw`; wznowienie wymaga zgodnych ustawień ważenia.
+
+`plot_samples=8` określa limit przykładowych obrazów walidacyjnych. 0 wyłącza je, a -1 wybiera wszystkie; nie zmniejsza to liczby ocenianych obrazów.

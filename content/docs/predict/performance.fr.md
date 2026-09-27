@@ -188,7 +188,7 @@ prétraité, empilé dans un tenseur unique, exécuté une fois, puis redécoup�
 que le post-traitement mono-image existant de chaque famille reçoive ce qu'il
 attend.
 
-Le chemin empilé n'est emprunté que si toutes ces conditions sont remplies\u00a0:
+Le chemin empilé n'est emprunté que si toutes ces conditions sont remplies :
 
 - `batch` est supérieur à `1`
 - `tiling` est désactivé
@@ -203,7 +203,7 @@ mutuellement leurs prédictions, ces exécutions restent donc séquentielles.
 
 `SUPPORTS_BATCHED_PREDICT` vaut true par défaut. Les familles suivantes le
 désactivent et exécutent une image par passe forward quelle que soit la valeur
-de `batch`\u00a0: Depth Anything V2, Depth Anything 3, EoMT, Faster R-CNN, FCOS,
+de `batch` : Depth Anything V2, Depth Anything 3, EoMT, Faster R-CNN, FCOS,
 HRNet, L2CS-Net, LibreMODUS, MiDaS, MoGe-2, PP-OCRv5, Real-ESRGAN, RetinaNet,
 SAM 3D Body, SwinIR, YOLOv1, ZipDepth, tous les détecteurs à vocabulaire ouvert
 et tous les modèles vision-langage.
@@ -273,7 +273,7 @@ Pour une exécution PyTorch, `model.quantize(recipe="fp16")` convertit le modèl
 en float16 et installe des hooks qui conservent le float32 aux entrées et
 sorties du modèle. `"bf16"` effectue la même opération en bfloat16. Aucune de
 ces conversions ne lit de données de calibration, `calib` est donc ignoré.
-La quantification couvre actuellement quatre familles\u00a0: YOLOv9, RF-DETR,
+La quantification couvre actuellement quatre familles : YOLOv9, RF-DETR,
 BiRefNet et FeyNobg. Une conversion sur un appareil CPU consigne un
 avertissement de lenteur, ces recettes sont donc destinées à un GPU.
 
@@ -299,13 +299,13 @@ maximale par classe au seuil `iou`, puis la liste fusionnée est tronquée à
 familles qui n'exécutent aucune NMS elles-mêmes.
 
 Le tuilage est omis, et pas simplement peu coûteux, si l'image tient déjà dans
-la taille d'entrée\u00a0: si ses deux dimensions sont inférieures ou égales à cette
+la taille d'entrée : si ses deux dimensions sont inférieures ou égales à cette
 taille, une unique passe forward ordinaire s'exécute. Il est également omis
 pour la classification, la segmentation sémantique et la tâche `embed`, qui se
 rabattent sur une passe unique puisque le tuilage n'y a aucun sens.
 
 Il lève une erreur pour les tâches dont la charge utile ne peut pas être
-réassemblée\u00a0: masques de segmentation d'instances, bounding boxes orientées,
+réassemblée : masques de segmentation d'instances, bounding boxes orientées,
 points, profondeur, contours et normales. Il ne peut pas être associé à
 `augment`.
 
@@ -326,7 +326,7 @@ cette option rend `iou` déterminant pour les familles qui l'ignorent autrement.
 
 En pratique, il s'agit d'un retournement horizontal. La liste d'échelles
 `TTA_SCALES` contient par défaut une seule échelle de `1.0` et aucune famille
-fournie ne la remplace. Chaque famille exécute donc deux passes\u00a0: l'image
+fournie ne la remplace. Chaque famille exécute donc deux passes : l'image
 d'origine et son reflet. Les familles marquées `TTA_FIXED_SIZE` redimensionnent
 l'entrée vers un carré fixe, ce qui rend de toute façon le multi-échelle sans
 effet pour elles.
@@ -342,7 +342,7 @@ profondeur, les normales, les contours, la restauration, l'OCR et les modèles
 d'embeddings, et ne peut pas être associée au tuilage.
 
 Les familles suivantes la désactivent entièrement, de sorte que `augment=True`
-exécute une seule passe ordinaire\u00a0: BiRefNet, CenterNet, CLIP, DexiNed, FOMO,
+exécute une seule passe ordinaire : BiRefNet, CenterNet, CLIP, DexiNed, FOMO,
 HRNet, L2CS-Net, LibreMODUS, NAFNet, PP-OCRv5, Real-ESRGAN, RetinaNet, SAM 3D
 Body, SigLIP2, SwinIR, TEED, toutes les variantes de SAM, tous les détecteurs à
 vocabulaire ouvert et tous les modèles vision-langage.

@@ -18,7 +18,7 @@ keywords:
   - MHR
   - Momentum Human Rig
   - estymacja pozy 3D
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -62,7 +62,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 5f47acceaf23ab64
+source_hash: 1b63435b35c57b10
 ---
 
 ## Instalacja
@@ -114,6 +114,8 @@ oryginalnego obrazu, a obroty używają konwencji MHR, czyli kątów Eulera zami
 reprezentacji oś-kąt. Więcej informacji o źródłach, streamingu i obsłudze
 wyników zawiera strona [predykcji](/docs/predict).
 
+Automatyczne pobieranie wymaga `libreyolo[hf]` i dostępu do modelu z ograniczonym dostępem. Lokalny checkpoint musi być sprawdzonym katalogiem snapshotu lub jego niezmienionym plikiem `model.ckpt` obok pasujących `model_config.yaml` i `LICENSE`. Ustalone hashe i zaakceptowane listy zasobów snapshotu odrzucają pliki przemianowane, zmienione, dowiązane lub dodatkowe. Zasoby MHR również mają ustalone wersje. Lokalny snapshot musi pozostać niezmieniony, gdy odczytuje go konstruktor projektu źródłowego.
+
 ## Warianty
 
 Dwa backbone współdzielą ten sam model ciała MHR. `d3` używa enkodera DINOv3
@@ -126,12 +128,6 @@ ViT-H/16+, a `h` oryginalnego enkodera ViT-H.
 Eksport siatki ciała nie jest zaimplementowany. LibreYOLO nie zdefiniowało
 jeszcze kontraktu wyeksportowanego grafu dla zadania siatki, w tym sposobu
 reprezentowania układu parametrów MHR poza PyTorch.
-
-## Checkpointy
-
-Wszystkie opublikowane pliki wag dla tej rodziny.
-
-<checkpoint-table />
 
 ## Licencja
 

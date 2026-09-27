@@ -4,9 +4,8 @@ families:
   - yolonas
 seo_title: 'YOLO-NAS: dự đoán, huấn luyện và xuất trong LibreYOLO'
 description: >-
-  Dùng YOLO-NAS trong LibreYOLO để phát hiện và ước lượng tư thế. Trọng số của
-  Deci.AI là độc quyền và chỉ dùng phi thương mại; LibreYOLO không công bố trọng
-  số nào.
+  Phát hiện, tư thế và hộp xoay YOLO-NAS trong LibreYOLO. Trọng số được huấn
+  luyện sẵn upstream chỉ dùng phi thương mại.
 lead: >-
   Một detector tích chập có backbone và neck được tạo ra từ quá trình tìm kiếm
   kiến trúc của Deci.AI, xây dựng bằng các block RepVGG nhận biết lượng tử hóa.
@@ -21,7 +20,7 @@ keywords:
   - ước lượng tư thế
   - detector nhận biết lượng tử hóa
   - AutoNAC
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -132,9 +131,8 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 47c30d6e44024ce7
+source_hash: 52050c4046781a6e
 ---
-
 ## Cài đặt
 
 YOLO-NAS không cần extra ngoài gói cơ sở.
@@ -157,6 +155,8 @@ ghim. Những gì các điều khoản cho phép được nêu trong [giấy ph�
 detector khác chỉ cần sửa một dòng. `conf` đặt ngưỡng độ tin cậy và `iou` đặt
 ngưỡng NMS. Xem [dự đoán](/docs/predict) để biết về nguồn, streaming và xử lý
 kết quả.
+
+Tác vụ hộp xoay trả về `result.obb`. Đồ thị OBB đã công bố dùng khung ảnh 1024 pixel và bộ nhãn 18 lớp đối tượng đã ghi.
 
 ## Các biến thể
 
@@ -186,6 +186,8 @@ bao quát. Huấn luyện từ mô hình khởi tạo ngẫu nhiên hoàn toàn 
 
 Xem [huấn luyện](/docs/train) để biết về tập dữ liệu, tăng cường dữ liệu, multi-GPU và logger.
 
+Phát hiện mặc định dùng `amp=True` với `amp_dtype="float16"`; huấn luyện hộp xoay vẫn dùng `amp=False`. Head OBB hỗ trợ huấn luyện, dự đoán và đánh giá, dùng augmentation lật/HSV và chọn checkpoint theo `metrics/mAP50-95(OBB)`. `load_detect_weights_for_obb()` khởi tạo nó từ trọng số phát hiện.
+
 ## Đánh giá
 
 `val()` trả về từ điển các khóa `metrics/` bao gồm precision, recall, mAP 50 và
@@ -212,8 +214,9 @@ checkpoint Deci không thay đổi nguồn gốc trọng số hay giấy phép �
 
 Không có tệp nào để liệt kê. Giấy phép của Deci cấm phân phối lại, nên tổ chức
 LibreYOLO không công bố trọng số YOLO-NAS và bản tải được phân giải ở nơi khác:
-tên có dạng `LibreYOLONAS<size>.pt`, hoặc `LibreYOLONAS<size>-pose.pt` cho tư thế,
-ánh xạ đến đối tượng tương ứng trên CDN công khai của Deci.
+tên có dạng `LibreYOLONAS<size>.pt`, `LibreYOLONAS<size>-pose.pt` cho tư thế, hoặc
+`LibreYOLONAS<size>-obb.pt` (s, m, l) cho hộp xoay, ánh xạ đến đối tượng tương ứng
+trên CDN công khai của Deci.
 
 Chỉ các checkpoint có SHA-256 được thư viện ghim mới có thể lấy theo cách đó.
 Mọi tệp khác đều bị từ chối an toàn thay vì mở pickle bên thứ ba chưa xác minh,
@@ -242,4 +245,3 @@ YOLO-NAS được phát hành mà không có bài báo. Mục bên dưới là t
 giả yêu cầu, bao quát SuperGradients, thư viện phân phối mô hình.
 
 <citation-block />
-

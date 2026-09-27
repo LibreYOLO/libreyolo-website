@@ -19,7 +19,7 @@ keywords:
   - mapa de profundidad results
   - results summary yolo
   - onnx mismos resultados yolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Payload classes, slots, move semantics, summary(), to_json(), plot(), save()
   and cutout() read from libreyolo/utils/results.py. Annotation and disk-writing
@@ -135,12 +135,12 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 548dbc9c7f5552ec
+source_hash: cebaac95f0a28b5f
 ---
 
 ## Un objeto, un slot por payload
 
-Una predicción sobre una imagen devuelve un `Results`. Lleva dieciocho slots de
+Una predicción sobre una imagen devuelve un `Results`. Lleva veintiún slots de
 payload, y un modelo rellena solo los que su tarea produce. Todos los demás
 quedan a `None`, así que leer `result.masks` en un detector da `None` en lugar
 de un error.
@@ -165,6 +165,9 @@ de un error.
 | `embeddings` | `Embeddings` | `(N, D)` filas normalizadas L2 | La tarea `embed` |
 | `identities` | `Identities` | N nombres y puntuaciones | La tarea `embed` con una galería |
 | `meshes` | `Meshes` | Parámetros del cuerpo y vértices opcionales | Recuperación de malla corporal |
+| `albedo` | `AlbedoMap` | `(H, W, 3)` RGB lineal | Estimación de albedo |
+| `boxes3d` | `Boxes3D` | `(N, 14)` cuboides en coordenadas de cámara, con las filas alineadas con `boxes` | Detección 3D monocular |
+| `actions` | `Actions` | `(T, D)` secuencia de acciones | Políticas robóticas |
 
 Junto a ellos están los campos que todo resultado tiene: `orig_shape` como
 `(alto, ancho)`, `path` (la ruta de origen, o `None` para entrada en memoria),
@@ -308,9 +311,7 @@ profundidad, un resultado panóptico con sus segmentos, un matte como PNG RGBA
 con fondo transparente, y un detector como boxes con las máscaras debajo. La
 ruta escrita se adjunta al resultado como `result.saved_path`.
 
-`Results.plot()` es más estrecho de lo que su nombre sugiere. Está definido
-solo para mapas de normales y mapas de bordes, y lanza `NotImplementedError`
-para cualquier otra cosa. Usa `save=True` para el resto de tareas.
+
 
 `Results.save(path)` es igual de estrecho: escribe un resultado de matte como
 recorte PNG RGBA con fondo transparente y lanza `NotImplementedError` en los
@@ -325,15 +326,19 @@ malla.
 Para saber dónde acaban los archivos y cómo se comportan `output_path` y
 `output_file_format`, mira [Fuentes de predicción](/docs/predict/sources).
 
+`plot()` cubre los payloads de todas las tareas. Las superposiciones sobre imágenes devuelven arrays contiguos HxWx3 uint8 BGR por defecto; `pil=True` solicita PIL. Los mapas de profundidad, normales, bordes y albedo, los cuboides 3D y las secuencias de acciones devuelven una imagen PIL por defecto; `pil=False` devuelve el array. `orig_img` conserva los píxeles BGR de fuentes en memoria y URL; los archivos locales y los fotogramas recopilados de vídeos finitos pueden reabrirse.
+
+Los controles incluyen `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` y `filename`. Las imágenes de clasificación guardadas incluyen las cinco etiquetas principales. El guardado de matte escribe un recorte RGBA.
+
 ## Los artefactos exportados devuelven el mismo objeto
 
 <code-tabs name="exported" />
 
 `LibreYOLO()` despacha según la extensión del archivo, así que un artefacto
 exportado se carga con la misma llamada que un checkpoint `.pt` y devuelve el
-mismo `Results`. Los archivos `.onnx`, `.engine`, `.pte` y `.mnn` se reconocen
-por la extensión, igual que los directorios de OpenVINO, Paddle y ncnn y una
-URL de modelo de Triton. El código que lee `result.boxes.xyxy` no cambia cuando
+mismo `Results`. Los archivos `.onnx`, `.torchscript`, `.engine`, `.pte`,
+`.tflite` y `.mnn` se reconocen por la extensión, igual que los directorios de
+OpenVINO, Paddle, ncnn y Core ML `.mlpackage` y una URL de modelo de Triton. El código que lee `result.boxes.xyxy` no cambia cuando
 un modelo se sustituye por su build exportada. Consulta
 [Exportación](/docs/export) para el conjunto completo de formatos.
 

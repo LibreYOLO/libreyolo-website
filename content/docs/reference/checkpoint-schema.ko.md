@@ -14,10 +14,8 @@ keywords:
   - libreyolo 체크포인트 메타데이터
   - 양적 현시
   - wrap_libreyolo_체크포인트
-last_verified: 1.5.0
-verification: >-
-  v1.5.0에서 libreyolo 저장소의 docs/checkpoint_schema.md를 반영하며,
-  libreyolo/utils/serialization.py 및 BaseModel.save와 교차 확인됨.
+last_verified: 1.6.0
+verification: 'v1.6.0에서 libreyolo 저장소의 docs/checkpoint_schema.md를 반영하며, libreyolo/utils/serialization.py 및 BaseModel.save와 교차 확인됨.'
 snippets:
   usage:
     - label: 체크포인트에서 메타데이터를 읽으십시오
@@ -47,7 +45,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: ce760f1bed97bfd0
+source_hash: 177904564cf0a488
 ---
 
 ## 스키마 v1.0
@@ -92,7 +90,7 @@ source_hash: ce760f1bed97bfd0
 
 ## 포즈 추가
 
-포즈는 보통 단일 클래스이며, `nc: 1`는 `person`와 함께 사용되지만, YOLO-NAS 포즈 헤드는 하나의 공유 키포인트 스켈레톤으로 다중 클래스 포즈도 지원하며, 이 경우 `nc`와 `names`가 탐지에서처럼 클래스를 설명합니다. 런타임 포즈 내보내기는 `scores`를 `[batch, anchors, nc]` 형태로 생성합니다.
+자세 체크포인트는 클래스와 키포인트 스키마를 기록합니다. YOLO-NAS는 하나의 공통 골격으로 여러 클래스를 지원하며, RF-DETR은 클래스별 키포인트 개수도 지원합니다. `nc`와 `names`는 클래스를 설명합니다. 런타임 자세 내보내기는 `[batch, anchors, nc]` 형태의 `scores`를 출력합니다.
 
 | 열쇠 | 의미 |
 |---|---|
@@ -100,6 +98,8 @@ source_hash: ce760f1bed97bfd0
 | `keypoint_dim` | `2`는 `x,y` 레이블용, `3`는 `x,y,visibility` 레이블용; 모델 출력은 항상 `x,y,visibility`를 노출합니다 |
 | `oks_sigmas` | 선택적 키포인트별 OKS 시그마; 부재 시 `num_keypoints`의 작업 기본값이 사용됩니다 |
 | `num_keypoints_per_class` | 클래스별 키포인트 수를 선택적으로 지정할 수 있으며, 키포인트 텐서가 클래스별로 패딩된 GroupPose 스타일 헤드에 해당; 키포인트가 없는 클래스에는 `0` |
+
+RF-DETR은 `kpt_names`와 함께 `num_keypoints_per_class`를 기록할 수 있습니다. 개수는 데이터셋 클래스와 정렬되며, 0은 바운딩 박스만 있는 클래스를 나타내고 예측은 최대 키포인트 형태에 맞춰 패딩됩니다.
 
 ## 메시 추가
 
@@ -167,6 +167,8 @@ MNN 내보내기는 평면 메타데이터를 필수 `<model>.mnn.json` 사이�
 
 `.pte`와 `.mnn`는 백엔드별 특수 파일로, PyTorch 체크포인트가 아닙니다.
 
+분류 모델은 `norm_mean`, `norm_std`, `resize_mode`를 기록합니다. 직사각형 캔버스는 `imgsz_h`와 `imgsz_w`를 유지합니다. YOLO9의 `letterbox_pad`는 `topleft` 또는 `center`이며, 메타데이터가 없으면 기존 왼쪽 위 정렬을 유지합니다.
+
 ## 양자화된 체크포인트
 
 양자화된 모델은 선택적 평면 키 `quant`를 추가하며, 이 키는 `schema`, `recipe`, `keep_high_precision`, `execution`, 보정 출처, `module_count` 및 `state`가 포함된 매니페스트 딕트(manifest dict)를 보유합니다. FP8 매니페스트는 또한 `fp8_tensorwise_weights`, 가중치 스케일이 출력 채널별이 아니라 텐서별인 `QuantLinear` 모듈 이름의 정확한 목록을 포함할 수 있습니다. `quant`를 확인한 로더는 `load_state_dict` 전에 양자화된 모듈 구조와 스케일링 정책을 재구성합니다.
@@ -213,6 +215,8 @@ MNN 내보내기는 평면 메타데이터를 필수 `<model>.mnn.json` 사이�
 
 릴리스 호환성을 위해, 독자들은 레거시 베스트 메트릭 별칭 `best_mAP50_95`, `best_mAP50`, `best_metric` 및 `best_metric_name`를 수용합니다.
 
+사용자 정의 선택은 `fitness_source="callback"`과 `best_metric_key="fitness/custom"`을 기록합니다. 콜백 코드/상태는 저장되지 않으므로 이 실행은 재개할 수 없습니다. 해당 가중치에서 새 실행을 시작합니다.
+
 ## 외부 스냅샷
 
 이 스키마는 LibreYOLO에서 작성한 `.pt` 파일을 관리합니다. 별도의 모델 계층에서 사용하는 다중 파일 업스트림 스냅샷을 이름 변경하거나 래핑하지 않습니다.
@@ -248,3 +252,7 @@ unwrap_libreyolo_checkpoint(loaded, *, strict=False) -> tuple[dict, dict]
 ```
 
 `validate_checkpoint_metadata`는 변이를 일으키지 않으며 오류 목록을 반환합니다; `strict=True`를 사용하면 대신 `CheckpointMetadataError`를 발생시킵니다. `model.save(path)`는 준수하는 체크포인트를 작성하는 지원되는 방법입니다.
+
+## 입력 프로파일
+
+두 극성 히스토그램 체크포인트는 형식, 레이아웃, 극성, 인코딩, 스케일, 윈도 지속 시간을 포함하는 전체 `input_profile`과 `input_initialization`을 보존합니다. 예측을 위해 다시 로드할 때 데이터셋 YAML은 필요 없으며, 학습/검증은 일치하지 않는 프로파일을 거부합니다. [이벤트 히스토그램](/docs/train/event-histograms)을 참조하십시오.

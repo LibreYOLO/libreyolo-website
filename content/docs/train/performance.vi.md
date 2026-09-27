@@ -17,7 +17,7 @@ keywords:
   - dataloader bị nghẽn
   - kernel launch overhead
   - mức sử dụng gpu
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   profile:
     - label: Profile rồi tiếp tục huấn luyện
@@ -67,9 +67,8 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: ee5bb727065b6099
+source_hash: c8d7adb6aabcbc80
 ---
-
 ## Đo trước khi thay đổi bất cứ thứ gì
 
 Ba đòn bẩy bên dưới giải quyết các vấn đề khác nhau, và áp dụng sai đòn bẩy sẽ
@@ -111,6 +110,8 @@ một bước bị giới hạn bởi launch có độ nhiễu đủ cao để m
 hiểu nhầm; lệnh ghi các thư mục theo thử nghiệm `prof_1`, `prof_2` và tiếp tục,
 cùng tệp tổng hợp `profile_repeat.json`.
 
+RF-DETR và đường ghép cặp D-FINE/DEIM/RT-DETR giảm truyền dữ liệu về host; khi đủ điều kiện trên CUDA, việc khởi tạo Adam và AdamW dùng cập nhật fused. SGD và tham số không thuộc CUDA dùng cách khởi tạo tiêu chuẩn. Các thay đổi triển khai này không đi kèm tuyên bố tăng tốc trong mọi trường hợp.
+
 ## Mixed precision
 
 `amp=True` là mặc định cho phần lớn family và chạy forward pass trong CUDA
@@ -118,11 +119,7 @@ autocast. `amp_dtype` chọn `float16` hoặc `bfloat16`.
 
 <code-tabs name="amp" />
 
-Float16 cần dynamic loss scaling và nhận gradient scaler hoạt động; phạm vi số
-mũ rộng hơn của bfloat16 không cần, vì vậy scaler của nó bị tắt. Bốn family được
-phân phối với `amp=False` là D-FINE, DEIM, YOLO-NAS và FOMO, còn cài đặt DEIM
-được RT-DETRv4 kế thừa. D-FINE nêu rõ lý do: decoder của nó clamp activation ở
-65504, giá trị float16 hữu hạn lớn nhất.
+Float16 dùng gradient scaler; bfloat16 tắt nó. Phát hiện D-FINE, DEIM, RT-DETRv4 và YOLO-NAS mặc định dùng `amp=True`. Dome-DETR, PP-YOLOE và YOLO-NAS OBB giữ mặc định FP32. Truyền `amp=False` để yêu cầu FP32 rõ ràng.
 
 Ngữ nghĩa đối số, gồm hành vi của yêu cầu bfloat16 trên phần cứng không hỗ trợ
 bfloat16, nằm trong [Siêu tham số](/docs/train/hyperparameters).
@@ -247,6 +244,21 @@ phân bổ đỉnh thay đổi từ -5 đến +19 phần trăm. Chi phí tương
 các mô hình phân loại nhỏ, vốn có activation nhỏ: ResNet-18 ở 224 px, batch 16,
 tăng từ 0.48 GB ở eager lên 0.57 GB khi dùng graph. Nếu điều này đẩy lượt chạy
 vượt giới hạn, hãy giảm batch hoặc tắt flag.
+
+## torch.compile
+
+`train(compile=True)` biên dịch forward và backward của mạng bằng
+`torch.compile`. Tham số này cũng nhận các mode `"default"`, `"reduce-overhead"`,
+`"max-autotune"` và `"max-autotune-no-cudagraphs"`; mặc định là `False`. Loss,
+optimizer, EMA, validation, checkpoint và xuất vẫn giữ ở chế độ eager, và các
+checkpoint được nạp mà không cần biên dịch. Chỉ lượt chạy CUDA một GPU mới được
+biên dịch. Các lượt chạy CPU, MPS, phân tán và chưng cất, cùng các trường hợp
+compiler thất bại, sẽ huấn luyện eager sau một cảnh báo. Việc biên dịch mất vài
+phút và cần trình biên dịch C cùng header Python trên máy huấn luyện.
+
+Trong `train()`, trừ khi `OMP_NUM_THREADS` đã được đặt, LibreYOLO hạ số luồng CPU
+của PyTorch xuống bằng hạn mức CPU của tiến trình, để container bị giới hạn CPU
+không bị throttle ở mọi bước.
 
 ## Nội dung liên quan
 

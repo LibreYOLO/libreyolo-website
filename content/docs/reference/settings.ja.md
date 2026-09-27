@@ -10,9 +10,9 @@ keywords:
   - HF_TOKEN
   - libreyolo 重み 保存先
   - libreyolo キャッシュ
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  v1.5.0のlibreyolo/**/*.pyでos.environとos.getenvを検索して変数を特定し、各使用箇所で意味を確認しました。ディレクトリ規約はlibreyolo/data/utils.py、libreyolo/utils/download.py、libreyolo/export/exporter.py、libreyolo/models/base/model.py、libreyolo/models/sam3dbody/mhr_body.pyから参照しました。
+  v1.6.0のlibreyolo/**/*.pyでos.environとos.getenvを検索して変数を特定し、各使用箇所で意味を確認しました。ディレクトリ規約はlibreyolo/data/utils.py、libreyolo/utils/download.py、libreyolo/export/exporter.py、libreyolo/models/base/model.py、libreyolo/models/sam3dbody/mhr_body.pyから参照しました。
 snippets:
   usage:
     - label: データセットルートを別の場所に指定
@@ -27,7 +27,7 @@ snippets:
 
         # デフォルトは~/datasetsでインポート時にLIBREYOLO_DATASETS_DIRが上書き
         print(DATASETS_DIR)
-source_hash: 462f1288582225ce
+source_hash: 82fbf9f3b1540603
 ---
 
 ## 環境変数
@@ -51,6 +51,8 @@ source_hash: 462f1288582225ce
 Hubカーネルは2段階のオプトインです。実行時の取得はオプションの `kernels` パッケージがインストールされている場合だけ行われます。そのため、`libreyolo[hub-kernels]` のインストールがオプトインで、`LIBREYOLO_HUB_KERNELS=0` がオプトアウトです。追加パッケージのないインストールはどちらの設定でも影響を受けません。
 
 カーネル選択はインポートも短絡します。`LIBREYOLO_KERNELS` で `off` または `reference` を強制すると、ツリー内の高速化プロバイダーは一切インポートされません。これら3つの変数が制御するレジストリについては、[カーネル](/docs/reference/kernels)を参照してください。
+
+`LIBREYOLO_TRITON_MSDA=0`は、組み込みのTritonによる変形可能アテンションのプロバイダーを無効にします。`LIBREYOLO_HUB_KERNELS=0`は、Hubカーネルとそのインストール案内を無効にします。どちらも移植性のあるフォールバックを維持します。
 
 ## ライブラリが設定する変数
 
@@ -81,6 +83,8 @@ Hubカーネルは2段階のオプトインです。実行時の取得はオプ�
 `HF_TOKEN` はHugging Faceのアクセストークンです。未設定の場合、Hugging Face CLIへのログインが書き込む `~/.cache/huggingface/token` からトークンを読み取ります。どちらの経路も使用できます。
 
 トークンが必要なのはアクセス制限されたリポジトリだけです。提供されている例はSAM 3です。重みはカスタムライセンス下のアクセス制限されたリポジトリからダウンロードされるため、リポジトリページで条件に同意し、セッションを認証する必要があります。
+
+`HF_TOKEN`は、Hubチェックポイントの読み込み、公開、Hubロガーの認証に使います。`OPENAI_API_KEY`と`OPENROUTER_API_KEY`は、対応する[LibreLLMのプロバイダー経路](/docs/reference/llm-api)に認証情報を渡します。
 
 ## ディレクトリ
 

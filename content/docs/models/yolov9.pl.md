@@ -20,7 +20,7 @@ keywords:
   - detekcja małych obiektów
   - programowalna informacja gradientowa
   - GELAN
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -147,7 +147,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: eaa6023a4a0b9e71
+source_hash: 624f3e70d2937683
 ---
 
 ## Instalacja
@@ -211,6 +211,10 @@ niepowodzeniem. Zamiast tego wskaż bazowy punkt kontrolny detekcji.
 
 Informacje o zbiorach danych, augmentacji, wielu GPU i loggerach znajdziesz w sekcji [trenowanie](/docs/train).
 
+Nowe dostrajanie standardowego modelu detekcji włącza gałąź PGI używaną tylko podczas trenowania, z `aux_weight=0.25`. `max_labels=300`; momentum SGD rośnie z 0.8 do 0.937 w trakcie trzech epok rozgrzewki. Stare checkpointy z jedną głowicą wznawiają trenowanie z tym samym grafem. Predykcja i eksport używają głównej głowicy. `letterbox_pad=None` dziedziczy znacznik checkpointu: nieoznaczone wagi używają `topleft`, a nowe oficjalne konwersje zapisują `center`.
+
+Mosaic w YOLO9 i YOLOX preferuje obrazy z adnotacjami, wykonując najwyżej 20 losowań; MixUp w YOLO9 stosuje tę samą regułę. Profile wejścia inne niż RGB opisano w sekcji [histogramów zdarzeń](/docs/train/event-histograms).
+
 ## Walidacja
 
 Metoda `val()` zwraca słownik kluczy `metrics/` obejmujących precyzję, czułość,
@@ -243,6 +247,8 @@ Obie informacje znajdują się na stronie danego formatu.
 
 <code-tabs name="export" />
 
+[TFLite INT8](/docs/export/tflite) używa `int8=True` z danymi kalibracyjnymi.
+
 ## Punkty kontrolne
 
 Wszystkie opublikowane pliki wag dla tej rodziny.
@@ -253,16 +259,10 @@ Wszystkie opublikowane pliki wag dla tej rodziny.
 
 <provenance-box>
 
-Jeden punkt kontrolny nie podlega tutaj licencji MIT. Model z krokiem 4 wytrenowany
-na VisDrone2019-DET dziedziczy warunki CC BY-NC-SA 3.0 tego zbioru danych: wyłącznie
-użytek niekomercyjny, udostępnianie utworów pochodnych na tych samych zasadach
-i wyłączenie z liberalnej licencji obejmującej resztę tej rodziny. Przewiduje
-klasy lotnicze VisDrone zamiast klas COCO. Biblioteka wyświetla wszystkie te
-informacje przed pobraniem pliku.
+Checkpoint do zdjęć lotniczych z krokiem 4 przewiduje klasy VisDrone. Należy stosować licencję zadeklarowaną przez wydawcę w repozytorium wag.
 
 </provenance-box>
 
 ## Cytowanie
 
 <citation-block />
-

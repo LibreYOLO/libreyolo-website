@@ -17,7 +17,7 @@ keywords:
   - entkoppelter Kopf
   - SimOTA
   - Echtzeit-Objekterkennung
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -111,7 +111,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: f5ab735a29f85a95
+source_hash: "ddba5fb10bb88ad2"
 ---
 
 ## Installation
@@ -148,6 +148,8 @@ Ohne weitere Angaben führt der Trainer 300 Epochen mit `lr0=0.01`, SGD-Momentum
 
 Unter [Training](/docs/train) findest du Informationen zu Datensätzen, Augmentation, Multi-GPU und Loggern.
 
+Mosaic zieht bis zu 20 mögliche Partnerbilder, um Bilder mit Annotationen zu bevorzugen; wenn keines passt, bleibt die letzte Ziehung erhalten.
+
 ## Validierung
 
 `val()` gibt ein Dictionary mit `metrics/`-Schlüsseln für Precision, Recall, mAP 50 und mAP 50-95 zurück, gemessen anhand jedes Datensatzes im Format, das du für das Training verwendet hast.
@@ -161,6 +163,8 @@ Unter [Training](/docs/train) findest du Informationen zu Datensätzen, Augmenta
 Ein exportiertes Artefakt wird über seine Dateiendung wieder durch `LibreYOLO()` geladen. Eine `.onnx`- oder `.engine`-Datei verhält sich daher wie ein Checkpoint und gibt dasselbe `Results`-Objekt zurück. Du kannst den Graphen auch in einer eigenständigen Laufzeitumgebung ohne installiertes LibreYOLO ausführen. Dann musst du Vor- und Nachverarbeitung selbst implementieren. Ein CoreML-Export kann mit `nms=True` NMS in den Graphen einbetten. YOLOX und YOLOv9 sind derzeit die einzigen beiden Familien, die dieses Flag akzeptieren.
 
 <code-tabs name="export" />
+
+[TFLite INT8](/docs/export/tflite) akzeptiert `int8=True` und einen Kalibrierungsdatensatz.
 
 ## Checkpoints
 

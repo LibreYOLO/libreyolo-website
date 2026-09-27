@@ -20,7 +20,7 @@ keywords:
   - wnioskowanie YouTube
   - vid_stride
   - stream=True
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Klasyfikację źródeł odczytano z libreyolo/utils/source.py (classify_source,
   SourceKind, StreamSource, MultiStreamSource). Akceptowane typy obrazów i
@@ -43,19 +43,34 @@ snippets:
         print(len(result.boxes), "detections")
     - label: Obrazy w pamięci
       language: python
-      code: |
+      code: >
         import numpy as np
+
         from PIL import Image
+
 
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
 
+
         pil_image = Image.open(SAMPLE_IMAGE)
+
         array = np.asarray(pil_image)
+
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+
+        # Tablice NumPy są odczytywane jako BGR, o ile nie wskazano inaczej; ta
+        jest w RGB.
+
+        result = model(array, color_format="rgb")
+
+        print(type(array).__name__, len(result.boxes))
+
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: Folder
@@ -207,7 +222,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c371965951dd0181
+source_hash: 81a0c947dbfe48b5
 ---
 
 ## Sposób klasyfikowania źródła
@@ -245,22 +260,28 @@ Pojedyncze źródło obrazu przyjmuje siedem typów.
 |---|---|
 | `str` albo `pathlib.Path` | Plik lokalny, `http(s)://`, `s3://` albo `gs://` |
 | `PIL.Image.Image` | Konwertowany do RGB |
-| `numpy.ndarray` | Obraz 2D w skali szarości albo 3D HWC lub CHW; tablica 4D używa pierwszego obrazu |
-| `torch.Tensor` | CHW albo NCHW, odczytywany jako RGB; tensor z partią używa pierwszego obrazu |
+| `numpy.ndarray` | Obraz 2D w skali szarości albo 3D HWC lub CHW w kolejności BGR; tablica 4D to batch |
+| `torch.Tensor` | CHW albo NCHW, odczytywany jako RGB; tensor 4D to batch |
 | `bytes` | Zakodowane dane obrazu |
 | `io.BytesIO` | Zakodowane dane obrazu |
 
+Tablica lub tensor 4D zwraca listę z jednym `Results` na obraz.
+
 Przed przetwarzaniem wstępnym wszystko jest konwertowane do RGB. Tablice NumPy
 są jedynym przypadkiem niejednoznacznej kolejności kanałów, dlatego steruje nią
-`color_format`: `"auto"` (wartość domyślna) pozostawia tablicę bez zmian, a
-`"bgr"` odwraca kanały, co jest potrzebne dla klatki odczytanej przez OpenCV.
+`color_format`: `"auto"` (wartość domyślna) i `"bgr"` odczytują tablicę jako
+BGR, czyli w kolejności zwracanej przez OpenCV, a `"rgb"` pozostawia ją bez
+zmian, co jest potrzebne dla tablicy utworzonej z obrazu PIL.
 
 Tablice zmiennoprzecinkowe są skalowane według własnego zakresu: wartości nie
 większe niż `1.0` są mnożone przez 255, a wyższe przycinane do `[0, 255]`.
 W tablicy RGBA kanał alfa jest usuwany.
 
-Ścieżki zdalne wymagają po jednym pakiecie, z których żaden nie jest instalowany
-domyślnie: `requests` dla `http(s)://`, `boto3` dla `s3://` oraz `gcsfs` dla `gs://`.
+Ścieżki zdalne wymagają po jednym pakiecie. `requests`, potrzebny dla
+`http(s)://`, jest częścią instalacji podstawowej; `boto3` dla `s3://` i `gcsfs`
+dla `gs://` już nie.
+
+Śledzenie przyjmuje obrazy, foldery sortowane według nazw plików, listy, krotki i leniwe iteratory obrazów jako kolejne klatki. `fps=30.0` określa częstotliwość sekwencji obrazów, a `color_format="auto"` wybiera interpretację wejścia. Zobacz [śledzenie](/docs/tasks/object-tracking).
 
 ## Foldery
 
@@ -277,8 +298,10 @@ Zobacz [wydajność wnioskowania](/docs/predict/performance).
 
 <code-tabs name="video" />
 
-Ścieżka jest uznawana za wideo, gdy jej rozszerzenie jest jednym z: `.asf`, `.avi`,
-`.gif`, `.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.ts`, `.wmv`, `.webm`.
+Ścieżka jest uznawana za wideo, gdy jej rozszerzenie jest jednym z: `.3g2`,
+`.3gp`, `.asf`, `.avi`, `.dav`, `.f4v`, `.flv`, `.gif`, `.h264`, `.h265`,
+`.hevc`, `.m2ts`, `.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.mts`,
+`.mxf`, `.ogv`, `.ts`, `.vob`, `.wmv`, `.webm`.
 
 `.gif` występuje na obu listach. Ścieżka `.gif` przekazana bezpośrednio do
 `predict` jest otwierana jako wideo, ponieważ kontrola wideo odbywa się jako
@@ -289,6 +312,8 @@ pierwsza. Plik `.gif` wewnątrz skanowanego folderu jest ładowany jako obraz st
 uwzględnieniu kroku powoduje ostrzeżenie sugerujące `stream=True`.
 
 Każdy obiekt `Results` z wideo zawiera `frame_idx`.
+
+Gdy nie można otworzyć H.264, kodowanie wideo przechodzi na dostępny kodek. Informacja o zastąpieniu jest zapisywana na poziomie INFO i w pamięci podręcznej dla kodeka i obszaru obrazu dopiero po powodzeniu innego kodeka.
 
 ## Kamery internetowe, strumienie sieciowe i YouTube
 
@@ -390,7 +415,9 @@ Obrazy trafiają do automatycznie numerowanych katalogów `runs/detect/predict`,
 `runs/detect/predict2` i kolejnych, z zachowaniem nazwy pliku źródłowego. Każdy
 obraz w jednym procesie trafia do tego samego katalogu, więc dwa foldery wejściowe
 zawierające tę samą nazwę pliku nadpisują się. Obrazy w pamięci nie mają nazwy
-do ponownego użycia i są numerowane jako `image0`, `image1` i kolejne.
+do ponownego użycia. Pojedynczy obraz jest zapisywany jako `inference`, więc
+kolejne wywołania go nadpisują; obrazy z listy lub batcha są numerowane jako
+`image0`, `image1` i kolejne.
 
 Wideo i źródła na żywo są zapisywane jako pojedynczy plik `.mp4` nazwany według źródła.
 
@@ -398,4 +425,4 @@ Wideo i źródła na żywo są zapisywane jako pojedynczy plik `.mp4` nazwany we
 plik, a bez rozszerzenia jako katalog. `output_file_format` wybiera kodowanie
 obrazu statycznego i przyjmuje `jpg`, `png` albo `webp`.
 
-Po zapisie zapisana ścieżka jest również dołączana do wyniku jako `result.saved_path`.
+Po zapisaniu obrazu zapisana ścieżka jest również dołączana do wyniku jako `result.saved_path`.

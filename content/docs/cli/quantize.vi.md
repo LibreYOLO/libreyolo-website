@@ -15,7 +15,7 @@ keywords:
   - lượng tử hóa fp8
   - lượng tử hóa sau huấn luyện yolo
   - tham số libreyolo quantize
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Lệnh
     value: libreyolo quantize
@@ -51,9 +51,8 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 7ae663e9f117826e
+source_hash: 409bc0b2ace6547e
 ---
-
 ## Cú pháp
 
 ```bash
@@ -72,7 +71,7 @@ và `--recipe int8` là cùng một tham số.
 | `calib` | `coco128.yaml` | Ảnh hiệu chuẩn: một tệp YAML dữ liệu hoặc tên một tập dữ liệu (dataset) có sẵn. Không nhãn, chỉ chạy forward. `none` bỏ qua bước hiệu chuẩn |
 | `samples` | `128` | Số ảnh hiệu chuẩn tối đa |
 | `batch` | `8` | Kích thước batch khi hiệu chuẩn |
-| `algorithm` | `auto` | Ước lượng dải giá trị activation: `auto`, tức chọn minmax, hoặc `minmax`, hoặc `percentile` |
+| `algorithm` | `auto` | Ước lượng dải giá trị activation: `auto` (minmax), `minmax`, `percentile`, `mse` hoặc `entropy` |
 | `out` | | Đường dẫn checkpoint đầu ra. Mặc định là đường dẫn nguồn kèm `-<recipe>` trước phần mở rộng |
 | `device` | `auto` | Thiết bị |
 | `allow_download_scripts` | `false` | Cho phép mã Python nhúng trong khối download của tệp YAML dataset |
@@ -140,3 +139,5 @@ bại, và `1` cho các lỗi runtime khác.
 
 Liên quan: [`libreyolo export`](/docs/cli/export), lệnh rời khỏi PyTorch và thay
 vào đó ghi ra một artifact để triển khai.
+
+`algorithm` mặc định là `auto` (minmax) và còn chấp nhận `minmax`, `percentile`, `mse` và `entropy`. MSE và entropy chọn phạm vi bằng cách quét histogram activation.

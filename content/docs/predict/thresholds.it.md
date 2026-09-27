@@ -18,7 +18,7 @@ keywords:
   - agnostic nms
   - detr senza nms
   - filtro classi inferenza
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Valori predefiniti presi da InferenceRunner.__call__ in
   libreyolo/models/base/inference.py. Comportamento della NMS per famiglia letto
@@ -108,7 +108,7 @@ snippets:
         che funzionano.
 
         print(len(loose.boxes), len(tight.boxes))
-source_hash: 0b978963c356027d
+source_hash: 849650629e58c9e1
 ---
 
 ## I quattro argomenti
@@ -138,6 +138,8 @@ controllo a cui ricorrere quando i rilevamenti sono troppi o troppo pochi.
 Il valore predefinito di `0.25` va bene per guardare delle immagini. Alimentare
 un sistema a valle di solito ne richiede uno più alto; misurare l'accuratezza ne
 richiede uno molto più basso.
+
+La validazione del rilevamento espone `metrics/best_conf` e soglie per classe derivate da F1 a IoU 0.50. Usale come punti di partenza misurati per le soglie di deployment; vedi [validazione](/docs/train/validation). La segmentazione non espone queste chiavi.
 
 ## iou
 

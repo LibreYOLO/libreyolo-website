@@ -19,7 +19,7 @@ keywords:
   - deep ocsort
   - track id
   - reid tracking
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -75,9 +75,8 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: f1fa7dcf60597d6b
+source_hash: b24043e73b35092d
 ---
-
 ## Định nghĩa
 
 Theo dõi không phải một trong các key tác vụ của LibreYOLO và không có
@@ -118,7 +117,10 @@ Theo dõi chạy trên mô hình PyTorch gốc. Artifact đã xuất được n�
 `LibreYOLO("model.onnx")` trả về đối tượng backend runtime, có `predict()` nhưng
 không có `track()`.
 
-Bốn tracker đi kèm thư viện, được chọn bằng đối số `tracker`:
+Bốn tracker đi kèm thư viện, được chọn bằng đối số `tracker`. Các cách viết
+`.yaml`, chẳng hạn `"bytetrack.yaml"`, chọn cùng các tracker tích hợp sẵn;
+LibreYOLO không đọc tệp YAML của tracker, và báo lỗi nếu có một tệp mang tên đó
+trong thư mục làm việc.
 
 `"bytetrack"` là mặc định. Nó chỉ dùng chuyển động, với Kalman filter và liên
 kết ba giai đoạn: kết quả phát hiện có độ tin cậy cao trước, sau đó lượt thứ hai
@@ -154,15 +156,21 @@ nội bộ ở ngưỡng thấp hơn để kết quả yếu vẫn có sẵn cho
 OC-SORT chạy detector ở chính `det_thresh`. Với ByteTrack và BoT-SORT,
 `track_conf` phải lớn hơn hoặc bằng `track_low_thresh`, mặc định là 0.1.
 
+`conf`, khi được truyền, là ngưỡng phát hiện của `predict()`: các kết quả phát
+hiện dưới ngưỡng này không bao giờ tới được tracker. Nếu không có nó, detector
+chạy ở các ngưỡng nêu trên.
+
 Cài đặt tracker được truyền theo một trong hai cách. Truyền instance cấu hình
 cho `tracker_config=`, kiểu của nó sẽ chọn tracker và khiến `tracker=` dư thừa.
 Hoặc truyền các trường dưới dạng đối số keyword và để `track()` dựng cấu hình
 cho tracker đã nêu; key không xác định sẽ cảnh báo thay vì được âm thầm áp dụng.
 Theo cả hai cách, `track_conf` bị bỏ qua khi key tương ứng được đặt tường minh.
 
-Các đối số còn lại giống dự đoán: `iou`, `imgsz`, `classes`, `max_det`,
-`vid_stride`, `show` và `save` với `output_path`. Nguồn là đường dẫn tệp video.
-Xem [dự đoán](/docs/predict) để biết cách xử lý kết quả.
+Các tham số còn lại giống dự đoán: `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show` và `save` cùng `output_path`. `persist=True` giữ tracker cùng các ID của nó từ lần gọi `track()` trước trên cùng mô hình, dành cho vòng lặp truyền một khung hình mỗi lần gọi, chẳng hạn `model.track(frame, persist=True)`. Nguồn có thể là video hoặc chuỗi ảnh có thứ tự. Xem [dự đoán](/docs/predict) để biết cách xử lý kết quả.
+
+Ảnh, thư mục sắp theo tên tệp, danh sách, tuple và iterator ảnh lười có thể cung cấp các khung hình liên tiếp. `fps=30.0` cung cấp thời gian của chúng và `color_format="auto"` chọn cách diễn giải đầu vào. `vid_stride` giảm tốc độ giữ lại xuống `fps / vid_stride`.
+
+Truyền đối tượng tracker tùy chỉnh qua `tracker=`. Nó triển khai `reset()` và `update(results, image=None)` từ `libreyolo.tracking.Tracker`. Mỗi lần chạy đặt lại nó một lần và truyền khung hình PIL RGB gốc. `track_id` trả về phải là mảng hoặc tensor số nguyên một chiều, tương ứng với bounding box trên cùng backend/thiết bị. Đối tượng tùy chỉnh mặc định dùng `track_conf=0.25`; cấu hình trực tiếp đối tượng thay vì truyền các kwargs của tracker hoặc `tracker_config`.
 
 ## Huấn luyện
 

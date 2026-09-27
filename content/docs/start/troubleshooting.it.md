@@ -15,8 +15,8 @@ keywords:
   - libreyolo cuda out of memory
   - libreyolo notimplementederror
   - risolvere errori libreyolo
-last_verified: 1.5.0
-source_hash: e271ab29b789865a
+last_verified: 1.6.0
+source_hash: f2faaab56a2f0415
 ---
 
 Gli errori sono raggruppati per il testo che vedi. Se il tuo messaggio non è
@@ -110,10 +110,10 @@ corrisponde a un checkpoint pubblicato produce un URL che non esiste. La
 tabella dei checkpoint su ogni pagina di modello elenca i nomi esatti dei file
 pubblicati.
 
-## L'addestramento si blocca o riparte su Windows
+## L'addestramento si blocca o riparte su Windows o macOS
 
-Windows non ha `fork`, quindi i worker del dataloader partono reimportando il
-tuo script. Senza una guardia `if __name__ == "__main__":`, ogni worker riesegue
+Windows non ha `fork`, e Python su macOS non lo usa per impostazione
+predefinita, quindi i worker del dataloader partono reimportando il tuo script. Senza una guardia `if __name__ == "__main__":`, ogni worker riesegue
 la tua chiamata di addestramento, il che porta a un deadlock oppure genera
 processi all'infinito.
 
@@ -152,8 +152,9 @@ ciò che sai essere una lista.
 
 ### Leggere le metriche come attributi
 
-`val()` restituisce un semplice dizionario le cui chiavi sono i nomi delle
-metriche, non un oggetto con accesso per attributi:
+`val()` restituisce un dizionario le cui chiavi sono i nomi delle metriche. Il
+suo unico attributo, `box`, porta i risultati per immagine e le soglie per
+classe, non i valori delle metriche:
 
 ```python
 metrics = model.val(data="coco8.yaml")
@@ -181,3 +182,7 @@ if report.errors:
 ```
 
 Vedi il [comando doctor](/docs/cli/doctor) per il catalogo dei controlli.
+
+## I worker persistenti non possono osservare le modifiche al dataset
+
+Gli hook attivi `close_mosaic` o `set_epoch` devono raggiungere le copie del dataset usate dai worker. Se un loader personalizzato con più worker mantiene copie persistenti incompatibili, usa `persistent_workers=False` o ricrea i worker dopo la modifica. Il percorso predefinito non persistente resta invariato.

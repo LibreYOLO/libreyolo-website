@@ -1,14 +1,13 @@
 ---
-title: Upgrade ke 1.5.0
-seo_title: Upgrade LibreYOLO 1.4.0 ke 1.5.0
+title: Meningkatkan ke 1.6.0
+seo_title: Tingkatkan LibreYOLO 1.5.0 ke 1.6.0
 description: >-
-  Empat perubahan kode yang diwajibkan 1.5.0, tiga perubahan yang menggeser
-  metrik, dan perubahan perilaku kecil yang perlu diketahui sebelum
-  membandingkan run.
+  Langkah migrasi prapemrosesan, default pelatihan, direktori proses, aset yang
+  dipatok, QAT, dan loader data di LibreYOLO 1.6.0.
 lead: >-
-  Tidak ada yang dihapus dari API model publik: setiap kelas dan fungsi yang
-  bekerja pada 1.4.0 tetap dapat diimpor. Empat argumen berubah bentuk, dan tiga
-  default menggeser angka yang mungkin dibandingkan.
+  Versi 1.6.0 mengubah prapemrosesan, default pelatihan, dan penanganan
+  checkpoint. Validasi ulang baseline tersimpan dan atur default lama secara
+  eksplisit saat mereproduksi proses sebelumnya.
 keywords:
   - upgrade libreyolo
   - migrasi libreyolo 1.5.0
@@ -16,18 +15,43 @@ keywords:
   - breaking change libreyolo
   - yolox bn eps
   - default faster-coco-eval
-last_verified: 1.5.0
-meta:
-  - label: Berlaku untuk
-    value: 1.4.0 ke 1.5.0
-  - label: Perubahan kode wajib
-    value: 'Empat, semuanya sempit'
-  - label: Hasil yang berubah
-    value: 'Backend COCO, eps BN YOLOX, multi-scale D-FINE'
-  - label: Penghapusan API publik
-    value: Tidak ada
-source_hash: ab38d8ef7b53f596
+last_verified: 1.6.0
+source_hash: e9c7cb5271aa4a81
 ---
+
+## 1.5.0 ke 1.6.0
+
+- Tingkatkan lingkungan yang dipatok di bawah ONNX Runtime 1.18 ke `onnxruntime>=1.18.0` sebelum memasang extra ONNX.
+
+- SAM 3D Body menerima kumpulan aset snapshot yang sudah ditinjau. Pasang `libreyolo[hf]`, dapatkan akses terbatas, lalu gunakan pengambilan otomatis, atau sediakan direktori snapshot tanpa perubahan dan aset MHR yang dipatok pada sistem berkas lokal tepercaya.
+
+- Jalankan ulang validasi setelah koreksi pengubahan ukuran RF-DETR non-pose dan normalisasi pengklasifikasi. Periksa ulang ambang skor keyakinan yang diterapkan sebelum membandingkan hasil dengan 1.5.0; tidak ada flag prapemrosesan lama.
+
+- Deteksi D-FINE, DEIM, RT-DETRv4, dan YOLO-NAS mengaktifkan FP16 AMP secara default. Berikan `amp=False` untuk mempertahankan FP32.
+
+- Untuk pilihan fine-tuning YOLO9 sebelumnya, atur `aux_weight=0`, `max_labels=100`, dan `warmup_momentum=0.937`. Atur `letterbox_pad="topleft"` jika konversi baru bertanda center harus mereproduksi geometri lama. Checkpoint lama dengan satu head melanjutkan pelatihan dengan graf aslinya. Run YOLO9 baru memakai lebih banyak memori GPU, jadi turunkan `batch` jika ukuran batch dari 1.5.0 kehabisan memori.
+
+- RF-DETR dan DINOv2 membuat direktori proses bernomor dengan nama family. Perbarui pengguna path artefak, atau atur `output_dir="runs/train", exist_ok=True` untuk mempertahankan lokasi lama dan perilaku penggunaan ulang.
+
+- Pertahankan `mixup + cutmix <= 1` untuk klasifikasi; kombinasi tidak valid kini menimbulkan galat saat penyiapan.
+
+- QAT menonaktifkan EMA, SyncBatchNorm, dan perataan checkpoint. Gunakan checkpoint best/last QAT tanpa bergantung pada status tersebut.
+
+- Loader kustom dengan hook mutasi dataset harus memakai `persistent_workers=False` atau membangun ulang worker setelah mutasi. Salinan persisten multi-worker yang tidak kompatibel kini menimbulkan galat.
+
+- Array gambar NumPy dibaca sebagai BGR, urutan OpenCV. Berikan `color_format="rgb"` saat memberikan array RGB seperti `np.asarray(pil_image)`; keluaran `cv2.imread()` dan frame video tidak perlu diubah.
+
+- Array NumPy atau tensor 4D adalah batch: `predict()` mengembalikan daftar berisi satu `Results` per gambar, alih-alih hanya memakai gambar pertama.
+
+- `train(resume=True)` dan `train(resume="path/to/last.pt")` memulihkan argumen pelatihan tersimpan milik proses tersebut dan tetap menulis ke direktori prosesnya; argumen yang diberikan secara eksplisit lebih diutamakan. Melanjutkan bobot rilis, atau proses yang sudah mencapai `epochs`-nya, menimbulkan `ValueError`.
+
+- Dengan validasi aktif, epoch terakhir selalu divalidasi, sehingga proses yang lebih pendek dari `eval_interval` kini melaporkan metrik dan menulis `best.pt`. `val=False` mematikan validasi, termasuk pada epoch terakhir. Validasi selama pelatihan kini menulis ke `<run>/val`, bukan `runs/val/`.
+
+- Kegagalan `train` di CLI melaporkan jenis galatnya, sehingga galat konfigurasi keluar dengan kode 2, bukan 1 dengan `io_error`.
+
+Lihat [changelog](/docs/changelog) untuk rilis lengkap dan [mengimpor bobot](/docs/migrate) untuk konversi checkpoint.
+
+## 1.4.0 ke 1.5.0
 
 Halaman ini membahas upgrade LibreYOLO. Untuk memuat checkpoint dari project
 upstream, lihat [impor bobot yang ada](/docs/migrate), yang merupakan topik lain.
@@ -35,9 +59,9 @@ upstream, lihat [impor bobot yang ada](/docs/migrate), yang merupakan topik lain
 Entri rilis lengkap tersedia pada [changelog](/docs/changelog). Bagian berikut
 hanya membahas tindakan yang diperlukan.
 
-## Perubahan kode yang wajib dilakukan
+### Perubahan kode yang wajib dilakukan
 
-### `allow_experimental=True` tidak lagi ada
+#### `allow_experimental=True` tidak lagi ada
 
 Gate konfirmasi telah dihapus beserta mekanisme
 `ddp_aware(experimental_key=...)` di baliknya. Pelatihan dan ekspor EC, RTMDet,
@@ -52,15 +76,16 @@ model.train(data="data.yaml", epochs=100, allow_experimental=True)
 model.train(data="data.yaml", epochs=100)
 ```
 
-Tidak ada shim deprecation. Pemanggilan yang masih memberikannya memunculkan
-`TypeError`. `BaseModel.EXPERIMENTAL_WEIGHT_FILENAMES` juga dihapus. Hook
+Tidak ada shim deprecation. Pemanggilan yang masih memberikannya mendapat
+peringatan `Unknown training config keys (ignored)`, dan argumen itu tidak
+berpengaruh. `BaseModel.EXPERIMENTAL_WEIGHT_FILENAMES` juga dihapus. Hook
 `get_download_notice()` tetap ada dan masih diganti oleh MiDaS, SegFormer,
 dan YOLO9-P2.
 
 Tingkat dukungan tetap dipublikasikan, tetapi bukan lagi argumen: lihat
 [tier stabilitas](/docs/reference/stability-tiers).
 
-### Tier ekspor `"experimental"` tidak lagi ada
+#### Tier ekspor `"experimental"` tidak lagi ada
 
 ```python
 from libreyolo.export.support import Tier
@@ -74,7 +99,7 @@ tempat yang sebelumnya membaca `"experimental"`. `BaseExporter` tidak lagi
 menghasilkan `RuntimeWarning` untuk format tersebut. Status per format tersedia
 dalam [matriks ekspor](/docs/reference/export-matrix).
 
-### `pretrained=False` bersama `resume` kini ditolak
+#### `pretrained=False` bersama `resume` kini ditolak
 
 Kombinasi ini sebelumnya berjalan secara tidak koheren. Kini muncul error:
 
@@ -87,7 +112,7 @@ seed, yang pada 1.5.0 berfungsi bagi setiap family yang dapat dilatih, bukan
 hanya tiga. `resume` melanjutkan run yang terputus dari checkpoint. Keduanya
 didokumentasikan dalam [pelatihan](/docs/train).
 
-### `--imgsz` CLI berupa string, bukan int
+#### `--imgsz` CLI berupa string, bukan int
 
 Perubahannya lebih sempit daripada kedengarannya. Kedua contoh ini tidak
 terpengaruh:
@@ -114,12 +139,12 @@ predict_cmd(..., imgsz="640")    # 1.5.0, dan "480x640" kini juga berfungsi
 Default `train` kini string `"640"`. `export --imgsz` sudah berupa string, dan
 `profile` tidak berubah.
 
-## Angka yang berubah
+### Angka yang berubah
 
 Tiga perubahan menggeser metrik pada pengaturan default. Jika melacak hasil
 lintas versi, baca bagian ini sebelum membandingkan run 1.5.0 dengan 1.4.0.
 
-### faster-coco-eval menjadi backend metrik COCO default
+#### faster-coco-eval menjadi backend metrik COCO default
 
 `val()` dan validasi pelatihan per epoch kini menghitung metrik COCO dengan
 backend C++ faster-coco-eval, bukan pycocotools.
@@ -147,7 +172,7 @@ yang benar-benar digunakan dicatat pada INFO, tersedia sebagai
 dalam payload JSON [CLI](/docs/cli/val). Instal jalur cepat dengan
 `pip install libreyolo[fast-eval]`.
 
-### Checkpoint YOLOX sebelum 1.5.0 memerlukan override eps
+#### Checkpoint YOLOX sebelum 1.5.0 memerlukan override eps
 
 Ini adalah jebakan dalam rilis. Baca jika memiliki hasil fine-tuning
 [YOLOX](/docs/models/yolox).
@@ -169,9 +194,9 @@ melaporkan angka yang tepat, evaluasi dengan eps BN diganti ke 1e-5:
 
 ```python
 import torch
-from libreyolo import LibreYOLOX
+from libreyolo import LibreYOLO
 
-model = LibreYOLOX("my-yolox-finetune.pt")
+model = LibreYOLO("my-yolox-finetune.pt")
 for module in model.model.modules():
     if isinstance(module, torch.nn.BatchNorm2d):
         module.eps = 1e-5
@@ -183,7 +208,7 @@ Alternatifnya, lipat `sqrt((var + 1e-3) / (var + 1e-5))` ke bobot BN sekali dan
 simpan hasilnya. Checkpoint yang dilatih pada 1.5.0 dan setelahnya tidak
 memerlukan keduanya.
 
-### Pelatihan multi-scale D-FINE memakai resep upstream per ukuran
+#### Pelatihan multi-scale D-FINE memakai resep upstream per ukuran
 
 `base_size_repeat` sebelumnya ditetapkan langsung ke 3 untuk setiap ukuran. Kini nilai
 diselesaikan per ukuran sesuai upstream: **n** berlatih pada ukuran tetap dengan
@@ -202,13 +227,13 @@ config = DFINEConfig(base_size_repeat=3)
 DEIM tetap memakai nilai 3 yang ditetapkan langsung. Detail family tersedia pada
 [D-FINE](/docs/models/d-fine).
 
-## Perlu diketahui, tanpa tindakan
+### Perlu diketahui, tanpa tindakan
 
 - **Hasil `imgsz` rectangle berubah karena sebelumnya salah.** Koordinat bounding box, pengubahan ukuran mask RTMDet, rescaling YOLO-NAS, dan scaling ground truth validator kini menggunakan tinggi dan lebar per sumbu, bukan satu skalar. `imgsz` persegi tidak berubah secara bit. Inferensi atau validasi rectangle pada 1.4.0 salah skala. YOLO-NAS kini menolak `imgsz` rectangle alih-alih diam-diam menghasilkan output salah.
 - **Dictionary metrik mendapatkan kunci baru.** `max_det`, `ar_max_det`, dan `AR_max_det` dari evaluator COCO, serta `metrics/loss` dan `metrics/loss/ce` dari FOMO. Nilai default tidak berubah, tetapi semua proses yang mengiterasi kunci metrik, termasuk [logger](/docs/train/loggers) kustom dan header CSV, melihat kolom baru.
 - **Run YOLO9 dengan seed yang memicu rebuild head** memulai dari initialization berbeda karena seed kini diterapkan sebelum rebuild, bukan setelahnya. Fine-tuning 1.4.0 dengan seed ke jumlah kelas berbeda tidak dapat direproduksi bit demi bit pada 1.5.0.
 - **`libreyolo[hub-kernels]` pada CUDA kini benar-benar mengaktifkan kernel MS-deform-attn native.** 1.4.0 membatasinya di balik kondisi yang tidak pernah diambil RF-DETR, sehingga kernel tidak pernah berjalan. Prediksi dapat bergeser dalam toleransi float untuk RF-DETR dan family deformable-attention lain. Instalasi standar tidak terpengaruh, dan `LIBREYOLO_HUB_KERNELS=0` menonaktifkannya.
-- **`libreyolo predict` membuang opsi tidak didukung, bukan memunculkan error.** CLI memfilter kwargs terhadap signature `__call__` model, sehingga opsi yang tidak diterima family diabaikan alih-alih memunculkan `TypeError`. Salah ketik nama flag kini diam-diam diabaikan.
+- **`libreyolo predict` membuang opsi tidak didukung, bukan memunculkan error.** CLI memfilter kwargs terhadap signature `__call__` model, sehingga opsi yang tidak diterima family diabaikan alih-alih memunculkan `TypeError`. Nama flag yang tidak dikenal tetap ditolak dengan `No such option`.
 - **Live sumber mengubah bentuk output JSON.** Webcam, stream RTSP, dan screen capture secara implisit mengaktifkan streaming, yang menghasilkan satu rekaman per frame, bukan satu untuk pemanggilan. [Sumber](/docs/predict/sources) tersebut baru pada 1.5.0, jadi script 1.4.0 tidak terpengaruh.
 - **Ekspor ulang `rfdetr-pose` atau `yolonas-pose` ke ONNX menghasilkan nama output berbeda.** 1.4.0 keliru membaca head pose multi-tensor sebagai segmentation melalui heuristic jumlah output. Berkas `.onnx` yang sudah ada di disk tidak berubah.
 - **Pada instalasi tanpa torch**, hasil memuat array numpy, bukan `torch.Tensor`, sehingga `.boxes.data` mengembalikan jenis berbeda dan tie-breaking NMS dapat berbeda dari torchvision. Jika torch terinstal, perilaku identik per byte. Lihat [instalasi ringan](/docs/lightweight-install).
@@ -216,7 +241,7 @@ DEIM tetap memakai nilai 3 yang ditetapkan langsung. Detail family tersedia pada
 - **Nama berkas bobot untuk family dengan suffix task diselesaikan secara berbeda.** `segformer-b0` kini diselesaikan menjadi `LibreSegformerb0-sem.pt`. Ini memperbaiki 404 pengunduhan otomatis dan merusak script yang melakukan hard-code nama tanpa suffix lama.
 - **Marker pytest `experimental_backend` kini menjadi `extended_backend`.** Hanya relevan jika menjalankan test suite dengan `-m`.
 
-## Checkpoint dan dataset
+### Checkpoint dan dataset
 
 Checkpoint yang ditulis oleh 1.4.0 dimuat tanpa perubahan.
 [Skema](/docs/reference/checkpoint-schema) mendapatkan `imgsz_h` dan `imgsz_w`
@@ -225,5 +250,3 @@ lama. Ekspor [ExecuTorch](/docs/export/executorch) dan [MNN](/docs/export/mnn)
 kini memerlukan sidecar, masing-masing `<program>.pte.json` dan
 `<model>.mnn.json`, sedangkan ekspor HRNet memuat
 `pose_input: "person_crop"`. Format dataset tidak berubah.
-
-

@@ -2,14 +2,12 @@
 title: Embedding
 seo_title: Embedding ảnh và vùng trong LibreYOLO
 description: >-
-  Tác vụ embed trả về vector float32 chuẩn hóa L2 cho toàn ảnh, từng vùng phát
-  hiện hoặc văn bản. Đăng ký gallery, khớp bằng cosine similarity và tìm kiếm từ
-  Python hoặc CLI.
+  Tác vụ embed trả về vector float32 chuẩn hóa L2 cho toàn ảnh, từng vùng phát hiện hoặc văn bản. Đăng ký
+  gallery, khớp bằng cosine similarity và tìm kiếm từ Python hoặc CLI.
 lead: >-
-  Một tác vụ bao phủ mọi vector LibreYOLO tạo ra. embed trả về các dòng float32
-  có độ dài đơn vị, với dot product là điểm tương đồng, dù dòng mô tả toàn ảnh,
-  một khuôn mặt được phát hiện hay một dòng văn bản, và cùng Gallery khớp tất cả
-  chúng.
+  Một tác vụ bao phủ mọi vector LibreYOLO tạo ra. embed trả về các dòng float32 có độ dài đơn vị, với dot
+  product là điểm tương đồng, dù dòng mô tả toàn ảnh, một khuôn mặt được phát hiện hay một dòng văn bản, và
+  cùng Gallery khớp tất cả chúng.
 keywords:
   - image embedding python
   - embedding chuẩn hóa l2
@@ -20,15 +18,13 @@ keywords:
   - clip embedding
   - dinov2 embedding
   - reid embedding
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  Key tác vụ và alias được đọc từ libreyolo/tasks.py. Payload kết quả lấy từ các
-  class Embeddings và Identities trong libreyolo/utils/results.py. API Gallery
-  từ libreyolo/utils/gallery.py. embed và _postprocess_embeddings từ
-  libreyolo/models/base/model.py. Các family được hỗ trợ được xác định bằng cách
-  tìm embed trong SUPPORTED_TASKS ở libreyolo/models/**/model.py. Bề mặt CLI từ
-  libreyolo/cli/__init__.py, libreyolo/cli/commands/special.py và
-  libreyolo/cli/commands/predict.py. Ý đồ thiết kế từ
+  Key tác vụ và alias được đọc từ libreyolo/tasks.py. Payload kết quả lấy từ các class Embeddings và
+  Identities trong libreyolo/utils/results.py. API Gallery từ libreyolo/utils/gallery.py. embed và
+  _postprocess_embeddings từ libreyolo/models/base/model.py. Các family được hỗ trợ được xác định bằng cách
+  tìm embed trong SUPPORTED_TASKS ở libreyolo/models/**/model.py. Bề mặt CLI từ libreyolo/cli/__init__.py,
+  libreyolo/cli/commands/special.py và libreyolo/cli/commands/predict.py. Ý đồ thiết kế từ
   docs/adr/0015-embed-generalization.md.
 meta:
   - label: Key tác vụ
@@ -153,11 +149,9 @@ snippets:
   cli:
     - label: Đăng ký cây thư mục
       language: bash
-      code: >
+      code: |
         # source/<identity>/*.jpg. Gallery hiện có được mở rộng tại chỗ.
-
-        libreyolo enroll model=librefacerec-l.onnx source=people/
-        gallery=refs.npz
+        libreyolo enroll model=librefacerec-l.onnx source=people/ gallery=refs.npz
     - label: Nhận dạng trong khi dự đoán
       language: bash
       code: |
@@ -165,17 +159,14 @@ snippets:
           gallery=refs.npz gallery_threshold=0.45
     - label: So sánh hai ảnh
       language: bash
-      code: >
+      code: |
         libreyolo compare model=librefacerec-l.onnx \
           source=a.jpg source2=b.jpg threshold=0.4
 
         # verify là cùng lệnh dưới tên thứ hai.
-
-        libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg
-        --json
-source_hash: ffbaad5599035bc7
+        libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg --json
+source_hash: 3197bfe9a3d53756
 ---
-
 ## Định nghĩa
 
 `embed` chuyển ảnh, vùng ảnh hoặc chuỗi thành một dòng float32 có chiều rộng cố
@@ -207,7 +198,7 @@ hóa về key đó, vì vậy `task="reid"` và `task="embed"` chọn đúng cù
 
 ## Mô hình
 
-Bốn family phục vụ tác vụ và được chia rõ theo việc có định vị gì trước hay không.
+Các họ embedding khác nhau ở việc mã hóa toàn bộ ảnh, clip hay vùng được phát hiện.
 
 | Family | Shape | Số chiều | Cũng hỗ trợ |
 |---|---|---|---|
@@ -220,10 +211,7 @@ CLIP và SigLIP 2 giữ `classify` làm tác vụ mặc định, vì vậy phả
 `task="embed"`. Checkpoint `-cls` hiện có của chúng là artifact hai tower dùng
 chung; không có checkpoint `-embed` trùng lặp cho cùng trọng số.
 
-`embed_text` chỉ tồn tại trên CLIP và SigLIP 2, hai family có text tower. DINOv2
-không có. Embedding DINOv2 bỏ qua semantic head và classification head rồi đọc
-token CLS cuối đã chuẩn hóa ở 224 pixel; các biến thể `n`, `s`, `m` và `l` đều
-dùng chung encoder DINOv2-S, vì vậy cả bốn trả về `D = 384`.
+`embed_text` có trên CLIP, SigLIP 2 và PE, những mô hình có nhánh văn bản. DINOv2 không có nhánh này. Embedding DINOv2 bỏ qua head phân đoạn ngữ nghĩa và phân loại, đọc token CLS cuối đã chuẩn hóa ở 224 pixel; các biến thể `n`, `s`, `m` và `l` đều dùng chung bộ mã hóa DINOv2-S nên cả bốn trả về `D = 384`.
 
 Các backbone chỉ dành cho phân loại được thêm trong bản phát hành này,
 [ViT](/docs/models/vit), [Swin](/docs/models/swin) và
@@ -235,6 +223,8 @@ Các backbone chỉ dành cho phân loại được thêm trong bản phát hàn
 dòng từ mọi kết quả thành tensor float32 CPU `(N_total, D)`, phát sinh lỗi nếu
 các dòng có số chiều khác nhau. Family không có `embed` trong tác vụ được hỗ trợ
 sẽ phát sinh `NotImplementedError`.
+
+[PE](/docs/models/pe) hỗ trợ embedding ảnh, văn bản và video hữu hạn với `clip_frames=8` mặc định. [V-JEPA 2](/docs/models/vjepa2) và [LeVJEPA](/docs/models/levjepa) tạo embedding clip và cung cấp token patch qua `embed_tokens()`. Trang mô hình mô tả cách lấy mẫu clip và các ràng buộc xuất trực tiếp sang runtime.
 
 ## Payload kết quả
 

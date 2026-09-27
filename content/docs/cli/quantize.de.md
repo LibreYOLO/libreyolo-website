@@ -15,7 +15,7 @@ keywords:
   - fp8 quantisierung
   - post training quantization yolo
   - libreyolo quantize argumente
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Befehl
     value: libreyolo quantize
@@ -48,7 +48,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 7ae663e9f117826e
+source_hash: 409bc0b2ace6547e
 ---
 
 ## Synopsis
@@ -69,7 +69,7 @@ Argumente sind `key=value`-Paare, und die POSIX-Form funktioniert ebenfalls,
 | `calib` | `coco128.yaml` | Kalibrierungsbilder: ein Daten-YAML oder der Name eines eingebauten Datensatzes. Ohne Labels, nur Forward-Pass. `none` überspringt die Kalibrierung |
 | `samples` | `128` | Maximale Anzahl Kalibrierungsbilder |
 | `batch` | `8` | Batch-Größe der Kalibrierung |
-| `algorithm` | `auto` | Schätzung des Aktivierungsbereichs: `auto`, was minmax wählt, oder `minmax`, oder `percentile` |
+| `algorithm` | `auto` | Schätzung des Aktivierungsbereichs: `auto` (minmax), `minmax`, `percentile`, `mse` oder `entropy` |
 | `out` | | Pfad des Ausgabe-Checkpoints. Standardmäßig der Quellpfad mit `-<recipe>` vor der Endung |
 | `device` | `auto` | Gerät |
 | `allow_download_scripts` | `false` | Eingebettetes Python in Download-Blöcken von Datensatz-YAMLs erlauben |
@@ -140,3 +140,5 @@ sonstigen Laufzeitfehlern.
 
 Verwandt: [`libreyolo export`](/docs/cli/export), das PyTorch verlässt und
 stattdessen ein Deployment-Artefakt schreibt.
+
+`algorithm` ist standardmäßig `auto` (minmax) und akzeptiert außerdem `minmax`, `percentile`, `mse` und `entropy`. MSE und Entropie wählen Bereiche durch Aktivierungshistogrammdurchläufe.

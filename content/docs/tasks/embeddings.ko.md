@@ -18,7 +18,7 @@ keywords:
   - 클립 임베딩
   - dinov2 임베딩
   - 리드 임베딩
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   작업 키와 별칭은 libreyolo/tasks.py.에서 읽습니다. Embeddings 및 Identities 클래스에서
   libreyolo/utils/results.py. Gallery API의 결과 페이로드를 가져옵니다.
@@ -170,7 +170,7 @@ snippets:
 
         libreyolo verify model=librefacerec-l.onnx source=a.jpg source2=b.jpg
         --json
-source_hash: ffbaad5599035bc7
+source_hash: "3197bfe9a3d53756"
 ---
 
 ## 정의
@@ -193,7 +193,7 @@ source_hash: ffbaad5599035bc7
 
 ## 모델들
 
-네 가문이 그 임무를 수행하며, 그들은 먼저 무엇이든 현지화하는지 여부에 따라 깔끔하게 나뉩니다.
+임베딩 계열마다 전체 이미지, 클립, 탐지된 영역 중 인코딩하는 대상이 다릅니다.
 
 | 계열 | 모양 | 차원 | 또한 지원 |
 |---|---|---|---|
@@ -204,13 +204,15 @@ source_hash: ffbaad5599035bc7
 
 CLIP과 SigLIP 2는 `classify`를 기본 작업으로 유지하므로 `task="embed"`는 요청해야 합니다. 기존의 `-cls` 체크포인트는 공유된 투타워 아티팩트이며, 동일한 가중치에 대한 복제된 `-embed` 체크포인트는 공개되지 않습니다.
 
-`embed_text`는 텍스트 타워가 있는 두 가지 계열인 CLIP과 SigLIP 2에서만 존재합니다. DINOv2에는 없습니다. DINOv2 임베딩은 의미 및 분류 헤드를 우회하며 224픽셀에서 최종 정규화된 CLS 토큰을 읽습니다; `n`, `s`, `m`, `l` 변형은 모두 DINOv2-S 인코더를 공유하므로 네 가지 모두 `D = 384`를 반환합니다.
+`embed_text`는 텍스트 타워가 있는 CLIP, SigLIP 2, PE에서 사용할 수 있습니다. DINOv2에는 텍스트 타워가 없습니다. DINOv2 임베딩은 시맨틱 분할 및 분류 헤드를 건너뛰고 224 픽셀에서 최종 정규화된 CLS 토큰을 읽습니다. `n`, `s`, `m`, `l` 변형은 모두 DINOv2-S 인코더를 공유하므로 네 가지 모두 `D = 384`를 반환합니다.
 
 이번 릴리스에 추가된 분류 전용 백본인 [ViT](/docs/models/vit), [Swin](/docs/models/swin) 및 [DeiT](/docs/models/deit)는 `classify`만 선언하며 이 작업을 수행하지 않습니다.
 
 <code-tabs name="predict" />
 
 `model.embed(source, **kwargs)`는 배치 단축키입니다: 이는 `predict`를 실행하고 모든 결과의 각 행을 하나의 `(N_total, D)` CPU float32 텐서로 연결하며, 행의 차원이 혼합되어 있으면 오류를 발생시킵니다. 지원되는 작업에 `embed`가 없는 계열는 `NotImplementedError`를 발생시킵니다.
+
+[PE](/docs/models/pe)는 이미지, 텍스트, 유한 길이 비디오 임베딩을 지원하며 기본값은 `clip_frames=8`입니다. [V-JEPA 2](/docs/models/vjepa2)와 [LeVJEPA](/docs/models/levjepa)는 클립 임베딩을 생성하고 `embed_tokens()`로 패치 토큰을 제공합니다. 모델 페이지에 클립 샘플링과 런타임 직접 내보내기 제약이 설명되어 있습니다.
 
 ## 결과 페이로드
 

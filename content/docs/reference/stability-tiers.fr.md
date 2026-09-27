@@ -10,8 +10,8 @@ keywords:
   - groupes couverture libreyolo
   - g0 g1 g2 g3 g4
   - niveaux modèles
-last_verified: 1.5.0
-verification: "Niveaux d'export lus dans docs/adr/0011-export-support-tiers.md et libreyolo/export/support.py\_; groupes de couverture et nombres par famille lus dans MODEL_GROUPS dans libreyolo/models/registry.py\_; contrôle de l'entraînement à partir de zéro lu dans libreyolo/models/base/model.py et libreyolo/cli/commands/train.py\_; inventaire du CLI lu dans libreyolo/models/inventory.py\_; niveaux d'API lus dans les docstrings des packages libreyolo/models/sam/, openvocab/ et vlm/ ainsi que dans les contrats de base.py, le tout en v1.5.0. Les noms de groupes destinés au lecteur (Flagship, Core, Supported, Inference only, Museum, Sibling tier) sont le vocabulaire propre au site pour les mêmes groupes, lu dans src/data/docs/registry.json."
+last_verified: 1.6.0
+verification: "Niveaux d'export lus dans docs/adr/0011-export-support-tiers.md et libreyolo/export/support.py\_; groupes de couverture et nombres par famille lus dans MODEL_GROUPS dans libreyolo/models/registry.py\_; contrôle de l'entraînement à partir de zéro lu dans libreyolo/models/base/model.py et libreyolo/cli/commands/train.py\_; inventaire du CLI lu dans libreyolo/models/inventory.py\_; niveaux d'API lus dans les docstrings des packages libreyolo/models/sam/, openvocab/ et vlm/ ainsi que dans les contrats de base.py, le tout en v1.6.0. Les noms de groupes destinés au lecteur (Flagship, Core, Supported, Inference only, Museum, Sibling tier) sont le vocabulaire propre au site pour les mêmes groupes, lu dans src/data/docs/registry.json."
 snippets:
   usage:
     - label: Lire les deux classifications d'une famille
@@ -27,7 +27,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: de545894b0d125e4
+source_hash: 6d8f3ec671e6cb02
 ---
 
 ## Niveaux de prise en charge de l'export
@@ -43,7 +43,7 @@ Ce niveau détermine si un appel aboutit. Il s'applique au triplet
 
 Les niveaux validated et available poursuivent tous deux sans demande de
 confirmation ni avertissement général. La différence porte sur les preuves,
-pas sur l'autorisation\u00a0: une entrée validated s'appuie sur un test de parité et
+pas sur l'autorisation : une entrée validated s'appuie sur un test de parité et
 une version `since`, contrairement à une entrée available. Une conversion
 CoreML sans exécution de prédiction sous macOS est par exemple available, et
 non validated.
@@ -69,20 +69,24 @@ un niveau, choisi selon son contrat d'appel et non son architecture.
 | Niveau | Fabrique | Contrat |
 |---|---|---|
 | Fabrique de détecteurs | `LibreYOLO` | Une passe forward sans prompt renvoie tous les objets trouvés avec des scores calibrés. Les membres s'enregistrent en reconnaissant un checkpoint |
-| Segmentation guidable | `LibreSAM` | Une passe forward n'a aucun sens sans prompt spatial ou conceptuel propre à l'image, transmis lors de l'appel. Interactive et à état\u00a0: encoder une fois, guider plusieurs fois |
+| Segmentation guidable | `LibreSAM` | Une passe forward n'a aucun sens sans prompt spatial ou conceptuel propre à l'image, transmis lors de l'appel. Interactive et à état : encoder une fois, guider plusieurs fois |
 | Détection à vocabulaire ouvert | `LibreOpenVocab` | Détecteurs discriminatifs conditionnés par du texte. La liste de classes est un prompt défini par `set_classes` |
 | Vision-langage | `LibreVLM` | Modèle génératif utilisé comme détecteur. La liste de classes est un prompt et la confiance une valeur factice |
+| Grounding | `LibreGround` | Une image et une instruction référentielle donnent au plus un point par requête |
+| Politique robotique | `LibreVLA` | Les images de la caméra et l'état du robot donnent une séquence d'actions futures |
 
-Les trois niveaux frères ne s'enregistrent délibérément pas dans la fabrique
+Les niveaux frères ne s'enregistrent délibérément pas dans la fabrique
 de détecteurs, c'est pourquoi `LibreYOLO("some-alias")` ne les atteint pas. Ils
 se chargent par alias de taille et téléchargement automatique plutôt que par
 inspection de checkpoint.
 
-Tous les quatre renvoient les mêmes `Results`, le code downstream reste donc
-inchangé. Les méthodes disponibles diffèrent\u00a0: les niveaux frères lèvent
-`NotImplementedError` pour `train()`, `val()` et `export()`, tandis que les
-niveaux SAM et vocabulaire ouvert le lèvent aussi pour `track()`. Chaque page
-de niveau énumère ses propres exclusions.
+Tous renvoient les mêmes `Results`, le code downstream reste donc inchangé.
+Les méthodes disponibles diffèrent : les niveaux frères lèvent
+`NotImplementedError` pour `train()`, `val()` et `export()`, à deux exceptions
+près. `LibreVLM` fait du fine-tuning de Qwen3-VL en tant que détecteur, et
+`LibreVLA` entraîne et valide SmolVLA, ACT et Diffusion Policy. Les niveaux SAM
+et vocabulaire ouvert lèvent aussi `NotImplementedError` pour `track()`. Chaque
+page de niveau énumère ses propres exclusions.
 
 ## Groupes de couverture
 
@@ -99,22 +103,21 @@ pour le même groupe dans l'en-tête d'une page de modèle.
 | Groupe | Nom | Familles | Signification |
 |---|---|---|---|
 | `g0` | Flagship | 2 | Piliers principaux requis dans la couverture des fonctionnalités partagées |
-| `g1` | Core | 10 | Ensemble de couverture des détecteurs entraînables |
-| `g2` | Supported | 14 | Ensemble de couverture supplémentaire des familles entraînables |
-| `g3` | Inference only | 35 | Familles sans implémentation d'entraînement |
+| `g1` | Core | 12 | Ensemble de couverture des détecteurs entraînables |
+| `g2` | Supported | 19 | Ensemble de couverture supplémentaire des familles entraînables |
+| `g3` | Inference only | 44 | Familles sans implémentation d'entraînement |
 | `g4` | Museum | 5 | Familles historiques avec couverture de l'inférence |
-| `s` | Sibling tier | 21 | API sœurs (SAM, vocabulaire ouvert, VLM, zero-shot) couvertes séparément |
+| `s` | Sibling tier | 36 | API sœurs (SAM, vocabulaire ouvert, VLM, grounding, zero-shot) couvertes séparément |
 
-Cela représente 87 familles réparties entre six groupes. `g3` contient à lui
-seul plus de familles que tous les autres groupes réunis, car la majeure partie
-du registre couvre des lignées réservées à l'inférence et des modèles
-historiques plutôt que des détecteurs activement entraînés.
+Cela représente 118 familles réparties entre six groupes. `g3` est le plus
+grand groupe, car une grande partie du registre couvre des lignées réservées à
+l'inférence plutôt que des détecteurs activement entraînés.
 
 Pour choisir un modèle, le groupe indique où attendre l'attention de
 l'ingénierie et non l'exactitude d'une famille. `g0` et `g1` accueillent la
 conception et la première intégration d'une nouvelle fonctionnalité. `g2` reste
 vert dans la CI, mais une fonctionnalité y arrive selon les occasions plutôt
-que dans la même vague de version. `g3` énonce une absence et non une limite\u00a0:
+que dans la même vague de version. `g3` énonce une absence et non une limite :
 la prédiction, la validation et, lorsque la famille le permet, l'export
 fonctionnent toujours. `train()` sur une famille `g3` ou `g4` lève
 `NotImplementedError` en donnant la raison au lieu d'exécuter un comportement
@@ -129,22 +132,27 @@ l'utilisateur. La prise en charge vient de l'API implémentée par la famille et
 des contrôles de capacité propres au format, jamais de la seule appartenance à
 un groupe. Les groupes classent les familles et non les tâches. Une exécution
 de couverture limitée à une tâche nomme donc explicitement celle-ci, comme
-dans «\u00a0g1 detect\u00a0».
+dans « g1 detect ».
 
-Deux éléments lisent le groupe à l'exécution et pas seulement dans les tests.
+Trois éléments lisent le groupe à l'exécution et pas seulement dans les tests.
 `collect_model_inventory()` dans `libreyolo/models/inventory.py` joint le
-groupe à chaque entrée affichée par l'inventaire du CLI, et `pretrained=False`
-ne déclenche le chemin spécial de réinitialisation à partir de zéro que pour
-les familles de `g0` et `g1`. Hors de ces deux groupes, le contrôle dans
+groupe à chaque entrée affichée par l'inventaire du CLI. `pretrained=False` ne
+déclenche le chemin spécial de réinitialisation à partir de zéro que pour les
+familles de `g0`, `g1` et `g2`. Hors de ces groupes, le contrôle dans
 `libreyolo/models/base/model.py` est entièrement ignoré. `pretrained=False`
 atteint alors la méthode `train()` propre à la famille comme un argument nommé
-ordinaire.
+ordinaire. L'entraînement avec `classes=` ou `single_cls=True` n'est accepté
+que pour la détection en `g0` et `g1`, et lève `ValueError` ailleurs.
 
 ## Entraînement
 
 Une famille de `g3` ou `g4` ne possède aucune implémentation d'entraînement et
 l'appel à `train()` lève une erreur. Il s'agit d'une propriété du code de la
-famille, et non de son groupe\u00a0: le groupe enregistre ce fait sans le provoquer.
+famille, et non de son groupe : le groupe enregistre ce fait sans le provoquer.
+
+Sur les 118 familles, 37 s'entraînent : toutes les familles `g0`, `g1` et `g2`,
+plus Qwen3-VL via `LibreVLM` et SmolVLA, ACT et Diffusion Policy via
+`LibreVLA`.
 
 Pour une famille entraînable, le fait qu'un réglage d'augmentation atteigne le
 pipeline est une question distincte avec son propre vocabulaire à trois

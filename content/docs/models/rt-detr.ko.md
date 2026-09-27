@@ -19,7 +19,7 @@ keywords:
   - 회전 바운딩 박스 탐지
   - OBB
   - DOTA
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -172,7 +172,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 8022a5a591922a90
+source_hash: "75454e612d7e2247"
 ---
 
 ## 설치
@@ -224,6 +224,8 @@ pip install "libreyolo[lora]"
 변경할 이유가 없다면 `imgsz`를 체크포인트 기본 크기로 유지합니다. 다른 크기에서도 검증과 예측이 작동하지만 한 가지 잔여 문제가 있습니다. 토큰 수가 기본 크기와 같은 직사각형은 잘못된 종횡비용으로 만들어진 임베딩을 계속 재사용합니다.
 
 데이터셋, 증강, 다중 GPU, 로거는 [학습](/docs/train)을 참조합니다.
+
+RT-DETRv4는 기본적으로 `amp=True`와 `amp_dtype="float16"`을 사용합니다. FP32에는 `amp=False`를 전달합니다.
 
 ## 검증
 

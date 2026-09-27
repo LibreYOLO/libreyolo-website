@@ -52,7 +52,7 @@ snippets:
 
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: da0776970ded8716
+source_hash: ccecee93e9744550
 ---
 
 ## Создание
@@ -158,6 +158,7 @@ model.track(
     source,
     *,
     track_conf=0.25,
+    conf=None,
     iou=0.45,
     imgsz=None,
     classes=None,
@@ -165,19 +166,25 @@ model.track(
     save=False,
     show=False,
     vid_stride=1,
+    fps=30.0,
+    color_format="auto",
     output_path=None,
     tracker="bytetrack",
     tracker_config=None,
     augment=False,
+    persist=False,
     **tracker_kwargs,
 ) -> Generator[Results, None, None]
 ```
 
 Отдаёт по одному `Results` на кадр с заполненным `track_id`. `tracker`
-принимает `"bytetrack"`, `"botsort"`, `"ocsort"` или `"deepocsort"` и
+принимает `"bytetrack"`, `"botsort"`, `"ocsort"` или `"deepocsort"`, при
+необходимости с суффиксом `.yaml`, либо экземпляр собственного трекера, и
 игнорируется, если задан `tracker_config`, потому что трекер выбирается по типу
 конфига. `track_conf` передаётся как `track_high_thresh` для ByteTrack и
-BoT-SORT и как `det_thresh` для OC-SORT и Deep OC-SORT. `output_path` по
+BoT-SORT и как `det_thresh` для OC-SORT и Deep OC-SORT. `conf`, если задан,
+служит порогом детекции, как в `predict()`. `persist=True` сохраняет трекер с
+предыдущего вызова для покадровых циклов. `output_path` по
 умолчанию — `runs/track/<video_stem>.mp4`.
 
 ## val
@@ -198,6 +205,9 @@ model.val(
     verbose=True,
     *,
     plots=None,
+    project=None,
+    name=None,
+    exist_ok=False,
     **kwargs,
 ) -> Dict
 ```
@@ -205,7 +215,11 @@ model.val(
 Возвращает словарь метрик, ключи которого зависят от задачи; для детекции это
 `metrics/precision`, `metrics/recall`, `metrics/mAP50` и `metrics/mAP50-95`.
 `imgsz` принимает целое число для квадратного размера или кортеж
-`(height, width)`, по умолчанию берётся родной входной размер модели. `plots` —
+`(height, width)`, по умолчанию берётся родной входной размер модели.
+`data=None` запускает валидацию на датасете, сохранённом в конфиге обучения
+чекпойнта, и вызывает ошибку, если его там нет, как у опубликованных весов.
+`project`, `name` и `exist_ok` задают выходной каталог как `project/name` с
+увеличиваемым номером, если не задан `exist_ok=True`. `plots` —
 псевдоним для `save_plots`. `allow_download_scripts` разрешает выполнять
 встроенный Python-код, который YAML датасета может содержать в поле `download`.
 
@@ -249,6 +263,7 @@ model.export(format="onnx", **kwargs) -> str
 | `dynamic` | `True` | Включить динамические оси |
 | `half` | `False` | Точность FP16 |
 | `int8` | `False` | Точность INT8 |
+| `quantize` | `None` | Точность: `16`, `8` или `32`, вместо `half` или `int8` |
 | `batch` | `1` | Размер батча, зашитый в артефакт |
 | `device` | `None` | Устройство, на котором идёт трассировка |
 | `data` | `None` | data.yaml для калибровки INT8 |
@@ -257,7 +272,9 @@ model.export(format="onnx", **kwargs) -> str
 | `verbose` | `False` | Подробный лог экспортёра |
 
 Запрещённые комбинации вызывают `NotImplementedError` на предварительной
-проверке, до трассировки. Покрытие и его правила описаны на странице
+проверке, до трассировки. Параметр, который формат не использует, вызывает
+предупреждение `Unknown <format> export arguments (ignored)`, и экспорт
+продолжается. Покрытие и его правила описаны на странице
 [матрица экспорта](/docs/reference/export-matrix). Если подключены активные
 LoRA-адаптеры, они сливаются с плотными весами, причём это слияние происходит
 только после всех проверок, способных отклонить запрос.

@@ -15,7 +15,7 @@ keywords:
   - réseau de neurones convolutif
   - classification d'images python
   - classifieur d'images pré-entraîné
-last_verified: 1.5.0
+last_verified: "1.6.0"
 snippets:
   predict:
     - label: Python
@@ -79,7 +79,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 68c09f080c74bb87
+source_hash: c996d557da01e4d4
 ---
 
 ## Installation
@@ -119,6 +119,8 @@ sous-dossiers `train/` et `val/`, un dossier par classe) et renvoie
 l'exactitude top-1 et top-5.
 
 <code-tabs name="val" />
+
+La validation et la calibration INT8 utilisent la transformation d'évaluation de la famille. Les métadonnées d'export enregistrent `norm_mean`, `norm_std` et `resize_mode` ; les anciens artefacts utilisent les valeurs de la famille par défaut. Les préprocesseurs de calibration renvoient le tableau CHW et le ratio requis.
 
 ## Exporter
 

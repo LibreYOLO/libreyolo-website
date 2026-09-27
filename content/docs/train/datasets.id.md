@@ -19,7 +19,7 @@ keywords:
   - libreyolo doctor
   - cek ketidakseimbangan kelas
   - kebocoran pembagian train val
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -65,7 +65,7 @@ snippets:
             print(finding.severity.value, finding.check_id, finding.message)
 
         raise SystemExit(report.exit_code(strict=False))
-source_hash: 9a12a0551c8b56e9
+source_hash: 84e47ff97fb2e2f3
 ---
 
 ## Arahkan pelatihan ke dataset
@@ -137,6 +137,8 @@ baris yang dimulai dengan `#` dilewati.
 `names` dapat berupa daftar atau pemetaan dengan kunci integer. `nc` bersifat opsional; ketika keduanya
 hadir dan tidak setuju, dokter melaporkannya sebagai kesalahan.
 
+Pose RF-DETR membaca `kpt_names` dengan ID atau nama kelas sebagai kunci. Model mempertahankan baris keypoint bernama pertama per kelas; daftar kosong menunjukkan kelas yang hanya memiliki kotak. Pose multikelas memerlukan `names` dan setidaknya satu kelas dengan keypoint.
+
 ## Tata letak direktori dan berkas label
 
 Deteksi, segmentasi, pose, dan kotak berorientasi semuanya berbagi satu tata letak. Label
@@ -164,6 +166,8 @@ daripada menaikkan. Baris dengan lebih dari lima kolom dibaca sebagai
 poligon dan kotaknya menjadi jangkauan poligon, sehingga ekspor segmentasi yang digunakan
 untuk pelatihan deteksi dimuat tanpa keluhan. Dokter melaporkan berapa banyak baris
 yang mengambil jalur itu.
+
+Kotak dengan koordinat terhingga yang melewati batas gambar dipotong secara konsisten untuk pelatihan dan validasi. Kotak tanpa area terlihat, koordinat tidak terhingga, dan poligon yang salah dibuang. ID kelas di luar rentang dilaporkan sebelum konstruksi target. `train(classes=[...])` memfilter supervisi dengan ID kelas asli; lihat [hiperparameter](/docs/train/hyperparameters).
 
 ## Tugas lainnya
 
@@ -269,4 +273,3 @@ diperiksa terhadap kontrak yang salah.
   dilakukan sekali setelah data tersedia.
 - [Validasi dan metrik ](/docs/train/validation) untuk evaluasi pada `val`
   atau pembagian `test`.
-

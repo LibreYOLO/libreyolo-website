@@ -4,12 +4,11 @@ families:
   - dinov2
 seo_title: 'DINOv2 trong LibreYOLO: phân đoạn ngữ nghĩa, phân loại và embedding'
 description: >-
-  Dùng DINOv2 trong LibreYOLO để phân đoạn ngữ nghĩa, phân loại và tạo embedding
-  toàn ảnh trên backbone DINOv2-with-Registers. Toàn bộ dùng Apache-2.0.
+  Dùng DINOv2 trong LibreYOLO để phân đoạn ngữ nghĩa, phân loại và tạo embedding toàn ảnh trên backbone
+  DINOv2-with-Registers. Toàn bộ dùng Apache-2.0.
 lead: >-
-  DINOv2 là vision transformer tự giám sát được Meta AI huấn luyện để tạo đặc
-  trưng ảnh đa dụng mà không cần nhãn. LibreYOLO bọc backbone
-  DINOv2-with-Registers cho ba tác vụ: phân đoạn ngữ nghĩa, phân loại và tạo
+  DINOv2 là vision transformer tự giám sát được Meta AI huấn luyện để tạo đặc trưng ảnh đa dụng mà không cần
+  nhãn. LibreYOLO bọc backbone DINOv2-with-Registers cho ba tác vụ: phân đoạn ngữ nghĩa, phân loại và tạo
   embedding toàn ảnh.
 keywords:
   - DINOv2
@@ -20,7 +19,7 @@ keywords:
   - embedding ảnh
   - trích xuất đặc trưng
   - Meta AI
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Phân đoạn ngữ nghĩa
@@ -151,9 +150,8 @@ snippets:
         # đặt tên tệp theo tác vụ, ở đây là LibreDINOv2s-sem.onnx.
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
-source_hash: 4256e0a0398e5aaf
+source_hash: c89a9662d03fe6f7
 ---
-
 ## Cài đặt
 
 LibreDINOv2 chỉ đăng ký khi đã cài `transformers`, cùng dependency tùy chọn mà RF-DETR cần cho backbone DINOv2, vì vậy mô hình cần cùng extra.
@@ -180,13 +178,17 @@ LibreYOLO không phát hành checkpoint LibreDINOv2. Thay vì tải tệp, hãy 
 
 <code-tabs name="train" />
 
-Các đối số keyword chính ở đây là `batch_size` và `lr`, không phải `batch` và `lr0` như hầu hết các họ mô hình khác; `batch` và `lr0` vẫn được chấp nhận và ánh xạ sang chúng, nhưng truyền cả hai sẽ phát sinh lỗi xung đột. `output_dir=` (mặc định `"runs/train"`) thay thế `project=`/`name=` làm cách chính để đặt vị trí lượt chạy, dù truyền trực tiếp `project=`/`name=` vẫn hoạt động. Xem [huấn luyện](/docs/train) để biết về dataset, tăng cường dữ liệu (data augmentation), multi-GPU và logger.
+Các đối số keyword chính ở đây là `batch_size` và `lr`, không phải `batch` và `lr0` như hầu hết các họ mô hình khác; `batch` và `lr0` vẫn được chấp nhận và ánh xạ sang chúng, nhưng truyền cả hai sẽ phát sinh lỗi xung đột. `output_dir=` (mặc định `None`) thay thế `project=`/`name=` làm cách chính để đặt vị trí lượt chạy, dù truyền trực tiếp `project=`/`name=` vẫn hoạt động. Xem [huấn luyện](/docs/train) để biết về dataset, tăng cường dữ liệu (data augmentation), multi-GPU và logger.
+
+Lần chạy mới dùng `runs/train/dinov2_exp` với hậu tố tăng dần và `exist_ok=False`. `resume=True` khôi phục trạng thái trainer và giữ thư mục chạy đã chọn. Phân loại hỗ trợ `cls_pw` và `class_weights` như mô tả trong [siêu tham số](/docs/train/hyperparameters).
 
 ## Xác thực
 
 `val()` trả về dictionary gồm các key `metrics/`: mIoU và độ chính xác pixel cho `task="semantic"`, độ chính xác top-1 và top-5 cho `task="classify"`. `task="embed"` không có ground truth để chấm điểm và phát sinh `NotImplementedError` nếu bạn gọi `val()` trên tác vụ này.
 
 <code-tabs name="val" />
+
+Hiệu chuẩn phân loại và embedding dùng lại pipeline phân loại của mô hình. Đánh giá dùng phép biến đổi của họ mô hình.
 
 ## Xuất
 

@@ -45,14 +45,14 @@ snippets:
 
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: da0776970ded8716
+source_hash: ccecee93e9744550
 ---
 
 ## Construction
 
 La fabrique renvoie une instance de classe de famille. Construire directement
 cette classe accepte les mêmes arguments, à l'exception de `size`, qui est
-requis\u00a0:
+requis :
 
 ```python
 Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
@@ -101,7 +101,7 @@ model(
 | `source` | `None` | Image, liste ou tuple d'images en mémoire, répertoire, fichier vidéo ou source écran comme `"screen"`, `"screen 1"`, `"screen 1 100 200 512 256"` |
 | `conf` | `0.25` | Seuil de confiance |
 | `iou` | `0.45` | Seuil IoU de la NMS |
-| `imgsz` | `None` | Remplacement de la taille d'entrée\u00a0; `None` utilise la taille native du modèle |
+| `imgsz` | `None` | Remplacement de la taille d'entrée ; `None` utilise la taille native du modèle |
 | `device` | `None` | Remplacement de l'appareil pour cet appel |
 | `classes` | `None` | Conserver uniquement ces identifiants de classe |
 | `max_det` | `300` | Nombre maximal de détections par image |
@@ -152,6 +152,7 @@ model.track(
     source,
     *,
     track_conf=0.25,
+    conf=None,
     iou=0.45,
     imgsz=None,
     classes=None,
@@ -159,20 +160,26 @@ model.track(
     save=False,
     show=False,
     vid_stride=1,
+    fps=30.0,
+    color_format="auto",
     output_path=None,
     tracker="bytetrack",
     tracker_config=None,
     augment=False,
+    persist=False,
     **tracker_kwargs,
 ) -> Generator[Results, None, None]
 ```
 
 Produit un objet `Results` par image avec `track_id` défini. `tracker` vaut
-`"bytetrack"`, `"botsort"`, `"ocsort"` ou `"deepocsort"`, et est ignoré si
+`"bytetrack"`, `"botsort"`, `"ocsort"` ou `"deepocsort"`, éventuellement avec
+un suffixe `.yaml`, ou une instance de tracker personnalisée, et est ignoré si
 `tracker_config` est fourni, car le type de configuration sélectionne le
 tracker. `track_conf` correspond à `track_high_thresh` pour ByteTrack et
-BoT-SORT, et à `det_thresh` pour OC-SORT et Deep OC-SORT. `output_path` utilise
-par défaut `runs/track/<video_stem>.mp4`.
+BoT-SORT, et à `det_thresh` pour OC-SORT et Deep OC-SORT. `conf`, s'il est
+fourni, est le seuil de détection, comme dans `predict()`. `persist=True`
+conserve le tracker de l'appel précédent pour les boucles image par image.
+`output_path` utilise par défaut `runs/track/<video_stem>.mp4`.
 
 ## val
 
@@ -192,6 +199,9 @@ model.val(
     verbose=True,
     *,
     plots=None,
+    project=None,
+    name=None,
+    exist_ok=False,
     **kwargs,
 ) -> Dict
 ```
@@ -200,6 +210,10 @@ Renvoie un dictionnaire de métriques dont les clés dépendent de la tâche. La
 détection renvoie `metrics/precision`, `metrics/recall`, `metrics/mAP50` et
 `metrics/mAP50-95`. `imgsz` accepte un entier carré ou un tuple
 `(height, width)` et utilise par défaut la taille d'entrée native du modèle.
+`data=None` valide sur le dataset enregistré dans la configuration
+d'entraînement du checkpoint et lève une erreur s'il n'y en a aucun, comme avec
+les poids publiés. `project`, `name` et `exist_ok` définissent le répertoire de
+sortie sous la forme `project/name`, incrémenté sauf si `exist_ok=True`.
 `plots` est un alias de `save_plots`. `allow_download_scripts` autorise le
 Python intégré que le champ `download` d'un YAML de dataset peut contenir.
 
@@ -213,7 +227,7 @@ La validation augmentée lève une erreur pour les tâches `obb` et `pose`.
 
 `train` est défini par famille, ses arguments diffèrent donc. Deux comportements
 sont partagés, car la classe de base encapsule la méthode `train` de chaque
-famille\u00a0:
+famille :
 
 - `cfg=` accepte le chemin d'un YAML dont les clés sont fusionnées dans l'appel. Les arguments nommés explicites l'emportent sur le fichier.
 - `pretrained=False` sur une famille du groupe de couverture `g0` ou `g1` réinitialise le modèle à partir de zéro avant l'entraînement et ne peut pas être associé à `resume=True`.
@@ -229,17 +243,18 @@ model.export(format="onnx", **kwargs) -> str
 
 Renvoie le chemin de l'artefact écrit. `format` est résolu dans le registre des
 exporteurs, où `engine` est un alias de `tensorrt` et `litert` un alias de
-`tflite`. Arguments partagés par tous les exporteurs\u00a0:
+`tflite`. Arguments partagés par tous les exporteurs :
 
 | Argument | Valeur par défaut | Signification |
 |---|---|---|
-| `output_path` | `None` | Chemin du fichier de sortie\u00a0; généré sous `weights/` s'il est omis |
-| `imgsz` | `None` | Tuple `(height, width)` ou entier unique\u00a0; taille native par défaut |
+| `output_path` | `None` | Chemin du fichier de sortie ; généré sous `weights/` s'il est omis |
+| `imgsz` | `None` | Tuple `(height, width)` ou entier unique ; taille native par défaut |
 | `opset` | `None` | Version de l'opset ONNX |
 | `simplify` | `True` | Exécuter la simplification du graphe ONNX |
 | `dynamic` | `True` | Activer les axes dynamiques |
 | `half` | `False` | Précision FP16 |
 | `int8` | `False` | Précision INT8 |
+| `quantize` | `None` | Précision sous la forme `16`, `8` ou `32`, à la place de `half` ou `int8` |
 | `batch` | `1` | Taille de batch intégrée à l'artefact |
 | `device` | `None` | Appareil utilisé pour le traçage |
 | `data` | `None` | data.yaml pour la calibration INT8 |
@@ -248,7 +263,9 @@ exporteurs, où `engine` est un alias de `tensorrt` et `litert` un alias de
 | `verbose` | `False` | Journalisation détaillée de l'exporteur |
 
 Les combinaisons bloquées lèvent `NotImplementedError` lors des vérifications
-préalables, avant le traçage. La couverture et ses règles figurent dans la
+préalables, avant le traçage.
+Une option que le format n'utilise pas émet l'avertissement
+`Unknown <format> export arguments (ignored)` et l'export continue. La couverture et ses règles figurent dans la
 [matrice d'export](/docs/reference/export-matrix). En présence d'adaptateurs
 LoRA actifs, ceux-ci sont fusionnés dans des poids denses, uniquement après
 tous les contrôles de refus de la requête.
@@ -259,7 +276,7 @@ tous les contrôles de refus de la requête.
 model.save(path) -> str
 ```
 
-Écrit un checkpoint LibreYOLO conforme au schéma v1.0\u00a0: state dict et
+Écrit un checkpoint LibreYOLO conforme au schéma v1.0 : state dict et
 métadonnées décrites dans le
 [schéma des checkpoints](/docs/reference/checkpoint-schema). Un modèle
 quantifié contient en plus son manifeste `quant`, afin que `LibreYOLO(path)`

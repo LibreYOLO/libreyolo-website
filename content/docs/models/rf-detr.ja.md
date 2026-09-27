@@ -4,7 +4,7 @@ families:
   - rfdetr
 seo_title: RF-DETR：MITライセンスで学習、ファインチューニング、エクスポート
 description: >-
-  LibreYOLOでRF-DETRを使い、検出、インスタンスセグメンテーション、姿勢推定、回転バウンディングボックスを扱います。すべてMITライセンスで、インストール、推論、学習、検証、エクスポートに対応します。
+  LibreYOLOでRF-DETRを使い、検出、インスタンスセグメンテーション、姿勢推定、回転バウンディングボックスを扱います。インストール、推論、学習、検証、エクスポートに対応します。
 lead: >-
   密なグリッドではなく固定された物体集合を予測するため、推論時にNMSを必要としない検出Transformerです。LibreYOLOは4つのタスクでRF-DETRをサポートします。
 keywords:
@@ -15,7 +15,7 @@ keywords:
   - インスタンスセグメンテーション
   - 姿勢推定
   - 回転バウンディングボックス
-last_verified: 1.5.0
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -90,7 +90,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -146,7 +146,7 @@ snippets:
     - label: エクスポートしたファイルを使う
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # ファクトリーはファイルサフィックスで振り分けるためエクスポート成果物も
         # 任意のチェックポイントと同様に読み込まれ同じ Results オブジェクトを返す
@@ -166,7 +166,7 @@ snippets:
 
         # 接続前にシグネチャを確認
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -176,7 +176,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 8c464aa759131694
+source_hash: 3238696a4e1ab6c2
 ---
 
 ## インストール
@@ -195,9 +195,11 @@ pip install "libreyolo[rfdetr]"
 
 返される`Results`オブジェクトはすべてのファミリーに共通するため、別の検出器への切り替えは1行の変更で済みます。`conf`と`max_det`はクエリ選択をフィルタリングします。調整するNMSステップはありません。ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
 
+物体検出、セグメンテーション、回転ボックスの処理では、アンチエイリアスなしの浮動小数点OpenCVバイリニアリサイズを使います。姿勢推定ではアンチエイリアス付きリサイズを維持します。長方形の`imgsz=(height, width)`は、タスクのパッチとウィンドウのグリッドを満たす必要があります。チェックポイント一覧にはUI検出器も含まれます。[イベントヒストグラム](/docs/train/event-histograms)では、記録された入力プロファイルを使います。
+
 ## バリアント
 
-4つのサイズと、1つのアーキテクチャを共有する4つのタスクがあります。セグメンテーション、姿勢推定、回転バウンディングボックスは異なるヘッドで検出デコーダーを再利用するため、同じ引数を受け取ります。各サイズのパラメータ数は近く、主に入力解像度が異なります。
+`n`から`l`までの4つの検出サイズと、1つのアーキテクチャを共有する4つのタスクがあります。セグメンテーション、姿勢推定、回転バウンディングボックスは異なるヘッドで検出デコーダーを再利用するため、同じ引数を受け取ります。セグメンテーションには`x`と`xx`が加わり、姿勢推定は`x`のみです。各サイズのパラメータ数は近く、主に入力解像度が異なります。
 
 <benchmark-table task="detect" />
 
@@ -205,7 +207,7 @@ pip install "libreyolo[rfdetr]"
 
 ## 学習
 
-4つすべてのタスクで、学習は公開済みチェックポイントから開始します。RF-DETRのネイティブトレーナーが無視する引数の一覧に`pretrained`が含まれるため、ここで`pretrained=False`を渡してもランダムに初期化されたモデルにはなりません。
+4つすべてのタスクで、学習は公開済みチェックポイントから開始します。`pretrained=False`を指定すると、代わりにバックボーンを含むネットワーク全体を再初期化し、ゼロから学習します。
 
 <code-tabs name="train" />
 
@@ -213,9 +215,11 @@ pip install "libreyolo[rfdetr]"
 
 データセット、データ拡張、マルチGPU、ロガーについては[学習](/docs/train)を参照してください。
 
+新規実行のデフォルトは`output_dir=None`で、`exist_ok=False`により連番付きの`runs/train/rfdetr_exp`に解決されます。再開した実行は、そのチェックポイントの実行ディレクトリに引き続き書き込みます。複数クラスの姿勢推定データセットでは、クラスのインデックスまたは名前をキーとする`kpt_names`を使います。空のリストはボックスのみのクラスを表します。推論ではキーポイントを`kpt_shape`に合わせてパディングします。キーポイントmAPによる適合度の計算では、ボックスのみのクラスは評価しません。
+
 ## 検証
 
-`val()`は、学習に使用した形式の任意のデータセットで測定した適合率、再現率、mAP 50、mAP 50-95を含む`metrics/`キーの辞書を返します。
+`val()`は、学習に使用した形式の任意のデータセットで測定したmAP 50、mAP 50-95、mAP 75、COCO平均再現率を含む`metrics/`キーの辞書を返します。
 
 <code-tabs name="val" />
 

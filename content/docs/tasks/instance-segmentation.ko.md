@@ -12,7 +12,7 @@ keywords:
   - 다각형 레이블
   - MIT 분할 라이브러리
   - 마스크 mAP
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -119,7 +119,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 33e331eac0f9b0af
+source_hash: 577cd3c8c2d5d6fe
 ---
 
 ## 정의
@@ -132,9 +132,9 @@ source_hash: 33e331eac0f9b0af
 
 ## 모델들
 
-네 개의 계열가 마스크를 학습하고 예측합니다: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine) 및 [RTMDet](/docs/models/rtmdet). RF-DETR은 자체 추가 패키지 `pip install "libreyolo[rfdetr]"`가 필요하며, 나머지 세 개는 기본 패키지에서 실행됩니다.
+네 개의 계열이 마스크를 학습하고 예측합니다: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine) 및 [GTR](/docs/models/gtr). RF-DETR은 자체 추가 패키지 `pip install "libreyolo[rfdetr]"`가 필요하며, 나머지 세 개는 기본 패키지에서 실행됩니다.
 
-[Mask R-CNN](/docs/models/mask-rcnn)은 마스크를 예측, 검증 및 내보내지만, `train()`은 `NotImplementedError`를 발생시킵니다.
+[Mask R-CNN](/docs/models/mask-rcnn)은 마스크를 예측, 검증 및 내보내지만, `train()`은 `NotImplementedError`를 발생시킵니다. [RTMDet](/docs/models/rtmdet)은 마스크를 예측하고 검증하지만 분할 학습은 `NotImplementedError`를 발생시키며, 탐지기로만 학습됩니다.
 
 [EoMT](/docs/models/eomt)는 마스크를 예측하고 검증하지만 학습할 수 없으며, 내보낸 모델은 더욱 제한적입니다: `export()`는 오직 의미적 작업만 허용하며, `segment`와 `panoptic`에 대해 `NotImplementedError`를 발생시키는데, 이는 두 개의 요청-마스크 런타임 계약이 정의되지 않았기 때문입니다. 파이썬에서 인스턴스 마스크에는 내보낸 그래프가 아닌 EoMT를 사용하십시오.
 

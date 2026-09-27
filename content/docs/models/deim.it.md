@@ -19,7 +19,7 @@ keywords:
   - object detection
   - real-time object detection
   - rilevamento oggetti python
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -141,7 +141,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 6edaac5f05abaabe
+source_hash: 8dc052b83d5f1ac0
 ---
 
 ## Installazione
@@ -172,6 +172,8 @@ passare a un rilevatore diverso è una modifica di una riga. `conf` e `max_det`
 filtrano un decode top-k su query e classi; non c'è nessun passaggio di NMS da
 regolare, e `iou` è accettato ma non usato. Vedi [predizione](/docs/predict) per
 sorgenti, streaming e gestione dei risultati.
+
+DEIM accetta `imgsz=(height, width)` rettangolare per la predizione. DEIMv2 rifiuta esplicitamente le richieste rettangolari di predizione/validazione. Questo non implica il supporto dell'addestramento o dell'esportazione rettangolare.
 
 ## Varianti
 
@@ -222,6 +224,8 @@ l'esecuzione parta.
 
 Vedi [addestramento](/docs/train) per dataset, data augmentation, multi-GPU e
 logger.
+
+DEIM attiva AMP di default con `amp_dtype="float16"`. Passa `amp=False` per l'addestramento FP32.
 
 ## Validazione
 

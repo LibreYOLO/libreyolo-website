@@ -19,7 +19,7 @@ keywords:
   - fp8 e4m3
   - kalibrierungsdaten quantisierung
   - qdq onnx export
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Aufruf
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -83,7 +83,7 @@ snippets:
             calib="coco128.yaml",      # data.yaml-Pfad oder eingebauter Name; None überspringt sie
             samples=128,               # maximale Anzahl Kalibrierungsbilder
             batch=8,                   # Batch-Größe der Kalibrierung
-            algorithm="auto",          # auto und minmax sind gleich; percentile ist die Alternative
+            algorithm="auto",          # auto wählt minmax; Alternativen: percentile, mse, entropy
             keep_high_precision=None,  # None nutzt die Regel der Familie
             verbose=True,
         )
@@ -167,7 +167,7 @@ snippets:
 
         # Jeder Float-Exporter greift jetzt, in jeder Präzision, die er kann.
         qmodel.export(format="tensorrt", half=True)
-source_hash: 4ffb06b87cad017e
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## Installation
@@ -193,6 +193,8 @@ Der entstehende Checkpoint ist ein normaler LibreYOLO-Checkpoint mit angehängte
 Die Trainer-Checkpoints, die während eines QAT-Laufs geschrieben werden, tragen
 das Manifest ebenfalls, `best.pt` aus so einem Lauf ist also selbst ein
 quantisierter Checkpoint.
+
+Der Kalibrierungsparameter `algorithm` akzeptiert `auto`, `minmax`, `percentile`, `mse` und `entropy`. `auto` wird zu minmax aufgelöst. MSE und Entropie verwenden Histogrammdurchläufe zur Auswahl der Aktivierungsbereiche.
 
 ## Rezepte
 
@@ -256,6 +258,8 @@ heißt heute `yolo9` und `rfdetr`.
 Mit `fp16` und `bf16` quantisierte Modelle sind nur für die Inferenz, und der
 Trainer lehnt sie mit einem Hinweis auf `amp=True` ab.
 
+Die QAT-Einrichtung deaktiviert EMA und SyncBatchNorm, setzt `average_best=0` und protokolliert jede Überschreibung. Gleitkommatraining behält seine angeforderten Einstellungen.
+
 ## Export
 
 <code-tabs name="export" />
@@ -286,6 +290,10 @@ Die quantisierte Arithmetik läuft in Simulation, also als Fake-Quantisierung, d
 selbst unter AMP in float32-Inseln gerechnet wird. Die Simulation ist numerisch
 treu, ein `val()`-Wert auf einem beliebigen Gerät ist also eine echte Aussage über
 die quantisierte Arithmetik. Eine Aussage über Geschwindigkeit ist er nicht.
+
+Apple MPS implementiert weder die Fake-Quantisierungs-Ops noch float8, auf einem
+Mac läuft also jedes Rezept außer `fp16` und `bf16` auf der CPU, mit einer
+Warnung.
 
 Zwei Ausnahmen laufen nativ. `fp16` und `bf16` sind gewöhnliche Casts.
 Finalisierte `fp8`-Module rechnen ihr GEMM direkt auf gepackten E4M3-Gewichten

@@ -15,7 +15,7 @@ keywords:
   - comando predict libreyolo
   - argumentos libreyolo predict
   - yolo salida json terminal
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Comando
     value: libreyolo predict
@@ -50,7 +50,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 7e46c7ed7dd9e6c4
+source_hash: 21374ebc0e6cf4d3
 ---
 
 ## Sinopsis
@@ -102,6 +102,11 @@ palabra de tarea se descarta antes del análisis.
 | `verbose` | `false` | Salida detallada por stderr |
 | `help_json` | `false` | Vuelca el esquema del comando como JSON y sale |
 
+| Argumento | Por defecto | Significado |
+| --- | --- | --- |
+| `mask` | `None` | Máscara binaria de inpainting para una sola imagen en los modelos que la requieren |
+| `trimap` | `None` | Trimap de tres niveles para una sola imagen en los modelos de matting guiado |
+
 ## Ejemplos
 
 <code-tabs name="examples" />
@@ -114,9 +119,10 @@ valores válidos para `model`. Tres opciones se rechazan en esos runtimes en
 lugar de ignorarse: `tiling`, `overlap_ratio` y `output_file_format` salen con
 `config_unsupported` cuando un backend de runtime no puede cumplirlas.
 
-`half` funciona al revés. Los runtimes exportados lo reciben y ejecutan en
-FP16; la inferencia nativa en PyTorch registra que se ignoró y continúa en
-FP32.
+`half` funciona al revés: se acepta y se ignora. La inferencia nativa en
+PyTorch registra que se ignoró y continúa en FP32, y un runtime exportado
+mantiene la precisión con la que se exportó, así que para inferir en FP16 hay
+que exportar con `half=true`.
 
 Los modelos de gaze (estimación de la mirada) son de dos etapas y no tienen
 detector propio, por lo que `face_detector` es obligatorio para ellos.

@@ -19,7 +19,7 @@ keywords:
   - miou segmentacja
   - jakość segmentacji panoptycznej
   - top1 accuracy
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   val:
     - label: Python
@@ -62,7 +62,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: d907183492fa3f57
+source_hash: da1e3ccfd1efba73
 ---
 
 ## Uruchamianie walidacji
@@ -71,7 +71,7 @@ source_hash: d907183492fa3f57
 
 <code-tabs name="val" />
 
-Wartość zwracana to zwykły `dict[str, float]`. Każdy klucz jest dosłowny,
+Wartość zwracana to `dict[str, float]`. Każdy klucz jest dosłowny,
 dlatego należy odczytywać go według nazwy, a nie pozycji.
 
 Główne argumenty to `data`, `split`, `batch`, `imgsz`, `conf`, `iou`, `workers`,
@@ -79,7 +79,9 @@ Główne argumenty to `data`, `split`, `batch`, `imgsz`, `conf`, `iou`, `workers
 a `iou` to `0.6`. Obie są znacznie mniej restrykcyjne niż wartości domyślne dla
 predykcji, ponieważ przegląd mAP wymaga ogona predykcji o niskiej pewności.
 Domyślna wartość `imgsz` odpowiada własnemu rozmiarowi wejścia modelu, a nie
-stałej liczbie. `split` przyjmuje wyłącznie `val`, `test` albo `train`.
+stałej liczbie. `split` przyjmuje wyłącznie `val`, `test` albo `train`. Bez
+`data` wytrenowany checkpoint jest walidowany na zbiorze danych, na którym go
+wytrenowano; opublikowane wagi go nie zawierają i wymagają `data=`.
 
 Każde inne pole konfiguracji walidacji jest przekazywane jako argument nazwany,
 w tym `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`, `cache` i
@@ -148,6 +150,8 @@ zawierają. Ich rodziny są wybierane według `metrics/mAP50-95`, który zwracaj
 słowniki. Estymacja pozy nie zwraca ani `fitness`, ani `metrics/mAP50-95`. Jej
 trenery ustawiają zamiast tego `best_metric_key` na
 `metrics/keypoints_mAP50-95`.
+
+Klasyfikacja ImageFolder dodaje makrośrednie `metrics/precision`, `metrics/recall` i `metrics/f1`, liczone po klasach obecnych w etykietach walidacyjnych. Top-1 pozostaje domyślną funkcją fitness. Detekcja zwraca też `metrics/best_conf` i `metrics/best_conf_f1`, wybierając próg optymalny dla mikro-F1 przy IoU 0.50, a progi z nazwami klas jako kluczami umieszcza w `metrics.box.best_conf_per_class`. Detekcje z równym wynikiem pozostają w jednej grupie; przy remisie wybierany jest wyższy próg. Brak dodatniego F1 daje 0.0. Segmentacja nie udostępnia tych kluczy progów.
 
 ## Klucze szybkości
 
@@ -248,7 +252,9 @@ powoduje błąd.
 
 `val()` zawsze zapisuje `config.yaml` w swoim katalogu wynikowym. Jeśli nie
 podano `save_dir`, domyślnie jest to
-`runs/val/<model>_<size>_<timestamp>`.
+`runs/val/<model>_<size>_<timestamp>`. `project`, `name` i `exist_ok` wybierają
+go tak samo jak przy trenowaniu: `project/name`, z sufiksem o kolejnym numerze,
+chyba że `exist_ok=True`.
 
 <code-tabs name="json" />
 
@@ -266,12 +272,18 @@ segmentacja panoptyczna, głębia, normalne, krawędzie, rekonstrukcja, matting,
 OCR, OBB i point nie zapisują tam niczego. Błąd tworzenia wykresu powoduje
 ostrzeżenie i nigdy nie przerywa przebiegu.
 
+`visualize=True` zapisuje obrazy TP/FP/FN ramek z uwzględnieniem klas dla detekcji i segmentacji lub porównanie etykiety z top-1 dla klasyfikacji ImageFolder w `visualize/errors/` i `visualize/correct/`. Dopasowanie używa IoU 0.5 i pewności `max(0.25, conf)`. Wartości domyślne to `visualize=False`, `show_labels=True` i `show_conf=True`. Nieobsługiwane zadania i walidacja klipów V-JEPA 2 odrzucają wizualizację.
+
+`plot_samples=8` ogranicza osobny wykres przykładowych obrazów; 0 go wyłącza, a -1 zachowuje wszystkie obrazy. Nie zmienia to metryk ani wyników wizualizacji.
+
 ## Walidacja podczas trenowania
 
-Trenowanie wykonuje walidację co `eval_interval` epok na podziale `val` zbioru
-danych. Uzyskane metryki sterują wyborem `best.pt`, mechanizmem early stopping
-`patience` i kluczami `val/` w każdym loggerze. Walidacja korzysta z wag EMA, gdy
-EMA jest włączone.
+Trenowanie wykonuje walidację co `eval_interval` epok, a także zawsze po
+ostatniej epoce, na podziale `val` zbioru danych. Uzyskane metryki sterują
+wyborem `best.pt`, mechanizmem early stopping `patience` i kluczami `val/`
+w każdym loggerze. Walidacja korzysta z wag EMA, gdy EMA jest włączone. Jej
+pliki trafiają do katalogu `val/` wewnątrz przebiegu. `val=False` wyłącza
+walidację podczas trenowania, łącznie z ostatnią epoką.
 
 Zobacz [Hiperparametry](/docs/train/hyperparameters), aby poznać `eval_interval`,
 `patience` i `save_plots`, oraz [Loggery eksperymentów](/docs/train/loggers), aby
@@ -281,3 +293,7 @@ sprawdzić, dokąd trafiają wartości.
 
 - [Zbiory danych](/docs/train/datasets) opisujące klucze podziałów i formaty
   odczytywane przez walidatory.
+
+## Metryki ramek dla poszczególnych obrazów
+
+Wyniki detekcji i segmentacji zachowują zgodność ze słownikiem i udostępniają też `results.box.image_metrics`. Każda nazwa pliku wskazuje `precision`, `recall`, `f1`, `tp`, `fp` i `fn`, obliczane według reguły dopasowania wizualizacji nawet przy wyłączonej wizualizacji. Segmentacja liczy tu ramki. Powtarzające się nazwy plików używają pełnych ścieżek od drugiego wystąpienia. Zerowe mianowniki dają 0.0. Te rekordy nie są zbierane między rozproszonymi procesami rank.

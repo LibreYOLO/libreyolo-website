@@ -97,7 +97,7 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: 891eaa1a42795a4c
+source_hash: ee5867f8671d1aac
 ---
 
 ## Instalación
@@ -119,8 +119,8 @@ local.
 `result.depth_map` lleva un mapa denso de profundidad inversa relativa: los
 valores más altos significan más cerca de la cámara, y los valores no tienen
 unidad métrica ni escala común entre imágenes. `save=True` escribe en disco una
-visualización de ese mapa con un mapa de color; `Results.plot()` no cubre esta
-familia, ya que está definido solo para normales de superficie y bordes.
+visualización de ese mapa con un mapa de color; `Results.plot()` renderiza el
+mapa de profundidad como imagen PIL, y `pil=False` devuelve el array en su lugar.
 Consulta [predicción](/docs/predict) para fuentes, streaming y manejo de
 resultados.
 

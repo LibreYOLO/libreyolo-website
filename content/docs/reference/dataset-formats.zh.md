@@ -11,8 +11,8 @@ keywords:
   - coco panoptic 格式
   - 深度数据集
   - pose kpt_shape
-last_verified: 1.5.0
-verification: 镜像 libreyolo 仓库 v1.5.0 的 docs/dataset_schema.md，加载器名称与 libreyolo/data/ 交叉核对过。
+last_verified: "1.6.0"
+verification: "镜像 libreyolo 仓库 v1.6.0 的 docs/dataset_schema.md，加载器名称与 libreyolo/data/ 交叉核对过。"
 snippets:
   usage:
     - label: 解析一行检测标注
@@ -30,7 +30,7 @@ snippets:
         # (class_id, x1, y1, x2, y2, area)，单位为像素
 
         print(row)
-source_hash: a8282c079624044d
+source_hash: 5f4bc7d17822a85d
 ---
 
 ## 通用 YAML
@@ -116,6 +116,8 @@ YAML 增加 `kpt_shape`，它是必填的，取值为 `[K, 2]` 或 `[K, 3]`，�
 
 字段数量恰好是 `5 + K * D`，其中 `D` 是 `kpt_shape` 的第二个值。关键点坐标是
 归一化的。可见性 `v` 出现时取值为 `0`、`1` 或 `2`。
+
+RF-DETR 多类别数据集需要 `names`，并可为每个类别定义 `kpt_names`。空的关键点名称列表表示只有检测框的类别。至少一个类别必须包含关键点。
 
 ## obb
 
@@ -415,3 +417,15 @@ dataset_root/
 
 `point` 是一种模型输出任务，而不是数据集标注模式。point 家族可以在内部改造已有的
 标注，例如从检测框行推导出目标中心，但没有定义只含点的文本标注格式。
+
+## 事件直方图
+
+YOLO9 和 RF-DETR 检测接受 `.npy` HWC 数组，包含两个非负有限计数平面，先正后负。`input_profile` 需要 `format: event_histogram`、`layout: HWC`、`polarity: positive_negative`、`encoding: counts`、正的 `scale` 和正整数 `window_us`。标签使用普通检测文本文件。见[输入准备](/docs/train/event-histograms)。
+
+## 机器人策略
+
+`act` 任务使用 LeRobot v3 数据集目录或 Hub 数据集 ID，其中包含回合、相机、状态和动作特征。它不使用检测 YAML。见[机器人策略](/docs/tasks/robot-policies)。
+
+## albedo
+
+将 `images/<split>/<name>.<image extension>` 与 `albedo/<split>/<name>.npy` 配对。目标是与图像尺寸相同、形状为 `(H, W, 3)`、范围在 [0, 1] 内的有限浮点线性 RGB 值。如有需要，可将 `input_dir` 和 `albedo_dir` 设为单级文件夹名称。用于显示的 PNG 和 sRGB 值不是定量反照率目标。
