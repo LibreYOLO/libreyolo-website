@@ -1,5 +1,6 @@
 'use client'
 import { useLocale, useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 
 import { motion } from 'framer-motion'
 import {
@@ -304,7 +305,7 @@ print(answer)`}</CodeBlock>
       </ul>
       <Callout icon={Eye} tone="libre" title={t('limitations.shinesTitle')}>
         <p>{t.rich('limitations.shinesBody', {
-          link: (chunks) => <a href="/docs" className="text-libre-600 dark:text-libre-400 hover:underline">{chunks}</a>,
+          link: (chunks) => <Link href="/docs" className="text-libre-600 dark:text-libre-400 hover:underline">{chunks}</Link>,
         })}</p>
       </Callout>
 
@@ -349,7 +350,7 @@ const sectionsZh = [
 ]
 
 const relatedLinksZh = [
-  { href: '/zh/docs', label: '核心文档' },
+  { href: '/docs', label: '核心文档' },
   { href: '/docs/experimental', label: '实验性任务' },
   { href: '/models', label: '模型库' },
 ]

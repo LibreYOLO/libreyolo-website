@@ -1,5 +1,6 @@
 'use client'
 import { useLocale, useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 
 import { motion } from 'framer-motion'
 import {
@@ -361,8 +362,8 @@ libreyolo train --model rf-detr-nano.pth --data data.yaml --lora`}</CodeBlock>
       />
       <Callout icon={Crosshair} tone="libre" title={t('status.stableTitle')}>
         <p>{t.rich('status.stableBody', {
-          docs: (chunks) => <a href="/docs" className="text-libre-600 dark:text-libre-400 hover:underline">{chunks}</a>,
-          vlm: (chunks) => <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">{chunks}</a>,
+          docs: (chunks) => <Link href="/docs" className="text-libre-600 dark:text-libre-400 hover:underline">{chunks}</Link>,
+          vlm: (chunks) => <Link href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">{chunks}</Link>,
         })}</p>
       </Callout>
 
@@ -397,7 +398,7 @@ const sectionsZh = [
 ]
 
 const relatedLinksZh = [
-  { href: '/zh/docs', label: '核心文档' },
+  { href: '/docs', label: '核心文档' },
   { href: '/docs/librevlm', label: 'LibreVLM' },
   { href: '/models', label: '模型库' },
 ]
@@ -822,7 +823,7 @@ libreyolo train --model rf-detr-nano.pth --data data.yaml --lora`}</CodeBlock>
         <p>
           对于生产工作，经过验证的核心是 YOLO9 检测以及 RF-DETR 检测与分割。相关内容请参阅{' '}
           <a href="/zh/docs" className="text-libre-600 dark:text-libre-400 hover:underline">核心文档</a>，
-          开放词表检测请参阅 <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM</a>。
+          开放词表检测请参阅 <a href="/zh/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM</a>。
         </p>
       </Callout>
 

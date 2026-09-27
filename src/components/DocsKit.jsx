@@ -9,7 +9,9 @@
  * to it. Keep the visual language identical to /docs.
  */
 
-import Link from 'next/link'
+// Locale-aware: every target here (/docs, /docs/experimental, /docs/librevlm,
+// /models) exists in every locale, so a reader stays in their language.
+import { Link } from '@/i18n/navigation'
 import { useState, useEffect } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
