@@ -118,13 +118,13 @@ qui l'implémente aujourd'hui.
 | Répertoire | Contenu |
 |---|---|
 | `kernels/quant/simulate/` | Kernels Triton de quantification simulée, avec passe backward straight-through, sur tout appareil. Utilisés par QAT et par la quantification simulée post-entraînement |
-| `kernels/quant/execute/` | Chemins de précision réelle réservés aux modèles finalisés, sans backward\u00a0: GEMM FP8 sur tensor cores, prologue et épilogue Triton fusionnés, et kernels de décompactage des poids compactés |
-| `kernels/attention/` | Opérations d'attention partagées entre les familles\u00a0: emplacement `ms_deform_attn` et politique SDPA fusionnée |
+| `kernels/quant/execute/` | Chemins de précision réelle réservés aux modèles finalisés, sans backward : GEMM FP8 sur tensor cores, prologue et épilogue Triton fusionnés, et kernels de décompactage des poids compactés |
+| `kernels/attention/` | Opérations d'attention partagées entre les familles : emplacement `ms_deform_attn` et politique SDPA fusionnée |
 
 La frontière entre `simulate` et `execute` dépend de la finalisation du modèle,
 et non de son entraînement ou de son déploiement. Les implémentations de
 référence restent dans `libreyolo/quant/`, qui définit la signification des
-valeurs\u00a0; `kernels/` ne fait que les accélérer. La compaction des poids ne
+valeurs ; `kernels/` ne fait que les accélérer. La compaction des poids ne
 possède aucune variante, car elle fait partie du contrat de checkpoint.
 
 Les emplacements GEMM et attention ne possèdent aucune implémentation de
@@ -146,11 +146,11 @@ variables dans les [paramètres](/docs/reference/settings).
 
 Les kernels CUDA compilés publiés sur Hugging Face Hub sont chargés à
 l'exécution au moyen du package facultatif `kernels`. Rien n'est intégré à
-LibreYOLO\u00a0: l'artefact est récupéré et mis en cache par ce package, et chaque
+LibreYOLO : l'artefact est récupéré et mis en cache par ce package, et chaque
 fournisseur épingle une révision de commit auditée. La modification d'une
 révision épinglée exige donc une exécution de parité sur GPU avant intégration.
 
-L'installation de l'extra active la fonctionnalité\u00a0:
+L'installation de l'extra active la fonctionnalité :
 
 ```bash
 pip install "libreyolo[hub-kernels]"
@@ -161,19 +161,19 @@ Sans le package, rien ne change et aucune requête réseau n'est effectuée.
 kernel dont le chargement ou l'exécution échoue se désactive pour le reste du
 processus et se rabat sur le chemin portable avec un avertissement unique.
 
-Un emplacement est aujourd'hui fourni par le Hub\u00a0: `ms_deform_attn`, les passes
+Un emplacement est aujourd'hui fourni par le Hub : `ms_deform_attn`, les passes
 forward et backward compilées de l'attention déformable multi-échelle de
 Deformable DETR, sous licence Apache 2.0. Il est relié à toute la lignée
-déformable\u00a0: RF-DETR, Deformable DETR, DINO-DETR, LW-DETR, Grounding DINO,
+déformable : RF-DETR, Deformable DETR, DINO-DETR, LW-DETR, Grounding DINO,
 RT-DETR, RT-DETRv2, D-FINE, RT-DETRv4, DEIM, DEIMv2, EC et OV-DEIM. La passe
 backward étant également compilée, l'entraînement en profite autant que la
 prédiction.
 
 L'éligibilité est délibérément stricte. Les entrées doivent être CUDA et
-float32, et l'exécution doit être eager\u00a0: le fournisseur se désiste sous
+float32, et l'exécution doit être eager : le fournisseur se désiste sous
 `torch.jit.is_tracing()`, `torch.compiler.is_compiling()`,
 `torch.compiler.is_exporting()` et `torch.onnx.is_in_onnx_export()`. Deux
-structures d'entrée se rabattent aussi sur le chemin portable\u00a0: un nombre de
+structures d'entrée se rabattent aussi sur le chemin portable : un nombre de
 points par niveau variable entre les niveaux et l'échantillonnage discret par
 indices entiers. La variante de pose EC n'est pas reliée.
 
@@ -212,17 +212,17 @@ abaisse mieux SDPA que les calculs manuels, tandis que Core AI et ExecuTorch
 décomposent eux-mêmes SDPA vers le noyau ATen.
 
 Deuxièmement, la condition de parité pour l'activer par défaut exige une égalité
-octet par octet. Les familles qui la satisfont utilisent SDPA par défaut\u00a0:
+octet par octet. Les familles qui la satisfont utilisent SDPA par défaut :
 SegFormer, Depth Anything et MoGe-2, BERT, Grounding DINO, SwinIR et PP-OCR.
 Les autres conservent les calculs manuels et exposent un paramètre `fused_attn`,
-que `set_fused_attention(model)` modifie\u00a0: Swin, le backbone Swin de DINO-DETR,
+que `set_fused_attention(model)` modifie : Swin, le backbone Swin de DINO-DETR,
 BiRefNet et FeyNobg, OWLv2, LW-DETR, SigLIP 2, ZipDepth et MobileSAM. ViT et
 DeiT portent le même paramètre mais l'activent par défaut, comme l'upstream.
 Le même appel avec `enabled=False` les désactive donc.
 
 L'opération est utile lorsqu'elle s'applique. Sur une RTX 5070 Ti avec
-autocast fp16, l'attention par fenêtres Swin passe de 1.278\u00a0ms à 0.721\u00a0ms,
-soit un gain de 1.77x, et l'attention visuelle OWLv2 de 6.483\u00a0ms à 1.735\u00a0ms,
+autocast fp16, l'attention par fenêtres Swin passe de 1.278 ms à 0.721 ms,
+soit un gain de 1.77x, et l'attention visuelle OWLv2 de 6.483 ms à 1.735 ms,
 soit 3.74x.
 
 ## Matériel
@@ -240,12 +240,12 @@ l'arborescence peuvent être fournis dans un package `libreyolo_kernels`
 distinct qui s'enregistre lors de l'import. Un backend privé reste ainsi
 entièrement hors de l'arborescence LibreYOLO.
 
-La parité conditionne toute intégration dans l'arborescence\u00a0: correspondance
+La parité conditionne toute intégration dans l'arborescence : correspondance
 forward exacte avec la référence et gradients à moins de 1e-6 de l'estimateur
 straight-through, sur l'ensemble de formes couvert par la suite de tests.
 
 La sélection des kernels interagit avec les
-[graphes CUDA](/docs/reference/cuda-graphs)\u00a0: la matrice de parité de
+[graphes CUDA](/docs/reference/cuda-graphs) : la matrice de parité de
 l'inférence a été exécutée sans le package `kernels`, elle ne couvre donc pas
 la sécurité de capture lorsqu'un kernel compilé est actif.
 

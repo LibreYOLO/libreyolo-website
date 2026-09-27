@@ -44,7 +44,7 @@ source_hash: 82fbf9f3b1540603
 |---|---|---|
 | `LIBREYOLO_DATASETS_DIR` | `~/datasets` | Racine des datasets. Lue une fois lors de l'import dans `libreyolo.data.DATASETS_DIR` |
 | `LIBREYOLO_FASTER_COCO_EVAL` | non définie | Remplace le paramètre de validation `faster_coco_eval`. `1`, `true`, `yes` ou `on` impose le backend rapide, toute autre valeur le désactive et l'absence de valeur s'en remet au paramètre de configuration |
-| `LIBREYOLO_KERNELS` | non définie | Sélection des kernels. `off` ou `reference` impose les implémentations de référence\u00a0; toute autre valeur ne sélectionne que les implémentations enregistrées sous ce nom |
+| `LIBREYOLO_KERNELS` | non définie | Sélection des kernels. `off` ou `reference` impose les implémentations de référence ; toute autre valeur ne sélectionne que les implémentations enregistrées sous ce nom |
 | `LIBREYOLO_QUANT_KERNELS` | non définie | Ancien alias de `LIBREYOLO_KERNELS`, lu uniquement lorsque ce dernier n'est pas défini |
 | `LIBREYOLO_HUB_KERNELS` | non définie | `0`, `false`, `off` ou `no` désactive le chargement de kernels depuis Hugging Face Hub. Toute autre valeur, y compris l'absence de valeur, le laisse activé |
 | `LIBREYOLO_MHR_PATH` | `~/.cache/libreyolo/mhr/mhr_model.pt` | Emplacement du modèle corporel MHR utilisé par la tâche `mesh` |
@@ -83,7 +83,7 @@ pas une méthode prise en charge.
 | `PYTORCH_ENABLE_MPS_FALLBACK` | Définie à `1` par les trainers EC avec `setdefault`, une valeur existante l'emporte donc |
 | `MOMENTUM_ENABLED` | Définie avec `setdefault` par le chargeur de la famille de maillage |
 
-`LOCAL_RANK` sert également de signal de mode distribué\u00a0: sa présence dans
+`LOCAL_RANK` sert également de signal de mode distribué : sa présence dans
 l'environnement indique au code d'entraînement qu'il s'exécute sous DDP.
 
 ## Variables des loggers
@@ -106,7 +106,7 @@ token est lu dans `~/.cache/huggingface/token`, où une connexion avec le CLI
 Hugging Face l'écrit. Les deux méthodes fonctionnent.
 
 Un token n'est requis que pour les dépôts protégés. SAM 3 est l'exemple
-fourni\u00a0: ses poids sont téléchargés depuis un dépôt protégé par une licence
+fourni : ses poids sont téléchargés depuis un dépôt protégé par une licence
 personnalisée, vous devez donc accepter les conditions sur la page du dépôt et
 authentifier la session.
 

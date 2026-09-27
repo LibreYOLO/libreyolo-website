@@ -50,7 +50,7 @@ FileNotFoundError: ONNX model not found: <path>
 ```
 
 Le chemin est résolu par rapport au répertoire de travail et non au script.
-Ce message apparaît aussi lorsqu'un export a silencieusement écrit ailleurs\u00a0:
+Ce message apparaît aussi lorsqu'un export a silencieusement écrit ailleurs :
 `export()` renvoie le chemin écrit. Récupérez cette valeur au lieu de supposer
 un nom.
 
@@ -66,7 +66,7 @@ d'écrire un script d'entraînement, consultez sa page de modèle.
 ## NotImplementedError depuis export()
 
 Une famille peut prendre en charge une tâche sans pouvoir l'exporter. EoMT est
-un cas fréquent\u00a0: `export()` accepte la tâche semantic et lève une erreur pour
+un cas fréquent : `export()` accepte la tâche semantic et lève une erreur pour
 `segment` et `panoptic`, car le contrat de runtime de masques de requêtes dont
 elles ont besoin n'est pas défini.
 
@@ -87,7 +87,7 @@ Si l'échec se produit pendant la validation plutôt que pendant l'entraînement
 celle-ci utilise sa propre taille de batch. Réduisez-la également.
 
 Sous Windows, un GPU d'affichage possède un second mode d'échec qui ressemble
-à une erreur CUDA aléatoire plutôt qu'à un manque de mémoire\u00a0: le pilote
+à une erreur CUDA aléatoire plutôt qu'à un manque de mémoire : le pilote
 réinitialise un GPU qui ne répond pas pendant un délai trop long et interrompt
 son travail. Les kernels longs sur la carte qui pilote votre écran peuvent le
 déclencher.
@@ -130,7 +130,7 @@ code s'exécute et renvoie un élément d'apparence correcte.
 
 `predict()` renvoie un objet `Results` pour une image et une liste pour
 plusieurs. Indexer le retour mono-image sélectionne une *détection*, et non une
-image\u00a0:
+image :
 
 ```python
 result = model.predict("image.jpg")   # a Results

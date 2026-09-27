@@ -137,7 +137,7 @@ streaming et la gestion des résultats.
 
 Six tailles partagent le même backbone CSP et le même neck PAFPN. Les deux
 plus petites, `n` et `t`, s'exécutent à une résolution d'entrée fixe plus
-faible que les quatre autres\u00a0; le tableau de benchmark ci-dessous donne la
+faible que les quatre autres ; le tableau de benchmark ci-dessous donne la
 valeur exacte de chacune.
 
 <benchmark-table task="detect" />
@@ -151,13 +151,13 @@ valeur exacte de chacune.
 Sans autre réglage, le trainer exécute 300 époques avec `lr0=0.01`, un momentum
 SGD de 0.9, un warmup de 5 époques, et désactive les augmentations mosaic et
 mixup pendant les 15 dernières époques. `train()` accepte également un
-argument `pretrained`, mais sa valeur n'est jamais lue dans la méthode\u00a0:
+argument `pretrained`, mais sa valeur n'est jamais lue dans la méthode :
 l'entraînement continue toujours depuis les poids ayant servi à construire le
 modèle. `pretrained=False` ne réinitialise donc pas le réseau.
 
 La valeur par défaut de `imgsz` est fixe dans la configuration d'entraînement
 de base, elle ne correspond pas à la résolution native du checkpoint chargé.
-Cela concerne tout particulièrement les checkpoints `n` et `t`\u00a0: si vous
+Cela concerne tout particulièrement les checkpoints `n` et `t` : si vous
 poursuivez l'entraînement de l'un ou de l'autre sans définir explicitement
 `imgsz`, il passe à la plus grande valeur par défaut et n'utilise plus la
 taille inférieure avec laquelle il a été publié.
@@ -184,7 +184,7 @@ fichier. Un fichier `.onnx` ou `.engine` se comporte donc comme un checkpoint
 et renvoie les mêmes `Results`. Vous pouvez également exécuter le graphe dans
 un runtime nu, sans installer LibreYOLO, mais vous devez alors écrire vous-même
 le prétraitement et le post-traitement. Un export CoreML peut intégrer la NMS
-au graphe avec `nms=True`\u00a0; YOLOX et YOLOv9 sont les deux seules familles pour
+au graphe avec `nms=True` ; YOLOX et YOLOv9 sont les deux seules familles pour
 lesquelles ce paramètre est actuellement accepté.
 
 <code-tabs name="export" />

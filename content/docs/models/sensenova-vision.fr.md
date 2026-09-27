@@ -108,22 +108,22 @@ la section Licence ci-dessous.
 
 Chaque prédiction est un décodage par diffusion sur le backbone Bagel-MoT
 partagé. Il s'agit donc d'un modèle de capacités et non d'un modèle temps
-réel\u00a0: attendez-vous à une latence par image nettement supérieure à celle d'un
+réel : attendez-vous à une latence par image nettement supérieure à celle d'un
 détecteur ou segmenteur spécialisé. `dtype="auto"` (la valeur par défaut)
 charge le modèle en bf16 sur un GPU disposant de suffisamment de mémoire et se
 rabat ailleurs sur une quantification NF4 en 4 bits, qui nécessite
-`bitsandbytes`\u00a0; transmettez `dtype="bf16"` pour imposer la pleine précision
+`bitsandbytes` ; transmettez `dtype="bf16"` pour imposer la pleine précision
 sur un GPU suffisamment grand. Le paramètre `noise_seed=42` à la construction
 initialise le sampler de diffusion afin de rendre les sorties denses
-reproductibles\u00a0; transmettez `noise_seed=None` pour désactiver cette
+reproductibles ; transmettez `noise_seed=None` pour désactiver cette
 initialisation.
 
-Les sept tâches partagent un seul checkpoint chargé\u00a0: `set_task()` passe de
+Les sept tâches partagent un seul checkpoint chargé : `set_task()` passe de
 l'une à l'autre sans rechargement. `set_classes()` définit le vocabulaire
-actif\u00a0; la détection, les points, la pose et la segmentation panoptique
+actif ; la détection, les points, la pose et la segmentation panoptique
 acceptent une liste de classes, tandis que la segmentation suit une expression
 référente et exige exactement la phrase désignant l'élément à isoler. Chaque
-tâche renvoie l'objet `Results` standard avec une charge utile différente\u00a0:
+tâche renvoie l'objet `Results` standard avec une charge utile différente :
 `boxes` pour detect, `points` pour point, `boxes` et `keypoints` pour pose,
 `ocr` pour OCR, `depth_map` pour depth, `masks` pour segment et `panoptic`
 (avec `segments_info`) pour panoptic. Consultez la

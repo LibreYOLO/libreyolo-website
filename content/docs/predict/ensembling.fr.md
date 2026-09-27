@@ -111,7 +111,7 @@ source_hash: 6dcd2f84ec6f3f65
 
 `LibreEnsemble` accepte au moins deux détecteurs, exécute chacun d'eux sur la
 même image et fusionne leurs bounding boxes dans un objet `Results` unique.
-Cette construction intervient au moment de la prédiction\u00a0: rien n'est à
+Cette construction intervient au moment de la prédiction : rien n'est à
 entraîner et les membres restent des modèles indépendants qui peuvent être
 validés et exportés séparément.
 
@@ -120,7 +120,7 @@ autre tâche lève `ValueError` lors de la construction, en indiquant l'indice
 du membre et sa tâche.
 
 Les deux noms sont importés de façon différée, ils ne coûtent donc rien avant
-leur utilisation\u00a0:
+leur utilisation :
 
 ```python
 from libreyolo import LibreEnsemble, ExternalDetector
@@ -142,7 +142,7 @@ LibreEnsemble(
 ```
 
 `members` est une séquence d'au moins deux éléments. Une entrée `str` ou
-`Path` est chargée par l'intermédiaire de `LibreYOLO()`\u00a0; toute autre entrée
+`Path` est chargée par l'intermédiaire de `LibreYOLO()` ; toute autre entrée
 doit être callable et exposer un dictionnaire `names`. Moins de deux éléments
 lèvent `ValueError`, tandis que la transmission d'une chaîne seule lève
 `TypeError` au lieu d'itérer sur ses caractères.
@@ -172,7 +172,7 @@ Trois noms sont acceptés, ainsi qu'un callable.
 | `fusion` | Comportement |
 |---|---|
 | `"wbf"` | Weighted boxes fusion séquentielle et fidèle à l'article [1]. Valeur par défaut |
-| `"wbf_seeded"` | Weighted boxes fusion en une passe\u00a0; une NMS consciente des classes choisit les graines des groupes |
+| `"wbf_seeded"` | Weighted boxes fusion en une passe ; une NMS consciente des classes choisit les graines des groupes |
 | `"nms"` | Concatène les bounding boxes de tous les membres, puis applique une NMS consciente des classes |
 
 [1] Roman Solovyev, Weimin Wang, Tatiana Gabruseva, ["Weighted boxes fusion:
@@ -187,12 +187,12 @@ groupes qui se chevauchent. `"nms"` choisit un élément survivant au lieu de
 calculer une moyenne. Les survivants conservent donc leurs scores d'origine et
 les poids influencent uniquement la bounding box gagnante. Puisqu'elle
 sélectionne sans former de groupes, cette méthode ne peut pas compter les
-votes\u00a0: associer `fusion="nms"` à une valeur de `min_votes` supérieure à `1`
+votes : associer `fusion="nms"` à une valeur de `min_votes` supérieure à `1`
 lève `ValueError`.
 
 La weighted boxes fusion remet à l'échelle le score d'un groupe selon la part
 du poids total des membres qui l'ont soutenu. Avec deux membres de même poids,
-une bounding box trouvée par un seul conserve la moitié de son score\u00a0: `0.9`
+une bounding box trouvée par un seul conserve la moitié de son score : `0.9`
 devient `0.45`. Une confiance fusionnée peut donc être inférieure au `conf`
 utilisé pour chaque membre. Filtrez selon le score fusionné au lieu de supposer
 que le seuil des membres reste respecté.
@@ -207,11 +207,11 @@ renvoyé.
 
 Les bounding boxes ne sont fusionnées qu'au sein d'un même nom de classe. Une
 classe connue d'un seul membre traverse la fusion telle quelle, sans être
-pénalisée\u00a0: la remise à l'échelle du score utilise un dénominateur propre à la
+pénalisée : la remise à l'échelle du score utilise un dénominateur propre à la
 classe, une classe connue seule conserve donc son score.
 
 Un chevauchement partiel consigne un avertissement qui nomme les classes non
-partagées par tous les membres. Lisez attentivement cet avertissement\u00a0: un
+partagées par tous les membres. Lisez attentivement cet avertissement : un
 checkpoint dont les noms de classes sont des valeurs factices comme `class_0`
 construit une union disjointe de tous les autres membres, aucune fusion entre
 membres ne se produit alors.
@@ -237,15 +237,15 @@ fusion.
 <code-tabs name="sources" />
 
 La signature d'appel reproduit celle d'un modèle unique et accepte les mêmes
-sources\u00a0: images, dossiers, listes, vidéos, capture d'écran, webcams et flux
+sources : images, dossiers, listes, vidéos, capture d'écran, webcams et flux
 réseau. Les sources en direct nécessitent `stream=True` pour la même raison
 qu'ailleurs.
 
 | Argument | Valeur par défaut | Remarques |
 |---|---|---|
-| `conf` | `0.25` | Par membre\u00a0; un scalaire est diffusé, sinon une valeur par membre |
+| `conf` | `0.25` | Par membre ; un scalaire est diffusé, sinon une valeur par membre |
 | `iou` | `0.45` | Seuil NMS propre à chaque membre, et non seuil de fusion |
-| `imgsz` | `None` | Une `list` est lue membre par membre\u00a0; un `int` ou tuple est diffusé |
+| `imgsz` | `None` | Une `list` est lue membre par membre ; un `int` ou tuple est diffusé |
 | `device` | `None` | Un scalaire ou une valeur par membre, afin de placer les membres sur des appareils différents |
 | `classes` | `None` | Filtre le résultat fusionné selon les identifiants de classe de l'union |
 | `max_det` | `300` | S'applique au résultat fusionné |
@@ -260,7 +260,7 @@ valeur demandée. Chacun peut ainsi produire largement, puis l'ensemble réduit
 le résultat une seule fois à la fin.
 
 L'image n'est décodée qu'une fois et le même objet est transmis à chaque
-membre. `batch` est accepté pour assurer la parité, mais ignoré\u00a0; les images
+membre. `batch` est accepté pour assurer la parité, mais ignoré ; les images
 sont traitées séquentiellement.
 
 ## Résultat renvoyé
@@ -282,11 +282,11 @@ la fusion s'exécute sur l'appareil du premier membre ayant renvoyé un élémen
 ## Limites d'un ensemble
 
 `val()` et `export()` lèvent tous deux `NotImplementedError` et vous renvoient
-vers les membres\u00a0: validez et exportez chacun d'eux séparément. Aucune méthode
+vers les membres : validez et exportez chacun d'eux séparément. Aucune méthode
 `train` n'existe, son appel lève donc `AttributeError`.
 
 La demi-précision n'est pas gérée au niveau de l'ensemble. `half=True` emprunte
-le même chemin sans effet accompagné d'un avertissement que partout ailleurs\u00a0;
+le même chemin sans effet accompagné d'un avertissement que partout ailleurs ;
 configurez la précision sur chaque membre.
 
 Il n'existe aucune interface en ligne de commande pour combiner les modèles.

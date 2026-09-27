@@ -52,7 +52,7 @@ source_hash: ccecee93e9744550
 
 La fabrique renvoie une instance de classe de famille. Construire directement
 cette classe accepte les mêmes arguments, à l'exception de `size`, qui est
-requis\u00a0:
+requis :
 
 ```python
 Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
@@ -101,7 +101,7 @@ model(
 | `source` | `None` | Image, liste ou tuple d'images en mémoire, répertoire, fichier vidéo ou source écran comme `"screen"`, `"screen 1"`, `"screen 1 100 200 512 256"` |
 | `conf` | `0.25` | Seuil de confiance |
 | `iou` | `0.45` | Seuil IoU de la NMS |
-| `imgsz` | `None` | Remplacement de la taille d'entrée\u00a0; `None` utilise la taille native du modèle |
+| `imgsz` | `None` | Remplacement de la taille d'entrée ; `None` utilise la taille native du modèle |
 | `device` | `None` | Remplacement de l'appareil pour cet appel |
 | `classes` | `None` | Conserver uniquement ces identifiants de classe |
 | `max_det` | `300` | Nombre maximal de détections par image |
@@ -227,7 +227,7 @@ La validation augmentée lève une erreur pour les tâches `obb` et `pose`.
 
 `train` est défini par famille, ses arguments diffèrent donc. Deux comportements
 sont partagés, car la classe de base encapsule la méthode `train` de chaque
-famille\u00a0:
+famille :
 
 - `cfg=` accepte le chemin d'un YAML dont les clés sont fusionnées dans l'appel. Les arguments nommés explicites l'emportent sur le fichier.
 - `pretrained=False` sur une famille du groupe de couverture `g0` ou `g1` réinitialise le modèle à partir de zéro avant l'entraînement et ne peut pas être associé à `resume=True`.
@@ -243,12 +243,12 @@ model.export(format="onnx", **kwargs) -> str
 
 Renvoie le chemin de l'artefact écrit. `format` est résolu dans le registre des
 exporteurs, où `engine` est un alias de `tensorrt` et `litert` un alias de
-`tflite`. Arguments partagés par tous les exporteurs\u00a0:
+`tflite`. Arguments partagés par tous les exporteurs :
 
 | Argument | Valeur par défaut | Signification |
 |---|---|---|
-| `output_path` | `None` | Chemin du fichier de sortie\u00a0; généré sous `weights/` s'il est omis |
-| `imgsz` | `None` | Tuple `(height, width)` ou entier unique\u00a0; taille native par défaut |
+| `output_path` | `None` | Chemin du fichier de sortie ; généré sous `weights/` s'il est omis |
+| `imgsz` | `None` | Tuple `(height, width)` ou entier unique ; taille native par défaut |
 | `opset` | `None` | Version de l'opset ONNX |
 | `simplify` | `True` | Exécuter la simplification du graphe ONNX |
 | `dynamic` | `True` | Activer les axes dynamiques |
@@ -276,7 +276,7 @@ tous les contrôles de refus de la requête.
 model.save(path) -> str
 ```
 
-Écrit un checkpoint LibreYOLO conforme au schéma v1.0\u00a0: state dict et
+Écrit un checkpoint LibreYOLO conforme au schéma v1.0 : state dict et
 métadonnées décrites dans le
 [schéma des checkpoints](/docs/reference/checkpoint-schema). Un modèle
 quantifié contient en plus son manifeste `quant`, afin que `LibreYOLO(path)`

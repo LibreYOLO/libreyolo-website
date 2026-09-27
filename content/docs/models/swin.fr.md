@@ -108,9 +108,9 @@ mis en cache localement.
 
 <code-tabs name="predict" />
 
-Un classificateur renvoie `result.probs` au lieu de `result.boxes`\u00a0: `top1` et
+Un classificateur renvoie `result.probs` au lieu de `result.boxes` : `top1` et
 `top5` donnent les indices de classes, tandis que `top1conf` et `top5conf`
-donnent leurs confiances. Chaque taille utilise une entrée fixe de 224\u00a0px, car
+donnent leurs confiances. Chaque taille utilise une entrée fixe de 224 px, car
 la dernière étape d'attention est construite pour cette résolution. La
 prédiction, la validation et l'export lèvent tous une erreur si vous
 transmettez une autre valeur à `imgsz`. Consultez la
@@ -122,8 +122,8 @@ résultats.
 Quatre tailles, de tiny à large, sont construites à partir de la même tour à
 fenêtres décalées et se distinguent par la largeur des embeddings et la
 profondeur des étapes. La taille large est pré-entraînée sur ImageNet-22k et
-affinée sur ImageNet-1k\u00a0; les trois autres sont directement entraînées sur
-ImageNet-1k. LibreYOLO fournit cette famille uniquement pour l'inférence\u00a0: la
+affinée sur ImageNet-1k ; les trois autres sont directement entraînées sur
+ImageNet-1k. LibreYOLO fournit cette famille uniquement pour l'inférence : la
 prédiction, la validation top-1/top-5 de type ImageNet et l'export sont pris en
 charge, mais la recette d'entraînement ImageNet upstream n'est pas implémentée.
 

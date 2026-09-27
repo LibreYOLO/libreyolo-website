@@ -120,7 +120,7 @@ mis en cache localement.
 
 <code-tabs name="predict" />
 
-Un résultat de restauration ne contient aucune bounding box\u00a0;
+Un résultat de restauration ne contient aucune bounding box ;
 `result.restored` est une image RGB uint8 dense de forme `(H, W, 3)`, sur un
 canevas 4x plus grand que l'entrée dans chaque dimension. `save=True` écrit
 directement cette image plutôt qu'une visualisation annotée. L'entrée est
@@ -162,7 +162,7 @@ pour connaître les clés exactes.
 Un artefact exporté se recharge dans `LibreYOLO()` grâce au suffixe de son
 fichier. Un fichier `.onnx` ou `.engine` se comporte donc comme un checkpoint
 et renvoie les mêmes `Results`. ExecuTorch et tous les formats indiqués comme
-bloqués dans la matrice ne sont pas disponibles pour cette famille\u00a0; ONNX,
+bloqués dans la matrice ne sont pas disponibles pour cette famille ; ONNX,
 TorchScript, TensorRT, OpenVINO et TFLite le sont. La page
 [Export](/docs/export) énumère les arguments acceptés par chaque format ainsi
 que les extras ajoutés par certains.

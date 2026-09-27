@@ -118,9 +118,9 @@ streaming et la gestion des résultats.
 
 ## Variantes
 
-SSD fournit un seul checkpoint\u00a0: le réseau SSD300 basé sur VGG16, avec son
+SSD fournit un seul checkpoint : le réseau SSD300 basé sur VGG16, avec son
 canevas natif fixe. Cette famille ne propose aucun choix de taille ou
-d'échelle\u00a0; la prédiction, la validation et l'export utilisent tous ce même
+d'échelle ; la prédiction, la validation et l'export utilisent tous ce même
 graphe.
 
 Le fichier de poids est `LibreSSD300.pt`, soit le préfixe de la famille suivi
@@ -140,7 +140,7 @@ pour l'entraînement.
 
 <export-matrix />
 
-SSD s'exporte uniquement vers ONNX\u00a0; tous les autres formats sont actuellement
+SSD s'exporte uniquement vers ONNX ; tous les autres formats sont actuellement
 bloqués pour cette famille. L'export utilise toujours le canevas natif du
 checkpoint et le graphe expose la tête brute compactée de SSD plutôt qu'une
 sortie avec suppression non maximale fusionnée. `nms=True` n'est donc pas
@@ -160,7 +160,7 @@ Tous les fichiers de poids publiés pour cette famille.
 <provenance-box>
 
 Le code SSD300 de LibreYOLO n'est pas porté depuis la version Caffe des
-auteurs de l'article\u00a0; il dérive de l'implémentation SSD300 sous licence
+auteurs de l'article ; il dérive de l'implémentation SSD300 sous licence
 BSD-3-Clause de torchvision, dont le dépôt est indiqué ci-dessus comme source
 upstream. Les poids VGG16 du backbone remontent eux-mêmes au VGGNet réduit et
 entièrement convolutionnel d'Oxford, publié sous licence CC BY 4.0 par Karen

@@ -91,41 +91,41 @@ pip install "libreyolo[sam]"
 
 ## Prédire
 
-`LibreSAM(...)` est un point d'entrée distinct de `LibreYOLO(...)`\u00a0: il
+`LibreSAM(...)` est un point d'entrée distinct de `LibreYOLO(...)` : il
 renvoie un segmenteur guidable plutôt qu'un détecteur, car une passe forward
 n'a ici aucun sens sans prompt spatial. Il n'existe aucune commande CLI
-`libreyolo predict` pour cette famille\u00a0; utilisez l'API Python.
+`libreyolo predict` pour cette famille ; utilisez l'API Python.
 
 <code-tabs name="predict" />
 
 Un prompt par point accepte `[x, y]` pour un objet, `[[x, y], ...]` pour
-plusieurs objets ou des tableaux numpy\u00a0; `labels` associe à chaque point la
+plusieurs objets ou des tableaux numpy ; `labels` associe à chaque point la
 valeur `1` (premier plan) ou `0` (arrière-plan), tous les points étant au
 premier plan par défaut. Un prompt par bounding box prend
 `[x1, y1, x2, y2]` ou une liste de bounding boxes, avec un masque par bounding
 box. Si vous omettez les deux prompts, l'image entière est segmentée en
 appliquant des prompts sur une grille dense et en conservant les masques
-fiables qui ne se chevauchent pas\u00a0; ce mode «\u00a0tout segmenter\u00a0» est simplifié
+fiables qui ne se chevauchent pas ; ce mode « tout segmenter » est simplifié
 par rapport au générateur automatique de masques de référence et peut
 sous-segmenter les scènes encombrées. Un véritable prompt par point ou
 bounding box est donc la méthode précise. `conf` filtre selon la qualité de
-masque prédite (IoU), et non selon une confiance de détection\u00a0: transmettez
+masque prédite (IoU), et non selon une confiance de détection : transmettez
 `0.0` pour conserver chaque candidat. `multimask=True` renvoie, pour chaque
 prompt, les trois masques d'ambiguïté objet complet ou partie de SAM plutôt
 que le seul meilleur masque. `device=` déplace le modèle et, si une session
 `set_image()` est active, son embedding mis en cache. Chaque masque porte
 l'identifiant de classe `0`, nommé `"object"`, puisqu'un masque guidable ne
 dispose d'aucun ensemble de classes fixe. `train()`, `val()`, `export()` et
-`track()` lèvent tous `NotImplementedError` pour cette famille\u00a0: dans LibreYOLO,
+`track()` lèvent tous `NotImplementedError` pour cette famille : dans LibreYOLO,
 SAM sert uniquement à la prédiction et le suivi vidéo est hors périmètre.
 Consultez la [prédiction](/docs/predict) pour les types de sources.
 
 ## Variantes
 
-Trois tailles d'encodeur d'image ViT\u00a0: base, large et huge, toutes avec une
-entrée fixe de 1024\u00a0px. Aucun benchmark d'exactitude ou de latence n'est encore
+Trois tailles d'encodeur d'image ViT : base, large et huge, toutes avec une
+entrée fixe de 1024 px. Aucun benchmark d'exactitude ou de latence n'est encore
 publié pour cette famille. Le choix d'une taille met donc directement en
-balance le poids de l'encodeur et la qualité du masque\u00a0: base est la plus
+balance le poids de l'encodeur et la qualité du masque : base est la plus
 rapide à encoder, huge la plus lourde.
 
 ## Licence

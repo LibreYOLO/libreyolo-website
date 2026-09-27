@@ -64,37 +64,37 @@ mis en cache localement.
 
 <code-tabs name="predict" />
 
-Cette famille se charge avec la fabrique `LibreVLM()` et non `LibreYOLO()`\u00a0:
+Cette famille se charge avec la fabrique `LibreVLM()` et non `LibreYOLO()` :
 les familles VLM ne déclarent aucun chargeur de checkpoint, le routage par
 suffixe de fichier décrit sur les autres pages de modèles ne s'applique donc
 pas ici. `set_classes()` définit le vocabulaire que SmolVLM2 doit rechercher.
 Ce réglage est persistant et reste appliqué à tous les appels `predict()` ou
 `track()` ultérieurs jusqu'à ce que vous le redéfinissiez. SmolVLM2 ne
-nécessite aucune substitution de parseur dans LibreYOLO\u00a0: il suit la même
+nécessite aucune substitution de parseur dans LibreYOLO : il suit la même
 sortie avec template de chat et JSON que la valeur par défaut partagée du
 niveau, son prompt de détection et son format de bounding boxes ne sont donc
 pas propres à la famille. Chaque détection porte la même confiance factice.
 Le filtrage `conf` fonctionne ainsi en tout ou rien plutôt que comme un
-classement\u00a0; `iou` a bien un effet, en supprimant une bounding box ultérieure
+classement ; `iou` a bien un effet, en supprimant une bounding box ultérieure
 de même classe dès qu'elle chevauche une bounding box déjà conservée au-delà
 du seuil, car un générateur répétitif peut sinon émettre plusieurs bounding
 boxes presque identiques pour un même objet. SmolVLM2 répond aussi à des
 questions libres par `chat()`, la même porte de sortie que celle documentée
-pour la fabrique `LibreVLM`. Le CLI de LibreYOLO ne couvre pas ce niveau\u00a0: il
+pour la fabrique `LibreVLM`. Le CLI de LibreYOLO ne couvre pas ce niveau : il
 n'existe aucune forme `libreyolo predict model=...` pour celui-ci. Consultez
 la [prédiction](/docs/predict) pour les sources, le streaming et la gestion des
 résultats.
 
 ## Variantes
 
-Une taille figure dans le registre\u00a0: SmolVLM2-500M-Video-Instruct, chargée avec
+Une taille figure dans le registre : SmolVLM2-500M-Video-Instruct, chargée avec
 `LibreVLM("smolvlm2-500m")`. SmolVLM2 est un détecteur moins performant que
 les modèles de grounding spécialisés de ce niveau. Le propre wrapper de
 LibreYOLO le décrit comme la démonstration qu'une nouvelle famille n'a besoin
 d'aucun parsing particulier pour fonctionner ici, et non comme la meilleure
 option à vocabulaire ouvert.
 
-LibreYOLO n'entraîne, ne valide et n'exporte pas SmolVLM2\u00a0: `train()`, `val()`
+LibreYOLO n'entraîne, ne valide et n'exporte pas SmolVLM2 : `train()`, `val()`
 et `export()` lèvent tous `NotImplementedError` pour chaque famille de ce
 niveau (consultez le niveau de prise en charge ci-dessus). Effectuez le
 fine-tuning de SmolVLM2 upstream et chargez les poids obtenus si vous avez

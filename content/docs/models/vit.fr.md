@@ -110,19 +110,19 @@ mis en cache localement.
 
 <code-tabs name="predict" />
 
-Un classificateur renvoie `result.probs` au lieu de `result.boxes`\u00a0: `top1` et
+Un classificateur renvoie `result.probs` au lieu de `result.boxes` : `top1` et
 `top5` donnent les indices de classes, tandis que `top1conf` et `top5conf`
 donnent leurs confiances. Le prétraitement redimensionne l'image et la recadre
-au centre pour obtenir une entrée fixe de 224\u00a0px, selon la recette d'évaluation
-AugReg de timm\u00a0: interpolation bicubique avec une fraction de recadrage de 0.9.
+au centre pour obtenir une entrée fixe de 224 px, selon la recette d'évaluation
+AugReg de timm : interpolation bicubique avec une fraction de recadrage de 0.9.
 Consultez la [prédiction](/docs/predict) pour les sources, le streaming et la
 gestion des résultats.
 
 ## Variantes
 
 Quatre tailles, de tiny à large, partagent un même graphe patch-16 fixe de
-224\u00a0px et se distinguent par la largeur des embeddings et la profondeur du
-transformer. LibreYOLO fournit cette famille uniquement pour l'inférence\u00a0: la
+224 px et se distinguent par la largeur des embeddings et la profondeur du
+transformer. LibreYOLO fournit cette famille uniquement pour l'inférence : la
 prédiction, la validation top-1/top-5 de type ImageNet et l'export sont pris en
 charge, mais la recette de fine-tuning AugReg n'est pas implémentée.
 

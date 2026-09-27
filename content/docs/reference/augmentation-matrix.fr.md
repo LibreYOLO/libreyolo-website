@@ -62,7 +62,7 @@ définit donc `mosaic_prob`.
 | `perspective` | Amplitude de la transformation projective de la transformation affine |
 | `flipud` | Probabilité de retournement vertical |
 | `no_aug_epochs` | Dernières époques entraînées sans augmentation forte |
-| `auto_augment` | Politique AutoAugment de classification\u00a0: randaugment, autoaugment ou augmix |
+| `auto_augment` | Politique AutoAugment de classification : randaugment, autoaugment ou augmix |
 | `erasing` | Probabilité RandomErasing de classification |
 | `mixup` | Probabilité de batch-MixUp de classification, avec étiquettes souples |
 | `cutmix` | Probabilité de batch-CutMix de classification, avec étiquettes souples |
@@ -77,7 +77,7 @@ Les quatre derniers forment les contrôles de classification. Les familles de d�
 |---|---|
 | `used` | Le réglage atteint le pipeline d'entraînement de la famille et modifie les échantillons |
 | `gated_by_mosaic` | Le réglage s'applique uniquement aux échantillons qui empruntent la branche mosaic, il ne se déclenche donc jamais avec `mosaic_prob == 0` |
-| `ignored` | Le réglage n'atteint jamais le pipeline\u00a0; le définir ne fait rien |
+| `ignored` | Le réglage n'atteint jamais le pipeline ; le définir ne fait rien |
 
 `ignored` est l'état à vérifier avant une exécution, car aucune erreur ne se
 produit. Le CLI avertit lorsqu'un paramètre d'entraînement explicitement
@@ -138,12 +138,12 @@ un ensemble ignored vide, aucun avertissement n'est donc émis à son sujet.
 
 | Famille | Différence par rapport à son archétype |
 |---|---|
-| `rtmdet` | `flipud` ignoré\u00a0: sa transformation ne comporte aucun retournement vertical |
+| `rtmdet` | `flipud` ignoré : sa transformation ne comporte aucun retournement vertical |
 | `picodet` | `flipud` ignoré |
 | `rtdetr` | `flipud` ignoré |
 | `rtdetrv2` | `flipud` ignoré |
 | `fomo` | `perspective` et `flipud` ignorés |
-| `ec` | `hsv_prob`, `degrees` et `translate` utilisés pour `task="pose"` uniquement\u00a0; detect et segment utilisent des recettes photométriques fixes |
+| `ec` | `hsv_prob`, `degrees` et `translate` utilisés pour `task="pose"` uniquement ; detect et segment utilisent des recettes photométriques fixes |
 | `dinov2` | Le groupe de classification est utilisé pour `task="classify"` uniquement |
 
 `ec` et `dinov2` sont des familles multitâches. Un réglage n'est donc marqué
@@ -159,12 +159,12 @@ que sa configuration désactive plutôt que la spécification d'augmentation.
 
 Certaines familles portent des réglages d'augmentation dans leur propre
 sous-classe `TrainConfig` plutôt que dans la classe de base. Le CLI ne les
-expose pas\u00a0; définissez-les par l'API Python.
+expose pas ; définissez-les par l'API Python.
 
 | Famille | Réglage | Signification |
 |---|---|---|
 | `yolo9`, `yolo9_e2e`, `yolo9_p2` | `copy_paste` | Probabilité d'augmentation copy-paste des instances, `task="segment"` uniquement |
-| `yolo9`, `yolo9_e2e`, `yolo9_p2` | `copy_paste_mode` | Source du copy-paste\u00a0: `flip` reflète le même échantillon, `mixup` utilise un second échantillon |
+| `yolo9`, `yolo9_e2e`, `yolo9_p2` | `copy_paste_mode` | Source du copy-paste : `flip` reflète le même échantillon, `mixup` utilise un second échantillon |
 | `yolo9`, `yolo9_e2e`, `yolo9_p2` | `rot90` | Probabilité de rotation aléatoire de 90 degrés |
 | `rfdetr` | `copy_paste` | Probabilité de copy-paste pour `task="segment"`, mode `flip` uniquement |
 | `rfdetr` | `copy_paste_mode` | Mode de source copy-paste pour `task="segment"` |
@@ -181,7 +181,7 @@ expose pas\u00a0; définissez-les par l'API Python.
 | Assistant | Valeur renvoyée |
 |---|---|
 | `aug_support(family)` | Table qui associe les réglages à `Support`, ou `None` pour une famille inconnue |
-| `ignored_aug_params(family)` | Ensemble des noms de réglages ignorés par la famille\u00a0; vide pour une famille inconnue |
+| `ignored_aug_params(family)` | Ensemble des noms de réglages ignorés par la famille ; vide pour une famille inconnue |
 | `uses_mosaic_gating(family)` | Indique si le MixUp de la famille se déclenche uniquement sur les échantillons mosaic |
 | `display_name(family)` | Nom de famille destiné au lecteur et utilisé dans les avertissements |
 | `mixup_gating_warning(family, mosaic_prob, mixup_prob)` | Texte de l'avertissement lorsque MixUp ne peut jamais se déclencher, sinon `None` |

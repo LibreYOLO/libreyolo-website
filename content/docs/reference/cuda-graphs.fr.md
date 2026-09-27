@@ -137,7 +137,7 @@ Plusieurs familles apparaissent sous plusieurs tâches, la matrice exécute donc
 plus de lignes qu'elle ne contient de familles distinctes. Trois autres
 familles effectuent une capture par des chemins propres à la famille avec
 leurs tests dédiés plutôt que par la matrice partagée, et ne font pas partie
-des 39\u00a0: PP-OCR, SAM et SenseNova.
+des 39 : PP-OCR, SAM et SenseNova.
 
 La vérification est bit à bit, et non approximative. Une ancienne version du
 protocole évaluait la parité selon l'amplitude relative et avait rétrogradé à
@@ -158,7 +158,7 @@ familles, réparties entre cinq tâches.
 | point | fomo |
 | restore | nafnet |
 
-Tout le reste s'entraîne en mode eager\u00a0: les autres tâches de ces mêmes
+Tout le reste s'entraîne en mode eager : les autres tâches de ces mêmes
 familles, les familles absentes de la liste, les exécutions distribuées et les
 exécutions de distillation. La capture est aussi omise tant qu'une forme est
 nouvelle. Le chemin d'entraînement attend qu'une forme d'entrée se répète trois
@@ -169,7 +169,7 @@ fois avant de la capturer, `multi_scale=True` peut donc ne jamais capturer.
 Le chemin d'inférence lève une erreur. `predict(cuda_graph=True)` sur une
 famille qui n'a pas activé la fonctionnalité lève `NotImplementedError` en
 nommant la famille, au lieu d'exécuter le mode eager et de vous laisser croire
-à un gain inexistant. Une mauvaise capture n'échoue pas bruyamment\u00a0: le rejeu
+à un gain inexistant. Une mauvaise capture n'échoue pas bruyamment : le rejeu
 d'une passe forward contenant une opération non capturable renvoie
 silencieusement des valeurs erronées. La prise en charge doit donc être une
 affirmation explicite par famille et non une tentative avec repli.
@@ -179,7 +179,7 @@ toujours être transmis sans risque. Une famille, tâche ou configuration non
 capturable écrit une ligne et s'entraîne en mode eager sans autre changement.
 Une capture qui échoue en cours d'exécution fait aussi passer tout le reste de
 l'exécution en mode eager au lieu de l'interrompre. Cette asymétrie est
-délibérée\u00a0: un appel de prédiction peut être corrigé sur son site d'appel,
+délibérée : un appel de prédiction peut être corrigé sur son site d'appel,
 tandis qu'une exécution d'entraînement ne doit pas mourir à la sixième heure à
 cause d'une optimisation facultative.
 
@@ -188,7 +188,7 @@ cause d'une optimisation facultative.
 Certaines familles ne peuvent pas être capturées entièrement, car une étape
 effectue réellement une opération impossible à enregistrer dans un graphe.
 Plutôt que de supprimer la famille, la capture est divisée à une jointure
-vérifiée\u00a0: la partie capturable est rejouée, le reste s'exécute en mode eager,
+vérifiée : la partie capturable est rejouée, le reste s'exécute en mode eager,
 et la sortie combinée est identique à une exécution entièrement eager.
 
 | Famille | Capturé | Eager et raison |
@@ -200,7 +200,7 @@ et la sortie combinée est identique à une exécution entièrement eager.
 | SenseNova | Tour de vision | Génération autorégressive, avec un cache KV qui grandit à chaque étape |
 | Détecteurs encodeur-décodeur | Backbone et encodeur | Décodeur et critère hongrois |
 
-La séparation de BiRefNet mérite une attention particulière\u00a0: le mauvais
+La séparation de BiRefNet mérite une attention particulière : le mauvais
 comportement de `deform_conv2d` sous capture se reproduit sur un appel isolé
 hors de tout modèle. Son remplacement par un équivalent PyTorch pur a été
 refusé, car il aurait aussi modifié les prédictions eager, or les valeurs eager
@@ -238,8 +238,8 @@ deux exécutions eager ayant la même seed divergent déjà. L'égalité bit à 
 n'est donc pas une exigence manquée par l'exécution avec graphe, mais une
 exigence qu'aucune exécution ne satisfait. Le phénomène est plus large avec
 `amp=False`, où une non-déterminisme relatif mesuré à 3.2e-7 dans un gradient
-de poids fp32 s'accumule\u00a0: deux exécutions eager YOLOv9-t avec la même seed
-divergent de 36\u00a0% en 20 étapes, et la désactivation de TF32 ne corrige pas le
+de poids fp32 s'accumule : deux exécutions eager YOLOv9-t avec la même seed
+divergent de 36 % en 20 étapes, et la désactivation de TF32 ne corrige pas le
 problème.
 
 ## Mémoire épinglée
@@ -264,7 +264,7 @@ puissent pas le laisser installé.
 
 Mesures effectuées sur une RTX 5070 Ti sous AMP, un processus par branche, avec
 rejeu d'un batch réel pour exclure le dataloader, et meilleur temps parmi 24
-étapes après warmup. Détection à 640\u00a0px, classification à 224\u00a0px.
+étapes après warmup. Détection à 640 px, classification à 224 px.
 
 | Famille | Batch | Accélération |
 |---|---:|---:|
@@ -278,17 +278,17 @@ rejeu d'un batch réel pour exclure le dataloader, et meilleur temps parmi 24
 
 Le gain d'une exécution complète est inférieur, car un graphe ne peut accélérer
 ni le dataloader ni la validation. Un fine-tuning de YOLOv9-t pendant 20
-époques sur 406 images est passé de 428.4\u00a0s à 367.7\u00a0s, soit un gain de 1.16x,
+époques sur 406 images est passé de 428.4 s à 367.7 s, soit un gain de 1.16x,
 avec une mAP50-95 identique de 0.6394 dans les deux branches et des loss
 identiques à chaque époque.
 
 La limite dépend de la part d'une étape consacrée au réseau. Sur le même
-matériel à 640\u00a0px avec un batch de 8, elle atteint 84\u00a0% pour YOLOv9-t mais
-seulement 26\u00a0% pour RTMDet-t, qui consacre l'essentiel de l'étape à son
+matériel à 640 px avec un batch de 8, elle atteint 84 % pour YOLOv9-t mais
+seulement 26 % pour RTMDet-t, qui consacre l'essentiel de l'étape à son
 assigner d'étiquettes. Le coût de lancement est maximal sous Windows, les gains
 sous Linux atteignent donc environ un tiers à la moitié de ce tableau. Une
 exécution limitée par le dataloader ne change pas du tout en temps réel. Le pic
-de mémoire varie entre une baisse de 5\u00a0% et une hausse de 19\u00a0%.
+de mémoire varie entre une baisse de 5 % et une hausse de 19 %.
 
 ## Précautions
 
@@ -297,7 +297,7 @@ déplace les paramètres le supprime. Le changement d'appareil par
 `predict(device=...)`, la quantification et la déquantification invalident
 tous les graphes capturés.
 
-La taille de batch compte davantage que la famille\u00a0: RT-DETR-r18 gagne 1.19x
+La taille de batch compte davantage que la famille : RT-DETR-r18 gagne 1.19x
 avec un batch de 2 et 1.04x avec un batch de 8, car un grand batch est limité
 par les calculs et offre moins de coût de lancement à supprimer.
 

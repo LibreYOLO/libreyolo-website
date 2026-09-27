@@ -138,12 +138,12 @@ mis en cache localement.
 
 <code-tabs name="predict" />
 
-`result.semantic_mask` contient la carte de classes dense\u00a0: `.data` est un
+`result.semantic_mask` contient la carte de classes dense : `.data` est un
 tenseur `(H, W)` d'identifiants de classe à la taille de l'image d'origine, et
 `.classes` énumère les identifiants de classe réellement présents.
 `result.boxes` vaut `None`, puisqu'il n'existe aucune détection par instance.
 `conf` et `iou` sont acceptés pour assurer la parité de l'API, mais ils ne
-modifient pas la sortie\u00a0: le modèle renvoie une classe par pixel et non des
+modifient pas la sortie : le modèle renvoie une classe par pixel et non des
 détections par instance à filtrer ou dédupliquer. Consultez la
 [prédiction](/docs/predict) pour les sources, le streaming et la gestion des
 résultats.
@@ -168,7 +168,7 @@ non commerciale des checkpoints pré-entraînés (consultez la section
 <code-tabs name="train" />
 
 Sans configuration supplémentaire, le trainer suit la recette ADE20K de
-l'article SegFormer\u00a0: AdamW au learning rate de base du backbone, une tête de
+l'article SegFormer : AdamW au learning rate de base du backbone, une tête de
 décodage entraînée à un learning rate 10x supérieur, un weight decay partout
 sauf sur LayerNorm et la convolution positionnelle Mix-FFN, ainsi qu'un
 planning de décroissance linéaire avec warmup. La convergence des grandes
@@ -179,7 +179,7 @@ multi-GPU et les loggers.
 
 ## Valider
 
-`val()` renvoie un dictionnaire de clés `metrics/`\u00a0: mIoU et exactitude par
+`val()` renvoie un dictionnaire de clés `metrics/` : mIoU et exactitude par
 pixel, mesurées sur tout dataset au format utilisé pour l'entraînement.
 
 <code-tabs name="val" />
@@ -207,10 +207,10 @@ Tous les fichiers de poids publiés pour cette famille.
 
 L'encodeur et la tête de décodage de LibreSegformer sont un portage PyTorch de
 l'implémentation SegFormer sous Apache-2.0 de Hugging Face Transformers, et
-non de NVlabs/SegFormer\u00a0: le dépôt d'origine de NVIDIA n'a jamais été lu ni
+non de NVlabs/SegFormer : le dépôt d'origine de NVIDIA n'a jamais été lu ni
 copié, et n'est cité ici que pour attribuer l'article à ses auteurs. Seuls les
 checkpoints pré-entraînés ci-dessus sont soumis à la restriction non
-commerciale de NVIDIA\u00a0; l'architecture et le code propre à LibreYOLO restent
+commerciale de NVIDIA ; l'architecture et le code propre à LibreYOLO restent
 entièrement sous licence MIT.
 
 </provenance-box>

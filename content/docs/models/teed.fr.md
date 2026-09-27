@@ -107,7 +107,7 @@ sont entraînés sur BIPED, dont les conditions publiées limitent l'utilisation
 un checkpoint que vous êtes autorisé à utiliser avec
 `weights/convert_teed_weights.py`, qui vérifie les clés des tenseurs par
 rapport à l'architecture du runtime avant d'écrire un fichier directement
-chargeable par LibreYOLO\u00a0:
+chargeable par LibreYOLO :
 
 ```bash
 python weights/convert_teed_weights.py upstream.pth weights/LibreTEEDt-edge.pt --verify
@@ -115,7 +115,7 @@ python weights/convert_teed_weights.py upstream.pth weights/LibreTEEDt-edge.pt -
 
 <code-tabs name="predict" />
 
-`result.edges` contient le résultat\u00a0: un tableau float32 `(H, W)` dans
+`result.edges` contient le résultat : un tableau float32 `(H, W)` dans
 `[0, 1]`, dont `.binary(threshold)` renvoie un masque booléen des contours. Il
 n'y a aucune bounding box, donc `conf`, `iou` et `max_det` n'ont aucun effet.
 Consultez la [prédiction](/docs/predict) pour les sources, le streaming et la
@@ -130,7 +130,7 @@ comparer aux autres.
 ## Valider
 
 `val()` rapporte les mesures F ODS et OIS de type BSDS sur un dataset de
-contours apparié\u00a0: les images sont placées à côté de cartes de contours de
+contours apparié : les images sont placées à côté de cartes de contours de
 même nom de base, avec un masque de validité facultatif pour que les pixels de
 remplissage ne soient jamais comptés. `imgsz` doit être divisible par le
 stride de sous-échantillonnage du réseau. LibreYOLO lève une erreur explicite
@@ -143,7 +143,7 @@ si ce n'est pas le cas.
 <export-matrix />
 
 L'export des contours suit un contrat de runtime à résolution fixe et avec un
-batch de 1\u00a0: `dynamic` et toute valeur de `batch` autre que 1 sont rejetés, et
+batch de 1 : `dynamic` et toute valeur de `batch` autre que 1 sont rejetés, et
 le graphe exporté produit une seule carte de probabilités fusionnée. Un
 artefact exporté se recharge dans `LibreYOLO()` grâce au suffixe de son
 fichier. Un fichier `.onnx` se comporte donc comme un checkpoint et renvoie
@@ -156,7 +156,7 @@ les mêmes `Results`.
 <provenance-box>
 
 LibreYOLO ne publie aucun checkpoint TEED. Rien n'est répliqué sous
-l'organisation LibreYOLO\u00a0; convertissez plutôt un checkpoint pour lequel vous
+l'organisation LibreYOLO ; convertissez plutôt un checkpoint pour lequel vous
 possédez une licence avec `weights/convert_teed_weights.py`.
 
 </provenance-box>

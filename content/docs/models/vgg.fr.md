@@ -110,20 +110,20 @@ mis en cache localement.
 
 <code-tabs name="predict" />
 
-Un classificateur renvoie `result.probs` au lieu de `result.boxes`\u00a0: `top1` et
+Un classificateur renvoie `result.probs` au lieu de `result.boxes` : `top1` et
 `top5` donnent les indices de classes, tandis que `top1conf` et `top5conf`
 donnent leurs confiances. La prédiction s'exécute avec une entrée fixe de
-224\u00a0px et lève une erreur si vous transmettez une autre valeur à `imgsz`.
+224 px et lève une erreur si vous transmettez une autre valeur à `imgsz`.
 Consultez la [prédiction](/docs/predict) pour les sources, le streaming et la
 gestion des résultats.
 
 ## Variantes
 
-Quatre tailles\u00a0: 16 ou 19 couches convolutionnelles, chacune déclinée sans et
+Quatre tailles : 16 ou 19 couches convolutionnelles, chacune déclinée sans et
 avec normalisation par batch. Les poids fournis proviennent de l'entraînement
 ImageNet ultérieur de torchvision à partir de zéro, et non de conversions de
 la version Caffe originale publiée par le groupe d'Oxford en 2014. LibreYOLO
-fournit cette famille uniquement pour l'inférence\u00a0: la prédiction, la
+fournit cette famille uniquement pour l'inférence : la prédiction, la
 validation top-1/top-5 de type ImageNet et l'export sont pris en charge, mais
 le fine-tuning n'est pas implémenté.
 

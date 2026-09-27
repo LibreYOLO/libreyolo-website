@@ -24,7 +24,7 @@ et non sous forme de bloc BibTeX. GitHub lit ce fichier et propose un bouton
 Cite this repository sur la page du dépôt, qui génère les formats APA et
 BibTeX. Récupérez l'entrée à cet endroit plutôt que de la saisir vous-même.
 
-Le fichier complet\u00a0:
+Le fichier complet :
 
 ```yaml
 cff-version: 1.2.0
@@ -64,7 +64,7 @@ généralement la section Citation du README upstream ou un fichier
 `CITATION.cff`. Il est affiché avec un lien vers son bloc d'origine afin de
 pouvoir le vérifier à la source. Il n'est jamais reconstitué depuis les
 métadonnées de l'article. Une entrée recréée à la main peut échouer
-silencieusement et lourdement\u00a0: coauteur oublié, mauvais lieu de publication,
+silencieusement et lourdement : coauteur oublié, mauvais lieu de publication,
 mauvais type d'entrée ou année de la prépublication. Les prépublications sont
 aussi acceptées, une entrée peut donc être un `@inproceedings` même si la
 version lue se trouvait sur arXiv.
@@ -76,7 +76,7 @@ original des auteurs.
 ## Contenu requis dans une section Méthodes
 
 Trois éléments rendent un résultat LibreYOLO reproductible et correctement
-attribué\u00a0:
+attribué :
 
 - La bibliothèque, citée depuis `CITATION.cff`, avec la version utilisée. `libreyolo version` l'affiche avec les versions de Python, torch et CUDA utilisées.
 - Les travaux upstream, cités depuis la section Citation de la page de la famille.

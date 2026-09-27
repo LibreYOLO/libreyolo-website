@@ -90,7 +90,7 @@ LibreEnsemble(
 | Argument | Valeur par défaut | Signification |
 |---|---|---|
 | `members` | | Au moins deux détecteurs |
-| `weights` | `None` | Facteurs de confiance par membre\u00a0; tous à `1.0` si omis |
+| `weights` | `None` | Facteurs de confiance par membre ; tous à `1.0` si omis |
 | `fusion` | `"wbf"` | `"wbf"`, `"wbf_seeded"`, `"nms"` ou un callable |
 | `fusion_iou` | `0.55` | Seuil IoU pour le regroupement de fusion |
 | `min_votes` | `1` | Conserver uniquement les bounding boxes confirmées par au moins ce nombre de membres |
@@ -167,7 +167,7 @@ doit être valide pour la famille concernée.
 l'inférence, tandis que les backends exportés l'ignorent. `classes` accepte les
 identifiants de classes de l'union et `max_det` s'applique au résultat fusionné.
 Les membres produisent donc largement et l'ensemble tronque une seule fois.
-`batch` est accepté pour assurer la parité de l'API\u00a0; les images sont traitées
+`batch` est accepté pour assurer la parité de l'API ; les images sont traitées
 séquentiellement.
 
 `val()` et `export()` lèvent `NotImplementedError`. Validez et exportez chaque
@@ -185,7 +185,7 @@ pixels de l'image d'origine et les étiquettes des identifiants de classes
 valides dans `names`. Les tenseurs, tableaux et listes imbriquées fonctionnent
 tous. LibreYOLO n'importe rien depuis le code externe.
 
-L'adaptateur valide la valeur renvoyée\u00a0: elle doit être un tuple à 3 éléments,
+L'adaptateur valide la valeur renvoyée : elle doit être un tuple à 3 éléments,
 les bounding boxes doivent avoir la forme `(N, 4)`, les trois tableaux doivent
 avoir la même longueur et chaque identifiant de classe doit figurer dans
 `names`. Les détections dont la confiance est inférieure ou égale à `conf`
@@ -255,5 +255,5 @@ les bounding boxes survivantes conservent leurs scores d'origine.
 
 `fusion=` accepte aussi un callable ayant la même signature que les opérations
 ci-dessus. Son nom est consigné dans `ens.fusion`, ou `"custom"` s'il n'en
-possède aucun. La valeur renvoyée est validée\u00a0: il doit s'agir d'un triplet
+possède aucun. La valeur renvoyée est validée : il doit s'agir d'un triplet
 `(boxes, scores, labels)` aux formes cohérentes.

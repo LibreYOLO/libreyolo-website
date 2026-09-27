@@ -49,7 +49,7 @@ source_hash: 177904564cf0a488
 
 ## Schéma v1.0
 
-Chaque checkpoint `.pt` officiel de LibreYOLO contient\u00a0:
+Chaque checkpoint `.pt` officiel de LibreYOLO contient :
 
 ```python
 {
@@ -68,7 +68,7 @@ Chaque checkpoint `.pt` officiel de LibreYOLO contient\u00a0:
 | Clé | Type | Signification |
 |---|---|---|
 | `model` | state dict | Poids du modèle |
-| `schema_version` | str | Version du contrat de métadonnées\u00a0; la v1.0 utilise la chaîne `"1.0"` |
+| `schema_version` | str | Version du contrat de métadonnées ; la v1.0 utilise la chaîne `"1.0"` |
 | `libreyolo_version` | str | Version ayant produit le checkpoint |
 | `model_family` | str | Famille enregistrée, comme `yolo9`, `rfdetr`, `dfine`, `ec` |
 | `size` | str | Variante au sein de la famille, comme `t`, `s`, `r18`, `atto` |
@@ -103,9 +103,9 @@ Les checkpoints de pose enregistrent leur schéma de classes et de points clés.
 | Clé | Signification |
 |---|---|
 | `num_keypoints` | Nombre positif de points clés utilisé par la tête de pose |
-| `keypoint_dim` | `2` pour les étiquettes `x,y` ou `3` pour `x,y,visibility`\u00a0; les sorties du modèle exposent toujours `x,y,visibility` |
-| `oks_sigmas` | Sigmas OKS facultatifs par point clé\u00a0; la valeur par défaut de la tâche pour `num_keypoints` est utilisée si absente |
-| `num_keypoints_per_class` | Nombre facultatif de points clés par classe pour les têtes de style GroupPose dont le tenseur de points clés est complété par classe\u00a0; `0` pour les classes sans point clé |
+| `keypoint_dim` | `2` pour les étiquettes `x,y` ou `3` pour `x,y,visibility` ; les sorties du modèle exposent toujours `x,y,visibility` |
+| `oks_sigmas` | Sigmas OKS facultatifs par point clé ; la valeur par défaut de la tâche pour `num_keypoints` est utilisée si absente |
+| `num_keypoints_per_class` | Nombre facultatif de points clés par classe pour les têtes de style GroupPose dont le tenseur de points clés est complété par classe ; `0` pour les classes sans point clé |
 
 RF-DETR peut enregistrer `num_keypoints_per_class` avec `kpt_names`. Les nombres correspondent aux classes du dataset ; zéro indique une classe avec uniquement des boîtes et les prédictions sont complétées jusqu'à la forme maximale des points clés.
 
@@ -117,11 +117,11 @@ modèles corporels, leurs dimensions sont donc consignées et jamais supposées.
 
 | Clé | Signification |
 |---|---|
-| `body_model` | Paramétrage, comme `mhr`\u00a0; requis et utilisé pour interpréter tous les champs ci-dessous |
-| `num_betas` | Nombre de coefficients d'identité et de forme\u00a0; 45 pour MHR |
-| `num_body_pose` | Largeur du bloc des paramètres de pose corporelle\u00a0; 130 pour MHR. Vecteur plat et non un triplet par articulation, car les articulations du rig ont différents degrés de liberté |
-| `num_vertices` | Nombre de sommets émis par le décodeur\u00a0; 18439 pour MHR |
-| `num_joints` | Nombre d'articulations émises par le décodeur\u00a0; 127 pour MHR |
+| `body_model` | Paramétrage, comme `mhr` ; requis et utilisé pour interpréter tous les champs ci-dessous |
+| `num_betas` | Nombre de coefficients d'identité et de forme ; 45 pour MHR |
+| `num_body_pose` | Largeur du bloc des paramètres de pose corporelle ; 130 pour MHR. Vecteur plat et non un triplet par articulation, car les articulations du rig ont différents degrés de liberté |
+| `num_vertices` | Nombre de sommets émis par le décodeur ; 18439 pour MHR |
+| `num_joints` | Nombre d'articulations émises par le décodeur ; 127 pour MHR |
 | `rotation_format` | Encodage des rotations, comme `euler_zyx` pour MHR ou `axis_angle`. Jamais déduit de la forme du tenseur, car un vecteur à 3 éléments est ambigu |
 
 ## Valeurs factices des tâches denses
@@ -141,8 +141,8 @@ Les prédictions de contours sont des cartes denses de probabilités float32
 dans `[0, 1]`.
 
 Les checkpoints de restauration peuvent ajouter `degradation`, une courte
-étiquette de corruption comme `deblur`, `denoise` ou `super-resolution`\u00a0;
-`dataset`, une étiquette de provenance comme `GoPro` ou `SIDD`\u00a0; et `scale`,
+étiquette de corruption comme `deblur`, `denoise` ou `super-resolution` ;
+`dataset`, une étiquette de provenance comme `GoPro` ou `SIDD` ; et `scale`,
 un facteur entier positif d'agrandissement entre sortie et entrée, par exemple
 `4` pour un modèle de super-résolution x4. Une valeur absente ou égale à `1`
 signifie que l'image restaurée conserve la résolution d'entrée. Le runtime
@@ -157,13 +157,13 @@ dict `model` contient deux sous-modèles dans les espaces de clés `det.*` et
 
 | Clé | Signification |
 |---|---|
-| `charset` | Alphabet CTC complet dans l'ordre des indices de sortie\u00a0: l'indice 0 est le blanc CTC, suivi du dictionnaire de reconnaissance puis de l'espace. Les chargeurs doivent le lire dans le checkpoint, jamais dans un fichier annexe |
-| `pipeline` | Valeurs par défaut du pipeline intégrées lors de la conversion\u00a0: `det_limit_side_len`, `det_db_thresh`, `det_db_box_thresh`, `det_db_unclip_ratio`, `rec_image_shape`. Les arguments du runtime peuvent les remplacer à chaque appel |
+| `charset` | Alphabet CTC complet dans l'ordre des indices de sortie : l'indice 0 est le blanc CTC, suivi du dictionnaire de reconnaissance puis de l'espace. Les chargeurs doivent le lire dans le checkpoint, jamais dans un fichier annexe |
+| `pipeline` | Valeurs par défaut du pipeline intégrées lors de la conversion : `det_limit_side_len`, `det_db_thresh`, `det_db_box_thresh`, `det_db_unclip_ratio`, `rec_image_shape`. Les arguments du runtime peuvent les remplacer à chaque appel |
 | `components` | Réservé aux étapes facultatives du pipeline comme l'orientation du document, la correction de perspective et la rotation des lignes de texte. Vide dans la v1 |
 
 ## Métadonnées du runtime d'export
 
-Les artefacts exportés utilisent la même double écriture rectangulaire\u00a0:
+Les artefacts exportés utilisent la même double écriture rectangulaire :
 `imgsz_h` et `imgsz_w` sont écrits à côté de l'ancien scalaire `imgsz`, et un
 lecteur qui ne comprend pas les champs rectangulaires ne doit pas interpréter
 silencieusement le scalaire comme un contrat carré.
@@ -177,15 +177,15 @@ carrés. Les exports HRNet sont des têtes de recadrage de personnes fixes,
 batch 1 et FP32, où W32 accepte 256x192 et W48 384x288. Le détecteur de
 personnes n'est pas intégré au graphe.
 
-Les exports avec NMS intégrée peuvent ajouter les clés plates suivantes\u00a0:
+Les exports avec NMS intégrée peuvent ajouter les clés plates suivantes :
 
 | Clé | Signification |
 |---|---|
-| `nms` | Booléen sous forme de chaîne\u00a0; `"true"` signifie que le graphe contient une sortie avec post-traitement intégré |
+| `nms` | Booléen sous forme de chaîne ; `"true"` signifie que le graphe contient une sortie avec post-traitement intégré |
 | `nms_conf` | Seuil de confiance intégré à la sortie |
 | `nms_iou` | Seuil IoU intégré à la sortie |
 | `max_det` | Nombre maximal de lignes de détection post-NMS émises par la sortie intégrée |
-| `nms_raw_output` | Booléen sous forme de chaîne\u00a0; `"true"` signifie que le graphe expose aussi une sortie auxiliaire brute du détecteur |
+| `nms_raw_output` | Booléen sous forme de chaîne ; `"true"` signifie que le graphe expose aussi une sortie auxiliaire brute du détecteur |
 
 Pour les exports ONNX de détection YOLO9 avec `nms=true`, la sortie `0`
 (nommée `output`) est le tenseur post-NMS autonome aux seuils d'export. Lorsque
@@ -194,12 +194,12 @@ LibreYOLO afin qu'ils appliquent l'écrêtage natif sur le canevas d'origine et
 la sémantique de `predict(conf=..., iou=..., max_det=...)` dans le runtime. Les
 consommateurs tiers doivent utiliser la première sortie.
 
-Les exports de pose peuvent ajouter `num_keypoints`\u00a0; `keypoint_dim`, dont les
+Les exports de pose peuvent ajouter `num_keypoints` ; `keypoint_dim`, dont les
 exports bruts de style GroupPose peuvent utiliser des valeurs supérieures comme
-`8` lorsque le tenseur inclut des champs de précision ou de logits de classes\u00a0;
+`8` lorsque le tenseur inclut des champs de précision ou de logits de classes ;
 `num_keypoints_per_class` sous forme de liste encodée en JSON, où les
 emplacements de classes sans point clé doivent être conservés puisqu'ils
-définissent le schéma\u00a0; et `pose_input`, où `"person_crop"` signifie que le
+définissent le schéma ; et `pose_input`, où `"person_crop"` signifie que le
 graphe accepte un recadrage déjà extrait et ne contient aucun détecteur. Les
 exports HRNet exigent cette valeur.
 
@@ -252,15 +252,15 @@ comme un modèle flottant.
 
 `"finalized"` est la forme de déploiement écrite par `export(format="pt")`.
 Les poids maîtres sont supprimés et chaque module quantifié contient des poids
-compactés à la place\u00a0:
+compactés à la place :
 
 | Recette | Tenseurs compactés | Déquantification |
 |---|---|---|
 | int8 | `weight_packed` int8 à la forme d'origine des poids, `_q_w_scale` FP32 par canal | `weight_packed * scale` |
 | fp8 | `weight_packed` float8_e4m3fn à la forme d'origine, `_q_w_scale` FP32 avec une entrée par canal de sortie | `weight_packed * scale` |
-| w4a16, w4a8 | `weight_packed` uint8, deux codes 4 bits par octet, nibble faible en premier, code `q + 8`\u00a0; `_q_w_gscale` FP32 `[out, ngroups]`, groupes de 128 le long de in_features | Échelle par groupe |
+| w4a16, w4a8 | `weight_packed` uint8, deux codes 4 bits par octet, nibble faible en premier, code `q + 8` ; `_q_w_gscale` FP32 `[out, ngroups]`, groupes de 128 le long de in_features | Échelle par groupe |
 | int2 | Quatre codes 2 bits par octet, code `q + 2`, groupes de 64 | Échelle par groupe |
-| nvfp4 | `weight_packed` uint8 `[out, ceil(in/16)*8]`, code `sign<<3 \| E2M1 level`\u00a0; `weight_block_scale` float8_e4m3fn `[out, ceil(in/16)]`\u00a0; `_q_w_amax` FP32 par tenseur | `block_scale * amax / (448 * 6)` |
+| nvfp4 | `weight_packed` uint8 `[out, ceil(in/16)*8]`, code `sign<<3 \| E2M1 level` ; `weight_block_scale` float8_e4m3fn `[out, ceil(in/16)]` ; `_q_w_amax` FP32 par tenseur | `block_scale * amax / (448 * 6)` |
 | mxfp4 | Comme nvfp4 mais avec des blocs de 32 éléments et `weight_block_exp` int8 `[out, ceil(in/32)]` en plus | `2 ** exponent` |
 
 Les buffers de plage d'activations `_q_act_lo`, `_q_act_hi` et
@@ -273,7 +273,7 @@ disposition est le contrat stable destiné aux exporteurs et runtimes externes.
 ## Checkpoints d'entraînement
 
 Les checkpoints du trainer utilisent le même noyau de métadonnées requis et
-peuvent ajouter des champs plats d'entraînement et de reprise\u00a0:
+peuvent ajouter des champs plats d'entraînement et de reprise :
 
 ```python
 {
@@ -311,7 +311,7 @@ Le schéma régit les fichiers `.pt` créés par LibreYOLO. Il ne renomme ni
 n'encapsule les snapshots upstream multifichiers utilisés par les niveaux de
 modèles distincts.
 
-La taille `14b-a7b` de LibreMODUS est une exception explicite\u00a0: l'alias se
+La taille `14b-a7b` de LibreMODUS est une exception explicite : l'alias se
 résout par `LibreVLM(...)` vers un répertoire de fichiers upstream épinglés.
 LibreYOLO ne leur ajoute pas de métadonnées v1.0 et ne les republie pas sous
 forme de fichier `.pt`.
@@ -328,7 +328,7 @@ la conversion automatique. Consultez les
 
 ## Assistants
 
-Les assistants du schéma se trouvent dans `libreyolo.utils.serialization`\u00a0:
+Les assistants du schéma se trouvent dans `libreyolo.utils.serialization` :
 
 ```python
 wrap_libreyolo_checkpoint(

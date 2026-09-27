@@ -94,7 +94,7 @@ pip install libreyolo
 
 ## Prédire
 
-Cette famille est réservée à l'inférence\u00a0: `train()` lève
+Cette famille est réservée à l'inférence : `train()` lève
 `NotImplementedError`, cette page ne comporte donc aucune section Entraîner.
 La prédiction, la validation et l'export sont tous pris en charge. Les poids
 sont téléchargés depuis Hugging Face à la première utilisation et mis en

@@ -166,7 +166,7 @@ mis en cache localement.
 L'objet `Results` renvoyé est celui de toutes les familles, le remplacement du
 détecteur ne demande donc de modifier qu'une ligne. Sur les modèles de base et
 de stride 4, `conf` définit le seuil de confiance et `iou` le seuil de NMS. Le
-modèle de bout en bout n'exécute aucune NMS et ignore `iou`\u00a0; `conf` et
+modèle de bout en bout n'exécute aucune NMS et ignore `iou` ; `conf` et
 `max_det` déterminent donc sa sortie. Consultez la
 [prédiction](/docs/predict) pour les sources, le streaming et la gestion des
 résultats.
@@ -186,9 +186,9 @@ Choisissez-le lorsque le runtime de déploiement ne possède pas d'opérateur NM
 
 Le modèle de stride 4 expose un niveau plus haut dans le backbone, prolonge le
 neck jusqu'à celui-ci et prédit sur quatre échelles au lieu de trois. L'échelle
-supplémentaire cible les objets qui couvrent peu de pixels\u00a0; l'unique checkpoint
+supplémentaire cible les objets qui couvrent peu de pixels ; l'unique checkpoint
 publié pour ce modèle est entraîné sur des images aériennes. Les checkpoints
-de détection de base peuvent y être transférés\u00a0: le backbone et le neck sont
+de détection de base peuvent y être transférés : le backbone et le neck sont
 chargés sans modification, les trois tours de tête pré-entraînées sont
 décalées d'un emplacement et la tour de stride 4 part d'une initialisation
 aléatoire.
@@ -232,7 +232,7 @@ pour l'entraînement.
 
 <export-matrix />
 
-Une coche s'applique aux trois variantes\u00a0; lorsqu'elles diffèrent, la matrice
+Une coche s'applique aux trois variantes ; lorsqu'elles diffèrent, la matrice
 indique la prise en charge la plus faible des trois.
 
 Un artefact exporté se recharge dans `LibreYOLO()` grâce au suffixe de son

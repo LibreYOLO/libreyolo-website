@@ -171,14 +171,14 @@ mis en cache localement.
 <code-tabs name="predict" />
 
 `set_classes()` est l'unique primitive qui transforme ce modèle en
-classificateur à vocabulaire ouvert\u00a0: elle insère chaque étiquette dans tous
+classificateur à vocabulaire ouvert : elle insère chaque étiquette dans tous
 les templates de prompts, encode les résultats, calcule leur moyenne et met
 en cache la matrice `[K, D]` obtenue comme tête de classification. Celle-ci
 n'est donc pas recalculée pour chaque image. Appelez de nouveau cette méthode
 à tout moment pour changer de classes. Sans appel, LibreSigLIP2 est chargé avec
 les 1 000 noms de classes ImageNet-1k déjà définis.
 
-SigLIP attribue un score indépendant à chaque classe\u00a0:
+SigLIP attribue un score indépendant à chaque classe :
 `logit = scale * (image . text) + bias`. Par défaut, cet ensemble de logits
 passe malgré tout par un softmax, ce qui produit une distribution mono-label
 cohérente avec le comportement `top1`/`top5` de LibreCLIP. Le passage de
@@ -193,7 +193,7 @@ Avec `task="embed"`, la prédiction renvoie un vecteur d'image normalisé L2 par
 entrée au lieu de probabilités de classes, et `embed_text()` renvoie des lignes
 de texte normalisées dans le même espace vectoriel. Un simple produit scalaire
 entre les deux correspond donc à la similarité cosinus. `iou` n'a d'effet sur
-aucune des deux tâches\u00a0; il n'y a aucune étape de NMS. Consultez la
+aucune des deux tâches ; il n'y a aucune étape de NMS. Consultez la
 [prédiction](/docs/predict) pour les sources, le streaming et la gestion des
 résultats.
 
@@ -204,7 +204,7 @@ ImageFolder, appelle `set_classes()` avec ces noms, puis mesure l'exactitude
 zero-shot top-1 et top-5 avec un score softmax. L'exactitude dépend de la
 manière dont les noms de classes sont interprétés comme prompts, et non d'une
 mise à jour des poids, puisqu'il n'y a rien à entraîner. La validation couvre
-uniquement `task="classify"`\u00a0; `task="embed"` n'a pas de validateur de dataset.
+uniquement `task="classify"` ; `task="embed"` n'a pas de validateur de dataset.
 
 <code-tabs name="val" />
 
@@ -217,8 +217,8 @@ L'export fige l'état actuel du modèle dans un graphe fixe. Pour
 résolution au moment de l'export sont incorporées dans une couche linéaire
 finale avec le facteur d'échelle et le biais appris. Le graphe exporté est donc
 un classificateur d'images `[B, K]` ordinaire, dépourvu de tour de texte et de
-tokenizer\u00a0; exportez-le de nouveau après avoir modifié les classes ou la
-taille. L'export en mode `multi_label=True` n'est pas implémenté\u00a0; repassez-le
+tokenizer ; exportez-le de nouveau après avoir modifié les classes ou la
+taille. L'export en mode `multi_label=True` n'est pas implémenté ; repassez-le
 d'abord à `False`. L'export avec `task="embed"` trace uniquement la tour
 d'image. Les deux nécessitent l'opset ONNX 14 ou ultérieur, que l'exporteur
 définit par défaut.
