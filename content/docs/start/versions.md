@@ -75,13 +75,12 @@ versions, its page is the accurate reference and this tree is not.
 version when a result has to be reproducible:
 
 ```bash
-pip install "libreyolo==1.5.0"
+pip install "libreyolo==1.6.0"
 ```
 
 Installing from source, a plain clone checks out `release`, the stable branch
 whose code matches the published release. The `dev` branch carries work that
-has not been released yet, including anything listed under
-[changelog](/docs/changelog) as landing since the last version.
+has not been released yet.
 
 ```bash
 git clone https://github.com/LibreYOLO/libreyolo.git
@@ -104,5 +103,5 @@ that leaned on a default therefore reproduces differently across versions. Pass
 the values you care about explicitly and a run stays comparable.
 
 [Changelog](/docs/changelog) summarizes what landed in recent releases, and
-[`CHANGELOG.md`](https://github.com/LibreYOLO/libreyolo/blob/dev/CHANGELOG.md)
+[`CHANGELOG.md`](https://github.com/LibreYOLO/libreyolo/blob/release/CHANGELOG.md)
 in the repository carries the full entries.

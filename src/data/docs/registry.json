@@ -3049,7 +3049,7 @@
         "pose",
         "obb"
       ],
-      "sizes_label": "n, s, m, l for detection, pose and oriented boxes; n through xx for segmentation",
+      "sizes_label": "n, s, m, l for detection and oriented boxes; n through xx for segmentation; x for pose",
       "added_in": "1.0.0",
       "task_added_in": {
         "detect": "1.0.0",
@@ -3159,34 +3159,6 @@
           "imgsz": 384,
           "data": null,
           "license": "cc-by-4.0"
-        },
-        {
-          "name": "LibreRFDETRn-pose.pt",
-          "task": "pose",
-          "imgsz": null,
-          "data": null,
-          "license": "apache-2.0"
-        },
-        {
-          "name": "LibreRFDETRs-pose.pt",
-          "task": "pose",
-          "imgsz": null,
-          "data": null,
-          "license": "apache-2.0"
-        },
-        {
-          "name": "LibreRFDETRm-pose.pt",
-          "task": "pose",
-          "imgsz": null,
-          "data": null,
-          "license": "apache-2.0"
-        },
-        {
-          "name": "LibreRFDETRl-pose.pt",
-          "task": "pose",
-          "imgsz": null,
-          "data": null,
-          "license": "apache-2.0"
         },
         {
           "name": "LibreRFDETRs-obb.pt",
@@ -4684,7 +4656,7 @@
         "detect"
       ],
       "sizes_label": "n, t, s, m, l, x at 416 to 640 px",
-      "added_in": "1.6.0",
+      "added_in": "1.0.0",
       "task_added_in": {
         "yolox": null
       },
@@ -4851,7 +4823,7 @@
         "detect"
       ],
       "sizes_label": "b at 640 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.1",
       "task_added_in": {
         "yolo7": null
       },
@@ -4925,7 +4897,7 @@
         "segment"
       ],
       "sizes_label": "t, s, m, l, x at 640 px",
-      "added_in": "1.6.0",
+      "added_in": "1.2.0",
       "task_added_in": {
         "rtmdet": null
       },
@@ -5076,7 +5048,7 @@
         "detect"
       ],
       "sizes_label": "s, m, l at 320 to 640 px",
-      "added_in": "1.6.0",
+      "added_in": "1.2.0",
       "task_added_in": {
         "picodet": null
       },
@@ -5198,7 +5170,7 @@
         "point"
       ],
       "sizes_label": null,
-      "added_in": "1.6.0",
+      "added_in": "1.3.0",
       "task_added_in": {
         "fomo": null
       },
@@ -5285,7 +5257,7 @@
         "semantic"
       ],
       "sizes_label": null,
-      "added_in": "1.6.0",
+      "added_in": "1.4.0",
       "task_added_in": {
         "segformer": null
       },
@@ -5394,7 +5366,7 @@
         "semantic"
       ],
       "sizes_label": null,
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "lingbotvision": null
       },
@@ -5484,7 +5456,7 @@
         "embed"
       ],
       "sizes_label": "n, s, m, l at 518 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.0",
       "task_added_in": {
         "dinov2": null
       },
@@ -5577,7 +5549,7 @@
         "restore"
       ],
       "sizes_label": "s, l at 256 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.1",
       "task_added_in": {
         "nafnet": null
       },
@@ -5650,7 +5622,7 @@
         "classify"
       ],
       "sizes_label": "18, 34, 50, 101 at 224 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.0",
       "task_added_in": {
         "resnet": null
       },
@@ -5745,7 +5717,7 @@
         "classify"
       ],
       "sizes_label": "t, s, b at 224 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.0",
       "task_added_in": {
         "convnext": null
       },
@@ -5832,7 +5804,7 @@
         "classify"
       ],
       "sizes_label": "s, m, l at 224 to 256 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.0",
       "task_added_in": {
         "mobilenetv4": null
       },
@@ -5920,7 +5892,7 @@
         "classify"
       ],
       "sizes_label": "b0, b1, b2, b3 at 224 to 300 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.0",
       "task_added_in": {
         "efficientnetv2": null
       },
@@ -6015,7 +5987,7 @@
         "detect"
       ],
       "sizes_label": "t, s, m, l, x at 640 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "lwdetr": null
       },
@@ -6117,7 +6089,7 @@
         "detect"
       ],
       "sizes_label": "r50, r50dc5, r101, r101dc5 at 800 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "detr": null
       },
@@ -6212,7 +6184,7 @@
         "detect"
       ],
       "sizes_label": "r50ss, r50ssdc5, r50, r50refine, r50twostage at 800 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "deformable_detr": null
       },
@@ -6314,7 +6286,7 @@
         "detect"
       ],
       "sizes_label": "r50, r50s5, swinl at 800 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "dinodetr": null
       },
@@ -6403,7 +6375,7 @@
         "segment"
       ],
       "sizes_label": "r50 at 800 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "mask_rcnn": null
       },
@@ -6491,7 +6463,7 @@
         "detect"
       ],
       "sizes_label": "n, s, m, l at 320 to 800 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "faster_rcnn": null
       },
@@ -6586,7 +6558,7 @@
         "detect"
       ],
       "sizes_label": "r50 at 800 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "fcos": null
       },
@@ -6660,7 +6632,7 @@
         "detect"
       ],
       "sizes_label": "r50, r50v2 at 800 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "retinanet": null
       },
@@ -6741,7 +6713,7 @@
         "detect"
       ],
       "sizes_label": "300 at 300 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "ssd": null
       },
@@ -6815,7 +6787,7 @@
         "detect"
       ],
       "sizes_label": "resdcn18, dla34 at 512 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "centernet": null
       },
@@ -6895,7 +6867,7 @@
         "detect"
       ],
       "sizes_label": null,
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "efficientdet": null
       },
@@ -6997,7 +6969,7 @@
         "classify"
       ],
       "sizes_label": "ti, s, b, l at 224 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "vit": null
       },
@@ -7092,7 +7064,7 @@
         "classify"
       ],
       "sizes_label": "t, s, b, l at 224 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "swin": null
       },
@@ -7187,7 +7159,7 @@
         "classify"
       ],
       "sizes_label": "16, 19, 16bn, 19bn at 224 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "vgg": null
       },
@@ -7282,7 +7254,7 @@
         "classify"
       ],
       "sizes_label": "b at 224 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "alexnet": null
       },
@@ -7356,7 +7328,7 @@
         "semantic"
       ],
       "sizes_label": "r50, r101 at 520 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "fcn": null
       },
@@ -7437,7 +7409,7 @@
         "semantic"
       ],
       "sizes_label": null,
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "deeplabv3": null
       },
@@ -7525,7 +7497,7 @@
         "semantic"
       ],
       "sizes_label": "s, m, l at 1024 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.1",
       "task_added_in": {
         "pidnet": null
       },
@@ -7614,7 +7586,7 @@
         "panoptic"
       ],
       "sizes_label": "s, b, l at 512 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.1",
       "task_added_in": {
         "eomt": null
       },
@@ -7750,7 +7722,7 @@
         "pose"
       ],
       "sizes_label": null,
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "hrnet": null
       },
@@ -7830,7 +7802,7 @@
         "gaze"
       ],
       "sizes_label": "r18, r34, r50, r101, r152 at 448 px",
-      "added_in": "1.6.0",
+      "added_in": "1.2.0",
       "task_added_in": {
         "l2cs": null
       },
@@ -7895,7 +7867,7 @@
         "depth"
       ],
       "sizes_label": "s, b, l, g at 518 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.0",
       "task_added_in": {
         "depth_anything": null
       },
@@ -7983,7 +7955,7 @@
         "depth"
       ],
       "sizes_label": "l at 504 px",
-      "added_in": "1.6.0",
+      "added_in": "1.4.0",
       "task_added_in": {
         "depth_anything3": null
       },
@@ -8057,7 +8029,7 @@
         "depth"
       ],
       "sizes_label": "b, bnpu at 384 px",
-      "added_in": "1.6.0",
+      "added_in": "1.4.0",
       "task_added_in": {
         "zipdepth": null
       },
@@ -8137,7 +8109,7 @@
         "depth"
       ],
       "sizes_label": "s, l at 256 to 384 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "midas": null
       },
@@ -8217,7 +8189,7 @@
         "normal"
       ],
       "sizes_label": "s, b, l at 518 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "moge2": null
       },
@@ -8297,7 +8269,7 @@
         "edge"
       ],
       "sizes_label": "t at 352 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "teed": null
       },
@@ -8362,7 +8334,7 @@
         "edge"
       ],
       "sizes_label": "b at 352 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "dexined": null
       },
@@ -8427,7 +8399,7 @@
         "restore"
       ],
       "sizes_label": "s, m, l at 64 px",
-      "added_in": "1.6.0",
+      "added_in": "1.4.0",
       "task_added_in": {
         "swinir": null
       },
@@ -8515,7 +8487,7 @@
         "restore"
       ],
       "sizes_label": "x4, x2, x4t at 64 px",
-      "added_in": "1.6.0",
+      "added_in": "1.4.0",
       "task_added_in": {
         "realesrgan": null
       },
@@ -8603,7 +8575,7 @@
         "matte"
       ],
       "sizes_label": "t, l at 1024 px",
-      "added_in": "1.6.0",
+      "added_in": "1.4.0",
       "task_added_in": {
         "birefnet": null
       },
@@ -8676,7 +8648,7 @@
         "matte"
       ],
       "sizes_label": "l at 1024 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "feynobg": null
       },
@@ -8763,7 +8735,7 @@
         "ocr"
       ],
       "sizes_label": "t, l at 960 px",
-      "added_in": "1.6.0",
+      "added_in": "1.4.0",
       "task_added_in": {
         "ppocr": null
       },
@@ -8844,7 +8816,7 @@
         "embed"
       ],
       "sizes_label": null,
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "facerec": null
       },
@@ -8894,7 +8866,7 @@
         "mesh"
       ],
       "sizes_label": "d3, h at 512 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "sam3dbody": null
       },
@@ -8959,7 +8931,7 @@
         "detect"
       ],
       "sizes_label": "t, b at 448 px",
-      "added_in": "1.6.0",
+      "added_in": "1.4.0",
       "task_added_in": {
         "yolo1": null
       },
@@ -9032,7 +9004,7 @@
         "detect"
       ],
       "sizes_label": "t, b at 416 to 608 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.1",
       "task_added_in": {
         "yolo2": null
       },
@@ -9112,7 +9084,7 @@
         "detect"
       ],
       "sizes_label": "t, b, spp at 416 to 608 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.1",
       "task_added_in": {
         "yolo3": null
       },
@@ -9199,7 +9171,7 @@
         "detect"
       ],
       "sizes_label": "t, b at 416 to 608 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.1",
       "task_added_in": {
         "yolo4": null
       },
@@ -9279,7 +9251,7 @@
         "classify"
       ],
       "sizes_label": "t, s, b at 224 px",
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "deit": null
       },
@@ -9367,7 +9339,7 @@
         "segment"
       ],
       "sizes_label": "base, large, huge at 1024 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.0",
       "task_added_in": {
         "sam": null
       },
@@ -9432,7 +9404,7 @@
         "segment"
       ],
       "sizes_label": null,
-      "added_in": "1.6.0",
+      "added_in": "1.3.1",
       "task_added_in": {
         "sam2": null
       },
@@ -9497,7 +9469,7 @@
         "segment"
       ],
       "sizes_label": "large at 1008 px",
-      "added_in": "1.6.0",
+      "added_in": "1.4.0",
       "task_added_in": {
         "sam3": null
       },
@@ -9562,7 +9534,7 @@
         "segment"
       ],
       "sizes_label": "tiny at 1024 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.1",
       "task_added_in": {
         "mobilesam": null
       },
@@ -9636,7 +9608,7 @@
         "segment"
       ],
       "sizes_label": null,
-      "added_in": "1.6.0",
+      "added_in": "1.4.0",
       "task_added_in": {
         "edgetam": null
       },
@@ -9701,7 +9673,7 @@
         "segment"
       ],
       "sizes_label": "pico at 96 px",
-      "added_in": "1.6.0",
+      "added_in": "1.4.0",
       "task_added_in": {
         "picosam3": null
       },
@@ -9767,7 +9739,7 @@
         "detect"
       ],
       "sizes_label": "t, b at 800 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.1",
       "task_added_in": {
         "grounding_dino": null
       },
@@ -9832,7 +9804,7 @@
         "detect"
       ],
       "sizes_label": "b16, l14 at 960 to 1008 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.1",
       "task_added_in": {
         "owlv2": null
       },
@@ -9897,7 +9869,7 @@
         "detect"
       ],
       "sizes_label": "t at 640 px",
-      "added_in": "1.6.0",
+      "added_in": "1.4.0",
       "task_added_in": {
         "omdet_turbo": null
       },
@@ -9962,7 +9934,7 @@
         "detect"
       ],
       "sizes_label": "s, m, l at 640 px",
-      "added_in": "1.6.0",
+      "added_in": "1.4.0",
       "task_added_in": {
         "ov_deim": null
       },
@@ -10028,7 +10000,7 @@
         "detect"
       ],
       "sizes_label": "base, large at 768 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.0",
       "task_added_in": {
         "florence2": null
       },
@@ -10093,7 +10065,7 @@
         "detect"
       ],
       "sizes_label": "224 at 224 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.0",
       "task_added_in": {
         "kosmos2": null
       },
@@ -10158,7 +10130,7 @@
         "detect"
       ],
       "sizes_label": "2b, 4b, 8b at 1024 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.0",
       "task_added_in": {
         "qwen3vl": null
       },
@@ -10223,7 +10195,7 @@
         "detect"
       ],
       "sizes_label": "500m at 512 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.0",
       "task_added_in": {
         "smolvlm2": null
       },
@@ -10288,7 +10260,7 @@
         "detect"
       ],
       "sizes_label": "1b, 2b, 8b at 448 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.0",
       "task_added_in": {
         "internvl3": null
       },
@@ -10353,7 +10325,7 @@
         "detect"
       ],
       "sizes_label": "450m, 3b at 512 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.0",
       "task_added_in": {
         "lfm2vl": null
       },
@@ -10419,7 +10391,7 @@
         "point"
       ],
       "sizes_label": "3b at 2500 px",
-      "added_in": "1.6.0",
+      "added_in": "1.3.0",
       "task_added_in": {
         "locateanything": null
       },
@@ -10499,7 +10471,7 @@
         "embed"
       ],
       "sizes_label": null,
-      "added_in": "1.6.0",
+      "added_in": "1.3.0",
       "task_added_in": {
         "clip": null
       },
@@ -10594,7 +10566,7 @@
         "embed"
       ],
       "sizes_label": null,
-      "added_in": "1.6.0",
+      "added_in": "1.4.0",
       "task_added_in": {
         "siglip2": null
       },
@@ -10694,7 +10666,7 @@
         "ocr"
       ],
       "sizes_label": "7b at 1024 px",
-      "added_in": "1.6.0",
+      "added_in": "1.4.0",
       "task_added_in": {
         "sensenovavision": null
       },
@@ -10748,7 +10720,7 @@
         "edge"
       ],
       "sizes_label": null,
-      "added_in": "1.6.0",
+      "added_in": "1.5.0",
       "task_added_in": {
         "libremodus": null
       },
