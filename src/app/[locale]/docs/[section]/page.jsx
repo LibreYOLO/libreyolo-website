@@ -1,6 +1,6 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
-import { getDoc, getDocSlugs } from '@/lib/docs'
+import { getDoc, getDocSlugs, docAlternates } from '@/lib/docs'
 import { buildPageMetadata } from '@/i18n/metadata'
 import { SectionIndexView, StandaloneDocView } from '@/components/docs/DocViews'
 
@@ -72,7 +72,7 @@ export async function generateMetadata({ params }) {
       description: doc.description,
       path: `/docs/${section}`,
       locale,
-      englishOnly: !doc.translated,
+      ...docAlternates(STANDALONE, section, locale),
       ownImage: true,
     }),
     keywords: doc.keywords,

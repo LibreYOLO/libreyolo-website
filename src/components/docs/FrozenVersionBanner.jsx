@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { DOCS_PRERELEASE, DOCS_CURRENT_VERSION } from '@/data/docs-versions'
+import { localizeHref } from '@/lib/docs'
 
 /*
  * Banner for the single-page docs kept at /docs/vX.Y.Z.
@@ -21,8 +22,9 @@ import { DOCS_PRERELEASE, DOCS_CURRENT_VERSION } from '@/data/docs-versions'
  * wrong page dropped from an index, so these pages stay indexable and simply
  * point at the current tree.
  */
-export default function FrozenVersionBanner({ version }) {
+export default function FrozenVersionBanner({ version, locale }) {
   if (DOCS_PRERELEASE && version === `v${DOCS_CURRENT_VERSION}`) return null
+  // A reader on /zh/docs/v1.4.0 lands on the current docs in their language.
 
   return (
     <div className="border-b border-amber-500/30 bg-amber-500/[0.07] px-6 py-3">
@@ -30,7 +32,7 @@ export default function FrozenVersionBanner({ version }) {
         These are the frozen docs for <strong className="font-semibold">{version}</strong>. They are
         kept for anyone pinned to that release and are no longer updated.{' '}
         <Link
-          href={DOCS_PRERELEASE ? `/docs/v${DOCS_CURRENT_VERSION}` : '/docs'}
+          href={localizeHref(DOCS_PRERELEASE ? `/docs/v${DOCS_CURRENT_VERSION}` : '/docs', locale)}
           className="font-medium text-libre-700 underline underline-offset-2 dark:text-libre-400"
         >
           Read the docs for v{DOCS_CURRENT_VERSION}, the latest stable release

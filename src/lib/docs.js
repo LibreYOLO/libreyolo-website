@@ -7,6 +7,8 @@ import nav from '@/data/docs/nav.json'
 import registryV150 from '@/data/docs/archive/v1.5.0/registry.json'
 import navV150 from '@/data/docs/archive/v1.5.0/nav.json'
 import { routing } from '@/i18n/routing'
+import { getArticleBySlug } from '@/lib/articles'
+import { LOCALIZED_SITE_ROUTES } from '@/lib/site-paths'
 
 // Authors write generated blocks as self-closing tags (`<checkpoint-table />`),
 // which reads naturally in markdown. HTML5 does not allow self-closing syntax on
@@ -55,6 +57,7 @@ export const DOCS_SECTION_INDEXES = [
 function createDocsSource({ version, registry, nav, docsDir, docDir, docFile, upstreamFile, basePath = '/docs', archived = false }) {
   const localizedNavCache = new Map()
   let pageSet = null
+  let pageIndex = null
 
   function readDoc(section, slug, locale) {
     const englishPath = docFile(section, slug)
@@ -116,13 +119,46 @@ function createDocsSource({ version, registry, nav, docsDir, docDir, docFile, up
     return pageSet.has(logicalPath)
   }
 
-  function href(target) {
-    if (!archived || typeof target !== 'string') return target
+  /*
+   * Whether `locale` has its own version of a logical path in this tree. Section
+   * indexes are message-driven, so every locale has them. A markdown page has
+   * one only where its `<slug>.<locale>.md` twin exists; elsewhere the locale URL
+   * serves the English page under the English canonical.
+   */
+  function isTranslated(logicalPath, locale) {
+    if (!locale || locale === routing.defaultLocale) return true
+    if (DOCS_SECTION_INDEXES.includes(logicalPath)) return true
+    if (!pageIndex) pageIndex = new Map(getAllDocPages().map((p) => [p.path, p]))
+    const page = pageIndex.get(logicalPath)
+    return Boolean(page && fs.existsSync(docFile(page.section, `${page.slug}.${locale}`)))
+  }
+
+  /*
+   * The locales that have their own version of a page: English plus every
+   * locale with a twin. The sitemap and the page's hreflang alternates both use
+   * this list, so the two always advertise the same set.
+   */
+  function docLocales(section, slug) {
+    return routing.locales.filter((locale) =>
+      locale === routing.defaultLocale || fs.existsSync(docFile(section, `${slug}.${locale}`)))
+  }
+
+  /*
+   * The URL a reader in `locale` should follow for a link written as a logical
+   * path. An archive adds its version prefix where it has the page. A locale
+   * reader stays in their language when the target exists in it and lands on
+   * the English page when it does not, so no link points at an English
+   * fallback served under a locale prefix.
+   */
+  function href(target, locale = routing.defaultLocale) {
+    if (typeof target !== 'string') return target
     const match = /^(\/docs(?:\/[^?#]*)?)([?#].*)?$/.exec(target)
-    if (!match) return target
+    if (!match) return localizeHref(target, locale)
     const logical = match[1].replace(/\/$/, '') || '/docs'
-    if (!hasPath(logical)) return target
-    return `${basePath}${logical.slice('/docs'.length)}${match[2] ?? ''}`
+    if (!hasPath(logical)) return localizeHref(target, locale)
+    const suffix = match[2] ?? ''
+    const path = archived ? `${basePath}${logical.slice('/docs'.length)}` : logical
+    return `${prefixFor(isTranslated(logical, locale) ? locale : routing.defaultLocale)}${path}${suffix}`
   }
 
   /*
@@ -152,12 +188,12 @@ function createDocsSource({ version, registry, nav, docsDir, docDir, docFile, up
     }
 
     let localized = nav
-    if (titles.size || archived) {
+    if (titles.size || archived || key !== routing.defaultLocale) {
       localized = structuredClone(nav)
       for (const group of localized.groups) {
         for (const item of group.items) {
           item.label = titles.get(item.slug) ?? item.label
-          item.slug = href(item.slug)
+          item.slug = href(item.slug, key)
         }
       }
     }
@@ -174,6 +210,8 @@ function createDocsSource({ version, registry, nav, docsDir, docDir, docFile, up
     nav,
     href,
     hasPath,
+    isTranslated,
+    docLocales,
     localizeNav,
     getAllDocPages,
     getDocSlugs,
@@ -252,6 +290,23 @@ export function getDocsArchive(version) {
 export const DOCS_VERSION = currentDocs.version
 export const DOCS_NAV = currentDocs.nav
 
+/*
+ * `docLocales` feeds both the sitemap and a page's hreflang alternates.
+ * `docAlternates` is what a current-tree page route hands to buildPageMetadata:
+ * the locales to list, and whether this URL is an English fallback that must
+ * canonicalise to English instead. An English page is only English-only when no
+ * locale has a twin; a locale URL is when its own twin is missing.
+ */
+export const docLocales = currentDocs.docLocales
+
+export function docAlternates(section, slug, locale) {
+  const locales = docLocales(section, slug)
+  const englishOnly = locale === routing.defaultLocale
+    ? locales.length === 1
+    : !locales.includes(locale)
+  return { locales, englishOnly }
+}
+
 export const localizeNav = currentDocs.localizeNav
 export const getDoc = currentDocs.getDoc
 export const getDocSlugs = currentDocs.getDocSlugs
@@ -288,5 +343,52 @@ export function extractHeadings(markdown, extra = []) {
 /* Frozen single-page docs for releases before the v2 tree. Kept reachable and
    canonicalised to /docs, never edited again, and never in the sitemap. */
 export const LEGACY_DOCS_VERSIONS = ['v1.4.0', 'v1.3.1', 'v1.3.0', 'v1.2.0', 'v1.1.0']
+
+/* ── locale-aware links ─────────────────────────────────────────── */
+
+const LOCALIZED_PATHS = new Set(LOCALIZED_SITE_ROUTES.map((route) => route.path || '/'))
+const LOCALE_PREFIX = new RegExp(`^/(${routing.locales.join('|')})(?=/|$)`)
+
+function prefixFor(locale) {
+  return locale === routing.defaultLocale ? '' : `/${locale}`
+}
+
+/*
+ * Whether `locale` has its own version of a site path (no locale prefix).
+ * Current docs pages and the frozen release trees answer from their twins,
+ * articles from theirs, and the routes in LOCALIZED_SITE_ROUTES exist in every
+ * locale. Everything else, the single-page docs before v2 included, is treated
+ * as English only.
+ */
+function existsInLocale(pathname, locale) {
+  if (LOCALIZED_PATHS.has(pathname)) return true
+  const archive = /^\/docs\/(v\d+\.\d+\.\d+)(\/.*)?$/.exec(pathname)
+  if (archive) {
+    const source = DOCS_ARCHIVES[archive[1]]
+    const logical = `/docs${archive[2] ?? ''}`
+    return Boolean(source && source.hasPath(logical) && source.isTranslated(logical, locale))
+  }
+  if (currentDocs.hasPath(pathname)) return currentDocs.isTranslated(pathname, locale)
+  const article = /^\/articles\/([^/]+)$/.exec(pathname)
+  if (article) return Boolean(getArticleBySlug(article[1], locale)?.translated)
+  return false
+}
+
+/*
+ * Resolve an internal link for a reader in `locale`. English, external links,
+ * anchors and already-prefixed paths are returned unchanged. A site path gets
+ * the locale prefix when that locale has its own page there, and stays on the
+ * English URL when it does not, so a link never lands on an English fallback
+ * served under a locale prefix (which canonicalises to English anyway).
+ */
+export function localizeHref(target, locale) {
+  if (!locale || locale === routing.defaultLocale) return target
+  if (typeof target !== 'string' || !target.startsWith('/') || target.startsWith('//')) return target
+  if (LOCALE_PREFIX.test(target)) return target
+  const match = /^([^?#]*)([?#].*)?$/.exec(target)
+  const pathname = match[1].replace(/\/$/, '') || '/'
+  if (!existsInLocale(pathname, locale)) return target
+  return `${prefixFor(locale)}${pathname === '/' ? '' : pathname}${match[2] ?? ''}`
+}
 
 export default registry

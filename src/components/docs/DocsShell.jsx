@@ -185,7 +185,7 @@ function OnThisPage({ headings }) {
   )
 }
 
-export default function DocsShell({ nav, activePath, version, archived = false, homeHref = '/docs', headings = [], breadcrumbs = [], showActions = true, children }) {
+export default function DocsShell({ nav, activePath, pagePath, version, archived = false, homeHref = '/docs', headings = [], breadcrumbs = [], showActions = true, children }) {
   const t = useTranslations('DocsChrome')
   const [drawerOpen, setDrawerOpen] = useState(false)
   const closeDrawer = () => setDrawerOpen(false)
@@ -223,7 +223,8 @@ export default function DocsShell({ nav, activePath, version, archived = false, 
               </ol>
             </nav>
             ) : <span />}
-            {showActions && <PageActions path={activePath} />}
+            {/* The markdown twin lives at the unprefixed path in every locale. */}
+            {showActions && <PageActions path={pagePath ?? activePath} />}
           </div>
           {children}
         </div>

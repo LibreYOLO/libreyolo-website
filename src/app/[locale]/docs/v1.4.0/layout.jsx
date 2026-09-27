@@ -26,10 +26,11 @@ export async function generateMetadata({ params }) {
   return { ...meta, alternates: { canonical: 'https://www.libreyolo.com/docs' } }
 }
 
-export default function DocsV140Layout({ children }) {
+export default async function DocsV140Layout({ children, params }) {
+  const { locale } = await params
   return (
     <>
-      <FrozenVersionBanner version="v1.4.0" />
+      <FrozenVersionBanner version="v1.4.0" locale={locale} />
       {children}
     </>
   )

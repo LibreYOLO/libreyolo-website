@@ -1,7 +1,8 @@
 import { getAllArticles, getArticleBySlug } from '@/lib/articles'
 import { routing, localeHtmlLang } from '@/i18n/routing'
 import { localeUrl } from '@/i18n/metadata'
-import { getAllDocPages, getDoc, DOCS_SECTION_INDEXES } from '@/lib/docs'
+import { getAllDocPages, docLocales, DOCS_SECTION_INDEXES } from '@/lib/docs'
+import { LOCALIZED_SITE_ROUTES } from '@/lib/site-paths'
 import { contentDate, localeFile } from '@/lib/content-dates'
 
 function languageMap(path, locales) {
@@ -48,19 +49,7 @@ function englishOnly(path, priority, changeFrequency = 'weekly', lastModified) {
 }
 
 export default function sitemap() {
-  const bilingualRoutes = [
-    { path: '', priority: 1.0 },
-    { path: '/models', priority: 0.9 },
-    { path: '/commercial', priority: 0.8 },
-    { path: '/sponsors', priority: 0.6 },
-    { path: '/science', priority: 0.8 },
-    { path: '/datasets', priority: 0.7 },
-    { path: '/articles', priority: 0.9 },
-    { path: '/docs/librevlm', priority: 0.8 },
-    { path: '/docs/experimental', priority: 0.8 },
-    { path: '/benchmarks', priority: 0.9 },
-    { path: '/cursor-hackathon', priority: 0.4 },
-  ].flatMap(({ path, priority }) => bilingual(path, priority))
+  const bilingualRoutes = LOCALIZED_SITE_ROUTES.flatMap(({ path, priority }) => bilingual(path, priority))
 
   /*
    * The v2 docs tree, generated from the content directory.
@@ -80,9 +69,7 @@ export default function sitemap() {
     bilingual(path, path === '/docs' ? 1.0 : 0.8))
 
   const docsContentRoutes = getAllDocPages().flatMap((page) => {
-    const locales = routing.locales.filter((locale) =>
-      locale === routing.defaultLocale || getDoc(page.section, page.slug, locale)?.translated
-    )
+    const locales = docLocales(page.section, page.slug)
     const priority = page.section === 'models' || page.section === 'tasks' ? 0.8 : 0.7
     const base = `content/docs/${page.section}/${page.slug}`
     const lastModified = (locale) => contentDate(localeFile(base, locale))

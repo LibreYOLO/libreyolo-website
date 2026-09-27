@@ -1,6 +1,6 @@
 import { setRequestLocale } from 'next-intl/server'
 
-import { getDoc, getDocSlugs } from '@/lib/docs'
+import { getDoc, getDocSlugs, docAlternates } from '@/lib/docs'
 import { buildPageMetadata } from '@/i18n/metadata'
 import { SectionDocView } from '@/components/docs/DocViews'
 
@@ -25,8 +25,9 @@ export async function generateMetadata({ params }) {
       locale,
       // Until a page has a .zh.md twin, a /zh URL serves English and
       // consolidates to the English canonical rather than claiming a
-      // translation that does not exist.
-      englishOnly: !doc.translated,
+      // translation that does not exist. Every translated version, English
+      // included, lists the same hreflang set: English plus each twin.
+      ...docAlternates(SECTION, slug, locale),
       ownImage: true,
     }),
     keywords: doc.keywords,

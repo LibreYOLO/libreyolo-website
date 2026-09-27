@@ -11,7 +11,7 @@ import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 
 import Code from '@/components/docs/Code'
-import { slugifyHeading } from '@/lib/docs'
+import { currentDocs, slugifyHeading } from '@/lib/docs'
 import CodeTabs from '@/components/docs/CodeTabs'
 import {
   SectionTitle, BenchmarkTable, VaEmbed, CheckpointTable, ExportMatrix,
@@ -39,10 +39,11 @@ function dom({ node, ...rest }) {
 /*
  * `source` is the docs tree being rendered. For an archived tree it keeps the
  * generated blocks on that release's registry and keeps /docs links inside the
- * archive wherever the archive has the target page.
+ * archive wherever the archive has the target page. `locale` keeps a link in
+ * the reader's language wherever the target has a translated version.
  */
-export default function DocMarkdown({ children, family, snippets = {}, source }) {
-  const href = (target) => (source ? source.href(target) : target)
+export default function DocMarkdown({ children, family, snippets = {}, source, locale }) {
+  const href = (target) => (source ?? currentDocs).href(target, locale)
   const components = {
     h2: ({ children: kids }) => <SectionTitle id={slugifyHeading(textOf(kids))}>{kids}</SectionTitle>,
     h3: ({ children: kids }) => (

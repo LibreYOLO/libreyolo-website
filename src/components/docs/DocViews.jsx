@@ -6,7 +6,9 @@
  * markdown, registry and sidebar of one tree. Paths inside a view are logical
  * ("/docs/models/rf-detr") and pass through `source.href()` on their way into a
  * link, which is the identity for the current tree and adds the version prefix
- * for an archive. The current routes render byte-identical output through
+ * for an archive. Given the reader's locale it also keeps a link in that locale
+ * wherever the target has a translated version, and sends it to the English
+ * page where it does not. The current routes render byte-identical output through
  * these views; the archive differs only in its data, its links, the version
  * label in the rail, and the one-line notice naming the release.
  */
@@ -65,7 +67,7 @@ async function ArchiveNotice({ locale, source, currentPath }) {
       {t.rich('archivedNotice', {
         version: source.version,
         link: (chunks) => (
-          <Link href={currentPath} className="text-libre-700 underline-offset-2 hover:underline dark:text-libre-400">
+          <Link href={currentDocs.href(currentPath, locale)} className="text-libre-700 underline-offset-2 hover:underline dark:text-libre-400">
             {chunks}
           </Link>
         ),
@@ -74,11 +76,11 @@ async function ArchiveNotice({ locale, source, currentPath }) {
   )
 }
 
-function shellProps(source) {
+function shellProps(source, locale) {
   return {
     version: source.version,
     archived: source.archived,
-    homeHref: source.href('/docs'),
+    homeHref: source.href('/docs', locale),
   }
 }
 
@@ -181,7 +183,7 @@ function Fact({ label, children }) {
 export async function DocsLandingView({ locale, source = currentDocs }) {
   const t = await getTranslations({ locale, namespace: 'DocsLanding' })
   const docsNav = source.localizeNav(locale)
-  const href = source.href
+  const href = (target) => source.href(target, locale)
   const registry = source.registry
 
   const families = Object.values(registry.families)
@@ -227,7 +229,7 @@ export async function DocsLandingView({ locale, source = currentDocs }) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <DocsShell nav={docsNav} activePath={href('/docs')} {...shellProps(source)} showActions={false}>
+      <DocsShell nav={docsNav} activePath={href('/docs')} {...shellProps(source, locale)} showActions={false}>
         <div className="max-w-3xl">
           <ArchiveNotice locale={locale} source={source} currentPath="/docs" />
           <h1 className="text-[2.4rem] font-semibold leading-tight tracking-tight text-surface-900 dark:text-white">
@@ -378,7 +380,7 @@ export async function SectionIndexView({ locale, section, source = currentDocs }
   const chrome = await getTranslations({ locale, namespace: 'DocsChrome' })
   const tiers = await getTranslations({ locale, namespace: 'Tiers' })
   const docsNav = source.localizeNav(locale)
-  const href = source.href
+  const href = (target) => source.href(target, locale)
 
   const group = docsNav.groups.find((g) => g.id === section)
   if (!group) notFound()
@@ -392,7 +394,7 @@ export async function SectionIndexView({ locale, section, source = currentDocs }
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd(breadcrumbs)) }} />
-      <DocsShell nav={docsNav} activePath={href(logicalPath)} {...shellProps(source)} breadcrumbs={breadcrumbs} showActions={false}>
+      <DocsShell nav={docsNav} activePath={href(logicalPath)} {...shellProps(source, locale)} breadcrumbs={breadcrumbs} showActions={false}>
         <div className="max-w-3xl">
           <ArchiveNotice locale={locale} source={source} currentPath={currentCounterpart(logicalPath, locale).path} />
           <h1 className="text-[2.1rem] font-semibold tracking-tight text-surface-900 dark:text-white">
@@ -450,7 +452,7 @@ export async function StandaloneDocView({ locale, slug, source = currentDocs }) 
   const doc = source.getDoc(STANDALONE, slug, locale)
   if (!doc) notFound()
 
-  const href = source.href
+  const href = (target) => source.href(target, locale)
   const path = `/docs/${slug}`
   const url = localeUrl(path, doc.translated ? locale : routing.defaultLocale)
   const headings = extractHeadings(doc.content)
@@ -478,7 +480,8 @@ export async function StandaloneDocView({ locale, slug, source = currentDocs }) 
       <DocsShell
         nav={source.localizeNav(locale)}
         activePath={href(path)}
-        {...shellProps(source)}
+        pagePath={source.href(path)}
+        {...shellProps(source, locale)}
         headings={headings}
         breadcrumbs={breadcrumbs}
       >
@@ -487,7 +490,7 @@ export async function StandaloneDocView({ locale, slug, source = currentDocs }) 
           <ArchiveNotice locale={locale} source={source} currentPath={currentCounterpart(path, locale, STANDALONE, slug).path} />
           <PageHeader doc={doc} />
 
-          <DocMarkdown snippets={doc.snippets || {}} bareTables {...(source.archived ? { source } : {})}>
+          <DocMarkdown snippets={doc.snippets || {}} bareTables locale={locale} {...(source.archived ? { source } : {})}>
             {doc.content}
           </DocMarkdown>
 
@@ -523,7 +526,7 @@ export async function SectionDocView({ locale, section, slug, source = currentDo
   if (isModel && !registeredFamily && !(doc.architecture_only && diagram)) notFound()
   const family = registeredFamily || { display: doc.title }
 
-  const href = source.href
+  const href = (target) => source.href(target, locale)
   const path = `/docs/${section}/${slug}`
   const url = localeUrl(path, doc.translated ? locale : routing.defaultLocale)
   // Model pages are a usage reference: install, predict, variants, train,
@@ -588,7 +591,8 @@ export async function SectionDocView({ locale, section, slug, source = currentDo
       <DocsShell
         nav={source.localizeNav(locale)}
         activePath={href(path)}
-        {...shellProps(source)}
+        pagePath={source.href(path)}
+        {...shellProps(source, locale)}
         headings={headings}
         breadcrumbs={breadcrumbs}
       >
@@ -600,7 +604,7 @@ export async function SectionDocView({ locale, section, slug, source = currentDo
               {registeredFamily ? <ModelHeader doc={doc} family={family} {...archivedSource} /> : <PageHeader doc={doc} />}
               <HeroMedia media={doc.hero} />
 
-              <DocMarkdown family={family} snippets={doc.snippets || {}} {...archivedSource}>
+              <DocMarkdown family={family} snippets={doc.snippets || {}} locale={locale} {...archivedSource}>
                 {doc.content}
               </DocMarkdown>
 
@@ -612,7 +616,7 @@ export async function SectionDocView({ locale, section, slug, source = currentDo
             <>
               <PageHeader doc={doc} />
 
-              <DocMarkdown snippets={doc.snippets || {}} bareTables {...archivedSource}>
+              <DocMarkdown snippets={doc.snippets || {}} bareTables locale={locale} {...archivedSource}>
                 {doc.content}
               </DocMarkdown>
 

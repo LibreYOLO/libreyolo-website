@@ -43,22 +43,26 @@ export function localeUrl(path, locale) {
   return `${SITE_URL}/${locale}${clean}`
 }
 
-// hreflang map covering every configured locale + x-default. Derived from
-// routing.locales / localeHtmlLang so adding a locale needs no edits here.
-function languageMap(path) {
+// hreflang map covering the given locales (every configured locale by default)
+// + x-default. Derived from routing.locales / localeHtmlLang so adding a locale
+// needs no edits here.
+function languageMap(path, locales = routing.locales) {
   const languages = {}
-  for (const locale of routing.locales) {
+  for (const locale of locales) {
     languages[localeHtmlLang[locale]] = localeUrl(path, locale)
   }
   languages['x-default'] = localeUrl(path, routing.defaultLocale)
   return languages
 }
 
-// Canonical (self-referential per locale) + full hreflang map for a translated page.
-export function buildAlternates(path, locale) {
+// Canonical (self-referential per locale) + hreflang map for a translated page.
+// `locales` narrows the map to the languages that have their own version of the
+// page (a docs page with twins in some locales only); every version of the page
+// then lists the same set, matching the sitemap.
+export function buildAlternates(path, locale, locales = routing.locales) {
   return {
     canonical: localeUrl(path, locale),
-    languages: languageMap(path),
+    languages: languageMap(path, locales),
   }
 }
 
@@ -95,12 +99,12 @@ function ownImageUrl(path, locale) {
   return `${localeUrl(path, locale)}/opengraph-image`
 }
 
-export function buildPageMetadata({ title, description, path, locale, englishOnly = false, ownImage = false }) {
+export function buildPageMetadata({ title, description, path, locale, englishOnly = false, ownImage = false, locales }) {
   const ogTarget = englishOnly ? routing.defaultLocale : locale
   return {
     title,
     description,
-    alternates: englishOnly ? buildEnglishOnlyAlternates(path) : buildAlternates(path, locale),
+    alternates: englishOnly ? buildEnglishOnlyAlternates(path) : buildAlternates(path, locale, locales),
     openGraph: {
       title,
       description,
