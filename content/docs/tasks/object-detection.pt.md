@@ -118,7 +118,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 28d7cbb721e0f109
+source_hash: 60bb0f5b7cf31cb7
 ---
 
 ## Definição
@@ -142,7 +142,7 @@ um objeto `Boxes` produz fatias de uma linha, então `box.cls`, `box.conf` e
 
 ## Modelos
 
-As seguintes famílias treinam e rodam predições: [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet) e [PicoDet](/docs/models/picodet). YOLOv9 e RF-DETR são as duas famílias principais, e os recursos chegam primeiro nelas. RF-DETR precisa do seu próprio extra, `pip install "libreyolo[rfdetr]"`; as demais rodam com o pacote base.
+As seguintes famílias treinam e rodam predições: [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [GTR](/docs/models/gtr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet) e [PicoDet](/docs/models/picodet). YOLOv9 e RF-DETR são as duas famílias principais, e os recursos chegam primeiro nelas. RF-DETR precisa do seu próprio extra, `pip install "libreyolo[rfdetr]"`; as demais rodam com o pacote base.
 
 Outras onze fazem predição, validação e exportação, mas o `train()` delas
 lança `NotImplementedError`: [LW-DETR](/docs/models/lw-detr),

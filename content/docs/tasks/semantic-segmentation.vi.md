@@ -116,7 +116,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: a60dad4b38f35bf5
+source_hash: 531a9b20e5532913
 ---
 ## Định nghĩa
 
@@ -156,7 +156,7 @@ lớp của ADE20K so với 19 lớp của Cityscapes, vì vậy `names` của c
 biết nó có thể gán nhãn gì, còn hai checkpoint chỉ so sánh được khi huấn luyện
 trên cùng tập lớp.
 
-[PP-LiteSeg](/docs/models/ppliteseg) và [U-Net](/docs/models/unet) là các họ phân đoạn ngữ nghĩa có thể huấn luyện. Trọng số Cityscapes của U-Net được phát hành dưới tên `LibreUNets-sem.pt`.
+[PP-LiteSeg](/docs/models/ppliteseg), [U-Net](/docs/models/unet) và [GTR](/docs/models/gtr) là các họ phân đoạn ngữ nghĩa có thể huấn luyện. Trọng số Cityscapes của U-Net được phát hành dưới tên `LibreUNets-sem.pt`.
 
 ## Dự đoán
 

@@ -129,7 +129,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 33e331eac0f9b0af
+source_hash: 3d956e53e80143c2
 ---
 
 ## Определение
@@ -153,11 +153,11 @@ source_hash: 33e331eac0f9b0af
 
 ## Модели
 
-Обучать и предсказывать маски умеют четыре семейства:
+Обучать и предсказывать маски умеют пять семейств:
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
-[D-FINE](/docs/models/d-fine) и [RTMDet](/docs/models/rtmdet). Для RF-DETR
+[D-FINE](/docs/models/d-fine), [GTR](/docs/models/gtr) и [RTMDet](/docs/models/rtmdet). Для RF-DETR
 нужна своя дополнительная зависимость, `pip install "libreyolo[rfdetr]"`;
-остальные три работают на базовом пакете.
+остальные четыре работают на базовом пакете.
 
 [Mask R-CNN](/docs/models/mask-rcnn) предсказывает, валидирует и экспортирует
 маски, но его `train()` выбрасывает `NotImplementedError`.

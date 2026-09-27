@@ -79,7 +79,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: "f0afab6b9b451075"
+source_hash: 23e295da8ac303cf
 ---
 
 ## 정의
@@ -105,6 +105,8 @@ source_hash: "f0afab6b9b451075"
 [SenseNova-Vision](/docs/models/sensenova-vision)은 여섯 가지 다른 작업을 수행하는 동일한 7B 체크포인트에서 디퓨전 디코드를 통해 깊이 맵을 이미지로 생성합니다. 추가적으로 `sensenova`가 필요하며, 가중치는 비상업적 사용으로 제한됩니다. 라이선스는 해당 페이지에서 확인할 수 있습니다.
 
 [Marigold V2](/docs/models/marigold-v2)는 깊이 인코딩을 명시하는 확산 기반 깊이 어댑터를 추가합니다.
+
+[GTR](/docs/models/gtr) 계열은 미터 단위 깊이를 예측하고 이를 상대 역깊이(relative inverse depth)로 반환하므로, 학습 데이터와 비슷한 장면에서는 `1 / result.depth_map.data`로 미터 값을 복원할 수 있습니다. 기본 패키지에서 실행되고, 학습할 수 있으며, ONNX와 TorchScript로 내보낼 수 있습니다.
 
 ## 예측
 
@@ -141,7 +143,7 @@ names: {0: depth}
 
 ## 학습
 
-LibreYOLO의 깊이 계열에는 학습 구현이 없으며, 이 계열에서 `train()`은 `NotImplementedError`를 발생시킵니다. 각 모델 페이지는 업스트림에서 학습한 체크포인트를 LibreYOLO가 로드할 수 있는 형태로 바꾸는 변환 스크립트를 명시합니다.
+깊이 계열 중 학습을 지원하는 것은 [GTR](/docs/models/gtr)뿐입니다: `-depth` 체크포인트에서 `train()`을 호출하면 모델 페이지에 설명된 업스트림 학습 레시피가 실행됩니다. 다른 계열에서는 `train()`이 `NotImplementedError`를 발생시킵니다. 각 모델 페이지는 업스트림에서 학습한 체크포인트를 LibreYOLO가 로드할 수 있는 형태로 바꾸는 변환 스크립트를 명시합니다.
 
 ## 검증
 

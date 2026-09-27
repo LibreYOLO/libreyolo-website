@@ -9,7 +9,7 @@ keywords:
   - 相对深度模型
   - depth anything libreyolo
   - 稠密深度预测
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: 预测深度图
@@ -77,7 +77,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: f0afab6b9b451075
+source_hash: 23e295da8ac303cf
 ---
 
 ## 定义
@@ -121,6 +121,8 @@ Anything V2 Large 蒸馏而来，另有一个检查点，它的解码器避开�
 
 [Marigold V2](/docs/models/marigold-v2) 提供基于扩散模型的深度适配器，并明确记录深度编码。
 
+[GTR](/docs/models/gtr) 预测度量深度（metric depth），并以相对逆深度的形式返回，因此对于与其训练数据相似的场景，`1 / result.depth_map.data` 可以还原出以米为单位的深度。它使用基础包运行，支持训练，并可导出为 ONNX 和 TorchScript。
+
 ## 预测
 
 权重在首次使用时下载，并缓存在本地。模型页面说明了身份验证和运行时要求。
@@ -161,7 +163,7 @@ names: {0: depth}
 
 ## 训练
 
-LibreYOLO 的深度家族都没有训练实现：调用 `train()` 会抛出 `NotImplementedError`。各模型页面列出了将上游训练检查点转换为 LibreYOLO 可加载格式的脚本。
+[GTR](/docs/models/gtr) 是唯一支持训练的深度家族：在 `-depth` 检查点上调用 `train()` 会运行它的上游训练方案，具体见它的模型页面。其他家族调用 `train()` 会抛出 `NotImplementedError`。各模型页面列出了将上游训练检查点转换为 LibreYOLO 可加载格式的脚本。
 
 ## 验证
 

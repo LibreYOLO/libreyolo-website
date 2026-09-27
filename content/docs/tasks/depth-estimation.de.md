@@ -16,7 +16,7 @@ keywords:
   - relative tiefe modell
   - depth anything libreyolo
   - dichte tiefenvorhersage
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Eine Tiefenkarte vorhersagen
@@ -84,7 +84,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: "f0afab6b9b451075"
+source_hash: 23e295da8ac303cf
 ---
 
 ## Definition
@@ -138,6 +138,11 @@ seiner Seite.
 
 [Marigold V2](/docs/models/marigold-v2) ergänzt diffusionsbasierte Tiefenadapter mit expliziten Tiefenkodierungen.
 
+[GTR](/docs/models/gtr) sagt metrische Tiefe vorher und gibt sie als relative
+inverse Tiefe zurück, sodass `1 / result.depth_map.data` bei Szenen, die seinen
+Trainingsdaten ähneln, wieder Meter ergibt. Es läuft mit dem Basispaket, lässt
+sich trainieren und exportiert nach ONNX und TorchScript.
+
 ## Vorhersage
 
 Gewichte werden bei der ersten Verwendung heruntergeladen und lokal zwischengespeichert. Die Modellseiten beschreiben Authentifizierung und Runtime-Anforderungen.
@@ -184,7 +189,7 @@ Vertrag.
 
 ## Training
 
-Keine Tiefenfamilie in LibreYOLO hat eine Trainingsimplementierung: `train()` löst bei diesen Familien `NotImplementedError` aus. Jede Modellseite nennt das Konvertierungsskript, das einen Upstream-trainierten Checkpoint in ein von LibreYOLO ladbares Format umwandelt.
+[GTR](/docs/models/gtr) ist die einzige Tiefenfamilie, die sich trainieren lässt: `train()` auf einem `-depth`-Checkpoint führt ihr Upstream-Rezept aus, das ihre Modellseite beschreibt. Bei den anderen Familien löst `train()` `NotImplementedError` aus. Jede Modellseite nennt das Konvertierungsskript, das einen Upstream-trainierten Checkpoint in ein von LibreYOLO ladbares Format umwandelt.
 
 ## Validierung
 

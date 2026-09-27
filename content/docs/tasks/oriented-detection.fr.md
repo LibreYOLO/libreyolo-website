@@ -17,7 +17,7 @@ keywords:
   - dataset DOTA
   - détection objets aérienne
   - IoU orientée
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -170,7 +170,7 @@ snippets:
 
 
         print(result.obb.xywhr)
-source_hash: dddb69a3bd3541a8
+source_hash: 8af4d1647609e5e6
 ---
 
 ## Définition
@@ -200,7 +200,7 @@ la forme alignée sur les axes.
 
 ## Modèles
 
-Trois familles prennent cette tâche en charge.
+Quatre familles prennent cette tâche en charge.
 
 [RF-DETR](/docs/models/rf-detr) prend en charge l'entraînement. Elle prédit, entraîne,
 valide et exporte les boîtes orientées, et fournit des checkpoints orientés
@@ -226,6 +226,11 @@ du test sont également indisponibles pour les boîtes orientées.
 Choisissez l'ensemble d'étiquettes du checkpoint et la prise en charge de l'entraînement adaptés à votre dataset.
 
 [YOLO-NAS](/docs/models/yolo-nas) prend aussi en charge l'entraînement et l'inférence OBB. Ses poids pré-entraînés conservent les conditions non commerciales d'amont.
+
+[GTR](/docs/models/gtr) publie `LibreGTRs-obb.pt` et `LibreGTRx-obb.pt`, qui
+prédisent les 15 classes de DOTA v1.0 avec une entrée fixe de 1024. Elle
+s'exécute avec le package de base et prend en charge la prédiction,
+l'entraînement, la validation ainsi que l'export ONNX et TorchScript.
 
 ## Prédire
 

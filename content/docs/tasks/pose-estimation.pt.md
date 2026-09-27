@@ -142,7 +142,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 1b9e7614546d8f00
+source_hash: 3650786b0a858958
 ---
 
 ## Definição
@@ -171,7 +171,7 @@ sua acurácia depende do detector que está na frente dele.
 
 ## Modelos
 
-Três famílias treinam e rodam predições: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) e [YOLO-NAS](/docs/models/yolo-nas), todas de estágio único. RF-DETR precisa do seu próprio extra, `pip install "libreyolo[rfdetr]"`. RF-DETR e EdgeCrafter têm checkpoints de pose publicados. RF-DETR também treina poses multiclasse; a cabeça de keypoints do EdgeCrafter é fixa na construção e rejeita datasets que declarem outra quantidade, enquanto RF-DETR reinicializa sua cabeça para a nova quantidade. YOLO-NAS baixa os pesos da própria CDN da Deci.AI sob licença não comercial, e o LibreYOLO não publica nenhum deles; sua cabeça de pose também é reconstruída para uma nova quantidade de keypoints e suporta esqueletos multiclasse ou não humanos.
+Quatro famílias treinam e rodam predições: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [GTR](/docs/models/gtr) e [YOLO-NAS](/docs/models/yolo-nas), todas de estágio único. RF-DETR precisa do seu próprio extra, `pip install "libreyolo[rfdetr]"`. RF-DETR, EdgeCrafter e GTR têm checkpoints de pose publicados. RF-DETR também treina poses multiclasse; a cabeça de keypoints do EdgeCrafter é fixa na construção e rejeita datasets que declarem outra quantidade, enquanto RF-DETR reinicializa sua cabeça para a nova quantidade. YOLO-NAS baixa os pesos da própria CDN da Deci.AI sob licença não comercial, e o LibreYOLO não publica nenhum deles; sua cabeça de pose também é reconstruída para uma nova quantidade de keypoints e suporta esqueletos multiclasse ou não humanos. GTR só treina em um dataset de classe única com 17 keypoints em `imgsz=640`.
 
 O [HRNet](/docs/models/hrnet) é a opção top-down. Ele prevê, valida e exporta, e
 seu `train()` levanta `NotImplementedError`. Sem uma fonte de pessoas, ele se

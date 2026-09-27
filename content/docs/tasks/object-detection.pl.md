@@ -142,7 +142,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 28d7cbb721e0f109
+source_hash: 60bb0f5b7cf31cb7
 ---
 
 ## Definicja
@@ -170,7 +170,8 @@ Następujące rodziny obsługują zarówno trenowanie, jak i predykcję:
 [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr),
 [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr),
 [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim),
-[Dome-DETR](/docs/models/dome-detr), [YOLO-NAS](/docs/models/yolo-nas),
+[Dome-DETR](/docs/models/dome-detr), [GTR](/docs/models/gtr),
+[YOLO-NAS](/docs/models/yolo-nas),
 [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7),
 [RTMDet](/docs/models/rtmdet) oraz [PicoDet](/docs/models/picodet). YOLOv9 i
 RF-DETR są dwiema głównymi rodzinami, które jako pierwsze otrzymują nowe

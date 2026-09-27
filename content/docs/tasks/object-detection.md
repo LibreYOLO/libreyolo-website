@@ -133,7 +133,7 @@ The following families train and predict: [YOLOv9](/docs/models/yolov9),
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
 [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine),
 [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr),
-[YOLO-NAS](/docs/models/yolo-nas),
+[GTR](/docs/models/gtr), [YOLO-NAS](/docs/models/yolo-nas),
 [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7),
 [RTMDet](/docs/models/rtmdet) and [PicoDet](/docs/models/picodet). YOLOv9 and
 RF-DETR are the two flagship families, and features land on them first. RF-DETR

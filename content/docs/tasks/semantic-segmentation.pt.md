@@ -120,7 +120,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: a60dad4b38f35bf5
+source_hash: 531a9b20e5532913
 ---
 
 ## Definição
@@ -157,7 +157,7 @@ eles as 150 classes do ADE20K contra as 19 do Cityscapes, então o `names` de um
 checkpoint é o que diz o que ele consegue rotular, e dois checkpoints só são
 comparáveis quando foram treinados no mesmo espaço de rótulos.
 
-[PP-LiteSeg](/docs/models/ppliteseg) e [U-Net](/docs/models/unet) são famílias semânticas treináveis. Os pesos de Cityscapes do U-Net estão publicados como `LibreUNets-sem.pt`.
+[PP-LiteSeg](/docs/models/ppliteseg), [U-Net](/docs/models/unet) e [GTR](/docs/models/gtr) são famílias semânticas treináveis. Os pesos de Cityscapes do U-Net estão publicados como `LibreUNets-sem.pt`.
 
 ## Predição
 

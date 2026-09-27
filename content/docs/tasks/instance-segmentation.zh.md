@@ -117,7 +117,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 33e331eac0f9b0af
+source_hash: 3d956e53e80143c2
 ---
 
 ## 定义
@@ -136,10 +136,10 @@ source_hash: 33e331eac0f9b0af
 
 ## 模型
 
-有四个家族既能训练也能预测掩码：[RF-DETR](/docs/models/rf-detr)、
-[EdgeCrafter](/docs/models/edgecrafter)、[D-FINE](/docs/models/d-fine) 和
-[RTMDet](/docs/models/rtmdet)。RF-DETR 需要自己的 extra，
-`pip install "libreyolo[rfdetr]"`；其余三个在基础包上就能跑。
+有五个家族既能训练也能预测掩码：[RF-DETR](/docs/models/rf-detr)、
+[EdgeCrafter](/docs/models/edgecrafter)、[D-FINE](/docs/models/d-fine)、
+[GTR](/docs/models/gtr) 和 [RTMDet](/docs/models/rtmdet)。RF-DETR 需要自己的 extra，
+`pip install "libreyolo[rfdetr]"`；其余四个在基础包上就能跑。
 
 [Mask R-CNN](/docs/models/mask-rcnn) 能预测、验证和导出掩码，但它的 `train()`
 会抛出 `NotImplementedError`。

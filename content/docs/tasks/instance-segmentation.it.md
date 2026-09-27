@@ -146,7 +146,7 @@ snippets:
 
 
         print(result.masks.data.shape)
-source_hash: 33e331eac0f9b0af
+source_hash: 3d956e53e80143c2
 ---
 
 ## Definizione
@@ -171,10 +171,10 @@ restituisce lo stesso contorno normalizzato.
 
 ## Modelli
 
-Quattro famiglie addestrano e predicono maschere: [RF-DETR](/docs/models/rf-detr),
-[EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine) e
-[RTMDet](/docs/models/rtmdet). RF-DETR richiede il suo extra dedicato,
-`pip install "libreyolo[rfdetr]"`; le altre tre funzionano con il pacchetto base.
+Cinque famiglie addestrano e predicono maschere: [RF-DETR](/docs/models/rf-detr),
+[EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine),
+[GTR](/docs/models/gtr) e [RTMDet](/docs/models/rtmdet). RF-DETR richiede il suo extra dedicato,
+`pip install "libreyolo[rfdetr]"`; le altre quattro funzionano con il pacchetto base.
 
 [Mask R-CNN](/docs/models/mask-rcnn) predice, valida ed esporta maschere, ma il
 suo `train()` solleva `NotImplementedError`.

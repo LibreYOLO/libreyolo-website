@@ -12,7 +12,7 @@ keywords:
   - MIT 许可 目标检测库
   - yolo 替代方案
   - 训练自己的目标检测模型
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -114,7 +114,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 28d7cbb721e0f109
+source_hash: 60bb0f5b7cf31cb7
 ---
 
 ## 定义
@@ -135,7 +135,7 @@ source_hash: 28d7cbb721e0f109
 
 ## 模型
 
-以下家族支持训练和预测：[YOLOv9](/docs/models/yolov9)、[RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter)、[RT-DETR](/docs/models/rt-detr)、[D-FINE](/docs/models/d-fine)、[DEIM](/docs/models/deim)、[Dome-DETR](/docs/models/dome-detr)、[YOLO-NAS](/docs/models/yolo-nas)、[YOLOX](/docs/models/yolox)、[YOLOv7](/docs/models/yolov7)、[RTMDet](/docs/models/rtmdet) 和 [PicoDet](/docs/models/picodet)。YOLOv9 和 RF-DETR 是两个旗舰家族，新功能优先在它们上面落地。RF-DETR 需要自己的 extra，`pip install "libreyolo[rfdetr]"`；其余家族使用基础包即可运行。
+以下家族支持训练和预测：[YOLOv9](/docs/models/yolov9)、[RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter)、[RT-DETR](/docs/models/rt-detr)、[D-FINE](/docs/models/d-fine)、[DEIM](/docs/models/deim)、[Dome-DETR](/docs/models/dome-detr)、[GTR](/docs/models/gtr)、[YOLO-NAS](/docs/models/yolo-nas)、[YOLOX](/docs/models/yolox)、[YOLOv7](/docs/models/yolov7)、[RTMDet](/docs/models/rtmdet) 和 [PicoDet](/docs/models/picodet)。YOLOv9 和 RF-DETR 是两个旗舰家族，新功能优先在它们上面落地。RF-DETR 需要自己的 extra，`pip install "libreyolo[rfdetr]"`；其余家族使用基础包即可运行。
 
 另有十一个家族可以预测、验证和导出，但它们的 `train()` 会抛出
 `NotImplementedError`：[LW-DETR](/docs/models/lw-detr)、

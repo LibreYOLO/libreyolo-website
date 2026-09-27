@@ -2,11 +2,12 @@
 title: Ước lượng tư thế
 seo_title: Ước lượng tư thế trong LibreYOLO
 description: >-
-  Dự đoán keypoint trên mỗi thực thể trong LibreYOLO: các family phục vụ tác vụ, định dạng nhãn và các lời gọi
-  dự đoán, huấn luyện, xác thực cùng xuất.
+  Dự đoán keypoint trên mỗi thực thể trong LibreYOLO: các family phục vụ tác vụ,
+  định dạng nhãn và các lời gọi dự đoán, huấn luyện, xác thực cùng xuất.
 lead: >-
-  Ước lượng tư thế định vị từng thực thể và trả về một tập keypoint có tên theo thứ tự, vì vậy đầu ra mang cấu
-  trúc bên trong của đối tượng thay vì chỉ phạm vi của nó. Key tác vụ là pose.
+  Ước lượng tư thế định vị từng thực thể và trả về một tập keypoint có tên theo
+  thứ tự, vì vậy đầu ra mang cấu trúc bên trong của đối tượng thay vì chỉ phạm
+  vi của nó. Key tác vụ là pose.
 keywords:
   - ước lượng tư thế python
   - phát hiện keypoint
@@ -48,13 +49,19 @@ snippets:
             print(person[visible])
     - label: Dùng top-down
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # HRNet dùng top-down: trước hết crop từng người. Khi không cung cấp
-        # nguồn người, mô hình tự ghép với detector LibreYOLO9t và ghi lựa chọn vào log.
+
+        # nguồn người, mô hình tự ghép với detector LibreYOLO9t và ghi lựa chọn
+        vào log.
+
         model = LibreYOLO("LibreHRNetw32-pose.pt")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.keypoints.xy.shape)
   train:
@@ -90,16 +97,22 @@ snippets:
   val:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreECs-pose.pt")
 
+
         # val() trả về dict thuần, không phải đối tượng.
+
         metrics = model.val(data="coco8-pose.yaml", allow_download_scripts=True)
 
+
         print(metrics["metrics/keypoints_mAP50-95"])
-        print(metrics["metrics/keypoints_mAP50"], metrics["metrics/keypoints_mAP75"])
+
+        print(metrics["metrics/keypoints_mAP50"],
+        metrics["metrics/keypoints_mAP75"])
     - label: CLI
       language: bash
       code: |
@@ -128,7 +141,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 1b9e7614546d8f00
+source_hash: 3650786b0a858958
 ---
 ## Định nghĩa
 
@@ -155,7 +168,7 @@ phía trước.
 
 ## Mô hình
 
-Ba họ mô hình vừa huấn luyện vừa dự đoán: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) và [YOLO-NAS](/docs/models/yolo-nas), đều là mô hình một giai đoạn. RF-DETR cần extra riêng, `pip install "libreyolo[rfdetr]"`. RF-DETR và EdgeCrafter có checkpoint tư thế đã công bố. RF-DETR còn huấn luyện tư thế nhiều lớp đối tượng; head keypoint của EdgeCrafter cố định khi khởi tạo và từ chối dataset khai báo số lượng khác, còn RF-DETR khởi tạo lại head cho số lượng mới. YOLO-NAS lấy trọng số từ CDN riêng của Deci.AI theo giấy phép phi thương mại, và LibreYOLO không công bố tệp nào; head tư thế của nó cũng dựng lại cho số keypoint mới và hỗ trợ bộ xương nhiều lớp đối tượng hoặc không phải người.
+Bốn họ mô hình vừa huấn luyện vừa dự đoán: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [GTR](/docs/models/gtr) và [YOLO-NAS](/docs/models/yolo-nas), đều là mô hình một giai đoạn. RF-DETR cần extra riêng, `pip install "libreyolo[rfdetr]"`. RF-DETR, EdgeCrafter và GTR có checkpoint tư thế đã công bố. RF-DETR còn huấn luyện tư thế nhiều lớp đối tượng; head keypoint của EdgeCrafter cố định khi khởi tạo và từ chối dataset khai báo số lượng khác, còn RF-DETR khởi tạo lại head cho số lượng mới. YOLO-NAS lấy trọng số từ CDN riêng của Deci.AI theo giấy phép phi thương mại, và LibreYOLO không công bố tệp nào; head tư thế của nó cũng dựng lại cho số keypoint mới và hỗ trợ bộ xương nhiều lớp đối tượng hoặc không phải người. GTR chỉ huấn luyện trên dataset một lớp đối tượng với 17 keypoint ở `imgsz=640`.
 
 [HRNet](/docs/models/hrnet) là lựa chọn top-down. Nó dự đoán, xác thực và xuất,
 còn `train()` phát sinh `NotImplementedError`. Khi không có nguồn người, nó tự

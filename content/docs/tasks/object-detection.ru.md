@@ -15,7 +15,6 @@ keywords:
   - альтернатива ultralytics yolo
   - обучить детектор объектов на своём датасете
 last_verified: 1.6.0
-
 snippets:
   predict:
     - label: Python
@@ -117,7 +116,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 28d7cbb721e0f109
+source_hash: 60bb0f5b7cf31cb7
 ---
 
 ## Определение
@@ -142,7 +141,7 @@ source_hash: 28d7cbb721e0f109
 
 ## Модели
 
-Следующие семейства поддерживают обучение и предсказание: [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet) и [PicoDet](/docs/models/picodet). YOLOv9 и RF-DETR — два флагманских семейства, и новые возможности сначала появляются в них. RF-DETR требует отдельный extra, `pip install "libreyolo[rfdetr]"`; остальные работают с базовым пакетом.
+Следующие семейства поддерживают обучение и предсказание: [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [GTR](/docs/models/gtr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet) и [PicoDet](/docs/models/picodet). YOLOv9 и RF-DETR — два флагманских семейства, и новые возможности сначала появляются в них. RF-DETR требует отдельный extra, `pip install "libreyolo[rfdetr]"`; остальные работают с базовым пакетом.
 
 Ещё одиннадцать поддерживают предсказание, валидацию и экспорт, но их
 `train()` бросает `NotImplementedError`: [LW-DETR](/docs/models/lw-detr),

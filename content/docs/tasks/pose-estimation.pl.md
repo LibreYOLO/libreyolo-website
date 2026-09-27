@@ -154,7 +154,7 @@ snippets:
 
 
         print(result.keypoints.xy)
-source_hash: 1b9e7614546d8f00
+source_hash: 3650786b0a858958
 ---
 
 ## Definicja
@@ -185,7 +185,7 @@ detektora.
 
 ## Modele
 
-Trzy rodziny zarówno trenują, jak i przewidują: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) i [YOLO-NAS](/docs/models/yolo-nas), wszystkie jednoetapowe. RF-DETR wymaga własnego dodatku, `pip install "libreyolo[rfdetr]"`. RF-DETR i EdgeCrafter udostępniają opublikowane checkpointy pozy. RF-DETR trenuje też pozy wieloklasowe; głowica punktów kluczowych EdgeCrafter jest ustalana podczas tworzenia i odrzuca zbiór deklarujący inną liczbę, a RF-DETR ponownie inicjalizuje dla niego głowicę. YOLO-NAS pobiera wagi z własnej sieci CDN Deci.AI na licencji niekomercyjnej, a LibreYOLO nie publikuje żadnych z nich; jego głowica pozy też przebudowuje się dla nowej liczby punktów kluczowych i obsługuje szkielety wieloklasowe lub inne niż ludzkie.
+Cztery rodziny zarówno trenują, jak i przewidują: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [GTR](/docs/models/gtr) i [YOLO-NAS](/docs/models/yolo-nas), wszystkie jednoetapowe. RF-DETR wymaga własnego dodatku, `pip install "libreyolo[rfdetr]"`. RF-DETR, EdgeCrafter i GTR udostępniają opublikowane checkpointy pozy. RF-DETR trenuje też pozy wieloklasowe; głowica punktów kluczowych EdgeCrafter jest ustalana podczas tworzenia i odrzuca zbiór deklarujący inną liczbę, a RF-DETR ponownie inicjalizuje dla niego głowicę. YOLO-NAS pobiera wagi z własnej sieci CDN Deci.AI na licencji niekomercyjnej, a LibreYOLO nie publikuje żadnych z nich; jego głowica pozy też przebudowuje się dla nowej liczby punktów kluczowych i obsługuje szkielety wieloklasowe lub inne niż ludzkie. GTR trenuje tylko na jednoklasowym zbiorze danych z 17 punktami kluczowymi przy `imgsz=640`.
 
 [HRNet](/docs/models/hrnet) jest opcją top-down. Przewiduje, waliduje i
 eksportuje, a jego `train()` zgłasza `NotImplementedError`. Jeśli nie podano

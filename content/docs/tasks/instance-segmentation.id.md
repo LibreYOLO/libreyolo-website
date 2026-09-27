@@ -20,15 +20,22 @@ snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Akhiran -seg pada nama berkas memilih head mask, sehingga tidak diperlukan task
+
+        # Akhiran -seg pada nama berkas memilih head mask, sehingga tidak
+        diperlukan task
+
         # argumen.
+
         model = LibreYOLO("LibreDFINEn-seg.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         print(result.masks.data.shape)   # (N, H, W), satu mask per deteksi
+
         print(result.boxes.xyxy.shape)   # (N, 4), N baris yang sama
     - label: CLI
       language: bash
@@ -37,13 +44,18 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Kontur mask
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreDFINEn-seg.pt")
+
         result = model(SAMPLE_IMAGE)
 
-        # .xy adalah daftar kontur (P, 2) dalam piksel, .xyn normalisasi yang sama.
+
+        # .xy adalah daftar kontur (P, 2) dalam piksel, .xyn normalisasi yang
+        sama.
+
         for name, contour in zip(result.boxes.cls, result.masks.xy):
             print(result.names[int(name)], contour.shape)
     - label: 'family lain, panggilan yang sama'
@@ -58,13 +70,18 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         # Berlanjut dari bobot segmentasi yang diterbitkan, mask head termasuk.
+
         # data harus menunjuk ke dataset yang labelnya membawa poligon.
+
         model = LibreYOLO("LibreDFINEn-seg.pt")
-        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8, lr0=2e-4)
+
+        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8,
+        lr0=2e-4)
     - label: CLI
       language: bash
       code: |
@@ -72,10 +89,14 @@ snippets:
           epochs=50 imgsz=640 batch=8 lr0=2e-4
     - label: Dari bobot deteksi
       language: bash
-      code: |
-        # Bobot deteksi tidak membawa mask head, jadi ini adalah transfer eksplisit
+      code: >
+        # Bobot deteksi tidak membawa mask head, jadi ini adalah transfer
+        eksplisit
+
         # : head memulai tanpa pelatihan. Meminta task=segment adalah
+
         # apa yang memberinya wewenang.
+
         libreyolo train model=LibreDFINEn.pt data=my-dataset.yaml \
           task=segment epochs=50 imgsz=640
   val:
@@ -108,16 +129,22 @@ snippets:
         libreyolo export model=LibreDFINEn-seg.pt format=onnx imgsz=640
     - label: Gunakan berkas yang diekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Pabrik mengarahkan berdasarkan sufiks berkas, jadi artefak yang diekspor dimuat
+
+        # Pabrik mengarahkan berdasarkan sufiks berkas, jadi artefak yang
+        diekspor dimuat
+
         # seperti checkpoint dan mengembalikan objek Results yang sama.
+
         model = LibreYOLO("LibreDFINEn-seg.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.masks.data.shape)
-source_hash: 33e331eac0f9b0af
+source_hash: 3d956e53e80143c2
 ---
 
 ## Definisi
@@ -140,10 +167,10 @@ array piksel `(P, 2)`, dan `.xyn` memberikan kontur yang sama dalam keadaan norm
 
 ## Model
 
-Empat keluarga baik melatih maupun memprediksi mask: [RF-DETR](/docs/models/rf-detr),
-[EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine) dan
-[RTMDet](/docs/models/rtmdet). RF-DETR membutuhkan tambahan sendiri,
-`pip install "libreyolo[rfdetr]"`; ketiga lainnya berjalan pada paket dasar.
+Lima keluarga baik melatih maupun memprediksi mask: [RF-DETR](/docs/models/rf-detr),
+[EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine),
+[GTR](/docs/models/gtr) dan [RTMDet](/docs/models/rtmdet). RF-DETR membutuhkan tambahan sendiri,
+`pip install "libreyolo[rfdetr]"`; keempat lainnya berjalan pada paket dasar.
 
 [Mask R-CNN](/docs/models/mask-rcnn) memprediksi, memvalidasi, dan mengekspor mask, tetapi
 `train()`-nya menimbulkan `NotImplementedError`.

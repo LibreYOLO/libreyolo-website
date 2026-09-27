@@ -148,7 +148,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.obb.xywhr)
-source_hash: dddb69a3bd3541a8
+source_hash: 8af4d1647609e5e6
 ---
 
 ## 定義
@@ -161,7 +161,7 @@ source_hash: dddb69a3bd3541a8
 
 ## モデル
 
-このタスクには3つのファミリーが対応します。
+このタスクには4つのファミリーが対応します。
 
 [RF-DETR](/docs/models/rf-detr)は学習できるファミリーです。回転ボックスの推論、学習、検証、エクスポートに対応し、n、s、m、lの4サイズで公開済みの回転チェックポイントを提供します。専用の追加パッケージ`pip install "libreyolo[rfdetr]"`が必要で、モデルページに重みのライセンスと来歴が記載されています。
 
@@ -172,6 +172,8 @@ source_hash: dddb69a3bd3541a8
 データセットに必要なチェックポイントのラベル集合と、学習への対応に基づいて選んでください。
 
 [YOLO-NAS](/docs/models/yolo-nas)もOBBの学習と推論に対応します。学習済みの重みには、アップストリームの非商用条件が引き続き適用されます。
+
+[GTR](/docs/models/gtr)は`LibreGTRs-obb.pt`と`LibreGTRx-obb.pt`を公開しており、これらは固定サイズ1024の入力でDOTA v1.0の15クラスを予測します。基本パッケージで実行でき、推論、学習、検証、ONNXとTorchScriptへのエクスポートに対応します。
 
 ## 推論
 

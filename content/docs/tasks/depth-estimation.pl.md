@@ -101,7 +101,7 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: f0afab6b9b451075
+source_hash: 23e295da8ac303cf
 ---
 
 ## Definicja
@@ -154,6 +154,11 @@ podano na stronie modelu.
 
 [Marigold V2](/docs/models/marigold-v2) dodaje adaptery głębi oparte na dyfuzji z jawnymi kodowaniami głębi.
 
+[GTR](/docs/models/gtr) przewiduje głębię metryczną i zwraca ją jako względną
+odwrotność głębi, dzięki czemu `1 / result.depth_map.data` daje wartości w
+metrach dla scen podobnych do jego danych treningowych. Działa z pakietem
+bazowym, obsługuje trenowanie i eksport do ONNX i TorchScript.
+
 ## Predykcja
 
 Wagi są pobierane przy pierwszym użyciu i przechowywane w lokalnej pamięci podręcznej. Strony modeli opisują uwierzytelnianie i wymagania środowiska uruchomieniowego.
@@ -198,7 +203,7 @@ zbiorów danych](/docs/reference/dataset-formats).
 
 ## Trenowanie
 
-Żadna rodzina głębi w LibreYOLO nie ma implementacji trenowania: `train()` zgłasza dla tych rodzin `NotImplementedError`. Każda strona modelu podaje skrypt konwersji checkpointu wytrenowanego w projekcie źródłowym do postaci wczytywanej przez LibreYOLO.
+[GTR](/docs/models/gtr) to jedyna rodzina głębi z obsługą trenowania: `train()` wywołane dla checkpointu `-depth` uruchamia przepis trenowania z projektu źródłowego, opisany na stronie modelu. W pozostałych rodzinach `train()` zgłasza `NotImplementedError`. Każda strona modelu podaje skrypt konwersji checkpointu wytrenowanego w projekcie źródłowym do postaci wczytywanej przez LibreYOLO.
 
 ## Walidacja
 

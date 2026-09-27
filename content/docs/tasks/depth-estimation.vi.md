@@ -2,11 +2,12 @@
 title: Ước lượng độ sâu
 seo_title: Ước lượng độ sâu monocular trong LibreYOLO
 description: >-
-  Dự đoán depth map tương đối dày đặc từ một ảnh trong LibreYOLO. So sánh các depth family, đọc metric độ sâu
-  và xuất mô hình độ sâu.
+  Dự đoán depth map tương đối dày đặc từ một ảnh trong LibreYOLO. So sánh các
+  depth family, đọc metric độ sâu và xuất mô hình độ sâu.
 lead: >-
-  Ước lượng độ sâu dự đoán khoảng cách từ mỗi pixel đến camera chỉ bằng một ảnh. LibreYOLO cung cấp dưới dạng
-  tác vụ depth, trả về inverse-depth map tương đối dày đặc trên canvas ảnh gốc.
+  Ước lượng độ sâu dự đoán khoảng cách từ mỗi pixel đến camera chỉ bằng một ảnh.
+  LibreYOLO cung cấp dưới dạng tác vụ depth, trả về inverse-depth map tương đối
+  dày đặc trên canvas ảnh gốc.
 keywords:
   - ước lượng độ sâu monocular python
   - tạo depth map từ một ảnh
@@ -29,15 +30,22 @@ snippets:
         print(depth.min, depth.max, depth.mean)
     - label: Làm việc với các giá trị
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         depth = result.depth_map
-        raw = depth.data          # cao hơn là gần hơn; không đơn vị thực, không tỷ lệ
+
+        raw = depth.data          # cao hơn là gần hơn; không đơn vị thực, không
+        tỷ lệ
+
         gray = depth.normalized() # đổi tỷ lệ về [0, 1] để trực quan hóa
+
         print(raw.shape, float(gray.max()))
     - label: Lựa chọn nhỏ gọn
       language: python
@@ -81,7 +89,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: f0afab6b9b451075
+source_hash: 23e295da8ac303cf
 ---
 ## Định nghĩa
 
@@ -128,6 +136,11 @@ giấy phép nằm trên trang của mô hình.
 
 [Marigold V2](/docs/models/marigold-v2) bổ sung adapter độ sâu dựa trên diffusion với cách mã hóa độ sâu rõ ràng.
 
+[GTR](/docs/models/gtr) dự đoán độ sâu theo đơn vị thực (metric depth) và trả về
+kết quả dưới dạng inverse depth tương đối, vì vậy `1 / result.depth_map.data`
+khôi phục độ sâu theo mét cho các cảnh giống dữ liệu huấn luyện của nó. Nó chạy
+trên package cơ sở, huấn luyện được và xuất sang ONNX cùng TorchScript.
+
 ## Dự đoán
 
 Trọng số tải về ở lần dùng đầu tiên và được lưu vào bộ nhớ đệm cục bộ. Trang mô hình mô tả yêu cầu xác thực và runtime.
@@ -170,7 +183,7 @@ dataset](/docs/reference/dataset-formats) để biết hợp đồng đầy đ�
 
 ## Huấn luyện
 
-Không họ độ sâu nào trong LibreYOLO triển khai huấn luyện: `train()` phát sinh `NotImplementedError` trên các họ này. Mỗi trang mô hình nêu script chuyển checkpoint được huấn luyện upstream thành định dạng LibreYOLO có thể tải.
+[GTR](/docs/models/gtr) là họ độ sâu duy nhất có thể huấn luyện: `train()` trên một checkpoint `-depth` chạy quy trình huấn luyện upstream của nó, được mô tả trên trang mô hình. Trên các họ còn lại, `train()` phát sinh `NotImplementedError`. Mỗi trang mô hình nêu script chuyển checkpoint được huấn luyện upstream thành định dạng LibreYOLO có thể tải.
 
 ## Xác thực
 

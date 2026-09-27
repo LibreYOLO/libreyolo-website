@@ -16,7 +16,7 @@ keywords:
   - points clés COCO
   - mAP OKS
   - entraîner modèle pose
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -147,7 +147,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 1b9e7614546d8f00
+source_hash: 3650786b0a858958
 ---
 
 ## Définition
@@ -178,16 +178,17 @@ le recadrage. Sa précision dépend donc du détecteur placé devant lui.
 
 ## Modèles
 
-Trois familles peuvent être entraînées et effectuer des prédictions :
-[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) et
-[YOLO-NAS](/docs/models/yolo-nas), toutes en une étape. RF-DETR nécessite son
-propre extra, `pip install "libreyolo[rfdetr]"`. RF-DETR et EdgeCrafter
+Quatre familles peuvent être entraînées et effectuer des prédictions :
+[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
+[GTR](/docs/models/gtr) et [YOLO-NAS](/docs/models/yolo-nas), toutes en une étape. RF-DETR nécessite son
+propre extra, `pip install "libreyolo[rfdetr]"`. RF-DETR, EdgeCrafter et GTR
 publient des checkpoints de pose. RF-DETR entraîne aussi des poses multiclasses. La tête de points clés d'EdgeCrafter est fixée à
 la construction et refuse un dataset qui déclare un autre nombre, tandis que
 RF-DETR réinitialise sa tête. YOLO-NAS récupère ses poids depuis le propre CDN
 de Deci.AI sous une licence non commerciale, et LibreYOLO n'en publie aucun. Sa
 tête de pose se reconstruit également pour un nouveau nombre de points clés.
-Elle prend aussi en charge les squelettes multiclasses ou non humains.
+Elle prend aussi en charge les squelettes multiclasses ou non humains. GTR ne
+s'entraîne que sur un dataset à une seule classe avec 17 points clés à `imgsz=640`.
 
 [HRNet](/docs/models/hrnet) constitue l'option descendante. Il prédit, valide et
 exporte, tandis que sa méthode `train()` déclenche une

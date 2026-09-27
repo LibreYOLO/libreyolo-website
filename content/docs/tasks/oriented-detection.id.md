@@ -8,8 +8,8 @@ description: >-
 lead: >-
   Deteksi objek berorientasi melokalisasi setiap instance dengan persegi panjang
   berotasi, bukan persegi panjang sejajar sumbu, sehingga objek miring dibatasi
-  dengan rapat alih-alih oleh bounding box yang penuh background. Kunci task-nya adalah
-  obb.
+  dengan rapat alih-alih oleh bounding box yang penuh background. Kunci task-nya
+  adalah obb.
 keywords:
   - deteksi oriented bounding box
   - deteksi objek berotasi
@@ -41,15 +41,21 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Sudut sebagai pengganti angle
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         result = LibreYOLO("LibreRFDETRs-obb.pt")(SAMPLE_IMAGE)
+
         obb = result.obb
 
+
         print(obb.xyxyxyxy.shape)    # (N, 4, 2) titik sudut dalam piksel
+
         print(obb.xyxyxyxyn.shape)   # hal yang sama, ternormalisasi
-        print(obb.xyxy.shape)        # (N, 4) bounding box sejajar sumbu yang melingkupi
+
+        print(obb.xyxy.shape)        # (N, 4) bounding box sejajar sumbu yang
+        melingkupi
     - label: Checkpoint lebih kecil
       language: python
       code: |
@@ -75,13 +81,18 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         # Melanjutkan dari bobot berorientasi terbitan. data harus menunjuk ke
+
         # dataset yang baris labelnya memuat empat sudut.
+
         model = LibreYOLO("LibreRFDETRs-obb.pt")
-        model.train(data="my-obb-dataset.yaml", epochs=50, imgsz=512, batch=8, lr0=1e-4)
+
+        model.train(data="my-obb-dataset.yaml", epochs=50, imgsz=512, batch=8,
+        lr0=1e-4)
     - label: CLI
       language: bash
       code: |
@@ -130,23 +141,33 @@ snippets:
         libreyolo export model=LibreRFDETRs-obb.pt format=onnx imgsz=512
     - label: RT-DETRv2
       language: bash
-      code: |
+      code: >
         # ONNX dan TorchScript adalah target tervalidasi di sini, pada FP32,
+
         # batch 1, di kanvas tetap 1024 kali 1024.
+
         libreyolo export model=LibreRTDETRv2n-obb.pt format=onnx imgsz=1024
-        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript imgsz=1024
+
+        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript
+        imgsz=1024
     - label: Gunakan berkas hasil ekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Factory merutekan berdasarkan akhiran berkas, sehingga artefak hasil
-        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang sama.
+
+        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang
+        sama.
+
         model = LibreYOLO("LibreRFDETRs-obb.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.obb.xywhr)
-source_hash: dddb69a3bd3541a8
+source_hash: 8af4d1647609e5e6
 ---
 
 ## Definisi
@@ -173,7 +194,7 @@ persegi panjang. `result.boxes` juga diisi dengan bentuk sejajar sumbu.
 
 ## Model
 
-Tiga family mendukung task ini.
+Empat family mendukung task ini.
 
 [RF-DETR](/docs/models/rf-detr) mendukung pelatihan. Model ini memprediksi, melatih, memvalidasi, dan mengekspor kotak berorientasi, serta memiliki checkpoint berorientasi dalam empat ukuran: n, s, m, dan l. Model ini memerlukan extra tersendiri, `pip install "libreyolo[rfdetr]"`, dan halaman model mencantumkan lisensi serta asal bobotnya.
 
@@ -194,6 +215,11 @@ berorientasi.
 Pilih kumpulan label checkpoint dan dukungan pelatihan yang sesuai dengan dataset.
 
 [YOLO-NAS](/docs/models/yolo-nas) juga mendukung pelatihan dan inferensi OBB. Bobot pretrained-nya mempertahankan ketentuan nonkomersial upstream.
+
+[GTR](/docs/models/gtr) menerbitkan `LibreGTRs-obb.pt` dan `LibreGTRx-obb.pt`,
+yang memprediksi 15 kelas DOTA v1.0 pada input tetap 1024. Model ini berjalan
+dengan paket dasar dan mendukung prediksi, pelatihan, validasi, serta ekspor
+ONNX dan TorchScript.
 
 ## Prediksi
 

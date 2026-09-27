@@ -102,7 +102,7 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: f0afab6b9b451075
+source_hash: 23e295da8ac303cf
 ---
 
 ## Definición
@@ -154,6 +154,11 @@ restringidos a uso no comercial; la licencia está en su página.
 
 [Marigold V2](/docs/models/marigold-v2) añade adaptadores de profundidad basados en difusión con codificaciones de profundidad explícitas.
 
+[GTR](/docs/models/gtr) predice profundidad métrica y la devuelve como profundidad
+inversa relativa, de modo que `1 / result.depth_map.data` recupera metros en
+escenas similares a sus datos de entrenamiento. Funciona con el paquete base,
+entrena y exporta a ONNX y TorchScript.
+
 ## Predicción
 
 Los pesos se descargan en el primer uso y se guardan en la caché local. Las páginas de los modelos describen los requisitos de autenticación y ejecución.
@@ -203,8 +208,9 @@ completo.
 
 ## Entrenamiento
 
-Ninguna familia de profundidad en LibreYOLO tiene implementación de
-entrenamiento: `train()` lanza `NotImplementedError` en estas familias. La página de
+[GTR](/docs/models/gtr) es la única familia de profundidad que entrena: `train()`
+sobre un checkpoint `-depth` ejecuta su receta upstream, que describe su página de
+modelo. En las demás familias, `train()` lanza `NotImplementedError`. La página de
 cada modelo indica el script de conversión que convierte un checkpoint entrenado
 upstream en uno que LibreYOLO pueda cargar.
 

@@ -16,7 +16,7 @@ keywords:
   - modèle profondeur relative
   - depth anything libreyolo
   - prédiction dense profondeur
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Prédire une carte de profondeur
@@ -97,7 +97,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: f0afab6b9b451075
+source_hash: 23e295da8ac303cf
 ---
 
 ## Définition
@@ -152,6 +152,11 @@ sont réservés à un usage non commercial. Leur licence figure sur sa page.
 
 [Marigold V2](/docs/models/marigold-v2) ajoute des adaptateurs de profondeur fondés sur la diffusion, avec des encodages de profondeur explicites.
 
+[GTR](/docs/models/gtr) prédit une profondeur métrique et la renvoie sous forme
+de profondeur inverse relative, si bien que `1 / result.depth_map.data` retrouve
+des mètres pour des scènes proches de ses données d'entraînement. Il s'exécute
+avec le paquet de base, s'entraîne et s'exporte en ONNX et TorchScript.
+
 ## Prédire
 
 Les poids se téléchargent au premier usage et sont mis en cache localement. Les pages des modèles décrivent les exigences d'authentification et de runtime.
@@ -203,8 +208,10 @@ contrat complet.
 
 ## Entraîner
 
-Aucune famille de profondeur de LibreYOLO ne possède d'implémentation
-d'entraînement. `train()` déclenche une `NotImplementedError` pour ces familles.
+[GTR](/docs/models/gtr) est la seule famille de profondeur qui s'entraîne :
+`train()` sur un checkpoint `-depth` exécute sa recette amont, que sa page de
+modèle décrit. Sur les autres familles, `train()` déclenche une
+`NotImplementedError`.
 Chaque page de modèle indique le script de conversion qui transforme un
 checkpoint entraîné dans le projet amont en un fichier chargeable par
 LibreYOLO.

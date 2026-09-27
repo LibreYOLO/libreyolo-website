@@ -158,7 +158,7 @@ rectangles. `result.boxes` is filled as well, with the axis-aligned form.
 
 ## Models
 
-Three families serve this task.
+Four families serve this task.
 
 [RF-DETR](/docs/models/rf-detr) supports training. It predicts, trains,
 validates and exports oriented boxes, and it ships published oriented
@@ -182,6 +182,11 @@ Tracking and test-time augmentation are also unavailable for oriented boxes.
 Choose the checkpoint label set and training support needed for your dataset.
 
 [YOLO-NAS](/docs/models/yolo-nas) also supports OBB training and inference. Its pretrained weights retain the upstream non-commercial terms.
+
+[GTR](/docs/models/gtr) publishes `LibreGTRs-obb.pt` and `LibreGTRx-obb.pt`,
+which predict the 15 DOTA v1.0 classes at a fixed 1024 input. It runs on the
+base package and supports prediction, training, validation, and ONNX and
+TorchScript export.
 
 ## Predict
 

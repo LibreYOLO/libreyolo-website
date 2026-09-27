@@ -36,36 +36,52 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: 'family lain, panggilan yang sama'
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Pabrik merutekan di checkpoint, dan setiap pendeteksi mengembalikan
-        # objek Results yang sama, sehingga mengganti family hanya butuh satu baris perubahan.
+
+        # objek Results yang sama, sehingga mengganti family hanya butuh satu
+        baris perubahan.
+
         model = LibreYOLO("LibreDFINEn.pt")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.boxes.xyxy.shape)
     - label: Video dan streaming
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # Sumber apa pun yang diterima perpustakaan: berkas, folder, URL, indeks webcam,
+
+        # Sumber apa pun yang diterima perpustakaan: berkas, folder, URL, indeks
+        webcam,
+
         # aliran RTSP, atau daftar .streams.
+
         for result in model.predict("clip.mp4", stream=True, save=True):
             print(len(result.boxes))
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # coco128.yaml mengunduh sampel 128 gambar pada penggunaan pertama. Arahkan data
+
+        # coco128.yaml mengunduh sampel 128 gambar pada penggunaan pertama.
+        Arahkan data
+
         # ke YAML dataset Anda sendiri untuk menjalankan yang sesungguhnya.
+
         model.train(data="coco128.yaml", epochs=50, imgsz=640, batch=8)
     - label: CLI
       language: bash
@@ -109,16 +125,22 @@ snippets:
         libreyolo export model=LibreYOLO9t.pt format=onnx imgsz=640
     - label: Gunakan berkas yang diekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Pabrik memproses berdasarkan akhiran berkas, jadi artefak yang diekspor dimuat
+
+        # Pabrik memproses berdasarkan akhiran berkas, jadi artefak yang
+        diekspor dimuat
+
         # seperti checkpoint dan mengembalikan objek Results yang sama.
+
         model = LibreYOLO("LibreYOLO9t.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy)
-source_hash: 28d7cbb721e0f109
+source_hash: 60bb0f5b7cf31cb7
 ---
 
 ## Definisi
@@ -142,7 +164,7 @@ sebuah objek `Boxes` menghasilkan irisan satu baris, jadi `box.cls`, `box.conf` 
 
 ## Model
 
-Family berikut mendukung pelatihan dan prediksi: [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet), dan [PicoDet](/docs/models/picodet). YOLOv9 dan RF-DETR adalah dua family unggulan, dan fitur baru hadir terlebih dahulu pada keduanya. RF-DETR memerlukan extra tersendiri, `pip install "libreyolo[rfdetr]"`; sisanya berjalan dengan paket dasar.
+Family berikut mendukung pelatihan dan prediksi: [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [GTR](/docs/models/gtr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet), dan [PicoDet](/docs/models/picodet). YOLOv9 dan RF-DETR adalah dua family unggulan, dan fitur baru hadir terlebih dahulu pada keduanya. RF-DETR memerlukan extra tersendiri, `pip install "libreyolo[rfdetr]"`; sisanya berjalan dengan paket dasar.
 
 Sebelas lagi memprediksi, memvalidasi dan mengekspor, tetapi `train()` mereka naik
 `NotImplementedError`: [LW-DETR](/docs/models/lw-detr),

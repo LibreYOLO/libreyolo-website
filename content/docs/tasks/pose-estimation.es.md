@@ -155,7 +155,7 @@ snippets:
 
 
         print(result.keypoints.xy)
-source_hash: 1b9e7614546d8f00
+source_hash: 3650786b0a858958
 ---
 
 ## Definición
@@ -185,16 +185,17 @@ precisión depende del detector que tiene delante.
 
 ## Modelos
 
-Tres familias entrenan y predicen:
-[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) y
-[YOLO-NAS](/docs/models/yolo-nas), todas de una etapa. RF-DETR necesita su
-propio extra, `pip install "libreyolo[rfdetr]"`. RF-DETR y EdgeCrafter traen
+Cuatro familias entrenan y predicen:
+[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
+[GTR](/docs/models/gtr) y [YOLO-NAS](/docs/models/yolo-nas), todas de una etapa. RF-DETR necesita su
+propio extra, `pip install "libreyolo[rfdetr]"`. RF-DETR, EdgeCrafter y GTR traen
 checkpoints de pose publicados. RF-DETR también entrena poses multiclase; la cabeza de keypoints de EdgeCrafter queda fijada
 en la construcción y rechaza un dataset que declare un número distinto, mientras
 que RF-DETR reinicializa la suya para ese número. YOLO-NAS descarga sus pesos del
 CDN propio de Deci.AI bajo una licencia no comercial, y LibreYOLO no publica
 ninguno de ellos; su cabeza de pose también se reconstruye para un número nuevo
-de keypoints, y soporta esqueletos multiclase o no humanos.
+de keypoints, y soporta esqueletos multiclase o no humanos. GTR solo entrena con un
+dataset de una sola clase con 17 keypoints a `imgsz=640`.
 
 [HRNet](/docs/models/hrnet) es la opción top-down. Predice, valida y exporta, y
 su `train()` lanza `NotImplementedError`. Si no se le da una fuente de personas,

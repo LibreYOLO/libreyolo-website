@@ -16,7 +16,7 @@ keywords:
   - ключові точки COCO
   - OKS mAP
   - навчити модель pose
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -163,7 +163,7 @@ snippets:
 
 
         print(result.keypoints.xy)
-source_hash: 1b9e7614546d8f00
+source_hash: 3650786b0a858958
 ---
 
 ## Визначення
@@ -191,16 +191,19 @@ source_hash: 1b9e7614546d8f00
 
 ## Моделі
 
-Три сімейства підтримують і навчання, і передбачення:
-[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) і
-[YOLO-NAS](/docs/models/yolo-nas), усі одностадійні. Для RF-DETR потрібне власне
-доповнення `pip install "libreyolo[rfdetr]"`. RF-DETR і EdgeCrafter постачаються
+Чотири сімейства підтримують і навчання, і передбачення:
+[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
+[GTR](/docs/models/gtr) і [YOLO-NAS](/docs/models/yolo-nas), усі одностадійні.
+Для RF-DETR потрібне власне
+доповнення `pip install "libreyolo[rfdetr]"`. RF-DETR, EdgeCrafter і GTR постачаються
 з опублікованими контрольними точками пози. RF-DETR також навчає багатокласову позу;
 голова ключових точок EdgeCrafter фіксується під час створення й відхиляє датасет
 з іншою кількістю точок, тоді як RF-DETR повторно ініціалізує голову під неї.
 YOLO-NAS отримує ваги з власної CDN Deci.AI за некомерційною ліцензією, а
 LibreYOLO не публікує жодних ваг цього сімейства; голова пози також перебудовується
 для нової кількості ключових точок і підтримує багатокласові чи нелюдські скелети.
+GTR навчається лише на однокласовому датасеті з 17 ключовими точками за
+`imgsz=640`.
 
 [HRNet](/docs/models/hrnet) є варіантом top-down. Модель виконує передбачення,
 валідацію та експорт, а її `train()` породжує `NotImplementedError`. Якщо джерело

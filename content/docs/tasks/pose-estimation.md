@@ -145,16 +145,17 @@ the detector in front of it.
 
 ## Models
 
-Three families both train and predict:
-[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) and
-[YOLO-NAS](/docs/models/yolo-nas), all one-stage. RF-DETR needs its own extra,
-`pip install "libreyolo[rfdetr]"`. RF-DETR and EdgeCrafter ship published pose
-checkpoints. RF-DETR also trains multi-class poses;
+Four families both train and predict:
+[RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
+[GTR](/docs/models/gtr) and [YOLO-NAS](/docs/models/yolo-nas), all one-stage. RF-DETR needs its own extra,
+`pip install "libreyolo[rfdetr]"`. RF-DETR, EdgeCrafter and GTR ship published
+pose checkpoints. RF-DETR also trains multi-class poses;
 EdgeCrafter's keypoint head is fixed at construction and rejects a dataset
 declaring a different count, while RF-DETR reinitializes its head for one. YOLO-NAS
 pulls its weights from Deci.AI's own CDN under a non-commercial license, and
 LibreYOLO publishes none of them; its pose head also rebuilds for a new
-keypoint count, and supports multi-class or non-human skeletons.
+keypoint count, and supports multi-class or non-human skeletons. GTR trains only on a
+single-class dataset with 17 keypoints at `imgsz=640`.
 
 [HRNet](/docs/models/hrnet) is the top-down option. It predicts, validates and
 exports, and its `train()` raises `NotImplementedError`. Given no person

@@ -112,7 +112,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 28d7cbb721e0f109
+source_hash: 60bb0f5b7cf31cb7
 ---
 
 ## 定義
@@ -125,7 +125,7 @@ source_hash: 28d7cbb721e0f109
 
 ## モデル
 
-以下のファミリーは学習と推論に対応します。[YOLOv9](/docs/models/yolov9)、[RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter)、[RT-DETR](/docs/models/rt-detr)、[D-FINE](/docs/models/d-fine)、[DEIM](/docs/models/deim)、[Dome-DETR](/docs/models/dome-detr)、[YOLO-NAS](/docs/models/yolo-nas)、[YOLOX](/docs/models/yolox)、[YOLOv7](/docs/models/yolov7)、[RTMDet](/docs/models/rtmdet)、[PicoDet](/docs/models/picodet)です。YOLOv9とRF-DETRは2つの主力ファミリーで、新機能は最初にこれらへ追加されます。RF-DETRには専用の追加パッケージ`pip install "libreyolo[rfdetr]"`が必要です。それ以外は基本パッケージで実行できます。
+以下のファミリーは学習と推論に対応します。[YOLOv9](/docs/models/yolov9)、[RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter)、[RT-DETR](/docs/models/rt-detr)、[D-FINE](/docs/models/d-fine)、[DEIM](/docs/models/deim)、[Dome-DETR](/docs/models/dome-detr)、[GTR](/docs/models/gtr)、[YOLO-NAS](/docs/models/yolo-nas)、[YOLOX](/docs/models/yolox)、[YOLOv7](/docs/models/yolov7)、[RTMDet](/docs/models/rtmdet)、[PicoDet](/docs/models/picodet)です。YOLOv9とRF-DETRは2つの主力ファミリーで、新機能は最初にこれらへ追加されます。RF-DETRには専用の追加パッケージ`pip install "libreyolo[rfdetr]"`が必要です。それ以外は基本パッケージで実行できます。
 
 さらに11個のファミリーが推論、検証、エクスポートに対応しますが、`train()`は`NotImplementedError`を送出します。[LW-DETR](/docs/models/lw-detr)、[DETR](/docs/models/detr)、[Deformable DETR](/docs/models/deformable-detr)、[DINO-DETR](/docs/models/dino-detr)、[Faster R-CNN](/docs/models/faster-rcnn)、[Mask R-CNN](/docs/models/mask-rcnn)、[FCOS](/docs/models/fcos)、[RetinaNet](/docs/models/retinanet)、[SSD](/docs/models/ssd)、[CenterNet](/docs/models/centernet)、[EfficientDet](/docs/models/efficientdet)です。
 

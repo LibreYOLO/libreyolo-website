@@ -110,7 +110,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: a60dad4b38f35bf5
+source_hash: 531a9b20e5532913
 ---
 
 ## 定義
@@ -129,7 +129,7 @@ source_hash: a60dad4b38f35bf5
 
 クラス集合はファミリーではなくチェックポイントごとに異なります。公開済みの重みは、ADE20Kの150クラスやCityscapesの19クラスなど、ほとんど共通点のないラベル空間を持つデータセットから得られています。何にラベルを付けられるかはチェックポイントの`names`で確認し、2つのチェックポイントを比較できるのは同じデータセットで学習した場合だけです。
 
-[PP-LiteSeg](/docs/models/ppliteseg)と[U-Net](/docs/models/unet)は、学習に対応するセマンティックセグメンテーションのファミリーです。U-NetのCityscapes重みは`LibreUNets-sem.pt`として公開されています。
+[PP-LiteSeg](/docs/models/ppliteseg)、[U-Net](/docs/models/unet)、[GTR](/docs/models/gtr)は、学習に対応するセマンティックセグメンテーションのファミリーです。U-NetのCityscapes重みは`LibreUNets-sem.pt`として公開されています。
 
 ## 推論
 

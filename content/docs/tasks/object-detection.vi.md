@@ -2,11 +2,12 @@
 title: Phát hiện đối tượng
 seo_title: Phát hiện đối tượng trong LibreYOLO
 description: >-
-  Phát hiện đối tượng dưới dạng hộp thẳng trục trong LibreYOLO: các family phục vụ tác vụ, định dạng nhãn và
-  các lời gọi dự đoán, huấn luyện, xác thực cùng xuất.
+  Phát hiện đối tượng dưới dạng hộp thẳng trục trong LibreYOLO: các family phục
+  vụ tác vụ, định dạng nhãn và các lời gọi dự đoán, huấn luyện, xác thực cùng
+  xuất.
 lead: >-
-  Phát hiện đối tượng định vị từng thực thể trong ảnh và trả về hình chữ nhật thẳng trục, nhãn lớp cùng điểm
-  số cho mỗi thực thể. Key tác vụ là detect.
+  Phát hiện đối tượng định vị từng thực thể trong ảnh và trả về hình chữ nhật
+  thẳng trục, nhãn lớp cùng điểm số cho mỗi thực thể. Key tác vụ là detect.
 keywords:
   - phát hiện đối tượng python
   - nhận diện vật thể trong ảnh
@@ -116,7 +117,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 28d7cbb721e0f109
+source_hash: 60bb0f5b7cf31cb7
 ---
 ## Định nghĩa
 
@@ -141,7 +142,7 @@ Các họ sau huấn luyện và dự đoán: [YOLOv9](/docs/models/yolov9),
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
 [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine),
 [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr),
-[YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox),
+[GTR](/docs/models/gtr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox),
 [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet) và
 [PicoDet](/docs/models/picodet). YOLOv9 và RF-DETR là hai family chủ lực, các
 tính năng được đưa vào chúng trước. RF-DETR cần thành phần bổ sung riêng,

@@ -170,7 +170,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.obb.xywhr)
-source_hash: dddb69a3bd3541a8
+source_hash: 8af4d1647609e5e6
 ---
 
 ## Definizione
@@ -199,7 +199,7 @@ riempito, con la forma allineata agli assi.
 
 ## Modelli
 
-Tre famiglie supportano questo task.
+Quattro famiglie supportano questo task.
 
 [RF-DETR](/docs/models/rf-detr) supporta l'addestramento. Predice, addestra, valida ed esporta box orientati e distribuisce checkpoint orientati in quattro dimensioni: n, s, m e l. Richiede il proprio extra, `pip install "libreyolo[rfdetr]"`, e la pagina del modello riporta la licenza dei pesi e la provenienza.
 
@@ -220,6 +220,11 @@ test-time augmentation non sono disponibili per i box orientati.
 Scegli l'insieme di etichette del checkpoint e il supporto all'addestramento necessari per il tuo dataset.
 
 Anche [YOLO-NAS](/docs/models/yolo-nas) supporta addestramento e inferenza OBB. I pesi preaddestrati mantengono i termini upstream non commerciali.
+
+[GTR](/docs/models/gtr) pubblica `LibreGTRs-obb.pt` e `LibreGTRx-obb.pt`,
+che predicono le 15 classi di DOTA v1.0 con un input fisso di 1024. Funziona con il
+pacchetto base e supporta predizione, addestramento, validazione ed esportazione
+ONNX e TorchScript.
 
 ## Predizione
 

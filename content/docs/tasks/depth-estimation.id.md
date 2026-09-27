@@ -31,24 +31,36 @@ snippets:
         print(depth.min, depth.max, depth.mean)
     - label: Bekerja dengan nilai-nilai tersebut
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreDepthAnythingV2s-depth.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         depth = result.depth_map
-        raw = depth.data          # semakin tinggi semakin dekat; tidak ada satuan metrik, tidak ada skala
+
+        raw = depth.data          # semakin tinggi semakin dekat; tidak ada
+        satuan metrik, tidak ada skala
+
         gray = depth.normalized() # diubah skala ke [0, 1] untuk visualisasi
+
         print(raw.shape, float(gray.max()))
     - label: Alternatif yang ringkas
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Kontrak task yang sama, jaringan yang jauh lebih kecil dibangun untuk runtime edge.
+
+        # Kontrak task yang sama, jaringan yang jauh lebih kecil dibangun untuk
+        runtime edge.
+
         model = LibreYOLO("LibreZipDepthb-depth.pt")
+
         result = model(SAMPLE_IMAGE)
+
 
         print(result.depth_map.data.shape)
   val:
@@ -74,16 +86,22 @@ snippets:
         model.export(format="onnx")
     - label: Jalankan berkas yang diekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Pabrik mengarahkan berdasarkan sufiks berkas, sehingga artefak yang diekspor dimuat
+
+        # Pabrik mengarahkan berdasarkan sufiks berkas, sehingga artefak yang
+        diekspor dimuat
+
         # seperti checkpoint apa pun dan mengembalikan objek Results yang sama.
+
         model = LibreYOLO("LibreDepthAnythingV2s-depth.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.depth_map.data.shape)
-source_hash: f0afab6b9b451075
+source_hash: 23e295da8ac303cf
 ---
 
 ## Definisi
@@ -132,6 +150,12 @@ untuk penggunaan non-komersial; lisensinya ada di halamannya.
 
 [Marigold V2](/docs/models/marigold-v2) menambahkan adaptor kedalaman berbasis difusi dengan encoding kedalaman eksplisit.
 
+[GTR](/docs/models/gtr) memprediksi kedalaman metrik dan mengembalikannya sebagai
+kedalaman invers relatif, sehingga `1 / result.depth_map.data` menghasilkan
+kembali jarak dalam meter untuk adegan yang mirip dengan data pelatihannya. Model
+ini berjalan dengan paket dasar, mendukung pelatihan, dan dapat diekspor ke ONNX
+serta TorchScript.
+
 ## Prediksi
 
 Bobot diunduh saat pertama kali dipakai dan disimpan dalam cache lokal. Halaman model menjelaskan persyaratan autentikasi dan runtime.
@@ -175,7 +199,7 @@ menutupi dataset yang menamai berkas kedalaman atau mask validitas mereka dengan
 
 ## Latih
 
-Tidak ada family kedalaman di LibreYOLO yang memiliki implementasi pelatihan: `train()` menimbulkan `NotImplementedError` pada family ini. Setiap halaman model menyebut skrip konversi untuk mengubah checkpoint yang dilatih upstream menjadi format yang dapat dimuat LibreYOLO.
+[GTR](/docs/models/gtr) adalah satu-satunya family kedalaman yang mendukung pelatihan: `train()` pada checkpoint `-depth` menjalankan resep upstream-nya, yang dijelaskan di halaman modelnya. Pada family lain, `train()` menimbulkan `NotImplementedError`. Setiap halaman model menyebut skrip konversi untuk mengubah checkpoint yang dilatih upstream menjadi format yang dapat dimuat LibreYOLO.
 
 ## Validasi
 

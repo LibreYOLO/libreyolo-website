@@ -119,7 +119,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 33e331eac0f9b0af
+source_hash: 3d956e53e80143c2
 ---
 
 ## 정의
@@ -132,7 +132,7 @@ source_hash: 33e331eac0f9b0af
 
 ## 모델들
 
-네 개의 계열가 마스크를 학습하고 예측합니다: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine) 및 [RTMDet](/docs/models/rtmdet). RF-DETR은 자체 추가 패키지 `pip install "libreyolo[rfdetr]"`가 필요하며, 나머지 세 개는 기본 패키지에서 실행됩니다.
+다섯 개의 계열이 마스크를 학습하고 예측합니다: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine), [GTR](/docs/models/gtr) 및 [RTMDet](/docs/models/rtmdet). RF-DETR은 자체 추가 패키지 `pip install "libreyolo[rfdetr]"`가 필요하며, 나머지 네 개는 기본 패키지에서 실행됩니다.
 
 [Mask R-CNN](/docs/models/mask-rcnn)은 마스크를 예측, 검증 및 내보내지만, `train()`은 `NotImplementedError`를 발생시킵니다.
 

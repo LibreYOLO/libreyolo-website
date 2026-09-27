@@ -125,7 +125,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: a60dad4b38f35bf5
+source_hash: 531a9b20e5532913
 ---
 
 ## Определение
@@ -164,7 +164,7 @@ source_hash: a60dad4b38f35bf5
 поэтому именно `names` чекпойнта говорит, что он умеет размечать, а сравнивать
 два чекпойнта можно только тогда, когда они обучены на одном и том же наборе.
 
-[PP-LiteSeg](/docs/models/ppliteseg) и [U-Net](/docs/models/unet) — обучаемые семейства семантической сегментации. Веса U-Net для Cityscapes опубликованы как `LibreUNets-sem.pt`.
+[PP-LiteSeg](/docs/models/ppliteseg), [U-Net](/docs/models/unet) и [GTR](/docs/models/gtr) — обучаемые семейства семантической сегментации. Веса U-Net для Cityscapes опубликованы как `LibreUNets-sem.pt`.
 
 ## Предсказание
 

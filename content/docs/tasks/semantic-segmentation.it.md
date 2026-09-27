@@ -118,7 +118,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: a60dad4b38f35bf5
+source_hash: 531a9b20e5532913
 ---
 
 ## Definizione
@@ -156,7 +156,7 @@ quindi il campo `names` di un checkpoint è ciò che ti dice che cosa sa
 etichettare, e due checkpoint sono confrontabili solo se sono stati addestrati
 sullo stesso dataset.
 
-[PP-LiteSeg](/docs/models/ppliteseg) e [U-Net](/docs/models/unet) sono famiglie di segmentazione semantica addestrabili. I pesi Cityscapes di U-Net sono pubblicati come `LibreUNets-sem.pt`.
+[PP-LiteSeg](/docs/models/ppliteseg), [U-Net](/docs/models/unet) e [GTR](/docs/models/gtr) sono famiglie di segmentazione semantica addestrabili. I pesi Cityscapes di U-Net sono pubblicati come `LibreUNets-sem.pt`.
 
 ## Predizione
 

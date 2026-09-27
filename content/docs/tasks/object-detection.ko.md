@@ -116,7 +116,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: "28d7cbb721e0f109"
+source_hash: 60bb0f5b7cf31cb7
 ---
 
 ## 정의
@@ -129,7 +129,7 @@ source_hash: "28d7cbb721e0f109"
 
 ## 모델들
 
-다음 계열은 학습과 예측을 지원합니다. [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet), [PicoDet](/docs/models/picodet). YOLOv9과 RF-DETR은 두 주력 계열이며 새 기능이 먼저 적용됩니다. RF-DETR은 전용 추가 패키지 `pip install "libreyolo[rfdetr]"`이 필요하며, 나머지는 기본 패키지에서 실행됩니다.
+다음 계열은 학습과 예측을 지원합니다. [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [GTR](/docs/models/gtr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet), [PicoDet](/docs/models/picodet). YOLOv9과 RF-DETR은 두 주력 계열이며 새 기능이 먼저 적용됩니다. RF-DETR은 전용 추가 패키지 `pip install "libreyolo[rfdetr]"`이 필요하며, 나머지는 기본 패키지에서 실행됩니다.
 
 추가로 열 가지가 예측, 검증 및 내보내기를 수행하지만, 그들의 `train()`는 `NotImplementedError`를 발생시킵니다: [LW-DETR](/docs/models/lw-detr), [DETR](/docs/models/detr), [Deformable DETR](/docs/models/deformable-detr), [DINO-DETR](/docs/models/dino-detr), [Faster R-CNN](/docs/models/faster-rcnn), [Mask R-CNN](/docs/models/mask-rcnn), [FCOS](/docs/models/fcos), [RetinaNet](/docs/models/retinanet), [SSD](/docs/models/ssd), [CenterNet](/docs/models/centernet) 및 [EfficientDet](/docs/models/efficientdet).
 

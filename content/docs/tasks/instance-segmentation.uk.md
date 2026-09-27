@@ -126,7 +126,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 33e331eac0f9b0af
+source_hash: 3d956e53e80143c2
 ---
 
 ## Визначення
@@ -150,10 +150,11 @@ source_hash: 33e331eac0f9b0af
 
 ## Моделі
 
-Чотири сімейства підтримують і навчання, і передбачення масок:
+П'ять сімейств підтримують і навчання, і передбачення масок:
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
-[D-FINE](/docs/models/d-fine) і [RTMDet](/docs/models/rtmdet). RF-DETR потребує
-власного набору залежностей `pip install "libreyolo[rfdetr]"`; інші три
+[D-FINE](/docs/models/d-fine), [GTR](/docs/models/gtr) і
+[RTMDet](/docs/models/rtmdet). RF-DETR потребує
+власного набору залежностей `pip install "libreyolo[rfdetr]"`; інші чотири
 працюють із базовим пакетом.
 
 [Mask R-CNN](/docs/models/mask-rcnn) передбачає, валідує та експортує маски,

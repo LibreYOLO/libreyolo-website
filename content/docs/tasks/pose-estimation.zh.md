@@ -12,7 +12,7 @@ keywords:
   - COCO 关键点
   - OKS mAP
   - 训练姿态估计模型
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -132,7 +132,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 1b9e7614546d8f00
+source_hash: 3650786b0a858958
 ---
 
 ## 定义
@@ -156,7 +156,7 @@ source_hash: 1b9e7614546d8f00
 
 ## 模型
 
-三个家族同时支持训练和预测：[RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter) 和 [YOLO-NAS](/docs/models/yolo-nas)，都是单阶段模型。RF-DETR 需要自己的 extra，`pip install "libreyolo[rfdetr]"`。RF-DETR 和 EdgeCrafter 提供已发布的姿态检查点。RF-DETR 也支持多类别姿态训练；EdgeCrafter 的关键点 head 在构造时固定，会拒绝声明不同关键点数量的数据集，而 RF-DETR 会为新数量重新初始化 head。YOLO-NAS 从 Deci.AI 自己的 CDN 获取采用非商用许可的权重，LibreYOLO 不发布这些权重；它的姿态 head 也会针对新的关键点数量重建，并支持多类别或非人体骨架。
+四个家族同时支持训练和预测：[RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter)、[GTR](/docs/models/gtr) 和 [YOLO-NAS](/docs/models/yolo-nas)，都是单阶段模型。RF-DETR 需要自己的 extra，`pip install "libreyolo[rfdetr]"`。RF-DETR、EdgeCrafter 和 GTR 提供已发布的姿态检查点。RF-DETR 也支持多类别姿态训练；EdgeCrafter 的关键点 head 在构造时固定，会拒绝声明不同关键点数量的数据集，而 RF-DETR 会为新数量重新初始化 head。YOLO-NAS 从 Deci.AI 自己的 CDN 获取采用非商用许可的权重，LibreYOLO 不发布这些权重；它的姿态 head 也会针对新的关键点数量重建，并支持多类别或非人体骨架。GTR 只能在 `imgsz=640` 下用单类别、17 个关键点的数据集训练。
 
 [HRNet](/docs/models/hrnet) 是自顶向下的那个选项。它能预测、验证和导出，而它的
 `train()` 会抛出 `NotImplementedError`。在没有给定人体来源时，它会自动给自己配一个

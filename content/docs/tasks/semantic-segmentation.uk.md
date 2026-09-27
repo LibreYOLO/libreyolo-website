@@ -134,7 +134,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: a60dad4b38f35bf5
+source_hash: 531a9b20e5532913
 ---
 
 ## Визначення
@@ -178,7 +178,7 @@ ADE20K проти 19 класів Cityscapes. Отже, поле `names` кон�
 що саме вона може позначати, а дві контрольні точки можна порівнювати лише тоді,
 коли їх навчено на одному датасеті.
 
-[PP-LiteSeg](/docs/models/ppliteseg) і [U-Net](/docs/models/unet) підтримують навчання семантичної сегментації. Ваги U-Net для Cityscapes опубліковано як `LibreUNets-sem.pt`.
+[PP-LiteSeg](/docs/models/ppliteseg), [U-Net](/docs/models/unet) і [GTR](/docs/models/gtr) підтримують навчання семантичної сегментації. Ваги U-Net для Cityscapes опубліковано як `LibreUNets-sem.pt`.
 
 ## Передбачення
 

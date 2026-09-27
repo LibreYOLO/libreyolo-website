@@ -16,7 +16,7 @@ keywords:
   - COCO Keypoints
   - OKS mAP
   - Pose-Modell trainieren
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -155,7 +155,7 @@ snippets:
 
 
         print(result.keypoints.xy)
-source_hash: "1b9e7614546d8f00"
+source_hash: 3650786b0a858958
 ---
 
 ## Definition
@@ -170,7 +170,7 @@ Zwei Architekturarten führen zu dieser Ausgabe. Ein einstufiges Modell sagt Box
 
 ## Modelle
 
-Drei Familien unterstützen Training und Vorhersage: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) und [YOLO-NAS](/docs/models/yolo-nas), alle einstufig. RF-DETR benötigt sein eigenes Extra, `pip install "libreyolo[rfdetr]"`. RF-DETR und EdgeCrafter bieten veröffentlichte Pose-Checkpoints. RF-DETR trainiert auch Posen mit mehreren Klassen. Der Keypoint-Head von EdgeCrafter wird bei der Erstellung festgelegt und weist einen Datensatz mit abweichender Anzahl zurück; RF-DETR initialisiert seinen Head dafür neu. YOLO-NAS lädt seine Gewichte von Deci.AIs eigenem CDN unter einer nichtkommerziellen Lizenz; LibreYOLO veröffentlicht keines davon. Sein Pose-Head wird ebenfalls für eine neue Keypoint-Anzahl neu aufgebaut und unterstützt mehrere Klassen oder nichtmenschliche Skelette.
+Vier Familien unterstützen Training und Vorhersage: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [GTR](/docs/models/gtr) und [YOLO-NAS](/docs/models/yolo-nas), alle einstufig. RF-DETR benötigt sein eigenes Extra, `pip install "libreyolo[rfdetr]"`. RF-DETR, EdgeCrafter und GTR bieten veröffentlichte Pose-Checkpoints. RF-DETR trainiert auch Posen mit mehreren Klassen. Der Keypoint-Head von EdgeCrafter wird bei der Erstellung festgelegt und weist einen Datensatz mit abweichender Anzahl zurück; RF-DETR initialisiert seinen Head dafür neu. YOLO-NAS lädt seine Gewichte von Deci.AIs eigenem CDN unter einer nichtkommerziellen Lizenz; LibreYOLO veröffentlicht keines davon. Sein Pose-Head wird ebenfalls für eine neue Keypoint-Anzahl neu aufgebaut und unterstützt mehrere Klassen oder nichtmenschliche Skelette. GTR trainiert nur auf einem Datensatz mit einer einzigen Klasse und 17 Keypoints bei `imgsz=640`.
 
 [HRNet](/docs/models/hrnet) ist die Top-down-Option. Es unterstützt Vorhersage, Validierung und Export, während `train()` `NotImplementedError` auslöst. Ohne Personenquelle koppelt es sich automatisch an einen LibreYOLO9t-Detektor. `cropped=True` behandelt das gesamte Bild als eine Instanz, `person_boxes=` übernimmt bereits vorhandene Boxen und `person_detector=` benennt einen anderen Detektor.
 

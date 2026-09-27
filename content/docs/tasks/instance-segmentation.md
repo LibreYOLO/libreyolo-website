@@ -128,10 +128,10 @@ normalized.
 
 ## Models
 
-Four families both train and predict masks: [RF-DETR](/docs/models/rf-detr),
-[EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine) and
-[RTMDet](/docs/models/rtmdet). RF-DETR needs its own extra,
-`pip install "libreyolo[rfdetr]"`; the other three run on the base package.
+Five families both train and predict masks: [RF-DETR](/docs/models/rf-detr),
+[EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine),
+[GTR](/docs/models/gtr) and [RTMDet](/docs/models/rtmdet). RF-DETR needs its own extra,
+`pip install "libreyolo[rfdetr]"`; the other four run on the base package.
 
 [Mask R-CNN](/docs/models/mask-rcnn) predicts, validates and exports masks, but
 its `train()` raises `NotImplementedError`.

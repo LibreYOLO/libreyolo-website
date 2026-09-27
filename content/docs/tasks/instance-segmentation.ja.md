@@ -116,7 +116,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 33e331eac0f9b0af
+source_hash: 3d956e53e80143c2
 ---
 
 ## 定義
@@ -129,7 +129,7 @@ source_hash: 33e331eac0f9b0af
 
 ## モデル
 
-マスクの学習と推論の両方に対応するファミリーは4つです。[RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter)、[D-FINE](/docs/models/d-fine)、[RTMDet](/docs/models/rtmdet)です。RF-DETRには専用の追加パッケージ`pip install "libreyolo[rfdetr]"`が必要で、他の3つは基本パッケージで実行できます。
+マスクの学習と推論の両方に対応するファミリーは5つです。[RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter)、[D-FINE](/docs/models/d-fine)、[GTR](/docs/models/gtr)、[RTMDet](/docs/models/rtmdet)です。RF-DETRには専用の追加パッケージ`pip install "libreyolo[rfdetr]"`が必要で、他の4つは基本パッケージで実行できます。
 
 [Mask R-CNN](/docs/models/mask-rcnn)はマスクの推論、検証、エクスポートに対応しますが、`train()`は`NotImplementedError`を送出します。
 

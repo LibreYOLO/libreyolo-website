@@ -78,7 +78,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: f0afab6b9b451075
+source_hash: 23e295da8ac303cf
 ---
 
 ## 定義
@@ -104,6 +104,8 @@ source_hash: f0afab6b9b451075
 [SenseNova-Vision](/docs/models/sensenova-vision)は、7つのタスクに対応する同じ7Bチェックポイントを使い、拡散デコードを通して深度マップを画像として生成します。`sensenova`追加パッケージが必要で、重みの利用は非商用に制限されます。ライセンスはモデルページに記載されています。
 
 [Marigold V2](/docs/models/marigold-v2)は、明示的な深度エンコーディングを持つ拡散ベースの深度アダプターを追加します。
+
+[GTR](/docs/models/gtr)はメトリック深度を予測して相対逆深度として返すため、学習データに似たシーンでは`1 / result.depth_map.data`でメートル単位の値を復元できます。基本パッケージで実行でき、学習にも対応し、ONNXとTorchScriptへエクスポートできます。
 
 ## 推論
 
@@ -140,7 +142,7 @@ names: {0: depth}
 
 ## 学習
 
-LibreYOLOの深度ファミリーには学習実装がありません。これらのファミリーでは`train()`が`NotImplementedError`を送出します。各モデルページには、アップストリームで学習したチェックポイントをLibreYOLOで読み込める形式へ変換するスクリプトが記載されています。
+[GTR](/docs/models/gtr)は学習に対応する唯一の深度ファミリーです。`-depth`チェックポイントで`train()`を呼び出すと、モデルページに記載されているアップストリームのレシピが実行されます。その他のファミリーでは`train()`が`NotImplementedError`を送出します。各モデルページには、アップストリームで学習したチェックポイントをLibreYOLOで読み込める形式へ変換するスクリプトが記載されています。
 
 ## 検証
 

@@ -134,7 +134,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: "1b9e7614546d8f00"
+source_hash: 3650786b0a858958
 ---
 
 ## 정의
@@ -149,7 +149,7 @@ source_hash: "1b9e7614546d8f00"
 
 ## 모델들
 
-세 계열이 학습과 예측을 모두 지원합니다. [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [YOLO-NAS](/docs/models/yolo-nas)는 모두 단일 단계 모델입니다. RF-DETR은 전용 추가 패키지 `pip install "libreyolo[rfdetr]"`이 필요합니다. RF-DETR과 EdgeCrafter에는 공개 자세 체크포인트가 있습니다. RF-DETR은 다중 클래스 자세도 학습합니다. EdgeCrafter의 키포인트 헤드는 생성 시 고정되므로 다른 개수를 선언한 데이터셋을 거부하지만, RF-DETR은 그 개수에 맞게 헤드를 다시 초기화합니다. YOLO-NAS는 비상업적 라이선스에 따라 Deci.AI의 CDN에서 가중치를 가져오며, LibreYOLO는 해당 가중치를 배포하지 않습니다. 자세 헤드는 새 키포인트 개수에 맞게 재구성되며, 다중 클래스 또는 사람이 아닌 골격도 지원합니다.
+네 계열이 학습과 예측을 모두 지원합니다. [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [GTR](/docs/models/gtr), [YOLO-NAS](/docs/models/yolo-nas)는 모두 단일 단계 모델입니다. RF-DETR은 전용 추가 패키지 `pip install "libreyolo[rfdetr]"`이 필요합니다. RF-DETR, EdgeCrafter, GTR에는 공개 자세 체크포인트가 있습니다. RF-DETR은 다중 클래스 자세도 학습합니다. EdgeCrafter의 키포인트 헤드는 생성 시 고정되므로 다른 개수를 선언한 데이터셋을 거부하지만, RF-DETR은 그 개수에 맞게 헤드를 다시 초기화합니다. YOLO-NAS는 비상업적 라이선스에 따라 Deci.AI의 CDN에서 가중치를 가져오며, LibreYOLO는 해당 가중치를 배포하지 않습니다. 자세 헤드는 새 키포인트 개수에 맞게 재구성되며, 다중 클래스 또는 사람이 아닌 골격도 지원합니다. GTR 계열은 `imgsz=640`에서 키포인트가 17개인 단일 클래스 데이터셋으로만 학습합니다.
 
 [HRNet](/docs/models/hrnet)은 상향식 옵션입니다. 이 모델은 예측하고, 검증하며, 내보내고, 그 `train()`는 `NotImplementedError`를 발생시킵니다. 사람이 입력되지 않으면, 자동으로 LibreYOLO9t 탐지기와 페어링되며; `cropped=True`는 전체 이미지를 하나의 인스턴스로 취급하고, `person_boxes=`는 이미 가지고 있는 박스를 사용하며, `person_detector=`는 다른 탐지기를 지정합니다.
 

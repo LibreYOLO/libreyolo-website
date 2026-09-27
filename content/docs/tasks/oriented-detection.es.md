@@ -168,7 +168,7 @@ snippets:
 
 
         print(result.obb.xywhr)
-source_hash: dddb69a3bd3541a8
+source_hash: 8af4d1647609e5e6
 ---
 
 ## Definición
@@ -197,7 +197,7 @@ con la forma alineada a los ejes.
 
 ## Modelos
 
-Tres familias cubren esta tarea.
+Cuatro familias cubren esta tarea.
 
 [RF-DETR](/docs/models/rf-detr) soporta entrenamiento. Predice, entrena, valida y
 exporta cajas orientadas, y publica checkpoints orientados en cuatro tamaños,
@@ -222,6 +222,11 @@ orientadas.
 Elige el conjunto de etiquetas y el soporte de entrenamiento del checkpoint que necesite tu dataset.
 
 [YOLO-NAS](/docs/models/yolo-nas) también soporta entrenamiento e inferencia OBB. Sus pesos preentrenados conservan los términos upstream de uso no comercial.
+
+[GTR](/docs/models/gtr) publica `LibreGTRs-obb.pt` y `LibreGTRx-obb.pt`,
+que predicen las 15 clases de DOTA v1.0 con una entrada fija de 1024. Funciona
+con el paquete base y soporta predicción, entrenamiento, validación y exportación
+a ONNX y TorchScript.
 
 ## Predicción
 

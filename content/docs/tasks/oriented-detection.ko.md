@@ -152,7 +152,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.obb.xywhr)
-source_hash: "dddb69a3bd3541a8"
+source_hash: 8af4d1647609e5e6
 ---
 
 ## 정의
@@ -165,7 +165,7 @@ source_hash: "dddb69a3bd3541a8"
 
 ## 모델들
 
-세 계열이 이 작업을 지원합니다.
+네 계열이 이 작업을 지원합니다.
 
 [RF-DETR](/docs/models/rf-detr)은 학습을 지원합니다. 회전 바운딩 박스의 예측, 학습, 검증, 내보내기를 지원하며 n, s, m, l 네 크기의 공개 회전 체크포인트를 제공합니다. 전용 추가 패키지 `pip install "libreyolo[rfdetr]"`이 필요하며, 모델 페이지에 가중치 라이선스와 출처가 있습니다.
 
@@ -176,6 +176,8 @@ source_hash: "dddb69a3bd3541a8"
 데이터셋에 필요한 체크포인트 레이블 집합과 학습 지원을 선택합니다.
 
 [YOLO-NAS](/docs/models/yolo-nas)도 OBB 학습과 추론을 지원합니다. 사전 학습된 가중치는 업스트림의 비상업적 약관을 유지합니다.
+
+[GTR](/docs/models/gtr) 계열은 고정된 1024 입력에서 DOTA v1.0의 15개 클래스를 예측하는 `LibreGTRs-obb.pt`와 `LibreGTRx-obb.pt`를 공개합니다. 기본 패키지에서 실행되며 예측, 학습, 검증, ONNX와 TorchScript 내보내기를 지원합니다.
 
 ## 예측
 

@@ -138,7 +138,7 @@ snippets:
 
 
         print(result.masks.data.shape)
-source_hash: 33e331eac0f9b0af
+source_hash: 3d956e53e80143c2
 ---
 
 ## Definicja
@@ -162,11 +162,12 @@ ten sam znormalizowany kontur.
 
 ## Modele
 
-Cztery rodziny obsługują zarówno trenowanie, jak i predykcję masek:
+Pięć rodzin obsługuje zarówno trenowanie, jak i predykcję masek:
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
-[D-FINE](/docs/models/d-fine) oraz [RTMDet](/docs/models/rtmdet). RF-DETR wymaga
-własnego zestawu zależności `pip install "libreyolo[rfdetr]"`, a pozostałe trzy
-działają z pakietem bazowym.
+[D-FINE](/docs/models/d-fine), [GTR](/docs/models/gtr) oraz
+[RTMDet](/docs/models/rtmdet). RF-DETR wymaga własnego zestawu zależności
+`pip install "libreyolo[rfdetr]"`, a pozostałe cztery działają z pakietem
+bazowym.
 
 [Mask R-CNN](/docs/models/mask-rcnn) przewiduje, waliduje i eksportuje maski,
 ale jego funkcja `train()` zgłasza `NotImplementedError`.

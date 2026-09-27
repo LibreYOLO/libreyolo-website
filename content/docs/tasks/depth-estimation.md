@@ -121,6 +121,11 @@ to non-commercial use; the license is on its page.
 
 [Marigold V2](/docs/models/marigold-v2) adds diffusion-based depth adapters with explicit depth encodings.
 
+[GTR](/docs/models/gtr) predicts metric depth and returns it as relative
+inverse depth, so `1 / result.depth_map.data` recovers meters for scenes like
+its training data. It runs on the base package, trains, and exports to ONNX and
+TorchScript.
+
 ## Predict
 
 Weights download on first use and are cached locally. The model pages describe authentication and runtime requirements.
@@ -167,9 +172,11 @@ cover datasets that name their depth files or validity masks differently. See
 
 ## Train
 
-No depth family in LibreYOLO has a training implementation: `train()` raises
-`NotImplementedError` on these families. Each model page names the conversion script
-that turns a checkpoint trained upstream into one LibreYOLO can load.
+[GTR](/docs/models/gtr) is the one depth family that trains: `train()` on a
+`-depth` checkpoint runs its upstream recipe, which its model page describes. On
+the other families `train()` raises `NotImplementedError`. Each model page names
+the conversion script that turns a checkpoint trained upstream into one LibreYOLO
+can load.
 
 ## Validate
 

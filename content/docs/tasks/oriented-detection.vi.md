@@ -2,11 +2,12 @@
 title: Phát hiện hộp xoay
 seo_title: Phát hiện hộp xoay trong LibreYOLO
 description: >-
-  Phát hiện đối tượng bị xoay trong LibreYOLO: các family phục vụ hộp xoay, dòng nhãn bốn góc và các lời gọi
-  dự đoán, huấn luyện, xác thực cùng xuất.
+  Phát hiện đối tượng bị xoay trong LibreYOLO: các family phục vụ hộp xoay, dòng
+  nhãn bốn góc và các lời gọi dự đoán, huấn luyện, xác thực cùng xuất.
 lead: >-
-  Phát hiện đối tượng có hướng định vị mỗi thực thể bằng hình chữ nhật xoay thay vì hình chữ nhật thẳng trục,
-  nhờ vậy đối tượng nghiêng được bao sát thay vì nằm trong hộp chứa nhiều background. Key tác vụ là obb.
+  Phát hiện đối tượng có hướng định vị mỗi thực thể bằng hình chữ nhật xoay thay
+  vì hình chữ nhật thẳng trục, nhờ vậy đối tượng nghiêng được bao sát thay vì
+  nằm trong hộp chứa nhiều background. Key tác vụ là obb.
 keywords:
   - phát hiện oriented bounding box
   - phát hiện đối tượng xoay
@@ -58,27 +59,40 @@ snippets:
         print(result.obb.xywhr.shape)
     - label: RT-DETRv2
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         # Trọng số DOTA v1.0, 15 lớp hàng không ở 1024 px. Graph hộp xoay
-        # được nhận dạng từ tensor riêng của checkpoint, vì vậy không cần đối số task.
+
+        # được nhận dạng từ tensor riêng của checkpoint, vì vậy không cần đối số
+        task.
+
         model = LibreYOLO("LibreRTDETRv2n-obb.pt")
+
         result = model("aerial.png", save=True)
 
+
         obb = result.obb
+
         print(obb.xywhr)
+
         print(result.names)   # máy bay, tàu, cảng, trực thăng và 11 lớp khác
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         # Tiếp tục từ trọng số hộp xoay đã công bố. data phải trỏ tới
+
         # dataset có dòng nhãn mang bốn góc.
+
         model = LibreYOLO("LibreRFDETRs-obb.pt")
-        model.train(data="my-obb-dataset.yaml", epochs=50, imgsz=512, batch=8, lr0=1e-4)
+
+        model.train(data="my-obb-dataset.yaml", epochs=50, imgsz=512, batch=8,
+        lr0=1e-4)
     - label: CLI
       language: bash
       code: |
@@ -127,11 +141,15 @@ snippets:
         libreyolo export model=LibreRFDETRs-obb.pt format=onnx imgsz=512
     - label: RT-DETRv2
       language: bash
-      code: |
+      code: >
         # ONNX và TorchScript là các target đã xác thực tại đây, ở FP32,
+
         # batch 1, trên canvas 1024 x 1024 cố định.
+
         libreyolo export model=LibreRTDETRv2n-obb.pt format=onnx imgsz=1024
-        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript imgsz=1024
+
+        libreyolo export model=LibreRTDETRv2n-obb.pt format=torchscript
+        imgsz=1024
     - label: Dùng tệp đã xuất
       language: python
       code: |
@@ -143,7 +161,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.obb.xywhr)
-source_hash: dddb69a3bd3541a8
+source_hash: 8af4d1647609e5e6
 ---
 ## Định nghĩa
 
@@ -167,7 +185,7 @@ thẳng trục bao ngoài, là dạng cần dùng khi mã downstream chỉ hiể
 
 ## Mô hình
 
-Ba họ mô hình phục vụ tác vụ này.
+Bốn họ mô hình phục vụ tác vụ này.
 
 [RF-DETR](/docs/models/rf-detr) hỗ trợ huấn luyện. Nó dự đoán, huấn luyện, đánh giá và xuất hộp xoay, đồng thời có checkpoint hộp xoay đã công bố với bốn kích thước n, s, m và l. Nó cần extra riêng, `pip install "libreyolo[rfdetr]"`, và trang mô hình ghi giấy phép cùng nguồn gốc trọng số.
 
@@ -187,6 +205,11 @@ augmentation cũng không khả dụng cho hộp xoay.
 Chọn bộ nhãn checkpoint và khả năng huấn luyện phù hợp với dataset của bạn.
 
 [YOLO-NAS](/docs/models/yolo-nas) cũng hỗ trợ huấn luyện và inference OBB. Trọng số được huấn luyện sẵn giữ các điều khoản phi thương mại của upstream.
+
+[GTR](/docs/models/gtr) công bố `LibreGTRs-obb.pt` và `LibreGTRx-obb.pt`,
+dự đoán 15 lớp đối tượng của DOTA v1.0 với đầu vào cố định 1024. Nó chạy trên
+package cơ sở và hỗ trợ dự đoán, huấn luyện, xác thực, cùng xuất ONNX và
+TorchScript.
 
 ## Dự đoán
 

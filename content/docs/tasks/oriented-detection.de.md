@@ -17,7 +17,7 @@ keywords:
   - DOTA Datensatz
   - Objekterkennung Luftbilder
   - Rotated IoU
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -183,7 +183,7 @@ snippets:
 
 
         print(result.obb.xywhr)
-source_hash: "dddb69a3bd3541a8"
+source_hash: 8af4d1647609e5e6
 ---
 
 ## Definition
@@ -196,7 +196,7 @@ Die orientierte Objekterkennung ergänzt eine Erkennung um eine Zahl: den Winkel
 
 ## Modelle
 
-Drei Familien decken diese Aufgabe ab.
+Vier Familien decken diese Aufgabe ab.
 
 [RF-DETR](/docs/models/rf-detr) unterstützt Training. Es unterstützt Vorhersage, Training, Validierung und Export orientierter Boxen und bietet veröffentlichte orientierte Checkpoints in vier Größen: n, s, m und l. Es benötigt sein eigenes Extra, `pip install "libreyolo[rfdetr]"`; seine Modellseite enthält die Gewichtslizenz und Herkunft.
 
@@ -207,6 +207,8 @@ Lies vor der Planung mit diesen Checkpoints den folgenden Abschnitt über ihre t
 Wähle den Labelsatz des Checkpoints und die Trainingsunterstützung passend zu deinem Datensatz.
 
 [YOLO-NAS](/docs/models/yolo-nas) unterstützt ebenfalls OBB-Training und -Inferenz. Seine vortrainierten Gewichte behalten die nichtkommerziellen Upstream-Bedingungen.
+
+[GTR](/docs/models/gtr) veröffentlicht `LibreGTRs-obb.pt` und `LibreGTRx-obb.pt`, die die 15 Klassen von DOTA v1.0 bei einer festen Eingabegröße von 1024 vorhersagen. Es läuft mit dem Basispaket und unterstützt Vorhersage, Training, Validierung sowie Export nach ONNX und TorchScript.
 
 ## Vorhersage
 

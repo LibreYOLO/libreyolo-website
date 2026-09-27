@@ -15,7 +15,7 @@ keywords:
   - MIT бібліотека детекції
   - альтернатива YOLO
   - навчити детектор об'єктів
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -122,7 +122,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 28d7cbb721e0f109
+source_hash: 60bb0f5b7cf31cb7
 ---
 
 ## Визначення
@@ -151,7 +151,8 @@ source_hash: 28d7cbb721e0f109
 [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr),
 [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr),
 [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim),
-[Dome-DETR](/docs/models/dome-detr), [YOLO-NAS](/docs/models/yolo-nas),
+[Dome-DETR](/docs/models/dome-detr), [GTR](/docs/models/gtr),
+[YOLO-NAS](/docs/models/yolo-nas),
 [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7),
 [RTMDet](/docs/models/rtmdet) і [PicoDet](/docs/models/picodet). YOLOv9 та
 RF-DETR є двома флагманськими сімействами, і функції спочатку додаються до них.

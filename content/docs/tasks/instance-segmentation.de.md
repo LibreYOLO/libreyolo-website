@@ -123,7 +123,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 33e331eac0f9b0af
+source_hash: 3d956e53e80143c2
 ---
 
 ## Definition
@@ -148,10 +148,10 @@ Kontur normalisiert.
 
 ## Modelle
 
-Vier Familien trainieren und sagen Masken vorher:
+Fünf Familien trainieren und sagen Masken vorher:
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
-[D-FINE](/docs/models/d-fine) und [RTMDet](/docs/models/rtmdet). RF-DETR braucht
-sein eigenes Extra, `pip install "libreyolo[rfdetr]"`; die anderen drei laufen
+[D-FINE](/docs/models/d-fine), [GTR](/docs/models/gtr) und [RTMDet](/docs/models/rtmdet). RF-DETR braucht
+sein eigenes Extra, `pip install "libreyolo[rfdetr]"`; die anderen vier laufen
 mit dem Basispaket.
 
 [Mask R-CNN](/docs/models/mask-rcnn) sagt Masken vorher, validiert und

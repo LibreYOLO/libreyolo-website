@@ -179,7 +179,7 @@ snippets:
 
 
         print(result.obb.xywhr)
-source_hash: dddb69a3bd3541a8
+source_hash: 8af4d1647609e5e6
 ---
 
 ## Definicja
@@ -209,7 +209,7 @@ wyrównaną do osi.
 
 ## Modele
 
-To zadanie obsługują trzy rodziny.
+To zadanie obsługują cztery rodziny.
 
 [RF-DETR](/docs/models/rf-detr) obsługuje trenowanie. Przewiduje, trenuje, waliduje i eksportuje obrócone ramki oraz udostępnia checkpointy tego zadania w czterech rozmiarach: n, s, m i l. Wymaga własnego dodatku, `pip install "libreyolo[rfdetr]"`, a strona modelu podaje licencję wag i ich pochodzenie.
 
@@ -230,6 +230,11 @@ testu również nie są dostępne dla obróconych ramek.
 Należy wybrać zestaw etykiet checkpointu i obsługę trenowania odpowiednie dla zbioru danych.
 
 [YOLO-NAS](/docs/models/yolo-nas) również obsługuje trenowanie i inferencję OBB. Jego wstępnie wytrenowane wagi zachowują niekomercyjne warunki projektu źródłowego.
+
+[GTR](/docs/models/gtr) udostępnia `LibreGTRs-obb.pt` i `LibreGTRx-obb.pt`,
+które przewidują 15 klas DOTA v1.0 przy stałym rozmiarze wejścia 1024. Działa z
+pakietem podstawowym i obsługuje predykcję, trenowanie, walidację oraz eksport
+do ONNX i TorchScript.
 
 ## Predykcja
 

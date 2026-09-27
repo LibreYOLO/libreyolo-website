@@ -15,7 +15,7 @@ keywords:
   - MIT Objekterkennungsbibliothek
   - YOLO Alternative
   - Objektdetektor trainieren
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -142,7 +142,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: "28d7cbb721e0f109"
+source_hash: 60bb0f5b7cf31cb7
 ---
 
 ## Definition
@@ -155,7 +155,7 @@ Die Objekterkennung beantwortet, wo sich jedes Objekt befindet und worum es sich
 
 ## Modelle
 
-Die folgenden Familien unterstützen Training und Vorhersage: [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet) und [PicoDet](/docs/models/picodet). YOLOv9 und RF-DETR sind die beiden Flaggschiff-Familien und erhalten Funktionen zuerst. RF-DETR benötigt sein eigenes Extra, `pip install "libreyolo[rfdetr]"`; die anderen laufen mit dem Basispaket.
+Die folgenden Familien unterstützen Training und Vorhersage: [YOLOv9](/docs/models/yolov9), [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [RT-DETR](/docs/models/rt-detr), [D-FINE](/docs/models/d-fine), [DEIM](/docs/models/deim), [Dome-DETR](/docs/models/dome-detr), [GTR](/docs/models/gtr), [YOLO-NAS](/docs/models/yolo-nas), [YOLOX](/docs/models/yolox), [YOLOv7](/docs/models/yolov7), [RTMDet](/docs/models/rtmdet) und [PicoDet](/docs/models/picodet). YOLOv9 und RF-DETR sind die beiden Flaggschiff-Familien und erhalten Funktionen zuerst. RF-DETR benötigt sein eigenes Extra, `pip install "libreyolo[rfdetr]"`; die anderen laufen mit dem Basispaket.
 
 Elf weitere Familien unterstützen Vorhersage, Validierung und Export, während `train()` `NotImplementedError` auslöst: [LW-DETR](/docs/models/lw-detr), [DETR](/docs/models/detr), [Deformable DETR](/docs/models/deformable-detr), [DINO-DETR](/docs/models/dino-detr), [Faster R-CNN](/docs/models/faster-rcnn), [Mask R-CNN](/docs/models/mask-rcnn), [FCOS](/docs/models/fcos), [RetinaNet](/docs/models/retinanet), [SSD](/docs/models/ssd), [CenterNet](/docs/models/centernet) und [EfficientDet](/docs/models/efficientdet).
 

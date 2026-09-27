@@ -130,7 +130,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 33e331eac0f9b0af
+source_hash: 3d956e53e80143c2
 ---
 
 ## Définition
@@ -155,10 +155,10 @@ pixels `(P, 2)`, et `.xyn` fournit le même contour normalisé.
 
 ## Modèles
 
-Quatre familles peuvent être entraînées et prédire des masques :
+Cinq familles peuvent être entraînées et prédire des masques :
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
-[D-FINE](/docs/models/d-fine) et [RTMDet](/docs/models/rtmdet). RF-DETR
-nécessite son propre extra, `pip install "libreyolo[rfdetr]"`. Les trois autres
+[D-FINE](/docs/models/d-fine), [GTR](/docs/models/gtr) et [RTMDet](/docs/models/rtmdet). RF-DETR
+nécessite son propre extra, `pip install "libreyolo[rfdetr]"`. Les quatre autres
 s'exécutent avec le paquet de base.
 
 [Mask R-CNN](/docs/models/mask-rcnn) prédit, valide et exporte des masques, mais

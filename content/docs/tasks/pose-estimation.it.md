@@ -154,7 +154,7 @@ snippets:
 
 
         print(result.keypoints.xy)
-source_hash: 1b9e7614546d8f00
+source_hash: 3650786b0a858958
 ---
 
 ## Definizione
@@ -184,7 +184,7 @@ accuratezza dipende dal rilevatore che ha davanti.
 
 ## Modelli
 
-Tre famiglie supportano sia addestramento sia predizione: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) e [YOLO-NAS](/docs/models/yolo-nas), tutte a singolo stadio. RF-DETR richiede il proprio extra, `pip install "libreyolo[rfdetr]"`. RF-DETR ed EdgeCrafter distribuiscono checkpoint di posa pubblicati. RF-DETR addestra anche pose multiclasse; la testa dei keypoint di EdgeCrafter è fissata alla costruzione e rifiuta dataset che dichiarano un numero diverso, mentre RF-DETR reinizializza la propria testa. YOLO-NAS scarica i pesi dal CDN di Deci.AI con una licenza non commerciale e LibreYOLO non ne pubblica nessuno; anche la sua testa di posa viene ricostruita per un nuovo numero di keypoint e supporta scheletri multiclasse o non umani.
+Quattro famiglie supportano sia addestramento sia predizione: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [GTR](/docs/models/gtr) e [YOLO-NAS](/docs/models/yolo-nas), tutte a singolo stadio. RF-DETR richiede il proprio extra, `pip install "libreyolo[rfdetr]"`. RF-DETR, EdgeCrafter e GTR distribuiscono checkpoint di posa pubblicati. RF-DETR addestra anche pose multiclasse; la testa dei keypoint di EdgeCrafter è fissata alla costruzione e rifiuta dataset che dichiarano un numero diverso, mentre RF-DETR reinizializza la propria testa. YOLO-NAS scarica i pesi dal CDN di Deci.AI con una licenza non commerciale e LibreYOLO non ne pubblica nessuno; anche la sua testa di posa viene ricostruita per un nuovo numero di keypoint e supporta scheletri multiclasse o non umani. GTR si addestra solo su un dataset a classe singola con 17 keypoint, a `imgsz=640`.
 
 [HRNet](/docs/models/hrnet) è l'opzione top-down. Predice, valida ed esporta, e
 il suo `train()` solleva `NotImplementedError`. Se non gli dai una sorgente di

@@ -17,7 +17,6 @@ keywords:
   - OKS mAP
   - обучить модель позы
 last_verified: 1.6.0
-
 snippets:
   predict:
     - label: Python
@@ -146,7 +145,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 1b9e7614546d8f00
+source_hash: 3650786b0a858958
 ---
 
 ## Определение
@@ -175,7 +174,7 @@ source_hash: 1b9e7614546d8f00
 
 ## Модели
 
-Три семейства поддерживают обучение и предсказание: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter) и [YOLO-NAS](/docs/models/yolo-nas), все одностадийные. RF-DETR требует отдельный extra, `pip install "libreyolo[rfdetr]"`. RF-DETR и EdgeCrafter имеют опубликованные чекпойнты позы. RF-DETR также обучает позы с несколькими классами; голова ключевых точек EdgeCrafter фиксируется при создании и отклоняет датасет с другим числом точек, а RF-DETR переинициализирует для него голову. YOLO-NAS скачивает веса из CDN Deci.AI по некоммерческой лицензии, и LibreYOLO их не публикует; его голова позы также перестраивается под новое число ключевых точек и поддерживает несколько классов или скелеты не человека.
+Четыре семейства поддерживают обучение и предсказание: [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter), [GTR](/docs/models/gtr) и [YOLO-NAS](/docs/models/yolo-nas), все одностадийные. RF-DETR требует отдельный extra, `pip install "libreyolo[rfdetr]"`. RF-DETR, EdgeCrafter и GTR имеют опубликованные чекпойнты позы. RF-DETR также обучает позы с несколькими классами; голова ключевых точек EdgeCrafter фиксируется при создании и отклоняет датасет с другим числом точек, а RF-DETR переинициализирует для него голову. YOLO-NAS скачивает веса из CDN Deci.AI по некоммерческой лицензии, и LibreYOLO их не публикует; его голова позы также перестраивается под новое число ключевых точек и поддерживает несколько классов или скелеты не человека. GTR обучается только на датасете с одним классом и 17 ключевыми точками при `imgsz=640`.
 
 [HRNet](/docs/models/hrnet) — вариант top-down. Он предсказывает, валидирует и
 экспортирует, а его `train()` бросает `NotImplementedError`. Если источник

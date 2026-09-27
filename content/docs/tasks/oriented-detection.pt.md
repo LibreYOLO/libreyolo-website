@@ -171,7 +171,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.obb.xywhr)
-source_hash: dddb69a3bd3541a8
+source_hash: 8af4d1647609e5e6
 ---
 
 ## Definição
@@ -201,7 +201,7 @@ aos eixos.
 
 ## Modelos
 
-Três famílias atendem a essa tarefa.
+Quatro famílias atendem a essa tarefa.
 
 [RF-DETR](/docs/models/rf-detr) suporta treinamento. Prevê, treina, valida e exporta caixas orientadas, e tem checkpoints orientados publicados em quatro tamanhos, n, s, m e l. Precisa do seu próprio extra, `pip install "libreyolo[rfdetr]"`, e sua página de modelo traz a licença dos pesos e a procedência.
 
@@ -222,6 +222,11 @@ também não estão disponíveis para caixas orientadas.
 Escolha o conjunto de classes do checkpoint e o suporte a treinamento necessários para seu dataset.
 
 [YOLO-NAS](/docs/models/yolo-nas) também suporta treinamento e inferência OBB. Seus pesos pré-treinados mantêm os termos não comerciais upstream.
+
+[GTR](/docs/models/gtr) publica `LibreGTRs-obb.pt` e `LibreGTRx-obb.pt`,
+que predizem as 15 classes do DOTA v1.0 com uma entrada fixa de 1024. Roda no
+pacote base e suporta predição, treinamento, validação e exportação para ONNX e
+TorchScript.
 
 ## Predição
 

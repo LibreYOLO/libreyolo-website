@@ -132,7 +132,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 1b9e7614546d8f00
+source_hash: 3650786b0a858958
 ---
 
 ## 定義
@@ -157,14 +157,14 @@ source_hash: 1b9e7614546d8f00
 
 ## モデル
 
-3つのファミリーが学習と推論の両方に対応します：
+4つのファミリーが学習と推論の両方に対応します：
 [RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter)、
-[YOLO-NAS](/docs/models/yolo-nas)で、すべて1段階方式です。RF-DETRには専用のextraである
-`pip install "libreyolo[rfdetr]"`が必要です。RF-DETRとEdgeCrafterは公開済みの姿勢
+[GTR](/docs/models/gtr)、[YOLO-NAS](/docs/models/yolo-nas)で、すべて1段階方式です。RF-DETRには専用のextraである
+`pip install "libreyolo[rfdetr]"`が必要です。RF-DETR、EdgeCrafter、GTRは公開済みの姿勢
 チェックポイントを提供します。RF-DETRは複数クラスの姿勢推定も学習できます。EdgeCrafterのキーポイントヘッドは構築時に固定され、異なる個数を宣言するデータセットを
 拒否しますが、RF-DETRはそれに合わせてヘッドを再初期化します。YOLO-NASは非商用ライセンスの
 下でDeci.AI独自のCDNから重みを取得し、LibreYOLOはどの重みも公開しません。その姿勢ヘッドも
-新しいキーポイント数に合わせて再構築され、複数クラスまたは人物以外のスケルトンにも対応します。
+新しいキーポイント数に合わせて再構築され、複数クラスまたは人物以外のスケルトンにも対応します。GTRが学習できるのは、`imgsz=640`で17個のキーポイントを持つ単一クラスのデータセットだけです。
 
 [HRNet](/docs/models/hrnet)はトップダウン方式の選択肢です。推論、検証、エクスポートに対応し、
 `train()`は`NotImplementedError`を発生させます。人物ソースを指定しない場合は、

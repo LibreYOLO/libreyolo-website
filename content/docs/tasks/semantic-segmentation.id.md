@@ -122,7 +122,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: a60dad4b38f35bf5
+source_hash: 531a9b20e5532913
 ---
 
 ## Definisi
@@ -158,7 +158,7 @@ ADE20K dibanding 19 kelas Cityscapes, sehingga `names` milik checkpoint
 menentukan apa yang dapat diberi label. Dua checkpoint hanya dapat dibandingkan
 jika dilatih pada kumpulan yang sama.
 
-[PP-LiteSeg](/docs/models/ppliteseg) dan [U-Net](/docs/models/unet) adalah family segmentasi semantik yang dapat dilatih. Bobot Cityscapes untuk U-Net dipublikasikan sebagai `LibreUNets-sem.pt`.
+[PP-LiteSeg](/docs/models/ppliteseg), [U-Net](/docs/models/unet), dan [GTR](/docs/models/gtr) adalah family segmentasi semantik yang dapat dilatih. Bobot Cityscapes untuk U-Net dipublikasikan sebagai `LibreUNets-sem.pt`.
 
 ## Prediksi
 

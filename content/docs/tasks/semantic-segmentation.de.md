@@ -120,7 +120,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: a60dad4b38f35bf5
+source_hash: 531a9b20e5532913
 ---
 
 ## Definition
@@ -160,7 +160,7 @@ Klassen von Cityscapes. Anhand von `names` des Checkpoints erkennst du, welche
 Labels er vorhersagen kann. Zwei Checkpoints sind nur vergleichbar, wenn sie
 auf demselben Datensatz trainiert wurden.
 
-[PP-LiteSeg](/docs/models/ppliteseg) und [U-Net](/docs/models/unet) sind trainierbare Familien für semantische Segmentierung. Die Cityscapes-Gewichte von U-Net sind als `LibreUNets-sem.pt` veröffentlicht.
+[PP-LiteSeg](/docs/models/ppliteseg), [U-Net](/docs/models/unet) und [GTR](/docs/models/gtr) sind trainierbare Familien für semantische Segmentierung. Die Cityscapes-Gewichte von U-Net sind als `LibreUNets-sem.pt` veröffentlicht.
 
 ## Vorhersage
 
