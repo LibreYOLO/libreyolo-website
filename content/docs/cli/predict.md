@@ -102,8 +102,9 @@ valid values for `model`. Three options are refused on those runtimes rather
 than ignored: `tiling`, `overlap_ratio` and `output_file_format` exit with
 `config_unsupported` when a runtime backend cannot honor them.
 
-`half` goes the other way. Exported runtimes receive it and run in FP16; native
-PyTorch inference logs that it was ignored and continues in FP32.
+`half` goes the other way: it is accepted and ignored. Native PyTorch inference
+logs that it was ignored and continues in FP32, and an exported runtime keeps the
+precision it was exported with, so FP16 inference means exporting with `half=true`.
 
 Gaze models are two stage and have no detector of their own, so
 `face_detector` is required for them. `gallery` applies only to models whose

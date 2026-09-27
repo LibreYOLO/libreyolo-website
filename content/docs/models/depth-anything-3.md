@@ -96,8 +96,8 @@ values mean closer to the camera, and the values have no metric unit or
 cross-image scale. The upstream checkpoint emits positive relative depth;
 LibreYOLO's network wrapper inverts it and reproduces the official sky
 handling so the output follows LibreYOLO's shared depth contract. `save=True`
-writes a colormapped visualization of that map to disk; `Results.plot()` does
-not cover this family, since it is defined for surface normals and edges only.
+writes a colormapped visualization of that map to disk; `Results.plot()`
+renders the depth map as a PIL image, and `pil=False` returns the array instead.
 See [prediction](/docs/predict) for sources, streaming and result handling.
 
 ## Variants

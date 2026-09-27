@@ -63,7 +63,7 @@ snippets:
         # 登録済みの各ファミリーと、タスク、サイズ、入力解像度を表示します。
         # 追加パッケージがないファミリーには、有効化するpipコマンドも表示されます。
         libreyolo models
-source_hash: 531023c2092fd751
+source_hash: 3ad6bb09bf2f5434
 ---
 
 ## インストール
@@ -170,6 +170,8 @@ Molmo2には別の環境を使ってください。Transformers 4.57.1への固�
 | `tflite`、`litert` | `onnx2tf`と`ai-edge-litert`にPython 3.12以降が必要 |
 
 `sensenova`はwheelが公開されていないmacOSで`bitsandbytes`をスキップし、その他は通常どおりインストールします。
+
+`vlm`はプラットフォームが限定されていません：固定されている`decord==0.6.0`には、x86-64のLinuxとWindows向けのwheelしかありません。macOSとARMのLinuxでは、`vlm`、`ground`、`vlm-train`、`all`のインストールに失敗します。
 
 ディスク容量が制約なら、その大半はPyTorchで、さらに大半はデフォルトwheelに同梱されるCUDAペイロードです。CPU専用wheelなら機能を失わずにそれを除去できます。PyTorchを一切含めないマシンでONNX物体検出を使う場合は、[軽量インストール](/docs/lightweight-install)を参照してください。
 

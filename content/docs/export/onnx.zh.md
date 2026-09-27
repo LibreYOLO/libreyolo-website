@@ -148,7 +148,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: ff50afedd377beaf
+source_hash: a407e1142b8aa57e
 ---
 
 ## 安装
@@ -172,10 +172,11 @@ ONNX extra 需要 `onnxruntime>=1.18.0`；LaMa 使用 opset-21 计算图。
 放开空间维，两阶段检测器则让源图的高和宽保持动态，因为它们的 resize 发生在图内部。
 
 省略 `opset` 时会按家族选择。DETR 系家族（`detr`、`deformable_detr`、`dinodetr`、
-`dfine`、`deim`、`deimv2`、`ec`、`lwdetr`、`rfdetr`、`rtdetr`、`rtdetrv2`、
-`rtdetrv4`）加上 `deit`、`midas` 和 `moge2` 用 opset 17，`aten::scaled_dot_product`
-正是在这一版才有对应的下降实现。其余都用 13。抠图（matting）无论如何都会提到 19，因为
-BiRefNet 的解码器需要 `DeformConv` 算子，而 ONNX 从 opset 19 起才定义它。
+`dfine`、`gtr`、`deim`、`deimv2`、`tinyformer`、`ec`、`lwdetr`、`rfdetr`、`rtdetr`、
+`rtdetrv2`、`rtdetrv4`）加上 `deit`、`midas`、`moge2` 和 `vjepa2` 用 opset 17，
+`aten::scaled_dot_product` 正是在这一版才有对应的下降实现。其余都用 13。BiRefNet 和
+FeyNobg 无论如何都会提到 19，因为它们的解码器需要 `DeformConv` 算子，而 ONNX 从
+opset 19 起才定义它。
 
 `simplify=True` 会跑 `onnxsim`，这一趟失败就保留原图，所以简化出错是一条警告，而不是
 导出失败。在 macOS arm64 上，如果 `onnx` 是 1.22 或更高版本、`onnxsim` 是 0.6.5 或
@@ -248,13 +249,14 @@ RF-DETR 也是唯一一个输入张量叫 `input` 而不是 `images` 的家族�
 
 这一版里有几个任务带着固定分辨率的运行时约定。深度、表面法线和边缘会拒绝
 `batch != 1` 并强制 `dynamic=False`。抠图会强制用原生的 1024 方形输入，因为
-BiRefNet 的 Swin 相对位置表和它们的分辨率绑死了。复原对除 Real-ESRGAN 以外的每个
-家族都强制固定画布，Real-ESRGAN 的生成器是全卷积的。
+BiRefNet 的 Swin 相对位置表和它们的分辨率绑死了。复原对除 Real-ESRGAN 和
+QuickSRNet 以外的每个家族都强制固定画布，这两者的网络是全卷积的。
 
-矩形 `imgsz` 对 YOLO9 系家族、HRNet、NAFNet 和 Real-ESRGAN 有效。有固定方形约定的
-家族（`clip`、`deformable_detr`、`detr`、`dinodetr`、`dfine`、`deim`、`deimv2`、
-`ec`、`lwdetr`、`moge2`、`rtdetr`、`rtdetrv2`、`rtdetrv4`、`rfdetr`、`siglip2`、
-`ssd`）会直接拒绝。
+矩形 `imgsz` 对 YOLO9 系家族、HRNet、NAFNet、PP-LiteSeg、Real-ESRGAN、QuickSRNet
+和 GTR 语义分割有效。有固定方形约定的家族（`clip`、`deformable_detr`、`detr`、
+`dinodetr`、`dfine`、语义分割以外的 `gtr`、`deim`、`deimv2`、`tinyformer`、`ec`、
+`lwdetr`、`moge2`、`rtdetr`、`rtdetrv2`、`rtdetrv4`、`rfdetr`、`siglip2`、`ssd`）
+会直接拒绝。
 
 有两种组合在 tracing 之前就会被拒绝：YOLO9 分割，因为在 LibreYOLO 里 YOLO9 只做检测；
 以及 RTMDet-Ins 分割，它那套动态卷积核的掩码解码没有导出运行时的约定。

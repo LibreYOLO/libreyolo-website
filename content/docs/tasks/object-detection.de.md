@@ -142,7 +142,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 60bb0f5b7cf31cb7
+source_hash: 01ee5ee9eea3b569
 ---
 
 ## Definition
@@ -161,7 +161,7 @@ Elf weitere Familien unterstützen Vorhersage, Validierung und Export, während 
 
 Die Darknet-Abstammungslinie aus [YOLOv1](/docs/models/yolov1), [YOLOv2](/docs/models/yolov2), [YOLOv3](/docs/models/yolov3) und [YOLOv4](/docs/models/yolov4) wird als eingefrorenes Exponat bewahrt. Vorhersage, Validierung und Export funktionieren, Training nicht.
 
-Eine separate Gruppe übernimmt ihre Klassenliste zur Laufzeit statt aus dem Checkpoint und erkennt dadurch Namen, die beim Training nie vorkamen: [Grounding DINO](/docs/models/grounding-dino), [OWLv2](/docs/models/owlv2), [OMDet-Turbo](/docs/models/omdet-turbo) und [OV-DEIM](/docs/models/ov-deim) sowie die Vision-Language-Familien [Florence-2](/docs/models/florence-2), [Kosmos-2](/docs/models/kosmos-2), [Qwen3-VL](/docs/models/qwen3-vl), [SmolVLM2](/docs/models/smolvlm2), [InternVL3](/docs/models/internvl3), [LFM2-VL](/docs/models/lfm2-vl), [LocateAnything](/docs/models/locate-anything), [SenseNova-Vision](/docs/models/sensenova-vision) und [LibreMODUS](/docs/models/libremodus). Diese Modelle werden über eigene Factorys und Extras geladen. Den genauen Aufruf findest du auf der jeweiligen Modellseite.
+Eine separate Gruppe übernimmt ihre Klassenliste zur Laufzeit statt aus dem Checkpoint und erkennt dadurch Namen, die beim Training nie vorkamen: [Grounding DINO](/docs/models/grounding-dino), [OWLv2](/docs/models/owlv2), [OMDet-Turbo](/docs/models/omdet-turbo) und [OV-DEIM](/docs/models/ov-deim) sowie die Vision-Language-Familien [Florence-2](/docs/models/florence-2), [Kosmos-2](/docs/models/kosmos-2), [Qwen3-VL](/docs/models/qwen3-vl), [SmolVLM2](/docs/models/smolvlm2), [InternVL3](/docs/models/internvl3), [LFM2-VL](/docs/models/lfm2-vl), [Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision), [LocateAnything](/docs/models/locate-anything), [SenseNova-Vision](/docs/models/sensenova-vision) und [LibreMODUS](/docs/models/libremodus). Diese Modelle werden über eigene Factorys und Extras geladen. Den genauen Aufruf findest du auf der jeweiligen Modellseite.
 
 [PP-YOLOE](/docs/models/ppyoloe) und [TinyFormer](/docs/models/tinyformer) unterstützen ebenfalls Erkennungstraining.
 

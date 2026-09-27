@@ -221,7 +221,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c355ad28487c9a65
+source_hash: 81a0c947dbfe48b5
 ---
 
 ## Cómo se clasifica una fuente
@@ -276,9 +276,8 @@ Los arrays de coma flotante se reescalan según su propio rango: los valores
 iguales o inferiores a `1.0` se multiplican por 255, y los valores más altos se
 recortan al rango `[0, 255]`. Un array RGBA descarta su canal alfa.
 
-Las rutas remotas necesitan un paquete cada una, y ninguno se instala por
-defecto: `requests` para `http(s)://`, `boto3` para `s3://` y `gcsfs` para
-`gs://`.
+Las rutas remotas necesitan un paquete cada una. `requests`, para `http(s)://`,
+viene con la instalación base; `boto3` para `s3://` y `gcsfs` para `gs://` no.
 
 El seguimiento acepta imágenes, carpetas ordenadas por nombre de archivo, listas, tuplas e iteradores de imágenes con carga diferida como fotogramas consecutivos. Pasa `fps=30.0` para definir la temporización de la secuencia de imágenes y `color_format="auto"` para seleccionar la interpretación de entrada. Consulta [seguimiento](/docs/tasks/object-tracking).
 
@@ -297,8 +296,10 @@ Consulta [Rendimiento de la inferencia](/docs/predict/performance).
 
 <code-tabs name="video" />
 
-Una ruta cuenta como vídeo cuando su sufijo es uno de `.asf`, `.avi`, `.gif`,
-`.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.ts`, `.wmv`, `.webm`.
+Una ruta cuenta como vídeo cuando su sufijo es uno de `.3g2`, `.3gp`, `.asf`,
+`.avi`, `.dav`, `.f4v`, `.flv`, `.gif`, `.h264`, `.h265`, `.hevc`, `.m2ts`,
+`.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.mts`, `.mxf`, `.ogv`, `.ts`,
+`.vob`, `.wmv`, `.webm`.
 
 `.gif` aparece en las dos listas. Una ruta `.gif` pasada directamente a
 `predict` se abre como vídeo, porque la comprobación de vídeo se ejecuta
@@ -416,8 +417,10 @@ Las imágenes van a un `runs/detect/predict`, `runs/detect/predict2` y así
 sucesivamente que se autoincrementa, conservando el nombre de archivo de origen.
 Todas las imágenes de un mismo proceso acaban en el mismo directorio, así que
 dos carpetas de entrada que contengan el mismo nombre de archivo se sobrescriben
-entre sí. Las imágenes en memoria no tienen nombre de archivo que reutilizar y
-se numeran `image0`, `image1` y así sucesivamente.
+entre sí. Las imágenes en memoria no tienen nombre de archivo que reutilizar.
+Una imagen suelta se guarda como `inference`, así que las llamadas repetidas
+la sobrescriben; una lista o un batch se numera `image0`, `image1` y así
+sucesivamente.
 
 Las fuentes de vídeo y en directo se escriben como un único `.mp4` con el nombre
 de la fuente.

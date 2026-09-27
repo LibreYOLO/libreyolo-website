@@ -241,6 +241,21 @@ small classification models, whose activations are small to begin with: ResNet-1
 at 224 px, batch 16, went from 0.48 GB eager to 0.57 GB graphed. If it pushes a
 run over the limit, lower the batch or leave the flag off.
 
+## torch.compile
+
+`train(compile=True)` compiles the network forward and backward with
+`torch.compile`. It also accepts the modes `"default"`, `"reduce-overhead"`,
+`"max-autotune"` and `"max-autotune-no-cudagraphs"`; the default is `False`.
+The loss, optimizer, EMA, validation, checkpoints and export stay eager, and the
+checkpoints load without compilation. Only single-GPU CUDA runs compile. CPU,
+MPS, distributed and distillation runs, and compiler failures, train eager after
+a warning. Compilation takes several minutes and needs a C compiler and Python
+headers on the training host.
+
+During `train()`, unless `OMP_NUM_THREADS` is set, LibreYOLO lowers the PyTorch
+CPU thread count to the process's CPU allowance, so CPU-limited containers do
+not throttle every step.
+
 ## Related
 
 - [Hyperparameters](/docs/train/hyperparameters) for `batch`, `nbs`, `cache` and

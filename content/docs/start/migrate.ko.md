@@ -13,7 +13,7 @@ keywords:
   - libreyolo 마이그레이션
   - pth를 libreyolo로 변환
   - 자동 변환
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: 진입점
     value: LibreYOLO("path/to/upstream.pth")
@@ -50,7 +50,7 @@ snippets:
       code: |
         # 변환된 파일은 게시된 파일과 동일한 스키마를 만족합니다.
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: 517b0462e83295f1
+source_hash: b19fedcf10862990
 ---
 
 이 페이지는 다른 프로젝트의 체크포인트에 관한 것입니다. 만약 이전 버전의 LibreYOLO에서 자신의 코드를 옮기고 있다면, [1.6.0으로 업그레이드](/docs/upgrade)를 참조하십시오.

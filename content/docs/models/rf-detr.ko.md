@@ -4,8 +4,8 @@ families:
   - rfdetr
 seo_title: 'RF-DETR: MIT 기반 학습, 파인튜닝 및 내보내기'
 description: >-
-  LibreYOLO에서 RF-DETR로 탐지, 인스턴스 분할, 자세 추정, 회전 박스를 수행합니다. 모두 MIT 라이선스로 설치, 예측,
-  학습, 검증, 내보내기합니다.
+  LibreYOLO에서 RF-DETR로 탐지, 인스턴스 분할, 자세 추정, 회전 박스를 수행합니다. 설치, 예측, 학습, 검증, 내보내기를
+  다룹니다.
 lead: >-
   조밀 그리드 대신 고정된 객체 집합을 예측하는 detection transformer이므로 추론 시 NMS가 필요하지 않습니다.
   LibreYOLO는 네 가지 작업을 지원합니다.
@@ -92,7 +92,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -177,7 +177,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 379a3a09691bf14b
+source_hash: 3238696a4e1ab6c2
 ---
 
 ## 설치
@@ -200,7 +200,7 @@ pip install "libreyolo[rfdetr]"
 
 ## 변형
 
-네 가지 크기와 하나의 구조를 공유하는 네 가지 작업이 있습니다. 분할, 자세 추정, 회전 박스는 다른 헤드와 함께 탐지 디코더를 재사용하므로 같은 인수를 받습니다. 크기별 매개변수 수는 비슷하며 주로 입력 해상도가 다릅니다.
+`n`부터 `l`까지 네 가지 탐지 크기와 하나의 구조를 공유하는 네 가지 작업이 있습니다. 분할, 자세 추정, 회전 박스는 다른 헤드와 함께 탐지 디코더를 재사용하므로 같은 인수를 받습니다. 분할에는 `x`와 `xx`가 추가되고, 자세 추정은 `x` 크기로만 제공됩니다. 크기별 매개변수 수는 비슷하며 주로 입력 해상도가 다릅니다.
 
 <benchmark-table task="detect" />
 
@@ -220,7 +220,7 @@ pip install "libreyolo[rfdetr]"
 
 ## 검증
 
-`val()`은 학습에 사용한 형식의 데이터셋을 대상으로 측정한 정밀도, 재현율, mAP 50, mAP 50-95를 포함하는 `metrics/` 키 사전을 반환합니다.
+`val()`은 학습에 사용한 형식의 데이터셋을 대상으로 측정한 mAP 50, mAP 50-95, mAP 75, COCO 평균 재현율을 포함하는 `metrics/` 키 사전을 반환합니다.
 
 <code-tabs name="val" />
 

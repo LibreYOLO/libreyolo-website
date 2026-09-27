@@ -17,7 +17,10 @@ keywords:
   - 플로렌스-2
   - 리브리욜로 채팅
 last_verified: 1.6.0
-verification: '별칭은 libreyolo/models/vlm/__init__.py에서 읽고; 저장소, 크기 및 작업 목록은 libreyolo/models/vlm/ 아래의 계열 모듈과 libreyolo/models/sensenova/model.py에서 가져오며; 호출 규칙과 예외는 libreyolo/models/vlm/base.py에서 가져오며, 모두 v1.6.0 버전입니다.'
+verification: >-
+  별칭은 libreyolo/models/vlm/__init__.py에서 읽고; 저장소, 크기 및 작업 목록은
+  libreyolo/models/vlm/ 아래의 계열 모듈과 libreyolo/models/sensenova/model.py에서 가져오며;
+  호출 규칙과 예외는 libreyolo/models/vlm/base.py에서 가져오며, 모두 v1.6.0 버전입니다.
 snippets:
   install:
     - label: 배시
@@ -43,7 +46,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: "77a04856cfe4f88c"
+source_hash: a9e0d635a6645d2c
 ---
 
 ## 설치
@@ -80,7 +83,7 @@ LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 
 `LibreVLM`, `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` 및 `LibreMODUS`(또한 `LibreModus`라고 표기됨)는 패키지 수준에서 내보내집니다.
 
-탐지에는 `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3`, `lfm2-vl-3b`도 포함됩니다. 크기가 없는 `gemma-4` 별칭은 E4B를 선택합니다. Molmo2 별칭은 `molmo2-4b`, `molmo2-8b`, `molmo2-o-7b`이며 기본값은 4B입니다. 별칭은 라우팅을 정의하며, 모든 원격 스냅샷을 다운로드하고 테스트했다는 의미는 아닙니다.
+탐지에는 `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3`, `lfm2-vl-3b`도 포함됩니다. 크기가 없는 `gemma-4` 별칭은 E4B를 선택합니다. Molmo2 별칭은 `molmo2-4b`, `molmo2-8b`, `molmo2-o-7b`이며 기본값은 4B입니다. 별칭은 라우팅을 정의하며, 모든 원격 스냅샷을 다운로드하고 테스트했다는 의미는 아닙니다. `moondream-3` 모델은 1.6.0에서 로드되지 않습니다: 미러에 가중치 샤드가 누락되어 있습니다.
 
 ## 작업
 

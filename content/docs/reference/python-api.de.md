@@ -79,7 +79,7 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 02fbec762b1ffced
+source_hash: 7dc6a5ef1b3ba9ea
 ---
 
 ## Einstiegspunkte
@@ -144,26 +144,36 @@ Erkennungs- und Multi-Task-Familien: `LibreYOLO9`, `LibreYOLO9E2E`,
 `LibreDEIMv2`, `LibreDETR`, `LibreDeformableDETR`, `LibreDINODETR`,
 `LibreLWDETR`, `LibreMaskRCNN`, `LibreFCOS`, `LibreFasterRCNN`,
 `LibreRetinaNet`, `LibreSSD`, `LibreCenterNet`, `LibreEfficientDet`, `LibreEC`,
-`LibrePICODET`, `LibreRTMDet`, `LibreFOMO`.
+`LibreGTR`, `LibreTinyFormer`, `LibrePICODET`, `LibrePPYOLOE`, `LibreRTMDet`,
+`LibreFOMO`.
 
 Familien für dichte Vorhersagen: `LibreMiDaS`, `LibreDepthAnythingV2`,
 `LibreDepthAnything3`, `LibreZipDepth`, `LibreMoGe2`, `LibreTEED`,
 `LibreDexiNed`, `LibreNAFNet`, `LibreRealESRGAN`, `LibreSwinIR`,
 `LibreBiRefNet`, `LibreFeyNobg`, `LibreFCN`, `LibreEoMT`, `LibreDeepLabv3`,
-`LibrePIDNet`, `LibreSegformer`, `LibreLingBotVision`.
+`LibrePIDNet`, `LibrePPLiteSeg`, `LibreUNet`, `LibreSegformer`,
+`LibreLingBotVision`, `LibreMarigoldV2`, `LibreDDColor`, `LibreHVICIDNet`,
+`LibreLaMa`, `LibreQuickSRNet`, `LibreBEN2`, `LibreViTMatte`.
 
 Klassifikations- und Embedding-Familien: `LibreViT`, `LibreMobileNetV4`,
 `LibreConvNeXt`, `LibreDeiT`, `LibreSwin`, `LibreEfficientNetV2`, `LibreVGG`,
-`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`.
+`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`,
+`LibreConvNeXtV2`, `LibrePE`, `LibreVJEPA2`, `LibreLeVJEPA`.
 
-Andere Aufgaben: `LibreHRNet` (Pose), `LibreL2CS` (Blick), `LibrePPOCR` (OCR),
-`LibreFaceEmbedder` (Embedding).
+Andere Aufgaben: `LibreHRNet` und `LibreDEKR` (Pose), `LibreL2CS` (Blick),
+`LibrePPOCR` (OCR), `LibreFaceEmbedder` (Embedding) sowie die 3D-Detektoren
+`LibreFCOS3D`, `LibreDetAny3D`, `LibreWildDet3D` und `Libre3DMOOD`
+(3D-Erkennung).
 
 Auch die benachbarten Stufen exportieren ihre Familienklassen: `LibreSAM1`,
 `LibreSAM2`, `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`;
 `LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo`; `LibreLFM2VL`,
 `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`,
-`LibreKosmos2`, `LibreLocateAnything`, `LibreMODUS` (auch `LibreModus`).
+`LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`,
+`LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (auch `LibreModus`);
+`LibreShowUI`, `LibreGroundFlorence2` und `LibreGroundQwen3VL` hinter
+`LibreGround`; `LibreSmolVLA`, `LibreACT` und `LibreDiffusionPolicy` hinter
+`LibreVLA`.
 
 ## Vorhersageschnittstelle
 

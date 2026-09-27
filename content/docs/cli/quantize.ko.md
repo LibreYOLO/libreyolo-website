@@ -44,7 +44,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: "663390776f2f2c15"
+source_hash: 409bc0b2ace6547e
 ---
 
 ## 개요
@@ -65,7 +65,7 @@ libreyolo quantize model=<name|path> [recipe=<recipe>] [key=value ...]
 | `calib` | `coco128.yaml` | 캘리브레이션 이미지: 데이터 YAML 또는 내장 데이터셋 이름. 레이블 없이 순전파에만 사용합니다. `none`은 캘리브레이션을 건너뜁니다 |
 | `samples` | `128` | 최대 캘리브레이션 이미지 수 |
 | `batch` | `8` | 캘리브레이션 배치 크기 |
-| `algorithm` | `auto` | 활성화 범위 추정: minmax를 선택하는 `auto`, 또는 `minmax`, 또는 `percentile` |
+| `algorithm` | `auto` | 활성화 범위 추정: `auto`(minmax), `minmax`, `percentile`, `mse`, `entropy` |
 | `out` | | 출력 체크포인트 경로. 기본값은 접미사 앞에 `-<recipe>`가 붙은 원본 경로입니다 |
 | `device` | `auto` | 장치 |
 | `allow_download_scripts` | `false` | 데이터셋 YAML의 download 블록에 내장된 Python 허용 |

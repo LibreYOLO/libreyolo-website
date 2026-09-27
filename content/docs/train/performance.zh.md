@@ -12,7 +12,7 @@ keywords:
   - 数据加载瓶颈
   - kernel 启动开销
   - gpu 利用率低
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   profile:
     - label: 剖析并继续训练
@@ -62,7 +62,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: 288ee5ee988f2fda
+source_hash: c8d7adb6aabcbc80
 ---
 
 ## 动手改任何东西之前先测量
@@ -219,6 +219,18 @@ head 卷积，两条反向路径以不同的顺序把三份贡献加了起来。
 在上面这些家族里，峰值分配量的变化落在 -5% 到 +19% 之间。相对代价最大的是小的分类
 模型，它们的激活值本来就小：ResNet-18 在 224 px、批大小 16 下从 eager 的 0.48 GB 变成
 捕获后的 0.57 GB。如果这让一次运行超出了上限，就降低批大小，或者干脆不开这个开关。
+
+## torch.compile
+
+`train(compile=True)` 用 `torch.compile` 编译网络的前向和反向。它也接受
+`"default"`、`"reduce-overhead"`、`"max-autotune"` 和
+`"max-autotune-no-cudagraphs"` 这几种模式；默认值是 `False`。损失、优化器、EMA、
+验证、检查点和导出都留在 eager，检查点加载时也不需要编译。只有单 GPU 的 CUDA 运行
+会编译。CPU、MPS、分布式和蒸馏运行，以及编译器出错的情况，都会在给出警告后以 eager
+训练。编译要花好几分钟，并且训练主机上需要有 C 编译器和 Python 头文件。
+
+在 `train()` 期间，除非设置了 `OMP_NUM_THREADS`，LibreYOLO 会把 PyTorch 的 CPU
+线程数降到进程可用的 CPU 配额，这样受 CPU 限制的容器就不会拖慢每一步。
 
 ## 相关
 

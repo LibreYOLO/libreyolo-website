@@ -98,7 +98,7 @@ snippets:
         yaw_logits, pitch_logits = session.run(
             None, {name: np.zeros((1, 3, 448, 448), dtype=np.float32)}
         )
-source_hash: 4ec43f4673b4be3e
+source_hash: 1f61c1a61e033bbc
 ---
 
 ## Instalasi
@@ -120,7 +120,8 @@ pip install "libreyolo[gaze]"
 ```
 
 Tanpa extra itu, LibreYOLO mencetak petunjuk unduhan manual alih-alih gagal
-secara diam-diam.
+secara diam-diam. Di 1.6.0, unduhan Google Drive upstream mengembalikan 404, jadi
+letakkan salinan lokal checkpoint di path yang Anda muat.
 
 ## Prediksi
 

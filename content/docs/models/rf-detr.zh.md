@@ -3,7 +3,7 @@ title: RF-DETR
 families:
   - rfdetr
 seo_title: RF-DETR：在 MIT 许可下训练、微调并导出
-description: 在 LibreYOLO 里用 RF-DETR 做目标检测、实例分割、姿态和旋转框。安装、预测、训练、验证、导出，全部采用 MIT 许可。
+description: 在 LibreYOLO 里用 RF-DETR 做目标检测、实例分割、姿态和旋转框。安装、预测、训练、验证、导出。
 lead: 一个检测 transformer，它预测的是一组固定数量的目标，而不是一张稠密网格，所以推理时不需要 NMS。LibreYOLO 支持它做四种任务。
 keywords:
   - RF-DETR
@@ -88,7 +88,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -173,7 +173,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 379a3a09691bf14b
+source_hash: 3238696a4e1ab6c2
 ---
 
 ## 安装
@@ -198,8 +198,9 @@ pip install "libreyolo[rfdetr]"
 
 ## 变体
 
-四种尺寸，四种任务共用一套架构：分割、姿态和旋转框复用检测的解码器，只是换了一个
-head，所以接受的参数完全一样。这些尺寸的参数量相近，主要差别在输入分辨率。
+检测有从 `n` 到 `l` 的四种尺寸，而四种任务共用一套架构：分割、姿态和旋转框复用
+检测的解码器，只是换了一个 head，所以接受的参数完全一样。分割另外多出 `x` 和 `xx`，姿态
+只有 `x`。这些尺寸的参数量相近，主要差别在输入分辨率。
 
 <benchmark-table task="detect" />
 
@@ -223,8 +224,8 @@ head，所以接受的参数完全一样。这些尺寸的参数量相近，主�
 
 ## 验证
 
-`val()` 返回一个由 `metrics/` 键组成的字典，涵盖查准率、查全率、mAP 50 和
-mAP 50-95，在任何与你训练时所用格式相同的数据集上测得。
+`val()` 返回一个由 `metrics/` 键组成的字典，涵盖 mAP 50、mAP 50-95、mAP 75 和
+COCO 平均查全率，在任何与你训练时所用格式相同的数据集上测得。
 
 <code-tabs name="val" />
 

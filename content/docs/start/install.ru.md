@@ -16,7 +16,6 @@ keywords:
   - libreyolo не видит gpu
   - требования libreyolo
 last_verified: 1.6.0
-
 meta:
   - label: Пакет
     value: libreyolo
@@ -68,7 +67,7 @@ snippets:
         # входными разрешениями. Семейства, у которых не хватает extra,
         # выводятся вместе с командой pip, которая их включает.
         libreyolo models
-source_hash: 531023c2092fd751
+source_hash: 3ad6bb09bf2f5434
 ---
 
 ## Установка
@@ -193,6 +192,10 @@ COCO откатывается на pycocotools и запуск продолжа�
 
 `sensenova` пропускает `bitsandbytes` на macOS, где wheel-пакет не публикуется;
 остальная часть extra ставится как обычно.
+
+`vlm` не ограничен платформой: для закреплённой в нём версии `decord==0.6.0`
+wheel-пакеты есть только для x86-64 Linux и Windows. На macOS и Linux на ARM
+`vlm`, `ground`, `vlm-train` и `all` не устанавливаются.
 
 Если ограничение — место на диске, то большую его часть занимает PyTorch, а
 большую часть PyTorch — CUDA-составляющая, которую по умолчанию тянет за собой

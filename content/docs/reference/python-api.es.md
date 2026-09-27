@@ -79,7 +79,7 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 02fbec762b1ffced
+source_hash: 7dc6a5ef1b3ba9ea
 ---
 
 ## Puntos de entrada
@@ -144,27 +144,35 @@ Familias de detección y multitarea: `LibreYOLO9`, `LibreYOLO9E2E`,
 `LibreDEIMv2`, `LibreDETR`, `LibreDeformableDETR`, `LibreDINODETR`,
 `LibreLWDETR`, `LibreMaskRCNN`, `LibreFCOS`, `LibreFasterRCNN`,
 `LibreRetinaNet`, `LibreSSD`, `LibreCenterNet`, `LibreEfficientDet`,
-`LibreEC`, `LibrePICODET`, `LibreRTMDet`, `LibreFOMO`.
+`LibreEC`, `LibreGTR`, `LibreTinyFormer`, `LibrePICODET`, `LibrePPYOLOE`,
+`LibreRTMDet`, `LibreFOMO`.
 
 Familias de predicción densa: `LibreMiDaS`, `LibreDepthAnythingV2`,
 `LibreDepthAnything3`, `LibreZipDepth`, `LibreMoGe2`, `LibreTEED`,
 `LibreDexiNed`, `LibreNAFNet`, `LibreRealESRGAN`, `LibreSwinIR`,
 `LibreBiRefNet`, `LibreFeyNobg`, `LibreFCN`, `LibreEoMT`, `LibreDeepLabv3`,
-`LibrePIDNet`, `LibreSegformer`, `LibreLingBotVision`.
+`LibrePIDNet`, `LibrePPLiteSeg`, `LibreUNet`, `LibreSegformer`,
+`LibreLingBotVision`, `LibreMarigoldV2`, `LibreDDColor`, `LibreHVICIDNet`,
+`LibreLaMa`, `LibreQuickSRNet`, `LibreBEN2`, `LibreViTMatte`.
 
 Familias de clasificación y embeddings: `LibreViT`, `LibreMobileNetV4`,
 `LibreConvNeXt`, `LibreDeiT`, `LibreSwin`, `LibreEfficientNetV2`, `LibreVGG`,
-`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`.
+`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`,
+`LibreConvNeXtV2`, `LibrePE`, `LibreVJEPA2`, `LibreLeVJEPA`.
 
-Otras tareas: `LibreHRNet` (pose), `LibreL2CS` (gaze), `LibrePPOCR` (ocr),
-`LibreFaceEmbedder` (embed).
+Otras tareas: `LibreHRNet` y `LibreDEKR` (pose), `LibreL2CS` (gaze),
+`LibrePPOCR` (ocr), `LibreFaceEmbedder` (embed), y los detectores 3D
+`LibreFCOS3D`, `LibreDetAny3D`, `LibreWildDet3D` y `Libre3DMOOD` (detect3d).
 
 Los niveles hermanos también exportan sus clases de familia: `LibreSAM1`,
 `LibreSAM2`, `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`;
 `LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo`; `LibreLFM2VL`,
 `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`,
-`LibreKosmos2`, `LibreLocateAnything`, `LibreMODUS` (también escrito
-`LibreModus`).
+`LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`,
+`LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (también escrito
+`LibreModus`); `LibreShowUI`, `LibreGroundFlorence2` y `LibreGroundQwen3VL`
+detrás de `LibreGround`; `LibreSmolVLA`, `LibreACT` y `LibreDiffusionPolicy`
+detrás de `LibreVLA`.
 
 ## Superficie de predicción
 

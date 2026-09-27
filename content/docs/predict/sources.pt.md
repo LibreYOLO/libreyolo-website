@@ -221,7 +221,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c355ad28487c9a65
+source_hash: 81a0c947dbfe48b5
 ---
 
 ## Como uma fonte é classificada
@@ -276,9 +276,8 @@ Arrays de ponto flutuante são reescalados pela própria faixa: valores iguais o
 abaixo de `1.0` são multiplicados por 255, valores maiores são recortados para
 `[0, 255]`. Um array RGBA descarta seu canal alfa.
 
-Caminhos remotos precisam de um pacote cada, e nenhum deles vem instalado por
-padrão: `requests` para `http(s)://`, `boto3` para `s3://` e `gcsfs` para
-`gs://`.
+Caminhos remotos precisam de um pacote cada. `requests`, para `http(s)://`, vem
+com a instalação base; `boto3` para `s3://` e `gcsfs` para `gs://` não vêm.
 
 O rastreamento aceita imagens, pastas ordenadas por nome de arquivo, listas, tuplas e iteradores preguiçosos de imagens como quadros consecutivos. Passe `fps=30.0` para definir a temporização da sequência de imagens e `color_format="auto"` para selecionar a interpretação da entrada. Veja [rastreamento](/docs/tasks/object-tracking).
 
@@ -297,8 +296,10 @@ empilhado por bloco nas famílias que suportam isso. Veja
 
 <code-tabs name="video" />
 
-Um caminho conta como vídeo quando seu sufixo é um de `.asf`, `.avi`, `.gif`,
-`.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.ts`, `.wmv`, `.webm`.
+Um caminho conta como vídeo quando seu sufixo é um de `.3g2`, `.3gp`, `.asf`,
+`.avi`, `.dav`, `.f4v`, `.flv`, `.gif`, `.h264`, `.h265`, `.hevc`, `.m2ts`,
+`.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.mts`, `.mxf`, `.ogv`, `.ts`,
+`.vob`, `.wmv`, `.webm`.
 
 `.gif` aparece nas duas listas. Um caminho `.gif` passado direto para `predict` é
 aberto como vídeo, porque a checagem de vídeo roda primeiro; um `.gif` que está
@@ -412,8 +413,9 @@ As imagens vão para um `runs/detect/predict`, `runs/detect/predict2` e assim po
 diante, com incremento automático, mantendo o nome do arquivo de origem. Toda
 imagem de um mesmo processo cai no mesmo diretório, então duas pastas de entrada
 com um mesmo nome de arquivo sobrescrevem uma à outra. Imagens em memória não têm
-nome de arquivo para reaproveitar e são numeradas `image0`, `image1` e assim por
-diante.
+nome de arquivo para reaproveitar. Uma imagem única é gravada como `inference`,
+então chamadas repetidas a sobrescrevem; uma lista ou um batch é numerado
+`image0`, `image1` e assim por diante.
 
 Fontes de vídeo e ao vivo são gravadas como um único `.mp4` nomeado a partir da
 fonte.

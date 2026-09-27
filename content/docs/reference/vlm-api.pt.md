@@ -49,7 +49,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 77a04856cfe4f88c
+source_hash: a9e0d635a6645d2c
 ---
 
 ## Instalação
@@ -94,7 +94,7 @@ os listados primeiro: `qwen3-vl` resolve para `4b`, `lfm2-vl` para `450m`,
 `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` e `LibreMODUS`
 (também escrito `LibreModus`) são exportados no nível do pacote.
 
-Detecção também inclui `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` e `lfm2-vl-3b`. O alias simples `gemma-4` seleciona E4B. Os aliases de Molmo2 são `molmo2-4b`, `molmo2-8b` e `molmo2-o-7b`; seu padrão é 4B. Os aliases definem o roteamento, não garantem que cada snapshot remoto tenha sido baixado e testado.
+Detecção também inclui `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` e `lfm2-vl-3b`. O alias simples `gemma-4` seleciona E4B. Os aliases de Molmo2 são `molmo2-4b`, `molmo2-8b` e `molmo2-o-7b`; seu padrão é 4B. Os aliases definem o roteamento, não garantem que cada snapshot remoto tenha sido baixado e testado. `moondream-3` não carrega na 1.6.0: faltam shards de pesos no espelho dele.
 
 ## Tarefas
 

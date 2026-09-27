@@ -1,8 +1,10 @@
 ---
 title: 결과 유형
 seo_title: LibreYOLO 결과 객체 참조
-description: "LibreYOLO 결과 페이로드: 박스, 마스크, 키포인트, 분류, 깊이, 알베도, 3D 직육면체 및 로봇 액션 청크."
-lead: Results는 모든 LibreYOLO 모델이 이미지별로 반환하는 단일 타입입니다. 작업 형태별 선택적 페이로드 슬롯이 있으며 모델이 생성한 슬롯만 채웁니다.
+description: 'LibreYOLO 결과 페이로드: 박스, 마스크, 키포인트, 분류, 깊이, 알베도, 3D 직육면체 및 로봇 액션 청크.'
+lead: >-
+  Results는 모든 LibreYOLO 모델이 이미지별로 반환하는 단일 타입입니다. 작업 형태별 선택적 페이로드 슬롯이 있으며 모델이 생성한
+  슬롯만 채웁니다.
 keywords:
   - libreyolo 결과 객체
   - 결과.상자
@@ -12,7 +14,9 @@ keywords:
   - 결과.요약
   - libreyolo 결과를 json으로
 last_verified: 1.6.0
-verification: '슬롯 이름, 형태, 속성 및 기본값은 v1.6.0의 libreyolo/utils/results.py에서 읽었습니다. 의미는 페이로드 클래스 도큐스트링에서 인용했습니다.'
+verification: >-
+  슬롯 이름, 형태, 속성 및 기본값은 v1.6.0의 libreyolo/utils/results.py에서 읽었습니다. 의미는 페이로드 클래스
+  도큐스트링에서 인용했습니다.
 snippets:
   usage:
     - label: Python
@@ -42,7 +46,7 @@ snippets:
         # 행을 일반 딕셔너리로, 그 다음에는 JSON으로.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: d74276d805c22c92
+source_hash: 173c542fb675892e
 ---
 
 ## 결과 객체
@@ -215,7 +219,7 @@ source_hash: d74276d805c22c92
 
 `summary(normalize=False, decimals=5, embeddings=False)`는 설정된 슬롯에 따라 탐지, 세그먼트, 포인트 또는 영역당 한 행씩의 일반 딕셔너리 목록을 반환합니다. `to_json(**kwargs)`는 자신의 인수를 `summary`에 전달하고 JSON 문자열을 반환합니다.
 
-`plot()`은 모든 작업 페이로드를 렌더링합니다. 이미지 오버레이의 기본값은 BGR 배열이며, `pil=True`로 PIL을 요청합니다. 엣지와 법선 맵 결과는 PIL 기본값을 유지합니다.
+`plot()`은 모든 작업 페이로드를 렌더링합니다. 이미지 오버레이의 기본값은 BGR 배열이며, `pil=True`로 PIL을 요청합니다. 깊이, 법선, 엣지, 알베도 맵과 3D 직육면체, 동작 청크는 기본적으로 PIL 이미지를 반환하며, `pil=False`를 지정하면 배열을 반환합니다.
 
 ## Boxes3D
 

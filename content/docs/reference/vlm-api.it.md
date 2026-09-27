@@ -20,7 +20,11 @@ keywords:
   - Florence-2
   - libreyolo chat
 last_verified: 1.6.0
-verification: Alias letti da libreyolo/models/vlm/__init__.py; repository, dimensioni ed elenchi di task dai moduli delle famiglie sotto libreyolo/models/vlm/ più libreyolo/models/sensenova/model.py; regole di chiamata ed eccezioni da libreyolo/models/vlm/base.py, tutto alla v1.6.0.
+verification: >-
+  Alias letti da libreyolo/models/vlm/__init__.py; repository, dimensioni ed
+  elenchi di task dai moduli delle famiglie sotto libreyolo/models/vlm/ più
+  libreyolo/models/sensenova/model.py; regole di chiamata ed eccezioni da
+  libreyolo/models/vlm/base.py, tutto alla v1.6.0.
 snippets:
   install:
     - label: bash
@@ -46,7 +50,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 77a04856cfe4f88c
+source_hash: a9e0d635a6645d2c
 ---
 
 ## Installazione
@@ -92,7 +96,7 @@ ogni famiglia sono quelle elencate per prime: `qwen3-vl` risolve a `4b`,
 `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` e `LibreMODUS`
 (scritto anche `LibreModus`) sono esportati a livello di pacchetto.
 
-Il rilevamento include anche `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` e `lfm2-vl-3b`. L'alias semplice `gemma-4` seleziona E4B. Gli alias Molmo2 sono `molmo2-4b`, `molmo2-8b` e `molmo2-o-7b`; il default è 4B. Gli alias definiscono l'instradamento, ma non attestano che ogni snapshot remoto sia stato scaricato e testato.
+Il rilevamento include anche `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` e `lfm2-vl-3b`. L'alias semplice `gemma-4` seleziona E4B. Gli alias Molmo2 sono `molmo2-4b`, `molmo2-8b` e `molmo2-o-7b`; il default è 4B. Gli alias definiscono l'instradamento, ma non attestano che ogni snapshot remoto sia stato scaricato e testato. `moondream-3` non si carica in 1.6.0: al suo mirror mancano alcuni shard dei pesi.
 
 ## Task
 

@@ -118,7 +118,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 531a9b20e5532913
+source_hash: e13acb1e813da7c4
 ---
 
 ## Definizione
@@ -207,8 +207,7 @@ names:
   1: sidewalk
 ```
 
-`masks_dir` è il nome della directory sostituito a `images`, con valore
-predefinito `masks`. `label_mapping` è un rimappaggio opzionale
+`masks_dir` è il nome della directory sostituito a `images`. `label_mapping` è un rimappaggio opzionale
 `{source_id: train_id}` applicato ai valori dei pixel della maschera al
 caricamento, ed è così che un dataset numerato da 1 a 150 diventa da 0 a 149;
 qualsiasi valore di origine non mappato diventa ignore, e ogni train id deve

@@ -58,18 +58,13 @@ snippets:
         print(field[h // 2, w // 2])
     - label: Salvar a visualização
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("LibreMoGe2s-normal.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
-        # plot() renderiza o campo; está definido para resultados de normais e
-        bordas.
-
+        # plot() retorna o campo renderizado como uma imagem PIL.
         result.plot().save("normals.png")
   val:
     - label: Validar e ler as chaves das métricas
@@ -103,7 +98,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.data.shape)
-source_hash: b033fdf3a2210ce5
+source_hash: dd8de1b1ecd208bf
 ---
 
 ## Definição

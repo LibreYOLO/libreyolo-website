@@ -45,7 +45,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 0f7f2b7487a67daa
+source_hash: 30b2c16d339f5f50
 ---
 
 ## 概要
@@ -237,8 +237,8 @@ SegFormer 和 NAFNet 会忽略整组参数，连 `flip_prob` 一起，因为它�
 
 ### 其他值得了解的行为
 
-`lora=true` 会被 RF-DETR、D-FINE、DEIM、DEIMv2、RT-DETR v1、v2 和 v4、EC 以
-及 ConvNeXt 接受。其他任何家族都会以 `config_unsupported` 退出，而不是在没
+`lora=true` 会被 RF-DETR、D-FINE、DEIM、DEIMv2、RT-DETR v1、v2 和 v4、EC、
+GTR 以及 ConvNeXt 接受。其他任何家族都会以 `config_unsupported` 退出，而不是在没
 有它的情况下训练。
 
 `pretrained=false` 与 `resume` 同时使用，在支持从头训练的家族上会被拒绝，因

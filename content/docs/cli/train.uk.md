@@ -53,7 +53,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 0f7f2b7487a67daa
+source_hash: 30b2c16d339f5f50
 ---
 
 ## Синопсис
@@ -255,8 +255,8 @@ stderr.
 
 ### Інша поведінка, яку варто знати
 
-`lora=true` приймають RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 і v4, EC та
-ConvNeXt. Будь-яке інше сімейство завершується з `config_unsupported`, замість
+`lora=true` приймають RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 і v4, EC, GTR
+та ConvNeXt. Будь-яке інше сімейство завершується з `config_unsupported`, замість
 навчатися без нього.
 
 `pretrained=false` у поєднанні з `resume` відхиляється для сімейств, які

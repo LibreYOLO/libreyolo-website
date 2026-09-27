@@ -16,7 +16,7 @@ keywords:
   - monokulare geometrie
   - winkelfehler metrik
   - dichte normalen vorhersage
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Normalenfeld vorhersagen
@@ -57,7 +57,7 @@ snippets:
         model = LibreYOLO("LibreMoGe2s-normal.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot() rendert das Feld; es ist für Normalen und Kanten definiert.
+        # plot() gibt das gerenderte Feld als PIL-Bild zurück.
         result.plot().save("normals.png")
   val:
     - label: Validieren und Metrikschlüssel auslesen
@@ -91,7 +91,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.data.shape)
-source_hash: "b033fdf3a2210ce5"
+source_hash: dd8de1b1ecd208bf
 ---
 
 ## Definition

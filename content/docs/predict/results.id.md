@@ -127,12 +127,12 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 201eca6457cf87a4
+source_hash: cebaac95f0a28b5f
 ---
 
 ## Satu objek, satu slot per payload
 
-Prediksi pada satu gambar mengembalikan satu `Results`. Objek ini memiliki delapan belas slot
+Prediksi pada satu gambar mengembalikan satu `Results`. Objek ini memiliki dua puluh satu slot
 payload, dan model hanya mengisi slot yang dihasilkan task-nya. Semua slot lain bernilai
 `None`, sehingga membaca `result.masks` pada detektor menghasilkan `None`, bukan error.
 
@@ -156,6 +156,9 @@ payload, dan model hanya mengisi slot yang dihasilkan task-nya. Semua slot lain 
 | `embeddings` | `Embeddings` | `(N, D)` baris ternormalisasi L2 | Task `embed` |
 | `identities` | `Identities` | N nama dan skor | Task `embed` dengan galeri |
 | `meshes` | `Meshes` | Parameter tubuh dan vertices opsional | Pemulihan mesh tubuh |
+| `albedo` | `AlbedoMap` | `(H, W, 3)` RGB linear | Estimasi albedo |
+| `boxes3d` | `Boxes3D` | `(N, 14)` kuboid dalam kerangka kamera, barisnya selaras dengan `boxes` | Deteksi 3D monokular |
+| `actions` | `Actions` | `(T, D)` potongan aksi | Policy robot |
 
 Di sampingnya terdapat field yang dimiliki setiap hasil: `orig_shape` sebagai
 `(height, width)`, `path` (path sumber atau `None` untuk input dalam memori), `names` yang
@@ -294,7 +297,7 @@ dan `result.meshes.save_obj(path, index=0)` untuk mesh.
 Untuk lokasi berkas serta perilaku `output_path` dan `output_file_format`, lihat
 [Sumber prediksi](/docs/predict/sources).
 
-`plot()` mencakup payload semua task. Overlay gambar mengembalikan BGR uint8 HxWx3 kontigu secara default; `pil=True` meminta PIL. Jalur edge dan peta normal yang sudah ada mempertahankan default PIL. `orig_img` menyimpan piksel BGR untuk sumber dalam memori dan URL; berkas lokal dan frame video berdurasi terbatas yang dikumpulkan dapat dibuka ulang.
+`plot()` mencakup payload semua task. Overlay gambar mengembalikan BGR uint8 HxWx3 kontigu secara default; `pil=True` meminta PIL. Peta kedalaman, normal, edge, dan albedo, kuboid 3D, serta potongan aksi mengembalikan gambar PIL secara default; `pil=False` mengembalikan array-nya. `orig_img` menyimpan piksel BGR untuk sumber dalam memori dan URL; berkas lokal dan frame video berdurasi terbatas yang dikumpulkan dapat dibuka ulang.
 
 Kontrol meliputi `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save`, dan `filename`. Gambar klasifikasi yang disimpan memuat lima label teratas. Penyimpanan matte menulis potongan RGBA.
 
@@ -304,8 +307,9 @@ Kontrol meliputi `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width
 
 `LibreYOLO()` melakukan dispatch berdasarkan sufiks berkas, sehingga artefak hasil ekspor
 dimuat melalui pemanggilan yang sama seperti checkpoint `.pt` dan mengembalikan `Results`
-yang sama. Berkas `.onnx`, `.engine`, `.pte`, dan `.mnn` dikenali berdasarkan sufiks,
-demikian juga direktori OpenVINO, Paddle, dan ncnn serta URL model Triton. Kode yang membaca
+yang sama. Berkas `.onnx`, `.torchscript`, `.engine`, `.pte`, `.tflite`, dan `.mnn`
+dikenali berdasarkan sufiks, demikian juga direktori OpenVINO, Paddle, ncnn, dan Core ML
+`.mlpackage` serta URL model Triton. Kode yang membaca
 `result.boxes.xyxy` tidak berubah saat model diganti dengan build hasil ekspor. Lihat
 [Ekspor](/docs/export) untuk seluruh format.
 

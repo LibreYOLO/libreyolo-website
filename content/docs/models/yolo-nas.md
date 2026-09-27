@@ -187,8 +187,8 @@ license that covers them.
 
 There are none to list. Deci's license forbids redistribution, so the LibreYOLO
 org publishes no YOLO-NAS weights and the download resolves elsewhere: a name
-of the form `LibreYOLONAS<size>.pt`, or `LibreYOLONAS<size>-pose.pt` for pose,
-maps to the matching object on Deci's public CDN.
+of the form `LibreYOLONAS<size>.pt`, `LibreYOLONAS<size>-pose.pt` for pose, or
+`LibreYOLONAS<size>-obb.pt` (s, m, l) for oriented boxes, maps to the matching object on Deci's public CDN.
 
 Only the checkpoints whose SHA-256 the library pins can be fetched that way.
 Anything else fails closed rather than opening an unverified third-party

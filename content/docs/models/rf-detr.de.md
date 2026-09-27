@@ -6,7 +6,7 @@ seo_title: 'RF-DETR: Training, Fine-Tuning und Export unter MIT'
 description: >-
   Nutze RF-DETR in LibreYOLO für Erkennung, Instanzsegmentierung, Pose und
   orientierte Boxen. Installiere, sage vorher, trainiere, validiere und
-  exportiere, vollständig MIT-lizenziert.
+  exportiere.
 lead: >-
   Ein Detection Transformer, der statt eines dichten Rasters eine feste Menge
   von Objekten vorhersagt und daher bei der Inferenz keine NMS benötigt.
@@ -99,7 +99,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -225,7 +225,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 379a3a09691bf14b
+source_hash: 3238696a4e1ab6c2
 ---
 
 ## Installation
@@ -253,9 +253,11 @@ Erkennung, Segmentierung und orientierte Boxen verwenden bilineare OpenCV-Skalie
 
 ## Varianten
 
-Es gibt vier Größen und vier Aufgaben mit einer gemeinsamen Architektur.
-Segmentierung, Pose und orientierte Boxen verwenden den Erkennungsdecoder mit
-einem anderen Head und akzeptieren daher dieselben Argumente. Die Größen haben
+Es gibt vier Erkennungsgrößen, `n` bis `l`, und vier Aufgaben mit einer
+gemeinsamen Architektur. Segmentierung, Pose und orientierte Boxen verwenden
+den Erkennungsdecoder mit einem anderen Head und akzeptieren daher dieselben
+Argumente. Die Segmentierung ergänzt `x` und `xx`, Pose gibt es nur in `x`.
+Die Größen haben
 ähnliche Parameteranzahlen und unterscheiden sich vor allem in der
 Eingabeauflösung.
 
@@ -286,8 +288,8 @@ Neue Läufe verwenden standardmäßig `output_dir=None` und damit ein hochgezäh
 
 ## Validierung
 
-`val()` gibt ein Dictionary mit `metrics/`-Schlüsseln für Precision, Recall,
-mAP 50 und mAP 50-95 zurück. Diese werden auf einem beliebigen Datensatz in
+`val()` gibt ein Dictionary mit `metrics/`-Schlüsseln für mAP 50, mAP 50-95,
+mAP 75 und den COCO-Average-Recall zurück. Diese werden auf einem beliebigen Datensatz in
 dem Format gemessen, das du für das Training verwendet hast.
 
 <code-tabs name="val" />

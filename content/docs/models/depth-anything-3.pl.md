@@ -105,7 +105,7 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: 0ac96180165c4891
+source_hash: d22a5fc355bbebd2
 ---
 ## Instalacja
 
@@ -121,7 +121,7 @@ Wagi są pobierane z Hugging Face przy pierwszym użyciu i są przechowywane w p
 
 <code-tabs name="predict" />
 
-`result.depth_map` zawiera gęstą względną mapę odwrotnej głębokości: wyższe wartości oznaczają bliżej kamery, a wartości te nie mają jednostki metrycznej ani skali międzyobrazowej. Checkpoint upstream generuje dodatnią względną głębokość; opakowanie sieci LibreYOLO odwraca ją i odwzorowuje oficjalne przetwarzanie nieba, tak aby wynik odpowiadał udostępnionemu kontraktowi głębokości LibreYOLO. `save=True` zapisuje wizualizację tej mapy w kolorze na dysku; `Results.plot()` nie obejmuje tej rodziny, ponieważ definiowana jest tylko dla normalnych powierzchni i krawędzi. Zobacz [predykcja](/docs/predict) dla źródeł, streaming i przetwarzania wyników.
+`result.depth_map` zawiera gęstą względną mapę odwrotnej głębokości: wyższe wartości oznaczają bliżej kamery, a wartości te nie mają jednostki metrycznej ani skali międzyobrazowej. Checkpoint upstream generuje dodatnią względną głębokość; opakowanie sieci LibreYOLO odwraca ją i odwzorowuje oficjalne przetwarzanie nieba, tak aby wynik odpowiadał udostępnionemu kontraktowi głębokości LibreYOLO. `save=True` zapisuje wizualizację tej mapy w kolorze na dysku; `Results.plot()` renderuje mapę głębi jako obraz PIL, a `pil=False` zwraca zamiast tego tablicę. Zobacz [predykcja](/docs/predict) dla źródeł, streaming i przetwarzania wyników.
 
 ## Warianty
 

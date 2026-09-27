@@ -11,7 +11,7 @@ keywords:
   - yolox bn eps
   - faster-coco-eval 默认
 last_verified: 1.6.0
-source_hash: c575718b8a7949f8
+source_hash: e9c7cb5271aa4a81
 ---
 
 ## 从 1.5.0 升级到 1.6.0
@@ -24,7 +24,7 @@ source_hash: c575718b8a7949f8
 
 - D-FINE、DEIM、RT-DETRv4 和 YOLO-NAS 检测默认启用 FP16 AMP。传入 `amp=False` 可保留 FP32。
 
-- 要使用以前的 YOLO9 微调设置，请设置 `aux_weight=0`、`max_labels=100` 和 `warmup_momentum=0.937`。新的中心对齐转换权重需要复现旧几何时，设置 `letterbox_pad="topleft"`。旧单 head 检查点继续使用原计算图续训。
+- 要使用以前的 YOLO9 微调设置，请设置 `aux_weight=0`、`max_labels=100` 和 `warmup_momentum=0.937`。新的中心对齐转换权重需要复现旧几何时，设置 `letterbox_pad="topleft"`。旧单 head 检查点继续使用原计算图续训。新的 YOLO9 运行会占用更多显存，所以如果沿用 1.5.0 的批大小出现显存不足，请调低 `batch`。
 
 - RF-DETR 和 DINOv2 创建以家族命名、自动递增的训练目录。请更新使用产物路径的程序，或设置 `output_dir="runs/train", exist_ok=True`，保留原位置和复用行为。
 
@@ -69,7 +69,8 @@ model.train(data="data.yaml", epochs=100, allow_experimental=True)
 model.train(data="data.yaml", epochs=100)
 ```
 
-没有留下弃用的兼容垫片。仍然传这个参数的调用会抛出 `TypeError`。
+没有留下弃用的兼容垫片。仍然传这个参数的调用会收到一条
+`Unknown training config keys (ignored)` 警告，而这个参数不会产生任何效果。
 `BaseModel.EXPERIMENTAL_WEIGHT_FILENAMES` 也随之移除。`get_download_notice()`
 这个钩子保留了下来，MiDaS、SegFormer 和 YOLO9-P2 依然会覆盖它。
 
@@ -174,9 +175,9 @@ YOLOX 规定 BatchNorm 使用 `eps=1e-3` 和 `momentum=0.03`。在 1.5.0 之前�
 
 ```python
 import torch
-from libreyolo import LibreYOLOX
+from libreyolo import LibreYOLO
 
-model = LibreYOLOX("my-yolox-finetune.pt")
+model = LibreYOLO("my-yolox-finetune.pt")
 for module in model.model.modules():
     if isinstance(module, torch.nn.BatchNorm2d):
         module.eps = 1e-5
@@ -222,7 +223,7 @@ DEIM 仍然使用硬编码的 3。家族细节见 [D-FINE](/docs/models/d-fine)�
   `LIBREYOLO_HUB_KERNELS=0` 可以关掉它。
 - **`libreyolo predict` 会丢弃不支持的选项，而不是报错。** CLI 会按模型 `__call__`
   的签名过滤 kwargs，所以某个家族不接受的选项会被忽略，而不是抛出 `TypeError`。
-  flag 名字拼错了现在也会被默默忽略。
+  未知的 flag 名字仍然会被拒绝，报 `No such option`。
 - **实时输入源会改变 JSON 输出的形态。** 摄像头、RTSP 流和屏幕捕获会隐式开启流式
   模式，于是每帧产出一条记录，而不是整次调用产出一条。这些
   [输入源](/docs/predict/sources)是 1.5.0 新增的，所以没有 1.4.0 的脚本会受影响。

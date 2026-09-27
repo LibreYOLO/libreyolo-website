@@ -100,7 +100,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: e1043aba1b70b65c
+source_hash: de71e994a0b6d8b4
 ---
 
 ## Instalação
@@ -120,8 +120,8 @@ Os pesos são baixados do Hugging Face no primeiro uso e ficam em cache local.
 `result.depth_map` carrega um mapa denso de profundidade inversa relativa:
 valores maiores significam mais perto da câmera, e os valores não têm unidade
 métrica nem escala entre imagens. `save=True` grava em disco uma visualização
-desse mapa com mapa de cores; `Results.plot()` não cobre esta família, já que
-está definido apenas para normais de superfície e bordas. A resolução de
+desse mapa com mapa de cores; `Results.plot()` renderiza o mapa de profundidade
+como uma imagem PIL, e `pil=False` retorna o array. A resolução de
 entrada precisa ser divisível por 14, a grade de patches do DINOv2 sobre a qual
 a cabeça DPT é construída; o LibreYOLO confere isso antes de rodar e levanta um
 erro se não for. Veja [predição](/docs/predict) para fontes, streaming e

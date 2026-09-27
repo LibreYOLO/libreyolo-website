@@ -2,12 +2,13 @@
 title: Python API
 seo_title: Tham chiếu Python API LibreYOLO
 description: >-
-  Các tên LibreYOLO xuất ở cấp package: factory, lớp họ mô hình, dữ liệu Results, backend, bộ đánh giá,
-  tracker và tiện ích dữ liệu.
+  Các tên LibreYOLO xuất ở cấp package: factory, lớp họ mô hình, dữ liệu
+  Results, backend, bộ đánh giá, tracker và tiện ích dữ liệu.
 lead: >-
-  API Python công khai của LibreYOLO là danh sách __all__ trong libreyolo/__init__.py. Thành phần xuất ở cấp
-  package dùng from libreyolo import <name>; các giao thức theo dõi và huấn luyện bên dưới dùng phân hệ có tên
-  riêng.
+  API Python công khai của LibreYOLO là danh sách __all__ trong
+  libreyolo/__init__.py. Thành phần xuất ở cấp package dùng from libreyolo
+  import <name>; các giao thức theo dõi và huấn luyện bên dưới dùng phân hệ có
+  tên riêng.
 keywords:
   - libreyolo python api
   - import libreyolo
@@ -19,10 +20,11 @@ keywords:
   - libreyolo __all__
 last_verified: 1.6.0
 verification: >-
-  Tên và signature được đọc từ libreyolo/__init__.py, libreyolo/models/__init__.py,
-  libreyolo/models/base/model.py, libreyolo/models/base/inference.py, libreyolo/models/sam/model.py,
-  libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py và libreyolo/ensemble/model.py ở
-  v1.6.0.
+  Tên và signature được đọc từ libreyolo/__init__.py,
+  libreyolo/models/__init__.py, libreyolo/models/base/model.py,
+  libreyolo/models/base/inference.py, libreyolo/models/sam/model.py,
+  libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py và
+  libreyolo/ensemble/model.py ở v1.6.0.
 snippets:
   usage:
     - label: Nạp mọi thứ qua một factory
@@ -50,21 +52,33 @@ snippets:
   factories:
     - label: Năm điểm vào
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, LibreEnsemble
 
+
         # Factory dò trọng số trên các họ không có prompt.
+
         detector = LibreYOLO("LibreYOLO9t.pt")
 
+
         # Hai detector trở lên phía sau một giao diện dự đoán.
+
         ens = LibreEnsemble(["LibreYOLO9t.pt", "LibreYOLO9s.pt"])
 
+
         # Ba factory còn lại cần cài gói bổ sung:
-        #   pip install 'libreyolo[sam]'        -> from libreyolo import LibreSAM
-        #   pip install 'libreyolo[vlm]'        -> from libreyolo import LibreVLM
-        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import LibreOpenVocab
+
+        #   pip install 'libreyolo[sam]'        -> from libreyolo import
+        LibreSAM
+
+        #   pip install 'libreyolo[vlm]'        -> from libreyolo import
+        LibreVLM
+
+        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import
+        LibreOpenVocab
+
         print(type(detector).__name__, ens.fusion)
-source_hash: 02fbec762b1ffced
+source_hash: 7dc6a5ef1b3ba9ea
 ---
 ## Điểm vào
 
@@ -126,26 +140,35 @@ Các họ detection và đa tác vụ: `LibreYOLO9`, `LibreYOLO9E2E`,
 `LibreDEIMv2`, `LibreDETR`, `LibreDeformableDETR`, `LibreDINODETR`,
 `LibreLWDETR`, `LibreMaskRCNN`, `LibreFCOS`, `LibreFasterRCNN`,
 `LibreRetinaNet`, `LibreSSD`, `LibreCenterNet`, `LibreEfficientDet`,
-`LibreEC`, `LibrePICODET`, `LibreRTMDet`, `LibreFOMO`.
+`LibreEC`, `LibreGTR`, `LibreTinyFormer`, `LibrePICODET`, `LibrePPYOLOE`,
+`LibreRTMDet`, `LibreFOMO`.
 
 Các họ dense prediction: `LibreMiDaS`, `LibreDepthAnythingV2`,
 `LibreDepthAnything3`, `LibreZipDepth`, `LibreMoGe2`, `LibreTEED`,
 `LibreDexiNed`, `LibreNAFNet`, `LibreRealESRGAN`, `LibreSwinIR`,
 `LibreBiRefNet`, `LibreFeyNobg`, `LibreFCN`, `LibreEoMT`, `LibreDeepLabv3`,
-`LibrePIDNet`, `LibreSegformer`, `LibreLingBotVision`.
+`LibrePIDNet`, `LibrePPLiteSeg`, `LibreUNet`, `LibreSegformer`,
+`LibreLingBotVision`, `LibreMarigoldV2`, `LibreDDColor`, `LibreHVICIDNet`,
+`LibreLaMa`, `LibreQuickSRNet`, `LibreBEN2`, `LibreViTMatte`.
 
 Các họ classification và embedding: `LibreViT`, `LibreMobileNetV4`,
 `LibreConvNeXt`, `LibreDeiT`, `LibreSwin`, `LibreEfficientNetV2`, `LibreVGG`,
-`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`.
+`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`,
+`LibreConvNeXtV2`, `LibrePE`, `LibreVJEPA2`, `LibreLeVJEPA`.
 
-Các tác vụ khác: `LibreHRNet` (pose), `LibreL2CS` (gaze), `LibrePPOCR` (ocr),
-`LibreFaceEmbedder` (embed).
+Các tác vụ khác: `LibreHRNet` và `LibreDEKR` (pose), `LibreL2CS` (gaze),
+`LibrePPOCR` (ocr), `LibreFaceEmbedder` (embed), cùng các detector 3D
+`LibreFCOS3D`, `LibreDetAny3D`, `LibreWildDet3D` và `Libre3DMOOD` (detect3d).
 
 Các cấp sibling cũng export lớp họ: `LibreSAM1`, `LibreSAM2`, `LibreSAM3`,
 `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`; `LibreGroundingDINO`,
 `LibreOWLv2`, `LibreOMDetTurbo`; `LibreLFM2VL`, `LibreQwen3VL`,
 `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`, `LibreKosmos2`,
-`LibreLocateAnything`, `LibreMODUS` (cũng viết là `LibreModus`).
+`LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`, `LibreMolmo2`,
+`LibreNorthMicroVision`, `LibreMODUS` (cũng viết là `LibreModus`);
+`LibreShowUI`, `LibreGroundFlorence2` và `LibreGroundQwen3VL` đứng sau
+`LibreGround`; `LibreSmolVLA`, `LibreACT` và `LibreDiffusionPolicy` đứng sau
+`LibreVLA`.
 
 ## Giao diện dự đoán
 

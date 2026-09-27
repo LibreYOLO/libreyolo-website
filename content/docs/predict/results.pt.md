@@ -135,12 +135,12 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 201eca6457cf87a4
+source_hash: cebaac95f0a28b5f
 ---
 
 ## Um objeto, um slot por payload
 
-Uma predição sobre uma imagem retorna um `Results`. Ele carrega dezoito slots
+Uma predição sobre uma imagem retorna um `Results`. Ele carrega vinte e um slots
 de payload, e um modelo preenche apenas os que a sua tarefa produz. Todos os
 outros slots são `None`, então ler `result.masks` em um detector dá `None` em
 vez de um erro.
@@ -165,6 +165,9 @@ vez de um erro.
 | `embeddings` | `Embeddings` | `(N, D)` com linhas normalizadas em L2 | A tarefa `embed` |
 | `identities` | `Identities` | N nomes e scores | A tarefa `embed` com uma galeria |
 | `meshes` | `Meshes` | Parâmetros do corpo e vértices opcionais | Recuperação de malha corporal |
+| `albedo` | `AlbedoMap` | `(H, W, 3)` RGB linear | Estimativa de albedo |
+| `boxes3d` | `Boxes3D` | `(N, 14)` cuboides no referencial da câmera, alinhados por linha com `boxes` | Detecção 3D monocular |
+| `actions` | `Actions` | `(T, D)` bloco de ações | Políticas de robôs |
 
 Ao lado deles ficam os campos que todo resultado tem: `orig_shape` como
 `(altura, largura)`, `path` (o caminho de origem, ou `None` para entrada em
@@ -324,7 +327,7 @@ Para saber onde os arquivos vão parar e como `output_path` e
 `output_file_format` se comportam, veja
 [Fontes de predição](/docs/predict/sources).
 
-`plot()` cobre os payloads de todas as tarefas. Sobreposições de imagem retornam HxWx3 uint8 BGR contíguo por padrão; `pil=True` solicita PIL. Os caminhos existentes de bordas e mapas de normais mantêm seus padrões PIL. `orig_img` mantém pixels BGR para fontes em memória e URLs; arquivos locais e quadros coletados de vídeos finitos podem ser reabertos.
+`plot()` cobre os payloads de todas as tarefas. Sobreposições de imagem retornam HxWx3 uint8 BGR contíguo por padrão; `pil=True` solicita PIL. Mapas de profundidade, normais, bordas e albedo, cuboides 3D e blocos de ações retornam uma imagem PIL por padrão; `pil=False` retorna o array. `orig_img` mantém pixels BGR para fontes em memória e URLs; arquivos locais e quadros coletados de vídeos finitos podem ser reabertos.
 
 Os controles incluem `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` e `filename`. Imagens de classificação salvas incluem as cinco primeiras labels. O salvamento de matte grava um recorte RGBA.
 
@@ -334,8 +337,9 @@ Os controles incluem `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_w
 
 `LibreYOLO()` despacha pelo sufixo do arquivo, então um artefato exportado
 carrega pela mesma chamada que um checkpoint `.pt` e retorna o mesmo `Results`.
-Arquivos `.onnx`, `.engine`, `.pte` e `.mnn` são reconhecidos pelo sufixo,
-assim como diretórios OpenVINO, Paddle e ncnn e uma URL de modelo do Triton.
+Arquivos `.onnx`, `.torchscript`, `.engine`, `.pte`, `.tflite` e `.mnn` são
+reconhecidos pelo sufixo, assim como diretórios OpenVINO, Paddle, ncnn e Core ML
+`.mlpackage` e uma URL de modelo do Triton.
 Código que lê `result.boxes.xyxy` não muda quando um modelo é trocado pelo seu
 build exportado. Veja [Exportação](/docs/export) para o conjunto completo de
 formatos.

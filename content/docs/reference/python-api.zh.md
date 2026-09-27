@@ -1,8 +1,10 @@
 ---
 title: Python API
 seo_title: LibreYOLO Python API 参考
-description: "LibreYOLO 在包级别导出的名称：工厂、家族类、Results 载荷、后端、验证器、跟踪器和数据辅助函数。"
-lead: "LibreYOLO 的公开 Python 接口是 libreyolo/__init__.py 中的 __all__ 列表。包级别导出使用 from libreyolo import <name>；下面的跟踪和训练协议使用各自指定的子模块。"
+description: LibreYOLO 在包级别导出的名称：工厂、家族类、Results 载荷、后端、验证器、跟踪器和数据辅助函数。
+lead: >-
+  LibreYOLO 的公开 Python 接口是 libreyolo/__init__.py 中的 __all__ 列表。包级别导出使用 from
+  libreyolo import <name>；下面的跟踪和训练协议使用各自指定的子模块。
 keywords:
   - libreyolo python api
   - libreyolo 导入
@@ -12,8 +14,11 @@ keywords:
   - LibreOpenVocab
   - LibreEnsemble
   - libreyolo __all__
-last_verified: "1.6.0"
-verification: "名字与签名读取自 v1.6.0 的 libreyolo/__init__.py、libreyolo/models/__init__.py、libreyolo/models/base/model.py、libreyolo/models/base/inference.py、libreyolo/models/sam/model.py、libreyolo/models/vlm/__init__.py、libreyolo/models/openvocab/__init__.py 和 libreyolo/ensemble/model.py。"
+last_verified: 1.6.0
+verification: >-
+  名字与签名读取自 v1.6.0 的
+  libreyolo/__init__.py、libreyolo/models/__init__.py、libreyolo/models/base/model.py、libreyolo/models/base/inference.py、libreyolo/models/sam/model.py、libreyolo/models/vlm/__init__.py、libreyolo/models/openvocab/__init__.py
+  和 libreyolo/ensemble/model.py。
 snippets:
   usage:
     - label: 用一个工厂函数加载任何模型
@@ -39,7 +44,7 @@ snippets:
 
         print(len(result))
   factories:
-    - label: "入口"
+    - label: 入口
       language: python
       code: >
         from libreyolo import LibreYOLO, LibreEnsemble
@@ -67,7 +72,7 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 02fbec762b1ffced
+source_hash: 7dc6a5ef1b3ba9ea
 ---
 
 ## 入口
@@ -129,27 +134,35 @@ Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 `LibreDEIMv2`、`LibreDETR`、`LibreDeformableDETR`、`LibreDINODETR`、
 `LibreLWDETR`、`LibreMaskRCNN`、`LibreFCOS`、`LibreFasterRCNN`、
 `LibreRetinaNet`、`LibreSSD`、`LibreCenterNet`、`LibreEfficientDet`、
-`LibreEC`、`LibrePICODET`、`LibreRTMDet`、`LibreFOMO`。
+`LibreEC`、`LibreGTR`、`LibreTinyFormer`、`LibrePICODET`、`LibrePPYOLOE`、
+`LibreRTMDet`、`LibreFOMO`。
 
 稠密预测家族：`LibreMiDaS`、`LibreDepthAnythingV2`、
 `LibreDepthAnything3`、`LibreZipDepth`、`LibreMoGe2`、`LibreTEED`、
 `LibreDexiNed`、`LibreNAFNet`、`LibreRealESRGAN`、`LibreSwinIR`、
 `LibreBiRefNet`、`LibreFeyNobg`、`LibreFCN`、`LibreEoMT`、`LibreDeepLabv3`、
-`LibrePIDNet`、`LibreSegformer`、`LibreLingBotVision`。
+`LibrePIDNet`、`LibrePPLiteSeg`、`LibreUNet`、`LibreSegformer`、
+`LibreLingBotVision`、`LibreMarigoldV2`、`LibreDDColor`、`LibreHVICIDNet`、
+`LibreLaMa`、`LibreQuickSRNet`、`LibreBEN2`、`LibreViTMatte`。
 
 分类与嵌入向量家族：`LibreViT`、`LibreMobileNetV4`、
 `LibreConvNeXt`、`LibreDeiT`、`LibreSwin`、`LibreEfficientNetV2`、`LibreVGG`、
-`LibreResNet`、`LibreAlexNet`、`LibreCLIP`、`LibreSigLIP2`、`LibreDINOv2`。
+`LibreResNet`、`LibreAlexNet`、`LibreCLIP`、`LibreSigLIP2`、`LibreDINOv2`、
+`LibreConvNeXtV2`、`LibrePE`、`LibreVJEPA2`、`LibreLeVJEPA`。
 
-其他任务：`LibreHRNet`（pose）、`LibreL2CS`（gaze）、`LibrePPOCR`（ocr）、
-`LibreFaceEmbedder`（embed）。
+其他任务：`LibreHRNet` 和 `LibreDEKR`（pose）、`LibreL2CS`（gaze）、
+`LibrePPOCR`（ocr）、`LibreFaceEmbedder`（embed），以及 3D 检测器
+`LibreFCOS3D`、`LibreDetAny3D`、`LibreWildDet3D` 和 `Libre3DMOOD`（detect3d）。
 
 兄弟层级也导出各自的家族类：`LibreSAM1`、`LibreSAM2`、
 `LibreSAM3`、`LibreEdgeTAM`、`LibreMobileSAM`、`LibrePicoSAM3`；
 `LibreGroundingDINO`、`LibreOWLv2`、`LibreOMDetTurbo`；`LibreLFM2VL`、
 `LibreQwen3VL`、`LibreSmolVLM2`、`LibreInternVL3`、`LibreFlorence2`、
-`LibreKosmos2`、`LibreLocateAnything`、`LibreMODUS`（也写作
-`LibreModus`）。
+`LibreKosmos2`、`LibreLocateAnything`、`LibreGemma4`、`LibreMoondream`、
+`LibreMolmo2`、`LibreNorthMicroVision`、`LibreMODUS`（也写作
+`LibreModus`）；`LibreGround` 背后的 `LibreShowUI`、`LibreGroundFlorence2` 和
+`LibreGroundQwen3VL`；`LibreVLA` 背后的 `LibreSmolVLA`、`LibreACT` 和
+`LibreDiffusionPolicy`。
 
 ## 预测接口
 

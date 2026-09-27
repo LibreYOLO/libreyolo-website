@@ -102,7 +102,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: e1043aba1b70b65c
+source_hash: de71e994a0b6d8b4
 ---
 
 ## Instalasi
@@ -122,8 +122,8 @@ Bobot diunduh dari Hugging Face saat pertama kali dipakai dan disimpan di cache 
 `result.depth_map` membawa peta inverse-depth relatif yang padat: nilai yang
 lebih tinggi berarti lebih dekat ke kamera, dan nilainya tidak punya satuan
 metrik maupun skala antargambar. `save=True` menulis visualisasi peta itu dengan
-colormap ke disk; `Results.plot()` tidak mencakup family ini, karena metode itu
-hanya didefinisikan untuk surface normal dan tepi. Resolusi masukan harus habis
+colormap ke disk; `Results.plot()` merender peta kedalaman sebagai gambar PIL,
+dan `pil=False` mengembalikan array-nya. Resolusi masukan harus habis
 dibagi 14, yaitu grid patch DINOv2 yang menjadi dasar head DPT; LibreYOLO
 memeriksanya sebelum menjalankan model dan memunculkan error bila tidak sesuai.
 Lihat [prediksi](/docs/predict) untuk sumber, streaming dan penanganan hasil.

@@ -50,7 +50,7 @@ snippets:
         # Wiersze jako zwykłe słowniki, a następnie jako JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: d74276d805c22c92
+source_hash: 173c542fb675892e
 ---
 
 ## Obiekt Results
@@ -310,7 +310,7 @@ słowników, po jednym wierszu na detekcję, segment, punkt lub region, zależni
 ustawionych pól. `to_json(**kwargs)` przekazuje argumenty do `summary` i zwraca
 ciąg JSON.
 
-`plot()` renderuje dane każdego zadania. Nakładki na obrazy domyślnie zwracają tablice BGR; `pil=True` żąda PIL. Wyniki krawędzi i map normalnych zachowują domyślne PIL.
+`plot()` renderuje dane każdego zadania. Nakładki na obrazy domyślnie zwracają tablice BGR; `pil=True` żąda PIL. Mapy głębi, normalnych, krawędzi i albedo, prostopadłościany 3D oraz fragmenty akcji domyślnie zwracają obraz PIL; `pil=False` zwraca tablicę.
 
 ## Boxes3D
 

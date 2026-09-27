@@ -46,7 +46,7 @@ snippets:
         model = LibreYOLO("LibreMoGe2s-normal.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot()はfieldをrenderし、normalとedgeの結果向けに定義されている
+        # plot()は描画したfieldをPIL画像として返す
         result.plot().save("normals.png")
   val:
     - label: 検証して指標キーを読み取る
@@ -80,7 +80,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.data.shape)
-source_hash: b033fdf3a2210ce5
+source_hash: dd8de1b1ecd208bf
 ---
 
 ## 定義

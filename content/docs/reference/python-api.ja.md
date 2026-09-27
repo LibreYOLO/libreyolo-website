@@ -71,7 +71,7 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 02fbec762b1ffced
+source_hash: 7dc6a5ef1b3ba9ea
 ---
 
 ## エントリーポイント
@@ -135,26 +135,34 @@ Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 `LibreDEIMv2`、`LibreDETR`、`LibreDeformableDETR`、`LibreDINODETR`、
 `LibreLWDETR`、`LibreMaskRCNN`、`LibreFCOS`、`LibreFasterRCNN`、
 `LibreRetinaNet`、`LibreSSD`、`LibreCenterNet`、`LibreEfficientDet`、
-`LibreEC`、`LibrePICODET`、`LibreRTMDet`、`LibreFOMO`。
+`LibreEC`、`LibreGTR`、`LibreTinyFormer`、`LibrePICODET`、`LibrePPYOLOE`、
+`LibreRTMDet`、`LibreFOMO`。
 
 密な推論ファミリー：`LibreMiDaS`、`LibreDepthAnythingV2`、
 `LibreDepthAnything3`、`LibreZipDepth`、`LibreMoGe2`、`LibreTEED`、
 `LibreDexiNed`、`LibreNAFNet`、`LibreRealESRGAN`、`LibreSwinIR`、
 `LibreBiRefNet`、`LibreFeyNobg`、`LibreFCN`、`LibreEoMT`、`LibreDeepLabv3`、
-`LibrePIDNet`、`LibreSegformer`、`LibreLingBotVision`。
+`LibrePIDNet`、`LibrePPLiteSeg`、`LibreUNet`、`LibreSegformer`、
+`LibreLingBotVision`、`LibreMarigoldV2`、`LibreDDColor`、`LibreHVICIDNet`、
+`LibreLaMa`、`LibreQuickSRNet`、`LibreBEN2`、`LibreViTMatte`。
 
 分類および埋め込みベクトルのファミリー：`LibreViT`、`LibreMobileNetV4`、
 `LibreConvNeXt`、`LibreDeiT`、`LibreSwin`、`LibreEfficientNetV2`、`LibreVGG`、
-`LibreResNet`、`LibreAlexNet`、`LibreCLIP`、`LibreSigLIP2`、`LibreDINOv2`。
+`LibreResNet`、`LibreAlexNet`、`LibreCLIP`、`LibreSigLIP2`、`LibreDINOv2`、
+`LibreConvNeXtV2`、`LibrePE`、`LibreVJEPA2`、`LibreLeVJEPA`。
 
-その他のタスク：`LibreHRNet`（姿勢）、`LibreL2CS`（視線）、`LibrePPOCR`（OCR）、
-`LibreFaceEmbedder`（埋め込みベクトル）。
+その他のタスク：`LibreHRNet`と`LibreDEKR`（姿勢）、`LibreL2CS`（視線）、
+`LibrePPOCR`（OCR）、`LibreFaceEmbedder`（埋め込みベクトル）、3D検出器の
+`LibreFCOS3D`、`LibreDetAny3D`、`LibreWildDet3D`、`Libre3DMOOD`（detect3d）。
 
 同系列の階層もファミリークラスを公開します：`LibreSAM1`、`LibreSAM2`、
 `LibreSAM3`、`LibreEdgeTAM`、`LibreMobileSAM`、`LibrePicoSAM3`、
 `LibreGroundingDINO`、`LibreOWLv2`、`LibreOMDetTurbo`、`LibreLFM2VL`、
 `LibreQwen3VL`、`LibreSmolVLM2`、`LibreInternVL3`、`LibreFlorence2`、
-`LibreKosmos2`、`LibreLocateAnything`、`LibreMODUS`（`LibreModus`という綴りも可能）。
+`LibreKosmos2`、`LibreLocateAnything`、`LibreGemma4`、`LibreMoondream`、
+`LibreMolmo2`、`LibreNorthMicroVision`、`LibreMODUS`（`LibreModus`という綴りも可能）；
+`LibreGround`配下の`LibreShowUI`、`LibreGroundFlorence2`、`LibreGroundQwen3VL`；
+`LibreVLA`配下の`LibreSmolVLA`、`LibreACT`、`LibreDiffusionPolicy`。
 
 ## 推論インターフェース
 

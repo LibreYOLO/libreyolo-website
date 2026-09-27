@@ -18,7 +18,7 @@ keywords:
   - yolox bn eps
   - faster coco eval défaut
 last_verified: 1.6.0
-source_hash: c575718b8a7949f8
+source_hash: e9c7cb5271aa4a81
 ---
 
 ## De 1.5.0 à 1.6.0
@@ -31,7 +31,7 @@ source_hash: c575718b8a7949f8
 
 - D-FINE, DEIM, RT-DETRv4 et la détection YOLO-NAS activent FP16 AMP par défaut. Passez `amp=False` pour conserver FP32.
 
-- Pour retrouver les anciens choix de fine-tuning YOLO9, définissez `aux_weight=0`, `max_labels=100` et `warmup_momentum=0.937`. Définissez `letterbox_pad="topleft"` lorsqu'une nouvelle conversion marquée center doit reproduire l'ancienne géométrie. Les anciens checkpoints à une seule tête reprennent avec leur graphe d'origine.
+- Pour retrouver les anciens choix de fine-tuning YOLO9, définissez `aux_weight=0`, `max_labels=100` et `warmup_momentum=0.937`. Définissez `letterbox_pad="topleft"` lorsqu'une nouvelle conversion marquée center doit reproduire l'ancienne géométrie. Les anciens checkpoints à une seule tête reprennent avec leur graphe d'origine. Les nouveaux entraînements YOLO9 consomment davantage de mémoire GPU, réduisez donc `batch` si une taille de batch utilisée en 1.5.0 dépasse la mémoire disponible.
 
 - RF-DETR et DINOv2 créent des répertoires d'exécution incrémentés portant le nom de la famille. Mettez à jour les consommateurs des chemins d'artefacts, ou définissez `output_dir="runs/train", exist_ok=True` pour conserver l'ancien emplacement et son comportement de réutilisation.
 
@@ -81,7 +81,8 @@ model.train(data="data.yaml", epochs=100)
 ```
 
 Il n'existe aucune couche de compatibilité pour la dépréciation. Un appel qui
-transmet encore cet argument déclenche une `TypeError`.
+transmet encore cet argument reçoit un avertissement
+`Unknown training config keys (ignored)`, et l'argument n'a aucun effet.
 `BaseModel.EXPERIMENTAL_WEIGHT_FILENAMES` a été supprimé avec lui. Le hook
 `get_download_notice()` subsiste et reste redéfini par MiDaS, SegFormer et
 YOLO9-P2.
@@ -206,9 +207,9 @@ Pour obtenir des nombres fidèles, évaluez-le en redéfinissant l'eps BN à 1e-
 
 ```python
 import torch
-from libreyolo import LibreYOLOX
+from libreyolo import LibreYOLO
 
-model = LibreYOLOX("my-yolox-finetune.pt")
+model = LibreYOLO("my-yolox-finetune.pt")
 for module in model.model.modules():
     if isinstance(module, torch.nn.BatchNorm2d):
         module.eps = 1e-5
@@ -271,8 +272,8 @@ la page [D-FINE](/docs/models/d-fine).
 - **`libreyolo predict` ignore les options non prises en charge au lieu de
   déclencher une erreur.** La CLI filtre les arguments nommés selon la signature
   `__call__` du modèle. Une option que la famille n'accepte pas est ainsi
-  ignorée au lieu de déclencher une `TypeError`. Une faute de frappe dans le
-  nom d'une option est maintenant ignorée silencieusement.
+  ignorée au lieu de déclencher une `TypeError`. Un nom d'option
+  inconnu est toujours rejeté avec `No such option`.
 - **Les sources en direct modifient la forme de la sortie JSON.** Les webcams,
   les flux RTSP et la capture d'écran activent implicitement le streaming, qui
   émet un enregistrement par image plutôt qu'un seul pour l'appel. Ces

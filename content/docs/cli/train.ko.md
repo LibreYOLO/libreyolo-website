@@ -46,7 +46,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 0f7f2b7487a67daa
+source_hash: 30b2c16d339f5f50
 ---
 
 ## 사용법
@@ -242,7 +242,7 @@ stderr의 다른 모든 출력과 함께 그 경고도 억제됩니다.
 ### 그 밖에 알아둘 동작
 
 `lora=true`는 RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2, v4, EC,
-ConvNeXt에서 받아들여집니다. 그 밖의 계열은 LoRA 없이 학습하는 대신
+GTR, ConvNeXt에서 받아들여집니다. 그 밖의 계열은 LoRA 없이 학습하는 대신
 `config_unsupported`로 종료합니다.
 
 `pretrained=false`와 `resume`을 함께 쓰는 것은 처음부터 학습을 지원하는

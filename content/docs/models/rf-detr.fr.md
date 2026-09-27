@@ -6,7 +6,7 @@ seo_title: 'RF-DETR : entraîner, affiner et exporter sous MIT'
 description: >-
   Utilisez RF-DETR dans LibreYOLO pour la détection, la segmentation
   d'instances, la pose et les boîtes orientées. Installez, prédisez, entraînez,
-  validez et exportez, entièrement sous licence MIT.
+  validez et exportez.
 lead: >-
   Un detection transformer qui prédit un ensemble fixe d'objets au lieu d'une
   grille dense, ce qui élimine le besoin de NMS lors de l'inférence. LibreYOLO
@@ -94,7 +94,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -216,7 +216,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 379a3a09691bf14b
+source_hash: 3238696a4e1ab6c2
 ---
 
 ## Installer
@@ -244,10 +244,11 @@ Les voies de détection, segmentation et boîtes orientées utilisent un redimen
 
 ## Variantes
 
-Quatre tailles et quatre tâches partagent une même architecture : la
-segmentation, la pose et les boîtes orientées réutilisent le décodeur de
-détection avec une tête différente, et acceptent donc les mêmes arguments. Les
-tailles comportent un nombre de paramètres similaire et diffèrent principalement
+Quatre tailles de détection, de `n` à `l`, et quatre tâches qui partagent une
+même architecture : la segmentation, la pose et les boîtes orientées
+réutilisent le décodeur de détection avec une tête différente, et acceptent
+donc les mêmes arguments. La segmentation ajoute `x` et `xx`, et la pose
+n'existe qu'en `x`. Les tailles comportent un nombre de paramètres similaire et diffèrent principalement
 par la résolution d'entrée.
 
 <benchmark-table task="detect" />
@@ -277,8 +278,8 @@ Les nouveaux entraînements utilisent par défaut `output_dir=None`, qui se rés
 
 ## Valider
 
-`val()` renvoie un dictionnaire de clés `metrics/` couvrant la précision, le
-rappel, la mAP 50 et la mAP 50-95, mesurés sur tout dataset dans le format
+`val()` renvoie un dictionnaire de clés `metrics/` couvrant la mAP 50, la
+mAP 50-95, la mAP 75 et le rappel moyen COCO, mesurés sur tout dataset dans le format
 utilisé pour l'entraînement.
 
 <code-tabs name="val" />

@@ -62,7 +62,7 @@ snippets:
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot() disegna la mappa; è definito per i risultati edge e normal.
+        # plot() restituisce la mappa disegnata come immagine PIL.
         result.plot().save("edges.png")
   val:
     - label: Validare e leggere le chiavi delle metriche
@@ -116,7 +116,7 @@ snippets:
 
 
         print(result.edges.array.shape)
-source_hash: bc286345540ed966
+source_hash: 1784d723c3ca99db
 ---
 
 ## Definizione

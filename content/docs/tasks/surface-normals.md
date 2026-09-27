@@ -39,7 +39,7 @@ snippets:
         model = LibreYOLO("LibreMoGe2s-normal.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot() renders the field; it is defined for normal and edge results.
+        # plot() returns the rendered field as a PIL image.
         result.plot().save("normals.png")
   val:
     - label: Validate and read the metric keys

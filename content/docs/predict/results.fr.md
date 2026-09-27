@@ -16,7 +16,7 @@ keywords:
   - résultats carte profondeur
   - results summary
   - mêmes résultats onnx
-last_verified: "1.6.0"
+last_verified: 1.6.0
 verification: >-
   Classes de charges utiles, emplacements, sémantique des déplacements,
   summary(), to_json(), plot(), save() et cutout() lus dans
@@ -146,12 +146,12 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 201eca6457cf87a4
+source_hash: cebaac95f0a28b5f
 ---
 
 ## Un objet, un emplacement par charge utile
 
-Une prédiction sur une image renvoie un objet `Results`. Il contient dix-huit
+Une prédiction sur une image renvoie un objet `Results`. Il contient vingt et un
 emplacements de charges utiles et un modèle remplit uniquement ceux que sa
 tâche produit. Tous les autres valent `None`, lire `result.masks` sur un
 détecteur renvoie donc `None` au lieu de lever une erreur.
@@ -176,8 +176,11 @@ détecteur renvoie donc `None` au lieu de lever une erreur.
 | `embeddings` | `Embeddings` | `(N, D)` lignes normalisées L2 | Tâche `embed` |
 | `identities` | `Identities` | N noms et scores | Tâche `embed` avec une galerie |
 | `meshes` | `Meshes` | Paramètres corporels et sommets facultatifs | Reconstruction de maillage corporel |
+| `albedo` | `AlbedoMap` | `(H, W, 3)` RGB linéaire | Estimation de l'albédo |
+| `boxes3d` | `Boxes3D` | `(N, 14)` cuboïdes dans le repère caméra, alignés ligne à ligne avec `boxes` | Détection 3D monoculaire |
+| `actions` | `Actions` | `(T, D)` séquence d'actions | Politiques robotiques |
 
-À leurs côtés figurent les champs présents dans chaque résultat\u00a0:
+À leurs côtés figurent les champs présents dans chaque résultat :
 `orig_shape` sous la forme `(height, width)`, `path` (le chemin source, ou
 `None` pour une entrée en mémoire), `names` qui associe les identifiants de
 classe aux noms de classes, `frame_idx` pour les images vidéo et en direct,
@@ -207,7 +210,7 @@ lieu d'un tenseur compacté unique.
 | `cls` | `(N,)` identifiant de classe sous forme de flottant |
 | `id` | `(N,)` identifiant de suivi, ou `None` |
 | `is_track` | Indique si `id` est défini |
-| `data` | Tous les éléments concaténés\u00a0: bounding boxes, identifiant facultatif, confiance, classe |
+| `data` | Tous les éléments concaténés : bounding boxes, identifiant facultatif, confiance, classe |
 
 `cls` est un tableau de flottants, utilisez-le donc sous la forme
 `result.names[int(cls)]`.
@@ -230,7 +233,7 @@ et `class_mask(id)` renvoie un tableau booléen `(H, W)`.
 qui contiennent au moins `id` et `category_id`. `segment_ids` énumère les
 identifiants présents et `segment_mask(id)` en sélectionne un.
 
-`DepthMap` contient la profondeur inverse relative `(H, W)`\u00a0: une valeur plus
+`DepthMap` contient la profondeur inverse relative `(H, W)` : une valeur plus
 élevée signifie une plus grande proximité, sans représenter des mètres. Il
 expose `min`, `max` et `mean` sur les valeurs finies, et `normalized()` remet
 les valeurs à l'échelle dans `[0, 1]`.
@@ -262,7 +265,7 @@ rapport à une galerie ou `(N,)` par rapport à un seul vecteur, et
 les sommets suivent l'ordre haut-gauche, haut-droit, bas-droit, bas-gauche. Les
 transcriptions figurent dans `texts`, les scores de reconnaissance dans `conf`
 et les scores de détection dans `det_conf`. Comme il s'agit de véritables
-polygones tournés, ils ne remplissent pas `boxes`\u00a0; `ocr.xyxy` donne leurs
+polygones tournés, ils ne remplissent pas `boxes` ; `ocr.xyxy` donne leurs
 enveloppes alignées sur les axes lorsque vous avez besoin de rectangles.
 
 ## Découper et déplacer
@@ -274,7 +277,7 @@ de classification ne peut donc pas tronquer son vecteur de probabilités à une
 seule classe, et celui d'un résultat de profondeur ne peut pas altérer la
 disposition `(H, W)`.
 
-`len(result)` compte les instances\u00a0: bounding boxes, points, embeddings,
+`len(result)` compte les instances : bounding boxes, points, embeddings,
 régions OCR ou maillages. Toute charge utile dense couvrant l'image entière
 compte pour `1`. Un résultat vide vaut `0`.
 
@@ -290,7 +293,7 @@ les emplacements nommés et renvoie le même objet.
 <code-tabs name="json" />
 
 `summary()` renvoie une liste de dictionnaires simples, et `to_json()` passe
-cette liste à `json.dumps`. Les deux acceptent les trois mêmes arguments\u00a0:
+cette liste à `json.dumps`. Les deux acceptent les trois mêmes arguments :
 `normalize=False` fait passer les coordonnées dans `[0, 1]`, `decimals=5`
 définit l'arrondi et `embeddings=False` détermine si les vecteurs d'embeddings
 sont inclus.
@@ -301,7 +304,7 @@ La forme des lignes suit la charge utile. Les lignes de détection contiennent
 orientées, les angles `gaze` en radians et degrés, `track_id` lors du suivi et
 les paramètres `mesh` en présence de maillages.
 
-En l'absence de bounding boxes, une charge utile détermine les lignes\u00a0: l'OCR
+En l'absence de bounding boxes, une charge utile détermine les lignes : l'OCR
 émet une ligne par région avec son `text`, les points une ligne par point, la
 segmentation panoptique une ligne par segment avec `pixel_count` et
 `pixel_fraction`, la segmentation sémantique une ligne par classe présente,
@@ -311,7 +314,7 @@ résumé décrivant la carte plutôt que ses pixels.
 
 Deux charges utiles sont délibérément abrégées. Un vecteur d'embedding est
 rapporté uniquement sous la forme `embedding_dim`, car une ligne de 512
-flottants occupe environ 2\u00a0Ko par visage\u00a0; transmettez `embeddings=True` pour
+flottants occupe environ 2 Ko par visage ; transmettez `embeddings=True` pour
 inclure les valeurs. Les sommets des maillages ne sont jamais inclus, car ils
 représentent des dizaines de milliers de coordonnées par personne. Lisez
 `result.meshes.vertices` ou appelez `result.meshes.save_obj(path)` pour accéder
@@ -329,13 +332,13 @@ matte sous forme de PNG RGBA à arrière-plan transparent et une détection sous
 forme de bounding boxes avec les masques en dessous. Le chemin écrit est joint
 au résultat sous la forme `result.saved_path`.
 
-`Results.save(path)` est tout aussi limité\u00a0: il écrit un résultat de matting
+`Results.save(path)` est tout aussi limité : il écrit un résultat de matting
 sous forme de découpe PNG RGBA à arrière-plan transparent et lève
 `NotImplementedError` dans les autres cas. `Results.cutout()` renvoie ce même
 tableau RGBA sans l'écrire. Les deux ont besoin de l'image source, lue dans
 `result.path` ou transmise avec `image=`.
 
-Deux charges utiles disposent de leur propre méthode d'écriture\u00a0:
+Deux charges utiles disposent de leur propre méthode d'écriture :
 `result.restored.save(path)` pour une image restaurée et
 `result.meshes.save_obj(path, index=0)` pour un maillage.
 
@@ -343,7 +346,7 @@ Pour connaître l'emplacement des fichiers et le comportement de `output_path`
 et `output_file_format`, consultez les
 [sources de prédiction](/docs/predict/sources).
 
-`plot()` couvre toutes les charges utiles de tâche. Les superpositions d'image renvoient par défaut un tableau BGR uint8 HxWx3 contigu ; `pil=True` demande une image PIL. Les parcours existants de contours et de normales conservent PIL par défaut. `orig_img` conserve les pixels BGR pour les sources en mémoire et les URL ; les fichiers locaux et les images collectées de vidéos finies peuvent être rouverts.
+`plot()` couvre toutes les charges utiles de tâche. Les superpositions d'image renvoient par défaut un tableau BGR uint8 HxWx3 contigu ; `pil=True` demande une image PIL. Les cartes de profondeur, de normales, de contours et d'albédo, les cuboïdes 3D et les séquences d'actions renvoient par défaut une image PIL ; `pil=False` renvoie le tableau. `orig_img` conserve les pixels BGR pour les sources en mémoire et les URL ; les fichiers locaux et les images collectées de vidéos finies peuvent être rouverts.
 
 Les contrôles comprennent `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` et `filename`. Les images de classification enregistrées incluent les cinq premières étiquettes. L'enregistrement de matting écrit une découpe RGBA.
 
@@ -353,9 +356,10 @@ Les contrôles comprennent `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `
 
 `LibreYOLO()` effectue le routage selon le suffixe du fichier. Un artefact
 exporté se charge donc avec le même appel qu'un checkpoint `.pt` et renvoie le
-même objet `Results`. Les fichiers `.onnx`, `.engine`, `.pte` et `.mnn` sont
-reconnus par leur suffixe, tout comme les répertoires OpenVINO, Paddle et ncnn,
-ainsi qu'une URL de modèle Triton. Le code qui lit `result.boxes.xyxy` ne change
+même objet `Results`. Les fichiers `.onnx`, `.torchscript`, `.engine`, `.pte`,
+`.tflite` et `.mnn` sont reconnus par leur suffixe, tout comme les répertoires
+OpenVINO, Paddle, ncnn et Core ML `.mlpackage`, ainsi qu'une URL de modèle
+Triton. Le code qui lit `result.boxes.xyxy` ne change
 pas lorsqu'un modèle est remplacé par sa version exportée. Consultez la page
 [Export](/docs/export) pour l'ensemble des formats.
 

@@ -2,11 +2,13 @@
 title: Làm việc với kết quả
 seo_title: Đối tượng Results của LibreYOLO
 description: >-
-  Mỗi ảnh có một đối tượng Results với một slot cho từng loại payload: box, mask, keypoint, probs, độ sâu,
-  panoptic, OCR và nhiều loại khác. Vẽ, lưu và JSON.
+  Mỗi ảnh có một đối tượng Results với một slot cho từng loại payload: box,
+  mask, keypoint, probs, độ sâu, panoptic, OCR và nhiều loại khác. Vẽ, lưu và
+  JSON.
 lead: >-
-  Mỗi dự đoán trả về một đối tượng Results cho từng ảnh. Đối tượng có một slot được đặt tên cho mỗi loại
-  payload; tất cả đều rỗng trừ các slot mô hình tạo ra, và artifact đã xuất cũng có cùng các slot.
+  Mỗi dự đoán trả về một đối tượng Results cho từng ảnh. Đối tượng có một slot
+  được đặt tên cho mỗi loại payload; tất cả đều rỗng trừ các slot mô hình tạo
+  ra, và artifact đã xuất cũng có cùng các slot.
 keywords:
   - đối tượng results yolo python
   - results.boxes xyxy
@@ -19,22 +21,30 @@ keywords:
   - onnx cùng results
 last_verified: 1.6.0
 verification: >-
-  Các lớp payload, slot, ngữ nghĩa di chuyển, summary(), to_json(), plot(), save() và cutout() được đọc từ
-  libreyolo/utils/results.py. Hành vi chú thích và ghi ra đĩa lấy từ InferenceRunner._save_annotated_image
-  trong libreyolo/models/base/inference.py và resolve_save_path trong libreyolo/utils/general.py. Cách định
-  tuyến theo hậu tố lấy từ LibreYOLO() trong libreyolo/models/__init__.py.
+  Các lớp payload, slot, ngữ nghĩa di chuyển, summary(), to_json(), plot(),
+  save() và cutout() được đọc từ libreyolo/utils/results.py. Hành vi chú thích
+  và ghi ra đĩa lấy từ InferenceRunner._save_annotated_image trong
+  libreyolo/models/base/inference.py và resolve_save_path trong
+  libreyolo/utils/general.py. Cách định tuyến theo hậu tố lấy từ LibreYOLO()
+  trong libreyolo/models/__init__.py.
 snippets:
   basic:
     - label: Box
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.orig_shape)   # (chiều cao, chiều rộng) của ảnh nguồn
-        print(result.path)         # đường dẫn nguồn, None cho đầu vào trong bộ nhớ
+
+        print(result.path)         # đường dẫn nguồn, None cho đầu vào trong bộ
+        nhớ
+
 
         for xyxy, conf, cls in zip(
             result.boxes.xyxy.tolist(),
@@ -44,15 +54,22 @@ snippets:
             print(result.names[int(cls)], round(float(conf), 3), xyxy)
     - label: Tọa độ chuẩn hóa
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.boxes.xyxy[:1])    # pixel, x1 y1 x2 y2
+
         print(result.boxes.xywh[:1])    # pixel, tâm x, tâm y, w, h
-        print(result.boxes.xyxyn[:1])   # cùng box chia cho chiều rộng và chiều cao
+
+        print(result.boxes.xyxyn[:1])   # cùng box chia cho chiều rộng và chiều
+        cao
+
         print(result.boxes.xywhn[:1])
     - label: NumPy và thiết bị
       language: python
@@ -118,11 +135,11 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 201eca6457cf87a4
+source_hash: cebaac95f0a28b5f
 ---
 ## Một đối tượng, một slot cho mỗi payload
 
-Dự đoán trên một ảnh trả về một `Results`. Đối tượng chứa mười tám slot payload,
+Dự đoán trên một ảnh trả về một `Results`. Đối tượng chứa hai mươi mốt slot payload,
 và mô hình chỉ điền các slot do tác vụ tạo ra. Mọi slot khác là `None`, nên đọc
 `result.masks` trên detector sẽ nhận `None` thay vì lỗi.
 
@@ -146,6 +163,9 @@ và mô hình chỉ điền các slot do tác vụ tạo ra. Mọi slot khác l�
 | `embeddings` | `Embeddings` | `(N, D)` các hàng chuẩn hóa L2 | Tác vụ `embed` |
 | `identities` | `Identities` | N tên và điểm | Tác vụ `embed` với gallery |
 | `meshes` | `Meshes` | Tham số cơ thể và vertex tùy chọn | Khôi phục mesh cơ thể |
+| `albedo` | `AlbedoMap` | `(H, W, 3)` RGB tuyến tính | Ước lượng albedo |
+| `boxes3d` | `Boxes3D` | `(N, 14)` khối hộp trong hệ camera, căn theo hàng với `boxes` | Phát hiện 3D đơn mắt |
+| `actions` | `Actions` | `(T, D)` đoạn hành động | Chính sách robot |
 
 Bên cạnh đó là các trường có trong mọi kết quả: `orig_shape` dưới dạng
 `(height, width)`, `path` (đường dẫn nguồn hoặc `None` cho đầu vào trong bộ nhớ),
@@ -281,7 +301,7 @@ Hai payload có trình ghi riêng: `result.restored.save(path)` cho ảnh đã k
 
 Để biết tệp được đặt ở đâu và `output_path` cùng `output_file_format` hoạt động thế nào, hãy xem [Nguồn dự đoán](/docs/predict/sources).
 
-`plot()` hỗ trợ dữ liệu của mọi tác vụ. Lớp phủ ảnh mặc định trả về BGR uint8 HxWx3 liên tục; `pil=True` yêu cầu PIL. Các đường xử lý biên và bản đồ pháp tuyến hiện có giữ mặc định PIL. `orig_img` giữ pixel BGR cho nguồn trong bộ nhớ và URL; có thể mở lại tệp cục bộ và khung hình đã thu từ video hữu hạn.
+`plot()` hỗ trợ dữ liệu của mọi tác vụ. Lớp phủ ảnh mặc định trả về BGR uint8 HxWx3 liên tục; `pil=True` yêu cầu PIL. Bản đồ độ sâu, pháp tuyến, biên và albedo, khối hộp 3D và đoạn hành động mặc định trả về ảnh PIL; `pil=False` trả về mảng. `orig_img` giữ pixel BGR cho nguồn trong bộ nhớ và URL; có thể mở lại tệp cục bộ và khung hình đã thu từ video hữu hạn.
 
 Các điều khiển gồm `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` và `filename`. Ảnh phân loại đã lưu chứa năm nhãn đứng đầu. Lưu matte ghi ảnh tách nền RGBA.
 
@@ -290,9 +310,10 @@ Các điều khiển gồm `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `
 <code-tabs name="exported" />
 
 `LibreYOLO()` định tuyến theo hậu tố tệp, nên artifact đã xuất được tải qua cùng
-lời gọi như checkpoint `.pt` và trả về cùng `Results`. Các tệp `.onnx`, `.engine`,
-`.pte` và `.mnn` được nhận diện theo hậu tố, tương tự các thư mục OpenVINO, Paddle,
-ncnn và URL mô hình Triton. Mã đọc `result.boxes.xyxy` không thay đổi khi mô hình
+lời gọi như checkpoint `.pt` và trả về cùng `Results`. Các tệp `.onnx`,
+`.torchscript`, `.engine`, `.pte`, `.tflite` và `.mnn` được nhận diện theo hậu tố,
+tương tự các thư mục OpenVINO, Paddle, ncnn, Core ML `.mlpackage` và URL mô hình
+Triton. Mã đọc `result.boxes.xyxy` không thay đổi khi mô hình
 được thay bằng bản đã xuất. Xem [Xuất](/docs/export) để biết toàn bộ định dạng.
 
 Dùng API riêng của runtime đồng nghĩa bạn phải tự đảm nhiệm tiền xử lý, hậu xử lý và tên lớp.

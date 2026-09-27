@@ -48,7 +48,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 663390776f2f2c15
+source_hash: 409bc0b2ace6547e
 ---
 
 ## Sinopsis
@@ -69,7 +69,7 @@ Argumen berupa pasangan `key=value`, dan bentuk POSIX juga berlaku, jadi
 | `calib` | `coco128.yaml` | Gambar kalibrasi: YAML data atau nama dataset bawaan. Tanpa label, hanya forward. `none` melewati kalibrasi |
 | `samples` | `128` | Jumlah maksimum gambar kalibrasi |
 | `batch` | `8` | Ukuran batch kalibrasi |
-| `algorithm` | `auto` | Estimasi rentang aktivasi: `auto`, yang memilih minmax, atau `minmax`, atau `percentile` |
+| `algorithm` | `auto` | Estimasi rentang aktivasi: `auto` (minmax), `minmax`, `percentile`, `mse` atau `entropy` |
 | `out` | | Path checkpoint keluaran. Secara bawaan berupa path sumber dengan `-<recipe>` sebelum akhiran |
 | `device` | `auto` | Perangkat |
 | `allow_download_scripts` | `false` | Mengizinkan Python yang tertanam di blok download pada YAML dataset |

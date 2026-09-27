@@ -4,12 +4,13 @@ families:
   - yolonas
 seo_title: 'YOLO-NAS: dự đoán, huấn luyện và xuất trong LibreYOLO'
 description: >-
-  Phát hiện, tư thế và hộp xoay YOLO-NAS trong LibreYOLO. Trọng số được huấn luyện sẵn upstream chỉ dùng phi
-  thương mại.
+  Phát hiện, tư thế và hộp xoay YOLO-NAS trong LibreYOLO. Trọng số được huấn
+  luyện sẵn upstream chỉ dùng phi thương mại.
 lead: >-
-  Một detector tích chập có backbone và neck được tạo ra từ quá trình tìm kiếm kiến trúc của Deci.AI, xây dựng
-  bằng các block RepVGG nhận biết lượng tử hóa. Trọng số thuộc Deci.AI, chỉ được cấp phép cho mục đích phi
-  thương mại và LibreYOLO không công bố trọng số nào.
+  Một detector tích chập có backbone và neck được tạo ra từ quá trình tìm kiếm
+  kiến trúc của Deci.AI, xây dựng bằng các block RepVGG nhận biết lượng tử hóa.
+  Trọng số thuộc Deci.AI, chỉ được cấp phép cho mục đích phi thương mại và
+  LibreYOLO không công bố trọng số nào.
 keywords:
   - YOLO-NAS
   - YOLONAS
@@ -24,13 +25,19 @@ snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Tên chưa có trên đĩa được lấy từ CDN của Deci. Trước tiên, bản tải
-        # in các điều khoản giấy phép của Deci; nhận tệp đồng nghĩa chấp nhận chúng.
+
+        # in các điều khoản giấy phép của Deci; nhận tệp đồng nghĩa chấp nhận
+        chúng.
+
         model = LibreYOLO("LibreYOLONASs.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
+
 
         for box in result.boxes:
             print(box.cls, box.conf, box.xyxy)
@@ -64,12 +71,17 @@ snippets:
           epochs=100 imgsz=640 batch=16
     - label: Huấn luyện từ đầu
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLONAS
 
-        # Không dùng checkpoint Deci nào: mô hình bắt đầu từ trọng số ngẫu nhiên,
+
+        # Không dùng checkpoint Deci nào: mô hình bắt đầu từ trọng số ngẫu
+        nhiên,
+
         # nên kết quả của lượt chạy chỉ bắt nguồn từ dữ liệu của bạn.
+
         model = LibreYOLONAS(None, size="s")
+
         model.train(data="my-dataset.yaml", imgsz=640, batch=16)
   val:
     - label: Python
@@ -88,9 +100,12 @@ snippets:
         libreyolo val model=LibreYOLONASs.pt data=my-dataset.yaml
     - label: Trên COCO
       language: bash
-      code: |
-        # YAML COCO đi kèm chứa script tải xuống nhúng sẵn, nên cần quyền rõ ràng
+      code: >
+        # YAML COCO đi kèm chứa script tải xuống nhúng sẵn, nên cần quyền rõ
+        ràng
+
         # trừ khi tập dữ liệu đã có cục bộ.
+
         libreyolo val model=LibreYOLONASl.pt data=coco.yaml imgsz=640 \
           allow_download_scripts=True
   export:
@@ -116,7 +131,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 483562cad2c02696
+source_hash: 52050c4046781a6e
 ---
 ## Cài đặt
 
@@ -199,8 +214,9 @@ checkpoint Deci không thay đổi nguồn gốc trọng số hay giấy phép �
 
 Không có tệp nào để liệt kê. Giấy phép của Deci cấm phân phối lại, nên tổ chức
 LibreYOLO không công bố trọng số YOLO-NAS và bản tải được phân giải ở nơi khác:
-tên có dạng `LibreYOLONAS<size>.pt`, hoặc `LibreYOLONAS<size>-pose.pt` cho tư thế,
-ánh xạ đến đối tượng tương ứng trên CDN công khai của Deci.
+tên có dạng `LibreYOLONAS<size>.pt`, `LibreYOLONAS<size>-pose.pt` cho tư thế, hoặc
+`LibreYOLONAS<size>-obb.pt` (s, m, l) cho hộp xoay, ánh xạ đến đối tượng tương ứng
+trên CDN công khai của Deci.
 
 Chỉ các checkpoint có SHA-256 được thư viện ghim mới có thể lấy theo cách đó.
 Mọi tệp khác đều bị từ chối an toàn thay vì mở pickle bên thứ ba chưa xác minh,

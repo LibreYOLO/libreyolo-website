@@ -2,11 +2,12 @@
 title: API thị giác-ngôn ngữ
 seo_title: 'API LibreVLM: bí danh, set_classes và chat'
 description: >-
-  Factory LibreVLM, mọi bí danh mô hình, từ vựng set_classes có tính duy trì, set_task, lối truy cập chat và
-  lý do độ tin cậy chỉ là giá trị giữ chỗ.
+  Factory LibreVLM, mọi bí danh mô hình, từ vựng set_classes có tính duy trì,
+  set_task, lối truy cập chat và lý do độ tin cậy chỉ là giá trị giữ chỗ.
 lead: >-
-  LibreVLM tải mô hình thị giác-ngôn ngữ sinh và vận hành như detector đối tượng. Danh sách lớp là prompt thay
-  vì head cố định, và mô hình trả về cùng Results như mọi họ khác.
+  LibreVLM tải mô hình thị giác-ngôn ngữ sinh và vận hành như detector đối
+  tượng. Danh sách lớp là prompt thay vì head cố định, và mô hình trả về cùng
+  Results như mọi họ khác.
 keywords:
   - LibreVLM
   - phát hiện bằng mô hình thị giác ngôn ngữ
@@ -18,9 +19,10 @@ keywords:
   - trò chuyện libreyolo
 last_verified: 1.6.0
 verification: >-
-  Bí danh được đọc từ libreyolo/models/vlm/__init__.py; repo, kích thước và danh sách tác vụ lấy từ các module
-  họ trong libreyolo/models/vlm/ cùng libreyolo/models/sensenova/model.py; quy tắc lời gọi và lỗi phát sinh
-  lấy từ libreyolo/models/vlm/base.py, tất cả ở v1.6.0.
+  Bí danh được đọc từ libreyolo/models/vlm/__init__.py; repo, kích thước và danh
+  sách tác vụ lấy từ các module họ trong libreyolo/models/vlm/ cùng
+  libreyolo/models/sensenova/model.py; quy tắc lời gọi và lỗi phát sinh lấy từ
+  libreyolo/models/vlm/base.py, tất cả ở v1.6.0.
 snippets:
   install:
     - label: bash
@@ -46,7 +48,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 77a04856cfe4f88c
+source_hash: a9e0d635a6645d2c
 ---
 ## Cài đặt
 
@@ -89,7 +91,7 @@ là mục được liệt kê đầu tiên: `qwen3-vl` phân giải thành `4b`,
 `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` và `LibreMODUS` (cũng
 được viết là `LibreModus`) được xuất ở cấp gói.
 
-Phát hiện còn gồm `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` và `lfm2-vl-3b`. Tên thay thế `gemma-4` không có hậu tố chọn E4B. Tên thay thế của Molmo2 là `molmo2-4b`, `molmo2-8b` và `molmo2-o-7b`; mặc định là 4B. Tên thay thế xác định định tuyến, không có nghĩa mọi snapshot từ xa đã được tải và kiểm thử.
+Phát hiện còn gồm `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` và `lfm2-vl-3b`. Tên thay thế `gemma-4` không có hậu tố chọn E4B. Tên thay thế của Molmo2 là `molmo2-4b`, `molmo2-8b` và `molmo2-o-7b`; mặc định là 4B. Tên thay thế xác định định tuyến, không có nghĩa mọi snapshot từ xa đã được tải và kiểm thử. `moondream-3` không nạp được trong 1.6.0: mirror của nó thiếu các shard trọng số.
 
 ## Tác vụ
 

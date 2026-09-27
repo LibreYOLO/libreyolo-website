@@ -48,7 +48,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 56d898992f1b129c
+source_hash: 21374ebc0e6cf4d3
 ---
 
 ## Sinossi
@@ -117,9 +117,10 @@ valori validi per `model`. Tre opzioni vengono rifiutate su quei runtime invece
 di essere ignorate: `tiling`, `overlap_ratio` e `output_file_format` escono con
 `config_unsupported` quando un backend di runtime non può rispettarle.
 
-`half` va nella direzione opposta. I runtime esportati lo ricevono ed eseguono
-in FP16; l'inferenza nativa in PyTorch registra che è stato ignorato e prosegue
-in FP32.
+`half` va nella direzione opposta: viene accettato e ignorato. L'inferenza nativa
+in PyTorch registra che è stato ignorato e prosegue in FP32, e un runtime
+esportato mantiene la precisione con cui è stato esportato, quindi per
+l'inferenza in FP16 bisogna esportare con `half=true`.
 
 I modelli di gaze (stima dello sguardo) sono a due stadi e non hanno un
 rilevatore proprio, quindi `face_detector` è obbligatorio per loro. `gallery` si

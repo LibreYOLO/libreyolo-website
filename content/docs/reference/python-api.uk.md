@@ -1,8 +1,14 @@
 ---
 title: Python API
 seo_title: Довідник Python API LibreYOLO
-description: 'Імена, які LibreYOLO експортує на рівні пакета: фабрики, класи сімейств, дані Results, бекенди, валідатори, трекери й засоби роботи з даними.'
-lead: Публічний Python API LibreYOLO визначає список __all__ у libreyolo/__init__.py. Експорт на рівні пакета використовує from libreyolo import <name>; протоколи відстеження й навчання нижче використовують свої іменовані підмодулі.
+description: >-
+  Імена, які LibreYOLO експортує на рівні пакета: фабрики, класи сімейств, дані
+  Results, бекенди, валідатори, трекери й засоби роботи з даними.
+lead: >-
+  Публічний Python API LibreYOLO визначає список __all__ у
+  libreyolo/__init__.py. Експорт на рівні пакета використовує from libreyolo
+  import <name>; протоколи відстеження й навчання нижче використовують свої
+  іменовані підмодулі.
 keywords:
   - libreyolo python api
   - libreyolo import
@@ -12,8 +18,13 @@ keywords:
   - LibreOpenVocab
   - LibreEnsemble
   - libreyolo __all__
-last_verified: "1.6.0"
-verification: Назви й сигнатури взято з libreyolo/__init__.py, libreyolo/models/__init__.py, libreyolo/models/base/model.py, libreyolo/models/base/inference.py, libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py та libreyolo/ensemble/model.py у v1.6.0.
+last_verified: 1.6.0
+verification: >-
+  Назви й сигнатури взято з libreyolo/__init__.py, libreyolo/models/__init__.py,
+  libreyolo/models/base/model.py, libreyolo/models/base/inference.py,
+  libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py,
+  libreyolo/models/openvocab/__init__.py та libreyolo/ensemble/model.py у
+  v1.6.0.
 snippets:
   usage:
     - label: Завантаження будь-чого через одну фабрику
@@ -41,21 +52,33 @@ snippets:
   factories:
     - label: П'ять точок входу
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, LibreEnsemble
 
+
         # Фабрика визначає сімейство без підказок за вагами.
+
         detector = LibreYOLO("LibreYOLO9t.pt")
 
+
         # Два або більше детекторів за однією поверхнею передбачення.
+
         ens = LibreEnsemble(["LibreYOLO9t.pt", "LibreYOLO9s.pt"])
 
+
         # Для інших трьох фабрик потрібно встановити додатковий пакет:
-        #   pip install 'libreyolo[sam]'        -> from libreyolo import LibreSAM
-        #   pip install 'libreyolo[vlm]'        -> from libreyolo import LibreVLM
-        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import LibreOpenVocab
+
+        #   pip install 'libreyolo[sam]'        -> from libreyolo import
+        LibreSAM
+
+        #   pip install 'libreyolo[vlm]'        -> from libreyolo import
+        LibreVLM
+
+        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import
+        LibreOpenVocab
+
         print(type(detector).__name__, ens.fusion)
-source_hash: 02fbec762b1ffced
+source_hash: 7dc6a5ef1b3ba9ea
 ---
 
 ## Точки входу
@@ -119,27 +142,35 @@ Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 `LibreDEIMv2`, `LibreDETR`, `LibreDeformableDETR`, `LibreDINODETR`,
 `LibreLWDETR`, `LibreMaskRCNN`, `LibreFCOS`, `LibreFasterRCNN`,
 `LibreRetinaNet`, `LibreSSD`, `LibreCenterNet`, `LibreEfficientDet`,
-`LibreEC`, `LibrePICODET`, `LibreRTMDet`, `LibreFOMO`.
+`LibreEC`, `LibreGTR`, `LibreTinyFormer`, `LibrePICODET`, `LibrePPYOLOE`,
+`LibreRTMDet`, `LibreFOMO`.
 
 Сімейства щільного передбачення: `LibreMiDaS`, `LibreDepthAnythingV2`,
 `LibreDepthAnything3`, `LibreZipDepth`, `LibreMoGe2`, `LibreTEED`,
 `LibreDexiNed`, `LibreNAFNet`, `LibreRealESRGAN`, `LibreSwinIR`,
 `LibreBiRefNet`, `LibreFeyNobg`, `LibreFCN`, `LibreEoMT`, `LibreDeepLabv3`,
-`LibrePIDNet`, `LibreSegformer`, `LibreLingBotVision`.
+`LibrePIDNet`, `LibrePPLiteSeg`, `LibreUNet`, `LibreSegformer`,
+`LibreLingBotVision`, `LibreMarigoldV2`, `LibreDDColor`, `LibreHVICIDNet`,
+`LibreLaMa`, `LibreQuickSRNet`, `LibreBEN2`, `LibreViTMatte`.
 
 Сімейства класифікації та ембедінгів: `LibreViT`, `LibreMobileNetV4`,
 `LibreConvNeXt`, `LibreDeiT`, `LibreSwin`, `LibreEfficientNetV2`, `LibreVGG`,
-`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`.
+`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`,
+`LibreConvNeXtV2`, `LibrePE`, `LibreVJEPA2`, `LibreLeVJEPA`.
 
-Інші завдання: `LibreHRNet` (поза), `LibreL2CS` (погляд), `LibrePPOCR` (ocr),
-`LibreFaceEmbedder` (embed).
+Інші завдання: `LibreHRNet` і `LibreDEKR` (поза), `LibreL2CS` (погляд),
+`LibrePPOCR` (ocr), `LibreFaceEmbedder` (embed), а також 3D-детектори
+`LibreFCOS3D`, `LibreDetAny3D`, `LibreWildDet3D` і `Libre3DMOOD` (detect3d).
 
 Суміжні рівні також експортують свої класи сімейств: `LibreSAM1`, `LibreSAM2`,
 `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`;
 `LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo`; `LibreLFM2VL`,
 `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`,
-`LibreKosmos2`, `LibreLocateAnything`, `LibreMODUS` (також пишеться
-`LibreModus`).
+`LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`,
+`LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (також пишеться
+`LibreModus`); `LibreShowUI`, `LibreGroundFlorence2` і `LibreGroundQwen3VL`
+через `LibreGround`; `LibreSmolVLA`, `LibreACT` і `LibreDiffusionPolicy` через
+`LibreVLA`.
 
 ## Поверхня передбачення
 

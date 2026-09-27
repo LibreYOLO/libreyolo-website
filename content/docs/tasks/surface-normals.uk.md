@@ -15,7 +15,7 @@ keywords:
   - монокулярна геометрія
   - метрика кутової похибки
   - щільне передбачення нормалей
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Передбачити поле нормалей
@@ -59,18 +59,13 @@ snippets:
         print(field[h // 2, w // 2])
     - label: Зберегти візуалізацію
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("LibreMoGe2s-normal.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
-        # plot() візуалізує поле; метод визначено для результатів нормалей і
-        країв.
-
+        # plot() повертає візуалізоване поле як зображення PIL.
         result.plot().save("normals.png")
   val:
     - label: Провалідувати й переглянути ключі метрик
@@ -111,7 +106,7 @@ snippets:
 
 
         print(result.normal_map.data.shape)
-source_hash: b033fdf3a2210ce5
+source_hash: dd8de1b1ecd208bf
 ---
 
 ## Визначення

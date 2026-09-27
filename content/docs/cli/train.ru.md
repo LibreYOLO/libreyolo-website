@@ -51,7 +51,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 0f7f2b7487a67daa
+source_hash: 30b2c16d339f5f50
 ---
 
 ## Синтаксис
@@ -252,7 +252,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 
 ### Другое поведение, о котором стоит знать
 
-`lora=true` принимают RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 и v4, EC и
+`lora=true` принимают RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 и v4, EC, GTR и
 ConvNeXt. Любое другое семейство завершается с `config_unsupported`, а не
 обучается без LoRA.
 

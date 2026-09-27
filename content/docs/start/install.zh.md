@@ -12,7 +12,7 @@ keywords:
   - libreyolo cuda
   - libreyolo gpu
   - libreyolo 环境要求
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: 包名
     value: libreyolo
@@ -64,7 +64,7 @@ snippets:
         # 缺少对应 extra 的家族会连同启用它们的那条 pip
         # 命令一起列出
         libreyolo models
-source_hash: 531023c2092fd751
+source_hash: 3ad6bb09bf2f5434
 ---
 
 ## 安装
@@ -178,6 +178,9 @@ wheel 的地方装得少一些。
 
 `sensenova` 在 macOS 上跳过 `bitsandbytes`，那里没有发布 wheel；这个 extra 的其余
 部分照常安装。
+
+`vlm` 没有做平台限定：它固定的 `decord==0.6.0` 只有 x86-64 Linux 和 Windows 的
+wheel。在 macOS 和 ARM Linux 上，`vlm`、`ground`、`vlm-train` 和 `all` 会安装失败。
 
 如果瓶颈是磁盘，那么占地方的大头是 PyTorch，而 PyTorch 里的大头又是它默认 wheel 打包
 的 CUDA 负载。换成仅 CPU 的 wheel 就能去掉这部分，而且什么也不用放弃。如果一台机器

@@ -93,8 +93,8 @@ Weights download from Hugging Face on first use and are cached locally.
 `result.depth_map` carries a dense relative inverse-depth map: higher values
 mean closer to the camera, and the values have no metric unit or cross-image
 scale. `save=True` writes a colormapped visualization of that map to disk;
-`Results.plot()` does not cover this family, since it is defined for surface
-normals and edges only. Input resolution must divide evenly by 14, the DINOv2
+`Results.plot()` renders the depth map as a PIL image, and `pil=False` returns
+the array instead. Input resolution must divide evenly by 14, the DINOv2
 patch grid the DPT head builds on; LibreYOLO checks this before running and
 raises if it does not. See [prediction](/docs/predict) for sources, streaming
 and result handling.

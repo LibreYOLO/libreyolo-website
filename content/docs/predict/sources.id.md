@@ -205,7 +205,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c355ad28487c9a65
+source_hash: 81a0c947dbfe48b5
 ---
 
 ## Cara sumber diklasifikasikan
@@ -258,8 +258,8 @@ apa adanya, seperti yang dibutuhkan array yang dibuat dari gambar PIL.
 Array float diskalakan ulang berdasarkan rentangnya sendiri: nilai hingga `1.0` dikalikan 255,
 sedangkan nilai lebih tinggi dipotong ke `[0, 255]`. Array RGBA membuang channel alfa.
 
-Path remote memerlukan satu paket per jenis dan tidak ada yang dipasang secara default:
-`requests` untuk `http(s)://`, `boto3` untuk `s3://`, dan `gcsfs` untuk `gs://`.
+Path remote memerlukan satu paket per jenis. `requests`, untuk `http(s)://`, sudah ikut
+dalam instalasi dasar; `boto3` untuk `s3://` dan `gcsfs` untuk `gs://` tidak.
 
 Pelacakan menerima gambar, folder yang diurutkan berdasarkan nama berkas, daftar, tuple, dan iterator gambar lazy sebagai frame berurutan. Berikan `fps=30.0` untuk menentukan waktu urutan gambar dan `color_format="auto"` untuk memilih interpretasi input. Lihat [pelacakan](/docs/tasks/object-tracking).
 
@@ -277,8 +277,10 @@ bertumpuk per bagian pada family yang mendukungnya. Lihat
 
 <code-tabs name="video" />
 
-Path dihitung sebagai video jika sufiksnya salah satu dari `.asf`, `.avi`, `.gif`, `.m4v`,
-`.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.ts`, `.wmv`, `.webm`.
+Path dihitung sebagai video jika sufiksnya salah satu dari `.3g2`, `.3gp`, `.asf`,
+`.avi`, `.dav`, `.f4v`, `.flv`, `.gif`, `.h264`, `.h265`, `.hevc`, `.m2ts`,
+`.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.mts`, `.mxf`, `.ogv`, `.ts`,
+`.vob`, `.wmv`, `.webm`.
 
 `.gif` muncul di kedua daftar. Path `.gif` yang diteruskan langsung ke `predict` dibuka sebagai
 video karena pemeriksaan video berjalan lebih dulu; `.gif` dalam folder yang dipindai dimuat
@@ -385,7 +387,9 @@ pertama. Untuk isinya, lihat [Bekerja dengan hasil](/docs/predict/results).
 Gambar masuk ke `runs/detect/predict`, `runs/detect/predict2`, dan seterusnya yang bertambah
 otomatis, dengan nama berkas sumber dipertahankan. Setiap gambar dalam satu proses masuk ke
 direktori yang sama, sehingga dua folder input dengan nama berkas sama saling menimpa.
-Gambar dalam memori tidak memiliki nama berkas dan diberi nomor `image0`, `image1`, dan seterusnya.
+Gambar dalam memori tidak memiliki nama berkas untuk dipakai ulang. Satu gambar tunggal disimpan
+sebagai `inference`, sehingga pemanggilan berulang menimpanya; list atau batch diberi nomor
+`image0`, `image1`, dan seterusnya.
 
 Video dan sumber live ditulis sebagai satu `.mp4` yang dinamai berdasarkan sumber.
 

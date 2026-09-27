@@ -4,7 +4,7 @@ families:
   - rfdetr
 seo_title: RF-DETR：MITライセンスで学習、ファインチューニング、エクスポート
 description: >-
-  LibreYOLOでRF-DETRを使い、検出、インスタンスセグメンテーション、姿勢推定、回転バウンディングボックスを扱います。すべてMITライセンスで、インストール、推論、学習、検証、エクスポートに対応します。
+  LibreYOLOでRF-DETRを使い、検出、インスタンスセグメンテーション、姿勢推定、回転バウンディングボックスを扱います。インストール、推論、学習、検証、エクスポートに対応します。
 lead: >-
   密なグリッドではなく固定された物体集合を予測するため、推論時にNMSを必要としない検出Transformerです。LibreYOLOは4つのタスクでRF-DETRをサポートします。
 keywords:
@@ -90,7 +90,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -176,7 +176,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 379a3a09691bf14b
+source_hash: 3238696a4e1ab6c2
 ---
 
 ## インストール
@@ -199,7 +199,7 @@ pip install "libreyolo[rfdetr]"
 
 ## バリアント
 
-4つのサイズと、1つのアーキテクチャを共有する4つのタスクがあります。セグメンテーション、姿勢推定、回転バウンディングボックスは異なるヘッドで検出デコーダーを再利用するため、同じ引数を受け取ります。各サイズのパラメータ数は近く、主に入力解像度が異なります。
+`n`から`l`までの4つの検出サイズと、1つのアーキテクチャを共有する4つのタスクがあります。セグメンテーション、姿勢推定、回転バウンディングボックスは異なるヘッドで検出デコーダーを再利用するため、同じ引数を受け取ります。セグメンテーションには`x`と`xx`が加わり、姿勢推定は`x`のみです。各サイズのパラメータ数は近く、主に入力解像度が異なります。
 
 <benchmark-table task="detect" />
 
@@ -219,7 +219,7 @@ pip install "libreyolo[rfdetr]"
 
 ## 検証
 
-`val()`は、学習に使用した形式の任意のデータセットで測定した適合率、再現率、mAP 50、mAP 50-95を含む`metrics/`キーの辞書を返します。
+`val()`は、学習に使用した形式の任意のデータセットで測定したmAP 50、mAP 50-95、mAP 75、COCO平均再現率を含む`metrics/`キーの辞書を返します。
 
 <code-tabs name="val" />
 

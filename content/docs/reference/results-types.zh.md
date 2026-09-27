@@ -1,8 +1,8 @@
 ---
 title: Results 类型
 seo_title: LibreYOLO Results 对象参考
-description: "LibreYOLO 结果载荷：检测框、掩码、关键点、分类、深度、反照率、3D 长方体和机器人动作块。"
-lead: "Results 是每个 LibreYOLO 模型统一的逐图像返回类型。它包含可选的载荷槽位，每个任务形状对应一个，只填入模型实际生成的载荷。"
+description: LibreYOLO 结果载荷：检测框、掩码、关键点、分类、深度、反照率、3D 长方体和机器人动作块。
+lead: Results 是每个 LibreYOLO 模型统一的逐图像返回类型。它包含可选的载荷槽位，每个任务形状对应一个，只填入模型实际生成的载荷。
 keywords:
   - libreyolo results 对象
   - Results.boxes
@@ -11,8 +11,8 @@ keywords:
   - Results.depth_map
   - Results.summary
   - libreyolo results 转 json
-last_verified: "1.6.0"
-verification: "槽位名称、形状、属性与默认值读取自 v1.6.0 的 libreyolo/utils/results.py。语义引自各载荷类的文档字符串。"
+last_verified: 1.6.0
+verification: 槽位名称、形状、属性与默认值读取自 v1.6.0 的 libreyolo/utils/results.py。语义引自各载荷类的文档字符串。
 snippets:
   usage:
     - label: Python
@@ -42,7 +42,7 @@ snippets:
         # 行数据，先是普通 dict，再是 JSON
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: d74276d805c22c92
+source_hash: 173c542fb675892e
 ---
 
 ## Results 对象
@@ -273,7 +273,7 @@ blendshape 系数。骨架尺度、手部姿态和面部表情放在 `extras` �
 列表，按被填充的槽位，每个检测、分段、点或区域对应一行。`to_json(**kwargs)` 把
 自己的参数转给 `summary`，返回 JSON 字符串。
 
-`plot()` 渲染每种任务载荷。图像叠加默认返回 BGR 数组；`pil=True` 请求 PIL。边缘和法线图结果保留 PIL 默认值。
+`plot()` 渲染每种任务载荷。图像叠加默认返回 BGR 数组；`pil=True` 请求 PIL。深度、法线、边缘和反照率图，以及 3D 长方体和动作块，默认返回 PIL 图像；`pil=False` 返回数组。
 
 ## Boxes3D
 

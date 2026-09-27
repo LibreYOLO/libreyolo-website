@@ -15,7 +15,7 @@ keywords:
   - libreyolo cuda
   - libreyolo gpu
   - libreyolo voraussetzungen
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: Paket
     value: libreyolo
@@ -66,7 +66,7 @@ snippets:
         # Alle registrierten Familien mit Aufgaben, Größen und Eingabe-
         # auflösungen. Bei fehlendem Extra wird der passende pip-Befehl gezeigt.
         libreyolo models
-source_hash: "531023c2092fd751"
+source_hash: 3ad6bb09bf2f5434
 ---
 
 ## Installation
@@ -193,6 +193,11 @@ Wheel existiert.
 
 `sensenova` überspringt `bitsandbytes` unter macOS, wo kein Wheel veröffentlicht
 wird. Der Rest des Extras wird normal installiert.
+
+`vlm` ist nicht auf Plattformen beschränkt: Die darin festgelegte Version
+`decord==0.6.0` hat Wheels nur für x86-64-Linux und Windows. Unter macOS und
+ARM-Linux schlägt die Installation von `vlm`, `ground`, `vlm-train` und `all`
+fehl.
 
 Wenn der Speicherplatz knapp ist, verursacht PyTorch den größten Teil des
 Bedarfs, insbesondere durch die im Standard-Wheel enthaltene CUDA-Payload. Ein

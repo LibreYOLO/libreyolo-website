@@ -146,7 +146,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: ff50afedd377beaf
+source_hash: a407e1142b8aa57e
 ---
 
 ## インストール
@@ -173,11 +173,11 @@ ONNX追加パッケージには`onnxruntime>=1.18.0`が必要です。LaMaはops
 可変のままになります。
 
 `opset`を省略すると、ファミリーごとに選択されます。DETR系ファミリー（`detr`、
-`deformable_detr`、`dinodetr`、`dfine`、`deim`、`deimv2`、`ec`、`lwdetr`、
-`rfdetr`、`rtdetr`、`rtdetrv2`、`rtdetrv4`）に加え、`deit`、`midas`、`moge2`では、
-`aten::scaled_dot_product`を変換できるopset 17が使われます。それ以外はすべて13です。
-マッティングは常に19に引き上げられます。BiRefNetのデコーダーには、ONNXでopset 19から
-定義される`DeformConv`演算子が必要なためです。
+`deformable_detr`、`dinodetr`、`dfine`、`gtr`、`deim`、`deimv2`、`tinyformer`、
+`ec`、`lwdetr`、`rfdetr`、`rtdetr`、`rtdetrv2`、`rtdetrv4`）に加え、`deit`、
+`midas`、`moge2`、`vjepa2`では、`aten::scaled_dot_product`を変換できるopset 17が
+使われます。それ以外はすべて13です。BiRefNetとFeyNobgは常に19に引き上げられます。
+これらのデコーダーには、ONNXでopset 19から定義される`DeformConv`演算子が必要なためです。
 
 `simplify=True`は`onnxsim`を実行し、処理に失敗した場合は元のグラフを維持します。そのため、
 簡略化エラーはエクスポート失敗ではなく警告になります。macOS arm64で`onnx` 1.22以降と
@@ -259,13 +259,14 @@ RF-DETRは、入力テンソル名が`images`ではなく`input`である唯一�
 このバージョンでは、いくつかのタスクに固定解像度のランタイム契約があります。深度、
 サーフェス法線、エッジでは`batch != 1`を拒否して`dynamic=False`を強制します。マッティングでは
 ネイティブの1024正方形を強制します。BiRefNetのSwin相対位置テーブルがその解像度に結び付いて
-いるためです。画像復元ではReal-ESRGAN以外の全ファミリーで固定キャンバスを強制します。
-Real-ESRGANのジェネレーターは完全畳み込み型です。
+いるためです。画像復元ではReal-ESRGANとQuickSRNet以外の全ファミリーで固定キャンバスを
+強制します。Real-ESRGANとQuickSRNetのネットワークは完全畳み込み型です。
 
-YOLO9ファミリー、HRNet、NAFNet、Real-ESRGANでは長方形の`imgsz`を使えます。固定の正方形を
-必要とするファミリー（`clip`、`deformable_detr`、`detr`、`dinodetr`、`dfine`、`deim`、
-`deimv2`、`ec`、`lwdetr`、`moge2`、`rtdetr`、`rtdetrv2`、`rtdetrv4`、`rfdetr`、
-`siglip2`、`ssd`）では長方形を拒否します。
+YOLO9ファミリー、HRNet、NAFNet、PP-LiteSeg、Real-ESRGAN、QuickSRNet、GTRのセマンティック
+セグメンテーションでは長方形の`imgsz`を使えます。固定の正方形を必要とするファミリー
+（`clip`、`deformable_detr`、`detr`、`dinodetr`、`dfine`、セマンティックセグメンテーション
+以外の`gtr`、`deim`、`deimv2`、`tinyformer`、`ec`、`lwdetr`、`moge2`、`rtdetr`、
+`rtdetrv2`、`rtdetrv4`、`rfdetr`、`siglip2`、`ssd`）では長方形を拒否します。
 
 トレース前に拒否される組み合わせは2つあります。YOLO9はLibreYOLOで物体検出だけに対応するため、
 YOLO9セグメンテーションは拒否されます。RTMDet-Insセグメンテーションは、動的カーネルによる

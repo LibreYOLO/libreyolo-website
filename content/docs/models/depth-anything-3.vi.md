@@ -98,7 +98,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: 0ac96180165c4891
+source_hash: d22a5fc355bbebd2
 ---
 
 ## Cài đặt
@@ -115,7 +115,7 @@ Trọng số được tải về từ Hugging Face trong lần sử dụng đầ
 
 <code-tabs name="predict" />
 
-`result.depth_map` chứa depth map nghịch đảo tương đối dense: giá trị cao hơn nghĩa là gần camera hơn, các giá trị không có đơn vị mét hoặc tỷ lệ xuyên ảnh. Checkpoint upstream phát ra độ sâu tương đối dương; network wrapper của LibreYOLO đảo giá trị này và tái tạo cách xử lý bầu trời chính thức để đầu ra tuân theo hợp đồng độ sâu chung của LibreYOLO. `save=True` ghi bản trực quan hóa áp colormap của map đó ra đĩa; `Results.plot()` không hỗ trợ họ mô hình này vì hàm chỉ được định nghĩa cho pháp tuyến bề mặt và cạnh. Xem [dự đoán](/docs/predict) để biết về nguồn, xử lý luồng và kết quả.
+`result.depth_map` chứa depth map nghịch đảo tương đối dense: giá trị cao hơn nghĩa là gần camera hơn, các giá trị không có đơn vị mét hoặc tỷ lệ xuyên ảnh. Checkpoint upstream phát ra độ sâu tương đối dương; network wrapper của LibreYOLO đảo giá trị này và tái tạo cách xử lý bầu trời chính thức để đầu ra tuân theo hợp đồng độ sâu chung của LibreYOLO. `save=True` ghi bản trực quan hóa áp colormap của map đó ra đĩa; `Results.plot()` render depth map thành ảnh PIL, còn `pil=False` sẽ trả về mảng thay vì ảnh. Xem [dự đoán](/docs/predict) để biết về nguồn, xử lý luồng và kết quả.
 
 ## Biến thể
 

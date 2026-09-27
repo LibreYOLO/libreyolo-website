@@ -17,8 +17,12 @@ keywords:
   - SmolVLM2
   - Florence-2
   - чат LibreYOLO
-last_verified: "1.6.0"
-verification: Псевдоніми прочитано з libreyolo/models/vlm/__init__.py; репозиторії, розміри й списки задач взято з модулів сімейств у libreyolo/models/vlm/ і libreyolo/models/sensenova/model.py; правила викликів і помилок взято з libreyolo/models/vlm/base.py, усе у версії v1.6.0.
+last_verified: 1.6.0
+verification: >-
+  Псевдоніми прочитано з libreyolo/models/vlm/__init__.py; репозиторії, розміри
+  й списки задач взято з модулів сімейств у libreyolo/models/vlm/ і
+  libreyolo/models/sensenova/model.py; правила викликів і помилок взято з
+  libreyolo/models/vlm/base.py, усе у версії v1.6.0.
 snippets:
   install:
     - label: bash
@@ -44,7 +48,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 77a04856cfe4f88c
+source_hash: a9e0d635a6645d2c
 ---
 
 ## Встановлення
@@ -91,7 +95,7 @@ LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 `LibreLocateAnything` і `LibreMODUS` (також пишеться `LibreModus`)
 експортуються на рівні пакета.
 
-Виявлення також охоплює `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` і `lfm2-vl-3b`. Псевдонім `gemma-4` без уточнення вибирає E4B. Псевдоніми Molmo2: `molmo2-4b`, `molmo2-8b` і `molmo2-o-7b`; типовим є 4B. Псевдоніми визначають маршрутизацію, а не підтверджують, що кожен віддалений знімок було завантажено й перевірено.
+Виявлення також охоплює `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` і `lfm2-vl-3b`. Псевдонім `gemma-4` без уточнення вибирає E4B. Псевдоніми Molmo2: `molmo2-4b`, `molmo2-8b` і `molmo2-o-7b`; типовим є 4B. Псевдоніми визначають маршрутизацію, а не підтверджують, що кожен віддалений знімок було завантажено й перевірено. `moondream-3` не завантажується в 1.6.0: у його дзеркалі бракує фрагментів ваг.
 
 ## Задачі
 

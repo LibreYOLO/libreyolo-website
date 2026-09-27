@@ -14,7 +14,7 @@ keywords:
   - квантування fp8
   - квантування після навчання
   - libreyolo quantize аргументи
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: Команда
     value: libreyolo quantize
@@ -48,7 +48,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 663390776f2f2c15
+source_hash: 409bc0b2ace6547e
 ---
 
 ## Синтаксис
@@ -69,7 +69,7 @@ libreyolo quantize model=<name|path> [recipe=<recipe>] [key=value ...]
 | `calib` | `coco128.yaml` | Зображення для калібрування: YAML з даними або назва вбудованого датасету. Без міток, лише прямий прохід. `none` пропускає калібрування |
 | `samples` | `128` | Максимальна кількість зображень для калібрування |
 | `batch` | `8` | Розмір батча під час калібрування |
-| `algorithm` | `auto` | Оцінювання діапазону активацій: `auto`, що обирає minmax, або `minmax`, або `percentile` |
+| `algorithm` | `auto` | Оцінювання діапазону активацій: `auto` (minmax), `minmax`, `percentile`, `mse` або `entropy` |
 | `out` | | Шлях до вихідної контрольної точки. Типово це шлях джерела з `-<recipe>` перед суфіксом |
 | `device` | `auto` | Пристрій |
 | `allow_download_scripts` | `false` | Дозволити вбудований код Python у блоках завантаження в YAML датасету |

@@ -12,9 +12,9 @@ keywords:
   - libreyolo カバレッジグループ
   - g0 g1 g2 g3 g4
   - model tiers
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
-  エクスポート階層はdocs/adr/0011-export-support-tiers.mdおよびlibreyolo/export/support.py、カバレッジグループとファミリーごとの件数はlibreyolo/models/registry.pyのMODEL_GROUPS、スクラッチ学習ゲートはlibreyolo/models/base/model.pyおよびlibreyolo/cli/commands/train.py、CLIインベントリはlibreyolo/models/inventory.py、API階層はlibreyolo/models/sam/、openvocab/、vlm/パッケージのdocstringとbase.pyの仕様から、すべてv1.5.0時点で確認しました。読者向けのグループラベル（Flagship、Core、Supported、Inference
+  エクスポート階層はdocs/adr/0011-export-support-tiers.mdおよびlibreyolo/export/support.py、カバレッジグループとファミリーごとの件数はlibreyolo/models/registry.pyのMODEL_GROUPS、スクラッチ学習ゲートはlibreyolo/models/base/model.pyおよびlibreyolo/cli/commands/train.py、CLIインベントリはlibreyolo/models/inventory.py、API階層はlibreyolo/models/sam/、openvocab/、vlm/パッケージのdocstringとbase.pyの仕様から、すべてv1.6.0時点で確認しました。読者向けのグループラベル（Flagship、Core、Supported、Inference
   only、Museum、Sibling
   tier）は同じグループに対してサイトが独自に使う用語で、src/data/docs/registry.jsonに由来します。
 snippets:
@@ -32,7 +32,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: de545894b0d125e4
+source_hash: 6d8f3ec671e6cb02
 ---
 
 ## エクスポートサポート階層
@@ -63,10 +63,12 @@ blockedの組み合わせは、依存関係の確認、キャリブレーショ�
 | プロンプト可能セグメンテーション | `LibreSAM` | 呼び出し時に画像ごとの空間プロンプトまたは概念プロンプトを指定しなければ、順伝播に意味がありません。対話的かつステートフルで、1回エンコードして何度もプロンプトを指定します |
 | オープンボキャブラリ検出 | `LibreOpenVocab` | テキスト条件付きの識別的検出器です。クラスリストはプロンプトで、`set_classes` で設定します |
 | 視覚言語 | `LibreVLM` | 検出器として駆動される生成モデルです。クラスリストはプロンプトで、信頼度はプレースホルダーです |
+| グラウンディング | `LibreGround` | 画像と参照指示を、クエリごとに最大1つの点に対応付けます |
+| ロボットポリシー | `LibreVLA` | カメラフレームとロボットの状態を、将来のアクションのチャンクに対応付けます |
 
-3つの兄弟階層は意図的に検出器ファクトリーへ登録されません。そのため、`LibreYOLO("some-alias")` からは到達できません。チェックポイントの判別ではなく、サイズの別名を使って読み込まれ、自動ダウンロードされます。
+兄弟階層は意図的に検出器ファクトリーへ登録されません。そのため、`LibreYOLO("some-alias")` からは到達できません。チェックポイントの判別ではなく、サイズの別名を使って読み込まれ、自動ダウンロードされます。
 
-4つすべてが同じ `Results` を返すため、階層が変わっても後続コードは変わりません。異なるのは動作するメソッドです。兄弟階層は `train()`、`val()`、`export()` で `NotImplementedError` を送出し、SAM階層とオープンボキャブラリ階層は `track()` でも送出します。各階層のページには、その階層固有の除外事項が記載されています。
+いずれも同じ `Results` を返すため、階層が変わっても後続コードは変わりません。異なるのは動作するメソッドです。兄弟階層は `train()`、`val()`、`export()` で `NotImplementedError` を送出しますが、例外が2つあります。`LibreVLM` はQwen3-VLを検出器としてファインチューニングし、`LibreVLA` はSmolVLA、ACT、Diffusion Policyを学習・検証します。SAM階層とオープンボキャブラリ階層は `track()` でも送出します。各階層のページには、その階層固有の除外事項が記載されています。
 
 ## カバレッジグループ
 
@@ -75,23 +77,25 @@ blockedの組み合わせは、依存関係の確認、キャリブレーショ�
 | グループ | ラベル | ファミリー数 | 意味 |
 |---|---|---|---|
 | `g0` | Flagship | 2 | 共通機能のカバレッジに必要な主力の基準モデル |
-| `g1` | Core | 10 | 学習可能な検出器のカバレッジセット |
-| `g2` | Supported | 14 | 追加の学習可能ファミリーのカバレッジセット |
-| `g3` | Inference only | 35 | 学習実装を持たないファミリー |
+| `g1` | Core | 12 | 学習可能な検出器のカバレッジセット |
+| `g2` | Supported | 19 | 追加の学習可能ファミリーのカバレッジセット |
+| `g3` | Inference only | 44 | 学習実装を持たないファミリー |
 | `g4` | Museum | 5 | 推論カバレッジを持つ歴史的ファミリー |
-| `s` | Sibling tier | 21 | 個別に対象となる兄弟API（SAM、open-vocab、VLM、zero-shot） |
+| `s` | Sibling tier | 36 | 個別に対象となる兄弟API（SAM、open-vocab、VLM、grounding、zero-shot） |
 
-6つのグループに合計87ファミリーがあります。`g3` だけでほかの全グループを合計した数より多くのファミリーを含みます。レジストリの大部分は、積極的に学習される検出器ではなく、推論専用の系譜とMuseumのカバレッジで占められているためです。
+6つのグループに合計118ファミリーがあります。`g3` が最大のグループです。レジストリの多くは、積極的に学習される検出器ではなく、推論専用の系譜で占められているためです。
 
 モデルを選ぶ読者にとって、グループはエンジニアリング上の注力箇所を示すものであり、ファミリーの精度を示すものではありません。新機能は `g0` と `g1` で設計され、最初に導入されます。`g2` はCIで正常な状態に保たれますが、機能は同じリリース周期ではなく、機会に応じて導入されます。`g3` は制限ではなく、機能の不在を示します。推論、検証、ファミリーが対応する場合はエクスポートも引き続き動作します。`g3` または `g4` ファミリーで `train()` を呼び出すと、処理を部分的かつ黙って行わず、理由を示す `NotImplementedError` が送出されます。`s` ファミリーは `LibreYOLO()` ではなく独自のファクトリーから読み込まれるため、このトレードオフにはまったく含まれません。チェックポイントのファイル名を読む際に、グループがタスク、ファミリー、サイズとどう組み合わさるかについては[基本概念](/docs/concepts)を参照してください。
 
 グループ自体がユーザー向け機能を付与したり制限したりすることはありません。サポートは、グループへの所属だけではなく、常にファミリーに実装されたAPIと形式固有の機能チェックから決まります。グループが分類するのはファミリーであり、タスクではありません。そのため、タスク単位のカバレッジ実行では「g1 detect」のようにタスクを明示します。
 
-テストだけでなく、実行時にグループを読み取る箇所が2つあります。`libreyolo/models/inventory.py` の `collect_model_inventory()` は、CLIインベントリが出力するすべての項目にグループを付加します。また、`pretrained=False` による特別なスクラッチ再初期化経路は、`g0` と `g1` のファミリーだけで開始されます。この2グループ以外では、`libreyolo/models/base/model.py` のチェックが完全に省略されるため、`pretrained=False` は通常のキーワードとしてファミリー独自の `train()` に渡されます。
+テストだけでなく、実行時にグループを読み取る箇所が3つあります。`libreyolo/models/inventory.py` の `collect_model_inventory()` は、CLIインベントリが出力するすべての項目にグループを付加します。`pretrained=False` による特別なスクラッチ再初期化経路は、`g0`、`g1`、`g2` のファミリーだけで開始されます。これらのグループ以外では、`libreyolo/models/base/model.py` のチェックが完全に省略されるため、`pretrained=False` は通常のキーワードとしてファミリー独自の `train()` に渡されます。`classes=` または `single_cls=True` を指定した学習は `g0` と `g1` の物体検出でのみ受け付けられ、それ以外では `ValueError` を送出します。
 
 ## 学習
 
 `g3` または `g4` のファミリーには学習実装がなく、そのファミリーで `train()` を呼び出すと例外が送出されます。これはファミリーのコードの特性であり、グループの特性ではありません。グループはその事実を引き起こすのではなく、記録します。
+
+118ファミリーのうち37ファミリーが学習できます。`g0`、`g1`、`g2` のすべてのファミリーに加え、`LibreVLM` 経由のQwen3-VLと、`LibreVLA` 経由のSmolVLA、ACT、Diffusion Policyです。
 
 学習できるファミリーでは、個々のデータ拡張設定がパイプラインに届くかどうかは別の問題で、`used`、`gated_by_mosaic`、`ignored` という独自の3値の用語があります。[データ拡張マトリックス](/docs/reference/augmentation-matrix)を参照してください。
 

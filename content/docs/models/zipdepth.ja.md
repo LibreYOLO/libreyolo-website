@@ -84,7 +84,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: 891eaa1a42795a4c
+source_hash: ee5867f8671d1aac
 ---
 
 ## インストール
@@ -101,7 +101,7 @@ pip install libreyolo
 
 <code-tabs name="predict" />
 
-`result.depth_map` には密な相対逆深度マップが格納されます。値が大きいほどカメラに近いことを示し、値にメートル法の単位や画像間で共通のスケールはありません。`save=True` を指定すると、そのマップをカラーマップで可視化した画像がディスクに書き込まれます。`Results.plot()` はサーフェス法線とエッジだけを対象として定義されているため、このファミリーには対応しません。ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
+`result.depth_map` には密な相対逆深度マップが格納されます。値が大きいほどカメラに近いことを示し、値にメートル法の単位や画像間で共通のスケールはありません。`save=True` を指定すると、そのマップをカラーマップで可視化した画像がディスクに書き込まれます。`Results.plot()` は深度マップをPIL画像として描画し、`pil=False` を指定すると代わりに配列を返します。ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
 
 ## バリアント
 

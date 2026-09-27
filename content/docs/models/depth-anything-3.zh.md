@@ -91,7 +91,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: 0ac96180165c4891
+source_hash: d22a5fc355bbebd2
 ---
 
 ## 安装
@@ -112,7 +112,8 @@ pip install libreyolo
 数值没有度量单位，也没有跨图像的尺度。上游检查点（checkpoint）输出的是正的相对
 深度；LibreYOLO 的网络包装器把它取逆，并复现了官方的天空处理，让输出符合
 LibreYOLO 共享的深度契约。`save=True` 会把这张图经过色彩映射的可视化结果写入
-磁盘；`Results.plot()` 不覆盖这个家族，因为它只为表面法线和边缘定义。数据源、
+磁盘；`Results.plot()` 会把深度图渲染成一张 PIL 图像，传 `pil=False` 则改为返回
+数组。数据源、
 流式处理和结果处理见[预测](/docs/predict)。
 
 ## 变体

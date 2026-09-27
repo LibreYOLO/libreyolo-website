@@ -47,7 +47,7 @@ snippets:
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot()는 지도를 렌더링합니다; 이는 엣지 및 일반 결과에 대해 정의됩니다.
+        # plot()은 렌더링된 맵을 PIL 이미지로 반환합니다.
         result.plot().save("edges.png")
   val:
     - label: 메트릭 키를 검증하고 읽습니다
@@ -94,7 +94,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.edges.array.shape)
-source_hash: bc286345540ed966
+source_hash: 1784d723c3ca99db
 ---
 
 ## 정의

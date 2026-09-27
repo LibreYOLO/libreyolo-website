@@ -120,7 +120,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 531a9b20e5532913
+source_hash: e13acb1e813da7c4
 ---
 
 ## Definition
@@ -212,8 +212,7 @@ names:
   1: sidewalk
 ```
 
-`masks_dir` bezeichnet den Verzeichnisnamen, der `images` ersetzt. Der
-Standardwert lautet `masks`. `label_mapping` ist eine optionale Zuordnung
+`masks_dir` bezeichnet den Verzeichnisnamen, der `images` ersetzt. `label_mapping` ist eine optionale Zuordnung
 `{source_id: train_id}`, die beim Laden auf die Pixelwerte der Maske angewendet
 wird. So kann ein von 1 bis 150 nummerierter Datensatz in den Bereich 0 bis 149
 überführt werden. Jeder nicht zugeordnete Quellwert wird zum Ignore-Label. Jede

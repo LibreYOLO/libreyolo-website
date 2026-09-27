@@ -1,8 +1,13 @@
 ---
 title: Results-Typen
 seo_title: Referenz zum LibreYOLO-Results-Objekt
-description: "LibreYOLO-Ergebnisse: Boxen, Masken, Keypoints, Klassifikation, Tiefe, Albedo, 3D-Quader und Roboteraktionssequenzen."
-lead: "Results ist der gemeinsame Rückgabetyp aller LibreYOLO-Modelle für ein einzelnes Bild. Er enthält optionale Datenslots, einen je Aufgabenform, und füllt nur die vom Modell erzeugten Slots."
+description: >-
+  LibreYOLO-Ergebnisse: Boxen, Masken, Keypoints, Klassifikation, Tiefe, Albedo,
+  3D-Quader und Roboteraktionssequenzen.
+lead: >-
+  Results ist der gemeinsame Rückgabetyp aller LibreYOLO-Modelle für ein
+  einzelnes Bild. Er enthält optionale Datenslots, einen je Aufgabenform, und
+  füllt nur die vom Modell erzeugten Slots.
 keywords:
   - libreyolo results objekt
   - Results.boxes
@@ -11,8 +16,11 @@ keywords:
   - Results.depth_map
   - Results.summary
   - libreyolo results to_json
-last_verified: "1.6.0"
-verification: "Slot-Namen, Formen, Eigenschaften und Standardwerte aus libreyolo/utils/results.py für v1.6.0. Semantik aus den Docstrings der Payload-Klassen."
+last_verified: 1.6.0
+verification: >-
+  Slot-Namen, Formen, Eigenschaften und Standardwerte aus
+  libreyolo/utils/results.py für v1.6.0. Semantik aus den Docstrings der
+  Payload-Klassen.
 snippets:
   usage:
     - label: Python
@@ -42,7 +50,7 @@ snippets:
         # Zeilen als einfache Dictionaries und anschließend als JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: d74276d805c22c92
+source_hash: 173c542fb675892e
 ---
 
 ## Das Results-Objekt
@@ -311,7 +319,7 @@ Slots eine Liste einfacher Dictionaries mit einer Zeile pro Erkennung,
 Segment, Punkt oder Region zurück. `to_json(**kwargs)` leitet seine Argumente
 an `summary` weiter und gibt den JSON-String zurück.
 
-`plot()` stellt die Ergebnisdaten jeder Aufgabe dar. Bild-Overlays verwenden standardmäßig BGR-Arrays; `pil=True` fordert PIL an. Kanten- und Normalenkartenergebnisse behalten PIL als Standard.
+`plot()` stellt die Ergebnisdaten jeder Aufgabe dar. Bild-Overlays verwenden standardmäßig BGR-Arrays; `pil=True` fordert PIL an. Tiefen-, Normalen-, Kanten- und Albedokarten, 3D-Quader und Aktionsblöcke liefern standardmäßig ein PIL-Bild; `pil=False` gibt das Array zurück.
 
 ## Boxes3D
 

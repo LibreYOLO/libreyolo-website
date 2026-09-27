@@ -190,7 +190,7 @@ snippets:
 
         tegrastats            # charge en direct ; nvidia-smi est limité sur
         Tegra
-source_hash: c07ff908503e89b5
+source_hash: 42f4131b1a842bfd
 ---
 
 ## Ce que consigne cette page
@@ -208,13 +208,10 @@ de CUDA n'ont pas été testées. La recette ci-dessous est celle qui a fonction
 sur cette combinaison.
 
 Cette exécution date du 2026-07-27 et portait sur LibreYOLO 1.4.0 ; elle n'a pas
-été refaite sur du matériel en 1.5.0 : c'est la seule page de l'arbre 1.5.0 à
-porter encore une vérification 1.4.0, d'où le `last_verified: "1.4.0"` de son
-front matter. Rien dans les changements de la 1.5.0 ne touche au chemin
-d'installation, aux quatre bibliothèques manquantes ni aux flags d'export
-décrits ici, les commandes devraient donc rester valables, mais les numéros de
-version dans les sorties ci-dessous sont ceux qu'a affichés la 1.4.0, pas une
-mesure en 1.5.0.
+été refaite sur du matériel en 1.5.0 ni en 1.6.0, d'où le
+`last_verified: "1.4.0"` de son front matter. Les commandes devraient rester
+valables, mais les numéros de version dans les sorties ci-dessous sont ceux
+qu'a affichés la 1.4.0, pas une mesure en 1.6.0.
 
 Deux points vont à l'encontre de ce que disent la plupart des guides Jetson. Les
 wheels sont les builds aarch64 ordinaires publiés pour CUDA 13, aucun build

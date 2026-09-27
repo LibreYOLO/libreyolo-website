@@ -48,7 +48,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 663390776f2f2c15
+source_hash: 409bc0b2ace6547e
 ---
 
 ## Sinopse
@@ -69,7 +69,7 @@ Os argumentos são pares `key=value`, e a forma POSIX também funciona, então
 | `calib` | `coco128.yaml` | Imagens de calibração: um YAML de dados ou o nome de um dataset embutido. Sem rótulos, apenas forward. `none` pula a calibração |
 | `samples` | `128` | Máximo de imagens de calibração |
 | `batch` | `8` | Tamanho de batch da calibração |
-| `algorithm` | `auto` | Estimativa do intervalo das ativações: `auto`, que seleciona minmax, ou `minmax`, ou `percentile` |
+| `algorithm` | `auto` | Estimativa do intervalo das ativações: `auto` (minmax), `minmax`, `percentile`, `mse` ou `entropy` |
 | `out` | | Caminho do checkpoint de saída. Por padrão, o caminho de origem com `-<recipe>` antes do sufixo |
 | `device` | `auto` | Dispositivo |
 | `allow_download_scripts` | `false` | Permite Python embutido nos blocos de download do YAML do dataset |

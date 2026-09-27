@@ -82,7 +82,7 @@ are the ones listed first: `qwen3-vl` resolves to `4b`, `lfm2-vl` to `450m`,
 `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` and `LibreMODUS`
 (also spelled `LibreModus`) are exported at package level.
 
-Detection also includes `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` and `lfm2-vl-3b`. The bare `gemma-4` alias selects E4B. Molmo2 aliases are `molmo2-4b`, `molmo2-8b` and `molmo2-o-7b`; its default is 4B. Aliases establish routing, not that every remote snapshot has been downloaded and tested.
+Detection also includes `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` and `lfm2-vl-3b`. The bare `gemma-4` alias selects E4B. Molmo2 aliases are `molmo2-4b`, `molmo2-8b` and `molmo2-o-7b`; its default is 4B. Aliases establish routing, not that every remote snapshot has been downloaded and tested. `moondream-3` does not load in 1.6.0: its mirror is missing weight shards.
 
 ## Tasks
 

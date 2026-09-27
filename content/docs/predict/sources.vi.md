@@ -210,7 +210,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c355ad28487c9a65
+source_hash: 81a0c947dbfe48b5
 ---
 ## Cách phân loại nguồn
 
@@ -262,8 +262,8 @@ giữ nguyên mảng, đúng với yêu cầu của mảng tạo từ ảnh PIL.
 Mảng số thực được scale lại theo phạm vi riêng: giá trị bằng hoặc dưới `1.0` được
 nhân với 255, còn giá trị cao hơn bị cắt vào `[0, 255]`. Mảng RGBA bỏ kênh alpha.
 
-Mỗi loại đường dẫn từ xa cần một gói riêng và không gói nào được cài mặc định:
-`requests` cho `http(s)://`, `boto3` cho `s3://` và `gcsfs` cho `gs://`.
+Mỗi loại đường dẫn từ xa cần một gói riêng. `requests`, cho `http(s)://`, đi kèm
+bản cài cơ sở; `boto3` cho `s3://` và `gcsfs` cho `gs://` thì không.
 
 Theo dõi chấp nhận ảnh, thư mục sắp theo tên tệp, danh sách, tuple và iterator ảnh lười làm các khung hình liên tiếp. Truyền `fps=30.0` để xác định thời gian chuỗi ảnh và `color_format="auto"` để chọn cách diễn giải đầu vào. Xem [theo dõi](/docs/tasks/object-tracking).
 
@@ -281,8 +281,10 @@ chồng cho mỗi nhóm trên các họ hỗ trợ. Xem
 
 <code-tabs name="video" />
 
-Đường dẫn được tính là video khi hậu tố thuộc một trong các dạng `.asf`, `.avi`,
-`.gif`, `.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.ts`, `.wmv`, `.webm`.
+Đường dẫn được tính là video khi hậu tố thuộc một trong các dạng `.3g2`, `.3gp`,
+`.asf`, `.avi`, `.dav`, `.f4v`, `.flv`, `.gif`, `.h264`, `.h265`, `.hevc`, `.m2ts`,
+`.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.mts`, `.mxf`, `.ogv`, `.ts`,
+`.vob`, `.wmv`, `.webm`.
 
 `.gif` xuất hiện trong cả hai danh sách. Đường dẫn `.gif` truyền trực tiếp vào
 `predict` được mở dưới dạng video vì bước kiểm tra video chạy trước; tệp `.gif`
@@ -390,7 +392,9 @@ không phải ảnh, nên `result[0]` trên dự đoán một ảnh là box đ�
 Ảnh được đưa vào `runs/detect/predict`, `runs/detect/predict2` và tiếp tục tự tăng,
 đồng thời giữ tên tệp nguồn. Mọi ảnh trong một tiến trình nằm trong cùng thư mục,
 nên hai thư mục đầu vào có cùng tên tệp sẽ ghi đè lẫn nhau. Ảnh trong bộ nhớ không
-có tên tệp để dùng lại và được đánh số `image0`, `image1` rồi tiếp tục.
+có tên tệp để dùng lại. Một ảnh đơn lẻ được lưu với tên `inference`, nên các lần
+gọi lặp lại sẽ ghi đè nó; một danh sách hoặc batch được đánh số `image0`, `image1`
+rồi tiếp tục.
 
 Video và nguồn trực tiếp được ghi thành một tệp `.mp4` duy nhất đặt theo tên nguồn.
 

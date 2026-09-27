@@ -16,7 +16,7 @@ keywords:
   - разметка полигонами yolo
   - mit библиотека сегментации
   - mask mAP
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -129,7 +129,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 3d956e53e80143c2
+source_hash: 577cd3c8c2d5d6fe
 ---
 
 ## Определение
@@ -153,14 +153,17 @@ source_hash: 3d956e53e80143c2
 
 ## Модели
 
-Обучать и предсказывать маски умеют пять семейств:
+Обучать и предсказывать маски умеют четыре семейства:
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
-[D-FINE](/docs/models/d-fine), [GTR](/docs/models/gtr) и [RTMDet](/docs/models/rtmdet). Для RF-DETR
+[D-FINE](/docs/models/d-fine) и [GTR](/docs/models/gtr). Для RF-DETR
 нужна своя дополнительная зависимость, `pip install "libreyolo[rfdetr]"`;
-остальные четыре работают на базовом пакете.
+остальные три работают на базовом пакете.
 
 [Mask R-CNN](/docs/models/mask-rcnn) предсказывает, валидирует и экспортирует
 маски, но его `train()` выбрасывает `NotImplementedError`.
+[RTMDet](/docs/models/rtmdet) предсказывает и валидирует маски, но обучение
+сегментации выбрасывает `NotImplementedError`; обучается он только как
+детектор.
 
 [EoMT](/docs/models/eomt) предсказывает и валидирует маски и тоже не
 поддерживает обучение, а его экспорт ограничен ещё сильнее: `export()`

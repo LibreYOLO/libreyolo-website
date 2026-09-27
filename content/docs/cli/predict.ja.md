@@ -42,7 +42,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 56d898992f1b129c
+source_hash: 21374ebc0e6cf4d3
 ---
 
 ## 書式
@@ -111,8 +111,9 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 ではなく拒否されます：ランタイムのバックエンドが`tiling`、`overlap_ratio`、
 `output_file_format`を扱えない場合、`config_unsupported`で終了します。
 
-`half`は逆です。エクスポートしたランタイムはこれを受け取ってFP16で実行し、
-ネイティブのPyTorch推論は無視したことをログに記録してFP32のまま続行します。
+`half`は逆です：受け付けたうえで無視されます。ネイティブのPyTorch推論は無視した
+ことをログに記録してFP32のまま続行し、エクスポートしたランタイムはエクスポート時の精度を
+維持します。そのため、FP16で推論するには`half=true`を付けてエクスポートする必要があります。
 
 視線推定モデルは2段構成で自前の検出器を持たないため、`face_detector`の指定が
 必須です。`gallery`はタスクが`embed`のモデルにだけ適用され、それ以外に渡すと

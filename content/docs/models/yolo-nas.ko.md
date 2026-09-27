@@ -3,7 +3,7 @@ title: YOLO-NAS
 families:
   - yolonas
 seo_title: 'YOLO-NAS: LibreYOLO의 예측, 학습 및 내보내기'
-description: "LibreYOLO에서 YOLO-NAS 객체 탐지, 자세 추정, 회전 박스를 사용합니다. 업스트림 사전 학습 가중치는 비상업용입니다."
+description: 'LibreYOLO에서 YOLO-NAS 객체 탐지, 자세 추정, 회전 박스를 사용합니다. 업스트림 사전 학습 가중치는 비상업용입니다.'
 lead: >-
   Deci.AI의 아키텍처 검색에서 나온 백본과 넥을 사용하고 양자화 인식 RepVGG 블록으로 구축된 합성곱 탐지기입니다. 가중치는
   Deci.AI 소유이며 비상업적 사용만 허용되고 LibreYOLO는 이를 게시하지 않습니다.
@@ -113,7 +113,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 483562cad2c02696
+source_hash: 52050c4046781a6e
 ---
 
 ## 설치
@@ -172,7 +172,7 @@ pip install libreyolo
 
 ## 체크포인트
 
-나열할 체크포인트가 없습니다. Deci 라이선스는 재배포를 금지하므로 LibreYOLO 조직은 YOLO-NAS 가중치를 게시하지 않으며 다운로드는 다른 위치에서 처리됩니다. `LibreYOLONAS<size>.pt` 형식의 이름 또는 자세용 `LibreYOLONAS<size>-pose.pt`가 Deci 공개 CDN의 해당 객체에 매핑됩니다.
+나열할 체크포인트가 없습니다. Deci 라이선스는 재배포를 금지하므로 LibreYOLO 조직은 YOLO-NAS 가중치를 게시하지 않으며 다운로드는 다른 위치에서 처리됩니다. `LibreYOLONAS<size>.pt` 형식의 이름, 자세용 `LibreYOLONAS<size>-pose.pt`, 또는 회전 박스용 `LibreYOLONAS<size>-obb.pt`(s, m, l)가 Deci 공개 CDN의 해당 객체에 매핑됩니다.
 
 라이브러리가 SHA-256을 고정한 체크포인트만 이 방식으로 가져올 수 있습니다. 그 외 항목은 검증되지 않은 서드파티 pickle을 열지 않고 실패하며 직접 다운로드해 경로로 전달해야 합니다. 디스크에 이미 있는 파일은 다운로드나 체크섬 게이트 없이 해당 경로에서 불러옵니다. 로더가 인식하는 원래 이름의 Deci `.pth`도 여기에 포함됩니다.
 

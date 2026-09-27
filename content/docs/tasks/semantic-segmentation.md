@@ -196,8 +196,7 @@ names:
   1: sidewalk
 ```
 
-`masks_dir` is the directory name substituted for `images`, defaulting to
-`masks`. `label_mapping` is an optional `{source_id: train_id}` remap applied
+`masks_dir` is the directory name substituted for `images`. `label_mapping` is an optional `{source_id: train_id}` remap applied
 to mask pixel values at load time, which is how a dataset numbered 1 to 150
 becomes 0 to 149; any source value left unmapped becomes ignore, and every
 train id has to fall in `0..nc-1`.

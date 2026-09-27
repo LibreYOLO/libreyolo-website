@@ -16,7 +16,7 @@ keywords:
   - libreyolo predict befehl
   - libreyolo predict argumente
   - yolo json ausgabe terminal
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: Befehl
     value: libreyolo predict
@@ -50,7 +50,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: "56d898992f1b129c"
+source_hash: 21374ebc0e6cf4d3
 ---
 
 ## Synopsis
@@ -120,9 +120,10 @@ Werte für `model`. Drei Optionen werden auf diesen Runtimes abgelehnt statt
 ignoriert: `tiling`, `overlap_ratio` und `output_file_format` beenden sich mit
 `config_unsupported`, wenn ein Runtime-Backend sie nicht erfüllen kann.
 
-`half` geht den umgekehrten Weg. Exportierte Runtimes nehmen es an und laufen in
-FP16; native PyTorch-Inferenz protokolliert, dass es ignoriert wurde, und macht
-in FP32 weiter.
+`half` geht den umgekehrten Weg: Es wird angenommen und ignoriert. Native
+PyTorch-Inferenz protokolliert, dass es ignoriert wurde, und macht in FP32
+weiter; eine exportierte Runtime behält die Präzision, mit der sie exportiert
+wurde. FP16-Inferenz heißt also, mit `half=true` zu exportieren.
 
 Gaze-Modelle sind zweistufig und haben keinen eigenen Detektor, deshalb ist
 `face_detector` für sie erforderlich. `gallery` gilt nur für Modelle, deren Task

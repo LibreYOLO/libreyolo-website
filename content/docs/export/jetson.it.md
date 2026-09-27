@@ -202,7 +202,7 @@ snippets:
 
         tegrastats            # carico in tempo reale; nvidia-smi è limitato su
         Tegra
-source_hash: c07ff908503e89b5
+source_hash: 42f4131b1a842bfd
 ---
 
 ## Cosa documenta questa pagina
@@ -219,13 +219,10 @@ state testate. La ricetta qui sotto è quella che ha funzionato su quella
 combinazione.
 
 Quell'esecuzione è del 2026-07-27 su LibreYOLO 1.4.0 e non è stata ripetuta su
-hardware 1.5.0: questa è l'unica pagina dell'albero 1.5.0 che porta ancora una
-verifica 1.4.0, ed è il motivo per cui il suo front matter dice
-`last_verified: "1.4.0"`. Nulla nelle modifiche di 1.5.0 tocca il percorso di
-installazione, le
-quattro librerie mancanti o i flag di esportazione descritti qui, quindi ci si
-aspetta che i comandi reggano, ma i numeri di versione negli output qui sotto
-sono quelli stampati da 1.4.0, non una misura su 1.5.0.
+hardware 1.5.0 o 1.6.0, ed è il motivo per cui il suo front matter dice
+`last_verified: "1.4.0"`. Ci si aspetta che i comandi reggano, ma i numeri di
+versione negli output qui sotto sono quelli stampati da 1.4.0, non una misura su
+1.6.0.
 
 Due cose vanno contro quello che dice la maggior parte delle guide per Jetson. I
 wheel sono le normali build aarch64 pubblicate per CUDA 13, quindi non serve

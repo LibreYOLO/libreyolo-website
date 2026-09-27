@@ -68,7 +68,7 @@ snippets:
         # resoluções de entrada. Famílias cujo extra está faltando são
         # listadas com o comando pip que as habilita.
         libreyolo models
-source_hash: 531023c2092fd751
+source_hash: 3ad6bb09bf2f5434
 ---
 
 ## Instalação
@@ -186,6 +186,10 @@ existe wheel.
 
 `sensenova` pula `bitsandbytes` no macOS, onde nenhuma wheel é publicada; o
 resto do extra instala normalmente.
+
+`vlm` não é delimitado por plataforma: sua versão fixada `decord==0.6.0` só tem
+wheels para Linux x86-64 e Windows. No macOS e no Linux ARM, `vlm`, `ground`,
+`vlm-train` e `all` falham na instalação.
 
 Se a restrição for o disco, a maior parte dele é o PyTorch, e a maior parte do
 PyTorch é a carga CUDA que a wheel padrão embute. Uma wheel só de CPU remove

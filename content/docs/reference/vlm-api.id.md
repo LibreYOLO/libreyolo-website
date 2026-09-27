@@ -18,9 +18,11 @@ keywords:
   - Florence-2
   - libreyolo chat
 last_verified: 1.6.0
-verification: Alias dibaca dari libreyolo/models/vlm/__init__.py; repositori, ukuran, dan daftar
-  task dari modul family di libreyolo/models/vlm/ serta libreyolo/models/sensenova/model.py; aturan
-  pemanggilan dan galat dari libreyolo/models/vlm/base.py, semuanya pada v1.6.0.
+verification: >-
+  Alias dibaca dari libreyolo/models/vlm/__init__.py; repositori, ukuran, dan
+  daftar task dari modul family di libreyolo/models/vlm/ serta
+  libreyolo/models/sensenova/model.py; aturan pemanggilan dan galat dari
+  libreyolo/models/vlm/base.py, semuanya pada v1.6.0.
 snippets:
   install:
     - label: bash
@@ -46,7 +48,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 77a04856cfe4f88c
+source_hash: a9e0d635a6645d2c
 ---
 
 ## Instal
@@ -90,7 +92,7 @@ adalah yang tercantum pertama: `qwen3-vl` mengarah ke `4b`, `lfm2-vl` ke `450m`,
 `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` dan `LibreMODUS`
 (juga dieja `LibreModus`) diekspor pada tingkat paket.
 
-Deteksi juga mencakup `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3`, dan `lfm2-vl-3b`. Alias `gemma-4` tanpa akhiran memilih E4B. Alias Molmo2 adalah `molmo2-4b`, `molmo2-8b`, dan `molmo2-o-7b`; default-nya 4B. Alias menentukan routing, bukan menandakan bahwa setiap snapshot jarak jauh sudah diunduh dan diuji.
+Deteksi juga mencakup `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3`, dan `lfm2-vl-3b`. Alias `gemma-4` tanpa akhiran memilih E4B. Alias Molmo2 adalah `molmo2-4b`, `molmo2-8b`, dan `molmo2-o-7b`; default-nya 4B. Alias menentukan routing, bukan menandakan bahwa setiap snapshot jarak jauh sudah diunduh dan diuji. `moondream-3` tidak dapat dimuat di 1.6.0: mirror-nya kehilangan sebagian shard bobot.
 
 ## Tugas
 

@@ -32,8 +32,10 @@ snippets:
         model.train(data="my-dataset.yaml", epochs=100, profile=True)
     - label: 'Hanya ukur, lalu berhenti'
       language: bash
-      code: |
-        # Menetapkan no_aug_epochs=0 dan menjalankan epoch secukupnya untuk mengisi jendela.
+      code: >
+        # Menetapkan no_aug_epochs=0 dan menjalankan epoch secukupnya untuk
+        mengisi jendela.
+
         libreyolo profile run coco128 --weights LibreYOLO9s.pt --size s
     - label: Periksa hasil lebih dalam
       language: bash
@@ -67,7 +69,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: 288ee5ee988f2fda
+source_hash: c8d7adb6aabcbc80
 ---
 
 ## Ukur sebelum mengubah apa pun
@@ -238,6 +240,22 @@ puncak VRAM naik kira-kira satu set aktivasi tambahan. Pada family di atas,
 alokasi puncak berubah antara -5 dan +19 persen. Biaya relatif terbesar pada
 model classification kecil: ResNet-18 224 px, batch 16, naik dari 0,48 GB eager
 menjadi 0,57 GB dengan graph. Jika melewati batas, turunkan batch atau nonaktifkan flag.
+
+## torch.compile
+
+`train(compile=True)` mengompilasi forward dan backward jaringan dengan
+`torch.compile`. Flag ini juga menerima mode `"default"`, `"reduce-overhead"`,
+`"max-autotune"` dan `"max-autotune-no-cudagraphs"`; nilai bawaannya `False`.
+Loss, optimizer, EMA, validasi, checkpoint, dan ekspor tetap eager, dan
+checkpoint dapat dimuat tanpa kompilasi. Hanya proses CUDA dengan satu GPU yang
+dikompilasi. Proses CPU, MPS, distributed, dan distilasi berlatih secara eager
+setelah menampilkan peringatan, begitu juga bila compiler gagal. Kompilasi
+memakan waktu beberapa menit dan memerlukan compiler C serta header Python di
+host pelatihan.
+
+Selama `train()`, kecuali `OMP_NUM_THREADS` ditetapkan, LibreYOLO menurunkan
+jumlah thread CPU PyTorch ke jatah CPU milik proses, sehingga container dengan
+CPU terbatas tidak terkena throttling di setiap langkah.
 
 ## Terkait
 

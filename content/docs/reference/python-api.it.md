@@ -1,8 +1,15 @@
 ---
 title: API Python
 seo_title: Riferimento dell'API Python di LibreYOLO
-description: 'I nomi che LibreYOLO esporta a livello di pacchetto: le factory, le classi di famiglia, i payload di Results, i backend, i validatori, i tracker e le utility per i dati.'
-lead: La superficie pubblica Python di LibreYOLO è la lista __all__ in libreyolo/__init__.py. Le esportazioni a livello di pacchetto usano from libreyolo import <name>; i protocolli di tracking e addestramento descritti sotto usano i rispettivi sottomoduli.
+description: >-
+  I nomi che LibreYOLO esporta a livello di pacchetto: le factory, le classi di
+  famiglia, i payload di Results, i backend, i validatori, i tracker e le
+  utility per i dati.
+lead: >-
+  La superficie pubblica Python di LibreYOLO è la lista __all__ in
+  libreyolo/__init__.py. Le esportazioni a livello di pacchetto usano from
+  libreyolo import <name>; i protocolli di tracking e addestramento descritti
+  sotto usano i rispettivi sottomoduli.
 keywords:
   - api python libreyolo
   - importare libreyolo python
@@ -13,7 +20,12 @@ keywords:
   - LibreEnsemble
   - libreyolo __all__
 last_verified: 1.6.0
-verification: Nomi e firme letti da libreyolo/__init__.py, libreyolo/models/__init__.py, libreyolo/models/base/model.py, libreyolo/models/base/inference.py, libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py e libreyolo/ensemble/model.py alla v1.6.0.
+verification: >-
+  Nomi e firme letti da libreyolo/__init__.py, libreyolo/models/__init__.py,
+  libreyolo/models/base/model.py, libreyolo/models/base/inference.py,
+  libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py,
+  libreyolo/models/openvocab/__init__.py e libreyolo/ensemble/model.py alla
+  v1.6.0.
 snippets:
   usage:
     - label: Caricare qualsiasi cosa da un'unica factory
@@ -38,7 +50,6 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(len(result))
-
   factories:
     - label: Punti di ingresso
       language: python
@@ -68,7 +79,7 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 02fbec762b1ffced
+source_hash: 7dc6a5ef1b3ba9ea
 ---
 
 ## Punti di ingresso
@@ -132,27 +143,35 @@ Famiglie di rilevamento e multi-task: `LibreYOLO9`, `LibreYOLO9E2E`,
 `LibreDEIMv2`, `LibreDETR`, `LibreDeformableDETR`, `LibreDINODETR`,
 `LibreLWDETR`, `LibreMaskRCNN`, `LibreFCOS`, `LibreFasterRCNN`,
 `LibreRetinaNet`, `LibreSSD`, `LibreCenterNet`, `LibreEfficientDet`,
-`LibreEC`, `LibrePICODET`, `LibreRTMDet`, `LibreFOMO`.
+`LibreEC`, `LibreGTR`, `LibreTinyFormer`, `LibrePICODET`, `LibrePPYOLOE`,
+`LibreRTMDet`, `LibreFOMO`.
 
 Famiglie di predizione densa: `LibreMiDaS`, `LibreDepthAnythingV2`,
 `LibreDepthAnything3`, `LibreZipDepth`, `LibreMoGe2`, `LibreTEED`,
 `LibreDexiNed`, `LibreNAFNet`, `LibreRealESRGAN`, `LibreSwinIR`,
 `LibreBiRefNet`, `LibreFeyNobg`, `LibreFCN`, `LibreEoMT`, `LibreDeepLabv3`,
-`LibrePIDNet`, `LibreSegformer`, `LibreLingBotVision`.
+`LibrePIDNet`, `LibrePPLiteSeg`, `LibreUNet`, `LibreSegformer`,
+`LibreLingBotVision`, `LibreMarigoldV2`, `LibreDDColor`, `LibreHVICIDNet`,
+`LibreLaMa`, `LibreQuickSRNet`, `LibreBEN2`, `LibreViTMatte`.
 
 Famiglie di classificazione ed embedding: `LibreViT`, `LibreMobileNetV4`,
 `LibreConvNeXt`, `LibreDeiT`, `LibreSwin`, `LibreEfficientNetV2`, `LibreVGG`,
-`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`.
+`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`,
+`LibreConvNeXtV2`, `LibrePE`, `LibreVJEPA2`, `LibreLeVJEPA`.
 
-Altri task: `LibreHRNet` (pose), `LibreL2CS` (gaze), `LibrePPOCR` (ocr),
-`LibreFaceEmbedder` (embed).
+Altri task: `LibreHRNet` e `LibreDEKR` (pose), `LibreL2CS` (gaze),
+`LibrePPOCR` (ocr), `LibreFaceEmbedder` (embed), e i detector 3D
+`LibreFCOS3D`, `LibreDetAny3D`, `LibreWildDet3D` e `Libre3DMOOD` (detect3d).
 
 Anche i tier gemelli esportano le loro classi di famiglia: `LibreSAM1`,
 `LibreSAM2`, `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`;
 `LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo`; `LibreLFM2VL`,
 `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`,
-`LibreKosmos2`, `LibreLocateAnything`, `LibreMODUS` (scritto anche
-`LibreModus`).
+`LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`,
+`LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (scritto anche
+`LibreModus`); `LibreShowUI`, `LibreGroundFlorence2` e `LibreGroundQwen3VL`
+dietro `LibreGround`; `LibreSmolVLA`, `LibreACT` e `LibreDiffusionPolicy`
+dietro `LibreVLA`.
 
 ## Superficie di predizione
 

@@ -5,8 +5,7 @@ families:
 seo_title: 'RF-DETR: latih, lakukan fine-tuning, dan ekspor di bawah MIT'
 description: >-
   Gunakan RF-DETR di LibreYOLO untuk deteksi, segmentasi instance, pose, dan
-  kotak berorientasi. Instal, prediksi, latih, validasi, dan ekspor, semuanya
-  berlisensi MIT.
+  kotak berorientasi. Instal, prediksi, latih, validasi, dan ekspor.
 lead: >-
   Detection transformer yang memprediksi sekumpulan objek tetap, bukan grid
   padat, sehingga tidak memerlukan NMS saat inferensi. LibreYOLO mendukungnya
@@ -99,7 +98,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -220,7 +219,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 379a3a09691bf14b
+source_hash: 3238696a4e1ab6c2
 ---
 
 ## Instalasi
@@ -246,10 +245,11 @@ Jalur deteksi, segmentasi, dan kotak berorientasi memakai pengubahan ukuran bili
 
 ## Varian
 
-Empat ukuran dan empat task yang memakai satu arsitektur: segmentasi, pose, dan kotak
-berorientasi menggunakan kembali decoder deteksi dengan head berbeda, sehingga semuanya
-menerima argumen yang sama. Setiap ukuran memiliki jumlah parameter yang mirip dan terutama
-berbeda dalam resolusi input.
+Empat ukuran deteksi, `n` sampai `l`, dan empat task yang memakai satu arsitektur:
+segmentasi, pose, dan kotak berorientasi menggunakan kembali decoder deteksi dengan head
+berbeda, sehingga semuanya menerima argumen yang sama. Segmentasi menambahkan `x` dan
+`xx`, dan pose hanya tersedia dalam `x`. Setiap ukuran memiliki jumlah parameter yang mirip
+dan terutama berbeda dalam resolusi input.
 
 <benchmark-table task="detect" />
 
@@ -275,8 +275,8 @@ Proses baru memakai `output_dir=None` secara default, yang menghasilkan direktor
 
 ## Validasi
 
-`val()` mengembalikan dictionary dengan key `metrics/` yang mencakup presisi, recall,
-mAP 50, dan mAP 50-95, yang diukur terhadap dataset apa pun dalam format yang digunakan
+`val()` mengembalikan dictionary dengan key `metrics/` yang mencakup mAP 50, mAP 50-95,
+mAP 75, dan average recall COCO, yang diukur terhadap dataset apa pun dalam format yang digunakan
 untuk pelatihan.
 
 <code-tabs name="val" />

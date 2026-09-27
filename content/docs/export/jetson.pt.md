@@ -195,7 +195,7 @@ snippets:
         sudo jetson_clocks
 
         tegrastats            # carga ao vivo; o nvidia-smi é limitado no Tegra
-source_hash: c07ff908503e89b5
+source_hash: 42f4131b1a842bfd
 ---
 
 ## O que esta página registra
@@ -211,12 +211,10 @@ Outras versões do JetPack, outras placas Jetson e outras versões do CUDA não 
 testadas. A receita abaixo é a que funcionou nessa combinação.
 
 Essa execução foi em 2026-07-27 contra o LibreYOLO 1.4.0, e não foi repetida
-em hardware com 1.5.0: esta é a única página da árvore 1.5.0 que ainda carrega uma
-verificação de 1.4.0, e é por isso que o front matter diz `last_verified: "1.4.0"`.
-Nada nas mudanças de 1.5.0 mexe no caminho de instalação, nas quatro bibliotecas
-faltantes ou nas flags de exportação descritas aqui, então espera-se que os comandos
-continuem valendo, mas os números de versão nas saídas abaixo são os que a 1.4.0
-imprimiu, não uma medição de 1.5.0.
+em hardware com 1.5.0 ou 1.6.0; é por isso que o front matter diz
+`last_verified: "1.4.0"`. Espera-se que os comandos continuem valendo, mas os
+números de versão nas saídas abaixo são os que a 1.4.0 imprimiu, não uma medição
+de 1.6.0.
 
 Duas coisas nisso contrariam o que a maioria dos guias de Jetson diz. Os wheels são
 as builds aarch64 comuns publicadas para CUDA 13, então nenhuma build de torch

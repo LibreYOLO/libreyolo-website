@@ -226,8 +226,8 @@ Float arrays are rescaled by their own range: values at or below `1.0` are
 multiplied by 255, higher values are clipped into `[0, 255]`. An RGBA array
 drops its alpha channel.
 
-Remote paths need one package each, and none of them is installed by default:
-`requests` for `http(s)://`, `boto3` for `s3://`, and `gcsfs` for `gs://`.
+Remote paths need one package each. `requests`, for `http(s)://`, comes with the
+base install; `boto3` for `s3://` and `gcsfs` for `gs://` do not.
 
 Tracking accepts images, filename-sorted folders, lists, tuples and lazy image iterators as consecutive frames. Pass `fps=30.0` to define image-sequence timing and `color_format="auto"` to select input interpretation. See [tracking](/docs/tasks/object-tracking).
 
@@ -246,8 +246,10 @@ stacked forward pass per chunk on families that support it. See
 
 <code-tabs name="video" />
 
-A path counts as video when its suffix is one of `.asf`, `.avi`, `.gif`,
-`.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.ts`, `.wmv`, `.webm`.
+A path counts as video when its suffix is one of `.3g2`, `.3gp`, `.asf`,
+`.avi`, `.dav`, `.f4v`, `.flv`, `.gif`, `.h264`, `.h265`, `.hevc`, `.m2ts`,
+`.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.mts`, `.mxf`, `.ogv`, `.ts`,
+`.vob`, `.wmv`, `.webm`.
 
 `.gif` appears in both lists. A `.gif` path passed directly to `predict` is
 opened as video, because the video check runs first; a `.gif` sitting inside a
@@ -360,8 +362,9 @@ returning it.
 Images go to an auto-incrementing `runs/detect/predict`, `runs/detect/predict2`
 and so on, keeping the source filename. Every image in one process lands in the
 same directory, so two input folders holding the same filename overwrite each
-other. In-memory images have no filename to reuse and are numbered `image0`,
-`image1` and so on.
+other. In-memory images have no filename to reuse. A single one is saved as
+`inference`, so repeated calls overwrite it; a list or batch is numbered
+`image0`, `image1` and so on.
 
 Video and live sources are written as a single `.mp4` named after the source.
 

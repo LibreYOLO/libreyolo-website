@@ -113,7 +113,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 531a9b20e5532913
+source_hash: e13acb1e813da7c4
 ---
 
 ## 정의
@@ -172,7 +172,7 @@ names:
   1: sidewalk
 ```
 
-`masks_dir`는 `images`를 대체한 디렉토리 이름으로, 기본값은 `masks`입니다. `label_mapping`는 로드 시 픽셀 값을 마스킹하기 위해 적용되는 선택적 `{source_id: train_id}` 재매핑으로, 이를 통해 1에서 150까지 번호가 매겨진 데이터셋이 0에서 149가 됩니다; 매핑되지 않은 소스 값은 무시 처리되며, 모든 학습 ID는 `0..nc-1` 범위에 있어야 합니다.
+`masks_dir`는 `images`를 대체한 디렉토리 이름입니다. `label_mapping`는 로드 시 픽셀 값을 마스킹하기 위해 적용되는 선택적 `{source_id: train_id}` 재매핑으로, 이를 통해 1에서 150까지 번호가 매겨진 데이터셋이 0에서 149가 됩니다; 매핑되지 않은 소스 값은 무시 처리되며, 모든 학습 ID는 `0..nc-1` 범위에 있어야 합니다.
 
 `masks_dir`를 제외하면 로더가 대체 모드로 전환됩니다: 마스크는 일반적인 `images`에서 `labels` 규칙을 통해 해결된 폴리곤 레이블에서 로드 시점에 래스터화되며, 객체 클래스 뒤에 `background` 클래스가 추가되어 `nc`가 하나 증가합니다.
 

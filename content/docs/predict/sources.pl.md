@@ -222,7 +222,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c355ad28487c9a65
+source_hash: 81a0c947dbfe48b5
 ---
 
 ## Sposób klasyfikowania źródła
@@ -277,8 +277,9 @@ Tablice zmiennoprzecinkowe są skalowane według własnego zakresu: wartości ni
 większe niż `1.0` są mnożone przez 255, a wyższe przycinane do `[0, 255]`.
 W tablicy RGBA kanał alfa jest usuwany.
 
-Ścieżki zdalne wymagają po jednym pakiecie, z których żaden nie jest instalowany
-domyślnie: `requests` dla `http(s)://`, `boto3` dla `s3://` oraz `gcsfs` dla `gs://`.
+Ścieżki zdalne wymagają po jednym pakiecie. `requests`, potrzebny dla
+`http(s)://`, jest częścią instalacji podstawowej; `boto3` dla `s3://` i `gcsfs`
+dla `gs://` już nie.
 
 Śledzenie przyjmuje obrazy, foldery sortowane według nazw plików, listy, krotki i leniwe iteratory obrazów jako kolejne klatki. `fps=30.0` określa częstotliwość sekwencji obrazów, a `color_format="auto"` wybiera interpretację wejścia. Zobacz [śledzenie](/docs/tasks/object-tracking).
 
@@ -297,8 +298,10 @@ Zobacz [wydajność wnioskowania](/docs/predict/performance).
 
 <code-tabs name="video" />
 
-Ścieżka jest uznawana za wideo, gdy jej rozszerzenie jest jednym z: `.asf`, `.avi`,
-`.gif`, `.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.ts`, `.wmv`, `.webm`.
+Ścieżka jest uznawana za wideo, gdy jej rozszerzenie jest jednym z: `.3g2`,
+`.3gp`, `.asf`, `.avi`, `.dav`, `.f4v`, `.flv`, `.gif`, `.h264`, `.h265`,
+`.hevc`, `.m2ts`, `.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.mts`,
+`.mxf`, `.ogv`, `.ts`, `.vob`, `.wmv`, `.webm`.
 
 `.gif` występuje na obu listach. Ścieżka `.gif` przekazana bezpośrednio do
 `predict` jest otwierana jako wideo, ponieważ kontrola wideo odbywa się jako
@@ -412,7 +415,9 @@ Obrazy trafiają do automatycznie numerowanych katalogów `runs/detect/predict`,
 `runs/detect/predict2` i kolejnych, z zachowaniem nazwy pliku źródłowego. Każdy
 obraz w jednym procesie trafia do tego samego katalogu, więc dwa foldery wejściowe
 zawierające tę samą nazwę pliku nadpisują się. Obrazy w pamięci nie mają nazwy
-do ponownego użycia i są numerowane jako `image0`, `image1` i kolejne.
+do ponownego użycia. Pojedynczy obraz jest zapisywany jako `inference`, więc
+kolejne wywołania go nadpisują; obrazy z listy lub batcha są numerowane jako
+`image0`, `image1` i kolejne.
 
 Wideo i źródła na żywo są zapisywane jako pojedynczy plik `.mp4` nazwany według źródła.
 

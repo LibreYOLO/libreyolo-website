@@ -152,7 +152,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: ff50afedd377beaf
+source_hash: a407e1142b8aa57e
 ---
 
 ## Встановлення
@@ -180,12 +180,12 @@ source_hash: ff50afedd377beaf
 розмір усередині графа.
 
 Якщо `opset` не зазначено, його вибирають для кожного сімейства окремо. Сімейства
-у стилі DETR (`detr`, `deformable_detr`, `dinodetr`, `dfine`, `deim`, `deimv2`,
-`ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`), а також `deit`,
-`midas` і `moge2` отримують opset 17, де знижується `aten::scaled_dot_product`.
-Усі інші отримують 13. Для matting незалежно від налаштувань вибирається 19,
-оскільки декодеру BiRefNet потрібен оператор `DeformConv`, визначений у ONNX
-починаючи з opset 19.
+у стилі DETR (`detr`, `deformable_detr`, `dinodetr`, `dfine`, `gtr`, `deim`,
+`deimv2`, `tinyformer`, `ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`,
+`rtdetrv4`), а також `deit`, `midas`, `moge2` і `vjepa2` отримують opset 17, де
+знижується `aten::scaled_dot_product`. Усі інші отримують 13. Для BiRefNet і
+FeyNobg незалежно від налаштувань вибирається 19, оскільки їхньому декодеру
+потрібен оператор `DeformConv`, визначений у ONNX починаючи з opset 19.
 
 Параметр `simplify=True` запускає `onnxsim` і в разі невдачі зберігає початковий
 граф, тому помилка спрощення створює попередження, а не зупиняє експорт. У macOS
@@ -277,13 +277,15 @@ RF-DETR також є єдиним сімейством, вхідний тенз
 `batch != 1` і примусово встановлюють `dynamic=False`. Matting вимагає початкового
 квадратного розміру 1024, оскільки таблиці відносних позицій Swin у BiRefNet
 прив'язані до своєї роздільної здатності. Відновлення вимагає фіксованого полотна
-для всіх сімейств, крім Real-ESRGAN, генератор якого є повністю згортковим.
+для всіх сімейств, крім Real-ESRGAN і QuickSRNet, мережі яких є повністю
+згортковими.
 
-Прямокутний `imgsz` працює для сімейств YOLO9, HRNet, NAFNet та Real-ESRGAN.
-Сімейства з контрактом фіксованої квадратної форми (`clip`, `deformable_detr`,
-`detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`, `moge2`,
-`rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`, `ssd`) одразу його
-відхиляють.
+Прямокутний `imgsz` працює для сімейств YOLO9, HRNet, NAFNet, PP-LiteSeg,
+Real-ESRGAN, QuickSRNet і семантичної сегментації GTR. Сімейства з контрактом
+фіксованої квадратної форми (`clip`, `deformable_detr`, `detr`, `dinodetr`,
+`dfine`, `gtr`, крім семантичної сегментації, `deim`, `deimv2`, `tinyformer`,
+`ec`, `lwdetr`, `moge2`, `rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`,
+`ssd`) одразу його відхиляють.
 
 Два поєднання відхиляються ще до трасування: сегментація YOLO9, оскільки YOLO9
 підтримує в LibreYOLO лише виявлення, і сегментація RTMDet-Ins, декодування масок

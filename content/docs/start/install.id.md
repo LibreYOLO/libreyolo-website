@@ -69,7 +69,7 @@ snippets:
         # Family yang ekstra-nya belum ada dicantumkan bersama perintah pip
         # yang mengaktifkannya.
         libreyolo models
-source_hash: 531023c2092fd751
+source_hash: 3ad6bb09bf2f5434
 ---
 
 ## Instalasi
@@ -187,6 +187,10 @@ berhasil di semua tempat dan hanya menginstal lebih sedikit jika wheel tidak ada
 
 `sensenova` melewati `bitsandbytes` pada macOS karena tidak ada wheel yang
 diterbitkan; bagian lain ekstra tetap diinstal secara normal.
+
+`vlm` tidak dibatasi platform: pin `decord==0.6.0`-nya hanya memiliki wheel untuk
+Linux x86-64 dan Windows. Di macOS dan Linux ARM, `vlm`, `ground`, `vlm-train`
+dan `all` gagal diinstal.
 
 Jika disk menjadi constraint, sebagian besar ruang digunakan PyTorch, dan
 sebagian besar PyTorch adalah payload CUDA dalam wheel default. Wheel khusus

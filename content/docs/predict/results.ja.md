@@ -113,12 +113,12 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: 201eca6457cf87a4
+source_hash: cebaac95f0a28b5f
 ---
 
 ## 1オブジェクト、ペイロードごとに1スロット
 
-1枚の画像に対する推論は1つの`Results`を返します。18個のペイロードスロットがあり、モデルは自身のタスクが生成するものだけを埋めます。そのほかのスロットはすべて`None`なので、検出器で`result.masks`を読み取るとエラーではなく`None`になります。
+1枚の画像に対する推論は1つの`Results`を返します。21個のペイロードスロットがあり、モデルは自身のタスクが生成するものだけを埋めます。そのほかのスロットはすべて`None`なので、検出器で`result.masks`を読み取るとエラーではなく`None`になります。
 
 | スロット | クラス | 形状 | 生成するタスク |
 |---|---|---|---|
@@ -140,6 +140,9 @@ source_hash: 201eca6457cf87a4
 | `embeddings` | `Embeddings` | `(N, D)`のL2正規化済み行 | `embed`タスク |
 | `identities` | `Identities` | N個の名前とスコア | ギャラリーを伴う`embed`タスク |
 | `meshes` | `Meshes` | 身体パラメータと任意の頂点 | 人体メッシュ復元 |
+| `albedo` | `AlbedoMap` | `(H, W, 3)`の線形RGB | アルベド推定 |
+| `boxes3d` | `Boxes3D` | カメラ座標系の`(N, 14)`直方体（`boxes`と行が対応） | 単眼3D検出 |
+| `actions` | `Actions` | `(T, D)`のアクションチャンク | ロボットポリシー |
 
 これらに加えて、すべての結果が持つフィールドがあります。`orig_shape`は`(height, width)`、`path`はソースパス（メモリ内入力では`None`）、`names`はクラスIDからクラス名へのマッピング、`frame_idx`は動画とライブフレーム用、`track_id`はトラッキング時に使われます。`restore_scale`は復元結果の整数アップスケール係数です。
 
@@ -226,7 +229,7 @@ source_hash: 201eca6457cf87a4
 
 ファイルの保存先と`output_path`および`output_file_format`の動作については[推論ソース](/docs/predict/sources)を参照してください。
 
-`plot()`はすべてのタスクのペイロードに対応します。画像への重ね合わせは、デフォルトで連続したHxWx3のuint8 BGR配列を返します。`pil=True`でPILを要求できます。既存のエッジと法線マップの経路では、PILを返すデフォルトを維持します。`orig_img`はメモリ内とURLのソースでBGRピクセルを保持します。ローカルファイルと、収集した有限長動画のフレームは再び開けます。
+`plot()`はすべてのタスクのペイロードに対応します。画像への重ね合わせは、デフォルトで連続したHxWx3のuint8 BGR配列を返します。`pil=True`でPILを要求できます。深度マップ、法線マップ、エッジマップ、アルベドマップ、3D直方体、アクションチャンクは、デフォルトでPIL画像を返します。`pil=False`で配列を返します。`orig_img`はメモリ内とURLのソースでBGRピクセルを保持します。ローカルファイルと、収集した有限長動画のフレームは再び開けます。
 
 制御引数には`img`、`conf`、`labels`、`boxes`、`masks`、`probs`、`line_width`、`pil`、`show`、`save`、`filename`があります。保存した分類画像には上位5つのラベルが含まれます。マットの保存ではRGBAの切り抜きを書き出します。
 
@@ -234,7 +237,7 @@ source_hash: 201eca6457cf87a4
 
 <code-tabs name="exported" />
 
-`LibreYOLO()`はファイルサフィックスで振り分けるため、エクスポートした成果物は`.pt`チェックポイントと同じ呼び出しで読み込まれ、同じ`Results`を返します。`.onnx`、`.engine`、`.pte`、`.mnn`ファイルはサフィックスで認識され、OpenVINO、Paddle、ncnnのディレクトリとTritonモデルURLも認識されます。モデルをエクスポート済みビルドへ切り替えても、`result.boxes.xyxy`を読み取るコードは変わりません。すべての形式については[エクスポート](/docs/export)を参照してください。
+`LibreYOLO()`はファイルサフィックスで振り分けるため、エクスポートした成果物は`.pt`チェックポイントと同じ呼び出しで読み込まれ、同じ`Results`を返します。`.onnx`、`.torchscript`、`.engine`、`.pte`、`.tflite`、`.mnn`ファイルはサフィックスで認識され、OpenVINO、Paddle、ncnn、Core ML `.mlpackage`のディレクトリとTritonモデルURLも認識されます。モデルをエクスポート済みビルドへ切り替えても、`result.boxes.xyxy`を読み取るコードは変わりません。すべての形式については[エクスポート](/docs/export)を参照してください。
 
 代わりにランタイム固有のAPIを使う場合は、前処理、後処理、クラス名を自分で管理する必要があります。
 

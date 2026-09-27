@@ -133,7 +133,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 483562cad2c02696
+source_hash: 52050c4046781a6e
 ---
 
 ## Instalacja
@@ -220,9 +220,10 @@ punktu kontrolnego Deci nie zmienia ani pochodzenia wag, ani obejmującej je lic
 
 Nie ma żadnych do wyświetlenia. Licencja Deci zabrania redystrybucji, dlatego
 organizacja LibreYOLO nie publikuje żadnych wag YOLO-NAS, a pobieranie jest
-kierowane gdzie indziej. Nazwa w postaci `LibreYOLONAS<size>.pt` albo
-`LibreYOLONAS<size>-pose.pt` dla estymacji pozy jest mapowana na odpowiedni
-obiekt w publicznym CDN Deci.
+kierowane gdzie indziej. Nazwa w postaci `LibreYOLONAS<size>.pt`,
+`LibreYOLONAS<size>-pose.pt` dla estymacji pozy albo
+`LibreYOLONAS<size>-obb.pt` (s, m, l) dla obróconych ramek jest mapowana na
+odpowiedni obiekt w publicznym CDN Deci.
 
 W ten sposób można pobierać tylko punkty kontrolne, których SHA-256 jest
 przypięte w bibliotece. Każdy inny przypadek jest bezpiecznie odrzucany zamiast

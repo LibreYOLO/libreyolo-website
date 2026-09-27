@@ -55,7 +55,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `recipe=int8` and
 | `calib` | `coco128.yaml` | Calibration images: a data YAML or a built-in dataset name. Unlabeled, forward only. `none` skips calibration |
 | `samples` | `128` | Maximum calibration images |
 | `batch` | `8` | Calibration batch size |
-| `algorithm` | `auto` | Activation range estimation: `auto`, which selects minmax, or `minmax`, or `percentile` |
+| `algorithm` | `auto` | Activation range estimation: `auto` (minmax), `minmax`, `percentile`, `mse` or `entropy` |
 | `out` | | Output checkpoint path. Defaults to the source path with `-<recipe>` before the suffix |
 | `device` | `auto` | Device |
 | `allow_download_scripts` | `false` | Allow embedded Python in dataset YAML download blocks |

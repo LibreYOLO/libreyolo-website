@@ -43,7 +43,7 @@ snippets:
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot() 会把概率图画出来，边缘结果和法线结果都有定义
+        # plot() 把渲染好的概率图以 PIL 图像返回
         result.plot().save("edges.png")
   val:
     - label: 验证并读取指标键
@@ -90,7 +90,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.edges.array.shape)
-source_hash: bc286345540ed966
+source_hash: 1784d723c3ca99db
 ---
 
 ## 定义

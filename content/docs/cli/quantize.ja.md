@@ -43,7 +43,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 663390776f2f2c15
+source_hash: 409bc0b2ace6547e
 ---
 
 ## 概要
@@ -64,7 +64,7 @@ libreyolo quantize model=<name|path> [recipe=<recipe>] [key=value ...]
 | `calib` | `coco128.yaml` | キャリブレーション画像：データYAML、または組み込みデータセットの名前。ラベルなしで、順伝播のみ。`none`でキャリブレーションをスキップ |
 | `samples` | `128` | キャリブレーション画像の最大枚数 |
 | `batch` | `8` | キャリブレーションのバッチサイズ |
-| `algorithm` | `auto` | 活性化範囲の推定：`auto`（minmaxを選択）、`minmax`、`percentile` |
+| `algorithm` | `auto` | 活性化範囲の推定：`auto`（minmax）、`minmax`、`percentile`、`mse`、`entropy` |
 | `out` | | 出力チェックポイントのパス。デフォルトは接尾辞の前に`-<recipe>`を付けたソースパス |
 | `device` | `auto` | デバイス |
 | `allow_download_scripts` | `false` | データセットYAMLのダウンロードブロックに埋め込まれたPythonを許可 |

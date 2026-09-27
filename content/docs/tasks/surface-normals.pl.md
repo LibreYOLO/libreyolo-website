@@ -58,18 +58,13 @@ snippets:
         print(field[h // 2, w // 2])
     - label: Zapisywanie wizualizacji
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("LibreMoGe2s-normal.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
-        # plot() renderuje pole; jest zdefiniowane dla wyników normalnych i
-        krawędzi.
-
+        # plot() zwraca wyrenderowane pole jako obraz PIL.
         result.plot().save("normals.png")
   val:
     - label: Walidacja i odczytywanie kluczy metryk
@@ -109,7 +104,7 @@ snippets:
 
 
         print(result.normal_map.data.shape)
-source_hash: b033fdf3a2210ce5
+source_hash: dd8de1b1ecd208bf
 ---
 
 ## Definicja

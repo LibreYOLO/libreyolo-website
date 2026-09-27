@@ -16,7 +16,7 @@ keywords:
   - libreyolo cuda
   - libreyolo gpu
   - системні вимоги libreyolo
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: Пакет
     value: libreyolo
@@ -70,7 +70,7 @@ snippets:
         # роздільною здатністю входу. Для сімейств без потрібного набору
         # залежностей наведено команду pip, яка їх вмикає.
         libreyolo models
-source_hash: 531023c2092fd751
+source_hash: 3ad6bb09bf2f5434
 ---
 
 ## Встановлення
@@ -195,6 +195,10 @@ wheel-пакета.
 
 `sensenova` пропускає `bitsandbytes` у macOS, для якої не опубліковано
 wheel-пакета; решта набору встановлюється звичайним способом.
+
+Область дії `vlm` не обмежено платформами: його закріплена версія
+`decord==0.6.0` має wheel-пакети лише для Linux x86-64 і Windows. У macOS і
+Linux на ARM набори `vlm`, `ground`, `vlm-train` і `all` не встановлюються.
 
 Якщо обмеженням є місце на диску, більшість займає PyTorch, а більшу частину
 PyTorch становлять компоненти CUDA, включені до його типового wheel-пакета.

@@ -14,8 +14,11 @@ keywords:
   - SmolVLM2
   - Florence-2
   - libreyolo chat
-last_verified: "1.6.0"
-verification: "别名读自 libreyolo/models/vlm/__init__.py；仓库、尺寸和任务列表读自 libreyolo/models/vlm/ 下的各家族模块，以及 libreyolo/models/sensenova/model.py；调用规则和抛出的异常读自 libreyolo/models/vlm/base.py，均为 v1.6.0。"
+last_verified: 1.6.0
+verification: >-
+  别名读自 libreyolo/models/vlm/__init__.py；仓库、尺寸和任务列表读自 libreyolo/models/vlm/
+  下的各家族模块，以及 libreyolo/models/sensenova/model.py；调用规则和抛出的异常读自
+  libreyolo/models/vlm/base.py，均为 v1.6.0。
 snippets:
   install:
     - label: bash
@@ -41,7 +44,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 77a04856cfe4f88c
+source_hash: a9e0d635a6645d2c
 ---
 
 ## 安装
@@ -84,7 +87,7 @@ LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 `LibreFlorence2`、`LibreKosmos2`、`LibreLocateAnything` 和 `LibreMODUS`
 （也可以写成 `LibreModus`）在包级别导出。
 
-检测还包括 `north-micro-vision`、`gemma-4-e2b`、`gemma-4-e4b`、`moondream-2`、`moondream-3` 和 `lfm2-vl-3b`。不带后缀的 `gemma-4` 别名选择 E4B。Molmo2 别名为 `molmo2-4b`、`molmo2-8b` 和 `molmo2-o-7b`；默认选择 4B。别名确定路由，并不表示每个远程快照都已下载并测试。
+检测还包括 `north-micro-vision`、`gemma-4-e2b`、`gemma-4-e4b`、`moondream-2`、`moondream-3` 和 `lfm2-vl-3b`。不带后缀的 `gemma-4` 别名选择 E4B。Molmo2 别名为 `molmo2-4b`、`molmo2-8b` 和 `molmo2-o-7b`；默认选择 4B。别名确定路由，并不表示每个远程快照都已下载并测试。`moondream-3` 在 1.6.0 中无法加载：它的镜像缺少权重分片。
 
 ## 任务
 

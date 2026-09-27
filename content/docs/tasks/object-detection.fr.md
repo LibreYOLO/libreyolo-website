@@ -129,7 +129,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 60bb0f5b7cf31cb7
+source_hash: 01ee5ee9eea3b569
 ---
 
 ## Définition
@@ -192,6 +192,8 @@ ainsi que les familles vision-langage [Florence-2](/docs/models/florence-2),
 [Kosmos-2](/docs/models/kosmos-2), [Qwen3-VL](/docs/models/qwen3-vl),
 [SmolVLM2](/docs/models/smolvlm2), [InternVL3](/docs/models/internvl3),
 [LFM2-VL](/docs/models/lfm2-vl),
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream),
+[North Micro Vision](/docs/models/northmicrovision),
 [LocateAnything](/docs/models/locate-anything),
 [SenseNova-Vision](/docs/models/sensenova-vision) et
 [LibreMODUS](/docs/models/libremodus). Ces modèles se chargent par leur propre

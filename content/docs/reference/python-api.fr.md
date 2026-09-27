@@ -79,7 +79,7 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 02fbec762b1ffced
+source_hash: 7dc6a5ef1b3ba9ea
 ---
 
 ## Points d'entrée
@@ -129,7 +129,7 @@ tâche canonique de `libreyolo.tasks.TASKS`.
 
 Chaque famille que la fabrique peut renvoyer est également exportée par nom.
 Vous pouvez ainsi construire directement une classe lorsque le checkpoint est
-connu à l'avance. Les constructeurs suivent `BaseModel.__init__`\u00a0:
+connu à l'avance. Les constructeurs suivent `BaseModel.__init__` :
 
 ```python
 Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
@@ -137,34 +137,42 @@ Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 
 Les valeurs par défaut du constructeur varient selon la famille ; consultez sa signature avant de l'appeler directement. YOLO9 et ses variantes insèrent `reg_max: int = 16` après `size`.
 
-Familles de détection et multitâches\u00a0: `LibreYOLO9`, `LibreYOLO9E2E`,
+Familles de détection et multitâches : `LibreYOLO9`, `LibreYOLO9E2E`,
 `LibreYOLO9P2`, `LibreYOLONAS`, `LibreYOLOX`, `LibreYOLO7`, `LibreYOLO4`,
 `LibreYOLO3`, `LibreYOLO2`, `LibreYOLO1`, `LibreRTDETR`, `LibreRTDETRv2`,
 `LibreRTDETRv4`, `LibreRFDETR`, `LibreDFINE`, `LibreDOMEDETR`, `LibreDEIM`,
 `LibreDEIMv2`, `LibreDETR`, `LibreDeformableDETR`, `LibreDINODETR`,
 `LibreLWDETR`, `LibreMaskRCNN`, `LibreFCOS`, `LibreFasterRCNN`,
 `LibreRetinaNet`, `LibreSSD`, `LibreCenterNet`, `LibreEfficientDet`,
-`LibreEC`, `LibrePICODET`, `LibreRTMDet`, `LibreFOMO`.
+`LibreEC`, `LibreGTR`, `LibreTinyFormer`, `LibrePICODET`, `LibrePPYOLOE`,
+`LibreRTMDet`, `LibreFOMO`.
 
-Familles de prédiction dense\u00a0: `LibreMiDaS`, `LibreDepthAnythingV2`,
+Familles de prédiction dense : `LibreMiDaS`, `LibreDepthAnythingV2`,
 `LibreDepthAnything3`, `LibreZipDepth`, `LibreMoGe2`, `LibreTEED`,
 `LibreDexiNed`, `LibreNAFNet`, `LibreRealESRGAN`, `LibreSwinIR`,
 `LibreBiRefNet`, `LibreFeyNobg`, `LibreFCN`, `LibreEoMT`, `LibreDeepLabv3`,
-`LibrePIDNet`, `LibreSegformer`, `LibreLingBotVision`.
+`LibrePIDNet`, `LibrePPLiteSeg`, `LibreUNet`, `LibreSegformer`,
+`LibreLingBotVision`, `LibreMarigoldV2`, `LibreDDColor`, `LibreHVICIDNet`,
+`LibreLaMa`, `LibreQuickSRNet`, `LibreBEN2`, `LibreViTMatte`.
 
-Familles de classification et d'embeddings\u00a0: `LibreViT`, `LibreMobileNetV4`,
+Familles de classification et d'embeddings : `LibreViT`, `LibreMobileNetV4`,
 `LibreConvNeXt`, `LibreDeiT`, `LibreSwin`, `LibreEfficientNetV2`, `LibreVGG`,
-`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`.
+`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`,
+`LibreConvNeXtV2`, `LibrePE`, `LibreVJEPA2`, `LibreLeVJEPA`.
 
-Autres tâches\u00a0: `LibreHRNet` (pose), `LibreL2CS` (gaze), `LibrePPOCR` (ocr),
-`LibreFaceEmbedder` (embed).
+Autres tâches : `LibreHRNet` et `LibreDEKR` (pose), `LibreL2CS` (gaze),
+`LibrePPOCR` (ocr), `LibreFaceEmbedder` (embed), ainsi que les détecteurs 3D
+`LibreFCOS3D`, `LibreDetAny3D`, `LibreWildDet3D` et `Libre3DMOOD` (detect3d).
 
-Les niveaux frères exportent également leurs classes de familles\u00a0: `LibreSAM1`,
-`LibreSAM2`, `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`\u00a0;
-`LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo`\u00a0; `LibreLFM2VL`,
+Les niveaux frères exportent également leurs classes de familles : `LibreSAM1`,
+`LibreSAM2`, `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3` ;
+`LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo` ; `LibreLFM2VL`,
 `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`,
-`LibreKosmos2`, `LibreLocateAnything`, `LibreMODUS` (également orthographié
-`LibreModus`).
+`LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`,
+`LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (également orthographié
+`LibreModus`) ; `LibreShowUI`, `LibreGroundFlorence2` et `LibreGroundQwen3VL`
+derrière `LibreGround` ; `LibreSmolVLA`, `LibreACT` et `LibreDiffusionPolicy`
+derrière `LibreVLA`.
 
 ## Interface de prédiction
 
@@ -206,7 +214,7 @@ de l'[API du modèle](/docs/reference/model-api).
 ## Charges utiles Results
 
 `Results` et ses classes de charges utiles sont exportés au niveau du
-package\u00a0: `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`,
+package : `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`,
 `Gaze`, `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`,
 `NormalMap`, `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`,
 `Identities`. Chacune est décrite dans les
@@ -218,7 +226,7 @@ package\u00a0: `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB
 
 Les artefacts exportés se chargent dans `LibreYOLO()` selon le suffixe du
 fichier, les classes de backends sont donc rarement construites manuellement.
-Elles sont exportées pour les cas où un backend doit être choisi explicitement\u00a0:
+Elles sont exportées pour les cas où un backend doit être choisi explicitement :
 `OnnxBackend`, `OpenVINOBackend`, `PaddleBackend`, `TensorRTBackend`,
 `TritonBackend`, `NcnnBackend`, `CoreMLBackend`, ainsi que
 `create_triton_config`. `BaseExporter` est le registre d'exporteurs utilisé
@@ -228,14 +236,14 @@ par `model.export()`.
 
 `model.val()` sélectionne le validateur adapté à la tâche. Les éléments
 suivants sont donc exportés pour un usage direct et pour la création de
-sous-classes\u00a0: `DetectionValidator`, `SegmentationValidator`, `PoseValidator`,
+sous-classes : `DetectionValidator`, `SegmentationValidator`, `PoseValidator`,
 `SemanticValidator`, `PanopticValidator`, `DepthValidator`, `NormalValidator`,
 `EdgeValidator` et le `ValidationConfig` partagé.
 
 ## Suivi
 
 `model.track()` sélectionne un tracker par nom. Les classes de trackers et
-leurs dataclasses de configuration sont également exportées\u00a0: `ByteTracker`
+leurs dataclasses de configuration sont également exportées : `ByteTracker`
 avec `TrackConfig`, `BoTSortTracker` avec `BoTSortConfig` et `OCSortTracker`
 avec `OCSortConfig`.
 
@@ -270,5 +278,5 @@ Importer `libreyolo` n'importe donc pas leurs dépendances. L'import échoue
 tout de même avec un message explicite lorsque l'extra requis manque.
 
 Deux classes ont été renommées et leur ancienne orthographe continue de se
-résoudre avec un `DeprecationWarning`\u00a0: `LibreYOLORTDETR` s'appelle désormais
+résoudre avec un `DeprecationWarning` : `LibreYOLORTDETR` s'appelle désormais
 `LibreRTDETR` et `LibreYOLORFDETR` s'appelle désormais `LibreRFDETR`.

@@ -2,11 +2,12 @@
 title: libreyolo predict
 seo_title: Tham chiếu lệnh libreyolo predict
 description: >-
-  Chạy suy luận (inference) từ dòng lệnh: mọi tham số, giá trị mặc định đọc thẳng từ định nghĩa CLI, và các cờ
-  quyết định những gì được in ra stdout.
+  Chạy suy luận (inference) từ dòng lệnh: mọi tham số, giá trị mặc định đọc
+  thẳng từ định nghĩa CLI, và các cờ quyết định những gì được in ra stdout.
 lead: >-
-  Chạy một mô hình đã tải trên một nguồn và in ra các dự đoán. Nguồn có thể là ảnh, thư mục, video, URL hoặc
-  luồng (stream) trực tiếp; mô hình có thể là checkpoint hoặc một artifact đã xuất.
+  Chạy một mô hình đã tải trên một nguồn và in ra các dự đoán. Nguồn có thể là
+  ảnh, thư mục, video, URL hoặc luồng (stream) trực tiếp; mô hình có thể là
+  checkpoint hoặc một artifact đã xuất.
 keywords:
   - libreyolo predict cli
   - lệnh inference libreyolo
@@ -22,7 +23,9 @@ meta:
     value: source
     mono: true
   - label: Đầu ra
-    value: 'Dự đoán in ra stdout. Với save=true, các tệp đã vẽ chú thích nằm trong runs/detect/predict'
+    value: >-
+      Dự đoán in ra stdout. Với save=true, các tệp đã vẽ chú thích nằm trong
+      runs/detect/predict
 snippets:
   examples:
     - label: Cơ bản
@@ -38,12 +41,14 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: 'Lọc lớp đối tượng, JSON trên stdout'
       language: bash
-      code: |
+      code: >
         # lớp đối tượng 0 là person trong danh sách lớp COCO đi kèm checkpoint
-        libreyolo predict model=LibreYOLO9s.pt classes="[0]" conf=0.4 max_det=50 \
+
+        libreyolo predict model=LibreYOLO9s.pt classes="[0]" conf=0.4 max_det=50
+        \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 56d898992f1b129c
+source_hash: 21374ebc0e6cf4d3
 ---
 ## Cú pháp
 
@@ -111,8 +116,10 @@ giá trị hợp lệ cho `model`. Có ba tùy chọn bị từ chối trên cá
 vì bị bỏ qua: `tiling`, `overlap_ratio` và `output_file_format` sẽ thoát với
 `config_unsupported` khi một backend runtime không thể đáp ứng chúng.
 
-`half` thì ngược lại. Các runtime đã xuất nhận tham số này và chạy ở FP16;
-inference PyTorch gốc ghi log rằng nó bị bỏ qua và tiếp tục chạy ở FP32.
+`half` thì ngược lại: tham số này được chấp nhận và bị bỏ qua. Inference PyTorch
+gốc ghi log rằng nó bị bỏ qua và tiếp tục chạy ở FP32, còn runtime đã xuất giữ
+nguyên precision đã dùng lúc xuất, nên muốn inference FP16 thì phải xuất với
+`half=true`.
 
 Các mô hình gaze gồm hai giai đoạn và không có bộ phát hiện của riêng chúng,
 nên `face_detector` là bắt buộc với chúng. `gallery` chỉ áp dụng cho các mô

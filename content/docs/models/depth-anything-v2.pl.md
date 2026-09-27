@@ -105,7 +105,7 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: e1043aba1b70b65c
+source_hash: de71e994a0b6d8b4
 ---
 ## Instalacja
 
@@ -121,7 +121,7 @@ Wagi są pobierane z Hugging Face przy pierwszym użyciu i są przechowywane w p
 
 <code-tabs name="predict" />
 
-`result.depth_map` przenosi gęstą względną mapę odwrotnej głębokości: wyższe wartości oznaczają bliżej kamery, a wartości te nie mają jednostki metrycznej ani skali międzyobrazowej. `save=True` zapisuje wizualizację tej mapy z kolorami na dysk; `Results.plot()` nie obejmuje tej rodziny, ponieważ jest zdefiniowana tylko dla normalnych powierzchni i krawędzi. Rozdzielczość wejściowa musi dzielić się dokładnie przez 14, czyli przez siatkę patchy DINOv2, na której buduje się głowica DPT; LibreYOLO sprawdza to przed uruchomieniem i zgłasza błąd, jeśli tak nie jest. Zobacz [predykcja](/docs/predict) dla źródeł, streaming i obsługi wyników.
+`result.depth_map` przenosi gęstą względną mapę odwrotnej głębokości: wyższe wartości oznaczają bliżej kamery, a wartości te nie mają jednostki metrycznej ani skali międzyobrazowej. `save=True` zapisuje wizualizację tej mapy z kolorami na dysk; `Results.plot()` renderuje mapę głębi jako obraz PIL, a `pil=False` zwraca zamiast tego tablicę. Rozdzielczość wejściowa musi dzielić się dokładnie przez 14, czyli przez siatkę patchy DINOv2, na której buduje się głowica DPT; LibreYOLO sprawdza to przed uruchomieniem i zgłasza błąd, jeśli tak nie jest. Zobacz [predykcja](/docs/predict) dla źródeł, streaming i obsługi wyników.
 
 ## Warianty
 

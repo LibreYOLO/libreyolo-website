@@ -3,7 +3,9 @@ title: YOLO-NAS
 families:
   - yolonas
 seo_title: 'YOLO-NAS: faça predições, treine e exporte no LibreYOLO'
-description: "Detecção, pose e caixas orientadas YOLO-NAS no LibreYOLO. Os pesos pré-treinados upstream são não comerciais."
+description: >-
+  Detecção, pose e caixas orientadas YOLO-NAS no LibreYOLO. Os pesos
+  pré-treinados upstream são não comerciais.
 lead: >-
   Um detector convolucional cujo backbone e neck saíram da busca de arquiteturas
   da Deci.AI, construído com blocos RepVGG preparados para quantização. Seus
@@ -129,7 +131,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 483562cad2c02696
+source_hash: 52050c4046781a6e
 ---
 
 ## Instalação
@@ -218,9 +220,9 @@ licença que os cobre.
 
 Não há nenhum para listar. A licença da Deci proíbe a redistribuição, então a
 organização do LibreYOLO não publica pesos do YOLO-NAS e o download é resolvido
-em outro lugar: um nome no formato `LibreYOLONAS<size>.pt`, ou
-`LibreYOLONAS<size>-pose.pt` para pose, corresponde ao objeto equivalente na CDN
-pública da Deci.
+em outro lugar: um nome no formato `LibreYOLONAS<size>.pt`,
+`LibreYOLONAS<size>-pose.pt` para pose, ou `LibreYOLONAS<size>-obb.pt` (s, m, l)
+para caixas orientadas, corresponde ao objeto equivalente na CDN pública da Deci.
 
 Só dá para baixar assim os checkpoints cujo SHA-256 a biblioteca fixa. Qualquer
 outra coisa falha de forma fechada em vez de abrir um pickle de terceiros não

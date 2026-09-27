@@ -16,7 +16,7 @@ keywords:
   - polygon labels
   - MIT lizenz segmentierung bibliothek
   - mask mAP
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -123,7 +123,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 3d956e53e80143c2
+source_hash: 577cd3c8c2d5d6fe
 ---
 
 ## Definition
@@ -148,14 +148,17 @@ Kontur normalisiert.
 
 ## Modelle
 
-Fünf Familien trainieren und sagen Masken vorher:
+Vier Familien trainieren und sagen Masken vorher:
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
-[D-FINE](/docs/models/d-fine), [GTR](/docs/models/gtr) und [RTMDet](/docs/models/rtmdet). RF-DETR braucht
-sein eigenes Extra, `pip install "libreyolo[rfdetr]"`; die anderen vier laufen
+[D-FINE](/docs/models/d-fine) und [GTR](/docs/models/gtr). RF-DETR braucht
+sein eigenes Extra, `pip install "libreyolo[rfdetr]"`; die anderen drei laufen
 mit dem Basispaket.
 
 [Mask R-CNN](/docs/models/mask-rcnn) sagt Masken vorher, validiert und
 exportiert sie, aber sein `train()` löst `NotImplementedError` aus.
+[RTMDet](/docs/models/rtmdet) sagt Masken vorher und validiert sie, aber das
+Training der Segmentierung löst `NotImplementedError` aus; RTMDet trainiert nur als
+Detektor.
 
 [EoMT](/docs/models/eomt) sagt Masken vorher und validiert sie, kann ebenfalls
 nicht trainieren, und sein Export ist noch enger gefasst: `export()` akzeptiert

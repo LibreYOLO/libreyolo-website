@@ -66,7 +66,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: "288ee5ee988f2fda"
+source_hash: c8d7adb6aabcbc80
 ---
 
 ## 변경 전 측정
@@ -169,6 +169,12 @@ YOLOX는 실행 도중 캡처된 영역이 계산하는 내용을 변경하며, 
 `amp=False`에서 비트 동일성(bit-identical)은 캡처 여부와 관계없이 이 하드웨어의 어떤 것에서도 사용할 수 없습니다. 동일한 시드로 초기화된 두 개의 즉시 실행(eager) YOLOv9-t 실행은 20단계 동안 상대적으로 36퍼센트 차이가 나며, YOLOX-t는 2.6퍼센트 차이를 보입니다. 이는 cuDNN이 일부 fp32 컨볼루션 형태에 대해 비결정적(non-deterministic) 가중치-기울기 알고리즘을 선택하기 때문입니다.
 
 캡처된 그래프는 정적 입력, 출력 및 워크스페이스 버퍼를 고정하므로, VRAM 피크가 대략 한 세트의 추가 활성화만큼 상승합니다. 위의 다양한 모델 계열에서, 피크 할당량은 -5%에서 +19% 사이로 이동했습니다. 상대적인 비용은 처음부터 활성화가 작은 소형 분류 모델에서 가장 큽니다: 224px의 ResNet-18, 배치 16, eager 모드에서 0.48GB였던 것이 graphed 모드에서 0.57GB로 증가했습니다. 실행이 한도를 초과한다면, 배치를 줄이거나 해당 플래그를 끄십시오.
+
+## torch.compile
+
+`train(compile=True)`는 `torch.compile`로 네트워크의 순전파와 역전파를 컴파일합니다. `"default"`, `"reduce-overhead"`, `"max-autotune"`, `"max-autotune-no-cudagraphs"` 모드도 받으며, 기본값은 `False`입니다. 손실, 옵티마이저, EMA, 검증, 체크포인트, 내보내기는 즉시 실행 모드로 유지되며, 체크포인트는 컴파일 없이 로드됩니다. 단일 GPU CUDA 실행만 컴파일됩니다. CPU, MPS, 분산, 증류 실행과 컴파일러 실패 시에는 경고를 출력한 뒤 즉시 실행 모드로 학습합니다. 컴파일에는 몇 분이 걸리며 학습 호스트에 C 컴파일러와 Python 헤더가 필요합니다.
+
+`train()` 중에 `OMP_NUM_THREADS`가 설정되어 있지 않으면 LibreYOLO는 PyTorch CPU 스레드 수를 프로세스의 CPU 할당량으로 낮추므로, CPU가 제한된 컨테이너에서 매 스텝이 스로틀링되지 않습니다.
 
 ## 관련된
 

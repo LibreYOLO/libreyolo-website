@@ -16,7 +16,7 @@ keywords:
   - etiquetas de polígonos yolo
   - segmentación de instancias licencia MIT
   - mAP de máscaras
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -135,7 +135,7 @@ snippets:
 
 
         print(result.masks.data.shape)
-source_hash: 3d956e53e80143c2
+source_hash: 577cd3c8c2d5d6fe
 ---
 
 ## Definición
@@ -160,13 +160,15 @@ máscara en su mayor contorno exterior como un array de píxeles `(P, 2)`, y
 
 ## Modelos
 
-Cinco familias entrenan y predicen máscaras: [RF-DETR](/docs/models/rf-detr),
-[EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine),
-[GTR](/docs/models/gtr) y [RTMDet](/docs/models/rtmdet). RF-DETR necesita su propio extra,
-`pip install "libreyolo[rfdetr]"`; las otras cuatro funcionan con el paquete base.
+Cuatro familias entrenan y predicen máscaras: [RF-DETR](/docs/models/rf-detr),
+[EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine) y
+[GTR](/docs/models/gtr). RF-DETR necesita su propio extra,
+`pip install "libreyolo[rfdetr]"`; las otras tres funcionan con el paquete base.
 
 [Mask R-CNN](/docs/models/mask-rcnn) predice, valida y exporta máscaras, pero su
-`train()` lanza `NotImplementedError`.
+`train()` lanza `NotImplementedError`. [RTMDet](/docs/models/rtmdet) predice y
+valida máscaras, pero entrenar segmentación lanza `NotImplementedError`; solo
+entrena como detector.
 
 [EoMT](/docs/models/eomt) predice y valida máscaras y tampoco puede entrenar, y
 su exportación es aún más estrecha: `export()` solo acepta la tarea semántica, y

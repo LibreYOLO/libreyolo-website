@@ -98,7 +98,7 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: 891eaa1a42795a4c
+source_hash: ee5867f8671d1aac
 ---
 
 ## Instalacja
@@ -120,9 +120,9 @@ pamięci podręcznej.
 `result.depth_map` zawiera gęstą mapę względnej odwrotności głębi: wyższe
 wartości oznaczają mniejszą odległość od kamery, a wartości nie mają jednostki
 metrycznej ani skali wspólnej dla obrazów. Ustawienie `save=True` zapisuje na
-dysku wizualizację tej mapy z nałożoną paletą kolorów. `Results.plot()` nie
-obsługuje tej rodziny, ponieważ zdefiniowano go tylko dla normalnych powierzchni
-i krawędzi. Więcej informacji o źródłach, streamingu i obsłudze wyników zawiera
+dysku wizualizację tej mapy z nałożoną paletą kolorów. `Results.plot()`
+renderuje mapę głębi jako obraz PIL, a `pil=False` zwraca zamiast tego tablicę.
+Więcej informacji o źródłach, streamingu i obsłudze wyników zawiera
 strona [predykcji](/docs/predict).
 
 ## Warianty

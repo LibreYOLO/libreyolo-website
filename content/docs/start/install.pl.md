@@ -74,7 +74,7 @@ snippets:
         # pip, które je włącza.
 
         libreyolo models
-source_hash: 531023c2092fd751
+source_hash: 3ad6bb09bf2f5434
 ---
 
 ## Instalacja
@@ -198,6 +198,11 @@ gdzie pakiet nie istnieje.
 
 `sensenova` pomija `bitsandbytes` w macOS, dla którego nie opublikowano pakietu.
 Pozostała część dodatku instaluje się normalnie.
+
+`vlm` nie jest ograniczony do platformy: jego przypięta zależność
+`decord==0.6.0` ma pakiety wheel tylko dla Linuksa x86-64 i Windows. W macOS i
+na Linuksie ARM instalacja `vlm`, `ground`, `vlm-train` i `all` kończy się
+niepowodzeniem.
 
 Jeśli ograniczeniem jest miejsce na dysku, większość zajmuje PyTorch, a większą
 część PyTorch stanowią dane CUDA dołączone do domyślnego pakietu. Pakiet tylko

@@ -162,6 +162,8 @@ plus the vision-language families
 [Florence-2](/docs/models/florence-2), [Kosmos-2](/docs/models/kosmos-2),
 [Qwen3-VL](/docs/models/qwen3-vl), [SmolVLM2](/docs/models/smolvlm2),
 [InternVL3](/docs/models/internvl3), [LFM2-VL](/docs/models/lfm2-vl),
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream),
+[North Micro Vision](/docs/models/northmicrovision),
 [LocateAnything](/docs/models/locate-anything),
 [SenseNova-Vision](/docs/models/sensenova-vision) and
 [LibreMODUS](/docs/models/libremodus). These load through their own factory and

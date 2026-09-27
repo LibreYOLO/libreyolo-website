@@ -15,7 +15,7 @@ keywords:
   - nhãn polygon
   - thư viện segmentation MIT
   - mask mAP
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -134,7 +134,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 3d956e53e80143c2
+source_hash: 577cd3c8c2d5d6fe
 ---
 
 ## Định nghĩa
@@ -156,13 +156,15 @@ mảng pixel `(P, 2)`, còn `.xyn` cung cấp cùng contour đã chuẩn hóa.
 
 ## Mô hình
 
-Năm family vừa huấn luyện vừa dự đoán mặt nạ: [RF-DETR](/docs/models/rf-detr),
-[EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine),
-[GTR](/docs/models/gtr) và [RTMDet](/docs/models/rtmdet). RF-DETR cần thành phần bổ sung riêng,
-`pip install "libreyolo[rfdetr]"`; bốn family còn lại chạy trên package cơ sở.
+Bốn family vừa huấn luyện vừa dự đoán mặt nạ: [RF-DETR](/docs/models/rf-detr),
+[EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine) và
+[GTR](/docs/models/gtr). RF-DETR cần thành phần bổ sung riêng,
+`pip install "libreyolo[rfdetr]"`; ba family còn lại chạy trên package cơ sở.
 
 [Mask R-CNN](/docs/models/mask-rcnn) dự đoán, xác thực và xuất mặt nạ, nhưng
-`train()` phát sinh `NotImplementedError`.
+`train()` phát sinh `NotImplementedError`. [RTMDet](/docs/models/rtmdet) dự
+đoán và xác thực mặt nạ, nhưng huấn luyện phân đoạn phát sinh
+`NotImplementedError`; nó chỉ huấn luyện như một detector.
 
 [EoMT](/docs/models/eomt) dự đoán và xác thực mặt nạ, cũng không thể huấn luyện,
 còn phạm vi xuất hẹp hơn nữa: `export()` chỉ nhận tác vụ semantic và phát sinh

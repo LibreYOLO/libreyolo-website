@@ -65,7 +65,7 @@ snippets:
       language: bash
       code: |
         libreyolo export model=LibreL2CSr50.pt format=onnx
-source_hash: 22aa3c3d87b0c730
+source_hash: fd43893dc6df0493
 ---
 
 ## 定义
@@ -92,7 +92,8 @@ source_hash: 22aa3c3d87b0c730
 这些权重带有许可限制。它们在 Gaze360 上训练，而 Gaze360 的许可只允许研究和非
 商业用途，并且禁止再分发，所以 LibreYOLO 不为这个家族镜像任何东西。库能自动
 获取的那唯一一个检查点，是在打印出许可条款之后，通过 `gdown` 直接从作者自己的
-Google Drive 分发处拉取的。部署之前请先读[L2CS-Net](/docs/models/l2cs)。
+Google Drive 分发处拉取的。在 1.6.0 中，这个下载会返回 404，所以请传入本地检查点。
+部署之前请先读[L2CS-Net](/docs/models/l2cs)。
 
 这条下载路径需要 `gaze` 这个 extra：
 

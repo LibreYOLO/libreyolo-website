@@ -5,8 +5,7 @@ families:
 seo_title: 'RF-DETR: huấn luyện, tinh chỉnh và xuất theo MIT'
 description: >-
   Dùng RF-DETR trong LibreYOLO để phát hiện, phân đoạn instance, tư thế và box
-  định hướng. Cài đặt, dự đoán, huấn luyện, đánh giá và xuất, tất cả theo giấy
-  phép MIT.
+  định hướng. Cài đặt, dự đoán, huấn luyện, đánh giá và xuất.
 lead: >-
   Một detection transformer dự đoán tập đối tượng cố định thay vì lưới dày đặc,
   nên không cần NMS khi suy luận. LibreYOLO hỗ trợ mô hình cho bốn tác vụ.
@@ -93,7 +92,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -211,7 +210,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 379a3a09691bf14b
+source_hash: 3238696a4e1ab6c2
 ---
 ## Cài đặt
 
@@ -236,8 +235,9 @@ Các đường xử lý phát hiện, phân đoạn và hộp xoay dùng phép �
 
 ## Các biến thể
 
-Bốn kích thước và bốn tác vụ dùng chung một kiến trúc: phân đoạn, tư thế và box
-định hướng dùng lại decoder phát hiện với head khác, nên nhận cùng các đối số.
+Bốn kích thước phát hiện, từ `n` đến `l`, và bốn tác vụ dùng chung một kiến trúc:
+phân đoạn, tư thế và box định hướng dùng lại decoder phát hiện với head khác, nên
+nhận cùng các đối số. Phân đoạn có thêm `x` và `xx`, còn tư thế chỉ có bản `x`.
 Các kích thước có số tham số tương tự và chủ yếu khác nhau ở độ phân giải đầu vào.
 
 <benchmark-table task="detect" />
@@ -264,8 +264,8 @@ Lần chạy mới mặc định dùng `output_dir=None`, được chuyển thà
 
 ## Đánh giá
 
-`val()` trả về từ điển các khóa `metrics/` bao gồm precision, recall, mAP 50 và
-mAP 50-95, được đo trên bất kỳ tập dữ liệu nào theo định dạng bạn đã huấn luyện.
+`val()` trả về từ điển các khóa `metrics/` bao gồm mAP 50, mAP 50-95, mAP 75 và
+average recall theo chuẩn COCO, được đo trên bất kỳ tập dữ liệu nào theo định dạng bạn đã huấn luyện.
 
 <code-tabs name="val" />
 

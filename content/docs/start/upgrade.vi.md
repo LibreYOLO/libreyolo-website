@@ -16,7 +16,7 @@ keywords:
   - yolox bn eps
   - faster coco eval mặc định
 last_verified: 1.6.0
-source_hash: c575718b8a7949f8
+source_hash: e9c7cb5271aa4a81
 ---
 ## 1.5.0 lên 1.6.0
 
@@ -28,7 +28,7 @@ source_hash: c575718b8a7949f8
 
 - Phát hiện D-FINE, DEIM, RT-DETRv4 và YOLO-NAS mặc định bật FP16 AMP. Truyền `amp=False` để giữ FP32.
 
-- Để dùng các lựa chọn tinh chỉnh YOLO9 trước đây, đặt `aux_weight=0`, `max_labels=100` và `warmup_momentum=0.937`. Đặt `letterbox_pad="topleft"` khi bản chuyển đổi mới có dấu center phải tái tạo hình học cũ. Checkpoint một head cũ tiếp tục với đồ thị gốc.
+- Để dùng các lựa chọn tinh chỉnh YOLO9 trước đây, đặt `aux_weight=0`, `max_labels=100` và `warmup_momentum=0.937`. Đặt `letterbox_pad="topleft"` khi bản chuyển đổi mới có dấu center phải tái tạo hình học cũ. Checkpoint một head cũ tiếp tục với đồ thị gốc. Các lần chạy YOLO9 mới dùng nhiều bộ nhớ GPU hơn, nên hãy giảm `batch` nếu kích thước batch của 1.5.0 bị hết bộ nhớ.
 
 - RF-DETR và DINOv2 tạo thư mục chạy mang tên họ mô hình với hậu tố tăng dần. Cập nhật nơi sử dụng đường dẫn tệp đầu ra, hoặc đặt `output_dir="runs/train", exist_ok=True` để giữ vị trí và hành vi tái sử dụng cũ.
 
@@ -75,8 +75,9 @@ model.train(data="data.yaml", epochs=100, allow_experimental=True)
 model.train(data="data.yaml", epochs=100)
 ```
 
-Không có lớp tương thích deprecation. Lệnh gọi vẫn truyền đối số sẽ phát
-`TypeError`. `BaseModel.EXPERIMENTAL_WEIGHT_FILENAMES` cũng bị xóa theo. Hook
+Không có lớp tương thích deprecation. Lệnh gọi vẫn truyền đối số sẽ nhận cảnh
+báo `Unknown training config keys (ignored)`, và đối số đó không có tác dụng.
+`BaseModel.EXPERIMENTAL_WEIGHT_FILENAMES` cũng bị xóa theo. Hook
 `get_download_notice()` vẫn còn và vẫn được MiDaS, SegFormer cùng YOLO9-P2
 override.
 
@@ -193,9 +194,9 @@ thực cho checkpoint đó, hãy đánh giá với BN eps được override thà
 
 ```python
 import torch
-from libreyolo import LibreYOLOX
+from libreyolo import LibreYOLO
 
-model = LibreYOLOX("my-yolox-finetune.pt")
+model = LibreYOLO("my-yolox-finetune.pt")
 for module in model.model.modules():
     if isinstance(module, torch.nn.BatchNorm2d):
         module.eps = 1e-5
@@ -246,8 +247,8 @@ DEIM vẫn dùng giá trị cố định 3. Chi tiết về họ nằm tại
   không bị ảnh hưởng, còn `LIBREYOLO_HUB_KERNELS=0` sẽ tắt nó.
 - **`libreyolo predict` bỏ tùy chọn không được hỗ trợ thay vì báo lỗi.** CLI
   lọc kwarg theo signature `__call__` của mô hình, nên tùy chọn mà một họ không
-  nhận sẽ bị bỏ qua thay vì phát `TypeError`. Lỗi chính tả trong tên cờ giờ bị
-  âm thầm bỏ qua.
+  nhận sẽ bị bỏ qua thay vì phát `TypeError`. Tên cờ không xác định vẫn bị từ
+  chối với `No such option`.
 - **Source trực tiếp thay đổi dạng đầu ra JSON.** Webcam, stream RTSP và chụp
   màn hình ngầm bật streaming, phát một bản ghi mỗi frame thay vì một bản ghi
   cho cả lệnh gọi. Các [source](/docs/predict/sources) này mới trong 1.5.0 nên

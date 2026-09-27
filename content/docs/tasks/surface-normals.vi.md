@@ -2,11 +2,12 @@
 title: Pháp tuyến bề mặt
 seo_title: Ước lượng pháp tuyến bề mặt trong LibreYOLO
 description: >-
-  Dự đoán trường pháp tuyến bề mặt dày đặc từ một ảnh trong LibreYOLO. Đọc quy ước hệ tọa độ camera, xác thực
-  sai số góc và xuất mô hình.
+  Dự đoán trường pháp tuyến bề mặt dày đặc từ một ảnh trong LibreYOLO. Đọc quy
+  ước hệ tọa độ camera, xác thực sai số góc và xuất mô hình.
 lead: >-
-  Ước lượng pháp tuyến bề mặt dự đoán hướng mà mỗi bề mặt nhìn thấy đang quay về. LibreYOLO cung cấp dưới dạng
-  tác vụ normal, trả về trường vector đơn vị dày đặc trên canvas ảnh gốc.
+  Ước lượng pháp tuyến bề mặt dự đoán hướng mà mỗi bề mặt nhìn thấy đang quay
+  về. LibreYOLO cung cấp dưới dạng tác vụ normal, trả về trường vector đơn vị
+  dày đặc trên canvas ảnh gốc.
 keywords:
   - ước lượng pháp tuyến bề mặt python
   - tạo normal map từ ảnh
@@ -18,15 +19,21 @@ snippets:
   predict:
     - label: Dự đoán trường pháp tuyến
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreMoGe2s-normal.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         normals = result.normal_map
+
         print(normals.data.shape)      # (H, W, 3) vector đơn vị float32
-        normals.assert_normalized()    # phát sinh lỗi nếu pixel nào không có độ dài đơn vị
+
+        normals.assert_normalized()    # phát sinh lỗi nếu pixel nào không có độ
+        dài đơn vị
     - label: Đọc một pixel
       language: python
       code: |
@@ -48,7 +55,7 @@ snippets:
         model = LibreYOLO("LibreMoGe2s-normal.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot() render trường; phương thức được định nghĩa cho kết quả normal và edge.
+        # plot() trả về trường đã render dưới dạng ảnh PIL.
         result.plot().save("normals.png")
   val:
     - label: Xác thực và đọc các key metric
@@ -82,7 +89,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.data.shape)
-source_hash: b033fdf3a2210ce5
+source_hash: dd8de1b1ecd208bf
 ---
 ## Định nghĩa
 

@@ -17,7 +17,7 @@ keywords:
   - gruppi di copertura libreyolo
   - g0 g1 g2 g3 g4
   - tier modelli yolo
-last_verified: 1.5.0
+last_verified: 1.6.0
 verification: >-
   Tier di esportazione da docs/adr/0011-export-support-tiers.md e
   libreyolo/export/support.py; gruppi di copertura e conteggi per famiglia da
@@ -25,7 +25,7 @@ verification: >-
   libreyolo/models/base/model.py e libreyolo/cli/commands/train.py; l'inventario
   della CLI letto da libreyolo/models/inventory.py; i tier di API dai docstring
   dei package libreyolo/models/sam/, openvocab/ e vlm/ e dai contratti in
-  base.py, tutto alla v1.5.0. Le etichette di gruppo mostrate al lettore
+  base.py, tutto alla v1.6.0. Le etichette di gruppo mostrate al lettore
   (Flagship, Core, Supportate, Solo inferenza, Museo, Tier gemello) sono il
   vocabolario del sito per gli stessi gruppi, da src/data/docs/registry.json.
 snippets:
@@ -43,7 +43,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: de545894b0d125e4
+source_hash: 6d8f3ec671e6cb02
 ---
 
 ## Tier di supporto all'esportazione
@@ -88,17 +88,21 @@ all'architettura.
 | Segmentazione con prompt | `LibreSAM` | Un forward non ha senso senza un prompt spaziale o concettuale per immagine, fornito al momento della chiamata. Interattivo e con stato: codifica una volta, invia prompt molte volte |
 | Rilevamento a vocabolario aperto | `LibreOpenVocab` | Detector discriminativi condizionati dal testo. L'elenco delle classi è un prompt, impostato da `set_classes` |
 | Vision-language | `LibreVLM` | Un modello generativo guidato come un detector. L'elenco delle classi è un prompt e la confidenza è un segnaposto |
+| Grounding | `LibreGround` | Un'immagine e un'istruzione referenziale producono al massimo un punto per query |
+| Policy robotica | `LibreVLA` | I frame della camera e lo stato del robot producono un blocco di azioni future |
 
-I tre tier gemelli deliberatamente non si registrano nella factory dei
+I tier gemelli deliberatamente non si registrano nella factory dei
 detector, ed è per questo che `LibreYOLO("some-alias")` non li raggiunge. Si
 caricano per alias di dimensione e download automatico, non tramite
 l'ispezione del checkpoint.
 
-Tutti e quattro restituiscono lo stesso `Results`, quindi il codice a valle
-non cambia passando dall'uno all'altro. Cambia quali metodi funzionano: i tier
-gemelli sollevano `NotImplementedError` per `train()`, `val()` ed `export()`,
-e i tier SAM e a vocabolario aperto sollevano anche per `track()`. La pagina
-di ogni tier elenca le proprie esclusioni.
+Tutti restituiscono lo stesso `Results`, quindi il codice a valle non cambia
+passando dall'uno all'altro. Cambia quali metodi funzionano: i tier gemelli
+sollevano `NotImplementedError` per `train()`, `val()` ed `export()`, con due
+eccezioni. `LibreVLM` fa fine-tuning di Qwen3-VL come detector, e `LibreVLA`
+addestra e valida SmolVLA, ACT e Diffusion Policy. I tier SAM e a vocabolario
+aperto sollevano anche per `track()`. La pagina di ogni tier elenca le proprie
+esclusioni.
 
 ## Gruppi di copertura
 
@@ -115,16 +119,15 @@ nell'intestazione di una pagina di modello.
 | Gruppo | Etichetta | Famiglie | Significato |
 |---|---|---|---|
 | `g0` | Flagship | 2 | Riferimenti flagship obbligatori nella copertura delle funzionalità condivise |
-| `g1` | Core | 10 | Insieme di copertura dei detector addestrabili |
-| `g2` | Supportate | 14 | Insieme di copertura aggiuntivo per le famiglie addestrabili |
-| `g3` | Solo inferenza | 35 | Famiglie senza un'implementazione dell'addestramento |
+| `g1` | Core | 12 | Insieme di copertura dei detector addestrabili |
+| `g2` | Supportate | 19 | Insieme di copertura aggiuntivo per le famiglie addestrabili |
+| `g3` | Solo inferenza | 44 | Famiglie senza un'implementazione dell'addestramento |
 | `g4` | Museo | 5 | Famiglie storiche con copertura in inferenza |
-| `s` | Tier gemello | 21 | API gemelle (SAM, open-vocab, VLM, zero-shot) coperte separatamente |
+| `s` | Tier gemello | 36 | API gemelle (SAM, open-vocab, VLM, grounding, zero-shot) coperte separatamente |
 
-In totale sono 87 famiglie in sei gruppi. Da solo `g3` contiene più famiglie
-di tutti gli altri gruppi messi insieme, perché gran parte del registry è
-lignaggio solo in inferenza e copertura da museo, più che detector addestrati
-attivamente.
+In totale sono 118 famiglie in sei gruppi. `g3` è il gruppo più grande, perché
+buona parte del registry è lignaggio solo in inferenza, più che detector
+addestrati attivamente.
 
 Per chi sta scegliendo un modello, il gruppo dice dove aspettarsi attenzione
 ingegneristica, non quanto è accurata una famiglia. `g0` e `g1` sono i gruppi
@@ -146,14 +149,15 @@ capacità specifici del formato, mai dalla sola appartenenza a un gruppo. I
 gruppi classificano le famiglie, non i task, quindi una run di copertura
 limitata a un task nomina il task esplicitamente, come in "g1 detect".
 
-Due punti leggono il gruppo a runtime e non solo nei test.
+Tre punti leggono il gruppo a runtime e non solo nei test.
 `collect_model_inventory()` in `libreyolo/models/inventory.py` allega il
-gruppo a ogni voce che l'inventario della CLI stampa, e `pretrained=False`
+gruppo a ogni voce che l'inventario della CLI stampa. `pretrained=False`
 attiva il percorso speciale di reinizializzazione da zero solo per le famiglie
-in `g0` e `g1`. Fuori da questi due gruppi il controllo in
+in `g0`, `g1` e `g2`. Fuori da questi gruppi il controllo in
 `libreyolo/models/base/model.py` viene saltato del tutto, quindi
 `pretrained=False` arriva al `train()` della famiglia stessa come un normale
-argomento keyword.
+argomento keyword. L'addestramento con `classes=` o `single_cls=True` è
+accettato solo per il rilevamento di `g0` e `g1` e altrove solleva `ValueError`.
 
 ## Addestramento
 
@@ -161,6 +165,10 @@ Una famiglia in `g3` o `g4` non ha un'implementazione dell'addestramento, e
 chiamare `train()` su una di esse solleva un errore. È una proprietà del
 codice della famiglia, non del suo gruppo: il gruppo registra il fatto, non lo
 causa.
+
+Delle 118 famiglie, 37 si addestrano: tutte le famiglie di `g0`, `g1` e `g2`,
+più Qwen3-VL tramite `LibreVLM` e SmolVLA, ACT e Diffusion Policy tramite
+`LibreVLA`.
 
 Per una famiglia che invece si addestra, se una singola manopola di data
 augmentation arrivi alla pipeline è una questione a parte, con un suo

@@ -28,7 +28,7 @@ last_verified: 1.6.0
 
 - D-FINE, DEIM, RT-DETRv4 and YOLO-NAS detection enable FP16 AMP by default. Pass `amp=False` to retain FP32.
 
-- For former YOLO9 fine-tune choices, set `aux_weight=0`, `max_labels=100` and `warmup_momentum=0.937`. Set `letterbox_pad="topleft"` when a new center-stamped conversion must reproduce the old geometry. Old single-head checkpoints resume with their original graph.
+- For former YOLO9 fine-tune choices, set `aux_weight=0`, `max_labels=100` and `warmup_momentum=0.937`. Set `letterbox_pad="topleft"` when a new center-stamped conversion must reproduce the old geometry. Old single-head checkpoints resume with their original graph. New YOLO9 runs use more GPU memory, so lower `batch` if a 1.5.0 batch size runs out of memory.
 
 - RF-DETR and DINOv2 create incremented family-named run directories. Update artifact-path consumers, or set `output_dir="runs/train", exist_ok=True` to retain the old location and reuse behavior.
 
@@ -76,7 +76,8 @@ model.train(data="data.yaml", epochs=100, allow_experimental=True)
 model.train(data="data.yaml", epochs=100)
 ```
 
-There is no deprecation shim. A call that still passes it raises `TypeError`.
+There is no deprecation shim. A call that still passes it gets an
+`Unknown training config keys (ignored)` warning, and the argument has no effect.
 `BaseModel.EXPERIMENTAL_WEIGHT_FILENAMES` was removed with it. The
 `get_download_notice()` hook survives, and is still overridden by MiDaS,
 SegFormer and YOLO9-P2.
@@ -192,9 +193,9 @@ faithful numbers for it, either evaluate with BN eps overridden to 1e-5:
 
 ```python
 import torch
-from libreyolo import LibreYOLOX
+from libreyolo import LibreYOLO
 
-model = LibreYOLOX("my-yolox-finetune.pt")
+model = LibreYOLO("my-yolox-finetune.pt")
 for module in model.model.modules():
     if isinstance(module, torch.nn.BatchNorm2d):
         module.eps = 1e-5
@@ -247,8 +248,8 @@ DEIM still uses the hardcoded 3. Family details are on
   unaffected, and `LIBREYOLO_HUB_KERNELS=0` disables it.
 - **`libreyolo predict` drops unsupported options instead of raising.** The CLI
   filters kwargs against the model's `__call__` signature, so an option a
-  family does not accept is ignored rather than raising `TypeError`. A typo in
-  a flag name is now silently ignored.
+  family does not accept is ignored rather than raising `TypeError`. An
+  unknown flag name is still rejected with `No such option`.
 - **Live sources change the JSON output shape.** Webcams, RTSP streams and
   screen capture implicitly enable streaming, which emits one record per frame
   rather than one for the call. These

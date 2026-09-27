@@ -49,7 +49,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 663390776f2f2c15
+source_hash: 409bc0b2ace6547e
 ---
 
 ## Składnia
@@ -70,7 +70,7 @@ Argumenty podaje się w parach `key=value`, forma POSIX również działa, więc
 | `calib` | `coco128.yaml` | Obrazy do kalibracji: plik YAML ze zbiorem danych lub nazwa wbudowanego zbioru danych. Bez etykiet, tylko przejście w przód. `none` pomija kalibrację |
 | `samples` | `128` | Maksymalna liczba obrazów kalibracyjnych |
 | `batch` | `8` | Rozmiar batcha przy kalibracji |
-| `algorithm` | `auto` | Estymacja zakresu aktywacji: `auto`, które wybiera minmax, albo `minmax`, albo `percentile` |
+| `algorithm` | `auto` | Estymacja zakresu aktywacji: `auto` (minmax), `minmax`, `percentile`, `mse` albo `entropy` |
 | `out` | | Ścieżka wyjściowego checkpointu. Domyślnie ścieżka źródłowa z `-<recipe>` przed sufiksem |
 | `device` | `auto` | Urządzenie |
 | `allow_download_scripts` | `false` | Zezwolenie na osadzony kod Pythona w blokach pobierania w pliku YAML zbioru danych |

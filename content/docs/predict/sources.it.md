@@ -222,7 +222,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c355ad28487c9a65
+source_hash: 81a0c947dbfe48b5
 ---
 
 ## Come viene classificata una sorgente
@@ -277,9 +277,9 @@ Gli array float vengono riscalati in base al proprio intervallo: i valori
 minori o uguali a `1.0` vengono moltiplicati per 255, quelli più alti vengono
 troncati dentro `[0, 255]`. Un array RGBA scarta il suo canale alpha.
 
-I percorsi remoti richiedono un pacchetto ciascuno, e nessuno di questi è
-installato di default: `requests` per `http(s)://`, `boto3` per `s3://` e
-`gcsfs` per `gs://`.
+I percorsi remoti richiedono un pacchetto ciascuno. `requests`, per
+`http(s)://`, è incluso nell'installazione base; `boto3` per `s3://` e `gcsfs`
+per `gs://` no.
 
 Il tracking accetta immagini, cartelle ordinate per nome file, liste, tuple e iteratori lazy di immagini come frame consecutivi. Passa `fps=30.0` per definire la temporizzazione della sequenza di immagini e `color_format="auto"` per selezionare l'interpretazione dell'input. Vedi [tracking](/docs/tasks/object-tracking).
 
@@ -298,9 +298,10 @@ forward pass impilato per ogni blocco sulle famiglie che lo supportano. Vedi
 
 <code-tabs name="video" />
 
-Un percorso conta come video quando il suo suffisso è uno tra `.asf`, `.avi`,
-`.gif`, `.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.ts`, `.wmv`,
-`.webm`.
+Un percorso conta come video quando il suo suffisso è uno tra `.3g2`, `.3gp`,
+`.asf`, `.avi`, `.dav`, `.f4v`, `.flv`, `.gif`, `.h264`, `.h265`, `.hevc`,
+`.m2ts`, `.m4v`, `.mkv`, `.mov`, `.mp4`, `.mpeg`, `.mpg`, `.mts`, `.mxf`, `.ogv`,
+`.ts`, `.vob`, `.wmv`, `.webm`.
 
 `.gif` compare in entrambe le liste. Un percorso `.gif` passato direttamente a
 `predict` viene aperto come video, perché il controllo sul video viene eseguito
@@ -418,8 +419,10 @@ Le immagini finiscono in `runs/detect/predict`, `runs/detect/predict2` e così
 via, con incremento automatico, mantenendo il nome del file sorgente. Ogni
 immagine di uno stesso processo finisce nella stessa directory, quindi due
 cartelle di input che contengono lo stesso nome di file si sovrascrivono a
-vicenda. Le immagini in memoria non hanno un nome di file da riutilizzare e
-vengono numerate `image0`, `image1` e così via.
+vicenda. Le immagini in memoria non hanno un nome di file da riutilizzare.
+Un'immagine singola viene salvata come `inference`, quindi le chiamate ripetute la
+sovrascrivono; una lista o un batch vengono numerati `image0`, `image1` e così
+via.
 
 Le sorgenti video e live vengono scritte come un unico `.mp4` che prende il nome
 dalla sorgente.

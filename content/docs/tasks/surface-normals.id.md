@@ -19,27 +19,41 @@ snippets:
   predict:
     - label: Prediksi kolom normal
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreMoGe2s-normal.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         normals = result.normal_map
+
         print(normals.data.shape)      # vektor satuan float32 (H, W, 3)
-        normals.assert_normalized()    # error jika ada piksel yang panjangnya bukan satu
+
+        normals.assert_normalized()    # error jika ada piksel yang panjangnya
+        bukan satu
     - label: Baca satu piksel
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreMoGe2s-normal.pt")
+
         result = model(SAMPLE_IMAGE)
 
-        # Frame kamera OpenCV: +x ke kanan, +y ke bawah, +z masuk ke scene. Permukaan
+
+        # Frame kamera OpenCV: +x ke kanan, +y ke bawah, +z masuk ke scene.
+        Permukaan
+
         # yang menghadap kamera terbaca mendekati (0, 0, -1).
+
         field = result.normals.data
+
         h, w = field.shape[:2]
+
         print(field[h // 2, w // 2, w // 2])
     - label: Simpan visualisasi
       language: python
@@ -49,7 +63,7 @@ snippets:
         model = LibreYOLO("LibreMoGe2s-normal.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot() merender kolom; tersedia untuk hasil normal dan edge.
+        # plot() mengembalikan kolom yang telah dirender sebagai gambar PIL.
         result.plot().save("normals.png")
   val:
     - label: Validasi dan baca kunci metrik
@@ -74,16 +88,22 @@ snippets:
         model.export(format="onnx", imgsz=518)
     - label: Jalankan berkas hasil ekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Factory mengarahkan berdasarkan suffix berkas, sehingga artefak hasil ekspor dimuat
+
+        # Factory mengarahkan berdasarkan suffix berkas, sehingga artefak hasil
+        ekspor dimuat
+
         # seperti checkpoint dan mengembalikan objek Results yang sama.
+
         model = LibreYOLO("LibreMoGe2s-normal.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.normal_map.data.shape)
-source_hash: b033fdf3a2210ce5
+source_hash: dd8de1b1ecd208bf
 ---
 
 ## Definisi

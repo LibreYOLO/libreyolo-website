@@ -3,7 +3,7 @@ title: YOLO-NAS
 families:
   - yolonas
 seo_title: YOLO-NAS：在 LibreYOLO 里预测、训练与导出
-description: "在 LibreYOLO 中使用 YOLO-NAS 检测、姿态和旋转框。上游预训练权重仅限非商用。"
+description: 在 LibreYOLO 中使用 YOLO-NAS 检测、姿态和旋转框。上游预训练权重仅限非商用。
 lead: >-
   一个卷积检测器，它的骨干和 neck 出自 Deci.AI 的架构搜索，由量化感知的 RepVGG 模块搭成。它的权重属于
   Deci.AI，许可仅限非商业用途，LibreYOLO 一个都不发布。
@@ -16,7 +16,7 @@ keywords:
   - 姿态估计
   - yolo-nas 训练自己的数据集
   - AutoNAC
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -113,7 +113,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 483562cad2c02696
+source_hash: 52050c4046781a6e
 ---
 
 ## 安装
@@ -189,8 +189,9 @@ mAP 50-95，衡量对象是任何符合你训练时所用格式的数据集。
 ## 检查点
 
 这里没有可列的。Deci 的许可禁止再分发，所以 LibreYOLO 组织不发布任何 YOLO-NAS
-权重，下载会解析到别处：形如 `LibreYOLONAS<size>.pt` 的名字，或者姿态用的
-`LibreYOLONAS<size>-pose.pt`，会映射到 Deci 公共 CDN 上对应的对象。
+权重，下载会解析到别处：形如 `LibreYOLONAS<size>.pt` 的名字、姿态用的
+`LibreYOLONAS<size>-pose.pt`，或者旋转框用的 `LibreYOLONAS<size>-obb.pt`（s、m、l），
+会映射到 Deci 公共 CDN 上对应的对象。
 
 只有 SHA-256 被库钉死的检查点才能这样拉取。其他的一律失败关闭，而不是去打开一个
 未经校验的第三方 pickle，得手动下载并以路径的形式传进来。已经在磁盘上的文件按

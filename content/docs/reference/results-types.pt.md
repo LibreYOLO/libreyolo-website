@@ -1,7 +1,9 @@
 ---
 title: Tipos de Results
 seo_title: Referência do objeto Results do LibreYOLO
-description: "Payloads de resultados LibreYOLO: caixas, máscaras, keypoints, classificação, profundidade, albedo, cuboides 3D e sequências de ações robóticas."
+description: >-
+  Payloads de resultados LibreYOLO: caixas, máscaras, keypoints, classificação,
+  profundidade, albedo, cuboides 3D e sequências de ações robóticas.
 lead: >-
   Results é o único tipo de retorno por imagem de todo modelo LibreYOLO. Contém
   slots opcionais de payload, um por formato de tarefa, e preenche apenas os que
@@ -48,7 +50,7 @@ snippets:
         # As linhas, como dicts simples, depois como JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: d74276d805c22c92
+source_hash: 173c542fb675892e
 ---
 
 ## O objeto Results
@@ -308,7 +310,7 @@ dicts simples, uma linha por detecção, segmento, ponto ou região dependendo d
 quais slots estão preenchidos. `to_json(**kwargs)` repassa os argumentos dele
 para `summary` e retorna a string JSON.
 
-`plot()` renderiza o payload de cada tarefa. Sobreposições de imagem usam arrays BGR por padrão; `pil=True` solicita PIL. Resultados de bordas e mapas de normais mantêm seus padrões PIL.
+`plot()` renderiza o payload de cada tarefa. Sobreposições de imagem usam arrays BGR por padrão; `pil=True` solicita PIL. Mapas de profundidade, normais, bordas e albedo, cuboides 3D e blocos de ações retornam uma imagem PIL por padrão; `pil=False` retorna o array.
 
 ## Boxes3D
 

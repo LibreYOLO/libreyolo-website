@@ -50,7 +50,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 56d898992f1b129c
+source_hash: 21374ebc0e6cf4d3
 ---
 
 ## Sinopsis
@@ -119,9 +119,10 @@ nilai yang sah untuk `model`. Tiga opsi ditolak, bukan diabaikan, pada runtime
 tersebut: `tiling`, `overlap_ratio` dan `output_file_format` keluar dengan
 `config_unsupported` bila backend runtime tidak dapat memenuhinya.
 
-`half` justru sebaliknya. Runtime hasil ekspor menerimanya dan berjalan di FP16;
-inferensi PyTorch native mencatat bahwa flag itu diabaikan lalu melanjutkan di
-FP32.
+`half` justru sebaliknya: flag ini diterima lalu diabaikan. Inferensi PyTorch
+native mencatat bahwa flag itu diabaikan lalu melanjutkan di FP32, dan runtime
+hasil ekspor mempertahankan presisi yang dipakai saat model diekspor, jadi
+inferensi FP16 berarti mengekspor dengan `half=true`.
 
 Model gaze bekerja dua tahap dan tidak punya detektor sendiri, sehingga
 `face_detector` wajib diisi untuknya. `gallery` hanya berlaku untuk model yang

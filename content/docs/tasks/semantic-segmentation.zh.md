@@ -110,7 +110,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 531a9b20e5532913
+source_hash: e13acb1e813da7c4
 ---
 
 ## 定义
@@ -186,7 +186,7 @@ names:
   1: sidewalk
 ```
 
-`masks_dir` 是用来替换 `images` 的目录名，默认为 `masks`。`label_mapping` 是可选的
+`masks_dir` 是用来替换 `images` 的目录名。`label_mapping` 是可选的
 `{source_id: train_id}` 重映射，在加载时作用于掩码的像素值，编号从 1 到 150 的数据集
 就是这样变成 0 到 149 的；任何没有被映射的源值都会变成忽略，而每个 train id 都必须
 落在 `0..nc-1` 内。

@@ -15,7 +15,7 @@ keywords:
   - label poligon
   - pustaka segmentasi MIT
   - mask mAP
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -144,7 +144,7 @@ snippets:
 
 
         print(result.masks.data.shape)
-source_hash: 3d956e53e80143c2
+source_hash: 577cd3c8c2d5d6fe
 ---
 
 ## Definisi
@@ -167,13 +167,15 @@ array piksel `(P, 2)`, dan `.xyn` memberikan kontur yang sama dalam keadaan norm
 
 ## Model
 
-Lima keluarga baik melatih maupun memprediksi mask: [RF-DETR](/docs/models/rf-detr),
-[EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine),
-[GTR](/docs/models/gtr) dan [RTMDet](/docs/models/rtmdet). RF-DETR membutuhkan tambahan sendiri,
-`pip install "libreyolo[rfdetr]"`; keempat lainnya berjalan pada paket dasar.
+Empat keluarga baik melatih maupun memprediksi mask: [RF-DETR](/docs/models/rf-detr),
+[EdgeCrafter](/docs/models/edgecrafter), [D-FINE](/docs/models/d-fine) dan
+[GTR](/docs/models/gtr). RF-DETR membutuhkan tambahan sendiri,
+`pip install "libreyolo[rfdetr]"`; ketiga lainnya berjalan pada paket dasar.
 
 [Mask R-CNN](/docs/models/mask-rcnn) memprediksi, memvalidasi, dan mengekspor mask, tetapi
-`train()`-nya menimbulkan `NotImplementedError`.
+`train()`-nya menimbulkan `NotImplementedError`. [RTMDet](/docs/models/rtmdet)
+memprediksi dan memvalidasi mask, tetapi pelatihan segmentasi menimbulkan
+`NotImplementedError`; family ini hanya dapat dilatih sebagai detektor.
 
 [EoMT](/docs/models/eomt) memprediksi dan memvalidasi mask dan juga tidak dapat melatih,
 dan ekspornya lebih sempit lagi: `export()` hanya menerima task semantik, dan

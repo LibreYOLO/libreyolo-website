@@ -48,7 +48,7 @@ snippets:
         model = LibreYOLO("LibreMoGe2s-normal.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot()는 필드를 렌더링합니다; 이것은 일반 및 엣지 결과에 대해 정의되어 있습니다.
+        # plot()은 렌더링된 필드를 PIL 이미지로 반환합니다.
         result.plot().save("normals.png")
   val:
     - label: 메트릭 키를 검증하고 읽습니다
@@ -82,7 +82,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.data.shape)
-source_hash: "b033fdf3a2210ce5"
+source_hash: dd8de1b1ecd208bf
 ---
 
 ## 정의

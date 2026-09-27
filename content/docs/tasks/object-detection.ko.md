@@ -116,7 +116,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 60bb0f5b7cf31cb7
+source_hash: 01ee5ee9eea3b569
 ---
 
 ## 정의
@@ -135,7 +135,7 @@ source_hash: 60bb0f5b7cf31cb7
 
 다크넷 계열, [YOLOv1](/docs/models/yolov1), [YOLOv2](/docs/models/yolov2), [YOLOv3](/docs/models/yolov3) 및 [YOLOv4](/docs/models/yolov4)는 냉동된 전시물처럼 유지됩니다: 예측, 검증 및 내보내기는 가능하지만, 학습은 되지 않습니다.
 
-별도의 그룹은 체크포인트에서 가져오는 대신 실행 시점에 클래스 목록을 가져오므로 학습에서 한 번도 본 적 없는 이름도 탐지합니다: [Grounding DINO](/docs/models/grounding-dino), [OWLv2](/docs/models/owlv2), [OMDet-Turbo](/docs/models/omdet-turbo) 및 [OV-DEIM](/docs/models/ov-deim), 그리고 비전-언어 계열 [Florence-2](/docs/models/florence-2), [Kosmos-2](/docs/models/kosmos-2), [Qwen3-VL](/docs/models/qwen3-vl), [SmolVLM2](/docs/models/smolvlm2), [InternVL3](/docs/models/internvl3), [LFM2-VL](/docs/models/lfm2-vl), [LocateAnything](/docs/models/locate-anything), [SenseNova-Vision](/docs/models/sensenova-vision) 및 [LibreMODUS](/docs/models/libremodus). 이들은 자체 팩토리과 추가 항목을 통해 로드되며; 각 모델 페이지는 정확한 호출을 포함합니다.
+별도의 그룹은 체크포인트에서 가져오는 대신 실행 시점에 클래스 목록을 가져오므로 학습에서 한 번도 본 적 없는 이름도 탐지합니다: [Grounding DINO](/docs/models/grounding-dino), [OWLv2](/docs/models/owlv2), [OMDet-Turbo](/docs/models/omdet-turbo) 및 [OV-DEIM](/docs/models/ov-deim), 그리고 비전-언어 계열 [Florence-2](/docs/models/florence-2), [Kosmos-2](/docs/models/kosmos-2), [Qwen3-VL](/docs/models/qwen3-vl), [SmolVLM2](/docs/models/smolvlm2), [InternVL3](/docs/models/internvl3), [LFM2-VL](/docs/models/lfm2-vl), [Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision), [LocateAnything](/docs/models/locate-anything), [SenseNova-Vision](/docs/models/sensenova-vision) 및 [LibreMODUS](/docs/models/libremodus). 이들은 자체 팩토리과 추가 항목을 통해 로드되며; 각 모델 페이지는 정확한 호출을 포함합니다.
 
 [PP-YOLOE](/docs/models/ppyoloe)와 [TinyFormer](/docs/models/tinyformer)도 탐지 학습을 지원합니다.
 

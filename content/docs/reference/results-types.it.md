@@ -1,8 +1,13 @@
 ---
 title: Tipi di Results
 seo_title: Riferimento dell'oggetto Results di LibreYOLO
-description: "Payload dei risultati LibreYOLO: box, maschere, keypoint, classificazione, profondità, albedo, cuboidi 3D e sequenze di azioni robotiche."
-lead: Results è l'unico tipo di ritorno per immagine di ogni modello LibreYOLO. Contiene slot di payload opzionali, uno per forma di task, e popola solo quelli prodotti dal modello.
+description: >-
+  Payload dei risultati LibreYOLO: box, maschere, keypoint, classificazione,
+  profondità, albedo, cuboidi 3D e sequenze di azioni robotiche.
+lead: >-
+  Results è l'unico tipo di ritorno per immagine di ogni modello LibreYOLO.
+  Contiene slot di payload opzionali, uno per forma di task, e popola solo
+  quelli prodotti dal modello.
 keywords:
   - oggetto Results libreyolo
   - Results.boxes
@@ -12,7 +17,10 @@ keywords:
   - risultati detection in json python
   - ottenere coordinate bounding box python
 last_verified: 1.6.0
-verification: Nomi degli slot, shape, proprietà e valori predefiniti letti da libreyolo/utils/results.py alla v1.6.0. Semantica citata dalle docstring delle classi di payload.
+verification: >-
+  Nomi degli slot, shape, proprietà e valori predefiniti letti da
+  libreyolo/utils/results.py alla v1.6.0. Semantica citata dalle docstring delle
+  classi di payload.
 snippets:
   usage:
     - label: Python
@@ -42,7 +50,7 @@ snippets:
         # Le righe, come dict semplici, poi come JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: d74276d805c22c92
+source_hash: 173c542fb675892e
 ---
 
 ## L'oggetto Results
@@ -309,7 +317,7 @@ di dict semplici, una riga per ogni rilevamento, segmento, punto o regione a
 seconda di quali slot sono valorizzati. `to_json(**kwargs)` passa i suoi
 argomenti a `summary` e restituisce la stringa JSON.
 
-`plot()` visualizza i dati di ogni task. Le sovrapposizioni sulle immagini restituiscono array BGR di default; `pil=True` richiede PIL. I risultati di bordi e mappe delle normali mantengono PIL come default.
+`plot()` visualizza i dati di ogni task. Le sovrapposizioni sulle immagini restituiscono array BGR di default; `pil=True` richiede PIL. Le mappe di profondità, delle normali, dei bordi e di albedo, i cuboidi 3D e i blocchi di azioni restituiscono di default un'immagine PIL; `pil=False` restituisce l'array.
 
 ## Boxes3D
 

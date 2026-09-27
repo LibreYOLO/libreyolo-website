@@ -3,7 +3,7 @@ title: YOLO-NAS
 families:
   - yolonas
 seo_title: YOLO-NAS：LibreYOLOで推論、学習、エクスポート
-description: "LibreYOLOでYOLO-NASの物体検出、姿勢推定、有向ボックスを使います。アップストリームの学習済み重みは非商用です。"
+description: LibreYOLOでYOLO-NASの物体検出、姿勢推定、有向ボックスを使います。アップストリームの学習済み重みは非商用です。
 lead: >-
   Deci.AIのアーキテクチャ探索から生まれたバックボーンとネックを持ち、量子化を考慮したRepVGGブロックで構築された畳み込み検出器です。重みはDeci.AIのもので、非商用利用だけが許可されており、LibreYOLOはその重みを一切公開していません。
 keywords:
@@ -112,7 +112,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 483562cad2c02696
+source_hash: 52050c4046781a6e
 ---
 
 ## インストール
@@ -171,7 +171,7 @@ pip install libreyolo
 
 ## チェックポイント
 
-一覧にするものはありません。Deciのライセンスは再配布を禁止しているため、LibreYOLO組織はYOLO-NASの重みを一切公開せず、ダウンロードは別の場所から解決されます。`LibreYOLONAS<size>.pt`形式の名前、姿勢推定の場合は`LibreYOLONAS<size>-pose.pt`形式の名前が、Deciの公開CDN上の対応するオブジェクトにマッピングされます。
+一覧にするものはありません。Deciのライセンスは再配布を禁止しているため、LibreYOLO組織はYOLO-NASの重みを一切公開せず、ダウンロードは別の場所から解決されます。`LibreYOLONAS<size>.pt`形式の名前、姿勢推定の場合は`LibreYOLONAS<size>-pose.pt`形式の名前、回転ボックスの場合は`LibreYOLONAS<size>-obb.pt`形式の名前（s、m、l）が、Deciの公開CDN上の対応するオブジェクトにマッピングされます。
 
 ライブラリがSHA-256を固定しているチェックポイントだけをこの方法で取得できます。それ以外は、検証されていない第三者のpickleを開かずに失敗し、手動でダウンロードしてパスとして渡す必要があります。すでにディスク上にあるファイルはパスから読み込まれ、ダウンロードもチェックサムゲートもありません。ローダーが認識する元の名前のDeci `.pth`もこれに含まれます。
 

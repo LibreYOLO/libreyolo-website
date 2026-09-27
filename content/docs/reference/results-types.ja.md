@@ -1,7 +1,7 @@
 ---
 title: Resultsの型
 seo_title: LibreYOLO Resultsオブジェクトリファレンス
-description: "LibreYOLOの結果ペイロード：ボックス、マスク、キーポイント、分類、深度、アルベド、3D直方体、ロボットのアクションチャンク。"
+description: LibreYOLOの結果ペイロード：ボックス、マスク、キーポイント、分類、深度、アルベド、3D直方体、ロボットのアクションチャンク。
 lead: >-
   Resultsは、すべてのLibreYOLOモデルが画像ごとに返す単一の型です。タスク形状ごとに1つ、オプションのペイロードスロットを持ち、モデルが生成したものだけを格納します。
 keywords:
@@ -44,7 +44,7 @@ snippets:
         # 行を通常のdictで取得し、次にJSONへ変換
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: d74276d805c22c92
+source_hash: 173c542fb675892e
 ---
 
 ## Resultsオブジェクト
@@ -283,7 +283,7 @@ dictを返し、`save_obj(path, index=0)`は1つのメッシュを書き出し�
 どのスロットが設定されているかに応じて、検出、セグメント、点、または領域ごとに1行です。
 `to_json(**kwargs)`は引数を`summary`へ渡し、JSON文字列を返します。
 
-`plot()`はすべてのタスクのペイロードを描画します。画像への重ね合わせはデフォルトでBGR配列を返し、`pil=True`でPILを要求できます。エッジと法線マップの結果は、PILを返すデフォルトを維持します。
+`plot()`はすべてのタスクのペイロードを描画します。画像への重ね合わせはデフォルトでBGR配列を返し、`pil=True`でPILを要求できます。深度マップ、法線マップ、エッジマップ、アルベドマップ、3D直方体、アクションチャンクは、デフォルトでPIL画像を返し、`pil=False`で配列を返します。
 
 ## Boxes3D
 

@@ -9,7 +9,7 @@ keywords:
   - yolo 命令行预测
   - libreyolo predict 参数
   - libreyolo json 输出
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: 命令
     value: libreyolo predict
@@ -41,7 +41,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 56d898992f1b129c
+source_hash: 21374ebc0e6cf4d3
 ---
 
 ## 用法概要
@@ -108,8 +108,9 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 运行时上会被拒绝，而不是被忽略：运行时后端无法满足 `tiling`、`overlap_ratio`
 和 `output_file_format` 时，命令会以 `config_unsupported` 退出。
 
-`half` 则相反。导出的运行时会接受它并以 FP16 运行；原生 PyTorch 推理会在日志
-里说明该选项被忽略，并继续以 FP32 运行。
+`half` 则相反：它会被接受，然后被忽略。原生 PyTorch 推理会在日志里说明该选项
+被忽略，并继续以 FP32 运行；导出的运行时则保持导出时的数值精度，所以要做 FP16
+推理，就得在导出时指定 `half=true`。
 
 视线估计模型是两阶段的，自身不带检测器，所以必须为它们指定 `face_detector`。
 `gallery` 只对任务为 `embed` 的模型有效；传给其他模型会以 `config_unsupported`

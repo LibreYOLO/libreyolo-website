@@ -12,7 +12,7 @@ keywords:
   - libreyolo 学習
   - libreyolo エクスポート
   - yolo python サンプル
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: インストール
     value: pip install libreyolo
@@ -94,7 +94,7 @@ snippets:
 
             print(metrics["metrics/mAP50-95"])
             print(metrics["metrics/mAP50"])
-            print(metrics["metrics/precision"], metrics["metrics/recall"])
+            print(metrics["metrics/mAP75"])
   export:
     - label: TorchScript
       language: python
@@ -117,7 +117,7 @@ snippets:
       code: |
         pip install "libreyolo[onnx]"
         libreyolo export model=yolo9-t format=onnx imgsz=640
-source_hash: 7dfa4197133544c5
+source_hash: eb6b18dedf1c5f4b
 ---
 
 ## インストール

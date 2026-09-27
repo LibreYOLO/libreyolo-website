@@ -9,7 +9,7 @@ keywords:
   - prédiction yolo en ligne de commande
   - arguments libreyolo predict
   - sortie json libreyolo
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: Commande
     value: libreyolo predict
@@ -43,7 +43,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 56d898992f1b129c
+source_hash: 21374ebc0e6cf4d3
 ---
 
 ## Synopsis
@@ -113,9 +113,10 @@ valeurs valides pour `model`. Trois options sont refusées sur ces runtimes
 plutôt qu'ignorées : `tiling`, `overlap_ratio` et `output_file_format` quittent
 avec `config_unsupported` quand un backend de runtime ne peut pas les honorer.
 
-`half` fonctionne à l'inverse. Les runtimes exportés le reçoivent et s'exécutent
-en FP16 ; l'inférence PyTorch native indique dans les logs qu'il a été ignoré et
-continue en FP32.
+`half` fonctionne à l'inverse : il est accepté puis ignoré. L'inférence PyTorch
+native indique dans les logs qu'il a été ignoré et continue en FP32, et un runtime
+exporté conserve la précision avec laquelle il a été exporté, si bien qu'une
+inférence en FP16 suppose un export avec `half=true`.
 
 Les modèles d'estimation du regard fonctionnent en deux étapes et n'ont pas de
 détecteur propre, donc `face_detector` est requis pour eux. `gallery` ne

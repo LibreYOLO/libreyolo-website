@@ -122,7 +122,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: 531a9b20e5532913
+source_hash: e13acb1e813da7c4
 ---
 
 ## Definisi
@@ -208,7 +208,7 @@ names:
   1: sidewalk
 ```
 
-`masks_dir` adalah nama direktori pengganti `images`, dengan default `masks`.
+`masks_dir` adalah nama direktori pengganti `images`.
 `label_mapping` adalah pemetaan opsional `{source_id: train_id}` yang diterapkan
 pada nilai piksel mask saat pemuatan. Dengan cara ini, dataset bernomor 1 hingga
 150 menjadi 0 hingga 149; nilai sumber yang tidak dipetakan menjadi ignore, dan

@@ -16,7 +16,6 @@ keywords:
   - квантизация после обучения yolo
   - аргументы libreyolo quantize
 last_verified: 1.6.0
-
 meta:
   - label: Команда
     value: libreyolo quantize
@@ -52,7 +51,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 663390776f2f2c15
+source_hash: 409bc0b2ace6547e
 ---
 
 ## Синтаксис
@@ -73,7 +72,7 @@ libreyolo quantize model=<name|path> [recipe=<recipe>] [key=value ...]
 | `calib` | `coco128.yaml` | Изображения для калибровки: YAML с описанием данных или имя встроенного датасета. Без разметки, только прямой проход. `none` пропускает калибровку |
 | `samples` | `128` | Максимальное число изображений для калибровки |
 | `batch` | `8` | Размер батча при калибровке |
-| `algorithm` | `auto` | Оценка диапазона активаций: `auto`, который выбирает minmax, либо `minmax`, либо `percentile` |
+| `algorithm` | `auto` | Оценка диапазона активаций: `auto` (minmax), `minmax`, `percentile`, `mse` или `entropy` |
 | `out` | | Путь к выходному чекпойнту. По умолчанию — путь к исходному файлу с `-<recipe>` перед суффиксом |
 | `device` | `auto` | Устройство |
 | `allow_download_scripts` | `false` | Разрешить встроенный Python в блоках скачивания в YAML датасета |

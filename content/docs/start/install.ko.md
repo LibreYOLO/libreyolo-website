@@ -66,7 +66,7 @@ snippets:
         # 결의안. 여분이 없는 계열은 다음과 같이 나열됩니다
         # 그들을 가능하게 하는 pip 명령어.
         libreyolo models
-source_hash: "531023c2092fd751"
+source_hash: 3ad6bb09bf2f5434
 ---
 
 ## 설치
@@ -171,6 +171,8 @@ Molmo2는 별도 환경을 사용합니다. Transformers 4.57.1 고정 버전이
 | `tflite`, `litert` | `onnx2tf`와 `ai-edge-litert`는 Python 3.12 이상이 필요합니다 |
 
 `sensenova`는 macOS에서 `bitsandbytes`를 건너뛰는데, 해당 플랫폼에는 휠이 게시되지 않습니다. 나머지 추가 항목들은 정상적으로 설치됩니다.
+
+`vlm`은 플랫폼 범위로 지정되어 있지 않습니다: 이 추가 기능이 고정한 `decord==0.6.0`에는 x86-64 Linux와 Windows용 휠만 있습니다. macOS와 ARM Linux에서는 `vlm`, `ground`, `vlm-train`, `all`의 설치가 실패합니다.
 
 디스크가 병목이라면 대부분은 PyTorch이고, PyTorch의 대부분은 기본 휠에 포함된 CUDA 페이로드입니다. CPU 전용 휠은 아무것도 포기하지 않고 그것을 제거합니다. 토치를 전혀 설치하지 않아야 하는 머신에서 ONNX 탐지를 위해서는 [경량 설치](/docs/lightweight-install)를 참조하십시오.
 

@@ -172,12 +172,9 @@ Other JetPack releases, other Jetson boards and other CUDA versions were not
 tested. The recipe below is the one that worked on that combination.
 
 That run was on 2026-07-27 against LibreYOLO 1.4.0, and it has not been repeated
-on 1.5.0 hardware: this is the one page in the 1.5.0 tree still carrying a 1.4.0
-verification, which is why its front matter says `last_verified: "1.4.0"`.
-Nothing in the 1.5.0 changes touches the install path, the four missing
-libraries or the export flags described here, so the commands are expected to
-hold, but the version numbers in the outputs below are what 1.4.0 printed, not a
-1.5.0 measurement.
+on 1.5.0 or 1.6.0 hardware, which is why its front matter says
+`last_verified: "1.4.0"`. The commands are expected to hold, but the version
+numbers in the outputs below are what 1.4.0 printed, not a 1.6.0 measurement.
 
 Two things about it run against what most Jetson guides say. The wheels are the
 ordinary aarch64 builds published for CUDA 13, so no Jetson-specific torch build

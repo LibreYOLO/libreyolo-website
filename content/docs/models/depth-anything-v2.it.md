@@ -108,7 +108,7 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: e1043aba1b70b65c
+source_hash: de71e994a0b6d8b4
 ---
 
 ## Installazione
@@ -129,9 +129,9 @@ in locale.
 `result.depth_map` contiene una mappa densa di profondità inversa relativa:
 valori più alti indicano una maggiore vicinanza alla camera, e i valori non
 hanno unità metrica né scala confrontabile fra immagini. `save=True` scrive su
-disco una visualizzazione della mappa con una colormap; `Results.plot()` non
-copre questa famiglia, perché è definito solo per le normali di superficie e i
-contorni. La risoluzione di input deve essere divisibile per 14, la griglia di
+disco una visualizzazione della mappa con una colormap; `Results.plot()` disegna
+la mappa di profondità come immagine PIL, e con `pil=False` restituisce invece
+l'array. La risoluzione di input deve essere divisibile per 14, la griglia di
 patch DINOv2 su cui si appoggia la testa DPT; LibreYOLO lo verifica prima di
 eseguire e solleva un errore se non lo è. Vedi [predizione](/docs/predict) per
 sorgenti, streaming e gestione dei risultati.

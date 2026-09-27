@@ -3,7 +3,9 @@ title: YOLO-NAS
 families:
   - yolonas
 seo_title: 'YOLO-NAS: prediksi, latih, dan ekspor di LibreYOLO'
-description: "Deteksi, pose, dan kotak berorientasi YOLO-NAS di LibreYOLO. Bobot pralatih upstream hanya untuk penggunaan nonkomersial."
+description: >-
+  Deteksi, pose, dan kotak berorientasi YOLO-NAS di LibreYOLO. Bobot pralatih
+  upstream hanya untuk penggunaan nonkomersial.
 lead: >-
   Detektor konvolusional yang backbone dan neck-nya dihasilkan oleh pencarian
   arsitektur Deci.AI, dibuat dari block RepVGG yang menyadari kuantisasi.
@@ -133,7 +135,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 483562cad2c02696
+source_hash: 52050c4046781a6e
 ---
 
 ## Instalasi
@@ -217,8 +219,9 @@ checkpoint Deci tidak mengubah asal bobot maupun lisensi yang mencakupnya.
 
 Tidak ada yang dapat dicantumkan. Lisensi Deci melarang distribusi ulang, sehingga organisasi
 LibreYOLO tidak menerbitkan bobot YOLO-NAS dan unduhan diselesaikan di tempat lain: nama
-berbentuk `LibreYOLONAS<size>.pt`, atau `LibreYOLONAS<size>-pose.pt` untuk pose, dipetakan
-ke objek yang sesuai pada CDN publik Deci.
+berbentuk `LibreYOLONAS<size>.pt`, `LibreYOLONAS<size>-pose.pt` untuk pose, atau
+`LibreYOLONAS<size>-obb.pt` (s, m, l) untuk kotak berorientasi, dipetakan ke objek yang
+sesuai pada CDN publik Deci.
 
 Hanya checkpoint dengan SHA-256 yang ditetapkan library yang dapat diambil dengan cara itu.
 Semua yang lain gagal dalam kondisi tertutup, bukan membuka pickle pihak ketiga yang belum

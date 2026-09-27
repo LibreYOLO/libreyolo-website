@@ -2,11 +2,12 @@
 title: Cài đặt
 seo_title: Cài đặt LibreYOLO
 description: >-
-  Cài LibreYOLO từ PyPI, chọn các gói bổ sung mà họ mô hình hoặc đích xuất cần, rồi xác nhận PyTorch nhận diện
-  GPU.
+  Cài LibreYOLO từ PyPI, chọn các gói bổ sung mà họ mô hình hoặc đích xuất cần,
+  rồi xác nhận PyTorch nhận diện GPU.
 lead: >-
-  LibreYOLO được phát hành trên PyPI với tên libreyolo. Package cơ sở hỗ trợ dự đoán, huấn luyện, xác thực và
-  các họ mô hình không cần gì ngoài PyTorch; các gói bổ sung cung cấp phần còn lại.
+  LibreYOLO được phát hành trên PyPI với tên libreyolo. Package cơ sở hỗ trợ dự
+  đoán, huấn luyện, xác thực và các họ mô hình không cần gì ngoài PyTorch; các
+  gói bổ sung cung cấp phần còn lại.
 keywords:
   - cài libreyolo
   - pip install libreyolo
@@ -66,7 +67,7 @@ snippets:
         # đầu vào. Họ còn thiếu gói bổ sung được liệt kê kèm lệnh pip
         # để kích hoạt.
         libreyolo models
-source_hash: 531023c2092fd751
+source_hash: 3ad6bb09bf2f5434
 ---
 ## Cài đặt
 
@@ -187,6 +188,10 @@ thành công ở mọi nơi và chỉ cài ít thành phần hơn khi wheel khô
 
 `sensenova` bỏ qua `bitsandbytes` trên macOS vì không có wheel được công bố;
 phần còn lại của gói bổ sung vẫn cài bình thường.
+
+`vlm` không được giới hạn nền tảng: pin `decord==0.6.0` của nó chỉ có wheel cho
+Linux x86-64 và Windows. Trên macOS và Linux ARM, `vlm`, `ground`, `vlm-train`
+và `all` cài đặt thất bại.
 
 Nếu ổ đĩa là giới hạn, phần lớn dung lượng thuộc về PyTorch, và phần lớn
 PyTorch là payload CUDA đi kèm wheel mặc định. Wheel chỉ dùng CPU loại bỏ phần

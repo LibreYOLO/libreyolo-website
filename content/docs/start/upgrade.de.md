@@ -18,7 +18,7 @@ keywords:
   - yolox bn eps
   - faster-coco-eval standard
 last_verified: 1.6.0
-source_hash: c575718b8a7949f8
+source_hash: e9c7cb5271aa4a81
 ---
 
 ## 1.5.0 auf 1.6.0
@@ -31,7 +31,7 @@ source_hash: c575718b8a7949f8
 
 - D-FINE, DEIM, RT-DETRv4 und YOLO-NAS-Erkennung aktivieren FP16-AMP standardmäßig. Übergib `amp=False`, um FP32 beizubehalten.
 
-- Für bisherige YOLO9-Fine-Tuning-Einstellungen setze `aux_weight=0`, `max_labels=100` und `warmup_momentum=0.937`. Setze `letterbox_pad="topleft"`, wenn eine neue Konvertierung mit Center-Eintrag die alte Geometrie reproduzieren muss. Alte Checkpoints mit einem Head werden mit ihrem ursprünglichen Graphen fortgesetzt.
+- Für bisherige YOLO9-Fine-Tuning-Einstellungen setze `aux_weight=0`, `max_labels=100` und `warmup_momentum=0.937`. Setze `letterbox_pad="topleft"`, wenn eine neue Konvertierung mit Center-Eintrag die alte Geometrie reproduzieren muss. Alte Checkpoints mit einem Head werden mit ihrem ursprünglichen Graphen fortgesetzt. Neue YOLO9-Läufe benötigen mehr GPU-Speicher, senke also `batch`, wenn eine Batch-Größe aus 1.5.0 den Speicher überschreitet.
 
 - RF-DETR und DINOv2 erstellen hochgezählte Laufverzeichnisse mit Familiennamen. Aktualisiere Programme, die Artefaktpfade verwenden, oder setze `output_dir="runs/train", exist_ok=True`, um den bisherigen Ort und das Wiederverwendungsverhalten beizubehalten.
 
@@ -81,7 +81,8 @@ model.train(data="data.yaml", epochs=100)
 ```
 
 Es gibt keinen veralteten Kompatibilitätspfad. Ein Aufruf, der das Argument
-weiterhin übergibt, löst `TypeError` aus. Gleichzeitig wurde
+weiterhin übergibt, erhält die Warnung `Unknown training config keys (ignored)`,
+und das Argument bleibt wirkungslos. Gleichzeitig wurde
 `BaseModel.EXPERIMENTAL_WEIGHT_FILENAMES` entfernt. Der Hook
 `get_download_notice()` bleibt bestehen und wird weiterhin von MiDaS,
 SegFormer und YOLO9-P2 überschrieben.
@@ -204,9 +205,9 @@ treue Werte musst du entweder BN-eps bei der Evaluierung auf 1e-5 setzen:
 
 ```python
 import torch
-from libreyolo import LibreYOLOX
+from libreyolo import LibreYOLO
 
-model = LibreYOLOX("my-yolox-finetune.pt")
+model = LibreYOLO("my-yolox-finetune.pt")
 for module in model.model.modules():
     if isinstance(module, torch.nn.BatchNorm2d):
         module.eps = 1e-5
@@ -265,8 +266,8 @@ DEIM verwendet weiterhin den festen Wert 3. Familiendetails findest du unter
 - **`libreyolo predict` verwirft nicht unterstützte Optionen, statt einen Fehler
   auszulösen.** Die CLI filtert Keyword-Argumente anhand der `__call__`-Signatur
   des Modells. Eine von der Familie nicht akzeptierte Option wird ignoriert,
-  statt `TypeError` auszulösen. Ein Tippfehler in einem Flag-Namen wird jetzt
-  unbemerkt ignoriert.
+  statt `TypeError` auszulösen. Ein unbekannter Flag-Name wird weiterhin mit
+  `No such option` abgelehnt.
 - **Live-Quellen verändern die Form der JSON-Ausgabe.** Webcams, RTSP-Streams
   und Bildschirmaufnahmen aktivieren implizit Streaming. Dadurch wird ein
   Datensatz pro Frame statt pro Aufruf ausgegeben. Diese

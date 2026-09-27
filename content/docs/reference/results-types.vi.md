@@ -2,11 +2,12 @@
 title: Các kiểu Results
 seo_title: Tham chiếu object Results của LibreYOLO
 description: >-
-  Dữ liệu kết quả LibreYOLO: bounding box, mặt nạ, keypoint, phân loại, độ sâu, albedo, khối hộp 3D và đoạn
-  hành động robot.
+  Dữ liệu kết quả LibreYOLO: bounding box, mặt nạ, keypoint, phân loại, độ sâu,
+  albedo, khối hộp 3D và đoạn hành động robot.
 lead: >-
-  Results là kiểu trả về theo ảnh duy nhất của mọi mô hình LibreYOLO. Nó chứa các vị trí dữ liệu tùy chọn, một
-  cho mỗi dạng tác vụ, và chỉ điền những vị trí mô hình tạo ra.
+  Results là kiểu trả về theo ảnh duy nhất của mọi mô hình LibreYOLO. Nó chứa
+  các vị trí dữ liệu tùy chọn, một cho mỗi dạng tác vụ, và chỉ điền những vị trí
+  mô hình tạo ra.
 keywords:
   - object results libreyolo
   - Results.boxes
@@ -17,8 +18,9 @@ keywords:
   - libreyolo results to_json
 last_verified: 1.6.0
 verification: >-
-  Tên slot, shape, thuộc tính và giá trị mặc định được đọc từ libreyolo/utils/results.py ở v1.6.0. Ngữ nghĩa
-  được lấy từ docstring của các lớp payload.
+  Tên slot, shape, thuộc tính và giá trị mặc định được đọc từ
+  libreyolo/utils/results.py ở v1.6.0. Ngữ nghĩa được lấy từ docstring của các
+  lớp payload.
 snippets:
   usage:
     - label: Python
@@ -48,7 +50,7 @@ snippets:
         # Các hàng dưới dạng dict thuần, sau đó là JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: d74276d805c22c92
+source_hash: 173c542fb675892e
 ---
 ## Object Results
 
@@ -292,7 +294,7 @@ các slot được nêu thay thế; nó nhận mọi slot cùng `track_id` và `
 thuần, mỗi detection, segment, điểm hoặc vùng một hàng tùy các slot đã đặt.
 `to_json(**kwargs)` chuyển đối số đến `summary` và trả về chuỗi JSON.
 
-`plot()` dựng dữ liệu của mọi tác vụ. Lớp phủ ảnh mặc định là mảng BGR; `pil=True` yêu cầu PIL. Kết quả biên và bản đồ pháp tuyến giữ mặc định PIL.
+`plot()` dựng dữ liệu của mọi tác vụ. Lớp phủ ảnh mặc định là mảng BGR; `pil=True` yêu cầu PIL. Bản đồ độ sâu, pháp tuyến, biên và albedo, khối hộp 3D và đoạn hành động mặc định trả về ảnh PIL; `pil=False` trả về mảng.
 
 ## Boxes3D
 

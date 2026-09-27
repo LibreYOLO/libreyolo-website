@@ -57,7 +57,7 @@ snippets:
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot() візуалізує карту; його визначено для країв і нормалей.
+        # plot() повертає візуалізовану карту як зображення PIL.
         result.plot().save("edges.png")
   val:
     - label: Виконати валідацію та прочитати ключі метрик
@@ -110,7 +110,7 @@ snippets:
 
 
         print(result.edges.array.shape)
-source_hash: bc286345540ed966
+source_hash: 1784d723c3ca99db
 ---
 
 ## Визначення

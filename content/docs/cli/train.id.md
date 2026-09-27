@@ -54,7 +54,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 0f7f2b7487a67daa
+source_hash: 30b2c16d339f5f50
 ---
 
 ## Sinopsis
@@ -257,7 +257,7 @@ tidak menulis `best.pt`.
 ### Perilaku lain yang perlu diketahui
 
 `lora=true` diterima oleh RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 dan v4,
-EC serta ConvNeXt. Family lain akan keluar dengan `config_unsupported`
+EC, GTR serta ConvNeXt. Family lain akan keluar dengan `config_unsupported`
 alih-alih melatih tanpa LoRA.
 
 `pretrained=false` yang digabung dengan `resume` ditolak pada family yang

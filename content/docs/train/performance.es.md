@@ -70,7 +70,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: 288ee5ee988f2fda
+source_hash: c8d7adb6aabcbc80
 ---
 
 ## Medir antes de tocar nada
@@ -264,6 +264,22 @@ ciento. El coste relativo es mayor en los modelos de clasificación pequeños,
 cuyas activaciones ya son pequeñas de partida: ResNet-18 a 224 px, batch 16,
 pasó de 0,48 GB en eager a 0,57 GB con grafo. Si eso empuja una ejecución por
 encima del límite, baja el batch o deja el flag apagado.
+
+## torch.compile
+
+`train(compile=True)` compila el forward y el backward de la red con
+`torch.compile`. También acepta los modos `"default"`, `"reduce-overhead"`,
+`"max-autotune"` y `"max-autotune-no-cudagraphs"`; el valor por defecto es
+`False`. La loss, el optimizador, la EMA, la validación, los checkpoints y la
+exportación siguen en eager, y los checkpoints se cargan sin compilación. Solo
+compilan las ejecuciones CUDA de una sola GPU. Las ejecuciones en CPU, MPS,
+distribuidas y de destilación, y los fallos del compilador, entrenan en eager
+tras un aviso. La compilación tarda varios minutos y necesita un compilador de C
+y las cabeceras de Python en la máquina de entrenamiento.
+
+Durante `train()`, salvo que `OMP_NUM_THREADS` esté definido, LibreYOLO reduce
+el número de hilos de CPU de PyTorch a la asignación de CPU del proceso, para
+que los contenedores con CPU limitada no ralenticen cada paso.
 
 ## Relacionado
 

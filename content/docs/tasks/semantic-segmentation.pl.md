@@ -131,7 +131,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: 531a9b20e5532913
+source_hash: e13acb1e813da7c4
 ---
 
 ## Definicja
@@ -228,8 +228,7 @@ names:
   1: sidewalk
 ```
 
-`masks_dir` jest nazwą katalogu zastępującego `images` i domyślnie przyjmuje
-wartość `masks`. `label_mapping` jest opcjonalnym mapowaniem
+`masks_dir` jest nazwą katalogu zastępującego `images`. `label_mapping` jest opcjonalnym mapowaniem
 `{source_id: train_id}`, stosowanym do wartości pikseli maski podczas
 wczytywania. W ten sposób zbiór danych numerowany od 1 do 150 zmienia się w
 zakres od 0 do 149. Każda niezmapowana wartość źródłowa staje się etykietą

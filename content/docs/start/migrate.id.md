@@ -14,7 +14,7 @@ keywords:
   - migrasi libreyolo
   - konversi pth ke libreyolo
   - autoconversion
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Entry point
     value: LibreYOLO("path/to/upstream.pth")
@@ -64,7 +64,7 @@ snippets:
         terbitan.
 
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: 517b0462e83295f1
+source_hash: b19fedcf10862990
 ---
 
 Halaman ini membahas checkpoint dari project lain. Jika memindahkan kode sendiri

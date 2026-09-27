@@ -294,7 +294,7 @@ plain dicts, one row per detection, segment, point or region depending on
 which slots are set. `to_json(**kwargs)` passes its arguments to `summary`
 and returns the JSON string.
 
-`plot()` renders every task payload. Image overlays default to BGR arrays; `pil=True` requests PIL. Edge and normal-map results retain their PIL defaults.
+`plot()` renders every task payload. Image overlays default to BGR arrays; `pil=True` requests PIL. Depth, normal, edge and albedo maps, 3D cuboids and action chunks return a PIL image by default; `pil=False` returns the array.
 
 ## Boxes3D
 

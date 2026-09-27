@@ -53,7 +53,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 0f7f2b7487a67daa
+source_hash: 30b2c16d339f5f50
 ---
 
 ## Składnia
@@ -256,7 +256,7 @@ zapisuje `best.pt`.
 ### Inne zachowania, które warto znać
 
 `lora=true` jest przyjmowane przez RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1,
-v2 i v4, EC oraz ConvNeXt. Każda inna rodzina kończy działanie z
+v2 i v4, EC, GTR oraz ConvNeXt. Każda inna rodzina kończy działanie z
 `config_unsupported`, zamiast trenować bez tego.
 
 `pretrained=false` w połączeniu z `resume` jest odrzucane w rodzinach, które

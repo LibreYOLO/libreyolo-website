@@ -16,7 +16,6 @@ keywords:
   - угловая ошибка нормалей
   - плотное предсказание нормалей
 last_verified: 1.6.0
-
 snippets:
   predict:
     - label: Предсказание поля нормалей
@@ -57,7 +56,7 @@ snippets:
         model = LibreYOLO("LibreMoGe2s-normal.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot() рисует поле; он определён для результатов normal и edge.
+        # plot() возвращает отрисованное поле как PIL-изображение.
         result.plot().save("normals.png")
   val:
     - label: Валидация и чтение ключей метрик
@@ -91,7 +90,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.data.shape)
-source_hash: b033fdf3a2210ce5
+source_hash: dd8de1b1ecd208bf
 ---
 
 ## Определение

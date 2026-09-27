@@ -16,7 +16,7 @@ keywords:
   - migrazione libreyolo
   - convertire pth in libreyolo
   - conversione automatica checkpoint
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Punto di ingresso
     value: LibreYOLO("path/to/upstream.pth")
@@ -54,7 +54,7 @@ snippets:
       code: |
         # Il file convertito soddisfa lo stesso schema di uno pubblicato.
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: 517b0462e83295f1
+source_hash: b19fedcf10862990
 ---
 
 Questa pagina parla dei checkpoint che arrivano da altri progetti. Se invece

@@ -155,7 +155,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: ff50afedd377beaf
+source_hash: a407e1142b8aa57e
 ---
 ## Cài đặt
 
@@ -182,11 +182,12 @@ chiều cao và chiều rộng của ảnh gốc ở dạng động vì bước 
 bên trong graph.
 
 `opset` được chọn theo từng họ mô hình khi bị bỏ trống. Các họ theo kiểu DETR
-(`detr`, `deformable_detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`,
-`rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) cùng với `deit`, `midas` và `moge2`
-nhận opset 17, vì đó là nơi `aten::scaled_dot_product` được hạ xuống. Mọi thứ còn
-lại nhận 13. Matting luôn được nâng lên 19 bất kể thế nào, vì decoder của BiRefNet
-cần toán tử `DeformConv`, thứ mà ONNX chỉ định nghĩa từ opset 19.
+(`detr`, `deformable_detr`, `dinodetr`, `dfine`, `gtr`, `deim`, `deimv2`,
+`tinyformer`, `ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) cùng
+với `deit`, `midas`, `moge2` và `vjepa2` nhận opset 17, vì đó là nơi
+`aten::scaled_dot_product` được hạ xuống. Mọi thứ còn lại nhận 13. BiRefNet và
+FeyNobg luôn được nâng lên 19 bất kể thế nào, vì decoder của chúng cần toán tử
+`DeformConv`, thứ mà ONNX chỉ định nghĩa từ opset 19.
 
 `simplify=True` chạy `onnxsim` và giữ lại graph gốc nếu bước này thất bại, nên một
 lỗi đơn giản hóa chỉ là cảnh báo chứ không phải là một lần xuất mô hình thất bại.
@@ -275,12 +276,13 @@ Một vài tác vụ mang theo hợp đồng runtime với độ phân giải c�
 này. Độ sâu, pháp tuyến bề mặt và biên từ chối `batch != 1` và ép `dynamic=False`.
 Matting ép về khung vuông 1024 gốc, vì các bảng relative-position của Swin trong
 BiRefNet gắn chặt với độ phân giải của chúng. Phục hồi ảnh ép một khung cố định cho
-mọi họ mô hình trừ Real-ESRGAN, vốn có generator hoàn toàn tích chập.
+mọi họ mô hình trừ Real-ESRGAN và QuickSRNet, vốn có mạng hoàn toàn tích chập.
 
-`imgsz` hình chữ nhật dùng được với các họ YOLO9, HRNet, NAFNet và Real-ESRGAN. Các
-họ mô hình có hợp đồng vuông cố định (`clip`, `deformable_detr`, `detr`,
-`dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`, `moge2`, `rtdetr`,
-`rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`, `ssd`) từ chối thẳng.
+`imgsz` hình chữ nhật dùng được với các họ YOLO9, HRNet, NAFNet, PP-LiteSeg,
+Real-ESRGAN, QuickSRNet và phân đoạn ngữ nghĩa GTR. Các họ mô hình có hợp đồng
+vuông cố định (`clip`, `deformable_detr`, `detr`, `dinodetr`, `dfine`, `gtr` trừ
+phân đoạn ngữ nghĩa, `deim`, `deimv2`, `tinyformer`, `ec`, `lwdetr`, `moge2`,
+`rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`, `ssd`) từ chối thẳng.
 
 Hai tổ hợp bị từ chối trước khi trace: phân đoạn với YOLO9, vì trong LibreYOLO
 YOLO9 chỉ làm phát hiện đối tượng, và phân đoạn với RTMDet-Ins, vốn có phần giải mã

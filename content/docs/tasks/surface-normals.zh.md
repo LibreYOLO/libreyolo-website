@@ -9,7 +9,7 @@ keywords:
   - 单目几何 moge-2
   - 法线角误差指标
   - 稠密法线预测
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: 预测法线场
@@ -44,7 +44,7 @@ snippets:
         model = LibreYOLO("LibreMoGe2s-normal.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot() 会把这个场渲染出来，法线结果和边缘结果都有定义
+        # plot() 把渲染好的场以 PIL 图像返回
         result.plot().save("normals.png")
   val:
     - label: 验证并读取指标键
@@ -78,7 +78,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.data.shape)
-source_hash: b033fdf3a2210ce5
+source_hash: dd8de1b1ecd208bf
 ---
 
 ## 定义

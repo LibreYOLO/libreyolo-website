@@ -4,7 +4,7 @@ seo_title: "LibreYOLO quickstart"
 description: "Run a detector on an image, fine-tune it on a small dataset and export it to TorchScript or ONNX, all on CPU, in about ten lines of Python."
 lead: "The shortest path through LibreYOLO: predict on one image, train on a small dataset, then export the result. Every command here runs on CPU."
 keywords: [libreyolo quickstart, libreyolo tutorial, libreyolo predict, libreyolo train, libreyolo export, yolo python example]
-last_verified: "1.5.0"
+last_verified: "1.6.0"
 meta:
   - label: Install
     value: pip install libreyolo
@@ -86,7 +86,7 @@ snippets:
 
             print(metrics["metrics/mAP50-95"])
             print(metrics["metrics/mAP50"])
-            print(metrics["metrics/precision"], metrics["metrics/recall"])
+            print(metrics["metrics/mAP75"])
   export:
     - label: TorchScript
       language: python

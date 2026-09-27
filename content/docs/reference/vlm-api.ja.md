@@ -42,7 +42,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 77a04856cfe4f88c
+source_hash: a9e0d635a6645d2c
 ---
 
 ## インストール
@@ -79,7 +79,7 @@ LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 
 `LibreVLM`、`LibreLFM2VL`、`LibreQwen3VL`、`LibreSmolVLM2`、`LibreInternVL3`、`LibreFlorence2`、`LibreKosmos2`、`LibreLocateAnything`、`LibreMODUS`（`LibreModus` という綴りも可能）はパッケージレベルでエクスポートされます。
 
-物体検出には、`north-micro-vision`、`gemma-4-e2b`、`gemma-4-e4b`、`moondream-2`、`moondream-3`、`lfm2-vl-3b`もあります。単独の`gemma-4`という別名はE4Bを選択します。Molmo2の別名は`molmo2-4b`、`molmo2-8b`、`molmo2-o-7b`で、デフォルトは4Bです。別名は振り分け先を定めるもので、すべてのリモートスナップショットのダウンロードとテストが完了していることを意味しません。
+物体検出には、`north-micro-vision`、`gemma-4-e2b`、`gemma-4-e4b`、`moondream-2`、`moondream-3`、`lfm2-vl-3b`もあります。単独の`gemma-4`という別名はE4Bを選択します。Molmo2の別名は`molmo2-4b`、`molmo2-8b`、`molmo2-o-7b`で、デフォルトは4Bです。別名は振り分け先を定めるもので、すべてのリモートスナップショットのダウンロードとテストが完了していることを意味しません。`moondream-3`は1.6.0では読み込めません。ミラーに重みのシャードが欠けているためです。
 
 ## タスク
 

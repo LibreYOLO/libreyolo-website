@@ -16,7 +16,7 @@ keywords:
   - géométrie monoculaire
   - métrique erreur angulaire
   - prédiction dense normales
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Prédire un champ de normales
@@ -51,18 +51,13 @@ snippets:
         print(field[h // 2, w // 2])
     - label: Enregistrer la visualisation
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("LibreMoGe2s-normal.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
-        # plot() rend le champ ; cette méthode est définie pour les normales et
-        les contours.
-
+        # plot() renvoie le champ rendu sous forme d'image PIL.
         result.plot().save("normals.png")
   val:
     - label: Valider et lire les clés des métriques
@@ -96,7 +91,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.data.shape)
-source_hash: b033fdf3a2210ce5
+source_hash: dd8de1b1ecd208bf
 ---
 
 ## Définition

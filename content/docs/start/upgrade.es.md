@@ -18,7 +18,7 @@ keywords:
   - yolox bn eps
   - faster-coco-eval por defecto
 last_verified: 1.6.0
-source_hash: c575718b8a7949f8
+source_hash: e9c7cb5271aa4a81
 ---
 
 ## De 1.5.0 a 1.6.0
@@ -31,7 +31,7 @@ source_hash: c575718b8a7949f8
 
 - D-FINE, DEIM, RT-DETRv4 y la detección de YOLO-NAS activan AMP FP16 por defecto. Pasa `amp=False` para conservar FP32.
 
-- Para recuperar los ajustes anteriores de fine-tuning de YOLO9, fija `aux_weight=0`, `max_labels=100` y `warmup_momentum=0.937`. Fija `letterbox_pad="topleft"` cuando una nueva conversión marcada como centrada deba reproducir la geometría anterior. Los checkpoints antiguos de una sola cabeza se reanudan con su grafo original.
+- Para recuperar los ajustes anteriores de fine-tuning de YOLO9, fija `aux_weight=0`, `max_labels=100` y `warmup_momentum=0.937`. Fija `letterbox_pad="topleft"` cuando una nueva conversión marcada como centrada deba reproducir la geometría anterior. Los checkpoints antiguos de una sola cabeza se reanudan con su grafo original. Las nuevas ejecuciones de YOLO9 usan más memoria de GPU, así que baja `batch` si un tamaño de batch de 1.5.0 se queda sin memoria.
 
 - RF-DETR y DINOv2 crean directorios de ejecución incrementados con el nombre de la familia. Actualiza los consumidores de rutas de artefactos, o fija `output_dir="runs/train", exist_ok=True` para conservar la ubicación y la reutilización anteriores.
 
@@ -79,8 +79,9 @@ model.train(data="data.yaml", epochs=100, allow_experimental=True)
 model.train(data="data.yaml", epochs=100)
 ```
 
-No hay ningún shim de deprecación. Una llamada que lo siga pasando lanza
-`TypeError`. `BaseModel.EXPERIMENTAL_WEIGHT_FILENAMES` se eliminó con él. El
+No hay ningún shim de deprecación. Una llamada que lo siga pasando recibe un
+aviso `Unknown training config keys (ignored)`, y el argumento no tiene ningún
+efecto. `BaseModel.EXPERIMENTAL_WEIGHT_FILENAMES` se eliminó con él. El
 hook `get_download_notice()` sobrevive, y lo siguen sobrescribiendo MiDaS,
 SegFormer y YOLO9-P2.
 
@@ -200,9 +201,9 @@ reportar números fieles, o bien lo evalúas con el eps de BN forzado a 1e-5:
 
 ```python
 import torch
-from libreyolo import LibreYOLOX
+from libreyolo import LibreYOLO
 
-model = LibreYOLOX("my-yolox-finetune.pt")
+model = LibreYOLO("my-yolox-finetune.pt")
 for module in model.model.modules():
     if isinstance(module, torch.nn.BatchNorm2d):
         module.eps = 1e-5
@@ -263,8 +264,8 @@ DEIM sigue usando el 3 fijo. Los detalles de la familia están en
 - **`libreyolo predict` descarta las opciones no soportadas en lugar de lanzar
   un error.** La CLI filtra los kwargs contra la firma de `__call__` del
   modelo, así que una opción que una familia no acepta se ignora en vez de
-  lanzar `TypeError`. Una errata en el nombre de un flag ahora se ignora en
-  silencio.
+  lanzar `TypeError`. Un nombre de flag desconocido se sigue rechazando con
+  `No such option`.
 - **Las fuentes en vivo cambian la forma de la salida JSON.** Las webcams, los
   streams RTSP y la captura de pantalla activan el streaming de forma
   implícita, lo que emite un registro por frame en lugar de uno por llamada.

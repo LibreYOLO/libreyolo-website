@@ -190,7 +190,7 @@ snippets:
 
 
         tegrastats            # beban live; nvidia-smi terbatas di Tegra
-source_hash: c07ff908503e89b5
+source_hash: 42f4131b1a842bfd
 ---
 
 ## Yang dicatat halaman ini
@@ -207,12 +207,9 @@ Rilis JetPack lain, board Jetson lain dan versi CUDA lain tidak diuji. Resep di
 bawah adalah yang berhasil pada kombinasi tersebut.
 
 Run itu dilakukan pada 2026-07-27 terhadap LibreYOLO 1.4.0, dan belum diulang di
-perangkat 1.5.0: ini satu-satunya halaman di tree 1.5.0 yang masih membawa
-verifikasi 1.4.0, karena itu front matter halaman ini menyebut
-`last_verified: "1.4.0"`. Tidak ada perubahan di 1.5.0 yang menyentuh jalur
-instalasi, empat library yang hilang atau flag ekspor yang dijelaskan di sini,
-jadi perintahnya diperkirakan tetap berlaku, tetapi nomor versi pada output di
-bawah adalah yang dicetak 1.4.0, bukan hasil ukur 1.5.0.
+perangkat 1.5.0 maupun 1.6.0, karena itu front matter halaman ini menyebut
+`last_verified: "1.4.0"`. Perintahnya diperkirakan tetap berlaku, tetapi nomor
+versi pada output di bawah adalah yang dicetak 1.4.0, bukan hasil ukur 1.6.0.
 
 Ada dua hal di dalamnya yang bertentangan dengan yang dikatakan kebanyakan
 panduan Jetson. Wheel yang dipakai adalah build aarch64 biasa yang dipublikasikan

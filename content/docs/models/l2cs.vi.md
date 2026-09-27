@@ -89,7 +89,7 @@ snippets:
         yaw_logits, pitch_logits = session.run(
             None, {name: np.zeros((1, 3, 448, 448), dtype=np.float32)}
         )
-source_hash: 4ec43f4673b4be3e
+source_hash: 1f61c1a61e033bbc
 ---
 
 ## Cài đặt
@@ -106,7 +106,7 @@ Checkpoint duy nhất LibreYOLO có thể tự động tìm nạp là ResNet-50 
 pip install "libreyolo[gaze]"
 ```
 
-Khi không có extra này, LibreYOLO in hướng dẫn tải thủ công thay vì âm thầm thất bại.
+Khi không có extra này, LibreYOLO in hướng dẫn tải thủ công thay vì âm thầm thất bại. Trong 1.6.0, bản tải từ Google Drive upstream trả về 404, nên hãy đặt một bản sao cục bộ của checkpoint tại đường dẫn bạn truyền vào khi nạp.
 
 ## Dự đoán
 

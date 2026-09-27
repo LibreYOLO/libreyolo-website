@@ -15,7 +15,7 @@ keywords:
   - міграція LibreYOLO
   - перетворити pth у LibreYOLO
   - автоматичне перетворення
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: Точка входу
     value: LibreYOLO("path/to/upstream.pth")
@@ -61,7 +61,7 @@ snippets:
       code: |
         # Перетворений файл відповідає тій самій схемі, що й опублікований.
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: 517b0462e83295f1
+source_hash: b19fedcf10862990
 ---
 
 Ця сторінка стосується контрольних точок з інших проєктів. Якщо ви переносите

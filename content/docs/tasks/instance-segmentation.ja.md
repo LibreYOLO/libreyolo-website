@@ -11,7 +11,7 @@ keywords:
   - ポリゴンラベル
   - MIT セグメンテーションライブラリ
   - mask mAP
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -116,7 +116,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 3d956e53e80143c2
+source_hash: 577cd3c8c2d5d6fe
 ---
 
 ## 定義
@@ -129,9 +129,9 @@ source_hash: 3d956e53e80143c2
 
 ## モデル
 
-マスクの学習と推論の両方に対応するファミリーは5つです。[RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter)、[D-FINE](/docs/models/d-fine)、[GTR](/docs/models/gtr)、[RTMDet](/docs/models/rtmdet)です。RF-DETRには専用の追加パッケージ`pip install "libreyolo[rfdetr]"`が必要で、他の4つは基本パッケージで実行できます。
+マスクの学習と推論の両方に対応するファミリーは4つです。[RF-DETR](/docs/models/rf-detr)、[EdgeCrafter](/docs/models/edgecrafter)、[D-FINE](/docs/models/d-fine)、[GTR](/docs/models/gtr)です。RF-DETRには専用の追加パッケージ`pip install "libreyolo[rfdetr]"`が必要で、他の3つは基本パッケージで実行できます。
 
-[Mask R-CNN](/docs/models/mask-rcnn)はマスクの推論、検証、エクスポートに対応しますが、`train()`は`NotImplementedError`を送出します。
+[Mask R-CNN](/docs/models/mask-rcnn)はマスクの推論、検証、エクスポートに対応しますが、`train()`は`NotImplementedError`を送出します。[RTMDet](/docs/models/rtmdet)はマスクの推論と検証に対応しますが、セグメンテーションの学習では`NotImplementedError`を送出します。学習できるのは検出器としてだけです。
 
 [EoMT](/docs/models/eomt)はマスクの推論と検証に対応しますが、学習はできません。エクスポートの範囲はさらに狭く、`export()`が受け付けるのはsemanticタスクだけです。`segment`と`panoptic`に必要なクエリマスクのランタイム契約が定義されていないため、これらでは`NotImplementedError`を送出します。EoMTのインスタンスマスクはエクスポート済みグラフではなくPythonで使用してください。
 

@@ -13,7 +13,7 @@ keywords:
   - yolox bn eps
   - faster-coco-eval 기본값
 last_verified: 1.6.0
-source_hash: c575718b8a7949f8
+source_hash: e9c7cb5271aa4a81
 ---
 
 ## 1.5.0에서 1.6.0으로
@@ -26,7 +26,7 @@ source_hash: c575718b8a7949f8
 
 - D-FINE, DEIM, RT-DETRv4, YOLO-NAS 탐지는 기본적으로 FP16 AMP를 활성화합니다. FP32를 유지하려면 `amp=False`를 전달합니다.
 
-- 이전 YOLO9 파인튜닝 설정을 사용하려면 `aux_weight=0`, `max_labels=100`, `warmup_momentum=0.937`을 설정합니다. center가 새로 기록된 변환에서 기존 기하를 재현해야 하면 `letterbox_pad="topleft"`를 설정합니다. 기존 단일 헤드 체크포인트는 원래 그래프로 학습을 재개합니다.
+- 이전 YOLO9 파인튜닝 설정을 사용하려면 `aux_weight=0`, `max_labels=100`, `warmup_momentum=0.937`을 설정합니다. center가 새로 기록된 변환에서 기존 기하를 재현해야 하면 `letterbox_pad="topleft"`를 설정합니다. 기존 단일 헤드 체크포인트는 원래 그래프로 학습을 재개합니다. 새 YOLO9 실행은 GPU 메모리를 더 많이 사용하므로, 1.5.0의 배치 크기에서 메모리가 부족하면 `batch`를 낮춥니다.
 
 - RF-DETR과 DINOv2는 계열 이름에 번호가 증가하는 실행 디렉터리를 생성합니다. 산출물 경로를 사용하는 코드를 갱신하거나, 기존 위치와 재사용 동작을 유지하려면 `output_dir="runs/train", exist_ok=True`를 설정합니다.
 
@@ -68,7 +68,7 @@ model.train(data="data.yaml", epochs=100, allow_experimental=True)
 model.train(data="data.yaml", epochs=100)
 ```
 
-더 이상 사용 중단 대체 코드는 없습니다. 여전히 그것을 전달하는 호출은 `TypeError`를 발생시킵니다. `BaseModel.EXPERIMENTAL_WEIGHT_FILENAMES`는 그것과 함께 제거되었습니다. `get_download_notice()` 훅은 남아 있으며 여전히 MiDaS, SegFormer 및 YOLO9-P2에 의해 재정의됩니다.
+더 이상 사용 중단 대체 코드는 없습니다. 여전히 그것을 전달하는 호출은 `Unknown training config keys (ignored)` 경고를 받으며, 인수는 아무 효과가 없습니다. `BaseModel.EXPERIMENTAL_WEIGHT_FILENAMES`는 그것과 함께 제거되었습니다. `get_download_notice()` 훅은 남아 있으며 여전히 MiDaS, SegFormer 및 YOLO9-P2에 의해 재정의됩니다.
 
 지원 수준은 여전히 게시되지만 더 이상 인수가 아닙니다: [안정성 등급](/docs/reference/stability-tiers)을 참조하십시오.
 
@@ -150,9 +150,9 @@ YOLOX는 BatchNorm `eps=1e-3` 및 `momentum=0.03`를 지정합니다. 1.5.0 이�
 
 ```python
 import torch
-from libreyolo import LibreYOLOX
+from libreyolo import LibreYOLO
 
-model = LibreYOLOX("my-yolox-finetune.pt")
+model = LibreYOLO("my-yolox-finetune.pt")
 for module in model.model.modules():
     if isinstance(module, torch.nn.BatchNorm2d):
         module.eps = 1e-5
@@ -182,7 +182,7 @@ DEIM은 여전히 하드코딩된 3을 사용합니다. 계열 세부 사항은 
 - **측정 지표 사전이 키를 얻었습니다.** COCO 평가기에서는 `max_det`, `ar_max_det` 및 `AR_max_det`를, FOMO에서는 `metrics/loss`와 `metrics/loss/ce`를 추가했습니다. 기본값의 값은 변경되지 않았지만, 사용자 정의 [로거](/docs/train/loggers)와 CSV 헤더를 포함하여 측정 지표 키를 반복하는 모든 항목은 새로운 열을 확인합니다.
 - **헤드 재구성을 트리거하는 시드 YOLO9 실행**은 재구성 전에 시드가 적용되기 때문에 서로 다른 초기화에서 시작됩니다. 다른 클래스 수에 대해 시드 1.4.0로 파인튜닝한 결과는 1.5.0에서 비트 단위로 재현할 수 없습니다.
 - **`libreyolo[hub-kernels]`가 이제 CUDA에서 실제로 네이티브 MS-deform-attn 커널을 사용합니다.** 1.4.0에서는 RF-DETR가 절대 사용하지 않는 조건 뒤에 이를 제한했기 때문에 커널이 실행되지 않았습니다. RF-DETR 및 다른 변형 주의(attention) 계열에서 예측 값이 부동소수점 허용 오차 내에서 변동할 수 있습니다. 기본 설치에는 영향을 주지 않으며, `LIBREYOLO_HUB_KERNELS=0`는 이를 비활성화합니다.
-- **`libreyolo predict`은 오류를 발생시키는 대신 지원되지 않는 옵션을 제거합니다.** CLI는 모델의 `__call__` 시그니처에 대해 kwargs를 필터링하므로, 계열가 허용하지 않는 옵션은 `TypeError`을 발생시키는 대신 무시됩니다. 플래그 이름의 오타도 이제 조용히 무시됩니다.
+- **`libreyolo predict`은 오류를 발생시키는 대신 지원되지 않는 옵션을 제거합니다.** CLI는 모델의 `__call__` 시그니처에 대해 kwargs를 필터링하므로, 계열가 허용하지 않는 옵션은 `TypeError`을 발생시키는 대신 무시됩니다. 알 수 없는 플래그 이름은 여전히 `No such option`으로 거부됩니다.
 - **실시간 소스는 JSON 출력 형태를 변경합니다.** 웹캠, RTSP 스트림 및 화면 캡처는 암묵적으로 스트리밍을 활성화하며, 호출당 하나의 레코드가 아니라 프레임당 하나의 레코드를 생성합니다. 이 [소스](/docs/predict/sources)는 1.5.0에서 새로 추가되었으므로 1.4.0 스크립트에는 영향을 주지 않습니다.
 - **`rfdetr-pose` 또는 `yolonas-pose`를 ONNX로 다시 내보내면 출력 이름이 다르게 나옵니다.** 1.4.0은 출력 수 기반의 휴리스틱을 통해 이들의 다중 텐서 포즈 헤드를 세분화(segmentation)로 잘못 읽었습니다. 디스크에 있는 기존 `.onnx` 파일은 그대로 유지됩니다.
 - **토치가 없는 설치**에서는 결과가 `torch.Tensor`가 아닌 numpy 배열을 유지하므로, `.boxes.data`는 다른 유형을 반환하며 NMS 동점 처리 방식이 torchvision과 다를 수 있습니다. 토치가 설치되어 있으면 동작은 바이트 단위까지 동일합니다. [경량 설치](/docs/lightweight-install)를 참조하십시오.

@@ -1,11 +1,13 @@
 ---
 title: Types de résultats
 seo_title: Référence de l'objet Results de LibreYOLO
-description: "Résultats LibreYOLO : boîtes, masques, points clés, classification, profondeur, albédo, cuboïdes 3D et séquences d'actions robotiques."
+description: >-
+  Résultats LibreYOLO : boîtes, masques, points clés, classification,
+  profondeur, albédo, cuboïdes 3D et séquences d'actions robotiques.
 lead: >-
   Results est l'unique type de retour par image de tous les modèles LibreYOLO.
-  Il contient des emplacements de charges utiles facultatifs, un par forme
-  de tâche, et ne remplit que ceux produits par le modèle.
+  Il contient des emplacements de charges utiles facultatifs, un par forme de
+  tâche, et ne remplit que ceux produits par le modèle.
 keywords:
   - objet results libreyolo
   - Results.boxes
@@ -14,7 +16,7 @@ keywords:
   - Results.depth_map
   - Results.summary
   - libreyolo results to_json
-last_verified: "1.6.0"
+last_verified: 1.6.0
 verification: >-
   Noms des emplacements, formes, propriétés et valeurs par défaut lus dans
   libreyolo/utils/results.py en v1.6.0. Sémantique citée depuis les docstrings
@@ -48,7 +50,7 @@ snippets:
         # Lignes sous forme de dictionnaires simples, puis en JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: d74276d805c22c92
+source_hash: 173c542fb675892e
 ---
 
 ## Objet Results
@@ -65,7 +67,7 @@ générateur qui les produit.
 | `speed` | `dict[str, float]` | Millisecondes par étape |
 | `track_id` | tensor | Identifiants de suivi lorsque le résultat provient de `track()` |
 | `frame_idx` | `int` | Indice de l'image pour les sources vidéo et flux |
-| `restore_scale` | `int` | Facteur d'agrandissement entre sortie et entrée d'un résultat de restauration\u00a0; `1` partout ailleurs |
+| `restore_scale` | `int` | Facteur d'agrandissement entre sortie et entrée d'un résultat de restauration ; `1` partout ailleurs |
 
 <code-tabs name="usage" />
 
@@ -149,7 +151,7 @@ meilleurs indices, et `top1conf` et `top5conf` leurs scores.
 
 ## OBB
 
-Bounding boxes orientées. `data` contient 7 ou 8 valeurs par ligne\u00a0: `xywhr`,
+Bounding boxes orientées. `data` contient 7 ou 8 valeurs par ligne : `xywhr`,
 un identifiant de suivi facultatif, puis la confiance et la classe.
 
 | Membre | Valeur renvoyée |
@@ -164,7 +166,7 @@ un identifiant de suivi facultatif, puis la confiance et la classe.
 
 Angles du regard par visage en radians, de forme `(N, 2)`, alignés ligne par
 ligne avec les bounding boxes des visages dans `boxes`. La colonne 0 est le
-tangage et la colonne 1 le lacet selon la convention L2CS\u00a0: un lacet positif
+tangage et la colonne 1 le lacet selon la convention L2CS : un lacet positif
 tourne le regard vers la gauche du sujet et un tangage positif le tourne vers
 le bas. `pitch_deg` et `yaw_deg` convertissent en degrés, et `direction_3d`
 renvoie le vecteur direction unitaire.
@@ -206,7 +208,7 @@ valeurs finies, et `normalized()` remet la carte à l'échelle dans `[0, 1]`.
 ## NormalMap
 
 Champ dense de normales de surface, float32 `(H, W, 3)`, sur le canevas de
-l'image d'origine dans le repère caméra OpenCV\u00a0: `+x` vers la droite, `+y`
+l'image d'origine dans le repère caméra OpenCV : `+x` vers la droite, `+y`
 vers le bas et `+z` dans la scène. Les normales font face à la caméra, une
 surface fronto-parallèle vaut donc `(0, 0, -1)`. Chaque pixel est un vecteur
 unitaire. `assert_normalized(atol=1e-4)` vérifie cet invariant.
@@ -215,7 +217,7 @@ unitaire. `assert_normalized(atol=1e-4)` vérifie cet invariant.
 
 Carte dense de probabilités des contours, float32 `(H, W)`, sur le canevas de
 l'image d'origine, où `0` n'est pas un contour et `1` en est un. La carte
-continue est conservée afin que le seuil reste au choix de l'appelant\u00a0:
+continue est conservée afin que le seuil reste au choix de l'appelant :
 `binary(threshold=0.5)` en applique un et `array` renvoie la vue numpy.
 
 ## RestoredImage
@@ -284,7 +286,7 @@ porte de repère mondial ou gravitationnel.
 
 La disposition des paramètres diffère entre les modèles corporels, rien n'est
 donc codé en dur concernant les formes. `body_model` nomme le paramétrage et
-les nombres sont relus dans les tenseurs\u00a0: `num_vertices`, `num_joints`,
+les nombres sont relus dans les tenseurs : `num_vertices`, `num_joints`,
 `num_betas` et `has_vertices`. `params` renvoie le dictionnaire de paramètres
 et `save_obj(path, index=0)` écrit un maillage. Les champs sont
 `global_orient`, `body_pose`, `betas`, `transl`, `vertices`, `faces`,
@@ -317,7 +319,7 @@ dictionnaires simples, une ligne par détection, segment, point ou région selon
 les emplacements définis. `to_json(**kwargs)` transmet ses arguments à
 `summary` et renvoie la chaîne JSON.
 
-`plot()` affiche toutes les charges utiles de tâche. Les superpositions d'image utilisent des tableaux BGR par défaut ; `pil=True` demande une image PIL. Les résultats de contours et de normales conservent PIL par défaut.
+`plot()` affiche toutes les charges utiles de tâche. Les superpositions d'image utilisent des tableaux BGR par défaut ; `pil=True` demande une image PIL. Les cartes de profondeur, de normales, de contours et d'albédo, les cuboïdes 3D et les séquences d'actions renvoient par défaut une image PIL ; `pil=False` renvoie le tableau.
 
 ## Boxes3D
 

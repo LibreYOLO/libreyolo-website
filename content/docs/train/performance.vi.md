@@ -2,11 +2,12 @@
 title: Hiệu năng huấn luyện
 seo_title: 'Huấn luyện nhanh hơn: CUDA graph, AMP, profiler'
 description: >-
-  Tăng tốc một lượt huấn luyện: capture bước chạy vào CUDA graph, chọn kiểu dữ liệu AMP và dùng profiler tích
-  hợp để tìm nơi thực sự chiếm thời gian.
+  Tăng tốc một lượt huấn luyện: capture bước chạy vào CUDA graph, chọn kiểu dữ
+  liệu AMP và dùng profiler tích hợp để tìm nơi thực sự chiếm thời gian.
 lead: >-
-  Ba đòn bẩy thay đổi tốc độ của một bước huấn luyện: mixed precision, capture forward và backward của mạng
-  bằng CUDA graph, cùng phương án xử lý điểm nghẽn mà profiler thực sự tìm thấy.
+  Ba đòn bẩy thay đổi tốc độ của một bước huấn luyện: mixed precision, capture
+  forward và backward của mạng bằng CUDA graph, cùng phương án xử lý điểm nghẽn
+  mà profiler thực sự tìm thấy.
 keywords:
   - cuda graph khi huấn luyện
   - tăng tốc huấn luyện
@@ -66,7 +67,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: 288ee5ee988f2fda
+source_hash: c8d7adb6aabcbc80
 ---
 ## Đo trước khi thay đổi bất cứ thứ gì
 
@@ -243,6 +244,21 @@ phân bổ đỉnh thay đổi từ -5 đến +19 phần trăm. Chi phí tương
 các mô hình phân loại nhỏ, vốn có activation nhỏ: ResNet-18 ở 224 px, batch 16,
 tăng từ 0.48 GB ở eager lên 0.57 GB khi dùng graph. Nếu điều này đẩy lượt chạy
 vượt giới hạn, hãy giảm batch hoặc tắt flag.
+
+## torch.compile
+
+`train(compile=True)` biên dịch forward và backward của mạng bằng
+`torch.compile`. Tham số này cũng nhận các mode `"default"`, `"reduce-overhead"`,
+`"max-autotune"` và `"max-autotune-no-cudagraphs"`; mặc định là `False`. Loss,
+optimizer, EMA, validation, checkpoint và xuất vẫn giữ ở chế độ eager, và các
+checkpoint được nạp mà không cần biên dịch. Chỉ lượt chạy CUDA một GPU mới được
+biên dịch. Các lượt chạy CPU, MPS, phân tán và chưng cất, cùng các trường hợp
+compiler thất bại, sẽ huấn luyện eager sau một cảnh báo. Việc biên dịch mất vài
+phút và cần trình biên dịch C cùng header Python trên máy huấn luyện.
+
+Trong `train()`, trừ khi `OMP_NUM_THREADS` đã được đặt, LibreYOLO hạ số luồng CPU
+của PyTorch xuống bằng hạn mức CPU của tiến trình, để container bị giới hạn CPU
+không bị throttle ở mọi bước.
 
 ## Nội dung liên quan
 

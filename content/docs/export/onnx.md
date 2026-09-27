@@ -158,10 +158,11 @@ axes, and the two-stage detectors keep source height and width dynamic because
 their resize happens inside the graph.
 
 `opset` is chosen per family when omitted. DETR-style families (`detr`,
-`deformable_detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`,
-`rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) plus `deit`, `midas` and `moge2` get
-opset 17, which is where `aten::scaled_dot_product` lowers. Everything else gets
-13. Matting is raised to 19 regardless, because BiRefNet's decoder needs the
+`deformable_detr`, `dinodetr`, `dfine`, `gtr`, `deim`, `deimv2`, `tinyformer`,
+`ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) plus `deit`,
+`midas`, `moge2` and `vjepa2` get opset 17, which is where
+`aten::scaled_dot_product` lowers. Everything else gets 13. BiRefNet and
+FeyNobg are raised to 19 regardless, because their decoder needs the
 `DeformConv` operator, which ONNX defines from opset 19.
 
 `simplify=True` runs `onnxsim` and keeps the original graph if the pass fails, so
@@ -251,11 +252,13 @@ Several tasks carry a fixed-resolution runtime contract in this version. Depth,
 surface normal and edge reject `batch != 1` and force `dynamic=False`. Matting
 forces the native 1024 square, because BiRefNet's Swin relative-position tables
 are tied to their resolution. Restoration forces a fixed canvas for every family
-except Real-ESRGAN, whose generator is fully convolutional.
+except Real-ESRGAN and QuickSRNet, whose networks are fully convolutional.
 
-Rectangular `imgsz` works for the YOLO9 families, HRNet, NAFNet and Real-ESRGAN.
+Rectangular `imgsz` works for the YOLO9 families, HRNet, NAFNet, PP-LiteSeg,
+Real-ESRGAN, QuickSRNet and GTR semantic segmentation.
 Families with a fixed square contract (`clip`, `deformable_detr`, `detr`,
-`dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`, `moge2`, `rtdetr`,
+`dinodetr`, `dfine`, `gtr` apart from semantic segmentation, `deim`, `deimv2`,
+`tinyformer`, `ec`, `lwdetr`, `moge2`, `rtdetr`,
 `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`, `ssd`) reject it outright.
 
 Two combinations are refused before tracing: YOLO9 segmentation, because YOLO9 is

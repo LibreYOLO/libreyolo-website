@@ -112,7 +112,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 60bb0f5b7cf31cb7
+source_hash: 01ee5ee9eea3b569
 ---
 
 ## 定義
@@ -131,7 +131,7 @@ source_hash: 60bb0f5b7cf31cb7
 
 Darknet系統の[YOLOv1](/docs/models/yolov1)、[YOLOv2](/docs/models/yolov2)、[YOLOv3](/docs/models/yolov3)、[YOLOv4](/docs/models/yolov4)は、固定された展示物として維持されています。推論、検証、エクスポートは機能しますが、学習はできません。
 
-別のグループはチェックポイントではなく実行時にクラスリストを受け取るため、学習時に見たことのない名前も検出できます。[Grounding DINO](/docs/models/grounding-dino)、[OWLv2](/docs/models/owlv2)、[OMDet-Turbo](/docs/models/omdet-turbo)、[OV-DEIM](/docs/models/ov-deim)に加え、Vision-Languageファミリーの[Florence-2](/docs/models/florence-2)、[Kosmos-2](/docs/models/kosmos-2)、[Qwen3-VL](/docs/models/qwen3-vl)、[SmolVLM2](/docs/models/smolvlm2)、[InternVL3](/docs/models/internvl3)、[LFM2-VL](/docs/models/lfm2-vl)、[LocateAnything](/docs/models/locate-anything)、[SenseNova-Vision](/docs/models/sensenova-vision)、[LibreMODUS](/docs/models/libremodus)です。これらは固有のファクトリと追加パッケージを通して読み込まれます。正確な呼び出しは各モデルページに記載されています。
+別のグループはチェックポイントではなく実行時にクラスリストを受け取るため、学習時に見たことのない名前も検出できます。[Grounding DINO](/docs/models/grounding-dino)、[OWLv2](/docs/models/owlv2)、[OMDet-Turbo](/docs/models/omdet-turbo)、[OV-DEIM](/docs/models/ov-deim)に加え、Vision-Languageファミリーの[Florence-2](/docs/models/florence-2)、[Kosmos-2](/docs/models/kosmos-2)、[Qwen3-VL](/docs/models/qwen3-vl)、[SmolVLM2](/docs/models/smolvlm2)、[InternVL3](/docs/models/internvl3)、[LFM2-VL](/docs/models/lfm2-vl)、[Gemma 4](/docs/models/gemma-4)、[Moondream](/docs/models/moondream)、[North Micro Vision](/docs/models/northmicrovision)、[LocateAnything](/docs/models/locate-anything)、[SenseNova-Vision](/docs/models/sensenova-vision)、[LibreMODUS](/docs/models/libremodus)です。これらは固有のファクトリと追加パッケージを通して読み込まれます。正確な呼び出しは各モデルページに記載されています。
 
 [PP-YOLOE](/docs/models/ppyoloe)と[TinyFormer](/docs/models/tinyformer)も物体検出の学習に対応します。
 

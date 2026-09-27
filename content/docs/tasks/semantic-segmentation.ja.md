@@ -110,7 +110,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 531a9b20e5532913
+source_hash: e13acb1e813da7c4
 ---
 
 ## 定義
@@ -169,7 +169,7 @@ names:
   1: sidewalk
 ```
 
-`masks_dir`は`images`の代わりに使うディレクトリ名で、デフォルトは`masks`です。`label_mapping`は任意の`{source_id: train_id}`マッピングで、読み込み時にマスクのピクセル値へ適用されます。1から150の番号を使うデータセットを0から149へ変換する場合などに使用します。マッピングされていないソース値はすべて無視になり、各学習IDは`0..nc-1`範囲でなければなりません。
+`masks_dir`は`images`の代わりに使うディレクトリ名です。`label_mapping`は任意の`{source_id: train_id}`マッピングで、読み込み時にマスクのピクセル値へ適用されます。1から150の番号を使うデータセットを0から149へ変換する場合などに使用します。マッピングされていないソース値はすべて無視になり、各学習IDは`0..nc-1`範囲でなければなりません。
 
 `masks_dir`を省略すると、ローダーはフォールバックへ切り替わります。通常の`images`から`labels`への規約で解決したポリゴンラベルを読み込み時にラスタライズし、物体クラスの後に`background`クラスを追加するため、`nc`が1増えます。
 

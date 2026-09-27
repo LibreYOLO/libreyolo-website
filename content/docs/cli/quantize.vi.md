@@ -2,11 +2,13 @@
 title: libreyolo quantize
 seo_title: tham chiếu lệnh libreyolo quantize
 description: >-
-  Lượng tử hóa (quantization) một checkpoint trong PyTorch từ dòng lệnh: các recipe, tham số hiệu chuẩn, giá
-  trị mặc định và những họ mô hình mà mỗi recipe chấp nhận.
+  Lượng tử hóa (quantization) một checkpoint trong PyTorch từ dòng lệnh: các
+  recipe, tham số hiệu chuẩn, giá trị mặc định và những họ mô hình mà mỗi recipe
+  chấp nhận.
 lead: >-
-  Thay các module float của mô hình bằng module đã lượng tử hóa, hiệu chuẩn chúng trên ảnh không nhãn khi
-  recipe cần thống kê, rồi lưu kết quả thành một checkpoint PyTorch.
+  Thay các module float của mô hình bằng module đã lượng tử hóa, hiệu chuẩn
+  chúng trên ảnh không nhãn khi recipe cần thống kê, rồi lưu kết quả thành một
+  checkpoint PyTorch.
 keywords:
   - libreyolo quantize cli
   - lệnh lượng tử hóa int8
@@ -22,7 +24,9 @@ meta:
     value: model
     mono: true
   - label: Đầu ra
-    value: 'Đường dẫn nguồn kèm -<recipe> trước phần mở rộng, ví dụ LibreYOLO9s-int8.pt'
+    value: >-
+      Đường dẫn nguồn kèm -<recipe> trước phần mở rộng, ví dụ
+      LibreYOLO9s-int8.pt
     mono: true
 snippets:
   examples:
@@ -38,13 +42,16 @@ snippets:
           out=weights/LibreYOLO9s-fp16.pt
     - label: 'Hiệu chuẩn rộng hơn, rồi khôi phục'
       language: bash
-      code: |
+      code: >
         libreyolo quantize model=LibreYOLO9s.pt recipe=int8 \
           calib=coco128.yaml samples=256 batch=16 algorithm=minmax
 
-        # Quantization-aware training trên checkpoint đã lượng tử hóa giúp lấy lại độ chính xác
-        libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10 lr0=0.001
-source_hash: 663390776f2f2c15
+        # Quantization-aware training trên checkpoint đã lượng tử hóa giúp lấy
+        lại độ chính xác
+
+        libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
+        lr0=0.001
+source_hash: 409bc0b2ace6547e
 ---
 ## Cú pháp
 
@@ -64,7 +71,7 @@ và `--recipe int8` là cùng một tham số.
 | `calib` | `coco128.yaml` | Ảnh hiệu chuẩn: một tệp YAML dữ liệu hoặc tên một tập dữ liệu (dataset) có sẵn. Không nhãn, chỉ chạy forward. `none` bỏ qua bước hiệu chuẩn |
 | `samples` | `128` | Số ảnh hiệu chuẩn tối đa |
 | `batch` | `8` | Kích thước batch khi hiệu chuẩn |
-| `algorithm` | `auto` | Ước lượng dải giá trị activation: `auto`, tức chọn minmax, hoặc `minmax`, hoặc `percentile` |
+| `algorithm` | `auto` | Ước lượng dải giá trị activation: `auto` (minmax), `minmax`, `percentile`, `mse` hoặc `entropy` |
 | `out` | | Đường dẫn checkpoint đầu ra. Mặc định là đường dẫn nguồn kèm `-<recipe>` trước phần mở rộng |
 | `device` | `auto` | Thiết bị |
 | `allow_download_scripts` | `false` | Cho phép mã Python nhúng trong khối download của tệp YAML dataset |

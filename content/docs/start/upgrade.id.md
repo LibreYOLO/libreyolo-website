@@ -16,7 +16,7 @@ keywords:
   - yolox bn eps
   - default faster-coco-eval
 last_verified: 1.6.0
-source_hash: c575718b8a7949f8
+source_hash: e9c7cb5271aa4a81
 ---
 
 ## 1.5.0 ke 1.6.0
@@ -29,7 +29,7 @@ source_hash: c575718b8a7949f8
 
 - Deteksi D-FINE, DEIM, RT-DETRv4, dan YOLO-NAS mengaktifkan FP16 AMP secara default. Berikan `amp=False` untuk mempertahankan FP32.
 
-- Untuk pilihan fine-tuning YOLO9 sebelumnya, atur `aux_weight=0`, `max_labels=100`, dan `warmup_momentum=0.937`. Atur `letterbox_pad="topleft"` jika konversi baru bertanda center harus mereproduksi geometri lama. Checkpoint lama dengan satu head melanjutkan pelatihan dengan graf aslinya.
+- Untuk pilihan fine-tuning YOLO9 sebelumnya, atur `aux_weight=0`, `max_labels=100`, dan `warmup_momentum=0.937`. Atur `letterbox_pad="topleft"` jika konversi baru bertanda center harus mereproduksi geometri lama. Checkpoint lama dengan satu head melanjutkan pelatihan dengan graf aslinya. Run YOLO9 baru memakai lebih banyak memori GPU, jadi turunkan `batch` jika ukuran batch dari 1.5.0 kehabisan memori.
 
 - RF-DETR dan DINOv2 membuat direktori proses bernomor dengan nama family. Perbarui pengguna path artefak, atau atur `output_dir="runs/train", exist_ok=True` untuk mempertahankan lokasi lama dan perilaku penggunaan ulang.
 
@@ -76,8 +76,9 @@ model.train(data="data.yaml", epochs=100, allow_experimental=True)
 model.train(data="data.yaml", epochs=100)
 ```
 
-Tidak ada shim deprecation. Pemanggilan yang masih memberikannya memunculkan
-`TypeError`. `BaseModel.EXPERIMENTAL_WEIGHT_FILENAMES` juga dihapus. Hook
+Tidak ada shim deprecation. Pemanggilan yang masih memberikannya mendapat
+peringatan `Unknown training config keys (ignored)`, dan argumen itu tidak
+berpengaruh. `BaseModel.EXPERIMENTAL_WEIGHT_FILENAMES` juga dihapus. Hook
 `get_download_notice()` tetap ada dan masih diganti oleh MiDaS, SegFormer,
 dan YOLO9-P2.
 
@@ -193,9 +194,9 @@ melaporkan angka yang tepat, evaluasi dengan eps BN diganti ke 1e-5:
 
 ```python
 import torch
-from libreyolo import LibreYOLOX
+from libreyolo import LibreYOLO
 
-model = LibreYOLOX("my-yolox-finetune.pt")
+model = LibreYOLO("my-yolox-finetune.pt")
 for module in model.model.modules():
     if isinstance(module, torch.nn.BatchNorm2d):
         module.eps = 1e-5
@@ -232,7 +233,7 @@ DEIM tetap memakai nilai 3 yang ditetapkan langsung. Detail family tersedia pada
 - **Dictionary metrik mendapatkan kunci baru.** `max_det`, `ar_max_det`, dan `AR_max_det` dari evaluator COCO, serta `metrics/loss` dan `metrics/loss/ce` dari FOMO. Nilai default tidak berubah, tetapi semua proses yang mengiterasi kunci metrik, termasuk [logger](/docs/train/loggers) kustom dan header CSV, melihat kolom baru.
 - **Run YOLO9 dengan seed yang memicu rebuild head** memulai dari initialization berbeda karena seed kini diterapkan sebelum rebuild, bukan setelahnya. Fine-tuning 1.4.0 dengan seed ke jumlah kelas berbeda tidak dapat direproduksi bit demi bit pada 1.5.0.
 - **`libreyolo[hub-kernels]` pada CUDA kini benar-benar mengaktifkan kernel MS-deform-attn native.** 1.4.0 membatasinya di balik kondisi yang tidak pernah diambil RF-DETR, sehingga kernel tidak pernah berjalan. Prediksi dapat bergeser dalam toleransi float untuk RF-DETR dan family deformable-attention lain. Instalasi standar tidak terpengaruh, dan `LIBREYOLO_HUB_KERNELS=0` menonaktifkannya.
-- **`libreyolo predict` membuang opsi tidak didukung, bukan memunculkan error.** CLI memfilter kwargs terhadap signature `__call__` model, sehingga opsi yang tidak diterima family diabaikan alih-alih memunculkan `TypeError`. Salah ketik nama flag kini diam-diam diabaikan.
+- **`libreyolo predict` membuang opsi tidak didukung, bukan memunculkan error.** CLI memfilter kwargs terhadap signature `__call__` model, sehingga opsi yang tidak diterima family diabaikan alih-alih memunculkan `TypeError`. Nama flag yang tidak dikenal tetap ditolak dengan `No such option`.
 - **Live sumber mengubah bentuk output JSON.** Webcam, stream RTSP, dan screen capture secara implisit mengaktifkan streaming, yang menghasilkan satu rekaman per frame, bukan satu untuk pemanggilan. [Sumber](/docs/predict/sources) tersebut baru pada 1.5.0, jadi script 1.4.0 tidak terpengaruh.
 - **Ekspor ulang `rfdetr-pose` atau `yolonas-pose` ke ONNX menghasilkan nama output berbeda.** 1.4.0 keliru membaca head pose multi-tensor sebagai segmentation melalui heuristic jumlah output. Berkas `.onnx` yang sudah ada di disk tidak berubah.
 - **Pada instalasi tanpa torch**, hasil memuat array numpy, bukan `torch.Tensor`, sehingga `.boxes.data` mengembalikan jenis berbeda dan tie-breaking NMS dapat berbeda dari torchvision. Jika torch terinstal, perilaku identik per byte. Lihat [instalasi ringan](/docs/lightweight-install).

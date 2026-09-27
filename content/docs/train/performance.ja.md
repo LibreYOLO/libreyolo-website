@@ -66,7 +66,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: 288ee5ee988f2fda
+source_hash: c8d7adb6aabcbc80
 ---
 
 ## 変更する前に測定する
@@ -169,6 +169,12 @@ YOLOXは実行の途中でキャプチャ領域の計算内容を変更し、`no
 `amp=False`では、キャプチャの有無にかかわらず、このハードウェアでビット単位の同一性は得られません。同一シードのYOLOv9-t eager実行を2回行うと20stepで相対36%、YOLOX-tでは2.6%ずれます。cuDNNが一部のfp32畳み込み形状に対して非決定的な重み勾配アルゴリズムを選ぶためです。
 
 キャプチャしたグラフは静的な入力、出力、ワークスペースのバッファーを固定するため、ピークVRAMはおよそ活性値1組分だけ増えます。上記のファミリーでは、ピーク割り当て量の変化は-5%から+19%でした。相対コストが最も大きいのは、もともとの活性値が小さい小規模な画像分類モデルです。224 px、バッチ16のResNet-18では、eagerの0.48 GBからGraphの0.57 GBへ増えました。上限を超える場合は、バッチを下げるかフラグを無効にしてください。
+
+## torch.compile
+
+`train(compile=True)`は、ネットワークの順伝播と逆伝播を`torch.compile`でコンパイルします。モードとして`"default"`、`"reduce-overhead"`、`"max-autotune"`、`"max-autotune-no-cudagraphs"`も受け付けます。デフォルトは`False`です。loss、オプティマイザー、EMA、検証、チェックポイント、エクスポートはeagerのままで、チェックポイントはコンパイルなしで読み込めます。コンパイルされるのは単一GPUのCUDA実行だけです。CPU、MPS、分散、蒸留の実行、およびコンパイラーが失敗した場合は、警告を出したうえでeagerで学習します。コンパイルには数分かかり、学習ホストにCコンパイラーとPythonのヘッダーが必要です。
+
+`train()`の実行中は、`OMP_NUM_THREADS`が設定されていない限り、LibreYOLOはPyTorchのCPUスレッド数をプロセスに割り当てられたCPU数まで下げます。そのため、CPUが制限されたコンテナーでも各stepが遅くなりません。
 
 ## 関連項目
 

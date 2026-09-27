@@ -68,7 +68,7 @@ snippets:
         # de entrada. Las familias cuyo extra falta se listan con el
         # comando pip que las habilita.
         libreyolo models
-source_hash: 531023c2092fd751
+source_hash: 3ad6bb09bf2f5434
 ---
 
 ## Instalación
@@ -194,6 +194,10 @@ simplemente instala menos donde no existe una wheel.
 
 `sensenova` omite `bitsandbytes` en macOS, donde no se publica ninguna wheel; el
 resto del extra se instala con normalidad.
+
+`vlm` no está acotado por plataforma: su versión fijada `decord==0.6.0` solo
+tiene wheels para Linux x86-64 y Windows. En macOS y en Linux ARM, `vlm`,
+`ground`, `vlm-train` y `all` no se pueden instalar.
 
 Si el disco es la limitación, la mayor parte es PyTorch, y la mayor parte de
 PyTorch es la carga de CUDA que su wheel por defecto incluye. Una wheel solo de

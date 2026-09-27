@@ -5,8 +5,7 @@ families:
 seo_title: 'RF-DETR: entrena, haz fine-tuning y exporta bajo MIT'
 description: >-
   Usa RF-DETR en LibreYOLO para detección, segmentación de instancias, pose y
-  cajas orientadas. Instala, predice, entrena, valida y exporta, todo con
-  licencia MIT.
+  cajas orientadas. Instala, predice, entrena, valida y exporta.
 lead: >-
   Un transformer de detección que predice un conjunto fijo de objetos en lugar
   de una rejilla densa, por lo que no necesita NMS en inferencia. LibreYOLO lo
@@ -94,7 +93,7 @@ snippets:
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+        print(metrics["metrics/mAP75"], metrics["metrics/AR100"])
     - label: CLI
       language: bash
       code: |
@@ -185,7 +184,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 379a3a09691bf14b
+source_hash: 3238696a4e1ab6c2
 ---
 
 ## Instalación
@@ -212,10 +211,11 @@ Las rutas de detección, segmentación y cajas orientadas usan redimensionado bi
 
 ## Variantes
 
-Cuatro tamaños, y cuatro tareas que comparten una misma arquitectura: la
-segmentación, la pose y las cajas orientadas reutilizan el decoder de detección
-con una cabeza distinta, así que aceptan los mismos argumentos. Los tamaños
-tienen un número de parámetros similar y se diferencian sobre todo en la
+Cuatro tamaños de detección, de `n` a `l`, y cuatro tareas que comparten una
+misma arquitectura: la segmentación, la pose y las cajas orientadas reutilizan
+el decoder de detección con una cabeza distinta, así que aceptan los mismos
+argumentos. La segmentación añade `x` y `xx`, y la pose solo existe en `x`. Los
+tamaños tienen un número de parámetros similar y se diferencian sobre todo en la
 resolución de entrada.
 
 <benchmark-table task="detect" />
@@ -245,9 +245,9 @@ Las ejecuciones nuevas usan `output_dir=None` por defecto, que se resuelve a un 
 
 ## Validación
 
-`val()` devuelve un diccionario de claves `metrics/` que cubren precisión,
-recall, mAP 50 y mAP 50-95, medidas contra cualquier dataset en el formato con
-el que entrenaste.
+`val()` devuelve un diccionario de claves `metrics/` que cubren mAP 50,
+mAP 50-95, mAP 75 y el recall promedio de COCO, medidas contra cualquier dataset
+en el formato con el que entrenaste.
 
 <code-tabs name="val" />
 

@@ -1,8 +1,12 @@
 ---
 title: 파이썬 API
 seo_title: LibreYOLO Python API 참조
-description: 'LibreYOLO가 패키지 수준에서 내보내는 이름을 설명합니다. 팩토리, 계열 클래스, Results 페이로드, 백엔드, 검증기, 추적기, 데이터 헬퍼를 다룹니다.'
-lead: 'LibreYOLO의 공개 Python 인터페이스는 libreyolo/__init__.py의 __all__ 목록입니다. 패키지 수준 내보내기는 from libreyolo import <name>을 사용하며, 아래 추적 및 학습 프로토콜은 명시된 하위 모듈을 사용합니다.'
+description: >-
+  LibreYOLO가 패키지 수준에서 내보내는 이름을 설명합니다. 팩토리, 계열 클래스, Results 페이로드, 백엔드, 검증기, 추적기,
+  데이터 헬퍼를 다룹니다.
+lead: >-
+  LibreYOLO의 공개 Python 인터페이스는 libreyolo/__init__.py의 __all__ 목록입니다. 패키지 수준 내보내기는
+  from libreyolo import <name>을 사용하며, 아래 추적 및 학습 프로토콜은 명시된 하위 모듈을 사용합니다.
 keywords:
   - libreyolo 파이썬 API
   - libreyolo 가져오기
@@ -13,7 +17,12 @@ keywords:
   - 리브르앙상블
   - libreyolo __all__
 last_verified: 1.6.0
-verification: 'v1.6.0에서 libreyolo/__init__.py, libreyolo/models/__init__.py, libreyolo/models/base/model.py, libreyolo/models/base/inference.py, libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py 및 libreyolo/ensemble/model.py에서 이름과 서명 읽기.'
+verification: >-
+  v1.6.0에서 libreyolo/__init__.py, libreyolo/models/__init__.py,
+  libreyolo/models/base/model.py, libreyolo/models/base/inference.py,
+  libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py,
+  libreyolo/models/openvocab/__init__.py 및 libreyolo/ensemble/model.py에서 이름과 서명
+  읽기.
 snippets:
   usage:
     - label: 하나의 팩토리를 통해 아무 것이나 적재하십시오
@@ -41,21 +50,33 @@ snippets:
   factories:
     - label: 진입점
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, LibreEnsemble
 
+
         # 무게를 맡는 팩토리가 무자극 계열들 위에 있습니다.
+
         detector = LibreYOLO("LibreYOLO9t.pt")
 
+
         # 하나의 예측 표면 뒤에 두 개 이상의 탐지기.
+
         ens = LibreEnsemble(["LibreYOLO9t.pt", "LibreYOLO9s.pt"])
 
+
         # 나머지 세 팩토리에는 추가 설치가 필요합니다:
-        #   pip install 'libreyolo[sam]'        -> from libreyolo import LibreSAM
-        #   pip install 'libreyolo[vlm]'        -> from libreyolo import LibreVLM
-        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import LibreOpenVocab
+
+        #   pip install 'libreyolo[sam]'        -> from libreyolo import
+        LibreSAM
+
+        #   pip install 'libreyolo[vlm]'        -> from libreyolo import
+        LibreVLM
+
+        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import
+        LibreOpenVocab
+
         print(type(detector).__name__, ens.fusion)
-source_hash: "02fbec762b1ffced"
+source_hash: 7dc6a5ef1b3ba9ea
 ---
 
 ## 진입점
@@ -104,15 +125,15 @@ Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 
 생성자 기본값은 계열마다 다르므로 직접 생성하기 전에 시그니처를 확인합니다. YOLO9과 그 변형은 `size` 뒤에 `reg_max: int = 16`을 삽입합니다.
 
-검출 및 다중 작업 계열: `LibreYOLO9`, `LibreYOLO9E2E`, `LibreYOLO9P2`, `LibreYOLONAS`, `LibreYOLOX`, `LibreYOLO7`, `LibreYOLO4`, `LibreYOLO3`, `LibreYOLO2`, `LibreYOLO1`, `LibreRTDETR`, `LibreRTDETRv2`, `LibreRTDETRv4`, `LibreRFDETR`, `LibreDFINE`, `LibreDOMEDETR`, `LibreDEIM`, `LibreDEIMv2`, `LibreDETR`, `LibreDeformableDETR`, `LibreDINODETR`, `LibreLWDETR`, `LibreMaskRCNN`, `LibreFCOS`, `LibreFasterRCNN`, `LibreRetinaNet`, `LibreSSD`, `LibreCenterNet`, `LibreEfficientDet`, `LibreEC`, `LibrePICODET`, `LibreRTMDet`, `LibreFOMO`.
+검출 및 다중 작업 계열: `LibreYOLO9`, `LibreYOLO9E2E`, `LibreYOLO9P2`, `LibreYOLONAS`, `LibreYOLOX`, `LibreYOLO7`, `LibreYOLO4`, `LibreYOLO3`, `LibreYOLO2`, `LibreYOLO1`, `LibreRTDETR`, `LibreRTDETRv2`, `LibreRTDETRv4`, `LibreRFDETR`, `LibreDFINE`, `LibreDOMEDETR`, `LibreDEIM`, `LibreDEIMv2`, `LibreDETR`, `LibreDeformableDETR`, `LibreDINODETR`, `LibreLWDETR`, `LibreMaskRCNN`, `LibreFCOS`, `LibreFasterRCNN`, `LibreRetinaNet`, `LibreSSD`, `LibreCenterNet`, `LibreEfficientDet`, `LibreEC`, `LibreGTR`, `LibreTinyFormer`, `LibrePICODET`, `LibrePPYOLOE`, `LibreRTMDet`, `LibreFOMO`.
 
-밀집 예측 계열: `LibreMiDaS`, `LibreDepthAnythingV2`, `LibreDepthAnything3`, `LibreZipDepth`, `LibreMoGe2`, `LibreTEED`, `LibreDexiNed`, `LibreNAFNet`, `LibreRealESRGAN`, `LibreSwinIR`, `LibreBiRefNet`, `LibreFeyNobg`, `LibreFCN`, `LibreEoMT`, `LibreDeepLabv3`, `LibrePIDNet`, `LibreSegformer`, `LibreLingBotVision`.
+밀집 예측 계열: `LibreMiDaS`, `LibreDepthAnythingV2`, `LibreDepthAnything3`, `LibreZipDepth`, `LibreMoGe2`, `LibreTEED`, `LibreDexiNed`, `LibreNAFNet`, `LibreRealESRGAN`, `LibreSwinIR`, `LibreBiRefNet`, `LibreFeyNobg`, `LibreFCN`, `LibreEoMT`, `LibreDeepLabv3`, `LibrePIDNet`, `LibrePPLiteSeg`, `LibreUNet`, `LibreSegformer`, `LibreLingBotVision`, `LibreMarigoldV2`, `LibreDDColor`, `LibreHVICIDNet`, `LibreLaMa`, `LibreQuickSRNet`, `LibreBEN2`, `LibreViTMatte`.
 
-분류 및 임베딩 계열: `LibreViT`, `LibreMobileNetV4`, `LibreConvNeXt`, `LibreDeiT`, `LibreSwin`, `LibreEfficientNetV2`, `LibreVGG`, `LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`.
+분류 및 임베딩 계열: `LibreViT`, `LibreMobileNetV4`, `LibreConvNeXt`, `LibreDeiT`, `LibreSwin`, `LibreEfficientNetV2`, `LibreVGG`, `LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`, `LibreConvNeXtV2`, `LibrePE`, `LibreVJEPA2`, `LibreLeVJEPA`.
 
-다른 작업: `LibreHRNet` (포즈), `LibreL2CS` (시선), `LibrePPOCR` (OCR), `LibreFaceEmbedder` (임베드).
+다른 작업: `LibreHRNet`과 `LibreDEKR` (포즈), `LibreL2CS` (시선), `LibrePPOCR` (OCR), `LibreFaceEmbedder` (임베드), 그리고 3D 탐지기 `LibreFCOS3D`, `LibreDetAny3D`, `LibreWildDet3D`, `Libre3DMOOD` (detect3d).
 
-형제 계층은 그들의 계열 클래스도 내보냅니다: `LibreSAM1`, `LibreSAM2`, `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`; `LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo`; `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything`, `LibreMODUS` (`LibreModus`로도 표기됨).
+형제 계층은 그들의 계열 클래스도 내보냅니다: `LibreSAM1`, `LibreSAM2`, `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`; `LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo`; `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`, `LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (`LibreModus`로도 표기됨); `LibreGround`를 통해 제공되는 `LibreShowUI`, `LibreGroundFlorence2`, `LibreGroundQwen3VL`; `LibreVLA`를 통해 제공되는 `LibreSmolVLA`, `LibreACT`, `LibreDiffusionPolicy`.
 
 ## 예측 표면
 

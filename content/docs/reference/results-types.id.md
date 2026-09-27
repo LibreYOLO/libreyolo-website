@@ -1,9 +1,13 @@
 ---
 title: Jenis Results
 seo_title: Referensi objek Results LibreYOLO
-description: "Payload hasil LibreYOLO: kotak, mask, keypoint, klasifikasi, kedalaman, albedo, kuboid 3D, dan rangkaian aksi robot."
-lead: Results adalah satu-satunya tipe hasil per gambar dari setiap model LibreYOLO. Objek ini memiliki
-  slot payload opsional, satu per bentuk task, dan hanya mengisi slot yang dihasilkan model.
+description: >-
+  Payload hasil LibreYOLO: kotak, mask, keypoint, klasifikasi, kedalaman,
+  albedo, kuboid 3D, dan rangkaian aksi robot.
+lead: >-
+  Results adalah satu-satunya tipe hasil per gambar dari setiap model LibreYOLO.
+  Objek ini memiliki slot payload opsional, satu per bentuk task, dan hanya
+  mengisi slot yang dihasilkan model.
 keywords:
   - objek results libreyolo
   - Results.boxes
@@ -13,8 +17,10 @@ keywords:
   - Results.summary
   - results libreyolo ke json
 last_verified: 1.6.0
-verification: Nama slot, bentuk, properti, dan nilai default dibaca dari libreyolo/utils/results.py
-  pada v1.6.0. Maknanya dikutip dari docstring kelas payload.
+verification: >-
+  Nama slot, bentuk, properti, dan nilai default dibaca dari
+  libreyolo/utils/results.py pada v1.6.0. Maknanya dikutip dari docstring kelas
+  payload.
 snippets:
   usage:
     - label: Python
@@ -44,7 +50,7 @@ snippets:
         # Baris sebagai dict biasa, lalu sebagai JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: d74276d805c22c92
+source_hash: 173c542fb675892e
 ---
 
 ## Objek Results
@@ -305,7 +311,7 @@ biasa, satu baris per deteksi, segmen, titik, atau region bergantung pada slot
 yang ditetapkan. `to_json(**kwargs)` meneruskan argumennya ke `summary` dan
 mengembalikan string JSON.
 
-`plot()` merender payload setiap task. Overlay gambar memakai array BGR secara default; `pil=True` meminta PIL. Hasil edge dan peta normal mempertahankan default PIL.
+`plot()` merender payload setiap task. Overlay gambar memakai array BGR secara default; `pil=True` meminta PIL. Peta kedalaman, normal, edge, dan albedo, kuboid 3D, serta potongan aksi mengembalikan gambar PIL secara default; `pil=False` mengembalikan array-nya.
 
 ## Boxes3D
 

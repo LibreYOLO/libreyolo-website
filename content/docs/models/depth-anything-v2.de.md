@@ -105,7 +105,7 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: e1043aba1b70b65c
+source_hash: de71e994a0b6d8b4
 ---
 
 ## Installation
@@ -126,8 +126,8 @@ Die Gewichte werden bei der ersten Verwendung von Hugging Face heruntergeladen u
 Werte bedeuten eine geringere Entfernung zur Kamera. Die Werte haben weder eine
 metrische Einheit noch eine bildübergreifende Skala. `save=True` schreibt eine
 farbkodierte Visualisierung dieser Karte auf den Datenträger. `Results.plot()`
-unterstützt diese Familie nicht, weil es nur für Oberflächennormalen und Kanten
-definiert ist. Die Eingabeauflösung muss ohne Rest durch 14 teilbar sein. Dies
+rendert die Tiefenkarte als PIL-Bild, und `pil=False` gibt stattdessen das
+Array zurück. Die Eingabeauflösung muss ohne Rest durch 14 teilbar sein. Dies
 entspricht dem DINOv2-Patch-Raster, auf dem der DPT-Head aufbaut. LibreYOLO prüft
 das vor der Ausführung und löst andernfalls einen Fehler aus. Unter
 [Vorhersage](/docs/predict) findest du Quellen, Streaming und die Verarbeitung

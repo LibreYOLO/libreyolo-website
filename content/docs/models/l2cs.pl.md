@@ -100,7 +100,7 @@ snippets:
         yaw_logits, pitch_logits = session.run(
             None, {name: np.zeros((1, 3, 448, 448), dtype=np.float32)}
         )
-source_hash: 4ec43f4673b4be3e
+source_hash: 1f61c1a61e033bbc
 ---
 
 ## Instalacja
@@ -122,7 +122,9 @@ pip install "libreyolo[gaze]"
 ```
 
 Bez niego LibreYOLO wypisuje instrukcje ręcznego pobierania zamiast po cichu
-kończyć działanie błędem.
+kończyć działanie błędem. W wersji 1.6.0 pobieranie z Google Drive autora zwraca
+404, więc lokalną kopię checkpointu należy umieścić pod ścieżką, z której jest
+ładowany.
 
 ## Predykcja
 

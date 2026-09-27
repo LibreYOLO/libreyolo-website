@@ -116,7 +116,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 531a9b20e5532913
+source_hash: e13acb1e813da7c4
 ---
 ## Định nghĩa
 
@@ -205,7 +205,7 @@ names:
   1: sidewalk
 ```
 
-`masks_dir` là tên thư mục được thay cho `images`, mặc định là `masks`.
+`masks_dir` là tên thư mục được thay cho `images`.
 `label_mapping` là mapping lại `{source_id: train_id}` tùy chọn được áp dụng cho
 giá trị pixel mặt nạ khi nạp, đây là cách dataset được đánh số từ 1 đến 150 trở
 thành 0 đến 149; mọi giá trị nguồn không được ánh xạ trở thành ignore, còn mọi

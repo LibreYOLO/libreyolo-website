@@ -10,7 +10,7 @@ keywords:
   - libreyolo 移行
   - pth libreyolo 変換
   - 自動変換
-last_verified: 1.5.0
+last_verified: 1.6.0
 meta:
   - label: エントリーポイント
     value: LibreYOLO("path/to/upstream.pth")
@@ -47,7 +47,7 @@ snippets:
       code: |
         # 変換後のファイルは公開済みファイルと同じスキーマを満たす
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: 517b0462e83295f1
+source_hash: b19fedcf10862990
 ---
 
 このページでは、ほかのプロジェクトのチェックポイントを扱います。独自のコードを古いLibreYOLOから移行する場合は、[1.6.0へのアップグレード](/docs/upgrade)を参照してください。

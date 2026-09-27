@@ -154,7 +154,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: ff50afedd377beaf
+source_hash: a407e1142b8aa57e
 ---
 
 ## Instalación
@@ -182,11 +182,12 @@ etapas mantienen dinámicos el alto y el ancho de origen porque su
 redimensionado ocurre dentro del grafo.
 
 `opset` se elige por familia cuando se omite. Las familias estilo DETR (`detr`,
-`deformable_detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`,
-`rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) más `deit`, `midas` y `moge2`
-reciben el opset 17, que es donde baja `aten::scaled_dot_product`. Todo lo demás
-recibe 13. El matting se eleva a 19 en cualquier caso, porque el decodificador de
-BiRefNet necesita el operador `DeformConv`, que ONNX define a partir del opset 19.
+`deformable_detr`, `dinodetr`, `dfine`, `gtr`, `deim`, `deimv2`, `tinyformer`,
+`ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) más `deit`,
+`midas`, `moge2` y `vjepa2` reciben el opset 17, que es donde baja
+`aten::scaled_dot_product`. Todo lo demás recibe 13. BiRefNet y FeyNobg se
+elevan a 19 en cualquier caso, porque su decodificador necesita el operador
+`DeformConv`, que ONNX define a partir del opset 19.
 
 `simplify=True` ejecuta `onnxsim` y conserva el grafo original si la pasada
 falla, así que un error de simplificación es un aviso y no un fallo de
@@ -279,13 +280,14 @@ ejecución. Profundidad, normales de superficie y bordes rechazan `batch != 1` y
 fuerzan `dynamic=False`. El matting fuerza el cuadrado nativo de 1024, porque
 las tablas de posición relativa del Swin de BiRefNet están ligadas a su
 resolución. La restauración fuerza un lienzo fijo para todas las familias salvo
-Real-ESRGAN, cuyo generador es totalmente convolucional.
+Real-ESRGAN y QuickSRNet, cuyas redes son totalmente convolucionales.
 
-Un `imgsz` rectangular funciona para las familias YOLO9, HRNet, NAFNet y
-Real-ESRGAN. Las familias con contrato de cuadrado fijo (`clip`,
-`deformable_detr`, `detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`,
-`lwdetr`, `moge2`, `rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`,
-`ssd`) lo rechazan de plano.
+Un `imgsz` rectangular funciona para las familias YOLO9, HRNet, NAFNet,
+PP-LiteSeg, Real-ESRGAN, QuickSRNet y la segmentación semántica de GTR. Las
+familias con contrato de cuadrado fijo (`clip`, `deformable_detr`, `detr`,
+`dinodetr`, `dfine`, `gtr` salvo en segmentación semántica, `deim`, `deimv2`,
+`tinyformer`, `ec`, `lwdetr`, `moge2`, `rtdetr`, `rtdetrv2`, `rtdetrv4`,
+`rfdetr`, `siglip2`, `ssd`) lo rechazan de plano.
 
 Dos combinaciones se rechazan antes del trazado: la segmentación YOLO9, porque
 YOLO9 es solo detección en LibreYOLO, y la segmentación RTMDet-Ins, cuya

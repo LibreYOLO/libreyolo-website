@@ -57,18 +57,13 @@ snippets:
             print(t, int(result.edges.binary(t).sum()))
     - label: Zapis wizualizacji
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
-        # plot() renderuje mapę; funkcja jest zdefiniowana dla wyników krawędzi
-        i normalnych.
-
+        # plot() zwraca wyrenderowaną mapę jako obraz PIL.
         result.plot().save("edges.png")
   val:
     - label: Walidacja i odczyt kluczy metryk
@@ -121,7 +116,7 @@ snippets:
 
 
         print(result.edges.array.shape)
-source_hash: bc286345540ed966
+source_hash: 1784d723c3ca99db
 ---
 
 ## Definicja

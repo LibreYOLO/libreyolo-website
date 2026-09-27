@@ -43,7 +43,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: "56d898992f1b129c"
+source_hash: 21374ebc0e6cf4d3
 ---
 
 ## 개요
@@ -112,8 +112,9 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 거부됩니다: `tiling`, `overlap_ratio`, `output_file_format`은 런타임 백엔드가
 이를 처리할 수 없을 때 `config_unsupported`로 종료합니다.
 
-`half`는 반대로 동작합니다. 내보낸 런타임은 이를 받아 FP16으로 실행하고,
-네이티브 PyTorch 추론은 무시되었다고 기록한 뒤 FP32로 계속합니다.
+`half`는 반대로 동작합니다: 받아들여지지만 무시됩니다. 네이티브 PyTorch 추론은
+무시되었다고 기록한 뒤 FP32로 계속하고, 내보낸 런타임은 내보낼 때의 정밀도를
+그대로 유지하므로 FP16 추론을 하려면 `half=true`로 내보내야 합니다.
 
 시선 추정 모델은 2단계이고 자체 탐지기가 없으므로 그런 모델에는
 `face_detector`가 필요합니다. `gallery`는 태스크가 `embed`인 모델에만

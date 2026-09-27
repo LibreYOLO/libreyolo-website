@@ -49,7 +49,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 56d898992f1b129c
+source_hash: 21374ebc0e6cf4d3
 ---
 
 ## Składnia
@@ -119,9 +119,10 @@ uruchomieniowych odrzucane, a nie ignorowane: `tiling`, `overlap_ratio` i
 `output_file_format` kończą działanie z `config_unsupported`, gdy backend
 środowiska uruchomieniowego nie może ich obsłużyć.
 
-`half` działa odwrotnie. Wyeksportowane środowiska uruchomieniowe przyjmują tę
-opcję i działają w FP16; natywna inferencja w PyTorch zapisuje w logach, że
-została zignorowana, i kontynuuje w FP32.
+`half` działa odwrotnie: jest przyjmowane i ignorowane. Natywna inferencja w
+PyTorch zapisuje w logach, że opcja została zignorowana, i kontynuuje w FP32, a
+wyeksportowane środowisko uruchomieniowe zachowuje precyzję, z jaką je
+wyeksportowano, więc inferencja w FP16 oznacza eksport z `half=true`.
 
 Modele estymacji spojrzenia są dwuetapowe i nie mają własnego detektora,
 dlatego `face_detector` jest dla nich wymagany. `gallery` dotyczy tylko modeli,

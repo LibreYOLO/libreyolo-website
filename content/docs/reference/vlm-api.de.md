@@ -49,7 +49,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: 77a04856cfe4f88c
+source_hash: a9e0d635a6645d2c
 ---
 
 ## Installation
@@ -95,7 +95,7 @@ Familie verwendet die zuerst aufgeführte Größe: `qwen3-vl` wird zu `4b`,
 `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` und `LibreMODUS` (auch
 `LibreModus` geschrieben) werden auf Paketebene exportiert.
 
-Die Erkennung umfasst außerdem `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` und `lfm2-vl-3b`. Der Alias `gemma-4` ohne Zusatz wählt E4B. Molmo2-Aliasse sind `molmo2-4b`, `molmo2-8b` und `molmo2-o-7b`; Standard ist 4B. Aliasse legen die Weiterleitung fest, sagen aber nicht aus, dass jeder entfernte Snapshot heruntergeladen und getestet wurde.
+Die Erkennung umfasst außerdem `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` und `lfm2-vl-3b`. Der Alias `gemma-4` ohne Zusatz wählt E4B. Molmo2-Aliasse sind `molmo2-4b`, `molmo2-8b` und `molmo2-o-7b`; Standard ist 4B. Aliasse legen die Weiterleitung fest, sagen aber nicht aus, dass jeder entfernte Snapshot heruntergeladen und getestet wurde. `moondream-3` lädt in 1.6.0 nicht: Seinem Mirror fehlen Gewichts-Shards.
 
 ## Aufgaben
 

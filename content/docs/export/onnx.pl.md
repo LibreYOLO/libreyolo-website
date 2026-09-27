@@ -154,7 +154,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: ff50afedd377beaf
+source_hash: a407e1142b8aa57e
 ---
 
 ## Instalacja
@@ -182,12 +182,12 @@ zachowują dynamiczną wysokość i szerokość źródła, ponieważ ich skalowa
 się wewnątrz grafu.
 
 `opset` jest przy pominięciu wybierany osobno dla każdej rodziny. Rodziny w stylu
-DETR (`detr`, `deformable_detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`,
-`lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) oraz `deit`, `midas` i
-`moge2` dostają opset 17, bo dopiero tam `aten::scaled_dot_product` ma swoje
-odwzorowanie. Reszta dostaje 13. Matting jest niezależnie od tego podnoszony do
-19, ponieważ dekoder w BiRefNet potrzebuje operatora `DeformConv`, który ONNX
-definiuje od opsetu 19.
+DETR (`detr`, `deformable_detr`, `dinodetr`, `dfine`, `gtr`, `deim`, `deimv2`,
+`tinyformer`, `ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`) oraz
+`deit`, `midas`, `moge2` i `vjepa2` dostają opset 17, bo dopiero tam
+`aten::scaled_dot_product` ma swoje odwzorowanie. Reszta dostaje 13. BiRefNet i
+FeyNobg są niezależnie od tego podnoszone do 19, ponieważ ich dekoder potrzebuje
+operatora `DeformConv`, który ONNX definiuje od opsetu 19.
 
 `simplify=True` uruchamia `onnxsim` i zachowuje pierwotny graf, jeśli przebieg
 się nie powiedzie, więc błąd upraszczania jest ostrzeżeniem, a nie niepowodzeniem
@@ -277,12 +277,14 @@ Kilka zadań ma w tej wersji kontrakt środowiska uruchomieniowego o stałej
 rozdzielczości. Głębia, normalna powierzchni i krawędzie odrzucają `batch != 1` i
 wymuszają `dynamic=False`. Matting wymusza natywny kwadrat 1024, ponieważ tablice
 pozycji względnych w Swin z BiRefNet są związane ze swoją rozdzielczością.
-Restauracja wymusza stałe płótno dla każdej rodziny poza Real-ESRGAN, którego
-generator jest w pełni konwolucyjny.
+Restauracja wymusza stałe płótno dla każdej rodziny poza Real-ESRGAN i
+QuickSRNet, których sieci są w pełni konwolucyjne.
 
-Prostokątny `imgsz` działa dla rodzin YOLO9, HRNet, NAFNet i Real-ESRGAN.
+Prostokątny `imgsz` działa dla rodzin YOLO9, HRNet, NAFNet, PP-LiteSeg,
+Real-ESRGAN, QuickSRNet oraz segmentacji semantycznej w GTR.
 Rodziny ze stałym kontraktem kwadratowym (`clip`, `deformable_detr`, `detr`,
-`dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`, `moge2`, `rtdetr`,
+`dinodetr`, `dfine`, `gtr` poza segmentacją semantyczną, `deim`, `deimv2`,
+`tinyformer`, `ec`, `lwdetr`, `moge2`, `rtdetr`,
 `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`, `ssd`) odrzucają go wprost.
 
 Dwie kombinacje są odrzucane przed trasowaniem: segmentacja w YOLO9, ponieważ

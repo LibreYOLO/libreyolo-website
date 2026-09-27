@@ -1,11 +1,13 @@
 ---
 title: Tipos de Results
 seo_title: Referencia del objeto Results de LibreYOLO
-description: "Payloads de resultados de LibreYOLO: cajas, máscaras, puntos clave, clasificación, profundidad, albedo, cuboides 3D y acciones robóticas."
+description: >-
+  Payloads de resultados de LibreYOLO: cajas, máscaras, puntos clave,
+  clasificación, profundidad, albedo, cuboides 3D y acciones robóticas.
 lead: >-
   Results es el único tipo de retorno por imagen de todos los modelos de
-  LibreYOLO. Lleva slots de payload opcionales, uno por forma de
-  tarea, y solo rellena los que el modelo ha producido.
+  LibreYOLO. Lleva slots de payload opcionales, uno por forma de tarea, y solo
+  rellena los que el modelo ha producido.
 keywords:
   - objeto Results de libreyolo
   - Results.boxes
@@ -48,7 +50,7 @@ snippets:
         # Las filas, como dicts planos, y luego como JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: d74276d805c22c92
+source_hash: 173c542fb675892e
 ---
 
 ## El objeto Results
@@ -309,7 +311,7 @@ dicts planos, una fila por detección, segmento, punto o región según qué slo
 estén rellenos. `to_json(**kwargs)` pasa sus argumentos a `summary` y devuelve
 la cadena JSON.
 
-`plot()` renderiza los payloads de todas las tareas. Las superposiciones sobre imágenes usan arrays BGR por defecto; `pil=True` solicita PIL. Los resultados de bordes y mapas de normales conservan PIL por defecto.
+`plot()` renderiza los payloads de todas las tareas. Las superposiciones sobre imágenes usan arrays BGR por defecto; `pil=True` solicita PIL. Los mapas de profundidad, normales, bordes y albedo, los cuboides 3D y las secuencias de acciones devuelven una imagen PIL por defecto; `pil=False` devuelve el array.
 
 ## Boxes3D
 

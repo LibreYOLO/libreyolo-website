@@ -9,7 +9,7 @@ keywords:
   - fp8 量化
   - 训练后量化 yolo
   - libreyolo quantize 参数
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: 命令
     value: libreyolo quantize
@@ -42,7 +42,7 @@ snippets:
 
         libreyolo train model=LibreYOLO9s-int8.pt data=coco8.yaml epochs=10
         lr0=0.001
-source_hash: 663390776f2f2c15
+source_hash: 409bc0b2ace6547e
 ---
 
 ## 概要
@@ -63,7 +63,7 @@ libreyolo quantize model=<name|path> [recipe=<recipe>] [key=value ...]
 | `calib` | `coco128.yaml` | 校准图像：一个数据 YAML，或内置数据集的名称。无标注，只做前向。`none` 跳过校准 |
 | `samples` | `128` | 校准图像的最大数量 |
 | `batch` | `8` | 校准批大小 |
-| `algorithm` | `auto` | 激活范围估计：`auto`（会选择 minmax）、`minmax` 或 `percentile` |
+| `algorithm` | `auto` | 激活范围估计：`auto`（minmax）、`minmax`、`percentile`、`mse` 或 `entropy` |
 | `out` | | 输出检查点路径。默认是在后缀前带 `-<recipe>` 的源路径 |
 | `device` | `auto` | 设备 |
 | `allow_download_scripts` | `false` | 允许数据集 YAML 下载块中内嵌的 Python |

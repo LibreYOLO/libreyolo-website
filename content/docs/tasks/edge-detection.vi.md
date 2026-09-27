@@ -49,18 +49,13 @@ snippets:
             print(t, int(result.edges.binary(t).sum()))
     - label: Lưu ảnh trực quan hóa
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
-        # plot() render map; phương thức được định nghĩa cho kết quả edge và
-        normal.
-
+        # plot() trả về map đã render dưới dạng ảnh PIL.
         result.plot().save("edges.png")
   val:
     - label: Xác thực và đọc các key metric
@@ -107,7 +102,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.edges.array.shape)
-source_hash: bc286345540ed966
+source_hash: 1784d723c3ca99db
 ---
 
 ## Định nghĩa

@@ -7,9 +7,9 @@ description: >-
   OIS e exporte.
 lead: >-
   A detecção de bordas prediz a probabilidade de cada pixel estar na borda de um
-  objeto. O LibreYOLO expõe isso como a tarefa edge, que retorna um mapa denso de
-  probabilidade no canvas da imagem original em vez de um conjunto de segmentos
-  de reta.
+  objeto. O LibreYOLO expõe isso como a tarefa edge, que retorna um mapa denso
+  de probabilidade no canvas da imagem original em vez de um conjunto de
+  segmentos de reta.
 keywords:
   - detecção de bordas python
   - detecção de contornos deep learning
@@ -56,18 +56,13 @@ snippets:
             print(t, int(result.edges.binary(t).sum()))
     - label: Salvar a visualização
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
-
         result = model(SAMPLE_IMAGE)
 
-
-        # plot() desenha o mapa; ele é definido para resultados de borda e de
-        normais.
-
+        # plot() retorna o mapa renderizado como uma imagem PIL.
         result.plot().save("edges.png")
   val:
     - label: Validar e ler as chaves de métrica
@@ -114,7 +109,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.edges.array.shape)
-source_hash: bc286345540ed966
+source_hash: 1784d723c3ca99db
 ---
 
 ## Definição

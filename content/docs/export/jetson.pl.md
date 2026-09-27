@@ -200,7 +200,7 @@ snippets:
 
         tegrastats            # obciążenie na żywo; nvidia-smi jest ograniczone
         na Tegra
-source_hash: c07ff908503e89b5
+source_hash: 42f4131b1a842bfd
 ---
 
 ## Co dokumentuje ta strona
@@ -216,12 +216,9 @@ Inne wydania JetPack, inne płytki Jetson i inne wersje CUDA nie były testowane
 Poniższy przepis to ten, który zadziałał na tej kombinacji.
 
 Tamto uruchomienie odbyło się 2026-07-27 na LibreYOLO 1.4.0 i nie zostało
-powtórzone na sprzęcie z 1.5.0: to jedyna strona w drzewie 1.5.0, która wciąż
-niesie weryfikację z 1.4.0, dlatego jej front matter podaje
-`last_verified: "1.4.0"`. Nic w zmianach z 1.5.0 nie dotyka ścieżki instalacji,
-czterech brakujących bibliotek ani opisanych tutaj flag eksportu, więc polecenia
-powinny pozostać aktualne, ale numery wersji w poniższych wynikach to te, które
-wypisała wersja 1.4.0, a nie pomiar z 1.5.0.
+powtórzone na sprzęcie z 1.5.0 ani 1.6.0, dlatego front matter tej strony podaje
+`last_verified: "1.4.0"`. Polecenia powinny pozostać aktualne, ale numery wersji
+w poniższych wynikach to te, które wypisała wersja 1.4.0, a nie pomiar z 1.6.0.
 
 Dwie rzeczy w tej konfiguracji przeczą temu, co mówi większość poradników o
 Jetson. Pakiety wheel to zwykłe kompilacje aarch64 publikowane dla CUDA 13, więc

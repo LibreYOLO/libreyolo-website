@@ -66,7 +66,7 @@ snippets:
         model = LibreYOLO("LibreMoGe2s-normal.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot() disegna il campo; è definito per i risultati normal ed edge.
+        # plot() restituisce il campo disegnato come immagine PIL.
         result.plot().save("normals.png")
   val:
     - label: Validare e leggere le chiavi delle metriche
@@ -106,7 +106,7 @@ snippets:
 
 
         print(result.normal_map.data.shape)
-source_hash: b033fdf3a2210ce5
+source_hash: dd8de1b1ecd208bf
 ---
 
 ## Definizione

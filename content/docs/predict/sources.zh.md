@@ -188,7 +188,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: c355ad28487c9a65
+source_hash: 81a0c947dbfe48b5
 ---
 
 ## 输入源是如何分类的
@@ -234,7 +234,7 @@ source_hash: c355ad28487c9a65
 
 浮点数组按自身的取值范围重新缩放：小于等于 `1.0` 的值乘以 255，更大的值裁剪到 `[0, 255]`。RGBA 数组会丢掉自己的 alpha 通道。
 
-远程路径各需要一个包，而且默认都不安装：`http(s)://` 需要 `requests`，`s3://` 需要 `boto3`，`gs://` 需要 `gcsfs`。
+远程路径各需要一个包。`http(s)://` 用的 `requests` 随基础安装一起装上；`s3://` 用的 `boto3` 和 `gs://` 用的 `gcsfs` 则不会。
 
 跟踪接受图像、按文件名排序的文件夹、列表、元组和惰性图像迭代器作为连续帧。传入 `fps=30.0` 定义图像序列的时间信息，传入 `color_format="auto"` 选择输入解释方式。见[跟踪](/docs/tasks/object-tracking)。
 
@@ -248,7 +248,7 @@ source_hash: c355ad28487c9a65
 
 <code-tabs name="video" />
 
-当路径的后缀是 `.asf`、`.avi`、`.gif`、`.m4v`、`.mkv`、`.mov`、`.mp4`、`.mpeg`、`.mpg`、`.ts`、`.wmv`、`.webm` 之一时，它算作视频。
+当路径的后缀是 `.3g2`、`.3gp`、`.asf`、`.avi`、`.dav`、`.f4v`、`.flv`、`.gif`、`.h264`、`.h265`、`.hevc`、`.m2ts`、`.m4v`、`.mkv`、`.mov`、`.mp4`、`.mpeg`、`.mpg`、`.mts`、`.mxf`、`.ogv`、`.ts`、`.vob`、`.wmv`、`.webm` 之一时，它算作视频。
 
 `.gif` 同时出现在两个列表里。直接传给 `predict` 的 `.gif` 路径会按视频打开，因为视频检查先执行；而扫描文件夹时遇到的 `.gif` 会按静态图像加载。
 
@@ -326,7 +326,7 @@ pip install mss
 
 `save=True` 会把带标注的输出写进一个运行目录，而不是把它返回。
 
-图像写入自动递增的 `runs/detect/predict`、`runs/detect/predict2` 等目录，并保留源文件名。同一个进程里的每张图像都落在同一个目录下，所以两个输入文件夹里有同名文件时会互相覆盖。内存中的图像没有文件名可以复用，会依次编号为 `image0`、`image1` 等。
+图像写入自动递增的 `runs/detect/predict`、`runs/detect/predict2` 等目录，并保留源文件名。同一个进程里的每张图像都落在同一个目录下，所以两个输入文件夹里有同名文件时会互相覆盖。内存中的图像没有文件名可以复用。单张图像会保存为 `inference`，所以重复调用会覆盖它；列表或批次则依次编号为 `image0`、`image1` 等。
 
 视频源和实时源写成单个 `.mp4`，以输入源命名。
 

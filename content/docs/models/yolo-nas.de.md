@@ -3,7 +3,9 @@ title: YOLO-NAS
 families:
   - yolonas
 seo_title: 'YOLO-NAS: Vorhersage, Training und Export in LibreYOLO'
-description: "Detektion, Pose und orientierte Boxen mit YOLO-NAS in LibreYOLO. Die vortrainierten Upstream-Gewichte sind nicht kommerziell nutzbar."
+description: >-
+  Detektion, Pose und orientierte Boxen mit YOLO-NAS in LibreYOLO. Die
+  vortrainierten Upstream-Gewichte sind nicht kommerziell nutzbar.
 lead: >-
   Ein konvolutionaler Detektor, dessen Backbone und Neck aus der
   Architektursuche von Deci.AI hervorgingen und auf quantisierungsbewussten
@@ -18,7 +20,7 @@ keywords:
   - Posenschätzung
   - quantisierungsbewusster Detektor
   - AutoNAC
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -142,7 +144,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 483562cad2c02696
+source_hash: 52050c4046781a6e
 ---
 
 ## Installation
@@ -201,7 +203,7 @@ Ein Export ist eine weitere Kopie derselben Gewichte in einem anderen Container.
 
 ## Checkpoints
 
-Es gibt keine aufzulisten. Decis Lizenz verbietet die Weiterverteilung, daher veröffentlicht die LibreYOLO-Organisation keine YOLO-NAS-Gewichte und der Download wird an anderer Stelle aufgelöst. Ein Name der Form `LibreYOLONAS<size>.pt` oder für die Posenschätzung `LibreYOLONAS<size>-pose.pt` wird dem passenden Objekt auf Decis öffentlichem CDN zugeordnet.
+Es gibt keine aufzulisten. Decis Lizenz verbietet die Weiterverteilung, daher veröffentlicht die LibreYOLO-Organisation keine YOLO-NAS-Gewichte und der Download wird an anderer Stelle aufgelöst. Ein Name der Form `LibreYOLONAS<size>.pt`, für die Posenschätzung `LibreYOLONAS<size>-pose.pt` oder für orientierte Boxen `LibreYOLONAS<size>-obb.pt` (s, m, l) wird dem passenden Objekt auf Decis öffentlichem CDN zugeordnet.
 
 Auf diese Weise lassen sich nur Checkpoints abrufen, deren SHA-256 die Bibliothek fest hinterlegt hat. Alle anderen werden sicher abgelehnt, statt ein ungeprüftes Pickle eines Drittanbieters zu öffnen. Du musst sie manuell herunterladen und als Pfad übergeben. Eine bereits lokal vorhandene Datei wird ohne Download und Prüfsummenprüfung von ihrem Pfad geladen. Das gilt auch für eine Deci-Datei mit der ursprünglichen Endung `.pth`, die der Loader erkennt.
 

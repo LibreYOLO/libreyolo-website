@@ -231,7 +231,7 @@ validation during training off, final epoch included, and the run writes no
 ### Other behavior worth knowing
 
 `lora=true` is accepted by RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 and
-v4, EC and ConvNeXt. Any other family exits with `config_unsupported` rather
+v4, EC, GTR and ConvNeXt. Any other family exits with `config_unsupported` rather
 than training without it.
 
 `pretrained=false` combined with `resume` is refused for the families that

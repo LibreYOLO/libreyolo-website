@@ -15,7 +15,7 @@ keywords:
   - полігональні мітки
   - MIT бібліотека сегментації
   - mask mAP
-last_verified: 1.5.0
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -126,7 +126,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 3d956e53e80143c2
+source_hash: 577cd3c8c2d5d6fe
 ---
 
 ## Визначення
@@ -150,15 +150,16 @@ source_hash: 3d956e53e80143c2
 
 ## Моделі
 
-П'ять сімейств підтримують і навчання, і передбачення масок:
+Чотири сімейства підтримують і навчання, і передбачення масок:
 [RF-DETR](/docs/models/rf-detr), [EdgeCrafter](/docs/models/edgecrafter),
-[D-FINE](/docs/models/d-fine), [GTR](/docs/models/gtr) і
-[RTMDet](/docs/models/rtmdet). RF-DETR потребує
-власного набору залежностей `pip install "libreyolo[rfdetr]"`; інші чотири
+[D-FINE](/docs/models/d-fine) і [GTR](/docs/models/gtr). RF-DETR потребує
+власного набору залежностей `pip install "libreyolo[rfdetr]"`; інші три
 працюють із базовим пакетом.
 
 [Mask R-CNN](/docs/models/mask-rcnn) передбачає, валідує та експортує маски,
-але його `train()` спричиняє `NotImplementedError`.
+але його `train()` спричиняє `NotImplementedError`. [RTMDet](/docs/models/rtmdet)
+передбачає й валідує маски, але навчання сегментації спричиняє
+`NotImplementedError`; це сімейство навчається лише як детектор.
 
 [EoMT](/docs/models/eomt) передбачає й валідує маски та також не підтримує
 навчання, а його експорт ще вужчий: `export()` приймає лише семантичну задачу

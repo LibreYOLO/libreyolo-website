@@ -45,7 +45,7 @@ snippets:
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot()はマップを描画する エッジと法線の結果に定義されている
+        # plot()は描画したマップをPIL画像として返す
         result.plot().save("edges.png")
   val:
     - label: 検証して指標キーを確認
@@ -92,7 +92,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.edges.array.shape)
-source_hash: bc286345540ed966
+source_hash: 1784d723c3ca99db
 ---
 
 ## 定義

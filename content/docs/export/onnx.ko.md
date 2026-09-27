@@ -151,7 +151,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: ff50afedd377beaf
+source_hash: a407e1142b8aa57e
 ---
 
 ## 설치
@@ -170,8 +170,8 @@ ONNX 추가 패키지에는 `onnxruntime>=1.18.0`이 필요하며, LaMa는 opset
 
 `dynamic`는 Python에서는 `True`로, CLI에서는 `False`로 기본 설정됩니다. 이것이 켜져 있으면 배치 축이 기호화되고 몇 가지 작업이 더 확장됩니다: 의미론적 세그멘테이션은 마스크 높이와 너비를 열고, Real-ESRGAN 복원은 공간 축을 열며, 2단계 탐지기는 그래프 내에서 리사이즈가 발생하기 때문에 소스 높이와 너비를 동적으로 유지합니다.
 
-`opset`는 생략될 때 각 계열마다 선택됩니다. DETR 스타일 계열(`detr`, `deformable_detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`)와 `deit`, `midas`, `moge2`는 opset 17을 사용하며, `aten::scaled_dot_product`가 낮아지는 곳입니다. 나머지는 모두
-13. Matting은 어쨌든 19로 올려집니다. 왜냐하면 BiRefNet의 디코더가 `DeformConv` 연산자를 필요로 하고, ONNX가 이를 opset 19에서 정의하기 때문입니다.
+`opset`는 생략될 때 각 계열마다 선택됩니다. DETR 스타일 계열(`detr`, `deformable_detr`, `dinodetr`, `dfine`, `gtr`, `deim`, `deimv2`, `tinyformer`, `ec`, `lwdetr`, `rfdetr`, `rtdetr`, `rtdetrv2`, `rtdetrv4`)와 `deit`, `midas`, `moge2`, `vjepa2`는 opset 17을 사용하며, `aten::scaled_dot_product`가 낮아지는 곳입니다. 나머지는 모두
+13을 사용합니다. BiRefNet과 FeyNobg는 디코더에 ONNX가 opset 19부터 정의하는 `DeformConv` 연산자가 필요하므로 어떤 경우에도 19로 올려집니다.
 
 `simplify=True`는 `onnxsim`를 실행하고 패스가 실패하면 원래 그래프를 유지하므로 단순화 오류는 내보내기 실패가 아니라 경고입니다. macOS arm64에서 `onnx` 1.22 이상과 `onnxsim` 0.6.5 이하를 사용할 경우 이 패스는 완전히 건너뛰며, 이는 해당 조합이 Python 프로세스를 중단시킬 수 있기 때문입니다.
 
@@ -223,9 +223,9 @@ ONNX 추가 패키지에는 `onnxruntime>=1.18.0`이 필요하며, LaMa는 opset
 
 RF-DETR은 또한 입력 텐서가 `images`가 아니라 `input`로 명명된 유일한 계열이기도 합니다.
 
-이 버전에서는 여러 작업이 고정 해상도 런타임 계약을 갖습니다. 깊이, 표면 법선 및 엣지 거부는 `batch != 1`를 사용하고, 강제는 `dynamic=False`를 사용합니다. 매팅은 BiRefNet의 Swin 상대 위치 테이블이 해상도에 맞춰져 있기 때문에 기본 1024 제곱을 강제합니다. 복원은 Real-ESRGAN을 제외한 모든 계열에서 고정 캔버스를 강제하며, Real-ESRGAN의 생성기는 완전 합성곱 방식입니다.
+이 버전에서는 여러 작업이 고정 해상도 런타임 계약을 갖습니다. 깊이, 표면 법선 및 엣지 거부는 `batch != 1`를 사용하고, 강제는 `dynamic=False`를 사용합니다. 매팅은 BiRefNet의 Swin 상대 위치 테이블이 해상도에 맞춰져 있기 때문에 기본 1024 제곱을 강제합니다. 복원은 Real-ESRGAN과 QuickSRNet을 제외한 모든 계열에서 고정 캔버스를 강제하며, 이 두 계열의 네트워크는 완전 합성곱 방식입니다.
 
-직사각형 `imgsz`는 YOLO9 계열, HRNet, NAFNet 및 Real-ESRGAN에 작동합니다. 고정된 정사각형 계약이 있는 계열(`clip`, `deformable_detr`, `detr`, `dinodetr`, `dfine`, `deim`, `deimv2`, `ec`, `lwdetr`, `moge2`, `rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`, `ssd`)은 이를 완전히 거부합니다.
+직사각형 `imgsz`는 YOLO9 계열, HRNet, NAFNet, PP-LiteSeg, Real-ESRGAN, QuickSRNet 및 GTR 시맨틱 분할에 작동합니다. 고정된 정사각형 계약이 있는 계열(`clip`, `deformable_detr`, `detr`, `dinodetr`, `dfine`, 시맨틱 분할을 제외한 `gtr`, `deim`, `deimv2`, `tinyformer`, `ec`, `lwdetr`, `moge2`, `rtdetr`, `rtdetrv2`, `rtdetrv4`, `rfdetr`, `siglip2`, `ssd`)은 이를 완전히 거부합니다.
 
 두 가지 조합은 추적 전에 거부됩니다: YOLO9 세분화는 LibreYOLO에서 YOLO9가 검출 전용이기 때문에, 그리고 RTMDet-Ins 세분화는 동적 커널 마스크 디코드에 내보낸 런타임 계약이 없기 때문입니다.
 

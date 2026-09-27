@@ -94,7 +94,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: 0ac96180165c4891
+source_hash: d22a5fc355bbebd2
 ---
 
 ## Installation
@@ -120,8 +120,8 @@ amont produit une profondeur relative positive ; le wrapper réseau de
 LibreYOLO l'inverse et reproduit le traitement officiel du ciel, si bien que
 la sortie respecte le contrat de profondeur partagé de LibreYOLO. `save=True`
 écrit sur disque une visualisation colorisée de cette carte ; `Results.plot()`
-ne couvre pas cette famille, puisqu'elle n'est définie que pour les normales
-de surface et les contours. Voir [la prédiction](/docs/predict) pour les
+rend la carte de profondeur sous forme d'image PIL, et `pil=False` renvoie le
+tableau à la place. Voir [la prédiction](/docs/predict) pour les
 sources, le streaming et le traitement des résultats.
 
 ## Variantes

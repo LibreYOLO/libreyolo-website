@@ -20,15 +20,22 @@ snippets:
   predict:
     - label: Prediksi peta tepi
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Tidak ada checkpoint tepi yang dilengkapi dengan LibreYOLO; konversi terlebih dahulu (di bawah).
+
+        # Tidak ada checkpoint tepi yang dilengkapi dengan LibreYOLO; konversi
+        terlebih dahulu (di bawah).
+
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         edges = result.edges
+
         print(edges.array.shape)          # (H, W) float32 di [0, 1]
+
         print(edges.binary(0.5).sum())    # jumlah piksel tepi pada 0.5
     - label: Pilih ambang batas Anda sendiri
       language: python
@@ -49,7 +56,7 @@ snippets:
         model = LibreYOLO("weights/LibreDexiNedb-edge.pt")
         result = model(SAMPLE_IMAGE)
 
-        # plot() menampilkan peta; ini didefinisikan untuk results tepi dan normal.
+        # plot() mengembalikan peta yang telah dirender sebagai gambar PIL.
         result.plot().save("edges.png")
   val:
     - label: Validasi dan baca kunci metrik
@@ -87,16 +94,22 @@ snippets:
         model.export(format="onnx", imgsz=352)
     - label: Jalankan berkas yang diekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Pabrik mengarahkan pada akhiran berkas, sehingga artefak yang diekspor dimuat
+
+        # Pabrik mengarahkan pada akhiran berkas, sehingga artefak yang diekspor
+        dimuat
+
         # seperti halnya checkpoint dan mengembalikan objek Results yang sama.
+
         model = LibreYOLO("weights/LibreDexiNedb-edge.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.edges.array.shape)
-source_hash: bc286345540ed966
+source_hash: 1784d723c3ca99db
 ---
 
 ## Definisi

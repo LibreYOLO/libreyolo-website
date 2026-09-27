@@ -190,6 +190,10 @@ succeeds everywhere and simply installs less where a wheel does not exist.
 `sensenova` skips `bitsandbytes` on macOS, where no wheel is published; the rest
 of the extra installs normally.
 
+`vlm` is not platform-scoped: its `decord==0.6.0` pin has wheels only for
+x86-64 Linux and Windows. On macOS and ARM Linux, `vlm`, `ground`, `vlm-train`
+and `all` fail to install.
+
 If disk is the constraint, most of it is PyTorch, and most of PyTorch is the
 CUDA payload its default wheel bundles. A CPU-only wheel removes that without
 giving anything up. For ONNX detection on a machine that should carry no torch
