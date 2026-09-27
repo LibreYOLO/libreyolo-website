@@ -113,7 +113,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: "f642c33d64f6878c"
+source_hash: a60dad4b38f35bf5
 ---
 
 ## 정의
@@ -132,7 +132,7 @@ source_hash: "f642c33d64f6878c"
 
 클래스 세트는 계열별로가 아니라 체크포인트별로 다릅니다. 공개된 가중치는 레이블 공간이 거의 공통점이 없는 데이터셋에서 나온 것이며, 예를 들어 ADE20K의 150개 클래스와 Cityscapes의 19개 클래스가 있습니다. 따라서 체크포인트의 `names`가 무엇을 레이블링할 수 있는지를 알려주며, 두 체크포인트는 동일한 데이터셋에서 학습된 경우에만 비교할 수 있습니다.
 
-[PP-LiteSeg](/docs/models/ppliteseg)와 [U-Net](/docs/models/unet)은 학습 가능한 시맨틱 분할 계열입니다. U-Net에는 현재 검증된 호스팅 변환 가중치가 없습니다.
+[PP-LiteSeg](/docs/models/ppliteseg)와 [U-Net](/docs/models/unet)은 학습 가능한 시맨틱 분할 계열입니다. U-Net의 Cityscapes 가중치는 `LibreUNets-sem.pt`로 공개되어 있습니다.
 
 ## 예측
 

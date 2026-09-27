@@ -10,7 +10,7 @@ keywords:
   - 训练语义分割模型
   - mIoU
   - MIT 许可 语义分割库
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -110,7 +110,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: f642c33d64f6878c
+source_hash: a60dad4b38f35bf5
 ---
 
 ## 定义
@@ -140,7 +140,7 @@ source_hash: f642c33d64f6878c
 其中就有 ADE20K 的 150 个类别对上 Cityscapes 的 19 个，所以告诉你一个检查点能标注
 什么的是它的 `names`，而两个检查点只有在同一个标签空间上训练过时才可比。
 
-[PP-LiteSeg](/docs/models/ppliteseg) 和 [U-Net](/docs/models/unet) 是可训练的语义分割家族。U-Net 目前没有经过验证的托管转换权重。
+[PP-LiteSeg](/docs/models/ppliteseg) 和 [U-Net](/docs/models/unet) 是可训练的语义分割家族。U-Net 的 Cityscapes 权重已发布为 `LibreUNets-sem.pt`。
 
 ## 预测
 

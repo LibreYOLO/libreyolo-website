@@ -107,16 +107,22 @@ snippets:
         libreyolo export model=LibreSegformerb0-sem.pt format=onnx imgsz=512
     - label: Gunakan berkas hasil ekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Factory merutekan berdasarkan akhiran berkas, sehingga artefak hasil
-        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang sama.
+
+        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang
+        sama.
+
         model = LibreYOLO("LibreSegformerb0-sem.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.semantic_mask.data.shape)
-source_hash: f642c33d64f6878c
+source_hash: a60dad4b38f35bf5
 ---
 
 ## Definisi
@@ -152,7 +158,7 @@ ADE20K dibanding 19 kelas Cityscapes, sehingga `names` milik checkpoint
 menentukan apa yang dapat diberi label. Dua checkpoint hanya dapat dibandingkan
 jika dilatih pada kumpulan yang sama.
 
-[PP-LiteSeg](/docs/models/ppliteseg) dan [U-Net](/docs/models/unet) adalah family segmentasi semantik yang dapat dilatih. U-Net saat ini tidak memiliki konversi terverifikasi yang dihosting.
+[PP-LiteSeg](/docs/models/ppliteseg) dan [U-Net](/docs/models/unet) adalah family segmentasi semantik yang dapat dilatih. Bobot Cityscapes untuk U-Net dipublikasikan sebagai `LibreUNets-sem.pt`.
 
 ## Prediksi
 

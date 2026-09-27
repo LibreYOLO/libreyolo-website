@@ -14,7 +14,7 @@ keywords:
   - навчити модель сегментації
   - mIoU
   - MIT бібліотека сегментації
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -134,7 +134,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: f642c33d64f6878c
+source_hash: a60dad4b38f35bf5
 ---
 
 ## Визначення
@@ -178,7 +178,7 @@ ADE20K проти 19 класів Cityscapes. Отже, поле `names` кон�
 що саме вона може позначати, а дві контрольні точки можна порівнювати лише тоді,
 коли їх навчено на одному датасеті.
 
-[PP-LiteSeg](/docs/models/ppliteseg) і [U-Net](/docs/models/unet) підтримують навчання семантичної сегментації. U-Net наразі не має перевіреної опублікованої конверсії.
+[PP-LiteSeg](/docs/models/ppliteseg) і [U-Net](/docs/models/unet) підтримують навчання семантичної сегментації. Ваги U-Net для Cityscapes опубліковано як `LibreUNets-sem.pt`.
 
 ## Передбачення
 

@@ -131,7 +131,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: f642c33d64f6878c
+source_hash: a60dad4b38f35bf5
 ---
 
 ## Definicja
@@ -177,7 +177,7 @@ przykład 150 klas ADE20K wobec 19 klas Cityscapes. Pole `names` checkpointu
 określa więc, co może on etykietować, a dwa checkpointy są porównywalne tylko
 wtedy, gdy wytrenowano je na tym samym zbiorze.
 
-[PP-LiteSeg](/docs/models/ppliteseg) i [U-Net](/docs/models/unet) to rodziny segmentacji semantycznej z obsługą trenowania. U-Net nie ma obecnie zweryfikowanej konwersji dostępnej do pobrania.
+[PP-LiteSeg](/docs/models/ppliteseg) i [U-Net](/docs/models/unet) to rodziny segmentacji semantycznej z obsługą trenowania. Wagi U-Net dla Cityscapes są opublikowane jako `LibreUNets-sem.pt`.
 
 ## Predykcja
 

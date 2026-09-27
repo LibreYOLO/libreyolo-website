@@ -124,7 +124,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: f642c33d64f6878c
+source_hash: a60dad4b38f35bf5
 ---
 
 ## Definición
@@ -169,7 +169,7 @@ las 150 clases de ADE20K frente a las 19 de Cityscapes entre ellos, así que el
 `names` de un checkpoint es lo que te dice qué puede etiquetar, y dos
 checkpoints solo son comparables cuando se entrenaron con el mismo.
 
-[PP-LiteSeg](/docs/models/ppliteseg) y [U-Net](/docs/models/unet) son familias semánticas entrenables. U-Net no tiene actualmente una conversión alojada verificada.
+[PP-LiteSeg](/docs/models/ppliteseg) y [U-Net](/docs/models/unet) son familias semánticas entrenables. Los pesos de Cityscapes de U-Net están publicados como `LibreUNets-sem.pt`.
 
 ## Predicción
 

@@ -2,11 +2,12 @@
 title: Phân đoạn ngữ nghĩa
 seo_title: Phân đoạn ngữ nghĩa trong LibreYOLO
 description: >-
-  Gán lớp đối tượng cho mọi pixel trong LibreYOLO: các family phục vụ tác vụ, định dạng mặt nạ dày đặc và các
-  lời gọi dự đoán, huấn luyện, xác thực cùng xuất.
+  Gán lớp đối tượng cho mọi pixel trong LibreYOLO: các family phục vụ tác vụ,
+  định dạng mặt nạ dày đặc và các lời gọi dự đoán, huấn luyện, xác thực cùng
+  xuất.
 lead: >-
-  Phân đoạn ngữ nghĩa gán một lớp đối tượng cho mỗi pixel của ảnh và không phân biệt các thực thể thuộc cùng
-  một lớp. Key tác vụ là semantic.
+  Phân đoạn ngữ nghĩa gán một lớp đối tượng cho mỗi pixel của ảnh và không phân
+  biệt các thực thể thuộc cùng một lớp. Key tác vụ là semantic.
 keywords:
   - phân đoạn ngữ nghĩa python
   - phân loại pixel
@@ -115,7 +116,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: f642c33d64f6878c
+source_hash: a60dad4b38f35bf5
 ---
 ## Định nghĩa
 
@@ -155,7 +156,7 @@ lớp của ADE20K so với 19 lớp của Cityscapes, vì vậy `names` của c
 biết nó có thể gán nhãn gì, còn hai checkpoint chỉ so sánh được khi huấn luyện
 trên cùng tập lớp.
 
-[PP-LiteSeg](/docs/models/ppliteseg) và [U-Net](/docs/models/unet) là các họ phân đoạn ngữ nghĩa có thể huấn luyện. U-Net hiện chưa có bản chuyển đổi được lưu trữ đã xác minh.
+[PP-LiteSeg](/docs/models/ppliteseg) và [U-Net](/docs/models/unet) là các họ phân đoạn ngữ nghĩa có thể huấn luyện. Trọng số Cityscapes của U-Net được phát hành dưới tên `LibreUNets-sem.pt`.
 
 ## Dự đoán
 

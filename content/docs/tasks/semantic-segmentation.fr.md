@@ -15,7 +15,7 @@ keywords:
   - entraîner modèle segmentation
   - mIoU
   - bibliothèque segmentation MIT
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -128,7 +128,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: f642c33d64f6878c
+source_hash: a60dad4b38f35bf5
 ---
 
 ## Définition
@@ -175,7 +175,7 @@ d'étiquettes ont peu en commun, notamment les 150 classes d'ADE20K contre les
 étiqueter, et deux checkpoints ne sont comparables que s'ils ont été entraînés
 sur le même dataset.
 
-[PP-LiteSeg](/docs/models/ppliteseg) et [U-Net](/docs/models/unet) sont des familles de segmentation sémantique entraînables. U-Net n'a actuellement aucune conversion hébergée vérifiée.
+[PP-LiteSeg](/docs/models/ppliteseg) et [U-Net](/docs/models/unet) sont des familles de segmentation sémantique entraînables. Les poids Cityscapes de U-Net sont publiés sous le nom `LibreUNets-sem.pt`.
 
 ## Prédire
 

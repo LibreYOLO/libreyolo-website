@@ -16,7 +16,6 @@ keywords:
   - mIoU
   - mit библиотека сегментации
 last_verified: 1.6.0
-
 snippets:
   predict:
     - label: Python
@@ -126,7 +125,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: f642c33d64f6878c
+source_hash: a60dad4b38f35bf5
 ---
 
 ## Определение
@@ -165,7 +164,7 @@ source_hash: f642c33d64f6878c
 поэтому именно `names` чекпойнта говорит, что он умеет размечать, а сравнивать
 два чекпойнта можно только тогда, когда они обучены на одном и том же наборе.
 
-[PP-LiteSeg](/docs/models/ppliteseg) и [U-Net](/docs/models/unet) — обучаемые семейства семантической сегментации. У U-Net сейчас нет проверенной размещённой конверсии.
+[PP-LiteSeg](/docs/models/ppliteseg) и [U-Net](/docs/models/unet) — обучаемые семейства семантической сегментации. Веса U-Net для Cityscapes опубликованы как `LibreUNets-sem.pt`.
 
 ## Предсказание
 

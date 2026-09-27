@@ -148,7 +148,7 @@ Cityscapes' 19 among them, so a checkpoint's `names` is what tells you what it
 can label, and two checkpoints are only comparable when they were trained on
 the same one.
 
-[PP-LiteSeg](/docs/models/ppliteseg) and [U-Net](/docs/models/unet) are trainable semantic families. U-Net currently has no verified hosted conversion.
+[PP-LiteSeg](/docs/models/ppliteseg) and [U-Net](/docs/models/unet) are trainable semantic families. U-Net's Cityscapes weights are published as `LibreUNets-sem.pt`.
 
 ## Predict
 
