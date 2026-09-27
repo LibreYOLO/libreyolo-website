@@ -30,14 +30,20 @@ snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Mengunduh checkpoint saat pertama digunakan, lalu menyimpannya di weights/.
+
+        # Mengunduh checkpoint saat pertama digunakan, lalu menyimpannya di
+        weights/.
+
         model = LibreYOLO("LibreYOLO9t.pt")
 
+
         # Satu gambar mengembalikan satu objek Results.
+
         result = model(SAMPLE_IMAGE, save=True)
+
 
         for box in result.boxes:
             print(result.names[int(box.cls)], float(box.conf), box.xyxy.tolist())
@@ -60,23 +66,30 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO9t.pt")
 
-        # coco8 adalah dataset 8 gambar yang disertakan bersama library. Dataset
-        # diunduh dari URL saat pertama digunakan, sehingga tidak ada script yang dijalankan.
-        results = model.train(
-            data="coco8.yaml",
-            epochs=1,
-            imgsz=640,
-            batch=4,
-            device="cpu",
-        )
+        # Worker data mengimpor ulang berkas ini di macOS dan Windows, jadi
+        script
 
-        print(results["save_dir"])
-        print(results["best_checkpoint"])
+        # menjalankan pelatihan di dalam guard main.
+
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
+
+            # coco8 adalah dataset 8 gambar yang disertakan bersama library. Dataset
+            # diunduh dari URL saat pertama digunakan, sehingga tidak ada script yang dijalankan.
+            results = model.train(
+                data="coco8.yaml",
+                epochs=1,
+                imgsz=640,
+                batch=4,
+                device="cpu",
+            )
+
+            print(results["save_dir"])
+            print(results["best_checkpoint"])
     - label: CLI
       language: bash
       code: |
@@ -87,37 +100,48 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() mengembalikan dict biasa, bukan objek.
-        metrics = model.val(data="coco8.yaml", device="cpu")
+            # val() mengembalikan dict biasa, bukan objek.
+            metrics = model.val(data="coco8.yaml", device="cpu")
 
-        print(metrics["metrics/mAP50-95"])
-        print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+            print(metrics["metrics/mAP50-95"])
+            print(metrics["metrics/mAP50"])
+            print(metrics["metrics/precision"], metrics["metrics/recall"])
   export:
     - label: TorchScript
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
+
         # ekspor() mengembalikan path yang ditulis.
+
         path = model.export(format="torchscript")
+
         print(path)
 
-        # Factory mengarahkan berdasarkan suffix berkas, sehingga artefak dimuat kembali
+
+        # Factory mengarahkan berdasarkan suffix berkas, sehingga artefak dimuat
+        kembali
+
         # seperti checkpoint dan mengembalikan objek Results yang sama.
+
         exported = LibreYOLO(path)
+
         result = exported(SAMPLE_IMAGE)
+
         print(len(result.boxes))
     - label: ONNX
       language: bash
       code: |
         pip install "libreyolo[onnx]"
         libreyolo export model=yolo9-t format=onnx imgsz=640
-source_hash: c11b6bdbf0b6fdf1
+source_hash: 7dfa4197133544c5
 ---
 
 ## Instalasi
@@ -153,7 +177,9 @@ atau generator.
 
 `data` adalah YAML dataset. `coco8.yaml` disertakan bersama library, sehingga
 snippet dapat langsung dijalankan; nama yang tidak disertakan dibaca sebagai
-path. Dataset diselesaikan di bawah `~/datasets`, atau di bawah
+path. Guard `__main__` ada karena worker data mengimpor ulang script di macOS
+dan Windows; lihat [pemecahan masalah](/docs/troubleshooting). Dataset
+diselesaikan di bawah `~/datasets`, atau di bawah
 `LIBREYOLO_DATASETS_DIR` jika variabel tersebut ditetapkan.
 
 Run menulis ke `project/name`, dengan default direktori di bawah `runs/train`,

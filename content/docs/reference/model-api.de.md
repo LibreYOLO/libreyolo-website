@@ -52,7 +52,7 @@ snippets:
 
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: da0776970ded8716
+source_hash: ccecee93e9744550
 ---
 
 ## Erstellung
@@ -144,6 +144,7 @@ model.track(
     source,
     *,
     track_conf=0.25,
+    conf=None,
     iou=0.45,
     imgsz=None,
     classes=None,
@@ -151,15 +152,18 @@ model.track(
     save=False,
     show=False,
     vid_stride=1,
+    fps=30.0,
+    color_format="auto",
     output_path=None,
     tracker="bytetrack",
     tracker_config=None,
     augment=False,
+    persist=False,
     **tracker_kwargs,
 ) -> Generator[Results, None, None]
 ```
 
-Gibt je Frame ein `Results`-Objekt mit gesetzter `track_id` aus. `tracker` ist `"bytetrack"`, `"botsort"`, `"ocsort"` oder `"deepocsort"`. Wenn `tracker_config` angegeben ist, wird der Wert ignoriert, da der Konfigurationstyp den Tracker auswählt. `track_conf` wird bei ByteTrack und BoT-SORT auf `track_high_thresh`, bei OC-SORT und Deep OC-SORT auf `det_thresh` abgebildet. `output_path` lautet standardmäßig `runs/track/<video_stem>.mp4`.
+Gibt je Frame ein `Results`-Objekt mit gesetzter `track_id` aus. `tracker` ist `"bytetrack"`, `"botsort"`, `"ocsort"` oder `"deepocsort"`, optional mit dem Suffix `.yaml`, oder eine eigene Tracker-Instanz. Wenn `tracker_config` angegeben ist, wird der Wert ignoriert, da der Konfigurationstyp den Tracker auswählt. `track_conf` wird bei ByteTrack und BoT-SORT auf `track_high_thresh`, bei OC-SORT und Deep OC-SORT auf `det_thresh` abgebildet. `conf` ist, sofern angegeben, wie bei `predict()` der Detektionsschwellenwert. `persist=True` behält den Tracker des vorherigen Aufrufs bei, für Schleifen mit einem Frame pro Aufruf. `output_path` lautet standardmäßig `runs/track/<video_stem>.mp4`.
 
 ## val
 
@@ -179,11 +183,14 @@ model.val(
     verbose=True,
     *,
     plots=None,
+    project=None,
+    name=None,
+    exist_ok=False,
     **kwargs,
 ) -> Dict
 ```
 
-Gibt ein Metrik-Dictionary zurück, dessen Schlüssel von der Aufgabe abhängen. Die Objekterkennung liefert `metrics/precision`, `metrics/recall`, `metrics/mAP50` und `metrics/mAP50-95`. `imgsz` akzeptiert eine Ganzzahl für ein Quadrat oder ein Tupel `(height, width)` und verwendet standardmäßig die native Eingabegröße des Modells. `plots` ist ein Alias für `save_plots`. `allow_download_scripts` steuert die Ausführung eingebetteten Python-Codes, den eine Datensatz-YAML-Datei im Feld `download` enthalten kann.
+Gibt ein Metrik-Dictionary zurück, dessen Schlüssel von der Aufgabe abhängen. Die Objekterkennung liefert `metrics/precision`, `metrics/recall`, `metrics/mAP50` und `metrics/mAP50-95`. `imgsz` akzeptiert eine Ganzzahl für ein Quadrat oder ein Tupel `(height, width)` und verwendet standardmäßig die native Eingabegröße des Modells. `data=None` validiert auf dem Datensatz, der in der Trainingskonfiguration des Checkpoints gespeichert ist, und löst einen Fehler aus, wenn es keinen gibt, wie bei veröffentlichten Gewichten. `project`, `name` und `exist_ok` legen das Ausgabeverzeichnis als `project/name` fest, hochgezählt, sofern nicht `exist_ok=True` gesetzt ist. `plots` ist ein Alias für `save_plots`. `allow_download_scripts` steuert die Ausführung eingebetteten Python-Codes, den eine Datensatz-YAML-Datei im Feld `download` enthalten kann.
 
 `faster_coco_eval` wird über `**kwargs` akzeptiert und ist standardmäßig `True`. Ist das Paket nicht installiert, wird auf pycocotools zurückgegriffen. Das verwendete Backend steht in `model.last_eval_backend`.
 
@@ -215,6 +222,7 @@ Gibt den Pfad zum geschriebenen Artefakt zurück. `format` wird über die Export
 | `dynamic` | `True` | Dynamische Achsen aktivieren |
 | `half` | `False` | FP16-Genauigkeit |
 | `int8` | `False` | INT8-Genauigkeit |
+| `quantize` | `None` | Genauigkeit als `16`, `8` oder `32`, anstelle von `half` oder `int8` |
 | `batch` | `1` | Im Artefakt eingebettete Batchgröße |
 | `device` | `None` | Gerät für die Aufzeichnung |
 | `data` | `None` | data.yaml für INT8-Kalibrierung |
@@ -222,7 +230,7 @@ Gibt den Pfad zum geschriebenen Artefakt zurück. `format` wird über die Export
 | `allow_download_scripts` | `False` | Eingebettetes Python in Datensatz-YAML-Downloads erlauben |
 | `verbose` | `False` | Ausführliche Exporter-Protokollierung |
 
-Gesperrte Kombinationen lösen bei der Vorabprüfung und vor der Aufzeichnung `NotImplementedError` aus. Abdeckung und Regeln stehen auf der Seite zur [Exportmatrix](/docs/reference/export-matrix). Bei vorhandenen aktiven LoRA-Adaptern werden diese in dichte Gewichte integriert. Die Zusammenführung erfolgt erst nach allen Prüfungen, die eine Anfrage ablehnen können.
+Gesperrte Kombinationen lösen bei der Vorabprüfung und vor der Aufzeichnung `NotImplementedError` aus. Eine Option, die das Format nicht verwendet, erzeugt die Warnung `Unknown <format> export arguments (ignored)`, und der Export läuft weiter. Abdeckung und Regeln stehen auf der Seite zur [Exportmatrix](/docs/reference/export-matrix). Bei vorhandenen aktiven LoRA-Adaptern werden diese in dichte Gewichte integriert. Die Zusammenführung erfolgt erst nach allen Prüfungen, die eine Anfrage ablehnen können.
 
 ## save
 

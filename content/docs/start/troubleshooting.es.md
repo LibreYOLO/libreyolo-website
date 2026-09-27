@@ -16,7 +16,7 @@ keywords:
   - solucionar errores libreyolo
   - libreyolo no descarga pesos
 last_verified: 1.6.0
-source_hash: 30b68976a4ac01d1
+source_hash: f2faaab56a2f0415
 ---
 
 Los errores están agrupados por el texto que ves. Si tu mensaje no está aquí,
@@ -109,10 +109,10 @@ corresponda con un checkpoint publicado produce una URL que no existe. La tabla
 de checkpoints de cada página de modelo enumera los nombres de archivo exactos
 que se han publicado.
 
-## El entrenamiento se queda colgado o se reinicia en Windows
+## El entrenamiento se queda colgado o se reinicia en Windows o macOS
 
-Windows no tiene `fork`, así que los workers del dataloader arrancan
-reimportando tu script. Sin una guarda `if __name__ == "__main__":`, cada worker
+Windows no tiene `fork`, y Python en macOS no lo usa por defecto, así que los
+workers del dataloader arrancan reimportando tu script. Sin una guarda `if __name__ == "__main__":`, cada worker
 vuelve a ejecutar tu llamada de entrenamiento, lo que provoca un deadlock o
 genera procesos sin fin.
 
@@ -150,8 +150,9 @@ silencio de un box por imagen. Indexa solo lo que sabes que es una lista.
 
 ### Leer las métricas como atributos
 
-`val()` devuelve un diccionario simple con el nombre de la métrica como clave,
-no un objeto con acceso por atributos:
+`val()` devuelve un diccionario con el nombre de la métrica como clave. Su único
+atributo, `box`, lleva resultados por imagen y umbrales por clase, no los valores
+de las métricas:
 
 ```python
 metrics = model.val(data="coco8.yaml")

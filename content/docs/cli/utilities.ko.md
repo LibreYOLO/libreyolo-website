@@ -40,7 +40,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
-source_hash: 7b5b53c46df00c06
+source_hash: 95935c1f8ca2d6db
 ---
 
 ## 개요
@@ -91,7 +91,10 @@ libreyolo checks
 ## models
 
 모든 모델 계열을 그 작업, 크기, 해당 체크포인트로 해석되는 CLI 이름, 각 크기의
-입력 해상도와 함께 나열합니다.
+입력 해상도와 함께 나열합니다. `model=`에 지정해 로드할 수 있는 이름만 나열됩니다.
+공개된 가중치가 없는 이름은 별도의
+`No published weights (local checkpoints only)` 줄에 표시되며, CLI 이름이 없는
+계열은 대신 Python 클래스나 자체 명령을 보여줍니다.
 
 ```bash
 libreyolo models

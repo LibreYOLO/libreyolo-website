@@ -43,19 +43,34 @@ snippets:
         print(len(result.boxes), "detections")
     - label: Obrazy w pamięci
       language: python
-      code: |
+      code: >
         import numpy as np
+
         from PIL import Image
+
 
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
 
+
         pil_image = Image.open(SAMPLE_IMAGE)
+
         array = np.asarray(pil_image)
+
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+
+        # Tablice NumPy są odczytywane jako BGR, o ile nie wskazano inaczej; ta
+        jest w RGB.
+
+        result = model(array, color_format="rgb")
+
+        print(type(array).__name__, len(result.boxes))
+
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: Folder
@@ -207,7 +222,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 93db4d43c24b69ae
+source_hash: c355ad28487c9a65
 ---
 
 ## Sposób klasyfikowania źródła
@@ -245,15 +260,18 @@ Pojedyncze źródło obrazu przyjmuje siedem typów.
 |---|---|
 | `str` albo `pathlib.Path` | Plik lokalny, `http(s)://`, `s3://` albo `gs://` |
 | `PIL.Image.Image` | Konwertowany do RGB |
-| `numpy.ndarray` | Obraz 2D w skali szarości albo 3D HWC lub CHW; tablica 4D używa pierwszego obrazu |
-| `torch.Tensor` | CHW albo NCHW, odczytywany jako RGB; tensor z partią używa pierwszego obrazu |
+| `numpy.ndarray` | Obraz 2D w skali szarości albo 3D HWC lub CHW w kolejności BGR; tablica 4D to batch |
+| `torch.Tensor` | CHW albo NCHW, odczytywany jako RGB; tensor 4D to batch |
 | `bytes` | Zakodowane dane obrazu |
 | `io.BytesIO` | Zakodowane dane obrazu |
 
+Tablica lub tensor 4D zwraca listę z jednym `Results` na obraz.
+
 Przed przetwarzaniem wstępnym wszystko jest konwertowane do RGB. Tablice NumPy
 są jedynym przypadkiem niejednoznacznej kolejności kanałów, dlatego steruje nią
-`color_format`: `"auto"` (wartość domyślna) pozostawia tablicę bez zmian, a
-`"bgr"` odwraca kanały, co jest potrzebne dla klatki odczytanej przez OpenCV.
+`color_format`: `"auto"` (wartość domyślna) i `"bgr"` odczytują tablicę jako
+BGR, czyli w kolejności zwracanej przez OpenCV, a `"rgb"` pozostawia ją bez
+zmian, co jest potrzebne dla tablicy utworzonej z obrazu PIL.
 
 Tablice zmiennoprzecinkowe są skalowane według własnego zakresu: wartości nie
 większe niż `1.0` są mnożone przez 255, a wyższe przycinane do `[0, 255]`.
@@ -402,4 +420,4 @@ Wideo i źródła na żywo są zapisywane jako pojedynczy plik `.mp4` nazwany we
 plik, a bez rozszerzenia jako katalog. `output_file_format` wybiera kodowanie
 obrazu statycznego i przyjmuje `jpg`, `png` albo `webp`.
 
-Po zapisie zapisana ścieżka jest również dołączana do wyniku jako `result.saved_path`.
+Po zapisaniu obrazu zapisana ścieżka jest również dołączana do wyniku jako `result.saved_path`.

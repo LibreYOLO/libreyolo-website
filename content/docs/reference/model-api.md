@@ -140,6 +140,7 @@ model.track(
     source,
     *,
     track_conf=0.25,
+    conf=None,
     iou=0.45,
     imgsz=None,
     classes=None,
@@ -147,19 +148,25 @@ model.track(
     save=False,
     show=False,
     vid_stride=1,
+    fps=30.0,
+    color_format="auto",
     output_path=None,
     tracker="bytetrack",
     tracker_config=None,
     augment=False,
+    persist=False,
     **tracker_kwargs,
 ) -> Generator[Results, None, None]
 ```
 
 Yields one `Results` per frame with `track_id` set. `tracker` is
-`"bytetrack"`, `"botsort"`, `"ocsort"` or `"deepocsort"`, and is ignored when
+`"bytetrack"`, `"botsort"`, `"ocsort"` or `"deepocsort"`, optionally with a
+`.yaml` suffix, or a custom tracker instance, and is ignored when
 `tracker_config` is given because the config type selects the tracker.
 `track_conf` maps to `track_high_thresh` for ByteTrack and BoT-SORT and to
-`det_thresh` for OC-SORT and Deep OC-SORT. `output_path` defaults to
+`det_thresh` for OC-SORT and Deep OC-SORT. `conf`, when given, is the detection
+threshold, as in `predict()`. `persist=True` keeps the tracker from the previous
+call for per-frame loops. `output_path` defaults to
 `runs/track/<video_stem>.mp4`.
 
 ## val
@@ -180,6 +187,9 @@ model.val(
     verbose=True,
     *,
     plots=None,
+    project=None,
+    name=None,
+    exist_ok=False,
     **kwargs,
 ) -> Dict
 ```
@@ -187,8 +197,11 @@ model.val(
 Returns a metrics dictionary whose keys depend on the task; detection returns
 `metrics/precision`, `metrics/recall`, `metrics/mAP50` and
 `metrics/mAP50-95`. `imgsz` accepts a square int or a `(height, width)` tuple
-and defaults to the model's native input size. `plots` is an alias for
-`save_plots`. `allow_download_scripts` gates the embedded Python that a
+and defaults to the model's native input size. `data=None` validates on the
+dataset saved in the checkpoint's training config and raises when there is
+none, as with released weights. `project`, `name` and `exist_ok` set the output
+directory as `project/name`, incremented unless `exist_ok=True`. `plots` is an
+alias for `save_plots`. `allow_download_scripts` gates the embedded Python that a
 dataset YAML may carry in its `download` field.
 
 `faster_coco_eval` is accepted through `**kwargs` and defaults to `True`,
@@ -230,6 +243,7 @@ an alias for `tflite`. Arguments shared by every exporter:
 | `dynamic` | `True` | Enable dynamic axes |
 | `half` | `False` | FP16 precision |
 | `int8` | `False` | INT8 precision |
+| `quantize` | `None` | Precision as `16`, `8` or `32`, in place of `half` or `int8` |
 | `batch` | `1` | Batch size baked into the artifact |
 | `device` | `None` | Device to trace on |
 | `data` | `None` | data.yaml for INT8 calibration |
@@ -238,6 +252,8 @@ an alias for `tflite`. Arguments shared by every exporter:
 | `verbose` | `False` | Verbose exporter logging |
 
 Blocked combinations raise `NotImplementedError` in preflight, before tracing.
+An option the format does not use warns `Unknown <format> export arguments
+(ignored)` and the export continues.
 Coverage and its rules are on the [export matrix](/docs/reference/export-matrix)
 page. When live LoRA adapters are present they are folded into dense weights,
 and that merge happens only after every request rejection.

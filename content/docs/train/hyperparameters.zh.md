@@ -18,7 +18,7 @@ keywords:
   - 早停 patience
   - amp bfloat16 混合精度
   - 训练配置 yaml
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -94,13 +94,13 @@ snippets:
         from libreyolo import LibreYOLO
 
         # 先加载被中断那次运行的检查点，再要求断点续训
-        model = LibreYOLO("runs/train/exp/weights/last.pt")
-        model.train(data="my-dataset.yaml", epochs=100, resume=True)
+        model = LibreYOLO("runs/train/yolo9_exp/weights/last.pt")
+        model.train(data="my-dataset.yaml", resume=True)
     - label: CLI
       language: bash
       code: |
-        libreyolo train model=runs/train/exp/weights/last.pt \
-          data=my-dataset.yaml epochs=100 resume=true
+        libreyolo train model=runs/train/yolo9_exp/weights/last.pt \
+          data=my-dataset.yaml resume=true
   cfg:
     - label: Python
       language: python
@@ -110,7 +110,7 @@ snippets:
         # yaml 里的键就是 TrainConfig 的字段名，显式传入的 kwargs 优先
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: eac4e55fcf16ca15
+source_hash: ca1259a10e05a51d
 ---
 
 ## 设置参数
@@ -201,7 +201,7 @@ Float16 需要动态损失缩放，会拿到一个真正在工作的 `GradScaler
 
 运行结果写到 `project/name`。`project` 在各处都默认为 `runs/train`，但 `name` 属于按家族覆盖的那几项：基础默认值是 `exp`，而 YOLOv9 用 `yolo9_exp`，D-FINE 用 `dfine_exp`。在默认的 `exist_ok=False` 下，已存在的目录会被加上一个递增后缀，而不是被覆盖。
 
-`save_period` 每 N 轮额外写一个 `weights/epoch_<N>.pt`，在此之上，每轮结束会写 `weights/last.pt`，被跟踪的指标每次变好会写 `weights/best.pt`。`eval_interval` 设置验证运行的频率，`patience` 会在连续这么多轮没有提升之后停掉这次运行，`0` 表示关闭早停。
+`save_period` 每 N 轮额外写一个 `weights/epoch_<N>.pt`，在此之上，每轮结束会写 `weights/last.pt`，被跟踪的指标每次变好会写 `weights/best.pt`。`eval_interval` 设置验证运行的频率，最后一轮总会验证；`val=False` 会关闭验证，这样的运行不会写出 `best.pt`。`patience` 会在连续这么多轮没有提升之后停掉这次运行，`0` 表示关闭早停。
 
 `cache` 把解码后的图片留在内存里（`True` 或 `"ram"`），或者作为 `.npy` 文件放在源文件旁边（`"disk"`），以此加快重复的轮次。缓存读到的内容与重新读取逐位一致。用了 dataloader worker 时，`"disk"` 是两者中更稳妥的那个。
 
@@ -211,13 +211,13 @@ Float16 需要动态损失缩放，会拿到一个真正在工作的 `GradScaler
 
 ## 断点续训
 
-`resume=True` 会接着一次被中断的运行往下跑。检查点必须先加载好，因为 resume 是从模型上读它，而不是从一个单独的参数读。
+`resume=True` 会从已加载的检查点接着一次被中断的运行往下跑；`resume="path/to/last.pt"` 则改为从那个文件接着跑。
 
 <code-tabs name="resume" />
 
-断点续训会恢复训练权重、优化器状态、EMA 权重和更新计数、最佳指标的跟踪、`GradScaler` 的缩放系数，以及 PyTorch、CUDA 和 NumPy 的随机状态。它从检查点的轮次加一开始，并把调度快进到那个位置。
+断点续训会恢复这次运行保存的训练参数，显式传入的参数会覆盖保存的值。它会继续写入检查点所在的运行目录。它会恢复训练权重、优化器状态、EMA 权重和更新计数、最佳指标的跟踪、`GradScaler` 的缩放系数，以及 PyTorch、CUDA 和 NumPy 的随机状态。它从检查点的轮次加一开始，并把调度快进到那个位置。
 
-有两件事它不做。`resume=True` 不能和 `pretrained` 一起用，那会报错。还有，当检查点的最佳指标键与当前这次运行的不同时，最佳指标的跟踪会带一条警告重置为零，而不是去比较两个含义并不相同的值。
+有三件事它不做。`resume=True` 不能和 `pretrained` 一起用，那会报错。已发布的权重和已经达到 `epochs` 的运行没有可续训的内容，会抛出一个说明这一点的 `ValueError`。还有，当检查点的最佳指标键与当前这次运行的不同时，最佳指标的跟踪会带一条警告重置为零，而不是去比较两个含义并不相同的值。
 
 ## 把配方写进文件
 

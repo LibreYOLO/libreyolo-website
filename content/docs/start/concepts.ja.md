@@ -16,7 +16,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: 標準タスク
-    value: 17
+    value: 20
   - label: サポートティア
     value: Flagship、Core、Supported、Inference only、Museum、Sibling tier
 snippets:
@@ -45,12 +45,12 @@ snippets:
         # "det"は"detect"へ "semantic-segmentation"は"semantic"へ解決される
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
         print(model.task)
-source_hash: 23d045463a6a8411
+source_hash: c745a3c602db00ea
 ---
 
 ## タスク
 
-タスクはモデルが返すものを表します。LibreYOLOには17個の標準タスク名があり、それぞれ出力を保持する`Results`オブジェクト上のフィールド名に対応します。
+タスクはモデルが返すものを表します。LibreYOLOには20個の標準タスク名があり、それぞれ出力を保持する`Results`オブジェクト上のフィールド名に対応します。
 
 | タスク | 戻り値 |
 |---|---|
@@ -65,12 +65,15 @@ source_hash: 23d045463a6a8411
 | `depth` | 密な相対逆深度マップ |
 | `normal` | 単位ベクトルからなる密なサーフェス法線場 |
 | `edge` | 密なエッジ確率マップ |
+| `albedo` | 照明を除いた表面色である、密な線形RGBアルベドマップ |
 | `restore` | ぼけ除去、ノイズ除去、超解像用の復元済みRGB画像 |
 | `matte` | 背景除去用の0から1までのソフト前景マップ |
 | `ocr` | 読み順に並んだ文字列付きのテキスト四辺形 |
 | `embed` | 内積が一致度を表すL2正規化済みベクトル |
 | `gaze` | 検出した顔ごとの視線方向 |
 | `mesh` | 検出した人物ごとの姿勢付き3D人体 |
+| `detect3d` | クラスと信頼度を持つ、カメラ座標系の3Dボックス |
+| `act` | カメラフレームとロボットの状態から予測したロボットのアクションチャンク |
 
 これらの名前はチェックポイントのメタデータとファイル名に現れます。タスクを渡す場所では一般的な別名も受け付け、他の処理より先に正規化します。`detection`と`det`は`detect`、`keypoints`は`pose`、`cls`は`classify`、`deblur`、`denoise`、`super-resolution`はすべて`restore`、`face-recognition`と`reid`は`embed`になります。認識できない名前は暗黙にデフォルトを使用せず例外を送出します。
 

@@ -179,7 +179,7 @@ snippets:
         suporte.
 
         qmodel.export(format="tensorrt", half=True)
-source_hash: 6c247a3243daf393
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## Instalação
@@ -299,6 +299,9 @@ A aritmética quantizada executa em simulação, que é quantização falsa calc
 ilhas de float32 mesmo sob AMP. A simulação é fiel na numérica, então um score de
 `val()` em qualquer dispositivo é uma afirmação real sobre a aritmética quantizada.
 Não é uma afirmação sobre velocidade.
+
+O MPS da Apple não implementa nem as operações de quantização falsa nem float8,
+então em um Mac toda receita exceto `fp16` e `bf16` roda na CPU, com um aviso.
 
 Duas exceções executam nativamente. `fp16` e `bf16` são conversões comuns. Módulos
 `fp8` finalizados rodam seu GEMM diretamente sobre pesos E4M3 empacotados através de

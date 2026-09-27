@@ -46,7 +46,11 @@ snippets:
         array = np.asarray(pil_image)
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+        # NumPy配列は指定がない限りBGRとして読み取られるが、この配列はRGB
+        result = model(array, color_format="rgb")
+        print(type(array).__name__, len(result.boxes))
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: フォルダー
@@ -183,7 +187,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 93db4d43c24b69ae
+source_hash: c355ad28487c9a65
 ---
 
 ## ソースの分類方法
@@ -218,12 +222,14 @@ source_hash: 93db4d43c24b69ae
 |---|---|
 | `str`または`pathlib.Path` | ローカルファイル、`http(s)://`、`s3://`、`gs://` |
 | `PIL.Image.Image` | RGBへ変換 |
-| `numpy.ndarray` | 2Dグレースケール、または3DのHWCかCHW。4D配列では最初の画像を使用 |
-| `torch.Tensor` | CHWまたはNCHWをRGBとして読み取り。バッチテンソルでは最初の画像を使用 |
+| `numpy.ndarray` | 2Dグレースケール、またはBGR順の3DのHWCかCHW。4D配列はバッチとして扱う |
+| `torch.Tensor` | CHWまたはNCHWをRGBとして読み取り。4Dテンソルはバッチとして扱う |
 | `bytes` | エンコードされた画像データ |
 | `io.BytesIO` | エンコードされた画像データ |
 
-前処理の前にすべてRGBへ変換されます。チャンネル順序が曖昧なのはNumPy配列だけなので、`color_format`で制御します。デフォルトの`"auto"`は配列をそのまま維持し、`"bgr"`はチャンネルを反転します。OpenCVで読み取ったフレームには後者が必要です。
+4Dの配列またはテンソルは、画像ごとに1つの`Results`を含むリストを返します。
+
+前処理の前にすべてRGBへ変換されます。チャンネル順序が曖昧なのはNumPy配列だけなので、`color_format`で制御します。デフォルトの`"auto"`と`"bgr"`は配列をOpenCVが返す順序であるBGRとして読み取り、`"rgb"`は配列をそのまま維持します。PIL画像から作った配列には後者が必要です。
 
 浮動小数点配列は自身の範囲に基づいて再スケーリングされます。`1.0`以下の値は255倍され、それより大きい値は`[0, 255]`内にクリップされます。RGBA配列ではアルファチャンネルを削除します。
 
@@ -325,5 +331,5 @@ pip install mss
 
 `output_path`はディレクトリを上書きします。サフィックスを持つパスはファイル、持たないパスはディレクトリとして扱われます。`output_file_format`は静止画像のエンコードを選択し、`jpg`、`png`、`webp`を受け付けます。
 
-保存後、書き込まれたパスは`result.saved_path`として結果にも追加されます。
+画像を保存した後、書き込まれたパスは`result.saved_path`として結果にも追加されます。
 

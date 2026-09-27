@@ -14,7 +14,7 @@ keywords:
   - youtube 推理
   - vid_stride
   - stream=True
-last_verified: "1.6.0"
+last_verified: 1.6.0
 verification: >-
   输入源分类读自
   libreyolo/utils/source.py（classify_source、SourceKind、StreamSource、MultiStreamSource）。接受的图像类型和目录扩展名来自
@@ -47,7 +47,11 @@ snippets:
         array = np.asarray(pil_image)
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+        # 除非另行指定，NumPy 数组按 BGR 读取，而这个数组是 RGB
+        result = model(array, color_format="rgb")
+        print(type(array).__name__, len(result.boxes))
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: 一个文件夹
@@ -184,7 +188,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 93db4d43c24b69ae
+source_hash: c355ad28487c9a65
 ---
 
 ## 输入源是如何分类的
@@ -219,12 +223,14 @@ source_hash: 93db4d43c24b69ae
 |---|---|
 | `str` 或 `pathlib.Path` | 本地文件、`http(s)://`、`s3://` 或 `gs://` |
 | `PIL.Image.Image` | 转换为 RGB |
-| `numpy.ndarray` | 2D 灰度，或 3D HWC 或 CHW；4D 数组取其中第一张图像 |
-| `torch.Tensor` | CHW 或 NCHW，按 RGB 读取；批量张量取其中第一张图像 |
+| `numpy.ndarray` | 2D 灰度，或 BGR 顺序的 3D HWC 或 CHW；4D 数组表示一批图像 |
+| `torch.Tensor` | CHW 或 NCHW，按 RGB 读取；4D 张量表示一批图像 |
 | `bytes` | 编码后的图像数据 |
 | `io.BytesIO` | 编码后的图像数据 |
 
-所有输入在预处理之前都会转换为 RGB。NumPy 数组是唯一通道顺序有歧义的情况，所以由 `color_format` 控制：`"auto"`（默认）保持数组原样，`"bgr"` 反转通道顺序，用 OpenCV 读到的帧需要的就是这个。
+4D 数组或张量返回一个列表，每张图像对应一个 `Results`。
+
+所有输入在预处理之前都会转换为 RGB。NumPy 数组是唯一通道顺序有歧义的情况，所以由 `color_format` 控制：`"auto"`（默认）和 `"bgr"` 按 BGR 读取数组，也就是 OpenCV 返回的顺序；`"rgb"` 保持数组原样，由 PIL 图像生成的数组需要的就是这个。
 
 浮点数组按自身的取值范围重新缩放：小于等于 `1.0` 的值乘以 255，更大的值裁剪到 `[0, 255]`。RGBA 数组会丢掉自己的 alpha 通道。
 
@@ -326,4 +332,4 @@ pip install mss
 
 `output_path` 会覆盖这个目录。带后缀的路径当作文件，不带后缀的当作目录。`output_file_format` 选择静态图像的编码格式，接受 `jpg`、`png` 或 `webp`。
 
-保存之后，写入的路径也会挂到结果上，即 `result.saved_path`。
+保存图像之后，写入的路径也会挂到结果上，即 `result.saved_path`。

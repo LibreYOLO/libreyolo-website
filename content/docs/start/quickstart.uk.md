@@ -65,31 +65,26 @@ snippets:
   train:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO
 
+        # У macOS і Windows робочі процеси даних повторно імпортують цей файл,
+        # тому скрипт тримає навчання під захисною умовою main.
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+            # coco8, це датасет із 8 зображень у комплекті бібліотеки. Під час першого
+            # використання він завантажується з URL, тому виконувати скрипт не потрібно.
+            results = model.train(
+                data="coco8.yaml",
+                epochs=1,
+                imgsz=640,
+                batch=4,
+                device="cpu",
+            )
 
-
-        # coco8, це датасет із 8 зображень у комплекті бібліотеки. Під час
-        першого
-
-        # використання він завантажується з URL, тому виконувати скрипт не
-        потрібно.
-
-        results = model.train(
-            data="coco8.yaml",
-            epochs=1,
-            imgsz=640,
-            batch=4,
-            device="cpu",
-        )
-
-
-        print(results["save_dir"])
-
-        print(results["best_checkpoint"])
+            print(results["save_dir"])
+            print(results["best_checkpoint"])
     - label: CLI
       language: bash
       code: |
@@ -100,14 +95,15 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() повертає звичайний dict, а не об'єкт.
-        metrics = model.val(data="coco8.yaml", device="cpu")
+            # val() повертає звичайний dict, а не об'єкт.
+            metrics = model.val(data="coco8.yaml", device="cpu")
 
-        print(metrics["metrics/mAP50-95"])
-        print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+            print(metrics["metrics/mAP50-95"])
+            print(metrics["metrics/mAP50"])
+            print(metrics["metrics/precision"], metrics["metrics/recall"])
   export:
     - label: TorchScript
       language: python
@@ -140,7 +136,7 @@ snippets:
       code: |
         pip install "libreyolo[onnx]"
         libreyolo export model=yolo9-t format=onnx imgsz=640
-source_hash: c11b6bdbf0b6fdf1
+source_hash: 7dfa4197133544c5
 ---
 
 ## Встановлення
@@ -176,6 +172,8 @@ pip install libreyolo
 
 `data`, це YAML датасету. `coco8.yaml` постачається з бібліотекою, тому
 фрагмент працює без змін; ім'я, якого немає в комплекті, читається як шлях.
+Захисна умова `__main__` потрібна тому, що в macOS і Windows робочі процеси
+даних повторно імпортують скрипт; див. [усунення несправностей](/docs/troubleshooting).
 Датасети визначаються в `~/datasets` або в `LIBREYOLO_DATASETS_DIR`,
 якщо цю змінну задано.
 

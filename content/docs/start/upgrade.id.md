@@ -1,10 +1,13 @@
 ---
 title: Meningkatkan ke 1.6.0
 seo_title: Tingkatkan LibreYOLO 1.5.0 ke 1.6.0
-description: Langkah migrasi prapemrosesan, default pelatihan, direktori proses, aset yang dipatok,
-  QAT, dan loader data di LibreYOLO 1.6.0.
-lead: Versi 1.6.0 mengubah prapemrosesan, default pelatihan, dan penanganan checkpoint. Validasi
-  ulang baseline tersimpan dan atur default lama secara eksplisit saat mereproduksi proses sebelumnya.
+description: >-
+  Langkah migrasi prapemrosesan, default pelatihan, direktori proses, aset yang
+  dipatok, QAT, dan loader data di LibreYOLO 1.6.0.
+lead: >-
+  Versi 1.6.0 mengubah prapemrosesan, default pelatihan, dan penanganan
+  checkpoint. Validasi ulang baseline tersimpan dan atur default lama secara
+  eksplisit saat mereproduksi proses sebelumnya.
 keywords:
   - upgrade libreyolo
   - migrasi libreyolo 1.5.0
@@ -13,7 +16,7 @@ keywords:
   - yolox bn eps
   - default faster-coco-eval
 last_verified: 1.6.0
-source_hash: f4fda6ef286113ab
+source_hash: c575718b8a7949f8
 ---
 
 ## 1.5.0 ke 1.6.0
@@ -35,6 +38,16 @@ source_hash: f4fda6ef286113ab
 - QAT menonaktifkan EMA, SyncBatchNorm, dan perataan checkpoint. Gunakan checkpoint best/last QAT tanpa bergantung pada status tersebut.
 
 - Loader kustom dengan hook mutasi dataset harus memakai `persistent_workers=False` atau membangun ulang worker setelah mutasi. Salinan persisten multi-worker yang tidak kompatibel kini menimbulkan galat.
+
+- Array gambar NumPy dibaca sebagai BGR, urutan OpenCV. Berikan `color_format="rgb"` saat memberikan array RGB seperti `np.asarray(pil_image)`; keluaran `cv2.imread()` dan frame video tidak perlu diubah.
+
+- Array NumPy atau tensor 4D adalah batch: `predict()` mengembalikan daftar berisi satu `Results` per gambar, alih-alih hanya memakai gambar pertama.
+
+- `train(resume=True)` dan `train(resume="path/to/last.pt")` memulihkan argumen pelatihan tersimpan milik proses tersebut dan tetap menulis ke direktori prosesnya; argumen yang diberikan secara eksplisit lebih diutamakan. Melanjutkan bobot rilis, atau proses yang sudah mencapai `epochs`-nya, menimbulkan `ValueError`.
+
+- Dengan validasi aktif, epoch terakhir selalu divalidasi, sehingga proses yang lebih pendek dari `eval_interval` kini melaporkan metrik dan menulis `best.pt`. `val=False` mematikan validasi, termasuk pada epoch terakhir. Validasi selama pelatihan kini menulis ke `<run>/val`, bukan `runs/val/`.
+
+- Kegagalan `train` di CLI melaporkan jenis galatnya, sehingga galat konfigurasi keluar dengan kode 2, bukan 1 dengan `io_error`.
 
 Lihat [changelog](/docs/changelog) untuk rilis lengkap dan [mengimpor bobot](/docs/migrate) untuk konversi checkpoint.
 

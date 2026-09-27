@@ -6,10 +6,10 @@ description: >-
   des répertoires d'exécution, des ressources épinglées, de QAT et des chargeurs
   de données dans LibreYOLO 1.6.0.
 lead: >-
-  La version 1.6.0 modifie le prétraitement, les valeurs d'entraînement par défaut
-  et la gestion des checkpoints. Revalidez les références enregistrées et
-  définissez explicitement les anciennes valeurs par défaut pour reproduire
-  une exécution antérieure.
+  La version 1.6.0 modifie le prétraitement, les valeurs d'entraînement par
+  défaut et la gestion des checkpoints. Revalidez les références enregistrées et
+  définissez explicitement les anciennes valeurs par défaut pour reproduire une
+  exécution antérieure.
 keywords:
   - mise à niveau libreyolo
   - migration libreyolo 1.5.0
@@ -17,8 +17,8 @@ keywords:
   - changements incompatibles libreyolo
   - yolox bn eps
   - faster coco eval défaut
-last_verified: "1.6.0"
-source_hash: f4fda6ef286113ab
+last_verified: 1.6.0
+source_hash: c575718b8a7949f8
 ---
 
 ## De 1.5.0 à 1.6.0
@@ -40,6 +40,16 @@ source_hash: f4fda6ef286113ab
 - QAT désactive EMA, SyncBatchNorm et le moyennage des checkpoints. Utilisez les checkpoints best/last de QAT sans dépendre de ces états.
 
 - Les chargeurs personnalisés avec des hooks de mutation du dataset doivent utiliser `persistent_workers=False` ou recréer les workers après la mutation. Les copies persistantes incompatibles de plusieurs workers lèvent désormais une erreur.
+
+- Les tableaux d'images NumPy sont lus en BGR, l'ordre d'OpenCV. Passez `color_format="rgb"` là où vous transmettez un tableau RGB comme `np.asarray(pil_image)` ; la sortie de `cv2.imread()` et les images vidéo ne demandent aucun changement.
+
+- Un tableau NumPy ou un tenseur 4D est un batch : `predict()` renvoie une liste avec un `Results` par image au lieu de n'utiliser que la première image.
+
+- `train(resume=True)` et `train(resume="path/to/last.pt")` restaurent les arguments d'entraînement enregistrés de l'exécution et continuent d'écrire dans son répertoire d'exécution ; les arguments que vous passez explicitement l'emportent. Reprendre des poids publiés, ou une exécution qui a déjà atteint ses `epochs`, lève `ValueError`.
+
+- Lorsque la validation est activée, la dernière époque est toujours validée, si bien que les exécutions plus courtes que `eval_interval` rapportent désormais des métriques et écrivent `best.pt`. `val=False` désactive la validation, dernière époque comprise. La validation pendant l'entraînement écrit dans `<run>/val` au lieu de `runs/val/`.
+
+- Les échecs de la commande CLI `train` indiquent leur type d'erreur, si bien que les erreurs de configuration se terminent avec le code 2 au lieu du code 1 avec `io_error`.
 
 Consultez le [changelog](/docs/changelog) pour la version complète et l'[importation de poids](/docs/migrate) pour la conversion de checkpoints.
 

@@ -15,8 +15,7 @@ keywords:
   - libreyolo cli команды
   - libreyolo без интернета
 last_verified: 1.6.0
-
-source_hash: d0d1f00bab2cee6e
+source_hash: 13810bf9ea01c459
 ---
 
 ## С какой модели начать?
@@ -88,8 +87,10 @@ LibreYOLO. О том, что распознаётся, а что требует 
 
 ## Что возвращает val?
 
-Обычный словарь, а не объект. Для детекции ключи включают `metrics/precision`,
-`metrics/recall`, `metrics/mAP50` и `metrics/mAP50-95`. Другие задачи
+Словарь с ключами по именам метрик. Для детекции ключи включают
+`metrics/precision`, `metrics/recall`, `metrics/mAP50` и `metrics/mAP50-95`, а
+результаты детекции и сегментации дополнительно содержат результаты по отдельным
+изображениям в `metrics.box`. Другие задачи
 возвращают ключи, осмысленные для них: например, `metrics/accuracy_top1` для
 классификации или `metrics/PQ`, `metrics/SQ` и `metrics/RQ` для паноптической
 сегментации.

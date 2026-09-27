@@ -178,7 +178,7 @@ snippets:
         niego precyzji.
 
         qmodel.export(format="tensorrt", half=True)
-source_hash: 6c247a3243daf393
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## Instalacja
@@ -304,6 +304,9 @@ Skwantyzowana arytmetyka wykonuje się w symulacji, czyli jako sztuczna
 kwantyzacja liczona w wyspach float32, nawet pod AMP. Symulacja jest wierna
 numerycznie, więc wynik `val()` na dowolnym urządzeniu jest prawdziwym
 stwierdzeniem o skwantyzowanej arytmetyce. Nie jest stwierdzeniem o szybkości.
+
+Apple MPS nie implementuje ani operacji sztucznej kwantyzacji, ani float8, więc
+na Macu każdy przepis poza `fp16` i `bf16` działa na CPU, z ostrzeżeniem.
 
 Dwa wyjątki wykonują się natywnie. `fp16` i `bf16` to zwykłe rzutowania typów.
 Sfinalizowane moduły `fp8` wykonują swój GEMM bezpośrednio na spakowanych wagach

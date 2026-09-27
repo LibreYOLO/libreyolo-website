@@ -146,7 +146,7 @@ snippets:
     - label: エクスポートしたファイルを使う
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # ファクトリーはファイルサフィックスで振り分けるためエクスポート成果物も
         # 任意のチェックポイントと同様に読み込まれ同じ Results オブジェクトを返す
@@ -166,7 +166,7 @@ snippets:
 
         # 接続前にシグネチャを確認
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -176,7 +176,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: c360784eb62a7df5
+source_hash: 379a3a09691bf14b
 ---
 
 ## インストール
@@ -207,7 +207,7 @@ pip install "libreyolo[rfdetr]"
 
 ## 学習
 
-4つすべてのタスクで、学習は公開済みチェックポイントから開始します。RF-DETRのネイティブトレーナーが無視する引数の一覧に`pretrained`が含まれるため、ここで`pretrained=False`を渡してもランダムに初期化されたモデルにはなりません。
+4つすべてのタスクで、学習は公開済みチェックポイントから開始します。`pretrained=False`を指定すると、代わりにバックボーンを含むネットワーク全体を再初期化し、ゼロから学習します。
 
 <code-tabs name="train" />
 
@@ -215,7 +215,7 @@ pip install "libreyolo[rfdetr]"
 
 データセット、データ拡張、マルチGPU、ロガーについては[学習](/docs/train)を参照してください。
 
-新規実行のデフォルトは`output_dir=None`で、`exist_ok=False`により連番付きの`runs/train/rfdetr_exp`に解決されます。複数クラスの姿勢推定データセットでは、クラスのインデックスまたは名前をキーとする`kpt_names`を使います。空のリストはボックスのみのクラスを表します。推論ではキーポイントを`kpt_shape`に合わせてパディングします。キーポイントmAPによる適合度の計算では、ボックスのみのクラスは評価しません。
+新規実行のデフォルトは`output_dir=None`で、`exist_ok=False`により連番付きの`runs/train/rfdetr_exp`に解決されます。再開した実行は、そのチェックポイントの実行ディレクトリに引き続き書き込みます。複数クラスの姿勢推定データセットでは、クラスのインデックスまたは名前をキーとする`kpt_names`を使います。空のリストはボックスのみのクラスを表します。推論ではキーポイントを`kpt_shape`に合わせてパディングします。キーポイントmAPによる適合度の計算では、ボックスのみのクラスは評価しません。
 
 ## 検証
 

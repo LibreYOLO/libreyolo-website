@@ -2,11 +2,11 @@
 title: Câu hỏi thường gặp
 seo_title: Câu hỏi thường gặp về LibreYOLO
 description: >-
-  Câu trả lời ngắn cho những câu hỏi áp dụng trên mọi mô hình LibreYOLO: phần cứng, giấy phép, trọng số, thiết
-  bị, huấn luyện, phạm vi xuất và CLI.
+  Câu trả lời ngắn cho những câu hỏi áp dụng trên mọi mô hình LibreYOLO: phần
+  cứng, giấy phép, trọng số, thiết bị, huấn luyện, phạm vi xuất và CLI.
 lead: >-
-  Câu trả lời cho những vấn đề không riêng một họ mô hình. Nội dung dành riêng cho từng họ nằm trên trang của
-  họ đó.
+  Câu trả lời cho những vấn đề không riêng một họ mô hình. Nội dung dành riêng
+  cho từng họ nằm trên trang của họ đó.
 keywords:
   - câu hỏi thường gặp libreyolo
   - libreyolo có cần gpu không
@@ -15,7 +15,7 @@ keywords:
   - cli libreyolo
   - dùng libreyolo offline
 last_verified: 1.6.0
-source_hash: d0d1f00bab2cee6e
+source_hash: 13810bf9ea01c459
 ---
 ## Tôi nên bắt đầu với mô hình nào?
 
@@ -84,9 +84,10 @@ khi thử. Xem [khái niệm cốt lõi](/docs/concepts).
 
 ## val trả về gì?
 
-Một dictionary thuần túy, không phải object. Các khóa detection gồm
+Một dictionary có khóa là tên metric. Các khóa detection gồm
 `metrics/precision`, `metrics/recall`, `metrics/mAP50` và
-`metrics/mAP50-95`. Những tác vụ khác trả về các khóa phù hợp, chẳng hạn
+`metrics/mAP50-95`, đồng thời kết quả detection và segmentation còn chứa kết quả
+theo từng ảnh trên `metrics.box`. Những tác vụ khác trả về các khóa phù hợp, chẳng hạn
 `metrics/accuracy_top1` cho classification hoặc `metrics/PQ`, `metrics/SQ` và
 `metrics/RQ` cho panoptic segmentation.
 

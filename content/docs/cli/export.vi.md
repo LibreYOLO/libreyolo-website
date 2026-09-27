@@ -2,11 +2,11 @@
 title: libreyolo export
 seo_title: Tham chiếu lệnh libreyolo export
 description: >-
-  Xuất một checkpoint sang định dạng triển khai: từng tham số kèm giá trị mặc định, nơi tệp kết quả được ghi
-  ra, và những tổ hợp mà lệnh từ chối.
+  Xuất một checkpoint sang định dạng triển khai: từng tham số kèm giá trị mặc
+  định, nơi tệp kết quả được ghi ra, và những tổ hợp mà lệnh từ chối.
 lead: >-
-  Chuyển một checkpoint thành một định dạng triển khai và ghi tệp kết quả vào weights/. Định dạng quyết định
-  những tham số nào bên dưới được áp dụng.
+  Chuyển một checkpoint thành một định dạng triển khai và ghi tệp kết quả vào
+  weights/. Định dạng quyết định những tham số nào bên dưới được áp dụng.
 keywords:
   - xuất mô hình libreyolo
   - lệnh libreyolo export
@@ -38,13 +38,16 @@ snippets:
           nms=true conf=0.25 iou=0.45 max_det=300
     - label: Chạy tệp đã xuất
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreYOLO9s.pt format=onnx imgsz=640
 
-        # Factory định tuyến theo phần mở rộng tệp, nên tệp xuất ra được tải như một checkpoint
+
+        # Factory định tuyến theo phần mở rộng tệp, nên tệp xuất ra được tải như
+        một checkpoint
+
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 0cc60dd7c5c9f864
+source_hash: 290b778a1060a760
 ---
 ## Cú pháp
 
@@ -66,6 +69,7 @@ và `--format onnx` là cùng một tham số.
 | `batch` | `1` | Kích thước batch khi xuất |
 | `half` | `false` | Độ chính xác FP16 |
 | `int8` | `false` | Lượng tử hóa (quantization) INT8 |
+| `quantize` | | Độ chính xác dạng `16` (FP16), `8` (INT8) hoặc `32` (FP32); thay thế `half` và `int8` |
 | `dynamic` | `false` | Hình dạng đầu vào động (ONNX) |
 | `simplify` | `true` | Đơn giản hóa graph ONNX |
 | `nms` | `false` | Nhúng NMS vào mô hình. Chỉ ONNX và CoreML |
@@ -112,7 +116,8 @@ và `iou` nhưng không nhận `max_det`, nên một giá trị `max_det` khác 
 cùng `format=coreml nms=true` sẽ thoát với `config_unsupported`.
 
 `half=true` đi cùng `int8=true` không phải là lỗi. INT8 thắng, `half` bị bỏ, và
-một cảnh báo được đưa ra stderr.
+một cảnh báo được đưa ra stderr. `quantize` mâu thuẫn với `half` hoặc `int8` sẽ
+thoát với `config_conflict`.
 
 `name` và `verify` hiện là các tùy chọn của RKNN. Truyền một trong hai cùng với
 định dạng khác sẽ thoát với `config_unsupported` thay vì bị bỏ qua.

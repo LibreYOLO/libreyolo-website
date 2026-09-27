@@ -17,7 +17,7 @@ keywords:
   - yolox bn eps
   - faster-coco-eval domyślnie
 last_verified: 1.6.0
-source_hash: f4fda6ef286113ab
+source_hash: c575718b8a7949f8
 ---
 
 ## Z 1.5.0 do 1.6.0
@@ -39,6 +39,16 @@ source_hash: f4fda6ef286113ab
 - QAT wyłącza EMA, SyncBatchNorm i uśrednianie checkpointów. Należy używać checkpointów QAT best/last bez polegania na tych stanach.
 
 - Własne loadery z hookami zmieniającymi zbiór danych muszą używać `persistent_workers=False` lub odtwarzać procesy robocze po zmianie. Niezgodne trwałe kopie przy wielu procesach roboczych zgłaszają teraz błąd.
+
+- Tablice obrazów NumPy są odczytywane jako BGR, w kolejności używanej przez OpenCV. Przy przekazywaniu tablicy RGB, takiej jak `np.asarray(pil_image)`, należy podać `color_format="rgb"`; wynik `cv2.imread()` i klatki wideo nie wymagają zmian.
+
+- Tablica NumPy lub tensor 4D to batch: `predict()` zwraca listę z jednym `Results` na obraz, zamiast używać tylko pierwszego obrazu.
+
+- `train(resume=True)` i `train(resume="path/to/last.pt")` przywracają zapisane argumenty trenowania uruchomienia i nadal zapisują do jego katalogu uruchomienia; argumenty przekazane jawnie mają pierwszeństwo. Wznowienie opublikowanych wag albo uruchomienia, które osiągnęło już swoją wartość `epochs`, zgłasza `ValueError`.
+
+- Przy włączonej walidacji ostatnia epoka jest zawsze walidowana, dlatego uruchomienia krótsze niż `eval_interval` raportują teraz metryki i zapisują `best.pt`. `val=False` wyłącza walidację, łącznie z ostatnią epoką. Walidacja w trakcie trenowania zapisuje do `<run>/val` zamiast do `runs/val/`.
+
+- Niepowodzenia polecenia `train` w CLI raportują typ błędu, dlatego błędy konfiguracji kończą się kodem 2 zamiast kodem 1 z `io_error`.
 
 Pełny opis wydania zawiera [lista zmian](/docs/changelog), a konwersję checkpointów opisano w sekcji [importowania wag](/docs/migrate).
 

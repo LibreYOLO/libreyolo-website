@@ -2,12 +2,13 @@
 title: ONNX
 seo_title: Xuất sang ONNX từ LibreYOLO
 description: >-
-  Xuất một mô hình LibreYOLO sang ONNX: opset mà LibreYOLO chọn cho từng họ mô hình, dynamic axes, NMS nhúng
-  sẵn, INT8, và cách graph được tải lại.
+  Xuất một mô hình LibreYOLO sang ONNX: opset mà LibreYOLO chọn cho từng họ mô
+  hình, dynamic axes, NMS nhúng sẵn, INT8, và cách graph được tải lại.
 lead: >-
-  ONNX là một định dạng đồ thị (graph) di động. LibreYOLO trace mô hình bằng torch.onnx.export, tùy chọn đơn
-  giản hóa graph, rồi ghi họ mô hình, tác vụ, tên các lớp đối tượng và kích thước đầu vào vào chính metadata
-  của tệp, để mọi backend LibreYOLO đều có thể dựng lại phần hậu xử lý.
+  ONNX là một định dạng đồ thị (graph) di động. LibreYOLO trace mô hình bằng
+  torch.onnx.export, tùy chọn đơn giản hóa graph, rồi ghi họ mô hình, tác vụ,
+  tên các lớp đối tượng và kích thước đầu vào vào chính metadata của tệp, để mọi
+  backend LibreYOLO đều có thể dựng lại phần hậu xử lý.
 keywords:
   - xuất yolo sang onnx
   - onnxruntime python
@@ -31,12 +32,15 @@ meta:
     value: LibreYOLO("weights/LibreYOLO9t.onnx")
     mono: true
   - label: Hình dạng
-    value: Batch động theo mặc định trong Python; các ngoại lệ theo từng tác vụ ở bên dưới
+    value: >-
+      Batch động theo mặc định trong Python; các ngoại lệ theo từng tác vụ ở bên
+      dưới
   - label: Precision
     value: 'FP32, FP16 (half=True), INT8 (int8=True, phát hiện đối tượng YOLO9)'
 verification: >-
-  Đọc từ libreyolo/export/onnx.py, libreyolo/export/exporter.py, libreyolo/export/support.py,
-  libreyolo/backends/onnx.py và libreyolo/cli/commands/export.py trên nhánh dev.
+  Đọc từ libreyolo/export/onnx.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/onnx.py và
+  libreyolo/cli/commands/export.py trên nhánh dev.
 snippets:
   install:
     - label: Cài đặt
@@ -116,30 +120,42 @@ snippets:
         print(result.boxes.xyxy[:3])
     - label: ONNX Runtime thuần
       language: python
-      code: |
+      code: >
         import numpy as np
+
         import onnx
+
         import onnxruntime as ort
+
 
         session = ort.InferenceSession(
             "weights/LibreYOLO9t.onnx",
             providers=["CPUExecutionProvider"],
         )
 
+
         # Trên đường này, tiền xử lý và hậu xử lý là việc của bạn
+
         batch = np.zeros((1, 3, 640, 640), dtype=np.float32)
+
         outputs = session.run(None, {session.get_inputs()[0].name: batch})
+
         print([out.shape for out in outputs])
 
-        # Graph mang theo họ mô hình, tác vụ, tên các lớp đối tượng và kích thước đầu vào
-        meta = {p.key: p.value for p in onnx.load("weights/LibreYOLO9t.onnx").metadata_props}
+
+        # Graph mang theo họ mô hình, tác vụ, tên các lớp đối tượng và kích
+        thước đầu vào
+
+        meta = {p.key: p.value for p in
+        onnx.load("weights/LibreYOLO9t.onnx").metadata_props}
+
         print(meta["model_family"], meta["task"], meta["imgsz"])
   support:
     - label: Kiểm tra một họ mô hình và tác vụ trước khi xuất
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 085c6fb8cb7ec4b2
+source_hash: ff50afedd377beaf
 ---
 ## Cài đặt
 
@@ -206,7 +222,9 @@ trợ cùng cách build parser.
 
 `int8=True` chạy lượng tử hóa (quantization) tĩnh của ONNX Runtime và ghi ra một
 graph QDQ với đầu vào và đầu ra ở float32. Chỉ các node `Conv` và `Gemm` được lượng
-tử hóa. Việc để phần giải mã của detection head ở float32 là có chủ đích: phép nối
+tử hóa, và lớp tích chập đầu tiên cùng detection head của YOLO9 vẫn ở float32, như
+trong `model.quantize()`, để điểm số lớp đối tượng không bị bão hòa ở dải đã hiệu
+chuẩn. Việc để phần giải mã của detection head ở float32 là có chủ đích: phép nối
 đó trộn tọa độ hộp theo thang pixel với điểm số lớp đối tượng trong khoảng 0 đến 1,
 và một activation scale duy nhất trên mỗi tensor, bị chi phối bởi độ lớn của hộp,
 sẽ đẩy mọi điểm số về không.

@@ -42,19 +42,34 @@ snippets:
         print(len(result.boxes), "detections")
     - label: Imagens em memória
       language: python
-      code: |
+      code: >
         import numpy as np
+
         from PIL import Image
+
 
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
 
+
         pil_image = Image.open(SAMPLE_IMAGE)
+
         array = np.asarray(pil_image)
+
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+
+        # Arrays NumPy são lidos como BGR, a menos que se indique o contrário;
+        este é RGB.
+
+        result = model(array, color_format="rgb")
+
+        print(type(array).__name__, len(result.boxes))
+
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: Uma pasta
@@ -206,7 +221,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 93db4d43c24b69ae
+source_hash: c355ad28487c9a65
 ---
 
 ## Como uma fonte é classificada
@@ -244,15 +259,18 @@ Uma fonte de imagem única aceita sete tipos.
 |---|---|
 | `str` ou `pathlib.Path` | Arquivo local, `http(s)://`, `s3://` ou `gs://` |
 | `PIL.Image.Image` | Convertido para RGB |
-| `numpy.ndarray` | Escala de cinza 2D, ou HWC ou CHW 3D; um array 4D usa sua primeira imagem |
-| `torch.Tensor` | CHW ou NCHW, lido como RGB; um tensor em batch usa sua primeira imagem |
+| `numpy.ndarray` | Escala de cinza 2D, ou HWC ou CHW 3D em ordem BGR; um array 4D é um batch |
+| `torch.Tensor` | CHW ou NCHW, lido como RGB; um tensor 4D é um batch |
 | `bytes` | Dados de imagem codificados |
 | `io.BytesIO` | Dados de imagem codificados |
 
+Um array ou tensor 4D retorna uma lista com um `Results` por imagem.
+
 Tudo é convertido para RGB antes do pré-processamento. Os arrays NumPy são o
 único caso em que a ordem dos canais é ambígua, então `color_format` controla
-isso: `"auto"` (o padrão) deixa o array como está, `"bgr"` inverte os canais,
-que é o que um quadro lido com OpenCV precisa.
+isso: `"auto"` (o padrão) e `"bgr"` leem o array como BGR, a ordem que o OpenCV
+retorna, e `"rgb"` o deixa como está, que é o que um array criado a partir de uma
+imagem PIL precisa.
 
 Arrays de ponto flutuante são reescalados pela própria faixa: valores iguais ou
 abaixo de `1.0` são multiplicados por 255, valores maiores são recortados para
@@ -404,5 +422,5 @@ fonte.
 arquivo, um caminho sem sufixo como diretório. `output_file_format` seleciona a
 codificação da imagem estática e aceita `jpg`, `png` ou `webp`.
 
-Depois de salvar, o caminho gravado também é anexado ao resultado como
+Depois que uma imagem é salva, o caminho gravado também é anexado ao resultado como
 `result.saved_path`.

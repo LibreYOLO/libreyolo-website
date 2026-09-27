@@ -125,7 +125,7 @@ snippets:
       code: |
         huggingface-cli upload my-org/my-run \
           /root/runs/run1/weights/best.pt best.pt
-source_hash: 75d314de06aca3b6
+source_hash: 2f4a8ac1df103962
 ---
 
 ## Vor dem Mieten
@@ -178,9 +178,9 @@ Speichermangelfehler zu entdecken. Siehe
 [Hyperparameter](/docs/train/hyperparameters).
 
 Auf einer Multi-GPU-Maschine startet `device="0,1,2,3"` selbstständig einen
-Worker pro GPU. `batch` bleibt dabei der globale Batch über alle GPUs hinweg. Der
-`__main__`-Schutz ist zwingend erforderlich, weil jeder Worker das Skript erneut
-importiert. Dies und das übrige verteilte Verhalten beschreibt
+Worker pro GPU. `batch` bleibt dabei der globale Batch über alle GPUs hinweg. Die
+Worker führen den Top-Level-Code eines ungeschützten Skripts nicht erneut aus,
+ein `__main__`-Schutz ist also optional. Dies und das übrige verteilte Verhalten beschreibt
 [Multi-GPU-Training](/docs/train/multi-gpu).
 
 ## Externe Überwachung

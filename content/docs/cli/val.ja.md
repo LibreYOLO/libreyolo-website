@@ -36,7 +36,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: 8e858639e96672a0
+source_hash: a0446a47e0f89b27
 ---
 
 ## 構文
@@ -81,6 +81,7 @@ libreyolo val model=<name|path> data=<dataset.yaml> [key=value ...]
 | 引数 | デフォルト | 意味 |
 | --- | --- | --- |
 | `classes` | `None` | カンマ区切りの元のデータセットクラスIDのみを評価（例：'0,3,5'）。それ以外のクラスのボックスは正解と予測から除外。デフォルトは、あればチェックポイントの学習時のclasses=を継承 |
+| `single_cls` | `False` | 対応する検出器を、すべてのクラスをクラス0に統合して評価 |
 | `crop_pct` | `None` | 分類の評価で中央クロップの前に使うリサイズ比率（デフォルトはモデルファミリー本来の値） |
 | `plot_samples` | `8` | 検証のサンプル描画の画像数。0でなし、-1ですべての検証画像（指標は変化しない） |
 | `visualize` | `False` | 検証した各画像のTP、FP、FNをvisualize/errors/（誤りあり）とvisualize/correct/に描画（detect、segment。classifyはラベルとtop-1を描画） |

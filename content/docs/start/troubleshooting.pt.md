@@ -15,7 +15,7 @@ keywords:
   - libreyolo notimplementederror
   - resolver erros libreyolo
 last_verified: 1.6.0
-source_hash: 30b68976a4ac01d1
+source_hash: f2faaab56a2f0415
 ---
 
 Os erros estão agrupados pelo texto que você vê. Se a sua mensagem não estiver
@@ -105,10 +105,10 @@ derivada dele, incluindo o sufixo da tarefa, então um nome que não corresponde
 um checkpoint publicado produz uma URL que não existe. A tabela de checkpoints
 em cada página de modelo lista os nomes de arquivo publicados exatos.
 
-## O treinamento trava ou reinicia no Windows
+## O treinamento trava ou reinicia no Windows ou no macOS
 
-O Windows não tem `fork`, então os workers do dataloader começam reimportando o
-seu script. Sem uma guarda `if __name__ == "__main__":`, cada worker roda de
+O Windows não tem `fork`, e o Python no macOS não o usa por padrão, então os
+workers do dataloader começam reimportando o seu script. Sem uma guarda `if __name__ == "__main__":`, cada worker roda de
 novo a sua chamada de treinamento, o que trava em deadlock ou gera processos sem
 parar.
 
@@ -145,8 +145,9 @@ bounding box por imagem. Indexe apenas o que você sabe que é uma lista.
 
 ### Ler as métricas como atributos
 
-`val()` devolve um dicionário simples com chaves de nome de métrica, não um
-objeto com acesso por atributo:
+`val()` devolve um dicionário com chaves de nome de métrica. Seu único atributo,
+`box`, traz resultados por imagem e limiares por classe, não os valores das
+métricas:
 
 ```python
 metrics = model.val(data="coco8.yaml")

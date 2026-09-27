@@ -41,7 +41,7 @@ snippets:
         # stream=Trueはジェネレーターを返し、フレームまたは画像ごとにResultsを1つ生成
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: da0776970ded8716
+source_hash: ccecee93e9744550
 ---
 
 ## 構築
@@ -144,6 +144,7 @@ model.track(
     source,
     *,
     track_conf=0.25,
+    conf=None,
     iou=0.45,
     imgsz=None,
     classes=None,
@@ -151,19 +152,25 @@ model.track(
     save=False,
     show=False,
     vid_stride=1,
+    fps=30.0,
+    color_format="auto",
     output_path=None,
     tracker="bytetrack",
     tracker_config=None,
     augment=False,
+    persist=False,
     **tracker_kwargs,
 ) -> Generator[Results, None, None]
 ```
 
 `track_id`を設定した`Results`をフレームごとに1つ生成します。`tracker`には
-`"bytetrack"`、`"botsort"`、`"ocsort"`、または`"deepocsort"`を指定できます。
+`"bytetrack"`、`"botsort"`、`"ocsort"`、または`"deepocsort"`（任意で`.yaml`接尾辞付き）、
+あるいはカスタムトラッカーのインスタンスを指定できます。
 `tracker_config`を指定した場合は設定の型がトラッカーを選択するため、`tracker`は無視されます。
 `track_conf`は、ByteTrackとBoT-SORTでは`track_high_thresh`に、OC-SORTとDeep OC-SORTでは
-`det_thresh`に対応します。`output_path`のデフォルトは`runs/track/<video_stem>.mp4`です。
+`det_thresh`に対応します。`conf`を指定した場合は、`predict()`と同様に検出のしきい値になります。
+`persist=True`はフレームごとのループ向けに、前回の呼び出しのトラッカーを保持します。
+`output_path`のデフォルトは`runs/track/<video_stem>.mp4`です。
 
 ## val
 
@@ -183,6 +190,9 @@ model.val(
     verbose=True,
     *,
     plots=None,
+    project=None,
+    name=None,
+    exist_ok=False,
     **kwargs,
 ) -> Dict
 ```
@@ -190,6 +200,9 @@ model.val(
 タスクに応じたキーを持つ指標辞書を返します。検出では`metrics/precision`、
 `metrics/recall`、`metrics/mAP50`、`metrics/mAP50-95`を返します。`imgsz`は正方形の整数値
 または`(height, width)`タプルを受け取り、デフォルトではモデル固有の入力サイズを使います。
+`data=None`はチェックポイントの学習設定に保存されたデータセットで検証し、公開済みの重みのように
+データセットがない場合は例外を発生させます。`project`、`name`、`exist_ok`は出力ディレクトリを
+`project/name`として設定し、`exist_ok=True`でない限り連番を付けます。
 `plots`は`save_plots`の別名です。`allow_download_scripts`は、データセットYAMLの`download`
 フィールドに含まれる可能性がある埋め込みPythonの実行可否を制御します。
 
@@ -229,6 +242,7 @@ model.export(format="onnx", **kwargs) -> str
 | `dynamic` | `True` | 動的軸を有効化 |
 | `half` | `False` | FP16精度 |
 | `int8` | `False` | INT8精度 |
+| `quantize` | `None` | 精度を`16`、`8`、`32`で指定。`half`や`int8`の代わりに使用 |
 | `batch` | `1` | 成果物に組み込むバッチサイズ |
 | `device` | `None` | トレースに使うデバイス |
 | `data` | `None` | INT8キャリブレーション用のdata.yaml |
@@ -237,6 +251,8 @@ model.export(format="onnx", **kwargs) -> str
 | `verbose` | `False` | エクスポーターの詳細ログ |
 
 禁止された組み合わせは、トレース前の事前検査で`NotImplementedError`を発生させます。
+その形式が使わないオプションは`Unknown <format> export arguments (ignored)`という警告を出し、
+エクスポートは続行されます。
 カバレッジとその規則は[エクスポートマトリックス](/docs/reference/export-matrix)のページに
 あります。有効なLoRAアダプターが存在する場合は密な重みに統合されます。この統合は、すべての
 要求拒否を確認した後にのみ行われます。

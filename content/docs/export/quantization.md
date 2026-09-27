@@ -252,6 +252,9 @@ in float32 islands even under AMP. Simulation is numerics-true, so a `val()` sco
 on any device is a real claim about the quantized arithmetic. It is not a speed
 claim.
 
+Apple MPS implements neither the fake-quantize ops nor float8, so on a Mac every
+recipe except `fp16` and `bf16` runs on CPU, with a warning.
+
 Two exceptions execute natively. `fp16` and `bf16` are ordinary casts. Finalized
 `fp8` modules run their GEMM directly on packed E4M3 weights through
 `torch._scaled_mm` on Ada, Hopper and Blackwell class hardware, using the same

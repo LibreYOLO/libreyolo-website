@@ -48,7 +48,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 0cc60dd7c5c9f864
+source_hash: 290b778a1060a760
 ---
 
 ## Sinossi
@@ -71,6 +71,7 @@ Gli argomenti sono coppie `key=value`, e funziona anche la forma POSIX, quindi
 | `batch` | `1` | Dimensione del batch dell'esportazione |
 | `half` | `false` | Precisione FP16 |
 | `int8` | `false` | Quantizzazione INT8 |
+| `quantize` | | Precisione come `16` (FP16), `8` (INT8) o `32` (FP32); sostituisce `half` e `int8` |
 | `dynamic` | `false` | Forme di input dinamiche (ONNX) |
 | `simplify` | `true` | Semplificazione del grafo ONNX |
 | `nms` | `false` | Incorpora l'NMS nel modello. Solo ONNX e CoreML |
@@ -117,7 +118,8 @@ incorporato è fissato a batch 1, e lo segnala su stderr. Su CoreML accetta
 predefinito insieme a `format=coreml nms=true` esce con `config_unsupported`.
 
 `half=true` insieme a `int8=true` non è un errore. Vince INT8, `half` viene
-scartato e un avviso va su stderr.
+scartato e un avviso va su stderr. Un `quantize` in disaccordo con `half` o
+`int8` esce con `config_conflict`.
 
 `name` e `verify` oggi sono opzioni di RKNN. Passarne una qualsiasi con un altro
 formato esce con `config_unsupported` invece di essere ignorata.

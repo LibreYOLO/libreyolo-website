@@ -2,11 +2,13 @@
 title: Siêu tham số
 seo_title: Siêu tham số huấn luyện trong LibreYOLO
 description: >-
-  Các đối số train() quan trọng: epochs, batch, lr0, optimizer, EMA, autobatch, tích lũy gradient và tiếp tục
-  huấn luyện, cùng lý do giá trị mặc định khác nhau theo family.
+  Các đối số train() quan trọng: epochs, batch, lr0, optimizer, EMA, autobatch,
+  tích lũy gradient và tiếp tục huấn luyện, cùng lý do giá trị mặc định khác
+  nhau theo family.
 lead: >-
-  Mọi đối số huấn luyện là một trường trên dataclass TrainConfig. Class cơ sở định nghĩa trường và giá trị mặc
-  định; mỗi model family tạo subclass và ghi đè những giá trị mặc định mà recipe đã công bố của nó thay đổi.
+  Mọi đối số huấn luyện là một trường trên dataclass TrainConfig. Class cơ sở
+  định nghĩa trường và giá trị mặc định; mỗi model family tạo subclass và ghi đè
+  những giá trị mặc định mà recipe đã công bố của nó thay đổi.
 keywords:
   - đối số train
   - learning rate
@@ -60,18 +62,24 @@ snippets:
                 print(f"{f.name}: {family_value}")
     - label: CLI
       language: bash
-      code: |
-        # In giá trị mặc định của train, val và predict, gồm cả ghi đè theo family.
+      code: >
+        # In giá trị mặc định của train, val và predict, gồm cả ghi đè theo
+        family.
+
         libreyolo cfg
   autobatch:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # batch=-1 thăm dò bộ nhớ GPU và phân giải thành một lũy thừa cụ thể của hai.
+
+        # batch=-1 thăm dò bộ nhớ GPU và phân giải thành một lũy thừa cụ thể của
+        hai.
+
         model.train(data="my-dataset.yaml", batch=-1, imgsz=640)
     - label: CLI
       language: bash
@@ -80,12 +88,16 @@ snippets:
   accumulate:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # 4 micro-batch gồm 16 ảnh trên mỗi bước optimizer, batch hiệu dụng là 64.
+
+        # 4 micro-batch gồm 16 ảnh trên mỗi bước optimizer, batch hiệu dụng là
+        64.
+
         model.train(data="my-dataset.yaml", batch=16, nbs=64)
   resume:
     - label: Python
@@ -94,23 +106,27 @@ snippets:
         from libreyolo import LibreYOLO
 
         # Nạp checkpoint của lượt chạy bị gián đoạn rồi yêu cầu tiếp tục.
-        model = LibreYOLO("runs/train/exp/weights/last.pt")
-        model.train(data="my-dataset.yaml", epochs=100, resume=True)
+        model = LibreYOLO("runs/train/yolo9_exp/weights/last.pt")
+        model.train(data="my-dataset.yaml", resume=True)
     - label: CLI
       language: bash
       code: |
-        libreyolo train model=runs/train/exp/weights/last.pt \
-          data=my-dataset.yaml epochs=100 resume=true
+        libreyolo train model=runs/train/yolo9_exp/weights/last.pt \
+          data=my-dataset.yaml resume=true
   cfg:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # Các key trong yaml là tên trường TrainConfig. Kwarg tường minh được ưu tiên.
+
+        # Các key trong yaml là tên trường TrainConfig. Kwarg tường minh được ưu
+        tiên.
+
         model = LibreYOLO("LibreYOLO9s.pt")
+
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: eac4e55fcf16ca15
+source_hash: ca1259a10e05a51d
 ---
 ## Thiết lập đối số
 
@@ -248,8 +264,10 @@ thay vì bị ghi đè.
 
 `save_period` ghi thêm `weights/epoch_<N>.pt` sau mỗi N epoch, bên cạnh
 `weights/last.pt` sau từng epoch và `weights/best.pt` mỗi khi metric được theo
-dõi cải thiện. `eval_interval` đặt tần suất xác thực, còn `patience` dừng lượt
-chạy sau số epoch đó mà không cải thiện; `0` tắt early stopping.
+dõi cải thiện. `eval_interval` đặt tần suất xác thực, và epoch cuối cùng luôn
+được xác thực; `val=False` tắt xác thực, và lượt chạy như vậy không ghi ra
+`best.pt`. `patience` dừng lượt chạy sau số epoch đó mà không cải thiện; `0` tắt
+early stopping.
 
 `cache` tăng tốc các epoch lặp lại bằng cách giữ ảnh đã decode trong RAM (`True`
 hoặc `"ram"`) hoặc dưới dạng tệp `.npy` bên cạnh nguồn (`"disk"`). Lượt đọc từ
@@ -262,18 +280,22 @@ lựa chọn an toàn hơn.
 
 ## Tiếp tục huấn luyện
 
-`resume=True` tiếp tục một lượt chạy bị gián đoạn. Checkpoint phải được nạp
-trước vì thao tác tiếp tục đọc nó từ mô hình, không phải từ đối số riêng.
+`resume=True` tiếp tục một lượt chạy bị gián đoạn từ checkpoint đã nạp;
+`resume="path/to/last.pt"` thì tiếp tục từ tệp đó.
 
 <code-tabs name="resume" />
 
-Thao tác tiếp tục khôi phục trọng số đã huấn luyện, trạng thái optimizer, trọng
+Thao tác tiếp tục khôi phục các đối số huấn luyện đã lưu của lượt chạy, và đối số
+được truyền tường minh sẽ ghi đè đối số đã lưu. Nó tiếp tục ghi vào thư mục chạy
+của checkpoint. Nó khôi phục trọng số đã huấn luyện, trạng thái optimizer, trọng
 số EMA và số lần cập nhật, thông tin theo dõi metric tốt nhất, scale của
 `GradScaler`, cùng trạng thái ngẫu nhiên PyTorch, CUDA và NumPy. Nó bắt đầu ở
 epoch sau epoch trong checkpoint và tua nhanh lịch tới vị trí đó.
 
-Có hai điều nó không thực hiện. Không thể kết hợp `resume=True` với `pretrained`,
-và yêu cầu như vậy sẽ phát sinh lỗi. Khi key metric tốt nhất của checkpoint khác
+Có ba điều nó không thực hiện. Không thể kết hợp `resume=True` với `pretrained`,
+và yêu cầu như vậy sẽ phát sinh lỗi. Trọng số đã phát hành và một lượt chạy đã
+đạt đủ `epochs` không có gì để tiếp tục, và sẽ phát sinh `ValueError` nêu rõ điều
+đó. Khi key metric tốt nhất của checkpoint khác
 lượt chạy hiện tại, thông tin theo dõi metric tốt nhất được đặt lại về 0 kèm
 cảnh báo thay vì so sánh các giá trị không cùng ý nghĩa.
 

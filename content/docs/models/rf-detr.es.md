@@ -154,7 +154,7 @@ snippets:
     - label: Usar el archivo exportado
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # La factoría enruta según la extensión del archivo, así que un
         # artefacto exportado se carga como cualquier checkpoint y devuelve
@@ -175,7 +175,7 @@ snippets:
 
         # y postprocesado. Inspecciona la firma antes de conectar nada.
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -185,7 +185,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: c360784eb62a7df5
+source_hash: 379a3a09691bf14b
 ---
 
 ## Instalación
@@ -225,9 +225,8 @@ resolución de entrada.
 ## Entrenamiento
 
 El entrenamiento parte de un checkpoint publicado, para las cuatro tareas.
-RF-DETR incluye `pretrained` entre los argumentos que su trainer nativo ignora,
-así que pasar `pretrained=False` no te da aquí un modelo inicializado
-aleatoriamente.
+`pretrained=False`, en cambio, reinicializa toda la red, backbone incluido, y
+entrena desde cero.
 
 <code-tabs name="train" />
 
@@ -242,7 +241,7 @@ válidos más cercanos.
 Consulta [entrenamiento](/docs/train) para datasets, aumento de datos
 (data augmentation), multi-GPU y loggers.
 
-Las ejecuciones nuevas usan `output_dir=None` por defecto, que se resuelve a un directorio `runs/train/rfdetr_exp` incrementado con `exist_ok=False`. Los datasets de pose multiclase usan `kpt_names` indexado por índice o nombre de clase; una lista vacía indica una clase solo con cajas. Las predicciones rellenan los keypoints hasta `kpt_shape`; el criterio de selección por mAP de keypoints no puntúa las clases solo con cajas.
+Las ejecuciones nuevas usan `output_dir=None` por defecto, que se resuelve a un directorio `runs/train/rfdetr_exp` incrementado con `exist_ok=False`. Una ejecución reanudada sigue escribiendo en el directorio de ejecución de su checkpoint. Los datasets de pose multiclase usan `kpt_names` indexado por índice o nombre de clase; una lista vacía indica una clase solo con cajas. Las predicciones rellenan los keypoints hasta `kpt_shape`; el criterio de selección por mAP de keypoints no puntúa las clases solo con cajas.
 
 ## Validación
 

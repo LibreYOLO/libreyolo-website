@@ -1,8 +1,15 @@
 ---
-title: "Upgrade auf 1.6.0"
-seo_title: "LibreYOLO von 1.5.0 auf 1.6.0 aktualisieren"
-description: "Migrationsschritte für Vorverarbeitung, Trainingsstandardwerte, Laufverzeichnisse, festgelegte Dateien, QAT und Datenloader in LibreYOLO 1.6.0."
-lead: "Version 1.6.0 ändert Vorverarbeitung, Trainingsstandardwerte und Checkpoint-Verarbeitung. Validiere gespeicherte Referenzergebnisse erneut und setze bisherige Standardwerte explizit, um einen älteren Lauf zu reproduzieren."
+title: Upgrade auf 1.6.0
+seo_title: LibreYOLO von 1.5.0 auf 1.6.0 aktualisieren
+description: >-
+  Migrationsschritte für Vorverarbeitung, Trainingsstandardwerte,
+  Laufverzeichnisse, festgelegte Dateien, QAT und Datenloader in LibreYOLO
+  1.6.0.
+lead: >-
+  Version 1.6.0 ändert Vorverarbeitung, Trainingsstandardwerte und
+  Checkpoint-Verarbeitung. Validiere gespeicherte Referenzergebnisse erneut und
+  setze bisherige Standardwerte explizit, um einen älteren Lauf zu
+  reproduzieren.
 keywords:
   - libreyolo upgrade
   - libreyolo 1.5.0 migration
@@ -10,9 +17,8 @@ keywords:
   - libreyolo breaking changes
   - yolox bn eps
   - faster-coco-eval standard
-last_verified: "1.6.0"
-
-source_hash: "f4fda6ef286113ab"
+last_verified: 1.6.0
+source_hash: c575718b8a7949f8
 ---
 
 ## 1.5.0 auf 1.6.0
@@ -34,6 +40,16 @@ source_hash: "f4fda6ef286113ab"
 - QAT deaktiviert EMA, SyncBatchNorm und Checkpoint-Mittelung. Verwende QAT-Best-/Last-Checkpoints, ohne dich auf diese Zustände zu verlassen.
 
 - Eigene Loader mit Hooks für Datensatzänderungen müssen `persistent_workers=False` verwenden oder Worker nach einer Änderung neu erstellen. Inkompatible persistente Multi-Worker-Kopien lösen jetzt einen Fehler aus.
+
+- NumPy-Bildarrays werden als BGR gelesen, in der Reihenfolge von OpenCV. Übergib `color_format="rgb"`, wo du ein RGB-Array wie `np.asarray(pil_image)` übergibst; die Ausgabe von `cv2.imread()` und Video-Frames brauchen keine Änderung.
+
+- Ein 4D-NumPy-Array oder -Tensor ist ein Batch: `predict()` gibt eine Liste mit einem `Results` pro Bild zurück, statt nur das erste Bild zu verwenden.
+
+- `train(resume=True)` und `train(resume="path/to/last.pt")` stellen die gespeicherten Trainingsargumente des Laufs wieder her und schreiben weiter in sein Laufverzeichnis; ausdrücklich übergebene Argumente haben Vorrang. Das Fortsetzen veröffentlichter Gewichte oder eines Laufs, der seine `epochs` bereits erreicht hat, löst `ValueError` aus.
+
+- Bei aktivierter Validierung wird die letzte Epoche immer validiert, sodass Läufe, die kürzer als `eval_interval` sind, jetzt Metriken melden und `best.pt` schreiben. `val=False` schaltet die Validierung ab, die letzte Epoche eingeschlossen. Die Validierung während des Trainings schreibt nach `<run>/val` statt nach `runs/val/`.
+
+- Fehler von CLI-`train` melden ihren Fehlertyp, sodass sich der Befehl bei Konfigurationsfehlern mit Code 2 statt mit Code 1 und `io_error` beendet.
 
 Siehe das [Changelog](/docs/changelog) für das vollständige Release und [Gewichte importieren](/docs/migrate) für die Checkpoint-Konvertierung.
 

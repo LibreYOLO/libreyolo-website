@@ -36,8 +36,8 @@ snippets:
 
 ## The knobs
 
-These are `TrainConfig` field names, not CLI spellings. The CLI maps its own
-aliases onto them, so `--mosaic` sets `mosaic_prob`.
+These are `TrainConfig` field names, not CLI spellings. `train()` and the CLI
+map the short spellings onto them, so `mosaic` sets `mosaic_prob`.
 
 | Knob | Meaning |
 |---|---|
@@ -59,7 +59,7 @@ aliases onto them, so `--mosaic` sets `mosaic_prob`.
 | `cutmix` | Classification batch-CutMix probability, with soft labels |
 
 The last four are the classification pack. Detection families ignore them.
-The CLI routes `mixup` to classification batch mixing for classifiers and to `mixup_prob` for detectors.
+`train()` and the CLI route `mixup` to classification batch mixing for classifiers and to `mixup_prob` for detectors.
 
 <code-tabs name="usage" />
 

@@ -110,14 +110,14 @@ snippets:
         # Checkpoint des unterbrochenen Laufs laden und anschließend die
         Fortsetzung anfordern.
 
-        model = LibreYOLO("runs/train/exp/weights/last.pt")
+        model = LibreYOLO("runs/train/yolo9_exp/weights/last.pt")
 
-        model.train(data="my-dataset.yaml", epochs=100, resume=True)
+        model.train(data="my-dataset.yaml", resume=True)
     - label: CLI
       language: bash
       code: |
-        libreyolo train model=runs/train/exp/weights/last.pt \
-          data=my-dataset.yaml epochs=100 resume=true
+        libreyolo train model=runs/train/yolo9_exp/weights/last.pt \
+          data=my-dataset.yaml resume=true
   cfg:
     - label: Python
       language: python
@@ -131,7 +131,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: eac4e55fcf16ca15
+source_hash: ca1259a10e05a51d
 ---
 
 ## Argumente festlegen
@@ -287,7 +287,9 @@ zu werden.
 `save_period` schreibt alle N Epochen zusätzlich eine Datei
 `weights/epoch_<N>.pt`. Dazu kommen `weights/last.pt` nach jeder Epoche und
 `weights/best.pt`, sobald sich die beobachtete Metrik verbessert.
-`eval_interval` bestimmt, wie oft die Validierung ausgeführt wird. `patience`
+`eval_interval` bestimmt, wie oft die Validierung ausgeführt wird, und die
+letzte Epoche wird immer validiert; `val=False` schaltet die Validierung ab, und
+ein solcher Lauf schreibt kein `best.pt`. `patience`
 beendet den Lauf nach dieser Zahl von Epochen ohne Verbesserung, wobei `0` das
 frühzeitige Beenden deaktiviert.
 
@@ -302,20 +304,24 @@ Dataloader-Workern ist `"disk"` die sicherere Wahl.
 
 ## Fortsetzung
 
-`resume=True` setzt einen unterbrochenen Lauf fort. Der Checkpoint muss zuerst
-geladen werden, weil die Fortsetzung ihn aus dem Modell und nicht aus einem
-separaten Argument liest.
+`resume=True` setzt einen unterbrochenen Lauf vom geladenen Checkpoint aus fort;
+`resume="path/to/last.pt"` setzt ihn stattdessen von dieser Datei aus fort.
 
 <code-tabs name="resume" />
 
-Beim Fortsetzen werden die trainierten Gewichte, der Optimiererzustand, die
+Beim Fortsetzen werden die gespeicherten Trainingsargumente des Laufs
+wiederhergestellt, und ein ausdrücklich übergebenes Argument hat Vorrang vor dem
+gespeicherten. Der Lauf schreibt weiter in das Laufverzeichnis des Checkpoints.
+Außerdem werden die trainierten Gewichte, der Optimiererzustand, die
 EMA-Gewichte und der Update-Zähler, die Verfolgung der besten Metrik, die
 `GradScaler`-Skalierung sowie die Zufallszustände von PyTorch, CUDA und NumPy
 wiederhergestellt. Der Lauf beginnt bei der Epoche nach der Checkpoint-Epoche und
 spult den Zeitplan bis zu dieser Position vor.
 
-Zwei Dinge sind nicht möglich. `resume=True` kann nicht mit `pretrained`
-kombiniert werden und löst dann einen Fehler aus. Wenn sich der Schlüssel der
+Drei Dinge sind nicht möglich. `resume=True` kann nicht mit `pretrained`
+kombiniert werden und löst dann einen Fehler aus. Veröffentlichte Gewichte und
+ein Lauf, der seine `epochs` bereits erreicht hat, enthalten nichts
+Fortzusetzendes und lösen einen `ValueError` aus, der das benennt. Und wenn sich der Schlüssel der
 besten Metrik im Checkpoint von dem des aktuellen Laufs unterscheidet, wird deren
 Verfolgung mit einer Warnung auf null zurückgesetzt, statt Werte mit
 unterschiedlicher Bedeutung zu vergleichen.

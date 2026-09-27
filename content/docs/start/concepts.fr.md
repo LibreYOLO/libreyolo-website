@@ -22,7 +22,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Tâches canoniques
-    value: 17
+    value: 20
   - label: Niveaux de prise en charge
     value: >-
       Vedette, Principal, Pris en charge, Inférence uniquement, Musée, Niveau
@@ -58,12 +58,12 @@ snippets:
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
 
         print(model.task)
-source_hash: 23d045463a6a8411
+source_hash: c745a3c602db00ea
 ---
 
 ## Tâches
 
-Une tâche correspond à ce que renvoie un modèle. LibreYOLO compte dix-sept noms
+Une tâche correspond à ce que renvoie un modèle. LibreYOLO compte vingt noms
 de tâches canoniques, chacun désignant le champ de l'objet `Results` qui porte
 sa sortie.
 
@@ -80,12 +80,15 @@ sa sortie.
 | `depth` | Une carte dense de profondeur inverse relative |
 | `normal` | Un champ dense de normales de surface sous forme de vecteurs unitaires |
 | `edge` | Une carte dense de probabilité des contours |
+| `albedo` | Une carte dense d'albédo en RVB linéaire, la couleur de surface sans éclairage |
 | `restore` | Une image RVB restaurée, pour le défloutage, le débruitage ou la super-résolution |
 | `matte` | Une carte progressive du premier plan de 0 à 1, pour supprimer l'arrière-plan |
 | `ocr` | Quadrilatères de texte accompagnés de leur transcription, dans l'ordre de lecture |
 | `embed` | Un vecteur normalisé en L2 dont le produit scalaire mesure la concordance |
 | `gaze` | Une direction du regard par visage détecté |
 | `mesh` | Un corps 3D articulé par personne détectée |
+| `detect3d` | Boîtes 3D en coordonnées caméra, avec une classe et un score de confiance |
+| `act` | Une séquence d'actions robotiques prédite à partir des images de la caméra et de l'état du robot |
 
 Ces noms figurent dans les métadonnées et les noms de fichiers des checkpoints.
 Les alias courants sont acceptés partout où une tâche est fournie et sont

@@ -74,7 +74,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 42668148fcc79c1f
+source_hash: 3112c6f54b98ef9f
 ---
 
 ## Impostare i parametri
@@ -83,8 +83,10 @@ I parametri di augmentation sono normali argomenti di `train()`.
 
 <code-tabs name="train" />
 
-Due di questi hanno una forma più breve sulla CLI: `mosaic` corrisponde a
-`mosaic_prob` e `mixup` corrisponde a `mixup_prob`. Tutti gli altri parametri si
+Tre di questi hanno una forma più breve, accettata sia da `train()` sia dalla
+CLI: `mosaic` corrisponde a `mosaic_prob`, `fliplr` a `flip_prob` e, nel
+rilevamento, `mixup` corrisponde a `mixup_prob`. Passare una forma breve e il
+suo campo con valori diversi solleva un errore. Tutti gli altri parametri si
 scrivono allo stesso modo in entrambi i casi.
 
 ## Tre stati, non due
@@ -202,7 +204,7 @@ MixUp per prima, quindi le due si sommano e la somma non dovrebbe superare 1.
 Tutti e quattro sono disattivati di default, quindi l'addestramento di
 classificazione non cambia se non lo chiedi.
 
-La CLI instrada `mixup` in base al task: la classificazione usa la combinazione di batch, mentre il rilevamento usa `mixup_prob`.
+`train()` e la CLI instradano `mixup` in base al task: la classificazione usa la combinazione di batch, mentre il rilevamento usa `mixup_prob`.
 
 `scale=0.5` indica un intervallo di area del ritaglio casuale pari a `(0.5, 1.0)`; una coppia esplicita imposta entrambi i limiti. `crop_pct=None` conserva il rapporto di ridimensionamento di valutazione della famiglia; una modifica influenza la valutazione durante addestramento/validazione, mentre l'esportazione mantiene il preprocessing nativo della famiglia.
 

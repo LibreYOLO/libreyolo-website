@@ -45,7 +45,7 @@ snippets:
         # stream=True는 프레임이나 이미지마다 하나의 Results를 반환하는 제너레이터를 반환합니다.
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: da0776970ded8716
+source_hash: ccecee93e9744550
 ---
 
 ## 건설
@@ -137,6 +137,7 @@ model.track(
     source,
     *,
     track_conf=0.25,
+    conf=None,
     iou=0.45,
     imgsz=None,
     classes=None,
@@ -144,15 +145,18 @@ model.track(
     save=False,
     show=False,
     vid_stride=1,
+    fps=30.0,
+    color_format="auto",
     output_path=None,
     tracker="bytetrack",
     tracker_config=None,
     augment=False,
+    persist=False,
     **tracker_kwargs,
 ) -> Generator[Results, None, None]
 ```
 
-`track_id`가 설정된 경우 프레임당 하나의 `Results`를 생성합니다. `tracker`는 `"bytetrack"`, `"botsort"`, `"ocsort"` 또는 `"deepocsort"`이며, 구성 유형이 트래커를 선택하기 때문에 `tracker_config`가 주어지면 무시됩니다. `track_conf`는 ByteTrack 및 BoT-SORT의 경우 `track_high_thresh`에 매핑되고, OC-SORT 및 Deep OC-SORT의 경우 `det_thresh`에 매핑됩니다. `output_path`는 기본값이 `runs/track/<video_stem>.mp4`입니다.
+`track_id`가 설정된 경우 프레임당 하나의 `Results`를 생성합니다. `tracker`는 `"bytetrack"`, `"botsort"`, `"ocsort"`, `"deepocsort"`(선택적으로 `.yaml` 접미사 포함) 또는 사용자 지정 트래커 인스턴스이며, 구성 유형이 트래커를 선택하기 때문에 `tracker_config`가 주어지면 무시됩니다. `track_conf`는 ByteTrack 및 BoT-SORT의 경우 `track_high_thresh`에 매핑되고, OC-SORT 및 Deep OC-SORT의 경우 `det_thresh`에 매핑됩니다. `conf`를 지정하면 `predict()`에서와 같이 탐지 임계값이 됩니다. `persist=True`는 프레임별 루프를 위해 이전 호출의 트래커를 유지합니다. `output_path`는 기본값이 `runs/track/<video_stem>.mp4`입니다.
 
 ## 값
 
@@ -172,11 +176,14 @@ model.val(
     verbose=True,
     *,
     plots=None,
+    project=None,
+    name=None,
+    exist_ok=False,
     **kwargs,
 ) -> Dict
 ```
 
-작업에 따라 키가 달라지는 메트릭 사전을 반환합니다; 탐지는 `metrics/precision`, `metrics/recall`, `metrics/mAP50` 및 `metrics/mAP50-95`를 반환합니다. `imgsz`는 정사각형 정수 또는 `(height, width)` 튜플을 허용하며 모델의 기본 입력 크기를 기본값으로 사용합니다. `plots`는 `save_plots`의 별칭입니다. `allow_download_scripts`는 데이터셋 YAML이 `download` 필드에 포함할 수 있는 내장 Python을 제어합니다.
+작업에 따라 키가 달라지는 메트릭 사전을 반환합니다; 탐지는 `metrics/precision`, `metrics/recall`, `metrics/mAP50` 및 `metrics/mAP50-95`를 반환합니다. `imgsz`는 정사각형 정수 또는 `(height, width)` 튜플을 허용하며 모델의 기본 입력 크기를 기본값으로 사용합니다. `data=None`은 체크포인트의 학습 설정에 저장된 데이터셋으로 검증하며, 공개된 가중치처럼 저장된 데이터셋이 없으면 예외를 발생시킵니다. `project`, `name`, `exist_ok`는 출력 디렉터리를 `project/name`으로 설정하며, `exist_ok=True`가 아니면 번호가 증가합니다. `plots`는 `save_plots`의 별칭입니다. `allow_download_scripts`는 데이터셋 YAML이 `download` 필드에 포함할 수 있는 내장 Python을 제어합니다.
 
 `faster_coco_eval`는 `**kwargs`를 통해 허용되며 기본값은 `True`이며, 패키지가 설치되지 않은 경우 pycocotools로 대체됩니다. 실행된 백엔드는 `model.last_eval_backend`에 보고됩니다.
 
@@ -208,6 +215,7 @@ model.export(format="onnx", **kwargs) -> str
 | `dynamic` | `True` | 동적 축 사용 |
 | `half` | `False` | FP16 정밀도 |
 | `int8` | `False` | INT8 정밀도 |
+| `quantize` | `None` | `half` 또는 `int8` 대신 `16`, `8` 또는 `32`로 지정하는 정밀도 |
 | `batch` | `1` | 배치 크기가 아티팩트에 내장됨 |
 | `device` | `None` | 따라 그릴 장치 |
 | `data` | `None` | INT8 보정을 위한 data.yaml |
@@ -215,7 +223,7 @@ model.export(format="onnx", **kwargs) -> str
 | `allow_download_scripts` | `False` | 데이터셋 YAML 다운로드에서 내장 Python 허용 |
 | `verbose` | `False` | 상세 내보내기 로깅 |
 
-차단된 조합은 추적 전에 프리플라이트에서 `NotImplementedError`를 발생시킵니다. 적용 범위와 규칙은 [내보내기 매트릭스](/docs/reference/export-matrix) 페이지에 있습니다. 실시간 LoRA 어댑터가 있을 경우, 그것들은 밀집 가중치에 통합되며, 이 병합은 모든 요청이 거부된 후에만 발생합니다.
+차단된 조합은 추적 전에 프리플라이트에서 `NotImplementedError`를 발생시킵니다. 형식이 사용하지 않는 옵션은 `Unknown <format> export arguments (ignored)` 경고를 내고 내보내기는 계속됩니다. 적용 범위와 규칙은 [내보내기 매트릭스](/docs/reference/export-matrix) 페이지에 있습니다. 실시간 LoRA 어댑터가 있을 경우, 그것들은 밀집 가중치에 통합되며, 이 병합은 모든 요청이 거부된 후에만 발생합니다.
 
 ## 저장
 

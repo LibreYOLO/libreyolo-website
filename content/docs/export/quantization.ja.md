@@ -149,7 +149,7 @@ snippets:
 
         # 任意の浮動小数点エクスポーターを対応する精度で利用可能
         qmodel.export(format="tensorrt", half=True)
-source_hash: 6c247a3243daf393
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## インストール
@@ -256,6 +256,9 @@ INT8カーネルで実行します。これは浮動小数点モデルで
 量子化演算はシミュレーションで実行されます。これはAMP使用時でもfloat32領域で計算する
 fake quantizationです。シミュレーションは数値的に正確なため、どのデバイスでも`val()`のスコアは
 量子化演算に関する実際の結果です。ただし、速度を示すものではありません。
+
+Apple MPSはfake quantizeの演算もfloat8も実装していないため、Macでは`fp16`と`bf16`以外の
+すべてのレシピが警告を出してCPUで実行されます。
 
 2つの例外はネイティブに実行されます。`fp16`と`bf16`は通常のキャストです。確定済みの`fp8`
 モジュールは、Ada、Hopper、Blackwellクラスのハードウェアで`torch._scaled_mm`を介し、パック済み

@@ -45,7 +45,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 0cc60dd7c5c9f864
+source_hash: 290b778a1060a760
 ---
 
 ## Synopsis
@@ -68,6 +68,7 @@ donc `format=onnx` et `--format onnx` sont le même argument.
 | `batch` | `1` | Taille de batch de l'export |
 | `half` | `false` | Précision FP16 |
 | `int8` | `false` | Quantification INT8 |
+| `quantize` | | Précision sous la forme `16` (FP16), `8` (INT8) ou `32` (FP32) ; remplace `half` et `int8` |
 | `dynamic` | `false` | Formes d'entrée dynamiques (ONNX) |
 | `simplify` | `true` | Simplification du graphe ONNX |
 | `nms` | `false` | Intégrer la NMS dans le modèle. ONNX et CoreML uniquement |
@@ -114,7 +115,8 @@ prend `conf` et `iou` mais pas `max_det`, donc un `max_det` non par défaut à c
 de `format=coreml nms=true` se termine avec `config_unsupported`.
 
 `half=true` en même temps que `int8=true` n'est pas une erreur. L'INT8 l'emporte,
-`half` est abandonné, et un avertissement part sur stderr.
+`half` est abandonné, et un avertissement part sur stderr. Un `quantize` en
+désaccord avec `half` ou `int8` se termine avec `config_conflict`.
 
 `name` et `verify` sont aujourd'hui des options RKNN. Passer l'un ou l'autre avec
 un autre format se termine avec `config_unsupported` plutôt que d'être ignoré.

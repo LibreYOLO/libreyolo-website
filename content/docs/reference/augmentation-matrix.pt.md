@@ -42,13 +42,13 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f3cba41ceadf131f
+source_hash: f0d31511715e3cc4
 ---
 
 ## Os parâmetros
 
-Estes são nomes de campos do `TrainConfig`, não a grafia da CLI. A CLI mapeia
-seus próprios aliases sobre eles, então `--mosaic` define `mosaic_prob`.
+Estes são nomes de campos do `TrainConfig`, não a grafia da CLI. `train()` e a CLI
+mapeiam as grafias curtas sobre eles, então `mosaic` define `mosaic_prob`.
 
 | Parâmetro | Significado |
 |---|---|
@@ -69,7 +69,7 @@ seus próprios aliases sobre eles, então `--mosaic` define `mosaic_prob`.
 | `mixup` | Probabilidade de MixUp por batch na classificação, com soft labels |
 | `cutmix` | Probabilidade de CutMix por batch na classificação, com soft labels |
 
-Os quatro últimos formam os controles de classificação. As famílias de detecção os ignoram. A CLI direciona `mixup` para a mistura de lotes nos classificadores e para `mixup_prob` nos detectores.
+Os quatro últimos formam os controles de classificação. As famílias de detecção os ignoram. `train()` e a CLI direcionam `mixup` para a mistura de lotes nos classificadores e para `mixup_prob` nos detectores.
 
 <code-tabs name="usage" />
 

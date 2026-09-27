@@ -19,7 +19,6 @@ keywords:
   - калибровочный датасет
   - экспорт qdq onnx
 last_verified: 1.6.0
-
 meta:
   - label: Вызов
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -45,110 +44,143 @@ verification: >-
   размера чекпойнтов — измеренные значения, записанные в docs/quantization.md.
 snippets:
   quantize:
-  - label: Python
-    language: python
-    code: |
-      from libreyolo import LibreYOLO
+    - label: Python
+      language: python
+      code: >
+        from libreyolo import LibreYOLO
 
-      model = LibreYOLO("LibreYOLO9s.pt")
 
-      # Подмена структуры плюс калибровка. calib — небольшой НЕРАЗМЕЧЕННЫЙ набор
-      # изображений, он читается только вперёд, чтобы вывести диапазоны активаций и масштабы.
-      qmodel = model.quantize(recipe="int8", calib="coco128.yaml", samples=128)
+        model = LibreYOLO("LibreYOLO9s.pt")
 
-      print(qmodel.quant_info())
-      qmodel.val(data="coco8.yaml")          # те же валидаторы, что и для float-модели
-      qmodel.save("LibreYOLO9s-int8.pt")     # чекпойнт несёт quant-манифест
-  - label: CLI
-    language: bash
-    code: |
-      libreyolo quantize --model LibreYOLO9s.pt --recipe int8 --calib coco128.yaml
-  - label: Аргументы
-    language: python
-    code: |
-      model.quantize(
-          recipe="int8",
-          calib="coco128.yaml",      # путь к data.yaml или встроенное имя; None пропускает калибровку
-          samples=128,               # максимум изображений для калибровки
-          batch=8,                   # размер батча калибровки
-          algorithm="auto",          # auto выбирает minmax; альтернативы: percentile, mse, entropy
-          keep_high_precision=None,  # None использует политику семейства
-          verbose=True,
-      )
+
+        # Подмена структуры плюс калибровка. calib — небольшой НЕРАЗМЕЧЕННЫЙ
+        набор
+
+        # изображений, он читается только вперёд, чтобы вывести диапазоны
+        активаций и масштабы.
+
+        qmodel = model.quantize(recipe="int8", calib="coco128.yaml",
+        samples=128)
+
+
+        print(qmodel.quant_info())
+
+        qmodel.val(data="coco8.yaml")          # те же валидаторы, что и для
+        float-модели
+
+        qmodel.save("LibreYOLO9s-int8.pt")     # чекпойнт несёт quant-манифест
+    - label: CLI
+      language: bash
+      code: >
+        libreyolo quantize --model LibreYOLO9s.pt --recipe int8 --calib
+        coco128.yaml
+    - label: Аргументы
+      language: python
+      code: |
+        model.quantize(
+            recipe="int8",
+            calib="coco128.yaml",      # путь к data.yaml или встроенное имя; None пропускает калибровку
+            samples=128,               # максимум изображений для калибровки
+            batch=8,                   # размер батча калибровки
+            algorithm="auto",          # auto выбирает minmax; альтернативы: percentile, mse, entropy
+            keep_high_precision=None,  # None использует политику семейства
+            verbose=True,
+        )
   reload:
-  - label: Квантизованный чекпойнт загружается обратно квантизованным
-    language: python
-    code: |
-      from libreyolo import LibreYOLO
+    - label: Квантизованный чекпойнт загружается обратно квантизованным
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
 
-      # quant-манифест восстанавливает квантизованную структуру и масштабы
-      # ещё до загрузки весов.
-      qmodel = LibreYOLO("LibreYOLO9s-int8.pt")
-      print(qmodel.quant_info())
+        # quant-манифест восстанавливает квантизованную структуру и масштабы
+        # ещё до загрузки весов.
+        qmodel = LibreYOLO("LibreYOLO9s-int8.pt")
+        print(qmodel.quant_info())
   train:
-  - label: QAT — это обычный train() на квантизованной модели
-    language: python
-    code: |
-      from libreyolo import LibreYOLO
+    - label: QAT — это обычный train() на квантизованной модели
+      language: python
+      code: >
+        from libreyolo import LibreYOLO
 
-      qmodel = LibreYOLO("LibreYOLO9s-int8.pt")
 
-      # Это дообучение, а не запуск с нуля: берите скорости обучения для дообучения.
-      qmodel.train(data="coco8.yaml", epochs=5, lr0=1e-4)
-  - label: QAD добавляет уже существующие аргументы дистилляции
-    language: python
-    code: |
-      qmodel.train(
-          data="coco8.yaml",
-          epochs=5,
-          lr0=1e-4,
-          distill_model="LibreYOLO9m.pt",
-      )
-  - label: CLI
-    language: bash
-    code: |
-      libreyolo train --model LibreYOLO9s-int8.pt --data coco8.yaml --epochs 5 --lr0 1e-4
+        qmodel = LibreYOLO("LibreYOLO9s-int8.pt")
+
+
+        # Это дообучение, а не запуск с нуля: берите скорости обучения для
+        дообучения.
+
+        qmodel.train(data="coco8.yaml", epochs=5, lr0=1e-4)
+    - label: QAD добавляет уже существующие аргументы дистилляции
+      language: python
+      code: |
+        qmodel.train(
+            data="coco8.yaml",
+            epochs=5,
+            lr0=1e-4,
+            distill_model="LibreYOLO9m.pt",
+        )
+    - label: CLI
+      language: bash
+      code: >
+        libreyolo train --model LibreYOLO9s-int8.pt --data coco8.yaml --epochs 5
+        --lr0 1e-4
   export:
-  - label: Упакованный PyTorch-чекпойнт
-    language: python
-    code: |
-      from libreyolo import LibreYOLO
+    - label: Упакованный PyTorch-чекпойнт
+      language: python
+      code: >
+        from libreyolo import LibreYOLO
 
-      qmodel = LibreYOLO("LibreYOLO9s-int8.pt")
 
-      # Записывает LibreYOLO9s-int8-final.pt: упакованные низкобитные веса и масштабы,
-      # мастер-веса fp32 выброшены, неквантизованный остаток приведён к fp16.
-      qmodel.export(format="pt")
+        qmodel = LibreYOLO("LibreYOLO9s-int8.pt")
 
-      # remainder="fp32" сохраняет неквантизованные тензоры точными.
-      qmodel.export(format="pt", remainder="fp32")
-  - label: QDQ INT8 ONNX
-    language: python
-    code: |
-      from libreyolo import LibreYOLO
 
-      qmodel = LibreYOLO("LibreYOLO9s-int8.pt")
+        # Записывает LibreYOLO9s-int8-final.pt: упакованные низкобитные веса и
+        масштабы,
 
-      # Пары QuantizeLinear/DequantizeLinear прямо в графе, несущие собственные
-      # масштабы модели — откалиброванные или обученные в QAT.
-      qmodel.export(format="onnx")
-  - label: CLI
-    language: bash
-    code: |
-      libreyolo export --model LibreYOLO9s-int8.pt --format onnx
+        # мастер-веса fp32 выброшены, неквантизованный остаток приведён к fp16.
+
+        qmodel.export(format="pt")
+
+
+        # remainder="fp32" сохраняет неквантизованные тензоры точными.
+
+        qmodel.export(format="pt", remainder="fp32")
+    - label: QDQ INT8 ONNX
+      language: python
+      code: >
+        from libreyolo import LibreYOLO
+
+
+        qmodel = LibreYOLO("LibreYOLO9s-int8.pt")
+
+
+        # Пары QuantizeLinear/DequantizeLinear прямо в графе, несущие
+        собственные
+
+        # масштабы модели — откалиброванные или обученные в QAT.
+
+        qmodel.export(format="onnx")
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo export --model LibreYOLO9s-int8.pt --format onnx
   dequantize:
-  - label: Возврат к float с сохранением весов, обученных в QAT
-    language: python
-    code: |
-      from libreyolo import LibreYOLO
+    - label: 'Возврат к float с сохранением весов, обученных в QAT'
+      language: python
+      code: >
+        from libreyolo import LibreYOLO
 
-      qmodel = LibreYOLO("LibreYOLO9s-int8.pt")
-      qmodel.dequantize()
 
-      # Теперь подходит любой float-экспортёр, с любой поддерживаемой им точностью.
-      qmodel.export(format="tensorrt", half=True)
+        qmodel = LibreYOLO("LibreYOLO9s-int8.pt")
 
-source_hash: 6c247a3243daf393
+        qmodel.dequantize()
+
+
+        # Теперь подходит любой float-экспортёр, с любой поддерживаемой им
+        точностью.
+
+        qmodel.export(format="tensorrt", half=True)
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## Установка
@@ -269,6 +301,10 @@ ONNX Runtime выводит масштабы сам.
 которая считается в островках float32 даже под AMP. Симуляция численно
 достоверна, поэтому результат `val()` на любом устройстве — настоящее
 утверждение о квантизованной арифметике. Но не утверждение о скорости.
+
+Бэкенд Apple MPS не реализует ни операций фейковой квантизации, ни float8,
+поэтому на Mac все рецепты, кроме `fp16` и `bf16`, выполняются на CPU с
+предупреждением.
 
 Два исключения исполняются нативно. `fp16` и `bf16` — обычные приведения.
 Финализированные модули `fp8` считают свой GEMM прямо на упакованных весах E4M3

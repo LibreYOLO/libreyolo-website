@@ -43,12 +43,12 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f3cba41ceadf131f
+source_hash: f0d31511715e3cc4
 ---
 
 ## Einstellungen
 
-Dies sind Feldnamen von `TrainConfig`, nicht ihre Schreibweisen in der CLI. Die CLI bildet eigene Aliasse darauf ab. `--mosaic` setzt daher `mosaic_prob`.
+Dies sind Feldnamen von `TrainConfig`, nicht ihre Schreibweisen in der CLI. `train()` und die CLI bilden die kurzen Schreibweisen darauf ab. `mosaic` setzt daher `mosaic_prob`.
 
 | Einstellung | Bedeutung |
 |---|---|
@@ -69,7 +69,7 @@ Dies sind Feldnamen von `TrainConfig`, nicht ihre Schreibweisen in der CLI. Die 
 | `mixup` | Batch-MixUp-Wahrscheinlichkeit mit weichen Labels für Klassifizierung |
 | `cutmix` | Batch-CutMix-Wahrscheinlichkeit mit weichen Labels für Klassifizierung |
 
-Die letzten vier bilden die Klassifikationsparameter. Detektionsfamilien ignorieren sie. Die CLI leitet `mixup` bei Klassifikatoren an die Batch-Mischung und bei Detektoren an `mixup_prob` weiter.
+Die letzten vier bilden die Klassifikationsparameter. Detektionsfamilien ignorieren sie. `train()` und die CLI leiten `mixup` bei Klassifikatoren an die Batch-Mischung und bei Detektoren an `mixup_prob` weiter.
 
 <code-tabs name="usage" />
 

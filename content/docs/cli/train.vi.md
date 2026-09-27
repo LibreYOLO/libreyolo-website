@@ -2,12 +2,13 @@
 title: libreyolo train
 seo_title: Tham chiếu lệnh libreyolo train
 description: >-
-  Huấn luyện mô hình từ dòng lệnh: tham số cùng giá trị mặc định, cách giá trị mặc định của họ mô hình ghi đè
-  chúng và tham số mà họ mô hình bỏ qua.
+  Huấn luyện mô hình từ dòng lệnh: tham số cùng giá trị mặc định, cách giá trị
+  mặc định của họ mô hình ghi đè chúng và tham số mà họ mô hình bỏ qua.
 lead: >-
-  Huấn luyện một mô hình trên một tập dữ liệu (dataset) và ghi checkpoint, chỉ số cùng log vào một thư mục
-  chạy. Mọi tham số bên dưới đều có giá trị mặc định lấy từ định nghĩa lệnh, và cấu hình huấn luyện riêng của
-  từng dòng mô hình có thể thay thế giá trị đó.
+  Huấn luyện một mô hình trên một tập dữ liệu (dataset) và ghi checkpoint, chỉ
+  số cùng log vào một thư mục chạy. Mọi tham số bên dưới đều có giá trị mặc định
+  lấy từ định nghĩa lệnh, và cấu hình huấn luyện riêng của từng dòng mô hình có
+  thể thay thế giá trị đó.
 keywords:
   - libreyolo train cli
   - lệnh huấn luyện libreyolo
@@ -24,27 +25,33 @@ meta:
     value: data
     mono: true
   - label: Đầu ra
-    value: 'Checkpoint, chỉ số và log nằm dưới runs/train/exp'
+    value: 'Checkpoint, chỉ số và log nằm dưới runs/train/<name>; YOLO9 dùng yolo9_exp'
 snippets:
   examples:
     - label: Cơ bản
       language: bash
-      code: |
+      code: >
         # coco8.yaml có sẵn trong gói và tự tải 8 ảnh của nó ở lần chạy đầu tiên
-        libreyolo train model=LibreYOLO9s.pt data=coco8.yaml epochs=10 imgsz=640 batch=8
+
+        libreyolo train model=LibreYOLO9s.pt data=coco8.yaml epochs=10 imgsz=640
+        batch=8
     - label: Kiểm tra cấu hình đã phân giải trước
       language: bash
-      code: |
-        # In ra cấu hình mà lần chạy sẽ dùng, gồm cả mặc định của family, rồi thoát
+      code: >
+        # In ra cấu hình mà lần chạy sẽ dùng, gồm cả mặc định của family, rồi
+        thoát
+
         # mà không huấn luyện hay nạp dữ liệu
-        libreyolo train model=LibreDFINEn.pt data=coco8.yaml epochs=10 dry_run=true
+
+        libreyolo train model=LibreDFINEn.pt data=coco8.yaml epochs=10
+        dry_run=true
     - label: Lần chạy có tên với công thức chỉ định rõ
       language: bash
       code: |
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 525a8e4366e4c0be
+source_hash: 0f7f2b7487a67daa
 ---
 ## Cú pháp
 
@@ -83,6 +90,7 @@ Tham số là các cặp `key=value`, và dạng POSIX cũng dùng được, nê
 | `amp` | `true` | Automatic Mixed Precision |
 | `amp_dtype` | `float16` | Kiểu dữ liệu AMP trên CUDA: `float16` hoặc `bfloat16` |
 | `cuda_graph` | `false` | Thu lượt forward và backward của quá trình huấn luyện vào CUDA graph. Chỉ một GPU và các family được hỗ trợ; phần còn lại chạy ở chế độ eager |
+| `compile` | `false` | Áp dụng `torch.compile` cho mạng huấn luyện: `true`, `false`, `default`, `reduce-overhead`, `max-autotune`, `max-autotune-no-cudagraphs`. Chỉ một GPU CUDA; các lần chạy khác huấn luyện ở chế độ eager kèm một cảnh báo |
 | `lora` | `false` | Tinh chỉnh (fine-tuning) bằng LoRA, dành cho các family transformer liệt kê ở mục Ghi chú |
 | `freeze` | | Đóng băng các lớp: một số nguyên đếm, một danh sách chỉ số, hoặc tên module |
 
@@ -141,7 +149,7 @@ Tham số là các cặp `key=value`, và dạng POSIX cũng dùng được, nê
 | Tham số | Mặc định | Ý nghĩa |
 |---|---|---|
 | `val` | `true` | Đánh giá trong lúc huấn luyện |
-| `eval_interval` | `10` | Đánh giá sau mỗi N epoch |
+| `eval_interval` | `10` | Đánh giá sau mỗi N epoch, và sau epoch cuối cùng |
 | `max_det` | `300` | Số dự đoán tối đa trên mỗi ảnh sau NMS của bước đánh giá |
 | `eval_max_det` | | Giới hạn của bộ đánh giá COCO. Khi không đặt, dùng quy ước AP@100 của pycocotools |
 | `faster_coco_eval` | `true` | Dùng backend C++ faster-coco-eval cho các chỉ số COCO khi đã cài; nếu không thì quay về pycocotools |
@@ -178,6 +186,7 @@ Tham số là các cặp `key=value`, và dạng POSIX cũng dùng được, nê
 | `average_best` | `0` | Lấy trung bình đều N checkpoint tốt nhất theo chỉ số theo dõi vào weights/average.pt khi kết thúc huấn luyện (0 = tắt) |
 | `export_check` | `False` | Xuất ONNX trước epoch 1 và dừng lần chạy nếu xuất lỗi (mặc định: tắt) |
 | `precise_bn` | `0` | Tính lại thống kê chạy BatchNorm từ số ảnh huấn luyện này sau epoch cuối (0 = tắt) |
+| `aux_weight` | | Chỉ YOLO9: trọng số loss của nhánh phụ PGI khi tinh chỉnh. `0.25` khi không đặt; `0` chỉ huấn luyện head chính |
 | `fliplr` | `None` | Xác suất lật ngang (tên thay thế của flip_prob trong hệ sinh thái) |
 | `flipud` | `0.0` | Xác suất lật dọc |
 | `auto_augment` | `None` | Chính sách auto-augment phân loại: randaugment, autoaugment, augmix (mặc định: không có) |
@@ -221,8 +230,9 @@ luyện qua các pipeline pass-through không có mosaic, không mixup và khôn
 đổi affine, nên `mosaic`, `mixup`, `hsv_prob`, `degrees`, `translate`, `shear`,
 `mosaic_scale` và `mixup_scale` không tác động tới đâu cả ở đó. EC dùng chung
 pipeline đó nhưng vẫn đọc `hsv_prob`, `degrees` và `translate` khi task của nó
-là pose. Các family phân loại, SegFormer và NAFNet bỏ qua toàn bộ nhóm đó cùng
-với `flip_prob`, vì phép lật của chúng chạy ở một xác suất cố định chứ không
+là pose. Các family phân loại bỏ qua nhóm đó trừ `mixup`, vốn là batch MixUp
+đối với chúng, và có đọc `flip_prob`. SegFormer và NAFNet bỏ qua toàn bộ nhóm đó
+cùng với `flip_prob`, vì phép lật của chúng chạy ở một xác suất cố định chứ không
 cấu hình được. YOLO-NAS chỉ bỏ qua riêng `mosaic`, vì thay vào đó nó tăng cường
 bằng một phép affine trên từng mẫu luôn bật. RF-DETR bỏ qua thêm ba tham số nữa
 ngoài danh sách đó: `optimizer`, `momentum` và `nesterov`.
@@ -233,9 +243,9 @@ chuẩn cho phiên bản đang cài. Nó cũng là tín hiệu duy nhất, nên 
 trong script với `quiet=true` sẽ chặn luôn cảnh báo đó cùng mọi thứ khác trên
 stderr.
 
-`val=false` là một trường hợp liên quan. Nó đặt `eval_interval` về `0` cho hầu
-hết các family; RF-DETR không thể tắt việc đánh giá theo cách đó và ghi log rằng
-nó đã bỏ qua yêu cầu.
+`val=false` là một trường hợp liên quan. Nó đặt `eval_interval` về `0`, qua đó
+tắt việc đánh giá trong lúc huấn luyện, kể cả ở epoch cuối, và lần chạy không ghi
+ra `best.pt`.
 
 ### Những hành vi khác đáng biết
 
@@ -247,7 +257,8 @@ huấn luyện mà không có nó.
 luyện từ đầu, vì hai thứ này yêu cầu những điều trái ngược nhau.
 
 `mosaic` và `mixup` là cách viết trên dòng lệnh của các trường cấu hình
-`mosaic_prob` và `mixup_prob`. Ở những family mà mixup chỉ áp dụng cho các mẫu
+`mosaic_prob` và `mixup_prob`; trên một mô hình phân loại, `mixup` thay vào đó là
+batch MixUp. Ở những family mà mixup chỉ áp dụng cho các mẫu
 mosaic, `mixup` lớn hơn không đi cùng `mosaic` bằng không sẽ không bao giờ kích
 hoạt, và lần chạy sẽ báo như vậy.
 

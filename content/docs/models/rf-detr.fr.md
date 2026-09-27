@@ -19,7 +19,7 @@ keywords:
   - segmentation d'instances
   - estimation de pose
   - boîtes orientées
-last_verified: "1.6.0"
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -180,7 +180,7 @@ snippets:
     - label: Utiliser le fichier exporté
       language: python
       code: >
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
 
         # La factory utilise le suffixe du fichier : un artefact exporté se
@@ -206,7 +206,7 @@ snippets:
 
         # Inspectez la signature avant de connecter quoi que ce soit.
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -216,7 +216,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: c360784eb62a7df5
+source_hash: 379a3a09691bf14b
 ---
 
 ## Installer
@@ -256,10 +256,9 @@ par la résolution d'entrée.
 
 ## Entraîner
 
-Pour les quatre tâches, l'entraînement part d'un checkpoint publié. RF-DETR
-répertorie `pretrained` parmi les arguments ignorés par son entraîneur natif.
-Fournir `pretrained=False` ne produit donc pas ici un modèle initialisé
-aléatoirement.
+Pour les quatre tâches, l'entraînement part d'un checkpoint publié.
+`pretrained=False` réinitialise à la place tout le réseau, backbone compris, et
+entraîne à partir de zéro.
 
 <code-tabs name="train" />
 
@@ -274,7 +273,7 @@ les tailles valides les plus proches.
 Consultez l'[entraînement](/docs/train) pour les datasets, l'augmentation, le
 multi-GPU et les loggers.
 
-Les nouveaux entraînements utilisent par défaut `output_dir=None`, qui se résout en un répertoire `runs/train/rfdetr_exp` incrémenté avec `exist_ok=False`. Les datasets de pose multiclasse utilisent `kpt_names` indexé par numéro ou nom de classe ; une liste vide indique une classe avec uniquement des boîtes. Les prédictions complètent les points clés jusqu'à `kpt_shape` ; le score de sélection fondé sur la mAP des points clés n'évalue pas les classes avec uniquement des boîtes.
+Les nouveaux entraînements utilisent par défaut `output_dir=None`, qui se résout en un répertoire `runs/train/rfdetr_exp` incrémenté avec `exist_ok=False`. Un entraînement repris continue d'écrire dans le répertoire de run de son checkpoint. Les datasets de pose multiclasse utilisent `kpt_names` indexé par numéro ou nom de classe ; une liste vide indique une classe avec uniquement des boîtes. Les prédictions complètent les points clés jusqu'à `kpt_shape` ; le score de sélection fondé sur la mAP des points clés n'évalue pas les classes avec uniquement des boîtes.
 
 ## Valider
 

@@ -103,13 +103,13 @@ snippets:
         from libreyolo import LibreYOLO
 
         # Carica il checkpoint della run interrotta, poi chiedi di riprendere.
-        model = LibreYOLO("runs/train/exp/weights/last.pt")
-        model.train(data="my-dataset.yaml", epochs=100, resume=True)
+        model = LibreYOLO("runs/train/yolo9_exp/weights/last.pt")
+        model.train(data="my-dataset.yaml", resume=True)
     - label: CLI
       language: bash
       code: |
-        libreyolo train model=runs/train/exp/weights/last.pt \
-          data=my-dataset.yaml epochs=100 resume=true
+        libreyolo train model=runs/train/yolo9_exp/weights/last.pt \
+          data=my-dataset.yaml resume=true
   cfg:
     - label: Python
       language: python
@@ -123,7 +123,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: eac4e55fcf16ca15
+source_hash: ca1259a10e05a51d
 ---
 
 ## Impostare gli argomenti
@@ -270,9 +270,10 @@ sovrascritta.
 
 `save_period` scrive un `weights/epoch_<N>.pt` extra ogni N epoche, in aggiunta a
 `weights/last.pt` dopo ogni epoca e a `weights/best.pt` ogni volta che la metrica
-tracciata migliora. `eval_interval` stabilisce ogni quanto gira la validazione e
-`patience` ferma la run dopo quel numero di epoche senza miglioramenti, con `0` che
-disattiva l'early stopping.
+tracciata migliora. `eval_interval` stabilisce ogni quanto gira la validazione, e
+l'ultima epoca viene sempre validata; `val=False` disattiva la validazione, e una run
+così non scrive `best.pt`. `patience` ferma la run dopo quel numero di epoche senza
+miglioramenti, con `0` che disattiva l'early stopping.
 
 `cache` accelera le epoche ripetute tenendo le immagini decodificate in RAM (`True` o
 `"ram"`) o come file `.npy` accanto alle sorgenti (`"disk"`). Le letture dalla cache
@@ -285,18 +286,21 @@ del dataloader, `"disk"` è la più sicura delle due.
 
 ## Resume
 
-`resume=True` continua una run interrotta. Il checkpoint va caricato prima, perché
-resume lo legge dal modello, non da un argomento separato.
+`resume=True` continua una run interrotta dal checkpoint caricato;
+`resume="path/to/last.pt"` continua invece da quel file.
 
 <code-tabs name="resume" />
 
-Resume ripristina i pesi addestrati, lo stato dell'optimizer, i pesi EMA e il conteggio
-degli aggiornamenti, il tracciamento della metrica migliore, la scala del `GradScaler` e
+Resume ripristina gli argomenti di addestramento salvati della run, e un argomento
+passato esplicitamente ha la precedenza su quello salvato. Continua a scrivere nella
+directory di run del checkpoint. Ripristina i pesi addestrati, lo stato dell'optimizer,
+i pesi EMA e il conteggio degli aggiornamenti, il tracciamento della metrica migliore, la scala del `GradScaler` e
 gli stati random di PyTorch, CUDA e NumPy. Riparte dall'epoca del checkpoint più uno e
 manda avanti lo schedule fino a quella posizione.
 
-Ci sono due cose che non fa. `resume=True` non si può combinare con `pretrained`, e
-provarci solleva un errore. E quando la chiave della metrica migliore del checkpoint è
+Ci sono tre cose che non fa. `resume=True` non si può combinare con `pretrained`, e
+provarci solleva un errore. I pesi pubblicati e una run che ha già raggiunto le sue
+`epochs` non hanno nulla da riprendere, e sollevano un `ValueError` che lo dice. E quando la chiave della metrica migliore del checkpoint è
 diversa da quella della run corrente, il tracciamento della metrica migliore si azzera con un
 warning invece di confrontare valori che non significano la stessa cosa.
 

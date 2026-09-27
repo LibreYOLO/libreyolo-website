@@ -153,7 +153,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 085c6fb8cb7ec4b2
+source_hash: ff50afedd377beaf
 ---
 
 ## Instalasi
@@ -220,7 +220,9 @@ serta cara membangun parsernya.
 <code-tabs name="int8" />
 
 `int8=True` menjalankan kuantisasi statis ONNX Runtime dan menulis graph QDQ dengan
-input dan output float32. Hanya node `Conv` dan `Gemm` yang dikuantisasi.
+input dan output float32. Hanya node `Conv` dan `Gemm` yang dikuantisasi, dan
+konvolusi pertama serta head deteksi YOLO9 tetap float32, sama seperti pada
+`model.quantize()`, sehingga skor kelas tidak jenuh pada rentang hasil kalibrasi.
 Membiarkan decoding pada head deteksi tetap di float32 adalah keputusan yang
 disengaja: konkatenasi itu mencampur koordinat box berskala piksel dengan skor
 kelas pada rentang 0 sampai 1, dan satu skala aktivasi per tensor yang didominasi

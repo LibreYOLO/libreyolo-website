@@ -147,7 +147,7 @@ snippets:
     - label: 내보낸 파일 사용
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # 팩토리는 파일 접미사에 따라 라우팅하므로 내보낸 아티팩트도
         # 다른 체크포인트처럼 불러와 동일한 Results 객체를 반환합니다.
@@ -167,7 +167,7 @@ snippets:
 
         # 연결하기 전에 시그니처를 확인합니다.
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -177,7 +177,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: "c360784eb62a7df5"
+source_hash: 379a3a09691bf14b
 ---
 
 ## 설치
@@ -208,7 +208,7 @@ pip install "libreyolo[rfdetr]"
 
 ## 학습
 
-네 작업 모두 공개된 체크포인트에서 학습을 시작합니다. RF-DETR의 네이티브 학습기가 무시하는 인수에 `pretrained`가 포함되므로 여기서 `pretrained=False`를 전달해도 무작위로 초기화된 모델을 얻지 못합니다.
+네 작업 모두 공개된 체크포인트에서 학습을 시작합니다. `pretrained=False`는 대신 백본을 포함한 전체 네트워크를 다시 초기화하고 처음부터 학습합니다.
 
 <code-tabs name="train" />
 
@@ -216,7 +216,7 @@ pip install "libreyolo[rfdetr]"
 
 데이터셋, 증강, 다중 GPU, 로거는 [학습](/docs/train)을 참조합니다.
 
-새 실행의 기본값은 `output_dir=None`이며, `exist_ok=False`에 따라 번호가 증가하는 `runs/train/rfdetr_exp`로 결정됩니다. 다중 클래스 자세 데이터셋은 클래스 인덱스 또는 이름을 키로 하는 `kpt_names`를 사용하며, 빈 목록은 바운딩 박스만 있는 클래스를 나타냅니다. 예측은 키포인트를 `kpt_shape`에 맞게 패딩하며, 키포인트 mAP 적합도는 바운딩 박스만 있는 클래스를 평가하지 않습니다.
+새 실행의 기본값은 `output_dir=None`이며, `exist_ok=False`에 따라 번호가 증가하는 `runs/train/rfdetr_exp`로 결정됩니다. 재개된 실행은 체크포인트의 실행 디렉터리에 계속 기록합니다. 다중 클래스 자세 데이터셋은 클래스 인덱스 또는 이름을 키로 하는 `kpt_names`를 사용하며, 빈 목록은 바운딩 박스만 있는 클래스를 나타냅니다. 예측은 키포인트를 `kpt_shape`에 맞게 패딩하며, 키포인트 mAP 적합도는 바운딩 박스만 있는 클래스를 평가하지 않습니다.
 
 ## 검증
 

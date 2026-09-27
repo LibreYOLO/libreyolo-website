@@ -16,7 +16,7 @@ keywords:
   - libreyolo notimplementederror
   - rozwiązywanie problemów libreyolo
 last_verified: 1.6.0
-source_hash: 30b68976a4ac01d1
+source_hash: f2faaab56a2f0415
 ---
 
 Błędy są pogrupowane według wyświetlanego tekstu. Jeśli danego komunikatu nie
@@ -111,10 +111,11 @@ opublikowanym checkpointem prowadzi do nieistniejącego adresu URL. Tabela
 checkpointów na stronie każdego modelu zawiera dokładne nazwy opublikowanych
 plików.
 
-## Trenowanie zawiesza się lub uruchamia ponownie w systemie Windows
+## Trenowanie zawiesza się lub uruchamia ponownie w systemie Windows lub macOS
 
-System Windows nie ma mechanizmu `fork`, dlatego procesy robocze modułu
-wczytującego dane rozpoczynają pracę od ponownego importu skryptu. Bez warunku
+System Windows nie ma mechanizmu `fork`, a Python w systemie macOS domyślnie go
+nie używa, dlatego procesy robocze modułu wczytującego dane rozpoczynają pracę
+od ponownego importu skryptu. Bez warunku
 `if __name__ == "__main__":` każdy proces roboczy ponownie wykonuje wywołanie
 trenowania, co powoduje zakleszczenie albo tworzenie procesów bez końca.
 
@@ -153,8 +154,9 @@ wiadomo, że jest listą.
 
 ### Odczytywanie metryk jako atrybutów
 
-Funkcja `val()` zwraca zwykły słownik z kluczami będącymi nazwami metryk, a nie
-obiekt z dostępem przez atrybuty:
+Funkcja `val()` zwraca słownik z kluczami będącymi nazwami metryk. Jego jedyny
+atrybut, `box`, zawiera wyniki dla poszczególnych obrazów i progi dla
+poszczególnych klas, a nie wartości metryk:
 
 ```python
 metrics = model.val(data="coco8.yaml")

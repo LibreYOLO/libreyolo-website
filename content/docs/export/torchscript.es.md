@@ -110,7 +110,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 286a082969ccd604
+source_hash: 6be59826c2dc9978
 ---
 
 ## Instalación
@@ -145,7 +145,9 @@ través de `_extra_files`.
 
 `LibreYOLO()` enruta por el sufijo `.torchscript` y devuelve el mismo objeto
 `Results` que el checkpoint del que viene. Con `device="auto"`, el módulo se
-mapea a CUDA cuando está disponible, luego a MPS y luego a CPU.
+mapea a CUDA cuando está disponible y, si no, a CPU. Apple Silicon lo ejecuta en
+CPU, porque MPS no puede cargar las constantes float64 que lleva un grafo
+trazado.
 
 El segundo snippet es la vía para quien no tenga LibreYOLO instalado, y para el
 despliegue en C++ con libtorch, donde el mismo archivo se carga con

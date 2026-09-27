@@ -2,12 +2,14 @@
 title: Ma trận tăng cường dữ liệu
 seo_title: Họ LibreYOLO nào hỗ trợ phép tăng cường dữ liệu nào
 description: >-
-  Hỗ trợ điều khiển tăng cường dữ liệu theo từng họ: mười sáu điều khiển TrainConfig, ba trạng thái, sáu kiểu
-  pipeline và các điều khiển mà một họ âm thầm bỏ qua.
+  Hỗ trợ điều khiển tăng cường dữ liệu theo từng họ: mười sáu điều khiển
+  TrainConfig, ba trạng thái, sáu kiểu pipeline và các điều khiển mà một họ âm
+  thầm bỏ qua.
 lead: >-
-  Việc đặt điều khiển tăng cường dữ liệu không bảo đảm nó đến được pipeline. Trang này ghi cách từng họ có thể
-  huấn luyện xử lý mỗi điều khiển trong TrainConfig, dùng bảng khai báo do thư viện phân phối làm nguồn chân
-  lý duy nhất.
+  Việc đặt điều khiển tăng cường dữ liệu không bảo đảm nó đến được pipeline.
+  Trang này ghi cách từng họ có thể huấn luyện xử lý mỗi điều khiển trong
+  TrainConfig, dùng bảng khai báo do thư viện phân phối làm nguồn chân lý duy
+  nhất.
 keywords:
   - tăng cường dữ liệu libreyolo
   - mosaic_prob
@@ -18,9 +20,9 @@ keywords:
   - điều khiển TrainConfig
 last_verified: 1.6.0
 verification: >-
-  Danh sách điều khiển, trạng thái, kiểu pipeline, sai khác theo họ và hàm trợ giúp được đọc từ
-  libreyolo/data/augment/spec.py ở v1.6.0. Bảng đó được gắn với pipeline thực bằng
-  tests/unit/test_augment_spec.py.
+  Danh sách điều khiển, trạng thái, kiểu pipeline, sai khác theo họ và hàm trợ
+  giúp được đọc từ libreyolo/data/augment/spec.py ở v1.6.0. Bảng đó được gắn với
+  pipeline thực bằng tests/unit/test_augment_spec.py.
 snippets:
   usage:
     - label: Truy vấn spec trực tiếp
@@ -40,12 +42,12 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f3cba41ceadf131f
+source_hash: f0d31511715e3cc4
 ---
 ## Các điều khiển
 
-Đây là tên trường `TrainConfig`, không phải cách viết CLI. CLI ánh xạ các bí danh
-riêng vào chúng, nên `--mosaic` đặt `mosaic_prob`.
+Đây là tên trường `TrainConfig`, không phải cách viết CLI. `train()` và CLI ánh
+xạ các cách viết ngắn vào chúng, nên `mosaic` đặt `mosaic_prob`.
 
 | Điều khiển | Ý nghĩa |
 |---|---|
@@ -66,7 +68,7 @@ riêng vào chúng, nên `--mosaic` đặt `mosaic_prob`.
 | `mixup` | Xác suất batch-MixUp phân loại với nhãn mềm |
 | `cutmix` | Xác suất batch-CutMix phân loại với nhãn mềm |
 
-Bốn tham số cuối thuộc nhóm phân loại. Các họ phát hiện bỏ qua chúng. CLI định tuyến `mixup` sang trộn batch phân loại cho bộ phân loại và sang `mixup_prob` cho bộ phát hiện.
+Bốn tham số cuối thuộc nhóm phân loại. Các họ phát hiện bỏ qua chúng. `train()` và CLI định tuyến `mixup` sang trộn batch phân loại cho bộ phân loại và sang `mixup_prob` cho bộ phát hiện.
 
 <code-tabs name="usage" />
 

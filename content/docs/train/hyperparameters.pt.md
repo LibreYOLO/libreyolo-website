@@ -105,14 +105,14 @@ snippets:
         # Carrega o checkpoint da execução interrompida e então pede para
         retomar.
 
-        model = LibreYOLO("runs/train/exp/weights/last.pt")
+        model = LibreYOLO("runs/train/yolo9_exp/weights/last.pt")
 
-        model.train(data="my-dataset.yaml", epochs=100, resume=True)
+        model.train(data="my-dataset.yaml", resume=True)
     - label: CLI
       language: bash
       code: |
-        libreyolo train model=runs/train/exp/weights/last.pt \
-          data=my-dataset.yaml epochs=100 resume=true
+        libreyolo train model=runs/train/yolo9_exp/weights/last.pt \
+          data=my-dataset.yaml resume=true
   cfg:
     - label: Python
       language: python
@@ -126,7 +126,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: eac4e55fcf16ca15
+source_hash: ca1259a10e05a51d
 ---
 
 ## Definindo argumentos
@@ -272,8 +272,9 @@ em vez de ser sobrescrito.
 `save_period` escreve um `weights/epoch_<N>.pt` extra a cada N épocas, além de
 `weights/last.pt` depois de cada época e `weights/best.pt` sempre que a métrica
 acompanhada melhora. `eval_interval` define com que frequência a validação roda, e
-`patience` para a execução após esse número de épocas sem melhora, com `0`
-desativando o early stopping.
+a época final sempre valida; `val=False` desliga a validação, e uma execução assim
+não grava nenhum `best.pt`. `patience` para a execução após esse número de épocas
+sem melhora, com `0` desativando o early stopping.
 
 `cache` acelera as épocas repetidas mantendo as imagens decodificadas na RAM
 (`True` ou `"ram"`) ou como arquivos `.npy` ao lado das fontes (`"disk"`). As
@@ -286,19 +287,22 @@ dataloader, `"disk"` é a mais segura das duas.
 
 ## Resume
 
-`resume=True` continua uma execução interrompida. O checkpoint precisa ser
-carregado antes, porque o resume o lê a partir do modelo, e não de um argumento
-separado.
+`resume=True` continua uma execução interrompida a partir do checkpoint
+carregado; `resume="path/to/last.pt"` continua a partir desse arquivo.
 
 <code-tabs name="resume" />
 
-O resume restaura os pesos treinados, o estado do otimizador, os pesos do EMA e a
-contagem de atualizações, o acompanhamento da melhor métrica, a escala do
+O resume restaura os argumentos de treinamento salvos da execução, e um argumento
+passado explicitamente sobrescreve o salvo. Continua gravando no diretório de
+execução do checkpoint. Restaura os pesos treinados, o estado do otimizador,
+os pesos do EMA e a contagem de atualizações, o acompanhamento da melhor métrica, a escala do
 `GradScaler`, e os estados aleatórios do PyTorch, do CUDA e do NumPy. Ele começa na
 época do checkpoint mais um e avança o schedule até essa posição.
 
-Duas coisas que ele não faz. `resume=True` não pode ser combinado com
-`pretrained`, o que levanta exceção. E quando a chave de melhor métrica do
+Três coisas que ele não faz. `resume=True` não pode ser combinado com
+`pretrained`, o que levanta exceção. Pesos publicados e uma execução que já
+atingiu suas `epochs` não têm nada para retomar, e levantam um `ValueError` que
+diz isso. E quando a chave de melhor métrica do
 checkpoint difere da da execução atual, o acompanhamento da melhor métrica é zerado
 com um aviso, em vez de comparar valores que não significam a mesma coisa.
 

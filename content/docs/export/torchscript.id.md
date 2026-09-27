@@ -119,7 +119,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 286a082969ccd604
+source_hash: 6be59826c2dc9978
 ---
 
 ## Instalasi
@@ -154,7 +154,9 @@ lewat `_extra_files`.
 
 `LibreYOLO()` melakukan routing berdasarkan sufiks `.torchscript` dan
 mengembalikan objek `Results` yang sama seperti checkpoint asalnya. Dengan
-`device="auto"`, modulnya dipetakan ke CUDA bila tersedia, lalu MPS, lalu CPU.
+`device="auto"`, modulnya dipetakan ke CUDA bila tersedia, dan selain itu ke
+CPU. Apple Silicon menjalankannya di CPU, karena MPS tidak bisa memuat konstanta
+float64 yang dibawa graph hasil tracing.
 
 Snippet kedua adalah jalur untuk pembaca yang tidak memasang LibreYOLO, dan untuk
 deployment C++ lewat libtorch, tempat arsip yang sama dimuat dengan

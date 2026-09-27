@@ -2,11 +2,12 @@
 title: Nâng cấp lên 1.6.0
 seo_title: Nâng cấp LibreYOLO 1.5.0 lên 1.6.0
 description: >-
-  Các bước chuyển đổi tiền xử lý, mặc định huấn luyện, thư mục chạy, tài nguyên đã ghim, QAT và loader dữ liệu
-  trong LibreYOLO 1.6.0.
+  Các bước chuyển đổi tiền xử lý, mặc định huấn luyện, thư mục chạy, tài nguyên
+  đã ghim, QAT và loader dữ liệu trong LibreYOLO 1.6.0.
 lead: >-
-  Phiên bản 1.6.0 thay đổi tiền xử lý, mặc định huấn luyện và xử lý checkpoint. Đánh giá lại kết quả chuẩn đã
-  lưu và đặt rõ giá trị mặc định trước đây khi tái tạo lần chạy cũ.
+  Phiên bản 1.6.0 thay đổi tiền xử lý, mặc định huấn luyện và xử lý checkpoint.
+  Đánh giá lại kết quả chuẩn đã lưu và đặt rõ giá trị mặc định trước đây khi tái
+  tạo lần chạy cũ.
 keywords:
   - nâng cấp libreyolo
   - chuyển sang libreyolo 1.5.0
@@ -15,7 +16,7 @@ keywords:
   - yolox bn eps
   - faster coco eval mặc định
 last_verified: 1.6.0
-source_hash: f4fda6ef286113ab
+source_hash: c575718b8a7949f8
 ---
 ## 1.5.0 lên 1.6.0
 
@@ -36,6 +37,16 @@ source_hash: f4fda6ef286113ab
 - QAT tắt EMA, SyncBatchNorm và lấy trung bình checkpoint. Dùng checkpoint best/last của QAT mà không dựa vào các trạng thái đó.
 
 - Loader tùy chỉnh có hook thay đổi dataset phải dùng `persistent_workers=False` hoặc dựng lại worker sau thay đổi. Các bản sao nhiều worker duy trì liên tục không tương thích nay phát sinh lỗi.
+
+- Mảng ảnh NumPy được đọc là BGR, thứ tự của OpenCV. Truyền `color_format="rgb"` ở những chỗ bạn truyền một mảng RGB như `np.asarray(pil_image)`; đầu ra của `cv2.imread()` và các frame video không cần thay đổi.
+
+- Mảng NumPy hoặc tensor 4D là một batch: `predict()` trả về một danh sách gồm một `Results` cho mỗi ảnh thay vì chỉ dùng ảnh đầu tiên.
+
+- `train(resume=True)` và `train(resume="path/to/last.pt")` khôi phục các đối số huấn luyện đã lưu của lần chạy và tiếp tục ghi vào thư mục chạy của nó; đối số bạn truyền tường minh được ưu tiên. Tiếp tục từ trọng số đã phát hành, hoặc từ một lần chạy đã đạt đủ `epochs`, sẽ phát sinh `ValueError`.
+
+- Khi bật đánh giá, epoch cuối cùng luôn được đánh giá, nên các lần chạy ngắn hơn `eval_interval` nay báo cáo chỉ số và ghi ra `best.pt`. `val=False` tắt đánh giá, kể cả ở epoch cuối. Đánh giá trong lúc huấn luyện ghi vào `<run>/val` thay vì `runs/val/`.
+
+- Lỗi của lệnh CLI `train` báo loại lỗi của chúng, nên lỗi cấu hình thoát với mã 2 thay vì mã 1 kèm `io_error`.
 
 Xem [nhật ký thay đổi](/docs/changelog) để biết toàn bộ bản phát hành và [nhập trọng số](/docs/migrate) để chuyển đổi checkpoint.
 

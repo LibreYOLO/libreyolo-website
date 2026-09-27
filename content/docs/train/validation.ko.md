@@ -60,7 +60,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: "ce7d26a5cd72d988"
+source_hash: da1e3ccfd1efba73
 ---
 
 ## 검증을 실행
@@ -69,9 +69,9 @@ source_hash: "ce7d26a5cd72d988"
 
 <code-tabs name="val" />
 
-반환 값은 일반 `dict[str, float]`입니다. 모든 키는 문자 그대로이므로 위치가 아니라 이름으로 읽으십시오.
+반환 값은 `dict[str, float]`입니다. 모든 키는 문자 그대로이므로 위치가 아니라 이름으로 읽으십시오.
 
-주요 인수는 `data`, `split`, `batch`, `imgsz`, `conf`, `iou`, `workers`, `device`, `augment`, `save_json` 및 `verbose`입니다. `conf`는 `0.001`로 기본 설정되며, `iou`는 `0.6`로 기본 설정되는데, 둘 다 예측 기본값보다 훨씬 느슨합니다. 이는 mAP 스윕이 낮은 신뢰도의 꼬리값을 필요로 하기 때문입니다. `imgsz`는 고정 숫자 대신 모델 자체 입력 크기를 기본값으로 사용합니다. `split`는 `val`, `test` 또는 `train`만 허용하며 그 외는 허용하지 않습니다.
+주요 인수는 `data`, `split`, `batch`, `imgsz`, `conf`, `iou`, `workers`, `device`, `augment`, `save_json` 및 `verbose`입니다. `conf`는 `0.001`로 기본 설정되며, `iou`는 `0.6`로 기본 설정되는데, 둘 다 예측 기본값보다 훨씬 느슨합니다. 이는 mAP 스윕이 낮은 신뢰도의 꼬리값을 필요로 하기 때문입니다. `imgsz`는 고정 숫자 대신 모델 자체 입력 크기를 기본값으로 사용합니다. `split`는 `val`, `test` 또는 `train`만 허용하며 그 외는 허용하지 않습니다. `data`가 없으면 학습된 체크포인트는 학습에 사용한 데이터셋으로 검증하며, 공개된 가중치에는 데이터셋이 없으므로 `data=`가 필요합니다.
 
 검증 구성의 다른 모든 필드는 키워드 인수로 전달되며, 여기에는 `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`, `cache` 및 `save_plots`가 포함됩니다.
 
@@ -117,7 +117,7 @@ OBB의 `metrics/precision`와 `metrics/recall`는 별칭이 아닙니다: 이들
 
 대부분의 작업은 또한 `fitness` 키를 반환하며, 단일 숫자 최적 체크포인트 선택에서 기본적으로 사용됩니다. 탐지, 분할 및 OBB는 이를 포함하지 않으며; 그들의 계열는 `metrics/mAP50-95`에서 선택되며, 해당 딕셔너리는 반환합니다. 포즈는 `fitness`나 `metrics/mAP50-95`를 반환하지 않으며; 트레이너는 대신 `best_metric_key`를 `metrics/keypoints_mAP50-95`로 설정합니다.
 
-ImageFolder 분류는 검증 정답에 있는 클래스의 평균을 구한 매크로 `metrics/precision`, `metrics/recall`, `metrics/f1`을 추가합니다. 기본 적합도는 top-1을 유지합니다. 탐지는 IoU 0.50에서 micro-F1을 최대화하는 임계값을 선택하여 `metrics/best_conf`, `metrics/best_conf_f1`, 클래스 이름을 키로 하는 `metrics/best_conf_per_class`도 반환합니다. 점수가 같은 탐지는 함께 처리하며, 동률이면 더 높은 임계값을 선택합니다. 양수 F1이 없으면 NaN을 반환합니다. 분할은 이 임계값 키를 제공하지 않습니다.
+ImageFolder 분류는 검증 정답에 있는 클래스의 평균을 구한 매크로 `metrics/precision`, `metrics/recall`, `metrics/f1`을 추가합니다. 기본 적합도는 top-1을 유지합니다. 탐지는 IoU 0.50에서 micro-F1을 최대화하는 임계값을 선택하여 `metrics/best_conf`, `metrics/best_conf_f1`도 반환하며, 클래스 이름을 키로 하는 임계값은 `metrics.box.best_conf_per_class`에 넣습니다. 점수가 같은 탐지는 함께 처리하며, 동률이면 더 높은 임계값을 선택합니다. 양수 F1이 없으면 0.0을 반환합니다. 분할은 이 임계값 키를 제공하지 않습니다.
 
 ## 속도 키
 
@@ -186,7 +186,7 @@ FOMO는 아무것도 바꾸지 않는 예외입니다: 그 검증자는 항상 �
 
 ## 파일이 검증을 작성
 
-`val()`는 항상 `config.yaml`를 자신의 저장 디렉토리에 작성하며, `save_dir`가 제공되지 않은 경우 기본적으로 `runs/val/<model>_<size>_<timestamp>`를 사용합니다.
+`val()`는 항상 `config.yaml`를 자신의 저장 디렉토리에 작성하며, `save_dir`가 제공되지 않은 경우 기본적으로 `runs/val/<model>_<size>_<timestamp>`를 사용합니다. `project`, `name`, `exist_ok`는 학습과 같은 방식으로 이를 선택합니다: `project/name`이며, `exist_ok=True`가 아니면 번호가 증가하는 접미사가 붙습니다.
 
 <code-tabs name="json" />
 
@@ -200,7 +200,7 @@ FOMO는 아무것도 바꾸지 않는 예외입니다: 그 검증자는 항상 �
 
 ## 학습 중 검증
 
-학습은 데이터셋의 `val` 분할에 대해 매 `eval_interval` 에폭마다 검증을 수행하며, 생성되는 지표는 `best.pt` 선택, `patience` 조기 종료, 그리고 모든 로거의 `val/` 키를 결정하는 데 사용됩니다. EMA가 켜져 있을 때 검증은 EMA 가중치로 실행됩니다.
+학습은 데이터셋의 `val` 분할에 대해 매 `eval_interval` 에폭마다, 그리고 마지막 에폭 뒤에는 항상 검증을 수행하며, 생성되는 지표는 `best.pt` 선택, `patience` 조기 종료, 그리고 모든 로거의 `val/` 키를 결정하는 데 사용됩니다. EMA가 켜져 있을 때 검증은 EMA 가중치로 실행됩니다. 검증 파일은 실행 내부의 `val/` 디렉토리에 저장됩니다. `val=False`는 마지막 에폭을 포함해 학습 중 검증을 끕니다.
 
 `eval_interval`, `patience` 및 `save_plots`에 대해서는 [하이퍼파라미터](/docs/train/hyperparameters)를 참조하고, 숫자가 어디에 들어가는지에 대해서는 [실험 로거](/docs/train/loggers)를 참조하십시오.
 

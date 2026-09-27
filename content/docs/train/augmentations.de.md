@@ -74,7 +74,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 42668148fcc79c1f
+source_hash: 3112c6f54b98ef9f
 ---
 
 ## Festlegen der Einstellungen
@@ -83,7 +83,7 @@ Die Augmentationseinstellungen sind gewöhnliche Argumente von `train()`.
 
 <code-tabs name="train" />
 
-Zwei davon besitzen kürzere CLI-Schreibweisen: `mosaic` wird auf `mosaic_prob` und `mixup` auf `mixup_prob` abgebildet. Alle anderen Einstellungen heißen an beiden Stellen gleich.
+Drei davon besitzen kürzere Schreibweisen, die `train()` und die CLI gleichermaßen akzeptieren: `mosaic` wird auf `mosaic_prob` abgebildet, `fliplr` auf `flip_prob` und bei der Detektion `mixup` auf `mixup_prob`. Werden eine kurze Schreibweise und ihr Feld mit unterschiedlichen Werten übergeben, wird ein Fehler ausgelöst. Alle anderen Einstellungen heißen an beiden Stellen gleich.
 
 ## Drei statt zwei Zustände
 
@@ -160,7 +160,7 @@ Vier Einstellungen steuern ausschließlich die Klassifizierungspipeline. Erkennu
 
 Alle vier sind standardmäßig deaktiviert. Das Klassifizierungstraining bleibt unverändert, sofern du sie nicht anforderst.
 
-Die CLI ordnet `mixup` nach Aufgabe zu: Klassifikation verwendet Batch-Mischung, Detektion verwendet `mixup_prob`.
+`train()` und die CLI ordnen `mixup` nach Aufgabe zu: Klassifikation verwendet Batch-Mischung, Detektion verwendet `mixup_prob`.
 
 `scale=0.5` bedeutet einen zufälligen Ausschnittsflächenbereich von `(0.5, 1.0)`; ein explizites Paar setzt beide Grenzen. `crop_pct=None` behält das Auswertungsskalierungsverhältnis der Familie bei. Ein abweichender Wert beeinflusst die Auswertung beim Training und bei der Validierung; der Export behält die native Familienvorverarbeitung.
 

@@ -13,8 +13,10 @@ keywords:
   - no_aug_epochs
   - 数据增强支持矩阵
   - TrainConfig 参数
-last_verified: "1.6.0"
-verification: "参数列表、状态、原型、各家族的差异以及辅助函数，均读自 v1.6.0 的 libreyolo/data/augment/spec.py。那张表格由 tests/unit/test_augment_spec.py 锁定到真实的流水线上。"
+last_verified: 1.6.0
+verification: >-
+  参数列表、状态、原型、各家族的差异以及辅助函数，均读自 v1.6.0 的 libreyolo/data/augment/spec.py。那张表格由
+  tests/unit/test_augment_spec.py 锁定到真实的流水线上。
 snippets:
   usage:
     - label: 直接查询 spec
@@ -34,13 +36,13 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f3cba41ceadf131f
+source_hash: f0d31511715e3cc4
 ---
 
 ## 参数一览
 
-这些是 `TrainConfig` 的字段名，不是 CLI 的写法。CLI 把自己的别名映射到它们上面，
-所以 `--mosaic` 设置的是 `mosaic_prob`。
+这些是 `TrainConfig` 的字段名，不是 CLI 的写法。`train()` 和 CLI 会把简短写法映射到
+它们上面，所以 `mosaic` 设置的是 `mosaic_prob`。
 
 | 参数 | 含义 |
 |---|---|
@@ -61,7 +63,7 @@ source_hash: f3cba41ceadf131f
 | `mixup` | 分类的 batch-MixUp 概率，带软标签 |
 | `cutmix` | 分类的 batch-CutMix 概率，带软标签 |
 
-最后四项属于分类参数组。检测家族忽略它们。CLI 将分类器的 `mixup` 分发到分类批量混合，将检测器的 `mixup` 分发到 `mixup_prob`。
+最后四项属于分类参数组。检测家族忽略它们。`train()` 和 CLI 将分类器的 `mixup` 分发到分类批量混合，将检测器的 `mixup` 分发到 `mixup_prob`。
 
 <code-tabs name="usage" />
 

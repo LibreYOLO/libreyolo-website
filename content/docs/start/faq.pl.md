@@ -15,7 +15,7 @@ keywords:
   - LibreYOLO CLI
   - LibreYOLO offline
 last_verified: 1.6.0
-source_hash: d0d1f00bab2cee6e
+source_hash: 13810bf9ea01c459
 ---
 
 ## Od którego modelu zacząć?
@@ -88,8 +88,10 @@ modelu informuje o tym przed próbą. Zobacz
 
 ## Co zwraca val?
 
-Zwykły słownik, a nie obiekt. Klucze detekcji obejmują `metrics/precision`,
-`metrics/recall`, `metrics/mAP50` i `metrics/mAP50-95`. Inne zadania zwracają
+Słownik z nazwami metryk jako kluczami. Klucze detekcji obejmują
+`metrics/precision`, `metrics/recall`, `metrics/mAP50` i `metrics/mAP50-95`,
+a wyniki detekcji i segmentacji zawierają też wyniki dla poszczególnych obrazów
+w `metrics.box`. Inne zadania zwracają
 odpowiednie dla nich klucze, takie jak `metrics/accuracy_top1` dla klasyfikacji
 albo `metrics/PQ`, `metrics/SQ` i `metrics/RQ` dla segmentacji panoptycznej.
 

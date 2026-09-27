@@ -20,7 +20,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Kanonische Aufgaben
-    value: 17
+    value: 20
   - label: Support-Stufen
     value: 'Flagship, Core, Supported, Inference only, Museum, Sibling tier'
 snippets:
@@ -49,12 +49,12 @@ snippets:
         # "pose", "det" zu "detect", "semantic-segmentation" zu "semantic".
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
         print(model.task)
-source_hash: 23d045463a6a8411
+source_hash: c745a3c602db00ea
 ---
 
 ## Aufgaben
 
-Eine Aufgabe bestimmt, was ein Modell zurückgibt. LibreYOLO besitzt 17
+Eine Aufgabe bestimmt, was ein Modell zurückgibt. LibreYOLO besitzt 20
 kanonische Aufgabennamen. Jeder bezeichnet das Feld im `Results`-Objekt, das
 die jeweilige Ausgabe enthält.
 
@@ -71,12 +71,15 @@ die jeweilige Ausgabe enthält.
 | `depth` | Eine dichte Karte relativer inverser Tiefe |
 | `normal` | Ein dichtes Feld von Einheitsvektoren für Oberflächennormalen |
 | `edge` | Eine dichte Kantenwahrscheinlichkeitskarte |
+| `albedo` | Eine dichte Albedo-Karte in linearem RGB, die Oberflächenfarbe ohne Beleuchtung |
 | `restore` | Ein restauriertes RGB-Bild für Entschärfung, Entrauschen oder Super-Resolution |
 | `matte` | Eine weiche Vordergrundkarte von 0 bis 1 für die Hintergrundentfernung |
 | `ocr` | Textvierecke mit Transkripten in Lesereihenfolge |
 | `embed` | Ein L2-normalisierter Vektor, dessen Skalarprodukt die Übereinstimmung misst |
 | `gaze` | Eine Blickrichtung pro erkanntem Gesicht |
 | `mesh` | Ein positionierter 3D-Körper pro erkannter Person |
+| `detect3d` | 3D-Boxen in Kamerakoordinaten mit Klasse und Confidence |
+| `act` | Ein Block von Roboteraktionen, vorhergesagt aus Kamera-Frames und Roboterzustand |
 
 Diese Namen stehen in Checkpoint-Metadaten und Dateinamen. Vertraute Aliasse
 werden überall akzeptiert, wo du eine Aufgabe übergibst, und vor jedem weiteren

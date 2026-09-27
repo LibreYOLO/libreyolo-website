@@ -14,7 +14,6 @@ keywords:
   - экспорт yolo в tensorrt
   - аргументы libreyolo export
 last_verified: 1.6.0
-
 meta:
   - label: Команда
     value: libreyolo export
@@ -48,7 +47,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 0cc60dd7c5c9f864
+source_hash: 290b778a1060a760
 ---
 
 ## Синопсис
@@ -71,6 +70,7 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 | `batch` | `1` | Размер батча при экспорте |
 | `half` | `false` | Точность FP16 |
 | `int8` | `false` | Квантизация INT8 |
+| `quantize` | | Точность: `16` (FP16), `8` (INT8) или `32` (FP32); заменяет `half` и `int8` |
 | `dynamic` | `false` | Динамические формы входа (ONNX) |
 | `simplify` | `true` | Упрощение графа ONNX |
 | `nms` | `false` | Встроить NMS в модель. Только ONNX и CoreML |
@@ -117,7 +117,8 @@ JSON-выводе и в строке лога всегда стоит `tensorrt`
 завершается с `config_unsupported`.
 
 `half=true` вместе с `int8=true` — не ошибка. Побеждает INT8, `half`
-отбрасывается, а в stderr уходит предупреждение.
+отбрасывается, а в stderr уходит предупреждение. Если `quantize` расходится с
+`half` или `int8`, команда завершается с `config_conflict`.
 
 `name` и `verify` сегодня относятся только к RKNN. Если передать любой из них с
 другим форматом, он не игнорируется, а команда завершается с

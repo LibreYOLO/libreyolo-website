@@ -153,9 +153,10 @@ discovering the ceiling with an out-of-memory error twenty minutes in. See
 [Hyperparameters](/docs/train/hyperparameters).
 
 On a multi-GPU box, `device="0,1,2,3"` spawns one worker per GPU by itself, and
-`batch` stays the global batch across all of them. The `__main__` guard is
-mandatory, because each worker re-imports the script. That, and the rest of the
-distributed behavior, is on [Multi-GPU training](/docs/train/multi-gpu).
+`batch` stays the global batch across all of them. The workers do not replay an
+unguarded script's top-level code, so a `__main__` guard is optional. That, and
+the rest of the distributed behavior, is on
+[Multi-GPU training](/docs/train/multi-gpu).
 
 ## Watch it from outside
 

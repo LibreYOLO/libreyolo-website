@@ -82,9 +82,10 @@ header tells you before you try. See [core concepts](/docs/concepts).
 
 ## What does val return?
 
-A plain dictionary, not an object. Detection keys include
+A dictionary keyed by metric name. Detection keys include
 `metrics/precision`, `metrics/recall`, `metrics/mAP50` and
-`metrics/mAP50-95`. Other tasks return the keys that make sense for them, such
+`metrics/mAP50-95`, and detection and segmentation results also carry
+per-image results on `metrics.box`. Other tasks return the keys that make sense for them, such
 as `metrics/accuracy_top1` for classification or `metrics/PQ`, `metrics/SQ` and
 `metrics/RQ` for panoptic segmentation.
 

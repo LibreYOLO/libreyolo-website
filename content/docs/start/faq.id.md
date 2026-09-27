@@ -15,7 +15,7 @@ keywords:
   - cli libreyolo
   - libreyolo offline
 last_verified: 1.6.0
-source_hash: d0d1f00bab2cee6e
+source_hash: 13810bf9ea01c459
 ---
 
 ## Model mana yang sebaiknya digunakan pertama kali?
@@ -85,8 +85,9 @@ header halaman model memberi tahu hal ini sebelum dicoba. Lihat
 
 ## Apa yang dikembalikan val?
 
-Dictionary biasa, bukan objek. Kunci deteksi mencakup `metrics/precision`,
-`metrics/recall`, `metrics/mAP50`, dan `metrics/mAP50-95`. Task lain
+Dictionary dengan kunci nama metrik. Kunci deteksi mencakup `metrics/precision`,
+`metrics/recall`, `metrics/mAP50`, dan `metrics/mAP50-95`, dan hasil deteksi
+serta segmentasi juga membawa hasil per gambar di `metrics.box`. Task lain
 mengembalikan kunci yang relevan, seperti `metrics/accuracy_top1` untuk
 classification atau `metrics/PQ`, `metrics/SQ`, dan `metrics/RQ` untuk
 panoptic segmentation.

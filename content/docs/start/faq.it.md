@@ -17,7 +17,7 @@ keywords:
   - libreyolo cli
   - libreyolo senza internet
 last_verified: 1.6.0
-source_hash: d0d1f00bab2cee6e
+source_hash: 13810bf9ea01c459
 ---
 
 ## Con quale modello conviene iniziare?
@@ -91,9 +91,10 @@ te lo dice prima ancora che tu ci provi. Vedi [concetti fondamentali](/docs/conc
 
 ## Cosa restituisce val?
 
-Un semplice dizionario, non un oggetto. Per il rilevamento le chiavi includono
-`metrics/precision`, `metrics/recall`, `metrics/mAP50` e `metrics/mAP50-95`. Gli
-altri task restituiscono le chiavi che hanno senso per loro, come
+Un dizionario con i nomi delle metriche come chiavi. Per il rilevamento le chiavi
+includono `metrics/precision`, `metrics/recall`, `metrics/mAP50` e
+`metrics/mAP50-95`, e i risultati di rilevamento e segmentazione portano anche i
+risultati per immagine su `metrics.box`. Gli altri task restituiscono le chiavi che hanno senso per loro, come
 `metrics/accuracy_top1` per la classificazione o `metrics/PQ`, `metrics/SQ` e
 `metrics/RQ` per la segmentazione panottica.
 

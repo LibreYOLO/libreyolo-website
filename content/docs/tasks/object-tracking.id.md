@@ -75,7 +75,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: 384ee3d6a05190aa
+source_hash: b24043e73b35092d
 ---
 
 ## Definisi
@@ -118,7 +118,10 @@ Tracking berjalan pada model PyTorch native. Artefak hasil ekspor yang dimuat
 melalui `LibreYOLO("model.onnx")` mengembalikan objek backend runtime dengan
 `predict()`, tetapi tanpa `track()`.
 
-Empat tracker disertakan dan dipilih melalui argumen `tracker`:
+Empat tracker disertakan dan dipilih melalui argumen `tracker`. Ejaan `.yaml`,
+seperti `"bytetrack.yaml"`, memilih tracker bawaan yang sama; LibreYOLO tidak
+membaca berkas YAML tracker, dan memunculkan error jika berkas dengan nama itu
+ada di direktori kerja.
 
 `"bytetrack"` adalah default. Tracker ini hanya menggunakan motion, dengan
 Kalman filter dan asosiasi tiga tahap: deteksi confidence tinggi, pass kedua
@@ -155,6 +158,10 @@ internal agar deteksi lemah tersedia bagi recovery pass. Deep OC-SORT menjalanka
 detektor pada `det_thresh`. Untuk ByteTrack dan BoT-SORT, `track_conf` harus sama
 dengan atau di atas `track_low_thresh`, dengan default 0.1.
 
+`conf`, bila diberikan, adalah ambang batas deteksi milik `predict()`: deteksi di
+bawahnya tidak pernah sampai ke tracker. Tanpanya, detektor berjalan pada ambang
+batas di atas.
+
 Pengaturan tracker masuk melalui dua cara. Berikan instance konfigurasi ke
 `tracker_config=`, dan jenisnya memilih tracker sehingga `tracker=` redundan.
 Atau berikan kolom sebagai keyword argument dan biarkan `track()` membuat
@@ -162,7 +169,7 @@ konfigurasi untuk tracker terpilih; kunci tidak dikenal menghasilkan peringatan.
 Dalam kedua cara, `track_conf` diabaikan setelah kunci pencocokan ditetapkan
 eksplisit.
 
-Argumen lainnya sama dengan prediksi: `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show`, dan `save` dengan `output_path`. Sumber dapat berupa video atau urutan gambar. Lihat [prediksi](/docs/predict) untuk penanganan hasil.
+Argumen lainnya sama dengan prediksi: `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show`, dan `save` dengan `output_path`. `persist=True` mempertahankan tracker beserta ID-nya dari pemanggilan `track()` sebelumnya pada model yang sama, untuk loop yang memberikan satu frame per pemanggilan, seperti `model.track(frame, persist=True)`. Sumber dapat berupa video atau urutan gambar. Lihat [prediksi](/docs/predict) untuk penanganan hasil.
 
 Gambar, folder yang diurutkan berdasarkan nama berkas, daftar, tuple, dan iterator gambar lazy dapat menyediakan frame berurutan. `fps=30.0` menentukan waktunya dan `color_format="auto"` memilih interpretasi input. `vid_stride` mengurangi laju frame yang dipertahankan menjadi `fps / vid_stride`.
 

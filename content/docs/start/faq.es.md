@@ -17,7 +17,7 @@ keywords:
   - libreyolo cli
   - libreyolo sin internet
 last_verified: 1.6.0
-source_hash: d0d1f00bab2cee6e
+source_hash: 13810bf9ea01c459
 ---
 
 ## ¿Con qué modelo debería empezar?
@@ -88,9 +88,10 @@ cabecera de la página de cada modelo te lo dice antes de intentarlo. Consulta
 
 ## ¿Qué devuelve val?
 
-Un diccionario plano, no un objeto. Las claves de detección incluyen
+Un diccionario indexado por nombre de métrica. Las claves de detección incluyen
 `metrics/precision`, `metrics/recall`, `metrics/mAP50` y
-`metrics/mAP50-95`. Las demás tareas devuelven las claves que tienen sentido
+`metrics/mAP50-95`, y los resultados de detección y segmentación llevan además
+resultados por imagen en `metrics.box`. Las demás tareas devuelven las claves que tienen sentido
 para ellas, como `metrics/accuracy_top1` para clasificación o `metrics/PQ`,
 `metrics/SQ` y `metrics/RQ` para segmentación panóptica.
 

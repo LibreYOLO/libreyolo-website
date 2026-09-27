@@ -43,7 +43,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
-source_hash: 7b5b53c46df00c06
+source_hash: 95935c1f8ca2d6db
 ---
 
 ## Synopsis
@@ -99,6 +99,10 @@ manquante depuis cette seule commande.
 
 Liste chaque famille de modèles avec ses tâches, ses tailles, les noms CLI qui
 pointent vers ses checkpoints, et la résolution d'entrée de chaque taille.
+Seuls les noms que `model=` peut charger sont listés. Les noms sans poids
+publiés apparaissent sur une ligne séparée
+`No published weights (local checkpoints only)`, et une famille sans nom CLI
+affiche à la place sa classe Python ou sa propre commande.
 
 ```bash
 libreyolo models

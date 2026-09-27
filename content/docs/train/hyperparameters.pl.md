@@ -106,14 +106,14 @@ snippets:
         # Wczytaj checkpoint przerwanego przebiegu, a następnie zażądaj
         wznowienia.
 
-        model = LibreYOLO("runs/train/exp/weights/last.pt")
+        model = LibreYOLO("runs/train/yolo9_exp/weights/last.pt")
 
-        model.train(data="my-dataset.yaml", epochs=100, resume=True)
+        model.train(data="my-dataset.yaml", resume=True)
     - label: CLI
       language: bash
       code: |
-        libreyolo train model=runs/train/exp/weights/last.pt \
-          data=my-dataset.yaml epochs=100 resume=true
+        libreyolo train model=runs/train/yolo9_exp/weights/last.pt \
+          data=my-dataset.yaml resume=true
   cfg:
     - label: Python
       language: python
@@ -127,7 +127,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: eac4e55fcf16ca15
+source_hash: ca1259a10e05a51d
 ---
 
 ## Ustawianie argumentów
@@ -277,9 +277,10 @@ katalog otrzymuje zwiększony sufiks zamiast zostać nadpisany.
 
 `save_period` zapisuje dodatkowy plik `weights/epoch_<N>.pt` co N epok, oprócz
 `weights/last.pt` po każdej epoce i `weights/best.pt` przy każdej poprawie
-śledzonej metryki. `eval_interval` ustawia częstotliwość walidacji, a `patience`
-zatrzymuje przebieg po tylu epokach bez poprawy. Wartość `0` wyłącza early
-stopping.
+śledzonej metryki. `eval_interval` ustawia częstotliwość walidacji, a ostatnia
+epoka jest zawsze walidowana; `val=False` wyłącza walidację, a taki przebieg nie
+zapisuje `best.pt`. `patience` zatrzymuje przebieg po tylu epokach bez poprawy.
+Wartość `0` wyłącza early stopping.
 
 `cache` przyspiesza powtarzane epoki przez przechowywanie zdekodowanych obrazów
 w RAM (`True` lub `"ram"`) albo jako pliki `.npy` obok źródeł (`"disk"`). Odczyty
@@ -292,18 +293,22 @@ workerach modułu wczytującego dane bezpieczniejszą opcją jest `"disk"`.
 
 ## Wznawianie
 
-`resume=True` kontynuuje przerwany przebieg. Najpierw trzeba wczytać checkpoint,
-ponieważ wznowienie odczytuje go z modelu, a nie z osobnego argumentu.
+`resume=True` kontynuuje przerwany przebieg od wczytanego checkpointu;
+`resume="path/to/last.pt"` kontynuuje zamiast tego od tego pliku.
 
 <code-tabs name="resume" />
 
-Wznowienie przywraca wytrenowane wagi, stan optymalizatora, wagi EMA i liczbę
+Wznowienie przywraca zapisane argumenty trenowania przebiegu, a argument
+przekazany jawnie zastępuje zapisany. Nadal zapisuje dane do katalogu przebiegu
+checkpointu. Przywraca wytrenowane wagi, stan optymalizatora, wagi EMA i liczbę
 aktualizacji, śledzenie najlepszej metryki, skalę `GradScaler` oraz stany losowe
 PyTorch, CUDA i NumPy. Rozpoczyna od epoki następującej po epoce checkpointu i
 przewija harmonogram do tej pozycji.
 
-Nie wykona dwóch czynności. `resume=True` nie można łączyć z `pretrained`, gdyż
-powoduje to błąd. Jeśli klucz najlepszej metryki checkpointu różni się od klucza
+Nie wykona trzech czynności. `resume=True` nie można łączyć z `pretrained`, gdyż
+powoduje to błąd. Opublikowane wagi i przebieg, który osiągnął już swoją wartość
+`epochs`, nie zawierają niczego do wznowienia i zgłaszają informujący o tym
+`ValueError`. Jeśli klucz najlepszej metryki checkpointu różni się od klucza
 bieżącego przebiegu, śledzenie najlepszej metryki jest zerowane z ostrzeżeniem,
 zamiast porównywać wartości o różnych znaczeniach.
 

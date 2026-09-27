@@ -6,8 +6,8 @@ description: >-
   gradient accumulation dan resume, plus mengapa default berbeda per family.
 lead: >-
   Setiap argumen pelatihan adalah kolom pada dataclass TrainConfig. Kelas dasar
-  mendefinisikan kolom dan defaultnya; setiap model family membuat subclass darinya dan
-  mengganti default yang diubah oleh resep yang dipublikasikannya.
+  mendefinisikan kolom dan defaultnya; setiap model family membuat subclass
+  darinya dan mengganti default yang diubah oleh resep yang dipublikasikannya.
 keywords:
   - argumen train
   - learning rate
@@ -102,14 +102,14 @@ snippets:
         # Memuat checkpoint dari jalannya yang terhenti, lalu minta untuk
         melanjutkan.
 
-        model = LibreYOLO("runs/train/exp/weights/last.pt")
+        model = LibreYOLO("runs/train/yolo9_exp/weights/last.pt")
 
-        model.train(data="my-dataset.yaml", epochs=100, resume=True)
+        model.train(data="my-dataset.yaml", resume=True)
     - label: CLI
       language: bash
       code: |
-        libreyolo train model=runs/train/exp/weights/last.pt \
-          data=my-dataset.yaml epochs=100 resume=true
+        libreyolo train model=runs/train/yolo9_exp/weights/last.pt \
+          data=my-dataset.yaml resume=true
   cfg:
     - label: Python
       language: python
@@ -123,7 +123,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: eac4e55fcf16ca15
+source_hash: ca1259a10e05a51d
 ---
 
 ## Mengatur argumen
@@ -262,9 +262,10 @@ alih-alih ditimpa.
 
 `save_period` menulis `weights/epoch_<N>.pt` tambahan setiap N epoch, di atas
 `weights/last.pt` setelah setiap epoch dan `weights/best.pt` setiap kali metrik yang dilacak
-membaik. `eval_interval` menentukan seberapa sering validasi dijalankan, dan `patience`
-menghentikan run setelah selama itu epoch tanpa perbaikan, dengan `0` menonaktifkan
-early stopping.
+membaik. `eval_interval` menentukan seberapa sering validasi dijalankan, dan epoch
+terakhir selalu divalidasi; `val=False` mematikan validasi, dan run seperti itu tidak
+menulis `best.pt`. `patience` menghentikan run setelah selama itu epoch tanpa
+perbaikan, dengan `0` menonaktifkan early stopping.
 
 `cache` mempercepat epoch berulang dengan menyimpan gambar yang telah didekode di RAM (`True` atau
 `"ram"`) atau sebagai berkas `.npy` di samping sumber (`"disk"`). Bacaan yang disimpan dalam cache adalah
@@ -277,18 +278,23 @@ keduanya.
 
 ## Ringkasan
 
-`resume=True` melanjutkan perjalanan yang terhenti. checkpoint harus dimuat
-pertama, karena resume membacanya dari model, bukan dari argumen terpisah.
+`resume=True` melanjutkan run yang terhenti dari checkpoint yang dimuat;
+`resume="path/to/last.pt"` justru melanjutkan dari berkas tersebut.
 
 <code-tabs name="resume" />
 
-Resume memulihkan bobot yang dilatih, status optimizer, bobot EMA dan
+Resume memulihkan argumen pelatihan tersimpan milik run tersebut, dan argumen yang
+diberikan secara eksplisit menggantikan nilai yang tersimpan. Resume tetap menulis
+ke direktori run milik checkpoint. Resume memulihkan bobot yang dilatih, status
+optimizer, bobot EMA dan
 perbarui jumlah, pelacakan metrik terbaik, skala `GradScaler`, dan PyTorch,
 Status acak CUDA dan NumPy. Itu dimulai pada checkpoint epoch ditambah satu dan
 mempercepat jadwal ke posisi tersebut.
 
-Dua hal yang tidak akan dilakukannya. `resume=True` tidak dapat digabungkan dengan `pretrained`,
-yang menimbulkan masalah. Dan ketika kunci metrik-terbaik checkpoint berbeda dari
+Tiga hal yang tidak akan dilakukannya. `resume=True` tidak dapat digabungkan dengan `pretrained`,
+yang menimbulkan masalah. Bobot rilis dan run yang sudah mencapai `epochs`-nya
+tidak menyimpan apa pun untuk dilanjutkan, dan memunculkan `ValueError` yang
+menyebutkan hal itu. Dan ketika kunci metrik-terbaik checkpoint berbeda dari
 jalannya saat ini, pelacakan metrik-terbaik direset ke nol dengan peringatan
 alih-alih membandingkan nilai yang tidak berarti sama.
 

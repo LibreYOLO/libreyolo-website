@@ -42,7 +42,11 @@ snippets:
         array = np.asarray(pil_image)
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+        # NumPy arrays are read as BGR unless told otherwise; this one is RGB.
+        result = model(array, color_format="rgb")
+        print(type(array).__name__, len(result.boxes))
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: A folder
@@ -205,15 +209,18 @@ A single image source accepts seven types.
 |---|---|
 | `str` or `pathlib.Path` | Local file, `http(s)://`, `s3://` or `gs://` |
 | `PIL.Image.Image` | Converted to RGB |
-| `numpy.ndarray` | 2D grayscale, or 3D HWC or CHW; a 4D array uses its first image |
-| `torch.Tensor` | CHW or NCHW, read as RGB; a batched tensor uses its first image |
+| `numpy.ndarray` | 2D grayscale, or 3D HWC or CHW in BGR order; a 4D array is a batch |
+| `torch.Tensor` | CHW or NCHW, read as RGB; a 4D tensor is a batch |
 | `bytes` | Encoded image data |
 | `io.BytesIO` | Encoded image data |
 
+A 4D array or tensor returns a list with one `Results` per image.
+
 Everything is converted to RGB before preprocessing. NumPy arrays are the one
 case where channel order is ambiguous, so `color_format` controls it:
-`"auto"` (the default) leaves the array as-is, `"bgr"` reverses the channels,
-which is what a frame read with OpenCV needs.
+`"auto"` (the default) and `"bgr"` read the array as BGR, the order OpenCV
+returns, and `"rgb"` leaves it as-is, which is what an array made from a PIL
+image needs.
 
 Float arrays are rescaled by their own range: values at or below `1.0` are
 multiplied by 255, higher values are clipped into `[0, 255]`. An RGBA array
@@ -362,5 +369,5 @@ Video and live sources are written as a single `.mp4` named after the source.
 file, a path without one as a directory. `output_file_format` selects the
 still-image encoding and accepts `jpg`, `png` or `webp`.
 
-After a save, the written path is also attached to the result as
+After an image is saved, the written path is also attached to the result as
 `result.saved_path`.

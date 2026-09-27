@@ -19,8 +19,14 @@ keywords:
   - youtube інференс
   - vid_stride
   - stream=True
-last_verified: "1.6.0"
-verification: Класифікацію джерел перевірено за libreyolo/utils/source.py (classify_source, SourceKind, StreamSource, MultiStreamSource). Прийняті типи зображень і розширення каталогів взято з libreyolo/utils/image_loader.py. Розширення відео та шляхи збереження взято з libreyolo/utils/video.py. Синтаксис екрана взято з libreyolo/utils/screen.py. Форми повернених даних і типові значення аргументів перевірено за InferenceRunner.__call__ у libreyolo/models/base/inference.py.
+last_verified: 1.6.0
+verification: >-
+  Класифікацію джерел перевірено за libreyolo/utils/source.py (classify_source,
+  SourceKind, StreamSource, MultiStreamSource). Прийняті типи зображень і
+  розширення каталогів взято з libreyolo/utils/image_loader.py. Розширення відео
+  та шляхи збереження взято з libreyolo/utils/video.py. Синтаксис екрана взято з
+  libreyolo/utils/screen.py. Форми повернених даних і типові значення аргументів
+  перевірено за InferenceRunner.__call__ у libreyolo/models/base/inference.py.
 snippets:
   images:
     - label: Одне зображення
@@ -47,7 +53,11 @@ snippets:
         array = np.asarray(pil_image)
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+        # Масиви NumPy зчитуються як BGR, якщо не вказано інше; цей масив у RGB.
+        result = model(array, color_format="rgb")
+        print(type(array).__name__, len(result.boxes))
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: Папка
@@ -194,7 +204,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 93db4d43c24b69ae
+source_hash: c355ad28487c9a65
 ---
 
 ## Класифікація джерела
@@ -232,15 +242,18 @@ source_hash: 93db4d43c24b69ae
 |---|---|
 | `str` або `pathlib.Path` | Локальний файл, `http(s)://`, `s3://` або `gs://` |
 | `PIL.Image.Image` | Перетворюється на RGB |
-| `numpy.ndarray` | 2D у відтінках сірого або 3D HWC чи CHW; для 4D масиву використовується перше зображення |
-| `torch.Tensor` | CHW або NCHW, зчитується як RGB; для пакетного тензора використовується перше зображення |
+| `numpy.ndarray` | 2D у відтінках сірого або 3D HWC чи CHW у порядку BGR; 4D масив є батчем |
+| `torch.Tensor` | CHW або NCHW, зчитується як RGB; 4D тензор є батчем |
 | `bytes` | Закодовані дані зображення |
 | `io.BytesIO` | Закодовані дані зображення |
 
+4D масив або тензор повертає список з одним `Results` на зображення.
+
 До попереднього оброблення все перетворюється на RGB. Порядок каналів
 неоднозначний лише для масивів NumPy, тому ним керує `color_format`: `"auto"`
-(типове значення) залишає масив без змін, а `"bgr"` змінює порядок каналів на
-зворотний, що потрібно для кадру, зчитаного через OpenCV.
+(типове значення) і `"bgr"` зчитують масив як BGR, у порядку, який повертає
+OpenCV, а `"rgb"` залишає масив без змін, що потрібно для масиву, створеного із
+зображення PIL.
 
 Масиви з рухомою комою масштабуються за власним діапазоном: значення не вище
 `1.0` множаться на 255, а вищі значення обмежуються діапазоном `[0, 255]`.
@@ -389,4 +402,4 @@ pip install mss
 шлях без нього як каталог. `output_file_format` вибирає кодування нерухомого
 зображення та приймає `jpg`, `png` або `webp`.
 
-Після збереження записаний шлях також додається до результату як `result.saved_path`.
+Після збереження зображення записаний шлях також додається до результату як `result.saved_path`.

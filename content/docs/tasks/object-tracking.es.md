@@ -76,7 +76,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: 384ee3d6a05190aa
+source_hash: b24043e73b35092d
 ---
 
 ## Definición
@@ -124,7 +124,10 @@ El seguimiento se ejecuta sobre modelos nativos de PyTorch. Un artefacto
 exportado que se carga con `LibreYOLO("model.onnx")` devuelve un objeto de
 backend de runtime, que trae `predict()` pero no `track()`.
 
-La biblioteca incluye cuatro trackers, seleccionables con el argumento `tracker`:
+La biblioteca incluye cuatro trackers, seleccionables con el argumento `tracker`.
+Las formas `.yaml`, como `"bytetrack.yaml"`, seleccionan los mismos trackers
+integrados; LibreYOLO no lee archivos YAML de tracker, y lanza un error si existe
+un archivo con ese nombre en el directorio de trabajo.
 
 `"bytetrack"` es el que viene por defecto. Es solo de movimiento, con un filtro
 de Kalman y una asociación en tres etapas: primero las detecciones de confianza
@@ -164,6 +167,10 @@ OC-SORT ejecuta el propio detector con `det_thresh`. Para ByteTrack y BoT-SORT,
 `track_conf` debe ser igual o mayor que `track_low_thresh`, cuyo valor por
 defecto es 0.1.
 
+`conf`, si se indica, es el umbral de detección de `predict()`: las detecciones
+por debajo de él nunca llegan al tracker. Sin él, el detector se ejecuta con los
+umbrales anteriores.
+
 Los ajustes del tracker llegan de una de dos maneras. Pasa una instancia de
 config a `tracker_config=`, y su tipo selecciona el tracker, con lo que `tracker=`
 sobra. O pasa los campos como argumentos con nombre y deja que `track()`
@@ -172,7 +179,9 @@ avisan en vez de aplicarse en silencio. En cualquiera de los dos casos,
 `track_conf` se ignora en cuanto la clave correspondiente se fija explícitamente.
 
 El resto de argumentos son los mismos que en predicción: `iou`, `imgsz`,
-`classes`, `max_det`, `vid_stride`, `show`, y `save` con `output_path`. La fuente puede ser un vídeo o una secuencia ordenada de imágenes. Consulta [predicción](/docs/predict) para el
+`classes`, `max_det`, `vid_stride`, `show`, y `save` con `output_path`. `persist=True` conserva el
+tracker y sus IDs de la llamada anterior a `track()` sobre el mismo modelo, para
+un bucle que pasa un fotograma por llamada, como `model.track(frame, persist=True)`. La fuente puede ser un vídeo o una secuencia ordenada de imágenes. Consulta [predicción](/docs/predict) para el
 manejo de resultados.
 
 Las imágenes, carpetas ordenadas por nombre de archivo, listas, tuplas e iteradores de imágenes con carga diferida pueden proporcionar fotogramas consecutivos. `fps=30.0` define su temporización y `color_format="auto"` selecciona la interpretación de entrada. `vid_stride` reduce la tasa retenida a `fps / vid_stride`.

@@ -94,13 +94,13 @@ snippets:
         from libreyolo import LibreYOLO
 
         # 중단된 실행의 체크포인트를 불러온 다음, 재개할지를 물어보십시오.
-        model = LibreYOLO("runs/train/exp/weights/last.pt")
-        model.train(data="my-dataset.yaml", epochs=100, resume=True)
+        model = LibreYOLO("runs/train/yolo9_exp/weights/last.pt")
+        model.train(data="my-dataset.yaml", resume=True)
     - label: CLI
       language: bash
       code: |
-        libreyolo train model=runs/train/exp/weights/last.pt \
-          data=my-dataset.yaml epochs=100 resume=true
+        libreyolo train model=runs/train/yolo9_exp/weights/last.pt \
+          data=my-dataset.yaml resume=true
   cfg:
     - label: Python
       language: python
@@ -110,7 +110,7 @@ snippets:
         # yaml의 키는 TrainConfig 필드 이름입니다. 명시적인 kwargs가 우선합니다.
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: "eac4e55fcf16ca15"
+source_hash: ca1259a10e05a51d
 ---
 
 ## 인수 설정
@@ -201,7 +201,7 @@ Float16는 동적 손실 스케일링이 필요하며 라이브 `GradScaler`를 
 
 실행은 `project/name`에 작성됩니다. `project`은 모든 곳에서 기본적으로 `runs/train`로 설정되어 있지만, `name`는 계열별 오버라이드 중 하나입니다: 기본 기본값은 `exp`이며, YOLOv9는 `yolo9_exp`를 사용하고 D-FINE은 `dfine_exp`를 사용합니다. `exist_ok=False`를 사용할 경우, 기본 설정으로 기존 디렉터리는 덮어쓰여지는 대신 번호가 증가된 접미사가 붙습니다.
 
-`save_period`는 각 epoch 후 `weights/last.pt` 외에 N epoch마다 추가로 `weights/epoch_<N>.pt`를 기록하고, 추적된 지표가 개선될 때마다 `weights/best.pt`도 기록합니다. `eval_interval`는 검증이 얼마나 자주 수행되는지 설정하며, `patience`는 개선 없이 지정된 epoch 수가 지나면 실행을 중단하고, `0`는 조기 종료를 비활성화합니다.
+`save_period`는 각 epoch 후 `weights/last.pt` 외에 N epoch마다 추가로 `weights/epoch_<N>.pt`를 기록하고, 추적된 지표가 개선될 때마다 `weights/best.pt`도 기록합니다. `eval_interval`는 검증이 얼마나 자주 수행되는지 설정하고 마지막 epoch는 항상 검증하며, `val=False`는 검증을 끄고 그런 실행은 `best.pt`를 기록하지 않습니다. `patience`는 개선 없이 지정된 epoch 수가 지나면 실행을 중단하고, `0`는 조기 종료를 비활성화합니다.
 
 `cache`는 디코딩된 이미지를 RAM(`True` 또는 `"ram"`)에 보관하거나 소스(`"disk"`) 옆에 `.npy` 파일로 저장하여 반복 에폭 속도를 높입니다. 캐시된 읽기는 새로 읽은 것과 바이트 단위로 동일합니다. 데이터로더 작업자와 함께, `"disk"`가 두 가지 중 더 안전합니다.
 
@@ -211,13 +211,13 @@ Float16는 동적 손실 스케일링이 필요하며 라이브 `GradScaler`를 
 
 ## 이력서
 
-`resume=True`는 중단된 실행을 계속합니다. 먼저 체크포인트를 로드해야 합니다. 왜냐하면 재개는 별도의 인수가 아니라 모델에서 그것을 읽기 때문입니다.
+`resume=True`는 로드된 체크포인트에서 중단된 실행을 계속하며, `resume="path/to/last.pt"`는 대신 해당 파일에서 계속합니다.
 
 <code-tabs name="resume" />
 
-Resume는 학습된 가중치, 옵티마이저 상태, EMA 가중치 및 업데이트 수, 최고 메트릭 추적, `GradScaler` 스케일, 그리고 PyTorch, CUDA 및 NumPy 랜덤 상태를 복원합니다. 이는 체크포인트의 에포크에 1을 더한 시점에서 시작하며, 스케줄을 해당 위치로 빠르게 진행합니다.
+Resume는 실행에 저장된 학습 인수를 복원하며, 명시적으로 전달한 인수가 저장된 값을 재정의합니다. 체크포인트의 실행 디렉터리에 계속 기록합니다. 학습된 가중치, 옵티마이저 상태, EMA 가중치 및 업데이트 수, 최고 메트릭 추적, `GradScaler` 스케일, 그리고 PyTorch, CUDA 및 NumPy 랜덤 상태를 복원합니다. 이는 체크포인트의 에포크에 1을 더한 시점에서 시작하며, 스케줄을 해당 위치로 빠르게 진행합니다.
 
-두 가지는 하지 않습니다. `resume=True`은 `pretrained`와 결합할 수 없으며, 이는 오류를 발생시킵니다. 그리고 체크포인트의 최상의 메트릭 키가 현재 실행의 것과 다를 경우, 최상의 메트릭 추적은 값을 비교하지 않고 경고와 함께 0으로 재설정됩니다.
+세 가지는 하지 않습니다. `resume=True`은 `pretrained`와 결합할 수 없으며, 이는 오류를 발생시킵니다. 공개된 가중치와 이미 `epochs`에 도달한 실행에는 재개할 것이 없으며, 그렇다고 알리는 `ValueError`를 발생시킵니다. 그리고 체크포인트의 최상의 메트릭 키가 현재 실행의 것과 다를 경우, 최상의 메트릭 추적은 값을 비교하지 않고 경고와 함께 0으로 재설정됩니다.
 
 ## 파일 속의 레시피
 

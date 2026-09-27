@@ -12,8 +12,8 @@ keywords:
   - mémoire cuda insuffisante libreyolo
   - notimplementederror libreyolo
   - dépannage libreyolo
-last_verified: "1.6.0"
-source_hash: 30b68976a4ac01d1
+last_verified: 1.6.0
+source_hash: f2faaab56a2f0415
 ---
 
 Les erreurs sont regroupées selon le texte affiché. Si votre message n'est pas
@@ -103,10 +103,10 @@ transmis. L'URL en est dérivée, suffixe de tâche compris. Un nom qui ne
 correspond à aucun checkpoint publié produit donc une URL inexistante. Le
 tableau des checkpoints de chaque page de modèle énumère les noms exacts.
 
-## L'entraînement se fige ou redémarre sous Windows
+## L'entraînement se fige ou redémarre sous Windows ou macOS
 
-Windows ne possède pas `fork`. Les workers du dataloader démarrent donc en
-réimportant votre script. Sans garde `if __name__ == "__main__":`, chaque
+Windows ne possède pas `fork`, et Python sur macOS ne l'utilise pas par défaut.
+Les workers du dataloader démarrent donc en réimportant votre script. Sans garde `if __name__ == "__main__":`, chaque
 worker relance votre appel d'entraînement, ce qui provoque un deadlock ou crée
 des processus sans fin.
 
@@ -145,8 +145,9 @@ valeurs dont vous savez qu'elles sont des listes.
 
 ### Lire les métriques comme des attributs
 
-`val()` renvoie un dictionnaire simple indexé par nom de métrique et non un
-objet à accès par attribut\u00a0:
+`val()` renvoie un dictionnaire indexé par nom de métrique. Son seul attribut,
+`box`, porte les résultats par image et les seuils par classe, et non les
+valeurs des métriques :
 
 ```python
 metrics = model.val(data="coco8.yaml")

@@ -38,6 +38,16 @@ last_verified: 1.6.0
 
 - Custom loaders with dataset-mutation hooks must use `persistent_workers=False` or rebuild workers after mutation. Incompatible persistent multi-worker copies now raise.
 
+- NumPy image arrays are read as BGR, the OpenCV order. Pass `color_format="rgb"` where you pass an RGB array such as `np.asarray(pil_image)`; `cv2.imread()` output and video frames need no change.
+
+- A 4D NumPy array or tensor is a batch: `predict()` returns a list with one `Results` per image instead of using only the first image.
+
+- `train(resume=True)` and `train(resume="path/to/last.pt")` restore the run's saved training arguments and keep writing into its run directory; arguments you pass explicitly win. Resuming released weights, or a run that already reached its `epochs`, raises `ValueError`.
+
+- With validation on, the final epoch always validates, so runs shorter than `eval_interval` now report metrics and write `best.pt`. `val=False` turns validation off, final epoch included. Validation during training writes into `<run>/val` instead of `runs/val/`.
+
+- CLI `train` failures report their error type, so configuration errors exit with code 2 instead of 1 with `io_error`.
+
 See the [changelog](/docs/changelog) for the full release and [importing weights](/docs/migrate) for checkpoint conversion.
 
 ## 1.4.0 to 1.5.0

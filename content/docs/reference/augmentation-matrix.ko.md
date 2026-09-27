@@ -16,7 +16,9 @@ keywords:
   - 증강 지원 매트릭스
   - TrainConfig 설정 조절
 last_verified: 1.6.0
-verification: '노브 목록, 상태, 전형, 계열별 편차 및 보조 함수는 v1.6.0에서 libreyolo/data/augment/spec.py로부터 읽습니다. 해당 테이블은 tests/unit/test_augment_spec.py.에 의해 실제 파이프라인에 고정되어 있습니다.'
+verification: >-
+  노브 목록, 상태, 전형, 계열별 편차 및 보조 함수는 v1.6.0에서 libreyolo/data/augment/spec.py로부터
+  읽습니다. 해당 테이블은 tests/unit/test_augment_spec.py.에 의해 실제 파이프라인에 고정되어 있습니다.
 snippets:
   usage:
     - label: 사양서에 직접 물어보십시오
@@ -36,12 +38,12 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: "f3cba41ceadf131f"
+source_hash: f0d31511715e3cc4
 ---
 
 ## 손잡이들
 
-이들은 CLI 철자가 아니라 `TrainConfig` 필드 이름입니다. CLI는 자체 별칭을 이들에 매핑하므로, `--mosaic`는 `mosaic_prob`를 설정합니다.
+이들은 CLI 철자가 아니라 `TrainConfig` 필드 이름입니다. `train()`과 CLI는 짧은 철자를 이들에 매핑하므로, `mosaic`는 `mosaic_prob`를 설정합니다.
 
 | 손잡이 | 의미 |
 |---|---|
@@ -62,7 +64,7 @@ source_hash: "f3cba41ceadf131f"
 | `mixup` | 분류 배치-MixUp 확률, 소프트 레이블과 함께 |
 | `cutmix` | 분류 배치-CutMix 확률, 소프트 레이블과 함께 |
 
-마지막 네 가지는 분류 설정입니다. 탐지 계열은 이를 무시합니다. CLI는 분류 모델에서는 `mixup`을 분류 배치 혼합에 전달하고 탐지 모델에서는 `mixup_prob`에 전달합니다.
+마지막 네 가지는 분류 설정입니다. 탐지 계열은 이를 무시합니다. `train()`과 CLI는 분류 모델에서는 `mixup`을 분류 배치 혼합에 전달하고 탐지 모델에서는 `mixup_prob`에 전달합니다.
 
 <code-tabs name="usage" />
 

@@ -48,7 +48,7 @@ snippets:
         # stream=True devuelve un generador, un Results por frame o imagen.
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: da0776970ded8716
+source_hash: ccecee93e9744550
 ---
 
 ## Construcción
@@ -154,6 +154,7 @@ model.track(
     source,
     *,
     track_conf=0.25,
+    conf=None,
     iou=0.45,
     imgsz=None,
     classes=None,
@@ -161,19 +162,25 @@ model.track(
     save=False,
     show=False,
     vid_stride=1,
+    fps=30.0,
+    color_format="auto",
     output_path=None,
     tracker="bytetrack",
     tracker_config=None,
     augment=False,
+    persist=False,
     **tracker_kwargs,
 ) -> Generator[Results, None, None]
 ```
 
 Emite un `Results` por frame con `track_id` asignado. `tracker` es
-`"bytetrack"`, `"botsort"`, `"ocsort"` o `"deepocsort"`, y se ignora cuando se
+`"bytetrack"`, `"botsort"`, `"ocsort"` o `"deepocsort"`, opcionalmente con un
+sufijo `.yaml`, o una instancia de tracker personalizada, y se ignora cuando se
 pasa `tracker_config`, porque el tipo de configuración selecciona el tracker.
 `track_conf` se corresponde con `track_high_thresh` en ByteTrack y BoT-SORT y
-con `det_thresh` en OC-SORT y Deep OC-SORT. `output_path` es por defecto
+con `det_thresh` en OC-SORT y Deep OC-SORT. `conf`, si se indica, es el umbral
+de detección, como en `predict()`. `persist=True` conserva el tracker de la
+llamada anterior para bucles frame a frame. `output_path` es por defecto
 `runs/track/<video_stem>.mp4`.
 
 ## val
@@ -194,6 +201,9 @@ model.val(
     verbose=True,
     *,
     plots=None,
+    project=None,
+    name=None,
+    exist_ok=False,
     **kwargs,
 ) -> Dict
 ```
@@ -202,7 +212,11 @@ Devuelve un diccionario de métricas cuyas claves dependen de la tarea; la
 detección devuelve `metrics/precision`, `metrics/recall`, `metrics/mAP50` y
 `metrics/mAP50-95`. `imgsz` acepta un entero cuadrado o una tupla
 `(height, width)` y por defecto usa el tamaño de entrada nativo del modelo.
-`plots` es un alias de `save_plots`. `allow_download_scripts` controla el Python
+`data=None` valida con el dataset guardado en la configuración de entrenamiento
+del checkpoint y lanza un error cuando no hay ninguno, como ocurre con los pesos
+publicados. `project`, `name` y `exist_ok` fijan el directorio de salida como
+`project/name`, incrementado salvo que `exist_ok=True`. `plots` es un alias de
+`save_plots`. `allow_download_scripts` controla el Python
 embebido que un YAML de dataset puede llevar en su campo `download`.
 
 `faster_coco_eval` se acepta a través de `**kwargs` y por defecto vale `True`,
@@ -247,6 +261,7 @@ un alias de `tflite`. Argumentos comunes a todos los exportadores:
 | `dynamic` | `True` | Activa los ejes dinámicos |
 | `half` | `False` | Precisión FP16 |
 | `int8` | `False` | Precisión INT8 |
+| `quantize` | `None` | Precisión como `16`, `8` o `32`, en lugar de `half` o `int8` |
 | `batch` | `1` | Tamaño de batch fijado en el artefacto |
 | `device` | `None` | Dispositivo sobre el que trazar |
 | `data` | `None` | data.yaml para la calibración INT8 |
@@ -255,7 +270,8 @@ un alias de `tflite`. Argumentos comunes a todos los exportadores:
 | `verbose` | `False` | Registro detallado del exportador |
 
 Las combinaciones bloqueadas lanzan `NotImplementedError` en la comprobación
-previa, antes del trazado. La cobertura y sus reglas están en la página de la
+previa, antes del trazado. Una opción que el formato no usa emite el aviso
+`Unknown <format> export arguments (ignored)` y la exportación continúa. La cobertura y sus reglas están en la página de la
 [matriz de exportación](/docs/reference/export-matrix). Cuando hay adaptadores
 LoRA activos, se pliegan en pesos densos, y esa fusión ocurre solo después de
 todos los rechazos posibles de la petición.

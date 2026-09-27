@@ -2,7 +2,9 @@
 title: 1.6.0으로 업그레이드
 seo_title: LibreYOLO 1.5.0에서 1.6.0으로 업그레이드
 description: 'LibreYOLO 1.6.0의 전처리, 학습 기본값, 실행 디렉터리, 고정 파일, QAT, 데이터 로더 마이그레이션 절차입니다.'
-lead: '1.6.0은 전처리, 학습 기본값, 체크포인트 처리를 변경합니다. 저장한 베이스라인을 다시 검증하고 이전 실행을 재현할 때는 이전 기본값을 명시적으로 설정합니다.'
+lead: >-
+  1.6.0은 전처리, 학습 기본값, 체크포인트 처리를 변경합니다. 저장한 베이스라인을 다시 검증하고 이전 실행을 재현할 때는 이전 기본값을
+  명시적으로 설정합니다.
 keywords:
   - libreyolo 업그레이드
   - libreyolo 1.5.0 마이그레이션
@@ -11,7 +13,7 @@ keywords:
   - yolox bn eps
   - faster-coco-eval 기본값
 last_verified: 1.6.0
-source_hash: "f4fda6ef286113ab"
+source_hash: c575718b8a7949f8
 ---
 
 ## 1.5.0에서 1.6.0으로
@@ -33,6 +35,16 @@ source_hash: "f4fda6ef286113ab"
 - QAT는 EMA, SyncBatchNorm, 체크포인트 평균을 비활성화합니다. 이 상태에 의존하지 않고 QAT의 best/last 체크포인트를 사용합니다.
 
 - 데이터셋 변경 훅이 있는 사용자 정의 로더는 `persistent_workers=False`를 사용하거나 변경 후 작업자를 다시 생성해야 합니다. 호환되지 않는 영구 다중 작업자 사본은 이제 오류를 발생시킵니다.
+
+- NumPy 이미지 배열은 OpenCV 순서인 BGR로 읽힙니다. `np.asarray(pil_image)` 같은 RGB 배열을 전달하는 곳에서는 `color_format="rgb"`를 전달하며, `cv2.imread()` 출력과 비디오 프레임은 변경할 필요가 없습니다.
+
+- 4D NumPy 배열이나 텐서는 배치입니다: `predict()`는 첫 번째 이미지만 사용하는 대신 이미지마다 `Results` 하나씩을 담은 리스트를 반환합니다.
+
+- `train(resume=True)`와 `train(resume="path/to/last.pt")`는 실행에 저장된 학습 인수를 복원하고 그 실행 디렉터리에 계속 기록하며, 명시적으로 전달한 인수가 우선합니다. 공개된 가중치나 이미 `epochs`에 도달한 실행을 재개하면 `ValueError`가 발생합니다.
+
+- 검증이 켜져 있으면 마지막 에폭은 항상 검증하므로, `eval_interval`보다 짧은 실행도 이제 지표를 보고하고 `best.pt`를 기록합니다. `val=False`는 마지막 에폭을 포함해 검증을 끕니다. 학습 중 검증은 `runs/val/` 대신 `<run>/val`에 기록합니다.
+
+- CLI `train` 실패는 오류 유형을 보고하므로, 설정 오류는 `io_error`와 함께 코드 1로 종료하는 대신 코드 2로 종료합니다.
 
 전체 릴리스는 [변경 기록](/docs/changelog)을, 체크포인트 변환은 [가중치 가져오기](/docs/migrate)를 참조하십시오.
 

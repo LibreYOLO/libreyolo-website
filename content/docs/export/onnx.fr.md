@@ -17,7 +17,7 @@ keywords:
   - nms embarqué onnx
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: Flag
     value: export(format="onnx")
@@ -151,7 +151,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 085c6fb8cb7ec4b2
+source_hash: ff50afedd377beaf
 ---
 
 ## Installation
@@ -221,7 +221,9 @@ prises en charge et pour la compilation du parser.
 
 `int8=True` exécute la quantification statique d'ONNX Runtime et écrit un graphe
 QDQ dont les entrées et les sorties sont en float32. Seuls les nœuds `Conv` et
-`Gemm` sont quantifiés. Laisser le décodage de la tête de détection en float32
+`Gemm` sont quantifiés, et la première convolution et la tête de détection de
+YOLO9 restent en float32, comme dans `model.quantize()`, afin que les scores de
+classe ne saturent pas à la plage calibrée. Laisser le décodage de la tête de détection en float32
 est délibéré : cette concaténation mélange des coordonnées de boîtes à l'échelle
 du pixel avec des scores de classe dans la plage 0 à 1, et une unique échelle
 d'activation par tenseur dominée par la magnitude des boîtes ramènerait tous les

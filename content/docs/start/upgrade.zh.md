@@ -1,8 +1,8 @@
 ---
-title: "升级到 1.6.0"
-seo_title: "LibreYOLO 从 1.5.0 升级到 1.6.0"
-description: "LibreYOLO 1.6.0 的迁移步骤：预处理、训练默认值、训练目录、固定资源、QAT 和数据加载器。"
-lead: "1.6.0 更改了预处理、训练默认值和检查点处理。请重新验证已保存的基线，复现旧训练时显式设置以前的默认值。"
+title: 升级到 1.6.0
+seo_title: LibreYOLO 从 1.5.0 升级到 1.6.0
+description: LibreYOLO 1.6.0 的迁移步骤：预处理、训练默认值、训练目录、固定资源、QAT 和数据加载器。
+lead: 1.6.0 更改了预处理、训练默认值和检查点处理。请重新验证已保存的基线，复现旧训练时显式设置以前的默认值。
 keywords:
   - libreyolo 升级
   - libreyolo 1.5.0 迁移
@@ -10,8 +10,8 @@ keywords:
   - libreyolo 破坏性变更
   - yolox bn eps
   - faster-coco-eval 默认
-last_verified: "1.6.0"
-source_hash: f4fda6ef286113ab
+last_verified: 1.6.0
+source_hash: c575718b8a7949f8
 ---
 
 ## 从 1.5.0 升级到 1.6.0
@@ -33,6 +33,16 @@ source_hash: f4fda6ef286113ab
 - QAT 禁用 EMA、SyncBatchNorm 和检查点平均。请使用 QAT 的 best/last 检查点，不要依赖这些状态。
 
 - 带数据集修改钩子的自定义加载器必须使用 `persistent_workers=False`，或在修改后重建 worker。不兼容的持久多 worker 副本现在会报错。
+
+- NumPy 图像数组按 BGR 读取，也就是 OpenCV 的顺序。传入 RGB 数组（例如 `np.asarray(pil_image)`）时，请同时传入 `color_format="rgb"`；`cv2.imread()` 的输出和视频帧无需修改。
+
+- 4D NumPy 数组或张量表示一批图像：`predict()` 返回一个列表，每张图像对应一个 `Results`，而不再只使用第一张图像。
+
+- `train(resume=True)` 和 `train(resume="path/to/last.pt")` 会恢复该次运行保存的训练参数，并继续写入它的运行目录；显式传入的参数优先。对已发布的权重或已经达到 `epochs` 的运行做断点续训会抛出 `ValueError`。
+
+- 启用验证时，最后一轮总会验证，因此短于 `eval_interval` 的运行现在也会报告指标并写出 `best.pt`。`val=False` 会关闭验证，最后一轮也包括在内。训练中的验证写入 `<run>/val`，而不是 `runs/val/`。
+
+- CLI `train` 失败时会报告错误类型，因此配置错误以退出码 2 退出，而不是带着 `io_error` 以退出码 1 退出。
 
 完整版本说明见[更新日志](/docs/changelog)，检查点转换见[导入权重](/docs/migrate)。
 

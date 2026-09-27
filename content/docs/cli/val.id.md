@@ -40,7 +40,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: 8e858639e96672a0
+source_hash: a0446a47e0f89b27
 ---
 
 ## Sinopsis
@@ -85,6 +85,7 @@ Argumen berupa pasangan `key=value`, dan bentuk POSIX juga berlaku, jadi
 | Argumen | Default | Arti |
 | --- | --- | --- |
 | `classes` | `None` | Evaluasi hanya ID kelas asli dataset ini, dipisahkan koma (misalnya '0,3,5'); kotak kelas lain dibuang dari ground truth dan prediksi. Default mengikuti classes= saat checkpoint dilatih, jika ada |
+| `single_cls` | `False` | Evaluasi detektor yang didukung dengan semua kelas digabung ke kelas 0 |
 | `crop_pct` | `None` | Rasio pengubahan ukuran evaluasi klasifikasi sebelum crop tengah (default: nilai native family model) |
 | `plot_samples` | `8` | Gambar sampel dalam plot sampel validasi: 0 untuk tanpa sampel, -1 untuk setiap gambar yang divalidasi (tidak mengubah metrik) |
 | `visualize` | `False` | Gambar setiap gambar validasi dengan true positive, false positive, dan false negative ke visualize/errors/ (ada kesalahan) dan visualize/correct/ (detect, segment; classify menggambar label vs top-1) |

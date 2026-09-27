@@ -19,7 +19,7 @@ keywords:
   - nms in onnx einbetten
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: Flag
     value: export(format="onnx")
@@ -153,7 +153,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: "085c6fb8cb7ec4b2"
+source_hash: ff50afedd377beaf
 ---
 
 ## Installation
@@ -227,8 +227,10 @@ und Aufgabe und den Bau des Parsers zeigt
 
 `int8=True` führt die statische Quantisierung der ONNX Runtime aus und schreibt
 einen QDQ-Graphen mit Float32-Eingaben und -Ausgaben. Quantisiert werden nur
-`Conv`- und `Gemm`-Knoten. Das Decoding im Detektions-Head in Float32 zu
-belassen, ist Absicht: diese Konkatenation mischt Box-Koordinaten im
+`Conv`- und `Gemm`-Knoten, und die erste Faltung sowie der Detektions-Head von
+YOLO9 bleiben in Float32, wie auch in `model.quantize()`, damit Klassen-Scores
+nicht am kalibrierten Bereich sättigen. Das Decoding im Detektions-Head in
+Float32 zu belassen, ist Absicht: diese Konkatenation mischt Box-Koordinaten im
 Pixelmaßstab mit Klassen-Scores im Bereich 0 bis 1, und eine einzelne
 Aktivierungsskala pro Tensor, dominiert von der Größenordnung der Box, würde
 jeden Score auf null drücken.

@@ -41,7 +41,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: 8e858639e96672a0
+source_hash: a0446a47e0f89b27
 ---
 
 ## Sinopse
@@ -86,6 +86,7 @@ Os argumentos são pares `key=value`, e a forma POSIX também funciona, então
 | Argumento | Padrão | Significado |
 | --- | --- | --- |
 | `classes` | `None` | Avalia apenas estes IDs originais de classe do dataset, separados por vírgulas (ex.: '0,3,5'); caixas de todas as demais classes são descartadas do ground truth e das predições. Usa por padrão o classes= com que o checkpoint foi treinado, se houver |
+| `single_cls` | `False` | Avalia um detector suportado com todas as classes fundidas na classe 0 |
 | `crop_pct` | `None` | Razão de redimensionamento de avaliação na classificação antes do recorte central (padrão: valor nativo da família do modelo) |
 | `plot_samples` | `8` | Imagens de amostra no gráfico de amostras de validação: 0 para nenhuma, -1 para cada imagem validada (não muda as métricas) |
 | `visualize` | `False` | Desenha cada imagem validada com seus verdadeiros positivos, falsos positivos e falsos negativos em visualize/errors/ (qualquer erro) e visualize/correct/ (detect, segment; classify desenha label versus top-1) |

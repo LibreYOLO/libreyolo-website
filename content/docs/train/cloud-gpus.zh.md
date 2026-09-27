@@ -111,7 +111,7 @@ snippets:
       code: |
         huggingface-cli upload my-org/my-run \
           /root/runs/run1/weights/best.pt best.pt
-source_hash: 75d314de06aca3b6
+source_hash: 2f4a8ac1df103962
 ---
 
 ## 在租任何机器之前
@@ -153,8 +153,8 @@ GPU 架构编译的 wheel 会报告 `torch.cuda.is_available() == True`，然后
 个显存不足的错误去发现上限要快。参见[超参数](/docs/train/hyperparameters)。
 
 在多卡机器上，`device="0,1,2,3"` 自己就会为每块 GPU 启动一个 worker，而 `batch`
-仍然是所有卡上的全局批大小。`__main__` 保护是必须的，因为每个 worker 都会重新导入
-这个脚本。这一点，以及其余的分布式行为，都在[多卡训练](/docs/train/multi-gpu)里。
+仍然是所有卡上的全局批大小。worker 不会重放未加保护的脚本的顶层代码，所以 `__main__`
+保护是可选的。这一点，以及其余的分布式行为，都在[多卡训练](/docs/train/multi-gpu)里。
 
 ## 从外面观察
 

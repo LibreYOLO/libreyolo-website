@@ -1,7 +1,7 @@
 ---
 title: libreyolo train
 seo_title: libreyolo train 命令参考
-description: "从命令行训练模型：参数及默认值、家族默认值如何覆盖它们，以及各家族忽略的参数。"
+description: 从命令行训练模型：参数及默认值、家族默认值如何覆盖它们，以及各家族忽略的参数。
 lead: >-
   在一个数据集上训练一个模型，并把检查点（checkpoint）、指标和日志写进运行目录。下面每个参数都有一个来自命令定义的默认值，而模型家族自己的训练配置可能会替换它。
 keywords:
@@ -11,7 +11,7 @@ keywords:
   - yolo 训练自己的数据集
   - libreyolo dry_run
   - yolo 冻结层
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: 命令
     value: libreyolo train
@@ -20,7 +20,7 @@ meta:
     value: data
     mono: true
   - label: 输出
-    value: 检查点、指标和日志，位于 runs/train/exp
+    value: 检查点、指标和日志，位于 runs/train/<name>；YOLO9 使用 yolo9_exp
 snippets:
   examples:
     - label: 基本用法
@@ -45,7 +45,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 525a8e4366e4c0be
+source_hash: 0f7f2b7487a67daa
 ---
 
 ## 概要
@@ -85,6 +85,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | `amp` | `true` | 自动混合精度 |
 | `amp_dtype` | `float16` | CUDA AMP 的 dtype：`float16` 或 `bfloat16` |
 | `cuda_graph` | `false` | 把训练的前向和反向捕获进 CUDA 图。仅限单 GPU 和受支持的家族，其余家族按 eager 模式运行 |
+| `compile` | `false` | 用 `torch.compile` 编译训练网络：`true`、`false`、`default`、`reduce-overhead`、`max-autotune`、`max-autotune-no-cudagraphs`。仅限单个 CUDA GPU；其他运行按 eager 模式训练并给出警告 |
 | `lora` | `false` | LoRA 微调，适用于「注意事项」中列出的 transformer 家族 |
 | `freeze` | | 冻结层：一个整数数量、一个索引列表，或模块名 |
 
@@ -143,7 +144,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | 参数 | 默认值 | 含义 |
 |---|---|---|
 | `val` | `true` | 训练过程中做验证 |
-| `eval_interval` | `10` | 每 N 轮验证一次 |
+| `eval_interval` | `10` | 每 N 轮验证一次，最后一轮结束后也会验证 |
 | `max_det` | `300` | 验证 NMS 之后每张图像的最大预测数 |
 | `eval_max_det` | | COCO 评估器的上限。未设置时采用 pycocotools 的 AP@100 惯例 |
 | `faster_coco_eval` | `true` | 装有 faster-coco-eval 时，用它的 C++ 后端计算 COCO 指标；否则回退到 pycocotools |
@@ -180,6 +181,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | `average_best` | `0` | 训练结束时，对监控指标最好的 N 个检查点均匀平均，写入 weights/average.pt（0 = 关闭） |
 | `export_check` | `False` | 在第 1 轮之前导出 ONNX，导出失败则终止训练（默认关闭） |
 | `precise_bn` | `0` | 最后一轮后，用此数量的训练图像重新计算 BatchNorm 运行统计量（0 = 关闭） |
+| `aux_weight` | | 仅 YOLO9：微调时 PGI 辅助分支的损失权重。未设置时为 `0.25`；`0` 只训练主 head |
 | `fliplr` | `None` | 水平翻转概率（flip_prob 的生态别名） |
 | `flipud` | `0.0` | 垂直翻转概率 |
 | `auto_augment` | `None` | 分类自动增强策略：randaugment、autoaugment、augmix（默认无） |
@@ -218,9 +220,10 @@ RF-DETR、D-FINE、DEIM、DEIMv2、RT-DETRv4 和 DINOv2 通过直通式流水线
 没有 mosaic、没有 mixup、也没有仿射变换，所以 `mosaic`、`mixup`、
 `hsv_prob`、`degrees`、`translate`、`shear`、`mosaic_scale` 和
 `mixup_scale` 在那里落不到实处。EC 共用同一条流水线，但当它的任务是姿态时
-确实会读取 `hsv_prob`、`degrees` 和 `translate`。分类家族、SegFormer 和
-NAFNet 会忽略整组参数，连 `flip_prob` 一起，因为它们的翻转按固定概率运行，
-而不是一个可配置的概率。YOLO-NAS 只忽略 `mosaic`，因为它改用一直开启的逐
+确实会读取 `hsv_prob`、`degrees` 和 `translate`。分类家族会忽略这组参数，
+但 `mixup` 除外，它在分类家族上是批量 MixUp；它们还会读取 `flip_prob`。
+SegFormer 和 NAFNet 会忽略整组参数，连 `flip_prob` 一起，因为它们的翻转按固定
+概率运行，而不是一个可配置的概率。YOLO-NAS 只忽略 `mosaic`，因为它改用一直开启的逐
 样本仿射变换来做增强。RF-DETR 在这份清单之外还要再忽略三个：`optimizer`、
 `momentum` 和 `nesterov`。
 
@@ -229,9 +232,8 @@ NAFNet 会忽略整组参数，连 `flip_prob` 一起，因为它们的翻转按
 号，所以带 `quiet=true` 的脚本化运行会连同 stderr 上的其他内容一起把这条警
 告压掉。
 
-`val=false` 是与此相关的一种情况。对大多数家族来说，它会把 `eval_interval`
-设为 `0`；RF-DETR 没法用这种方式关掉验证，只会记录一条日志说明它忽略了这个
-请求。
+`val=false` 是与此相关的一种情况。它会把 `eval_interval` 设为 `0`，从而关闭
+训练中的验证，最后一轮也包括在内，这次运行不会写出 `best.pt`。
 
 ### 其他值得了解的行为
 
@@ -242,9 +244,9 @@ NAFNet 会忽略整组参数，连 `flip_prob` 一起，因为它们的翻转按
 `pretrained=false` 与 `resume` 同时使用，在支持从头训练的家族上会被拒绝，因
 为这两者要求的是相反的事情。
 
-`mosaic` 和 `mixup` 是配置字段 `mosaic_prob` 和 `mixup_prob` 的命令行写法。
-在 mixup 只作用于 mosaic 样本的家族上，`mixup` 大于零而 `mosaic` 为零时永远
-不会触发，运行时也会这样提示。
+`mosaic` 和 `mixup` 是配置字段 `mosaic_prob` 和 `mixup_prob` 的命令行写法；在分类
+模型上，`mixup` 则是批量 MixUp。在 mixup 只作用于 mosaic 样本的家族上，
+`mixup` 大于零而 `mosaic` 为零时永远不会触发，运行时也会这样提示。
 
 `dry_run=true` 会解析模型引用、应用家族默认值，并打印它将用来训练的配置。它
 不会加载数据集，所以这是确认某个参数是否取到你预期值的廉价办法。

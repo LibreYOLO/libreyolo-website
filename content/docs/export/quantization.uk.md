@@ -18,7 +18,7 @@ keywords:
   - fp8 e4m3
   - калібрувальний датасет
   - експорт qdq onnx
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: Виклик
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -38,27 +38,44 @@ meta:
       export(format="pt") для упакованої контрольної точки,
       export(format="onnx") для графа QDQ INT8
     mono: true
-verification: Перевірено за файлами libreyolo/quant/api.py, libreyolo/models/base/model.py, libreyolo/cli/commands/quantize.py та docs/quantization.md у гілці dev. Значення розміру контрольних точок взято з вимірювань, зафіксованих у docs/quantization.md.
+verification: >-
+  Перевірено за файлами libreyolo/quant/api.py, libreyolo/models/base/model.py,
+  libreyolo/cli/commands/quantize.py та docs/quantization.md у гілці dev.
+  Значення розміру контрольних точок взято з вимірювань, зафіксованих у
+  docs/quantization.md.
 snippets:
   quantize:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # Заміна структури та калібрування. calib є невеликим набором зображень БЕЗ МІТОК,
-        # який читається лише у прямому проході для визначення діапазонів і масштабів активацій.
-        qmodel = model.quantize(recipe="int8", calib="coco128.yaml", samples=128)
+
+        # Заміна структури та калібрування. calib є невеликим набором зображень
+        БЕЗ МІТОК,
+
+        # який читається лише у прямому проході для визначення діапазонів і
+        масштабів активацій.
+
+        qmodel = model.quantize(recipe="int8", calib="coco128.yaml",
+        samples=128)
+
 
         print(qmodel.quant_info())
-        qmodel.val(data="coco8.yaml")          # ті самі валідатори, що й для моделі з рухомою комою
-        qmodel.save("LibreYOLO9s-int8.pt")     # контрольна точка містить маніфест квантування
+
+        qmodel.val(data="coco8.yaml")          # ті самі валідатори, що й для
+        моделі з рухомою комою
+
+        qmodel.save("LibreYOLO9s-int8.pt")     # контрольна точка містить
+        маніфест квантування
     - label: CLI
       language: bash
-      code: |
-        libreyolo quantize --model LibreYOLO9s.pt --recipe int8 --calib coco128.yaml
+      code: >
+        libreyolo quantize --model LibreYOLO9s.pt --recipe int8 --calib
+        coco128.yaml
     - label: Аргументи
       language: python
       code: |
@@ -160,7 +177,7 @@ snippets:
         підтримуваною точністю.
 
         qmodel.export(format="tensorrt", half=True)
-source_hash: 6c247a3243daf393
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## Встановлення
@@ -282,6 +299,9 @@ ONNX Runtime і TensorRT виконують за допомогою справж
 обчислюється в острівцях float32 навіть під AMP. Симуляція точно відтворює числові
 властивості, тому оцінка `val()` на будь-якому пристрої є справжнім твердженням
 про квантовану арифметику. Вона не є твердженням про швидкість.
+
+Apple MPS не реалізує ні операцій імітаційного квантування, ні float8, тому на Mac
+усі рецепти, крім `fp16` і `bf16`, виконуються на CPU з попередженням.
 
 Два винятки виконуються нативно. `fp16` і `bf16` є звичайними приведеннями.
 Фіналізовані модулі `fp8` виконують GEMM безпосередньо для упакованих ваг E4M3

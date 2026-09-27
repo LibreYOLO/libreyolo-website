@@ -18,7 +18,7 @@ keywords:
   - вбудований nms onnx
   - onnx int8 qdq
   - onnx metadata_props
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: Параметр
     value: export(format="onnx")
@@ -35,7 +35,10 @@ meta:
     value: Типово динамічний батч у Python; винятки для завдань наведено нижче
   - label: Точність
     value: 'FP32, FP16 (half=True), INT8 (int8=True, виявлення YOLO9)'
-verification: Перевірено за файлами libreyolo/export/onnx.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/onnx.py та libreyolo/cli/commands/export.py у гілці dev.
+verification: >-
+  Перевірено за файлами libreyolo/export/onnx.py, libreyolo/export/exporter.py,
+  libreyolo/export/support.py, libreyolo/backends/onnx.py та
+  libreyolo/cli/commands/export.py у гілці dev.
 snippets:
   install:
     - label: Встановлення
@@ -149,7 +152,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 085c6fb8cb7ec4b2
+source_hash: ff50afedd377beaf
 ---
 
 ## Встановлення
@@ -218,7 +221,9 @@ DeepStream виконує пригнічення на власному етап�
 <code-tabs name="int8" />
 
 Параметр `int8=True` запускає статичне квантування ONNX Runtime та записує граф
-QDQ із вхідними й вихідними даними float32. Квантуються лише вузли `Conv` і `Gemm`.
+QDQ із вхідними й вихідними даними float32. Квантуються лише вузли `Conv` і `Gemm`,
+а перша згортка й голова детектора моделі YOLO9 залишаються у float32, як і в
+`model.quantize()`, щоб оцінки класів не насичувалися на межі каліброваного діапазону.
 Декодування голови детектора навмисно залишається у float32: ця конкатенація
 поєднує координати рамок у масштабі пікселів з оцінками класів у діапазоні від
 0 до 1, а єдиний масштаб активації для тензора, у якому переважає величина

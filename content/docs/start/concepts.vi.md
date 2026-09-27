@@ -20,7 +20,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Tác vụ chuẩn
-    value: 17
+    value: 20
   - label: Cấp hỗ trợ
     value: 'Flagship, Core, Supported, Chỉ inference, Museum, Cấp sibling'
 snippets:
@@ -54,12 +54,12 @@ snippets:
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
 
         print(model.task)
-source_hash: 23d045463a6a8411
+source_hash: c745a3c602db00ea
 ---
 
 ## Tác vụ
 
-Tác vụ là thứ mô hình trả về. LibreYOLO có mười bảy tên tác vụ chuẩn, và mỗi
+Tác vụ là thứ mô hình trả về. LibreYOLO có hai mươi tên tác vụ chuẩn, và mỗi
 tên tương ứng với trường trên object `Results` chứa đầu ra của tác vụ đó.
 
 | Tác vụ | Trả về |
@@ -75,12 +75,15 @@ tên tương ứng với trường trên object `Results` chứa đầu ra của
 | `depth` | Bản đồ độ sâu nghịch đảo tương đối dày đặc |
 | `normal` | Trường vector đơn vị pháp tuyến bề mặt dày đặc |
 | `edge` | Bản đồ xác suất cạnh dày đặc |
+| `albedo` | Bản đồ albedo linear-RGB dày đặc, tức màu bề mặt khi không có ánh sáng |
 | `restore` | Ảnh RGB được khôi phục để khử nhòe, khử nhiễu hoặc tăng độ phân giải |
 | `matte` | Bản đồ tiền cảnh mềm từ 0 đến 1 để xóa nền |
 | `ocr` | Tứ giác văn bản kèm nội dung nhận dạng, theo thứ tự đọc |
 | `embed` | Vector chuẩn hóa L2 có tích vô hướng đo mức tương đồng |
 | `gaze` | Hướng nhìn cho mỗi khuôn mặt được phát hiện |
 | `mesh` | Cơ thể 3D đã tạo dáng cho mỗi người được phát hiện |
+| `detect3d` | Box 3D trong hệ tọa độ camera, kèm lớp và độ tin cậy |
+| `act` | Một đoạn hành động robot được dự đoán từ các frame camera và trạng thái robot |
 
 Đây là các tên xuất hiện trong metadata checkpoint và tên file. Các alias quen
 thuộc được chấp nhận ở mọi nơi có thể truyền tác vụ và được chuẩn hóa trước mọi

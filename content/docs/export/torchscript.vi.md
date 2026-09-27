@@ -111,7 +111,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 286a082969ccd604
+source_hash: 6be59826c2dc9978
 ---
 
 ## Cài đặt
@@ -146,7 +146,8 @@ Metadata không nằm trong một tệp sidecar. `torch.jit.save` lưu
 
 `LibreYOLO()` định tuyến theo phần mở rộng `.torchscript` và trả về cùng đối tượng
 `Results` như checkpoint mà nó xuất phát. Với `device="auto"`, module được map sang
-CUDA khi có, rồi đến MPS, rồi CPU.
+CUDA khi có, nếu không thì CPU. Apple Silicon chạy nó trên CPU, vì MPS không thể
+nạp các hằng số float64 mà một graph đã trace mang theo.
 
 Đoạn mã thứ hai là hướng đi dành cho người đọc không cài LibreYOLO, và cho việc
 triển khai C++ qua libtorch, nơi cùng archive đó nạp được bằng

@@ -15,7 +15,7 @@ keywords:
   - yolo modell auf datensatz evaluieren
   - mAP50-95 kommandozeile
   - libreyolo val argumente
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: Befehl
     value: libreyolo val
@@ -43,7 +43,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: "8e858639e96672a0"
+source_hash: a0446a47e0f89b27
 ---
 
 ## Synopsis
@@ -88,6 +88,7 @@ Argumente sind `key=value`-Paare, und die POSIX-Form funktioniert ebenfalls,
 | Argument | Standard | Bedeutung |
 | --- | --- | --- |
 | `classes` | `None` | Nur diese ursprünglichen Datensatz-Klassen-IDs auswerten, kommagetrennt (z. B. '0,3,5'); Boxen anderer Klassen werden aus Ground Truth und Vorhersagen entfernt. Standardmäßig wird classes= des Checkpoint-Trainings übernommen, sofern vorhanden |
+| `single_cls` | `False` | Einen unterstützten Detektor auswerten, bei dem alle Klassen zu Klasse 0 zusammengeführt sind |
 | `crop_pct` | `None` | Skalierungsverhältnis vor dem mittigen Ausschnitt bei der Klassifikationsauswertung (Standard: nativer Wert der Modellfamilie) |
 | `plot_samples` | `8` | Bilder in der Validierungsbeispieldarstellung: 0 für keine, -1 für jedes validierte Bild (ändert die Metriken nicht) |
 | `visualize` | `False` | Jedes validierte Bild mit True Positives, False Positives und False Negatives nach visualize/errors/ (bei Fehlern) und visualize/correct/ zeichnen (detect, segment; classify zeigt Label gegen Top-1) |

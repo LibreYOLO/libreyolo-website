@@ -95,9 +95,10 @@ including the task suffix, so a name that does not match a published checkpoint
 produces a URL that does not exist. The checkpoint table on each model page
 lists the exact published filenames.
 
-## Training hangs or restarts on Windows
+## Training hangs or restarts on Windows or macOS
 
-Windows has no `fork`, so dataloader workers start by re-importing your script.
+Windows has no `fork`, and Python on macOS does not use it by default, so
+dataloader workers start by re-importing your script.
 Without a `if __name__ == "__main__":` guard, each worker re-runs your training
 call, which either deadlocks or spawns processes without end.
 
@@ -134,8 +135,8 @@ Index only what you know is a list.
 
 ### Reading metrics as attributes
 
-`val()` returns a plain dictionary keyed by metric name, not an object with
-attribute access:
+`val()` returns a dictionary keyed by metric name. Its one attribute, `box`,
+carries per-image results and per-class thresholds, not the metric values:
 
 ```python
 metrics = model.val(data="coco8.yaml")

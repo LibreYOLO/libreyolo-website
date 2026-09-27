@@ -1,7 +1,9 @@
 ---
 title: libreyolo train
 seo_title: Befehlsreferenz für libreyolo train
-description: "Trainiere ein Modell über die Kommandozeile: Argumente mit Standardwerten, Überschreibungen durch Familien und von einer Familie ignorierte Argumente."
+description: >-
+  Trainiere ein Modell über die Kommandozeile: Argumente mit Standardwerten,
+  Überschreibungen durch Familien und von einer Familie ignorierte Argumente.
 lead: >-
   Trainiert ein Modell auf einem Datensatz und schreibt Checkpoints, Metriken
   und Logs in ein Run-Verzeichnis. Jedes Argument unten hat einen Default aus
@@ -14,7 +16,7 @@ keywords:
   - libreyolo train argumente
   - libreyolo dry run
   - yolo layer einfrieren
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: Befehl
     value: libreyolo train
@@ -23,7 +25,9 @@ meta:
     value: data
     mono: true
   - label: Ausgabe
-    value: 'Checkpoints, Metriken und Logs unter runs/train/exp'
+    value: >-
+      Checkpoints, Metriken und Logs unter runs/train/<name>; YOLO9 verwendet
+      yolo9_exp
 snippets:
   examples:
     - label: Basis
@@ -49,7 +53,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: "525a8e4366e4c0be"
+source_hash: 0f7f2b7487a67daa
 ---
 
 ## Synopsis
@@ -90,6 +94,7 @@ Form hat.
 | `amp` | `true` | Automatic Mixed Precision |
 | `amp_dtype` | `float16` | CUDA-AMP-Dtype: `float16` oder `bfloat16` |
 | `cuda_graph` | `false` | Nimmt Forward- und Backward-Pass des Trainings in CUDA-Graphs auf. Nur eine GPU, nur unterstützte Familien; der Rest läuft eager |
+| `compile` | `false` | Das Trainingsnetz mit `torch.compile` kompilieren: `true`, `false`, `default`, `reduce-overhead`, `max-autotune`, `max-autotune-no-cudagraphs`. Nur eine CUDA-GPU; andere Runs trainieren eager mit einer Warnung |
 | `lora` | `false` | LoRA-Fine-Tuning, für die unter Hinweise gelisteten Transformer-Familien |
 | `freeze` | | Schichten einfrieren: eine Anzahl als Integer, eine Liste von Indizes oder Modulnamen |
 
@@ -148,7 +153,7 @@ Form hat.
 | Argument | Default | Bedeutung |
 |---|---|---|
 | `val` | `true` | Während des Trainings validieren |
-| `eval_interval` | `10` | Alle N Epochen validieren |
+| `eval_interval` | `10` | Alle N Epochen validieren, und nach der letzten Epoche |
 | `max_det` | `300` | Maximale Anzahl Vorhersagen pro Bild nach der Validierungs-NMS |
 | `eval_max_det` | | Obergrenze für den COCO-Evaluator. Ohne Angabe die AP@100-Konvention von pycocotools |
 | `faster_coco_eval` | `true` | Nutzt das C++-Backend faster-coco-eval für COCO-Metriken, wenn es installiert ist; fällt sonst auf pycocotools zurück |
@@ -185,6 +190,7 @@ Form hat.
 | `average_best` | `0` | Die N besten Checkpoints nach der überwachten Metrik am Trainingsende gleichgewichtet zu weights/average.pt mitteln (0 = aus) |
 | `export_check` | `False` | ONNX vor Epoche 1 exportieren und den Lauf bei Exportfehler abbrechen (Standard: aus) |
 | `precise_bn` | `0` | Laufende BatchNorm-Statistiken nach der letzten Epoche aus so vielen Trainingsbildern neu berechnen (0 = aus) |
+| `aux_weight` | | Nur YOLO9: Loss-Gewicht des PGI-Hilfszweigs für das Fine-Tuning. `0.25` ohne Angabe; `0` trainiert nur den Haupt-Head |
 | `fliplr` | `None` | Wahrscheinlichkeit horizontaler Spiegelung (Ökosystem-Alias für flip_prob) |
 | `flipud` | `0.0` | Wahrscheinlichkeit vertikaler Spiegelung |
 | `auto_augment` | `None` | Auto-Augmentierungsregel für Klassifikation: randaugment, autoaugment, augmix (Standard: keine) |
@@ -230,9 +236,10 @@ DINOv2 trainieren über Pass-through-Pipelines ohne Mosaic, ohne Mixup und ohne
 affine Verzerrung, `mosaic`, `mixup`, `hsv_prob`, `degrees`, `translate`,
 `shear`, `mosaic_scale` und `mixup_scale` laufen dort also ins Leere. EC teilt
 sich diese Pipeline, liest aber `hsv_prob`, `degrees` und `translate`, wenn sein
-Task Pose ist. Die Klassifikationsfamilien, SegFormer und NAFNet ignorieren
-diesen ganzen Satz und `flip_prob` gleich mit, weil ihr Spiegeln mit einer
-festen statt einer konfigurierbaren Wahrscheinlichkeit läuft. YOLO-NAS ignoriert
+Task Pose ist. Die Klassifikationsfamilien ignorieren diesen Satz bis auf
+`mixup`, das bei ihnen Batch-MixUp ist, und sie lesen `flip_prob`. SegFormer und
+NAFNet ignorieren den ganzen Satz und `flip_prob` gleich mit, weil ihr Spiegeln
+mit einer festen statt einer konfigurierbaren Wahrscheinlichkeit läuft. YOLO-NAS ignoriert
 allein `mosaic`, da es stattdessen mit einer immer aktiven affinen
 Transformation pro Sample augmentiert. RF-DETR ignoriert über diese Liste hinaus
 drei weitere: `optimizer`, `momentum` und `nesterov`.
@@ -243,9 +250,9 @@ und diese Zeile ist die verbindliche Liste für die installierte Version. Sie is
 außerdem das einzige Signal, ein geskripteter Run mit `quiet=true` unterdrückt
 die Warnung also zusammen mit allem anderen auf stderr.
 
-`val=false` ist ein verwandter Fall. Es setzt `eval_interval` bei den meisten
-Familien auf `0`; RF-DETR kann die Validierung so nicht abschalten und
-protokolliert, dass es die Anfrage ignoriert hat.
+`val=false` ist ein verwandter Fall. Es setzt `eval_interval` auf `0`, was die
+Validierung während des Trainings abschaltet, die letzte Epoche eingeschlossen,
+und der Run schreibt kein `best.pt`.
 
 ### Anderes Verhalten, das du kennen solltest
 
@@ -258,7 +265,8 @@ Training von Grund auf neu unterstützen, denn die beiden verlangen
 Gegensätzliches.
 
 `mosaic` und `mixup` sind die Schreibweisen der Konfigurationsfelder
-`mosaic_prob` und `mixup_prob` auf der Kommandozeile. Bei Familien, deren Mixup
+`mosaic_prob` und `mixup_prob` auf der Kommandozeile; bei einem
+Klassifikationsmodell ist `mixup` stattdessen Batch-MixUp. Bei Familien, deren Mixup
 nur auf Mosaic-Samples wirkt, greift `mixup` über null bei `mosaic` auf null
 nie, und der Run sagt das auch.
 

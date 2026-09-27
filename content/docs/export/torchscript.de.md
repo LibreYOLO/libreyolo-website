@@ -112,7 +112,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 286a082969ccd604
+source_hash: 6be59826c2dc9978
 ---
 
 ## Installation
@@ -148,7 +148,9 @@ Die Metadaten liegen nicht in einer Sidecar-Datei. `torch.jit.save` legt
 
 `LibreYOLO()` entscheidet anhand der Endung `.torchscript` und liefert dasselbe
 `Results`-Objekt wie der Checkpoint, aus dem es stammt. Mit `device="auto"` wird
-das Modul auf CUDA gemappt, sofern verfügbar, danach auf MPS, danach auf die CPU.
+das Modul auf CUDA gemappt, sofern verfügbar, sonst auf die CPU. Apple Silicon
+führt es auf der CPU aus, weil MPS die float64-Konstanten nicht laden kann, die
+ein per Tracing erzeugter Graph mitführt.
 
 Das zweite Snippet ist der Weg für Leser ohne installiertes LibreYOLO und für das
 Deployment in C++ über libtorch, wo dasselbe Archiv mit `torch::jit::load` lädt.

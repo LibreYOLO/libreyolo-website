@@ -2,11 +2,13 @@
 title: libreyolo val
 seo_title: Tham chiếu lệnh libreyolo val
 description: >-
-  Đánh giá một checkpoint trên một split của tập dữ liệu (dataset) từ dòng lệnh: mọi tham số kèm giá trị mặc
-  định, và các khóa metric (chỉ số) mà từng tác vụ trả về.
+  Đánh giá một checkpoint trên một split của tập dữ liệu (dataset) từ dòng lệnh:
+  mọi tham số kèm giá trị mặc định, và các khóa metric (chỉ số) mà từng tác vụ
+  trả về.
 lead: >-
-  Đánh giá một mô hình trên một split của dataset rồi in ra các metric. Tập metric phụ thuộc vào tác vụ của mô
-  hình, và các con số này chính là thứ dựng nên một dòng trong bảng benchmark.
+  Đánh giá một mô hình trên một split của dataset rồi in ra các metric. Tập
+  metric phụ thuộc vào tác vụ của mô hình, và các con số này chính là thứ dựng
+  nên một dòng trong bảng benchmark.
 keywords:
   - libreyolo val cli
   - lệnh đánh giá mô hình libreyolo
@@ -22,7 +24,9 @@ meta:
     value: 'model, data'
     mono: true
   - label: Đầu ra
-    value: Metric trên stdout. Biểu đồ và COCO JSON nằm trong runs/val/exp khi được yêu cầu
+    value: >-
+      Metric trên stdout. Biểu đồ và COCO JSON nằm trong runs/val/exp khi được
+      yêu cầu
 snippets:
   examples:
     - label: Cơ bản
@@ -39,7 +43,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: 8e858639e96672a0
+source_hash: a0446a47e0f89b27
 ---
 ## Cú pháp
 
@@ -83,6 +87,7 @@ Tham số là các cặp `key=value`, và dạng POSIX cũng dùng được, nê
 | Tham số | Mặc định | Ý nghĩa |
 | --- | --- | --- |
 | `classes` | `None` | Chỉ đánh giá các ID lớp đối tượng gốc này, phân cách bằng dấu phẩy (ví dụ '0,3,5'); bounding box của mọi lớp khác bị bỏ khỏi ground truth và dự đoán. Mặc định dùng classes= đã huấn luyện checkpoint, nếu có |
+| `single_cls` | `False` | Đánh giá một bộ phát hiện được hỗ trợ với mọi lớp đối tượng gộp về lớp đối tượng 0 |
 | `crop_pct` | `None` | Tỷ lệ đổi kích thước đánh giá phân loại trước cắt giữa (mặc định: giá trị gốc của họ mô hình) |
 | `plot_samples` | `8` | Ảnh mẫu trong biểu đồ mẫu đánh giá: 0 để không có, -1 để lấy mọi ảnh được đánh giá (không đổi chỉ số) |
 | `visualize` | `False` | Vẽ mọi ảnh được đánh giá với true positive, false positive và false negative vào visualize/errors/ (có lỗi) và visualize/correct/ (detect, segment; classify vẽ nhãn so với top-1) |

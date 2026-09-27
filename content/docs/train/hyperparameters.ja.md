@@ -93,13 +93,13 @@ snippets:
         from libreyolo import LibreYOLO
 
         # 中断した実行のチェックポイントを読み込み、再開を要求
-        model = LibreYOLO("runs/train/exp/weights/last.pt")
-        model.train(data="my-dataset.yaml", epochs=100, resume=True)
+        model = LibreYOLO("runs/train/yolo9_exp/weights/last.pt")
+        model.train(data="my-dataset.yaml", resume=True)
     - label: CLI
       language: bash
       code: |
-        libreyolo train model=runs/train/exp/weights/last.pt \
-          data=my-dataset.yaml epochs=100 resume=true
+        libreyolo train model=runs/train/yolo9_exp/weights/last.pt \
+          data=my-dataset.yaml resume=true
   cfg:
     - label: Python
       language: python
@@ -109,7 +109,7 @@ snippets:
         # yamlのキーはTrainConfigフィールド名。明示的なkwargsが優先
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: eac4e55fcf16ca15
+source_hash: ca1259a10e05a51d
 ---
 
 ## 引数の設定
@@ -237,8 +237,9 @@ bfloat16に対応しないCUDAデバイスで要求すると、通知なく機�
 
 `save_period`はNエポックごとに追加の`weights/epoch_<N>.pt`を書き出します。さらに、各エポック後の
 `weights/last.pt`と、追跡対象の指標が改善するたびの`weights/best.pt`があります。
-`eval_interval`は検証の実行間隔を設定し、`patience`は改善なしでそのエポック数が続くと実行を
-停止します。`0`は早期終了を無効にします。
+`eval_interval`は検証の実行間隔を設定し、最終エポックでは常に検証します。`val=False`は検証を
+無効にし、その場合の実行では`best.pt`は書き出されません。`patience`は改善なしでそのエポック数が
+続くと実行を停止します。`0`は早期終了を無効にします。
 
 `cache`は、デコード済み画像をRAM（`True`または`"ram"`）か、ソースの隣の`.npy`ファイル
 （`"disk"`）に保持して、エポックの繰り返しを高速化します。キャッシュからの読み取りは新規の
@@ -250,18 +251,21 @@ bfloat16に対応しないCUDAデバイスで要求すると、通知なく機�
 
 ## 再開
 
-`resume=True`は中断した実行を継続します。再開処理は別の引数ではなくモデルからチェックポイントを
-読み取るため、先にチェックポイントを読み込む必要があります。
+`resume=True`は読み込んだチェックポイントから中断した実行を継続し、
+`resume="path/to/last.pt"`は代わりにそのファイルから継続します。
 
 <code-tabs name="resume" />
 
-再開時には、学習済みの重み、optimizerの状態、EMAの重みと更新回数、最良指標の追跡、
-`GradScaler`のスケール、PyTorch、CUDA、NumPyの乱数状態が復元されます。チェックポイントの
-エポックに1を加えた位置から開始し、スケジュールをその位置まで早送りします。
+再開時には実行で保存された学習引数が復元され、明示的に渡した引数は保存された値より優先されます。
+チェックポイントの実行ディレクトリに引き続き書き込みます。また、学習済みの重み、optimizerの状態、
+EMAの重みと更新回数、最良指標の追跡、`GradScaler`のスケール、PyTorch、CUDA、NumPyの乱数状態が
+復元されます。チェックポイントのエポックに1を加えた位置から開始し、スケジュールをその位置まで
+早送りします。
 
-2つの処理は行いません。`resume=True`は`pretrained`と併用できず、例外を発生させます。また、
-チェックポイントの最良指標キーが現在の実行と異なる場合、意味の違う値を比較せず、警告とともに
-最良指標の追跡を0へリセットします。
+3つの処理は行いません。`resume=True`は`pretrained`と併用できず、例外を発生させます。公開済みの
+重みと、すでに`epochs`に達した実行には再開するものがないため、その旨を示す`ValueError`を
+発生させます。また、チェックポイントの最良指標キーが現在の実行と異なる場合、意味の違う値を
+比較せず、警告とともに最良指標の追跡を0へリセットします。
 
 ## ファイル内のレシピ
 

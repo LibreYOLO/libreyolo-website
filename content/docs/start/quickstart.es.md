@@ -69,27 +69,26 @@ snippets:
         from libreyolo import LibreYOLO
 
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+        # Los workers de datos vuelven a importar este archivo en macOS y
+        Windows,
 
+        # así que un script entrena dentro de una guarda main.
 
-        # coco8 es un dataset de 8 imágenes incluido con la biblioteca. Se
-        descarga
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        # desde una URL en el primer uso, así que no hay que ejecutar ningún
-        script.
+            # coco8 es un dataset de 8 imágenes incluido con la biblioteca. Se descarga
+            # desde una URL en el primer uso, así que no hay que ejecutar ningún script.
+            results = model.train(
+                data="coco8.yaml",
+                epochs=1,
+                imgsz=640,
+                batch=4,
+                device="cpu",
+            )
 
-        results = model.train(
-            data="coco8.yaml",
-            epochs=1,
-            imgsz=640,
-            batch=4,
-            device="cpu",
-        )
-
-
-        print(results["save_dir"])
-
-        print(results["best_checkpoint"])
+            print(results["save_dir"])
+            print(results["best_checkpoint"])
     - label: CLI
       language: bash
       code: |
@@ -100,14 +99,15 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() devuelve un dict simple, no un objeto.
-        metrics = model.val(data="coco8.yaml", device="cpu")
+            # val() devuelve un dict simple, no un objeto.
+            metrics = model.val(data="coco8.yaml", device="cpu")
 
-        print(metrics["metrics/mAP50-95"])
-        print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+            print(metrics["metrics/mAP50-95"])
+            print(metrics["metrics/mAP50"])
+            print(metrics["metrics/precision"], metrics["metrics/recall"])
   export:
     - label: TorchScript
       language: python
@@ -130,7 +130,7 @@ snippets:
       code: |
         pip install "libreyolo[onnx]"
         libreyolo export model=yolo9-t format=onnx imgsz=640
-source_hash: c11b6bdbf0b6fdf1
+source_hash: 7dfa4197133544c5
 ---
 
 ## Instalación
@@ -166,8 +166,10 @@ sola imagen devuelve un `Results`; un directorio, una lista de imágenes o
 
 `data` es un YAML de dataset. `coco8.yaml` viene con la biblioteca, y por eso
 el snippet funciona tal cual se pega; un nombre que no viene incluido se
-interpreta como una ruta. Los datasets se resuelven bajo `~/datasets`, o bajo
-`LIBREYOLO_DATASETS_DIR` cuando esa variable está definida.
+interpreta como una ruta. La guarda `__main__` está ahí porque los workers de
+datos vuelven a importar el script en macOS y Windows; consulta
+[solución de problemas](/docs/troubleshooting). Los datasets se resuelven bajo
+`~/datasets`, o bajo `LIBREYOLO_DATASETS_DIR` cuando esa variable está definida.
 
 Una ejecución escribe en `project/name`, por defecto un directorio bajo
 `runs/train`, con `weights/best.pt` y `weights/last.pt` dentro. `train()`

@@ -15,7 +15,7 @@ keywords:
   - randaugment
   - cutmix
   - no_aug_epochs
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -70,7 +70,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 42668148fcc79c1f
+source_hash: 3112c6f54b98ef9f
 ---
 
 ## 设置这些参数
@@ -79,8 +79,9 @@ source_hash: 42668148fcc79c1f
 
 <code-tabs name="train" />
 
-其中两个在 CLI 上有更短的写法：`mosaic` 对应 `mosaic_prob`，`mixup` 对应
-`mixup_prob`。其余参数在两边的写法完全一致。
+其中三个有更短的写法，`train()` 和 CLI 都接受：`mosaic` 对应 `mosaic_prob`，`fliplr`
+对应 `flip_prob`，在检测上 `mixup` 对应 `mixup_prob`。同时传入简短写法和它对应的字段
+且取值不同时会报错。其余参数在两边的写法完全一致。
 
 ## 三种状态，而不是两种
 
@@ -179,7 +180,7 @@ SegFormer 来说，活的参数是类属性 `semantic_scale_jitter` 和 `semanti
 
 四个默认都是关的，所以除非你主动要求，分类训练不会有任何变化。
 
-CLI 按任务分发 `mixup`：分类使用批量混合，检测使用 `mixup_prob`。
+`train()` 和 CLI 按任务分发 `mixup`：分类使用批量混合，检测使用 `mixup_prob`。
 
 `scale=0.5` 表示随机裁剪面积范围为 `(0.5, 1.0)`；显式传入一对数值可设置两个边界。`crop_pct=None` 保留家族的评估缩放比例；覆盖它会影响训练期间和验证的评估，而导出保持家族原生预处理。
 

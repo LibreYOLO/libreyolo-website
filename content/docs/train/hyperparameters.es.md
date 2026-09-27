@@ -103,13 +103,13 @@ snippets:
         from libreyolo import LibreYOLO
 
         # Carga el checkpoint de la ejecución interrumpida y pide reanudarla.
-        model = LibreYOLO("runs/train/exp/weights/last.pt")
-        model.train(data="my-dataset.yaml", epochs=100, resume=True)
+        model = LibreYOLO("runs/train/yolo9_exp/weights/last.pt")
+        model.train(data="my-dataset.yaml", resume=True)
     - label: CLI
       language: bash
       code: |
-        libreyolo train model=runs/train/exp/weights/last.pt \
-          data=my-dataset.yaml epochs=100 resume=true
+        libreyolo train model=runs/train/yolo9_exp/weights/last.pt \
+          data=my-dataset.yaml resume=true
   cfg:
     - label: Python
       language: python
@@ -123,7 +123,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: eac4e55fcf16ca15
+source_hash: ca1259a10e05a51d
 ---
 
 ## Cómo pasar argumentos
@@ -272,8 +272,9 @@ recibe un sufijo incremental en lugar de ser sobrescrito.
 `save_period` escribe un `weights/epoch_<N>.pt` extra cada N épocas, además de
 `weights/last.pt` después de cada época y `weights/best.pt` cada vez que mejora la
 métrica que se sigue. `eval_interval` fija cada cuánto se ejecuta la validación, y
-`patience` detiene la ejecución tras ese número de épocas sin mejora, con `0`
-desactivando el early stopping.
+la última época siempre se valida; `val=False` desactiva la validación, y una
+ejecución así no escribe `best.pt`. `patience` detiene la ejecución tras ese
+número de épocas sin mejora, con `0` desactivando el early stopping.
 
 `cache` acelera las épocas repetidas manteniendo las imágenes decodificadas en RAM
 (`True` o `"ram"`) o como archivos `.npy` junto a las fuentes (`"disk"`). Las
@@ -286,20 +287,25 @@ de dataloader, `"disk"` es la opción más segura de las dos.
 
 ## Reanudar
 
-`resume=True` continúa una ejecución interrumpida. El checkpoint hay que cargarlo
-primero, porque resume lo lee del modelo, no de un argumento aparte.
+`resume=True` continúa una ejecución interrumpida desde el checkpoint cargado;
+`resume="path/to/last.pt"` continúa en cambio desde ese archivo.
 
 <code-tabs name="resume" />
 
-Resume restaura los pesos entrenados, el estado del optimizador, los pesos de la
-EMA y su contador de actualizaciones, el seguimiento de la mejor métrica, la
-escala del `GradScaler` y los estados aleatorios de PyTorch, CUDA y NumPy. Empieza
-en la época del checkpoint más uno y adelanta la planificación hasta esa posición.
+Resume restaura los argumentos de entrenamiento guardados de la ejecución, y un
+argumento pasado explícitamente sustituye al guardado. Sigue escribiendo en el
+directorio de ejecución del checkpoint. Restaura los pesos entrenados, el estado
+del optimizador, los pesos de la EMA y su contador de actualizaciones, el
+seguimiento de la mejor métrica, la escala del `GradScaler` y los estados
+aleatorios de PyTorch, CUDA y NumPy. Empieza en la época del checkpoint más uno y
+adelanta la planificación hasta esa posición.
 
-Dos cosas que no hará. `resume=True` no se puede combinar con `pretrained`, y
-hacerlo lanza un error. Y cuando la clave de mejor métrica del checkpoint difiere
-de la de la ejecución actual, el seguimiento de la mejor métrica se reinicia a cero
-con un warning en lugar de comparar valores que no significan lo mismo.
+Tres cosas que no hará. `resume=True` no se puede combinar con `pretrained`, y
+hacerlo lanza un error. Los pesos publicados y una ejecución que ya alcanzó sus
+`epochs` no tienen nada que reanudar, y lanzan un `ValueError` que lo indica. Y
+cuando la clave de mejor métrica del checkpoint difiere de la de la ejecución
+actual, el seguimiento de la mejor métrica se reinicia a cero con un warning en
+lugar de comparar valores que no significan lo mismo.
 
 ## Recetas en un archivo
 

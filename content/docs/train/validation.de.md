@@ -20,7 +20,7 @@ keywords:
   - miou
   - panoptic quality
   - top1 accuracy
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   val:
     - label: Python
@@ -63,7 +63,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: "ce7d26a5cd72d988"
+source_hash: da1e3ccfd1efba73
 ---
 
 ## Ausführen einer Validierung
@@ -72,7 +72,7 @@ source_hash: "ce7d26a5cd72d988"
 
 <code-tabs name="val" />
 
-Der Rückgabewert ist ein einfaches `dict[str, float]`. Jeder Schlüssel ist
+Der Rückgabewert ist ein `dict[str, float]`. Jeder Schlüssel ist
 literal. Lies ihn daher über seinen Namen und nicht über seine Position aus.
 
 Die wichtigsten Argumente sind `data`, `split`, `batch`, `imgsz`, `conf`,
@@ -81,7 +81,9 @@ den Standardwert `0.001`, `iou` den Standardwert `0.6`. Beide sind erheblich
 lockerer als die Standardwerte für Vorhersagen, weil ein mAP-Sweep auch den
 Ausläufer mit niedriger Confidence benötigt. Der Standardwert von `imgsz` ist
 die eigene Eingabegröße des Modells und keine feste Zahl. `split` akzeptiert
-ausschließlich `val`, `test` oder `train`.
+ausschließlich `val`, `test` oder `train`. Ohne `data` validiert ein trainierter
+Checkpoint auf dem Datensatz, mit dem er trainiert wurde; veröffentlichte
+Gewichte enthalten keinen und benötigen `data=`.
 
 Jedes weitere Feld der Validierungskonfiguration wird als Keyword-Argument
 weitergereicht. Dazu gehören `save_dir`, `max_det`, `eval_max_det`, `half`,
@@ -155,7 +157,7 @@ ist. Pose gibt weder `fitness` noch `metrics/mAP50-95` zurück. Die zugehörigen
 Trainer setzen `best_metric_key` stattdessen auf
 `metrics/keypoints_mAP50-95`.
 
-ImageFolder-Klassifikation ergänzt die Makrometriken `metrics/precision`, `metrics/recall` und `metrics/f1`, gemittelt über die in den Validierungszielen vorhandenen Klassen. Top-1 bleibt die Standardfitness. Die Erkennung liefert außerdem `metrics/best_conf`, `metrics/best_conf_f1` und `metrics/best_conf_per_class` mit Klassennamen als Schlüssel. Sie bestimmen Micro-F1-optimale Schwellenwerte bei IoU 0.50. Erkennungen mit gleichem Score bleiben gruppiert; bei Gleichstand wird der höhere Schwellenwert gewählt. Ohne positiven F1 ergibt sich NaN. Segmentierung stellt diese Schwellenwertschlüssel nicht bereit.
+ImageFolder-Klassifikation ergänzt die Makrometriken `metrics/precision`, `metrics/recall` und `metrics/f1`, gemittelt über die in den Validierungszielen vorhandenen Klassen. Top-1 bleibt die Standardfitness. Die Erkennung liefert außerdem `metrics/best_conf` und `metrics/best_conf_f1`, wählt dabei den Micro-F1-optimalen Schwellenwert bei IoU 0.50 und legt Schwellenwerte mit Klassennamen als Schlüssel in `metrics.box.best_conf_per_class` ab. Erkennungen mit gleichem Score bleiben gruppiert; bei Gleichstand wird der höhere Schwellenwert gewählt. Ohne positiven F1 ergibt sich 0.0. Segmentierung stellt diese Schwellenwertschlüssel nicht bereit.
 
 ## Geschwindigkeitsschlüssel
 
@@ -259,7 +261,9 @@ Werden beide angefordert, wird ein Fehler ausgelöst.
 
 `val()` schreibt immer eine `config.yaml` in sein Ausgabeverzeichnis. Wenn
 `save_dir` nicht angegeben ist, lautet dessen Standardwert
-`runs/val/<model>_<size>_<timestamp>`.
+`runs/val/<model>_<size>_<timestamp>`. `project`, `name` und `exist_ok` wählen
+es wie beim Training: `project/name`, mit einem hochgezählten Suffix, sofern
+nicht `exist_ok=True` gesetzt ist.
 
 <code-tabs name="json" />
 
@@ -284,10 +288,12 @@ ab.
 
 ## Validierung während des Trainings
 
-Das Training validiert alle `eval_interval` Epochen anhand des `val`-Splits
-des Datensatzes. Die erzeugten Metriken steuern die Auswahl von `best.pt`, den
+Das Training validiert alle `eval_interval` Epochen und immer nach der letzten
+Epoche anhand des `val`-Splits des Datensatzes. Die erzeugten Metriken steuern die Auswahl von `best.pt`, den
 vorzeitigen Abbruch mit `patience` und die `val/`-Schlüssel in jedem Logger.
-Bei aktiviertem EMA läuft die Validierung auf den EMA-Gewichten.
+Bei aktiviertem EMA läuft die Validierung auf den EMA-Gewichten. Ihre Dateien
+landen in einem Verzeichnis `val/` innerhalb des Laufs. `val=False` schaltet die
+Validierung während des Trainings ab, die letzte Epoche eingeschlossen.
 
 Unter [Hyperparameter](/docs/train/hyperparameters) findest du Informationen
 zu `eval_interval`, `patience` und `save_plots`. Unter

@@ -167,7 +167,7 @@ snippets:
         didukungnya.
 
         qmodel.export(format="tensorrt", half=True)
-source_hash: 6c247a3243daf393
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## Instalasi
@@ -290,6 +290,9 @@ Aritmetika terkuantisasi dieksekusi dalam simulasi, yaitu fake quantization yang
 dihitung di pulau float32 bahkan di bawah AMP. Simulasinya benar secara numerik,
 jadi skor `val()` di perangkat mana pun merupakan klaim nyata tentang aritmetika
 terkuantisasi. Itu bukan klaim tentang kecepatan.
+
+Apple MPS tidak mengimplementasikan operasi fake-quantize maupun float8, jadi di
+Mac setiap resep kecuali `fp16` dan `bf16` berjalan di CPU, disertai peringatan.
 
 Ada dua pengecualian yang dieksekusi secara native. `fp16` dan `bf16` hanyalah
 konversi presisi biasa. Modul `fp8` yang sudah difinalisasi menjalankan GEMM-nya

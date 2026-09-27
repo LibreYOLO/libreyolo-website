@@ -12,7 +12,7 @@ keywords:
   - nvfp4 mxfp4
   - dataset de calibration
   - export onnx qdq int8
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: Appel
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -166,7 +166,7 @@ snippets:
         gérée.
 
         qmodel.export(format="tensorrt", half=True)
-source_hash: 6c247a3243daf393
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## Installation
@@ -294,6 +294,10 @@ quantification calculée dans des îlots float32, même sous AMP. La simulation 
 fidèle numériquement, donc un score `val()` sur n'importe quel appareil est une
 affirmation réelle sur l'arithmétique quantifiée. Ce n'est pas une affirmation de
 vitesse.
+
+Apple MPS n'implémente ni les opérations de fausse quantification ni le float8,
+donc sur un Mac toutes les recettes sauf `fp16` et `bf16` s'exécutent sur CPU,
+avec un avertissement.
 
 Deux exceptions s'exécutent nativement. `fp16` et `bf16` sont de simples
 conversions. Les modules `fp8` finalisés exécutent leur GEMM directement sur des

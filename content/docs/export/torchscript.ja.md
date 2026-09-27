@@ -101,7 +101,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 286a082969ccd604
+source_hash: 6be59826c2dc9978
 ---
 
 ## インストール
@@ -124,7 +124,7 @@ source_hash: 286a082969ccd604
 
 <code-tabs name="run" />
 
-`LibreYOLO()` は `.torchscript` 接尾辞に基づいて処理を振り分け、元のチェックポイントと同じ `Results` オブジェクトを返します。`device="auto"` の場合、利用可能であればCUDA、次にMPS、最後にCPUへモジュールを割り当てます。
+`LibreYOLO()` は `.torchscript` 接尾辞に基づいて処理を振り分け、元のチェックポイントと同じ `Results` オブジェクトを返します。`device="auto"` の場合、利用可能であればCUDA、そうでなければCPUへモジュールを割り当てます。MPSはトレースされたグラフが持つfloat64の定数を読み込めないため、Apple SiliconではCPUで実行します。
 
 2番目のスニペットは、LibreYOLOをインストールしていない場合と、同じアーカイブを `torch::jit::load` で読み込むlibtorchによるC++デプロイに使用する方法です。この場合、前処理、デコード、NMS、座標の再スケーリングを自分で実装します。追加メタデータファイルは引き続き読み取ることができ、クラス名が存在する唯一の場所です。
 

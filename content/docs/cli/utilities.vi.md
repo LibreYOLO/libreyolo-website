@@ -44,7 +44,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
-source_hash: 7b5b53c46df00c06
+source_hash: 95935c1f8ca2d6db
 ---
 
 ## Cú pháp
@@ -98,7 +98,10 @@ còn thiếu chỉ từ một lệnh này.
 ## models
 
 Liệt kê mọi họ mô hình cùng các tác vụ, các kích thước, những tên CLI phân giải
-ra checkpoint của họ đó, và độ phân giải đầu vào của từng kích thước.
+ra checkpoint của họ đó, và độ phân giải đầu vào của từng kích thước. Chỉ những
+tên mà `model=` có thể tải mới được liệt kê. Các tên chưa có trọng số được công
+bố xuất hiện trên một dòng riêng `No published weights (local checkpoints only)`,
+và một họ không có tên CLI nào sẽ hiển thị lớp Python hoặc lệnh riêng của nó.
 
 ```bash
 libreyolo models

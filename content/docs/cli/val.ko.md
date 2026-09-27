@@ -37,7 +37,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: "8e858639e96672a0"
+source_hash: a0446a47e0f89b27
 ---
 
 ## 개요
@@ -82,6 +82,7 @@ libreyolo val model=<name|path> data=<dataset.yaml> [key=value ...]
 | 인자 | 기본값 | 의미 |
 | --- | --- | --- |
 | `classes` | `None` | 쉼표로 구분한 원본 데이터셋 클래스 ID만 평가(예: '0,3,5'); 나머지 클래스의 박스는 정답과 예측에서 제거하며, 체크포인트 학습에 classes=를 사용했다면 기본적으로 그 설정을 상속 |
+| `single_cls` | `False` | 지원되는 탐지기의 모든 클래스를 클래스 0으로 합쳐 평가 |
 | `crop_pct` | `None` | 중앙 크롭 전 분류 평가 크기 조정 비율(기본값: 모델 계열의 기본값) |
 | `plot_samples` | `8` | 검증 샘플 플롯의 이미지 수: 0은 없음, -1은 검증한 모든 이미지(지표에는 영향 없음) |
 | `visualize` | `False` | 검증한 모든 이미지의 참 양성, 거짓 양성, 거짓 음성을 visualize/errors/(오류가 있는 경우)와 visualize/correct/에 표시(detect, segment; classify는 레이블과 top-1을 비교) |

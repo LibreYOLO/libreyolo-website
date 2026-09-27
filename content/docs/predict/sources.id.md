@@ -54,7 +54,11 @@ snippets:
         array = np.asarray(pil_image)
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+        # Array NumPy dibaca sebagai BGR kecuali diberi tahu lain; yang ini RGB.
+        result = model(array, color_format="rgb")
+        print(type(array).__name__, len(result.boxes))
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: Folder
@@ -201,7 +205,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 93db4d43c24b69ae
+source_hash: c355ad28487c9a65
 ---
 
 ## Cara sumber diklasifikasikan
@@ -239,14 +243,17 @@ Sumber satu gambar menerima tujuh tipe.
 |---|---|
 | `str` atau `pathlib.Path` | Berkas lokal, `http(s)://`, `s3://`, atau `gs://` |
 | `PIL.Image.Image` | Dikonversi ke RGB |
-| `numpy.ndarray` | Grayscale 2D, atau HWC maupun CHW 3D; array 4D memakai gambar pertama |
-| `torch.Tensor` | CHW atau NCHW, dibaca sebagai RGB; tensor batch memakai gambar pertama |
+| `numpy.ndarray` | Grayscale 2D, atau HWC maupun CHW 3D dalam urutan BGR; array 4D adalah batch |
+| `torch.Tensor` | CHW atau NCHW, dibaca sebagai RGB; tensor 4D adalah batch |
 | `bytes` | Data gambar terenkode |
 | `io.BytesIO` | Data gambar terenkode |
 
+Array atau tensor 4D mengembalikan daftar berisi satu `Results` per gambar.
+
 Semuanya dikonversi ke RGB sebelum prapemrosesan. Array NumPy adalah satu-satunya kasus dengan
-urutan channel ambigu, sehingga `color_format` mengontrolnya: `"auto"` (default) membiarkan
-array apa adanya, sedangkan `"bgr"` membalik channel, seperti yang dibutuhkan frame OpenCV.
+urutan channel ambigu, sehingga `color_format` mengontrolnya: `"auto"` (default) dan `"bgr"`
+membaca array sebagai BGR, urutan yang dikembalikan OpenCV, sedangkan `"rgb"` membiarkannya
+apa adanya, seperti yang dibutuhkan array yang dibuat dari gambar PIL.
 
 Array float diskalakan ulang berdasarkan rentangnya sendiri: nilai hingga `1.0` dikalikan 255,
 sedangkan nilai lebih tinggi dipotong ke `[0, 255]`. Array RGBA membuang channel alfa.
@@ -386,4 +393,4 @@ Video dan sumber live ditulis sebagai satu `.mp4` yang dinamai berdasarkan sumbe
 tanpa sufiks dianggap sebagai direktori. `output_file_format` memilih encoding gambar diam
 dan menerima `jpg`, `png`, atau `webp`.
 
-Setelah penyimpanan, path yang ditulis juga dilampirkan ke hasil sebagai `result.saved_path`.
+Setelah gambar disimpan, path yang ditulis juga dilampirkan ke hasil sebagai `result.saved_path`.

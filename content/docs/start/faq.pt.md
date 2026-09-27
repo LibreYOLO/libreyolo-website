@@ -17,7 +17,7 @@ keywords:
   - libreyolo cli
   - libreyolo sem internet
 last_verified: 1.6.0
-source_hash: d0d1f00bab2cee6e
+source_hash: 13810bf9ea01c459
 ---
 
 ## Por qual modelo devo começar?
@@ -90,9 +90,10 @@ cabeçalho da página do modelo avisa antes de você tentar. Veja
 
 ## O que o val retorna?
 
-Um dicionário simples, não um objeto. As chaves de detecção incluem
-`metrics/precision`, `metrics/recall`, `metrics/mAP50` e `metrics/mAP50-95`.
-Outras tarefas retornam as chaves que fazem sentido para elas, como
+Um dicionário com chaves de nome de métrica. As chaves de detecção incluem
+`metrics/precision`, `metrics/recall`, `metrics/mAP50` e `metrics/mAP50-95`, e os
+resultados de detecção e segmentação também trazem resultados por imagem em
+`metrics.box`. Outras tarefas retornam as chaves que fazem sentido para elas, como
 `metrics/accuracy_top1` para classificação ou `metrics/PQ`, `metrics/SQ` e
 `metrics/RQ` para segmentação panóptica.
 

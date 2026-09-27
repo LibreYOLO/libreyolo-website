@@ -127,7 +127,7 @@ snippets:
       code: |
         huggingface-cli upload my-org/my-run \
           /root/runs/run1/weights/best.pt best.pt
-source_hash: 75d314de06aca3b6
+source_hash: 2f4a8ac1df103962
 ---
 
 ## Sebelum Anda menyewa apa pun
@@ -174,9 +174,10 @@ menemukan batas maksimum dengan kesalahan kehabisan memori dua puluh menit kemud
 [Hyperparameters](/docs/train/hyperparameters).
 
 Pada sebuah kotak multi-GPU, `device="0,1,2,3"` secara otomatis membuat satu pekerja per GPU, dan
-`batch` tetap menjadi batch global di seluruh GPU tersebut. Penjaga `__main__`
-wajib, karena setiap pekerja mengimpor ulang skrip. Hal itu, dan perilaku terdistribusi lainnya,
-ada di [Pelatihan Multi-GPU](/docs/train/multi-gpu).
+`batch` tetap menjadi batch global di seluruh GPU tersebut. Pekerja tidak
+menjalankan ulang kode tingkat atas dari skrip tanpa penjaga, jadi penjaga `__main__`
+bersifat opsional. Hal itu, dan perilaku terdistribusi lainnya, ada di
+[Pelatihan Multi-GPU](/docs/train/multi-gpu).
 
 ## Mengamatinya dari luar
 

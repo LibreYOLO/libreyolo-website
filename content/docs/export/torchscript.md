@@ -131,7 +131,8 @@ through `_extra_files`.
 
 `LibreYOLO()` routes on the `.torchscript` suffix and returns the same `Results`
 object as the checkpoint it came from. With `device="auto"` the module is mapped
-to CUDA when available, then MPS, then CPU.
+to CUDA when available, otherwise CPU. Apple Silicon runs it on CPU, because MPS
+cannot load the float64 constants a traced graph carries.
 
 The second snippet is the path for a reader with no LibreYOLO installed, and for
 C++ deployment through libtorch, where the same archive loads with

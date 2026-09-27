@@ -40,7 +40,7 @@ snippets:
         # ファクトリーはファイル拡張子で振り分けるので、エクスポート結果もチェックポイントと同じように読み込まれる
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 0cc60dd7c5c9f864
+source_hash: 290b778a1060a760
 ---
 
 ## 概要
@@ -62,6 +62,7 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 | `batch` | `1` | エクスポート時のバッチサイズ |
 | `half` | `false` | FP16精度 |
 | `int8` | `false` | INT8量子化 |
+| `quantize` | | 精度を`16`（FP16）、`8`（INT8）、`32`（FP32）で指定。`half`と`int8`の代わりになります |
 | `dynamic` | `false` | 動的な入力形状（ONNX） |
 | `simplify` | `true` | ONNXグラフの簡略化 |
 | `nms` | `false` | NMSをモデルに埋め込みます。ONNXとCoreMLのみ |
@@ -95,7 +96,7 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 
 `nms=true`はONNXとCoreMLでは受け付けられ、それ以外のすべての形式では`nms_unsupported_format`で拒否されます。ONNXでは、埋め込まれたグラフがバッチ1に固定されるため`dynamic`を強制的にオフにし、そのことをstderrに出力します。CoreMLでは`conf`と`iou`は受け付けますが`max_det`は受け付けないので、デフォルト以外の`max_det`を`format=coreml nms=true`と一緒に渡すと`config_unsupported`で終了します。
 
-`half=true`と`int8=true`を同時に指定してもエラーにはなりません。INT8が優先され、`half`は破棄され、警告がstderrに出ます。
+`half=true`と`int8=true`を同時に指定してもエラーにはなりません。INT8が優先され、`half`は破棄され、警告がstderrに出ます。`half`または`int8`と食い違う`quantize`は`config_conflict`で終了します。
 
 `name`と`verify`は現時点ではRKNN用のオプションです。どちらかを別の形式と一緒に渡すと、無視されるのではなく`config_unsupported`で終了します。
 

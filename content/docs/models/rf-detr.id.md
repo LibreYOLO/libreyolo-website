@@ -183,7 +183,7 @@ snippets:
     - label: Gunakan berkas hasil ekspor
       language: python
       code: >
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
 
         # Factory merutekan berdasarkan sufiks berkas, sehingga artefak hasil
@@ -210,7 +210,7 @@ snippets:
 
         # pascapemrosesan sendiri. Periksa signature sebelum menghubungkannya.
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -220,7 +220,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: c360784eb62a7df5
+source_hash: 379a3a09691bf14b
 ---
 
 ## Instalasi
@@ -257,9 +257,9 @@ berbeda dalam resolusi input.
 
 ## Pelatihan
 
-Pelatihan dimulai dari checkpoint yang dipublikasikan untuk keempat task. RF-DETR
-mencantumkan `pretrained` di antara argumen yang diabaikan pelatih native-nya, sehingga
-`pretrained=False` tidak menghasilkan model yang diinisialisasi secara acak di sini.
+Pelatihan dimulai dari checkpoint yang dipublikasikan untuk keempat task.
+`pretrained=False` justru menginisialisasi ulang seluruh jaringan, termasuk backbone,
+lalu melatih dari nol.
 
 <code-tabs name="train" />
 
@@ -271,7 +271,7 @@ window; LibreYOLO memeriksanya sebelum proses dimulai dan menyebutkan ukuran val
 
 Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
 
-Proses baru memakai `output_dir=None` secara default, yang menghasilkan direktori `runs/train/rfdetr_exp` bernomor dengan `exist_ok=False`. Dataset pose multikelas memakai `kpt_names` dengan indeks atau nama kelas sebagai kunci; daftar kosong menandai kelas yang hanya memiliki kotak. Prediksi mengisi keypoint hingga `kpt_shape`; fitness mAP keypoint tidak menilai kelas yang hanya memiliki kotak.
+Proses baru memakai `output_dir=None` secara default, yang menghasilkan direktori `runs/train/rfdetr_exp` bernomor dengan `exist_ok=False`. Proses yang dilanjutkan tetap menulis ke direktori run milik checkpoint-nya. Dataset pose multikelas memakai `kpt_names` dengan indeks atau nama kelas sebagai kunci; daftar kosong menandai kelas yang hanya memiliki kotak. Prediksi mengisi keypoint hingga `kpt_shape`; fitness mAP keypoint tidak menilai kelas yang hanya memiliki kotak.
 
 ## Validasi
 

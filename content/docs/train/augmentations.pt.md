@@ -75,7 +75,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 42668148fcc79c1f
+source_hash: 3112c6f54b98ef9f
 ---
 
 ## Definir os parâmetros
@@ -84,8 +84,10 @@ Os parâmetros de data augmentation são argumentos comuns de `train()`.
 
 <code-tabs name="train" />
 
-Dois deles têm uma grafia mais curta na CLI: `mosaic` corresponde a `mosaic_prob`
-e `mixup` corresponde a `mixup_prob`. Todos os outros parâmetros se escrevem
+Três deles têm grafias mais curtas, aceitas tanto por `train()` quanto pela CLI:
+`mosaic` corresponde a `mosaic_prob`, `fliplr` a `flip_prob` e, na detecção,
+`mixup` corresponde a `mixup_prob`. Passar uma grafia curta e o seu campo com
+valores diferentes levanta exceção. Todos os outros parâmetros se escrevem
 igual nos dois lugares.
 
 ## Três estados, não dois
@@ -208,7 +210,7 @@ passar de 1.
 Os quatro vêm desligados por padrão, então o treinamento de classificação não
 muda a menos que você peça.
 
-A CLI direciona `mixup` por tarefa: classificação usa mistura de batches, enquanto detecção usa `mixup_prob`.
+`train()` e a CLI direcionam `mixup` por tarefa: classificação usa mistura de batches, enquanto detecção usa `mixup_prob`.
 
 `scale=0.5` significa uma faixa de área de recorte aleatório de `(0.5, 1.0)`; um par explícito define ambos os limites. `crop_pct=None` preserva a razão de redimensionamento de avaliação da família; uma substituição afeta a avaliação de treinamento/validação, enquanto a exportação mantém o pré-processamento nativo da família.
 

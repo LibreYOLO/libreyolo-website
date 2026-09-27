@@ -63,7 +63,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: ce7d26a5cd72d988
+source_hash: da1e3ccfd1efba73
 ---
 
 ## Ejecutar una validación
@@ -72,7 +72,7 @@ source_hash: ce7d26a5cd72d988
 
 <code-tabs name="val" />
 
-El valor devuelto es un `dict[str, float]` simple. Todas las claves son
+El valor devuelto es un `dict[str, float]`. Todas las claves son
 literales, así que léelas por nombre y no por posición.
 
 Los argumentos principales son `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
@@ -80,7 +80,9 @@ Los argumentos principales son `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
 defecto e `iou` `0.6`, ambos mucho más permisivos que los valores por defecto de
 predicción, porque un barrido de mAP necesita la cola de baja confianza. `imgsz`
 toma por defecto el tamaño de entrada del propio modelo en lugar de un número
-fijo. `split` acepta `val`, `test` o `train` y nada más.
+fijo. `split` acepta `val`, `test` o `train` y nada más. Sin `data`, un
+checkpoint entrenado se valida con el dataset con el que se entrenó; los pesos
+publicados no llevan ninguno y necesitan `data=`.
 
 Cualquier otro campo de la configuración de validación se pasa como argumento
 con nombre, incluidos `save_dir`, `max_det`, `eval_max_det`, `half`,
@@ -150,7 +152,7 @@ diccionarios sí devuelven. Pose no devuelve ni `fitness` ni `metrics/mAP50-95`;
 en su lugar, sus entrenadores fijan `best_metric_key` a
 `metrics/keypoints_mAP50-95`.
 
-La clasificación ImageFolder añade las métricas macro `metrics/precision`, `metrics/recall` y `metrics/f1`, promediadas sobre las clases presentes en los targets de validación. Top-1 sigue siendo el criterio de selección por defecto. La detección también devuelve `metrics/best_conf`, `metrics/best_conf_f1` y `metrics/best_conf_per_class`, indexado por nombre de clase, eligiendo umbrales óptimos de micro-F1 con IoU 0.50. Las detecciones con la misma puntuación permanecen agrupadas; los empates eligen el umbral más alto. Si no hay F1 positivo, se devuelve NaN. La segmentación no expone estas claves de umbral.
+La clasificación ImageFolder añade las métricas macro `metrics/precision`, `metrics/recall` y `metrics/f1`, promediadas sobre las clases presentes en los targets de validación. Top-1 sigue siendo el criterio de selección por defecto. La detección también devuelve `metrics/best_conf` y `metrics/best_conf_f1`, eligiendo el umbral óptimo de micro-F1 con IoU 0.50, y deja los umbrales indexados por nombre de clase en `metrics.box.best_conf_per_class`. Las detecciones con la misma puntuación permanecen agrupadas; los empates eligen el umbral más alto. Si no hay F1 positivo, se devuelve 0.0. La segmentación no expone estas claves de umbral.
 
 ## Claves de velocidad
 
@@ -252,6 +254,8 @@ combinar, y pedir ambas lanza un error.
 
 `val()` siempre escribe `config.yaml` en su directorio de guardado, que por
 defecto es `runs/val/<model>_<size>_<timestamp>` cuando no se pasa `save_dir`.
+`project`, `name` y `exist_ok` lo eligen igual que en el entrenamiento:
+`project/name`, con un sufijo incremental salvo que `exist_ok=True`.
 
 <code-tabs name="json" />
 
@@ -274,10 +278,13 @@ ahí. Un fallo al generar las gráficas avisa y nunca aborta la ejecución.
 
 ## Validación durante el entrenamiento
 
-El entrenamiento valida cada `eval_interval` épocas sobre el split `val` del
-dataset, y las métricas que produce son las que gobiernan la selección de
-`best.pt`, la parada temprana por `patience` y las claves `val/` de todos los
-loggers. La validación se ejecuta sobre los pesos EMA cuando EMA está activado.
+El entrenamiento valida cada `eval_interval` épocas, y siempre tras la última
+época, sobre el split `val` del dataset, y las métricas que produce son las que
+gobiernan la selección de `best.pt`, la parada temprana por `patience` y las
+claves `val/` de todos los loggers. La validación se ejecuta sobre los pesos EMA
+cuando EMA está activado. Sus archivos van a un directorio `val/` dentro de la
+ejecución. `val=False` desactiva la validación durante el entrenamiento, última
+época incluida.
 
 Consulta [Hiperparámetros](/docs/train/hyperparameters) para `eval_interval`,
 `patience` y `save_plots`, y [Loggers de experimentos](/docs/train/loggers) para

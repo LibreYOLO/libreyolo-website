@@ -12,8 +12,8 @@ keywords:
   - emplacement poids libreyolo
   - cli libreyolo
   - libreyolo hors ligne
-last_verified: "1.6.0"
-source_hash: d0d1f00bab2cee6e
+last_verified: 1.6.0
+source_hash: 13810bf9ea01c459
 ---
 
 ## Par quel modèle commencer\u00a0?
@@ -89,9 +89,10 @@ dans l'en-tête d'une page de modèle vous l'indique avant l'essai. Consultez le
 
 ## Que renvoie val\u00a0?
 
-Un dictionnaire simple, et non un objet. Les clés de détection comprennent
+Un dictionnaire indexé par nom de métrique. Les clés de détection comprennent
 `metrics/precision`, `metrics/recall`, `metrics/mAP50` et
-`metrics/mAP50-95`. Les autres tâches renvoient les clés pertinentes, comme
+`metrics/mAP50-95`, et les résultats de détection et de segmentation portent
+aussi des résultats par image sur `metrics.box`. Les autres tâches renvoient les clés pertinentes, comme
 `metrics/accuracy_top1` pour la classification ou `metrics/PQ`, `metrics/SQ`
 et `metrics/RQ` pour la segmentation panoptique.
 

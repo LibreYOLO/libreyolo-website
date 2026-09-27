@@ -189,7 +189,7 @@ snippets:
     - label: Użycie wyeksportowanego pliku
       language: python
       code: >
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
 
         # Fabryka wybiera ścieżkę na podstawie rozszerzenia pliku, dlatego
@@ -216,7 +216,7 @@ snippets:
 
         # i końcowego. Przed integracją sprawdź sygnaturę.
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -226,7 +226,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: c360784eb62a7df5
+source_hash: 379a3a09691bf14b
 ---
 
 ## Instalacja
@@ -264,9 +264,8 @@ mają podobną liczbę parametrów i różnią się głównie rozdzielczością 
 ## Trenowanie
 
 Trenowanie dla wszystkich czterech zadań zaczyna się od opublikowanego punktu
-kontrolnego. RF-DETR umieszcza `pretrained` wśród argumentów ignorowanych przez
-natywny trener, więc przekazanie `pretrained=False` nie daje tutaj losowo
-zainicjalizowanego modelu.
+kontrolnego. `pretrained=False` zamiast tego ponownie inicjalizuje całą sieć,
+łącznie z backbone, i trenuje od zera.
 
 <code-tabs name="train" />
 
@@ -280,7 +279,7 @@ prawidłowe rozmiary.
 
 Informacje o zbiorach danych, augmentacji, wielu GPU i loggerach znajdziesz w sekcji [trenowanie](/docs/train).
 
-Nowe uruchomienia domyślnie używają `output_dir=None`, co tworzy katalog `runs/train/rfdetr_exp` z kolejnym numerem i `exist_ok=False`. Wieloklasowe zbiory pozy używają `kpt_names` z indeksem lub nazwą klasy jako kluczem; pusta lista oznacza klasę z samymi ramkami. Predykcje uzupełniają punkty kluczowe do `kpt_shape`; funkcja fitness oparta na mAP punktów kluczowych nie ocenia klas z samymi ramkami.
+Nowe uruchomienia domyślnie używają `output_dir=None`, co tworzy katalog `runs/train/rfdetr_exp` z kolejnym numerem i `exist_ok=False`. Wznowione uruchomienie nadal zapisuje do katalogu uruchomienia swojego punktu kontrolnego. Wieloklasowe zbiory pozy używają `kpt_names` z indeksem lub nazwą klasy jako kluczem; pusta lista oznacza klasę z samymi ramkami. Predykcje uzupełniają punkty kluczowe do `kpt_shape`; funkcja fitness oparta na mAP punktów kluczowych nie ocenia klas z samymi ramkami.
 
 ## Walidacja
 

@@ -76,7 +76,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: 384ee3d6a05190aa
+source_hash: b24043e73b35092d
 ---
 
 ## Definição
@@ -122,7 +122,10 @@ O rastreamento roda em modelos PyTorch nativos. Um artefato exportado carregado
 por `LibreYOLO("model.onnx")` devolve um objeto de backend de runtime, que traz
 `predict()` mas não `track()`.
 
-Quatro trackers acompanham a biblioteca, selecionados pelo argumento `tracker`:
+Quatro trackers acompanham a biblioteca, selecionados pelo argumento `tracker`. As
+grafias `.yaml`, como `"bytetrack.yaml"`, selecionam os mesmos trackers
+embutidos; o LibreYOLO não lê arquivos YAML de tracker e lança exceção se existir
+um arquivo com esse nome no diretório de trabalho.
 
 `"bytetrack"` é o padrão. Usa apenas movimento, com um filtro de Kalman e uma
 associação em três estágios: primeiro as detecções de alta confiança, depois uma
@@ -161,6 +164,9 @@ continuem disponíveis para a passada de recuperação. O Deep OC-SORT roda o
 detector no próprio `det_thresh`. Para ByteTrack e BoT-SORT, `track_conf`
 precisa ser igual ou superior a `track_low_thresh`, cujo padrão é 0.1.
 
+`conf`, quando informado, é o limiar de detecção do `predict()`: detecções abaixo
+dele nunca chegam ao tracker. Sem ele, o detector roda com os limiares acima.
+
 As configurações do tracker chegam de duas formas. Passe uma instância de config
 para `tracker_config=`, e o tipo dela seleciona o tracker, tornando `tracker=`
 redundante. Ou passe os campos como keyword arguments e deixe `track()` montar a
@@ -168,7 +174,7 @@ config para o tracker que você nomeou; chaves desconhecidas emitem aviso em vez
 de serem aplicadas silenciosamente. De qualquer forma, `track_conf` é ignorado
 quando a chave correspondente é definida explicitamente.
 
-Os demais argumentos espelham a predição: `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show` e `save` com `output_path`. A fonte pode ser um vídeo ou uma sequência ordenada de imagens. Veja [predição](/docs/predict) para tratamento de resultados.
+Os demais argumentos espelham a predição: `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show` e `save` com `output_path`. `persist=True` mantém o tracker e seus IDs da chamada anterior de `track()` no mesmo modelo, para um loop que passa um quadro por chamada, como `model.track(frame, persist=True)`. A fonte pode ser um vídeo ou uma sequência ordenada de imagens. Veja [predição](/docs/predict) para tratamento de resultados.
 
 Imagens, pastas ordenadas por nome de arquivo, listas, tuplas e iteradores preguiçosos de imagens podem fornecer quadros consecutivos. `fps=30.0` fornece sua temporização e `color_format="auto"` seleciona a interpretação da entrada. `vid_stride` reduz a taxa retida para `fps / vid_stride`.
 

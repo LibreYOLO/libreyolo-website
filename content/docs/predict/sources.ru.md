@@ -20,7 +20,6 @@ keywords:
   - vid_stride
   - stream=True
 last_verified: 1.6.0
-
 verification: >-
   Классификация источников прочитана из libreyolo/utils/source.py
   (classify_source, SourceKind, StreamSource, MultiStreamSource). Принимаемые
@@ -43,19 +42,34 @@ snippets:
         print(len(result.boxes), "detections")
     - label: Изображения в памяти
       language: python
-      code: |
+      code: >
         import numpy as np
+
         from PIL import Image
+
 
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
 
+
         pil_image = Image.open(SAMPLE_IMAGE)
+
         array = np.asarray(pil_image)
+
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+
+        # NumPy-массивы читаются как BGR, если не указано иное; этот массив в
+        RGB.
+
+        result = model(array, color_format="rgb")
+
+        print(type(array).__name__, len(result.boxes))
+
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: Папка
@@ -207,7 +221,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 93db4d43c24b69ae
+source_hash: c355ad28487c9a65
 ---
 
 ## Как классифицируется источник
@@ -245,15 +259,18 @@ source_hash: 93db4d43c24b69ae
 |---|---|
 | `str` или `pathlib.Path` | Локальный файл, `http(s)://`, `s3://` или `gs://` |
 | `PIL.Image.Image` | Преобразуется в RGB |
-| `numpy.ndarray` | 2D в оттенках серого либо 3D HWC или CHW; из 4D-массива берётся первое изображение |
-| `torch.Tensor` | CHW или NCHW, читается как RGB; из батчевого тензора берётся первое изображение |
+| `numpy.ndarray` | 2D в оттенках серого либо 3D HWC или CHW в порядке BGR; 4D-массив считается батчем |
+| `torch.Tensor` | CHW или NCHW, читается как RGB; 4D-тензор считается батчем |
 | `bytes` | Закодированные данные изображения |
 | `io.BytesIO` | Закодированные данные изображения |
 
+4D-массив или 4D-тензор возвращает список с одним `Results` на каждое изображение.
+
 Перед предобработкой всё преобразуется в RGB. NumPy-массивы — единственный
 случай, где порядок каналов неоднозначен, поэтому им управляет `color_format`:
-`"auto"` (значение по умолчанию) оставляет массив как есть, `"bgr"`
-переворачивает каналы — именно это нужно кадру, прочитанному через OpenCV.
+`"auto"` (значение по умолчанию) и `"bgr"` читают массив как BGR, в порядке,
+который возвращает OpenCV, а `"rgb"` оставляет его как есть, и именно это нужно
+массиву, полученному из изображения PIL.
 
 Массивы с плавающей точкой масштабируются по собственному диапазону: значения
 не выше `1.0` умножаются на 255, более высокие обрезаются до диапазона
@@ -409,5 +426,5 @@ pip install mss
 без суффикса — каталогом. `output_file_format` задаёт формат кодирования
 неподвижных изображений и принимает `jpg`, `png` или `webp`.
 
-После сохранения записанный путь также добавляется к результату как
+После сохранения изображения записанный путь также добавляется к результату как
 `result.saved_path`.

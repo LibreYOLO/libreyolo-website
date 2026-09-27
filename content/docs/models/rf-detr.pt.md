@@ -183,7 +183,7 @@ snippets:
     - label: Usar o arquivo exportado
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # A factory decide pelo sufixo do arquivo, então um artefato exportado
         # carrega como qualquer checkpoint e devolve o mesmo objeto Results.
@@ -206,7 +206,7 @@ snippets:
 
         # coisa.
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -216,7 +216,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: c360784eb62a7df5
+source_hash: 379a3a09691bf14b
 ---
 
 ## Instalação
@@ -255,10 +255,9 @@ de parâmetros parecidas e diferem principalmente na resolução de entrada.
 
 ## Treinamento
 
-O treinamento parte de um checkpoint publicado, para as quatro tarefas. O
-RF-DETR lista `pretrained` entre os argumentos que seu trainer nativo ignora,
-então passar `pretrained=False` não te dá aqui um modelo inicializado
-aleatoriamente.
+O treinamento parte de um checkpoint publicado, para as quatro tarefas.
+`pretrained=False`, em vez disso, reinicializa a rede inteira, backbone incluído,
+e treina do zero.
 
 <code-tabs name="train" />
 
@@ -273,7 +272,7 @@ próximos.
 Veja [treinamento](/docs/train) para datasets, data augmentation, multi-GPU e
 loggers.
 
-Novas execuções usam `output_dir=None` por padrão, que resulta em um `runs/train/rfdetr_exp` incrementado com `exist_ok=False`. Datasets de pose multiclasse usam `kpt_names` com o índice ou nome da classe como chave; uma lista vazia indica uma classe só de caixas. As predições completam os keypoints até `kpt_shape`; o fitness de mAP de keypoints não avalia classes só de caixas.
+Novas execuções usam `output_dir=None` por padrão, que resulta em um `runs/train/rfdetr_exp` incrementado com `exist_ok=False`. Uma execução retomada continua gravando no diretório de execução do seu checkpoint. Datasets de pose multiclasse usam `kpt_names` com o índice ou nome da classe como chave; uma lista vazia indica uma classe só de caixas. As predições completam os keypoints até `kpt_shape`; o fitness de mAP de keypoints não avalia classes só de caixas.
 
 ## Validação
 

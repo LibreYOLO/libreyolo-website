@@ -197,8 +197,10 @@ the parser build.
 <code-tabs name="int8" />
 
 `int8=True` runs ONNX Runtime static quantization and writes a QDQ graph with
-float32 inputs and outputs. Only `Conv` and `Gemm` nodes are quantized. Leaving
-the detection-head decode in float32 is deliberate: that concatenation mixes
+float32 inputs and outputs. Only `Conv` and `Gemm` nodes are quantized, and
+YOLO9's first convolution and detection head stay float32, as they do in
+`model.quantize()`, so class scores do not saturate at the calibrated range.
+Leaving the detection-head decode in float32 is deliberate: that concatenation mixes
 pixel-scale box coordinates with class scores in the range 0 to 1, and a single
 per-tensor activation scale dominated by the box magnitude would drive every
 score to zero.

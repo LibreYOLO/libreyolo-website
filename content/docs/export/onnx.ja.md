@@ -146,7 +146,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 085c6fb8cb7ec4b2
+source_hash: ff50afedd377beaf
 ---
 
 ## インストール
@@ -210,7 +210,9 @@ DeepStreamは独自のクラスタリング段階で抑制を実行するため�
 <code-tabs name="int8" />
 
 `int8=True`はONNX Runtimeの静的量子化を実行し、float32の入力と出力を持つQDQグラフを
-書き出します。量子化されるのは`Conv`ノードと`Gemm`ノードだけです。物体検出ヘッドの
+書き出します。量子化されるのは`Conv`ノードと`Gemm`ノードだけで、YOLO9の最初の畳み込みと
+物体検出ヘッドは`model.quantize()`と同様にfloat32のままとなるため、クラススコアが
+キャリブレーション済みの範囲で飽和しません。物体検出ヘッドの
 デコードをfloat32のままにするのは意図的です。この連結処理ではピクセル単位のボックス座標と
 0〜1のクラススコアが混在します。ボックスの値の大きさに支配された単一のテンソル単位の
 活性化スケールを使うと、すべてのスコアが0になるためです。

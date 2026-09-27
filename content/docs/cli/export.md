@@ -57,6 +57,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `format=onnx` and
 | `batch` | `1` | Export batch size |
 | `half` | `false` | FP16 precision |
 | `int8` | `false` | INT8 quantization |
+| `quantize` | | Precision as `16` (FP16), `8` (INT8) or `32` (FP32); replaces `half` and `int8` |
 | `dynamic` | `false` | Dynamic input shapes (ONNX) |
 | `simplify` | `true` | ONNX graph simplification |
 | `nms` | `false` | Embed NMS in the model. ONNX and CoreML only |
@@ -102,7 +103,8 @@ embedded graph is fixed at batch 1, and says so on stderr. On CoreML it takes
 `format=coreml nms=true` exits with `config_unsupported`.
 
 `half=true` together with `int8=true` is not an error. INT8 wins, `half` is
-dropped, and a warning goes to stderr.
+dropped, and a warning goes to stderr. `quantize` that disagrees with `half` or
+`int8` exits with `config_conflict`.
 
 `name` and `verify` are RKNN options today. Passing either with another format
 exits with `config_unsupported` rather than being ignored.

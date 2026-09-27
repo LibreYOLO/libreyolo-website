@@ -76,7 +76,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 42668148fcc79c1f
+source_hash: 3112c6f54b98ef9f
 ---
 
 ## Ustawianie parametrów
@@ -85,9 +85,11 @@ Parametry augmentacji są zwykłymi argumentami `train()`.
 
 <code-tabs name="train" />
 
-Dwa z nich mają krótszą pisownię w CLI: `mosaic` odpowiada `mosaic_prob`, a
-`mixup` odpowiada `mixup_prob`. Każdy inny parametr zapisuje się identycznie w
-obu miejscach.
+Trzy z nich mają krótszą pisownię, akceptowaną zarówno przez `train()`, jak
+i przez CLI: `mosaic` odpowiada `mosaic_prob`, `fliplr` odpowiada `flip_prob`,
+a w detekcji `mixup` odpowiada `mixup_prob`. Przekazanie krótkiej pisowni
+i odpowiadającego jej pola z różnymi wartościami zgłasza błąd. Każdy inny
+parametr zapisuje się identycznie w obu miejscach.
 
 ## Trzy stany, nie dwa
 
@@ -208,7 +210,7 @@ sumują i ich suma powinna wynosić najwyżej 1.
 Wszystkie cztery są domyślnie wyłączone, dlatego trenowanie klasyfikacji nie
 zmienia się bez jawnego żądania.
 
-CLI kieruje `mixup` według zadania: klasyfikacja używa mieszania batchy, a detekcja `mixup_prob`.
+`train()` i CLI kierują `mixup` według zadania: klasyfikacja używa mieszania batchy, a detekcja `mixup_prob`.
 
 `scale=0.5` oznacza losowy zakres obszaru wycinka `(0.5, 1.0)`; jawna para ustawia obie granice. `crop_pct=None` zachowuje współczynnik zmiany rozmiaru rodziny podczas ewaluacji; nadpisanie wpływa na ewaluację podczas trenowania i walidacji, a eksport zachowuje natywne przetwarzanie wstępne rodziny.
 

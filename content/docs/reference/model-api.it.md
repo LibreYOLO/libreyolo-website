@@ -52,7 +52,7 @@ snippets:
 
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: da0776970ded8716
+source_hash: ccecee93e9744550
 ---
 
 ## Costruzione
@@ -157,6 +157,7 @@ model.track(
     source,
     *,
     track_conf=0.25,
+    conf=None,
     iou=0.45,
     imgsz=None,
     classes=None,
@@ -164,20 +165,26 @@ model.track(
     save=False,
     show=False,
     vid_stride=1,
+    fps=30.0,
+    color_format="auto",
     output_path=None,
     tracker="bytetrack",
     tracker_config=None,
     augment=False,
+    persist=False,
     **tracker_kwargs,
 ) -> Generator[Results, None, None]
 ```
 
 Produce un `Results` per frame con `track_id` impostato. `tracker` è
-`"bytetrack"`, `"botsort"`, `"ocsort"` o `"deepocsort"`, e viene ignorato
+`"bytetrack"`, `"botsort"`, `"ocsort"` o `"deepocsort"`, eventualmente con un
+suffisso `.yaml`, oppure un'istanza di tracker personalizzato, e viene ignorato
 quando si passa `tracker_config`, perché è il tipo di config a selezionare il
 tracker. `track_conf` corrisponde a `track_high_thresh` per ByteTrack e
-BoT-SORT e a `det_thresh` per OC-SORT e Deep OC-SORT. Il valore predefinito di
-`output_path` è `runs/track/<video_stem>.mp4`.
+BoT-SORT e a `det_thresh` per OC-SORT e Deep OC-SORT. `conf`, quando è
+indicato, è la soglia di rilevamento, come in `predict()`. `persist=True`
+mantiene il tracker della chiamata precedente per i cicli frame per frame. Il
+valore predefinito di `output_path` è `runs/track/<video_stem>.mp4`.
 
 ## val
 
@@ -197,6 +204,9 @@ model.val(
     verbose=True,
     *,
     plots=None,
+    project=None,
+    name=None,
+    exist_ok=False,
     **kwargs,
 ) -> Dict
 ```
@@ -205,7 +215,11 @@ Restituisce un dizionario di metriche le cui chiavi dipendono dal task; il
 rilevamento restituisce `metrics/precision`, `metrics/recall`, `metrics/mAP50`
 e `metrics/mAP50-95`. `imgsz` accetta un int quadrato o una tupla
 `(height, width)` e per impostazione predefinita usa la dimensione di input
-nativa del modello. `plots` è un alias di `save_plots`.
+nativa del modello. `data=None` valida sul dataset salvato nella
+configurazione di addestramento del checkpoint e solleva un errore quando non
+ce n'è uno, come nei pesi pubblicati. `project`, `name` e `exist_ok` impostano
+la directory di output come `project/name`, incrementata a meno che
+`exist_ok=True`. `plots` è un alias di `save_plots`.
 `allow_download_scripts` regola l'esecuzione del Python incorporato che un YAML
 di dataset può portare nel suo campo `download`.
 
@@ -251,6 +265,7 @@ un alias di `tflite`. Argomenti condivisi da tutti gli exporter:
 | `dynamic` | `True` | Abilita gli assi dinamici |
 | `half` | `False` | Precisione FP16 |
 | `int8` | `False` | Precisione INT8 |
+| `quantize` | `None` | Precisione come `16`, `8` o `32`, al posto di `half` o `int8` |
 | `batch` | `1` | Dimensione del batch integrata nell'artefatto |
 | `device` | `None` | Dispositivo su cui fare il tracing |
 | `data` | `None` | data.yaml per la calibrazione INT8 |
@@ -259,7 +274,8 @@ un alias di `tflite`. Argomenti condivisi da tutti gli exporter:
 | `verbose` | `False` | Log dettagliati dell'exporter |
 
 Le combinazioni bloccate sollevano `NotImplementedError` nel preflight, prima
-del tracing. La copertura e le sue regole sono nella pagina
+del tracing. Un'opzione che il formato non usa emette l'avviso `Unknown <format>
+export arguments (ignored)` e l'esportazione prosegue. La copertura e le sue regole sono nella pagina
 [matrice di esportazione](/docs/reference/export-matrix). Quando sono presenti
 adattatori LoRA attivi, vengono ripiegati nei pesi densi, e quella fusione
 avviene solo dopo ogni rifiuto della richiesta.

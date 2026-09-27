@@ -41,7 +41,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: 8e858639e96672a0
+source_hash: a0446a47e0f89b27
 ---
 
 ## Sinossi
@@ -86,6 +86,7 @@ Gli argomenti sono coppie `key=value`, e funziona anche la forma POSIX, quindi
 | Argomento | Default | Significato |
 | --- | --- | --- |
 | `classes` | `None` | Valuta solo questi ID originali di classe del dataset, separati da virgole (es. '0,3,5'); i box di ogni altra classe vengono scartati da ground truth e predizioni. Di default usa classes= dell'addestramento del checkpoint, se presente |
+| `single_cls` | `False` | Valuta un rilevatore supportato con tutte le classi riunite nella classe 0 |
 | `crop_pct` | `None` | Rapporto di ridimensionamento nella valutazione della classificazione prima del ritaglio centrale (default: valore nativo della famiglia del modello) |
 | `plot_samples` | `8` | Immagini nel grafico dei campioni di validazione: 0 per nessuna, -1 per ogni immagine validata (non modifica le metriche) |
 | `visualize` | `False` | Disegna ogni immagine validata con veri positivi, falsi positivi e falsi negativi in visualize/errors/ (qualsiasi errore) e visualize/correct/ (detect, segment; classify disegna etichetta rispetto a top-1) |

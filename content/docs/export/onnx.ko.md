@@ -151,7 +151,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: "085c6fb8cb7ec4b2"
+source_hash: ff50afedd377beaf
 ---
 
 ## 설치
@@ -191,7 +191,7 @@ ONNX 추가 패키지에는 `onnxruntime>=1.18.0`이 필요하며, LaMa는 opset
 
 <code-tabs name="int8" />
 
-`int8=True`는 ONNX Runtime 정적 양자화를 실행하고 float32 입력 및 출력을 가진 QDQ 그래프를 작성합니다. `Conv`와 `Gemm` 노드만 양자화됩니다. 탐지 헤드 디코드를 float32로 그대로 두는 것은 의도적인데, 그 연결(concatenation)은 픽셀 단위 상자 좌표와 0에서 1 범위의 클래스 점수를 혼합하고, 상자 크기에 지배되는 단일 텐서별 활성화 스케일이 모든 점수를 0으로 몰아갈 수 있기 때문입니다.
+`int8=True`는 ONNX Runtime 정적 양자화를 실행하고 float32 입력 및 출력을 가진 QDQ 그래프를 작성합니다. `Conv`와 `Gemm` 노드만 양자화되며, YOLO9의 첫 번째 컨볼루션과 탐지 헤드는 `model.quantize()`에서와 마찬가지로 float32로 유지되므로 클래스 점수가 보정된 범위에서 포화되지 않습니다. 탐지 헤드 디코드를 float32로 그대로 두는 것은 의도적인데, 그 연결(concatenation)은 픽셀 단위 상자 좌표와 0에서 1 범위의 클래스 점수를 혼합하고, 상자 크기에 지배되는 단일 텐서별 활성화 스케일이 모든 점수를 0으로 몰아갈 수 있기 때문입니다.
 
 이 플래그는 현재 YOLO9 검출에만 적용되며, 다른 경우에는 사전 점검에서 `NotImplementedError`를 발생시킵니다. `data`를 생략하면 경고와 함께 `coco8.yaml`로 대체됩니다; 8개의 이미지는 대표적인 보정 세트가 아닙니다. 이미 PyTorch에서 양자화된 모델은 [양자화](/docs/export/quantization)에 설명된 다른 경로를 따릅니다.
 

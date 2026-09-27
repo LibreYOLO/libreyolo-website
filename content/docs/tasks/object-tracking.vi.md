@@ -2,12 +2,14 @@
 title: Theo dõi đối tượng
 seo_title: Theo dõi đối tượng trong LibreYOLO
 description: >-
-  Theo dõi đối tượng qua các frame video trong LibreYOLO bằng ByteTrack, BoT-SORT, OC-SORT hoặc Deep OC-SORT,
-  trên mọi mô hình phát hiện, phân đoạn hoặc tư thế.
+  Theo dõi đối tượng qua các frame video trong LibreYOLO bằng ByteTrack,
+  BoT-SORT, OC-SORT hoặc Deep OC-SORT, trên mọi mô hình phát hiện, phân đoạn
+  hoặc tư thế.
 lead: >-
-  Theo dõi gán định danh ổn định cho từng kết quả phát hiện qua các frame video. LibreYOLO không biểu diễn đây
-  là tác vụ có trọng số riêng: đó là chế độ dự đoán model.track(), chạy tracker đã chọn trên đầu ra theo từng
-  frame của mô hình phát hiện, phân đoạn hoặc tư thế.
+  Theo dõi gán định danh ổn định cho từng kết quả phát hiện qua các frame video.
+  LibreYOLO không biểu diễn đây là tác vụ có trọng số riêng: đó là chế độ dự
+  đoán model.track(), chạy tracker đã chọn trên đầu ra theo từng frame của mô
+  hình phát hiện, phân đoạn hoặc tư thế.
 keywords:
   - theo dõi đối tượng python
   - multi object tracking
@@ -53,20 +55,27 @@ snippets:
             pass
     - label: Điều chỉnh tracker
       language: python
-      code: |
+      code: >
         from libreyolo import BoTSortConfig, LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
+
         # Kiểu cấu hình chọn tracker, vì vậy tracker= là dư thừa ở đây.
+
         config = BoTSortConfig(track_buffer=60, frame_rate=25, enable_cmc=False)
+
         for result in model.track("video.mp4", tracker_config=config):
             print(result.track_id)
 
-        # Hoặc truyền cùng các trường dưới dạng đối số keyword để track() tự dựng.
-        for result in model.track("video.mp4", tracker="botsort", track_buffer=60):
+        # Hoặc truyền cùng các trường dưới dạng đối số keyword để track() tự
+        dựng.
+
+        for result in model.track("video.mp4", tracker="botsort",
+        track_buffer=60):
             print(result.track_id)
-source_hash: 384ee3d6a05190aa
+source_hash: b24043e73b35092d
 ---
 ## Định nghĩa
 
@@ -108,7 +117,10 @@ Theo dõi chạy trên mô hình PyTorch gốc. Artifact đã xuất được n�
 `LibreYOLO("model.onnx")` trả về đối tượng backend runtime, có `predict()` nhưng
 không có `track()`.
 
-Bốn tracker đi kèm thư viện, được chọn bằng đối số `tracker`:
+Bốn tracker đi kèm thư viện, được chọn bằng đối số `tracker`. Các cách viết
+`.yaml`, chẳng hạn `"bytetrack.yaml"`, chọn cùng các tracker tích hợp sẵn;
+LibreYOLO không đọc tệp YAML của tracker, và báo lỗi nếu có một tệp mang tên đó
+trong thư mục làm việc.
 
 `"bytetrack"` là mặc định. Nó chỉ dùng chuyển động, với Kalman filter và liên
 kết ba giai đoạn: kết quả phát hiện có độ tin cậy cao trước, sau đó lượt thứ hai
@@ -144,13 +156,17 @@ nội bộ ở ngưỡng thấp hơn để kết quả yếu vẫn có sẵn cho
 OC-SORT chạy detector ở chính `det_thresh`. Với ByteTrack và BoT-SORT,
 `track_conf` phải lớn hơn hoặc bằng `track_low_thresh`, mặc định là 0.1.
 
+`conf`, khi được truyền, là ngưỡng phát hiện của `predict()`: các kết quả phát
+hiện dưới ngưỡng này không bao giờ tới được tracker. Nếu không có nó, detector
+chạy ở các ngưỡng nêu trên.
+
 Cài đặt tracker được truyền theo một trong hai cách. Truyền instance cấu hình
 cho `tracker_config=`, kiểu của nó sẽ chọn tracker và khiến `tracker=` dư thừa.
 Hoặc truyền các trường dưới dạng đối số keyword và để `track()` dựng cấu hình
 cho tracker đã nêu; key không xác định sẽ cảnh báo thay vì được âm thầm áp dụng.
 Theo cả hai cách, `track_conf` bị bỏ qua khi key tương ứng được đặt tường minh.
 
-Các tham số còn lại giống dự đoán: `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show` và `save` cùng `output_path`. Nguồn có thể là video hoặc chuỗi ảnh có thứ tự. Xem [dự đoán](/docs/predict) để biết cách xử lý kết quả.
+Các tham số còn lại giống dự đoán: `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show` và `save` cùng `output_path`. `persist=True` giữ tracker cùng các ID của nó từ lần gọi `track()` trước trên cùng mô hình, dành cho vòng lặp truyền một khung hình mỗi lần gọi, chẳng hạn `model.track(frame, persist=True)`. Nguồn có thể là video hoặc chuỗi ảnh có thứ tự. Xem [dự đoán](/docs/predict) để biết cách xử lý kết quả.
 
 Ảnh, thư mục sắp theo tên tệp, danh sách, tuple và iterator ảnh lười có thể cung cấp các khung hình liên tiếp. `fps=30.0` cung cấp thời gian của chúng và `color_format="auto"` chọn cách diễn giải đầu vào. `vid_stride` giảm tốc độ giữ lại xuống `fps / vid_stride`.
 

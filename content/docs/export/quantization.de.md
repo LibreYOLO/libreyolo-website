@@ -19,7 +19,7 @@ keywords:
   - fp8 e4m3
   - kalibrierungsdaten quantisierung
   - qdq onnx export
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: Aufruf
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -167,7 +167,7 @@ snippets:
 
         # Jeder Float-Exporter greift jetzt, in jeder Präzision, die er kann.
         qmodel.export(format="tensorrt", half=True)
-source_hash: "6c247a3243daf393"
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## Installation
@@ -290,6 +290,10 @@ Die quantisierte Arithmetik läuft in Simulation, also als Fake-Quantisierung, d
 selbst unter AMP in float32-Inseln gerechnet wird. Die Simulation ist numerisch
 treu, ein `val()`-Wert auf einem beliebigen Gerät ist also eine echte Aussage über
 die quantisierte Arithmetik. Eine Aussage über Geschwindigkeit ist er nicht.
+
+Apple MPS implementiert weder die Fake-Quantisierungs-Ops noch float8, auf einem
+Mac läuft also jedes Rezept außer `fp16` und `bf16` auf der CPU, mit einer
+Warnung.
 
 Zwei Ausnahmen laufen nativ. `fp16` und `bf16` sind gewöhnliche Casts.
 Finalisierte `fp8`-Module rechnen ihr GEMM direkt auf gepackten E4M3-Gewichten

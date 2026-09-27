@@ -20,7 +20,6 @@ keywords:
   - оценка позы python
   - повёрнутые рамки obb
 last_verified: 1.6.0
-
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -153,7 +152,7 @@ snippets:
     - label: Использование экспортированного файла
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # Фабрика выбирает загрузчик по расширению файла, поэтому
         # экспортированный артефакт загружается как любой чекпойнт и
@@ -176,7 +175,7 @@ snippets:
 
         # на сигнатуру.
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -186,7 +185,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: c360784eb62a7df5
+source_hash: 379a3a09691bf14b
 ---
 
 ## Установка
@@ -224,9 +223,8 @@ pip install "libreyolo[rfdetr]"
 ## Обучение
 
 Обучение начинается с опубликованного чекпойнта — для всех четырёх задач.
-RF-DETR числит `pretrained` среди аргументов, которые его собственный обучающий
-код игнорирует, поэтому передача `pretrained=False` не даст здесь модель со
-случайной инициализацией.
+`pretrained=False` вместо этого заново инициализирует всю сеть, включая бэкбон,
+и обучает её с нуля.
 
 <code-tabs name="train" />
 
@@ -239,7 +237,7 @@ RF-DETR числит `pretrained` среди аргументов, которы�
 
 Про датасеты, аугментацию, multi-GPU и логгеры см. [обучение](/docs/train).
 
-Новые запуски по умолчанию используют `output_dir=None`, который разрешается в `runs/train/rfdetr_exp` с увеличиваемым номером и `exist_ok=False`. Датасеты позы с несколькими классами используют `kpt_names` с индексом или именем класса в ключах; пустой список обозначает класс только с рамками. Предсказания дополняют ключевые точки до `kpt_shape`; fitness по mAP ключевых точек не оценивает классы только с рамками.
+Новые запуски по умолчанию используют `output_dir=None`, который разрешается в `runs/train/rfdetr_exp` с увеличиваемым номером и `exist_ok=False`. Возобновлённый запуск продолжает писать в каталог запуска своего чекпойнта. Датасеты позы с несколькими классами используют `kpt_names` с индексом или именем класса в ключах; пустой список обозначает класс только с рамками. Предсказания дополняют ключевые точки до `kpt_shape`; fitness по mAP ключевых точек не оценивает классы только с рамками.
 
 ## Валидация
 

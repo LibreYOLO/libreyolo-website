@@ -1,7 +1,10 @@
 ---
 title: libreyolo train
 seo_title: riferimento del comando libreyolo train
-description: 'Addestra un modello dalla riga di comando: gli argomenti con i loro valori predefiniti, come i valori predefiniti di ogni famiglia li sostituiscono e quali argomenti una famiglia ignora.'
+description: >-
+  Addestra un modello dalla riga di comando: gli argomenti con i loro valori
+  predefiniti, come i valori predefiniti di ogni famiglia li sostituiscono e
+  quali argomenti una famiglia ignora.
 lead: >-
   Addestra un modello su un dataset e scrive checkpoint, metriche e log in una
   directory di esecuzione. Ogni argomento qui sotto ha un valore predefinito
@@ -23,7 +26,7 @@ meta:
     value: data
     mono: true
   - label: Output
-    value: 'Checkpoint, metriche e log in runs/train/exp'
+    value: 'Checkpoint, metriche e log in runs/train/<name>; YOLO9 usa yolo9_exp'
 snippets:
   examples:
     - label: Base
@@ -50,7 +53,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 525a8e4366e4c0be
+source_hash: 0f7f2b7487a67daa
 ---
 
 ## Sinossi
@@ -91,6 +94,7 @@ negativa.
 | `amp` | `true` | Automatic Mixed Precision |
 | `amp_dtype` | `float16` | Tipo di dato dell'AMP su CUDA: `float16` o `bfloat16` |
 | `cuda_graph` | `false` | Cattura il forward e il backward dell'addestramento in CUDA graph. Solo GPU singola e solo per le famiglie supportate; le altre girano in modalità eager |
+| `compile` | `false` | Applica `torch.compile` alla rete di addestramento: `true`, `false`, `default`, `reduce-overhead`, `max-autotune`, `max-autotune-no-cudagraphs`. Solo una GPU CUDA; le altre esecuzioni addestrano in modalità eager con un avviso |
 | `lora` | `false` | Fine-tuning con LoRA, per le famiglie transformer elencate nelle Note |
 | `freeze` | | Congela i layer: un numero intero, una lista di indici o nomi di moduli |
 
@@ -149,7 +153,7 @@ negativa.
 | Argomento | Predefinito | Significato |
 |---|---|---|
 | `val` | `true` | Valida durante l'addestramento |
-| `eval_interval` | `10` | Valida ogni N epoche |
+| `eval_interval` | `10` | Valida ogni N epoche e dopo l'ultima epoca |
 | `max_det` | `300` | Numero massimo di predizioni per immagine dopo la NMS di validazione |
 | `eval_max_det` | | Limite del valutatore COCO. Se non impostato, la convenzione AP@100 di pycocotools |
 | `faster_coco_eval` | `true` | Usa il backend C++ faster-coco-eval per le metriche COCO quando è installato; altrimenti ricade su pycocotools |
@@ -186,6 +190,7 @@ negativa.
 | `average_best` | `0` | Calcola la media uniforme degli N checkpoint migliori secondo la metrica monitorata in weights/average.pt al termine dell'addestramento (0 = disattivato) |
 | `export_check` | `False` | Esporta ONNX prima dell'epoca 1 e interrompe l'esecuzione se l'esportazione fallisce (default: disattivato) |
 | `precise_bn` | `0` | Ricalcola le statistiche correnti di BatchNorm da questo numero di immagini di addestramento dopo l'ultima epoca (0 = disattivato) |
+| `aux_weight` | | Solo YOLO9: peso della loss del ramo ausiliario PGI per il fine-tuning. `0.25` se non impostato; `0` addestra solo la testa principale |
 | `fliplr` | `None` | Probabilità di ribaltamento orizzontale (alias di ecosistema di flip_prob) |
 | `flipud` | `0.0` | Probabilità di ribaltamento verticale |
 | `auto_augment` | `None` | Regola di auto-augmentation per classificazione: randaugment, autoaugment, augmix (default: nessuna) |
@@ -231,9 +236,10 @@ RT-DETRv4 e DINOv2 si addestrano con pipeline pass-through senza mosaic, senza
 mixup e senza warp affine, quindi lì `mosaic`, `mixup`, `hsv_prob`, `degrees`,
 `translate`, `shear`, `mosaic_scale` e `mixup_scale` non raggiungono nulla. EC
 condivide quella pipeline ma legge `hsv_prob`, `degrees` e `translate` quando
-il suo task è la stima della posa. Le famiglie di classificazione, SegFormer e
-NAFNet ignorano tutto quell'insieme e con esso `flip_prob`, perché il loro flip
-gira a una probabilità fissa e non configurabile. YOLO-NAS ignora solo
+il suo task è la stima della posa. Le famiglie di classificazione ignorano
+quell'insieme tranne `mixup`, che per loro è MixUp a livello di batch, e leggono
+`flip_prob`. SegFormer e NAFNet ignorano tutto quell'insieme e con esso
+`flip_prob`, perché il loro flip gira a una probabilità fissa e non configurabile. YOLO-NAS ignora solo
 `mosaic`, dato che al suo posto fa data augmentation con una trasformazione
 affine per campione sempre attiva. RF-DETR ne ignora altri tre oltre a quella
 lista: `optimizer`, `momentum` e `nesterov`.
@@ -244,9 +250,9 @@ la lista autorevole per la versione installata. È anche l'unico segnale, quindi
 un'esecuzione da script con `quiet=true` sopprime l'avviso insieme a tutto il
 resto su stderr.
 
-`val=false` è un caso collegato. Imposta `eval_interval` a `0` per la maggior
-parte delle famiglie; RF-DETR non può disattivare la validazione in quel modo e
-registra di aver ignorato la richiesta.
+`val=false` è un caso collegato. Imposta `eval_interval` a `0`, che disattiva
+la validazione durante l'addestramento, ultima epoca inclusa, e l'esecuzione non
+scrive `best.pt`.
 
 ### Altri comportamenti da conoscere
 
@@ -258,7 +264,8 @@ addestrare senza LoRA.
 supportano l'addestramento da zero, dato che i due chiedono cose opposte.
 
 `mosaic` e `mixup` sono la scrittura da riga di comando dei campi di
-configurazione `mosaic_prob` e `mixup_prob`. Nelle famiglie il cui mixup si
+configurazione `mosaic_prob` e `mixup_prob`; su un modello di classificazione
+`mixup` è invece MixUp a livello di batch. Nelle famiglie il cui mixup si
 applica solo ai campioni con mosaic, `mixup` sopra zero con `mosaic` a zero non
 scatta mai, e l'esecuzione lo dice.
 

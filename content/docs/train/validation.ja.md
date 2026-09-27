@@ -57,7 +57,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: ce7d26a5cd72d988
+source_hash: da1e3ccfd1efba73
 ---
 
 ## 検証の実行
@@ -66,9 +66,9 @@ source_hash: ce7d26a5cd72d988
 
 <code-tabs name="val" />
 
-戻り値は通常の`dict[str, float]`です。すべてのキーはリテラルなので、位置ではなく名前で読み取ってください。
+戻り値は`dict[str, float]`です。すべてのキーはリテラルなので、位置ではなく名前で読み取ってください。
 
-主な引数は`data`、`split`、`batch`、`imgsz`、`conf`、`iou`、`workers`、`device`、`augment`、`save_json`、`verbose`です。`conf`のデフォルトは`0.001`、`iou`は`0.6`で、どちらも予測時のデフォルトより大幅に緩くなっています。mAPのsweepには信頼度の低い末尾まで必要なためです。`imgsz`は固定値ではなくモデル自身の入力サイズがデフォルトです。`split`は`val`、`test`、`train`だけを受け付けます。
+主な引数は`data`、`split`、`batch`、`imgsz`、`conf`、`iou`、`workers`、`device`、`augment`、`save_json`、`verbose`です。`conf`のデフォルトは`0.001`、`iou`は`0.6`で、どちらも予測時のデフォルトより大幅に緩くなっています。mAPのsweepには信頼度の低い末尾まで必要なためです。`imgsz`は固定値ではなくモデル自身の入力サイズがデフォルトです。`split`は`val`、`test`、`train`だけを受け付けます。`data`を指定しない場合、学習で得たチェックポイントは学習に使ったデータセットで検証し、公開済みの重みはデータセットを持たないため`data=`が必要です。
 
 検証構成のその他のフィールドはキーワード引数として渡せます。`save_dir`、`max_det`、`eval_max_det`、`half`、`amp_dtype`、`cache`、`save_plots`も含まれます。
 
@@ -114,7 +114,7 @@ pointタスクのsweepキーは距離しきい値から構築されます。デ�
 
 ほとんどのタスクは、最良チェックポイント選択でデフォルト使用する単一値の`fitness`キーも返します。物体検出、セグメンテーション、OBBはこのキーを持ちません。それらのファミリーでは辞書が返す`metrics/mAP50-95`を使って選択します。姿勢推定は`fitness`も`metrics/mAP50-95`も返さず、代わりにトレーナーが`best_metric_key`を`metrics/keypoints_mAP50-95`へ設定します。
 
-ImageFolder分類は、検証対象に存在するクラスで平均したマクロ平均の`metrics/precision`、`metrics/recall`、`metrics/f1`を追加します。デフォルトの適合度は引き続きtop-1です。物体検出は`metrics/best_conf`、`metrics/best_conf_f1`、クラス名をキーとする`metrics/best_conf_per_class`も返し、IoU 0.50でマイクロF1が最良となるしきい値を選択します。同じスコアの検出はまとめて扱い、同点の場合は高いしきい値を選びます。正のF1がない場合はNaNを返します。セグメンテーションはこれらのしきい値キーを公開しません。
+ImageFolder分類は、検証対象に存在するクラスで平均したマクロ平均の`metrics/precision`、`metrics/recall`、`metrics/f1`を追加します。デフォルトの適合度は引き続きtop-1です。物体検出は`metrics/best_conf`と`metrics/best_conf_f1`も返してIoU 0.50でマイクロF1が最良となるしきい値を選択し、クラス名をキーとするしきい値を`metrics.box.best_conf_per_class`に格納します。同じスコアの検出はまとめて扱い、同点の場合は高いしきい値を選びます。正のF1がない場合は0.0を返します。セグメンテーションはこれらのしきい値キーを公開しません。
 
 ## 速度キー
 
@@ -183,7 +183,7 @@ FOMOは動作が変わらない例外です。バリデーターが常にこのl
 
 ## 検証が書き込むファイル
 
-`val()`は必ず保存ディレクトリに`config.yaml`を書き込みます。`save_dir`を指定しない場合、デフォルトは`runs/val/<model>_<size>_<timestamp>`です。
+`val()`は必ず保存ディレクトリに`config.yaml`を書き込みます。`save_dir`を指定しない場合、デフォルトは`runs/val/<model>_<size>_<timestamp>`です。`project`、`name`、`exist_ok`は学習と同じ方法でこれを選択します：`project/name`に、`exist_ok=True`でない限り連番の接尾辞を付けます。
 
 <code-tabs name="json" />
 
@@ -197,7 +197,7 @@ FOMOは動作が変わらない例外です。バリデーターが常にこのl
 
 ## 学習中の検証
 
-学習は`eval_interval`エポックごとにデータセットの`val`分割で検証し、生成された指標が`best.pt`の選択、`patience`による早期停止、すべてのロガーの`val/`キーを駆動します。EMAが有効な場合、検証はEMA重み上で実行されます。
+学習は`eval_interval`エポックごと、および最終エポックの後には必ず、データセットの`val`分割で検証し、生成された指標が`best.pt`の選択、`patience`による早期停止、すべてのロガーの`val/`キーを駆動します。EMAが有効な場合、検証はEMA重み上で実行されます。そのファイルは実行ディレクトリ内の`val/`ディレクトリに書き込まれます。`val=False`は最終エポックも含めて学習中の検証を無効にします。
 
 `eval_interval`、`patience`、`save_plots`については[ハイパーパラメーター](/docs/train/hyperparameters)を、数値の送信先については[実験ロガー](/docs/train/loggers)を参照してください。
 

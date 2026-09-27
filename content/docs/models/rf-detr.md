@@ -129,7 +129,7 @@ snippets:
     - label: Use the exported file
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # The factory routes on the file suffix, so an exported artifact loads
         # like any checkpoint and returns the same Results object.
@@ -145,7 +145,7 @@ snippets:
 
         # Running the graph directly means doing your own preprocessing and
         # postprocessing. Inspect the signature before wiring anything up.
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
         name = session.get_inputs()[0].name
         outputs = session.run(None, {name: np.zeros((1, 3, 512, 512), dtype=np.float32)})
 
@@ -187,9 +187,9 @@ in input resolution.
 
 ## Train
 
-Training starts from a published checkpoint, for all four tasks. RF-DETR lists
-`pretrained` among the arguments its native trainer ignores, so passing
-`pretrained=False` does not give you a randomly initialized model here.
+Training starts from a published checkpoint, for all four tasks.
+`pretrained=False` instead reinitializes the whole network, backbone included,
+and trains from scratch.
 
 <code-tabs name="train" />
 
@@ -202,7 +202,7 @@ the nearest valid sizes.
 
 See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
 
-Fresh runs default to `output_dir=None`, resolving to an incremented `runs/train/rfdetr_exp` with `exist_ok=False`. Multi-class pose datasets use `kpt_names` keyed by class index or name; an empty list marks a box-only class. Predictions pad keypoints to `kpt_shape`; keypoint-mAP fitness does not score box-only classes.
+Fresh runs default to `output_dir=None`, resolving to an incremented `runs/train/rfdetr_exp` with `exist_ok=False`. A resumed run keeps writing into its checkpoint's run directory. Multi-class pose datasets use `kpt_names` keyed by class index or name; an empty list marks a box-only class. Predictions pad keypoints to `kpt_shape`; keypoint-mAP fitness does not score box-only classes.
 
 ## Validate
 

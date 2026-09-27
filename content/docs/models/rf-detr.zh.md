@@ -13,7 +13,7 @@ keywords:
   - 实例分割
   - 姿态估计
   - 旋转框检测
-last_verified: "1.6.0"
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -143,7 +143,7 @@ snippets:
     - label: 使用导出的文件
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # 工厂按文件后缀分发，所以导出的产物加载方式和任何检查点一样，
         # 返回的也是同一个 Results 对象
@@ -163,7 +163,7 @@ snippets:
 
         # 接线之前先看清楚签名
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -173,7 +173,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: c360784eb62a7df5
+source_hash: 379a3a09691bf14b
 ---
 
 ## 安装
@@ -207,9 +207,8 @@ head，所以接受的参数完全一样。这些尺寸的参数量相近，主�
 
 ## 训练
 
-四种任务的训练都从已发布的检查点（checkpoint）开始。RF-DETR 把 `pretrained` 列在
-它原生训练器会忽略的参数里，所以在这里传 `pretrained=False` 并不会给你一个随机
-初始化的模型。
+四种任务的训练都从已发布的检查点（checkpoint）开始。
+`pretrained=False` 则会重新初始化整个网络，包括骨干，并从头训练。
 
 <code-tabs name="train" />
 
@@ -220,7 +219,7 @@ head，所以接受的参数完全一样。这些尺寸的参数量相近，主�
 
 数据集、数据增强、多卡训练和日志记录器见[训练](/docs/train)。
 
-新训练默认使用 `output_dir=None`，解析为自动递增的 `runs/train/rfdetr_exp`，并设置 `exist_ok=False`。多类别姿态数据集使用以类别索引或名称为键的 `kpt_names`；空列表表示只有检测框的类别。预测将关键点填充到 `kpt_shape`；关键点 mAP 的适应度不计入只有检测框的类别。
+新训练默认使用 `output_dir=None`，解析为自动递增的 `runs/train/rfdetr_exp`，并设置 `exist_ok=False`。断点续训的运行会继续写入其检查点所在的运行目录。多类别姿态数据集使用以类别索引或名称为键的 `kpt_names`；空列表表示只有检测框的类别。预测将关键点填充到 `kpt_shape`；关键点 mAP 的适应度不计入只有检测框的类别。
 
 ## 验证
 

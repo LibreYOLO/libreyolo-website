@@ -18,8 +18,10 @@ keywords:
   - matriks dukungan augmentasi
   - knob TrainConfig
 last_verified: 1.6.0
-verification: Daftar pengaturan, status, arketipe, perbedaan per family, dan fungsi helper dibaca
-  dari libreyolo/data/augment/spec.py pada v1.6.0. Tabel itu dikunci ke pipeline aktual oleh tests/unit/test_augment_spec.py.
+verification: >-
+  Daftar pengaturan, status, arketipe, perbedaan per family, dan fungsi helper
+  dibaca dari libreyolo/data/augment/spec.py pada v1.6.0. Tabel itu dikunci ke
+  pipeline aktual oleh tests/unit/test_augment_spec.py.
 snippets:
   usage:
     - label: Tanyakan langsung kepada spec
@@ -39,13 +41,13 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f3cba41ceadf131f
+source_hash: f0d31511715e3cc4
 ---
 
 ## Knob
 
-Berikut adalah nama field `TrainConfig`, bukan ejaan CLI. CLI memetakan aliasnya
-sendiri ke field tersebut, sehingga `--mosaic` menetapkan `mosaic_prob`.
+Berikut adalah nama field `TrainConfig`, bukan ejaan CLI. `train()` dan CLI
+memetakan ejaan pendek ke field tersebut, sehingga `mosaic` menetapkan `mosaic_prob`.
 
 | Knob | Arti |
 |---|---|
@@ -66,7 +68,7 @@ sendiri ke field tersebut, sehingga `--mosaic` menetapkan `mosaic_prob`.
 | `mixup` | Probabilitas batch-MixUp classification, dengan soft label |
 | `cutmix` | Probabilitas batch-CutMix classification, dengan soft label |
 
-Empat yang terakhir adalah paket klasifikasi. Family deteksi mengabaikannya. CLI mengarahkan `mixup` ke pencampuran batch klasifikasi untuk pengklasifikasi dan ke `mixup_prob` untuk detektor.
+Empat yang terakhir adalah paket klasifikasi. Family deteksi mengabaikannya. `train()` dan CLI mengarahkan `mixup` ke pencampuran batch klasifikasi untuk pengklasifikasi dan ke `mixup_prob` untuk detektor.
 
 <code-tabs name="usage" />
 

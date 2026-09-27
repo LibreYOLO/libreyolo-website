@@ -17,7 +17,7 @@ keywords:
   - inférence youtube
   - vid_stride
   - stream=True
-last_verified: "1.6.0"
+last_verified: 1.6.0
 verification: >-
   Classification des sources lue dans libreyolo/utils/source.py
   (classify_source, SourceKind, StreamSource, MultiStreamSource). Types d'images
@@ -53,7 +53,11 @@ snippets:
         array = np.asarray(pil_image)
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+        # Un tableau NumPy est lu en BGR par défaut. Celui-ci est en RGB.
+        result = model(array, color_format="rgb")
+        print(type(array).__name__, len(result.boxes))
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: Un dossier
@@ -205,7 +209,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 93db4d43c24b69ae
+source_hash: c355ad28487c9a65
 ---
 
 ## Méthode de classification d'une source
@@ -243,15 +247,18 @@ Une source image unique accepte sept types.
 |---|---|
 | `str` ou `pathlib.Path` | Fichier local, `http(s)://`, `s3://` ou `gs://` |
 | `PIL.Image.Image` | Convertie en RGB |
-| `numpy.ndarray` | Nuances de gris 2D, ou HWC ou CHW 3D\u00a0; un tableau 4D utilise sa première image |
-| `torch.Tensor` | CHW ou NCHW, lu comme RGB\u00a0; un tenseur par batch utilise sa première image |
+| `numpy.ndarray` | Nuances de gris 2D, ou HWC ou CHW 3D dans l'ordre BGR ; un tableau 4D est un batch |
+| `torch.Tensor` | CHW ou NCHW, lu comme RGB ; un tenseur 4D est un batch |
 | `bytes` | Données d'image encodées |
 | `io.BytesIO` | Données d'image encodées |
 
+Un tableau ou un tenseur 4D renvoie une liste avec un `Results` par image.
+
 Tout est converti en RGB avant le prétraitement. Les tableaux NumPy sont le
-seul cas où l'ordre des canaux est ambigu, `color_format` le contrôle donc\u00a0:
-`"auto"` (valeur par défaut) conserve le tableau tel quel, tandis que `"bgr"`
-inverse les canaux, comme l'exige une image lue avec OpenCV.
+seul cas où l'ordre des canaux est ambigu, `color_format` le contrôle donc :
+`"auto"` (valeur par défaut) et `"bgr"` lisent le tableau comme BGR, l'ordre que
+renvoie OpenCV, tandis que `"rgb"` le conserve tel quel, comme l'exige un
+tableau créé à partir d'une image PIL.
 
 Les tableaux de flottants sont remis à l'échelle selon leur propre plage\u00a0: les
 valeurs inférieures ou égales à `1.0` sont multipliées par 255, tandis que les
@@ -414,5 +421,5 @@ comme un fichier, un chemin sans suffixe comme un répertoire.
 `output_file_format` sélectionne l'encodage des images fixes et accepte `jpg`,
 `png` ou `webp`.
 
-Après un enregistrement, le chemin écrit est aussi joint au résultat sous la
-forme `result.saved_path`.
+Après l'enregistrement d'une image, le chemin écrit est aussi joint au résultat
+sous la forme `result.saved_path`.

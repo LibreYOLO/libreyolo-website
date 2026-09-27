@@ -19,7 +19,7 @@ keywords:
   - YouTube Inferenz
   - vid_stride
   - stream=True
-last_verified: "1.6.0"
+last_verified: 1.6.0
 verification: >-
   Quellenklassifizierung aus libreyolo/utils/source.py gelesen (classify_source,
   SourceKind, StreamSource, MultiStreamSource). Akzeptierte Bildtypen und
@@ -46,19 +46,34 @@ snippets:
         print(len(result.boxes), "detections")
     - label: Bilder im Arbeitsspeicher
       language: python
-      code: |
+      code: >
         import numpy as np
+
         from PIL import Image
+
 
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
 
+
         pil_image = Image.open(SAMPLE_IMAGE)
+
         array = np.asarray(pil_image)
+
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+
+        # NumPy-Arrays gelten als BGR, sofern nicht anders angegeben; dieses ist
+        RGB.
+
+        result = model(array, color_format="rgb")
+
+        print(type(array).__name__, len(result.boxes))
+
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: Ein Ordner
@@ -210,7 +225,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: "93db4d43c24b69ae"
+source_hash: c355ad28487c9a65
 ---
 
 ## Klassifizierung einer Quelle
@@ -245,12 +260,14 @@ Eine einzelne Bildquelle akzeptiert sieben Typen.
 |---|---|
 | `str` oder `pathlib.Path` | Lokale Datei, `http(s)://`, `s3://` oder `gs://` |
 | `PIL.Image.Image` | Wird in RGB umgewandelt |
-| `numpy.ndarray` | 2D-Graustufen oder 3D-HWC beziehungsweise CHW; ein 4D-Array verwendet sein erstes Bild |
-| `torch.Tensor` | CHW oder NCHW, als RGB gelesen; ein Batch-Tensor verwendet sein erstes Bild |
+| `numpy.ndarray` | 2D-Graustufen oder 3D-HWC beziehungsweise CHW in BGR-Reihenfolge; ein 4D-Array ist ein Batch |
+| `torch.Tensor` | CHW oder NCHW, als RGB gelesen; ein 4D-Tensor ist ein Batch |
 | `bytes` | Codierte Bilddaten |
 | `io.BytesIO` | Codierte Bilddaten |
 
-Vor der Vorverarbeitung wird alles in RGB umgewandelt. Nur bei NumPy-Arrays ist die Kanalreihenfolge mehrdeutig, daher steuert `color_format` sie. `"auto"` ist der Standard und lässt das Array unverändert. `"bgr"` kehrt die Kanäle um, wie es ein mit OpenCV gelesener Frame benötigt.
+Ein 4D-Array oder -Tensor liefert eine Liste mit einem `Results` pro Bild.
+
+Vor der Vorverarbeitung wird alles in RGB umgewandelt. Nur bei NumPy-Arrays ist die Kanalreihenfolge mehrdeutig, daher steuert `color_format` sie. `"auto"` (der Standard) und `"bgr"` lesen das Array als BGR, in der Reihenfolge, die OpenCV liefert, und `"rgb"` lässt es unverändert, wie es ein aus einem PIL-Bild erzeugtes Array benötigt.
 
 Gleitkomma-Arrays werden anhand ihres eigenen Wertebereichs skaliert. Werte bis einschließlich `1.0` werden mit 255 multipliziert, höhere Werte auf `[0, 255]` begrenzt. Bei einem RGBA-Array wird der Alphakanal entfernt.
 
@@ -352,4 +369,4 @@ Video- und Live-Quellen werden als einzelne `.mp4`-Datei mit dem Namen der Quell
 
 `output_path` überschreibt das Verzeichnis. Ein Pfad mit Dateiendung wird als Datei behandelt, ein Pfad ohne Endung als Verzeichnis. `output_file_format` wählt die Codierung für Standbilder und akzeptiert `jpg`, `png` oder `webp`.
 
-Nach dem Speichern wird der geschriebene Pfad außerdem als `result.saved_path` an das Ergebnis angehängt.
+Nachdem ein Bild gespeichert wurde, wird der geschriebene Pfad außerdem als `result.saved_path` an das Ergebnis angehängt.

@@ -2,11 +2,13 @@
 title: Tăng cường dữ liệu
 seo_title: Tăng cường dữ liệu khi huấn luyện trong LibreYOLO
 description: >-
-  Các nút điều chỉnh augmentation trên TrainConfig, bốn dạng pipeline phía sau chúng và bảng theo từng family
-  cho biết nút nào được dùng, bị ràng buộc hoặc bị bỏ qua.
+  Các nút điều chỉnh augmentation trên TrainConfig, bốn dạng pipeline phía sau
+  chúng và bảng theo từng family cho biết nút nào được dùng, bị ràng buộc hoặc
+  bị bỏ qua.
 lead: >-
-  Augmentation được cấu hình bằng các nút điều chỉnh trên TrainConfig, nhưng mỗi model family chạy pipeline
-  huấn luyện riêng, và pipeline không có nhánh mosaic sẽ bỏ qua mosaic_prob thay vì mô phỏng gần đúng.
+  Augmentation được cấu hình bằng các nút điều chỉnh trên TrainConfig, nhưng mỗi
+  model family chạy pipeline huấn luyện riêng, và pipeline không có nhánh mosaic
+  sẽ bỏ qua mosaic_prob thay vì mô phỏng gần đúng.
 keywords:
   - data augmentation yolo
   - mosaic augmentation
@@ -72,7 +74,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 42668148fcc79c1f
+source_hash: 3112c6f54b98ef9f
 ---
 ## Thiết lập các nút điều chỉnh
 
@@ -81,8 +83,10 @@ thường.
 
 <code-tabs name="train" />
 
-Hai nút có cách viết CLI ngắn hơn: `mosaic` ánh xạ tới `mosaic_prob` và `mixup`
-ánh xạ tới `mixup_prob`. Mọi nút khác được viết giống hệt ở cả hai nơi.
+Ba nút có cách viết ngắn hơn, được cả `train()` lẫn CLI chấp nhận: `mosaic` ánh
+xạ tới `mosaic_prob`, `fliplr` tới `flip_prob`, và với phát hiện, `mixup` ánh xạ
+tới `mixup_prob`. Truyền một cách viết ngắn cùng trường tương ứng của nó với hai
+giá trị khác nhau sẽ báo lỗi. Mọi nút khác được viết giống hệt ở cả hai nơi.
 
 ## Ba trạng thái, không phải hai
 
@@ -194,7 +198,7 @@ giá trị được cộng lại và tổng không nên vượt quá 1.
 Cả bốn đều mặc định tắt, vì vậy quá trình huấn luyện phân loại không thay đổi
 nếu bạn không yêu cầu.
 
-CLI định tuyến `mixup` theo tác vụ: phân loại dùng trộn batch, còn phát hiện dùng `mixup_prob`.
+`train()` và CLI định tuyến `mixup` theo tác vụ: phân loại dùng trộn batch, còn phát hiện dùng `mixup_prob`.
 
 `scale=0.5` nghĩa là khoảng diện tích cắt ngẫu nhiên `(0.5, 1.0)`; một cặp rõ ràng đặt cả hai giới hạn. `crop_pct=None` giữ tỷ lệ đổi kích thước đánh giá của họ mô hình; giá trị ghi đè ảnh hưởng đánh giá trong huấn luyện và đánh giá riêng, còn xuất giữ tiền xử lý gốc của họ mô hình.
 

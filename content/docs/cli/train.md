@@ -13,7 +13,7 @@ meta:
     value: data
     mono: true
   - label: Output
-    value: "Checkpoints, metrics and logs under runs/train/exp"
+    value: "Checkpoints, metrics and logs under runs/train/<name>; YOLO9 uses yolo9_exp"
 snippets:
   examples:
     - label: Basic
@@ -72,6 +72,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `epochs=50` and
 | `amp` | `true` | Automatic Mixed Precision |
 | `amp_dtype` | `float16` | CUDA AMP dtype: `float16` or `bfloat16` |
 | `cuda_graph` | `false` | Capture the training forward and backward into CUDA graphs. Single GPU, supported families only; the rest run eager |
+| `compile` | `false` | `torch.compile` the training network: `true`, `false`, `default`, `reduce-overhead`, `max-autotune`, `max-autotune-no-cudagraphs`. Single CUDA GPU; other runs train eager with a warning |
 | `lora` | `false` | LoRA fine-tuning, for the transformer families listed under Notes |
 | `freeze` | | Freeze layers: an integer count, a list of indices, or module names |
 
@@ -130,7 +131,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `epochs=50` and
 | Argument | Default | Meaning |
 |---|---|---|
 | `val` | `true` | Validate during training |
-| `eval_interval` | `10` | Validate every N epochs |
+| `eval_interval` | `10` | Validate every N epochs, and after the final epoch |
 | `max_det` | `300` | Maximum predictions per image after validation NMS |
 | `eval_max_det` | | COCO evaluator cap. The pycocotools AP@100 convention when unset |
 | `faster_coco_eval` | `true` | Use the faster-coco-eval C++ backend for COCO metrics when installed; falls back to pycocotools |
@@ -167,6 +168,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `epochs=50` and
 | `average_best` | `0` | Uniform-average the N best checkpoints by the watched metric into weights/average.pt at the end of training (0 = off) |
 | `export_check` | `False` | Export ONNX before epoch 1 and fail the run if export breaks (default: off) |
 | `precise_bn` | `0` | Recompute BatchNorm running stats from this many train images after the last epoch (0 = off) |
+| `aux_weight` | | YOLO9 only: PGI auxiliary-branch loss weight for fine-tuning. `0.25` when unset; `0` trains the main head only |
 | `fliplr` | `None` | Horizontal flip probability (ecosystem alias of flip_prob) |
 | `flipud` | `0.0` | Vertical flip probability |
 | `auto_augment` | `None` | Classification auto-augment policy: randaugment, autoaugment, augmix (default: none) |
@@ -209,9 +211,10 @@ pass-through pipelines with no mosaic, no mixup and no affine warp, so
 `mosaic`, `mixup`, `hsv_prob`, `degrees`, `translate`, `shear`, `mosaic_scale`
 and `mixup_scale` reach nothing there. EC shares that pipeline but does read
 `hsv_prob`, `degrees` and `translate` when its task is pose. The
-classification families, SegFormer and NAFNet ignore that whole set and
-`flip_prob` with it, because their flip runs at a fixed probability rather than
-a configurable one. YOLO-NAS ignores `mosaic` alone, since it augments with an
+classification families ignore that set except `mixup`, which is batch MixUp
+for them, and they read `flip_prob`. SegFormer and NAFNet ignore the whole set
+and `flip_prob` with it, because their flip runs at a fixed probability rather
+than a configurable one. YOLO-NAS ignores `mosaic` alone, since it augments with an
 always-on per-sample affine instead. RF-DETR ignores three more on top of that
 list: `optimizer`, `momentum` and `nesterov`.
 
@@ -221,9 +224,9 @@ authoritative list for the version installed. It is also the only signal, so a
 scripted run with `quiet=true` suppresses the warning along with everything
 else on stderr.
 
-`val=false` is a related case. It sets `eval_interval` to `0` for most
-families; RF-DETR cannot disable validation that way and logs that it ignored
-the request.
+`val=false` is a related case. It sets `eval_interval` to `0`, which turns
+validation during training off, final epoch included, and the run writes no
+`best.pt`.
 
 ### Other behavior worth knowing
 
@@ -235,7 +238,8 @@ than training without it.
 support scratch training, since the two ask for opposite things.
 
 `mosaic` and `mixup` are the command-line spellings of the `mosaic_prob` and
-`mixup_prob` config fields. On families whose mixup only applies to mosaic
+`mixup_prob` config fields; on a classification model `mixup` is batch MixUp
+instead. On families whose mixup only applies to mosaic
 samples, `mixup` above zero with `mosaic` at zero never fires, and the run says
 so.
 

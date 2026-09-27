@@ -76,8 +76,10 @@ The augmentation knobs are ordinary `train()` arguments.
 
 <code-tabs name="train" />
 
-Two of them have shorter CLI spellings: `mosaic` maps to `mosaic_prob` and
-`mixup` maps to `mixup_prob`. Every other knob is spelled identically in both
+Three of them have shorter spellings, accepted by `train()` and the CLI alike:
+`mosaic` maps to `mosaic_prob`, `fliplr` to `flip_prob`, and on detection
+`mixup` maps to `mixup_prob`. Passing a short spelling and its field with
+different values raises. Every other knob is spelled identically in both
 places.
 
 ## Three states, not two
@@ -190,7 +192,7 @@ so the two are additive and should sum to at most 1.
 
 All four default off, so classification training is unchanged unless you ask.
 
-The CLI routes `mixup` by task: classification uses batch mixing, while detection uses `mixup_prob`.
+`train()` and the CLI route `mixup` by task: classification uses batch mixing, while detection uses `mixup_prob`.
 
 `scale=0.5` means a random crop area range of `(0.5, 1.0)`; an explicit pair sets both bounds. `crop_pct=None` preserves the family evaluation resize ratio; an override affects train/validation evaluation, while export keeps native family preprocessing.
 

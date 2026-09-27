@@ -155,7 +155,7 @@ snippets:
     - label: Usare il file esportato
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # La factory smista in base al suffisso del file, quindi un artefatto
         # esportato si carica come qualsiasi checkpoint e restituisce lo stesso
@@ -178,7 +178,7 @@ snippets:
 
         # collegare qualsiasi cosa.
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -188,7 +188,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: c360784eb62a7df5
+source_hash: 379a3a09691bf14b
 ---
 
 ## Installazione
@@ -230,8 +230,8 @@ input.
 ## Addestramento
 
 L'addestramento parte da un checkpoint pubblicato, per tutti e quattro i task.
-RF-DETR elenca `pretrained` tra gli argomenti che il suo trainer nativo ignora,
-quindi passare `pretrained=False` qui non ti dà un modello inizializzato a caso.
+`pretrained=False` invece reinizializza l'intera rete, backbone incluso, e
+addestra da zero.
 
 <code-tabs name="train" />
 
@@ -246,7 +246,7 @@ le dimensioni valide più vicine.
 Vedi [addestramento](/docs/train) per dataset, data augmentation, multi-GPU e
 logger.
 
-Le nuove esecuzioni usano di default `output_dir=None`, che risolve a una directory incrementale `runs/train/rfdetr_exp` con `exist_ok=False`. I dataset di posa multiclasse usano `kpt_names` con l'indice o il nome della classe come chiave; una lista vuota indica una classe con soli box. Le predizioni aggiungono padding ai keypoint fino a `kpt_shape`; la fitness basata sulla mAP dei keypoint non valuta le classi con soli box.
+Le nuove esecuzioni usano di default `output_dir=None`, che risolve a una directory incrementale `runs/train/rfdetr_exp` con `exist_ok=False`. Un'esecuzione ripresa continua a scrivere nella directory di run del suo checkpoint. I dataset di posa multiclasse usano `kpt_names` con l'indice o il nome della classe come chiave; una lista vuota indica una classe con soli box. Le predizioni aggiungono padding ai keypoint fino a `kpt_shape`; la fitness basata sulla mAP dei keypoint non valuta le classi con soli box.
 
 ## Validazione
 

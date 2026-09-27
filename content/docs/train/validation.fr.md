@@ -20,7 +20,7 @@ keywords:
   - miou
   - qualité panoptique
   - exactitude top1
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   val:
     - label: Python
@@ -63,7 +63,7 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: ce7d26a5cd72d988
+source_hash: da1e3ccfd1efba73
 ---
 
 ## Exécuter une validation
@@ -72,7 +72,7 @@ source_hash: ce7d26a5cd72d988
 
 <code-tabs name="val" />
 
-La valeur de retour est un simple `dict[str, float]`. Chaque clé est littérale,
+La valeur de retour est un `dict[str, float]`. Chaque clé est littérale,
 lisez-la donc par son nom plutôt que par sa position.
 
 Les principaux arguments sont `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
@@ -80,7 +80,9 @@ Les principaux arguments sont `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
 par défaut et `iou` vaut `0.6`, deux valeurs bien plus permissives que celles
 de la prédiction, car un balayage mAP exige la fin à faible confiance. `imgsz`
 utilise par défaut la taille d'entrée propre au modèle plutôt qu'un nombre fixe.
-`split` accepte uniquement `val`, `test` ou `train`.
+`split` accepte uniquement `val`, `test` ou `train`. Sans `data`, un checkpoint
+entraîné est validé sur le dataset sur lequel il a été entraîné ; les poids
+publiés n'en portent aucun et ont besoin de `data=`.
 
 Tout autre champ de la configuration de validation est transmis comme argument
 nommé, notamment `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`,
@@ -154,7 +156,7 @@ segmentation et OBB n'en possèdent pas ; leurs familles sont sélectionnées se
 `fitness` ni `metrics/mAP50-95` ; ses trainers définissent à la place
 `best_metric_key` sur `metrics/keypoints_mAP50-95`.
 
-La classification ImageFolder ajoute les valeurs macro `metrics/precision`, `metrics/recall` et `metrics/f1`, moyennées sur les classes présentes dans les cibles de validation. L'exactitude top-1 reste le score de sélection par défaut. La détection renvoie aussi `metrics/best_conf`, `metrics/best_conf_f1` et `metrics/best_conf_per_class` indexé par nom de classe, en choisissant les seuils optimaux du micro-F1 à IoU 0.50. Les détections de score égal restent groupées ; les égalités choisissent le seuil le plus élevé. Sans F1 positif, la valeur est NaN. La segmentation n'expose pas ces clés de seuil.
+La classification ImageFolder ajoute les valeurs macro `metrics/precision`, `metrics/recall` et `metrics/f1`, moyennées sur les classes présentes dans les cibles de validation. L'exactitude top-1 reste le score de sélection par défaut. La détection renvoie aussi `metrics/best_conf` et `metrics/best_conf_f1`, en choisissant le seuil optimal du micro-F1 à IoU 0.50, et place les seuils indexés par nom de classe dans `metrics.box.best_conf_per_class`. Les détections de score égal restent groupées ; les égalités choisissent le seuil le plus élevé. Sans F1 positif, la valeur est 0.0. La segmentation n'expose pas ces clés de seuil.
 
 ## Clés de vitesse
 
@@ -258,7 +260,9 @@ Les demander toutes les deux provoque une erreur.
 
 `val()` écrit toujours `config.yaml` dans son répertoire de sortie, qui vaut par
 défaut `runs/val/<model>_<size>_<timestamp>` lorsque `save_dir` n'est pas
-fourni.
+fourni. `project`, `name` et `exist_ok` le choisissent comme le fait
+l'entraînement : `project/name`, avec un suffixe incrémenté sauf si
+`exist_ok=True`.
 
 <code-tabs name="json" />
 
@@ -283,10 +287,13 @@ n'interrompt jamais l'exécution.
 
 ## Validation pendant l'entraînement
 
-L'entraînement effectue une validation toutes les `eval_interval` époques sur
-le split `val` du dataset, et les mesures obtenues pilotent la sélection de
-`best.pt`, l'early stop défini par `patience` et les clés `val/` de chaque
-logger. La validation utilise les poids EMA lorsque l'EMA est active.
+L'entraînement effectue une validation toutes les `eval_interval` époques, et
+toujours après la dernière époque, sur le split `val` du dataset, et les mesures
+obtenues pilotent la sélection de `best.pt`, l'early stop défini par `patience`
+et les clés `val/` de chaque logger. La validation utilise les poids EMA lorsque
+l'EMA est active. Ses fichiers vont dans un répertoire `val/` à l'intérieur de
+l'exécution. `val=False` désactive la validation pendant l'entraînement,
+dernière époque comprise.
 
 Consultez les [hyperparamètres](/docs/train/hyperparameters) pour
 `eval_interval`, `patience` et `save_plots`, et les

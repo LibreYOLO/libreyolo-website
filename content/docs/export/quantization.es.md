@@ -181,7 +181,7 @@ snippets:
         soporte.
 
         qmodel.export(format="tensorrt", half=True)
-source_hash: 6c247a3243daf393
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## Instalación
@@ -308,6 +308,10 @@ simulada calculada en islas de float32 incluso bajo AMP. La simulación es fiel 
 lo numérico, así que una puntuación de `val()` en cualquier dispositivo es una
 afirmación real sobre la aritmética cuantizada. No es una afirmación sobre la
 velocidad.
+
+Apple MPS no implementa ni las operaciones de cuantización simulada ni float8,
+así que en un Mac todas las recetas salvo `fp16` y `bf16` se ejecutan en CPU, con
+una advertencia.
 
 Dos excepciones se ejecutan de forma nativa. `fp16` y `bf16` son casts
 corrientes. Los módulos `fp8` finalizados ejecutan su GEMM directamente sobre

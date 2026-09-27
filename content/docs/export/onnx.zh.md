@@ -14,7 +14,7 @@ keywords:
   - onnx 内嵌 nms
   - onnx int8 量化 qdq
   - onnx metadata_props
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: 参数
     value: export(format="onnx")
@@ -148,7 +148,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 085c6fb8cb7ec4b2
+source_hash: ff50afedd377beaf
 ---
 
 ## 安装
@@ -205,7 +205,8 @@ BiRefNet 的解码器需要 `DeformConv` 算子，而 ONNX 从 opset 19 起才�
 <code-tabs name="int8" />
 
 `int8=True` 会跑 ONNX Runtime 的静态量化，写出一张输入输出都是 float32 的 QDQ 图。
-只有 `Conv` 和 `Gemm` 节点会被量化。把检测 head 的解码留在 float32 是有意为之：那次
+只有 `Conv` 和 `Gemm` 节点会被量化，而且 YOLO9 的第一个卷积和检测 head 保持 float32，
+和 `model.quantize()` 中一样，这样类别分数不会在校准范围处饱和。把检测 head 的解码留在 float32 是有意为之：那次
 拼接把像素尺度的检测框坐标和 0 到 1 之间的类别分数混在一起，而单个 per-tensor 的激活
 缩放因子会被检测框的数量级主导，把每个分数都压到零。
 

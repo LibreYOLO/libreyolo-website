@@ -119,7 +119,7 @@ snippets:
       code: |
         huggingface-cli upload my-org/my-run \
           /root/runs/run1/weights/best.pt best.pt
-source_hash: 75d314de06aca3b6
+source_hash: 2f4a8ac1df103962
 ---
 
 ## Antes de alugar qualquer coisa
@@ -171,8 +171,9 @@ rápido do que descobrir o teto com um erro de falta de memória vinte minutos
 depois. Veja [Hiperparâmetros](/docs/train/hyperparameters).
 
 Em uma máquina multi-GPU, `device="0,1,2,3"` sozinho já cria um worker por GPU,
-e `batch` continua sendo o batch global entre todas elas. A guarda `__main__` é
-obrigatória, porque cada worker reimporta o script. Isso, e o resto do
+e `batch` continua sendo o batch global entre todas elas. Os workers não
+reexecutam o código de nível superior de um script sem guarda, então uma guarda
+`__main__` é opcional. Isso, e o resto do
 comportamento distribuído, está em
 [Treinamento multi-GPU](/docs/train/multi-gpu).
 

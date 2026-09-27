@@ -17,7 +17,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: 표준 작업
-    value: 17
+    value: 20
   - label: 지원 등급
     value: '플래그십, 코어, 지원됨, 추론 전용, 박물관, 형제 계층'
 snippets:
@@ -46,12 +46,12 @@ snippets:
         # "pose", "det"를 "detect"로, "semantic-segmentation"을 "semantic"으로.
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
         print(model.task)
-source_hash: 23d045463a6a8411
+source_hash: c745a3c602db00ea
 ---
 
 ## 작업
 
-작업은 모델이 반환하는 것입니다. LibreYOLO에는 열일곱 개의 표준 작업 이름이 있으며, 각각은 출력물을 담는 `Results` 객체의 필드를 이름 짓습니다.
+작업은 모델이 반환하는 것입니다. LibreYOLO에는 스무 개의 표준 작업 이름이 있으며, 각각은 출력물을 담는 `Results` 객체의 필드를 이름 짓습니다.
 
 | 과제 | 반환 |
 |---|---|
@@ -66,12 +66,15 @@ source_hash: 23d045463a6a8411
 | `depth` | 조밀한 상대 역깊이 지도 |
 | `normal` | 조밀한 단위 벡터 표면 법선 필드 |
 | `edge` | 밀집된 엣지 확률 지도 |
+| `albedo` | 조밀한 선형 RGB 알베도 지도, 조명을 뺀 표면 색상 |
 | `restore` | 복원된 RGB 이미지, 디블러링, 노이즈 제거 또는 초해상도를 위해 |
 | `matte` | 배경 제거를 위한 0에서 1까지의 부드러운 전경 맵 |
 | `ocr` | 읽기 순서대로 된 텍스트 쿼드와 필기록 |
 | `embed` | 내적이 일치도를 측정하는 L2 정규화 벡터 |
 | `gaze` | 탐지된 얼굴마다 시선 방향 |
 | `mesh` | 감지된 각 사람에 대해 포즈가 지정된 3D 몸 |
+| `detect3d` | 클래스와 신뢰도를 가진 카메라 좌표계의 3D 상자 |
+| `act` | 카메라 프레임과 로봇 상태로부터 예측한 로봇 동작 청크 |
 
 이름들은 체크포인트 메타데이터와 파일 이름에 나타나는 이름들입니다. 익숙한 별칭은 작업이 전달되는 모든 곳에서 허용되며, 다른 모든 일이 일어나기 전에 정규화됩니다: `detection`와 `det`는 `detect`가 되고, `keypoints`는 `pose`가 되며, `cls`는 `classify`가 되고, `deblur`, `denoise` 및 `super-resolution`는 모두 `restore`가 되며, `face-recognition`와 `reid`는 `embed`가 됩니다. 인식되지 않는 이름은 조용히 기본값으로 처리되는 대신 오류를 발생시킵니다.
 

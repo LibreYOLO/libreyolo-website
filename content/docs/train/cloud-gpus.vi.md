@@ -118,7 +118,7 @@ snippets:
       code: |
         huggingface-cli upload my-org/my-run \
           /root/runs/run1/weights/best.pt best.pt
-source_hash: 75d314de06aca3b6
+source_hash: 2f4a8ac1df103962
 ---
 
 ## Trước khi thuê bất cứ thứ gì
@@ -166,8 +166,8 @@ hết bộ nhớ sau hai mươi phút. Xem [Siêu tham
 số](/docs/train/hyperparameters).
 
 Trên máy multi-GPU, `device="0,1,2,3"` tự tạo một worker cho mỗi GPU và `batch`
-vẫn là batch toàn cục trên tất cả GPU. Bắt buộc phải có guard `__main__` vì mỗi
-worker import lại script. Nội dung này và các hành vi phân tán khác nằm trong
+vẫn là batch toàn cục trên tất cả GPU. Các worker không chạy lại mã cấp cao nhất
+của một script không có guard, nên guard `__main__` là tùy chọn. Nội dung này và các hành vi phân tán khác nằm trong
 [Huấn luyện multi-GPU](/docs/train/multi-gpu).
 
 ## Theo dõi từ bên ngoài

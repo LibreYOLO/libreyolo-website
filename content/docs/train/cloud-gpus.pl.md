@@ -132,7 +132,7 @@ snippets:
       code: |
         huggingface-cli upload my-org/my-run \
           /root/runs/run1/weights/best.pt best.pt
-source_hash: 75d314de06aca3b6
+source_hash: 2f4a8ac1df103962
 ---
 
 ## Przed wynajęciem czegokolwiek
@@ -185,9 +185,9 @@ błąd braku pamięci po dwudziestu minutach. Zobacz
 
 Na maszynie z wieloma GPU wartość `device="0,1,2,3"` samodzielnie uruchamia
 jednego workera na każdy GPU, a `batch` pozostaje globalnym batchem obejmującym
-wszystkie urządzenia. Strażnik `__main__` jest obowiązkowy, ponieważ każdy worker
-ponownie importuje skrypt. Ten i pozostałe elementy działania rozproszonego
-opisano na stronie [trenowanie na wielu GPU](/docs/train/multi-gpu).
+wszystkie urządzenia. Workery nie wykonują ponownie kodu najwyższego poziomu
+skryptu bez strażnika, więc strażnik `__main__` jest opcjonalny. Ten i pozostałe
+elementy działania rozproszonego opisano na stronie [trenowanie na wielu GPU](/docs/train/multi-gpu).
 
 ## Obserwowanie z zewnątrz
 

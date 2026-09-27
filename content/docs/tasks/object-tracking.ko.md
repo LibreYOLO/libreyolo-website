@@ -71,7 +71,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: "384ee3d6a05190aa"
+source_hash: b24043e73b35092d
 ---
 
 ## 정의
@@ -92,7 +92,7 @@ LibreYOLO의 모델 계층 중 두 개도 이를 거부합니다. `LibreSAM`를 
 
 추적은 네이티브 PyTorch 모델에서 실행됩니다. `LibreYOLO("model.onnx")`를 통해 로드된 내보낸 아티팩트는 런타임 백엔드 객체를 반환하며, 이 객체는 `predict()`는 포함하지만 `track()`는 포함하지 않습니다.
 
-라이브러리에는 `tracker` 인수로 선택된 네 개의 트래커가 함께 제공됩니다:
+라이브러리에는 `tracker` 인수로 선택된 네 개의 트래커가 함께 제공됩니다. `"bytetrack.yaml"` 같은 `.yaml` 표기는 같은 내장 트래커를 선택하며, LibreYOLO는 트래커 YAML 파일을 읽지 않고 그런 이름의 파일이 작업 디렉터리에 있으면 예외를 발생시킵니다.
 
 `"bytetrack"`가 기본값입니다. 이는 모션 전용으로, 칼만 필터와 세 단계 연관을 사용합니다: 먼저 높은 신뢰도의 검출, 그런 다음 낮은 신뢰도의 검출이 기존 트랙과 일치할 기회를 제공하는 두 번째 패스가 있으며, 이를 버리기 전에 마지막으로 확인되지 않은 트랙을 처리합니다. `TrackConfig`로 구성됩니다.
 
@@ -108,9 +108,11 @@ LibreYOLO의 모델 계층 중 두 개도 이를 거부합니다. `LibreSAM`를 
 
 `track_conf`는 첫 번째 연관 단계의 임계값을 설정합니다: ByteTrack과 BoT-SORT의 경우 `track_high_thresh`, OC-SORT와 Deep OC-SORT의 경우 `det_thresh`입니다. 이것은 `predict()`의 `conf`가 아니며, ByteTrack, BoT-SORT 및 OC-SORT의 경우 탐지기는 내부적으로 더 낮은 임계값에서 실행되어 약한 탐지가 복구 단계에서 계속 사용할 수 있도록 합니다. Deep OC-SORT는 탐지기를 `det_thresh` 자체에서 실행합니다. ByteTrack과 BoT-SORT의 경우 `track_conf`는 `track_low_thresh` 이상이어야 하며, 기본값은 0.1입니다.
 
+`conf`를 지정하면 `predict()`의 탐지 임계값이 됩니다: 그보다 낮은 탐지는 트래커에 전달되지 않습니다. 지정하지 않으면 탐지기는 위의 임계값에서 실행됩니다.
+
 트래커 설정은 두 가지 방법 중 하나로 이루어집니다. 구성 인스턴스를 `tracker_config=`에 전달하면, 해당 타입이 트래커를 선택하여 `tracker=`는 불필요해집니다. 또는 필드를 키워드 인수로 전달하고 `track()`가 지정한 트래커용 구성을 생성하도록 할 수 있습니다. 알 수 없는 키는 조용히 적용되지 않고 경고를 표시합니다. 어느 쪽이든, 일치하는 키가 명시적으로 설정되면 `track_conf`는 무시됩니다.
 
-나머지 인수는 예측과 동일합니다. `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show`, 그리고 `output_path`와 함께 쓰는 `save`입니다. 소스는 비디오 또는 순서가 있는 이미지 시퀀스일 수 있습니다. 결과 처리는 [예측](/docs/predict)을 참조하십시오.
+나머지 인수는 예측과 동일합니다. `iou`, `imgsz`, `classes`, `max_det`, `vid_stride`, `show`, 그리고 `output_path`와 함께 쓰는 `save`입니다. `persist=True`는 호출마다 프레임 하나를 전달하는 루프(예: `model.track(frame, persist=True)`)를 위해 같은 모델에서 이전 `track()` 호출의 트래커와 그 ID를 유지합니다. 소스는 비디오 또는 순서가 있는 이미지 시퀀스일 수 있습니다. 결과 처리는 [예측](/docs/predict)을 참조하십시오.
 
 이미지, 파일 이름순으로 정렬된 폴더, 리스트, 튜플, 지연 이미지 이터레이터를 연속 프레임으로 사용할 수 있습니다. `fps=30.0`은 시간 간격을 지정하며 `color_format="auto"`는 입력 해석 방식을 선택합니다. `vid_stride`는 유지되는 프레임 속도를 `fps / vid_stride`로 줄입니다.
 

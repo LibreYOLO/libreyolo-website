@@ -51,7 +51,11 @@ snippets:
         array = np.asarray(pil_image)
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+        # NumPy 배열은 따로 지정하지 않으면 BGR로 읽히며, 이 배열은 RGB입니다.
+        result = model(array, color_format="rgb")
+        print(type(array).__name__, len(result.boxes))
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: 폴더
@@ -188,7 +192,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: "93db4d43c24b69ae"
+source_hash: c355ad28487c9a65
 ---
 
 ## 출처가 분류되는 방법
@@ -223,12 +227,14 @@ source_hash: "93db4d43c24b69ae"
 |---|---|
 | `str` 또는 `pathlib.Path` | 로컬 파일, `http(s)://`, `s3://` 또는 `gs://` |
 | `PIL.Image.Image` | RGB로 변환됨 |
-| `numpy.ndarray` | 2D 그레이스케일, 또는 3D HWC 또는 CHW; 4D 배열은 첫 번째 이미지를 사용합니다 |
-| `torch.Tensor` | CHW 또는 NCHW, RGB로 읽음; 배치된 텐서는 첫 번째 이미지를 사용함 |
+| `numpy.ndarray` | 2D 그레이스케일, 또는 BGR 순서의 3D HWC 또는 CHW; 4D 배열은 배치입니다 |
+| `torch.Tensor` | CHW 또는 NCHW, RGB로 읽음; 4D 텐서는 배치로 처리됨 |
 | `bytes` | 인코딩된 이미지 데이터 |
 | `io.BytesIO` | 인코딩된 이미지 데이터 |
 
-모든 것은 전처리 전에 RGB로 변환됩니다. 채널 순서가 모호한 NumPy 배열의 경우 `color_format`가 이를 제어합니다: `"auto"`(기본값)는 배열을 그대로 두고, `"bgr"`는 채널을 역순으로 바꾸며, 이는 OpenCV로 읽은 프레임이 필요로 하는 것입니다.
+4D 배열이나 텐서는 이미지마다 `Results` 하나씩을 담은 리스트를 반환합니다.
+
+모든 것은 전처리 전에 RGB로 변환됩니다. 채널 순서가 모호한 NumPy 배열의 경우 `color_format`가 이를 제어합니다: `"auto"`(기본값)와 `"bgr"`는 배열을 OpenCV가 반환하는 순서인 BGR로 읽고, `"rgb"`는 배열을 그대로 두며, 이는 PIL 이미지로 만든 배열이 필요로 하는 것입니다.
 
 부동 소수점 배열은 자체 범위로 다시 스케일됩니다: `1.0` 이하의 값은 255와 곱해지고, 더 높은 값은 `[0, 255]`로 잘립니다. RGBA 배열은 알파 채널을 제거합니다.
 
@@ -330,4 +336,4 @@ pip install mss
 
 `output_path`는 디렉토리를 덮어씁니다. 접미사가 있는 경로는 파일로 처리되고, 접미사가 없는 경로는 디렉토리로 처리됩니다. `output_file_format`는 정지 이미지 인코딩을 선택하며 `jpg`, `png` 또는 `webp`를 허용합니다.
 
-저장 후, 작성된 경로는 결과에도 `result.saved_path`로 첨부됩니다.
+이미지가 저장된 후, 작성된 경로는 결과에도 `result.saved_path`로 첨부됩니다.

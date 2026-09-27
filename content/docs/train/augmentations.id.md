@@ -74,7 +74,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 42668148fcc79c1f
+source_hash: 3112c6f54b98ef9f
 ---
 
 ## Mengatur pengaturan
@@ -83,8 +83,11 @@ Pengaturan augmentasi adalah argumen `train()` biasa.
 
 <code-tabs name="train" />
 
-Dua pengaturan memiliki ejaan CLI yang lebih pendek: `mosaic` dipetakan ke
-`mosaic_prob` dan `mixup` ke `mixup_prob`. Pengaturan lain dieja sama di keduanya.
+Tiga pengaturan memiliki ejaan yang lebih pendek, yang diterima `train()` maupun
+CLI: `mosaic` dipetakan ke `mosaic_prob`, `fliplr` ke `flip_prob`, dan pada
+deteksi `mixup` dipetakan ke `mixup_prob`. Memberikan ejaan pendek beserta
+field-nya dengan nilai berbeda akan memunculkan error. Pengaturan lain dieja sama
+di keduanya.
 
 ## Tiga status, bukan dua
 
@@ -190,7 +193,7 @@ per batch, dengan MixUp lebih dahulu, sehingga jumlah keduanya maksimal 1.
 Keempatnya default nonaktif, sehingga pelatihan classification tidak berubah
 kecuali diminta.
 
-CLI mengarahkan `mixup` berdasarkan task: klasifikasi memakai pencampuran batch, sedangkan deteksi memakai `mixup_prob`.
+`train()` dan CLI mengarahkan `mixup` berdasarkan task: klasifikasi memakai pencampuran batch, sedangkan deteksi memakai `mixup_prob`.
 
 `scale=0.5` berarti rentang area crop acak `(0.5, 1.0)`; pasangan nilai eksplisit menetapkan kedua batas. `crop_pct=None` mempertahankan rasio pengubahan ukuran evaluasi family; penggantian nilai memengaruhi evaluasi pelatihan/validasi, sedangkan ekspor mempertahankan prapemrosesan native family.
 

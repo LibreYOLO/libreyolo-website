@@ -154,7 +154,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 085c6fb8cb7ec4b2
+source_hash: ff50afedd377beaf
 ---
 
 ## Instalación
@@ -223,7 +223,9 @@ soportadas y la compilación del parser.
 
 `int8=True` ejecuta la cuantización estática de ONNX Runtime y escribe un grafo
 QDQ con entradas y salidas en float32. Solo se cuantizan los nodos `Conv` y
-`Gemm`. Dejar en float32 la decodificación de la cabeza de detección es
+`Gemm`, y la primera convolución y la cabeza de detección de YOLO9 se quedan en
+float32, igual que en `model.quantize()`, para que las puntuaciones de clase no
+se saturen en el rango calibrado. Dejar en float32 la decodificación de la cabeza de detección es
 deliberado: esa concatenación mezcla coordenadas de box a escala de píxel con
 puntuaciones de clase en el rango de 0 a 1, y una única escala de activación por
 tensor dominada por la magnitud de los boxes llevaría todas las puntuaciones a

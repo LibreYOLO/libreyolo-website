@@ -35,12 +35,12 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f3cba41ceadf131f
+source_hash: f0d31511715e3cc4
 ---
 
 ## ノブ
 
-これらはCLIでの表記ではなく、`TrainConfig`のフィールド名です。CLIは固有の別名をこれらにマッピングするため、`--mosaic`は`mosaic_prob`を設定します。
+これらはCLIでの表記ではなく、`TrainConfig`のフィールド名です。`train()`とCLIは短い表記をこれらにマッピングするため、`mosaic`は`mosaic_prob`を設定します。
 
 | ノブ | 意味 |
 |---|---|
@@ -61,7 +61,7 @@ source_hash: f3cba41ceadf131f
 | `mixup` | ソフトラベルを使う分類用バッチMixUpの確率 |
 | `cutmix` | ソフトラベルを使う分類用バッチCutMixの確率 |
 
-最後の4つは分類専用の設定です。物体検出のファミリーはこれらを無視します。CLIは分類モデルの`mixup`をバッチの混合に、検出モデルでは`mixup_prob`に振り分けます。
+最後の4つは分類専用の設定です。物体検出のファミリーはこれらを無視します。`train()`とCLIは分類モデルの`mixup`をバッチの混合に、検出モデルでは`mixup_prob`に振り分けます。
 
 <code-tabs name="usage" />
 

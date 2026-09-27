@@ -52,7 +52,7 @@ snippets:
 
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: da0776970ded8716
+source_hash: ccecee93e9744550
 ---
 
 ## Tworzenie
@@ -157,6 +157,7 @@ model.track(
     source,
     *,
     track_conf=0.25,
+    conf=None,
     iou=0.45,
     imgsz=None,
     classes=None,
@@ -164,20 +165,26 @@ model.track(
     save=False,
     show=False,
     vid_stride=1,
+    fps=30.0,
+    color_format="auto",
     output_path=None,
     tracker="bytetrack",
     tracker_config=None,
     augment=False,
+    persist=False,
     **tracker_kwargs,
 ) -> Generator[Results, None, None]
 ```
 
 Zwraca kolejno po jednym `Results` na klatkę z ustawionym `track_id`. `tracker`
-przyjmuje `"bytetrack"`, `"botsort"`, `"ocsort"` lub `"deepocsort"` i jest
-ignorowane, gdy podano `tracker_config`, ponieważ typ konfiguracji wybiera
-tracker. `track_conf` jest mapowane na `track_high_thresh` dla ByteTrack
-i BoT-SORT oraz na `det_thresh` dla OC-SORT i Deep OC-SORT. `output_path`
-domyślnie przyjmuje `runs/track/<video_stem>.mp4`.
+przyjmuje `"bytetrack"`, `"botsort"`, `"ocsort"` lub `"deepocsort"`, opcjonalnie
+z sufiksem `.yaml`, albo własną instancję trackera i jest ignorowane, gdy podano
+`tracker_config`, ponieważ typ konfiguracji wybiera tracker. `track_conf` jest
+mapowane na `track_high_thresh` dla ByteTrack i BoT-SORT oraz na `det_thresh`
+dla OC-SORT i Deep OC-SORT. `conf`, jeśli podano, jest progiem detekcji, tak jak
+w `predict()`. `persist=True` zachowuje tracker z poprzedniego wywołania na
+potrzeby pętli przetwarzających klatkę po klatce. `output_path` domyślnie
+przyjmuje `runs/track/<video_stem>.mp4`.
 
 ## val
 
@@ -197,6 +204,9 @@ model.val(
     verbose=True,
     *,
     plots=None,
+    project=None,
+    name=None,
+    exist_ok=False,
     **kwargs,
 ) -> Dict
 ```
@@ -204,8 +214,11 @@ model.val(
 Zwraca słownik metryk, którego klucze zależą od zadania. Detekcja zwraca
 `metrics/precision`, `metrics/recall`, `metrics/mAP50` i `metrics/mAP50-95`.
 `imgsz` przyjmuje liczbę całkowitą dla kwadratu lub krotkę `(height, width)`,
-a domyślnie używa natywnego rozmiaru wejścia modelu. `plots` jest aliasem
-`save_plots`. `allow_download_scripts` steruje osadzonym kodem Pythona, który
+a domyślnie używa natywnego rozmiaru wejścia modelu. `data=None` waliduje na
+zbiorze danych zapisanym w konfiguracji trenowania checkpointu i zgłasza błąd,
+gdy go nie ma, jak w przypadku opublikowanych wag. `project`, `name` i
+`exist_ok` ustawiają katalog wyjściowy jako `project/name`, z kolejnym numerem,
+chyba że `exist_ok=True`. `plots` jest aliasem `save_plots`. `allow_download_scripts` steruje osadzonym kodem Pythona, który
 plik YAML zbioru danych może zawierać w polu `download`.
 
 `faster_coco_eval` jest przyjmowane przez `**kwargs` i domyślnie ma wartość
@@ -245,6 +258,7 @@ eksporterów, gdzie `engine` jest aliasem `tensorrt`, a `litert` aliasem
 | `dynamic` | `True` | Włączenie osi dynamicznych |
 | `half` | `False` | Precyzja FP16 |
 | `int8` | `False` | Precyzja INT8 |
+| `quantize` | `None` | Precyzja jako `16`, `8` lub `32`, zamiast `half` lub `int8` |
 | `batch` | `1` | Rozmiar batcha zapisany w artefakcie |
 | `device` | `None` | Urządzenie używane do śledzenia |
 | `data` | `None` | data.yaml do kalibracji INT8 |
@@ -253,7 +267,8 @@ eksporterów, gdzie `engine` jest aliasem `tensorrt`, a `litert` aliasem
 | `verbose` | `False` | Szczegółowe komunikaty eksportera |
 
 Zablokowane kombinacje zgłaszają `NotImplementedError` w kontroli wstępnej,
-przed śledzeniem. Pokrycie i jego reguły opisano na stronie
+przed śledzeniem. Opcja, której format nie używa, powoduje ostrzeżenie
+`Unknown <format> export arguments (ignored)`, a eksport jest kontynuowany. Pokrycie i jego reguły opisano na stronie
 [macierzy eksportu](/docs/reference/export-matrix). Jeśli występują aktywne
 adaptery LoRA, są scalane w gęste wagi, a scalenie następuje dopiero po
 odrzuceniu wszystkich nieprawidłowych żądań.

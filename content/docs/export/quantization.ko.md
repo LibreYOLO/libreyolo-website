@@ -45,22 +45,31 @@ snippets:
   quantize:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9s.pt")
 
+
         # 구조 교체 및 보정. calib는 작은 레이블 없는 이미지 세트입니다,
+
         # 활성 범위와 스케일을 도출하기 위해 순방향 전용으로 읽습니다.
-        qmodel = model.quantize(recipe="int8", calib="coco128.yaml", samples=128)
+
+        qmodel = model.quantize(recipe="int8", calib="coco128.yaml",
+        samples=128)
+
 
         print(qmodel.quant_info())
+
         qmodel.val(data="coco8.yaml")          # 부동 소수점 모델과 동일한 검증기
+
         qmodel.save("LibreYOLO9s-int8.pt")     # 체크포인트가 양자 매니페스트를 포함하고 있습니다
     - label: CLI
       language: bash
-      code: |
-        libreyolo quantize --model LibreYOLO9s.pt --recipe int8 --calib coco128.yaml
+      code: >
+        libreyolo quantize --model LibreYOLO9s.pt --recipe int8 --calib
+        coco128.yaml
     - label: 논쟁
       language: python
       code: |
@@ -104,8 +113,9 @@ snippets:
         )
     - label: CLI
       language: bash
-      code: |
-        libreyolo train --model LibreYOLO9s-int8.pt --data coco8.yaml --epochs 5 --lr0 1e-4
+      code: >
+        libreyolo train --model LibreYOLO9s-int8.pt --data coco8.yaml --epochs 5
+        --lr0 1e-4
   export:
     - label: 패킹된 PyTorch 체크포인트
       language: python
@@ -145,7 +155,7 @@ snippets:
 
         # 이제 어떤 부동 소수점 내보내기 도구라도 지원하는 모든 정밀도로 적용됩니다.
         qmodel.export(format="tensorrt", half=True)
-source_hash: "6c247a3243daf393"
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## 설치
@@ -219,6 +229,8 @@ QAT 설정은 EMA와 SyncBatchNorm을 비활성화하고 `average_best=0`으로 
 ## 제약
 
 양자화 산술은 시뮬레이션에서 실행되며, 이는 AMP 하에서도 float32 영역에서 계산된 가짜 양자화입니다. 시뮬레이션은 수치적으로 정확하므로, 어떤 장치에서든 `val()` 점수는 양자화 산술에 대한 실제 주장입니다. 이는 속도와 관련된 주장이 아닙니다.
+
+Apple MPS는 가짜 양자화 연산도 float8도 구현하지 않으므로, Mac에서는 `fp16`과 `bf16`을 제외한 모든 레시피가 경고와 함께 CPU에서 실행됩니다.
 
 두 가지 예외가 네이티브로 실행됩니다. `fp16`와 `bf16`는 일반적인 캐스트입니다. 최종화된 `fp8` 모듈은 Ada, Hopper 및 Blackwell 클래스 하드웨어에서 `torch._scaled_mm`를 통해 패킹된 E4M3 가중치로 직접 GEMM을 실행하며, 시뮬레이션과 동일하게 보정된 활성화 스케일을 사용합니다; `LIBREYOLO_KERNELS=off`를 설정하면 모든 곳에서 정확히 시뮬레이션된 경로가 복원됩니다.
 

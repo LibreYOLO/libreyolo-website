@@ -16,7 +16,7 @@ keywords:
   - yolox bn eps
   - faster-coco-eval padrão
 last_verified: 1.6.0
-source_hash: f4fda6ef286113ab
+source_hash: c575718b8a7949f8
 ---
 
 ## De 1.5.0 para 1.6.0
@@ -38,6 +38,16 @@ source_hash: f4fda6ef286113ab
 - QAT desativa EMA, SyncBatchNorm e média de checkpoints. Use os checkpoints best/last de QAT sem depender desses estados.
 
 - Loaders personalizados com hooks de alteração do dataset devem usar `persistent_workers=False` ou reconstruir os workers após a alteração. Cópias persistentes incompatíveis com múltiplos workers agora geram erro.
+
+- Arrays de imagem NumPy são lidos como BGR, a ordem do OpenCV. Passe `color_format="rgb"` onde você passa um array RGB, como `np.asarray(pil_image)`; a saída de `cv2.imread()` e os quadros de vídeo não precisam de mudança.
+
+- Um array NumPy ou tensor 4D é um batch: `predict()` retorna uma lista com um `Results` por imagem em vez de usar só a primeira imagem.
+
+- `train(resume=True)` e `train(resume="path/to/last.pt")` restauram os argumentos de treinamento salvos da execução e continuam gravando no seu diretório de execução; os argumentos que você passa explicitamente prevalecem. Retomar pesos publicados, ou uma execução que já atingiu suas `epochs`, gera `ValueError`.
+
+- Com a validação ligada, a época final sempre valida, então execuções mais curtas que `eval_interval` agora reportam métricas e gravam `best.pt`. `val=False` desliga a validação, incluindo a época final. A validação durante o treinamento grava em `<run>/val` em vez de `runs/val/`.
+
+- Falhas do `train` na CLI reportam seu tipo de erro, então erros de configuração saem com código 2 em vez de 1 com `io_error`.
 
 Veja o [changelog](/docs/changelog) para o release completo e [importação de pesos](/docs/migrate) para conversão de checkpoints.
 

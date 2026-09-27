@@ -14,7 +14,7 @@ keywords:
   - fp8 e4m3
   - 量化校准数据集
   - qdq onnx 导出
-last_verified: "1.6.0"
+last_verified: 1.6.0
 meta:
   - label: 调用
     value: 'model.quantize(recipe="int8", calib="coco128.yaml")'
@@ -152,7 +152,7 @@ snippets:
 
         # 现在任何浮点导出器都可用，精度也随它支持的来
         qmodel.export(format="tensorrt", half=True)
-source_hash: 6c247a3243daf393
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## 安装
@@ -254,6 +254,9 @@ YOLO9-s int8 从 29.5 MB 降到 9.6 MB，RF-DETR-n nvfp4 从 122 MB 降到 26 MB
 量化运算是在模拟中执行的，也就是即便在 AMP 下也在 float32 孤岛里算出来的伪量化。模拟
 在数值上是真实的，所以在任何设备上跑出的 `val()` 分数都是关于量化运算的真实结论。它不
 是速度上的结论。
+
+Apple MPS 既没有实现伪量化算子，也不支持 float8，所以在 Mac 上，除 `fp16` 和 `bf16`
+以外的每种配方都会在 CPU 上运行，并给出警告。
 
 有两个例外是原生执行的。`fp16` 和 `bf16` 就是普通的类型转换。固化后的 `fp8` 模块在
 Ada、Hopper 和 Blackwell 级别的硬件上，通过 `torch._scaled_mm` 直接在打包的 E4M3 权重

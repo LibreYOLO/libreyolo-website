@@ -74,6 +74,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `batch=8` and
 | Argument | Default | Meaning |
 | --- | --- | --- |
 | `classes` | `None` | Evaluate on only these original dataset class ids, comma-separated (e.g. '0,3,5'); every other class's boxes are dropped from ground truth and predictions. Defaults to the classes= the checkpoint was trained with, if any |
+| `single_cls` | `False` | Evaluate a supported detector with every class merged into class 0 |
 | `crop_pct` | `None` | Classification eval resize ratio before the center crop (default: the model family's native value) |
 | `plot_samples` | `8` | Sample images in the validation sample plot: 0 for none, -1 for every validated image (does not change the metrics) |
 | `visualize` | `False` | Draw every validated image with its true positives, false positives and false negatives to visualize/errors/ (any mistake) and visualize/correct/ (detect, segment; classify draws label vs top-1) |

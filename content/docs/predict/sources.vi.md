@@ -2,11 +2,12 @@
 title: Nguồn dự đoán
 seo_title: Nguồn dự đoán trong LibreYOLO
 description: >-
-  Mọi nguồn mà predict chấp nhận: ảnh, thư mục, URL, tệp video, webcam, RTSP, YouTube, chụp màn hình, danh
-  sách ảnh và tệp .streams.
+  Mọi nguồn mà predict chấp nhận: ảnh, thư mục, URL, tệp video, webcam, RTSP,
+  YouTube, chụp màn hình, danh sách ảnh và tệp .streams.
 lead: >-
-  Đối số source được phân loại trước khi mở bất kỳ thứ gì, nên một lời gọi xử lý được JPEG, thư mục, MP4, chỉ
-  số webcam, URL RTSP, vùng màn hình hoặc danh sách camera.
+  Đối số source được phân loại trước khi mở bất kỳ thứ gì, nên một lời gọi xử lý
+  được JPEG, thư mục, MP4, chỉ số webcam, URL RTSP, vùng màn hình hoặc danh sách
+  camera.
 keywords:
   - suy luận video yolo python
   - rtsp
@@ -20,11 +21,12 @@ keywords:
   - stream=True
 last_verified: 1.6.0
 verification: >-
-  Cách phân loại nguồn được đọc từ libreyolo/utils/source.py (classify_source, SourceKind, StreamSource,
-  MultiStreamSource). Loại ảnh và phần mở rộng thư mục được chấp nhận lấy từ libreyolo/utils/image_loader.py.
-  Phần mở rộng video và đường dẫn lưu lấy từ libreyolo/utils/video.py. Cú pháp màn hình lấy từ
-  libreyolo/utils/screen.py. Shape trả về và giá trị mặc định đối số lấy từ InferenceRunner.__call__ trong
-  libreyolo/models/base/inference.py.
+  Cách phân loại nguồn được đọc từ libreyolo/utils/source.py (classify_source,
+  SourceKind, StreamSource, MultiStreamSource). Loại ảnh và phần mở rộng thư mục
+  được chấp nhận lấy từ libreyolo/utils/image_loader.py. Phần mở rộng video và
+  đường dẫn lưu lấy từ libreyolo/utils/video.py. Cú pháp màn hình lấy từ
+  libreyolo/utils/screen.py. Shape trả về và giá trị mặc định đối số lấy từ
+  InferenceRunner.__call__ trong libreyolo/models/base/inference.py.
 snippets:
   images:
     - label: Một ảnh
@@ -39,19 +41,34 @@ snippets:
         print(len(result.boxes), "detections")
     - label: Ảnh trong bộ nhớ
       language: python
-      code: |
+      code: >
         import numpy as np
+
         from PIL import Image
+
 
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
 
+
         pil_image = Image.open(SAMPLE_IMAGE)
+
         array = np.asarray(pil_image)
+
         raw_bytes = open(SAMPLE_IMAGE, "rb").read()
 
-        for source in (pil_image, array, raw_bytes):
+
+        # Mảng NumPy được đọc là BGR trừ khi được chỉ định khác; mảng này là
+        RGB.
+
+        result = model(array, color_format="rgb")
+
+        print(type(array).__name__, len(result.boxes))
+
+
+        for source in (pil_image, raw_bytes):
             result = model(source)
             print(type(source).__name__, len(result.boxes))
     - label: Một thư mục
@@ -101,14 +118,19 @@ snippets:
   live:
     - label: Webcam (cần camera được kết nối)
       language: python
-      code: |
+      code: >
         import itertools
+
 
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
 
-        # Webcam chỉ số 0. Nguồn trực tiếp không kết thúc, nên hãy giới hạn vòng lặp.
+
+        # Webcam chỉ số 0. Nguồn trực tiếp không kết thúc, nên hãy giới hạn vòng
+        lặp.
+
         for result in itertools.islice(model(0, stream=True), 100):
             print(result.frame_idx, len(result.boxes))
     - label: RTSP (cần URL camera có thể truy cập)
@@ -126,11 +148,14 @@ snippets:
   streams:
     - label: Tệp .streams (cung cấp camera của bạn)
       language: python
-      code: |
+      code: >
         import itertools
+
         from pathlib import Path
 
+
         from libreyolo import LibreYOLO
+
 
         Path("cameras.streams").write_text(
             "# one source per line, blank lines and comments are skipped\n"
@@ -139,8 +164,11 @@ snippets:
             encoding="utf-8",
         )
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
-        for result in itertools.islice(model("cameras.streams", stream=True), 100):
+
+        for result in itertools.islice(model("cameras.streams", stream=True),
+        100):
             print(result.frame_idx, len(result.boxes))
     - label: Danh sách camera
       language: python
@@ -167,17 +195,22 @@ snippets:
         print(len(result.boxes), "detections")
     - label: 'Một vùng màn hình, liên tục'
       language: python
-      code: |
+      code: >
         import itertools
+
 
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreYOLO9s.pt")
 
+
         # "screen <màn_hình> <trái> <trên> <chiều_rộng> <chiều_cao>"
-        for result in itertools.islice(model("screen 1 100 200 512 256", stream=True), 50):
+
+        for result in itertools.islice(model("screen 1 100 200 512 256",
+        stream=True), 50):
             print(len(result.boxes))
-source_hash: 93db4d43c24b69ae
+source_hash: c355ad28487c9a65
 ---
 ## Cách phân loại nguồn
 
@@ -214,15 +247,17 @@ Nguồn một ảnh chấp nhận bảy loại.
 |---|---|
 | `str` hoặc `pathlib.Path` | Tệp cục bộ, `http(s)://`, `s3://` hoặc `gs://` |
 | `PIL.Image.Image` | Chuyển sang RGB |
-| `numpy.ndarray` | Ảnh xám 2D hoặc HWC/CHW 3D; mảng 4D dùng ảnh đầu tiên |
-| `torch.Tensor` | CHW hoặc NCHW, đọc dưới dạng RGB; tensor theo batch dùng ảnh đầu tiên |
+| `numpy.ndarray` | Ảnh xám 2D hoặc HWC/CHW 3D theo thứ tự BGR; mảng 4D là một batch |
+| `torch.Tensor` | CHW hoặc NCHW, đọc dưới dạng RGB; tensor 4D là một batch |
 | `bytes` | Dữ liệu ảnh đã mã hóa |
 | `io.BytesIO` | Dữ liệu ảnh đã mã hóa |
 
+Mảng hoặc tensor 4D trả về một danh sách gồm một `Results` cho mỗi ảnh.
+
 Mọi thứ được chuyển sang RGB trước khi tiền xử lý. Mảng NumPy là trường hợp duy
 nhất có thứ tự kênh nhập nhằng, nên `color_format` điều khiển thứ tự: `"auto"`
-(mặc định) giữ nguyên mảng, còn `"bgr"` đảo các kênh, đúng với yêu cầu của frame
-đọc bằng OpenCV.
+(mặc định) và `"bgr"` đọc mảng dưới dạng BGR, thứ tự mà OpenCV trả về, còn `"rgb"`
+giữ nguyên mảng, đúng với yêu cầu của mảng tạo từ ảnh PIL.
 
 Mảng số thực được scale lại theo phạm vi riêng: giá trị bằng hoặc dưới `1.0` được
 nhân với 255, còn giá trị cao hơn bị cắt vào `[0, 255]`. Mảng RGBA bỏ kênh alpha.
@@ -363,4 +398,4 @@ Video và nguồn trực tiếp được ghi thành một tệp `.mp4` duy nhấ
 không có hậu tố được coi là thư mục. `output_file_format` chọn kiểu mã hóa ảnh
 tĩnh và chấp nhận `jpg`, `png` hoặc `webp`.
 
-Sau khi lưu, đường dẫn đã ghi cũng được gắn vào kết quả dưới dạng `result.saved_path`.
+Sau khi một ảnh được lưu, đường dẫn đã ghi cũng được gắn vào kết quả dưới dạng `result.saved_path`.

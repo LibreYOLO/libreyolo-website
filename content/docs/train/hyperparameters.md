@@ -90,13 +90,13 @@ snippets:
         from libreyolo import LibreYOLO
 
         # Load the interrupted run's checkpoint, then ask to resume.
-        model = LibreYOLO("runs/train/exp/weights/last.pt")
-        model.train(data="my-dataset.yaml", epochs=100, resume=True)
+        model = LibreYOLO("runs/train/yolo9_exp/weights/last.pt")
+        model.train(data="my-dataset.yaml", resume=True)
     - label: CLI
       language: bash
       code: |
-        libreyolo train model=runs/train/exp/weights/last.pt \
-          data=my-dataset.yaml epochs=100 resume=true
+        libreyolo train model=runs/train/yolo9_exp/weights/last.pt \
+          data=my-dataset.yaml resume=true
   cfg:
     - label: Python
       language: python
@@ -244,9 +244,10 @@ instead of being overwritten.
 
 `save_period` writes an extra `weights/epoch_<N>.pt` every N epochs, on top of
 `weights/last.pt` after each epoch and `weights/best.pt` whenever the tracked
-metric improves. `eval_interval` sets how often validation runs, and `patience`
-stops the run after that many epochs without improvement, with `0` disabling
-early stopping.
+metric improves. `eval_interval` sets how often validation runs, and the final
+epoch always validates; `val=False` turns validation off, and such a run writes
+no `best.pt`. `patience` stops the run after that many epochs without
+improvement, with `0` disabling early stopping.
 
 `cache` speeds up repeated epochs by holding decoded images in RAM (`True` or
 `"ram"`) or as `.npy` files beside the sources (`"disk"`). Cached reads are
@@ -259,20 +260,24 @@ the two.
 
 ## Resume
 
-`resume=True` continues an interrupted run. The checkpoint has to be loaded
-first, because resume reads it from the model, not from a separate argument.
+`resume=True` continues an interrupted run from the loaded checkpoint;
+`resume="path/to/last.pt"` continues from that file instead.
 
 <code-tabs name="resume" />
 
-Resume restores the trained weights, the optimizer state, the EMA weights and
-update count, the best-metric tracking, the `GradScaler` scale, and the PyTorch,
-CUDA and NumPy random states. It starts at the checkpoint's epoch plus one and
-fast-forwards the schedule to that position.
+Resume restores the run's saved training arguments, and an argument passed
+explicitly overrides the saved one. It keeps writing into the checkpoint's run
+directory. It restores the trained weights, the optimizer state, the EMA weights
+and update count, the best-metric tracking, the `GradScaler` scale, and the
+PyTorch, CUDA and NumPy random states. It starts at the checkpoint's epoch plus
+one and fast-forwards the schedule to that position.
 
-Two things it will not do. `resume=True` cannot be combined with `pretrained`,
-which raises. And when the checkpoint's best-metric key differs from the current
-run's, best-metric tracking resets to zero with a warning rather than comparing
-values that do not mean the same thing.
+Three things it will not do. `resume=True` cannot be combined with `pretrained`,
+which raises. Released weights and a run that already reached its `epochs` hold
+nothing to resume, and raise a `ValueError` that says so. And when the
+checkpoint's best-metric key differs from the current run's, best-metric
+tracking resets to zero with a warning rather than comparing values that do not
+mean the same thing.
 
 ## Recipes in a file
 

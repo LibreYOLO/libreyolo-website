@@ -19,7 +19,7 @@ keywords:
   - сегментація екземплярів
   - оцінювання пози
   - орієнтовані обмежувальні рамки
-last_verified: "1.6.0"
+last_verified: 1.6.0
 hero:
   src: /showcase/parkour-detection.mp4
   poster: /showcase/parkour-detection-poster.jpg
@@ -183,7 +183,7 @@ snippets:
     - label: Використати експортований файл
       language: python
       code: >
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
 
         # Фабрика виконує маршрутизацію за суфіксом файлу, тому експортований
@@ -210,7 +210,7 @@ snippets:
 
         # обробку. Перевірте сигнатуру до підключення компонентів.
 
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
 
         name = session.get_inputs()[0].name
 
@@ -220,7 +220,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: c360784eb62a7df5
+source_hash: 379a3a09691bf14b
 ---
 
 ## Встановлення
@@ -261,8 +261,8 @@ pip install "libreyolo[rfdetr]"
 ## Навчання
 
 Для всіх чотирьох завдань навчання починається з опублікованої контрольної точки.
-RF-DETR перелічує `pretrained` серед аргументів, які ігнорує його нативний тренер,
-тому передавання `pretrained=False` не створює тут випадково ініціалізованої моделі.
+`pretrained=False` натомість повторно ініціалізує всю мережу, включно з бекбоном,
+і навчає її з нуля.
 
 <code-tabs name="train" />
 
@@ -276,7 +276,7 @@ LibreYOLO перевіряє це до початку запуску й нази
 Датасети, аугментацію, кілька GPU та системи журналювання описано на сторінці
 [навчання](/docs/train).
 
-Нові запуски типово використовують `output_dir=None`, що визначає каталог `runs/train/rfdetr_exp` зі збільшуваним номером і `exist_ok=False`. Датасети багатокласової пози використовують `kpt_names` із ключами за індексом або назвою класу; порожній список позначає клас лише з рамками. Передбачення доповнюють ключові точки до `kpt_shape`; оцінка якості за mAP ключових точок не враховує класи лише з рамками.
+Нові запуски типово використовують `output_dir=None`, що визначає каталог `runs/train/rfdetr_exp` зі збільшуваним номером і `exist_ok=False`. Відновлений запуск продовжує записувати в каталог запуску своєї контрольної точки. Датасети багатокласової пози використовують `kpt_names` із ключами за індексом або назвою класу; порожній список позначає клас лише з рамками. Передбачення доповнюють ключові точки до `kpt_shape`; оцінка якості за mAP ключових точок не враховує класи лише з рамками.
 
 ## Валідація
 

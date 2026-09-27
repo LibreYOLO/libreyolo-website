@@ -90,7 +90,6 @@ snippets:
             keep_high_precision=None,  # None usa la regola della famiglia
             verbose=True,
         )
-
   reload:
     - label: Un checkpoint quantizzato si ricarica come tale
       language: python
@@ -101,7 +100,6 @@ snippets:
         # prima che i pesi vengano caricati.
         qmodel = LibreYOLO("LibreYOLO9s-int8.pt")
         print(qmodel.quant_info())
-
   train:
     - label: Il QAT è un semplice train() su un modello quantizzato
       language: python
@@ -130,7 +128,6 @@ snippets:
       code: >
         libreyolo train --model LibreYOLO9s-int8.pt --data coco8.yaml --epochs 5
         --lr0 1e-4
-
   export:
     - label: Checkpoint PyTorch impacchettato
       language: python
@@ -166,7 +163,6 @@ snippets:
       language: bash
       code: |
         libreyolo export --model LibreYOLO9s-int8.pt --format onnx
-
   dequantize:
     - label: 'Tornare a float, mantenendo i pesi addestrati con QAT'
       language: python
@@ -178,7 +174,7 @@ snippets:
 
         # Ora vale qualsiasi esportatore float, a qualunque precisione supporti.
         qmodel.export(format="tensorrt", half=True)
-source_hash: 6c247a3243daf393
+source_hash: 8d41f13e6ee33ff2
 ---
 
 ## Installazione
@@ -300,6 +296,9 @@ L'aritmetica quantizzata viene eseguita in simulazione, cioè fake quantization
 calcolata in isole di float32 anche sotto AMP. La simulazione è fedele nei numeri,
 quindi un punteggio di `val()` su qualsiasi dispositivo è un'affermazione reale
 sull'aritmetica quantizzata. Non è un'affermazione sulla velocità.
+
+Apple MPS non implementa né le operazioni di fake quantization né float8, quindi
+su un Mac ogni ricetta tranne `fp16` e `bf16` gira su CPU, con un avviso.
 
 Due eccezioni vengono eseguite in modo nativo. `fp16` e `bf16` sono normali cast. I
 moduli `fp8` finalizzati eseguono la loro GEMM direttamente su pesi E4M3

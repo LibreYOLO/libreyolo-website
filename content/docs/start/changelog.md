@@ -153,7 +153,7 @@ These notes describe library dev at `4da12d005eb41a8e694a86124c97ea5faaee9b7c`. 
 
 <!-- A04 -->
 - **F1-optimal detection confidence thresholds. (#778)**
-  Detection validation adds `metrics/best_conf`, `metrics/best_conf_f1` and `metrics/best_conf_per_class`, computed at IoU `0.50`. Global selection uses micro F1; per-class thresholds are keyed by class name. Equal-score detections are grouped, and F1 ties choose the higher threshold. No positive F1 yields `NaN`. Segmentation's separate metrics implementation does not expose these keys.
+  Detection validation adds `metrics/best_conf` and `metrics/best_conf_f1`, computed at IoU `0.50`, and `results.box.best_conf_per_class`. Global selection uses micro F1; per-class thresholds are keyed by class name. Equal-score detections are grouped, and F1 ties choose the higher threshold. No positive F1 yields `0.0`. Segmentation's separate metrics implementation does not expose these values.
 
 <!-- A05 -->
 - **Configurable validation sample plots. (#880)**

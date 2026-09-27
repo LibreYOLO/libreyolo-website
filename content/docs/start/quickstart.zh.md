@@ -57,20 +57,23 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+        # 在 macOS 和 Windows 上，数据加载 worker 会重新导入这个文件，
+        # 所以脚本要把训练放在 main 保护之下
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        # coco8 是库自带的 8 张图片的数据集，首次使用时从 URL 下载，
-        # 因此不需要执行任何脚本
-        results = model.train(
-            data="coco8.yaml",
-            epochs=1,
-            imgsz=640,
-            batch=4,
-            device="cpu",
-        )
+            # coco8 是库自带的 8 张图片的数据集，首次使用时从 URL 下载，
+            # 因此不需要执行任何脚本
+            results = model.train(
+                data="coco8.yaml",
+                epochs=1,
+                imgsz=640,
+                batch=4,
+                device="cpu",
+            )
 
-        print(results["save_dir"])
-        print(results["best_checkpoint"])
+            print(results["save_dir"])
+            print(results["best_checkpoint"])
     - label: CLI
       language: bash
       code: |
@@ -81,14 +84,15 @@ snippets:
       code: |
         from libreyolo import LibreYOLO
 
-        model = LibreYOLO("LibreYOLO9t.pt")
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() 返回一个普通 dict，不是对象
-        metrics = model.val(data="coco8.yaml", device="cpu")
+            # val() 返回一个普通 dict，不是对象
+            metrics = model.val(data="coco8.yaml", device="cpu")
 
-        print(metrics["metrics/mAP50-95"])
-        print(metrics["metrics/mAP50"])
-        print(metrics["metrics/precision"], metrics["metrics/recall"])
+            print(metrics["metrics/mAP50-95"])
+            print(metrics["metrics/mAP50"])
+            print(metrics["metrics/precision"], metrics["metrics/recall"])
   export:
     - label: TorchScript
       language: python
@@ -111,7 +115,7 @@ snippets:
       code: |
         pip install "libreyolo[onnx]"
         libreyolo export model=yolo9-t format=onnx imgsz=640
-source_hash: c11b6bdbf0b6fdf1
+source_hash: 7dfa4197133544c5
 ---
 
 ## 安装
@@ -134,7 +138,7 @@ pip install libreyolo
 
 <code-tabs name="train" />
 
-`data` 是一份数据集 YAML。`coco8.yaml` 随库一起提供，所以这段代码片段粘贴过去就能跑；不是自带的名字会按路径读取。数据集在 `~/datasets` 下解析，设置了 `LIBREYOLO_DATASETS_DIR` 时则在该变量指向的位置解析。
+`data` 是一份数据集 YAML。`coco8.yaml` 随库一起提供，所以这段代码片段粘贴过去就能跑；不是自带的名字会按路径读取。之所以有 `__main__` 保护，是因为在 macOS 和 Windows 上，数据加载 worker 会重新导入这个脚本；见[疑难排查](/docs/troubleshooting)。数据集在 `~/datasets` 下解析，设置了 `LIBREYOLO_DATASETS_DIR` 时则在该变量指向的位置解析。
 
 一次运行写到 `project/name`，默认是 `runs/train` 下的一个目录，里面有 `weights/best.pt` 和 `weights/last.pt`。`train()` 返回一个字典，包含 `save_dir`、`best_checkpoint`、`last_checkpoint`、每轮的损失和每轮的验证指标。训练得到的检查点（checkpoint）通过 `LibreYOLO()` 加载，和预训练的完全一样。
 

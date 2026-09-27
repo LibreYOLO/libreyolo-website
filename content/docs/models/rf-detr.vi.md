@@ -4,11 +4,12 @@ families:
   - rfdetr
 seo_title: 'RF-DETR: huấn luyện, tinh chỉnh và xuất theo MIT'
 description: >-
-  Dùng RF-DETR trong LibreYOLO để phát hiện, phân đoạn instance, tư thế và box định hướng. Cài đặt, dự đoán,
-  huấn luyện, đánh giá và xuất, tất cả theo giấy phép MIT.
+  Dùng RF-DETR trong LibreYOLO để phát hiện, phân đoạn instance, tư thế và box
+  định hướng. Cài đặt, dự đoán, huấn luyện, đánh giá và xuất, tất cả theo giấy
+  phép MIT.
 lead: >-
-  Một detection transformer dự đoán tập đối tượng cố định thay vì lưới dày đặc, nên không cần NMS khi suy
-  luận. LibreYOLO hỗ trợ mô hình cho bốn tác vụ.
+  Một detection transformer dự đoán tập đối tượng cố định thay vì lưới dày đặc,
+  nên không cần NMS khi suy luận. LibreYOLO hỗ trợ mô hình cho bốn tác vụ.
 keywords:
   - RF-DETR
   - detection transformer thời gian thực
@@ -54,11 +55,14 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreRFDETRs.pt")
-        model.train(data="my-dataset.yaml", epochs=50, imgsz=512, batch=8, lr0=1e-4)
+
+        model.train(data="my-dataset.yaml", epochs=50, imgsz=512, batch=8,
+        lr0=1e-4)
     - label: CLI
       language: bash
       code: |
@@ -96,54 +100,87 @@ snippets:
         libreyolo val model=LibreRFDETRs.pt data=my-dataset.yaml imgsz=512
     - label: Trên COCO
       language: bash
-      code: |
-        # YAML COCO đi kèm chứa script tải xuống nhúng sẵn, nên cần quyền rõ ràng
+      code: >
+        # YAML COCO đi kèm chứa script tải xuống nhúng sẵn, nên cần quyền rõ
+        ràng
+
         # trừ khi tập dữ liệu đã có cục bộ.
+
         libreyolo val model=LibreRFDETRn.pt data=coco.yaml imgsz=384 \
           allow_download_scripts=True
   export:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreRFDETRs.pt")
+
         model.export(format="onnx", imgsz=512)
+
         model.export(format="tensorrt", imgsz=512, half=True)
 
+
         # Các đối số được mọi định dạng chấp nhận:
+
         #
+
         #   format    "onnx" | "torchscript" | "executorch" | "tensorrt"
+
         #             | "openvino" | "paddle" | "mnn" | "rknn" | "ncnn"
+
         #             | "tflite" | "coreml" | "coreai".
+
         #             "engine" is an alias for tensorrt, "litert" for tflite.
+
         #   imgsz     int hoặc (chiều cao, chiều rộng). Mặc định là
+
         #             độ phân giải gốc.
+
         #   batch     int, mặc định 1.
+
         #   half      bool, xuất ở FP16. Mặc định False.
+
         #   int8      bool, xuất ở INT8. Mặc định False. Cần `data`.
+
         #   data      đường dẫn đến YAML tập dữ liệu, dùng để hiệu chuẩn int8.
+
         #   fraction  float, phần tập hiệu chuẩn cần dùng. Mặc định 1.0.
+
         #   dynamic   bool, các trục động. Mặc định True.
+
         #   simplify  bool, chạy đơn giản hóa đồ thị ONNX. Mặc định True.
+
         #   opset     int, ONNX opset. Được chọn theo họ khi không chỉ định.
-        #   device    str, thiết bị dùng để truy vết. Mặc định là thiết bị của mô hình.
+
+        #   device    str, thiết bị dùng để truy vết. Mặc định là thiết bị của
+        mô hình.
+
         #   output_path  str, mặc định là tên suy ra từ checkpoint.
+
         #   verbose   bool, mặc định False.
+
         #   allow_download_scripts  bool, mặc định False. Cho phép mã Python
+
         #             nhúng trong YAML tập dữ liệu cần tải xuống.
+
         #
+
         # Một số định dạng nhận thêm đối số riêng, chẳng hạn nền tảng đích RKNN.
+
         # Các đối số đó được ghi trong trang của từng định dạng.
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreRFDETRs.pt format=onnx imgsz=512
-        libreyolo export model=LibreRFDETRs.pt format=tensorrt imgsz=512 half=True
+
+        libreyolo export model=LibreRFDETRs.pt format=tensorrt imgsz=512
+        half=True
     - label: Dùng tệp đã xuất
       language: python
       code: |
-        from libreyolo import LibreYOLO
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
         # Factory định tuyến theo hậu tố tệp, nên artifact đã xuất được tải
         # như mọi checkpoint và trả về cùng đối tượng Results.
@@ -153,19 +190,28 @@ snippets:
         print(result.boxes.xyxy)
     - label: Không dùng LibreYOLO
       language: python
-      code: |
+      code: >
         import numpy as np
+
         import onnxruntime as ort
 
-        # Chạy trực tiếp đồ thị nghĩa là bạn tự thực hiện tiền xử lý và hậu xử lý.
+
+        # Chạy trực tiếp đồ thị nghĩa là bạn tự thực hiện tiền xử lý và hậu xử
+        lý.
+
         # Hãy kiểm tra chữ ký trước khi kết nối.
-        session = ort.InferenceSession("LibreRFDETRs.onnx")
+
+        session = ort.InferenceSession("weights/LibreRFDETRs.onnx")
+
         name = session.get_inputs()[0].name
-        outputs = session.run(None, {name: np.zeros((1, 3, 512, 512), dtype=np.float32)})
+
+        outputs = session.run(None, {name: np.zeros((1, 3, 512, 512),
+        dtype=np.float32)})
+
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: c360784eb62a7df5
+source_hash: 379a3a09691bf14b
 ---
 ## Cài đặt
 
@@ -200,9 +246,9 @@ Các kích thước có số tham số tương tự và chủ yếu khác nhau �
 
 ## Huấn luyện
 
-Huấn luyện bắt đầu từ checkpoint đã công bố cho cả bốn tác vụ. RF-DETR liệt kê
-`pretrained` trong các đối số mà trình huấn luyện native bỏ qua, nên truyền
-`pretrained=False` không tạo mô hình khởi tạo ngẫu nhiên ở đây.
+Huấn luyện bắt đầu từ checkpoint đã công bố cho cả bốn tác vụ.
+`pretrained=False` thay vào đó khởi tạo lại toàn bộ mạng, kể cả backbone, và
+huấn luyện từ đầu.
 
 <code-tabs name="train" />
 
@@ -214,7 +260,7 @@ kiểm tra điều này trước khi chạy và nêu các kích thước hợp l
 
 Xem [huấn luyện](/docs/train) để biết về tập dữ liệu, tăng cường dữ liệu, multi-GPU và logger.
 
-Lần chạy mới mặc định dùng `output_dir=None`, được chuyển thành `runs/train/rfdetr_exp` với hậu tố tăng dần và `exist_ok=False`. Dataset tư thế nhiều lớp đối tượng dùng `kpt_names` với khóa là chỉ số hoặc tên lớp đối tượng; danh sách rỗng đánh dấu lớp chỉ có bounding box. Dự đoán đệm keypoint đến `kpt_shape`; fitness keypoint-mAP không chấm điểm các lớp chỉ có bounding box.
+Lần chạy mới mặc định dùng `output_dir=None`, được chuyển thành `runs/train/rfdetr_exp` với hậu tố tăng dần và `exist_ok=False`. Lần chạy được tiếp tục sẽ ghi tiếp vào thư mục chạy của checkpoint đó. Dataset tư thế nhiều lớp đối tượng dùng `kpt_names` với khóa là chỉ số hoặc tên lớp đối tượng; danh sách rỗng đánh dấu lớp chỉ có bounding box. Dự đoán đệm keypoint đến `kpt_shape`; fitness keypoint-mAP không chấm điểm các lớp chỉ có bounding box.
 
 ## Đánh giá
 
