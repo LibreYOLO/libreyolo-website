@@ -1,0 +1,13 @@
+{
+  "name": "SenseNova-Vision",
+  "org": "SenseTime (OpenSenseNova)",
+  "paper_title": "Vision as Unified Multimodal Generation",
+  "paper_url": "https://arxiv.org/abs/2607.06560",
+  "code_url": "https://github.com/OpenSenseNova/SenseNova-Vision",
+  "license": "Apache-2.0 (code); CC BY-NC 4.0 (weights)",
+  "code_license": "Apache-2.0",
+  "license_interpretation": "LibreYOLO's SenseNova-Vision port is Apache-2.0 code adapted from SenseTime's OpenSenseNova/SenseNova-Vision release, which is itself built on Apache-2.0 sources: ByteDance's Bagel decoder, Hugging Face Transformers' Qwen2 and SigLIP modules, and Black Forest Labs' FLUX autoencoder. The SenseNova-Vision-7B-MoT checkpoint is a separate artifact under CC BY-NC 4.0, NON-COMMERCIAL USE ONLY. LibreYOLO mirrors it byte-identical, with attribution, at LibreYOLO/SenseNovaVision7b, but mirroring does not change the license: it stays non-commercial, and the loader prints that notice before every automatic download. One upstream file, modeling/bagel/modeling_utils.py, carries an incompatible CC BY-NC 4.0 license inherited from Meta's DiT; LibreYOLO did not port it. The small permissive routines it would have supplied were re-derived independently instead, from Hugging Face Transformers' ViTMAE implementation (Apache-2.0) and OpenAI's guided-diffusion (MIT).",
+  "bibtex": "@misc{sensenova2026sensenovavision,\n      title={Vision as Unified Multimodal Generation}, \n      author={Xiaoyang Han and Jianhua Li and Kewang Deng and Zukai Chen and Xuanke Shi and Sihan Wang and Boxuan Li and Linyan Wang and Siyi Xie and Xin You and Jinsheng Quan and Zhongang Cai and Haiwen Diao and Ziwei Liu and Lei Yang and Dahua Lin and Quan Wang},\n      year={2026},\n      eprint={2607.06560},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2607.06560}, \n}",
+  "bibtex_source_url": "https://github.com/OpenSenseNova/SenseNova-Vision#citation",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README on branch main ('If you find SenseNova-Vision useful, please cite our technical report'). Cross-checked against the arXiv API for 2607.06560: seventeen authors in the same order, identical title, comment '48 pages, 22 figures', no recorded venue, matching the @misc/arXiv form the authors publish. Do not hand-edit; a wrong citation misattributes someone's work."
+}

@@ -4,6 +4,8 @@ import matter from 'gray-matter'
 
 import registry from '@/data/docs/registry.json'
 import nav from '@/data/docs/nav.json'
+import registryV160 from '@/data/docs/archive/v1.6.0/registry.json'
+import navV160 from '@/data/docs/archive/v1.6.0/nav.json'
 import registryV150 from '@/data/docs/archive/v1.5.0/registry.json'
 import navV150 from '@/data/docs/archive/v1.5.0/nav.json'
 import { routing } from '@/i18n/routing'
@@ -230,6 +232,17 @@ export const currentDocs = createDocsSource({
  * entry here, and copy the v1.5.0 route folder.
  */
 export const DOCS_ARCHIVES = {
+  'v1.6.0': createDocsSource({
+    version: '1.6.0',
+    registry: registryV160,
+    nav: navV160,
+    docsDir: path.join(process.cwd(), 'content', 'archive', 'docs', 'v1.6.0'),
+    docDir: (section) => path.join(process.cwd(), 'content', 'archive', 'docs', 'v1.6.0', section),
+    docFile: (section, name) => path.join(process.cwd(), 'content', 'archive', 'docs', 'v1.6.0', section, `${name}.md`),
+    upstreamFile: (slug) => path.join(process.cwd(), 'src', 'data', 'docs', 'archive', 'v1.6.0', 'upstream', `${slug}.json`),
+    basePath: '/docs/v1.6.0',
+    archived: true,
+  }),
   'v1.5.0': createDocsSource({
     version: '1.5.0',
     registry: registryV150,

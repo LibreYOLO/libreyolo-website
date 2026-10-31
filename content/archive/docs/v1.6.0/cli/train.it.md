@@ -1,0 +1,285 @@
+---
+title: libreyolo train
+seo_title: riferimento del comando libreyolo train
+description: >-
+  Addestra un modello dalla riga di comando: gli argomenti con i loro valori
+  predefiniti, come i valori predefiniti di ogni famiglia li sostituiscono e
+  quali argomenti una famiglia ignora.
+lead: >-
+  Addestra un modello su un dataset e scrive checkpoint, metriche e log in una
+  directory di esecuzione. Ogni argomento qui sotto ha un valore predefinito
+  preso dalla definizione del comando, che la configurazione di addestramento
+  propria di una famiglia di modelli può sostituire.
+keywords:
+  - libreyolo train cli
+  - addestrare yolo da riga di comando
+  - comando libreyolo train
+  - argomenti libreyolo train
+  - addestrare yolo dataset personalizzato
+  - congelare layer yolo
+last_verified: 1.6.0
+meta:
+  - label: Comando
+    value: libreyolo train
+    mono: true
+  - label: Obbligatorio
+    value: data
+    mono: true
+  - label: Output
+    value: 'Checkpoint, metriche e log in runs/train/<name>; YOLO9 usa yolo9_exp'
+snippets:
+  examples:
+    - label: Base
+      language: bash
+      code: >
+        # coco8.yaml è incluso nel pacchetto e scarica le sue 8 immagini al
+        primo uso.
+
+        libreyolo train model=LibreYOLO9s.pt data=coco8.yaml epochs=10 imgsz=640
+        batch=8
+    - label: Controllare prima la configurazione risolta
+      language: bash
+      code: >
+        # Stampa quello che l'esecuzione userebbe, valori predefiniti della
+        famiglia
+
+        # inclusi, ed esce senza addestrare né caricare dati.
+
+        libreyolo train model=LibreDFINEn.pt data=coco8.yaml epochs=10
+        dry_run=true
+    - label: Esecuzione con nome e ricetta esplicita
+      language: bash
+      code: |
+        libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
+          epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
+          patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
+source_hash: 30b2c16d339f5f50
+---
+
+## Sinossi
+
+```bash
+libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
+```
+
+Gli argomenti sono coppie `key=value`, e funziona anche la forma POSIX, quindi
+`epochs=50` e `--epochs 50` sono lo stesso argomento. I booleani accettano
+`true` e `false`: `amp=false` diventa `--no-amp` dove il flag ha una forma
+negativa.
+
+## Argomenti
+
+### Modello e dati
+
+| Argomento | Predefinito | Significato |
+|---|---|---|
+| `data` | | Percorso dello YAML del dataset (formato YOLO, ad esempio `coco8.yaml`). Obbligatorio |
+| `model` | `yolox-s` | Nome del modello o percorso dei pesi |
+| `task` | | Override esplicito del task: `detect`, `segment`, `semantic`, `pose`, `classify`, `gaze`, `obb`, `point`, `depth` |
+| `pretrained` | `true` | Usa pesi preaddestrati. `false` costruisce l'architettura e addestra da zero |
+| `allow_download_scripts` | `false` | Consente il Python incorporato nei blocchi di download dello YAML del dataset |
+
+### Ciclo di addestramento
+
+| Argomento | Predefinito | Significato |
+|---|---|---|
+| `epochs` | `300` | Epoche di addestramento |
+| `batch` | `16` | Dimensione del batch per dispositivo |
+| `imgsz` | `640` | Dimensione delle immagini di addestramento: `640` (quadrata) o `480x640` (altezza x larghezza) |
+| `device` | `auto` | Dispositivo: `0`, `cpu`, `mps`, `auto` |
+| `workers` | `4` | Worker del dataloader |
+| `cache` | `false` | Mette in cache le immagini per velocizzare il caricamento dei dati: `ram`, `disk`, `true`, `false` |
+| `seed` | `0` | Seed casuale |
+| `resume` | | Riprende l'addestramento: `true`, oppure il percorso di un checkpoint |
+| `amp` | `true` | Automatic Mixed Precision |
+| `amp_dtype` | `float16` | Tipo di dato dell'AMP su CUDA: `float16` o `bfloat16` |
+| `cuda_graph` | `false` | Cattura il forward e il backward dell'addestramento in CUDA graph. Solo GPU singola e solo per le famiglie supportate; le altre girano in modalità eager |
+| `compile` | `false` | Applica `torch.compile` alla rete di addestramento: `true`, `false`, `default`, `reduce-overhead`, `max-autotune`, `max-autotune-no-cudagraphs`. Solo una GPU CUDA; le altre esecuzioni addestrano in modalità eager con un avviso |
+| `lora` | `false` | Fine-tuning con LoRA, per le famiglie transformer elencate nelle Note |
+| `freeze` | | Congela i layer: un numero intero, una lista di indici o nomi di moduli |
+
+### Distillazione
+
+| Argomento | Predefinito | Significato |
+|---|---|---|
+| `distill_model` | | Insegnante: un checkpoint di un rilevatore, oppure l'id di un foundation teacher come `dinov2` per la distillazione delle feature del backbone |
+| `dis` | | Peso della loss di distillazione. Se non impostato, il valore pubblicato per quel tipo di loss |
+| `distill_loss_type` | `mgd` | Loss sulle feature per gli insegnanti rilevatori: `mgd`, `cwd`. I foundation teacher usano sempre `feat_mse` |
+
+### Ottimizzatore
+
+| Argomento | Predefinito | Significato |
+|---|---|---|
+| `optimizer` | `sgd` | Ottimizzatore: `sgd`, `adam`, `adamw` |
+| `lr0` | `0.01` | Learning rate iniziale (tasso di apprendimento) |
+| `momentum` | `0.937` | Momento di SGD, e coefficiente del primo momento per gli ottimizzatori Adam |
+| `weight_decay` | `0.0005` | Regolarizzazione L2 |
+| `nesterov` | `true` | Momento di Nesterov |
+
+### Scheduler
+
+| Argomento | Predefinito | Significato |
+|---|---|---|
+| `scheduler` | `yoloxwarmcos` | Tipo di schedule del learning rate |
+| `warmup_epochs` | `5` | Durata del warmup |
+| `warmup_lr_start` | `0.0` | Learning rate iniziale del warmup |
+| `min_lr_ratio` | `0.05` | Rapporto minimo del learning rate |
+| `lr_drop` | `100` | Epoca del calo a gradino del learning rate di RF-DETR |
+
+### Augmentation
+
+| Argomento | Predefinito | Significato |
+|---|---|---|
+| `mosaic` | `1.0` | Probabilità del mosaic |
+| `mixup` | `1.0` | Probabilità del mixup |
+| `hsv_prob` | `1.0` | Probabilità del jitter HSV |
+| `flip_prob` | `0.5` | Probabilità del flip orizzontale |
+| `degrees` | `10.0` | Intervallo di rotazione, in più e in meno, in gradi |
+| `translate` | `0.1` | Rapporto di traslazione |
+| `shear` | `2.0` | Angolo di shear |
+| `mosaic_scale` | `(0.1,2.0)` | Intervallo di scala del mosaic |
+| `mixup_scale` | `(0.5,1.5)` | Intervallo di scala del mixup |
+| `no_aug_epochs` | `15` | Disattiva la data augmentation per le ultime N epoche |
+
+### EMA
+
+| Argomento | Predefinito | Significato |
+|---|---|---|
+| `ema` | `true` | Media mobile esponenziale |
+| `ema_decay` | `0.9998` | Fattore di decadimento dell'EMA |
+
+### Validazione durante l'addestramento
+
+| Argomento | Predefinito | Significato |
+|---|---|---|
+| `val` | `true` | Valida durante l'addestramento |
+| `eval_interval` | `10` | Valida ogni N epoche e dopo l'ultima epoca |
+| `max_det` | `300` | Numero massimo di predizioni per immagine dopo la NMS di validazione |
+| `eval_max_det` | | Limite del valutatore COCO. Se non impostato, la convenzione AP@100 di pycocotools |
+| `faster_coco_eval` | `true` | Usa il backend C++ faster-coco-eval per le metriche COCO quando è installato; altrimenti ricade su pycocotools |
+| `save_plots` | `false` | Salva i grafici della validazione finale durante l'addestramento |
+| `patience` | `50` | Pazienza dell'early stopping. `0` lo disattiva |
+
+### Output
+
+| Argomento | Predefinito | Significato |
+|---|---|---|
+| `project` | `runs/train` | Directory radice di output |
+| `name` | `exp` | Nome dell'esperimento |
+| `exist_ok` | `false` | Riusa la directory di output esistente |
+| `save_period` | `10` | Salva un checkpoint ogni N epoche |
+| `log_interval` | `10` | Registra la loss ogni N batch |
+
+### Flag per agenti
+
+| Argomento | Predefinito | Significato |
+|---|---|---|
+| `json` | `false` | Output JSON su stdout |
+| `quiet` | `false` | Sopprime stderr |
+| `dry_run` | `false` | Risolve e stampa la configurazione senza eseguire |
+| `help_json` | `false` | Stampa lo schema del comando in JSON ed esce |
+
+| Argomento | Default | Significato |
+| --- | --- | --- |
+| `min_samples` | `0` | Lunghezza minima dell'epoca per dataset piccoli: quando il dataset ha meno immagini, estrae questo numero di campioni per epoca con reinserimento (0 = disattivato) |
+| `class_balanced` | `False` | Campionamento con fattore di ripetizione in stile LVIS per dataset a coda lunga (default: disattivato) |
+| `cls_pw` | `0.0` | Esponente della ponderazione inversa alla frequenza per la classificazione: 0 disattivata, 1 completa (pesi di classe a media uno; non combinabile con class_weights=True) |
+| `class_weights` | `False` | Pesi della loss di classificazione precedenti, normalizzati sui campioni (default: disattivati) |
+| `single_cls` | `False` | Addestra un rilevatore supportato rimappando ogni etichetta alla classe 0 |
+| `classes` | `None` | Addestra un rilevatore supportato solo su questi ID originali di classe del dataset, separati da virgole (es. '0,3,5'); ogni altra classe viene scartata come se non fosse etichettata. Gli ID restano invariati, senza essere compattati |
+| `average_best` | `0` | Calcola la media uniforme degli N checkpoint migliori secondo la metrica monitorata in weights/average.pt al termine dell'addestramento (0 = disattivato) |
+| `export_check` | `False` | Esporta ONNX prima dell'epoca 1 e interrompe l'esecuzione se l'esportazione fallisce (default: disattivato) |
+| `precise_bn` | `0` | Ricalcola le statistiche correnti di BatchNorm da questo numero di immagini di addestramento dopo l'ultima epoca (0 = disattivato) |
+| `aux_weight` | | Solo YOLO9: peso della loss del ramo ausiliario PGI per il fine-tuning. `0.25` se non impostato; `0` addestra solo la testa principale |
+| `fliplr` | `None` | Probabilità di ribaltamento orizzontale (alias di ecosistema di flip_prob) |
+| `flipud` | `0.0` | Probabilità di ribaltamento verticale |
+| `auto_augment` | `None` | Regola di auto-augmentation per classificazione: randaugment, autoaugment, augmix (default: nessuna) |
+| `erasing` | `0.0` | Probabilità RandomErasing per classificazione, 0 <= erasing < 1 |
+| `cutmix` | `0.0` | Probabilità CutMix per classificazione (etichette soft) |
+| `scale` | `0.5` | Intervallo di area RandomResizedCrop per classificazione: limite inferiore float o coppia esplicita (min,max) |
+| `crop_pct` | `None` | Rapporto di ridimensionamento nella valutazione della classificazione prima del ritaglio centrale (default: valore nativo della famiglia del modello) |
+| `plot_samples` | `8` | Immagini nel grafico dei campioni di validazione: 0 per nessuna, -1 per ogni immagine validata (non modifica le metriche) |
+
+## Esempi
+
+<code-tabs name="examples" />
+
+## Note
+
+### I valori predefiniti qui sopra non sono sempre quelli usati
+
+Ogni famiglia di modelli porta con sé la propria configurazione di
+addestramento, e dove quella configurazione differisce da quella di base, il
+suo valore sostituisce il valore predefinito del comando per ogni argomento che
+non hai impostato esplicitamente. Impostare l'argomento tu vince sempre.
+`libreyolo cfg` stampa i valori predefiniti di base e le sostituzioni per
+famiglia, ed è il modo per vedere che cosa userà davvero una data famiglia.
+
+`imgsz` è l'argomento per cui questo conta di più. Il valore predefinito del
+comando è `640`, che non è l'input nativo di ogni checkpoint: le dimensioni
+pubblicate per il rilevamento con RF-DETR sono 384, 512, 576 e 704, e i
+checkpoint YOLOX `n` e `t` sono a 416. RF-DETR e DEIMv2 sono gestiti inoltrando
+`imgsz` solo quando è stato impostato esplicitamente, così altrimenti resta in
+vigore la loro dimensione. Alle altre famiglie il valore arriva così com'è e ci
+addestrano sopra. FOMO è la famiglia rigida: ogni dimensione accetta solo il
+proprio input nativo (96, 192 e 224), quindi un addestramento FOMO ha bisogno
+di `imgsz` impostato di conseguenza, altrimenti si ferma con un errore. RF-DETR
+richiede anche che il valore sia divisibile per la dimensione delle sue patch
+moltiplicata per il numero delle sue finestre, e quando non lo è riporta le due
+dimensioni valide più vicine.
+
+### Argomenti che una famiglia ignora
+
+Non tutte le famiglie leggono tutti gli argomenti, e quelli della data
+augmentation sono il caso in cui si nota di più. RF-DETR, D-FINE, DEIM, DEIMv2,
+RT-DETRv4 e DINOv2 si addestrano con pipeline pass-through senza mosaic, senza
+mixup e senza warp affine, quindi lì `mosaic`, `mixup`, `hsv_prob`, `degrees`,
+`translate`, `shear`, `mosaic_scale` e `mixup_scale` non raggiungono nulla. EC
+condivide quella pipeline ma legge `hsv_prob`, `degrees` e `translate` quando
+il suo task è la stima della posa. Le famiglie di classificazione ignorano
+quell'insieme tranne `mixup`, che per loro è MixUp a livello di batch, e leggono
+`flip_prob`. SegFormer e NAFNet ignorano tutto quell'insieme e con esso
+`flip_prob`, perché il loro flip gira a una probabilità fissa e non configurabile. YOLO-NAS ignora solo
+`mosaic`, dato che al suo posto fa data augmentation con una trasformazione
+affine per campione sempre attiva. RF-DETR ne ignora altri tre oltre a quella
+lista: `optimizer`, `momentum` e `nesterov`.
+
+Impostarne uno non è un errore. L'esecuzione scrive una riga su stderr con il
+nome della famiglia e gli argomenti che ignorerà, poi addestra, e quella riga è
+la lista autorevole per la versione installata. È anche l'unico segnale, quindi
+un'esecuzione da script con `quiet=true` sopprime l'avviso insieme a tutto il
+resto su stderr.
+
+`val=false` è un caso collegato. Imposta `eval_interval` a `0`, che disattiva
+la validazione durante l'addestramento, ultima epoca inclusa, e l'esecuzione non
+scrive `best.pt`.
+
+### Altri comportamenti da conoscere
+
+`lora=true` è accettato da RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 e v4,
+EC, GTR e ConvNeXt. Qualsiasi altra famiglia esce con `config_unsupported` invece di
+addestrare senza LoRA.
+
+`pretrained=false` combinato con `resume` viene rifiutato per le famiglie che
+supportano l'addestramento da zero, dato che i due chiedono cose opposte.
+
+`mosaic` e `mixup` sono la scrittura da riga di comando dei campi di
+configurazione `mosaic_prob` e `mixup_prob`; su un modello di classificazione
+`mixup` è invece MixUp a livello di batch. Nelle famiglie il cui mixup si
+applica solo ai campioni con mosaic, `mixup` sopra zero con `mosaic` a zero non
+scatta mai, e l'esecuzione lo dice.
+
+`dry_run=true` risolve il riferimento al modello, applica i valori predefiniti
+della famiglia e stampa la configurazione con cui addestrerebbe. Non carica il
+dataset, quindi è il modo economico per confermare che un argomento sia
+arrivato al valore che ti aspettavi.
+
+stdout porta l'oggetto con il risultato finale; avanzamento e avvisi vanno su
+stderr. Il codice di uscita è `0` in caso di successo, `2` per un errore d'uso
+o di configurazione, `3` quando il dataset non si trova o non si può leggere,
+`4` quando il modello non si può caricare, e `1` per gli altri errori a runtime.
+
+Correlati: [`libreyolo doctor`](/docs/cli/doctor) per controllare un dataset
+prima di impegnarsi in un addestramento, [`libreyolo monitor`](/docs/cli/monitor)
+per seguire un'esecuzione nel browser, [`libreyolo val`](/docs/cli/val) per
+misurare il risultato.

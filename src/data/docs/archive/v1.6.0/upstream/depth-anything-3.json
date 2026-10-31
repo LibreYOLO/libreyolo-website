@@ -1,0 +1,13 @@
+{
+  "name": "Depth Anything 3",
+  "org": "ByteDance Seed",
+  "paper_title": "Depth Anything 3: Recovering the Visual Space from Any Views",
+  "paper_url": "https://arxiv.org/abs/2511.10647",
+  "code_url": "https://github.com/ByteDance-Seed/Depth-Anything-3",
+  "license": "Apache-2.0",
+  "code_license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so the DA3MONO-LARGE checkpoint LibreYOLO ports can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy you redistribute, and it grants a patent license. It places no obligation on your own application code. The upstream project also publishes CC-BY-NC-4.0 Large, Giant and Nested checkpoints for its any-view and multi-view modes; LibreYOLO does not port those, so that non-commercial license never reaches anything this family downloads.",
+  "bibtex": "@article{depthanything3,\n  title={Depth Anything 3: Recovering the visual space from any views},\n  author={Haotong Lin and Sili Chen and Jun Hao Liew and Donny Y. Chen and Zhenyu Li and Guang Shi and Jiashi Feng and Bingyi Kang},\n  journal={arXiv preprint arXiv:2511.10647},\n  year={2025}\n}",
+  "bibtex_source_url": "https://github.com/ByteDance-Seed/Depth-Anything-3#-citations",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citations section of the upstream README on branch main. Cross-checked against the arXiv API for 2511.10647: eight authors in the same order (the arXiv record lists the third author as \"Junhao Liew\", the README's own citation block spaces it \"Jun Hao Liew\" to match the byline above it; the block is kept as published), identical title, published 2025-11-13. Do not hand-edit; a wrong citation misattributes someone's work."
+}

@@ -1,0 +1,12 @@
+{
+  "name": "ViTMatte",
+  "org": "HUST Vision Lab",
+  "paper_title": "ViTMatte: Boosting Image Matting with Pretrained Plain Vision Transformers",
+  "paper_url": "https://arxiv.org/abs/2305.15272",
+  "code_url": "https://github.com/hustvl/ViTMatte",
+  "license": "MIT code; Apache-2.0 weights",
+  "license_interpretation": "The original code is MIT. The publisher card for hustvl/vitmatte-small-composition-1k declares Apache-2.0 for the weights.",
+  "bibtex": "@article{yao2024vitmatte,\n  title={ViTMatte: Boosting image matting with pre-trained plain vision transformers},\n  author={Yao, Jingfeng and Wang, Xinggang and Yang, Shusheng and Wang, Baoyuan},\n  journal={Information Fusion},\n  volume={103},\n  pages={102091},\n  year={2024},\n  publisher={Elsevier}\n}",
+  "bibtex_source_url": "https://raw.githubusercontent.com/hustvl/ViTMatte/main/README.md",
+  "bibtex_verified": "2026-09-26: copied verbatim from the upstream README citation block. Author names and order and title cross-checked against the arXiv API for 2305.15272. The upstream citation form is retained; conference/journal entries were also checked against the publisher. Publisher: https://www.sciencedirect.com/science/article/pii/S1566253523004074 (Information Fusion 103, 2024, 102091)."
+}

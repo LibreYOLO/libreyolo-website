@@ -1,0 +1,12 @@
+{
+  "name": "ZipDepth",
+  "org": "University of Bologna",
+  "paper_title": "ZipDepth: Bringing Lightweight Zero-Shot Monocular Depth Anywhere, on Any Device",
+  "paper_url": "https://arxiv.org/abs/2607.08771",
+  "code_url": "https://github.com/fabiotosi92/ZipDepth",
+  "license": "MIT",
+  "license_interpretation": "MIT is a permissive license, so both checkpoints can be used in commercial and closed-source products with no redistribution restriction beyond keeping the license notice. It places no obligation on your own application code. The weights were trained by distilling pseudo-labels from Depth Anything V2 Large, whose Large checkpoint is itself CC-BY-NC-4.0; the ZipDepth authors publish the distilled student under MIT regardless, and LibreYOLO republishes that same MIT-licensed student.",
+  "bibtex": "@inproceedings{tosi2026zipdepth,\n  title     = {ZipDepth: Bringing Lightweight Zero-Shot Monocular Depth Anywhere, on Any Device},\n  author    = {Tosi, Fabio and Bartolomei, Luca and Poggi, Matteo and Mattoccia, Stefano},\n  booktitle = {European Conference on Computer Vision (ECCV)},\n  year      = {2026}\n}",
+  "bibtex_source_url": "https://github.com/fabiotosi92/ZipDepth#-citation",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README on branch main. Cross-checked against the arXiv API for 2607.08771: four authors in the same order, identical title, submitted 2026-07-09. The README's own block already gives it as the accepted ECCV 2026 @inproceedings entry rather than an @article preprint form. Do not hand-edit; a wrong citation misattributes someone's work."
+}

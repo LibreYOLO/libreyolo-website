@@ -1,0 +1,12 @@
+{
+  "name": "YOLOv7",
+  "org": "MultimediaTechLab",
+  "paper_title": "YOLOv7: Trainable Bag-of-Freebies Sets New State-of-the-Art for Real-Time Object Detectors",
+  "paper_url": "https://arxiv.org/abs/2207.02696",
+  "code_url": "https://github.com/MultimediaTechLab/YOLO",
+  "license": "MIT",
+  "license_interpretation": "MIT is a permissive license, so these weights can be used in commercial and closed-source products. The one standing obligation is to keep the license text and the copyright notice, Kin-Yiu Wong and Hao-Tang Tsui, with any copy you redistribute. It places no condition on your own application code, and a model you train yourself on your own data is yours. The port follows the authors' MIT re-release of YOLOv7, not the GPL-3.0 WongKinYiu/yolov7 repository that carries the same model, so the permissive terms come from the source LibreYOLO actually derives from.",
+  "bibtex": "@inproceedings{wang2022yolov7,\n      title={{YOLOv7}: Trainable Bag-of-Freebies Sets New State-of-the-Art for Real-Time Object Detectors},\n      author={Wang, Chien-Yao and Bochkovskiy, Alexey and Liao, Hong-Yuan Mark},\n      year={2023},\n      booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},\n}",
+  "bibtex_source_url": "https://github.com/MultimediaTechLab/YOLO#citations",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citations section of the upstream README on branch main, the entry keyed wang2022yolov7. Cross-checked against the arXiv API for 2207.02696: same title, and the same three authors in the same order, Chien-Yao Wang, Alexey Bochkovskiy and Hong-Yuan Mark Liao, submitted 2022-07-06. arXiv carries no journal reference for it, so the CVPR 2023 venue is the authors' own claim in their citation block, consistent with the paper's later conference acceptance. Do not hand-edit; a wrong citation misattributes someone's work."
+}

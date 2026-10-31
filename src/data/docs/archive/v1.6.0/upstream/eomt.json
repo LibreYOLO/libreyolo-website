@@ -1,0 +1,12 @@
+{
+  "name": "EoMT",
+  "org": "TU Eindhoven, Mobile Perception Systems Lab",
+  "paper_title": "Your ViT is Secretly an Image Segmentation Model",
+  "paper_url": "https://arxiv.org/abs/2503.19108",
+  "code_url": "https://github.com/tue-mps/eomt",
+  "license": "MIT",
+  "license_interpretation": "MIT is a permissive license, so this code and these weights can be used in commercial and closed-source products. It asks only that you keep the copyright and license notice with any copy you redistribute. LibreYOLO ships only the DINOv2-backed EoMT checkpoints, sizes s/b/l; the DINOv3 EoMT variants are excluded because they depend on gated non-commercial DINOv3 weights. DINOv2 itself is Apache-2.0. The semantic checkpoint is trained on ADE20K and the instance and panoptic checkpoints on COCO; both are research datasets, and users remain responsible for dataset-license compliance when validating or fine-tuning against them.",
+  "bibtex": "@inproceedings{kerssies2025eomt,\n  author    = {Kerssies, Tommie and Cavagnero, Niccol\\`{o} and Hermans, Alexander and Norouzi, Narges and Averta, Giuseppe and Leibe, Bastian and Dubbelman, Gijs and {de Geus}, Daan},\n  title     = {{Your ViT is Secretly an Image Segmentation Model}},\n  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},\n  year      = {2025},\n}",
+  "bibtex_source_url": "https://github.com/tue-mps/eomt#bibtex-citation",
+  "bibtex_verified": "2026-08-08, copied verbatim from the BibTeX Citation section of the upstream README on branch master. Cross-checked against the arXiv API for 2503.19108: eight authors in the same order, identical title, and the venue matches the CVPR 2025 acceptance recorded in the paper's own arXiv comment. Do not hand-edit; a wrong citation misattributes someone's work."
+}

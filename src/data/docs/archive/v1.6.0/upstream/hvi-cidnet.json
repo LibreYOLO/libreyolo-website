@@ -1,0 +1,12 @@
+{
+  "name": "HVI-CIDNet",
+  "org": "HVI-CIDNet authors",
+  "code_url": "https://github.com/Fediory/HVI-CIDNet",
+  "license": "MIT",
+  "license_interpretation": "The publisher declares MIT for the model and generalization checkpoint.",
+  "paper_title": "HVI: A New Color Space for Low-light Image Enhancement",
+  "paper_url": "https://arxiv.org/abs/2502.20272",
+  "bibtex": "@article{yan2025hvi,\n  title={HVI: A New color space for Low-light Image Enhancement},\n  author={Yan, Qingsen and Feng, Yixu and Zhang, Cheng and Pang, Guansong and Shi, Kangbiao and Wu, Peng and Dong, Wei and Sun, Jinqiu and Zhang, Yanning},\n  journal={arXiv preprint arXiv:2502.20272},\n  year={2025}\n}",
+  "bibtex_source_url": "https://raw.githubusercontent.com/Fediory/HVI-CIDNet/master/Readme.md",
+  "bibtex_verified": "2026-09-26: copied verbatim from the upstream Readme.md citation block. Cross-checked all nine authors, their order, title and year against the arXiv API for 2502.20272. Upstream preprint citation retained."
+}

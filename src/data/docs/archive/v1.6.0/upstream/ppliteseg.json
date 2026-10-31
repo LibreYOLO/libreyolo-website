@@ -1,0 +1,9 @@
+{
+  "name": "PP-LiteSeg",
+  "org": "PaddlePaddle",
+  "code_url": "https://github.com/PaddlePaddle/PaddleSeg",
+  "license": "Apache-2.0",
+  "license_interpretation": "The upstream implementation declares Apache-2.0. The STDC backbone also carries its original MIT attribution. The released checkpoints are converted from the Deci-AI/super-gradients Cityscapes artifacts; SuperGradients is released under Apache-2.0 and grants separate weight licenses only for YOLO-NAS, so these checkpoints carry Apache-2.0.",
+  "weights_license": "Apache-2.0",
+  "checkpoint_license": "apache-2.0"
+}

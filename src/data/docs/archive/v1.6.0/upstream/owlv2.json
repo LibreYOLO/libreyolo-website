@@ -1,0 +1,12 @@
+{
+  "name": "OWLv2",
+  "org": "Google Research",
+  "paper_title": "Scaling Open-Vocabulary Object Detection",
+  "paper_url": "https://arxiv.org/abs/2306.09683",
+  "code_url": "https://github.com/google-research/scenic/tree/main/scenic/projects/owl_vit",
+  "license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so these checkpoints can be used in commercial and closed-source products. It asks you to keep the license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. LibreYOLO vendors no OWLv2 model source of its own: LibreOWLv2 calls the Apache-2.0 `transformers` implementation, `Owlv2ForObjectDetection`, directly, and downloads the official checkpoints into a LibreYOLO-hosted mirror repository that preserves the upstream snapshot files.",
+  "bibtex": "@article{minderer2023scaling,\n  title={Scaling Open-Vocabulary Object Detection},\n  author={Matthias Minderer, Alexey Gritsenko, Neil Houlsby},\n  journal={NeurIPS},\n  year={2023},\n}",
+  "bibtex_source_url": "https://github.com/google-research/scenic/blob/main/scenic/projects/owl_vit/README.md#references",
+  "bibtex_verified": "2026-08-08, copied verbatim from the OWL-ViT v2 entry in the References section of the upstream README on branch main (the same file separately carries an OWL-ViT v1 entry, arXiv 2205.06230, not used here since LibreOWLv2 wraps only v2). Cross-checked against the arXiv API for 2306.09683: three authors, same order, same title, no journal-ref recorded in the arXiv metadata, matching the NeurIPS 2023 form the README already gives. Do not hand-edit; a wrong citation misattributes someone's work."
+}

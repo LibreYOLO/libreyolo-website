@@ -1,0 +1,7 @@
+{
+  "name": "Marigold V2",
+  "org": "Huawei Bayer Lab",
+  "code_url": "https://github.com/huawei-bayerlab/marigold-v2",
+  "license": "Apache-2.0",
+  "license_interpretation": "The adapters and separately acquired Qwen image base declare Apache-2.0."
+}

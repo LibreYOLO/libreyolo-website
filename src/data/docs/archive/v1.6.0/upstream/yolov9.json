@@ -1,0 +1,12 @@
+{
+  "name": "YOLOv9",
+  "org": "MultimediaTechLab",
+  "paper_title": "YOLOv9: Learning What You Want to Learn Using Programmable Gradient Information",
+  "paper_url": "https://arxiv.org/abs/2402.13616",
+  "code_url": "https://github.com/MultimediaTechLab/YOLO",
+  "license": "MIT",
+  "license_interpretation": "MIT is a permissive license, so these weights can be used in commercial and closed-source products. The one standing obligation is to keep the license text and the copyright notice, Kin-Yiu Wong and Hao-Tang Tsui, with any copy you redistribute. It places no condition on your own application code, and a model you train yourself on your own data is yours. Two things are worth knowing beyond that. The port follows the authors' MIT re-release of YOLOv9, not the GPL-3.0 repository that carries the same model, so the permissive terms come from the source LibreYOLO actually derives from. And one checkpoint in this family is not MIT: the stride-4 model trained on VisDrone2019-DET inherits that dataset's CC BY-NC-SA 3.0 terms, which rule out commercial use and require share-alike on anything derived from it.",
+  "bibtex": "@inproceedings{wang2024yolov9,\n      title={{YOLOv9}: Learning What You Want to Learn Using Programmable Gradient Information},\n      author={Wang, Chien-Yao and Yeh, I-Hau and Liao, Hong-Yuan Mark},\n      year={2024},\n      booktitle={Proceedings of the European Conference on Computer Vision (ECCV)},\n}",
+  "bibtex_source_url": "https://github.com/MultimediaTechLab/YOLO#citations",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citations section of the upstream README on branch main, the entry keyed wang2024yolov9. Cross-checked against the arXiv API for 2402.13616: same title, and the same three authors in the same order, Chien-Yao Wang, I-Hau Yeh and Hong-Yuan Mark Liao, submitted 2024-02-21. arXiv carries no journal reference for it, so the ECCV 2024 venue is the authors' own claim in their citation block. Do not hand-edit; a wrong citation misattributes someone's work."
+}
