@@ -9,12 +9,9 @@ last_verified: "1.7.0"
 
 ## 1.7.0, released 2026-10-31
 
-YOLO9 now runs on code ported from the MIT upstream, MultimediaTechLab/YOLO, and checkpoints written by earlier releases give bit-identical float outputs. Two new tasks arrive with the `LibreGen` factory: `generate` (text to image) and `generate3d` (one image to 3D Gaussian splats). The release also adds the WeVisOne-VL VLM family, a confusion matrix on detect, segment and classify validation, per-class precision/recall/F1 curves on detect and segment validation, and class-agnostic NMS. 116 commits, 27 merged pull requests. Several changes move training results, metrics or output paths you may be comparing against v1.6.0 (YOLO9-family and YOLOv7 training recipes, `perspective` warps, D-FINE CLI defaults, some CLI run folders, confusion-matrix counts, `single_cls` validation, segmentation masks for box-only label rows, RTMDet-Ins detection counts): read **Changed** and **Breaking changes** before upgrading. See [upgrading to 1.7.0](/docs/upgrade#160-to-170) for migrations.
+Two new tasks arrive with the `LibreGen` factory: `generate` (text to image) and `generate3d` (one image to 3D Gaussian splats). The release also adds the WeVisOne-VL VLM family, a confusion matrix on detect, segment and classify validation, per-class precision/recall/F1 curves on detect and segment validation, class-agnostic NMS, and YOLO9 training fixes. 116 commits, 27 merged pull requests. Several changes move training results, metrics or output paths you may be comparing against v1.6.0 (YOLO9-family and YOLOv7 training recipes, `perspective` warps, D-FINE CLI defaults, some CLI run folders, confusion-matrix counts, `single_cls` validation, segmentation masks for box-only label rows, RTMDet-Ins detection counts): read **Changed** and **Breaking changes** before upgrading. See [upgrading to 1.7.0](/docs/upgrade#160-to-170) for migrations.
 
 ### Highlights
-
-- **YOLO9 on MIT upstream code. (#930)**
-  The YOLO9 building blocks, the detection-head towers YOLO9-E2E and YOLO9-P2 share, the PGI branches and mixup are ported from MultimediaTechLab/YOLO (MIT). Existing checkpoints load unchanged and predict the same boxes.
 
 - **Image and 3D generation. (#933, #964)**
   `LibreGen` runs FLUX.2 klein 4B and SANA-Sprint 0.6B for text to image, and Speridlabs Idol turns one picture of an object into 3D Gaussian splats.
@@ -169,9 +166,6 @@ YOLO9 now runs on code ported from the MIT upstream, MultimediaTechLab/YOLO, and
   `N` skipped flagged images because it followed image ids instead of the worst-first order shown in the Radar dialog; it now follows that order and wraps at the end. The Radar button (`Y`) reopens the last scan, with its time and a Rescan button, instead of scanning again.
 
 ### Security/Licensing
-
-- **YOLO9, YOLO9-E2E and YOLO9-P2 code follows the MIT upstream. (#930)**
-  The YOLO9 building blocks, the detection-head towers shared by YOLO9-E2E and YOLO9-P2, the PGI branches and the YOLO9 mixup blend are ported from MultimediaTechLab/YOLO (MIT, commit c4cb5f6f); the YOLO9-E2E one-to-one design follows DATE (Apache-2.0), the P2 level is LibreYOLO code, and mosaic tile placement reuses the YOLOX-derived helper. `THIRD_PARTY_NOTICES.txt` gains entries for the DATE design (Apache-2.0), the torchvision `RandomPerspective` design and batched-NMS coordinate trick (BSD-3-Clause), its MMDetection entry now also credits `filter_scores_and_topk` (Apache-2.0), and the RepVGG entry is removed with `fuse_convs()`. Float inference is unchanged: raw outputs of checkpoints written by 1.6.0 (t/s/m/c, 2 and 120 classes) and sample-image detections of the published t and m weights are bit-identical, and the main path matches the pinned upstream model on random weights (`tests/unit/test_yolo9_parity.py`, which needs the upstream checkout and is not part of CI). Checkpoints written by earlier releases load through a rename of legacy tensor names, and of the module names in quantization manifests; resumed training checkpoints go through the same rename. Training behavior does change, as listed under Changed and Fixed. Exported-runtime parity beyond ONNX on YOLO9-t and CUDA mixed-precision training were not measured.
 
 - **Notices for the new families. (#967)**
   `NOTICE` gains a WeVisOne-VL entry, and `weights/LICENSE_NOTICE.txt` gains entries for the Speridlabs Idol, FLUX.2 klein and SANA-Sprint weights, including the Gemma Terms of Use that cover SANA-Sprint's Gemma 2 text encoder. All three download from their publishers at pinned revisions.
